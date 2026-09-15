@@ -111,21 +111,31 @@ if (!/BỎ LẠI|bỏ lại/.test(sync)) {
   );
 }
 
-// ── 4. Hiện ảnh thì phải hiện ghi công ──────────────────────
+// ── 4. Ảnh Storage (đã PHÂN PHỐI) thì phải hiện ghi công riêng ──
+// Hotlink Commons chỉ DẪN tới tác phẩm — dòng chung cuối `mount()` đã đủ, nên
+// KHÔNG bắt buộc dòng riêng cho ca đó (Henry chốt 2026-09-10). Ảnh Storage thì
+// mình PHÂN PHỐI, CC BY-SA đòi ghi công riêng — bộ dò chỉ canh đúng ca này.
 const ui = read(UI);
 if (/it\.anh\b/.test(ui)) {
+  if (!/it\.anhNguon\b/.test(ui)) {
+    fail(
+      `${UI}: không đọc \`it.anhNguon\` — không phân biệt được ảnh hotlink Commons (không bắt buộc ghi công riêng) với ảnh đã kéo về Storage (bắt buộc).`
+    );
+  }
   for (const truong of ['anhTacGia', 'anhLicense', 'anhTrang']) {
     // 🪤 `includes(truong)` là RĂNG CÙN: đổi tên thành `anhTacGiaZZ` vẫn chứa
     // `anhTacGia` nên vẫn "pass". Đã vấp đúng thế lúc red-team. Phải soi ĐÚNG
     // dạng truy cập `it.<tên>` kèm biên từ.
     if (!new RegExp(`it\\.${truong}\\b`).test(ui)) {
       fail(
-        `${UI}: có hiện ảnh nhưng KHÔNG đọc \`it.${truong}\` — thiếu ghi công cho ảnh CC BY-SA.`
+        `${UI}: có hiện ảnh nhưng KHÔNG đọc \`it.${truong}\` — thiếu đường ghi công cho ảnh Storage (CC BY-SA).`
       );
     }
   }
   if (!/cns-anh-nguon/.test(ui)) {
-    fail(`${UI}: không còn dựng khối \`.cns-anh-nguon\` — ghi công không lên được màn hình.`);
+    fail(
+      `${UI}: không còn dựng khối \`.cns-anh-nguon\` — ghi công ảnh Storage không lên được màn hình khi cần.`
+    );
   }
 }
 

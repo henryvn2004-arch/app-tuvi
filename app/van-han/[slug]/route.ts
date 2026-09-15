@@ -257,7 +257,7 @@ function pageShell(opts: {
   <div class="faq-block"><h2>Câu Hỏi Thường Gặp</h2>${faqHTML}</div>
   <div class="rel-block"><div class="rel-title">Xem thêm</div><div class="rel-grid">${relLinks.join('')}</div></div>
 </div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=26" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
 </body></html>`;
 }
 
@@ -292,7 +292,7 @@ function buildL1(chiIdx: number, namXem: number): string {
     `<div class="cta-box">
       <h2>Xem Chính Xác Theo Ngày Giờ Sinh</h2>
       <p>Nhập đầy đủ ngày tháng năm và giờ sinh để nhận lá số cá nhân hoá.</p>
-      <a class="cta-btn" href="/luan-giai.html">Xem Lá Số →</a>
+      <a class="cta-btn" href="/app/luan-giai">Xem Lá Số →</a>
     </div>`,
     // Cach cuc
     topCC.length > 0 ? `<div class="cc-block">
@@ -364,7 +364,7 @@ function buildL2(canIdx: number, chiIdx: number, namXem: number): string {
     `<div class="cta-box">
       <h2>Xem Lá Số Cá Nhân Hoá</h2>
       <p>Nhập đầy đủ ngày tháng năm và giờ sinh để xem chính xác cung Mệnh, đại vận và tiểu vận năm ${namXem}.</p>
-      <a class="cta-btn" href="/luan-giai.html">Xem Lá Số →</a>
+      <a class="cta-btn" href="/app/luan-giai">Xem Lá Số →</a>
     </div>`,
     topCC.length > 0 ? `<div class="cc-block">
       <h2>Cách Cục Của Tuổi ${esc(canChi)}</h2>

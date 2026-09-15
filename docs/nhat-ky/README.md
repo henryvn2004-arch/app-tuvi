@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-244 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+276 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 79 | 364,066 B |
+| `2026-09.md` | 111 | 467,842 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -26,6 +26,37 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 💸 S3 lên LIVE — hoàn Lượng thật + popup báo khách khi tool trả phí hỏng |
+| 1 | 2026-09 | `2026-09.md` | 🚪 Pha 2 vá phễu conversion bỏ sót 12 trang — auto-open bản mẫu vẫn sống |
+| 1 | 2026-09 | `2026-09.md` | 🪦 Retire /luan-giai.html — 301 về /app/luan-giai + card index.html lệch văn phong |
+| 1 | 2026-09 | `2026-09.md` | 🏷️ Productize luận giải Pha 4 (một phần) — copy tường trả tiền nói rõ có PDF + email |
+| 1 | 2026-09 | `2026-09.md` | 🎁 Productize luận giải — sửa PDF câm dấu · thẻ "Báo cáo đã sẵn sàng" · cổng nhận email |
+| 1 | 2026-09 | `2026-09.md` | 🔪 Pha 3 vá phễu conversion — cắt giữa phần 2 · ảnh cho phần khoá · mục lục cá nhân · thanh CTA dính |
+| 1 | 2026-09 | `2026-09.md` | 🚪 Pha 2 vá phễu conversion — gỡ auto-open bản mẫu, form là màn hình đầu |
+| 1 | 2026-09 | `2026-09.md` | 💰 Pha 1 vá phễu conversion — hạ giá QR 250→100 Lượng + deep link/copy/đếm ngược lên đầu modal |
+| 1 | 2026-09 | `2026-09.md` | 📧 5 loại email còn thiếu: hoá đơn, PDF luận giải, reminder, cross-sell, broadcast |
+| 1 | 2026-09 | `2026-09.md` | 📊 Pha 0 vá phễu conversion — 4 chỗ đo đang mù: preview_shown/unlock_click khách đăng nhập, bộ event QR, chay_moi |
+| 1 | 2026-09 | `2026-09.md` | 🐛 Đăng ký lại bằng email ĐÃ TỒN TẠI báo nhầm "đã gửi email xác nhận" |
+| 1 | 2026-09 | `2026-09.md` | 📧 Hạ tầng email — Resend nguồn duy nhất, chống trùng + unsubscribe |
+| 1 | 2026-09 | `2026-09.md` | 📖 Giọng luận giải Lá Số → light novel + hook mọc từ nội dung thật + cho phép diễn dịch hiện đại |
+| 1 | 2026-09 | `2026-09.md` | 🗂️ Sidebar: slogan xuống hàng · số dư Lượng đậm nét · "Gần đây" → "Công cụ yêu thích" |
+| 1 | 2026-09 | `2026-09.md` | 🖼️ `tong-quan` v2 thiếu ảnh ở 4 bậc tuổi ngoài `truong-thanh` — vẽ bù 24 ảnh |
+| 1 | 2026-09 | `2026-09.md` | 🔢 Thần Số Học 11 → 13 chỉ số — soi đối thủ, chỉ lấy 2 phần THẬT SỰ có giá trị |
+| 1 | 2026-09 | `2026-09.md` | 🐛 CI đỏ sau loạt auto-show — Playwright `page.click('#btnGo')` đụng độ với bản mẫu tự mở |
+| 1 | 2026-09 | `2026-09.md` | 🏁 Auto-show sample nối xong đủ 14 tool (chốt loạt "nối hết các tool còn lại") |
+| 1 | 2026-09 | `2026-09.md` | ✅ Auto-show sample cho Xem Tuổi — port `buildPhanPrompt` từ JS trình duyệt |
+| 1 | 2026-09 | `2026-09.md` | ✅ Auto-show sample cho Đặt Tên Con/DN + Chọn Ngày Tốt — script sinh mẫu riêng |
+| 1 | 2026-09 | `2026-09.md` | ✅ Auto-show sample cho Sổ Nhân Mạch — thêm TOOL_CONFIGS mới |
+| 1 | 2026-09 | `2026-09.md` | ✅ Auto-show sample cho Duyên Nợ Tiền Kiếp — thêm TOOL_CONFIGS mới |
+| 1 | 2026-09 | `2026-09.md` | ✅ Auto-show sample mở rộng sang Chu Trình Cuộc Đời + Vận Hạn Năm |
+| 1 | 2026-09 | `2026-09.md` | 🔀 Footer "Lập Lá Số" trỏ nhầm `/luan-giai.html` — đổi sang `/app/luan-giai` |
+| 1 | 2026-09 | `2026-09.md` | 🐌 PDF mẫu 3 tool nhiều mục nặng 4,9-5,8 MB — Chromium nhúng lại tài nguyên MỖI trang |
+| 1 | 2026-09 | `2026-09.md` | 🐛 Gen sample laso lần đầu SAU khi bỏ hard paywall — `injectAndRender` bấm nhầm nút đã ẩn |
+| 1 | 2026-09 | `2026-09.md` | 🔓 Đảo ngược hard paywall của laso (app-luan-giai.html) — auto-show trở lại |
+| 1 | 2026-09 | `2026-09.md` | 👁️ Auto-show sample ngay khi vào trang (day-con/nguoi-khac/huong-nghiep-tre/chan-dung-vo-chong/chan-dung-tien-kiep) |
+| 1 | 2026-09 | `2026-09.md` | 🖼️ PDF "Xem mẫu" + SampleHint cho 2 tool sinh ẢNH (chan-dung-vo-chong/tien-kiep) |
+| 1 | 2026-09 | `2026-09.md` | 🔓 Gỡ placeholder "Xem bản mẫu" (SampleHint) cho 3 tool đã có PDF mẫu |
+| 1 | 2026-09 | `2026-09.md` | 🖨️ PDF "Xem mẫu" chụp trang thật — mở rộng sang 3 tool `phan` |
+| 1 | 2026-09 | `2026-09.md` | 🐛 Bộ lọc nhiễu "postMessage" (#785) vẫn lọt — neo `^` sai vì browser tự thêm "Uncaught " |
 | 1 | 2026-09 | `2026-09.md` | 🗂️ Sidebar bỏ danh sách công cụ, gộp Hồ sơ lên đầu + Sổ lá số theo nhóm |
 | 1 | 2026-09 | `2026-09.md` | 🚨 `security_audit()` báo giả "cày quà đăng ký" cho hộ dùng chung thiết bị |
 | 1 | 2026-09 | `2026-09.md` | 🖨️ PDF "Xem mẫu" — từ tự dựng HTML rời sang CHỤP ĐÚNG trang thật |
@@ -269,3 +300,4 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 162 | 2026-09 | `2026-09.md` | 🕸️ P4 — La-Võng: từ 2 sao cố định Thìn/Tuất sang NHÃN của Đà La |
 | 163 | 2026-09 | `2026-09.md` | 🚀 Tứ Hóa Phi Tinh + 2 vá hiển thị mobile trên lá số |
 | 164 | 2026-09 | `2026-09.md` | 🔌 Tứ Hóa Phi Tinh — nối dữ kiện vào prompt luận giải |
+| 165 | 2026-09 | `2026-09.md` | 🛡️ Bộ dò `check:webdriver` — chặn tái phát GA4/Clarity/Meta Pixel đổ phiên giả từ CI |

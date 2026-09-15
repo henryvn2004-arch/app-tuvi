@@ -24,7 +24,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=39">
+<link rel="stylesheet" href="/shell.css?v=46">
 <style>
 /* Thẻ Vận Hôm Nay phải co theo bề rộng CỘT chứ không theo viewport: trên
    desktop `.ws` chỉ còn ~360px sau khi trừ sidebar 246px + rail 336px, nên
@@ -458,8 +458,8 @@
 <script src="/poster.js?v=5" defer></script>
 <script src="/tool-prices.js?v=8"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=90"></script>
+  <script src="/nav.js?v=27" data-icons-only></script>
+<script src="/shell.js?v=91"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 /* ── Ô icon đầu .ws-top: `mountToolIcon()` (shell.js) tự chèn SVG của tool
@@ -1830,6 +1830,19 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
 
   function seen(){ try{ return localStorage.getItem(TOUR_KEY)==='1'; }catch(e){ return true; } }
   function markSeen(){ try{ localStorage.setItem(TOUR_KEY,'1'); }catch(e){} }
+
+  // `TOUR_KEY` là cờ THEO TRÌNH DUYỆT — máy mới, trình duyệt ẩn danh, hay xoá
+  // site data đều làm mất cờ dù tài khoản đã dùng app lâu rồi, tour lại hiện
+  // ra cho một "returning user" thật. `user.created_at` (Supabase, đã có sẵn
+  // trong `Auth.getUser()` từ lúc đăng nhập, không cần gọi thêm) mới là tín
+  // hiệu THEO TÀI KHOẢN: tài khoản tạo quá 24h coi như không còn là lần đầu.
+  function isReturningUser(){
+    try{
+      var u=window.Auth&&Auth.getUser&&Auth.getUser();
+      if(!u||!u.created_at) return false;
+      return (Date.now()-new Date(u.created_at).getTime())>24*3600*1000;
+    }catch(e){ return false; }
+  }
   function esc2(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
   // Vùng NHÌN THẤY THẬT. `window.innerHeight` trên iOS Safari tính cả dải nằm
@@ -1945,6 +1958,31 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
     if(_spot){ _spot.remove(); _spot=null; }
     if(_pop){ _pop.remove(); _pop=null; }
     bindWatchers(false);
+    watchDrawers(false);
+  }
+
+  // 🪤 `.tour-spot`/`.tour-pop` cố ý nổi TRÊN sidebar/rail (z-index 901/902 >
+  // 60) để không bị một drawer khác che mất — nhưng hệ quả là nếu người dùng
+  // TỰ bấm ☰/Trợ lý mở drawer giữa lúc một bước KHÔNG nằm trong drawer đang
+  // hiện (vd bước "#nextCard" ở khung giữa), vòng sáng vẫn đứng yên ở TOẠ ĐỘ
+  // CŨ của neo đó — sidebar mới mở vừa hay che đúng chỗ đó thì vòng sáng
+  // trông như đang khoanh vào một mục sidebar (đã báo qua ảnh chụp: bước
+  // "Thầy đã chọn sẵn" khoanh nhầm vào "Tổng quan"). Sidebar/rail mở tay là
+  // tín hiệu người dùng đã tự đi khám phá — đóng tour luôn, đúng tinh thần
+  // "không chặn thao tác khác của trang" đã có sẵn ở đầu file.
+  var _drawerObs=null;
+  function watchDrawers(on){
+    if(!on){ if(_drawerObs){ _drawerObs.disconnect(); _drawerObs=null; } return; }
+    if(_drawerObs || !window.MutationObserver) return;
+    var targets=[document.getElementById('shell-sidebar'), document.getElementById('shell-rail')].filter(Boolean);
+    if(!targets.length) return;
+    _drawerObs=new MutationObserver(function(muts){
+      for(var i=0;i<muts.length;i++){
+        var el=muts[i].target;
+        if(el && el.classList && el.classList.contains('open')){ finish(); return; }
+      }
+    });
+    targets.forEach(function(t){ _drawerObs.observe(t,{attributes:true,attributeFilter:['class']}); });
   }
 
   // 🪤 Trang /app cuộn trong #ws chứ không cuộn window → phải nghe 'scroll' ở
@@ -1970,7 +2008,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
   }
 
   function start(){
-    if(seen()) return;
+    if(seen()||isReturningUser()) return;
     // Không bước nào có điểm neo (trang lỗi, hoặc các khối cùng chưa kịp
     // dựng) → đừng tạo một overlay không trỏ vào đâu cả.
     var any=false;
@@ -1982,6 +2020,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
     document.body.appendChild(_spot);
     document.body.appendChild(_pop);
     bindWatchers(true);
+    watchDrawers(true);
     step(0);
   }
 

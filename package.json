@@ -44,6 +44,7 @@
     "test:smoke:ui": "playwright test --config=playwright.smoke.config.ts --ui",
     "lhci": "lhci autorun",
     "check:motifs": "node scripts/check-que-motifs.mjs",
+    "check:illus": "node scripts/check-illus.mjs",
     "check:terms": "node scripts/check-terms.mjs",
     "check:publish": "node scripts/check-publish-filter.mjs",
     "check:jobs": "node scripts/check-cron-jobs.mjs",
@@ -67,9 +68,11 @@
     "oracle:ansao": "node scripts/oracle/check-ansao-exhaustive.mjs",
     "oracle:lunar": "node scripts/oracle/report-lunar-diff.mjs",
     "oracle:tieuhan": "node scripts/oracle/verify-tieuhan.mjs",
-    "check:lavong": "node scripts/check-la-vong.mjs"
+    "check:lavong": "node scripts/check-la-vong.mjs",
+    "check:webdriver": "node scripts/check-analytics-webdriver.mjs"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^4.9.0",
     "@supabase/supabase-js": "^2.112.3",
     "@vercel/functions": "^3.9.5",
     "celestine": "^0.2.1",
@@ -79,6 +82,7 @@
     "pdf-parse": "^1.1.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "resend": "6.27.0",
     "sharp": "^0.35.3",
     "zod": "^4.4.3"
   },

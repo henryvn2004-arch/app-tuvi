@@ -20,7 +20,7 @@ const CFG = {
 // SOCIAL PROOF DATA
 // ═══════════════════════════════════════════════════════════
 const ACTIONS = [
-  { action: 'vừa mở khóa luận giải lá số',           page: '/luan-giai.html' },
+  { action: 'vừa mở khóa luận giải lá số',           page: '/app/luan-giai' },
   { action: 'vừa xem tuổi vợ chồng',                 page: '/xem-tuoi.html' },
   { action: 'vừa xem tuổi làm ăn',                   page: '/xem-lam-an.html' },
   { action: 'vừa phân tích diện tướng khuôn mặt',    page: '/tools/tuong-mat-ai.html' },
@@ -28,10 +28,10 @@ const ACTIONS = [
   { action: 'vừa luận giải thanh tướng giọng nói',   page: '/tools/thanh-tuong-ai.html' },
   { action: 'vừa xem khí sắc vận trình 1–3 tháng',  page: '/tools/khi-sac-ai.html' },
   { action: 'vừa xem thủ tướng chỉ tay',             page: '/tools/thu-tuong-ai.html' },
-  { action: 'vừa mở khóa phân tích đại vận',         page: '/luan-giai.html' },
+  { action: 'vừa mở khóa phân tích đại vận',         page: '/app/luan-giai' },
   { action: 'vừa xem tuổi hợp tác kinh doanh',       page: '/xem-lam-an.html' },
   { action: 'vừa đọc khảo luận về mệnh Thuỷ',        page: '/blog.html' },
-  { action: 'vừa luận giải lá số vừa lập xong',      page: '/luan-giai.html' },
+  { action: 'vừa luận giải lá số vừa lập xong',      page: '/app/luan-giai' },
 ];
 
 const NAMES = [
@@ -55,12 +55,12 @@ const POPUP_DATA = {
     headline: 'Mệnh lý không nên để mai sau mới biết',
     body: 'Hiểu được bản mệnh, đại vận, tướng pháp giúp bạn chủ động trong những quyết định quan trọng. <strong>50+ công cụ luận giải</strong> theo cổ pháp đang chờ bạn khám phá.',
     cta: 'Khám Phá Công Cụ Mệnh Lý →',
-    ctaHref: '/luan-giai.html',
+    ctaHref: '/app/luan-giai',
     secondary: 'Để sau vậy',
     urgency: '<span class="ic-inline" data-icon="lock" data-icon-emoji="🔒" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔒</span> Theo cổ pháp · 紫微鬥數 · 子平八字 · 麻衣神相 · 八宅明鏡',
   },
   // Lá Số tool page — scarcity (đoạn cũ của homepage di chuyển về đây)
-  '/luan-giai.html': {
+  '/app/luan-giai': {
     icon: '⚠️',
     headline: 'Lá số của bạn có thể đang ở giai đoạn chuyển vận quan trọng',
     body: 'Nhiều người bỏ qua dấu hiệu này và hối tiếc về sau. Bài luận giải đầy đủ sẽ chỉ ra chính xác <strong>những đại hạn cần chuẩn bị trong 5 năm tới</strong> — và cách thuận thế để không bỏ lỡ.',
@@ -105,7 +105,7 @@ const POPUP_DEFAULT = {
   headline: 'Khám phá thêm về mệnh lý của bạn',
   body: 'Tử Vi · Tử Bình · Tướng Số · Phong Thủy theo cổ pháp — phân tích toàn diện về tính cách, vận trình, tình duyên, tài lộc và những đại hạn quan trọng sắp tới.',
   cta: 'Xem Lá Số Cá Nhân →',
-  ctaHref: '/luan-giai.html',
+  ctaHref: '/app/luan-giai',
   secondary: 'Để sau vậy',
   urgency: '<span class="ic-inline" data-icon="lock" data-icon-emoji="🔒" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔒</span> Phân tích cá nhân hoá · Theo cổ pháp · Bảo mật tuyệt đối',
 };
@@ -378,7 +378,7 @@ function showPopup() {
 
 function startPopup() {
   // Không hiện popup trên các trang không có paywall
-  const paywalledPages = ['/', '/index.html', '/xem-tuoi.html', '/xem-lam-an.html', '/luan-giai.html'];
+  const paywalledPages = ['/', '/index.html', '/xem-tuoi.html', '/xem-lam-an.html', '/app/luan-giai'];
   const path = location.pathname;
   const isPaywalled = paywalledPages.some(p => path === p || path.endsWith(p));
   if (!isPaywalled) return;

@@ -262,7 +262,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     <a class="cta-btn" href="${appLuanGiaiHref(parseIsrSlug(slug))}">Xem Luận Giải →</a>
   </div>
 </div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=26" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
 </body></html>`;
 }
 
@@ -312,7 +312,7 @@ ${commonHead}
 <div id="nav-ph" style="height:60px;background:#061A2E"></div>
 ${bcHTML}
 ${row.rendered_html}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=26" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
 </body></html>`;
   }
   const luanGiai: Record<string,string> = (row.luan_giai as Record<string,string>) || {};
@@ -328,7 +328,7 @@ ${commonHead}
 ${bcHTML}
 <h1>${title}</h1>
 <div>${bodyHTML}</div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=26" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
 </body></html>`;
 }
 
@@ -1275,7 +1275,7 @@ async function fetchRelatedArticles(cungMenh: string, chinhTinh: string): Promis
   //    trang trí, và chính chuỗi đó kéo dài request tới mức Vercel giết.
   if (keywords.length && left() > 0) {
     const ors = keywords
-      .map((kw) => `tags.cs.%7B%22${encodeURIComponent(kw)}%22%7D`)
+      .map((kw) => `tags.cs.%5B%22${encodeURIComponent(kw)}%22%5D`)
       .join(',');
     const r = await sbFetch<ArticleStub>(
       `${SB_URL}/rest/v1/master_articles?or=(${ors})&select=slug,title,excerpt&${PUBLISHED_ONLY}&order=created_at.desc&limit=4`,
@@ -1506,7 +1506,7 @@ ${relatedArticles.length ? `<div style="background:#F9F4EB;border-top:2px solid 
 </div>
 </div>` : ''}
 ${relatedHTML}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=26" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
 <script src="/share.js" defer></script>
 <script src="/pwa-push.js?v=2" defer></script>
 <script>

@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=39">
+<link rel="stylesheet" href="/shell.css?v=46">
 <style>
 .or-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px}
 .or-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
@@ -71,13 +71,15 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
+        <img class="intro-avatar" src="/tool-avatars/oracle.webp" alt="" style="display:none" onerror="this.remove()">
+        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/boi-bai-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
-          <img class="intro-avatar" src="/tool-avatars/oracle.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Oracle Phương Đông</div>
-            <div class="intro-d">Oracle Phương Đông rút một lá triết lý phương Đông — Âm Dương, Ngũ Hành, Bát Quái — đọc lời khuyên tĩnh tâm. Rút một lá, nhận lời khuyên ngắn, dừng lại và thở chậm hơn.</div>
-            <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
+            <div class="intro-d">Đôi khi không cần một câu trả lời cụ thể, chỉ cần một khoảnh khắc dừng lại và thở chậm hơn. Rút một lá triết lý Âm Dương, Ngũ Hành, Bát Quái, nhận lời khuyên ngắn để tĩnh tâm.</div>
+            <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
@@ -86,12 +88,27 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="aperture"></span><span>Triết lý<br>phương Đông</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — tool này miễn phí, không có form/kết quả tách biệt
+           (cả hai luôn cùng hiện trên trang, chỉ khác nội dung kết quả trống
+           hay đã có), nên chỉ 2 bước: chọn kiểu rút → nhận thông điệp. JS đổi
+           bước ở `wsStepsSet` (cuối file), gọi tại renderResult(). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Chọn kiểu rút</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận thông điệp</span></div>
+      </div>
       <div class="or-card" id="inputCard">
         <div class="fc-head"><span class="fc-ic" data-icon="sparkles"></span><h2>Chọn Kiểu Rút Bài</h2></div>
         <p class="sub">Chọn kiểu rút (1, 3 hay 5 lá) — hệ thống rút ngẫu nhiên, trả thông điệp, hướng dẫn thực hành cho từng lá.</p>
-        <p class="price-note" data-tvp-price-label="oracle">…</p>
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt" data-tvp-price-label="oracle">…</div>
+            </div>
+          </div>
+        </div>
         <div class="spread-btns">
           <button class="spread-btn active" onclick="setSpread(1,this)"><span class="ic" data-icon="sparkles"></span> 1 Lá — Thông Điệp Hiện Tại</button>
           <button class="spread-btn" onclick="setSpread(3,this)"><span class="ic" data-icon="sparkles"></span> 3 Lá — Nhân · Duyên · Quả</button>
@@ -106,6 +123,16 @@
             <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="drawBtnLabel">Định Tâm &amp; Rút Bài</b></span>
           </button>
         </div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Oracle Phương Đông</div>
+        <p class="wsp-desc">Âm Dương, Ngũ Hành và Bát Quái là ba học thuyết nền tảng của triết học phương Đông cổ, mô tả quy luật vận động và cân bằng của vạn vật. Đây là những khái niệm gốc mà nhiều môn thuật số như Kinh Dịch, phong thủy đều xây dựng dựa trên đó.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div class="result-section" id="result-section" data-ws-result style="margin-top:16px">
@@ -122,8 +149,8 @@
 <script>window.SHELL_ACTIVE='oracle';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'oracle'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=33"></script>
-  <script src="/nav.js?v=26" data-icons-only></script><script src="/shell.js?v=90"></script>
+<script src="/tuvi-paywall.js?v=35"></script>
+  <script src="/nav.js?v=27" data-icons-only></script><script src="/shell.js?v=91"></script>
 <script>
 function initOracle(){
   Shell.setContext({
@@ -335,6 +362,19 @@ const SPREAD_LABELS = {
   ]
 };
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn (chọn kiểu rút → nhận thông điệp), không tạo trạng thái mới. `n` các
+// bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền navy).
+function wsStepsSet(n) {
+  var el = document.getElementById('wsSteps');
+  if (!el) return;
+  var steps = el.querySelectorAll('.wss-step');
+  for (var i = 0; i < steps.length; i++) {
+    steps[i].classList.remove('active', 'done');
+    if (i + 1 < n) steps[i].classList.add('done');
+    else if (i + 1 === n) steps[i].classList.add('active');
+  }
+}
 let _spread = 1, _drawn = [];
 
 function setSpread(n, btn) {
@@ -360,6 +400,7 @@ function draw() {
 }
 
 function renderResult() {
+  wsStepsSet(2); // Nhận thông điệp — bài đã rút, kết quả sắp hiện ra
   const q = document.getElementById('question').value.trim();
   document.getElementById('questionDisplay').textContent = q ? `"${q}"` : '';
   const spread = SPREAD_LABELS[_spread];

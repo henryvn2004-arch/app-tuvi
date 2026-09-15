@@ -20,10 +20,11 @@ import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage, logImageUsage, logLlmParseFail } from '@/lib/agent/usage';
 import { railFreeGrant, railFreeTurnsPerGen } from '@/lib/billing/viral-budget';
 import { computeLaso, type Laso } from '@/lib/engine/laso';
-import { computePastLife, resolveEra, type PastLifeProfile } from '@/lib/engine/past-life';
+import { computePastLife, resolveEra, pastLifeMeta, type PastLifeProfile } from '@/lib/engine/past-life';
 import { computeMorphologyForPalace } from '@/lib/engine/portrait';
 import {
   PAST_LIFE_STORY_SYSTEM_PROMPT,
+  PAST_LIFE_STORY_SCHEMA,
   buildPastLifeStoryPrompt,
   PAST_LIFE_IMAGE_SYSTEM_PROMPT,
   buildPastLifeImagePrompt,
@@ -97,40 +98,6 @@ function buildProfile(birth: BirthParams, eraId?: string): BuiltProfile {
   return { ok: true, ls: lasoRes.ls, profile: computePastLife(lasoRes.ls, gender, era) };
 }
 
-/**
- * Phần deterministic của kết quả — thứ engine TRA BẢNG ra, 0 lượt LLM, 0đ.
- *
- * Dùng ở HAI nơi và phải giống hệt nhau: lượt tính thử miễn phí (W1) và lượt
- * trả tiền. Tách ra làm một hàm thay vì chép hai bản, vì lệch nhau là người
- * dùng thấy danh xưng/nền văn minh đổi ngay lúc vừa trả tiền — mất niềm tin
- * đúng khoảnh khắc tệ nhất.
- */
-function metaOf(profile: PastLifeProfile) {
-  return {
-    // Danh xưng chính = chức phận do BẢNG TRA chốt (Tể tướng / Thái y / Quan
-    // án…) — ngắn, cụ thể, người dùng kể lại được. biDanh (LLM) chỉ là vế phụ
-    // hiển thị nhỏ bên dưới (Henry phản hồi: danh xưng dài kiểu mô tả thì đọc
-    // xong không nhớ nổi để mà kể cho bạn bè).
-    danhXung: profile.occupation.title,
-    characterName: profile.characterName,
-    occupation: {
-      title: profile.occupation.title,
-      desc: profile.occupation.desc,
-      star: profile.occupation.star,
-      brightness: profile.occupation.brightness || '',
-      borrowed: profile.occupation.borrowed,
-      notes: profile.occupation.notes,
-      tier: profile.occupation.tier,
-      tierLabel: profile.occupation.tierLabel,
-      tierBreakdown: profile.occupation.tierBreakdown,
-      source: profile.occupation.source,
-    },
-    menh: profile.readouts.menh,
-    thanCungName: profile.thanCungName,
-    portraitAge: profile.arc.portraitAge,
-    era: { id: profile.era.id, label: profile.era.label, ageLabel: profile.era.ageLabel },
-  };
-}
 
 /**
  * W1b — lượt TÍNH THỬ: chạy tầng deterministic rồi dừng.
@@ -162,7 +129,7 @@ async function runPreview(request: NextRequest) {
   return ok({
     success: true,
     preview: true,
-    ...metaOf(profile),
+    ...pastLifeMeta(profile),
     // Khung 5 hồi: nhãn giai đoạn + vai trò kịch do ENGINE chốt (đỉnh cao /
     // biến cố rơi vào hồi nào là suy từ 9 đại vận). Cố ý KHÔNG kèm title/text —
     // đó là phần LLM viết, tức phần đang bán.
@@ -180,27 +147,6 @@ interface StoryAct {
   text?: string;
 }
 
-// Schema ép ở TẦNG API (Gemini responseSchema) — khác hẳn việc dặn shape trong
-// prompt: model không còn đường trả thiếu khoá hay kèm câu dẫn ngoài JSON.
-// `title`/`text` để required vì thiếu một trong hai là hồi đó rỗng trên màn hình.
-const STORY_SCHEMA = {
-  type: 'OBJECT',
-  properties: {
-    biDanh: { type: 'STRING' },
-    moTaNhanVat: { type: 'STRING' },
-    acts: {
-      type: 'ARRAY',
-      items: {
-        type: 'OBJECT',
-        properties: { title: { type: 'STRING' }, text: { type: 'STRING' } },
-        required: ['title', 'text'],
-      },
-    },
-    ketLuan: { type: 'STRING' },
-  },
-  required: ['biDanh', 'moTaNhanVat', 'acts', 'ketLuan'],
-  propertyOrdering: ['biDanh', 'moTaNhanVat', 'acts', 'ketLuan'],
-};
 
 async function handleStory(birth: BirthParams, userId: string, key: string, eraId?: string) {
   const built = buildProfile(birth, eraId);
@@ -231,11 +177,11 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
           (nudge
             ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
             : ''),
-        // Ép JSON ở tầng API (xem STORY_SCHEMA) — chốt chặn thật, prompt chỉ là
-        // lớp nhắc. parseJSON + lượt thử lại bên dưới vẫn giữ làm lưới an toàn
-        // cho nhánh backup Anthropic (API không có JSON mode).
+        // Ép JSON ở tầng API (xem PAST_LIFE_STORY_SCHEMA) — chốt chặn thật,
+        // prompt chỉ là lớp nhắc. parseJSON + lượt thử lại bên dưới vẫn giữ
+        // làm lưới an toàn cho nhánh backup Anthropic (API không có JSON mode).
         json: true,
-        jsonSchema: STORY_SCHEMA,
+        jsonSchema: PAST_LIFE_STORY_SCHEMA,
         // 5 hồi × 100-160 từ tiếng Việt + mô tả nhân vật + lời kết — 2600 quá
         // sát, hết chỗ là JSON cụt và parse hỏng. Nâng 50% cùng đợt (Henry
         // chốt 2026-08-20, retest thấy luận giải bị cắt ngang giữa câu).
@@ -301,9 +247,9 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
 
   const payload = {
     success: true,
-    // Phần deterministic đi qua metaOf() — CÙNG hàm lượt tính thử dùng, nên
+    // Phần deterministic đi qua pastLifeMeta() — CÙNG hàm lượt tính thử dùng, nên
     // danh xưng/nền văn minh không thể đổi giữa hai lượt.
-    ...metaOf(profile),
+    ...pastLifeMeta(profile),
     biDanh: String(parsed.biDanh || ''),
     moTaNhanVat: String(parsed.moTaNhanVat || ''),
     acts,

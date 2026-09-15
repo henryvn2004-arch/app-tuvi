@@ -38,6 +38,14 @@ jobs:
 
       - run: npm ci
 
+      # Runner image có sẵn repo apt Google Chrome, không liên quan gì tới
+      # Chromium của Playwright (Playwright tải thẳng qua CDN riêng) — nhưng
+      # `--with-deps` vẫn chạy `apt-get update` quét qua nó. Repo này thỉnh
+      # thoảng có Packages.gz lệch hash với Release (lỗi bên Google), làm
+      # `apt-get update` thoát mã lỗi và playwright install ăn theo, dù phần
+      # cần cài (thư viện hệ thống từ repo Ubuntu) không hề hư.
+      - run: sudo rm -f /etc/apt/sources.list.d/google-chrome.list
+
       - run: npx playwright install chromium --with-deps
 
       # Production đo domain thật; mọi deploy khác (preview, kể cả nhánh `dev`)

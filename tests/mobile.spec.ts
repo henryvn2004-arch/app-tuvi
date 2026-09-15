@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 
 const KEY_PAGES = [
   { path: '/',                name: 'Homepage' },
-  { path: '/luan-giai.html', name: 'Luận Giải' },
+  { path: '/app-luan-giai.html', name: 'Luận Giải' },
   { path: '/xem-tuoi.html',  name: 'Xem Tuổi' },
   { path: '/tu-binh.html',   name: 'Tử Bình' },
   { path: '/phong-thuy.html',name: 'Phong Thuỷ' },
@@ -64,14 +64,18 @@ test.describe('Mobile — hamburger menu', () => {
 });
 
 // ── Mobile — form usability ───────────────────────────────────────────────────
+// Trang laso THẬT là app-luan-giai.html (/luan-giai.html cũ nay 301 sang
+// /app/luan-giai — Henry, 2026-09-14, xem plan productize luận giải). Form
+// dùng chung TuviForm nhưng host id đổi: #tuvi-form-container (cũ) →
+// #tuviFormHost (mới, xem app-luan-giai.html).
 test.describe('Mobile — Luận Giải form', () => {
   test('form inputs có thể tap và nhập liệu', async ({ page }) => {
-    await page.goto('/luan-giai.html');
+    await page.goto('/app-luan-giai.html');
     await page.waitForLoadState('networkidle');
     await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
 
     // Form phải đủ rộng để nhìn thấy trên mobile
-    const container = page.locator('#tuvi-form-container');
+    const container = page.locator('#tuviFormHost');
     await expect(container).toBeVisible({ timeout: 8000 });
 
     const box = await container.boundingBox();
@@ -79,11 +83,20 @@ test.describe('Mobile — Luận Giải form', () => {
   });
 
   test('submit button không bị crop trên mobile', async ({ page }) => {
-    await page.goto('/luan-giai.html');
+    await page.goto('/app-luan-giai.html');
     await page.waitForLoadState('networkidle');
-
-    const btn = page.locator('.btn-submit, #tvf-submit-btn').first();
-    await expect(btn).toBeVisible({ timeout: 8000 });
+    // 🪤 app-luan-giai.html gọi `TuviForm.render('tuviFormHost', {mode:'compact'})`
+    // — mode:'compact' KHÔNG dựng `.btn-submit`/`#tvf-submit-btn` (khối đó chỉ
+    // tồn tại ở nhánh mode:'full' của tuvi-form.js, xem `buildFull`/render()).
+    // Compact "tái dùng .frow/.fg/.btn-go sẵn có của trang gọi" đúng như comment
+    // ngay trong tuvi-form.js — nút submit THẬT của trang này là `#btnGo`
+    // (`.btn-go`, `onclick="doLuan()"`), đứng ngoài #tuviFormHost, cùng nút mà
+    // bài kiểm "grid 12 cung" bên dưới gọi gián tiếp qua `doLuan()`. Selector
+    // cũ `.btn-submit, #tvf-submit-btn` không timeout vì tải chậm — nó đỏ vì
+    // phần tử KHÔNG BAO GIỜ tồn tại trên trang này, hai lượt sửa timeout trước
+    // đó đều sai gốc.
+    const btn = page.locator('#btnGo, .btn-go').first();
+    await expect(btn).toBeVisible({ timeout: 20_000 });
 
     const box = await btn.boundingBox();
     expect(box?.width).toBeGreaterThan(80);
@@ -94,19 +107,34 @@ test.describe('Mobile — Luận Giải form', () => {
 // ── Mobile — lá số grid ───────────────────────────────────────────────────────
 test.describe('Mobile — Lá Số grid', () => {
   test('grid 12 cung không overflow màn hình', async ({ page }) => {
-    await page.goto('/luan-giai.html');
+    await page.goto('/app-luan-giai.html');
     await page.waitForLoadState('networkidle');
-    await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
+    await page.waitForFunction(() => {
+      const w = window as unknown as { TuviForm?: unknown; doLuan?: unknown };
+      return !!w.TuviForm && typeof w.doLuan === 'function';
+    }, { timeout: 10_000 });
 
-    await page.evaluate(`
-      TuviForm.setData({ hoten: 'Mobile Test', ngay: 15, thang: 7, nam: 1990, gioHour: 7, gioitinh: 'nam', namXem: 2026 })
-    `);
-    await page.locator('#tvf-submit-btn').click();
-    await page.waitForSelector('#result-section.active', { timeout: 20_000 });
+    // Gọi thẳng `doLuan()` (cùng cách tests/hard-paywall.spec.ts đã dùng ổn
+    // định) thay vì bấm nút submit — bấm nút cần nó "actionable" (không bị
+    // phần tử khác che), mà app-luan-giai.html có thêm FAB/rail nổi trên
+    // layout shell mà trang cũ không có, dễ khiến `.click()` timeout dù nút
+    // vẫn hiển thị đúng. Kết quả cuối giống hệt: cùng hàm `doLuan()` chạy.
+    await page.evaluate(() => {
+      const w = window as unknown as {
+        TuviForm: { setData(d: Record<string, unknown>): void };
+        doLuan(): void;
+      };
+      w.TuviForm.setData({ hoten: 'Mobile Test', ngay: 15, thang: 7, nam: 1990, gioHour: 7, gioitinh: 'nam', namXem: 2026 });
+      w.doLuan();
+    });
+    // #lgPanel bật display:block + #miniChart (grid 12 cung) đổ chữ NGAY sau
+    // khi engine tính xong — thuần client, không đợi LLM/network (xem doLuan
+    // trong app-luan-giai.html), khác `#result-section.active` của trang cũ.
+    await page.waitForSelector('#lgPanel', { state: 'visible', timeout: 20_000 });
 
-    // Grid has intentional min-width:480px for scrollable mobile UX.
-    // Verify the wrapping container stays within viewport (not the inner grid).
-    const wrap = page.locator('.laso-wrap');
+    // Grid có min-width nội tại cho trải nghiệm cuộn ngang trên mobile.
+    // Verify khung BAO NGOÀI (miniChart) nằm trong viewport, không phải lưới bên trong.
+    const wrap = page.locator('#miniChart');
     const wrapBox = await wrap.boundingBox();
     const viewportWidth = page.viewportSize()?.width ?? 390;
     if (wrapBox) {

@@ -291,8 +291,13 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 .tpw-qr-box{margin:0 auto 14px;width:190px;height:190px;background:#f5f5f5;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#999;font-size:.8rem}
 .tpw-qr-box img{width:190px;height:190px;object-fit:contain}
 .tpw-qr-info{background:#f5f5f5;border-radius:8px;padding:10px 14px;font-size:.82rem;text-align:left;margin-bottom:10px;line-height:1.8;color:#333}
+.tpw-qr-copyrow{display:flex;gap:8px;margin-bottom:10px}
+.tpw-qr-copybtn{flex:1;background:#f5f5f5;border:1px solid #e2ddd3;border-radius:6px;padding:.5rem .4rem;font-size:.76rem;font-family:inherit;color:#333;cursor:pointer}
+.tpw-qr-copybtn:hover{background:#ececec}
 .tpw-qr-hint{font-size:.75rem;color:#666;margin-bottom:12px;line-height:1.7}
 .tpw-qr-warn{color:#C0392B;font-weight:600}
+.tpw-qr-countdown{font-size:.76rem;color:#999;margin-bottom:8px}
+.tpw-qr-countdown b{color:#C0392B}
 .tpw-qr-status{font-size:.88rem;color:#444;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:.4rem;min-height:1.3rem}
 .tpw-qr-btn{background:#061A2E;color:#C9A84C;border:none;padding:.6rem 1.4rem;border-radius:6px;cursor:pointer;font-size:.88rem;font-family:inherit;font-weight:600}
 .tpw-qr-btn:hover{background:#0D3B5E}`;
@@ -852,24 +857,39 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     el.className = 'tpw-qr-backdrop';
     el.setAttribute('role', 'dialog');
     el.setAttribute('aria-modal', 'true');
+    // Pha 1b (vá phễu 2026-09) — `#tpw-qr-apps` (deep link mở app ngân hàng)
+    // đứng TRƯỚC `#tpw-qr-box` (ảnh QR): khách mobile rời trang trung vị 48
+    // giây sau khi thấy QR — trên CHÍNH điện thoại đang xem thì không tự quét
+    // được mã của mình, phải bấm deep link hoặc chép tay. Đặt thao tác làm
+    // được lên đầu, QR (chỉ hữu ích cho ai xem trên máy khác) xuống dưới.
+    // Trên desktop vô hại: `BankDeepLink.render` tự ẩn `#tpw-qr-apps`
+    // (`isLikelyPhone()`=false) nên thứ tự DOM không đổi gì hiển thị.
     el.innerHTML =
       '<div class="tpw-qr-modal">' +
         '<button class="tpw-qr-close" type="button" aria-label="Đóng">✕</button>' +
         '<div class="tpw-qr-title">Chuyển Khoản Ngân Hàng</div>' +
         '<div class="tpw-qr-credits" id="tpw-qr-credits"></div>' +
         '<div class="tpw-qr-amount" id="tpw-qr-amount"></div>' +
-        '<div class="tpw-qr-box" id="tpw-qr-box"></div>' +
         '<div id="tpw-qr-apps" hidden></div>' +
+        '<div class="tpw-qr-box" id="tpw-qr-box"></div>' +
         '<div class="tpw-qr-info" id="tpw-qr-info"></div>' +
+        '<div class="tpw-qr-copyrow" id="tpw-qr-copyrow"></div>' +
         '<div class="tpw-qr-hint">Mở app ngân hàng → Quét QR hoặc chuyển khoản thủ công<br>' +
           '<span class="tpw-qr-warn">⚠ Chuyển ĐÚNG số tiền ở trên (không hơn, không kém) vào đúng số TK — nội dung CK ghi gì cũng được, hệ thống tự nhận theo số TK</span><br>' +
           'Chuyển xong, quay lại tab này — hệ thống tự nhận diện và chạy tiếp trong vài giây, không cần bấm gì thêm.</div>' +
+        '<div class="tpw-qr-countdown" id="tpw-qr-countdown"></div>' +
         '<div class="tpw-qr-status" id="tpw-qr-status"></div>' +
         '<button class="tpw-qr-btn" type="button" id="tpw-qr-manual">Tôi đã chuyển khoản</button>' +
       '</div>';
     document.body.appendChild(el);
     el.querySelector('.tpw-qr-close').addEventListener('click', _closeQr);
-    el.querySelector('#tpw-qr-manual').addEventListener('click', () => _qrPoll(true));
+    // Nút dưới cùng đổi Ý NGHĨA khi hết giờ (`_qrExpired`, đặt bởi vòng đếm
+    // ngược trong `_openBankQr`) — cùng MỘT nút, tránh nhét thêm một nút thứ
+    // hai luôn hiện mà 99% thời gian không làm gì.
+    el.querySelector('#tpw-qr-manual').addEventListener('click', () => {
+      if (_qrExpired) { _reopenExpiredQr(); return; }
+      _qrPoll(true);
+    });
     el.addEventListener('click', (e) => { if (e.target === el) _closeQr(); });
     return el;
   }
@@ -882,8 +902,17 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   function _qrEscHandler(e) { if (e.key === 'Escape') _closeQr(); }
   function _qrVisHandler() { if (document.visibilityState === 'visible' && _qrOrderCode) _qrPoll(false); }
 
+  // Chỉ bắn `qr_close` khi ĐANG còn `_qrOrderCode` (đơn còn treo, chưa ai xác
+  // nhận `paid`) — nhánh thành công trong `_qrPoll` đã tự xoá `_qrOrderCode`
+  // (= null) TRƯỚC khi gọi `_closeQr()` nên tự loại trừ, không cần tham số
+  // riêng phân biệt. Gộp cả lượt MUA THÀNH CÔNG vào `qr_close` thì bậc này
+  // đọc thành "bỏ dở" oan — đúng cái D1 cần tránh.
   function _closeQr() {
-    clearInterval(_qrTimer); _qrTimer = null; _qrOrderCode = null;
+    clearInterval(_qrTimer); _qrTimer = null;
+    if (_qrOrderCode) {
+      try { if (window.Track) window.Track.event('qr_close', { tool_id: (_cfg && _cfg.product) || '' }); } catch (e) { /* đo hỏng không được chặn đóng modal */ }
+    }
+    _qrOrderCode = null;
     const el = document.getElementById('tpw-qr-backdrop');
     if (el) el.classList.remove('show');
     document.removeEventListener('keydown', _qrEscHandler);
@@ -891,7 +920,56 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     if (_qrLastFocus && _qrLastFocus.focus) _qrLastFocus.focus();
   }
 
-  let _qrResumeSlug = null, _qrResumeCallback = null;
+  let _qrResumeSlug = null, _qrResumeCallback = null, _qrResumeAmount = null, _qrExpired = false;
+
+  /** Ghi "13:45" (mm:ss) vào #tpw-qr-countdown, hoặc chuỗi hết hạn khi hết giờ. */
+  function _paintQrCountdown(secLeft) {
+    const el = document.getElementById('tpw-qr-countdown');
+    if (!el) return;
+    if (secLeft <= 0) { el.innerHTML = '<b>Mã đã hết hạn</b> — bấm nút bên dưới để tạo mã mới.'; return; }
+    const m = Math.floor(secLeft / 60), s = secLeft % 60;
+    el.textContent = 'Mã hết hạn sau ' + m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  /** Hết giờ chờ (15 phút): khoá lượt hỏi cũ, đổi nút thành lối tạo mã MỚI —
+   *  không tự ý tạo lại (mỗi lần tạo là một lượt gọi payOS thật). */
+  function _qrExpire() {
+    _qrExpired = true;
+    _paintQrCountdown(0);
+    _qrStatus('', false);
+    const btn = document.getElementById('tpw-qr-manual');
+    if (btn) btn.textContent = 'Tạo mã mới →';
+  }
+
+  function _reopenExpiredQr() {
+    if (_qrResumeAmount == null) return;
+    _openBankQr(_qrResumeAmount, _qrResumeSlug, _qrResumeCallback);
+  }
+
+  /** Hai nút chép nhanh (số TK / số tiền) — KHÔNG thay cho deep link (đã tự
+   *  copy số TK trước khi mở app, `bank-deeplink.js`): đây là lối cho khách
+   *  xem trên máy khác/không cài app ngân hàng nào trong danh sách. */
+  function _wireQrCopyButtons(accountNumber, amountVND) {
+    const host = document.getElementById('tpw-qr-copyrow');
+    if (!host) return;
+    host.innerHTML =
+      '<button class="tpw-qr-copybtn" type="button" data-copy="' + _esc(accountNumber) + '" data-label="Chép số TK" data-field="account">Chép số TK</button>' +
+      '<button class="tpw-qr-copybtn" type="button" data-copy="' + _esc(String(amountVND)) + '" data-label="Chép số tiền" data-field="amount">Chép số tiền</button>';
+    host.querySelectorAll('.tpw-qr-copybtn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const text = btn.getAttribute('data-copy'), label = btn.getAttribute('data-label'), field = btn.getAttribute('data-field');
+        const done = () => {
+          btn.textContent = 'Đã chép ✓';
+          setTimeout(() => { btn.textContent = label; }, 1400);
+        };
+        const fallback = () => { try { document.execCommand('copy'); } catch (e) { /* ignore */ } done(); };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done, fallback);
+        } else fallback();
+        try { if (window.Track) window.Track.event('qr_copy', { tool_id: (_cfg && _cfg.product) || '', meta: { field: field } }); } catch (e) { /* đo hỏng không được chặn chép */ }
+      });
+    });
+  }
 
   async function _qrPoll(manual) {
     if (!_qrOrderCode) return;
@@ -915,6 +993,9 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         if (!_qrOrderCode) return;
         _qrOrderCode = null;
         clearInterval(_qrTimer); _qrTimer = null;
+        // Xoá dòng đếm ngược — thành công thì không còn "hết hạn sau…" nào cả.
+        const cdEl = document.getElementById('tpw-qr-countdown');
+        if (cdEl) cdEl.textContent = '';
         _qrStatus('Thanh toán thành công! Đang tiếp tục…', false);
         const slug = _qrResumeSlug, callback = _qrResumeCallback;
         setTimeout(() => {
@@ -975,7 +1056,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     if (_bdlLoading) return _bdlLoading;
     _bdlLoading = new Promise((resolve) => {
       const s = document.createElement('script');
-      s.src = '/tools-shared/bank-deeplink.js?v=1';
+      s.src = '/tools-shared/bank-deeplink.js?v=2';
       s.onload = () => resolve();
       // Fail-open: tải lỗi thì đơn giản không hiện khối deep link, QR vẫn dùng được.
       s.onerror = () => resolve();
@@ -990,13 +1071,17 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     const userId = window.Auth?.getUser()?.id || '';
     if (!userId) return;
 
-    _qrResumeSlug = slug; _qrResumeCallback = callback;
+    _qrResumeSlug = slug; _qrResumeCallback = callback; _qrResumeAmount = amountVnd;
     const el = _qrEl();
     document.getElementById('tpw-qr-box').textContent = 'Đang tải QR…';
     document.getElementById('tpw-qr-apps').hidden = true;
     document.getElementById('tpw-qr-info').innerHTML = '';
+    document.getElementById('tpw-qr-copyrow').innerHTML = '';
     document.getElementById('tpw-qr-amount').textContent = '';
     document.getElementById('tpw-qr-credits').textContent = '';
+    document.getElementById('tpw-qr-countdown').textContent = '';
+    document.getElementById('tpw-qr-manual').textContent = 'Tôi đã chuyển khoản';
+    _qrExpired = false;
     _qrStatus('Đang tạo mã QR…', true);
     _qrOrderCode = null;
     _qrLastFocus = document.activeElement;
@@ -1016,6 +1101,11 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       document.getElementById('tpw-qr-credits').textContent = d.credits + ' Lượng';
       document.getElementById('tpw-qr-amount').textContent =
         new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(d.amountVND);
+      // Pha 0 — modal đã hiện số tiền THẬT, tách khỏi `unlock_click` (bấm nút
+      // mở khoá) vì giữa hai bậc đó còn phụ thuộc `_qrAmountFor` đọc giá quy
+      // đổi thành công; thiếu bậc này thì không phân biệt được "bấm mở nhưng
+      // rơi về tường /topup.html cũ" khỏi "thấy QR rồi mới bỏ".
+      try { if (window.Track) window.Track.event('qr_shown', { tool_id: (_cfg && _cfg.product) || '', meta: { amount_vnd: d.amountVND, credits: d.credits } }); } catch (e) { /* đo hỏng không được chặn hiện QR */ }
 
       // Nội dung CK đến TỪ SERVER — cùng luật đã vá ở topup.html (một chuỗi
       // cho cả hai phía, không tự dựng lại ở client).
@@ -1032,7 +1122,23 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       img.src = qrUrl;
       qrBox.appendChild(img);
       _loadBankDeepLink().then(() => {
-        if (window.BankDeepLink) window.BankDeepLink.render(document.getElementById('tpw-qr-apps'), d, memo);
+        const appsEl = document.getElementById('tpw-qr-apps');
+        if (window.BankDeepLink) window.BankDeepLink.render(appsEl, d, memo);
+        // `bdl:click` = module dùng chung (`bank-deeplink.js`) tự bắn khi
+        // khách bấm mở app ngân hàng (đã copy sẵn số TK trước khi điều
+        // hướng) — nghe ở ĐÂY vì chỉ trang tool mới có `_cfg.product` để gắn
+        // vào event, module kia không biết tool nào đang gọi nó.
+        // 🪤 `#tpw-qr-apps` là node TĨNH (`_qrEl()` cache lại, không dựng
+        // mới mỗi lần mở QR) — thiếu cờ `bdlBound` thì mở QR lần hai trong
+        // CÙNG phiên (ví dụ vừa đóng vừa mở lại để thử số tiền khác) gắn
+        // thêm một listener chồng lên, bắn `qr_deeplink_click` HAI LẦN cho
+        // một cú bấm.
+        if (appsEl && !appsEl.dataset.bdlBound) {
+          appsEl.dataset.bdlBound = '1';
+          appsEl.addEventListener('bdl:click', () => {
+            try { if (window.Track) window.Track.event('qr_deeplink_click', { tool_id: (_cfg && _cfg.product) || '' }); } catch (e) { /* đo hỏng không được chặn mở app */ }
+          });
+        }
       });
 
       document.getElementById('tpw-qr-info').innerHTML =
@@ -1040,13 +1146,21 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         '<b>Số TK:</b> ' + _esc(d.accountNumber || '—') + '<br>' +
         '<b>Chủ TK:</b> ' + _esc(d.accountName || '—') + '<br>' +
         '<b>Nội dung CK:</b> <span style="font-weight:700;color:#061A2E">' + _esc(memo) + '</span>';
+      _wireQrCopyButtons(d.accountNumber || '', d.amountVND);
 
       _qrStatus('Đang chờ thanh toán…', false);
+      // Pha 1b — đếm ngược THẬT (không phải urgency bịa): cùng đúng 15 phút
+      // (300 lượt × 3s) mà lượt chờ `_qrPoll` vốn đã tự dừng, chỉ thêm phần
+      // NGƯỜI DÙNG NHÌN THẤY được — trước đây hết giờ chỉ lặng lẽ đổi dòng
+      // trạng thái, không ai biết mình còn bao lâu để chuyển khoản.
+      const TOTAL_TICKS = 300;
+      _paintQrCountdown(TOTAL_TICKS * 3);
       let cnt = 0;
       clearInterval(_qrTimer);
       _qrTimer = setInterval(() => {
         cnt++;
-        if (cnt > 300) { clearInterval(_qrTimer); _qrTimer = null; _qrStatus('Hết giờ chờ.', false); return; }
+        _paintQrCountdown((TOTAL_TICKS - cnt) * 3);
+        if (cnt > TOTAL_TICKS) { clearInterval(_qrTimer); _qrTimer = null; _qrExpire(); return; }
         _qrPoll(false);
       }, 3000);
     } catch (e) {

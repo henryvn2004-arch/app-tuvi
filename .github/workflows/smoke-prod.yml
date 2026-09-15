@@ -39,6 +39,12 @@ jobs:
 
       - run: npm ci
 
+      # Xem chú thích cùng dòng trong playwright.yml — repo apt Google Chrome
+      # có sẵn trên runner đôi lúc Packages.gz lệch hash với Release, làm
+      # `apt-get update` (chạy ngầm trong --with-deps) thoát lỗi dù không cần
+      # gì từ repo đó.
+      - run: sudo rm -f /etc/apt/sources.list.d/google-chrome.list
+
       - run: npx playwright install chromium --with-deps
 
       # Production đo THẲNG domain thật (gồm cả DNS + redirect apex→www + CDN);

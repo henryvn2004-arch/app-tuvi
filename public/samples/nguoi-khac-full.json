@@ -1,0 +1,185 @@
+{
+  "success": true,
+  "ten": "Anh Minh",
+  "quanHe": {
+    "id": "sep",
+    "label": "Sếp / cấp trên",
+    "cungCuaBan": "Phụ Mẫu"
+  },
+  "viec": {
+    "id": "nho-viec",
+    "label": "Sắp nhờ họ một việc / trình một đề xuất"
+  },
+  "gioiTinh": "nam",
+  "kieu": {
+    "id": "ho-tro",
+    "ten": "Hỗ trợ",
+    "tuTuong": "Thiếu dương (少陽) — âm ngoài, dương trong",
+    "motCau": "Nghĩ ra đường đi, nói cho người khác hiểu, làm quân sư",
+    "cauHoi": [
+      "Làm sao để mọi người thấy hợp lý?",
+      "Mình đang được nhìn như thế nào?",
+      "Còn cách nào hay hơn không?",
+      "Ai cần được thuyết phục trước?"
+    ],
+    "dongLuc": "Muốn được nhìn nhận là người sắc sảo và có ảnh hưởng. Không ai công nhận thì bất an, dù việc vẫn chạy.",
+    "datChat": "Phản ứng nhanh, nghĩ nhiều nước, đọc được không khí phòng họp. Thích trình bày, thích được hỏi ý kiến, và thường là người giải thích lại cho cả đội hiểu.",
+    "manh": "Biến thứ rối thành thứ người khác hiểu được, và làm được điều đó nhanh hơn hầu hết mọi người.",
+    "yeu": "Nói giỏi hơn làm; hưởng thụ quá trình mà nhẹ tay với kết quả cuối; cần lời khen nhiều hơn mình thừa nhận.",
+    "moiTruongHop": "Chỗ ăn bằng đầu và bằng miệng: hoạch định, tiếp thị, tư vấn, đào tạo, luật, y, nghề chuyên môn có thương hiệu cá nhân.",
+    "moiTruongKy": "Việc lặp lại, không ai hỏi tới ý kiến, thành quả tính theo tập thể — ở đó bạn héo nhanh dù lương vẫn tốt."
+  },
+  "kieuPhu": null,
+  "lai": false,
+  "toaDo": {
+    "x": -0.974,
+    "y": 0.349
+  },
+  "matDoc": [
+    {
+      "cung": "Mệnh",
+      "nhan": "Cốt cách",
+      "y": "Con người gốc — cái không đổi dù đổi việc, đổi chỗ",
+      "sao": [
+        "Thiên Cơ (Miếu)",
+        "Thiên Lương (Miếu)"
+      ],
+      "muon": false,
+      "cachCuc": [
+        "Hỏa/Linh đắc: can đảm, dũng mãnh, chí khí hiên ngang",
+        "[Thiên Lương] Cung Mệnh an tại Tý, Sửu, Dần, Mão, Thìn, Tỵ, Ngọ có Lương tọa thủ, gặp Nguyệt, Linh hội chiếu, là nhiều có tài năng và dĩ nhiên là quý hiển."
+      ],
+      "diem": 2.8
+    },
+    {
+      "cung": "Phúc Đức",
+      "nhan": "Nền tâm tính",
+      "y": "Cái làm họ thấy yên hay thấy bất an, thứ họ tin là đáng sống",
+      "sao": [
+        "Thiên Đồng (Vượng) [Hóa Khoa]",
+        "Thái Âm (Vượng) [Hóa Kỵ]"
+      ],
+      "muon": true,
+      "cachCuc": [
+        "Tuần/Triệt án ngữ Phúc Đức: xa quê lập nghiệp, họ hàng ly tán",
+        "Phúc Đức vô chính diệu: kém phúc",
+        "[Thái Tuế] Không được hưởng phúc dồi dào, khó tránh được tai họa. Trong họ thiếu hòa khí."
+      ],
+      "diem": 6.2
+    },
+    {
+      "cung": "Thiên Di",
+      "nhan": "Ra ngoài",
+      "y": "Cách họ cư xử với người ngoài — đây là mặt bạn gặp nhiều nhất",
+      "sao": [
+        "Thiên Cơ (Miếu)",
+        "Thiên Lương (Miếu)"
+      ],
+      "muon": true,
+      "cachCuc": [
+        "Thiên Di vô chính diệu: lấy chiếu từ cung xung",
+        "Tuần án ngữ: giảm tính chất tốt/xấu các sao trong cung 50% (đang tác dụng)",
+        "Vô chính diệu có Tuần: rất tốt — Tuần giải trừ cung trống"
+      ],
+      "diem": 5.9
+    },
+    {
+      "cung": "Quan Lộc",
+      "nhan": "Cách làm việc",
+      "y": "Họ coi trọng gì trong công việc, làm kiểu nào thì thấy đúng",
+      "sao": [
+        "Thái Dương (Vượng) [Hóa Lộc]",
+        "Cự Môn (Vượng)"
+      ],
+      "muon": true,
+      "cachCuc": [
+        "Thiên Mã tại Quan Lộc: công danh hiển đạt, công việc lưu động",
+        "Quan Lộc vô chính diệu: công danh bình thường, không hiển đạt",
+        "[Lộc Tồn] Có danh chức và nhiều tiền bạc, có tài tổ chức."
+      ],
+      "diem": 3
+    },
+    {
+      "cung": "Nô Bộc",
+      "nhan": "Với người xung quanh",
+      "y": "Họ kết giao và giữ người thế nào",
+      "sao": [
+        "Liêm Trinh (Hãm)",
+        "Phá Quân (Hãm)"
+      ],
+      "muon": false,
+      "cachCuc": [
+        "Tả/Hữu mờ tại Nô Bộc: người giúp việc lừa đảo, bạn bè gian",
+        "[Tả Phù, Hữu Bật] Gặp nhiều người giúp đỡ.",
+        "[Song Hao] Hay phải xa nhà, nay đây mai đó nhưng được nhiều người mến chuộng."
+      ],
+      "diem": 3.6
+    }
+  ],
+  "than": {
+    "cung": "Thiên Di",
+    "y": "Càng về sau càng sống ở bên ngoài — quan hệ, đi lại, môi trường mới."
+  },
+  "vanNam": {
+    "nam": 2026,
+    "khung": {
+      "tuoiStart": 34,
+      "tuoiEnd": 43,
+      "diem": 7
+    },
+    "tieuHanCung": "Mệnh",
+    "luuNienCung": "Tử Tức",
+    "catSat": {
+      "cat": 5,
+      "sat": 2,
+      "canCan": "cát nhiều hơn sát"
+    }
+  },
+  "daiVan": {
+    "tuoiStart": 34,
+    "tuoiEnd": 43,
+    "cung": "Điền Trạch",
+    "sao": [
+      "Vũ Khúc (Miếu) [Hóa Quyền]",
+      "Tham Lang (Miếu)"
+    ],
+    "diem": 7
+  },
+  "voiBanCoSo": null,
+  "namXem": 2026,
+  "keHoach": "Để đề xuất lọt tai sếp Minh, bạn phải đi từ bức tranh lớn rồi mới đến giải pháp, tuyệt đối không quăng số liệu vụn vặt ngay từ đầu. Mở màn bằng việc xin góc nhìn chiến lược của sếp, vì người này rất thích được hỏi ý kiến và đóng vai trò quân sư. Trình bày ngắn gọn bối cảnh, đưa ra 2 phương án đã gạn lọc kèm rủi ro, rồi chừa đúng một khoảng trống chiến lược để sếp tự tay chốt nước cờ cuối nhé. Cái bẫy lớn nhất là ép sếp duyệt ngay tại trận bằng mớ chi tiết thi công; làm vậy sếp sẽ thấy bị dồn vào chân tường và bắt đầu soi lỗi logic để vặn lại bạn đấy.",
+  "tinhKhi": "Anh Minh là mẫu người có đầu óc tính toán cực nhanh, thích đứng ở vị trí vạch đường chỉ lối hơn là xắn tay áo đi dọn dẹp chi tiết. Sếp có tài biến những chuyện rối rắm thành mô hình gãy gọn để thuyết phục người khác, nắm bắt không khí phòng họp rất nhạy cơ. Người ngoài nhìn vào dễ tưởng sếp chỉ giỏi bàn chuyện vĩ mô mà lơ là thực thi, nhưng thực chất đầu óc ấy sinh ra là để làm quân sư giải quyết thế khó chứ không phải thợ làm theo lệnh.",
+  "chamNoc": "Sếp khó chịu nhất khi bị cấp dưới đặt vào thế đã rồi hoặc qua mặt, tước mất vai trò định hướng chiến lược. Cảm giác mình bị xem như cái máy đóng dấu duyệt việc hay ý kiến chuyên môn bị phớt lờ sẽ chạm thẳng vào nỗi bất an về tầm ảnh hưởng của người này đấy.",
+  "coiTrong": "Người này coi trọng danh tiếng, sự sắc sảo và muốn được công nhận là người có tầm nhìn thuyết phục được đám đông. Thứ sếp sợ mất nhất chính là vị thế dẫn dắt và sự tôn trọng của tập thể đối với trí tuệ của mình.",
+  "nenNoi": [
+    {
+      "viec": "Nhờ sếp cố vấn khung chiến lược trước khi chốt chi tiết thi công.",
+      "vidu": "\"Em đã lọc ra hai hướng xử lý cho dự án này, nhờ anh xem giúp em nước cờ nào đi sẽ êm hơn về mặt dài hạn ạ?\""
+    },
+    {
+      "viec": "Công nhận công sức định hướng của sếp ngay trong phần mở đầu đề xuất.",
+      "vidu": "\"Bản kế hoạch này em triển khai bám sát theo đúng định hướng giải pháp hôm trước anh chỉ ra đấy ạ.\""
+    },
+    {
+      "viec": "Đưa phương án mở để sếp đóng góp dấu ấn cá nhân vào quyết định.",
+      "vidu": "\"Em thấy phương án A đang tối ưu nhất, nhưng ở khâu thuyết phục phòng ban kia thì em muốn xin thêm cao kiến của anh.\""
+    }
+  ],
+  "tranhNoi": [
+    {
+      "viec": "Dồn ép đưa ra quyết định ngay lập tức mà không cho sếp thời gian suy tính.",
+      "vidu": "\"Việc này gấp lắm rồi anh duyệt luôn đi chứ không là trễ hạn toàn bộ đấy nhé.\""
+    },
+    {
+      "viec": "Ném một đống dữ liệu chi tiết thô mà không tóm lược bức tranh tổng thể.",
+      "vidu": "\"Bảng số liệu chi tiết từng hạng mục đây anh tự xem đi, em làm xong hết cả rồi.\""
+    },
+    {
+      "viec": "Gợi ý mang tính phủ nhận hoàn toàn định hướng sếp từng đưa ra trước đó.",
+      "vidu": "\"Cách tính của anh hôm trước không khả thi đâu, em nghĩ phải dẹp hết làm lại từ đầu cơ.\""
+    }
+  ],
+  "thoiDiem": "Anh Minh đang ở đại vận 34–43 tuổi rất vững vàng, có uy quyền và độ sắc bén cao để thâu tóm công việc. Năm 2026 các yếu tố thuận lợi lấn át trở ngại, tinh thần làm việc hăng hái nên đây là lúc rất tốt để bạn đưa các đề xuất mang tính đột phá, mở rộng dự án tới cho sếp duyệt.",
+  "voiBan": "",
+  "motCau": "Muốn sếp Minh gật đầu, hãy cho sếp làm quân sư vạch cờ thay vì bắt sếp làm người thợ đóng dấu."
+}

@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=39">
+<link rel="stylesheet" href="/shell.css?v=46">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Vận Hạn 12 Tháng — mượn khuôn app-luan-giai.html */
@@ -47,6 +47,16 @@
 .sec-n{width:26px;height:26px;flex:0 0 auto;border-radius:7px;background:var(--navy);color:var(--gold);font-family:var(--serif);font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:600}
 .sec-h h3{font-family:var(--serif);font-size:18px;font-weight:600}
 .card{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:15px 17px;box-shadow:var(--shadow)}
+.lg-illus{position:relative;margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
+.lg-illus img{width:100%;height:100%;object-fit:cover;display:block}
+/* Bìa chương (2026-09-13, tách khỏi ảnh 2026-09-14, cùng mẫu app-luan-giai.html):
+   câu hook đứng box RIÊNG ngay dưới banner tháng, không đè lên ảnh nữa —
+   chèn làm sibling SAU `.lg-illus` (insertAdjacentHTML 'afterend'). Chỉ áp
+   cho luận THẬT (renderMarkdown gọi kèm illusFig) — nhánh văn mẫu mờ (dummy,
+   dòng ~587) KHÔNG có figure sống để chèn vào lúc dựng chuỗi (banner+dummy
+   cùng vào DOM một lượt), nên vẫn giữ .fb-card như cũ, không đổi hành vi ở đó. */
+.lg-hookbox{margin:-4px 0 10px;background:var(--white);border-radius:16px;padding:14px 18px 15px;box-shadow:0 3px 10px rgba(6,26,46,.08)}
+.lg-hookbox p{font-family:var(--serif);font-weight:700;font-size:15.5px;line-height:1.44;color:var(--heading);margin:0}
 .ask{margin-top:11px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 .fold-toggle{font-size:12.5px;color:var(--tx-blue);cursor:pointer;margin-bottom:14px;display:inline-block}
 #miniChart{display:block;margin-bottom:20px}
@@ -124,12 +134,14 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
+        <img class="intro-avatar" src="/tool-avatars/van-han-nam.webp" alt="" style="display:none" onerror="this.remove()">
+        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
-          <img class="intro-avatar" src="/tool-avatars/van-han-nam.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Vận Hạn 12 Tháng Tới</div>
-            <div class="intro-d">Luận vận trình theo từng tháng trong năm — biết trước tháng nào cần cẩn trọng, tháng nào nên tiến.</div>
+            <div class="intro-d">Một năm 12 tháng không tháng nào giống tháng nào — có tháng thuận để tiến, có tháng chỉ nên giữ mình chờ thời. Soi vận trình từng tháng từ lá số của bạn để chủ động hơn thay vì bị động đón nhận.</div>
             <div id="introSrc"></div>
           </div>
         </div>
@@ -139,16 +151,49 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="dollar-sign"></span><span>Tài chính<br>từng tháng</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (doXem/showForm/initGate/paywall/kết quả). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước lá số</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="calendar"></span><h2>Nhập ngày sinh để xem vận hạn 12 tháng tới</h2></div>
         <p class="sub" id="fmSub">Nhập ngày giờ sinh. Hệ thống luận vận hạn theo từng tháng âm lịch — đại vận hiện tại, tiểu vận năm nay và luận riêng đủ 12 tháng.</p>
         <div id="sampleLinkHost"></div>
         <div id="tuviFormHost"></div>
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt">Miễn phí</div>
+            </div>
+          </div>
+        </div>
         <button class="btn-go" id="btnGo" onclick="doXem()">
           <span class="bg-label"><span class="ic" data-icon="calendar"></span><b id="btnGoLabel">Xem vận hạn →</b></span>
           <small>Miễn phí</small>
         </button>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Vận Hạn 12 Tháng Tới</div>
+        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+      </div>
+      <div class="samp-cta" id="sampCta" style="display:none">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai ngày sinh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" onclick="openSample(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="vhPanel" data-ws-result>
@@ -186,6 +231,8 @@
 <script>window.SHELL_ACTIVE='van-han-nam';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
+<script src="/tools-shared/illus-nguong.js?v=1"></script>
+<script src="/tools-shared/illus-match.js?v=1"></script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/pchip.js?v=1"></script>
 <script src="/tools-shared/daivan-chart.js?v=1"></script>
@@ -207,13 +254,14 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=33"></script>
+<script src="/tuvi-paywall.js?v=35"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
+<script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
-<script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=90"></script>
+<script src="/nav.js?v=27" data-icons-only></script>
+<script src="/shell.js?v=91"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
@@ -263,6 +311,21 @@ var CUNG_ORDER=['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan L�
 var SC_DIMS=['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
 function cungTotal(sc){ if(!sc)return null; var d=SC_DIMS.map(function(k){return sc[k]}).filter(function(v){return typeof v==='number'}); return d.length?Math.round(d.reduce(function(a,b){return a+b},0)/d.length*10)/10:null; }
 function scoreColor(t){ return t>=7?'var(--green)':t>=5?'var(--gold-soft)':'var(--red)'; }
+
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → xem trước → paywall → kết quả), không tạo
+// trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
+// đang "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 var _astrolabe=null,_hoTen='',_ngay=0,_thang=0,_nam=0,_gioitinh='nam',_laSoText=null;
@@ -291,6 +354,117 @@ function _loadDummyVH(){
     .then(function(j){ DUMMY_VH=j||{}; return DUMMY_VH; })
     .catch(function(){ DUMMY_VH={}; return DUMMY_VH; });
 }
+
+// ── Bản mẫu TỰ MỞ (auto-show) — port từ app-luan-giai.html/app-chu-trinh-cuoc-doi.html
+// (2026-09-10). Tool này KHÔNG bán lẻ (mở cả bó), dummy (`DUMMY_VH`, đã tải qua
+// `_loadDummyVH()` ở trên) đã phủ ĐỦ cả 16 phần — dùng THẲNG làm nội dung "mở
+// khoá hết" của bản mẫu, không cần sinh thêm hay tạo file riêng. Khung 12
+// tháng (`_khung`) không tính được ở client — gọi lại đúng API `action=khung`
+// mà `doXem()` dùng (0 lượt LLM, 0đ, không cần đăng nhập), cho lá số mẫu cố
+// định `SAMPLE_BIRTH_VH` (khớp `SAMPLE_BIRTH` trong scripts/gen-tool-sample.mjs).
+// 🪤 Đặt SAU `TU_NGAY/TU_THANG/TU_NAM`/`_astrolabe`/`DUMMY_VH` — IIFE tự-mở ở
+// cuối khối này gọi `openSample` NGAY LÚC PARSE, đặt trước ba biến đó thì
+// `fetch(...)` xây dựng request với `tuNgay/tuThang/tuNam` toàn `undefined`
+// (khai báo `var` đã hoist nhưng GÁN GIÁ TRỊ thì chưa chạy tới).
+var SAMPLE_BIRTH_VH={ngay:15,thang:8,nam:1990,gio_hour:6,gio_idx:3,gioitinh:'nam'};
+var _sampleOpenVH=false;
+
+function closeSample(){
+  _sampleOpenVH=false;
+  var bar=document.getElementById('sampBar'); if(bar) bar.remove();
+  ['vhBody','vhScores','vhJump','miniChart','hookHost','cnsHost','vhMap'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.innerHTML='';
+  });
+  var vh=document.getElementById('vhPanel'); if(vh) vh.style.display='none';
+}
+
+// `auto=true`: tự mở lúc vào trang, hỏng thì ÂM THẦM hiện lại `#sampCta`
+// (không alert). `auto=false`: khách tự bấm, hỏng thì phải NÓI — cùng lý do
+// app-luan-giai.html.
+function openSample(btn,auto){
+  var reset=function(){ if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; } };
+  if(btn){ btn.disabled=true; btn.textContent='Đang mở…'; }
+  Promise.all([
+    _loadDummyVH(),
+    fetch('/api/van-han-nam?action=khung',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({birth:{day:SAMPLE_BIRTH_VH.ngay,month:SAMPLE_BIRTH_VH.thang,year:SAMPLE_BIRTH_VH.nam,hourBranch:SAMPLE_BIRTH_VH.gio_idx,gender:SAMPLE_BIRTH_VH.gioitinh},tuNgay:TU_NGAY,tuThang:TU_THANG,tuNam:TU_NAM})})
+      .then(function(r){ return r.json(); })
+  ]).then(function(res){
+     // Bất đồng bộ (fetch khung) — khách có thể đã có vận hạn THẬT trước khi
+     // đáp xuống (đến qua ?auto=1, hoặc điền form nhanh tay). Không chốt lại
+     // thì bản mẫu đè lên kết quả thật của họ.
+     if(auto&&(_astrolabe||window.__tvmbSkipDemo)) return;
+     var dummy=res[0], kd=res[1];
+     if(!kd||!kd.khung) throw new Error((kd&&kd.error)||'Không dựng được khung mẫu.');
+     renderSample(dummy,kd,auto); reset();
+   })
+   .catch(function(e){
+     reset();
+     if(window.console) console.error('sample:',e);
+     if(auto){ var c=document.getElementById('sampCta'); if(c) c.style.display='flex'; return; }
+     alert('Chưa mở được bản mẫu. Bạn thử lại giúp, hoặc nhập ngày sinh để xem vận hạn thật.');
+   });
+}
+
+function renderSample(dummy,kd,auto){
+  var b=SAMPLE_BIRTH_VH;
+  var conv=convertDuongToAm(b.ngay,b.thang,b.nam,b.gio_hour);
+  conv.gioIdx=b.gio_idx;
+  var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,
+    canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:b.gio_idx,gioitinh:b.gioitinh,namXem:TU_NAM});
+  ls._conv=conv; ls._hoTen='Người mẫu';
+  _astrolabe=ls; _hoTen='Người mẫu'; _ngay=b.ngay; _thang=b.thang; _nam=b.nam; _gioitinh=b.gioitinh;
+  _laSoText=formatLaSoV2(ls,conv); ls._laSoText=_laSoText;
+  _khung=kd.khung; _labels=kd.labels; _tongPhan=kd.tongPhan;
+
+  render(ls);
+  mountHook(ls);
+  document.getElementById('miniChart').innerHTML=renderGrid(ls,{name:'Người mẫu',gioitinh:b.gioitinh,dd:b.ngay,mm:b.thang,yyyy:b.nam,hh:b.gio_hour,gioChi:CHI[b.gio_idx],amLich:conv.amLich,amDuongNam:conv.amDuongNam});
+  if(window.mountIcons) window.mountIcons(document.getElementById('miniChart'));
+
+  // Rót lời AI (đủ 16 phần, dummy đã KHÔNG mờ nữa) qua ĐÚNG hàm trang thật
+  // dùng khi khách đọc lại cache đã trả tiền — gỡ badge/CTA + bỏ mờ
+  // `.tpw-real-lock`, một cửa duy nhất.
+  _renderCached(dummy||{});
+
+  var panel=document.getElementById('vhPanel');
+  var old=document.getElementById('sampBar'); if(old) old.remove();
+  var bar=document.createElement('div');
+  bar.className='samp-bar'; bar.id='sampBar';
+  bar.innerHTML='<div class="sb-txt">Đây là <b>BẢN MẪU</b> — lá số của <b>Người mẫu</b> ('+
+    b.ngay+'/'+b.thang+'/'+b.nam+'), không phải của bạn.</div>'+
+    '<button type="button" onclick="sampleToForm()">Xem vận hạn của tôi →</button>';
+  panel.insertBefore(bar,panel.firstChild);
+
+  panel.style.display='block';
+  document.getElementById('birthPanel').style.display='none';
+  var _sc=document.getElementById('sampCta'); if(_sc) _sc.style.display='none';
+  document.getElementById('btnEdit').style.display='none';
+  var _btnLg=document.getElementById('btnLuanGiai'); if(_btnLg) _btnLg.style.display='none';
+  _sampleOpenVH=true;
+  if(!auto&&window.AiLoadingSteps) AiLoadingSteps.scrollToResult('vhPanel');
+  if(window.Track) Track.event('preview_shown',{meta:{from:auto?'sample_auto':'sample_click'}});
+}
+
+function sampleToForm(){
+  closeSample();
+  showForm();
+  var f=document.getElementById('birthPanel');
+  var c=document.getElementById('sampCta'); if(c) c.style.display='flex';
+  if(f&&f.scrollIntoView) f.scrollIntoView({behavior:'smooth',block:'start'});
+  if(window.Track) Track.event('cta_click',{meta:{from:'sample_to_form'}});
+}
+
+// Chỉ mời/tự mở bản mẫu với khách NGUỘI — cùng 3 điều kiện với các tool anh
+// em (xem docs/nhat-ky/2026-09.md mục "Auto-show sample...").
+(function(){
+  try{
+    if(window.__tvmbSkipDemo) return;
+    if(window.Shell&&Shell.autoRun&&Shell.autoRun()) return;
+    if(window.Shell&&Shell.getRememberedBirth&&Shell.getRememberedBirth()) return;
+    var c=document.getElementById('sampCta'); if(c) c.style.display='flex';
+  }catch(e){ if(window.console) console.error('sample gate:',e); }
+})();
 
 // Quay lại từ lượt nạp Lượng (xem `TuviPaywall._insufficient`/`resumeIfPending`)
 // sau khi đã hết Lượng ngay lúc mở khoá — trang này là MULTI-PAGE (điều hướng
@@ -359,6 +533,7 @@ async function doXem(){
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart'));
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('vhPanel').style.display='block';
+    wsStepsSet(2); // Xem trước lá số — khung 12 tháng + văn mẫu sắp hiện ra
     document.getElementById('btnEdit').style.display='';
     document.getElementById('btnLuanGiai').style.display='';
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('vhPanel');
@@ -413,6 +588,18 @@ function buildChips(){
   return c;
 }
 
+// Banner minh hoạ — CHỈ phần THÁNG (5-16). Phần 1-4 mượn nội dung Luận Giải/
+// Chu Trình Cuộc Đời vốn đã có banner riêng ở trang gốc, không dựng lại ở
+// đây. Tháng KHÔNG có trục sắc thái (xem `illusUrlForThang`, illus-match.js)
+// — chỉ đổi cảnh theo mùa/lễ tiết, không suy tốt/xấu.
+function illusBannerHtml(t,ls){
+  if(!window.IllusMatch||!t||typeof t.thangAL!=='number') return '';
+  var r=IllusMatch.illusUrlForThang(ls,t.thangAL,_gioitinh);
+  if(!r) return '';
+  return '<figure class="lg-illus"><img src="'+r.url+'" alt="Minh hoạ '+esc(t.nhan||'')+'" loading="lazy"'+
+    ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
+}
+
 // ── Render 16 phần ───────────────────────────────────────────────────────
 // Phần 1–4 dùng LẠI khối deterministic của bản Luận Giải (LuanGiaiCore) —
 // cùng một dữ liệu thì phải hiện cùng một kiểu. Phần 5–16 là khối THÁNG riêng.
@@ -441,7 +628,8 @@ function render(ls){
       var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
       body=pre?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
     }else{
-      body=renderThang(_khung.thangs[p-5]);
+      var t=_khung.thangs[p-5];
+      body=illusBannerHtml(t,ls)+renderThang(t);
     }
     // 🔴 (2026-09-07) Bỏ hẳn khoá-mini bán LẺ từng phần (16 Lượng/phần) —
     // Henry chốt chỉ còn MỘT nút mở cả bó, cùng mẫu app-chu-trinh-cuoc-doi.html.
@@ -591,7 +779,7 @@ function _renderCached(store){
   _store=store;
   for(var p=1;p<=_tongPhan;p++){
     var box=document.getElementById('claude-content-'+p),text=store[p]||store[String(p)];
-    if(box&&text){ box.style.display='block'; box.classList.remove('tpw-real-lock'); box.innerHTML=renderMarkdown(text); }
+    if(box&&text){ box.style.display='block'; box.classList.remove('tpw-real-lock'); box.innerHTML=renderMarkdown(text,illusFigFor(box)); }
   }
   document.getElementById('vhUnlock').style.display='none';
   document.getElementById('vhProgress').style.display='none';
@@ -616,7 +804,7 @@ async function initGate(){
   }catch(e){hasAccess=false;}
   if(hasAccess){
     var cached=await _fetchCached(_pendingSlug);
-    if(cached){ _renderCached(cached); return; }
+    if(cached){ _renderCached(cached); wsStepsSet(4); return; }
     // 🐞 Đã trả tiền nhưng CHƯA có cache (lượt trước bị ngắt giữa chừng trước
     // khi PhanPool ghi xong `_saveResult`) — cùng bản vá app-chu-trinh-cuoc-doi.html
     // (2026-09-07): mở khoá + sinh lại NGAY, miễn phí (hasAccess đã xác nhận
@@ -629,6 +817,7 @@ async function initGate(){
 function _renderUnlockBlock(){
   var host=document.getElementById('vhUnlock');
   host.style.display='block';
+  wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   _paintSecLocks(true);
   if(_loggedIn()){
     host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateAI()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span><b>Luận vận hạn 12 tháng →</b></span><small>Tốn <span data-tvp-price="van-han-nam">…</span> Lượng <span data-tvp-price-vnd="van-han-nam"></span></small></button>'+
@@ -713,6 +902,7 @@ async function initiateAI(){
 async function _startAI(){
   document.getElementById('vhUnlock').style.display='none';
   document.getElementById('vhProgress').style.display='block';
+  wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu luận giải đầy đủ
   _paintSecLocks(false);
   _store={};
   _pace&&_pace.reset();
@@ -856,7 +1046,7 @@ async function _runPhanVanHan(p){
     }
     _store[p]=data.luanGiai;
     doneWait();
-    if(box)box.innerHTML=renderMarkdown(data.luanGiai);
+    if(box)box.innerHTML=renderMarkdown(data.luanGiai,illusFigFor(box));
     _renderMap();   // ô của tháng vừa xong đổi từ "chưa luận" sang có mức + từ khoá
     return true;
   }catch(e){
@@ -881,8 +1071,11 @@ window._vhRetry=function(p){
 // CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tra ra class
 // CSS màu (.fb-card, xem shell.css). Cùng cơ chế với app-luan-giai.html.
 var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
-function renderMarkdown(text){
-  var lines=String(text||'').split('\n'),out='';
+// `illusFig` = figure ảnh banner của phần đang render (null nếu thiếu ảnh
+// hoặc gọi từ nhánh dựng chuỗi dummy). Có ảnh thì câu hook ĐẦU TIÊN đè lên
+// ảnh (bìa chương) thay vì đứng thành card riêng — cùng cơ chế app-luan-giai.html.
+function renderMarkdown(text,illusFig){
+  var lines=String(text||'').split('\n'),out='',hookUsed=false;
   function inline(s){ return s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>'); }
   var pendingLead='';
   function flushPending(){ if(pendingLead){ out+='<p>'+pendingLead+'</p>'; pendingLead=''; } }
@@ -894,7 +1087,13 @@ function renderMarkdown(text){
     if(m){
       flushPending();
       var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';
-      out+='<div class="fb-card '+cls+'">“'+esc(m[2].trim())+'”</div>';
+      var hookHtml='“'+esc(m[2].trim())+'”';
+      if(!hookUsed&&illusFig){
+        illusFig.insertAdjacentHTML('afterend','<div class="lg-hookbox"><p>'+hookHtml+'</p></div>');
+        hookUsed=true;
+      }else{
+        out+=window.FbCardTopic.cardHtml(cls,window.FbCardTopic.extractTopic(line.trim()),hookHtml);
+      }
       pendingLead=inline(m[3]).trim();
       return;
     }
@@ -903,6 +1102,17 @@ function renderMarkdown(text){
   });
   flushPending();
   return out;
+}
+// `.lg-illus` là sibling của `.card` (chứa `box`) trong cùng `.sec`. Dọn
+// overlay cũ trước khi render lại (gọi lại được: cache → vừa luận xong).
+// Trả về figure CHỈ khi còn <img> sống (ảnh lỗi thì onerror đã gỡ khung).
+function illusFigFor(box){
+  var sec=box&&box.closest('.sec');
+  var fig=sec?sec.querySelector('.lg-illus'):null;
+  var prev=sec?sec.querySelector('.lg-hookbox'):null;
+  if(prev)prev.remove();
+  if(!fig)return null;
+  return fig.querySelector('img')?fig:null;
 }
 
 function _saveResult(){
@@ -932,6 +1142,7 @@ function showForm(){
   document.getElementById('btnLuanGiai').style.display='none';
   document.getElementById('vhUnlock').style.display='none';
   document.getElementById('vhProgress').style.display='none';
+  wsStepsSet(1); // về lại Nhập thông tin
   Shell.setShareable(null);
 }
 

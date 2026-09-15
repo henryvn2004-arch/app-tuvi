@@ -663,28 +663,54 @@ function closeAuthModal() {
 // ── "Lưu tài khoản" — modal RIÊNG, nhỏ, KHÔNG dùng chung DOM với showAuthModal
 // (tránh đụng logic tab đăng nhập/đăng ký đang chạy tốt). Chỉ có ở đây khi
 // đang là phiên ẩn danh (xem `TuviPaywall`/`updateNavUI` — nơi gọi tự kiểm).
-function showClaimModal() {
-  if (document.getElementById('claim-modal')) {
-    document.getElementById('claim-modal').style.display = 'flex';
-    return;
+//
+// `opts` (tuỳ chọn) — nơi gọi khác nhau cần COPY khác nhau cho cùng MỘT cơ
+// chế (claimAccount nâng cấp phiên ẩn danh tại chỗ): nav bar cảnh báo "sắp
+// mất Lượng", còn thẻ "Báo cáo đã sẵn sàng" (report-delivery.js) mời "nhận
+// báo cáo qua email" — vẫn MỘT modal, MỘT hàm submit, chỉ đổi chữ + việc làm
+// tiếp sau khi thành công:
+//   opts.title/desc/submitLabel — chữ hiển thị, mặc định y hệt bản gốc.
+//   opts.callback — gọi SAU KHI claim xong; có callback thì im lặng đóng
+//     modal (nơi gọi tự lo phản hồi thành công theo NGỮ CẢNH của nó — ví dụ
+//     report-delivery.js gửi email luôn); KHÔNG có callback thì giữ hành vi
+//     gốc (banner "✓ Đã lưu").
+function showClaimModal(opts) {
+  opts = opts || {};
+  var title = opts.title || 'Lưu tài khoản';
+  var desc = opts.desc || 'Bạn đang dùng phiên tạm — Lượng và lịch sử đang giữ ở đây sẽ MẤT nếu xoá trình duyệt hoặc đổi máy. Thêm email + mật khẩu để giữ lại, không mất gì đang có.';
+  var submitLabel = opts.submitLabel || 'Lưu tài khoản';
+  _pendingClaimCallback = typeof opts.callback === 'function' ? opts.callback : null;
+
+  var modal = document.getElementById('claim-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'claim-modal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+    document.body.appendChild(modal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeClaimModal(); });
   }
-  const modal = document.createElement('div');
-  modal.id = 'claim-modal';
-  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+  // Luôn viết lại nội dung — modal có thể đã dựng TRƯỚC ĐÓ với opts khác (vd
+  // nav bar rồi tới thẻ báo cáo trong cùng phiên trang); tái dùng khung DOM
+  // nhưng KHÔNG được để chữ CŨ đứng lại.
   modal.innerHTML = `
     <div style="background:#fff;border-radius:14px;padding:32px;width:100%;max-width:380px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
       <button onclick="closeClaimModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#aaa;line-height:1">×</button>
-      <div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#061A2E;margin-bottom:6px">Lưu tài khoản</div>
-      <p style="font-size:12.5px;color:#7a705f;line-height:1.6;margin-bottom:18px">Bạn đang dùng phiên tạm — Lượng và lịch sử đang giữ ở đây sẽ MẤT nếu xoá trình duyệt hoặc đổi máy. Thêm email + mật khẩu để giữ lại, không mất gì đang có.</p>
+      <div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#061A2E;margin-bottom:6px">${_escHtml(title)}</div>
+      <p style="font-size:12.5px;color:#7a705f;line-height:1.6;margin-bottom:18px">${_escHtml(desc)}</p>
       <input id="claim-email" type="email" placeholder="Email" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'">
       <input id="claim-password" type="password" placeholder="Mật khẩu (ít nhất 6 ký tự)" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'" onkeydown="if(event.key==='Enter')submitClaim()">
       <div id="claim-error" style="color:#C0392B;font-size:12px;margin-bottom:8px;display:none"></div>
-      <button id="claim-submit" onclick="submitClaim()" style="width:100%;padding:11px;background:#061A2E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Lưu tài khoản</button>
+      <button id="claim-submit" onclick="submitClaim()" style="width:100%;padding:11px;background:#061A2E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">${_escHtml(submitLabel)}</button>
     </div>`;
-  document.body.appendChild(modal);
-  modal.addEventListener('click', e => { if (e.target === modal) closeClaimModal(); });
+  modal.style.display = 'flex';
   setTimeout(() => document.getElementById('claim-email')?.focus(), 100);
 }
+
+function _escHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+let _pendingClaimCallback = null;
 
 function closeClaimModal() {
   const m = document.getElementById('claim-modal');
@@ -696,6 +722,7 @@ async function submitClaim() {
   const pass  = document.getElementById('claim-password').value;
   const errEl = document.getElementById('claim-error');
   const btn   = document.getElementById('claim-submit');
+  const submitLabelBefore = btn.textContent;
   if (!email || !pass) { errEl.textContent = 'Vui lòng điền email và mật khẩu.'; errEl.style.display = 'block'; return; }
   if (pass.length < 6) { errEl.textContent = 'Mật khẩu ít nhất 6 ký tự.'; errEl.style.display = 'block'; return; }
   errEl.style.display = 'none';
@@ -704,14 +731,20 @@ async function submitClaim() {
     await claimAccount(email, pass);
     closeClaimModal();
     try { window.fbq && window.fbq('track', 'CompleteRegistration'); } catch (e) {}
-    const msg = '✓ Đã lưu — kiểm tra email để xác nhận nếu được yêu cầu';
-    if (window.TuviPaywall && window.TuviPaywall._banner) window.TuviPaywall._banner(msg);
-    else alert(msg);
+    const cb = _pendingClaimCallback;
+    _pendingClaimCallback = null;
+    if (cb) {
+      cb();
+    } else {
+      const msg = '✓ Đã lưu — kiểm tra email để xác nhận nếu được yêu cầu';
+      if (window.TuviPaywall && window.TuviPaywall._banner) window.TuviPaywall._banner(msg);
+      else alert(msg);
+    }
   } catch (e) {
     errEl.textContent = e.message || 'Không lưu được. Vui lòng thử lại.';
     errEl.style.display = 'block';
   } finally {
-    btn.textContent = 'Lưu tài khoản'; btn.disabled = false;
+    btn.textContent = submitLabelBefore; btn.disabled = false;
   }
 }
 window.showClaimModal = showClaimModal;
@@ -791,7 +824,19 @@ async function submitAuth() {
     } else {
       const d = await signUpEmail(email, pass);
       if (!d.access_token) {
-        showAuthError('Đã gửi email xác nhận — vui lòng kiểm tra hộp thư.');
+        // GoTrue trả response y hệt lượt đăng ký thành công khi email ĐÃ TỒN
+        // TẠI (chống dò email — xem docs Supabase "signUp"), chỉ khác ở chỗ
+        // `identities` rỗng thay vì có dữ liệu thật, và KHÔNG gửi email nào.
+        // Không tách 2 trường hợp này thì người đã có tài khoản bấm "Đăng ký"
+        // lại sẽ bị báo nhầm "đã gửi email xác nhận" trong khi thực ra chẳng
+        // có gì được gửi cả — họ chỉ cần Đăng nhập.
+        if (Array.isArray(d.identities) && d.identities.length === 0) {
+          switchTab('signin');
+          document.getElementById('auth-email').value = email;
+          showAuthError('Email này đã có tài khoản — nhập mật khẩu để đăng nhập.');
+        } else {
+          showAuthError('Đã gửi email xác nhận — vui lòng kiểm tra hộp thư.');
+        }
         btn.textContent = _currentTab === 'signin' ? 'Đăng nhập' : 'Tạo tài khoản';
         btn.disabled = false;
         return;

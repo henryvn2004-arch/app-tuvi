@@ -232,7 +232,7 @@ ul{margin:0 0 12px 20px;color:var(--text-mid)}li{margin-bottom:6px}
   </section>
 
 </div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=26" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
 </body>
 </html>`;
 

@@ -77,13 +77,18 @@ test.describe('Prod smoke @smoke', () => {
     if (!page.url().includes('luan-giai.html')) {
       // So theo PATHNAME, không so theo host: trên preview host là *.vercel.app
       // nên phép so cũ (neo vào tuviminhbao.com) sẽ đỏ oan.
+      //
+      // `/luan-giai.html` 301 (Next trả 308) về `/app/luan-giai` từ 2026-09-14
+      // (trang cũ 24-phần đã retire — xem plan productize luận giải), nên
+      // "luan-giai" PHẢI có trong danh sách đích hợp lệ — thiếu là chính lượt
+      // dọn dẹp này tự làm smoke đỏ trên prod thật.
       const path = new URL(page.url()).pathname;
-      expect(path, 'chuyển trang phải về la-so hoặc trang chủ').toMatch(/la-so|index|^\/$/);
+      expect(path, 'chuyển trang phải về la-so, luận giải, hoặc trang chủ').toMatch(/la-so|luan-giai|index|^\/$/);
     }
   });
 
   test('paywall module (tuvi-paywall.js) load được', async ({ page, request }) => {
-    await page.goto('/luan-giai.html');
+    await page.goto('/app/luan-giai');
     await page.waitForLoadState('domcontentloaded');
 
     // PayPal SDK lazy-load — chỉ inject khi paywall trigger. Smoke check phải

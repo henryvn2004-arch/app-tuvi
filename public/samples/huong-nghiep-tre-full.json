@@ -1,0 +1,297 @@
+{
+  "success": true,
+  "ten": "Bé An",
+  "namXem": 2026,
+  "tuoi": 11,
+  "laTreEm": true,
+  "namSinh": 2016,
+  "gioiTinh": "nu",
+  "moiLo": {
+    "id": "chua-thich-gi",
+    "label": "Con chưa thích gì rõ rệt, cái gì cũng nhàn nhạt",
+    "can": "Chỗ nên bày ra trước để con có cơ hội chạm vào đúng thứ hợp — và mốc nào thì thôi lo."
+  },
+  "lop": {
+    "id": "giua",
+    "ten": "Tuổi thử và làm ra sản phẩm",
+    "tuoi": "8–12 tuổi",
+    "vaiChaMe": "Cho con làm ra một thứ trọn vẹn. Ở tuổi này cái quý không phải là học được gì mà là lần đầu biết cảm giác theo một việc tới lúc xong.",
+    "xungHo": "con"
+  },
+  "kieu": {
+    "id": "lanh-dao",
+    "ten": "Lãnh đạo",
+    "tuTuong": "Thiếu âm (少陰) — dương ngoài, âm trong",
+    "amDuong": "duong",
+    "saoNhom": [
+      "Tử Vi",
+      "Thiên Phủ",
+      "Vũ Khúc",
+      "Thiên Tướng"
+    ],
+    "motCau": "Cầm trịch, sắp người vào đúng chỗ, dựng thứ chạy được lâu",
+    "dongLuc": "Muốn là người nói ra thì người khác tin — có công tín, có chỗ đứng được thừa nhận, không phải hô hào mới có người nghe.",
+    "datChat": "Tính xong mới động, làm có thứ lớp, chuộng phương pháp và tiền lệ. Nhìn việc gì cũng thấy phải ráp lại từ nguồn lực đang có chứ không phải làm lại từ đầu.",
+    "cauHoi": [
+      "Có tiền lệ nào chưa?",
+      "Có bản mẫu nào chạy được rồi không?",
+      "Ghép được với nguồn lực sẵn có không?",
+      "Việc này có hợp lý không?"
+    ],
+    "kieuDan": "Quản theo mục tiêu — chia mốc, đặt điểm kiểm, giao rồi theo dõi tiến độ chứ không đứng cạnh chỉ tay.",
+    "moiTruongHop": "Tổ chức có phân tầng và có quy chuẩn, nơi bạn ráp được người và nguồn lực: doanh nghiệp đã qua giai đoạn sống sót, mảng cần dựng lại nề nếp.",
+    "moiTruongKy": "Chỗ hỗn loạn, đổi hướng liên tục, không ai giữ lời — bạn mất nhiều sức để dựng trật tự hơn là để làm việc.",
+    "manh": "Nhìn ra ai mạnh chỗ nào rồi đặt đúng chỗ đó, khiến cả đội chạy nhanh hơn tổng từng người.",
+    "yeu": "Trọng thể diện và tiền lệ nên dễ chậm chân ở khúc phải liều; ôm việc vì sợ người khác làm không đủ chuẩn.",
+    "baiHoc": [
+      "Có ham muốn lãnh đạo không đồng nghĩa với biết lãnh đạo — cái thứ hai phải học riêng.",
+      "Tầm nhìn rộng tới đâu quyết định cái đội lớn tới đâu; giữ khư khư quyền quyết là tự đặt trần cho chính mình.",
+      "Chuộng tiền lệ dễ thành ngại thứ chưa có tiền lệ, mà chính đó là chỗ ăn tiền.",
+      "Bạn cần người dám xông — thiếu một người kiểu Khai sáng bên cạnh thì kế hoạch đẹp mà không ai phá cục."
+    ],
+    "source": "Tứ tượng thiếu âm; bộ Tử Phủ Liêm Vũ Tướng, cổ quyết \"Tử Phủ Vũ Tướng, vị cư nhân thượng\". Đặc chất từng sao theo Tân Biên 4.2 và Vương Đình Chi."
+  },
+  "kieuPhu": null,
+  "lai": false,
+  "toaDo": {
+    "x": 0.552,
+    "y": -0.178
+  },
+  "matDoc": [
+    {
+      "cung": "Mệnh",
+      "nhan": "Cốt cách",
+      "y": "Con người gốc — phần không đổi dù đổi trường, đổi bạn",
+      "sao": [
+        "Tử Vi (Bình)",
+        "Tham Lang (Hãm)"
+      ],
+      "muon": true,
+      "cachCuc": [
+        "Khôi/Việt thủ Mệnh: thường trưởng tử, diện mạo thanh tú, thông minh, cao thượng",
+        "Khôi/Việt + cát tinh: tài văn võ, lãnh đạo giỏi, sớm hiển đạt, phú quý sống lâu",
+        "[Tử Vi, Thiên Phủ] Cung Mệnh có Tử hay Phủ tọa thủ, hay có Tử, Phủ tọa thủ đồng cung, lại gặp Phụ, Bật hội hợp nên được hưởng phú quý trọn đời."
+      ]
+    },
+    {
+      "cung": "Quan Lộc",
+      "nhan": "Đường học nghiệp",
+      "y": "Cách con vào việc, và chịu được kỷ luật tới đâu",
+      "sao": [
+        "Thiên Phủ (Bình)"
+      ],
+      "muon": false,
+      "cachCuc": []
+    },
+    {
+      "cung": "Phúc Đức",
+      "nhan": "Thứ khiến con thấy đáng làm",
+      "y": "Cái làm con thấy có nghĩa — nguồn động lực bền nhất",
+      "sao": [
+        "Vũ Khúc (Hãm)",
+        "Phá Quân (Hãm)"
+      ],
+      "muon": false,
+      "cachCuc": []
+    },
+    {
+      "cung": "Thiên Di",
+      "nhan": "Ra khỏi nhà",
+      "y": "Cách con cư xử ở trường, giữa bạn bè, chỗ lạ",
+      "sao": [
+        "Tử Vi (Bình)",
+        "Tham Lang (Hãm)"
+      ],
+      "muon": false,
+      "cachCuc": [
+        "Tử Tham tại Thiên Di: phiền lòng, tiểu nhân quấy rối, may ít rủi nhiều",
+        "[Tử Vi, Tham Lang] Rời khỏi nhà hay gặp những sự phiền lòng, may ít rủi nhiều, thường có kẻ tiểu nhân theo dõi quấy rối."
+      ]
+    }
+  ],
+  "changDangO": {
+    "tuoiStart": 6,
+    "tuoiEnd": 15,
+    "namStart": 2021,
+    "namEnd": 2030,
+    "cung": "Mệnh",
+    "sao": [
+      "Tử Vi (Bình)",
+      "Tham Lang (Hãm)"
+    ]
+  },
+  "chatNguoi": [
+    {
+      "ten": "Hình khối & thẩm mỹ",
+      "cao": "Nghĩ bằng hình — nhớ chỗ, nhớ dáng, nhớ màu; đẹp hay xấu là con thấy ngay."
+    },
+    {
+      "ten": "Nếp và kỷ luật",
+      "cao": "Ngăn nắp, theo nếp — Thích danh sách, thích biết trước hôm nay làm gì, khó chịu khi lịch đổi đột ngột. Nhận việc thì làm tới nơi."
+    },
+    {
+      "ten": "Thiên nhiên & chăm sóc",
+      "cao": "Nhạy với cây cối, con vật, và với người đang cần được chăm."
+    }
+  ],
+  "khongDoiHoi": [
+    {
+      "ten": "Hình khối & thẩm mỹ",
+      "thap": "Việc hợp với con không đòi hỏi con mắt hình khối hay thẩm mỹ"
+    },
+    {
+      "ten": "Thiên nhiên & chăm sóc",
+      "thap": "Việc hợp với con không đòi hỏi chăm sóc cây cối, con vật hay người đang cần"
+    }
+  ],
+  "chuaRoNet": false,
+  "huongDau": {
+    "id": "dan-dat",
+    "ten": "Dẫn dắt · đứng ra tổ chức",
+    "chat": "Ở đâu có nhóm là nó đứng ra chia việc. Chịu được phần trách nhiệm mà đứa khác né, và rất để ý ai làm chưa xong.",
+    "dauHieu": [
+      "Tự nhận làm nhóm trưởng, hoặc bực khi nhóm trưởng làm không ra gì",
+      "Chia việc cho anh em, bạn bè mà không ai bảo",
+      "Nhớ ai hứa gì rồi nhắc lại",
+      "Ấm ức rất lâu khi bị xử không công bằng"
+    ],
+    "diem": 65,
+    "vi": [
+      "Hiểu người & dẫn nhóm — Đọc được người khác đang thấy gì, và biết cách làm nhóm chạy.",
+      "Hướng năng lượng — Hướng ra ngoài — Ở nhà một mình là bứt rứt, gặp bạn là bật lên, nghĩ ra ý gì phải nói ngay mới chịu được."
+    ]
+  },
+  "conKhoa": [
+    "Tỉ mỉ · làm cho đúng",
+    "Giao thiệp · thuyết phục"
+  ],
+  "bayNghe": true,
+  "huong": [
+    {
+      "id": "dan-dat",
+      "ten": "Dẫn dắt · đứng ra tổ chức",
+      "chat": "Ở đâu có nhóm là nó đứng ra chia việc. Chịu được phần trách nhiệm mà đứa khác né, và rất để ý ai làm chưa xong.",
+      "dauHieu": [
+        "Tự nhận làm nhóm trưởng, hoặc bực khi nhóm trưởng làm không ra gì",
+        "Chia việc cho anh em, bạn bè mà không ai bảo",
+        "Nhớ ai hứa gì rồi nhắc lại",
+        "Ấm ức rất lâu khi bị xử không công bằng"
+      ],
+      "diem": 65,
+      "vi": [
+        "Hiểu người & dẫn nhóm — Đọc được người khác đang thấy gì, và biết cách làm nhóm chạy.",
+        "Hướng năng lượng — Hướng ra ngoài — Ở nhà một mình là bứt rứt, gặp bạn là bật lên, nghĩ ra ý gì phải nói ngay mới chịu được."
+      ],
+      "hoatDong": [
+        "Làm tổ trưởng, lớp phó — chỗ có trách nhiệm thật chứ không phải cái danh",
+        "Tổ chức một buổi sinh nhật từ đầu tới cuối, kể cả phần tiền",
+        "Đội nhóm cần phối hợp: bóng đá, hướng đạo, đội văn nghệ",
+        "Cho quản một khoản nhỏ hằng tháng và tự chịu khi tiêu hết trước hạn"
+      ],
+      "chaMeNen": "Giao trọn một việc kèm quyền quyết trong việc đó, rồi đừng can. Nó làm rất nghiêm phần được giao hẳn và làm rất hờ phần bị giám sát từng bước.",
+      "chaMeTranh": "Đổi luật giữa chừng, hoặc lật quyết định của nó trước mặt người khác. Đứa này chịu được phạt nặng nhưng không chịu được bất nhất — mất lòng tin ở đây là mất nhiều năm.",
+      "deBiHieuNham": "Bị cho là hống hách, thích chỉ huy. Phần lớn là nó thấy việc đang không ai cầm và không chịu nổi cảnh đó.",
+      "chatViec": "Việc mà kết quả đến từ chỗ sắp đúng người vào đúng chỗ, và phần quyết cuối cùng là của mình.",
+      "ngheViDu": [
+        "Quản lý dự án, quản lý sản xuất",
+        "Điều hành doanh nghiệp, tự lập nghiệp",
+        "Chỉ huy công trường, quản lý vận hành",
+        "Quản lý dịch vụ, nhà hàng, khách sạn"
+      ]
+    },
+    {
+      "id": "lam-dung",
+      "ten": "Tỉ mỉ · làm cho đúng",
+      "chat": "Có chuẩn riêng và giữ chuẩn đó kể cả khi không ai kiểm. Sai một chi tiết là làm lại, dù người lớn đã bảo thế là được rồi.",
+      "dauHieu": [
+        "Xếp đồ ngay ngắn, khó chịu khi có thứ lệch",
+        "Viết lại cả trang vì một chữ xấu",
+        "Nhắc người khác khi thấy làm sai luật",
+        "Cần biết trước hôm nay sẽ làm gì; đổi lịch đột ngột là rối"
+      ],
+      "diem": 64,
+      "vi": [
+        "Nếp và kỷ luật — Ngăn nắp, theo nếp — Thích danh sách, thích biết trước hôm nay làm gì, khó chịu khi lịch đổi đột ngột. Nhận việc thì làm tới nơi."
+      ],
+      "hoatDong": [
+        "Sưu tầm và phân loại: tem, mô hình, thẻ bài, đá — chỗ nào có hệ thống là hợp",
+        "Nhạc cụ hoặc thư pháp — nơi luyện đúng kỹ thuật chính là con đường",
+        "Giao quản một việc chung của lớp cần làm đều",
+        "Cho tự lập kế hoạch ôn thi rồi theo kế hoạch của chính nó"
+      ],
+      "chaMeNen": "Báo trước khi đổi kế hoạch. Với đứa này, biết trước là điều kiện để làm tốt chứ không phải sự cầu kỳ.",
+      "chaMeTranh": "Chê nó cứng nhắc rồi ép làm ẩu cho nhanh. Cái chuẩn đó là chỗ mạnh nhất của nó; thứ nó cần học là biết khi nào ĐỦ TỐT — và điều đó dạy được, không phải bằng cách phá chuẩn.",
+      "deBiHieuNham": "Bị cho là khó tính, làm chậm. Nó không chậm, nó đang làm tới mức của nó — và mức đó cao hơn mức người khác chấp nhận.",
+      "chatViec": "Việc mà sai một li là hỏng, và người ta trả tiền cho chuyện không có sai sót.",
+      "ngheViDu": [
+        "Kế toán, kiểm toán, kiểm soát nội bộ",
+        "Xét nghiệm, kiểm nghiệm, kiểm định",
+        "Luật, công chứng, tuân thủ",
+        "Quản lý chất lượng, an toàn"
+      ]
+    },
+    {
+      "id": "giao-thiep",
+      "ten": "Giao thiệp · thuyết phục",
+      "chat": "Đi đâu cũng có bạn trong mười phút. Đọc được không khí trong phòng và tự biết phải nói kiểu gì với ai.",
+      "dauHieu": [
+        "Kết bạn rất nhanh, kể cả với người lớn",
+        "Biết xin thế nào thì được, đổi thế nào thì có lợi",
+        "Chán khi phải ngồi im một mình",
+        "Nói trước đám đông không sợ"
+      ],
+      "diem": 60,
+      "vi": [
+        "Ngôn ngữ & kể chuyện — Vào việc bằng chữ và bằng lời — nghe, đọc, kể lại, tranh luận.",
+        "Hướng năng lượng — Hướng ra ngoài — Ở nhà một mình là bứt rứt, gặp bạn là bật lên, nghĩ ra ý gì phải nói ngay mới chịu được.",
+        "Cách ở với nhóm — Thuận theo nhóm — Dễ chơi với ai cũng được, nhường phần cho bạn, ngại làm mất lòng. Việc nhóm thì nhận phần nặng mà không kể."
+      ],
+      "hoatDong": [
+        "Bán một thứ có thật: nước chanh, đồ tự làm, sách cũ — và tự tính lãi",
+        "Thi hùng biện, kể chuyện, dẫn chương trình của lớp",
+        "Nhóm cần đàm phán: đội tranh biện, phiên toà giả định",
+        "Cho làm cầu nối trong một việc thật của nhà"
+      ],
+      "chaMeNen": "Cho sân khấu, và cho việc có con số. Đứa này giỏi phần người; thứ nó thiếu là phần sổ sách, mà học sớm thì sau này đi rất xa.",
+      "chaMeTranh": "Tin lời nó nói mà không kiểm việc nó làm. Nó thuyết phục được cả cha mẹ — chưa bao giờ bị hỏi lại thì nó học được rằng nói hay là đủ.",
+      "deBiHieuNham": "Bị cho là lắm mồm, khôn lỏi. Phần lớn là nó đang thử xem cách nào hiệu quả với ai — đó là kỹ năng, chỉ là chưa có ranh giới.",
+      "chatViec": "Việc mà không ai giao sẵn khách, và kết quả đo bằng quan hệ dựng được.",
+      "ngheViDu": [
+        "Kinh doanh, phát triển thị trường, môi giới",
+        "Truyền thông, quan hệ công chúng",
+        "Tư vấn, đàm phán thương mại",
+        "Luật sư tranh tụng, đại diện"
+      ]
+    }
+  ],
+  "nhinRaCon": "Bé An ở nhà một mình thì uể oải, nhưng cứ hễ có nhóm bạn hay việc chung là bật dậy xông xáo ngay đấy. Cháu có nếp riêng, thích mọi thứ rõ ràng theo lịch, ai hứa gì là nhớ rất dai và thấy ai làm sai luật là phải lên tiếng nhắc nhở. Người ngoài nhìn vào dễ tưởng con hách dịch hay thích chỉ huy, nhưng thực ra là do cháu không chịu nổi cảnh một việc bị bỏ lửng mà chẳng ai đứng ra gánh. Cứ giao việc nửa vời rồi đứng kè kè chỉ trỏ thì cháu làm rất hời hợt, nhưng hễ trao trọn quyền quyết là con làm tới nơi tới chốn.",
+  "viSaoHuongNay": "Cốt cách của bé An mang khí chất cầm trịch từ Tử Vi và cách vào việc ngăn nắp của Thiên Phủ ở cung học nghiệp, nên động lực lớn nhất là được tin cậy và có tiếng nói được công nhận. Những việc phù hợp với con không đòi hỏi khiếu thẩm mỹ hay sự tỉ mẩn chăm sóc cỏ cây, mà cần khả năng sắp người vào đúng chỗ và đứng mũi chịu sào. Sau này những dạng việc như quản lý dự án hay điều hành vận hành sẽ rất gần với chất người này, chỉ để anh chị dễ hình dung chứ không phải ép cháu đi đường đó.",
+  "batDauTuDau": [
+    {
+      "viec": "Đăng ký cho cháu tham gia một đội nhóm hướng đạo sinh hoặc câu lạc bộ kịch nói vào sáng thứ Bảy hằng tuần, kéo dài trong một tháng.",
+      "viSao": "Môi trường đội nhóm này sẽ kích hoạt ngay năng lượng hướng ngoại và cho con đất để phối hợp, phân vai cùng bạn bè."
+    },
+    {
+      "viec": "Giao cho con tự lên kế hoạch tổ chức một buổi liên hoan nhỏ cuối tuần tại nhà, đưa khoản tiền cố định 300.000 đồng để cháu tự tính toán mua bánh kẹo.",
+      "viSao": "Việc này giúp con trải nghiệm cảm giác chịu trách nhiệm trọn vẹn từ lúc lên danh sách đến khi sự kiện hoàn thành."
+    },
+    {
+      "viec": "Trao đổi với cô giáo chủ nhiệm trong tuần này để đề xuất cho bé An thử sức làm tổ trưởng hoặc lớp phó phụ trách một đầu việc cụ thể ở lớp.",
+      "viSao": "Cháu cần một vị trí có trách nhiệm thật sự để phát huy tính kỷ luật và nhu cầu được người khác tín nhiệm."
+    }
+  ],
+  "tranhLam": [
+    {
+      "viec": "Người lớn tránh đổi luật giữa chừng hoặc lật lại quyết định của con ngay trước mặt người khác.",
+      "viSao": "Cháu có thể chấp nhận kỷ luật nghiêm nhưng cực kỳ ghét sự bất nhất, làm vậy sẽ khiến con mất lòng tin rất lâu."
+    },
+    {
+      "viec": "Tránh đứng sát bên kiểm tra từng li từng tí hay can thiệp khi con đang tự điều phối công việc được giao.",
+      "viSao": "Sự can thiệp vụn vặt sẽ dập tắt ngay tính chủ động, khiến cháu chán nản và chỉ làm đối phó cho xong chuyện."
+    }
+  ],
+  "noiTheNao": "Đừng hỏi con thích làm gì chung chung vì cháu sẽ thấy mơ hồ lắm, anh chị hãy hỏi vào đúng vai trò điều phối của con sau một buổi sinh hoạt nhóm. Hãy gợi chuyện tự nhiên rồi hỏi: \"Hôm nay ở nhóm, việc gì con thấy các bạn làm lộn xộn nhất mà nếu để con tự chia việc thì con sẽ làm khác đi?\"",
+  "loLang": "Anh chị thấy con cái gì cũng nhàn nhạt là vì chưa thả cháu vào đúng môi trường đòi hỏi sự phân công và trách nhiệm tập thể đấy. Bé An không thuộc tệp say mê ngồi một chỗ vẽ vời hay chăm bẵm thứ gì, lửa của cháu chỉ bùng lên khi thấy một mớ việc ngổn ngang cần người đứng ra dọn dẹp. Cứ để con nhận việc có người phụ thuộc vào mình, anh chị sẽ thấy cháu đổi khác rõ rệt. Đến tầm 12 tuổi khi con hoàn thành được một vài sản phẩm chung trọn vẹn, nỗi lo này sẽ tự khắc hết.",
+  "mocKeTiep": "Qua tuổi 12 bước vào giai đoạn lớn hơn, anh chị sẽ thấy con bắt đầu để ý nhiều đến vị thế của mình ngoài xã hội và cách bạn bè nhìn nhận. Lúc đó, người lớn cần chuyển từ việc giao việc cụ thể sang làm quân sư, bàn bạc cùng con về các dự án dài hơi hơn thay vì tự ý xếp đặt.",
+  "motCau": "Đừng tìm sở thích của con qua sách vở hay đồ chơi tĩnh, hãy nhìn cách con đứng ra thu xếp một đám đông."
+}

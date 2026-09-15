@@ -45,6 +45,9 @@ async function initProfile() {
   loadHistory();
   setupTabs();
   setupHistFilters();
+  setupHistSearch();
+  setupAccountSettingsNav();
+  setupThemeChoice();
   loadHeaderBalance();
   if (window.mountIcons) window.mountIcons();
 }
@@ -66,6 +69,64 @@ function setupHistFilters() {
     const f = chip.dataset.filter;
     groups.forEach(g => { g.style.display = (f === 'all' || g.dataset.group === f) ? '' : 'none'; });
   }));
+}
+
+// Ô tìm kiếm trong tab Lịch Sử: lọc theo chữ trên mọi thẻ (không đụng chip nhóm).
+function setupHistSearch() {
+  const input = document.getElementById('histSearch');
+  if (!input) return;
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    document.querySelectorAll('#tab-lichsu .laso-card, #tab-lichsu .xem-item, #tab-lichsu .tuong-card, #tab-lichsu .chat-item').forEach(el => {
+      el.style.display = (!q || el.textContent.toLowerCase().indexOf(q) !== -1) ? '' : 'none';
+    });
+  });
+}
+
+// Sub-nav trong tab Tài Khoản (Thông tin cá nhân/Bảo mật/Giao diện/Kết nối).
+function setupAccountSettingsNav() {
+  const btns = document.querySelectorAll('#tab-account .setnav-btn');
+  const panes = document.querySelectorAll('#tab-account .setpane');
+  if (!btns.length) return;
+  btns.forEach(btn => btn.addEventListener('click', () => {
+    btns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const key = btn.dataset.pane;
+    panes.forEach(p => p.classList.toggle('active', p.dataset.pane === key));
+  }));
+}
+
+// Nút chọn Sáng/Tối trong tab Tài Khoản — dùng CHUNG khoá localStorage
+// `app_theme` với nút "Đổi nền" ở sidebar (shell.js `toggleTheme()`), không
+// dựng cơ chế thứ hai lệch nhau.
+function setupThemeChoice() {
+  const btns = document.querySelectorAll('#tab-account .theme-btn');
+  if (!btns.length) return;
+  function current() {
+    return document.documentElement.dataset.theme || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  }
+  function paint() {
+    const t = current();
+    btns.forEach(b => b.classList.toggle('active', b.dataset.themeChoice === t));
+  }
+  btns.forEach(btn => btn.addEventListener('click', () => {
+    const t = btn.dataset.themeChoice;
+    document.documentElement.dataset.theme = t;
+    try { localStorage.setItem('app_theme', t); } catch (e) { /* ignore */ }
+    paint();
+  }));
+  paint();
+}
+
+// 4 ô tổng số ở đầu tab Lịch Sử — mỗi renderXxx() cập nhật phần của mình rồi gọi lại đây.
+window._histCounts = window._histCounts || { lasos: 0, xemtuoi: 0, tuong: 0, chat: 0 };
+function updateHistStats() {
+  const c = window._histCounts;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v || 0; };
+  set('statLasos', c.lasos);
+  set('statXemTuoi', c.xemtuoi);
+  set('statTuong', c.tuong);
+  set('statChat', c.chat);
 }
 
 function renderProfileHeader() {
@@ -173,6 +234,8 @@ function renderLasos(lasos) {
     const badge = document.getElementById('countLasos');
     badge.textContent = count; badge.style.display = '';
   }
+  window._histCounts.lasos = count;
+  updateHistStats();
 
   const el = document.getElementById('lasosContent');
   if (count === 0) {
@@ -196,6 +259,7 @@ function lasoCard(l) {
   // Cung Mệnh + cục hiện ngay subtitle trên card-top
   const menhCuc = [l.cung_menh ? `Mệnh ${l.cung_menh}` : '', l.cuc || ''].filter(Boolean).join(' · ');
   const chinh = l.chinh_tinh ? `<span class="badge blue" style="margin-top:.5rem">${l.chinh_tinh}</span>` : '';
+  const napAm = l.nap_am ? `<span class="badge" style="margin-top:.5rem">${escHtml(l.nap_am)}</span>` : '';
   return `<div class="laso-card" onclick="openLuanModal('${l.slug}','${escHtml(name)}')">
     <div class="card-top">
       <div class="card-avatar">${letter}</div>
@@ -207,7 +271,7 @@ function lasoCard(l) {
     </div>
     <div class="card-body">
       <div class="card-badges" style="margin-bottom:.6rem">
-        ${chinh}
+        ${chinh}${napAm}
       </div>
       <div class="card-date">${ic('calendar',13)} ${date}</div>
       <div class="card-actions">
@@ -227,6 +291,8 @@ function renderXemTuoi(list) {
     const badge = document.getElementById('countXemTuoi');
     badge.textContent = list.length; badge.style.display = '';
   }
+  window._histCounts.xemtuoi = list.length;
+  updateHistStats();
 
   const el = document.getElementById('xemTuoiContent');
   if (list.length === 0) {
@@ -313,6 +379,17 @@ async function loadHeaderBalance() {
   }
 }
 
+// 2 ô tổng số ở đầu tab Kết Nối — trên đúng 4 kênh có backend thật (AI qua
+// MCP + Telegram + WhatsApp + Messenger). KHÔNG thêm Zalo/Discord: chưa có
+// route liên kết cho hai kênh đó.
+const _connStats = { mcp: false, tg: false, wa: false, msgr: false };
+function updateConnStats() {
+  const ok = (_connStats.mcp ? 1 : 0) + (_connStats.tg ? 1 : 0) + (_connStats.wa ? 1 : 0) + (_connStats.msgr ? 1 : 0);
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('connOkCount', ok + '/4');
+  set('connMissingCount', (4 - ok) + '/4');
+}
+
 // ── AI QUA MCP (self-serve key riêng của user) ──
 function _mcpShow(state) { // 'checking' | 'nokey' | 'ready'
   const c = document.getElementById('mcpChecking');
@@ -322,6 +399,7 @@ function _mcpShow(state) { // 'checking' | 'nokey' | 'ready'
   c.style.display = state === 'checking' ? 'block' : 'none';
   n.style.display = state === 'nokey' ? 'block' : 'none';
   r.style.display = state === 'ready' ? 'block' : 'none';
+  if (state !== 'checking') { _connStats.mcp = state === 'ready'; updateConnStats(); }
 }
 async function loadMcpKey() {
   if (!(await _tok())) return;
@@ -376,8 +454,10 @@ async function loadTelegramLink() {
       headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = res.ok ? await res.json() : { linked: false };
+    _connStats.tg = !!d.linked;
+    updateConnStats();
     if (d.linked) {
-      statusEl.textContent = '✓ Đã liên kết — bot Telegram dùng chung ví Lượng này.';
+      statusEl.innerHTML = '✓ Đã liên kết — bot Telegram dùng chung ví Lượng này.' + (d.telegram_user_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.telegram_user_id)) + '</span>' : '');
       btnLink.style.display = 'none';
       btnUnlink.style.display = 'inline-block';
     } else {
@@ -436,8 +516,10 @@ async function loadWhatsappLink() {
       headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = res.ok ? await res.json() : { linked: false };
+    _connStats.wa = !!d.linked;
+    updateConnStats();
     if (d.linked) {
-      statusEl.textContent = '✓ Đã liên kết — bot WhatsApp dùng chung ví Lượng này.';
+      statusEl.innerHTML = '✓ Đã liên kết — bot WhatsApp dùng chung ví Lượng này.' + (d.whatsapp_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.whatsapp_id)) + '</span>' : '');
       btnLink.style.display = 'none';
       btnUnlink.style.display = 'inline-block';
     } else {
@@ -496,8 +578,10 @@ async function loadMessengerLink() {
       headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = res.ok ? await res.json() : { linked: false };
+    _connStats.msgr = !!d.linked;
+    updateConnStats();
     if (d.linked) {
-      statusEl.textContent = '✓ Đã liên kết — bot Messenger dùng chung ví Lượng này.';
+      statusEl.innerHTML = '✓ Đã liên kết — bot Messenger dùng chung ví Lượng này.' + (d.messenger_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.messenger_id)) + '</span>' : '');
       btnLink.style.display = 'none';
       btnUnlink.style.display = 'inline-block';
     } else {
@@ -586,6 +670,8 @@ async function loadReferralPanel() {
   if (bar && cap > 0) setTimeout(() => { bar.style.width = Math.min(100, Math.round(used / cap * 100)) + '%'; }, 100);
   document.getElementById('refTotalCount').textContent = d.invited || 0;
   document.getElementById('refEarnedCount').textContent = d.creditsEarned || 0;
+  _nqStats.invited = d.invited || 0;
+  updateNqStats();
 
   const btn = document.getElementById('refCopyBtn');
   if (btn && !btn.dataset.wired) {
@@ -613,6 +699,19 @@ async function loadReferralPanel() {
 // questTaskGo(). Không nội suy chuỗi từ server vào thuộc tính onclick: dấu
 // nháy trong chuỗi là vỡ thẻ (cùng lý do đã ghi ở phần Thầy Nhớ bên dưới).
 var _qtDefs = [];
+
+// 4 ô tổng số ở đầu tab Nhiệm Vụ — mỗi phần (Khởi Hành/kênh liên lạc/mời
+// bạn/chia sẻ) ghi đúng phần của mình rồi gọi lại đây, không suy ra khung
+// "nhiệm vụ hàng ngày/tuần" không có backend đứng sau.
+var _nqStats = { khDone: 0, khTotal: 0, khCredits: 0, chDone: 0, chTotal: 0, chCredits: 0, invited: 0, shares: 0 };
+function updateNqStats() {
+  const s = _nqStats;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('nqDoneRatio', (s.khDone + s.chDone) + '/' + (s.khTotal + s.chTotal));
+  set('nqCredits', s.khCredits + s.chCredits);
+  set('nqInvited', s.invited);
+  set('nqShares', s.shares);
+}
 
 async function loadQuestTasks() {
   var host = document.getElementById('qtBody');
@@ -644,6 +743,10 @@ function renderQuestTasks(kh) {
   if (!host) return;
   let done = 0;
   for (let i = 0; i < kh.steps.length; i++) if (kh.steps[i].done) done++;
+  _nqStats.khDone = done;
+  _nqStats.khTotal = kh.steps.length;
+  _nqStats.khCredits = kh.claimed ? (+kh.credits || 0) : 0;
+  updateNqStats();
 
   let h = kh.claimed
     ? '<div class="qt-top"><div class="qt-count" style="color:var(--green)">✓ Đã hoàn tất — +' + (+kh.credits || 0) + ' Lượng đã vào ví.</div></div>'
@@ -666,6 +769,10 @@ function renderChannelTasks(indexOffset, tasks) {
   const card = document.getElementById('chCard');
   const host = document.getElementById('chBody');
   if (!card || !host) return;
+  _nqStats.chDone = tasks.filter(function (t) { return t.done; }).length;
+  _nqStats.chTotal = tasks.length;
+  _nqStats.chCredits = tasks.filter(function (t) { return t.done; }).reduce(function (s, t) { return s + (+t.credits || 0); }, 0);
+  updateNqStats();
   if (!tasks.length || tasks.every(function (t) { return t.done; })) { card.style.display = 'none'; return; }
 
   const granted = tasks.filter(function (t) { return t.justGranted; })
@@ -723,6 +830,8 @@ async function loadMyShares() {
 function renderMyShares(list) {
   const host = document.getElementById('spBody');
   if (!host) return;
+  _nqStats.shares = list.length;
+  updateNqStats();
   if (!list.length) {
     host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Bạn chưa chia sẻ lượt nào.</div>';
     return;
@@ -748,7 +857,7 @@ async function loadCredits() {
   try {
     const res = await fetch(
       SUPABASE_URL + '/rest/v1/credit_transactions?user_id=eq.' + encodeURIComponent(_pUser.id) +
-      '&order=created_at.desc&limit=30&select=*',
+      '&order=created_at.desc&limit=100&select=*',
       { headers: { apikey: SUPABASE_ANON, Authorization: 'Bearer ' + (await _tok()) } }
     );
     const txns = res.ok ? await res.json() : [];
@@ -778,23 +887,104 @@ async function loadCredits() {
   }
 }
 
+const VILU_LABELS = { topup:'Nạp Lượng', use_laso:'Luận Giải Lá Số', use_xem_tuoi:'Xem Tuổi Vợ Chồng', use_xem_lam_an:'Xem Tuổi Làm Ăn', admin_grant:'Cấp Lượng (quản trị)', chat:'Hỏi trợ lý' };
+function viluLabel(t) { return VILU_LABELS[t.type] || t.description || t.type; }
+
+let _viluTxns = [];
+let _viluPage = 1;
+let _viluBound = false;
+const VILU_PAGE_SIZE = 10;
+
 function renderTransactions(list) {
+  _viluTxns = list || [];
+  _viluPage = 1;
+
+  // 3 ô tổng số — trên đúng số giao dịch vừa tải (không phải toàn bộ lịch sử).
+  let tongNap = 0, tongChi = 0;
+  _viluTxns.forEach(t => { if (t.amount > 0) tongNap += t.amount; else tongChi += Math.abs(t.amount); });
+  const setStat = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  setStat('viluTongNap', '+' + tongNap);
+  setStat('viluTongChi', '-' + tongChi);
+  setStat('viluSoGD', _viluTxns.length);
+
+  // Dropdown lọc theo loại — liệt kê đúng các `type` có trong dữ liệu, không bịa nhóm.
+  const typeSel = document.getElementById('viluTypeFilter');
+  if (typeSel) {
+    const seen = {}, cur = typeSel.value;
+    let opts = '<option value="">Tất cả loại giao dịch</option>';
+    _viluTxns.forEach(t => {
+      if (t.type && !seen[t.type]) { seen[t.type] = 1; opts += `<option value="${escHtml(t.type)}">${escHtml(viluLabel(t))}</option>`; }
+    });
+    typeSel.innerHTML = opts;
+    typeSel.value = cur;
+  }
+
+  if (!_viluBound) {
+    _viluBound = true;
+    const search = document.getElementById('viluSearch');
+    if (typeSel) typeSel.addEventListener('change', () => { _viluPage = 1; renderViluTable(); });
+    if (search) search.addEventListener('input', () => { _viluPage = 1; renderViluTable(); });
+  }
+
+  renderViluTable();
+}
+
+function renderViluTable() {
   const el = document.getElementById('transactionList');
-  if (!list || list.length === 0) {
+  const pager = document.getElementById('viluPager');
+  if (!el) return;
+  if (!_viluTxns.length) {
     el.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Chưa có giao dịch nào.</div>';
+    if (pager) pager.style.display = 'none';
     return;
   }
-  const LABELS = { topup:'Nạp Lượng', use_laso:'Luận Giải Lá Số', use_xem_tuoi:'Xem Tuổi Vợ Chồng', use_xem_lam_an:'Xem Tuổi Làm Ăn' };
-  el.innerHTML = '<div class="purchase-list">' + list.map(t => {
-    const date = new Date(t.created_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
-    const isAdd = t.amount > 0;
-    const amtColor = isAdd ? 'var(--green)' : 'var(--red)';
-    const amtStr = (isAdd ? '+' : '') + t.amount + ' cr';
-    const label = LABELS[t.type] || t.description || t.type;
-    return '<div class="purchase-item"><div class="purchase-slug">' + escHtml(label) + '</div>' +
-           '<div class="purchase-amount" style="color:' + amtColor + '">' + amtStr + '</div>' +
-           '<div class="purchase-date">' + date + '</div></div>';
-  }).join('') + '</div>';
+
+  const type = document.getElementById('viluTypeFilter')?.value || '';
+  const q = (document.getElementById('viluSearch')?.value || '').trim().toLowerCase();
+  const filtered = _viluTxns.filter(t => {
+    if (type && t.type !== type) return false;
+    if (q && viluLabel(t).toLowerCase().indexOf(q) === -1) return false;
+    return true;
+  });
+
+  if (!filtered.length) {
+    el.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không có giao dịch khớp bộ lọc.</div>';
+    if (pager) pager.style.display = 'none';
+    return;
+  }
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / VILU_PAGE_SIZE));
+  _viluPage = Math.min(_viluPage, totalPages);
+  const start = (_viluPage - 1) * VILU_PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + VILU_PAGE_SIZE);
+
+  el.innerHTML = '<div class="vilu-tbl-wrap"><table class="vilu-tbl"><thead><tr>' +
+    '<th>#</th><th>Thời gian</th><th>Loại</th><th>Nội dung</th><th>Số lượng</th><th>Mã giao dịch</th>' +
+    '</tr></thead><tbody>' + pageItems.map((t, i) => {
+      const date = new Date(t.created_at).toLocaleString('vi-VN', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      const isAdd = t.amount > 0;
+      const loaiColor = isAdd ? 'var(--green)' : 'var(--red)';
+      const loaiText = isAdd ? 'Nạp / Thưởng' : 'Sử dụng';
+      const amtCls = isAdd ? 'pos' : 'neg';
+      const amtStr = (isAdd ? '+' : '') + t.amount;
+      const ma = t.id ? String(t.id).slice(0, 8) : '—';
+      return '<tr><td>' + (start + i + 1) + '</td><td>' + date + '</td>' +
+        '<td style="color:' + loaiColor + ';font-weight:600">' + loaiText + '</td>' +
+        '<td>' + escHtml(viluLabel(t)) + '</td>' +
+        '<td class="vilu-amt ' + amtCls + '">' + amtStr + '</td>' +
+        '<td class="vilu-mono">' + escHtml(ma) + '</td></tr>';
+    }).join('') + '</tbody></table></div>';
+
+  if (pager) {
+    pager.style.display = totalPages > 1 ? 'flex' : 'none';
+    if (totalPages > 1) {
+      pager.innerHTML = '<span>Hiển thị ' + (start + 1) + '–' + Math.min(start + VILU_PAGE_SIZE, filtered.length) + ' / ' + filtered.length + ' giao dịch</span><div class="vilu-pgbtns">' +
+        Array.from({ length: totalPages }, (_, idx) => idx + 1).map(p =>
+          '<button type="button" class="vilu-pgbtn' + (p === _viluPage ? ' active' : '') + '" data-p="' + p + '">' + p + '</button>'
+        ).join('') + '</div>';
+      pager.querySelectorAll('.vilu-pgbtn').forEach(b => b.addEventListener('click', () => { _viluPage = parseInt(b.dataset.p, 10); renderViluTable(); }));
+    }
+  }
 }
 
 // ── RENDER XEM TƯỚNG ──
@@ -814,6 +1004,8 @@ function renderTuong(list) {
     const badge = document.getElementById('countTuong');
     badge.textContent = list.length; badge.style.display = '';
   }
+  window._histCounts.tuong = list.length;
+  updateHistStats();
 
   const el = document.getElementById('tuongContent');
   if (list.length === 0) {

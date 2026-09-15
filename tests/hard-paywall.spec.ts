@@ -116,13 +116,26 @@ async function run(page: Page) {
   await page.waitForSelector('#lgBody .sec', { timeout: 15000 });
 }
 
-test('bản mẫu KHÔNG tự mở, form đứng trên cùng', async ({ page }) => {
+// 💰 Pha 2 (2026-09-14): auto-open GỠ dựa trên số đo (docs/nhat-ky/2026-09.md
+// mục "Pha 2 vá phễu conversion") — laso 30 ngày chỉ ~6% người mở trang nhập
+// được form vì bản mẫu tự bung chiếm màn hình đầu. Bài kiểm này khoá lại
+// hành vi MỚI — form là màn hình đầu, bản mẫu chỉ mở khi khách TỰ bấm.
+test('form là màn hình đầu khi vào trang, bản mẫu KHÔNG tự mở', async ({ page }) => {
   await stubApis(page);
   await page.goto('/app-luan-giai.html');
-  await page.waitForTimeout(1500);
   await expect(page.locator('#birthPanel')).toBeVisible();
-  await expect(page.locator('#sampBar')).toHaveCount(0);
   await expect(page.locator('#sampCta')).toBeVisible();
+  await expect(page.locator('#sampBar')).toHaveCount(0);
+});
+
+test('bấm "Xem bản mẫu" mở bản mẫu, form ẩn', async ({ page }) => {
+  await stubApis(page);
+  await page.goto('/app-luan-giai.html');
+  await page.locator('#btnSample').click();
+  await page.waitForSelector('#sampBar', { timeout: 15000 });
+  await expect(page.locator('#birthPanel')).toBeHidden();
+  await expect(page.locator('#sampBar')).toHaveCount(1);
+  await expect(page.locator('#sampCta')).toBeHidden();
 });
 
 test('phần 1-2 sinh chữ THẬT, phần 3+ chỉ còn ô giữ chỗ', async ({ page }) => {

@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=39">
+<link rel="stylesheet" href="/shell.css?v=46">
 <style>
 .form-card{max-width:860px}
 .sample-link{display:inline-block;font-size:12.5px;color:var(--tx-blue);margin-bottom:12px}
@@ -88,13 +88,15 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
+        <img class="intro-avatar" src="/tool-avatars/nguoi-khac.webp" alt="" style="display:none" onerror="this.remove()">
+        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
-          <img class="intro-avatar" src="/tool-avatars/nguoi-khac.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Lá Số Người Khác</div>
-            <div class="intro-d">Lá Số Người Khác lập lá số Tử Vi cho một người bạn cần hiểu rõ hơn. Nhập ngày giờ sinh người đó, nhận cẩm nang nên nói gì, nên tránh gì và kế hoạch cụ thể cho việc bạn đang cần làm với họ.</div>
-            <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
+            <div class="intro-d">Hiểu sai một người quan trọng — sếp, đối tác, người yêu — thường là gốc rễ của những va chạm không đáng có. Nhập ngày giờ sinh của họ, nhận cẩm nang nên nói gì, nên tránh gì.</div>
+            <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
@@ -103,11 +105,16 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>Lúc nào nên<br>đưa việc lớn</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="nguoi-khac" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — khớp flow thật: form → xem trước (2/9 đoạn miễn
+           phí) → thanh toán → cẩm nang đầy đủ. JS đổi bước ở `wsStepsSet`
+           (cuối file), gọi tại analyze()/_runAnonPreview/_renderLockWall/
+           _doGenerate/showForm. -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước cẩm nang</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="user"></span><h2>Ngày sinh của người bạn muốn hiểu</h2></div>
@@ -180,6 +187,21 @@
           </button>
         </div>
         <div class="err" id="error-msg"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Lá Số Người Khác</div>
+        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="nguoi-khac" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resPanel" data-ws-result style="display:none">
@@ -327,15 +349,29 @@ window.SHELL_INTRO={key:'nguoi-khac'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=33"></script>
+<script src="/tuvi-paywall.js?v=35"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=26" data-icons-only></script>
+  <script src="/nav.js?v=27" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
-<script src="/shell.js?v=90"></script>
+<script src="/shell.js?v=91"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → xem trước → thanh toán → kết quả), không tạo
+// trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
+// đang "active" (nền navy).
+function wsStepsSet(n) {
+  var el = document.getElementById('wsSteps');
+  if (!el) return;
+  var steps = el.querySelectorAll('.wss-step');
+  for (var i = 0; i < steps.length; i++) {
+    steps[i].classList.remove('active', 'done');
+    if (i + 1 < n) steps[i].classList.add('done');
+    else if (i + 1 === n) steps[i].classList.add('active');
+  }
+}
 var _currentSlug = '';
 var _last = null;
 var _lastSelf = null;
@@ -421,6 +457,56 @@ TuviForm.render('formHostSelf', { mode: 'compact', prefix: 'self', gioitinh: 'na
   if(!host) return;
   var url='https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-nguoi-khac.pdf';
   host.innerHTML='<a href="'+url+'" target="_blank" rel="noopener" class="sample-link">↗ Xem mẫu (PDF, lá số khác)</a>';
+})();
+
+// Nút "Xem bản mẫu" (khối .samp-cta phía trên form) — override placeholder
+// mặc định của tools-shared/sample-hint.js bằng dữ liệu THẬT: cùng payload
+// PDF ở trên dùng, rót thẳng qua renderMeta/renderProse THẬT của trang này.
+(function(){
+  var SAMPLE_URL='/samples/nguoi-khac-full.json';
+  var _cache=null;
+  function _showSampleBar(){
+    var panel=document.getElementById('resPanel');
+    if(!panel||document.getElementById('sampBar')) return;
+    var bar=document.createElement('div');
+    bar.className='samp-bar'; bar.id='sampBar';
+    bar.innerHTML='<div class="sb-txt">Đây là <b>BẢN MẪU</b> minh hoạ (lá số khác) — chưa phải kết quả của người bạn cần xem.</div>'+
+      '<button type="button" id="sampBarClose">Nhập lá số người đó →</button>';
+    panel.insertBefore(bar,panel.firstChild);
+    document.getElementById('sampBarClose').onclick=function(){
+      var b=document.getElementById('sampBar'); if(b) b.remove();
+      if(typeof window._closePanel==='function') window._closePanel();
+      var cta=document.getElementById('sampCta'); if(cta) cta.style.display='flex';
+    };
+  }
+  window.SampleHint.open=function(btn){
+    if(btn){ btn.disabled=true; btn.textContent='Đang mở…'; }
+    var p=_cache?Promise.resolve(_cache):fetch(SAMPLE_URL).then(function(r){
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return r.json();
+    }).then(function(j){ _cache=j; return j; });
+    p.then(function(data){
+      if(typeof window._openPanel==='function') window._openPanel();
+      renderMeta(data);
+      renderProse(data);
+      var loading=document.getElementById('loading'); if(loading) loading.style.display='none';
+      var card=document.getElementById('card'); if(card) card.style.display='block';
+      var be=document.getElementById('btnEdit'); if(be) be.style.display='';
+      var cta=document.getElementById('sampCta'); if(cta) cta.style.display='none';
+      _showSampleBar();
+      if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; }
+    }).catch(function(e){
+      if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; }
+      if(window.console) console.error('sample:',e);
+      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
+    });
+  };
+  try {
+    if (!(window.Shell && Shell.autoRun && Shell.autoRun()) &&
+        !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {
+      var c = document.getElementById('sampCta'); if (c) c.style.display = 'flex';
+    }
+  } catch (e) { if (window.console) console.error('sample auto-open:', e); }
 })();
 
 // 🔑 Lá số shell đang nhớ là lá số CỦA NGƯỜI DÙNG → điền vào form 'self', KHÔNG
@@ -624,6 +710,7 @@ async function _runAnonPreview(b, self, qh, viec) {
     mountHook(data);
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
+    wsStepsSet(2); // Xem trước cẩm nang — 2/9 đoạn miễn phí vừa hiện ra
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall(qh, viec, data.khoa);
     _mountCnsNguoiKhac(b);
@@ -669,6 +756,7 @@ function _renderLockWall(qh, viec, khoaRaw) {
   var host = document.getElementById('nkLockHost');
   host.style.display = 'block';
   host.innerHTML = '';
+  wsStepsSet(3); // Thanh toán — tường đã dựng (nút phẳng hoặc lockPreview), chờ mở khoá
   // Đã đăng nhập (chỉ còn thiếu tiền, không thiếu tài khoản) → nút phẳng, bỏ
   // qua màn "Đăng ký" — cùng mẫu app-chu-trinh-cuoc-doi.html `_renderUnlockBlock`.
   if (_nkLoggedIn()) {
@@ -799,6 +887,7 @@ async function _doGenerate(freeRerun, qh, viec) {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
+    wsStepsSet(4); // Nhận kết quả — đã trả tiền (hoặc mở lại miễn phí), cẩm nang đầy đủ đã hiện
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _loadHistory();
     _mountCnsNguoiKhac(_last);
@@ -1056,6 +1145,7 @@ function showForm() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
+  wsStepsSet(1); // về lại Nhập thông tin
   // Quay về form thì gỡ nút Chia sẻ — bản vừa xem không còn trên màn hình nữa.
   Shell.setShareable(null);
 }

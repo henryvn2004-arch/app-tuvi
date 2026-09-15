@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import { waitUntil } from '@vercel/functions';
 import { fireServerPurchase } from '@/lib/marketing/server-conversions';
 import { alertNewPayment } from '@/lib/admin/alert';
+import { sendInvoiceEmail } from '@/lib/email/invoice';
 
 const CHECKSUM_KEY = process.env.PAYOS_CHECKSUM_KEY!;
 const SUPABASE_URL = process.env.SUPABASE_URL!;
@@ -100,6 +101,10 @@ export async function POST(request: NextRequest) {
         // Henry hỏi 2026-09-08: báo ngay khi có người trả tiền (Telegram+WhatsApp).
         // `waitUntil` giữ tiến trình sống đủ để gửi xong dù response đã trả về.
         waitUntil(alertNewPayment({ provider: 'bank', amountVnd, credits: row.credits, userId }));
+        waitUntil(sendInvoiceEmail({
+          userId, orderId: orderCode, provider: 'bank', credits: row.credits, amountVnd,
+          label: `Chuyển khoản – ${row.credits} Lượng`, balance: row.balance,
+        }));
       } else {
         console.error('[bank-webhook] không tìm được user_id để bắn Purchase, orderCode=', orderCode);
       }

@@ -207,15 +207,14 @@ export async function GET(req: NextRequest) {
       anhTacGia: row.image_credit,
       anhLicense: row.image_license,
       anhTrang: commonsFilePage(row.image_file),
-      // Luôn trỏ tới bài EN qua trang chuyển hướng CỦA Wikidata — không phải
-      // link vi.wikipedia lưu sẵn ở `wiki_url`. Lý do: `wiki_url` ưu tiên bài
-      // vi (chỉ 25.905/272.783 dòng có), phần lớn KHÔNG tồn tại bài .vi nên
-      // link vỡ; đi lại 350k dòng để đổi sang enTitle tốn ngang một lượt scrape
-      // Wikidata mới. `Special:GoToLinkedPage/enwiki/<qid>` giải quyết bằng
-      // MỘT field đã có sẵn trên mọi dòng (`qid`) — 302 sang bài EN nếu có,
-      // không có thì Wikidata tự hiện trang báo "chưa có bài" (đã kiểm bằng
-      // curl), không bao giờ 404 thẳng như link .vi bịa trước đây.
-      lienKet: `https://www.wikidata.org/wiki/Special:GoToLinkedPage/enwiki/${row.qid}`,
+      // Link thẳng bài Wikipedia (vi nếu có, không thì en) — đã tính sẵn lúc
+      // import vào `wiki_url` (267.044/272.783 dòng có, xem
+      // scripts/import-celeb-births.mjs). Trước đây đi qua
+      // `Special:GoToLinkedPage/enwiki/<qid>` của Wikidata để né chỗ thiếu bài
+      // .vi, nhưng route đó của Wikidata giờ trả lỗi cho MỌI qid — không còn
+      // dùng được. `wiki_url` thiếu ở ~2% dòng thì UI tự ẩn nút (đã có sẵn
+      // `it.lienKet ? ... : ''`), không suy đoán URL.
+      lienKet: row.wiki_url,
     };
   });
 

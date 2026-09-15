@@ -203,7 +203,7 @@
     if (window.Track) { flushTrack(); return; }
     if (document.getElementById('tvmb-track-js')) return;
     var s = document.createElement('script');
-    s.id = 'tvmb-track-js'; s.src = '/track.js?v=7'; s.async = true;
+    s.id = 'tvmb-track-js'; s.src = '/track.js?v=8'; s.async = true;
     s.onload = flushTrack;
     (document.head || document.documentElement).appendChild(s);
   }
@@ -497,8 +497,8 @@
   // 2026-09: bỏ danh sách công cụ khỏi sidebar — đã hiện sẵn giữa trang Trang
   // chủ (springboard), lặp lại ở đây là thừa (TOOLS vẫn giữ ĐẦY ĐỦ dữ liệu cho
   // Cmd+K/icon ws-top, xem applyCatalog ở trên). Hồ sơ lên đầu thay cho
-  // `.sb-brand` cũ; "Lá số đã lưu" (nhóm theo quan hệ) và "Gần đây" tách khỏi
-  // trang Tài khoản, nạp async qua loadSidebarCharts().
+  // `.sb-brand` cũ; "Lá số đã lưu" (nhóm theo quan hệ, loadSidebarCharts()) và
+  // "Công cụ yêu thích" (top 3 tool_run, loadSidebarFavTools()) đều nạp async.
   function renderSidebar() {
     var host = document.getElementById('shell-sidebar');
     if (!host) return;
@@ -532,12 +532,12 @@
     });
     h += '</nav></div>';
 
-    // "Gần đây" — chỉ hiện khi có dữ liệu thật (xem renderSidebarRecent). Trỏ
-    // vào tab Lịch Sử (Tài khoản) — nơi liệt kê phiên/lá số/xem tuổi/xem tướng
-    // đã dùng gần đây — KHÔNG phải trang Lá số đã lưu (đó là quản lý sổ theo
-    // nhóm quan hệ, khác việc "vừa xem gì").
-    h += '<div class="grp" id="sbRecentGrp" hidden><div class="grp-h" data-act="grp">Gần đây' +
-         '<a class="grp-link" href="/app/tai-khoan#lichsu">Xem tất cả</a></div><nav class="grp-nav" id="sbRecentList"></nav></div>';
+    // "Công cụ yêu thích" — 3 công cụ user CHẠY NHIỀU LẦN NHẤT (đếm qua event
+    // tool_run, xem /api/tool-usage), không phải "vừa mở gần đây". Chỉ hiện khi
+    // có dữ liệu thật (xem paintSidebarFavTools). "Xem tất cả" trỏ về Trang chủ
+    // — nơi đã liệt kê ĐẦY ĐỦ danh mục công cụ (springboard).
+    h += '<div class="grp" id="sbFavGrp" hidden><div class="grp-h" data-act="grp">Công cụ yêu thích' +
+         '<a class="grp-link" href="/app">Xem tất cả</a></div><nav class="grp-nav" id="sbFavList"></nav></div>';
 
     h += '<div class="sb-spacer"></div>';
     h += '<div class="sb-foot-grp">' +
@@ -545,7 +545,7 @@
          '<button class="item" type="button" data-act="theme">' + svg('sun') + ' Đổi nền</button>' +
          '<a class="item danger" href="#" data-act="signout">' + svg('door-open') + ' Đăng xuất</a>' +
          '</div>';
-    h += '<div class="sb-brandmini"><img src="/seal.webp" alt=""><b>TỬ VI MINH BẢO</b><span>Tri mệnh lý – Thuận thế hành</span></div>';
+    h += '<div class="sb-brandmini"><img src="/seal.webp" alt=""><div class="sb-brandmini-tx"><b>TỬ VI MINH BẢO</b><span>Tri mệnh lý – Thuận thế hành</span></div></div>';
 
     host.innerHTML = h;
     mountToolIcon();
@@ -567,13 +567,13 @@
     // đây để đúng bất kể ai chạy trước.
     paintAuth();
     loadSidebarCharts();
+    loadSidebarFavTools();
   }
 
-  // ── SỔ LÁ SỐ TRONG SIDEBAR: đếm theo nhóm + "Gần đây" ──
+  // ── SỔ LÁ SỐ TRONG SIDEBAR: đếm theo nhóm ──
   // Dùng CHUNG /api/charts (đã có sẵn cho `user-charts.js`) — không mở thêm
   // route riêng cho sidebar. Trần 30 dòng của sổ (MAX_CHARTS, xem route) đủ
   // nhỏ để gộp tại đây, không cần server tính sẵn.
-  var SB_RECENT_SHOW = 5;
   function sidebarRelationKey(it) {
     var r = it && it.relation;
     return LASO_RELATIONS.some(function (g) { return g.key === r; }) ? r : 'khac';
@@ -590,31 +590,54 @@
   }
   function paintSidebarCharts(items) {
     var grp = document.getElementById('sbLasoGrp');
-    if (grp) {
-      var counts = { gia_dinh: 0, ban_be: 0, dong_nghiep: 0, khac: 0 };
-      items.forEach(function (it) { counts[sidebarRelationKey(it)]++; });
-      LASO_RELATIONS.forEach(function (g) {
-        var el = document.getElementById('sbLasoCount-' + g.key);
-        if (el) el.textContent = counts[g.key];
-      });
-      grp.hidden = false;
-    }
-    var recentGrp = document.getElementById('sbRecentGrp');
-    var recentList = document.getElementById('sbRecentList');
-    if (recentGrp && recentList) {
-      if (!items.length) { recentGrp.hidden = true; return; }
-      var sorted = items.slice().sort(function (a, b) {
-        return new Date(b.last_used_at).getTime() - new Date(a.last_used_at).getTime();
-      }).slice(0, SB_RECENT_SHOW);
-      recentList.innerHTML = sorted.map(function (it) {
-        var name = it.label || (it.birth && it.birth.hoten) || 'Chưa đặt tên';
-        return '<a class="rc-row" href="/app/tai-khoan#lichsu">' +
-          '<span class="rc-ava">' + esc((name[0] || '?').toUpperCase()) + '</span>' +
-          '<span class="rc-tx"><b>' + esc(name) + '</b></span>' +
-          '<span class="rc-time">' + esc(relTime(new Date(it.last_used_at).getTime())) + '</span></a>';
-      }).join('');
-      recentGrp.hidden = false;
-    }
+    if (!grp) return;
+    var counts = { gia_dinh: 0, ban_be: 0, dong_nghiep: 0, khac: 0 };
+    items.forEach(function (it) { counts[sidebarRelationKey(it)]++; });
+    LASO_RELATIONS.forEach(function (g) {
+      var el = document.getElementById('sbLasoCount-' + g.key);
+      if (el) el.textContent = counts[g.key];
+    });
+    grp.hidden = false;
+  }
+
+  // ── "CÔNG CỤ YÊU THÍCH" TRONG SIDEBAR: 3 tool user CHẠY NHIỀU LẦN NHẤT ──
+  // Nguồn /api/tool-usage — đếm event `tool_run` trong bảng `events` (cùng
+  // bảng lib/ops/tool-usage-alerts.ts dùng cho digest vận hành). `tool_id` trả
+  // về là SLUG (window.SHELL_ACTIVE) TRÙNG với `id` của mục trong TOOLS, nên
+  // khớp thẳng vào TOOLS đang có sẵn ở client để lấy label/href/icon — không
+  // cần gọi thêm tool_pricing.
+  var SB_FAV_SHOW = 3;
+  function findToolItem(id) {
+    var found = null;
+    TOOLS.forEach(function (g) { g.items.forEach(function (it) { if (it.id === id) found = it; }); });
+    return found;
+  }
+  function loadSidebarFavTools() {
+    var host = document.getElementById('shell-sidebar');
+    if (!host || !getToken()) return; // khách vãng lai — chưa có lịch sử để đếm
+    freshToken().then(function (tok) {
+      if (!tok) return;
+      return fetch('/api/tool-usage', { headers: { Authorization: 'Bearer ' + tok } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) { paintSidebarFavTools((d && d.items) || []); });
+    }).catch(function () { /* chỉ là tiện ích — hỏng thì im lặng */ });
+  }
+  function paintSidebarFavTools(items) {
+    var grp = document.getElementById('sbFavGrp');
+    var list = document.getElementById('sbFavList');
+    if (!grp || !list) return;
+    // tool_id có thể trỏ vào công cụ đã bỏ khỏi danh mục (tool_pricing đổi/gỡ)
+    // — bỏ qua để không dẫn tới đường chết, KHÔNG lấy chỗ đó chèn tool khác.
+    var rows = items
+      .map(function (it) { return { count: it.count, tool: findToolItem(it.tool_id) }; })
+      .filter(function (r) { return r.tool; })
+      .slice(0, SB_FAV_SHOW);
+    if (!rows.length) { grp.hidden = true; return; }
+    list.innerHTML = rows.map(function (r) {
+      return '<a class="item" href="' + r.tool.href + '">' + (r.tool.icon ? svg(r.tool.icon) : '') +
+        ' ' + esc(r.tool.label) + ' <span class="pill">' + esc(String(r.count)) + '</span></a>';
+    }).join('');
+    grp.hidden = false;
   }
 
   // ── RENDER RAIL ──
@@ -1719,18 +1742,130 @@
   }
   function printWorkspace() {
     try { track('pdf_download', { tool_id: ACTIVE }); } catch (e) { /* ignore */ }
-    ensurePrintHead();
+    var isBook = ensurePrintBook();
+    if (!isBook) ensurePrintHead(); // bìa sách đã tự mang tên+ngày sinh, khỏi lặp đầu trang cũ
+    var host = wsResultHost();
     var done = false;
     var go = function () {
       if (done) return; done = true;
       ensurePrintFoot();
       window.print();
     };
-    ensureQrJs(go);
-    // Mạng chậm và qr.js chưa kịp tải thì đừng giữ người dùng chờ vô hạn —
-    // in luôn sau 800ms, chân trang khi đó thiếu QR (còn seal + ngày) chứ
-    // không phải không in được gì.
-    setTimeout(go, 800);
+    var pending = 1; // QR — luôn chờ, xem ensureQrJs bên dưới
+    var release = function () { pending--; if (pending <= 0) go(); };
+    ensureQrJs(release);
+    if (isBook && host) {
+      pending++;
+      forceEagerIllusImages(host, release);
+    }
+    // Trần cứng — mạng chậm/QR hoặc ảnh chưa kịp tải thì đừng giữ người dùng
+    // chờ vô hạn. Bìa sách kéo thêm ảnh minh hoạ (giờ đã nén ~150KB/tấm,
+    // xem illus-match.js) nên trần dài hơn bản không-bìa.
+    setTimeout(go, isBook ? 2500 : 800);
+  }
+  // `loading="lazy"` trên ảnh phần 2 trở đi (xem `illusBannerHtml` ở các
+  // trang tool) chỉ tải khi CUỘN TỚI — bấm "Lưu PDF" mà chưa từng cuộn qua
+  // các phần sau thì ảnh CHƯA HỀ được yêu cầu tải, in ngay ra khung trống dù
+  // ảnh gốc hoàn toàn tồn tại (Henry báo 2026-09-14: PDF thật có trang thiếu
+  // ảnh). Gỡ `lazy` ngay trước khi in để trình duyệt tải NGAY bất kể có đang
+  // hiện trên màn hình hay không, rồi CHỜ THẬT SỰ (không đoán mili giây) cho
+  // tới khi tải xong hoặc lỗi mới gọi `cb`.
+  function forceEagerIllusImages(host, cb) {
+    var imgs = Array.prototype.slice.call(host.querySelectorAll('.lg-illus img'));
+    if (!imgs.length) { cb(); return; }
+    var left = imgs.length;
+    var settle = function () { left--; if (left <= 0) cb(); };
+    imgs.forEach(function (img) {
+      if (img.loading === 'lazy') img.loading = 'eager';
+      if (img.complete) { settle(); return; }
+      img.addEventListener('load', settle, { once: true });
+      img.addEventListener('error', settle, { once: true }); // lỗi thì thôi — onerror riêng của ảnh đã tự gỡ khung, đừng giữ in mãi
+    });
+  }
+  // ── Bìa sách (6 tool có ảnh minh hoạ illus-match.js) ─────────────────
+  // 2026-09-14: trước đây "Lưu PDF" chỉ in nguyên màn hình, không có bố cục.
+  // Giờ 6 tool này có ảnh minh hoạ thật nên dựng thêm bìa + trang danh ngôn +
+  // mục lục kiểu sách TRƯỚC nội dung — chỉ áp dụng đúng 6 id trong
+  // `BOOK_QUOTES`, tool khác rơi về `ensurePrintHead()` cũ, không hồi quy
+  // ~30 tool còn lại. Quote lấy từ chính văn cổ (Luận Ngữ/Mạnh Tử/Đạo Đức
+  // Kinh/Tôn Tử Binh Pháp), không bịa.
+  var BOOK_QUOTES = {
+    'luan-giai': { vi: 'Tận kỳ tâm giả, tri kỳ tính dã; tri kỳ tính, tắc tri thiên hĩ.', viet: 'Người thấu tận lòng mình thì biết được tính mình; biết tính mình thì biết được lẽ trời.', src: 'Mạnh Tử · Tận Tâm thượng' },
+    'chu-trinh-cuoc-doi': { vi: 'Tam thập nhi lập, tứ thập nhi bất hoặc, ngũ thập nhi tri thiên mệnh.', viet: 'Ba mươi tuổi lập thân, bốn mươi tuổi hết nghi hoặc, năm mươi tuổi biết mệnh trời.', src: 'Khổng Tử · Luận Ngữ, Vi Chính' },
+    'van-han-nam': { vi: 'Hoạ hề, phúc chi sở ỷ; phúc hề, hoạ chi sở phục.', viet: 'Trong hoạ có mầm phúc, trong phúc có mầm hoạ.', src: 'Lão Tử · Đạo Đức Kinh' },
+    'cong-so': { vi: 'Tri kỷ tri bỉ, bách chiến bất đãi.', viet: 'Biết mình biết người, trăm trận không nguy.', src: 'Tôn Tử · Binh Pháp' },
+    'day-con': { vi: 'Tính tương cận dã, tập tương viễn dã.', viet: 'Tính người vốn gần nhau, do tập nhiễm mà xa nhau.', src: 'Khổng Tử · Luận Ngữ, Dương Hoá' },
+    'huong-nghiep-tre': { vi: 'Tri chi giả bất như hiếu chi giả; hiếu chi giả bất như lạc chi giả.', viet: 'Biết mà làm không bằng thích mà làm; thích mà làm không bằng say mê mà làm.', src: 'Khổng Tử · Luận Ngữ, Ung Dã' }
+  };
+  function toRomanUpper(n) {
+    var map = [[1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
+    var out = '';
+    for (var i = 0; i < map.length; i++) { while (n >= map[i][0]) { out += map[i][1]; n -= map[i][0]; } }
+    return out || 'I';
+  }
+  // Mục lục đọc thẳng DOM đang hiện — dùng chung 1 hàm cho cả 3 dạng chương
+  // đang có ở 6 tool (`.sec` của luận-giải/chu-trình/vận-hạn, `.cs-sec` của
+  // công-sở, `.res-block` của dạy-con/hướng-nghiệp-trẻ), KHÔNG cần biết tool
+  // nào dùng dạng nào — tự thử lần lượt, dạng nào có phần tử thì dùng dạng đó.
+  // `shownEl` lọc đúng khối đang ẩn (chưa mở khoá/chưa tick), tránh mục lục
+  // liệt kê chương không có trong bản in.
+  function bookTocItems(host) {
+    var items = [];
+    host.querySelectorAll('.sec').forEach(function (sec) {
+      var h = sec.querySelector('.sec-h h3');
+      if (h && shownEl(sec)) items.push(h.textContent.trim());
+    });
+    if (!items.length) host.querySelectorAll('.cs-sec').forEach(function (sec) {
+      var h = sec.querySelector('h3');
+      if (h && shownEl(sec)) items.push(h.textContent.trim());
+    });
+    if (!items.length) host.querySelectorAll('.res-block').forEach(function (b) {
+      var h = b.querySelector('.res-block-title');
+      if (h && shownEl(b)) items.push(h.textContent.trim());
+    });
+    return items;
+  }
+  // Dựng bìa + trang danh ngôn + mục lục, chèn lên ĐẦU host. Trả `true` nếu
+  // tool này có bật bìa sách (để `printWorkspace` biết bỏ qua đầu trang cũ).
+  function ensurePrintBook() {
+    var meta = BOOK_QUOTES[ACTIVE];
+    var host = wsResultHost();
+    if (!meta || !host) return false;
+    host.classList.add('ws-book-mode');
+    if (document.getElementById('wsBookCover')) return true; // đã dựng (bấm in lần 2)
+    var sub = shareBirthLines({ birth: (ctx && ctx.birth) || null });
+    var items = bookTocItems(host);
+    var tocHtml = items.map(function (label, i) {
+      return '<li><span class="wsb-toc-n">' + toRomanUpper(i + 1) + '</span><span class="wsb-toc-t">' + esc(label) + '</span><span class="wsb-toc-leader"></span></li>';
+    }).join('');
+    var wrap = document.createElement('div');
+    wrap.id = 'wsBookCover';
+    wrap.innerHTML =
+      '<div class="wsb-cover">' +
+        '<div class="wsb-spine"><svg viewBox="0 0 46 900" preserveAspectRatio="none">' +
+          '<line x1="23" y1="120" x2="23" y2="780" stroke="rgba(249,244,235,.28)" stroke-width="1"/>' +
+          '<line x1="12" y1="126" x2="34" y2="138" stroke="#F4EFE2" stroke-width="3" stroke-linecap="round"/>' +
+          '<line x1="12" y1="330" x2="34" y2="342" stroke="#F4EFE2" stroke-width="3" stroke-linecap="round"/>' +
+          '<line x1="12" y1="534" x2="34" y2="546" stroke="#F4EFE2" stroke-width="3" stroke-linecap="round"/>' +
+          '<line x1="12" y1="738" x2="34" y2="750" stroke="#F4EFE2" stroke-width="3" stroke-linecap="round"/>' +
+        '</svg></div>' +
+        '<div class="wsb-label"><div class="wsb-label-in"><div class="wsb-label-t">' + esc(wsTitleText()) + '</div><img class="wsb-seal" src="/seal.webp" alt=""></div></div>' +
+        (sub ? '<div class="wsb-cover-cap"><b>LÁ SỐ TRỌN ĐỜI</b><span>' + esc(sub) + '</span></div>' : '') +
+        '<div class="wsb-cover-foot"><div class="mk">✦</div><b>TỬ VI MINH BẢO</b><span>tuviminhbao.com</span></div>' +
+      '</div>' +
+      '<div class="wsb-quote"><div class="wsb-quote-in">' +
+        '<div class="wsb-qmark">“</div>' +
+        '<div class="wsb-qtxt">' + esc(meta.vi) + '</div>' +
+        '<div class="wsb-qviet">' + esc(meta.viet) + '</div>' +
+        '<div class="wsb-qrule"></div>' +
+        '<div class="wsb-qsrc">' + esc(meta.src) + '</div>' +
+      '</div></div>' +
+      (items.length ? (
+        '<div class="wsb-toc"><div class="wsb-toc-h"><b>MỤC LỤC</b><h2>' + esc(wsTitleText()) + '</h2></div><div class="wsb-toc-rule"></div>' +
+        '<ul class="wsb-toc-list">' + tocHtml + '</ul></div>'
+      ) : '');
+    host.insertBefore(wrap, host.firstChild);
+    return true;
   }
   // Bản in không có `.ws-top` (đã ẩn) nên tự nó không nói được đây là kết quả
   // gì của ai. Dựng một khối CHỈ hiện lúc in, lấy đúng chữ đang có trên màn
@@ -1758,9 +1893,13 @@
   // Chân trang PDF: triện website + tên miền + ngày xuất bên trái, QR quét
   // về trang bên phải — cùng bố cục "triện + QR" đã dùng ở poster ảnh viral
   // (`poster.js`), giữ nhận diện nhất quán giữa ảnh chia sẻ và bản PDF.
+  // Bìa sách (6 tool trong BOOK_QUOTES) dùng bản TRANG BÌA CUỐI riêng
+  // (`ensurePrintBackCover`, seal+QR to bằng cả trang) thay cho thanh chân
+  // trang mỏng này — tránh lặp seal+QR hai lần liền nhau ở cuối tài liệu.
   function ensurePrintFoot() {
     var host = wsResultHost();
     if (!host) return;
+    if (host.classList.contains('ws-book-mode')) { ensurePrintBackCover(host); return; }
     var foot = document.getElementById('wsPrintFoot');
     if (!foot) {
       foot = document.createElement('div');
@@ -1780,6 +1919,31 @@
       var cctx = cv.getContext('2d');
       cctx.clearRect(0, 0, 120, 120);
       window.QR.draw(cctx, link, 0, 0, 120);
+    }
+  }
+  // Trang bìa cuối — khép lại quyển sách bằng đúng bộ nhận diện đã dùng ở bìa
+  // trước (seal thật + QR thật), thay vì chỉ một thanh chân trang mỏng.
+  function ensurePrintBackCover(host) {
+    var back = document.getElementById('wsBookBack');
+    if (!back) {
+      back = document.createElement('div');
+      back.id = 'wsBookBack';
+      back.innerHTML =
+        '<div class="wsb-back">' +
+          '<img class="wsb-back-seal" src="/seal.webp" alt="">' +
+          '<div class="wsb-back-brand"><b>TỬ VI MINH BẢO</b><span>紫微明寶</span></div>' +
+          '<canvas class="wsb-back-qr" id="wsBookBackQrCv" width="140" height="140"></canvas>' +
+          '<div class="wsb-back-cap">Quét mã để quay lại</div>' +
+          '<div class="wsb-back-url">tuviminhbao.com</div>' +
+        '</div>';
+      host.appendChild(back);
+    }
+    var cv = document.getElementById('wsBookBackQrCv');
+    if (cv && window.QR) {
+      var link = Shell.viralUrl('https://tuviminhbao.com/app', ACTIVE, { source: 'pdf', medium: 'print' });
+      var cctx = cv.getContext('2d');
+      cctx.clearRect(0, 0, 140, 140);
+      window.QR.draw(cctx, link, 0, 0, 140);
     }
   }
 
@@ -2674,12 +2838,12 @@
           '<div id="introSrc"></div>' +
           '</div></div></div>';
       }
-      // Dòng "Theo <cổ pháp> · phương pháp Tử Vi Minh Bảo" — nạp động, điền
-      // sau khi kịp tải; nếu khối intro đã bị đóng trước đó thì bỏ qua.
-      ensureToolSourcesJs(function () {
-        var slot = document.getElementById('introSrc');
-        if (slot) slot.innerHTML = window.ToolSources.introHtml(key);
-      });
+      // Dòng "Theo <cổ pháp>..." KHÔNG còn điền vào banner nữa (Henry
+      // 2026-09-14: cho banner gọn lại) — `#introSrc` giữ lại rỗng vì
+      // `check-intro-card.mjs` vẫn bắt buộc thẻ này có mặt trên 49 trang
+      // tĩnh. Dòng nguồn/cổ pháp đầy đủ vẫn còn ở CUỐI kết quả qua
+      // `maybeAppendSrcNote()` — chỉ bỏ bản rút gọn trong banner, không bỏ
+      // minh bạch nguồn.
     },
     // Gọi khi trang đã chạy (có kết quả): ẩn intro cho LƯỢT XEM này (không
     // nhớ qua localStorage) — box quay lại mỗi khi mở trang mới.
@@ -2717,6 +2881,11 @@
     // đúng khoảnh khắc tò mò cao nhất thay vì chờ tới thanh công cụ chung.
     // No-op nếu chưa có `currentShare()` (shareWorkspace tự kiểm).
     shareNow: function () { shareWorkspace(); },
+    // Kích hoạt CHÍNH luồng "Lưu PDF" (bìa sách + mục lục + ảnh minh hoạ nếu
+    // có, xem printWorkspace/ensurePrintBook) từ một nút do TRANG tự vẽ —
+    // dùng cho thẻ "Báo cáo đã sẵn sàng" (tools-shared/report-delivery.js).
+    // CÙNG một đường với FAB `wsPdfBtn` — không dựng đường in thứ hai.
+    printNow: function () { printWorkspace(); },
     /**
      * Khung giữa ĐANG có một kết quả thật hay chưa — CÙNG ngưỡng mà nút Chia
      * sẻ / Lưu PDF / dòng ghi nguồn đã dùng (`currentShare()`).
@@ -3024,7 +3193,7 @@
       var known = _rc.balance != null && !_rc.anon;
       var txt = known ? _rc.balance.toLocaleString('vi-VN') : null;
       var sub = document.getElementById('sbSub');
-      if (sub) sub.textContent = txt != null ? (txt + ' Lượng · Nạp thêm →') : 'Xem hồ sơ →';
+      if (sub) sub.innerHTML = txt != null ? ('<b>' + txt + ' Lượng</b> · Nạp thêm →') : 'Xem hồ sơ →';
       var pill = document.getElementById('sbBalance');
       if (pill) pill.textContent = txt != null ? txt : '—';
     } catch (e) { /* ignore */ }
@@ -3065,8 +3234,9 @@
 
   // ── BOTTOM TAB BAR (mobile) ──
   // Chèn 1 lần vào body; CSS chỉ hiện ≤900px. Cho phép chạm 1 phát tới Trợ lý
-  // (rail) và Công cụ (sidebar) thay vì chôn sau hamburger. Trang chủ / Tài
-  // khoản là link điều hướng. Active theo trang đang mở.
+  // (rail) và Tài khoản (sidebar — đã đổi từ "Công cụ" 2026-09 vì sidebar giờ
+  // là hồ sơ/ví/sổ lá số, không còn danh mục công cụ). Trang chủ / Góp Ý là
+  // link điều hướng. Active theo trang đang mở.
   // 5 mục — bài học workshop 2026-09: người dùng xong một tool KHÔNG biết bấm
   // vào đâu để quay lại Luận Đường. "Trang chủ" nay là trang chủ THẬT
   // (tuviminhbao.com, ngoài shell) — icon nhà GIỮ NGUYÊN như trước, chỉ đổi
@@ -3077,12 +3247,11 @@
     if (document.getElementById('shell-tabbar')) return;
     var isHome = ACTIVE === 'home';
     var isAcct = ACTIVE === 'ho-so' || ACTIVE === 'vi-luong' || ACTIVE === 'tai-khoan';
-    var isTool = !isHome && !isAcct;
     var TI = {
       home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
       chat: '<path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/>',
-      grid: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>',
       user: '<circle cx="12" cy="8" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0" stroke-linecap="round"/>',
+      inbox: '<polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
       // Âm dương — dấu hiệu của Luận Đường, tách biệt hẳn icon nhà của
       // "Trang chủ" để hai đích không lẫn vào nhau trên cùng một thanh.
       yin: '<circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9 9 9 0 0 1 0-18z"/><circle cx="12" cy="7.5" r="1"/><circle cx="12" cy="16.5" r="1"/>',
@@ -3094,8 +3263,8 @@
       '<a class="tab" href="/">' + ti('home') + 'Trang chủ</a>' +
       '<button class="tab" type="button" data-tab="rail">' + ti('chat') + 'Trợ lý</button>' +
       '<div class="tab-home' + (isHome ? ' active' : '') + '"><a class="tab-home-btn" href="/app" aria-label="Về Luận Đường">' + ti('yin') + '</a><span>Home</span></div>' +
-      '<button class="tab' + (isTool ? ' active' : '') + '" type="button" data-tab="tools">' + ti('grid') + 'Công cụ</button>' +
-      '<a class="tab' + (isAcct ? ' active' : '') + '" href="/app/tai-khoan">' + ti('user') + 'Tài khoản</a>';
+      '<button class="tab" type="button" data-tab="tools">' + ti('user') + 'Tài khoản</button>' +
+      '<a class="tab' + (isAcct ? ' active' : '') + '" href="/app/tai-khoan#gopy">' + ti('inbox') + 'Góp Ý</a>';
     document.body.appendChild(nav);
     // Đi qua CHÍNH Shell.openRail (thay vì tự mở) để lời mời tắt được ở CẢ hai
     // đường mở rail — mở bằng tab mà orb vẫn nhấp nháy thì nó nói sai.

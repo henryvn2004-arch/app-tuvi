@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=39">
+<link rel="stylesheet" href="/shell.css?v=46">
 <style>
 .dt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:640px}
 .dt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
@@ -72,13 +72,15 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
+        <img class="intro-avatar" src="/tool-avatars/thu-tuong.webp" alt="" style="display:none" onerror="this.remove()">
+        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/xem-tuong-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
-          <img class="intro-avatar" src="/tool-avatars/thu-tuong.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Thủ Tướng</div>
-            <div class="intro-d">Thủ Tướng đọc chỉ tay theo Ngũ Hành Hình Tướng từ ảnh bàn tay bạn. Chụp ảnh lòng bàn tay, nhận luận tam đại chỉ, đường vận mệnh, gò và ngón tay — sự nghiệp, tình duyên, sức khoẻ.</div>
-            <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
+            <div class="intro-d">Lòng bàn tay lưu lại dấu vết của cả một chặng đường sống — sự nghiệp, tình duyên, sức khoẻ đều để lại đường nét riêng. Chụp ảnh lòng bàn tay, nhận bản luận theo Ngũ Hành Hình Tướng.</div>
+            <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
@@ -87,13 +89,17 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ngũ Hành Hình Tướng</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="thu-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (analyze/resetTool/paywall/kết quả). Tool này
+           không có màn "xem trước" tách riêng — chọn/chụp ảnh xong vẫn đứng
+           nguyên ở bước 1 cho tới khi bấm phân tích, nên chỉ 3 bước. -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Tải ảnh bàn tay</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-
       <div class="dt-card" id="inputCard">
         <div class="fc-head"><span class="fc-ic" data-icon="hand"></span><h2>Tải ảnh lòng bàn tay</h2></div>
         <p class="sub">Chụp và tải một tấm ảnh rõ lòng bàn tay. Hệ thống phân tích đường chỉ tay theo Ngũ Hành Hình Tướng, luận tam đại chỉ, đường vận mệnh, gò và ngón tay.</p>
@@ -169,6 +175,21 @@
         </button>
         <div class="dt-error" id="error-msg"></div>
       </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Thủ Tướng</div>
+        <p class="wsp-desc">Chỉ tướng học phương Đông là môn xem chỉ tay dựa trên các đường chính trên lòng bàn tay cùng các gò xung quanh để luận đoán tính cách, sự nghiệp và vận trình. Đây là một nhánh riêng trong hệ thống nhân tướng học cổ truyền, song song với xem tướng mặt.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="thu-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
+      </div>
 
       <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
         <h2>Phân Tích Thủ Tướng Học</h2>
@@ -187,9 +208,10 @@
 <script>window.SHELL_ACTIVE='thu-tuong';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'thu-tuong'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=33"></script>
-  <script src="/nav.js?v=26" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
-<script src="/shell.js?v=90"></script>
+<script src="/tuvi-paywall.js?v=35"></script>
+  <script src="/nav.js?v=27" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
+<script src="/tools-shared/fbcard-topic.js?v=2"></script>
+<script src="/shell.js?v=91"></script>
 <script>
 function initThuTuong(){
   Shell.setContext({
@@ -207,6 +229,21 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // ══════════════════════════════════════════════════════════════════════
 let _imageData=null, _mediaType='image/jpeg', _camStream=null;
 let _mpHandsReady=false, _handGeoNote=null, _currentSlug='';
+
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (tải ảnh → thanh toán → kết quả), không tạo trạng
+// thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n` đang
+// "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 
 function loadHands(cb) {
   if (_mpHandsReady) { cb(null); return; }
@@ -424,6 +461,7 @@ async function analyze() {
   if (!_imageData) return;
   document.getElementById('error-msg').classList.remove('active');
   document.getElementById('analyzeBtn').disabled=true;
+  wsStepsSet(2); // Thanh toán — chốt tường trước khi gọi model
   _currentSlug = TuviPaywall.generateToolSlug('thu-tuong');
   await TuviPaywall.requireCredits(_currentSlug, async () => {
     await _doAnalyze();
@@ -433,6 +471,7 @@ async function analyze() {
 
 async function _doAnalyze() {
   document.getElementById('resultCard').style.display='block';
+  wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu luận giải
   const aiResultEl = document.getElementById('aiResult');
   aiResultEl.innerHTML='<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="hand"></span><div class="dt-loading-text">Đang đọc chỉ tay...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
   window.mountIcons && window.mountIcons(aiResultEl);
@@ -478,6 +517,7 @@ function resetTool() {
   document.getElementById('resultCard').style.display='none';
   document.getElementById('aiResult').innerHTML='';
   document.getElementById('inputCard').scrollIntoView({behavior:'smooth',block:'start'});
+  wsStepsSet(1); // về lại Tải ảnh bàn tay
   Shell.setShareable(null);
 }
 
@@ -492,7 +532,7 @@ function renderMd(md){
     // chung, vì nó tự xử lý cả nhãn LẪN in đậm của riêng câu hook.
     .replace(/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*(.*)$/gm,function(_,tag,hook,rest){
       var cls=HOOK_TAG_CLASS[tag]||'fb-trungtinh';
-      return '<div class="fb-card '+cls+'">"'+hook.trim()+'"</div>'+rest;
+      return window.FbCardTopic.cardHtml(cls,window.FbCardTopic.extractTopic(_),'"'+hook.trim()+'"')+rest;
     })
     .replace(/^## (.+)$/gm,'<h2>$1</h2>')
     .replace(/^### (.+)$/gm,'<h3>$1</h3>')

@@ -304,18 +304,21 @@ async function runPost(request: NextRequest) {
   let isPreview = phanNum <= FREE_PHAN || isCtcdPreview;
   const previewToolId = isCtcdPreview ? 'chu-trinh-cuoc-doi' : 'laso';
 
-  // 🐞 (2026-09-07, phát hiện lúc chạy final-test thật) Phần 14-15 của
-  // Chu Trình Cuộc Đời KHÔNG chỉ là "xem trước trước khi mua" — chúng còn NẰM
-  // TRONG bó 11 phần đã bán. Khách ĐÃ MUA cả bó mà cache thiếu đúng 2 phần này
-  // (lượt sinh trước bị ngắt giữa chừng) sẽ bị cầu dao xem-trước (ngân sách
-  // CHUNG toàn site, trần ĐỜI chỉ 3 lượt) chặn MÃI MÃI dù đã trả tiền — nút
-  // "↻ Thử lại" không bao giờ qua được vì suất đã hết, và họ không có đường
-  // nào khác để lấy lại đúng 2/11 phần đã trả tiền. Khách ĐÃ SỞ HỮU bundleSlug
-  // thì không còn là "xem trước" nữa — cho đi thẳng đường trả-tiền-thường,
-  // đừng tiêu một suất quota vốn không phải để dành cho ca này.
-  if (isCtcdPreview && bundleSlug) {
+  // 🐞 (2026-09-07, phát hiện lúc chạy final-test thật; 2026-09-10 mở rộng
+  // sang phần 1-2 của laso — CÙNG lỗi, khác chỗ) Phần xem-trước KHÔNG chỉ là
+  // "trước khi mua" — chúng còn NẰM TRONG phần/bó đã bán (phần 1-2 của laso
+  // bán lẻ qua `slug`, phần 14-15 của Chu Trình Cuộc Đời nằm trong `bundleSlug`).
+  // Khách ĐÃ MUA mà cache thiếu đúng các phần này (lượt sinh trước bị ngắt
+  // giữa chừng, hoặc trước đây phần 2 còn thuộc diện trả phí) sẽ bị cầu dao
+  // xem-trước (ngân sách CHUNG toàn site, trần ĐỜI) chặn MÃI MÃI dù đã trả
+  // tiền — nút "↻ Thử lại" không bao giờ qua được vì suất đã hết. Khách ĐÃ SỞ
+  // HỮU slug/bundleSlug thì không còn là "xem trước" nữa — cho đi thẳng đường
+  // trả-tiền-thường, đừng tiêu một suất quota vốn không phải để dành cho ca này.
+  const ownedSlugsForPreview = (isCtcdPreview ? [bundleSlug] : [slug, bundleSlug])
+    .filter((s): s is string => !!s);
+  if (isPreview && ownedSlugsForPreview.length) {
     const previewAuth = await authUserFromRequest(request);
-    if (!('error' in previewAuth) && (await hasAnySlugAccess(previewAuth.user.id, [bundleSlug]))) {
+    if (!('error' in previewAuth) && (await hasAnySlugAccess(previewAuth.user.id, ownedSlugsForPreview))) {
       isPreview = false;
     }
   }
@@ -419,6 +422,16 @@ async function runPost(request: NextRequest) {
     // diễn biến theo thời gian trong chính ĐV, nội suy PCHIP) — bố cục giờ có
     // 4 mục (① vì sao ② 3 quãng thời gian ③ đào sâu câu hỏi trọng tâm ④ kết
     // luận) thay vì 2-3, nên nới thêm 200-250→220-270 từ, trần cộng theo.
+    // 2026-09-14 (Henry) — nới ngân sách TỪ trong `instructionFor()` (vd cung
+    // 350-400→480-550 từ) nhưng CỐ Ý KHÔNG cộng trần ở đây. Đo thật trên 24
+    // phần của 1 lá số thật (script sinh trực tiếp qua buildPromptCached +
+    // llmTextFull, Gemini): MỌI phần đã tự overshoot ngân sách từ CŨ 30-70%
+    // (có phần tới +156%) mà 0/24 phần chạm `finishReason: MAX_TOKENS` — tức
+    // trần hiện tại còn dư rất nhiều so với chữ thực sinh ra (vd phần 14: trần
+    // 5400 token, chữ thật chỉ dùng ~500-550). "Cụt ý" người đọc thấy là do
+    // ngân sách TỪ khiêm tốn, không phải do trần — xem docs/nhat-ky/2026-09.md.
+    // Ngân sách mới vẫn còn cách trần rất xa nên không cần nới; nới mù ở đây
+    // là tốn thêm mà không giải quyết gì cả.
     const maxTok = THINK_BUDGET + (phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
       : (phan >= 2 && phan <= 13) ? 2400 : (phan >= 15 && phan <= 23) ? 2500 : 1500);
     // 2026-09-02 — hạ độ nghĩ cho ĐÚNG nhóm route văn dài này. A/B mù 48 bản

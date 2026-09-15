@@ -507,13 +507,30 @@ export const MAU_ARC_CHUNG = mauArc(
 // nguồn DỰ BÁO thứ hai. `arcDoc()` vẫn nội suy `${NHAN_TINH_CHAT_RULE}` như
 // cũ nên 6 bản đang dùng nó không đổi một byte.
 export const NHAN_TINH_CHAT_RULE =
-  '── NHÃN TÍNH CHẤT MỖI CÂU HOOK ──\nCâu mở đầu mỗi phần (nếu bài đã yêu cầu câu chốt/phán quyết in đậm) LUÔN kèm một nhãn tính chất trong ngoặc vuông NGAY TRƯỚC dấu ** mở: [TỐT] (tin vui/thuận lợi), [CẢNH BÁO] (tin xấu/rủi ro/cần đề phòng), [TRUNG TÍNH] (trung lập). Mọi đoạn xuống dòng KHÁC trong phần cũng mở bằng một câu NGẮN in đậm tương tự — cùng chuẩn cụ thể, đo lường/hình dung được — kèm đúng một trong ba nhãn trên. Có bao nhiêu đoạn thì có bấy nhiêu câu hook, mỗi câu đứng đầu đúng đoạn của nó, không dồn hết vào một câu. Nhãn đứng NGOÀI dấu **, viết ĐÚNG một trong ba từ, không lặp nhãn ở chỗ khác.\nNgay sau tên nhãn thêm dấu | rồi MỘT TỪ KHOÁ 1–3 chữ VIẾT HOA: ý của chính đoạn đó rút thành cái tên người đọc nhớ được, KHÔNG phải nói lại tên nhãn và KHÔNG phải tên sao — [TỐT|MỞ LỐI], [CẢNH BÁO|GIỮ TIỀN], [TRUNG TÍNH|CHỜ THỜI], [TỐT|NGƯỜI ĐỠ]. Các đoạn trong cùng một phần không dùng trùng từ khoá.';
+  '── NHÃN TÍNH CHẤT MỖI CÂU HOOK ──\nCâu mở đầu mỗi phần (nếu bài đã yêu cầu câu chốt/phán quyết in đậm) LUÔN kèm một nhãn tính chất trong ngoặc vuông NGAY TRƯỚC dấu ** mở: [TỐT] (tin vui/thuận lợi), [CẢNH BÁO] (tin xấu/rủi ro/cần đề phòng), [TRUNG TÍNH] (trung lập). Mọi đoạn xuống dòng KHÁC trong phần cũng mở bằng một câu NGẮN in đậm tương tự — cùng chuẩn cụ thể, đo lường/hình dung được — kèm đúng một trong ba nhãn trên. Có bao nhiêu đoạn thì có bấy nhiêu câu hook, mỗi câu đứng đầu đúng đoạn của nó, không dồn hết vào một câu. Nhãn đứng NGOÀI dấu **, viết ĐÚNG một trong ba từ, không lặp nhãn ở chỗ khác.\nNgay sau tên nhãn thêm dấu | rồi MỘT TỪ KHOÁ 1–3 chữ VIẾT HOA: ý của chính đoạn đó rút thành cái tên người đọc nhớ được, KHÔNG phải nói lại tên nhãn và KHÔNG phải tên sao — [TỐT|MỞ LỐI], [CẢNH BÁO|GIỮ TIỀN], [TRUNG TÍNH|CHỜ THỜI], [TỐT|NGƯỜI ĐỠ]. Các đoạn trong cùng một phần không dùng trùng từ khoá.\nNgay sau từ khoá đó thêm một dấu | nữa rồi ĐÚNG MỘT mã chủ đề (chữ thường, không dấu) khớp nội dung đoạn, chọn trong đúng 10 mã: ban-than, hon-nhan, su-nghiep, tai-chinh, con-cai, gia-dinh, nha-cua, suc-khoe, van-han, ten-goi — [TỐT|MỞ LỐI|su-nghiep], [CẢNH BÁO|GIỮ TIỀN|tai-chinh]. Không chắc đoạn thuộc mã nào thì chọn mã GẦN NHẤT, tuyệt đối không bịa mã ngoài danh sách.';
+
+// 2026-09-10 (Henry): thêm câu HOOK kết đoạn để giữ chân đọc tiếp — tách hằng
+// RIÊNG (`HOOK_CHUYEN_DOAN_RULE`) theo đúng khuôn `NHAN_TINH_CHAT_RULE` ở
+// trên, để Khí Sắc mượn thẳng (KHÔNG gọi cả `arcDoc()`, lý do y hệt dòng dưới)
+// mà không phải chép tay. CỐ Ý không bắt hook phải neo dữ liệu THẬT của phần
+// SAU — lúc viết câu này model chưa luận tới phần đó, bắt neo dữ liệu chưa
+// tồn tại là tự mâu thuẫn; hook chỉ cần đúng GIỌNG và đúng KIỂU, không cần
+// đúng NỘI DUNG cụ thể sắp tới.
+// 2026-09-14 (Henry): siết vế ĐẦU — hook từng bị lỏng tới mức có thể là một
+// câu treo chung chung dán vào cuối, không liên quan gì đoạn vừa viết (đọc
+// tách rời vẫn hiểu, tức không MỌC RA từ nội dung). Vế cũ (không cần đúng dữ
+// liệu phần SAU) giữ nguyên — hai luật không mâu thuẫn: một cái neo vào phần
+// đã viết (đoạn ĐANG có), một cái không neo vào phần chưa viết (đoạn CHƯA có).
+export const HOOK_CHUYEN_DOAN_RULE =
+  '── CÂU HOOK KẾT ĐOẠN (giữ chân đọc tiếp) ──\nTrong phần đang viết, chọn 1–2 đoạn xuống dòng gần cuối (ưu tiên đoạn áp chót hoặc đoạn cuối cùng) để câu CUỐI CÙNG của đoạn đó là một CÂU HOOK: PHẢI MỌC RA từ chi tiết vừa nêu trong CHÍNH đoạn đó, không phải câu treo chung chung dán vào cuối. Rồi mới bỏ lửng, KHÔNG trả lời ngay trong câu đó, hướng sang điều SẮP nói tới — đoạn kế tiếp trong cùng bài, hoặc phần kế tiếp nếu đây là một phần trong loạt nhiều lượt gọi. Hook KHÔNG cần đúng dữ liệu của phần chưa luận tới (chưa luận thì chưa có gì để neo) — chỉ cần giữ ĐÚNG giọng đang kể, viết như một câu bình thường trong mạch văn, KHÔNG lộ vẻ quảng cáo, KHÔNG viết kiểu meta ("đọc tiếp phần sau", "xem bên dưới", "phần sau sẽ nói").\nChọn ĐÚNG MỘT kiểu cho mỗi câu hook, trong 12 kiểu sau — không lặp kiểu trong cùng phần: khoảng trống tò mò (còn một điều chưa nói hết) · sợ mất (rủi ro nếu bỏ qua) · khan hiếm (thời điểm hiếm, qua là hết) · so sánh xã hội (người cùng cảnh đang ở đâu) · cái tôi/bản sắc (thuộc nhóm nào trong số đông) · tiên đoán (điều nhiều khả năng sắp tới) · giúp quyết định (ngả về lựa chọn nào) · tri thức ẩn (điều ít người để ý) · lật niềm tin cũ (chỗ đang hiểu sai) · quy luật lặp lại (đang lặp lại một vòng cũ) · uy tín cứ liệu (dựa trên số liệu/hệ thống đã chấm — KHÔNG lộ tên hệ thống hay trường phái) · mạch chuyện dang dở (đang ở đoạn nào của hành trình).';
 
 // ⚠️ Khối "NHÃN TÍNH CHẤT" +~610 ký tự cho mỗi bản dùng `arcDoc` — 5 bản đầu
 // (Lá Số/Bát Tự/Phu Thê/Xem Tuổi-Làm Ăn/Bút Tướng) đều đã sát trần
 // (`scripts/check-prompt-budget.mjs`, mục DOC_FILES) khi thêm khối này, nên
 // nới trần cùng lượt theo đúng biên ~10% đã dùng trước đó, không phải nới
 // tuỳ tiện. Bản mới thêm sau (Nhóm C) đặt cap ngay từ đầu, khỏi phải nới.
+// 2026-09-10: `HOOK_CHUYEN_DOAN_RULE` cộng thêm ~1.150 ký tự cho MỌI bản dùng
+// `arcDoc` — xem cap mới ở từng entry `DOC_FILES` (scripts/check-prompt-budget.mjs).
 const arcDoc = (o: { canCu: string; moc: string; duBao: string; phepDich: string }) => `── BA THỨ BẮT BUỘC CÓ TRONG MỖI PHẦN (BỔ SUNG cho luật phán quyết ở trên, KHÔNG thay nó) ──
 Viết LIỀN MẠCH trong văn xuôi. TUYỆT ĐỐI không in tên ba mục này ra màn hình, không đánh số, không tách thành tiêu đề.
 - HÀNH VI ĐỜI THƯỜNG (1–2 việc): việc cụ thể tới mức người đọc tự soi ra mình — "hay nhận việc rồi ôm một mình", "cãi xong là im mấy ngày", "tiền vào tay là có chỗ gọi tên ngay". Phải mọc ra từ ${o.canCu} của CHÍNH phần đang viết, KHÔNG phải câu chung chung ai đọc cũng thấy đúng. Chật chỗ thì lấy MỘT cái đắt nhất.
@@ -522,11 +539,13 @@ Viết LIỀN MẠCH trong văn xuôi. TUYỆT ĐỐI không in tên ba mục n�
 
 ${NHAN_TINH_CHAT_RULE}
 
+${HOOK_CHUYEN_DOAN_RULE}
+
 ── GIỌNG ──
 Viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ), mỗi đoạn 1–2 cái. KHÔNG chêm vào câu phán quyết in đậm, không chêm vào câu chốt.
 CẤM: "Như vậy có thể thấy" · "Nhìn chung" · "Tóm lại" · "Về mặt…" · "Thứ nhất… thứ hai" · "Trước tiên cần hiểu rằng" · rào đón ở câu chốt.
 
-── PHÉP DỊCH (dữ kiện → câu). Học đúng phép biến đổi này, đừng chép chữ ──
+── PHÉP DỊCH (dữ kiện → câu) — ĐƯỢC diễn dịch thành hình ảnh/tình huống hiện đại miễn giữ đúng HƯỚNG và MỨC ĐỘ của căn cứ gốc (suy nghĩa, không phải bịa dữ kiện — bịa dữ kiện là sao/cách cục/con số không có thật, vẫn cấm). Học đúng phép biến đổi này, đừng chép chữ ──
 ${o.phepDich}`;
 
 // ⚠️ CỐ Ý KHÔNG có lớp CHỐT ở đây, dù arc chat có. Cả ba prompt luận giải đích
@@ -538,7 +557,9 @@ ${o.phepDich}`;
 // dạng, nên không được đụng.
 
 const PHEP_DICH_LASO = `· [Phu Thê] Thiên Đồng(hãm) + Đà La → ✅ hành vi: "Chuyện nhà có gì cũng để bụng, đợi tới lúc không chịu nổi nữa mới nói một thể." ❌ "Thiên Đồng hãm địa gặp Đà La chủ hôn nhân trắc trở."
-· [Tài Bạch] Vũ Khúc(miếu) + Hóa Lộc → ✅ câu lật: "Cái tính chi ly mà người nhà hay kêu lại đúng là chỗ giữ được tiền cho anh." ❌ "Vũ Khúc miếu địa Hóa Lộc là cách cục tài lộc tốt."`;
+· [Tài Bạch] Vũ Khúc(miếu) + Hóa Lộc → ✅ câu lật: "Cái tính chi ly mà người nhà hay kêu lại đúng là chỗ giữ được tiền cho anh." ❌ "Vũ Khúc miếu địa Hóa Lộc là cách cục tài lộc tốt."
+· [Thiên Di] Thiên Mã ngộ Tuần/Triệt (cách cục ly hương, bôn ba) — DIỄN DỊCH HIỆN ĐẠI: ly hương/tai ương lúc xuất hành → ✅ "Ra khỏi nhà là dễ dính chuyện ngoài ý muốn hơn người ta — lái xe đường dài, đi công tác xa thì cẩn thận hơn một bậc." ❌ "Thiên Mã ngộ Tuần Triệt tại Thiên Di, chủ ly hương bôn ba, dễ tai ương."
+· [Mệnh] cách cục phú quý rõ (chính tinh miếu vượng + Hóa Lộc/Hóa Quyền hội) — DIỄN DỊCH HIỆN ĐẠI: cự phú → ✅ "Tiền với anh không dừng ở mức đủ ăn đủ mặc đâu — cứ đà này có ngày thành đại gia thật, chỉ là tiêu cũng phải xứng tầm đó." ❌ "Cách cục phú quý song toàn, chủ đại phú đại quý."`;
 
 export const DOC_ARC_LASO = arcDoc({
   duBao:
@@ -905,7 +926,8 @@ Nguyên tắc:
 - MỌI chỉ số dưới đây đã tính sẵn — **TUYỆT ĐỐI KHÔNG tự tính lại**, kể cả khi người hỏi đưa lại ngày sinh hay tên
 - ⚠️ Số Đường Đời của trang này tính theo phép **rút gọn NGÀY, THÁNG, NĂM RIÊNG rồi mới cộng** (đúng quy ước thần số học Việt và Hans Decoz). KHÔNG được giải thích bằng lối "cộng tất cả chữ số một lượt" — hai lối cho kết quả khác nhau ở 12% số ngày sinh, và nói lối kia là mâu thuẫn với chính con số đang hiện trên màn hình
 - Bốn số CỐT LÕI: Đường Đời (hành trình chính) · Định Mệnh (tài năng bẩm sinh) · Linh Hồn (khao khát nội tâm) · Sứ Mệnh (cách hiện ra ngoài). Nêu chúng bổ trợ hay mâu thuẫn nhau, ứng vào sự nghiệp/tình cảm
-- Các lớp BỔ SUNG, chỉ dùng khi câu hỏi chạm tới: Ngày Sinh · Thái Độ · Trưởng Thành · Năm Cá Nhân · Biểu Đồ Ngày Sinh (mũi tên mạnh/trống) · Bài Học Còn Thiếu · Đam Mê Tiềm Ẩn · Nợ Nghiệp Quật · Đỉnh Cao & Thử Thách. **Đừng đọc vanh vách cả bảng** — chọn đúng vài lớp trả lời được câu đang hỏi
+- Các lớp BỔ SUNG, chỉ dùng khi câu hỏi chạm tới: Ngày Sinh · Thái Độ · Trưởng Thành · Năm Cá Nhân · Biểu Đồ Ngày Sinh (mũi tên mạnh/trống) · Bài Học Còn Thiếu · Đam Mê Tiềm Ẩn · Nợ Nghiệp Quật · Đỉnh Cao & Thử Thách · Nghề Nghiệp Phù Hợp · Tam Giác Vàng Hướng Nghiệp. **Đừng đọc vanh vách cả bảng** — chọn đúng vài lớp trả lời được câu đang hỏi
+- Nghề Nghiệp Phù Hợp và Tam Giác Vàng là GỢI Ý theo năng lượng chủ đạo, không phải khung đóng cứng — nói rõ điều đó khi người hỏi có vẻ hiểu nhầm thành "chỉ được làm nghề này"
 - Chỉ số nào ghi "(không có)" / "(không xác định)" thì nói thẳng là không có; KHÔNG bịa ra cho đủ mâm
 - Nợ nghiệp quật và mũi tên trống là điểm YẾU — nói thật, kèm lối gỡ; không bọc đường
 - Số bậc thầy (11/22/33) luận riêng; nói thẳng ưu/khuyết, không tâng bốc

@@ -132,7 +132,18 @@ export default [
     files: ['scripts/**/*.{js,mjs,cjs}', '*.mjs'],
     languageOptions: {
       sourceType: 'module',
-      globals: { ...globals.node, ...projectGlobals },
+      globals: {
+        ...globals.node,
+        ...projectGlobals,
+        // public/laso-chart.js `const CHI` — KHÔNG tự lên `window` (không như
+        // `var`/`function`), nên gen-tool-sample.mjs phải gọi bare `CHI[idx]`
+        // bên trong `page.evaluate()` để khớp scope thật của trang
+        // (`window.CHI` ở đó luôn `undefined`, im lặng vỡ giờ Chi). Khai RIÊNG
+        // ở đây (không đưa vào `projectGlobals` dùng chung) — `CHI` đã có chỗ
+        // KHAI THẬT trong `public/laso-chart.js`, đưa vào global dùng chung sẽ
+        // đụng `no-redeclare` ngay tại chính file đó.
+        CHI: 'readonly',
+      },
     },
   },
 

@@ -11,17 +11,19 @@
       báo lỗi. Nó nằm CUỐI bản luận giải người ta vừa trả tiền — làm hỏng trang
       vì một mục phụ là đắt hơn nhiều so với việc lặng lẽ biến mất.
    4. Ảnh hỏng thì rơi về avatar chữ cái, không để ô vỡ.
-   5. GHI CÔNG ảnh. Hotlink thì mình chỉ DẪN tới tác phẩm; từ khi kéo ảnh về
-      Supabase Storage thì mình PHÂN PHỐI nó, nên CC BY-SA đòi ghi tác giả +
-      license ngay trên trang. `anhTacGia`/`anhLicense` chưa có (chưa đồng bộ,
-      hoặc Commons không trả extmetadata) thì lùi về link trang mô tả file —
-      đó vẫn là cách ghi công được chấp nhận.
-      ⚠️ 2026-09-04: từng thử bỏ dòng này (dư khi đã có 1 dòng chung cuối
-      `mount()`) — `npm run check:celebanh` CHẶN CỨNG, đọc chính bộ dò:
-      "từ khi kéo ảnh về kho của mình... CC BY-SA đòi ghi tác giả + license
-      trên trang. Bỏ dòng ghi công đi thì trang vẫn chạy hoàn hảo — đó chính
-      là lý do phải có bộ dò". ĐỪNG bỏ lại mà không sửa luôn bộ dò + có quyết
-      định rõ ràng — đây là ranh giới pháp lý, không phải gu hiển thị. */
+   5. GHI CÔNG ảnh RIÊNG TỪNG THẺ — chỉ bắt buộc khi ảnh đã kéo về Supabase
+      Storage (`anhNguon === 'storage'`): lúc đó mình PHÂN PHỐI tác phẩm nên
+      CC BY-SA đòi ghi tác giả + license ngay trên trang, không được lùi về
+      dòng chung. Hotlink Commons (`anhNguon === 'commons'`, hiện là 100% ảnh
+      — chưa đồng bộ Storage lần nào) thì mình chỉ DẪN tới tác phẩm, dòng ghi
+      công chung cuối `mount()` ("Nguồn: Wikidata · ảnh từ Wikimedia Commons…")
+      là đủ — dòng riêng trên từng thẻ khi đó là DƯ.
+      ⚠️ 2026-09-04 từng thử bỏ dòng riêng này VÔ ĐIỀU KIỆN — `check:celebanh`
+      chặn đúng vì lúc đó không phân biệt hotlink/Storage. 2026-09-10 Henry
+      quyết định bỏ dòng riêng cho ca hotlink (quyết định rõ ràng, đã cập nhật
+      `check:celebanh` theo `anhNguon`) — ĐỪNG bỏ điều kiện `anhNguon ===
+      'storage'` mà không nhớ: ngày sync Storage chạy lần đầu, thẻ Storage
+      PHẢI hiện lại dòng ghi công, đây vẫn là ranh giới pháp lý. */
 (function (root) {
   var CHI_LABEL = {
     Tý: '23–01h', Sửu: '01–03h', Dần: '03–05h', Mão: '05–07h',
@@ -47,6 +49,9 @@
      Ba mức, rơi dần: tác giả + license → chỉ license → chỉ link trang file.
      Không có ảnh thì không ghi gì (avatar chữ cái không phải tác phẩm của ai). */
   function ghiCong(it) {
+    // Hotlink Commons: dòng chung cuối `mount()` đã ghi công đủ, dòng riêng
+    // ở đây chỉ bắt buộc khi ảnh đã PHÂN PHỐI qua Storage của mình.
+    if (it.anhNguon !== 'storage') return '';
     if (!it.anh) return '';
     var phan = [];
     if (it.anhTacGia) phan.push(esc(it.anhTacGia));
