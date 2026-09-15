@@ -874,8 +874,8 @@ function huongNghiepIllusHtml(data) {
     if (!tuoiBac) return '';
     var r = IllusMatch.illusUrlForTongQuan(ls, data.gioiTinh, tuoiBac);
     if (!r) return '';
-    return '<figure class="lg-illus"><img src="' + r.url + '" alt="" loading="eager"' +
-      ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
+    return '<figure class="lg-illus"><picture><source media="print" srcset="' + r.printUrl + '"><img src="' + r.url + '" alt="" loading="eager"' +
+      ' onerror="this.closest(\'.lg-illus\').remove()"></picture></figure>';
   } catch (e) { console.error('huongNghiepIllusHtml', e); return ''; }
 }
 

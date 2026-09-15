@@ -768,8 +768,8 @@ function illusBannerHtml(p,ls,label){
   if(p<2||p>10) return '';
   var r=IllusMatch.illusUrlForDaiVan(ls,p-2,_gioitinh);
   if(!r) return '';
-  return '<figure class="lg-illus"><img src="'+r.url+'" alt="Minh hoạ '+esc(label)+'" loading="lazy"'+
-    ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
+  return '<figure class="lg-illus"><picture><source media="print" srcset="'+r.printUrl+'"><img src="'+r.url+'" alt="Minh hoạ '+esc(label)+'" loading="lazy"'+
+    ' onerror="this.closest(\'.lg-illus\').remove()"></picture></figure>';
 }
 function buildPhanSection(p,ep,label,ls,locked){
   var bodyHtml,tag;

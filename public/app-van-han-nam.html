@@ -596,8 +596,8 @@ function illusBannerHtml(t,ls){
   if(!window.IllusMatch||!t||typeof t.thangAL!=='number') return '';
   var r=IllusMatch.illusUrlForThang(ls,t.thangAL,_gioitinh);
   if(!r) return '';
-  return '<figure class="lg-illus"><img src="'+r.url+'" alt="Minh hoạ '+esc(t.nhan||'')+'" loading="lazy"'+
-    ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
+  return '<figure class="lg-illus"><picture><source media="print" srcset="'+r.printUrl+'"><img src="'+r.url+'" alt="Minh hoạ '+esc(t.nhan||'')+'" loading="lazy"'+
+    ' onerror="this.closest(\'.lg-illus\').remove()"></picture></figure>';
 }
 
 // ── Render 16 phần ───────────────────────────────────────────────────────
