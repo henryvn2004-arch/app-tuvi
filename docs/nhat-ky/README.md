@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-285 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+286 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 120 | 502,923 B |
+| `2026-09.md` | 121 | 506,671 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🎟️ Hồi sinh 7 ngày — trigger cấp tự động THỨ HAI, gắn vào email nhắc user idle — Pha 2c của plan "marketing kiểu Shopee" |
 | 1 | 2026-09 | `2026-09.md` | 💸 "invalid signature" webhook payOS tái phát SAU khi đã vá checksum key — gốc thật là bug null |
 | 1 | 2026-09 | `2026-09.md` | 🎟️ Chào sân 48h — trigger cấp tự động ĐẦU TIÊN + nối voucher vào checkout — Pha 2b của plan "marketing kiểu Shopee" |
 | 1 | 2026-09 | `2026-09.md` | 🎟️ Ví Ưu Đãi — dựng bảng voucher_defs/user_vouchers — Pha 2 của plan "marketing kiểu Shopee" |
