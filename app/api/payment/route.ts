@@ -21,7 +21,15 @@ import { voucherListActive, voucherConsume, pickBestVoucher } from '@/lib/billin
 import { getToolRevenue } from '@/lib/marketing/tool-profit';
 import { syncOnboardingTasks, KHOI_HANH_STEPS } from '@/lib/onboarding/tasks';
 import { getConfigValue } from '@/lib/config/appConfig';
-import { CRON_RUNS_LIMIT, JOBS, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen, type CronRun } from '@/lib/ops/jobs';
+import {
+  CRON_RUNS_LIMIT,
+  JOBS,
+  evaluateJobs,
+  fetchPgcronRuns,
+  fetchRecentCronRuns,
+  syncJobFirstSeen,
+  type CronRun,
+} from '@/lib/ops/jobs';
 import { checkEnv } from '@/lib/ops/preflight';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
@@ -829,13 +837,14 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
   try {
     // Trang này là trung tâm VẬN HÀNH của admin (track COO) — trả kèm sức khoẻ
     // tool để panel không phải gọi thêm một vòng API nữa.
-    const [r, health24, health7d, alerts, pgcronRuns] = await Promise.all([
+    const [r, health24, health7d, alerts, pgcronRuns, recentRuns] = await Promise.all([
       // `cache: 'no-store'` KHÔNG phải tuỳ chọn ở đây: Next nhớ kết quả GET kể
       // cả trong route động, nên panel Vận Hành có thể vẽ lại một bức ảnh cũ
       // của `cron_runs` và nói "mọi job đúng lịch" trong lúc một job đã chết —
       // đúng ca đã đo ngày 30/07 (xem lib/marketing/anomaly-alerts.ts).
-      // Cửa sổ dùng CHUNG `CRON_RUNS_LIMIT` với cảnh báo + digest: ba con số
-      // khác nhau là ba nơi cùng nhìn một bảng mà kết luận lệch nhau.
+      // Đây là log THÔ hiển thị trực tiếp (bảng "Cron & Jobs") — cố ý vẫn lấy
+      // top-N TOÀN BẢNG theo thời gian, vì mục đích là "hoạt động gần đây" chứ
+      // không phải "đánh giá từng job" (việc đó dùng `recentRuns` bên dưới).
       fetch(
         `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,source,status,started_at,finished_at,duration_ms,note` +
           `&order=started_at.desc&limit=${CRON_RUNS_LIMIT}`,
@@ -848,6 +857,11 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
       opsAlerts(),
       // Job pg_cron không ghi cron_runs — xem lib/ops/jobs.ts.
       fetchPgcronRuns(),
+      // N dòng gần nhất CHO MỖI job_key — dùng riêng cho `evaluateJobs`, KHÔNG
+      // dùng cho bảng log thô ở trên. Top-N TOÀN BẢNG (limit dùng chung phía
+      // trên) bị job chạy mỗi 15 phút chiếm hết cửa sổ trong vài ngày, đẩy job
+      // TUẦN ra ngoài và làm `evaluateJobs` phán sai "CHƯA HỀ chạy".
+      fetchRecentCronRuns(),
     ]);
     const runs = r.ok ? await r.json() : [];
     const reconcile = await rpcSafe('payment_reconcile', { p_days: 30 });
@@ -859,10 +873,9 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
       reconcile,
       // S4: sổ job giờ ở SERVER (lib/ops/jobs.ts) — sổ hardcode cũ trong
       // admin.html đã trôi khỏi thực tế (khai 5 job trong khi có 9).
-      // CỐ Ý chỉ gộp pg_cron cho phần ĐÁNH GIÁ, không nhét vào `runs` — bảng
-      // "Cron & Jobs" bên dưới là log thô của cron_runs, trộn nguồn khác vào
-      // sẽ thành một bảng không còn khớp với bất kỳ truy vấn SQL nào.
-      jobs: evaluateJobs([...runs, ...pgcronRuns], await syncJobFirstSeen()),
+      // Đánh giá job dùng `recentRuns` (N dòng/job_key) + pg_cron, KHÔNG dùng
+      // `runs` (log thô top-N toàn bảng) — xem chú thích ở Promise.all trên.
+      jobs: evaluateJobs([...recentRuns, ...pgcronRuns], await syncJobFirstSeen()),
       env: checkEnv(),
       digest: await latestOpsDigest(),
       // S6: rà bảo mật. `rpcSafe` để panel không sập nếu RPC chưa được áp.

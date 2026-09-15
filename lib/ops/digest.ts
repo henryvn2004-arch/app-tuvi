@@ -18,7 +18,7 @@
 //     S2 là chuông báo cháy, cái này là điểm danh.)
 // ============================================================
 
-import { CRON_RUNS_LIMIT, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen, type CronRun } from './jobs';
+import { evaluateJobs, fetchPgcronRuns, fetchRecentCronRuns, syncJobFirstSeen, type CronRun } from './jobs';
 import { checkEnv } from './preflight';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -169,14 +169,12 @@ export interface OpsDigest {
 
 /** Dựng digest vận hành 24h. Thuần dữ liệu, không gọi LLM. */
 export async function buildOpsDigest(): Promise<OpsDigest> {
-  const [tools, recon, runsRes, pgcronRuns, sec, chans, cfgRows, mediaRows, ytRows] = await Promise.all([
+  const [tools, recon, recentRuns, pgcronRuns, sec, chans, cfgRows, mediaRows, ytRows] = await Promise.all([
     rpc<ToolRow[]>('tool_health', { p_hours: 24 }, []),
     rpc<ReconRow[]>('payment_reconcile', { p_days: 30 }, []),
-    fetch(
-      `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,status,started_at,note` +
-        `&order=started_at.desc&limit=${CRON_RUNS_LIMIT}`,
-      SB_FRESH,
-    ).catch(() => null),
+    // N dòng gần nhất CHO MỖI job_key (không phải top-N toàn bảng) — job chạy
+    // mỗi 15 phút không đẩy được job TUẦN ra khỏi cửa sổ. Xem `fetchRecentCronRuns`.
+    fetchRecentCronRuns(),
     // Job pg_cron (auto-pipeline) không ghi cron_runs — thiếu nguồn này thì nó
     // luôn hiện "chưa hề chạy" dù thực tế chạy đủ mỗi ngày.
     fetchPgcronRuns(),
@@ -195,7 +193,7 @@ export async function buildOpsDigest(): Promise<OpsDigest> {
     sel<Array<Record<string, unknown>>>('van_dap?select=yt_status&yt_status=not.is.null&limit=5000', []),
   ]);
 
-  const runs: CronRun[] = [...(runsRes && runsRes.ok ? await runsRes.json() : []), ...pgcronRuns];
+  const runs: CronRun[] = [...recentRuns, ...pgcronRuns];
   // Cùng bản đồ first-seen với cảnh báo 3h/lượt — hai bộ dò đọc hai mốc khác
   // nhau thì digest 07:30 và cảnh báo 10:00 lại nói ngược nhau về CÙNG một job,
   // đúng chuyện đã xảy ra hôm 30/07 khi chúng nhìn hai bản cache khác nhau.
