@@ -487,6 +487,48 @@
           </div>
         </div>
 
+        <!-- KHỐI · MÁY TÍNH HOÀ VỐN QUẢNG CÁO -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Máy Tính Hoà Vốn Quảng Cáo</div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.4rem">
+            3 biến: <b>Ngân sách Ads/ngày</b>, <b>Giá bán ròng/sản phẩm</b> (giá bán trừ chi phí biến đổi — phí cổng
+            thanh toán, chi phí API sinh nội dung; tra số thật ở tab "Registry" nếu cần chính xác, để trống = coi
+            chi phí biến đổi là 0), <b>Số sản phẩm bán được/ngày</b>. Biết 2 trong 3 thì suy ra cái còn lại — chọn ở
+            ô "Tính" bên dưới. Đây là mức HOÀ VỐN (lãi = 0) — nhắm đúng mức này không có biên an toàn cho hoàn tiền/
+            churn, nên cân nhắc đặt mục tiêu users/ngày cao hơn breakeven 1,5-2 lần.
+          </div>
+          <div class="panel-body" style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:flex-end;padding-top:0">
+            <div>
+              <label style="display:block;font-size:.68rem;color:var(--text-lt);margin-bottom:.2rem">Ngân sách Ads/ngày (đ)</label>
+              <input type="number" id="be-budget" class="price-input" style="width:140px" placeholder="1000000">
+            </div>
+            <div>
+              <label style="display:block;font-size:.68rem;color:var(--text-lt);margin-bottom:.2rem">Giá bán/sản phẩm (đ, gộp)</label>
+              <input type="number" id="be-price" class="price-input" style="width:120px" placeholder="50000">
+            </div>
+            <div>
+              <label style="display:block;font-size:.68rem;color:var(--text-lt);margin-bottom:.2rem">Chi phí biến đổi/sp (đ)</label>
+              <input type="number" id="be-cost" class="price-input" style="width:110px" placeholder="0">
+            </div>
+            <div>
+              <label style="display:block;font-size:.68rem;color:var(--text-lt);margin-bottom:.2rem">Số sản phẩm/ngày</label>
+              <input type="number" id="be-users" class="price-input" style="width:100px" placeholder="20">
+            </div>
+            <div>
+              <label style="display:block;font-size:.68rem;color:var(--text-lt);margin-bottom:.2rem">Tính</label>
+              <select id="be-solve-for" class="price-input" style="width:150px">
+                <option value="users">Số sản phẩm/ngày cần</option>
+                <option value="price">Giá bán tối thiểu</option>
+                <option value="budget">Ngân sách tối đa</option>
+              </select>
+            </div>
+            <button class="btn btn-gold btn-sm" onclick="calcBreakeven()">Tính hoà vốn</button>
+          </div>
+          <div class="panel-body" id="be-result" style="font-size:.86rem;padding-top:0"></div>
+        </div>
+
       </div>
 
       <!-- ── GIỮ CHÂN & DOANH THU ── -->
@@ -4645,6 +4687,47 @@ function renderConversionTactics() {
       <td style="padding:.5rem .4rem;font-weight:600;white-space:nowrap;vertical-align:top">${t.title}</td>
       <td style="padding:.5rem .4rem;color:var(--text-lt)">${t.note}</td>
     </tr>`).join('');
+}
+
+// ── Máy tính hoà vốn quảng cáo ───────────────────────────────────────────
+// budget = netPrice × users LÀ đẳng thức HOÀ VỐN (lãi=0) — biết 2/3 biến,
+// suy biến còn lại. `netPrice` = giá bán trừ chi phí biến đổi (phí cổng
+// thanh toán + chi phí API sinh nội dung); người dùng tự nhập chi phí đó,
+// KHÔNG có nguồn tự động tra (chưa có bảng cost_vnd theo tool ở DB — Registry
+// mới cho doanh thu, chưa cho chi phí biến đổi từng lượt).
+function _beFmt(n) {
+  return Math.round(n).toLocaleString('vi-VN') + 'đ';
+}
+
+function calcBreakeven() {
+  const out = document.getElementById('be-result');
+  const budget = parseFloat(document.getElementById('be-budget').value);
+  const price = parseFloat(document.getElementById('be-price').value);
+  const cost = parseFloat(document.getElementById('be-cost').value) || 0;
+  const users = parseFloat(document.getElementById('be-users').value);
+  const solveFor = document.getElementById('be-solve-for').value;
+  const netPrice = (isFinite(price) ? price : NaN) - cost;
+
+  if (solveFor === 'users') {
+    if (!isFinite(budget) || !isFinite(price)) { out.innerHTML = '⚠️ Cần nhập Ngân sách và Giá bán.'; return; }
+    if (netPrice <= 0) { out.innerHTML = '⚠️ Giá bán ròng (sau chi phí biến đổi) phải > 0 — bán bao nhiêu cũng lỗ, không hoà vốn được.'; return; }
+    const need = Math.ceil(budget / netPrice);
+    let html = `Cần bán <strong>${need} sản phẩm/ngày</strong> để hoà vốn — ${_beFmt(budget)} ÷ ${_beFmt(netPrice)} lãi ròng/sản phẩm.`;
+    if (isFinite(users) && users > 0) {
+      const profit = netPrice * users - budget;
+      const roas = (netPrice * users) / budget;
+      html += `<br>Với <strong>${users} sản phẩm/ngày</strong> thực tế: ${profit >= 0 ? '✅ LÃI' : '🔻 LỖ'} <strong>${_beFmt(Math.abs(profit))}/ngày</strong> · ROAS ${roas.toFixed(2)}x.`;
+    }
+    out.innerHTML = html;
+  } else if (solveFor === 'price') {
+    if (!isFinite(budget) || !isFinite(users) || users <= 0) { out.innerHTML = '⚠️ Cần nhập Ngân sách và Số sản phẩm/ngày (>0).'; return; }
+    const needNet = budget / users;
+    out.innerHTML = `Giá bán TỐI THIỂU để hoà vốn ở ${users} sản phẩm/ngày: <strong>${_beFmt(needNet + cost)}</strong> (lãi ròng ${_beFmt(needNet)} sau khi trừ chi phí biến đổi ${_beFmt(cost)}).`;
+  } else {
+    if (!isFinite(price) || !isFinite(users) || users <= 0) { out.innerHTML = '⚠️ Cần nhập Giá bán và Số sản phẩm/ngày (>0).'; return; }
+    if (netPrice <= 0) { out.innerHTML = '⚠️ Giá bán ròng phải > 0.'; return; }
+    out.innerHTML = `Ở ${users} sản phẩm/ngày, lãi ròng ${_beFmt(netPrice)}/sản phẩm: ngân sách ads TỐI ĐA để hoà vốn là <strong>${_beFmt(netPrice * users)}/ngày</strong>.`;
+  }
 }
 
 async function loadMarketing() {
