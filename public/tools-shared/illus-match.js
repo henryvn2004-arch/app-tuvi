@@ -84,6 +84,15 @@
     'tong-quan': 2,
   };
 
+  /** Số biến thể trung-niên (2026-09-15) — CHỈ 1/khía (không lên 2 như
+   * trưởng-thành, xem `KhiaCanh.trungNien` ở illus-prompt.ts). Cố ý KHÔNG có
+   * khoá `tong-quan` ở đây: khía đó đã có 2 biến thể trung-niên thật từ trước
+   * (PR #826, cảnh chung không tách theo tuổi) — rơi về `VARIANT_COUNT` như cũ. */
+  var TRUNG_NIEN_VARIANT_COUNT = {
+    menh: 1, 'phu-mau': 1, 'phuc-duc': 1, 'dien-trach': 1, 'quan-loc': 1, 'no-boc': 1,
+    'thien-di': 1, 'tat-ach': 1, 'tai-bach': 1, 'tu-tuc': 1, 'phu-the': 1, 'huynh-de': 1,
+  };
+
   /** Hash chuỗi ổn định (djb2) — CHỈ để chọn biến thể bối cảnh, không cần bền
    * vững mật mã, chỉ cần CÙNG lá số ra CÙNG một số mỗi lần render (PDF, poster,
    * mở lại link cũ phải khớp nhau — random mỗi lần load là hỏng cả ba). */
@@ -109,7 +118,10 @@
    * — KHÔNG suy đoán, KHÔNG hiện ảnh sai (cùng luật "đọc hụt thì để … và từ
    * chối chạy" của giá Lượng).
    *
-   * @param {object} ls     lá số (anSaoLaSo) của trang đang hiển thị
+   * @param {object} ls     lá số (anSaoLaSo) của trang đang hiển thị — dùng
+   *                         luôn `ls.tuoiXem` (tuổi thực tại năm xem, engine
+   *                         đã tính sẵn và trả ra trên `ls`) để chọn bậc tuổi
+   *                         tranh, KHÔNG cần trang gọi tự tính lại.
    * @param {number} phan   1-13
    * @param {'nam'|'nu'} gioi  giới tính NHÂN VẬT trong tranh. BẮT BUỘC truyền
    *                           tay — `anSaoLaSo()` KHÔNG echo `gioitinh` đầu
@@ -138,15 +150,28 @@
     }
     if (!sac) return null;
 
+    // Bậc tuổi THẬT của lá số (2026-09-15) — trước đó khoá cứng 'truong-thanh'
+    // cho MỌI lá số, kể cả người 55 tuổi. `tong-quan` đã phủ đủ 5 bậc (PR
+    // #826) nên dùng thẳng; 12 khía còn lại mới chỉ có thêm `trung-nien` (xem
+    // `KhiaCanh.trungNien`, illus-prompt.ts) — bậc khác rơi về `truong-thanh`,
+    // KHÔNG suy đoán ảnh cho bậc chưa vẽ.
+    var tuoiThat = tuoiBac(ls.tuoiXem);
+    var tuoi = 'truong-thanh';
+    if (khia === 'tong-quan') {
+      tuoi = tuoiThat || 'truong-thanh';
+    } else if (tuoiThat === 'trung-nien') {
+      tuoi = 'trung-nien';
+    }
+
     var seedStr = String(ls.canChiNam || '') + '|' + String(ls.menhDC || '') + '|' + String(ls.thanDC || '');
-    return buildUrl(khia, sac, gioi, 'truong-thanh', seedStr);
+    return buildUrl(khia, sac, gioi, tuoi, seedStr);
   }
 
   /** Dựng URL từ 5 mảnh đã CHỐT (khoá tag) — dùng chung giữa `illusUrlForPhan`
    * và `illusUrlForDaiVan`. `seedStr` chỉ cần ổn định theo LÁ SỐ, không cần
    * theo khía/tuổi — hàm tự trộn thêm khía vào hash. */
   function buildUrl(khia, sac, gioi, tuoi, seedStr) {
-    var vCount = VARIANT_COUNT[khia] || 1;
+    var vCount = (tuoi === 'trung-nien' && TRUNG_NIEN_VARIANT_COUNT[khia]) || VARIANT_COUNT[khia] || 1;
     var v = (_hash(seedStr + khia + tuoi) % vCount) + 1;
     var id = khia + '--' + sac + '--' + gioi + '--' + tuoi + '--v' + v;
     // .webp (1536x1024, quality 82) — bản NÉN SẴN cho MÀN HÌNH, migrate
