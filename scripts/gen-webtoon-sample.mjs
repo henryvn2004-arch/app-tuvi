@@ -368,6 +368,25 @@ Lower the overall value so it reads clearly darker than the original: mist gathe
 Add one small warm lantern glow in the village, the single brightest point in the frame.
 No human figures. Still soft watercolor, still airy — deeper and quieter, but never harsh and never pure black.`),
   },
+
+  // ── Banner trang tool (`.intro-card`/`.intro-photo`) — Henry 2026-09-16:
+  // "gen lại hết cho phù hợp style ghibli", bức thử đầu tiên cho nhóm `laso`
+  // (Tử Vi Đẩu Số). Thay hẳn nhân vật "đạo sĩ già" cũ (hero-banner-prompt.ts,
+  // tranh thuỷ mặc) bằng Minh Bảo, đúng luật đã chốt ở PLAN.md §1.3 ("Tool
+  // cảm xúc → Minh Bảo dẫn dắt, tương tác với khách"). Giữ khổ 1536×1024 —
+  // ĐÚNG khổ mọi cảnh V2 khác đã dùng (hero/daily/library/...) và khớp sẵn
+  // `.intro-card .intro-photo{aspect-ratio:1536/1024}` trong shell.css, nên
+  // không cần sửa CSS. Giữ bố cục gốc: nhân vật lệch phải, khoảng trống
+  // trên-trái để đè chữ hook — đúng vai trò banner cần.
+  banerLasoV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Redraw ONLY the boy from the provided image seated cross-legged at a low wooden table on the right side of the frame, in the middle of reading a fortune. A long scroll lies open flat on the table in front of him, showing a faint circular chart divided into twelve sections with a few soft glowing dots scattered across it — no readable text, letters or symbols on it. One of his hands hovers just above the chart, pointing gently at one section; he looks up and to his left with a warm, knowing little smile, as if mid-explanation to someone listening. Keep his exact face, hair, hat and outfit — same character, same big-head chibi proportion, no redesign.
+Add a second, secondary figure seated across the table facing him: a village woman seen mostly from behind/the side, simple rural clothing, her face turned away or softly shadowed so no distinct facial detail is needed — she is clearly listening, not the focus of the image.
+Background: warm late-afternoon village scene behind them — soft rolling hills, two or three small tiled-roof houses, gentle golden light.
+Leave a large open area of plain warm sky in the upper-left third of the frame — no hills, houses or clutter there — so hook text can be placed over it later.`),
+  },
 };
 
 // ── chạy ───────────────────────────────────────────────────────────────────
