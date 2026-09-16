@@ -20,7 +20,7 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      { source: '/',                    destination: '/index.html'           },
+      { source: '/',                    destination: '/index-sample-v3.html' },
       { source: '/app',                 destination: '/app-home.html'        },
       { source: '/app/la-so',           destination: '/app-luan-giai.html'   },
       { source: '/app/luan-giai',       destination: '/app-luan-giai.html'   },

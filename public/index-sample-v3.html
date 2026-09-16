@@ -2,24 +2,99 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
+<script src="https://js.sentry-cdn.com/f884fb7e9d257df10ecb6dbe562141cb.min.js" crossorigin="anonymous" defer></script>
 <link rel="icon" type="image/webp" href="/seal.webp">
-<title>[SAMPLE] Tử Vi Minh Bảo — Trang chủ webtoon v3</title>
-<meta name="description" content="Bản mẫu trang chủ webtoon — không wire route, chỉ để duyệt hình hài.">
+<link rel="apple-touch-icon" href="/seal.webp">
+<meta name="description" content="Cổng tử vi · tử bình · tướng số · phong thủy theo cổ pháp. 59+ công cụ — luận giải lá số, xem tướng, phong thủy, đặt tên, chọn ngày tốt, bói bài. Tri Mệnh Lý — Thuận Thế Hành.">
+<meta name="keywords" content="tử vi, tử bình, tướng số, phong thủy, xem tuổi, đặt tên con, ngày tốt, tarot, kinh dịch, ai">
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="https://www.tuviminhbao.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tử Vi Minh Bảo — Cổng Mệnh Lý · 59+ Công Cụ Cổ Pháp</title>
+<meta property="og:title" content="Tử Vi Minh Bảo — Cổng Mệnh Lý · 59+ Công Cụ Cổ Pháp">
+<meta property="og:description" content="Tử vi · Tử Bình · Tướng số · Phong thủy theo cổ pháp. Luận giải cá nhân hóa.">
+<meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
+<meta property="og:url" content="https://www.tuviminhbao.com">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tử Vi Minh Bảo">
+<meta property="og:locale" content="vi_VN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tử Vi Minh Bảo — Cổng Mệnh Lý">
+<meta name="twitter:description" content="59+ công cụ tử vi · tử bình · tướng số · phong thủy theo cổ pháp.">
+<meta name="twitter:image" content="https://www.tuviminhbao.com/seal.webp">
 
+<!-- Fonts: Noto Serif (Vietnamese subset, auto via Google Fonts) -->
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+
+<!-- LCP: ảnh minh hoạ hero, ưu tiên nạp sớm để không đội LCP -->
 <link rel="preload" as="image" href="/mascot/hero-scene-v2.webp" fetchpriority="high">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Tử Vi Minh Bảo",
+  "alternateName": "紫微明寶",
+  "url": "https://www.tuviminhbao.com",
+  "description": "Cổng mệnh lý: tử vi, tử bình, tướng số, phong thủy theo cổ pháp",
+  "inLanguage": "vi"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://www.tuviminhbao.com/bao-chi#organization",
+  "name": "Tử Vi Minh Bảo",
+  "alternateName": "紫微明寶",
+  "url": "https://www.tuviminhbao.com",
+  "logo": { "@type": "ImageObject", "url": "https://www.tuviminhbao.com/seal.webp" },
+  "description": "Cổng mệnh lý tổng hợp 59+ công cụ — tử vi, tử bình, tướng số, phong thủy theo cổ pháp",
+  "areaServed": ["VN", "US", "AU", "CA"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Tử Vi Minh Bảo",
+  "alternateName": "tuviminhbao.com",
+  "url": "https://www.tuviminhbao.com",
+  "applicationCategory": "LifestyleApplication",
+  "operatingSystem": "Web",
+  "inLanguage": "vi",
+  "description": "Xem lá số Tử Vi Đẩu Số online theo cổ pháp — an sao chính xác, phân tích 12 cung, 9 đại vận, tiểu vận từng năm, cách cục đặc biệt. Luận giải chuyên sâu 24 phần bằng tiếng Việt.",
+  "featureList": [
+    "An sao Tử Vi Đẩu Số theo cổ pháp",
+    "Phân tích 12 cung, chính tinh, phụ tinh",
+    "9 đại vận và tiểu vận từng năm",
+    "Cách cục đặc biệt từ 200+ database",
+    "Luận giải chuyên sâu 24 phần",
+    "Xem vận hạn theo năm (namXem)"
+  ],
+  "audience": {
+    "@type": "Audience",
+    "geographicArea": "Vietnam",
+    "audienceType": "Người Việt quan tâm tử vi, mệnh lý, vận hạn"
+  },
+  "provider": {
+    "@type": "Organization",
+    "@id": "https://www.tuviminhbao.com/bao-chi#organization",
+    "name": "Tử Vi Minh Bảo",
+    "url": "https://www.tuviminhbao.com"
+  }
+}
+</script>
 
 <style>
 /* ============================================================
-   SAMPLE Sprint 4 v3 — Henry gửi mockup tay (2026-09-16): trang chủ KHÔNG
-   mang sidebar/rail của shell.js ra ngoài (khác v2 trước đó). Đây là trang
-   marketing riêng, tông SÁNG (khác nav.js navy dùng ở 40+ trang trong site —
-   CỐ Ý, header/footer ở đây không gọi nav.js topnav).
-   CHƯA wire vào next.config.mjs — chỉ để Henry duyệt hình hài.
+   Trang chủ webtoon (Sprint 4, 2026-09) — theo mockup tay Henry: KHÔNG
+   mang sidebar/rail của shell.js ra ngoài (khác bản v2 cũ, xem
+   index-sample-v2.html, giữ làm tài liệu). Trang marketing riêng, tông
+   SÁNG (khác nav.js navy dùng ở các trang khác trong site — CỐ Ý, header/
+   footer ở đây không gọi nav.js topnav).
    ============================================================ */
 :root {
   --cream: #f6f3ee;
@@ -250,19 +325,9 @@ button { font: inherit; cursor: pointer; }
   .bn-center-circle svg { width: 24px; height: 24px; }
 }
 
-/* ── Sticky-note trong bản mẫu (chỉ hiện khi mở file rời, KHÔNG lên khi wire route) ── */
-.sample-flag {
-  position: fixed; left: 12px; bottom: 12px; z-index: 99; background: #16232c; color: #fff;
-  font-size: 11.5px; padding: 6px 10px; border-radius: 8px; opacity: 0.75; font-family: monospace;
-}
-@media (max-width: 680px) {
-  .sample-flag { bottom: calc(70px + env(safe-area-inset-bottom)); }
-}
 </style>
 </head>
 <body>
-
-<div class="sample-flag">SAMPLE v3 — chưa wire route</div>
 
 <!-- ═══════════════ HEADER ═══════════════ -->
 <header class="mb-header">
