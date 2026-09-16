@@ -106,9 +106,31 @@ vẫn là giọng trẻ con.
 Mỗi sprint: **cổng duyệt sample trước, làm thật sau.** Sprint chỉ đóng khi CI
 xanh + Henry gật.
 
+### 📊 TIẾN ĐỘ (cập nhật 2026-09-16, sau vòng sửa footer trang chủ)
+
+| Sprint | Trạng thái | Đã làm | Còn thiếu |
+|---|---|---|---|
+| 0 — Nền | ✅ Xong | `theme.css` gom 40 file, `check:theme` xanh | — |
+| 1 — Character Bible | ⚠️ Vẽ lại theo style mới | corner-Bảo + 4 dáng vẽ **V1** (Sprint 1), sau đó Henry chốt style Ghibli/chibi (STYLE_LOCK_V2) → mascot/hero/corner/library/articles/community đã vẽ lại **V2** | `expressions` × 4 và `poses` × 4 mới **chỉ có bản V1**, chưa vẽ lại V2 (chưa dùng ở đâu — §3.4 Sprint 3 cũng đang treo vì thiếu bộ này); chưa có bức `paywall` |
+| 2 — Chrome dùng chung | ⚠️ Phần lớn xong | `nav.js`: palette navy/gold, 102 icon SVG bo tròn nét, corner-Bảo trong topnav (đã cập nhật sang **V2** `corner-v2.webp` khi đổi style), **footer đổi màu nâu espresso khớp tông trang chủ mới** (đợt sửa vừa rồi) | Chưa gắn bong bóng thoại Minh Bảo vào topnav (nếu có trong scope gốc) |
+| 3 — App shell (53 trang `/app/*`) | ⚠️ Chỉ làm phần khung | `shell.css` đổi palette + bo góc thẻ + shadow mềm — palette khớp `theme.css`/trang chủ (`--navy #0F2A3D`, `--gold #C8A96A`) | **Chưa có bong bóng thoại Minh Bảo trong rail (§3.3)**, **chưa map biểu cảm theo trang (§3.4)** — kẹt vì Sprint 1 chưa có bộ expressions V2; **`tuvi-form.js` chưa đổi giọng "Bảo/bạn"** (§1.1/§2, còn nhãn form cũ) |
+| 4 — Homepage (`/`) | ✅ Xong, đang polish | Dựng lại theo 2 mockup Henry gửi, ảnh V2 riêng cho từng khối (hero/daily/library/articles/community), SEO đầy đủ, wire vào route `/`, vá LCP+contrast+responsive-images (Lighthouse xanh), vá màu + bỏ icon SVG thô ở footer theo phản hồi Henry | — (đang chờ Henry duyệt lần cuối) |
+| 5 — 52 tool avatar | ⬜ Chưa bắt đầu | — | Toàn bộ 52 avatar vẫn là art cũ (line-art vàng trên navy), chưa vẽ lại theo V2 |
+| 6 — 54 trang tool SEO | ⬜ Chưa bắt đầu | — | `tools/tools.css` + 13 trang `:root` riêng chưa đổi da |
+| 7 — 26 route SEO server | ⬜ Chưa bắt đầu | — | `app/**/route.ts` chưa có helper trỏ `theme.css` |
+| 8 — Ảnh phụ | ⬜ Chưa bắt đầu | — | fbcard/van-rieng/van-ngay/64 quẻ/seal/favicon/og vẫn ảnh cũ |
+| 9 — Thư viện minh hoạ luận giải | ⬜ Chưa bắt đầu | — | Cần đếm bucket thật + Henry xác nhận riêng (ảnh nằm trong sản phẩm đã bán) |
+| 10 — Giọng §2 toàn site | ⬜ Chưa bắt đầu | — | `arcGiong` (`lib/agent/prompts.ts`) chưa đổi sang giọng Bảo |
+
+**Tóm tắt cho Henry:** nav + footer (chrome dùng chung, hiện trên ~200 trang) và
+trang chủ `/` đã lên giao diện mới. **Khung** của 53 trang `/app/*` (màu + bo góc)
+đã đổi nhưng **CHƯA có Minh Bảo/giọng mới bên trong**. 145 trang marketing/SEO,
+54 trang tool, 26 route server, 52 avatar tool, ảnh phụ, thư viện minh hoạ, và
+giọng LLM toàn site — **tất cả chưa đụng tới**, vẫn là giao diện/nội dung cũ.
+
 ---
 
-### 🏗 SPRINT 0 — Nền (không đổi một pixel nào)
+### 🏗 SPRINT 0 — Nền (không đổi một pixel nào) — ✅ XONG
 **Vì sao trước tiên:** site có 4 "bộ da" không dùng chung token; 31 file chép tay
 bảng màu vào `:root`; `nav.js` gõ hex cứng. Không gom trước thì mỗi lần chỉnh màu
 là 31 lần sửa tay và chắc chắn trôi.
@@ -128,7 +150,7 @@ là 31 lần sửa tay và chắc chắn trôi.
 
 ---
 
-### 🧒 SPRINT 1 — Character Bible Minh Bảo
+### 🧒 SPRINT 1 — Character Bible Minh Bảo — ⚠️ V1 xong, đang vẽ lại V2 (thiếu expressions/poses/paywall)
 Mở rộng từ 2 bức đã duyệt thành bộ dùng được.
 
 | Bức | Khổ | Dùng ở |
@@ -155,7 +177,7 @@ không vẽ text-to-image thuần. Vòng 1 vẽ rời → trôi nhân vật (áo
 
 ---
 
-### 🎨 SPRINT 2 — Chrome dùng chung
+### 🎨 SPRINT 2 — Chrome dùng chung — ⚠️ Phần lớn xong (nav+footer+icon+mascot V2)
 Đổi một lần, ăn sang **mọi** trang không phải `/app/*`.
 
 | Việc | Ghi chú |
@@ -174,7 +196,7 @@ khoá (`data-icon="wallet"`) ⇒ **không trang nào phải sửa**.
 
 ---
 
-### 🏠 SPRINT 3 — App shell → 53 trang một lượt
+### 🏠 SPRINT 3 — App shell → 53 trang một lượt — ⚠️ Chỉ xong phần khung (màu+bo góc), chưa có Bảo/giọng mới
 Sprint **lãi nhất trên mỗi giờ bỏ ra**: sửa `shell.css` là 53 trang `/app/*` đổi da.
 
 | Việc |
@@ -191,7 +213,7 @@ Sprint **lãi nhất trên mỗi giờ bỏ ra**: sửa `shell.css` là 53 trang
 
 ---
 
-### 🚪 SPRINT 4 — Homepage (mang shell ra ngoài)
+### 🚪 SPRINT 4 — Homepage (mang shell ra ngoài) — ✅ Xong, đang chờ Henry duyệt lần cuối
 `/` dựng theo khung shell, marketing nén còn 4 khối đẩy xuống dưới `.ws-body`:
 số liệu live · marquee công cụ · đánh giá · SEO strip + footer.
 **Cắt:** marquee câu hỏi (trùng chip rail) · khối values (dồn vào `/about`) ·
@@ -214,7 +236,7 @@ Giảm thiểu:
 
 ---
 
-### 🖼 SPRINT 5 — 52 tool avatar
+### 🖼 SPRINT 5 — 52 tool avatar — ⬜ Chưa bắt đầu
 Bảng chủ đề từng tool đã có ở `lib/media/tool-avatar-prompt.ts` (`TOOL_AVATARS`).
 Reskin = **thay khối `ART_DIRECTION`/`LINE_STYLE`** bằng `webtoon-style.ts`, giữ
 nguyên `centralSubject`.
@@ -232,27 +254,27 @@ tương tác với khách; tool tra cứu thì Bảo đứng cạnh vật thể 
 
 ---
 
-### 📄 SPRINT 6 — 54 trang tool SEO
+### 📄 SPRINT 6 — 54 trang tool SEO — ⬜ Chưa bắt đầu
 `tools/tools.css` phủ 41 trang; **13 trang có `:root` chép tay đè lên** (Sprint 0
 đã dọn). Chỉ đổi da, **giữ nguyên lượng chữ** (§1.2).
 **Sample gate:** `/tools/an-sao.html`. **Ước:** 2–3 ngày.
 
 ---
 
-### ⚙️ SPRINT 7 — 26 route SEO render server
+### ⚙️ SPRINT 7 — 26 route SEO render server — ⬜ Chưa bắt đầu
 Mỗi `app/**/route.ts` một khối `<style>` nhúng trong chuỗi TS, không helper chung.
 Sprint này dựng helper + trỏ về `theme.css`.
 **Sample gate:** `/tu-dien` + `/van-han`. **Ước:** 2–3 ngày.
 
 ---
 
-### 🎴 SPRINT 8 — Ảnh phụ
+### 🎴 SPRINT 8 — Ảnh phụ — ⬜ Chưa bắt đầu
 fbcard-topics 30 · van-rieng 36 · van-ngay 4 · 64 quẻ Kinh Dịch · seal/favicon/og.
 **Sample gate:** 3 bức mỗi nhóm. **Ước:** 2 ngày.
 
 ---
 
-### 🗂 SPRINT 9 — Thư viện minh hoạ luận giải
+### 🗂 SPRINT 9 — Thư viện minh hoạ luận giải — ⬜ Chưa bắt đầu
 ```
 13 khía × 3 sắc × 2 giới × 5 bậc tuổi × 1–2 biến thể ≈ 708 bức
 ```
@@ -265,7 +287,7 @@ số file có trong Supabase Storage. Chốt ngân sách sau khi đếm.
 
 ---
 
-### ✍️ SPRINT 10 — Rà chữ toàn site sang giọng §2
+### ✍️ SPRINT 10 — Rà chữ toàn site sang giọng §2 — ⬜ Chưa bắt đầu
 Làm **SAU CÙNG** để chữ bám hình, không phải ngược lại.
 ⚠️ `lib/agent/prompts.ts` có **3 họ prompt khác nhau** — giọng Bảo sửa ở
 **`arcGiong`**. Luật: *"khối mới phải THAY, không cộng dồn"* và *"dạy bằng VÍ DỤ
