@@ -22,7 +22,7 @@
  * Script này CỐ Ý không dùng `lib/image/openai-image.ts`: file đó là đường sinh
  * ảnh của 2 tool ĐANG BÁN, không kéo nó vào một lượt thử phong cách.
  */
-import { writeFileSync, existsSync, mkdirSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
 const ROOT = new URL('..', import.meta.url).pathname;
@@ -74,19 +74,29 @@ Old Vietnamese countryside: rice paddies, a bamboo grove, a village gate far beh
 CHARACTER LOCK — keep these exact traits in every future image: round face, soft dark hair peeking under the hat, large expressive dark eyes, a simple indigo-brown tunic, bare feet, a small warm smile. Full body, centered, facing the viewer at a slight three-quarter angle.`),
   },
 
-  // Bảng biểu cảm §3.4 — một tấm 4 ô để 4 trạng thái chắc chắn CÙNG một nhân vật.
-  // Vẽ rời 4 lượt thì gpt-image trôi mặt, đã cắn ở bộ tool-avatar.
+  // Bảng biểu cảm §3.4.
+  //
+  // 🪤 Vòng 1 vẽ text-to-image thuần → TRÔI NHÂN VẬT: áo đổi từ chàm sang nâu,
+  // mặt già hơn bức `mascot`, và hai ô cuối gần như trùng nhau. Chữa bằng cách
+  // đưa CHÍNH bức đã duyệt vào `images/edits` làm neo nhận diện (`from`), thay
+  // vì tả lại nhân vật bằng chữ và hy vọng model dựng đúng. Tả bằng chữ không
+  // neo được khuôn mặt — đây là cùng bệnh bộ tool-avatar đã cắn.
+  //
+  // Bốn trạng thái bám bảng §3.4: Hero=vui nhẹ · Form=tập trung ·
+  // Analysis=suy tư · Paywall=nghiêm túc. Vòng 1 ra ô 3 và 4 trùng nhau nên
+  // lần này tả TÁCH BẠCH bằng dấu hiệu nhìn thấy được, không bằng tính từ.
   expressions: {
     size: '1536x1024',
+    from: 'mascot.png',
     prompt:
-      build(`A character expression sheet: the SAME chibi Vietnamese boy repeated four times in a single horizontal row, evenly spaced on a plain cream background, bust-up portraits only.
-He wears a conical hat and an indigo-brown tunic; round face, soft dark hair, large expressive dark eyes.
-Left to right, the four expressions are:
-1. lightly cheerful and welcoming, eyes bright, small open smile
-2. focused and attentive, slight lean forward, gentle concentration
-3. thoughtful and contemplative, eyes half-lowered, hand near chin
-4. calm and serious, steady direct gaze, no smile
-All four must be unmistakably the same character with identical proportions, hair and clothing. No frames, no borders, no dividing lines between them.`),
+      build(`Draw a character expression sheet using the boy in the provided image. Keep his face, hair, conical hat, indigo tunic and proportions EXACTLY as they are — same character, no redesign, no aging.
+Remove the buffalo and the landscape. Place four bust-up portraits of him in a single horizontal row, evenly spaced, on a plain flat cream background.
+Left to right:
+1. cheerful greeting — eyes wide and bright, open smile, one hand raised in a small wave
+2. focused — leaning slightly forward, eyebrows drawn in, both hands resting on an unseen table, mouth a small straight line
+3. pondering — head tilted up and away, eyes looking off to the upper left, one finger tapping his cheek, mouth slightly pursed
+4. solemn — squared shoulders, chin level, steady direct gaze at the viewer, lips closed and flat, no smile at all
+The four must differ clearly at a glance. No frames, no borders, no dividing lines, no shadows between them.`),
   },
 
   // §8.4
@@ -97,12 +107,20 @@ All four must be unmistakably the same character with identical proportions, hai
 No human figures. Wide, calm, spiritual mood with a large area of open sky in the upper third that text can sit over.`),
   },
 
-  // §8.5
+  // §8.5 — "a darker version of the SAME style".
+  //
+  // 🪤 Vòng 1 vẽ rời → ra tranh thuỷ mặc Tàu cổ điển, KHÁC hẳn bức `hero`, và
+  // tông lại SÁNG hơn hero chứ không tối hơn. "Cùng một cảnh, khác giờ trong
+  // ngày" là quan hệ giữa HAI bức, mà text-to-image không thấy bức kia.
+  // ⇒ neo bằng `from: hero.png` rồi chỉ yêu cầu ĐỔI ÁNH SÁNG.
   paywall: {
     size: '1536x1024',
+    from: 'hero.png',
     prompt:
-      build(`The same East Asian mountain landscape at dusk, quieter and more mysterious: drifting mist between the ridges, the far mountains dissolving into deep blue-grey, a single soft warm glow of lantern light low in the valley.
-No human figures. Still watercolor and still airy — deeper in tone but never harsh, never black.`),
+      build(`Take the provided landscape and repaint it at dusk. Keep the SAME composition, the same mountain silhouettes, the same village and rice terraces in the same positions — only the light changes.
+Lower the overall value so it reads clearly darker than the original: mist gathering between the ridges, far mountains dissolving into deep blue-grey, the sky drained to a dim warm grey, the village rooftops in shadow.
+Add one small warm lantern glow in the village, the single brightest point in the frame.
+No human figures. Still soft watercolor, still airy — deeper and quieter, but never harsh and never pure black.`),
   },
 };
 
@@ -136,20 +154,49 @@ for (const name of pick) {
     continue;
   }
 
-  process.stdout.write(`🎨 ${name} (${size}, ${QUALITY})… `);
+  // `from` ⇒ đi đường images/EDITS (đưa bức đã duyệt vào làm neo nhận diện)
+  // thay vì images/generations. Đây là cách DUY NHẤT giữ được cùng một khuôn
+  // mặt / cùng một cảnh giữa các bức: tả bằng chữ thì model dựng lại từ đầu
+  // mỗi lượt và trôi. Bức neo phải tồn tại — thiếu thì dừng, KHÔNG lặng lẽ lùi
+  // về text-to-image (lùi lặng lẽ là ra bức trôi mà không ai biết vì sao).
+  const from = SAMPLES[name].from;
+  if (from && !existsSync(join(OUT, from))) {
+    console.error(`❌ ${name} cần bức neo "${from}" trong ${OUT} — chạy nó trước.`);
+    process.exit(1);
+  }
+
+  process.stdout.write(`🎨 ${name} (${size}, ${QUALITY}${from ? `, neo: ${from}` : ''})… `);
   const t0 = Date.now();
-  const r = await fetch('https://api.openai.com/v1/images/generations', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${KEY}` },
-    body: JSON.stringify({
-      model: MODEL,
-      prompt,
-      size,
-      quality: QUALITY,
-      output_format: 'png',
-      n: 1,
-    }),
-  });
+
+  let r;
+  if (from) {
+    const fd = new FormData();
+    fd.append('model', MODEL);
+    fd.append('prompt', prompt);
+    fd.append('size', size);
+    fd.append('quality', QUALITY);
+    fd.append('n', '1');
+    fd.append('image', new Blob([readFileSync(join(OUT, from))], { type: 'image/png' }), from);
+    r = await fetch('https://api.openai.com/v1/images/edits', {
+      method: 'POST',
+      // KHÔNG tự đặt Content-Type: boundary do FormData sinh, gõ tay là hỏng.
+      headers: { Authorization: `Bearer ${KEY}` },
+      body: fd,
+    });
+  } else {
+    r = await fetch('https://api.openai.com/v1/images/generations', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${KEY}` },
+      body: JSON.stringify({
+        model: MODEL,
+        prompt,
+        size,
+        quality: QUALITY,
+        output_format: 'png',
+        n: 1,
+      }),
+    });
+  }
 
   if (!r.ok) {
     const body = await r.text().catch(() => '');

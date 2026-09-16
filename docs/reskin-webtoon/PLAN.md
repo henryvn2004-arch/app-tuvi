@@ -1,317 +1,327 @@
-# Reskin Webtoon — Kế hoạch tổng thể
+# Reskin Webtoon — Workplan theo Sprint
 
-> Trạng thái: **ĐỀ XUẤT, chưa duyệt.** Không code gì trước khi Henry chốt.
-> Nhánh: `claude/website-webtoon-reskin-7nxdwi`
+> Nhánh: `claude/website-webtoon-reskin-7nxdwi` · PR #903
+> Cập nhật 2026-09-16 sau khi Henry chốt guideline + 3 quyết định đầu.
 
-**Mục tiêu:** reskin toàn site sang phong cách webtoon, nhân vật mascot xuyên
-suốt — cậu bé thần đồng **Minh Bảo**, bối cảnh làng quê Việt Nam xưa, giọng vui
-nhộn nhẹ nhàng, giải trí chứ không nặng học thuật. Mobile-first.
-
----
-
-## 0. HAI THỨ CHẶN ĐƯỜNG — cần Henry trả lời trước
-
-### 0.1 🔴 Ảnh mẫu mascot + design mẫu CHƯA tới
-Henry nói "tao gửi mày hình mẫu tham khảo" nhưng **trong phiên này không có file
-đính kèm nào**. Không có ảnh mẫu thì không chốt được diện mạo Minh Bảo, mà diện
-mạo Minh Bảo là thứ mọi ảnh còn lại phải bám theo.
-
-Cách gửi: kéo ảnh vào khung chat, hoặc commit vào `docs/reskin-webtoon/ref/`.
-
-### 0.2 🟡 Guideline style — Henry nói gửi sau
-Plan này giả định guideline sẽ CHỐT lại phần "Character Bible" (mục 3) chứ không
-lật ngược kiến trúc (mục 2). Nếu guideline đòi đổi cả grid/typography thì Phase 0
-phải làm rộng hơn.
+**Mục tiêu:** reskin toàn site sang webtoon, mascot **Minh Bảo** xuyên suốt — cậu
+bé thần đồng biết trước tương lai, bối cảnh làng quê Việt Nam xưa. Mobile-first.
 
 ---
 
-## 1. HIỆN TRẠNG — bốn "bộ da" độc lập, không dùng chung token
+## ✅ ĐÃ CHỐT (không mở lại)
 
-Đây là phát hiện quan trọng nhất. Site **không có một nguồn màu duy nhất**. Muốn
-đổi da mà không sửa lại chỗ này thì phải sửa tay ~130 file và chắc chắn trôi.
-
-| # | Họ trang | Số trang | Nguồn style | Ghi chú |
-|---|---|---|---|---|
-| A | App shell `/app/*` | **53** `public/app-*.html` | `shell.css` (85 KB) + `shell.js` (223 KB) | Sửa 1 CSS = xong 53 trang. Rẻ nhất. |
-| B | SEO tool pages | **54** `public/tools/*.html` | `tools/tools.css` (18,6 KB) — nhưng **13 trang có `:root` chép tay đè lên** | 41 trang ăn theo CSS chung |
-| C | Marketing / pháp lý | **42** `public/*.html` | Mỗi trang một khối `<style>` riêng. `index.html` tự mang 59 KB CSS inline | Tệ nhất |
-| D | SEO render từ server | **26** `app/**/route.ts` | Mỗi route một `<style>` nhúng trong chuỗi TS. **Không có helper chung** | `tu-dien`, `van-han`, `la-so/[slug]`, `nghien-cuu`, `menh-kho`… |
-
-**Chrome dùng chung:** `nav.js` (72 KB) vẽ topnav + footer cho họ B/C/D, và giữ
-bảng **102 icon SVG**. Màu trong `nav.js` là **hex gõ cứng** (`#061A2E`,
-`#C9A84C`…), không đọc biến CSS.
-
-**Bảng màu hiện tại** (navy/gold/đỏ — tông "cổ pháp trang nghiêm"):
-`--navy #061A2E` · `--gold #C9A84C` · `--blue #1455A4` · `--red #C0392B` ·
-`--green #1E6B3C` · giấy `#FBFAF7`.
-Đúng 31 file chép tay bảng này vào `:root` của riêng nó.
-
-**Fonts:** Noto Serif + Be Vietnam Pro, **self-host bắt buộc** (`npm run
-check:font` chặn Google Fonts — đã từng gây CLS 0,2364).
+| # | Quyết định | Hệ quả |
+|---|---|---|
+| 1 | **Giọng trẻ con hóm hỉnh, xưng hô lễ phép** | Bỏ toàn bộ "ngươi"/"ta" trong guideline. Xem §2. |
+| 2 | **Paywall CHE HẾT** (`.tpw-ph`), không blur | Guideline §7 "blur content" **bị bác**. Xem §3.4. |
+| 3 | **STYLE_LOCK duyệt** qua bức `mascot` + `hero` | Khối prompt trong `scripts/gen-webtoon-sample.mjs` là nguồn phong cách. |
+| 4 | **`gpt-image-2`**, không phải `gpt-image-1` | OpenAI tắt bản 1 ngày 23/10/2026. |
 
 ---
 
-## 2. KIẾN TRÚC ĐỀ XUẤT — Phase 0 phải làm trước mọi thứ
+## 1. ⚠️ GUIDELINE vs HỆ THỐNG — 6 chỗ còn lệch
 
-### 2.1 Một nguồn token duy nhất: `public/theme.css`
+Guideline do ChatGPT soạn, không đọc được repo. Dưới đây là chỗ nó nói một
+đằng mà hệ thống này làm một nẻo. **Cần Henry gật/lắc từng mục.**
 
+### 1.1 🔴 §5.3 "Progress bar step 1→4" — đề nghị BỎ
+Chia form khai sinh thành 4 bước **gãy 4 thứ cùng lúc**:
+- `TuviForm.render()` dùng chung ~40 trang với 3 chế độ. Trang `tuong-hop` render
+  **HAI form cạnh nhau** (người A / người B) — hai wizard cạnh nhau là vô nghĩa.
+- `?auto=1` + `Shell.autoRun()` tự submit form từ deep link. Wizard không có một
+  nút submit để tự bấm.
+- Giữ chỗ chống CLS `#tuviFormHost:empty{min-height:252px}` là số **ĐO** cho form
+  hiện tại. Mỗi bước wizard một chiều cao ⇒ CLS ở từng lần chuyển bước.
+- Thêm bước vào form đang chuyển đổi tốt thường làm **giảm** tỉ lệ hoàn thành.
+
+**Đề xuất thay:** giữ MỘT màn hình, đổi cách hỏi cho ra giọng trò chuyện. Thanh
+tiến trình để cho **HÀNH TRÌNH** (Gặp Bảo → Khai sinh → Xem trước → Mở khoá),
+không phải cho các ô của form.
+
+### 1.2 🔴 §2.2 "Giảm text logic" — chỉ áp cho `/app/*`
+Site có 54 trang tool SEO + 26 route render server + 7.080 `seo_pages` tồn tại để
+**xếp hạng tìm kiếm**. Cắt chữ ở đó là cắt nguồn khách.
+**Luật đề xuất:** kể chuyện ở `/app/*` (sản phẩm sau đăng nhập). Trang SEO chỉ
+thay **da**, giữ nguyên lượng chữ.
+
+### 1.3 🟡 §11 "Replace ALL tool-based UI" — không phải tool nào cũng hợp
+Bọc một cái la bàn Bát Trạch hay bảng tra Nạp Âm vào lớp kể chuyện làm nó **khó
+dùng hơn**.
+**Luật đề xuất — chia hai loại:**
+- *Tool cảm xúc* (lá số, luận giải, chân dung, tiền kiếp, duyên nợ, chu trình
+  cuộc đời) → kể chuyện đầy đủ, Minh Bảo dẫn dắt.
+- *Tool tra cứu* (bát trạch, nạp âm, chọn ngày, kim lâu, số đẹp) → giữ thẳng
+  việc, chỉ đổi da + một câu của Bảo ở đầu.
+
+### 1.4 🟡 §2.3 "Progressive Reveal" đụng `portrait_cache`
+Người **đã trả tiền** mở lại kết quả cũ phải thấy NGAY và ĐỦ. Reveal từ từ chỉ
+được áp cho **lần xem đầu**, không áp cho lần mở lại bản đã mua.
+
+### 1.5 🟡 §9.3 "Unlock mechanics / mở khoá chương" — đừng đẻ ID mới
+Đường tiền khoá theo `tool_id` + Lượng. Luật cứng: *"slug thanh toán PHẢI bắt đầu
+bằng đúng `tool_id`"* — sai là trừ tiền hai lần.
+**Được:** gọi tool là "chương" trên **CHỮ HIỂN THỊ**.
+**Cấm:** đẻ một hệ ID "chapter" song song với `tool_id`.
+
+### 1.6 🟡 §9.1 "Bạn đã đi được 30% hành trình" — dùng lại cái đã có
+Đã có hệ Nhiệm Vụ ở `/app/tai-khoan#nhiemvu`. Đừng dựng hệ tiến trình thứ hai;
+đổi cách hiển thị của cái đang chạy.
+
+### ✅ Hai chỗ guideline TRÙNG KHỚP sẵn — không phải làm gì
+- **§4.2 Typography** "Heading serif / Body sans" = đúng thứ repo đang chạy
+  (Noto Serif + Be Vietnam Pro, self-host). **Đừng đụng font** — `check:font`
+  chặn Google Fonts, và font từng gây CLS 0,2364.
+- **§4.1 Palette** rất gần bảng hiện tại (`#0F2A3D` vs `--navy-2 #0A2540`;
+  `#C8A96A` vs `--gold #C9A84C`). Đây là **làm dịu**, không phải lật bảng màu.
+
+---
+
+## 2. GIỌNG MINH BẢO — chốt cụ thể
+
+**Ngôi xưng:** Bảo tự xưng **"Bảo"**, gọi người dùng là **"bạn"**.
+
+Vì sao không dùng "con/cháu" hay "cô/chú": người dùng trải từ 18 tới 70 tuổi,
+đoán sai vai là hỏng ngay câu đầu. "Bảo" + "bạn" lễ phép, không đoán tuổi, và
+vẫn là giọng trẻ con.
+
+| Chỗ | ❌ Guideline (ChatGPT) | ✅ Bản chốt |
+|---|---|---|
+| Form | "Tên của ngươi là gì?" | "Bạn tên gì để Bảo gọi cho thân?" |
+| Form | "Cho ta biết ngày sinh" | "Bạn cho Bảo xin ngày sinh nhé" |
+| Hero | "Ta thấy… mệnh của ngươi không tầm thường" | "Bạn sinh giờ đó hả? Ồ… hay à nha." |
+| Chờ | — | "Bạn đợi Bảo chút, Bảo đang đếm sao." |
+| Paywall | "Nếu chỉ dừng ở đây… ngươi sẽ hiểu sai chính mình" | "Phần sau Bảo phải coi kỹ hơn mới dám nói." |
+
+**Luật giọng:**
+1. Câu ngắn. Bảo là trẻ con, không nói câu ghép ba mệnh đề.
+2. Tò mò, không phán. "Ồ", "à nha", "hình như" > "chắc chắn", "định mệnh".
+3. **Không doạ.** Guideline §10 tự cấm "tone bán hàng lộ liễu" nhưng copy
+   paywall của nó lại doạ — bản chốt bỏ.
+4. Không nhắc "AI"/"trí tuệ nhân tạo" (luật `docs/luat/chu-hien-thi.md`).
+
+---
+
+## 3. SPRINT
+
+Mỗi sprint: **cổng duyệt sample trước, làm thật sau.** Sprint chỉ đóng khi CI
+xanh + Henry gật.
+
+---
+
+### 🏗 SPRINT 0 — Nền (không đổi một pixel nào)
+**Vì sao trước tiên:** site có 4 "bộ da" không dùng chung token; 31 file chép tay
+bảng màu vào `:root`; `nav.js` gõ hex cứng. Không gom trước thì mỗi lần chỉnh màu
+là 31 lần sửa tay và chắc chắn trôi.
+
+| Việc | File |
+|---|---|
+| `public/theme.css` — `:root` + dark, NGUỒN DUY NHẤT | mới |
+| Trỏ 31 file `:root` chép tay về đó | 31 file |
+| `nav.js` đọc `var()` thay hex cứng | `public/nav.js` |
+| `npm run check:theme` — chặn `:root` chép tay mới | `scripts/check-theme.mjs` |
+| Nâng `STYLE_LOCK` lên module dùng chung | `lib/media/webtoon-style.ts` |
+| `docs/reskin-webtoon/giong-minh-bao.md` — §2 thành file tra cứu | mới |
+
+**Sample gate:** không có — chốt bằng ảnh chụp **trước/sau giống hệt nhau**.
+**DoD:** `check:theme` xanh · Lighthouse không đổi · 8/8 CI xanh.
+**Ước:** 1,5–2 ngày.
+
+---
+
+### 🧒 SPRINT 1 — Character Bible Minh Bảo
+Mở rộng từ 2 bức đã duyệt thành bộ dùng được.
+
+| Bức | Khổ | Dùng ở |
+|---|---|---|
+| ~~mascot~~ ✅ đã duyệt | 1024² | nguồn neo cho mọi bức sau |
+| ~~hero~~ ✅ đã duyệt | 1536×1024 | nền hero trang chủ |
+| expressions ×4 (vui/tập trung/suy tư/nghiêm túc) | 1536×1024 | §3.4 map theo ngữ cảnh |
+| paywall (hoàng hôn, cùng cảnh hero) | 1536×1024 | tường trả phí |
+| **corner-Bảo** — nửa người, nền trong suốt | 512² | 🔴 xem ghi chú dưới |
+| poses ×4 (chỉ tay, cầm thẻ tre, chống cằm, vẫy tay) | 1536×1024 | khung minh hoạ |
+
+🔴 **corner-Bảo bắt buộc phải có.** Guideline §3.2 đòi mascot xuất hiện ở mọi
+section. Nhưng cột `.ws` ở desktop chỉ còn **~360px** sau khi trừ sidebar 246 +
+rail 336 — nhét bức mascot lớn vào đó là ăn hết chỗ nội dung. Cần bản nhỏ,
+nền trong suốt, neo góc.
+
+**Kỹ thuật đã sửa vòng này:** dùng `images/edits` với bức đã duyệt làm **neo**,
+không vẽ text-to-image thuần. Vòng 1 vẽ rời → trôi nhân vật (áo đổi màu, mặt già
+đi) và bức paywall lạc sang tranh thuỷ mặc Tàu.
+
+**Sample gate:** trọn bộ, Henry duyệt từng bức.
+**DoD:** 4 biểu cảm phân biệt được **khi nhìn ở 64px** · webp ≤ 50 KB/bức.
+**Ước:** 1 ngày.
+
+---
+
+### 🎨 SPRINT 2 — Chrome dùng chung
+Đổi một lần, ăn sang **mọi** trang không phải `/app/*`.
+
+| Việc | Ghi chú |
+|---|---|
+| `nav.js` topnav + footer sang palette mới | 72 KB, hex cứng → `var()` |
+| **102 icon SVG** webtoon hoá | Bo `stroke-linejoin:round`, nét 1.5→2.2, hơi lệch tay |
+| corner-Bảo vào topnav | §5.1 |
+| Bump `nav.js?v=31` | ⚠️ **bắt buộc**, luật `docs/ICONS.md` |
+
+⚠️ **Không rasterize icon.** 102 file PNG giết mobile. Giữ SVG, giữ nguyên tên
+khoá (`data-icon="wallet"`) ⇒ **không trang nào phải sửa**.
+⚠️ Nút CHỈ-icon **cấm `textContent`** — xoá mất `<svg>`.
+
+**Sample gate:** ảnh chụp topnav + footer + bảng 102 icon.
+**Ước:** 2–3 ngày.
+
+---
+
+### 🏠 SPRINT 3 — App shell → 53 trang một lượt
+Sprint **lãi nhất trên mỗi giờ bỏ ra**: sửa `shell.css` là 53 trang `/app/*` đổi da.
+
+| Việc |
+|---|
+| `shell.css` (85 KB) sang palette + bo góc 20–28px + shadow mềm + padding 20–32px |
+| Bong bóng thoại Minh Bảo trong rail (§3.3) |
+| Map biểu cảm theo ngữ cảnh trang (§3.4) |
+| `tuvi-form.js` — đổi nhãn sang giọng §2 (**MỘT màn hình**, xem §1.1) |
+
+**Sample gate:** `/app` + `/app/la-so` + `/app/luan-giai`, cả mobile lẫn desktop.
+**Rủi ro:** `check:navph` · `check:formph` · `check:introcard` sẽ kêu — giữ chỗ
+đổi chiều cao thì phải **ĐO lại**, đừng đoán.
+**Ước:** 3–4 ngày.
+
+---
+
+### 🚪 SPRINT 4 — Homepage (mang shell ra ngoài)
+`/` dựng theo khung shell, marketing nén còn 4 khối đẩy xuống dưới `.ws-body`:
+số liệu live · marquee công cụ · đánh giá · SEO strip + footer.
+**Cắt:** marquee câu hỏi (trùng chip rail) · khối values (dồn vào `/about`) ·
+CTA đáy (rail luôn hiện).
+
+🔴 **Rủi ro lớn nhất cả dự án.** `/` đang bị canh **LCP ≤ 4000ms · CLS ≤ 0,1 ·
+TBT ≤ 600ms**, mà mang shell ra là thêm **~308 KB** (`shell.js` 223 + `shell.css` 85).
+
+Giảm thiểu:
+- Hero + form dựng **tĩnh trong HTML**, không để JS chèn (`check:introcard`).
+- Rail chat tách ra, nạp khi tương tác.
+- Khung chờ cho sidebar + rail, nhắm **DƯ** chứ không thiếu.
+- ⚠️ Khối bê vào `.ws` co theo **bề rộng CỘT** (~360px), `@media(max-width:600px)`
+  **không bao giờ khớp** → khai `container-type` + hỏi `@container`.
+- ⚠️ `srcset`+`sizes` thì NGƯỢC LẠI: chỉ hiểu viewport. Hai thứ lệch nhau khi rail mở.
+- ⚠️ **CLS chỉ kết luận được bằng prod↔prod.** Preview đo hụt (0,016 vs 0,160 thật).
+
+**Sample gate:** `/` mobile + desktop, **kèm số Lighthouse đo trên prod**.
+**Ước:** 3–4 ngày.
+
+---
+
+### 🖼 SPRINT 5 — 52 tool avatar
+Bảng chủ đề từng tool đã có ở `lib/media/tool-avatar-prompt.ts` (`TOOL_AVATARS`).
+Reskin = **thay khối `ART_DIRECTION`/`LINE_STYLE`** bằng `webtoon-style.ts`, giữ
+nguyên `centralSubject`.
+
+🔴 **Cả 52 bức phải vẽ lại, không giữ được bức nào.** Bộ cũ là *"thin gold line
+art on deep navy, no other colors anywhere"*; style mới là *"watercolor, cream,
+no harsh contrast"* — không tương thích chút nào.
+
+🔄 **Đổi luật cũ:** file đó ghi *"KHÔNG ép mọi tool có nhân vật người"*. Webtoon
+làm ngược: **Minh Bảo có mặt ở cả 52**, nhưng đổi vai — tool luận người thì Bảo
+tương tác với khách; tool tra cứu thì Bảo đứng cạnh vật thể (la bàn, lịch, vòng quẻ).
+
+**Sample gate:** 5 bức (`--sample` đã có sẵn).
+**Ước:** 2 ngày · ~57k đ.
+
+---
+
+### 📄 SPRINT 6 — 54 trang tool SEO
+`tools/tools.css` phủ 41 trang; **13 trang có `:root` chép tay đè lên** (Sprint 0
+đã dọn). Chỉ đổi da, **giữ nguyên lượng chữ** (§1.2).
+**Sample gate:** `/tools/an-sao.html`. **Ước:** 2–3 ngày.
+
+---
+
+### ⚙️ SPRINT 7 — 26 route SEO render server
+Mỗi `app/**/route.ts` một khối `<style>` nhúng trong chuỗi TS, không helper chung.
+Sprint này dựng helper + trỏ về `theme.css`.
+**Sample gate:** `/tu-dien` + `/van-han`. **Ước:** 2–3 ngày.
+
+---
+
+### 🎴 SPRINT 8 — Ảnh phụ
+fbcard-topics 30 · van-rieng 36 · van-ngay 4 · 64 quẻ Kinh Dịch · seal/favicon/og.
+**Sample gate:** 3 bức mỗi nhóm. **Ước:** 2 ngày.
+
+---
+
+### 🗂 SPRINT 9 — Thư viện minh hoạ luận giải
 ```
-public/theme.css        ← :root { --wt-* } + dark mode. NGUỒN DUY NHẤT.
-   ├── shell.css        @import (họ A)
-   ├── tools/tools.css  @import (họ B)
-   ├── nav.js           đọc var() thay vì hex cứng
-   └── mỗi trang C/D    <link> thay cho :root chép tay
+13 khía × 3 sắc × 2 giới × 5 bậc tuổi × 1–2 biến thể ≈ 708 bức
 ```
-
-Kèm `npm run check:theme` — bộ dò chặn mọi `:root` mới chép tay màu thương hiệu.
-**Không có bước này, reskin sẽ trôi trong vòng 2 tuần.**
-
-Đây là chỗ duy nhất plan đi ngược luật "thay đổi tối thiểu": nó tốn ~1 ngày
-nhưng cắt 130 lần sửa tay xuống còn 1.
-
-### 2.2 Giữ nguyên, KHÔNG đụng
-
-- Engine an sao, `tools-shared/*`, đường tiền, prompt LLM — reskin là **da**, không
-  phải xương.
-- **102 icon SVG**: vẽ lại bằng SVG (bo góc `stroke-linejoin:round`, nét dày hơn,
-  hơi nguệch ngoạc) — **KHÔNG rasterize thành ảnh**. 102 file PNG là giết mobile.
-  Chi tiết ở mục 4.4.
-- Luật `docs/ICONS.md` vẫn nguyên: không emoji màu, thêm icon phải bump `nav.js?v=`.
+🔴 **Việc đầu tiên là ĐẾM BUCKET THẬT.** 708 là số combo code SINH RA, chưa phải
+số file có trong Supabase Storage. Chốt ngân sách sau khi đếm.
+🔴 Ảnh này nằm **trong sản phẩm khách đã trả tiền** — cần Henry xác nhận riêng.
+✅ `illusUrlForPhan` trả `null` khi thiếu ⇒ luận giải im lặng không hiện ảnh
+⇒ gen dở dang **không gãy trang**, rải nhiều đợt được.
+**Sample gate:** 6 bức. **Ước:** rải nhiều đợt.
 
 ---
 
-## 3. CHARACTER BIBLE — Minh Bảo
-
-Không phải asset giao hàng. Đây là **bộ ảnh tham chiếu** để mọi prompt về sau
-nhất quán. Làm đầu tiên, Henry duyệt xong mới gen tiếp bất cứ thứ gì.
-
-| # | Ảnh | Khổ | Dùng để |
-|---|---|---|---|
-| 1 | Turnaround (chính diện / 3-4 / nghiêng) | 1536×1024 | khoá tỉ lệ, trang phục |
-| 2 | Bảng biểu cảm ×8 (cười, nghĩ, "à ra thế", ngạc nhiên, bí ẩn, gật gù, tinh nghịch, ngái ngủ) | 1024×1024 | tái dùng cho UI state |
-| 3 | Bảng dáng ×6 (ngồi gốc đa, chỉ tay, cưỡi trâu, cầm quạt, chống cằm, chạy) | 1536×1024 | khung minh hoạ |
-| 4 | Bảng bối cảnh làng quê ×4 (cổng làng, sân đình, bờ ao, chợ quê) | 1536×1024 | nền cho mọi ảnh sau |
-| 5 | Bảng phụ kiện (quạt giấy, thẻ tre, đèn lồng, con trâu, con cún) | 1024×1024 | motif lặp lại |
-
-Tổng **~10 lượt gen**. Chốt xong đóng băng thành `docs/reskin-webtoon/bible.md` +
-một khối prompt cố định (giống `ART_DIRECTION` trong `lib/media/tool-avatar-prompt.ts`).
-
-**Hạ tầng đã có sẵn, không phải dựng mới:**
-- `lib/image/openai-image.ts` — đã chạy `gpt-image-2`, đúng model Henry muốn.
-- `scripts/gen-tool-avatars.mjs` / `gen-illus.mjs` / `gen-que-images.mjs` — đã có
-  cơ chế skip file đã vẽ, `--dry-run`, `--sample`.
-- `OPENAI_API_KEY` **đọc được trong container này** → gen chạy ngay tại phiên.
-- ⚠️ Container chưa `npm install` → thiếu `sharp` (nén webp) và `tsc`. Chạy
-  `npm ci` trước lượt gen đầu.
+### ✍️ SPRINT 10 — Rà chữ toàn site sang giọng §2
+Làm **SAU CÙNG** để chữ bám hình, không phải ngược lại.
+⚠️ `lib/agent/prompts.ts` có **3 họ prompt khác nhau** — giọng Bảo sửa ở
+**`arcGiong`**. Luật: *"khối mới phải THAY, không cộng dồn"* và *"dạy bằng VÍ DỤ
+rẻ và ăn hơn dạy bằng LUẬT"*. `check:prompt` có trần — chạm trần thì **CẮT** chỗ
+khác, đừng nới.
+**Sample gate:** 3 trang. **Ước:** 2–3 ngày.
 
 ---
 
-## 4. KHO ẢNH & ICON CẦN GEN
+## 4. CHẠY SONG SONG (worktree)
+Sau khi Sprint 0 xong, ba nhánh này không giẫm chân nhau:
+- `wt-icons` — Sprint 2 icon SVG (chỉ đụng `nav.js`)
+- `wt-gen` — Sprint 5/8/9 gen ảnh (chỉ đụng `scripts/` + `lib/media/` + asset)
+- `wt-seo` — Sprint 7 (chỉ đụng `app/**/route.ts`)
 
-### 4.1 Tổng lượng — xếp theo độ ưu tiên
-
-| Nhóm | Số ảnh | Khổ gen | Khổ giao | Vị trí |
-|---|---|---|---|---|
-| Character bible | ~10 | 1024–1536 | (không ship) | tham chiếu |
-| Hero trang chủ | 2 (desktop + crop mobile) | 1024×1536 | 600×720 + 400×480 webp | thay `/minh-bao-hero.webp` |
-| **Tool avatar** | **52** | 1024×1024 | 512×512 webp | `public/tool-avatars/` — dùng ở 53 trang app + springboard + `/cong-cu` |
-| Con dấu / favicon / og | ~5 | 1024×1024 | 512 + 192 + 1200×630 | `seal.webp`, `og-image.webp`, `manifest.json` |
-| Thẻ chia sẻ FB | 30 | 1536×1024 | 1200×630 webp | `public/img/fbcard-topics/` |
-| Vận riêng 12 cung | 36 | 1024×1024 | 500w webp | `public/img/van-rieng/` |
-| Vận ngày | 4 | 1536×1024 | 500w + 800w | `public/img/van-ngay/` |
-| 64 quẻ Kinh Dịch | 64 | 1024×1536 | webp → Supabase Storage | tool Kinh Dịch / Mai Hoa |
-| **Thư viện minh hoạ luận giải** | **~708** | 1536×1024 | webp → Supabase Storage | xem 4.2 |
-
-**Tổng ≈ 910 ảnh.** Với `gpt-image-2` khổ `1024×1536` quality `medium` ≈ **1.090đ/ảnh**
-(số này lấy từ chú thích trong `lib/image/openai-image.ts`, **phải tra lại bảng giá
-OpenAI trước khi chốt ngân sách** — luật `lib/agent/usage.ts` cấm gõ giá từ trí nhớ).
-→ ước **~1 triệu đồng** cho trọn bộ, trong đó thư viện minh hoạ chiếm ~78%.
-
-### 4.2 🔴 Thư viện minh hoạ luận giải — khoản đắt nhất, đề nghị để CUỐI
-
-Công thức từ `public/tools-shared/illus-match.js` + `lib/media/illus-prompt.ts`:
-
-```
-13 khía cạnh (12 cung + tổng quan)
- × 3 sắc thái (tốt / trung / xấu)
- × 2 giới (nam / nữ)
- × 5 bậc tuổi (nhi-đồng, thanh-niên, trưởng-thành, trung-niên, lão-niên)
- × 1–2 biến thể
-≈ 708 ảnh
-```
-
-Cộng thêm bộ Xem Tuổi (`XEM_TUOI_CANH`: xét-tuổi, ngũ-hành, tứ-tượng, tính-cách,
-vận-hành).
-
-**Ba cảnh báo:**
-1. Ảnh này nằm **trong sản phẩm người ta đã trả tiền** (Luận Giải, Chu Trình Cuộc
-   Đời, Vận Hạn 12 Tháng). Đổi nét vẽ là đổi thứ khách đã mua — cần Henry xác nhận.
-2. **Chưa audit bucket thật.** Con số 708 là số combo code SINH RA, không phải số
-   file có trong Supabase Storage. Việc đầu tiên của phase này là đếm bucket thật.
-3. `illusUrlForPhan` trả `null` khi thiếu ảnh và luận giải **im lặng không hiện** —
-   nên gen dở dang không gãy trang, cho phép rải nhiều đợt.
-
-### 4.3 Bảng tool avatar — mapping có sẵn
-
-52 file trong `public/tool-avatars/`, bảng chủ đề từng tool đã nằm ở
-`lib/media/tool-avatar-prompt.ts` (`TOOL_AVATARS`). Reskin = **thay khối
-`ART_DIRECTION`/`LINE_STYLE`**, giữ nguyên `centralSubject` của từng tool. Đây là
-lý do bộ này rẻ và nhanh: sửa 1 khối prompt, chạy `--all`.
-
-⚠️ Luật đã ghi trong file đó: **không ép mọi tool có nhân vật người**. Với webtoon
-đề xuất ngược lại — Minh Bảo xuất hiện ở **mọi** avatar (đó là điểm của "mascot
-xuyên suốt"), nhưng vai trò khác nhau: tool luận người → Minh Bảo tương tác với
-khách; tool tra cứu → Minh Bảo đứng bên cạnh vật thể (la bàn, lịch, vòng quẻ).
-
-### 4.4 Icon — vẽ lại SVG, KHÔNG gen ảnh
-
-102 icon trong `public/nav.js`. Webtoon hoá bằng cách:
-- `stroke-linecap/linejoin: round`, `stroke-width` 1.5 → 2.2
-- bo tròn các góc vuông, thêm chút bất đối xứng
-- giữ nguyên **tên khoá** (`data-icon="wallet"`) → không trang nào phải sửa
-
-Việc tay, ~2 ngày, không tốn tiền gen. Bump `nav.js?v=31`.
+Nhánh chính giữ Sprint 0/3/4 — chúng đụng `theme.css` + `shell.css` + `index.html`.
 
 ---
 
-## 5. HOMEPAGE — mang shell ra ngoài
-
-Henry muốn: `/` = shell (giống `/app`) + các phần marketing đẩy xuống dưới, gọn lại.
-
-### 5.1 Hiện trạng
-- `/` → `public/index.html`: 59 KB CSS inline, 8 section (hero + form chat, số liệu
-  live, marquee câu hỏi, marquee tool, đánh giá, khảo luận, values, SEO strip, CTA).
-  Ảnh hero là **phần tử LCP**.
-- `/app` → `public/app-home.html` (132 KB): shell 3 cột, thẻ "Vận hôm nay",
-  springboard, tour onboarding.
-
-### 5.2 Đề xuất
-`index.html` dựng theo khung shell (`.shell` > `.sb` + `.ws` + `.rail`), phần
-`.ws-body` mang nội dung `/app` cho khách chưa đăng nhập, rồi **dưới đáy `.ws-body`**
-là các section marketing đã nén còn ~4:
-1. Số liệu live (giữ)
-2. Marquee công cụ (giữ, gọn lại)
-3. Đánh giá người dùng (giữ)
-4. SEO strip + footer (giữ — **không được cắt**, đây là đường SEO)
-
-Cắt: marquee câu hỏi (trùng chip rail), khối values (đưa vào `/about`), CTA đáy
-(rail đã luôn hiện).
-
-### 5.3 🔴 Rủi ro phải nói trước
-`/` là trang SEO quan trọng nhất và đang được `lighthouserc.mobile.json` canh:
-**LCP ≤ 4000ms · CLS ≤ 0,1 · TBT ≤ 600ms**.
-
-Mang shell ra homepage = bắt trang đó nạp thêm **`shell.js` 223 KB + `shell.css`
-85 KB**. Repo đã có tiền sử đúng loại này (CLAUDE.md: box JS chèn đầu khung nội
-dung vừa gây CLS vừa LÀ phần tử LCP).
-
-**Giảm thiểu:**
-- Hero + form khai sinh dựng **tĩnh trong HTML**, không để JS chèn (`check:introcard`).
-- `shell.js` tách phần rail chat sang `defer` / nạp khi tương tác.
-- Khung chờ đặt sẵn cho sidebar + rail, nhắm DƯ.
-- ⚠️ **CLS chỉ kết luận được bằng prod↔prod** — preview đo hụt (0,016 vs 0,160 thật).
-  Phải đo lại sau khi lên prod, không tin số preview.
-- ⚠️ Khối trong `.ws` co theo **bề rộng CỘT** (~360px ở desktop sau khi trừ sidebar
-  246 + rail 336), không theo viewport. Mọi khối marketing bê vào `.ws` phải khai
-  `container-type` + `@container`, `@media(max-width:600px)` sẽ KHÔNG khớp.
-
----
-
-## 6. LỘ TRÌNH — mỗi phase có cổng duyệt sample
-
-Luật Henry: **trước khi reskin page nào phải làm sample, duyệt xong mới làm thật.**
-
-| Phase | Nội dung | Sample cần duyệt | Ước |
-|---|---|---|---|
-| **0** | `theme.css` + `check:theme` + gom 31 `:root` chép tay | — (không đổi pixel nào) | 1–2 ngày |
-| **1** | Character Bible Minh Bảo | **10 ảnh bible** | 1 ngày |
-| **2** | Chrome: `nav.js` topnav+footer, 102 icon SVG, bảng màu webtoon | **1 ảnh chụp topnav + footer + bảng 102 icon** | 2–3 ngày |
-| **3** | App shell (`shell.css`) — 53 trang cùng lúc | **`/app` + `/app/la-so` + `/app/luan-giai`** | 3–4 ngày |
-| **4** | Homepage revamp (mục 5) | **`/` mobile + desktop** | 3–4 ngày |
-| **5** | Tool avatar ×52 | **5 ảnh mẫu** (`--sample` đã có sẵn) | 2 ngày |
-| **6** | SEO tool pages (`tools.css` + 13 trang chép tay) | **`/tools/an-sao.html`** | 2–3 ngày |
-| **7** | 26 route SEO server-render | **`/tu-dien` + `/van-han`** | 2–3 ngày |
-| **8** | Ảnh phụ: fbcard 30, vận riêng 36, vận ngày 4, 64 quẻ | **3 ảnh mỗi nhóm** | 2 ngày |
-| **9** | 🔴 Thư viện minh hoạ ~708 ảnh | **6 ảnh mẫu** + Henry xác nhận đổi nét vẽ sản phẩm đã bán | rải nhiều đợt |
-| **10** | Giọng văn: rà chữ hiển thị sang tông hóm hỉnh | **3 trang mẫu** | 2–3 ngày |
-
-Phase 0–4 là **đường tới hiệu quả nhìn thấy được**. Phase 5–9 là bề rộng.
-
-### Tách worktree (Henry đã cho phép)
-Chạy song song được, không giẫm chân nhau:
-- `wt-icons` — Phase 2 icon SVG (chỉ đụng `nav.js`)
-- `wt-gen` — Phase 5/8/9 gen ảnh (chỉ đụng `scripts/` + `lib/media/` + asset)
-- `wt-seo` — Phase 7 (chỉ đụng `app/**/route.ts`)
-
-Nhánh chính giữ Phase 0/3/4 vì chúng đụng `theme.css` + `shell.css` + `index.html`.
-
----
-
-## 7. MOBILE-FIRST — luật cứng cho mọi ảnh
+## 5. MOBILE-FIRST — luật cứng mọi ảnh
 
 | Khoản | Luật |
 |---|---|
 | Định dạng | Gen PNG → **luôn** chuyển `.webp` bằng `sharp` trước khi commit |
-| Khổ giao | Avatar 512² · hero 600×720 (mobile 400×480) · minh hoạ 800w · fbcard 1200×630 |
-| `srcset` | Ảnh ≥800w phải có 2 bậc. ⚠️ `srcset`+`sizes` hiểu **viewport**, không hiểu container — lệch với `.ws` khi rail mở |
-| CLS | Mọi `<img>` khai `width`+`height` thật. Giữ chỗ chỉ có tác dụng khi khối CÓ MẶT ở lần vẽ đầu |
-| Ngân sách | Ảnh hero ≤ 100 KB · avatar ≤ 50 KB · minh hoạ ≤ 120 KB |
-| Lazy | Mọi ảnh dưới màn hình đầu: `loading="lazy" decoding="async"`. Hero: `fetchpriority="high"` |
+| Khổ giao | avatar 512² · hero 600×720 (mobile 400×480) · minh hoạ 800w · fbcard 1200×630 · corner-Bảo 512² trong suốt |
+| Ngân sách | hero ≤ 100 KB · avatar ≤ 50 KB · minh hoạ ≤ 120 KB |
+| CLS | Mọi `<img>` khai `width`+`height` THẬT |
+| Lazy | Dưới màn hình đầu: `loading="lazy" decoding="async"`. Hero: `fetchpriority="high"` |
 
 ---
 
-## 8. GIỌNG VĂN — "vui nhộn nhẹ nhàng, gần gũi hóm hỉnh"
+## 6. BỘ DÒ SẼ KÊU — biết trước để không hoảng
 
-Đây là phần **rẻ nhất mà đổi cảm giác nhiều nhất**, nhưng rủi ro cao vì chạm 2 luật
-đã có:
-
-1. **Luật `docs/luat/chu-hien-thi.md`**: cấm khoe "AI"/"trí tuệ nhân tạo" như điểm
-   nổi bật. Reskin không được lách luật này (3 trang pháp lý là ngoại lệ).
-2. **Luật prompt LLM**: `lib/agent/prompts.ts` có **3 họ prompt khác nhau**
-   (`arcCore` rail chat · `arcDoc` bản luận dài · `arcGiong` JSON chở giọng).
-   Đổi giọng Minh Bảo phải sửa **`arcGiong`**, và luật đã ghi: *"khối mới phải THAY,
-   không cộng dồn"* + *"dạy bằng VÍ DỤ rẻ và ăn hơn dạy bằng LUẬT"*.
-   `npm run check:prompt` có trần — chạm trần thì CẮT chỗ khác, đừng nới.
-
-Đề xuất: Phase 10 làm **sau** khi hình đã xong, để giọng bám theo hình chứ không
-ngược lại.
-
----
-
-## 9. QC — 46 bộ dò sẽ kêu, biết trước để không hoảng
-
-Reskin chạm vào vùng của các bộ dò này:
-
-| Bộ dò | Vì sao kêu | Xử |
+| Bộ dò | Sprint | Xử |
 |---|---|---|
-| `check:font` | Nếu thêm font display webtoon | Self-host vào `public/fonts/` + preload 400, **cấm** Google Fonts |
-| `check:introcard` | Phase 4 đụng khối intro đầu homepage | Giữ dựng tĩnh trong HTML |
-| `check:navph` / `check:formph` | Giữ chỗ nav/form đổi chiều cao | Đo lại, cập nhật số |
-| `check:illus` / `check:motifs` | Phase 8/9 | Không đổi bảng khoá, chỉ đổi prompt |
-| `check:prices` | Nếu lỡ ghi số giá vào UI mới | **Client không chép số giá.** Đọc hụt → `…` + paywall từ chối chạy |
-| `check:nostore` | Nếu thêm GET Supabase mới | `cache:'no-store'` — đã cắn 3 lần |
-| Lighthouse | Phase 4 | Đo prod↔prod, không tin preview |
-| Playwright 16 spec | Phase 3/4 đổi selector | Cập nhật spec cùng PR, dùng web-first assertion |
+| `check:theme` (mới) | 0 | Chính nó là deliverable |
+| `check:font` | 2 | **Đừng thêm font.** Repo đã đúng §4.2 sẵn |
+| `check:navph` `check:formph` | 3 | Giữ chỗ đổi chiều cao → **ĐO lại** |
+| `check:introcard` | 4 | Giữ dựng tĩnh trong HTML |
+| `check:prices` | 3,6 | **Client không chép số giá.** Đọc hụt → `…` + từ chối chạy |
+| `check:illus` `check:motifs` | 8,9 | Không đổi bảng khoá, chỉ đổi prompt |
+| `check:prompt` | 10 | Chạm trần thì CẮT, đừng nới |
+| Lighthouse | 4 | **prod↔prod**, không tin preview |
+| Playwright 16 spec | 3,4 | Cập nhật spec CÙNG PR, dùng web-first assertion |
 
 ⚠️ `tsc --noEmit` xanh **không** chứng minh `next build` chạy (đã 7 lượt deploy
-ERROR). Phải để job `next-build` xanh.
-
-⚠️ Thêm icon mới → sửa `ICONS` **và bump `nav.js?v=`**. Nút CHỈ-icon **cấm
-`textContent`** (xoá mất `<svg>`).
+ERROR). Job `next-build` phải xanh.
+⚠️ `npm ci` TRƯỚC khi thêm file mới vào `scripts/` — nêu đúng bản lockfile
+(`prettier@3.9.6`), `npx prettier` trần kéo bản bất kỳ trong cache.
 
 ---
 
-## 10. CÂU HỎI CHỜ HENRY CHỐT
+## 7. CÒN CHỜ HENRY
 
-1. **Ảnh mẫu mascot + design mẫu** — chưa nhận được, xem mục 0.1.
-2. **Bảng màu webtoon**: giữ navy/gold làm gốc (an toàn, nhận diện cũ) hay đổi hẳn
-   sang tông sáng ấm kiểu tranh Đông Hồ (vàng nghệ, đỏ son, xanh chàm, giấy dó)?
-   Tao nghiêng về phương án 2 — navy hiện tại kéo tông về "trang nghiêm", ngược hẳn
-   với brief "vui nhộn nhẹ nhàng".
-3. **Thư viện minh hoạ ~708 ảnh**: gen trọn bộ (~800k đ), hay thu hẹp ma trận (bỏ
-   bậc tuổi, còn ~140 ảnh)? Ảnh này nằm trong sản phẩm đã bán.
-4. **Phase 0 (`theme.css`)**: duyệt không? Nó không đổi một pixel nào nhưng là thứ
-   giữ reskin khỏi trôi.
-5. **Bắt đầu từ đâu**: tao đề nghị Phase 0 → 1 (bible) → 2 (chrome) → 3 (shell), vì
-   Phase 3 xong là **53 trang đổi da cùng lúc** — cú hích nhìn thấy được lớn nhất
-   trên mỗi giờ bỏ ra.
+1. **6 mục ở §1** — gật/lắc từng cái. Nặng nhất là **§1.1 (bỏ wizard 4 bước)**
+   và **§1.2 (không cắt chữ trang SEO)**.
+2. **Sprint 9** — xác nhận riêng việc đổi nét vẽ trong sản phẩm đã bán.
+3. **Thứ tự** — tao đề nghị chạy thẳng Sprint 0 → 1 → 2 → 3. Hết Sprint 3 là
+   **53 trang đổi da cùng lúc**, cú hích nhìn thấy được lớn nhất.
