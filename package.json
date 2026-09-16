@@ -43,6 +43,7 @@
     "test:smoke": "playwright test --config=playwright.smoke.config.ts",
     "test:smoke:ui": "playwright test --config=playwright.smoke.config.ts --ui",
     "lhci": "lhci autorun",
+    "check:theme": "node scripts/check-theme.mjs",
     "check:motifs": "node scripts/check-que-motifs.mjs",
     "check:illus": "node scripts/check-illus.mjs",
     "check:terms": "node scripts/check-terms.mjs",
