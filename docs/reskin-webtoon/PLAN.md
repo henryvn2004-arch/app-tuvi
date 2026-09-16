@@ -106,13 +106,13 @@ vẫn là giọng trẻ con.
 Mỗi sprint: **cổng duyệt sample trước, làm thật sau.** Sprint chỉ đóng khi CI
 xanh + Henry gật.
 
-### 📊 TIẾN ĐỘ (cập nhật 2026-09-16, sau vòng sửa footer trang chủ)
+### 📊 TIẾN ĐỘ (cập nhật 2026-09-16, sau vòng gen expressions/poses V2)
 
 | Sprint | Trạng thái | Đã làm | Còn thiếu |
 |---|---|---|---|
 | 0 — Nền | ✅ Xong | `theme.css` gom 40 file, `check:theme` xanh | — |
-| 1 — Character Bible | ⚠️ Vẽ lại theo style mới | corner-Bảo + 4 dáng vẽ **V1** (Sprint 1), sau đó Henry chốt style Ghibli/chibi (STYLE_LOCK_V2) → mascot/hero/corner/library/articles/community đã vẽ lại **V2** | `expressions` × 4 và `poses` × 4 mới **chỉ có bản V1**, chưa vẽ lại V2 (chưa dùng ở đâu — §3.4 Sprint 3 cũng đang treo vì thiếu bộ này); chưa có bức `paywall` |
-| 2 — Chrome dùng chung | ⚠️ Phần lớn xong | `nav.js`: palette navy/gold, 102 icon SVG bo tròn nét, corner-Bảo trong topnav (đã cập nhật sang **V2** `corner-v2.webp` khi đổi style), **footer đổi màu nâu espresso khớp tông trang chủ mới** (đợt sửa vừa rồi) | Chưa gắn bong bóng thoại Minh Bảo vào topnav (nếu có trong scope gốc) |
+| 1 — Character Bible | ⚠️ Ảnh xong, chưa wire | mascot/hero/corner/library/articles/community **V2** đã lên site; **expressions ×4 + poses ×4 V2 vừa gen xong, đã tách 8 ảnh riêng (nền trong suốt), đang chờ Henry duyệt** | Chưa commit/wire 8 ảnh vào trang nào (đợi Sprint 3); `paywall` còn neo ảnh V1 (`hero.png`), chưa gen lại theo V2 |
+| 2 — Chrome dùng chung | ⚠️ Phần lớn xong | `nav.js`: palette navy/gold, 102 icon SVG bo tròn nét, corner-Bảo trong topnav (đã cập nhật sang **V2** `corner-v2.webp` khi đổi style), **footer đổi màu nâu espresso khớp tông trang chủ mới** (đợt sửa vừa rồi) | 🔴 Henry: 102 icon hiện tại (Lucide bo nét) chưa đủ khớp Ghibli/chibi — cần **gen lại bằng ảnh**, không còn thuần SVG (xem ghi chú ở Sprint 2 đầy đủ) |
 | 3 — App shell (53 trang `/app/*`) | ⚠️ Chỉ làm phần khung | `shell.css` đổi palette + bo góc thẻ + shadow mềm — palette khớp `theme.css`/trang chủ (`--navy #0F2A3D`, `--gold #C8A96A`) | **Chưa có bong bóng thoại Minh Bảo trong rail (§3.3)**, **chưa map biểu cảm theo trang (§3.4)** — kẹt vì Sprint 1 chưa có bộ expressions V2; **`tuvi-form.js` chưa đổi giọng "Bảo/bạn"** (§1.1/§2, còn nhãn form cũ) |
 | 4 — Homepage (`/`) | ✅ Xong, đang polish | Dựng lại theo 2 mockup Henry gửi, ảnh V2 riêng cho từng khối (hero/daily/library/articles/community), SEO đầy đủ, wire vào route `/`, vá LCP+contrast+responsive-images (Lighthouse xanh), vá màu + bỏ icon SVG thô ở footer theo phản hồi Henry | — (đang chờ Henry duyệt lần cuối) |
 | 5 — 52 tool avatar | ⬜ Chưa bắt đầu | — | Toàn bộ 52 avatar vẫn là art cũ (line-art vàng trên navy), chưa vẽ lại theo V2 |
@@ -150,17 +150,17 @@ là 31 lần sửa tay và chắc chắn trôi.
 
 ---
 
-### 🧒 SPRINT 1 — Character Bible Minh Bảo — ⚠️ V1 xong, đang vẽ lại V2 (thiếu expressions/poses/paywall)
+### 🧒 SPRINT 1 — Character Bible Minh Bảo — ⚠️ Ảnh xong (V2), CHƯA wire vào trang nào
 Mở rộng từ 2 bức đã duyệt thành bộ dùng được.
 
 | Bức | Khổ | Dùng ở |
 |---|---|---|
-| ~~mascot~~ ✅ đã duyệt | 1024² | nguồn neo cho mọi bức sau |
-| ~~hero~~ ✅ đã duyệt | 1536×1024 | nền hero trang chủ |
-| expressions ×4 (vui/tập trung/suy tư/nghiêm túc) | 1536×1024 | §3.4 map theo ngữ cảnh |
-| paywall (hoàng hôn, cùng cảnh hero) | 1536×1024 | tường trả phí |
-| **corner-Bảo** — nửa người, nền trong suốt | 512² | 🔴 xem ghi chú dưới |
-| poses ×4 (chỉ tay, cầm thẻ tre, chống cằm, vẫy tay) | 1536×1024 | khung minh hoạ |
+| ~~mascot~~ ✅ đã duyệt | 1024² | nguồn neo cho mọi bức sau (V2: `mascotV2.png`) |
+| ~~hero~~ ✅ đã duyệt | 1536×1024 | nền hero trang chủ (V2: `heroSceneV2` → `hero-scene-v2.webp`, đã lên `/`) |
+| ✅ expressions ×4 (vui/tập trung/suy tư/nghiêm túc) | tách từ sheet 1536×1024 | §3.4 map theo ngữ cảnh — **đã gen + tách 4 ảnh riêng (nền trong suốt), CHƯA commit/wire, đang chờ Henry duyệt** |
+| ⬜ paywall (hoàng hôn, cùng cảnh hero) | 1536×1024 | tường trả phí — **entry cũ trong script còn neo `hero.png` (V1), cần trỏ lại `heroSceneV2.png` rồi gen lại** |
+| ~~corner-Bảo~~ ✅ đã lên site | 512² | góc topnav toàn site (`corner-v2.webp`) — xem ghi chú dưới |
+| ✅ poses ×4 (chỉ tay, cầm thẻ tre, chống cằm, vẫy tay) | tách từ sheet 1536×1024 | khung minh hoạ — **đã gen + tách 4 ảnh riêng (nền trong suốt), CHƯA commit/wire, đang chờ Henry duyệt** |
 
 🔴 **corner-Bảo bắt buộc phải có.** Guideline §3.2 đòi mascot xuất hiện ở mọi
 section. Nhưng cột `.ws` ở desktop chỉ còn **~360px** sau khi trừ sidebar 246 +
@@ -190,6 +190,13 @@ không vẽ text-to-image thuần. Vòng 1 vẽ rời → trôi nhân vật (áo
 ⚠️ **Không rasterize icon.** 102 file PNG giết mobile. Giữ SVG, giữ nguyên tên
 khoá (`data-icon="wallet"`) ⇒ **không trang nào phải sửa**.
 ⚠️ Nút CHỈ-icon **cấm `textContent`** — xoá mất `<svg>`.
+
+🔴 **2026-09-16 — Henry:** bộ 102 icon hiện tại (Lucide, chỉ bo tròn nét) KHÔNG
+đủ khớp style Ghibli/chibi của trang chủ mới — làm lại đợt này phải **gen
+bằng ảnh** (illustration thật, không phải line-art vector bo góc). Đổi kỹ
+thuật: 102 icon giờ là ẢNH (webp nhỏ) chứ không còn thuần SVG path — bỏ
+luôn ràng buộc "không rasterize icon" phía trên, cần nghĩ lại ngân sách
+cân nặng mobile (KB/icon × 102) trước khi làm.
 
 **Sample gate:** ảnh chụp topnav + footer + bảng 102 icon.
 **Ước:** 2–3 ngày.
