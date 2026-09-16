@@ -1546,6 +1546,7 @@ export async function GET(request: NextRequest) {
   if (action === 'khoi-hanh-defs') return handleKhoiHanhDefs();
   if (action === 'social-proof-info') return handleSocialProofInfo();
   if (action === 'promo-info')   return handlePromoInfo(searchParams);
+  if (action === 'tool-popularity') return handleToolPopularity(searchParams);
   if (action === 'admin-promo-list') return handleAdminPromoList(request);
   if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
   if (action === 'admin-users-list') return handleAdminUsersList(request);
@@ -3161,6 +3162,32 @@ async function handlePromoInfo(sp: URLSearchParams): Promise<Response> {
     // KHÔNG trả `used_count`/`max_uses` ra ngoài — đó là ngân sách nội bộ.
     return ok({ found: true, code: r.code, credits: r.credits, live });
   } catch { return ok({ found: false }); }
+}
+
+// ── GET: tool-popularity ("Bằng chứng xã hội cạnh nút mua") — số người ĐÃ
+// MỞ trang tool này trong 30 ngày qua. Số THẬT, đọc từ
+// dashboard_tool_viewcount() (migration-tool-viewcount.sql): event 'tool_open'
+// đã lọc bot + distinct theo user/anon — KHÔNG BAO GIỜ bịa số.
+//
+// Dưới MIN_DISPLAY thì trả `show:false` — ẩn hẳn badge thay vì hiện một con
+// số nhỏ trông thảm (hay tệ hơn, tự bịa số to lên). Công khai, không cần
+// đăng nhập, giống hệt `promo-info`/`social-proof-info`.
+const TOOL_POPULARITY_MIN_DISPLAY = 20;
+async function handleToolPopularity(sp: URLSearchParams): Promise<Response> {
+  const tool = (sp.get('tool') || '').trim();
+  if (!tool || tool.length > 60) return ok({ show: false });
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/dashboard_tool_viewcount`, {
+      method: 'POST',
+      headers: SB_HEADERS,
+      body: JSON.stringify({ p_tool_id: tool, p_days: 30 }),
+    });
+    if (!res.ok) return ok({ show: false });
+    const count = await res.json();
+    const n = typeof count === 'number' ? count : 0;
+    if (n < TOOL_POPULARITY_MIN_DISPLAY) return ok({ show: false });
+    return ok({ show: true, count: n });
+  } catch { return ok({ show: false }); }
 }
 
 async function handleAdminPromoList(request: NextRequest): Promise<Response> {

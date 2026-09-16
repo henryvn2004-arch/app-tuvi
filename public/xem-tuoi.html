@@ -18,6 +18,7 @@
 <script src="/tuong-hop.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
+<script src="/tools-shared/tool-popularity.js?v=1"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tuvi-grid.js?v=3"></script>
@@ -1396,7 +1397,7 @@ function renderTeasers(result) {
     </div>
     <div style="text-align:center;margin-top:16px">
       <button class="btn-paywall" onclick="initiatePaymentTuoi(_savedResult,'${product}')"><span>Mở Khóa Luận Giải →</span></button>
-      <div class="paywall-secure" style="margin-top:8px"><span class="ic" data-icon="lock"></span> Trừ thẳng từ số dư · <span data-tvp-price="xem-tuoi">…</span> lượng</div>
+      <div class="paywall-secure" style="margin-top:8px"><span class="ic" data-icon="lock"></span> Trừ thẳng từ số dư · <span data-tvp-price="xem-tuoi">…</span> lượng<span data-tvp-viewcount="xem-tuoi" hidden></span></div>
     </div>`;
   items.forEach((m, i) => {
     const idx = i + 1;
