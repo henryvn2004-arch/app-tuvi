@@ -1,4 +1,4 @@
-// nav.js — Shared navigation component v15 (webtoon palette + corner-Bảo mascot)
+// nav.js — Shared navigation component v16 (corner-Bảo mascot → style V2 chibi)
 (function () {
   var path = window.location.pathname;
 
@@ -532,7 +532,7 @@
     // flexbox của .topnav, nên một sibling flex mới ở cuối KHÔNG đẩy được nó
     // ra, chỉ đè lên nhau (đã thấy lúc test: mascot chồng lên nút "Đăng nhập").
     // Đặt cạnh logo là vùng chắc chắn không ai khác tranh chỗ.
-    + '<img class="nav-mascot" src="/mascot/corner.webp" alt="" width="34" height="34" loading="eager" decoding="async">'
+    + '<img class="nav-mascot" src="/mascot/corner-v2.webp" alt="" width="34" height="34" loading="eager" decoding="async">'
     + '<div class="nav-links" id="nav-links">'
     + '<a class="nav-link nav-cta-ld' + (isActive('/app')?' active':'') + '" href="/app" title="Lập lá số và hỏi trợ lý Luận Đường — vào đây để dùng công cụ">✦ Luận Đường</a>'
     + dd_kp

@@ -112,9 +112,9 @@ body {
 </div>
 
 <script src="/auth.js?v=2"></script>
-<script src="/nav.js?v=31" data-icons-only></script>
+<script src="/nav.js?v=32" data-icons-only></script>
 <script>
-// `nav.js?v=31` ở chế độ `data-icons-only` CỐ Ý không nạp Meta Pixel (xem
+// `nav.js?v=32` ở chế độ `data-icons-only` CỐ Ý không nạp Meta Pixel (xem
 // nav.js#297). Nhưng đây là trang XÁC NHẬN THANH TOÁN — đúng nơi PHẢI bắn
 // Purchase, nên khởi tạo pixel riêng ở đây thay vì trông chờ nav.js. Cùng
 // pixel ID với nav.js, cùng lý do bỏ qua `navigator.webdriver` (bộ E2E chạy
@@ -128,7 +128,7 @@ if (!document.getElementById('fb-pixel-js') && !navigator.webdriver) {
   window.fbq('init', '1747342186469684');
   window.fbq('track', 'PageView');
 }
-// `nav.js?v=31` ở chế độ `data-icons-only` CŨNG bỏ qua GA4 (xem nav.js#336) —
+// `nav.js?v=32` ở chế độ `data-icons-only` CŨNG bỏ qua GA4 (xem nav.js#336) —
 // nạp riêng ở đây để trang XÁC NHẬN THANH TOÁN vẫn có page_view/PageView cơ
 // bản. Event `purchase`/`Purchase` KHÔNG bắn ở đây (và không ở topup.html) —
 // bắn phía SERVER (lib/marketing/server-conversions.ts), đúng một lần, ngay

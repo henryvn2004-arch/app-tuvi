@@ -113,6 +113,22 @@ ${STYLE_LOCK_V2}
 Negative:
 ${NEGATIVE_V2}`;
 
+/**
+ * Cho `images/edits` (có `from`, đã có ẢNH neo mang sẵn hình hài) — chỉ cần
+ * tả THAY ĐỔI (tư thế/cảnh mới), không lặp lại CHARACTER_DNA_V2 bằng chữ:
+ * ảnh neo đã LÀ hình hài đó, tả lại bằng chữ là thừa và có khi kéo ngược
+ * tỉ lệ về ít chibi hơn (chữ "7 years old boy" một mình không ép được tỉ lệ
+ * đầu 60% bằng một tấm ảnh tham chiếu thật).
+ */
+const edit2 = (body) => `${body}
+
+STYLE:
+${STYLE_LOCK_V2}
+
+Negative:
+${NEGATIVE_V2}
+No text, letters, Chinese characters or captions anywhere in the image.`;
+
 const SAMPLES = {
   // Prompt nhân vật — chép từ guideline §8.3, thêm ràng buộc nhận diện để các
   // bức sau tái dựng được cùng một cậu bé.
@@ -242,30 +258,65 @@ Leave open empty space above and to one side of him so a speech bubble and a sma
     }),
   },
 
-  // Homepage v3 — 3 thẻ "Khám phá thêm" đang DÙNG LẠI heroScene/dailyScene
-  // (Henry bắt lỗi: "gen nhiều hình context khác nhau đi... đừng để hình
-  // trùng lắp"). Mỗi thẻ một CẢNH riêng, đúng nội dung thẻ đó, không chữ.
-  libraryScene: {
-    size: '1536x1024',
-    from: 'mascot.png',
+  // ══════════════════════════════════════════════════════════════════════
+  // BỘ V2 THẬT — Henry đã chốt STYLE_LOCK_V2 làm style CHUNG của cả site
+  // (2026-09-16: "style ghibli này cũng là style của website luôn nhé").
+  // `chanTrauV2` (đã duyệt) trở thành ẢNH NEO nhận diện MỚI, thay mascot.png
+  // cũ — copy sang mascotV2.png trước khi chạy (script tự kiểm tồn tại).
+  // Các bức dưới đây đều `from: 'mascotV2.png'`, dùng `edit2()` (giữ đúng
+  // STYLE_LOCK_V2 + Negative, không lặp lại toàn bộ CHARACTER_DNA_V2 vì ảnh
+  // neo đã MANG sẵn hình hài đó — lặp lại bằng chữ là thừa, đôi khi còn kéo
+  // ngược về tỉ lệ ít chibi hơn).
+  // ══════════════════════════════════════════════════════════════════════
+  cornerV2: {
+    size: '1024x1024',
+    from: 'mascotV2.png',
+    transparent: true,
     prompt:
-      build(`Redraw ONLY the boy from the provided image sitting cross-legged on a wooden floor, surrounded by tall stacks of old bound books and rolled bamboo scrolls on simple wooden shelves behind him. He holds one open book on his lap, looking down at it with quiet curiosity. Keep his face, hair, conical hat and indigo tunic EXACTLY as shown — same character (he may set the hat beside him if more natural for sitting indoors, but keep the same hair and face).
+      edit2(`Redraw ONLY the boy from the provided image as a half-body (waist-up) portrait, facing slightly to the side as if listening attentively, one hand raised near his chin in a thinking gesture.
+Keep his exact face, hair, conical hat and outfit as shown — same character, same big-head chibi proportion.
+Remove the buffalo and the entire background completely. The background must be fully transparent — no color, no ground, no sky, nothing behind him.
+Leave soft empty margin on all sides so the figure can be placed in a small corner of a page.`),
+  },
+  heroSceneV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Take the boy riding the water buffalo from the provided image and repaint the background into a wider, more open landscape. Keep him, his hat, outfit, the stick and the buffalo EXACTLY as shown — same character, same pose, same big-head chibi proportion, no redesign.
+Background: soft layered hills far away on the left, a warm golden sun with a small flock of birds flying in a diagonal formation in the open sky on the right, a tiny cluster of tiled-roof village houses nestled in the mid-ground.
+Leave a large area of open pale sky in the upper-right third of the image with nothing in it — no birds, no hills, no houses there — so text and a speech bubble can be placed over it later.
+Wide horizontal composition, the buffalo walking gently toward the right side of the frame.`),
+  },
+  dailySceneV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Redraw ONLY the boy from the provided image standing on the ground next to the buffalo, in a cheerful mid-step walking pose, holding a small blank rolled scroll in both hands in front of his chest as if about to show it. Keep his exact face, hair, hat and outfit — same character, same big-head chibi proportion.
+The scroll must be completely BLANK — no text, no writing, no symbols on it.
+Background: a few small tiled-roof village houses and soft rolling hills, gentle daylight, calm mood.
+Leave open empty space above and to one side of him so a speech bubble and a small card can be placed there later.`),
+  },
+  libraryV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Redraw ONLY the boy from the provided image sitting cross-legged on a wooden floor, surrounded by tall stacks of old bound books and rolled scrolls on simple wooden shelves behind him. He holds one open book on his lap, looking down at it with quiet curiosity. Keep his exact face, hair and outfit — same character, same big-head chibi proportion (he may set the hat beside him since he is sitting indoors, but keep the same hair and face).
 The books and scrolls must be completely BLANK on their spines and pages — no text, no writing, no symbols anywhere.
 Background: a small quiet study nook with warm wooden tones, soft light from one side. No buffalo, no outdoor landscape.`),
   },
-  articlesScene: {
+  articlesV2: {
     size: '1536x1024',
-    from: 'mascot.png',
+    from: 'mascotV2.png',
     prompt:
-      build(`Redraw ONLY the boy from the provided image sitting under a large shady tree, leaning against the trunk, writing on a small wooden tablet resting on his knees with a bamboo brush. Keep his face, hair, conical hat and indigo tunic EXACTLY as shown — same character.
+      edit2(`Redraw ONLY the boy from the provided image sitting under a large shady tree, leaning against the trunk, writing on a small wooden tablet resting on his knees with a brush. Keep his exact face, hair and outfit — same character, same big-head chibi proportion.
 The tablet must be completely BLANK — no text, no writing, no symbols on it.
 Background: a peaceful garden corner with a few soft green plants and a low stone, gentle daylight. No buffalo, no wide landscape, no village.`),
   },
-  communityScene: {
+  communityV2: {
     size: '1536x1024',
-    from: 'mascot.png',
+    from: 'mascotV2.png',
     prompt:
-      build(`Redraw ONLY the boy from the provided image sitting together with two or three other village children of similar chibi style around a small warm lantern on the ground at night, all smiling and chatting. Keep his face, hair, conical hat and indigo tunic EXACTLY as shown — same character; the other children should look distinct from him (different hair, simple different-colored tunics) but drawn in the exact same soft chibi watercolor style.
+      edit2(`Redraw ONLY the boy from the provided image sitting together with two or three other village children around a small warm lantern on the ground at night, all smiling and chatting. Keep his exact face, hair and outfit — same character, same big-head chibi proportion; the other children should look distinct from him (different hair, different simple outfit colors) but drawn in the exact same style.
 Background: a calm night sky with a soft moon and a few stars, silhouettes of bamboo far behind. The lantern glow is the brightest point in the frame. No text, no signs, no banners anywhere.`),
   },
 
