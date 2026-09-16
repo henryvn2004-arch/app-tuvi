@@ -102,7 +102,7 @@
   --card: #ffffff;
   --ink: #16232c;
   --ink-soft: #5b6670;
-  --ink-faint: #8a9198;
+  --ink-faint: #6b7178;
   --line: #e9e3d6;
   --navy: #0f2a3d;
   --gold: #c8a96a;
@@ -157,7 +157,7 @@ button { font: inherit; cursor: pointer; }
 .mb-login {
   display: flex; align-items: center; gap: 7px; padding: 8px 16px 8px 12px;
   border-radius: 999px; border: 1.4px solid var(--gold); background: var(--gold-soft);
-  color: #8a6a2f; font-weight: 700; font-size: 14px; white-space: nowrap;
+  color: #6b4f1e; font-weight: 700; font-size: 14px; white-space: nowrap;
   font-family: inherit;
 }
 .mb-login .ic { width: 16px; height: 16px; }
@@ -254,7 +254,7 @@ button { font: inherit; cursor: pointer; }
 .daily-title { font-size: 26px; font-weight: 800; margin: 0 0 10px; color: var(--ink); }
 .daily-badge { display: inline-block; font-size: 12.5px; font-weight: 700; padding: 4px 12px; border-radius: 999px; margin-bottom: 12px; }
 .daily-badge.v-tot { background: var(--green-soft); color: #3f7a74; }
-.daily-badge.v-binh { background: var(--gold-soft); color: #8a6a2f; }
+.daily-badge.v-binh { background: var(--gold-soft); color: #6b4f1e; }
 .daily-badge.v-xau { background: var(--terracotta-soft); color: var(--terracotta); }
 .daily-desc { font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; margin: 0 0 20px; max-width: 40ch; min-height: 44px; }
 .daily-cta { display: inline-flex; align-items: center; gap: 6px; background: var(--navy); color: #fff; font-weight: 700; font-size: 14px; padding: 11px 20px; border-radius: 12px; border: none; }
@@ -277,7 +277,7 @@ button { font: inherit; cursor: pointer; }
 .explore-body h3 { font-size: 16px; margin: 0 0 6px; font-weight: 800; }
 .explore-body p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; margin: 0 0 14px; }
 .explore-cta { font-size: 13.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; padding: 9px 16px; border-radius: 10px; }
-.explore-cta.gold { background: var(--gold); color: #fff; }
+.explore-cta.gold { background: var(--gold); color: var(--navy); }
 .explore-cta.outline { border: 1.4px solid var(--line); color: var(--ink); }
 .explore-cta.light { background: rgba(255,255,255,0.14); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
 .explore-card.dark { background: var(--navy); color: #fff; }
@@ -369,8 +369,8 @@ button { font: inherit; cursor: pointer; }
     <div class="hero-art">
       <img
         src="/mascot/hero-scene-v2.webp"
-        srcset="/mascot/hero-scene-v2-sm.webp 768w, /mascot/hero-scene-v2.webp 1536w"
-        sizes="(max-width: 860px) 100vw, 560px"
+        srcset="/mascot/hero-scene-v2-sm.webp 768w, /mascot/hero-scene-v2-md.webp 1100w, /mascot/hero-scene-v2.webp 1536w"
+        sizes="(max-width: 860px) calc(100vw - 48px), 560px"
         width="1536" height="1024" fetchpriority="high"
         alt="Minh Bảo cưỡi trâu giữa khung cảnh làng quê, núi non và nắng sớm">
     </div>
@@ -415,8 +415,8 @@ button { font: inherit; cursor: pointer; }
       </div>
       <div class="daily-art">
         <img src="/mascot/daily-scene-v2.webp"
-             srcset="/mascot/daily-scene-v2-sm.webp 768w, /mascot/daily-scene-v2.webp 1536w"
-             sizes="(max-width: 820px) 100vw, 500px"
+             srcset="/mascot/daily-scene-v2-sm.webp 768w, /mascot/daily-scene-v2-md.webp 1100w, /mascot/daily-scene-v2.webp 1536w"
+             sizes="(max-width: 820px) calc(100vw - 48px), 500px"
              width="1536" height="1024" loading="lazy"
              alt="Minh Bảo cầm cuộn thư trước làng, xem hoàng lịch hôm nay">
       </div>
