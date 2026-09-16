@@ -226,6 +226,22 @@ Leave open empty space above and to one side of him so a speech bubble and a sma
     }),
   },
 
+  // Henry chốt STYLE_LOCK_V2 (2026-09-16), xin thêm 1 bức test cảnh KHÁC hẳn
+  // chanTrauV2 (nhiều người, kiến trúc, ngồi trong nhà) trước khi regen cả
+  // bộ nhân vật gốc — kiểm xem style có đứng vững khi cảnh phức tạp hơn.
+  dinhLangV2: {
+    size: '1536x1024',
+    prompt: build2({
+      mood: 'warm, respectful',
+      action:
+        'Minh Bảo sitting cross-legged on a wooden floor, hands resting on his knees, talking cheerfully and listening attentively to a small group of three elderly village men (village elders) sitting around him in a loose circle.',
+      scene:
+        'inside an open-sided đình làng (traditional Vietnamese communal house) — wooden pillars, a tiled roof, low wooden platform floor',
+      env: 'a low wooden tea table with a few small teacups between them, the elders wearing simple long tunics in muted colors with white or grey hair and beards, a big old banyan tree visible through the open side of the building',
+      light: 'soft midday light filtering through the open sides, gentle and calm',
+    }),
+  },
+
   // Homepage v3 — 3 thẻ "Khám phá thêm" đang DÙNG LẠI heroScene/dailyScene
   // (Henry bắt lỗi: "gen nhiều hình context khác nhau đi... đừng để hình
   // trùng lắp"). Mỗi thẻ một CẢNH riêng, đúng nội dung thẻ đó, không chữ.
