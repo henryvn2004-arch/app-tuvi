@@ -107,6 +107,37 @@ The four must differ clearly at a glance. No frames, no borders, no dividing lin
 No human figures. Wide, calm, spiritual mood with a large area of open sky in the upper third that text can sit over.`),
   },
 
+  // Sprint 1 — corner-Bảo: bản nhỏ, NỀN TRONG SUỐT, neo góc rail/sidebar.
+  // Bắt buộc phải có: cột `.ws` desktop chỉ còn ~360px sau khi trừ sidebar
+  // 246 + rail 336 (shell.css) — nhét bức mascot lớn (có trâu, có cảnh) vào
+  // đó là ăn hết chỗ nội dung. Cần bản bán thân, không cảnh, không trâu.
+  corner: {
+    size: '1024x1024',
+    from: 'mascot.png',
+    transparent: true,
+    prompt:
+      build(`Redraw ONLY the boy from the provided image as a half-body (waist-up) portrait, facing slightly to the side as if listening attentively, one hand raised near his chin in a thinking gesture.
+Keep his face, hair, conical hat and indigo tunic EXACTLY as shown — same character.
+Remove the buffalo and the entire landscape completely. The background must be fully transparent — no cream color, no ground, no sky, nothing behind him at all.
+Leave soft empty margin on all sides so the figure can be placed in a small corner of a page.`),
+  },
+
+  // Sprint 1 — bảng 4 dáng cho khung minh hoạ (guideline: chỉ tay, cầm thẻ
+  // tre, chống cằm, vẫy tay). Cùng kỹ thuật neo như expressions.
+  poses: {
+    size: '1536x1024',
+    from: 'mascot.png',
+    prompt:
+      build(`Draw a character pose sheet using the boy in the provided image. Keep his face, hair, conical hat, indigo tunic and proportions EXACTLY as they are — same character, no redesign.
+Remove the buffalo. Place four full-body poses of him in a single horizontal row, evenly spaced, standing on a plain flat cream background with only a hint of ground shadow beneath his feet.
+Left to right:
+1. pointing forward with one hand, as if showing the way, body turned slightly toward the viewer
+2. holding up a small bamboo slip (thẻ tre) with both hands, looking down at it as if reading
+3. sitting cross-legged, one elbow resting on his knee, chin resting on his hand, thoughtful
+4. waving with one raised hand, cheerful, mid-step as if walking toward the viewer
+No frames, no borders, no dividing lines between them.`),
+  },
+
   // §8.5 — "a darker version of the SAME style".
   //
   // 🪤 Vòng 1 vẽ rời → ra tranh thuỷ mặc Tàu cổ điển, KHÁC hẳn bức `hero`, và
@@ -168,6 +199,8 @@ for (const name of pick) {
   process.stdout.write(`🎨 ${name} (${size}, ${QUALITY}${from ? `, neo: ${from}` : ''})… `);
   const t0 = Date.now();
 
+  const transparent = !!SAMPLES[name].transparent;
+
   let r;
   if (from) {
     const fd = new FormData();
@@ -176,6 +209,10 @@ for (const name of pick) {
     fd.append('size', size);
     fd.append('quality', QUALITY);
     fd.append('n', '1');
+    // background:transparent CHỈ có tác dụng khi output PNG (mặc định của
+    // images/edits đã là png, không có output_format riêng để khai như
+    // generations) — bỏ qua với ảnh có cảnh phía sau (mascot/hero/paywall).
+    if (transparent) fd.append('background', 'transparent');
     fd.append('image', new Blob([readFileSync(join(OUT, from))], { type: 'image/png' }), from);
     r = await fetch('https://api.openai.com/v1/images/edits', {
       method: 'POST',
