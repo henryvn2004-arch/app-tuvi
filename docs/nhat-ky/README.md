@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-298 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+299 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🖼 11 banner hook `.intro-card` — cast webtoon mới + publish thật lên Storage |
 | 1 | 2026-09 | `2026-09.md` | 👀 Bằng chứng xã hội cạnh nút mua — badge "N người đã xem tháng này" (thí điểm 2 trang) |
 | 1 | 2026-09 | `2026-09.md` | 📊 Lượt cron `ext-metrics` đầu tiên — Clarity xác nhận field thật, Meta Ads lộ lỗi quyền token |
 | 1 | 2026-09 | `2026-09.md` | 🧹 Dọn bảng "Thủ Thuật Chuyển Đổi Ngoài Giá" — audit 4 mục `new` còn lại, phát hiện thêm 1 mục lỗi thời |
