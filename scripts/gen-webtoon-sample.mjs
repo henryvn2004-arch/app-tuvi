@@ -320,6 +320,39 @@ Background: a peaceful garden corner with a few soft green plants and a low ston
 Background: a calm night sky with a soft moon and a few stars, silhouettes of bamboo far behind. The lantern glow is the brightest point in the frame. No text, no signs, no banners anywhere.`),
   },
 
+  // Bảng biểu cảm — regen theo STYLE_LOCK_V2, neo mascotV2.png (thay bản
+  // `expressions` cũ neo mascot.png). Cùng 4 trạng thái §3.4, giữ nguyên nội
+  // dung mô tả (đã kiểm không trôi nhân vật ở bản V1) — chỉ đổi ẢNH NEO.
+  expressionsV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Draw a character expression sheet using the boy in the provided image. Keep his exact face, hair, hat and outfit — same character, same big-head chibi proportion, no redesign, no aging.
+Remove the buffalo and the landscape. Place four bust-up portraits of him in a single horizontal row, evenly spaced, on a plain flat cream background.
+Left to right:
+1. cheerful greeting — eyes wide and bright, open smile, one hand raised in a small wave
+2. focused — leaning slightly forward, eyebrows drawn in, both hands resting on an unseen table, mouth a small straight line
+3. pondering — head tilted up and away, eyes looking off to the upper left, one finger tapping his cheek, mouth slightly pursed
+4. solemn — squared shoulders, chin level, steady direct gaze at the viewer, lips closed and flat, no smile at all
+The four must differ clearly at a glance. No frames, no borders, no dividing lines, no shadows between them.`),
+  },
+
+  // Bảng 4 dáng — regen theo STYLE_LOCK_V2, neo mascotV2.png (thay bản
+  // `poses` cũ). Cùng 4 dáng đã duyệt ở bản V1.
+  posesV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Draw a character pose sheet using the boy in the provided image. Keep his exact face, hair, hat and outfit — same character, same big-head chibi proportion, no redesign.
+Remove the buffalo. Place four full-body poses of him in a single horizontal row, evenly spaced, standing on a plain flat cream background with only a hint of ground shadow beneath his feet.
+Left to right:
+1. pointing forward with one hand, as if showing the way, body turned slightly toward the viewer
+2. holding up a small bamboo slip (thẻ tre) with both hands, looking down at it as if reading
+3. sitting cross-legged, one elbow resting on his knee, chin resting on his hand, thoughtful
+4. waving with one raised hand, cheerful, mid-step as if walking toward the viewer
+No frames, no borders, no dividing lines between them.`),
+  },
+
   // §8.5 — "a darker version of the SAME style".
   //
   // 🪤 Vòng 1 vẽ rời → ra tranh thuỷ mặc Tàu cổ điển, KHÁC hẳn bức `hero`, và
