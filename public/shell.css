@@ -66,7 +66,7 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .shell{display:grid;grid-template-columns:246px 1fr var(--rail-w);height:100vh;min-height:600px}
 
 /* ── SIDEBAR ── */
-.sb{background:linear-gradient(180deg,var(--navy),var(--navy-2));color:var(--sb-txt);display:flex;flex-direction:column;overflow-y:auto}
+.sb{background:linear-gradient(180deg,#2B1B10,#3D2818);color:var(--sb-txt);display:flex;flex-direction:column;overflow-y:auto}
 .sb::-webkit-scrollbar{width:8px}.sb::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:8px}
 .seal{width:34px;height:34px;border-radius:7px;object-fit:cover;border:1px solid rgba(200,169,106,.45);flex:0 0 auto;display:block}
 /* Hồ sơ — đầu sidebar trên MỌI trang (2026-09, thay `.sb-brand`/`.sb-foot` cũ):
@@ -285,7 +285,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    xong một tool thì KHÔNG biết bấm vào đâu để quay lại Luận Đường) · Công cụ
    (sidebar) · Tài khoản. shell.js chèn #shell-tabbar vào body; chỉ hiện
    ≤900px; ẩn khi drawer/cmdk đang mở. Desktop KHÔNG đụng tới. ── */
-.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:49;grid-template-columns:1fr 1fr 72px 1fr 1fr;align-items:end;background:linear-gradient(180deg,var(--navy-2),var(--navy));border-top:1px solid rgba(200,169,106,.18);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(15,42,61,.22)}
+.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:49;grid-template-columns:1fr 1fr 72px 1fr 1fr;align-items:end;background:linear-gradient(180deg,#3D2818,#2B1B10);border-top:1px solid rgba(200,169,106,.18);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(15,42,61,.22)}
 .tabbar .tab{appearance:none;-webkit-appearance:none;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;color:var(--sb-txt-dim);font-family:inherit;font-size:10.5px;line-height:1;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .tabbar .tab svg{width:22px;height:22px;display:block;stroke-width:1.7}
 .tabbar .tab.active{color:var(--gold)}
@@ -296,8 +296,8 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    khớp màu thương hiệu). `top:-15px` kéo nó lên khỏi hàng mà vẫn nằm trong
    `.tabbar` để không phải tính lại vị trí tuyệt đối riêng. */
 .tabbar .tab-home{display:flex;flex-direction:column;align-items:center;position:relative;top:-15px}
-.tabbar .tab-home-btn{appearance:none;-webkit-appearance:none;width:52px;height:52px;border-radius:50%;border:4px solid var(--navy);background:linear-gradient(160deg,var(--gold),var(--gold-soft));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(15,42,61,.35);cursor:pointer}
-.tabbar .tab-home-btn svg{width:24px;height:24px;stroke:var(--navy);stroke-width:2}
+.tabbar .tab-home-btn{appearance:none;-webkit-appearance:none;width:52px;height:52px;border-radius:50%;border:4px solid #2B1B10;background:linear-gradient(160deg,var(--gold),var(--gold-soft));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(15,42,61,.35);cursor:pointer}
+.tabbar .tab-home-btn svg{width:24px;height:24px;stroke:#2B1B10;stroke-width:2}
 .tabbar .tab-home-btn:active{transform:scale(.94)}
 .tabbar .tab-home span{margin-top:3px;font-size:10.5px;color:var(--sb-txt-dim)}
 .tabbar .tab-home.active span{color:var(--gold)}
