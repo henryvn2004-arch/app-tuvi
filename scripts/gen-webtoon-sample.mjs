@@ -406,6 +406,23 @@ A small cream-and-orange cat is curled up asleep near the books. A small warm oi
 Warm wooden tones throughout, soft lamp light, cozy and quiet mood, evening atmosphere.
 Leave a large open area of plain, softly lit wall or empty space in the upper-left third of the frame — no shelves, scrolls or clutter there — so hook text can be placed over it later.`),
   },
+
+  // Henry 2026-09-16: thêm KHÁCH rõ mặt — "chị gái tầm 30 tuổi đang ngồi
+  // nghe rất chăm chú" — khác bản làng (phụ nữ quay lưng, không rõ mặt) và
+  // bản thư phòng gốc (không có khách). Giữ nguyên bối cảnh thư phòng vừa
+  // duyệt, thêm khách ngồi ĐỐI DIỆN, rõ mặt, biểu cảm chăm chú — không phải
+  // trang phục làng quê như Minh Bảo (khách là NGƯỜI HIỆN ĐẠI đến xem, đối
+  // lập có chủ ý với không gian cổ của Minh Bảo).
+  banerLasoIndoorGuestV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Redraw ONLY the boy from the provided image seated at a low wooden desk inside a cozy traditional study room, on the right side of the frame. Remove the hat for this indoor scene (hang it on a peg nearby if natural). A long scroll lies open flat on the desk between him and the guest, showing a faint circular chart divided into twelve sections with a few soft glowing dots — no readable text, letters or symbols on it. One of his hands points gently at a section of the chart; he looks up toward the guest with a warm, confident little smile, mid-explanation. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
+Add a second figure seated across the low desk, facing him and the viewer at a three-quarter angle: a woman in her early thirties, gentle friendly face clearly visible, simple modern casual outfit (soft blouse or sweater, no traditional robe — she is a present-day visitor, a deliberate contrast to Minh Bảo's old-fashioned study), sitting attentively with a focused, listening expression, leaning slightly toward the scroll, hands resting together in her lap or near the desk.
+Behind them on the wall, a large hanging scroll displays a soft circular astrological diagram with faint dot-and-line patterns — no readable text or symbols. A short stack of old bound books sits on a low shelf to one side, spines and covers completely blank — no text or symbols anywhere on them. A small cream-and-orange cat is curled up asleep nearby. A small warm oil lamp glows on the desk, its light the brightest point in the frame.
+Warm wooden tones throughout, soft lamp light, cozy and quiet mood, evening atmosphere.
+Leave a modest open area of plain, softly lit wall in the upper portion of the frame — no shelves or clutter there — so hook text can be placed over it later.`),
+  },
 };
 
 // ── chạy ───────────────────────────────────────────────────────────────────
