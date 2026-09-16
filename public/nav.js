@@ -1,4 +1,4 @@
-// nav.js — Shared navigation component v18 (footer: navy #0A1D2B → nâu espresso #2B1B10, đổi HUE thật chứ không chỉ đổi độ sáng)
+// nav.js — Shared navigation component v19 (footer: bỏ FT_SIGN_ICON — hình SVG vẽ tay bằng code, chỉ giữ chữ ký chữ)
 (function () {
   var path = window.location.pathname;
 
@@ -375,12 +375,6 @@
     }
   }
 
-  // Chữ ký chân trang — trang trí thuần tuý, không phải icon chức năng nên
-  // không nằm trong bảng ICONS dùng chung. Định nghĩa SỚM (cùng lý do
-  // footerCss ở trên): injectFooter() dùng biến này, và footer-only mode gọi
-  // injectFooter() TRƯỚC khi chạm tới code full-mode phía dưới.
-  var FT_SIGN_ICON = '<svg viewBox="0 0 120 36" width="84" height="25" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="90" cy="10" r="7" fill="currentColor" stroke="none" opacity=".85"/><path d="M2 32 L26 12 L40 24 L60 6 L78 22 L96 32 Z" opacity=".8"/></svg>';
-
   // ── CHẾ ĐỘ CHỈ-ICON ────────────────────────────────────────────
   // 27 trang shell và 2 trang admin CỐ Ý không nạp nav.js: nav.js tự chèn thanh
   // nav lên đầu <body>, mà mấy trang đó có chrome riêng. Hệ quả là chúng không
@@ -592,7 +586,6 @@
   // ── Footer ────────────────────────────────────────────────────
   // Cấu trúc khớp 2 dropdown đang chạy thật trên nav (Khám phá / Cẩm nang):
   // cột "Công Cụ"/"Tra Cứu" trỏ hub (đọc dữ liệu), không liệt kê tool lẻ nữa.
-  // CSS + FT_SIGN_ICON đã chuyển lên ĐẦU file (cạnh `css`) — xem ghi chú ở đó.
   function ftItem(href, iconKey, label) {
     return '<a class="ft-item" href="' + href + '"><span class="ft-item-ic">' + (ICONS[iconKey] || '') + '</span>' + label + '</a>';
   }
@@ -642,7 +635,7 @@
       + '<span class="ft-sep">·</span><a href="/huong-dan-thanh-toan.html">Thanh Toán</a>'
       + '<span class="ft-sep">·</span><a href="/mien-tru-trach-nhiem.html">Miễn Trừ Trách Nhiệm</a>'
       + '</div>'
-      + '<div class="ft-sign">' + FT_SIGN_ICON + '<span>Tri mệnh nhi hành — vô ưu vô hoặc</span></div>'
+      + '<div class="ft-sign"><span>Tri mệnh nhi hành — vô ưu vô hoặc</span></div>'
       + '</div>'
       + '<div class="ft-disclaimer">Nội dung luận giải mang tính tham khảo, không thay thế tư vấn chuyên môn. <a href="/mien-tru-trach-nhiem.html" style="color:inherit;text-decoration:underline">Xem chi tiết</a>.</div>'
       + '</div></footer>';
