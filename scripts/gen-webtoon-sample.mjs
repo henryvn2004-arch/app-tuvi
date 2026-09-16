@@ -483,6 +483,21 @@ Leave a modest open area of plain, softly lit wall in the upper portion of the f
   // `tuong-hop` — xem hợp tuổi) dùng LẠI banerVoChongV2 đã duyệt (2 khách),
   // không vẽ thêm — đúng nhóm chứa tool 2 người.
 
+  // Nhóm còn sót lại — Bát Tự/Tử Bình (tu-binh). Cùng "họ" với laso (tính
+  // vận từ ngày sinh) nên phân biệt bằng ĐẠO CỤ (4 thẻ tre Tứ Trụ, không
+  // phải cuộn lá số) + trang phục/tông màu, không cần đổi hẳn không khí.
+  banerTuBinhV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Use the boy from the provided image as Minh Bảo, but make him a SECONDARY figure this time — off to one side of the room, arranging four small smooth wooden blocks into his own little row, mimicking the old man's gesture, focused and pleased with himself, not part of the conversation nearby. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
+The MAIN FOCUS of the scene is a different character: an elderly Vietnamese man in his seventies, full white hair and a short trimmed white beard, a warm dignified "phúc hậu" expression, wearing a simple dark forest-green traditional Vietnamese áo the — old-fashioned in style, visually distinct in color from other elderly men in the set. He sits at a low wooden table, carefully arranging four tall bamboo slips upright in a row side by side (representing the Four Pillars), one hand placing a small round yin-yang token beside them.
+Facing him across the table, a woman in her early thirties sits attentively, simple modern casual outfit, watching the bamboo slips with a focused, curious expression.
+Setting: a quiet study room — a small plain tapestry with a faint bagua (eight-trigram) circular pattern on the wall behind him (no readable text or symbols), a stack of blank-spined books on a low shelf, soft warm daylight through a window.
+Minh Bảo and his wooden blocks form a small charming vignette off to the side, visually separate from the old man and his guest.
+Leave a modest open area of plain, softly lit wall in the upper portion of the frame — no clutter there — so hook text can be placed over it later.`),
+  },
+
   banerKinhDichV2: {
     size: '1536x1024',
     from: 'mascotV2.png',
