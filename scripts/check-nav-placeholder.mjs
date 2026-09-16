@@ -20,7 +20,9 @@
  * chính `nav.js` bơm vào lúc chạy, tức nó cũng chưa có ở lần vẽ đầu.
  *
  * Kiểm trên MỌI trang có `<script src="/nav.js">` KHÔNG mang `data-icons-only`
- * (trang shell dùng cờ đó và nav.js return sớm, không dựng nav bar):
+ * hay `data-footer-only` (cả hai cờ đều return SỚM trong nav.js, trước khi
+ * chạm code dựng `<nav class="topnav">` — trang chủ webtoon dùng cờ sau để
+ * chỉ lấy footer mà không chồng nav lên sidebar/ws-top của shell.js):
  *   1. có đúng MỘT `#nav-ph`
  *   2. `#nav-ph` khai `height:60px` bằng inline style
  *   3. thẻ `nav.js` nằm trong `<head>` thì PHẢI có `defer` — không thì nav.js
@@ -58,7 +60,7 @@ let checked = 0;
 for (const p of files) {
   const s = readFileSync(p, 'utf8');
   const tag = s.match(/<script[^>]*src="\/nav\.js[^"]*"[^>]*>/);
-  if (!tag || /data-icons-only/.test(tag[0])) continue; // không dựng nav bar
+  if (!tag || /data-icons-only|data-footer-only/.test(tag[0])) continue; // không dựng nav bar
   checked++;
   const rel = p.slice(p.indexOf('public/'));
 
