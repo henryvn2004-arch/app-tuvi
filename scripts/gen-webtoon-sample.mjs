@@ -138,6 +138,29 @@ Left to right:
 No frames, no borders, no dividing lines between them.`),
   },
 
+  // Homepage v3 — Henry gửi mockup tay (hero cưỡi trâu giữa cảnh núi+nắng+
+  // chim, không sidebar/rail). Hai bức composite NHÂN VẬT + CẢNH, khác
+  // `mascot` (cảnh tre gần, không có núi/nắng) và khác `hero` (cảnh không
+  // người). Neo vào mascot.png để giữ đúng khuôn mặt/áo/trâu đã duyệt.
+  heroScene: {
+    size: '1536x1024',
+    from: 'mascot.png',
+    prompt:
+      build(`Take the boy riding the water buffalo from the provided image and repaint him into a wider, more open landscape. Keep him, his conical hat, indigo tunic, the bamboo stick and the buffalo EXACTLY as shown — same character, same pose, no redesign.
+Replace the close-up bamboo grove background with: soft layered ink-wash mountains far in the background on the left, a warm golden sun with a small flock of birds flying in a diagonal formation in the open sky on the right, and a tiny cluster of tiled-roof village houses nestled in the mid-ground.
+Leave a large area of open pale sky in the upper-right third of the image with nothing in it — no birds, no mountains, no houses there — so text and a speech bubble can be placed over it later.
+Wide horizontal composition, the buffalo walking gently toward the right side of the frame.`),
+  },
+  dailyScene: {
+    size: '1536x1024',
+    from: 'mascot.png',
+    prompt:
+      build(`Redraw ONLY the boy from the provided image standing on the ground next to the buffalo, in a cheerful mid-step walking pose, holding a small blank rolled bamboo scroll in both hands in front of his chest as if about to show it. Keep his face, hair, conical hat and indigo tunic EXACTLY as shown — same character.
+The scroll must be completely BLANK — no text, no writing, no symbols on it.
+Background: a few small tiled-roof village houses and soft rolling hills, gentle daylight, calm mood.
+Leave open empty space above and to one side of him so a speech bubble and a small card can be placed there later.`),
+  },
+
   // §8.5 — "a darker version of the SAME style".
   //
   // 🪤 Vòng 1 vẽ rời → ra tranh thuỷ mặc Tàu cổ điển, KHÁC hẳn bức `hero`, và
