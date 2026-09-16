@@ -63,6 +63,56 @@ Leave generous empty space; the composition must read clearly at 400px wide on a
 
 const build = (body) => `${STYLE_LOCK}\n\n${PALETTE}\n\nSUBJECT:\n${body}\n\n${GUARDS}`;
 
+// ════════════════════════════════════════════════════════════════════════
+// STYLE LOCK V2 — Henry gửi guideline THỨ HAI (2026-09-16, cũng do ChatGPT
+// soạn — "MINH BẢO IMAGE ENGINE"), chê bộ ảnh V1 chưa đủ cute/Ghibli. Chép
+// NGUYÊN VĂN "STYLE" + "CHARACTER" của guideline này, KHÔNG trộn với
+// STYLE_LOCK ở trên — để so sánh cạnh nhau, không ai đè ai cho tới khi
+// Henry chốt bản nào. `build2()` dùng riêng cho các mẫu `*V2`.
+// ════════════════════════════════════════════════════════════════════════
+const STYLE_LOCK_V2 = `minimalist Vietnamese webtoon illustration, soft warm color palette (beige, brown, muted green), clean thin line art, soft shading, no harsh contrast, cute chibi proportion (big head ~60%, small body), peaceful countryside atmosphere, slightly nostalgic, gentle lighting, flat + light gradient shading, highly consistent character design, no hyper realism, no anime glossy rendering`;
+
+const CHARACTER_DNA_V2 = `Minh Bảo, Vietnamese boy, 7 years old, chibi style, round face, soft cheeks, small nose, big brown eyes, messy short dark hair, innocent and calm expression.
+Outfit (default): brown rural shirt, dark rolled pants, barefoot OR simple sandals, straw hat (nón lá) optional, small woven bag.
+Signature: often holding stick / book / grass / brush, relaxed posture, peaceful vibe.`;
+
+const NEGATIVE_V2 = `realistic face, 3D render, western style, anime glossy, over-detailed, messy background, text artifacts, extra fingers, Chinese characters, captions, letters`;
+
+/**
+ * `mood`/`action`/`scene`/`env`/`light` ghép đúng khung "PROMPT ENGINE
+ * TEMPLATE" của guideline — KHÔNG viết lại prompt tự do mỗi lần (đúng mục
+ * 6 "không rewrite prompt mỗi lần").
+ */
+const build2 = ({
+  mood,
+  action,
+  scene,
+  env,
+  light,
+}) => `A ${mood} minimalist Vietnamese webtoon illustration.
+
+Character:
+${CHARACTER_DNA_V2}
+${action}
+
+Scene:
+${scene}
+
+Environment details:
+${env}
+
+Lighting:
+${light}
+
+Composition:
+centered character, clean background, lots of negative space, soft depth. No text, letters or captions anywhere in the image.
+
+STYLE:
+${STYLE_LOCK_V2}
+
+Negative:
+${NEGATIVE_V2}`;
+
 const SAMPLES = {
   // Prompt nhân vật — chép từ guideline §8.3, thêm ràng buộc nhận diện để các
   // bức sau tái dựng được cùng một cậu bé.
@@ -159,6 +209,48 @@ Wide horizontal composition, the buffalo walking gently toward the right side of
 The scroll must be completely BLANK — no text, no writing, no symbols on it.
 Background: a few small tiled-roof village houses and soft rolling hills, gentle daylight, calm mood.
 Leave open empty space above and to one side of him so a speech bubble and a small card can be placed there later.`),
+  },
+
+  // Test STYLE_LOCK_V2 — đúng ví dụ "Chăn trâu" trong guideline thứ hai,
+  // KHÔNG neo `from` (thử xem chữ mô tả CHARACTER_DNA_V2 một mình có đủ
+  // sức vẽ ra một Minh Bảo nhất quán hay không, trước khi quyết có đổi
+  // ảnh neo mascot.png hiện tại sang bản chibi đầu-to hơn không).
+  chanTrauV2: {
+    size: '1536x1024',
+    prompt: build2({
+      mood: 'joyful',
+      action: 'Minh Bảo sitting on a water buffalo, smiling, holding a small stick.',
+      scene: 'rice field countryside, wide open paddies',
+      env: 'a few birds in the sky, small tiled-roof houses in the distance, a narrow river',
+      light: 'golden hour, warm low sunlight',
+    }),
+  },
+
+  // Homepage v3 — 3 thẻ "Khám phá thêm" đang DÙNG LẠI heroScene/dailyScene
+  // (Henry bắt lỗi: "gen nhiều hình context khác nhau đi... đừng để hình
+  // trùng lắp"). Mỗi thẻ một CẢNH riêng, đúng nội dung thẻ đó, không chữ.
+  libraryScene: {
+    size: '1536x1024',
+    from: 'mascot.png',
+    prompt:
+      build(`Redraw ONLY the boy from the provided image sitting cross-legged on a wooden floor, surrounded by tall stacks of old bound books and rolled bamboo scrolls on simple wooden shelves behind him. He holds one open book on his lap, looking down at it with quiet curiosity. Keep his face, hair, conical hat and indigo tunic EXACTLY as shown — same character (he may set the hat beside him if more natural for sitting indoors, but keep the same hair and face).
+The books and scrolls must be completely BLANK on their spines and pages — no text, no writing, no symbols anywhere.
+Background: a small quiet study nook with warm wooden tones, soft light from one side. No buffalo, no outdoor landscape.`),
+  },
+  articlesScene: {
+    size: '1536x1024',
+    from: 'mascot.png',
+    prompt:
+      build(`Redraw ONLY the boy from the provided image sitting under a large shady tree, leaning against the trunk, writing on a small wooden tablet resting on his knees with a bamboo brush. Keep his face, hair, conical hat and indigo tunic EXACTLY as shown — same character.
+The tablet must be completely BLANK — no text, no writing, no symbols on it.
+Background: a peaceful garden corner with a few soft green plants and a low stone, gentle daylight. No buffalo, no wide landscape, no village.`),
+  },
+  communityScene: {
+    size: '1536x1024',
+    from: 'mascot.png',
+    prompt:
+      build(`Redraw ONLY the boy from the provided image sitting together with two or three other village children of similar chibi style around a small warm lantern on the ground at night, all smiling and chatting. Keep his face, hair, conical hat and indigo tunic EXACTLY as shown — same character; the other children should look distinct from him (different hair, simple different-colored tunics) but drawn in the exact same soft chibi watercolor style.
+Background: a calm night sky with a soft moon and a few stars, silhouettes of bamboo far behind. The lantern glow is the brightest point in the frame. No text, no signs, no banners anywhere.`),
   },
 
   // §8.5 — "a darker version of the SAME style".
