@@ -1,4 +1,4 @@
-// nav.js — Shared navigation component v16 (corner-Bảo mascot → style V2 chibi)
+// nav.js — Shared navigation component v17 (footer: navy #0A1D2B → ink #16232C, khớp tông cream/gold trang chủ mới)
 (function () {
   var path = window.location.pathname;
 
@@ -328,7 +328,7 @@
   // (index-sample-v2.html) hiện icon email khổng lồ không màu, chữ
   // "undefined" lộ ra vì FT_SIGN_ICON cũng ăn theo lỗi thứ tự tương tự.
   var footerCss = [
-    '.site-footer{background:#0A1D2B;color:rgba(255,255,255,0.5);padding:44px 40px 22px;margin-top:auto}',
+    '.site-footer{background:#16232C;color:rgba(255,255,255,0.5);padding:44px 40px 22px;margin-top:auto}',
     '.ft-body{max-width:1100px;margin:0 auto}',
     '.ft-top{display:grid;grid-template-columns:1.5fr auto 1fr 1fr 1fr;gap:0}',
     '.ft-top .ft-brand{padding-right:32px}',
