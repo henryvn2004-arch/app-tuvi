@@ -68,7 +68,8 @@ const SAMPLES = {
   // bức sau tái dựng được cùng một cậu bé.
   mascot: {
     size: '1024x1024',
-    prompt: build(`A chibi Vietnamese boy around 8 years old wearing a traditional conical hat (nón lá), sitting on the back of a water buffalo, smiling gently, holding a small bamboo stick.
+    prompt:
+      build(`A chibi Vietnamese boy around 8 years old wearing a traditional conical hat (nón lá), sitting on the back of a water buffalo, smiling gently, holding a small bamboo stick.
 Old Vietnamese countryside: rice paddies, a bamboo grove, a village gate far behind, peaceful late-afternoon light.
 CHARACTER LOCK — keep these exact traits in every future image: round face, soft dark hair peeking under the hat, large expressive dark eyes, a simple indigo-brown tunic, bare feet, a small warm smile. Full body, centered, facing the viewer at a slight three-quarter angle.`),
   },
@@ -77,7 +78,8 @@ CHARACTER LOCK — keep these exact traits in every future image: round face, so
   // Vẽ rời 4 lượt thì gpt-image trôi mặt, đã cắn ở bộ tool-avatar.
   expressions: {
     size: '1536x1024',
-    prompt: build(`A character expression sheet: the SAME chibi Vietnamese boy repeated four times in a single horizontal row, evenly spaced on a plain cream background, bust-up portraits only.
+    prompt:
+      build(`A character expression sheet: the SAME chibi Vietnamese boy repeated four times in a single horizontal row, evenly spaced on a plain cream background, bust-up portraits only.
 He wears a conical hat and an indigo-brown tunic; round face, soft dark hair, large expressive dark eyes.
 Left to right, the four expressions are:
 1. lightly cheerful and welcoming, eyes bright, small open smile
@@ -90,14 +92,16 @@ All four must be unmistakably the same character with identical proportions, hai
   // §8.4
   hero: {
     size: '1536x1024',
-    prompt: build(`A peaceful East Asian landscape: layered ink-wash mountains fading into soft haze, a small Vietnamese village of tiled roofs nestled at their foot, rice terraces, a flock of birds crossing a wide pale sky, warm low sunlight.
+    prompt:
+      build(`A peaceful East Asian landscape: layered ink-wash mountains fading into soft haze, a small Vietnamese village of tiled roofs nestled at their foot, rice terraces, a flock of birds crossing a wide pale sky, warm low sunlight.
 No human figures. Wide, calm, spiritual mood with a large area of open sky in the upper third that text can sit over.`),
   },
 
   // §8.5
   paywall: {
     size: '1536x1024',
-    prompt: build(`The same East Asian mountain landscape at dusk, quieter and more mysterious: drifting mist between the ridges, the far mountains dissolving into deep blue-grey, a single soft warm glow of lantern light low in the valley.
+    prompt:
+      build(`The same East Asian mountain landscape at dusk, quieter and more mysterious: drifting mist between the ridges, the far mountains dissolving into deep blue-grey, a single soft warm glow of lantern light low in the valley.
 No human figures. Still watercolor and still airy — deeper in tone but never harsh, never black.`),
   },
 };
@@ -137,7 +141,14 @@ for (const name of pick) {
   const r = await fetch('https://api.openai.com/v1/images/generations', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${KEY}` },
-    body: JSON.stringify({ model: MODEL, prompt, size, quality: QUALITY, output_format: 'png', n: 1 }),
+    body: JSON.stringify({
+      model: MODEL,
+      prompt,
+      size,
+      quality: QUALITY,
+      output_format: 'png',
+      n: 1,
+    }),
   });
 
   if (!r.ok) {
