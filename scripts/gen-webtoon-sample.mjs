@@ -423,6 +423,24 @@ Behind them on the wall, a large hanging scroll displays a soft circular astrolo
 Warm wooden tones throughout, soft lamp light, cozy and quiet mood, evening atmosphere.
 Leave a modest open area of plain, softly lit wall in the upper portion of the frame — no shelves or clutter there — so hook text can be placed over it later.`),
   },
+
+  // Henry 2026-09-16: đổi vai — "ông lão bạc phơ xem lá số cho chị gái chăm
+  // chú nghe, còn Minh Bảo thì ngồi chơi với con mèo". Ông lão là nhân vật
+  // MỚI, KHÔNG có ảnh neo (chưa từng vẽ) — tả bằng chữ, chấp nhận độ trôi
+  // nhận diện cao hơn Minh Bảo (chỉ là bản thử, không phải nhân vật lặp lại
+  // nhiều nơi như Minh Bảo nên chưa cần neo riêng). Minh Bảo lùi thành nhân
+  // vật PHỤ — vẫn neo mascotV2.png để giữ đúng nhận diện.
+  banerLasoOldManV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Use the boy from the provided image as Minh Bảo, but make him a SECONDARY figure this time — off to one side of the room, sitting on the floor near a sleeping-turned-awake cream-and-orange cat, gently playing with it (dangling a bit of string or scratching behind its ears), cheerful and relaxed, clearly enjoying himself and not part of the fortune-reading conversation nearby. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
+The MAIN FOCUS of the scene is a different character: an elderly sage with long flowing snow-white hair and a full snow-white beard, wearing a simple long traditional robe, seated cross-legged at a low wooden desk in the center-right of the frame. A long scroll lies open flat on the desk, showing a faint circular chart divided into twelve sections with a few soft glowing dots — no readable text, letters or symbols on it. He points gently at the chart with one hand, calm and wise expression.
+Facing him across the desk, a woman in her early thirties sits attentively, simple modern casual outfit (soft blouse or sweater), leaning in slightly, listening closely with a focused, engaged expression.
+Setting: the same cozy traditional study room — a large hanging scroll on the wall behind the desk showing a faint circular astrological diagram (no readable text), a short stack of old bound books on a low shelf with completely blank spines, a small warm oil lamp glowing on the desk as the brightest point in the frame.
+Minh Bảo and the cat form a small charming vignette off to the side, visually separate from the old sage and the woman at the desk.
+Leave a modest open area of plain, softly lit wall in the upper portion of the frame — no shelves or clutter there — so hook text can be placed over it later.`),
+  },
 };
 
 // ── chạy ───────────────────────────────────────────────────────────────────
