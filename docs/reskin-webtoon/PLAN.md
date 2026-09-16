@@ -106,14 +106,14 @@ vẫn là giọng trẻ con.
 Mỗi sprint: **cổng duyệt sample trước, làm thật sau.** Sprint chỉ đóng khi CI
 xanh + Henry gật.
 
-### 📊 TIẾN ĐỘ (cập nhật 2026-09-16, sau vòng gen expressions/poses V2)
+### 📊 TIẾN ĐỘ (cập nhật 2026-09-16, sau vòng wire Minh Bảo vào rail)
 
 | Sprint | Trạng thái | Đã làm | Còn thiếu |
 |---|---|---|---|
 | 0 — Nền | ✅ Xong | `theme.css` gom 40 file, `check:theme` xanh | — |
-| 1 — Character Bible | ⚠️ Ảnh xong, chưa wire | mascot/hero/corner/library/articles/community **V2** đã lên site; **expressions ×4 + poses ×4 V2 vừa gen xong, đã tách 8 ảnh riêng (nền trong suốt), đang chờ Henry duyệt** | Chưa commit/wire 8 ảnh vào trang nào (đợi Sprint 3); `paywall` còn neo ảnh V1 (`hero.png`), chưa gen lại theo V2 |
+| 1 — Character Bible | ⚠️ Ảnh xong, 4/8 đã wire | mascot/hero/corner/library/articles/community **V2** đã lên site; expressions ×4 + poses ×4 V2 đã duyệt, tách 8 ảnh riêng, **commit vào `public/mascot/`** — `expr-vui-v2.webp` đã wire vào rail-empty | 4 pose CHƯA có chỗ dùng (không có "khung minh hoạ" nào đang trống trên `/app/*` phù hợp — `.intro-card` là hệ banner nhóm cổ pháp khác); `paywall` còn neo ảnh V1 (`hero.png`), chưa gen lại theo V2 |
 | 2 — Chrome dùng chung | ⚠️ Phần lớn xong | `nav.js`: palette navy/gold, 102 icon SVG bo tròn nét, corner-Bảo trong topnav (đã cập nhật sang **V2** `corner-v2.webp` khi đổi style), **footer đổi màu nâu espresso khớp tông trang chủ mới** (đợt sửa vừa rồi) | 🔴 Henry: 102 icon hiện tại (Lucide bo nét) chưa đủ khớp Ghibli/chibi — cần **gen lại bằng ảnh**, không còn thuần SVG (xem ghi chú ở Sprint 2 đầy đủ) |
-| 3 — App shell (53 trang `/app/*`) | ⚠️ Chỉ làm phần khung | `shell.css` đổi palette + bo góc thẻ + shadow mềm — palette khớp `theme.css`/trang chủ (`--navy #0F2A3D`, `--gold #C8A96A`) | **Chưa có bong bóng thoại Minh Bảo trong rail (§3.3)**, **chưa map biểu cảm theo trang (§3.4)** — kẹt vì Sprint 1 chưa có bộ expressions V2; **`tuvi-form.js` chưa đổi giọng "Bảo/bạn"** (§1.1/§2, còn nhãn form cũ) |
+| 3 — App shell (53 trang `/app/*`) | ⚠️ Khung + rail-empty xong | `shell.css` đổi palette + bo góc thẻ + shadow mềm; **Minh Bảo (`expr-vui-v2`) đã vào `.rail-empty`** (trạng thái trước khi có lá số) kèm câu chào giọng §2, thay avatar "thầy" cũ ở đúng chỗ đó — KHÔNG đụng `.rail-h`/`.rail-ava` (hệ chọn thầy luận giải, khác Minh Bảo, vẫn hoạt động bình thường) | Rail SAU khi có lá số (đang chat) chưa có Minh Bảo — mới phủ trạng thái RỖNG; chưa map biểu cảm khác nhau theo trang (§3.4, mới dùng đúng 1/4 biểu cảm); **`tuvi-form.js` chưa đổi giọng "Bảo/bạn"** (§1.1/§2 — quyết định RIÊNG, còn chờ Henry gật vì đụng cấu trúc form) |
 | 4 — Homepage (`/`) | ✅ Xong, đang polish | Dựng lại theo 2 mockup Henry gửi, ảnh V2 riêng cho từng khối (hero/daily/library/articles/community), SEO đầy đủ, wire vào route `/`, vá LCP+contrast+responsive-images (Lighthouse xanh), vá màu + bỏ icon SVG thô ở footer theo phản hồi Henry | — (đang chờ Henry duyệt lần cuối) |
 | 5 — 52 tool avatar | ⬜ Chưa bắt đầu | — | Toàn bộ 52 avatar vẫn là art cũ (line-art vàng trên navy), chưa vẽ lại theo V2 |
 | 6 — 54 trang tool SEO | ⬜ Chưa bắt đầu | — | `tools/tools.css` + 13 trang `:root` riêng chưa đổi da |
