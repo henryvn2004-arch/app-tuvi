@@ -14,10 +14,20 @@
      ⇒ Cần chữ màu thương hiệu thì dùng bộ --heading / --tx-* bên dưới. Bộ đó
      có giá trị light TRÙNG KHÍT màu gốc (nên light mode không đổi một pixel)
      và có bản sáng ở dark. Dùng thẳng --navy làm chữ thì ở dark ra 1,04:1. */
-  --navy:#061A2E; --navy-2:#0A2540; --navy-3:#0D3B5E;
-  --gold:#C9A84C; --gold-soft:#7C5F26; --gold-lt:#F9F4EB;
-  --blue:#1455A4; --red:#C0392B; --green:#1E6B3C;
-  --heading:#061A2E; --tx-blue:#1455A4; --tx-red:#C0392B; --tx-green:#1E6B3C;
+  /* Bảng webtoon (Sprint 3, 2026-09) — cùng nguồn palette đã áp cho nav.js:
+     navy #061A2E→#0F2A3D · gold #C9A84C→#C8A96A (guideline §4.1) · navy-2/
+     navy-3 GIỮ NGUYÊN QUAN HỆ SÁNG DẦN với navy cũ (không phải số bịa), xem
+     docs/reskin-webtoon/PLAN.md. --gold-soft giữ ĐỦ TỐI để làm màu CHỮ trên
+     nền giấy — không dùng thẳng --gold (sáng) làm chữ, mất tương phản. */
+  --navy:#0F2A3D; --navy-2:#13354F; --navy-3:#164B6D;
+  --gold:#C8A96A; --gold-soft:#7C6942; --gold-lt:#F9F4EB;
+  /* --red/--green đổi theo guideline §4.1 (Secondary red/green) — làm DỊU CTA
+     và trạng thái "đã xong", đổi từ đỏ báo động/xanh lá bão hoà cũ sang tông
+     đất/xanh xám mềm hơn, khớp tinh thần "vui nhộn nhẹ nhàng" thay vì "cảnh
+     báo nghiêm trọng". Ảnh hưởng trực tiếp nút Gửi (.send) và CTA mở khoá
+     (.stm-btn) — cân nhắc lại nếu đo thấy tỉ lệ bấm giảm. */
+  --blue:#1455A4; --red:#C46A5E; --green:#7FA7A3;
+  --heading:#0F2A3D; --tx-blue:#1455A4; --tx-red:#C46A5E; --tx-green:#7FA7A3;
   /* Chữ kem trên thẻ NAVY CỐ ĐỊNH (.today-card giữ nguyên nền navy ở cả hai
      theme). CỐ Ý không khai lại ở dark — theo theme là chữ tối trên nền navy. */
   --gold-on-navy:#F9F4EB;
@@ -35,8 +45,8 @@
      mép phải viewport). Hai chỗ chép cùng một số 336px là hẹn ngày trôi khỏi
      nhau; đổi bề rộng rail thì chỉ sửa đúng một dòng này. */
   --rail-w:336px;
-  --shadow:0 1px 2px rgba(6,26,46,.04),0 4px 16px rgba(6,26,46,.06);
-  --shadow-lg:0 24px 60px rgba(6,26,46,.28),0 6px 18px rgba(6,26,46,.16);
+  --shadow:0 1px 2px rgba(15,42,61,.04),0 4px 16px rgba(15,42,61,.06);
+  --shadow-lg:0 24px 60px rgba(15,42,61,.28),0 6px 18px rgba(15,42,61,.16);
 }
 :root[data-theme="dark"]{
   --text:#e9e6df; --text-mid:#b7b3a9; --text-lt:#8a867c; --ink:#e9e6df; --ink-mid:#b7b3a9; --ink-lt:#8a867c;
@@ -58,7 +68,7 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 /* ── SIDEBAR ── */
 .sb{background:linear-gradient(180deg,var(--navy),var(--navy-2));color:var(--sb-txt);display:flex;flex-direction:column;overflow-y:auto}
 .sb::-webkit-scrollbar{width:8px}.sb::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:8px}
-.seal{width:34px;height:34px;border-radius:7px;object-fit:cover;border:1px solid rgba(201,168,76,.45);flex:0 0 auto;display:block}
+.seal{width:34px;height:34px;border-radius:7px;object-fit:cover;border:1px solid rgba(200,169,106,.45);flex:0 0 auto;display:block}
 /* Hồ sơ — đầu sidebar trên MỌI trang (2026-09, thay `.sb-brand`/`.sb-foot` cũ):
    trước đây tên hiệu lặp lại y hệt `.ws-top` của Trang chủ (Henry chỉ ra qua
    ảnh chụp mobile), còn hồ sơ cũ lại chỉ nằm ở ĐÁY. Gộp về một khối, đưa lên
@@ -86,19 +96,19 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .item{display:flex;align-items:center;gap:10px;padding:7px 8px;margin:1px 0;border-radius:7px;color:var(--sb-txt);cursor:pointer;font-size:13px;position:relative;text-decoration:none;width:100%;box-sizing:border-box}
 button.item{border:none;background:none;font:inherit;text-align:left}
 .item:hover{background:rgba(255,255,255,.05);color:#fff}
-.item.active{background:linear-gradient(90deg,rgba(201,168,76,.16),rgba(201,168,76,.02));color:#fff;font-weight:500}
+.item.active{background:linear-gradient(90deg,rgba(200,169,106,.16),rgba(200,169,106,.02));color:#fff;font-weight:500}
 .item.active::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:var(--gold)}
 .item.danger:hover{background:rgba(192,57,43,.14);color:#f0b2a8}
 .item.danger:hover .ic{opacity:.9;color:#f0b2a8}
 .ic{width:15px;height:15px;flex:0 0 auto;opacity:.5}
 .item:hover .ic,.item.active .ic{opacity:.9}.item.active .ic{color:var(--gold)}
 .pill{margin-left:auto;font-size:9.5px;padding:1px 6px;border-radius:20px;background:rgba(30,107,60,.22);color:#6fce97}
-.pill.cost{background:rgba(201,168,76,.16);color:var(--gold)}
+.pill.cost{background:rgba(200,169,106,.16);color:var(--gold)}
 /* Chấm nhắc "Khởi Hành" chưa xong cạnh mục Tổng quan — xem khoiHanhPending()
    trong shell.js. Tự pulse nhẹ để bắt mắt mà không cần chữ, đứng gọn cạnh
    nhãn nên không phá bố cục có/không có .pill. */
 .sb-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-left:6px;flex:0 0 auto;animation:sbDotPulse 1.8s ease-in-out infinite}
-@keyframes sbDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.45)}50%{box-shadow:0 0 0 4px rgba(201,168,76,0)}}
+@keyframes sbDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(200,169,106,.45)}50%{box-shadow:0 0 0 4px rgba(200,169,106,0)}}
 .ava{width:29px;height:29px;border-radius:50%;background:linear-gradient(135deg,var(--gold-soft),var(--gold));display:flex;align-items:center;justify-content:center;color:#2a1e05;font-weight:700;font-size:13px;flex:0 0 auto}
 .sb-spacer{flex:1}
 .sb-foot-grp{padding:8px 8px;border-top:1px solid var(--sb-line)}
@@ -117,7 +127,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 /* Icon cố định cạnh tên tool trên `.ws-top` — xem `mountToolIcon()` trong
    shell.js. Icon (không phải ảnh minh hoạ .intro-avatar): ở cỡ 32-40px một
    icon đơn sắc đọc rõ hơn hẳn ảnh 1024×1024 thu nhỏ hết chi tiết. */
-.ws-avatar{width:40px;height:40px;border-radius:9px;flex-shrink:0;background:radial-gradient(circle at 30% 25%,var(--navy-3),var(--navy));border:1px solid rgba(201,168,76,.4);display:flex;align-items:center;justify-content:center;color:var(--gold)}
+.ws-avatar{width:40px;height:40px;border-radius:9px;flex-shrink:0;background:radial-gradient(circle at 30% 25%,var(--navy-3),var(--navy));border:1px solid rgba(200,169,106,.4);display:flex;align-items:center;justify-content:center;color:var(--gold)}
 .ws-avatar svg{width:22px;height:22px}
 .ws-title b{font-family:var(--serif);font-size:17px;font-weight:600;display:block}
 .ws-title span{font-size:12px;color:var(--text-lt)}
@@ -195,7 +205,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 /* ── RAIL ── */
 .rail{background:var(--white);border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
 .rail-h{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
-.rail-ava{width:32px;height:32px;border-radius:8px;object-fit:cover;border:1px solid rgba(201,168,76,.4);flex:0 0 auto;display:block;cursor:pointer}
+.rail-ava{width:32px;height:32px;border-radius:8px;object-fit:cover;border:1px solid rgba(200,169,106,.4);flex:0 0 auto;display:block;cursor:pointer}
 .rail-h b{font-size:13.5px;display:block;font-family:var(--serif)}
 .rail-h span{font-size:10.5px;color:var(--text-lt)}
 .rail-h .tools{margin-left:auto;display:flex;gap:4px}
@@ -207,7 +217,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .msg{font-size:13px;line-height:1.62;max-width:100%}
 .msg.u{align-self:flex-end;background:var(--navy);color:#eef2f6;padding:9px 12px;border-radius:12px 12px 3px 12px;max-width:86%}
 .msg.a{color:var(--text);display:flex;gap:8px;align-items:flex-start;max-width:100%}
-.msg-ava{width:24px;height:24px;border-radius:6px;object-fit:cover;flex:0 0 auto;margin-top:1px;border:1px solid rgba(201,168,76,.35)}
+.msg-ava{width:24px;height:24px;border-radius:6px;object-fit:cover;flex:0 0 auto;margin-top:1px;border:1px solid rgba(200,169,106,.35)}
 .msg-body{flex:1;min-width:0}
 .msg.a b,.msg.a strong{color:var(--text);font-weight:700}
 .msg.a p{margin-bottom:8px}
@@ -248,9 +258,9 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 @keyframes shBlink{0%,60%,100%{opacity:.3}30%{opacity:1}}
 
 /* ── COMMAND PALETTE ── */
-.cmdk-wrap{position:fixed;inset:0;z-index:50;display:none;align-items:flex-start;justify-content:center;padding-top:12vh;background:rgba(6,26,46,.42);backdrop-filter:blur(3px)}
+.cmdk-wrap{position:fixed;inset:0;z-index:50;display:none;align-items:flex-start;justify-content:center;padding-top:12vh;background:rgba(15,42,61,.42);backdrop-filter:blur(3px)}
 .cmdk-wrap.open{display:flex}
-.cmdk{width:min(640px,92vw);background:var(--white);border:1px solid var(--line-2);border-radius:14px;box-shadow:var(--shadow-lg);overflow:hidden;display:flex;flex-direction:column;max-height:66vh}
+.cmdk{width:min(640px,92vw);background:var(--white);border:1px solid var(--line-2);border-radius:20px;box-shadow:var(--shadow-lg);overflow:hidden;display:flex;flex-direction:column;max-height:66vh}
 .cmdk-in{display:flex;align-items:center;gap:11px;padding:15px 17px;border-bottom:1px solid var(--line)}
 .cmdk-in svg{width:18px;height:18px;color:var(--text-lt);flex:0 0 auto}
 .cmdk-in input{flex:1;border:none;outline:none;background:transparent;font-family:var(--sans);font-size:15.5px;color:var(--text)}
@@ -275,7 +285,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    xong một tool thì KHÔNG biết bấm vào đâu để quay lại Luận Đường) · Công cụ
    (sidebar) · Tài khoản. shell.js chèn #shell-tabbar vào body; chỉ hiện
    ≤900px; ẩn khi drawer/cmdk đang mở. Desktop KHÔNG đụng tới. ── */
-.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:49;grid-template-columns:1fr 1fr 72px 1fr 1fr;align-items:end;background:linear-gradient(180deg,var(--navy-2),var(--navy));border-top:1px solid rgba(201,168,76,.18);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(6,26,46,.22)}
+.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:49;grid-template-columns:1fr 1fr 72px 1fr 1fr;align-items:end;background:linear-gradient(180deg,var(--navy-2),var(--navy));border-top:1px solid rgba(200,169,106,.18);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(15,42,61,.22)}
 .tabbar .tab{appearance:none;-webkit-appearance:none;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;color:var(--sb-txt-dim);font-family:inherit;font-size:10.5px;line-height:1;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .tabbar .tab svg{width:22px;height:22px;display:block;stroke-width:1.7}
 .tabbar .tab.active{color:var(--gold)}
@@ -286,7 +296,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    khớp màu thương hiệu). `top:-15px` kéo nó lên khỏi hàng mà vẫn nằm trong
    `.tabbar` để không phải tính lại vị trí tuyệt đối riêng. */
 .tabbar .tab-home{display:flex;flex-direction:column;align-items:center;position:relative;top:-15px}
-.tabbar .tab-home-btn{appearance:none;-webkit-appearance:none;width:52px;height:52px;border-radius:50%;border:4px solid var(--navy);background:linear-gradient(160deg,var(--gold),var(--gold-soft));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(6,26,46,.35);cursor:pointer}
+.tabbar .tab-home-btn{appearance:none;-webkit-appearance:none;width:52px;height:52px;border-radius:50%;border:4px solid var(--navy);background:linear-gradient(160deg,var(--gold),var(--gold-soft));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(15,42,61,.35);cursor:pointer}
 .tabbar .tab-home-btn svg{width:24px;height:24px;stroke:var(--navy);stroke-width:2}
 .tabbar .tab-home-btn:active{transform:scale(.94)}
 .tabbar .tab-home span{margin-top:3px;font-size:10.5px;color:var(--sb-txt-dim)}
@@ -302,7 +312,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    trước khi có banner nhóm — `check-intro-card.mjs` vẫn bắt buộc thẻ này khớp
    `key` nên giữ trong HTML, ẩn hẳn bằng CSS bên dưới chứ không xoá. Toàn bộ
    49 trang box tĩnh giờ đều đã gắn `.intro-photo` (2026-09-14, vòng 5). */
-.intro-card{position:relative;overflow:hidden;background:linear-gradient(135deg,#F3E7C8,#FBF6E8);border:1px solid var(--gold-soft);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px;min-height:230px;display:flex;flex-direction:column;justify-content:flex-end}
+.intro-card{position:relative;overflow:hidden;background:linear-gradient(135deg,#F3E7C8,#FBF6E8);border:1px solid var(--gold-soft);border-radius:22px;box-shadow:var(--shadow);margin-bottom:16px;min-height:230px;display:flex;flex-direction:column;justify-content:flex-end}
 .intro-card .intro-avatar{display:none}
 .intro-card .intro-text{max-width:100%}
 /* Henry 2026-09-15 (vòng 10, "wording nhìn cho chuyên nghiệp"): tiêu đề đổi
@@ -394,8 +404,8 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .recent-item .ri-s{font-size:11px;color:var(--text-lt);flex:0 0 auto}
 
 /* ── MODAL CHIA SẺ PHIÊN ── */
-.sh-share-modal{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(6,26,46,.42);backdrop-filter:blur(3px)}
-.ssm-card{position:relative;width:min(440px,94vw);background:var(--white);border:1px solid var(--line-2);border-radius:14px;box-shadow:var(--shadow-lg);padding:20px 20px 18px}
+.sh-share-modal{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(15,42,61,.42);backdrop-filter:blur(3px)}
+.ssm-card{position:relative;width:min(440px,94vw);background:var(--white);border:1px solid var(--line-2);border-radius:20px;box-shadow:var(--shadow-lg);padding:20px 20px 18px}
 .ssm-x{position:absolute;top:10px;right:10px;width:26px;height:26px;border:none;background:transparent;color:var(--text-lt);font-size:18px;line-height:1;cursor:pointer;border-radius:6px}
 .ssm-x:hover{background:var(--paper-2);color:var(--text)}
 .ssm-t{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
@@ -412,10 +422,10 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .ssm-in.full{width:100%;box-sizing:border-box;resize:vertical}
 
 /* ── CTA "rủ người khác xem/thử" (dùng chung nhiều tool kết quả) ── */
-.compat-invite{margin:16px auto 0;max-width:420px;padding:12px 14px;border:1px solid var(--gold-soft);border-radius:10px;background:var(--paper-2);display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;text-align:left}
+.compat-invite{margin:16px auto 0;max-width:420px;padding:12px 14px;border:1px solid var(--gold-soft);border-radius:14px;background:var(--paper-2);display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;text-align:left}
 .compat-invite .ci-t{flex:1;min-width:180px;font-size:12.6px;color:var(--text-mid);line-height:1.5}
 
-.sam-card{position:relative;width:min(420px,94vw);max-height:82vh;display:flex;flex-direction:column;background:var(--white);border:1px solid var(--line-2);border-radius:14px;box-shadow:var(--shadow-lg);padding:20px 20px 14px}
+.sam-card{position:relative;width:min(420px,94vw);max-height:82vh;display:flex;flex-direction:column;background:var(--white);border:1px solid var(--line-2);border-radius:20px;box-shadow:var(--shadow-lg);padding:20px 20px 14px}
 .sam-rand{border:1px dashed var(--line-2);background:var(--paper);border-radius:9px;padding:9px 12px;font-size:12.5px;color:var(--text-mid);cursor:pointer;font-family:inherit;margin-bottom:12px;text-align:center}
 .sam-rand:hover{border-color:var(--gold-soft);color:var(--text)}
 .sam-list{overflow-y:auto;display:flex;flex-direction:column;gap:4px;margin:0 -6px;padding:0 6px}
@@ -429,14 +439,14 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .sam-chk{flex:0 0 auto;color:var(--gold)}
 
 /* ── Modal HẾT LƯỢNG (giọng thầy) — bật khi rail nhận 402, mời nạp để luận tiếp ── */
-.sh-topup-modal{position:fixed;inset:0;z-index:72;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(6,26,46,.46);backdrop-filter:blur(3px)}
-.stm-card{position:relative;width:min(400px,94vw);background:var(--white);border:1px solid var(--line-2);border-radius:16px;box-shadow:var(--shadow-lg);padding:26px 22px 20px;text-align:center}
+.sh-topup-modal{position:fixed;inset:0;z-index:72;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(15,42,61,.46);backdrop-filter:blur(3px)}
+.stm-card{position:relative;width:min(400px,94vw);background:var(--white);border:1px solid var(--line-2);border-radius:22px;box-shadow:var(--shadow-lg);padding:26px 22px 20px;text-align:center}
 .stm-x{position:absolute;top:10px;right:10px;width:26px;height:26px;border:none;background:transparent;color:var(--text-lt);font-size:18px;line-height:1;cursor:pointer;border-radius:6px}
 .stm-x:hover{background:var(--paper-2);color:var(--text)}
 .stm-ava{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);margin-bottom:12px}
 .stm-t{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--heading);margin-bottom:8px}
 .stm-d{font-size:13.5px;color:var(--text-mid);line-height:1.6;margin-bottom:18px}
-.stm-btn{display:block;background:var(--red,#C0392B);color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:12px 20px;border-radius:10px;margin-bottom:8px}
+.stm-btn{display:block;background:var(--red,#C46A5E);color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:12px 20px;border-radius:10px;margin-bottom:8px}
 .stm-btn:hover{filter:brightness(1.06)}
 .stm-later{border:none;background:transparent;color:var(--text-lt);font-size:12.5px;cursor:pointer;font-family:inherit;padding:4px}
 .stm-later:hover{color:var(--text-mid)}
@@ -454,13 +464,13 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .rail-meter .rm-sub{opacity:.75}
 .rail-meter .rm-a{color:var(--tx-blue);font-weight:600;text-decoration:none;white-space:nowrap}
 .rail-meter .rm-a:hover{text-decoration:underline}
-.rail-meter.low .rm-t b{color:var(--gold,#7C5F26)}
-.rail-meter.out .rm-t{color:var(--red,#C0392B);font-weight:600}
+.rail-meter.low .rm-t b{color:var(--gold,#C8A96A)}
+.rail-meter.out .rm-t{color:var(--red,#C46A5E);font-weight:600}
 
 /* ── THẺ MỜI TRONG DÒNG HỘI THOẠI ──
    Chèn sau câu thứ 3, gọi tên đúng cung người ta vừa hỏi. Trông như một thẻ
    thông tin trong mạch chat, KHÔNG phải banner quảng cáo cắt ngang. */
-.rail-upsell{margin:12px 0 4px;padding:13px 14px;background:var(--gold-lt,#F9F4EB);border:1px solid var(--gold-soft,rgba(154,123,58,.3));border-radius:11px;animation:shFade .2s ease}
+.rail-upsell{margin:12px 0 4px;padding:13px 14px;background:var(--gold-lt,#F9F4EB);border:1px solid var(--gold-soft,rgba(154,123,58,.3));border-radius:16px;animation:shFade .2s ease}
 .rail-upsell .ru-t{font-size:13px;color:var(--text);line-height:1.55;margin-bottom:5px}
 .rail-upsell .ru-t b{color:var(--heading)}
 .rail-upsell .ru-d{font-size:12.5px;color:var(--text-mid);line-height:1.6;margin-bottom:11px}
@@ -468,7 +478,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .rail-upsell .ru-list{color:var(--text-lt);font-style:italic}
 .rail-upsell .ru-f{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .rail-upsell .ru-btn{background:var(--navy);color:var(--gold-bright,#c9a84c);text-decoration:none;font-family:var(--serif);font-weight:600;font-size:13px;padding:9px 15px;border-radius:8px;white-space:nowrap}
-.rail-upsell .ru-btn:hover{background:var(--navy-mid,#0D3B5E)}
+.rail-upsell .ru-btn:hover{background:var(--navy-mid,#164B6D)}
 .rail-upsell .ru-price{font-size:11.5px;color:var(--text-lt)}
 
 /* Thẻ gợi ý công cụ trong lúc trò chuyện (bước 4). CỐ Ý nhẹ hơn .rail-upsell:
@@ -476,13 +486,13 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    lời mời mua, và nó xuất hiện đúng lúc người ta đang cần giúp. Không có ô
    giá nào ở đây, xem lib/tools/suggest-tool.ts. */
 .tool-suggest{display:flex;align-items:center;gap:11px;margin:10px 0 4px;padding:11px 13px;
-  background:var(--paper-2,#fbf9f5);border:1px solid var(--line,#e6e2d8);border-radius:11px;animation:shFade .2s ease}
+  background:var(--paper-2,#fbf9f5);border:1px solid var(--line,#e6e2d8);border-radius:16px;animation:shFade .2s ease}
 .tool-suggest .ts-b{flex:1;min-width:0}
 .tool-suggest .ts-t{font-family:var(--serif);font-size:13.5px;font-weight:600;color:var(--heading);line-height:1.4}
 .tool-suggest .ts-d{font-size:12.5px;color:var(--text-mid);line-height:1.55;margin-top:2px}
 .tool-suggest .ts-go{flex-shrink:0;background:var(--navy);color:var(--gold-bright,#c9a84c);text-decoration:none;
   font-family:var(--serif);font-weight:600;font-size:12.5px;padding:7px 14px;border-radius:8px;white-space:nowrap}
-.tool-suggest .ts-go:hover{background:var(--navy-mid,#0D3B5E)}
+.tool-suggest .ts-go:hover{background:var(--navy-mid,#164B6D)}
 
 /* ── RESPONSIVE (max-width:900px) — PHẢI để CUỐI file: các rule .rail/.sb đặt
    sau media query (vd .rail{position:relative} cho panel lịch sử) sẽ override
@@ -545,7 +555,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
   .ws-actions .btn{flex:0 0 auto;white-space:nowrap;padding:7px 10px}
   /* `bottom` khớp .sb/.rail phía trên — không phủ lên tabbar, để tabbar luôn
      bấm được trực tiếp (không phải đóng drawer trước mới bấm Home được). */
-  .backdrop{position:fixed;left:0;right:0;top:0;bottom:calc(64px + env(safe-area-inset-bottom));background:rgba(6,26,46,.4);z-index:55;display:none}
+  .backdrop{position:fixed;left:0;right:0;top:0;bottom:calc(64px + env(safe-area-inset-bottom));background:rgba(15,42,61,.4);z-index:55;display:none}
   .backdrop.on{display:block}
   /* Bottom tab: hiện trên mobile, chừa chỗ cuối trang, LUÔN sticky kể cả khi
      sidebar/rail đang mở (xem ghi chú ở .sb/.rail phía trên). */
@@ -580,7 +590,7 @@ font-family:inherit}
    `app-luan-giai.html` làm mẫu), KHÔNG chép lại 3 dòng màu này thêm lần nào
    nữa — chép là drift màu giữa các trang, y hệt bẫy `.claude-content` đã bị
    trùng lặp trước đó. */
-.fb-card{position:relative;border-radius:14px;padding:36px 26px 24px;margin:16px 0 18px;font-family:var(--sans);font-weight:700;font-size:clamp(18px,4.8vw,24px);line-height:1.45;letter-spacing:.01em;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.fb-card{position:relative;border-radius:20px;padding:36px 26px 24px;margin:16px 0 18px;font-family:var(--sans);font-weight:700;font-size:clamp(18px,4.8vw,24px);line-height:1.45;letter-spacing:.01em;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.05)}
 /* Dấu ngoặc kép lớn trang trí ở góc — chữ “ ” đã có sẵn quanh câu trích (JS
    ghép `“…”` khi dựng .fb-card), đây chỉ là hoạ tiết, không lặp nghĩa. */
 .fb-card::before{content:'\201C';position:absolute;top:2px;left:14px;font-family:Georgia,'Times New Roman',serif;font-size:54px;line-height:1;font-weight:700;color:currentColor;opacity:.22}
@@ -614,7 +624,7 @@ font-family:inherit}
    khác hẳn .fb-card (poster to, dành cho ĐÚNG MỘT câu trích trong văn bản
    dài). Danh sách gợi ý không có trục tốt/xấu — toàn bộ đều là lựa chọn được
    đề xuất — nên chỉ MỘT màu trung tính, không có biến thể fb-tot/fb-canhbao. */
-.fb-item{border-radius:10px;padding:12px 14px;margin:8px 0;background:var(--gold-lt);border-left:3px solid var(--gold-soft)}
+.fb-item{border-radius:14px;padding:12px 14px;margin:8px 0;background:var(--gold-lt);border-left:3px solid var(--gold-soft)}
 .fb-item b,.fb-item strong{font-family:var(--serif);font-size:14.5px;color:var(--heading)}
 
 /* ══════════════════════════════════════════════════════════════════════
@@ -796,7 +806,7 @@ font-family:inherit}
    riêng từng trang). Gom một nguồn ở đây; trang nào cần khác biệt (vd
    `.form-card{max-width}` tuỳ độ dài nội dung) chỉ override đúng thuộc tính
    đó trong `<style>` riêng, KHÔNG chép lại nguyên khối. */
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
@@ -809,7 +819,7 @@ font-family:inherit}
    TUỲ CHỌN (icon lấp lánh + nhãn chính + dòng phụ giá) — một `<button
    class="btn-go">Chữ thường</button>` không có 3 phần đó vẫn hiện đúng hình
    (nền vàng, bo góc, canh giữa), chỉ thiếu icon/dòng phụ. */
-.btn-go{background:linear-gradient(160deg,var(--gold),var(--gold-soft));color:var(--navy);border:none;border-radius:11px;padding:13px 20px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:var(--serif);width:100%;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:var(--shadow)}
+.btn-go{background:linear-gradient(160deg,var(--gold),var(--gold-soft));color:var(--navy);border:none;border-radius:16px;padding:13px 20px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:var(--serif);width:100%;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:var(--shadow)}
 .btn-go .bg-label{display:flex;align-items:center;gap:7px}
 .btn-go .ic{width:16px;height:16px;display:inline-flex}
 .btn-go .ic svg{width:100%;height:100%}
@@ -839,7 +849,7 @@ font-family:inherit}
 /* Hộp "Chi phí sử dụng" — số Lượng + quy đổi VNĐ + phương thức thanh toán,
    đứng trước nút CTA. Điền giá qua `data-tvp-price`/`data-tvp-price-vnd`
    (xem `_fillVndSlots` ở app-luan-giai.html) — KHÔNG chép số cứng. */
-.cost-box{display:flex;gap:14px;flex-wrap:wrap;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin:14px 0}
+.cost-box{display:flex;gap:14px;flex-wrap:wrap;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:13px 15px;margin:14px 0}
 .cost-box .cb-l{display:flex;gap:11px;align-items:flex-start;flex:1;min-width:190px}
 .cost-box .cb-ic{flex:0 0 auto;width:32px;height:32px;border-radius:50%;background:var(--gold-lt);color:var(--gold-soft);display:flex;align-items:center;justify-content:center}
 .cost-box .cb-ic svg{width:16px;height:16px}
@@ -857,7 +867,7 @@ font-family:inherit}
 @media(max-width:480px){.cost-box .cb-r{border-left:none;border-top:1px solid var(--line-2);padding:10px 0 0;margin-top:2px;flex-basis:100%;max-width:none}}
 /* Thẻ gợi ý "Xem bản mẫu" (icon bóng đèn + nút pill) — dùng chung nhiều
    trang (SampleHint, tools-shared/sample-hint.js), giữ ở đây làm nguồn chung. */
-.samp-cta{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:12px 14px;max-width:640px;margin-bottom:14px;font-size:13px;color:var(--text-lt);display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.samp-cta{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:12px 14px;max-width:640px;margin-bottom:14px;font-size:13px;color:var(--text-lt);display:flex;align-items:center;gap:11px;flex-wrap:wrap}
 .samp-cta .sc-ic{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--gold-lt);color:var(--gold-soft);display:flex;align-items:center;justify-content:center}
 .samp-cta .sc-ic svg{width:17px;height:17px}
 .samp-cta .sc-txt{flex:1;min-width:160px;display:flex;flex-direction:column}
@@ -925,7 +935,7 @@ font-family:inherit}
    Henry: "ko cần hình ảnh gì cả"). Icon vuông navy/gold dùng lại đúng mẫu
    `.fc-ic`/`.cb-ic` đã có, không bịa màu tím như ảnh mẫu để giữ nhất quán
    bảng màu thương hiệu. */
-.ws-promo{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:16px;box-shadow:var(--shadow)}
+.ws-promo{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:18px 20px;margin-top:16px;box-shadow:var(--shadow)}
 .ws-promo .wsp-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:12px}
 .ws-promo .wsp-ic{width:26px;height:26px;border-radius:7px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .ws-promo .wsp-ic svg{width:14px;height:14px}
@@ -936,7 +946,7 @@ font-family:inherit}
 /* Thanh DÍNH "Đây là BẢN MẪU" — hiện phía trên kết quả khi bản mẫu đang tự mở
    (hoặc mở tay). Chuyển từ app-luan-giai.html (nơi định nghĩa gốc) sang đây
    (2026-09) để dùng chung — nhiều trang giờ auto-show sample lúc vào trang. */
-.samp-bar{position:sticky;top:var(--ws-top-h,69px);z-index:6;background:var(--navy);color:#fff;border-radius:10px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:var(--shadow)}
+.samp-bar{position:sticky;top:var(--ws-top-h,69px);z-index:6;background:var(--navy);color:#fff;border-radius:14px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:var(--shadow)}
 .samp-bar .sb-txt{flex:1;min-width:180px;font-size:12.5px;line-height:1.5}
 .samp-bar .sb-txt b{color:var(--gold)}
 .samp-bar button{flex:0 0 auto;background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--serif)}
@@ -947,7 +957,7 @@ font-family:inherit}
    một nguồn JS, hai trang cùng gọi. Khối TĨNH có mặt từ lần vẽ đầu, chỉ ẩn
    bằng [hidden] — KHÔNG chèn muộn bằng JS, tránh đúng cú CLS 0,0049 mà
    `renderPdfBtn`/`fabAdd` đã phải vá (xem shell.js). */
-.report-ready{border:1px solid var(--line);border-radius:14px;padding:20px;margin:18px 0;background:linear-gradient(180deg,var(--gold-lt),var(--white));text-align:center}
+.report-ready{border:1px solid var(--line);border-radius:20px;padding:20px;margin:18px 0;background:linear-gradient(180deg,var(--gold-lt),var(--white));text-align:center}
 .report-ready[hidden]{display:none}
 .report-ready .rr-eyebrow{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-soft);font-weight:700;margin-bottom:6px}
 .report-ready .rr-title{font-family:var(--serif);font-size:18px;color:var(--navy);font-weight:700;margin-bottom:4px}
@@ -960,5 +970,5 @@ font-family:inherit}
 .report-ready .rr-btn:disabled{opacity:.55;cursor:default}
 .report-ready .rr-btn.sent{border-color:var(--tx-green);color:var(--tx-green)}
 /* Đang dựng — chưa đủ N phần. Spinner thay icon tải, nút vẫn khoá. */
-.rr-spin{width:15px;height:15px;border:2px solid rgba(6,26,46,.18);border-top-color:var(--navy);border-radius:50%;animation:rr-spin .7s linear infinite;flex:0 0 auto}
+.rr-spin{width:15px;height:15px;border:2px solid rgba(15,42,61,.18);border-top-color:var(--navy);border-radius:50%;animation:rr-spin .7s linear infinite;flex:0 0 auto}
 @keyframes rr-spin{to{transform:rotate(360deg)}}
