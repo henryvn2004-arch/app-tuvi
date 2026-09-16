@@ -435,10 +435,44 @@ Leave a modest open area of plain, softly lit wall in the upper portion of the f
     from: 'mascotV2.png',
     prompt:
       edit2(`Use the boy from the provided image as Minh Bảo, but make him a SECONDARY figure this time — off to one side of the room, sitting on the floor near a sleeping-turned-awake cream-and-orange cat, gently playing with it (dangling a bit of string or scratching behind its ears), cheerful and relaxed, clearly enjoying himself and not part of the fortune-reading conversation nearby. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
-The MAIN FOCUS of the scene is a different character: an elderly sage with long flowing snow-white hair and a full snow-white beard, wearing a simple long traditional robe, seated cross-legged at a low wooden desk in the center-right of the frame. A long scroll lies open flat on the desk, showing a faint circular chart divided into twelve sections with a few soft glowing dots — no readable text, letters or symbols on it. He points gently at the chart with one hand, calm and wise expression.
+The MAIN FOCUS of the scene is a different character: an elderly VIETNAMESE man with a warm, kind, round "phúc hậu" face (gentle smiling eyes, soft rosy cheeks, benevolent expression), short neatly trimmed white beard and moustache (not a long dramatic wizard beard), white hair mostly covered by a simple dark khăn đóng (traditional Vietnamese turban-style headwrap), wearing a simple dark brown áo the (traditional Vietnamese long tunic) — a distinctly Vietnamese scholar look, not Chinese. He is seated cross-legged at a low wooden desk in the center-right of the frame. A long scroll lies open flat on the desk, showing a faint circular chart divided into twelve sections with a few soft glowing dots — no readable text, letters or symbols on it. He points gently at the chart with one hand, calm and warmly wise expression.
 Facing him across the desk, a woman in her early thirties sits attentively, simple modern casual outfit (soft blouse or sweater), leaning in slightly, listening closely with a focused, engaged expression.
 Setting: the same cozy traditional study room — a large hanging scroll on the wall behind the desk showing a faint circular astrological diagram (no readable text), a short stack of old bound books on a low shelf with completely blank spines, a small warm oil lamp glowing on the desk as the brightest point in the frame.
-Minh Bảo and the cat form a small charming vignette off to the side, visually separate from the old sage and the woman at the desk.
+Minh Bảo and the cat form a small charming vignette off to the side, visually separate from the old man and the woman at the desk.
+Leave a modest open area of plain, softly lit wall in the upper portion of the frame — no shelves or clutter there — so hook text can be placed over it later.`),
+  },
+
+  // Henry 2026-09-16: hệ thống hoá — Minh Bảo CỐ ĐỊNH (đổi hoạt động phụ tuỳ
+  // cảnh), còn THẦY/CÔ luận giải + khách + bối cảnh đổi theo NHÓM tool.
+  // Ví dụ 1: tool 1 người (Tử Vi) → ông lão, 1 khách, phòng sách+thư pháp,
+  // Minh Bảo chơi mèo (banerLasoOldManV2 ở trên). Ví dụ 2 (bức này): tool
+  // 2 người (xem tuổi vợ chồng, nhóm sẽ map vào "laso" — `chan-dung-vo-chong`)
+  // → CÔ khác (không phải ông lão), 2 khách (vợ chồng/người yêu), Minh Bảo
+  // đổi hoạt động sang đọc sách.
+  banerVoChongV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Use the boy from the provided image as Minh Bảo, but make him a SECONDARY figure this time — off to one side of the room, sitting cross-legged on the floor with an open picture book on his lap, quietly reading it with a calm, absorbed little smile, not part of the conversation nearby. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
+The MAIN FOCUS of the scene is a different character: a warm, kind-faced VIETNAMESE woman in her fifties, greying hair neatly tied back, a gentle motherly "phúc hậu" expression, wearing a simple dark indigo áo dài or traditional blouse — a wise fortune-teller "cô", visually distinct from an old man. She sits at a low round wooden table, gently gesturing with one open hand toward a long scroll lying flat on the table, showing a faint circular chart divided into twelve sections with a few soft glowing dots — no readable text, letters or symbols on it.
+Facing her across the table, a young couple sits close together, both attentive and listening closely: a woman in her late twenties in simple modern casual clothing, and a man of similar age beside her in simple modern casual clothing, their shoulders gently touching, both leaning in toward the scroll with warm, hopeful expressions.
+Setting: a cozy traditional room, warmer and softer than a scholar's study — simple woven mats, a small vase of fresh flowers on the table, soft morning light through a paper window, a small warm lantern glowing nearby.
+Minh Bảo and his book form a small charming vignette off to the side, visually separate from the woman and the couple at the table.
+Leave a modest open area of plain, softly lit wall in the upper portion of the frame — no clutter there — so hook text can be placed over it later.`),
+  },
+
+  // Ví dụ 3: nhóm "Thần Số Học" (than-so-hoc) — Henry: "1 ông chú trẻ hơn,
+  // 1 phòng khác". Trẻ hơn hẳn 2 nhân vật trên (không bạc phơ/không tóc
+  // hoa râm), phòng thiên về TÍNH TOÁN (bàn tính, con số) thay vì tử vi.
+  banerThanSoHocV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Use the boy from the provided image as Minh Bảo, but make him a SECONDARY figure this time — off to one side of the room, sitting on a low stool, quietly stacking a few small smooth wooden number tiles into a little tower, focused and cheerful, not part of the conversation nearby. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
+The MAIN FOCUS of the scene is a different character: a Vietnamese man in his early thirties (visibly younger than an elderly sage — no white hair, no beard, a friendly approachable "chú" figure), short neat dark hair, warm easygoing smile, wearing a simple modern shirt with sleeves rolled up (not an old-fashioned robe — a contemporary, approachable look fitting numerology's modern feel). He sits at a low wooden desk, one hand resting on an abacus-like wooden counting frame with a few beads glowing faintly, the other pointing at a sheet of paper showing a few soft glowing numeral marks arranged in a simple grid — no readable digits or text.
+Facing him across the desk, a woman in her early thirties sits attentively, simple modern casual outfit, leaning in slightly, listening closely with a focused, curious expression.
+Setting: a bright, tidy study corner — a small shelf with a few blank-covered notebooks stacked neatly, a potted succulent, soft daytime light through a window (brighter and more modern-feeling than a dim evening scholar's study).
+Minh Bảo and his number tiles form a small charming vignette off to the side, visually separate from the young man and the woman at the desk.
 Leave a modest open area of plain, softly lit wall in the upper portion of the frame — no shelves or clutter there — so hook text can be placed over it later.`),
   },
 };
