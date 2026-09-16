@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 /**
- * Sinh ẢNH BANNER CHÍNH (khối hook `.intro-card` đầu trang tool) — tranh thủy
- * mặc khổ ngang, CÓ MÀU — bằng gpt-image-2. Xem `lib/media/hero-banner-prompt.ts`
- * cho phong cách + cảnh từng NHÓM (banner dùng CHUNG theo nhóm, không phải
- * 1 bức/tool — 11 nhóm phủ 52 tool, mỗi nhóm một nhân vật/đạo cụ đúng bản
- * chất cổ pháp của nhóm đó).
+ * Sinh ẢNH BANNER CHÍNH (khối hook `.intro-card` đầu trang tool) — webtoon
+ * Ghibli/chibi Minh Bảo, khổ ngang, CÓ MÀU — bằng gpt-image-2. Xem
+ * `lib/media/hero-banner-prompt.ts` cho cảnh từng NHÓM (banner dùng CHUNG
+ * theo nhóm, không phải 1 bức/tool — 11 nhóm phủ 52 tool, mỗi nhóm một
+ * thầy/cô + đạo cụ đúng bản chất cổ pháp của nhóm đó, Minh Bảo luôn có mặt).
+ *
+ * 🔴 LUÔN gọi `images/edits` — neo `ANCHOR_IMAGE_PATH` (ảnh Minh Bảo đã
+ * commit trong `public/`) để giữ đúng khuôn mặt, không phải `images/generations`
+ * thuần (tả bằng chữ thì trôi nhân vật, đã cắn ở character bible V1).
  *
  * Khác `gen-tool-avatars.mjs`: mỗi nhóm sinh NHIỀU biến thể để duyệt (chưa
  * chốt bức nào), không phải 1 bức/nhóm.
@@ -20,7 +24,7 @@
  * crop bằng CSS object-fit ở khối hiển thị) · --quality low|medium|high
  * (mặc định medium) · --model (mặc định gpt-image-2, xem lib/image/openai-image.ts).
  */
-import { writeFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync } from 'fs';
 import { execFileSync } from 'child_process';
 import { tmpdir } from 'os';
 import { join } from 'path';
@@ -44,22 +48,35 @@ execFileSync(
     outDir,
     join(ROOT, 'lib/media/hero-banner-prompt.ts'),
     join(ROOT, 'lib/media/tool-avatar-prompt.ts'),
+    join(ROOT, 'lib/media/webtoon-style.ts'),
   ],
   { stdio: 'inherit' }
 );
-const { HERO_BANNER_GROUPS, resolveHeroGroup, buildHeroBannerPrompt } = require(
+const { HERO_BANNER_GROUPS, resolveHeroGroup, buildHeroBannerPrompt, ANCHOR_IMAGE_PATH } = require(
   join(outDir, 'hero-banner-prompt.js')
 );
 if (
   !Array.isArray(HERO_BANNER_GROUPS) ||
   typeof resolveHeroGroup !== 'function' ||
-  typeof buildHeroBannerPrompt !== 'function'
+  typeof buildHeroBannerPrompt !== 'function' ||
+  typeof ANCHOR_IMAGE_PATH !== 'string'
 ) {
   console.error(
-    '❌ không nạp được HERO_BANNER_GROUPS/resolveHeroGroup/buildHeroBannerPrompt từ bản dịch — dừng trước khi đốt tiền vẽ.'
+    '❌ không nạp được HERO_BANNER_GROUPS/resolveHeroGroup/buildHeroBannerPrompt/ANCHOR_IMAGE_PATH từ bản dịch — dừng trước khi đốt tiền vẽ.'
   );
   process.exit(1);
 }
+
+const anchorPath = join(ROOT, ANCHOR_IMAGE_PATH);
+if (!existsSync(anchorPath)) {
+  console.error(
+    `❌ thiếu ảnh neo "${ANCHOR_IMAGE_PATH}" — không vẽ được, dừng trước khi đốt tiền.`
+  );
+  process.exit(1);
+}
+const anchorBytes = readFileSync(anchorPath);
+const anchorFileName = ANCHOR_IMAGE_PATH.split('/').pop();
+const anchorMime = anchorFileName.endsWith('.webp') ? 'image/webp' : 'image/png';
 
 const argv = process.argv.slice(2);
 const flag = (n, d) => {
@@ -128,17 +145,20 @@ for (const g of groups) {
     const ten = `${g.id}-${String(i).padStart(2, '0')}.png`;
     const dich = join(outBase, ten);
     try {
-      const r = await fetch('https://api.openai.com/v1/images/generations', {
+      // images/edits — neo ẢNH Minh Bảo, KHÔNG phải images/generations thuần
+      // (xem ghi chú đầu file). Multipart: KHÔNG tự đặt Content-Type, boundary
+      // do FormData sinh, gõ tay là hỏng.
+      const fd = new FormData();
+      fd.append('model', MODEL);
+      fd.append('prompt', prompt);
+      fd.append('size', SIZE);
+      fd.append('quality', QUALITY);
+      fd.append('n', '1');
+      fd.append('image', new Blob([anchorBytes], { type: anchorMime }), anchorFileName);
+      const r = await fetch('https://api.openai.com/v1/images/edits', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${KEY}` },
-        body: JSON.stringify({
-          model: MODEL,
-          prompt,
-          size: SIZE,
-          quality: QUALITY,
-          output_format: 'png',
-          n: 1,
-        }),
+        headers: { Authorization: `Bearer ${KEY}` },
+        body: fd,
       });
       if (!r.ok) throw new Error(`${r.status}: ${(await r.text().catch(() => '')).slice(0, 300)}`);
       const j = await r.json();

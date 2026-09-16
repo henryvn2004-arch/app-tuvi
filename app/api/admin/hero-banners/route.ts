@@ -2,10 +2,16 @@
 // GET /api/admin/hero-banners?group=tu-binh&n=15  (hoặc ?tool=<tool_id>, tự
 // suy ra nhóm qua resolveHeroGroup)
 //
-// Sinh ẢNH BANNER CHÍNH (khối hook `.intro-card` đầu trang tool) — tranh thủy
-// mặc khổ ngang, CÓ MÀU, bằng gpt-image-2 — rồi cất vào Supabase Storage. Chạy
-// TRÊN VERCEL vì key OpenAI ở đó — cùng lý do và cùng khuôn
-// `app/api/admin/illus-images/route.ts` / `que-images/route.ts`.
+// Sinh ẢNH BANNER CHÍNH (khối hook `.intro-card` đầu trang tool) — webtoon
+// Ghibli/chibi Minh Bảo, khổ ngang, CÓ MÀU, bằng gpt-image-2 — rồi cất vào
+// Supabase Storage. Chạy TRÊN VERCEL vì key OpenAI ở đó — cùng lý do và cùng
+// khuôn `app/api/admin/illus-images/route.ts` / `que-images/route.ts`.
+//
+// 🔴 Reskin 2026-09-16: LUÔN gọi qua `images/edits` (neo ẢNH, không phải
+// `images/generations` thuần) — đọc `ANCHOR_IMAGE_PATH` (đã commit trong
+// `public/`) TỪ ĐĨA lúc khởi động route, không phải fetch qua mạng. Thiếu
+// hẳn Minh Bảo trong ảnh là dấu hiệu neo bị bỏ qua — không được âm thầm lùi
+// về text-to-image (xem lib/image/openai-image.ts).
 //
 // Banner dùng CHUNG theo NHÓM (xem lib/media/hero-banner-prompt.ts), không
 // phải 1 bức/tool — và mỗi nhóm sinh NHIỀU BIẾN THỂ (n) của CÙNG một prompt
@@ -20,15 +26,24 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 import { NextRequest } from 'next/server';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { generatePortraitImage } from '@/lib/image/openai-image';
 import { logImageUsage } from '@/lib/agent/usage';
-import { resolveHeroGroup, buildHeroBannerPrompt } from '@/lib/media/hero-banner-prompt';
+import { resolveHeroGroup, buildHeroBannerPrompt, ANCHOR_IMAGE_PATH } from '@/lib/media/hero-banner-prompt';
 import { getConfigValue } from '@/lib/config/appConfig';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
 const BUCKET = 'portraits';
 const PREFIX = 'hero-banners';
+
+// Đọc MỘT LẦN lúc route nạp (không phải mỗi request) — file tĩnh trong
+// `public/`, không đổi giữa các lượt gọi. `process.cwd()` là gốc repo khi
+// chạy trên Vercel (Next.js serverless function).
+const ANCHOR_BYTES = readFileSync(join(process.cwd(), ANCHOR_IMAGE_PATH));
+const ANCHOR_FILE_NAME = ANCHOR_IMAGE_PATH.split('/').pop()!;
+const ANCHOR_MIME = ANCHOR_FILE_NAME.endsWith('.webp') ? 'image/webp' : 'image/png';
 
 const BLOCKING = /401|403|429|invalid_api_key|insufficient_quota|billing|rate.?limit/i;
 
@@ -164,7 +179,13 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-      const img = await generatePortraitImage({ prompt, size, quality, model });
+      const img = await generatePortraitImage({
+        prompt,
+        size,
+        quality,
+        model,
+        anchorImage: { bytes: ANCHOR_BYTES, mimeType: ANCHOR_MIME, fileName: ANCHOR_FILE_NAME },
+      });
       void logImageUsage('hero-banner', img.model, img.usage, img.durationMs);
 
       const up = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {
