@@ -387,6 +387,25 @@ Add a second, secondary figure seated across the table facing him: a village wom
 Background: warm late-afternoon village scene behind them — soft rolling hills, two or three small tiled-roof houses, gentle golden light.
 Leave a large open area of plain warm sky in the upper-left third of the frame — no hills, houses or clutter there — so hook text can be placed over it later.`),
   },
+
+  // Henry (ảnh tham khảo, 2026-09-16): thích BỐI CẢNH thư phòng ấm cúng hơn
+  // cảnh làng ngoài trời — bàn gỗ, sách chất đống, biểu đồ treo tường, mèo
+  // ngủ, đèn dầu. GIỮ nguyên thiết kế nhân vật đã chốt (CHARACTER_DNA_V2/
+  // STYLE_LOCK_V2), chỉ đổi BỐI CẢNH sang trong nhà — không chép phong cách
+  // vẽ chi tiết/tỉ lệ đầu nhỏ hơn của ảnh tham khảo đó (khác hẳn chibi đã
+  // duyệt). Gáy sách/biểu đồ tường CỐ Ý không có chữ đọc được — GUARDS đã
+  // cắn việc gpt-image bịa chữ Hán vô nghĩa (xem đầu file).
+  banerLasoIndoorV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Redraw ONLY the boy from the provided image seated at a low wooden desk inside a cozy traditional study room, on the right side of the frame, in the middle of reading a fortune. Remove the hat for this indoor scene (hang it on a peg nearby if natural). A long scroll lies open flat on the desk in front of him, showing a faint circular chart divided into twelve sections with a few soft glowing dots — no readable text, letters or symbols on it. One hand rests on the scroll, the other holds a small writing brush; he looks down at the chart with a warm, focused little smile.
+Behind him on the wall, a large hanging scroll displays a soft circular astrological diagram with faint dot-and-line patterns — no readable text or symbols.
+To one side, a short stack of old bound books sits on the desk or a low shelf, their spines and covers completely blank — no text, letters or symbols anywhere on them.
+A small cream-and-orange cat is curled up asleep near the books. A small warm oil lamp glows on the desk, its light the brightest point in the frame. Optionally one small potted plant in a corner.
+Warm wooden tones throughout, soft lamp light, cozy and quiet mood, evening atmosphere.
+Leave a large open area of plain, softly lit wall or empty space in the upper-left third of the frame — no shelves, scrolls or clutter there — so hook text can be placed over it later.`),
+  },
 };
 
 // ── chạy ───────────────────────────────────────────────────────────────────
