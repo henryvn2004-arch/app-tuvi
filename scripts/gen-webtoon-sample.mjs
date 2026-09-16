@@ -454,26 +454,117 @@ Leave a modest open area of plain, softly lit wall in the upper portion of the f
     from: 'mascotV2.png',
     prompt:
       edit2(`Use the boy from the provided image as Minh Bảo, but make him a SECONDARY figure this time — off to one side of the room, sitting cross-legged on the floor with an open picture book on his lap, quietly reading it with a calm, absorbed little smile, not part of the conversation nearby. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
-The MAIN FOCUS of the scene is a different character: a warm, kind-faced VIETNAMESE woman in her fifties, greying hair neatly tied back, a gentle motherly "phúc hậu" expression, wearing a simple dark indigo áo dài or traditional blouse — a wise fortune-teller "cô", visually distinct from an old man. She sits at a low round wooden table, gently gesturing with one open hand toward a long scroll lying flat on the table, showing a faint circular chart divided into twelve sections with a few soft glowing dots — no readable text, letters or symbols on it.
+The MAIN FOCUS of the scene is a different character: a warm, kind-faced elderly VIETNAMESE woman in her sixties, full white hair neatly tied back, a gentle motherly "phúc hậu" expression, wearing a simple dark indigo traditional áo dài — old-fashioned in style, visually distinct from an old man (different gender, different room, different props). She sits at a low round wooden table, gently gesturing with one open hand toward a long scroll lying flat on the table, showing a faint circular chart divided into twelve sections with a few soft glowing dots — no readable text, letters or symbols on it.
 Facing her across the table, a young couple sits close together, both attentive and listening closely: a woman in her late twenties in simple modern casual clothing, and a man of similar age beside her in simple modern casual clothing, their shoulders gently touching, both leaning in toward the scroll with warm, hopeful expressions.
 Setting: a cozy traditional room, warmer and softer than a scholar's study — simple woven mats, a small vase of fresh flowers on the table, soft morning light through a paper window, a small warm lantern glowing nearby.
 Minh Bảo and his book form a small charming vignette off to the side, visually separate from the woman and the couple at the table.
 Leave a modest open area of plain, softly lit wall in the upper portion of the frame — no clutter there — so hook text can be placed over it later.`),
   },
 
-  // Ví dụ 3: nhóm "Thần Số Học" (than-so-hoc) — Henry: "1 ông chú trẻ hơn,
-  // 1 phòng khác". Trẻ hơn hẳn 2 nhân vật trên (không bạc phơ/không tóc
-  // hoa râm), phòng thiên về TÍNH TOÁN (bàn tính, con số) thay vì tử vi.
+  // Ví dụ 3: nhóm "Thần Số Học" (than-so-hoc). Henry chốt LẠI (sau khi xem
+  // bản "ông chú trẻ"): thầy/cô xem PHẢI già, tóc bạc, người Việt, phong
+  // cách xưa — thống nhất ở CẢ 11 nhóm, không có nhân vật trẻ tuổi. Phân
+  // biệt nhóm bằng GIỚI TÍNH/trang phục/đạo cụ/phòng, không bằng tuổi tác.
   banerThanSoHocV2: {
     size: '1536x1024',
     from: 'mascotV2.png',
     prompt:
       edit2(`Use the boy from the provided image as Minh Bảo, but make him a SECONDARY figure this time — off to one side of the room, sitting on a low stool, quietly stacking a few small smooth wooden number tiles into a little tower, focused and cheerful, not part of the conversation nearby. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
-The MAIN FOCUS of the scene is a different character: a Vietnamese man in his early thirties (visibly younger than an elderly sage — no white hair, no beard, a friendly approachable "chú" figure), short neat dark hair, warm easygoing smile, wearing a simple modern shirt with sleeves rolled up (not an old-fashioned robe — a contemporary, approachable look fitting numerology's modern feel). He sits at a low wooden desk, one hand resting on an abacus-like wooden counting frame with a few beads glowing faintly, the other pointing at a sheet of paper showing a few soft glowing numeral marks arranged in a simple grid — no readable digits or text.
+The MAIN FOCUS of the scene is a different character: an elderly Vietnamese man in his seventies, full white hair combed neatly back, a short trimmed white moustache, a warm attentive "phúc hậu" expression, wearing a simple dark grey traditional Vietnamese áo the — old-fashioned in style, not modern clothing. He sits at a low wooden desk, one hand resting on an abacus-like wooden counting frame with a few beads glowing faintly, the other pointing at a sheet of paper showing a few soft glowing numeral marks arranged in a simple grid — no readable digits or text.
 Facing him across the desk, a woman in her early thirties sits attentively, simple modern casual outfit, leaning in slightly, listening closely with a focused, curious expression.
-Setting: a bright, tidy study corner — a small shelf with a few blank-covered notebooks stacked neatly, a potted succulent, soft daytime light through a window (brighter and more modern-feeling than a dim evening scholar's study).
-Minh Bảo and his number tiles form a small charming vignette off to the side, visually separate from the young man and the woman at the desk.
+Setting: a tidy study corner — a small shelf with a few blank-covered notebooks stacked neatly, a potted plant, soft daytime light through a window.
+Minh Bảo and his number tiles form a small charming vignette off to the side, visually separate from the old man and the woman at the desk.
 Leave a modest open area of plain, softly lit wall in the upper portion of the frame — no shelves or clutter there — so hook text can be placed over it later.`),
+  },
+
+  // ── 8 nhóm còn lại — cùng nguyên tắc: Minh Bảo cố định (đổi hoạt động
+  // phụ), thầy/cô + khách + phòng đổi theo TỪNG NHÓM, phân biệt rõ tuổi/
+  // giới/trang phục để 11 banner không lặp nhau. `menh-ly` (có tool
+  // `tuong-hop` — xem hợp tuổi) dùng LẠI banerVoChongV2 đã duyệt (2 khách),
+  // không vẽ thêm — đúng nhóm chứa tool 2 người.
+
+  banerKinhDichV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Use the boy from the provided image as Minh Bảo, but make him a SECONDARY figure this time — off to one side of the room, lying on his stomach on the floor, chin in his hands, watching three fireflies glow softly in a small glass jar beside him, quietly delighted, not part of the conversation nearby. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
+The MAIN FOCUS of the scene is a different character: a calm, mysterious elderly Vietnamese woman in her sixties, full white hair loosely tied back in a low bun, a serene knowing expression, wearing a simple deep indigo-purple traditional áo dài — old-fashioned in style. She sits at a low table, in the middle of casting three small bronze coins onto its surface — one coin still spinning — while a faint hexagram of six soft glowing horizontal lines (broken and unbroken) hovers gently above the table, no readable text or symbols.
+Facing her across the table, a woman in her early thirties sits attentively, simple modern casual outfit, watching the coins with a focused, curious expression.
+Setting: a quiet dim room at night, a single small candle providing warm flickering light, faint incense smoke curling upward, a plain dark wall behind her.
+Minh Bảo and the firefly jar form a small charming vignette off to the side, visually separate from the woman and her guest.
+Leave a modest open area of plain, dim wall in the upper portion of the frame — no clutter there — so hook text can be placed over it later.`),
+  },
+
+  banerPhongThuyV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Use the boy from the provided image as Minh Bảo, but make him a SECONDARY figure this time — off to one side of the room, kneeling beside a small wooden toy house, carefully placing a tiny toy tree next to it with a proud little smile, not part of the conversation nearby. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
+The MAIN FOCUS of the scene is a different character: a confident, practical-looking elderly Vietnamese man in his sixties, full white hair combed neatly back, a warm reassuring smile, wearing a simple dark grey traditional Vietnamese áo the — old-fashioned in style, not modern clothing. He sits at a low table, holding a round wooden Luo Pan compass out before him with both hands, studying its dial closely. On the table beside him sits a small simple architectural model of a tiled-roof house, no readable text anywhere.
+Facing him across the table, a woman in her early thirties sits attentively, simple modern casual outfit, leaning in to look at the compass with a focused, curious expression.
+Setting: a bright, practical daytime room — a small potted bamboo in the corner, a rolled-up house blueprint leaning against the wall (blank, no readable lines or text), soft late-morning light through a window.
+Minh Bảo and his toy house form a small charming vignette off to the side, visually separate from the man and his guest.
+Leave a modest open area of plain, softly lit wall in the upper portion of the frame — no clutter there — so hook text can be placed over it later.`),
+  },
+
+  banerXemTuongV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Use the boy from the provided image as Minh Bảo, but make him a SECONDARY figure this time — off to one side of the room, sitting cross-legged, holding up a small round hand-mirror, making a silly face at his own reflection and giggling, not part of the conversation nearby. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
+The MAIN FOCUS of the scene is a different character: a warm elderly Vietnamese woman ("bà") in her sixties, kind round "phúc hậu" face, silver hair neatly rolled into a small bun, wearing a simple soft brown áo bà ba. She sits close to her guest, gently holding the guest's open palm in both of her hands, studying its lines with a knowing, gentle smile.
+The guest: a woman in her early thirties, simple modern casual outfit, sitting attentively, palm resting in the old woman's hands, watching her face with a curious, slightly nervous smile.
+Setting: a small warm sitting room — an antique standing mirror in the corner reflecting soft light, a woven basket of dried herbs, a small tray with two teacups on the low table beside them, soft afternoon light.
+Minh Bảo and his hand-mirror form a small charming vignette off to the side, visually separate from the old woman and her guest.
+Leave a modest open area of plain, softly lit wall in the upper portion of the frame — no clutter there — so hook text can be placed over it later.`),
+  },
+
+  banerChiemTinhTayV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Use the boy from the provided image as Minh Bảo, but make him a SECONDARY figure this time — off to one side of the room, lying on his back on a soft rug, pointing up at a few small glow-in-the-dark star stickers on the ceiling, eyes wide with wonder, not part of the conversation nearby. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
+The MAIN FOCUS of the scene is a different character: an elegant elderly Vietnamese woman in her sixties, full white hair swept back neatly, a calm dreamy expression, wearing a simple flowing dark teal traditional áo dài with subtle star-like embroidery — old-fashioned in style. She sits at a small round table, holding an antique brass astrolabe up toward a faint circular zodiac wheel of soft glowing stars hovering above the table — no readable text or symbols.
+Facing her across the table, a woman in her late twenties sits attentively, simple modern casual outfit, gazing up at the glowing star wheel with a delighted, curious expression.
+Setting: a cozy room at night, a large window behind them showing a deep blue night sky scattered with a few faint stars, a small brass telescope standing in the corner, soft warm lamp light mixing with cool moonlight.
+Minh Bảo and his ceiling stars form a small charming vignette off to the side, visually separate from the woman and her guest.
+Leave a modest open area of plain night-sky or wall in the upper portion of the frame — no clutter there — so hook text can be placed over it later.`),
+  },
+
+  banerDatTenLichV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Use the boy from the provided image as Minh Bảo, but make him a SECONDARY figure this time — off to one side of the room, kneeling at a tiny low stool, carefully dipping a small brush into a bowl of water and "painting" happily on a wet slate that leaves no lasting mark, tongue peeking out in concentration, not part of the conversation nearby. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
+The MAIN FOCUS of the scene is a different character: a plump, warm-faced Vietnamese grandmother in her sixties, silver hair in a simple bun, a cheerful "phúc hậu" smile, wearing a simple soft brown áo bà ba — visually distinct from the other older characters (rounder, softer, cheerier). She sits at a low desk, brush lifted just above an open scroll, about to write the very first stroke — the scroll paper is COMPLETELY BLANK, not one mark on it yet. A small calendar page with a few soft glowing dots rests nearby — no readable text or symbols anywhere on the desk.
+Facing her across the desk, a woman in her late twenties sits attentively, simple modern casual outfit, watching the brush with a hopeful, curious expression, perhaps gently cradling a small wrapped gift (implying a baby-naming visit) in her lap.
+Setting: a warm, tidy room — a small shelf of blank-spined books, a vase of fresh flowers, soft daytime light through a paper window.
+Minh Bảo and his wet-slate painting form a small charming vignette off to the side, visually separate from the grandmother and her guest.
+Leave a modest open area of plain, softly lit wall in the upper portion of the frame — no clutter there — so hook text can be placed over it later.`),
+  },
+
+  banerPhongCachAiV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Use the boy from the provided image as Minh Bảo, but make him a SECONDARY figure this time — off to one side of the room, standing on tiptoe, draping a colorful silk ribbon over his own shoulder like a little cape, admiring himself with a playful grin, not part of the conversation nearby. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
+The MAIN FOCUS of the scene is a different character: a warm elderly Vietnamese woman in her sixties, full white hair neatly rolled into a small bun, a friendly encouraging smile, wearing a simple soft brown áo dài — old-fashioned in style, with a keen eye for what suits people. She stands beside a tall standing mirror, gently holding up a few soft fabric swatches and ribbons of different warm colors next to her guest's reflection, comparing them thoughtfully.
+The guest: a woman in her mid-twenties, simple modern casual outfit, standing in front of the mirror, looking at her own reflection with a hopeful, curious smile.
+Setting: a bright, airy modern room — a small clothes rack with a few plain, unlabeled garments, a vase of fresh flowers, large soft daylight through a window.
+Minh Bảo and his ribbon form a small charming vignette off to the side, visually separate from the stylist and her guest.
+Leave a modest open area of plain, brightly lit wall in the upper portion of the frame — no clutter there — so hook text can be placed over it later.`),
+  },
+
+  banerBoiBaiV2: {
+    size: '1536x1024',
+    from: 'mascotV2.png',
+    prompt:
+      edit2(`Use the boy from the provided image as Minh Bảo, but make him a SECONDARY figure this time — off to one side of the room, sitting cross-legged, carefully building a small house of playing cards, holding his breath in concentration, not part of the conversation nearby. Keep his exact face, hair and outfit — same character, same big-head chibi proportion, no redesign.
+The MAIN FOCUS of the scene is a different character: a striking elderly Vietnamese woman in her sixties, full white hair partly wrapped in a dark patterned headscarf, warm mysterious eyes, wearing a flowing dark red and gold shawl over simple traditional clothing — a distinctive, old-fashioned fortune-teller look. She sits at a small round table, fanning out a small hand of ornate but blank-faced cards, one card just being drawn and turned face-up (its face a soft glowing abstract pattern, no readable symbols or text).
+Facing her across the table, a woman in her late twenties sits attentively, simple modern casual outfit, watching the drawn card with a hopeful, slightly nervous smile.
+Setting: a cozy dim room, a single candle burning on the table as the brightest point, a richly patterned but plain-colored cloth draped over the table, soft shadows.
+Minh Bảo and his card house form a small charming vignette off to the side, visually separate from the woman and her guest.
+Leave a modest open area of plain, dim wall in the upper portion of the frame — no clutter there — so hook text can be placed over it later.`),
   },
 };
 
