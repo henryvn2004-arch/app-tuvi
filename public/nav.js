@@ -319,6 +319,68 @@
     '}'
   ].join('');
 
+  // ── Footer — CSS định nghĩa Ở ĐÂY (không phải cạnh injectFooter() bên dưới)
+  // để cả nhánh `data-icons-only`/`data-footer-only` (return SỚM, trước khi
+  // chạm tới code full-mode) LẪN full-mode đều dùng chung được. Đặt cạnh
+  // `injectFooter()` (như bản đầu) là bug thật đã cắn: `data-footer-only` gọi
+  // injectFooter() nhưng `#footer-css` chưa từng được inject vì code đó nằm
+  // SAU return của chính nhánh này trong thứ tự file — trang chủ Sprint 4
+  // (index-sample-v2.html) hiện icon email khổng lồ không màu, chữ
+  // "undefined" lộ ra vì FT_SIGN_ICON cũng ăn theo lỗi thứ tự tương tự.
+  var footerCss = [
+    '.site-footer{background:#0A1D2B;color:rgba(255,255,255,0.5);padding:44px 40px 22px;margin-top:auto}',
+    '.ft-body{max-width:1100px;margin:0 auto}',
+    '.ft-top{display:grid;grid-template-columns:1.5fr auto 1fr 1fr 1fr;gap:0}',
+    '.ft-top .ft-brand{padding-right:32px}',
+    '.ft-top .ft-col{padding-left:32px}',
+    '.ft-divider{width:1px;align-self:stretch;background:rgba(255,255,255,.08)}',
+    '.ft-brand-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}',
+    '.ft-brand-row img{width:36px;height:36px;object-fit:contain;border-radius:5px;opacity:0.9}',
+    '.ft-brand-name{font-size:14px;font-weight:700;color:rgba(255,255,255,0.85);font-family:Georgia,serif;line-height:1.2}',
+    '.ft-brand-zh{font-size:11px;color:#C8A96A}',
+    '.ft-tagline{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7;max-width:240px}',
+    '.ft-legal{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;gap:8px}',
+    '.ft-legal-row{display:flex;align-items:flex-start;gap:9px;font-size:11px;color:rgba(255,255,255,.5);line-height:1.5}',
+    '.ft-legal-row strong{color:rgba(255,255,255,.6);font-weight:600;font-size:11.5px}',
+    '.ft-legal-row .dim{color:rgba(255,255,255,.5)}',
+    '.ft-legal-ic{flex-shrink:0;width:14px;height:14px;margin-top:1px;color:#9A7B3A}',
+    '.ft-legal-ic svg{width:100%;height:100%}',
+    '.ft-social{display:flex;gap:8px;margin-top:16px}',
+    '.ft-soc{width:28px;height:28px;border-radius:50%;border:1px solid rgba(200,169,106,.35);color:#C8A96A;display:flex;align-items:center;justify-content:center;text-decoration:none!important;transition:border-color .15s,background .15s}',
+    '.ft-soc:hover{background:rgba(200,169,106,.1);border-color:#C8A96A}',
+    '.ft-soc svg{width:13px;height:13px}',
+    '.ft-col-title{font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#C8A96A;margin-bottom:16px}',
+    '.ft-col-title i{display:block;width:22px;height:2px;background:#9A7B3A;margin-top:8px;border-radius:2px;font-style:normal}',
+    '.ft-item{display:flex;align-items:center;gap:11px;font-size:13px;color:rgba(255,255,255,.55)!important;text-decoration:none!important;margin-bottom:15px}',
+    '.ft-item:last-child{margin-bottom:0}',
+    '.ft-item:hover{color:rgba(255,255,255,.9)!important}',
+    '.ft-item-ic{flex-shrink:0;width:15px;height:15px;color:#9A7B3A}',
+    '.ft-item-ic svg{width:100%;height:100%}',
+    '.ft-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.5)}',
+    '.ft-bottom-left{display:flex;align-items:center;gap:9px;flex-wrap:wrap}',
+    '.ft-bottom-left a{color:rgba(255,255,255,.5)!important;text-decoration:none!important;font-size:11px;display:inline-block;padding:7px 2px}',
+    '.ft-bottom-left a:hover{color:rgba(255,255,255,.7)!important}',
+    '.ft-sep{color:rgba(255,255,255,.5)}',
+    '.ft-sign{display:flex;align-items:center;gap:10px;color:#C8A96A;opacity:.9}',
+    '.ft-sign span{font-family:Georgia,serif;font-style:italic;font-size:12.5px;letter-spacing:.02em}',
+    '.ft-disclaimer{font-size:9.5px;color:rgba(255,255,255,0.5);line-height:1.6;margin-top:12px;text-align:center}',
+    '.ft-disclaimer a{color:inherit;text-decoration:underline}',
+    '@media(max-width:900px){.ft-top{grid-template-columns:1fr 1fr}.ft-top .ft-brand{grid-column:1/-1;padding-right:0}.ft-divider{display:none}.ft-top .ft-col{padding-left:0}}',
+    '@media(max-width:600px){.site-footer{padding:36px 20px 18px}.ft-top{grid-template-columns:1fr 1fr;gap:20px 16px}.ft-top .ft-brand{grid-column:1/-1}.ft-bottom{flex-direction:column;align-items:flex-start}}'
+  ].join('');
+
+  function ensureFooterCss() {
+    if (!document.getElementById('footer-css')) {
+      var fs=document.createElement('style'); fs.id='footer-css'; fs.textContent=footerCss; document.head.appendChild(fs);
+    }
+  }
+
+  // Chữ ký chân trang — trang trí thuần tuý, không phải icon chức năng nên
+  // không nằm trong bảng ICONS dùng chung. Định nghĩa SỚM (cùng lý do
+  // footerCss ở trên): injectFooter() dùng biến này, và footer-only mode gọi
+  // injectFooter() TRƯỚC khi chạm tới code full-mode phía dưới.
+  var FT_SIGN_ICON = '<svg viewBox="0 0 120 36" width="84" height="25" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="90" cy="10" r="7" fill="currentColor" stroke="none" opacity=".85"/><path d="M2 32 L26 12 L40 24 L60 6 L78 22 L96 32 Z" opacity=".8"/></svg>';
+
   // ── CHẾ ĐỘ CHỈ-ICON ────────────────────────────────────────────
   // 27 trang shell và 2 trang admin CỐ Ý không nạp nav.js: nav.js tự chèn thanh
   // nav lên đầu <body>, mà mấy trang đó có chrome riêng. Hệ quả là chúng không
@@ -346,6 +408,37 @@
     }
     // Cùng lý do như lượt quét kép ở cuối file: script chạy trước khi thân trang
     // được parse, nên phải quét lại khi DOM đóng.
+    mountIcons();
+    if (document.readyState === 'loading')
+      document.addEventListener('DOMContentLoaded', function () { mountIcons(); });
+    return;
+  }
+  // `data-footer-only` — trang chủ webtoon (Sprint 4): dùng shell.css/shell.js
+  // y hệt /app (icons-only đáng lẽ đủ) nhưng CÒN cần footer thật cho SEO/pháp
+  // lý, mà icons-only ở trên `return` trước khi tới `injectFooter()`. KHÔNG
+  // dùng full mode ở đây: full mode tự chèn `<nav class="topnav">` lên đầu
+  // <body>, chồng lên sidebar/ws-top mà shell.js đã dựng — hai thanh điều
+  // hướng đè nhau. Và KHÔNG lặp GA4/Clarity/PWA của full mode: shell.js đã tự
+  // bù các mục đó cho mọi trang icons-only (xem ghi chú ở shell.js).
+  // Mount vào `#site-footer-host` nếu trang có khai (đặt CUỐI `.ws-body`, sau
+  // các section marketing) — thiếu thì lùi về `document.body.appendChild` như
+  // hành vi cũ, không phá 40+ trang đang dùng full mode.
+  if (_self && _self.hasAttribute('data-footer-only')) {
+    if (!document.getElementById('nav-css')) {
+      var s1 = document.createElement('style');
+      s1.id = 'nav-css';
+      s1.textContent = css;
+      document.head.appendChild(s1);
+    }
+    var runHomeFooter = function () {
+      var host = document.getElementById('site-footer-host');
+      var old = document.querySelector('footer.site-footer');
+      if (old) old.remove();
+      injectFooter(host || undefined);
+    };
+    if (document.readyState === 'loading')
+      document.addEventListener('DOMContentLoaded', function () { setTimeout(runHomeFooter, 0); });
+    else setTimeout(runHomeFooter, 0);
     mountIcons();
     if (document.readyState === 'loading')
       document.addEventListener('DOMContentLoaded', function () { mountIcons(); });
@@ -499,63 +592,16 @@
   // ── Footer ────────────────────────────────────────────────────
   // Cấu trúc khớp 2 dropdown đang chạy thật trên nav (Khám phá / Cẩm nang):
   // cột "Công Cụ"/"Tra Cứu" trỏ hub (đọc dữ liệu), không liệt kê tool lẻ nữa.
-  var footerCss = [
-    '.site-footer{background:#0A1D2B;color:rgba(255,255,255,0.5);padding:44px 40px 22px;margin-top:auto}',
-    '.ft-body{max-width:1100px;margin:0 auto}',
-    '.ft-top{display:grid;grid-template-columns:1.5fr auto 1fr 1fr 1fr;gap:0}',
-    '.ft-top .ft-brand{padding-right:32px}',
-    '.ft-top .ft-col{padding-left:32px}',
-    '.ft-divider{width:1px;align-self:stretch;background:rgba(255,255,255,.08)}',
-    '.ft-brand-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}',
-    '.ft-brand-row img{width:36px;height:36px;object-fit:contain;border-radius:5px;opacity:0.9}',
-    '.ft-brand-name{font-size:14px;font-weight:700;color:rgba(255,255,255,0.85);font-family:Georgia,serif;line-height:1.2}',
-    '.ft-brand-zh{font-size:11px;color:#C8A96A}',
-    '.ft-tagline{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7;max-width:240px}',
-    '.ft-legal{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;gap:8px}',
-    '.ft-legal-row{display:flex;align-items:flex-start;gap:9px;font-size:11px;color:rgba(255,255,255,.5);line-height:1.5}',
-    '.ft-legal-row strong{color:rgba(255,255,255,.6);font-weight:600;font-size:11.5px}',
-    '.ft-legal-row .dim{color:rgba(255,255,255,.5)}',
-    '.ft-legal-ic{flex-shrink:0;width:14px;height:14px;margin-top:1px;color:#9A7B3A}',
-    '.ft-legal-ic svg{width:100%;height:100%}',
-    '.ft-social{display:flex;gap:8px;margin-top:16px}',
-    '.ft-soc{width:28px;height:28px;border-radius:50%;border:1px solid rgba(200,169,106,.35);color:#C8A96A;display:flex;align-items:center;justify-content:center;text-decoration:none!important;transition:border-color .15s,background .15s}',
-    '.ft-soc:hover{background:rgba(200,169,106,.1);border-color:#C8A96A}',
-    '.ft-soc svg{width:13px;height:13px}',
-    '.ft-col-title{font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#C8A96A;margin-bottom:16px}',
-    '.ft-col-title i{display:block;width:22px;height:2px;background:#9A7B3A;margin-top:8px;border-radius:2px;font-style:normal}',
-    '.ft-item{display:flex;align-items:center;gap:11px;font-size:13px;color:rgba(255,255,255,.55)!important;text-decoration:none!important;margin-bottom:15px}',
-    '.ft-item:last-child{margin-bottom:0}',
-    '.ft-item:hover{color:rgba(255,255,255,.9)!important}',
-    '.ft-item-ic{flex-shrink:0;width:15px;height:15px;color:#9A7B3A}',
-    '.ft-item-ic svg{width:100%;height:100%}',
-    '.ft-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.5)}',
-    '.ft-bottom-left{display:flex;align-items:center;gap:9px;flex-wrap:wrap}',
-    '.ft-bottom-left a{color:rgba(255,255,255,.5)!important;text-decoration:none!important;font-size:11px;display:inline-block;padding:7px 2px}',
-    '.ft-bottom-left a:hover{color:rgba(255,255,255,.7)!important}',
-    '.ft-sep{color:rgba(255,255,255,.5)}',
-    '.ft-sign{display:flex;align-items:center;gap:10px;color:#C8A96A;opacity:.9}',
-    '.ft-sign span{font-family:Georgia,serif;font-style:italic;font-size:12.5px;letter-spacing:.02em}',
-    '.ft-disclaimer{font-size:9.5px;color:rgba(255,255,255,0.5);line-height:1.6;margin-top:12px;text-align:center}',
-    '.ft-disclaimer a{color:inherit;text-decoration:underline}',
-    '@media(max-width:900px){.ft-top{grid-template-columns:1fr 1fr}.ft-top .ft-brand{grid-column:1/-1;padding-right:0}.ft-divider{display:none}.ft-top .ft-col{padding-left:0}}',
-    '@media(max-width:600px){.site-footer{padding:36px 20px 18px}.ft-top{grid-template-columns:1fr 1fr;gap:20px 16px}.ft-top .ft-brand{grid-column:1/-1}.ft-bottom{flex-direction:column;align-items:flex-start}}'
-  ].join('');
-
-  if (!document.getElementById('footer-css')) {
-    var fs=document.createElement('style'); fs.id='footer-css'; fs.textContent=footerCss; document.head.appendChild(fs);
-  }
-
+  // CSS + FT_SIGN_ICON đã chuyển lên ĐẦU file (cạnh `css`) — xem ghi chú ở đó.
   function ftItem(href, iconKey, label) {
     return '<a class="ft-item" href="' + href + '"><span class="ft-item-ic">' + (ICONS[iconKey] || '') + '</span>' + label + '</a>';
   }
   function ftLegalRow(iconKey, html) {
     return '<div class="ft-legal-row"><span class="ft-legal-ic">' + (ICONS[iconKey] || '') + '</span><div>' + html + '</div></div>';
   }
-  // Chữ ký chân trang — trang trí thuần tuý, không phải icon chức năng nên
-  // không nằm trong bảng ICONS dùng chung.
-  var FT_SIGN_ICON = '<svg viewBox="0 0 120 36" width="84" height="25" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="90" cy="10" r="7" fill="currentColor" stroke="none" opacity=".85"/><path d="M2 32 L26 12 L40 24 L60 6 L78 22 L96 32 Z" opacity=".8"/></svg>';
 
-  function injectFooter() {
+  function injectFooter(mountHost) {
+    ensureFooterCss();
     var f = '<footer class="site-footer"><div class="ft-body"><div class="ft-top">'
       + '<div class="ft-brand"><div class="ft-brand-row"><img src="/seal.webp" alt=""><div><div class="ft-brand-name">Tử Vi Minh Bảo</div><div class="ft-brand-zh">Tri mệnh lý – Thuận thế hành</div></div></div><div class="ft-tagline">Tử vi đẩu số theo cổ pháp, luận giải chuyên sâu.</div>'
       // Mã số doanh nghiệp CHƯA có trong hồ sơ được cung cấp — KHÔNG bịa số.
@@ -600,7 +646,8 @@
       + '</div>'
       + '<div class="ft-disclaimer">Nội dung luận giải mang tính tham khảo, không thay thế tư vấn chuyên môn. <a href="/mien-tru-trach-nhiem.html" style="color:inherit;text-decoration:underline">Xem chi tiết</a>.</div>'
       + '</div></footer>';
-    var ft=document.createElement('div'); ft.innerHTML=f; document.body.appendChild(ft.firstChild);
+    var ft=document.createElement('div'); ft.innerHTML=f;
+    (mountHost || document.body).appendChild(ft.firstChild);
   }
 
   function runFooter() { var o=document.querySelector('footer.site-footer'); if(o)o.remove(); injectFooter(); }
