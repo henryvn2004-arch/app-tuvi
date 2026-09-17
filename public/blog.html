@@ -39,11 +39,11 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 .nav-hamburger { display: none; background: none; border: none; color: #8BAACC; cursor: pointer; padding: 8px; font-size: 20px; }
 
 /* HERO — khác với Tài Liệu: tone đậm hơn, editorial */
-.hero { background: var(--navy); padding: 56px 40px 44px; position: relative; overflow: hidden; }
-.hero::before { content: '問'; position: absolute; font-family: 'Noto Serif SC', serif; font-size: 300px; color: rgba(255,255,255,0.025); top: 50%; right: 5%; transform: translateY(-50%); pointer-events: none; }
+.hero { background: var(--bg-soft); padding: 56px 40px 44px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border-lt); }
+.hero::before { content: '問'; position: absolute; font-family: 'Noto Serif SC', serif; font-size: 300px; color: rgba(6,26,46,.035); top: 50%; right: 5%; transform: translateY(-50%); pointer-events: none; }
 .hero-eyebrow { font-size: 11px; letter-spacing: 4px; color: #c9a84c; text-transform: uppercase; margin-bottom: 12px; opacity:0; animation: fadeUp 0.6s ease 0.1s forwards; }
-.hero-title { font-family: 'Noto Serif', serif; font-size: 38px; color: #fff; font-weight: 400; margin-bottom: 10px; opacity:0; animation: fadeUp 0.6s ease 0.2s forwards; }
-.hero-sub { font-size: 14px; color: #8BAACC; font-weight: 300; line-height: 1.7; max-width: 560px; opacity:0; animation: fadeUp 0.6s ease 0.3s forwards; }
+.hero-title { font-family: 'Noto Serif', serif; font-size: 38px; color: var(--navy); font-weight: 400; margin-bottom: 10px; opacity:0; animation: fadeUp 0.6s ease 0.2s forwards; }
+.hero-sub { font-size: 14px; color: var(--text-mid); font-weight: 300; line-height: 1.7; max-width: 560px; opacity:0; animation: fadeUp 0.6s ease 0.3s forwards; }
 
 .featured-label { font-size: 10px; font-weight: 600; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
 .featured-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; }
