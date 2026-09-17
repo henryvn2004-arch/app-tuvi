@@ -183,6 +183,12 @@ jobs:
       - name: Bảng mô-típ tranh 64 quẻ đầy đủ
         run: npm run check:motifs
 
+      # Sprint 0 reskin webtoon gộp 40 file :root chép tay về public/theme.css
+      # — bộ dò giữ nó khỏi trôi lại: PR sau copy-paste :root từ trang cũ là
+      # quay lại đúng bệnh cũ, và CSS thuần thì không gì khác bắt lỗi được.
+      - name: Không còn :root chép tay trùng theme.css
+        run: npm run check:theme
+
       # Thư viện hình minh hoạ: PHẦN (LLM đọc) ↔ khía cạnh (ảnh) ↔ cung ↔ ngưỡng
       # sắc thái phải khớp NHAU TUYỆT ĐỐI ở bốn nguồn khác nhau (illus-prompt.ts,
       # luan-giai-doc.ts, illus-match.js, illus-nguong.js). Lệch một khoá là một

@@ -21,6 +21,7 @@
 const OPENAI_KEY = process.env.OPENAI_API_KEY || '';
 const OPENAI_IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || 'gpt-image-2';
 const OPENAI_IMAGES_URL = 'https://api.openai.com/v1/images/generations';
+const OPENAI_IMAGES_EDIT_URL = 'https://api.openai.com/v1/images/edits';
 
 export interface GeneratePortraitOpts {
   prompt: string;
@@ -34,6 +35,15 @@ export interface GeneratePortraitOpts {
    * lên là cả site vẽ khác đi.
    */
   model?: string;
+  /**
+   * ẢNH NEO tuỳ chọn (bytes + mime) — CÓ thì gọi `images/edits` thay vì
+   * `images/generations` (đưa ảnh vào làm neo nhận diện nhân vật thay vì vẽ
+   * mới từ chữ). Dùng cho bộ ảnh Minh Bảo (hero-banner-prompt.ts và về sau)
+   * — text-to-image thuần làm TRÔI NHÂN VẬT giữa các bức (đã cắn ở character
+   * bible V1). KHÔNG dùng cho 2 tool chân dung đang bán (không truyền field
+   * này ⇒ hành vi y hệt trước, đường cũ không đổi).
+   */
+  anchorImage?: { bytes: Buffer; mimeType: string; fileName: string };
 }
 
 export interface GeneratePortraitResult {
@@ -56,25 +66,47 @@ export async function generatePortraitImage(opts: GeneratePortraitOpts): Promise
 
   const model = opts.model || OPENAI_IMAGE_MODEL;
 
-  const r = await fetch(OPENAI_IMAGES_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${OPENAI_KEY}`,
-    },
-    body: JSON.stringify({
-      model,
-      prompt: opts.prompt,
-      size: opts.size || '1024x1024',
-      quality: opts.quality || 'medium',
-      // Khai RÕ png, không dựa vào mặc định: 2 route chân dung upload lên
-      // Supabase Storage với đuôi `.png` + `Content-Type: image/png`, và ảnh đó
-      // còn đi thẳng vào og:image của trang chia sẻ. Mặc định đổi một nhịp là
-      // file nói dối kiểu của chính nó ở 3 nơi cùng lúc.
-      output_format: 'png',
-      n: 1,
-    }),
-  });
+  let r: Response;
+  if (opts.anchorImage) {
+    // images/edits — multipart, KHÔNG tự đặt Content-Type: boundary do
+    // FormData sinh, gõ tay là hỏng (đã cắn ở scripts/gen-webtoon-sample.mjs).
+    const fd = new FormData();
+    fd.append('model', model);
+    fd.append('prompt', opts.prompt);
+    fd.append('size', opts.size || '1024x1024');
+    fd.append('quality', opts.quality || 'medium');
+    fd.append('n', '1');
+    // `Buffer`/`Uint8Array` kiểu `ArrayBufferLike` không gán thẳng được vào
+    // `BlobPart` (TS muốn đúng `ArrayBuffer`) — cắt lại thành ArrayBuffer thật.
+    const { bytes } = opts.anchorImage;
+    const ab = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+    fd.append('image', new Blob([ab], { type: opts.anchorImage.mimeType }), opts.anchorImage.fileName);
+    r = await fetch(OPENAI_IMAGES_EDIT_URL, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${OPENAI_KEY}` },
+      body: fd,
+    });
+  } else {
+    r = await fetch(OPENAI_IMAGES_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${OPENAI_KEY}`,
+      },
+      body: JSON.stringify({
+        model,
+        prompt: opts.prompt,
+        size: opts.size || '1024x1024',
+        quality: opts.quality || 'medium',
+        // Khai RÕ png, không dựa vào mặc định: 2 route chân dung upload lên
+        // Supabase Storage với đuôi `.png` + `Content-Type: image/png`, và ảnh đó
+        // còn đi thẳng vào og:image của trang chia sẻ. Mặc định đổi một nhịp là
+        // file nói dối kiểu của chính nó ở 3 nơi cùng lúc.
+        output_format: 'png',
+        n: 1,
+      }),
+    });
+  }
 
   if (!r.ok) {
     const body = await r.text().catch(() => '');

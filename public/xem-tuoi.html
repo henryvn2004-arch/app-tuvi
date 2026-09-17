@@ -23,25 +23,10 @@
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tuvi-grid.js?v=3"></script>
 <script src="/tuvi-paywall.js?v=35"></script>
+<link rel="stylesheet" href="/theme.css?v=1">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { overflow-x: hidden; }
-:root {
-  --navy:      #061A2E;
-  --navy-mid:  #0D3B5E;
-  --blue:      #1455A4;
-  --text:      #1a1a1a;
-  --text-mid:  #444;
-  --text-lt:   #666;
-  --border:    #CCCCCC;
-  --border-lt: #E8E8E8;
-  --bg:        #FFFFFF;
-  --bg-soft:   #F5F4F0;
-  --gold:      #7C5F26;
-  --gold-lt:   #F9F4EB;
-  --red:       #C0392B;
-  --green:     #1E6B3C;
-}
 /* Thẻ trích dẫn kiểu Facebook caption cho câu hook — trang này KHÔNG nạp
    shell.css (trang standalone cũ), nên khai riêng thay vì phụ thuộc token
    của shell (--sans/--heading không tồn tại ở đây). Màu khớp bản gốc trong
@@ -1820,7 +1805,7 @@ async function analyze(){
 function toggleDropdown(btn){const menu=btn.nextElementSibling;const isOpen=menu.classList.contains('open');document.querySelectorAll('.nav-dropdown-menu').forEach(m=>m.classList.remove('open'));document.querySelectorAll('.nav-dropdown-btn').forEach(b=>b.classList.remove('open'));if(!isOpen){menu.classList.add('open');btn.classList.add('open');}}
 document.addEventListener('click',e=>{if(!e.target.closest('.nav-dropdown')){document.querySelectorAll('.nav-dropdown-menu').forEach(m=>m.classList.remove('open'));document.querySelectorAll('.nav-dropdown-btn').forEach(b=>b.classList.remove('open'));}});
 </script>
-<script src="/nav.js?v=30"></script>
+<script src="/nav.js?v=35"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/chatbot.js"></script>
 <script>

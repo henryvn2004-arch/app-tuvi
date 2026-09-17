@@ -656,8 +656,8 @@
       (HIST_ON ? '<div class="rail-hist" id="railHist" style="display:none"></div>' : '') +
       '<div class="ctx" id="railCtx" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:13px;height:13px;flex:0 0 auto"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg> <span id="railCtxTxt"></span></div>' +
       '<div class="chat" id="chat">' +
-        '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="' + authorAva() + '" alt=""></div><b>Chưa có lá số nào</b>' +
-        '<p>Lập lá số ở khung giữa, rồi hỏi tôi bất cứ điều gì —<br>vận sự nghiệp, tình duyên, năm nay, tháng tới…</p></div>' +
+        '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="/mascot/expr-vui-v2.webp" alt="Minh Bảo"></div><b>Chưa có lá số nào</b>' +
+        '<p>Bạn lập lá số ở khung giữa xong, Bảo trả lời liền —<br>chuyện sự nghiệp, tình duyên, năm nay, tháng tới, hỏi gì cũng được.</p></div>' +
       '</div>' +
       '<div class="rail-meter" id="railMeter" style="display:none"></div>' +
       '<div class="rail-sugg" id="railSugg" style="display:none"></div>' +

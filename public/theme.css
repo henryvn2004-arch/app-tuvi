@@ -1,0 +1,35 @@
+/* ============================================================
+   theme.css — NGUỒN DUY NHẤT cho bảng màu thương hiệu dùng ở các trang
+   marketing/tool KHÔNG thuộc app-shell (`shell.css` đã có bảng riêng cho
+   /app/* · `tools/tools.css` phủ phần lớn 54 trang tool, file này chỉ dọn
+   phần CÒN LẠI mà 44 trang từng chép tay vào `:root` của riêng mình).
+
+   Sprint 0 (reskin webtoon, 2026-09) — GOM, không đổi màu. Giá trị dưới đây
+   là giá trị ĐA SỐ trong 44 file đã audit (`docs/reskin-webtoon/PLAN.md`
+   Sprint 0). Trang nào có màu KHÁC (upload.html tông tối riêng, chat-v2.html
+   giấy ấm hơn, app-bat-tu.html, một vài `--gold-bright`…) VẪN GIỮ khối
+   `:root{...}` cục bộ của nó ngay trong trang — đó là OVERRIDE CÓ CHỦ Ý,
+   không phải chép tay quên xoá. `<link>` file này luôn nạp TRƯỚC `<style>`
+   của trang nên override cục bộ luôn thắng theo cascade, y hệt trước khi gộp.
+
+   ⚠️ ĐỔI GIÁ TRỊ Ở ĐÂY = ĐỔI MÀU CỦA MỌI TRANG ĐANG DÙNG NÓ. Đó là mục đích
+   của file này (Sprint 2/3 sẽ sửa các giá trị dưới thành bảng webtoon), nhưng
+   Sprint 0 CHƯA đổi gì — số hệt số cũ, kiểm bằng `npm run check:theme`.
+   ============================================================ */
+:root {
+  --navy: #061a2e;
+  --navy-mid: #0d3b5e;
+  --blue: #1455a4;
+  --gold: #7c5f26;
+  --gold-lt: #f9f4eb;
+  --gold-bright: #d4a843;
+  --text: #1a1a1a;
+  --text-mid: #444;
+  --text-lt: #666;
+  --border: #cccccc;
+  --border-lt: #e8e8e8;
+  --bg: #ffffff;
+  --bg-soft: #f5f4f0;
+  --red: #c0392b;
+  --green: #1e6b3c;
+}

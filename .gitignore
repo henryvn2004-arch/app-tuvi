@@ -95,3 +95,4 @@ scripts/fixtures/lunar-table-new.json
 # Ảnh banner chính (khối hook `.intro-card`) sinh bằng scripts/gen-hero-banners.mjs
 # khi thử nghiệm — bản final (đã duyệt + optimize) mới vào public/, commit thẳng.
 .hero-banners/
+.webtoon-sample/

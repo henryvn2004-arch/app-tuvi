@@ -1,4 +1,4 @@
-// nav.js — Shared navigation component v14 (Lucide icons + iconHtml + EMOJI_TO_ICON map)
+// nav.js — Shared navigation component v19 (footer: bỏ FT_SIGN_ICON — hình SVG vẽ tay bằng code, chỉ giữ chữ ký chữ)
 (function () {
   var path = window.location.pathname;
 
@@ -271,26 +271,31 @@
     //     <span class="ic" data-icon="wallet"></span>
     '.ic,.ic-inline{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;vertical-align:-.125em}',
     '.ic>svg,.ic-inline>svg{width:1em;height:1em;display:block}',
-    '.topnav{position:sticky;top:0;z-index:200;background:#061A2E;display:flex;align-items:center;height:60px;padding:0 40px;gap:28px}',
+    '.topnav{position:sticky;top:0;z-index:200;background:#0F2A3D;display:flex;align-items:center;height:60px;padding:0 40px;gap:28px}',
     '.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}',
     '.nav-logo img{width:38px;height:38px;object-fit:contain;border-radius:5px}',
     '.nav-logo .name{font-size:16px;font-weight:700;color:#FF4000;font-family:Georgia,serif}',
     '.nav-logo .url{font-size:10px;color:#aaa;letter-spacing:.07em;text-transform:uppercase}',
+    // Mascot Minh Bảo — góc phải topnav (guideline §5.1 "Logo + slogan nhẹ,
+    // mascot nhỏ bên phải"). Ẩn dưới 900px: hết chỗ khi hamburger xuất hiện,
+    // và cột nav-links đã chiếm hết flex:1 ở màn hẹp.
+    '.nav-mascot{width:34px;height:34px;object-fit:contain;flex-shrink:0;margin-left:4px}',
+    '@media(max-width:900px){.nav-mascot{display:none}}',
     '.nav-links{display:flex;align-items:center;gap:2px;flex:1;overflow:visible}',
     '.nav-link{color:#8BAACC;font-size:13px;text-decoration:none;padding:6px 10px;border-radius:6px;transition:all .15s;white-space:nowrap;cursor:pointer;display:inline-flex;align-items:center;gap:4px}',
     '.nav-link:hover{color:#fff;background:rgba(255,255,255,.07)}',
-    '.nav-link.active{color:#c9a84c}',
-    '.nav-cta-ld{background:#c9a84c;color:#061A2E!important;font-weight:700;padding:7px 15px;margin-right:6px}',
-    '.nav-cta-ld:hover{background:#d8bd6a;color:#061A2E!important}',
+    '.nav-link.active{color:#C8A96A}',
+    '.nav-cta-ld{background:#C8A96A;color:#0F2A3D!important;font-weight:700;padding:7px 15px;margin-right:6px}',
+    '.nav-cta-ld:hover{background:#D9C08F;color:#0F2A3D!important}',
     '.nav-link svg{width:11px;height:11px;opacity:.7;flex-shrink:0}',
     '.nav-hamburger{display:none;background:none;border:none;color:#8BAACC;cursor:pointer;padding:8px;z-index:400;position:relative}',
     '.nav-hamburger svg{width:22px;height:22px;display:block}',
     '.nav-dd{position:relative;display:flex;align-items:center}',
-    '.nav-dd-menu{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid #ccc;border-top:3px solid #c9a84c;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:500;max-height:80vh;overflow-y:auto}',
+    '.nav-dd-menu{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid #ccc;border-top:3px solid #C8A96A;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:500;max-height:80vh;overflow-y:auto}',
     '.nav-dd:hover .nav-dd-menu{display:block}',
     '.nav-dd-item{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;color:#1a1a1a;text-decoration:none;border-bottom:1px solid #f0f0f0;transition:background .12s}',
     '.nav-dd-item:last-child{border-bottom:none}',
-    '.nav-dd-item:hover{background:#F5F4F0;color:#061A2E}',
+    '.nav-dd-item:hover{background:#F5F4F0;color:#0F2A3D}',
     '.nav-dd-item.active{color:#9A7B3A;font-weight:600}',
     '.nav-dd-item .nav-ic{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;flex-shrink:0;color:#9A7B3A}',
     '.nav-dd-item .nav-ic svg{width:16px;height:16px;display:block}',
@@ -298,7 +303,7 @@
     '.nav-dd-section:first-child{margin-top:0}',
     '@media(max-width:900px){.topnav{padding:0 16px;gap:0}.nav-links{gap:0}}',
     '@media(max-width:700px){',
-    '.nav-links{display:none;position:absolute;top:60px;left:0;right:0;background:#061A2E;flex-direction:column;padding:8px 0 16px;gap:0;border-bottom:1px solid #1a2a3a;z-index:199;overflow-y:auto;max-height:calc(100vh - 60px)}',
+    '.nav-links{display:none;position:absolute;top:60px;left:0;right:0;background:#0F2A3D;flex-direction:column;padding:8px 0 16px;gap:0;border-bottom:1px solid #1a2a3a;z-index:199;overflow-y:auto;max-height:calc(100vh - 60px)}',
     '.nav-links.open{display:flex}',
     '.nav-link{padding:10px 24px;border-radius:0;width:100%;display:block}',
     '.nav-hamburger{display:block}',
@@ -308,11 +313,67 @@
     '.nav-dd-menu.open{display:block !important}',
     '.nav-dd-item{color:#8BAACC;padding:9px 36px;border-bottom:1px solid rgba(255,255,255,.05)}',
     '.nav-dd-item:hover{background:rgba(255,255,255,.05);color:#fff}',
-    '.nav-dd-item.active{color:#c9a84c}',
-    '.nav-dd-item .nav-ic{color:#c9a84c}',
-    '.nav-dd-section{background:rgba(201,168,76,.1);color:#c9a84c;padding:7px 24px 4px}',
+    '.nav-dd-item.active{color:#C8A96A}',
+    '.nav-dd-item .nav-ic{color:#C8A96A}',
+    '.nav-dd-section{background:rgba(200,169,106,.1);color:#C8A96A;padding:7px 24px 4px}',
     '}'
   ].join('');
+
+  // ── Footer — CSS định nghĩa Ở ĐÂY (không phải cạnh injectFooter() bên dưới)
+  // để cả nhánh `data-icons-only`/`data-footer-only` (return SỚM, trước khi
+  // chạm tới code full-mode) LẪN full-mode đều dùng chung được. Đặt cạnh
+  // `injectFooter()` (như bản đầu) là bug thật đã cắn: `data-footer-only` gọi
+  // injectFooter() nhưng `#footer-css` chưa từng được inject vì code đó nằm
+  // SAU return của chính nhánh này trong thứ tự file — trang chủ Sprint 4
+  // (index-sample-v2.html) hiện icon email khổng lồ không màu, chữ
+  // "undefined" lộ ra vì FT_SIGN_ICON cũng ăn theo lỗi thứ tự tương tự.
+  var footerCss = [
+    '.site-footer{background:#2B1B10;color:rgba(255,255,255,0.5);padding:44px 40px 22px;margin-top:auto}',
+    '.ft-body{max-width:1100px;margin:0 auto}',
+    '.ft-top{display:grid;grid-template-columns:1.5fr auto 1fr 1fr 1fr;gap:0}',
+    '.ft-top .ft-brand{padding-right:32px}',
+    '.ft-top .ft-col{padding-left:32px}',
+    '.ft-divider{width:1px;align-self:stretch;background:rgba(255,255,255,.08)}',
+    '.ft-brand-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}',
+    '.ft-brand-row img{width:36px;height:36px;object-fit:contain;border-radius:5px;opacity:0.9}',
+    '.ft-brand-name{font-size:14px;font-weight:700;color:rgba(255,255,255,0.85);font-family:Georgia,serif;line-height:1.2}',
+    '.ft-brand-zh{font-size:11px;color:#C8A96A}',
+    '.ft-tagline{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7;max-width:240px}',
+    '.ft-legal{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;gap:8px}',
+    '.ft-legal-row{display:flex;align-items:flex-start;gap:9px;font-size:11px;color:rgba(255,255,255,.5);line-height:1.5}',
+    '.ft-legal-row strong{color:rgba(255,255,255,.6);font-weight:600;font-size:11.5px}',
+    '.ft-legal-row .dim{color:rgba(255,255,255,.5)}',
+    '.ft-legal-ic{flex-shrink:0;width:14px;height:14px;margin-top:1px;color:#9A7B3A}',
+    '.ft-legal-ic svg{width:100%;height:100%}',
+    '.ft-social{display:flex;gap:8px;margin-top:16px}',
+    '.ft-soc{width:28px;height:28px;border-radius:50%;border:1px solid rgba(200,169,106,.35);color:#C8A96A;display:flex;align-items:center;justify-content:center;text-decoration:none!important;transition:border-color .15s,background .15s}',
+    '.ft-soc:hover{background:rgba(200,169,106,.1);border-color:#C8A96A}',
+    '.ft-soc svg{width:13px;height:13px}',
+    '.ft-col-title{font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#C8A96A;margin-bottom:16px}',
+    '.ft-col-title i{display:block;width:22px;height:2px;background:#9A7B3A;margin-top:8px;border-radius:2px;font-style:normal}',
+    '.ft-item{display:flex;align-items:center;gap:11px;font-size:13px;color:rgba(255,255,255,.55)!important;text-decoration:none!important;margin-bottom:15px}',
+    '.ft-item:last-child{margin-bottom:0}',
+    '.ft-item:hover{color:rgba(255,255,255,.9)!important}',
+    '.ft-item-ic{flex-shrink:0;width:15px;height:15px;color:#9A7B3A}',
+    '.ft-item-ic svg{width:100%;height:100%}',
+    '.ft-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.5)}',
+    '.ft-bottom-left{display:flex;align-items:center;gap:9px;flex-wrap:wrap}',
+    '.ft-bottom-left a{color:rgba(255,255,255,.5)!important;text-decoration:none!important;font-size:11px;display:inline-block;padding:7px 2px}',
+    '.ft-bottom-left a:hover{color:rgba(255,255,255,.7)!important}',
+    '.ft-sep{color:rgba(255,255,255,.5)}',
+    '.ft-sign{display:flex;align-items:center;gap:10px;color:#C8A96A;opacity:.9}',
+    '.ft-sign span{font-family:Georgia,serif;font-style:italic;font-size:12.5px;letter-spacing:.02em}',
+    '.ft-disclaimer{font-size:9.5px;color:rgba(255,255,255,0.5);line-height:1.6;margin-top:12px;text-align:center}',
+    '.ft-disclaimer a{color:inherit;text-decoration:underline}',
+    '@media(max-width:900px){.ft-top{grid-template-columns:1fr 1fr}.ft-top .ft-brand{grid-column:1/-1;padding-right:0}.ft-divider{display:none}.ft-top .ft-col{padding-left:0}}',
+    '@media(max-width:600px){.site-footer{padding:36px 20px 18px}.ft-top{grid-template-columns:1fr 1fr;gap:20px 16px}.ft-top .ft-brand{grid-column:1/-1}.ft-bottom{flex-direction:column;align-items:flex-start}}'
+  ].join('');
+
+  function ensureFooterCss() {
+    if (!document.getElementById('footer-css')) {
+      var fs=document.createElement('style'); fs.id='footer-css'; fs.textContent=footerCss; document.head.appendChild(fs);
+    }
+  }
 
   // ── CHẾ ĐỘ CHỈ-ICON ────────────────────────────────────────────
   // 27 trang shell và 2 trang admin CỐ Ý không nạp nav.js: nav.js tự chèn thanh
@@ -341,6 +402,37 @@
     }
     // Cùng lý do như lượt quét kép ở cuối file: script chạy trước khi thân trang
     // được parse, nên phải quét lại khi DOM đóng.
+    mountIcons();
+    if (document.readyState === 'loading')
+      document.addEventListener('DOMContentLoaded', function () { mountIcons(); });
+    return;
+  }
+  // `data-footer-only` — trang chủ webtoon (Sprint 4): dùng shell.css/shell.js
+  // y hệt /app (icons-only đáng lẽ đủ) nhưng CÒN cần footer thật cho SEO/pháp
+  // lý, mà icons-only ở trên `return` trước khi tới `injectFooter()`. KHÔNG
+  // dùng full mode ở đây: full mode tự chèn `<nav class="topnav">` lên đầu
+  // <body>, chồng lên sidebar/ws-top mà shell.js đã dựng — hai thanh điều
+  // hướng đè nhau. Và KHÔNG lặp GA4/Clarity/PWA của full mode: shell.js đã tự
+  // bù các mục đó cho mọi trang icons-only (xem ghi chú ở shell.js).
+  // Mount vào `#site-footer-host` nếu trang có khai (đặt CUỐI `.ws-body`, sau
+  // các section marketing) — thiếu thì lùi về `document.body.appendChild` như
+  // hành vi cũ, không phá 40+ trang đang dùng full mode.
+  if (_self && _self.hasAttribute('data-footer-only')) {
+    if (!document.getElementById('nav-css')) {
+      var s1 = document.createElement('style');
+      s1.id = 'nav-css';
+      s1.textContent = css;
+      document.head.appendChild(s1);
+    }
+    var runHomeFooter = function () {
+      var host = document.getElementById('site-footer-host');
+      var old = document.querySelector('footer.site-footer');
+      if (old) old.remove();
+      injectFooter(host || undefined);
+    };
+    if (document.readyState === 'loading')
+      document.addEventListener('DOMContentLoaded', function () { setTimeout(runHomeFooter, 0); });
+    else setTimeout(runHomeFooter, 0);
     mountIcons();
     if (document.readyState === 'loading')
       document.addEventListener('DOMContentLoaded', function () { mountIcons(); });
@@ -429,6 +521,12 @@
   var html = '<nav class="topnav">'
     + '<a class="nav-logo" href="/"><img src="/seal.webp" alt="">'
     + '<div><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div></a>'
+    // Mascot NGAY SAU logo, KHÔNG ở rìa phải: #nav-auth-area tự đặt
+    // `position:fixed;right:56px` (auth.js updateNavUI) — thoát hẳn khỏi
+    // flexbox của .topnav, nên một sibling flex mới ở cuối KHÔNG đẩy được nó
+    // ra, chỉ đè lên nhau (đã thấy lúc test: mascot chồng lên nút "Đăng nhập").
+    // Đặt cạnh logo là vùng chắc chắn không ai khác tranh chỗ.
+    + '<img class="nav-mascot" src="/mascot/corner-v2.webp" alt="" width="34" height="34" loading="eager" decoding="async">'
     + '<div class="nav-links" id="nav-links">'
     + '<a class="nav-link nav-cta-ld' + (isActive('/app')?' active':'') + '" href="/app" title="Lập lá số và hỏi trợ lý Luận Đường — vào đây để dùng công cụ">✦ Luận Đường</a>'
     + dd_kp
@@ -488,63 +586,15 @@
   // ── Footer ────────────────────────────────────────────────────
   // Cấu trúc khớp 2 dropdown đang chạy thật trên nav (Khám phá / Cẩm nang):
   // cột "Công Cụ"/"Tra Cứu" trỏ hub (đọc dữ liệu), không liệt kê tool lẻ nữa.
-  var footerCss = [
-    '.site-footer{background:#1A1210;color:rgba(255,255,255,0.5);padding:44px 40px 22px;margin-top:auto}',
-    '.ft-body{max-width:1100px;margin:0 auto}',
-    '.ft-top{display:grid;grid-template-columns:1.5fr auto 1fr 1fr 1fr;gap:0}',
-    '.ft-top .ft-brand{padding-right:32px}',
-    '.ft-top .ft-col{padding-left:32px}',
-    '.ft-divider{width:1px;align-self:stretch;background:rgba(255,255,255,.08)}',
-    '.ft-brand-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}',
-    '.ft-brand-row img{width:36px;height:36px;object-fit:contain;border-radius:5px;opacity:0.9}',
-    '.ft-brand-name{font-size:14px;font-weight:700;color:rgba(255,255,255,0.85);font-family:Georgia,serif;line-height:1.2}',
-    '.ft-brand-zh{font-size:11px;color:#C9A84C}',
-    '.ft-tagline{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7;max-width:240px}',
-    '.ft-legal{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;gap:8px}',
-    '.ft-legal-row{display:flex;align-items:flex-start;gap:9px;font-size:11px;color:rgba(255,255,255,.5);line-height:1.5}',
-    '.ft-legal-row strong{color:rgba(255,255,255,.6);font-weight:600;font-size:11.5px}',
-    '.ft-legal-row .dim{color:rgba(255,255,255,.5)}',
-    '.ft-legal-ic{flex-shrink:0;width:14px;height:14px;margin-top:1px;color:#9A7B3A}',
-    '.ft-legal-ic svg{width:100%;height:100%}',
-    '.ft-social{display:flex;gap:8px;margin-top:16px}',
-    '.ft-soc{width:28px;height:28px;border-radius:50%;border:1px solid rgba(201,168,76,.35);color:#C9A84C;display:flex;align-items:center;justify-content:center;text-decoration:none!important;transition:border-color .15s,background .15s}',
-    '.ft-soc:hover{background:rgba(201,168,76,.1);border-color:#C9A84C}',
-    '.ft-soc svg{width:13px;height:13px}',
-    '.ft-col-title{font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#C9A84C;margin-bottom:16px}',
-    '.ft-col-title i{display:block;width:22px;height:2px;background:#9A7B3A;margin-top:8px;border-radius:2px;font-style:normal}',
-    '.ft-item{display:flex;align-items:center;gap:11px;font-size:13px;color:rgba(255,255,255,.55)!important;text-decoration:none!important;margin-bottom:15px}',
-    '.ft-item:last-child{margin-bottom:0}',
-    '.ft-item:hover{color:rgba(255,255,255,.9)!important}',
-    '.ft-item-ic{flex-shrink:0;width:15px;height:15px;color:#9A7B3A}',
-    '.ft-item-ic svg{width:100%;height:100%}',
-    '.ft-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.5)}',
-    '.ft-bottom-left{display:flex;align-items:center;gap:9px;flex-wrap:wrap}',
-    '.ft-bottom-left a{color:rgba(255,255,255,.5)!important;text-decoration:none!important;font-size:11px;display:inline-block;padding:7px 2px}',
-    '.ft-bottom-left a:hover{color:rgba(255,255,255,.7)!important}',
-    '.ft-sep{color:rgba(255,255,255,.5)}',
-    '.ft-sign{display:flex;align-items:center;gap:10px;color:#C9A84C;opacity:.9}',
-    '.ft-sign span{font-family:Georgia,serif;font-style:italic;font-size:12.5px;letter-spacing:.02em}',
-    '.ft-disclaimer{font-size:9.5px;color:rgba(255,255,255,0.5);line-height:1.6;margin-top:12px;text-align:center}',
-    '.ft-disclaimer a{color:inherit;text-decoration:underline}',
-    '@media(max-width:900px){.ft-top{grid-template-columns:1fr 1fr}.ft-top .ft-brand{grid-column:1/-1;padding-right:0}.ft-divider{display:none}.ft-top .ft-col{padding-left:0}}',
-    '@media(max-width:600px){.site-footer{padding:36px 20px 18px}.ft-top{grid-template-columns:1fr 1fr;gap:20px 16px}.ft-top .ft-brand{grid-column:1/-1}.ft-bottom{flex-direction:column;align-items:flex-start}}'
-  ].join('');
-
-  if (!document.getElementById('footer-css')) {
-    var fs=document.createElement('style'); fs.id='footer-css'; fs.textContent=footerCss; document.head.appendChild(fs);
-  }
-
   function ftItem(href, iconKey, label) {
     return '<a class="ft-item" href="' + href + '"><span class="ft-item-ic">' + (ICONS[iconKey] || '') + '</span>' + label + '</a>';
   }
   function ftLegalRow(iconKey, html) {
     return '<div class="ft-legal-row"><span class="ft-legal-ic">' + (ICONS[iconKey] || '') + '</span><div>' + html + '</div></div>';
   }
-  // Chữ ký chân trang — trang trí thuần tuý, không phải icon chức năng nên
-  // không nằm trong bảng ICONS dùng chung.
-  var FT_SIGN_ICON = '<svg viewBox="0 0 120 36" width="84" height="25" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="90" cy="10" r="7" fill="currentColor" stroke="none" opacity=".85"/><path d="M2 32 L26 12 L40 24 L60 6 L78 22 L96 32 Z" opacity=".8"/></svg>';
 
-  function injectFooter() {
+  function injectFooter(mountHost) {
+    ensureFooterCss();
     var f = '<footer class="site-footer"><div class="ft-body"><div class="ft-top">'
       + '<div class="ft-brand"><div class="ft-brand-row"><img src="/seal.webp" alt=""><div><div class="ft-brand-name">Tử Vi Minh Bảo</div><div class="ft-brand-zh">Tri mệnh lý – Thuận thế hành</div></div></div><div class="ft-tagline">Tử vi đẩu số theo cổ pháp, luận giải chuyên sâu.</div>'
       // Mã số doanh nghiệp CHƯA có trong hồ sơ được cung cấp — KHÔNG bịa số.
@@ -585,11 +635,12 @@
       + '<span class="ft-sep">·</span><a href="/huong-dan-thanh-toan.html">Thanh Toán</a>'
       + '<span class="ft-sep">·</span><a href="/mien-tru-trach-nhiem.html">Miễn Trừ Trách Nhiệm</a>'
       + '</div>'
-      + '<div class="ft-sign">' + FT_SIGN_ICON + '<span>Tri mệnh nhi hành — vô ưu vô hoặc</span></div>'
+      + '<div class="ft-sign"><span>Tri mệnh nhi hành — vô ưu vô hoặc</span></div>'
       + '</div>'
       + '<div class="ft-disclaimer">Nội dung luận giải mang tính tham khảo, không thay thế tư vấn chuyên môn. <a href="/mien-tru-trach-nhiem.html" style="color:inherit;text-decoration:underline">Xem chi tiết</a>.</div>'
       + '</div></footer>';
-    var ft=document.createElement('div'); ft.innerHTML=f; document.body.appendChild(ft.firstChild);
+    var ft=document.createElement('div'); ft.innerHTML=f;
+    (mountHost || document.body).appendChild(ft.firstChild);
   }
 
   function runFooter() { var o=document.querySelector('footer.site-footer'); if(o)o.remove(); injectFooter(); }
