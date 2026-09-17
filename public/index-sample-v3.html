@@ -402,27 +402,8 @@ button { font: inherit; cursor: pointer; }
   </div>
 </section>
 
-<!-- ═══════════════ VẬN HÔM NAY ═══════════════ -->
-<section class="daily-sec">
-  <div class="wrap">
-    <div class="daily-card">
-      <div class="daily-text">
-        <div class="daily-eyebrow"><span class="ic" data-icon="calendar-days"></span>Vận hôm nay</div>
-        <h3 class="daily-title serif" id="dcTitle">Hôm nay</h3>
-        <span class="daily-badge v-binh" id="dcBadge">Đang xem…</span>
-        <p class="daily-desc" id="dcDesc">Bảo đang xem hoàng lịch cho bạn…</p>
-        <a class="daily-cta" href="/app-ngay-tot.html">Xem chi tiết →</a>
-      </div>
-      <div class="daily-art">
-        <img src="/mascot/daily-scene-v2.webp"
-             srcset="/mascot/daily-scene-v2-sm.webp 768w, /mascot/daily-scene-v2-md.webp 1100w, /mascot/daily-scene-v2.webp 1536w"
-             sizes="(max-width: 820px) calc(100vw - 48px), 500px"
-             width="1536" height="1024" loading="lazy"
-             alt="Minh Bảo cầm cuộn thư trước làng, xem hoàng lịch hôm nay">
-      </div>
-    </div>
-  </div>
-</section>
+<!-- ═══════════════ KHÁCH HÀNG NÓI GÌ ═══════════════ -->
+<div id="home-rv-host"></div>
 
 <!-- ═══════════════ KHÁM PHÁ THÊM ═══════════════ -->
 <section class="explore-sec">
@@ -488,28 +469,21 @@ button { font: inherit; cursor: pointer; }
   <a class="bn-item" href="/cong-cu.html"><span class="ic" data-icon="layout-grid"></span>Thêm</a>
 </nav>
 
-<script src="/nav.js?v=36" data-footer-only defer></script>
+<script src="/nav.js?v=37" data-footer-only defer></script>
+<script>window.TestimonialsNoAutoRun = true;</script>
+<script src="/testimonials.js?v=1"></script>
 <script>
 (function () {
-  // ── Vận hôm nay — số THẬT từ /api/van-ngay (engine hoàng lịch), không bịa.
+  // ── Khách hàng nói gì — tái dùng ĐÚNG data + logic slider của
+  // testimonials.js (window.Testimonials, xem comment ở đó) thay vì viết
+  // lại — một nguồn duy nhất cho nội dung review trên toàn site.
   (function () {
-    function vnNow() { var dt = new Date(); return new Date(dt.getTime() + (7 * 60 - dt.getTimezoneOffset()) * 60000); }
-    var titleEl = document.getElementById('dcTitle');
-    var badgeEl = document.getElementById('dcBadge');
-    var descEl = document.getElementById('dcDesc');
-    fetch('/api/van-ngay?tuan=0', { cache: 'no-store' })
-      .then(function (r) { return r.json(); })
-      .then(function (v) {
-        if (!v || !v.ok) return;
-        var now = vnNow();
-        if (titleEl) titleEl.textContent = v.ngay.thu + ' · ' + now.getDate() + '/' + (now.getMonth() + 1);
-        var t = v.danhGia.tinhChat;
-        var label = t === 'tốt' ? 'Ngày tốt' : t === 'xấu' ? 'Ngày xấu' : 'Ngày bình';
-        var cls = t === 'tốt' ? 'v-tot' : t === 'xấu' ? 'v-xau' : 'v-binh';
-        if (badgeEl) { badgeEl.textContent = label; badgeEl.className = 'daily-badge ' + cls; }
-        if (descEl) descEl.textContent = (v.truc && v.truc.ten ? v.truc.ten + ' — ' : '') + v.danhGia.nhan;
-      })
-      .catch(function () {});
+    var host = document.getElementById('home-rv-host');
+    if (!host || !window.Testimonials || !window.TestimonialsData) return;
+    var reviews = window.TestimonialsData.default;
+    window.Testimonials.injectCSS();
+    host.outerHTML = window.Testimonials.buildSection(reviews);
+    window.Testimonials.initSlider(reviews);
   })();
 
   // ── Số liệu — mô phỏng, cùng thuật toán index-sample-v2/shell.js ────

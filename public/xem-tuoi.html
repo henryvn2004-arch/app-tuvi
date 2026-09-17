@@ -67,7 +67,7 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 }
 .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
 .nav-logo img { width:38px; height:38px; object-fit:contain; border-radius:5px; }
-.nav-logo .name { font-size:16px; font-weight:700; color:#FF4000; font-family:Georgia,serif; }
+.nav-logo .name { font-size:16px; font-weight:700; color:#FF4000; font-family:'Noto Serif',Georgia,serif; }
 .nav-logo .url  { font-size:10px; color:#aaa; letter-spacing:0.07em; text-transform:uppercase; }
 .nav-logo em { font-style: italic; color: #8BAACC; font-size: 14px; margin-left: 10px; }
 .nav-tag { font-size: 10px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #8BAACC; }
@@ -509,7 +509,7 @@ select.form-input { cursor: pointer; }
 .footer-top  { display:flex; justify-content:space-between; align-items:flex-start; gap:32px; flex-wrap:wrap; padding-bottom:24px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:20px; }
 .footer-brand { display:flex; align-items:center; gap:10px; }
 .footer-brand img { width:36px; height:36px; object-fit:contain; border-radius:5px; opacity:0.9; }
-.footer-brand-text .name { font-size:14px; font-weight:700; color:rgba(255,255,255,0.85); font-family:Georgia,serif; }
+.footer-brand-text .name { font-size:14px; font-weight:700; color:rgba(255,255,255,0.85); font-family:'Noto Serif',Georgia,serif; }
 .footer-brand-text .zh   { font-size:12px; color:#C9A84C; }
 .footer-tagline { font-size:12px; margin-top:8px; color:rgba(255,255,255,0.35); line-height:1.6; }
 .footer-bottom  { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:rgba(255,255,255,0.25); }
@@ -1805,7 +1805,7 @@ async function analyze(){
 function toggleDropdown(btn){const menu=btn.nextElementSibling;const isOpen=menu.classList.contains('open');document.querySelectorAll('.nav-dropdown-menu').forEach(m=>m.classList.remove('open'));document.querySelectorAll('.nav-dropdown-btn').forEach(b=>b.classList.remove('open'));if(!isOpen){menu.classList.add('open');btn.classList.add('open');}}
 document.addEventListener('click',e=>{if(!e.target.closest('.nav-dropdown')){document.querySelectorAll('.nav-dropdown-menu').forEach(m=>m.classList.remove('open'));document.querySelectorAll('.nav-dropdown-btn').forEach(b=>b.classList.remove('open'));}});
 </script>
-<script src="/nav.js?v=36"></script>
+<script src="/nav.js?v=37"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/chatbot.js"></script>
 <script>
