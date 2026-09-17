@@ -28,8 +28,6 @@
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
 
-<!-- LCP: ảnh minh hoạ hero, ưu tiên nạp sớm để không đội LCP -->
-<link rel="preload" as="image" href="/mascot/hero-scene-v2.webp" fetchpriority="high">
 
 <script type="application/ld+json">
 {
@@ -134,7 +132,7 @@ button { font: inherit; cursor: pointer; }
 
 /* ── Hero ───────────────────────────────────────────────────── */
 .hero { padding: 48px 0 20px; }
-.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; }
+.hero-text { max-width: 640px; }
 .hero-title { font-size: 46px; line-height: 1.14; font-weight: 800; color: var(--ink); margin: 0 0 14px; letter-spacing: -0.01em; }
 .hero-sub { font-size: 16px; color: var(--ink-soft); line-height: 1.6; margin: 0 0 22px; max-width: 46ch; }
 .hero-search {
@@ -156,13 +154,8 @@ button { font: inherit; cursor: pointer; }
 .hero-quote { font-style: italic; color: var(--ink-soft); font-size: 14.5px; line-height: 1.6; border-left: 2px solid var(--gold); padding-left: 14px; max-width: 42ch; }
 .hero-quote b { display: block; font-style: normal; font-weight: 700; color: var(--ink); margin-top: 4px; font-size: 13px; }
 
-.hero-art { position: relative; }
-.hero-art picture, .hero-art img { width: 100%; height: auto; border-radius: var(--radius-lg); }
-
 @media (max-width: 860px) {
-  .hero-grid { grid-template-columns: 1fr; }
   .hero-title { font-size: 34px; }
-  .hero-art { order: 2; margin-top: 4px; }
 }
 
 /* ── Section heading (dùng chung) ───────────────────────────── */
@@ -306,7 +299,7 @@ button { font: inherit; cursor: pointer; }
 
 <!-- ═══════════════ HERO ═══════════════ -->
 <section class="hero">
-  <div class="wrap hero-grid">
+  <div class="wrap">
     <div class="hero-text">
       <h1 class="hero-title serif">Hiểu mình<br>Sống thuận hơn</h1>
       <p class="hero-sub">Tử vi không chỉ để biết tương lai, mà để sống tốt hơn ở hiện tại.</p>
@@ -316,14 +309,6 @@ button { font: inherit; cursor: pointer; }
         <button class="filt" type="submit" aria-label="Tìm"><span class="ic" data-icon="sparkles"></span></button>
       </form>
       <p class="hero-quote serif">"Mỗi người đều có một vận mệnh, miễn là chịu lắng nghe..."<b>— Minh Bảo</b></p>
-    </div>
-    <div class="hero-art">
-      <img
-        src="/mascot/hero-scene-v2.webp"
-        srcset="/mascot/hero-scene-v2-sm.webp 768w, /mascot/hero-scene-v2-md.webp 1100w, /mascot/hero-scene-v2.webp 1536w"
-        sizes="(max-width: 860px) calc(100vw - 48px), 560px"
-        width="1536" height="1024" fetchpriority="high"
-        alt="Minh Bảo cưỡi trâu giữa khung cảnh làng quê, núi non và nắng sớm">
     </div>
   </div>
 </section>
