@@ -95,16 +95,22 @@ const MODEL = flag('--model', 'gpt-image-2');
 const DRY = has('--dry-run');
 const FORCE = has('--force');
 
-// Trải đủ sắc thái để duyệt phong cách: Tarot (bài) · Kinh Dịch (hào) ·
-// Bát Trạch (la bàn) · Chân Dung Vợ Chồng (hai người) · Phong Thủy Bàn Làm Việc
-// (đồ vật) · Bản Đồ Sao (chiêm tinh Tây, khác hẳn cổ pháp Trung Hoa).
+// Đợt 2 (2026-09-17, sau khi Henry đổi hướng bỏ Minh Bảo): 1 tool đại diện
+// MỖI NHÓM thầy/cô trong 11 nhóm (`master-groups.ts`) — vì giờ cái cần duyệt
+// là 11 THIẾT KẾ NHÂN VẬT khác nhau (tuổi/giới tính/trang phục), không phải
+// đa dạng loại deliverable trong CÙNG một nhân vật Minh Bảo như đợt 1.
 const SAMPLE = [
-  'tarot',
-  'kinh-dich',
-  'bat-trach',
-  'chan-dung-vo-chong',
-  'ban-lam-viec',
-  'ban-do-sao',
+  'laso', // nhóm laso — ông thầy khăn đóng, áo the nâu
+  'tu-binh', // nhóm tu-binh — ông thầy áo the xanh rêu
+  'than-so-hoc', // nhóm than-so-hoc — ông thầy áo the xám
+  'kinh-dich', // nhóm kinh-dich — bà cô áo dài chàm
+  'bat-trach', // nhóm phong-thuy — ông thầy áo the xám (la bàn)
+  'dien-tuong', // nhóm xem-tuong — bà áo bà ba nâu
+  'ban-do-sao', // nhóm chiem-tinh-tay — bà áo dài xanh ngọc
+  'dat-ten-con', // nhóm dat-ten-lich — bà ngoại áo bà ba
+  'tuong-hop', // nhóm menh-ly — bà áo dài chàm đậm
+  'personal-color', // nhóm phong-cach-ai — bà áo dài nâu
+  'tarot', // nhóm boi-bai — bà khăn rằn, khăn choàng đỏ-vàng
 ];
 
 let pick;
