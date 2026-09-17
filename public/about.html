@@ -67,11 +67,11 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 .nav-link:hover { color: #fff; background: rgba(255,255,255,0.07); }
 .nav-link.active { color: #c9a84c; }
 .nav-hamburger { display: none; background: none; border: none; color: #8BAACC; cursor: pointer; padding: 8px; font-size: 20px; }
-.hero { background: var(--navy); padding: 72px 40px 56px; text-align: center; position: relative; overflow: hidden; }
-.hero::before { content: '紫微明寶'; position: absolute; font-family: 'Noto Serif SC', serif; font-size: 160px; color: rgba(255,255,255,0.03); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; white-space: nowrap; }
+.hero { background: var(--bg-soft); padding: 72px 40px 56px; text-align: center; position: relative; overflow: hidden; border-bottom: 1px solid var(--border-lt); }
+.hero::before { content: '紫微明寶'; position: absolute; font-family: 'Noto Serif SC', serif; font-size: 160px; color: rgba(6,26,46,.035); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; white-space: nowrap; }
 .hero-eyebrow { font-size: 11px; letter-spacing: 4px; color: #c9a84c; text-transform: uppercase; margin-bottom: 16px; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards; }
-.hero-title { font-family: 'Noto Serif', serif; font-size: 42px; color: #fff; font-weight: 400; margin-bottom: 16px; opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
-.hero-sub { font-size: 15px; color: #8BAACC; max-width: 520px; margin: 0 auto; line-height: 1.7; font-weight: 300; opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; }
+.hero-title { font-family: 'Noto Serif', serif; font-size: 42px; color: var(--navy); font-weight: 400; margin-bottom: 16px; opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
+.hero-sub { font-size: 15px; color: var(--text-mid); max-width: 520px; margin: 0 auto; line-height: 1.7; font-weight: 300; opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; }
 .page-body { flex: 1; max-width: 760px; margin: 0 auto; padding: 72px 40px 96px; width: 100%; }
 .section { margin-bottom: 64px; opacity: 0; transform: translateY(16px); animation: fadeUp 0.6s ease forwards; }
 .section:nth-child(1){animation-delay:0.05s} .section:nth-child(2){animation-delay:0.10s}
@@ -93,12 +93,12 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 .limit-item { display: flex; gap: 14px; align-items: flex-start; }
 .limit-num { width: 24px; height: 24px; background: var(--navy); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; margin-top: 1px; }
 .limit-text { font-size: 14px; color: var(--text-mid); line-height: 1.7; font-weight: 300; }
-.contact-box { background: var(--navy); border-radius: 12px; padding: 32px; display: flex; align-items: center; gap: 24px; margin-top: 24px; }
+.contact-box { background: var(--bg-soft); border: 1px solid var(--border-lt); border-radius: 12px; padding: 32px; display: flex; align-items: center; gap: 24px; margin-top: 24px; }
 .contact-icon { font-size: 32px; flex-shrink: 0; }
-.contact-label { font-size: 11px; color: #8BAACC; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
-.contact-email { font-family: 'Noto Serif', serif; font-size: 18px; color: #c9a84c; text-decoration: none; cursor: pointer; }
+.contact-label { font-size: 11px; color: var(--text-lt); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+.contact-email { font-family: 'Noto Serif', serif; font-size: 18px; color: var(--navy); text-decoration: none; cursor: pointer; }
 .contact-email:hover { text-decoration: underline; }
-.contact-note { font-size: 12px; color: #8BAACC; margin-top: 4px; font-weight: 300; }
+.contact-note { font-size: 12px; color: var(--text-mid); margin-top: 4px; font-weight: 300; }
 .site-footer { background:#1A1210; color:rgba(255,255,255,0.5); padding:36px 32px 24px; }
 .footer-top  { display:flex; justify-content:space-between; align-items:flex-start; gap:32px; flex-wrap:wrap; padding-bottom:24px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:20px; }
 .footer-brand { display:flex; align-items:center; gap:10px; }

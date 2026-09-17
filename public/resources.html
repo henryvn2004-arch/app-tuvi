@@ -36,15 +36,15 @@ body { font-family: "Be Vietnam Pro", sans-serif; background: var(--bg); color: 
 .nav-hamburger { display: none; background: none; border: none; color: #8BAACC; cursor: pointer; padding: 8px; font-size: 20px; margin-left: auto; }
 
 /* HERO */
-.hero { background: var(--navy); padding: 52px 40px 40px; position: relative; overflow: hidden; }
-.hero::before { content: "典"; position: absolute; font-family: "Noto Serif SC", serif; font-size: 280px; color: rgba(255,255,255,0.025); top: 50%; right: 5%; transform: translateY(-50%); pointer-events: none; }
+.hero { background: var(--bg-soft); padding: 52px 40px 40px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border-lt); }
+.hero::before { content: "典"; position: absolute; font-family: "Noto Serif SC", serif; font-size: 280px; color: rgba(6,26,46,.035); top: 50%; right: 5%; transform: translateY(-50%); pointer-events: none; }
 .hero-eyebrow { font-size: 11px; letter-spacing: 4px; color: #c9a84c; text-transform: uppercase; margin-bottom: 12px; }
-.hero-title { font-family: "Noto Serif", serif; font-size: 36px; color: #fff; font-weight: 400; margin-bottom: 10px; }
-.hero-sub { font-size: 14px; color: #8BAACC; font-weight: 300; line-height: 1.7; max-width: 560px; }
+.hero-title { font-family: "Noto Serif", serif; font-size: 36px; color: var(--navy); font-weight: 400; margin-bottom: 10px; }
+.hero-sub { font-size: 14px; color: var(--text-mid); font-weight: 300; line-height: 1.7; max-width: 560px; }
 .hero-stats { display: flex; gap: 32px; margin-top: 24px; }
 .hero-stat { }
-.hero-stat-n { font-family: "Noto Serif", serif; font-size: 28px; color: #c9a84c; }
-.hero-stat-l { font-size: 11px; color: #8BAACC; margin-top: 2px; }
+.hero-stat-n { font-family: "Noto Serif", serif; font-size: 28px; color: var(--navy); }
+.hero-stat-l { font-size: 11px; color: var(--text-lt); margin-top: 2px; }
 
 /* SEARCH BAR */
 .search-bar { background: var(--bg-soft); border-bottom: 1px solid var(--border); padding: 14px 40px; display: flex; gap: 12px; align-items: center; }
