@@ -389,6 +389,27 @@ Keep the same flat cel-shaded webtoon rendering style as the reference — flat 
 Leave a large open area of plain warm sky in the upper-right third of the frame with nothing in it — so text can be placed over it later.`),
   },
 
+  // Biến thể THỨ HAI của paywall (Henry, cùng vòng "vui như Tết" 2026-09-17):
+  // đổi nhân vật CHÍNH sang một cặp đôi khách hàng vui vẻ đi về sau khi xem
+  // xong — "chị gái vui vẻ ra về trên đường làng, tay cầm lá số, đi cùng bạn
+  // trai... Minh Bảo đang chơi với các bạn, nông dân đang gặt lúa". Ba lớp
+  // rõ rệt: cặp đôi là TIÊU ĐIỂM (tiền cảnh/giữa khung), Minh Bảo+bạn là PHỤ
+  // (một góc, nhỏ hơn), nông dân gặt lúa là NỀN (hậu cảnh, không phải tiêu
+  // điểm). Vẫn neo `heroSceneV2.png` — chỉ để giữ ĐÚNG mặt/tóc/áo Minh Bảo,
+  // không phải giữ bố cục cảnh (cảnh đổi hoàn toàn, không còn cưỡi trâu).
+  paywallCoupleV2: {
+    size: '1536x1024',
+    from: 'heroSceneV2.png',
+    prompt:
+      edit2(`Do NOT draw the boy riding the buffalo this time. Instead draw a brand new scene with a DIFFERENT main focus:
+MAIN FOCUS (foreground, center of the frame): a young woman in her late twenties, radiant and smiling, walking down a village dirt road, holding a rolled scroll (her fortune reading) happily in both hands close to her chest as if delighted with the news. A young man of similar age — her boyfriend, simple modern casual clothing — walks right beside her, close together, both looking happy and at ease, mid-conversation.
+SECONDARY (off to one side, smaller, clearly not the focus): use the boy from the provided image, keeping his exact face, hair, hat and outfit — same character, same big-head chibi proportion, no redesign — playing cheerfully with two other village children nearby, running or laughing together.
+BACKGROUND: a few farmers out in the golden rice paddies further back, bent over harvesting rice with sickles, small and simple in the chibi style, just filling the scene with life, not a focus.
+Setting: early sunrise, warm golden light, soft pastel sky, a festive Tết (Lunar New Year)-like touch — a few branches of blooming yellow hoa mai near the village houses, a red paper lantern or two, colorful little flags strung between houses — cheerful and warm.
+Keep the same flat cel-shaded webtoon rendering style as the reference — flat color fields, thin clean outlines, simple soft gradient shading, no photorealistic lighting, no painterly brushwork.
+Leave a large open area of plain warm sky in the upper third of the frame with nothing in it — so text can be placed over it later.`),
+  },
+
   // ── Banner trang tool (`.intro-card`/`.intro-photo`) — Henry 2026-09-16:
   // "gen lại hết cho phù hợp style ghibli", bức thử đầu tiên cho nhóm `laso`
   // (Tử Vi Đẩu Số). Thay hẳn nhân vật "đạo sĩ già" cũ (hero-banner-prompt.ts,
