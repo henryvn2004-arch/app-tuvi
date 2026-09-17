@@ -118,6 +118,7 @@
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 body {
   background: var(--page);
   color: var(--ink);
@@ -180,9 +181,10 @@ button { font: inherit; cursor: pointer; }
 .ftb-cta { display: inline-flex; align-items: center; gap: 6px; background: var(--navy); color: #fff; font-weight: 700; font-size: 14.5px; padding: 13px 22px; border-radius: 12px; border: none; margin-bottom: 22px; }
 .ftb-proof { display: flex; align-items: center; gap: 10px; }
 .ftb-avatars { display: flex; }
-.ftb-avatars span { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; margin-left: -8px; }
-.ftb-avatars span:first-child { margin-left: 0; }
-.ftb-proof-txt { font-size: 12px; color: var(--ink-faint); }
+.ftb-avatars img { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; margin-left: -8px; object-fit: cover; display: block; }
+.ftb-avatars img:first-child { margin-left: 0; }
+.ftb-proof-txt { font-size: 12px; color: var(--ink-faint); text-decoration: none; cursor: pointer; }
+.ftb-proof-txt:hover { color: var(--ink); text-decoration: underline; }
 
 .ftb-art { position: relative; height: 100%; min-height: 330px; }
 .ftb-art img { width: 100%; height: 100%; object-fit: cover; object-position: 68% 38%; }
@@ -393,7 +395,7 @@ button { font: inherit; cursor: pointer; }
 
     var BANNERS = [
       {
-        badge: 'Phổ biến nhất',
+        badge: 'Luận Giải Tử Vi',
         title: '10 năm tới của bạn — đã được định sẵn?',
         sub: 'Không phải bói đại khái. Lá số của bạn đã chứa sẵn từng chặng, hiện ra rõ theo từng năm — không phải một bài viết chung chung ai đọc cũng thấy đúng.',
         feats: [
@@ -407,7 +409,7 @@ button { font: inherit; cursor: pointer; }
         alt: 'Thư cầm quyển luận giải Tử Vi khoe với bạn bè ở quán cà phê vỉa hè Sài Gòn, không khí vui vẻ',
       },
       {
-        badge: 'Công cụ nổi bật',
+        badge: 'Chu Trình Cuộc Đời',
         title: '9 khúc quanh cuộc đời bạn — đang ở đâu?',
         sub: 'Không phải đoán mò. Từng chặng 10 năm đã chứa sẵn trong lá số — tái dựng rõ lúc nào nên tiến, lúc nào nên giữ sức.',
         feats: [
@@ -421,7 +423,7 @@ button { font: inherit; cursor: pointer; }
         alt: 'Trí cầm quyển luận giải Chu Trình Cuộc Đời, đồng nghiệp xúm quanh bàn làm việc ở văn phòng cười nói vui vẻ',
       },
       {
-        badge: 'Chuyên sâu',
+        badge: 'Tứ Bình Bát Tự',
         title: 'Trong người bạn — đang thiếu điều gì?',
         sub: 'Không phải cảm tính. Bốn trụ năm – tháng – ngày – giờ đã chứa sẵn phần ngũ hành đang lệch, đang thiếu — hiện ra rõ từng chút một.',
         feats: [
@@ -435,7 +437,7 @@ button { font: inherit; cursor: pointer; }
         alt: 'Thư ăn tối cùng bạn thân trong nhà hàng, quyển luận giải Tứ Trụ Bát Tự đặt trên bàn, trò chuyện nhẹ nhàng',
       },
       {
-        badge: 'Được yêu thích',
+        badge: 'Chân Dung Vợ Chồng',
         title: 'Người bạn sẽ cưới… trông như thế nào?',
         sub: 'Không phải đoán. Lá số của bạn đã chứa sẵn khuôn mặt người đó. Từ cung Phu Thê trong lá số, chúng tôi vẽ chân dung người bạn đời tương lai — kèm mô tả tính cách, phong thái.',
         feats: [
@@ -449,7 +451,7 @@ button { font: inherit; cursor: pointer; }
         alt: 'Trí và Thư ăn kem bên Hồ Gươm Hà Nội, Thư chỉ vào quyển luận giải giải thích, Trí gật gù đồng tình',
       },
       {
-        badge: 'Dành cho cha mẹ',
+        badge: 'Dạy Con Theo Lá Số',
         title: 'Cách bạn dạy con — đang hợp hay ngược?',
         sub: 'Không phải đoán cảm tính. Lá số của con đã chứa sẵn cách con tiếp thu, cách ra bài để con chịu nghe — hiện ra rõ, không áp chung một khuôn cho mọi đứa trẻ.',
         feats: [
@@ -464,7 +466,27 @@ button { font: inherit; cursor: pointer; }
       },
     ];
 
-    var AVATAR_COLORS = ['#c8a96a', '#7fa7a3', '#c46a5e', '#8ba8cc'];
+    // Avatar khách hàng: 6 ảnh chân dung dựng sẵn (public/mascot/avatars/),
+    // KHÔNG phải ảnh khách thật — chỉ để dải "đông người dùng" nhìn có sức
+    // sống hơn khối tròn màu trơn cũ. Không gắn tên/trích dẫn vào các avatar
+    // này (khác hẳn phần "Khách hàng nói gì" thật ở #rv-section) nên không
+    // giả làm bằng chứng của một người cụ thể.
+    var AVATAR_IMGS = [
+      '/mascot/avatars/nu-tre.webp',
+      '/mascot/avatars/nam-tre.webp',
+      '/mascot/avatars/nu-trung-nien.webp',
+      '/mascot/avatars/nam-trung-nien.webp',
+      '/mascot/avatars/nu-lon-tuoi.webp',
+      '/mascot/avatars/nam-lon-tuoi.webp',
+    ];
+    function pickAvatars(n) {
+      var pool = AVATAR_IMGS.slice();
+      for (var i = pool.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+      }
+      return pool.slice(0, n);
+    }
 
     track.innerHTML = BANNERS.map(function (b) {
       var feats = b.feats
@@ -475,7 +497,7 @@ button { font: inherit; cursor: pointer; }
           );
         })
         .join('');
-      var avatars = AVATAR_COLORS.map(function (c) { return '<span style="background:' + c + '"></span>'; }).join('');
+      var avatars = pickAvatars(4).map(function (src) { return '<img src="' + src + '" alt="" loading="lazy">'; }).join('');
       return (
         '<div class="ftb-slide"><div class="ftb-card">' +
         '<div class="ftb-text">' +
@@ -485,7 +507,7 @@ button { font: inherit; cursor: pointer; }
         '<div class="ftb-feats">' + feats + '</div>' +
         '<a class="ftb-cta" href="' + b.href + '">' + b.cta + '</a>' +
         '<div class="ftb-proof"><div class="ftb-avatars">' + avatars + '</div>' +
-        '<span class="ftb-proof-txt">Xem đánh giá thật của người dùng ↓</span></div>' +
+        '<a class="ftb-proof-txt" href="#rv-section">Xem đánh giá thật của người dùng ↓</a></div>' +
         '</div>' +
         '<div class="ftb-art"><img src="' + b.img + '" alt="' + b.alt + '" loading="lazy"></div>' +
         '</div></div>'
