@@ -190,31 +190,54 @@ button { font: inherit; cursor: pointer; }
   .tool-card span { font-size: 11.5px; }
 }
 
-/* ── Daily fortune card ─────────────────────────────────────── */
-.daily-sec { padding: 24px 0; }
-.daily-card {
+/* ── Công cụ nổi bật — slider banner theo mẫu Henry duyệt ─────── */
+.ftb-sec { padding: 28px 0 8px; }
+.ftb-viewport { position: relative; }
+.ftb-track-wrap { overflow: hidden; border-radius: var(--radius-lg); }
+.ftb-track { display: flex; transition: transform .45s cubic-bezier(.4,0,.2,1); will-change: transform; }
+.ftb-slide { flex: 0 0 100%; min-width: 0; }
+.ftb-card {
   background: linear-gradient(135deg, #fff 0%, var(--cream) 100%);
   border: 1px solid var(--line); border-radius: var(--radius-lg);
-  display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; overflow: hidden;
+  display: grid; grid-template-columns: 1fr 1fr; align-items: center; overflow: hidden; min-height: 460px;
 }
-.daily-text { padding: 30px 36px; }
-.daily-eyebrow { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
-.daily-eyebrow .ic { width: 14px; height: 14px; }
-.daily-title { font-size: 26px; font-weight: 800; margin: 0 0 10px; color: var(--ink); }
-.daily-badge { display: inline-block; font-size: 12.5px; font-weight: 700; padding: 4px 12px; border-radius: 999px; margin-bottom: 12px; }
-.daily-badge.v-tot { background: var(--green-soft); color: #3f7a74; }
-.daily-badge.v-binh { background: var(--gold-soft); color: #6b4f1e; }
-.daily-badge.v-xau { background: var(--terracotta-soft); color: var(--terracotta); }
-.daily-desc { font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; margin: 0 0 20px; max-width: 40ch; min-height: 44px; }
-.daily-cta { display: inline-flex; align-items: center; gap: 6px; background: var(--navy); color: #fff; font-weight: 700; font-size: 14px; padding: 11px 20px; border-radius: 12px; border: none; }
+.ftb-text { padding: 40px 44px; }
+.ftb-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #8a6a2f; background: var(--gold-soft); padding: 6px 14px; border-radius: 999px; margin-bottom: 18px; }
+.ftb-badge .ic { width: 13px; height: 13px; }
+.ftb-title { font-size: 30px; line-height: 1.22; font-weight: 800; color: var(--ink); margin: 0 0 12px; }
+.ftb-sub { font-size: 14.5px; color: var(--ink-soft); line-height: 1.65; margin: 0 0 24px; max-width: 42ch; }
+.ftb-feats { display: flex; gap: 22px; margin-bottom: 26px; }
+.ftb-feat { flex: 1; min-width: 0; }
+.ftb-feat-ic { width: 38px; height: 38px; border-radius: 11px; background: var(--gold-soft); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+.ftb-feat-ic .ic { width: 18px; height: 18px; color: #8a6a2f; }
+.ftb-feat b { display: block; font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.3; margin-bottom: 2px; }
+.ftb-feat span { display: block; font-size: 11.5px; color: var(--ink-faint); line-height: 1.35; }
+.ftb-cta { display: inline-flex; align-items: center; gap: 6px; background: var(--navy); color: #fff; font-weight: 700; font-size: 14.5px; padding: 13px 22px; border-radius: 12px; border: none; margin-bottom: 22px; }
+.ftb-proof { display: flex; align-items: center; gap: 10px; }
+.ftb-avatars { display: flex; }
+.ftb-avatars span { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; margin-left: -8px; }
+.ftb-avatars span:first-child { margin-left: 0; }
+.ftb-proof-txt { font-size: 12px; color: var(--ink-faint); }
 
-.daily-art { position: relative; height: 100%; min-height: 260px; }
-.daily-art img { width: 100%; height: 100%; object-fit: cover; }
+.ftb-art { position: relative; height: 100%; min-height: 330px; }
+.ftb-art img { width: 100%; height: 100%; object-fit: cover; object-position: 68% 38%; }
+
+.ftb-btn { position: absolute; top: 50%; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 17px; color: var(--navy); box-shadow: 0 4px 14px rgba(22,35,44,.08); display: flex; align-items: center; justify-content: center; transform: translateY(-50%); z-index: 5; }
+.ftb-prev { left: -18px; }
+.ftb-next { right: -18px; }
+.ftb-dots { display: flex; justify-content: center; gap: 8px; margin-top: 18px; }
+.ftb-dot { width: 8px; height: 8px; box-sizing: content-box; padding: 6px; background-clip: content-box; border-radius: 50%; background-color: var(--line); cursor: pointer; border: none; }
+.ftb-dot.active { background-color: var(--navy); }
 
 @media (max-width: 820px) {
-  .daily-card { grid-template-columns: 1fr; }
-  .daily-text { padding: 26px 22px 20px; }
-  .daily-art { min-height: 190px; order: -1; }
+  .ftb-card { grid-template-columns: 1fr; min-height: 0; }
+  .ftb-text { padding: 26px 22px 22px; text-align: center; }
+  .ftb-feats { gap: 10px; }
+  .ftb-feat-ic { margin-left: auto; margin-right: auto; }
+  .ftb-sub { max-width: none; }
+  .ftb-proof { justify-content: center; }
+  .ftb-art { min-height: 220px; order: -1; }
+  .ftb-btn { display: none; }
 }
 
 /* ── Explore more ───────────────────────────────────────────── */
@@ -330,6 +353,22 @@ button { font: inherit; cursor: pointer; }
   </div>
 </section>
 
+<!-- ═══════════════ CÔNG CỤ NỔI BẬT — slider 5 banner ═══════════════ -->
+<section class="ftb-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="ic" data-icon="star"></span>
+      <h2>Công cụ nổi bật</h2>
+    </div>
+    <div class="ftb-viewport">
+      <div class="ftb-track-wrap"><div class="ftb-track" id="ftb-track"></div></div>
+      <button class="ftb-btn ftb-prev" id="ftb-prev" aria-label="Trước">‹</button>
+      <button class="ftb-btn ftb-next" id="ftb-next" aria-label="Sau">›</button>
+      <div class="ftb-dots" id="ftb-dots"></div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════ KHÁCH HÀNG NÓI GÌ ═══════════════ -->
 <div id="home-rv-host"></div>
 
@@ -399,6 +438,157 @@ button { font: inherit; cursor: pointer; }
 <script src="/testimonials.js?v=1"></script>
 <script>
 (function () {
+  // ── Công cụ nổi bật — slider 5 banner, mỗi banner một tool ──────────
+  (function () {
+    var track = document.getElementById('ftb-track');
+    var dotsEl = document.getElementById('ftb-dots');
+    var prevBtn = document.getElementById('ftb-prev');
+    var nextBtn = document.getElementById('ftb-next');
+    if (!track) return;
+
+    var BANNERS = [
+      {
+        badge: 'Phổ biến nhất',
+        title: '10 năm tới của bạn đang ở chặng nào?',
+        sub: 'An trọn lá số, luận giải 24 phần theo đại vận – tiểu vận từng năm — không phải một bài viết chung chung ai đọc cũng thấy đúng.',
+        feats: [
+          ['sparkles', 'An sao chuẩn cổ pháp', 'Đúng theo cách cục cổ truyền'],
+          ['file-text', '24 phần luận giải', 'Không rút gọn, không chung chung'],
+          ['hourglass', 'Đại vận & tiểu vận', 'Theo từng giai đoạn, từng năm'],
+        ],
+        cta: 'Xem lá số của bạn →',
+        href: '/app-luan-giai.html',
+        img: '/mascot/featured-laso.webp',
+        alt: 'Trí ngồi đọc bản luận giải Tử Vi trong phòng buổi tối, trang mở hiện lá số 12 cung',
+      },
+      {
+        badge: 'Công cụ nổi bật',
+        title: 'Trong 9 đại vận cuộc đời, bạn đang ở chặng nào?',
+        sub: 'Điểm số cổ pháp thiên thời – địa lợi – nhân hòa cho từng chặng 10 năm, để biết lúc nào nên tiến, lúc nào nên giữ sức.',
+        feats: [
+          ['hourglass', 'Soi trọn 9 đại vận', 'Từ nhỏ đến hết đời'],
+          ['bar-chart-3', 'Điểm số từng chặng', 'Thiên thời – địa lợi – nhân hòa'],
+          ['calendar-days', 'Tiểu vận năm nay', 'Biết lúc nên tiến, nên lùi'],
+        ],
+        cta: 'Xem chu trình của bạn →',
+        href: '/app-chu-trinh-cuoc-doi.html',
+        img: '/mascot/featured-chu-trinh.webp',
+        alt: 'Thư ngồi đọc bản luận giải Chu Trình Cuộc Đời trong thư viện, trang mở hiện biểu đồ hình thoi 9 chặng',
+      },
+      {
+        badge: 'Chuyên sâu',
+        title: 'Tứ trụ của bạn — ngũ hành đang thiếu gì, thừa gì?',
+        sub: 'Lập trụ năm – tháng – ngày – giờ, luận theo sinh khắc ngũ hành — nền tảng cổ pháp lâu đời hơn cả Tử Vi.',
+        feats: [
+          ['hash', 'Lập tứ trụ chính xác', 'Năm – tháng – ngày – giờ sinh'],
+          ['scale', 'Luận ngũ hành sinh khắc', 'Thiếu gì, thừa gì, cân bằng ra sao'],
+          ['file-text', 'Luận giải chuyên sâu', 'Không rút gọn như bản miễn phí'],
+        ],
+        cta: 'Lập tứ trụ của bạn →',
+        href: '/tu-binh.html',
+        img: '/mascot/featured-tu-binh.webp',
+        alt: 'Trí xem bản luận giải Tứ Trụ Bát Tự tại bàn làm việc ở công ty, trang mở hiện 4 trụ',
+      },
+      {
+        badge: 'Được yêu thích',
+        title: 'Người bạn đời tương lai của bạn trông như thế nào?',
+        sub: 'Phân tích cung Phu Thê rồi vẽ chân dung người bạn đời — kèm mô tả tính cách, phong thái. Không chỉ đoán, mà thấy được.',
+        feats: [
+          ['heart', 'Phân tích cung Phu Thê', 'Từ lá số của chính bạn'],
+          ['image', 'Vẽ chân dung người ấy', 'Hình dung cụ thể, không mơ hồ'],
+          ['users', 'Tính cách & phong thái', 'Người bạn đời hợp với bạn'],
+        ],
+        cta: 'Xem chân dung của bạn →',
+        href: '/app-chan-dung-vo-chong.html',
+        img: '/mascot/featured-vo-chong.webp',
+        alt: 'Hai người xem chung bản luận giải Chân Dung Vợ Chồng ở quán cà phê, trang mở hiện phác thảo chân dung',
+      },
+      {
+        badge: 'Dành cho cha mẹ',
+        title: 'Vì sao nhắc hoài mà con vẫn không nghe?',
+        sub: 'Nhập lá số của con — biết cách con tiếp thu, cách ra bài để con chịu làm, và kiểu kỷ luật đang phản tác dụng.',
+        feats: [
+          ['baby', 'Cách con tiếp thu', 'Học kiểu gì thì vào, kiểu gì thì trôi'],
+          ['lightbulb', 'Kỷ luật phù hợp', 'Kiểu nào đang phản tác dụng'],
+          ['heart-handshake', 'Chỗ hay va chạm', 'Giữa cha mẹ và con'],
+        ],
+        cta: 'Xem lá số của con →',
+        href: '/app-day-con.html',
+        img: '/mascot/featured-day-con.webp',
+        alt: 'Thư ngồi đọc bản luận giải Dạy Con Theo Lá Số ở phòng khách buổi tối, trang mở hiện sơ đồ các bước',
+      },
+    ];
+
+    var AVATAR_COLORS = ['#c8a96a', '#7fa7a3', '#c46a5e', '#8ba8cc'];
+
+    track.innerHTML = BANNERS.map(function (b) {
+      var feats = b.feats
+        .map(function (f) {
+          return (
+            '<div class="ftb-feat"><div class="ftb-feat-ic"><span class="ic" data-icon="' + f[0] + '"></span></div>' +
+            '<b>' + f[1] + '</b><span>' + f[2] + '</span></div>'
+          );
+        })
+        .join('');
+      var avatars = AVATAR_COLORS.map(function (c) { return '<span style="background:' + c + '"></span>'; }).join('');
+      return (
+        '<div class="ftb-slide"><div class="ftb-card">' +
+        '<div class="ftb-text">' +
+        '<div class="ftb-badge"><span class="ic" data-icon="star"></span>' + b.badge + '</div>' +
+        '<h3 class="ftb-title serif">' + b.title + '</h3>' +
+        '<p class="ftb-sub">' + b.sub + '</p>' +
+        '<div class="ftb-feats">' + feats + '</div>' +
+        '<a class="ftb-cta" href="' + b.href + '">' + b.cta + '</a>' +
+        '<div class="ftb-proof"><div class="ftb-avatars">' + avatars + '</div>' +
+        '<span class="ftb-proof-txt">Xem đánh giá thật của người dùng ↓</span></div>' +
+        '</div>' +
+        '<div class="ftb-art"><img src="' + b.img + '" alt="' + b.alt + '" loading="lazy"></div>' +
+        '</div></div>'
+      );
+    }).join('');
+    if (window.mountIcons) window.mountIcons(track);
+
+    var total = BANNERS.length;
+    var idx = 0;
+    var autoT = null;
+
+    dotsEl.innerHTML = '';
+    for (var d = 0; d < total; d++) {
+      var dot = document.createElement('button');
+      dot.className = 'ftb-dot' + (d === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Banner ' + (d + 1));
+      (function (di) { dot.addEventListener('click', function () { stopAuto(); goTo(di); startAuto(); }); })(d);
+      dotsEl.appendChild(dot);
+    }
+
+    function updateDots() {
+      var dots = dotsEl.querySelectorAll('.ftb-dot');
+      dots.forEach(function (dt, i) { dt.classList.toggle('active', i === idx); });
+    }
+
+    function goTo(newIdx) {
+      idx = (newIdx + total) % total;
+      track.style.transform = 'translateX(-' + idx * 100 + '%)';
+      updateDots();
+    }
+
+    function startAuto() { stopAuto(); autoT = setInterval(function () { goTo(idx + 1); }, 6000); }
+    function stopAuto() { if (autoT) { clearInterval(autoT); autoT = null; } }
+
+    prevBtn.addEventListener('click', function () { stopAuto(); goTo(idx - 1); startAuto(); });
+    nextBtn.addEventListener('click', function () { stopAuto(); goTo(idx + 1); startAuto(); });
+
+    var touchX = 0;
+    track.addEventListener('touchstart', function (e) { touchX = e.touches[0].clientX; stopAuto(); }, { passive: true });
+    track.addEventListener('touchend', function (e) {
+      var diff = touchX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) goTo(diff > 0 ? idx + 1 : idx - 1);
+      startAuto();
+    }, { passive: true });
+
+    startAuto();
+  })();
+
   // ── Khách hàng nói gì — tái dùng ĐÚNG data + logic slider của
   // testimonials.js (window.Testimonials, xem comment ở đó) thay vì viết
   // lại — một nguồn duy nhất cho nội dung review trên toàn site.
