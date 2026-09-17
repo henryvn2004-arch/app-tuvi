@@ -504,7 +504,7 @@ function updateNavUI() {
         <div style="display:flex;align-items:center;gap:7px;cursor:pointer;padding:6px 8px;border-radius:8px;transition:background .15s"
              onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background=''"
              onclick="document.getElementById('nav-profile-menu').style.display=document.getElementById('nav-profile-menu').style.display==='block'?'none':'block'">
-          <div id="nav-credit-badge" style="background:rgba(200,169,106,.15);border:1px solid rgba(200,169,106,.4);border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700;color:#C8A96A;letter-spacing:.02em;white-space:nowrap;font-family:Georgia,serif">
+          <div id="nav-credit-badge" style="background:rgba(200,169,106,.15);border:1px solid rgba(200,169,106,.4);border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700;color:#C8A96A;letter-spacing:.02em;white-space:nowrap;font-family:'Noto Serif',Georgia,serif">
             <svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:3px"><ellipse cx="7" cy="8.5" rx="6.2" ry="2" fill="#C8A96A" opacity=".35"/><path d="M1.2 7C1.2 7 0.8 5.5 2 4.2C3 3.2 4.5 2.8 7 2.8C9.5 2.8 11 3.2 12 4.2C13.2 5.5 12.8 7 12.8 7C12.1 8.2 9.8 9 7 9C4.2 9 1.9 8.2 1.2 7Z" fill="#C8A96A"/><path d="M2.5 4.5C3.3 3.5 5 3 7 3C9 3 10.7 3.5 11.5 4.5" stroke="#E0CBA0" stroke-width=".7" stroke-linecap="round"/><ellipse cx="7" cy="3" rx="3.5" ry="1.2" fill="#D9C08F"/><path d="M5.5 3C5.5 3 6 1.5 7 1.2C8 1.5 8.5 3 8.5 3" stroke="#E0CBA0" stroke-width=".6" fill="none"/></svg> …
           </div>
           ${avatar
@@ -521,7 +521,7 @@ function updateNavUI() {
           <div style="padding:10px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
             <div>
               <div style="font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Lượng · Xu</div>
-              <div id="nav-credit-menu-val" style="font-size:16px;font-weight:700;color:#061A2E;font-family:Georgia,serif">… lượng</div>
+              <div id="nav-credit-menu-val" style="font-size:16px;font-weight:700;color:#061A2E;font-family:'Noto Serif',Georgia,serif">… lượng</div>
             </div>
             <a href="/topup.html" style="background:#C8A96A;color:#061A2E;font-size:11px;font-weight:700;padding:5px 10px;border-radius:5px;text-decoration:none" onmouseover="this.style.background='#E0CBA0'" onmouseout="this.style.background='#C8A96A'">+ Nạp</a>
           </div>
@@ -578,7 +578,7 @@ function showAuthModal(callback) {
       <!-- Logo -->
       <div style="text-align:center;margin-bottom:20px">
         <img src="/seal.webp" style="width:48px;height:48px;border-radius:6px;margin-bottom:8px">
-        <div style="font-family:Georgia,serif;font-size:16px;font-weight:700;color:#CC2200">Tử Vi Minh Bảo</div><div style="font-size:11px;color:#999;margin-top:2px;font-style:italic">Tri mệnh lý – Thuận thế hành</div>
+        <div style="font-family:'Noto Serif',Georgia,serif;font-size:16px;font-weight:700;color:#CC2200">Tử Vi Minh Bảo</div><div style="font-size:11px;color:#999;margin-top:2px;font-style:italic">Tri mệnh lý – Thuận thế hành</div>
       </div>
 
       <!-- Google/Facebook OAuth — ẨN khi mở trong webview nhúng của FB/IG, xem
@@ -695,7 +695,7 @@ function showClaimModal(opts) {
   modal.innerHTML = `
     <div style="background:#fff;border-radius:14px;padding:32px;width:100%;max-width:380px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
       <button onclick="closeClaimModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#aaa;line-height:1">×</button>
-      <div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#061A2E;margin-bottom:6px">${_escHtml(title)}</div>
+      <div style="font-family:'Noto Serif',Georgia,serif;font-size:17px;font-weight:700;color:#061A2E;margin-bottom:6px">${_escHtml(title)}</div>
       <p style="font-size:12.5px;color:#7a705f;line-height:1.6;margin-bottom:18px">${_escHtml(desc)}</p>
       <input id="claim-email" type="email" placeholder="Email" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'">
       <input id="claim-password" type="password" placeholder="Mật khẩu (ít nhất 6 ký tự)" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'" onkeydown="if(event.key==='Enter')submitClaim()">

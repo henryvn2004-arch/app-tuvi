@@ -284,6 +284,10 @@
     initSlider(reviews);
   }
 
+  // Cho trang dùng cờ TestimonialsNoAutoRun (vd. trang chủ) gọi lại ĐÚNG
+  // logic dựng thẻ + slider này thay vì viết lại — một nguồn duy nhất.
+  window.Testimonials = { injectCSS: injectCSS, buildSection: buildSection, initSlider: initSlider };
+
   // window.TestimonialsNoAutoRun: trang chủ chỉ cần DATA để tự dựng slider ở
   // VỊ TRÍ RIÊNG trong luồng trang, không cần section tự chèn cuối body như
   // các trang tool. Mọi trang khác KHÔNG set cờ này nên hành vi giữ nguyên.
