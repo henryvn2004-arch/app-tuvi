@@ -488,10 +488,16 @@ window.sendSignupSignal = sendSignupSignal;
 function updateNavUI() {
   const navEl = document.getElementById('nav-auth-area');
   if (!navEl) return;
-  // Always fix to top-right
+  // Always fix to top-right.
+  // ⚠️ Mobile (≤700px): `.nav-hamburger` của nav.js nằm ở `right:16px`
+  // (padding .topnav) + rộng 38px ⇒ mép trái của nó cách viewport đúng
+  // 54px. `right:52px` (bản cũ) hụt 2px, đè lên hamburger ở MỌI bề rộng
+  // màn hình (đo Playwright 320-430px, luôn lệch đúng 2px) — không phải do
+  // logo/slogan dài, đó là lỗi khác đã sửa riêng ở nav.js. 64px = 54 + 10px
+  // đệm.
   const isMobile = window.innerWidth <= 700;
   navEl.style.cssText = isMobile
-    ? 'position:fixed;top:10px;right:52px;height:40px;display:flex;align-items:center;z-index:199'
+    ? 'position:fixed;top:10px;right:64px;height:40px;display:flex;align-items:center;z-index:199'
     : 'position:fixed;top:0;right:56px;height:60px;display:flex;align-items:center;z-index:300';
   if (_session && _user) {
     const isAnon = !!_user.is_anonymous;
