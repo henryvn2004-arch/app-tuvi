@@ -105,6 +105,8 @@ const nextConfig = {
       { source: '/sitemap-hubs.xml',    destination: '/sitemap-hubs'         },
       { source: '/sitemap-pregen.xml',  destination: '/sitemap-pregen'       },
       { source: '/khao-luan/:slug',     destination: '/api/khao-luan?slug=:slug' },
+      // Link "Tải PDF" mẫu — proxy qua domain riêng để không lộ project ref Supabase.
+      { source: '/tai-mau/:file',       destination: '/api/tai-mau?file=:file'   },
       { source: '/tu-vi/:slug',         destination: '/api/tu-vi?slug=:slug'     },
       { source: '/phong-thuy',          destination: '/api/tu-vi-hub?cat=phong-thuy'   },
       { source: '/xem-tuong',           destination: '/api/tu-vi-hub?cat=xem-tuong'    },
