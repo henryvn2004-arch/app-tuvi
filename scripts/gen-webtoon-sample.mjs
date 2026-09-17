@@ -369,6 +369,23 @@ Add one small warm lantern glow in the village, the single brightest point in th
 No human figures. Still soft watercolor, still airy — deeper and quieter, but never harsh and never pure black.`),
   },
 
+  // Bản V2 của `paywall` (Henry, "làm tiếp Sprint 1" 2026-09-17) — cùng ý
+  // tưởng V1 ("cùng cảnh hero, đổi giờ trong ngày sang hoàng hôn", KHÔNG có
+  // Minh Bảo) nhưng neo trên `heroSceneV2.png` (cảnh cưỡi trâu đã duyệt của
+  // bộ webtoon) thay vì `hero.png` V1 đã nghỉ hưu. Vẫn dùng `edit2` (khung
+  // STYLE_LOCK_V2 chung) dù không giữ nhân vật — anchor ảnh vẫn cần thiết để
+  // GIỮ ĐÚNG bố cục núi/làng/bầu trời của heroSceneV2, không phải để giữ mặt
+  // nhân vật (không có nhân vật trong khung này).
+  paywallV2: {
+    size: '1536x1024',
+    from: 'heroSceneV2.png',
+    prompt:
+      edit2(`Redraw the exact same buffalo from the provided image, standing alone in the exact same spot and pose, but WITHOUT the boy riding it this time (empty saddle area, no rider, no human figure anywhere in the image). Keep the buffalo's exact same flat cel-shaded rendering style, same outline thickness, same shading as shown.
+Keep the same hills, the same village houses and the same open sky area in the same positions as the reference, all in that SAME flat illustrated style — flat color fields, thin clean outlines, simple soft gradient shading, absolutely NOT a realistic or painterly repaint, no photorealistic lighting, no fine brushstroke texture.
+Shift the lighting to early dusk: a bit dimmer/cooler than the original golden-hour, sky a touch more muted, one small warm lantern glow in the village as the brightest point in the frame.
+Keep the same large open area of plain sky in the upper-right third of the image with nothing in it — so text can be placed over it later.`),
+  },
+
   // ── Banner trang tool (`.intro-card`/`.intro-photo`) — Henry 2026-09-16:
   // "gen lại hết cho phù hợp style ghibli", bức thử đầu tiên cho nhóm `laso`
   // (Tử Vi Đẩu Số). Thay hẳn nhân vật "đạo sĩ già" cũ (hero-banner-prompt.ts,
