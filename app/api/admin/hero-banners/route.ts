@@ -66,6 +66,11 @@ const GIA_VND: Record<string, Record<Quality, number>> = {
   'gpt-image-1': { low: 500, medium: 1625, high: 6313 },
 };
 
+// Độ rộng dải PHAI ALPHA ở rìa TRÁI ảnh — tỉ lệ trên bề rộng đã resize (không
+// phải px cứng, co giãn cùng ảnh). 5% đủ mượt mép mà không chạm tới Minh Bảo/
+// nhân vật phụ (luôn vẽ gần rìa trái nhưng chưa tới sát x=0 ở cả 11 nhóm).
+const FADE_PCT = 0.05;
+
 // Nén `<path>.png` thành `.webp` cùng tên, ghi đè. `pngBytes` khi đã có sẵn
 // trong bộ nhớ (vừa vẽ xong) — tránh tải lại; thiếu thì tự HEAD/GET từ Storage
 // (đường `compressOnly`, ảnh đã có từ trước).
@@ -80,6 +85,16 @@ const GIA_VND: Record<string, Record<Quality, number>> = {
 // khung ngang trên cả 230 ảnh") nhưng chưa kịp áp cho route này — vá lại đây
 // theo đúng khuôn đó: encode bằng `sharp` tại chỗ, `resize({width})` của sharp
 // tự suy chiều cao ĐÚNG TỈ LỆ (không như cổng transform ở trên).
+//
+// 🎨 Phai alpha rìa TRÁI (Henry 2026-09-17, "cho hình và background blend lại
+// với nhau"): `.intro-photo` neo PHẢI trong khung to bằng cả `.intro-card`
+// (`object-fit:contain`), nên mép TRÁI thật của ảnh luôn rơi vào GIỮA card ở
+// một % khác nhau tuỳ bề rộng màn hình — không thể tính trước một mốc % cố
+// định trong CSS để làm mềm đúng chỗ. Phai NGAY TRONG ảnh (theo % bề rộng của
+// chính nó, đi theo ảnh dù hiển thị ở đâu) là cách DUY NHẤT đúng ở MỌI bề rộng
+// — nền `.intro-photo{background:#F3E7C8}` lộ ra qua phần trong suốt, khớp
+// tông với nền `.intro-card`. `dest-in` nhân alpha mask (SVG gradient) vào
+// ảnh gốc, KHÔNG đổi màu, chỉ đổi độ trong suốt.
 // Trả về chuỗi lỗi (rỗng nếu ok) — KHÔNG throw, gọi nơi khác tự quyết có
 // chặn cả lượt hay không.
 async function nenWebp(path: string, pngBytes?: Buffer): Promise<string> {
@@ -93,7 +108,21 @@ async function nenWebp(path: string, pngBytes?: Buffer): Promise<string> {
     // 1200px rộng đủ nét cho khung banner rộng nhất (~1000px CSS, màn retina);
     // quality 78 theo đúng mức đã đo ở illus (900px/80 ⇒ ~150KB/tấm) — banner
     // rộng hơn nên hạ nhẹ quality để bù.
-    const wBuf = await sharp(src).resize({ width: 1200 }).webp({ quality: 78 }).toBuffer();
+    const resized = await sharp(src).resize({ width: 1200 }).toBuffer();
+    const { width, height } = await sharp(resized).metadata();
+    const fadeMask = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+        <stop offset="${FADE_PCT}" stop-color="#fff" stop-opacity="1"/>
+        <stop offset="1" stop-color="#fff" stop-opacity="1"/>
+      </linearGradient></defs>
+      <rect width="100%" height="100%" fill="url(#g)"/>
+    </svg>`;
+    const faded = await sharp(resized)
+      .ensureAlpha()
+      .composite([{ input: Buffer.from(fadeMask), blend: 'dest-in' }])
+      .toBuffer();
+    const wBuf = await sharp(faded).webp({ quality: 78 }).toBuffer();
     const wUp = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path.replace(/\.png$/, '.webp')}`, {
       method: 'POST',
       headers: {
