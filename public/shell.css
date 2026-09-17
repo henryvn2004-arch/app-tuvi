@@ -334,12 +334,12 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    vẽ ở rìa TRÁI khung theo prompt `hero-banner-prompt.ts`), y hệt lỗi
    "che hình" Henry báo 2026-09-16.
    Đổi sang `object-fit:contain` + `object-position:right` — khung ảnh nay
-   BẰNG CẢ CARD (không tự suy width nữa) nên không bao giờ tràn: ảnh luôn co
-   theo trục hẹp hơn (chiều cao ở desktop, chiều rộng ở mobile khi card hẹp),
-   luôn thấy ĐỦ 100% nội dung, neo phải để phần trống (nếu có) dồn hết sang
-   trái đúng chỗ đặt chữ. Bỏ hẳn `mask-image` phai 18% (vòng 10) — khung ảnh
-   giờ khớp ĐÚNG cạnh thật của ảnh (không còn "khớp gần đúng" như bản cover),
-   phai thêm là tự che phần Minh Bảo mà prompt đã cố tình chừa trống cho chữ. */
+   BẰNG CẢ CARD (không tự suy width nữa) nên không bao giờ tràn, luôn thấy ĐỦ
+   100% nội dung. Bỏ hẳn `mask-image` phai 18% (vòng 10) — khung ảnh giờ khớp
+   ĐÚNG cạnh thật của ảnh, phai thêm là tự che phần Minh Bảo mà prompt đã cố
+   tình chừa trống cho chữ. Quy tắc này CHỈ còn áp dụng ở DESKTOP — mobile có
+   bố cục RIÊNG (xếp DỌC, xem `@media` bên dưới) vì card hẹp khiến ảnh chiếm
+   trọn bề rộng, không còn "phần trống dồn sang trái" nào để đặt chữ lên nữa. */
 .intro-card .intro-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:right center;z-index:0;background:#F3E7C8}
 /* Gradient PHỦ — đo thật bằng Playwright (`app-chu-trinh-cuoc-doi.html`, mô tả
    DÀI nhất + `.hero-pills` 3 cột LUÔN bằng nhau nên cột 3 chạm sát đúng
@@ -353,18 +353,26 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .intro-card::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#F3E7C8 0%,#F3E7C8 18%,rgba(243,231,200,.55) 40%,rgba(243,231,200,.55) 68%,rgba(243,231,200,0) 88%)}
 .intro-card .intro-body{position:relative;z-index:2;padding:18px 20px 4px;max-width:72%}
 .intro-card .hero-pills{position:relative;z-index:2;max-width:72%;margin:0;padding:12px 20px 18px}
+/* Henry 2026-09-17, vòng 2 của lỗi "khó đọc" (ảnh chụp thật trên iPhone,
+   không phải giả lập): card hẹp buộc `.intro-photo` (object-fit:contain
+   trong khung bằng cả card) tràn kín 100% bề rộng — KHÔNG CÒN vùng nào chắc
+   chắn không ảnh để đặt chữ lên. Vá bằng GRADIENT (0,32 opacity) không đủ —
+   đo bằng ảnh chụp: màu phủ (#F3E7C8) quá GẦN tông với chính bức tranh (cũng
+   kem/nâu ấm) nên gần như KHÔNG đổi được độ tương phản, dù đúng dữ liệu CSS.
+   Không vá tiếp bằng cách tăng % mờ (chữ đọc được thì lại đúng lỗi "che
+   hình" ban đầu) — ĐỔI HẲN BỐ CỤC trên mobile: ảnh lên THÀNH MỘT DẢI NGANG
+   riêng ở ĐẦU card (dùng đúng thứ tự DOM sẵn có: photo → body → pills, chỉ
+   cần đổi `position` từ absolute sang static là xếp chồng dọc tự nhiên), chữ
+   xuống hẳn bên dưới trên nền `.intro-card` THUẦN — không còn ảnh nào đằng
+   sau chữ nữa nên không cần gradient/mờ gì hết. Desktop giữ nguyên bố cục
+   cũ (đủ rộng để 2 cột không chồng nhau). */
 @media(max-width:640px){
-  .intro-card{min-height:230px}
-  .intro-card .intro-body{max-width:64%;padding:16px 16px 4px}
-  .intro-card .hero-pills{max-width:64%;padding:10px 16px 16px}
+  .intro-card{flex-direction:column;justify-content:flex-start}
+  .intro-card .intro-photo{position:static;inset:auto;width:100%;height:auto;aspect-ratio:1536/1024;object-fit:cover;object-position:center;display:block}
+  .intro-card::after{content:none}
+  .intro-card .intro-body{max-width:100%;padding:16px 16px 4px}
+  .intro-card .hero-pills{max-width:100%;padding:10px 16px 16px}
   .intro-card .intro-t{font-size:17px}
-  /* Card hẹp ⇒ ảnh co theo BỀ RỘNG (không phải chiều cao) ⇒ tràn kín cả
-     card, không còn vùng "chắc chắn không ảnh" nào. Nền tường trong tranh
-     vốn đã cùng tông kem nhạt với `.intro-card` — độ mờ 55% (như desktop)
-     cộng dồn lên nền sáng sẵn gần như XOÁ TRẮNG cả nhân vật (đo bằng ảnh
-     chụp thật, không phải đoán). Hạ xuống 32% + rút ngắn dải đặc để Minh Bảo
-     vẫn hiện được xuyên qua lớp phủ trên màn hẹp. */
-  .intro-card::after{background:linear-gradient(90deg,#F3E7C8 0%,#F3E7C8 8%,rgba(243,231,200,.32) 26%,rgba(243,231,200,.32) 64%,rgba(243,231,200,0) 80%)}
 }
 
 /* ── HÀNG GỢI Ý CÂU HỎI (chip cố định trên ô nhập rail, cuộn ngang) ── */
