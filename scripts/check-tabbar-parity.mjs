@@ -36,7 +36,7 @@ const stripTags = (s) =>
 // ── shell.js: renderTabbar() ──
 const shellPath = ROOT + 'public/shell.js';
 const shellSrc = readFileSync(shellPath, 'utf8');
-const fnMatch = shellSrc.match(/function renderTabbar\s*\([^)]*\)\s*\{[\s\S]*?\n  \}/);
+const fnMatch = shellSrc.match(/function renderTabbar\s*\([^)]*\)\s*\{[\s\S]*?\n {2}\}/);
 if (!fnMatch) {
   fail(
     `${shellPath}: không tìm thấy function renderTabbar() — đổi tên/cấu trúc hàm thì phải sửa lại bộ dò này.`
