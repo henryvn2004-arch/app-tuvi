@@ -13,7 +13,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getUserFromSupabaseToken } from '@/lib/admin/auth';
 import { sendTransactionalEmail } from '@/lib/email/send';
-import { renderLuanGiaiPdf, type LuanGiaiToolId } from '@/lib/pdf/luan-giai';
+import { renderLuanGiaiPdf, TOOL_META, type LuanGiaiToolId } from '@/lib/pdf/luan-giai';
+import { buildPhans } from '@/lib/pdf/phan-labels';
+import { getOrCreateReportToken } from '@/lib/pdf/report-link';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -21,24 +23,6 @@ export const maxDuration = 45;
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
-
-const TOOL_LABEL: Record<LuanGiaiToolId, string> = {
-  laso: 'Luận Giải Lá Số',
-  'chu-trinh-cuoc-doi': 'Chu Trình Cuộc Đời',
-};
-
-// Nhãn phần — PORT NGUYÊN VĂN từ `PHAN_LABELS` (public/account-core.js), nơi
-// tab "Xem Lại" của trang này đang dùng để vẽ modal. Hai bản phải khớp nhau —
-// đổi một bên thì đổi bên kia, không có cách nào bắt lệch bằng type-check vì
-// một bên là JS trình duyệt.
-const PHAN_LABELS: Record<string, string> = {
-  '1': 'Tổng Quan', '2': 'Cung Mệnh', '3': 'Tâm Tính', '4': 'Học Vấn',
-  '5': 'Phụ Mẫu', '6': 'Phúc Đức', '7': 'Điền Trạch', '8': 'Quan Lộc',
-  '9': 'Nô Bộc', '10': 'Thiên Di', '11': 'Tật Ách', '12': 'Tài Bạch',
-  '13': 'Tử Tức', '14': 'Phu Thê', '15': 'Huynh Đệ', '16': 'Đại Vận',
-  '17': 'Tiểu Hạn', '18': 'Lưu Niên', '19': 'Cách Cục', '20': 'Sự Nghiệp',
-  '21': 'Tình Cảm', '22': 'Sức Khoẻ', '23': 'Tài Lộc', '24': 'Vận Mệnh',
-};
 
 // 🔑 Slug của 2 tool CÓ nút "Gửi lại PDF" phân biệt bằng TIỀN TỐ (xem
 // `makeLasoSlug`, lib/engine/laso.ts): chu-trinh-cuoc-doi luôn có tiền tố
@@ -83,11 +67,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Bạn không sở hữu lá số này' }, { status: 403 });
   }
 
-  const luanGiai = (row.luan_giai as Record<string, unknown> | null) || {};
-  const phans = Object.keys(luanGiai)
-    .filter((k) => /^\d+$/.test(k) && PHAN_LABELS[k] && String(luanGiai[k] ?? '').trim())
-    .sort((a, b) => Number(a) - Number(b))
-    .map((k) => ({ title: PHAN_LABELS[k], text: String(luanGiai[k]).slice(0, 50_000) }));
+  const phans = buildPhans(row.luan_giai as Record<string, unknown> | null)
+    .map((p) => ({ title: p.title, text: p.text.slice(0, 50_000) }));
   if (!phans.length) {
     return NextResponse.json({ error: 'Chưa có nội dung luận giải nào được lưu cho lá số này' }, { status: 400 });
   }
@@ -96,7 +77,7 @@ export async function POST(req: NextRequest) {
   const ngaySinh = [row.ngay_sinh, row.thang_sinh, row.nam_sinh].every((v) => v != null)
     ? `${row.ngay_sinh}/${row.thang_sinh}/${row.nam_sinh}${row.gio_chi ? ', giờ ' + row.gio_chi : ''}`
     : '';
-  const toolLabel = TOOL_LABEL[toolId];
+  const toolLabel = TOOL_META[toolId].title;
 
   try {
     const pdfBuffer = await renderLuanGiaiPdf({
@@ -113,12 +94,27 @@ export async function POST(req: NextRequest) {
     // double-click/spam-click trong cùng một ngày, đúng mẫu dedupeKey
     // `crosssell-<user>-<tool>-<yyyy-mm-dd>` đã có sẵn (lib/email/send.ts).
     const dayBucket = new Date().toISOString().slice(0, 10);
+
+    // Link xem báo cáo trực tuyến (magic link, không cần đăng nhập) — best-
+    // effort: lỗi sinh token KHÔNG được chặn việc gửi PDF, đính kèm mới là
+    // giá trị chính của email này. Thiếu token thì email vẫn gửi, chỉ thiếu
+    // dòng link.
+    let viewOnlineHtml = '';
+    try {
+      const linkToken = await getOrCreateReportToken(slug, toolId, user.id);
+      const viewUrl = `https://tuviminhbao.com/ket-qua-laso/${linkToken}`;
+      viewOnlineHtml = `<p><a href="${viewUrl}">Xem báo cáo trực tuyến →</a> (không cần đăng nhập, mở trên bất kỳ thiết bị nào)</p>`;
+    } catch (e) {
+      console.error('[luan-giai/resend-pdf] lỗi sinh report token', e);
+    }
+
     const result = await sendTransactionalEmail({
       dedupeKey: `resend-pdf-luan-giai-${toolId}-${user.id}-${slug}-${dayBucket}`,
       template: 'luan-giai-pdf-resend',
       to: user.email,
       subject: `PDF ${toolLabel}${hoTen ? ' — ' + hoTen : ''} — Tử Vi Minh Bảo`,
       html: `<p>Gửi lại bạn bản PDF ${toolLabel.toLowerCase()}${hoTen ? ' của <b>' + hoTen + '</b>' : ''} — đính kèm trong email này.</p>
+${viewOnlineHtml}
 <p style="font-size:12px;color:#888">Bạn luôn xem lại bản đầy đủ trên tài khoản tại <a href="https://tuviminhbao.com/app">tuviminhbao.com/app</a>.</p>`,
       userId: user.id,
       attachments: [{ filename: `${toolId}-tu-vi-minh-bao.pdf`, content: pdfBuffer.toString('base64') }],
