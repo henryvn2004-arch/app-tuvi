@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-303 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+304 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 138 | 572,361 B |
+| `2026-09.md` | 139 | 575,259 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🖼 Sprint 5 — vẽ lại 52 avatar tool, đổi hẳn hướng giữa chừng: bỏ Minh Bảo, dùng thầy/cô cầm deliverable |
 | 1 | 2026-09 | `2026-09.md` | 🔓 Sprint 1 xong nốt — ảnh paywall V2 wire vào tấm khoá `tuvi-paywall.js` |
 | 1 | 2026-09 | `2026-09.md` | 📱 Banner `.intro-card` mobile — hết đường vá bằng gradient, đổi hẳn BỐ CỤC |
 | 1 | 2026-09 | `2026-09.md` | 🎨 Banner `.intro-card` — phai alpha rìa trái để ảnh BLEND vào nền |
