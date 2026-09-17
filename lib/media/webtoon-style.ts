@@ -12,6 +12,15 @@
 // duyệt cả bộ ảnh (mascot/hero/corner/expressions/poses + 11 banner tool).
 // ============================================================
 
+/**
+ * Ảnh NEO nhận diện Minh Bảo cho `images/edits` — nguồn DUY NHẤT, dùng chung
+ * bởi `hero-banner-prompt.ts` VÀ `tool-avatar-prompt.ts` (đặt Ở ĐÂY thay vì
+ * trong một trong hai file đó để tránh import vòng giữa chúng — hero-banner
+ * đã import `TOOL_AVATAR_ALIAS` từ tool-avatar, nếu tool-avatar lại import
+ * ngược từ hero-banner là circular import).
+ */
+export const ANCHOR_IMAGE_PATH = 'public/mascot/hero-scene-v2.webp';
+
 /** Khối phong cách cố định — mọi ảnh Minh Bảo phải mở đầu bằng đúng khối này. */
 export const STYLE_LOCK = `minimalist Vietnamese webtoon illustration, soft warm color palette (beige, brown, muted green), clean thin line art, soft shading, no harsh contrast, cute chibi proportion (big head ~60%, small body), peaceful countryside atmosphere, slightly nostalgic, gentle lighting, flat + light gradient shading, highly consistent character design, no hyper realism, no anime glossy rendering`;
 

@@ -26,16 +26,13 @@
 // ============================================================
 
 import { TOOL_AVATAR_ALIAS } from './tool-avatar-prompt';
-import { edit2Prompt } from './webtoon-style';
+import { edit2Prompt, ANCHOR_IMAGE_PATH } from './webtoon-style';
 
-/**
- * Ảnh NEO nhận diện Minh Bảo cho `images/edits` — đường DUY NHẤT giữ đúng
- * khuôn mặt giữa 11 bức (tả bằng chữ thì model dựng lại từ đầu mỗi lượt và
- * trôi nhân vật, đã cắn ở character bible V1). Dùng LẠI đúng asset đã commit
- * (không phải file PNG gốc `.webtoon-sample/mascotV2.png`, không nằm trong
- * repo) — webp nén vẫn đủ nét cho images/edits, không cần bản gốc.
- */
-export const ANCHOR_IMAGE_PATH = 'public/mascot/hero-scene-v2.webp';
+// Re-export — `ANCHOR_IMAGE_PATH` giờ khai ở `webtoon-style.ts` (nguồn DUY
+// NHẤT, dùng chung với `tool-avatar-prompt.ts`, tránh import vòng giữa hai
+// file đó). Giữ export Ở ĐÂY để `app/api/admin/hero-banners/route.ts` và
+// `scripts/gen-hero-banners.mjs` (import từ module này) không phải sửa lại.
+export { ANCHOR_IMAGE_PATH };
 
 export interface HeroBannerGroupSpec {
   /** id nhóm — cũng là tiền tố tên file (<id>-NN.png) trong Storage. */

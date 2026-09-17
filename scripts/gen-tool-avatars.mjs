@@ -1,24 +1,30 @@
 #!/usr/bin/env node
 /**
- * Sinh ảnh đại diện cho từng tool (line art vàng kim / nền navy, phong cách
- * Luo Pan) bằng gpt-image-1 — xem `lib/media/tool-avatar-prompt.ts` cho bảng
- * chủ đề từng tool và khối phong cách chung.
+ * Sinh ảnh đại diện cho từng tool — webtoon/chibi, Minh Bảo neo ẢNH (giống
+ * hero-banner) — xem `lib/media/tool-avatar-prompt.ts` cho bảng chủ đề từng
+ * tool và khối phong cách chung.
  *
  * Ảnh là ASSET TĨNH, sinh MỘT LẦN rồi thôi (giống `gen-que-images.mjs`).
  *
+ * 🔴 LUÔN gọi `images/edits` — neo `ANCHOR_IMAGE_PATH` (ảnh Minh Bảo đã
+ * commit trong `public/`) để giữ đúng khuôn mặt qua 52 lượt vẽ riêng, không
+ * phải `images/generations` thuần (tả bằng chữ thì trôi nhân vật — cùng bài
+ * học đã cắn ở hero-banner V1, xem `scripts/gen-hero-banners.mjs`).
+ *
  * Chạy ở NƠI CÓ `OPENAI_API_KEY` và ra được Internet:
- *   node scripts/gen-tool-avatars.mjs --sample            # 5 bức mẫu để duyệt phong cách
+ *   node scripts/gen-tool-avatars.mjs --sample            # 6 bức mẫu để duyệt phong cách
  *   node scripts/gen-tool-avatars.mjs --all                # trọn bộ đang bật
  *   node scripts/gen-tool-avatars.mjs --tool laso,tarot     # chỉ vài tool
  *   node scripts/gen-tool-avatars.mjs --all --dry-run        # chỉ in prompt
  *
- * Cờ: --out <thư mục> (mặc định `.tool-avatars/`) · --size (mặc định 1024x1024)
- * · --quality low|medium|high (mặc định medium).
+ * Cờ: --out <thư mục> (mặc định `.tool-avatars/`) · --size (mặc định 1024x1024,
+ * khổ vuông đúng chỗ dùng thật — xem `tool-avatar-prompt.ts`) · --quality
+ * low|medium|high (mặc định medium) · --model (mặc định gpt-image-2).
  *
  * Bức đã có trong thư mục đích thì BỎ QUA — chạy lại sau khi đứt mạng không
  * đốt lại tiền cho phần đã xong. Dùng `--force` để vẽ đè.
  */
-import { writeFileSync, existsSync, mkdirSync, mkdtempSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync, mkdtempSync } from 'fs';
 import { execFileSync } from 'child_process';
 import { tmpdir } from 'os';
 import { join } from 'path';
@@ -29,7 +35,8 @@ const ROOT = new URL('..', import.meta.url).pathname;
 
 // ── nạp module prompt (TS) — cùng cách gen-que-images.mjs đã dùng: gọi CLI
 // `tsc` để biên dịch tại chỗ, KHÔNG dùng `ts.transpileModule` (gói
-// typescript@7 không còn xuất API biên dịch trong JS). ──
+// typescript@7 không còn xuất API biên dịch trong JS). Compile luôn
+// `webtoon-style.ts` — `tool-avatar-prompt.ts` giờ import từ đó. ──
 const TSC = join(ROOT, 'node_modules/.bin/tsc');
 const outDir = mkdtempSync(join(tmpdir(), 'tool-avatar-prompt-'));
 execFileSync(
@@ -44,16 +51,35 @@ execFileSync(
     '--outDir',
     outDir,
     join(ROOT, 'lib/media/tool-avatar-prompt.ts'),
+    join(ROOT, 'lib/media/hero-banner-prompt.ts'),
+    join(ROOT, 'lib/media/webtoon-style.ts'),
   ],
   { stdio: 'inherit' }
 );
-const { TOOL_AVATARS, buildToolAvatarPrompt } = require(join(outDir, 'tool-avatar-prompt.js'));
-if (!Array.isArray(TOOL_AVATARS) || typeof buildToolAvatarPrompt !== 'function') {
+const { TOOL_AVATARS, buildToolAvatarPrompt, ANCHOR_IMAGE_PATH } = require(
+  join(outDir, 'tool-avatar-prompt.js')
+);
+if (
+  !Array.isArray(TOOL_AVATARS) ||
+  typeof buildToolAvatarPrompt !== 'function' ||
+  typeof ANCHOR_IMAGE_PATH !== 'string'
+) {
   console.error(
-    '❌ không nạp được TOOL_AVATARS/buildToolAvatarPrompt từ bản dịch — dừng trước khi đốt tiền vẽ.'
+    '❌ không nạp được TOOL_AVATARS/buildToolAvatarPrompt/ANCHOR_IMAGE_PATH từ bản dịch — dừng trước khi đốt tiền vẽ.'
   );
   process.exit(1);
 }
+
+const anchorPath = join(ROOT, ANCHOR_IMAGE_PATH);
+if (!existsSync(anchorPath)) {
+  console.error(
+    `❌ thiếu ảnh neo "${ANCHOR_IMAGE_PATH}" — không vẽ được, dừng trước khi đốt tiền.`
+  );
+  process.exit(1);
+}
+const anchorBytes = readFileSync(anchorPath);
+const anchorFileName = ANCHOR_IMAGE_PATH.split('/').pop();
+const anchorMime = anchorFileName.endsWith('.webp') ? 'image/webp' : 'image/png';
 
 // ── cờ dòng lệnh ──
 const argv = process.argv.slice(2);
@@ -65,6 +91,7 @@ const has = (n) => argv.includes(n);
 const OUT = flag('--out', join(ROOT, '.tool-avatars'));
 const SIZE = flag('--size', '1024x1024');
 const QUALITY = flag('--quality', 'medium');
+const MODEL = flag('--model', 'gpt-image-2');
 const DRY = has('--dry-run');
 const FORCE = has('--force');
 
@@ -132,16 +159,20 @@ for (const id of pick) {
   }
 
   try {
-    const r = await fetch('https://api.openai.com/v1/images/generations', {
+    // images/edits — neo ẢNH Minh Bảo, KHÔNG phải images/generations thuần
+    // (xem ghi chú đầu file). Multipart: KHÔNG tự đặt Content-Type, boundary
+    // do FormData sinh, gõ tay là hỏng.
+    const fd = new FormData();
+    fd.append('model', MODEL);
+    fd.append('prompt', prompt);
+    fd.append('size', SIZE);
+    fd.append('quality', QUALITY);
+    fd.append('n', '1');
+    fd.append('image', new Blob([anchorBytes], { type: anchorMime }), anchorFileName);
+    const r = await fetch('https://api.openai.com/v1/images/edits', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${KEY}` },
-      body: JSON.stringify({
-        model: 'gpt-image-1',
-        prompt,
-        size: SIZE,
-        quality: QUALITY,
-        n: 1,
-      }),
+      headers: { Authorization: `Bearer ${KEY}` },
+      body: fd,
     });
     if (!r.ok) throw new Error(`${r.status}: ${(await r.text().catch(() => '')).slice(0, 300)}`);
     const j = await r.json();
@@ -158,9 +189,11 @@ for (const id of pick) {
 
 if (!DRY) {
   console.log(`\nVẽ mới ${daVe} · bỏ qua ${boQua} · lỗi ${loi}`);
-  const GIA_VND = { low: 500, medium: 1300, high: 5000 }; // ước tính ở 1024×1024, xem que-images route cho bảng đối chiếu
+  // ƯỚC TÍNH thô ở 1024×1024 quality=medium — số thật lấy từ events.meta.cost_vnd
+  // (lib/agent/usage.ts), KHÔNG dùng con số này để tính tiền thật.
+  const GIA_VND = { low: 400, medium: 1100, high: 3500 };
   console.log(
-    `Chi phí ước tính lượt này: ~${(daVe * (GIA_VND[QUALITY] || 1300)).toLocaleString('vi-VN')}đ`
+    `Chi phí ước tính lượt này: ~${(daVe * (GIA_VND[QUALITY] || 1100)).toLocaleString('vi-VN')}đ`
   );
   if (loi) process.exitCode = 1;
 }

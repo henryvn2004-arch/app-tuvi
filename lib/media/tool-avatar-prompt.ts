@@ -1,86 +1,59 @@
 // lib/media/tool-avatar-prompt.ts
 // ============================================================
-// Dựng prompt sinh ẢNH ĐẠI DIỆN cho từng tool bằng gpt-image — line art vàng
-// kim trên nền navy, phong cách tranh minh hoạ Tử Vi cao cấp (KHÔNG phải icon
-// phẳng). Đã chốt qua nhiều vòng duyệt tay với Henry (xem
-// `docs/nhat-ky/2026-08.md` mục "Hình đại diện tool"):
-//   1. Bản icon-phẳng đầu tiên (vòng tròn đối xứng cứng) → chê "nhìn đâu cũng
-//      vòng tròn", không có hồn.
-//   2. Đổi sang khung "narrative hero illustration" (không đối xứng hoàn hảo,
-//      có nhân vật/cấu trúc biểu tượng làm trọng tâm, mây/trăng/sao bao quanh)
-//      → khớp Ý.
-//   3. Nhân vật lúc đầu mặt buồn/cúi xuống → chỉnh sang biểu cảm TƯƠI, mắt mở,
-//      khẽ cười — xem `EXPRESSION_RULE` dưới.
-//   4. Hán tự trang trí gpt-image hay bịa chữ GIẢ (không đọc được) → bỏ hẳn,
-//      thay bằng hoa văn/tua rua/mây (xem `CHINESE_AESTHETICS`).
+// Dựng prompt sinh ẢNH ĐẠI DIỆN cho từng tool bằng gpt-image.
 //
-// ⚠️ KHÔNG ép MỌI tool có nhân vật người. Bảng `TOOL_AVATARS` chọn theo đúng
-// bản chất từng tool: tool có tính LUẬN GIẢI CON NGƯỜI (đọc lá số, chân dung,
-// tương hợp, xem tướng, phong cách AI...) → nhân vật (1 người/couple/em
-// bé/nhóm tuỳ tool). Tool có tính TRA CỨU/CƠ CHẾ THUẦN (an sao trần, Kinh
-// Dịch, Bát Trạch, Nạp Âm, lịch...) → cấu trúc biểu tượng trừu tượng (vòng
-// quẻ, la bàn, lịch...), không gán gượng một nhân vật vào đó.
+// 🔴 Reskin webtoon 2026-09-17 (Sprint 5, sau khi Sprint 5b banner đã xong):
+// bỏ HẲN bộ khung "line art vàng kim trên nền navy" cũ (chốt 2026-08, xem
+// `docs/nhat-ky/2026-08.md` mục "Hình đại diện tool") — không hợp phong cách
+// webtoon/chibi ấm áp của trang chủ + banner mới. Đổi luật CŨ ("KHÔNG ép mọi
+// tool có nhân vật người"): Minh Bảo giờ có mặt ở CẢ 52 avatar, đúng vai trò
+// mascot cố định của site, nhưng ĐỔI VAI theo bản chất tool:
+//   - Tool "LUẬN NGƯỜI" (đọc lá số, chân dung, tương hợp, xem tướng, phong
+//     cách AI...) → Minh Bảo TƯƠNG TÁC với một khách (chỉ, đưa, cùng nhìn).
+//   - Tool "TRA CỨU/CƠ CHẾ THUẦN" (an sao trần, Kinh Dịch, Bát Trạch, Nạp
+//     Âm, lịch...) → Minh Bảo đứng/ngồi CẠNH vật thể biểu tượng của tool đó
+//     (la bàn, lịch, vòng quẻ...), không cần khách.
+// Neo bằng ẢNH (`images/edits`, `webtoon-style.ts`) như hero-banner — tránh
+// trôi mặt Minh Bảo qua 52 lượt vẽ riêng.
+//
+// ⚠️ KHỔ VUÔNG NHỎ (1024², hiển thị thật ở 104px/`tools/*.html` và 48px/PDF
+// print header — xem `public/tools/tools.css` `.xt-avatar` và
+// `public/shell.css` `.ws-print-avatar`) — KHÁC hero-banner (khổ ngang lớn).
+// Bố cục vì thế phải ĐƠN GIẢN, Minh Bảo/vật thể to & giữa khung, nền phẳng
+// không chi tiết rườm rà — chi tiết nhỏ sẽ mờ hẳn khi thu về 48-104px.
+//
+// 🔴 MỚI RA MẪU 6 TOOL ĐẠI DIỆN (`SAMPLE` trong `gen-tool-avatars.mjs`) —
+// CHƯA rà hết 46 `centralSubject` còn lại (vẫn mô tả nhân vật "gufeng" cũ,
+// KHÔNG có Minh Bảo) — chờ Henry duyệt style trước khi viết lại toàn bộ,
+// tránh viết lại 52 lần rồi phải sửa lại nếu style chưa đúng ý.
 // ============================================================
 
-/** Bắt đầu MỌI ảnh — phần khung nghệ thuật cố định, không đổi theo tool. */
+import { edit2Prompt, ANCHOR_IMAGE_PATH } from './webtoon-style';
+
+// Re-export cho `scripts/gen-tool-avatars.mjs` (đọc file neo trước khi gọi
+// API) — nguồn thật khai ở `webtoon-style.ts`, dùng chung với hero-banner.
+export { ANCHOR_IMAGE_PATH };
+
+// Khổ NHỎ (xem cảnh báo đầu file) — bố cục phải đơn giản, KHÔNG rườm rà như
+// hero-banner. Giữ tên `ART_DIRECTION`/`COMPOSITION`/`DO_NOT` để phần diff so
+// với bản cũ dễ đọc, nhưng nội dung đổi hẳn.
 const ART_DIRECTION = `ART DIRECTION:
 
-This is NOT an icon.
-This is a rich, narrative-style hero illustration.
-
-The composition should feel artistic, mystical, and slightly asymmetrical — not rigid or overly geometric.`;
+This is a small SQUARE icon-portrait (displayed as small as 48-104px) — the opposite of a wide narrative scene. Center the subject large and clear, filling most of the frame. A plain, softly gradient warm background (cream/beige, no scenery clutter) — nothing that would turn to mush at a small size.`;
 
 const COMPOSITION = `COMPOSITION:
 
-- A large celestial circular structure inspired by Luo Pan or astrology, but not perfectly rigid
-- The circle can be partially broken, layered, or blended into the scene
-- Surrounding space should include atmospheric elements (clouds, stars, flow)
-- The background fills the entire square canvas edge to edge with a rich, fully saturated deep navy blue. Absolutely NO vignette, no soft circular spotlight fading to black or gray at the corners, no photographic glow halo, no blur — the four corners are the same crisp navy as the center.`;
-
-/**
- * Áp cho MỌI nhân vật người trong bộ ảnh. Đây là chỗ sửa NẾU sau này thấy
- * nhân vật lại "buồn" — chỉ sửa MỘT chỗ, không sửa tay 30+ dòng centralSubject.
- */
-const EXPRESSION_RULE = `If the central subject includes a human figure, her or his expression must read as UPLIFTING and HOPEFUL: eyes open (not closed, not downcast, not sleepy), a light, warm, gently serene smile — like someone quietly pleased with what the reading reveals. Never somber, sorrowful, tired, or melancholic.`;
-
-const CHINESE_AESTHETICS = `CHINESE AESTHETICS (CRITICAL):
-
-- Do NOT render dense blocks of Chinese characters — gpt-image tends to fabricate fake, unreadable glyphs that read as wrong to anyone literate in Chinese. Prefer plain ornamental dots, tassels, knotwork and cloud scrollwork over actual characters. At most one or two small, simple decorative marks may hint at writing, never a caption or label.
-- Include traditional cloud motifs (祥云)
-- Include small symbolic marks (like trigrams, zodiac hints) used sparingly, never as a symmetric ring of trigrams around a yin-yang disc (that specific layout reads as a national flag, not a metaphysics motif)`;
-
-const CELESTIAL_ELEMENTS = `CELESTIAL ELEMENTS:
-
-- Crescent moon
-- Stars (✦)
-- Orbit lines or cosmic arcs`;
-
-const LINE_STYLE = `LINE STYLE:
-
-- Thin, refined gold line (#E6C76B, #F2E3B3) on the deep navy background (#0B2A45 → #123A5A)
-- Clean but slightly expressive (not too mechanical)
-- No other colors anywhere in the image; never render any part of the image in gray, black-and-white, sepia, or any desaturated tone`;
-
-const BALANCE = `BALANCE:
-
-- Mix of:
-  - detailed areas (halo / outer structure)
-  - open negative space
-  - flowing decorative elements`;
+- ONE clear focal subject, large, centered, filling most of the square frame
+- At most one small supporting prop (the tool's own object/symbol), also kept simple and large enough to read small
+- Plain soft warm background (cream/beige gradient), no background scenery, no crowd, no small background details
+- No text, caption or label anywhere in the image`;
 
 const DO_NOT = `DO NOT:
 
-- Do NOT make it a simple icon
-- Do NOT make perfect symmetry
-- Do NOT reduce everything to circles only
-- Do NOT remove character or narrative feeling
-- Do NOT render the background as gray, desaturated, or vignetted — it must stay a rich navy blue corner to corner
-- Do NOT give any human figure a sad, solemn, sleepy, or melancholic expression — see the expression rule above
-- Do NOT add any text, caption, or label anywhere in the image`;
-
-const FINAL_FEELING = `FINAL FEELING:
-
-A luxurious, mystical Chinese astrology artwork — like a high-end Zi Wei Dou Shu illustration, rich in detail, slightly poetic, warm and alive, not somber. Inspired by editorial illustration, Chinese celestial art, and luxury spiritual branding, not UI icons.`;
+- Do NOT draw a wide scene with background scenery, other people, or small background details — this is a SQUARE ICON, not a banner
+- Do NOT make the subject small within the frame — fill most of the square
+- Do NOT add any text, caption, or label anywhere in the image
+- Do NOT render Chinese characters — if the tool's prop implies writing, use plain unreadable marks/dots, never fabricated glyphs`;
 
 export interface ToolAvatarSpec {
   /** tool_id trong bảng tool_pricing — cũng là tên file ảnh (<id>.webp). */
@@ -112,7 +85,7 @@ export const TOOL_AVATARS: ToolAvatarSpec[] = [
     label: 'Tarot 78 Lá',
     context: 'Rút một lá bài Tarot, nghe một câu trả lời rõ cho chuyện đang rối.',
     centralSubject:
-      'A single upright tarot card as the symbolic structure at the center — its face left blank apart from a thin decorative border and one small engraved star, floating as if just drawn from the deck, faint fanned cards barely visible behind it. No human figure needed; let the card itself be the calm, poised presence at the center.',
+      'Use the boy from the provided image as Minh Bảo, filling most of the square frame, sitting cross-legged and holding up ONE large tarot card facing the viewer with both hands, looking at it with a curious, delighted expression. The card face is plain except for a thin decorative border and one small engraved star — no readable symbols or text. Keep his exact face, hair, hat and outfit — same character, same big-head chibi proportion, no redesign.',
   },
   {
     id: 'oracle',
@@ -135,8 +108,7 @@ export const TOOL_AVATARS: ToolAvatarSpec[] = [
     label: 'Bản Đồ Sao Lúc Sinh',
     context: 'Dựng bánh xe 12 nhà chiêm tinh Tây đúng khoảnh khắc chào đời.',
     centralSubject:
-      'A Western natal-chart wheel as the symbolic structure — twelve slim house segments with a handful of classical planet glyphs (☉ ☽ ♀ ♂) resting lightly on its rim, gently asymmetrical rather than perfectly rigid. No human figure; let the wheel itself be the calm centerpiece.',
-    extraMotifs: ['faint constellation dots connected by hair-thin lines in the background corners'],
+      'Use the boy from the provided image as Minh Bảo, filling most of the square frame, holding up a large round Western natal-chart wheel with both hands, gazing at it with wide, delighted eyes — the wheel shows twelve slim house segments with a handful of classical planet glyphs (☉ ☽ ♀ ♂) on its rim, no readable text. Keep his exact face, hair, hat and outfit — same character, same big-head chibi proportion, no redesign.',
   },
 
   // ── Công Cụ Tử Vi — an sao trần, trước khi ai luận ──
@@ -184,7 +156,7 @@ export const TOOL_AVATARS: ToolAvatarSpec[] = [
     label: 'Kinh Dịch 64 Quẻ',
     context: 'Gieo một quẻ trong 64 quẻ Kinh Dịch, đọc hào đang động.',
     centralSubject:
-      'A segmented circle as the symbolic structure at the center: six concentric rings nested inside one another like tree rings, each an unbroken thin gold line except one single ring broken by a small radial gap and marked with a slightly brighter gold tone — the point of change. Fully abstract and geometric, no human figure, nothing resembling a national flag or religious emblem.',
+      'Use the boy from the provided image as Minh Bảo, filling most of the square frame, mid-toss of three small bronze coins with one hand, watching them with wide excited eyes — beside him a simple hexagram symbol (six stacked short horizontal bars, one glowing brighter than the rest) hovers softly, fully abstract, nothing resembling a flag or religious emblem. Keep his exact face, hair, hat and outfit — same character, same big-head chibi proportion, no redesign.',
   },
   {
     id: 'mai-hoa',
@@ -308,7 +280,7 @@ export const TOOL_AVATARS: ToolAvatarSpec[] = [
     label: 'Chân Dung Vợ Chồng',
     context: 'Vẽ chân dung người bạn đời tương lai từ cung Phu Thê.',
     centralSubject:
-      'A minimal elegant East Asian young couple in gufeng style, facing each other in profile, close but not touching, with delicate hair ornaments and tassels, smooth flowing hair lines, graceful silhouettes — soft, idealized, warmly smiling expressions, calm and timeless, fully integrated into the celestial composition around them.',
+      'Use the boy from the provided image as Minh Bảo, filling most of the square frame, holding up a small round portrait frame with both hands, peeking at it himself with a delighted, knowing smile. Inside the frame: a soft, gentle silhouette of a young couple standing close together, faces not detailed — just enough to read as "the future partner". Keep Minh Bảo\'s exact face, hair, hat and outfit — same character, same big-head chibi proportion, no redesign.',
   },
   {
     id: 'duyen-no-tien-kiep',
@@ -373,7 +345,7 @@ export const TOOL_AVATARS: ToolAvatarSpec[] = [
     label: 'Hướng Bát Trạch',
     context: 'Tính mệnh quái và hướng nhà hợp theo Bát Trạch.',
     centralSubject:
-      'A small house silhouette as the symbolic structure at the center (plain roofline over a rectangle, door as a thin gap), sitting in the middle of a plain circle marked with eight short straight tick marks at even intervals around its rim, a single compass needle laid across pointing to one favourable direction. No human figure, no ring of trigram bars, nothing resembling a national flag.',
+      'Use the boy from the provided image as Minh Bảo, filling most of the square frame, sitting beside a small simple house model (plain roofline over a rectangle), holding a round compass marked with eight short even tick marks around its rim, pointing at one favourable direction with a proud smile. No ring of trigram bars, nothing resembling a national flag. Keep his exact face, hair, hat and outfit — same character, same big-head chibi proportion, no redesign.',
   },
   {
     id: 'kim-lau',
@@ -440,7 +412,7 @@ export const TOOL_AVATARS: ToolAvatarSpec[] = [
     label: 'Phong Thủy Bàn Làm Việc',
     context: 'Chụp ảnh bàn làm việc, xem cách kê có đang cản đường thăng tiến.',
     centralSubject:
-      'A simple desk-and-chair silhouette as the symbolic structure, seen at a three-quarter angle in plain thin outline, a small compass needle floating just above the desk surface, faint ascending step-lines behind the chair. No human figure.',
+      'Use the boy from the provided image as Minh Bảo, filling most of the square frame, kneeling beside a small simple desk-and-chair model, carefully holding a round wooden Luo Pan compass out above it, studying the desk placement with focused curiosity. Keep his exact face, hair, hat and outfit — same character, same big-head chibi proportion, no redesign.',
   },
   {
     id: 'cua-hang-phong-thuy',
@@ -521,22 +493,22 @@ export function resolveAvatarId(idOrKey: string): string {
   return TOOL_AVATAR_ALIAS[idOrKey] || idOrKey;
 }
 
+/**
+ * Prompt cho `images/edits`, neo Minh Bảo qua `ANCHOR_IMAGE_PATH` (dùng LẠI
+ * đúng ảnh neo của hero-banner — một nguồn neo DUY NHẤT cho mọi bộ ảnh nhân
+ * vật, xem `hero-banner-prompt.ts`). `t.centralSubject` phải tự mô tả Minh
+ * Bảo đang làm gì (không lặp lại CHARACTER_DNA bằng chữ — `edit2Prompt` đã
+ * xử lý phần đó).
+ */
 export function buildToolAvatarPrompt(t: ToolAvatarSpec): string {
-  const celestial = t.extraMotifs?.length
-    ? `${CELESTIAL_ELEMENTS}\n- ${t.extraMotifs.join('\n- ')}`
-    : CELESTIAL_ELEMENTS;
-
-  return [
-    `Create a premium Chinese metaphysics illustration in elegant gold line art on a deep navy background.`,
-    `Context:\n${t.label}\n${t.context}`,
-    ART_DIRECTION,
-    COMPOSITION,
-    `CENTRAL SUBJECT (IMPORTANT):\n\n${t.centralSubject}\n\n${EXPRESSION_RULE}`,
-    CHINESE_AESTHETICS,
-    celestial,
-    LINE_STYLE,
-    BALANCE,
-    DO_NOT,
-    FINAL_FEELING,
-  ].join('\n\n---\n\n');
+  const extra = t.extraMotifs?.length ? `\nChi tiết thêm: ${t.extraMotifs.join('; ')}` : '';
+  return edit2Prompt(
+    [
+      `Context: ${t.label} — ${t.context}`,
+      ART_DIRECTION,
+      COMPOSITION,
+      `CENTRAL SUBJECT (IMPORTANT):\n\n${t.centralSubject}${extra}`,
+      DO_NOT,
+    ].join('\n\n---\n\n')
+  );
 }
