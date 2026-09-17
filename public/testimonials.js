@@ -114,28 +114,41 @@
     if (document.getElementById('rv-css')) return;
     var s = document.createElement('style');
     s.id = 'rv-css';
+    // Bảng màu khớp theme webtoon mới (navy #0F2A3D / gold #C8A96A / kem
+    // #F6F3EE / viền #E9E3D6 — cùng giá trị hex đã chốt ở tools.css :root và
+    // index-sample-v3.html :root, xem docs/nhat-ky/2026-09.md). Ghim CỨNG hex
+    // thay vì var(--x): file này chạy trên ~49 trang có :root khác nhau
+    // (hoặc không có), không thể trông cậy biến CSS của host page.
+    //
+    // ⚠️ KHÔNG khai font-family Noto Serif ở đây dù site dùng serif cho các
+    // câu trích khác — nhiều trong số 49 trang này chưa preload font đó
+    // (check:font cố ý bỏ qua "khai mà không nạp", xem comment đầu
+    // check-font-selfhost.mjs), khai vào là tái diễn đúng lỗi vỡ dấu Georgia
+    // vừa vá ở nav.js/auth.js phiên này. Giữ nguyên chữ kế thừa font thân bài
+    // của trang.
     s.textContent = [
-      '.rv-section{padding:56px 40px;background:#fff;border-top:1px solid #E8E8E8}',
-      '.rv-inner{max-width:960px;margin:0 auto}',
-      '.rv-eyebrow{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#666;display:flex;align-items:center;gap:16px;margin-bottom:32px}',
-      '.rv-eyebrow::after{content:"";flex:1;height:1px;background:#E8E8E8}',
+      '.rv-section{padding:48px 24px;background:#F6F3EE;border-top:1px solid #E9E3D6}',
+      '.rv-inner{max-width:1180px;margin:0 auto}',
+      '.rv-eyebrow{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:800;color:#16232C;margin-bottom:24px}',
+      '.rv-eyebrow .rv-eyebrow-ic{width:18px;height:18px;color:#C8A96A;flex:none}',
       '.rv-viewport{position:relative}',
       '.rv-track-wrap{overflow:hidden}',
-      '.rv-track{display:flex;gap:24px;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform;align-items:stretch}',
-      '.rv-card{background:#fff;border:1px solid #CCCCCC;padding:28px 24px;flex:0 0 calc(33.333% - 16px);box-sizing:border-box;display:flex;flex-direction:column;border-radius:2px}',
-      '.rv-stars{color:#c9a84c;font-size:15px;margin-bottom:14px;letter-spacing:2px}',
-      '.rv-text{font-size:14px;color:#444;line-height:1.75;font-style:italic;margin-bottom:20px;flex:1}',
-      '.rv-name{font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:2px}',
-      '.rv-date{font-size:11px;color:#666}',
-      '.rv-btn{position:absolute;top:50%;width:40px;height:40px;border-radius:50%;border:1px solid #CCCCCC;background:#fff;cursor:pointer;font-size:16px;color:#061A2E;box-shadow:0 2px 8px rgba(0,0,0,.08);transition:border-color .15s;z-index:10;display:flex;align-items:center;justify-content:center;transform:translateY(-50%)}',
-      '.rv-btn:hover{border-color:#061A2E}',
+      '.rv-track{display:flex;gap:20px;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform;align-items:stretch}',
+      '.rv-card{background:#fff;border:1px solid #E9E3D6;padding:26px 24px;flex:0 0 calc(33.333% - 14px);box-sizing:border-box;display:flex;flex-direction:column;border-radius:16px;box-shadow:0 4px 16px rgba(22,35,44,.05)}',
+      '.rv-stars{color:#C8A96A;font-size:15px;margin-bottom:14px;letter-spacing:2px}',
+      '.rv-text{font-size:14px;color:#444C52;line-height:1.75;margin-bottom:20px;flex:1}',
+      '.rv-meta{border-top:1px solid #F1E7D2;padding-top:12px}',
+      '.rv-name{font-size:12.5px;font-weight:700;color:#16232C;margin-bottom:2px}',
+      '.rv-date{font-size:11px;color:#8B9299}',
+      '.rv-btn{position:absolute;top:50%;width:40px;height:40px;border-radius:50%;border:1px solid #E9E3D6;background:#fff;cursor:pointer;font-size:16px;color:#0F2A3D;box-shadow:0 4px 14px rgba(22,35,44,.08);transition:border-color .15s;z-index:10;display:flex;align-items:center;justify-content:center;transform:translateY(-50%)}',
+      '.rv-btn:hover{border-color:#0F2A3D}',
       '.rv-prev{left:-20px}',
       '.rv-next{right:-20px}',
       '.rv-dots{display:flex;justify-content:center;gap:8px;margin-top:24px}',
-      '.rv-dot{width:8px;height:8px;box-sizing:content-box;padding:8px;background-clip:content-box;border-radius:50%;background-color:#E8E8E8;cursor:pointer;transition:background-color .2s;border:none}',
-      '.rv-dot.active{background-color:#061A2E}',
-      '@media(max-width:900px){.rv-section{padding:40px 24px}.rv-card{flex:0 0 calc(50% - 12px)}}',
-      '@media(max-width:600px){.rv-section{padding:32px 16px}.rv-card{flex:0 0 100%}.rv-btn{display:none}}',
+      '.rv-dot{width:8px;height:8px;box-sizing:content-box;padding:6px;background-clip:content-box;border-radius:50%;background-color:#E9E3D6;cursor:pointer;transition:background-color .2s;border:none}',
+      '.rv-dot.active{background-color:#0F2A3D}',
+      '@media(max-width:900px){.rv-section{padding:36px 20px}.rv-card{flex:0 0 calc(50% - 10px)}}',
+      '@media(max-width:600px){.rv-section{padding:28px 16px}.rv-card{flex:0 0 100%}.rv-btn{display:none}}',
     ].join('');
     document.head.appendChild(s);
   }
@@ -155,7 +168,7 @@
 
     return '<section class="rv-section" id="rv-section">'
       + '<div class="rv-inner">'
-      + '<div class="rv-eyebrow">Đánh Giá Của Khách Hàng</div>'
+      + '<div class="rv-eyebrow"><span class="ic rv-eyebrow-ic" data-icon="star"></span>Đánh Giá Của Khách Hàng</div>'
       + '<div class="rv-viewport">'
       + '<div class="rv-track-wrap"><div class="rv-track" id="rv-track">' + cards + '</div></div>'
       + '<button class="rv-btn rv-prev" id="rv-prev" aria-label="Trước">‹</button>'
@@ -169,6 +182,12 @@
   // ── Slider logic ─────────────────────────────────────────────
 
   function initSlider(reviews) {
+    // Icon eyebrow dựng bằng innerHTML (buildSection) sau khi DOM ban đầu đã
+    // quét xong — mountIcons() lại đúng vùng vừa chèn, giống cách ftb-sec ở
+    // index-sample-v3.html làm với icon slider của nó.
+    var section = document.getElementById('rv-section');
+    if (section && window.mountIcons) window.mountIcons(section);
+
     var track   = document.getElementById('rv-track');
     var dotsEl  = document.getElementById('rv-dots');
     var prevBtn = document.getElementById('rv-prev');
