@@ -95,9 +95,9 @@
    index-sample-v2.html, giữ làm tài liệu). Trang marketing riêng, tông
    SÁNG. Header + footer DÙNG CHUNG nav.js full mode (2026-09-17: trước đó
    tự dựng `.mb-header` riêng — bản chép tay không có GA4/Clarity/Pixel,
-   không biết trạng thái đăng nhập, nút hamburger chết — đổi lại `<script
-   src="/nav.js?v=..."></script>` full mode, cùng một nguồn với mọi trang
-   khác, xem docs/nhat-ky/2026-09.md).
+   không biết trạng thái đăng nhập, nút hamburger chết — đổi sang nạp thẳng
+   nav.js ở cuối body, KHÔNG mang cờ data-footer-only nữa, cùng một nguồn với
+   mọi trang khác, xem docs/nhat-ky/2026-09.md).
    ============================================================ */
 :root {
   --cream: #f6f3ee;
