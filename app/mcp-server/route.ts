@@ -87,7 +87,7 @@ export async function GET() {
 <script type="application/ld+json">${JSON.stringify(schema)}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--blue:#1455A4;--gold:#9A7B3A;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border-lt:#E8E8E8;--bg-soft:#F5F4F0}
+:root{--navy:#0F2A3D;--blue:#1455A4;--gold:#7C6942;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border-lt:#E8E8E8;--bg-soft:#F4F2EC}
 body{font-family:Arial,sans-serif;color:var(--text);font-size:16px;line-height:1.6;background:#fff}
 a{color:var(--blue)}
 .page{max-width:880px;margin:0 auto;padding:0 40px 80px}
@@ -113,7 +113,7 @@ ul{margin:0 0 10px 20px;color:var(--text-mid)}li{margin-bottom:5px}
 <script src="/auth.js" defer></script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <div class="page">
   <div class="hero">
     <div class="eyebrow">Free MCP server · No API key</div>

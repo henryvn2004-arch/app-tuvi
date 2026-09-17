@@ -64,7 +64,7 @@ export async function GET() {
   const tabBtns = CAT_ORDER.filter(c => catData[c]?.length).map((cat, i) => {
     const meta = CAT_META[cat] || { label: cat, icon: '📄' };
     const cnt = counts[cat] || 0;
-    return `<button class="tab-btn${i===0?' active':''}" data-cat="${cat}"><span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span> ${esc(meta.label)} <span class="tab-count">${cnt.toLocaleString('vi-VN')}</span></button>`;
+    return `<button class="tab-btn${i===0?' active':''}" data-cat="${cat}"><span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">${meta.icon}</span> ${esc(meta.label)} <span class="tab-count">${cnt.toLocaleString('vi-VN')}</span></button>`;
   }).join('\n  ');
 
   const tabPanels = CAT_ORDER.filter(c => catData[c]?.length).map((cat, i) => {
@@ -120,18 +120,18 @@ export async function GET() {
 })}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--red:#b5201a;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--bg:#FFFFFF;--bg-soft:#F5F4F0}
+:root{--navy:#0F2A3D;--blue:#1455A4;--gold:#7C6942;--gold-lt:#F9F4EB;--red:#b5201a;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#D8D4CB;--bg:#FFFFFF;--bg-soft:#F4F2EC}
 body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;font-size:16px;-webkit-font-smoothing:antialiased}
 
 /* HERO */
-.hero{background:var(--navy);padding:52px 40px 40px;position:relative;overflow:hidden}
-.hero::before{content:"紫";position:absolute;font-family:"Noto Serif",serif;font-size:280px;color:rgba(255,255,255,0.025);top:50%;right:5%;transform:translateY(-50%);pointer-events:none}
-.hero-eyebrow{font-size:11px;letter-spacing:4px;color:#c9a84c;text-transform:uppercase;margin-bottom:12px}
-.hero-title{font-family:"Noto Serif",serif;font-size:36px;color:#fff;font-weight:400;margin-bottom:10px}
-.hero-sub{font-size:14px;color:#8BAACC;font-weight:300;line-height:1.7;max-width:560px}
+.hero{background:var(--bg-soft);padding:52px 40px 40px;position:relative;overflow:hidden}
+.hero::before{content:"紫";position:absolute;font-family:"Noto Serif",serif;font-size:280px;color:rgba(124,105,66,0.05);top:50%;right:5%;transform:translateY(-50%);pointer-events:none}
+.hero-eyebrow{font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
+.hero-title{font-family:"Noto Serif",serif;font-size:36px;color:var(--navy);font-weight:400;margin-bottom:10px}
+.hero-sub{font-size:14px;color:var(--text-mid);font-weight:300;line-height:1.7;max-width:560px}
 .hero-stats{display:flex;gap:32px;margin-top:24px}
-.hero-stat-n{font-family:"Noto Serif",serif;font-size:28px;color:#c9a84c}
-.hero-stat-l{font-size:11px;color:#8BAACC;margin-top:2px}
+.hero-stat-n{font-family:"Noto Serif",serif;font-size:28px;color:var(--navy)}
+.hero-stat-l{font-size:11px;color:var(--text-lt);margin-top:2px}
 
 /* SEARCH */
 .search-bar{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:14px 40px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
@@ -176,7 +176,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 </style>
 <script src="/auth.js"></script>
 </head>
-<body>
+<body><div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <script src="/nav.js?v=36"></script>
 
 <div class="hero">

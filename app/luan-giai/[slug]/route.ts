@@ -88,7 +88,7 @@ const DCHI_TO_POS: Record<number,[number,number]> = {
   0:[3,2],1:[3,1],2:[3,0],3:[2,0],4:[1,0],5:[0,0],6:[0,1],7:[0,2],8:[0,3],9:[1,3],10:[2,3],11:[3,3],
 };
 const SAT_SET = new Set(['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp','Tang Môn','Bạch Hổ']);
-const HOA_COL: Record<string,string> = {'Lộc':'#1E6B3C','Quyền':'#7B3FA0','Khoa':'#1455A4','Kỵ':'#C0392B'};
+const HOA_COL: Record<string,string> = {'Lộc':'#7FA7A3','Quyền':'#7B3FA0','Khoa':'#1455A4','Kỵ':'#C46A5E'};
 
 /**
  * Đại vận chứa năm đang xem.
@@ -135,16 +135,16 @@ function renderGrid(ls: Rec): string {
     const isMenh = !!p.isMenh;
     const isThan = !!p.isThan;
     const isDVCung = curDV && palaces[Number(curDV.cungIdx)] === p;
-    const border = isMenh ? '2px solid #9A7B3A' : '1px solid #555';
+    const border = isMenh ? '2px solid #7C6942' : '1px solid #555';
     const bg = isMenh ? '#1a1600' : '#0a0f1a';
     let html = `<div style="background:${bg};padding:6px;min-height:110px;border:${border};position:relative">`;
     html += `<div style="display:flex;justify-content:space-between;margin-bottom:3px">`;
-    html += `<span style="font-size:9px;color:#9A7B3A;font-weight:700">${esc(cungName)}</span>`;
+    html += `<span style="font-size:9px;color:#7C6942;font-weight:700">${esc(cungName)}</span>`;
     html += `<span style="font-size:9px;color:#777">${esc(diacChi)}</span>`;
     html += `</div>`;
     if (isMenh||isThan) {
       html += `<div style="display:flex;gap:3px;margin-bottom:2px">`;
-      if (isMenh) html += `<span style="font-size:8px;background:#9A7B3A;color:#fff;padding:1px 4px;border-radius:2px">Mệnh</span>`;
+      if (isMenh) html += `<span style="font-size:8px;background:#7C6942;color:#fff;padding:1px 4px;border-radius:2px">Mệnh</span>`;
       if (isThan) html += `<span style="font-size:8px;background:#555;color:#fff;padding:1px 4px;border-radius:2px">Thân</span>`;
       if (isDVCung) html += `<span style="font-size:8px;background:#1455A4;color:#fff;padding:1px 4px;border-radius:2px">ĐV</span>`;
       html += `</div>`;
@@ -158,7 +158,7 @@ function renderGrid(ls: Rec): string {
       html += `<div style="font-size:11px;font-weight:700;color:${col}">${esc(ten)}${hoa?`<sup style="font-size:8px">${esc(hoa[0])}</sup>`:''}${bDot?`<sup style="color:#4ade80;font-size:8px">${bDot}</sup>`:''}</div>`;
     });
     if (majStars.length === 0) html += `<div style="font-size:10px;color:#555;font-style:italic">Vô chính diệu</div>`;
-    if (trangSinh) html += `<div style="font-size:9px;color:#9A7B3A;margin-top:2px">${esc(trangSinh)}</div>`;
+    if (trangSinh) html += `<div style="font-size:9px;color:#7C6942;margin-top:2px">${esc(trangSinh)}</div>`;
     const minorNames = allStars.filter(s=>!majStars.find(m=>m.ten===s.ten)).slice(0,5).map(s=>String(s.ten||'')).join(' ');
     if (minorNames) html += `<div style="font-size:8px;color:#555;margin-top:2px;line-height:1.3">${esc(minorNames)}</div>`;
     html += `</div>`;
@@ -168,8 +168,8 @@ function renderGrid(ls: Rec): string {
   const canChiNam = String(ls.canChiNam||'');
   const napAm     = String(ls.napAmHanh||'');
   const cuc       = String(ls.cucName||ls.cuc||'');
-  const center = `<div style="background:#0e1020;border:2px solid #9A7B3A;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;grid-column:span 2;grid-row:span 2">
-    <div style="font-size:9px;color:#9A7B3A;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">紫微明寶</div>
+  const center = `<div style="background:#0e1020;border:2px solid #7C6942;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;grid-column:span 2;grid-row:span 2">
+    <div style="font-size:9px;color:#7C6942;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">紫微明寶</div>
     <div style="font-size:14px;font-weight:700;color:#e2e8f0;margin-bottom:4px">${esc(canChiNam)}</div>
     <div style="font-size:10px;color:#aaa;margin-bottom:2px">Cung ${esc(String(menhP?.cungName||''))}</div>
     <div style="font-size:9px;color:#777;margin-bottom:2px">${esc(napAm)}</div>
@@ -239,13 +239,13 @@ function buildLuanGiaiHTML(ls: Rec, params: IsrParams, slug: string): string {
 
   // ── Teaser content (free, visible to Google) ──────────────────────────────
   const LOAI_COL: Record<string,string> = {
-    quy_cuc:'#7B3FA0',phu_cuc:'#1E6B3C',hung_cuc:'#C0392B',trung_cuc:'#9A7B3A',than_cu:'#555',
+    quy_cuc:'#7B3FA0',phu_cuc:'#7FA7A3',hung_cuc:'#C46A5E',trung_cuc:'#7C6942',than_cu:'#555',
   };
 
   // Cách cục nổi bật (top 4)
   const ccHTML = cachCuc.slice(0,4).map(c => {
     const loai = String(c.loai||'');
-    return `<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;padding:10px 12px;background:#F5F4F0;border-radius:6px;border-left:3px solid ${LOAI_COL[loai]||'#888'}">
+    return `<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;padding:10px 12px;background:#F4F2EC;border-radius:6px;border-left:3px solid ${LOAI_COL[loai]||'#888'}">
       <span style="background:${LOAI_COL[loai]||'#888'};color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:3px;white-space:nowrap">${esc(String(c.ten||''))}</span>
       <span style="font-size:13px;color:#333;line-height:1.6">${esc(String(c.moTa||''))}</span>
     </div>`;
@@ -257,7 +257,7 @@ function buildLuanGiaiHTML(ls: Rec, params: IsrParams, slug: string): string {
     ? menhItems.map(y => {
         const isGood = y.includes('phú quý')||y.includes('giàu sang')||y.includes('sáng')||y.includes('sống lâu');
         const isBad  = y.includes('vất vả')||y.includes('hung')||y.includes('tai')||y.includes('yểu');
-        const col = isGood ? '#1E6B3C' : isBad ? '#C0392B' : '#444';
+        const col = isGood ? '#7FA7A3' : isBad ? '#C46A5E' : '#444';
         return `<p style="font-size:14px;color:${col};line-height:1.7;margin-bottom:8px;padding-left:16px;border-left:2px solid ${col}20">${esc(y)}</p>`;
       }).join('')
     : '<p style="color:#888;font-style:italic">Cung Mệnh chưa có phân tích chi tiết.</p>';
@@ -277,16 +277,16 @@ function buildLuanGiaiHTML(ls: Rec, params: IsrParams, slug: string): string {
 
   const vanNamHTML = (curDV || tvThis) ? `
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px">
-      ${curDV ? `<div style="flex:1;min-width:140px;background:#F5F4F0;border-radius:8px;padding:14px 16px">
+      ${curDV ? `<div style="flex:1;min-width:140px;background:#F4F2EC;border-radius:8px;padding:14px 16px">
         <div style="font-size:11px;color:#888;margin-bottom:4px">ĐẠI VẬN HIỆN TẠI</div>
-        <div style="font-size:18px;font-weight:700;color:#061A2E">${esc(dvDC)}</div>
-        ${dvTotal>0?`<div style="font-size:13px;color:${dvTotal>=7?'#1E6B3C':dvTotal>=4?'#9A7B3A':'#C0392B'};font-weight:600">${dvTotal}/10 điểm</div>`:''}
+        <div style="font-size:18px;font-weight:700;color:#0F2A3D">${esc(dvDC)}</div>
+        ${dvTotal>0?`<div style="font-size:13px;color:${dvTotal>=7?'#7FA7A3':dvTotal>=4?'#7C6942':'#C46A5E'};font-weight:600">${dvTotal}/10 điểm</div>`:''}
         <div style="font-size:11px;color:#777">${esc(String(curDV.tuoiStart||''))}–${esc(String(curDV.tuoiEnd||''))} tuổi</div>
       </div>` : ''}
       ${tvThis ? `<div style="flex:1;min-width:140px;background:#EEF4FF;border-radius:8px;padding:14px 16px;border:1px solid #1455A420">
         <div style="font-size:11px;color:#888;margin-bottom:4px">TIỂU VẬN NĂM ${namXem}</div>
-        <div style="font-size:18px;font-weight:700;color:#061A2E">${esc(tvDC)}</div>
-        ${(tvCat||tvSat)?`<div style="font-size:13px;color:${tvCat>tvSat?'#1E6B3C':tvCat<tvSat?'#C0392B':'#9A7B3A'};font-weight:600">cát ${tvCat} / sát ${tvSat}</div>`:''}
+        <div style="font-size:18px;font-weight:700;color:#0F2A3D">${esc(tvDC)}</div>
+        ${(tvCat||tvSat)?`<div style="font-size:13px;color:${tvCat>tvSat?'#7FA7A3':tvCat<tvSat?'#C46A5E':'#7C6942'};font-weight:600">cát ${tvCat} / sát ${tvSat}</div>`:''}
         <div style="font-size:11px;color:#777">năm không có điểm riêng — đọc trong khung đại vận bên cạnh</div>
       </div>` : ''}
     </div>` : '';
@@ -296,10 +296,10 @@ function buildLuanGiaiHTML(ls: Rec, params: IsrParams, slug: string): string {
   const MLABELS = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
   const menhSc = scores['Mệnh'];
   const scoresHTML = menhSc ? `
-    <div style="background:#F5F4F0;border-radius:8px;padding:14px 16px;margin-bottom:24px">
-      <div style="font-size:12px;font-weight:700;color:#061A2E;margin-bottom:10px">Điểm 6 chiều — Cung Mệnh</div>
+    <div style="background:#F4F2EC;border-radius:8px;padding:14px 16px;margin-bottom:24px">
+      <div style="font-size:12px;font-weight:700;color:#0F2A3D;margin-bottom:10px">Điểm 6 chiều — Cung Mệnh</div>
       ${METRICS.map((m,i) => {
-        const v = menhSc[m]||0; const col = v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C0392B';
+        const v = menhSc[m]||0; const col = v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C46A5E';
         return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
           <span style="font-size:11px;color:#666;width:80px;flex-shrink:0">${MLABELS[i]}</span>
           <div style="flex:1;height:7px;background:#d0d8e0;border-radius:4px;overflow:hidden">
@@ -312,18 +312,18 @@ function buildLuanGiaiHTML(ls: Rec, params: IsrParams, slug: string): string {
 
   // ── Paywall block ─────────────────────────────────────────────────────────
   const paywallHTML = `
-    <div style="margin:32px 0;padding:28px 24px;background:linear-gradient(135deg,#061A2E 0%,#0d2d4a 100%);border-radius:12px;color:#fff;text-align:center">
-      <div style="font-size:13px;color:#9A7B3A;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">🔮 Luận giải chuyên sâu đầy đủ</div>
+    <div style="margin:32px 0;padding:28px 24px;background:linear-gradient(135deg,#0F2A3D 0%,#0d2d4a 100%);border-radius:12px;color:#fff;text-align:center">
+      <div style="font-size:13px;color:#7C6942;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">🔮 Luận giải chuyên sâu đầy đủ</div>
       <h2 style="font-size:20px;font-weight:700;color:#fff;margin-bottom:12px;line-height:1.4">24 phần phân tích chuyên sâu theo cổ pháp Tử Vi Đẩu Số</h2>
       <p style="font-size:13px;color:#94a3b8;margin-bottom:20px;line-height:1.7">Tính cách · Sự nghiệp · Tài lộc · Tình duyên · Sức khỏe · Gia đình · Phân tích 12 cung · 9 đại vận · Tiểu vận năm ${namXem} · Lời khuyên cụ thể</p>
-      <a href="/" style="display:inline-block;background:#9A7B3A;color:#fff;font-size:14px;font-weight:700;padding:12px 28px;border-radius:7px;text-decoration:none;margin-bottom:10px">Xem luận giải đầy đủ →</a>
+      <a href="/" style="display:inline-block;background:#7C6942;color:#fff;font-size:14px;font-weight:700;padding:12px 28px;border-radius:7px;text-decoration:none;margin-bottom:10px">Xem luận giải đầy đủ →</a>
       <p style="font-size:11px;color:#64748b;margin-top:10px">Đăng nhập miễn phí · Dùng credit để xem · Không cần tải app</p>
     </div>`;
 
   // ── Related link ──────────────────────────────────────────────────────────
   const relatedHTML = `
-    <div style="margin-top:24px;padding:16px 18px;background:#F9F4EB;border-radius:8px;border-left:3px solid #9A7B3A">
-      <div style="font-size:12px;color:#9A7B3A;font-weight:700;margin-bottom:6px">📊 Xem thêm</div>
+    <div style="margin-top:24px;padding:16px 18px;background:#F9F4EB;border-radius:8px;border-left:3px solid #7C6942">
+      <div style="font-size:12px;color:#7C6942;font-weight:700;margin-bottom:6px">📊 Xem thêm</div>
       <a href="${lasoUrl}" style="font-size:14px;color:#1455A4;text-decoration:none;display:block;margin-bottom:4px">→ Lá số chi tiết 24 phần — ${esc(canChi)} sinh ${String(dd).padStart(2,'0')}/${String(mm).padStart(2,'0')}/${year} giờ ${esc(gioName)}</a>
       <a href="/menh-kho/${year}" style="font-size:13px;color:#555;text-decoration:none;display:block">→ Mệnh khố năm ${year}</a>
     </div>`;
@@ -353,23 +353,23 @@ function buildLuanGiaiHTML(ls: Rec, params: IsrParams, slug: string): string {
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Be Vietnam Pro',sans-serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh}
 .wrap{max-width:780px;margin:0 auto;padding:0 16px 60px}
-.hero{background:#061A2E;color:#fff;padding:28px 20px 24px;margin-bottom:0}
-.hero-sub{font-size:11px;color:#9A7B3A;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
-h1{font-family:'Noto Serif',serif;font-size:clamp(16px,3.5vw,22px);font-weight:600;color:#fff;line-height:1.4;margin-bottom:8px}
-.hero-meta{font-size:12px;color:#94a3b8}
-.bc{font-size:11px;color:#9A7B3A;padding:10px 0;border-bottom:1px solid #E8E3D9;margin-bottom:20px}
-.bc a{color:#9A7B3A;text-decoration:none}
+.hero{background:#F4F2EC;color:#0F2A3D;padding:28px 20px 24px;margin-bottom:0}
+.hero-sub{font-size:11px;color:#7C6942;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+h1{font-family:'Noto Serif',serif;font-size:clamp(16px,3.5vw,22px);font-weight:600;color:#0F2A3D;line-height:1.4;margin-bottom:8px}
+.hero-meta{font-size:12px;color:#767676}
+.bc{font-size:11px;color:#7C6942;padding:10px 0;border-bottom:1px solid #E8E3D9;margin-bottom:20px}
+.bc a{color:#7C6942;text-decoration:none}
 .bc a:hover{text-decoration:underline}
 .sec{margin-bottom:28px}
-.sec-title{font-size:12px;font-weight:700;color:#9A7B3A;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid #E8E3D9}
-h2.sec-title{font-family:'Noto Serif',serif;font-size:16px;text-transform:none;letter-spacing:0;color:#061A2E}
+.sec-title{font-size:12px;font-weight:700;color:#7C6942;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid #E8E3D9}
+h2.sec-title{font-family:'Noto Serif',serif;font-size:16px;text-transform:none;letter-spacing:0;color:#0F2A3D}
 .blur-wrap{position:relative;overflow:hidden;border-radius:8px}
 .blur-content{filter:blur(4px);user-select:none;pointer-events:none;opacity:0.6}
 .blur-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(to bottom,transparent 0%,rgba(248,247,244,0.9) 40%,rgba(248,247,244,1) 100%);padding:20px;text-align:center}
 </style>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <div class="hero">
   <div class="wrap">
     <div class="hero-sub">Luận Giải Tử Vi</div>
@@ -423,7 +423,7 @@ h2.sec-title{font-family:'Noto Serif',serif;font-size:16px;text-transform:none;l
   ${relatedHTML}
 </div>
 
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36" defer></script>
 </body>
 </html>`;
 }

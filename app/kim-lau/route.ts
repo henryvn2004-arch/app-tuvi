@@ -160,13 +160,13 @@ export async function GET() {
 <script type="application/ld+json">${schema}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--gold:#9A7B3A;--text:#1a1a1a;--mid:#555;--bg:#fff;--soft:#F5F4F0;--border:#e8e8e8;--bad:#B3261E;--ok:#1E6B3C}
+:root{--navy:#0F2A3D;--gold:#7C6942;--text:#1a1a1a;--mid:#555;--bg:#fff;--soft:#F4F2EC;--border:#e8e8e8;--bad:#C46A5E;--ok:#7FA7A3}
 body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
 .breadcrumb{background:var(--soft);border-bottom:1px solid var(--border);padding:10px 40px;font-size:12px;color:#888}
 .breadcrumb a{color:#888;text-decoration:none}.breadcrumb a:hover{color:var(--navy)}
-.hero{background:linear-gradient(135deg,#061A2E 0%,#0D3B5E 100%);color:#fff;padding:44px 40px 36px;text-align:center}
+.hero{background:var(--soft);color:var(--navy);padding:44px 40px 36px;text-align:center}
 .hero h1{font-family:'Noto Serif',serif;font-size:29px;font-weight:600;margin-bottom:12px;line-height:1.35}
-.hero p{font-size:14px;opacity:.85;max-width:660px;margin:0 auto;line-height:1.7}
+.hero p{font-size:14px;color:var(--mid);max-width:660px;margin:0 auto;line-height:1.7}
 .wrap{max-width:860px;margin:0 auto;padding:36px 24px 80px}
 h2{font-family:'Noto Serif',serif;font-size:21px;color:var(--navy);margin:36px 0 14px;padding-bottom:9px;border-bottom:2px solid var(--border)}
 h3{font-size:16px;color:var(--navy);margin:22px 0 8px}
@@ -191,7 +191,7 @@ th{background:var(--soft);font-weight:600;color:var(--navy);font-size:13px;posit
 </style>
 <script src="/auth.js"></script>
 </head>
-<body>
+<body><div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=36"></script>
 <div class="breadcrumb"><a href="/">Trang Chủ</a> › <a href="/chon-ngay">Chọn Ngày</a> › <span>Kim Lâu</span></div>
 

@@ -140,7 +140,7 @@ ${kws ? `<meta name="keywords" content="${escHtml(kws)}">` : ''}
 <script type="application/ld+json">${schema}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--purple:#8b6dff;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0}
+:root{--navy:#0F2A3D;--navy-mid:#13354F;--blue:#1455A4;--gold:#7C6942;--gold-lt:#F9F4EB;--gold-bright:#C8A96A;--purple:#8b6dff;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#D8D4CB;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F4F2EC}
 body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 .breadcrumb{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:12px 40px;font-size:12px;color:var(--text-lt);display:flex;gap:8px;align-items:center}
 .breadcrumb a{color:var(--text-lt);text-decoration:none}.breadcrumb a:hover{color:var(--navy)}
@@ -171,7 +171,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 <script src="/auth.js" defer></script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <div class="breadcrumb">
   <a href="/">Trang Chủ</a><span>›</span>
   <a href="/tu-vi">Tử Vi</a><span>›</span>
@@ -190,7 +190,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   </div>
   ${relatedHtml}
 </article>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36" defer></script>
 </body></html>`;
 }
 
@@ -201,10 +201,10 @@ function buildNotFound() {
 <script src="/auth.js" defer></script>
 </head>
 <body style="font-family:sans-serif;text-align:center;padding:80px">
-<h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy trang</h1>
+<h1 style="color:#0F2A3D;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy trang</h1>
 <p style="color:#777;margin-bottom:24px">Trang tử vi này không tồn tại hoặc đã được cập nhật.</p>
 <a href="/" style="color:#1455A4">← Về Trang Chủ</a>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36" defer></script>
 </body></html>`;
 }
 

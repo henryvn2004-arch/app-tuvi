@@ -88,15 +88,15 @@ export async function GET() {
 })}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0}
+:root{--navy:#0F2A3D;--navy-mid:#13354F;--blue:#1455A4;--gold:#7C6942;--gold-lt:#F9F4EB;--gold-bright:#C8A96A;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#D8D4CB;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F4F2EC}
 body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
 .bc{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:12px 40px;font-size:12px;color:var(--text-lt);display:flex;gap:8px;align-items:center}
 .bc a{color:var(--text-lt);text-decoration:none}.bc a:hover{color:var(--navy)}.bc span{color:var(--border)}
-.td-hero{background:var(--navy);color:#fff;padding:64px 40px 48px;text-align:center;border-bottom:3px solid #c9a84c}
-.td-hero-label{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;margin-bottom:14px}
+.td-hero{background:var(--bg-soft);color:var(--navy);padding:64px 40px 48px;text-align:center;border-bottom:3px solid var(--gold-bright)}
+.td-hero-label{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
 .td-hero-title{font-family:'Noto Serif',serif;font-size:38px;font-weight:600;margin-bottom:16px;line-height:1.25}
-.td-hero-desc{font-size:15px;opacity:.75;max-width:560px;margin:0 auto 28px;line-height:1.7}
-.td-hero-count{display:inline-block;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:#c9a84c;padding:8px 20px;font-size:13px;font-weight:600}
+.td-hero-desc{font-size:15px;color:var(--text-mid);max-width:560px;margin:0 auto 28px;line-height:1.7}
+.td-hero-count{display:inline-block;background:var(--gold-lt);border:1px solid #e8d9b0;color:var(--gold);padding:8px 20px;font-size:13px;font-weight:600}
 .td-nav{background:#fff;border-bottom:1px solid var(--border-lt);padding:0 40px;overflow-x:auto;white-space:nowrap}
 .td-nav-inner{display:flex;gap:0;max-width:1100px;margin:0 auto}
 .td-nav-link{display:inline-block;padding:14px 18px;font-size:13px;color:var(--text-lt);text-decoration:none;border-bottom:2px solid transparent;transition:all .12s;white-space:nowrap}
@@ -124,7 +124,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 }
 </style>
 <script src="/auth.js"></script>
-</head><body>
+</head><body><div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=36"></script>
 <div class="bc"><a href="/">Trang Chủ</a><span>›</span><span>Từ Điển</span></div>
 

@@ -158,14 +158,14 @@ function buildHub(cat: string, meta: typeof CAT_META[string], pages: any[], pagi
 <script type="application/ld+json">${schema}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--purple:#8b6dff;--text:#1a1a1a;--bg:#fff;--bg-soft:#F5F4F0;--border:#e8e8e8}
+:root{--navy:#0F2A3D;--purple:#8b6dff;--text:#1a1a1a;--bg:#fff;--bg-soft:#F4F2EC;--border:#e8e8e8}
 body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text)}
 .breadcrumb{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:10px 40px;font-size:12px;color:#888}
 .breadcrumb a{color:#888;text-decoration:none}.breadcrumb a:hover{color:var(--navy)}
-.hub-hero{background:linear-gradient(135deg,#061A2E 0%,#0D3B5E 100%);color:#fff;padding:48px 40px 40px;text-align:center}
+.hub-hero{background:var(--bg-soft);color:var(--navy);padding:48px 40px 40px;text-align:center}
 .hub-hero-icon{font-size:40px;margin-bottom:12px}
 .hub-hero h1{font-family:'Noto Serif',serif;font-size:30px;font-weight:600;margin-bottom:12px}
-.hub-hero p{font-size:14px;opacity:.8;max-width:600px;margin:0 auto 24px;line-height:1.7}
+.hub-hero p{font-size:14px;color:#444;max-width:600px;margin:0 auto 24px;line-height:1.7}
 .hub-hero-cta{display:inline-block;background:var(--purple);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px}
 .hub-wrap{max-width:1100px;margin:0 auto;padding:40px 24px 80px}
 .hub-section{margin-bottom:48px}
@@ -185,11 +185,11 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 </style>
 <script src="/auth.js"></script>
 </head>
-<body>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27"></script>
+<body><div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36"></script>
 <div class="breadcrumb"><a href="/">Trang Chủ</a> › <span>${esc(meta.h1)}</span></div>
 <div class="hub-hero">
-  <div class="hub-hero-icon"><span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span></div>
+  <div class="hub-hero-icon"><span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">${meta.icon}</span></div>
   <h1>${esc(meta.h1)}</h1>
   <p>${esc(meta.desc)}</p>
   <a class="hub-hero-cta" href="/">Xem Tử Vi Của Bạn →</a>

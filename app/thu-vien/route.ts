@@ -78,8 +78,8 @@ function page(bodyHtml: string, count: number): Response {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700&display=swap" rel="stylesheet"></noscript>
 <style>
-:root{--navy:#061A2E;--gold:#9A7B3A;--gold-soft:#C9AE6A;--gold-lt:#F9F4EB;--paper:#F4F2EC;
---white:#fff;--text:#1a1a1a;--text-mid:#4a4a4a;--text-lt:#6b6b6b;--line:#E8E8E8;--red:#C0392B;
+:root{--navy:#0F2A3D;--gold:#7C6942;--gold-soft:#C9AE6A;--gold-lt:#F9F4EB;--paper:#F4F2EC;
+--white:#fff;--text:#1a1a1a;--text-mid:#4a4a4a;--text-lt:#6b6b6b;--line:#E8E8E8;--red:#C46A5E;
 --serif:'Noto Serif',Georgia,serif}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--paper);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;line-height:1.6}

@@ -29,7 +29,7 @@ export const CACHE_HEADERS = {
 // Shared CSS for all ngay-tot pages
 export const CSS = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--blue:#1455A4;--gold:#9A7B3A;--green:#2E7D32;--red:#C62828;--text:#1a1a1a;--text-lt:#777;--border:#CCC;--border-lt:#E8E8E8;--bg:#fff;--bg-soft:#F5F4F0;--bg-gold:#FFF9E6;--bg-green:#E8F5E9;--bg-red:#FFEBEE}
+:root{--navy:#0F2A3D;--blue:#1455A4;--gold:#7C6942;--green:#7FA7A3;--red:#C46A5E;--text:#1a1a1a;--text-lt:#777;--border:#CCC;--border-lt:#E8E8E8;--bg:#fff;--bg-soft:#F4F2EC;--bg-gold:#FFF9E6;--bg-green:#E8F5E9;--bg-red:#FFEBEE}
 body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
 a{color:var(--blue);text-decoration:none}
 .page{max-width:1100px;margin:0 auto;padding:0 32px 80px}
@@ -80,7 +80,7 @@ h1 em{font-style:italic;color:var(--gold)}
 .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
 .cal-day{display:flex;align-items:center;justify-content:center;height:26px;font-size:12px;color:var(--navy);border-radius:3px;transition:all .1s;border:1px solid transparent}
 .cal-day:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
-.cal-day.great{background:#2E7D32;color:#fff;font-weight:700}
+.cal-day.great{background:#7FA7A3;color:#fff;font-weight:700}
 .cal-day.great:hover{background:#1B5E20}
 .cal-day.good{background:#C8E6C9;color:#1B5E20;font-weight:600}
 .cal-day.soso{background:#FFE0B2;color:#E65100}
@@ -88,7 +88,7 @@ h1 em{font-style:italic;color:var(--gold)}
 .legend{display:flex;flex-wrap:wrap;gap:14px;margin:-6px 0 14px;font-size:11px;color:var(--text-lt)}
 .legend-item{display:inline-flex;align-items:center;gap:6px}
 .legend-dot{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--border-lt)}
-.legend-dot.great{background:#2E7D32;border-color:#2E7D32}
+.legend-dot.great{background:#7FA7A3;border-color:#7FA7A3}
 .legend-dot.good{background:#C8E6C9}
 .legend-dot.soso{background:#FFE0B2}
 .legend-dot.bad{background:#FFCDD2}
@@ -150,7 +150,7 @@ export function renderPage(opts: PageOpts): string {
 <style>${CSS}</style>
 <script src="/auth.js" defer></script>
 </head><body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <div class="bc">${bcHTML}</div>
 <div class="page">${opts.body}</div>
 <script src="/nav.js?v=36" defer></script>

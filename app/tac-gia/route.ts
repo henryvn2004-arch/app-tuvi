@@ -71,13 +71,13 @@ function buildHTML(masters: any[]) {
 <script type="application/ld+json">${schemas}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0}
+:root{--navy:#0F2A3D;--blue:#1455A4;--gold:#7C6942;--gold-lt:#F9F4EB;--gold-bright:#C8A96A;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#D8D4CB;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F4F2EC}
 body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 .breadcrumb{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:12px 40px;font-size:12px;color:var(--text-lt);display:flex;gap:8px;align-items:center}
 .breadcrumb a{color:var(--text-lt);text-decoration:none}.breadcrumb a:hover{color:var(--navy)}.breadcrumb span{color:var(--border)}
-.page-header{background:var(--navy);color:#fff;padding:40px 40px 32px}
+.page-header{background:var(--bg-soft);color:var(--navy);padding:40px 40px 32px}
 .page-header h1{font-family:'Noto Serif',serif;font-size:28px;font-weight:600;margin-bottom:8px}
-.page-header p{font-size:14px;color:rgba(255,255,255,.6);line-height:1.7;max-width:600px}
+.page-header p{font-size:14px;color:var(--text-mid);line-height:1.7;max-width:600px}
 .main{flex:1;max-width:900px;margin:0 auto;padding:40px 40px 80px;width:100%}
 .intro-box{background:var(--gold-lt);border:1px solid #e6d9c0;border-radius:8px;padding:20px 24px;margin-bottom:32px;font-size:14px;color:var(--text-mid);line-height:1.8}
 .intro-box strong{color:var(--navy)}
@@ -97,7 +97,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 <script src="/auth.js" defer></script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <div class="breadcrumb"><a href="/">Trang Chủ</a><span>›</span><span>Tác Giả</span></div>
 <div class="page-header">
   <h1>Tác Giả Nghiên Cứu Tử Vi</h1>

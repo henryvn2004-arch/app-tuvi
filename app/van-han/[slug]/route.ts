@@ -157,12 +157,12 @@ function stars(d: number) {
   if (d >= 7)   return '<span style="color:#1a6b3a">★★★★</span>';
   if (d >= 5.5) return '<span style="color:#7a5f0a">★★★</span>';
   if (d >= 4)   return '<span style="color:#1455A4">★★</span>';
-  return '<span style="color:#C0392B">★</span>';
+  return '<span style="color:#C46A5E">★</span>';
 }
 
 const CSS = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--blue:#1455A4;--gold:#9A7B3A;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCC;--border-lt:#E8E8E8;--bg:#fff;--bg-soft:#F5F4F0}
+:root{--navy:#0F2A3D;--blue:#1455A4;--gold:#7C6942;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCC;--border-lt:#E8E8E8;--bg:#fff;--bg-soft:#F4F2EC}
 body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
 a{color:var(--blue);text-decoration:none}
 .page{max-width:1000px;margin:0 auto;padding:0 40px 80px}
@@ -191,10 +191,10 @@ tr:hover td{background:var(--bg-soft)}
 .cc-item{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:var(--bg-soft);border-radius:6px}
 .cc-badge{font-size:11px;font-weight:700;padding:2px 8px;background:#2a1f5e;color:#a78bfa;border-radius:4px;white-space:nowrap;flex-shrink:0}
 .cc-desc{font-size:13px;color:var(--text-mid);line-height:1.5}
-.cta-box{margin:36px 0;padding:28px 24px;background:linear-gradient(135deg,#061A2E,#0D3B5E);border-radius:10px;color:#fff;text-align:center}
+.cta-box{margin:36px 0;padding:28px 24px;background:linear-gradient(135deg,#0F2A3D,#13354F);border-radius:10px;color:#fff;text-align:center}
 .cta-box h2{font-size:20px;font-weight:400;margin-bottom:8px}
 .cta-box p{font-size:13px;opacity:.85;margin-bottom:18px;line-height:1.7;max-width:480px;margin-left:auto;margin-right:auto}
-.cta-btn{display:inline-block;background:#c9a84c;color:#061A2E;padding:11px 28px;border-radius:6px;font-weight:700;font-size:13px}
+.cta-btn{display:inline-block;background:#C8A96A;color:#0F2A3D;padding:11px 28px;border-radius:6px;font-weight:700;font-size:13px}
 .faq-block{padding:36px 0;border-bottom:1px solid var(--border-lt)}
 .faq-block>h2{font-size:20px;font-weight:400;color:var(--navy);margin-bottom:18px}
 .faq-item{margin-bottom:18px}
@@ -245,7 +245,7 @@ function pageShell(opts: {
 <style>${CSS}</style>
 <script src="/auth.js" defer></script>
 </head><body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <div class="bc">${bc}</div>
 <div class="page">
   <div class="hero">
@@ -257,7 +257,7 @@ function pageShell(opts: {
   <div class="faq-block"><h2>Câu Hỏi Thường Gặp</h2>${faqHTML}</div>
   <div class="rel-block"><div class="rel-title">Xem thêm</div><div class="rel-grid">${relLinks.join('')}</div></div>
 </div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36" defer></script>
 </body></html>`;
 }
 
