@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="/shell.css?v=50">
 <style>
 .form-card{max-width:860px}
-.sample-link{display:inline-block;font-size:12.5px;color:var(--tx-blue);margin-bottom:12px}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 .err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
@@ -119,7 +118,6 @@
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="user"></span><h2>Ngày sinh của người bạn muốn hiểu</h2></div>
         <p class="sub">Nhập ngày giờ sinh người đó, mối quan hệ và việc bạn đang cần làm với họ để phân tích lá số theo đúng việc bạn nêu.</p>
-        <div id="sampleLinkHost"></div>
 
         <div class="frow nk-qh">
           <div class="fg" style="flex:1">
@@ -199,11 +197,6 @@
         <span class="sc-ic" data-icon="file-text"></span>
         <span class="sc-txt"><b>Bản luận giải mẫu</b><span>Tải PDF Lá Số Người Khác đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
         <a class="sc-btn" href="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-nguoi-khac.pdf" target="_blank" rel="noopener">Tải PDF →</a>
-      </div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="nguoi-khac" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -453,66 +446,6 @@ function onQuanHeChange() {
 TuviForm.render('formHost', { mode: 'compact', prefix: '', gioitinh: 'nam', showName: true });
 TuviForm.render('formHostSelf', { mode: 'compact', prefix: 'self', gioitinh: 'nam', showName: false });
 
-// Nút "Xem mẫu" — PDF sinh bằng LLM thật cho 1 lá số mẫu, CHỤP ĐÚNG trang thật
-// qua Playwright (scripts/gen-tool-sample.mjs, hàm renderRealPageAndUpload) —
-// có đủ chart/card như màn hình luận giải thật (2026-09, bật lại sau khi sửa
-// script để chụp trang thay vì tự dựng HTML rời).
-(function(){
-  var host=document.getElementById('sampleLinkHost');
-  if(!host) return;
-  var url='https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-nguoi-khac.pdf';
-  host.innerHTML='<a href="'+url+'" target="_blank" rel="noopener" class="sample-link">↗ Xem mẫu (PDF, lá số khác)</a>';
-})();
-
-// Nút "Xem bản mẫu" (khối .samp-cta phía trên form) — override placeholder
-// mặc định của tools-shared/sample-hint.js bằng dữ liệu THẬT: cùng payload
-// PDF ở trên dùng, rót thẳng qua renderMeta/renderProse THẬT của trang này.
-(function(){
-  var SAMPLE_URL='/samples/nguoi-khac-full.json';
-  var _cache=null;
-  function _showSampleBar(){
-    var panel=document.getElementById('resPanel');
-    if(!panel||document.getElementById('sampBar')) return;
-    var bar=document.createElement('div');
-    bar.className='samp-bar'; bar.id='sampBar';
-    bar.innerHTML='<div class="sb-txt">Đây là <b>BẢN MẪU</b> minh hoạ (lá số khác) — chưa phải kết quả của người bạn cần xem.</div>'+
-      '<button type="button" id="sampBarClose">Nhập lá số người đó →</button>';
-    panel.insertBefore(bar,panel.firstChild);
-    document.getElementById('sampBarClose').onclick=function(){
-      var b=document.getElementById('sampBar'); if(b) b.remove();
-      if(typeof window._closePanel==='function') window._closePanel();
-      var cta=document.getElementById('sampCta'); if(cta) cta.style.display='flex';
-    };
-  }
-  window.SampleHint.open=function(btn){
-    if(btn){ btn.disabled=true; btn.textContent='Đang mở…'; }
-    var p=_cache?Promise.resolve(_cache):fetch(SAMPLE_URL).then(function(r){
-      if(!r.ok) throw new Error('HTTP '+r.status);
-      return r.json();
-    }).then(function(j){ _cache=j; return j; });
-    p.then(function(data){
-      if(typeof window._openPanel==='function') window._openPanel();
-      renderMeta(data);
-      renderProse(data);
-      var loading=document.getElementById('loading'); if(loading) loading.style.display='none';
-      var card=document.getElementById('card'); if(card) card.style.display='block';
-      var be=document.getElementById('btnEdit'); if(be) be.style.display='';
-      var cta=document.getElementById('sampCta'); if(cta) cta.style.display='none';
-      _showSampleBar();
-      if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; }
-    }).catch(function(e){
-      if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; }
-      if(window.console) console.error('sample:',e);
-      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
-    });
-  };
-  try {
-    if (!(window.Shell && Shell.autoRun && Shell.autoRun()) &&
-        !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {
-      var c = document.getElementById('sampCta'); if (c) c.style.display = 'flex';
-    }
-  } catch (e) { if (window.console) console.error('sample auto-open:', e); }
-})();
 
 // 🔑 Lá số shell đang nhớ là lá số CỦA NGƯỜI DÙNG → điền vào form 'self', KHÔNG
 // điền vào form chính. Đây là tool DUY NHẤT mà form chính là của người khác;
