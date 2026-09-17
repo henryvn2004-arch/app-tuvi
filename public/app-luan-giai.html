@@ -769,6 +769,16 @@ function mountHook(ls){
  */
 function _tryHookNarrative(host,spec){
   if(!spec||!Array.isArray(spec.facts)||spec.facts.length<2) return;
+  // Dấu hiệu "đang soạn thêm" — khối cũ (mount()) hiện NGAY và trông như đã
+  // xong, nên không có dòng này thì người dùng dễ tưởng nhầm trang đứng yên
+  // trong lúc lượt gọi LLM (~5-8s) vẫn đang chạy phía sau. Gắn vào CUỐI
+  // #hookHost (ngoài .hkl-block) để không đụng DOM mà upgrade() sắp thay
+  // nguyên khối; tự xoá khi upgrade() thành công (host.innerHTML bị ghi đè)
+  // hoặc khi rơi vào nhánh không có gì để nâng cấp.
+  var pending=document.createElement('div');
+  pending.style.cssText='margin-top:8px;font-size:12px;color:var(--text-lt);opacity:.85';
+  pending.textContent='✦ Đang soạn phần mở đầu hấp dẫn hơn…';
+  if(host)host.appendChild(pending);
   var tk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
   var headers={'Content-Type':'application/json'};
   if(tk)headers['Authorization']='Bearer '+tk;
@@ -780,8 +790,11 @@ function _tryHookNarrative(host,spec){
   };
   fetch('/api/hook-narrative',{method:'POST',headers:headers,body:JSON.stringify(body)})
     .then(function(r){ return r.json(); })
-    .then(function(data){ if(data&&data.allowed) window.HookLayer.upgrade(host,spec,data); })
-    .catch(function(){ /* mạng hỏng — giữ nguyên khối fact-card cũ */ });
+    .then(function(data){
+      if(data&&data.allowed) window.HookLayer.upgrade(host,spec,data);
+      else if(pending.parentNode) pending.remove();
+    })
+    .catch(function(){ if(pending.parentNode)pending.remove(); /* mạng hỏng — giữ nguyên khối fact-card cũ */ });
 }
 
 function _lgLoggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Auth.isLoggedIn()); }
