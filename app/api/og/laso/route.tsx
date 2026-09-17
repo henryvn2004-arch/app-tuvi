@@ -36,14 +36,14 @@ export async function GET(req: NextRequest) {
     (
       <div style={{
         width: '1200px', height: '630px', display: 'flex',
-        background: '#061A2E', fontFamily: 'BeVN, sans-serif',
+        background: '#F4F2EC', fontFamily: 'BeVN, sans-serif',
         position: 'relative', overflow: 'hidden',
       }}>
         {/* Background gradient */}
         <div style={{
           position: 'absolute', top: 0, right: 0,
           width: '600px', height: '630px',
-          background: 'linear-gradient(135deg, transparent, #0D2E4A)',
+          background: 'linear-gradient(135deg, transparent, #F1E7D2)',
           display: 'flex',
         }} />
 
@@ -54,26 +54,26 @@ export async function GET(req: NextRequest) {
         }}>
           {/* Eyebrow */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-            <div style={{ width: '32px', height: '2px', background: '#c9a84c', display: 'flex' }} />
-            <span style={{ fontSize: '13px', color: '#c9a84c', letterSpacing: '4px', textTransform: 'uppercase' }}>
+            <div style={{ width: '32px', height: '2px', background: '#C8A96A', display: 'flex' }} />
+            <span style={{ fontSize: '13px', color: '#7C6942', letterSpacing: '4px', textTransform: 'uppercase' }}>
               TỬ VI MINH BẢO
             </span>
           </div>
 
           {/* Title */}
-          <div style={{ fontSize: '18px', color: 'rgba(255,255,255,0.5)', marginBottom: '10px', display: 'flex' }}>
+          <div style={{ fontSize: '18px', color: 'rgba(15,42,61,0.6)', marginBottom: '10px', display: 'flex' }}>
             Lá Số Tử Vi · {gt}{year ? ` · ${year}` : ''}
           </div>
           {canChi && (
-            <div style={{ fontSize: '42px', color: '#c9a84c', fontWeight: 700, marginBottom: '8px', display: 'flex' }}>
+            <div style={{ fontSize: '42px', color: '#7C6942', fontWeight: 700, marginBottom: '8px', display: 'flex' }}>
               {canChi}
             </div>
           )}
 
           {/* Cung menh + chinh tinh */}
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '20px' }}>
-            <span style={{ fontSize: '22px', color: '#fff', fontWeight: 700 }}>Cung {cm}</span>
-            {ct && <span style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)' }}>· {ct}</span>}
+            <span style={{ fontSize: '22px', color: '#0F2A3D', fontWeight: 700 }}>Cung {cm}</span>
+            {ct && <span style={{ fontSize: '16px', color: 'rgba(15,42,61,0.65)' }}>· {ct}</span>}
           </div>
 
           {/* Cach cuc tags */}
@@ -93,7 +93,7 @@ export async function GET(req: NextRequest) {
           )}
 
           {/* Domain */}
-          <div style={{ marginTop: 'auto', fontSize: '14px', color: 'rgba(201,168,76,0.5)', display: 'flex' }}>
+          <div style={{ marginTop: 'auto', fontSize: '14px', color: 'rgba(124,105,66,0.65)', display: 'flex' }}>
             tuviminhbao.com
           </div>
         </div>
@@ -102,18 +102,18 @@ export async function GET(req: NextRequest) {
         <div style={{
           width: '260px', display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
-          borderLeft: '1px solid rgba(255,255,255,0.08)',
+          borderLeft: '1px solid rgba(15,42,61,0.12)',
           padding: '0 32px', zIndex: 1,
         }}>
           {diem > 0 && (
             <>
-              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', display: 'flex' }}>
+              <div style={{ fontSize: '13px', color: 'rgba(15,42,61,0.5)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', display: 'flex' }}>
                 Điểm cung
               </div>
               <div style={{ fontSize: '72px', fontWeight: 700, color: col, lineHeight: 1, display: 'flex' }}>
                 {diem.toFixed(1)}
               </div>
-              <div style={{ fontSize: '16px', color: 'rgba(255,255,255,0.3)', marginTop: '6px', display: 'flex' }}>
+              <div style={{ fontSize: '16px', color: 'rgba(15,42,61,0.4)', marginTop: '6px', display: 'flex' }}>
                 / 10
               </div>
             </>
