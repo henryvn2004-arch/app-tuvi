@@ -69,7 +69,7 @@
       return { hoa: hoa, star: star, target: target, self: target.cungName === cungForPhan };
     }).filter(Boolean);
     if (!rows.length) return '';
-    var h = '<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🚀" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🚀</span> Tứ Hóa Phi Tinh (can cung ' + canCung + ')</div>';
+    var h = '<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🚀" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🚀</span> Tứ Hóa Phi Tinh (can cung ' + canCung + ')</div>';
     rows.forEach(function (r) {
       var cls = r.hoa === 'Kỵ' ? 'yn-hung' : 'yn-cat';
       var selfBadge = r.self ? ' <span style="color:#7B3FA0;font-weight:700">[TỰ HÓA]</span>' : '';
@@ -165,7 +165,7 @@
     const hasTuan = allStars.some((s) => s.ten === 'Tuần');
     const hasTriet = allStars.some((s) => s.ten === 'Triệt');
     if (catIn.length || satIn.length || baiIn.length || hasTuan || hasTriet) {
-      h += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔍" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔍</span> Sao tam phương tứ chính</div>`;
+      h += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔍" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔍</span> Sao tam phương tứ chính</div>`;
       if (catIn.length) h += `<div class="pregen-yn yn-cat">Cát tinh: ${catIn.join(', ')}</div>`;
       if (satIn.length) h += `<div class="pregen-yn yn-hung">Sát tinh: ${satIn.join(', ')}</div>`;
       if (baiIn.length) h += `<div class="pregen-yn yn-hung" style="color:#fca5a5">Bại tinh: ${baiIn.join(', ')}</div>`;
@@ -193,7 +193,7 @@
     if (phan === 1) {
       const cc = _astrolabe.cachCuc || [];
       if (cc.length > 0) {
-        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">⚙</span> Cách cục đặc biệt</div>`;
+        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> Cách cục đặc biệt</div>`;
         cc.forEach(c => { preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${c.ten}</span><span class="cc-mota">${c.moTa}</span></div>`; });
         preGenHtml += `</div>`;
       }
@@ -201,7 +201,7 @@
         const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
         const top3 = Object.entries(_astrolabe.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>b[1]-a[1]).slice(0,3);
         const bot3 = Object.entries(_astrolabe.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>a[1]-b[1]).slice(0,3);
-        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Điểm mạnh / yếu nổi bật</div>`;
+        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> Điểm mạnh / yếu nổi bật</div>`;
         // Vành 12 cung — CÙNG con số mà hai dòng "Mạnh nhất / Yếu nhất" ngay
         // dưới đang đọc (`cungScores[cung].tong`), chỉ đổi cách đọc: hai dòng
         // chữ nêu được 6/12 cung, hình nêu cả 12 và cho thấy KHOẢNG CÁCH giữa
@@ -227,7 +227,7 @@
       const ccItems = (_astrolabe.cachCuc||[]).filter(c => c.cung === cungForPhan);
       const sc = _astrolabe.cungScores?.[cungForPhan];
       if (ccItems.length > 0) {
-        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">⚙</span> Cách cục đặc biệt</div>`;
+        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> Cách cục đặc biệt</div>`;
         ccItems.forEach(c => { preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${c.ten}</span></div>`; });
         preGenHtml += `</div>`;
       }
@@ -235,7 +235,7 @@
       // tích sao" (ý nghĩa cách cục, có thể rỗng) để cung nào cũng đủ dữ liệu sao.
       preGenHtml += buildCungStarHtml(cungForPhan, _astrolabe);
       if (ynItems.length > 0) {
-        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📋" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📋</span> Phân tích sao</div>`;
+        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📋" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📋</span> Phân tích sao</div>`;
         ynItems.forEach(y => {
           const cls = y.includes('đại cát')||y.includes('đại phú') ? 'yn-great-cat'
             : y.includes('[cát]')||y.includes('phú quý')||y.includes('giàu sang') ? 'yn-cat'
@@ -250,7 +250,7 @@
       if (sc) {
         const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
         const MV = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
-        preGenHtml += `<div class="pregen-block pregen-scores"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📈</span> Đánh giá 6 chiều</div><div class="score-bars">`;
+        preGenHtml += `<div class="pregen-block pregen-scores"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📈</span> Đánh giá 6 chiều</div><div class="score-bars">`;
         METRICS.forEach((m,i) => {
           const v=sc[m]; const pct=v*10;
           const col=v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C0392B';
@@ -275,7 +275,7 @@
         const curIdx = dvs.findIndex(d => cur && d.cungIdx === cur.cungIdx);
         const diff = dvs.length > 1 ? (((dvs[1].cungIdx - dvs[0].cungIdx) % 12) + 12) % 12 : 1;
         const thuan = diff === 1;
-        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📈</span> 9 đại vận — biểu đồ điểm số</div>`;
+        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📈</span> 9 đại vận — biểu đồ điểm số</div>`;
         preGenHtml += `<div style="position:relative;height:240px;margin-top:8px"><canvas id="chart-daivan-overview"></canvas></div>`;
         preGenHtml += `<div style="font-size:11px;color:#666;margin-top:12px;line-height:1.5">`;
         preGenHtml += `· Khởi vận: ${dvs[0].tuoiStart} tuổi · Hướng: ${thuan ? 'thuận' : 'nghịch'}<br>`;
@@ -298,7 +298,7 @@
             const ttScore=sc.thienThoi?.score??sc.thienThoi, dlScore=sc.diaLoi?.score??sc.diaLoi, nhScore=sc.nhanHoa?.score??sc.nhanHoa;
             const ttBar=(ttScore/5*100).toFixed(0), dlBar=(dlScore/1*100).toFixed(0), nhBar=(nhScore/4*100).toFixed(0), totBar=(sc.tong/10*100).toFixed(0);
             const totCol=sc.tong>=7?'#4ade80':sc.tong>=4?'#60a5fa':'#f87171';
-            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Scoring đại vận — Cung ${dvCungName} (${dvDC})</div><div class="score-bars">
+            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> Scoring đại vận — Cung ${dvCungName} (${dvDC})</div><div class="score-bars">
               <div class="score-bar-row"><span class="score-label">Thiên Thời</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${ttBar}%;background:#c9a84c"></div></div><span class="score-val">${ttScore}/5</span></div>
               <div class="score-bar-row"><span class="score-label">Địa Lợi</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${dlBar}%;background:#0E7490"></div></div><span class="score-val">${dlScore}/1</span></div>
               <div class="score-bar-row"><span class="score-label">Nhân Hòa</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${nhBar}%;background:#7B2FBE"></div></div><span class="score-val">${nhScore}/4</span></div>
@@ -325,7 +325,7 @@
           const satIn=SAT.filter(s=>tptcNames.includes(s)), baiIn=BAI.filter(s=>tptcNames.includes(s)), catIn=CAT.filter(s=>tptcNames.includes(s));
           const hasTuan=allStars.some(s=>s.ten==='Tuần'), hasTriet=allStars.some(s=>s.ten==='Triệt');
           if (catIn.length||satIn.length||baiIn.length||hasTuan||hasTriet) {
-            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔍" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔍</span> Sao tam phương tứ chính</div>`;
+            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔍" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔍</span> Sao tam phương tứ chính</div>`;
             if (catIn.length) preGenHtml += `<div class="pregen-yn yn-cat">Cát tinh: ${catIn.join(', ')}</div>`;
             if (satIn.length) preGenHtml += `<div class="pregen-yn yn-hung">Sát tinh: ${satIn.join(', ')}</div>`;
             if (baiIn.length) preGenHtml += `<div class="pregen-yn yn-hung" style="color:#fca5a5">Bại tinh: ${baiIn.join(', ')}</div>`;
@@ -335,7 +335,7 @@
           }
           const ccDV=(_astrolabe.cachCuc||[]).filter(c=>c.cung===dvCungName||c.cung==='');
           if (ccDV.length>0) {
-            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">⚙</span> Cách cục liên quan</div>`;
+            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> Cách cục liên quan</div>`;
             ccDV.forEach(c=>{ preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${c.ten}</span><span class="cc-mota">${c.moTa}</span></div>`; });
             preGenHtml += `</div>`;
           }
@@ -343,7 +343,7 @@
           if (dvRules.length>0) {
             const totR=dvRules.filter(r=>r.type==='tot'), xauR=dvRules.filter(r=>r.type==='xau');
             const cbR=dvRules.filter(r=>r.type==='canh_bao'), trungR=dvRules.filter(r=>r.type==='trung');
-            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔮</span> Luận đoán vận hạn</div>`;
+            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔮</span> Luận đoán vận hạn</div>`;
             if (totR.length) { preGenHtml += `<div class="rules-group">`; totR.forEach(r=>{ preGenHtml += `<div class="pregen-yn yn-cat">✦ ${r.text}</div>`; }); preGenHtml += `</div>`; }
             if (trungR.length) { preGenHtml += `<div class="rules-group">`; trungR.forEach(r=>{ preGenHtml += `<div class="pregen-yn yn-neutral">◆ ${r.text}</div>`; }); preGenHtml += `</div>`; }
             if (xauR.length) { preGenHtml += `<div class="rules-group">`; xauR.forEach(r=>{ preGenHtml += `<div class="pregen-yn yn-hung">▼ ${r.text}</div>`; }); preGenHtml += `</div>`; }
