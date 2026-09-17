@@ -643,9 +643,10 @@ function buildPhanSection(p,ep,label,ls,locked){
   }else{
     var pre=LuanGiaiCore.buildPreGenHtml(ep,ls);
     var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
-    // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc) GẤP LẠI mặc
-    // định — xem lý do đầy đủ ở app-luan-giai.html (buildPhanSection).
-    bodyHtml=pre?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
+    // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc) — Pha 4
+    // (2026-09-17): bung sẵn mặc định, xem lý do đảo ngược ở app-luan-giai.html
+    // (buildPhanSection).
+    bodyHtml=pre?('<details class="lg-calc" open><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
   }
   // Badge "Khoá" cho MỌI phần 3-11 lúc dựng trang lần đầu, KHÔNG còn phụ thuộc
   // đã đăng nhập hay chưa (khách đăng nhập nhưng CHƯA trả tiền vẫn thấy dummy
@@ -682,7 +683,14 @@ function buildPhanSection(p,ep,label,ls,locked){
   var ctaRepeat=dummy
     ? '<div class="lg-cta-repeat" id="lg-cta-'+p+'"><button class="btn-go" type="button" onclick="_triggerUnlockAll()">✦ Mở toàn bộ bản luận — <span data-tvp-price="chu-trinh-cuoc-doi">…</span> Lượng <span class="tpw-vnd" data-tvp-price-vnd="chu-trinh-cuoc-doi"></span> →</button></div>'
     : '';
-  var banner=locked?'':illusBannerHtml(p,ls,label);
+  // Pha 4 (2026-09-17): trước đây KHÔNG hiện ảnh nào ở phần khoá (`locked?''`).
+  // Nay dùng ĐÚNG ảnh khớp lá số thật (illusBannerHtml — deterministic, tra
+  // bảng tĩnh IllusMatch, 0 token) rồi làm mờ bằng `.tpw-real-lock` (đã có sẵn
+  // CSS blur từ tuvi-paywall.js) — cùng quyết định app-luan-giai.html vừa đảo
+  // ngược. Không khớp được cung nào thì vẫn rỗng như cũ, không có banner cố
+  // định để rơi về (trang này chưa từng có).
+  var bannerRaw=illusBannerHtml(p,ls,label);
+  var banner=(locked&&bannerRaw)?bannerRaw.replace('<img ','<img class="tpw-real-lock" '):bannerRaw;
   return sec(p,label,tag,banner+'<div class="card">'+bodyHtml+claudeBox+ctaRepeat+related+ask('Luận sâu phần: '+label)+'</div>');
 }
 // Gỡ CẢ badge "Khoá" LẪN CTA lặp lại của phần p — gọi cùng lúc, cùng lý do
