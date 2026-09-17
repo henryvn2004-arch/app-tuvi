@@ -119,7 +119,7 @@ ${NOINDEX_FOLLOW}
 <script type="application/ld+json">${schema}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--blue:#1455A4;--gold:#9A7B3A;--text:#1a1a1a;--text-lt:#777;--border:#CCC;--border-lt:#E8E8E8;--bg:#fff;--bg-soft:#F5F4F0}
+:root{--navy:#0F2A3D;--blue:#1455A4;--gold:#7C6942;--text:#1a1a1a;--text-lt:#777;--border:#CCC;--border-lt:#E8E8E8;--bg:#fff;--bg-soft:#F4F2EC}
 body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
 a{color:var(--blue);text-decoration:none}
 .page{max-width:900px;margin:0 auto;padding:0 32px 80px}
@@ -141,15 +141,15 @@ h1 em{font-style:italic;color:var(--gold)}
 .gio-link{flex:1;text-align:center;padding:6px 0;border-radius:4px;font-size:12px;font-weight:600;transition:all .12s}
 .gio-nam{background:var(--navy);color:#fff}.gio-nam:hover{background:#1455A4}
 .gio-nu{background:var(--gold);color:#fff}.gio-nu:hover{opacity:.85}
-.cta-box{padding:20px 24px;background:linear-gradient(135deg,#061A2E,#0D3B5E);border-radius:8px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.cta-box{padding:20px 24px;background:linear-gradient(135deg,#0F2A3D,#13354F);border-radius:8px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap}
 .cta-box p{font-size:13px;opacity:.85;max-width:480px;line-height:1.6}
-.cta-btn{background:#c9a84c;color:#061A2E;padding:9px 20px;border-radius:5px;font-weight:700;font-size:13px;white-space:nowrap}
+.cta-btn{background:#C8A96A;color:#0F2A3D;padding:9px 20px;border-radius:5px;font-weight:700;font-size:13px;white-space:nowrap}
 .note{font-size:12px;color:var(--text-lt);padding:10px 0;border-top:1px solid var(--border-lt)}
 @media(max-width:700px){.page,.bc{padding-left:14px;padding-right:14px}.grid{grid-template-columns:repeat(2,1fr)}h1{font-size:22px}.cta-box{flex-direction:column;text-align:center}}
 </style>
 <script src="/auth.js" defer></script>
 </head><body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <div class="bc">
   <a href="/">Trang Chủ</a><span>›</span>
   <a href="/menh-kho.html">Mệnh Khố</a><span>›</span>
@@ -178,7 +178,7 @@ h1 em{font-style:italic;color:var(--gold)}
 
   <p class="note">* Lá số hiển thị vận hạn năm ${NAM_XEM}. Để xem năm khác, dùng công cụ luận giải trực tiếp.</p>
 </div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36" defer></script>
 </body></html>`;
 
   return new NextResponse(html, {

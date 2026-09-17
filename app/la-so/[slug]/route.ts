@@ -163,7 +163,7 @@ function buildPregenHTML(row: Record<string,unknown>, slug: string): string {
         const sc = cungScores[c];
         return `<div class="score-cung"><div class="score-cung-name">${esc(c)}</div><div class="score-bars">${METRICS.map((m,i)=>{
           const v = sc[m]||0; const pct = v*10;
-          const col = v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C0392B';
+          const col = v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C46A5E';
           return `<div class="sb-row"><span class="sb-label">${MLABELS[i]}</span><div class="sb-bg"><div class="sb-fill" style="width:${pct}%;background:${col}"></div></div><span class="sb-val">${v}</span></div>`;
         }).join('')}</div></div>`;
       }).join('')
@@ -190,16 +190,16 @@ ${NOINDEX_FOLLOW}
 <script type="application/ld+json">${schema}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0}
+:root{--navy:#0F2A3D;--navy-mid:#13354F;--blue:#1455A4;--gold:#7C6942;--gold-lt:#F9F4EB;--gold-bright:#C8A96A;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#D8D4CB;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F4F2EC}
 body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 .bc{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:12px 40px;font-size:12px;color:var(--text-lt);display:flex;gap:8px;align-items:center}
 .bc a{color:var(--text-lt);text-decoration:none}.bc a:hover{color:var(--navy)}.bc span{color:var(--border)}
 .wrap{flex:1;max-width:900px;margin:0 auto;padding:40px 40px 80px;width:100%}
-.hero{background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:12px;padding:28px 32px;color:#fff;margin-bottom:28px}
-.hero-eyebrow{font-size:10px;letter-spacing:3px;color:#c9a84c;text-transform:uppercase;margin-bottom:8px}
+.hero{background:var(--bg-soft);border-radius:12px;padding:28px 32px;color:var(--navy);margin-bottom:28px}
+.hero-eyebrow{font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
 .hero-title{font-family:'Noto Serif',serif;font-size:28px;font-weight:600;margin-bottom:12px;line-height:1.3}
 .hero-tags{display:flex;gap:8px;flex-wrap:wrap}
-.hero-tag{font-size:11px;padding:3px 10px;border-radius:12px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.85)}
+.hero-tag{font-size:11px;padding:3px 10px;border-radius:12px;background:#fff;border:1px solid var(--border-lt);color:var(--text-mid)}
 .section{margin-bottom:28px}
 .section-title{font-family:'Noto Serif',serif;font-size:16px;font-weight:600;color:var(--navy);padding-bottom:10px;border-bottom:2px solid var(--border-lt);margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .cc-list{display:flex;flex-direction:column;gap:10px}
@@ -234,7 +234,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 </style>
 <script src="/auth.js" defer></script>
 </head><body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <div class="bc">
   <a href="/">Trang Chủ</a><span>›</span>
   <a href="/menh-kho.html">Mệnh Khố</a><span>›</span>
@@ -247,14 +247,14 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     <div class="hero-tags">
       ${row.chinh_tinh_menh?`<span class="hero-tag">⭐ ${esc(row.chinh_tinh_menh)}</span>`:''}
       ${row.nap_am?`<span class="hero-tag">🔥 ${esc(row.nap_am)}</span>`:''}
-      ${row.cuc?`<span class="hero-tag"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">⚙</span> Cục ${esc(row.cuc)}</span>`:''}
+      ${row.cuc?`<span class="hero-tag"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> Cục ${esc(row.cuc)}</span>`:''}
       ${row.am_duong?`<span class="hero-tag">${esc(row.am_duong)}</span>`:''}
       ${row.gio_chi?`<span class="hero-tag">Giờ ${esc(row.gio_chi)}</span>`:''}
     </div>
   </div>
-  ${cachCuc.length > 0 ? `<div class="section"><div class="section-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">⚙</span> Cách Cục Đặc Biệt <span style="font-size:12px;color:var(--text-lt);font-weight:400">(${cachCuc.length} cách cục)</span></div>${ccHTML}</div>` : ''}
-  ${dvHTML ? `<div class="section"><div class="section-title"><span class="ic-inline" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📅</span> Đại Vận</div>${dvHTML}</div>` : ''}
-  ${scoresHTML ? `<div class="section"><div class="section-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Điểm 6 Chiều Từng Cung</div><div class="scores-grid">${scoresHTML}</div></div>` : ''}
+  ${cachCuc.length > 0 ? `<div class="section"><div class="section-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> Cách Cục Đặc Biệt <span style="font-size:12px;color:var(--text-lt);font-weight:400">(${cachCuc.length} cách cục)</span></div>${ccHTML}</div>` : ''}
+  ${dvHTML ? `<div class="section"><div class="section-title"><span class="ic-inline" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📅</span> Đại Vận</div>${dvHTML}</div>` : ''}
+  ${scoresHTML ? `<div class="section"><div class="section-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> Điểm 6 Chiều Từng Cung</div><div class="scores-grid">${scoresHTML}</div></div>` : ''}
   ${contentHTML ? `<div class="section"><div class="body-content">${contentHTML}</div></div>` : ''}
   <div class="cta-box">
     <h3>Luận Giải Chuyên Sâu Đầy Đủ — 24 Phần</h3>
@@ -262,7 +262,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     <a class="cta-btn" href="${appLuanGiaiHref(parseIsrSlug(slug))}">Xem Luận Giải →</a>
   </div>
 </div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36" defer></script>
 </body></html>`;
 }
 
@@ -299,7 +299,7 @@ function buildPublicHTML(row: Record<string,unknown>, slug: string): string {
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <script type="application/ld+json">${schema}</script>`;
-  const bcHTML = `<div style="background:#F5F4F0;border-bottom:1px solid #E8E8E8;padding:12px 40px;font-size:12px;color:#777;display:flex;gap:8px;align-items:center">
+  const bcHTML = `<div style="background:#F4F2EC;border-bottom:1px solid #E8E8E8;padding:12px 40px;font-size:12px;color:#777;display:flex;gap:8px;align-items:center">
   <a href="/" style="color:#777;text-decoration:none">Trang Chủ</a><span style="color:#CCC">›</span>
   <a href="/menh-kho.html" style="color:#777;text-decoration:none">Mệnh Khố</a><span style="color:#CCC">›</span>
   <span>${esc(row.can_chi_nam as string)} ${esc(gt)} — Cung ${esc(row.cung_menh as string)}</span>
@@ -309,10 +309,10 @@ function buildPublicHTML(row: Record<string,unknown>, slug: string): string {
 ${commonHead}
 <script src="/auth.js" defer></script>
 </head><body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 ${bcHTML}
 ${row.rendered_html}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36" defer></script>
 </body></html>`;
   }
   const luanGiai: Record<string,string> = (row.luan_giai as Record<string,string>) || {};
@@ -322,13 +322,13 @@ ${row.rendered_html}
 ${commonHead}
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
 <script src="/auth.js" defer></script>
-<style>body{font-family:'Be Vietnam Pro',sans-serif;max-width:760px;margin:0 auto;padding:0 20px 40px;color:#333}h1{font-family:'Noto Serif',serif;color:#061A2E;margin:32px 0 24px}p{margin-bottom:14px;line-height:1.8;color:#444}</style>
+<style>body{font-family:'Be Vietnam Pro',sans-serif;max-width:760px;margin:0 auto;padding:0 20px 40px;color:#333}h1{font-family:'Noto Serif',serif;color:#0F2A3D;margin:32px 0 24px}p{margin-bottom:14px;line-height:1.8;color:#444}</style>
 </head><body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 ${bcHTML}
 <h1>${title}</h1>
 <div>${bodyHTML}</div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36" defer></script>
 </body></html>`;
 }
 
@@ -643,8 +643,8 @@ function renderGrid(ls: Rec, canIdx: number): string {
   const cuc       = String(ls.cucName||ls.cuc||'');
   const canChiNam = String(ls.canChiNam||'');
   const centerHTML = `<div class="grid-center">
-    <div style="font-size:10px;color:#9A7B3A;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">紫微明寶</div>
-    <div style="font-size:14px;font-weight:700;color:#061A2E;margin-bottom:4px">${esc(canChiNam)}</div>
+    <div style="font-size:10px;color:#7C6942;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">紫微明寶</div>
+    <div style="font-size:14px;font-weight:700;color:#0F2A3D;margin-bottom:4px">${esc(canChiNam)}</div>
     <div style="font-size:11px;color:#444;margin-bottom:2px">Cung Mệnh: ${esc(String(menhP?.cungName||''))}</div>
     <div style="font-size:10px;color:#777;margin-bottom:2px">${esc(napAm)}</div>
     <div style="font-size:10px;color:#777">${esc(cuc)}</div>
@@ -698,11 +698,11 @@ function renderTextBlocks(ls: Rec): string {
     const sc = scores[cung];
     if (!sc) return '';
     const total = METRICS.reduce((s,m)=>s+(sc[m]||0),0);
-    return `<div style="background:#F5F4F0;border-radius:8px;padding:12px;margin-bottom:10px">
-      <div style="font-size:12px;font-weight:700;color:#061A2E;margin-bottom:8px">${esc(cung)} <span style="font-weight:400;color:#888;font-size:11px">(${(total/METRICS.length).toFixed(1)}/10)</span></div>
+    return `<div style="background:#F4F2EC;border-radius:8px;padding:12px;margin-bottom:10px">
+      <div style="font-size:12px;font-weight:700;color:#0F2A3D;margin-bottom:8px">${esc(cung)} <span style="font-weight:400;color:#888;font-size:11px">(${(total/METRICS.length).toFixed(1)}/10)</span></div>
       ${METRICS.map((m,i) => {
         const v=sc[m]||0; const pct=v*10;
-        const col=v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C0392B';
+        const col=v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C46A5E';
         return `<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
           <span style="font-size:10px;color:#666;width:72px;flex-shrink:0">${MLABELS[i]}</span>
           <div style="flex:1;height:6px;background:#d0d8e0;border-radius:3px;overflow:hidden">
@@ -719,22 +719,22 @@ function renderTextBlocks(ls: Rec): string {
     const tong = sc.tong as number || 0;
     const col  = tong>=7?'#1a6b3a':tong>=4?'#7a5f0a':'#6b1a1a';
     const isCur= !!dv.isCurrentDV;
-    return `<div style="text-align:center;padding:8px 10px;border:${isCur?'2px solid #c9a84c':'1px solid #e0e0e0'};border-radius:6px;background:${isCur?'#F9F4EB':'#fff'}">
+    return `<div style="text-align:center;padding:8px 10px;border:${isCur?'2px solid #C8A96A':'1px solid #e0e0e0'};border-radius:6px;background:${isCur?'#F9F4EB':'#fff'}">
       <div style="font-size:10px;color:#888;margin-bottom:2px">${esc(String(dv.tuoiStart||''))}–${esc(String(dv.tuoiEnd||''))}t</div>
-      <div style="font-size:12px;font-weight:700;color:#061A2E">${esc(String(dv.diaChi||''))}</div>
+      <div style="font-size:12px;font-weight:700;color:#0F2A3D">${esc(String(dv.diaChi||''))}</div>
       ${tong>0?`<div style="font-size:11px;font-weight:700;color:${col};margin-top:2px">${tong}/10</div>`:''}
-      ${isCur?'<div style="font-size:9px;color:#9A7B3A;font-weight:700;margin-top:2px">Hiện tại</div>':''}
+      ${isCur?'<div style="font-size:9px;color:#7C6942;font-weight:700;margin-top:2px">Hiện tại</div>':''}
     </div>`;
   }).join('');
 
   return `
     <div style="background:#fff;border-radius:10px;padding:20px;border:1px solid #e0e0e0;margin-bottom:16px">
-      <div style="font-size:13px;font-weight:700;color:#061A2E;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #061A2E">⚙ Cách Cục</div>
+      <div style="font-size:13px;font-weight:700;color:#0F2A3D;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #0F2A3D">⚙ Cách Cục</div>
       ${ccHTML}
     </div>
 
     ${dvHTML ? `<div style="background:#fff;border-radius:10px;padding:20px;border:1px solid #e0e0e0">
-      <div style="font-size:13px;font-weight:700;color:#061A2E;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #061A2E">📅 Đại Vận</div>
+      <div style="font-size:13px;font-weight:700;color:#0F2A3D;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #0F2A3D">📅 Đại Vận</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">${dvHTML}</div>
     </div>` : ''}`;
 }
@@ -779,7 +779,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
   const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
   const MLABELS = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
   const LOAI_COL: Record<string,string> = {
-    quy_cuc:'#7B3FA0',phu_cuc:'#1E6B3C',hung_cuc:'#C0392B',trung_cuc:'#9A7B3A',than_cu:'#555',
+    quy_cuc:'#7B3FA0',phu_cuc:'#7FA7A3',hung_cuc:'#C46A5E',trung_cuc:'#7C6942',than_cu:'#555',
   };
   const LOAI_LABEL: Record<string,string> = {
     quy_cuc:'Quý Cục',phu_cuc:'Phú Cục',hung_cuc:'Hung Cục',trung_cuc:'Trung Cục',than_cu:'Thần Cú',
@@ -792,7 +792,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     const sc = scores[cungName];
     if (!sc) return '';
     return `<div style="display:flex;flex-direction:column;gap:3px;margin-top:8px">${METRICS.map((m,i)=>{
-      const v=sc[m]||0; const col=v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C0392B';
+      const v=sc[m]||0; const col=v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C46A5E';
       return `<div style="display:flex;align-items:center;gap:6px">
         <span style="font-size:10px;color:#888;width:72px">${MLABELS[i]}</span>
         <div style="flex:1;height:5px;background:#e0e0e0;border-radius:3px;overflow:hidden">
@@ -807,7 +807,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
 
   function cta(label: string): string {
     return `<div style="margin-top:16px;padding-top:12px;border-top:1px solid #E8E3D9;text-align:right">
-<a href="${appLuanGiaiHref(params)}" style="display:inline-block;background:#9A7B3A;color:#fff;font-size:12px;font-weight:600;padding:7px 16px;border-radius:5px;text-decoration:none">${esc(label)} →</a>
+<a href="${appLuanGiaiHref(params)}" style="display:inline-block;background:#7C6942;color:#fff;font-size:12px;font-weight:600;padding:7px 16px;border-radius:5px;text-decoration:none">${esc(label)} →</a>
 </div>`;
   }
 
@@ -822,10 +822,10 @@ function render24Sections(ls: Rec, params: IsrParams): string {
   // ── Section 1: Tổng Quan Lá Số ───────────────────────────────────────────
   let b1 = '';
   if (cachCuc.length > 0) {
-    b1 += `<div style="margin-bottom:12px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">⚙ Cách cục đặc biệt</div>`;
+    b1 += `<div style="margin-bottom:12px"><div style="font-size:11px;font-weight:600;color:#7C6942;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">⚙ Cách cục đặc biệt</div>`;
     cachCuc.forEach(c => {
       const loai = String(c.loai||'');
-      b1 += `<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;padding:8px 10px;background:#F5F4F0;border-radius:6px;border-left:3px solid ${LOAI_COL[loai]||'#888'}">
+      b1 += `<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;padding:8px 10px;background:#F4F2EC;border-radius:6px;border-left:3px solid ${LOAI_COL[loai]||'#888'}">
         <span style="background:${LOAI_COL[loai]||'#888'};color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:3px;white-space:nowrap">${esc(String(c.ten||''))}</span>
         <span style="font-size:12px;color:#444;line-height:1.5">${esc(String(c.moTa||''))}</span>
       </div>`;
@@ -837,7 +837,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
   const s1 = sec(1, b1);
 
   // ── Sections 2–13: 12 Cung ───────────────────────────────────────────────
-  const HOA_COL: Record<string,string> = {'Lộc':'#1E6B3C','Quyền':'#7B3FA0','Khoa':'#1455A4','Kỵ':'#C0392B'};
+  const HOA_COL: Record<string,string> = {'Lộc':'#7FA7A3','Quyền':'#7B3FA0','Khoa':'#1455A4','Kỵ':'#C46A5E'};
 
   // TPTC-augmented analysis: expose phanTichCungYNghia to re-run with TPTC stars merged into each palace
   const _engine = loadEngine();
@@ -867,7 +867,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
       return { hoa, star, target, self };
     }).filter(Boolean) as { hoa: string; star: string; target: Rec; self: boolean }[];
     if (!rows.length) return '';
-    let h = `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🚀 Tứ Hóa Phi Tinh (can cung ${esc(canCung)})</div>`;
+    let h = `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#7C6942;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🚀 Tứ Hóa Phi Tinh (can cung ${esc(canCung)})</div>`;
     rows.forEach(r => {
       const col = r.hoa === 'Kỵ' ? '#f87171' : '#86efac';
       const selfBadge = r.self ? ` <span style="color:#7B3FA0;font-weight:700">[TỰ HÓA]</span>` : '';
@@ -902,7 +902,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
         const hoa   = String(s.hoa||'');
         const bright = String(s.brightness||'');
         const brightCol = bright==='Miếu'||bright==='Vượng'?'#4ade80':bright==='Đắc'?'#86efac':bright==='Bình hòa'||bright==='Bình'?'#60a5fa':'#f87171';
-        body += `<span style="display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;background:#061A2E;color:#fff;border-radius:4px;font-size:12px;font-weight:700">${starLink(String(s.ten||''), esc(String(s.ten||'')))} <span style="color:${brightCol};font-size:10px">(${esc(bright)})</span>${hoa?` <span style="color:#5FA8D3">[H.${esc(hoa[0])}]</span>`:''}</span>`;
+        body += `<span style="display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;background:#0F2A3D;color:#fff;border-radius:4px;font-size:12px;font-weight:700">${starLink(String(s.ten||''), esc(String(s.ten||'')))} <span style="color:${brightCol};font-size:10px">(${esc(bright)})</span>${hoa?` <span style="color:#5FA8D3">[H.${esc(hoa[0])}]</span>`:''}</span>`;
       });
     }
     body += `</div>`;
@@ -915,7 +915,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     const stateChips: string[] = [];
     if (diacChi) stateChips.push(esc(diacChi));
     if (trangSinh) stateChips.push(esc(trangSinh));
-    if (isVong) stateChips.push('<span style="color:#C0392B">Không Vong</span>');
+    if (isVong) stateChips.push('<span style="color:#C46A5E">Không Vong</span>');
     const hasTuan  = allStars.some(s=>s.ten==='Tuần');
     const hasTriet = allStars.some(s=>s.ten==='Triệt');
     if (hasTuan)  stateChips.push('<span style="color:#5a4a00">Tuần</span>');
@@ -945,7 +945,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     // Phân tích sao (cachCucTungCung) — chính tinh patterns first
     const ynSorted = sortByChinhTinh(ynItems);
     if (ynSorted.length > 0) {
-      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">📋 Phân tích sao</div>`;
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#7C6942;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">📋 Phân tích sao</div>`;
       ynSorted.slice(0, 8).forEach(y => {
         const isGreatCat = y.includes('đại cát')||y.includes('đại phú');
         const isCat      = !isGreatCat && (y.includes('[cát]')||y.includes('phú quý')||y.includes('giàu sang'));
@@ -960,7 +960,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
 
     // Tam phương tứ chính — after Phân tích sao
     if (catTPTC.length || satTPTC.length || baiTPTC.length || tptcItems.length) {
-      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🔍 Tam phương tứ chính</div>`;
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#7C6942;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🔍 Tam phương tứ chính</div>`;
       if (catTPTC.length) body += `<div style="font-size:12px;color:#86efac;margin:2px 0">Cát tinh: ${catTPTC.map(s=>starLink(s,esc(s))).join(', ')}</div>`;
       if (satTPTC.length) body += `<div style="font-size:12px;color:#f87171;margin:2px 0">Sát tinh: ${satTPTC.map(s=>starLink(s,esc(s))).join(', ')}</div>`;
       if (baiTPTC.length) body += `<div style="font-size:12px;color:#fca5a5;margin:2px 0">Bại tinh: ${baiTPTC.map(s=>starLink(s,esc(s))).join(', ')}</div>`;
@@ -980,7 +980,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
 
     // Cách cục riêng cung
     if (ccInCung.length > 0) {
-      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⚙ Cách cục đặc biệt</div>`;
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#7C6942;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⚙ Cách cục đặc biệt</div>`;
       ccInCung.forEach(c => {
         const loai = String(c.loai||'');
         body += `<span style="display:inline-block;background:${LOAI_COL[loai]||'#888'};color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:3px;margin:2px">${esc(String(c.ten||''))}</span>`;
@@ -1005,13 +1005,13 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     dvs.slice(0,9).forEach((dv, idx) => {
       const sc2=(dv.scoring as Rec)||{}; const t2=Number(sc2.tong)||0;
       const isCur=!!dv.isCurrentDV;
-      const col=t2>=7?'#1E6B3C':t2>=4?'#9A7B3A':'#C0392B';
-      b14 += `<div style="text-align:center;padding:8px 10px;border:${isCur?'2px solid #9A7B3A':'1px solid #e0e0e0'};border-radius:7px;background:${isCur?'#F9F4EB':'#fff'};min-width:66px">
+      const col=t2>=7?'#7FA7A3':t2>=4?'#7C6942':'#C46A5E';
+      b14 += `<div style="text-align:center;padding:8px 10px;border:${isCur?'2px solid #7C6942':'1px solid #e0e0e0'};border-radius:7px;background:${isCur?'#F9F4EB':'#fff'};min-width:66px">
         <div style="font-size:10px;color:#888;margin-bottom:2px">ĐV ${idx+1}</div>
-        <div style="font-size:12px;font-weight:700;color:#061A2E">${esc(String(dv.diaChi||''))}</div>
+        <div style="font-size:12px;font-weight:700;color:#0F2A3D">${esc(String(dv.diaChi||''))}</div>
         <div style="font-size:9px;color:#999">${esc(String(dv.tuoiStart||''))}–${esc(String(dv.tuoiEnd||''))}t</div>
         ${t2>0?`<div style="font-size:11px;font-weight:700;color:${col};margin-top:2px">${t2}/10</div>`:''}
-        ${isCur?`<div style="font-size:9px;color:#9A7B3A;font-weight:700">Hiện tại</div>`:''}
+        ${isCur?`<div style="font-size:9px;color:#7C6942;font-weight:700">Hiện tại</div>`:''}
       </div>`;
     });
     b14 += `</div>`;
@@ -1046,9 +1046,9 @@ function render24Sections(ls: Rec, params: IsrParams): string {
       const tong = Number(sc.tong)||0;
       const totCol = tong>=7?'#4ade80':tong>=4?'#60a5fa':'#f87171';
       const nhDetail = sc.nhanHoa as Rec|undefined;
-      body += `<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">📊 Scoring — Cung ${esc(dvCungName)} (${esc(dvDC)})</div>
+      body += `<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:600;color:#7C6942;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">📊 Scoring — Cung ${esc(dvCungName)} (${esc(dvDC)})</div>
         <div style="display:flex;flex-direction:column;gap:4px">
-          ${[['Thiên Thời',ttSc,5,'#c9a84c'],['Địa Lợi',dlSc,1,'#0E7490'],['Nhân Hòa',nhSc,4,'#7B2FBE']].map(([lbl,v,max,col])=>`
+          ${[['Thiên Thời',ttSc,5,'#C8A96A'],['Địa Lợi',dlSc,1,'#0E7490'],['Nhân Hòa',nhSc,4,'#7B2FBE']].map(([lbl,v,max,col])=>`
             <div style="display:flex;align-items:center;gap:6px">
               <span style="font-size:10px;color:#888;width:72px">${esc(String(lbl))}</span>
               <div style="flex:1;height:5px;background:#e0e0e0;border-radius:3px;overflow:hidden">
@@ -1071,7 +1071,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     if (dvPalace) {
       const majDV  = (dvPalace.majorStars as Rec[])||[];
       const xungDV = dvPalace.xungChieuCung as Rec|undefined;
-      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⭐ Chính tinh cung đại vận</div>`;
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#7C6942;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⭐ Chính tinh cung đại vận</div>`;
       if (majDV.length === 0) {
         const xungStars = xungDV ? ((xungDV.majorStars as Rec[])||[]).map(s=>`${esc(String(s.ten||''))} (${esc(String(s.brightness||''))})`).join(', ') : '';
         body += `<div style="font-size:12px;color:#94a3b8;font-style:italic">Vô chính diệu${xungStars?` — mượn từ cung xung: <strong>${xungStars}</strong>`:''}</div>`;
@@ -1080,7 +1080,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
           const bright = String(s.brightness||'');
           const bCol = bright==='Miếu'||bright==='Vượng'?'#4ade80':bright==='Đắc'?'#86efac':bright==='Bình hòa'||bright==='Bình'?'#60a5fa':'#f87171';
           const hoa   = String(s.hoa||'');
-          body += `<div style="font-size:12px;color:#ddd;margin:2px 0"><span style="font-weight:600;color:#061A2E">${esc(String(s.ten||''))}</span> <span style="color:${bCol};font-size:11px">(${esc(bright)})</span>${hoa?` <span style="color:#1455A4">[Hóa ${esc(hoa)}]</span>`:''}</div>`;
+          body += `<div style="font-size:12px;color:#ddd;margin:2px 0"><span style="font-weight:600;color:#0F2A3D">${esc(String(s.ten||''))}</span> <span style="color:${bCol};font-size:11px">(${esc(bright)})</span>${hoa?` <span style="color:#1455A4">[Hóa ${esc(hoa)}]</span>`:''}</div>`;
         });
       }
       body += `</div>`;
@@ -1096,7 +1096,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
       const baiIn  = BAI_TPTC.filter(s=>tptcNames.includes(s));
 
       if (catIn.length||satIn.length||baiIn.length||hasTuan||hasTriet) {
-        body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🔍 Sao tam phương tứ chính</div>`;
+        body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#7C6942;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🔍 Sao tam phương tứ chính</div>`;
         if (catIn.length)  body += `<div style="font-size:12px;color:#86efac;margin:2px 0">Cát tinh: ${esc(catIn.join(', '))}</div>`;
         if (satIn.length)  body += `<div style="font-size:12px;color:#f87171;margin:2px 0">Sát tinh: ${esc(satIn.join(', '))}</div>`;
         if (baiIn.length)  body += `<div style="font-size:12px;color:#fca5a5;margin:2px 0">Bại tinh: ${esc(baiIn.join(', '))}</div>`;
@@ -1109,10 +1109,10 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     // Cách cục liên quan
     const ccDV = cachCuc.filter(c => dvCungName && String(c.cung||'')===dvCungName);
     if (ccDV.length > 0) {
-      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⚙ Cách cục liên quan</div>`;
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#7C6942;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⚙ Cách cục liên quan</div>`;
       ccDV.forEach(c => {
         const loai = String(c.loai||'');
-        body += `<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;padding:7px 10px;background:#F5F4F0;border-radius:5px;border-left:2px solid ${LOAI_COL[loai]||'#888'}">
+        body += `<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;padding:7px 10px;background:#F4F2EC;border-radius:5px;border-left:2px solid ${LOAI_COL[loai]||'#888'}">
           <span style="background:${LOAI_COL[loai]||'#888'};color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:3px;white-space:nowrap">${esc(String(c.ten||''))}</span>
           <span style="font-size:11px;color:#444;line-height:1.4">${esc(String(c.moTa||''))}</span>
         </div>`;
@@ -1127,7 +1127,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
       const xauR  = dvRules.filter(r=>r.type==='xau');
       const cbR   = dvRules.filter(r=>r.type==='canh_bao');
       const trungR = dvRules.filter(r=>r.type==='trung');
-      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🔮 Luận đoán vận hạn</div>`;
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#7C6942;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🔮 Luận đoán vận hạn</div>`;
       totR.forEach(r   => { body += `<div style="font-size:12px;color:#86efac;padding:2px 0;line-height:1.5">✦ ${esc(String(r.text||''))}</div>`; });
       trungR.forEach(r => { body += `<div style="font-size:12px;color:#94a3b8;padding:2px 0;line-height:1.5">◆ ${esc(String(r.text||''))}</div>`; });
       xauR.forEach(r   => { body += `<div style="font-size:12px;color:#f87171;padding:2px 0;line-height:1.5">▼ ${esc(String(r.text||''))}</div>`; });
@@ -1138,9 +1138,9 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     // Vận Hạn patterns (yNghia)
     const dvYN = (dv.yNghia as string[])||[];
     if (dvYN.length > 0) {
-      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">📖 Luận giải vận hạn</div>`;
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#7C6942;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">📖 Luận giải vận hạn</div>`;
       dvYN.forEach(t => {
-        body += `<div style="font-size:12px;color:#374151;padding:3px 0 3px 10px;border-left:2px solid #c9a84c;margin-bottom:4px;line-height:1.5">${esc(t)}</div>`;
+        body += `<div style="font-size:12px;color:#374151;padding:3px 0 3px 10px;border-left:2px solid #C8A96A;margin-bottom:4px;line-height:1.5">${esc(t)}</div>`;
       });
       body += `</div>`;
     }
@@ -1175,11 +1175,11 @@ function render24Sections(ls: Rec, params: IsrParams): string {
 
   let b24 = '';
   if (tvThis) {
-    const tvCol = tvCat>tvSat?'#1E6B3C':tvCat<tvSat?'#C0392B':'#9A7B3A';
+    const tvCol = tvCat>tvSat?'#7FA7A3':tvCat<tvSat?'#C46A5E':'#7C6942';
     const tvCanCan = tvCat>tvSat?'cát nhiều hơn sát':tvCat<tvSat?'sát nhiều hơn cát':'cát sát cân nhau';
     b24 += `<p>Tiểu vận năm <strong>${namXem}</strong>: cung <strong>${esc(tvDC)}</strong> — <strong style="color:${tvCol}">${esc(tvCanCan)}</strong>. Tiểu vận KHÔNG có điểm riêng; tốt/xấu của năm đọc ở cung hạn và cán cân cát/sát, còn điểm là của khung đại vận bên dưới.</p>`;
-    if (Number(tvThis.satCount)>0) b24 += `<p style="color:#C0392B;font-size:12px">⚠ ${tvThis.satCount} sát tinh ảnh hưởng — chú ý sức khỏe và tránh rủi ro.</p>`;
-    if (Number(tvThis.catCount)>0) b24 += `<p style="color:#1E6B3C;font-size:12px">✦ ${tvThis.catCount} cát tinh hỗ trợ trong năm này.</p>`;
+    if (Number(tvThis.satCount)>0) b24 += `<p style="color:#C46A5E;font-size:12px">⚠ ${tvThis.satCount} sát tinh ảnh hưởng — chú ý sức khỏe và tránh rủi ro.</p>`;
+    if (Number(tvThis.catCount)>0) b24 += `<p style="color:#7FA7A3;font-size:12px">✦ ${tvThis.catCount} cát tinh hỗ trợ trong năm này.</p>`;
   }
   if (curDV) {
     const dvSc2 = (curDV.scoring as Rec)||{};
@@ -1196,7 +1196,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
       const tSc=Number(t.mainScore||0); const tNam=Number(t.nam); const isThis=tNam===namXem;
       b24 += `<div style="text-align:center;padding:7px 10px;border:${isThis?'2px solid #1455A4':'1px solid #e0e0e0'};border-radius:6px;background:${isThis?'#EEF4FF':'#fff'};min-width:64px">
         <div style="font-size:10px;color:#888">${tNam}</div>
-        <div style="font-size:13px;font-weight:700;color:${tSc>=7?'#1E6B3C':tSc>=4?'#9A7B3A':'#C0392B'}">${tSc.toFixed(1)}</div>
+        <div style="font-size:13px;font-weight:700;color:${tSc>=7?'#7FA7A3':tSc>=4?'#7C6942':'#C46A5E'}">${tSc.toFixed(1)}</div>
         <div style="font-size:10px;color:#888">${esc(String(t.diaChi||''))}</div>
       </div>`;
     });
@@ -1250,7 +1250,7 @@ function buildRelatedLinks(params: IsrParams): string {
   links.push({ label: `Tất cả giờ sinh ngày ${p(dd)}/${p(mm)}/${year}`, url: `/menh-kho/${year}/${p(mm)}-${p(dd)}` });
   links.push({ label: `Lá số tử vi năm sinh ${year}`, url: `/menh-kho/${year}` });
 
-  return `<div style="background:#F5F4F0;border-top:2px solid #E8E8E8;padding:24px;margin-top:32px">
+  return `<div style="background:#F4F2EC;border-top:2px solid #E8E8E8;padding:24px;margin-top:32px">
 <div style="max-width:1000px;margin:0 auto">
   <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:16px">Xem thêm lá số liên quan</div>
   <div style="display:flex;flex-wrap:wrap;gap:8px">
@@ -1383,18 +1383,18 @@ ${NOINDEX_FOLLOW}
 <script type="application/ld+json">${schema}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0}
+:root{--navy:#0F2A3D;--navy-mid:#13354F;--blue:#1455A4;--gold:#7C6942;--gold-lt:#F9F4EB;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#D8D4CB;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F4F2EC}
 body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 .bc{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:9px 24px;font-size:12px;color:var(--text-lt);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .bc a{color:var(--text-lt);text-decoration:none}.bc a:hover{color:var(--navy)}
 a.sao-link{color:inherit;text-decoration:none;border-bottom:1px dotted currentColor;opacity:.9}
 a.sao-link:hover{opacity:1;border-bottom-style:solid}
 .wrap{max-width:1000px;margin:0 auto;padding:28px 24px 80px}
-.hero{background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:10px;padding:24px 28px;color:#fff;margin-bottom:24px}
-.hero-eyebrow{font-size:10px;letter-spacing:3px;color:#c9a84c;text-transform:uppercase;margin-bottom:6px}
+.hero{background:var(--bg-soft);border-radius:10px;padding:24px 28px;color:var(--navy);margin-bottom:24px}
+.hero-eyebrow{font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
 .hero-title{font-size:22px;font-weight:700;margin-bottom:10px;line-height:1.3}
 .hero-tags{display:flex;gap:8px;flex-wrap:wrap}
-.hero-tag{font-size:11px;padding:3px 10px;border-radius:12px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.85)}
+.hero-tag{font-size:11px;padding:3px 10px;border-radius:12px;background:#fff;border:1px solid var(--border-lt);color:var(--text-mid)}
 .layout{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
 .grid-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px}
 .cta-box{margin-top:20px;padding:20px;background:linear-gradient(135deg,#171a4a,#2d2060);border-radius:10px;color:#fff;text-align:center}
@@ -1415,10 +1415,10 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 .s24b strong{color:var(--navy)}
 .laso-grid{display:grid;grid-template-columns:repeat(4,1fr);border:2px solid #555;background:#555;gap:1px}
 .cung-cell{border:1px solid #888;padding:7px 7px 22px;min-height:150px;position:relative;display:flex;flex-direction:column;background:#fff;overflow:hidden}
-.cung-cell.is-menh{border:2px solid #9A7B3A;background:#FFFDF7}
-.cung-cell.cur-van{outline:2px solid #1E6B3C;outline-offset:-2px}
+.cung-cell.is-menh{border:2px solid #7C6942;background:#FFFDF7}
+.cung-cell.cur-van{outline:2px solid #7FA7A3;outline-offset:-2px}
 .cung-empty{background:#f8f8f8;min-height:150px}
-.grid-center{border:2px solid #9A7B3A;background:#F9F4EB;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;grid-column:span 2;grid-row:span 2}
+.grid-center{border:2px solid #7C6942;background:#F9F4EB;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;grid-column:span 2;grid-row:span 2}
 .v2-cell-header{display:flex;flex-direction:column;align-items:center;margin-bottom:4px;gap:2px}
 .v2-can-chi{font-size:9px;color:#777;font-weight:500;width:100%;text-align:left}
 .v2-cung-name{font-size:10px;color:#222;font-weight:700;text-transform:uppercase;text-align:center;width:100%;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap}
@@ -1440,7 +1440,7 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 </style>
 <script src="/auth.js" defer></script>
 </head><body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <div class="bc">
   <a href="/">Trang Chủ</a>›
   <a href="/menh-kho.html">Mệnh Khố</a>›
@@ -1496,17 +1496,17 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 </div>
 ${relatedArticles.length ? `<div style="background:#F9F4EB;border-top:2px solid #E8E4D9;padding:24px;margin-top:0">
 <div style="max-width:1000px;margin:0 auto">
-  <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#9A7B3A;margin-bottom:14px">Đọc thêm từ nghiên cứu</div>
+  <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#7C6942;margin-bottom:14px">Đọc thêm từ nghiên cứu</div>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px">
     ${relatedArticles.map(a=>`<a href="/nghien-cuu/${esc(a.slug)}" style="display:block;background:#fff;border:1px solid #E6D9C0;border-radius:8px;padding:14px;text-decoration:none;color:inherit;transition:box-shadow .15s" onmouseover="this.style.boxShadow='0 2px 10px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow='none'">
-      <div style="font-size:13px;font-weight:700;color:#061A2E;line-height:1.45;margin-bottom:6px">${esc(a.title)}</div>
+      <div style="font-size:13px;font-weight:700;color:#0F2A3D;line-height:1.45;margin-bottom:6px">${esc(a.title)}</div>
       ${a.excerpt?`<div style="font-size:12px;color:#777;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${esc(a.excerpt)}</div>`:''}
     </a>`).join('')}
   </div>
 </div>
 </div>` : ''}
 ${relatedHTML}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36" defer></script>
 <script src="/share.js" defer></script>
 <script src="/pwa-push.js?v=2" defer></script>
 <script>

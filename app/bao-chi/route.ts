@@ -132,7 +132,7 @@ export async function GET() {
 <script type="application/ld+json">${schemas.replace(/</g, '\\u003c')}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--blue:#1455A4;--gold:#9A7B3A;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#fff;--bg-soft:#F5F4F0}
+:root{--navy:#0F2A3D;--blue:#1455A4;--gold:#7C6942;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#D8D4CB;--border-lt:#E8E8E8;--bg:#fff;--bg-soft:#F4F2EC}
 body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
 a{color:var(--blue)}
 .bc{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:10px 40px;font-size:12px;color:var(--text-lt);display:flex;gap:8px}
@@ -165,7 +165,7 @@ ul{margin:0 0 12px 20px;color:var(--text-mid)}li{margin-bottom:6px}
 <script src="/auth.js" defer></script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <div class="bc"><a href="/">Trang Chủ</a><span>›</span><span>Thông tin báo chí</span></div>
 <div class="page">
 
@@ -217,8 +217,8 @@ ul{margin:0 0 12px 20px;color:var(--text-mid)}li{margin-bottom:6px}
     <div class="assets">
       <div class="asset"><img src="/seal.webp" alt="Triện Tử Vi Minh Bảo"><a href="/seal.webp" download>Tải triện (.webp)</a></div>
       <div>
-        <div><span class="swatch" style="background:#061A2E"></span><code>#061A2E</code> — navy chủ đạo</div>
-        <div style="margin-top:8px"><span class="swatch" style="background:#C9A84C"></span><code>#C9A84C</code> — vàng nhấn</div>
+        <div><span class="swatch" style="background:#0F2A3D"></span><code>#0F2A3D</code> — navy chủ đạo</div>
+        <div style="margin-top:8px"><span class="swatch" style="background:#C8A96A"></span><code>#C8A96A</code> — vàng nhấn</div>
       </div>
     </div>
     <p class="tiny" style="margin-top:12px">Tên gọi: <b>Tử Vi Minh Bảo</b> (chữ Hán: 紫微明寶). Xin viết đủ dấu.</p>

@@ -159,7 +159,7 @@ ${(row.tags||[]).length ? `<meta name="keywords" content="${esc(row.tags.join(',
 <script type="application/ld+json">${schema}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0}
+:root{--navy:#0F2A3D;--navy-mid:#13354F;--blue:#1455A4;--gold:#7C6942;--gold-lt:#F9F4EB;--gold-bright:#C8A96A;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#D8D4CB;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F4F2EC}
 body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
 .bc{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:12px 40px;font-size:12px;color:var(--text-lt);display:flex;gap:8px;align-items:center}
 .bc a{color:var(--text-lt);text-decoration:none}.bc a:hover{color:var(--navy)}.bc span{color:var(--border)}
@@ -182,12 +182,12 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .article-body th{background:var(--navy);color:#fff;padding:11px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase}
 .article-body td{padding:10px 14px;border-bottom:1px solid var(--border-lt);color:var(--text-mid)}
 .article-body tr:nth-child(even) td{background:var(--bg-soft)}
-.cta-box{margin-top:48px;padding:36px 32px;background:var(--navy);border:2px solid var(--gold);color:#fff;text-align:center}
-.cta-box-label{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;margin-bottom:10px}
-.cta-box h3{font-family:'Noto Serif',serif;font-size:22px;margin-bottom:10px;font-weight:600;color:#fff}
-.cta-box p{font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:22px;line-height:1.6}
-.cta-btn{display:inline-block;background:transparent;color:#c9a84c;border:2px solid #c9a84c;padding:13px 36px;text-decoration:none;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;transition:all .18s}
-.cta-btn:hover{background:#c9a84c;color:var(--navy)}
+.cta-box{margin-top:48px;padding:36px 32px;background:linear-gradient(135deg,#fdf6e9 0%,#fff9ef 100%);border:2px solid var(--gold-bright);color:var(--navy);text-align:center}
+.cta-box-label{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.cta-box h3{font-family:'Noto Serif',serif;font-size:22px;margin-bottom:10px;font-weight:600;color:var(--navy)}
+.cta-box p{font-size:14px;color:var(--text-mid);margin-bottom:22px;line-height:1.6}
+.cta-btn{display:inline-block;background:var(--navy);color:var(--gold-bright);border:2px solid var(--gold-bright);padding:13px 36px;text-decoration:none;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;transition:all .18s}
+.cta-btn:hover{background:var(--gold-bright);color:var(--navy)}
 .rel-wrap{margin-top:40px;padding-top:28px;border-top:1px solid var(--border-lt)}
 .rel-title{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:14px}
 .rel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
@@ -197,7 +197,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 </style>
 <script src="/auth.js" defer></script>
 </head><body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <div class="bc">
   <a href="/">Trang Chủ</a><span>›</span>
   <a href="${hubUrl}">${esc(hubName)}</a><span>›</span>
@@ -218,7 +218,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
     <a class="cta-btn" href="/">Xem Tử Vi →</a>
   </div>
 </article>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36" defer></script>
 </body></html>`;
 
   return new NextResponse(html, {

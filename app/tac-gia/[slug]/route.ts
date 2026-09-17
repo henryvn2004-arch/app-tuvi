@@ -116,22 +116,22 @@ async function buildHTML(master: any, articles: any[], realArticleCount: number)
 <script type="application/ld+json">${schemas}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0}
+:root{--navy:#0F2A3D;--navy-mid:#13354F;--blue:#1455A4;--gold:#7C6942;--gold-lt:#F9F4EB;--gold-bright:#C8A96A;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#D8D4CB;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F4F2EC}
 body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 .breadcrumb{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:12px 40px;font-size:12px;color:var(--text-lt);display:flex;gap:8px;align-items:center}
 .breadcrumb a{color:var(--text-lt);text-decoration:none}.breadcrumb a:hover{color:var(--navy)}.breadcrumb span{color:var(--border)}
-.profile-header{background:var(--navy);padding:48px 40px 40px}
+.profile-header{background:var(--bg-soft);padding:48px 40px 40px}
 .profile-inner{max-width:860px;margin:0 auto;display:flex;gap:32px;align-items:flex-start}
-.profile-avatar{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid var(--gold-bright);color:var(--gold-bright);font-family:'Noto Serif',serif;font-size:32px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.profile-avatar{width:80px;height:80px;border-radius:50%;background:var(--gold-lt);border:2px solid var(--gold-bright);color:var(--gold);font-family:'Noto Serif',serif;font-size:32px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
 .profile-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.profile-details{flex:1;color:#fff}
-.profile-name{font-family:'Noto Serif',serif;font-size:28px;font-weight:600;color:var(--gold-bright);margin-bottom:4px}
-.profile-title{font-size:13px;color:rgba(255,255,255,.55);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px}
-.profile-bio{font-size:15px;line-height:1.8;color:rgba(255,255,255,.8);font-weight:300;max-width:600px}
+.profile-details{flex:1;color:var(--text)}
+.profile-name{font-family:'Noto Serif',serif;font-size:28px;font-weight:600;color:var(--navy);margin-bottom:4px}
+.profile-title{font-size:13px;color:var(--text-lt);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px}
+.profile-bio{font-size:15px;line-height:1.8;color:var(--text-mid);font-weight:300;max-width:600px}
 .profile-stats{display:flex;gap:24px;margin-top:18px}
 .stat-item{text-align:center}
-.stat-num{font-family:'Noto Serif',serif;font-size:22px;font-weight:600;color:var(--gold-bright)}
-.stat-label{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:1.5px;text-transform:uppercase}
+.stat-num{font-family:'Noto Serif',serif;font-size:22px;font-weight:600;color:var(--navy)}
+.stat-label{font-size:10px;color:var(--text-lt);letter-spacing:1.5px;text-transform:uppercase}
 .main{flex:1;max-width:860px;margin:0 auto;padding:40px 40px 80px;width:100%;display:grid;grid-template-columns:1fr 260px;gap:40px}
 .articles-section h2{font-family:'Noto Serif',serif;font-size:16px;font-weight:600;color:var(--text-lt);letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border)}
 .art-row{padding:20px 0;border-bottom:1px solid var(--border-lt)}
@@ -157,7 +157,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 <script src="/auth.js" defer></script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <div class="breadcrumb"><a href="/">Trang Chủ</a><span>›</span><a href="/tac-gia">Tác Giả</a><span>›</span><span>${esc(name)}</span></div>
 <div class="profile-header">
   <div class="profile-inner">
@@ -197,7 +197,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     </div>` : ''}
   </aside>
 </div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36" defer></script>
 </body></html>`;
 }
 
@@ -207,9 +207,9 @@ function buildNotFound() {
 <link rel="icon" type="image/webp" href="/seal.webp">
 <script src="/auth.js" defer></script>
 </head><body style="font-family:sans-serif;text-align:center;padding:80px">
-<h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy tác giả</h1>
+<h1 style="color:#0F2A3D;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy tác giả</h1>
 <a href="/tac-gia" style="color:#1455A4">← Về danh sách tác giả</a>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36" defer></script>
 </body></html>`;
 }
 

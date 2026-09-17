@@ -154,7 +154,7 @@ ${tags.length ? `<meta name="keywords" content="${esc(tags.join(', '))}">` : ''}
 <script type="application/ld+json">${schemas}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0}
+:root{--navy:#0F2A3D;--navy-mid:#13354F;--blue:#1455A4;--gold:#7C6942;--gold-lt:#F9F4EB;--gold-bright:#C8A96A;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#D8D4CB;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F4F2EC}
 body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 .breadcrumb{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:12px 40px;font-size:12px;color:var(--text-lt);display:flex;gap:8px;align-items:center}
 .breadcrumb a{color:var(--text-lt);text-decoration:none}.breadcrumb a:hover{color:var(--navy)}.breadcrumb span{color:var(--border)}
@@ -198,7 +198,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 <script src="/auth.js" defer></script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <div class="breadcrumb">
   <a href="/">Trang Chủ</a><span>›</span>
   <a href="/nghien-cuu">Nghiên Cứu</a><span>›</span>
@@ -225,11 +225,11 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     <a href="/nghien-cuu">← Về Nghiên Cứu</a>
     ${masterUrl ? `<a href="${esc(masterUrl)}">Bài khác của ${esc(masterName)} →</a>` : ''}
   </div>
-  <div style="margin-top:40px;padding:24px;background:linear-gradient(135deg,#061A2E,#0D3B5E);border-radius:10px;color:#fff;text-align:center">
-    <div style="font-size:11px;letter-spacing:3px;color:#c9a84c;text-transform:uppercase;margin-bottom:8px">Tra Cứu Lá Số</div>
+  <div style="margin-top:40px;padding:24px;background:linear-gradient(135deg,#0F2A3D,#13354F);border-radius:10px;color:#fff;text-align:center">
+    <div style="font-size:11px;letter-spacing:3px;color:#C8A96A;text-transform:uppercase;margin-bottom:8px">Tra Cứu Lá Số</div>
     <div style="font-family:'Noto Serif',serif;font-size:20px;font-weight:600;margin-bottom:10px">Xem lá số tử vi của bạn</div>
     <p style="font-size:13px;opacity:.85;margin-bottom:20px;line-height:1.6">Áp dụng kiến thức trong bài để phân tích lá số cụ thể — cách cục, đại vận, điểm 6 chiều.</p>
-    <a href="/app/luan-giai" style="display:inline-block;background:#9A7B3A;color:#fff;padding:12px 28px;border-radius:7px;text-decoration:none;font-weight:700;font-size:14px;margin-right:10px">Lập Lá Số Của Bạn →</a>
+    <a href="/app/luan-giai" style="display:inline-block;background:#7C6942;color:#fff;padding:12px 28px;border-radius:7px;text-decoration:none;font-weight:700;font-size:14px;margin-right:10px">Lập Lá Số Của Bạn →</a>
     <a href="/menh-kho.html" style="display:inline-block;background:rgba(255,255,255,.12);color:#fff;padding:12px 20px;border-radius:7px;text-decoration:none;font-size:13px">Tra theo ngày sinh</a>
     <a href="/nghien-cuu" style="display:inline-block;background:rgba(255,255,255,.12);color:#fff;padding:12px 20px;border-radius:7px;text-decoration:none;font-size:13px;margin-left:10px">Bài khác</a>
   </div>
@@ -257,7 +257,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 </article>
 <script src="/related-tools.js"></script>
 <script src="/testimonials.js"></script>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36" defer></script>
 <script src="/share.js" defer></script>
 <script>
 window.addEventListener('load', function () {
@@ -280,10 +280,10 @@ function buildNotFound() {
 <link rel="icon" type="image/webp" href="/seal.webp">
 <script src="/auth.js" defer></script>
 </head><body style="font-family:sans-serif;text-align:center;padding:80px">
-<h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy bài viết</h1>
+<h1 style="color:#0F2A3D;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy bài viết</h1>
 <p style="color:#777;margin-bottom:24px">Bài viết không tồn tại hoặc đã bị xóa.</p>
 <a href="/nghien-cuu" style="color:#1455A4">← Về Nghiên Cứu</a>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=36" defer></script>
 </body></html>`;
 }
 
