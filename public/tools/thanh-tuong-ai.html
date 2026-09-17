@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=35" as="script">
+<link rel="preload" href="/nav.js?v=36" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Thanh Tướng — Xem Tướng Giọng Nói | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Thanh Tướng — Xem Tướng Giọng Nói | Tử Vi Minh Bảo"/>
@@ -20,27 +20,27 @@
 <link rel="stylesheet" href="/tools/tools.css">
 <style>
 /* Passage card */
-.passage-card{background:linear-gradient(135deg,#fdf8f0,#fff9ef);border:2px solid #c9a84c;border-radius:12px;padding:24px 28px;margin:20px 0}
+.passage-card{background:linear-gradient(135deg,#fdf8f0,#fff9ef);border:2px solid #C8A96A;border-radius:12px;padding:24px 28px;margin:20px 0}
 .passage-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#9A7B3A;margin-bottom:10px}
-.passage-text{font-family:'Noto Serif',Georgia,serif;font-size:18px;line-height:1.9;color:#061A2E;text-align:center}
+.passage-text{font-family:'Noto Serif',Georgia,serif;font-size:18px;line-height:1.9;color:#0F2A3D;text-align:center}
 .passage-text em{color:#9A7B3A;font-style:normal;font-weight:600}
 .passage-note{font-size:12px;color:var(--text-lt);margin-top:8px;text-align:center}
 /* Recording UI */
 .record-wrap{text-align:center;padding:24px 0 16px}
 .btn-record{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;background:var(--navy);color:#fff;border:none;border-radius:50px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.5px}
-.btn-record:hover{background:#0D3B5E;transform:scale(1.02)}
-.btn-record.recording{background:#C0392B;animation:pulse-red 1.2s ease-in-out infinite}
+.btn-record:hover{background:#13354F;transform:scale(1.02)}
+.btn-record.recording{background:#C46A5E;animation:pulse-red 1.2s ease-in-out infinite}
 .btn-record.processing{background:#888;cursor:not-allowed}
 @keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,0.4)}50%{box-shadow:0 0 0 12px rgba(192,57,43,0)}}
-.countdown-badge{display:none;font-size:48px;font-weight:700;color:#C0392B;margin:12px 0;font-family:Georgia,serif}
+.countdown-badge{display:none;font-size:48px;font-weight:700;color:#C46A5E;margin:12px 0;font-family:Georgia,serif}
 .countdown-badge.visible{display:block}
 .timer-bar-wrap{height:4px;background:var(--border-lt);border-radius:2px;margin:12px 24px;overflow:hidden;display:none}
 .timer-bar-wrap.visible{display:block}
-.timer-bar{height:100%;background:#C0392B;border-radius:2px;width:0%;transition:width .1s linear}
+.timer-bar{height:100%;background:#C46A5E;border-radius:2px;width:0%;transition:width .1s linear}
 /* Waveform canvas */
 .waveform-wrap{margin:12px 0;display:none}
 .waveform-wrap.visible{display:block}
-#waveCanvas{width:100%;height:80px;border-radius:8px;background:#061A2E;display:block}
+#waveCanvas{width:100%;height:80px;border-radius:8px;background:#0F2A3D;display:block}
 /* Features panel */
 .features-panel{display:none;margin-top:16px;padding:14px 16px;background:var(--bg-soft);border-radius:10px;border:1px solid var(--border-lt)}
 .features-panel.visible{display:block}
@@ -64,7 +64,7 @@
 .md-result strong{color:var(--navy);font-weight:700}
 .md-result em{color:#9A7B3A}
 .md-result p{margin:0 0 10px}
-.md-result blockquote{border-left:3px solid #c9a84c;padding:8px 16px;margin:12px 0;background:#fdf8f0;font-style:italic;color:#9A7B3A}
+.md-result blockquote{border-left:3px solid #C8A96A;padding:8px 16px;margin:12px 0;background:#fdf8f0;font-style:italic;color:#9A7B3A}
 .ai-loading{display:flex;flex-direction:column;align-items:center;gap:16px;padding:40px 0}
 .ai-loading-icon{font-size:48px;animation:pulse 1.5s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
@@ -82,7 +82,7 @@
 </script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 
 <div class="hero-tool">
   <div class="page">
@@ -335,10 +335,10 @@ function startWaveform() {
   function draw() {
     _animFrame = requestAnimationFrame(draw);
     _analyser.getByteTimeDomainData(dataArr);
-    ctx.fillStyle = '#061A2E';
+    ctx.fillStyle = '#0F2A3D';
     ctx.fillRect(0, 0, W, H);
     ctx.lineWidth = 2;
-    ctx.strokeStyle = '#c9a84c';
+    ctx.strokeStyle = '#C8A96A';
     ctx.beginPath();
     const slice = W / bufLen;
     let x = 0;
@@ -817,6 +817,6 @@ async function _saveTuongReading(tool, resultText, imageData, mediaType) {
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js?v=2"></script>
-<script src="/nav.js?v=35" defer></script>
+<script src="/nav.js?v=36" defer></script>
 </body>
 </html>

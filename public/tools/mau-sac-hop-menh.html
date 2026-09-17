@@ -24,15 +24,14 @@
 <script src="/tuvi-paywall.js?v=23"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <link rel="stylesheet" href="/tools/tools.css">
-<link rel="stylesheet" href="/theme.css?v=1">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;}
 h1,h2,h3{font-family:'Noto Serif',serif;}
-.hero{background:linear-gradient(180deg,var(--navy),var(--navy-mid));padding:36px 24px 28px;text-align:center;}
-.hero h1{font-size:22px;color:var(--gold-bright);margin-bottom:6px;}
-.hero p{font-size:13px;color:rgba(255,255,255,.62);max-width:480px;margin:0 auto 14px;line-height:1.65;}
-.hero-cost{display:inline-flex;align-items:center;gap:8px;background:rgba(154,123,58,.15);border:1px solid rgba(154,123,58,.4);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--gold-bright);}
+.hero{background:var(--bg-soft);padding:36px 24px 28px;text-align:center;}
+.hero h1{font-size:22px;color:var(--navy);margin-bottom:6px;}
+.hero p{font-size:13px;color:var(--text-mid);max-width:480px;margin:0 auto 14px;line-height:1.65;}
+.hero-cost{display:inline-flex;align-items:center;gap:8px;background:var(--gold-lt);border:1px solid #e8d9b0;border-radius:20px;padding:5px 14px;font-size:12px;color:var(--gold);}
 .container{max-width:780px;margin:0 auto;padding:0 14px;}
 .card{background:var(--bg);border:1px solid var(--border-lt);border-radius:12px;padding:22px;margin:16px 0;box-shadow:0 2px 6px rgba(0,0,0,.05);}
 .card-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border-lt);display:flex;align-items:center;gap:8px;}
@@ -110,14 +109,14 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
 /* TRY-ON */
 .tryon-upload-zone{border:2px dashed var(--border);border-radius:10px;padding:28px 16px;text-align:center;cursor:pointer;background:var(--bg-soft);position:relative;transition:all .2s;}
-.tryon-upload-zone:hover,.tryon-upload-zone.drag{border-color:#c9a84c;background:#c9a84c08;}
+.tryon-upload-zone:hover,.tryon-upload-zone.drag{border-color:#C8A96A;background:#C8A96A08;}
 .tryon-upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 .tryon-preview{max-width:220px;border-radius:9px;display:block;margin:10px auto 0;object-fit:cover;}
 .style-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0;}
 .style-btn{padding:10px;border:1.5px solid var(--border);border-radius:8px;background:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:Arial,sans-serif;color:var(--text-mid);transition:all .15s;text-align:center;}
 .style-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
-.style-btn:hover:not(.active){border-color:#c9a84c;background:#fffdf7;}
-.btn-tryon{width:100%;padding:12px;background:linear-gradient(135deg,#9A7B3A,#c9a84c);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;transition:opacity .2s;}
+.style-btn:hover:not(.active){border-color:#C8A96A;background:#fffdf7;}
+.btn-tryon{width:100%;padding:12px;background:linear-gradient(135deg,#9A7B3A,#C8A96A);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;transition:opacity .2s;}
 .btn-tryon:hover{opacity:.88;} .btn-tryon:disabled{opacity:.45;cursor:not-allowed;}
 .tryon-spinner{width:34px;height:34px;border:3px solid var(--border-lt);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px;}
 .ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
@@ -148,7 +147,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 </script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 
 <div class="hero">
   <span style="font-size:44px;display:block;margin-bottom:10px;"><span class="ic" data-icon="palette"></span></span>
@@ -507,7 +506,7 @@ function renderResults(data){
   const cl2=document.getElementById('comboList');cl2.innerHTML='';
   (s.colorCombos||[]).forEach(combo=>{
     const sc=combo.score||80;
-    const bg2=sc>=90?'#1E6B3C':sc>=80?'#9A7B3A':'#1455A4';
+    const bg2=sc>=90?'#7FA7A3':sc>=80?'#9A7B3A':'#1455A4';
     cl2.innerHTML+=`<div class="combo-item">
       <div class="combo-score-circle" style="background:${bg2};">${sc}</div>
       <div class="combo-body">
@@ -677,7 +676,7 @@ TuviPaywall.init({ product: 'mau-sac-hop-menh' });
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js?v=2"></script>
-<script src="/nav.js?v=35" defer></script>
+<script src="/nav.js?v=36" defer></script>
 <script src="/tool-sources.js?v=1"></script>
 <script>
   if (window.ToolSources) {

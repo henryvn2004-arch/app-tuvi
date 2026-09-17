@@ -25,16 +25,15 @@
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/bat-trach.js?v=2"></script>
 <link rel="stylesheet" href="/tools/tools.css">
-<link rel="stylesheet" href="/theme.css?v=1">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;}
 h1,h2,h3,h4{font-family:'Noto Serif',serif;}
-.hero{background:linear-gradient(180deg,var(--navy) 0%,var(--navy-mid) 100%);padding:36px 24px 28px;text-align:center;}
+.hero{background:var(--bg-soft);padding:36px 24px 28px;text-align:center;}
 .hero-icon{font-size:44px;display:block;margin-bottom:10px;}
-.hero h1{font-size:22px;color:var(--gold-bright);margin-bottom:6px;}
-.hero p{font-size:13px;color:rgba(255,255,255,.62);max-width:500px;margin:0 auto 14px;line-height:1.65;}
-.hero-cost{display:inline-flex;align-items:center;gap:8px;background:rgba(154,123,58,.15);border:1px solid rgba(154,123,58,.4);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--gold-bright);}
+.hero h1{font-size:22px;color:var(--navy);margin-bottom:6px;}
+.hero p{font-size:13px;color:var(--text-mid);max-width:500px;margin:0 auto 14px;line-height:1.65;}
+.hero-cost{display:inline-flex;align-items:center;gap:8px;background:var(--gold-lt);border:1px solid #e8d9b0;border-radius:20px;padding:5px 14px;font-size:12px;color:var(--gold);}
 .container{max-width:780px;margin:0 auto;padding:0 14px;}
 .card{background:var(--bg);border:1px solid var(--border-lt);border-radius:12px;padding:22px;margin:16px 0;box-shadow:0 2px 6px rgba(0,0,0,.05);}
 .card-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border-lt);display:flex;align-items:center;gap:8px;}
@@ -116,9 +115,9 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
 .shop-price{font-size:10px;color:var(--text-lt);}
 .advice-text{font-size:13px;color:var(--text-mid);line-height:1.75;background:var(--bg-soft);border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 7px 7px 0;}
 /* RENDER */
-.render-btn{width:100%;padding:13px;background:linear-gradient(135deg,#9A7B3A,#c9a84c);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s;}
+.render-btn{width:100%;padding:13px;background:linear-gradient(135deg,#9A7B3A,#C8A96A);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s;}
 .render-btn:hover{opacity:.88;} .render-btn:disabled{opacity:.45;cursor:not-allowed;}
-.render-spinner{width:34px;height:34px;border:3px solid var(--border-lt);border-top-color:#c9a84c;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px;}
+.render-spinner{width:34px;height:34px;border:3px solid var(--border-lt);border-top-color:#C8A96A;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px;}
 .render-ba{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
 .render-ba-col{text-align:center;}
 .render-ba-label{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px;}
@@ -146,7 +145,7 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
 </script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 
 <div class="hero">
   <span class="hero-icon"><span class="ic-inline" data-icon-emoji="🏪" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🏪</span></span>
@@ -536,7 +535,7 @@ TuviPaywall.init({ product: 'cua-hang-phong-thuy' });
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js?v=2"></script>
-<script src="/nav.js?v=35" defer></script>
+<script src="/nav.js?v=36" defer></script>
 <script src="/tool-sources.js?v=1"></script>
 <script>
   if (window.ToolSources) {

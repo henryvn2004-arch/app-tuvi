@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=35" as="script"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="preload" href="/nav.js?v=36" as="script"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Vận Tháng Tử Vi — Phân Tích Vận Khí Từng Tháng | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Vận Tháng Tử Vi — Phân Tích Vận Khí Từng Tháng | Tử Vi Minh Bảo"/>
 <meta property="og:description" content="Xem vận tháng theo Tử Vi Đẩu Số — phân tích tiểu hạn tháng, sao hạn, cung hạn cho 12 tháng trong năm. Biết tháng nào thuận, tháng nào cần cẩn thận."/>
@@ -36,7 +36,7 @@
 </script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <div class="hero-tool">
   <div class="page">
     <div class="eyebrow">Công Cụ Miễn Phí</div>
@@ -97,15 +97,15 @@ const THANG_CHI_START=2; // tháng 1 âm = Dần (chi 2)
 const CURRENT_YEAR=2026;
 const CUNG_MEAN={
   'Mệnh':     {acc:'#1455A4', txt:'Vận an cung Mệnh — tập trung vào bản thân và quyết định lớn. Năng lượng cá nhân cao.'},
-  'Phụ Mẫu':  {acc:'#1E6B3C', txt:'Thuận cho việc gia đình, bề trên, học hành, ký văn bản.'},
+  'Phụ Mẫu':  {acc:'#7FA7A3', txt:'Thuận cho việc gia đình, bề trên, học hành, ký văn bản.'},
   'Phúc Đức': {acc:'#7B2FBE', txt:'Phúc đức bảo hộ, tâm linh thuận. Tốt cho tâm linh và bình yên nội tâm.'},
   'Điền Trạch':{acc:'#9A7B3A', txt:'Liên quan nhà đất, bất động sản. Tốt để mua/sửa nhà nếu sao cung tốt.'},
   'Quan Lộc': {acc:'#0E7490', txt:'Tháng quan trọng nhất cho sự nghiệp, thăng tiến, thi cử — cung công việc.'},
   'Nô Bộc':   {acc:'#2F5BEA', txt:'Liên quan cộng sự, nhân viên, bạn bè. Kiểm tra hợp tác và quan hệ hỗ trợ.'},
   'Thiên Di':  {acc:'#5FA8D3', txt:'Vận di chuyển, xuất ngoại. Tốt để đi lại và mở rộng địa bàn.'},
-  'Tật Ách':   {acc:'#C0392B', txt:'Cần chú ý sức khỏe. Sao tốt thì ổn, sao hung thì giữ gìn thể chất.'},
-  'Tài Bạch':  {acc:'#c9a84c', txt:'Tháng quan trọng nhất về tài chính — thu nhập, chi tiêu, đầu tư.'},
-  'Tử Tức':   {acc:'#1E6B3C', txt:'Liên quan con cái, sáng tạo, dự án mới. Tốt cho khởi đầu ý tưởng.'},
+  'Tật Ách':   {acc:'#C46A5E', txt:'Cần chú ý sức khỏe. Sao tốt thì ổn, sao hung thì giữ gìn thể chất.'},
+  'Tài Bạch':  {acc:'#C8A96A', txt:'Tháng quan trọng nhất về tài chính — thu nhập, chi tiêu, đầu tư.'},
+  'Tử Tức':   {acc:'#7FA7A3', txt:'Liên quan con cái, sáng tạo, dự án mới. Tốt cho khởi đầu ý tưởng.'},
   'Phu Thê':   {acc:'#E91E8C', txt:'Tháng vận tình cảm, hôn nhân. Quan trọng nhất cho quan hệ đôi lứa.'},
   'Huynh Đệ': {acc:'#7F8C8D', txt:'Liên quan bạn bè cùng vai, anh em, cạnh tranh ngang hàng.'}
 };
@@ -141,7 +141,7 @@ function luanGiai(){
       const stars=(palace?.majorStars||[]).map(s=>String(s.ten||'')).filter(Boolean).join(', ')||'(vô chính diệu)';
       const score=ls.cungScores?.[cungName];
       const tot=score?Object.values(score).reduce((a,b)=>a+b,0)/6:5;
-      const col=tot>=7?'#1FA3D6':tot>=5?'#2F5BEA':'#C0392B';
+      const col=tot>=7?'#1FA3D6':tot>=5?'#2F5BEA':'#C46A5E';
       const isCur=m===((now.getMonth()+1-1+12)%12); // rough
       const mean=CUNG_MEAN[cungName];
       cards.push(`<div class="thang-card${isCur?' cur':''}">
@@ -181,6 +181,6 @@ TuviForm.render('tuvi-form-container',{onSubmit:luanGiai,submitLabel:'Xem Vận 
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js?v=2"></script>
-<script src="/nav.js?v=35" defer></script>
+<script src="/nav.js?v=36" defer></script>
 </body>
 </html>

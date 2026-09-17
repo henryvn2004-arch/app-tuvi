@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=35" as="script">
+<link rel="preload" href="/nav.js?v=36" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Bói Bài Tây Huyền Bí — Rút Bài & Luận Giải Chuyên Sâu | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Bói Bài Tây Huyền Bí — Rút Bài & Luận Giải Chuyên Sâu | Tử Vi Minh Bảo"/>
@@ -25,7 +25,7 @@
 .pc-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .6s ease}
 .pc-inner.flipped{transform:rotateY(180deg)}
 .pc-front,.pc-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:8px;border:2px solid var(--border)}
-.pc-back{background:repeating-linear-gradient(45deg,#061A2E 0px,#061A2E 4px,#0D3B5E 4px,#0D3B5E 8px);display:flex;align-items:center;justify-content:center}
+.pc-back{background:repeating-linear-gradient(45deg,#0F2A3D 0px,#0F2A3D 4px,#13354F 4px,#13354F 8px);display:flex;align-items:center;justify-content:center}
 .pc-back::after{content:'🂠';font-size:32px;filter:grayscale(1);opacity:.3}
 .pc-front{transform:rotateY(180deg);background:#fff;display:flex;flex-direction:column;padding:6px;position:relative}
 .pc-corner-tl,.pc-corner-br{position:absolute;line-height:1;font-weight:700}
@@ -40,7 +40,7 @@
 /* Topic tabs */
 .topic-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;justify-content:center}
 .topic-tab{padding:6px 14px;font-size:12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;background:var(--bg-soft);color:var(--text-mid);transition:all .15s;font-family:inherit}
-.topic-tab:hover,.topic-tab.active{background:#c9a84c22;border-color:#c9a84c;color:#9A7B3A;font-weight:600}
+.topic-tab:hover,.topic-tab.active{background:#C8A96A22;border-color:#C8A96A;color:#9A7B3A;font-weight:600}
 /* Meaning card */
 .pc-meaning{padding:20px 24px;border-radius:8px;margin-bottom:14px;border:1px solid var(--border-lt)}
 .pcm-header{display:flex;align-items:center;gap:14px;margin-bottom:12px}
@@ -55,9 +55,9 @@
 .pcm-topic-text{font-size:12px;color:var(--text-mid);line-height:1.6}
 .spread-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:24px}
 .spread-btn{padding:10px 20px;background:var(--bg-soft);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit;color:var(--text-mid);transition:all .15s}
-.spread-btn:hover,.spread-btn.active{background:#c9a84c22;border-color:#c9a84c;color:#9A7B3A;font-weight:600}
-.draw-btn{display:block;margin:0 auto;padding:14px 40px;background:var(--navy);color:#c9a84c;border:2px solid #c9a84c;font-size:15px;font-weight:700;border-radius:6px;cursor:pointer;font-family:inherit;transition:all .2s}
-.draw-btn:hover{background:#0D3B5E}
+.spread-btn:hover,.spread-btn.active{background:#C8A96A22;border-color:#C8A96A;color:#9A7B3A;font-weight:600}
+.draw-btn{display:block;margin:0 auto;padding:14px 40px;background:var(--navy);color:#C8A96A;border:2px solid #C8A96A;font-size:15px;font-weight:700;border-radius:6px;cursor:pointer;font-family:inherit;transition:all .2s}
+.draw-btn:hover{background:#13354F}
 @media(max-width:480px){.pcm-topics{grid-template-columns:1fr}.pc-scene{width:66px;height:100px}.pc-scene.lg{width:80px;height:120px}}
 </style>
 <script type="application/ld+json">
@@ -65,7 +65,7 @@
 </script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 
 <div class="hero-tool">
   <div class="page">
@@ -290,11 +290,11 @@ function renderResult() {
             <div class="pcm-topic-label" style="color:${col}"><span class="ic-inline" data-icon-emoji="❤" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">❤</span> Tình Cảm</div>
             <div class="pcm-topic-text">${r.love}</div>
           </div>
-          <div class="pcm-topic" style="border-color:#1E6B3C33;background:#1E6B3C08">
-            <div class="pcm-topic-label" style="color:#1E6B3C"><span class="ic-inline" data-icon-emoji="💼" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💼</span> Sự Nghiệp</div>
+          <div class="pcm-topic" style="border-color:#7FA7A333;background:#7FA7A308">
+            <div class="pcm-topic-label" style="color:#7FA7A3"><span class="ic-inline" data-icon-emoji="💼" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💼</span> Sự Nghiệp</div>
             <div class="pcm-topic-text">${r.career}</div>
           </div>
-          <div class="pcm-topic" style="border-color:#c9a84c33;background:#c9a84c08">
+          <div class="pcm-topic" style="border-color:#C8A96A33;background:#C8A96A08">
             <div class="pcm-topic-label" style="color:#9A7B3A"><span class="ic-inline" data-icon-emoji="💰" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💰</span> Tài Chính</div>
             <div class="pcm-topic-text">${r.finance}</div>
           </div>
@@ -326,7 +326,7 @@ function renderResult() {
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js?v=2"></script>
-<script src="/nav.js?v=35" defer></script>
+<script src="/nav.js?v=36" defer></script>
 <script src="/tool-sources.js?v=1"></script>
 <script>
   if (window.ToolSources) {
