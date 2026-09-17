@@ -24,7 +24,6 @@
 <!-- Chart.js ĐÃ GỠ: chuỗi "Chart" không xuất hiện lần nào trong trang này,
      và không script nào nó nạp có dùng tới. Cùng bệnh với app-luan-giai. -->
 <link rel="stylesheet" href="/tools/tools.css">
-<link rel="stylesheet" href="/theme.css?v=1">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
@@ -35,14 +34,14 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-si
 
 /* HERO */
 .hero-tool{background:var(--navy);padding:52px 0 40px;text-align:center}
-.hero-tool .eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#8BAACC;margin-bottom:14px}
+.hero-tool .eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(249,244,235,.7);margin-bottom:14px}
 .hero-tool h1{font-size:clamp(24px,4vw,40px);color:#fff;margin-bottom:12px;font-weight:400;line-height:1.2}
-.hero-tool h1 em{font-style:italic;color:#c9a84c}
-.hero-tool p{color:#8BAACC;font-size:14px;max-width:560px;margin:0 auto}
+.hero-tool h1 em{font-style:italic;color:#C8A96A}
+.hero-tool p{color:rgba(249,244,235,.7);font-size:14px;max-width:560px;margin:0 auto}
 .hero-stats{display:flex;gap:24px;justify-content:center;margin-top:24px;flex-wrap:wrap}
 .hero-stat-item{text-align:center}
 .hero-stat-item .n{font-size:22px;color:#fff;font-weight:700}
-.hero-stat-item .l{font-size:11px;color:#8BAACC;letter-spacing:1px}
+.hero-stat-item .l{font-size:11px;color:rgba(249,244,235,.7);letter-spacing:1px}
 .stat-div{width:1px;background:rgba(255,255,255,.15)}
 
 /* INTRO */
@@ -62,7 +61,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-si
 .xt-factor-desc{font-size:12px;color:var(--text-lt);line-height:1.5}
 .xt-steps{display:flex;align-items:flex-start;gap:0;flex-wrap:wrap}
 .xt-step{flex:1;min-width:180px;display:flex;gap:14px;padding:4px}
-.xt-step-num{width:36px;height:36px;background:var(--navy);color:#c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.xt-step-num{width:36px;height:36px;background:var(--navy);color:#C8A96A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
 .xt-step-body{flex:1}
 .xt-step-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:6px}
 .xt-step-desc{font-size:13px;color:var(--text-lt);line-height:1.6}
@@ -117,18 +116,18 @@ select.form-input{cursor:pointer}
 .laso-legend{font-size:11px;color:#555;padding:8px 4px;line-height:1.8;border-top:1px solid var(--border-lt);margin-top:4px}
 
 /* PAYWALL CTA */
-.paywall-gate{border:2px solid #c9a84c;border-radius:12px;padding:40px 36px;margin:48px 0 32px;background:linear-gradient(135deg,#fdf6e9 0%,#fff9ef 100%);text-align:center;position:relative;overflow:hidden}
+.paywall-gate{border:2px solid #C8A96A;border-radius:12px;padding:40px 36px;margin:48px 0 32px;background:linear-gradient(135deg,#fdf6e9 0%,#fff9ef 100%);text-align:center;position:relative;overflow:hidden}
 .paywall-gate::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(201,168,76,.03) 10px,rgba(201,168,76,.03) 20px);pointer-events:none}
-.paywall-eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;margin-bottom:12px}
-.paywall-title{font-family:Arial,sans-serif;font-size:26px;font-weight:400;color:#061A2E;margin-bottom:10px;line-height:1.3}
+.paywall-eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#C8A96A;margin-bottom:12px}
+.paywall-title{font-family:Arial,sans-serif;font-size:26px;font-weight:400;color:#0F2A3D;margin-bottom:10px;line-height:1.3}
 .paywall-desc{font-size:15px;color:#666;line-height:1.7;margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto}
 .paywall-features{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto;text-align:left}
 .paywall-feature{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#444;line-height:1.4}
-.paywall-feature::before{content:'✦';color:#c9a84c;flex-shrink:0;font-size:11px;margin-top:1px}
-.paywall-price{font-size:38px;font-weight:700;color:#061A2E;margin-bottom:4px}
+.paywall-feature::before{content:'✦';color:#C8A96A;flex-shrink:0;font-size:11px;margin-top:1px}
+.paywall-price{font-size:38px;font-weight:700;color:#0F2A3D;margin-bottom:4px}
 .paywall-price-note{font-size:12px;color:#999;margin-bottom:24px}
-.btn-paywall{display:inline-flex;align-items:center;gap:10px;padding:16px 40px;background:#061A2E;color:#c9a84c;border:2px solid #c9a84c;border-radius:4px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit;transition:all .2s;text-decoration:none}
-.btn-paywall:hover{background:#c9a84c;color:#061A2E}
+.btn-paywall{display:inline-flex;align-items:center;gap:10px;padding:16px 40px;background:#0F2A3D;color:#C8A96A;border:2px solid #C8A96A;border-radius:4px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit;transition:all .2s;text-decoration:none}
+.btn-paywall:hover{background:#C8A96A;color:#0F2A3D}
 
 /* FOOTER */
 .site-footer{background:#1A1210;color:rgba(255,255,255,.5);padding:36px 32px 24px}
@@ -136,7 +135,7 @@ select.form-input{cursor:pointer}
 .footer-brand{display:flex;align-items:center;gap:10px}
 .footer-brand img{width:36px;height:36px;object-fit:contain;border-radius:5px;opacity:.9}
 .footer-brand-text .name{font-size:14px;font-weight:700;color:rgba(255,255,255,.85);font-family:Georgia,serif}
-.footer-brand-text .zh{font-size:12px;color:#C9A84C}
+.footer-brand-text .zh{font-size:12px;color:#C8A96A}
 .footer-tagline{font-size:12px;margin-top:8px;color:rgba(255,255,255,.35);line-height:1.6}
 .footer-bottom{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,.25)}
 .footer-bottom img{width:20px;height:20px;object-fit:contain;opacity:.3;border-radius:3px}
@@ -147,7 +146,7 @@ select.form-input{cursor:pointer}
 </head>
 <body>
 
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#0F2A3D"></div>
 
 <div class="hero-tool">
   <div class="page">
@@ -212,10 +211,10 @@ select.form-input{cursor:pointer}
         <span style="font-weight:700;color:#555;margin-right:8px">Độ sáng:</span>
         (M) Miếu &nbsp;·&nbsp; (V) Vượng &nbsp;·&nbsp; (Đ) Đắc &nbsp;·&nbsp; (B) Bình hòa &nbsp;·&nbsp; (H) Hãm
         <span style="margin-left:16px;font-weight:700;color:#555">Ngũ hành:</span>
-        <span style="color:#C0392B;font-weight:700">■</span> Hỏa &nbsp;
+        <span style="color:#C46A5E;font-weight:700">■</span> Hỏa &nbsp;
         <span style="color:#7F8C8D;font-weight:700">■</span> Kim &nbsp;
         <span style="color:#1a1a1a;font-weight:700">■</span> Thủy &nbsp;
-        <span style="color:#1E6B3C;font-weight:700">■</span> Mộc &nbsp;
+        <span style="color:#7FA7A3;font-weight:700">■</span> Mộc &nbsp;
         <span style="color:#8B6914;font-weight:700">■</span> Thổ
       </div>
     </div>

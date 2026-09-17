@@ -26,17 +26,17 @@
 .card-inner.flipped{transform:rotateY(180deg)}
 .card-inner.reversed{transform:rotateY(180deg) rotateZ(180deg)}
 .card-face,.card-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
-.card-back{background:linear-gradient(135deg,#061A2E 0%,#0D3B5E 50%,#061A2E 100%);border:2px solid #c9a84c}
-.card-back::after{content:'✦';font-size:28px;color:#c9a84c;opacity:.7}
+.card-back{background:linear-gradient(135deg,#0F2A3D 0%,#13354F 50%,#0F2A3D 100%);border:2px solid #C8A96A}
+.card-back::after{content:'✦';font-size:28px;color:#C8A96A;opacity:.7}
 .card-face{transform:rotateY(180deg);background:#fff;border:2px solid #e8d9b0;flex-direction:column;padding:6px 4px}
 .card-face .cf-num{font-size:9px;font-weight:700;color:#9A7B3A;letter-spacing:1px;text-transform:uppercase;text-align:center}
 .card-face .cf-symbol{font-size:36px;line-height:1.1;margin:4px 0}
-.card-face .cf-name{font-size:9px;font-weight:700;color:#061A2E;text-align:center;line-height:1.3;padding:0 2px}
+.card-face .cf-name{font-size:9px;font-weight:700;color:#0F2A3D;text-align:center;line-height:1.3;padding:0 2px}
 .card-face .cf-suit{font-size:8px;color:#9A7B3A;margin-top:2px}
 .card-face.major .cf-symbol{font-size:42px}
-.card-face.major{background:linear-gradient(180deg,#fdf8f0 0%,#fff 100%);border-color:#c9a84c}
+.card-face.major{background:linear-gradient(180deg,#fdf8f0 0%,#fff 100%);border-color:#C8A96A}
 /* Reversed overlay */
-.card-face.is-reversed::before{content:'↕ Ngược';position:absolute;top:4px;right:4px;font-size:7px;background:#f5c0bc;color:#C0392B;padding:1px 4px;border-radius:2px;font-weight:700}
+.card-face.is-reversed::before{content:'↕ Ngược';position:absolute;top:4px;right:4px;font-size:7px;background:#f5c0bc;color:#C46A5E;padding:1px 4px;border-radius:2px;font-weight:700}
 /* Spread layouts */
 .spread-1{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:24px 0}
 .spread-3{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:24px 0}
@@ -61,8 +61,8 @@ gap:8px;width:fit-content;margin:24px auto}
 .cm-name{font-size:15px;font-weight:700;color:var(--navy)}
 .cm-sub{font-size:11px;color:var(--text-lt);margin-top:2px}
 .cm-pos{font-size:11px;font-weight:700;padding:2px 8px;border-radius:2px;margin-top:4px;display:inline-block}
-.pos-upright{background:#eaf4ed;color:#1E6B3C}
-.pos-reversed{background:#fef0ef;color:#C0392B}
+.pos-upright{background:#eaf4ed;color:#7FA7A3}
+.pos-reversed{background:#fef0ef;color:#C46A5E}
 .cm-body{font-size:14px;color:var(--text-mid);line-height:1.8}
 .cm-keywords{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .cm-kw{font-size:11px;padding:2px 8px;border-radius:2px;background:var(--bg-soft);border:1px solid var(--border-lt);color:var(--text-mid)}
@@ -70,9 +70,9 @@ gap:8px;width:fit-content;margin:24px auto}
 .spread-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:24px}
 .spread-btn{padding:10px 20px;background:var(--bg-soft);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit;color:var(--text-mid);transition:all .15s}
 .spread-btn:hover{background:var(--gold-lt);border-color:var(--gold)}
-.spread-btn.active{background:#c9a84c22;border-color:#c9a84c;color:#9A7B3A;font-weight:600}
-.draw-btn{display:block;margin:0 auto;padding:14px 40px;background:var(--navy);color:#c9a84c;border:2px solid #c9a84c;font-size:15px;font-weight:700;border-radius:6px;cursor:pointer;font-family:inherit;letter-spacing:.5px;transition:all .2s}
-.draw-btn:hover{background:#0D3B5E}
+.spread-btn.active{background:#C8A96A22;border-color:#C8A96A;color:#9A7B3A;font-weight:600}
+.draw-btn{display:block;margin:0 auto;padding:14px 40px;background:var(--navy);color:#C8A96A;border:2px solid #C8A96A;font-size:15px;font-weight:700;border-radius:6px;cursor:pointer;font-family:inherit;letter-spacing:.5px;transition:all .2s}
+.draw-btn:hover{background:#13354F}
 .draw-btn:disabled{opacity:.5;cursor:default}
 /* Shuffle animation */
 @keyframes shuffle{0%{transform:translateX(0) rotate(0)}25%{transform:translateX(-20px) rotate(-5deg)}50%{transform:translateX(20px) rotate(5deg)}75%{transform:translateX(-10px) rotate(-2deg)}100%{transform:translateX(0) rotate(0)}}
@@ -87,7 +87,7 @@ gap:8px;width:fit-content;margin:24px auto}
 </script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#0F2A3D"></div>
 
 <div class="hero-tool">
   <div class="page">
@@ -505,7 +505,7 @@ const SPREADS = {
   ]
 };
 
-const SUIT_COLORS = {major:'#c9a84c',wands:'#E74C3C',cups:'#1455A4',swords:'#7F8C8D',pentacles:'#1E6B3C'};
+const SUIT_COLORS = {major:'#C8A96A',wands:'#E74C3C',cups:'#1455A4',swords:'#7F8C8D',pentacles:'#7FA7A3'};
 const SUIT_VI = {major:'Bí Ẩn Lớn',wands:'Gậy ♦ Lửa',cups:'Cốc ♦ Nước',swords:'Kiếm ♦ Gió',pentacles:'Tiền ♦ Đất'};
 
 let _spread = 1;
@@ -590,7 +590,7 @@ function flipCard(i) {
   const inner = document.getElementById(`inner-${i}`);
   const face = document.getElementById(`face-${i}`);
   if (!inner || !face) return;
-  const col = SUIT_COLORS[c.type] || '#c9a84c';
+  const col = SUIT_COLORS[c.type] || '#C8A96A';
   face.innerHTML = `<div class="cf-num" style="color:${col}">${c.num}</div><div class="cf-symbol" style="color:${col}">${c.sym}</div><div class="cf-name">${c.name}</div><div class="cf-suit">${SUIT_VI[c.type]}</div>`;
   if (c.reversed) {
     face.classList.add('is-reversed');
@@ -605,7 +605,7 @@ function renderMeanings() {
   document.getElementById('readingResult').innerHTML = `
     <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:16px">✦ Luận Giải Từng Lá</div>
     ${_drawn.map((c, i) => {
-      const col = SUIT_COLORS[c.type] || '#c9a84c';
+      const col = SUIT_COLORS[c.type] || '#C8A96A';
       const meaning = c.reversed ? c.rev : c.up;
       return `<div class="card-meaning" style="border-left-color:${col}">
         <div class="cm-header">

@@ -27,7 +27,7 @@
 .pregen-block{background:#F5F5F5;border:1px solid #e0e0e0;border-radius:8px;padding:12px 16px;margin:12px 0}
 .pregen-title{font-size:11px;font-weight:600;color:#1a3a6a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
 .pregen-item{font-size:12px;color:#333;margin:4px 0}
-.pregen-row{font-size:12px;margin:3px 0}.pregen-good{color:#1a6b3a}.pregen-bad{color:#C0392B}
+.pregen-row{font-size:12px;margin:3px 0}.pregen-good{color:#1a6b3a}.pregen-bad{color:#C46A5E}
 .cc-label{font-size:11px;font-weight:600;padding:2px 6px;border-radius:3px;margin-right:6px}
 .cc-quy_cuc{background:#2a1f5e;color:#a78bfa}.cc-phu_cuc{background:#1f3a2a;color:#4ade80}.cc-ban_tien_cuc{background:#1a2535;color:#7bb8f8}.cc-tap_cuc,.cc-than_cu,.cc-menh_co_ban{background:#222;color:#a8b8c8}
 .cc-mota{font-size:11px;color:#555}
@@ -39,15 +39,15 @@
 .score-val{font-size:11px;color:#333;width:28px;text-align:right;flex-shrink:0}
 .radar-btn{padding:5px 12px;font-size:11px;cursor:pointer;background:#1a1a1a;color:#aaa;border:1px solid #333;border-radius:4px;transition:all .15s}
 .radar-btn:hover{background:#252525;color:#ddd}
-.radar-btn.active{background:#c9a84c22;color:#c9a84c;border-color:#c9a84c}
+.radar-btn.active{background:#C8A96A22;color:#C8A96A;border-color:#C8A96A}
 /* Nhóm Thái Tuế */
 .group-card{padding:20px 24px;border-left:4px solid transparent;border-radius:0 8px 8px 0;margin-bottom:16px}
-.group-card.g1{background:#eaf4ed;border-color:#1E6B3C}
+.group-card.g1{background:#eaf4ed;border-color:#7FA7A3}
 .group-card.g2{background:#e8f0fe;border-color:#1455A4}
 .group-card.g3{background:#fff8ec;border-color:#9A7B3A}
 .group-card.g4{background:var(--bg-soft);border-color:var(--border)}
 .group-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:2px;margin-bottom:8px;color:#fff}
-.g1 .group-badge{background:#1E6B3C}.g2 .group-badge{background:#1455A4}.g3 .group-badge{background:#9A7B3A}.g4 .group-badge{background:#666}
+.g1 .group-badge{background:#7FA7A3}.g2 .group-badge{background:#1455A4}.g3 .group-badge{background:#9A7B3A}.g4 .group-badge{background:#666}
 .group-title{font-size:16px;font-weight:600;color:var(--navy);margin-bottom:4px}
 .group-desc{font-size:13px;color:var(--text-mid);line-height:1.7}
 </style>
@@ -56,7 +56,7 @@
 </script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#0F2A3D"></div>
 
 <div class="hero-tool">
   <div class="page">
@@ -196,14 +196,14 @@ function renderChartsPhan1(ls) {
   if (!ls?.cungScores) return;
   const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
   const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-  const METRIC_COLORS = {tiemNang:'#c9a84c',benVung:'#1E6B3C',anToan:'#0E7490',quyNhan:'#7B2FBE',minhBach:'#1455A4',tuongHop:'#B04020'};
+  const METRIC_COLORS = {tiemNang:'#C8A96A',benVung:'#7FA7A3',anToan:'#0E7490',quyNhan:'#7B2FBE',minhBach:'#1455A4',tuongHop:'#B04020'};
   const METRIC_LABELS_VI = {tiemNang:'Tiềm Năng',benVung:'Bền Vững',anToan:'An Toàn',quyNhan:'Quý Nhân',minhBach:'Minh Bạch',tuongHop:'Tương Hợp'};
   const METRIC_DESC = {tiemNang:'Tiềm năng phát đạt',benVung:'Bền vững ổn định',anToan:'An toàn ít rủi ro',quyNhan:'Quý nhân hỗ trợ',minhBach:'Cung rõ ràng',tuongHop:'Hài hòa bản mệnh'};
   const WHEEL_MAP = [
     {name:'Sự nghiệp',cung:'Quan Lộc',color:'#7EC8E3'},{name:'Tài chính',cung:'Tài Bạch',color:'#5FA8D3'},
     {name:'Tình duyên',cung:'Phu Thê',color:'#1FA3D6'},{name:'Sức khỏe',cung:'Tật Ách',color:'#2F5BEA'},
     {name:'Gia đình',cung:'Phụ Mẫu',color:'#233E99'},{name:'Bạn bè',cung:'Nô Bộc',color:'#142B7A'},
-    {name:'Tâm linh',cung:'Phúc Đức',color:'#C0392B'},{name:'Tài sản',cung:'Điền Trạch',color:'#071A2E'},
+    {name:'Tâm linh',cung:'Phúc Đức',color:'#C46A5E'},{name:'Tài sản',cung:'Điền Trạch',color:'#071A2E'},
   ];
   const sc = ls.cungScores;
 
@@ -212,7 +212,7 @@ function renderChartsPhan1(ls) {
   if (barEl) {
     const sorted = CUNG_ORDER.filter(c=>sc[c]).map(c=>[c,METRICS.reduce((s,m)=>s+(sc[c][m]||0),0)]).sort((a,b)=>b[1]-a[1]);
     barEl.innerHTML = sorted.map(([cung,total])=>{
-      const pct=(total/60*100).toFixed(1),col=total>=40?'#1FA3D6':total>=33?'#2F5BEA':'#C0392B';
+      const pct=(total/60*100).toFixed(1),col=total>=40?'#1FA3D6':total>=33?'#2F5BEA':'#C46A5E';
       return `<div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;color:#aaa;width:80px;text-align:right;flex-shrink:0">${cung}</span><div style="flex:1;height:18px;background:#F5F5F5;border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${col};border-radius:3px;display:flex;align-items:center;padding-left:6px"><span style="font-size:10px;color:#fff;font-weight:600">${total.toFixed(1)}</span></div></div><span style="font-size:10px;color:#666;width:32px;text-align:right">${pct}%</span></div>`;
     }).join('');
   }
@@ -251,9 +251,9 @@ function renderChartsPhan1(ls) {
     const data=labels.map(c=>isTotal?METRICS.reduce((s,m)=>s+(_sc[c][m]||0),0):(_sc[c][metric]||0));
     window._radarAllChart.data.labels=labels;
     window._radarAllChart.data.datasets[0].data=data;
-    window._radarAllChart.data.datasets[0].borderColor=isTotal?'#c9a84c':METRIC_COLORS[metric];
-    window._radarAllChart.data.datasets[0].backgroundColor=(isTotal?'#c9a84c':METRIC_COLORS[metric])+'25';
-    window._radarAllChart.data.datasets[0].pointBackgroundColor=isTotal?'#c9a84c':METRIC_COLORS[metric];
+    window._radarAllChart.data.datasets[0].borderColor=isTotal?'#C8A96A':METRIC_COLORS[metric];
+    window._radarAllChart.data.datasets[0].backgroundColor=(isTotal?'#C8A96A':METRIC_COLORS[metric])+'25';
+    window._radarAllChart.data.datasets[0].pointBackgroundColor=isTotal?'#C8A96A':METRIC_COLORS[metric];
     window._radarAllChart.options.scales.r.max=isTotal?60:10;
     window._radarAllChart.options.scales.r.ticks.stepSize=isTotal?10:2;
     window._radarAllChart.options.plugins.title.text=isTotal?'Tổng điểm 12 cung (max 60)':METRIC_LABELS_VI[metric]+' — '+METRIC_DESC[metric];
@@ -264,7 +264,7 @@ function renderChartsPhan1(ls) {
     const labels=CUNG_ORDER.filter(c=>sc[c]);
     window._radarAllChart=new Chart(radarCtx,{
       type:'radar',
-      data:{labels,datasets:[{label:'Tổng điểm',data:labels.map(c=>METRICS.reduce((s,m)=>s+(sc[c][m]||0),0)),borderColor:'#c9a84c',backgroundColor:'#c9a84c25',pointBackgroundColor:'#c9a84c',pointRadius:4,pointHoverRadius:6,borderWidth:2}]},
+      data:{labels,datasets:[{label:'Tổng điểm',data:labels.map(c=>METRICS.reduce((s,m)=>s+(sc[c][m]||0),0)),borderColor:'#C8A96A',backgroundColor:'#C8A96A25',pointBackgroundColor:'#C8A96A',pointRadius:4,pointHoverRadius:6,borderWidth:2}]},
       options:{responsive:true,scales:{r:{min:0,max:60,ticks:{stepSize:10,font:{size:10},color:'#888',backdropColor:'transparent'},pointLabels:{font:{size:12,weight:'600'}},grid:{color:'rgba(0,0,0,0.08)'},angleLines:{color:'rgba(0,0,0,0.1)'}}},plugins:{legend:{display:false},title:{display:true,text:'Tổng điểm 12 cung (max 60 — cao = tốt)',font:{size:13,weight:'500'},padding:{bottom:12}},tooltip:{callbacks:{label:(ctx)=>` ${ctx.label}: ${ctx.raw.toFixed(1)} điểm`}}}}
     });
     const legendEl=document.getElementById('radar-legend');

@@ -18,7 +18,6 @@
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/nav.js?v=35" defer></script>
 <link rel="stylesheet" href="/tools/tools.css">
-<link rel="stylesheet" href="/theme.css?v=1">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;}
@@ -147,7 +146,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 </script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#0F2A3D"></div>
 <div id="nav-placeholder"></div>
 
 <div class="hero">
@@ -371,7 +370,7 @@ const _KHAC={Kim:'Mộc',Mộc:'Thổ',Thổ:'Thủy',Thủy:'Hỏa',Hỏa:'Kim'
 function getRelation(menh,ngay){
   if(menh===ngay)return{code:'binh_hoa',text:'Ngày đồng hành — bình ổn, thuận lợi',icon:'☯️',color:'linear-gradient(135deg,#1a3a2a,#2e5a42)'};
   if(_SINH[ngay]===menh)return{code:'ngay_sinh_menh',text:'Ngày sinh Mệnh ✦ Cực kỳ thuận lợi',icon:'⭐',color:'linear-gradient(135deg,#1a2a10,#2e5010)'};
-  if(_SINH[menh]===ngay)return{code:'menh_sinh_ngay',text:'Mệnh sinh Ngày — hao tổn chút ít, vẫn tốt',icon:'🌙',color:'linear-gradient(135deg,#1a2a40,#0d3b5e)'};
+  if(_SINH[menh]===ngay)return{code:'menh_sinh_ngay',text:'Mệnh sinh Ngày — hao tổn chút ít, vẫn tốt',icon:'🌙',color:'linear-gradient(135deg,#1a2a40,#13354F)'};
   if(_KHAC[ngay]===menh)return{code:'ngay_khac_menh',text:'Ngày khắc Mệnh ✦ Cần hóa giải bằng màu',icon:'⚠️',color:'linear-gradient(135deg,#3a1a10,#6b2510)'};
   return{code:'menh_khac_ngay',text:'Mệnh khắc Ngày — ngày trung bình, cẩn thận',icon:'🔶',color:'linear-gradient(135deg,#3a2a10,#6b4510)'};
 }
@@ -432,7 +431,7 @@ function onFormChange(){
   document.getElementById('previewCanChi').textContent=`${dd}/${mm}/${yy} — ${cc}`;
   const hanhEl=document.getElementById('previewHanh');
   hanhEl.textContent='Hành '+hanh;
-  const colors={Kim:'#888',Mộc:'#2E8B57',Thủy:'#1455A4',Hỏa:'#C0392B',Thổ:'#9A7B3A'};
+  const colors={Kim:'#888',Mộc:'#2E8B57',Thủy:'#1455A4',Hỏa:'#C46A5E',Thổ:'#9A7B3A'};
   hanhEl.style.cssText=`background:${colors[hanh]||'#888'};color:#fff;padding:2px 9px;border-radius:10px;font-weight:600;font-size:11px;`;
   document.getElementById('previewRelation').textContent=rel.text;
   preview.classList.add('show');

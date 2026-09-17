@@ -6,20 +6,21 @@
 /* ── RESET & VARS ─────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --navy:      #061A2E;
-  --navy-mid:  #0D3B5E;
+  --navy:      #0F2A3D;
+  --navy-mid:  #13354F;
   --blue:      #1455A4;
   --text:      #1a1a1a;
   --text-mid:  #444;
   --text-lt:   #666;
-  --border:    #CCCCCC;
+  --border:    #D8D4CB;
   --border-lt: #E8E8E8;
   --bg:        #FFFFFF;
-  --bg-soft:   #F5F4F0;
-  --gold:      #7C5F26;
+  --bg-soft:   #F4F2EC;
+  --gold:      #7C6942;
   --gold-lt:   #F9F4EB;
-  --red:       #C0392B;
-  --green:     #1E6B3C;
+  --gold-bright: #C8A96A;
+  --red:       #C46A5E;
+  --green:     #7FA7A3;
 }
 body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
@@ -28,14 +29,14 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 
 /* ── HERO ──────────────────────────────────────────────────── */
 .hero-tool { background: var(--navy); padding: 52px 0 40px; text-align: center; }
-.hero-tool .eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #8BAACC; margin-bottom: 14px; }
+.hero-tool .eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: rgba(249,244,235,.7); margin-bottom: 14px; }
 .hero-tool h1 { font-size: clamp(22px, 4vw, 38px); color: #fff; margin-bottom: 12px; font-weight: 400; line-height: 1.2; }
-.hero-tool h1 em { font-style: italic; color: #c9a84c; }
-.hero-tool p { color: #8BAACC; font-size: 14px; max-width: 560px; margin: 0 auto; line-height: 1.7; }
+.hero-tool h1 em { font-style: italic; color: #C8A96A; }
+.hero-tool p { color: rgba(249,244,235,.7); font-size: 14px; max-width: 560px; margin: 0 auto; line-height: 1.7; }
 .hero-stats { display: flex; gap: 24px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
 .hero-stat-item { text-align: center; }
 .hero-stat-item .n { font-size: 22px; color: #fff; font-weight: 700; }
-.hero-stat-item .l { font-size: 11px; color: #8BAACC; letter-spacing: 1px; }
+.hero-stat-item .l { font-size: 11px; color: rgba(249,244,235,.7); letter-spacing: 1px; }
 .stat-div { width: 1px; background: rgba(255,255,255,.15); }
 
 /* ── INTRO — .xt-* classes (same as xem-tuoi.html) ─────────── */
@@ -55,7 +56,7 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 .xt-factor-desc { font-size: 12px; color: var(--text-lt); line-height: 1.5; }
 .xt-steps { display: flex; align-items: flex-start; gap: 0; flex-wrap: wrap; }
 .xt-step { flex: 1; min-width: 180px; display: flex; gap: 14px; padding: 4px; }
-.xt-step-num { width: 36px; height: 36px; background: var(--navy); color: #c9a84c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+.xt-step-num { width: 36px; height: 36px; background: var(--navy); color: #C8A96A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
 .xt-step-body { flex: 1; }
 .xt-step-title { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
 .xt-step-desc { font-size: 13px; color: var(--text-lt); line-height: 1.6; }
@@ -63,18 +64,21 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 .xt-note { display: flex; gap: 12px; align-items: flex-start; background: var(--gold-lt); border: 1px solid #e8d9b0; border-radius: 8px; padding: 14px 16px; margin: 32px 0 0; font-size: 13px; color: var(--text-mid); line-height: 1.6; }
 .xt-note-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
 
-/* ── TOOL AVATAR — line-art vàng kim/navy, xem lib/media/tool-avatar-prompt.ts.
+/* ── TOOL AVATAR — thầy/cô webtoon cầm deliverable, xem
+   lib/media/tool-avatar-prompt.ts + master-groups.ts. Nền đổi từ navy sang
+   --gold-lt (kem ấm) để khớp nền kem/be đã bake sẵn trong chính ảnh — nền
+   navy cũ để lộ viền tối quanh ảnh mới (Sprint 6, 2026-09-17).
    .xt-avatar cho box "Công cụ này là gì?" (avatar trái, tên+mô tả phải).
    .hero-avatar cho các trang dùng .hero-tool/.hero thay vì .xt-grid-2 (avatar
    nhỏ, căn giữa, phía trên h1). Ảnh thiếu (404, chưa sinh) tự ẩn qua onerror
    trong HTML — không để lại ô vỡ ảnh. ── */
 .xt-intro-row { display: flex; gap: 24px; align-items: flex-start; margin-bottom: 4px; }
-.xt-avatar { width: 104px; height: 104px; border-radius: 16px; flex-shrink: 0; object-fit: cover; background: var(--navy); }
+.xt-avatar { width: 104px; height: 104px; border-radius: 20px; flex-shrink: 0; object-fit: cover; background: var(--gold-lt); }
 .xt-intro-text { flex: 1; min-width: 0; }
-.hero-avatar { width: 84px; height: 84px; border-radius: 14px; object-fit: cover; background: var(--navy); margin: 0 auto 16px; display: block; }
+.hero-avatar { width: 84px; height: 84px; border-radius: 18px; object-fit: cover; background: var(--gold-lt); margin: 0 auto 16px; display: block; }
 @media (max-width: 480px) {
-  .xt-avatar { width: 72px; height: 72px; border-radius: 12px; }
-  .hero-avatar { width: 64px; height: 64px; margin-bottom: 12px; }
+  .xt-avatar { width: 72px; height: 72px; border-radius: 16px; }
+  .hero-avatar { width: 64px; height: 64px; margin-bottom: 12px; border-radius: 14px; }
 }
 
 /* ── FORM — same as luan-giai.html ─────────────────────────── */
@@ -177,13 +181,13 @@ select.form-input { cursor: pointer; }
 .kl-table tr.highlight td { background: var(--gold-lt); border-left: 3px solid var(--gold); font-weight: 600; }
 
 /* CTA at bottom */
-.tool-cta { border: 2px solid #c9a84c; background: linear-gradient(135deg,#fdf6e9 0%,#fff9ef 100%); padding: 40px 36px; margin: 56px 0; text-align: center; position: relative; overflow: hidden; }
+.tool-cta { border: 2px solid #C8A96A; background: linear-gradient(135deg,#fdf6e9 0%,#fff9ef 100%); padding: 40px 36px; margin: 56px 0; text-align: center; position: relative; overflow: hidden; }
 .tool-cta::before { content:''; position:absolute; inset:0; background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(201,168,76,.03) 10px,rgba(201,168,76,.03) 20px); pointer-events:none; }
-.tool-cta-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #c9a84c; margin-bottom: 12px; }
+.tool-cta-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C8A96A; margin-bottom: 12px; }
 .tool-cta-title { font-size: 24px; font-weight: 400; color: var(--navy); margin-bottom: 10px; line-height: 1.3; }
 .tool-cta-desc { font-size: 14px; color: #666; line-height: 1.7; margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto; }
-.tool-cta-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 36px; background: var(--navy); color: #c9a84c; border: 2px solid #c9a84c; border-radius: 4px; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; font-family: inherit; transition: all .2s; text-decoration: none; }
-.tool-cta-btn:hover { background: #c9a84c; color: var(--navy); }
+.tool-cta-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 36px; background: var(--navy); color: #C8A96A; border: 2px solid #C8A96A; border-radius: 4px; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; font-family: inherit; transition: all .2s; text-decoration: none; }
+.tool-cta-btn:hover { background: #C8A96A; color: var(--navy); }
 
 /* ── FOOTER ─────────────────────────────────────────────────── */
 .site-footer { background: #1A1210; color: rgba(255,255,255,.5); padding: 36px 32px 24px; }
@@ -191,7 +195,7 @@ select.form-input { cursor: pointer; }
 .footer-brand { display: flex; align-items: center; gap: 10px; }
 .footer-brand img { width: 36px; height: 36px; object-fit: contain; border-radius: 5px; opacity: .9; }
 .footer-brand-text .name { font-size: 14px; font-weight: 700; color: rgba(255,255,255,.85); font-family: Georgia,serif; }
-.footer-brand-text .zh   { font-size: 12px; color: #C9A84C; }
+.footer-brand-text .zh   { font-size: 12px; color: #C8A96A; }
 .footer-tagline { font-size: 12px; margin-top: 8px; color: rgba(255,255,255,.35); line-height: 1.6; }
 .footer-bottom { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: rgba(255,255,255,.25); }
 .footer-bottom img { width: 20px; height: 20px; object-fit: contain; opacity: .3; border-radius: 3px; }

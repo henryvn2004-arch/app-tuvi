@@ -25,7 +25,6 @@
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/bat-trach.js?v=2"></script>
 <link rel="stylesheet" href="/tools/tools.css">
-<link rel="stylesheet" href="/theme.css?v=1">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;}
@@ -144,9 +143,9 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 .ti-note{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;background:var(--gold-lt);border-radius:8px;font-size:12px;color:var(--navy);margin-top:10px;line-height:1.5;border:1px solid #e8d9b0;}
 
 /* AI ROOM RENDER */
-.render-btn{width:100%;padding:13px;background:linear-gradient(135deg,#9A7B3A,#c9a84c);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s;}
+.render-btn{width:100%;padding:13px;background:linear-gradient(135deg,#9A7B3A,#C8A96A);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s;}
 .render-btn:hover{opacity:.88;} .render-btn:disabled{opacity:.45;cursor:not-allowed;}
-.render-spinner{width:34px;height:34px;border:3px solid var(--border-lt);border-top-color:#c9a84c;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px;}
+.render-spinner{width:34px;height:34px;border:3px solid var(--border-lt);border-top-color:#C8A96A;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px;}
 .render-ba{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
 .render-ba-col{text-align:center;}
 .render-ba-label{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px;}
@@ -158,7 +157,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 </script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#0F2A3D"></div>
 
 <div class="hero">
   <span style="font-size:44px;display:block;margin-bottom:10px;"><span class="ic" data-icon="compass"></span></span>
@@ -366,7 +365,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 const GUA_DATA=BatTrachTool.guaDataLegacy();
 const DIR_VN={N:'Bắc',NE:'Đông Bắc',E:'Đông',SE:'Đông Nam',S:'Nam',SW:'Tây Nam',W:'Tây',NW:'Tây Bắc',C:'Trung Tâm'};
 const BAGUA=[['SE','S','SW'],['E','C','W'],['NE','N','NW']];
-const TIER_BG={best:'#1E6B3C',good:'#2D8E52',ok:'#5B8A3C',neutral:'#6B7280',warn:'#B45309',bad:'#B91C1C',worst:'#7F1D1D'};
+const TIER_BG={best:'#7FA7A3',good:'#2D8E52',ok:'#5B8A3C',neutral:'#6B7280',warn:'#B45309',bad:'#B91C1C',worst:'#7F1D1D'};
 const TIER_CLR={best:'#86EFAC',good:'#BBF7D0',ok:'#D9F99D',neutral:'#E5E7EB',warn:'#FCD34D',bad:'#FCA5A5',worst:'#FECACA'};
 
 function calcGua(y,g){return BatTrachTool.getCungMenh(y,g==='male'?'nam':'nu');}

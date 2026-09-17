@@ -22,10 +22,10 @@
 :root{--pro-accent:#8B1A1A;--pro-accent-lt:#FBEFEF}
 
 /* Hero */
-.pro-hero{background:linear-gradient(135deg,#061A2E 0%,#0D3B5E 100%);color:#fff;padding:48px 24px 40px;margin-bottom:0;position:relative;overflow:hidden}
+.pro-hero{background:linear-gradient(135deg,#0F2A3D 0%,#13354F 100%);color:#fff;padding:48px 24px 40px;margin-bottom:0;position:relative;overflow:hidden}
 .pro-hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at 20% 20%,rgba(154,123,58,.15) 0%,transparent 50%);pointer-events:none}
 .pro-hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:1}
-.pro-badge{display:inline-block;padding:4px 12px;background:var(--gold);color:#061A2E;font-size:10px;font-weight:800;letter-spacing:2px;border-radius:4px;margin-bottom:16px;text-transform:uppercase}
+.pro-badge{display:inline-block;padding:4px 12px;background:var(--gold);color:#0F2A3D;font-size:10px;font-weight:800;letter-spacing:2px;border-radius:4px;margin-bottom:16px;text-transform:uppercase}
 .pro-hero h1{font-family:'Noto Serif',Georgia,serif;font-size:36px;line-height:1.2;margin:0 0 14px;font-weight:700}
 .pro-hero .sub{font-size:16px;line-height:1.6;color:#e8d9b8;margin:0;max-width:640px}
 
@@ -70,7 +70,7 @@
 /* Task progress */
 .task-progress{display:flex;gap:6px;margin:16px 0 20px}
 .task-pip{flex:1;height:6px;background:var(--border-lt);border-radius:3px;position:relative;overflow:hidden}
-.task-pip.active{background:#C0392B}
+.task-pip.active{background:#C46A5E}
 .task-pip.done{background:var(--green)}
 
 /* Task card */
@@ -81,23 +81,23 @@
 .task-time{font-size:12px;color:var(--text-lt);font-weight:600}
 .task-title{font-family:'Noto Serif',serif;font-size:20px;color:var(--navy);margin:0 0 10px;font-weight:700}
 .task-instruction{font-size:13px;color:var(--text-mid);margin-bottom:18px;line-height:1.6;padding:10px 14px;background:rgba(255,255,255,.7);border-left:3px solid var(--gold);border-radius:4px}
-.task-text{font-family:'Noto Serif',serif;font-size:20px;line-height:1.8;color:#061A2E;text-align:center;padding:20px 10px;background:#fff;border-radius:8px;border:1px solid var(--border-lt);margin-bottom:16px;min-height:80px;white-space:pre-line}
+.task-text{font-family:'Noto Serif',serif;font-size:20px;line-height:1.8;color:#0F2A3D;text-align:center;padding:20px 10px;background:#fff;border-radius:8px;border:1px solid var(--border-lt);margin-bottom:16px;min-height:80px;white-space:pre-line}
 .task-text.vowel{font-size:72px;letter-spacing:16px;font-weight:700;color:var(--navy)}
 
 /* Record controls */
 .record-wrap{text-align:center;padding:14px 0 6px}
 .btn-record{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;background:var(--navy);color:#fff;border:none;border-radius:50px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.5px}
-.btn-record:hover{background:#0D3B5E;transform:scale(1.02)}
-.btn-record.recording{background:#C0392B;animation:pulse-red 1.2s ease-in-out infinite}
+.btn-record:hover{background:#13354F;transform:scale(1.02)}
+.btn-record.recording{background:#C46A5E;animation:pulse-red 1.2s ease-in-out infinite}
 .btn-record.processing{background:#888;cursor:not-allowed;animation:none}
 .btn-record:disabled{opacity:.6;cursor:not-allowed}
 @keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,0.4)}50%{box-shadow:0 0 0 12px rgba(192,57,43,0)}}
 
-.countdown-badge{display:none;font-size:56px;font-weight:700;color:#C0392B;margin:8px 0;font-family:'Noto Serif',Georgia,serif}
+.countdown-badge{display:none;font-size:56px;font-weight:700;color:#C46A5E;margin:8px 0;font-family:'Noto Serif',Georgia,serif}
 .countdown-badge.visible{display:block}
 .timer-bar-wrap{height:4px;background:var(--border-lt);border-radius:2px;margin:12px 24px;overflow:hidden;display:none}
 .timer-bar-wrap.visible{display:block}
-.timer-bar{height:100%;background:#C0392B;border-radius:2px;width:0%;transition:width .1s linear}
+.timer-bar{height:100%;background:#C46A5E;border-radius:2px;width:0%;transition:width .1s linear}
 .waveform-wrap{margin:12px 0;display:none}
 .waveform-wrap.visible{display:block}
 #waveCanvas{width:100%;height:60px;background:#fff;border:1px solid var(--border-lt);border-radius:6px;display:block}
@@ -133,7 +133,7 @@
 .analyze-wrap{text-align:center;margin:20px 0;display:none}
 .analyze-wrap.visible{display:block}
 .btn-analyze{padding:16px 40px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.5px}
-.btn-analyze:hover{background:#0D3B5E}
+.btn-analyze:hover{background:#13354F}
 .btn-analyze:disabled{background:#888;cursor:not-allowed}
 
 /* Results */
@@ -164,7 +164,7 @@
 </head>
 <body>
 <div id="nav-placeholder"></div>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<div id="nav-ph" style="height:60px;background:#0F2A3D"></div>
 
 <main>
   <!-- HERO -->
@@ -556,7 +556,7 @@ async function recordBuffer(durationSec) {
     const w = waveCanvas.width, h = waveCanvas.height;
     ctx.fillStyle = '#fff';
     ctx.fillRect(0,0,w,h);
-    ctx.strokeStyle = '#C0392B';
+    ctx.strokeStyle = '#C46A5E';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     const sliceW = w / waveData.length;
@@ -1328,14 +1328,14 @@ async function _doThanhTuongAnalyze() {
             resultsPanel.innerHTML = renderMarkdown(content);
           }
           if (json.err) {
-            resultsPanel.innerHTML += '<p style="color:#C0392B;margin-top:14px">Lỗi stream: ' + json.err + '</p>';
+            resultsPanel.innerHTML += '<p style="color:#C46A5E;margin-top:14px">Lỗi stream: ' + json.err + '</p>';
           }
         } catch(_) { /* ignore malformed chunks */ }
       }
     }
 
     if (!content) {
-      resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">Không nhận được nội dung trả về. Thử lại.</p>';
+      resultsPanel.innerHTML = '<p style="color:#C46A5E;padding:20px;text-align:center">Không nhận được nội dung trả về. Thử lại.</p>';
     } else {
       _saveTuongReading('thanh-tuong-pro', content, null, null);
     }
@@ -1344,7 +1344,7 @@ async function _doThanhTuongAnalyze() {
     analyzeBtn.disabled = false;
   } catch (err) {
     console.error(err);
-    resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">Lỗi: ' + (err.message || err) + '</p>';
+    resultsPanel.innerHTML = '<p style="color:#C46A5E;padding:20px;text-align:center">Lỗi: ' + (err.message || err) + '</p>';
     analyzeBtn.textContent = 'Thử Lại';
     analyzeBtn.disabled = false;
   }
