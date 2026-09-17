@@ -347,7 +347,7 @@ window.SHELL_INTRO={key:'nguoi-khac'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=35"></script>
+<script src="/tuvi-paywall.js?v=36"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=38" data-icons-only></script>
@@ -644,6 +644,7 @@ async function _runAnonPreview(b, self, qh, viec) {
     renderMetaHead(data);
     renderProse(data);      // chỉ tinhKhi/chamNoc có mặt; các nhánh `if` khác tự trượt
     renderMetaBasis(data);  // cơ sở lá số MIỄN PHÍ, dựng rõ — không còn làm mờ
+    _nkDummy=await _nkDummyPromise();
     _nkLockBlocks(data);
     mountHook(data);
     document.getElementById('card').style.display = 'block';
@@ -727,10 +728,32 @@ var NK_LOCKED_BLOCKS = [
   ['endBlock', false],
 ];
 
-/** Dựng khung rỗng + ô giữ chỗ cho mọi khối đang khoá.
- *  `keHoachBlock` BỎ HẲN khi người hỏi không nêu việc cụ thể (`hieu-them`) —
- *  bản thật cũng ẩn khối đó, để nó ở đây là hứa thứ trả tiền xong cũng không
- *  có. `withBlock` BỎ HẲN khi không nhập lá số của người hỏi, cùng lý do. */
+// Văn MẪU (sample, `scripts/gen-tool-sample.mjs`) cho các khối đang khoá —
+// Pha 4 (2026-09-17, cùng lượt app-luan-giai.html/app-day-con.html): thay ô
+// giữ chỗ rỗng bằng chính văn AI thật của một người MẪU CỐ ĐỊNH, làm mờ bằng
+// `.tpw-real-lock`. `withBlock` (voiBan) vắng khỏi map: bản mẫu không có lá
+// số người hỏi (xem chú thích buildFullPayload trong gen-tool-sample.mjs) —
+// tự rơi về ô giữ chỗ cũ.
+function _nkDummyPromise(){ return TuviPaywall.loadSampleJson('/samples/nguoi-khac-dummy.json'); }
+var _nkDummy=null;
+_nkDummyPromise();
+var NK_DUMMY_FIELD = { keHoachBlock:'keHoach', coiTrongBlock:'coiTrong', timeBlock:'thoiDiem', endBlock:'motCau' };
+function _nkDummyBodyHtml(blockId){
+  if(!_nkDummy) return '';
+  if(blockId==='sayBlock'){
+    var html=_mucHtml(_nkDummy.nenNoi)+_mucHtml(_nkDummy.tranhNoi);
+    return html?TuviPaywall.sampleBlurHtml(html):'';
+  }
+  var field=NK_DUMMY_FIELD[blockId];
+  var text=field&&_nkDummy[field];
+  return text?TuviPaywall.sampleBlurHtml('<p>'+esc(text)+'</p>'):'';
+}
+
+/** Dựng khung rỗng + ô giữ chỗ (hoặc văn mẫu mờ, nếu có) cho mọi khối đang
+ *  khoá. `keHoachBlock` BỎ HẲN khi người hỏi không nêu việc cụ thể
+ *  (`hieu-them`) — bản thật cũng ẩn khối đó, để nó ở đây là hứa thứ trả tiền
+ *  xong cũng không có. `withBlock` BỎ HẲN khi không nhập lá số của người hỏi,
+ *  cùng lý do. */
 function _nkLockBlocks(data) {
   var viec = data.viec || {};
   NK_LOCKED_BLOCKS.forEach(function (b, i) {
@@ -741,8 +764,9 @@ function _nkLockBlocks(data) {
     var body = block.querySelector('.res-block-body');
     if (!body || body.querySelector('.tpw-ph-host')) return;
     body.classList.add('tpw-locked');
+    var sample = _nkDummyBodyHtml(b[0]);
     body.insertAdjacentHTML('beforeend',
-      '<div class="tpw-ph-host">' + TuviPaywall.placeholderHtml(i, b[1]) + '</div>');
+      '<div class="tpw-ph-host">' + (sample || TuviPaywall.placeholderHtml(i, b[1])) + '</div>');
     var titleEl = block.querySelector('.res-block-title');
     if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
     block.style.display = 'block';

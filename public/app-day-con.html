@@ -471,7 +471,7 @@ window.SHELL_INTRO={key:'day-con'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=35"></script>
+<script src="/tuvi-paywall.js?v=36"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=38" data-icons-only></script>
@@ -666,10 +666,34 @@ var DC_LOCKED_BLOCKS = [
   ['changBlock', true], ['withBlock', false], ['endBlock', false],
 ];
 
-/** Dựng khung rỗng + ô giữ chỗ cho mọi khối đang khoá.
- *  `coLaSoChaMe=false` thì BỎ HẲN "Hai Bên Với Nhau" — bản thật cũng ẩn khối đó
- *  khi không có lá số cha/mẹ, nên để nó ở đây là hứa một thứ trả tiền xong
- *  cũng không có. */
+// Văn MẪU (sample, `scripts/gen-tool-sample.mjs`) cho các khối AI-VĂN đang
+// khoá — Pha 4 (2026-09-17, cùng lượt app-luan-giai.html): thay ô giữ chỗ
+// rỗng bằng chính văn AI thật của một bé MẪU CỐ ĐỊNH (khác bé đang xem), làm
+// mờ bằng `.tpw-real-lock`. CHỈ áp cho field AI-VĂN có trong dummy JSON —
+// `trucBlock`/`khieuBlock`/`hdBlock` là DỮ LIỆU ENGINE (điểm số) của CHÍNH bé
+// đang xem, không phải văn AI, KHÔNG có trong dummy JSON và vẫn giữ ô giữ chỗ
+// rỗng cũ (đúng luật "che hết luôn" — không lộ điểm số thật). `withBlock`
+// (voiChaMe) cũng vắng: bản mẫu không có lá số cha/mẹ (xem chú thích
+// buildFullPayload trong gen-tool-sample.mjs).
+function _dcDummyPromise(){ return TuviPaywall.loadSampleJson('/samples/day-con-dummy.json'); }
+var _dcDummy=null;
+_dcDummyPromise();
+var DC_DUMMY_FIELD = { dhBlock:'dinhHuong', loBlock:'loLang', howCardsBlock:'vaoBangGi', changBlock:'changNay', endBlock:'motCau' };
+function _dcDummyBodyHtml(blockId){
+  if(!_dcDummy) return '';
+  if(blockId==='doBlock'){
+    var html=_mucHtml(_dcDummy.nenLam)+_mucHtml(_dcDummy.tranhLam);
+    return html?TuviPaywall.sampleBlurHtml(html):'';
+  }
+  var field=DC_DUMMY_FIELD[blockId];
+  var text=field&&_dcDummy[field];
+  return text?TuviPaywall.sampleBlurHtml('<p>'+esc(text)+'</p>'):'';
+}
+
+/** Dựng khung rỗng + ô giữ chỗ (hoặc văn mẫu mờ, nếu có) cho mọi khối đang
+ *  khoá. `coLaSoChaMe=false` thì BỎ HẲN "Hai Bên Với Nhau" — bản thật cũng ẩn
+ *  khối đó khi không có lá số cha/mẹ, nên để nó ở đây là hứa một thứ trả tiền
+ *  xong cũng không có. */
 function _dcLockBlocks(coLaSoChaMe) {
   DC_LOCKED_BLOCKS.forEach(function (b, i) {
     if (b[0] === 'withBlock' && !coLaSoChaMe) return;
@@ -678,8 +702,9 @@ function _dcLockBlocks(coLaSoChaMe) {
     var body = block.querySelector('.res-block-body');
     if (!body || body.querySelector('.tpw-ph-host')) return;
     body.classList.add('tpw-locked');
+    var sample = _dcDummyBodyHtml(b[0]);
     body.insertAdjacentHTML('beforeend',
-      '<div class="tpw-ph-host">' + TuviPaywall.placeholderHtml(i, b[1]) + '</div>');
+      '<div class="tpw-ph-host">' + (sample || TuviPaywall.placeholderHtml(i, b[1])) + '</div>');
     var titleEl = block.querySelector('.res-block-title');
     if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
     block.style.display = 'block';
@@ -745,6 +770,7 @@ async function _runAnonPreview(b, self, lo) {
       document.getElementById('basisMore').style.display = 'none';
       document.getElementById('basisBlock').style.display = 'block';
     }
+    _dcDummy=await _dcDummyPromise();
     _dcLockBlocks(!!self);
     _syncSections();
     mountHook(data);

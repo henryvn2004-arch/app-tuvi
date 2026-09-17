@@ -60,6 +60,15 @@ async function stubApis(page: Page, opts?: { blockPreview?: boolean }) {
     body: JSON.stringify([{ package_id: '50', credits: 250, amount_vnd: 199000, label: 'Khởi Đầu' }]) }));
   await page.route('**/api/search', (r) =>
     r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ docs: '' }) }));
+  // Pha 4 (2026-09-17, hard-paywall.spec.ts): phần khoá nay hiện văn MẪU thật
+  // bị blur (`buildLockedPlaceholderHtml` → `_laSoDummy`) thay vì vạch xám —
+  // stub CỐ ĐỊNH, không phụ thuộc `public/samples/laso-dummy.json` thật (nội
+  // dung đó do LLM sinh, đổi theo lượt gen-tool-sample.mjs).
+  const DUMMY_PHAN = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+  const laSoDummy: Record<string, string> = {};
+  for (const p of DUMMY_PHAN) laSoDummy[String(p)] = `**Câu mẫu phần ${p}**\n\nVăn mẫu của lá số MẪU cho phần ${p}, đủ dài để không rỗng.`;
+  await page.route('**/samples/laso-dummy.json', (r) =>
+    r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(laSoDummy) }));
   await page.route('**/api/payment**', (r) =>
     r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ hasAccess: false, balance: 0 }) }));
   await page.route('**/api/track**', (r) => r.fulfill({ status: 200, body: '{}' }));
@@ -130,7 +139,7 @@ test('form là màn hình đầu khi vào trang', async ({ page }) => {
   await expect(page.locator('#sampCta')).toHaveCount(0);
 });
 
-test('phần 1-2 sinh chữ THẬT, phần 3+ chỉ còn ô giữ chỗ', async ({ page }) => {
+test('phần 1-2 sinh chữ THẬT, phần 3+ hiện văn MẪU bị blur', async ({ page }) => {
   await stubApis(page);
   await run(page);
   await expect(page.locator('#claude-content-1')).toContainText('Chữ AI của phần 1', { timeout: 15000 });
@@ -141,11 +150,24 @@ test('phần 1-2 sinh chữ THẬT, phần 3+ chỉ còn ô giữ chỗ', async 
   expect(parts).toEqual([1, 2]);
   expect(calls(page)[0].anonId).toBeTruthy();
 
-  // Phần 3+: ô giữ chỗ, KHÔNG chữ thật nào lọt vào DOM.
-  await expect(page.locator('#sec-3 .tpw-ph')).toBeVisible();
+  // Phần 3+: văn MẪU (từ /samples/laso-dummy.json, stub ở trên) bị mờ bằng
+  // .tpw-real-lock — KHÔNG còn vạch xám .tpw-ph, và KHÔNG phải dữ liệu THẬT
+  // của chính lá số vừa nhập (điểm số, tên "Kiểm Thử").
+  await expect(page.locator('#sec-3 .tpw-real-lock')).toBeVisible();
+  await expect(page.locator('#sec-3 .tpw-real-lock')).toContainText('Câu mẫu phần 3');
   const sec3 = await page.locator('#sec-3 .card').innerText();
   expect(sec3).not.toMatch(/\/10/);
-  expect(await page.locator('#lgBody .tpw-ph').count()).toBe(11);
+  expect(sec3).not.toContain('Kiểm Thử');
+  expect(await page.locator('#lgBody .tpw-real-lock').count()).toBe(11);
+  expect(await page.locator('#lgBody .tpw-ph').count()).toBe(0);
+});
+
+test('văn mẫu chưa nạp được (lỗi mạng) → về đúng ô giữ chỗ cũ, không chặn trang', async ({ page }) => {
+  await stubApis(page);
+  await page.route('**/samples/laso-dummy.json', (r) => r.fulfill({ status: 500, body: 'err' }));
+  await run(page);
+  await expect(page.locator('#sec-3 .tpw-ph')).toBeVisible();
+  expect(await page.locator('#lgBody .tpw-real-lock').count()).toBe(0);
 });
 
 test('tường + câu căng thẳng đứng NGAY DƯỚI phần 2', async ({ page }) => {
@@ -200,5 +222,6 @@ test('trả tiền xong: KHÔNG sinh lại phần đã đọc free, tường kh�
   await expect(page.locator('#lgTension')).toHaveCount(1);
   await expect(page.locator('#claude-content-1')).toContainText('Chữ AI của phần 1');
   await expect(page.locator('#claude-content-2')).toContainText('Chữ AI của phần 2');
-  await expect(page.locator('#lgBody .tpw-ph')).toHaveCount(0);    // hết ô giữ chỗ
+  await expect(page.locator('#lgBody .tpw-ph')).toHaveCount(0);          // hết ô giữ chỗ
+  await expect(page.locator('#lgBody .tpw-real-lock')).toHaveCount(0);   // hết văn mẫu bị mờ
 });

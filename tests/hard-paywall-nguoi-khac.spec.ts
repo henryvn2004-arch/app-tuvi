@@ -88,6 +88,15 @@ async function stubApis(page: Page, opts?: { previewBody?: object }) {
   await page.route('**/api/payment**', (r) => r.fulfill({ status: 200, contentType: 'application/json',
     body: JSON.stringify({ hasAccess: false, balance: 0 }) }));
   await page.route('**/api/track**', (r) => r.fulfill({ status: 200, body: '{}' }));
+  // Pha 4 (2026-09-17): 5 khối (keHoach/coiTrong/nenNoi+tranhNoi/thoiDiem/
+  // motCau — có văn AI trong dummy JSON) nay hiện văn MẪU bị blur thay vì
+  // vạch xám rỗng — stub CỐ ĐỊNH, không phụ thuộc file thật.
+  await page.route('**/samples/nguoi-khac-dummy.json', (r) => r.fulfill({ status: 200, contentType: 'application/json',
+    body: JSON.stringify({
+      keHoach: 'Văn mẫu kế hoạch cho người MẪU.', coiTrong: 'Văn mẫu coi trọng cho người MẪU.',
+      nenNoi: [{ viec: 'Việc mẫu nên nói', vidu: 'Ví dụ mẫu' }], tranhNoi: [{ viec: 'Việc mẫu tránh nói', vidu: '' }],
+      thoiDiem: 'Văn mẫu thời điểm cho người MẪU.', motCau: 'Văn mẫu một câu cho người MẪU.', voiBan: '',
+    }) }));
 
   await page.route('**/api/nguoi-khac**', async (r) => {
     const url = new URL(r.request().url());
@@ -166,17 +175,19 @@ test('khối khoá: keHoach có tiêu đề dù chưa có chữ, coiTrong tách 
 
   await expect(page.locator('#keHoachBlock')).toBeVisible();
   await expect(page.locator('#keHoachTitle')).toContainText('Sắp nhờ họ một việc');
-  await expect(page.locator('#keHoachBlock .tpw-ph')).toBeVisible();
+  // Pha 4 (2026-09-17): có văn AI trong dummy JSON (stub ở trên) → văn MẪU bị
+  // blur (`.tpw-real-lock`), không còn vạch xám `.tpw-ph`.
+  await expect(page.locator('#keHoachBlock .tpw-real-lock')).toContainText('Văn mẫu kế hoạch');
   await expect(page.locator('#keHoachBlock .tpw-lock-badge')).toBeVisible();
 
   await expect(page.locator('#coiTrongBlock')).toBeVisible();
-  await expect(page.locator('#coiTrongBlock .tpw-ph')).toBeVisible();
+  await expect(page.locator('#coiTrongBlock .tpw-real-lock')).toContainText('Văn mẫu coi trọng');
   // coiTrong không còn nằm giữa hai đoạn free trong `proseTop`.
   await expect(page.locator('#proseTop #coiTrong')).toHaveCount(0);
 
-  await expect(page.locator('#sayBlock .tpw-ph')).toBeVisible();
-  await expect(page.locator('#timeBlock .tpw-ph')).toBeVisible();
-  await expect(page.locator('#endBlock .tpw-ph')).toBeVisible();
+  await expect(page.locator('#sayBlock .tpw-real-lock')).toContainText('Việc mẫu nên nói');
+  await expect(page.locator('#timeBlock .tpw-real-lock')).toContainText('Văn mẫu thời điểm');
+  await expect(page.locator('#endBlock .tpw-real-lock')).toContainText('Văn mẫu một câu');
   // Không nhập lá số của người hỏi → withBlock ẩn hẳn, không hứa suông.
   await expect(page.locator('#withBlock')).toBeHidden();
 
@@ -209,7 +220,7 @@ test('cầu dao chặn → lùi về khung cũ, không màn hình lỗi', async 
 test('trả tiền xong: ô giữ chỗ biến mất, nội dung thật thế chỗ', async ({ page }) => {
   await stubApis(page);
   await run(page, 'nho-viec');
-  await expect(page.locator('#keHoachBlock .tpw-ph')).toBeVisible();
+  await expect(page.locator('#keHoachBlock .tpw-real-lock')).toBeVisible();
 
   await page.evaluate(() => (window as unknown as { _doGenerate(f: boolean, qh: string, viec: string): Promise<void> })
     ._doGenerate(false, 'sep', 'nho-viec'));

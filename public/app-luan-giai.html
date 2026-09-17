@@ -424,7 +424,7 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tools-shared/nguoi-than.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=35"></script>
+<script src="/tuvi-paywall.js?v=36"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
@@ -538,18 +538,32 @@ function wsStepsSet(n){
     else if(i+1===n) steps[i].classList.add('active');
   }
 }
-function doLuan(){
+// Văn MẪU (sample, `scripts/gen-tool-sample.mjs`) cho phần ĐANG KHOÁ — thay ô
+// giữ chỗ trống bằng chính văn AI thật của một lá số MẪU CỐ ĐỊNH (khác lá số
+// khách vừa nhập), làm mờ bằng `.tpw-real-lock` (xem `TuviPaywall.sampleBlurHtml`).
+// Henry 2026-09-17: "dùng chính sample thật để làm nội dung blur, nhìn thật
+// hơn" — thay cho vạch xám của hard paywall cũ (2026-09-06). `buildLockedPlaceholderHtml`
+// bên dưới đọc map này theo `phan`; rỗng/lỗi mạng thì tự rơi về `TuviPaywall.placeholderHtml`
+// (vạch xám), KHÔNG chặn trang. `doLuan()` await lời gọi này TRƯỚC `renderLuan`
+// để lần render ĐẦU TIÊN đã có sẵn văn mẫu, không cần vẽ lại lần hai.
+function _lasoDummyPromise(){ return TuviPaywall.loadSampleJson('/samples/laso-dummy.json'); }
+var _laSoDummy=null; // { "3": "văn mẫu phần 3", ... } — điền bởi doLuan(), đọc bởi buildLockedPlaceholderHtml
+_lasoDummyPromise(); // mồi fetch NGAY lúc nạp trang — tới lúc khách bấm nút thường đã có sẵn trong cache
+async function doLuan(){
   var btn=document.getElementById('btnGo');
   var namxem=parseInt(document.getElementById('inpNamxem').value)||new Date().getFullYear();
   var fdIn=TuviForm.getData();
   var name=fdIn.hoten, gioitinh=fdIn.gioitinh, dd=fdIn.ngay, mm=fdIn.thang, yyyy=fdIn.nam, hh=fdIn.gioHour, pp=fdIn.gioPhut, gioAmIdx=fdIn.gioIdx;
   if(!dd||!mm||!yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
+  // Khoá nút NGAY (trước await) — chặn double-submit trong lúc chờ văn mẫu
+  // (thường đã có sẵn trong cache, xem `_lasoDummyPromise()` mồi ở trên).
+  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang luận…';
+  _laSoDummy=await _lasoDummyPromise();
   // Lưu lại NGAY để `?tpwResume=1` (quay về sau khi nạp Lượng, xem IIFE
   // `LG_RESUME_KEY` ở đầu file) khôi phục được đúng form này mà không cần bấm
   // "Luận giải" lần hai — ghi mỗi lượt lập lá số thành công, không riêng lượt
   // sắp hết Lượng, vì lúc gõ form ta chưa biết trước lượt nào sẽ hết Lượng.
   try{ sessionStorage.setItem(LG_RESUME_KEY, JSON.stringify({fd:fdIn, namxem:namxem, subjectLabel:_subjectLabel||null})); }catch(e){ /* ignore */ }
-  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang luận…';
   try{
     var gioChi=CHI[gioAmIdx];
     var conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
@@ -843,7 +857,9 @@ function lockedIllusHtml(){
 function buildPhanSection(phan,label,ls,locked){
   var bodyHtml,tag;
   if(locked){
-    // Hard paywall: ô giữ chỗ, KHÔNG một chữ thật nào. Xem `buildLockedPlaceholderHtml`.
+    // Hard paywall: KHÔNG một chữ thật nào của CHÍNH lá số này. Pha 4
+    // (2026-09-17): nội dung mờ giờ là văn MẪU của một lá số KHÁC (thật, không
+    // phải vạch giả) — xem `buildLockedPlaceholderHtml`.
     bodyHtml=buildLockedPlaceholderHtml(phan);
     tag=TuviPaywall.lockBadge('Khoá');
   }else{
@@ -900,19 +916,27 @@ function buildPhanSection(phan,label,ls,locked){
 // Henry chốt: "che hết luôn, đừng vừa hiện vừa che sẽ confuse user" — người
 // đọc không tách được đâu là phần mình đang có, đâu là phần chưa mua, nên vừa
 // hụt hẫng vừa mất luôn lý do trả tiền (đọc xong một dòng thật thì cảm giác
-// "chắc phần còn lại cũng cỡ vậy").
+// "chắc phần còn lại cũng cỡ vậy"). Luật này VẪN ĐÚNG cho dữ liệu của CHÍNH lá
+// số khách vừa nhập — xem chú thích `KHÔNG nhận ls` bên dưới, chưa đổi.
 //
 // Cái móc nay nằm ở ĐÚNG MỘT chỗ: hai phần đầu được model viết THẬT, đọc trọn
 // vẹn, cộng một câu chốt chỉ đích danh cung yếu nhất (`_tensionLine`). Từ phần
-// 3 trở đi chỉ còn hình dạng.
+// 3 trở đi chỉ còn hình dạng — hoặc từ Pha 4, văn của một lá số MẪU KHÁC.
 //
 // KHÔNG nhận `ls`: nhận vào là sớm muộn cũng có người nhét một con số thật vào
 // đây cho "đỡ trống", và thế là quay về đúng bản cũ. Chữ ký hàm là chỗ chặn
-// việc đó rẻ nhất.
+// việc đó rẻ nhất — Pha 4 (2026-09-17) chỉ thêm `_laSoDummy` (văn mẫu, đọc từ
+// module scope, không phải tham số) để hiện thứ TRÔNG như đã bị khoá thay vì ô
+// trống, KHÔNG mở lại đường nhét `ls` thật vào hàm này.
 function buildLockedPlaceholderHtml(phan){
-  // Uỷ quyền cho `TuviPaywall.placeholderHtml` — bản chép riêng ở trang này đã
-  // gỡ khi app-day-con cần đúng thứ đó (Pha 3). Hai bản chép tay của cùng một
-  // thứ là đường trôi lệch quen thuộc của repo này.
+  // Pha 4 (2026-09-17) — có văn MẪU thật (`_laSoDummy`, nạp bởi doLuan() TRƯỚC
+  // khi gọi renderLuan) thì dựng qua ĐÚNG pipeline hiển thị thật (renderMarkdown,
+  // cùng hàm claude-content dùng) rồi mờ bằng .tpw-real-lock — "trông có thật"
+  // thay vì vạch xám. `_laSoDummy` luôn là văn của lá số MẪU CỐ ĐỊNH, không
+  // phải của khách đang xem — xem chú thích ở TuviPaywall.sampleBlurHtml.
+  var sample=_laSoDummy&&(_laSoDummy[phan]||_laSoDummy[String(phan)]);
+  if(sample) return TuviPaywall.sampleBlurHtml(renderMarkdown(sample));
+  // Chưa nạp được (mạng lỗi/404) → về đúng ô giữ chỗ cũ, không chặn trang.
   return TuviPaywall.placeholderHtml(phan);
 }
 

@@ -196,6 +196,16 @@
              `_renderLockWall()`/`TuviPaywall.lockPreview` ngay dưới. -->
         <div id="hookHost"></div>
 
+        <!-- Pha 4 (2026-09-17) — mô tả nhân vật của lá số MẪU (khác lá số
+             đang xem), làm mờ bằng `.tpw-real-lock`, để "trông có thật" thay
+             vì khoá trắng hoàn toàn. Khối RIÊNG với `moTaBlock` (không tái
+             dùng): `moTaBlock` chỉ hiện SAU khi trả tiền, tái dùng nó cho bản
+             mẫu dễ để sót lớp mờ dính lại trên chữ THẬT nếu quên gỡ đúng chỗ. -->
+        <div class="cdtk-mirror" id="cdtkDummyMota" style="display:none">
+          <div class="cdtk-eyebrow">Mô tả nhân vật (bản mẫu)</div>
+          <p class="tpw-real-lock" id="cdtkDummyMotaText"></p>
+        </div>
+
         <!-- Khách chưa đăng nhập: khoá LUÔN cả phần "miễn phí" phía dưới (5
              hồi + cơ sở lá số) — chỉ hero (danh xưng/tên/nền văn minh) là
              phần đầu được xem. -->
@@ -245,7 +255,7 @@ window.SHELL_INTRO={key:'chan-dung-tien-kiep'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
-<script src="/tuvi-paywall.js?v=35"></script>
+<script src="/tuvi-paywall.js?v=36"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
@@ -415,6 +425,7 @@ async function _runAnonPreview() {
     wsStepsSet(2); // Xem trước chân dung — danh xưng + khung 5 hồi (chưa có chữ) đã hiện
     _renderLockWall();
     _showDummyPortrait(_lastBirth.gender);
+    _showDummyMota();
   } catch (e) {
     _closePanel();
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
@@ -497,6 +508,22 @@ function _clearDummyPortrait() {
   if (badge) badge.remove();
 }
 
+// Văn MẪU (sample, `scripts/gen-tool-sample.mjs`) cho mô tả nhân vật — Pha 4
+// (2026-09-17, cùng lượt app-luan-giai.html). `moTaNhanVat` là trường DUY
+// NHẤT của tool này có trong dummy JSON (xem `fieldOrder` trong
+// gen-tool-sample.mjs: `['moTaNhanVat','ketLuan']`, nhưng route thật của
+// chính trang này KHÔNG hiện `ketLuan` ở bản xem trước) — 5 hồi truyện
+// (`acts`) không có văn mẫu, giữ nguyên khung rỗng cũ (`actsLocked`).
+function _cdtkDummyPromise(){ return TuviPaywall.loadSampleJson('/samples/chan-dung-tien-kiep-dummy.json'); }
+function _showDummyMota(){
+  return _cdtkDummyPromise().then(function(d){
+    var text=d&&d.moTaNhanVat;
+    if(!text) return;
+    document.getElementById('cdtkDummyMotaText').textContent=text;
+    document.getElementById('cdtkDummyMota').style.display='block';
+  }).catch(function(){});
+}
+
 function _openPanel() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
@@ -504,7 +531,7 @@ function _openPanel() {
   document.getElementById('card').style.display = 'none';
   document.getElementById('cdtkLockHost').style.display = 'none';
   _clearDummyPortrait();
-  ['storyBlock', 'basisBlock', 'imgWrap', 'moTaBlock', 'eraLine', 'birthLine',
+  ['storyBlock', 'basisBlock', 'imgWrap', 'moTaBlock', 'cdtkDummyMota', 'eraLine', 'birthLine',
    'imgLoadStatus', 'imgActions', 'resultImg'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });

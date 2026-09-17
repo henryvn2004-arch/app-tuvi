@@ -313,7 +313,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=35"></script>
+<script src="/tuvi-paywall.js?v=36"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
@@ -375,16 +375,25 @@ function wsStepsSet(n){
     else if(i+1===n) steps[i].classList.add('active');
   }
 }
-function doLuan(){
+// Văn MẪU (sample, `scripts/gen-tool-sample.mjs`) cho phần luận giải AI đang
+// khoá — Pha 4 (2026-09-17, cùng lượt với app-luan-giai.html): thay
+// `DUMMY_CTCD` gõ tay cũ bằng đúng file JSON script sinh (một nguồn, regen
+// được qua `npx tsx scripts/gen-tool-sample.mjs chu-trinh-cuoc-doi`), tránh
+// hai bản văn mẫu trôi lệch nhau.
+function _ctcdDummyPromise(){ return TuviPaywall.loadSampleJson('/samples/chu-trinh-cuoc-doi-dummy.json'); }
+var _ctcdDummy=null;
+_ctcdDummyPromise();
+async function doLuan(){
   var btn=document.getElementById('btnGo');
   var namxem=parseInt(document.getElementById('inpNamxem').value)||new Date().getFullYear();
   var fdIn=TuviForm.getData();
   var name=fdIn.hoten, gioitinh=fdIn.gioitinh, dd=fdIn.ngay, mm=fdIn.thang, yyyy=fdIn.nam, hh=fdIn.gioHour, pp=fdIn.gioPhut, gioAmIdx=fdIn.gioIdx;
   if(!dd||!mm||!yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
+  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang luận…';
+  _ctcdDummy=await _ctcdDummyPromise();
   // Lưu lại NGAY để `?tpwResume=1` (quay về sau khi nạp Lượng, xem
   // `LG_RESUME_KEY` ở đầu file) khôi phục được đúng form này không cần gõ lại.
   try{ sessionStorage.setItem(LG_RESUME_KEY, JSON.stringify({fd:fdIn, namxem:namxem})); }catch(e){ /* ignore */ }
-  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang luận…';
   try{
     var gioChi=CHI[gioAmIdx];
     var conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
@@ -598,25 +607,12 @@ function phanRelatedHtml(ep){
 // ── Nội dung MẪU (dummy) cho phần 3-11, hiện MỜ để lộ ĐỘ DÀI bản luận thật ──
 // Henry (2026-09-07): "ko mở từng mục nữa, mà mở blur hết đi, mở 1 lần thôi
 // (trừ phần 1,2 mở sẵn preview) ... dùng dummy text bằng ... luận giải của 1
-// lá số sample". Thay nút "Mở phần này" riêng từng đại vận (23 Lượng/phần) —
-// văn mẫu dưới đây SINH TỪ đúng lá số mẫu {15/8/1990, giờ Dần, nam, xem 2026},
-// dữ kiện thật (cung/sao/điểm engine) lấy từ chính lá số đó, chỉ phần LỜI VĂN
-// là viết tay theo đúng khuôn `instructionFor(15..24)` — quy tắc "phải đi qua
-// ĐÚNG pipeline thật" (rút ra từ vụ ảnh dummy Pixabay bị từ chối, xem
-// docs/nhat-ky/2026-09.md) áp dụng ĐẦY ĐỦ khi có provider LLM khả dụng; sinh
-// lại bằng `/api/lasotuvi` thật (docs/luat/…) khi cần polish trước khi nhân
-// rộng sang các tool khác.
-var DUMMY_CTCD={
-  16:'[TRUNG TÍNH|CHỊU RÈN] **Giai đoạn 14–23 tuổi không hẳn êm, cũng chưa tới mức nặng — mức khá của một chặng phải chịu ảnh hưởng mạnh từ người trên.**\nCung an tại Phụ Mẫu với Tử Vi – Thất Sát cho một quãng mà cha mẹ, thầy cô hay cấp trên đầu đời tác động rõ vào hướng đi hơn là tự mình quyết; Tử Vi mang uy nhưng đi cùng Thất Sát dễ sinh cọ xát, bất đồng quan điểm với người lớn tuổi hơn mình. Biết lắng nghe thay vì chống đối ngay sẽ tích luỹ được nền tảng học vấn và kỷ luật cho cả quãng đời sau; ngược lại dễ vướng xung đột kéo dài tới đầu tuổi 20.',
-  17:'[TỐT|VẬN LÊN] **24–33 tuổi là một trong những quãng dễ thở nhất đời người này — điểm tổng 8,1/10 thuộc nhóm cao nhất trong cả 9 đại vận.**\nCung an tại Phúc Đức vô chính diệu, mượn cung xung chiếu để luận, nên tính chất chặng này thiên về tinh thần và phúc phần hơn là bôn ba sự nghiệp — nhiều khả năng tâm lý ổn định, ít vướng tai ương bất ngờ, tạo đà tốt để tích luỹ cho các chặng sau. Nên tận dụng quãng thuận này để đặt nền — học thêm, xây quan hệ, chuẩn bị nguồn lực.',
-  18:'[TỐT|ĐANG THUẬN] **Đây chính là đại vận hiện tại (34–43 tuổi) — điểm 7/10, vẫn thuộc nhóm thuận.**\nCung an tại Điền Trạch vô chính diệu, mượn xung chiếu để luận — chặng này thiên về nhà cửa, tài sản, xu hướng chung là tích luỹ ổn định hơn biến động lớn. Đang ở giữa một giai đoạn thuận là thời điểm hợp để quyết những việc dài hơi (ổn định chỗ ở, đầu tư nền tảng); phần khó hơn của lá số nằm ở các chặng sau, nên tranh thủ quãng dễ thở này.',
-  19:'[CẢNH BÁO|CHẬT VẬT] **44–53 tuổi là chặng nặng nhất về sự nghiệp trong cả đời — điểm chỉ 3,2/10.**\nCung an tại Quan Lộc vô chính diệu, phải mượn cung xung chiếu để luận, cho thấy đường công danh giai đoạn này thiếu điểm tựa vững, dễ gặp trắc trở về công việc hay hướng đi sự nghiệp. Không phải chặng để mạo hiểm đổi nghề hay dốc hết vốn liếng; nên giữ thế phòng thủ, chuẩn bị sẵn phương án dự phòng trước khi bước vào giai đoạn này.',
-  20:'[TRUNG TÍNH|CẨN NGƯỜI] **54–63 tuổi ở mức trung bình — chủ đề chính xoay quanh chuyện dùng người.**\nCung an tại Nô Bộc có Liêm Trinh – Phá Quân, phản ánh quan hệ với bạn bè, đối tác hay cấp dưới trong giai đoạn này dễ biến động, có thể gặp người giúp đỡ bất ngờ nhưng cũng dễ vướng thị phi từ chính người từng thân cận. Nên chọn lọc kỹ ai đáng tin trong quãng này, tránh giao phó việc lớn cho người mới quen.',
-  21:'[TỐT|ĐỈNH CAO] **64–73 tuổi là đại vận cao điểm nhất trong toàn bộ 9 chặng — 8,7/10.**\nCung an tại Thiên Di vô chính diệu, mượn xung chiếu để luận — chủ đề chính là đối ngoại, di chuyển, quan hệ xã hội ở tuổi xế chiều, thuận lợi hơn hẳn kỳ vọng thông thường về giai đoạn này. Đây là phần thưởng cho những ai đã giữ vững qua các chặng khó trước đó (đặc biệt ĐV5 44–53 tuổi) — về già lại là lúc thong thả, ít vướng bận.',
-  22:'[TRUNG TÍNH|GIỮ SỨC] **74–83 tuổi ở mức khá, 6,3/10 — sức khoẻ là chủ đề cần quan tâm hơn cả.**\nCung an tại Tật Ách có Thiên Phủ, sao vốn mang tính ổn định và có phần trợ giúp nên bệnh tật giai đoạn này (nếu có) thường không quá nặng hay kéo dài, nhưng vẫn cần chủ động giữ gìn thay vì chủ quan vì tuổi đã cao. Duy trì nếp sống điều độ, khám sức khoẻ định kỳ sẽ giúp quãng này nhẹ nhàng hơn.',
-  23:'[CẢNH BÁO|GIỮ CỦA] **84–93 tuổi là chặng cuối và cũng là chặng nặng thứ hai trong cả đời về tiền bạc — 3,3/10.**\nCung an tại Tài Bạch có Thiên Đồng – Thái Âm, vốn là bộ sao hiền hoà nhưng ở tuổi này dễ gặp trục trặc quản lý tài sản hoặc phụ thuộc tài chính vào người khác. Điều quan trọng nhất là chuẩn bị sẵn nguồn lực và phương án an dưỡng từ sớm — các chặng thuận trước đó (đặc biệt ĐV3, ĐV4, ĐV7) chính là cơ hội để tích luỹ cho giai đoạn cuối này.',
-  24:'[TỐT|NĂM THUẬN] **Năm xem này rơi vào một năm thuận — tiểu hạn trùng ngay cung Mệnh, lại nằm trong đại vận đang tốt, nên năm này nên tiến hơn là thủ.**\nTiểu hạn tại Mệnh với Thiên Cơ – Thiên Lương cho một năm thiên về mưu tính, ra quyết định và chủ động nắm cơ hội hơn là bị động chờ đợi; đại vận nền đang tốt giúp những rủi ro nhỏ trong năm cũng dễ được hoá giải, không kéo dài thành chuyện lớn.\nCơ hội trong năm nghiêng về những việc cần tính toán, lên kế hoạch dài hơi; rủi ro cần để ý là dễ ôm đồm quá nhiều việc cùng lúc do Thiên Cơ vốn đa mưu túc trí. Một năm hợp để quyết định những việc quan trọng đã cân nhắc từ trước, hơn là khởi sự việc hoàn toàn mới chưa chuẩn bị kỹ.'
-};
+// lá số sample". Pha 4 (2026-09-17): văn mẫu KHÔNG còn gõ tay ở đây — đọc từ
+// `public/samples/chu-trinh-cuoc-doi-dummy.json` (script `gen-tool-sample.mjs`
+// sinh qua ĐÚNG pipeline `buildPromptCached`+`llmTextFull` thật, cùng lá số mẫu
+// {15/8/1990, giờ Dần, nam, xem 2026}) qua `_ctcdDummyPromise()` ở trên — một
+// nguồn DUY NHẤT, regen bằng `npx tsx scripts/gen-tool-sample.mjs chu-trinh-cuoc-doi`,
+// không còn bản chép tay trôi lệch khỏi bản script sinh.
 
 // `locked` = khách chưa đăng ký + không phải phần 1-2 → tiêu đề vẫn dựng vào
 // DOM như bình thường (thấy đủ 11 phần thật), nhưng KHÔNG render
@@ -672,7 +668,8 @@ function buildPhanSection(p,ep,label,ls,locked){
   // không phải lá số đang xem) làm MỜ bằng `.tpw-real-lock` — để lộ ĐỘ DÀI
   // bản luận thật mà không lộ một chữ thật nào của NGƯỜI ĐANG XEM. Bị chữ
   // THẬT ghi đè ngay khi mua cả bó hoặc đọc lại cache (không cần dọn tay).
-  var dummy=(p>=3&&DUMMY_CTCD[ep])?renderMarkdown(DUMMY_CTCD[ep]):'';
+  var sample=_ctcdDummy&&(_ctcdDummy[ep]||_ctcdDummy[String(ep)]);
+  var dummy=(p>=3&&sample)?renderMarkdown(sample):'';
   var claudeBox='<div class="claude-content'+(dummy?' tpw-real-lock':'')+'" id="claude-content-'+ep+'" style="display:'+(dummy?'block':'none')+'">'+dummy+'</div>';
   // CTA LẶP LẠI (2026-09-07, Henry: "box blur nào cũng phải hiện CTA như box
   // thứ 3" — tức banner `#lgUnlock`) — mỗi phần khoá (3-11) tự mang một lời
