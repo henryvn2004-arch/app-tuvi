@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
           height: '630px',
           display: 'flex',
           flexDirection: 'column',
-          background: '#061A2E',
+          background: '#F4F2EC',
           fontFamily: 'BeVN, sans-serif',
           position: 'relative',
           overflow: 'hidden',
@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
             width: '460px',
             height: '460px',
             borderRadius: '50%',
-            background: 'rgba(201,168,76,0.10)',
+            background: 'rgba(200,169,106,0.18)',
             display: 'flex',
           }}
         />
@@ -57,12 +57,12 @@ export async function GET(req: NextRequest) {
             width: '96px',
             height: '96px',
             borderRadius: '12px',
-            border: '2px solid rgba(201,168,76,0.6)',
+            border: '2px solid rgba(124,105,66,0.6)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#c9a84c',
+            color: '#7C6942',
             fontSize: '30px',
             fontWeight: 700,
             lineHeight: 1.05,
@@ -74,40 +74,40 @@ export async function GET(req: NextRequest) {
 
         {/* eyebrow */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
-          <div style={{ width: '34px', height: '2px', background: '#c9a84c', display: 'flex' }} />
-          <span style={{ fontSize: '15px', color: '#c9a84c', letterSpacing: '5px' }}>
+          <div style={{ width: '34px', height: '2px', background: '#C8A96A', display: 'flex' }} />
+          <span style={{ fontSize: '15px', color: '#7C6942', letterSpacing: '5px' }}>
             LUẬN ĐƯỜNG · TỬ VI MINH BẢO
           </span>
         </div>
 
         {/* nhãn lá số (tên · ngày · giới) */}
-        <div style={{ fontSize: ctx.length > 42 ? '40px' : '48px', color: '#ffffff', fontWeight: 700, display: 'flex', marginBottom: '10px' }}>
+        <div style={{ fontSize: ctx.length > 42 ? '40px' : '48px', color: '#0F2A3D', fontWeight: 700, display: 'flex', marginBottom: '10px' }}>
           {ctx || 'Lá số Tử Vi'}
         </div>
         {/* thầy luận */}
-        <div style={{ fontSize: '22px', color: '#c9a84c', display: 'flex', marginBottom: '30px' }}>
+        <div style={{ fontSize: '22px', color: '#7C6942', display: 'flex', marginBottom: '30px' }}>
           Luận bởi Thầy {thay}
         </div>
 
         {/* trích lời thầy */}
         {q ? (
           <div style={{ display: 'flex', maxWidth: '900px' }}>
-            <div style={{ width: '4px', background: 'rgba(201,168,76,0.7)', borderRadius: '2px', display: 'flex', marginRight: '20px' }} />
-            <div style={{ fontSize: '27px', color: 'rgba(255,255,255,0.82)', lineHeight: 1.5, display: 'flex' }}>
+            <div style={{ width: '4px', background: 'rgba(124,105,66,0.7)', borderRadius: '2px', display: 'flex', marginRight: '20px' }} />
+            <div style={{ fontSize: '27px', color: 'rgba(15,42,61,0.82)', lineHeight: 1.5, display: 'flex' }}>
               “{q}…”
             </div>
           </div>
         ) : (
-          <div style={{ fontSize: '26px', color: 'rgba(255,255,255,0.7)', display: 'flex', maxWidth: '860px', lineHeight: 1.5 }}>
+          <div style={{ fontSize: '26px', color: 'rgba(15,42,61,0.7)', display: 'flex', maxWidth: '860px', lineHeight: 1.5 }}>
             Lời luận giải riêng cho lá số này — nhấn để đọc và hỏi thầy cho chính bạn.
           </div>
         )}
 
         {/* footer CTA */}
         <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <span style={{ fontSize: '20px', color: '#ffffff', fontWeight: 700, display: 'flex' }}>Xem lời thầy luận</span>
-          <span style={{ fontSize: '20px', color: '#c9a84c', display: 'flex' }}>→</span>
-          <span style={{ fontSize: '18px', color: 'rgba(201,168,76,0.6)', display: 'flex', marginLeft: 'auto' }}>tuviminhbao.com</span>
+          <span style={{ fontSize: '20px', color: '#0F2A3D', fontWeight: 700, display: 'flex' }}>Xem lời thầy luận</span>
+          <span style={{ fontSize: '20px', color: '#7C6942', display: 'flex' }}>→</span>
+          <span style={{ fontSize: '18px', color: 'rgba(124,105,66,0.7)', display: 'flex', marginLeft: 'auto' }}>tuviminhbao.com</span>
         </div>
       </div>
     ),

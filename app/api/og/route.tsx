@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
           height: '630px',
           display: 'flex',
           flexDirection: 'column',
-          background: '#061A2E',
+          background: '#F4F2EC',
           padding: '64px 80px',
           fontFamily: fonts.length ? 'BeVN, sans-serif' : 'sans-serif',
           position: 'relative',
@@ -36,16 +36,16 @@ export async function GET(request: NextRequest) {
         <div style={{
           position: 'absolute', top: 0, right: 0,
           width: '480px', height: '630px',
-          background: 'linear-gradient(135deg, transparent 0%, #0D3B5E 100%)',
+          background: 'linear-gradient(135deg, transparent 0%, #F1E7D2 100%)',
           display: 'flex',
         }} />
 
         {/* Gold accent bar */}
-        <div style={{ width: '56px', height: '3px', background: '#c9a84c', marginBottom: '28px', display: 'flex' }} />
+        <div style={{ width: '56px', height: '3px', background: '#C8A96A', marginBottom: '28px', display: 'flex' }} />
 
         {/* Site name */}
         <div style={{
-          fontSize: '15px', color: '#c9a84c',
+          fontSize: '15px', color: '#7C6942',
           letterSpacing: '5px', textTransform: 'uppercase',
           marginBottom: '32px', display: 'flex',
         }}>
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
 
         {/* Title */}
         <div style={{
-          fontSize: `${fontSize}px`, color: '#FFFFFF', fontWeight: 700,
+          fontSize: `${fontSize}px`, color: '#0F2A3D', fontWeight: 700,
           lineHeight: 1.3, flex: 1, display: 'flex', alignItems: 'center',
           maxWidth: '960px',
         }}>
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
         {/* Category / subtitle */}
         {sub ? (
           <div style={{
-            fontSize: '18px', color: 'rgba(255,255,255,0.5)',
+            fontSize: '18px', color: 'rgba(15,42,61,0.55)',
             marginTop: '24px', display: 'flex',
           }}>
             {sub}
@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
 
         {/* Domain */}
         <div style={{
-          fontSize: '15px', color: 'rgba(201,168,76,0.55)',
+          fontSize: '15px', color: 'rgba(124,105,66,0.7)',
           marginTop: '14px', display: 'flex',
         }}>
           tuviminhbao.com

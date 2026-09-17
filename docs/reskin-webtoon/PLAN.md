@@ -119,7 +119,7 @@ xanh + Henry gật.
 | 5b — Banner hook `.intro-card` (11 nhóm, khác Sprint 5) | ✅ Xong, đã publish thật + vá lỗi "che hình" | 11 nhóm cast duyệt xong, ảnh đã publish + vá 2 lỗi CSS (`.intro-photo` tràn ngang mobile, `::after` gradient lấn ảnh) + vá lỗi webp bị cắt cạnh (`nenWebp` đổi sang `sharp`, xem `nhat-ky/2026-09.md` "che hình") | Route `app/api/admin/hero-banners/route.ts` (cổng `hero_banners.gen`) chưa từng chạy qua để VẼ MỚI — lần publish làm thủ công thẳng vào Storage bằng ảnh đã duyệt sẵn |
 | 6 — 54 trang tool SEO | ✅ Xong | `tools/tools.css` + cả 54 trang đổi bảng màu webtoon (khớp `shell.css`), `.xt-avatar`/`.hero-avatar` nền đổi navy→kem khớp avatar Sprint 5, `#nav-ph` hết nháy màu; gỡ `theme.css` dư thừa khỏi 14 trang (thêm `--gold-bright` vào `tools.css` thay thế) | "13 trang `:root` riêng" trong dòng cũ SAI — thực tế chỉ 2 trang, không đụng navy/gold; đã sửa lại mô tả. `.site-footer` tĩnh trong 54 trang KHÔNG đổi màu (dead code, `nav.js` luôn thay bằng footer mới) |
 | 7 — 25 route SEO server | ✅ Xong | 25 file (24 route riêng + `app/ngay-tot/_shared.ts` dùng chung 6 route) đổi `:root` cục bộ sang bảng webtoon, band navy (`.hero`/`.page-header`/`.profile-header`/`.hub-hero`) đổi sang nền kem luôn trong cùng lượt (rút kinh nghiệm Sprint 6), thêm `#nav-ph` còn thiếu, bump `nav.js` version lệch ở các trang `[slug]` | "26 route" là số đếm sai, thực tế 30 route dựng HTML (4 trang share/embed cố ý không nạp nav/footer, không tính); `app/thu-vien` + 4 trang share/embed vẫn navy riêng, cố ý ngoài phạm vi (không dùng biến chung, không nạp nav.js) |
-| 8 — Ảnh phụ | ⬜ Chưa bắt đầu | — | fbcard/van-rieng/van-ngay/64 quẻ/seal/favicon/og vẫn ảnh cũ |
+| 8 — Ảnh phụ | ✅ Xong | Khảo sát trực tiếp mở từng ảnh ra xem (không đoán theo khuôn Sprint 6/7): fbcard-topics/van-rieng (ink-wash be/nâu/xanh rêu) đã tương thích sẵn nền kem, seal.webp là dấu triện đỏ-trắng theo quy ước văn hoá — cả 3 KHÔNG cần sửa, gen lại sẽ tốn tiền vô ích. Chỉ 4 route Satori (`app/api/og/*`) thật sự "vẫn navy" — đổi nền `#061A2E`→`#F4F2EC`, chữ trắng→navy, gold chuẩn hoá `#C8A96A`/`#7C6942` | 64 quẻ (Gongbi) Henry xác nhận giữ nguyên, không đụng. `scripts/gen-que-images.mjs` vẫn ghim `gpt-image-1` cũ (đã bị OpenAI khai tử) — nằm trong vùng "không đụng" nên chưa vá, cờ nợ kỹ thuật riêng |
 | 9 — Thư viện minh hoạ luận giải | ⬜ Chưa bắt đầu | — | Cần đếm bucket thật + Henry xác nhận riêng (ảnh nằm trong sản phẩm đã bán) |
 | 10 — Giọng §2 toàn site | ⬜ Chưa bắt đầu | — | `arcGiong` (`lib/agent/prompts.ts`) chưa đổi sang giọng Bảo |
 
@@ -276,9 +276,28 @@ Sprint này dựng helper + trỏ về `theme.css`.
 
 ---
 
-### 🎴 SPRINT 8 — Ảnh phụ — ⬜ Chưa bắt đầu
-fbcard-topics 30 · van-rieng 36 · van-ngay 4 · 64 quẻ Kinh Dịch · seal/favicon/og.
-**Sample gate:** 3 bức mỗi nhóm. **Ước:** 2 ngày.
+### 🎴 SPRINT 8 — Ảnh phụ — ✅ Xong (2026-09-17)
+Khảo sát trước khi gen (agent Explore) lật ngược tiền đề của dòng PLAN gốc:
+- **fbcard-topics (30) + van-riêng (36)**: phong cách ink-wash thuỷ mặc be/nâu/
+  xanh rêu — mở file ảnh ra xem trực tiếp, đã tương thích sẵn với nền kem mới,
+  KHÔNG có kiến trúc "navy full-bleed" như các band CSS ở Sprint 6/7. Không gen
+  lại.
+- **van-ngay (4)**: cùng phong cách ink-wash, cùng kết luận — không gen lại.
+- **seal/favicon**: `seal.webp` là con dấu đỏ-trắng theo quy ước văn hoá triện
+  ấn — đỏ không phải "lỗi bảng màu", đổi sẽ phá tính nhận diện. Không đổi.
+- **64 quẻ Kinh Dịch**: Henry xác nhận giữ nguyên (Gongbi đã chốt trước đó).
+- **og**: đây là phần DUY NHẤT thật sự "vẫn navy" — 4 route Satori
+  (`app/api/og/route.tsx`, `og/social`, `og/laso`, `og/luan-duong`) nền
+  `#061A2E` full-bleed. Đổi kiến trúc y hệt Sprint 6/7: nền→`#F4F2EC`, chữ
+  chính→`#0F2A3D`, gold chuẩn hoá `#C8A96A` (hoạ tiết)/`#7C6942` (chữ). Giữ
+  nguyên accent tím `rgba(167,139,250,…)` trong `og/laso` (cùng logic CTA tím
+  đã giữ ở Sprint 7) và màu chỉ báo điểm số (`diemColor()`).
+
+**Bài học:** 3/5 nhóm trong dòng PLAN gốc không có script gen trong repo (ảnh
+đến từ PR #774 + commit tay Henry, chưa từng commit prompt) — "cùng 1 dòng
+PLAN.md" không có nghĩa "cùng 1 loại lỗi". Mở ảnh ra NHÌN trước khi viết
+prompt/gọi API tốn tiền rẻ hơn nhiều so với gen theo mặc định rồi mới phát
+hiện không cần. Chi tiết: `docs/nhat-ky/2026-09.md`.
 
 ---
 

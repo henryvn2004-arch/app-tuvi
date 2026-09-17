@@ -24,9 +24,11 @@ import { loadOgFonts, ogFallbackRedirect } from '@/lib/og/font';
 
 export const runtime = 'edge';
 
-const NAVY = '#061A2E';
-const NAVY_2 = '#0D3B5E';
-const GOLD = '#c9a84c';
+const CREAM = '#F4F2EC';
+const CREAM_2 = '#F1E7D2';
+const NAVY_TEXT = '#0F2A3D';
+const GOLD = '#C8A96A';
+const GOLD_TEXT = '#7C6942';
 
 const SIZES = {
   quote: { w: 1080, h: 1350 },
@@ -75,7 +77,7 @@ export async function GET(request: NextRequest) {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          background: NAVY,
+          background: CREAM,
           padding: `${padY}px 88px`,
           fontFamily,
           position: 'relative',
@@ -89,14 +91,14 @@ export async function GET(request: NextRequest) {
             right: 0,
             width: `${Math.round(w * 0.55)}px`,
             height: `${h}px`,
-            background: `linear-gradient(160deg, transparent 0%, ${NAVY_2} 100%)`,
+            background: `linear-gradient(160deg, transparent 0%, ${CREAM_2} 100%)`,
             display: 'flex',
           }}
         />
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ width: '64px', height: '4px', background: GOLD, marginBottom: '30px', display: 'flex' }} />
-          <div style={{ fontSize: '24px', color: GOLD, letterSpacing: '6px', display: 'flex' }}>
+          <div style={{ fontSize: '24px', color: GOLD_TEXT, letterSpacing: '6px', display: 'flex' }}>
             {kicker.toUpperCase()}
           </div>
         </div>
@@ -107,7 +109,7 @@ export async function GET(request: NextRequest) {
             display: 'flex',
             fontSize: `${quoteSize(quote.length, variant)}px`,
             fontWeight: 700,
-            color: '#FFFFFF',
+            color: NAVY_TEXT,
             lineHeight: 1.42,
           }}
         >
@@ -116,13 +118,13 @@ export async function GET(request: NextRequest) {
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           {title ? (
-            <div style={{ fontSize: '26px', color: 'rgba(255,255,255,0.52)', marginBottom: '18px', display: 'flex' }}>
+            <div style={{ fontSize: '26px', color: 'rgba(15,42,61,0.55)', marginBottom: '18px', display: 'flex' }}>
               {title}
             </div>
           ) : null}
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <div style={{ width: '40px', height: '2px', background: GOLD, marginRight: '18px', display: 'flex' }} />
-            <div style={{ fontSize: '26px', color: GOLD, letterSpacing: '2px', display: 'flex' }}>tuviminhbao.com</div>
+            <div style={{ fontSize: '26px', color: GOLD_TEXT, letterSpacing: '2px', display: 'flex' }}>tuviminhbao.com</div>
           </div>
         </div>
       </div>
