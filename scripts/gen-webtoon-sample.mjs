@@ -369,21 +369,24 @@ Add one small warm lantern glow in the village, the single brightest point in th
 No human figures. Still soft watercolor, still airy — deeper and quieter, but never harsh and never pure black.`),
   },
 
-  // Bản V2 của `paywall` (Henry, "làm tiếp Sprint 1" 2026-09-17) — cùng ý
-  // tưởng V1 ("cùng cảnh hero, đổi giờ trong ngày sang hoàng hôn", KHÔNG có
-  // Minh Bảo) nhưng neo trên `heroSceneV2.png` (cảnh cưỡi trâu đã duyệt của
-  // bộ webtoon) thay vì `hero.png` V1 đã nghỉ hưu. Vẫn dùng `edit2` (khung
-  // STYLE_LOCK_V2 chung) dù không giữ nhân vật — anchor ảnh vẫn cần thiết để
-  // GIỮ ĐÚNG bố cục núi/làng/bầu trời của heroSceneV2, không phải để giữ mặt
-  // nhân vật (không có nhân vật trong khung này).
+  // Bản V2 của `paywall` — VÒNG 2 (Henry, sau khi xem bản "trâu một mình lúc
+  // hoàng hôn"): đổi HẲN không khí — "phải vui tươi, nắng sớm bình minh, cả
+  // làng vui vẻ, giữ lại Minh Bảo, không khí vui như Tết". Ngược hẳn ý ban
+  // đầu V1 (hoàng hôn, không nhân vật, tĩnh lặng) — không còn là "cùng cảnh
+  // hero đổi giờ" nữa mà là một CẢNH MỚI hẳn, chỉ giữ đúng nhân vật Minh Bảo
+  // + tông màu chung của bộ. Neo `heroSceneV2.png` để GIỮ ĐÚNG mặt/tóc/áo
+  // Minh Bảo (đang cưỡi trâu) — không neo để giữ bố cục cảnh nữa vì cảnh đổi
+  // hoàn toàn (bình minh + đông người, khác hẳn cánh đồng vắng của hero gốc).
   paywallV2: {
     size: '1536x1024',
     from: 'heroSceneV2.png',
     prompt:
-      edit2(`Redraw the exact same buffalo from the provided image, standing alone in the exact same spot and pose, but WITHOUT the boy riding it this time (empty saddle area, no rider, no human figure anywhere in the image). Keep the buffalo's exact same flat cel-shaded rendering style, same outline thickness, same shading as shown.
-Keep the same hills, the same village houses and the same open sky area in the same positions as the reference, all in that SAME flat illustrated style — flat color fields, thin clean outlines, simple soft gradient shading, absolutely NOT a realistic or painterly repaint, no photorealistic lighting, no fine brushstroke texture.
-Shift the lighting to early dusk: a bit dimmer/cooler than the original golden-hour, sky a touch more muted, one small warm lantern glow in the village as the brightest point in the frame.
-Keep the same large open area of plain sky in the upper-right third of the image with nothing in it — so text can be placed over it later.`),
+      edit2(`Use the boy riding the water buffalo from the provided image, keeping his exact face, hair, hat, outfit and pose — same character, same big-head chibi proportion, no redesign. Move him into a brand new, much livelier scene:
+Early sunrise over the village — a warm golden sun just rising over the hills, soft pastel pink-and-gold sky, gentle morning mist low over the rice fields catching the light.
+The whole village is awake and cheerful: several villagers visible in the mid-ground going about a joyful morning — a couple of kids playing, someone sweeping their front yard, someone carrying a basket, a few chickens — all small and simple in the chibi style, not the main focus, just filling the scene with life.
+Give the scene a festive, Tết (Lunar New Year)-like mood: a few branches of blooming yellow hoa mai (apricot blossom) near the houses, a red paper lantern or two hanging by a doorway, colorful little flags strung between two houses — cheerful and warm, not literal fireworks or crowds, just a joyful festive village morning.
+Keep the same flat cel-shaded webtoon rendering style as the reference — flat color fields, thin clean outlines, simple soft gradient shading, no photorealistic lighting, no painterly brushwork.
+Leave a large open area of plain warm sky in the upper-right third of the frame with nothing in it — so text can be placed over it later.`),
   },
 
   // ── Banner trang tool (`.intro-card`/`.intro-photo`) — Henry 2026-09-16:
