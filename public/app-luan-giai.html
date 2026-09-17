@@ -428,7 +428,7 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
-<script src="/tools-shared/hook-layer.js?v=2"></script>
+<script src="/tools-shared/hook-layer.js?v=3"></script>
   <script src="/nav.js?v=38" data-icons-only></script>
 <script src="/shell.js?v=95"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
@@ -717,8 +717,14 @@ function mountHook(ls){
     var hiem=HF.cachCucHiem(ls,census);
     if(hiem)facts.push(hiem);
     var hexDims=HF.hexDimsForCung(ls,'Mệnh');
-    window.HookLayer.mount(host,{
+    // Ảnh minh hoạ banner — TÁI DÙNG đúng bộ `illus-match.js` đã chọn cho phần
+    // 1 (Tổng Quan) ở #lgBody, KHÔNG generate ảnh riêng cho tầng hook (tốn
+    // tiền/chậm, phá đúng nguyên tắc "0đ tới khi có gì để bán" của tầng này).
+    var illus=(window.IllusMatch&&window.IllusMatch.illusUrlForPhan)?window.IllusMatch.illusUrlForPhan(ls,1,_gioitinh):null;
+    var spec={
       tool:'laso',
+      toolLabel:'Luận Giải Tử Vi',
+      illus:illus,
       charts:[
         hexDims?{type:'hexRadar',data:{dims:hexDims},title:'Lục Giác cung Mệnh'}:null
       ].filter(Boolean),
@@ -728,8 +734,40 @@ function mountHook(ls){
         items:['11 cung còn lại — mỗi cung một phần luận riêng, viết theo cổ pháp','Cách cục, tứ hoá và quy tắc của từng cung'],
         onUnlock:function(){ return initiateLuanGiaiChuyenSau('hook'); }
       }
-    });
+    };
+    // `mount()` dựng khối fact-card cũ NGAY (0 mạng) — đây là thứ người dùng
+    // thấy tức khắc và cũng là lưới an toàn nếu tầng kể chuyện dưới đây hỏng.
+    window.HookLayer.mount(host,spec);
+    _tryHookNarrative(host,spec);
   });
+}
+
+/**
+ * Tầng "kể chuyện" (add-on, KHÔNG BẮT BUỘC) — gọi `/api/hook-narrative` để
+ * NÂNG CẤP khối fact-card khô thành template "Preview Highlight" (banner +
+ * box, xem `HookLayer.upgrade`). `facts` gửi đi là ĐÚNG mấy fact deterministic
+ * `mountHook()` vừa dựng — model chỉ được diễn giải giọng, không tính lại số
+ * nào (đúng LASO_AUTHORITY_RULE).
+ *
+ * Best-effort tuyệt đối: hết quota/lỗi mạng/parse hỏng → `data.allowed` false
+ * hoặc fetch tự catch — khối cũ đứng nguyên, KHÔNG báo lỗi, KHÔNG chặn phần
+ * còn lại của trang. Đây là lý do hàm này KHÔNG `await` ở nơi gọi.
+ */
+function _tryHookNarrative(host,spec){
+  if(!spec||!Array.isArray(spec.facts)||spec.facts.length<2) return;
+  var tk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
+  var headers={'Content-Type':'application/json'};
+  if(tk)headers['Authorization']='Bearer '+tk;
+  var body={
+    toolId:spec.tool,
+    toolLabel:spec.toolLabel||spec.tool,
+    anonId:TuviPaywall.previewAnonId(),
+    facts:spec.facts.map(function(f){ return {title:f.title,body:f.body,tone:f.tone,caption:f.caption}; })
+  };
+  fetch('/api/hook-narrative',{method:'POST',headers:headers,body:JSON.stringify(body)})
+    .then(function(r){ return r.json(); })
+    .then(function(data){ if(data&&data.allowed) window.HookLayer.upgrade(host,spec,data); })
+    .catch(function(){ /* mạng hỏng — giữ nguyên khối fact-card cũ */ });
 }
 
 function _lgLoggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Auth.isLoggedIn()); }
