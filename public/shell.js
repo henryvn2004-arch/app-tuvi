@@ -1755,22 +1755,23 @@
     var release = function () { pending--; if (pending <= 0) go(); };
     ensureQrJs(release);
     // 🪤 2026-09-17: gate cũ `isBook &&` bỏ sót Xem Tuổi/Xem Tuổi Làm Ăn/Tương
-    // Hợp — 3 tool có `.lg-illus img` (9 khía cạnh minh hoạ, PR #830/#880)
-    // nhưng KHÔNG có bìa sách (`ensurePrintBook()` false vì không có mục
-    // trong `BOOK_QUOTES`). `forceEagerIllusImages` không chạy ⇒ ảnh vẫn
-    // `loading=lazy`, chưa từng được yêu cầu tải ⇒ PDF ra khung trống (Henry
-    // báo qua bản mẫu xem-tuoi thật). Hàm tự no-op nếu trang không có
-    // `.lg-illus img` nên gọi vô điều kiện là an toàn, không cần biết trước
-    // tool nào có ảnh.
-    var hasIllus = !!(host && host.querySelector('.lg-illus img'));
-    if (host && (isBook || hasIllus)) {
+    // Hợp — có `.lg-illus img` (9 khía cạnh minh hoạ, PR #830/#880) nhưng
+    // KHÔNG có bìa sách (`ensurePrintBook()` false vì không có mục trong
+    // `BOOK_QUOTES`) nên bị bỏ sót, ảnh vẫn `loading=lazy`, chưa từng được
+    // yêu cầu tải ⇒ PDF ra khung trống (Henry báo qua bản mẫu xem-tuoi
+    // thật). `forceEagerIllusImages` tự dò `.lg-illus img` trong DOM và
+    // `cb()` ngay nếu không có — gọi VÔ ĐIỀU KIỆN cho mọi tool, không cần
+    // (và không nên) tự đoán trước tool nào có ảnh ở tầng gọi.
+    if (host) {
       pending++;
       forceEagerIllusImages(host, release);
     }
     // Trần cứng — mạng chậm/QR hoặc ảnh chưa kịp tải thì đừng giữ người dùng
-    // chờ vô hạn. Bìa sách/tool có ảnh minh hoạ kéo thêm ảnh (giờ đã nén
-    // ~150KB/tấm, xem illus-match.js) nên trần dài hơn bản không ảnh.
-    setTimeout(go, (isBook || hasIllus) ? 2500 : 800);
+    // chờ vô hạn. Tool không có ảnh thì `forceEagerIllusImages` trả `cb()`
+    // gần như ngay lập tức (qua nhánh `pending`), trần dưới đây chỉ có tác
+    // dụng với tool THẬT SỰ có ảnh đang tải — dùng chung một trần rộng cho
+    // mọi tool thay vì đoán trước isBook.
+    setTimeout(go, 2500);
   }
   // `loading="lazy"` trên ảnh phần 2 trở đi (xem `illusBannerHtml` ở các
   // trang tool) chỉ tải khi CUỘN TỚI — bấm "Lưu PDF" mà chưa từng cuộn qua
