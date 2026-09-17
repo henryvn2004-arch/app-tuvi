@@ -120,7 +120,7 @@ xanh + Henry gật.
 | 6 — 54 trang tool SEO | ✅ Xong | `tools/tools.css` + cả 54 trang đổi bảng màu webtoon (khớp `shell.css`), `.xt-avatar`/`.hero-avatar` nền đổi navy→kem khớp avatar Sprint 5, `#nav-ph` hết nháy màu; gỡ `theme.css` dư thừa khỏi 14 trang (thêm `--gold-bright` vào `tools.css` thay thế) | "13 trang `:root` riêng" trong dòng cũ SAI — thực tế chỉ 2 trang, không đụng navy/gold; đã sửa lại mô tả. `.site-footer` tĩnh trong 54 trang KHÔNG đổi màu (dead code, `nav.js` luôn thay bằng footer mới) |
 | 7 — 25 route SEO server | ✅ Xong | 25 file (24 route riêng + `app/ngay-tot/_shared.ts` dùng chung 6 route) đổi `:root` cục bộ sang bảng webtoon, band navy (`.hero`/`.page-header`/`.profile-header`/`.hub-hero`) đổi sang nền kem luôn trong cùng lượt (rút kinh nghiệm Sprint 6), thêm `#nav-ph` còn thiếu, bump `nav.js` version lệch ở các trang `[slug]` | "26 route" là số đếm sai, thực tế 30 route dựng HTML (4 trang share/embed cố ý không nạp nav/footer, không tính); `app/thu-vien` + 4 trang share/embed vẫn navy riêng, cố ý ngoài phạm vi (không dùng biến chung, không nạp nav.js) |
 | 8 — Ảnh phụ | ✅ Xong | Khảo sát trực tiếp mở từng ảnh ra xem (không đoán theo khuôn Sprint 6/7): fbcard-topics/van-rieng (ink-wash be/nâu/xanh rêu) đã tương thích sẵn nền kem, seal.webp là dấu triện đỏ-trắng theo quy ước văn hoá — cả 3 KHÔNG cần sửa, gen lại sẽ tốn tiền vô ích. Chỉ 4 route Satori (`app/api/og/*`) thật sự "vẫn navy" — đổi nền `#061A2E`→`#F4F2EC`, chữ trắng→navy, gold chuẩn hoá `#C8A96A`/`#7C6942` | 64 quẻ (Gongbi) Henry xác nhận giữ nguyên, không đụng. `scripts/gen-que-images.mjs` vẫn ghim `gpt-image-1` cũ (đã bị OpenAI khai tử) — nằm trong vùng "không đụng" nên chưa vá, cờ nợ kỹ thuật riêng |
-| 9 — Thư viện minh hoạ luận giải | ⬜ Chưa bắt đầu | — | Cần đếm bucket thật + Henry xác nhận riêng (ảnh nằm trong sản phẩm đã bán) |
+| 9 — Thư viện minh hoạ luận giải | ✅ Xong (không đổi gì) | Đếm bucket thật qua Supabase (MCP, không cần script) ra 652 ảnh gốc (969 MB), phủ đủ mọi khía, nhiều hơn cả ước tính ~360 combo code có thể chạm tới — không phải "chưa có gì" như PLAN.md ngầm giả định. Gửi Henry 1 ảnh mẫu thật (style watercolor "light-novel" Trí/Thư) | Henry xác nhận **giữ nguyên style, không vẽ lại** dù khác style chibi (Minh Bảo) đã chốt cho phần còn lại của site — quyết định thương hiệu có chủ đích, không phải nợ kỹ thuật |
 | 10 — Giọng §2 toàn site | ⬜ Chưa bắt đầu | — | `arcGiong` (`lib/agent/prompts.ts`) chưa đổi sang giọng Bảo |
 
 **Tóm tắt cho Henry:** nav + footer (chrome dùng chung, hiện trên ~200 trang) và
@@ -301,16 +301,21 @@ hiện không cần. Chi tiết: `docs/nhat-ky/2026-09.md`.
 
 ---
 
-### 🗂 SPRINT 9 — Thư viện minh hoạ luận giải — ⬜ Chưa bắt đầu
-```
-13 khía × 3 sắc × 2 giới × 5 bậc tuổi × 1–2 biến thể ≈ 708 bức
-```
-🔴 **Việc đầu tiên là ĐẾM BUCKET THẬT.** 708 là số combo code SINH RA, chưa phải
-số file có trong Supabase Storage. Chốt ngân sách sau khi đếm.
-🔴 Ảnh này nằm **trong sản phẩm khách đã trả tiền** — cần Henry xác nhận riêng.
-✅ `illusUrlForPhan` trả `null` khi thiếu ⇒ luận giải im lặng không hiện ảnh
-⇒ gen dở dang **không gãy trang**, rải nhiều đợt được.
-**Sample gate:** 6 bức. **Ước:** rải nhiều đợt.
+### 🗂 SPRINT 9 — Thư viện minh hoạ luận giải — ✅ Xong, không đổi gì (2026-09-17)
+Đếm bucket thật (`storage.objects`, project `dciwkfdqhhddeymlisey`, qua MCP
+Supabase — không cần `reencode-illus.mjs` hay credential trong sandbox): **652
+ảnh gốc, 969 MB**, mọi khía đều có ảnh (24-120/nhóm, không nhóm nào rỗng) —
+nhiều hơn cả ước tính ~360 combo "code có thể chạm tới" tính từ cách
+`illus-match.js` suy giảm trục lúc runtime. "13×3×2×5×1-2≈708" của PLAN.md là
+số combo lý thuyết nhân thẳng, không phải số ảnh thật cần có.
+
+Tải 1 ảnh thật qua URL public (0đ, bucket public) gửi Henry xem: style
+watercolor tả thực "light-novel" (nhân vật Trí/Thư, `lib/media/illus-prompt.ts`
+`STYLE_LOCK`) — nền ấm hợp bảng màu mới, nhưng KHÁC style chibi (Minh Bảo,
+`lib/media/webtoon-style.ts`) đã chốt cho phần còn lại của site ngày 16/9.
+**Henry xác nhận giữ nguyên, không vẽ lại** — quyết định thương hiệu có chủ
+đích (không phải mọi minh hoạ trên site phải cùng một nhân vật), không phải
+nợ kỹ thuật cần dọn. Chi tiết: `docs/nhat-ky/2026-09.md`.
 
 ---
 
