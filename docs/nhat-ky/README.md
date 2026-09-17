@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-325 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+326 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 160 | 641,128 B |
+| `2026-09.md` | 161 | 643,506 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -27,6 +27,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 🖼 Homepage: 3 chỉnh sửa nhỏ cho slider "Công cụ nổi bật" — badge dùng tên tool, avatar khách hàng thật hơn, link đánh giá bấm được |
 | 1 | 2026-09 | `2026-09.md` | ✏️ Homepage: viết lại chữ 5 banner "Công cụ nổi bật" theo guideline tò mò/hook — thử nghiệm trước khi áp cho shell |
+| 1 | 2026-09 | `2026-09.md` | 📡 CMO Digest đọc thêm Clarity (rage/dead click, scroll depth) |
 | 1 | 2026-09 | `2026-09.md` | 🖼 Homepage: vẽ lại 5 banner "Công cụ nổi bật" — nhân vật Trí/Thư đời thường, bỏ cảnh học bài đơn độc |
 | 1 | 2026-09 | `2026-09.md` | 🔗 Homepage: gỡ card "Xem Tướng Mạo" tự bịa, thay bằng 5 icon tướng riêng |
 | 1 | 2026-09 | `2026-09.md` | 🔗 Homepage: 6 icon/tool-card trỏ nhầm trang standalone thay vì `/app-*.html` trong shell |
