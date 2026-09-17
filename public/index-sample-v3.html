@@ -93,8 +93,11 @@
    Trang chủ webtoon (Sprint 4, 2026-09) — theo mockup tay Henry: KHÔNG
    mang sidebar/rail của shell.js ra ngoài (khác bản v2 cũ, xem
    index-sample-v2.html, giữ làm tài liệu). Trang marketing riêng, tông
-   SÁNG (khác nav.js navy dùng ở các trang khác trong site — CỐ Ý, header/
-   footer ở đây không gọi nav.js topnav).
+   SÁNG. Header + footer DÙNG CHUNG nav.js full mode (2026-09-17: trước đó
+   tự dựng `.mb-header` riêng — bản chép tay không có GA4/Clarity/Pixel,
+   không biết trạng thái đăng nhập, nút hamburger chết — đổi sang nạp thẳng
+   nav.js ở cuối body, KHÔNG mang cờ data-footer-only nữa, cùng một nguồn với
+   mọi trang khác, xem docs/nhat-ky/2026-09.md).
    ============================================================ */
 :root {
   --cream: #f6f3ee;
@@ -128,60 +131,6 @@ img { max-width: 100%; display: block; }
 .serif { font-family: 'Noto Serif', Georgia, serif; }
 .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
 button { font: inherit; cursor: pointer; }
-
-/* ── Header ─────────────────────────────────────────────────── */
-.mb-header {
-  position: sticky; top: 0; z-index: 40;
-  background: rgba(251, 250, 246, 0.92);
-  backdrop-filter: saturate(180%) blur(8px);
-  border-bottom: 1px solid var(--line);
-}
-.mb-header-inner { display: flex; align-items: center; gap: 20px; height: 72px; }
-.mb-logo { display: flex; align-items: center; gap: 12px; margin-right: auto; }
-.mb-seal {
-  width: 34px; height: 34px; border-radius: 9px; background: var(--terracotta);
-  color: #fff; display: flex; align-items: center; justify-content: center;
-  font-size: 17px; font-weight: 700; flex: none;
-}
-.mb-brand-name { font-weight: 800; font-size: 16.5px; color: var(--navy); line-height: 1.15; }
-.mb-brand-tag { font-size: 10.5px; letter-spacing: 0.08em; color: var(--ink-faint); text-transform: uppercase; }
-.mb-nav { display: flex; gap: 28px; }
-.mb-nav a { font-size: 14.5px; font-weight: 600; color: var(--ink); opacity: 0.82; }
-.mb-nav a:hover { opacity: 1; }
-.mb-actions { display: flex; align-items: center; gap: 10px; }
-.mb-icon-btn {
-  width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line);
-  background: #fff; display: flex; align-items: center; justify-content: center; color: var(--ink);
-}
-.mb-icon-btn .ic { width: 17px; height: 17px; }
-.mb-login {
-  display: flex; align-items: center; gap: 7px; padding: 8px 16px 8px 12px;
-  border-radius: 999px; border: 1.4px solid var(--gold); background: var(--gold-soft);
-  color: #6b4f1e; font-weight: 700; font-size: 14px; white-space: nowrap;
-  font-family: inherit;
-}
-.mb-login .ic { width: 16px; height: 16px; }
-.mb-menu-btn { display: none; }
-
-@media (max-width: 760px) {
-  .mb-nav { display: none; }
-  .mb-menu-btn {
-    display: flex; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line);
-    background: #fff; align-items: center; justify-content: center; margin-right: 4px; flex: none;
-  }
-  .mb-menu-btn .ic { width: 18px; height: 18px; }
-  .mb-header-inner { gap: 8px; }
-  .mb-logo { min-width: 0; overflow: hidden; }
-  .mb-brand-text { min-width: 0; overflow: hidden; }
-  .mb-brand-tag { display: none; }
-  .mb-brand-name { font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .mb-login { padding: 7px 12px 7px 10px; font-size: 13px; flex: none; }
-}
-@media (max-width: 420px) {
-  /* Tên thương hiệu chật chỗ cạnh hamburger + tìm kiếm + đăng nhập — giữ
-     mỗi con dấu 明 làm logo rút gọn, đỡ hơn chữ bị cắt nửa từ. */
-  .mb-brand-text { display: none; }
-}
 
 /* ── Hero ───────────────────────────────────────────────────── */
 .hero { padding: 48px 0 20px; }
@@ -329,29 +278,8 @@ button { font: inherit; cursor: pointer; }
 </head>
 <body>
 
-<!-- ═══════════════ HEADER ═══════════════ -->
-<header class="mb-header">
-  <div class="wrap mb-header-inner">
-    <button class="mb-menu-btn" aria-label="Menu" type="button"><span class="ic" data-icon="menu"></span></button>
-    <a class="mb-logo" href="/index-sample-v3.html">
-      <div class="mb-seal">明</div>
-      <div class="mb-brand-text">
-        <div class="mb-brand-name">Tử Vi Minh Bảo</div>
-        <div class="mb-brand-tag">Tri mệnh lý · Thuận thế hành</div>
-      </div>
-    </a>
-    <nav class="mb-nav">
-      <a href="/menh-kho.html">Khám phá</a>
-      <a href="/cong-cu.html">Công cụ</a>
-      <a href="/blog.html">Bài viết</a>
-      <a href="#">Cộng đồng</a>
-    </nav>
-    <div class="mb-actions">
-      <button class="mb-icon-btn" aria-label="Tìm kiếm" type="button"><span class="ic" data-icon="search"></span></button>
-      <button class="mb-login" type="button" onclick="if(window.showAuthModal)showAuthModal(null);"><span class="ic" data-icon="user"></span>Đăng nhập</button>
-    </div>
-  </div>
-</header>
+<!-- ═══════════════ HEADER — dùng chung nav.js, KHÔNG tự dựng riêng ═══════════════ -->
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 
 <!-- ═══════════════ HERO ═══════════════ -->
 <section class="hero">
@@ -452,9 +380,6 @@ button { font: inherit; cursor: pointer; }
   </div>
 </div>
 
-<!-- ═══════════════ FOOTER (dark, dùng chung nav.js) ═══════════════ -->
-<div id="site-footer-host"></div>
-
 <!-- ═══════════════ BOTTOM NAV — mobile ═══════════════ -->
 <nav class="bottom-nav">
   <a class="bn-item active" href="/index-sample-v3.html"><span class="ic" data-icon="home"></span>Trang chủ</a>
@@ -469,7 +394,7 @@ button { font: inherit; cursor: pointer; }
   <a class="bn-item" href="/app-tai-khoan.html#gopy"><span class="ic" data-icon="inbox"></span>Góp Ý</a>
 </nav>
 
-<script src="/nav.js?v=37" data-footer-only defer></script>
+<script src="/nav.js?v=38"></script>
 <script>window.TestimonialsNoAutoRun = true;</script>
 <script src="/testimonials.js?v=1"></script>
 <script>

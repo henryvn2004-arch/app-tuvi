@@ -273,9 +273,13 @@
     '.ic>svg,.ic-inline>svg{width:1em;height:1em;display:block}',
     '.topnav{position:sticky;top:0;z-index:200;background:rgba(251,250,246,.92);backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid #e8e3d8;display:flex;align-items:center;height:60px;padding:0 40px;gap:28px}',
     '.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}',
-    '.nav-logo img{width:38px;height:38px;object-fit:contain;border-radius:5px}',
-    '.nav-logo .name{font-size:16px;font-weight:700;color:#FF4000;font-family:\'Noto Serif\',Georgia,serif}',
-    '.nav-logo .url{font-size:10px;color:#767676;letter-spacing:.07em;text-transform:uppercase}',
+    '.nav-logo img{width:38px;height:38px;object-fit:contain;border-radius:5px;flex-shrink:0}',
+    // `.nav-brand-text` cần `min-width:0` để ellipsis bên dưới có tác dụng —
+    // flex item mặc định `min-width:auto`, không co được dưới độ rộng nội
+    // dung tự nhiên (bẫy flexbox kinh điển).
+    '.nav-brand-text{min-width:0;overflow:hidden}',
+    '.nav-logo .name{font-size:16px;font-weight:700;color:#FF4000;font-family:\'Noto Serif\',Georgia,serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
+    '.nav-logo .url{font-size:9px;color:#767676;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
     // Mascot Minh Bảo — góc phải topnav (guideline §5.1 "Logo + slogan nhẹ,
     // mascot nhỏ bên phải"). Ẩn dưới 900px: hết chỗ khi hamburger xuất hiện,
     // và cột nav-links đã chiếm hết flex:1 ở màn hẹp.
@@ -307,6 +311,13 @@
     '.nav-links.open{display:flex}',
     '.nav-link{padding:10px 24px;border-radius:0;width:100%;display:block}',
     '.nav-hamburger{display:block}',
+    // `#nav-auth-area` là `position:fixed` (xem comment ở JS bên dưới) nên
+    // flexbox của `.topnav` KHÔNG biết dành chỗ cho nó — logo dài (brand +
+    // slogan) tự do tràn ra tới sát/đè lên hamburger rồi đè lên nút "Đăng
+    // nhập"/badge Lượng. Ép logo co lại + ellipsis, chừa đủ chỗ CỐ ĐỊNH cho
+    // hamburger (38px) + auth area (rộng nhất khi đã đăng nhập: badge Lượng
+    // + avatar, ước lượng RỘNG để không tái phạm khi nội dung auth đổi).
+    '.nav-logo{flex-shrink:1;min-width:0;max-width:calc(100vw - 220px)}',
     '.nav-dd{width:100%;display:block}',
     '.nav-dd:hover .nav-dd-menu{display:none}',
     '.nav-dd-menu{position:static;border:none;box-shadow:none;background:rgba(15,42,61,.04);width:100%;max-height:60vh;overflow-y:auto}',
@@ -520,7 +531,7 @@
 
   var html = '<nav class="topnav">'
     + '<a class="nav-logo" href="/"><img src="/seal.webp" alt="">'
-    + '<div><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div></a>'
+    + '<div class="nav-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div></a>'
     // Mascot NGAY SAU logo, KHÔNG ở rìa phải: #nav-auth-area tự đặt
     // `position:fixed;right:56px` (auth.js updateNavUI) — thoát hẳn khỏi
     // flexbox của .topnav, nên một sibling flex mới ở cuối KHÔNG đẩy được nó
