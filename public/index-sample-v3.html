@@ -141,8 +141,8 @@ button { font: inherit; cursor: pointer; }
 .tools-sec { padding: 24px 0 8px; }
 .tools-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
 .tool-card { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
-.tool-ic { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; }
-.tool-ic .ic { width: 24px; height: 24px; }
+.tool-ic { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; background: #f4f2ec; overflow: hidden; }
+.tool-ic img { width: 100%; height: 100%; object-fit: cover; }
 .tool-card span { font-size: 12.5px; font-weight: 700; color: var(--ink); line-height: 1.3; }
 .t-gold { background: var(--gold-soft); color: #8a6a2f; }
 .t-blue { background: var(--blue-soft); color: #35618c; }
@@ -296,22 +296,22 @@ button { font: inherit; cursor: pointer; }
       <a class="more" href="/cong-cu.html">Xem tất cả →</a>
     </div>
     <div class="tools-grid">
-      <a class="tool-card" href="/app-luan-giai.html"><div class="tool-ic t-gold"><span class="ic" data-icon="sparkles"></span></div><span>Luận Giải<br>Lá Số</span></a>
-      <a class="tool-card" href="/app-chu-trinh-cuoc-doi.html"><div class="tool-ic t-gold"><span class="ic" data-icon="hourglass"></span></div><span>Chu Trình<br>Cuộc Đời</span></a>
-      <a class="tool-card" href="/app-bat-tu.html"><div class="tool-ic t-blue"><span class="ic" data-icon="file-text"></span></div><span>Tứ Bình<br>Bát Tự</span></a>
-      <a class="tool-card" href="/app-than-so-hoc.html"><div class="tool-ic t-gold"><span class="ic" data-icon="hash"></span></div><span>Thần Số<br>Học</span></a>
-      <a class="tool-card" href="/app-xem-tuoi.html"><div class="tool-ic t-pink"><span class="ic" data-icon="heart"></span></div><span>Xem Tuổi<br>Vợ Chồng</span></a>
-      <a class="tool-card" href="/app-gio-sinh.html"><div class="tool-ic t-pink"><span class="ic" data-icon="clock"></span></div><span>Xác Định<br>Giờ Sinh</span></a>
-      <a class="tool-card" href="/app-van-han-nam.html"><div class="tool-ic t-gold"><span class="ic" data-icon="calendar-days"></span></div><span>Vận Hạn<br>12 Tháng Tới</span></a>
-      <a class="tool-card" href="/app-ngay-tot.html"><div class="tool-ic t-pink"><span class="ic" data-icon="image"></span></div><span>Xem Ngày<br>Tốt Xấu</span></a>
-      <a class="tool-card" href="/app-cong-so.html"><div class="tool-ic t-blue"><span class="ic" data-icon="briefcase"></span></div><span>Tử Vi<br>Công Sở &amp; HN</span></a>
-      <a class="tool-card" href="/app-phong-thuy.html"><div class="tool-ic t-green"><span class="ic" data-icon="leaf"></span></div><span>Phong Thủy<br>Ứng Dụng</span></a>
-      <a class="tool-card" href="/app-xem-tuoi.html"><div class="tool-ic t-green"><span class="ic" data-icon="handshake"></span></div><span>Hợp Tác<br>Làm Ăn</span></a>
-      <a class="tool-card" href="/app-dien-tuong.html"><div class="tool-ic t-blue"><span class="ic" data-icon="smile"></span></div><span>Diện Tướng<br>Xem Tướng Mặt</span></a>
-      <a class="tool-card" href="/app-nhan-tuong.html"><div class="tool-ic t-blue"><span class="ic" data-icon="eye"></span></div><span>Nhãn Tướng<br>Xem Tướng Mắt</span></a>
-      <a class="tool-card" href="/app-thu-tuong.html"><div class="tool-ic t-gold"><span class="ic" data-icon="hand"></span></div><span>Thủ Tướng<br>Xem Chỉ Tay</span></a>
-      <a class="tool-card" href="/app-thanh-tuong.html"><div class="tool-ic t-pink"><span class="ic" data-icon="mic"></span></div><span>Thanh Tướng<br>Xem Giọng Nói</span></a>
-      <a class="tool-card" href="/app-khi-sac.html"><div class="tool-ic t-green"><span class="ic" data-icon="sunrise"></span></div><span>Khí Sắc<br>Vận Khí Ngắn Hạn</span></a>
+      <a class="tool-card" href="/app-luan-giai.html"><div class="tool-ic"><img src="/mascot/tool-icons/luan-giai.webp" alt="" loading="lazy"></div><span>Luận Giải<br>Lá Số</span></a>
+      <a class="tool-card" href="/app-chu-trinh-cuoc-doi.html"><div class="tool-ic"><img src="/mascot/tool-icons/chu-trinh-cuoc-doi.webp" alt="" loading="lazy"></div><span>Chu Trình<br>Cuộc Đời</span></a>
+      <a class="tool-card" href="/app-bat-tu.html"><div class="tool-ic"><img src="/mascot/tool-icons/tu-binh-bat-tu.webp" alt="" loading="lazy"></div><span>Tứ Bình<br>Bát Tự</span></a>
+      <a class="tool-card" href="/app-than-so-hoc.html"><div class="tool-ic"><img src="/mascot/tool-icons/than-so-hoc.webp" alt="" loading="lazy"></div><span>Thần Số<br>Học</span></a>
+      <a class="tool-card" href="/app-xem-tuoi.html"><div class="tool-ic"><img src="/mascot/tool-icons/xem-tuoi.webp" alt="" loading="lazy"></div><span>Xem Tuổi<br>Vợ Chồng</span></a>
+      <a class="tool-card" href="/app-gio-sinh.html"><div class="tool-ic"><img src="/mascot/tool-icons/gio-sinh.webp" alt="" loading="lazy"></div><span>Xác Định<br>Giờ Sinh</span></a>
+      <a class="tool-card" href="/app-van-han-nam.html"><div class="tool-ic"><img src="/mascot/tool-icons/van-han-nam.webp" alt="" loading="lazy"></div><span>Vận Hạn<br>12 Tháng Tới</span></a>
+      <a class="tool-card" href="/app-ngay-tot.html"><div class="tool-ic"><img src="/mascot/tool-icons/ngay-tot.webp" alt="" loading="lazy"></div><span>Xem Ngày<br>Tốt Xấu</span></a>
+      <a class="tool-card" href="/app-cong-so.html"><div class="tool-ic"><img src="/mascot/tool-icons/cong-so.webp" alt="" loading="lazy"></div><span>Tử Vi<br>Công Sở &amp; HN</span></a>
+      <a class="tool-card" href="/app-phong-thuy.html"><div class="tool-ic"><img src="/mascot/tool-icons/phong-thuy.webp" alt="" loading="lazy"></div><span>Phong Thủy<br>Ứng Dụng</span></a>
+      <a class="tool-card" href="/app-xem-tuoi.html"><div class="tool-ic"><img src="/mascot/tool-icons/hop-tac-lam-an.webp" alt="" loading="lazy"></div><span>Hợp Tác<br>Làm Ăn</span></a>
+      <a class="tool-card" href="/app-dien-tuong.html"><div class="tool-ic"><img src="/mascot/tool-icons/dien-tuong.webp" alt="" loading="lazy"></div><span>Diện Tướng<br>Xem Tướng Mặt</span></a>
+      <a class="tool-card" href="/app-nhan-tuong.html"><div class="tool-ic"><img src="/mascot/tool-icons/nhan-tuong.webp" alt="" loading="lazy"></div><span>Nhãn Tướng<br>Xem Tướng Mắt</span></a>
+      <a class="tool-card" href="/app-thu-tuong.html"><div class="tool-ic"><img src="/mascot/tool-icons/thu-tuong.webp" alt="" loading="lazy"></div><span>Thủ Tướng<br>Xem Chỉ Tay</span></a>
+      <a class="tool-card" href="/app-thanh-tuong.html"><div class="tool-ic"><img src="/mascot/tool-icons/thanh-tuong.webp" alt="" loading="lazy"></div><span>Thanh Tướng<br>Xem Giọng Nói</span></a>
+      <a class="tool-card" href="/app-khi-sac.html"><div class="tool-ic"><img src="/mascot/tool-icons/khi-sac.webp" alt="" loading="lazy"></div><span>Khí Sắc<br>Vận Khí Ngắn Hạn</span></a>
     </div>
   </div>
 </section>
