@@ -39,6 +39,14 @@ async function stubApis(page: Page, opts?: { blockPreview?: boolean }) {
     body: JSON.stringify({ hasAccess: false, balance: 0 }) }));
   await page.route('**/api/track**', (r) => r.fulfill({ status: 200, body: '{}' }));
   await page.route('**/api/search', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ docs: '' }) }));
+  // Pha 4 (2026-09-17): văn mẫu của phần 3-11 nay ĐỌC ĐỘNG từ
+  // `/samples/chu-trinh-cuoc-doi-dummy.json` (thay `DUMMY_CTCD` gõ tay cũ) —
+  // stub CỐ ĐỊNH, không phụ thuộc file thật (nội dung đổi theo lượt
+  // gen-tool-sample.mjs, và bài kiểm này không nên phụ thuộc mạng/deploy).
+  const ctcdDummy: Record<string, string> = {};
+  for (let ep = 16; ep <= 24; ep++) ctcdDummy[String(ep)] = `**Câu mẫu phần ${ep}**\n\nVăn mẫu của lá số MẪU cho phần ${ep}, đủ dài để không rỗng.`;
+  await page.route('**/samples/chu-trinh-cuoc-doi-dummy.json', (r) =>
+    r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(ctcdDummy) }));
 
   await page.route('**/api/lasotuvi**', async (r) => {
     const body = JSON.parse(r.request().postData() || '{}');

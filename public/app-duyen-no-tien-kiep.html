@@ -254,7 +254,7 @@ window.SHELL_INTRO={key:'duyen-no-tien-kiep'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
-<script src="/tuvi-paywall.js?v=35"></script>
+<script src="/tuvi-paywall.js?v=36"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=38" data-icons-only></script>
@@ -531,6 +531,12 @@ function mountHook(data) {
 // thanh toán — khác bản chữ nên không cho xem thật trước, đây chỉ là hình
 // dạng đang chờ theo đúng số người + giới tính đã nhập, không phải suy đoán
 // diện mạo thật của ai.
+// Văn MẪU (sample, `scripts/gen-tool-sample.mjs`) cho câu chuyện — Pha 4
+// (2026-09-17, cùng lượt app-luan-giai.html): `moTaMoiDuyen` của một cặp
+// lá số MẪU CỐ ĐỊNH (khác cặp đang nhập), làm mờ bằng `.tpw-real-lock`, đứng
+// NGAY DƯỚI bộ ảnh minh hoạ mờ — cả hai đều thuộc micro-preview trước khi bấm
+// "Xem Duyên Nợ", không phải kết quả thật.
+function _dnDummyPromise(){ return TuviPaywall.loadSampleJson('/samples/duyen-no-tien-kiep-dummy.json'); }
 function _showDummyPortraits(births) {
   var host = document.getElementById('dummyPortraitHost');
   if (!host) return;
@@ -540,7 +546,14 @@ function _showDummyPortraits(births) {
       'alt="Ảnh minh hoạ (mờ)" style="width:100px;height:150px;object-fit:cover;border-radius:10px">';
   }).join('');
   host.innerHTML = TuviPaywall.lockBadge('Bức tranh chung — minh hoạ') +
-    '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">' + imgs + '</div>';
+    '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">' + imgs + '</div>' +
+    '<div id="dummyPortraitDesc" style="margin-top:10px"></div>';
+  _dnDummyPromise().then(function (d) {
+    var text = d && d.moTaMoiDuyen;
+    var el = document.getElementById('dummyPortraitDesc');
+    if (!text || !el) return;
+    el.innerHTML = TuviPaywall.sampleBlurHtml('<p>' + esc(text) + '</p>');
+  }).catch(function () {});
 }
 function _clearDummyPortraits() {
   var host = document.getElementById('dummyPortraitHost');

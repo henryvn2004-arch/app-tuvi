@@ -240,7 +240,7 @@ window.SHELL_INTRO={key:'chan-dung-vo-chong'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=35"></script>
+<script src="/tuvi-paywall.js?v=36"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
@@ -488,6 +488,12 @@ function _renderLockWall() {
 // hơn không hiện gì (đúng bài học ở docs/nhat-ky/2026-09.md "Sửa nguồn ảnh
 // dummy"). Không có cặp ảnh riêng đúng phong cách thì bỏ qua khối này, chỉ
 // còn tường khoá chữ (`_renderLockWall`) — không tự chế ảnh giả để lấp chỗ.
+// Văn MẪU (sample, `scripts/gen-tool-sample.mjs`) — Pha 4 (2026-09-17, cùng
+// lượt app-luan-giai.html): `description`/`meetingContext`/`phuTheLuanGiai`
+// của một lá số MẪU CỐ ĐỊNH (khác lá số đang xem), dùng để làm mờ thay vạch
+// xám ở cả hai khối `dummyPortraitHost` (ảnh+mô tả) và `luanGiaiBlock`.
+function _cdvcDummyPromise(){ return TuviPaywall.loadSampleJson('/samples/chan-dung-vo-chong-dummy.json'); }
+
 function _showDummyPortrait(gender) {
   var host = document.getElementById('dummyPortraitHost');
   var url = TuviPaywall.dummyPortraitUrl(gender, 'chan-dung-vo-chong');
@@ -497,27 +503,40 @@ function _showDummyPortrait(gender) {
     TuviPaywall.lockBadge('Ảnh minh hoạ — chưa mở') +
     '<img src="' + url + '" class="tpw-real-lock" ' +
     'alt="Ảnh minh hoạ (mờ) — mở khoá để xem chân dung thật" ' +
-    'style="display:block;margin-top:8px;max-width:260px;width:100%;border-radius:12px">';
+    'style="display:block;margin-top:8px;max-width:260px;width:100%;border-radius:12px">' +
+    '<div id="dummyPortraitDesc" style="margin-top:10px"></div>';
+  _cdvcDummyPromise().then(function (d) {
+    var text = d && d.description;
+    var el = document.getElementById('dummyPortraitDesc');
+    if (!text || !el) return;
+    el.innerHTML = TuviPaywall.sampleBlurHtml('<p>' + esc(text) + '</p>');
+  }).catch(function () {});
 }
 
 // Box "Luận Giải Cung Phu Thê" MỜ (2026-09-07) — trước đây `luanGiaiBlock`
 // nằm `display:none` HOÀN TOÀN ở tầng xem-trước, người xem chỉ thấy đúng một
 // dòng liệt kê trong tường khoá chung (`_renderLockWall`), không có gì gợi ý
 // "đây là một đoạn văn thật, đã viết sẵn, đang chờ mở khoá" — dễ hiểu lầm là
-// tính năng chưa có. Dựng vài dòng giả làm mờ (đúng khối `.tpw-lock-blur` đã
-// dùng cho tường khoá/ảnh dummy) NGAY TRONG chính box thật, để hình dạng và
-// vị trí khớp 100% với box sẽ hiện sau khi mở khoá — không phải một box khác.
+// tính năng chưa có. Pha 4 (2026-09-17): có văn mẫu (`phuTheLuanGiai` trong
+// dummy JSON) thì hiện ĐÚNG văn đó, mờ bằng `.tpw-real-lock` — không có (dummy
+// hiện tại của tool này chưa sinh trường đó) thì rơi về vạch giả `.tpw-lock-blur`
+// cũ, cùng hình dạng box sẽ hiện sau khi mở khoá.
 function _showLuanGiaiSkeleton() {
   var block = document.getElementById('luanGiaiBlock');
   var text = document.getElementById('luanGiaiText');
   if (!block || !text) return;
-  text.innerHTML =
-    TuviPaywall.lockBadge('Luận giải — chưa mở') +
+  var badge = TuviPaywall.lockBadge('Luận giải — chưa mở');
+  text.innerHTML = badge +
     '<div class="tpw-lock-blur" aria-hidden="true" style="margin-top:10px">' +
       '<i style="width:96%"></i><i style="width:88%"></i><i style="width:93%"></i>' +
       '<i style="width:70%"></i><i style="width:91%"></i><i style="width:58%"></i>' +
     '</div>';
   block.style.display = 'block';
+  _cdvcDummyPromise().then(function (d) {
+    var sample = d && d.phuTheLuanGiai;
+    if (!sample) return;
+    text.innerHTML = badge + TuviPaywall.sampleBlurHtml(mdBoldParas(sample));
+  }).catch(function () {});
 }
 
 function _openPanel() {

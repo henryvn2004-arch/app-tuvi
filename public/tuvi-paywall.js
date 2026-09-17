@@ -85,6 +85,9 @@ const TuviPaywall = (() => {
 
   let _cfg        = null;
   let _priceCache = null;
+  // Cache theo path cho `loadSampleJson` — nhiều phần khoá trên CÙNG một trang
+  // (13 phan của laso chẳng hạn) đọc chung MỘT file *-dummy.json, chỉ fetch 1 lần.
+  const _sampleCache = {};
 
   // ── Ý định mở khoá TRƯỚC khi rời trang đi nạp Lượng ─────────────
   // Đo trên Chu Trình Cuộc Đời (2026-08-30): 12 lượt bấm mở khoá → 1 signup →
@@ -1677,6 +1680,40 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       (chart === false ? '' : '<div class="tpw-ph-chart"></div>') + '</div>';
   }
 
+  /**
+   * Nạp một file JSON mẫu (`public/samples/<tool>-dummy.json`, sinh bởi
+   * `scripts/gen-tool-sample.mjs` — văn AI THẬT của một lá số MẪU cố định,
+   * KHÔNG BAO GIỜ là dữ liệu của khách đang xem) — cache theo `path`, nhiều
+   * lời gọi cùng path chỉ fetch một lần. Lỗi mạng/404 → resolve `null`, để nơi
+   * gọi tự rơi về `placeholderHtml` (không có sample thì về đúng ô giữ chỗ cũ,
+   * không chặn cả trang).
+   */
+  function loadSampleJson(path) {
+    if (!_sampleCache[path]) {
+      _sampleCache[path] = fetch(path)
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .catch(function () { return null; });
+    }
+    return _sampleCache[path];
+  }
+
+  /**
+   * Bọc HTML đã render sẵn của văn MẪU (sample, khác `placeholderHtml`) bằng
+   * lớp mờ `.tpw-real-lock` — CÙNG class trang này đã dùng để mờ nội dung
+   * deterministic thật cho khách chưa đăng nhập, nay dùng lại cho văn AI của
+   * lá số MẪU đứng sau phần khoá, để "trông có thật" thay vì vạch xám trống.
+   *
+   * 🔴 CHỈ nhận HTML đã dựng từ văn bản trong `*-dummy.json` (sample cố định).
+   * KHÔNG truyền dữ liệu THẬT của khách đang xem vào đây — đó chính là lỗi
+   * `buildTeaserHtml` cũ đã bị cấm (xem app-luan-giai.html
+   * `buildLockedPlaceholderHtml`, "che hết luôn, đừng vừa hiện vừa che").
+   */
+  function sampleBlurHtml(html) {
+    if (!html) return '';
+    _css();
+    return '<div class="tpw-real-lock" aria-hidden="true">' + html + '</div>';
+  }
+
   // ── DANH TÍNH TẠM CỦA KHÁCH CHƯA ĐĂNG NHẬP ────────────────────────────────
   // Khoá đếm suất `preview.free_runs` của cầu dao xem trước
   // (lib/billing/anon-preview.ts). ⚠️ KHÔNG phải danh tính: client tự khai, xoá
@@ -1753,6 +1790,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     init, getProduct, requireCredits, requireCreditsCached, requireCreditsCachedQuery,
     generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots,
     mountCostHints, refreshCostHints, lockPreview, isFreeRerun, lockBadge, placeholderHtml,
+    loadSampleJson, sampleBlurHtml,
     previewAnonId, dummyPortraitUrl,
     sectionLockHtml, wireSectionLocks, resumeIfPending,
     _banner, _close, _closeLock, _login, showRefundNotice,
