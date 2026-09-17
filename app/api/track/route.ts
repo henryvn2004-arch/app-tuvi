@@ -101,6 +101,10 @@ const ALLOWED = new Set([
   //   report_resend_click = bấm "Gửi lại PDF" ở lịch sử
   //   report_resend_sent  = gửi lại thành công
   'report_resend_click', 'report_resend_sent',
+  // Pha 5b (2026-09) — permalink riêng tư `/ket-qua-laso/<token>` mở từ link
+  // trong email resend. `report_link_view` = có ai thật sự MỞ link đó không
+  // (khác việc chỉ gửi email đi, chưa chắc ai bấm vào).
+  'report_link_view',
 ]);
 
 // Coi là "vừa đăng ký" nếu tài khoản tạo trong 15 phút gần đây (né tính nhầm

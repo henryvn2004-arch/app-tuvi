@@ -95,7 +95,7 @@ export interface LuanGiaiPdfInput {
 // CLAUDE.md — đây là văn bản trang trí tĩnh, hai nơi render bằng hai bộ máy
 // khác hẳn nhau (React-PDF primitives vs HTML/CSS in trình duyệt) nên không
 // thể dùng chung một hàm. Đổi quote thì sửa CẢ HAI chỗ.
-const TOOL_META: Record<LuanGiaiToolId, { title: string; quoteVi: string; quoteViet: string; quoteSrc: string }> = {
+export const TOOL_META: Record<LuanGiaiToolId, { title: string; quoteVi: string; quoteViet: string; quoteSrc: string }> = {
   laso: {
     title: 'Luận Giải Lá Số',
     quoteVi: 'Tận kỳ tâm giả, tri kỳ tính dã; tri kỳ tính, tắc tri thiên hĩ.',
