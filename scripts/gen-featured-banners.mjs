@@ -65,62 +65,60 @@ if (!STYLE_LOCK || !TEXT_SAFE_AREA || typeof nhanVat !== 'function') {
   process.exit(1);
 }
 
-// Bìa bản luận giải — nhận diện THƯƠNG HIỆU dùng chung mọi banner (bìa xanh
-// navy + seal đỏ, xem lib/pdf/luan-giai.tsx cho bản PDF thật). KHÔNG tả chữ
-// đọc được — seal thật có chữ Hán, ở đây làm mờ theo đúng luật TEXT_SAFE_AREA.
-const BIA_LUAN_GIAI =
-  'Beside them rests the closed cover of the printed reading booklet: a deep navy-blue card cover, a small red square stamp near the lower corner with soft illegible pale marks suggestive of a traditional seal, a thin muted gold rule near the top edge, otherwise plain.';
+// Mô tả QUYỂN LUẬN GIẢI — nhận diện THƯƠNG HIỆU dùng chung mọi banner (bìa
+// xanh navy + seal đỏ, xem lib/pdf/luan-giai.tsx cho bản PDF thật). KHÔNG tả
+// chữ đọc được — seal thật có chữ Hán, ở đây làm mờ theo đúng luật
+// TEXT_SAFE_AREA. Mỗi banner tự khai `bia` RIÊNG (đóng hay mở, ai cầm, trang
+// mở hiện gì) thay vì một hằng số `BIA_LUAN_GIAI` đóng dùng chung — bản duyệt
+// 2026-09-17 (Henry) có banner bìa đóng (cầm lên khoe/để trên bàn) VÀ banner
+// bìa mở (chỉ vào biểu đồ), gộp chung một mô tả "đóng" cho cả hai là sai với
+// ảnh thật đã vẽ.
 
 const BANNERS = [
   {
     id: 'laso',
     ten: 'Luận Giải Tử Vi',
-    nhanVat: nhanVat('nam', 'truong-thanh'),
-    canh: 'Trí sits alone at a small wooden desk in his own quiet room in the evening, one hand resting on an open booklet propped against a stack of books, intently studying the page. A single warm desk lamp is the main light source.',
+    nhanVat: nhanVat('nu', 'truong-thanh'),
+    canh: 'Thư sits at a lively outdoor sidewalk café table in Saigon with three close friends around her, holding up the closed booklet so everyone can see its cover, caught mid-laugh and mid-sentence as she points at it, animated and delighted. Her friends lean in eagerly — one reaching out toward the booklet, another laughing with their head tipped back, the third grinning and chiming in — the whole table buzzing with cheerful chatter.',
     boiCanh:
-      'A modest bedroom-study corner: a wooden desk, a stack of paperback books, a small potted plant, a half-drunk mug of tea, curtains drawn against the dark window, a plain wall calendar.',
-    trang:
-      'The open page shows a large circular natal chart divided into twelve wedge-shaped segments around a small empty centre, drawn with a faint ruler-straight grid, no readable text or numbers in any segment.',
+      'A bustling Saigon sidewalk café: small round marble-top tables and rattan chairs spilling onto the pavement, glasses of cà phê sữa đá sweating on the table with a phin filter still perched on one, a row of potted areca palms along a low wall, a striped fabric awning overhead, motorbikes and a softly blurred street scene beyond the railing, warm late-morning sunlight, the whole place lively and busy with other cheerful patrons lightly sketched in the background.',
+    bia: 'In her hands, held up so her friends can see, the closed cover of the printed reading booklet: a deep navy-blue card cover, a small red square stamp near the lower corner with soft illegible pale marks suggestive of a traditional seal, a thin muted gold rule near the top edge, otherwise plain.',
   },
   {
     id: 'chu-trinh-cuoc-doi',
     ten: 'Chu Trình Cuộc Đời',
-    nhanVat: nhanVat('nu', 'truong-thanh'),
-    canh: 'Thư sits alone at a long reading table in a quiet library, both hands holding an open booklet in front of her, absorbed and thoughtful.',
+    nhanVat: nhanVat('nam', 'truong-thanh'),
+    canh: 'Trí sits at his desk in a bright open-plan office, holding up the closed booklet so his colleagues gathered around can see its cover, caught mid-laugh and mid-sentence as he points at it, delighted and easy. Several colleagues — both men and women — have gathered around his desk, leaning in eagerly: one leaning over his shoulder pointing at the cover, a woman beside him laughing with a hand near her mouth, another colleague perched on the edge of a neighbouring desk grinning, the whole corner of the office buzzing with cheerful chatter.',
     boiCanh:
-      "A small municipal library reading room: tall wooden bookshelves softly out of focus behind, a single hanging pendant lamp over the table, a short stack of returned books at the table's edge, soft afternoon window light.",
-    trang:
-      'The open page shows a tall spindle-shaped diagram: a narrow vertical spine widening and narrowing through nine uneven stacked segments from top to bottom, each segment a different soft muted shade, no readable text or numbers.',
+      'A bright open-plan office in central Saigon: tall floor-to-ceiling windows with a hazy high-rise skyline beyond, rows of desks with monitors and lightly sketched colleagues further back, a potted pothos trailing off a filing cabinet, a couple of plastic cups of iced coffee sweating on the desks, scattered papers and a closed laptop, warm late-morning sunlight pouring in, everything fresh and lively.',
+    bia: 'In his hands, held up so his colleagues can see, the closed cover of the printed reading booklet: a deep navy-blue card cover, a small red square stamp near the lower corner with soft illegible pale marks suggestive of a traditional seal, a thin muted gold rule near the top edge, otherwise plain.',
   },
   {
     id: 'tu-binh',
     ten: 'Tử Bình Bát Tự',
-    nhanVat: nhanVat('nam', 'truong-thanh'),
-    canh: 'Trí sits at his own desk in an open-plan office after most colleagues have left, leaning over an open booklet placed beside his closed laptop, one finger tracing down the page.',
+    nhanVat: nhanVat('nu', 'truong-thanh'),
+    canh: 'Thư sits across a small restaurant table from a close friend at dinner, the booklet resting closed on the table between their half-finished plates. The conversation is quiet and unhurried — Thư leaning in slightly with a soft, thoughtful half-smile, speaking gently with one hand resting near the booklet, her friend listening closely with a warm, attentive expression, chin resting lightly on one hand. No one else is in the frame — just the two of them, fully absorbed in the moment, the mood calm and intimate rather than loud.',
     boiCanh:
-      'A small office corner in the evening: a laptop with a dimmed screen, a desk lamp switched on, a potted pothos trailing off a filing cabinet, a window showing a few lit windows in a distant skyline, an empty mug.',
-    trang:
-      'The open page shows four narrow vertical columns side by side like carved pillars, each topped with a small abstract stacked-shape motif, no readable text or characters.',
+      'A cosy small Vietnamese restaurant at dinner time: a candle glowing low between them, two plates of a shared home-style dish, chopsticks resting on ceramic rests, a carafe of water sweating lightly, a vase with a single stem of flowers, other diners softly blurred and quiet in the background, warm dim evening lighting.',
+    bia: 'On the table between their plates, resting closed, the printed reading booklet: a deep navy-blue card cover, a small red square stamp near the lower corner with soft illegible pale marks suggestive of a traditional seal, a thin muted gold rule near the top edge, otherwise plain.',
   },
   {
     id: 'chan-dung-vo-chong',
     ten: 'Chân Dung Vợ Chồng',
-    nhanVat: `${nhanVat('nam', 'truong-thanh')}. Beside them, ${nhanVat('nu', 'truong-thanh')}`,
-    canh: 'Trí and Thư sit close together at a small café table, both leaning in over one open booklet held between them, Thư pointing at the page while Trí smiles. No one else is in the frame — just the two of them.',
+    nhanVat: `${nhanVat('nu', 'truong-thanh')}. Beside her, ${nhanVat('nam', 'truong-thanh')}`,
+    canh: 'Thư and Trí sit close together at a small round table outside a little ice cream shop by Hoàn Kiếm Lake, each with a small cup of ice cream in front of them. Thư holds the booklet open between them, one finger tracing the page as she explains, leaning in with a warm, animated expression. Trí leans in beside her, nodding slowly with a small satisfied smile, clearly recognising something true in what she is pointing out, one arm resting lightly along the back of her chair. No one else is in the frame — just the two of them, close and unhurried.',
     boiCanh:
-      'A corner table in a quiet Vietnamese coffee shop: two glasses of cà phê sữa đá sweating rings onto the wood table, a small potted succulent, soft rain streaking the window beside them, warm hanging pendant lights.',
-    trang:
-      "The open page shows a softly rendered portrait sketch: a gentle line-art silhouette bust of a person's head and shoulders, unfinished and impressionistic, no facial detail sharp enough to read as a specific face, no readable text.",
+      "A small outdoor ice cream stall table by Hoàn Kiếm Lake in Hanoi on a crisp cool evening: the lake's still water and the silhouette of Turtle Tower softly visible behind them, a string of warm fairy lights strung along the stall awning, both of them in light jackets and Thư with a thin scarf, a faint chill in the air suggested by warm hands wrapped around the ice cream cups and a light steam of breath, old trees along the lake shore, a few strollers softly sketched in the distance, the whole scene glowing warm against the cool blue evening.",
+    bia: 'The booklet Thư holds open between them: a deep navy-blue card cover folded back, a small red square stamp near the lower corner of the back cover with soft illegible pale marks suggestive of a traditional seal, a thin muted gold rule near the top edge. The open page shows two small circular natal charts side by side, each divided into faint wedge-shaped segments with a few soft glowing dots, joined by a single thin curved line between them — no readable text or numbers anywhere.',
   },
   {
     id: 'day-con',
     ten: 'Dạy Con Theo Lá Số',
-    nhanVat: nhanVat('nu', 'truong-thanh'),
-    canh: 'Thư sits on the floor of her living room in the evening, back resting against the sofa, an open booklet resting on her knees, reading with a soft thoughtful smile.',
+    nhanVat: `${nhanVat('nu', 'truong-thanh')}. Beside her, ${nhanVat('nam', 'truong-thanh')}`,
+    canh: 'Trí and Thư sit close together on a cosy sofa at home, Trí holding the booklet open and angled toward Thư, one finger tracing the page as he explains something. Thư leans in, listening closely with a warm, attentive expression, nodding slowly as if recognising something true. On the floor in front of the sofa, their five-year-old son sits playing with a set of wooden toy blocks and a small toy car, absorbed and happy, while his three-year-old little sister sits close beside him, reaching for one of the blocks, both children lit warm and soft, a little rug and a scatter of toys around them.',
     boiCanh:
-      "A lived-in living room: a low coffee table with a child's crayon drawing taped to its edge, a small toy car left on the rug, a standing lamp glowing warm, a folded child's blanket on the sofa behind her.",
-    trang:
-      'The open page shows a simple stepped diagram: a gently rising staircase-like path of five uneven steps with a small abstract marker on one step, no readable text or labels.',
+      'A cosy wooden mountain home in Đà Lạt: a small wood-burning stove glowing in the corner, a knitted blanket draped over the sofa arm, tall windows showing misty pine trees and soft evening light outside, a low wooden coffee table with two mugs of hot tea steaming, potted ferns by the window, warm lamplight mixing with the last cool blue of dusk outside, the whole room quiet and warm.',
+    bia: 'The booklet Trí holds open toward Thư: a deep navy-blue card cover folded back, a small red square stamp near the lower corner of the back cover with soft illegible pale marks suggestive of a traditional seal, a thin muted gold rule near the top edge. The open page shows a gently rising path of small rounded stepping-stones, each marked with a soft glowing dot, climbing from one corner of the page to the other — no readable text or numbers anywhere.',
   },
 ];
 
@@ -132,8 +130,7 @@ function buildPrompt(b) {
     '',
     `Scene: ${b.canh}`,
     `Environment: ${b.boiCanh}`,
-    `The booklet's open page: ${b.trang}`,
-    BIA_LUAN_GIAI,
+    b.bia,
     '',
     'Composition: wide horizontal frame, the character(s) placed off-centre towards the right, seen from a natural eye-level three-quarter angle, room to breathe around them.',
     '',
