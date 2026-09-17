@@ -771,13 +771,17 @@ function _tryHookNarrative(host,spec){
   if(!spec||!Array.isArray(spec.facts)||spec.facts.length<2) return;
   // Dấu hiệu "đang soạn thêm" — khối cũ (mount()) hiện NGAY và trông như đã
   // xong, nên không có dòng này thì người dùng dễ tưởng nhầm trang đứng yên
-  // trong lúc lượt gọi LLM (~5-8s) vẫn đang chạy phía sau. Gắn vào CUỐI
-  // #hookHost (ngoài .hkl-block) để không đụng DOM mà upgrade() sắp thay
-  // nguyên khối; tự xoá khi upgrade() thành công (host.innerHTML bị ghi đè)
-  // hoặc khi rơi vào nhánh không có gì để nâng cấp.
+  // trong lúc lượt gọi LLM vẫn đang chạy phía sau. Vòng quay tái dùng đúng
+  // `.rr-spin`/`@keyframes rr-spin` đã có sẵn trong shell.css (dùng ngay
+  // trong trang này ở #lgBtnPdfIcon) — không định nghĩa keyframe thứ hai.
+  // Số giây nêu ra là khoảng đo THẬT trên `events.llm_usage` (2,7–7,9s ở lượt
+  // đo 2026-09-17), không phải số áng chừng. Gắn vào CUỐI #hookHost (ngoài
+  // .hkl-block) để không đụng DOM mà upgrade() sắp thay nguyên khối; tự xoá
+  // khi upgrade() thành công (host.innerHTML bị ghi đè) hoặc khi rơi vào
+  // nhánh không có gì để nâng cấp.
   var pending=document.createElement('div');
-  pending.style.cssText='margin-top:8px;font-size:12px;color:var(--text-lt);opacity:.85';
-  pending.textContent='✦ Đang soạn phần mở đầu hấp dẫn hơn…';
+  pending.style.cssText='display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12px;color:var(--text-lt);opacity:.9';
+  pending.innerHTML='<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
   if(host)host.appendChild(pending);
   var tk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
   var headers={'Content-Type':'application/json'};
