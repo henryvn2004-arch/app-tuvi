@@ -112,7 +112,7 @@ xanh + Henry gật.
 |---|---|---|---|
 | 0 — Nền | ✅ Xong | `theme.css` gom 40 file, `check:theme` xanh | — |
 | 1 — Character Bible | ✅ Xong (paywall wire xong, 4 pose để dành) | mascot/hero/corner/library/articles/community/**paywall** V2 đã lên site; `expr-vui-v2` wire vào rail-empty, `paywall-v2.webp` (chị khách cầm lá số về cùng bạn trai, Minh Bảo chơi với bạn, bình minh Tết) wire vào `.tpw-lock` (`tuvi-paywall.js`, dùng chung `_softLock`+`lockPreview`) | 4 pose (chỉ tay/thẻ tre/chống cằm/vẫy tay) đã duyệt + commit, vẫn CHƯA có "khung minh hoạ" nào trống trên `/app/*` phù hợp — để dành chờ sprint có onboarding/empty-state mới |
-| 2 — Chrome dùng chung | ⚠️ Phần lớn xong | `nav.js`: **`.topnav` đổi nền navy→kem trong suốt+blur khớp `.mb-header` homepage thật** (2026-09-17, Henry chỉ ra "header trên cùng vẫn navy" — Sprint 2 trước đó mới đổi hex đậm→nhạt, chưa đổi kiến trúc sáng/tối), 102 icon SVG bo tròn nét, corner-Bảo trong topnav (đã cập nhật sang **V2** `corner-v2.webp` khi đổi style), **footer đổi màu nâu espresso khớp tông trang chủ mới** | 🔴 Henry: 102 icon hiện tại (Lucide bo nét) chưa đủ khớp Ghibli/chibi — cần **gen lại bằng ảnh**, không còn thuần SVG (xem ghi chú ở Sprint 2 đầy đủ) |
+| 2 — Chrome dùng chung | ⚠️ Phần lớn xong | `nav.js`: **`.topnav` đổi nền navy→kem trong suốt+blur khớp `.mb-header` homepage thật** (2026-09-17, Henry chỉ ra "header trên cùng vẫn navy" — Sprint 2 trước đó mới đổi hex đậm→nhạt, chưa đổi kiến trúc sáng/tối), 102 icon SVG bo tròn nét, corner-Bảo trong topnav (đã cập nhật sang **V2** `corner-v2.webp` khi đổi style), **footer đổi màu nâu espresso khớp tông trang chủ mới**, **254 icon-span dùng gold cũ `#9A7B3A` đã retune sang `#7C6942`** (2026-09-17, chỉ màu — bản thân SVG dùng `currentColor` nên không có gì để retune ở tầng đó) | 🔴 Henry: 102 icon hiện tại (Lucide bo nét) chưa đủ khớp Ghibli/chibi — cần **gen lại bằng ảnh**, không còn thuần SVG. **VẪN TREO** — retune màu không giải quyết được câu hỏi hình dạng này (xem ghi chú ở Sprint 2 đầy đủ) |
 | 3 — App shell (53 trang `/app/*`) | ⚠️ Khung + rail-empty xong | `shell.css` đổi palette + bo góc thẻ + shadow mềm; **Minh Bảo (`expr-vui-v2`) đã vào `.rail-empty`** (trạng thái trước khi có lá số) kèm câu chào giọng §2, thay avatar "thầy" cũ ở đúng chỗ đó — KHÔNG đụng `.rail-h`/`.rail-ava` (hệ chọn thầy luận giải, khác Minh Bảo, vẫn hoạt động bình thường) | Rail SAU khi có lá số (đang chat) chưa có Minh Bảo — mới phủ trạng thái RỖNG; chưa map biểu cảm khác nhau theo trang (§3.4, mới dùng đúng 1/4 biểu cảm); **`tuvi-form.js` chưa đổi giọng "Bảo/bạn"** (§1.1/§2 — quyết định RIÊNG, còn chờ Henry gật vì đụng cấu trúc form) |
 | 4 — Homepage (`/`) | ✅ Xong, đang polish | Dựng lại theo 2 mockup Henry gửi, ảnh V2 riêng cho từng khối (hero/daily/library/articles/community), SEO đầy đủ, wire vào route `/`, vá LCP+contrast+responsive-images (Lighthouse xanh), vá màu + bỏ icon SVG thô ở footer theo phản hồi Henry | — (đang chờ Henry duyệt lần cuối) |
 | 5 — 52 tool avatar | ✅ Xong | 52/52 avatar mới — thầy/cô của 11 nhóm (`master-groups.ts`, dùng chung Sprint 5b) đang cầm/chỉ vào deliverable riêng của từng tool, không phải Minh Bảo; `public/tool-avatars/*.webp` (512×512, quality 82) đã thay hết art cũ | Vẫn hiện ở `/tools/*.html` (Sprint 6, còn navy) và header PDF — chưa có "sân khấu" webtoon để khoe cho tới khi Sprint 6 xong |
@@ -197,10 +197,23 @@ khoá (`data-icon="wallet"`) ⇒ **không trang nào phải sửa**.
 bằng ảnh** (illustration thật, không phải line-art vector bo góc). Đổi kỹ
 thuật: 102 icon giờ là ẢNH (webp nhỏ) chứ không còn thuần SVG path — bỏ
 luôn ràng buộc "không rasterize icon" phía trên, cần nghĩ lại ngân sách
-cân nặng mobile (KB/icon × 102) trước khi làm.
+cân nặng mobile (KB/icon × 102) trước khi làm. **VẪN TREO** — câu hỏi hình
+dạng chưa được trả lời, xem mục màu bên dưới.
 
-**Sample gate:** ảnh chụp topnav + footer + bảng 102 icon.
-**Ước:** 2–3 ngày.
+✅ **2026-09-17 — phần MÀU đã xong, hình dạng vẫn treo.** Hỏi Henry "chỉ retune
+màu có đủ không" trước khi động vào 102 icon SVG — khảo sát ra **hai việc khác
+nhau bị PLAN.md gộp làm một**: (a) bản thân bộ SVG dùng `stroke="currentColor"`,
+`.ic`/`.ic-inline` không khai `color` ⇒ **không có gì để retune ở tầng này**,
+icon tự ăn màu chữ bao quanh, đã đúng từ Sprint 6/7; (b) một lỗi THẬT riêng biệt
+— 254/436 chỗ dùng hex gold cũ `#9A7B3A` là hex ghim thẳng vào span
+`data-icon`/`data-icon-emoji` (fallback trước khi `mountIcons()` chạy), sót lại
+từ trước Sprint 6/7 vì nó không nằm trong `:root`. Henry chốt **chỉ sửa (b)**,
+đổi `#9A7B3A→#7C6942` (khớp giá trị Sprint 6/7), giữ nguyên 182 chỗ hex đó dùng
+cho phần tử KHÔNG phải icon. Câu hỏi (a) — hình dạng icon có cần vẽ lại bằng
+ảnh — **vẫn TREO**, màu không giải quyết được hình. Chi tiết: `docs/nhat-ky/2026-09.md`.
+
+**Sample gate:** ảnh chụp topnav + footer + bảng 102 icon (cho phần HÌNH DẠNG,
+chưa làm). **Ước:** 2–3 ngày (cho phần hình dạng, chưa làm).
 
 ---
 

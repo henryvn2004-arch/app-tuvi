@@ -46,7 +46,7 @@
     const reasons = (v.reasons || []).slice(0, 3).map(r => '· ' + r).join('<br>');
     return `
       <div class="pregen-block">
-        <div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Trục ${label}</div>
+        <div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> Trục ${label}</div>
         <div class="pregen-domain-bar">
           <div class="pregen-domain-name">${label}</div>
           <div class="pregen-domain-track"><div class="pregen-domain-fill" style="width:${v.score*10}%"></div></div>
@@ -81,7 +81,7 @@
   switch (phan) {
     case 1: { // Tổng Quan Bát Tự — radar 7 trục + cường nhược + ngũ hành + override cách cục
       h += `<div class="pregen-block">
-        <div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚖" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">⚖</span> Cường Nhược Nhật Can</div>
+        <div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚖" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚖</span> Cường Nhược Nhật Can</div>
         <div class="pregen-domain-bar">
           <div class="pregen-domain-name">${bt.cuongNhuoc.label}</div>
           <div class="pregen-domain-track"><div class="pregen-domain-fill" style="width:${(bt.cuongNhuoc.score||5)*10}%"></div></div>
@@ -93,12 +93,12 @@
           · Đắc thế: ${bt.cuongNhuoc.dacThe || 0}
         </div>
       </div>`;
-      h += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📐" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📐</span> 7 trục đánh giá định lượng</div>
+      h += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📐" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📐</span> 7 trục đánh giá định lượng</div>
         <div style="margin-top:8px"><canvas id="phan1-radar-chart" style="max-height:380px"></canvas></div>
       </div>`;
       const overrides = matches.filter(m => m.hopLe && m.override);
       if (overrides.length) {
-        h += `<div class="pregen-block override"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔥" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔥</span> Cách cục đặc biệt thay nội cách</div>`;
+        h += `<div class="pregen-block override"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔥" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔥</span> Cách cục đặc biệt thay nội cách</div>`;
         overrides.forEach(m => h += `<div class="pregen-cach-name">${m.ten}</div><div class="pregen-cach-desc">${m.description}</div><div class="pregen-cach-source">— ${m.source}</div>`);
         h += `</div>`;
       }
@@ -106,7 +106,7 @@
     }
     case 2: { // Cách Cục
       h += `<div class="pregen-block">
-        <div class="pregen-title"><span class="ic-inline" data-icon-emoji="📜" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📜</span> Nội cách bản mệnh</div>
+        <div class="pregen-title"><span class="ic-inline" data-icon-emoji="📜" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📜</span> Nội cách bản mệnh</div>
         <div class="pregen-cach-name">${bt.cachCuc.primary || '—'}</div>
         <div class="pregen-cach-desc">Loại: ${bt.cachCuc.type || '—'} · ${bt.cachCuc.thanhPhaCach || ''}</div>
         ${bt.cachCuc.note ? `<div class="pregen-domain-reasons" style="padding-left:0;margin-top:8px">${bt.cachCuc.note}</div>` : ''}
@@ -116,7 +116,7 @@
       const warnings = matches.filter(m => !m.hopLe);
       if (warnings.length) warnings.forEach(m => h += renderCachCucCard(m));
       h += `<div class="pregen-block">
-        <div class="pregen-title"><span class="ic-inline" data-icon-emoji="🌟" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🌟</span> Dụng thần</div>
+        <div class="pregen-title"><span class="ic-inline" data-icon-emoji="🌟" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🌟</span> Dụng thần</div>
         <div class="pregen-cach-name">Dụng: ${bt.dungThan.primary}${bt.dungThan.secondary ? ' · Hỉ: ' + bt.dungThan.secondary : ''}</div>
         <div class="pregen-cach-desc">${bt.dungThan.method || ''}<br>${bt.dungThan.rationale || ''}</div>
       </div>`;
@@ -154,7 +154,7 @@
     }
     case 8: { // Tình Duyên
       h += renderDomainBar('Hôn nhân', 'honNhan');
-      h += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="💞" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💞</span> Cung Phu Thê (Nhật Chi)</div>
+      h += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="💞" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">💞</span> Cung Phu Thê (Nhật Chi)</div>
         <div class="pregen-cach-name">${bt.tuTru[2].chi}</div>
         <div class="pregen-cach-desc">Tàng can: ${(bt.tuTru[2].tangCan||[]).map(t=>t.can).join(', ') || '—'}</div>
       </div>`;
@@ -166,7 +166,7 @@
       h += renderDomainBar('Sức khỏe', 'sucKhoe');
       const nh = bt.nguHanh?.counts || {};
       const order = ['Mộc','Hỏa','Thổ','Kim','Thủy'];
-      h += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🌿" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🌿</span> Phân bố ngũ hành</div>`;
+      h += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🌿" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🌿</span> Phân bố ngũ hành</div>`;
       order.forEach(hanh => {
         const n = nh[hanh] || 0;
         h += `<div class="pregen-domain-bar">
@@ -248,7 +248,7 @@
     case 12: { // Tổng Quan Đại Vận — line chart
       if (bt.daiVans?.length) {
         h += `<div class="pregen-block">
-          <div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📈</span> 9 đại vận — biểu đồ điểm số</div>
+          <div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📈</span> 9 đại vận — biểu đồ điểm số</div>
           <div style="position:relative;height:240px;margin-top:8px"><canvas id="phan12-line-chart"></canvas></div>
           <div class="pregen-domain-reasons" style="padding-left:0;margin-top:12px">
             · Khởi vận: ${bt.tuoiKhoiVan} tuổi · Hướng: ${bt.daiVanThuan ? 'thuận' : 'nghịch'}<br>
@@ -262,7 +262,7 @@
       const dv = bt.daiVanHienTai;
       if (dv) {
         h += `<div class="pregen-block">
-          <div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚡" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">⚡</span> Đại vận đang trải qua</div>
+          <div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚡" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚡</span> Đại vận đang trải qua</div>
           <div class="pregen-cach-name">${dv.can} ${dv.chi} — ${dv.thapThanCan}/${dv.thapThanChi}</div>
           <div class="pregen-cach-desc">Tuổi ${dv.tuoiStart}-${dv.tuoiEnd} · Năm ${dv.namStart}-${dv.namEnd} · Score ${dv.score}/10 · ${dv.label}</div>`;
         if (dv.factors?.length) {
@@ -284,7 +284,7 @@
       const next = bt.daiVans?.[nextIdx];
       if (next) {
         h += `<div class="pregen-block">
-          <div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔮</span> Đại vận sắp tới</div>
+          <div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔮</span> Đại vận sắp tới</div>
           <div class="pregen-cach-name">${next.can} ${next.chi} — ${next.thapThanCan}/${next.thapThanChi}</div>
           <div class="pregen-cach-desc">Tuổi ${next.tuoiStart}-${next.tuoiEnd} · Năm ${next.namStart}-${next.namEnd} · Score ${next.score}/10 · ${next.label}</div>`;
         if (next.factors?.length) {
@@ -306,7 +306,7 @@
         const factors = ln.factors || [];
         const rels = ln.relations || {};
         h += `<div class="pregen-block">
-          <div class="pregen-title"><span class="ic-inline" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📅</span> Năm ${ln.nam} (Lưu Niên)</div>
+          <div class="pregen-title"><span class="ic-inline" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📅</span> Năm ${ln.nam} (Lưu Niên)</div>
           <div class="pregen-cach-name">${ln.can} ${ln.chi} — ${ln.thapThanCan} / ${ln.thapThanChi}</div>
           <div class="pregen-cach-desc">Tuổi ${bt.tuoiXem} · Nạp âm ${ln.napAm} · Score ${ln.score}/10 · ${ln.label}</div>`;
         // Relations với tứ trụ
