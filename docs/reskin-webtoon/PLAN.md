@@ -121,7 +121,7 @@ xanh + Henry gật.
 | 7 — 25 route SEO server | ✅ Xong | 25 file (24 route riêng + `app/ngay-tot/_shared.ts` dùng chung 6 route) đổi `:root` cục bộ sang bảng webtoon, band navy (`.hero`/`.page-header`/`.profile-header`/`.hub-hero`) đổi sang nền kem luôn trong cùng lượt (rút kinh nghiệm Sprint 6), thêm `#nav-ph` còn thiếu, bump `nav.js` version lệch ở các trang `[slug]` | "26 route" là số đếm sai, thực tế 30 route dựng HTML (4 trang share/embed cố ý không nạp nav/footer, không tính); `app/thu-vien` + 4 trang share/embed vẫn navy riêng, cố ý ngoài phạm vi (không dùng biến chung, không nạp nav.js) |
 | 8 — Ảnh phụ | ✅ Xong | Khảo sát trực tiếp mở từng ảnh ra xem (không đoán theo khuôn Sprint 6/7): fbcard-topics/van-rieng (ink-wash be/nâu/xanh rêu) đã tương thích sẵn nền kem, seal.webp là dấu triện đỏ-trắng theo quy ước văn hoá — cả 3 KHÔNG cần sửa, gen lại sẽ tốn tiền vô ích. Chỉ 4 route Satori (`app/api/og/*`) thật sự "vẫn navy" — đổi nền `#061A2E`→`#F4F2EC`, chữ trắng→navy, gold chuẩn hoá `#C8A96A`/`#7C6942` | 64 quẻ (Gongbi) Henry xác nhận giữ nguyên, không đụng. `scripts/gen-que-images.mjs` vẫn ghim `gpt-image-1` cũ (đã bị OpenAI khai tử) — nằm trong vùng "không đụng" nên chưa vá, cờ nợ kỹ thuật riêng |
 | 9 — Thư viện minh hoạ luận giải | ✅ Xong (không đổi gì) | Đếm bucket thật qua Supabase (MCP, không cần script) ra 652 ảnh gốc (969 MB), phủ đủ mọi khía, nhiều hơn cả ước tính ~360 combo code có thể chạm tới — không phải "chưa có gì" như PLAN.md ngầm giả định. Gửi Henry 1 ảnh mẫu thật (style watercolor "light-novel" Trí/Thư) | Henry xác nhận **giữ nguyên style, không vẽ lại** dù khác style chibi (Minh Bảo) đã chốt cho phần còn lại của site — quyết định thương hiệu có chủ đích, không phải nợ kỹ thuật |
-| 10 — Giọng §2 toàn site | ⬜ Chưa bắt đầu | — | `arcGiong` (`lib/agent/prompts.ts`) chưa đổi sang giọng Bảo |
+| 10 — Giọng §2 toàn site | ✅ Xong, Henry chốt không đổi | Trình bày cụ thể file/hàm/ví dụ trước khi sửa (`arcGiong`, `lib/agent/prompts.ts`, 3 mục Hướng Nghiệp Trẻ/Nhân Mạch/Ngũ Hành) — Henry chốt giữ nguyên | Chữ tĩnh trên site (form/hero/paywall, §1.1) vẫn là quyết định RIÊNG, chưa gật, không nằm trong sprint này |
 
 **Tóm tắt cho Henry:** nav + footer (chrome dùng chung, hiện trên ~200 trang) và
 trang chủ `/` đã lên giao diện mới. **Khung** của 53 trang `/app/*` (màu + bo góc)
@@ -332,13 +332,16 @@ nợ kỹ thuật cần dọn. Chi tiết: `docs/nhat-ky/2026-09.md`.
 
 ---
 
-### ✍️ SPRINT 10 — Rà chữ toàn site sang giọng §2 — ⬜ Chưa bắt đầu
-Làm **SAU CÙNG** để chữ bám hình, không phải ngược lại.
-⚠️ `lib/agent/prompts.ts` có **3 họ prompt khác nhau** — giọng Bảo sửa ở
-**`arcGiong`**. Luật: *"khối mới phải THAY, không cộng dồn"* và *"dạy bằng VÍ DỤ
-rẻ và ăn hơn dạy bằng LUẬT"*. `check:prompt` có trần — chạm trần thì **CẮT** chỗ
-khác, đừng nới.
-**Sample gate:** 3 trang. **Ước:** 2–3 ngày.
+### ✍️ SPRINT 10 — Rà chữ toàn site sang giọng §2 — ✅ Xong, Henry chốt KHÔNG đổi (2026-09-17)
+Trước khi sửa, trình bày cụ thể cho Henry: đúng 1 file (`lib/agent/prompts.ts`),
+đúng 1 hàm (`arcGiong()` — dùng cho 3 mục LLM tự sinh: Hướng Nghiệp Trẻ/Nhân
+Mạch/Ngũ Hành), kèm ví dụ câu cụ thể sẽ đổi và một điểm mơ hồ cần chốt: tiêu đề
+"toàn site" nhưng mô tả chi tiết chỉ nói `arcGiong` — chữ tĩnh khác (form/hero/
+paywall) là việc RIÊNG, tự PLAN.md đã ghi "còn chờ Henry gật" ở `tuvi-form.js`
+(§1.1), không thuộc phạm vi sprint này.
+
+**Henry chốt: giữ nguyên, không sửa gì.** Không có thay đổi code. Chi tiết:
+`docs/nhat-ky/2026-09.md`.
 
 ---
 
