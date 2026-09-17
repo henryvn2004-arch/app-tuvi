@@ -96,3 +96,7 @@ scripts/fixtures/lunar-table-new.json
 # khi thử nghiệm — bản final (đã duyệt + optimize) mới vào public/, commit thẳng.
 .hero-banners/
 .webtoon-sample/
+
+# Ảnh banner "Công cụ nổi bật" trang chủ sinh bằng scripts/gen-featured-banners.mjs
+# — bản final (đã duyệt + optimize webp) mới vào public/mascot/, commit thẳng.
+.featured-banners/
