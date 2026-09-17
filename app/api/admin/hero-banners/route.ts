@@ -28,6 +28,7 @@ export const dynamic = 'force-dynamic';
 import { NextRequest } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import sharp from 'sharp';
 import { generatePortraitImage } from '@/lib/image/openai-image';
 import { logImageUsage } from '@/lib/agent/usage';
 import { resolveHeroGroup, buildHeroBannerPrompt, ANCHOR_IMAGE_PATH } from '@/lib/media/hero-banner-prompt';
@@ -65,19 +66,34 @@ const GIA_VND: Record<string, Record<Quality, number>> = {
   'gpt-image-1': { low: 500, medium: 1625, high: 6313 },
 };
 
-// Nén `<path>.png` (đã có trong Storage) thành `.webp` cùng tên, ghi đè —
-// cửa biến đổi ảnh có sẵn của Supabase Storage, không cần thư viện ảnh riêng
-// (cùng khuôn `illus-images/route.ts`). 1200px rộng đủ nét cho khung banner
-// rộng nhất (~1000px CSS, màn retina); quality 78 theo đúng mức đã đo ở
-// illus (900px/80 ⇒ ~150KB/tấm) — banner rộng hơn nên hạ nhẹ quality để bù.
+// Nén `<path>.png` thành `.webp` cùng tên, ghi đè. `pngBytes` khi đã có sẵn
+// trong bộ nhớ (vừa vẽ xong) — tránh tải lại; thiếu thì tự HEAD/GET từ Storage
+// (đường `compressOnly`, ảnh đã có từ trước).
+//
+// 🔴 KHÔNG dùng cổng biến đổi ảnh `render/image` của Supabase Storage — nó ép
+// cứng RỘNG mà GIỮ NGUYÊN CAO GỐC thay vì co theo tỉ lệ (chỉ truyền `width`,
+// không có `height`, là bug của chính dịch vụ, không phải cách gọi sai): với
+// nguồn 1536×1024 co về rộng 1200 mà cao vẫn 1024 ⇒ CẮT ~22% hai bên trái/phải
+// để vừa khung — đúng chỗ 11 nhóm banner đặt Minh Bảo/nhân vật phụ (rìa khung
+// theo `hero-banner-prompt.ts`), tức là bị cắt ngay phần Henry cần thấy. Bài
+// học NÀY ĐÃ vá ở `illus-images/route.ts` (2026-09-14, PR #851, "cắt mất ~40%
+// khung ngang trên cả 230 ảnh") nhưng chưa kịp áp cho route này — vá lại đây
+// theo đúng khuôn đó: encode bằng `sharp` tại chỗ, `resize({width})` của sharp
+// tự suy chiều cao ĐÚNG TỈ LỆ (không như cổng transform ở trên).
 // Trả về chuỗi lỗi (rỗng nếu ok) — KHÔNG throw, gọi nơi khác tự quyết có
 // chặn cả lượt hay không.
-async function nenWebp(path: string): Promise<string> {
+async function nenWebp(path: string, pngBytes?: Buffer): Promise<string> {
   try {
-    const wUrl = `${SUPABASE_URL}/storage/v1/render/image/public/${BUCKET}/${path}?width=1200&quality=78`;
-    const wResp = await fetch(wUrl, { headers: { Accept: 'image/webp' } });
-    if (!wResp.ok) throw new Error(`nén webp HTTP ${wResp.status}`);
-    const wBuf = new Uint8Array(await wResp.arrayBuffer());
+    let src = pngBytes;
+    if (!src) {
+      const r = await fetch(`${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`, { cache: 'no-store' });
+      if (!r.ok) throw new Error(`tải PNG gốc HTTP ${r.status}`);
+      src = Buffer.from(await r.arrayBuffer());
+    }
+    // 1200px rộng đủ nét cho khung banner rộng nhất (~1000px CSS, màn retina);
+    // quality 78 theo đúng mức đã đo ở illus (900px/80 ⇒ ~150KB/tấm) — banner
+    // rộng hơn nên hạ nhẹ quality để bù.
+    const wBuf = await sharp(src).resize({ width: 1200 }).webp({ quality: 78 }).toBuffer();
     const wUp = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path.replace(/\.png$/, '.webp')}`, {
       method: 'POST',
       headers: {
@@ -86,7 +102,7 @@ async function nenWebp(path: string): Promise<string> {
         'Content-Type': 'image/webp',
         'x-upsert': 'true',
       },
-      body: wBuf,
+      body: new Uint8Array(wBuf),
     });
     if (!wUp.ok) throw new Error('lưu webp hỏng: ' + (await wUp.text().catch(() => '')).slice(0, 200));
     return '';
@@ -188,6 +204,7 @@ export async function GET(req: NextRequest) {
       });
       void logImageUsage('hero-banner', img.model, img.usage, img.durationMs);
 
+      const pngBytes = Buffer.from(img.b64, 'base64');
       const up = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {
         method: 'POST',
         headers: {
@@ -196,14 +213,13 @@ export async function GET(req: NextRequest) {
           'Content-Type': 'image/png',
           'x-upsert': 'true',
         },
-        body: new Uint8Array(Buffer.from(img.b64, 'base64')),
+        body: new Uint8Array(pngBytes),
       });
       if (!up.ok) throw new Error('lưu ảnh hỏng: ' + (await up.text().catch(() => '')).slice(0, 200));
 
-      // Bản .webp NÉN SẴN — cùng khuôn `illus-images/route.ts` (dùng cổng
-      // biến đổi ảnh có sẵn của Supabase Storage, không cần thư viện riêng).
-      // Lỗi bước này KHÔNG chặn cả lượt — PNG gốc đã lưu xong.
-      const err = await nenWebp(path);
+      // Bản .webp NÉN SẴN, đúng tỉ lệ (xem ghi chú ở `nenWebp`). Lỗi bước này
+      // KHÔNG chặn cả lượt — PNG gốc đã lưu xong.
+      const err = await nenWebp(path, pngBytes);
       if (err) ketQua.push({ id: id + ' (webp)', loi: err });
 
       daVe++;

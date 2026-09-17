@@ -323,38 +323,34 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .intro-card .intro-d{font-size:13.5px;color:var(--text-mid);line-height:1.7;border-left:3px solid var(--gold-soft);padding-left:14px}
 .intro-card .intro-d b{color:#5B3A1A}
 
-/* Banner thủy mặc khổ ngang (`scripts/gen-hero-banners.mjs`, dùng CHUNG theo
+/* Banner webtoon khổ ngang (`scripts/gen-hero-banners.mjs`, dùng CHUNG theo
    NHÓM cổ pháp — xem lib/media/hero-banner-prompt.ts) — LÀ nền của cả
    `.intro-card`, không phải thumbnail cạnh chữ (Henry 2026-09-14, vòng 5).
-   Nguồn 1536×1024 (khổ RỘNG NHẤT gpt-image-2 hỗ trợ) trong khi khung banner
-   RỘNG hơn nhiều theo TỈ LỆ (aspect ~3-4:1) — `cover` (vòng 5-8) từng phải
-   cắt dọc rất mạnh, ăn mất mặt trời/núi ở giữa ảnh. Henry vòng 9: "resize nhỏ
-   lại, chiều cao bằng banner bình thường, miễn nhìn được FULL hình" — thay vì
-   `object-fit:contain` (khung ẢNH vẫn to bằng cả card, chỉ NỘI DUNG co lại —
-   để lại một dải trống VÔ HÌNH bên trái mà mask bên dưới không biết đâu mà
-   bám), đặt KÍCH THƯỚC THẬT của khung ảnh khớp đúng nội dung hiển thị:
-   `height:100%` + `aspect-ratio` tự suy ra `width`, neo `top:0;right:0`. Nhờ
-   vậy khung ảnh = đúng vùng tranh nhìn thấy, không còn phần trống vô hình.
-   Henry vòng 10 ("2 hộp riêng biệt, tìm hiệu ứng blend"): `mask-image` phai
-   dần 18% bên trái CHÍNH khung này (nay khớp ảnh nên phai đúng chỗ) — để lộ
-   màu NỀN của `.intro-photo` (đặt TRÙNG tông parchment với `.intro-card`,
-   không dùng `var(--navy)` nữa) mượt dần thay vì một đường cắt cứng. */
-.intro-card .intro-photo{position:absolute;top:0;right:0;width:auto;height:100%;aspect-ratio:1536/1024;object-fit:cover;z-index:0;background:#F3E7C8;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%);mask-image:linear-gradient(90deg,transparent 0%,#000 18%)}
-/* Gradient PHỦ từ trái (đục, tông PARCHMENT khớp `.intro-card` — không dùng
-   `var(--paper)` nữa, xem dưới) sang phải (trong suốt) — đảm bảo chữ đọc được
-   trên MỌI ảnh nhóm mà không cần biết trước tông màu. Dùng % thay vì px nên
-   tỉ lệ giữ nguyên ở mọi bề rộng, kể cả mobile. Đứng sau `.intro-photo` trong
-   DOM (thẻ ảnh) nên `::after` của `.intro-card` vẽ trên nó; `.intro-body`/
-   `.hero-pills` có z-index cao hơn nên vẫn trên cùng.
-   Henry 2026-09-15 (vòng 8, "banner trông như dán ảnh đè lên"): dải chuyển
-   CŨ chỉ dài 36 điểm % (52→88) — đủ để chữ đọc được nhưng tạo một MÉP rõ nét
-   ngay chỗ ảnh "hiện ra", nhất là khi ảnh có viền tương phản (núi/cành thông)
-   đúng ngay chỗ đó. Kéo dài thành 62 điểm % (30→92) để ảnh "hiện dần" mượt
-   hơn thay vì lộ mép; đồng thời đổi màu dải phủ khớp tông parchment ấm của
-   `.intro-card` (thay vì `var(--paper)` gần trắng, lệch tông với tranh thủy
-   mặc "aged parchment" — chính lệch tông này, không chỉ độ dài dải, cũng góp
-   phần tạo cảm giác "dán đè" dù dải phủ đã che kín). */
-.intro-card::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#F3E7C8 0%,#F3E7C8 30%,rgba(243,231,200,0) 92%)}
+   Nguồn 1536×1024 trong khi khung banner RỘNG hơn nhiều theo TỈ LỆ (aspect
+   ~3-4:1 desktop) — `cover` (vòng 5-8) từng phải cắt dọc rất mạnh, ăn mất
+   mặt trời/núi ở giữa ảnh; bản `height:100%+aspect-ratio` (vòng 9) tự suy
+   `width` từ chiều cao lại TRÀN NGANG khỏi card trên mobile (card hẹp hơn
+   width suy ra) — `overflow:hidden` của card ăn mất TRỌN vẹt Minh Bảo (luôn
+   vẽ ở rìa TRÁI khung theo prompt `hero-banner-prompt.ts`), y hệt lỗi
+   "che hình" Henry báo 2026-09-16.
+   Đổi sang `object-fit:contain` + `object-position:right` — khung ảnh nay
+   BẰNG CẢ CARD (không tự suy width nữa) nên không bao giờ tràn: ảnh luôn co
+   theo trục hẹp hơn (chiều cao ở desktop, chiều rộng ở mobile khi card hẹp),
+   luôn thấy ĐỦ 100% nội dung, neo phải để phần trống (nếu có) dồn hết sang
+   trái đúng chỗ đặt chữ. Bỏ hẳn `mask-image` phai 18% (vòng 10) — khung ảnh
+   giờ khớp ĐÚNG cạnh thật của ảnh (không còn "khớp gần đúng" như bản cover),
+   phai thêm là tự che phần Minh Bảo mà prompt đã cố tình chừa trống cho chữ. */
+.intro-card .intro-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:right center;z-index:0;background:#F3E7C8}
+/* Gradient PHỦ — đo thật bằng Playwright (`app-chu-trinh-cuoc-doi.html`, mô tả
+   DÀI nhất + `.hero-pills` 3 cột LUÔN bằng nhau nên cột 3 chạm sát đúng
+   `max-width` của khối chữ): ảnh bắt đầu ở ~46% bề rộng card tại 1280px
+   nhưng `.intro-body`/`.hero-pills` có `max-width:72%` — VÙNG CHỮ THẬT SỰ
+   RỘNG HƠN vùng ảnh, cột pill thứ 3 luôn đè lên ảnh dù ảnh đã hiện đủ. Dải
+   mờ tuyệt đối (0→18%) chỉ đủ cho TIÊU ĐỀ; đoạn 18→68% dùng ĐỘ MỜ 55% (không
+   phải 0%) — chữ vẫn đọc được nhưng Minh Bảo/mèo mờ ẢO thấy được thay vì
+   BIẾN MẤT dưới lớp phủ đặc như bản trước đó (đúng lỗi Henry báo). Từ 88%
+   trở đi trong suốt hẳn — vùng thầy/cô chắc chắn không có chữ đè lên. */
+.intro-card::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#F3E7C8 0%,#F3E7C8 18%,rgba(243,231,200,.55) 40%,rgba(243,231,200,.55) 68%,rgba(243,231,200,0) 88%)}
 .intro-card .intro-body{position:relative;z-index:2;padding:18px 20px 4px;max-width:72%}
 .intro-card .hero-pills{position:relative;z-index:2;max-width:72%;margin:0;padding:12px 20px 18px}
 @media(max-width:640px){
@@ -362,6 +358,13 @@ button.item{border:none;background:none;font:inherit;text-align:left}
   .intro-card .intro-body{max-width:64%;padding:16px 16px 4px}
   .intro-card .hero-pills{max-width:64%;padding:10px 16px 16px}
   .intro-card .intro-t{font-size:17px}
+  /* Card hẹp ⇒ ảnh co theo BỀ RỘNG (không phải chiều cao) ⇒ tràn kín cả
+     card, không còn vùng "chắc chắn không ảnh" nào. Nền tường trong tranh
+     vốn đã cùng tông kem nhạt với `.intro-card` — độ mờ 55% (như desktop)
+     cộng dồn lên nền sáng sẵn gần như XOÁ TRẮNG cả nhân vật (đo bằng ảnh
+     chụp thật, không phải đoán). Hạ xuống 32% + rút ngắn dải đặc để Minh Bảo
+     vẫn hiện được xuyên qua lớp phủ trên màn hẹp. */
+  .intro-card::after{background:linear-gradient(90deg,#F3E7C8 0%,#F3E7C8 8%,rgba(243,231,200,.32) 26%,rgba(243,231,200,.32) 64%,rgba(243,231,200,0) 80%)}
 }
 
 /* ── HÀNG GỢI Ý CÂU HỎI (chip cố định trên ô nhập rail, cuộn ngang) ── */
