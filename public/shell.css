@@ -878,7 +878,7 @@ font-family:inherit}
 @media(max-width:480px){.cost-box .cb-r{border-left:none;border-top:1px solid var(--line-2);padding:10px 0 0;margin-top:2px;flex-basis:100%;max-width:none}}
 /* Thẻ gợi ý "Xem bản mẫu" (icon bóng đèn + nút pill) — dùng chung nhiều
    trang (SampleHint, tools-shared/sample-hint.js), giữ ở đây làm nguồn chung. */
-.samp-cta{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:12px 14px;max-width:640px;margin-bottom:14px;font-size:13px;color:var(--text-lt);display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.samp-cta{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:12px 14px;max-width:640px;margin-top:14px;margin-bottom:14px;font-size:13px;color:var(--text-lt);display:flex;align-items:center;gap:11px;flex-wrap:wrap}
 .samp-cta .sc-ic{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--gold-lt);color:var(--gold-soft);display:flex;align-items:center;justify-content:center}
 .samp-cta .sc-ic svg{width:17px;height:17px}
 .samp-cta .sc-txt{flex:1;min-width:160px;display:flex;flex-direction:column}

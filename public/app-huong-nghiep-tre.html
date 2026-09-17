@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="/shell.css?v=50">
 <style>
 .form-card{max-width:860px}
-.sample-link{display:inline-block;font-size:12.5px;color:var(--tx-blue);margin-bottom:12px}
 /* ⚠️ CSS của trang nhắm ô nhập PHẢI scope theo id RIÊNG, KHÔNG nhắm `.fg select`
    chung — TuviForm dựng markup vào đúng khuôn .frow/.fg này, nên một luật chung
    sẽ bơm cả 5 select của form ngày sinh. Đã trả giá một lần ở trang Công Sở. */
@@ -140,7 +139,6 @@
         <div class="form-card">
           <div class="fc-head"><span class="fc-ic" data-icon="compass"></span><h2>Hướng Nghiệp Sớm Cho Con</h2></div>
           <p class="sub">Nhập ngày giờ sinh của con và điều bạn đang lo. Nhận về thiên hướng nổi nhất, hoạt động nên thử và nên bắt đầu từ đâu.</p>
-          <div id="sampleLinkHost"></div>
           <div id="formHost"></div>
           <div class="frow">
             <div class="fg" style="flex:1">
@@ -184,11 +182,6 @@
         <span class="sc-ic" data-icon="file-text"></span>
         <span class="sc-txt"><b>Bản luận giải mẫu</b><span>Tải PDF Hướng Nghiệp Sớm Cho Con đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
         <a class="sc-btn" href="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-huong-nghiep-tre.pdf" target="_blank" rel="noopener">Tải PDF →</a>
-      </div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="huong-nghiep-tre" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -392,67 +385,6 @@ function onMoiLoChange() {
 }
 
 TuviForm.render('formHost', { mode: 'compact', prefix: '', gioitinh: 'nam', showName: true });
-
-// Nút "Xem mẫu" — PDF sinh bằng LLM thật cho 1 lá số mẫu, CHỤP ĐÚNG trang thật
-// qua Playwright (scripts/gen-tool-sample.mjs, hàm renderRealPageAndUpload) —
-// có đủ chart/card như màn hình luận giải thật (2026-09, bật lại sau khi sửa
-// script để chụp trang thay vì tự dựng HTML rời).
-(function(){
-  var host=document.getElementById('sampleLinkHost');
-  if(!host) return;
-  var url='https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-huong-nghiep-tre.pdf';
-  host.innerHTML='<a href="'+url+'" target="_blank" rel="noopener" class="sample-link">↗ Xem mẫu (PDF, lá số khác)</a>';
-})();
-
-// Nút "Xem bản mẫu" (khối .samp-cta phía trên form) — override placeholder
-// mặc định của tools-shared/sample-hint.js bằng dữ liệu THẬT: cùng payload
-// PDF ở trên dùng, rót thẳng qua renderMeta/renderProse THẬT của trang này.
-(function(){
-  var SAMPLE_URL='/samples/huong-nghiep-tre-full.json';
-  var _cache=null;
-  function _showSampleBar(){
-    var panel=document.getElementById('resPanel');
-    if(!panel||document.getElementById('sampBar')) return;
-    var bar=document.createElement('div');
-    bar.className='samp-bar'; bar.id='sampBar';
-    bar.innerHTML='<div class="sb-txt">Đây là <b>BẢN MẪU</b> minh hoạ (lá số khác) — chưa phải kết quả của con bạn.</div>'+
-      '<button type="button" id="sampBarClose">Nhập lá số con tôi →</button>';
-    panel.insertBefore(bar,panel.firstChild);
-    document.getElementById('sampBarClose').onclick=function(){
-      var b=document.getElementById('sampBar'); if(b) b.remove();
-      if(typeof window._closePanel==='function') window._closePanel();
-      var cta=document.getElementById('sampCta'); if(cta) cta.style.display='flex';
-    };
-  }
-  window.SampleHint.open=function(btn){
-    if(btn){ btn.disabled=true; btn.textContent='Đang mở…'; }
-    var p=_cache?Promise.resolve(_cache):fetch(SAMPLE_URL).then(function(r){
-      if(!r.ok) throw new Error('HTTP '+r.status);
-      return r.json();
-    }).then(function(j){ _cache=j; return j; });
-    p.then(function(data){
-      if(typeof window._openPanel==='function') window._openPanel();
-      renderMeta(data);
-      renderProse(data);
-      var loading=document.getElementById('loading'); if(loading) loading.style.display='none';
-      var card=document.getElementById('card'); if(card) card.style.display='block';
-      var be=document.getElementById('btnEdit'); if(be) be.style.display='';
-      var cta=document.getElementById('sampCta'); if(cta) cta.style.display='none';
-      _showSampleBar();
-      if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; }
-    }).catch(function(e){
-      if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; }
-      if(window.console) console.error('sample:',e);
-      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
-    });
-  };
-  try {
-    if (!(window.Shell && Shell.autoRun && Shell.autoRun()) &&
-        !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {
-      var c = document.getElementById('sampCta'); if (c) c.style.display = 'flex';
-    }
-  } catch (e) { if (window.console) console.error('sample auto-open:', e); }
-})();
 
 // 🔑 CỐ Ý KHÔNG gọi `Shell.prefillForm()`: lá số shell đang nhớ là lá số CỦA
 // NGƯỜI DÙNG, mà form này là của CON. Đổ vào là người ta bấm luôn rồi nhận bản

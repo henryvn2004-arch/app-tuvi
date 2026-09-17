@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-310 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+311 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 145 | 599,068 B |
+| `2026-09.md` | 146 | 602,358 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🧹 Dọn 3 chỗ trùng "xem/tải bản mẫu" trên cột phụ — chỉ giữ 1 box, sửa luôn spacing |
 | 1 | 2026-09 | `2026-09.md` | 🎨 Sprint 2 phần icon — retune màu gold cũ trên 254 icon-span, không đụng hình dạng |
 | 1 | 2026-09 | `2026-09.md` | 🗂 Sprint 9 — Thư viện minh hoạ luận giải: đếm bucket thật, Henry chốt giữ nguyên style |
 | 1 | 2026-09 | `2026-09.md` | 🎴 Sprint 8 — Ảnh phụ: khảo sát lật ngược tiền đề, chỉ 4 route OG cần sửa |
