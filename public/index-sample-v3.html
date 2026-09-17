@@ -130,38 +130,10 @@ img { max-width: 100%; display: block; }
 .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
 button { font: inherit; cursor: pointer; }
 
-/* ── Hero ───────────────────────────────────────────────────── */
-.hero { padding: 48px 0 20px; }
-.hero-text { max-width: 640px; }
-.hero-title { font-size: 46px; line-height: 1.14; font-weight: 800; color: var(--ink); margin: 0 0 14px; letter-spacing: -0.01em; }
-.hero-sub { font-size: 16px; color: var(--ink-soft); line-height: 1.6; margin: 0 0 22px; max-width: 46ch; }
-.hero-search {
-  display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--line);
-  border-radius: 999px; padding: 6px 8px 6px 18px; box-shadow: 0 6px 18px rgba(22,35,44,0.05);
-  max-width: 480px; margin-bottom: 20px;
-}
-.hero-search .ic { width: 18px; height: 18px; color: var(--ink-faint); flex: none; }
-.hero-search input {
-  border: none; outline: none; flex: 1; font-size: 14.5px; background: transparent; color: var(--ink);
-  min-width: 0;
-}
-.hero-search input::placeholder { color: var(--ink-faint); }
-.hero-search .filt {
-  width: 34px; height: 34px; border-radius: 50%; background: var(--cream); border: none; flex: none;
-  display: flex; align-items: center; justify-content: center;
-}
-.hero-search .filt .ic { color: var(--ink-soft); }
-.hero-quote { font-style: italic; color: var(--ink-soft); font-size: 14.5px; line-height: 1.6; border-left: 2px solid var(--gold); padding-left: 14px; max-width: 42ch; }
-.hero-quote b { display: block; font-style: normal; font-weight: 700; color: var(--ink); margin-top: 4px; font-size: 13px; }
-
-@media (max-width: 860px) {
-  .hero-title { font-size: 34px; }
-}
-
 /* ── Section heading (dùng chung) ───────────────────────────── */
 .sec-head { display: flex; align-items: center; gap: 8px; margin: 8px 0 16px; }
 .sec-head .ic { width: 18px; height: 18px; color: var(--green); }
-.sec-head h2 { font-size: 18px; margin: 0; font-weight: 800; color: var(--ink); flex: 1; }
+.sec-head h2, .sec-head h1 { font-size: 18px; margin: 0; font-weight: 800; color: var(--ink); flex: 1; }
 .sec-head .more { font-size: 13.5px; font-weight: 700; color: var(--ink-soft); white-space: nowrap; }
 
 /* ── Tool grid ──────────────────────────────────────────────── */
@@ -184,7 +156,7 @@ button { font: inherit; cursor: pointer; }
 }
 
 /* ── Công cụ nổi bật — slider banner theo mẫu Henry duyệt ─────── */
-.ftb-sec { padding: 28px 0 8px; }
+.ftb-sec { padding: 40px 0 8px; }
 .ftb-viewport { position: relative; }
 .ftb-track-wrap { overflow: hidden; border-radius: var(--radius-lg); }
 .ftb-track { display: flex; transition: transform .45s cubic-bezier(.4,0,.2,1); will-change: transform; }
@@ -297,18 +269,18 @@ button { font: inherit; cursor: pointer; }
 <!-- ═══════════════ HEADER — dùng chung nav.js, KHÔNG tự dựng riêng ═══════════════ -->
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 
-<!-- ═══════════════ HERO ═══════════════ -->
-<section class="hero">
+<!-- ═══════════════ CÔNG CỤ NỔI BẬT — slider 5 banner, đầu trang ═══════════════ -->
+<section class="ftb-sec">
   <div class="wrap">
-    <div class="hero-text">
-      <h1 class="hero-title serif">Hiểu mình<br>Sống thuận hơn</h1>
-      <p class="hero-sub">Tử vi không chỉ để biết tương lai, mà để sống tốt hơn ở hiện tại.</p>
-      <form class="hero-search" action="/cong-cu.html" method="get">
-        <span class="ic" data-icon="search"></span>
-        <input type="text" name="q" placeholder="Tìm công cụ — Lá Số, Bát Tự, xem tuổi..." autocomplete="off">
-        <button class="filt" type="submit" aria-label="Tìm"><span class="ic" data-icon="sparkles"></span></button>
-      </form>
-      <p class="hero-quote serif">"Mỗi người đều có một vận mệnh, miễn là chịu lắng nghe..."<b>— Minh Bảo</b></p>
+    <div class="sec-head">
+      <span class="ic" data-icon="star"></span>
+      <h1>Công cụ nổi bật</h1>
+    </div>
+    <div class="ftb-viewport">
+      <div class="ftb-track-wrap"><div class="ftb-track" id="ftb-track"></div></div>
+      <button class="ftb-btn ftb-prev" id="ftb-prev" aria-label="Trước">‹</button>
+      <button class="ftb-btn ftb-next" id="ftb-next" aria-label="Sau">›</button>
+      <div class="ftb-dots" id="ftb-dots"></div>
     </div>
   </div>
 </section>
@@ -334,22 +306,6 @@ button { font: inherit; cursor: pointer; }
       <a class="tool-card" href="/phong-thuy.html"><div class="tool-ic t-green"><span class="ic" data-icon="leaf"></span></div><span>Phong Thủy<br>Ứng Dụng</span></a>
       <a class="tool-card" href="/xem-lam-an.html"><div class="tool-ic t-green"><span class="ic" data-icon="handshake"></span></div><span>Hợp Tác<br>Làm Ăn</span></a>
       <a class="tool-card" href="/xem-tuong.html"><div class="tool-ic t-blue"><span class="ic" data-icon="user"></span></div><span>Xem<br>Tướng Mạo</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ CÔNG CỤ NỔI BẬT — slider 5 banner ═══════════════ -->
-<section class="ftb-sec">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="ic" data-icon="star"></span>
-      <h2>Công cụ nổi bật</h2>
-    </div>
-    <div class="ftb-viewport">
-      <div class="ftb-track-wrap"><div class="ftb-track" id="ftb-track"></div></div>
-      <button class="ftb-btn ftb-prev" id="ftb-prev" aria-label="Trước">‹</button>
-      <button class="ftb-btn ftb-next" id="ftb-next" aria-label="Sau">›</button>
-      <div class="ftb-dots" id="ftb-dots"></div>
     </div>
   </div>
 </section>
