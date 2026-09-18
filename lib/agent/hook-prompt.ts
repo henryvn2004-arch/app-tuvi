@@ -13,8 +13,9 @@
 // trong "hookNgan"/"moTa" từng box ("3 năm tới", "giai đoạn này"...) là khung
 // TU TỪ tạo cảm giác cận kề, KHÔNG phải số tính lại từ đại vận/tiểu hạn — facts
 // hiện có (cungManhNhat/cungYeuNhat/cachCucHiem) không mang mốc thời gian thật.
-// Được PHÉP ở mức box; "introText" (tổng hợp NHIỀU fact khác nhau ở khối mở
-// đầu) thì KHÔNG — giữ nguyên luật cũ, không gán một mốc thời gian cho cả cục.
+// Được PHÉP ở MỌI field kể cả "introText" (2026-09-18, Henry: rào riêng cho
+// introText là thừa — cùng tu từ, không phải tính toán, không có gì khác biệt
+// để cấm riêng nó).
 //
 // Input/Output 1-1: đúng `facts.length` box, ĐÚNG THỨ TỰ facts đưa vào — route
 // gọi map `boxes[i]` với `facts[i]` để suy icon (client tự suy icon từ
@@ -78,7 +79,7 @@ Ví dụ PHÉP DỊCH (học đúng cách biến đổi này, đừng chép ch�
 == KHỐI MỞ ĐẦU ==
 - "tagHook": 1 cụm 1–3 từ, kiểu nhãn (vd "Tổng quan nhanh").
 - "hookTitleLine1"/"hookTitleLine2"/"hookTitleHighlight": tổng hợp CẢM GIÁC CHUNG từ TOÀN BỘ dữ kiện thành một câu 2-3 dòng đọc liền mạch, cùng tinh thần trigger cao ở trên (twist, cận kề) — KHÔNG liệt kê lại từng dữ kiện.
-- "introText": 1–2 câu bắc cầu xuống phần box, có thể nhắc số lượng box. Đây là câu TỔNG HỢP nhiều dữ kiện khác nhau nên TUYỆT ĐỐI không gán một mốc thời gian cụ thể cho cả cục — khác với "hookNgan" từng box, được PHÉP dùng khung TIMING ở trên.
+- "introText": 1–2 câu bắc cầu xuống phần box, có thể nhắc số lượng box, được PHÉP dùng khung TIMING ở trên nếu hợp mạch văn.
 - "quoteHook": ĐÚNG 1 câu ngắn, giọng chiêm nghiệm cổ pháp, không đạo lý sáo rỗng, không nhắc "AI"/"trí tuệ nhân tạo".
 
 CHECKLIST TRƯỚC KHI TRẢ VỀ MỖI BOX — thiếu 1 ý là viết lại box đó, không trả nửa vời:
