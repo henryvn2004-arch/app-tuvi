@@ -373,7 +373,7 @@ function checkSetup() {
 startBtn.addEventListener('click', () => {
   tasksSection.style.display = 'block';
   loadTask(0);
-  tasksSection.scrollIntoView({behavior:'smooth',block:'start'});
+  tasksSection.scrollIntoView({behavior:'smooth',block:'nearest'});
 });
 
 function loadTask(idx) {
@@ -977,7 +977,7 @@ function compileAndShowFeatures() {
   analyzeWrap.style.display = 'block';
   tasksSection.style.display = 'none';
   wsStepsSet(2); // Xem kết quả đo — 12 chỉ số âm học vừa tính xong, free
-  featuresPanel.scrollIntoView({behavior:'smooth',block:'start'});
+  featuresPanel.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 function clamp(x, lo, hi){ return Math.max(lo, Math.min(hi, x)); }
@@ -1171,7 +1171,7 @@ async function _doThanhTuongAnalyze() {
   var _analyzeBtnLb = document.getElementById('analyzeBtnLabel'); if (_analyzeBtnLb) _analyzeBtnLb.textContent = 'Đang luận giải…';
   resultsCard.style.display = 'block';
   resultsPanel.innerHTML = '<p class="loading-dots" style="text-align:center;color:var(--text-lt);padding:30px 0">Đang phân tích theo cổ pháp</p>';
-  resultsCard.scrollIntoView({behavior:'smooth',block:'start'});
+  resultsCard.scrollIntoView({behavior:'smooth',block:'nearest'});
 
   const nguam = estimateNguAm(state.results, state.gender);
   const geoNote = buildGeoNote(state.gender, state.age, nguam, state.results);

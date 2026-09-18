@@ -609,7 +609,7 @@ function renderResults(d) {
   document.getElementById('tryonSection').style.display = 'block';
   clearTryon();
 
-  setTimeout(() => document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+  setTimeout(() => document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 200);
 
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({

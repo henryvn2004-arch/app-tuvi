@@ -499,7 +499,7 @@ function renderResults(data){
   _renderRecs=(analysis.recommendations||[]).filter(r=>r.priority==='high').slice(0,3).map(r=>r.reason||'').filter(Boolean);
   resetRender(); document.getElementById('renderCard').style.display='block';
   const sec=document.getElementById('results-section');sec.style.display='block';
-  setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),200);
+  setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'nearest'}),200);
 
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({

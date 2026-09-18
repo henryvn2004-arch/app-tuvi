@@ -631,7 +631,7 @@ async function _doPhanTich() {
   document.getElementById('resultTabsWrap').style.display = 'none';
   document.getElementById('tryonSection').style.display = 'none';
   document.getElementById('resetWrap').style.display = 'none';
-  resultSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  resultSec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   _analysisLoadingCtl = AiLoadingSteps.mount('analysisStepsHost', ANALYSIS_STEPS);
   _analysisLoadingCtl.start();
 
