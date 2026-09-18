@@ -178,8 +178,9 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .cost-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem 0;border-bottom:1px solid var(--border-lt)}
 .cost-row:last-child{border-bottom:none}
 .cost-left{display:flex;align-items:center;gap:.85rem;min-width:0}
-.cost-icon-wrap{width:30px;height:30px;border-radius:7px;background:var(--gold-lt);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cost-icon-wrap{width:30px;height:30px;border-radius:7px;background:var(--gold-lt);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
 .cost-icon-wrap svg{width:16px;height:16px}
+.cost-icon-wrap img{width:100%;height:100%;object-fit:cover}
 .cost-name{font-size:.88rem;color:var(--text);font-weight:600}
 .cost-desc{font-size:.75rem;color:var(--text-lt);margin-top:.1rem}
 .cost-right{text-align:right;flex-shrink:0}
@@ -263,6 +264,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 <body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <script src="/nav.js?v=38"></script>
+<script src="/tools-shared/tool-icons.js?v=1"></script>
 
 <main class="wrap">
   <div class="page-header">
@@ -850,7 +852,11 @@ async function loadToolPricing() {
         const money = perCredit ? Math.ceil((Number(t.credits) * perCredit) / 1000) * 1000 : null;
         html += '<div class="cost-row">'
           + '<div class="cost-left">'
-          + '<div class="cost-icon-wrap">' + (window.iconHtml ? window.iconHtml(t.icon) : '') + '</div>'
+          + '<div class="cost-icon-wrap">' + (
+              (window.ToolIcons && window.ToolIcons.src(t.tool_id))
+                ? '<img src="' + window.ToolIcons.src(t.tool_id) + '" alt="" loading="lazy">'
+                : (window.iconHtml ? window.iconHtml(t.icon) : '')
+            ) + '</div>'
           + '<div><div class="cost-name">' + esc(t.label) + '</div>'
           + (t.description ? '<div class="cost-desc">' + esc(t.description) + '</div>' : '')
           + '</div></div>'

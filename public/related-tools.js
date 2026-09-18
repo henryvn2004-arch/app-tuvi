@@ -94,6 +94,12 @@
       '.rt-card:hover{border-color:var(--navy,#061A2E);box-shadow:0 2px 8px rgba(6,26,46,.08);text-decoration:none}',
       '.rt-icon{font-size:20px;flex-shrink:0;color:#9A7B3A;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px}',
       '.rt-icon svg{width:20px;height:20px}',
+      // Ảnh minh hoạ (không phải glyph đơn sắc) cần ô LỚN HƠN 20px mới không mờ —
+      // cùng bẫy đã ghi trong shell.js (.ws-top): ảnh 1024x1024 thu nhỏ xuống
+      // dưới ~28px mất chi tiết. Chỉ áp cho `.rt-icon-img` (có icon riêng),
+      // glyph SVG cũ vẫn giữ 20px như trước.
+      '.rt-icon-img{width:28px;height:28px;border-radius:8px;overflow:hidden}',
+      '.rt-icon-img img{width:100%;height:100%;object-fit:cover}',
       '.rt-name{font-size:12px;font-weight:600;color:var(--navy,#061A2E);line-height:1.3}',
     ].join('');
     document.head.appendChild(s);
@@ -184,13 +190,30 @@
     }).filter(Boolean);
   }
 
+  // `id` ở TOOLS phía trên là khoá RIÊNG của widget này (đặt trước khi có
+  // `tool_pricing.tool_id` thống nhất) — vài mục lệch tên so với tool_id thật,
+  // cần dịch lại mới tra được `window.ToolIcons.src()`. Mục KHÔNG có trong
+  // bảng này (đúng bằng `id` sẵn) hoặc không tra ra icon thì rơi về SVG cũ.
+  var ID_TO_TOOL_ID = {
+    'luan-giai': 'laso',
+    'tuong-mat': 'dien-tuong',
+    'than-so': 'than-so-hoc',
+    'xem-sinh-con': 'xem-tuoi-sinh-con',
+    'cua-hang': 'cua-hang-phong-thuy',
+    'chon-ngay': 'chon-ngay-tot',
+  };
+
   // ── Build HTML ────────────────────────────────────────────────
   function buildSection(tools, title) {
     if (!tools || !tools.length) return '';
     var cards = tools.map(function(t) {
-      var iconHtml = (window.iconHtml ? window.iconHtml(t.icon) : t.icon);
+      var toolId = ID_TO_TOOL_ID[t.id] || t.id;
+      var illus = window.ToolIcons && window.ToolIcons.src(toolId);
+      var iconHtml = illus
+        ? '<img src="' + illus + '" alt="" loading="lazy">'
+        : (window.iconHtml ? window.iconHtml(t.icon) : t.icon);
       return '<a class="rt-card" href="' + t.url + '">'
-        + '<span class="rt-icon">' + iconHtml + '</span>'
+        + '<span class="rt-icon' + (illus ? ' rt-icon-img' : '') + '">' + iconHtml + '</span>'
         + '<span class="rt-name">' + t.name + '</span>'
         + '</a>';
     }).join('');
