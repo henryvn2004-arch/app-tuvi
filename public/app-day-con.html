@@ -786,28 +786,69 @@ async function _runAnonPreview(b, self, lo) {
   }
 }
 
-// Hé đúng MỘT trong 8 chất năng khiếu (điểm cao nhất).
-// 🔑 Đọc `data.khieuTop` chứ KHÔNG phải `data.khieu`: bản xem trước không còn
-// gửi cả 8 chất (`PREVIEW_KEEP` trong route.ts), server tự chọn sẵn quán quân
-// và gửi đúng một phần tử. Đổi lại thành `data.khieu` là hook im lặng biến mất
+// Hé ĐÚNG HAI trong 8 chất năng khiếu (cao nhất + thấp nhất).
+// 🔑 Đọc `data.khieuTop`/`data.khieuBottom` chứ KHÔNG phải `data.khieu`: bản
+// xem trước không gửi cả 8 chất (`PREVIEW_KEEP` trong route.ts), server tự
+// chọn sẵn quán quân + chất thấp nhất và gửi đúng hai phần tử
+// (`previewExtras()`, 2026-09-18 nới 1→2 — cùng tỉ lệ hé 2/N đã dùng ở
+// HookLayer cho tử vi). Đổi lại thành `data.khieu` là hook im lặng biến mất
 // — `undefined || []` không ném lỗi nào.
 function mountHook(data) {
   var host = document.getElementById('hookHost');
   if (!host || !window.HookLayer) return;
   var top = data.khieuTop;
   if (!top) return;
-  window.HookLayer.mount(host, {
-    tool: 'day-con',
-    charts: [],
-    facts: [{
-      tone: top.noiBat ? 'good' : 'neutral',
-      title: 'Chất năng khiếu cao nhất: ' + top.ten,
-      value: top.diem,
-      body: (top.noiBat ? 'Vượt ngưỡng “đáng cho thử”. ' : 'Chưa vượt ngưỡng, nhưng cao nhất trong 8 chất. ') +
-        '7 chất còn lại, 5 trục tính khí, và định hướng cách dạy nằm trong bản đầy đủ.',
-      source: 'engine · khieu',
-    }],
-  });
+  var facts = [{
+    tone: top.noiBat ? 'good' : 'neutral',
+    title: 'Chất năng khiếu cao nhất: ' + top.ten,
+    value: top.diem,
+    body: (top.noiBat ? 'Vượt ngưỡng “đáng cho thử”. ' : 'Chưa vượt ngưỡng, nhưng cao nhất trong 8 chất. ') +
+      '7 chất còn lại, 5 trục tính khí, và định hướng cách dạy nằm trong bản đầy đủ.',
+    source: 'engine · khieuTop',
+  }];
+  if (data.khieuBottom && data.khieuBottom.ten !== top.ten) {
+    facts.push({
+      tone: 'bad',
+      title: 'Chất cần bồi thêm nhất: ' + data.khieuBottom.ten,
+      value: data.khieuBottom.diem,
+      body: 'Thấp nhất trong 8 chất — cách bồi thêm và định hướng cụ thể nằm trong bản đầy đủ.',
+      source: 'engine · khieuBottom',
+    });
+  }
+  var spec = { tool: 'day-con', toolLabel: 'Dạy Con Theo Lá Số', charts: [], facts: facts };
+  window.HookLayer.mount(host, spec);
+  _tryHookNarrativeDC(host, spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeDC(host, spec) {
+  if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
+  if (host) host.style.display = 'none';
+  var pending = document.createElement('div');
+  pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if (host && host.parentNode) host.parentNode.insertBefore(pending, host.nextSibling);
+  var tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+  var headers = { 'Content-Type': 'application/json' };
+  if (tk) headers['Authorization'] = 'Bearer ' + tk;
+  var body = {
+    toolId: spec.tool,
+    toolLabel: spec.toolLabel || spec.tool,
+    anonId: TuviPaywall.previewAnonId(),
+    facts: spec.facts.map(function (f) { return { title: f.title, body: f.body, tone: f.tone, caption: f.caption }; }),
+  };
+  fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (pending.parentNode) pending.remove();
+      if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
+      if (host) host.style.display = '';
+    })
+    .catch(function () {
+      if (pending.parentNode) pending.remove();
+      if (host) host.style.display = '';
+    });
 }
 
 // Nút phẳng cho khách ĐÃ đăng nhập (xem `_renderLockWall`) — đọc lại `moiLo`

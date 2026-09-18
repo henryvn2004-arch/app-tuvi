@@ -88,6 +88,12 @@ async function stubApis(page: Page, opts?: { previewBody?: object }) {
   await page.route('**/api/payment**', (r) => r.fulfill({ status: 200, contentType: 'application/json',
     body: JSON.stringify({ hasAccess: false, balance: 0 }) }));
   await page.route('**/api/track**', (r) => r.fulfill({ status: 200, body: '{}' }));
+  // Tầng hook kể chuyện (`_tryHookNarrativeNK`, 2026-09-18) tự gọi
+  // `/api/hook-narrative` ngay sau `mountHook()` — KHÔNG stub thì bài kiểm gọi
+  // THẬT tới model và tiêu THẬT một suất `preview.free_runs` (xem chú thích
+  // đầy đủ ở tests/hard-paywall.spec.ts).
+  await page.route('**/api/hook-narrative**', (r) =>
+    r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ allowed: false }) }));
   // Pha 4 (2026-09-17): 5 khối (keHoach/coiTrong/nenNoi+tranhNoi/thoiDiem/
   // motCau — có văn AI trong dummy JSON) nay hiện văn MẪU bị blur thay vì
   // vạch xám rỗng — stub CỐ ĐỊNH, không phụ thuộc file thật.

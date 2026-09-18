@@ -61,6 +61,12 @@ async function stubApis(page: Page, bal: Balance) {
     body: JSON.stringify([{ package_id: '50', credits: 350, amount_vnd: 199000, label: 'Khởi Đầu' }]) }));
   await page.route('**/api/search', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ docs: '' }) }));
   await page.route('**/api/track**', (r) => r.fulfill({ status: 200, body: '{}' }));
+  // Tầng hook kể chuyện (`_tryHookNarrativeVHN`, port từ app-luan-giai.html
+  // 2026-09-18) tự gọi `/api/hook-narrative` ngay sau `mountHook()` — KHÔNG
+  // stub thì bài kiểm gọi THẬT tới model và tiêu THẬT một suất
+  // `preview.free_runs` (xem chú thích đầy đủ ở tests/hard-paywall.spec.ts).
+  await page.route('**/api/hook-narrative**', (r) =>
+    r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ allowed: false }) }));
 
   await page.route('**/api/payment**', (r) => {
     const url = new URL(r.request().url());

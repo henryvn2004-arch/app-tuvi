@@ -36,6 +36,7 @@ const PREVIEW_PAYLOAD = {
   conNguoi: 'ĐOẠN VĂN MIỄN PHÍ MỘT về con.',
   chatNoi: 'ĐOẠN VĂN MIỄN PHÍ HAI về chất nổi.',
   khieuTop: { id: 'ngonngu', ten: 'Ngôn ngữ', diem: 7.4, noiBat: true, saoDay: ['Xương Khúc'] },
+  khieuBottom: { id: 'so', ten: 'Con số', diem: 4.1, noiBat: false, saoDay: [] },
   coSo: { tong: 84, soSao: 62, soCachCuc: 9, soDaiVan: 13, trichDan: null },
 };
 
@@ -72,6 +73,12 @@ async function stubApis(page: Page, opts?: { previewBody?: object }) {
   await page.route('**/api/payment**', (r) => r.fulfill({ status: 200, contentType: 'application/json',
     body: JSON.stringify({ hasAccess: false, balance: 0 }) }));
   await page.route('**/api/track**', (r) => r.fulfill({ status: 200, body: '{}' }));
+  // Tầng hook kể chuyện (`_tryHookNarrativeDC`, 2026-09-18) tự gọi
+  // `/api/hook-narrative` ngay sau `mountHook()` — KHÔNG stub thì bài kiểm gọi
+  // THẬT tới model và tiêu THẬT một suất `preview.free_runs` (xem chú thích
+  // đầy đủ ở tests/hard-paywall.spec.ts).
+  await page.route('**/api/hook-narrative**', (r) =>
+    r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ allowed: false }) }));
   // Pha 4 (2026-09-17): 5 trong 9 khối khoá (dinhHuong/loLang/vaoBangGi/
   // changNay/motCau — có văn AI trong dummy JSON) nay hiện văn MẪU bị blur
   // thay vì vạch xám rỗng — stub CỐ ĐỊNH, không phụ thuộc file thật.
@@ -151,8 +158,9 @@ test('bản xem trước: 2 đoạn văn thật + câu trích, phần bán KHÔN
   await expect(page.locator('#basisBlock')).toBeVisible();
   await expect(page.locator('#basisList')).toBeEmpty();     // các dòng cơ sở là phần trả phí
 
-  // Hook hé đúng MỘT chất, đọc từ `khieuTop`.
+  // Hook hé ĐÚNG HAI chất (cao nhất + thấp nhất), đọc từ `khieuTop`/`khieuBottom`.
   await expect(page.locator('#hookHost')).toContainText('Ngôn ngữ');
+  await expect(page.locator('#hookHost')).toContainText('Con số');
 
   // Có mang định danh cho cầu dao — thiếu là mọi khách rơi về khung cũ.
   expect(calls(page)).toHaveLength(1);
