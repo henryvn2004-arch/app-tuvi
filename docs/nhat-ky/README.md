@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-327 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+328 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🖼 Bỏ ảnh mascot cố định (`/mascot/paywall-v2.webp`) khỏi tấm khoá trả phí — vênh style với ảnh luận giải thật |
 | 1 | 2026-09 | `2026-09.md` | ✍️ Homepage: viết lại lần 2 chữ 5 banner "Công cụ nổi bật" — bỏ giọng "hook/tò mò", quay lại chuyên nghiệp + sửa số phần sai |
 | 1 | 2026-09 | `2026-09.md` | 🖼 Homepage: 3 chỉnh sửa nhỏ cho slider "Công cụ nổi bật" — badge dùng tên tool, avatar khách hàng thật hơn, link đánh giá bấm được |
 | 1 | 2026-09 | `2026-09.md` | ✏️ Homepage: viết lại chữ 5 banner "Công cụ nổi bật" theo guideline tò mò/hook — thử nghiệm trước khi áp cho shell |

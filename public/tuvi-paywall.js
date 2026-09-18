@@ -204,7 +204,6 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
    Nay ngược lại: vạch mờ là dải trang trí có chiều cao RIÊNG, lớp chữ nằm
    TRONG luồng và là thứ quyết định chiều cao. Không ca nội dung nào cắt được nữa. */
 .tpw-lock{position:relative;margin-top:14px;border:1px solid #e7e0d0;border-radius:12px;overflow:hidden;background:#fff;animation:tpw-up .25s ease}
-.tpw-lock-photo{display:block;width:100%;aspect-ratio:1536/1024;object-fit:cover;background:#F3E7C8}
 .tpw-lock-blur{height:106px;box-sizing:border-box;padding:18px 20px 0;overflow:hidden;user-select:none;pointer-events:none;filter:blur(4px);opacity:.5}
 .tpw-lock-blur i{display:block;height:11px;border-radius:6px;background:linear-gradient(90deg,#cfc7b4,#ece6da);margin-bottom:10px}
 /* Chồng lên ĐUÔI dải mờ để vẫn ra cảm giác "có chữ bị che", nhưng phần chồng
@@ -501,15 +500,6 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // không có gì thay thế, y hệt như nút không phản hồi.
   function _visible(el) { return !!(el && el.offsetParent !== null); }
 
-  // Ảnh đầu tấm khoá (Henry, reskin webtoon 2026-09-17: "chị gái vui vẻ cầm lá
-  // số về cùng bạn trai, Minh Bảo chơi với bạn, nông dân gặt lúa, bình minh
-  // không khí Tết") — DÙNG CHUNG cả hai tấm khoá (`_softLock` từ chối thiếu
-  // Lượng · `lockPreview` W1 đã tính thử), chèn làm con ĐẦU TIÊN của `.tpw-lock`
-  // nên không đụng tới trò `margin-top:-52px` của `.tpw-lock-veil` (vẫn overlap
-  // đúng lên `.tpw-lock-blur` như cũ, ảnh chỉ thêm phía TRƯỚC cả hai). Khổ
-  // 1536:1024 gốc giữ nguyên tỉ lệ trong CSS (`aspect-ratio`) nên không cắt.
-  const LOCK_PHOTO = '<img class="tpw-lock-photo" src="/mascot/paywall-v2.webp" alt="" loading="lazy">';
-
   function _softLock(inner) {
     const declaredEl = document.querySelector('[data-tvp-lock]');
     const declared = declaredEl && _visible(declaredEl) ? declaredEl : null;
@@ -522,7 +512,6 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     _lockEl = document.createElement('div');
     _lockEl.className = 'tpw-lock';
     _lockEl.innerHTML =
-      LOCK_PHOTO +
       '<div class="tpw-lock-blur" aria-hidden="true">' +
         '<i style="width:96%"></i><i style="width:88%"></i><i style="width:93%"></i>' +
         '<i style="width:70%"></i><i style="width:91%"></i><i style="width:58%"></i>' +
@@ -687,7 +676,6 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     _lockEl = document.createElement('div');
     _lockEl.className = 'tpw-lock tpw-prev';
     _lockEl.innerHTML =
-      LOCK_PHOTO +
       '<div class="tpw-lock-blur" aria-hidden="true">' +
         '<i style="width:96%"></i><i style="width:88%"></i><i style="width:93%"></i>' +
         '<i style="width:70%"></i><i style="width:91%"></i><i style="width:58%"></i>' +
