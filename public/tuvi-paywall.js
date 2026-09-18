@@ -364,6 +364,30 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     );
   }
 
+  // Hết trần đời XEM TRƯỚC (`preview.free_runs`, lib/billing/anon-preview.ts).
+  // CHỈ giải thích + dẫn thẳng vào mở khoá trả phí — TUYỆT ĐỐI không hứa thêm
+  // lượt free nào từ việc đăng nhập/đăng ký: trần này khoá theo CHUNG một
+  // `pKey` (anon_id hoặc user_id), đăng nhập không tự sinh thêm suất nào ở
+  // policy hiện tại. Nơi gọi PHẢI tự lọc: chỉ gọi khi `reason` từ response
+  // API là key_cap/ip_cap/global_cap (chắc chắn hết quota) — lỗi hệ thống
+  // thật (disabled/error) phải im lặng, giữ đúng ô giữ chỗ cũ (xem luật
+  // "Hỏng thì IM" ở `_runFreePreview`, app-luan-giai.html).
+  function _previewCapCta(scrollTo) {
+    _close();
+    const el = scrollTo && document.getElementById(scrollTo);
+    if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function previewCapReached(opts) {
+    opts = opts || {};
+    const scrollTo = opts.scrollTo || 'lgUnlock';
+    _open(
+      '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Đã dùng hết lượt xem trước miễn phí</div></div>' +
+      '<div class="tpw-center"><div class="tpw-msg">Bạn đã dùng hết số lượt xem trước miễn phí cho lá số này. Mở bản luận đầy đủ để đọc trọn, không giới hạn số lần xem lại.</div></div>' +
+      '<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">Để sau</button>' +
+      '<button class="tpw-btn ok" onclick="TuviPaywall._previewCapCta(\'' + scrollTo + '\')">Xem cách mở khoá →</button></div>'
+    );
+  }
+
   // ── Overlay helper ────────────────────────────────────────────
   let _ov = null;
   function _open(inner) {
@@ -1782,6 +1806,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     previewAnonId, dummyPortraitUrl,
     sectionLockHtml, wireSectionLocks, resumeIfPending,
     _banner, _close, _closeLock, _login, showRefundNotice,
+    previewCapReached, _previewCapCta,
   };
 })();
 

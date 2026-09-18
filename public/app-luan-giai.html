@@ -425,7 +425,7 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tools-shared/nguoi-than.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=36"></script>
+<script src="/tuvi-paywall.js?v=37"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
@@ -1226,6 +1226,11 @@ var TONG_PHAN=13;
 var FREE_PHAN=1;
 // Số phần chạy song song — xem lý do chọn 3 trong tools-shared/phan-pool.js.
 var PHAN_CONCURRENCY=3;
+// `gate.reason` của lượt xem trước MIỄN PHÍ gần nhất bị chặn (null nếu chưa
+// từng chặn/không phải do cầu dao quota) — `_runPhanLuanGiai` ghi, `_runFreePreview`
+// đọc để quyết có bật `TuviPaywall.previewCapReached()` hay không. Không đổi
+// chữ ký `_runPhanLuanGiai` (còn nhiều nơi khác gọi và chỉ đọc boolean).
+var _lgLastPreviewDenyReason=null;
 // ETA tự hiệu chỉnh: đo nhịp NGAY TRONG phiên này thay vì hứa theo một con
 // số chép cứng (số chép cứng nói dối vào đúng ngày đổi model).
 var _pace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer():null;
@@ -1479,18 +1484,29 @@ async function initLuanGiaiGate(ls){
 // `FREE_PHAN` tăng lại. Song song ở đây là mỗi lượt đều cache-miss, đắt hơn
 // mà chẳng nhanh hơn bao nhiêu.
 //
-// Hỏng thì IM: phần xem trước là quà, không phải hàng đã bán. Chặn bởi cầu dao
-// (402) hay mạng lỗi đều để nguyên ô giữ chỗ + tấm tường — đúng thứ khách sẽ
-// thấy nếu tính năng này chưa từng tồn tại. `_runPhanLuanGiai` tự vẽ ô lỗi kèm
-// nút Thử lại, nên chỉ cần dọn ô đó đi.
+// Hỏng thì IM: phần xem trước là quà, không phải hàng đã bán. Mạng lỗi/server
+// hỏng thật đều để nguyên ô giữ chỗ + tấm tường — đúng thứ khách sẽ thấy nếu
+// tính năng này chưa từng tồn tại. `_runPhanLuanGiai` tự vẽ ô lỗi kèm nút Thử
+// lại, nên chỉ cần dọn ô đó đi. NGOẠI LỆ DUY NHẤT: cầu dao quota xem trước
+// (402, `reason` key_cap/ip_cap/global_cap) — lúc đó KHÔNG im, bật popup
+// `TuviPaywall.previewCapReached()` vì đây không phải hỏng, mà là hết quà.
 async function _runFreePreview(){
   if(_previewRan) return;
   _previewRan=true;
   for(var p=1;p<=FREE_PHAN;p++){
+    _lgLastPreviewDenyReason=null;
     var ok=await _runPhanLuanGiai(p,true);
     if(!ok){
       var box=document.getElementById('claude-content-'+p);
       if(box){ box.style.display='none'; box.innerHTML=''; }
+      // Chỉ bật popup khi CHẮC CHẮN là hết trần đời xem trước — lỗi hệ thống
+      // thật (disabled/error/mạng lỗi) phải im lặng theo luật "Hỏng thì IM"
+      // ở trên: popup mà bật oan lúc server đang lỗi là ép khách trả tiền
+      // ngay lúc công cụ chưa chắc chạy được.
+      var r=_lgLastPreviewDenyReason;
+      if(r==='key_cap'||r==='ip_cap'||r==='global_cap'){
+        TuviPaywall.previewCapReached({scrollTo:'lgUnlock'});
+      }
       return;   // hỏng phần 1 thì đừng đốt tiếp tiền cho phần 2
     }
   }
@@ -1795,6 +1811,7 @@ async function _runPhanLuanGiai(p,preview){
     var data=await resp.json();
     if(data.error||!data.luanGiai){
       doneWait();
+      _lgLastPreviewDenyReason=data.reason||null;
       if(window.TuviPaywall&&TuviPaywall.showRefundNotice)TuviPaywall.showRefundNotice(data);
       if(box)box.innerHTML=preview?'':'<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan('+p+')">↻ Thử lại</button></div>';
       return false;
