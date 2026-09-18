@@ -100,3 +100,7 @@ scripts/fixtures/lunar-table-new.json
 # Ảnh banner "Công cụ nổi bật" trang chủ sinh bằng scripts/gen-featured-banners.mjs
 # — bản final (đã duyệt + optimize webp) mới vào public/mascot/, commit thẳng.
 .featured-banners/
+
+# Sheet mẫu 102 icon (Sprint 2) sinh thử để Henry duyệt style — bản final
+# (đã duyệt + cắt + optimize webp) mới vào public/, commit thẳng.
+.icon-sheet-sample/
