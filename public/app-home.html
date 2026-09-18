@@ -68,8 +68,9 @@
 .next-wrap{margin-bottom:22px}
 .nx-main{display:flex;gap:13px;align-items:flex-start;background:var(--white);border:1px solid var(--gold-soft);border-radius:14px;padding:16px 17px;box-shadow:var(--shadow);text-decoration:none;transition:.15s}
 .nx-main:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(6,26,46,.09)}
-.nx-main .ic{width:44px;height:44px;flex:0 0 auto;border-radius:11px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center}
+.nx-main .ic{width:44px;height:44px;flex:0 0 auto;border-radius:11px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .nx-main .ic svg{width:23px;height:23px}
+.nx-main .ic img{width:100%;height:100%;object-fit:cover}
 .nx-tx{min-width:0}
 .nx-tx b{display:block;font-family:var(--serif);font-size:16px;font-weight:600;color:var(--heading);margin-bottom:4px}
 .nx-why{font-size:12.5px;color:var(--text-mid);line-height:1.55}
@@ -81,7 +82,8 @@
 @container home (min-width:480px){.grid{grid-template-columns:repeat(6,1fr)}}
 @container home (min-width:720px){.grid{grid-template-columns:repeat(8,1fr)}}
 .tile{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;background:none;border:none;padding:0}
-.tile-ic{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:24px;transition:transform .12s}
+.tile-ic{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:24px;transition:transform .12s;overflow:hidden}
+.tile-ic img{width:100%;height:100%;object-fit:cover}
 .tile:active .tile-ic{transform:scale(.92)}
 .tile-lb{font-size:10.5px;line-height:1.25;color:var(--text-mid);text-align:center;max-width:76px}
 /* Tint theo NHÓM (`need_tags` đầu tiên) — màu MANG NGHĨA (nhu cầu), không
@@ -459,6 +461,7 @@
 <script src="/tool-prices.js?v=8"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=38" data-icons-only></script>
+<script src="/tools-shared/tool-icons.js?v=1"></script>
 <script src="/shell.js?v=95"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -568,7 +571,14 @@ function pickNext(d) {
   return out;
 }
 
-function cardIcon(row) { return window.iconHtml ? window.iconHtml(row.icon) : svg('grid'); }
+function cardIcon(row) {
+  // Tool có icon minh hoạ riêng (ToolIcons.src) thì ưu tiên ảnh — dùng chung
+  // cho cả tile springboard lẫn thẻ "Gợi ý cho bạn". Thiếu khoá thì rơi về
+  // glyph SVG đơn sắc như trước (tool chưa có icon riêng).
+  var illus = window.ToolIcons && window.ToolIcons.src(row.tool_id);
+  if (illus) return '<img src="' + illus + '" alt="" loading="lazy">';
+  return window.iconHtml ? window.iconHtml(row.icon) : svg('grid');
+}
 
 function renderNext(d) {
   var host = document.getElementById('nextCard'); if (!host) return;

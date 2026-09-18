@@ -305,6 +305,7 @@ a { color: var(--blue); text-decoration: none; }
 }
 .tool-icon { font-size: 26px; line-height: 1; color: #9A7B3A; display: flex; align-items: center; justify-content: center; min-height: 28px; }
 .tool-icon svg { width: 26px; height: 26px; }
+.tool-icon img { width: 32px; height: 32px; border-radius: 9px; object-fit: cover; }
 .tool-name {
   font-family: 'Noto Serif', Georgia, serif; font-size: 17px;
   color: var(--navy); font-weight: 700;
@@ -569,6 +570,7 @@ a { color: var(--blue); text-decoration: none; }
 <script src="/tool-prices.js?v=8"></script>
 <script src="/tuvi-paywall.js?v=37"></script>
 <script src="/nav.js?v=38"></script><script src="/referral.js?v=1"></script>
+<script src="/tools-shared/tool-icons.js?v=1"></script>
 
 <script>
 // ─────────────────────────────────────────────────────────────
@@ -778,9 +780,13 @@ function renderToolGrid(tools, isFreeTab) {
 // ⚠️ TÊN HÀM KHÔNG ĐƯỢC LÀ `iconHtml`: khai `function iconHtml` ở top-level của
 // classic script CHÍNH LÀ gán `window.iconHtml`, nên nó ghi đè bản của nav.js rồi
 // tự gọi chính mình → tràn stack, lưới tool trắng trơn.
-function toolIcon(raw) {
-  if (window.iconHtml) return window.iconHtml(raw);
-  return raw || ''; // nav.js chưa nạp được: đưa nguyên liệu thô, không dựng gì thêm
+function toolIcon(t) {
+  // Tool có icon minh hoạ riêng (ToolIcons.src) thì ưu tiên ảnh — chỉ 48 tool
+  // đang bật mới có, thiếu khoá thì rơi về SVG/emoji cũ như trước.
+  var illus = window.ToolIcons && window.ToolIcons.src(t.tool_id);
+  if (illus) return '<img src="' + illus + '" alt="" loading="lazy">';
+  if (window.iconHtml) return window.iconHtml(t.icon);
+  return t.icon || ''; // nav.js chưa nạp được: đưa nguyên liệu thô, không dựng gì thêm
 }
 
 // `byNeed` = đang ở lối xem theo nhu cầu ⇒ CÂU HỎI làm tiêu đề, tên bộ môn tụt
@@ -808,7 +814,7 @@ function toolCardHtml(t, byNeed) {
     : '<div class="tool-name">' + esc(t.label) + '</div>' +
       '<div class="tool-desc">' + esc(t.description || '') + '</div>';
   return '<a href="' + url + '" class="tool-card' + featured + '">' +
-    '<div class="tool-icon">' + toolIcon(t.icon) + '</div>' +
+    '<div class="tool-icon">' + toolIcon(t) + '</div>' +
     head +
     '<div class="tool-footer">' + priceHtml +
       '<div class="tool-cta">Mở →</div>' +
