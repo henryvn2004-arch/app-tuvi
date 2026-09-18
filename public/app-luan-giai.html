@@ -764,25 +764,27 @@ function mountHook(ls){
  * nào (đúng LASO_AUTHORITY_RULE).
  *
  * Best-effort tuyệt đối: hết quota/lỗi mạng/parse hỏng → `data.allowed` false
- * hoặc fetch tự catch — khối cũ đứng nguyên, KHÔNG báo lỗi, KHÔNG chặn phần
- * còn lại của trang. Đây là lý do hàm này KHÔNG `await` ở nơi gọi.
+ * hoặc fetch tự catch — khối cũ (đang bị CHE trong lúc chờ, xem bên dưới)
+ * hiện LẠI, KHÔNG báo lỗi, KHÔNG chặn phần còn lại của trang. Đây là lý do
+ * hàm này KHÔNG `await` ở nơi gọi.
  */
 function _tryHookNarrative(host,spec){
   if(!spec||!Array.isArray(spec.facts)||spec.facts.length<2) return;
-  // Dấu hiệu "đang soạn thêm" — khối cũ (mount()) hiện NGAY và trông như đã
-  // xong, nên không có dòng này thì người dùng dễ tưởng nhầm trang đứng yên
-  // trong lúc lượt gọi LLM vẫn đang chạy phía sau. Vòng quay tái dùng đúng
-  // `.rr-spin`/`@keyframes rr-spin` đã có sẵn trong shell.css (dùng ngay
-  // trong trang này ở #lgBtnPdfIcon) — không định nghĩa keyframe thứ hai.
-  // Số giây nêu ra là khoảng đo THẬT trên `events.llm_usage` (2,7–7,9s ở lượt
-  // đo 2026-09-17), không phải số áng chừng. Gắn vào CUỐI #hookHost (ngoài
-  // .hkl-block) để không đụng DOM mà upgrade() sắp thay nguyên khối; tự xoá
-  // khi upgrade() thành công (host.innerHTML bị ghi đè) hoặc khi rơi vào
-  // nhánh không có gì để nâng cấp.
+  // Che khối fact-card cũ (mount() đã dựng SẴN trong host, giữ nguyên làm
+  // lưới an toàn) NGAY khi bắt đầu chờ — hiện nó ra rồi vài giây sau mới đổi
+  // giao diện từng khiến người xem tưởng "vẫn y như cũ" (Henry 2026-09-17,
+  // xem PR #932). Thay bằng khoảng trống + vòng quay; khối cũ CHỈ hiện lại
+  // nếu tầng kể chuyện hỏng thật (hết quota/lỗi mạng/parse hỏng) — đúng lúc
+  // đó nó mới đáng là bản thay thế, không phải trạng thái mặc định nữa.
+  // Vòng quay tái dùng `.rr-spin`/`@keyframes rr-spin` đã có sẵn trong
+  // shell.css (dùng ngay trong trang này ở #lgBtnPdfIcon) — không định
+  // nghĩa keyframe thứ hai. Số giây nêu ra là khoảng đo THẬT trên
+  // `events.llm_usage` (2,7–7,9s ở lượt đo 2026-09-17), không phải áng chừng.
+  if(host)host.style.display='none';
   var pending=document.createElement('div');
-  pending.style.cssText='display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12px;color:var(--text-lt);opacity:.9';
+  pending.style.cssText='display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
   pending.innerHTML='<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
-  if(host)host.appendChild(pending);
+  if(host&&host.parentNode)host.parentNode.insertBefore(pending,host.nextSibling);
   var tk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
   var headers={'Content-Type':'application/json'};
   if(tk)headers['Authorization']='Bearer '+tk;
@@ -795,10 +797,21 @@ function _tryHookNarrative(host,spec){
   fetch('/api/hook-narrative',{method:'POST',headers:headers,body:JSON.stringify(body)})
     .then(function(r){ return r.json(); })
     .then(function(data){
-      if(data&&data.allowed) window.HookLayer.upgrade(host,spec,data);
-      else if(pending.parentNode) pending.remove();
+      if(pending.parentNode)pending.remove();
+      if(data&&data.allowed){
+        window.HookLayer.upgrade(host,spec,data);
+        // Đã có bản luận thật để xem — 2 box tĩnh ở cột phụ (Giới thiệu +
+        // Bản luận giải mẫu) giờ thừa, nhường chỗ cho nội dung thật. KHÔNG
+        // đụng #shellRecent (lịch sử xem gần đây) — chỉ đúng 2 box này.
+        var promoEls=document.querySelectorAll('.ws-promo,.samp-cta');
+        for(var i=0;i<promoEls.length;i++)promoEls[i].style.display='none';
+      }
+      if(host)host.style.display='';
     })
-    .catch(function(){ if(pending.parentNode)pending.remove(); /* mạng hỏng — giữ nguyên khối fact-card cũ */ });
+    .catch(function(){
+      if(pending.parentNode)pending.remove();
+      if(host)host.style.display=''; /* mạng hỏng — hiện lại khối fact-card cũ */
+    });
 }
 
 function _lgLoggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Auth.isLoggedIn()); }
