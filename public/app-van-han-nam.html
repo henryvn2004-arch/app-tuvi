@@ -499,13 +499,12 @@ function render(ls){
   for(var p=1;p<=_tongPhan;p++){
     var body;
     if(p<=4){
-      // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc) GẤP LẠI mặc
-      // định — cùng khuôn với app-luan-giai.html/app-chu-trinh-cuoc-doi.html
-      // (buildPhanSection): người dùng chạy tool là để đọc LUẬN GIẢI, không
-      // phải đọc lại dữ liệu thô đã hiện trên lá số phía trên.
+      // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc) — Pha 4
+      // (2026-09-17): bung sẵn mặc định, xem lý do đảo ngược ở app-luan-giai.html
+      // (buildPhanSection).
       var pre=LuanGiaiCore.buildPreGenHtml(PRE[p],ls);
       var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
-      body=pre?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
+      body=pre?('<details class="lg-calc" open><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
     }else{
       var t=_khung.thangs[p-5];
       body=illusBannerHtml(t,ls)+renderThang(t);

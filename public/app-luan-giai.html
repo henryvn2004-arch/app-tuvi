@@ -136,11 +136,12 @@
    giữ chỗ của chính phần đó, để cuộn sâu vẫn còn chỗ bấm. */
 .lg-cta-repeat{margin-top:14px;text-align:center}
 .lg-cta-repeat .btn-go{width:100%;max-width:360px}
-/* Pha 3 (2026-09-14) — ảnh cho phần ĐANG KHOÁ: ĐÚNG MỘT banner chung của cả
-   tool (lockedIllusHtml(), không đổi theo cung/sắc thái) làm mờ + gắn nhãn.
-   KHÔNG dùng .tpw-real-lock (tuvi-paywall.js) — class đó dành riêng cho nội
-   dung THẬT bị mờ, ở đây là ảnh trang trí dùng chung nên tách class mới cho
-   rõ ý, tránh đọc nhầm là "có dữ liệu thật đằng sau lớp mờ này". */
+/* Pha 3 (2026-09-14) — ảnh cho phần ĐANG KHOÁ, làm mờ + gắn nhãn. Pha 4
+   (2026-09-17): lockedIllusHtml() nay ưu tiên ảnh KHỚP ĐÚNG cung/sắc/giới của
+   lá số đang xem (illusBannerHtml, deterministic, 0 token) — chỉ rơi về banner
+   chung cố định khi không khớp được. KHÔNG dùng .tpw-real-lock (tuvi-paywall.js)
+   — class đó dành riêng cho nội dung AI thật bị mờ, ảnh minh hoạ là tra bảng
+   tĩnh nên tách class riêng cho rõ ý. */
 .lg-illus-lock img{filter:blur(4px) saturate(.75);opacity:.55}
 .lg-illus-lock .lg-illus-tag{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
 /* Pha 3 — mục lục cá nhân: chấm vàng đánh dấu ĐÚNG cung `_tensionLine()` đã
@@ -897,15 +898,22 @@ function illusBannerHtml(phan,ls,label){
   return '<figure class="lg-illus"><img src="'+r.url+'" data-print-src="'+r.printUrl+'" alt="Minh hoạ '+esc(label)+'"'+lazyAttr+
     ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
 }
-// Pha 3 (2026-09-14) — ảnh cho phần ĐANG KHOÁ. KHÁC HẲN illusBannerHtml ngay
-// trên: dùng ĐÚNG MỘT banner của cả tool (hero-banners/laso-01.webp — đã tải
-// sẵn ở `.intro-photo` đầu trang, xem lại nếu cache trình duyệt), GIỐNG HỆT
-// NHAU ở MỌI phần khoá bất kể cung nào/lá số nào — không có gì để rò rỉ vì
-// ảnh không đổi theo sắc thái. Đây là điều kiện bắt buộc để không phạm đúng
-// luật "che hết luôn, đừng vừa hiện vừa che" mà buildLockedPlaceholderHtml đã
-// chốt: một ảnh CỐ ĐỊNH không mang tín hiệu gì về cung đó tốt hay xấu.
+// Pha 3 (2026-09-14) — ảnh cho phần ĐANG KHOÁ.
+//
+// 🔁 ĐẢO NGƯỢC Pha 4 (2026-09-17): trước đây dùng ĐÚNG MỘT banner cố định của
+// cả tool (hero-banners/laso-01.webp), GIỐNG HỆT NHAU ở MỌI phần khoá bất kể
+// cung nào/lá số nào — lý do cũ (dưới) là "ảnh khớp cung tự lộ sắc thái, hiện
+// nó ở phần khoá là vừa che vừa hé". Henry chốt lại: dùng ĐÚNG ảnh khớp lá số
+// thật (illusBannerHtml, vẫn 0 token — IllusMatch tra bảng tĩnh, KHÔNG gọi
+// AI) rồi LÀM MỜ bằng chính `.lg-illus-lock` (đã có sẵn CSS blur) — ảnh trông
+// thật vì đúng là ảnh thật của lá số này, nhưng mờ nên không đọc được sắc thái
+// rõ ràng nữa. Không khớp được cung nào (IllusMatch chưa nạp/thiếu tag) thì
+// rơi về đúng banner cố định cũ — còn hơn không có ảnh nào.
 var LOCK_ILLUS_URL='https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.webp';
-function lockedIllusHtml(){
+function lockedIllusHtml(phan,ls,label){
+  var real=illusBannerHtml(phan,ls,label);
+  if(real) return real.replace('<figure class="lg-illus"','<figure class="lg-illus lg-illus-lock"')
+    .replace('</figure>','<span class="lg-illus-tag">'+TuviPaywall.lockBadge('Ảnh minh hoạ')+'</span></figure>');
   return '<figure class="lg-illus lg-illus-lock"><img src="'+LOCK_ILLUS_URL+'" alt="" loading="lazy"'+
     ' onerror="this.closest(\'.lg-illus\').remove()"><span class="lg-illus-tag">'+TuviPaywall.lockBadge('Ảnh minh hoạ')+'</span></figure>';
 }
@@ -920,11 +928,11 @@ function buildPhanSection(phan,label,ls,locked){
   }else{
     var pre=LuanGiaiCore.buildPreGenHtml(phan,ls);
     var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
-    // Khối TÍNH TOÁN (cách cục/điểm số/quy tắc) GẤP LẠI mặc định — user chạy
-    // tool xong đọc ngay khối này rồi tưởng ĐÓ là luận giải, trong khi phần
-    // LUẬN THẬT (AI, `claude-content` dưới) tới sau. Henry chốt: giữ nguyên
-    // thứ tự, chỉ thu gọn; ai muốn soi cơ sở thì tự bấm mở.
-    bodyHtml=pre?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
+    // Khối TÍNH TOÁN (cách cục/điểm số/quy tắc) — Pha 4 (2026-09-17): ĐẢO NGƯỢC
+    // quyết định thu gọn cũ (Henry lúc đó lo user đọc nhầm khối này thành luận
+    // giải AI). Henry chốt lại: bung sẵn luôn, vẫn giữ `<details>` để ai muốn
+    // vẫn gập lại được — chỉ đổi trạng thái MẶC ĐỊNH.
+    bodyHtml=pre?('<details class="lg-calc" open><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
     tag='';
   }
   // CTA lặp lại (ẨN mặc định, bật bởi `_paintSecLocks` khi `_renderUnlockBlock`
@@ -946,7 +954,7 @@ function buildPhanSection(phan,label,ls,locked){
   // luận giải của chính cung đó còn chưa đọc được, mời sang tool khác lúc này
   // là điều hướng vào chỗ rỗng.
   var related=locked?'':cungRelatedHtml(label,ls);
-  var banner=locked?lockedIllusHtml():illusBannerHtml(phan,ls,label);
+  var banner=locked?lockedIllusHtml(phan,ls,label):illusBannerHtml(phan,ls,label);
   // Pha 3 (2026-09-14, cắt giữa phần 2) — ô nối tiếp ẨN mặc định, chỉ
   // `_runPhanLuanGiai(FREE_PHAN,true)` bật lên khi bản xem trước THẬT SỰ bị
   // cắt (xem _truncateMidPart). CHỈ dựng cho đúng phần FREE_PHAN — phần 1 đọc
