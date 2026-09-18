@@ -385,7 +385,11 @@ async function runPost(request: NextRequest) {
       // 'global_cap'/'error' là cầu dao ngân sách hoặc DB hỏng — hai thứ cần
       // biết ngay chứ không được lẫn vào nhau.
       console.error(`[lasotuvi] xem trước bị chặn (${gate.reason}) phần ${phanNum}`);
-      return err('Đã hết lượt xem trước miễn phí.', 402);
+      // `reason` đi kèm response — client dùng nó để phân biệt "hết suất xem
+      // trước" (key_cap/ip_cap/global_cap, đáng hiện popup mời trả phí) với lỗi
+      // hệ thống thật (disabled/error, phải im lặng theo triết lý "Hỏng thì IM"
+      // ở đầu `_runFreePreview`). KHÔNG đổi status/message cho client cũ chưa đọc `reason`.
+      return ok({ error: 'Đã hết lượt xem trước miễn phí.', reason: gate.reason }, 402);
     }
   }
 

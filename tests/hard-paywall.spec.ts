@@ -44,7 +44,7 @@ const calls = (page: Page): PreviewCall[] => (page as PageWithCalls).__calls;
 
 // Stub ĐẦY ĐỦ shape mà client đọc — stub thiếu trường thì bài kiểm xanh oan vì
 // nó đo đường lùi chứ không đo đường thật (bẫy đã ghi trong CLAUDE.md).
-async function stubApis(page: Page, opts?: { blockPreview?: boolean }) {
+async function stubApis(page: Page, opts?: { blockPreview?: boolean; blockReason?: string }) {
   opts = opts || {};
   const recorded: PreviewCall[] = [];
   (page as PageWithCalls).__calls = recorded;
@@ -84,7 +84,9 @@ async function stubApis(page: Page, opts?: { blockPreview?: boolean }) {
     const body = JSON.parse(r.request().postData() || '{}');
     recorded.push(body);
     if (opts.blockPreview && body.phan <= 1) {
-      return r.fulfill({ status: 402, contentType: 'application/json', body: JSON.stringify({ error: 'Đã hết lượt xem trước miễn phí.' }) });
+      const denyBody: { error: string; reason?: string } = { error: 'Đã hết lượt xem trước miễn phí.' };
+      if (opts.blockReason) denyBody.reason = opts.blockReason;
+      return r.fulfill({ status: 402, contentType: 'application/json', body: JSON.stringify(denyBody) });
     }
     return r.fulfill({
       status: 200,
@@ -199,7 +201,7 @@ test('tường + câu căng thẳng đứng NGAY DƯỚI phần 1', async ({ pag
   expect(order).toBe('OK');
 });
 
-test('cầu dao chặn xem trước → im lặng, tường vẫn nguyên', async ({ page }) => {
+test('cầu dao chặn xem trước không rõ lý do → im lặng, tường vẫn nguyên', async ({ page }) => {
   await stubApis(page, { blockPreview: true });
   await run(page);
   await page.waitForTimeout(1200);
@@ -208,6 +210,30 @@ test('cầu dao chặn xem trước → im lặng, tường vẫn nguyên', asyn
   await expect(page.locator('#claude-content-1')).toBeHidden();
   await expect(page.locator('#lgUnlock')).toBeVisible();
   await expect(page.locator('.laso-error')).toHaveCount(0);
+  // Không `reason` (giả lập lỗi hệ thống/mạng, không phải hết quota CHẮC
+  // CHẮN) → KHÔNG bật popup mời trả phí. Xem luật "Hỏng thì IM" ở đầu
+  // `_runFreePreview` (app-luan-giai.html) — chỉ 3 lý do key_cap/ip_cap/
+  // global_cap mới đủ chắc để phá vỡ sự im lặng đó.
+  await expect(page.locator('.tpw-overlay')).toHaveCount(0);
+});
+
+test('hết trần đời xem trước (key_cap) → bật popup mời trả phí', async ({ page }) => {
+  await stubApis(page, { blockPreview: true, blockReason: 'key_cap' });
+  await run(page);
+  await page.waitForTimeout(1200);
+  expect(calls(page).map((c: PreviewCall) => c.phan)).toEqual([1]);
+  await expect(page.locator('#claude-content-1')).toBeHidden();
+  await expect(page.locator('#lgUnlock')).toBeVisible();
+  // Popup chỉ giải thích + dẫn thẳng vào trả phí — TUYỆT ĐỐI không được hứa
+  // thêm lượt xem miễn phí nào (trần đời khoá theo CHUNG một pKey, đăng nhập
+  // không sinh thêm suất ở policy hiện tại).
+  await expect(page.locator('.tpw-overlay')).toBeVisible();
+  await expect(page.locator('.tpw-overlay')).not.toContainText(/đăng nhập để (xem|có) thêm|thêm lượt|miễn phí thêm/i);
+  await page.locator('.tpw-overlay .tpw-btn.ok').click();
+  await expect(page.locator('.tpw-overlay')).toHaveCount(0);
+  // CTA cuộn tới đúng tấm tường thật (`#lgUnlock`), không dựng UI trả phí
+  // riêng — tường đã có sẵn giá + nút mở khoá thật.
+  await expect(page.locator('#lgUnlock')).toBeInViewport();
 });
 
 test('trả tiền xong: KHÔNG sinh lại phần đã đọc free, tường không bị xoá', async ({ page }) => {
