@@ -488,7 +488,7 @@ button { font: inherit; cursor: pointer; }
       return pool.slice(0, n);
     }
 
-    track.innerHTML = BANNERS.map(function (b) {
+    track.innerHTML = BANNERS.map(function (b, i) {
       var feats = b.feats
         .map(function (f) {
           return (
@@ -498,6 +498,13 @@ button { font: inherit; cursor: pointer; }
         })
         .join('');
       var avatars = pickAvatars(4).map(function (src) { return '<img src="' + src + '" alt="" loading="lazy">'; }).join('');
+      // Slide 0 luôn hiện ngay từ đầu (và là phần tử LCP của trang) — KHÔNG
+      // được lazy: lazy trên ảnh luôn-hiển-thị là nguyên nhân đã xác minh của
+      // CLS ~0,62 trên section.tools-sec (ảnh "bung" ra sau khi layout đã ổn
+      // định, đẩy mọi thứ bên dưới xuống). Slide 1-4 ngoài khung nhìn ban đầu
+      // nên vẫn lazy như cũ.
+      var artLoading = i === 0 ? 'eager' : 'lazy';
+      var artFetchPriority = i === 0 ? ' fetchpriority="high"' : '';
       return (
         '<div class="ftb-slide"><div class="ftb-card">' +
         '<div class="ftb-text">' +
@@ -509,7 +516,7 @@ button { font: inherit; cursor: pointer; }
         '<div class="ftb-proof"><div class="ftb-avatars">' + avatars + '</div>' +
         '<a class="ftb-proof-txt" href="#rv-section">Xem đánh giá thật của người dùng ↓</a></div>' +
         '</div>' +
-        '<div class="ftb-art"><img src="' + b.img + '" alt="' + b.alt + '" loading="lazy"></div>' +
+        '<div class="ftb-art"><img src="' + b.img + '" alt="' + b.alt + '" loading="' + artLoading + '"' + artFetchPriority + '></div>' +
         '</div></div>'
       );
     }).join('');
