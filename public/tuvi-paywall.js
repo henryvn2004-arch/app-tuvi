@@ -85,6 +85,9 @@ const TuviPaywall = (() => {
 
   let _cfg        = null;
   let _priceCache = null;
+  // Cache theo path cho `loadSampleJson` — nhiều phần khoá trên CÙNG một trang
+  // (13 phan của laso chẳng hạn) đọc chung MỘT file *-dummy.json, chỉ fetch 1 lần.
+  const _sampleCache = {};
 
   // ── Ý định mở khoá TRƯỚC khi rời trang đi nạp Lượng ─────────────
   // Đo trên Chu Trình Cuộc Đời (2026-08-30): 12 lượt bấm mở khoá → 1 signup →
@@ -201,7 +204,6 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
    Nay ngược lại: vạch mờ là dải trang trí có chiều cao RIÊNG, lớp chữ nằm
    TRONG luồng và là thứ quyết định chiều cao. Không ca nội dung nào cắt được nữa. */
 .tpw-lock{position:relative;margin-top:14px;border:1px solid #e7e0d0;border-radius:12px;overflow:hidden;background:#fff;animation:tpw-up .25s ease}
-.tpw-lock-photo{display:block;width:100%;aspect-ratio:1536/1024;object-fit:cover;background:#F3E7C8}
 .tpw-lock-blur{height:106px;box-sizing:border-box;padding:18px 20px 0;overflow:hidden;user-select:none;pointer-events:none;filter:blur(4px);opacity:.5}
 .tpw-lock-blur i{display:block;height:11px;border-radius:6px;background:linear-gradient(90deg,#cfc7b4,#ece6da);margin-bottom:10px}
 /* Chồng lên ĐUÔI dải mờ để vẫn ra cảm giác "có chữ bị che", nhưng phần chồng
@@ -498,15 +500,6 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // không có gì thay thế, y hệt như nút không phản hồi.
   function _visible(el) { return !!(el && el.offsetParent !== null); }
 
-  // Ảnh đầu tấm khoá (Henry, reskin webtoon 2026-09-17: "chị gái vui vẻ cầm lá
-  // số về cùng bạn trai, Minh Bảo chơi với bạn, nông dân gặt lúa, bình minh
-  // không khí Tết") — DÙNG CHUNG cả hai tấm khoá (`_softLock` từ chối thiếu
-  // Lượng · `lockPreview` W1 đã tính thử), chèn làm con ĐẦU TIÊN của `.tpw-lock`
-  // nên không đụng tới trò `margin-top:-52px` của `.tpw-lock-veil` (vẫn overlap
-  // đúng lên `.tpw-lock-blur` như cũ, ảnh chỉ thêm phía TRƯỚC cả hai). Khổ
-  // 1536:1024 gốc giữ nguyên tỉ lệ trong CSS (`aspect-ratio`) nên không cắt.
-  const LOCK_PHOTO = '<img class="tpw-lock-photo" src="/mascot/paywall-v2.webp" alt="" loading="lazy">';
-
   function _softLock(inner) {
     const declaredEl = document.querySelector('[data-tvp-lock]');
     const declared = declaredEl && _visible(declaredEl) ? declaredEl : null;
@@ -519,7 +512,6 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     _lockEl = document.createElement('div');
     _lockEl.className = 'tpw-lock';
     _lockEl.innerHTML =
-      LOCK_PHOTO +
       '<div class="tpw-lock-blur" aria-hidden="true">' +
         '<i style="width:96%"></i><i style="width:88%"></i><i style="width:93%"></i>' +
         '<i style="width:70%"></i><i style="width:91%"></i><i style="width:58%"></i>' +
@@ -684,7 +676,6 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     _lockEl = document.createElement('div');
     _lockEl.className = 'tpw-lock tpw-prev';
     _lockEl.innerHTML =
-      LOCK_PHOTO +
       '<div class="tpw-lock-blur" aria-hidden="true">' +
         '<i style="width:96%"></i><i style="width:88%"></i><i style="width:93%"></i>' +
         '<i style="width:70%"></i><i style="width:91%"></i><i style="width:58%"></i>' +
@@ -1677,6 +1668,40 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       (chart === false ? '' : '<div class="tpw-ph-chart"></div>') + '</div>';
   }
 
+  /**
+   * Nạp một file JSON mẫu (`public/samples/<tool>-dummy.json`, sinh bởi
+   * `scripts/gen-tool-sample.mjs` — văn AI THẬT của một lá số MẪU cố định,
+   * KHÔNG BAO GIỜ là dữ liệu của khách đang xem) — cache theo `path`, nhiều
+   * lời gọi cùng path chỉ fetch một lần. Lỗi mạng/404 → resolve `null`, để nơi
+   * gọi tự rơi về `placeholderHtml` (không có sample thì về đúng ô giữ chỗ cũ,
+   * không chặn cả trang).
+   */
+  function loadSampleJson(path) {
+    if (!_sampleCache[path]) {
+      _sampleCache[path] = fetch(path)
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .catch(function () { return null; });
+    }
+    return _sampleCache[path];
+  }
+
+  /**
+   * Bọc HTML đã render sẵn của văn MẪU (sample, khác `placeholderHtml`) bằng
+   * lớp mờ `.tpw-real-lock` — CÙNG class trang này đã dùng để mờ nội dung
+   * deterministic thật cho khách chưa đăng nhập, nay dùng lại cho văn AI của
+   * lá số MẪU đứng sau phần khoá, để "trông có thật" thay vì vạch xám trống.
+   *
+   * 🔴 CHỈ nhận HTML đã dựng từ văn bản trong `*-dummy.json` (sample cố định).
+   * KHÔNG truyền dữ liệu THẬT của khách đang xem vào đây — đó chính là lỗi
+   * `buildTeaserHtml` cũ đã bị cấm (xem app-luan-giai.html
+   * `buildLockedPlaceholderHtml`, "che hết luôn, đừng vừa hiện vừa che").
+   */
+  function sampleBlurHtml(html) {
+    if (!html) return '';
+    _css();
+    return '<div class="tpw-real-lock" aria-hidden="true">' + html + '</div>';
+  }
+
   // ── DANH TÍNH TẠM CỦA KHÁCH CHƯA ĐĂNG NHẬP ────────────────────────────────
   // Khoá đếm suất `preview.free_runs` của cầu dao xem trước
   // (lib/billing/anon-preview.ts). ⚠️ KHÔNG phải danh tính: client tự khai, xoá
@@ -1753,6 +1778,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     init, getProduct, requireCredits, requireCreditsCached, requireCreditsCachedQuery,
     generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots,
     mountCostHints, refreshCostHints, lockPreview, isFreeRerun, lockBadge, placeholderHtml,
+    loadSampleJson, sampleBlurHtml,
     previewAnonId, dummyPortraitUrl,
     sectionLockHtml, wireSectionLocks, resumeIfPending,
     _banner, _close, _closeLock, _login, showRefundNotice,

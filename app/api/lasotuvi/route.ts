@@ -297,7 +297,17 @@ async function runPost(request: NextRequest) {
   // day-con/...) — một người đã hết suất ĐỜI ở tool này thì cũng hết ở tool
   // kia, đây là THIẾT KẾ (một ngân sách "làm quen sản phẩm" cho cả trang),
   // không phải bug cần tách theo tool_id.
-  const FREE_PHAN = 2;
+  //
+  // 🔴 (2026-09-18) DỜI LẠI TỪ 2 XUỐNG 1 — riêng cho "laso". Tầng hook kể
+  // chuyện (`/api/hook-narrative`, xem hook-prompt.ts) đi CHUNG ngân sách
+  // `preview.free_runs` này (`_tryHookNarrative` ở app-luan-giai.html), nên
+  // giữ FREE_PHAN=2 nghĩa là một lượt submit giờ tốn 3/3 suất đời (phần 1 +
+  // phần 2 + hook) — hết ngay lượt đầu. Henry chốt: bớt phần 2 văn xuôi free,
+  // để hook (rẻ hơn, ~66-370đ so với ~350đ/phần) chiếm đúng suất đó — quay
+  // lại đúng tổng 2 suất/lượt như trước khi có hook. KHÔNG đụng
+  // `FREE_PHAN_CTCD_MIN/MAX` — hai hằng số đó của "chu-trinh-cuoc-doi", độc
+  // lập với hằng số này, không đọc lại nó.
+  const FREE_PHAN = 1;
   const FREE_PHAN_CTCD_MIN = 14;
   const FREE_PHAN_CTCD_MAX = 15;
   const isCtcdPreview = phanNum >= FREE_PHAN_CTCD_MIN && phanNum <= FREE_PHAN_CTCD_MAX;

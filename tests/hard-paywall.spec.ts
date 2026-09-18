@@ -60,14 +60,30 @@ async function stubApis(page: Page, opts?: { blockPreview?: boolean }) {
     body: JSON.stringify([{ package_id: '50', credits: 250, amount_vnd: 199000, label: 'Khởi Đầu' }]) }));
   await page.route('**/api/search', (r) =>
     r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ docs: '' }) }));
+  // Pha 4 (2026-09-17, hard-paywall.spec.ts): phần khoá nay hiện văn MẪU thật
+  // bị blur (`buildLockedPlaceholderHtml` → `_laSoDummy`) thay vì vạch xám —
+  // stub CỐ ĐỊNH, không phụ thuộc `public/samples/laso-dummy.json` thật (nội
+  // dung đó do LLM sinh, đổi theo lượt gen-tool-sample.mjs).
+  const DUMMY_PHAN = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+  const laSoDummy: Record<string, string> = {};
+  for (const p of DUMMY_PHAN) laSoDummy[String(p)] = `**Câu mẫu phần ${p}**\n\nVăn mẫu của lá số MẪU cho phần ${p}, đủ dài để không rỗng.`;
+  await page.route('**/samples/laso-dummy.json', (r) =>
+    r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(laSoDummy) }));
   await page.route('**/api/payment**', (r) =>
     r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ hasAccess: false, balance: 0 }) }));
   await page.route('**/api/track**', (r) => r.fulfill({ status: 200, body: '{}' }));
+  // Tầng hook kể chuyện (`_tryHookNarrative`, 2026-09-17) tự gọi
+  // `/api/hook-narrative` ngay sau `mountHook()` — KHÔNG stub thì bài kiểm gọi
+  // THẬT tới model và tiêu THẬT một suất `preview.free_runs`, đúng cái luật ở
+  // đầu file cấm. `allowed:false` là đủ: client tự lùi về khối fact-card cũ,
+  // không đổi gì các assertion phía dưới (không bài kiểm nào đo tầng hook).
+  await page.route('**/api/hook-narrative**', (r) =>
+    r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ allowed: false }) }));
 
   await page.route('**/api/lasotuvi**', async (r) => {
     const body = JSON.parse(r.request().postData() || '{}');
     recorded.push(body);
-    if (opts.blockPreview && body.phan <= 2) {
+    if (opts.blockPreview && body.phan <= 1) {
       return r.fulfill({ status: 402, contentType: 'application/json', body: JSON.stringify({ error: 'Đã hết lượt xem trước miễn phí.' }) });
     }
     return r.fulfill({
@@ -130,25 +146,39 @@ test('form là màn hình đầu khi vào trang', async ({ page }) => {
   await expect(page.locator('#sampCta')).toHaveCount(0);
 });
 
-test('phần 1-2 sinh chữ THẬT, phần 3+ chỉ còn ô giữ chỗ', async ({ page }) => {
+test('phần 1 sinh chữ THẬT, phần 2+ hiện văn MẪU bị blur', async ({ page }) => {
   await stubApis(page);
   await run(page);
   await expect(page.locator('#claude-content-1')).toContainText('Chữ AI của phần 1', { timeout: 15000 });
-  await expect(page.locator('#claude-content-2')).toContainText('Chữ AI của phần 2', { timeout: 15000 });
 
-  // Đúng 2 lượt gọi model, đúng phần 1 và 2, có mang anonId.
+  // Đúng 1 lượt gọi model (FREE_PHAN=1 — dời từ 2, xem lasotuvi/route.ts
+  // 2026-09-18: tầng hook kể chuyện giờ chiếm suất mà phần 2 văn xuôi từng
+  // dùng), đúng phần 1, có mang anonId.
   const parts = calls(page).map((c: PreviewCall) => c.phan).sort();
-  expect(parts).toEqual([1, 2]);
+  expect(parts).toEqual([1]);
   expect(calls(page)[0].anonId).toBeTruthy();
 
-  // Phần 3+: ô giữ chỗ, KHÔNG chữ thật nào lọt vào DOM.
-  await expect(page.locator('#sec-3 .tpw-ph')).toBeVisible();
-  const sec3 = await page.locator('#sec-3 .card').innerText();
-  expect(sec3).not.toMatch(/\/10/);
-  expect(await page.locator('#lgBody .tpw-ph').count()).toBe(11);
+  // Phần 2+: văn MẪU (từ /samples/laso-dummy.json, stub ở trên) bị mờ bằng
+  // .tpw-real-lock — KHÔNG còn vạch xám .tpw-ph, và KHÔNG phải dữ liệu THẬT
+  // của chính lá số vừa nhập (điểm số, tên "Kiểm Thử").
+  await expect(page.locator('#sec-2 .tpw-real-lock')).toBeVisible();
+  await expect(page.locator('#sec-2 .tpw-real-lock')).toContainText('Câu mẫu phần 2');
+  const sec2 = await page.locator('#sec-2 .card').innerText();
+  expect(sec2).not.toMatch(/\/10/);
+  expect(sec2).not.toContain('Kiểm Thử');
+  expect(await page.locator('#lgBody .tpw-real-lock').count()).toBe(12);
+  expect(await page.locator('#lgBody .tpw-ph').count()).toBe(0);
 });
 
-test('tường + câu căng thẳng đứng NGAY DƯỚI phần 2', async ({ page }) => {
+test('văn mẫu chưa nạp được (lỗi mạng) → về đúng ô giữ chỗ cũ, không chặn trang', async ({ page }) => {
+  await stubApis(page);
+  await page.route('**/samples/laso-dummy.json', (r) => r.fulfill({ status: 500, body: 'err' }));
+  await run(page);
+  await expect(page.locator('#sec-2 .tpw-ph')).toBeVisible();
+  expect(await page.locator('#lgBody .tpw-real-lock').count()).toBe(0);
+});
+
+test('tường + câu căng thẳng đứng NGAY DƯỚI phần 1', async ({ page }) => {
   await stubApis(page);
   await run(page);
   await expect(page.locator('#lgTension')).toBeVisible({ timeout: 15000 });
@@ -159,7 +189,7 @@ test('tường + câu căng thẳng đứng NGAY DƯỚI phần 2', async ({ pag
   await expect(page.locator('.tpw-overlay')).toHaveCount(0);   // không có hộp "chưa đọc được bảng giá"
 
   const order = await page.evaluate(() => {
-    const ids = ['sec-2', 'lgTension', 'lgUnlock', 'sec-3'];
+    const ids = ['sec-1', 'lgTension', 'lgUnlock', 'sec-2'];
     const els = ids.map((i) => document.getElementById(i));
     if (els.some((e) => !e)) return 'MISSING';
     const seq = els as HTMLElement[];
@@ -184,7 +214,7 @@ test('trả tiền xong: KHÔNG sinh lại phần đã đọc free, tường kh�
   await stubApis(page);
   await page.route('**/api/save-laso', (r) => r.fulfill({ status: 200, body: '{}' }));
   await run(page);
-  await expect(page.locator('#claude-content-2')).toContainText('Chữ AI của phần 2', { timeout: 15000 });
+  await expect(page.locator('#claude-content-1')).toContainText('Chữ AI của phần 1', { timeout: 15000 });
   calls(page).length = 0;
 
   // Bỏ qua requireCredits (đã có bài kiểm riêng cho đường tiền) — cái cần đo ở
@@ -193,12 +223,13 @@ test('trả tiền xong: KHÔNG sinh lại phần đã đọc free, tường kh�
   await page.waitForFunction(() => /hoàn tất|lỗi/.test(document.getElementById('lgProgress')!.textContent!), { timeout: 30000 });
 
   const parts = calls(page).map((c: PreviewCall) => c.phan).sort((a: number, b: number) => a - b);
-  expect(parts).toEqual([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);   // 1 và 2 KHÔNG chạy lại
+  expect(parts).toEqual([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);   // chỉ phần 1 KHÔNG chạy lại (FREE_PHAN=1)
 
   // renderLuan(...,true) ghi đè #lgBody — hai node tĩnh phải sống sót.
   await expect(page.locator('#lgUnlock')).toHaveCount(1);
   await expect(page.locator('#lgTension')).toHaveCount(1);
   await expect(page.locator('#claude-content-1')).toContainText('Chữ AI của phần 1');
   await expect(page.locator('#claude-content-2')).toContainText('Chữ AI của phần 2');
-  await expect(page.locator('#lgBody .tpw-ph')).toHaveCount(0);    // hết ô giữ chỗ
+  await expect(page.locator('#lgBody .tpw-ph')).toHaveCount(0);          // hết ô giữ chỗ
+  await expect(page.locator('#lgBody .tpw-real-lock')).toHaveCount(0);   // hết văn mẫu bị mờ
 });

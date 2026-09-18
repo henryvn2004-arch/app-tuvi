@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-329 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+330 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 164 | 651,564 B |
+| `2026-09.md` | 165 | 653,292 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -27,6 +27,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 🐛 Homepage: vá gốc CLS ~0,62 ở `section.tools-sec` — ảnh slide đầu bị lazy oan |
 | 1 | 2026-09 | `2026-09.md` | 🖼 Homepage: 16 icon "Công cụ chính" — vẽ theo nội dung từng tool thay vì symbol chung |
+| 1 | 2026-09 | `2026-09.md` | 🖼 Bỏ ảnh mascot cố định (`/mascot/paywall-v2.webp`) khỏi tấm khoá trả phí — vênh style với ảnh luận giải thật |
 | 1 | 2026-09 | `2026-09.md` | ✍️ Homepage: viết lại lần 2 chữ 5 banner "Công cụ nổi bật" — bỏ giọng "hook/tò mò", quay lại chuyên nghiệp + sửa số phần sai |
 | 1 | 2026-09 | `2026-09.md` | 🖼 Homepage: 3 chỉnh sửa nhỏ cho slider "Công cụ nổi bật" — badge dùng tên tool, avatar khách hàng thật hơn, link đánh giá bấm được |
 | 1 | 2026-09 | `2026-09.md` | ✏️ Homepage: viết lại chữ 5 banner "Công cụ nổi bật" theo guideline tò mò/hook — thử nghiệm trước khi áp cho shell |

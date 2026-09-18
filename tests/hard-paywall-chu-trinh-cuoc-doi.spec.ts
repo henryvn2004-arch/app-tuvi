@@ -12,9 +12,14 @@
 // (`#lgUnlock`, dời xuống dưới phần 2). 9 phần đó (không phải 10 nữa, vì
 // phần 2 đã free) nay hiện văn MẪU (dummy) làm mờ bằng `.tpw-real-lock` —
 // CỐ Ý, khác hẳn bug cũ mà bài kiểm này từng canh ("không .tpw-real-lock ở
-// đâu cả"). Luật MỚI: `.tpw-real-lock` chỉ được phép xuất hiện trên
-// `.claude-content` của phần 3-11 (văn mẫu), TUYỆT ĐỐI không trên khối
-// deterministic (`.tpw-ph` vẫn phải rỗng-hoàn-toàn như cũ).
+// đâu cả"). Luật: `.tpw-real-lock` trên `.claude-content` của phần 3-11 LUÔN
+// đúng 9 (văn mẫu) — khối tính toán (`.tpw-ph`) vẫn phải rỗng-hoàn-toàn.
+//
+// 🔴 Pha 4 (2026-09-17): banner ảnh của phần khoá (khách CHƯA đăng nhập) GIỜ
+// CŨNG mang `.tpw-real-lock` khi IllusMatch khớp được cung — số ảnh khớp phụ
+// thuộc lá số thật/thư viện ảnh, KHÔNG còn là hằng số như văn mẫu. Đếm
+// `.tpw-real-lock` toàn trang không còn đáng tin; đếm đúng
+// `.claude-content.tpw-real-lock` khi cần con số cố định.
 
 import { test, expect, type Page } from '@playwright/test';
 
@@ -39,6 +44,14 @@ async function stubApis(page: Page, opts?: { blockPreview?: boolean }) {
     body: JSON.stringify({ hasAccess: false, balance: 0 }) }));
   await page.route('**/api/track**', (r) => r.fulfill({ status: 200, body: '{}' }));
   await page.route('**/api/search', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ docs: '' }) }));
+  // Pha 4 (2026-09-17): văn mẫu của phần 3-11 nay ĐỌC ĐỘNG từ
+  // `/samples/chu-trinh-cuoc-doi-dummy.json` (thay `DUMMY_CTCD` gõ tay cũ) —
+  // stub CỐ ĐỊNH, không phụ thuộc file thật (nội dung đổi theo lượt
+  // gen-tool-sample.mjs, và bài kiểm này không nên phụ thuộc mạng/deploy).
+  const ctcdDummy: Record<string, string> = {};
+  for (let ep = 16; ep <= 24; ep++) ctcdDummy[String(ep)] = `**Câu mẫu phần ${ep}**\n\nVăn mẫu của lá số MẪU cho phần ${ep}, đủ dài để không rỗng.`;
+  await page.route('**/samples/chu-trinh-cuoc-doi-dummy.json', (r) =>
+    r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(ctcdDummy) }));
 
   await page.route('**/api/lasotuvi**', async (r) => {
     const body = JSON.parse(r.request().postData() || '{}');
@@ -161,7 +174,11 @@ test('phần 1+2 không còn khoá-mini (đã free) — 9 phần còn lại kho�
 
   expect(await page.locator('#lgBody .tpw-ph').count()).toBe(9);
   expect(await page.locator('#lgBody [id^="sec-ai-lock-"]').count()).toBe(0);
-  expect(await page.locator('.tpw-real-lock').count()).toBe(9);
+  // Pha 4 (2026-09-17): banner ảnh của phần khoá GIỜ CŨNG mang `.tpw-real-lock`
+  // khi IllusMatch khớp được cung (xem app-chu-trinh-cuoc-doi.html buildPhanSection)
+  // — số ảnh khớp phụ thuộc lá số thật/thư viện ảnh, không còn là hằng số. Đếm
+  // riêng đúng 9 khối văn mẫu (`.claude-content`), không đếm gộp cả trang.
+  expect(await page.locator('#lgBody .claude-content.tpw-real-lock').count()).toBe(9);
 });
 
 test('tường đứng NGAY DƯỚI phần 2, có giá', async ({ page }) => {
