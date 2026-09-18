@@ -448,7 +448,7 @@ function renderResult() {
   window.mountIcons && window.mountIcons(document.getElementById('readingResult'));
 
   Shell.setShareable({ kind:'text', toolId:'oracle', title:'Kết quả Oracle của tôi', text: shareText() });
-  setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' }), 600);
+  setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 600);
 }
 
 function shareText() {

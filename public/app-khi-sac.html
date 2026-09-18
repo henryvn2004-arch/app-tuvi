@@ -307,7 +307,7 @@ async function _doAnalyze() {
   document.getElementById('results-content').style.display = 'none';
   document.getElementById('results-content').innerHTML = '';
   document.getElementById('results-actions').style.display = 'none';
-  rs.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  rs.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
   try {
     const res = await fetch('/api/tuong-mat', {

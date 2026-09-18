@@ -585,7 +585,7 @@ async function _doAnalyze() {
   aiResultEl.innerHTML=
     '<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="sparkles"></span><div class="dt-loading-text">Đang phân tích tướng mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
   window.mountIcons && window.mountIcons(aiResultEl);
-  document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'nearest'});
 
   try {
     const res = await fetch('/api/tuong-mat',{

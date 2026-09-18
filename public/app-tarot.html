@@ -595,7 +595,7 @@ function renderSpread() {
 
   renderMeanings();
   Shell.setShareable({ kind:'text', toolId:'tarot', title:'Kết quả Tarot của tôi', text: shareText() });
-  setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
+  setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 400);
 }
 
 function shareText() {

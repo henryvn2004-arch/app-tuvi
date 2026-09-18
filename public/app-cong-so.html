@@ -327,7 +327,10 @@ function doCongSo(){
     // Tool free chạy gần như tức thì (không cần orb/loading — luật đã ghi ở
     // ai-loading-steps.js) nhưng nếu form nằm dưới cuối màn hình thì kết quả
     // vẫn hiện NGOÀI khung nhìn. Cuộn lên để thấy nó vừa dựng xong.
-    document.getElementById('resPanel').scrollIntoView({behavior:'smooth',block:'start'});
+    // `block:'nearest'` (không phải 'start'): `.ws-side-col` (Giới thiệu/Bản
+    // luận giải mẫu/Phiên gần đây) đứng giữa form và resPanel trong DOM —
+    // 'start' cuộn quá tay, đẩy trôi cả khối đó khỏi khung nhìn dù còn nguyên.
+    document.getElementById('resPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
     ve();
     Shell.rememberBirth(fd);
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
