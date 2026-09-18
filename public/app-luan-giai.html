@@ -581,7 +581,7 @@ async function doLuan(){
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart')); // ô giữa mang span [data-icon]
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('lgPanel').style.display='block';
-    wsStepsSet(2); // Xem trước lá số — điểm số + 2 phần miễn phí sắp hiện ra
+    wsStepsSet(2); // Xem trước lá số — điểm số + 1 phần miễn phí + tầng hook sắp hiện ra
     document.getElementById('btnEdit').style.display='';
     document.getElementById('btnBatTu').style.display='';
     // Form dài hơn màn hình (nhất là mobile) thì lúc bấm nút, khung kết quả
@@ -968,16 +968,17 @@ function buildPhanSection(phan,label,ls,locked){
   // là điều hướng vào chỗ rỗng.
   var related=locked?'':cungRelatedHtml(label,ls);
   var banner=locked?lockedIllusHtml(phan,ls,label):illusBannerHtml(phan,ls,label);
-  // Pha 3 (2026-09-14, cắt giữa phần 2) — ô nối tiếp ẨN mặc định, chỉ
+  // Pha 3 (2026-09-14, cắt giữa phần cuối free — nay là phần 1, xem
+  // 2026-09-18 FREE_PHAN 2→1) — ô nối tiếp ẨN mặc định, chỉ
   // `_runPhanLuanGiai(FREE_PHAN,true)` bật lên khi bản xem trước THẬT SỰ bị
-  // cắt (xem _truncateMidPart). CHỈ dựng cho đúng phần FREE_PHAN — phần 1 đọc
-  // trọn (mồi cho phần 2), phần 3+ đã có ô giữ chỗ riêng của chính nó.
+  // cắt (xem _truncateMidPart). CHỈ dựng cho đúng phần FREE_PHAN — phần 2+ đã
+  // có ô giữ chỗ riêng của chính nó.
   //
   // 🪤 KHÔNG dùng `TuviPaywall.placeholderHtml()` ở đây dù muốn cùng hình dạng
   // vạch giả — hàm đó gắn class `.tpw-ph`, và `tests/hard-paywall.spec.ts` đếm
-  // đúng `.tpw-ph` trong `#lgBody` để khẳng định "đúng 11 phần khoá có ô giữ
+  // đúng `.tpw-ph` trong `#lgBody` để khẳng định "đúng 12 phần khoá có ô giữ
   // chỗ" (TONG_PHAN-FREE_PHAN). Ô nối tiếp này không phải một PHẦN KHOÁ — dùng
-  // chung class là đếm nhầm 12, bài kiểm đỏ vì lý do chẳng liên quan gì tới
+  // chung class là đếm nhầm 13, bài kiểm đỏ vì lý do chẳng liên quan gì tới
   // paywall. `.lg-cut-bars` dựng riêng, cùng màu/kích thước nhưng class khác.
   var cutStub=(phan===FREE_PHAN)
     ? '<div class="lg-cut-continue" id="lg-cut-'+phan+'" style="display:none"><div class="lg-cut-note">Phần '+phan+' còn tiếp — mở khoá để đọc trọn vẹn</div><div class="lg-cut-bars" aria-hidden="true"><i></i><i></i><i></i></div></div>'
@@ -1216,10 +1217,13 @@ function _partSlug(phan){
 var TONG_PHAN=13;
 // 🔴 HARD PAYWALL (2026-09-06) — số phần chạy model THẬT và cho đọc MIỄN PHÍ,
 // trước khi khách trả đồng nào. PHẢI khớp `FREE_PHAN` trong
-// app/api/lasotuvi/route.ts: client rộng hơn server thì phần thứ 3 ăn 402 giữa
+// app/api/lasotuvi/route.ts: client rộng hơn server thì phần thứ 2 ăn 402 giữa
 // chừng (khách thấy lỗi ở đúng chỗ đang bị thuyết phục); server rộng hơn client
 // thì mình trả tiền model cho một phần không ai đọc.
-var FREE_PHAN=2;
+// 🔴 (2026-09-18) Dời 2→1 — tầng hook kể chuyện (`_tryHookNarrative` ngay dưới
+// `mountHook`) đi CHUNG ngân sách `preview.free_runs` với phần này, chiếm suất
+// mà phần 2 văn xuôi từng dùng. Xem chú thích đầy đủ ở `FREE_PHAN` phía server.
+var FREE_PHAN=1;
 // Số phần chạy song song — xem lý do chọn 3 trong tools-shared/phan-pool.js.
 var PHAN_CONCURRENCY=3;
 // ETA tự hiệu chỉnh: đo nhịp NGAY TRONG phiên này thay vì hứa theo một con
@@ -1455,17 +1459,25 @@ async function initLuanGiaiGate(ls){
 // nhận bảng điểm deterministic, KHÔNG một chữ AI nào về lá số của chính họ, rồi
 // bị hỏi 150 Lượng. Đo 30 ngày: 263 người thấy tường → 20 người bấm mở → gần 0
 // đơn. Bảng số thì khô, không ai đọc xong mà bị ám ảnh, nên không có gì để bán.
-// Nay: hai phần đầu do model viết thật, đọc trọn vẹn, rồi mới tới tường.
+// Nay: phần đầu do model viết thật, đọc trọn vẹn, rồi mới tới tường.
 //
-// 🔑 VÌ SAO CHỈ 2 PHẦN chứ không chạy trọn rồi làm mờ 80%: đo `events` 09/2026
+// 🔑 (2026-09-18) DỜI 2→1 PHẦN — tầng hook kể chuyện (`_tryHookNarrative`,
+// route riêng `/api/hook-narrative`) giờ chiếm đúng suất ngân sách
+// `preview.free_runs` mà phần 2 văn xuôi từng dùng, xem chú thích ở
+// `FREE_PHAN` phía trên. Vẫn đúng 2 thứ khách đọc miễn phí trước tường — chỉ
+// đổi TỪ (phần 1 + phần 2 văn xuôi) SANG (phần 1 + hook kể chuyện).
+//
+// 🔑 VÌ SAO CHỈ 1 PHẦN chứ không chạy trọn rồi làm mờ 80%: đo `events` 09/2026
 // (gemini-3.8-flash) 243đ và ~4,8 giây MỖI PHẦN ⇒ trọn 13 phần là 3.159đ và
-// ~62 giây cho MỘT cú click quảng cáo, trước khi có đồng doanh thu nào. Hai
-// phần: 486đ, ~10 giây. Cùng cái móc, 1/6,5 chi phí. Và phần bị che thì làm mờ
-// hay không sinh ra cũng như nhau với người đọc — chỉ khác ở hoá đơn.
+// ~62 giây cho MỘT cú click quảng cáo, trước khi có đồng doanh thu nào. Một
+// phần: 243đ, ~4,8 giây — 1/13 chi phí. Và phần bị che thì làm mờ hay không
+// sinh ra cũng như nhau với người đọc — chỉ khác ở hoá đơn.
 //
-// 🔑 TUẦN TỰ, KHÔNG SONG SONG: 2 phần thôi, mà phần 1 phải xong trước để lượt
-// mồi ghi cache `system` (xem `_startLuanGiaiAI`). Song song 2 lượt ở đây là
-// cả hai cùng cache-miss, đắt hơn mà chẳng nhanh hơn bao nhiêu.
+// 🔑 TUẦN TỰ, KHÔNG SONG SONG — dù `FREE_PHAN` hiện chỉ còn 1 lượt, vòng lặp
+// vẫn viết tuần tự (không `Promise.all`): phần sau luôn phải chờ phần trước
+// xong để mồi cache `system` (xem `_startLuanGiaiAI`) — giữ nguyên nếu
+// `FREE_PHAN` tăng lại. Song song ở đây là mỗi lượt đều cache-miss, đắt hơn
+// mà chẳng nhanh hơn bao nhiêu.
 //
 // Hỏng thì IM: phần xem trước là quà, không phải hàng đã bán. Chặn bởi cầu dao
 // (402) hay mạng lỗi đều để nguyên ô giữ chỗ + tấm tường — đúng thứ khách sẽ
@@ -1527,7 +1539,7 @@ function _renderUnlockBlock(){
   _wireStickyCta();
   if(_lgLoggedIn()){
     host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau(\'wall\')">✦ Luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button>'+
-      '<p>Bạn vừa đọc 2 phần đầu miễn phí. 11 phần còn lại — mỗi cung một phần luận riêng theo cổ pháp — nằm trong bản đầy đủ, kèm bản PDF tải về hoặc gửi qua email.</p>';
+      '<p>Bạn vừa đọc 1 phần đầu miễn phí. 12 phần còn lại — mỗi cung một phần luận riêng theo cổ pháp — nằm trong bản đầy đủ, kèm bản PDF tải về hoặc gửi qua email.</p>';
     TuviPaywall.fillPriceSlots(host);
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
     // qua lockPreview nữa, nhánh này mới là nút thật) → tự chạy tiếp.
@@ -1537,8 +1549,8 @@ function _renderUnlockBlock(){
   host.innerHTML='';
   TuviPaywall.lockPreview({
     host:host,
-    title:'⊙ Còn 11 phần nữa đang khoá',
-    items:['Bản PDF đầy đủ — tải về hoặc gửi qua email trong vài phút','11 cung còn lại — mỗi cung một phần luận riêng, viết theo cổ pháp','Cách cục, tứ hoá và quy tắc của từng cung'],
+    title:'⊙ Còn 12 phần nữa đang khoá',
+    items:['Bản PDF đầy đủ — tải về hoặc gửi qua email trong vài phút','12 cung còn lại — mỗi cung một phần luận riêng, viết theo cổ pháp','Cách cục, tứ hoá và quy tắc của từng cung'],
     cta:'Mở bản luận đầy đủ →',
     slug:function(){return _pendingSlug;},
     onUnlock:function(){ return _startLuanGiaiAI(); },

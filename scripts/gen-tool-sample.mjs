@@ -282,9 +282,10 @@ const TOOL_CONFIGS = {
     label: 'Luận Giải Lá Số',
     sampleBirth: SAMPLE_BIRTH,
     namXem: NAM_XEM,
-    // FREE_PHAN=2 (app/api/lasotuvi/route.ts): phần 1 (Tổng quan) + phần 2
-    // (Mệnh) xem trước thật, miễn phí — chỉ 3-13 (11 cung còn lại) cần dummy.
-    dummyPhanList: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+    // FREE_PHAN=1 (app/api/lasotuvi/route.ts, dời từ 2 ngày 2026-09-18 — tầng
+    // hook kể chuyện chiếm suất mà phần 2 từng dùng): chỉ phần 1 (Tổng quan)
+    // xem trước thật, miễn phí — 2-13 (12 cung) cần dummy.
+    dummyPhanList: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
     pdfPhanList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
     maxTokFor(ep) {
       const THINK_BUDGET = 900;
