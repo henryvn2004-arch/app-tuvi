@@ -159,7 +159,13 @@ button { font: inherit; cursor: pointer; }
 /* ── Công cụ nổi bật — slider banner theo mẫu Henry duyệt ─────── */
 .ftb-sec { padding: 40px 0 8px; }
 .ftb-viewport { position: relative; }
-.ftb-track-wrap { overflow: hidden; border-radius: var(--radius-lg); }
+/* min-height khớp .ftb-card: #ftb-track rỗng trong HTML tĩnh, JS mới
+   `innerHTML=` 5 slide vào — thiếu chỗ này thì khối "bung" từ 0 lên ~460px
+   ngay sau khi layout đã ổn định, đẩy section.tools-sec xuống (CLS ~0,62,
+   xảy ra khi script chạy chậm hơn lần vẽ đầu — timing nên không phải lần
+   đo nào cũng dính). loading="eager" trên ảnh slide 0 không đủ: khối cha
+   vẫn rỗng cho tới khi JS chạy. */
+.ftb-track-wrap { overflow: hidden; border-radius: var(--radius-lg); min-height: 460px; }
 .ftb-track { display: flex; transition: transform .45s cubic-bezier(.4,0,.2,1); will-change: transform; }
 .ftb-slide { flex: 0 0 100%; min-width: 0; }
 .ftb-card {
@@ -205,6 +211,9 @@ button { font: inherit; cursor: pointer; }
   .ftb-proof { justify-content: center; }
   .ftb-art { min-height: 220px; order: -1; }
   .ftb-btn { display: none; }
+  /* .ftb-card bỏ min-height ở breakpoint này (card co theo nội dung) —
+     giữ chỗ DƯ cho .ftb-track-wrap để khối JS-chèn không bung từ 0. */
+  .ftb-track-wrap { min-height: 760px; }
 }
 
 /* ── Explore more ───────────────────────────────────────────── */
