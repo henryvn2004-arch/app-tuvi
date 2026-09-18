@@ -37,7 +37,17 @@
    rồi thay bằng số đo, đừng tin nó lâu. */
 @media (max-width:480px){#tuviFormHost:empty{min-height:330px}}
 
-#lgPanel{display:none}
+/* `scroll-margin-top` khớp `.ws-top` (thanh dính đầu trang, 69px) — thiếu dòng
+   này thì `AiLoadingSteps.scrollToResult('lgPanel')` (bấm "Lập lá số & Luận
+   giải ngay") cuộn #hookHost (con ĐẦU của #lgPanel, chứa vòng quay loading của
+   `_tryHookNarrative`) khớp thẳng lên y=0 — ĐÚNG dải bị `.ws-top` z-index:5 đè
+   lên, cao ~63-70px, che TRỌN vòng quay suốt cả lượt chờ (Henry test thật:
+   backend chạy đúng ~7-10s, preview_shown/llm_usage đều ghi nhận thành công,
+   nhưng không thấy gì trên màn hình — bị che chứ không phải không chạy).
+   Cùng luật đã áp cho `.sec` (dòng dưới), KHÔNG cộng thêm 52px của `.jump` —
+   `.jump` chưa kịp dính lúc cuộn tới ĐẦU lgPanel (nó đứng SAU hookHost trong
+   DOM, chỉ dính khi cuộn qua nó, không phải lúc cuộn về đầu panel). */
+#lgPanel{display:none;scroll-margin-top:var(--ws-top-h,69px)}
 .lg-body{max-width:860px}
 /* jump nav */
 .jump{position:sticky;top:var(--ws-top-h,69px);z-index:4;background:var(--paper);border-bottom:1px solid var(--line);padding:8px 0;margin:0 0 18px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
