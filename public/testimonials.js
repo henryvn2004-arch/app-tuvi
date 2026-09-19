@@ -120,31 +120,14 @@
   // chép tay — một nguồn duy nhất cho review, tránh trôi khỏi nhau.
   window.TestimonialsData = DATA;
 
-  // ── Avatar minh hoạ (KHÔNG phải ảnh người thật) ─────────────────
-  // Cố ý không dùng ảnh thật/API avatar bên ngoài: gán ảnh người thật vào
-  // tên + lời bịa là gán phát ngôn giả cho một người có thật chưa từng
-  // đồng ý — rủi ro pháp lý lẫn quảng cáo lừa dối. Avatar ở đây là hình
-  // minh hoạ dựng bằng SVG nội tuyến, không tải mạng ngoài, chỉ để phần
-  // review sinh động hơn — không nhằm giả làm ảnh thật.
+  // ── Avatar khách hàng ────────────────────────────────────────────
+  // Ảnh SYNTHETIC (sinh bằng gpt-image-1, xem docs/nhat-ky/2026-09.md) —
+  // không phải ảnh của người có thật nào, nên gán kèm tên/lời đánh giá bịa
+  // không dính rủi ro quyền hình ảnh. 8 file mỗi giới ở public/avatars/,
+  // chọn theo hash tên nên MỘT tên luôn ra ĐÚNG một avatar ở mọi lần build.
 
-  var AV_BG   = ['#F1E7D2', '#E7EFEA', '#F3E3DA', '#E4ECF4', '#EFE6F5', '#F7EDE2', '#E1EEEA', '#F6E4E4', '#EFEAE0', '#E9F0E6'];
-  var AV_BODY = '#3B4A56';
-  var AV_HAIR = '#241C15';
-
-  // Mỗi kiểu tóc là một mảng vẽ TRƯỚC đầu/vai — đầu (đường tròn) đè lên
-  // sau nên chỉ còn lộ đúng phần viền tóc, không cần vẽ mặt/mắt/mũi.
-  var AV_HAIR_SHAPES = {
-    m1: '<ellipse cx="32" cy="19" rx="12" ry="8" fill="' + AV_HAIR + '"/>',
-    m2: '<ellipse cx="32" cy="18.5" rx="12.5" ry="9" fill="' + AV_HAIR + '"/><ellipse cx="20.5" cy="23" rx="2.5" ry="4.5" fill="' + AV_HAIR + '"/>',
-    m3: '<ellipse cx="32" cy="16.5" rx="11.5" ry="4" fill="' + AV_HAIR + '"/>',
-    m4: '<ellipse cx="21.5" cy="21" rx="3" ry="6" fill="' + AV_HAIR + '"/><ellipse cx="42.5" cy="21" rx="3" ry="6" fill="' + AV_HAIR + '"/>',
-    f1: '<path d="M14 26 L18 9 L46 9 L50 26 L48 60 L16 60 Z" fill="' + AV_HAIR + '"/>',
-    f2: '<path d="M17 13 L47 13 L47 35 L17 35 Z" fill="' + AV_HAIR + '"/>',
-    f3: '<ellipse cx="32" cy="19" rx="11" ry="7" fill="' + AV_HAIR + '"/><circle cx="32" cy="9" r="5" fill="' + AV_HAIR + '"/>',
-    f4: '<ellipse cx="32" cy="19" rx="11" ry="7" fill="' + AV_HAIR + '"/><path d="M42 17 L50 14 L52 40 L44 35 Z" fill="' + AV_HAIR + '"/>',
-  };
-  var AV_VARIANTS_M = ['m1', 'm2', 'm3', 'm4'];
-  var AV_VARIANTS_F = ['f1', 'f2', 'f3', 'f4'];
+  var AV_VARIANTS_M = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6', 'm7', 'm8'];
+  var AV_VARIANTS_F = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8'];
 
   function hashStr(s) {
     var h = 0;
@@ -152,18 +135,10 @@
     return h;
   }
 
-  function avatarSVG(gender, name) {
-    var h = hashStr(name || '');
+  function avatarImgHtml(gender, name) {
     var variants = gender === 'f' ? AV_VARIANTS_F : AV_VARIANTS_M;
-    var variant = variants[h % variants.length];
-    var bg = AV_BG[Math.floor(h / variants.length) % AV_BG.length];
-    var body = '<path d="M32 37C18.5 37 9 46 9 58v6h46v-6c0-12-9.5-21-23-21z" fill="' + AV_BODY + '"/>';
-    var head = '<circle cx="32" cy="24.5" r="10.5" fill="' + AV_BODY + '"/>';
-    return '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">'
-      + '<circle cx="32" cy="32" r="32" fill="' + bg + '"/>'
-      + (AV_HAIR_SHAPES[variant] || '')
-      + head + body
-      + '</svg>';
+    var variant = variants[hashStr(name || '') % variants.length];
+    return '<img src="/avatars/' + variant + '.jpg" alt="" width="38" height="38" loading="lazy" decoding="async">';
   }
 
   // ── Map path → dataset key ────────────────────────────────────
@@ -212,7 +187,7 @@
       '.rv-text{font-size:14px;color:#444C52;line-height:1.75;margin-bottom:20px;flex:1}',
       '.rv-meta{border-top:1px solid #F1E7D2;padding-top:12px;display:flex;align-items:center;gap:10px}',
       '.rv-avatar{width:38px;height:38px;border-radius:50%;overflow:hidden;flex:none;line-height:0}',
-      '.rv-avatar svg{display:block;width:100%;height:100%}',
+      '.rv-avatar img{display:block;width:100%;height:100%;object-fit:cover}',
       '.rv-meta-text{min-width:0}',
       '.rv-name{font-size:12.5px;font-weight:700;color:#16232C;margin-bottom:2px}',
       '.rv-date{font-size:11px;color:#8B9299}',
@@ -239,7 +214,7 @@
         + '<div class="rv-stars">' + stars + '</div>'
         + '<p class="rv-text">' + r.text + '</p>'
         + '<div class="rv-meta">'
-        + '<div class="rv-avatar">' + avatarSVG(r.gender, r.name) + '</div>'
+        + '<div class="rv-avatar">' + avatarImgHtml(r.gender, r.name) + '</div>'
         + '<div class="rv-meta-text"><div class="rv-name">' + r.name + ' — ' + r.city + '</div><div class="rv-date">' + r.date + '</div></div>'
         + '</div>'
         + '</div>';
