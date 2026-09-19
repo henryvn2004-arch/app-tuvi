@@ -393,17 +393,18 @@ function mountHook(r,nameA,nameB){
   if(!scored.length)return;
   var best=scored.reduce(function(a,b){return b.score>a.score?b:a;});
   var worst=scored.reduce(function(a,b){return b.score<a.score?b:a;});
+  function withPeriod(s){ s=(s||'').trim(); if(!s)return ''; return /[.!?…]$/.test(s)?s:s+'.'; }
   var facts=[{
     tone:'good',
     title:'Chiều hợp nhất: '+best.label+' — '+best.score+'/10',
-    body:(best.detail||'')+' Cả '+scored.length+' chiều, điểm chi tiết theo từng người, và cách hoá giải nằm trong bản luận giải chuyên sâu.',
+    body:withPeriod(best.detail)+' Cả '+scored.length+' chiều, điểm chi tiết theo từng người, và cách hoá giải nằm trong bản luận giải chuyên sâu.',
     source:'engine · '+(MODE_KEY==='xem-lam-an'?'TuongHopLamAn':'TuongHop')+'.calcTuongHop',
   }];
   if(worst.label!==best.label){
     facts.push({
       tone:'bad',
       title:'Chiều cần lưu ý nhất: '+worst.label+' — '+worst.score+'/10',
-      body:(worst.detail||'')+' Cách hoá giải cụ thể nằm trong bản luận giải chuyên sâu.',
+      body:withPeriod(worst.detail)+' Cách hoá giải cụ thể nằm trong bản luận giải chuyên sâu.',
       source:'engine · '+(MODE_KEY==='xem-lam-an'?'TuongHopLamAn':'TuongHop')+'.calcTuongHop',
     });
   }
