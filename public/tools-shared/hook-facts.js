@@ -214,5 +214,60 @@ window.HookFacts = (function () {
     percentileOfDaiVan: percentileOfDaiVan,
     top3: top3,
   };
-  return { tuvi: tuvi };
+
+  // ── Họ Tử Bình (bát tự) — `bt` = kết quả `tinhBatTu()`/route tubinh, cùng
+  // shape client/server (xem chú thích đầu lib/engine/tubinh.ts). KHÔNG suy
+  // "tốt/xấu" từ cường nhược hay vượng/suy ngũ hành — cả hai đều là TRẠNG
+  // THÁI, không phải điểm số hay-dở (cực vượng/cực nhược đều là mất cân
+  // bằng), nên tone='neutral' cho cả hai, để đúng LASO_AUTHORITY_RULE — đây
+  // là hàm suy fact, không phải hàm luận giải.
+  function cuongNhuocFact(bt) {
+    var cn = bt && bt.cuongNhuoc;
+    if (!cn || typeof cn.score !== 'number' || !cn.label) return null;
+    return {
+      kind: 'tb-cuong-nhuoc', tone: 'neutral',
+      title: 'Nhật Can ' + (bt.nhatCan || '') + ': ' + cn.label,
+      body: 'Điểm cường nhược ' + cn.score.toFixed(1) + '/10' + (cn.dacLenh != null ? (cn.dacLenh ? ' — đắc lệnh' : ' — không đắc lệnh') : '') + '.',
+      value: cn.score,
+    };
+  }
+
+  // Ngũ hành THIẾU — tone='bad' ("cần bổ khuyết") vì đây là hướng luận phổ
+  // biến của chính môn Tử Bình (thiếu hành nào thì dụng thần thường cần bù
+  // hành đó), khác cường nhược (trạng thái trung tính).
+  function nguHanhThieuFact(bt) {
+    var nh = bt && bt.nguHanh;
+    if (!nh || !nh.deficient || !nh.weighted) return null;
+    var v = nh.weighted[nh.deficient];
+    return {
+      kind: 'tb-ngu-hanh', tone: 'bad',
+      title: 'Ngũ hành thiếu: ' + nh.deficient,
+      body: 'Trọng số ' + (typeof v === 'number' ? v.toFixed(1) : '0') + ' — thấp nhất trong 5 hành, hướng bổ khuyết cụ thể nằm trong bản đầy đủ.',
+      value: v,
+    };
+  }
+
+  function dungThanFact(bt) {
+    var dt = bt && bt.dungThan;
+    if (!dt || !dt.primary) return null;
+    return {
+      kind: 'tb-dung-than', tone: 'neutral',
+      title: 'Dụng thần chính: ' + dt.primary,
+      body: (dt.secondary ? 'Hỉ thần ' + dt.secondary + ' — ' : '') + 'lý do chọn và cách dùng cụ thể nằm trong bản đầy đủ.',
+    };
+  }
+
+  /** Gói tiện: tối đa 3 fact cho trang tổng quan Tử Bình. */
+  function top3BatTu(bt) {
+    return [cuongNhuocFact(bt), nguHanhThieuFact(bt), dungThanFact(bt)].filter(Boolean);
+  }
+
+  var tuBinh = {
+    cuongNhuocFact: cuongNhuocFact,
+    nguHanhThieuFact: nguHanhThieuFact,
+    dungThanFact: dungThanFact,
+    top3: top3BatTu,
+  };
+
+  return { tuvi: tuvi, tuBinh: tuBinh };
 })();

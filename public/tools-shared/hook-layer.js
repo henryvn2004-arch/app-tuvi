@@ -120,7 +120,10 @@ window.HookLayer = (function () {
     'Tật Ách': 'shield-check', 'Tài Bạch': 'dollar-sign', 'Tử Tức': 'baby',
     'Phu Thê': 'heart', 'Huynh Đệ': 'users',
   };
-  var KIND_ICON = { 'cach-cuc-hiem': 'sparkles', 'daivan-dinh': 'trending-up', 'daivan-day': 'compass' };
+  var KIND_ICON = {
+    'cach-cuc-hiem': 'sparkles', 'daivan-dinh': 'trending-up', 'daivan-day': 'compass',
+    'tb-cuong-nhuoc': 'scale', 'tb-ngu-hanh': 'flame', 'tb-dung-than': 'compass',
+  };
   function _iconFor(f) {
     if (!f) return 'sparkles';
     if (f.cungTen && CUNG_ICON[f.cungTen]) return CUNG_ICON[f.cungTen];
