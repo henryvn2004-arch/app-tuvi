@@ -14,6 +14,10 @@ const STATIC_PAGES = [
     '/app/luan-giai',         // core product page (301 từ /luan-giai.html cũ, 2026-09-14)
     '/tu-vi',                 // SEO pages index
     '/tu-dien',               // từ điển index
+    '/thu-vien',              // thư viện — cổng tra cứu tổng
+    '/thu-vien/sao-cung',     // hub sao × cung
+    '/thu-vien/khai-niem',    // hub khái niệm
+    '/thu-vien/nap-am',       // hub nạp âm
     '/about.html',
     '/nguon-du-lieu.html', // ghi công nguồn dữ liệu (bắt buộc theo giấy phép CC BY)
     '/resources.html',
