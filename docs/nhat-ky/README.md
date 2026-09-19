@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-335 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+336 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -360,3 +360,4 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 164 | 2026-09 | `2026-09.md` | 🔌 Tứ Hóa Phi Tinh — nối dữ kiện vào prompt luận giải |
 | 165 | 2026-09 | `2026-09.md` | 🛡️ Bộ dò `check:webdriver` — chặn tái phát GA4/Clarity/Meta Pixel đổ phiên giả từ CI |
 | 166 | 2026-09 | `2026-09.md` | 🐢 Đo tốc độ mobile lần đầu bằng số thật — hoãn 3 tracker bên thứ ba tới lúc rảnh |
+| 167 | 2026-09 | `2026-09.md` | 🐢 P2 — bỏ `noto-serif.css` khỏi render-blocking, 94 trang |
