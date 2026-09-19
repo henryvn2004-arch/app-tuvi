@@ -793,7 +793,7 @@ function _tryHookNarrative(host,spec){
   // shell.css (dùng ngay trong trang này ở #lgBtnPdfIcon) — không định
   // nghĩa keyframe thứ hai. Số giây nêu ra là khoảng đo THẬT trên
   // `events.llm_usage` (2,7–7,9s ở lượt đo 2026-09-17), không phải áng chừng.
-  if(host)host.style.display='none';
+  if(host)host.style.visibility='hidden';
   var pending=document.createElement('div');
   pending.style.cssText='display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
   pending.innerHTML='<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
@@ -819,11 +819,11 @@ function _tryHookNarrative(host,spec){
         var promoEls=document.querySelectorAll('.ws-promo,.samp-cta');
         for(var i=0;i<promoEls.length;i++)promoEls[i].style.display='none';
       }
-      if(host)host.style.display='';
+      if(host)host.style.visibility='';
     })
     .catch(function(){
       if(pending.parentNode)pending.remove();
-      if(host)host.style.display=''; /* mạng hỏng — hiện lại khối fact-card cũ */
+      if(host)host.style.visibility=''; /* mạng hỏng — hiện lại khối fact-card cũ */
     });
 }
 

@@ -1086,7 +1086,7 @@ function mountHook(items, nguam) {
  *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
 function _tryHookNarrativeTTP(host, spec) {
   if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
-  if (host) host.style.display = 'none';
+  if (host) host.style.visibility='hidden';
   const pending = document.createElement('div');
   pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
   pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
@@ -1105,11 +1105,11 @@ function _tryHookNarrativeTTP(host, spec) {
     .then(data => {
       if (pending.parentNode) pending.remove();
       if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
-      if (host) host.style.display = '';
+      if (host) host.style.visibility='';
     })
     .catch(() => {
       if (pending.parentNode) pending.remove();
-      if (host) host.style.display = '';
+      if (host) host.style.visibility='';
     });
 }
 
