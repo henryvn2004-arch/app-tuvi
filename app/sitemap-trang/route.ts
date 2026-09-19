@@ -20,6 +20,7 @@ const STATIC_PAGES = [
     '/blog.html',
     '/menh-kho.html',
     '/ngay-tot',              // ngay-tot hub
+    '/xem-ngay-hom-nay',      // hoàng lịch đầy đủ HÔM NAY (thần sát/cửu tinh/bành tổ)
     '/van-han',               // van-han hub
     '/xem-tuoi.html',
     '/xem-lam-an.html',
