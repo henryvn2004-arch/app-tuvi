@@ -242,6 +242,12 @@ jobs:
       - name: Truy vấn công khai phải lọc trạng thái xuất bản
         run: npm run check:publish
 
+      # `bo_suu_tap` của thu_vien_muc là MỘT bộ giá trị lặp ở constraint DB,
+      # script seed, route công khai, cron, brand-check — đổi một chỗ mà quên
+      # chỗ khác là mồ côi dữ liệu hoặc 404 im lặng.
+      - name: thu_vien_muc — bo_suu_tap khớp mọi nguồn
+        run: npm run check:thuvien
+
       # Sổ job ↔ vercel.json ↔ file route. Lớp lỗi này tái phát BA LẦN (sổ cũ
       # trong admin.html khai 5/9 job ⇒ CMO Digest chết 14 ngày; rồi bảng
       # CRON_TRIGGERS cũng 5 mục ⇒ nút Chạy ngay chết; rồi 11/20 ⇒ "Unknown
