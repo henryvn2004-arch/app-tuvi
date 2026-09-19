@@ -8,8 +8,8 @@
   var TOOLS = [
     // Tử Vi
     { id:'luan-giai',    url:'/',                              icon:'🔮', name:'Luận Giải Lá Số',          cat:['tuvi'],                         tags:['tử vi','lá số','luận giải','đại vận','tiểu vận'] },
-    { id:'xem-tuoi',     url:'/xem-tuoi.html',                 icon:'💑', name:'Xem Tuổi Vợ Chồng',        cat:['tuvi','hon-nhan','tinh-cach'],   tags:['hôn nhân','vợ chồng','tình duyên','tương hợp'] },
-    { id:'xem-lam-an',   url:'/xem-lam-an.html',              icon:'🤝', name:'Xem Tuổi Làm Ăn',          cat:['tuvi','cong-viec','tai-chinh'],  tags:['làm ăn','hợp tác','kinh doanh','đối tác'] },
+    { id:'xem-tuoi',     url:'/app/xem-tuoi',                  icon:'💑', name:'Xem Tuổi Vợ Chồng',        cat:['tuvi','hon-nhan','tinh-cach'],   tags:['hôn nhân','vợ chồng','tình duyên','tương hợp'] },
+    { id:'xem-lam-an',   url:'/app/xem-lam-an',                icon:'🤝', name:'Xem Tuổi Làm Ăn',          cat:['tuvi','cong-viec','tai-chinh'],  tags:['làm ăn','hợp tác','kinh doanh','đối tác'] },
     { id:'an-sao',       url:'/tools/an-sao.html',             icon:'📊', name:'An Sao Lá Số',             cat:['tuvi'],                         tags:['an sao','108 sao','lá số'] },
     { id:'sao-nam',      url:'/tools/sao-nam.html',            icon:'☀', name:'Tổng Quan Lá Số',           cat:['tuvi','van-han'],               tags:['sao năm','tổng quan','lá số'] },
     { id:'cach-cuc',     url:'/tools/cach-cuc.html',           icon:'⚗', name:'Cách Cục & Các Cung',       cat:['tuvi'],                         tags:['cách cục','12 cung','cung mệnh'] },

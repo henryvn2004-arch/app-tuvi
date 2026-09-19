@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Tu Binh Regression paywall', () => {
+test.describe('Tu Binh Regression paywall (shell /app/bat-tu)', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tu-binh.html');
+    await page.goto('/app/bat-tu');
     await page.waitForLoadState('networkidle');
   });
 

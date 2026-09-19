@@ -77,8 +77,6 @@ const nextConfig = {
       { source: '/app/oracle', destination: '/app-oracle.html' },
       { source: '/app/boi-bai-tay', destination: '/app-boi-bai-tay.html' },
       { source: '/app/khi-sac', destination: '/app-khi-sac.html' },
-      { source: '/xem-tuoi',            destination: '/xem-tuoi.html'        },
-      { source: '/xem-lam-an',          destination: '/xem-lam-an.html'      },
       { source: '/la-so',               destination: '/la-so.html'           },
       { source: '/la-so-v2',            destination: '/la-so-v2.html'        },
       { source: '/menh-kho',            destination: '/menh-kho.html'        },
@@ -146,6 +144,16 @@ const nextConfig = {
       // chặn hẳn `public/luan-giai.html` — file đó xoá luôn trong cùng lượt
       // này, không để lại 4200+ dòng chết không ai đọc được.
       { source: '/luan-giai.html', destination: '/app/luan-giai', permanent: true },
+      // Retire 3 trang standalone giàu nội dung (xem-tuoi.html, xem-lam-an.html,
+      // tu-binh.html) — Henry, 2026-09-19. Cùng khuôn với /luan-giai.html: 308,
+      // chặn TRƯỚC filesystem nên an toàn xoá file .html cùng lượt. Redirect cả
+      // path .html LẪN path đẹp cũ (rewrite '/xem-tuoi'→'/xem-tuoi.html' đã gỡ ở
+      // rewrites() phía trên, không còn ai phục vụ '/xem-tuoi' nếu thiếu dòng này).
+      { source: '/xem-tuoi.html',   destination: '/app/xem-tuoi',   permanent: true },
+      { source: '/xem-tuoi',        destination: '/app/xem-tuoi',   permanent: true },
+      { source: '/xem-lam-an.html', destination: '/app/xem-lam-an', permanent: true },
+      { source: '/xem-lam-an',      destination: '/app/xem-lam-an', permanent: true },
+      { source: '/tu-binh.html',    destination: '/app/bat-tu',     permanent: true },
     ];
   },
 };

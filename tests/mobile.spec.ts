@@ -5,8 +5,8 @@ import { test, expect } from '@playwright/test';
 const KEY_PAGES = [
   { path: '/',                name: 'Homepage' },
   { path: '/app-luan-giai.html', name: 'Luận Giải' },
-  { path: '/xem-tuoi.html',  name: 'Xem Tuổi' },
-  { path: '/tu-binh.html',   name: 'Tử Bình' },
+  { path: '/app/xem-tuoi',   name: 'Xem Tuổi' },
+  { path: '/app/bat-tu',     name: 'Tử Bình' },
   { path: '/phong-thuy.html',name: 'Phong Thuỷ' },
   { path: '/topup.html',     name: 'Topup' },
   { path: '/profile.html',   name: 'Profile' },

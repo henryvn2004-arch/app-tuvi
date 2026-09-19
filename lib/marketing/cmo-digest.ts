@@ -272,8 +272,10 @@ VỀ KHỐI "ga4" (Google Analytics 4, 7 ngày qua) — đọc kỹ, đây là c
   lọc được — không đủ căn cứ để gọi một chiều là "đo hụt", đừng kết luận.
 - ga4.channels (kênh) và ga4.landing (trang đáp) là thứ DUY NHẤT chỉ GA4 thấy được — dùng GA4 đúng
   vào việc này, đừng dùng nó để đếm người.
-- Nếu ga4.landing thấy /xem-tuoi.html và /xem-lam-an.html cao gần bằng nhau (mỗi trang vài trăm), đó
+- Nếu ga4.landing thấy /app/xem-tuoi và /app/xem-lam-an cao gần bằng nhau (mỗi trang vài trăm), đó
   là dấu vết CI Playwright chạy vào prod, KHÔNG phải người thật — nói thẳng, đừng đem khoe là traffic.
+  (Trước 2026-09-19 dấu vết này nằm ở /xem-tuoi.html · /xem-lam-an.html — hai trang standalone đã
+  retire, route qua shell.)
 - ga4.activeNow là số người online 30 phút gần nhất, mang tính tức thời — dùng làm màu sắc, ĐỪNG suy ra
   xu hướng cả tuần từ nó.
 - Mọi tỉ lệ ghép GA4 với số nội bộ (vd sessions GA4 ÷ số người trả tiền) là ƯỚC LƯỢNG vì hai nguồn đo

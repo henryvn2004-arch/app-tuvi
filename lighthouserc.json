@@ -3,8 +3,8 @@
     "collect": {
       "url": [
         "https://www.tuviminhbao.com/",
-        "https://www.tuviminhbao.com/xem-tuoi.html",
-        "https://www.tuviminhbao.com/xem-lam-an.html",
+        "https://www.tuviminhbao.com/app/xem-tuoi",
+        "https://www.tuviminhbao.com/app/xem-lam-an",
         "https://www.tuviminhbao.com/la-so.html"
       ],
       "numberOfRuns": 3,

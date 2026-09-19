@@ -1,83 +1,84 @@
 import { test, expect } from '@playwright/test';
 
 // Gap hiện tại: tu-binh.spec.ts chỉ test paywall regression, chưa test kết quả thực
+// 2026-09-19: retire /tu-binh.html → shell /app/bat-tu (public/app-bat-tu.html).
+// DOM khác bản standalone cũ: #tubinh-form-container → #tuviFormHost,
+// #tvf-submit-btn → #btnGo, #result-section → #btPanel (data-ws-result),
+// #result-header → #btScores, #tutru-table → #tutruTable,
+// #muc-luc-items .muc-luc-btn/[id^="ml-"] → #btJump a.
 
-// Helper: setData + click submit + chờ result hoặc error
+// Helper: setData + click submit + chờ result hoặc timeout (thiếu credits)
 // Returns true nếu AI phản hồi, false nếu timeout (thiếu credits)
 async function submitTuBinh(page: any): Promise<boolean> {
   await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
   await page.evaluate(`
-    TuviForm.setData({ hoten: 'Test Tubinh', ngay: 15, thang: 7, nam: 1990, gioHour: 7, gioitinh: 'nam', namXem: 2026 })
+    TuviForm.setData({ hoten: 'Test Tubinh', ngay: 15, thang: 7, nam: 1990, gioHour: 7, gioitinh: 'nam' })
   `);
-  // TuviForm generates #tvf-submit-btn
-  await page.locator('#tvf-submit-btn').click();
-  // Chờ result-section hoặc error-msg show (AI call có thể mất 30-90s)
+  await page.locator('#btnGo').click();
+  // Chờ #btPanel hiện (AI call có thể mất 30-90s)
   return page.waitForFunction(
-    `getComputedStyle(document.querySelector('#result-section')).display !== 'none' ||
-     document.querySelector('#error-msg')?.classList.contains('show')`,
+    `getComputedStyle(document.querySelector('#btPanel')).display !== 'none'`,
     { timeout: 90_000 }
   ).then(() => true).catch(() => false);
 }
 
-test.describe('Tử Bình — Submit & Result', () => {
+test.describe('Tử Bình — Submit & Result (shell /app/bat-tu)', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tu-binh.html');
+    await page.goto('/app/bat-tu');
     await page.waitForLoadState('networkidle');
   });
 
   test('form container inject thành công', async ({ page }) => {
-    await expect(page.locator('#tubinh-form-container')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('#tuviFormHost')).toBeVisible({ timeout: 8000 });
     await page.waitForFunction(
-      'document.querySelectorAll("#tubinh-form-container input, #tubinh-form-container select").length > 0',
+      'document.querySelectorAll("#tuviFormHost input, #tuviFormHost select").length > 0',
       { timeout: 10_000 }
     );
   });
 
-  test('submit button #tvf-submit-btn hiện', async ({ page }) => {
+  test('submit button #btnGo hiện', async ({ page }) => {
     await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
-    await expect(page.locator('#tvf-submit-btn')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('#btnGo')).toBeVisible({ timeout: 8000 });
   });
 
-  test('submit → result-section hoặc error-msg hiện (không treo)', async ({ page }) => {
+  test('submit → #btPanel hiện (không treo)', async ({ page }) => {
     test.setTimeout(120_000);
     const responded = await submitTuBinh(page);
     if (!responded) { console.warn('AI không phản hồi trong 90s — có thể thiếu credits, bỏ qua'); return; }
 
-    const resultVisible = await page.locator('#result-section').isVisible().catch(() => false);
-    const errorVisible = await page.locator('#error-msg.show').isVisible().catch(() => false);
-    expect(resultVisible || errorVisible).toBe(true);
+    await expect(page.locator('#btPanel')).toBeVisible();
   });
 
-  test('nếu result hiện — result-header và tutru-table có nội dung', async ({ page }) => {
+  test('nếu result hiện — btScores và tutruTable có nội dung', async ({ page }) => {
     test.setTimeout(120_000);
     const responded = await submitTuBinh(page);
     if (!responded) { console.warn('AI không phản hồi trong 90s — có thể thiếu credits, bỏ qua'); return; }
 
-    const resultVisible = await page.locator('#result-section').isVisible().catch(() => false);
+    const resultVisible = await page.locator('#btPanel').isVisible().catch(() => false);
     if (!resultVisible) { console.warn('Result không hiện (có thể thiếu credits)'); return; }
 
-    // result-header có thể rỗng nếu không đủ credits (AI không chạy)
-    const headerEmpty = await page.locator('#result-header').evaluate(
+    // btScores có thể rỗng nếu không đủ credits (AI không chạy)
+    const scoresEmpty = await page.locator('#btScores').evaluate(
       (el: HTMLElement) => el.innerHTML.trim() === ''
     ).catch(() => true);
-    if (headerEmpty) { console.warn('result-header rỗng — có thể thiếu credits, bỏ qua'); return; }
+    if (scoresEmpty) { console.warn('btScores rỗng — có thể thiếu credits, bỏ qua'); return; }
 
-    await expect(page.locator('#result-header')).not.toBeEmpty({ timeout: 5000 });
-    const table = page.locator('#tutru-table');
+    await expect(page.locator('#btScores')).not.toBeEmpty({ timeout: 5000 });
+    const table = page.locator('#tutruTable');
     if (await table.isVisible().catch(() => false)) {
       expect(await table.locator('tr').count()).toBeGreaterThanOrEqual(1);
     }
   });
 
-  test('nếu result hiện — mục lục ít nhất 3 mục', async ({ page }) => {
+  test('nếu result hiện — mục lục (btJump) ít nhất 3 mục', async ({ page }) => {
     test.setTimeout(120_000);
     const responded = await submitTuBinh(page);
     if (!responded) { console.warn('AI không phản hồi trong 90s — có thể thiếu credits, bỏ qua'); return; }
 
-    const resultVisible = await page.locator('#result-section').isVisible().catch(() => false);
+    const resultVisible = await page.locator('#btPanel').isVisible().catch(() => false);
     if (!resultVisible) { console.warn('Result không hiện (có thể thiếu credits)'); return; }
 
-    const mucLuc = page.locator('#muc-luc-items .muc-luc-btn, [id^="ml-"]');
+    const mucLuc = page.locator('#btJump a');
     const count = await mucLuc.count();
     if (count === 0) { console.warn('Mục lục rỗng — có thể thiếu credits, bỏ qua'); return; }
     expect(count).toBeGreaterThanOrEqual(3);
@@ -89,9 +90,9 @@ test.describe('Tử Bình — Submit & Result', () => {
 
     await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
     await page.evaluate(`
-      TuviForm.setData({ hoten: 'Test User', ngay: 15, thang: 7, nam: 1990, gioHour: 7, gioitinh: 'nam', namXem: 2026 })
+      TuviForm.setData({ hoten: 'Test User', ngay: 15, thang: 7, nam: 1990, gioHour: 7, gioitinh: 'nam' })
     `);
-    await page.locator('#tvf-submit-btn').click();
+    await page.locator('#btnGo').click();
     await page.waitForTimeout(5000);
 
     expect(dialogs).toHaveLength(0);

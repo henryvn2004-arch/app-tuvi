@@ -21,15 +21,15 @@ const CFG = {
 // ═══════════════════════════════════════════════════════════
 const ACTIONS = [
   { action: 'vừa mở khóa luận giải lá số',           page: '/app/luan-giai' },
-  { action: 'vừa xem tuổi vợ chồng',                 page: '/xem-tuoi.html' },
-  { action: 'vừa xem tuổi làm ăn',                   page: '/xem-lam-an.html' },
+  { action: 'vừa xem tuổi vợ chồng',                 page: '/app/xem-tuoi' },
+  { action: 'vừa xem tuổi làm ăn',                   page: '/app/xem-lam-an' },
   { action: 'vừa phân tích diện tướng khuôn mặt',    page: '/tools/tuong-mat-ai.html' },
   { action: 'vừa xem nhãn tướng đôi mắt',            page: '/tools/nhan-tuong-ai.html' },
   { action: 'vừa luận giải thanh tướng giọng nói',   page: '/tools/thanh-tuong-ai.html' },
   { action: 'vừa xem khí sắc vận trình 1–3 tháng',  page: '/tools/khi-sac-ai.html' },
   { action: 'vừa xem thủ tướng chỉ tay',             page: '/tools/thu-tuong-ai.html' },
   { action: 'vừa mở khóa phân tích đại vận',         page: '/app/luan-giai' },
-  { action: 'vừa xem tuổi hợp tác kinh doanh',       page: '/xem-lam-an.html' },
+  { action: 'vừa xem tuổi hợp tác kinh doanh',       page: '/app/xem-lam-an' },
   { action: 'vừa đọc khảo luận về mệnh Thuỷ',        page: '/blog.html' },
   { action: 'vừa luận giải lá số vừa lập xong',      page: '/app/luan-giai' },
 ];
@@ -70,7 +70,7 @@ const POPUP_DATA = {
     urgency: '<span class="ic-inline" data-icon="lock" data-icon-emoji="🔒" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔒</span> Phân tích cá nhân hoá · Theo cổ pháp · Bảo mật tuyệt đối',
   },
   // Tử Bình Bát Tự
-  '/tu-binh.html': {
+  '/app/bat-tu': {
     icon: '📜',
     headline: 'Bát Tự là bản đồ chính xác nhất về vận trình cuộc đời',
     body: 'Tứ Trụ — Năm, Tháng, Ngày, Giờ — chứa đủ thông tin về <strong>tính cách, sự nghiệp, tài lộc và những giai đoạn cần lưu ý</strong>. Đọc đúng Bát Tự là biết được hướng đi của 60 năm tới.',
@@ -79,7 +79,7 @@ const POPUP_DATA = {
     secondary: 'Để sau vậy',
     urgency: '<span class="ic-inline" data-icon="lock" data-icon-emoji="🔒" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔒</span> Cổ pháp Tử Bình Chân Thuyên · Cá nhân hóa theo lá số · Bảo mật tuyệt đối',
   },
-  '/xem-tuoi.html': {
+  '/app/xem-tuoi': {
     icon: '💑',
     headline: 'Tuổi tác ảnh hưởng lớn hơn bạn nghĩ đến hôn nhân',
     body: 'Nhiều cặp đôi gặp xung đột không giải thích được chỉ vì bỏ qua yếu tố tuổi. Bài phân tích đầy đủ sẽ chỉ ra <strong>mức độ tương hợp thực sự và những giai đoạn cần lưu ý</strong> trong cuộc hôn nhân.',
@@ -88,7 +88,7 @@ const POPUP_DATA = {
     secondary: 'Thôi, tôi tự xử lý được',
     urgency: '<span class="ic-inline" data-icon="zap" data-icon-emoji="⚡" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚡</span> Kết quả ngay · Dựa trên lá số thực · Không phán chung chung',
   },
-  '/xem-lam-an.html': {
+  '/app/xem-lam-an': {
     icon: '🤝',
     headline: 'Hợp tác sai người có thể tiêu tốn nhiều năm nỗ lực',
     body: 'Tuổi tác hợp làm ăn không chỉ là "hợp hay không" — mà còn là <strong>thời điểm nào thuận, giai đoạn nào cần cẩn thận</strong> và ai là người phù hợp dài hạn.',
@@ -378,7 +378,7 @@ function showPopup() {
 
 function startPopup() {
   // Không hiện popup trên các trang không có paywall
-  const paywalledPages = ['/', '/index.html', '/xem-tuoi.html', '/xem-lam-an.html', '/app/luan-giai'];
+  const paywalledPages = ['/', '/index.html', '/app/xem-tuoi', '/app/xem-lam-an', '/app/luan-giai'];
   const path = location.pathname;
   const isPaywalled = paywalledPages.some(p => path === p || path.endsWith(p));
   if (!isPaywalled) return;
