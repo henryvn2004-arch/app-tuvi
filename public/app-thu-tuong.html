@@ -152,6 +152,11 @@
           <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
         </div>
 
+        <!-- Khối hook (2 fact) — hé 2 dòng đầu của _handGeoNote (window,
+             engine MediaPipe Hands đã tính, sẵn hiện ở #handGeomPanel rồi)
+             thành fact nổi bật + gọi tầng kể chuyện, ngay trước nút phân tích. -->
+        <div id="hookHost"></div>
+
         <div class="cost-box">
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
@@ -209,6 +214,7 @@
 window.SHELL_INTRO={key:'thu-tuong'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=37"></script>
+<script src="/tools-shared/hook-layer.js?v=4"></script>
   <script src="/nav.js?v=38" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/shell.js?v=95"></script>
@@ -349,6 +355,66 @@ function analyzeHandGeometry(lm, w, h) {
   return geoLines.join('\n');
 }
 
+// _handGeoNote đã có sẵn (0đ, engine hình học MediaPipe Hands) và ĐÃ hiện
+// tóm tắt ở #handGeomPanel — hook chỉ diễn lại 2 dòng đầu (rộng/dài lòng bàn
+// tay, ngón dài nhất) thành fact nổi bật + gọi tầng kể chuyện, không tính
+// thêm số nào.
+function mountHook() {
+  var host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer || !_handGeoNote) return;
+  var m1 = _handGeoNote.match(/Tỷ lệ rộng\/dài lòng bàn tay:[^\n]+/);
+  var m2 = _handGeoNote.match(/Ngón dài nhất:[^\n]+/);
+  if (!m1) return;
+  var facts = [{
+    tone: 'neutral',
+    title: m1[0],
+    body: 'Đo trực tiếp từ ảnh bằng MediaPipe Hands — hình dạng lòng bàn tay theo landmark thật của bạn. Luận giải đầy đủ theo cổ pháp thủ tướng nằm trong bản phân tích chuyên sâu.',
+    source: 'engine · MediaPipe Hands',
+  }];
+  if (m2) {
+    facts.push({
+      tone: 'neutral',
+      title: m2[0],
+      body: 'Đo trực tiếp từ ảnh bằng MediaPipe Hands. Ý nghĩa từng ngón, tỷ lệ 2D:4D và các đường chỉ tay nằm trong bản phân tích chuyên sâu.',
+      source: 'engine · MediaPipe Hands',
+    });
+  }
+  var spec = { tool: 'thu-tuong', toolLabel: 'Thủ Tướng', charts: [], facts: facts };
+  window.HookLayer.mount(host, spec);
+  _tryHookNarrativeTT(host, spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeTT(host, spec) {
+  if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
+  if (host) host.style.display = 'none';
+  var pending = document.createElement('div');
+  pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if (host && host.parentNode) host.parentNode.insertBefore(pending, host.nextSibling);
+  var tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+  var headers = { 'Content-Type': 'application/json' };
+  if (tk) headers['Authorization'] = 'Bearer ' + tk;
+  var body = {
+    toolId: spec.tool,
+    toolLabel: spec.toolLabel || spec.tool,
+    anonId: TuviPaywall.previewAnonId(),
+    facts: spec.facts.map(function (f) { return { title: f.title, body: f.body, tone: f.tone, caption: f.caption }; }),
+  };
+  fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (pending.parentNode) pending.remove();
+      if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
+      if (host) host.style.display = '';
+    })
+    .catch(function () {
+      if (pending.parentNode) pending.remove();
+      if (host) host.style.display = '';
+    });
+}
+
 function switchTab(id, btn) {
   document.querySelectorAll('.dt-input-tab').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.dt-input-pane').forEach(p=>p.classList.remove('active'));
@@ -396,6 +462,7 @@ function showPreview(dataUrl) {
       drawHandOverlay(lm, imgEl);
       if (lm) {
         _handGeoNote = analyzeHandGeometry(lm, w, h);
+        mountHook();
       } else {
         const err=document.getElementById('error-msg');
         err.textContent='⚠ Không nhận diện được bàn tay. Thử chụp rõ hơn với nền tương phản và ánh sáng đủ.';

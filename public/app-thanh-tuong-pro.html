@@ -182,6 +182,11 @@
         <div class="warn-card" id="featuresWarn"></div>
       </div>
 
+      <!-- Khối hook (2 fact) — CHỈ dùng dữ liệu ĐÃ MIỄN PHÍ của chính lượt đo
+           này (Ngũ Âm ước tính + F0 trung bình, cả hai đã hiện ở featuresPanel
+           trên), KHÔNG tính thêm số nào. -->
+      <div id="hookHost"></div>
+
       <div class="dt-card" id="analyzeWrap" style="display:none">
         <div class="cost-box">
           <div class="cb-l">
@@ -236,6 +241,7 @@
 window.SHELL_INTRO={key:'thanh-tuong-pro'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=37"></script>
+<script src="/tools-shared/hook-layer.js?v=4"></script>
   <script src="/nav.js?v=38" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/shell.js?v=95"></script>
@@ -958,6 +964,7 @@ function compileAndShowFeatures() {
 
   const nguam = estimateNguAm(r, state.gender);
   nguamBadge.textContent = 'Ngũ Âm ước tính: ' + nguam.label;
+  mountHook(items, nguam);
 
   const warns = [];
   if (s.sustainDuration < 2.5) warns.push('⚠ Ngân âm quá ngắn (<2.5s) — khí bất túc hoặc mic không thu trọn. Nếu không cố ý, nên thu lại bài 2.');
@@ -1049,6 +1056,60 @@ function interpStability(cv){
   if (cv < 0.20) return 'Ổn định.';
   if (cv < 0.30) return 'Có biến động.';
   return 'Biến động lớn.';
+}
+
+// Khối hook (2 fact) — CHỈ dùng dữ liệu ĐÃ MIỄN PHÍ của chính lượt đo này
+// (F0 trung bình + Ngũ Âm ước tính, cả hai đã hiện ở featuresPanel trên),
+// KHÔNG tính thêm số nào.
+function mountHook(items, nguam) {
+  const host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer || !items || !items.length || !nguam) return;
+  const f0 = items[0];
+  const facts = [{
+    tone: 'neutral',
+    title: f0.name + ': ' + f0.value,
+    body: f0.interp + ' Đo trực tiếp từ giọng nói qua micro. 11 chỉ số âm học còn lại và luận giải đầy đủ nằm trong bản phân tích chuyên sâu.',
+    source: 'engine · thanh-tuong-pro F0 analysis',
+  }, {
+    tone: 'neutral',
+    title: 'Ngũ Âm ước tính: ' + nguam.label,
+    body: 'Xếp theo 12 chỉ số âm học đo được (HNR, sustain, jitter, centroid…). Ý nghĩa đầy đủ theo Ngũ Âm cổ pháp nằm trong bản phân tích chuyên sâu.',
+    source: 'engine · estimateNguAm',
+  }];
+  const spec = { tool: 'thanh-tuong-pro', toolLabel: 'Thanh Tướng Pro', charts: [], facts: facts };
+  window.HookLayer.mount(host, spec);
+  _tryHookNarrativeTTP(host, spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeTTP(host, spec) {
+  if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
+  if (host) host.style.display = 'none';
+  const pending = document.createElement('div');
+  pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if (host && host.parentNode) host.parentNode.insertBefore(pending, host.nextSibling);
+  const tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+  const headers = { 'Content-Type': 'application/json' };
+  if (tk) headers['Authorization'] = 'Bearer ' + tk;
+  const body = {
+    toolId: spec.tool,
+    toolLabel: spec.toolLabel || spec.tool,
+    anonId: TuviPaywall.previewAnonId(),
+    facts: spec.facts.map(f => ({ title: f.title, body: f.body, tone: f.tone, caption: f.caption })),
+  };
+  fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+    .then(r => r.json())
+    .then(data => {
+      if (pending.parentNode) pending.remove();
+      if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
+      if (host) host.style.display = '';
+    })
+    .catch(() => {
+      if (pending.parentNode) pending.remove();
+      if (host) host.style.display = '';
+    });
 }
 
 function estimateNguAm(r, gender){

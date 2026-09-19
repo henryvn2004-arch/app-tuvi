@@ -215,6 +215,7 @@ window.SHELL_INTRO={key:'but-tuong'};</script>
 <script src="/tools-shared/but-tuong.js"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=37"></script>
+<script src="/tools-shared/hook-layer.js?v=4"></script>
   <script src="/nav.js?v=38" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=95"></script>
 <script>
@@ -409,6 +410,7 @@ function renderReport(m) {
   });
   html += '</div>';
   if (m.goiY) html += '<div class="bt-goiy"><strong>Gợi ý:</strong> ' + m.goiY.loi + '</div>';
+  html += '<div id="hookHost"></div>';
   html += '<div class="cost-box" style="margin-top:18px">'
     + '<div class="cb-l"><span class="cb-ic" data-icon="wallet"></span><div>'
     + '<div class="cb-title">Chi phí sử dụng</div>'
@@ -424,6 +426,71 @@ function renderReport(m) {
   document.getElementById('btReport').innerHTML = html;
   document.getElementById('btReport').style.display = 'block';
   if (window.TuviPaywall && window.TuviPaywall.fillPriceSlots) window.TuviPaywall.fillPriceSlots(document.getElementById('btReport')).then(function(){ _fillVndSlots(document.getElementById('btReport'),'but-tuong'); });
+  mountHook(m);
+}
+
+// Khối hook (2 fact) — CHỈ dùng dữ liệu ĐÃ MIỄN PHÍ của chính lượt đo này
+// (m.tongDiem + trục cao nhất trong số các trục ĐO ĐƯỢC từ ảnh tĩnh — cot/
+// nhuc/the, xem `analyzeImageData` ở tools-shared/but-tuong.js), KHÔNG bịa
+// thêm số nào. `m.goiY` luôn null với ảnh tĩnh (chỉ đo 3/6 trục) nên không
+// dùng được ở đây, khác nhánh ký trực tiếp trên canvas.
+function mountHook(m) {
+  var host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer || !m || !m.truc) return;
+  var T = window.BuTuongTool.TRUC_META;
+  var bestKey = null, bestScore = -1;
+  Object.keys(m.truc).forEach(function (k) {
+    var t = m.truc[k];
+    if (t && typeof t.score === 'number' && t.score > bestScore) { bestScore = t.score; bestKey = k; }
+  });
+  var facts = [{
+    tone: m.tongDiem >= 75 ? 'good' : m.tongDiem >= 50 ? 'neutral' : 'bad',
+    title: 'Điểm tổng: ' + m.tongDiem + '/100',
+    body: 'Tính từ ' + Object.keys(m.truc).length + ' trục đo được trực tiếp từ ảnh tĩnh. Luận giải đầy đủ theo cổ pháp bút tướng (Thần/Khí/Cốt/Nhục/Huyết/Thế) nằm trong bản phân tích chuyên sâu.',
+    source: 'engine · BuTuongTool.analyzeImageData',
+  }];
+  if (bestKey) {
+    facts.push({
+      tone: 'good',
+      title: 'Trục mạnh nhất: ' + T[bestKey].ten + ' (' + T[bestKey].han + ') — ' + bestScore + '/100',
+      body: T[bestKey].ynghia + '. Các trục còn lại và gợi ý cải thiện cụ thể nằm trong bản phân tích chuyên sâu.',
+      source: 'engine · BuTuongTool.analyzeImageData',
+    });
+  }
+  var spec = { tool: 'but-tuong', toolLabel: 'Bút Tướng', charts: [], facts: facts };
+  window.HookLayer.mount(host, spec);
+  _tryHookNarrativeBT(host, spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeBT(host, spec) {
+  if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
+  if (host) host.style.display = 'none';
+  var pending = document.createElement('div');
+  pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if (host && host.parentNode) host.parentNode.insertBefore(pending, host.nextSibling);
+  var tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+  var headers = { 'Content-Type': 'application/json' };
+  if (tk) headers['Authorization'] = 'Bearer ' + tk;
+  var body = {
+    toolId: spec.tool,
+    toolLabel: spec.toolLabel || spec.tool,
+    anonId: TuviPaywall.previewAnonId(),
+    facts: spec.facts.map(function (f) { return { title: f.title, body: f.body, tone: f.tone, caption: f.caption }; }),
+  };
+  fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (pending.parentNode) pending.remove();
+      if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
+      if (host) host.style.display = '';
+    })
+    .catch(function () {
+      if (pending.parentNode) pending.remove();
+      if (host) host.style.display = '';
+    });
 }
 
 function _fillVndSlots(host,product){
