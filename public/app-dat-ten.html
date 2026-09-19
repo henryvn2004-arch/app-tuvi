@@ -169,7 +169,7 @@ window.SHELL_INTRO={key:'dat-ten'};</script>
 <script src="/can-chi.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=37"></script>
-<script src="/tools-shared/hook-layer.js?v=2"></script>
+<script src="/tools-shared/hook-layer.js?v=4"></script>
   <script src="/nav.js?v=38" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=95"></script>
@@ -177,6 +177,7 @@ window.SHELL_INTRO={key:'dat-ten'};</script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
 var SINH={'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
+var BI_KHAC={'Kim':'Hỏa','Mộc':'Kim','Thổ':'Mộc','Thủy':'Thổ','Hỏa':'Thủy'}; // hành khắc mình — nguồn: tools-shared/nap-am.js
 
 function doDatTen(){
   var btn=document.getElementById('btnGo');
@@ -231,16 +232,56 @@ function mountHook(iCon){
   var host=document.getElementById('hookHost');
   if(!host||!window.HookLayer)return;
   var hanhCanBo=_hanhSinhCho(iCon.hanh);
-  window.HookLayer.mount(host,{
+  var hanhCanTranh=BI_KHAC[iCon.hanh];
+  var spec={
     tool:'dat-ten-con',
+    toolLabel:'Đặt Tên Cho Con',
     charts:[],
     facts:[{
       tone:'good',
       title:'Hành nên chọn khi đặt tên: '+hanhCanBo,
       body:'Mệnh con nạp âm '+iCon.napAm+' — hành '+iCon.hanh+'. Chữ trong tên nên mang hành '+hanhCanBo+' (tương sinh) hoặc '+iCon.hanh+' (đồng hành). 12 tên cụ thể kèm ý nghĩa Hán Việt nằm trong bản gợi ý chuyên sâu.',
       source:'engine · CanChi.ccInfo',
+    },{
+      tone:'bad',
+      title:'Hành cần tránh: '+hanhCanTranh,
+      body:hanhCanTranh+' khắc '+iCon.hanh+' — chữ mang hành này dễ làm giảm bớt cái hay của mệnh con, nên hạn chế khi chọn tên.',
+      source:'engine · CanChi.ccInfo',
     }],
-  });
+  };
+  window.HookLayer.mount(host,spec);
+  _tryHookNarrativeDT(host,spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeDT(host,spec){
+  if(!spec||!Array.isArray(spec.facts)||spec.facts.length<2) return;
+  if(host)host.style.display='none';
+  var pending=document.createElement('div');
+  pending.style.cssText='display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML='<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if(host&&host.parentNode)host.parentNode.insertBefore(pending,host.nextSibling);
+  var tk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
+  var headers={'Content-Type':'application/json'};
+  if(tk)headers['Authorization']='Bearer '+tk;
+  var body={
+    toolId:spec.tool,
+    toolLabel:spec.toolLabel||spec.tool,
+    anonId:TuviPaywall.previewAnonId(),
+    facts:spec.facts.map(function(f){ return {title:f.title,body:f.body,tone:f.tone,caption:f.caption}; })
+  };
+  fetch('/api/hook-narrative',{method:'POST',headers:headers,body:JSON.stringify(body)})
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(pending.parentNode)pending.remove();
+      if(data&&data.allowed) window.HookLayer.upgrade(host,spec,data);
+      if(host)host.style.display='';
+    })
+    .catch(function(){
+      if(pending.parentNode)pending.remove();
+      if(host)host.style.display='';
+    });
 }
 
 // ══════════════════════════════════════════════════════════════════════

@@ -145,6 +145,27 @@ window.HookFacts = (function () {
   }
 
   /**
+   * Điểm tổng của MỘT cung cụ thể — dùng khi trang chỉ tính sẵn 1 cung (vd
+   * Phu Thê ở chan-dung-vo-chong, Mệnh ở chan-dung-tien-kiep) chứ không có
+   * đủ `cungScores` của cả 12 cung để so `cungManhNhat`/`cungYeuNhat`. Ngưỡng
+   * tone theo đúng quy ước `scoreColor` đã dùng ở app-bat-tu.html (>=6.5 tốt
+   * · >=4 trung bình · dưới 4 cần chú ý).
+   */
+  function tongFactCung(ls, cungTen) {
+    var sc = ls && ls.cungScores && ls.cungScores[cungTen];
+    var tong = sc && typeof sc.tong === 'number' ? sc.tong : null;
+    if (tong == null) return null;
+    var tone = tong >= 6.5 ? 'good' : tong >= 4 ? 'neutral' : 'bad';
+    return {
+      kind: 'cung-tong', tone: tone,
+      title: 'Điểm tổng cung ' + cungTen + ': ' + tong.toFixed(1) + '/10',
+      body: 'Chấm trên 6 chiều đánh giá (' + CUNG_DIM_KEYS.map(function (k) { return CUNG_DIM_LABELS[k]; }).join(', ') + ') — điểm từng chiều và luận giải chi tiết nằm trong bản đầy đủ.',
+      value: tong, cungTen: cungTen,
+      source: 'engine · cungScores[\'' + cungTen + '\'].tong',
+    };
+  }
+
+  /**
    * Cách cục HIẾM nhất trong lá số, tra theo `census.cachCuc` — kết quả quét
    * hết 518.400 lá số (`public/laso-census.json`, do
    * `scripts/build-laso-census.mjs` sinh ra, xem Pha 1 workplan). `census` là
@@ -210,6 +231,7 @@ window.HookFacts = (function () {
     hexDimsForCung: hexDimsForCung,
     cungYeuNhat: cungYeuNhat,
     cungManhNhat: cungManhNhat,
+    tongFactCung: tongFactCung,
     cachCucHiem: cachCucHiem,
     percentileOfDaiVan: percentileOfDaiVan,
     top3: top3,

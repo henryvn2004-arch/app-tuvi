@@ -204,7 +204,7 @@
 window.SHELL_INTRO={key:'dien-tuong'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=37"></script>
-<script src="/tools-shared/hook-layer.js?v=2"></script>
+<script src="/tools-shared/hook-layer.js?v=4"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
   <script src="/nav.js?v=38" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
@@ -306,24 +306,66 @@ function analyzeGeometry(lm, w, h) {
 
 // window._geoNote đã có sẵn (0đ, engine hình học MediaPipe FaceMesh) nhưng
 // TRƯỚC ĐÂY chưa từng hiện ra DOM — chỉ gửi kèm cho AI sau khi trả tiền (xem
-// `geoNote` trong body gửi /api/tuong-mat). Hé đúng dòng Tam Đình (câu đầu,
-// đối chiếu được ngay với ảnh cạnh bên) làm fact — giữ các dòng còn lại
-// (tỷ lệ mắt/mũi/miệng/trán/cằm) cho phần AI viết.
+// `geoNote` trong body gửi /api/tuong-mat). Hé 2 dòng đầu (Tam Đình + tỷ lệ
+// rộng/dài mặt, đối chiếu được ngay với ảnh cạnh bên) làm fact — giữ các dòng
+// còn lại (mắt/mũi/miệng/trán/cằm) cho phần AI viết.
+// 2026-09-19: nới 1→2 dòng để đủ tối thiểu cho tầng hook kể chuyện
+// (`/api/hook-narrative` đòi ≥2 dữ kiện) — cùng dữ liệu MediaPipe đã tính sẵn,
+// không thêm phép đo mới.
 function mountHook() {
   var host = document.getElementById('hookHost');
   if (!host || !window.HookLayer || !window._geoNote) return;
   var m = window._geoNote.match(/Tam Đình:[^\n]+/);
   if (!m) return;
-  window.HookLayer.mount(host, {
-    tool: 'dien-tuong',
-    charts: [],
-    facts: [{
+  var facts = [{
+    tone: 'neutral',
+    title: m[0],
+    body: 'Đo trực tiếp từ ảnh bằng MediaPipe — Thượng/Trung/Hạ Đình chia đúng theo landmark khuôn mặt của bạn. Luận giải đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.',
+    source: 'engine · MediaPipe FaceMesh',
+  }];
+  var m2 = window._geoNote.match(/Tỷ lệ rộng\/dài mặt:[^\n]+/);
+  if (m2) {
+    facts.push({
       tone: 'neutral',
-      title: m[0],
-      body: 'Đo trực tiếp từ ảnh bằng MediaPipe — Thượng/Trung/Hạ Đình chia đúng theo landmark khuôn mặt của bạn. Luận giải đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.',
+      title: m2[0],
+      body: 'Đo trực tiếp từ ảnh bằng MediaPipe. Ý nghĩa theo Ma Y Thần Tướng và các bộ vị còn lại (mắt, mũi, miệng, trán, cằm) nằm trong bản phân tích chuyên sâu.',
       source: 'engine · MediaPipe FaceMesh',
-    }],
-  });
+    });
+  }
+  var spec = { tool: 'dien-tuong', toolLabel: 'Diện Tướng', charts: [], facts: facts };
+  window.HookLayer.mount(host, spec);
+  _tryHookNarrativeDienT(host, spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeDienT(host, spec) {
+  if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
+  if (host) host.style.display = 'none';
+  var pending = document.createElement('div');
+  pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if (host && host.parentNode) host.parentNode.insertBefore(pending, host.nextSibling);
+  var tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+  var headers = { 'Content-Type': 'application/json' };
+  if (tk) headers['Authorization'] = 'Bearer ' + tk;
+  var body = {
+    toolId: spec.tool,
+    toolLabel: spec.toolLabel || spec.tool,
+    anonId: TuviPaywall.previewAnonId(),
+    facts: spec.facts.map(function (f) { return { title: f.title, body: f.body, tone: f.tone, caption: f.caption }; }),
+  };
+  fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (pending.parentNode) pending.remove();
+      if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
+      if (host) host.style.display = '';
+    })
+    .catch(function () {
+      if (pending.parentNode) pending.remove();
+      if (host) host.style.display = '';
+    });
 }
 
 function checkHeadTilt(lm, w, h) {

@@ -243,8 +243,8 @@ window.SHELL_INTRO={key:'chan-dung-vo-chong'};</script>
 <script src="/tuvi-paywall.js?v=37"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
-<script src="/tools-shared/hook-facts.js?v=2"></script>
-<script src="/tools-shared/hook-layer.js?v=2"></script>
+<script src="/tools-shared/hook-facts.js?v=3"></script>
+<script src="/tools-shared/hook-layer.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=38" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
@@ -444,13 +444,48 @@ function mountHook(data) {
       cachCuc: (data.phuThe && data.phuThe.cachCuc) || [],
     };
     var hexDims = data.cungScoresPhuThe ? HF.hexDimsForCung(pseudoLs, 'Phu Thê') : null;
+    var tongFact = HF.tongFactCung(pseudoLs, 'Phu Thê');
     var hiem = HF.cachCucHiem(pseudoLs, census);
-    window.HookLayer.mount(host, {
+    var spec = {
       tool: 'chan-dung-vo-chong',
+      toolLabel: 'Chân Dung Người Phối Ngẫu',
       charts: [hexDims ? { type: 'hexRadar', data: { dims: hexDims }, title: 'Lục Giác cung Phu Thê' } : null].filter(Boolean),
-      facts: [hiem].filter(Boolean),
-    });
+      facts: [tongFact, hiem].filter(Boolean),
+    };
+    window.HookLayer.mount(host, spec);
+    _tryHookNarrativeCDVC(host, spec);
   });
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeCDVC(host, spec) {
+  if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
+  if (host) host.style.display = 'none';
+  var pending = document.createElement('div');
+  pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if (host && host.parentNode) host.parentNode.insertBefore(pending, host.nextSibling);
+  var tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+  var headers = { 'Content-Type': 'application/json' };
+  if (tk) headers['Authorization'] = 'Bearer ' + tk;
+  var body = {
+    toolId: spec.tool,
+    toolLabel: spec.toolLabel || spec.tool,
+    anonId: TuviPaywall.previewAnonId(),
+    facts: spec.facts.map(function (f) { return { title: f.title, body: f.body, tone: f.tone, caption: f.caption }; }),
+  };
+  fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (pending.parentNode) pending.remove();
+      if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
+      if (host) host.style.display = '';
+    })
+    .catch(function () {
+      if (pending.parentNode) pending.remove();
+      if (host) host.style.display = '';
+    });
 }
 
 function _renderLockWall() {
