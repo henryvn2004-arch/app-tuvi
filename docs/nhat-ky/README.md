@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-337 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+338 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 172 | 669,462 B |
+| `2026-09.md` | 173 | 684,358 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🖼 Avatar cho `testimonials.js` — ảnh synthetic sinh bằng gpt-image-1 (không phải người thật) + thêm 27 review 9 tool |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Vá "Giới thiệu · Bản luận giải mẫu · Phiên gần đây" biến mất sau khi chạy tool — cuộn quá tay, không phải bị gỡ |
 | 1 | 2026-09 | `2026-09.md` | 🖼 32 icon tool còn lại + wire toàn site — bảng ánh xạ `ToolIcons` dùng chung |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Homepage: mục dưới đây chưa vá hết — gốc thật là `#ftb-track` RỖNG trong HTML tĩnh |
