@@ -334,8 +334,8 @@ function renderXemTuoi(list) {
       <div class="icon">${ic('heart-handshake',44)}</div>
       <p>Chưa có kết quả xem tuổi nào được lưu.</p>
       <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
-        <a href="/xem-tuoi.html" class="btn-primary">Xem Tuổi Vợ Chồng</a>
-        <a href="/xem-lam-an.html" class="btn-primary btn-gold">Xem Tuổi Làm Ăn</a>
+        <a href="/app/xem-tuoi" class="btn-primary">Xem Tuổi Vợ Chồng</a>
+        <a href="/app/xem-lam-an" class="btn-primary btn-gold">Xem Tuổi Làm Ăn</a>
       </div>
     </div>`;
     return;

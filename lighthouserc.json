@@ -1,12 +1,17 @@
 {
+  "//": [
+    "2026-09-19: /xem-tuoi.html và /xem-lam-an.html (standalone) đã retire, 301",
+    "sang shell /app/xem-tuoi · /app/xem-lam-an — GỠ khỏi cổng chặn 'error' này,",
+    "KHÔNG đổi tên URL tại chỗ. Trang shell chưa từng có baseline dưới cổng",
+    "error-level (CLS đo được ~0.15, cùng dạng vấn đề mà /app/luan-giai đã gặp,",
+    "xem lighthouserc.mobile.json: 'chưa có baseline nên chưa siết error'). Sửa",
+    "chrome/sidebar shell để hạ CLS là việc riêng, ảnh hưởng cả 35 trang shell —",
+    "ngoài phạm vi PR retire 2 trang này.",
+    ""
+  ],
   "ci": {
     "collect": {
-      "url": [
-        "https://www.tuviminhbao.com/",
-        "https://www.tuviminhbao.com/xem-tuoi.html",
-        "https://www.tuviminhbao.com/xem-lam-an.html",
-        "https://www.tuviminhbao.com/la-so.html"
-      ],
+      "url": ["https://www.tuviminhbao.com/", "https://www.tuviminhbao.com/la-so.html"],
       "numberOfRuns": 3,
       "settings": {
         "preset": "desktop",

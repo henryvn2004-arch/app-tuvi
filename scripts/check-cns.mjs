@@ -48,7 +48,6 @@ const PAGES = [
   // 'public/luan-giai.html' XOÁ 2026-09-14 — 301 về /app/luan-giai
   // (public/app-luan-giai.html, dòng ngay dưới đã cắm khối này từ trước).
   'public/app-luan-giai.html',
-  'public/tu-binh.html',
   'public/app-bat-tu.html',
   'public/app.html',
   'public/app-cong-so.html',

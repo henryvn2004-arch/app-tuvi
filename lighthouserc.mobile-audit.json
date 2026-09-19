@@ -12,7 +12,7 @@
     "     lời câu 'UI/UX mobile đã ổn chưa': content-width (tràn ngang),",
     "     font-size (chữ/ô nhập quá nhỏ), tap-targets + target-size (nút quá bé),",
     "     color-contrast, meta viewport.",
-    "  3. Phủ 8 trang theo ĐÚNG đường user đi (vào từ Ads → lập lá số → luận giải",
+    "  3. Phủ 7 trang theo ĐÚNG đường user đi (vào từ Ads → lập lá số → luận giải",
     "     → gặp paywall → nạp tiền), thay vì 2 trang.",
     "",
     "Chạy: Actions → 'Lighthouse CI' → Run workflow → mobile_audit = true.",
@@ -26,8 +26,7 @@
         "https://www.tuviminhbao.com/app/luan-giai",
         "https://www.tuviminhbao.com/app/bat-tu",
         "https://www.tuviminhbao.com/la-so.html",
-        "https://www.tuviminhbao.com/xem-tuoi.html",
-        "https://www.tuviminhbao.com/tu-binh.html",
+        "https://www.tuviminhbao.com/app/xem-tuoi",
         "https://www.tuviminhbao.com/topup.html"
       ],
       "numberOfRuns": 2,
