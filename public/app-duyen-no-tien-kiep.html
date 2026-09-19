@@ -255,7 +255,7 @@ window.SHELL_INTRO={key:'duyen-no-tien-kiep'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tuvi-paywall.js?v=37"></script>
-<script src="/tools-shared/hook-layer.js?v=2"></script>
+<script src="/tools-shared/hook-layer.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=38" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
@@ -512,16 +512,55 @@ function mountHook(data) {
   var host = document.getElementById('hookHost');
   if (!host || !window.HookLayer || !data.bond) return;
   var a = data.nhanVats[data.bond.a], b = data.nhanVats[data.bond.b];
-  window.HookLayer.mount(host, {
-    tool: 'duyen-no-tien-kiep',
-    charts: [],
-    facts: [{
+  var facts = [{
+    tone: 'neutral',
+    title: 'Loại duyên: ' + data.bond.label,
+    body: 'Giữa ' + esc(a.ten) + ' và ' + esc(b.ten) + ': ' + data.bond.gist + ' Câu chuyện 4 hồi + bức tranh chung nằm trong bản đầy đủ.',
+    source: 'engine · computeGroupBond',
+  }];
+  var sig = Array.isArray(data.bond.signals) ? data.bond.signals[0] : null;
+  if (sig && sig.label && sig.detail) {
+    facts.push({
       tone: 'neutral',
-      title: 'Loại duyên: ' + data.bond.label,
-      body: 'Giữa ' + esc(a.ten) + ' và ' + esc(b.ten) + ': ' + data.bond.gist + ' Câu chuyện 4 hồi + bức tranh chung nằm trong bản đầy đủ.',
+      title: 'Dấu hiệu: ' + sig.label,
+      body: sig.detail + ' — các dấu hiệu còn lại và lưới duyên đầy đủ giữa mọi người nằm trong bản đầy đủ.',
       source: 'engine · computeGroupBond',
-    }],
-  });
+    });
+  }
+  var spec = { tool: 'duyen-no-tien-kiep', toolLabel: 'Duyên Nợ Tiền Kiếp', charts: [], facts: facts };
+  window.HookLayer.mount(host, spec);
+  _tryHookNarrativeDNTK(host, spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeDNTK(host, spec) {
+  if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
+  if (host) host.style.display = 'none';
+  var pending = document.createElement('div');
+  pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if (host && host.parentNode) host.parentNode.insertBefore(pending, host.nextSibling);
+  var tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+  var headers = { 'Content-Type': 'application/json' };
+  if (tk) headers['Authorization'] = 'Bearer ' + tk;
+  var body = {
+    toolId: spec.tool,
+    toolLabel: spec.toolLabel || spec.tool,
+    anonId: TuviPaywall.previewAnonId(),
+    facts: spec.facts.map(function (f) { return { title: f.title, body: f.body, tone: f.tone, caption: f.caption }; }),
+  };
+  fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (pending.parentNode) pending.remove();
+      if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
+      if (host) host.style.display = '';
+    })
+    .catch(function () {
+      if (pending.parentNode) pending.remove();
+      if (host) host.style.display = '';
+    });
 }
 
 // Ảnh minh hoạ MỜ, MỖI người ĐÚNG giới tính của họ (2026-09-07, Henry chốt

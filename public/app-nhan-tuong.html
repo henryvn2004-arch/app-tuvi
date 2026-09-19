@@ -209,7 +209,7 @@
 window.SHELL_INTRO={key:'nhan-tuong'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=37"></script>
-<script src="/tools-shared/hook-layer.js?v=2"></script>
+<script src="/tools-shared/hook-layer.js?v=4"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
   <script src="/nav.js?v=38" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
@@ -352,7 +352,11 @@ function cropEye(imgEl, lm, side) {
 // `irisNote` trong body gửi /api/tuong-mat). Diễn lại thành câu người đọc
 // được (bản gốc là câu ghi chú kỹ thuật cho model), giữ luận giải đầy đủ cho
 // phần AI.
-function mountHook() {
+// 2026-09-19: thêm fact thứ 2 (góc đuôi mắt) để đủ tối thiểu cho tầng hook kể
+// chuyện (`/api/hook-narrative` đòi ≥2 dữ kiện) — dùng LẠI đúng công thức
+// `eyeAngle` đã có ở app-dien-tuong.html (cùng 4 landmark 33/133/263/362),
+// không bịa phép đo mới.
+function mountHook(lm, imgEl) {
   const host = document.getElementById('hookHost');
   if (!host || !window.HookLayer) return;
   let title, body;
@@ -366,11 +370,43 @@ function mountHook() {
     title = 'Vị trí tròng mắt: cân đối';
     body = 'Đo trực tiếp từ ảnh bằng MediaPipe. Nhãn hình, thần khí và các chi tiết khác nằm trong bản phân tích chuyên sâu.';
   }
-  window.HookLayer.mount(host, {
-    tool: 'nhan-tuong',
-    charts: [],
-    facts: [{ tone: 'neutral', title, body, source: 'engine · MediaPipe iris landmark' }],
-  });
+  const facts = [{ tone: 'neutral', title, body, source: 'engine · MediaPipe iris landmark' }];
+  const angleFact = analyzeEyeAngleFact(lm, imgEl);
+  if (angleFact) facts.push(angleFact);
+  const spec = { tool: 'nhan-tuong', toolLabel: 'Nhân Tướng', charts: [], facts: facts };
+  window.HookLayer.mount(host, spec);
+  _tryHookNarrativeNT(host, spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeNT(host, spec) {
+  if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
+  if (host) host.style.display = 'none';
+  var pending = document.createElement('div');
+  pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if (host && host.parentNode) host.parentNode.insertBefore(pending, host.nextSibling);
+  var tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+  var headers = { 'Content-Type': 'application/json' };
+  if (tk) headers['Authorization'] = 'Bearer ' + tk;
+  var body = {
+    toolId: spec.tool,
+    toolLabel: spec.toolLabel || spec.tool,
+    anonId: TuviPaywall.previewAnonId(),
+    facts: spec.facts.map(function (f) { return { title: f.title, body: f.body, tone: f.tone, caption: f.caption }; }),
+  };
+  fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (pending.parentNode) pending.remove();
+      if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
+      if (host) host.style.display = '';
+    })
+    .catch(function () {
+      if (pending.parentNode) pending.remove();
+      if (host) host.style.display = '';
+    });
 }
 
 function analyzeIrisNote(lm) {
@@ -388,6 +424,27 @@ function analyzeIrisNote(lm) {
   if (avgPos < 0.3) return '[MediaPipe detect: tròng mắt lệch lên — có thể Tam Bạch Nhãn Hạ]';
   if (avgPos > 0.7) return '[MediaPipe detect: tròng mắt lệch xuống — có thể Tam Bạch Nhãn Thượng]';
   return null;
+}
+
+/** Cùng công thức `eyeLAngle`/`eyeRAngle`/`eyeAngle` của app-dien-tuong.html
+ *  (`analyzeGeometry`) — landmark 33/133 (mắt trái), 263/362 (mắt phải), quy
+ *  về không gian pixel bằng naturalWidth/naturalHeight trước khi lấy góc,
+ *  KHÔNG lấy trực tiếp toạ độ chuẩn hoá (x/y khác tỉ lệ khung ảnh). */
+function analyzeEyeAngleFact(lm, imgEl) {
+  if (!lm || !lm[33] || !lm[133] || !lm[263] || !lm[362] || !imgEl) return null;
+  const w = imgEl.naturalWidth, h = imgEl.naturalHeight;
+  if (!w || !h) return null;
+  const p = (pt, axis) => pt[axis] * (axis === 'x' ? w : h);
+  const eyeLAngle = Math.atan2((p(lm[33],'y') - p(lm[133],'y')), (p(lm[133],'x') - p(lm[33],'x'))) * 180 / Math.PI;
+  const eyeRAngle = Math.atan2((p(lm[263],'y') - p(lm[362],'y')), (p(lm[263],'x') - p(lm[362],'x'))) * 180 / Math.PI;
+  const eyeAngle = (eyeLAngle + eyeRAngle) / 2;
+  const desc = eyeAngle > 2 ? 'đuôi mắt cong lên' : eyeAngle < -2 ? 'đuôi mắt xuôi' : 'ngang';
+  return {
+    tone: 'neutral',
+    title: 'Góc đuôi mắt: ' + eyeAngle.toFixed(1) + '° (' + desc + ')',
+    body: 'Đo trực tiếp từ ảnh bằng MediaPipe. Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.',
+    source: 'engine · MediaPipe FaceMesh',
+  };
 }
 
 function switchTab(id, btn) {
@@ -438,7 +495,7 @@ function showPreview(dataUrl) {
       cropEye(imgEl, lm, 'right');
       document.getElementById('eyePanels').style.display='flex';
       _irisNote = analyzeIrisNote(lm);
-      mountHook();
+      mountHook(lm, imgEl);
     } else {
       const err=document.getElementById('error-msg');
       err.textContent='⚠ Không nhận diện được mặt rõ ràng. Vẫn có thể phân tích nhưng nên dùng ảnh thẳng mặt hơn.';
