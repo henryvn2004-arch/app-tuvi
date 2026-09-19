@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-338 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+339 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -363,3 +363,4 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 166 | 2026-09 | `2026-09.md` | 🐢 Đo tốc độ mobile lần đầu bằng số thật — hoãn 3 tracker bên thứ ba tới lúc rảnh |
 | 167 | 2026-09 | `2026-09.md` | 🐢 P2 — bỏ `noto-serif.css` khỏi render-blocking, 94 trang |
 | 168 | 2026-09 | `2026-09.md` | 🔌 Nạp từ khoá volume thật (Google Ads Keyword Planner / TikTok Creative Center) — `/api/admin/keyword-import` |
+| 169 | 2026-09 | `2026-09.md` | 🐢 P3 — bỏ `laso-chart.css` khỏi render-blocking trên 5 trang, đo bằng Playwright throttle trước khi đụng |
