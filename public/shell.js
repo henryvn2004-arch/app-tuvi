@@ -21,27 +21,35 @@
   // `gtag-js` là ID chung nên nav.js/shell.js không nạp trùng nếu cả hai cùng
   // có mặt trên một trang. Bỏ qua navigator.webdriver — cùng lý do chặn bot
   // E2E như nav.js.
-  if (!document.getElementById('gtag-js') && !window.navigator.webdriver) {
-    var _ga = document.createElement('script'); _ga.id = 'gtag-js'; _ga.async = true;
-    _ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0'; document.head.appendChild(_ga);
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () { window.dataLayer.push(arguments); };
-    window.gtag('js', new Date());
-    window.gtag('config', 'G-F4XNRS2XT0');
-    window.gtag('config', 'AW-18419617290');
-  }
+  // Hoãn tới lúc main thread RẢNH (requestIdleCallback, trần 2000ms) thay vì
+  // chạy ngay trong lượt parse ban đầu — cùng lý do và cùng cách với nav.js.
+  // Lighthouse mobile đo GTM+Clarity tự chiếm hàng trăm ms main-thread ngay
+  // trong cửa sổ LCP/TTI trên /app/luan-giai (docs/nhat-ky/2026-09.md).
+  var _loadTrackers = function () {
+    if (!document.getElementById('gtag-js') && !window.navigator.webdriver) {
+      var _ga = document.createElement('script'); _ga.id = 'gtag-js'; _ga.async = true;
+      _ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0'; document.head.appendChild(_ga);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', 'G-F4XNRS2XT0');
+      window.gtag('config', 'AW-18419617290');
+    }
 
-  // ── Microsoft Clarity ──────────────────────────────────────────────
-  // Cùng lý do như khối GA4 ở trên: nav.js#data-icons-only bỏ qua Clarity nên
-  // shell.js phải tự bù cho toàn bộ trang /app/*. `clarity-js` là ID chung với
-  // nav.js để không nạp trùng khi cả hai cùng có mặt.
-  if (!document.getElementById('clarity-js') && !window.navigator.webdriver) {
-    (function (c, l, a, r, i, t, y) {
-      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
-      t = l.createElement(r); t.id = 'clarity-js'; t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
-      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-    })(window, document, 'clarity', 'script', 'yg15ejzyc6');
-  }
+    // ── Microsoft Clarity ──────────────────────────────────────────────
+    // Cùng lý do như khối GA4 ở trên: nav.js#data-icons-only bỏ qua Clarity nên
+    // shell.js phải tự bù cho toàn bộ trang /app/*. `clarity-js` là ID chung với
+    // nav.js để không nạp trùng khi cả hai cùng có mặt.
+    if (!document.getElementById('clarity-js') && !window.navigator.webdriver) {
+      (function (c, l, a, r, i, t, y) {
+        c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+        t = l.createElement(r); t.id = 'clarity-js'; t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+        y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+      })(window, document, 'clarity', 'script', 'yg15ejzyc6');
+    }
+  };
+  if ('requestIdleCallback' in window) requestIdleCallback(_loadTrackers, { timeout: 2000 });
+  else setTimeout(_loadTrackers, 1500);
 
   // ── NGUỒN DUY NHẤT: danh sách công cụ (render cả sidebar lẫn Cmd+K) ──
   // ── DANH SÁCH CÔNG CỤ — dựng TỪ DỮ LIỆU, không còn mảng chép tay ──
