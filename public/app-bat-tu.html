@@ -211,6 +211,7 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
       </div>
 
       <div id="btPanel" data-ws-result>
+        <div id="hookHost"></div>
         <div class="birth-bar" id="birthBar"></div>
         <div class="scores" id="btScores"></div>
         <div class="tutru-wrap"><table class="tutru" id="tutruTable"></table></div>
@@ -260,6 +261,8 @@ window.SHELL_INTRO={key:'bat-tu'};</script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
+<script src="/tools-shared/hook-facts.js?v=2"></script>
+<script src="/tools-shared/hook-layer.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=37"></script>
   <script src="/nav.js?v=38" data-icons-only></script><script src="/shell.js?v=95"></script>
@@ -369,8 +372,55 @@ function doBatTu(){
 }
 function reBatTu(){ var y=parseInt(document.getElementById('barNamxem').value); if(y)document.getElementById('inpNamxem').value=y; doBatTu(); }
 
+// Hé cường nhược nhật can + ngũ hành thiếu (+ dụng thần chính nếu có) — cả 3
+// đều đã tính sẵn ở `bt` (client tự tính = server tính ra y hệt, xem chú
+// thích đầu lib/engine/tubinh.ts), và đã hiện SẴN miễn phí trong `#btScores`/
+// `#tutruTable` — hook chỉ diễn giải lại bằng giọng trigger-cao, không lộ gì
+// mới hơn khách đã thấy trên màn hình.
+function mountHook(bt){
+  var host=document.getElementById('hookHost');
+  if(!host||!window.HookLayer||!window.HookFacts||!window.HookFacts.tuBinh)return;
+  var facts=window.HookFacts.tuBinh.top3(bt);
+  if(facts.length<2){ host.innerHTML=''; return; }
+  var spec={tool:'tu-binh',toolLabel:'Tử Bình Bát Tự',charts:[],facts:facts};
+  window.HookLayer.mount(host,spec);
+  _tryHookNarrativeTB(host,spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeTB(host,spec){
+  if(!spec||!Array.isArray(spec.facts)||spec.facts.length<2) return;
+  if(host)host.style.display='none';
+  var pending=document.createElement('div');
+  pending.style.cssText='display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML='<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if(host&&host.parentNode)host.parentNode.insertBefore(pending,host.nextSibling);
+  var tk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
+  var headers={'Content-Type':'application/json'};
+  if(tk)headers['Authorization']='Bearer '+tk;
+  var body={
+    toolId:spec.tool,
+    toolLabel:spec.toolLabel||spec.tool,
+    anonId:TuviPaywall.previewAnonId(),
+    facts:spec.facts.map(function(f){ return {title:f.title,body:f.body,tone:f.tone,caption:f.caption}; })
+  };
+  fetch('/api/hook-narrative',{method:'POST',headers:headers,body:JSON.stringify(body)})
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(pending.parentNode)pending.remove();
+      if(data&&data.allowed) window.HookLayer.upgrade(host,spec,data);
+      if(host)host.style.display='';
+    })
+    .catch(function(){
+      if(pending.parentNode)pending.remove();
+      if(host)host.style.display='';
+    });
+}
+
 function renderBatTu(bt,namxem){
   renderTuTruTable(bt);
+  mountHook(bt);
   var cn=bt.cuongNhuoc,dt=bt.dungThan,cc=bt.cachCuc,dvh=bt.daiVanHienTai,ln=bt.luuNien;
 
   // ── score cards ──
