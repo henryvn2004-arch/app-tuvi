@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🖼 Avatar minh hoạ cho `testimonials.js` (SVG nội tuyến, không phải ảnh thật) + thêm 27 review 9 tool |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Vá "Giới thiệu · Bản luận giải mẫu · Phiên gần đây" biến mất sau khi chạy tool — cuộn quá tay, không phải bị gỡ |
 | 1 | 2026-09 | `2026-09.md` | 🖼 32 icon tool còn lại + wire toàn site — bảng ánh xạ `ToolIcons` dùng chung |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Homepage: mục dưới đây chưa vá hết — gốc thật là `#ftb-track` RỖNG trong HTML tĩnh |
