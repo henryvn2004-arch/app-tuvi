@@ -227,6 +227,93 @@ function reconcile(items, snapshotRows, loaiExpected) {
   return { daCo, thieu, nghiTrungKhacTen, khongKhopEngine };
 }
 
+/**
+ * Sinh SQL `UPDATE tu_dien SET xuong = …` cho các dòng ĐÃ ĐỐI CHIẾU AN TOÀN
+ * (khớp tên hẳn, hoặc nghi trùng CHỈ KHÁC CHÍNH TẢ — sĩ/sỹ, hỉ/hỷ). KHÔNG đụng
+ * `ten`/`slug` của dòng — chỉ đắp thêm dữ kiện tất định, nên an toàn ngay cả
+ * với nhóm "nghi trùng": gắn nhầm SAI DỮ KIỆN chỉ xảy ra nếu gắn nhầm SAO,
+ * mà nhóm nghi trùng đã xác nhận là 1 sao 2 cách viết, không phải 2 sao khác
+ * nhau (khác nhóm "Tả Phù"/"Thiên Diêu", KHÔNG được gộp).
+ *
+ * KHÔNG đụng `thu_vien_muc` (mới thật) — bảng đó chưa có dòng nào ở bước này.
+ */
+function buildXuongBackfillSql(sao, cung, saoRec, cungRec) {
+  const saoByTen = new Map(sao.map((s) => [s.ten, s]));
+  const cungByTen = new Map(cung.map((c) => [c.ten, c]));
+  const lines = [
+    '-- Đắp `xuong` vào tu_dien — SINH TỰ ĐỘNG bởi scripts/gen-thu-vien-index.mjs.',
+    '-- CHỈ set xuong (dữ kiện tất định), KHÔNG đụng ten/slug/content.',
+    'begin;',
+  ];
+  const escSql = (s) => `'${String(s).replace(/'/g, "''")}'`;
+
+  for (const r of [...saoRec.daCo, ...saoRec.nghiTrungKhacTen]) {
+    const engineTen = r.ten ?? r.tenEngine;
+    const slug = r.slugCu ?? r.slugTuDien;
+    const item = saoByTen.get(engineTen);
+    if (!item) continue;
+    const xuong = {
+      type: item.type,
+      element: item.element,
+      yin_yang: item.yin_yang,
+      weight: item.weight,
+      traits: item.traits,
+      positions: item.positions,
+    };
+    lines.push(
+      `update public.tu_dien set xuong = ${escSql(JSON.stringify(xuong))}::jsonb where slug = ${escSql(slug)};`
+    );
+  }
+  for (const r of cungRec.daCo) {
+    const item = cungByTen.get(r.ten);
+    if (!item) continue;
+    const xuong = { thuTu: item.thuTu, tenNgan: item.tenNgan };
+    lines.push(
+      `update public.tu_dien set xuong = ${escSql(JSON.stringify(xuong))}::jsonb where slug = ${escSql(r.slugCu)};`
+    );
+  }
+  lines.push('commit;');
+  return lines.join('\n');
+}
+
+/**
+ * Sinh SQL `INSERT INTO thu_vien_muc` cho 2 bộ sưu tập có đủ dữ kiện NGAY BÂY
+ * GIỜ (sao×cung · nạp âm) — publish_status mặc định 'draft' (cột DB), cần cron
+ * đắp văn + qua cửa chất lượng mới lên 'published'.
+ *
+ * 🔴 CỐ Ý BỎ 'khai-niem': cần rút từ `keyword_ideas` và NGƯỜI PHẢI DUYỆT danh
+ * sách trước khi gieo — không tự chọn chủ đề.
+ *
+ * 🔴 CHỈ seed sao×cung có `soCachCuc > 0` (113/168) — 55 tổ hợp không có cách
+ * cục nào là không đủ dữ kiện tất định để qua cửa chất lượng, seed rồi để
+ * draft vĩnh viễn chỉ là rác trong bảng.
+ */
+function buildThuVienMucSeedSql(saoCung, napAm) {
+  const escSql = (s) => `'${String(s).replace(/'/g, "''")}'`;
+  const lines = [
+    '-- Gieo thu_vien_muc (draft) — SINH TỰ ĐỘNG bởi scripts/gen-thu-vien-index.mjs.',
+    "-- publish_status giữ mặc định 'draft' — KHÔNG public cho tới khi cron đắp văn qua cửa chất lượng.",
+    'begin;',
+  ];
+
+  for (const sc of saoCung) {
+    if (sc.soCachCuc === 0) continue;
+    const xuong = { sao: sc.sao, cung: sc.cung, cachCuc: sc.cachCuc };
+    const ten = `${sc.sao} tại ${sc.cung}`;
+    lines.push(
+      `insert into public.thu_vien_muc (slug, bo_suu_tap, ten, xuong) values (${escSql(sc.slug)}, 'sao-cung', ${escSql(ten)}, ${escSql(JSON.stringify(xuong))}::jsonb) on conflict (slug) do update set xuong = excluded.xuong;`
+    );
+  }
+  for (const na of napAm) {
+    const xuong = { hanh: na.hanh, canChi: na.canChi };
+    lines.push(
+      `insert into public.thu_vien_muc (slug, bo_suu_tap, ten, xuong) values (${escSql(na.slug)}, 'nap-am', ${escSql(na.ten)}, ${escSql(JSON.stringify(xuong))}::jsonb) on conflict (slug) do update set xuong = excluded.xuong;`
+    );
+  }
+  lines.push('commit;');
+  return lines.join('\n');
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────
 function main() {
   const outPath = arg('out');
@@ -330,6 +417,28 @@ function main() {
     `\nNạp âm:                 ${napAm.length} tên (KHÔNG phải 60 — mỗi tên phủ 2 vị trí trong chu kỳ 60)`
   );
   console.log(`\nĐã ghi: ${outPath}`);
+
+  const sqlOutPath = arg('sql-out');
+  if (sqlOutPath) {
+    if (!snapshot) {
+      console.error(
+        '\n--sql-out cần --tu-dien-snapshot (không đối chiếu được thì không sinh SQL).'
+      );
+      process.exit(1);
+    }
+    const sql = buildXuongBackfillSql(sao, cung, saoRec, cungRec);
+    writeFileSync(sqlOutPath, sql);
+    const nUpdates = (sql.match(/^update /gm) || []).length;
+    console.log(`Đã ghi SQL backfill xuong (${nUpdates} dòng UPDATE): ${sqlOutPath}`);
+  }
+
+  const seedOutPath = arg('seed-out');
+  if (seedOutPath) {
+    const sql = buildThuVienMucSeedSql(saoCung, napAm);
+    writeFileSync(seedOutPath, sql);
+    const nInserts = (sql.match(/^insert /gm) || []).length;
+    console.log(`Đã ghi SQL gieo thu_vien_muc (${nInserts} dòng INSERT, draft): ${seedOutPath}`);
+  }
 }
 
 main();
