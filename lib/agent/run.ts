@@ -371,18 +371,13 @@ async function runAgentInner(
     // luật vận hạn theo tầng + độ dài chuẩn). app_config.chat.system_prompt
     // (nếu có) KHÔNG còn thay thế template mà chèn vào như LỚP TÔNG (persona)
     // — chỉnh giọng văn trong DB không cần deploy, shape vẫn được giữ.
-    // Văn phong tác giả (thầy) cho luồng lá số — cùng cơ chế như scenario
-    // (buildChatContext), nhưng birth-path xưa nay bỏ qua. Gộp CÙNG tone DB.
-    const authorPersona = req.authorName && req.authorStyle
-      ? `Phong cách: Bạn đang thể hiện phong cách của ${req.authorName} — ${req.authorStyle}`
-      : '';
-    const toneParts = [
-      cfgIn.systemPrompt
-        ? `TÔNG/PHONG CÁCH (tùy chỉnh — CHỈ đổi giọng văn, KHÔNG đổi hình dạng/độ dài/luật luận bên dưới):\n${cfgIn.systemPrompt}`
-        : '',
-      authorPersona,
-    ].filter(Boolean);
-    const tone = toneParts.length ? toneParts.join('\n\n') : undefined;
+    // 2026-09-19 (Henry): gỡ persona tác giả (authorName/authorStyle, "thầy")
+    // khỏi tone — cùng quyết định với `buildChatContext` (lib/agent/prompts.ts):
+    // không đo ra khác biệt giọng đáng kể, chỉ tốn thêm ký tự. `cfgIn.systemPrompt`
+    // (LỚP TÔNG cấu hình DB) không liên quan, vẫn giữ nguyên.
+    const tone = cfgIn.systemPrompt
+      ? `TÔNG/PHONG CÁCH (tùy chỉnh — CHỈ đổi giọng văn, KHÔNG đổi hình dạng/độ dài/luật luận bên dưới):\n${cfgIn.systemPrompt}`
+      : undefined;
     system = hasLaso
       ? CHAT_SYSTEM_LASO(lasoCtx, undefined, tone)
       : CHAT_SYSTEM_GENERAL(undefined, tone);

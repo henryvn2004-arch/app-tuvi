@@ -24,10 +24,18 @@ import { readFileSync } from 'fs';
 const FILE = 'lib/agent/prompts.ts';
 
 // Trần phần LUẬT (toàn bộ prompt trừ ctx/docs/persona được nội suy rỗng).
+//
+// 🔴 Henry chốt 2026-09-19 — nới CẢ BA (LASO 7000→8100, GENERAL 7300→8400,
+// RICH_RULES 9700→10600) để có chỗ cho khối "BẾ TẮC THẬT" mới trong `arcCore`
+// (layer Phật pháp/tâm lý — chỉ bật khi câu hỏi cho thấy bế tắc thật, không
+// phải tò mò tra cứu — + lối thoát khi có dấu hiệu nguy hiểm thật). Đây LÀ
+// nghiệp vụ mới (yêu cầu Henry), không phải khối GIỌNG/HÌNH DẠNG cộng dồn mà
+// bộ dò này sinh ra để chặn — cùng đợt đã cắt câu "Persona nêu ở đầu…" (chết,
+// vì persona tác giả bị gỡ khỏi buildChatContext/run.ts) để bớt phải nới thêm.
 const BUDGET = {
-  CHAT_SYSTEM_LASO: 7000,
-  CHAT_SYSTEM_GENERAL: 7300,
-  CHAT_RICH_RULES: 9700,
+  CHAT_SYSTEM_LASO: 8100,
+  CHAT_SYSTEM_GENERAL: 8400,
+  CHAT_RICH_RULES: 10600,
 };
 
 // Khối mô tả BỐ CỤC. Một shape chỉ được dùng ĐÚNG MỘT bản trong nhóm này.
