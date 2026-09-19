@@ -158,7 +158,11 @@ function isUsable(kw: string): boolean {
  * KHÔNG BAO GIỜ throw — hỏng thì trả rỗng để vòng lặp đi tiếp.
  */
 async function fetchSuggest(term: string, hl: string, gl: string): Promise<string[]> {
-  const url = `${ENDPOINT}?${new URLSearchParams({ client: 'firefox', hl, gl, q: term }).toString()}`;
+  // 🔑 `oe=utf-8` BẮT BUỘC: thiếu nó, Google trả Content-Type khai
+  // charset=ISO-8859-1 trong khi thân vẫn là byte UTF-8 — `res.text()` giải mã
+  // theo charset khai báo (đúng chuẩn Fetch) nên tiếng Việt vỡ thành `l� g�`.
+  // Cắn thật: 1.159/2.012 dòng (58%) trong `keyword_ideas` đã hỏng kiểu này.
+  const url = `${ENDPOINT}?${new URLSearchParams({ client: 'firefox', hl, gl, oe: 'utf-8', q: term }).toString()}`;
   try {
     const res = await fetch(url, {
       headers: {
