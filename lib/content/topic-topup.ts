@@ -324,6 +324,110 @@ interface Spoke {
   surface: Surface;
 }
 
+/**
+ * Ngày lễ/dịp trong năm, gán vào ĐÚNG một tháng DƯƠNG LỊCH — nguồn cho bề mặt
+ * khao-luan, góc nhìn tử vi/huyền học ("vì sao lại có X", "X thường có hiện
+ * tượng gì xảy ra"), KHÔNG phải bài giải thích phong tục đơn thuần.
+ *
+ * ⚠️ Ngày ÂM LỊCH (Vu Lan, Trung Thu, tháng cô hồn, Tết Hàn Thực...) không có
+ * ngày dương cố định qua từng năm — gán vào tháng dương THƯỜNG GẶP nhất theo
+ * kinh nghiệm (vd Trung Thu rằm tháng 8 âm hầu hết rơi vào tháng 9 dương),
+ * CHẤP NHẬN sai lệch vài tuần một số năm. Cùng mức chính xác `peakMonths` của
+ * các spoke Tết/Kim Lâu phía trên — đổi sang tính ngày âm chính xác là việc
+ * khác (cần `lib/almanac`), không phải phạm vi nới seed này.
+ */
+const HOLIDAY_THEMES_BY_MONTH: Record<number, string[]> = {
+  1: [
+    'Tết Dương lịch có ý nghĩa gì trong quan niệm dân gian và huyền học',
+    'Cúng ông Công ông Táo ngày nào là đúng và ý nghĩa tâm linh của lễ này',
+    'Tất niên cuối năm — vì sao phải cúng và dọn dẹp bàn thờ tổ tiên',
+    'Đêm Giao thừa có những điều kiêng kỵ gì theo quan niệm dân gian',
+    'Xông đất đầu năm chọn tuổi thế nào cho hợp mệnh gia chủ',
+    'Vì sao có tục lì xì đầu năm và ý nghĩa phong thủy đằng sau',
+  ],
+  2: [
+    'Rằm tháng Giêng vì sao được gọi là Tết Nguyên Tiêu và cúng thế nào cho đúng',
+    'Lễ Valentine 14/2 — tình duyên theo lá số có khác gì tình yêu hiện đại',
+    'Ngày Thầy thuốc Việt Nam 27/2 — cung nào trong lá số hợp nghề y',
+    'Đi lễ chùa đầu năm cầu gì thì đúng theo từng mệnh cung',
+    'Sao giải hạn đầu năm là sao nào và có thực sự hoá giải được vận xấu',
+  ],
+  3: [
+    'Quốc tế Phụ nữ 8/3 — cung Phu Thê nói gì về người phụ nữ vượng phu ích tử',
+    'Ngày Quốc tế Hạnh phúc 20/3 — lá số có cung nào quyết định người hạnh phúc',
+    'Vì sao dân gian kiêng động thổ vào đầu tháng 3 âm lịch',
+    'Tháng 3 âm lịch có phải tháng dễ gặp thị phi theo quan niệm dân gian',
+    'Cung Nô Bộc nói gì về người luôn sẵn lòng giúp đỡ người khác',
+  ],
+  4: [
+    'Tết Hàn Thực mùng 3 tháng 3 âm — vì sao ăn bánh trôi bánh chay và ý nghĩa tâm linh',
+    'Giỗ Tổ Hùng Vương 10/3 âm — vì sao người Việt tin vào việc thờ cúng tổ tiên',
+    'Tiết Thanh Minh đi tảo mộ — những điều kiêng kỵ khi thăm mộ tổ tiên',
+    'Ngày Giải phóng miền Nam 30/4 — tuổi nào có số gắn với biến cố lớn của đất nước',
+    'Cuối tháng 4 chuyển mùa — vì sao dễ ốm vặt theo cung Tật Ách',
+  ],
+  5: [
+    'Quốc tế Lao động 1/5 — cung Quan Lộc nói gì về người vất vả vì công việc',
+    'Lễ Phật Đản rằm tháng 4 — nguồn gốc và ý nghĩa của ngày Đức Phật đản sinh',
+    'Ngày của Mẹ — cung Phụ Mẫu trong lá số nói gì về duyên nợ với mẹ',
+    'Mùa hè tháng 5 âm — vì sao dân gian gọi đây là tháng độc, tháng nóng nhất năm',
+    'Cung Tử Tức nói gì về duyên con cái trước thềm Quốc tế Thiếu nhi',
+  ],
+  6: [
+    'Tết Đoan Ngọ mùng 5 tháng 5 âm — vì sao gọi là Tết giết sâu bọ',
+    'Ngày của Cha — cung Phụ Mẫu nói gì về người ít nói nhưng thương con âm thầm',
+    'Ngày Gia đình Việt Nam 28/6 — cung Phúc Đức quyết định điều gì trong một gia đình',
+    'Quốc tế Thiếu nhi 1/6 — cung Tử Tức nói gì về những đứa trẻ khó nuôi',
+    'Ngày Báo chí Cách mạng Việt Nam 21/6 — cung nào hợp với nghề cầm bút',
+  ],
+  7: [
+    'Ngày Thương binh Liệt sĩ 27/7 — vì sao người Việt có tục thắp hương tưởng nhớ người đã khuất',
+    'Sắp vào tháng cô hồn — cần chuẩn bị gì trước khi bước sang tháng 7 âm',
+    'Giữa mùa hè tháng 7 dương — vì sao vận khí dễ thất thường theo đại vận',
+    'Mưa ngâu tháng 7 — sự tích Ngưu Lang Chức Nữ và bài học về cung Phu Thê',
+    'Quan niệm đông con nhiều lộc theo cung Tử Tức có còn đúng trong đời sống hiện đại',
+  ],
+  8: [
+    'Vì sao lại có tháng cô hồn và nguồn gốc thực sự của tháng 7 âm lịch',
+    'Trong tháng cô hồn thường có hiện tượng gì xảy ra theo quan niệm dân gian',
+    'Cúng cô hồn tháng 7 vào ngày nào và mâm cúng cần chuẩn bị những gì',
+    'Lễ Vu Lan báo hiếu rằm tháng 7 — cung Phụ Mẫu nói gì về chữ hiếu',
+    'Những điều kiêng kỵ trong tháng cô hồn — có nên tin theo hay không',
+    'Xá tội vong nhân là gì và vì sao trùng ngày với lễ Vu Lan',
+    'Cách mạng Tháng Tám 19/8 — tuổi nào có số gắn liền với thời khắc lịch sử',
+  ],
+  9: [
+    'Tết Trung Thu rằm tháng 8 — nguồn gốc Tết Trung Thu và ý nghĩa với cung Tử Tức',
+    'Vì sao Trung Thu gắn với sự tích chị Hằng chú Cuội trong dân gian Việt Nam',
+    'Quốc khánh 2/9 — tuổi nào có số gắn với vận nước theo đại vận',
+    'Chuyển mùa thu tháng 9 — vì sao dễ trở bệnh cũ theo cung Tật Ách',
+    'Cung Phụ Mẫu nói gì về phúc thọ trước thềm Ngày Quốc tế Người cao tuổi',
+  ],
+  10: [
+    'Tết Trùng Cửu mùng 9 tháng 9 âm — vì sao có tục leo núi lánh nạn',
+    'Ngày Phụ nữ Việt Nam 20/10 — cung Phu Thê nói gì về người phụ nữ tề gia nội trợ',
+    'Ngày Doanh nhân Việt Nam 13/10 — cung Quan Lộc nói gì về số làm chủ',
+    'Halloween 31/10 — quan niệm vong linh phương Tây khác gì huyền học phương Đông',
+    'Ngày Quốc tế Người cao tuổi 1/10 — cung Phụ Mẫu và chữ phúc thọ trong lá số',
+    'Cuối thu đầu đông tháng 10 — vì sao dễ gặp chuyện buồn theo tiểu hạn',
+  ],
+  11: [
+    'Ngày Nhà giáo Việt Nam 20/11 — cung nào trong lá số hợp với nghề dạy học',
+    'Lễ Hạ Nguyên rằm tháng 10 — ý nghĩa tạ ơn trời đất cuối năm trong dân gian',
+    'Cuối thu đầu đông — vì sao đây là thời điểm hợp xem lại vận hạn cả năm',
+    'Cung Thiên Di nói gì về người hay phải đi xa dịp cuối năm',
+    'Bắt đầu mùa cưới cuối năm — tuổi nào cưới cuối năm thì thuận theo cổ pháp',
+  ],
+  12: [
+    'Giáng Sinh 24-25/12 — vì sao một lễ hội phương Tây lại phổ biến ở Việt Nam',
+    'Cuối năm dương lịch — vì sao đây là lúc nhiều người tìm xem tử vi năm mới',
+    'Tổng kết một năm — cách nhìn lại vận hạn 12 tháng qua theo lá số',
+    'Rằm tháng Chạp và không khí chuẩn bị đón Tết Nguyên Đán trong dân gian',
+    'Vì sao cuối năm âm lịch nhiều người xem ngày dọn nhà đón Tết',
+    'Sao Thái Bạch cuối năm — quan niệm dân gian về tháng củ mật là gì',
+  ],
+};
+
 const SEASONAL_SPOKES: Spoke[] = [
   // Quanh năm — cầu đã thấy trên GSC (hạng 82–88).
   { pattern: 'Tử vi tuổi {x} — vận trình trọn đời', entities: CAN_CHI, surface: 'khao-luan' },
@@ -355,6 +459,19 @@ const SEASONAL_SPOKES: Spoke[] = [
   // Bề mặt /khao-luan-tamly ăn TOÀN BỘ từ TAMLY_THEMES — nguồn DUY NHẤT của
   // nó (xem ghi chú tại khai báo TAMLY_THEMES).
   { pattern: '{x}', entities: TAMLY_THEMES, surface: 'khao-luan-tamly' },
+
+  // Ngày lễ/dịp theo tháng — một spoke riêng mỗi tháng, chỉ hoạt động ĐÚNG
+  // tháng đó (peakMonths: [m]) để chủ đề luôn đúng thời điểm khi bài lên
+  // (vd bài Trung Thu không thể lên vào tháng 3). Xem chú thích tại khai báo
+  // HOLIDAY_THEMES_BY_MONTH.
+  ...Object.entries(HOLIDAY_THEMES_BY_MONTH).map(
+    ([month, topics]): Spoke => ({
+      pattern: '{x}',
+      entities: topics,
+      peakMonths: [Number(month)],
+      surface: 'khao-luan',
+    }),
+  ),
 ];
 
 // ── Kiểu dữ liệu ──────────────────────────────────────────────────────────────
