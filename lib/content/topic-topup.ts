@@ -449,6 +449,28 @@ const SEASONAL_SPOKES: Spoke[] = [
   { pattern: 'Tuổi {x} có phải hạn lớn về tiền bạc không', entities: ['30', '35', '41', '49', '53'],
     surface: 'khao-luan' },
 
+  // ── Snapshot 2026-09-19: cầu thật đo qua vidIQ (search YouTube tại VN,
+  // KHÔNG phải suy diễn từ autocomplete) ─────────────────────────────────────
+  //
+  // ⚠️ ĐÂY LÀ SNAPSHOT THỦ CÔNG, không phải nguồn tự động thứ 4 — file này
+  // giữ đúng luật "ba nguồn, không có nguồn thứ tư" ở đầu file. vidIQ MCP bắt
+  // buộc đi qua MCP client (giao thức MCP, không phải REST) nên route cron
+  // KHÔNG gọi thẳng bằng `fetch()` được — nên nạp tay định kỳ khi có người
+  // ngồi soát qua vidIQ, giống cách LIFE_QUESTIONS được nạp tay.
+  //
+  // Đã LỌC BỚT khỏi kết quả thô: "tử vi hàng ngày"/"tử vi ngày mới" (volume
+  // cao, +190-261%) là cầu HOROSCOPE HẰNG NGÀY — khác loại nội dung evergreen
+  // của bề mặt này, cần một cron RIÊNG chạy theo ngày, không phải một bài tĩnh
+  // ở đây. "tarot"/"bói bài" (114K lượt/tháng VN) cũng bị loại: site có tool
+  // Tarot (`public/tools/tarot.html`) nhưng KHÔNG có kho `tuvi_docs` cho Tarot
+  // — viết bài Tarot qua `ragSearch` hiện tại sẽ ra bài KHÔNG có nguồn, phạm
+  // đúng luật "bám sát tài liệu, không bịa" của pipeline này.
+  { pattern: '{x}', entities: [
+    'Tướng số và tử vi có phải là một, hai cách xem vận mệnh này khác nhau ở đâu',
+    'Tử vi phương Đông và chiêm tinh phương Tây — hai hệ thống luận mệnh khác nhau ở điểm nào',
+    '12 con giáp trong tử vi và 12 con giáp dân gian có phải cùng một ý nghĩa',
+  ], surface: 'khao-luan' },
+
   // Bề mặt /nghien-cuu ăn TOÀN BỘ từ LIFE_QUESTIONS bên dưới.
   { pattern: '{x}', entities: LIFE_QUESTIONS, surface: 'nghien-cuu' },
 
