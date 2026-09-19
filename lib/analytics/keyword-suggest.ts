@@ -50,6 +50,15 @@ const DEFAULTS: KeywordSuggestConfig = {
   //  - 10 truy vấn GSC đọc được tên đều quanh kim lâu / ngày tốt / tử vi <can chi>;
   //  - "tử vi tuổi" / "tử vi năm" là đầu truy vấn của mọi trang đối thủ đang xếp
 //    hạng, trong khi site đang đặt title bằng "vận hạn" — từ hẹp hơn nhiều.
+  //
+  // ⚠️ Đợt nới 2026-09-19: bộ gốc ở trên toàn THUẬT NGỮ tra cứu (kim lâu, ngày
+  // tốt, cung mệnh...) — không seed nào chạm tới các mảng ĐỜI SỐNG mà site đang
+  // thật sự viết (`VALID_KL_CATS` ở `cron-khao-luan/route.ts`: hôn-nhân, tài-
+  // chính, công-việc, con-cái, tính-cách...) hay `LIFE_QUESTIONS` ở
+  // `lib/content/topic-topup.ts` đang phải bù tay. Suggest không tự phát hiện
+  // được chủ đề mới ngoài seed đã cho (khác Google Trends), nên thiếu seed ở
+  // mảng nào là `keyword_ideas` mù hẳn mảng đó. 20 dòng dưới nới sang đúng các
+  // mảng còn thiếu, giữ nguyên khung "tử vi/xem + <mảng đời sống>" như seed gốc.
   seeds: [
     'tử vi',
     'tử vi tuổi',
@@ -79,6 +88,27 @@ const DEFAULTS: KeywordSuggestConfig = {
     'phong thủy',
     'xem tướng',
     'đặt tên con',
+    // ── Nới 2026-09-19: mảng đời sống chưa có seed nào ──────────────────────
+    'tử vi hôn nhân',
+    'tử vi tình duyên',
+    'tử vi công việc',
+    'tử vi sự nghiệp',
+    'tử vi tài lộc',
+    'tử vi con cái',
+    'tử vi gia đạo',
+    'tử vi sức khỏe',
+    'tử vi tính cách',
+    'xem tuổi cưới hỏi',
+    'xem tuổi làm nhà',
+    'xem tuổi xây nhà',
+    'luận giải lá số',
+    'xem lá số miễn phí',
+    'tử vi trọn đời',
+    'giải hạn',
+    'cách hóa giải vận xui',
+    'sao hạn',
+    'đại vận',
+    'tiểu hạn',
   ],
   expansions: ['', '2026', '2027', 'là gì', 'có tốt không', 'cách tính', 'nam', 'nữ', 'theo ngày sinh', 'chi tiết'],
 };
