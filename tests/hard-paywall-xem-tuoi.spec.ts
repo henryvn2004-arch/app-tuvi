@@ -31,6 +31,7 @@ async function stubApis(page: Page, bal: Balance) {
   await page.route('**/api/search', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ docs: '' }) }));
   await page.route('**/api/track**', (r) => r.fulfill({ status: 200, body: '{}' }));
   await page.route('**/api/history**', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: '{}' }));
+  await page.route('**/api/hook-narrative**', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ allowed: false }) }));
 
   await page.route('**/api/payment**', (r) => {
     const url = new URL(r.request().url());

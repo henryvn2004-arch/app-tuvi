@@ -154,6 +154,9 @@
       <div id="xtPanel" data-ws-result>
         <div class="verdict" id="xtVerdict"></div>
         <div class="who-row" id="xtWho"></div>
+        <!-- Khối hook (2 fact) — chiều điểm cao nhất + thấp nhất trong 8 chiều
+             hoà hợp ĐÃ TÍNH XONG miễn phí (r.items), KHÔNG tính thêm số nào. -->
+        <div id="hookHost"></div>
         <div class="jump" id="xtJump"></div>
         <div class="xt-unlock" id="xtUnlock" style="display:none">
           <button class="btn-go" id="btnUnlock" onclick="initiateXemTuoiChuyenSau()">✦ Luận giải chuyên sâu — <span data-tvp-price="xem-tuoi">…</span> Lượng →</button>
@@ -188,6 +191,7 @@
 <script src="/tuong-hop-lam-an.js?v=1"></script>
 <script src="/tools-shared/illus-match.js?v=2"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
+<script src="/tools-shared/hook-layer.js?v=4"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
@@ -347,6 +351,7 @@ function doCompat(){
       liveText:true
     });
     initXemTuoiGate(r,nameA,nameB);
+    mountHook(r,nameA,nameB);
   }catch(e){
     document.getElementById('xtBody').innerHTML='<div class="laso-error">Lỗi khi so tuổi: '+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
@@ -377,6 +382,67 @@ function doCompat(){
 // chụp là VÀNH chứ không phải con số tổng.
 //
 // `_compatResult` do `renderCompat` đặt — nếu chưa có thì chưa tính xong.
+// Khối hook (2 fact) — CHỈ dùng dữ liệu ĐÃ MIỄN PHÍ của chính lượt so tuổi
+// này (r.items — 8 chiều hòa hợp đã chấm xong, 0đ), KHÔNG tính thêm số nào.
+// Chỉ hiện ở 2 mode CÓ khoá trả phí (xem-tuoi/xem-lam-an) — mode `tuong-hop`
+// đã miễn phí hoàn toàn, không có gì để "hé" thêm nữa.
+function mountHook(r,nameA,nameB){
+  var host=document.getElementById('hookHost');
+  if(!host||!window.HookLayer||!PAID_MODES[MODE_KEY]||!r||!Array.isArray(r.items)||!r.items.length)return;
+  var scored=r.items.filter(function(m){return typeof m.score==='number';});
+  if(!scored.length)return;
+  var best=scored.reduce(function(a,b){return b.score>a.score?b:a;});
+  var worst=scored.reduce(function(a,b){return b.score<a.score?b:a;});
+  var facts=[{
+    tone:'good',
+    title:'Chiều hợp nhất: '+best.label+' — '+best.score+'/10',
+    body:(best.detail||'')+' Cả '+scored.length+' chiều, điểm chi tiết theo từng người, và cách hoá giải nằm trong bản luận giải chuyên sâu.',
+    source:'engine · '+(MODE_KEY==='xem-lam-an'?'TuongHopLamAn':'TuongHop')+'.calcTuongHop',
+  }];
+  if(worst.label!==best.label){
+    facts.push({
+      tone:'bad',
+      title:'Chiều cần lưu ý nhất: '+worst.label+' — '+worst.score+'/10',
+      body:(worst.detail||'')+' Cách hoá giải cụ thể nằm trong bản luận giải chuyên sâu.',
+      source:'engine · '+(MODE_KEY==='xem-lam-an'?'TuongHopLamAn':'TuongHop')+'.calcTuongHop',
+    });
+  }
+  var spec={tool:MODE_KEY,toolLabel:MODE.title,charts:[],facts:facts};
+  window.HookLayer.mount(host,spec);
+  _tryHookNarrativeXT(host,spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeXT(host,spec){
+  if(!spec||!Array.isArray(spec.facts)||spec.facts.length<2) return;
+  if(host)host.style.display='none';
+  var pending=document.createElement('div');
+  pending.style.cssText='display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML='<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if(host&&host.parentNode)host.parentNode.insertBefore(pending,host.nextSibling);
+  var tk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
+  var headers={'Content-Type':'application/json'};
+  if(tk)headers['Authorization']='Bearer '+tk;
+  var body={
+    toolId:spec.tool,
+    toolLabel:spec.toolLabel||spec.tool,
+    anonId:TuviPaywall.previewAnonId(),
+    facts:spec.facts.map(function(f){ return {title:f.title,body:f.body,tone:f.tone,caption:f.caption}; })
+  };
+  fetch('/api/hook-narrative',{method:'POST',headers:headers,body:JSON.stringify(body)})
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(pending.parentNode)pending.remove();
+      if(data&&data.allowed) window.HookLayer.upgrade(host,spec,data);
+      if(host)host.style.display='';
+    })
+    .catch(function(){
+      if(pending.parentNode)pending.remove();
+      if(host)host.style.display='';
+    });
+}
+
 function taiAnhVanh(){
   var host=document.getElementById('compatVanh'), btn=document.getElementById('crTaiBtn');
   if(!host||!host.innerHTML||!window.Poster||!_vanhInfo)return;
