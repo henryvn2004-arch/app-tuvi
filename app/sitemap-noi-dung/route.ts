@@ -9,6 +9,7 @@ export const maxDuration = 15;
 import {
   BASE_URL,
   fetchAllSlugs,
+  fetchAllThuVienMuc,
   rowLastmod,
   urlEntry,
   xmlUrlset,
@@ -18,12 +19,13 @@ import {
 export async function GET() {
   // `hasUpdatedAt = true` CHỈ cho tu_dien + sach_library — hai bảng duy nhất có
   // cột đó. Hỏi nhầm là PostgREST 400 và mất im lặng cả họ URL.
-  const [khaoLuan, masterArticles, tuDien, taiLieu, sach] = await Promise.all([
+  const [khaoLuan, masterArticles, tuDien, taiLieu, sach, thuVienMuc] = await Promise.all([
     fetchAllSlugs('khao_luan'),
     fetchAllSlugs('master_articles'),
     fetchAllSlugs('tu_dien', true),
     fetchAllSlugs('tai_lieu'),
     fetchAllSlugs('sach_library', true),
+    fetchAllThuVienMuc(),
   ]);
 
   const entries: string[] = [];
@@ -38,6 +40,16 @@ export async function GET() {
   push('/tu-dien/', tuDien);
   push('/tai-lieu/', taiLieu);
   push('/tai-lieu/sach/', sach);
+
+  // `thu_vien_muc`: URL phụ thuộc `bo_suu_tap` (/thu-vien/{bst}/{slug}) — không
+  // dùng `push()` vì tiền tố khác nhau theo từng dòng, không phải một bảng
+  // = một tiền tố cố định như các dòng trên.
+  for (const r of thuVienMuc) {
+    if (!r.slug || !r.bo_suu_tap) continue;
+    entries.push(
+      urlEntry(`${BASE_URL}/thu-vien/${r.bo_suu_tap}/${encodeURIComponent(r.slug)}`, rowLastmod(r)),
+    );
+  }
 
   return xmlResponse(xmlUrlset(entries));
 }

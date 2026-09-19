@@ -1,252 +1,275 @@
-// app/thu-vien/route.ts
-// ============================================================
-// C3 — THƯ VIỆN CHUNG: những bản luận người dùng đã bấm "Chia sẻ".
+// app/thu-vien/route.ts — THƯ VIỆN: nhà tra cứu tử vi & huyền học.
 //
-// Henry chốt **AUTO OPT-IN, trừ khi người dùng chọn ẩn** (`gallery_opt_out`).
+// 🔴 TRƯỚC 2026-09: trang này là lưới ảnh "Thư Viện Luận Đường" — bản luận
+// người dùng bấm "Chia sẻ", AUTO OPT-IN (`gallery_opt_out=false` mặc định).
+// Ai bấm chia sẻ để gửi riêng cho vợ/bạn thì mặc nhiên lên một trang công
+// khai, trừ khi tự tìm ra nút ẩn. Không có trục chủ đề, không tra cứu được gì
+// — nội dung là gì phụ thuộc hoàn toàn vào ai vừa bấm chia sẻ.
 //
-// 🔴 `noindex, follow` — CỐ Ý, và đây là quyết định TÁCH BIỆT với chuyện có mặt
-// trong thư viện:
-//   • Liệt kê trong site = thứ Henry vừa duyệt.
-//   • Đẩy tên người thật vào Google = một quyết định khác hẳn, và khó lùi hơn
-//     nhiều (gỡ khỏi index mất hàng tuần, còn gỡ khỏi thư viện là tức thì).
-//   • Chính `/ket-qua/[id]` — thứ trang này trỏ tới — ĐÃ `noindex, follow` từ
-//     trước. Một trang hub index được mà trỏ vào toàn trang noindex thì phần
-//     index chỉ còn là danh sách tên người, tức đúng phần đáng ngại nhất mà
-//     không kèm phần đáng giá nào.
-// Muốn mở index thì đổi ĐÚNG một dòng `ROBOTS` bên dưới.
-// ============================================================
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
+// NAY: trang thuần THAM KHẢO/TRA CỨU — không đọc `shared_results`, không hiện
+// bất cứ dữ liệu cá nhân nào của người dùng. Gom 4 kho nội dung ĐÃ CÓ SẴN và
+// ĐÃ INDEX (`tu_dien` · `khao_luan` · `master_articles` · `sach_library`)
+// thành một cổng vào theo chủ đề, thay vì để rời rạc như trước.
+//
+// Lưới ảnh cũ không mất — `/ket-qua/[id]` (nơi các thẻ đó trỏ tới) vẫn sống
+// nguyên, người đã chia sẻ không mất link nào.
+//
+// Bộ sưu tập SINH TỪ ENGINE đã lên: `/thu-vien/sao-cung` (113 tổ hợp chính
+// tinh × cung có cách cục) · `/thu-vien/khai-niem` (54 thuật ngữ) ·
+// `/thu-vien/nap-am` (30 nạp âm) — xem app/thu-vien/[bst]/route.ts. Đếm theo
+// publish_status='published' nên trước khi cron app/api/cron/thu-vien-build
+// chạy xong lượt đầu, thẻ vẫn hiện nhưng đếm 0 — route hub tự xử lý trạng
+// thái rỗng, không phải 404.
+export const revalidate = 3600;
 
-import { createClient } from '@supabase/supabase-js';
-import { GA4_TRACK_SNIPPET } from '@/lib/analytics/isr-tracking';
+import { NextResponse } from 'next/server';
+import { ORG_ID } from '@/lib/seo/entity';
+import { PUBLISH_GATED_TABLES, withPublished } from '@/lib/content/publish-filter';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
-const SITE = 'https://www.tuviminhbao.com';
+const BASE = 'https://www.tuviminhbao.com';
 
-/** Đổi thành 'index, follow' nếu Henry chốt cho Google đọc. Xem chú thích đầu file. */
-const ROBOTS = 'noindex, follow';
-
-/**
- * Số dòng ĐỌC lên. Phải lớn hơn hẳn `MAX_CARDS` vì hai bộ lọc bên dưới cắt đi
- * rất nhiều: đo trên prod, 50 dòng chỉ còn 34 thẻ nhìn khác nhau, và sau khi
- * chặn trần mỗi tool thì còn 23.
- */
-const FETCH = 200;
-/** Trần số thẻ vẽ ra. */
-const MAX_CARDS = 60;
-/**
- * Trần mỗi tool.
- *
- * 🔑 Đây là lá chắn CHÍNH, và nó phải theo TOOL chứ không theo NGƯỜI. Đo trên
- * prod: **27/50 dòng là ẩn danh** (`owner_user_id` NULL) ⇒ cap theo người
- * không với tới quá nửa dữ liệu. Mà người xem cũng không biết ai tạo thẻ nào —
- * thứ họ thấy là *"lại Chân Dung Vợ Chồng nữa"*: sau khi gộp trùng, tool đó
- * vẫn chiếm **12/34 = 35%** lưới.
- *
- * 4 là đủ để thấy một tool ra được nhiều kiểu kết quả khác nhau, mà không để
- * tool nào chiếm quá ~1/5 lưới.
- */
-const MAX_PER_TOOL = 4;
-
-interface Row {
-  id: string;
-  tool_id: string;
-  kind: 'image' | 'text';
-  title: string;
-  image_url: string | null;
-  text_content: string | null;
-  blocks: { header: string | null; image: string | null; text: string | null }[] | null;
-  created_at: string;
-}
-
-function esc(s: string): string {
+function esc(s: unknown): string {
   return String(s == null ? '' : s)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
-function page(bodyHtml: string, count: number): Response {
-  const html = `<!DOCTYPE html><html lang="vi"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Thư Viện Luận Đường — những bản luận đã được chia sẻ | Tử Vi Minh Bảo</title>
-<meta name="description" content="Những bản luận Tử Vi do chính người dùng bấm chia sẻ — chân dung, cẩm nang ứng xử, luận giải lá số. Xem thử rồi tự lập lá số của bạn.">
-<meta name="robots" content="${ROBOTS}">
-<link rel="canonical" href="${SITE}/thu-vien">
-<link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700&display=swap" rel="stylesheet"></noscript>
-<style>
-:root{--navy:#0F2A3D;--gold:#7C6942;--gold-soft:#C9AE6A;--gold-lt:#F9F4EB;--paper:#F4F2EC;
---white:#fff;--text:#1a1a1a;--text-mid:#4a4a4a;--text-lt:#6b6b6b;--line:#E8E8E8;--red:#C46A5E;
---serif:'Noto Serif',Georgia,serif}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--paper);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;line-height:1.6}
-.wrap{max-width:1000px;margin:0 auto;padding:0 16px 40px}
-.top{display:flex;align-items:center;gap:12px;padding:18px 0 6px}
-.top img{width:40px;height:40px;border-radius:8px}
-.top b{font-family:var(--serif);font-size:19px;display:block;color:var(--navy)}
-.top span{font-size:12.5px;color:var(--text-mid)}
-.lead{font-size:14px;color:var(--text-mid);margin:12px 0 20px;max-width:640px}
-.lead b{color:var(--text)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-.card{display:block;text-decoration:none;color:inherit;background:var(--white);border:1px solid var(--line);
-border-radius:12px;overflow:hidden;box-shadow:0 4px 14px rgba(6,26,46,.06)}
-.card .ph{aspect-ratio:3/4;background:var(--gold-lt);display:block;width:100%;object-fit:cover}
-.card .ph.txt{display:flex;align-items:center;justify-content:center;aspect-ratio:16/10;
-font-family:var(--serif);font-size:13px;color:var(--gold);padding:14px;text-align:center;line-height:1.6}
-.card .meta{padding:11px 13px}
-.card .t{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--navy);
-display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.card .s{font-size:11.5px;color:var(--text-lt);margin-top:4px}
-.cta{margin:26px 0 0;background:var(--white);border:1px solid var(--gold-soft);border-radius:14px;
-padding:18px;text-align:center}
-.cta b{font-family:var(--serif);font-size:16px;display:block;margin-bottom:5px;color:var(--navy)}
-.cta p{font-size:13px;color:var(--text-mid);margin-bottom:13px}
-.cta a{display:inline-block;background:var(--red);color:#fff;text-decoration:none;font-family:var(--serif);
-font-weight:600;font-size:15px;padding:11px 26px;border-radius:9px}
-.empty{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:26px;text-align:center;color:var(--text-mid);font-size:14px}
-.foot{margin-top:26px;font-size:11.5px;color:var(--text-lt);text-align:center;line-height:1.8}
-.foot a{color:var(--gold)}
-@media(max-width:520px){.grid{grid-template-columns:1fr 1fr;gap:10px}.card .t{font-size:13px}}
-</style></head>
-<body><div class="wrap">
-  <div class="top">
-    <img src="/seal.webp" alt="Tử Vi Minh Bảo" width="40" height="40">
-    <div><b>Thư Viện Luận Đường</b><span>${count} bản luận người dùng đã chia sẻ</span></div>
-  </div>
-  <p class="lead">Đây là những bản luận do <b>chính người dùng bấm "Chia sẻ"</b> — không phải mẫu dựng sẵn. Mở một bản bất kỳ để xem tool đọc được gì từ một lá số thật.</p>
-  ${bodyHtml}
-  <div class="cta">
-    <b>Muốn xem bản của chính bạn?</b>
-    <p>Nhập ngày sinh — xem ngay, không cần đăng ký.</p>
-    <a href="${SITE}/app?utm_source=thu-vien&utm_medium=internal&utm_campaign=gallery">Vào Luận Đường →</a>
-  </div>
-  <div class="foot">
-    Mỗi bản ở đây do người tạo tự chia sẻ và có thể tự ẩn đi bất cứ lúc nào.<br>
-    © 2026 Tử Vi Minh Bảo · <a href="${SITE}/app">tuviminhbao.com</a>
-  </div>
-</div>${GA4_TRACK_SNIPPET}
-</body></html>`;
-  return new Response(html, {
-    status: 200,
-    headers: {
-      'content-type': 'text/html; charset=utf-8',
-      // Trang đọc dữ liệu người dùng vừa chia sẻ/vừa ẩn → cache ngắn ở CDN cho
-      // rẻ, nhưng đừng lâu tới mức người bấm "Ẩn" xong vẫn thấy bản của mình.
-      'cache-control': 'public, s-maxage=60, stale-while-revalidate=120',
-    },
-  });
-}
-
-const TOOL_NHAN: Record<string, string> = {
-  'chan-dung-vo-chong': 'Chân Dung Vợ Chồng',
-  'chan-dung-tien-kiep': 'Chân Dung Tiền Kiếp',
-  'duyen-no-tien-kiep': 'Duyên Nợ Tiền Kiếp',
-  'nguoi-khac': 'Lá Số Người Khác',
-  'day-con': 'Dạy Con Theo Lá Số',
-  'nhan-mach': 'Sổ Nhân Mạch',
-  'luan-giai': 'Luận Giải Lá Số',
-  'cong-so': 'Tử Vi Công Sở',
-  'kinh-dich': 'Gieo Quẻ Kinh Dịch',
-  // Ba cái dưới đây thiếu từ đầu nên vẫn đang hiện nhãn chung "Luận Đường" —
-  // phát hiện khi đếm phân bố tool trên prod, không phải khi đọc code.
-  // ⚠️ Bảng này là bản CHÉP TAY và sẽ trôi khỏi `tool_pricing.label`. Cố ý
-  // không đọc thẳng DB: `shared_results.tool_id` dùng id của shell
-  // (`luan-giai`) còn bảng giá dùng id khác (`laso`), nối được thì phải kéo
-  // theo `tool_canon()` — không đáng cho một cái nhãn.
-  'van-han-nam': 'Vận Hạn 12 Tháng Tới',
-  'hoang-dao': 'Giờ Hoàng Đạo',
-  'but-tuong': 'Bút Tướng — Xem Chữ Ký',
-};
-
-/**
- * Ảnh đại diện của một thẻ. Dùng CHUNG cho khoá gộp trùng và cho thẻ vẽ ra —
- * hai bên mà tính khác nhau thì gộp theo một đằng, hiện theo một nẻo.
- */
-function anhCua(r: Row): string {
-  return (
-    r.image_url || (Array.isArray(r.blocks) ? r.blocks.find((b) => b && b.image)?.image : '') || ''
-  );
+interface Section {
+  href: string;
+  title: string;
+  desc: string;
+  count: number | null;
+  countLabel: string;
 }
 
 /**
- * Gộp thẻ TRÙNG NHÌN + chặn trần mỗi tool.
+ * Đếm mỗi bảng bằng `Prefer: count=exact` + `HEAD` — không kéo dữ liệu, chỉ
+ * lấy con số. Đếm hụt (lỗi mạng/schema) → `null`, trang vẫn dựng nhưng KHÔNG
+ * bịa số: thẻ đó ẩn phần "N mục" thay vì hiện số cũ/số sai.
  *
- * 🔑 Khoá gộp là thứ NGƯỜI XEM NHÌN THẤY (`tool_id` + ảnh, hoặc tiêu đề khi
- * không có ảnh), KHÔNG phải chủ sở hữu. Hai thẻ trông y hệt thì thẻ thứ hai
- * không nói thêm được gì cho người xem, bất kể ai tạo ra nó — mà người xem
- * cũng không có cách nào biết ai tạo.
- *
- * Giữ bản MỚI NHẤT của mỗi khoá (`rows` đã sắp giảm dần theo `created_at`).
+ * Bảng nằm trong `PUBLISH_GATED_TABLES` (`khao_luan` · `master_articles`) thì
+ * TỰ ĐỘNG lọc `publish_status=published` — đây là trang CÔNG KHAI, không phải
+ * admin, nên đếm cả bài đã gỡ là bịa số cho người đọc. `npm run check:publish`
+ * canh đúng chuyện này.
  */
-function locThe(rows: Row[]): Row[] {
-  const daThay = new Set<string>();
-  const demTool = new Map<string, number>();
-  const ra: Row[] = [];
-  for (const r of rows) {
-    if (ra.length >= MAX_CARDS) break;
-    const nhinThay = anhCua(r) || (r.title || '').toLowerCase().replace(/\s+/g, ' ').trim();
-    // Không có cả ảnh lẫn tiêu đề thì không gộp được theo cái gì — lấy `id` để
-    // nó không bao giờ đụng khoá của dòng khác (thà thừa còn hơn nuốt nhầm).
-    const khoa = r.tool_id + '|' + (nhinThay || 'id:' + r.id);
-    if (daThay.has(khoa)) continue;
-    const n = demTool.get(r.tool_id) || 0;
-    if (n >= MAX_PER_TOOL) continue;
-    daThay.add(khoa);
-    demTool.set(r.tool_id, n + 1);
-    ra.push(r);
+async function demBang(table: string): Promise<number | null> {
+  const base = `${SB_URL}/rest/v1/${table}?select=id`;
+  const url = (PUBLISH_GATED_TABLES as readonly string[]).includes(table)
+    ? withPublished(base)
+    : base;
+  try {
+    const res = await fetch(url, {
+      method: 'HEAD',
+      headers: {
+        apikey: SB_KEY,
+        Authorization: `Bearer ${SB_KEY}`,
+        Prefer: 'count=exact',
+      },
+    });
+    if (!res.ok) return null;
+    const range = res.headers.get('content-range'); // "0-24/132"
+    const total = range?.split('/')[1];
+    return total ? parseInt(total, 10) : null;
+  } catch (e) {
+    console.error('[thu-vien] đếm hỏng', table, e);
+    return null;
   }
-  return ra;
+}
+
+/** Đếm MỘT bộ sưu tập của thu_vien_muc (bo_suu_tap), chỉ tính dòng published
+ * — HEAD + count=exact, không kéo dữ liệu. Cùng nguyên tắc `demBang`: đếm
+ * hụt → null, ẩn số thay vì bịa. */
+async function demBoSuuTap(bst: string): Promise<number | null> {
+  try {
+    const res = await fetch(
+      `${SB_URL}/rest/v1/thu_vien_muc?bo_suu_tap=eq.${bst}&publish_status=eq.published&select=id`,
+      {
+        method: 'HEAD',
+        headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, Prefer: 'count=exact' },
+      },
+    );
+    if (!res.ok) return null;
+    const range = res.headers.get('content-range');
+    const total = range?.split('/')[1];
+    return total ? parseInt(total, 10) : null;
+  } catch (e) {
+    console.error('[thu-vien] đếm bộ sưu tập hỏng', bst, e);
+    return null;
+  }
 }
 
 export async function GET(): Promise<Response> {
-  let rows: Row[] = [];
-  try {
-    const sb = createClient(SB_URL, SB_KEY, {
-      global: { fetch: (input, init) => fetch(input, { ...init, cache: 'no-store' }) },
-    });
-    const { data } = await sb
-      .from('shared_results')
-      .select('id,tool_id,kind,title,image_url,text_content,blocks,created_at')
-      .eq('revoked', false)
-      .eq('gallery_opt_out', false)
-      .order('created_at', { ascending: false })
-      .limit(FETCH);
-    rows = locThe((data as Row[]) || []);
-  } catch (e) {
-    console.error('[thu-vien] đọc hỏng', e);
-    // Đọc hụt → trang vẫn dựng, chỉ là rỗng. KHÔNG 500: đây là trang công khai
-    // và một nhịp Supabase chớp không đáng làm nó chết hẳn.
-  }
+  const [tuDien, khaoLuan, nghienCuu, saoCung, khaiNiem, napAm] = await Promise.all([
+    demBang('tu_dien'),
+    demBang('khao_luan'),
+    demBang('master_articles'),
+    demBoSuuTap('sao-cung'),
+    demBoSuuTap('khai-niem'),
+    demBoSuuTap('nap-am'),
+  ]);
 
-  if (!rows.length) {
-    return page(
-      '<div class="empty">Chưa có bản luận nào được chia sẻ. Bạn có thể là người đầu tiên.</div>',
-      0,
-    );
-  }
+  const sections: Section[] = [
+    {
+      href: '/tu-dien',
+      title: 'Từ Điển Tử Vi & Huyền Học',
+      desc: 'Tra cứu theo mục: sao tử vi, cung số, khái niệm cổ pháp, tướng pháp, ngày tốt, phong thủy, làm đẹp và đặt tên theo ngũ hành.',
+      count: tuDien,
+      countLabel: 'mục tra cứu',
+    },
+    {
+      href: '/thu-vien/sao-cung',
+      title: 'Sao An Tại Từng Cung',
+      desc: 'Ý nghĩa từng chính tinh khi an tại một cung cụ thể — tổng hợp cách cục cổ văn ghi lại cho đúng tổ hợp sao×cung đó.',
+      count: saoCung,
+      countLabel: 'tổ hợp',
+    },
+    {
+      href: '/thu-vien/khai-niem',
+      title: 'Khái Niệm Tử Vi & Huyền Học',
+      desc: 'Thuật ngữ nền tảng của Tử Vi Đẩu Số, Bát Tự, Kỳ Môn Độn Giáp, Lục Nhâm và Hoàng lịch.',
+      count: khaiNiem,
+      countLabel: 'khái niệm',
+    },
+    {
+      href: '/thu-vien/nap-am',
+      title: 'Nạp Âm Lục Thập Hoa Giáp',
+      desc: '30 tên nạp âm trong chu kỳ 60 năm — ngũ hành và ý nghĩa của từng nạp âm.',
+      count: napAm,
+      countLabel: 'nạp âm',
+    },
+    {
+      href: '/blog.html',
+      title: 'Khảo Luận',
+      desc: 'Phân tích chuyên sâu theo chủ đề: tính cách, sự nghiệp, tài chính, hôn nhân, gia đình, con cái — đối chiếu với cổ pháp Tử Vi Đẩu Số.',
+      count: khaoLuan,
+      countLabel: 'bài khảo luận',
+    },
+    {
+      href: '/nghien-cuu',
+      title: 'Nghiên Cứu Học Thuật',
+      desc: 'Bài viết học thuật, chiêm nghiệm và thực hành từ góc nhìn lý luận — dành cho người muốn hiểu sâu hơn nguyên lý, không chỉ kết quả.',
+      count: nghienCuu,
+      countLabel: 'bài nghiên cứu',
+    },
+    {
+      href: '/resources.html',
+      title: 'Sách & Tài Liệu',
+      desc: 'Tủ sách cổ pháp: tư liệu gốc và tổng hợp về Tử Vi Đẩu Số, Bát Tự, phong thủy — dùng để đối chiếu, không phải để thay luận giải.',
+      count: null,
+      countLabel: 'đầu sách',
+    },
+  ];
 
-  const cards = rows
-    .map((r) => {
-      const img = anhCua(r);
-      const nhan = TOOL_NHAN[r.tool_id] || 'Luận Đường';
-      // Thẻ không ảnh: lấy câu đầu làm nền chữ. Cắt sạch markdown + xuống dòng.
-      const teaser =
-        (Array.isArray(r.blocks) ? r.blocks.find((b) => b && b.text)?.text || '' : '') ||
-        r.text_content ||
-        '';
-      const cut = teaser.replace(/[*#\n]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 90);
-      const ph = img
-        ? `<img class="ph" src="${esc(img)}" alt="" loading="lazy" width="220" height="293">`
-        : `<div class="ph txt">${esc(cut || nhan)}</div>`;
-      return `<a class="card" href="/ket-qua/${esc(r.id)}?utm_source=thu-vien&utm_medium=internal">
-      ${ph}
-      <div class="meta"><div class="t">${esc(r.title || nhan)}</div><div class="s">${esc(nhan)}</div></div>
-    </a>`;
-    })
+  // 🔑 HREF LÀ SỰ THẬT ĐÃ ĐỐI CHIẾU, KHÔNG PHẢI ĐOÁN: `/khao-luan` và
+  // `/tai-lieu` KHÔNG có rewrite bare-path trong next.config.mjs (chỉ
+  // `/khao-luan/:slug` · `/tai-lieu/:slug` có slug mới khớp) → 404 cho người
+  // thật. `khao-luan.html`/`tai-lieu.html` tự redirect slug rỗng sang
+  // `/blog.html`/`/resources.html` — đó mới là listing THẬT, nên trỏ THẲNG
+  // vào đó, không qua một cú redirect client-side thừa.
+  // `sach_library` (168 dòng) KHÔNG khớp `/resources.html` (223 mục tĩnh, tự
+  // viết tay, không đọc bảng đó) — hai nguồn cho cùng một thư mục, đếm theo
+  // bảng rồi gắn vào trang kia là bịa số. Để `count: null` cho card này.
+  const totalKnown = sections.reduce((s, x) => s + (x.count || 0), 0);
+
+  const cards = sections
+    .map(
+      (s) => `<a class="lib-card" href="${esc(s.href)}">
+      <div class="lib-card-top">
+        <h2 class="lib-card-title">${esc(s.title)}</h2>
+        ${s.count != null ? `<span class="lib-card-count">${s.count}</span>` : ''}
+      </div>
+      <p class="lib-card-desc">${esc(s.desc)}</p>
+      <span class="lib-card-cta">${s.count != null ? esc(s.countLabel) : 'Xem thư mục'} →</span>
+    </a>`,
+    )
     .join('\n');
 
-  return page(`<div class="grid">${cards}</div>`, rows.length);
+  const html = `<!DOCTYPE html><html lang="vi"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Thư Viện Tử Vi &amp; Huyền Học | Tử Vi Minh Bảo</title>
+<meta name="description" content="Tra cứu tử vi và huyền học theo cổ pháp: từ điển sao/cung, khảo luận chuyên sâu, nghiên cứu học thuật và tủ sách — tổng hợp một nơi, có nguồn dẫn.">
+<meta property="og:title" content="Thư Viện Tử Vi &amp; Huyền Học — Tử Vi Minh Bảo">
+<meta property="og:description" content="Tra cứu tử vi và huyền học theo cổ pháp: từ điển, khảo luận, nghiên cứu học thuật và tủ sách.">
+<meta property="og:image" content="${BASE}/seal.webp">
+<meta property="og:url" content="${BASE}/thu-vien">
+<link rel="canonical" href="${BASE}/thu-vien">
+<meta name="robots" content="index, follow">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
+<script type="application/ld+json">${JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Thư Viện Tử Vi Minh Bảo',
+  description: 'Cổng tra cứu tử vi và huyền học theo cổ pháp',
+  url: `${BASE}/thu-vien`,
+  publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE },
+  hasPart: sections.map((s) => ({
+    '@type': 'CollectionPage',
+    name: s.title,
+    url: `${BASE}${s.href}`,
+  })),
+})}</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#0F2A3D;--gold:#7C6942;--gold-bright:#C8A96A;--text:#1a1a1a;--text-mid:#4a4a4a;--text-lt:#6b6b6b;--border:#D8D4CB;--border-lt:#E8E8E8;--bg:#fff;--bg-soft:#F4F2EC;--serif:'Noto Serif',Georgia,serif}
+body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.bc{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:12px 40px;font-size:12px;color:var(--text-lt);display:flex;gap:8px;align-items:center}
+.bc a{color:var(--text-lt);text-decoration:none}.bc a:hover{color:var(--navy)}.bc span{color:var(--border)}
+.lib-hero{background:var(--bg-soft);color:var(--navy);padding:64px 40px 48px;text-align:center;border-bottom:3px solid var(--gold-bright)}
+.lib-hero-label{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.lib-hero-title{font-family:var(--serif);font-size:38px;font-weight:600;margin-bottom:16px;line-height:1.25}
+.lib-hero-desc{font-size:15px;color:var(--text-mid);max-width:600px;margin:0 auto 28px;line-height:1.7}
+.lib-hero-count{display:inline-block;background:#F9F4EB;border:1px solid #e8d9b0;color:var(--gold);padding:8px 20px;font-size:13px;font-weight:600}
+.lib-body{max-width:1000px;margin:0 auto;padding:48px 40px 80px;width:100%;flex:1}
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.lib-card{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:var(--bg);border:1px solid var(--border-lt);border-radius:12px;padding:24px;transition:border-color .12s,box-shadow .12s}
+.lib-card:hover{border-color:var(--gold);box-shadow:0 6px 20px rgba(15,42,61,.08)}
+.lib-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+.lib-card-title{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--navy);line-height:1.35}
+.lib-card-count{flex-shrink:0;font-size:12px;font-weight:600;color:var(--gold);background:#F9F4EB;border:1px solid #e8d9b0;border-radius:20px;padding:3px 10px;white-space:nowrap}
+.lib-card-desc{font-size:13.5px;color:var(--text-mid);line-height:1.6;flex:1}
+.lib-card-cta{margin-top:14px;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--gold)}
+.lib-cta{margin-top:40px;background:var(--bg-soft);border:1px solid var(--border);border-radius:14px;padding:28px;text-align:center}
+.lib-cta b{font-family:var(--serif);font-size:17px;display:block;margin-bottom:6px;color:var(--navy)}
+.lib-cta p{font-size:13.5px;color:var(--text-mid);margin-bottom:16px}
+.lib-cta a{display:inline-block;background:#C46A5E;color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:11px 28px;border-radius:9px}
+@media(max-width:700px){.bc,.lib-hero,.lib-body{padding-left:20px;padding-right:20px}.lib-hero-title{font-size:28px}.lib-grid{grid-template-columns:1fr}}
+</style>
+<script src="/auth.js?v=2"></script>
+</head><body><div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=38" defer></script>
+<div class="bc"><a href="/">Trang Chủ</a><span>›</span><span>Thư Viện</span></div>
+
+<div class="lib-hero">
+  <div class="lib-hero-label">Tra Cứu</div>
+  <h1 class="lib-hero-title">Thư Viện Tử Vi &amp; Huyền Học</h1>
+  <p class="lib-hero-desc">Tổng hợp tri thức tử vi đẩu số theo cổ pháp — tra cứu theo mục, đọc khảo luận chuyên sâu, hoặc đối chiếu tư liệu gốc. Không cần nhập ngày sinh.</p>
+  ${totalKnown > 0 ? `<span class="lib-hero-count">${totalKnown}+ mục nội dung</span>` : ''}
+</div>
+
+<div class="lib-body">
+  <div class="lib-grid">${cards}</div>
+  <div class="lib-cta">
+    <b>Muốn xem lá số của riêng bạn?</b>
+    <p>Nhập ngày sinh — luận giải cá nhân hóa theo đúng lá số của bạn, không phải nội dung tổng hợp.</p>
+    <a href="${BASE}/app?utm_source=thu-vien&utm_medium=internal&utm_campaign=library">Vào Luận Đường →</a>
+  </div>
+</div>
+
+</body></html>`;
+
+  return new NextResponse(html, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+    },
+  });
 }

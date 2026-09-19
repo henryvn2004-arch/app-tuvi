@@ -1,7 +1,7 @@
 /**
- * Bộ lọc "chỉ lấy bài ĐANG ĐĂNG" cho hai bảng nội dung do LLM sinh.
+ * Bộ lọc "chỉ lấy bài ĐANG ĐĂNG" cho các bảng nội dung do LLM sinh.
  *
- * `khao_luan` và `master_articles` nay có cột `publish_status`
+ * `khao_luan`, `master_articles`, `thu_vien_muc` đều có cột `publish_status`
  * (published | draft | hidden). Cột đó chỉ có nghĩa nếu MỌI bề mặt công khai
  * đều lọc theo nó — gỡ một bài xuống mà trang vẫn hiện thì cột chỉ là trang trí.
  *
@@ -13,10 +13,14 @@
  *
  * ⚠️ KHÔNG áp bộ lọc này cho đường ADMIN: trang Kho phải thấy được cả bài đã
  * gỡ xuống, nếu không thì gỡ xong là mất dấu luôn, không đăng lại được.
+ *
+ * `thu_vien_muc` KHÁC hai bảng kia ở MẶC ĐỊNH: `draft`, không phải
+ * `published` — nội dung chưa từng tồn tại, không phải nội dung cũ cần giữ
+ * nguyên khi thêm cột. Xem `_patches/migration-thu-vien.sql`.
  */
 
-/** Hai bảng có cột `publish_status`. Thêm bảng mới thì khai ở đây. */
-export const PUBLISH_GATED_TABLES = ['khao_luan', 'master_articles'] as const;
+/** Bảng có cột `publish_status`. Thêm bảng mới thì khai ở đây. */
+export const PUBLISH_GATED_TABLES = ['khao_luan', 'master_articles', 'thu_vien_muc'] as const;
 
 /** Mảnh query PostgREST — nối vào chuỗi tham số bằng dấu `&`. */
 export const PUBLISHED_ONLY = 'publish_status=eq.published';

@@ -90,6 +90,31 @@ export async function fetchAllSeoPages(): Promise<SeoPageRow[]> {
   return results.flat() as SeoPageRow[];
 }
 
+export type ThuVienMucRow = { slug: string; bo_suu_tap: string; created_at?: string; updated_at?: string };
+
+/** `thu_vien_muc`: URL phụ thuộc CẢ `slug` LẪN `bo_suu_tap` (`/thu-vien/{bst}/{slug}`)
+ *  — cùng lý do `fetchAllSeoPages` tách riêng thay vì dùng `fetchAllSlugs`
+ *  (không tải được thêm cột `category`/`bo_suu_tap`). Tự gate published qua
+ *  `gate()` vì bảng nằm trong `PUBLISH_GATED_TABLES`. */
+export async function fetchAllThuVienMuc(): Promise<ThuVienMucRow[]> {
+  const total = await countRows('thu_vien_muc');
+  if (!total) return [];
+  const pageSize = 1000;
+  const offsets = Array.from({ length: Math.ceil(total / pageSize) }, (_, i) => i * pageSize);
+  const results = await Promise.all(
+    offsets.map((offset) =>
+      fetch(
+        `${SUPABASE_URL}/rest/v1/thu_vien_muc?select=slug,bo_suu_tap,created_at,updated_at${gate('thu_vien_muc')}&order=id.asc&limit=${pageSize}&offset=${offset}`,
+        {
+          headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+          cache: 'no-store',
+        },
+      ).then((r) => (r.ok ? r.json() : [])),
+    ),
+  );
+  return results.flat() as ThuVienMucRow[];
+}
+
 export function escXml(s: string): string {
   return String(s || '')
     .replace(/&/g, '&amp;')
