@@ -1158,10 +1158,16 @@ const CHAT_FOLLOWUP_RULE =
 // thường và hỏi về ĐỜI, khớp với arc vừa nhân ra cho cả 25 tool.
 const CHAT_SUGGEST_RULES =
   'CUỐI CÙNG, sau khi luận xong, xuống dòng và ghi ĐÚNG một dòng bắt đầu bằng "SUGGEST: " ' +
-  'gồm 3 câu hỏi ngắn (mỗi câu ≤ 12 từ) mà người dùng có thể muốn hỏi TIẾP, bám sát nội dung vừa luận, ' +
-  'ngăn cách bằng " | ". Viết bằng LỜI THƯỜNG như người dùng sẽ tự gõ — không mở đầu bằng tên riêng ' +
+  'gồm 3 gợi ý ngắn (mỗi câu ≤ 12 từ), ngăn cách bằng " | ". Cả 3 LUÔN là lời NGƯỜI DÙNG sẽ tự gõ để gửi cho bạn — ' +
+  'TUYỆT ĐỐI không phải lời của BẠN (thầy), và TUYỆT ĐỐI không lặp lại hay diễn lại chính câu bạn vừa hỏi người dùng. ' +
+  'Câu trả lời VỪA RỒI của bạn có kết bằng một câu hỏi ngược lại người dùng (cần họ kể/xác nhận thêm thông tin) → ' +
+  '3 gợi ý PHẢI là CÂU TRẢ LỜI ngắn, gọn cho đúng câu hỏi đó (vd bạn hỏi "chuyện này kéo dài bao lâu rồi" → gợi ý ' +
+  '"Mấy tháng nay rồi" / "Mới đây thôi" / "Cả năm nay rồi" — không phải hỏi lại nguyên câu đó). ' +
+  'Nếu câu trả lời của bạn KHÔNG kết bằng câu hỏi ngược thì 3 gợi ý là CÂU HỎI TIẾP mà người dùng muốn hỏi bạn, bám sát nội dung vừa luận. ' +
+  'Viết bằng LỜI THƯỜNG như người dùng sẽ tự gõ — không mở đầu bằng tên riêng ' +
   'chuyên môn (tên sao, cung, quẻ, can chi…), trừ khi họ vừa hỏi thẳng về đúng thứ đó. ' +
-  'Ví dụ: SUGGEST: Công việc năm sau thế nào? | Có nên đổi nghề không? | Tiền bạc thì sao? ' +
+  'Ví dụ khi hỏi tiếp: SUGGEST: Công việc năm sau thế nào? | Có nên đổi nghề không? | Tiền bạc thì sao? ' +
+  'Ví dụ khi trả lời câu bạn vừa hỏi ngược: SUGGEST: Mấy tháng nay rồi | Mới đây thôi | Cả năm nay rồi. ' +
   'Dòng này KHÔNG phải nội dung luận (hệ thống tách ra làm nút gợi ý, không hiển thị). Không ghi gì sau 3 câu đó.';
 
 // ── Thời gian thực (múi giờ VN) tiêm vào prompt ──────────────
