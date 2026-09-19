@@ -666,10 +666,19 @@ async function fromGsc(): Promise<DemandItem[]> {
     .map(q => ({ keyword: q.key, source: 'gsc' as const, position: q.position }));
 }
 
-/** Nguồn 2 — Google Suggest đã gom sẵn trong `keyword_ideas`. */
+/**
+ * Nguồn 2 — Google Suggest đã gom sẵn trong `keyword_ideas`, VẪN CÙNG BẢNG với
+ * volume thật do Henry tự tay đổ vào qua `/api/admin/keyword-import` (Google
+ * Ads Keyword Planner / TikTok Creative Center — hai nguồn cần tài khoản chi
+ * tiêu thật, không gọi được từ cron). Không phải nguồn thứ tư: cùng một dòng
+ * `keyword_ideas`, chỉ thêm cột `volume` mà bảng đã chừa sẵn từ đầu.
+ *
+ * Ưu tiên `volume` (cầu ĐÃ ĐO được bằng số thật) trước `times_seen` (chỉ đếm
+ * số lượt Suggest THẤY cụm đó, không nói được cụm nào lớn hơn cụm nào).
+ */
 async function fromSuggest(limit: number): Promise<DemandItem[]> {
   const r = await sb(
-    `/keyword_ideas?select=keyword,times_seen,best_position&order=times_seen.desc&limit=${limit}`,
+    `/keyword_ideas?select=keyword,times_seen,best_position&order=volume.desc.nullslast,times_seen.desc&limit=${limit}`,
   );
   if (!r.ok || !r.body?.length) return [];
   return (r.body as { keyword: string; best_position: number | null }[]).map(k => ({
