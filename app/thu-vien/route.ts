@@ -14,11 +14,12 @@
 // Lưới ảnh cũ không mất — `/ket-qua/[id]` (nơi các thẻ đó trỏ tới) vẫn sống
 // nguyên, người đã chia sẻ không mất link nào.
 //
-// ⏭️ VIỆC TIẾP (đang làm): thêm các bộ sưu tập SINH TỪ ENGINE —
-// `/thu-vien/sao` (111 sao, nguồn `STAR_DATA` trong tuvi-ansao-engine.js),
-// `/thu-vien/cung` (12 cung), `/thu-vien/cach-cuc` (748 cách cục, nguồn
-// `CACH_CUC_DATA`). Khi các route đó lên, thêm thẻ cho chúng ở SECTIONS bên
-// dưới — đừng thêm thẻ trỏ tới route CHƯA tồn tại (404 cho người thật).
+// Bộ sưu tập SINH TỪ ENGINE đã lên: `/thu-vien/sao-cung` (113 tổ hợp chính
+// tinh × cung có cách cục) · `/thu-vien/khai-niem` (54 thuật ngữ) ·
+// `/thu-vien/nap-am` (30 nạp âm) — xem app/thu-vien/[bst]/route.ts. Đếm theo
+// publish_status='published' nên trước khi cron app/api/cron/thu-vien-build
+// chạy xong lượt đầu, thẻ vẫn hiện nhưng đếm 0 — route hub tự xử lý trạng
+// thái rỗng, không phải 404.
 export const revalidate = 3600;
 
 import { NextResponse } from 'next/server';
@@ -79,11 +80,36 @@ async function demBang(table: string): Promise<number | null> {
   }
 }
 
+/** Đếm MỘT bộ sưu tập của thu_vien_muc (bo_suu_tap), chỉ tính dòng published
+ * — HEAD + count=exact, không kéo dữ liệu. Cùng nguyên tắc `demBang`: đếm
+ * hụt → null, ẩn số thay vì bịa. */
+async function demBoSuuTap(bst: string): Promise<number | null> {
+  try {
+    const res = await fetch(
+      `${SB_URL}/rest/v1/thu_vien_muc?bo_suu_tap=eq.${bst}&publish_status=eq.published&select=id`,
+      {
+        method: 'HEAD',
+        headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, Prefer: 'count=exact' },
+      },
+    );
+    if (!res.ok) return null;
+    const range = res.headers.get('content-range');
+    const total = range?.split('/')[1];
+    return total ? parseInt(total, 10) : null;
+  } catch (e) {
+    console.error('[thu-vien] đếm bộ sưu tập hỏng', bst, e);
+    return null;
+  }
+}
+
 export async function GET(): Promise<Response> {
-  const [tuDien, khaoLuan, nghienCuu] = await Promise.all([
+  const [tuDien, khaoLuan, nghienCuu, saoCung, khaiNiem, napAm] = await Promise.all([
     demBang('tu_dien'),
     demBang('khao_luan'),
     demBang('master_articles'),
+    demBoSuuTap('sao-cung'),
+    demBoSuuTap('khai-niem'),
+    demBoSuuTap('nap-am'),
   ]);
 
   const sections: Section[] = [
@@ -93,6 +119,27 @@ export async function GET(): Promise<Response> {
       desc: 'Tra cứu theo mục: sao tử vi, cung số, khái niệm cổ pháp, tướng pháp, ngày tốt, phong thủy, làm đẹp và đặt tên theo ngũ hành.',
       count: tuDien,
       countLabel: 'mục tra cứu',
+    },
+    {
+      href: '/thu-vien/sao-cung',
+      title: 'Sao An Tại Từng Cung',
+      desc: 'Ý nghĩa từng chính tinh khi an tại một cung cụ thể — tổng hợp cách cục cổ văn ghi lại cho đúng tổ hợp sao×cung đó.',
+      count: saoCung,
+      countLabel: 'tổ hợp',
+    },
+    {
+      href: '/thu-vien/khai-niem',
+      title: 'Khái Niệm Tử Vi & Huyền Học',
+      desc: 'Thuật ngữ nền tảng của Tử Vi Đẩu Số, Bát Tự, Kỳ Môn Độn Giáp, Lục Nhâm và Hoàng lịch.',
+      count: khaiNiem,
+      countLabel: 'khái niệm',
+    },
+    {
+      href: '/thu-vien/nap-am',
+      title: 'Nạp Âm Lục Thập Hoa Giáp',
+      desc: '30 tên nạp âm trong chu kỳ 60 năm — ngũ hành và ý nghĩa của từng nạp âm.',
+      count: napAm,
+      countLabel: 'nạp âm',
     },
     {
       href: '/blog.html',
