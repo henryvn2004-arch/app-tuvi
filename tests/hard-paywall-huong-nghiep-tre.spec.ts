@@ -36,7 +36,10 @@ const PREVIEW_PAYLOAD = {
   toaDo: { x: 0.4, y: 0.5 },
   matDoc: [{ nhan: 'Cung Mệnh', cung: 'Tý', sao: ['Cự Môn'], muon: false, cachCuc: [] }],
   changDangO: { tuoiStart: 6, tuoiEnd: 11, namStart: 2023, namEnd: 2028, cung: 'Tý' },
-  chatNguoi: [{ ten: 'Tò mò kỹ thuật', cao: 'thích tháo lắp đồ chơi' }],
+  chatNguoi: [
+    { ten: 'Tò mò kỹ thuật', cao: 'thích tháo lắp đồ chơi' },
+    { ten: 'Hướng nội quan sát', cao: 'thích ngồi nhìn trước khi tham gia' },
+  ],
   khongDoiHoi: [],
   chuaRoNet: false,
   huongDau: HUONG_DAU,
@@ -70,6 +73,12 @@ async function stubApis(page: Page, opts?: { previewBody?: object }) {
   await page.route('**/api/payment**', (r) => r.fulfill({ status: 200, contentType: 'application/json',
     body: JSON.stringify({ hasAccess: false, balance: 0 }) }));
   await page.route('**/api/track**', (r) => r.fulfill({ status: 200, body: '{}' }));
+  // Tầng hook kể chuyện (`_tryHookNarrativeHNT`, 2026-09-18) tự gọi
+  // `/api/hook-narrative` ngay sau `mountHook()` — KHÔNG stub thì bài kiểm gọi
+  // THẬT tới model và tiêu THẬT một suất `preview.free_runs` (xem chú thích
+  // đầy đủ ở tests/hard-paywall.spec.ts).
+  await page.route('**/api/hook-narrative**', (r) =>
+    r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ allowed: false }) }));
   // Pha 4 (2026-09-17): 4 khối (loLang/noiTheNao/mocKeTiep/motCau — văn AI
   // trong dummy JSON) + doBlock (batDauTuDau/tranhLam) nay hiện văn MẪU bị
   // blur thay vì vạch xám rỗng — stub CỐ ĐỊNH, không phụ thuộc file thật.

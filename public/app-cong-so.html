@@ -444,27 +444,70 @@ function dungTuong(){
   });
 }
 
-// Hé đúng MỘT trong 12 mặt (mặt mạnh nhất) — không dựng lại cả radar (nhãn
-// nhỏ li ti trong khung hẹp, xem chú thích tại #hookHost) và không lộ "lý do"
-// (cung/sao/ý nghĩa của Mười Hai Mặt và Cơ Sở đều nằm trong `bodyHTML`, đúng
-// phần đang khoá — chỉ điểm số của MỘT mặt là tương đương "một câu ví dụ",
-// không phải "toàn bộ bảng"). `_ho.radar` đã tính xong ở client cho MỌI
+// Hé ĐÚNG HAI trong 12 mặt (mạnh nhất + yếu nhất) — không dựng lại cả radar
+// (nhãn nhỏ li ti trong khung hẹp, xem chú thích tại #hookHost) và không lộ
+// "lý do" (cung/sao/ý nghĩa của Mười Hai Mặt và Cơ Sở đều nằm trong `bodyHTML`,
+// đúng phần đang khoá — chỉ điểm số của 2/12 mặt là tương đương "hai câu ví
+// dụ", không phải "toàn bộ bảng"). `_ho.radar` đã tính xong ở client cho MỌI
 // người dùng (kể cả chưa đăng ký) — không cần gọi thêm gì.
+// 2026-09-18: nới 1→2 mặt để đủ tối thiểu cho tầng hook kể chuyện
+// (`/api/hook-narrative` đòi ≥2 dữ kiện) — cùng tỉ lệ hé 2/N đã dùng ở
+// HookFacts.tuvi (mạnh nhất/yếu nhất trên 12 cung).
 function mountHookAnon(){
   var host=document.getElementById('hookHost');
   if(!host||!window.HookLayer||!_ho||!_ho.radar||!_ho.radar.length)return;
-  var top=_ho.radar.slice().sort(function(a,b){return b.diem-a.diem;})[0];
-  window.HookLayer.mount(host,{
-    tool:'cong-so',
-    charts:[],
-    facts:[{
-      tone:'good',
-      title:'Mặt mạnh nhất trong 12 mặt: '+top.nhan,
-      value:top.diem,
-      body:'Trên thang 10 điểm — 11 mặt còn lại, lý do từng mặt, và bảng đầy đủ nằm trong hồ sơ đăng ký được xem miễn phí.',
+  var sorted=_ho.radar.slice().sort(function(a,b){return b.diem-a.diem;});
+  var top=sorted[0], bot=sorted[sorted.length-1];
+  var facts=[{
+    tone:'good',
+    title:'Mặt mạnh nhất trong 12 mặt: '+top.nhan,
+    value:top.diem,
+    body:'Trên thang 10 điểm — 11 mặt còn lại, lý do từng mặt, và bảng đầy đủ nằm trong hồ sơ đăng ký được xem miễn phí.',
+    source:'engine · ho.radar'
+  }];
+  if(bot&&bot.nhan!==top.nhan){
+    facts.push({
+      tone:'bad',
+      title:'Mặt cần bồi thêm nhất: '+bot.nhan,
+      value:bot.diem,
+      body:'Trên thang 10 điểm — lý do và cách bồi từng mặt nằm trong hồ sơ đăng ký được xem miễn phí.',
       source:'engine · ho.radar'
-    }]
-  });
+    });
+  }
+  var spec={tool:'cong-so',toolLabel:'Tử Vi Công Sở',charts:[],facts:facts};
+  window.HookLayer.mount(host,spec);
+  _tryHookNarrativeCS(host,spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeCS(host,spec){
+  if(!spec||!Array.isArray(spec.facts)||spec.facts.length<2) return;
+  if(host)host.style.display='none';
+  var pending=document.createElement('div');
+  pending.style.cssText='display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML='<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if(host&&host.parentNode)host.parentNode.insertBefore(pending,host.nextSibling);
+  var tk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
+  var headers={'Content-Type':'application/json'};
+  if(tk)headers['Authorization']='Bearer '+tk;
+  var body={
+    toolId:spec.tool,
+    toolLabel:spec.toolLabel||spec.tool,
+    anonId:TuviPaywall.previewAnonId(),
+    facts:spec.facts.map(function(f){ return {title:f.title,body:f.body,tone:f.tone,caption:f.caption}; })
+  };
+  fetch('/api/hook-narrative',{method:'POST',headers:headers,body:JSON.stringify(body)})
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(pending.parentNode)pending.remove();
+      if(data&&data.allowed) window.HookLayer.upgrade(host,spec,data);
+      if(host)host.style.display='';
+    })
+    .catch(function(){
+      if(pending.parentNode)pending.remove();
+      if(host)host.style.display='';
+    });
 }
 
 function moNhanh(){

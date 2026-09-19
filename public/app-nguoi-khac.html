@@ -659,29 +659,64 @@ async function _runAnonPreview(b, self, qh, viec) {
   }
 }
 
-// Hé đúng chính tinh cung Mệnh — MỘT trong "2/5 mặt đọc" đã có trong payload
-// xem trước (chỉ tên sao, KHÔNG kèm cachCuc/diem — route.ts tự nói tên sao là
-// "bằng chứng engine đọc thật", cachCuc mới là "hàng"). `basisBlock` đã dựng
-// cả 2/5 mặt này (miễn phí, không khoá) ngay phía dưới — hook chỉ nhắc lại
-// đúng MỘT mặt bằng widget riêng để mở vòng tò mò sớm hơn, trước khi cuộn tới.
+// Hé ĐỦ "2/5 mặt đọc" đã có trong payload xem trước (chỉ tên sao, KHÔNG kèm
+// cachCuc/diem — route.ts tự nói tên sao là "bằng chứng engine đọc thật",
+// cachCuc mới là "hàng"). `basisBlock` đã dựng cả 2/5 mặt này (miễn phí,
+// không khoá) ngay phía dưới — hook nhắc lại CẢ HAI để mở vòng tò mò sớm hơn,
+// trước khi cuộn tới, và đủ tối thiểu cho tầng hook kể chuyện (`/api/hook-narrative`
+// đòi ≥2 dữ kiện, 2026-09-18) mà không phải nới payload xem trước.
 function mountHook(data) {
   var host = document.getElementById('hookHost');
   if (!host || !window.HookLayer) return;
-  var menh = (data.matDoc || []).filter(function (m) { return m.cung === 'Mệnh'; })[0];
-  if (!menh) return;
-  var saoText = (menh.sao || []).join(', ') || 'không có chính tinh';
-  window.HookLayer.mount(host, {
-    tool: 'nguoi-khac',
-    charts: [],
-    facts: [{
+  var matDoc = data.matDoc || [];
+  if (!matDoc.length) return;
+  var facts = matDoc.map(function (m) {
+    var saoText = (m.sao || []).join(', ') || 'không có chính tinh';
+    return {
       tone: 'neutral',
-      title: 'Chính tinh tại cung Mệnh: ' + saoText + (menh.muon ? ' (mượn xung chiếu)' : ''),
+      title: 'Chính tinh tại cung ' + m.cung + ': ' + saoText + (m.muon ? ' (mượn xung chiếu)' : ''),
       body: 'Cách cục, đại vận, vận năm, và cách ứng xử cụ thể với người này nằm trong cẩm nang đầy đủ.',
       source: 'engine · matDoc',
-    }],
+    };
   });
+  var spec = { tool: 'nguoi-khac', toolLabel: 'Lá Số Người Khác', charts: [], facts: facts };
+  window.HookLayer.mount(host, spec);
+  _tryHookNarrativeNK(host, spec);
 }
 
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. `facts`
+ *  chỉ 1 (matDoc hụt payload) thì bỏ qua — cùng luật `/api/hook-narrative`
+ *  đòi ≥2 dữ kiện.
+ */
+function _tryHookNarrativeNK(host, spec) {
+  if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
+  if (host) host.style.display = 'none';
+  var pending = document.createElement('div');
+  pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if (host && host.parentNode) host.parentNode.insertBefore(pending, host.nextSibling);
+  var tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+  var headers = { 'Content-Type': 'application/json' };
+  if (tk) headers['Authorization'] = 'Bearer ' + tk;
+  var body = {
+    toolId: spec.tool,
+    toolLabel: spec.toolLabel || spec.tool,
+    anonId: TuviPaywall.previewAnonId(),
+    facts: spec.facts.map(function (f) { return { title: f.title, body: f.body, tone: f.tone, caption: f.caption }; }),
+  };
+  fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (pending.parentNode) pending.remove();
+      if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
+      if (host) host.style.display = '';
+    })
+    .catch(function () {
+      if (pending.parentNode) pending.remove();
+      if (host) host.style.display = '';
+    });
+}
 // Nút phẳng cho khách ĐÃ đăng nhập (xem `_renderLockWall`) — đọc lại
 // `quanHe`/`viecCanLam` tại lúc bấm thay vì đóng gói vào chuỗi `onclick`.
 function _nkUnlockLoggedIn() {

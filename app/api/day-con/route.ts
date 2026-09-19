@@ -119,9 +119,10 @@ const CACHE = cacheFor(TOOL_ID, SHAPE);
 // (`truc` · `khieu` đủ 8 · `changHoc` · `goiYHoatDong` · `voiChaMeCoSo` · 10
 // trường văn xuôi còn lại) là thứ đang bán.
 //
-// 🔴 `khieu` CỐ Ý VẮNG MẶT dù tầng hook cần nó: hook chỉ hé chất CAO NHẤT, mà
-// gửi cả 8 là dựng lại được nguyên khối `khieuBlock` đang khoá. Thay bằng
-// `khieuTop` — một phần tử, tính riêng ở `previewExtras()`.
+// 🔴 `khieu` CỐ Ý VẮNG MẶT dù tầng hook cần nó: hook chỉ hé chất CAO NHẤT và
+// THẤP NHẤT (2/8 — cùng tỉ lệ hé đã dùng ở HookLayer cho tử vi, 2-3/12 cung),
+// mà gửi cả 8 là dựng lại được nguyên khối `khieuBlock` đang khoá. Thay bằng
+// `khieuTop`/`khieuBottom` — hai phần tử, tính riêng ở `previewExtras()`.
 //
 // Tách làm HAI mảnh vì có hai nơi gọi khác nhau: nhánh cầu-dao-chặn chỉ có
 // `meta()` trong tay (chưa gọi model, nên chưa có chữ nào). Gọi `previewOf`
@@ -148,7 +149,8 @@ const PREVIEW_KEEP = [...PREVIEW_KEEP_META, ...PREVIEW_KEEP_PROSE];
  */
 function previewExtras(p: DayConProfile, ls: Laso) {
   const ks = [...(p.assess.khieu || [])].sort((a, b) => b.diem - a.diem);
-  return { khieuTop: ks[0] || null, coSo: coSoDoc(ls, p) };
+  const bottom = ks.length > 1 ? ks[ks.length - 1] : null;
+  return { khieuTop: ks[0] || null, khieuBottom: bottom, coSo: coSoDoc(ls, p) };
 }
 
 const clean = (v: unknown) => String(v == null ? '' : v).trim();
