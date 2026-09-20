@@ -276,7 +276,7 @@ function _fillVndSlots(host,product){
   var els=host.querySelectorAll('[data-tvp-price-vnd]');
   var cost=window.ToolPrices.get(product);
   var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
-  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+  els.forEach(function(el){ el.textContent = lbl || ''; });
 }
 TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'van-han-nam'); });
 
@@ -737,7 +737,7 @@ function _renderUnlockBlock(){
   wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   _paintSecLocks(true);
   if(_loggedIn()){
-    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateAI()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span><b>Luận vận hạn 12 tháng →</b></span><small>Tốn <span data-tvp-price="van-han-nam">…</span> Lượng <span data-tvp-price-vnd="van-han-nam"></span></small></button>'+
+    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateAI()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span><b>Luận vận hạn 12 tháng →</b></span><small>Tốn <span class="vnd" data-tvp-price-vnd="van-han-nam"></span> <span class="cb-sub">(<span data-tvp-price="van-han-nam">…</span> Lượng)</span></small></button>'+
       '<p>Viết riêng cho lá số này: tổng quan, hành trình đại vận, đại vận và tiểu vận hiện tại, rồi từng tháng một trong 12 tháng tới.</p>';
     TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,'van-han-nam'); });
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi

@@ -196,8 +196,18 @@ window.ToolPrices = (function () {
     if (row.is_free) return 'Miễn phí';
     var v = Number(row.credits);
     if (!isFinite(v) || v <= 0) return null;
-    if (_saleActive(row)) return Number(row.sale_credits) + ' Lượng mỗi lượt (giảm từ ' + v + ')';
-    return v + ' Lượng mỗi lượt';
+    // Henry (2026-09-20): VNĐ lên làm giá CHÍNH, Lượng lùi thành ngoặc phụ —
+    // đảo ngược "N Lượng mỗi lượt" cũ. `vndLabel` rỗng khi chưa đọc được
+    // `credit_packages` → rơi về câu Lượng-only cũ, KHÔNG bịa số VNĐ.
+    if (_saleActive(row)) {
+      var sale = Number(row.sale_credits);
+      var saleVnd = vndLabel(sale);
+      return saleVnd
+        ? saleVnd + ' mỗi lượt (' + sale + ' Lượng, giảm từ ' + v + ')'
+        : sale + ' Lượng mỗi lượt (giảm từ ' + v + ')';
+    }
+    var vnd = vndLabel(v);
+    return vnd ? vnd + ' mỗi lượt (' + v + ' Lượng)' : v + ' Lượng mỗi lượt';
   }
 
   /**

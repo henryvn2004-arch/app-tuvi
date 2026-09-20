@@ -415,14 +415,14 @@ function renderReport(m) {
   html += '<div class="cost-box" style="margin-top:18px">'
     + '<div class="cb-l"><span class="cb-ic" data-icon="wallet"></span><div>'
     + '<div class="cb-title">Chi phí sử dụng</div>'
-    + '<div class="cb-amt"><span data-tvp-price="but-tuong">…</span> Lượng <span class="vnd" data-tvp-price-vnd="but-tuong"></span> mỗi lượt</div>'
+    + '<div class="cb-amt"><span class="vnd" data-tvp-price-vnd="but-tuong"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="but-tuong">…</span> Lượng)</span></div>'
     + '<div class="cb-pay"><span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span><span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span></div>'
     + '</div></div>'
     + '<div class="cb-r"><span class="cb-ic" data-icon="gift"></span><div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div></div>'
     + '</div>'
     + '<button class="btn-go" id="butTuongAnalyzeBtn" onclick="analyze()">'
     + '<span class="bg-label"><span class="ic" data-icon="pen-line"></span><b id="butTuongAnalyzeLabel">Luận Giải Đầy Đủ →</b></span>'
-    + '<small>Tốn <span data-tvp-price="but-tuong">…</span> Lượng <span data-tvp-price-vnd="but-tuong"></span></small>'
+    + '<small>Tốn <span class="vnd" data-tvp-price-vnd="but-tuong"></span> <span class="cb-sub">(<span data-tvp-price="but-tuong">…</span> Lượng)</span></small>'
     + '</button>';
   document.getElementById('btReport').innerHTML = html;
   document.getElementById('btReport').style.display = 'block';
@@ -499,7 +499,7 @@ function _fillVndSlots(host,product){
   var els=host.querySelectorAll('[data-tvp-price-vnd]');
   var cost=window.ToolPrices.get(product);
   var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
-  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+  els.forEach(function(el){ el.textContent = lbl || ''; });
 }
 
 function readBirth() {

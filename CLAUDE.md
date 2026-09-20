@@ -131,9 +131,13 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 - **💰 Giá Lượng: client KHÔNG chép số.** Nguồn duy nhất `tool_pricing`+`credit_packages`
   (Admin, không deploy) · UI qua `public/tool-prices.js` (`data-tvp-price`) · đọc hụt
   → `…` + paywall **từ chối chạy** · chỉ `admin.html` fetch thẳng. `npm run check:prices` · `docs/luat/tien.md`.
-- **Giá trị 1 Lượng SUY TỪ `credit_packages`** (gói bậc hai/`sort_order` = 399.000/600 = **665đ**)
-  · `app_config['credits.vnd_per_credit']` **ĐÃ GỠ**, đọc lại rơi im lặng về `1000` · sửa kèm
-  cả ba: SQL `credit_vnd()` · `vndPerCredit()` · `FALLBACK` (`lib/billing/packages.ts`). `docs/luat/tien.md`.
+- **Giá trị 1 Lượng SUY TỪ `credit_packages`** (gói bậc hai/`sort_order` = 400.000/800 =
+  **500đ chính xác**, chốt 2026-09-20) · `app_config['credits.vnd_per_credit']` **ĐÃ GỠ**, đọc
+  lại rơi im lặng về `1000` · sửa kèm cả ba: SQL `credit_vnd()` · `vndPerCredit()` · `FALLBACK`
+  (`lib/billing/packages.ts`). `docs/luat/tien.md`.
+- **VNĐ là giá CHÍNH ở mọi câu nói giá cho khách** (paywall, hộp "Chi phí sử dụng", nhãn tool) —
+  Lượng lùi thành chú thích phụ trong ngoặc, trừ **gói mua Lượng** (`/topup.html`) vẫn để Lượng
+  làm chính. Nguồn: `ToolPrices.vndLabel()`/`priceLabel()` · `TuviPaywall._vndFirst()`.
 - **Icon: KHÔNG dùng emoji màu** — bộ dùng chung `public/nav.js` (`data-icon="wallet"`)
   · dựng bằng `innerHTML` → gọi lại `window.mountIcons(el)` · giữ ký tự đơn sắc theo font
   (`→ ← ✦ ★ ✓ ✗ ✕ ⚠ ☰`), không áp dụng cho prompt LLM/Telegram admin · thêm icon → sửa

@@ -28,13 +28,14 @@ export interface CreditPackage {
 // 2000→2700. Mục đích là hạ giá THẬT của một bản luận cho khách quảng cáo:
 // Luận Giải 150 Lượng qua ô nạp lẻ từ 120.000đ xuống 86.000đ.
 //
-// ⚠️ THỨ TỰ TRIỂN KHAI: bảng này lên TRƯỚC, `credit_packages` trên DB sửa SAU
-// (ngược với thói quen "data trước"). Trong khoảng giữa, DB vẫn trả số CŨ và
-// đó mới là số đúng với thứ đang thu; đường lùi này chỉ chạy khi DB đọc hụt,
-// và lúc đó cấp DƯ vài chục Lượng còn hơn cấp HỤT cho người vừa trả tiền.
+// 🔴 2026-09-20 (Henry chốt "500đ CHÍNH XÁC", xem _patches/migration-luong-500-exact.sql):
+// bậc hai (Phổ Thông) landed ở 399.000/800 = 499đ, không tròn. Nâng GIÁ gói
+// (không đụng Lượng) 399.000→400.000 ⇒ 400.000/800 = 500đ đúng. Đổi giá thay
+// vì đổi Lượng để giữ 800 tròn — hai gói còn lại (Khởi Đầu/Cao Cấp/VIP) CỐ Ý
+// không đổi, thang chiết khấu theo bậc vẫn đơn điệu giảm.
 const FALLBACK: Record<string, CreditPackage> = {
   '50':  { packageId: '50',  credits: 350,  amountVnd: 199_000, amountUsd: '8.00',  label: 'Khởi Đầu' },
-  '120': { packageId: '120', credits: 800,  amountVnd: 399_000, amountUsd: '16.00', label: 'Phổ Thông' },
+  '120': { packageId: '120', credits: 800,  amountVnd: 400_000, amountUsd: '16.00', label: 'Phổ Thông' },
   '350': { packageId: '350', credits: 1600, amountVnd: 699_000, amountUsd: '28.00', label: 'Cao Cấp' },
   '800': { packageId: '800', credits: 2700, amountVnd: 999_000, amountUsd: '40.00', label: 'VIP' },
 };

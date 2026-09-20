@@ -390,7 +390,7 @@ function _fillVndSlots(host,product){
   var els=host.querySelectorAll('[data-tvp-price-vnd]');
   var cost=window.ToolPrices.get(product);
   var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
-  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+  els.forEach(function(el){ el.textContent = lbl || ''; });
 }
 // Danh sách hiện cho người ĐÃ ĐĂNG NHẬP nhưng chưa mở nhánh — họ đã thấy trọn
 // phần thân (radar/lộ trình/ghép đội), nên chỉ liệt kê đúng phần nhánh.
@@ -427,7 +427,7 @@ function dungTuong(){
   if(loggedIn){
     // Đã đăng nhập đã thấy TRỌN radar 12 mặt (bangHTML) — không hook lại nữa,
     // hook chỉ có việc ở màn ĐĂNG KÝ (mountHookAnon dưới).
-    host.innerHTML='<button class="btn-go" id="btnNhanh"><span class="bg-label"><span class="ic" data-icon="users"></span><b>Mở phần nhánh nghề →</b></span><small>Tốn <span data-tvp-price="cong-so">…</span> Lượng <span data-tvp-price-vnd="cong-so"></span></small></button>';
+    host.innerHTML='<button class="btn-go" id="btnNhanh"><span class="bg-label"><span class="ic" data-icon="users"></span><b>Mở phần nhánh nghề →</b></span><small>Tốn <span class="vnd" data-tvp-price-vnd="cong-so"></span> <span class="cb-sub">(<span data-tvp-price="cong-so">…</span> Lượng)</span></small></button>';
     TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,'cong-so'); });
     document.getElementById('btnNhanh').addEventListener('click',function(){
       TuviPaywall.requireCredits(_slug,moNhanh);
