@@ -109,6 +109,8 @@ img { max-width: 100%; display: block; }
 .pm-io span.out { color: #4d7d78; background: var(--green-soft); }
 
 .pm-visual { background: var(--cream); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 20px; min-height: 190px; display: flex; align-items: center; justify-content: center; }
+.pm-visual-img { padding: 0; background: transparent; border: none; }
+.pm-visual-img img { width: 100%; height: auto; border-radius: var(--radius-md); }
 .pm-visual-row { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; width: 100%; }
 .pm-visual-arrow { color: var(--ink-faint); font-size: 16px; flex: none; }
 
@@ -248,28 +250,8 @@ img { max-width: 100%; display: block; }
             <p>Từ thông tin ngày giờ sinh, hệ thống lập lá số Tử Vi theo cổ pháp, và dựa trên các sách, tài liệu Tử Vi huyền học để luận giải, diễn giải các yếu tố trong lá số.</p>
             <div class="pm-io"><span>Input: ngày giờ sinh + cổ thư, tài liệu Tử Vi</span><span class="out">Output: lá số + tập quy tắc luận giải sơ khai</span></div>
           </div>
-          <div class="pm-visual">
-            <div class="pm-visual-row">
-              <div class="pm-birth-card"><b>Ngày sinh</b>15/10/1960 · 14:30 (GMT+7)<br>Hà Nội, Việt Nam</div>
-              <span class="pm-visual-arrow">→</span>
-              <div class="pm-visual-col">
-                <div class="pm-chart-mini">
-                  <div class="pm-chart-cell">Phụ Mẫu</div><div class="pm-chart-cell">Mệnh</div><div class="pm-chart-cell">Phúc Đức</div><div class="pm-chart-cell">Điền Trạch</div>
-                  <div class="pm-chart-cell">Huynh Đệ</div><div class="pm-chart-center">TỬ VI</div><div class="pm-chart-cell">Quan Lộc</div>
-                  <div class="pm-chart-cell">Phu Thê</div><div class="pm-chart-cell">Nô Bộc</div>
-                  <div class="pm-chart-cell">Tử Tức</div><div class="pm-chart-cell">Thiên Di</div><div class="pm-chart-cell">Tật Ách</div><div class="pm-chart-cell">Tài Bạch</div>
-                </div>
-                <div class="pm-visual-caption">Lá số Tử Vi</div>
-              </div>
-              <div class="pm-panel">
-                <ul>
-                  <li><span class="ic" data-icon="book-open"></span>Tử Vi Đẩu Số</li>
-                  <li><span class="ic" data-icon="scroll-text"></span>Các sách cổ</li>
-                  <li><span class="ic" data-icon="book-open"></span>Tài liệu huyền học</li>
-                  <li class="pm-more">...</li>
-                </ul>
-              </div>
-            </div>
+          <div class="pm-visual pm-visual-img">
+            <img src="/images/phuong-phap/step-01.webp" alt="Bước 1: từ ngày giờ sinh, lập lá số Tử Vi theo cổ pháp, rồi chuyển thành dữ liệu có cấu trúc (cung, sao, vị trí, tứ hoá, mối quan hệ)" loading="lazy">
           </div>
         </div>
       </div>
