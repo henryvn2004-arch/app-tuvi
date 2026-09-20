@@ -316,7 +316,7 @@
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
               <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span data-tvp-price="laso">…</span> Lượng <span class="vnd" data-tvp-price-vnd="laso"></span> mỗi lượt</div>
+              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="laso"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="laso">…</span> Lượng)</span></div>
               <div class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
@@ -330,7 +330,7 @@
         </div>
         <button class="btn-go" id="btnGo" onclick="doLuan()">
           <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnGoLabel">Lập lá số &amp; Luận giải ngay →</b></span>
-          <small>Tốn <span data-tvp-price="laso">…</span> Lượng <span data-tvp-price-vnd="laso"></span></small>
+          <small>Tốn <span class="vnd" data-tvp-price-vnd="laso"></span> <span class="cb-sub">(<span data-tvp-price="laso">…</span> Lượng)</span></small>
         </button>
       </div>
       </div>
@@ -461,7 +461,7 @@ function _fillVndSlots(host,product){
   var els=host.querySelectorAll('[data-tvp-price-vnd]');
   var cost=window.ToolPrices.get(product);
   var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
-  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+  els.forEach(function(el){ el.textContent = lbl || ''; });
 }
 TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'laso'); });
 

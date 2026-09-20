@@ -275,7 +275,7 @@ function _fillVndSlots(host,product){
   var els=host.querySelectorAll('[data-tvp-price-vnd]');
   var cost=window.ToolPrices.get(product);
   var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
-  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+  els.forEach(function(el){ el.textContent = lbl || ''; });
 }
 
 // ── Dựng ô nhập ─────────────────────────────────────────────
@@ -474,7 +474,7 @@ function buildLock(){
   _gsSaveResume();
   if(_daDangNhap()){
     if(_lastPreview) _renderGrid(_lastPreview);
-    host.innerHTML='<button class="btn-go" id="btnKhaoSat"><span class="bg-label"><span class="ic" data-icon="clock"></span><b>Bắt đầu khảo sát thu hẹp →</b></span><small>Tốn <span data-tvp-price="'+TOOL_ID+'">…</span> Lượng <span data-tvp-price-vnd="'+TOOL_ID+'"></span></small></button>';
+    host.innerHTML='<button class="btn-go" id="btnKhaoSat"><span class="bg-label"><span class="ic" data-icon="clock"></span><b>Bắt đầu khảo sát thu hẹp →</b></span><small>Tốn <span class="vnd" data-tvp-price-vnd="'+TOOL_ID+'"></span> <span class="cb-sub">(<span data-tvp-price="'+TOOL_ID+'">…</span> Lượng)</span></small></button>';
     TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,TOOL_ID); });
     const runUnlock=function(){return runSurvey();};
     document.getElementById('btnKhaoSat').addEventListener('click',function(){

@@ -220,7 +220,7 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
         <div class="bt-unlock" id="btUnlock" style="display:none">
           <button class="btn-go" id="btnUnlock" onclick="initiateBatTuChuyenSau()">
             <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b>Luận giải chuyên sâu →</b></span>
-            <small>Tốn <span data-tvp-price="tu-binh">…</span> Lượng <span data-tvp-price-vnd="tu-binh"></span></small>
+            <small>Tốn <span class="vnd" data-tvp-price-vnd="tu-binh"></span> <span class="cb-sub">(<span data-tvp-price="tu-binh">…</span> Lượng)</span></small>
           </button>
           <p>Viết riêng cho tứ trụ này theo cổ pháp Tử Bình — 16 phần: cách cục, thập thần, đại vận, lưu niên.</p>
         </div>
@@ -286,7 +286,7 @@ function _fillVndSlots(host,product){
   var els=host.querySelectorAll('[data-tvp-price-vnd]');
   var cost=window.ToolPrices.get(product);
   var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
-  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+  els.forEach(function(el){ el.textContent = lbl || ''; });
 }
 TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'tu-binh'); });
 

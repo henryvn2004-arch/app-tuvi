@@ -857,16 +857,20 @@ font-family:inherit}
 .fc-head .fc-ic{flex:0 0 auto;width:34px;height:34px;border-radius:9px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center}
 .fc-head .fc-ic svg{width:18px;height:18px}
 .fc-head h2{margin-bottom:0}
-/* Hộp "Chi phí sử dụng" — số Lượng + quy đổi VNĐ + phương thức thanh toán,
-   đứng trước nút CTA. Điền giá qua `data-tvp-price`/`data-tvp-price-vnd`
-   (xem `_fillVndSlots` ở app-luan-giai.html) — KHÔNG chép số cứng. */
+/* Hộp "Chi phí sử dụng" — VNĐ (chính) + số Lượng (phụ, trong ngoặc) + phương
+   thức thanh toán, đứng trước nút CTA. Điền giá qua `data-tvp-price`/
+   `data-tvp-price-vnd` (xem `_fillVndSlots` ở app-luan-giai.html) — KHÔNG
+   chép số cứng.
+   🔴 Henry (2026-09-20): VNĐ lên làm giá CHÍNH, Lượng lùi thành `.cb-sub` phụ
+   trong ngoặc — `.vnd` (dán trên chính span VNĐ) đảo vai trò so với trước:
+   nay là số NỔI BẬT, không còn là chú thích mờ đứng sau số Lượng. */
 .cost-box{display:flex;gap:14px;flex-wrap:wrap;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:13px 15px;margin:14px 0}
 .cost-box .cb-l{display:flex;gap:11px;align-items:flex-start;flex:1;min-width:190px}
 .cost-box .cb-ic{flex:0 0 auto;width:32px;height:32px;border-radius:50%;background:var(--gold-lt);color:var(--gold-soft);display:flex;align-items:center;justify-content:center}
 .cost-box .cb-ic svg{width:16px;height:16px}
 .cost-box .cb-title{font-size:11.5px;color:var(--text-lt)}
 .cost-box .cb-amt{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--gold-soft);margin:1px 0 6px}
-.cost-box .cb-amt .vnd{font-family:var(--sans);font-weight:400;font-size:12px;color:var(--text-lt)}
+.cost-box .cb-amt .cb-sub{font-family:var(--sans);font-weight:400;font-size:12px;color:var(--text-lt)}
 .cost-box .cb-pay{display:flex;flex-direction:column;gap:3px}
 .cost-box .cb-pay span{font-size:11.5px;color:var(--text-mid);display:flex;align-items:center;gap:5px}
 .cost-box .cb-pay .ic{width:13px;height:13px;color:var(--text-lt);display:inline-flex}

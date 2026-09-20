@@ -895,7 +895,7 @@
         <!-- KHỐI 1 · GIÁ CÔNG CỤ -->
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>Giá Công Cụ (Lượng)</div>
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>Giá Công Cụ (VNĐ)</div>
             <div class="panel-actions">
               <span style="font-size:.72rem;color:var(--text-lt)" id="pricing-rate-note">quy đổi theo đơn giá gói · hiệu lực ~1 phút (cache)</span>
               <button class="btn btn-gold btn-sm" onclick="saveAllPricing()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Lưu tất cả</button>
@@ -913,7 +913,7 @@
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Công Cụ</th><th>Tool ID</th><th>Lượng</th><th>≈ VNĐ</th><th>Free</th><th>Bật</th><th>Giá KM</th><th>KM từ</th><th>KM đến</th><th></th></tr></thead>
+              <thead><tr><th>Công Cụ</th><th>Tool ID</th><th>VNĐ</th><th>≈ Lượng</th><th>Free</th><th>Bật</th><th>Giá KM (VNĐ)</th><th>KM từ</th><th>KM đến</th><th></th></tr></thead>
               <tbody id="pricing-body"><tr><td colspan="10" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
             </table>
           </div>
@@ -6920,7 +6920,15 @@ const CAT_LABELS = { 'chat': 'Trợ Lý (Rail)' }; // còn lại dùng nguyên c
 let VND_PER_CREDIT = 829;
 let _pricingRows = [];
 
-function fmtVnd(cr) { return (Math.max(0, cr || 0) * VND_PER_CREDIT).toLocaleString('vi-VN') + 'đ'; }
+// Henry (2026-09-20): admin gõ VNĐ, Lượng tự suy — NGƯỢC chiều cũ (gõ Lượng,
+// VNĐ suy theo). `credits` vẫn là cột DUY NHẤT lưu trong `tool_pricing`
+// (schema không có cột VNĐ) nên input VNĐ chỉ là lớp NHẬP LIỆU, quy đổi
+// sang Lượng ngay tại `patchPricing()` trước khi PATCH — không lưu số VNĐ.
+function vndOf(cr) { return Math.round(Math.max(0, cr || 0) * VND_PER_CREDIT); }
+function creditsFromVnd(vnd) { return Math.max(0, Math.round((vnd || 0) / (VND_PER_CREDIT || 1))); }
+// Bước nhảy của input number — làm tròn đơn giá hiện hành, tối thiểu 1 để
+// không tạo step=0 khi VND_PER_CREDIT chưa nạp xong (đường lùi hiếm gặp).
+function vndStep() { return Math.max(1, Math.round(VND_PER_CREDIT) || 1); }
 
 // `datetime-local` input ⇄ ISO — luôn giờ TRÌNH DUYỆT (VN chỉ 1 múi giờ, không
 // DST, nên không cần quy đổi tay). Rỗng/không hợp lệ → null (KHÔNG giới hạn).
@@ -6953,7 +6961,7 @@ async function loadPackageRate() {
       VND_PER_CREDIT = Number(ref.amount_vnd) / Number(ref.credits);
     }
     const n = document.getElementById('pricing-rate-note');
-    if (n) n.textContent = '1 Lượng ≈ ' + Math.round(VND_PER_CREDIT).toLocaleString('vi-VN')
+    if (n) n.textContent = 'Gõ VNĐ, Lượng tự tính · 1 Lượng ≈ ' + Math.round(VND_PER_CREDIT).toLocaleString('vi-VN')
       + 'đ (gói phổ biến) · hiệu lực ~1 phút (cache)';
   } catch (e) { /* giữ mức dự phòng */ }
 }
@@ -6975,12 +6983,12 @@ async function loadPricing() {
         html += `<tr id="pr-row-${r.tool_id}">
           <td><strong>${r.label || r.tool_id}</strong></td>
           <td class="mono" style="color:var(--text-lt);font-size:.68rem">${r.tool_id}</td>
-          <td><input type="number" id="pr-credits-${r.tool_id}" value="${r.credits}" min="0" class="price-input" oninput="updVnd('${r.tool_id}')"></td>
-          <td id="pr-vnd-${r.tool_id}" style="color:var(--text-lt);font-size:.72rem">${fmtVnd(r.credits)}</td>
+          <td><input type="number" id="pr-vnd-${r.tool_id}" value="${vndOf(r.credits)}" min="0" step="${vndStep()}" class="price-input" oninput="updCreditsFromVnd('${r.tool_id}')"></td>
+          <td id="pr-credits-${r.tool_id}" style="color:var(--text-lt);font-size:.72rem">≈ ${r.credits} L</td>
           <td style="text-align:center"><input type="checkbox" id="pr-free-${r.tool_id}" ${r.is_free ? 'checked' : ''}></td>
           <td style="text-align:center"><input type="checkbox" id="pr-en-${r.tool_id}" ${r.enabled ? 'checked' : ''}></td>
-          <td><input type="number" id="pr-sale-${r.tool_id}" value="${r.sale_credits != null ? r.sale_credits : ''}" min="0" placeholder="—" class="price-input" style="width:70px" oninput="updSaleVnd('${r.tool_id}')">
-            <div id="pr-sale-vnd-${r.tool_id}" style="color:var(--text-lt);font-size:.62rem">${r.sale_credits != null ? fmtVnd(r.sale_credits) : ''}</div></td>
+          <td><input type="number" id="pr-sale-vnd-${r.tool_id}" value="${r.sale_credits != null ? vndOf(r.sale_credits) : ''}" min="0" placeholder="—" step="${vndStep()}" class="price-input" style="width:90px" oninput="updSaleCreditsFromVnd('${r.tool_id}')">
+            <div id="pr-sale-${r.tool_id}" style="color:var(--text-lt);font-size:.62rem">${r.sale_credits != null ? '≈ ' + r.sale_credits + ' L' : ''}</div></td>
           <td><input type="datetime-local" id="pr-sale-from-${r.tool_id}" value="${toLocalInput(r.sale_starts_at)}" class="price-input" style="width:150px"></td>
           <td><input type="datetime-local" id="pr-sale-to-${r.tool_id}" value="${toLocalInput(r.sale_ends_at)}" class="price-input" style="width:150px"></td>
           <td><button class="btn btn-primary btn-sm" id="pr-btn-${r.tool_id}" onclick="savePricingRow('${r.tool_id}')">Lưu</button></td>
@@ -6991,18 +6999,18 @@ async function loadPricing() {
   } catch (e) { body.innerHTML = `<tr><td colspan="10" class="empty">Lỗi: ${e.message}</td></tr>`; }
 }
 
-function updVnd(id) {
-  const cr = parseInt(document.getElementById('pr-credits-' + id)?.value || 0);
-  const el = document.getElementById('pr-vnd-' + id);
-  if (el) el.textContent = fmtVnd(isNaN(cr) ? 0 : cr);
+function updCreditsFromVnd(id) {
+  const vnd = parseFloat(document.getElementById('pr-vnd-' + id)?.value || 0);
+  const el = document.getElementById('pr-credits-' + id);
+  if (el) el.textContent = '≈ ' + creditsFromVnd(isNaN(vnd) ? 0 : vnd) + ' L';
 }
 
-function updSaleVnd(id) {
-  const raw = document.getElementById('pr-sale-' + id)?.value;
-  const el = document.getElementById('pr-sale-vnd-' + id);
+function updSaleCreditsFromVnd(id) {
+  const raw = document.getElementById('pr-sale-vnd-' + id)?.value;
+  const el = document.getElementById('pr-sale-' + id);
   if (!el) return;
-  const cr = parseInt(raw);
-  el.textContent = raw === '' || isNaN(cr) ? '' : fmtVnd(cr);
+  const vnd = parseFloat(raw);
+  el.textContent = raw === '' || isNaN(vnd) ? '' : ('≈ ' + creditsFromVnd(vnd) + ' L');
 }
 
 function pricingAlert(type, msg) {
@@ -7027,14 +7035,19 @@ async function patchToolPricing(id, fields) {
 // rỗng → null (tắt KM); có nhập thì phải hợp lệ và rẻ hơn giá gốc, không thì
 // KM coi như không chạy (đúng luật ở lib/billing/pricing.ts::effectivePrice)
 // nhưng vẫn cảnh báo ngay tại đây để admin không tưởng nhầm đã áp KM.
+//
+// Đọc từ Ô VNĐ (nguồn nhập của admin) rồi suy Lượng NGAY TRƯỚC KHI PATCH —
+// `tool_pricing.credits` vẫn là cột lưu DUY NHẤT, VNĐ chỉ là lớp nhập liệu.
 async function patchPricing(id) {
-  const credits = parseInt(document.getElementById('pr-credits-' + id)?.value);
+  const vnd = parseFloat(document.getElementById('pr-vnd-' + id)?.value);
   const enabled = document.getElementById('pr-en-' + id)?.checked;
   const is_free = document.getElementById('pr-free-' + id)?.checked;
-  if (isNaN(credits) || credits < 0) throw new Error('Lượng không hợp lệ');
-  const saleRaw = document.getElementById('pr-sale-' + id)?.value;
-  const sale_credits = saleRaw === '' || saleRaw == null ? null : parseInt(saleRaw);
-  if (sale_credits != null && (isNaN(sale_credits) || sale_credits < 0)) throw new Error('Giá KM không hợp lệ');
+  if (isNaN(vnd) || vnd < 0) throw new Error('Giá VNĐ không hợp lệ');
+  const credits = creditsFromVnd(vnd);
+  const saleVndRaw = document.getElementById('pr-sale-vnd-' + id)?.value;
+  const saleVnd = saleVndRaw === '' || saleVndRaw == null ? null : parseFloat(saleVndRaw);
+  if (saleVnd != null && (isNaN(saleVnd) || saleVnd < 0)) throw new Error('Giá KM (VNĐ) không hợp lệ');
+  const sale_credits = saleVnd == null ? null : creditsFromVnd(saleVnd);
   if (sale_credits != null && sale_credits >= credits) throw new Error('Giá KM phải rẻ hơn giá gốc');
   const sale_starts_at = fromLocalInput(document.getElementById('pr-sale-from-' + id)?.value);
   const sale_ends_at = fromLocalInput(document.getElementById('pr-sale-to-' + id)?.value);
