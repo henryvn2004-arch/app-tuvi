@@ -254,7 +254,7 @@ ${faq.map((f) => `<div class="faq-q">${esc(f.q)}</div><p>${esc(f.a)}</p>`).join(
   <a href="/xong-dat">Tuổi xông đất Tết</a>
   <a href="/van-han">Vận hạn theo tuổi</a>
   <a href="/app/bat-trach">Bát trạch — hướng nhà</a>
-  <a href="/xem-tuoi.html">Xem tuổi vợ chồng</a>
+  <a href="/app/xem-tuoi">Xem tuổi vợ chồng</a>
   <a href="/app/luan-giai">Luận giải lá số</a>
 </div>
 

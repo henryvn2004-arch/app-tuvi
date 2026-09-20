@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Tu Binh Regression paywall', () => {
+test.describe('Tu Binh Regression paywall (shell /app/bat-tu)', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/tu-binh.html');
+    await page.goto('/app/bat-tu');
     await page.waitForLoadState('networkidle');
   });
 
@@ -53,10 +53,17 @@ async function fillVisibleSelects(page: any) {
   }
 }
 async function findBtn(page: any) {
+  // Trang shell (#shell-sidebar/.sb, #shell-rail/.rail) đứng TRƯỚC #btnGo trong
+  // DOM và không khớp mẫu loại-trừ nav bên dưới (không có chữ "nav" trong
+  // class/id) — quét chung dễ vớ nhầm nút trong sidebar. Ưu tiên #btnGo (nút
+  // submit thật của app-bat-tu.html) trước khi rơi về quét chung.
+  const goBtn = page.locator('#btnGo');
+  if (await goBtn.count() && await goBtn.first().isVisible()) return goBtn.first();
+
   const b = page.locator('button');
   for (let i = 0; i < await b.count(); i++) {
     if (!await b.nth(i).isVisible()) continue;
-    if (await b.nth(i).evaluate((el: Element) => !!el.closest('nav,header,.nav,#nav,[class*="nav"]'))) continue;
+    if (await b.nth(i).evaluate((el: Element) => !!el.closest('nav,header,.nav,#nav,[class*="nav"],.sb,#shell-sidebar,.rail,#shell-rail'))) continue;
     return b.nth(i);
   }
   return null;

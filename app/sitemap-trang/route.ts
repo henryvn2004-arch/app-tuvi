@@ -26,8 +26,8 @@ const STATIC_PAGES = [
     '/ngay-tot',              // ngay-tot hub
     '/xem-ngay-hom-nay',      // hoàng lịch đầy đủ HÔM NAY (thần sát/cửu tinh/bành tổ)
     '/van-han',               // van-han hub
-    '/xem-tuoi.html',
-    '/xem-lam-an.html',
+    '/app/xem-tuoi',          // 301 từ /xem-tuoi.html cũ, 2026-09-19
+    '/app/xem-lam-an',        // 301 từ /xem-lam-an.html cũ, 2026-09-19
     '/contact.html',
     // Category hubs
     '/kien-thuc-tuvi',

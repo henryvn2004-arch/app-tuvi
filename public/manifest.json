@@ -51,7 +51,7 @@
       "name": "Xem Tuổi Hợp Khắc",
       "short_name": "Xem Tuổi",
       "description": "Xem tuổi vợ chồng hợp khắc",
-      "url": "/xem-tuoi.html?utm_source=pwa_shortcut",
+      "url": "/app/xem-tuoi?utm_source=pwa_shortcut",
       "icons": [{ "src": "/seal.webp", "sizes": "192x192" }]
     }
   ]
