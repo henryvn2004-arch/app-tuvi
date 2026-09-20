@@ -111,63 +111,11 @@ img { max-width: 100%; display: block; }
 .pm-visual { background: var(--cream); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 20px; min-height: 190px; display: flex; align-items: center; justify-content: center; }
 .pm-visual-img { padding: 0; background: transparent; border: none; }
 .pm-visual-img img { width: 100%; height: auto; border-radius: var(--radius-md); }
-.pm-visual-row { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; width: 100%; }
-.pm-visual-arrow { color: var(--ink-faint); font-size: 16px; flex: none; }
 
 @media (max-width: 900px) {
   .pm-step-card { grid-template-columns: 1fr; }
   .pm-visual { order: -1; }
 }
-
-/* ── Small building blocks reused across step visuals ─────────── */
-.pm-birth-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; font-size: 11px; line-height: 1.6; color: var(--ink-soft); }
-.pm-birth-card b { display: block; font-size: 12px; color: var(--ink); margin-bottom: 2px; }
-
-.pm-chart-mini { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: 3px; width: 120px; height: 120px; background: var(--navy); border-radius: 6px; padding: 3px; flex: none; }
-.pm-chart-cell { background: #fff; border-radius: 2px; font-size: 5.6px; font-weight: 700; color: var(--ink-soft); display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.1; padding: 1px; }
-.pm-chart-center { grid-column: 2 / span 2; grid-row: 2 / span 2; background: var(--gold-soft); border-radius: 2px; display: flex; align-items: center; justify-content: center; font-family: 'Noto Serif', serif; font-weight: 800; font-size: 9px; color: #8a6a2f; }
-.pm-visual-caption { text-align: center; font-size: 9.5px; color: var(--ink-faint); margin-top: 6px; }
-.pm-visual-col { display: flex; flex-direction: column; align-items: center; }
-
-.pm-panel { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; min-width: 148px; }
-.pm-panel-title { font-size: 11px; font-weight: 800; color: var(--ink); margin: 0 0 8px; }
-.pm-panel ul { list-style: none; margin: 0; padding: 0; }
-.pm-panel li { display: flex; align-items: center; gap: 6px; font-size: 10.5px; color: var(--ink-soft); padding: 2.5px 0; }
-.pm-panel li .ic { width: 12px; height: 12px; flex: none; color: #8a6a2f; }
-.pm-panel li.ok .ic { color: #4d7d78; }
-.pm-panel li.bad .ic { color: var(--terracotta); }
-
-.pm-avatar-circle { width: 44px; height: 44px; border-radius: 50%; background: #fff; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; margin: 0 auto; }
-.pm-avatar-circle .ic { width: 20px; height: 20px; color: var(--ink-faint); }
-
-.pm-team-row { display: flex; justify-content: center; }
-.pm-team-av { width: 38px; height: 38px; border-radius: 50%; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; border: 2px solid var(--cream); margin-left: -10px; }
-.pm-team-av:first-child { margin-left: 0; }
-
-.pm-bot { width: 44px; height: 44px; border-radius: 50%; background: var(--navy); display: flex; align-items: center; justify-content: center; flex: none; }
-.pm-bot .ic { width: 20px; height: 20px; color: var(--gold); }
-.pm-doc-line { height: 5px; border-radius: 3px; background: var(--line); margin-bottom: 6px; }
-.pm-doc-line:nth-child(1) { width: 90%; }
-.pm-doc-line:nth-child(2) { width: 100%; }
-.pm-doc-line:nth-child(3) { width: 68%; margin-bottom: 0; }
-
-/* ── Visual: cycle diagram for step 04 ──────────────────────── */
-.pm-cycle { display: grid; grid-template-columns: 78px 24px 78px; grid-template-rows: auto 24px auto; align-items: center; justify-items: center; }
-.pm-cycle-node { display: flex; flex-direction: column; align-items: center; gap: 5px; width: 78px; text-align: center; }
-.pm-cycle-ic { width: 34px; height: 34px; border-radius: 50%; background: #fff; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; }
-.pm-cycle-ic .ic { width: 15px; height: 15px; color: #8a6a2f; }
-.pm-cycle-node span { font-size: 9.5px; font-weight: 700; color: var(--ink-soft); line-height: 1.2; }
-.pm-cycle-arrow { color: var(--ink-faint); font-size: 14px; }
-
-.pm-more { font-size: 10.5px; color: var(--ink-faint); padding: 2.5px 0; }
-
-.pm-loop {
-  display: flex; align-items: center; gap: 10px; justify-content: center;
-  font-size: 12.5px; font-weight: 700; color: var(--ink-faint);
-  background: var(--cream); border: 1px dashed var(--line); border-radius: 999px;
-  padding: 10px 18px; margin: 4px auto 0; max-width: fit-content;
-}
-.pm-loop .ic { width: 15px; height: 15px; color: #8a6a2f; }
 
 /* ── Combined banner: kết hợp + nguyên tắc ─────────────────────── */
 .pm-ai { margin: 46px 0 0; background: var(--navy); color: #fff; border-radius: var(--radius-lg); padding: 32px 36px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 30px; align-items: center; }
@@ -306,28 +254,8 @@ img { max-width: 100%; display: block; }
             <p>Kết quả từ mô hình được sử dụng LLM (AI ngôn ngữ lớn) để diễn giải thành ngôn ngữ tự nhiên, dễ hiểu, cá nhân hoá theo từng lá số, giúp người dùng dễ tiếp cận và ứng dụng. AI không tự suy luận, mà chỉ diễn đạt lại kết quả đã được xác định từ mô hình.</p>
             <div class="pm-io"><span>Input: kết quả từ mô hình</span><span class="out">Output: bản luận giải hoàn chỉnh</span></div>
           </div>
-          <div class="pm-visual">
-            <div class="pm-visual-row">
-              <div class="pm-panel">
-                <div class="pm-panel-title">Kết quả từ mô hình</div>
-                <ul>
-                  <li><span class="ic" data-icon="check"></span>Các quy tắc luận giải</li>
-                  <li><span class="ic" data-icon="check"></span>Mức độ tin cậy</li>
-                  <li><span class="ic" data-icon="check"></span>Các luận điểm chính</li>
-                  <li class="pm-more">...</li>
-                </ul>
-              </div>
-              <span class="pm-visual-arrow">→</span>
-              <div class="pm-visual-col">
-                <div class="pm-bot"><span class="ic" data-icon="bot"></span></div>
-                <div class="pm-visual-caption">LLM<br>(diễn giải ngôn ngữ)</div>
-              </div>
-              <span class="pm-visual-arrow">→</span>
-              <div class="pm-panel">
-                <div class="pm-panel-title">Bản luận giải cho bạn</div>
-                <div class="pm-doc-line"></div><div class="pm-doc-line"></div><div class="pm-doc-line"></div>
-              </div>
-            </div>
+          <div class="pm-visual pm-visual-img">
+            <img src="/images/phuong-phap/step-05.webp" alt="Bước 5: LLM chuyển đổi kết quả mô hình thành ngôn ngữ tự nhiên, diễn giải rõ ràng và cá nhân hoá, tạo ra bản luận giải hoàn chỉnh trình bày cho người dùng" loading="lazy">
           </div>
         </div>
       </div>
