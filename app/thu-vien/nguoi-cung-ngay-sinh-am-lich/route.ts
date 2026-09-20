@@ -126,9 +126,6 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .bst-hero-title{font-family:var(--serif);font-size:32px;font-weight:600;margin-bottom:14px;line-height:1.25}
 .bst-hero-desc{font-size:14.5px;color:var(--text-mid);max-width:640px;margin:0 auto 22px;line-height:1.7}
 .bst-hero-count{display:inline-block;background:#F9F4EB;border:1px solid #e8d9b0;color:var(--gold);padding:7px 18px;font-size:12.5px;font-weight:600}
-.switch-cal{max-width:1000px;margin:0 auto;padding:18px 40px 0;font-size:12.5px;color:var(--text-lt)}
-.switch-cal a{color:var(--navy);font-weight:600;text-decoration:none}
-.switch-cal a:hover{color:var(--gold)}
 .bst-body{max-width:1000px;margin:0 auto;padding:20px 40px 80px;width:100%;flex:1}
 .cal-month{margin-bottom:28px}
 .cal-month-title{font-family:var(--serif);font-size:16px;color:var(--navy);font-weight:600;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--border-lt)}
@@ -136,7 +133,18 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .cal-day{display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;background:var(--bg-soft);border:1px solid var(--border-lt);color:var(--navy);text-decoration:none;font-size:12.5px;font-weight:600;border-radius:6px;transition:all .12s}
 .cal-day:hover{border-color:var(--gold);background:#fff;color:var(--gold)}
 .cal-today{background:var(--navy);color:#fff;border-color:var(--navy)}
-@media(max-width:700px){.bc,.bst-hero,.bst-body,.switch-cal{padding-left:20px;padding-right:20px}.bst-hero-title{font-size:26px}}
+.dob-search{max-width:1000px;margin:24px auto 0;padding:0 40px}
+.dob-tabs{display:flex;gap:8px;margin-bottom:10px;justify-content:center}
+.dob-tab{padding:7px 16px;border-radius:20px;border:1px solid var(--border-lt);background:#fff;color:var(--text-lt);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .12s;font-family:inherit}
+.dob-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.dob-tab:hover{border-color:var(--gold)}
+.dob-form{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.dob-input{width:90px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;text-align:center;font-family:inherit}
+.dob-input:focus{outline:none;border-color:var(--gold)}
+.dob-btn{padding:9px 22px;border:none;border-radius:8px;background:var(--gold-bright);color:var(--navy);font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+.dob-btn:hover{background:var(--gold)}
+.dob-err{text-align:center;color:#C46A5E;font-size:12px;margin-top:6px}
+@media(max-width:700px){.bc,.bst-hero,.bst-body,.dob-search{padding-left:20px;padding-right:20px}.bst-hero-title{font-size:26px}}
 </style>
 <script src="/auth.js?v=2"></script>
 </head><body><div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
@@ -149,7 +157,46 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
   <p class="bst-hero-desc">Chọn tháng và ngày ÂM LỊCH — xem ai cũng sinh ngày âm đó, bất kể năm can chi nào. Dữ liệu tổng hợp từ Wikidata, quy đổi âm lịch theo engine Tử Vi Minh Bảo.</p>
   ${tong != null ? `<span class="bst-hero-count">${tong.toLocaleString('vi-VN')} người</span>` : ''}
 </div>
-<p class="switch-cal">Đang tra theo ngày <b>âm lịch</b>. Muốn tra theo <a href="${BASE}/thu-vien/nguoi-cung-ngay-sinh">ngày dương lịch</a> thay vào đó?</p>
+
+<div class="dob-search">
+  <div class="dob-tabs" role="tablist">
+    <button type="button" class="dob-tab" data-cal="duong" role="tab" aria-selected="false">Dương lịch</button>
+    <button type="button" class="dob-tab active" data-cal="am" role="tab" aria-selected="true">Âm lịch</button>
+  </div>
+  <form class="dob-form" id="dob-form">
+    <input type="number" inputmode="numeric" name="d" class="dob-input" placeholder="Ngày" min="1" max="30" required>
+    <input type="number" inputmode="numeric" name="m" class="dob-input" placeholder="Tháng" min="1" max="12" required>
+    <button type="submit" class="dob-btn">Tra cứu →</button>
+  </form>
+  <p class="dob-err" id="dob-err" hidden>Ngày không hợp lệ.</p>
+</div>
+<script>
+(function(){
+  var cal = 'am';
+  var tabs = document.querySelectorAll('.dob-tab');
+  var form = document.getElementById('dob-form');
+  var dInput = form.querySelector('input[name=d]');
+  var err = document.getElementById('dob-err');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-selected','false')});
+      t.classList.add('active');
+      t.setAttribute('aria-selected','true');
+      cal = t.getAttribute('data-cal');
+      dInput.max = cal === 'am' ? 30 : 31;
+    });
+  });
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var d = parseInt(this.d.value, 10), m = parseInt(this.m.value, 10);
+    var maxD = cal === 'am' ? 30 : 31;
+    if (!d || !m || d < 1 || d > maxD || m < 1 || m > 12) { err.hidden = false; return; }
+    err.hidden = true;
+    var ngay = String(m).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+    location.href = '/thu-vien/nguoi-cung-ngay-sinh' + (cal === 'am' ? '-am-lich' : '') + '/' + ngay;
+  });
+})();
+</script>
 
 <div class="bst-body">${months}</div>
 
