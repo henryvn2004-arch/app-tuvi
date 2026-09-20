@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-343 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+345 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 179 | 712,503 B |
+| `2026-09.md` | 180 | 714,559 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -26,6 +26,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 💰 "1 Lượng = 500đ" đúng nghĩa (không phải 499) + đảo VNĐ/Lượng thành chính/phụ toàn site |
+| 1 | 2026-09 | `2026-09.md` | 🗣 Rail chat gọi user là "con" — vá gốc ở `companion.ts` (chế độ tâm sự), không phải `XUNG_HO_RULE` |
 | 1 | 2026-09 | `2026-09.md` | 🖥 Trang admin mới "Rail Chat" — xem lại hội thoại rail thật của user, đọc từ `tuvi_chats` có sẵn |
 | 1 | 2026-09 | `2026-09.md` | ✍️ Layer "bế tắc thật" (tâm lý + lối xưa) cho rail chat trong `arcCore` + gỡ persona tác giả (authorName/authorStyle) khỏi prompt |
 | 1 | 2026-09 | `2026-09.md` | 🖼 Avatar `testimonials.js`: bỏ hash 16-ảnh (đụng tên), chuyển sang 1 tên = 1 ảnh, 79 ảnh synthetic đa dạng bối cảnh |
