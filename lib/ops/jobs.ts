@@ -299,6 +299,13 @@ export const JOBS: JobSpec[] = [
   { key: 'thu-vien-build', label: 'Đắp văn Thư Viện (khái niệm/sao-cung/nạp âm)', source: 'vercel',
     everyMinutes: D, schedule: '14:00 VN hằng ngày', sink: 'thu_vien_muc', path: '/api/cron/thu-vien-build',
     since: '2026-09-19' },
+  // Việc HỮU HẠN (16 sao + 1 backfill) — mỗi lượt sau khi xong sẽ luôn 'skip'.
+  // Chấp nhận được, cùng kiểu bounded-backlog với viral-seo-pages. `since` =
+  // ngày merge: job chưa từng chạy nên cron_runs trống, thiếu mốc này bộ dò
+  // kêu ngay "CHƯA HỀ chạy".
+  { key: 'tu-dien-sao-moi', label: 'Viết bài 16 sao mới cho tu_dien', source: 'vercel',
+    everyMinutes: D, schedule: '15:00 VN hằng ngày', sink: 'tu_dien', path: '/api/cron/tu-dien-sao-moi',
+    since: '2026-09-19' },
 ];
 
 export interface CronRun {

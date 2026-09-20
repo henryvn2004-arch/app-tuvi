@@ -22,12 +22,17 @@
 --   niệm như "12 Sao Trường Sinh", hoặc "Tả Phù"/"Thiên Diêu" — khác hẳn từ
 --   với "Tả Phụ"/"Thiên Riêu" của engine, KHÔNG phải lỗi dấu, giữ nguyên).
 --
--- 🔴 NGUỒN NGAY TRONG STAR_DATA CÓ 4 KHOÁ TRÙNG (đọc bằng regex trên văn bản,
--- object literal JS đã âm thầm đè bản đầu khi eval): "Lưu Hà" và "Lộc Tồn"
--- vô hại (dữ liệu giống hệt) nhưng "Thiên Quan" và "Thiên Phúc" có TYPE KHÁC
--- NHAU giữa hai lần khai ('phụ tinh' → 'phúc tinh') — KHÔNG sửa mò, việc tay
--- Henry cần làm trước khi tin dữ liệu 2 sao này (xem CLAUDE.md "KHÔNG sửa mò
--- một công thức cổ pháp").
+-- ✅ ĐÃ XỬ LÝ 2026-09-19 (Henry xác nhận "Thiên Quan"/"Thiên Phúc" là 2 sao
+-- khác nhau, không phải nhầm lẫn tên): nguồn STAR_DATA từng có 4 khoá trùng
+-- (object literal JS âm thầm đè bản đầu khi eval). "Lưu Hà"/"Lộc Tồn" vô hại
+-- (dữ liệu giống hệt). "Thiên Quan"/"Thiên Phúc" MỖI TÊN bị khai 2 lần trong
+-- CÙNG STAR_DATA (dòng ~2250 'phụ tinh' vs dòng ~2302 'phúc tinh') — cặp sau
+-- nằm giữa lô sao rõ ràng mới thêm (Thiên Không/Quan Phủ/Thai Phụ/Phong Cáo),
+-- tức ai đó gõ nhầm lại 2 tên đã có sẵn. JS giữ bản SAU nên engine ĐANG CHẠY
+-- THẬT đã là bản 'phúc tinh'; cặp 'phụ tinh' đầu là code chết, không route
+-- nào đọc tới. Đã xoá cặp chết (dòng ~2250-2251) trong
+-- public/tuvi-ansao-engine.js — KHÔNG đổi hành vi engine (check:laso +
+-- check:lasogolden xanh sau khi xoá), chỉ dọn nguồn khỏi khoá trùng.
 -- ============================================================
 
 -- ── 1. Mở rộng tu_dien: Hán tự + dữ kiện tất định từ engine ────────────────
