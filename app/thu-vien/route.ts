@@ -102,14 +102,33 @@ async function demBoSuuTap(bst: string): Promise<number | null> {
   }
 }
 
+/** Đếm `celeb_births` (chưa bị chặn) cho card "Người Cùng Ngày Sinh" —
+ * cùng bảng, cùng chuẩn no-store/HEAD, xem app/thu-vien/nguoi-cung-ngay-sinh. */
+async function demCeleb(): Promise<number | null> {
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/celeb_births?blocked=is.false&select=id`, {
+      method: 'HEAD',
+      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, Prefer: 'count=exact' },
+    });
+    if (!res.ok) return null;
+    const range = res.headers.get('content-range');
+    const total = range?.split('/')[1];
+    return total ? parseInt(total, 10) : null;
+  } catch (e) {
+    console.error('[thu-vien] đếm celeb_births hỏng', e);
+    return null;
+  }
+}
+
 export async function GET(): Promise<Response> {
-  const [tuDien, khaoLuan, nghienCuu, saoCung, khaiNiem, napAm] = await Promise.all([
+  const [tuDien, khaoLuan, nghienCuu, saoCung, khaiNiem, napAm, celeb] = await Promise.all([
     demBang('tu_dien'),
     demBang('khao_luan'),
     demBang('master_articles'),
     demBoSuuTap('sao-cung'),
     demBoSuuTap('khai-niem'),
     demBoSuuTap('nap-am'),
+    demCeleb(),
   ]);
 
   const sections: Section[] = [
@@ -140,6 +159,13 @@ export async function GET(): Promise<Response> {
       desc: '30 tên nạp âm trong chu kỳ 60 năm — ngũ hành và ý nghĩa của từng nạp âm.',
       count: napAm,
       countLabel: 'nạp âm',
+    },
+    {
+      href: '/thu-vien/nguoi-cung-ngay-sinh',
+      title: 'Người Nổi Tiếng Cùng Ngày Sinh',
+      desc: 'Chọn ngày sinh dương lịch — xem ai cũng sinh ngày đó và thuộc cung hoàng đạo gì. Dữ liệu tổng hợp từ Wikidata.',
+      count: celeb,
+      countLabel: 'người',
     },
     {
       href: '/blog.html',
@@ -173,7 +199,13 @@ export async function GET(): Promise<Response> {
   // `sach_library` (168 dòng) KHÔNG khớp `/resources.html` (223 mục tĩnh, tự
   // viết tay, không đọc bảng đó) — hai nguồn cho cùng một thư mục, đếm theo
   // bảng rồi gắn vào trang kia là bịa số. Để `count: null` cho card này.
-  const totalKnown = sections.reduce((s, x) => s + (x.count || 0), 0);
+  //
+  // `nguoi-cung-ngay-sinh` KHÔNG cộng vào tổng: 272k+ NGƯỜI trong celeb_births
+  // không phải "mục nội dung" cùng loại với bài/thuật ngữ — cộng chung là thổi
+  // phồng badge "N+ mục nội dung" sai bản chất.
+  const totalKnown = sections
+    .filter((s) => s.href !== '/thu-vien/nguoi-cung-ngay-sinh')
+    .reduce((s, x) => s + (x.count || 0), 0);
 
   const cards = sections
     .map(

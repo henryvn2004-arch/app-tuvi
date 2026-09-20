@@ -18,6 +18,7 @@ const STATIC_PAGES = [
     '/thu-vien/sao-cung',     // hub sao × cung
     '/thu-vien/khai-niem',    // hub khái niệm
     '/thu-vien/nap-am',       // hub nạp âm
+    '/thu-vien/nguoi-cung-ngay-sinh', // hub lịch 366 ngày — xem NGAY_SINH_PAGES bên dưới cho 366 trang con
     '/about.html',
     '/nguon-du-lieu.html', // ghi công nguồn dữ liệu (bắt buộc theo giấy phép CC BY)
     '/resources.html',
@@ -103,6 +104,24 @@ const STATIC_PAGES = [
     '/tools/xem-tuoi-sinh-con.html',
 ];
 
+// 366 trang hub theo NGÀY DƯƠNG LỊCH của app/thu-vien/nguoi-cung-ngay-sinh —
+// tập cố định, sinh tại đây thay vì viết tay 366 dòng vào STATIC_PAGES.
+// Cùng logic MONTH_DAYS với route đó (giữ nguyên `02-29` — có người thật
+// sinh ngày này).
+const NGAY_SINH_MONTH_DAYS = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const NGAY_SINH_PAGES: string[] = (() => {
+  const out: string[] = [];
+  for (let m = 1; m <= 12; m++) {
+    for (let d = 1; d <= NGAY_SINH_MONTH_DAYS[m - 1]; d++) {
+      out.push(
+        `/thu-vien/nguoi-cung-ngay-sinh/${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
+      );
+    }
+  }
+  return out;
+})();
+
 export async function GET() {
-  return xmlResponse(xmlUrlset(STATIC_PAGES.map((p) => urlEntry(BASE_URL + p))));
+  const all = [...STATIC_PAGES, ...NGAY_SINH_PAGES];
+  return xmlResponse(xmlUrlset(all.map((p) => urlEntry(BASE_URL + p))));
 }
