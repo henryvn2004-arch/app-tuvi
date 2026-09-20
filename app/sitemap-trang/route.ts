@@ -18,7 +18,8 @@ const STATIC_PAGES = [
     '/thu-vien/sao-cung',     // hub sao × cung
     '/thu-vien/khai-niem',    // hub khái niệm
     '/thu-vien/nap-am',       // hub nạp âm
-    '/thu-vien/nguoi-cung-ngay-sinh', // hub lịch 366 ngày — xem NGAY_SINH_PAGES bên dưới cho 366 trang con
+    '/thu-vien/nguoi-cung-ngay-sinh', // hub lịch 366 ngày dương — xem NGAY_SINH_PAGES bên dưới
+    '/thu-vien/nguoi-cung-ngay-sinh-am-lich', // hub lịch 360 ngày âm — xem NGAY_SINH_AM_PAGES bên dưới
     '/about.html',
     '/nguon-du-lieu.html', // ghi công nguồn dữ liệu (bắt buộc theo giấy phép CC BY)
     '/resources.html',
@@ -121,7 +122,22 @@ const NGAY_SINH_PAGES: string[] = (() => {
   return out;
 })();
 
+// 360 trang hub theo NGÀY ÂM LỊCH (12 tháng × 30 ngày, không phân biệt tháng
+// nhuận) của app/thu-vien/nguoi-cung-ngay-sinh-am-lich — cùng lý do sinh tại
+// đây thay vì viết tay như NGAY_SINH_PAGES ở trên.
+const NGAY_SINH_AM_PAGES: string[] = (() => {
+  const out: string[] = [];
+  for (let m = 1; m <= 12; m++) {
+    for (let d = 1; d <= 30; d++) {
+      out.push(
+        `/thu-vien/nguoi-cung-ngay-sinh-am-lich/${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
+      );
+    }
+  }
+  return out;
+})();
+
 export async function GET() {
-  const all = [...STATIC_PAGES, ...NGAY_SINH_PAGES];
+  const all = [...STATIC_PAGES, ...NGAY_SINH_PAGES, ...NGAY_SINH_AM_PAGES];
   return xmlResponse(xmlUrlset(all.map((p) => urlEntry(BASE_URL + p))));
 }

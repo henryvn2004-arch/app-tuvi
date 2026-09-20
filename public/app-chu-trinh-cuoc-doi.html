@@ -1093,7 +1093,7 @@ function _renderUnlockBlock(){
   _paintSecLocks(true);
   mountHook(_astrolabe);
   if(_lgLoggedIn()){
-    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span><b>Luận giải chuyên sâu →</b></span><small>Tốn <span data-tvp-price="chu-trinh-cuoc-doi">…</span> Lượng <span data-tvp-price-vnd="chu-trinh-cuoc-doi"></span></small></button>'+
+    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span><b>Luận giải chuyên sâu →</b></span><small>Tốn <span class="vnd" data-tvp-price-vnd="chu-trinh-cuoc-doi"></span> <span class="cb-sub">(<span data-tvp-price="chu-trinh-cuoc-doi">…</span> Lượng)</span></small></button>'+
       '<p>Viết riêng cho lá số này theo cổ pháp — 11 phần: tổng quan đại vận, luận riêng từng đại vận trong 9 đại vận, và tiểu vận năm xem. Kèm bản PDF tải về hoặc gửi qua email.</p>';
     TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,'chu-trinh-cuoc-doi'); });
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
@@ -1122,7 +1122,7 @@ function _fillVndSlots(host,product){
   var els=host.querySelectorAll('[data-tvp-price-vnd]');
   var cost=window.ToolPrices.get(product);
   var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
-  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+  els.forEach(function(el){ el.textContent = lbl || ''; });
 }
 
 // Slug PHẦN LẺ — CHỈ dùng cho mua/kiểm quyền một phần riêng (23 Lượng/phần),

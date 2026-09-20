@@ -18,9 +18,11 @@ test.describe('Topup Page', () => {
   });
 
   test('4 muc gia hien dung', async ({ page }) => {
-    // Giá 4 gói (tăng 2026-08-30, xem _patches/migration-credit-packages-reprice-2026-08.sql):
-    // Khởi Đầu 199k, Phổ Thông 399k, Cao Cấp 699k, VIP 999k.
-    for (const price of ['199', '399', '699', '999']) {
+    // Giá 4 gói: Khởi Đầu 199k, Cao Cấp 699k, VIP 999k (2026-08-30, xem
+    // _patches/migration-credit-packages-reprice-2026-08.sql); Phổ Thông
+    // 399k→400k (2026-09-20, _patches/migration-luong-500-exact.sql) để
+    // 1 Lượng = 500đ CHÍNH XÁC thay vì 499đ.
+    for (const price of ['199', '400', '699', '999']) {
       await expect(page.locator(`text=/${price}/`).first()).toBeVisible();
     }
   });

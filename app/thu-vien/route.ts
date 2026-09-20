@@ -162,8 +162,15 @@ export async function GET(): Promise<Response> {
     },
     {
       href: '/thu-vien/nguoi-cung-ngay-sinh',
-      title: 'Người Nổi Tiếng Cùng Ngày Sinh',
+      title: 'Cùng Ngày Sinh — Dương Lịch',
       desc: 'Chọn ngày sinh dương lịch — xem ai cũng sinh ngày đó và thuộc cung hoàng đạo gì. Dữ liệu tổng hợp từ Wikidata.',
+      count: celeb,
+      countLabel: 'người',
+    },
+    {
+      href: '/thu-vien/nguoi-cung-ngay-sinh-am-lich',
+      title: 'Cùng Ngày Sinh — Âm Lịch',
+      desc: 'Chọn ngày âm lịch (bất kể năm can chi) — xem ai cũng sinh ngày âm đó, kèm ngày dương lịch tương ứng của từng người.',
       count: celeb,
       countLabel: 'người',
     },
@@ -200,11 +207,12 @@ export async function GET(): Promise<Response> {
   // viết tay, không đọc bảng đó) — hai nguồn cho cùng một thư mục, đếm theo
   // bảng rồi gắn vào trang kia là bịa số. Để `count: null` cho card này.
   //
-  // `nguoi-cung-ngay-sinh` KHÔNG cộng vào tổng: 272k+ NGƯỜI trong celeb_births
-  // không phải "mục nội dung" cùng loại với bài/thuật ngữ — cộng chung là thổi
-  // phồng badge "N+ mục nội dung" sai bản chất.
+  // `nguoi-cung-ngay-sinh`/`-am-lich` KHÔNG cộng vào tổng: cả hai đọc CÙNG một
+  // số celeb_births (272k+ NGƯỜI), không phải "mục nội dung" cùng loại với
+  // bài/thuật ngữ — cộng chung vừa đếm trùng đôi vừa thổi phồng badge sai bản chất.
+  const NGAY_SINH_HREFS = ['/thu-vien/nguoi-cung-ngay-sinh', '/thu-vien/nguoi-cung-ngay-sinh-am-lich'];
   const totalKnown = sections
-    .filter((s) => s.href !== '/thu-vien/nguoi-cung-ngay-sinh')
+    .filter((s) => !NGAY_SINH_HREFS.includes(s.href))
     .reduce((s, x) => s + (x.count || 0), 0);
 
   const cards = sections
