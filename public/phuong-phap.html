@@ -292,30 +292,8 @@ img { max-width: 100%; display: block; }
             <p>Các quy tắc đã được chuyên gia thẩm định được đưa trở lại vào mô hình để tiếp tục huấn luyện. Hệ thống liên tục kiểm thử trên các lá số thực mới (out-of-sample) và lặp lại vòng cải tiến cho đến khi đạt độ chính xác tối ưu.</p>
             <div class="pm-io"><span>Input: bộ quy tắc đã thẩm định</span><span class="out">Output: mô hình luận giải hoàn chỉnh</span></div>
           </div>
-          <div class="pm-visual">
-            <div class="pm-visual-row">
-              <div class="pm-cycle">
-                <div class="pm-cycle-node" style="grid-column:1;grid-row:1"><div class="pm-cycle-ic"><span class="ic" data-icon="file-text"></span></div><span>Dữ liệu mới</span></div>
-                <span class="pm-cycle-arrow" style="grid-column:2;grid-row:1">→</span>
-                <div class="pm-cycle-node" style="grid-column:3;grid-row:1"><div class="pm-cycle-ic"><span class="ic" data-icon="settings"></span></div><span>Huấn luyện mô hình</span></div>
-                <span class="pm-cycle-arrow" style="grid-column:1;grid-row:2">↑</span>
-                <span class="pm-cycle-arrow" style="grid-column:3;grid-row:2">↓</span>
-                <div class="pm-cycle-node" style="grid-column:1;grid-row:3"><div class="pm-cycle-ic"><span class="ic" data-icon="rotate-cw"></span></div><span>Cải tiến</span></div>
-                <span class="pm-cycle-arrow" style="grid-column:2;grid-row:3">←</span>
-                <div class="pm-cycle-node" style="grid-column:3;grid-row:3"><div class="pm-cycle-ic"><span class="ic" data-icon="bar-chart-3"></span></div><span>Kiểm thử &amp; đánh giá</span></div>
-              </div>
-              <span class="pm-visual-arrow">→</span>
-              <div class="pm-panel">
-                <div class="pm-panel-title">Mục tiêu</div>
-                <ul>
-                  <li class="ok"><span class="ic" data-icon="check"></span>Tăng độ chính xác</li>
-                  <li class="ok"><span class="ic" data-icon="check"></span>Giảm sai lệch</li>
-                  <li class="ok"><span class="ic" data-icon="check"></span>Ổn định qua nhiều tập dữ liệu</li>
-                  <li class="ok"><span class="ic" data-icon="check"></span>Kiểm chứng trên lá số mới</li>
-                  <li class="pm-more">...</li>
-                </ul>
-              </div>
-            </div>
+          <div class="pm-visual pm-visual-img">
+            <img src="/images/phuong-phap/step-04.webp" alt="Bước 4: huấn luyện và cập nhật mô hình liên tục — vòng lặp huấn luyện, kiểm thử & đánh giá, cải tiến — cho tới khi có mô hình luận giải hoàn chỉnh sẵn sàng ứng dụng" loading="lazy">
           </div>
         </div>
       </div>
