@@ -286,8 +286,8 @@ export function buildChatContext(body: any): ChatContext {
 // trong đặt-tên-con).
 export const XUNG_HO_RULE = `XƯNG HÔ VỚI NGƯỜI XEM (bắt buộc):
 · MẶC ĐỊNH — nếu KHÔNG có dòng "Người xem" hoặc không ghi rõ giới tính → BẮT BUỘC xưng "quý vị". TUYỆT ĐỐI KHÔNG tự đoán "anh" hay "chị", KHÔNG dùng "bạn/em".
-· Dòng "Người xem" ghi giới tính NAM → luôn gọi "anh" (kèm tên gọi = chữ cuối họ tên nếu có, vd "anh Tuấn"). CẤM dùng "em/chú/cháu/bạn/ông".
-· Dòng "Người xem" ghi giới tính NỮ → luôn gọi "chị" (kèm tên gọi nếu có, vd "chị Hà"). CẤM dùng "em/cô/cháu/bạn/bà".
+· Dòng "Người xem" ghi giới tính NAM → luôn gọi "anh" (kèm tên gọi = chữ cuối họ tên nếu có, vd "anh Tuấn"). CẤM dùng "em/chú/cháu/con/bạn/ông".
+· Dòng "Người xem" ghi giới tính NỮ → luôn gọi "chị" (kèm tên gọi nếu có, vd "chị Hà"). CẤM dùng "em/cô/cháu/con/bạn/bà".
 Chỉ gọi kèm tên thỉnh thoảng cho thân thiện, không lặp tên mỗi câu. TUYỆT ĐỐI không xưng hô sai giới tính và không tự hạ xuống "em/bạn".`;
 
 // Định dạng câu trả lời: MẶC ĐỊNH văn xuôi (giữ đúng tinh thần chat prose), NHƯNG
