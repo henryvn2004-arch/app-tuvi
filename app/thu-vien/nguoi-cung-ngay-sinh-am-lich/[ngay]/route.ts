@@ -1,20 +1,16 @@
-// app/thu-vien/nguoi-cung-ngay-sinh/[ngay]/route.ts
+// app/thu-vien/nguoi-cung-ngay-sinh-am-lich/[ngay]/route.ts
 // ============================================================
-// Trang HUB theo NGÀY DƯƠNG LỊCH (366 trang tĩnh cố định: 01-01 → 12-31),
-// KHÔNG phải một trang riêng cho từng người. 272.783 người trong
-// `celeb_births` không đủ dày để đứng thành 272.783 trang riêng — thin
-// content + index bloat chết chắc (đúng bẫy CLAUDE.md "seo-programmatic").
+// Trang HUB theo NGÀY ÂM LỊCH (360 trang tĩnh cố định: 12 tháng × 30 ngày —
+// KHÔNG phân biệt tháng nhuận, xem chú thích cột `key_t0_am` trong migration
+// `celeb_births_key_t0_am`), ảnh song sinh của
+// app/thu-vien/nguoi-cung-ngay-sinh (dương lịch, xem file đó cho lý do KHÔNG
+// mở trang riêng từng người trong 272.783 dòng celeb_births).
 //
-// Nguồn dữ liệu THUẦN TRUY VẤN, không LLM, không cron: `celeb_births.key_t0`
-// (dạng "MM-DD", đã có sẵn index `celeb_births_t0_idx (key_t0, fame_score
-// DESC) WHERE blocked=false`) — route này CHỈ lọc top N theo index có sẵn,
-// không thêm cột/migration nào. `tra_loi_ngan`/FAQ là CHUỖI TEMPLATE ghép từ
-// số liệu thật, không gọi model — khỏi tốn LLM cho 366 trang.
-//
-// `ngay` khớp NGUYÊN VĂN giá trị `key_t0` ("MM-DD", tháng trước ngày sau) —
-// cố ý giữ đúng định dạng cột DB, không đảo thành "DD-MM" để tránh lỗi hoán
-// đổi ngày/tháng khi đọc lại.
-export const revalidate = 604800; // dữ liệu celeb_births gần như tĩnh — 7 ngày
+// `key_t0_am` = tháng-ngày ÂM LỊCH (vd "02-23"), phái sinh từ `key_t1`
+// ("<canChi>|<thángAL>|<ngàyAL>") NGAY TRONG POSTGRES (generated column,
+// stored, có index riêng) — bỏ can-chi năm để group được "cùng ngày âm bất
+// kể năm nào", đúng cách key_t0 đang làm cho ngày dương. 0 LLM, 0 cron.
+export const revalidate = 604800;
 
 import { NextRequest, NextResponse } from 'next/server';
 import { ORG_ID } from '@/lib/seo/entity';
@@ -33,14 +29,16 @@ function esc(s: unknown): string {
     .replace(/"/g, '&quot;');
 }
 
-const MONTH_DAYS = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const TEN_THANG_AM = [
+  'Giêng', 'Hai', 'Ba', 'Tư', 'Năm', 'Sáu', 'Bảy', 'Tám', 'Chín', 'Mười', 'Mười Một', 'Chạp',
+];
 
-/** Toàn bộ 366 giá trị "MM-DD" hợp lệ, đúng thứ tự lịch — dùng để tính ngày
- * trước/sau (điều hướng) mà không cần Date object (né múi giờ/DST). */
-const ALL_NGAY: string[] = (() => {
+/** Toàn bộ 360 giá trị "MM-DD" (12 tháng × 30 ngày) — dùng để tính ngày âm
+ * trước/sau. Không có tháng nhuận trong danh sách (xem chú thích đầu file). */
+const ALL_NGAY_AM: string[] = (() => {
   const out: string[] = [];
   for (let m = 1; m <= 12; m++) {
-    for (let d = 1; d <= MONTH_DAYS[m - 1]; d++) {
+    for (let d = 1; d <= 30; d++) {
       out.push(`${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`);
     }
   }
@@ -52,37 +50,16 @@ function parseNgay(ngay: string): { m: number; d: number } | null {
   if (!mt) return null;
   const m = Number(mt[1]);
   const d = Number(mt[2]);
-  if (m < 1 || m > 12 || d < 1 || d > MONTH_DAYS[m - 1]) return null;
+  if (m < 1 || m > 12 || d < 1 || d > 30) return null;
   return { m, d };
 }
 
-/** Cung hoàng đạo Tây phương theo ngày dương — bảng cố định, không suy đoán. */
-const CUNG_HOANG_DAO: { ten: string; tu: [number, number]; den: [number, number] }[] = [
-  { ten: 'Bạch Dương', tu: [3, 21], den: [4, 19] },
-  { ten: 'Kim Ngưu', tu: [4, 20], den: [5, 20] },
-  { ten: 'Song Tử', tu: [5, 21], den: [6, 20] },
-  { ten: 'Cự Giải', tu: [6, 21], den: [7, 22] },
-  { ten: 'Sư Tử', tu: [7, 23], den: [8, 22] },
-  { ten: 'Xử Nữ', tu: [8, 23], den: [9, 22] },
-  { ten: 'Thiên Bình', tu: [9, 23], den: [10, 22] },
-  { ten: 'Bọ Cạp', tu: [10, 23], den: [11, 21] },
-  { ten: 'Nhân Mã', tu: [11, 22], den: [12, 21] },
-  { ten: 'Ma Kết', tu: [12, 22], den: [1, 19] },
-  { ten: 'Bảo Bình', tu: [1, 20], den: [2, 18] },
-  { ten: 'Song Ngư', tu: [2, 19], den: [3, 20] },
-];
-
-function zodiacOf(m: number, d: number): string {
-  for (const c of CUNG_HOANG_DAO) {
-    const [tm, td] = c.tu;
-    const [dm, dd] = c.den;
-    if (tm <= dm) {
-      if ((m === tm && d >= td) || (m > tm && m < dm) || (m === dm && d <= dd)) return c.ten;
-    } else {
-      if ((m === tm && d >= td) || m > tm || m < dm || (m === dm && d <= dd)) return c.ten;
-    }
-  }
-  return 'Không xác định';
+/** Định dạng `birth_date` ("YYYY-MM-DD") thành "dd/mm/yyyy" bằng string,
+ * không qua Date object — né lệch múi giờ khi parse chuỗi ISO. */
+function formatDuong(birthDate: string): string {
+  const mt = /^(\d{4})-(\d{2})-(\d{2})$/.exec(birthDate || '');
+  if (!mt) return '';
+  return `${Number(mt[3])}/${Number(mt[2])}/${mt[1]}`;
 }
 
 interface Row {
@@ -103,83 +80,81 @@ export async function GET(
 ): Promise<Response> {
   const { ngay } = await params;
   const parsed = parseNgay(ngay);
-  if (!parsed) return NextResponse.redirect(`${BASE}/thu-vien/nguoi-cung-ngay-sinh`);
+  if (!parsed) return NextResponse.redirect(`${BASE}/thu-vien/nguoi-cung-ngay-sinh-am-lich`);
   const { m, d } = parsed;
 
   const headers = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` };
   const res = await fetch(
     `${SB_URL}/rest/v1/celeb_births` +
-      `?key_t0=eq.${ngay}&blocked=is.false` +
+      `?key_t0_am=eq.${ngay}&blocked=is.false` +
       `&select=qid,name,occupation,country,wiki_url,image_file,image_url,birth_date,key_t1` +
       `&order=fame_score.desc&limit=60`,
     { headers: { ...headers, Prefer: 'count=exact' }, cache: 'no-store' },
   );
-  if (!res.ok) return NextResponse.redirect(`${BASE}/thu-vien/nguoi-cung-ngay-sinh`);
+  if (!res.ok) return NextResponse.redirect(`${BASE}/thu-vien/nguoi-cung-ngay-sinh-am-lich`);
   const rows = (await res.json()) as Row[];
-  const range = res.headers.get('content-range'); // "0-59/745"
+  const range = res.headers.get('content-range');
   const tong = range ? parseInt(range.split('/')[1] || '0', 10) : rows.length;
 
   const { anhCho, commonsFilePage } = celebPhoto();
   const top3 = rows.slice(0, 3).map((r) => r.name);
-  const cung = zodiacOf(m, d);
-  const dmLabel = `${d} tháng ${m}`;
+  const dmLabel = `${d} tháng ${TEN_THANG_AM[m - 1]}`;
 
   const traLoiNgan = tong
-    ? `Có ${tong} người nổi tiếng được ghi nhận sinh ngày ${d}/${m} (mọi năm), trong đó nổi bật nhất là ${top3.join(', ')}. Người sinh ngày này thuộc cung hoàng đạo ${cung} theo chiêm tinh phương Tây.`
-    : `Chưa có dữ liệu người nổi tiếng sinh ngày ${d}/${m} trong kho. Người sinh ngày này thuộc cung hoàng đạo ${cung} theo chiêm tinh phương Tây.`;
+    ? `Có ${tong} người nổi tiếng được ghi nhận sinh ngày ${d} tháng ${m} ÂM LỊCH (bất kể năm can chi), trong đó nổi bật nhất là ${top3.join(', ')}. Ngày âm này rơi vào các ngày dương lịch khác nhau tuỳ năm sinh — xem chi tiết từng người bên dưới.`
+    : `Chưa có dữ liệu người nổi tiếng sinh ngày ${d} tháng ${m} âm lịch trong kho.`;
 
   const cards = rows
     .map((r) => {
       const anh = anhCho(r);
-      const year = r.birth_date ? r.birth_date.slice(0, 4) : '';
+      const al = parseKeyT1(r.key_t1);
       const trangAnh = commonsFilePage(r.image_file);
       const anhTag = anh.url
         ? `<img class="pp-img" src="${esc(anh.url)}" alt="${esc(r.name)}" loading="lazy" width="120" height="120">`
         : `<div class="pp-img pp-img-ph">${esc(r.name.slice(0, 1))}</div>`;
-      const al = parseKeyT1(r.key_t1);
       return `<a class="pp-card" href="${esc(r.wiki_url || trangAnh || '#')}" target="_blank" rel="noopener nofollow">
         ${anhTag}
         <div class="pp-name">${esc(r.name)}</div>
-        <div class="pp-meta">${[r.occupation, r.country, year].filter(Boolean).map(esc).join(' · ')}</div>
-        ${al ? `<div class="pp-lunar">Âm lịch: ${al.ngayAL}/${al.thangAL} ${esc(al.canChi)}</div>` : ''}
+        <div class="pp-meta">${[r.occupation, r.country].filter(Boolean).map(esc).join(' · ')}</div>
+        <div class="pp-lunar">Dương lịch: ${esc(formatDuong(r.birth_date))}${al ? ` · Năm ${esc(al.canChi)}` : ''}</div>
       </a>`;
     })
     .join('');
 
-  const idx = ALL_NGAY.indexOf(ngay);
-  const prevNgay = ALL_NGAY[(idx - 1 + ALL_NGAY.length) % ALL_NGAY.length];
-  const nextNgay = ALL_NGAY[(idx + 1) % ALL_NGAY.length];
+  const idx = ALL_NGAY_AM.indexOf(ngay);
+  const prevNgay = ALL_NGAY_AM[(idx - 1 + ALL_NGAY_AM.length) % ALL_NGAY_AM.length];
+  const nextNgay = ALL_NGAY_AM[(idx + 1) % ALL_NGAY_AM.length];
 
   const faqs = [
     {
-      q: `Ai là người nổi tiếng sinh ngày ${d}/${m}?`,
+      q: `Ai là người nổi tiếng sinh ngày ${d} tháng ${m} âm lịch?`,
       a: tong
-        ? `Có ${tong} người nổi tiếng được Wikidata ghi nhận sinh ngày ${d}/${m} (không phân biệt năm sinh), nổi bật nhất là ${top3.join(', ')}.`
-        : `Hiện kho dữ liệu chưa có người nổi tiếng nào ghi nhận sinh ngày ${d}/${m}.`,
+        ? `Có ${tong} người nổi tiếng được ghi nhận sinh ngày ${d} tháng ${m} âm lịch (không phân biệt năm can chi), nổi bật nhất là ${top3.join(', ')}.`
+        : `Hiện kho dữ liệu chưa có người nổi tiếng nào ghi nhận sinh ngày ${d} tháng ${m} âm lịch.`,
     },
     {
-      q: `Sinh ngày ${d} tháng ${m} là cung hoàng đạo gì?`,
-      a: `Người sinh ngày ${d}/${m} thuộc cung hoàng đạo ${cung} theo chiêm tinh phương Tây.`,
+      q: `Ngày ${d} tháng ${m} âm lịch tương ứng ngày dương lịch nào?`,
+      a: `Vì âm lịch không cố định theo dương lịch mỗi năm, ngày ${d} tháng ${m} âm có thể rơi vào các ngày dương khác nhau tuỳ năm sinh — xem ngày dương lịch cụ thể của từng người trong danh sách bên dưới.`,
     },
     {
-      q: `Cùng ngày sinh dương lịch có phải cùng lá số Tử Vi không?`,
-      a: `Không. Tử Vi Đẩu Số an sao theo NGÀY GIỜ ÂM LỊCH, không phải ngày dương lịch — hai người cùng sinh nhật dương lịch nhưng khác năm sinh thường ra lá số khác nhau hoàn toàn. Muốn biết đúng cung Mệnh và sao chiếu của bạn, cần lập lá số theo đúng ngày giờ âm lịch.`,
+      q: `Cùng ngày âm lịch nhưng khác năm can chi thì lá số Tử Vi có giống nhau không?`,
+      a: `Không hẳn. An sao Tử Vi Đẩu Số cần đúng CẢ can chi năm sinh lẫn giờ sinh — hai người cùng ngày âm nhưng khác năm (khác tuổi) hoặc khác giờ sinh vẫn ra lá số khác nhau. Cùng ngày âm lịch chỉ là bước gần hơn so với chỉ cùng ngày dương, chưa đủ để kết luận cùng lá số.`,
     },
   ];
 
-  const url = `${BASE}/thu-vien/nguoi-cung-ngay-sinh/${ngay}`;
-  const hubUrl = `${BASE}/thu-vien/nguoi-cung-ngay-sinh`;
-  const title = `Ai Sinh Ngày ${dmLabel}? ${tong} Người Nổi Tiếng Cùng Ngày Sinh | Tử Vi Minh Bảo`;
-  const img = `${BASE}/api/og?${new URLSearchParams({ title: `Ngày ${dmLabel}`, sub: 'Người nổi tiếng cùng ngày sinh' }).toString()}`;
+  const url = `${BASE}/thu-vien/nguoi-cung-ngay-sinh-am-lich/${ngay}`;
+  const hubUrl = `${BASE}/thu-vien/nguoi-cung-ngay-sinh-am-lich`;
+  const title = `Ai Sinh Ngày ${dmLabel} Âm Lịch? ${tong} Người Nổi Tiếng | Tử Vi Minh Bảo`;
+  const img = `${BASE}/api/og?${new URLSearchParams({ title: `Ngày ${dmLabel} âm lịch`, sub: 'Người nổi tiếng cùng ngày sinh' }).toString()}`;
 
   const schema = JSON.stringify([
     {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
-      name: `Người nổi tiếng sinh ngày ${dmLabel}`,
+      name: `Người nổi tiếng sinh ngày ${dmLabel} âm lịch`,
       description: traLoiNgan,
       url,
-      about: { '@type': 'Thing', name: `Ngày ${dmLabel} dương lịch` },
+      about: { '@type': 'Thing', name: `Ngày ${dmLabel} âm lịch` },
       publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE },
       mainEntity: {
         '@type': 'ItemList',
@@ -211,8 +186,8 @@ export async function GET(
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Trang Chủ', item: `${BASE}/` },
         { '@type': 'ListItem', position: 2, name: 'Thư Viện', item: `${BASE}/thu-vien` },
-        { '@type': 'ListItem', position: 3, name: 'Người Cùng Ngày Sinh', item: hubUrl },
-        { '@type': 'ListItem', position: 4, name: `Ngày ${dmLabel}`, item: url },
+        { '@type': 'ListItem', position: 3, name: 'Người Cùng Ngày Sinh Âm Lịch', item: hubUrl },
+        { '@type': 'ListItem', position: 4, name: `Ngày ${dmLabel} âm`, item: url },
       ],
     },
   ]);
@@ -248,7 +223,10 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .article-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
 .meta-loai{font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold)}
 .article-title{font-family:var(--serif);font-size:28px;color:var(--navy);font-weight:600;line-height:1.3;margin-bottom:20px}
-.tln-box{background:var(--bg-soft);border-left:3px solid var(--gold-bright);padding:18px 22px;margin-bottom:32px;font-size:15.5px;line-height:1.7;color:var(--text-mid)}
+.tln-box{background:var(--bg-soft);border-left:3px solid var(--gold-bright);padding:18px 22px;margin-bottom:16px;font-size:15.5px;line-height:1.7;color:var(--text-mid)}
+.switch-cal{font-size:12.5px;color:var(--text-lt);margin-bottom:24px}
+.switch-cal a{color:var(--navy);font-weight:600;text-decoration:none}
+.switch-cal a:hover{color:var(--gold)}
 .pp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;margin-bottom:16px}
 .pp-card{display:block;text-decoration:none;color:inherit;text-align:center}
 .pp-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;border:1px solid var(--border-lt);background:var(--bg-soft)}
@@ -256,9 +234,6 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .pp-name{font-size:13px;font-weight:600;color:var(--navy);margin-top:7px;line-height:1.3}
 .pp-meta{font-size:11.5px;color:var(--text-lt);margin-top:2px;line-height:1.3}
 .pp-lunar{font-size:11px;color:var(--gold);margin-top:2px;line-height:1.3}
-.switch-cal{font-size:12.5px;color:var(--text-lt);margin-bottom:24px}
-.switch-cal a{color:var(--navy);font-weight:600;text-decoration:none}
-.switch-cal a:hover{color:var(--gold)}
 .pp-empty{text-align:center;color:var(--text-lt);font-size:14px;padding:40px 0}
 .faq-wrap{margin-top:40px;padding-top:24px;border-top:1px solid var(--border-lt)}
 .faq-title{font-family:var(--serif);font-size:19px;color:var(--navy);font-weight:600;margin-bottom:18px}
@@ -283,16 +258,16 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 <div class="bc">
   <a href="/">Trang Chủ</a><span>›</span>
   <a href="/thu-vien">Thư Viện</a><span>›</span>
-  <a href="${hubUrl}">Người Cùng Ngày Sinh</a><span>›</span>
-  <span>Ngày ${d}/${m}</span>
+  <a href="${hubUrl}">Người Cùng Ngày Sinh Âm Lịch</a><span>›</span>
+  <span>Ngày ${d}/${m} âm</span>
 </div>
 <article class="article-wrap">
   <div class="article-meta">
-    <span class="meta-loai">Người Nổi Tiếng · Ngày ${d}/${m}</span>
+    <span class="meta-loai">Người Nổi Tiếng · Âm Lịch ${d}/${m}</span>
   </div>
-  <h1 class="article-title">Ai Sinh Ngày ${dmLabel}?</h1>
+  <h1 class="article-title">Ai Sinh Ngày ${dmLabel} Âm Lịch?</h1>
   <div class="tln-box">${esc(traLoiNgan)}</div>
-  <p class="switch-cal">Đang tra theo ngày <b>dương lịch</b>. Muốn tra theo <a href="${BASE}/thu-vien/nguoi-cung-ngay-sinh-am-lich">ngày âm lịch</a> thay vào đó?</p>
+  <p class="switch-cal">Đang tra theo ngày <b>âm lịch</b>. Muốn tra theo <a href="${BASE}/thu-vien/nguoi-cung-ngay-sinh">ngày dương lịch</a> thay vào đó?</p>
   ${rows.length ? `<div class="pp-grid">${cards}</div>` : `<div class="pp-empty">Chưa có dữ liệu cho ngày này.</div>`}
   ${tong > rows.length ? `<p style="font-size:12.5px;color:var(--text-lt)">Hiện ${rows.length}/${tong} người nổi bật nhất theo mức độ nổi tiếng (Wikidata sitelinks).</p>` : ''}
   <div class="faq-wrap">
@@ -307,7 +282,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
   <div class="cta-box">
     <div class="cta-box-label">Tử Vi Minh Bảo</div>
     <h3>Xem Lá Số Của Bạn</h3>
-    <p>Ngày sinh dương lịch chỉ cho biết cung hoàng đạo — muốn biết cung Mệnh, chính tinh và vận trình thật, cần lập lá số theo đúng ngày giờ âm lịch.</p>
+    <p>Cùng ngày âm lịch mới chỉ gần đúng — muốn biết chính xác cung Mệnh, chính tinh và vận trình, cần lập lá số theo đúng ngày giờ và NĂM can chi của bạn.</p>
     <a class="cta-btn" href="/">Lập Lá Số →</a>
   </div>
 </article>
