@@ -234,6 +234,7 @@ button { font: inherit; cursor: pointer; }
 .dna-eyebrow .ic { width: 13px; height: 13px; }
 .dna-title { font-size: 27px; font-weight: 800; color: var(--ink); margin: 0 0 14px; }
 .dna-sub { font-size: 14.5px; line-height: 1.7; color: var(--ink-soft); margin: 0; }
+.dna-badges { display: none; }
 
 /* ── 4 thẻ chi tiết (AstroDataBank / Khởi tạo / Đối chiếu / Thẩm định) ── */
 .dna-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 0 0 20px; position: relative; z-index: 1; }
@@ -276,6 +277,27 @@ button { font: inherit; cursor: pointer; }
   .dna-seal { width: 34px; height: 34px; top: 18px; right: 18px; }
   .dna-process { padding: 22px 18px 20px; }
   .dna-process-foot { justify-content: center; text-align: center; }
+}
+
+/* ── Mobile: cards 1 cột + badge tin cậy + flow 3 cột/hàng ─────── */
+@media (max-width: 680px) {
+  .dna-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 18px 0 0; }
+  .dna-badges > span { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: #8a6a2f; background: var(--gold-soft); border-radius: 999px; padding: 7px 14px; }
+  .dna-badges .ic { width: 14px; height: 14px; }
+
+  .dna-grid { grid-template-columns: 1fr; }
+
+  .dna-flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 4px; }
+  .dna-flow-step { width: auto; }
+  .dna-flow-step img { width: 56px; height: 46px; }
+  .dna-flow-arrow { display: none; }
+  .dna-flow-step:not(:nth-of-type(3n)) { position: relative; }
+  .dna-flow-step:not(:nth-of-type(3n))::after { content: '→'; position: absolute; top: 18px; right: -12px; color: var(--ink-faint); font-size: 13px; }
+
+  .dna-process-foot { flex-direction: column; gap: 16px; }
+  .dna-process-list { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 12px 16px; }
+  .dna-process-list li::before { content: '✓'; width: auto; height: auto; border-radius: 0; background: none; color: #2f8f6f; font-size: 12px; font-weight: 800; }
+  .dna-cta { width: 100%; justify-content: center; }
 }
 
 /* ── Explore more ───────────────────────────────────────────── */
@@ -367,6 +389,11 @@ button { font: inherit; cursor: pointer; }
         <div class="dna-eyebrow"><span class="ic" data-icon="sparkles"></span>Phương pháp luận giải</div>
         <h2 class="dna-title serif">Tử Vi Nghiệm Chứng</h2>
         <p class="dna-sub">Hệ thống được xây dựng từ dữ liệu thực tế và một quy trình luận giải có kiểm chứng nhiều lớp.</p>
+        <div class="dna-badges">
+          <span><span class="ic" data-icon="shield-check"></span>Dữ liệu thật</span>
+          <span><span class="ic" data-icon="users"></span>Con người thật</span>
+          <span><span class="ic" data-icon="bar-chart-3"></span>Giá trị thật</span>
+        </div>
       </div>
       <div class="dna-grid">
         <div class="dna-item">
