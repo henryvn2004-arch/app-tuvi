@@ -161,6 +161,9 @@
       <button class="nav-item" onclick="goTo('feedback')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span><span>Góp Ý</span><span class="nav-badge" id="fb-nav-badge" style="display:none;margin-left:auto;background:var(--red,#C0392B);color:#fff;font-size:.62rem;font-weight:700;border-radius:999px;padding:.05rem .4rem"></span>
       </button>
+      <button class="nav-item" onclick="goTo('railchats')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><span>Rail Chat</span>
+      </button>
       <button class="nav-item" onclick="goTo('adminusers')" id="nav-adminusers">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><span>Quản Trị Viên</span>
       </button>
@@ -1614,6 +1617,40 @@
         </div>
       </div>
 
+      <!-- ── HỘI THOẠI RAIL CHAT (Vận Hành) ──
+           Đọc từ bảng tuvi_chats — nơi shell.js/tuvi-chat.html ĐÃ tự đồng bộ
+           mỗi phiên rail của user ĐĂNG NHẬP (xem app/api/admin/rail-chats).
+           KHÔNG có phiên của khách ẩn danh — họ chỉ sống trong localStorage,
+           chưa từng gửi lên server, nên trang này không thấy được. -->
+      <div class="page" id="page-railchats">
+        <div class="stats" id="rc-stats" style="grid-template-columns:repeat(3,1fr)">
+          <div class="stat"><div class="stat-label">Tổng Phiên</div><div class="stat-value" id="rc-c-total">…</div><div class="stat-sub">khớp bộ lọc hiện tại</div></div>
+          <div class="stat blue"><div class="stat-label">Đang Xem</div><div class="stat-value" id="rc-c-shown">…</div><div class="stat-sub">trang này</div></div>
+          <div class="stat"><div class="stat-label">Phạm Vi</div><div class="stat-value" style="font-size:1rem">Chỉ user đăng nhập</div><div class="stat-sub">khách ẩn danh không đồng bộ lên server</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Hội Thoại Rail Chat</div>
+            <div class="panel-actions">
+              <input class="search-input" id="rc-f-email" placeholder="Lọc theo email…" style="width:200px" onkeydown="if(event.key==='Enter')loadRailChatsAdmin()">
+              <input class="search-input" id="rc-f-type" placeholder="Lọc theo tool (vd luan-giai)…" style="width:200px" onkeydown="if(event.key==='Enter')loadRailChatsAdmin()">
+              <input class="search-input" id="rc-f-q" placeholder="Tìm trong nội dung…" style="width:200px" onkeydown="if(event.key==='Enter')loadRailChatsAdmin()">
+              <button class="btn btn-primary btn-sm" onclick="rcResetOffset();loadRailChatsAdmin()">Lọc</button>
+              <button class="btn btn-ghost btn-sm" onclick="loadRailChatsAdmin()">↻</button>
+            </div>
+          </div>
+          <div id="rc-body" style="padding:1rem 1.25rem"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+          <div class="panel-header" style="border-top:1px solid var(--line)">
+            <span style="font-size:.75rem;color:var(--text-lt)" id="rc-page-info"></span>
+            <div class="panel-actions">
+              <button class="btn btn-ghost btn-sm" onclick="rcPage(-1)">← Trước</button>
+              <button class="btn btn-ghost btn-sm" onclick="rcPage(1)">Sau →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ── API & KEYS (Vận Hành) ── -->
       <div class="page" id="page-apikeys">
         <div class="stats" id="mcp-stats" style="grid-template-columns:repeat(4,1fr)">
@@ -1965,6 +2002,7 @@ const PAGE_TITLES = {
   sysconfig: 'System Config', apikeys: 'API & Keys', registry: 'Tools Registry',
   adminusers: 'Quản Trị Viên',
   feedback: 'Góp Ý Người Dùng',
+  railchats: 'Hội Thoại Rail Chat',
 };
 
 /**
@@ -2253,6 +2291,7 @@ function goTo(page) {
                     sysconfig: loadSysConfig, apikeys: loadApiKeys, registry: loadRegistry,
                     adminusers: () => { loadAdminRoster(); loadAdminLoginAttempts(); },
                     feedback: loadFeedbackAdmin,
+                    railchats: loadRailChatsAdmin,
                     content: () => {
     if (showView) showView('dashboard');
     if (!window._contentInitialized) {
@@ -2448,6 +2487,102 @@ async function fbAdminReply(id) {
     toast('Đã lưu hồi đáp', 'success');
     loadFeedbackAdmin();
   } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
+}
+
+// ══════════════════════════════════════════════════════════════
+// HỘI THOẠI RAIL CHAT — panel "Rail Chat"
+// ══════════════════════════════════════════════════════════════
+// Đọc qua /api/admin/rail-chats (service key + tra admin_users), KHÔNG đọc
+// thẳng PostgREST: bảng tuvi_chats chỉ cho user đọc CHÍNH chat của họ (RLS
+// auth.uid()=user_id), JWT admin một mình không đọc được chat người khác.
+let _rcOffset = 0;
+const RC_LIMIT = 50;
+
+function rcResetOffset() { _rcOffset = 0; }
+
+async function rcAdminFetch(qs) {
+  const res = await fetch('/api/admin/rail-chats' + (qs || ''), {
+    cache: 'no-store',
+    headers: { Authorization: `Bearer ${_token}` },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  return data;
+}
+
+async function loadRailChatsAdmin() {
+  const host = document.getElementById('rc-body');
+  if (!host) return;
+  host.innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  const email = (document.getElementById('rc-f-email') || {}).value || '';
+  const type  = (document.getElementById('rc-f-type')  || {}).value || '';
+  const q     = (document.getElementById('rc-f-q')     || {}).value || '';
+  try {
+    const qs = `?limit=${RC_LIMIT}&offset=${_rcOffset}`
+      + `&email=${encodeURIComponent(email)}&type=${encodeURIComponent(type)}&q=${encodeURIComponent(q)}`;
+    const data = await rcAdminFetch(qs);
+    rcRender(data.items || [], data.total || 0);
+  } catch (e) {
+    console.error('[loadRailChatsAdmin]', e);
+    host.innerHTML = `<div class="alert-box alert-error">Không tải được hội thoại: ${escHtml(e.message)}</div>`;
+  }
+}
+
+function rcPage(dir) {
+  const next = _rcOffset + dir * RC_LIMIT;
+  if (next < 0) return;
+  _rcOffset = next;
+  loadRailChatsAdmin();
+}
+
+/** Nhãn tool từ `type` (vd 'app-luan-giai' → 'luan-giai', 'app-'+toolId khi
+ *  qua shell.js; các type cũ như 'laso'/'tu-binh' từ tuvi-chat.html giữ nguyên). */
+function rcToolLabel(type) {
+  if (!type) return 'không rõ';
+  return type.startsWith('app-') ? type.slice(4) : type;
+}
+
+function rcRender(items, total) {
+  const host = document.getElementById('rc-body');
+  if (!host) return;
+  const cTotal = document.getElementById('rc-c-total');
+  const cShown = document.getElementById('rc-c-shown');
+  if (cTotal) cTotal.textContent = total;
+  if (cShown) cShown.textContent = items.length;
+  const info = document.getElementById('rc-page-info');
+  if (info) {
+    const from = total ? _rcOffset + 1 : 0;
+    const to = _rcOffset + items.length;
+    info.textContent = `${from}–${to} / ${total}`;
+  }
+  if (!items.length) {
+    host.innerHTML = '<div class="empty-state"><p>Không có hội thoại nào khớp bộ lọc.</p></div>';
+    return;
+  }
+  host.innerHTML = items.map(c => {
+    const when = new Date(c.updated_at).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+    const msgs = Array.isArray(c.messages) ? c.messages : [];
+    const transcript = msgs.map(m => {
+      const who = m.role === 'user' ? 'Người dùng' : 'Trợ lý';
+      const cls = m.role === 'user' ? 'color:var(--tx-blue)' : 'color:var(--gold-soft)';
+      return `<div style="margin-bottom:.7rem"><b style="${cls};font-size:.72rem">${who}</b>`
+        + `<div style="font-size:.85rem;color:var(--text);line-height:1.6;white-space:pre-wrap">${escHtml(m.content || '')}</div></div>`;
+    }).join('') || '<div style="font-size:.8rem;color:var(--text-lt);font-style:italic">Phiên rỗng, chưa có tin nhắn.</div>';
+    return `
+      <div style="border:1px solid var(--line);border-radius:var(--radius);padding:.9rem 1.1rem;margin-bottom:.9rem;background:var(--paper)">
+        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem">
+          <span class="badge badge-blue">${escHtml(rcToolLabel(c.type))}</span>
+          <span style="font-size:.75rem;color:var(--text-mid);font-weight:600">${escHtml(c.email || c.user_id)}</span>
+          <span style="font-size:.75rem;color:var(--text-lt)">${c.msg_count} tin</span>
+          <span style="font-size:.72rem;color:var(--text-lt);margin-left:auto">${escHtml(when)}</span>
+        </div>
+        <div style="font-size:.85rem;color:var(--text);margin-bottom:.5rem">${escHtml(c.label || '(chưa đặt tên)')}</div>
+        <details>
+          <summary style="font-size:.75rem;color:var(--gold-soft);cursor:pointer">Xem toàn bộ hội thoại (${c.msg_count} tin)</summary>
+          <div style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--line)">${transcript}</div>
+        </details>
+      </div>`;
+  }).join('');
 }
 
 // ── PLACEHOLDER (module chưa build) ──

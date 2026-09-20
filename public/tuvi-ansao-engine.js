@@ -2247,8 +2247,6 @@ const STAR_DATA = {
   'Thiên Đức':   { type:'phúc tinh',  element:'thổ',   weight:6,  traits:['đức độ','giải hạn'] },
   'Nguyệt Đức':  { type:'phúc tinh',  element:'kim',   weight:6,  traits:['đức độ','giải hạn'] },
   'Thiên Y':     { type:'phúc tinh',  element:'thủy',  weight:6,  traits:['y dược','cứu bệnh'] },
-  'Thiên Quan':  { type:'phụ tinh',   element:'hỏa',   weight:6,  traits:['quý nhân'] },
-  'Thiên Phúc':  { type:'phụ tinh',   element:'thổ',   weight:6,  traits:['quý nhân'] },
   'Cô Thần':     { type:'phụ tinh',   element:'thổ',   weight:6,  traits:['cô độc'] },
   'Quả Tú':      { type:'phụ tinh',   element:'thổ',   weight:6,  traits:['cô độc'] },
   'Hoa Cái':     { type:'phụ tinh',   element:'kim',   weight:6,  traits:['phú quý','tâm linh'] },
