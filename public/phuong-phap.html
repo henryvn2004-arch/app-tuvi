@@ -122,6 +122,17 @@ img { max-width: 100%; display: block; }
 .pm-chart-cell { background: #fff; border-radius: 2px; font-size: 6.4px; font-weight: 700; color: var(--ink-soft); display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.1; padding: 1px; }
 .pm-chart-center { grid-column: 2 / span 2; grid-row: 2 / span 2; background: var(--gold-soft); border-radius: 2px; display: flex; align-items: center; justify-content: center; font-family: 'Noto Serif', serif; font-weight: 800; font-size: 11px; color: #8a6a2f; text-align: center; line-height: 1.2; }
 
+/* ── Visual: stacked profile photo cards ────────────────────────── */
+.pm-photo-stack { display: flex; justify-content: center; }
+.pm-photo-card { width: 56px; background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 4px; margin-left: -16px; box-shadow: 0 2px 6px rgba(15,42,61,.08); }
+.pm-photo-card:first-child { margin-left: 0; transform: rotate(-4deg); }
+.pm-photo-card:nth-child(2) { transform: rotate(2deg); z-index: 1; }
+.pm-photo-card:last-child { transform: rotate(6deg); }
+.pm-photo-ph { width: 100%; height: 40px; border-radius: 4px; background: var(--gold-soft); display: flex; align-items: center; justify-content: center; }
+.pm-photo-ph .ic { width: 16px; height: 16px; color: #8a6a2f; }
+.pm-photo-lines { margin-top: 4px; }
+.pm-photo-lines .pm-doc-line { height: 3px; margin-bottom: 3px; }
+
 /* ── Visual: category avatars (AstroDataBank profiles) ─────────── */
 .pm-avatars-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 .pm-avatar { display: flex; flex-direction: column; align-items: center; gap: 5px; width: 62px; }
@@ -158,8 +169,8 @@ img { max-width: 100%; display: block; }
 .pm-doc-line:nth-child(3) { width: 70%; margin-bottom: 0; }
 
 .pm-loop {
-  display: flex; align-items: center; gap: 10px; justify-content: center;
-  font-size: 12.5px; font-weight: 700; color: var(--ink-faint);
+  display: flex; align-items: center; gap: 10px; justify-content: center; flex-wrap: wrap;
+  font-size: 12.5px; font-weight: 700; color: var(--ink-faint); text-align: center;
   background: var(--cream); border: 1px dashed var(--line); border-radius: 999px;
   padding: 10px 18px; margin: 4px auto 0; max-width: fit-content;
 }
@@ -238,7 +249,27 @@ img { max-width: 100%; display: block; }
             <div class="pm-io"><span>Input: ngày giờ sinh thật (AstroDataBank)</span><span class="out">Output: tập quy tắc &amp; kết quả luận giải ban đầu</span></div>
           </div>
           <div class="pm-visual">
-            <div class="pm-birth-card"><b>Ngày sinh</b>15/10/1960 · 14:30 (GMT+7)<br>Hà Nội, Việt Nam</div>
+            <div class="pm-birth-card" style="width:100%">
+              <b>Dữ liệu cuộc đời thực</b>
+              <ul class="pm-checklist" style="margin-top:4px">
+                <li><span class="ic" data-icon="check"></span>Tiểu sử, nghề nghiệp</li>
+                <li><span class="ic" data-icon="check"></span>Các mốc sự kiện quan trọng</li>
+                <li><span class="ic" data-icon="check"></span>Thành tựu, biến cố</li>
+                <li><span class="ic" data-icon="check"></span>Thông tin đã được kiểm chứng</li>
+              </ul>
+            </div>
+            <span class="pm-visual-arrow">↓</span>
+            <div class="pm-photo-stack">
+              <div class="pm-photo-card"><div class="pm-photo-ph"><span class="ic" data-icon="user"></span></div><div class="pm-photo-lines"><div class="pm-doc-line"></div><div class="pm-doc-line" style="width:65%"></div></div></div>
+              <div class="pm-photo-card"><div class="pm-photo-ph"><span class="ic" data-icon="user"></span></div><div class="pm-photo-lines"><div class="pm-doc-line"></div><div class="pm-doc-line" style="width:65%"></div></div></div>
+              <div class="pm-photo-card"><div class="pm-photo-ph"><span class="ic" data-icon="user"></span></div><div class="pm-photo-lines"><div class="pm-doc-line"></div><div class="pm-doc-line" style="width:65%"></div></div></div>
+            </div>
+            <div class="pm-avatars-row">
+              <div class="pm-avatar"><div class="pm-avatar-ic"><span class="ic" data-icon="crown"></span></div><span>Chính trị gia</span></div>
+              <div class="pm-avatar"><div class="pm-avatar-ic"><span class="ic" data-icon="flask-conical"></span></div><span>Nhà khoa học</span></div>
+              <div class="pm-avatar"><div class="pm-avatar-ic"><span class="ic" data-icon="mic"></span></div><span>Nghệ sĩ</span></div>
+              <div class="pm-avatar"><div class="pm-avatar-ic"><span class="ic" data-icon="briefcase"></span></div><span>Doanh nhân</span></div>
+            </div>
             <span class="pm-visual-arrow">↓</span>
             <div class="pm-chart-mini">
               <div class="pm-chart-cell">Phụ Mẫu</div><div class="pm-chart-cell">Mệnh</div><div class="pm-chart-cell">Phúc Đức</div><div class="pm-chart-cell">Điền Trạch</div>
