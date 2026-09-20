@@ -1,4 +1,4 @@
-// nav.js — Shared navigation component v19 (footer: bỏ FT_SIGN_ICON — hình SVG vẽ tay bằng code, chỉ giữ chữ ký chữ)
+// nav.js — Shared navigation component v20 (footer: thêm link Câu Hỏi Thường Gặp vào cột "Về Chúng Tôi")
 (function () {
   var path = window.location.pathname;
 
@@ -648,6 +648,7 @@
       + '<div class="ft-col"><div class="ft-col-title">Về Chúng Tôi<i></i></div>'
       + ftItem('/about.html', 'info', 'Giới Thiệu')
       + ftItem('/tac-gia', 'user', 'Tác Giả')
+      + ftItem('/faqs.html', 'lightbulb', 'Câu Hỏi Thường Gặp')
       + ftItem('/contact.html', 'mail', 'Liên Hệ')
       + '</div>'
       + '</div>'

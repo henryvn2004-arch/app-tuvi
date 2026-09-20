@@ -29,6 +29,7 @@ const STATIC_PAGES = [
     '/app/xem-tuoi',          // 301 từ /xem-tuoi.html cũ, 2026-09-19
     '/app/xem-lam-an',        // 301 từ /xem-lam-an.html cũ, 2026-09-19
     '/contact.html',
+    '/faqs.html',
     // Category hubs
     '/kien-thuc-tuvi',
     '/phong-thuy',
