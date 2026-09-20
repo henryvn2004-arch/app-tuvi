@@ -143,9 +143,9 @@ img { max-width: 100%; display: block; }
       <div class="pm-step">
         <div class="pm-step-rail"><div class="pm-step-num">01</div><div class="pm-step-line"></div></div>
         <div class="pm-step-card">
-          <div class="pm-step-head"><div class="pm-step-ic"><span class="ic" data-icon="file-text"></span></div><h3>Dữ liệu</h3></div>
-          <p>Khởi điểm là 80.000+ ngày giờ sinh và diễn biến cuộc đời có thật — không phải số bịa để minh hoạ. Đây là tập nền để mọi nguyên lý phía sau được soi lại, thay vì chỉ dựa vào một cuốn sách duy nhất.</p>
-          <div class="pm-io"><span>Input: ngày giờ sinh + sự kiện đời thật</span><span class="out">Output: tập dữ liệu đối chứng</span></div>
+          <div class="pm-step-head"><div class="pm-step-ic"><span class="ic" data-icon="globe"></span></div><h3>Dữ liệu</h3></div>
+          <p>Khởi điểm là AstroDataBank — 80.000+ ngày giờ sinh cùng tiểu sử cuộc đời có thật của những người thật, không phải số bịa để minh hoạ. Đây là tập nền để mọi nguyên lý phía sau được soi lại, thay vì chỉ dựa vào một cuốn sách duy nhất.</p>
+          <div class="pm-io"><span>Input: ngày giờ sinh + tiểu sử thật (AstroDataBank)</span><span class="out">Output: tập dữ liệu đối chứng</span></div>
         </div>
       </div>
 
@@ -153,8 +153,8 @@ img { max-width: 100%; display: block; }
         <div class="pm-step-rail"><div class="pm-step-num">02</div><div class="pm-step-line"></div></div>
         <div class="pm-step-card">
           <div class="pm-step-head"><div class="pm-step-ic"><span class="ic" data-icon="book-open"></span></div><h3>Nguyên lý</h3></div>
-          <p>Cổ pháp Tử Vi được hệ thống hoá thành quy tắc rõ ràng — an sao, cung mệnh, tứ hoá — để mỗi lá số được tính bằng đúng MỘT bộ quy tắc, không "mỗi thầy một kiểu". Đây là phần engine tính, không phải AI đoán.</p>
-          <div class="pm-io"><span>Input: cổ thư + quy tắc truyền thống</span><span class="out">Output: bộ quy tắc an sao đã hệ thống hoá</span></div>
+          <p>Từ mỗi bộ ngày giờ sinh ở bước 1, lập lá số đúng theo cổ pháp Tử Vi — an sao, cung mệnh, tứ hoá theo đúng MỘT bộ quy tắc, không "mỗi thầy một kiểu". Toàn bộ 80.000+ lá số này là nền để xây mô hình luận giải.</p>
+          <div class="pm-io"><span>Input: ngày giờ sinh + quy tắc cổ pháp</span><span class="out">Output: 80.000+ lá số đã an sao</span></div>
         </div>
       </div>
 
@@ -162,38 +162,38 @@ img { max-width: 100%; display: block; }
         <div class="pm-step-rail"><div class="pm-step-num">03</div><div class="pm-step-line"></div></div>
         <div class="pm-step-card">
           <div class="pm-step-head"><div class="pm-step-ic"><span class="ic" data-icon="search"></span></div><h3>Đối chiếu</h3></div>
-          <p>Kết quả an sao được đối chiếu chéo với dữ liệu thật ở bước 1, có tham chiếu thêm nguồn quốc tế như AstroDataBank — tìm ra chỗ nguyên lý khớp và chỗ còn lệch, trước khi cho phép nó chạy trên lá số của bạn.</p>
-          <div class="pm-io"><span>Input: quy tắc + dữ liệu thật</span><span class="out">Output: bảng đối chiếu, ghi rõ sai lệch</span></div>
+          <p>Từng lá số ở bước 2 được đối chiếu trực tiếp với tiểu sử thật của đúng người đó ở bước 1 — sự nghiệp, hôn nhân, biến cố đời họ có khớp với cách cục trên lá số không. Từ hàng vạn phép so sánh này, hệ thống rút ra pattern nào đúng, pattern nào sai.</p>
+          <div class="pm-io"><span>Input: lá số + tiểu sử thật của cùng một người</span><span class="out">Output: pattern đúng/sai theo từng cách cục</span></div>
         </div>
       </div>
 
       <div class="pm-step">
         <div class="pm-step-rail"><div class="pm-step-num">04</div><div class="pm-step-line"></div></div>
         <div class="pm-step-card">
-          <div class="pm-step-head"><div class="pm-step-ic"><span class="ic" data-icon="message-circle"></span></div><h3>Diễn giải</h3></div>
-          <p>Chỉ tới bước này AI mới xuất hiện — và chỉ để viết thành câu chữ dễ đọc từ các con số đã tính xong ở bước 2–3. AI không tự suy vị trí sao, không tự tính lại đại vận: số liệu nào cũng đã có sẵn trước khi AI chạm vào.</p>
-          <div class="pm-io"><span>Input: số liệu đã tính từ engine</span><span class="out">Output: văn bản luận giải theo đúng lá số</span></div>
+          <div class="pm-step-head"><div class="pm-step-ic"><span class="ic" data-icon="shield-check"></span></div><h3>Hiệu chỉnh</h3></div>
+          <p>Pattern rút ra ở bước 3 được đội ngũ chuyên gia kinh nghiệm kiểm chứng lại bằng tay — loại pattern nhiễu, giữ pattern có cơ sở — rồi đưa vào tinh chỉnh mô hình luận giải. Vòng lặp 02–03–04 lặp lại liên tục, cho ra mô hình luận giải chính xác nhất tính tới thời điểm hiện tại.</p>
+          <div class="pm-io"><span>Input: pattern đúng/sai + thẩm định chuyên gia</span><span class="out">Output: mô hình luận giải đã hiệu chỉnh</span></div>
         </div>
       </div>
 
       <div class="pm-step">
         <div class="pm-step-rail"><div class="pm-step-num">05</div></div>
         <div class="pm-step-card">
-          <div class="pm-step-head"><div class="pm-step-ic"><span class="ic" data-icon="rotate-cw"></span></div><h3>Hiệu chỉnh</h3></div>
-          <p>Sai số phát hiện ở bước 3, cùng phản hồi thực tế từ người dùng, được ghi nhận lại và đưa ngược về bước 2 và 3 — nguyên lý được tinh chỉnh, bảng đối chiếu được cập nhật. Hệ thống không dừng ở một lần đúng.</p>
-          <div class="pm-io"><span>Input: sai số + phản hồi thực tế</span><span class="out">Output: nguyên lý & bảng đối chiếu đã cập nhật</span></div>
+          <div class="pm-step-head"><div class="pm-step-ic"><span class="ic" data-icon="message-circle"></span></div><h3>Diễn giải</h3></div>
+          <p>Chỉ tới bước cuối này LLM mới xuất hiện — và chỉ để viết thành câu chữ dễ đọc từ kết luận mô hình đã chốt ở bước 4, áp cho đúng lá số của bạn. LLM không tự suy vị trí sao, không tự tính lại đại vận, không tự bịa pattern: mọi kết luận đã có sẵn trước khi nó chạm vào.</p>
+          <div class="pm-io"><span>Input: mô hình luận giải đã hiệu chỉnh + lá số của bạn</span><span class="out">Output: văn bản luận giải theo đúng lá số</span></div>
         </div>
       </div>
 
-      <div class="pm-loop"><span class="ic" data-icon="rotate-cw"></span>Vòng lặp liên tục — bước 05 quay ngược về bước 02 &amp; 03, không kết thúc ở một lần đúng</div>
+      <div class="pm-loop"><span class="ic" data-icon="rotate-cw"></span>Vòng lặp liên tục — bước 04 quay ngược về bước 02 &amp; 03 để tiếp tục tinh chỉnh mô hình, không dừng ở một lần đúng</div>
 
     </div>
   </section>
 
   <section class="wrap">
     <div class="pm-ai">
-      <h2><span class="ic" data-icon="shield-check"></span>Vai trò của AI, nói cho rõ</h2>
-      <p>Toàn bộ con số — cung nào có sao gì, đại vận nào ứng năm nào, tứ hoá rơi vào đâu — đến từ engine tính toán ở bước 2 và 3, <b>không</b> phải AI. AI chỉ được giao đúng một việc ở bước 4: <b>diễn giải</b> những con số đã chốt thành văn bản mạch lạc. Nó không có quyền tự bịa cung, tự đổi sao, hay tự suy luận điều engine chưa tính ra.</p>
+      <h2><span class="ic" data-icon="shield-check"></span>Vai trò của LLM, nói cho rõ</h2>
+      <p>Mô hình luận giải — pattern nào đúng, cách cục nào ứng với điều gì — được xây và hiệu chỉnh ở bước 02–04, bằng dữ liệu thật và thẩm định của chuyên gia, <b>không</b> phải LLM. LLM chỉ được giao đúng một việc ở bước 05: <b>diễn giải</b> kết luận đã chốt của mô hình thành văn bản mạch lạc cho đúng lá số của bạn. Nó không có quyền tự bịa cách cục, tự đổi pattern, hay tự suy luận điều mô hình chưa kết luận.</p>
     </div>
   </section>
 
