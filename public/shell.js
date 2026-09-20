@@ -392,9 +392,16 @@
   // to hơn) + đổi nhịp tick từ CỐ ĐỊNH 4s sang NGẪU NHIÊN 5-10s (setTimeout đệ
   // quy, không phải setInterval) cho nhịp trông tự nhiên hơn một máy đếm đều.
 
+  // Henry chốt tiếp (2026-09-20): "cho số nó to lên, chục trăm ngàn" + tách rõ
+  // hành vi hai số — `online` phải THẤY nó nhảy liên tục (cả lên lẫn xuống),
+  // `promptsToday` thì CHỈ cộng dồn (không bao giờ lùi). Biên độ random-walk
+  // của `online` phải tỉ lệ với baseline mới, không thì trên nền chục ngàn
+  // bước nhảy vài chục/tick (baseline cũ) sẽ KHÔNG THẤY nhảy nữa.
+
   /** Bước mô phỏng: seed lần đầu theo giờ VN hiện tại, sau đó random-walk nhẹ
-   * quanh baseline. `online` dao động cả hai chiều; `promptsToday` CHỈ TĂNG
-   * trong ngày (giống một bộ đếm thật) và tự reset khi qua ngày mới giờ VN. */
+   * quanh baseline. `online` dao động cả hai chiều mỗi tick; `promptsToday`
+   * CHỈ TĂNG trong ngày (giống một bộ đếm thật) và tự reset khi qua ngày mới
+   * giờ VN. */
   function simulatePulse() {
     var now = vnNow();
     var dayKey = pulseDayKey(now);
@@ -402,16 +409,16 @@
     if (!_pulseData || _pulseDayKey !== dayKey) {
       _pulseDayKey = dayKey;
       _pulseData = {
-        online: Math.round(900 + factor * 1600 + Math.random() * 150),
-        promptsToday: Math.round(1800 + factor * 1400 + Math.random() * 200),
+        online: Math.round(5000 + factor * 25000 + Math.random() * 1500),
+        promptsToday: Math.round(40000 + factor * 130000 + Math.random() * 2000),
       };
     } else {
-      var driftOnline = Math.round((Math.random() - 0.42) * 40); // lệch nhẹ về tăng
-      var target = Math.round(900 + factor * 1600);
+      var driftOnline = Math.round((Math.random() - 0.42) * 400); // lệch nhẹ về tăng, nhảy cả hai chiều
+      var target = Math.round(5000 + factor * 25000);
       // Kéo nhẹ về baseline của giờ hiện tại (tránh trôi dạt quá xa qua nhiều giờ) + nhiễu ngẫu nhiên.
-      _pulseData.online = Math.max(600, Math.min(3400, Math.round(_pulseData.online * 0.9 + target * 0.1 + driftOnline)));
+      _pulseData.online = Math.max(3000, Math.min(35000, Math.round(_pulseData.online * 0.9 + target * 0.1 + driftOnline)));
       if (Math.random() < 0.55) {
-        _pulseData.promptsToday += Math.round(Math.random() * 15) + (Math.random() < 0.12 ? 40 : 0);
+        _pulseData.promptsToday += Math.round(Math.random() * 150) + (Math.random() < 0.12 ? 400 : 0);
       }
     }
     return _pulseData;
