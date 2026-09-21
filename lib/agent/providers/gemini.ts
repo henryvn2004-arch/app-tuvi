@@ -426,13 +426,21 @@ export async function streamGeminiTurn(
   suggestions: string[];
   sentText: boolean;
 }> {
-  // Cache tường minh CHỈ cho `system` — xem chú thích ở streamGemini (prose)
-  // phía trên; cùng cửa `getOrCreateGeminiCache`, cùng fallback an toàn.
-  const cacheName = await getOrCreateGeminiCache(GEMINI_MODEL, system);
+  // 🔴 2026-09-21: KHÔNG dùng cache tường minh ở đây (đã thử, rút lại) — đo
+  // được trên prod thật: Google từ chối thẳng 400 "CachedContent can not be
+  // used with GenerateContent request setting system_instruction, tools or
+  // tool_config" bất cứ khi nào request còn `tools`, mà đường này (function-
+  // calling) LUÔN có tools ở mọi round trừ round cuối (`forceAnswer` — geminiTools
+  // null để ép trả lời). Google CHO PHÉP bake `tools` vào CachedContent lúc tạo,
+  // nhưng làm vậy thì round cuối KHÔNG CÒN CÁCH nào "tắt" tools đi được nữa
+  // (request dùng cachedContent cấm set lại tools, kể cả để omit) — phá vỡ
+  // đúng cơ chế "cấm tool ở vòng cuối để ép trả lời, chống lặp tool vô hạn"
+  // đã có. Đổi lại một tối ưu token lấy một lỗ hổng an toàn không đáng — rút
+  // cache khỏi HẲN đường này, giữ nguyên hành vi cũ 100%. Cache tường minh chỉ
+  // còn ở streamGemini (prose, KHÔNG BAO GIỜ có tools — an toàn, không đụng
+  // giới hạn này). Xem docs/nhat-ky/2026-09.md.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const body: any = cacheName
-    ? { cachedContent: cacheName, contents }
-    : { system_instruction: { parts: [{ text: system }] }, contents };
+  const body: any = { system_instruction: { parts: [{ text: system }] }, contents };
   body.generationConfig = { maxOutputTokens: cfg.maxTokens, temperature: 0.7, thinkingConfig: { thinkingBudget: 0 } };
   if (geminiTools && geminiTools.length) body.tools = geminiTools;
   const url =
