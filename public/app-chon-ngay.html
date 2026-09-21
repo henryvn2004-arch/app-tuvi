@@ -8,7 +8,8 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="stylesheet" href="/shell.css?v=50">
 <style>
 .form-card{max-width:600px}
@@ -148,7 +149,7 @@
               <span class="cb-ic" data-icon="wallet"></span>
               <div>
                 <div class="cb-title">Chi phí sử dụng</div>
-                <div class="cb-amt"><span data-tvp-price="chon-ngay-tot">…</span> Lượng <span class="vnd" data-tvp-price-vnd="chon-ngay-tot"></span> mỗi lượt</div>
+                <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="chon-ngay-tot"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="chon-ngay-tot">…</span> Lượng)</span></div>
                 <div class="cb-pay">
                   <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                   <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
@@ -162,7 +163,7 @@
           </div>
           <button class="btn-go" id="btnUnlock" onclick="initiateChonNgayChuyenSau()">
             <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnUnlockLabel">Chọn ngày chuyên sâu →</b></span>
-            <small>Tốn <span data-tvp-price="chon-ngay-tot">…</span> Lượng <span data-tvp-price-vnd="chon-ngay-tot"></span></small>
+            <small>Tốn <span class="vnd" data-tvp-price-vnd="chon-ngay-tot"></span> <span class="cb-sub">(<span data-tvp-price="chon-ngay-tot">…</span> Lượng)</span></small>
           </button>
         </div>
         <div class="dt-result" id="dtResult"></div>
@@ -179,7 +180,7 @@ window.SHELL_INTRO={key:'chon-ngay'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=37"></script>
 <script src="/tools-shared/hook-layer.js?v=4"></script>
-  <script src="/nav.js?v=38" data-icons-only></script>
+  <script src="/nav.js?v=41" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=95"></script>
 <script>
@@ -299,7 +300,7 @@ function _fillVndSlots(host,product){
   var els=host.querySelectorAll('[data-tvp-price-vnd]');
   var cost=window.ToolPrices.get(product);
   var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
-  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+  els.forEach(function(el){ el.textContent = lbl || ''; });
 }
 TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'chon-ngay-tot'); });
 

@@ -1,4 +1,4 @@
-// nav.js — Shared navigation component v19 (footer: bỏ FT_SIGN_ICON — hình SVG vẽ tay bằng code, chỉ giữ chữ ký chữ)
+// nav.js — Shared navigation component v20 (footer: thêm link Câu Hỏi Thường Gặp vào cột "Về Chúng Tôi")
 (function () {
   var path = window.location.pathname;
 
@@ -257,7 +257,7 @@
   var PHONG_PATHS  = ['/tools/phong-thuy.html','/tools/ban-lam-viec.html','/tools/cua-hang-phong-thuy.html','/tools/bat-trach.html','/kim-lau'];
   var NGAY_PATHS   = ['/ngay-tot','/tools/hoang-dao.html','/tools/ngay-tot.html','/tools/luc-nham.html','/tools/han-nam.html','/tools/chon-ngay-tot.html'];
   var TENCHU_PATHS  = ['/tools/dat-ten-con.html','/tools/dat-ten-doanh-nghiep.html'];
-  var BAIVIET_PATHS = ['/blog.html','/nghien-cuu','/tac-gia'];
+  var BAIVIET_PATHS = ['/van-dap','/nghien-cuu','/tac-gia','/phuong-phap'];
   var KP_PATHS = ['/cong-cu','/menh-kho','/ngay-tot','/thu-vien'].concat(TUONG_PATHS, PHONG_PATHS, NGAY_PATHS, TENCHU_PATHS, LAM_DEP_PATHS);
 
   function anyActive(arr) { return arr.some(function(p){ return path === p || path.startsWith(p + '/') || path.startsWith(p); }); }
@@ -450,41 +450,54 @@
     return;
   }
 
-  // GA4 — bỏ qua trình duyệt tự động (navigator.webdriver). Bộ E2E Playwright
-  // chạy THẲNG vào prod mỗi lần push/PR nên mỗi lượt CI đổ hàng chục phiên vào
-  // GA4: kênh dồn hết vào Direct (không referrer) và top landing page biến thành
-  // đúng danh sách URL trong tests/. D6 đã chặn chuyện này cho track.js nhưng bỏ
-  // sót GA4 — hệ quả là hai nguồn đếm hai tập khách khác nhau, khiến "% đo được"
-  // trên panel GA4 vs Nội Bộ thấp giả.
-  if (!document.getElementById('gtag-js') && !navigator.webdriver) {
-    var ga = document.createElement('script'); ga.id='gtag-js'; ga.async=true;
-    ga.src='https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0'; document.head.appendChild(ga);
-    window.dataLayer=window.dataLayer||[]; function gtag(){dataLayer.push(arguments);} window.gtag=gtag;
-    gtag('js',new Date()); gtag('config','G-F4XNRS2XT0');
-    // Google Ads tag riêng (khác G-F4XNRS2XT0 của GA4) — Google Ads yêu cầu cài
-    // trực tiếp trên mọi trang để đọc được conversion, không chỉ qua GA4 import.
-    gtag('config','AW-18419617290');
-  }
-  // Microsoft Clarity — heatmap + session recording, bổ sung cho GA4 chứ không
-  // thay số liệu. Cùng lý do bỏ qua navigator.webdriver như GA4/Pixel ở trên.
-  if (!document.getElementById('clarity-js') && !navigator.webdriver) {
-    (function(c,l,a,r,i,t,y){
-      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      t=l.createElement(r);t.id='clarity-js';t.async=1;t.src='https://www.clarity.ms/tag/'+i;
-      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, 'clarity', 'script', 'yg15ejzyc6');
-  }
-  // Meta (Facebook) Pixel — cùng lý do bỏ qua navigator.webdriver như GA4 ở trên,
-  // tránh bộ E2E Playwright đổ traffic giả vào pixel quảng cáo.
-  if (!document.getElementById('fb-pixel-js') && !navigator.webdriver) {
-    (function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.id='fb-pixel-js';t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window,
-    document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    window.fbq('init', '1747342186469684');
-    window.fbq('track', 'PageView');
-  }
+  // GA4/Clarity/FB Pixel — hoãn tới lúc main thread RẢNH (requestIdleCallback,
+  // trần 2000ms) thay vì chạy ngay trong lượt parse ban đầu. Lighthouse mobile
+  // đo được 3 script này tự chiếm ~770ms main-thread NGAY trong cửa sổ LCP/TTI
+  // (docs/nhat-ky/2026-09.md) — nhiều hơn cả trần TBT 600ms. Bản thân việc
+  // NẠP đã async sẵn, cái nặng là lúc CHẠY code khởi tạo của chúng, nên phải dời
+  // thời điểm tạo thẻ <script>, không chỉ thời điểm tải. Trễ tối đa ~2s không
+  // đáng kể cho việc ghi nhận PageView/conversion (khách rời trang dưới 2s là
+  // hiếm), đổi lại bỏ hẳn phần TBT nặng nhất ra khỏi cửa sổ người dùng đang chờ
+  // trang tương tác được.
+  var _loadTrackers = function () {
+    // GA4 — bỏ qua trình duyệt tự động (navigator.webdriver). Bộ E2E Playwright
+    // chạy THẲNG vào prod mỗi lần push/PR nên mỗi lượt CI đổ hàng chục phiên vào
+    // GA4: kênh dồn hết vào Direct (không referrer) và top landing page biến thành
+    // đúng danh sách URL trong tests/. D6 đã chặn chuyện này cho track.js nhưng bỏ
+    // sót GA4 — hệ quả là hai nguồn đếm hai tập khách khác nhau, khiến "% đo được"
+    // trên panel GA4 vs Nội Bộ thấp giả.
+    if (!document.getElementById('gtag-js') && !navigator.webdriver) {
+      var ga = document.createElement('script'); ga.id='gtag-js'; ga.async=true;
+      ga.src='https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0'; document.head.appendChild(ga);
+      window.dataLayer=window.dataLayer||[]; function gtag(){dataLayer.push(arguments);} window.gtag=gtag;
+      gtag('js',new Date()); gtag('config','G-F4XNRS2XT0');
+      // Google Ads tag riêng (khác G-F4XNRS2XT0 của GA4) — Google Ads yêu cầu cài
+      // trực tiếp trên mọi trang để đọc được conversion, không chỉ qua GA4 import.
+      gtag('config','AW-18419617290');
+    }
+    // Microsoft Clarity — heatmap + session recording, bổ sung cho GA4 chứ không
+    // thay số liệu. Cùng lý do bỏ qua navigator.webdriver như GA4/Pixel ở trên.
+    if (!document.getElementById('clarity-js') && !navigator.webdriver) {
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.id='clarity-js';t.async=1;t.src='https://www.clarity.ms/tag/'+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, 'clarity', 'script', 'yg15ejzyc6');
+    }
+    // Meta (Facebook) Pixel — cùng lý do bỏ qua navigator.webdriver như GA4 ở trên,
+    // tránh bộ E2E Playwright đổ traffic giả vào pixel quảng cáo.
+    if (!document.getElementById('fb-pixel-js') && !navigator.webdriver) {
+      (function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.id='fb-pixel-js';t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      window.fbq('init', '1747342186469684');
+      window.fbq('track', 'PageView');
+    }
+  };
+  if ('requestIdleCallback' in window) requestIdleCallback(_loadTrackers, { timeout: 2000 });
+  else setTimeout(_loadTrackers, 1500);
   // Conversion script — skip on chat page (social proof popup conflicts with chat UX)
   var _noConv = ['/tuvi-chat.html'];
   if (!document.getElementById('cv-script') && _noConv.indexOf(location.pathname) === -1) {
@@ -524,9 +537,10 @@
   var dd_cn = '<div class="nav-dd" id="nav-dd-cn">'
     + '<span class="nav-link' + (anyActive(BAIVIET_PATHS)?' active':'') + '" id="nav-dd-cn-toggle" role="button" tabindex="0">Cẩm nang ' + CHEV + '</span>'
     + '<div class="nav-dd-menu" id="nav-dd-cn-menu">'
+    + ddItem('/phuong-phap','shield-check',   'Phương Pháp & Độ Tin Cậy')
     + ddItem('/nghien-cuu', 'file-text',      'Nghiên Cứu Tử Vi')
     + ddItem('/tac-gia',    'user',           'Tác Giả')
-    + ddItem('/blog.html',  'message-circle', 'Khảo Luận')
+    + ddItem('/van-dap',    'message-circle', 'Vấn Đáp')
     + '</div></div>';
 
   var html = '<nav class="topnav">'
@@ -635,6 +649,7 @@
       + '<div class="ft-col"><div class="ft-col-title">Về Chúng Tôi<i></i></div>'
       + ftItem('/about.html', 'info', 'Giới Thiệu')
       + ftItem('/tac-gia', 'user', 'Tác Giả')
+      + ftItem('/faqs.html', 'lightbulb', 'Câu Hỏi Thường Gặp')
       + ftItem('/contact.html', 'mail', 'Liên Hệ')
       + '</div>'
       + '</div>'

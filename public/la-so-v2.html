@@ -8,7 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-600.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/be-vietnam-pro.css?v=1">
 <link rel="stylesheet" href="/theme.css?v=1">
 <style>
@@ -76,7 +77,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
     <a class="nav-link" href="/">Trang Chủ</a>
     <a class="nav-link" href="/app/luan-giai">Lá Số</a>
     <a class="nav-link" href="/about.html">Giới Thiệu</a>
-    <a class="nav-link" href="/blog.html">Vấn Đáp</a>
+    <a class="nav-link" href="/van-dap">Vấn Đáp</a>
   </div>
 </nav>
 <div class="form-wrap">
@@ -117,6 +118,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
   </div>
 </div>
 <script src="/tuvi-ansao-engine.js"></script>
+<script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
@@ -132,7 +134,8 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 function getStarElementClass(n){const d=(typeof STAR_DATA!=='undefined')?STAR_DATA[n]:null;if(!d?.element)return'sc-neutral';return{'kim':'sc-kim','mộc':'sc-moc','thủy':'sc-thuy','hỏa':'sc-hoa','thổ':'sc-tho'}[d.element.toLowerCase()]||'sc-neutral'}
 function getStarClass(s){if(s.nhom==='chinh')return'sc-'+(CHINH_TINH_COLOR[s.ten]||'neutral');if(s.hoa==='Lộc')return'sc-hoa-loc';if(s.hoa==='Quyền')return'sc-hoa-quyen';if(s.hoa==='Khoa')return'sc-hoa-khoa';if(s.hoa==='Kỵ')return'sc-hoa-ky';return getStarElementClass(s.ten)}
 function getCungCan(ci,di){return((ci%5)*2+di)%10}
-function hourMinToGioAm(h,m){return Math.floor(((h*60+m+60)%(24*60))/120)%12}
+// Uỷ THẲNG cho VnTimezone (tools-shared/vn-timezone.js) — NGUỒN DUY NHẤT.
+function hourMinToGioAm(h,m){return window.VnTimezone.hourMinToGioIdx(h,m)}
 
 function renderCungCell(palace, dvTuoi, canNamIdx) {
   const dcIdx=CHI.indexOf(palace.diaChi),canIdx=getCungCan(canNamIdx,dcIdx);
@@ -283,7 +286,7 @@ async function exportPNG(){
 buildDropdowns();updateGioAm();
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName!=='BUTTON')doAnSao();});
 </script>
-<script src="/nav.js?v=38" data-icons-only></script>
+<script src="/nav.js?v=41" data-icons-only></script>
 <script>
 // `nav.js` ở chế độ `data-icons-only` CỐ Ý không chèn GA4/Ads/Meta Pixel
 // (đúng cho 27 trang shell — đã có qua shell.js — và 2 trang admin, không cần

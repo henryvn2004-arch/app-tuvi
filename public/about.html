@@ -51,7 +51,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-600.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/be-vietnam-pro.css?v=1"><link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/theme.css?v=1">
 <style>
@@ -82,6 +83,11 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 .section-title { font-family: 'Noto Serif', serif; font-size: 24px; font-weight: 600; color: var(--navy); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
 .section-body { font-size: 15px; line-height: 1.9; color: var(--text-mid); font-weight: 300; }
 .section-body p + p { margin-top: 16px; }
+.section-body ul { margin: 12px 0 16px 0; padding-left: 0; list-style: none; }
+.section-body li { position: relative; padding-left: 20px; margin-top: 8px; }
+.section-body li::before { content: ''; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+.subhead { font-family: 'Noto Serif', serif; font-size: 16px; font-weight: 600; color: var(--navy); margin: 28px 0 4px 0; }
+.section-body > .subhead:first-child { margin-top: 0; }
 .principles { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
 .principle-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 10px; padding: 20px; border-top: 3px solid var(--navy); }
 .principle-num { font-size: 10px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
@@ -150,9 +156,22 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
     <div class="section-label">Về chúng tôi</div>
     <div class="section-title">Nhóm Nghiên Cứu</div>
     <div class="section-body">
-      <p>Chúng tôi là một nhóm những người nghiên cứu Tử vi đẩu số theo khuynh hướng cổ điển, lấy kinh điển làm nền tảng, lấy thực chứng làm tiêu chuẩn, và luôn giữ thái độ thận trọng trước mọi diễn giải.</p>
-      <p>Trên cơ sở đó, chúng tôi tìm cách kết hợp những tri thức truyền thống với phương pháp luận hiện đại, hầu mong mở rộng khả năng khảo cứu và kiểm nghiệm.</p>
-      <p>Việc xây dựng công cụ luận giải này không nhằm thay thế con người, mà trước hết là để hệ thống hóa các nguyên lý, cách cục và quy tắc vốn tản mạn trong nhiều thư tịch khác nhau.</p>
+      <p>Tử Vi Minh Bảo được phát triển bởi một nhóm nghiên cứu độc lập, quy tụ những cá nhân có nền tảng và hướng đi khác nhau, nhưng cùng chung sự quan tâm sâu sắc đối với mệnh lý học phương Đông.</p>
+      <p>Thành phần nhóm bao gồm:</p>
+      <ul>
+        <li>Các thầy và người thực hành Tử Vi, huyền học lâu năm</li>
+        <li>Các học giả và nhà nghiên cứu trong các lĩnh vực liên quan như lịch sử, triết học phương Đông</li>
+        <li>Những người làm việc trong môi trường học thuật, bao gồm giảng viên và nhà nghiên cứu đại học</li>
+      </ul>
+      <p>Một số thành viên theo đuổi việc luận giải mệnh lý như một nghề nghiệp chính, trong khi những người khác đến từ các lĩnh vực chuyên môn khác nhau nhưng có quá trình nghiên cứu và thực hành nghiêm túc trong thời gian dài.</p>
+      <p>Nhiều thành viên đã có kinh nghiệm học tập và tiếp cận các trường phái Tử Vi và huyền học tại Trung Quốc và Hồng Kông, nơi các hệ thống lý luận này được phát triển và lưu truyền mạnh mẽ.</p>
+      <p>Sự đa dạng về nền tảng giúp nhóm:</p>
+      <ul>
+        <li>Tiếp cận vấn đề từ nhiều góc nhìn khác nhau</li>
+        <li>Kết hợp giữa lý thuyết và thực tiễn</li>
+        <li>Tránh sự phiến diện trong quá trình hệ thống hoá và luận giải</li>
+      </ul>
+      <p>Mục tiêu chung của nhóm không phải là đưa ra những kết luận tuyệt đối, mà là xây dựng một hệ thống luận giải có cơ sở, có kiểm chứng và có thể ứng dụng trong thực tế.</p>
     </div>
   </div>
 
@@ -162,6 +181,79 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
     <div class="section-body">
       <p>Việc luận giải Tử vi đẩu số, theo thiển ý của chúng tôi, trước hết cần đặt trên nền tảng của kinh điển, sau nữa mới xét đến biến hóa trong thực tế. Nếu rời bỏ nguyên lý mà chỉ dựa vào cảm đoán, thì dễ rơi vào võ đoán; ngược lại, nếu chỉ câu nệ văn tự mà không xét nghiệm thực chứng, thì khó tránh khỏi chỗ cứng nhắc.</p>
       <p>Do đó, phương pháp mà chúng tôi theo đuổi là sự kết hợp giữa hệ thống hóa các nguyên tắc cổ truyền và đối chiếu với những trường hợp thực tế đã được ghi nhận. Công nghệ chỉ được dùng như một công cụ hỗ trợ khảo cứu — không phải thay thế sự suy xét của con người.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Phương pháp</div>
+    <div class="section-title">Cách Xây Dựng Hệ Thống Luận Giải</div>
+    <div class="section-body">
+      <p>Hệ thống luận giải tại Tử Vi Minh Bảo được xây dựng theo hướng kết hợp giữa nền tảng cổ học, dữ liệu thực chứng và công nghệ hiện đại, nhằm đảm bảo tính nhất quán, khả năng kiểm nghiệm và giá trị ứng dụng trong thực tế.</p>
+
+      <div class="subhead">1. Nền tảng dữ liệu thực chứng</div>
+      <p>Chúng tôi xây dựng hệ thống dựa trên:</p>
+      <ul>
+        <li>Dữ liệu ngày, giờ sinh của hơn 270.000 cá nhân</li>
+        <li>Kết hợp với cơ sở dữ liệu quốc tế từ AstroDataBank</li>
+        <li>Đối chiếu với các diễn biến thực tế trong cuộc đời của họ</li>
+      </ul>
+      <p>Quá trình này cho phép:</p>
+      <ul>
+        <li>Nhận diện các mô hình lặp lại giữa cấu trúc lá số và diễn biến cuộc đời</li>
+        <li>Xác định các giai đoạn biến động theo thời gian</li>
+        <li>Kiểm nghiệm lại các nguyên lý cổ học trên dữ liệu thực tế</li>
+      </ul>
+
+      <div class="subhead">2. Hệ thống hoá cổ pháp</div>
+      <p>Toàn bộ logic luận giải được xây dựng dựa trên:</p>
+      <ul>
+        <li>Các nguyên lý và cấu trúc của Tử Vi Đẩu Số truyền thống</li>
+        <li>Việc chuẩn hoá các cách cục, quy tắc và thứ tự luận đoán</li>
+        <li>Loại bỏ các yếu tố mang tính cảm đoán hoặc thiếu cơ sở</li>
+      </ul>
+      <p>Mục tiêu là chuyển từ các tri thức rời rạc trong kinh điển thành một hệ thống luận giải có cấu trúc, nhất quán và có thể kiểm chứng.</p>
+
+      <div class="subhead">3. Mô hình hoá và kiểm nghiệm</div>
+      <p>Trên nền tảng dữ liệu và cổ pháp đã được hệ thống hoá:</p>
+      <ul>
+        <li>Các mô hình được xây dựng để nhận diện mối liên hệ giữa lá số và thực tế</li>
+        <li>Kết quả được đối chiếu ngược lại với dữ liệu đã có</li>
+        <li>Các quy tắc được điều chỉnh dựa trên mức độ phù hợp với thực tế</li>
+      </ul>
+      <p>Công nghệ được sử dụng ở đây nhằm:</p>
+      <ul>
+        <li>Mở rộng quy mô kiểm nghiệm</li>
+        <li>Tăng tính nhất quán trong luận giải</li>
+        <li>Giảm sai lệch do yếu tố chủ quan</li>
+      </ul>
+
+      <div class="subhead">4. Diễn giải bằng hệ thống ngôn ngữ</div>
+      <p>Sau khi xác định được cấu trúc và các luận điểm chính:</p>
+      <ul>
+        <li>Hệ thống ngôn ngữ được sử dụng để diễn giải nội dung theo cách rõ ràng, dễ hiểu và có tính ứng dụng</li>
+        <li>Nội dung được trình bày theo ngữ cảnh cá nhân, thay vì các mô tả chung chung</li>
+      </ul>
+      <p>Điều quan trọng là:</p>
+      <ul>
+        <li>Hệ thống không tự suy đoán luận điểm</li>
+        <li>Mà chỉ diễn giải lại các kết quả đã được xác định từ trước</li>
+      </ul>
+
+      <div class="subhead">5. Hiệu chỉnh bởi chuyên gia</div>
+      <p>Toàn bộ hệ thống được rà soát và hiệu chỉnh bởi đội ngũ cộng tác, bao gồm:</p>
+      <ul>
+        <li>Các chuyên gia nghiên cứu Tử vi</li>
+        <li>Những người có kinh nghiệm thực hành trong lĩnh vực huyền học</li>
+      </ul>
+      <p>Quy trình này giúp:</p>
+      <ul>
+        <li>Giữ vững tinh thần của cổ pháp</li>
+        <li>Hạn chế các diễn giải cực đoan hoặc thiếu cơ sở</li>
+        <li>Đảm bảo tính cân bằng giữa lý thuyết và thực tiễn</li>
+      </ul>
+    </div>
+    <div class="quote-block" style="margin-top:24px">
+      <div class="quote-text">Dữ liệu → Nguyên lý → Mô hình → Kiểm nghiệm → Diễn giải → Hiệu chỉnh — một quy trình nhiều lớp, để mỗi luận giải không chỉ có tính logic, mà còn có khả năng đối chiếu với thực tế.</div>
     </div>
   </div>
 
@@ -257,6 +349,6 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
   }
 })();
 </script>
-<script src="/nav.js?v=38"></script>
+<script src="/nav.js?v=41"></script>
 </body>
 </html>

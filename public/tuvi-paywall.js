@@ -178,6 +178,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 .tpw-btn.topup{background:#9A7B3A;border:none;color:#fff;display:inline-block;text-decoration:none;padding:10px 28px;border-radius:7px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
 .tpw-btn.topup:hover{background:#7d6230}
 .tpw-msg{font-size:13px;color:#444;line-height:1.65;margin-bottom:14px}
+.tpw-sub{font-weight:400;font-size:.92em;color:#8a8a8a}
 .tpw-center{padding:18px 22px;text-align:center}
 .tpw-banner{position:fixed;top:72px;left:50%;transform:translateX(-50%);background:#1E6B3C;color:#fff;padding:9px 22px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.18);white-space:nowrap;pointer-events:none;animation:tpw-fade .25s ease}
 @keyframes tpw-spin{to{transform:rotate(360deg)}}
@@ -339,7 +340,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       if (!el) {
         el = document.createElement('script');
         el.id = '_tvmb_prices_js';
-        el.src = '/tool-prices.js?v=7';
+        el.src = '/tool-prices.js?v=9';
         document.head.appendChild(el);
       }
       el.addEventListener('load', () => resolve());
@@ -666,11 +667,10 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     if (cost == null) { _priceUnknown(); return false; }
     let balance = null;
     try { balance = await getBalance(); } catch (e) { balance = null; }
-    // Quy đổi ra VNĐ ngay cạnh số Lượng — Henry: "unlock thì ghi giá lượng -
-    // VNĐ luôn để user biết". `vndLabel` tự trả '' khi chưa đọc được
-    // `credit_packages` — khi đó KHÔNG hiện ngoặc rỗng, không đoán số.
+    // VNĐ lên làm giá CHÍNH (Henry, 2026-09-20), Lượng lùi thành chú thích
+    // phụ trong ngoặc — xem `_vndFirst`. `vndLabel` tự trả '' khi chưa đọc
+    // được `credit_packages` — khi đó rơi về "N Lượng" một mình, không bịa số.
     const vndLbl = window.ToolPrices ? window.ToolPrices.vndLabel(cost) : '';
-    const vndSuffix = vndLbl ? ' (' + vndLbl + ')' : '';
 
     let money;
     if (balance == null) {
@@ -686,13 +686,13 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       // tiền" mà không biết bao nhiêu. Giá đọc từ `tool_pricing` như mọi chỗ
       // khác; đọc hụt thì hàm này đã dừng từ trên (`_priceUnknown`), nên tới
       // được đây là chắc chắn có số thật, không phải số đoán.
-      money = 'Mở đầy đủ tốn <b>' + cost + ' Lượng</b>' + vndSuffix + ' · bấm mở là trả tiền và đọc ngay, ' +
+      money = 'Mở đầy đủ tốn ' + _vndFirst(cost, vndLbl) + ' · bấm mở là trả tiền và đọc ngay, ' +
         'không cần đăng ký trước. <a onclick="TuviPaywall._login()">Đã có tài khoản? Đăng nhập</a>';
     } else if (balance < cost) {
-      money = 'Bạn còn <b>' + balance + '</b> · cần <b>' + cost + '</b>' + vndSuffix + ' — thiếu ' + (cost - balance) +
+      money = 'Bạn còn <b>' + balance + '</b> · cần ' + _vndFirst(cost, vndLbl) + ' — thiếu ' + (cost - balance) +
         ', <a href="/topup.html" onclick="' + _topupClick('preview', cost - balance) + '">nạp thêm →</a>';
     } else {
-      money = 'Bạn còn <b>' + balance + ' Lượng</b> · mở đầy đủ tốn <b>' + cost + '</b>' + vndSuffix;
+      money = 'Bạn còn <b>' + balance + ' Lượng</b> · mở đầy đủ tốn ' + _vndFirst(cost, vndLbl);
     }
 
     const items = (o.items || []).map((t) => '<li>' + _esc(t) + '</li>').join('');
@@ -1232,14 +1232,18 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       const amountVnd = _qrAmountFor(need);
       if (amountVnd != null) { _openBankQr(amountVnd, slug, callback); return; }
     }
-    // 🔴 PHẢI NÓI GIÁ VNĐ ở đây (hard paywall 2026-09-06) — cùng luật với
-    // `lockPreview`. `vndLabel` tự trả '' khi chưa đọc được `credit_packages`,
-    // khi đó KHÔNG hiện ngoặc rỗng, không đoán số.
+    // VNĐ lên làm giá CHÍNH (Henry, 2026-09-20) — cùng luật với `lockPreview`,
+    // xem `_vndFirst`. `vndLabel` tự trả '' khi chưa đọc được `credit_packages`,
+    // khi đó rơi về "N Lượng" một mình, không bịa số.
     const needVndLbl = window.ToolPrices ? window.ToolPrices.vndLabel(need) : '';
-    const needVndSuffix = needVndLbl ? ' (' + needVndLbl + ')' : '';
+    // Số VNĐ của `cost` (tổng giá tool) KHÔNG PHẢI của `need` (phần còn thiếu)
+    // — dùng đúng nhãn ứng với số credits đang hiện ra cạnh nó, đừng chép
+    // nhầm `needVndLbl` sang chỗ hiện `cost` (hai số khác nhau khi đã có sẵn
+    // ít Lượng trong ví).
+    const costVndLbl = window.ToolPrices ? window.ToolPrices.vndLabel(cost) : '';
     const shown =
       _softLock(
-        '<div class="tpw-lock-t">⊙ Còn thiếu ' + need + ' Lượng' + needVndSuffix + '</div>' +
+        '<div class="tpw-lock-t">⊙ Còn thiếu ' + _vndFirst(need, needVndLbl) + '</div>' +
         '<div class="tpw-lock-s">Bạn còn <b>' + balance + '</b> · thao tác này tốn <b>' + cost + '</b>' +
         '<br>Nạp thêm là mở ra ngay.</div>' +
         '<a class="tpw-btn topup" href="/topup.html" onclick="' + _topupClick('paywall', need) + '">Nạp Lượng →</a>' +
@@ -1268,9 +1272,9 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       return;
     }
     _open(
-      '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Không đủ Lượng</div><div class="tpw-hd-s">Cần thêm ' + need + ' lượng' + needVndSuffix + '</div></div>' +
+      '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Không đủ Lượng</div><div class="tpw-hd-s">Cần thêm ' + _vndFirst(need, needVndLbl) + '</div></div>' +
       '<div class="tpw-center">' +
-        '<div class="tpw-msg">Số dư: <strong>' + balance + ' lượng</strong> · Cần: <strong>' + cost + ' lượng</strong>' + needVndSuffix + '<br>' +
+        '<div class="tpw-msg">Số dư: <strong>' + balance + ' lượng</strong> · Cần: ' + _vndFirst(cost, costVndLbl) + '<br>' +
         '<span style="font-size:12px;color:#999">Nạp thêm Lượng để tiếp tục.</span></div>' +
         '<a class="tpw-btn topup" href="/topup.html" onclick="' + _topupClick('paywall', need) + '">Nạp Lượng →</a>' +
       '</div>' +
@@ -1591,6 +1595,16 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   function _esc(s) {
     return String(s == null ? '' : s)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // Henry (2026-09-20): giá VNĐ lên làm CHÍNH ở mọi câu nói giá trong paywall,
+  // Lượng chỉ còn là chú thích phụ trong ngoặc — đảo ngược "N Lượng (~Yđ)" cũ.
+  // `vndLbl` rỗng (chưa đọc được `credit_packages`) → rơi về "N Lượng" một
+  // mình, KHÔNG bịa số VNĐ.
+  function _vndFirst(credits, vndLbl) {
+    return vndLbl
+      ? '<b>' + vndLbl + '</b> <span class="tpw-sub">(' + credits + ' Lượng)</span>'
+      : '<b>' + credits + ' Lượng</b>';
   }
 
   // ── Silent flow (cho chat: trừ ngầm, KHÔNG confirm modal) ─────

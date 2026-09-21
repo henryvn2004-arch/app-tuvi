@@ -120,11 +120,13 @@ export const LASO_MAX_TOKENS = 1350;
 export function buildChatContext(body: any): ChatContext {
   const toolType    = body.toolType || 'laso';
   const docs        = body.docs as string | undefined;
-  const authorName  = (body.authorName  as string | undefined) || '';
-  const authorStyle = (body.authorStyle as string | undefined) || '';
-  const persona     = authorName && authorStyle
-    ? `Phong cách: Bạn đang thể hiện phong cách của ${authorName} — ${authorStyle}`
-    : '';
+  // 2026-09-19 (Henry): gỡ persona tác giả (authorName/authorStyle) khỏi
+  // system prompt — đo không ra khác biệt giọng đáng kể trong ngân sách 120–180
+  // từ + khung 5 lớp đã siết sẵn, chỉ tốn thêm ký tự mỗi lượt gọi. UI "chọn
+  // thầy" (tuvi-chat.html/shell.js) CỐ Ý giữ nguyên — chỉ còn là trang trí
+  // (tên/avatar), không còn đổi câu trả lời. Vẫn giữ tham số `persona` rỗng
+  // xuyên suốt các hàm CHAT_SYSTEM_* bên dưới để không phải sửa 20+ chữ ký hàm.
+  const persona = '';
 
   if (toolType === 'xem-tuoi' || toolType === 'xem-lam-an' || toolType === 'tuong-hop') {
     return {
@@ -258,6 +260,16 @@ export function buildChatContext(body: any): ChatContext {
   let systemForCall: any;
   let maxTokens = LASO_MAX_TOKENS;
   if (hasFullLaso) {
+    // 🔴 Trần 32.000 ký tự là lưới an toàn cho lá số bất thường (nhiều cách cục),
+    // KHÔNG phải hành vi bình thường — lá số thật đo được ~22.400 ký tự. Trước
+    // đây cắt IM LẶNG (đúng loại lỗi CLAUDE.md cấm): lá số chạm trần mất đứt phần
+    // đuôi (thường là khối ĐẠI VẬN muộn) mà không ai biết. Log khi THỰC SỰ cắt.
+    if (laSoText.length > 32000) {
+      console.error(
+        `[buildChatContext] laSoText bị cắt: ${laSoText.length} → 32000 ký tự ` +
+        `(toolType=${toolType}) — lá số bất thường hoặc trần đã lỗi thời, kiểm lại.`
+      );
+    }
     systemForCall = [
       { type: 'text', text: CHAT_RICH_RULES(persona) + TOOLS_INSTRUCTION(true) },
       { type: 'text', text: '=== DỮ LIỆU LÁ SỐ (hệ thống tính sẵn) ===\n' + laSoText.slice(0, 32000), cache_control: { type: 'ephemeral' } },
@@ -284,8 +296,8 @@ export function buildChatContext(body: any): ChatContext {
 // trong đặt-tên-con).
 export const XUNG_HO_RULE = `XƯNG HÔ VỚI NGƯỜI XEM (bắt buộc):
 · MẶC ĐỊNH — nếu KHÔNG có dòng "Người xem" hoặc không ghi rõ giới tính → BẮT BUỘC xưng "quý vị". TUYỆT ĐỐI KHÔNG tự đoán "anh" hay "chị", KHÔNG dùng "bạn/em".
-· Dòng "Người xem" ghi giới tính NAM → luôn gọi "anh" (kèm tên gọi = chữ cuối họ tên nếu có, vd "anh Tuấn"). CẤM dùng "em/chú/cháu/bạn/ông".
-· Dòng "Người xem" ghi giới tính NỮ → luôn gọi "chị" (kèm tên gọi nếu có, vd "chị Hà"). CẤM dùng "em/cô/cháu/bạn/bà".
+· Dòng "Người xem" ghi giới tính NAM → luôn gọi "anh" (kèm tên gọi = chữ cuối họ tên nếu có, vd "anh Tuấn"). CẤM dùng "em/chú/cháu/con/bạn/ông".
+· Dòng "Người xem" ghi giới tính NỮ → luôn gọi "chị" (kèm tên gọi nếu có, vd "chị Hà"). CẤM dùng "em/cô/cháu/con/bạn/bà".
 Chỉ gọi kèm tên thỉnh thoảng cho thân thiện, không lặp tên mỗi câu. TUYỆT ĐỐI không xưng hô sai giới tính và không tự hạ xuống "em/bạn".`;
 
 // Định dạng câu trả lời: MẶC ĐỊNH văn xuôi (giữ đúng tinh thần chat prose), NHƯNG
@@ -381,12 +393,17 @@ export const arcCore = (o: {
   ③ TWIST (1 câu) — lật góc nhìn: cái họ tưởng là điểm yếu hoá ra là chỗ mạnh, hoặc ngược lại. PHẢI rút từ dữ liệu thật bên dưới, không phải nói ngược cho kêu.
   ④ VÌ SAO (ngắn) — nói NGHĨA và HỆ QUẢ đời thường (tiền bạc, công việc, tình cảm, sức khoẻ, gia đình). Căn cứ suy luận vẫn BẮT BUỘC là ${o.canCu} — đó là để KHÔNG bịa, KHÔNG phải để đọc tên ra.${o.duoi}${o.hanViet}
   ⑤ CHỐT — ${o.chot}
+- BẾ TẮC THẬT (không phải tò mò tra cứu — kiểu "sao khổ vậy", "có thoát được không", "phải làm sao đây", "chấp nhận số phận thôi à"): lớp ④ mở thêm, viết liền mạch, không tách khối:
+  · Gọi đúng TÊN một khái niệm tâm lý học khớp với điều họ đang trải qua NẾU có và khớp thật (vd "lo âu dự đoán", "hội chứng kẻ mạo danh") để họ tự tra thêm — không khớp hoặc không chắc thì bỏ hẳn, đừng gán bừa cho có.
+  · Một câu ngắn kiểu an ủi đời thường: chuyện này ai cũng có lúc gặp, người xưa hay bảo/các cụ hay nói... (mượn ý vô thường, buông, nhân duyên) — TUYỆT ĐỐI không nhắc "Phật giáo"/"đạo Phật"/"nhà sư", không giảng đạo, không lên giọng dạy đời.
+  Không dừng câu trả lời ở "số đã vậy rồi" — lá số chỉ vẽ xu hướng, không phải bản án.
+- Có dấu hiệu nguy hiểm THẬT (ý định tự hại, buông xuôi hẳn): bỏ khung 5 lớp, nói thật lòng bằng giọng quan tâm, khuyên tìm người thật ngay (người thân, bác sĩ/chuyên gia tâm lý, cơ sở y tế gần nhất) — KHÔNG cố giải quyết bằng lá số, KHÔNG tự bịa số điện thoại đường dây nóng.
 🔵 THUẬT NGỮ — HẠN CHẾ, KHÔNG CẤM. Mặc định viết bằng lời thường; tên riêng phải ĐÁNG chỗ nó chiếm:
 - Đừng MỞ ĐẦU câu bằng ${o.tenRieng} khi họ chưa tỏ ý muốn học — phần lớn người hỏi ${o.khongRanh}, nghe tên riêng ở đầu câu là trôi mất.
 - Mỗi câu phải ĐỨNG VỮNG khi xoá hết tên riêng đi: tên riêng là phần THÊM để kiểm chứng, không phải phần gánh nghĩa. Gọi tên thì giải nghĩa ngay.
 - Họ hỏi SÂU (${o.hoiSau}, hỏi tiếp đúng chi tiết vừa nêu) → gọi tên và nói đủ; càng hỏi sâu càng dùng được nhiều, chỉ đừng rải cho sang.
 - CẤM: câu chung chung ai đọc cũng thấy đúng · "Như vậy có thể thấy / Nhìn chung / Tóm lại / Về mặt… / Thứ nhất… thứ hai / Trước tiên cần hiểu rằng" · rào đón ở câu chốt · bịa dữ kiện${o.camBia} cho câu nghe hay.
-- GIỌNG: viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ, đúng không), mỗi đoạn 1–2 cái, không đặt trong câu chốt. Persona nêu ở đầu chỉ đổi GIỌNG, không đổi độ dài — ngân sách luôn thắng.${o.xungHo}
+- GIỌNG: viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ, đúng không), mỗi đoạn 1–2 cái, không đặt trong câu chốt.${o.xungHo}
 - Khối "KHI NGƯỜI TA CẦN NGƯỜI NGHE" ở CUỐI prompt (nếu có) GHI ĐÈ toàn bộ nhịp này.`;
 
 // Bối cảnh + ngân sách của HAI bản CHAT. Tách thành hằng vì cả `LUAN_ARC` lẫn
@@ -1320,6 +1337,23 @@ export function extractLasoContext(lasoData: any, question: string, opts?: { ful
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const starName = (s: any): string => (typeof s === 'object' ? s.ten || '' : s || '');
 
+  // 14 chính tinh — CÙNG bộ `_CT_SET` trong public/tuvi-laso-format.js (formatLaSoV2,
+  // nguồn luận giải 24 phần). Hai bản vì rail chạy server TS còn formatLaSoV2 chạy
+  // client JS, không gộp được — đổi một bên (thêm/bớt chính tinh, không xảy ra
+  // thật nhưng phòng khi) nhớ đổi bên kia. Dùng để sắp "Ý nghĩa" theo cùng thứ tự
+  // ưu tiên với bản luận giải: mục nào neo vào chính tinh lên trước — đó là câu
+  // luận giải 24 phần dùng để chọn PHÁN QUYẾT, rail thiếu tín hiệu này thì luận
+  // yếu hơn dù CÙNG dữ liệu thô.
+  const CHINH_TINH_SET = new Set([
+    'Tử Vi', 'Thiên Cơ', 'Thái Dương', 'Vũ Khúc', 'Thiên Đồng', 'Liêm Trinh',
+    'Thiên Phủ', 'Thái Âm', 'Tham Lang', 'Cự Môn', 'Thiên Tướng', 'Thiên Lương',
+    'Thất Sát', 'Phá Quân',
+  ]);
+  const hasChinhTinh = (text: string): boolean => {
+    for (const s of CHINH_TINH_SET) if (text.includes(s)) return true;
+    return false;
+  };
+
   let ctx = LASO_AUTHORITY_RULE;
   if (lasoData.canChiNam) ctx += 'Can Chi: ' + lasoData.canChiNam + '\n';
   if (lasoData.napAm)     ctx += 'Nạp Âm: ' + lasoData.napAm + ' (' + (lasoData.napAmHanh || '') + ')\n';
@@ -1427,11 +1461,34 @@ export function extractLasoContext(lasoData: any, question: string, opts?: { ful
     if (chinh.length) ctx += '  Chính tinh: ' + chinh.join(', ') + '\n';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const phu = (p.stars||[]).filter((s: any) => typeof s === 'object' ? s.nhom !== 'chinh' : true).map(starFmt).filter(Boolean);
-    if (phu.length) ctx += '  Phụ tinh: ' + phu.slice(0,8).join(', ') + '\n';
-    // Sao tổ hợp tam phương tứ chính (đã loại Tuần/Triệt từ cung ngoài)
+    // 🔴 2026-09: BỎ trần slice(0,8) — parity với formatLaSoV2 (KHÔNG cắt phụ
+    // tinh). Trần cũ cắt IM LẶNG các sao đứng cuối mảng (thường là Đào Hoa/Hồng
+    // Loan/Thiên Hình/Kình Dương... — đúng loại sao hay bị hỏi riêng).
+    if (phu.length) ctx += '  Phụ tinh: ' + phu.join(', ') + '\n';
+    // Tam hợp + Xung chiếu — CÙNG cấu trúc formatLaSoV2 (đọc p.tamHopCungs/
+    // p.xungChieuCung, engine gắn sẵn lúc an sao — KHÔNG phải tính lại).
+    // 🔴 THAY cho danh sách phẳng `tuChinhStars` cũ: bản cũ chỉ liệt kê TÊN sao
+    // trộn lẫn 3 cung tam hợp + cung xung, mất hẳn "sao nào đứng ở cung nào" —
+    // đúng cấu trúc mà luận giải 24 phần dùng để luận (một sao tốt lạc ở cung
+    // xung khác hẳn nó tọa ngay tam hợp). Tuần/Triệt-aware: cung dính Tuần/Triệt
+    // báo thẳng thay vì liệt kê sao xuyên qua nó (khớp luật "Tuần/Triệt chỉ ảnh
+    // hưởng cung đó, không ảnh hưởng sang cung khác").
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const tptc = (p.tuChinhStars||[]).filter((s: any) => !p.stars?.includes(s)).map(starFmt).filter(Boolean);
-    if (tptc.length) ctx += '  Tam phương tứ chính: ' + tptc.slice(0,12).join(', ') + '\n';
+    const hasTuanTriet = (c: any): boolean => (c?.stars || []).some((s: any) => s?.nhom === 'tuan_triet');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (p.tamHopCungs?.length) {
+      const tamHopStr = (p.tamHopCungs as any[]).map((c: any) => {
+        if (hasTuanTriet(c)) return `${c.cungName}(${c.diaChi}):(bị Tuần/Triệt)`;
+        const cs = (c.majorStars || []).map(starFmt).join(' ');
+        return `${c.cungName}(${c.diaChi}):${cs || 'trống'}`;
+      }).join(' | ');
+      ctx += '  Tam hợp: ' + tamHopStr + '\n';
+      const xung = p.xungChieuCung;
+      if (xung) {
+        const xungCs = hasTuanTriet(xung) ? '(bị Tuần/Triệt)' : ((xung.majorStars || []).map(starFmt).join(' ') || 'trống');
+        ctx += `  Xung chiếu: ${xung.cungName}(${xung.diaChi}):${xungCs}\n`;
+      }
+    }
     // Cách cục đặc biệt của cung này — lọc từ mảng global lasoData.cachCuc
     // theo trường .cung (engine KHÔNG gắn p.cachCuc per-palace). Trước đây đọc
     // p.cachCuc nên cách như "Nhật Nguyệt Chiếu Bích" của Điền không hiện.
@@ -1467,11 +1524,19 @@ export function extractLasoContext(lasoData: any, question: string, opts?: { ful
       });
     }
     // Ý nghĩa cung từ CACH_CUC_DATA matching (patterns Khốc Hư, Thiên Mã, v.v.) —
-    // đây là kênh mang tomTat HÌNH TƯỢNG nhất (rút từ cach_cuc_all.json). Nâng
-    // trần 6→10 để câu văn đắt không bị cắt mù theo thứ tự engine liệt kê.
+    // đây là kênh mang tomTat HÌNH TƯỢNG nhất (rút từ cach_cuc_all.json).
+    // 🔴 2026-09: BỎ trần slice(0,10) (cắt mù cuối mảng) + đổi sang MỘT DÒNG MỖI
+    // MỤC có nhãn [Ý NGHĨA · chính tinh]/[Ý NGHĨA], sắp mục neo chính tinh lên
+    // trước — parity với `_sortYn`/tag trong formatLaSoV2. Bản cũ gộp một dòng
+    // "A | B | C" không phân biệt mục nào nặng ký, model phải tự đoán trong khi
+    // luận giải 24 phần đã CÓ SẴN tín hiệu này.
     const ynItems: string[] = lasoData.cachCucTungCung?.[pName] || [];
     if (ynItems.length) {
-      ctx += '  Ý nghĩa: ' + ynItems.slice(0, 10).join(' | ') + '\n';
+      [...ynItems]
+        .sort((a, b) => (hasChinhTinh(a) ? 0 : 1) - (hasChinhTinh(b) ? 0 : 1))
+        .forEach((y) => {
+          ctx += `  ${hasChinhTinh(y) ? '[Ý NGHĨA · chính tinh]' : '[Ý NGHĨA]'} ${y}\n`;
+        });
     }
   }
 

@@ -2,8 +2,10 @@
   "version": 2,
   "crons": [
     { "path": "/api/cron-khao-luan",     "schedule": "0 3 * * *"  },
+    { "path": "/api/cron-khao-luan",     "schedule": "0 7 * * *"  },
     { "path": "/api/cron-khao-luan",     "schedule": "0 11 * * *" },
     { "path": "/api/cron-khao-luan",     "schedule": "0 15 * * *" },
+    { "path": "/api/cron-khao-luan",     "schedule": "0 19 * * *" },
     { "path": "/api/cron-master-write",  "schedule": "0 2 * * *"  },
     { "path": "/api/cron-master-write",  "schedule": "0 6 * * *"  },
     { "path": "/api/cron-master-write",  "schedule": "0 10 * * *" },
@@ -41,7 +43,9 @@
     { "path": "/api/cron/email-reminder-idle", "schedule": "0 1 * * 2" },
     { "path": "/api/cron/email-cross-sell", "schedule": "0 1 * * 4" },
     { "path": "/api/cron/email-broadcast-drain", "schedule": "*/15 * * * *" },
-    { "path": "/api/cron/email-abandoned-checkout", "schedule": "15 3 * * *" }
+    { "path": "/api/cron/email-abandoned-checkout", "schedule": "15 3 * * *" },
+    { "path": "/api/cron/thu-vien-build", "schedule": "0 7 * * *" },
+    { "path": "/api/cron/tu-dien-sao-moi", "schedule": "0 8 * * *" }
   ],
   "headers": [
     {

@@ -44,12 +44,25 @@ const DEFAULTS: KeywordSuggestConfig = {
   enabled: true,
   hl: 'vi',
   gl: 'vn',
-  maxRequests: 180,
+  // 180→300 (2026-09-21): thêm 9 seed + 2 expansion nghi vấn đẩy tổng tổ hợp
+  // lên hẳn — trần cũ để lại quá ít vòng quay cho seed mới trong rotateSeeds().
+  // 300×350ms delayMs ≈ 105s quét thuần, còn dư nhiều so với maxDuration=300s
+  // của route (xem app/api/cron/keyword-suggest/route.ts).
+  maxRequests: 300,
   delayMs: 350,
   // Bộ gốc bám ĐÚNG thực trạng đo được, không phải bốc theo cảm tính:
   //  - 10 truy vấn GSC đọc được tên đều quanh kim lâu / ngày tốt / tử vi <can chi>;
   //  - "tử vi tuổi" / "tử vi năm" là đầu truy vấn của mọi trang đối thủ đang xếp
 //    hạng, trong khi site đang đặt title bằng "vận hạn" — từ hẹp hơn nhiều.
+  //
+  // ⚠️ Đợt nới 2026-09-19: bộ gốc ở trên toàn THUẬT NGỮ tra cứu (kim lâu, ngày
+  // tốt, cung mệnh...) — không seed nào chạm tới các mảng ĐỜI SỐNG mà site đang
+  // thật sự viết (`VALID_KL_CATS` ở `cron-khao-luan/route.ts`: hôn-nhân, tài-
+  // chính, công-việc, con-cái, tính-cách...) hay `LIFE_QUESTIONS` ở
+  // `lib/content/topic-topup.ts` đang phải bù tay. Suggest không tự phát hiện
+  // được chủ đề mới ngoài seed đã cho (khác Google Trends), nên thiếu seed ở
+  // mảng nào là `keyword_ideas` mù hẳn mảng đó. 20 dòng dưới nới sang đúng các
+  // mảng còn thiếu, giữ nguyên khung "tử vi/xem + <mảng đời sống>" như seed gốc.
   seeds: [
     'tử vi',
     'tử vi tuổi',
@@ -79,8 +92,52 @@ const DEFAULTS: KeywordSuggestConfig = {
     'phong thủy',
     'xem tướng',
     'đặt tên con',
+    // ── Nới 2026-09-19: mảng đời sống chưa có seed nào ──────────────────────
+    'tử vi hôn nhân',
+    'tử vi tình duyên',
+    'tử vi công việc',
+    'tử vi sự nghiệp',
+    'tử vi tài lộc',
+    'tử vi con cái',
+    'tử vi gia đạo',
+    'tử vi sức khỏe',
+    'tử vi tính cách',
+    'xem tuổi cưới hỏi',
+    'xem tuổi làm nhà',
+    'xem tuổi xây nhà',
+    'luận giải lá số',
+    'xem lá số miễn phí',
+    'tử vi trọn đời',
+    'giải hạn',
+    'cách hóa giải vận xui',
+    'sao hạn',
+    'đại vận',
+    'tiểu hạn',
+    // ── Nới 2026-09-21: dạng NGHI VẤN — câu người ta hỏi AI, không phải cụm
+    // danh từ gõ vào Google. Suggest tự hoàn thành phần còn lại của câu, nên
+    // seed chỉ cần mở đúng cửa nghi vấn; hai bộ (seed mới + expansion mới bên
+    // dưới) cộng dồn, không thay bộ cũ — mảng "độ tin cậy" đo được chỉ chạm
+    // 1,7% kho bài (`docs/nhat-ky/2026-09.md`), gần như trống trước đợt này.
+    'tại sao tử vi',
+    'vì sao tử vi',
+    'có nên xem tử vi',
+    'tử vi có đúng không',
+    'tử vi có chính xác không',
+    'nên tin tử vi',
+    'xem tử vi ở đâu uy tín',
+    'tử vi khác bát tự',
+    'làm sao biết mình hợp',
+    'có nên tin vào tử vi',
   ],
-  expansions: ['', '2026', '2027', 'là gì', 'có tốt không', 'cách tính', 'nam', 'nữ', 'theo ngày sinh', 'chi tiết'],
+  expansions: [
+    '', '2026', '2027', 'là gì', 'có tốt không', 'cách tính', 'nam', 'nữ', 'theo ngày sinh', 'chi tiết',
+    // Nghi vấn — ghép với MỌI seed (cross product, xem collectSuggestions),
+    // hữu ích nhất với seed thuật ngữ cũ: "kim lâu có đúng không". Ghép vào 9
+    // seed nghi vấn mới ở trên ra vài cụm lặp ý ("tử vi có đúng không có đúng
+    // không") — Suggest chỉ trả rỗng cho cụm đó, không hại gì, không đáng để
+    // tách riêng danh sách expansion theo loại seed.
+    'có đúng không', 'có nên tin không',
+  ],
 };
 
 export interface KeywordHit {
@@ -128,7 +185,11 @@ function isUsable(kw: string): boolean {
  * KHÔNG BAO GIỜ throw — hỏng thì trả rỗng để vòng lặp đi tiếp.
  */
 async function fetchSuggest(term: string, hl: string, gl: string): Promise<string[]> {
-  const url = `${ENDPOINT}?${new URLSearchParams({ client: 'firefox', hl, gl, q: term }).toString()}`;
+  // 🔑 `oe=utf-8` BẮT BUỘC: thiếu nó, Google trả Content-Type khai
+  // charset=ISO-8859-1 trong khi thân vẫn là byte UTF-8 — `res.text()` giải mã
+  // theo charset khai báo (đúng chuẩn Fetch) nên tiếng Việt vỡ thành `l� g�`.
+  // Cắn thật: 1.159/2.012 dòng (58%) trong `keyword_ideas` đã hỏng kiểu này.
+  const url = `${ENDPOINT}?${new URLSearchParams({ client: 'firefox', hl, gl, oe: 'utf-8', q: term }).toString()}`;
   try {
     const res = await fetch(url, {
       headers: {

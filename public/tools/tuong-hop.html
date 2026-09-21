@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=38" as="script">
+<link rel="preload" href="/nav.js?v=41" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Xem Tương Hợp Tuổi — Hợp Khắc Theo Địa Chi | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Xem Tương Hợp Tuổi — Hợp Khắc Theo Địa Chi | Tử Vi Minh Bảo"/>
@@ -191,7 +191,7 @@
     <div class="tool-cta-eyebrow">Phân Tích Sâu Hơn</div>
     <div class="tool-cta-title">Xem Tuổi Vợ Chồng theo Lá Số</div>
     <div class="tool-cta-desc">Phân tích 8 yếu tố từ hai lá số Tử Vi đầy đủ — tương quan cung Mệnh, Phu Thê, Tài Bạch, Tử Tức và đại vận. Luận giải chuyên sâu 9 phần, chỉ $9.</div>
-    <a class="tool-cta-btn" href="/xem-tuoi.html">Xem Tuổi Vợ Chồng Đầy Đủ →</a>
+    <a class="tool-cta-btn" href="/app/xem-tuoi">Xem Tuổi Vợ Chồng Đầy Đủ →</a>
   </div>
 </div>
 
@@ -265,11 +265,14 @@ function calculate(){
 window.calculate=calculate;
 })();
 </script>
+<script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script>
 // ── Phân tích sâu theo lá số — dùng CHUNG engine public/tuong-hop.js (như /app/tuong-hop). ──
-// Lazy-load engine khi bấm để trang SEO nhẹ. hourMinToGioAm inline (khỏi nạp laso-chart.js).
+// Lazy-load engine khi bấm để trang SEO nhẹ (khỏi nạp laso-chart.js) — nhưng
+// vn-timezone.js (3.8KB, không phụ thuộc gì) nạp eager để hourMinToGioAm uỷ
+// thẳng cho NGUỒN DUY NHẤT, không tự chép công thức giờ→chi ở đây nữa.
 (function(){
-  function hourMinToGioAm(h,m){ return Math.floor((((h*60+m+60)%(24*60))/120))%12; }
+  function hourMinToGioAm(h,m){ return window.VnTimezone.hourMinToGioIdx(h,m); }
   ['A','B'].forEach(function(k){
     var hh=document.getElementById('dHh'+k),opt='<option value="">Giờ</option>';
     for(var h=0;h<=23;h++)opt+='<option value="'+h+'">'+String(h).padStart(2,'0')+':00</option>';
@@ -339,6 +342,6 @@ window.calculate=calculate;
 <script src="/testimonials.js"></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
 <script src="/related-tools.js?v=2"></script>
-<script src="/nav.js?v=38" defer></script>
+<script src="/nav.js?v=41" defer></script>
 </body>
 </html>

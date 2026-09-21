@@ -112,9 +112,11 @@ test.describe('Topup — nút mua', () => {
 
   test('giá tiền hiển thị đúng format', async ({ page }) => {
     const content = await page.content();
-    // Các mức giá VND (tăng 2026-08-30 — Khởi Đầu 199k, Phổ Thông 399k, xem
-    // _patches/migration-credit-packages-reprice-2026-08.sql)
+    // Các mức giá VND — Khởi Đầu 199k giữ nguyên (2026-08-30, xem
+    // _patches/migration-credit-packages-reprice-2026-08.sql); Phổ Thông
+    // 399k→400k (2026-09-20, xem _patches/migration-luong-500-exact.sql) để
+    // 1 Lượng = 500đ CHÍNH XÁC thay vì 499đ.
     expect(content).toMatch(/199[.,]000|199000/);
-    expect(content).toMatch(/399[.,]000|399000/);
+    expect(content).toMatch(/400[.,]000|400000/);
   });
 });

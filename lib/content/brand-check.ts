@@ -46,8 +46,17 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
  *    NHẤT, ký tên cuối bài. Đo trên prod: 300/306 bài dùng "tôi" — đó là
  *    ĐỊNH DẠNG, không phải lỗi trôi. Áp luật `khao-luan` sang đây sẽ chặn
  *    ~100% output.
+ *  - `thu-vien`        → thân bài GLOSSARY/THAM KHẢO (cột `than` của
+ *    `thu_vien_muc`), 250–900 từ, ngôi 3 khách quan. KHÁC hẳn 3 bề mặt trên:
+ *    đây là văn ĐỊNH NGHĨA/GIẢI THÍCH (đúng kiểu "X là gì"), không phải văn
+ *    "hook" mở bằng một tình huống — luật `mo-bai-giao-trinh` (cấm mở kiểu
+ *    "Tử Vi là một...") sẽ chặn OAN gần như mọi bài, nên profile này TẮT nó
+ *    (`skipMoBaiCheck`). `mode:'block'` CỐ Ý ghim cứng như `khao-luan-tamly`:
+ *    nội dung MỚI hoàn toàn (bảng `thu_vien_muc` mặc định draft), lời hứa với
+ *    Henry là "qua cửa chất lượng mới publish" — để mode chung ('warn') thì
+ *    cửa đó chỉ là trang trí, mọi bản nháp đều lọt.
  */
-export type BrandProfile = 'khao-luan' | 'khao-luan-tamly' | 'nghien-cuu';
+export type BrandProfile = 'khao-luan' | 'khao-luan-tamly' | 'nghien-cuu' | 'thu-vien';
 
 export interface BrandViolation {
   /** slug luật, để lọc/thống kê về sau */
@@ -102,6 +111,10 @@ interface ProfileRules {
    * vì rủi ro nội dung (chẩn đoán tâm lý, framing khủng hoảng) nặng hơn.
    */
   mode?: GateMode;
+  /** Bỏ qua luật `mo-bai-giao-trinh` (cấm mở bài kiểu "X là một hệ thống...").
+   * CHỈ dùng cho bề mặt mà mở bài ĐỊNH NGHĨA là đúng định dạng, không phải lỗi
+   * — xem `thu-vien` ở `BrandProfile`. */
+  skipMoBaiCheck?: boolean;
 }
 
 interface BrandCheckConfig {
@@ -156,6 +169,20 @@ const DEFAULT_CONFIG: BrandCheckConfig = {
       allowSelfRef: true,
       requireBold: true,
       banEmoji: true,
+    },
+    'thu-vien': {
+      // Thân giải thích một khái niệm/tổ hợp sao×cung/nạp âm — ngắn hơn hẳn
+      // một bài khảo luận đầy đủ, băng rộng vì đây là bề mặt MỚI, chưa có dữ
+      // liệu thật để soi ngưỡng chặt hơn.
+      minLen: 250,
+      maxLen: 900,
+      lengthUnit: 'words',
+      readerAddress: 'free',
+      allowSelfRef: false,
+      requireBold: false,
+      banEmoji: true,
+      mode: 'block',
+      skipMoBaiCheck: true,
     },
   },
 };
@@ -477,12 +504,16 @@ export function checkAuto(content: string, rules: ProfileRules): BrandViolation[
   // ── Viral core ──
   // severity 'block' là CỐ Ý dù gate đang chạy mode='warn': ở warn nó chỉ ghi sổ,
   // và chính cái sổ đó là thứ để đọc trước khi quyết có bật 'block' hay không.
-  const moBaiXau = firstMatch(RE_MO_BAI_GIAO_TRINH, moBai(content));
-  if (moBaiXau)
-    add(
-      'mo-bai-giao-trinh',
-      `Mở bài đi giới thiệu bộ môn thay vì chạm vào việc của người đọc: "${moBaiXau}"`,
-    );
+  // `skipMoBaiCheck` (profile 'thu-vien'): mở bài ĐỊNH NGHĨA là đúng định
+  // dạng cho glossary, không phải lỗi — xem giải thích ở `BrandProfile`.
+  if (!rules.skipMoBaiCheck) {
+    const moBaiXau = firstMatch(RE_MO_BAI_GIAO_TRINH, moBai(content));
+    if (moBaiXau)
+      add(
+        'mo-bai-giao-trinh',
+        `Mở bài đi giới thiệu bộ môn thay vì chạm vào việc của người đọc: "${moBaiXau}"`,
+      );
+  }
 
   return v;
 }
@@ -505,7 +536,9 @@ async function checkLlm(content: string, profile: BrandProfile, doc: string): Pr
       ? 'tùy bút Nghiên Cứu do một persona thầy viết (ngôi thứ nhất "tôi" LÀ ĐÚNG định dạng, ký tên cuối bài, 1.200–1.500 từ)'
       : profile === 'khao-luan-tamly'
         ? 'bài Khảo Luận/Vấn Đáp nhánh TÂM LÝ/XÃ HỘI (ngôi thứ ba, không tự xưng, ~1.400 ký tự) — đề tài chạm cảm xúc/quan hệ/áp lực sống, cần soi thêm 2 mục an toàn'
-        : 'bài Khảo Luận/Vấn Đáp (ngôi thứ ba, không tự xưng, ~1.400 ký tự)';
+        : profile === 'thu-vien'
+          ? 'thân bài GLOSSARY/THAM KHẢO của Thư Viện (ngôi thứ ba, không tự xưng, 250–900 từ) — văn ĐỊNH NGHĨA/GIẢI THÍCH một khái niệm hoặc tổ hợp sao×cung/nạp âm, mở bài kiểu "X là..." LÀ ĐÚNG định dạng ở đây, không phải lỗi'
+          : 'bài Khảo Luận/Vấn Đáp (ngôi thứ ba, không tự xưng, ~1.400 ký tự)';
 
   const isTamLy = profile === 'khao-luan-tamly';
   // 🔴 Hai mục này KHÔNG phải luật văn phong — chúng gác một rủi ro có hại

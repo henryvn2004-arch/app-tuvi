@@ -1,7 +1,7 @@
 // app/api/cron/topic-topup/route.ts
 // Nạp chủ đề hằng tuần cho 2 cron viết bài (cron-master-write → /nghien-cuu,
-// cron-khao-luan → blog.html). Mặc định 21 chủ đề mỗi bề mặt = 3 bài/ngày × 7
-// ngày, khớp đúng nhịp hai cron đang chạy.
+// cron-khao-luan → /van-dap). Mặc định 35 chủ đề mỗi bề mặt = 5 bài/ngày × 7
+// ngày, khớp đúng nhịp hai cron đang chạy (2026-09-21: khao-luan 3→5 bài/ngày).
 //
 // Chạy THỨ TƯ 8h sáng VN (0 1 * * 3) — SAU keyword-suggest (T3) đúng một ngày
 // để lượt nạp luôn ăn được mẻ Google Suggest mới nhất. Né T2/T6 (autopilot),

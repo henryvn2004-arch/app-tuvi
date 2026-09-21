@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-334 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+353 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 169 | 669,462 B |
+| `2026-09.md` | 188 | 748,197 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,19 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🕰️ Gộp công thức giờ→chi về MỘT nguồn — sau khi soát bug "23:45 báo Sửu" của khách |
+| 1 | 2026-09 | `2026-09.md` | 💾 Cache tường minh Gemini (`cachedContents`) cho rail chat — Sprint 1.1 |
+| 1 | 2026-09 | `2026-09.md` | 🩹 Rail chat: vá 3 chỗ CẮT DỮ LIỆU LUẬN GIẢI + 1 chỗ cắt-im-lặng |
+| 1 | 2026-09 | `2026-09.md` | 📊 GEO — nối chéo faqs.html ↔ Vấn Đáp + đếm lượt AI crawler thật |
+| 1 | 2026-09 | `2026-09.md` | 🗣 GEO/đa dạng topic Vấn Đáp — PR 4+5+6/6: 14 danh mục, nguồn cầu chat thật, tăng nhịp cron |
+| 1 | 2026-09 | `2026-09.md` | 🗣 GEO/đa dạng topic Vấn Đáp — PR 1+2/6: phát hành /phuong-phap + hub SSR /van-dap |
+| 1 | 2026-09 | `2026-09.md` | 📈 Pulse tracker sidebar: nâng biên độ số + tách rõ "nhảy" vs "cộng dồn" |
+| 1 | 2026-09 | `2026-09.md` | 💰 "1 Lượng = 500đ" đúng nghĩa (không phải 499) + đảo VNĐ/Lượng thành chính/phụ toàn site |
+| 1 | 2026-09 | `2026-09.md` | 🗣 Rail chat gọi user là "con" — vá gốc ở `companion.ts` (chế độ tâm sự), không phải `XUNG_HO_RULE` |
+| 1 | 2026-09 | `2026-09.md` | 🖥 Trang admin mới "Rail Chat" — xem lại hội thoại rail thật của user, đọc từ `tuvi_chats` có sẵn |
+| 1 | 2026-09 | `2026-09.md` | ✍️ Layer "bế tắc thật" (tâm lý + lối xưa) cho rail chat trong `arcCore` + gỡ persona tác giả (authorName/authorStyle) khỏi prompt |
+| 1 | 2026-09 | `2026-09.md` | 🖼 Avatar `testimonials.js`: bỏ hash 16-ảnh (đụng tên), chuyển sang 1 tên = 1 ảnh, 79 ảnh synthetic đa dạng bối cảnh |
+| 1 | 2026-09 | `2026-09.md` | 🖼 Avatar cho `testimonials.js` — ảnh synthetic sinh bằng gpt-image-1 (không phải người thật) + thêm 27 review 9 tool |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Vá "Giới thiệu · Bản luận giải mẫu · Phiên gần đây" biến mất sau khi chạy tool — cuộn quá tay, không phải bị gỡ |
 | 1 | 2026-09 | `2026-09.md` | 🖼 32 icon tool còn lại + wire toàn site — bảng ánh xạ `ToolIcons` dùng chung |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Homepage: mục dưới đây chưa vá hết — gốc thật là `#ftb-track` RỖNG trong HTML tĩnh |
@@ -44,6 +57,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 1 | 2026-09 | `2026-09.md` | 🔝 Homepage: gỡ hẳn khối hero + thanh search — slider "Công cụ nổi bật" lên đầu trang |
 | 1 | 2026-09 | `2026-09.md` | ✂️ Homepage: gỡ ảnh hero "Minh Bảo cưỡi trâu" — slider "Công cụ nổi bật" đã thay chỗ đó |
 | 1 | 2026-09 | `2026-09.md` | 🖼 Homepage: thay khối "Vận Hôm Nay/kịch bản" cũ bằng slider 5 banner "Công cụ nổi bật" |
+| 1 | 2026-09 | `2026-09.md` | 🔗 Pha 5b productize luận giải — permalink riêng tư /ket-qua-laso/<token> |
 | 1 | 2026-09 | `2026-09.md` | 🩹 Nút Đăng nhập mobile đè hamburger — lỗi offset cố định trong auth.js |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Homepage tự dựng header riêng thay vì dùng nav.js full mode dùng chung |
 | 1 | 2026-09 | `2026-09.md` | 🧹 Dọn 3 chỗ trùng "xem/tải bản mẫu" trên cột phụ — chỉ giữ 1 box, sửa luôn spacing |
@@ -359,3 +373,8 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 163 | 2026-09 | `2026-09.md` | 🚀 Tứ Hóa Phi Tinh + 2 vá hiển thị mobile trên lá số |
 | 164 | 2026-09 | `2026-09.md` | 🔌 Tứ Hóa Phi Tinh — nối dữ kiện vào prompt luận giải |
 | 165 | 2026-09 | `2026-09.md` | 🛡️ Bộ dò `check:webdriver` — chặn tái phát GA4/Clarity/Meta Pixel đổ phiên giả từ CI |
+| 166 | 2026-09 | `2026-09.md` | 🐢 Đo tốc độ mobile lần đầu bằng số thật — hoãn 3 tracker bên thứ ba tới lúc rảnh |
+| 167 | 2026-09 | `2026-09.md` | 🐢 P2 — bỏ `noto-serif.css` khỏi render-blocking, 94 trang |
+| 168 | 2026-09 | `2026-09.md` | 🔌 Nạp từ khoá volume thật (Google Ads Keyword Planner / TikTok Creative Center) — `/api/admin/keyword-import` |
+| 169 | 2026-09 | `2026-09.md` | 🐢 P3 — bỏ `laso-chart.css` khỏi render-blocking trên 5 trang, đo bằng Playwright throttle trước khi đụng |
+| 170 | 2026-09 | `2026-09.md` | 🎯 CLS thật (Clarity RUM) — khối `hookHost` sụp về 0 rồi bung ra, vá `display:none`→`visibility:hidden` trên 21 trang |

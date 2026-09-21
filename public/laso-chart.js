@@ -27,7 +27,9 @@ const _BC_MAP = { Miếu: 'M', Vượng: 'V', Đắc: 'Đ', Bình: 'B', Hãm: 'H
 // ── HELPERS ──
 function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 function _bShort(b) { return _BC_MAP[b] || ''; }
-function hourMinToGioAm(h, m) { return Math.floor((((h * 60 + m + 60) % (24 * 60)) / 120)) % 12; }
+// Uỷ THẲNG cho VnTimezone (tools-shared/vn-timezone.js) — NGUỒN DUY NHẤT của
+// công thức giờ→chi. Mọi trang nạp laso-chart.js đều đã nạp vn-timezone.js.
+function hourMinToGioAm(h, m) { return window.VnTimezone.hourMinToGioIdx(h, m); }
 function _getCungCan(ci, di) { return (((ci % 5) * 2 + di) % 10); }
 function _getElemClass(n) { const d = (typeof STAR_DATA !== 'undefined') ? STAR_DATA[n] : null; if (!d || !d.element) return 'sc-neutral'; return { kim: 'sc-kim', mộc: 'sc-moc', thủy: 'sc-thuy', hỏa: 'sc-hoa', thổ: 'sc-tho' }[d.element.toLowerCase()] || 'sc-neutral'; }
 function _getStarCls(s) { if (s.nhom === 'chinh') return 'sc-' + (_CHINH_COLOR[s.ten] || 'neutral'); if (s.hoa === 'Lộc') return 'sc-hoa-loc'; if (s.hoa === 'Quyền') return 'sc-hoa-quyen'; if (s.hoa === 'Khoa') return 'sc-hoa-khoa'; if (s.hoa === 'Kỵ') return 'sc-hoa-ky'; return _getElemClass(s.ten); }

@@ -89,6 +89,12 @@ window.ToolPrices = (function () {
    */
   function _saleActive(row) {
     if (!row) return false;
+    // `row.sale_credits == null` PHẢI kiểm TRƯỚC khi ép kiểu — `Number(null)`
+    // là `0`, và `0` lọt qua `isFinite` (đã cắn thật: 2026-09-21, mọi tool có
+    // `sale_credits` bỏ trống bị hiện giá 0đ vì bị coi là đang khuyến mãi về
+    // giá `Number(null)`). `lib/billing/pricing.ts::effectivePrice()` phía
+    // server đã kiểm `== null` trước — bản client này lệch, nay khớp lại.
+    if (row.sale_credits == null) return false;
     var sale = Number(row.sale_credits);
     var full = Number(row.credits);
     if (!isFinite(sale) || !isFinite(full) || sale >= full) return false;
@@ -196,8 +202,18 @@ window.ToolPrices = (function () {
     if (row.is_free) return 'Miễn phí';
     var v = Number(row.credits);
     if (!isFinite(v) || v <= 0) return null;
-    if (_saleActive(row)) return Number(row.sale_credits) + ' Lượng mỗi lượt (giảm từ ' + v + ')';
-    return v + ' Lượng mỗi lượt';
+    // Henry (2026-09-20): VNĐ lên làm giá CHÍNH, Lượng lùi thành ngoặc phụ —
+    // đảo ngược "N Lượng mỗi lượt" cũ. `vndLabel` rỗng khi chưa đọc được
+    // `credit_packages` → rơi về câu Lượng-only cũ, KHÔNG bịa số VNĐ.
+    if (_saleActive(row)) {
+      var sale = Number(row.sale_credits);
+      var saleVnd = vndLabel(sale);
+      return saleVnd
+        ? saleVnd + ' mỗi lượt (' + sale + ' Lượng, giảm từ ' + v + ')'
+        : sale + ' Lượng mỗi lượt (giảm từ ' + v + ')';
+    }
+    var vnd = vndLabel(v);
+    return vnd ? vnd + ' mỗi lượt (' + v + ' Lượng)' : v + ' Lượng mỗi lượt';
   }
 
   /**
