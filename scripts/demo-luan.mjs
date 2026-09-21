@@ -65,6 +65,18 @@ const starFmt = (s) => {
 };
 const starName = (s) => (typeof s === 'object' ? s.ten || '' : s || '');
 
+// CÙNG bộ `_CT_SET` (public/tuvi-laso-format.js) + extractLasoContext (lib/agent/
+// prompts.ts) — ba bản, đổi một chỗ nhớ đổi cả ba.
+const CHINH_TINH_SET = new Set([
+  'Tử Vi', 'Thiên Cơ', 'Thái Dương', 'Vũ Khúc', 'Thiên Đồng', 'Liêm Trinh',
+  'Thiên Phủ', 'Thái Âm', 'Tham Lang', 'Cự Môn', 'Thiên Tướng', 'Thiên Lương',
+  'Thất Sát', 'Phá Quân',
+]);
+const hasChinhTinh = (text) => {
+  for (const s of CHINH_TINH_SET) if (text.includes(s)) return true;
+  return false;
+};
+
 // ── Build context: variant 'old' (cắt mù) vs 'new' (rank + [nặng ký]) ──
 function buildContext(ls, variant) {
   const palaces = ls.palaces || [];
@@ -101,12 +113,25 @@ function buildContext(ls, variant) {
       .filter((s) => (typeof s === 'object' ? s.nhom !== 'chinh' : true))
       .map(starFmt)
       .filter(Boolean);
-    if (phu.length) ctx += '  Phụ tinh: ' + phu.slice(0, 8).join(', ') + '\n';
-    const tptc = (p.tuChinhStars || [])
-      .filter((s) => !p.stars?.includes(s))
-      .map(starFmt)
-      .filter(Boolean);
-    if (tptc.length) ctx += '  Tam phương tứ chính: ' + tptc.slice(0, 12).join(', ') + '\n';
+    // parity với lib/agent/prompts.ts (2026-09): bỏ trần slice(0,8).
+    if (phu.length) ctx += '  Phụ tinh: ' + phu.join(', ') + '\n';
+    // Tam hợp + Xung chiếu (thay cho tuChinhStars phẳng cũ) — mirror prompts.ts.
+    const hasTuanTriet = (c) => (c?.stars || []).some((s) => s?.nhom === 'tuan_triet');
+    if (p.tamHopCungs?.length) {
+      const tamHopStr = p.tamHopCungs
+        .map((c) => {
+          if (hasTuanTriet(c)) return `${c.cungName}(${c.diaChi}):(bị Tuần/Triệt)`;
+          const cs = (c.majorStars || []).map(starFmt).join(' ');
+          return `${c.cungName}(${c.diaChi}):${cs || 'trống'}`;
+        })
+        .join(' | ');
+      ctx += '  Tam hợp: ' + tamHopStr + '\n';
+      const xung = p.xungChieuCung;
+      if (xung) {
+        const xungCs = hasTuanTriet(xung) ? '(bị Tuần/Triệt)' : (xung.majorStars || []).map(starFmt).join(' ') || 'trống';
+        ctx += `  Xung chiếu: ${xung.cungName}(${xung.diaChi}):${xungCs}\n`;
+      }
+    }
 
     let ccThis = (ls.cachCuc || []).filter((c) => {
       if (typeof c !== 'object') return false;
@@ -127,9 +152,15 @@ function buildContext(ls, variant) {
         chiTiet +
         '\n';
     });
+    // parity với lib/agent/prompts.ts (2026-09): bỏ trần slice + sắp/tag chính tinh.
     const ynItems = ls.cachCucTungCung?.[pName] || [];
-    const cap = variant === 'new' ? 10 : 6;
-    if (ynItems.length) ctx += '  Ý nghĩa: ' + ynItems.slice(0, cap).join(' | ') + '\n';
+    if (ynItems.length) {
+      [...ynItems]
+        .sort((a, b) => (hasChinhTinh(a) ? 0 : 1) - (hasChinhTinh(b) ? 0 : 1))
+        .forEach((y) => {
+          ctx += `  ${hasChinhTinh(y) ? '[Ý NGHĨA · chính tinh]' : '[Ý NGHĨA]'} ${y}\n`;
+        });
+    }
   }
   return ctx;
 }
