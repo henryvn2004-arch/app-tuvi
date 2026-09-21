@@ -12,11 +12,15 @@
  * `window.TuviForm`, nên Node không gọi được — đường mòn dễ đi nhất lúc đó là
  * CHÉP sang script import. Bộ dò này chặn đúng đường mòn ấy.
  *
- * Kiểm 4 thứ:
+ * Kiểm 5 thứ:
  *   1. `tuvi-form.js` KHÔNG tự khai lại ba hàm — phải lấy từ `window.VnTimezone`
  *   2. MỌI trang nạp `tuvi-form.js` cũng nạp `vn-timezone.js`, và nạp TRƯỚC
  *   3. Không file nào khác chép lại bảng mốc múi giờ VN
  *   4. Bảng mốc trong module khớp ĐÚNG tooltip đang hiện cho người dùng
+ *   5. Không file nào khác chép lại CÔNG THỨC `hourMinToGioIdx` (giờ:phút →
+ *      địa chi) — đã bắt được 6 bản chép tay (la-so.html, la-so-v2.html,
+ *      tools/tuong-hop.html, laso-chart.js, lib/charts/key.ts,
+ *      lib/engine/laso.ts) trước khi gộp về đây, xem docs/nhat-ky.
  *
  * Tự red-team: dựng lại đúng bản chép tay rồi xác nhận phép 3 bắt được.
  *
@@ -126,19 +130,44 @@ if (tipRows.length !== tblRows.length) {
   }
 }
 
-// ── RED-TEAM: dựng lại bản chép tay, phép 3 phải bắt ─────────
+// ── 5. Không nơi nào khác chép lại CÔNG THỨC hourMinToGioIdx ─
+// Dấu hiệu nhận dạng: `*60 + <phút> + 60` ngay trước `%(24*60).../120` — hình
+// dạng RIÊNG của công thức khối-2-giờ-neo-giờ-lẻ, không trùng công thức khác
+// trong repo (engine dùng `(hour+1)/2` — hour-only, không có `*60`).
+const FORMULA_MARK = /\*\s*60\s*\+\s*\w+\s*\+\s*60\)?\s*%\s*\(?\s*24\s*\*\s*60/;
+for (const f of allSources(join(ROOT, 'public'))
+  .concat(allSources(join(ROOT, 'scripts')))
+  .concat(allSources(join(ROOT, 'lib')))) {
+  if (f.includes('tools-shared') && f.endsWith('vn-timezone.js')) continue;
+  if (f.endsWith('check-vn-timezone.mjs')) continue;
+  if (FORMULA_MARK.test(readFileSync(f, 'utf-8'))) {
+    fail(
+      `${f.slice(ROOT.length)}: chép lại công thức giờ→chi — gọi VnTimezone.hourMinToGioIdx() (browser) hoặc clockToBranch() của lib/engine/laso.ts (server), đừng viết lại.`
+    );
+  }
+}
+
+// ── RED-TEAM: dựng lại bản chép tay, phép 3 và phép 5 phải bắt ─
 const forged = 'const D=(y,m,d)=>0; if (t >= D(1944, 3, 9)) return 540;';
 if (!MARK.test(forged)) {
   fail(
     'RED-TEAM THẤT BẠI: mẫu nhận dạng KHÔNG bắt được bản chép tay dựng lại — bộ dò không có răng.'
   );
 } else {
-  console.log('   ↳ red-team: bản chép tay dựng lại BỊ BẮT ✓');
+  console.log('   ↳ red-team: bản chép tay dựng lại bảng mốc BỊ BẮT ✓');
+}
+const forgedFormula = 'function hourMinToGioAm(h,m){return Math.floor(((h*60+m+60)%(24*60))/120)%12}';
+if (!FORMULA_MARK.test(forgedFormula)) {
+  fail(
+    'RED-TEAM THẤT BẠI: mẫu nhận dạng công thức KHÔNG bắt được bản chép tay dựng lại — bộ dò không có răng.'
+  );
+} else {
+  console.log('   ↳ red-team: bản chép tay dựng lại công thức BỊ BẮT ✓');
 }
 
 if (bad === 0) {
   console.log(
-    `✅ Múi giờ VN một nguồn duy nhất (${MODULE}); ${pages} trang nạp đúng thứ tự; không còn bản chép tay; bảng khớp tooltip.`
+    `✅ Múi giờ VN một nguồn duy nhất (${MODULE}); ${pages} trang nạp đúng thứ tự; không còn bản chép tay bảng mốc lẫn công thức; bảng khớp tooltip.`
   );
 } else {
   console.error(
