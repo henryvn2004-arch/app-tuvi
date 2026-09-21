@@ -136,7 +136,7 @@ h1 em{font-style:italic;color:var(--gold)}
     <div class="rel-grid">${relLinks}</div>
   </div>
 </div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=39" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=40" defer></script>
 </body></html>`;
 
   return new NextResponse(html, {

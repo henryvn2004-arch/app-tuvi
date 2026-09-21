@@ -86,6 +86,7 @@ const nextConfig = {
       { source: '/contact',             destination: '/contact.html'         },
       { source: '/resources',           destination: '/resources.html'       },
       { source: '/blog',                destination: '/blog.html'            },
+      { source: '/phuong-phap',         destination: '/phuong-phap.html'     },
       { source: '/payment-success',     destination: '/payment-success.html' },
       { source: '/auth-callback',       destination: '/auth-callback.html'   },
       { source: '/tai-lieu/:slug',      destination: '/tai-lieu.html'        },
@@ -154,6 +155,11 @@ const nextConfig = {
       { source: '/xem-lam-an.html', destination: '/app/xem-lam-an', permanent: true },
       { source: '/xem-lam-an',      destination: '/app/xem-lam-an', permanent: true },
       { source: '/tu-binh.html',    destination: '/app/bat-tu',     permanent: true },
+      // Trang DNA "Cách hệ thống hoạt động" — dọn về URL sạch để nộp sitemap
+      // + llms.txt + JSON-LD (canonical/og:url dùng /phuong-phap, không còn
+      // .html). Link cũ trỏ .html vẫn còn ở vài nơi ngoài site (backlink,
+      // social) nên giữ redirect 308 thay vì xoá thẳng.
+      { source: '/phuong-phap.html', destination: '/phuong-phap',    permanent: true },
     ];
   },
 };

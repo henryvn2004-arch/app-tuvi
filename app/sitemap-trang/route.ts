@@ -21,6 +21,7 @@ const STATIC_PAGES = [
     '/thu-vien/nguoi-cung-ngay-sinh', // hub lịch 366 ngày dương — xem NGAY_SINH_PAGES bên dưới
     '/thu-vien/nguoi-cung-ngay-sinh-am-lich', // hub lịch 360 ngày âm — xem NGAY_SINH_AM_PAGES bên dưới
     '/about.html',
+    '/phuong-phap',           // Tử Vi Nghiệm Chứng — quy trình 5 bước, trang DNA thương hiệu
     '/nguon-du-lieu.html', // ghi công nguồn dữ liệu (bắt buộc theo giấy phép CC BY)
     '/resources.html',
     '/blog.html',
