@@ -285,6 +285,14 @@ export interface TamLyRunResult {
  * bọc `NextResponse`) — thứ đã có tiền lệ đúng ở `cron-khao-luan/route.ts`.
  */
 export async function processOneRun(): Promise<TamLyRunResult> {
+  // 🔴 CẦU DAO THỜI GIAN — trước đây KHÔNG có (đã rà lại khi nới nhịp
+  // cron-khao-luan 3→5 bài/ngày 2026-09-21, phát hiện nhánh này thiếu đúng
+  // cầu dao mà `cron-khao-luan/route.ts` đã có từ đầu). `route.ts` khai
+  // `maxDuration=300`, mà một lượt ở đây = 1 lượt Kimi (`writeQaSet`,
+  // maxTokens:15000, có thể tự chiếm phần lớn ngân sách) RỒI MỚI loop
+  // brandCheck+ghi DB cho 3–5 bài. Không có cầu dao thì lượt nào brandCheck
+  // chậm là mất TRẮNG cả mẻ (kể cả bài đã qua gate), không phải mất 1 bài.
+  const startTime = Date.now();
   const results = { written: 0, saved: 0, blocked: 0, errors: [] as string[] };
 
   const cap = await getConfigValue<number>(CAP_CONFIG_KEY, CAP_DEFAULT);
@@ -312,6 +320,12 @@ export async function processOneRun(): Promise<TamLyRunResult> {
     let savedAny = false;
 
     for (let i = 0; i < articles.length; i++) {
+      // Bài còn lại trong mẻ (nếu có) BỎ LUÔN, không ghi dở — cùng vocab "nở
+      // hụt" đã có: 2/5 lên được vẫn tính là chủ đề xong, không phải lỗi.
+      if (Date.now() - startTime > 250000) {
+        results.errors.push(`Dừng sớm — hết ngân sách thời gian (${i}/${articles.length} bài đã xử lý)`);
+        break;
+      }
       const article = articles[i];
       const tks = tamlyTokens(article.title);
       if (batchTitles.some((t) => tamlyOverlap(tks, t) >= TAMLY_DUP_THRESHOLD)) {

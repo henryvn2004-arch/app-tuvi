@@ -175,11 +175,11 @@ export async function GET(): Promise<Response> {
       countLabel: 'người',
     },
     {
-      href: '/blog.html',
-      title: 'Khảo Luận',
+      href: '/van-dap',
+      title: 'Vấn Đáp',
       desc: 'Phân tích chuyên sâu theo chủ đề: tính cách, sự nghiệp, tài chính, hôn nhân, gia đình, con cái — đối chiếu với cổ pháp Tử Vi Đẩu Số.',
       count: khaoLuan,
-      countLabel: 'bài khảo luận',
+      countLabel: 'bài vấn đáp',
     },
     {
       href: '/nghien-cuu',
@@ -197,12 +197,13 @@ export async function GET(): Promise<Response> {
     },
   ];
 
-  // 🔑 HREF LÀ SỰ THẬT ĐÃ ĐỐI CHIẾU, KHÔNG PHẢI ĐOÁN: `/khao-luan` và
-  // `/tai-lieu` KHÔNG có rewrite bare-path trong next.config.mjs (chỉ
-  // `/khao-luan/:slug` · `/tai-lieu/:slug` có slug mới khớp) → 404 cho người
-  // thật. `khao-luan.html`/`tai-lieu.html` tự redirect slug rỗng sang
-  // `/blog.html`/`/resources.html` — đó mới là listing THẬT, nên trỏ THẲNG
-  // vào đó, không qua một cú redirect client-side thừa.
+  // 🔑 HREF LÀ SỰ THẬT ĐÃ ĐỐI CHIẾU, KHÔNG PHẢI ĐOÁN: `/khao-luan` (không
+  // slug) và `/tai-lieu` KHÔNG có rewrite bare-path trong next.config.mjs
+  // (chỉ `/khao-luan/:slug` · `/tai-lieu/:slug` có slug mới khớp) → 404 cho
+  // người thật, nên KHÔNG trỏ vào đó. `/van-dap` khác hẳn: nó là route SSR
+  // thật (app/van-dap/route.ts), không phải alias/redirect — trỏ thẳng vào
+  // đó là đúng, không phải giải pháp tạm. `tai-lieu.html` tự redirect slug
+  // rỗng sang `/resources.html` — đó mới là listing thật cho tài liệu.
   // `sach_library` (168 dòng) KHÔNG khớp `/resources.html` (223 mục tĩnh, tự
   // viết tay, không đọc bảng đó) — hai nguồn cho cùng một thư mục, đếm theo
   // bảng rồi gắn vào trang kia là bịa số. Để `count: null` cho card này.
@@ -284,7 +285,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 </style>
 <script src="/auth.js?v=2"></script>
 </head><body><div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=39" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=41" defer></script>
 <div class="bc"><a href="/">Trang Chủ</a><span>›</span><span>Thư Viện</span></div>
 
 <div class="lib-hero">

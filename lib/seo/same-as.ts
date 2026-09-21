@@ -65,6 +65,15 @@ export async function orgNode(opts: OrgNodeOptions = {}): Promise<Record<string,
       'Cổng mệnh lý — lá số lập bằng engine tất định theo cổ pháp, phần luận chỉ diễn giải trên số đã tính, không tự sinh dữ liệu.',
     areaServed: ['VN', 'US', 'AU', 'CA'],
     inLanguage: 'vi',
+    // Neo về trang phương pháp (/phuong-phap) — quy trình đối chiếu luận giải
+    // với dữ liệu cuộc đời thực đã kiểm chứng (AstroDataBank, 270.000+ hồ sơ)
+    // trước khi đưa cho chuyên gia thẩm định. Đây là POD kỹ thuật thật của
+    // site, không phải khẩu hiệu — knowsAbout trỏ URL để máy đọc kiểm chứng
+    // được, không chỉ đọc mô tả ở description.
+    knowsAbout: [
+      'Tử Vi Đẩu Số',
+      { '@type': 'CreativeWork', name: 'Tử Vi Nghiệm Chứng', url: `${SEO_BASE}/phuong-phap` },
+    ],
   };
   // Chỉ khai khi THẬT SỰ có hồ sơ — `sameAs: []` không mang tín hiệu nào mà
   // vẫn chiếm chỗ, và đó đúng là hiện trạng đang phải sửa.

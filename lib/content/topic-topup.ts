@@ -37,7 +37,7 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
  * Số chủ đề nạp cho mỗi bề mặt mỗi tuần = (số lịch cron/ngày) × 1 bài/lượt × 7.
  *
  * ⚠️ BA BỀ MẶT TIÊU KHÁC NHAU, đừng gộp về một con số. `vercel.json` khai:
- *   cron-khao-luan       3 lịch/ngày → 3 bài/ngày → 21/tuần
+ *   cron-khao-luan       5 lịch/ngày → 5 bài/ngày → 35/tuần (2026-09-21: 3→5)
  *   cron-master-write    5 lịch/ngày → 5 bài/ngày → 35/tuần
  *   cron-khao-luan-tamly 2 lịch/TUẦN (T3+T6, KHÔNG phải mỗi ngày) → 2/tuần —
  *     mỗi lượt chỉ pop ĐÚNG 1 chủ đề (nó tự nở thành 3–5 bài ở tầng viết, xem
@@ -48,7 +48,7 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
  */
 const PER_WEEK: Record<Surface, number> = {
   'nghien-cuu': 35,
-  'khao-luan': 21,
+  'khao-luan': 35,
   'khao-luan-tamly': 2,
 };
 
@@ -84,7 +84,7 @@ const SURFACES: Record<Surface, SurfaceSpec> = {
       'Truy vấn DIỄN GIẢI: người đã biết cơ bản, muốn hiểu VÌ SAO / CƠ CHẾ / KHÁC NHAU CHỖ NÀO. ' +
       'Ví dụ dạng: "vì sao hai người cùng giờ sinh lại khác số phận", "cung Tài Bạch xấu có nhất định nghèo không".',
   },
-  // → bảng `khao_luan`, hiện tại blog.html (danh sách) + /khao-luan/<slug> (chi tiết)
+  // → bảng `khao_luan`, hiện tại /van-dap (hub theo danh mục) + /khao-luan/<slug> (chi tiết)
   'khao-luan': {
     queueType: 'khao-luan',
     brief: 'Bài Vấn Đáp ngắn ~1.400 ký tự, ngôi thứ BA, không tự xưng.',
@@ -497,7 +497,7 @@ const SEASONAL_SPOKES: Spoke[] = [
 /** Một cụm từ khoá kèm XUẤT XỨ — xuất xứ là thứ phân biệt file này với bịa. */
 interface DemandItem {
   keyword: string;
-  source: 'gsc' | 'suggest' | 'seasonal';
+  source: 'gsc' | 'suggest' | 'seasonal' | 'chat';
   /** Hạng hiện tại trên GSC, nếu có. Càng gần 20 càng dễ đẩy lên. */
   position?: number;
   surfaceHint?: Surface;
@@ -689,6 +689,54 @@ async function fromSuggest(limit: number): Promise<DemandItem[]> {
 }
 
 /**
+ * Nguồn 4 — câu hỏi THẬT người dùng đã hỏi trợ lý của CHÍNH site (`tuvi_chats`).
+ *
+ * Khác GSC/Suggest (người ta gõ vào Google): đây là câu hỏi đặt THẲNG cho AI —
+ * đúng dạng ChatGPT/Perplexity đang phải trả lời mỗi ngày ("có nên đổi việc",
+ * "bao giờ ổn định", "người ấy tính cách thế nào"). Cầu MẠNH hơn Suggest (bằng
+ * chứng trực tiếp, không suy từ autocomplete) nhưng THÔ hơn hẳn: câu gốc mang
+ * xưng hô cá nhân suồng sã, ngữ cảnh riêng, đôi khi chi tiết đời tư — KHÔNG BAO
+ * GIỜ ghi thẳng. `shapeTopics()` bên dưới có luật riêng bắt khái quát hoá +
+ * xoá xưng hô/chi tiết cá nhân trước khi đặt tên; hàm này chỉ lọc HÌNH DẠNG
+ * (đủ dài, có dấu hiệu nghi vấn) và xoá 2 đại từ suồng sã rõ nhất trước khi
+ * đưa cho model, không đọc/dùng bất cứ trường nào khác ngoài text câu hỏi.
+ *
+ * `surfaceHint: 'khao-luan'` LUÔN cố định — câu hỏi cá nhân ngắn đúng hình
+ * dạng Vấn Đáp, không phải tuỳ bút nghiên cứu hay khung tâm lý (khung đó có
+ * danh sách chủ đề riêng, không trộn nguồn).
+ */
+async function fromChatIntents(limit: number): Promise<DemandItem[]> {
+  const r = await sb(`/tuvi_chats?select=messages&order=updated_at.desc&limit=200`);
+  if (!r.ok || !r.body?.length) return [];
+
+  const QUESTION_HINT = /\?|\bsao\b|thế nào|có nên|có phải|bao giờ|làm sao|liệu\b/i;
+  const out: DemandItem[] = [];
+  const seen = new Set<string>();
+
+  for (const row of r.body as { messages: unknown }[]) {
+    const msgs = Array.isArray(row.messages)
+      ? (row.messages as { role?: string; content?: string }[])
+      : [];
+    for (const m of msgs) {
+      if (m?.role !== 'user' || typeof m.content !== 'string') continue;
+      const text = m.content
+        .trim()
+        .replace(/\b(tao|mày|may)\b/gi, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (text.length < 12 || text.length > 200) continue;
+      if (!QUESTION_HINT.test(text)) continue;
+      const key = text.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({ keyword: text, source: 'chat', surfaceHint: 'khao-luan' });
+      if (out.length >= limit) return out;
+    }
+  }
+  return out;
+}
+
+/**
  * Nguồn 3 — khung mùa vụ. Luôn trả về được, nên hàng đợi không bao giờ cạn.
  *
  * `offset` xoay theo SỐ TUẦN trong năm để tuần sau lấy thực thể khác tuần này —
@@ -777,7 +825,17 @@ Có ba bề mặt, chọn bề mặt phù hợp với Ý ĐỊNH TÌM KIẾM c�
   ĐỐI KHÔNG được gán vào bề mặt này; chỉ chọn giữa [khao-luan]/[nghien-cuu]
   cho chúng.
 
-LUẬT ĐẶT TIÊU ĐỀ:
+⚠️ DÒNG CÓ [nguồn: chat] LÀ NGOẠI LỆ CỦA MỌI LUẬT "GIỮ NGUYÊN" BÊN DƯỚI: đó là
+câu hỏi thật một người đã gõ cho trợ lý, không phải từ khoá tìm kiếm. LUÔN gán
+bề mặt [khao-luan]. BẮT BUỘC viết lại hoàn toàn thành câu hỏi khái quát, ngôi
+thứ ba hoặc trung tính — xoá SẠCH xưng hô cá nhân ("tao", "tôi", "mình", "em"),
+xoá mọi chi tiết đời tư/ngày tháng/tên riêng nếu câu gốc có nhắc tới, CHỈ giữ
+lại Ý ĐỊNH đang hỏi. Ví dụ: "tao đổi việc dc ko, có cơ hội ko" (nguồn chat) →
+"Có nên đổi việc lúc này — lá số nhìn quyết định này thế nào" (không phải giữ
+nguyên câu gốc).
+
+LUẬT ĐẶT TIÊU ĐỀ (áp dụng cho [nguồn: gsc]/[nguồn: suggest]/[nguồn: seasonal];
+dòng [nguồn: chat] theo luật riêng ở trên):
 - Giữ nguyên cụm từ khoá chính trong tiêu đề (đó là thứ người ta gõ).
 - 45–75 ký tự. Tiếng Việt có dấu.
 - Không giật tít, không hứa hẹn ("bí mật", "ít ai biết", "chấn động").
@@ -849,17 +907,22 @@ export async function runTopicTopup(
   const now = opts.now ?? new Date();
   const empty: TopupResult = { inserted: 0, bySurface: {}, sources: {}, deduped: 0 };
 
-  // Gom cầu. GSC và Suggest có thể rỗng (chưa cấu hình / cron chưa chạy) —
-  // mùa vụ luôn trả về được nên lượt chạy không bao giờ trắng tay.
+  // Gom cầu. GSC/Suggest/chat có thể rỗng (chưa cấu hình / cron chưa chạy /
+  // chưa đủ hội thoại) — mùa vụ luôn trả về được nên lượt chạy không bao giờ
+  // trắng tay.
   const weekIndex = Math.floor(now.getTime() / (7 * 86400_000));
-  const [gsc, suggest] = await Promise.all([
+  const [gsc, suggest, chat] = await Promise.all([
     fromGsc().catch(() => [] as DemandItem[]),
     fromSuggest(120).catch(() => [] as DemandItem[]),
+    fromChatIntents(40).catch(() => [] as DemandItem[]),
   ]);
   const seasonal = fromSeasonal(now, weekIndex);
 
   // Thứ tự nối = thứ tự ưu tiên: cầu đã chứng minh đứng trước cầu suy ra.
-  const pool = [...gsc, ...suggest, ...seasonal];
+  // `chat` đứng cạnh `suggest` — cả hai là bằng chứng cầu THẬT (không phải suy
+  // diễn như seasonal), chỉ khác kênh đo (autocomplete Google vs. câu hỏi
+  // thẳng cho trợ lý của chính site).
+  const pool = [...gsc, ...suggest, ...chat, ...seasonal];
   if (!pool.length) return { ...empty, note: 'không gom được cụm từ khoá nào' };
 
   const existing = await loadExistingTitles();
