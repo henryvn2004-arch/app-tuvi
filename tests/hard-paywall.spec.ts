@@ -72,10 +72,11 @@ async function stubApis(page: Page, opts?: { blockPreview?: boolean; blockReason
   await page.route('**/api/payment**', (r) =>
     r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ hasAccess: false, balance: 0 }) }));
   await page.route('**/api/track**', (r) => r.fulfill({ status: 200, body: '{}' }));
-  // Tầng hook kể chuyện (`_tryHookNarrative`, 2026-09-17) tự gọi
+  // Tầng hook kể chuyện (`HookLayer.run()`, 2026-09-17) tự gọi
   // `/api/hook-narrative` ngay sau `mountHook()` — KHÔNG stub thì bài kiểm gọi
   // THẬT tới model và tiêu THẬT một suất `preview.free_runs`, đúng cái luật ở
-  // đầu file cấm. `allowed:false` là đủ: client tự lùi về khối fact-card cũ,
+  // đầu file cấm. `allowed:false` không kèm `reason` cầu dao là đủ: client tự
+  // ẨN HẲN khối hook (2026-09-21, bỏ fallback fact-card deterministic cũ),
   // không đổi gì các assertion phía dưới (không bài kiểm nào đo tầng hook).
   await page.route('**/api/hook-narrative**', (r) =>
     r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ allowed: false }) }));

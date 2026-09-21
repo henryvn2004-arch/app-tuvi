@@ -73,7 +73,7 @@ async function stubApis(page: Page, opts?: { previewBody?: object }) {
   await page.route('**/api/payment**', (r) => r.fulfill({ status: 200, contentType: 'application/json',
     body: JSON.stringify({ hasAccess: false, balance: 0 }) }));
   await page.route('**/api/track**', (r) => r.fulfill({ status: 200, body: '{}' }));
-  // Tầng hook kể chuyện (`_tryHookNarrativeDC`, 2026-09-18) tự gọi
+  // Tầng hook kể chuyện (`HookLayer.run()`, 2026-09-18) tự gọi
   // `/api/hook-narrative` ngay sau `mountHook()` — KHÔNG stub thì bài kiểm gọi
   // THẬT tới model và tiêu THẬT một suất `preview.free_runs` (xem chú thích
   // đầy đủ ở tests/hard-paywall.spec.ts).
@@ -158,9 +158,11 @@ test('bản xem trước: 2 đoạn văn thật + câu trích, phần bán KHÔN
   await expect(page.locator('#basisBlock')).toBeVisible();
   await expect(page.locator('#basisList')).toBeEmpty();     // các dòng cơ sở là phần trả phí
 
-  // Hook hé ĐÚNG HAI chất (cao nhất + thấp nhất), đọc từ `khieuTop`/`khieuBottom`.
-  await expect(page.locator('#hookHost')).toContainText('Ngôn ngữ');
-  await expect(page.locator('#hookHost')).toContainText('Con số');
+  // `/api/hook-narrative` stub trả `allowed:false` không kèm `reason` cầu dao
+  // (key_cap/ip_cap/global_cap) — `HookLayer.run()` ẨN HẲN khối trong trường
+  // hợp đó (2026-09-21, bỏ hẳn fallback fact-card deterministic cũ), nên
+  // `#hookHost` phải rỗng, KHÔNG còn hiện `khieuTop`/`khieuBottom` như bản cũ.
+  await expect(page.locator('#hookHost')).toBeEmpty();
 
   // Có mang định danh cho cầu dao — thiếu là mọi khách rơi về khung cũ.
   expect(calls(page)).toHaveLength(1);

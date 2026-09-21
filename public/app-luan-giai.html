@@ -40,7 +40,7 @@
 /* `scroll-margin-top` khớp `.ws-top` (thanh dính đầu trang, 69px) — thiếu dòng
    này thì `AiLoadingSteps.scrollToResult('lgPanel')` (bấm "Lập lá số & Luận
    giải ngay") cuộn #hookHost (con ĐẦU của #lgPanel, chứa vòng quay loading của
-   `_tryHookNarrative`) khớp thẳng lên y=0 — ĐÚNG dải bị `.ws-top` z-index:5 đè
+   `HookLayer.run()`) khớp thẳng lên y=0 — ĐÚNG dải bị `.ws-top` z-index:5 đè
    lên, cao ~63-70px, che TRỌN vòng quay suốt cả lượt chờ (Henry test thật:
    backend chạy đúng ~7-10s, preview_shown/llm_usage đều ghi nhận thành công,
    nhưng không thấy gì trên màn hình — bị che chứ không phải không chạy).
@@ -358,7 +358,7 @@
       <div id="lgPanel" data-ws-result>
         <!-- Tầng hook (Pha 2 pilot) — đứng TRƯỚC lgScores, dựng bởi
              mountHook() sau khi renderLuan() xong. Rỗng cho tới khi
-             HookLayer.mount() chạy; không có gì thì tự để trống, không
+             HookLayer.run() chạy; không có gì thì tự để trống, không
              chặn/làm chậm phần lgScores/miniChart/lgBody phía dưới. -->
         <div id="hookHost"></div>
         <div class="scores" id="lgScores"></div>
@@ -758,71 +758,17 @@ function mountHook(ls){
         tieuDe:'Bản đầy đủ trả lời làm gì với nó',
         items:['11 cung còn lại — mỗi cung một phần luận riêng, viết theo cổ pháp','Cách cục, tứ hoá và quy tắc của từng cung'],
         onUnlock:function(){ return initiateLuanGiaiChuyenSau('hook'); }
-      }
-    };
-    // `mount()` dựng khối fact-card cũ NGAY (0 mạng) — đây là thứ người dùng
-    // thấy tức khắc và cũng là lưới an toàn nếu tầng kể chuyện dưới đây hỏng.
-    window.HookLayer.mount(host,spec);
-    _tryHookNarrative(host,spec);
-  });
-}
-
-/**
- * Tầng "kể chuyện" (add-on, KHÔNG BẮT BUỘC) — gọi `/api/hook-narrative` để
- * NÂNG CẤP khối fact-card khô thành template "Preview Highlight" (banner +
- * box, xem `HookLayer.upgrade`). `facts` gửi đi là ĐÚNG mấy fact deterministic
- * `mountHook()` vừa dựng — model chỉ được diễn giải giọng, không tính lại số
- * nào (đúng LASO_AUTHORITY_RULE).
- *
- * Best-effort tuyệt đối: hết quota/lỗi mạng/parse hỏng → `data.allowed` false
- * hoặc fetch tự catch — khối cũ (đang bị CHE trong lúc chờ, xem bên dưới)
- * hiện LẠI, KHÔNG báo lỗi, KHÔNG chặn phần còn lại của trang. Đây là lý do
- * hàm này KHÔNG `await` ở nơi gọi.
- */
-function _tryHookNarrative(host,spec){
-  if(!spec||!Array.isArray(spec.facts)||spec.facts.length<2) return;
-  // Che khối fact-card cũ (mount() đã dựng SẴN trong host, giữ nguyên làm
-  // lưới an toàn) NGAY khi bắt đầu chờ — hiện nó ra rồi vài giây sau mới đổi
-  // giao diện từng khiến người xem tưởng "vẫn y như cũ" (Henry 2026-09-17,
-  // xem PR #932). Thay bằng khoảng trống + vòng quay; khối cũ CHỈ hiện lại
-  // nếu tầng kể chuyện hỏng thật (hết quota/lỗi mạng/parse hỏng) — đúng lúc
-  // đó nó mới đáng là bản thay thế, không phải trạng thái mặc định nữa.
-  // Vòng quay tái dùng `.rr-spin`/`@keyframes rr-spin` đã có sẵn trong
-  // shell.css (dùng ngay trong trang này ở #lgBtnPdfIcon) — không định
-  // nghĩa keyframe thứ hai. Số giây nêu ra là khoảng đo THẬT trên
-  // `events.llm_usage` (2,7–7,9s ở lượt đo 2026-09-17), không phải áng chừng.
-  if(host)host.style.display='none';
-  var pending=document.createElement('div');
-  pending.style.cssText='display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
-  pending.innerHTML='<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
-  if(host&&host.parentNode)host.parentNode.insertBefore(pending,host.nextSibling);
-  var tk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
-  var headers={'Content-Type':'application/json'};
-  if(tk)headers['Authorization']='Bearer '+tk;
-  var body={
-    toolId:spec.tool,
-    toolLabel:spec.toolLabel||spec.tool,
-    anonId:TuviPaywall.previewAnonId(),
-    facts:spec.facts.map(function(f){ return {title:f.title,body:f.body,tone:f.tone,caption:f.caption}; })
-  };
-  fetch('/api/hook-narrative',{method:'POST',headers:headers,body:JSON.stringify(body)})
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      if(pending.parentNode)pending.remove();
-      if(data&&data.allowed){
-        window.HookLayer.upgrade(host,spec,data);
-        // Đã có bản luận thật để xem — 2 box tĩnh ở cột phụ (Giới thiệu +
-        // Bản luận giải mẫu) giờ thừa, nhường chỗ cho nội dung thật. KHÔNG
-        // đụng #shellRecent (lịch sử xem gần đây) — chỉ đúng 2 box này.
+      },
+      // Đã có bản luận thật để xem — 2 box tĩnh ở cột phụ (Giới thiệu + Bản
+      // luận giải mẫu) giờ thừa, nhường chỗ cho nội dung thật. KHÔNG đụng
+      // #shellRecent (lịch sử xem gần đây) — chỉ đúng 2 box này.
+      onNarrative:function(){
         var promoEls=document.querySelectorAll('.ws-promo,.samp-cta');
         for(var i=0;i<promoEls.length;i++)promoEls[i].style.display='none';
       }
-      if(host)host.style.display='';
-    })
-    .catch(function(){
-      if(pending.parentNode)pending.remove();
-      if(host)host.style.display=''; /* mạng hỏng — hiện lại khối fact-card cũ */
-    });
+    };
+    window.HookLayer.run(host, spec);
+  });
 }
 
 function _lgLoggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Auth.isLoggedIn()); }
@@ -1230,7 +1176,7 @@ var TONG_PHAN=13;
 // app/api/lasotuvi/route.ts: client rộng hơn server thì phần thứ 2 ăn 402 giữa
 // chừng (khách thấy lỗi ở đúng chỗ đang bị thuyết phục); server rộng hơn client
 // thì mình trả tiền model cho một phần không ai đọc.
-// 🔴 (2026-09-18) Dời 2→1 — tầng hook kể chuyện (`_tryHookNarrative` ngay dưới
+// 🔴 (2026-09-18) Dời 2→1 — tầng hook kể chuyện (`HookLayer.run()`, gọi từ
 // `mountHook`) đi CHUNG ngân sách `preview.free_runs` với phần này, chiếm suất
 // mà phần 2 văn xuôi từng dùng. Xem chú thích đầy đủ ở `FREE_PHAN` phía server.
 var FREE_PHAN=1;
@@ -1476,7 +1422,7 @@ async function initLuanGiaiGate(ls){
 // đơn. Bảng số thì khô, không ai đọc xong mà bị ám ảnh, nên không có gì để bán.
 // Nay: phần đầu do model viết thật, đọc trọn vẹn, rồi mới tới tường.
 //
-// 🔑 (2026-09-18) DỜI 2→1 PHẦN — tầng hook kể chuyện (`_tryHookNarrative`,
+// 🔑 (2026-09-18) DỜI 2→1 PHẦN — tầng hook kể chuyện (`HookLayer.run()`,
 // route riêng `/api/hook-narrative`) giờ chiếm đúng suất ngân sách
 // `preview.free_runs` mà phần 2 văn xuôi từng dùng, xem chú thích ở
 // `FREE_PHAN` phía trên. Vẫn đúng 2 thứ khách đọc miễn phí trước tường — chỉ

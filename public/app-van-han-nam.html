@@ -555,50 +555,19 @@ function mountHook(ls){
     var facts=[HF.daiVanDinh(ls),HF.daiVanDay(ls)].filter(Boolean);
     var hiem=HF.cachCucHiem(ls,census);
     if(hiem)facts.push(hiem);
-    // `charts` (lifeArc) CHỈ ở fact-card — `HookLayer.upgrade()` không vẽ lại
-    // chart (xem `_narrativeHtml`), nên khi tầng kể chuyện lên thay thế, chart
-    // này biến mất, nhường chỗ cho văn xuôi tả lại ĐÚNG đỉnh/đáy đó — cùng
-    // đánh đổi đã chấp nhận ở Luận Giải Tử Vi, không phải hồi quy mới.
+    // `charts` (lifeArc) KHÔNG hiện ở tầng kể chuyện — `HookLayer.run()` không
+    // vẽ lại chart khi hiện narrative (xem chú thích đầu hook-layer.js), văn
+    // xuôi tả lại ĐÚNG đỉnh/đáy đó thay — cùng đánh đổi đã chấp nhận ở Luận
+    // Giải Tử Vi, không phải hồi quy mới.
     var spec={
       tool:'van-han-nam',toolLabel:'Vận Hạn 12 Tháng',
       charts:[{type:'lifeArc',data:{segments:HF.daiVanSegments(ls)},title:'Đường Đời Qua Các Đại Vận'}],
       facts:facts
     };
-    window.HookLayer.mount(host,spec);
-    _tryHookNarrativeVHN(host,spec);
+    window.HookLayer.run(host, spec);
   });
 }
 
-/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
- *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
-function _tryHookNarrativeVHN(host,spec){
-  if(!spec||!Array.isArray(spec.facts)||spec.facts.length<2) return;
-  if(host)host.style.display='none';
-  var pending=document.createElement('div');
-  pending.style.cssText='display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
-  pending.innerHTML='<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
-  if(host&&host.parentNode)host.parentNode.insertBefore(pending,host.nextSibling);
-  var tk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
-  var headers={'Content-Type':'application/json'};
-  if(tk)headers['Authorization']='Bearer '+tk;
-  var body={
-    toolId:spec.tool,
-    toolLabel:spec.toolLabel||spec.tool,
-    anonId:TuviPaywall.previewAnonId(),
-    facts:spec.facts.map(function(f){ return {title:f.title,body:f.body,tone:f.tone,caption:f.caption}; })
-  };
-  fetch('/api/hook-narrative',{method:'POST',headers:headers,body:JSON.stringify(body)})
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      if(pending.parentNode)pending.remove();
-      if(data&&data.allowed) window.HookLayer.upgrade(host,spec,data);
-      if(host)host.style.display='';
-    })
-    .catch(function(){
-      if(pending.parentNode)pending.remove();
-      if(host)host.style.display='';
-    });
-}
 // Số thứ tự đại vận đang đi — CÙNG phép chọn với server (dvHienTaiSo trong
 // app/api/van-han-nam/route.ts): so cả cungIdx lẫn tuoiStart rồi kẹp ở 9, vì
 // bản Luận Giải chỉ có prompt cho ĐV1–ĐV9.

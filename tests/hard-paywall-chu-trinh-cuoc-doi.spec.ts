@@ -52,7 +52,7 @@ async function stubApis(page: Page, opts?: { blockPreview?: boolean }) {
   for (let ep = 16; ep <= 24; ep++) ctcdDummy[String(ep)] = `**Câu mẫu phần ${ep}**\n\nVăn mẫu của lá số MẪU cho phần ${ep}, đủ dài để không rỗng.`;
   await page.route('**/samples/chu-trinh-cuoc-doi-dummy.json', (r) =>
     r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(ctcdDummy) }));
-  // Tầng hook kể chuyện (`_tryHookNarrativeCTCD`, port từ app-luan-giai.html
+  // Tầng hook kể chuyện (`HookLayer.run()`, port từ app-luan-giai.html
   // 2026-09-18) tự gọi `/api/hook-narrative` ngay sau `mountHook()` — KHÔNG
   // stub thì bài kiểm gọi THẬT tới model và tiêu THẬT một suất
   // `preview.free_runs` của toolId `chu-trinh-cuoc-doi` (đúng bẫy đã cắn ở
