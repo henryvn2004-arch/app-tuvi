@@ -6,12 +6,14 @@ export const maxDuration = 15;
 
 import { NextRequest, NextResponse } from 'next/server';
 import { khaoLuanCategory, fetchByCategory, renderCategoryPage, categoryPageUrl, PAGE_SIZE, BASE_URL } from '../../../_shared';
+import { logAiCrawlerHit } from '@/lib/seo/ai-crawler-log';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ cat: string; page: string }> },
 ) {
   const { cat, page: pageParam } = await params;
+  logAiCrawlerHit(request.headers.get('user-agent'), `/van-dap/${cat}/trang/${pageParam}`);
   if (!khaoLuanCategory(cat)) return NextResponse.redirect(new URL('/van-dap', BASE_URL));
 
   const page = Math.floor(Number(pageParam));
