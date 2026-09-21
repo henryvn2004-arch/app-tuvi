@@ -14,6 +14,7 @@
 
 import { sse } from '@/lib/contract/v1';
 import type { ChatConfig } from '@/lib/config/appConfig';
+import { getOrCreateGeminiCache } from '@/lib/agent/providers/gemini-cache';
 
 const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
 // Mặc định Gemini 2.5 Flash — A/B cho thấy trung thành với dữ liệu lá số/cổ
@@ -191,15 +192,20 @@ export async function streamGemini(
   const contents = toGeminiContents(convo);
   if (!contents.length) throw new Error('gemini: convo rỗng');
 
-  const body = {
-    system_instruction: { parts: [{ text: system }] },
-    contents,
-    generationConfig: {
-      maxOutputTokens: cfg.maxTokens,
-      temperature: 0.7,
-      // thinkingBudget 0 = chế độ rẻ/nhanh nhất (không tốn token "suy nghĩ").
-      thinkingConfig: { thinkingBudget: 0 },
-    },
+  // Cache tường minh CHỈ cho `system` (CÙNG phạm vi cache bên Anthropic —
+  // `convo` không cache ở cả hai phía). `null` (chưa đủ dài/lỗi/thiếu env) →
+  // rơi về `system_instruction` đầy đủ như cũ, KHÔNG có gì khác biệt cho
+  // người dùng. Xem lib/agent/providers/gemini-cache.ts.
+  const cacheName = await getOrCreateGeminiCache(GEMINI_MODEL, system);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const body: any = cacheName
+    ? { cachedContent: cacheName, contents }
+    : { system_instruction: { parts: [{ text: system }] }, contents };
+  body.generationConfig = {
+    maxOutputTokens: cfg.maxTokens,
+    temperature: 0.7,
+    // thinkingBudget 0 = chế độ rẻ/nhanh nhất (không tốn token "suy nghĩ").
+    thinkingConfig: { thinkingBudget: 0 },
   };
   const url =
     `${GEMINI_BASE}/${encodeURIComponent(GEMINI_MODEL)}:streamGenerateContent?alt=sse&key=${GEMINI_KEY}`;
@@ -420,12 +426,14 @@ export async function streamGeminiTurn(
   suggestions: string[];
   sentText: boolean;
 }> {
+  // Cache tường minh CHỈ cho `system` — xem chú thích ở streamGemini (prose)
+  // phía trên; cùng cửa `getOrCreateGeminiCache`, cùng fallback an toàn.
+  const cacheName = await getOrCreateGeminiCache(GEMINI_MODEL, system);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const body: any = {
-    system_instruction: { parts: [{ text: system }] },
-    contents,
-    generationConfig: { maxOutputTokens: cfg.maxTokens, temperature: 0.7, thinkingConfig: { thinkingBudget: 0 } },
-  };
+  const body: any = cacheName
+    ? { cachedContent: cacheName, contents }
+    : { system_instruction: { parts: [{ text: system }] }, contents };
+  body.generationConfig = { maxOutputTokens: cfg.maxTokens, temperature: 0.7, thinkingConfig: { thinkingBudget: 0 } };
   if (geminiTools && geminiTools.length) body.tools = geminiTools;
   const url =
     `${GEMINI_BASE}/${encodeURIComponent(GEMINI_MODEL)}:streamGenerateContent?alt=sse&key=${GEMINI_KEY}`;

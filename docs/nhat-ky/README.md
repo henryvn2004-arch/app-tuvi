@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-351 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+352 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 186 | 738,396 B |
+| `2026-09.md` | 187 | 744,713 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 💾 Cache tường minh Gemini (`cachedContents`) cho rail chat — Sprint 1.1 |
 | 1 | 2026-09 | `2026-09.md` | 🩹 Rail chat: vá 3 chỗ CẮT DỮ LIỆU LUẬN GIẢI + 1 chỗ cắt-im-lặng |
 | 1 | 2026-09 | `2026-09.md` | 📊 GEO — nối chéo faqs.html ↔ Vấn Đáp + đếm lượt AI crawler thật |
 | 1 | 2026-09 | `2026-09.md` | 🗣 GEO/đa dạng topic Vấn Đáp — PR 4+5+6/6: 14 danh mục, nguồn cầu chat thật, tăng nhịp cron |
