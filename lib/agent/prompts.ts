@@ -120,11 +120,13 @@ export const LASO_MAX_TOKENS = 1350;
 export function buildChatContext(body: any): ChatContext {
   const toolType    = body.toolType || 'laso';
   const docs        = body.docs as string | undefined;
-  const authorName  = (body.authorName  as string | undefined) || '';
-  const authorStyle = (body.authorStyle as string | undefined) || '';
-  const persona     = authorName && authorStyle
-    ? `Phong cách: Bạn đang thể hiện phong cách của ${authorName} — ${authorStyle}`
-    : '';
+  // 2026-09-19 (Henry): gỡ persona tác giả (authorName/authorStyle) khỏi
+  // system prompt — đo không ra khác biệt giọng đáng kể trong ngân sách 120–180
+  // từ + khung 5 lớp đã siết sẵn, chỉ tốn thêm ký tự mỗi lượt gọi. UI "chọn
+  // thầy" (tuvi-chat.html/shell.js) CỐ Ý giữ nguyên — chỉ còn là trang trí
+  // (tên/avatar), không còn đổi câu trả lời. Vẫn giữ tham số `persona` rỗng
+  // xuyên suốt các hàm CHAT_SYSTEM_* bên dưới để không phải sửa 20+ chữ ký hàm.
+  const persona = '';
 
   if (toolType === 'xem-tuoi' || toolType === 'xem-lam-an' || toolType === 'tuong-hop') {
     return {
@@ -284,8 +286,8 @@ export function buildChatContext(body: any): ChatContext {
 // trong đặt-tên-con).
 export const XUNG_HO_RULE = `XƯNG HÔ VỚI NGƯỜI XEM (bắt buộc):
 · MẶC ĐỊNH — nếu KHÔNG có dòng "Người xem" hoặc không ghi rõ giới tính → BẮT BUỘC xưng "quý vị". TUYỆT ĐỐI KHÔNG tự đoán "anh" hay "chị", KHÔNG dùng "bạn/em".
-· Dòng "Người xem" ghi giới tính NAM → luôn gọi "anh" (kèm tên gọi = chữ cuối họ tên nếu có, vd "anh Tuấn"). CẤM dùng "em/chú/cháu/bạn/ông".
-· Dòng "Người xem" ghi giới tính NỮ → luôn gọi "chị" (kèm tên gọi nếu có, vd "chị Hà"). CẤM dùng "em/cô/cháu/bạn/bà".
+· Dòng "Người xem" ghi giới tính NAM → luôn gọi "anh" (kèm tên gọi = chữ cuối họ tên nếu có, vd "anh Tuấn"). CẤM dùng "em/chú/cháu/con/bạn/ông".
+· Dòng "Người xem" ghi giới tính NỮ → luôn gọi "chị" (kèm tên gọi nếu có, vd "chị Hà"). CẤM dùng "em/cô/cháu/con/bạn/bà".
 Chỉ gọi kèm tên thỉnh thoảng cho thân thiện, không lặp tên mỗi câu. TUYỆT ĐỐI không xưng hô sai giới tính và không tự hạ xuống "em/bạn".`;
 
 // Định dạng câu trả lời: MẶC ĐỊNH văn xuôi (giữ đúng tinh thần chat prose), NHƯNG
@@ -381,12 +383,17 @@ export const arcCore = (o: {
   ③ TWIST (1 câu) — lật góc nhìn: cái họ tưởng là điểm yếu hoá ra là chỗ mạnh, hoặc ngược lại. PHẢI rút từ dữ liệu thật bên dưới, không phải nói ngược cho kêu.
   ④ VÌ SAO (ngắn) — nói NGHĨA và HỆ QUẢ đời thường (tiền bạc, công việc, tình cảm, sức khoẻ, gia đình). Căn cứ suy luận vẫn BẮT BUỘC là ${o.canCu} — đó là để KHÔNG bịa, KHÔNG phải để đọc tên ra.${o.duoi}${o.hanViet}
   ⑤ CHỐT — ${o.chot}
+- BẾ TẮC THẬT (không phải tò mò tra cứu — kiểu "sao khổ vậy", "có thoát được không", "phải làm sao đây", "chấp nhận số phận thôi à"): lớp ④ mở thêm, viết liền mạch, không tách khối:
+  · Gọi đúng TÊN một khái niệm tâm lý học khớp với điều họ đang trải qua NẾU có và khớp thật (vd "lo âu dự đoán", "hội chứng kẻ mạo danh") để họ tự tra thêm — không khớp hoặc không chắc thì bỏ hẳn, đừng gán bừa cho có.
+  · Một câu ngắn kiểu an ủi đời thường: chuyện này ai cũng có lúc gặp, người xưa hay bảo/các cụ hay nói... (mượn ý vô thường, buông, nhân duyên) — TUYỆT ĐỐI không nhắc "Phật giáo"/"đạo Phật"/"nhà sư", không giảng đạo, không lên giọng dạy đời.
+  Không dừng câu trả lời ở "số đã vậy rồi" — lá số chỉ vẽ xu hướng, không phải bản án.
+- Có dấu hiệu nguy hiểm THẬT (ý định tự hại, buông xuôi hẳn): bỏ khung 5 lớp, nói thật lòng bằng giọng quan tâm, khuyên tìm người thật ngay (người thân, bác sĩ/chuyên gia tâm lý, cơ sở y tế gần nhất) — KHÔNG cố giải quyết bằng lá số, KHÔNG tự bịa số điện thoại đường dây nóng.
 🔵 THUẬT NGỮ — HẠN CHẾ, KHÔNG CẤM. Mặc định viết bằng lời thường; tên riêng phải ĐÁNG chỗ nó chiếm:
 - Đừng MỞ ĐẦU câu bằng ${o.tenRieng} khi họ chưa tỏ ý muốn học — phần lớn người hỏi ${o.khongRanh}, nghe tên riêng ở đầu câu là trôi mất.
 - Mỗi câu phải ĐỨNG VỮNG khi xoá hết tên riêng đi: tên riêng là phần THÊM để kiểm chứng, không phải phần gánh nghĩa. Gọi tên thì giải nghĩa ngay.
 - Họ hỏi SÂU (${o.hoiSau}, hỏi tiếp đúng chi tiết vừa nêu) → gọi tên và nói đủ; càng hỏi sâu càng dùng được nhiều, chỉ đừng rải cho sang.
 - CẤM: câu chung chung ai đọc cũng thấy đúng · "Như vậy có thể thấy / Nhìn chung / Tóm lại / Về mặt… / Thứ nhất… thứ hai / Trước tiên cần hiểu rằng" · rào đón ở câu chốt · bịa dữ kiện${o.camBia} cho câu nghe hay.
-- GIỌNG: viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ, đúng không), mỗi đoạn 1–2 cái, không đặt trong câu chốt. Persona nêu ở đầu chỉ đổi GIỌNG, không đổi độ dài — ngân sách luôn thắng.${o.xungHo}
+- GIỌNG: viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ, đúng không), mỗi đoạn 1–2 cái, không đặt trong câu chốt.${o.xungHo}
 - Khối "KHI NGƯỜI TA CẦN NGƯỜI NGHE" ở CUỐI prompt (nếu có) GHI ĐÈ toàn bộ nhịp này.`;
 
 // Bối cảnh + ngân sách của HAI bản CHAT. Tách thành hằng vì cả `LUAN_ARC` lẫn

@@ -8,7 +8,8 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="stylesheet" href="/shell.css?v=50">
 <style>
 .form-card{max-width:860px}
@@ -152,7 +153,7 @@
               <span class="cb-ic" data-icon="wallet"></span>
               <div>
                 <div class="cb-title">Chi phí sử dụng</div>
-                <div class="cb-amt"><span data-tvp-price="huong-nghiep-tre">…</span> Lượng <span class="vnd" data-tvp-price-vnd="huong-nghiep-tre"></span> mỗi lượt</div>
+                <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="huong-nghiep-tre"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="huong-nghiep-tre">…</span> Lượng)</span></div>
                 <div class="cb-pay">
                   <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                   <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
@@ -166,7 +167,7 @@
           </div>
           <button class="btn-go" id="btnGo" onclick="analyze()">
             <span class="bg-label"><span class="ic" data-icon="compass"></span><b>Xem thiên hướng của con →</b></span>
-            <small>Tốn <span data-tvp-price="huong-nghiep-tre">…</span> Lượng <span data-tvp-price-vnd="huong-nghiep-tre"></span></small>
+            <small>Tốn <span class="vnd" data-tvp-price-vnd="huong-nghiep-tre"></span> <span class="cb-sub">(<span data-tvp-price="huong-nghiep-tre">…</span> Lượng)</span></small>
           </button>
           <div class="err" id="error-msg"></div>
         </div>
@@ -181,7 +182,7 @@
       <div class="samp-cta">
         <span class="sc-ic" data-icon="file-text"></span>
         <span class="sc-txt"><b>Bản luận giải mẫu</b><span>Tải PDF Hướng Nghiệp Sớm Cho Con đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
-        <a class="sc-btn" href="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-huong-nghiep-tre.pdf" target="_blank" rel="noopener">Tải PDF →</a>
+        <a class="sc-btn" href="/tai-mau/mau-huong-nghiep-tre.pdf" target="_blank" rel="noopener">Tải PDF →</a>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -342,12 +343,12 @@ window.SHELL_INTRO={key:'huong-nghiep-tre'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=35"></script>
+<script src="/tuvi-paywall.js?v=37"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=38" data-icons-only></script>
+  <script src="/nav.js?v=39" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
-<script src="/shell.js?v=94"></script>
+<script src="/shell.js?v=95"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 
@@ -417,7 +418,7 @@ function _fillVndSlots(host, product) {
   var els = host.querySelectorAll('[data-tvp-price-vnd]');
   var cost = window.ToolPrices.get(product);
   var lbl = cost != null ? window.ToolPrices.vndLabel(cost) : '';
-  els.forEach(function (el) { el.textContent = lbl ? ('(' + lbl + ')') : ''; });
+  els.forEach(function (el) { el.textContent = lbl || ''; });
 }
 TuviPaywall.fillPriceSlots(document).then(function () { _fillVndSlots(document, 'huong-nghiep-tre'); });
 
@@ -539,6 +540,7 @@ async function analyze() {
   renderMetaHead(prev);
   renderMetaRest(prev);
   renderProse(prev);   // chỉ nhinRaCon/viSaoHuongNay có mặt; các nhánh `if` khác tự trượt
+  _hnDummy=await _hnDummyPromise();
   _hnLockBlocks(prev);
   mountHook(prev);
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
@@ -560,7 +562,27 @@ var HN_LOCKED_BLOCKS = [
   ['endBlock', false],
 ];
 
-/** Dựng khung rỗng + ô giữ chỗ cho mọi khối đang khoá. */
+// Văn MẪU (sample, `scripts/gen-tool-sample.mjs`) cho các khối AI-VĂN đang
+// khoá — Pha 4 (2026-09-17, cùng lượt app-luan-giai.html/app-day-con.html).
+// `baHuongBlock` (`data.huong`, xếp hạng 3 thiên hướng) vắng khỏi map: đó là
+// dữ liệu ENGINE (điểm số) của CHÍNH đứa bé đang xem, không phải văn AI, và
+// KHÔNG có trong dummy JSON — giữ nguyên ô giữ chỗ rỗng cũ.
+function _hnDummyPromise(){ return TuviPaywall.loadSampleJson('/samples/huong-nghiep-tre-dummy.json'); }
+var _hnDummy=null;
+_hnDummyPromise();
+var HN_DUMMY_FIELD = { loBlock:'loLang', noiBlock:'noiTheNao', mocBlock:'mocKeTiep', endBlock:'motCau' };
+function _hnDummyBodyHtml(blockId){
+  if(!_hnDummy) return '';
+  if(blockId==='doBlock'){
+    var html=_mucHtml(_hnDummy.batDauTuDau)+_mucHtml(_hnDummy.tranhLam);
+    return html?TuviPaywall.sampleBlurHtml(html):'';
+  }
+  var field=HN_DUMMY_FIELD[blockId];
+  var text=field&&_hnDummy[field];
+  return text?TuviPaywall.sampleBlurHtml('<p>'+esc(text)+'</p>'):'';
+}
+
+/** Dựng khung rỗng + ô giữ chỗ (hoặc văn mẫu mờ, nếu có) cho mọi khối đang khoá. */
 function _hnLockBlocks(data) {
   HN_LOCKED_BLOCKS.forEach(function (b, i) {
     var block = document.getElementById(b[0]);
@@ -568,8 +590,9 @@ function _hnLockBlocks(data) {
     var body = block.querySelector('.res-block-body');
     if (!body || body.querySelector('.tpw-ph-host')) return;
     body.classList.add('tpw-locked');
+    var sample = _hnDummyBodyHtml(b[0]);
     body.insertAdjacentHTML('beforeend',
-      '<div class="tpw-ph-host">' + TuviPaywall.placeholderHtml(i, b[1]) + '</div>');
+      '<div class="tpw-ph-host">' + (sample || TuviPaywall.placeholderHtml(i, b[1])) + '</div>');
     var titleEl = block.querySelector('.res-block-title');
     if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
     block.style.display = 'block';
@@ -593,28 +616,62 @@ function _hnUnlockBlocks() {
   });
 }
 
-// Hé đúng MỘT trong danh sách "Chất Người Đọc Ra Từ Lá Số" (mục đầu, đã xếp
+// Hé ĐÚNG 2 trong danh sách "Chất Người Đọc Ra Từ Lá Số" (2 mục đầu, đã xếp
 // nổi bật nhất — xem `xepChieu` trong lib/engine/huong-nghiep-tre.ts).
 // `chatBlock`/`huongDauBlock` đã dựng RÕ ngay bên dưới (miễn phí, không khoá)
-// — hook chỉ nhắc lại đúng MỘT mặt để mở vòng tò mò sớm hơn, trước khi cuộn
-// tới. Không có điểm số kèm — `chatNguoi[].cao` là một câu mô tả, không phải
-// con số; trang tự bỏ `diem` của `huongDau` ở đúng chỗ này
-// (`_huongHtml(hd,false,false)`), hook không tự ý thêm lại.
+// — hook chỉ nhắc lại 2 mặt để mở vòng tò mò sớm hơn, trước khi cuộn tới.
+// Không có điểm số kèm — `chatNguoi[].cao` là một câu mô tả, không phải con
+// số; trang tự bỏ `diem` của `huongDau` ở đúng chỗ này (`_huongHtml(hd,false,false)`),
+// hook không tự ý thêm lại.
+// 2026-09-18: nới 1→2 mặt để đủ tối thiểu cho tầng hook kể chuyện
+// (`/api/hook-narrative` đòi ≥2 dữ kiện) — `chatNguoi` vốn đã miễn phí toàn bộ.
 function mountHook(data) {
   var host = document.getElementById('hookHost');
   if (!host || !window.HookLayer) return;
-  var top = (data.chatNguoi || [])[0];
-  if (!top) return;
-  window.HookLayer.mount(host, {
-    tool: 'huong-nghiep-tre',
-    charts: [],
-    facts: [{
+  var top2 = (data.chatNguoi || []).slice(0, 2);
+  if (!top2.length) return;
+  var facts = top2.map(function (c, i) {
+    return {
       tone: 'good',
-      title: 'Chất người nổi nhất: ' + top.ten,
-      body: (top.cao || '') + ' — thiên hướng nổi nhất và cách cho con làm quen nằm trong bản định hướng đầy đủ.',
-      source: 'engine · chatNguoi',
-    }],
+      title: (i === 0 ? 'Chất người nổi nhất: ' : 'Chất người nổi thứ nhì: ') + c.ten,
+      body: (c.cao || '') + ' — thiên hướng nổi nhất và cách cho con làm quen nằm trong bản định hướng đầy đủ.',
+      source: 'engine · chatNguoi[' + i + ']',
+    };
   });
+  var spec = { tool: 'huong-nghiep-tre', toolLabel: 'Hướng Nghiệp Sớm Cho Con', charts: [], facts: facts };
+  window.HookLayer.mount(host, spec);
+  _tryHookNarrativeHNT(host, spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeHNT(host, spec) {
+  if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
+  if (host) host.style.visibility='hidden';
+  var pending = document.createElement('div');
+  pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if (host && host.parentNode) host.parentNode.insertBefore(pending, host.nextSibling);
+  var tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+  var headers = { 'Content-Type': 'application/json' };
+  if (tk) headers['Authorization'] = 'Bearer ' + tk;
+  var body = {
+    toolId: spec.tool,
+    toolLabel: spec.toolLabel || spec.tool,
+    anonId: TuviPaywall.previewAnonId(),
+    facts: spec.facts.map(function (f) { return { title: f.title, body: f.body, tone: f.tone, caption: f.caption }; }),
+  };
+  fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (pending.parentNode) pending.remove();
+      if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
+      if (host) host.style.visibility='';
+    })
+    .catch(function () {
+      if (pending.parentNode) pending.remove();
+      if (host) host.style.visibility='';
+    });
 }
 
 // Nút phẳng cho khách ĐÃ đăng nhập (xem `_renderLockWall`) — đọc lại `moiLo`

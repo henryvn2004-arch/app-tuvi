@@ -29,6 +29,7 @@ export async function GET() {
       <div class="eyebrow">Lịch Vạn Niên · Cổ Pháp</div>
       <h1>Xem <em>Ngày Tốt</em> 2020–2036</h1>
       <p>Tra cứu ngày đẹp theo 10 loại việc — dựa trên 12 trực, 28 nhị thập bát tú, hoàng/hắc đạo và Tam Nương / Nguyệt Kỵ / Dương Công.</p>
+      <p style="margin-top:10px"><a href="/xem-ngay-hom-nay" class="rel-item">Xem ngày hôm nay — hoàng lịch đầy đủ: thần sát, cửu tinh, Bành Tổ →</a></p>
     </div>
     <h2 class="sec-title">Xem Theo Việc</h2>
     <div class="act-grid">${actGrid}</div>

@@ -3,9 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FAQs — Câu Hỏi Thường Gặp — Tử Vi Minh Bảo</title>
-<meta name="description" content="Câu hỏi thường gặp về dịch vụ an sao Tử Vi Đẩu Số tại Tử Vi Minh Bảo — cách sử dụng, thanh toán, độ chính xác và thông tin thêm.">
+<title>Câu Hỏi Thường Gặp (Q&amp;A) — Tử Vi Minh Bảo</title>
+<meta name="description" content="Giải đáp về hệ thống luận giải Tử Vi Minh Bảo — cách hoạt động, độ chính xác, nhóm nghiên cứu đứng sau, và các câu hỏi về Lượng, thanh toán, hoàn tiền.">
+<meta property="og:title" content="Câu Hỏi Thường Gặp (Q&amp;A) — Tử Vi Minh Bảo">
+<meta property="og:description" content="Giải đáp về hệ thống luận giải Tử Vi Minh Bảo — cách hoạt động, độ chính xác, và các câu hỏi về Lượng, thanh toán, hoàn tiền.">
+<meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
+<meta property="og:url" content="https://www.tuviminhbao.com/faqs.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tử Vi Minh Bảo">
+<meta property="og:locale" content="vi_VN">
+<link rel="canonical" href="https://www.tuviminhbao.com/faqs.html">
 <link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="apple-touch-icon" href="/seal.webp">
 <link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-600.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/be-vietnam-pro.css?v=1">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -18,7 +27,8 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:#fff;color:#1a1a1a;line-
 .nav-link:hover{color:#fff;background:rgba(255,255,255,.07)}
 .wrap{max-width:720px;margin:0 auto;padding:56px 40px 100px}
 .eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#666;margin-bottom:16px}
-h1{font-size:32px;font-weight:400;color:#061A2E;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid #eee}
+h1{font-size:32px;font-weight:400;color:#061A2E;margin-bottom:12px}
+.h1-sub{font-size:14px;color:#777;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid #eee;font-weight:300}
 .faq-group{margin-bottom:40px}
 .faq-group-title{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#666;margin-bottom:20px;display:flex;align-items:center;gap:12px}
 .faq-group-title::after{content:'';flex:1;height:1px;background:#eee}
@@ -27,6 +37,10 @@ h1{font-size:32px;font-weight:400;color:#061A2E;margin-bottom:40px;padding-botto
 .faq-q{font-size:15px;font-weight:600;color:#061A2E;margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .faq-q .icon{color:#c9a84c;font-size:18px;flex-shrink:0;transition:transform .2s}
 .faq-a{font-size:14px;color:#555;line-height:1.8}
+.faq-a p+p{margin-top:10px}
+.faq-a ul{margin:8px 0 10px 18px}
+.faq-a li{margin-top:4px}
+.faq-a a{color:#1455A4}
 .faq.open .icon{transform:rotate(45deg)}
 footer{background:#1A1210;color:rgba(255,255,255,.5);padding:24px 40px;font-size:11px;display:flex;justify-content:space-between;align-items:center}
 footer a{color:rgba(255,255,255,.5);text-decoration:none}
@@ -36,11 +50,28 @@ footer a{color:rgba(255,255,255,.5);text-decoration:none}
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"Tử Vi Minh Bảo sử dụng phương pháp an sao nào?","acceptedAnswer":{"@type":"Answer","text":"Chúng tôi sử dụng phương pháp an sao cổ pháp Tử Vi Đẩu Số truyền thống, dựa trên ngày giờ sinh dương lịch được chuyển đổi sang âm lịch. Hệ thống tích hợp thư viện iztro — một thư viện mã nguồn mở học thuật được kiểm chứng."}},
-    {"@type":"Question","name":"Luận giải có chính xác không?","acceptedAnswer":{"@type":"Answer","text":"Luận giải được sinh tự động từ chính bộ số engine đã an sao, dựa trên hệ thống Tử Vi Đẩu Số cổ điển và kho tài liệu học thuật. Kết quả mang tính tham khảo — độ chính xác phụ thuộc vào tính đúng đắn của thông tin ngày giờ sinh."}},
-    {"@type":"Question","name":"Tôi cần cung cấp thông tin gì?","acceptedAnswer":{"@type":"Answer","text":"Bạn cần cung cấp: ngày tháng năm sinh dương lịch, giờ sinh (càng chính xác càng tốt), giới tính và múi giờ."}},
-    {"@type":"Question","name":"Thanh toán như thế nào?","acceptedAnswer":{"@type":"Answer","text":"Thanh toán qua PayPal hoặc thẻ Visa/Mastercard/JCB. Sau khi thanh toán thành công, kết quả được mở khóa ngay lập tức và bạn có thể tải PDF."}},
-    {"@type":"Question","name":"Tôi không biết chính xác giờ sinh thì sao?","acceptedAnswer":{"@type":"Answer","text":"Hãy nhập giờ sinh gần đúng nhất mà bạn biết. Trong Tử Vi Đẩu Số, giờ sinh được tính theo 12 địa chi, mỗi cung giờ kéo dài 2 tiếng — nên sai số nhỏ thường không ảnh hưởng nhiều."}}
+    {"@type":"Question","name":"Tử Vi Minh Bảo là gì?","acceptedAnswer":{"@type":"Answer","text":"Tử Vi Minh Bảo là hệ thống luận giải cá nhân hoá, kết hợp giữa cổ học phương Đông, dữ liệu thực tế và công nghệ hiện đại, giúp bạn hiểu rõ hơn về bản thân, các giai đoạn trong cuộc đời và những xu hướng có thể xảy ra."}},
+    {"@type":"Question","name":"Đây có phải chỉ là website xem Tử Vi không?","acceptedAnswer":{"@type":"Answer","text":"Không. Tử Vi Minh Bảo là một hệ thống gồm nhiều công cụ nghiên cứu và luận giải, trong đó Tử Vi Đẩu Số là một phần trọng tâm, cùng các công cụ phân tích vận hạn theo thời gian, tra cứu đối chiếu mệnh lý, và nội dung nghiên cứu ứng dụng."}},
+    {"@type":"Question","name":"Nội dung luận giải có thực sự chính xác không?","acceptedAnswer":{"@type":"Answer","text":"Không có hệ thống nào đưa ra kết luận tuyệt đối. Tử Vi Minh Bảo được xây dựng trên dữ liệu ngày giờ sinh của hơn 270.000 người thật, kết hợp cơ sở dữ liệu quốc tế AstroDataBank, đối chiếu với diễn biến thực tế. Kết quả có cơ sở hơn, nhưng vẫn nên xem như một nguồn tham khảo có giá trị."}},
+    {"@type":"Question","name":"Hệ thống hoạt động như thế nào?","acceptedAnswer":{"@type":"Answer","text":"Quy trình gồm 5 bước: xây dựng lá số từ ngày giờ sinh, phân tích cấu trúc theo nguyên lý Tử Vi, đối chiếu với dữ liệu thực tế, hệ thống diễn giải nội dung, và hiệu chỉnh bởi chuyên gia. Hệ thống không tự suy đoán, chỉ diễn giải lại các kết luận đã được xác định."}},
+    {"@type":"Question","name":"Ai đứng sau hệ thống này?","acceptedAnswer":{"@type":"Answer","text":"Một nhóm nghiên cứu mệnh lý lấy kinh điển làm nền tảng, lấy thực chứng làm tiêu chuẩn, kết hợp phương pháp và công nghệ hiện đại — gồm các học giả, người nghiên cứu Tử Vi Đẩu Số và những người có kinh nghiệm luận giải thực tế qua nhiều lá số."}},
+    {"@type":"Question","name":"Vì sao phải nhập chính xác giờ sinh?","acceptedAnswer":{"@type":"Answer","text":"Giờ sinh là yếu tố quan trọng trong Tử Vi Đẩu Số. Sai lệch nhỏ có thể làm thay đổi vị trí sao và ảnh hưởng đến toàn bộ luận giải. Nếu không chắc chắn, nên xem kết quả với mức độ tham khảo cao hơn."}},
+    {"@type":"Question","name":"Tôi có thể thay đổi vận mệnh không?","acceptedAnswer":{"@type":"Answer","text":"Tử vi không phải là sự định đoạt tuyệt đối. Lá số phản ánh xu hướng, thời điểm và khả năng — kết quả cuối cùng vẫn phụ thuộc vào hành động và lựa chọn của mỗi người."}},
+    {"@type":"Question","name":"Tại sao nội dung đọc \"giống mình\"?","acceptedAnswer":{"@type":"Answer","text":"Cấu trúc lá số có tính hệ thống, dữ liệu thực tế giúp xác định pattern, và hệ thống diễn giải theo đúng ngữ cảnh cá nhân. Sự \"đúng\" là kết quả của phương pháp, không phải đoán ngẫu nhiên."}},
+    {"@type":"Question","name":"Hệ thống có tự \"bịa\" nội dung không?","acceptedAnswer":{"@type":"Answer","text":"Không. Hệ thống chỉ dùng để diễn giải nội dung và làm rõ luận điểm — logic luận giải đã được xây dựng từ trước dựa trên cổ pháp, dữ liệu và quy tắc đã kiểm nghiệm."}},
+    {"@type":"Question","name":"Vì sao phải trả phí để xem đầy đủ?","acceptedAnswer":{"@type":"Answer","text":"Chi phí bao gồm xây dựng và xử lý dữ liệu quy mô lớn, phát triển hệ thống luận giải, duy trì hạ tầng công nghệ và hiệu chỉnh nội dung liên tục. Phí dịch vụ giúp đảm bảo chất lượng và sự đầu tư nghiêm túc cho hệ thống."}},
+    {"@type":"Question","name":"Tôi nên sử dụng kết quả như thế nào?","acceptedAnswer":{"@type":"Answer","text":"Nên xem luận giải như một góc nhìn có hệ thống, một công cụ hỗ trợ quyết định, một nguồn tham khảo có cơ sở — không nên phụ thuộc hoàn toàn vào kết quả."}},
+    {"@type":"Question","name":"Nếu tôi thấy nội dung chưa đúng thì sao?","acceptedAnswer":{"@type":"Answer","text":"Có thể do sai giờ sinh, khác biệt trường phái, hoặc yếu tố cá nhân chưa được phản ánh đầy đủ. Bạn có thể gửi phản hồi qua trang Liên Hệ để hệ thống được cải thiện."}},
+    {"@type":"Question","name":"Hệ thống có được cập nhật không?","acceptedAnswer":{"@type":"Answer","text":"Có. Hệ thống được cải thiện liên tục dựa trên dữ liệu mới, phản hồi người dùng và quá trình kiểm nghiệm thực tế."}},
+    {"@type":"Question","name":"Lượng là gì?","acceptedAnswer":{"@type":"Answer","text":"Lượng là đơn vị dùng để mở khoá các công cụ luận giải chuyên sâu trên Tử Vi Minh Bảo. Nạp một lần, dùng được cho mọi công cụ, không cần mua riêng theo từng tính năng."}},
+    {"@type":"Question","name":"Làm sao để nạp Lượng?","acceptedAnswer":{"@type":"Answer","text":"Vào trang Nạp Lượng, chọn một gói phù hợp và thanh toán. Lượng được cộng vào ví ngay sau khi giao dịch thành công."}},
+    {"@type":"Question","name":"Có những cách thanh toán nào?","acceptedAnswer":{"@type":"Answer","text":"Chuyển khoản ngân hàng VND qua payOS bằng cách quét mã QR trên app ngân hàng Việt Nam, hoặc PayPal / thẻ quốc tế Visa, Mastercard, JCB."}},
+    {"@type":"Question","name":"Lượng có hết hạn không?","acceptedAnswer":{"@type":"Answer","text":"Không. Lượng được lưu vĩnh viễn trong tài khoản, dùng lúc nào cũng được."}},
+    {"@type":"Question","name":"Mỗi lần mở lại kết quả cũ có bị trừ Lượng nữa không?","acceptedAnswer":{"@type":"Answer","text":"Không. Mỗi lá số hay kết quả chỉ trừ Lượng một lần duy nhất khi luận giải lần đầu — sau đó xem lại bao nhiêu lần cũng miễn phí."}},
+    {"@type":"Question","name":"Trả phí xong tôi nhận được gì?","acceptedAnswer":{"@type":"Answer","text":"Toàn bộ nội dung luận giải chuyên sâu của công cụ đó, viết theo đúng lá số và ngữ cảnh cá nhân, cùng quyền xem lại không giới hạn và tải về khi công cụ hỗ trợ."}},
+    {"@type":"Question","name":"Thanh toán xong mà chưa thấy Lượng vào ví?","acceptedAnswer":{"@type":"Answer","text":"Thử làm mới trang, hoặc vào Hồ Sơ, tab Ví Lượng để kiểm tra số dư. Nếu sau 1-2 phút vẫn chưa thấy, liên hệ qua trang Liên Hệ kèm mã giao dịch để được xử lý."}},
+    {"@type":"Question","name":"Có hoàn tiền không?","acceptedAnswer":{"@type":"Answer","text":"Do tính chất là kết quả số hoá, hệ thống không hoàn tiền sau khi kết quả đã được hiển thị. Nếu gặp lỗi giao dịch — trừ tiền nhưng không nhận được kết quả — hãy liên hệ ngay để được kiểm tra và xử lý."}},
+    {"@type":"Question","name":"Xem lại lịch sử giao dịch ở đâu?","acceptedAnswer":{"@type":"Answer","text":"Vào Hồ Sơ, tab Ví Lượng, để xem số dư hiện tại và toàn bộ lịch sử nạp, trừ Lượng."}}
   ]
 }
 </script>
@@ -51,56 +82,255 @@ footer a{color:rgba(255,255,255,.5);text-decoration:none}
 <div class="wrap">
   <div class="eyebrow">Hỗ Trợ</div>
   <h1>Câu Hỏi Thường Gặp</h1>
+  <div class="h1-sub">Giải đáp về hệ thống luận giải, độ chính xác, và về Lượng &amp; thanh toán.</div>
 
   <div class="faq-group">
-    <div class="faq-group-title">Về Dịch Vụ</div>
+    <div class="faq-group-title">Về Hệ Thống</div>
+
     <div class="faq open">
-      <div class="faq-q" onclick="toggle(this)">Tử Vi Minh Bảo sử dụng phương pháp an sao nào? <span class="icon">+</span></div>
-      <div class="faq-a">Chúng tôi sử dụng phương pháp an sao cổ pháp Tử Vi Đẩu Số truyền thống, dựa trên ngày giờ sinh dương lịch được chuyển đổi sang âm lịch. Hệ thống tích hợp thư viện iztro — thư viện mã nguồn mở học thuật được kiểm chứng bởi cộng đồng nghiên cứu Tử Vi.</div>
+      <div class="faq-q" onclick="toggle(this)">Tử Vi Minh Bảo là gì? <span class="icon">+</span></div>
+      <div class="faq-a">
+        <p>Tử Vi Minh Bảo là hệ thống luận giải cá nhân hoá, kết hợp giữa cổ học phương Đông, dữ liệu thực tế và công nghệ hiện đại.</p>
+        <p>Hệ thống giúp bạn hiểu rõ hơn về:</p>
+        <ul>
+          <li>Bản thân</li>
+          <li>Các giai đoạn trong cuộc đời</li>
+          <li>Những xu hướng có thể xảy ra</li>
+        </ul>
+      </div>
     </div>
+
     <div class="faq">
-      <div class="faq-q" onclick="toggle(this)">Luận giải có chính xác không? <span class="icon">+</span></div>
-      <div class="faq-a" style="display:none">Luận giải được sinh tự động từ chính bộ số engine đã an sao, dựa trên hệ thống Tử Vi Đẩu Số cổ điển và kho tài liệu học thuật hơn 200 cuốn. Kết quả mang tính tham khảo — độ chính xác phụ thuộc vào tính đúng đắn của thông tin ngày giờ sinh bạn cung cấp.</div>
+      <div class="faq-q" onclick="toggle(this)">Đây có phải chỉ là website xem Tử Vi không? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Không. Tử Vi Minh Bảo là một hệ thống gồm nhiều công cụ nghiên cứu và luận giải, trong đó Tử Vi Đẩu Số là một phần trọng tâm.</p>
+        <p>Ngoài ra, nền tảng còn bao gồm:</p>
+        <ul>
+          <li>Các công cụ phân tích vận hạn theo thời gian</li>
+          <li>Công cụ tra cứu, đối chiếu mệnh lý</li>
+          <li>Các nội dung nghiên cứu và cẩm nang ứng dụng</li>
+        </ul>
+        <p>Mục tiêu không chỉ là "xem số", mà là xây dựng một hệ sinh thái công cụ giúp hiểu và ứng dụng mệnh lý trong thực tế.</p>
+      </div>
     </div>
+
     <div class="faq">
-      <div class="faq-q" onclick="toggle(this)">Dịch vụ có thể thay thế thầy tử vi không? <span class="icon">+</span></div>
-      <div class="faq-a" style="display:none">Không hoàn toàn. Tử Vi Minh Bảo cung cấp luận giải dựa trên cổ pháp và kho tài liệu học thuật — phù hợp để tự tìm hiểu và tham khảo. Đối với các quyết định quan trọng, việc tham vấn thầy có kinh nghiệm thực tiễn vẫn có giá trị riêng.</div>
+      <div class="faq-q" onclick="toggle(this)">Nội dung luận giải có thực sự chính xác không? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Không có hệ thống nào có thể đưa ra kết luận tuyệt đối.</p>
+        <p>Tuy nhiên, Tử Vi Minh Bảo được xây dựng trên:</p>
+        <ul>
+          <li>Dữ liệu ngày giờ sinh của hơn 270.000 người thật</li>
+          <li>Kết hợp với cơ sở dữ liệu quốc tế từ AstroDataBank</li>
+          <li>Đối chiếu với các diễn biến thực tế trong cuộc đời</li>
+        </ul>
+        <p>Các nguyên lý cổ học được kiểm nghiệm trên dữ liệu, thay vì chỉ dựa vào cảm đoán. Kết quả vì vậy có cơ sở hơn, nhưng vẫn nên được xem như một nguồn tham khảo có giá trị.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Hệ thống hoạt động như thế nào? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Quy trình luận giải gồm nhiều bước:</p>
+        <ul>
+          <li>Xây dựng lá số từ ngày, giờ sinh</li>
+          <li>Phân tích cấu trúc theo nguyên lý Tử Vi</li>
+          <li>Đối chiếu với dữ liệu thực tế</li>
+          <li>Hệ thống diễn giải nội dung</li>
+          <li>Hiệu chỉnh bởi chuyên gia</li>
+        </ul>
+        <p>Hệ thống không tự "đoán", mà chỉ diễn giải lại các kết luận đã được xác định.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Ai đứng sau hệ thống này? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Tử Vi Minh Bảo được xây dựng bởi một nhóm nghiên cứu mệnh lý theo hướng:</p>
+        <ul>
+          <li>Lấy kinh điển làm nền tảng</li>
+          <li>Lấy thực chứng làm tiêu chuẩn</li>
+          <li>Kết hợp với phương pháp và công nghệ hiện đại</li>
+        </ul>
+        <p>Nhóm bao gồm các học giả và người nghiên cứu Tử Vi Đẩu Số, cùng những người có kinh nghiệm luận giải thực tế qua nhiều lá số. Mỗi người mang một góc nhìn riêng, từ học thuật đến thực tiễn, nhưng cùng chung mục tiêu là hiểu và hệ thống hoá mệnh lý một cách nghiêm túc. Xem thêm tại trang <a href="/about.html">Giới Thiệu</a>.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Vì sao phải nhập chính xác giờ sinh? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Giờ sinh là yếu tố quan trọng trong Tử Vi Đẩu Số. Sai lệch nhỏ có thể:</p>
+        <ul>
+          <li>Làm thay đổi vị trí sao</li>
+          <li>Ảnh hưởng đến toàn bộ luận giải</li>
+        </ul>
+        <p>Nếu không chắc chắn, bạn nên sử dụng kết quả với mức độ tham khảo cao hơn.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Tôi có thể thay đổi vận mệnh không? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Tử vi không phải là sự định đoạt tuyệt đối.</p>
+        <p>Lá số phản ánh:</p>
+        <ul>
+          <li>Xu hướng</li>
+          <li>Thời điểm</li>
+          <li>Khả năng</li>
+        </ul>
+        <p>Nhưng kết quả cuối cùng vẫn phụ thuộc vào hành động và lựa chọn của mỗi người.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Tại sao nội dung đọc "giống mình"? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Điều này đến từ:</p>
+        <ul>
+          <li>Cấu trúc lá số có tính hệ thống</li>
+          <li>Dữ liệu thực tế giúp xác định pattern</li>
+          <li>Hệ thống diễn giải theo đúng ngữ cảnh cá nhân</li>
+        </ul>
+        <p>Sự "đúng" là kết quả của phương pháp, không phải đoán ngẫu nhiên.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Hệ thống có tự "bịa" nội dung không? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Không.</p>
+        <p>Hệ thống chỉ dùng để:</p>
+        <ul>
+          <li>Diễn giải nội dung</li>
+          <li>Làm rõ luận điểm</li>
+        </ul>
+        <p>Logic luận giải đã được xây dựng từ trước dựa trên:</p>
+        <ul>
+          <li>Cổ pháp</li>
+          <li>Dữ liệu</li>
+          <li>Quy tắc đã kiểm nghiệm</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Vì sao phải trả phí để xem đầy đủ? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Chi phí bao gồm:</p>
+        <ul>
+          <li>Xây dựng và xử lý dữ liệu quy mô lớn</li>
+          <li>Phát triển hệ thống luận giải</li>
+          <li>Duy trì hạ tầng công nghệ</li>
+          <li>Hiệu chỉnh nội dung liên tục</li>
+        </ul>
+        <p>Phí dịch vụ giúp đảm bảo chất lượng và sự đầu tư nghiêm túc cho hệ thống.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Tôi nên sử dụng kết quả như thế nào? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Bạn nên xem luận giải như:</p>
+        <ul>
+          <li>Một góc nhìn có hệ thống</li>
+          <li>Một công cụ hỗ trợ quyết định</li>
+          <li>Một nguồn tham khảo có cơ sở</li>
+        </ul>
+        <p>Không nên phụ thuộc hoàn toàn vào kết quả.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Nếu tôi thấy nội dung chưa đúng thì sao? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Điều này có thể do:</p>
+        <ul>
+          <li>Sai giờ sinh</li>
+          <li>Khác biệt trong trường phái</li>
+          <li>Yếu tố cá nhân chưa được phản ánh đầy đủ</li>
+        </ul>
+        <p>Bạn có thể gửi phản hồi qua <a href="/contact.html">trang Liên Hệ</a> để hệ thống được cải thiện.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Hệ thống có được cập nhật không? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Có. Hệ thống được cải thiện liên tục dựa trên:</p>
+        <ul>
+          <li>Dữ liệu mới</li>
+          <li>Phản hồi người dùng</li>
+          <li>Quá trình kiểm nghiệm thực tế</li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <div class="faq-group">
-    <div class="faq-group-title">Về Thông Tin Đầu Vào</div>
-    <div class="faq">
-      <div class="faq-q" onclick="toggle(this)">Tôi cần cung cấp những thông tin gì? <span class="icon">+</span></div>
-      <div class="faq-a" style="display:none">Bạn cần: ngày tháng năm sinh dương lịch, giờ sinh (càng chính xác càng tốt), giới tính và múi giờ (mặc định GMT+7 cho Việt Nam).</div>
-    </div>
-    <div class="faq">
-      <div class="faq-q" onclick="toggle(this)">Tôi không biết chính xác giờ sinh thì sao? <span class="icon">+</span></div>
-      <div class="faq-a" style="display:none">Nhập giờ sinh gần đúng nhất. Trong Tử Vi Đẩu Số, giờ sinh được tính theo 12 địa chi — mỗi cung giờ kéo dài 2 tiếng, nên sai số dưới 1 tiếng thường không thay đổi cung Mệnh.</div>
-    </div>
-    <div class="faq">
-      <div class="faq-q" onclick="toggle(this)">Nhập ngày âm lịch hay dương lịch? <span class="icon">+</span></div>
-      <div class="faq-a" style="display:none">Nhập ngày dương lịch. Hệ thống tự động chuyển đổi sang âm lịch để an sao.</div>
-    </div>
-  </div>
+    <div class="faq-group-title">Giao Dịch, Lượng &amp; Thanh Toán</div>
 
-  <div class="faq-group">
-    <div class="faq-group-title">Về Thanh Toán</div>
     <div class="faq">
-      <div class="faq-q" onclick="toggle(this)">Phí dịch vụ là bao nhiêu? <span class="icon">+</span></div>
-      <div class="faq-a" style="display:none">Mỗi công cụ có mức phí riêng, hiển thị ngay trên trang của công cụ đó trước khi bạn bấm dùng. Số dư Lượng và lịch sử giao dịch xem trong mục Tài khoản.</div>
+      <div class="faq-q" onclick="toggle(this)">Lượng là gì? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Lượng là đơn vị dùng để mở khoá các công cụ luận giải chuyên sâu trên Tử Vi Minh Bảo. Nạp một lần, dùng được cho mọi công cụ — không cần mua riêng theo từng tính năng.</p>
+      </div>
     </div>
+
     <div class="faq">
-      <div class="faq-q" onclick="toggle(this)">Tôi không có tài khoản PayPal có thanh toán được không? <span class="icon">+</span></div>
-      <div class="faq-a" style="display:none">Có. Trong cửa sổ PayPal, chọn "Pay with Debit or Credit Card" để nhập thông tin thẻ Visa, Mastercard hoặc JCB trực tiếp — không cần tài khoản PayPal.</div>
+      <div class="faq-q" onclick="toggle(this)">Làm sao để nạp Lượng? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Vào trang <a href="/topup.html">Nạp Lượng</a>, chọn một gói phù hợp và thanh toán. Lượng được cộng vào ví ngay sau khi giao dịch thành công.</p>
+      </div>
     </div>
+
     <div class="faq">
-      <div class="faq-q" onclick="toggle(this)">Thanh toán xong nhưng chưa thấy kết quả? <span class="icon">+</span></div>
-      <div class="faq-a" style="display:none">Thử làm mới trang (F5). Nếu vẫn không thấy sau 1-2 phút, liên hệ qua <a href="/contact.html" style="color:#1455A4">trang Liên Hệ</a> kèm mã giao dịch PayPal — chúng tôi hỗ trợ trong vòng 24 giờ.</div>
+      <div class="faq-q" onclick="toggle(this)">Có những cách thanh toán nào? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p><strong>(1) Chuyển khoản ngân hàng VND</strong> qua payOS — quét mã QR bằng app ngân hàng Việt Nam, Lượng vào ví tự động.</p>
+        <p><strong>(2) PayPal / Thẻ quốc tế</strong> — nhận Visa, Mastercard, JCB; trong cửa sổ PayPal có thể chọn "Pay with Debit or Credit Card" để trả bằng thẻ mà không cần có sẵn tài khoản PayPal.</p>
+      </div>
     </div>
+
     <div class="faq">
-      <div class="faq-q" onclick="toggle(this)">Kết quả được lưu bao lâu? <span class="icon">+</span></div>
-      <div class="faq-a" style="display:none">Kết quả luận giải được lưu 7 ngày trên hệ thống. Bạn có thể quay lại xem bằng cách nhập lại thông tin sinh nhật. Nên tải PDF ngay để lưu vĩnh viễn.</div>
+      <div class="faq-q" onclick="toggle(this)">Lượng có hết hạn không? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Không. Lượng được lưu vĩnh viễn trong tài khoản, dùng lúc nào cũng được.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Mỗi lần mở lại kết quả cũ có bị trừ Lượng nữa không? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Không. Mỗi lá số hay kết quả chỉ trừ Lượng một lần duy nhất khi luận giải lần đầu. Sau đó bạn xem lại bao nhiêu lần cũng miễn phí.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Trả phí xong tôi nhận được gì? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Toàn bộ nội dung luận giải chuyên sâu của công cụ đó — viết theo đúng lá số và ngữ cảnh cá nhân của bạn — cùng quyền xem lại không giới hạn, và tải về khi công cụ hỗ trợ.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Thanh toán xong mà chưa thấy Lượng vào ví? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Thử làm mới trang (F5), hoặc vào <a href="/profile.html">Hồ Sơ</a> → tab "Ví Lượng" để kiểm tra lại số dư. Nếu sau 1–2 phút vẫn chưa thấy, liên hệ qua <a href="/contact.html">trang Liên Hệ</a> kèm mã giao dịch (PayPal hoặc payOS) để được xử lý.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Có hoàn tiền không? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Do tính chất là kết quả số hoá, hệ thống <a href="/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien">không hoàn tiền</a> sau khi kết quả đã được hiển thị. Nếu gặp lỗi giao dịch — trừ tiền nhưng không nhận được kết quả — hãy <a href="/contact.html">liên hệ</a> ngay để được kiểm tra và xử lý.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faq-q" onclick="toggle(this)">Xem lại lịch sử giao dịch ở đâu? <span class="icon">+</span></div>
+      <div class="faq-a" style="display:none">
+        <p>Vào <a href="/profile.html">Hồ Sơ</a> → tab "Ví Lượng" để xem số dư hiện tại và toàn bộ lịch sử nạp, trừ Lượng.</p>
+      </div>
     </div>
   </div>
 
@@ -120,6 +350,6 @@ function toggle(el) {
   }
 }
 </script>
-<script src="/nav.js?v=38"></script>
+<script src="/nav.js?v=39"></script>
 </body>
 </html>

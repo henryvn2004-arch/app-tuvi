@@ -21,27 +21,35 @@
   // `gtag-js` là ID chung nên nav.js/shell.js không nạp trùng nếu cả hai cùng
   // có mặt trên một trang. Bỏ qua navigator.webdriver — cùng lý do chặn bot
   // E2E như nav.js.
-  if (!document.getElementById('gtag-js') && !window.navigator.webdriver) {
-    var _ga = document.createElement('script'); _ga.id = 'gtag-js'; _ga.async = true;
-    _ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0'; document.head.appendChild(_ga);
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () { window.dataLayer.push(arguments); };
-    window.gtag('js', new Date());
-    window.gtag('config', 'G-F4XNRS2XT0');
-    window.gtag('config', 'AW-18419617290');
-  }
+  // Hoãn tới lúc main thread RẢNH (requestIdleCallback, trần 2000ms) thay vì
+  // chạy ngay trong lượt parse ban đầu — cùng lý do và cùng cách với nav.js.
+  // Lighthouse mobile đo GTM+Clarity tự chiếm hàng trăm ms main-thread ngay
+  // trong cửa sổ LCP/TTI trên /app/luan-giai (docs/nhat-ky/2026-09.md).
+  var _loadTrackers = function () {
+    if (!document.getElementById('gtag-js') && !window.navigator.webdriver) {
+      var _ga = document.createElement('script'); _ga.id = 'gtag-js'; _ga.async = true;
+      _ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0'; document.head.appendChild(_ga);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', 'G-F4XNRS2XT0');
+      window.gtag('config', 'AW-18419617290');
+    }
 
-  // ── Microsoft Clarity ──────────────────────────────────────────────
-  // Cùng lý do như khối GA4 ở trên: nav.js#data-icons-only bỏ qua Clarity nên
-  // shell.js phải tự bù cho toàn bộ trang /app/*. `clarity-js` là ID chung với
-  // nav.js để không nạp trùng khi cả hai cùng có mặt.
-  if (!document.getElementById('clarity-js') && !window.navigator.webdriver) {
-    (function (c, l, a, r, i, t, y) {
-      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
-      t = l.createElement(r); t.id = 'clarity-js'; t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
-      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-    })(window, document, 'clarity', 'script', 'yg15ejzyc6');
-  }
+    // ── Microsoft Clarity ──────────────────────────────────────────────
+    // Cùng lý do như khối GA4 ở trên: nav.js#data-icons-only bỏ qua Clarity nên
+    // shell.js phải tự bù cho toàn bộ trang /app/*. `clarity-js` là ID chung với
+    // nav.js để không nạp trùng khi cả hai cùng có mặt.
+    if (!document.getElementById('clarity-js') && !window.navigator.webdriver) {
+      (function (c, l, a, r, i, t, y) {
+        c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+        t = l.createElement(r); t.id = 'clarity-js'; t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+        y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+      })(window, document, 'clarity', 'script', 'yg15ejzyc6');
+    }
+  };
+  if ('requestIdleCallback' in window) requestIdleCallback(_loadTrackers, { timeout: 2000 });
+  else setTimeout(_loadTrackers, 1500);
 
   // ── NGUỒN DUY NHẤT: danh sách công cụ (render cả sidebar lẫn Cmd+K) ──
   // ── DANH SÁCH CÔNG CỤ — dựng TỪ DỮ LIỆU, không còn mảng chép tay ──
@@ -384,9 +392,16 @@
   // to hơn) + đổi nhịp tick từ CỐ ĐỊNH 4s sang NGẪU NHIÊN 5-10s (setTimeout đệ
   // quy, không phải setInterval) cho nhịp trông tự nhiên hơn một máy đếm đều.
 
+  // Henry chốt tiếp (2026-09-20): "cho số nó to lên, chục trăm ngàn" + tách rõ
+  // hành vi hai số — `online` phải THẤY nó nhảy liên tục (cả lên lẫn xuống),
+  // `promptsToday` thì CHỈ cộng dồn (không bao giờ lùi). Biên độ random-walk
+  // của `online` phải tỉ lệ với baseline mới, không thì trên nền chục ngàn
+  // bước nhảy vài chục/tick (baseline cũ) sẽ KHÔNG THẤY nhảy nữa.
+
   /** Bước mô phỏng: seed lần đầu theo giờ VN hiện tại, sau đó random-walk nhẹ
-   * quanh baseline. `online` dao động cả hai chiều; `promptsToday` CHỈ TĂNG
-   * trong ngày (giống một bộ đếm thật) và tự reset khi qua ngày mới giờ VN. */
+   * quanh baseline. `online` dao động cả hai chiều mỗi tick; `promptsToday`
+   * CHỈ TĂNG trong ngày (giống một bộ đếm thật) và tự reset khi qua ngày mới
+   * giờ VN. */
   function simulatePulse() {
     var now = vnNow();
     var dayKey = pulseDayKey(now);
@@ -394,16 +409,16 @@
     if (!_pulseData || _pulseDayKey !== dayKey) {
       _pulseDayKey = dayKey;
       _pulseData = {
-        online: Math.round(900 + factor * 1600 + Math.random() * 150),
-        promptsToday: Math.round(1800 + factor * 1400 + Math.random() * 200),
+        online: Math.round(5000 + factor * 25000 + Math.random() * 1500),
+        promptsToday: Math.round(40000 + factor * 130000 + Math.random() * 2000),
       };
     } else {
-      var driftOnline = Math.round((Math.random() - 0.42) * 40); // lệch nhẹ về tăng
-      var target = Math.round(900 + factor * 1600);
+      var driftOnline = Math.round((Math.random() - 0.42) * 400); // lệch nhẹ về tăng, nhảy cả hai chiều
+      var target = Math.round(5000 + factor * 25000);
       // Kéo nhẹ về baseline của giờ hiện tại (tránh trôi dạt quá xa qua nhiều giờ) + nhiễu ngẫu nhiên.
-      _pulseData.online = Math.max(600, Math.min(3400, Math.round(_pulseData.online * 0.9 + target * 0.1 + driftOnline)));
+      _pulseData.online = Math.max(3000, Math.min(35000, Math.round(_pulseData.online * 0.9 + target * 0.1 + driftOnline)));
       if (Math.random() < 0.55) {
-        _pulseData.promptsToday += Math.round(Math.random() * 15) + (Math.random() < 0.12 ? 40 : 0);
+        _pulseData.promptsToday += Math.round(Math.random() * 150) + (Math.random() < 0.12 ? 400 : 0);
       }
     }
     return _pulseData;
@@ -1754,14 +1769,24 @@
     var pending = 1; // QR — luôn chờ, xem ensureQrJs bên dưới
     var release = function () { pending--; if (pending <= 0) go(); };
     ensureQrJs(release);
-    if (isBook && host) {
+    // 🪤 2026-09-17: gate cũ `isBook &&` bỏ sót Xem Tuổi/Xem Tuổi Làm Ăn/Tương
+    // Hợp — có `.lg-illus img` (9 khía cạnh minh hoạ, PR #830/#880) nhưng
+    // KHÔNG có bìa sách (`ensurePrintBook()` false vì không có mục trong
+    // `BOOK_QUOTES`) nên bị bỏ sót, ảnh vẫn `loading=lazy`, chưa từng được
+    // yêu cầu tải ⇒ PDF ra khung trống (Henry báo qua bản mẫu xem-tuoi
+    // thật). `forceEagerIllusImages` tự dò `.lg-illus img` trong DOM và
+    // `cb()` ngay nếu không có — gọi VÔ ĐIỀU KIỆN cho mọi tool, không cần
+    // (và không nên) tự đoán trước tool nào có ảnh ở tầng gọi.
+    if (host) {
       pending++;
       forceEagerIllusImages(host, release);
     }
     // Trần cứng — mạng chậm/QR hoặc ảnh chưa kịp tải thì đừng giữ người dùng
-    // chờ vô hạn. Bìa sách kéo thêm ảnh minh hoạ (giờ đã nén ~150KB/tấm,
-    // xem illus-match.js) nên trần dài hơn bản không-bìa.
-    setTimeout(go, isBook ? 2500 : 800);
+    // chờ vô hạn. Tool không có ảnh thì `forceEagerIllusImages` trả `cb()`
+    // gần như ngay lập tức (qua nhánh `pending`), trần dưới đây chỉ có tác
+    // dụng với tool THẬT SỰ có ảnh đang tải — dùng chung một trần rộng cho
+    // mọi tool thay vì đoán trước isBook.
+    setTimeout(go, 2500);
   }
   // `loading="lazy"` trên ảnh phần 2 trở đi (xem `illusBannerHtml` ở các
   // trang tool) chỉ tải khi CUỘN TỚI — bấm "Lưu PDF" mà chưa từng cuộn qua

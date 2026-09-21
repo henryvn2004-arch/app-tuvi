@@ -11,9 +11,14 @@
 // phiên giả vào GA4 (dồn hết vào kênh Direct vì không có referrer).
 // ============================================================
 
+// Hoãn tới lúc main thread RẢNH (requestIdleCallback, trần 2000ms) — cùng kỹ
+// thuật và cùng lý do với public/nav.js/shell.js: Lighthouse mobile đo GTM+
+// Clarity tự chiếm hàng trăm ms main-thread ngay trong cửa sổ LCP/TTI
+// (docs/nhat-ky/2026-09.md). track.js đã có hàng đợi/retry cho gtag('event')
+// lẫn fbq('track') nên trễ vài giây không làm mất event.
 export const GA4_TRACK_SNIPPET =
   '<script src="/track.js?v=4" defer></script>' +
-  "<script>(function(){if(!document.getElementById('gtag-js')&&!navigator.webdriver){" +
+  "<script>(function(){function _lt(){if(!document.getElementById('gtag-js')&&!navigator.webdriver){" +
   "var ga=document.createElement('script');ga.id='gtag-js';ga.async=true;" +
   "ga.src='https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0';document.head.appendChild(ga);" +
   "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;" +
@@ -24,5 +29,6 @@ export const GA4_TRACK_SNIPPET =
   "(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};" +
   "t=l.createElement(r);t.id='clarity-js';t.async=1;t.src='https://www.clarity.ms/tag/'+i;" +
   "y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);" +
-  "})(window,document,'clarity','script','yg15ejzyc6');}" +
+  "})(window,document,'clarity','script','yg15ejzyc6');}}" +
+  "if('requestIdleCallback' in window)requestIdleCallback(_lt,{timeout:2000});else setTimeout(_lt,1500);" +
   "})();</script>";

@@ -8,7 +8,8 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="stylesheet" href="/shell.css?v=50">
 <style>
 .dt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:680px;margin-bottom:16px}
@@ -182,13 +183,18 @@
         <div class="warn-card" id="featuresWarn"></div>
       </div>
 
+      <!-- Khối hook (2 fact) — CHỈ dùng dữ liệu ĐÃ MIỄN PHÍ của chính lượt đo
+           này (Ngũ Âm ước tính + F0 trung bình, cả hai đã hiện ở featuresPanel
+           trên), KHÔNG tính thêm số nào. -->
+      <div id="hookHost"></div>
+
       <div class="dt-card" id="analyzeWrap" style="display:none">
         <div class="cost-box">
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
               <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span data-tvp-price="thanh-tuong-pro">…</span> Lượng <span class="vnd" data-tvp-price-vnd="thanh-tuong-pro"></span> mỗi lượt</div>
+              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="thanh-tuong-pro"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="thanh-tuong-pro">…</span> Lượng)</span></div>
               <div class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
@@ -202,7 +208,7 @@
         </div>
         <button class="btn-go" id="analyzeBtn">
           <span class="bg-label"><span class="ic" data-icon="music"></span><b id="analyzeBtnLabel">Luận Giải Thanh Tướng →</b></span>
-          <small>Tốn <span data-tvp-price="thanh-tuong-pro">…</span> Lượng <span data-tvp-price-vnd="thanh-tuong-pro"></span></small>
+          <small>Tốn <span class="vnd" data-tvp-price-vnd="thanh-tuong-pro"></span> <span class="cb-sub">(<span data-tvp-price="thanh-tuong-pro">…</span> Lượng)</span></small>
         </button>
       </div>
       </div>
@@ -235,10 +241,11 @@
 <script>window.SHELL_ACTIVE='thanh-tuong-pro';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'thanh-tuong-pro'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=35"></script>
-  <script src="/nav.js?v=38" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
+<script src="/tuvi-paywall.js?v=37"></script>
+<script src="/tools-shared/hook-layer.js?v=4"></script>
+  <script src="/nav.js?v=39" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
-<script src="/shell.js?v=94"></script>
+<script src="/shell.js?v=95"></script>
 <script>
 function initThanhTuongPro(){
   Shell.setContext({
@@ -373,7 +380,7 @@ function checkSetup() {
 startBtn.addEventListener('click', () => {
   tasksSection.style.display = 'block';
   loadTask(0);
-  tasksSection.scrollIntoView({behavior:'smooth',block:'start'});
+  tasksSection.scrollIntoView({behavior:'smooth',block:'nearest'});
 });
 
 function loadTask(idx) {
@@ -958,6 +965,7 @@ function compileAndShowFeatures() {
 
   const nguam = estimateNguAm(r, state.gender);
   nguamBadge.textContent = 'Ngũ Âm ước tính: ' + nguam.label;
+  mountHook(items, nguam);
 
   const warns = [];
   if (s.sustainDuration < 2.5) warns.push('⚠ Ngân âm quá ngắn (<2.5s) — khí bất túc hoặc mic không thu trọn. Nếu không cố ý, nên thu lại bài 2.');
@@ -977,7 +985,7 @@ function compileAndShowFeatures() {
   analyzeWrap.style.display = 'block';
   tasksSection.style.display = 'none';
   wsStepsSet(2); // Xem kết quả đo — 12 chỉ số âm học vừa tính xong, free
-  featuresPanel.scrollIntoView({behavior:'smooth',block:'start'});
+  featuresPanel.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 function clamp(x, lo, hi){ return Math.max(lo, Math.min(hi, x)); }
@@ -1049,6 +1057,60 @@ function interpStability(cv){
   if (cv < 0.20) return 'Ổn định.';
   if (cv < 0.30) return 'Có biến động.';
   return 'Biến động lớn.';
+}
+
+// Khối hook (2 fact) — CHỈ dùng dữ liệu ĐÃ MIỄN PHÍ của chính lượt đo này
+// (F0 trung bình + Ngũ Âm ước tính, cả hai đã hiện ở featuresPanel trên),
+// KHÔNG tính thêm số nào.
+function mountHook(items, nguam) {
+  const host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer || !items || !items.length || !nguam) return;
+  const f0 = items[0];
+  const facts = [{
+    tone: 'neutral',
+    title: f0.name + ': ' + f0.value,
+    body: f0.interp + ' Đo trực tiếp từ giọng nói qua micro. 11 chỉ số âm học còn lại và luận giải đầy đủ nằm trong bản phân tích chuyên sâu.',
+    source: 'engine · thanh-tuong-pro F0 analysis',
+  }, {
+    tone: 'neutral',
+    title: 'Ngũ Âm ước tính: ' + nguam.label,
+    body: 'Xếp theo 12 chỉ số âm học đo được (HNR, sustain, jitter, centroid…). Ý nghĩa đầy đủ theo Ngũ Âm cổ pháp nằm trong bản phân tích chuyên sâu.',
+    source: 'engine · estimateNguAm',
+  }];
+  const spec = { tool: 'thanh-tuong-pro', toolLabel: 'Thanh Tướng Pro', charts: [], facts: facts };
+  window.HookLayer.mount(host, spec);
+  _tryHookNarrativeTTP(host, spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeTTP(host, spec) {
+  if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
+  if (host) host.style.visibility='hidden';
+  const pending = document.createElement('div');
+  pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if (host && host.parentNode) host.parentNode.insertBefore(pending, host.nextSibling);
+  const tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+  const headers = { 'Content-Type': 'application/json' };
+  if (tk) headers['Authorization'] = 'Bearer ' + tk;
+  const body = {
+    toolId: spec.tool,
+    toolLabel: spec.toolLabel || spec.tool,
+    anonId: TuviPaywall.previewAnonId(),
+    facts: spec.facts.map(f => ({ title: f.title, body: f.body, tone: f.tone, caption: f.caption })),
+  };
+  fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+    .then(r => r.json())
+    .then(data => {
+      if (pending.parentNode) pending.remove();
+      if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
+      if (host) host.style.visibility='';
+    })
+    .catch(() => {
+      if (pending.parentNode) pending.remove();
+      if (host) host.style.visibility='';
+    });
 }
 
 function estimateNguAm(r, gender){
@@ -1171,7 +1233,7 @@ async function _doThanhTuongAnalyze() {
   var _analyzeBtnLb = document.getElementById('analyzeBtnLabel'); if (_analyzeBtnLb) _analyzeBtnLb.textContent = 'Đang luận giải…';
   resultsCard.style.display = 'block';
   resultsPanel.innerHTML = '<p class="loading-dots" style="text-align:center;color:var(--text-lt);padding:30px 0">Đang phân tích theo cổ pháp</p>';
-  resultsCard.scrollIntoView({behavior:'smooth',block:'start'});
+  resultsCard.scrollIntoView({behavior:'smooth',block:'nearest'});
 
   const nguam = estimateNguAm(state.results, state.gender);
   const geoNote = buildGeoNote(state.gender, state.age, nguam, state.results);
@@ -1279,7 +1341,7 @@ function _fillVndSlots(host,product){
   var els=host.querySelectorAll('[data-tvp-price-vnd]');
   var cost=window.ToolPrices.get(product);
   var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
-  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+  els.forEach(function(el){ el.textContent = lbl || ''; });
 }
 TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'thanh-tuong-pro'); });
 

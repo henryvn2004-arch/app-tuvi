@@ -8,7 +8,8 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="stylesheet" href="/shell.css?v=50">
 <style>
 .form-card{max-width:760px}
@@ -190,7 +191,7 @@
       <div class="samp-cta">
         <span class="sc-ic" data-icon="file-text"></span>
         <span class="sc-txt"><b>Bản luận giải mẫu</b><span>Tải PDF Tử Vi Công Sở đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
-        <a class="sc-btn" href="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-cong-so.pdf" target="_blank" rel="noopener">Tải PDF →</a>
+        <a class="sc-btn" href="/tai-mau/mau-cong-so.pdf" target="_blank" rel="noopener">Tải PDF →</a>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -246,12 +247,12 @@ window.SHELL_INTRO={key:'cong-so'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=35"></script>
+<script src="/tuvi-paywall.js?v=37"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/poster.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=38" data-icons-only></script>
-<script src="/shell.js?v=94"></script>
+  <script src="/nav.js?v=39" data-icons-only></script>
+<script src="/shell.js?v=95"></script>
 <script>
 var _ho=null,_birth=null;
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
@@ -327,7 +328,10 @@ function doCongSo(){
     // Tool free chạy gần như tức thì (không cần orb/loading — luật đã ghi ở
     // ai-loading-steps.js) nhưng nếu form nằm dưới cuối màn hình thì kết quả
     // vẫn hiện NGOÀI khung nhìn. Cuộn lên để thấy nó vừa dựng xong.
-    document.getElementById('resPanel').scrollIntoView({behavior:'smooth',block:'start'});
+    // `block:'nearest'` (không phải 'start'): `.ws-side-col` (Giới thiệu/Bản
+    // luận giải mẫu/Phiên gần đây) đứng giữa form và resPanel trong DOM —
+    // 'start' cuộn quá tay, đẩy trôi cả khối đó khỏi khung nhìn dù còn nguyên.
+    document.getElementById('resPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
     ve();
     Shell.rememberBirth(fd);
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
@@ -386,7 +390,7 @@ function _fillVndSlots(host,product){
   var els=host.querySelectorAll('[data-tvp-price-vnd]');
   var cost=window.ToolPrices.get(product);
   var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
-  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+  els.forEach(function(el){ el.textContent = lbl || ''; });
 }
 // Danh sách hiện cho người ĐÃ ĐĂNG NHẬP nhưng chưa mở nhánh — họ đã thấy trọn
 // phần thân (radar/lộ trình/ghép đội), nên chỉ liệt kê đúng phần nhánh.
@@ -423,7 +427,7 @@ function dungTuong(){
   if(loggedIn){
     // Đã đăng nhập đã thấy TRỌN radar 12 mặt (bangHTML) — không hook lại nữa,
     // hook chỉ có việc ở màn ĐĂNG KÝ (mountHookAnon dưới).
-    host.innerHTML='<button class="btn-go" id="btnNhanh"><span class="bg-label"><span class="ic" data-icon="users"></span><b>Mở phần nhánh nghề →</b></span><small>Tốn <span data-tvp-price="cong-so">…</span> Lượng <span data-tvp-price-vnd="cong-so"></span></small></button>';
+    host.innerHTML='<button class="btn-go" id="btnNhanh"><span class="bg-label"><span class="ic" data-icon="users"></span><b>Mở phần nhánh nghề →</b></span><small>Tốn <span class="vnd" data-tvp-price-vnd="cong-so"></span> <span class="cb-sub">(<span data-tvp-price="cong-so">…</span> Lượng)</span></small></button>';
     TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,'cong-so'); });
     document.getElementById('btnNhanh').addEventListener('click',function(){
       TuviPaywall.requireCredits(_slug,moNhanh);
@@ -441,27 +445,70 @@ function dungTuong(){
   });
 }
 
-// Hé đúng MỘT trong 12 mặt (mặt mạnh nhất) — không dựng lại cả radar (nhãn
-// nhỏ li ti trong khung hẹp, xem chú thích tại #hookHost) và không lộ "lý do"
-// (cung/sao/ý nghĩa của Mười Hai Mặt và Cơ Sở đều nằm trong `bodyHTML`, đúng
-// phần đang khoá — chỉ điểm số của MỘT mặt là tương đương "một câu ví dụ",
-// không phải "toàn bộ bảng"). `_ho.radar` đã tính xong ở client cho MỌI
+// Hé ĐÚNG HAI trong 12 mặt (mạnh nhất + yếu nhất) — không dựng lại cả radar
+// (nhãn nhỏ li ti trong khung hẹp, xem chú thích tại #hookHost) và không lộ
+// "lý do" (cung/sao/ý nghĩa của Mười Hai Mặt và Cơ Sở đều nằm trong `bodyHTML`,
+// đúng phần đang khoá — chỉ điểm số của 2/12 mặt là tương đương "hai câu ví
+// dụ", không phải "toàn bộ bảng"). `_ho.radar` đã tính xong ở client cho MỌI
 // người dùng (kể cả chưa đăng ký) — không cần gọi thêm gì.
+// 2026-09-18: nới 1→2 mặt để đủ tối thiểu cho tầng hook kể chuyện
+// (`/api/hook-narrative` đòi ≥2 dữ kiện) — cùng tỉ lệ hé 2/N đã dùng ở
+// HookFacts.tuvi (mạnh nhất/yếu nhất trên 12 cung).
 function mountHookAnon(){
   var host=document.getElementById('hookHost');
   if(!host||!window.HookLayer||!_ho||!_ho.radar||!_ho.radar.length)return;
-  var top=_ho.radar.slice().sort(function(a,b){return b.diem-a.diem;})[0];
-  window.HookLayer.mount(host,{
-    tool:'cong-so',
-    charts:[],
-    facts:[{
-      tone:'good',
-      title:'Mặt mạnh nhất trong 12 mặt: '+top.nhan,
-      value:top.diem,
-      body:'Trên thang 10 điểm — 11 mặt còn lại, lý do từng mặt, và bảng đầy đủ nằm trong hồ sơ đăng ký được xem miễn phí.',
+  var sorted=_ho.radar.slice().sort(function(a,b){return b.diem-a.diem;});
+  var top=sorted[0], bot=sorted[sorted.length-1];
+  var facts=[{
+    tone:'good',
+    title:'Mặt mạnh nhất trong 12 mặt: '+top.nhan,
+    value:top.diem,
+    body:'Trên thang 10 điểm — 11 mặt còn lại, lý do từng mặt, và bảng đầy đủ nằm trong hồ sơ đăng ký được xem miễn phí.',
+    source:'engine · ho.radar'
+  }];
+  if(bot&&bot.nhan!==top.nhan){
+    facts.push({
+      tone:'bad',
+      title:'Mặt cần bồi thêm nhất: '+bot.nhan,
+      value:bot.diem,
+      body:'Trên thang 10 điểm — lý do và cách bồi từng mặt nằm trong hồ sơ đăng ký được xem miễn phí.',
       source:'engine · ho.radar'
-    }]
-  });
+    });
+  }
+  var spec={tool:'cong-so',toolLabel:'Tử Vi Công Sở',charts:[],facts:facts};
+  window.HookLayer.mount(host,spec);
+  _tryHookNarrativeCS(host,spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeCS(host,spec){
+  if(!spec||!Array.isArray(spec.facts)||spec.facts.length<2) return;
+  if(host)host.style.visibility='hidden';
+  var pending=document.createElement('div');
+  pending.style.cssText='display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML='<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if(host&&host.parentNode)host.parentNode.insertBefore(pending,host.nextSibling);
+  var tk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
+  var headers={'Content-Type':'application/json'};
+  if(tk)headers['Authorization']='Bearer '+tk;
+  var body={
+    toolId:spec.tool,
+    toolLabel:spec.toolLabel||spec.tool,
+    anonId:TuviPaywall.previewAnonId(),
+    facts:spec.facts.map(function(f){ return {title:f.title,body:f.body,tone:f.tone,caption:f.caption}; })
+  };
+  fetch('/api/hook-narrative',{method:'POST',headers:headers,body:JSON.stringify(body)})
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(pending.parentNode)pending.remove();
+      if(data&&data.allowed) window.HookLayer.upgrade(host,spec,data);
+      if(host)host.style.visibility='';
+    })
+    .catch(function(){
+      if(pending.parentNode)pending.remove();
+      if(host)host.style.visibility='';
+    });
 }
 
 function moNhanh(){

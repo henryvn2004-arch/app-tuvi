@@ -30,6 +30,50 @@ async function callRpc<T>(fn: string, params: Record<string, unknown>): Promise<
   return res.json();
 }
 
+interface ClaritySnapshotForDigest {
+  stat_date: string;
+  sessions: number | null;
+  bot_sessions: number | null;
+  rage_click_count: number | null;
+  rage_click_session_pct: number | null;
+  dead_click_count: number | null;
+  dead_click_session_pct: number | null;
+  avg_scroll_depth: number | null;
+}
+
+/**
+ * Đọc lại dòng Clarity MỚI NHẤT đã có sẵn trong `ext_metrics_daily` (cron
+ * `ext-metrics`, 05:00 VN — chạy TRƯỚC cron này 3 tiếng nên dữ liệu hôm nay
+ * luôn có mặt khi digest dựng lúc 08:00 VN). KHÔNG gọi lại Clarity Data
+ * Export API ở đây — trần 10 request/project/ngày đã do `ext-metrics` tiêu
+ * thụ, gọi thêm là chia đôi ngân sách của một nguồn best-effort.
+ */
+async function getLatestClarity(): Promise<ClaritySnapshotForDigest | null> {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/ext_metrics_daily?source=eq.clarity&entity=eq._total&order=stat_date.desc&limit=1&select=stat_date,metrics`,
+      { headers: SB_HEADERS, cache: 'no-store' },
+    );
+    if (!res.ok) return null;
+    const rows: Array<{ stat_date: string; metrics: Record<string, unknown> }> = await res.json();
+    const row = rows[0];
+    if (!row) return null;
+    const m = row.metrics || {};
+    return {
+      stat_date: row.stat_date,
+      sessions: (m.sessions as number) ?? null,
+      bot_sessions: (m.bot_sessions as number) ?? null,
+      rage_click_count: (m.rage_click_count as number) ?? null,
+      rage_click_session_pct: (m.rage_click_session_pct as number) ?? null,
+      dead_click_count: (m.dead_click_count as number) ?? null,
+      dead_click_session_pct: (m.dead_click_session_pct as number) ?? null,
+      avg_scroll_depth: (m.avg_scroll_depth as number) ?? null,
+    };
+  } catch {
+    return null;
+  }
+}
+
 interface CmoSnapshot {
   funnelThisWeek: unknown;
   funnelPrevWeek: unknown;
@@ -79,6 +123,12 @@ interface CmoSnapshot {
    * run gần nhất không thấy gì đáng báo — KHÔNG phải "chưa nối ads".
    */
   growthFindings: Finding[];
+  /**
+   * Microsoft Clarity — rage click/dead click/scroll depth, xem
+   * `getLatestClarity()` ngay trên. null = chưa cấu hình hoặc cron
+   * `ext-metrics` hôm nay chưa chạy/lỗi.
+   */
+  clarity: ClaritySnapshotForDigest | null;
 }
 
 // Snapshot 7 ngày gần nhất SO VỚI 7 ngày trước đó (WoW) — đủ để LLM thấy xu
@@ -94,7 +144,7 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     funnelThisWeek, funnelPrevWeek, sourcesThisWeek, engagement,
     revenueThisWeek, revenuePrevWeek, margin, channelHealth, atRisk,
     signupTruthThisWeek, signupTruthPrevWeek, trafficQuality, ga4, gsc,
-    growthFindings,
+    growthFindings, clarity,
   ] = await Promise.all([
     callRpc('marketing_funnel', { p_from: d(7), p_to: d(0) }),
     callRpc('marketing_funnel', { p_from: d(14), p_to: d(7) }),
@@ -124,6 +174,7 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     // ROAS, cổng mẫu ≥30 đã áp). getLatestGrowthFindings() tự fail-open
     // (lỗi/rỗng → []), .catch() ở đây chỉ phòng thêm, không kéo sập digest.
     getLatestGrowthFindings().catch(() => []),
+    getLatestClarity().catch(() => null),
   ]);
 
   const funnel = funnelThisWeek as { visitors?: unknown; visitors_human?: unknown };
@@ -141,6 +192,7 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
       : null,
     gsc,
     growthFindings,
+    clarity,
   };
 }
 
@@ -220,8 +272,10 @@ VỀ KHỐI "ga4" (Google Analytics 4, 7 ngày qua) — đọc kỹ, đây là c
   lọc được — không đủ căn cứ để gọi một chiều là "đo hụt", đừng kết luận.
 - ga4.channels (kênh) và ga4.landing (trang đáp) là thứ DUY NHẤT chỉ GA4 thấy được — dùng GA4 đúng
   vào việc này, đừng dùng nó để đếm người.
-- Nếu ga4.landing thấy /xem-tuoi.html và /xem-lam-an.html cao gần bằng nhau (mỗi trang vài trăm), đó
+- Nếu ga4.landing thấy /app/xem-tuoi và /app/xem-lam-an cao gần bằng nhau (mỗi trang vài trăm), đó
   là dấu vết CI Playwright chạy vào prod, KHÔNG phải người thật — nói thẳng, đừng đem khoe là traffic.
+  (Trước 2026-09-19 dấu vết này nằm ở /xem-tuoi.html · /xem-lam-an.html — hai trang standalone đã
+  retire, route qua shell.)
 - ga4.activeNow là số người online 30 phút gần nhất, mang tính tức thời — dùng làm màu sắc, ĐỪNG suy ra
   xu hướng cả tuần từ nó.
 - Mọi tỉ lệ ghép GA4 với số nội bộ (vd sessions GA4 ÷ số người trả tiền) là ƯỚC LƯỢNG vì hai nguồn đo
@@ -253,6 +307,21 @@ VỀ KHỐI "gsc" (Google Search Console, 28 ngày, KẾT THÚC TRƯỚC 3 NGÀY
   nên số ở đây là cận dưới. Nói "chưa hiện ra trong tìm kiếm" thì đúng, nói "chưa được index" là vượt
   quá dữ liệu.
 - Ngày cuối trong khoảng vẫn có thể thiếu do độ trễ — TUYỆT ĐỐI không đọc phần đuôi thành "đang sụt".
+
+VỀ KHỐI "clarity" (Microsoft Clarity — rage click/dead click/scroll depth; cửa
+sổ ~24h TRƯỢT tính từ lúc cron chạy, KHÔNG phải một ngày lịch VN sạch):
+- clarity = null nghĩa là CHƯA cấu hình Clarity hoặc cron ext-metrics hôm nay
+  chưa chạy/lỗi — nói thẳng một câu, TUYỆT ĐỐI không suy diễn UX đang tệ.
+- Chỉ có ĐÚNG 1 lát cắt/ngày, không có kỳ trước để so — TUYỆT ĐỐI không nói
+  "tăng/giảm", chỉ nêu số tuyệt đối của ngày đó.
+- "sessions"/"bot_sessions" đo riêng bởi Clarity, KHÔNG cùng thước đo với
+  funnel*_human hay ga4 — đừng đem so sánh hay cộng dồn với hai nguồn kia.
+- "rage_click_count"/"dead_click_count" là SỐ LƯỢT CLICK, không phải số
+  session. "*_session_pct" mới là % session dính ít nhất 1 lượt — đây là con
+  số đáng nêu ở "⚠️ Điểm nghẽn" khi có mặt và đáng kể, không phải count thô.
+- "avg_scroll_depth" là % cuộn trang trung bình (0-100) của TOÀN site, không
+  tách theo trang — thấp không tự động là xấu (trang ngắn cuộn hết sớm là
+  bình thường), đừng kết luận UX tệ chỉ từ một con số này.
 
 VỀ KHỐI "growthFindings" (bậc 6 Growth Data Plan — findings ads/campaign):
 - Đây là mảng VIỆC đã tính XONG bởi code (CAC/CPA/ROAS, cổng mẫu ≥30 đã áp) — CHỈ đọc lại

@@ -23,7 +23,8 @@
 <link rel="apple-touch-icon" href="/seal.png">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="stylesheet" href="/shell.css?v=50">
 <style>
 /* Thẻ Vận Hôm Nay phải co theo bề rộng CỘT chứ không theo viewport: trên
@@ -68,8 +69,9 @@
 .next-wrap{margin-bottom:22px}
 .nx-main{display:flex;gap:13px;align-items:flex-start;background:var(--white);border:1px solid var(--gold-soft);border-radius:14px;padding:16px 17px;box-shadow:var(--shadow);text-decoration:none;transition:.15s}
 .nx-main:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(6,26,46,.09)}
-.nx-main .ic{width:44px;height:44px;flex:0 0 auto;border-radius:11px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center}
+.nx-main .ic{width:44px;height:44px;flex:0 0 auto;border-radius:11px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .nx-main .ic svg{width:23px;height:23px}
+.nx-main .ic img{width:100%;height:100%;object-fit:cover}
 .nx-tx{min-width:0}
 .nx-tx b{display:block;font-family:var(--serif);font-size:16px;font-weight:600;color:var(--heading);margin-bottom:4px}
 .nx-why{font-size:12.5px;color:var(--text-mid);line-height:1.55}
@@ -81,7 +83,8 @@
 @container home (min-width:480px){.grid{grid-template-columns:repeat(6,1fr)}}
 @container home (min-width:720px){.grid{grid-template-columns:repeat(8,1fr)}}
 .tile{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;background:none;border:none;padding:0}
-.tile-ic{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:24px;transition:transform .12s}
+.tile-ic{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:24px;transition:transform .12s;overflow:hidden}
+.tile-ic img{width:100%;height:100%;object-fit:cover}
 .tile:active .tile-ic{transform:scale(.92)}
 .tile-lb{font-size:10.5px;line-height:1.25;color:var(--text-mid);text-align:center;max-width:76px}
 /* Tint theo NHÓM (`need_tags` đầu tiên) — màu MANG NGHĨA (nhu cầu), không
@@ -109,6 +112,38 @@
 .hb-search:hover{border-color:var(--gold-soft)}
 .hb-search svg{width:16px;height:16px;flex:0 0 auto}
 .hb-search span{flex:1}
+/* ── CỐT LÕI — mồi khám phá "Cách hệ thống hoạt động" (/phuong-phap.html).
+   `.core-go` định vị TUYỆT ĐỐI vì vị trí chevron đổi giữa hai layout: giữa
+   chiều cao cả thẻ ở hàng ngang (desktop), cạnh hàng tiêu đề ở layout xếp
+   chồng (mobile) — không đưa vào flex-order được vì mô tả nằm CHUNG khối
+   với tiêu đề mà chevron thì không được kéo dài theo mô tả. */
+.core-card{position:relative;display:flex;align-items:center;gap:20px;background:var(--white);border:1px solid var(--gold-soft);border-radius:16px;padding:18px 46px 18px 20px;margin-bottom:18px;box-shadow:var(--shadow);text-decoration:none;color:inherit;transition:.15s}
+.core-card:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(6,26,46,.09)}
+.core-main{display:flex;gap:14px;align-items:flex-start;flex:1 1 260px;min-width:0}
+.core-ic{width:46px;height:46px;flex:0 0 auto;border-radius:50%;background:var(--paper-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--navy)}
+.core-ic svg{width:24px;height:24px}
+.core-tx{min-width:0}
+.core-eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:4px}
+.core-tx b{display:block;font-family:var(--serif);font-size:16px;font-weight:700;color:var(--heading);line-height:1.35;margin-bottom:5px}
+.core-tx p{font-size:12.5px;color:var(--text-mid);line-height:1.55;margin:0}
+.core-stats{display:flex;gap:22px;flex:0 0 auto;padding-left:20px;border-left:1px solid var(--line)}
+.core-stat{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;width:96px}
+.core-stat .ic{width:26px;height:26px;color:var(--gold-soft)}
+.core-stat b{font-size:11.5px;font-weight:700;color:var(--heading)}
+.core-stat span{font-size:10.5px;color:var(--text-lt)}
+.core-go{position:absolute;top:50%;right:16px;transform:translateY(-50%);font-size:20px;color:var(--gold-soft)}
+@container home (max-width:720px){
+  .core-stats{gap:12px;padding-left:14px}
+  .core-stat{width:78px}
+}
+@container home (max-width:430px){
+  .core-card{flex-wrap:wrap;padding:16px 40px 14px 16px;gap:12px}
+  .core-go{top:22px;transform:none}
+  .core-stats{flex:1 1 100%;border-left:none;border-top:1px solid var(--line);padding:14px 0 0;justify-content:space-between}
+  .core-stat{width:auto;flex:1;gap:5px}
+  .core-stat b{font-size:11px}
+  .core-stat span{font-size:9.5px}
+}
 /* ── VẬN HÔM NAY — thẻ hero theo ngày (deterministic, miễn phí) → mồi vào rail luận riêng ──
    Nền SÁNG theo token (`--white`), không còn navy cố định như bản cũ: thẻ nay
    là một tờ tranh, mà tranh thuỷ mặc thì phải đứng trên nền giấy. */
@@ -398,6 +433,22 @@
             <span>Tìm công cụ — Lá Số, Bát Tự, xem tuổi…</span>
           </button>
         </div>
+        <a class="core-card" href="/phuong-phap.html">
+          <div class="core-main">
+            <div class="core-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9 9 9 0 0 1 0-18z"/><circle cx="12" cy="7.5" r="1"/><circle cx="12" cy="16.5" r="1"/></svg></div>
+            <div class="core-tx">
+              <div class="core-eyebrow">Cốt lõi của Tử Vi Minh Bảo</div>
+              <b>Khoa học từ dữ liệu thật, phục vụ cuộc sống thật</b>
+              <p>Hơn 270.000+ lá số người thật, được kiểm chứng và phân tích bằng phương pháp luận giải hiện đại, kết hợp tinh hoa cổ học, nhằm mang đến những dự đoán đáng tin cậy và hữu ích cho cuộc sống.</p>
+            </div>
+          </div>
+          <div class="core-stats">
+            <div class="core-stat"><span class="ic" data-icon="globe"></span><b>Dữ liệu thật</b><span>270.000+ hồ sơ</span></div>
+            <div class="core-stat"><span class="ic" data-icon="shield-check"></span><b>Phương pháp chuẩn</b><span>Cổ học × Hiện đại</span></div>
+            <div class="core-stat"><span class="ic" data-icon="users"></span><b>Ứng dụng thực tiễn</b><span>Vì cuộc sống tốt hơn</span></div>
+          </div>
+          <div class="core-go" aria-hidden="true">›</div>
+        </a>
         <!-- Khung chờ: `pickNext()` trả ĐÚNG 1 mục nên số ô là cố định, chỉ
              độ dài chữ mới đổi. Xem chú thích .nx-skel trong <style>. -->
         <div id="nextCard" class="nx-skel" aria-busy="true" aria-label="Đang tải gợi ý">
@@ -458,8 +509,9 @@
 <script src="/poster.js?v=5" defer></script>
 <script src="/tool-prices.js?v=8"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=38" data-icons-only></script>
-<script src="/shell.js?v=94"></script>
+  <script src="/nav.js?v=39" data-icons-only></script>
+<script src="/tools-shared/tool-icons.js?v=1"></script>
+<script src="/shell.js?v=95"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 /* ── Ô icon đầu .ws-top: `mountToolIcon()` (shell.js) tự chèn SVG của tool
@@ -568,7 +620,14 @@ function pickNext(d) {
   return out;
 }
 
-function cardIcon(row) { return window.iconHtml ? window.iconHtml(row.icon) : svg('grid'); }
+function cardIcon(row) {
+  // Tool có icon minh hoạ riêng (ToolIcons.src) thì ưu tiên ảnh — dùng chung
+  // cho cả tile springboard lẫn thẻ "Gợi ý cho bạn". Thiếu khoá thì rơi về
+  // glyph SVG đơn sắc như trước (tool chưa có icon riêng).
+  var illus = window.ToolIcons && window.ToolIcons.src(row.tool_id);
+  if (illus) return '<img src="' + illus + '" alt="" loading="lazy">';
+  return window.iconHtml ? window.iconHtml(row.icon) : svg('grid');
+}
 
 function renderNext(d) {
   var host = document.getElementById('nextCard'); if (!host) return;

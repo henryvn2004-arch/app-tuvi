@@ -17,7 +17,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-600.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/be-vietnam-pro.css?v=1"><link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet"></noscript>
 <script src="/auth.js?v=2"></script>
 <script src="/share.js"></script>
@@ -35,11 +36,11 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 .nav-link:hover { color:#fff; background:rgba(255,255,255,0.07); }
 .nav-link.active { color:#c9a84c; }
 .nav-hamburger { display:none; background:none; border:none; color:#8BAACC; cursor:pointer; padding:8px; font-size:20px; }
-.hero { background:var(--navy); padding:56px 40px 44px; position:relative; overflow:hidden; }
-.hero::before { content:'联'; position:absolute; font-family:'Noto Serif SC',serif; font-size:300px; color:rgba(255,255,255,0.025); top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; }
+.hero { background:var(--bg-soft); padding:56px 40px 44px; position:relative; overflow:hidden; border-bottom:1px solid var(--border-lt); }
+.hero::before { content:'联'; position:absolute; font-family:'Noto Serif SC',serif; font-size:300px; color:rgba(6,26,46,.035); top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; }
 .hero-eyebrow { font-size:11px; letter-spacing:4px; color:#c9a84c; text-transform:uppercase; margin-bottom:12px; opacity:0; animation:fadeUp 0.6s ease 0.1s forwards; }
-.hero-title { font-family:'Noto Serif',serif; font-size:38px; color:#fff; font-weight:400; margin-bottom:10px; opacity:0; animation:fadeUp 0.6s ease 0.2s forwards; }
-.hero-sub { font-size:14px; color:#8BAACC; font-weight:300; line-height:1.7; opacity:0; animation:fadeUp 0.6s ease 0.3s forwards; }
+.hero-title { font-family:'Noto Serif',serif; font-size:38px; color:var(--navy); font-weight:400; margin-bottom:10px; opacity:0; animation:fadeUp 0.6s ease 0.2s forwards; }
+.hero-sub { font-size:14px; color:var(--text-mid); font-weight:300; line-height:1.7; opacity:0; animation:fadeUp 0.6s ease 0.3s forwards; }
 .page-body { flex:1; max-width:800px; margin:0 auto; padding:64px 40px 96px; width:100%; }
 .intro { text-align:center; margin-bottom:48px; }
 .intro-text { font-family:'Noto Serif',serif; font-size:16px; color:var(--text-mid); line-height:1.9; font-style:italic; max-width:520px; margin:0 auto; }
@@ -179,6 +180,6 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
   }
 })();
 </script>
-<script src="/nav.js?v=38"></script>
+<script src="/nav.js?v=39"></script>
 </body>
 </html>

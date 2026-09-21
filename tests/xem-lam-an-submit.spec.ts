@@ -1,40 +1,41 @@
 import { test, expect } from '@playwright/test';
 
-// Gap hiện tại: xem-lam-an.spec.ts chỉ test page load, chưa test submit
+// 2026-09-19: retire /xem-lam-an.html → shell /app/xem-lam-an (public/app-xem-tuoi.html,
+// dùng chung file với /app/xem-tuoi qua MODE_KEY). DOM khác bản standalone cũ:
+// #tuvi-form-a/#tuvi-form-b/#btn-analyze/#result-section/#nam-xem
+// → #a-fields/#b-fields/#btnGo/#xtPanel (data-ws-result) — không còn field
+// "năm xem" (calcTuongHop không nhận tham số năm).
 
-test.describe('Xem Tuổi Làm Ăn — Submit & Result', () => {
+test.describe('Xem Tuổi Làm Ăn — Submit & Result (shell /app/xem-lam-an)', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/xem-lam-an.html');
+    await page.goto('/app/xem-lam-an');
     await page.waitForLoadState('networkidle');
     await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
   });
 
-  test('hai form panels hiện (tuvi-form-a và tuvi-form-b)', async ({ page }) => {
-    await expect(page.locator('#tuvi-form-a')).toBeVisible({ timeout: 8000 });
-    await expect(page.locator('#tuvi-form-b')).toBeVisible({ timeout: 8000 });
+  test('hai form panels hiện (a-fields và b-fields)', async ({ page }) => {
+    await expect(page.locator('#a-fields')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('#b-fields')).toBeVisible({ timeout: 8000 });
   });
 
-  test('nút Phân Tích Tương Quan hiện', async ({ page }) => {
-    await expect(page.locator('#btn-analyze')).toBeVisible({ timeout: 8000 });
-    await expect(page.locator('#btn-analyze')).toContainText('Phân Tích');
+  test('nút xét hợp tác (#btnGo) hiện', async ({ page }) => {
+    await expect(page.locator('#btnGo')).toBeVisible({ timeout: 8000 });
   });
 
-  test('submit → #result-section visible (kết quả hoặc error rõ ràng)', async ({ page }) => {
+  test('submit → #xtPanel visible (kết quả hoặc error rõ ràng)', async ({ page }) => {
     await page.evaluate(`
       TuviForm.setData({ hoten: 'Nguyen Van A', ngay: 15, thang: 7, nam: 1980, gioHour: 7, gioitinh: 'nam' }, 'a');
       TuviForm.setData({ hoten: 'Tran Van B',   ngay: 10, thang: 3, nam: 1975, gioHour: 3, gioitinh: 'nam' }, 'b');
     `);
 
-    const namXem = page.locator('#nam-xem');
-    if (await namXem.isVisible().catch(() => false)) {
-      await namXem.fill('2026');
-    }
+    await page.locator('#btnGo').click();
 
-    await page.locator('#btn-analyze').click();
-
-    // result-section phải hiện (display != none)
-    await page.waitForSelector('#result-section:not([style*="display: none"])', { timeout: 30_000 });
-    await expect(page.locator('#result-section')).toBeVisible();
+    // #xtPanel phải hiện (display != none)
+    await page.waitForFunction(
+      `getComputedStyle(document.querySelector('#xtPanel')).display !== 'none'`,
+      { timeout: 30_000 }
+    );
+    await expect(page.locator('#xtPanel')).toBeVisible();
   });
 
   test('kết quả có nội dung — không rỗng', async ({ page }) => {
@@ -43,15 +44,13 @@ test.describe('Xem Tuổi Làm Ăn — Submit & Result', () => {
       TuviForm.setData({ hoten: 'Tran Van B',   ngay: 10, thang: 3, nam: 1975, gioHour: 3, gioitinh: 'nam' }, 'b');
     `);
 
-    const namXem = page.locator('#nam-xem');
-    if (await namXem.isVisible().catch(() => false)) {
-      await namXem.fill('2026');
-    }
+    await page.locator('#btnGo').click();
+    await page.waitForFunction(
+      `getComputedStyle(document.querySelector('#xtPanel')).display !== 'none'`,
+      { timeout: 30_000 }
+    );
 
-    await page.locator('#btn-analyze').click();
-    await page.waitForSelector('#result-section:not([style*="display: none"])', { timeout: 30_000 });
-
-    const resultText = await page.locator('#result-section').textContent();
+    const resultText = await page.locator('#xtPanel').textContent();
     expect(resultText?.trim().length).toBeGreaterThan(20);
   });
 
@@ -64,7 +63,7 @@ test.describe('Xem Tuổi Làm Ăn — Submit & Result', () => {
       TuviForm.setData({ hoten: 'Test B', ngay: 10, thang: 3, nam: 1975, gioHour: 3, gioitinh: 'nam' }, 'b');
     `);
 
-    await page.locator('#btn-analyze').click();
+    await page.locator('#btnGo').click();
     await page.waitForTimeout(5000);
 
     expect(dialogs).toHaveLength(0);
@@ -81,8 +80,11 @@ test.describe('Xem Tuổi Làm Ăn — Submit & Result', () => {
       TuviForm.setData({ hoten: 'Test B', ngay: 10, thang: 3, nam: 1975, gioHour: 3, gioitinh: 'nam' }, 'b');
     `);
 
-    await page.locator('#btn-analyze').click();
-    await page.waitForSelector('#result-section:not([style*="display: none"])', { timeout: 30_000 }).catch(() => {});
+    await page.locator('#btnGo').click();
+    await page.waitForFunction(
+      `getComputedStyle(document.querySelector('#xtPanel')).display !== 'none'`,
+      { timeout: 30_000 }
+    ).catch(() => {});
 
     const critical = errors.filter(e =>
       !e.includes('favicon') && !e.includes('Sentry') && !e.includes('ERR_BLOCKED') && !e.includes('fonts.google')

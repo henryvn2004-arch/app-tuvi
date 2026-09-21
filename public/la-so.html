@@ -10,7 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-600.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/be-vietnam-pro.css?v=1">
 <link rel="stylesheet" href="/theme.css?v=1">
 <style>
@@ -127,8 +128,8 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
       <button class="nav-dropdown-btn" onclick="toggleDropdown(this)">Luận Giải ▾</button>
       <div class="nav-dropdown-menu">
         <a class="nav-dropdown-item" href="/app/luan-giai">Luận Giải Lá Số</a>
-        <a class="nav-dropdown-item" href="/xem-tuoi.html">Xem Tuổi Vợ Chồng</a>
-        <a class="nav-dropdown-item" href="/xem-lam-an.html">Xem Tuổi Làm Ăn</a>
+        <a class="nav-dropdown-item" href="/app/xem-tuoi">Xem Tuổi Vợ Chồng</a>
+        <a class="nav-dropdown-item" href="/app/xem-lam-an">Xem Tuổi Làm Ăn</a>
       </div>
     </div>
     <a class="nav-link" href="/about.html">Giới Thiệu</a>
@@ -477,7 +478,7 @@ updateGioAm();
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName!=='BUTTON')doAnSao();});
 document.addEventListener('DOMContentLoaded', loadFromSlug);
 </script>
-<script src="/nav.js?v=38" data-icons-only></script>
+<script src="/nav.js?v=39" data-icons-only></script>
 <script>
 // `nav.js` ở chế độ `data-icons-only` CỐ Ý không chèn GA4/Ads/Meta Pixel
 // (đúng cho 27 trang shell — đã có qua shell.js — và 2 trang admin, không cần

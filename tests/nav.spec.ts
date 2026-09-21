@@ -1,16 +1,16 @@
 import { test, expect } from '@playwright/test';
 
-const PAGES = ['/', '/app-luan-giai.html', '/xem-tuoi.html', '/tu-binh.html', '/phong-thuy.html'];
+const PAGES = ['/', '/app-luan-giai.html', '/app/xem-tuoi', '/app/bat-tu', '/phong-thuy.html'];
 
 test.describe('Navigation', () => {
   test('logo visible và link về trang chủ', async ({ page }) => {
-    // Trang laso (/app-luan-giai.html) dùng SHELL (sidebar + tab bar riêng,
-    // không phải .topnav/.nav-logo cổ điển) — `a[href="/"]` trên đó khớp
-    // ĐÚNG nhưng là nút `.tab` của thanh tab MOBILE, ẩn trên viewport desktop
-    // mặc định của bài kiểm này. Bài kiểm này đo NAV CHUNG (không riêng gì
-    // laso) nên dùng một trang tĩnh còn giữ layout cổ điển thay vì đi theo
-    // laso vào retire (2026-09-14, xem plan productize luận giải).
-    await page.goto('/xem-tuoi.html');
+    // Các trang SHELL (sidebar + tab bar riêng, không phải .topnav/.nav-logo cổ
+    // điển) — `a[href="/"]` trên đó khớp ĐÚNG nhưng là nút `.tab` của thanh tab
+    // MOBILE, ẩn trên viewport desktop mặc định của bài kiểm này. Bài kiểm này đo
+    // NAV CHUNG (không riêng gì laso/xem-tuoi) nên dùng một trang tĩnh còn giữ
+    // layout cổ điển thay vì đi theo laso/xem-tuoi/tu-binh vào retire
+    // (2026-09-14 luan-giai.html, 2026-09-19 xem-tuoi.html/xem-lam-an.html/tu-binh.html).
+    await page.goto('/phong-thuy.html');
     await page.waitForLoadState('networkidle');
     const logo = page.locator('.nav-logo, .nav-brand, a[href="/"], a[href="index.html"]').first();
     await expect(logo).toBeVisible();

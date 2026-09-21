@@ -36,6 +36,7 @@ const PREVIEW_PAYLOAD = {
   conNguoi: 'ĐOẠN VĂN MIỄN PHÍ MỘT về con.',
   chatNoi: 'ĐOẠN VĂN MIỄN PHÍ HAI về chất nổi.',
   khieuTop: { id: 'ngonngu', ten: 'Ngôn ngữ', diem: 7.4, noiBat: true, saoDay: ['Xương Khúc'] },
+  khieuBottom: { id: 'so', ten: 'Con số', diem: 4.1, noiBat: false, saoDay: [] },
   coSo: { tong: 84, soSao: 62, soCachCuc: 9, soDaiVan: 13, trichDan: null },
 };
 
@@ -72,6 +73,22 @@ async function stubApis(page: Page, opts?: { previewBody?: object }) {
   await page.route('**/api/payment**', (r) => r.fulfill({ status: 200, contentType: 'application/json',
     body: JSON.stringify({ hasAccess: false, balance: 0 }) }));
   await page.route('**/api/track**', (r) => r.fulfill({ status: 200, body: '{}' }));
+  // Tầng hook kể chuyện (`_tryHookNarrativeDC`, 2026-09-18) tự gọi
+  // `/api/hook-narrative` ngay sau `mountHook()` — KHÔNG stub thì bài kiểm gọi
+  // THẬT tới model và tiêu THẬT một suất `preview.free_runs` (xem chú thích
+  // đầy đủ ở tests/hard-paywall.spec.ts).
+  await page.route('**/api/hook-narrative**', (r) =>
+    r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ allowed: false }) }));
+  // Pha 4 (2026-09-17): 5 trong 9 khối khoá (dinhHuong/loLang/vaoBangGi/
+  // changNay/motCau — có văn AI trong dummy JSON) nay hiện văn MẪU bị blur
+  // thay vì vạch xám rỗng — stub CỐ ĐỊNH, không phụ thuộc file thật.
+  await page.route('**/samples/day-con-dummy.json', (r) => r.fulfill({ status: 200, contentType: 'application/json',
+    body: JSON.stringify({
+      dinhHuong: 'Văn mẫu định hướng cho bé MẪU.', loLang: 'Văn mẫu lo lắng cho bé MẪU.',
+      vaoBangGi: 'Văn mẫu vào bảng gì cho bé MẪU.', changNay: 'Văn mẫu chặng này cho bé MẪU.',
+      motCau: 'Văn mẫu một câu cho bé MẪU.', nenLam: [{ viec: 'Việc mẫu nên làm', vidu: 'Ví dụ mẫu' }],
+      tranhLam: [{ viec: 'Việc mẫu tránh làm', vidu: '' }], voiChaMe: '',
+    }) }));
 
   await page.route('**/api/day-con**', async (r) => {
     const url = new URL(r.request().url());
@@ -141,8 +158,9 @@ test('bản xem trước: 2 đoạn văn thật + câu trích, phần bán KHÔN
   await expect(page.locator('#basisBlock')).toBeVisible();
   await expect(page.locator('#basisList')).toBeEmpty();     // các dòng cơ sở là phần trả phí
 
-  // Hook hé đúng MỘT chất, đọc từ `khieuTop`.
+  // Hook hé ĐÚNG HAI chất (cao nhất + thấp nhất), đọc từ `khieuTop`/`khieuBottom`.
   await expect(page.locator('#hookHost')).toContainText('Ngôn ngữ');
+  await expect(page.locator('#hookHost')).toContainText('Con số');
 
   // Có mang định danh cho cầu dao — thiếu là mọi khách rơi về khung cũ.
   expect(calls(page)).toHaveLength(1);
@@ -174,6 +192,26 @@ test('khối khoá dựng khung rỗng + ô giữ chỗ, không có khối "Hai 
   await expect(page.locator('#dcLockHost .tpw-lock')).toBeVisible();
   await expect(page.locator('#dcLockHost')).toContainText('60 Lượng');
   await expect(page.locator('.tpw-overlay')).toHaveCount(0);
+});
+
+test('5 khối có văn AI trong dummy JSON hiện văn MẪU bị blur, 4 khối deterministic vẫn ô rỗng', async ({ page }) => {
+  await stubApis(page);
+  await run(page);
+
+  // Có văn AI trong /samples/day-con-dummy.json (stub ở trên) → `.tpw-real-lock`.
+  await expect(page.locator('#dhBlock .tpw-real-lock')).toContainText('Văn mẫu định hướng');
+  await expect(page.locator('#loBlock .tpw-real-lock')).toContainText('Văn mẫu lo lắng');
+  await expect(page.locator('#howCardsBlock .tpw-real-lock')).toContainText('Văn mẫu vào bảng gì');
+  await expect(page.locator('#changBlock .tpw-real-lock')).toContainText('Văn mẫu chặng này');
+  await expect(page.locator('#endBlock .tpw-real-lock')).toContainText('Văn mẫu một câu');
+  await expect(page.locator('#doBlock .tpw-real-lock')).toContainText('Việc mẫu nên làm');
+
+  // trucBlock/khieuBlock/hdBlock: điểm số ENGINE của CHÍNH bé đang xem, không
+  // có trong dummy JSON — PHẢI vẫn là ô giữ chỗ rỗng, không phải văn mẫu.
+  await expect(page.locator('#trucBlock .tpw-ph')).toBeVisible();
+  await expect(page.locator('#trucBlock .tpw-real-lock')).toHaveCount(0);
+  await expect(page.locator('#khieuBlock .tpw-ph')).toBeVisible();
+  await expect(page.locator('#hdBlock .tpw-ph')).toBeVisible();
 });
 
 test('cầu dao chặn → lùi về khung cũ, không màn hình lỗi', async ({ page }) => {

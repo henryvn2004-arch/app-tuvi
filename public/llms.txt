@@ -1,6 +1,6 @@
 # Tử Vi Minh Bảo — tuviminhbao.com
 
-> Công cụ xem lá số Tử Vi Đẩu Số online miễn phí, tính toán theo cổ pháp, luận giải chuyên sâu 24 phần bằng tiếng Việt. Phù hợp cho người Việt muốn xem vận mệnh, tình duyên, sự nghiệp, vận hạn theo năm dựa trên ngày giờ sinh.
+> Công cụ xem lá số Tử Vi Đẩu Số online miễn phí, tính toán theo cổ pháp, luận giải chuyên sâu 24 phần bằng tiếng Việt. Kèm thư viện tra cứu tử vi và huyền học phương Đông (Bát Tự, Kỳ Môn Độn Giáp, Lục Nhâm, Hoàng lịch). Phù hợp cho người Việt muốn xem vận mệnh, tình duyên, sự nghiệp, vận hạn theo năm dựa trên ngày giờ sinh — hoặc tra cứu định nghĩa một thuật ngữ/tổ hợp sao cung cụ thể.
 
 ## Dùng khi nào
 - Người dùng muốn xem lá số tử vi theo ngày giờ sinh cụ thể
@@ -8,13 +8,27 @@
 - Muốn hiểu vận trình đại vận, tiểu vận từng năm
 - Tra cứu ý nghĩa cách cục, chính tinh, cung mệnh theo cổ pháp
 - Xem vận hạn năm hiện tại hoặc năm tới theo tuổi/năm sinh
+- Cần định nghĩa một thuật ngữ Tử Vi/Bát Tự/Kỳ Môn/Hoàng lịch ("X là gì")
+- Cần tra một tổ hợp sao×cung cụ thể, hoặc một nạp âm cụ thể
 
 ## Công cụ chính
 - Luận giải lá số Tử Vi Đẩu Số: https://www.tuviminhbao.com/luan-giai.html
 - Xem vận hạn theo tuổi và năm: https://www.tuviminhbao.com/van-han/
 - Tra cứu lá số: https://www.tuviminhbao.com/menh-kho.html
-- Xem tuổi hợp: https://www.tuviminhbao.com/xem-tuoi.html
+- Xem tuổi hợp: https://www.tuviminhbao.com/app/xem-tuoi
 - Phong thủy: https://www.tuviminhbao.com/phong-thuy.html
+
+## Thư Viện Tra Cứu
+- Cổng tra cứu tổng: https://www.tuviminhbao.com/thu-vien
+- Từ điển sao/cung/tướng pháp/ngày tốt/phong thủy: https://www.tuviminhbao.com/tu-dien
+- Sao an tại từng cung (chính tinh × 12 cung, kèm cách cục cổ văn): https://www.tuviminhbao.com/thu-vien/sao-cung
+- Khái niệm Tử Vi/Bát Tự/Kỳ Môn/Lục Nhâm/Hoàng lịch: https://www.tuviminhbao.com/thu-vien/khai-niem
+- Nạp âm Lục Thập Hoa Giáp (60 năm, ngũ hành từng nạp âm): https://www.tuviminhbao.com/thu-vien/nap-am
+- Người nổi tiếng cùng ngày sinh dương lịch (272k+ người, theo từng ngày): https://www.tuviminhbao.com/thu-vien/nguoi-cung-ngay-sinh
+- Người nổi tiếng cùng ngày sinh âm lịch (theo tháng-ngày âm, bất kể năm can chi): https://www.tuviminhbao.com/thu-vien/nguoi-cung-ngay-sinh-am-lich
+- Khảo luận chuyên sâu theo chủ đề: https://www.tuviminhbao.com/blog.html
+- Nghiên cứu học thuật: https://www.tuviminhbao.com/nghien-cuu
+- Sách & tài liệu gốc: https://www.tuviminhbao.com/resources.html
 
 ## Thông tin kỹ thuật
 - An sao theo cổ pháp (không phải cải cách)
@@ -23,6 +37,7 @@
 - Cách cục đặc biệt từ database 200+ cách cục
 - Scoring 6 chiều: Tiềm Năng, Bền Vững, An Toàn, Quý Nhân, Minh Bạch, Tương Hợp
 - Luận giải: 24 phần chuyên sâu bằng tiếng Việt
+- Mỗi trang thư viện có đoạn trả lời ngắn ngay đầu bài — trích dẫn được độc lập, không cần đọc hết bài
 
 ## Ngôn ngữ
 Tiếng Việt (Vietnamese). Phục vụ người Việt trong nước và hải ngoại.

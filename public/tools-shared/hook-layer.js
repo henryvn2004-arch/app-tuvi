@@ -4,6 +4,19 @@
  * đầu trang. Load SAU `hook-charts.js` (không bắt buộc `hook-facts.js`, vì
  * `spec.facts`/`spec.charts` có thể đến thẳng từ field `hook` server trả về).
  *
+ * `HookLayer.upgrade(host, spec, data)` — NÂNG CẤP khối vừa `mount()` xong
+ * (fact card khô) thành template "Preview Highlight" (banner + 3 box kể
+ * chuyện), gọi SAU khi `POST /api/hook-narrative` trả về `data` (xem
+ * `mountHook()` ở app-luan-giai.html). CỐ Ý là bước RIÊNG, không gộp vào
+ * `mount()`: `mount()` phải chạy XONG và HIỆN NGAY (0 mạng, đúng luật cũ),
+ * `upgrade()` chỉ thay ruột nếu/khi tầng kể chuyện (có gọi LLM, có thể hết
+ * quota/lỗi mạng/parse hỏng) trả về được. Hỏng thì `upgrade()` không được gọi
+ * — khối cũ đứng nguyên, KHÔNG bao giờ trắng trang.
+ *
+ * `data.boxes` PHẢI cùng độ dài và ĐÚNG THỨ TỰ với `spec.facts` đã đưa cho
+ * `/api/hook-narrative` — `upgrade()` ghép `data.boxes[i]` với `spec.facts[i]`
+ * để suy icon (server không trả icon, xem `_iconFor`).
+ *
  * KHÔNG mở đường tiền mới: nút gate chỉ gọi `spec.gate.onUnlock()` — đúng quy
  * ước đã có ở `TuviPaywall.wireSectionLocks` (trang tự bọc `requireCredits`
  * bên trong `onUnlock`, xem `initiateLuanGiaiChuyenSau` ở app-luan-giai.html).
@@ -98,6 +111,105 @@ window.HookLayer = (function () {
       '<button type="button" class="hkl-gate-btn" data-hkl-unlock>' + ctaLabel + priceSpan + ' →</button></div>';
   }
 
+  // Tên cung → icon `nav.js` (bộ 88 icon lucide-static đã có sẵn trong repo,
+  // KHÔNG bịa icon ngoài bộ này — xem CLAUDE.md luật Icon). Đúng CHÍNH TẢ
+  // `TEN_CUNG` của public/tuvi-ansao-engine.js — sai một dấu là rơi về mặc định.
+  var CUNG_ICON = {
+    'Mệnh': 'user', 'Phụ Mẫu': 'users', 'Phúc Đức': 'sparkles', 'Điền Trạch': 'home',
+    'Quan Lộc': 'briefcase', 'Nô Bộc': 'handshake', 'Thiên Di': 'compass',
+    'Tật Ách': 'shield-check', 'Tài Bạch': 'dollar-sign', 'Tử Tức': 'baby',
+    'Phu Thê': 'heart', 'Huynh Đệ': 'users',
+  };
+  var KIND_ICON = {
+    'cach-cuc-hiem': 'sparkles', 'daivan-dinh': 'trending-up', 'daivan-day': 'compass',
+    'tb-cuong-nhuoc': 'scale', 'tb-ngu-hanh': 'flame', 'tb-dung-than': 'compass',
+  };
+  function _iconFor(f) {
+    if (!f) return 'sparkles';
+    if (f.cungTen && CUNG_ICON[f.cungTen]) return CUNG_ICON[f.cungTen];
+    if (f.kind && KIND_ICON[f.kind]) return KIND_ICON[f.kind];
+    return 'sparkles';
+  }
+
+  /**
+   * Dựng template "Preview Highlight" — banner (tag/tiêu đề/quote) + N box.
+   * `data` = kết quả `POST /api/hook-narrative` (đã qua allowlist server, chỉ
+   * còn chuỗi). `facts`/`toolLabel`/`illus` đến từ chính `spec` mà `mount()`
+   * đã nhận — dùng lại chứ không suy thêm gì mới ở đây.
+   */
+  function _narrativeHtml(data, facts, toolLabel, illus) {
+    var boxesHtml = (data.boxes || []).map(function (b, i) {
+      var f = facts[i];
+      return (
+        '<div class="hkl-nb-box">' +
+          '<div class="hkl-nb-box-head">' +
+            '<span class="hkl-nb-ic" data-icon="' + esc(_iconFor(f)) + '"></span>' +
+            '<span class="hkl-nb-no">' + String(i + 1).padStart(2, '0') + '</span>' +
+            '<b>' + esc(b.tieuDe || '') + '</b>' +
+          '</div>' +
+          '<div class="hkl-nb-hook">' + esc(b.hookNgan || '') + '</div>' +
+          '<div class="hkl-nb-mota">' + esc(b.moTa || '') + '</div>' +
+        '</div>'
+      );
+    }).join('');
+    var illusHtml = illus
+      ? '<img class="hkl-nb-illus" src="' + esc(illus.url) + '" alt="" loading="lazy" onerror="this.remove()">'
+      : '';
+    return (
+      '<div class="hkl-nb-banner">' +
+        '<div class="hkl-nb-left">' +
+          '<span class="hkl-nb-tag">' + esc(data.tagHook || '') + '</span>' +
+          '<div class="hkl-nb-title">' +
+            '<div>' + esc(data.hookTitleLine1 || '') + '</div>' +
+            (data.hookTitleLine2 ? '<div>' + esc(data.hookTitleLine2) + '</div>' : '') +
+            (data.hookTitleHighlight ? '<div class="hkl-nb-hl">' + esc(data.hookTitleHighlight) + '</div>' : '') +
+          '</div>' +
+          (data.introText ? '<p class="hkl-nb-intro">' + esc(data.introText) + '</p>' : '') +
+        '</div>' +
+        '<div class="hkl-nb-right">' +
+          illusHtml +
+          (data.quoteHook
+            ? '<div class="hkl-nb-quote"><span>“' + esc(data.quoteHook) + '”</span><b>— ' + esc(toolLabel) + '</b></div>'
+            : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="hkl-nb-section-t">' + facts.length + ' điều quan trọng nhất trong ' + esc(toolLabel) +
+        ' của bạn <span>(xem trước)</span></div>' +
+      '<div class="hkl-nb-grid">' + boxesHtml + '</div>'
+    );
+  }
+
+  /** Xem chú thích đầu file. `illus` (tuỳ chọn) = `{url}` do trang tự tính
+   *  (vd `IllusMatch.illusUrlForPhan`) — file này không tự suy ảnh minh hoạ. */
+  function upgrade(host, spec, data) {
+    if (!host || !spec || !data || !Array.isArray(data.boxes)) return;
+    var facts = (Array.isArray(spec.facts) ? spec.facts : []).filter(Boolean);
+    if (data.boxes.length !== facts.length) return; // shape lệch — giữ nguyên khối cũ, không đoán ghép
+    _ensureCss();
+    _ensureNarrativeCss();
+    var gateHtml = _gate(spec.gate, spec.tool);
+    host.innerHTML = '<div class="hkl-block hkl-narrative">' +
+      _narrativeHtml(data, facts, spec.toolLabel || spec.tool || '', spec.illus) +
+      gateHtml +
+    '</div>';
+
+    if (window.mountIcons) window.mountIcons(host);
+    if (window.TuviPaywall && typeof window.TuviPaywall.fillPriceSlots === 'function') {
+      window.TuviPaywall.fillPriceSlots(host);
+    }
+    var btn = host.querySelector('[data-hkl-unlock]');
+    if (btn && spec.gate && typeof spec.gate.onUnlock === 'function') {
+      btn.addEventListener('click', function () {
+        try {
+          if (window.Track) window.Track.event('unlock_click', { tool_id: spec.tool || '', meta: { from: 'hook-narrative' } });
+        } catch (e) { /* đo hỏng không được chặn lượt mua */ }
+        spec.gate.onUnlock();
+      });
+    }
+    // KHÔNG bắn lại `preview_shown` — `mount()` đã bắn đúng một lần cho lượt
+    // xem này; `upgrade()` chỉ đổi RUỘT của cùng một lượt hiện, bắn thêm là đếm trùng.
+  }
+
   function mount(host, spec) {
     if (!host || !spec) return;
     var facts = (Array.isArray(spec.facts) ? spec.facts : []).filter(Boolean);
@@ -172,5 +284,45 @@ window.HookLayer = (function () {
     document.head.appendChild(st);
   }
 
-  return { mount: mount, loadCensus: loadCensus };
+  // CSS riêng cho template "Preview Highlight" (`upgrade()`) — tách khỏi
+  // `_ensureCss()` để khối fact-card cũ (`mount()`) không phải tải thêm CSS nó
+  // không dùng khi tầng kể chuyện chưa kịp trả về (đường phổ biến nhất).
+  var _narrativeCssInjected = false;
+  function _ensureNarrativeCss() {
+    if (_narrativeCssInjected) return;
+    _narrativeCssInjected = true;
+    var st = document.createElement('style');
+    st.textContent =
+      '.hkl-narrative{max-width:none}' +
+      '.hkl-nb-banner{display:flex;flex-wrap:wrap;gap:20px;margin-bottom:18px}' +
+      '.hkl-nb-left{flex:1 1 320px;min-width:0}' +
+      '.hkl-nb-tag{display:inline-block;background:var(--gold-lt);color:var(--gold-soft);' +
+        'font-family:var(--sans);font-size:11.5px;font-weight:700;letter-spacing:.03em;' +
+        'padding:4px 12px;border-radius:99px;margin-bottom:10px}' +
+      '.hkl-nb-title{font-family:var(--serif);font-weight:700;font-size:21px;line-height:1.4;color:var(--heading)}' +
+      '.hkl-nb-hl{color:var(--gold-soft)}' +
+      '.hkl-nb-intro{margin:12px 0 0;font-size:13.5px;color:var(--text-mid);line-height:1.7}' +
+      '.hkl-nb-right{flex:0 0 auto;width:100%;max-width:260px;display:flex;flex-direction:column;gap:10px}' +
+      '.hkl-nb-illus{width:100%;border-radius:10px;display:block;object-fit:cover;aspect-ratio:4/3}' +
+      '.hkl-nb-quote{background:var(--paper);border:1px solid var(--line);border-radius:9px;' +
+        'padding:12px 14px;font-family:var(--serif);font-style:italic;font-size:13px;color:var(--text-mid);line-height:1.6}' +
+      '.hkl-nb-quote span{display:block;margin-bottom:6px}' +
+      '.hkl-nb-quote b{display:block;font-style:normal;font-size:11.5px;color:var(--gold-soft);text-align:right}' +
+      '@media(max-width:640px){.hkl-nb-right{max-width:none;flex-direction:row}.hkl-nb-illus{max-width:120px;aspect-ratio:1/1}}' +
+      '.hkl-nb-section-t{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--heading);' +
+        'margin:4px 0 12px;padding-top:14px;border-top:1px dashed var(--line-2)}' +
+      '.hkl-nb-section-t span{font-family:var(--sans);font-weight:400;font-size:12px;color:var(--text-lt)}' +
+      '.hkl-nb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}' +
+      '.hkl-nb-box{border:1px solid var(--line);border-radius:10px;padding:14px 15px;background:var(--paper)}' +
+      '.hkl-nb-box-head{display:flex;align-items:center;gap:8px;margin-bottom:9px}' +
+      '.hkl-nb-ic{flex:0 0 auto;color:var(--gold-soft);display:flex}' +
+      '.hkl-nb-ic svg{width:18px;height:18px}' +
+      '.hkl-nb-no{font-family:var(--mono,ui-monospace,monospace);font-size:11px;color:var(--text-lt);flex:0 0 auto}' +
+      '.hkl-nb-box-head b{font-family:var(--serif);font-size:13.5px;font-weight:600;color:var(--text);min-width:0}' +
+      '.hkl-nb-hook{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--text);line-height:1.55;margin-bottom:6px}' +
+      '.hkl-nb-mota{font-size:12.5px;color:var(--text-mid);line-height:1.65}';
+    document.head.appendChild(st);
+  }
+
+  return { mount: mount, upgrade: upgrade, loadCensus: loadCensus };
 })();

@@ -192,7 +192,7 @@ th{background:var(--soft);font-weight:600;color:var(--navy);font-size:13px;posit
 <script src="/auth.js"></script>
 </head>
 <body><div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=38"></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=39"></script>
 <div class="breadcrumb"><a href="/">Trang Chủ</a> › <a href="/chon-ngay">Chọn Ngày</a> › <span>Kim Lâu</span></div>
 
 <div class="hero">
@@ -254,7 +254,7 @@ ${faq.map((f) => `<div class="faq-q">${esc(f.q)}</div><p>${esc(f.a)}</p>`).join(
   <a href="/xong-dat">Tuổi xông đất Tết</a>
   <a href="/van-han">Vận hạn theo tuổi</a>
   <a href="/app/bat-trach">Bát trạch — hướng nhà</a>
-  <a href="/xem-tuoi.html">Xem tuổi vợ chồng</a>
+  <a href="/app/xem-tuoi">Xem tuổi vợ chồng</a>
   <a href="/app/luan-giai">Luận giải lá số</a>
 </div>
 

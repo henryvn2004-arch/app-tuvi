@@ -7,7 +7,8 @@
 <meta name="robots" content="noindex">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-600.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/be-vietnam-pro.css?v=1">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -102,6 +103,7 @@ body {
 }
 .tool-link:hover { background: #e8e4dc; }
 .tool-link .icon-sm { font-size: 20px; display: block; margin-bottom: 4px; }
+.tool-link .icon-sm img { width: 24px; height: 24px; border-radius: 7px; object-fit: cover; }
 </style>
 </head>
 <body>
@@ -112,9 +114,9 @@ body {
 </div>
 
 <script src="/auth.js?v=2"></script>
-<script src="/nav.js?v=38" data-icons-only></script>
+<script src="/nav.js?v=39" data-icons-only></script>
 <script>
-// `nav.js?v=38` ở chế độ `data-icons-only` CỐ Ý không nạp Meta Pixel (xem
+// `nav.js?v=39` ở chế độ `data-icons-only` CỐ Ý không nạp Meta Pixel (xem
 // nav.js#297). Nhưng đây là trang XÁC NHẬN THANH TOÁN — đúng nơi PHẢI bắn
 // Purchase, nên khởi tạo pixel riêng ở đây thay vì trông chờ nav.js. Cùng
 // pixel ID với nav.js, cùng lý do bỏ qua `navigator.webdriver` (bộ E2E chạy
@@ -128,7 +130,7 @@ if (!document.getElementById('fb-pixel-js') && !navigator.webdriver) {
   window.fbq('init', '1747342186469684');
   window.fbq('track', 'PageView');
 }
-// `nav.js?v=38` ở chế độ `data-icons-only` CŨNG bỏ qua GA4 (xem nav.js#336) —
+// `nav.js?v=39` ở chế độ `data-icons-only` CŨNG bỏ qua GA4 (xem nav.js#336) —
 // nạp riêng ở đây để trang XÁC NHẬN THANH TOÁN vẫn có page_view/PageView cơ
 // bản. Event `purchase`/`Purchase` KHÔNG bắn ở đây (và không ở topup.html) —
 // bắn phía SERVER (lib/marketing/server-conversions.ts), đúng một lần, ngay
@@ -250,9 +252,9 @@ function showSuccess(slug, credits, balance) {
     </a>
     <div style="font-size:12px;color:#999;margin-bottom:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Hoặc sử dụng ngay</div>
     <div class="tools-grid">
-      <a href="/" class="tool-link"><span class="icon-sm"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔮</span></span>Luận Giải Lá Số</a>
-      <a href="/xem-tuoi.html" class="tool-link"><span class="icon-sm"><span class="ic-inline" data-icon-emoji="💑" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">💑</span></span>Xem Tuổi Vợ Chồng</a>
-      <a href="/xem-lam-an.html" class="tool-link"><span class="icon-sm"><span class="ic-inline" data-icon-emoji="💼" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">💼</span></span>Xem Tuổi Làm Ăn</a>
+      <a href="/" class="tool-link"><span class="icon-sm"><img src="/mascot/tool-icons/luan-giai.webp" alt="" loading="lazy"></span>Luận Giải Lá Số</a>
+      <a href="/app/xem-tuoi" class="tool-link"><span class="icon-sm"><img src="/mascot/tool-icons/xem-tuoi.webp" alt="" loading="lazy"></span>Xem Tuổi Vợ Chồng</a>
+      <a href="/app/xem-lam-an" class="tool-link"><span class="icon-sm"><img src="/mascot/tool-icons/hop-tac-lam-an.webp" alt="" loading="lazy"></span>Xem Tuổi Làm Ăn</a>
       <a href="/topup.html" class="tool-link"><span class="icon-sm"><span class="ic-inline" data-icon-emoji="💳" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">💳</span></span>Nạp Thêm Credits</a>
     </div>
   `;

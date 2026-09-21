@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="apple-touch-icon" href="/seal.webp">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cách Hệ Thống Hoạt Động — Tử Vi Nghiệm Chứng | Tử Vi Minh Bảo</title>
+<meta name="description" content="Một luận giải đáng tin cậy được xây dựng từ dữ liệu thực tế và quy trình kiểm chứng nhiều lớp — 5 bước tạo nên mỗi bản luận giải trên Tử Vi Minh Bảo.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.tuviminhbao.com/phuong-phap.html">
+<meta property="og:title" content="Cách Hệ Thống Hoạt Động — Tử Vi Nghiệm Chứng">
+<meta property="og:description" content="5 bước tạo nên mỗi bản luận giải: lập lá số, đối chiếu thực nghiệm, kiểm chứng chuyên gia, hiệu chỉnh mô hình, diễn giải bằng AI.">
+<meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
+<meta property="og:url" content="https://www.tuviminhbao.com/phuong-phap.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tử Vi Minh Bảo">
+<meta name="twitter:card" content="summary">
+
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
+
+<style>
+:root {
+  --cream: #f6f3ee;
+  --page: #fbfaf6;
+  --card: #ffffff;
+  --ink: #16232c;
+  --ink-soft: #5b6670;
+  --ink-faint: #6b7178;
+  --line: #e9e3d6;
+  --navy: #0f2a3d;
+  --gold: #c8a96a;
+  --gold-soft: #f1e7d2;
+  --green: #7fa7a3;
+  --green-soft: #e4eeec;
+  --terracotta: #c46a5e;
+  --terracotta-soft: #f7e3e0;
+  --blue-soft: #e4edf5;
+  --radius-lg: 22px;
+  --radius-md: 16px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+.serif { font-family: 'Noto Serif', Georgia, serif; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* ── Hero ───────────────────────────────────────────────────── */
+.pm-hero { padding: 44px 0 8px; text-align: center; }
+.pm-back { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 700; color: var(--ink-faint); margin-bottom: 18px; }
+.pm-back:hover { color: var(--ink); }
+.pm-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #8a6a2f; background: var(--gold-soft); padding: 6px 14px; border-radius: 999px; margin-bottom: 18px; }
+.pm-eyebrow .ic { width: 13px; height: 13px; }
+.pm-title { font-size: 34px; line-height: 1.2; font-weight: 800; margin: 0 0 14px; }
+.pm-sub { font-size: 15px; line-height: 1.7; color: var(--ink-soft); max-width: 66ch; margin: 0 auto; }
+
+/* ── Nguồn dữ liệu panel ────────────────────────────────────── */
+.pm-source { margin: 30px 0 0; display: grid; grid-template-columns: 230px 1fr 190px; align-items: center; gap: 28px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 26px 32px; }
+.pm-source-num { display: flex; align-items: center; gap: 14px; text-align: left; }
+.pm-source-num .pm-source-ic { width: 52px; height: 52px; border-radius: 14px; background: var(--gold-soft); display: flex; align-items: center; justify-content: center; flex: none; }
+.pm-source-num .pm-source-ic .ic { width: 26px; height: 26px; color: #8a6a2f; }
+.pm-source-eyebrow { display: block; font-size: 11px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 2px; }
+.pm-source-num b { display: block; font-size: 24px; font-weight: 800; line-height: 1.15; }
+.pm-source-num span { display: block; font-size: 11.5px; color: var(--ink-soft); margin-top: 1px; }
+.pm-source-text { text-align: left; font-size: 13px; line-height: 1.65; color: var(--ink-soft); }
+.pm-source-text b { color: var(--ink); font-weight: 800; }
+.pm-source-brand { text-align: center; }
+.pm-globe { width: 90px; height: 90px; margin: 0 auto 8px; }
+.pm-source-brand b { display: block; font-size: 13px; font-weight: 800; color: var(--ink); }
+.pm-source-brand span { display: block; font-size: 10.5px; color: var(--ink-faint); margin-top: 1px; }
+
+@media (max-width: 860px) {
+  .pm-source { grid-template-columns: 1fr; text-align: center; }
+  .pm-source-num { justify-content: center; text-align: center; }
+  .pm-source-text { text-align: center; }
+}
+
+/* ── Timeline ───────────────────────────────────────────────── */
+.pm-flow { padding: 46px 0 8px; position: relative; }
+.pm-step { display: grid; grid-template-columns: 64px 1fr; gap: 22px; position: relative; padding-bottom: 40px; }
+.pm-step:last-child { padding-bottom: 0; }
+.pm-step-rail { display: flex; flex-direction: column; align-items: center; }
+.pm-step-num {
+  width: 44px; height: 44px; border-radius: 50%; background: var(--navy); color: #fff;
+  font-family: 'Noto Serif', serif; font-weight: 700; font-size: 16px;
+  display: flex; align-items: center; justify-content: center; flex: none; z-index: 1;
+}
+.pm-step-line { flex: 1; width: 2px; background: var(--line); margin: 6px 0; min-height: 24px; }
+.pm-step:last-child .pm-step-line { display: none; }
+.pm-step-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 26px 28px; display: grid; grid-template-columns: 300px 1fr; gap: 30px; align-items: center; }
+.pm-step-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.pm-step-ic { width: 34px; height: 34px; border-radius: 10px; background: var(--gold-soft); display: flex; align-items: center; justify-content: center; flex: none; }
+.pm-step-ic .ic { width: 16px; height: 16px; color: #8a6a2f; }
+.pm-step-card h3 { font-size: 17px; font-weight: 800; margin: 0; line-height: 1.3; }
+.pm-step-card p { font-size: 13.5px; line-height: 1.65; color: var(--ink-soft); margin: 0 0 12px; }
+.pm-io { display: flex; flex-direction: column; gap: 6px; }
+.pm-io span { font-size: 11px; font-weight: 700; color: var(--navy); background: var(--blue-soft); padding: 5px 11px; border-radius: 8px; }
+.pm-io span.out { color: #4d7d78; background: var(--green-soft); }
+
+.pm-visual { background: var(--cream); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 20px; min-height: 190px; display: flex; align-items: center; justify-content: center; }
+.pm-visual-img { padding: 0; background: transparent; border: none; }
+.pm-visual-img img { width: 100%; height: auto; border-radius: var(--radius-md); }
+
+@media (max-width: 900px) {
+  .pm-step-card { grid-template-columns: 1fr; }
+  .pm-visual { order: -1; }
+}
+
+/* ── Combined banner: kết hợp + nguyên tắc ─────────────────────── */
+.pm-ai { margin: 46px 0 0; background: var(--navy); color: #fff; border-radius: var(--radius-lg); padding: 32px 36px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 30px; align-items: center; }
+.pm-ai h2 { font-size: 18px; font-weight: 800; margin: 0 0 8px; display: flex; align-items: center; gap: 8px; }
+.pm-ai h2 .ic { width: 18px; height: 18px; color: var(--gold); }
+.pm-ai p { font-size: 13.5px; line-height: 1.65; color: #c7d3da; margin: 0; }
+.pm-ai-rules { border-left: 1px solid rgba(255,255,255,.18); padding-left: 26px; }
+.pm-ai-rules p { margin: 0 0 8px; font-weight: 700; color: #fff; }
+.pm-ai-rules p:last-child { margin-bottom: 0; font-weight: 400; color: #c7d3da; }
+
+@media (max-width: 780px) {
+  .pm-ai { grid-template-columns: 1fr; }
+  .pm-ai-rules { border-left: none; border-top: 1px solid rgba(255,255,255,.18); padding-left: 0; padding-top: 18px; }
+}
+
+/* ── Stats ──────────────────────────────────────────────────── */
+.pm-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 40px 0 8px; }
+.pm-stat { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 16px; }
+.pm-stat-ic { width: 36px; height: 36px; border-radius: 10px; background: var(--gold-soft); display: flex; align-items: center; justify-content: center; flex: none; }
+.pm-stat-ic .ic { width: 16px; height: 16px; color: #8a6a2f; }
+.pm-stat b { display: block; font-size: 16px; font-weight: 800; color: var(--ink); line-height: 1.2; }
+.pm-stat span { display: block; font-size: 11px; color: var(--ink-soft); margin-top: 1px; }
+
+/* ── CTA band ───────────────────────────────────────────────── */
+.pm-cta-band { text-align: center; padding: 44px 0 60px; }
+.pm-cta-band p { font-size: 14.5px; color: var(--ink-soft); margin: 0 0 18px; }
+.pm-cta { display: inline-flex; align-items: center; gap: 6px; background: var(--gold); color: var(--navy); font-weight: 800; font-size: 15px; padding: 14px 28px; border-radius: 12px; }
+
+@media (max-width: 620px) {
+  .pm-title { font-size: 26px; }
+  .pm-step { grid-template-columns: 40px 1fr; gap: 14px; }
+  .pm-step-num { width: 34px; height: 34px; font-size: 14px; }
+  .pm-step-card { padding: 18px 16px; }
+  .pm-ai { padding: 26px 20px; }
+  .pm-stats { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
+
+<main>
+  <section class="pm-hero">
+    <div class="wrap">
+      <a class="pm-back" href="/">← Quay lại trang chủ</a>
+      <div class="pm-eyebrow"><span class="ic" data-icon="sparkles"></span>Tử Vi Nghiệm Chứng</div>
+      <h1 class="pm-title serif">Cách hệ thống hoạt động</h1>
+      <p class="pm-sub">Một luận giải đáng tin cậy được xây dựng từ dữ liệu thực tế và quy trình kiểm chứng nhiều lớp. Dưới đây là 5 bước tạo nên mỗi bản luận giải trên Tử Vi Minh Bảo.</p>
+
+      <div class="pm-source">
+        <div class="pm-source-num">
+          <div class="pm-source-ic"><span class="ic" data-icon="globe"></span></div>
+          <div><span class="pm-source-eyebrow">Nguồn dữ liệu</span><b>270.000+</b><span>hồ sơ nhân vật thực đã được kiểm chứng</span></div>
+        </div>
+        <div class="pm-source-text">Hệ thống sử dụng hơn 270.000 hồ sơ ngày giờ sinh <b>đã được kiểm chứng</b> từ <b>AstroDataBank</b>, kết hợp với dữ liệu tiểu sử và diễn biến cuộc đời của các nhân vật trong nhiều lĩnh vực: chính trị, khoa học, nghệ thuật, kinh doanh, ...</div>
+        <div class="pm-source-brand">
+          <svg class="pm-globe" viewBox="0 0 100 100" fill="none">
+            <circle cx="50" cy="50" r="42" stroke="#c8a96a" stroke-width="1.4" opacity="0.6"/>
+            <ellipse cx="50" cy="50" rx="42" ry="16" stroke="#c8a96a" stroke-width="1.2" opacity="0.5"/>
+            <ellipse cx="50" cy="50" rx="16" ry="42" stroke="#c8a96a" stroke-width="1.2" opacity="0.5"/>
+            <line x1="8" y1="50" x2="92" y2="50" stroke="#c8a96a" stroke-width="1.2" opacity="0.5"/>
+            <line x1="50" y1="8" x2="50" y2="92" stroke="#c8a96a" stroke-width="1.2" opacity="0.5"/>
+            <circle cx="50" cy="50" r="42" stroke="#0f2a3d" stroke-width="2"/>
+          </svg>
+          <b>AstroDataBank</b><span>A global astrology database</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pm-flow">
+    <div class="wrap">
+
+      <div class="pm-step">
+        <div class="pm-step-rail"><div class="pm-step-num">01</div><div class="pm-step-line"></div></div>
+        <div class="pm-step-card">
+          <div>
+            <div class="pm-step-head"><div class="pm-step-ic"><span class="ic" data-icon="book-open"></span></div><h3>Lập lá số và xây dựng mô hình luận giải sơ khai</h3></div>
+            <p>Từ thông tin ngày giờ sinh, hệ thống lập lá số Tử Vi theo cổ pháp, và dựa trên các sách, tài liệu Tử Vi huyền học để luận giải, diễn giải các yếu tố trong lá số.</p>
+            <div class="pm-io"><span>Input: ngày giờ sinh + cổ thư, tài liệu Tử Vi</span><span class="out">Output: lá số + tập quy tắc luận giải sơ khai</span></div>
+          </div>
+          <div class="pm-visual pm-visual-img">
+            <img src="/images/phuong-phap/step-01.webp" alt="Bước 1: từ ngày giờ sinh, lập lá số Tử Vi theo cổ pháp, rồi chuyển thành dữ liệu có cấu trúc (cung, sao, vị trí, tứ hoá, mối quan hệ)" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+      <div class="pm-step">
+        <div class="pm-step-rail"><div class="pm-step-num">02</div><div class="pm-step-line"></div></div>
+        <div class="pm-step-card">
+          <div>
+            <div class="pm-step-head"><div class="pm-step-ic"><span class="ic" data-icon="search"></span></div><h3>Đối chiếu với dữ liệu thực đã kiểm chứng</h3></div>
+            <p>Luận giải sơ khai được đối chiếu với dữ liệu cuộc đời thực tế của các nhân vật trong cơ sở dữ liệu, nhằm đánh giá độ chính xác của từng cách cục, xác định sai lệch, và thử nghiệm các phương pháp kết hợp.</p>
+            <div class="pm-io"><span>Input: luận giải sơ khai + dữ liệu cuộc đời thực</span><span class="out">Output: đánh giá độ chính xác, phát hiện lỗi, gợi ý cải thiện</span></div>
+          </div>
+          <div class="pm-visual pm-visual-img">
+            <img src="/images/phuong-phap/step-02.webp" alt="Bước 2: luận giải sơ khai được đối chiếu với dữ liệu thực đã kiểm chứng từ AstroDataBank, đánh giá phù hợp / chưa chính xác / sai lệch cho từng cách cục" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+      <div class="pm-step">
+        <div class="pm-step-rail"><div class="pm-step-num">03</div><div class="pm-step-line"></div></div>
+        <div class="pm-step-card">
+          <div>
+            <div class="pm-step-head"><div class="pm-step-ic"><span class="ic" data-icon="shield-check"></span></div><h3>Kiểm chứng bởi chuyên gia</h3></div>
+            <p>Kết quả sau đối chiếu được gửi đến đội ngũ chuyên gia gồm các nhà nghiên cứu, nhà Tử Vi và huyền học, để thảo luận, đánh giá và kết luận mức độ tin cậy của từng quy tắc luận giải.</p>
+            <div class="pm-io"><span>Input: kết quả đối chiếu</span><span class="out">Output: bộ quy tắc được thẩm định chuyên môn</span></div>
+          </div>
+          <div class="pm-visual pm-visual-img">
+            <img src="/images/phuong-phap/step-03.webp" alt="Bước 3: hội đồng chuyên gia thảo luận, đánh giá và phản biện kết quả đối chiếu, đưa ra kết luận sau thẩm định — quy tắc được chấp nhận, cần điều chỉnh, hoặc bị loại bỏ" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+      <div class="pm-step">
+        <div class="pm-step-rail"><div class="pm-step-num">04</div><div class="pm-step-line"></div></div>
+        <div class="pm-step-card">
+          <div>
+            <div class="pm-step-head"><div class="pm-step-ic"><span class="ic" data-icon="rotate-cw"></span></div><h3>Hiệu chỉnh và tối ưu mô hình sau cùng</h3></div>
+            <p>Các quy tắc đã được chuyên gia thẩm định được đưa trở lại vào mô hình để tiếp tục huấn luyện. Hệ thống liên tục kiểm thử trên các lá số thực mới (out-of-sample) và lặp lại vòng cải tiến cho đến khi đạt độ chính xác tối ưu.</p>
+            <div class="pm-io"><span>Input: bộ quy tắc đã thẩm định</span><span class="out">Output: mô hình luận giải hoàn chỉnh</span></div>
+          </div>
+          <div class="pm-visual pm-visual-img">
+            <img src="/images/phuong-phap/step-04.webp" alt="Bước 4: huấn luyện và cập nhật mô hình liên tục — vòng lặp huấn luyện, kiểm thử & đánh giá, cải tiến — cho tới khi có mô hình luận giải hoàn chỉnh sẵn sàng ứng dụng" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+      <div class="pm-step">
+        <div class="pm-step-rail"><div class="pm-step-num">05</div></div>
+        <div class="pm-step-card">
+          <div>
+            <div class="pm-step-head"><div class="pm-step-ic"><span class="ic" data-icon="message-circle"></span></div><h3>Áp dụng LLM để diễn giải thành lời</h3></div>
+            <p>Kết quả từ mô hình được sử dụng LLM (AI ngôn ngữ lớn) để diễn giải thành ngôn ngữ tự nhiên, dễ hiểu, cá nhân hoá theo từng lá số, giúp người dùng dễ tiếp cận và ứng dụng. AI không tự suy luận, mà chỉ diễn đạt lại kết quả đã được xác định từ mô hình.</p>
+            <div class="pm-io"><span>Input: kết quả từ mô hình</span><span class="out">Output: bản luận giải hoàn chỉnh</span></div>
+          </div>
+          <div class="pm-visual pm-visual-img">
+            <img src="/images/phuong-phap/step-05.webp" alt="Bước 5: LLM chuyển đổi kết quả mô hình thành ngôn ngữ tự nhiên, diễn giải rõ ràng và cá nhân hoá, tạo ra bản luận giải hoàn chỉnh trình bày cho người dùng" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="pm-ai">
+      <div>
+        <h2><span class="ic" data-icon="shield-check"></span>Kết hợp dữ liệu – cổ pháp – chuyên gia – AI</h2>
+        <p>Đó là cách chúng tôi tạo ra những luận giải có cơ sở, minh bạch và đáng tin cậy.</p>
+      </div>
+      <div class="pm-ai-rules">
+        <p>Không cảm đoán. Không suy luận tuỳ tiện.</p>
+        <p>Chỉ những kết luận đã được kiểm chứng.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="pm-stats">
+      <div class="pm-stat"><div class="pm-stat-ic"><span class="ic" data-icon="globe"></span></div><div><b>270.000+</b><span>hồ sơ nhân vật thực (từ AstroDataBank)</span></div></div>
+      <div class="pm-stat"><div class="pm-stat-ic"><span class="ic" data-icon="book-open"></span></div><div><b>2.000+</b><span>quy tắc luận giải đã được kiểm chứng</span></div></div>
+      <div class="pm-stat"><div class="pm-stat-ic"><span class="ic" data-icon="users"></span></div><div><b>10+</b><span>chuyên gia Tử Vi tham gia thẩm định</span></div></div>
+      <div class="pm-stat"><div class="pm-stat-ic"><span class="ic" data-icon="rotate-cw"></span></div><div><b>Liên tục</b><span>cập nhật và cải tiến mô hình</span></div></div>
+    </div>
+  </section>
+
+  <section class="pm-cta-band">
+    <div class="wrap">
+      <p>Muốn thấy hệ thống này hoạt động thế nào với lá số của bạn?</p>
+      <a class="pm-cta" href="/app-luan-giai.html">Xem lá số của bạn →</a>
+    </div>
+  </section>
+</main>
+
+<script src="/nav.js?v=39"></script>
+</body>
+</html>

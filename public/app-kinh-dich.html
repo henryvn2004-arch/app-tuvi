@@ -8,7 +8,8 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="stylesheet" href="/shell.css?v=50">
 <style>
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
@@ -185,8 +186,8 @@ window.SHELL_INTRO={key:'kinh-dich'};</script>
 <script src="/tools-shared/kinh-dich-hao.js?v=1"></script>
 <script src="/tools-shared/kinh-dich.js?v=5"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=38" data-icons-only></script>
-<script src="/shell.js?v=94"></script>
+  <script src="/nav.js?v=39" data-icons-only></script>
+<script src="/shell.js?v=95"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/kinh-dich.js (bảng 64 quẻ + tra quẻ) với
 // trang standalone. Gieo/animation ở đây (DOM-specific), showResult gọi module.

@@ -8,7 +8,8 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="stylesheet" href="/shell.css?v=50">
 <style>
 .dt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:640px}
@@ -152,7 +153,7 @@
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
               <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span data-tvp-price="dien-tuong">…</span> Lượng <span class="vnd" data-tvp-price-vnd="dien-tuong"></span> mỗi lượt</div>
+              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="dien-tuong"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="dien-tuong">…</span> Lượng)</span></div>
               <div class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
@@ -166,7 +167,7 @@
         </div>
         <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
           <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="analyzeBtnLabel">Phân Tích Tướng Mặt →</b></span>
-          <small>Tốn <span data-tvp-price="dien-tuong">…</span> Lượng <span data-tvp-price-vnd="dien-tuong"></span></small>
+          <small>Tốn <span class="vnd" data-tvp-price-vnd="dien-tuong"></span> <span class="cb-sub">(<span data-tvp-price="dien-tuong">…</span> Lượng)</span></small>
         </button>
         <div class="dt-error" id="error-msg"></div>
       </div>
@@ -203,12 +204,12 @@
 <script>window.SHELL_ACTIVE='dien-tuong';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'dien-tuong'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=35"></script>
-<script src="/tools-shared/hook-layer.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=37"></script>
+<script src="/tools-shared/hook-layer.js?v=4"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
-  <script src="/nav.js?v=38" data-icons-only></script>
+  <script src="/nav.js?v=39" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
-<script src="/shell.js?v=94"></script>
+<script src="/shell.js?v=95"></script>
 <script>
 function initDienTuong(){
   Shell.setContext({
@@ -306,24 +307,66 @@ function analyzeGeometry(lm, w, h) {
 
 // window._geoNote đã có sẵn (0đ, engine hình học MediaPipe FaceMesh) nhưng
 // TRƯỚC ĐÂY chưa từng hiện ra DOM — chỉ gửi kèm cho AI sau khi trả tiền (xem
-// `geoNote` trong body gửi /api/tuong-mat). Hé đúng dòng Tam Đình (câu đầu,
-// đối chiếu được ngay với ảnh cạnh bên) làm fact — giữ các dòng còn lại
-// (tỷ lệ mắt/mũi/miệng/trán/cằm) cho phần AI viết.
+// `geoNote` trong body gửi /api/tuong-mat). Hé 2 dòng đầu (Tam Đình + tỷ lệ
+// rộng/dài mặt, đối chiếu được ngay với ảnh cạnh bên) làm fact — giữ các dòng
+// còn lại (mắt/mũi/miệng/trán/cằm) cho phần AI viết.
+// 2026-09-19: nới 1→2 dòng để đủ tối thiểu cho tầng hook kể chuyện
+// (`/api/hook-narrative` đòi ≥2 dữ kiện) — cùng dữ liệu MediaPipe đã tính sẵn,
+// không thêm phép đo mới.
 function mountHook() {
   var host = document.getElementById('hookHost');
   if (!host || !window.HookLayer || !window._geoNote) return;
   var m = window._geoNote.match(/Tam Đình:[^\n]+/);
   if (!m) return;
-  window.HookLayer.mount(host, {
-    tool: 'dien-tuong',
-    charts: [],
-    facts: [{
+  var facts = [{
+    tone: 'neutral',
+    title: m[0],
+    body: 'Đo trực tiếp từ ảnh bằng MediaPipe — Thượng/Trung/Hạ Đình chia đúng theo landmark khuôn mặt của bạn. Luận giải đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.',
+    source: 'engine · MediaPipe FaceMesh',
+  }];
+  var m2 = window._geoNote.match(/Tỷ lệ rộng\/dài mặt:[^\n]+/);
+  if (m2) {
+    facts.push({
       tone: 'neutral',
-      title: m[0],
-      body: 'Đo trực tiếp từ ảnh bằng MediaPipe — Thượng/Trung/Hạ Đình chia đúng theo landmark khuôn mặt của bạn. Luận giải đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.',
+      title: m2[0],
+      body: 'Đo trực tiếp từ ảnh bằng MediaPipe. Ý nghĩa theo Ma Y Thần Tướng và các bộ vị còn lại (mắt, mũi, miệng, trán, cằm) nằm trong bản phân tích chuyên sâu.',
       source: 'engine · MediaPipe FaceMesh',
-    }],
-  });
+    });
+  }
+  var spec = { tool: 'dien-tuong', toolLabel: 'Diện Tướng', charts: [], facts: facts };
+  window.HookLayer.mount(host, spec);
+  _tryHookNarrativeDienT(host, spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeDienT(host, spec) {
+  if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
+  if (host) host.style.visibility='hidden';
+  var pending = document.createElement('div');
+  pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if (host && host.parentNode) host.parentNode.insertBefore(pending, host.nextSibling);
+  var tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+  var headers = { 'Content-Type': 'application/json' };
+  if (tk) headers['Authorization'] = 'Bearer ' + tk;
+  var body = {
+    toolId: spec.tool,
+    toolLabel: spec.toolLabel || spec.tool,
+    anonId: TuviPaywall.previewAnonId(),
+    facts: spec.facts.map(function (f) { return { title: f.title, body: f.body, tone: f.tone, caption: f.caption }; }),
+  };
+  fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (pending.parentNode) pending.remove();
+      if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
+      if (host) host.style.visibility='';
+    })
+    .catch(function () {
+      if (pending.parentNode) pending.remove();
+      if (host) host.style.visibility='';
+    });
 }
 
 function checkHeadTilt(lm, w, h) {
@@ -585,7 +628,7 @@ async function _doAnalyze() {
   aiResultEl.innerHTML=
     '<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="sparkles"></span><div class="dt-loading-text">Đang phân tích tướng mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
   window.mountIcons && window.mountIcons(aiResultEl);
-  document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'nearest'});
 
   try {
     const res = await fetch('/api/tuong-mat',{
@@ -694,7 +737,7 @@ function _fillVndSlots(host,product){
   var els=host.querySelectorAll('[data-tvp-price-vnd]');
   var cost=window.ToolPrices.get(product);
   var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
-  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+  els.forEach(function(el){ el.textContent = lbl || ''; });
 }
 TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'dien-tuong'); });
 

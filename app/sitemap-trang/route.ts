@@ -14,16 +14,24 @@ const STATIC_PAGES = [
     '/app/luan-giai',         // core product page (301 từ /luan-giai.html cũ, 2026-09-14)
     '/tu-vi',                 // SEO pages index
     '/tu-dien',               // từ điển index
+    '/thu-vien',              // thư viện — cổng tra cứu tổng
+    '/thu-vien/sao-cung',     // hub sao × cung
+    '/thu-vien/khai-niem',    // hub khái niệm
+    '/thu-vien/nap-am',       // hub nạp âm
+    '/thu-vien/nguoi-cung-ngay-sinh', // hub lịch 366 ngày dương — xem NGAY_SINH_PAGES bên dưới
+    '/thu-vien/nguoi-cung-ngay-sinh-am-lich', // hub lịch 360 ngày âm — xem NGAY_SINH_AM_PAGES bên dưới
     '/about.html',
     '/nguon-du-lieu.html', // ghi công nguồn dữ liệu (bắt buộc theo giấy phép CC BY)
     '/resources.html',
     '/blog.html',
     '/menh-kho.html',
     '/ngay-tot',              // ngay-tot hub
+    '/xem-ngay-hom-nay',      // hoàng lịch đầy đủ HÔM NAY (thần sát/cửu tinh/bành tổ)
     '/van-han',               // van-han hub
-    '/xem-tuoi.html',
-    '/xem-lam-an.html',
+    '/app/xem-tuoi',          // 301 từ /xem-tuoi.html cũ, 2026-09-19
+    '/app/xem-lam-an',        // 301 từ /xem-lam-an.html cũ, 2026-09-19
     '/contact.html',
+    '/faqs.html',
     // Category hubs
     '/kien-thuc-tuvi',
     '/phong-thuy',
@@ -97,6 +105,39 @@ const STATIC_PAGES = [
     '/tools/xem-tuoi-sinh-con.html',
 ];
 
+// 366 trang hub theo NGÀY DƯƠNG LỊCH của app/thu-vien/nguoi-cung-ngay-sinh —
+// tập cố định, sinh tại đây thay vì viết tay 366 dòng vào STATIC_PAGES.
+// Cùng logic MONTH_DAYS với route đó (giữ nguyên `02-29` — có người thật
+// sinh ngày này).
+const NGAY_SINH_MONTH_DAYS = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const NGAY_SINH_PAGES: string[] = (() => {
+  const out: string[] = [];
+  for (let m = 1; m <= 12; m++) {
+    for (let d = 1; d <= NGAY_SINH_MONTH_DAYS[m - 1]; d++) {
+      out.push(
+        `/thu-vien/nguoi-cung-ngay-sinh/${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
+      );
+    }
+  }
+  return out;
+})();
+
+// 360 trang hub theo NGÀY ÂM LỊCH (12 tháng × 30 ngày, không phân biệt tháng
+// nhuận) của app/thu-vien/nguoi-cung-ngay-sinh-am-lich — cùng lý do sinh tại
+// đây thay vì viết tay như NGAY_SINH_PAGES ở trên.
+const NGAY_SINH_AM_PAGES: string[] = (() => {
+  const out: string[] = [];
+  for (let m = 1; m <= 12; m++) {
+    for (let d = 1; d <= 30; d++) {
+      out.push(
+        `/thu-vien/nguoi-cung-ngay-sinh-am-lich/${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
+      );
+    }
+  }
+  return out;
+})();
+
 export async function GET() {
-  return xmlResponse(xmlUrlset(STATIC_PAGES.map((p) => urlEntry(BASE_URL + p))));
+  const all = [...STATIC_PAGES, ...NGAY_SINH_PAGES, ...NGAY_SINH_AM_PAGES];
+  return xmlResponse(xmlUrlset(all.map((p) => urlEntry(BASE_URL + p))));
 }

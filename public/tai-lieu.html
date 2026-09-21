@@ -19,7 +19,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-600.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/be-vietnam-pro.css?v=1"><link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/theme.css?v=1">
 <style>
@@ -90,7 +91,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 </head>
 <body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<script src="/nav.js?v=38"></script>
+<script src="/nav.js?v=39"></script>
 
 <div class="breadcrumb" id="breadcrumb">
   <a href="/">Trang Chủ</a>
@@ -323,6 +324,7 @@ async function loadRelated(currentSlug, category, tags) {
 load();
 </script>
 <script src="/testimonials.js"></script>
+<script src="/tools-shared/tool-icons.js?v=1"></script>
 <script src="/related-tools.js?v=2"></script>
 </body>
 </html>

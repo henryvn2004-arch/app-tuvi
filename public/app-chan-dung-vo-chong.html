@@ -8,7 +8,8 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="stylesheet" href="/shell.css?v=50">
 <style>
 /* Giữ chỗ cho form khai sinh. `TuviForm.render` chạy ngay trong lúc phân tích
@@ -110,7 +111,7 @@
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
               <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span data-tvp-price="chan-dung-vo-chong">…</span> Lượng <span class="vnd" data-tvp-price-vnd="chan-dung-vo-chong"></span> mỗi lượt</div>
+              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="chan-dung-vo-chong"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="chan-dung-vo-chong">…</span> Lượng)</span></div>
               <div class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
@@ -124,7 +125,7 @@
         </div>
         <button class="btn-go" id="btnGo" onclick="analyze()">
           <span class="bg-label"><span class="ic" data-icon="image"></span><b id="btnGoLabel">Vẽ Chân Dung →</b></span>
-          <small>Tốn <span data-tvp-price="chan-dung-vo-chong">…</span> Lượng <span data-tvp-price-vnd="chan-dung-vo-chong"></span></small>
+          <small>Tốn <span class="vnd" data-tvp-price-vnd="chan-dung-vo-chong"></span> <span class="cb-sub">(<span data-tvp-price="chan-dung-vo-chong">…</span> Lượng)</span></small>
         </button>
         <div class="err" id="error-msg"></div>
       </div>
@@ -138,7 +139,7 @@
       <div class="samp-cta">
         <span class="sc-ic" data-icon="file-text"></span>
         <span class="sc-txt"><b>Bản luận giải mẫu</b><span>Tải PDF Chân Dung Vợ Chồng đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
-        <a class="sc-btn" href="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-chan-dung-vo-chong.pdf" target="_blank" rel="noopener">Tải PDF →</a>
+        <a class="sc-btn" href="/tai-mau/mau-chan-dung-vo-chong.pdf" target="_blank" rel="noopener">Tải PDF →</a>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -240,15 +241,15 @@ window.SHELL_INTRO={key:'chan-dung-vo-chong'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=35"></script>
+<script src="/tuvi-paywall.js?v=37"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
-<script src="/tools-shared/hook-facts.js?v=1"></script>
-<script src="/tools-shared/hook-layer.js?v=2"></script>
+<script src="/tools-shared/hook-facts.js?v=3"></script>
+<script src="/tools-shared/hook-layer.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=38" data-icons-only></script>
+  <script src="/nav.js?v=39" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
-<script src="/shell.js?v=94"></script>
+<script src="/shell.js?v=95"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/portrait-recover.js?v=2"></script>
 <script>
@@ -307,7 +308,7 @@ function _fillVndSlots(host,product){
   var els=host.querySelectorAll('[data-tvp-price-vnd]');
   var cost=window.ToolPrices.get(product);
   var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
-  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+  els.forEach(function(el){ el.textContent = lbl || ''; });
 }
 TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'chan-dung-vo-chong'); });
 
@@ -444,13 +445,48 @@ function mountHook(data) {
       cachCuc: (data.phuThe && data.phuThe.cachCuc) || [],
     };
     var hexDims = data.cungScoresPhuThe ? HF.hexDimsForCung(pseudoLs, 'Phu Thê') : null;
+    var tongFact = HF.tongFactCung(pseudoLs, 'Phu Thê');
     var hiem = HF.cachCucHiem(pseudoLs, census);
-    window.HookLayer.mount(host, {
+    var spec = {
       tool: 'chan-dung-vo-chong',
+      toolLabel: 'Chân Dung Người Phối Ngẫu',
       charts: [hexDims ? { type: 'hexRadar', data: { dims: hexDims }, title: 'Lục Giác cung Phu Thê' } : null].filter(Boolean),
-      facts: [hiem].filter(Boolean),
-    });
+      facts: [tongFact, hiem].filter(Boolean),
+    };
+    window.HookLayer.mount(host, spec);
+    _tryHookNarrativeCDVC(host, spec);
   });
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeCDVC(host, spec) {
+  if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
+  if (host) host.style.visibility='hidden';
+  var pending = document.createElement('div');
+  pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if (host && host.parentNode) host.parentNode.insertBefore(pending, host.nextSibling);
+  var tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+  var headers = { 'Content-Type': 'application/json' };
+  if (tk) headers['Authorization'] = 'Bearer ' + tk;
+  var body = {
+    toolId: spec.tool,
+    toolLabel: spec.toolLabel || spec.tool,
+    anonId: TuviPaywall.previewAnonId(),
+    facts: spec.facts.map(function (f) { return { title: f.title, body: f.body, tone: f.tone, caption: f.caption }; }),
+  };
+  fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (pending.parentNode) pending.remove();
+      if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
+      if (host) host.style.visibility='';
+    })
+    .catch(function () {
+      if (pending.parentNode) pending.remove();
+      if (host) host.style.visibility='';
+    });
 }
 
 function _renderLockWall() {
@@ -488,6 +524,12 @@ function _renderLockWall() {
 // hơn không hiện gì (đúng bài học ở docs/nhat-ky/2026-09.md "Sửa nguồn ảnh
 // dummy"). Không có cặp ảnh riêng đúng phong cách thì bỏ qua khối này, chỉ
 // còn tường khoá chữ (`_renderLockWall`) — không tự chế ảnh giả để lấp chỗ.
+// Văn MẪU (sample, `scripts/gen-tool-sample.mjs`) — Pha 4 (2026-09-17, cùng
+// lượt app-luan-giai.html): `description`/`meetingContext`/`phuTheLuanGiai`
+// của một lá số MẪU CỐ ĐỊNH (khác lá số đang xem), dùng để làm mờ thay vạch
+// xám ở cả hai khối `dummyPortraitHost` (ảnh+mô tả) và `luanGiaiBlock`.
+function _cdvcDummyPromise(){ return TuviPaywall.loadSampleJson('/samples/chan-dung-vo-chong-dummy.json'); }
+
 function _showDummyPortrait(gender) {
   var host = document.getElementById('dummyPortraitHost');
   var url = TuviPaywall.dummyPortraitUrl(gender, 'chan-dung-vo-chong');
@@ -497,27 +539,40 @@ function _showDummyPortrait(gender) {
     TuviPaywall.lockBadge('Ảnh minh hoạ — chưa mở') +
     '<img src="' + url + '" class="tpw-real-lock" ' +
     'alt="Ảnh minh hoạ (mờ) — mở khoá để xem chân dung thật" ' +
-    'style="display:block;margin-top:8px;max-width:260px;width:100%;border-radius:12px">';
+    'style="display:block;margin-top:8px;max-width:260px;width:100%;border-radius:12px">' +
+    '<div id="dummyPortraitDesc" style="margin-top:10px"></div>';
+  _cdvcDummyPromise().then(function (d) {
+    var text = d && d.description;
+    var el = document.getElementById('dummyPortraitDesc');
+    if (!text || !el) return;
+    el.innerHTML = TuviPaywall.sampleBlurHtml('<p>' + esc(text) + '</p>');
+  }).catch(function () {});
 }
 
 // Box "Luận Giải Cung Phu Thê" MỜ (2026-09-07) — trước đây `luanGiaiBlock`
 // nằm `display:none` HOÀN TOÀN ở tầng xem-trước, người xem chỉ thấy đúng một
 // dòng liệt kê trong tường khoá chung (`_renderLockWall`), không có gì gợi ý
 // "đây là một đoạn văn thật, đã viết sẵn, đang chờ mở khoá" — dễ hiểu lầm là
-// tính năng chưa có. Dựng vài dòng giả làm mờ (đúng khối `.tpw-lock-blur` đã
-// dùng cho tường khoá/ảnh dummy) NGAY TRONG chính box thật, để hình dạng và
-// vị trí khớp 100% với box sẽ hiện sau khi mở khoá — không phải một box khác.
+// tính năng chưa có. Pha 4 (2026-09-17): có văn mẫu (`phuTheLuanGiai` trong
+// dummy JSON) thì hiện ĐÚNG văn đó, mờ bằng `.tpw-real-lock` — không có (dummy
+// hiện tại của tool này chưa sinh trường đó) thì rơi về vạch giả `.tpw-lock-blur`
+// cũ, cùng hình dạng box sẽ hiện sau khi mở khoá.
 function _showLuanGiaiSkeleton() {
   var block = document.getElementById('luanGiaiBlock');
   var text = document.getElementById('luanGiaiText');
   if (!block || !text) return;
-  text.innerHTML =
-    TuviPaywall.lockBadge('Luận giải — chưa mở') +
+  var badge = TuviPaywall.lockBadge('Luận giải — chưa mở');
+  text.innerHTML = badge +
     '<div class="tpw-lock-blur" aria-hidden="true" style="margin-top:10px">' +
       '<i style="width:96%"></i><i style="width:88%"></i><i style="width:93%"></i>' +
       '<i style="width:70%"></i><i style="width:91%"></i><i style="width:58%"></i>' +
     '</div>';
   block.style.display = 'block';
+  _cdvcDummyPromise().then(function (d) {
+    var sample = d && d.phuTheLuanGiai;
+    if (!sample) return;
+    text.innerHTML = badge + TuviPaywall.sampleBlurHtml(mdBoldParas(sample));
+  }).catch(function () {});
 }
 
 function _openPanel() {

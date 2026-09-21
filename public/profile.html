@@ -6,7 +6,8 @@
 <title>Hồ Sơ Của Tôi — Tử Vi Minh Bảo</title>
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <!-- marked.js for markdown rendering -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <link rel="stylesheet" href="/theme.css?v=1">
@@ -350,12 +351,12 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
           <div style="font-size:.8rem;font-weight:700">Luận Giải Lá Số</div>
           <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">190 lượng</div>
         </a>
-        <a href="/xem-tuoi.html" style="background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)">
+        <a href="/app/xem-tuoi" style="background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)">
           <div style="font-size:1.4rem;margin-bottom:.35rem"><span data-icon="heart-handshake" style="width:22px;height:22px;color:#7C6942"></span></div>
           <div style="font-size:.8rem;font-weight:700">Xem Tuổi Vợ Chồng</div>
           <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">90 lượng</div>
         </a>
-        <a href="/xem-lam-an.html" style="background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)">
+        <a href="/app/xem-lam-an" style="background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)">
           <div style="font-size:1.4rem;margin-bottom:.35rem"><span data-icon="briefcase" style="width:22px;height:22px;color:#7C6942"></span></div>
           <div style="font-size:.8rem;font-weight:700">Xem Tuổi Làm Ăn</div>
           <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">90 lượng</div>
@@ -681,7 +682,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
   </div>
 </div>
 
-<script src="/nav.js?v=38"></script>
+<script src="/nav.js?v=39"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/account-core.js?v=9"></script>
 </body>

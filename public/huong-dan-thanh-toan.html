@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hướng Dẫn Thanh Toán — Tử Vi Minh Bảo</title>
-<meta name="description" content="Hướng dẫn nạp credits và sử dụng Tử Vi Minh Bảo — nạp một lần, dùng cho mọi công cụ.">
+<meta name="description" content="Hướng dẫn nạp Lượng và sử dụng Tử Vi Minh Bảo — nạp một lần, dùng cho mọi công cụ, không hết hạn.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-600.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/be-vietnam-pro.css?v=1">
 <style>
@@ -35,6 +35,7 @@ h2{font-size:16px;font-weight:700;color:#061A2E;margin:36px 0 16px;letter-spacin
 .tool-costs th{text-align:left;padding:8px 12px;background:#F5F4F0;color:#444;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
 .tool-costs td{padding:10px 12px;border-bottom:1px solid #eee;color:#333}
 .tool-costs tr:last-child td{border-bottom:none}
+.tool-costs-note{font-size:12px;color:#aaa;margin-top:8px}
 .credits-val{font-weight:700;color:#061A2E}
 .usd-val{color:#aaa;font-size:12px}
 
@@ -52,7 +53,7 @@ footer a{color:rgba(255,255,255,.5);text-decoration:none}
 <div class="wrap">
   <div class="eyebrow">Hỗ Trợ</div>
   <h1>Hướng Dẫn Thanh Toán</h1>
-  <div class="updated">Hệ thống Credits · Nạp 1 lần, dùng mọi công cụ · Không hết hạn</div>
+  <div class="updated">Hệ thống Lượng · Nạp 1 lần, dùng mọi công cụ · Không hết hạn · Cập nhật lần cuối: Tháng 9, 2026</div>
 
   <h2>Cách hoạt động</h2>
 
@@ -67,28 +68,15 @@ footer a{color:rgba(255,255,255,.5);text-decoration:none}
   <div class="step">
     <div class="step-num">2</div>
     <div class="step-content">
-      <h3>Chọn gói nạp credits</h3>
-      <p>Vào trang <a href="/topup.html"><strong>Nạp Credits</strong></a> và chọn một trong ba gói bên dưới. Thanh toán qua PayPal hoặc thẻ Visa/Mastercard.</p>
+      <h3>Chọn gói nạp Lượng</h3>
+      <p>Vào trang <a href="/topup.html"><strong>Nạp Lượng</strong></a> và chọn một trong các gói bên dưới. Thanh toán qua <strong>chuyển khoản ngân hàng VND</strong> (quét mã QR payOS bằng app ngân hàng, Lượng vào tài khoản tự động) hoặc <strong>PayPal / thẻ Visa, Mastercard</strong> quốc tế.</p>
 
-      <div class="pkg-grid" style="margin-top:16px">
-        <div class="pkg-box">
-          <div class="name">Starter</div>
-          <div class="credits">100 cr</div>
-          <div class="price">$10</div>
-        </div>
-        <div class="pkg-box pop">
-          <div class="name">Popular ⭐</div>
-          <div class="credits">220 cr</div>
-          <div class="price">$20</div>
-          <div class="bonus">+10% bonus</div>
-        </div>
-        <div class="pkg-box">
-          <div class="name">Pro</div>
-          <div class="credits">460 cr</div>
-          <div class="price">$40</div>
-          <div class="bonus">+15% bonus</div>
-        </div>
+      <div class="pkg-grid" id="pkgGrid" style="margin-top:16px">
+        <div class="pkg-box"><div class="name">…</div><div class="credits">…</div><div class="price">…</div></div>
+        <div class="pkg-box"><div class="name">…</div><div class="credits">…</div><div class="price">…</div></div>
+        <div class="pkg-box"><div class="name">…</div><div class="credits">…</div><div class="price">…</div></div>
       </div>
+      <div class="tool-costs-note">Giá đọc trực tiếp từ hệ thống, có thể thay đổi. Bảng gói đầy đủ tại trang <a href="/topup.html">Nạp Lượng</a>.</div>
     </div>
   </div>
 
@@ -96,55 +84,109 @@ footer a{color:rgba(255,255,255,.5);text-decoration:none}
     <div class="step-num">3</div>
     <div class="step-content">
       <h3>Sử dụng công cụ</h3>
-      <p>Sau khi nạp xong, quay lại bất kỳ công cụ nào và nhấn <strong>Mở Khóa</strong>. Credits tự động trừ ngay lập tức — không cần redirect hay đợi xác nhận.</p>
+      <p>Sau khi nạp xong, quay lại bất kỳ công cụ nào và nhấn <strong>Mở Khóa</strong>. Lượng tự động trừ ngay lập tức — không cần redirect hay đợi xác nhận.</p>
 
       <table class="tool-costs" style="margin-top:14px">
         <thead>
-          <tr><th>Công cụ</th><th>Chi phí</th><th>Tương đương</th></tr>
+          <tr><th>Công cụ</th><th>Chi phí</th><th>Quy đổi</th></tr>
         </thead>
         <tbody>
           <tr>
             <td><span class="ic" data-icon="sparkles"></span> Luận Giải Lá Số (24 phần)</td>
-            <td><span class="credits-val">190 credits</span></td>
-            <td class="usd-val">≈ $19</td>
+            <td><span class="credits-val"><span data-tvp-price="laso">…</span> Lượng</span></td>
+            <td class="usd-val" data-tvp-price-vnd="laso"></td>
           </tr>
           <tr>
             <td><span class="ic" data-icon="heart-handshake"></span> Xem Tuổi Vợ Chồng</td>
-            <td><span class="credits-val">90 credits</span></td>
-            <td class="usd-val">≈ $9</td>
+            <td><span class="credits-val"><span data-tvp-price="xem-tuoi">…</span> Lượng</span></td>
+            <td class="usd-val" data-tvp-price-vnd="xem-tuoi"></td>
           </tr>
           <tr>
             <td><span class="ic" data-icon="briefcase"></span> Xem Tuổi Làm Ăn</td>
-            <td><span class="credits-val">90 credits</span></td>
-            <td class="usd-val">≈ $9</td>
+            <td><span class="credits-val"><span data-tvp-price="xem-lam-an">…</span> Lượng</span></td>
+            <td class="usd-val" data-tvp-price-vnd="xem-lam-an"></td>
           </tr>
         </tbody>
       </table>
+      <div class="tool-costs-note">Giá đọc trực tiếp từ hệ thống, có thể thay đổi. Bảng giá đầy đủ cho toàn bộ công cụ: xem tại trang <a href="/cong-cu.html">Công Cụ</a>.</div>
     </div>
   </div>
 
-  <div class="notice">✓ Mỗi kết quả chỉ trừ credits <strong>một lần</strong>. Bạn có thể xem lại miễn phí bất kỳ lúc nào từ trang Hồ Sơ.</div>
+  <div class="notice">✓ Mỗi kết quả chỉ trừ Lượng <strong>một lần</strong>. Bạn có thể xem lại miễn phí bất kỳ lúc nào từ trang Hồ Sơ.</div>
 
   <h2>Câu hỏi thường gặp</h2>
+
+  <p><strong>Ngoài PayPal, có cách nào thanh toán bằng ngân hàng Việt Nam không?</strong><br>
+  Có. Chọn <strong>Chuyển khoản</strong> ở trang Nạp Lượng — quét mã QR bằng app ngân hàng Việt Nam bất kỳ, Lượng vào tài khoản tự động, không cần thẻ quốc tế.</p>
 
   <p><strong>Tôi có thể thanh toán bằng thẻ không cần tài khoản PayPal không?</strong><br>
   Có. Trong cửa sổ PayPal, chọn <em>"Pay with Debit or Credit Card"</em> để nhập thông tin thẻ trực tiếp.</p>
 
-  <p><strong>Credits có hết hạn không?</strong><br>
-  Không. Credits không bao giờ hết hạn.</p>
+  <p><strong>Lượng có hết hạn không?</strong><br>
+  Không. Lượng không bao giờ hết hạn.</p>
 
-  <p><strong>Tôi có thể dùng credits cho nhiều công cụ không?</strong><br>
+  <p><strong>Tôi có thể dùng Lượng cho nhiều công cụ không?</strong><br>
   Có. Một lần nạp dùng được cho tất cả công cụ: lá số, xem tuổi vợ chồng, xem tuổi làm ăn và mọi công cụ sẽ ra mắt sau này.</p>
 
-  <p><strong>Nạp xong credits nhưng chưa thấy trong tài khoản?</strong><br>
-  Thử làm mới trang (F5) hoặc vào <a href="/profile.html#credits">Hồ Sơ → Credits</a> để kiểm tra. Nếu vẫn không thấy, liên hệ qua <a href="/contact.html">trang Liên Hệ</a> kèm mã giao dịch PayPal.</p>
+  <p><strong>Nạp xong Lượng nhưng chưa thấy trong tài khoản?</strong><br>
+  Thử làm mới trang (F5) hoặc vào <a href="/profile.html">Hồ Sơ</a> → tab <strong>Ví Lượng</strong> để kiểm tra. Nếu vẫn không thấy, liên hệ qua <a href="/contact.html">trang Liên Hệ</a> kèm mã giao dịch.</p>
 
-  <p><strong>Tôi có thể chuyển credits cho người khác không?</strong><br>
-  Không. Credits gắn với tài khoản cá nhân và không thể chuyển nhượng.</p>
+  <p><strong>Tôi có thể chuyển Lượng cho người khác không?</strong><br>
+  Không. Lượng gắn với tài khoản cá nhân và không thể chuyển nhượng.</p>
 
   <div class="warn">Nếu gặp bất kỳ vấn đề nào với thanh toán, vui lòng liên hệ trước khi thực hiện giao dịch lại để tránh bị tính phí hai lần.</div>
 </div>
 
-<script src="/nav.js?v=38"></script>
+<script src="/tool-prices.js"></script>
+<script>
+// Gói nạp KHÔNG chép số — cùng luật với `tool-prices.js` (đọc `credit_packages`
+// qua ToolPrices, admin đổi gói trong Admin là trang này tự đổi theo, không
+// deploy lại). Đọc hụt thì giữ khung chờ "…", không bịa số.
+(function () {
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function vnd(n) {
+    return Number(n).toLocaleString('vi-VN') + 'đ';
+  }
+  function render() {
+    if (!window.ToolPrices) return;
+    window.ToolPrices.load().then(function () {
+      var pkgs = window.ToolPrices.packages();
+      var grid = document.getElementById('pkgGrid');
+      if (!grid || !pkgs.length) return;
+      var featuredIdx = Math.min(1, pkgs.length - 1);
+      grid.innerHTML = pkgs
+        .map(function (p, i) {
+          var pop = i === featuredIdx;
+          return (
+            '<div class="pkg-box' + (pop ? ' pop' : '') + '">' +
+            '<div class="name">' + esc(p.label || 'Gói ' + (i + 1)) + (pop ? ' ⭐' : '') + '</div>' +
+            '<div class="credits">' + p.credits + ' Lượng</div>' +
+            '<div class="price">' + vnd(p.amount_vnd) + '</div>' +
+            '</div>'
+          );
+        })
+        .join('');
+    });
+  }
+  // Ghi "(~X đ)" cạnh số Lượng ở bảng chi phí công cụ — cùng mẫu `_fillVndSlots`
+  // của app-luan-giai.html. `ToolPrices.vndLabel` tự trả '' khi chưa đọc được
+  // `credit_packages`, lúc đó không hiện gì (không đoán số).
+  function fillVndSlots() {
+    if (!window.ToolPrices) return;
+    document.querySelectorAll('[data-tvp-price-vnd]').forEach(function (el) {
+      var cost = window.ToolPrices.get(el.getAttribute('data-tvp-price-vnd'));
+      var lbl = cost != null ? window.ToolPrices.vndLabel(cost) : '';
+      el.textContent = lbl;
+    });
+  }
+  render();
+  if (window.ToolPrices) window.ToolPrices.load().then(fillVndSlots);
+})();
+</script>
+<script src="/nav.js?v=39"></script>
 </body>
 </html>

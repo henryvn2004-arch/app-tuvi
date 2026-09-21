@@ -36,7 +36,10 @@ const PREVIEW_PAYLOAD = {
   toaDo: { x: 0.4, y: 0.5 },
   matDoc: [{ nhan: 'Cung Mệnh', cung: 'Tý', sao: ['Cự Môn'], muon: false, cachCuc: [] }],
   changDangO: { tuoiStart: 6, tuoiEnd: 11, namStart: 2023, namEnd: 2028, cung: 'Tý' },
-  chatNguoi: [{ ten: 'Tò mò kỹ thuật', cao: 'thích tháo lắp đồ chơi' }],
+  chatNguoi: [
+    { ten: 'Tò mò kỹ thuật', cao: 'thích tháo lắp đồ chơi' },
+    { ten: 'Hướng nội quan sát', cao: 'thích ngồi nhìn trước khi tham gia' },
+  ],
   khongDoiHoi: [],
   chuaRoNet: false,
   huongDau: HUONG_DAU,
@@ -70,6 +73,21 @@ async function stubApis(page: Page, opts?: { previewBody?: object }) {
   await page.route('**/api/payment**', (r) => r.fulfill({ status: 200, contentType: 'application/json',
     body: JSON.stringify({ hasAccess: false, balance: 0 }) }));
   await page.route('**/api/track**', (r) => r.fulfill({ status: 200, body: '{}' }));
+  // Tầng hook kể chuyện (`_tryHookNarrativeHNT`, 2026-09-18) tự gọi
+  // `/api/hook-narrative` ngay sau `mountHook()` — KHÔNG stub thì bài kiểm gọi
+  // THẬT tới model và tiêu THẬT một suất `preview.free_runs` (xem chú thích
+  // đầy đủ ở tests/hard-paywall.spec.ts).
+  await page.route('**/api/hook-narrative**', (r) =>
+    r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ allowed: false }) }));
+  // Pha 4 (2026-09-17): 4 khối (loLang/noiTheNao/mocKeTiep/motCau — văn AI
+  // trong dummy JSON) + doBlock (batDauTuDau/tranhLam) nay hiện văn MẪU bị
+  // blur thay vì vạch xám rỗng — stub CỐ ĐỊNH, không phụ thuộc file thật.
+  await page.route('**/samples/huong-nghiep-tre-dummy.json', (r) => r.fulfill({ status: 200, contentType: 'application/json',
+    body: JSON.stringify({
+      loLang: 'Văn mẫu lo lắng cho bé MẪU.', noiTheNao: 'Văn mẫu nói thế nào cho bé MẪU.',
+      mocKeTiep: 'Văn mẫu mốc kế tiếp cho bé MẪU.', motCau: 'Văn mẫu một câu cho bé MẪU.',
+      batDauTuDau: [{ viec: 'Việc mẫu bắt đầu', vidu: 'Ví dụ mẫu' }], tranhLam: [{ viec: 'Việc mẫu tránh làm', vidu: '' }],
+    }) }));
 
   await page.route('**/api/huong-nghiep-tre**', async (r) => {
     const url = new URL(r.request().url());
@@ -147,9 +165,15 @@ test('6 khối trả phí dựng ô giữ chỗ, tường có giá', async ({ pa
   await run(page);
 
   await expect(page.locator('#resPanel .tpw-ph-host')).toHaveCount(6);
-  await expect(page.locator('#loBlock .tpw-ph')).toBeVisible();
+  // Pha 4 (2026-09-17): có văn AI trong dummy JSON (stub ở trên) → văn MẪU bị
+  // blur (`.tpw-real-lock`), không còn vạch xám `.tpw-ph`.
+  await expect(page.locator('#loBlock .tpw-real-lock')).toContainText('Văn mẫu lo lắng');
   await expect(page.locator('#loBlock .tpw-lock-badge')).toBeVisible();
   await expect(page.locator('#loBlock .res-block-body')).toHaveClass(/tpw-locked/);
+  // baHuongBlock: xếp hạng 3 thiên hướng — dữ liệu ENGINE của CHÍNH bé đang
+  // xem, không có trong dummy JSON — PHẢI vẫn là ô giữ chỗ rỗng.
+  await expect(page.locator('#baHuongBlock .tpw-ph')).toBeVisible();
+  await expect(page.locator('#baHuongBlock .tpw-real-lock')).toHaveCount(0);
 
   await expect(page.locator('#hnLockHost .tpw-lock')).toBeVisible();
   await expect(page.locator('#hnLockHost')).toContainText('60 Lượng');

@@ -145,6 +145,27 @@ window.HookFacts = (function () {
   }
 
   /**
+   * Điểm tổng của MỘT cung cụ thể — dùng khi trang chỉ tính sẵn 1 cung (vd
+   * Phu Thê ở chan-dung-vo-chong, Mệnh ở chan-dung-tien-kiep) chứ không có
+   * đủ `cungScores` của cả 12 cung để so `cungManhNhat`/`cungYeuNhat`. Ngưỡng
+   * tone theo đúng quy ước `scoreColor` đã dùng ở app-bat-tu.html (>=6.5 tốt
+   * · >=4 trung bình · dưới 4 cần chú ý).
+   */
+  function tongFactCung(ls, cungTen) {
+    var sc = ls && ls.cungScores && ls.cungScores[cungTen];
+    var tong = sc && typeof sc.tong === 'number' ? sc.tong : null;
+    if (tong == null) return null;
+    var tone = tong >= 6.5 ? 'good' : tong >= 4 ? 'neutral' : 'bad';
+    return {
+      kind: 'cung-tong', tone: tone,
+      title: 'Điểm tổng cung ' + cungTen + ': ' + tong.toFixed(1) + '/10',
+      body: 'Chấm trên 6 chiều đánh giá (' + CUNG_DIM_KEYS.map(function (k) { return CUNG_DIM_LABELS[k]; }).join(', ') + ') — điểm từng chiều và luận giải chi tiết nằm trong bản đầy đủ.',
+      value: tong, cungTen: cungTen,
+      source: 'engine · cungScores[\'' + cungTen + '\'].tong',
+    };
+  }
+
+  /**
    * Cách cục HIẾM nhất trong lá số, tra theo `census.cachCuc` — kết quả quét
    * hết 518.400 lá số (`public/laso-census.json`, do
    * `scripts/build-laso-census.mjs` sinh ra, xem Pha 1 workplan). `census` là
@@ -210,9 +231,65 @@ window.HookFacts = (function () {
     hexDimsForCung: hexDimsForCung,
     cungYeuNhat: cungYeuNhat,
     cungManhNhat: cungManhNhat,
+    tongFactCung: tongFactCung,
     cachCucHiem: cachCucHiem,
     percentileOfDaiVan: percentileOfDaiVan,
     top3: top3,
   };
-  return { tuvi: tuvi };
+
+  // ── Họ Tử Bình (bát tự) — `bt` = kết quả `tinhBatTu()`/route tubinh, cùng
+  // shape client/server (xem chú thích đầu lib/engine/tubinh.ts). KHÔNG suy
+  // "tốt/xấu" từ cường nhược hay vượng/suy ngũ hành — cả hai đều là TRẠNG
+  // THÁI, không phải điểm số hay-dở (cực vượng/cực nhược đều là mất cân
+  // bằng), nên tone='neutral' cho cả hai, để đúng LASO_AUTHORITY_RULE — đây
+  // là hàm suy fact, không phải hàm luận giải.
+  function cuongNhuocFact(bt) {
+    var cn = bt && bt.cuongNhuoc;
+    if (!cn || typeof cn.score !== 'number' || !cn.label) return null;
+    return {
+      kind: 'tb-cuong-nhuoc', tone: 'neutral',
+      title: 'Nhật Can ' + (bt.nhatCan || '') + ': ' + cn.label,
+      body: 'Điểm cường nhược ' + cn.score.toFixed(1) + '/10' + (cn.dacLenh != null ? (cn.dacLenh ? ' — đắc lệnh' : ' — không đắc lệnh') : '') + '.',
+      value: cn.score,
+    };
+  }
+
+  // Ngũ hành THIẾU — tone='bad' ("cần bổ khuyết") vì đây là hướng luận phổ
+  // biến của chính môn Tử Bình (thiếu hành nào thì dụng thần thường cần bù
+  // hành đó), khác cường nhược (trạng thái trung tính).
+  function nguHanhThieuFact(bt) {
+    var nh = bt && bt.nguHanh;
+    if (!nh || !nh.deficient || !nh.weighted) return null;
+    var v = nh.weighted[nh.deficient];
+    return {
+      kind: 'tb-ngu-hanh', tone: 'bad',
+      title: 'Ngũ hành thiếu: ' + nh.deficient,
+      body: 'Trọng số ' + (typeof v === 'number' ? v.toFixed(1) : '0') + ' — thấp nhất trong 5 hành, hướng bổ khuyết cụ thể nằm trong bản đầy đủ.',
+      value: v,
+    };
+  }
+
+  function dungThanFact(bt) {
+    var dt = bt && bt.dungThan;
+    if (!dt || !dt.primary) return null;
+    return {
+      kind: 'tb-dung-than', tone: 'neutral',
+      title: 'Dụng thần chính: ' + dt.primary,
+      body: (dt.secondary ? 'Hỉ thần ' + dt.secondary + ' — ' : '') + 'lý do chọn và cách dùng cụ thể nằm trong bản đầy đủ.',
+    };
+  }
+
+  /** Gói tiện: tối đa 3 fact cho trang tổng quan Tử Bình. */
+  function top3BatTu(bt) {
+    return [cuongNhuocFact(bt), nguHanhThieuFact(bt), dungThanFact(bt)].filter(Boolean);
+  }
+
+  var tuBinh = {
+    cuongNhuocFact: cuongNhuocFact,
+    nguHanhThieuFact: nguHanhThieuFact,
+    dungThanFact: dungThanFact,
+    top3: top3BatTu,
+  };
+
+  return { tuvi: tuvi, tuBinh: tuBinh };
 })();

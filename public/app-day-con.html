@@ -8,7 +8,8 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="stylesheet" href="/shell.css?v=50">
 <style>
 .form-card{max-width:860px}
@@ -250,7 +251,7 @@
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
               <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span data-tvp-price="day-con">…</span> Lượng <span class="vnd" data-tvp-price-vnd="day-con"></span> mỗi lượt</div>
+              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="day-con"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="day-con">…</span> Lượng)</span></div>
               <div class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
@@ -265,7 +266,7 @@
         <div class="frow" style="margin-bottom:0;margin-top:14px">
           <button class="btn-go" id="btnGo" onclick="analyze()">
             <span class="bg-label"><span class="ic" data-icon="baby"></span><b>Xem Cách Dạy Con →</b></span>
-            <small>Tốn <span data-tvp-price="day-con">…</span> Lượng <span data-tvp-price-vnd="day-con"></span></small>
+            <small>Tốn <span class="vnd" data-tvp-price-vnd="day-con"></span> <span class="cb-sub">(<span data-tvp-price="day-con">…</span> Lượng)</span></small>
           </button>
         </div>
         <div class="err" id="error-msg"></div>
@@ -280,7 +281,7 @@
       <div class="samp-cta">
         <span class="sc-ic" data-icon="file-text"></span>
         <span class="sc-txt"><b>Bản luận giải mẫu</b><span>Tải PDF Dạy Con Theo Lá Số đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
-        <a class="sc-btn" href="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-day-con.pdf" target="_blank" rel="noopener">Tải PDF →</a>
+        <a class="sc-btn" href="/tai-mau/mau-day-con.pdf" target="_blank" rel="noopener">Tải PDF →</a>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -471,12 +472,12 @@ window.SHELL_INTRO={key:'day-con'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=35"></script>
+<script src="/tuvi-paywall.js?v=37"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=38" data-icons-only></script>
+  <script src="/nav.js?v=39" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
-<script src="/shell.js?v=94"></script>
+<script src="/shell.js?v=95"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 
@@ -560,7 +561,7 @@ function _fillVndSlots(host, product) {
   var els = host.querySelectorAll('[data-tvp-price-vnd]');
   var cost = window.ToolPrices.get(product);
   var lbl = cost != null ? window.ToolPrices.vndLabel(cost) : '';
-  els.forEach(function (el) { el.textContent = lbl ? ('(' + lbl + ')') : ''; });
+  els.forEach(function (el) { el.textContent = lbl || ''; });
 }
 TuviPaywall.fillPriceSlots(document).then(function () { _fillVndSlots(document, 'day-con'); });
 
@@ -666,10 +667,34 @@ var DC_LOCKED_BLOCKS = [
   ['changBlock', true], ['withBlock', false], ['endBlock', false],
 ];
 
-/** Dựng khung rỗng + ô giữ chỗ cho mọi khối đang khoá.
- *  `coLaSoChaMe=false` thì BỎ HẲN "Hai Bên Với Nhau" — bản thật cũng ẩn khối đó
- *  khi không có lá số cha/mẹ, nên để nó ở đây là hứa một thứ trả tiền xong
- *  cũng không có. */
+// Văn MẪU (sample, `scripts/gen-tool-sample.mjs`) cho các khối AI-VĂN đang
+// khoá — Pha 4 (2026-09-17, cùng lượt app-luan-giai.html): thay ô giữ chỗ
+// rỗng bằng chính văn AI thật của một bé MẪU CỐ ĐỊNH (khác bé đang xem), làm
+// mờ bằng `.tpw-real-lock`. CHỈ áp cho field AI-VĂN có trong dummy JSON —
+// `trucBlock`/`khieuBlock`/`hdBlock` là DỮ LIỆU ENGINE (điểm số) của CHÍNH bé
+// đang xem, không phải văn AI, KHÔNG có trong dummy JSON và vẫn giữ ô giữ chỗ
+// rỗng cũ (đúng luật "che hết luôn" — không lộ điểm số thật). `withBlock`
+// (voiChaMe) cũng vắng: bản mẫu không có lá số cha/mẹ (xem chú thích
+// buildFullPayload trong gen-tool-sample.mjs).
+function _dcDummyPromise(){ return TuviPaywall.loadSampleJson('/samples/day-con-dummy.json'); }
+var _dcDummy=null;
+_dcDummyPromise();
+var DC_DUMMY_FIELD = { dhBlock:'dinhHuong', loBlock:'loLang', howCardsBlock:'vaoBangGi', changBlock:'changNay', endBlock:'motCau' };
+function _dcDummyBodyHtml(blockId){
+  if(!_dcDummy) return '';
+  if(blockId==='doBlock'){
+    var html=_mucHtml(_dcDummy.nenLam)+_mucHtml(_dcDummy.tranhLam);
+    return html?TuviPaywall.sampleBlurHtml(html):'';
+  }
+  var field=DC_DUMMY_FIELD[blockId];
+  var text=field&&_dcDummy[field];
+  return text?TuviPaywall.sampleBlurHtml('<p>'+esc(text)+'</p>'):'';
+}
+
+/** Dựng khung rỗng + ô giữ chỗ (hoặc văn mẫu mờ, nếu có) cho mọi khối đang
+ *  khoá. `coLaSoChaMe=false` thì BỎ HẲN "Hai Bên Với Nhau" — bản thật cũng ẩn
+ *  khối đó khi không có lá số cha/mẹ, nên để nó ở đây là hứa một thứ trả tiền
+ *  xong cũng không có. */
 function _dcLockBlocks(coLaSoChaMe) {
   DC_LOCKED_BLOCKS.forEach(function (b, i) {
     if (b[0] === 'withBlock' && !coLaSoChaMe) return;
@@ -678,8 +703,9 @@ function _dcLockBlocks(coLaSoChaMe) {
     var body = block.querySelector('.res-block-body');
     if (!body || body.querySelector('.tpw-ph-host')) return;
     body.classList.add('tpw-locked');
+    var sample = _dcDummyBodyHtml(b[0]);
     body.insertAdjacentHTML('beforeend',
-      '<div class="tpw-ph-host">' + TuviPaywall.placeholderHtml(i, b[1]) + '</div>');
+      '<div class="tpw-ph-host">' + (sample || TuviPaywall.placeholderHtml(i, b[1])) + '</div>');
     var titleEl = block.querySelector('.res-block-title');
     if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
     block.style.display = 'block';
@@ -745,6 +771,7 @@ async function _runAnonPreview(b, self, lo) {
       document.getElementById('basisMore').style.display = 'none';
       document.getElementById('basisBlock').style.display = 'block';
     }
+    _dcDummy=await _dcDummyPromise();
     _dcLockBlocks(!!self);
     _syncSections();
     mountHook(data);
@@ -760,28 +787,69 @@ async function _runAnonPreview(b, self, lo) {
   }
 }
 
-// Hé đúng MỘT trong 8 chất năng khiếu (điểm cao nhất).
-// 🔑 Đọc `data.khieuTop` chứ KHÔNG phải `data.khieu`: bản xem trước không còn
-// gửi cả 8 chất (`PREVIEW_KEEP` trong route.ts), server tự chọn sẵn quán quân
-// và gửi đúng một phần tử. Đổi lại thành `data.khieu` là hook im lặng biến mất
+// Hé ĐÚNG HAI trong 8 chất năng khiếu (cao nhất + thấp nhất).
+// 🔑 Đọc `data.khieuTop`/`data.khieuBottom` chứ KHÔNG phải `data.khieu`: bản
+// xem trước không gửi cả 8 chất (`PREVIEW_KEEP` trong route.ts), server tự
+// chọn sẵn quán quân + chất thấp nhất và gửi đúng hai phần tử
+// (`previewExtras()`, 2026-09-18 nới 1→2 — cùng tỉ lệ hé 2/N đã dùng ở
+// HookLayer cho tử vi). Đổi lại thành `data.khieu` là hook im lặng biến mất
 // — `undefined || []` không ném lỗi nào.
 function mountHook(data) {
   var host = document.getElementById('hookHost');
   if (!host || !window.HookLayer) return;
   var top = data.khieuTop;
   if (!top) return;
-  window.HookLayer.mount(host, {
-    tool: 'day-con',
-    charts: [],
-    facts: [{
-      tone: top.noiBat ? 'good' : 'neutral',
-      title: 'Chất năng khiếu cao nhất: ' + top.ten,
-      value: top.diem,
-      body: (top.noiBat ? 'Vượt ngưỡng “đáng cho thử”. ' : 'Chưa vượt ngưỡng, nhưng cao nhất trong 8 chất. ') +
-        '7 chất còn lại, 5 trục tính khí, và định hướng cách dạy nằm trong bản đầy đủ.',
-      source: 'engine · khieu',
-    }],
-  });
+  var facts = [{
+    tone: top.noiBat ? 'good' : 'neutral',
+    title: 'Chất năng khiếu cao nhất: ' + top.ten,
+    value: top.diem,
+    body: (top.noiBat ? 'Vượt ngưỡng “đáng cho thử”. ' : 'Chưa vượt ngưỡng, nhưng cao nhất trong 8 chất. ') +
+      '7 chất còn lại, 5 trục tính khí, và định hướng cách dạy nằm trong bản đầy đủ.',
+    source: 'engine · khieuTop',
+  }];
+  if (data.khieuBottom && data.khieuBottom.ten !== top.ten) {
+    facts.push({
+      tone: 'bad',
+      title: 'Chất cần bồi thêm nhất: ' + data.khieuBottom.ten,
+      value: data.khieuBottom.diem,
+      body: 'Thấp nhất trong 8 chất — cách bồi thêm và định hướng cụ thể nằm trong bản đầy đủ.',
+      source: 'engine · khieuBottom',
+    });
+  }
+  var spec = { tool: 'day-con', toolLabel: 'Dạy Con Theo Lá Số', charts: [], facts: facts };
+  window.HookLayer.mount(host, spec);
+  _tryHookNarrativeDC(host, spec);
+}
+
+/** Port từ `_tryHookNarrative` (app-luan-giai.html) — xem chú thích đầy đủ ở
+ *  đó. `toolId` riêng ⇒ trần xem trước độc lập với các tool khác. */
+function _tryHookNarrativeDC(host, spec) {
+  if (!spec || !Array.isArray(spec.facts) || spec.facts.length < 2) return;
+  if (host) host.style.visibility='hidden';
+  var pending = document.createElement('div');
+  pending.style.cssText = 'display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px';
+  pending.innerHTML = '<span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span>';
+  if (host && host.parentNode) host.parentNode.insertBefore(pending, host.nextSibling);
+  var tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+  var headers = { 'Content-Type': 'application/json' };
+  if (tk) headers['Authorization'] = 'Bearer ' + tk;
+  var body = {
+    toolId: spec.tool,
+    toolLabel: spec.toolLabel || spec.tool,
+    anonId: TuviPaywall.previewAnonId(),
+    facts: spec.facts.map(function (f) { return { title: f.title, body: f.body, tone: f.tone, caption: f.caption }; }),
+  };
+  fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (pending.parentNode) pending.remove();
+      if (data && data.allowed) window.HookLayer.upgrade(host, spec, data);
+      if (host) host.style.visibility='';
+    })
+    .catch(function () {
+      if (pending.parentNode) pending.remove();
+      if (host) host.style.visibility='';
+    });
 }
 
 // Nút phẳng cho khách ĐÃ đăng nhập (xem `_renderLockWall`) — đọc lại `moiLo`

@@ -6,10 +6,11 @@
 <title>Admin — Tử Vi Minh Bảo</title>
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="stylesheet" href="/admin.css?v=4"/>
 <script>(function(){try{var t=localStorage.getItem('tva_theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
-  <script src="/nav.js?v=38" data-icons-only></script>
+  <script src="/nav.js?v=39" data-icons-only></script>
   <script>
     /* Admin dựng lại DOM ở 200+ chỗ bằng innerHTML. mountIcons() chỉ tự quét lúc
        nạp trang, nên gọi tay từng chỗ vừa dễ sót vừa không kiểm nổi. Quan sát DOM
@@ -159,6 +160,9 @@
       </button>
       <button class="nav-item" onclick="goTo('feedback')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span><span>Góp Ý</span><span class="nav-badge" id="fb-nav-badge" style="display:none;margin-left:auto;background:var(--red,#C0392B);color:#fff;font-size:.62rem;font-weight:700;border-radius:999px;padding:.05rem .4rem"></span>
+      </button>
+      <button class="nav-item" onclick="goTo('railchats')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><span>Rail Chat</span>
       </button>
       <button class="nav-item" onclick="goTo('adminusers')" id="nav-adminusers">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><span>Quản Trị Viên</span>
@@ -891,7 +895,7 @@
         <!-- KHỐI 1 · GIÁ CÔNG CỤ -->
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>Giá Công Cụ (Lượng)</div>
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>Giá Công Cụ (VNĐ)</div>
             <div class="panel-actions">
               <span style="font-size:.72rem;color:var(--text-lt)" id="pricing-rate-note">quy đổi theo đơn giá gói · hiệu lực ~1 phút (cache)</span>
               <button class="btn btn-gold btn-sm" onclick="saveAllPricing()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Lưu tất cả</button>
@@ -909,7 +913,7 @@
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Công Cụ</th><th>Tool ID</th><th>Lượng</th><th>≈ VNĐ</th><th>Free</th><th>Bật</th><th>Giá KM</th><th>KM từ</th><th>KM đến</th><th></th></tr></thead>
+              <thead><tr><th>Công Cụ</th><th>Tool ID</th><th>VNĐ</th><th>≈ Lượng</th><th>Free</th><th>Bật</th><th>Giá KM (VNĐ)</th><th>KM từ</th><th>KM đến</th><th></th></tr></thead>
               <tbody id="pricing-body"><tr><td colspan="10" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
             </table>
           </div>
@@ -1613,6 +1617,40 @@
         </div>
       </div>
 
+      <!-- ── HỘI THOẠI RAIL CHAT (Vận Hành) ──
+           Đọc từ bảng tuvi_chats — nơi shell.js/tuvi-chat.html ĐÃ tự đồng bộ
+           mỗi phiên rail của user ĐĂNG NHẬP (xem app/api/admin/rail-chats).
+           KHÔNG có phiên của khách ẩn danh — họ chỉ sống trong localStorage,
+           chưa từng gửi lên server, nên trang này không thấy được. -->
+      <div class="page" id="page-railchats">
+        <div class="stats" id="rc-stats" style="grid-template-columns:repeat(3,1fr)">
+          <div class="stat"><div class="stat-label">Tổng Phiên</div><div class="stat-value" id="rc-c-total">…</div><div class="stat-sub">khớp bộ lọc hiện tại</div></div>
+          <div class="stat blue"><div class="stat-label">Đang Xem</div><div class="stat-value" id="rc-c-shown">…</div><div class="stat-sub">trang này</div></div>
+          <div class="stat"><div class="stat-label">Phạm Vi</div><div class="stat-value" style="font-size:1rem">Chỉ user đăng nhập</div><div class="stat-sub">khách ẩn danh không đồng bộ lên server</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Hội Thoại Rail Chat</div>
+            <div class="panel-actions">
+              <input class="search-input" id="rc-f-email" placeholder="Lọc theo email…" style="width:200px" onkeydown="if(event.key==='Enter')loadRailChatsAdmin()">
+              <input class="search-input" id="rc-f-type" placeholder="Lọc theo tool (vd luan-giai)…" style="width:200px" onkeydown="if(event.key==='Enter')loadRailChatsAdmin()">
+              <input class="search-input" id="rc-f-q" placeholder="Tìm trong nội dung…" style="width:200px" onkeydown="if(event.key==='Enter')loadRailChatsAdmin()">
+              <button class="btn btn-primary btn-sm" onclick="rcResetOffset();loadRailChatsAdmin()">Lọc</button>
+              <button class="btn btn-ghost btn-sm" onclick="loadRailChatsAdmin()">↻</button>
+            </div>
+          </div>
+          <div id="rc-body" style="padding:1rem 1.25rem"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+          <div class="panel-header" style="border-top:1px solid var(--line)">
+            <span style="font-size:.75rem;color:var(--text-lt)" id="rc-page-info"></span>
+            <div class="panel-actions">
+              <button class="btn btn-ghost btn-sm" onclick="rcPage(-1)">← Trước</button>
+              <button class="btn btn-ghost btn-sm" onclick="rcPage(1)">Sau →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ── API & KEYS (Vận Hành) ── -->
       <div class="page" id="page-apikeys">
         <div class="stats" id="mcp-stats" style="grid-template-columns:repeat(4,1fr)">
@@ -1964,6 +2002,7 @@ const PAGE_TITLES = {
   sysconfig: 'System Config', apikeys: 'API & Keys', registry: 'Tools Registry',
   adminusers: 'Quản Trị Viên',
   feedback: 'Góp Ý Người Dùng',
+  railchats: 'Hội Thoại Rail Chat',
 };
 
 /**
@@ -2252,6 +2291,7 @@ function goTo(page) {
                     sysconfig: loadSysConfig, apikeys: loadApiKeys, registry: loadRegistry,
                     adminusers: () => { loadAdminRoster(); loadAdminLoginAttempts(); },
                     feedback: loadFeedbackAdmin,
+                    railchats: loadRailChatsAdmin,
                     content: () => {
     if (showView) showView('dashboard');
     if (!window._contentInitialized) {
@@ -2447,6 +2487,102 @@ async function fbAdminReply(id) {
     toast('Đã lưu hồi đáp', 'success');
     loadFeedbackAdmin();
   } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
+}
+
+// ══════════════════════════════════════════════════════════════
+// HỘI THOẠI RAIL CHAT — panel "Rail Chat"
+// ══════════════════════════════════════════════════════════════
+// Đọc qua /api/admin/rail-chats (service key + tra admin_users), KHÔNG đọc
+// thẳng PostgREST: bảng tuvi_chats chỉ cho user đọc CHÍNH chat của họ (RLS
+// auth.uid()=user_id), JWT admin một mình không đọc được chat người khác.
+let _rcOffset = 0;
+const RC_LIMIT = 50;
+
+function rcResetOffset() { _rcOffset = 0; }
+
+async function rcAdminFetch(qs) {
+  const res = await fetch('/api/admin/rail-chats' + (qs || ''), {
+    cache: 'no-store',
+    headers: { Authorization: `Bearer ${_token}` },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  return data;
+}
+
+async function loadRailChatsAdmin() {
+  const host = document.getElementById('rc-body');
+  if (!host) return;
+  host.innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  const email = (document.getElementById('rc-f-email') || {}).value || '';
+  const type  = (document.getElementById('rc-f-type')  || {}).value || '';
+  const q     = (document.getElementById('rc-f-q')     || {}).value || '';
+  try {
+    const qs = `?limit=${RC_LIMIT}&offset=${_rcOffset}`
+      + `&email=${encodeURIComponent(email)}&type=${encodeURIComponent(type)}&q=${encodeURIComponent(q)}`;
+    const data = await rcAdminFetch(qs);
+    rcRender(data.items || [], data.total || 0);
+  } catch (e) {
+    console.error('[loadRailChatsAdmin]', e);
+    host.innerHTML = `<div class="alert-box alert-error">Không tải được hội thoại: ${escHtml(e.message)}</div>`;
+  }
+}
+
+function rcPage(dir) {
+  const next = _rcOffset + dir * RC_LIMIT;
+  if (next < 0) return;
+  _rcOffset = next;
+  loadRailChatsAdmin();
+}
+
+/** Nhãn tool từ `type` (vd 'app-luan-giai' → 'luan-giai', 'app-'+toolId khi
+ *  qua shell.js; các type cũ như 'laso'/'tu-binh' từ tuvi-chat.html giữ nguyên). */
+function rcToolLabel(type) {
+  if (!type) return 'không rõ';
+  return type.startsWith('app-') ? type.slice(4) : type;
+}
+
+function rcRender(items, total) {
+  const host = document.getElementById('rc-body');
+  if (!host) return;
+  const cTotal = document.getElementById('rc-c-total');
+  const cShown = document.getElementById('rc-c-shown');
+  if (cTotal) cTotal.textContent = total;
+  if (cShown) cShown.textContent = items.length;
+  const info = document.getElementById('rc-page-info');
+  if (info) {
+    const from = total ? _rcOffset + 1 : 0;
+    const to = _rcOffset + items.length;
+    info.textContent = `${from}–${to} / ${total}`;
+  }
+  if (!items.length) {
+    host.innerHTML = '<div class="empty-state"><p>Không có hội thoại nào khớp bộ lọc.</p></div>';
+    return;
+  }
+  host.innerHTML = items.map(c => {
+    const when = new Date(c.updated_at).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+    const msgs = Array.isArray(c.messages) ? c.messages : [];
+    const transcript = msgs.map(m => {
+      const who = m.role === 'user' ? 'Người dùng' : 'Trợ lý';
+      const cls = m.role === 'user' ? 'color:var(--tx-blue)' : 'color:var(--gold-soft)';
+      return `<div style="margin-bottom:.7rem"><b style="${cls};font-size:.72rem">${who}</b>`
+        + `<div style="font-size:.85rem;color:var(--text);line-height:1.6;white-space:pre-wrap">${escHtml(m.content || '')}</div></div>`;
+    }).join('') || '<div style="font-size:.8rem;color:var(--text-lt);font-style:italic">Phiên rỗng, chưa có tin nhắn.</div>';
+    return `
+      <div style="border:1px solid var(--line);border-radius:var(--radius);padding:.9rem 1.1rem;margin-bottom:.9rem;background:var(--paper)">
+        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem">
+          <span class="badge badge-blue">${escHtml(rcToolLabel(c.type))}</span>
+          <span style="font-size:.75rem;color:var(--text-mid);font-weight:600">${escHtml(c.email || c.user_id)}</span>
+          <span style="font-size:.75rem;color:var(--text-lt)">${c.msg_count} tin</span>
+          <span style="font-size:.72rem;color:var(--text-lt);margin-left:auto">${escHtml(when)}</span>
+        </div>
+        <div style="font-size:.85rem;color:var(--text);margin-bottom:.5rem">${escHtml(c.label || '(chưa đặt tên)')}</div>
+        <details>
+          <summary style="font-size:.75rem;color:var(--gold-soft);cursor:pointer">Xem toàn bộ hội thoại (${c.msg_count} tin)</summary>
+          <div style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--line)">${transcript}</div>
+        </details>
+      </div>`;
+  }).join('');
 }
 
 // ── PLACEHOLDER (module chưa build) ──
@@ -6784,7 +6920,15 @@ const CAT_LABELS = { 'chat': 'Trợ Lý (Rail)' }; // còn lại dùng nguyên c
 let VND_PER_CREDIT = 829;
 let _pricingRows = [];
 
-function fmtVnd(cr) { return (Math.max(0, cr || 0) * VND_PER_CREDIT).toLocaleString('vi-VN') + 'đ'; }
+// Henry (2026-09-20): admin gõ VNĐ, Lượng tự suy — NGƯỢC chiều cũ (gõ Lượng,
+// VNĐ suy theo). `credits` vẫn là cột DUY NHẤT lưu trong `tool_pricing`
+// (schema không có cột VNĐ) nên input VNĐ chỉ là lớp NHẬP LIỆU, quy đổi
+// sang Lượng ngay tại `patchPricing()` trước khi PATCH — không lưu số VNĐ.
+function vndOf(cr) { return Math.round(Math.max(0, cr || 0) * VND_PER_CREDIT); }
+function creditsFromVnd(vnd) { return Math.max(0, Math.round((vnd || 0) / (VND_PER_CREDIT || 1))); }
+// Bước nhảy của input number — làm tròn đơn giá hiện hành, tối thiểu 1 để
+// không tạo step=0 khi VND_PER_CREDIT chưa nạp xong (đường lùi hiếm gặp).
+function vndStep() { return Math.max(1, Math.round(VND_PER_CREDIT) || 1); }
 
 // `datetime-local` input ⇄ ISO — luôn giờ TRÌNH DUYỆT (VN chỉ 1 múi giờ, không
 // DST, nên không cần quy đổi tay). Rỗng/không hợp lệ → null (KHÔNG giới hạn).
@@ -6817,7 +6961,7 @@ async function loadPackageRate() {
       VND_PER_CREDIT = Number(ref.amount_vnd) / Number(ref.credits);
     }
     const n = document.getElementById('pricing-rate-note');
-    if (n) n.textContent = '1 Lượng ≈ ' + Math.round(VND_PER_CREDIT).toLocaleString('vi-VN')
+    if (n) n.textContent = 'Gõ VNĐ, Lượng tự tính · 1 Lượng ≈ ' + Math.round(VND_PER_CREDIT).toLocaleString('vi-VN')
       + 'đ (gói phổ biến) · hiệu lực ~1 phút (cache)';
   } catch (e) { /* giữ mức dự phòng */ }
 }
@@ -6839,12 +6983,12 @@ async function loadPricing() {
         html += `<tr id="pr-row-${r.tool_id}">
           <td><strong>${r.label || r.tool_id}</strong></td>
           <td class="mono" style="color:var(--text-lt);font-size:.68rem">${r.tool_id}</td>
-          <td><input type="number" id="pr-credits-${r.tool_id}" value="${r.credits}" min="0" class="price-input" oninput="updVnd('${r.tool_id}')"></td>
-          <td id="pr-vnd-${r.tool_id}" style="color:var(--text-lt);font-size:.72rem">${fmtVnd(r.credits)}</td>
+          <td><input type="number" id="pr-vnd-${r.tool_id}" value="${vndOf(r.credits)}" min="0" step="${vndStep()}" class="price-input" oninput="updCreditsFromVnd('${r.tool_id}')"></td>
+          <td id="pr-credits-${r.tool_id}" style="color:var(--text-lt);font-size:.72rem">≈ ${r.credits} L</td>
           <td style="text-align:center"><input type="checkbox" id="pr-free-${r.tool_id}" ${r.is_free ? 'checked' : ''}></td>
           <td style="text-align:center"><input type="checkbox" id="pr-en-${r.tool_id}" ${r.enabled ? 'checked' : ''}></td>
-          <td><input type="number" id="pr-sale-${r.tool_id}" value="${r.sale_credits != null ? r.sale_credits : ''}" min="0" placeholder="—" class="price-input" style="width:70px" oninput="updSaleVnd('${r.tool_id}')">
-            <div id="pr-sale-vnd-${r.tool_id}" style="color:var(--text-lt);font-size:.62rem">${r.sale_credits != null ? fmtVnd(r.sale_credits) : ''}</div></td>
+          <td><input type="number" id="pr-sale-vnd-${r.tool_id}" value="${r.sale_credits != null ? vndOf(r.sale_credits) : ''}" min="0" placeholder="—" step="${vndStep()}" class="price-input" style="width:90px" oninput="updSaleCreditsFromVnd('${r.tool_id}')">
+            <div id="pr-sale-${r.tool_id}" style="color:var(--text-lt);font-size:.62rem">${r.sale_credits != null ? '≈ ' + r.sale_credits + ' L' : ''}</div></td>
           <td><input type="datetime-local" id="pr-sale-from-${r.tool_id}" value="${toLocalInput(r.sale_starts_at)}" class="price-input" style="width:150px"></td>
           <td><input type="datetime-local" id="pr-sale-to-${r.tool_id}" value="${toLocalInput(r.sale_ends_at)}" class="price-input" style="width:150px"></td>
           <td><button class="btn btn-primary btn-sm" id="pr-btn-${r.tool_id}" onclick="savePricingRow('${r.tool_id}')">Lưu</button></td>
@@ -6855,18 +6999,18 @@ async function loadPricing() {
   } catch (e) { body.innerHTML = `<tr><td colspan="10" class="empty">Lỗi: ${e.message}</td></tr>`; }
 }
 
-function updVnd(id) {
-  const cr = parseInt(document.getElementById('pr-credits-' + id)?.value || 0);
-  const el = document.getElementById('pr-vnd-' + id);
-  if (el) el.textContent = fmtVnd(isNaN(cr) ? 0 : cr);
+function updCreditsFromVnd(id) {
+  const vnd = parseFloat(document.getElementById('pr-vnd-' + id)?.value || 0);
+  const el = document.getElementById('pr-credits-' + id);
+  if (el) el.textContent = '≈ ' + creditsFromVnd(isNaN(vnd) ? 0 : vnd) + ' L';
 }
 
-function updSaleVnd(id) {
-  const raw = document.getElementById('pr-sale-' + id)?.value;
-  const el = document.getElementById('pr-sale-vnd-' + id);
+function updSaleCreditsFromVnd(id) {
+  const raw = document.getElementById('pr-sale-vnd-' + id)?.value;
+  const el = document.getElementById('pr-sale-' + id);
   if (!el) return;
-  const cr = parseInt(raw);
-  el.textContent = raw === '' || isNaN(cr) ? '' : fmtVnd(cr);
+  const vnd = parseFloat(raw);
+  el.textContent = raw === '' || isNaN(vnd) ? '' : ('≈ ' + creditsFromVnd(vnd) + ' L');
 }
 
 function pricingAlert(type, msg) {
@@ -6891,14 +7035,19 @@ async function patchToolPricing(id, fields) {
 // rỗng → null (tắt KM); có nhập thì phải hợp lệ và rẻ hơn giá gốc, không thì
 // KM coi như không chạy (đúng luật ở lib/billing/pricing.ts::effectivePrice)
 // nhưng vẫn cảnh báo ngay tại đây để admin không tưởng nhầm đã áp KM.
+//
+// Đọc từ Ô VNĐ (nguồn nhập của admin) rồi suy Lượng NGAY TRƯỚC KHI PATCH —
+// `tool_pricing.credits` vẫn là cột lưu DUY NHẤT, VNĐ chỉ là lớp nhập liệu.
 async function patchPricing(id) {
-  const credits = parseInt(document.getElementById('pr-credits-' + id)?.value);
+  const vnd = parseFloat(document.getElementById('pr-vnd-' + id)?.value);
   const enabled = document.getElementById('pr-en-' + id)?.checked;
   const is_free = document.getElementById('pr-free-' + id)?.checked;
-  if (isNaN(credits) || credits < 0) throw new Error('Lượng không hợp lệ');
-  const saleRaw = document.getElementById('pr-sale-' + id)?.value;
-  const sale_credits = saleRaw === '' || saleRaw == null ? null : parseInt(saleRaw);
-  if (sale_credits != null && (isNaN(sale_credits) || sale_credits < 0)) throw new Error('Giá KM không hợp lệ');
+  if (isNaN(vnd) || vnd < 0) throw new Error('Giá VNĐ không hợp lệ');
+  const credits = creditsFromVnd(vnd);
+  const saleVndRaw = document.getElementById('pr-sale-vnd-' + id)?.value;
+  const saleVnd = saleVndRaw === '' || saleVndRaw == null ? null : parseFloat(saleVndRaw);
+  if (saleVnd != null && (isNaN(saleVnd) || saleVnd < 0)) throw new Error('Giá KM (VNĐ) không hợp lệ');
+  const sale_credits = saleVnd == null ? null : creditsFromVnd(saleVnd);
   if (sale_credits != null && sale_credits >= credits) throw new Error('Giá KM phải rẻ hơn giá gốc');
   const sale_starts_at = fromLocalInput(document.getElementById('pr-sale-from-' + id)?.value);
   const sale_ends_at = fromLocalInput(document.getElementById('pr-sale-to-' + id)?.value);

@@ -480,8 +480,14 @@
     var el = typeof containerOrId === 'string' ? document.getElementById(containerOrId) : containerOrId;
     if (!el) return;
     opts = opts || {};
+    // `block:'nearest'` (không phải 'start'): từ 2026-09-14, `.ws-side-col`
+    // (Giới thiệu/Bản luận giải mẫu/Phiên gần đây) chen giữa form và panel kết
+    // quả trong DOM — 'start' ép panel kết quả lên SÁT mép trên viewport, cuộn
+    // trôi mất cả `.ws-side-col` dù nó vẫn còn nguyên trên trang (không ai xoá
+    // gì cả, chỉ là cuộn quá tay). 'nearest' giữ đúng Ý ĐỊNH gốc — chỉ cuộn khi
+    // panel THẬT SỰ nằm ngoài khung nhìn — mà không ép quá đà khi đã đủ chỗ.
     var run = function () {
-      try { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) { /* ignore */ }
+      try { el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) { /* ignore */ }
     };
     // Mặc định cuộn NGAY — trình duyệt buộc phải tính lại layout khi đọc vị
     // trí để cuộn nên panel vừa display:block trong CÙNG tick vẫn đo đúng.
