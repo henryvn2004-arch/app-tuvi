@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 import { ORG_ID } from '@/lib/seo/entity';
 import { khaoLuanCategory } from '@/lib/content/khao-luan-categories';
+import { logAiCrawlerHit } from '@/lib/seo/ai-crawler-log';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -218,6 +219,7 @@ export async function GET(request: NextRequest) {
   const { searchParams, pathname } = new URL(request.url);
   const pathSlug = pathname.split('/').filter(Boolean).pop() || '';
   const slug = pathSlug === 'khao-luan' ? '' : (pathSlug || searchParams.get('slug') || '');
+  if (slug) logAiCrawlerHit(request.headers.get('user-agent'), `/khao-luan/${slug}`);
 
   if (!slug) return NextResponse.redirect(new URL('/van-dap', BASE_URL));
 
