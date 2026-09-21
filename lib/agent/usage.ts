@@ -60,6 +60,16 @@ const MODEL_PRICING: Record<string, { input: number; output: number }> = {
   'kimi-k3': { input: 3, output: 15 },
 };
 const DEFAULT_PRICING = MODEL_PRICING['claude-sonnet-4-6'];
+
+// ─── Cache tường minh Gemini (lib/agent/providers/gemini-cache.ts) ─────────
+// ⚠️ Giá LƯU TRỮ này đến từ nguồn TỔNG HỢP thứ 3 (ai.google.dev bị egress
+// proxy chặn trong môi trường build khi tra — không đọc được thẳng từ trang
+// Google), KHÁC với giá input/output ở bảng trên (đọc trực tiếp qua raw
+// GitHub của Google, tin cậy hơn). ⚠️ ĐỐI CHỨNG lại với hoá đơn Google Cloud
+// thật trước khi tin số biên LN dựa vào dòng cost này. $1.00/1M token/giờ,
+// riêng cho Flash — không có dòng theo model khác vì repo chỉ dùng Flash cho
+// rail.
+const GEMINI_CACHE_STORAGE_USD_PER_1M_TOKEN_HOUR = 1.0;
 /** Model `gemini-*` KHÔNG có dòng riêng (vd pin `GEMINI_MODEL` sang bản khác)
  * → lấy mức ĐẮT NHẤT trong họ, không lấy dòng của một model cụ thể.
  * Vì sao: đường hụt-bảng-giá phải nghiêng về phía tính DƯ, không tính THIẾU.
@@ -150,6 +160,48 @@ export async function logImageUsage(
           cost_vnd: calcImageCostVnd(model, usage),
           ...(durationMs != null ? { duration_ms: Math.round(durationMs) } : {}),
         },
+      }),
+    });
+  } catch {
+    /* best-effort */
+  }
+}
+
+/**
+ * Log chi phí LƯU TRỮ một cache tường minh Gemini vừa tạo — ước lượng CẬN
+ * TRÊN cho TRỌN thời hạn TTL (token × giờ × giá), ghi MỘT LẦN lúc tạo (không
+ * biết cache sẽ sống hết TTL hay bị tạo lại sớm hơn — cận trên khớp luật
+ * "đường hụt-bảng-giá phải nghiêng về phía tính DƯ" đã có ở calcCostVnd).
+ *
+ * `tool_id='gemini-cache'` — CỐ Ý một bucket RIÊNG, KHÔNG gộp vào 'chat':
+ * gộp đòi phải luồn `toolId` thật qua suốt
+ * streamGemini/streamGeminiTurn → getOrCreateGeminiCache → createCache, một
+ * refactor lớn hơn phạm vi PR này. Đây là ĐÁNH ĐỔI CÓ Ý THỨC, không phải bỏ
+ * sót: `select sum(cost_vnd) from events where tool_id='gemini-cache'` vẫn
+ * tra được tổng chi phí lưu trữ, chỉ chưa RỘT được về đúng scenario nào gây
+ * ra nó.
+ *
+ * `tokenCount == null` (Google không trả `usageMetadata` lúc tạo cache) →
+ * KHÔNG ghi gì — thà thiếu một dòng còn hơn bịa số làm sai biên LN im lặng.
+ */
+export async function logGeminiCacheStorage(model: string, tokenCount: number | null, ttlSeconds: number): Promise<void> {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return;
+  if (tokenCount == null || tokenCount <= 0) return;
+  const usd = (tokenCount * GEMINI_CACHE_STORAGE_USD_PER_1M_TOKEN_HOUR * (ttlSeconds / 3600)) / 1e6;
+  const costVnd = Math.round(usd * USD_TO_VND);
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/events`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        Prefer: 'return=minimal',
+      },
+      body: JSON.stringify({
+        event_type: 'llm_usage',
+        tool_id: 'gemini-cache',
+        meta: { model, token_count: tokenCount, ttl_seconds: ttlSeconds, cost_vnd: costVnd },
       }),
     });
   } catch {
