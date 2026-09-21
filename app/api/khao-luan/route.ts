@@ -4,6 +4,7 @@ export const maxDuration = 15;
 import { NextRequest, NextResponse } from 'next/server';
 import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 import { ORG_ID } from '@/lib/seo/entity';
+import { khaoLuanCategory } from '@/lib/content/khao-luan-categories';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -43,6 +44,13 @@ function buildHTML(article: any, slug: string, related: any[], master?: any) {
   const img   = `${BASE_URL}/api/og?${new URLSearchParams({ title: String(article.title||'').slice(0,80), sub: article.category || 'Khảo Luận' }).toString()}`;
   const body  = renderMarkdown(article.content||'');
   const cat   = escHtml(article.category||'');
+  // Breadcrumb + link "về danh mục" trỏ ĐÚNG cụm /van-dap/<category> khi
+  // category khớp danh mục hợp lệ (nguồn duy nhất: khao-luan-categories.ts) —
+  // không phải hub tổng chung chung. Đây là mạch liên kết hub-and-spoke:
+  // bài → cụm chủ đề → hub tổng, thay vì mọi bài đều trỏ thẳng lên hub tổng.
+  const catMeta = article.category ? khaoLuanCategory(article.category) : undefined;
+  const backHref = catMeta ? `/van-dap/${catMeta.id}` : '/van-dap';
+  const backLabel = catMeta ? catMeta.label : 'Vấn Đáp';
 
   // QAPage/FAQPage: bài khảo luận VỐN ĐÃ đúng hình dạng hỏi-đáp (title = câu
   // hỏi, excerpt = câu trả lời ngắn tự đứng được — theo đúng HOOK_RULES), chỉ
@@ -71,8 +79,9 @@ function buildHTML(article: any, slug: string, related: any[], master?: any) {
     ...(faqSchema ? [faqSchema] : []),
     { '@context':'https://schema.org','@type':'BreadcrumbList', itemListElement:[
       {'@type':'ListItem',position:1,name:'Trang Chủ',item:BASE_URL+'/'},
-      {'@type':'ListItem',position:2,name:'Khảo Luận',item:BASE_URL+'/blog.html'},
-      {'@type':'ListItem',position:3,name:article.title,item:url}] },
+      {'@type':'ListItem',position:2,name:'Vấn Đáp',item:BASE_URL+'/van-dap'},
+      ...(catMeta ? [{'@type':'ListItem',position:3,name:catMeta.label,item:BASE_URL+backHref}] : []),
+      {'@type':'ListItem',position:catMeta?4:3,name:article.title,item:url}] },
   ]);
 
   return `<!DOCTYPE html><html lang="vi"><head>
@@ -139,14 +148,18 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 .author-box-name{font-family:'Noto Serif',serif;font-size:16px;font-weight:600;color:var(--navy);margin-bottom:4px}
 .author-box-bio{font-size:13px;color:var(--text-lt);line-height:1.65;margin-bottom:8px}
 .author-box-link{font-size:12px;color:var(--blue);text-decoration:none}.author-box-link:hover{text-decoration:underline}
+.method-box{margin-top:20px;padding:22px 24px;background:var(--navy);border-radius:10px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.method-box p{font-size:13px;color:#c7d3da;line-height:1.6;max-width:520px;margin:0}
+.method-box p b{color:#fff}
+.method-box a{flex-shrink:0;background:var(--gold-bright);color:var(--navy);font-weight:700;font-size:13px;padding:10px 20px;border-radius:8px;text-decoration:none}
 @keyframes spin{to{transform:rotate(360deg)}}
-@media(max-width:700px){.breadcrumb,.article-wrap{padding-left:16px;padding-right:16px}.article-title{font-size:26px}.author-box{flex-direction:column;gap:12px}}
+@media(max-width:700px){.breadcrumb,.article-wrap{padding-left:16px;padding-right:16px}.article-title{font-size:26px}.author-box{flex-direction:column;gap:12px}.method-box{flex-direction:column;align-items:flex-start}}
 </style>
 <script src="/auth.js" defer></script>
 </head>
 <body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<div class="breadcrumb"><a href="/">Trang Chủ</a><span>›</span><a href="/blog.html">Khảo Luận</a><span>›</span><span>${title}</span></div>
+<div class="breadcrumb"><a href="/">Trang Chủ</a><span>›</span><a href="/van-dap">Vấn Đáp</a><span>›</span><a href="${backHref}">${escHtml(backLabel)}</a><span>›</span><span>${title}</span></div>
 <article class="article-wrap">
   <div class="article-meta">
     ${article.category?`<span class="meta-cat">${cat}</span>`:''}
@@ -168,7 +181,11 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
       <a class="author-box-link" href="/tac-gia/${escHtml(master.id)}">Xem tất cả bài viết →</a>
     </div>
   </div>` : ''}
-  <div class="article-nav"><a href="/blog.html">← Về Khảo Luận</a></div>
+  <div class="method-box">
+    <p><b>Câu trả lời trên đây đối chiếu với dữ liệu cuộc đời thực đã kiểm chứng</b>, không chỉ dựa vào cổ pháp lý thuyết — quy trình Tử Vi Nghiệm Chứng dùng hơn 270.000 hồ sơ từ AstroDataBank và hơn 2.000 quy tắc đã qua thẩm định của 10+ chuyên gia.</p>
+    <a href="/app/luan-giai">Xem hệ thống đọc lá số của bạn thế nào →</a>
+  </div>
+  <div class="article-nav"><a href="${backHref}">← Về ${escHtml(backLabel)}</a></div>
   ${related.length?`<div class="related-section"><div class="related-title">Bài Viết Liên Quan</div><ul class="related-list">${
     related.map((r:any)=>`<li class="related-item"><a href="/khao-luan/${r.slug}"><span class="rel-title">${escHtml(r.title)}</span>${r.category?`<span class="rel-cat">${escHtml(r.category)}</span>`:''}</a></li>`).join('')
   }</ul></div>`:''}
@@ -179,7 +196,7 @@ window._articleData = { category: ${JSON.stringify(article.category||'')}, tags:
 </script>
 <script src="/related-tools.js"></script>
 <script src="/testimonials.js"></script>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=40" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=41" defer></script>
 </body></html>`;
 }
 
@@ -192,8 +209,8 @@ function buildNotFound() {
 <body style="font-family:sans-serif;text-align:center;padding:80px">
 <h1 style="color:#0F2A3D;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy bài viết</h1>
 <p style="color:#777;margin-bottom:24px">Bài viết không tồn tại hoặc đã bị xóa.</p>
-<a href="/blog.html" style="color:#1455A4">← Về Khảo Luận</a>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=40" defer></script>
+<a href="/van-dap" style="color:#1455A4">← Về Vấn Đáp</a>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=41" defer></script>
 </body></html>`;
 }
 
@@ -202,7 +219,7 @@ export async function GET(request: NextRequest) {
   const pathSlug = pathname.split('/').filter(Boolean).pop() || '';
   const slug = pathSlug === 'khao-luan' ? '' : (pathSlug || searchParams.get('slug') || '');
 
-  if (!slug) return NextResponse.redirect(new URL('/blog.html', BASE_URL));
+  if (!slug) return NextResponse.redirect(new URL('/van-dap', BASE_URL));
 
   try {
     const r = await fetch(

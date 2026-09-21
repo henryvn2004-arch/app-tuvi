@@ -1,24 +1,26 @@
 import { test, expect } from '@playwright/test';
 
 // ── Khảo Luận (article detail) ───────────────────────────────────────────────
-// khao-luan.html cần ?slug=xxx để load bài — test navigate từ blog trước
-test.describe('Khảo Luận (khao-luan.html)', () => {
-  test('page load không crash khi không có slug', async ({ page }) => {
-    await page.goto('/khao-luan.html');
-    await page.waitForLoadState('networkidle');
-    // Không crash — body vẫn render được
-    await expect(page.locator('body')).toBeVisible();
+// `/khao-luan/:slug` là SSR THẬT (app/api/khao-luan/route.ts) — nội dung có
+// mặt ngay trong HTML đầu tiên, không cần chờ fetch client. `public/blog.html`
+// + `public/khao-luan.html` (client fetch, không lọc publish_status) đã bị
+// XOÁ và thay bằng `/van-dap` (app/van-dap/route.ts, SSR) — xem mô tả ở
+// _shared.ts vì sao: GPTBot/PerplexityBot/ClaudeBot không chạy JS nên bản cũ
+// không có lấy một liên kết nào cho AI crawler thấy.
+test.describe('Khảo Luận (khao-luan/:slug)', () => {
+  test('khao-luan.html cũ đã 308 sang /van-dap', async ({ page }) => {
+    const res = await page.goto('/khao-luan.html');
+    expect(page.url()).toContain('/van-dap');
+    expect(res?.status()).toBeLessThan(400);
   });
 
-  test('navigate từ blog → article load đầy đủ', async ({ page }) => {
-    // /khao-luan/:slug → SSR HTML từ API (không phải khao-luan.html)
-    await page.goto('/blog.html');
+  test('navigate từ /van-dap → article load đầy đủ', async ({ page }) => {
+    await page.goto('/van-dap');
     await page.waitForLoadState('networkidle');
-    await page.waitForSelector('#state-loading', { state: 'hidden', timeout: 15000 }).catch(() => {});
 
-    const firstLink = page.locator('#article-grid .article-link, #article-grid a[href*="khao-luan"]').first();
+    const firstLink = page.locator('.vd-card[href*="/khao-luan/"]').first();
     const hasLink = await firstLink.isVisible().catch(() => false);
-    if (!hasLink) { console.warn('Không tìm thấy article link từ blog'); return; }
+    if (!hasLink) { console.warn('Không tìm thấy article link từ /van-dap'); return; }
 
     const href = await firstLink.getAttribute('href');
     if (!href) return;
@@ -28,16 +30,14 @@ test.describe('Khảo Luận (khao-luan.html)', () => {
 
     // SSR page dùng .article-title và .article-body
     const articleVisible = await page.locator('.article-title, .article-body').first().isVisible().catch(() => false);
-    const errorVisible = await page.locator('.error-state, [class*="error"]').first().isVisible().catch(() => false);
-    expect(articleVisible || errorVisible).toBe(true);
+    expect(articleVisible).toBe(true);
   });
 
   test('article title không rỗng khi có slug hợp lệ', async ({ page }) => {
-    await page.goto('/blog.html');
+    await page.goto('/van-dap');
     await page.waitForLoadState('networkidle');
-    await page.waitForSelector('#state-loading', { state: 'hidden', timeout: 15000 }).catch(() => {});
 
-    const firstLink = page.locator('#article-grid .article-link, #article-grid a[href*="khao-luan"]').first();
+    const firstLink = page.locator('.vd-card[href*="/khao-luan/"]').first();
     const hasLink = await firstLink.isVisible().catch(() => false);
     if (!hasLink) return;
 
@@ -48,65 +48,52 @@ test.describe('Khảo Luận (khao-luan.html)', () => {
     await page.waitForLoadState('networkidle');
 
     const titleEl = page.locator('.article-title, h1').first();
-    const titleVisible = await titleEl.isVisible().catch(() => false);
-    if (titleVisible) {
-      await expect(titleEl).not.toBeEmpty({ timeout: 5000 });
-    }
-  });
-
-  test('không có JS errors nghiêm trọng', async ({ page }) => {
-    const errors: string[] = [];
-    page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-    await page.goto('/khao-luan.html');
-    await page.waitForLoadState('networkidle');
-    const critical = errors.filter(e =>
-      !e.includes('favicon') && !e.includes('Sentry') && !e.includes('ERR_BLOCKED') && !e.includes('fonts.google')
-    );
-    expect(critical).toHaveLength(0);
+    await expect(titleEl).not.toBeEmpty({ timeout: 5000 });
   });
 });
 
-// ── Blog / Vấn Đáp ────────────────────────────────────────────────────────────
-test.describe('Blog / Vấn Đáp (blog.html)', () => {
+// ── Vấn Đáp (hub SSR, thay blog.html) ────────────────────────────────────────
+test.describe('Vấn Đáp (/van-dap)', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/blog.html');
+    await page.goto('/van-dap');
     await page.waitForLoadState('networkidle');
   });
 
-  test('page load — không crash', async ({ page }) => {
-    await expect(page.locator('h1, h2, .page-title, #article-grid').first()).toBeVisible({ timeout: 8000 });
+  test('blog.html cũ đã 308 sang /van-dap', async ({ page }) => {
+    await page.goto('/blog.html');
+    expect(page.url()).toContain('/van-dap');
   });
 
-  test('articles tải về — ít nhất 1 item', async ({ page }) => {
-    await page.waitForSelector('#state-loading', { state: 'hidden', timeout: 15000 }).catch(() => {});
-    const items = page.locator('#article-grid .article-item, #article-grid .article-link, #article-grid [class*="article"]');
-    const count = await items.count();
-    expect(count).toBeGreaterThanOrEqual(1);
+  test('page load — SSR, không cần chờ JS', async ({ page }) => {
+    await expect(page.locator('h1.vd-title')).toBeVisible({ timeout: 8000 });
   });
 
-  test('search input lọc được', async ({ page }) => {
-    await page.waitForSelector('#state-loading', { state: 'hidden', timeout: 15000 }).catch(() => {});
+  test('articles có mặt ngay trong HTML đầu tiên (SSR thật)', async ({ page }) => {
+    const content = await page.content();
+    // Không đợi networkidle/JS — nội dung phải nằm sẵn trong response đầu.
+    expect(content).toContain('/khao-luan/');
+    const items = page.locator('.vd-card');
+    expect(await items.count()).toBeGreaterThanOrEqual(1);
+  });
+
+  test('search input lọc được (client-side, không fetch lại)', async ({ page }) => {
     const search = page.locator('#search-input');
-    if (await search.isVisible().catch(() => false)) {
-      await search.fill('tử vi');
-      await page.waitForTimeout(600);
-      const badge = page.locator('#count-badge');
-      if (await badge.isVisible().catch(() => false)) {
-        const text = await badge.textContent();
-        expect(text).toBeTruthy();
-      }
-    }
+    await expect(search).toBeVisible();
+    const before = await page.locator('.vd-card:visible').count();
+    await search.fill('xxxxxxkhongcothatxxxxxx');
+    await page.waitForTimeout(300);
+    const after = await page.locator('.vd-card:visible').count();
+    expect(after).toBeLessThanOrEqual(before);
   });
 
-  test('category filter buttons clickable', async ({ page }) => {
-    await page.waitForSelector('#state-loading', { state: 'hidden', timeout: 15000 }).catch(() => {});
-    const catBtn = page.locator('.cat-btn').first();
-    if (await catBtn.isVisible().catch(() => false)) {
-      await catBtn.click();
-      await page.waitForTimeout(400);
-      // Không crash
-      await expect(page.locator('#article-grid')).toBeVisible();
-    }
+  test('chip danh mục dẫn tới đúng trang cụm /van-dap/<danh-mục>', async ({ page }) => {
+    const chip = page.locator('.vd-chip').first();
+    if (!(await chip.isVisible().catch(() => false))) return;
+    const href = await chip.getAttribute('href');
+    expect(href).toMatch(/^\/van-dap\/[a-z-]+$/);
+    await chip.click();
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('h1.vd-title')).toBeVisible();
   });
 });
 

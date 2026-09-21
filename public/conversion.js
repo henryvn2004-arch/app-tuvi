@@ -30,7 +30,7 @@ const ACTIONS = [
   { action: 'vừa xem thủ tướng chỉ tay',             page: '/tools/thu-tuong-ai.html' },
   { action: 'vừa mở khóa phân tích đại vận',         page: '/app/luan-giai' },
   { action: 'vừa xem tuổi hợp tác kinh doanh',       page: '/app/xem-lam-an' },
-  { action: 'vừa đọc khảo luận về mệnh Thuỷ',        page: '/blog.html' },
+  { action: 'vừa đọc khảo luận về mệnh Thuỷ',        page: '/van-dap' },
   { action: 'vừa luận giải lá số vừa lập xong',      page: '/app/luan-giai' },
 ];
 

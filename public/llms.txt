@@ -33,7 +33,7 @@ Tử Vi Minh Bảo là hệ thống đầu tiên và duy nhất luận giải T�
 - Nạp âm Lục Thập Hoa Giáp (60 năm, ngũ hành từng nạp âm): https://www.tuviminhbao.com/thu-vien/nap-am
 - Người nổi tiếng cùng ngày sinh dương lịch (272k+ người, theo từng ngày): https://www.tuviminhbao.com/thu-vien/nguoi-cung-ngay-sinh
 - Người nổi tiếng cùng ngày sinh âm lịch (theo tháng-ngày âm, bất kể năm can chi): https://www.tuviminhbao.com/thu-vien/nguoi-cung-ngay-sinh-am-lich
-- Khảo luận chuyên sâu theo chủ đề: https://www.tuviminhbao.com/blog.html
+- Vấn đáp Tử Vi theo chủ đề (hôn nhân, tài chính, sự nghiệp, vận hạn...): https://www.tuviminhbao.com/van-dap
 - Nghiên cứu học thuật: https://www.tuviminhbao.com/nghien-cuu
 - Sách & tài liệu gốc: https://www.tuviminhbao.com/resources.html
 

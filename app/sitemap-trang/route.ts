@@ -4,6 +4,7 @@
 export const dynamic = 'force-dynamic';
 
 import { BASE_URL, urlEntry, xmlUrlset, xmlResponse } from '@/lib/seo/sitemap-source';
+import { KHAO_LUAN_CATEGORY_IDS } from '@/lib/content/khao-luan-categories';
 
 // CỐ Ý KHÔNG có lastmod: mình không theo dõi ngày sửa của mấy trang này ở bất
 // cứ đâu, mà bịa một ngày còn tệ hơn bỏ trống — xem lib/seo/lastmod.ts.
@@ -24,7 +25,7 @@ const STATIC_PAGES = [
     '/phuong-phap',           // Tử Vi Nghiệm Chứng — quy trình 5 bước, trang DNA thương hiệu
     '/nguon-du-lieu.html', // ghi công nguồn dữ liệu (bắt buộc theo giấy phép CC BY)
     '/resources.html',
-    '/blog.html',
+    '/van-dap',
     '/menh-kho.html',
     '/ngay-tot',              // ngay-tot hub
     '/xem-ngay-hom-nay',      // hoàng lịch đầy đủ HÔM NAY (thần sát/cửu tinh/bành tổ)
@@ -138,7 +139,12 @@ const NGAY_SINH_AM_PAGES: string[] = (() => {
   return out;
 })();
 
+// 10 trang cụm /van-dap/<danh-mục> (trang 1, không phải /trang/N) — nguồn
+// DUY NHẤT ở lib/content/khao-luan-categories.ts, thêm danh mục mới thì
+// mảng này tự theo, không cần sửa ở đây.
+const VAN_DAP_CAT_PAGES = KHAO_LUAN_CATEGORY_IDS.map((id) => `/van-dap/${id}`);
+
 export async function GET() {
-  const all = [...STATIC_PAGES, ...NGAY_SINH_PAGES, ...NGAY_SINH_AM_PAGES];
+  const all = [...STATIC_PAGES, ...VAN_DAP_CAT_PAGES, ...NGAY_SINH_PAGES, ...NGAY_SINH_AM_PAGES];
   return xmlResponse(xmlUrlset(all.map((p) => urlEntry(BASE_URL + p))));
 }

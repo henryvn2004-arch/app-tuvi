@@ -20,7 +20,11 @@ export async function GET() {
   // `hasUpdatedAt = true` CHỈ cho tu_dien + sach_library — hai bảng duy nhất có
   // cột đó. Hỏi nhầm là PostgREST 400 và mất im lặng cả họ URL.
   const [khaoLuan, masterArticles, tuDien, taiLieu, sach, thuVienMuc] = await Promise.all([
-    fetchAllSlugs('khao_luan'),
+    // `khao_luan` CÓ cột `updated_at` (chú thích cũ ở hàm gọi nói "chỉ tu_dien
+    // + sach_library có cột đó" — đã trôi so với schema thật, xem cột trong
+    // Supabase). Thiếu `true` ở đây làm sửa bài không đổi `lastmod`, Google
+    // không biết mà crawl lại.
+    fetchAllSlugs('khao_luan', true),
     fetchAllSlugs('master_articles'),
     fetchAllSlugs('tu_dien', true),
     fetchAllSlugs('tai_lieu'),

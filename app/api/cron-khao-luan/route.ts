@@ -14,6 +14,7 @@ import { brandCheck } from '@/lib/content/brand-check';
 import { BRAND_FORMAT_RULES } from '@/lib/content/brand-rules';
 import { ARC_SEO_VAN_DAP, HOOK_RULES } from '@/lib/content/viral-core';
 import { initialPublishStatus } from '@/lib/content/publish-filter';
+import { KHAO_LUAN_CATEGORY_IDS } from '@/lib/content/khao-luan-categories';
 
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
@@ -80,7 +81,9 @@ async function ragSearch(topic: string) {
   } catch { return ''; }
 }
 
-const VALID_KL_CATS = ['hon-nhan','gia-dinh','tai-chinh','cong-viec','tinh-cach','van-han','dien-san','quan-he','benh-tat','con-cai'];
+// Danh mục hợp lệ — nguồn DUY NHẤT ở lib/content/khao-luan-categories.ts,
+// dùng CHUNG với hub /van-dap. Đừng khai lại mảng này ở đây.
+const VALID_KL_CATS = KHAO_LUAN_CATEGORY_IDS;
 const MASTER_IDS = ['huyen-khong','tu-nguyen','linh-son','dau-nam','ngoc-tinh','thien-an','thanh-hu','bac-minh','thai-hu','tam-kinh','co-nguyet','linh-co','dieu-khong','nhat-nguyen','tinh-quang'];
 
 async function pickAuthor(): Promise<string> {
@@ -133,7 +136,7 @@ ${HOOK_RULES}
 
 ${BRAND_FORMAT_RULES}
 Trả về JSON thuần (KHÔNG backtick):
-{"title":"Tiêu đề ≤60 ký tự theo luật ở trên","slug":"slug-ascii","excerpt":"Tóm tắt ≤155 ký tự theo luật ở trên","category":"CHỌN 1 TRONG: hon-nhan|gia-dinh|tai-chinh|cong-viec|tinh-cach|van-han|dien-san|quan-he|benh-tat|con-cai","tags":["tag1","tag2"],"featured":false,"content":"markdown 1.200–1.600 ký tự"}`;
+{"title":"Tiêu đề ≤60 ký tự theo luật ở trên","slug":"slug-ascii","excerpt":"Tóm tắt ≤155 ký tự theo luật ở trên","category":"CHỌN 1 TRONG: ${VALID_KL_CATS.join('|')}","tags":["tag1","tag2"],"featured":false,"content":"markdown 1.200–1.600 ký tự"}`;
 
   // Bản cũ tự tay bóc fence rồi `JSON.parse` trần — chính việc phải viết
   // `.replace(/^```json/…)` là bằng chứng model CÓ bọc backtick trong thực tế,

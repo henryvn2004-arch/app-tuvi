@@ -85,7 +85,6 @@ const nextConfig = {
       { source: '/about',               destination: '/about.html'           },
       { source: '/contact',             destination: '/contact.html'         },
       { source: '/resources',           destination: '/resources.html'       },
-      { source: '/blog',                destination: '/blog.html'            },
       { source: '/phuong-phap',         destination: '/phuong-phap.html'     },
       { source: '/payment-success',     destination: '/payment-success.html' },
       { source: '/auth-callback',       destination: '/auth-callback.html'   },
@@ -160,6 +159,18 @@ const nextConfig = {
       // .html). Link cũ trỏ .html vẫn còn ở vài nơi ngoài site (backlink,
       // social) nên giữ redirect 308 thay vì xoá thẳng.
       { source: '/phuong-phap.html', destination: '/phuong-phap',    permanent: true },
+      // `/blog.html` (client fetch, 0 link cho AI crawler thấy — xem
+      // app/van-dap/route.ts) → hub SSR mới. GSC 28 ngày cả site chỉ 16 nhấp
+      // (11 về trang chủ) nên gần như không có equity để mất; `/blog` (rewrite
+      // cũ trỏ .html) cũng dọn về cùng đích, khỏi còn hai đường vào một nội
+      // dung đã xoá.
+      { source: '/blog.html', destination: '/van-dap', permanent: true },
+      { source: '/blog',      destination: '/van-dap', permanent: true },
+      // `khao-luan.html` (bản client-render CŨ, không lọc publish_status —
+      // đã bị SSR route `/api/khao-luan` thay thế từ trước nhưng file tĩnh
+      // vẫn còn phục vụ được thẳng ở `/khao-luan.html`) — xoá file, chặn
+      // bằng redirect trước filesystem, cùng khuôn các dòng trên.
+      { source: '/khao-luan.html', destination: '/van-dap', permanent: true },
     ];
   },
 };

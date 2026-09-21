@@ -257,7 +257,7 @@
   var PHONG_PATHS  = ['/tools/phong-thuy.html','/tools/ban-lam-viec.html','/tools/cua-hang-phong-thuy.html','/tools/bat-trach.html','/kim-lau'];
   var NGAY_PATHS   = ['/ngay-tot','/tools/hoang-dao.html','/tools/ngay-tot.html','/tools/luc-nham.html','/tools/han-nam.html','/tools/chon-ngay-tot.html'];
   var TENCHU_PATHS  = ['/tools/dat-ten-con.html','/tools/dat-ten-doanh-nghiep.html'];
-  var BAIVIET_PATHS = ['/blog.html','/nghien-cuu','/tac-gia','/phuong-phap'];
+  var BAIVIET_PATHS = ['/van-dap','/nghien-cuu','/tac-gia','/phuong-phap'];
   var KP_PATHS = ['/cong-cu','/menh-kho','/ngay-tot','/thu-vien'].concat(TUONG_PATHS, PHONG_PATHS, NGAY_PATHS, TENCHU_PATHS, LAM_DEP_PATHS);
 
   function anyActive(arr) { return arr.some(function(p){ return path === p || path.startsWith(p + '/') || path.startsWith(p); }); }
@@ -540,7 +540,7 @@
     + ddItem('/phuong-phap','shield-check',   'Phương Pháp & Độ Tin Cậy')
     + ddItem('/nghien-cuu', 'file-text',      'Nghiên Cứu Tử Vi')
     + ddItem('/tac-gia',    'user',           'Tác Giả')
-    + ddItem('/blog.html',  'message-circle', 'Khảo Luận')
+    + ddItem('/van-dap',    'message-circle', 'Vấn Đáp')
     + '</div></div>';
 
   var html = '<nav class="topnav">'

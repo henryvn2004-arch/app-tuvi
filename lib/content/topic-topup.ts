@@ -84,7 +84,7 @@ const SURFACES: Record<Surface, SurfaceSpec> = {
       'Truy vấn DIỄN GIẢI: người đã biết cơ bản, muốn hiểu VÌ SAO / CƠ CHẾ / KHÁC NHAU CHỖ NÀO. ' +
       'Ví dụ dạng: "vì sao hai người cùng giờ sinh lại khác số phận", "cung Tài Bạch xấu có nhất định nghèo không".',
   },
-  // → bảng `khao_luan`, hiện tại blog.html (danh sách) + /khao-luan/<slug> (chi tiết)
+  // → bảng `khao_luan`, hiện tại /van-dap (hub theo danh mục) + /khao-luan/<slug> (chi tiết)
   'khao-luan': {
     queueType: 'khao-luan',
     brief: 'Bài Vấn Đáp ngắn ~1.400 ký tự, ngôi thứ BA, không tự xưng.',
