@@ -15,6 +15,7 @@
 // ============================================================
 
 import { createHash } from 'crypto';
+import { clockToBranch } from '@/lib/engine/laso';
 
 export interface ChartBirth {
   hoten?: string;
@@ -35,9 +36,7 @@ const num = (v: unknown, fallback = 0) => (Number.isFinite(Number(v)) ? Number(v
 export function hourIndexOf(b: ChartBirth): number {
   if (b.gioIdx != null && b.gioIdx !== '') return num(b.gioIdx, -1);
   if (b.gioHour != null && b.gioHour !== '') {
-    const h = num(b.gioHour);
-    const m = num(b.gioPhut);
-    return Math.floor((((h * 60 + m + 60) % (24 * 60)) / 120)) % 12;
+    return clockToBranch(num(b.gioHour), num(b.gioPhut));
   }
   return -1;
 }

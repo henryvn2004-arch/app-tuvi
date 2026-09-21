@@ -118,6 +118,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
   </div>
 </div>
 <script src="/tuvi-ansao-engine.js"></script>
+<script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
@@ -133,7 +134,8 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 function getStarElementClass(n){const d=(typeof STAR_DATA!=='undefined')?STAR_DATA[n]:null;if(!d?.element)return'sc-neutral';return{'kim':'sc-kim','mộc':'sc-moc','thủy':'sc-thuy','hỏa':'sc-hoa','thổ':'sc-tho'}[d.element.toLowerCase()]||'sc-neutral'}
 function getStarClass(s){if(s.nhom==='chinh')return'sc-'+(CHINH_TINH_COLOR[s.ten]||'neutral');if(s.hoa==='Lộc')return'sc-hoa-loc';if(s.hoa==='Quyền')return'sc-hoa-quyen';if(s.hoa==='Khoa')return'sc-hoa-khoa';if(s.hoa==='Kỵ')return'sc-hoa-ky';return getStarElementClass(s.ten)}
 function getCungCan(ci,di){return((ci%5)*2+di)%10}
-function hourMinToGioAm(h,m){return Math.floor(((h*60+m+60)%(24*60))/120)%12}
+// Uỷ THẲNG cho VnTimezone (tools-shared/vn-timezone.js) — NGUỒN DUY NHẤT.
+function hourMinToGioAm(h,m){return window.VnTimezone.hourMinToGioIdx(h,m)}
 
 function renderCungCell(palace, dvTuoi, canNamIdx) {
   const dcIdx=CHI.indexOf(palace.diaChi),canIdx=getCungCan(canNamIdx,dcIdx);
