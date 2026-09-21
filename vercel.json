@@ -2,8 +2,10 @@
   "version": 2,
   "crons": [
     { "path": "/api/cron-khao-luan",     "schedule": "0 3 * * *"  },
+    { "path": "/api/cron-khao-luan",     "schedule": "0 7 * * *"  },
     { "path": "/api/cron-khao-luan",     "schedule": "0 11 * * *" },
     { "path": "/api/cron-khao-luan",     "schedule": "0 15 * * *" },
+    { "path": "/api/cron-khao-luan",     "schedule": "0 19 * * *" },
     { "path": "/api/cron-master-write",  "schedule": "0 2 * * *"  },
     { "path": "/api/cron-master-write",  "schedule": "0 6 * * *"  },
     { "path": "/api/cron-master-write",  "schedule": "0 10 * * *" },

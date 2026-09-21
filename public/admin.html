@@ -2603,7 +2603,7 @@ function goToSoon(el, title, sprint, desc) {
 // ── CRON & JOBS ──
 // Registry hiển thị (server /api/payment mới là nguồn "được phép trigger").
 const CRON_JOBS = [
-  { key:'cron-khao-luan',    label:'Viết Khảo Luận',   source:'vercel', schedule:'03·11·15h hằng ngày', sink:'khao_luan → blog',      trigger:true },
+  { key:'cron-khao-luan',    label:'Viết Khảo Luận',   source:'vercel', schedule:'03·07·11·15·19h UTC (10·14·18·22·2h VN)', sink:'khao_luan → /van-dap', trigger:true },
   { key:'cron-master-write', label:'Viết Nghiên Cứu',  source:'vercel', schedule:'02·06·10·16·20h',     sink:'master_articles',       trigger:true },
   { key:'cron-push',         label:'Push (web)',       source:'vercel', schedule:'00:00 hằng ngày',     sink:'edge send-daily-push',  trigger:true },
   { key:'cron-daily-push',   label:'Push (app/FCM)',   source:'vercel', schedule:'00:00 hằng ngày',     sink:'push_tokens (FCM)',     trigger:true },

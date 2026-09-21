@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-347 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+348 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 182 | 720,911 B |
+| `2026-09.md` | 183 | 725,584 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🗣 GEO/đa dạng topic Vấn Đáp — PR 4+5+6/6: 14 danh mục, nguồn cầu chat thật, tăng nhịp cron |
 | 1 | 2026-09 | `2026-09.md` | 🗣 GEO/đa dạng topic Vấn Đáp — PR 1+2/6: phát hành /phuong-phap + hub SSR /van-dap |
 | 1 | 2026-09 | `2026-09.md` | 📈 Pulse tracker sidebar: nâng biên độ số + tách rõ "nhảy" vs "cộng dồn" |
 | 1 | 2026-09 | `2026-09.md` | 💰 "1 Lượng = 500đ" đúng nghĩa (không phải 499) + đảo VNĐ/Lượng thành chính/phụ toàn site |

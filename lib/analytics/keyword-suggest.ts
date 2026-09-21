@@ -44,7 +44,11 @@ const DEFAULTS: KeywordSuggestConfig = {
   enabled: true,
   hl: 'vi',
   gl: 'vn',
-  maxRequests: 180,
+  // 180→300 (2026-09-21): thêm 9 seed + 2 expansion nghi vấn đẩy tổng tổ hợp
+  // lên hẳn — trần cũ để lại quá ít vòng quay cho seed mới trong rotateSeeds().
+  // 300×350ms delayMs ≈ 105s quét thuần, còn dư nhiều so với maxDuration=300s
+  // của route (xem app/api/cron/keyword-suggest/route.ts).
+  maxRequests: 300,
   delayMs: 350,
   // Bộ gốc bám ĐÚNG thực trạng đo được, không phải bốc theo cảm tính:
   //  - 10 truy vấn GSC đọc được tên đều quanh kim lâu / ngày tốt / tử vi <can chi>;
@@ -109,8 +113,31 @@ const DEFAULTS: KeywordSuggestConfig = {
     'sao hạn',
     'đại vận',
     'tiểu hạn',
+    // ── Nới 2026-09-21: dạng NGHI VẤN — câu người ta hỏi AI, không phải cụm
+    // danh từ gõ vào Google. Suggest tự hoàn thành phần còn lại của câu, nên
+    // seed chỉ cần mở đúng cửa nghi vấn; hai bộ (seed mới + expansion mới bên
+    // dưới) cộng dồn, không thay bộ cũ — mảng "độ tin cậy" đo được chỉ chạm
+    // 1,7% kho bài (`docs/nhat-ky/2026-09.md`), gần như trống trước đợt này.
+    'tại sao tử vi',
+    'vì sao tử vi',
+    'có nên xem tử vi',
+    'tử vi có đúng không',
+    'tử vi có chính xác không',
+    'nên tin tử vi',
+    'xem tử vi ở đâu uy tín',
+    'tử vi khác bát tự',
+    'làm sao biết mình hợp',
+    'có nên tin vào tử vi',
   ],
-  expansions: ['', '2026', '2027', 'là gì', 'có tốt không', 'cách tính', 'nam', 'nữ', 'theo ngày sinh', 'chi tiết'],
+  expansions: [
+    '', '2026', '2027', 'là gì', 'có tốt không', 'cách tính', 'nam', 'nữ', 'theo ngày sinh', 'chi tiết',
+    // Nghi vấn — ghép với MỌI seed (cross product, xem collectSuggestions),
+    // hữu ích nhất với seed thuật ngữ cũ: "kim lâu có đúng không". Ghép vào 9
+    // seed nghi vấn mới ở trên ra vài cụm lặp ý ("tử vi có đúng không có đúng
+    // không") — Suggest chỉ trả rỗng cho cụm đó, không hại gì, không đáng để
+    // tách riêng danh sách expansion theo loại seed.
+    'có đúng không', 'có nên tin không',
+  ],
 };
 
 export interface KeywordHit {

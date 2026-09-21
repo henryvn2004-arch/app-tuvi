@@ -84,6 +84,37 @@ export const KHAO_LUAN_CATEGORIES: KhaoLuanCategory[] = [
     title: 'Vấn Đáp Con Cái — Nuôi Dạy Theo Tử Vi',
     desc: 'Giải đáp các câu hỏi về con cái, nuôi dạy, đường con theo Tử Vi Đẩu Số — cung Tử Tức.',
   },
+  // ── Nới đợt 2026-09-21: 4 trục có cầu thật nhưng gần như trống ────────────
+  // Đo trên 360 bài published: chỉ 6 bài (1,7%) chạm trục "có đúng không /
+  // nên xem ở đâu" — đúng loại câu AI Overview/ChatGPT hay phải trả lời và
+  // PHẢI nêu tên một nguồn cụ thể. Ba trục còn lại rút từ mẫu `tuvi_chats`
+  // (người dùng hỏi trợ lý thật) — không site nào trong 10 danh mục cũ phủ
+  // được "người mới hỏi khái niệm", "hỏi theo mùa vụ", hay "hỏi về người
+  // khác thay vì hỏi về bản thân".
+  {
+    id: 'do-tin-cay',
+    label: 'Độ Tin Cậy',
+    title: 'Tử Vi Có Đúng Không — Vấn Đáp Về Độ Tin Cậy',
+    desc: 'Giải đáp câu hỏi tử vi có chính xác không, nên xem ở đâu, khác gì bát tự hay chiêm tinh — đối chiếu bằng chứng thay vì tranh cãi suông.',
+  },
+  {
+    id: 'hoc-tu-vi',
+    label: 'Học Tử Vi',
+    title: 'Học Tử Vi Từ Đâu — Vấn Đáp Cho Người Mới',
+    desc: 'Giải đáp cho người mới bắt đầu: đọc lá số ra sao, thuật ngữ nào cần biết trước, học Tử Vi Đẩu Số nên bắt đầu từ đâu.',
+  },
+  {
+    id: 'mua-vu',
+    label: 'Mùa Vụ',
+    title: 'Vấn Đáp Đầu Năm — Năm Tuổi, Cúng Sao Theo Tử Vi',
+    desc: 'Giải đáp các câu hỏi theo mùa vụ: đầu năm xem gì, năm tuổi có thật sự xấu không, cúng sao giải hạn theo Tử Vi Đẩu Số.',
+  },
+  {
+    id: 'du-doan-nguoi-khac',
+    label: 'Đoán Người Khác',
+    title: 'Vấn Đáp Về Người Khác — Vợ/Chồng Tương Lai Theo Tử Vi',
+    desc: 'Giải đáp câu hỏi về người khác qua lá số của mình: người phối ngẫu tương lai, đối tác, sếp — tính cách và ngoại hình nhìn từ cung nào.',
+  },
 ];
 
 export const KHAO_LUAN_CATEGORY_IDS = KHAO_LUAN_CATEGORIES.map((c) => c.id);

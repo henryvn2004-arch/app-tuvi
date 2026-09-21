@@ -107,9 +107,11 @@ const D = 24 * 60;
  *    ngày thì chẳng mấy chốc bị ngó lơ — hỏng y như khi nó im lặng.
  */
 export const JOBS: JobSpec[] = [
-  // 0/3/11/15 UTC → 10·18·22h VN. Gap lớn nhất là 22h→10h hôm sau = 12 tiếng.
-  { key: 'cron-khao-luan', label: 'Viết Khảo Luận', source: 'vercel', everyMinutes: 12 * H,
-    schedule: '10·18·22h VN hằng ngày', sink: 'khao_luan → blog', path: '/api/cron-khao-luan' },
+  // 3/7/11/15/19 UTC → 10·14·18·22·2h VN. Gap lớn nhất là 22h→10h hôm sau = 8
+  // tiếng (2026-09-21: 3 lịch/ngày → 5, cách đều 4h, để PER_WEEK['khao-luan']
+  // 21→35 có đất chạy — xem lib/content/topic-topup.ts).
+  { key: 'cron-khao-luan', label: 'Viết Khảo Luận', source: 'vercel', everyMinutes: 8 * H,
+    schedule: '10·14·18·22·2h VN hằng ngày', sink: 'khao_luan → /van-dap', path: '/api/cron-khao-luan' },
   { key: 'cron-master-write', label: 'Viết Nghiên Cứu', source: 'vercel', everyMinutes: 6 * H,
     schedule: '03·09·13·17·23h VN', sink: 'master_articles', path: '/api/cron-master-write' },
   { key: 'cron-push', label: 'Push (web)', source: 'vercel', everyMinutes: D,
