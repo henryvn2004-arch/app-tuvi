@@ -426,6 +426,19 @@ export async function streamGeminiTurn(
   suggestions: string[];
   sentText: boolean;
 }> {
+  // 🔴 2026-09-21 (phát hiện lượt sau, khi đo lại hotfix cache ở trên): mọi
+  // vòng gọi tool THỨ HAI trở đi đều rớt 400 "Function call is missing a
+  // thought_signature in functionCall parts" — KHÁC HẲN bug cache phía trên,
+  // đã tồn tại từ trước PR #989, chỉ bị che bởi fallback Anthropic (fail-soft
+  // im lặng "cứu" trải nghiệm nhưng ĐỐT TIỀN: fallback gửi lại TOÀN BỘ context
+  // không cache, đo được 145k–437k input token/lượt, 737–8.675đ/lượt). Đã TRA
+  // THẬT (không đoán): Gemini 3.x đính `thoughtSignature` (chuỗi base64, field
+  // NGANG HÀNG với `functionCall` trong `Part`, xem `Part` interface của
+  // googleapis/js-genai) vào mỗi phần functionCall trả về, và YÊU CẦU đúng
+  // chuỗi đó phải được gửi lại nguyên vẹn khi model-turn chứa functionCall
+  // được ghép vào lịch sử cho vòng sau. Code cũ chỉ giữ {name,args}, làm rớt
+  // field này → vòng 2 luôn hỏng hình dạng request.
+
   // 🔴 2026-09-21: KHÔNG dùng cache tường minh ở đây (đã thử, rút lại) — đo
   // được trên prod thật: Google từ chối thẳng 400 "CachedContent can not be
   // used with GenerateContent request setting system_instruction, tools or
@@ -502,7 +515,7 @@ export async function streamGeminiTurn(
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const functionCalls: { name: string; args: any }[] = [];
+  const functionCalls: { name: string; args: any; thoughtSignature?: string }[] = [];
   const reader = resp.body.getReader();
   const dec = new TextDecoder();
   let buf = '';
@@ -527,7 +540,11 @@ export async function streamGeminiTurn(
             for (const p of parts) {
               if (typeof p.text === 'string') onText(p.text);
               else if (p.functionCall) {
-                functionCalls.push({ name: p.functionCall.name, args: p.functionCall.args || {} });
+                functionCalls.push({
+                  name: p.functionCall.name,
+                  args: p.functionCall.args || {},
+                  thoughtSignature: typeof p.thoughtSignature === 'string' ? p.thoughtSignature : undefined,
+                });
               }
             }
           }
@@ -556,7 +573,11 @@ export async function streamGeminiTurn(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const modelParts: any[] = [];
   if (full.trim()) modelParts.push({ text: full });
-  for (const fc of functionCalls) modelParts.push({ functionCall: { name: fc.name, args: fc.args } });
+  for (const fc of functionCalls)
+    modelParts.push({
+      functionCall: { name: fc.name, args: fc.args },
+      ...(fc.thoughtSignature ? { thoughtSignature: fc.thoughtSignature } : {}),
+    });
 
   const suggestions =
     suppress || markerAt < 0
