@@ -156,7 +156,8 @@ if (!MARK.test(forged)) {
 } else {
   console.log('   ↳ red-team: bản chép tay dựng lại bảng mốc BỊ BẮT ✓');
 }
-const forgedFormula = 'function hourMinToGioAm(h,m){return Math.floor(((h*60+m+60)%(24*60))/120)%12}';
+const forgedFormula =
+  'function hourMinToGioAm(h,m){return Math.floor(((h*60+m+60)%(24*60))/120)%12}';
 if (!FORMULA_MARK.test(forgedFormula)) {
   fail(
     'RED-TEAM THẤT BẠI: mẫu nhận dạng công thức KHÔNG bắt được bản chép tay dựng lại — bộ dò không có răng.'
