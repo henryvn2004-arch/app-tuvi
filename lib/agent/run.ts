@@ -185,6 +185,13 @@ interface TurnMeter {
   usage: LlmUsage;
   model: string;
   t0: number;
+  // Tổng số VÒNG tool-use thật đã chạy trong lượt này — cộng dồn qua CẢ BA
+  // loop (Gemini/Kimi/Anthropic) VÀ mọi lần rơi provider, cùng ổ với `usage`.
+  // Trước bản này `llm_usage` chỉ có TỔNG token/lượt (219k trung bình đo
+  // 2026-09) mà không ai biết nó gồm mấy vòng — nên không đo nổi `chat.max_rounds`
+  // (4) có đang thật sự bị CHẠM hay chỉ là trần thừa. Có trường này rồi mới
+  // đổi trần bằng SỐ ĐO thay vì đoán (xem docs/nhat-ky/2026-09.md).
+  rounds: number;
 }
 
 export async function runAgent(
@@ -203,6 +210,7 @@ export async function runAgent(
     // Đo TRỌN lượt (gồm mọi vòng tool-use và mọi lần rơi provider), vì đó mới
     // là thời gian người dùng thật sự ngồi chờ — không phải một lượt gọi model.
     t0: Date.now(),
+    rounds: 0,
   };
   try {
     return await runAgentInner(req, cfgIn, send, profiles, userId, meter);
@@ -217,7 +225,7 @@ export async function runAgent(
     // và `n` sai thì "trung bình mỗi lượt" sai theo, im lặng.
     const u = meter.usage;
     if (u.input_tokens || u.output_tokens || u.cache_read_input_tokens || u.cache_creation_input_tokens) {
-      void logLlmUsage(req.scenario?.type || 'chat', meter.model, u, Date.now() - meter.t0);
+      void logLlmUsage(req.scenario?.type || 'chat', meter.model, u, Date.now() - meter.t0, meter.rounds, cfgIn.maxRounds);
     }
   }
 }
@@ -618,6 +626,7 @@ async function runAgentInner(
     let anyTextSent = false;
     try {
       for (let round = 0; round <= cfg.maxRounds; round++) {
+        meter.rounds++;
         const forceAnswer = round === cfg.maxRounds; // vòng cuối: bỏ tool để ép trả lời
         const turn = await streamGeminiTurn(system, gContents, forceAnswer ? null : gTools, cfg, send, meterGemini);
         anyTextSent = anyTextSent || turn.sentText;
@@ -692,6 +701,7 @@ async function runAgentInner(
     let anyTextSent = false;
     try {
       for (let round = 0; round <= cfg.maxRounds; round++) {
+        meter.rounds++;
         const forceAnswer = round === cfg.maxRounds; // vòng cuối: ép trả lời, cấm tool
         const turn = await streamKimiTurn(kMessages, forceAnswer ? null : kTools, cfg, send);
         anyTextSent = anyTextSent || turn.sentText;
@@ -756,6 +766,7 @@ async function runAgentInner(
   // "FALLBACK NGƯỢC").
   if (geminiEligible(scenarioType, hasImages, cfg.providerRoutes)) {
     try {
+      meter.rounds++; // prose = một lượt gọi model duy nhất, không có vòng tool-use
       suggestions = await streamGemini(system, convo, cfg, send, meterGemini);
       return {
         toolsUsed,
@@ -813,6 +824,7 @@ async function runAgentInner(
   // nào và chưa stream chữ nào thì fallback sang Gemini vẫn SẠCH.
   const toolsBeforeAnthropic = toolsUsed.length;
   for (let round = 0; round <= cfg.maxRounds; round++) {
+    meter.rounds++;
     const forceAnswer = round === cfg.maxRounds; // vòng cuối: ép trả lời, cấm tool
     const turn = await streamTurn(system, convo, tools, cfg, send, forceAnswer);
     totalUsage.input_tokens += turn.usage.input_tokens;
@@ -838,6 +850,7 @@ async function runAgentInner(
       } else if (cleanSoFar && geminiProseCapable(scenarioType, hasImages)) {
         console.error('[runAgent] Anthropic chết → fallback Gemini (prose):', turn.errorBody);
         try {
+          meter.rounds++; // prose = một lượt gọi model duy nhất
           suggestions = await streamGemini(system, convo, cfg, send, meterGemini);
           return {
             toolsUsed,
