@@ -6,6 +6,7 @@
 
 import type { z } from 'zod';
 import type { McpKeyInfo } from '../auth';
+import { clockToBranch } from '@/lib/engine/laso';
 
 type Rec = Record<string, unknown>;
 
@@ -52,22 +53,18 @@ const CHI_GIO_ALIAS: Record<string, number> = Object.fromEntries(
   Object.entries(_CHI_GIO_RAW).map(([k, v]) => [k.normalize('NFC'), v]),
 );
 
-/** Giờ ĐỒNG HỒ (0–23) → index địa chi giờ (khối 2h, neo giờ lẻ; Tý=23–00:59). */
-export function clockToBranchIdx(hour: number): number {
-  const h = (((Math.floor(hour) % 24) + 24) % 24);
-  return Math.floor(((h + 1) % 24) / 2) % 12;
-}
-
 /**
  * Chuẩn hoá `gio_sinh` (số 0–23 HOẶC tên giờ chi) → index địa chi 0..11.
- * Trả -1 nếu không hiểu.
+ * Trả -1 nếu không hiểu. Giờ đồng hồ đi qua `clockToBranch` của
+ * `lib/engine/laso.ts` — NGUỒN DUY NHẤT, không tự chép lại công thức khối 2h
+ * ở đây (từng có bản chép tay trôi khỏi gốc, xem `docs/nhat-ky/2026-08.md`).
  */
 export function parseGioSinh(gio: number | string): number {
-  if (typeof gio === 'number' && Number.isFinite(gio)) return clockToBranchIdx(gio);
+  if (typeof gio === 'number' && Number.isFinite(gio)) return clockToBranch(gio);
   const raw = String(gio).trim();
   if (raw === '') return -1;
   // Thuần số dạng chuỗi "9", "13" → giờ đồng hồ.
-  if (/^\d{1,2}$/.test(raw)) return clockToBranchIdx(Number(raw));
+  if (/^\d{1,2}$/.test(raw)) return clockToBranch(Number(raw));
   // Tên chi (chuẩn hoá NFC, bỏ tiền tố "giờ/gio" nếu có).
   const key = normVi(raw).replace(/^gi[oờ]\s+/, '').trim();
   if (key in CHI_GIO_ALIAS) return CHI_GIO_ALIAS[key];

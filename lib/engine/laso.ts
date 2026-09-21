@@ -52,15 +52,32 @@ function yearChi(y: number): string {
   return CHI_NAMES[(((y + 8) % 12) + 12) % 12];
 }
 
+// ── Múi giờ VN: NGUỒN DUY NHẤT là public/tools-shared/vn-timezone.js ──
+// Nạp CHÍNH file đó qua `new Function` — cùng kỹ thuật `loadEngine()` bên
+// dưới dùng cho pchip.js/tuvi-ansao-engine.js — để KHÔNG có một bản
+// TypeScript chép lại công thức giờ→chi rồi trôi khỏi bản gốc. Đã cắn đúng
+// lỗi này một lần (`gioIdx*2+1` ở `tuvi-form.js`, xem
+// `docs/nhat-ky/2026-08.md` mục "Xác Định Giờ Sinh").
+type VnTimezoneApi = { hourMinToGioIdx: (h: number, m: number) => number };
+let vnTimezoneCache: VnTimezoneApi | null = null;
+function loadVnTimezone(): VnTimezoneApi {
+  if (vnTimezoneCache) return vnTimezoneCache;
+  const code = readFileSync(join(process.cwd(), 'public', 'tools-shared', 'vn-timezone.js'), 'utf-8');
+  const mod: { exports: Rec } = { exports: {} };
+  new Function('module', code)(mod);
+  vnTimezoneCache = mod.exports as VnTimezoneApi;
+  return vnTimezoneCache;
+}
+
 /**
- * Giờ ĐỒNG HỒ (24h) → index địa chi giờ (0=Tý..11=Hợi) — DETERMINISTIC, server
- * tự tính để KHÔNG để LLM map (đã gặp lỗi LLM chọn 9h35→Thìn thay vì Tỵ).
- * Tý=23:00–00:59, Sửu=01:00–02:59, … Tỵ=09:00–10:59 … (khối 2 giờ, neo giờ lẻ).
- * Phút không đổi khối nên bỏ qua. Ví dụ: 9→Tỵ(5), 13→Mùi(7), 23→Tý(0), 0→Tý(0).
+ * Giờ ĐỒNG HỒ (24h) [+ phút, mặc định 0] → index địa chi giờ (0=Tý..11=Hợi) —
+ * DETERMINISTIC, server tự tính để KHÔNG để LLM map (đã gặp lỗi LLM chọn
+ * 9h35→Thìn thay vì Tỵ). Tý=23:00–00:59, Sửu=01:00–02:59, … Tỵ=09:00–10:59 …
+ * (khối 2 giờ, neo giờ lẻ). Ví dụ: 9→Tỵ(5), 13→Mùi(7), 23→Tý(0), 0→Tý(0).
  */
-export function clockToBranch(hour: number): number {
+export function clockToBranch(hour: number, minute = 0): number {
   const h = (((Math.floor(hour) % 24) + 24) % 24);
-  return Math.floor(((h + 1) % 24) / 2) % 12;
+  return loadVnTimezone().hourMinToGioIdx(h, minute);
 }
 
 // ── Engine loader (singleton) ───────────────────────────────

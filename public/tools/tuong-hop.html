@@ -265,11 +265,14 @@ function calculate(){
 window.calculate=calculate;
 })();
 </script>
+<script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script>
 // ── Phân tích sâu theo lá số — dùng CHUNG engine public/tuong-hop.js (như /app/tuong-hop). ──
-// Lazy-load engine khi bấm để trang SEO nhẹ. hourMinToGioAm inline (khỏi nạp laso-chart.js).
+// Lazy-load engine khi bấm để trang SEO nhẹ (khỏi nạp laso-chart.js) — nhưng
+// vn-timezone.js (3.8KB, không phụ thuộc gì) nạp eager để hourMinToGioAm uỷ
+// thẳng cho NGUỒN DUY NHẤT, không tự chép công thức giờ→chi ở đây nữa.
 (function(){
-  function hourMinToGioAm(h,m){ return Math.floor((((h*60+m+60)%(24*60))/120))%12; }
+  function hourMinToGioAm(h,m){ return window.VnTimezone.hourMinToGioIdx(h,m); }
   ['A','B'].forEach(function(k){
     var hh=document.getElementById('dHh'+k),opt='<option value="">Giờ</option>';
     for(var h=0;h<=23;h++)opt+='<option value="'+h+'">'+String(h).padStart(2,'0')+':00</option>';
