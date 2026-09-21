@@ -9,7 +9,8 @@
 export const dynamic = 'force-dynamic';
 export const maxDuration = 15;
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { logAiCrawlerHit } from '@/lib/seo/ai-crawler-log';
 import {
   BASE_URL,
   KHAO_LUAN_CATEGORIES,
@@ -27,7 +28,8 @@ import {
   type KhaoLuanRow,
 } from './_shared';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  logAiCrawlerHit(request.headers.get('user-agent'), '/van-dap');
   const rows = await fetchPublished();
 
   const cutoff = Date.now() - RECENT_DAYS * 86400_000;
@@ -112,6 +114,7 @@ ${renderHead({ title, desc, url, schemas })}
   <p class="vd-sub">Những câu hỏi thật về hôn nhân, tiền bạc, sự nghiệp, vận hạn — giải đáp theo Tử Vi Đẩu Số cổ pháp, đối chiếu với dữ liệu cuộc đời thực đã kiểm chứng.</p>
   <input class="vd-search" id="search-input" type="text" placeholder="Bạn đang thắc mắc điều gì? (tình cảm, sự nghiệp, vận hạn…)">
   <div class="vd-chips">${chipsHtml}</div>
+  <p style="font-size:12px;color:var(--text-lt);margin-top:14px">Câu hỏi về tài khoản, thanh toán, Lượng? Xem <a href="/faqs.html" style="color:var(--blue)">Câu Hỏi Thường Gặp</a>.</p>
 </div>
 <div class="vd-wrap">
   ${recentHtml}
