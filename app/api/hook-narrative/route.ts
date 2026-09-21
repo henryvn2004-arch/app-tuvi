@@ -1,9 +1,14 @@
 // app/api/hook-narrative/route.ts
 // POST /api/hook-narrative — "tầng hook kể chuyện", dùng CHUNG cho mọi tool có
-// tầng hook (`public/tools-shared/hook-layer.js`). Đây là lớp NÓI THÊM đặt
-// LÊN TRÊN facts deterministic đã có (`HookFacts.*` phía client) — KHÔNG thay
-// thế chúng: hết quota/lỗi mạng/parse hỏng → trả `{allowed:false}`, client tự
-// lùi về khối hkl-fact cũ (xem hook-layer.js `mount()`), KHÔNG báo lỗi.
+// tầng hook (`public/tools-shared/hook-layer.js`). `{allowed:false, reason}`
+// KHÔNG lùi về fact-card deterministic nữa (bỏ hẳn 2026-09-21) — client
+// (`HookLayer.run()`) tự rẽ: `reason` là cầu dao lượt xem trước (`key_cap`/
+// `ip_cap`/`global_cap`) → banner mời đăng ký/nạp Lượng; lý do khác (lỗi
+// mạng/LLM/parse hỏng) → ẨN HẲN khối, không báo lỗi.
+//
+// User đã đăng nhập VÀ còn Lượng > 0 trong ví → BỎ QUA cầu dao 3-lượt-đời,
+// không trừ tiền (xem đoạn gọi `getBalance` bên dưới) — cầu dao chỉ còn áp
+// cho khách chưa đăng nhập hoặc đã đăng nhập mà ví rỗng.
 //
 // Route CHỦ ĐỘNG generic theo `facts` chứ không đọc riêng lá số của tool nào —
 // cùng một bộ facts (đã chốt bởi `HookFacts.*` của tool đó) thì luôn ra cùng
@@ -24,6 +29,7 @@ import { logLlmUsage, logLlmParseFail } from '@/lib/agent/usage';
 import { previewGate, previewIpHash } from '@/lib/billing/anon-preview';
 import { previewCacheGet, previewCachePut } from '@/lib/llm/preview-cache';
 import { authUserFromRequest } from '@/lib/api/tool-helpers';
+import { getBalance } from '@/lib/billing/credits';
 import { parseLlmJson } from '@/lib/llm/json';
 import { HOOK_NARRATIVE_SYSTEM, HOOK_NARRATIVE_SCHEMA, buildHookNarrativePrompt, type HookFactInput } from '@/lib/agent/hook-prompt';
 
@@ -135,8 +141,18 @@ export async function POST(request: NextRequest) {
 
   const auth = await authUserFromRequest(request);
   const pKey = 'error' in auth ? clean(body.anonId, 80) : auth.user.id;
-  const gate = await previewGate(pKey, previewIpHash(request), toolId);
-  if (!gate.allowed) return ok({ allowed: false, reason: gate.reason });
+
+  // User đã đăng nhập VÀ còn Lượng trong ví → bỏ qua hẳn cầu dao 3-lượt-đời
+  // (`preview.free_runs`), không trừ tiền — tầng này là phần thưởng đi kèm
+  // của người đã có Lượng, không phải sản phẩm bán riêng. Cầu dao chỉ còn áp
+  // cho khách CHƯA đăng nhập hoặc đã đăng nhập mà ví rỗng (Henry chốt
+  // 2026-09-21, sau khi chính tài khoản mình bị chặn bởi cầu dao dùng
+  // CHUNG cho cả anon lẫn đã trả tiền).
+  const hasBalance = 'error' in auth ? false : (await getBalance(auth.user.id)) > 0;
+  if (!hasBalance) {
+    const gate = await previewGate(pKey, previewIpHash(request), toolId);
+    if (!gate.allowed) return ok({ allowed: false, reason: gate.reason });
+  }
 
   const prompt = buildHookNarrativePrompt(toolLabel, facts);
   const ask = async (nudge: boolean) => {

@@ -1,50 +1,54 @@
 /**
  * hook-layer.js — Tử Vi Minh Bảo
- * `HookLayer.mount(host, spec)` — dựng khối hook (fact + chart + gate) lên
- * đầu trang. Load SAU `hook-charts.js` (không bắt buộc `hook-facts.js`, vì
- * `spec.facts`/`spec.charts` có thể đến thẳng từ field `hook` server trả về).
  *
- * `HookLayer.upgrade(host, spec, data)` — NÂNG CẤP khối vừa `mount()` xong
- * (fact card khô) thành template "Preview Highlight" (banner + 3 box kể
- * chuyện), gọi SAU khi `POST /api/hook-narrative` trả về `data` (xem
- * `mountHook()` ở app-luan-giai.html). CỐ Ý là bước RIÊNG, không gộp vào
- * `mount()`: `mount()` phải chạy XONG và HIỆN NGAY (0 mạng, đúng luật cũ),
- * `upgrade()` chỉ thay ruột nếu/khi tầng kể chuyện (có gọi LLM, có thể hết
- * quota/lỗi mạng/parse hỏng) trả về được. Hỏng thì `upgrade()` không được gọi
- * — khối cũ đứng nguyên, KHÔNG bao giờ trắng trang.
+ * `HookLayer.run(host, spec)` — CỬA DUY NHẤT cho tầng "hook kể chuyện":
+ * hiện spinner chờ, gọi `POST /api/hook-narrative`, rồi rơi vào ĐÚNG MỘT
+ * trong ba trạng thái cuối — KHÔNG còn khối fact-card deterministic cũ làm
+ * trạng thái chờ/nền (Henry chốt 2026-09-21: "bỏ luôn cái highlight
+ * deterministic cũ luôn đi" sau khi phát hiện quota-hết lặng lẽ lùi về đúng
+ * khối đó, trông như tính năng mới chưa chạy):
+ *   1. `allowed:true`  → template "Preview Highlight" (banner + N box kể
+ *      chuyện) — xem `_renderNarrative`.
+ *   2. `allowed:false` với `reason` là cầu dao lượt xem trước
+ *      (`key_cap`/`ip_cap`/`global_cap`) → banner mời đăng ký (chưa đăng
+ *      nhập) hoặc mời nạp Lượng (đã đăng nhập, hết lượt) — xem
+ *      `_renderGateOnly`. KHÔNG BAO GIỜ gọi API lần hai tự động; bấm nút mới
+ *      thử lại (đăng ký xong = user_id mới = quota mới).
+ *   3. Mọi lý do khác (`llm_error`/`parse_error`/`disabled`/`error`/mạng
+ *      hỏng) → ẨN HẲN khối, không hiện gì — đây là lớp NÓI THÊM tuỳ chọn,
+ *      không phải nội dung cốt lõi, nên lỗi kỹ thuật thì lặng lẽ biến mất
+ *      thay vì hiện một khối cũ trông như sản phẩm dở dang.
  *
- * `data.boxes` PHẢI cùng độ dài và ĐÚNG THỨ TỰ với `spec.facts` đã đưa cho
- * `/api/hook-narrative` — `upgrade()` ghép `data.boxes[i]` với `spec.facts[i]`
- * để suy icon (server không trả icon, xem `_iconFor`).
- *
- * KHÔNG mở đường tiền mới: nút gate chỉ gọi `spec.gate.onUnlock()` — đúng quy
- * ước đã có ở `TuviPaywall.wireSectionLocks` (trang tự bọc `requireCredits`
- * bên trong `onUnlock`, xem `initiateLuanGiaiChuyenSau` ở app-luan-giai.html).
- * `HookLayer` không tự gọi `TuviPaywall.requireCredits` để khỏi có HAI chỗ
- * cùng quyết định slug/giá — dễ trôi khỏi nhau như đã cắn với giá hiển thị.
+ * Phía server (`app/api/hook-narrative/route.ts`) tự BỎ QUA cầu dao 3-lượt-
+ * đời cho user đã đăng nhập VÀ còn số dư Lượng > 0 — không giới hạn, không
+ * trừ tiền (tầng này là phần thưởng đi kèm, không phải sản phẩm bán riêng).
+ * Cầu dao 3-lượt-đời (`preview.free_runs`, `app_config`) chỉ áp cho khách
+ * CHƯA đăng nhập hoặc đã đăng nhập mà ví rỗng.
  *
  * `HookLayer.loadCensus()` nạp `public/laso-census.json` (một lần, cache theo
  * Promise) — trang tự gọi TRƯỚC khi tính `HookFacts.tuvi.cachCucHiem`/
- * `percentileOfDaiVan`, rồi mới `mount()`. `mount()` không tự await census để
- * giữ API đồng bộ và không ép mọi trang phải cần tới bảng này.
+ * `percentileOfDaiVan`, rồi mới build `spec.facts` cho `run()`.
+ *
+ * ⚠️ Chart (`spec.charts`, vd hexRadar/lifeArc) KHÔNG hiện lại ở bản kể
+ * chuyện — tradeoff đã chấp nhận từ bản `upgrade()` cũ (xem git history
+ * app-van-han-nam.html): văn xuôi tả lại đúng đỉnh/đáy đó, khỏi vẽ trùng.
+ *
+ * `HookLayer.mount(host, spec)` VẪN giữ (KHÔNG xoá) — 6 trang tướng thuật/
+ * làm đẹp (da-lieu-ai, kieu-toc, mau-sac-hop-menh, personal-color, trang-diem,
+ * trang-phuc-theo-ngay) dùng NÓ MỘT MÌNH, không ghép narrative, không có
+ * paywall để hé — đổi hành vi của `mount()` là đổi luôn 6 trang đó ngoài ý
+ * định. Phạm vi đổi lần này CHỈ nằm ở luồng `run()`.
  */
 window.HookLayer = (function () {
   'use strict';
 
   // ── Nạp public/laso-census.json (một lần, cache theo Promise) ──────────
-  // File TĨNH sinh bởi `scripts/build-laso-census.mjs` — quét hết 518.400 lá
-  // số có thể có, không phụ thuộc user nào, nên hợp browser HTTP cache như
-  // mọi asset tĩnh khác (`public/cach_cuc_all.json` cùng kiểu). ĐÂY LÀ
-  // `fetch()` CỦA TRÌNH DUYỆT cho một file public — KHÔNG phải fetch phía
-  // server tới Supabase, nên luật "mọi GET Supabase phải cache:'no-store'"
-  // của CLAUDE.md không áp ở đây; ngược lại, muốn trình duyệt TỰ cache lại
-  // đúng file này giữa các lượt xem trang.
   var _censusPromise = null;
   function loadCensus() {
     if (!_censusPromise) {
       _censusPromise = fetch('/laso-census.json')
         .then(function (r) { return r.ok ? r.json() : null; })
-        .catch(function () { return null; }); // mạng hỏng → null, phía gọi tự ẩn khối cần census
+        .catch(function () { return null; });
     }
     return _censusPromise;
   }
@@ -55,13 +59,6 @@ window.HookLayer = (function () {
 
   var TONE_CLASS = { good: 'hkl-good', bad: 'hkl-bad', neutral: 'hkl-neutral' };
 
-  // `f.source` (vd "engine · cungScores['Tử Tức'].tong") KHÔNG còn render —
-  // Henry chỉ ra 2026-08-28 nó đọc như code bị lộ ra ngoài chứ không như một
-  // trích dẫn đáng tin (nhiều chỗ còn tệ hơn, vd "NH_COLORS['+na+']" — lộ cả
-  // dấu nối chuỗi). ~20 file `mountHook()` khắp site vẫn truyền field này vào
-  // `facts` — CỐ Ý không dọn, vì field vô hại khi không ai đọc nó nữa (chỉ
-  // nằm trong object JS, không vào DOM); dọn hết 20 chỗ ngoài phạm vi việc
-  // đang sửa. Field mới thêm SAU NGÀY NÀY thì khỏi cần viết `source` nữa.
   function _fact(f) {
     var toneCls = TONE_CLASS[f.tone] || TONE_CLASS.neutral;
     var score = typeof f.value === 'number'
@@ -76,16 +73,6 @@ window.HookLayer = (function () {
     );
   }
 
-  // `c.data` truyền THẲNG làm tham số duy nhất cho `HookCharts[c.type]()` —
-  // PHẢI đúng shape hàm đó đợi (đọc chữ ký từng hàm trong hook-charts.js),
-  // KHÔNG phải mảng/giá trị thô:
-  //   lifeArc:      { segments: [...] }
-  //   hexRadar:     { dims: [...] }
-  //   rarityDots:   { highlightIndex, caption }
-  //   percentileBar:{ value, caption }
-  // Bắt được đúng lỗi này khi test thật trên app-luan-giai.html: truyền
-  // mảng thô → hàm đọc `o.segments`/`o.dims` ra `undefined` → tự trả rỗng,
-  // KHÔNG throw — khối chart lặng lẽ biến mất mà không có lỗi console nào.
   function _chart(c) {
     if (!c || !c.data || !window.HookCharts || typeof window.HookCharts[c.type] !== 'function') return '';
     var svg = window.HookCharts[c.type](c.data);
@@ -103,17 +90,12 @@ window.HookLayer = (function () {
       (g.tieuDe ? '<b>' + esc(g.tieuDe) + '</b>' : '') +
       (items ? '<ul class="hkl-gate-ul">' + items + '</ul>' : '');
     if (typeof g.href === 'string') {
-      // Cầu nối sang tool khác (tool miễn phí, không có đường tiền để gọi) —
-      // xem Pha 7 workplan. Không gắn `data-hkl-unlock`, không tính unlock_click.
       return '<div class="hkl-gate">' + inner + '<a class="hkl-gate-btn" href="' + esc(g.href) + '">' + ctaLabel + ' →</a></div>';
     }
     return '<div class="hkl-gate">' + inner +
       '<button type="button" class="hkl-gate-btn" data-hkl-unlock>' + ctaLabel + priceSpan + ' →</button></div>';
   }
 
-  // Tên cung → icon `nav.js` (bộ 88 icon lucide-static đã có sẵn trong repo,
-  // KHÔNG bịa icon ngoài bộ này — xem CLAUDE.md luật Icon). Đúng CHÍNH TẢ
-  // `TEN_CUNG` của public/tuvi-ansao-engine.js — sai một dấu là rơi về mặc định.
   var CUNG_ICON = {
     'Mệnh': 'user', 'Phụ Mẫu': 'users', 'Phúc Đức': 'sparkles', 'Điền Trạch': 'home',
     'Quan Lộc': 'briefcase', 'Nô Bộc': 'handshake', 'Thiên Di': 'compass',
@@ -131,12 +113,6 @@ window.HookLayer = (function () {
     return 'sparkles';
   }
 
-  /**
-   * Dựng template "Preview Highlight" — banner (tag/tiêu đề/quote) + N box.
-   * `data` = kết quả `POST /api/hook-narrative` (đã qua allowlist server, chỉ
-   * còn chuỗi). `facts`/`toolLabel`/`illus` đến từ chính `spec` mà `mount()`
-   * đã nhận — dùng lại chứ không suy thêm gì mới ở đây.
-   */
   function _narrativeHtml(data, facts, toolLabel, illus) {
     var boxesHtml = (data.boxes || []).map(function (b, i) {
       var f = facts[i];
@@ -181,13 +157,15 @@ window.HookLayer = (function () {
 
   /** Xem chú thích đầu file. `illus` (tuỳ chọn) = `{url}` do trang tự tính
    *  (vd `IllusMatch.illusUrlForPhan`) — file này không tự suy ảnh minh hoạ. */
-  function upgrade(host, spec, data) {
-    if (!host || !spec || !data || !Array.isArray(data.boxes)) return;
-    var facts = (Array.isArray(spec.facts) ? spec.facts : []).filter(Boolean);
-    if (data.boxes.length !== facts.length) return; // shape lệch — giữ nguyên khối cũ, không đoán ghép
-    _ensureCss();
+  function _renderNarrative(host, spec, data, facts) {
+    if (!data || !Array.isArray(data.boxes) || data.boxes.length !== facts.length) {
+      host.innerHTML = '';
+      host.style.display = 'none';
+      return;
+    }
     _ensureNarrativeCss();
     var gateHtml = _gate(spec.gate, spec.tool);
+    host.style.display = '';
     host.innerHTML = '<div class="hkl-block hkl-narrative">' +
       _narrativeHtml(data, facts, spec.toolLabel || spec.tool || '', spec.illus) +
       gateHtml +
@@ -206,10 +184,97 @@ window.HookLayer = (function () {
         spec.gate.onUnlock();
       });
     }
-    // KHÔNG bắn lại `preview_shown` — `mount()` đã bắn đúng một lần cho lượt
-    // xem này; `upgrade()` chỉ đổi RUỘT của cùng một lượt hiện, bắn thêm là đếm trùng.
+    try {
+      if (window.Track) window.Track.event('preview_shown', { tool_id: spec.tool || '', meta: { from: 'hook-narrative' } });
+    } catch (e) { /* đo hỏng không được chặn hiện khối */ }
+    // `spec.onNarrative` (tuỳ chọn) — trang tự làm thêm việc CHỈ khi bản kể
+    // chuyện thật sự lên (vd app-luan-giai.html ẩn 2 box "Giới thiệu"/"Bản
+    // luận giải mẫu" ở cột phụ vì đã có nội dung thật thay thế).
+    if (typeof spec.onNarrative === 'function') {
+      try { spec.onNarrative(); } catch (e) { /* lỗi ở trang gọi không được vỡ khối hook */ }
+    }
   }
 
+  /** Banner "hết lượt xem trước" — thay hẳn chỗ khối hook đứng, KHÔNG gọi lại
+   *  API tự động. `loggedIn` quyết định lời mời: chưa đăng nhập → đăng ký
+   *  (user_id mới = quota mới); đã đăng nhập (ví rỗng) → nạp Lượng (ví >0 thì
+   *  route đã bỏ qua cầu dao này từ đầu, không bao giờ tới nhánh này). */
+  function _gateOnlyHtml(loggedIn) {
+    var title = loggedIn ? 'Đã dùng hết lượt xem trước miễn phí' : 'Đã dùng hết lượt xem trước miễn phí';
+    var desc = loggedIn
+      ? 'Nạp Lượng để xem phần mở đầu nổi bật này không giới hạn ở mọi công cụ trên trang.'
+      : 'Đăng ký tài khoản miễn phí để có thêm lượt xem trước — hoặc nạp Lượng để xem không giới hạn ngay.';
+    var ctaLabel = loggedIn ? 'Nạp Lượng →' : 'Đăng ký miễn phí →';
+    var attr = loggedIn ? 'data-hkl-topup' : 'data-hkl-signup';
+    return '<div class="hkl-block hkl-gateonly">' +
+      '<div class="hkl-go-t"><span data-icon="sparkles"></span>' + esc(title) + '</div>' +
+      '<div class="hkl-go-d">' + esc(desc) + '</div>' +
+      '<button type="button" class="hkl-gate-btn" ' + attr + '>' + esc(ctaLabel) + '</button>' +
+    '</div>';
+  }
+
+  function _renderGateOnly(host, spec) {
+    _ensureNarrativeCss();
+    var loggedIn = !!(window.Auth && window.Auth.isLoggedIn());
+    host.style.display = '';
+    host.innerHTML = _gateOnlyHtml(loggedIn);
+    if (window.mountIcons) window.mountIcons(host);
+    var btnSignup = host.querySelector('[data-hkl-signup]');
+    if (btnSignup) {
+      btnSignup.addEventListener('click', function () {
+        if (window.Auth && typeof window.Auth.require === 'function') {
+          window.Auth.require(function () { run(host, spec); }); // đăng ký xong = user_id mới = quota mới, thử lại luôn
+        }
+      });
+    }
+    var btnTopup = host.querySelector('[data-hkl-topup]');
+    if (btnTopup) {
+      btnTopup.addEventListener('click', function () { location.href = '/topup.html'; });
+    }
+  }
+
+  function _pendingHtml() {
+    return '<div class="hkl-pending"><span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span></div>';
+  }
+
+  /** Cửa DUY NHẤT cho tầng hook kể chuyện — xem chú thích đầu file. */
+  function run(host, spec) {
+    if (!host || !spec) return;
+    var facts = (Array.isArray(spec.facts) ? spec.facts : []).filter(Boolean);
+    if (facts.length < 2) { host.innerHTML = ''; host.style.display = 'none'; return; }
+    _ensureNarrativeCss();
+    host.style.display = '';
+    host.innerHTML = _pendingHtml();
+
+    var tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
+    var headers = { 'Content-Type': 'application/json' };
+    if (tk) headers['Authorization'] = 'Bearer ' + tk;
+    var body = {
+      toolId: spec.tool,
+      toolLabel: spec.toolLabel || spec.tool,
+      anonId: (window.TuviPaywall && window.TuviPaywall.previewAnonId) ? window.TuviPaywall.previewAnonId() : '',
+      facts: facts.map(function (f) { return { title: f.title, body: f.body, tone: f.tone, caption: f.caption }; }),
+    };
+    fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data && data.allowed) {
+          _renderNarrative(host, spec, data, facts);
+        } else if (data && (data.reason === 'key_cap' || data.reason === 'ip_cap' || data.reason === 'global_cap')) {
+          _renderGateOnly(host, spec);
+        } else {
+          host.innerHTML = '';
+          host.style.display = 'none';
+        }
+      })
+      .catch(function () {
+        host.innerHTML = '';
+        host.style.display = 'none';
+      });
+  }
+
+  /** GIỮ NGUYÊN cho 6 trang tướng thuật/làm đẹp dùng MỘT MÌNH (không ghép
+   *  narrative) — xem chú thích đầu file. KHÔNG dùng hàm này cho luồng mới. */
   function mount(host, spec) {
     if (!host || !spec) return;
     var facts = (Array.isArray(spec.facts) ? spec.facts : []).filter(Boolean);
@@ -238,8 +303,6 @@ window.HookLayer = (function () {
         spec.gate.onUnlock();
       });
     }
-    // Khối hook dựng xong là hiện NGAY (không có trạng thái ẩn/hiện như
-    // `sectionLockHtml`) — đúng thời điểm "tường đã hiện" để đo funnel.
     try {
       if (window.Track) window.Track.event('preview_shown', { tool_id: spec.tool || '', meta: { from: 'hook' } });
     } catch (e) { /* đo hỏng không được chặn hiện tường */ }
@@ -284,15 +347,23 @@ window.HookLayer = (function () {
     document.head.appendChild(st);
   }
 
-  // CSS riêng cho template "Preview Highlight" (`upgrade()`) — tách khỏi
-  // `_ensureCss()` để khối fact-card cũ (`mount()`) không phải tải thêm CSS nó
-  // không dùng khi tầng kể chuyện chưa kịp trả về (đường phổ biến nhất).
+  // CSS cho `run()` (spinner chờ / banner mời đăng ký-nạp Lượng / template
+  // "Preview Highlight") — dùng chung `.hkl-block`/`.hkl-gate*` của `_ensureCss()`
+  // nên gọi cả hai, không lặp lại các rule đó ở đây.
   var _narrativeCssInjected = false;
   function _ensureNarrativeCss() {
     if (_narrativeCssInjected) return;
     _narrativeCssInjected = true;
+    _ensureCss();
     var st = document.createElement('style');
     st.textContent =
+      '.hkl-pending{display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px}' +
+      '.hkl-gateonly{text-align:center;padding:26px 20px}' +
+      '.hkl-go-t{display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--serif);' +
+        'font-size:15.5px;font-weight:700;color:var(--heading);margin-bottom:8px}' +
+      '.hkl-go-t svg{width:18px;height:18px;color:var(--gold-soft)}' +
+      '.hkl-go-d{font-size:13px;color:var(--text-mid);line-height:1.65;max-width:440px;margin:0 auto 16px}' +
+      '.hkl-gateonly .hkl-gate-btn{padding:11px 26px}' +
       '.hkl-narrative{max-width:none}' +
       '.hkl-nb-banner{display:flex;flex-wrap:wrap;gap:20px;margin-bottom:18px}' +
       '.hkl-nb-left{flex:1 1 320px;min-width:0}' +
@@ -324,5 +395,5 @@ window.HookLayer = (function () {
     document.head.appendChild(st);
   }
 
-  return { mount: mount, upgrade: upgrade, loadCensus: loadCensus };
+  return { run: run, mount: mount, loadCensus: loadCensus };
 })();
