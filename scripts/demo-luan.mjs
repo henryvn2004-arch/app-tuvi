@@ -68,9 +68,20 @@ const starName = (s) => (typeof s === 'object' ? s.ten || '' : s || '');
 // CÙNG bộ `_CT_SET` (public/tuvi-laso-format.js) + extractLasoContext (lib/agent/
 // prompts.ts) — ba bản, đổi một chỗ nhớ đổi cả ba.
 const CHINH_TINH_SET = new Set([
-  'Tử Vi', 'Thiên Cơ', 'Thái Dương', 'Vũ Khúc', 'Thiên Đồng', 'Liêm Trinh',
-  'Thiên Phủ', 'Thái Âm', 'Tham Lang', 'Cự Môn', 'Thiên Tướng', 'Thiên Lương',
-  'Thất Sát', 'Phá Quân',
+  'Tử Vi',
+  'Thiên Cơ',
+  'Thái Dương',
+  'Vũ Khúc',
+  'Thiên Đồng',
+  'Liêm Trinh',
+  'Thiên Phủ',
+  'Thái Âm',
+  'Tham Lang',
+  'Cự Môn',
+  'Thiên Tướng',
+  'Thiên Lương',
+  'Thất Sát',
+  'Phá Quân',
 ]);
 const hasChinhTinh = (text) => {
   for (const s of CHINH_TINH_SET) if (text.includes(s)) return true;
@@ -128,7 +139,9 @@ function buildContext(ls, variant) {
       ctx += '  Tam hợp: ' + tamHopStr + '\n';
       const xung = p.xungChieuCung;
       if (xung) {
-        const xungCs = hasTuanTriet(xung) ? '(bị Tuần/Triệt)' : (xung.majorStars || []).map(starFmt).join(' ') || 'trống';
+        const xungCs = hasTuanTriet(xung)
+          ? '(bị Tuần/Triệt)'
+          : (xung.majorStars || []).map(starFmt).join(' ') || 'trống';
         ctx += `  Xung chiếu: ${xung.cungName}(${xung.diaChi}):${xungCs}\n`;
       }
     }
