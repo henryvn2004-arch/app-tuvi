@@ -195,12 +195,23 @@ export async function logLlmParseFail(
  * token và tiền, KHÔNG có trường thời lượng nào, nên không tool nào biết mình
  * chạy bao lâu; con số "45–60 giây" duy nhất đang có là suy gián tiếp từ khoảng
  * cách hai mốc log của hai pha chạy song song — mẹo chỉ dùng được cho đúng tool
- * đó. Có trường này thì mới đặt ETA bằng SỐ ĐO thay vì bằng phỏng đoán. */
+ * đó. Có trường này thì mới đặt ETA bằng SỐ ĐO thay vì bằng phỏng đoán.
+ *
+ * `rounds`/`maxRounds` (chỉ rail — route khác không truyền) — tổng số VÒNG
+ * tool-use thật lượt này đã chạy, và trần `chat.max_rounds` tại thời điểm ghi.
+ * Trước hai trường này, mỗi dòng `llm_usage` của rail chỉ có TỔNG token/lượt
+ * (219k trung bình, đo 2026-09) mà không ai biết nó gồm mấy vòng gọi model —
+ * nên không đo nổi trần 4 có đang thật sự bị CHẠM hay chỉ là dư thừa. `rounds
+ * === maxRounds+1` là dấu hiệu lượt đó bị trần chặn (đã dùng hết, có thể còn
+ * muốn gọi tool thêm mà bị ép trả lời) — cần cho quyết định hạ trần bằng SỐ
+ * ĐO thay vì đoán. */
 export async function logLlmUsage(
   toolId: string,
   model: string,
   usage: LlmUsage,
   durationMs?: number,
+  rounds?: number,
+  maxRounds?: number,
 ): Promise<void> {
   if (!SUPABASE_URL || !SUPABASE_KEY) return;
   if (!usage.input_tokens && !usage.output_tokens) return; // không có gì để ghi
@@ -221,6 +232,8 @@ export async function logLlmUsage(
           ...usage,
           cost_vnd: calcCostVnd(model, usage),
           ...(durationMs != null ? { duration_ms: Math.round(durationMs) } : {}),
+          ...(rounds != null ? { rounds } : {}),
+          ...(maxRounds != null ? { max_rounds: maxRounds } : {}),
         },
       }),
     });
