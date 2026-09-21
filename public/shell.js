@@ -334,7 +334,7 @@
       if (!el) {
         el = document.createElement('script');
         el.id = '_tvmb_prices_js';
-        el.src = '/tool-prices.js?v=8';
+        el.src = '/tool-prices.js?v=9';
         document.head.appendChild(el);
       }
       el.addEventListener('load', function () { resolve(); });

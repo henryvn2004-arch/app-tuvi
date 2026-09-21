@@ -89,6 +89,12 @@ window.ToolPrices = (function () {
    */
   function _saleActive(row) {
     if (!row) return false;
+    // `row.sale_credits == null` PHẢI kiểm TRƯỚC khi ép kiểu — `Number(null)`
+    // là `0`, và `0` lọt qua `isFinite` (đã cắn thật: 2026-09-21, mọi tool có
+    // `sale_credits` bỏ trống bị hiện giá 0đ vì bị coi là đang khuyến mãi về
+    // giá `Number(null)`). `lib/billing/pricing.ts::effectivePrice()` phía
+    // server đã kiểm `== null` trước — bản client này lệch, nay khớp lại.
+    if (row.sale_credits == null) return false;
     var sale = Number(row.sale_credits);
     var full = Number(row.credits);
     if (!isFinite(sale) || !isFinite(full) || sale >= full) return false;
