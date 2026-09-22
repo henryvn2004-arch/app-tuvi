@@ -136,6 +136,36 @@ function readUsage(evt: any): GeminiUsage | null {
   };
 }
 
+/**
+ * Đẩy usage ra NGOÀI đúng MỘT lần cho MỘT lời gọi API.
+ *
+ * 🔴 VÌ SAO TÁCH RA THÀNH HÀM: trước bản này hai vòng lặp stream gọi thẳng
+ * `onUsage(u)` ngay trong thân vòng, dựa trên giả định "Gemini chỉ gửi
+ * `usageMetadata` ở CHUNK CUỐI". Giả định đó SAI — Gemini gửi `usageMetadata`
+ * ở MỌI chunk, và số trong đó là CỘNG DỒN từ đầu stream. Bộ đếm bên
+ * `run.ts` (`meterGemini`) lại cộng `+=` mỗi lần được gọi, nên một lượt rail
+ * bị ghi sổ gấp đúng SỐ CHUNK lần.
+ *
+ * Đo trên prod 30 ngày (`events` where `event_type='llm_usage'`, `tool_id='chat'`):
+ *   · gemini-3.8-flash  n=204 · input trung bình **238.102** · tương quan với
+ *     độ dài output **0,892** (số token prompt KHÔNG thể phụ thuộc độ dài câu
+ *     trả lời — đó chính là dấu vân tay của lỗi nhân này)
+ *   · claude-opus-5     n=33  · input trung bình **4.418** · nhánh Anthropic
+ *     gán `=` chứ không `+=` (run.ts) nên không dính ⇒ nhóm ĐỐI CHỨNG
+ * Cùng một rail, cùng system prompt, cùng người dùng ⇒ thổi phồng ~54×.
+ *
+ * Hệ quả đã xảy ra: `cost_vnd` của mọi lượt rail đi Gemini bị thổi ~54×, kéo
+ * theo bảng biên lợi nhuận và cảnh báo giá tự động đọc sai hẳn — "rail lỗ
+ * 1,7× doanh thu" là ẢO. Xem docs/nhat-ky/2026-09.md.
+ *
+ * ⚠️ KHÔNG sửa bằng cách đổi `+=` thành `=` ở `run.ts`: `+=` là ĐÚNG khi cộng
+ * qua NHIỀU round tool-use (mỗi round là một lời gọi API thật, token tiêu
+ * thật). Chỗ sai là TẦN SUẤT gọi, không phải phép cộng.
+ */
+function emitUsageOnce(u: GeminiUsage | null, onUsage?: (u: GeminiUsage) => void): void {
+  if (u && onUsage) onUsage(u);
+}
+
 const RETRYABLE = new Set([429, 500, 502, 503, 504]);
 const MAX_TRIES = 3;
 
@@ -185,8 +215,11 @@ export async function streamGemini(
   convo: any[],
   cfg: ChatConfig,
   send: (s: string) => void,
-  // Gemini gửi `usageMetadata` trong CHUNK CUỐI của stream — bắt tại chỗ rồi
-  // đẩy ngược ra, vì sau khi hàm này trả về thì không còn cách nào hỏi lại.
+  // Gemini gửi `usageMetadata` ở MỌI chunk, số CỘNG DỒN từ đầu stream — nên
+  // chỉ giữ bản MỚI NHẤT rồi đẩy ra ĐÚNG MỘT LẦN sau khi hết stream
+  // (`emitUsageOnce`). Bắn theo từng chunk là nhân token lên theo số chunk:
+  // đã cắn thật, ~54× trên prod. Đẩy ngược ra vì sau khi hàm trả về thì không
+  // còn cách nào hỏi lại.
   onUsage?: (u: GeminiUsage) => void,
 ): Promise<string[]> {
   const contents = toGeminiContents(convo);
@@ -268,6 +301,7 @@ export async function streamGemini(
   const reader = resp.body.getReader();
   const dec = new TextDecoder();
   let buf = '';
+  let lastUsage: GeminiUsage | null = null;
   try {
     while (true) {
       const { done, value } = await reader.read();
@@ -282,7 +316,7 @@ export async function streamGemini(
         try {
           const evt = JSON.parse(json);
           const u = readUsage(evt);
-          if (u && onUsage) onUsage(u);
+          if (u) lastUsage = u;
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const parts = evt?.candidates?.[0]?.content?.parts as any[] | undefined;
           if (parts) {
@@ -298,6 +332,9 @@ export async function streamGemini(
     // fallback). Xả nốt phần an toàn rồi kết thúc êm.
     console.error('[gemini] lỗi giữa stream:', (e as Error).message);
   }
+  // Đứng NGOÀI vòng lặp: xem chú thích `onUsage` ở chữ ký hàm. Đặt trước mọi
+  // đường ra bên dưới (kể cả `throw` "trả lời rỗng") vì token đã tiêu thật rồi.
+  emitUsageOnce(lastUsage, onUsage);
 
   // Hết stream: xả nốt đuôi nếu chưa gặp marker.
   if (markerAt < 0 && full.length > sentLen) {
@@ -517,6 +554,7 @@ export async function streamGeminiTurn(
   const reader = resp.body.getReader();
   const dec = new TextDecoder();
   let buf = '';
+  let lastUsage: GeminiUsage | null = null;
   try {
     while (true) {
       const { done, value } = await reader.read();
@@ -531,7 +569,7 @@ export async function streamGeminiTurn(
         try {
           const evt = JSON.parse(json);
           const u = readUsage(evt);
-          if (u && onUsage) onUsage(u);
+          if (u) lastUsage = u;
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const parts = evt?.candidates?.[0]?.content?.parts as any[] | undefined;
           if (parts) {
@@ -554,6 +592,8 @@ export async function streamGeminiTurn(
   } catch (e) {
     console.error('[gemini-tools] lỗi giữa stream:', (e as Error).message);
   }
+  // Xem chú thích `onUsage` ở chữ ký hàm — MỘT lần cho MỘT lời gọi API.
+  emitUsageOnce(lastUsage, onUsage);
 
   if (markerAt < 0 && full.length > sentLen) {
     send(sse.text({ delta: full.slice(sentLen) }));
