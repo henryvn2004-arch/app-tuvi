@@ -229,6 +229,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='van-han-nam';window.SHELL_HISTORY=true;
+// Bước 7: lan chat-first sang tool free/deterministic — khảo sát bằng cờ
+// inject trước khi sửa file (đúng kỷ luật bước 3): mốc chia sẻ workspace có
+// sẵn ở #vhPanel, Shell.setContext() đã gọi, layout 420px không tràn (lá số
+// 12 cung đọc được, không tràn cột).
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/illus-nguong.js?v=1"></script>
