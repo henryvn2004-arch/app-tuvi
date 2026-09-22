@@ -7,10 +7,19 @@ test.describe('Tu Binh Regression paywall (shell /app/bat-tu)', () => {
   });
 
   test('page load OK', async ({ page }) => {
-    await expect(page.locator('h1, h2, h3, .form-container, form').first()).toBeVisible();
+    // Bước 6: #birthPanel (chứa <h2>) ẩn mặc định — hội thoại trong rail (#chat)
+    // là màn hình đầu thật sự nay. Vẫn giữ đúng ý bài kiểm cũ: có nội dung
+    // chào/hỏi hiện ra ngay khi vào trang.
+    await expect(page.locator('#chat .msg.a').first()).toBeVisible();
   });
 
   test('REGRESSION paywall KHONG auto-popup khi submit', async ({ page }) => {
+    // Bước 6: #birthPanel ẩn mặc định — hiện lại để fillRequired()/findBtn()
+    // không no-op (tránh bài kiểm xanh giả vì không tìm thấy field/nút nào).
+    await page.evaluate(() => {
+      const el = document.getElementById('birthPanel');
+      if (el) el.style.display = 'block';
+    });
     const dialogs: string[] = [];
     page.on('dialog', d => { dialogs.push(d.message()); d.dismiss(); });
     await fillRequired(page);
@@ -23,6 +32,10 @@ test.describe('Tu Binh Regression paywall (shell /app/bat-tu)', () => {
   });
 
   test('sau submit DOM thay doi khong co modal', async ({ page }) => {
+    await page.evaluate(() => {
+      const el = document.getElementById('birthPanel');
+      if (el) el.style.display = 'block';
+    });
     await fillRequired(page);
     const s = await findBtn(page);
     if (!s) { console.warn('No submit btn'); return; }

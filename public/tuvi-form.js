@@ -512,9 +512,121 @@ window.TuviForm = (() => {
     setData({ hoten: '', ngay: '', thang: '', nam: '', gioitinh: 'nam', gioHour: 0, gioPhut: 0 }, prefix);
   }
 
+  // ── renderChat(options) — Bước 6: hội thoại từng bước thay form-card ──
+  // Dựng 3 bong bóng hỏi-đáp (tên+giới tính[+năm luận] / ngày sinh / giờ
+  // sinh) NGAY trong #chat, dùng id RIÊNG (prefix 'c'+prefix, KHÔNG đụng các
+  // field thật của `render()`) — lý do giống hệt bước 5 (app-than-so-hoc):
+  // `Shell.setContext()` → `greet()` ghi đè `chat.innerHTML` toàn bộ lúc
+  // chào, di chuyển thẳng field thật vào đó sẽ làm chúng biến mất vĩnh viễn.
+  // Nộp xong mới quy đổi giờ sinh sang VN (cùng `toVnHour` mà getData() dùng)
+  // rồi `setData()` vào field thật (prefix gốc, thường đang ẩn trong
+  // `#birthPanel`) — trang gọi `onDone()` rồi tự chạy hàm tính TOÁN CŨ,
+  // không đổi gì ở tầng đó. Field thật vẫn là nguồn cho `getData()`/"Sửa".
+  function renderChat(options = {}) {
+    injectCss();
+    const {
+      prefix     = '',
+      gioitinh   = 'nam',
+      showName   = true,
+      showNamXem = false,
+      submitLabel = 'Tiếp tục →',
+      q1 = showName ? 'Cho thầy xin họ tên và giới tính của con nhé.' : 'Giới tính của con là gì?',
+      q2 = 'Ngày sinh dương lịch của con là ngày nào?',
+      q3 = 'Giờ sinh của con là mấy giờ?',
+      onDone,
+    } = options;
+    const chat = document.getElementById('chat');
+    if (!chat) return;
+    const empty = document.getElementById('railEmpty');
+    if (empty) empty.style.display = 'none';
+    const cp = 'c' + (prefix || 'x'); // prefix RIÊNG cho field ảo trong chat — không trùng field thật
+    const opts = buildOptions();
+    const namXemDefault = new Date().getFullYear();
+    const av = () => { const a = document.querySelector('.rail-ava'); return a ? a.src : '/thay-tuvi.webp'; };
+    const bubble = (id, html) => {
+      const el = document.createElement('div');
+      el.className = 'msg a'; el.id = id;
+      el.innerHTML = '<img class="msg-ava" src="' + av() + '" alt="">' + '<div class="msg-body">' + html + '</div>';
+      chat.appendChild(el); chat.scrollTop = chat.scrollHeight;
+      return el;
+    };
+    const collapse = (el, html) => {
+      el.innerHTML = '<img class="msg-ava" src="' + av() + '" alt="">' + '<div class="msg-body">' + html + '</div>';
+    };
+
+    const s1 = bubble('chatStep-' + cp + '-1', '<p>' + q1 + '</p>' +
+      '<div class="frow">' +
+        (showName ? `<div class="fg" style="flex:1.6;min-width:150px"><label>Họ và tên</label><input type="text" id="${pid('hoten', cp)}" placeholder="Nguyễn Văn A" autocomplete="off"></div>` : '') +
+        `<div class="fg" style="width:90px"><label>Giới tính</label><select id="${pid('gioitinh', cp)}"><option value="nam"${gioitinh === 'nam' ? ' selected' : ''}>Nam</option><option value="nu"${gioitinh === 'nu' ? ' selected' : ''}>Nữ</option></select></div>` +
+        (showNamXem ? `<div class="fg" style="width:90px"><label>Năm xem vận</label><input type="number" id="${pid('namXem', cp)}" value="${namXemDefault}" min="1900" max="2100"></div>` : '') +
+      '</div>' +
+      `<button class="btn-go" type="button" id="${cp}-next1" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button>`);
+    const focusFirst = () => { const f = document.getElementById(pid('hoten', cp)) || document.getElementById(pid('gioitinh', cp)); if (f) f.focus(); };
+    focusFirst();
+    document.getElementById(cp + '-next1').addEventListener('click', function () {
+      const hoten = showName ? (document.getElementById(pid('hoten', cp))?.value || '').trim() : '';
+      const gioitinhV = document.getElementById(pid('gioitinh', cp))?.value || 'nam';
+      const namXemV = showNamXem ? (parseInt(document.getElementById(pid('namXem', cp))?.value) || namXemDefault) : undefined;
+      collapse(s1, '<p>' + (hoten ? '<b>' + esc(hoten) + '</b> · ' : '') + (gioitinhV === 'nam' ? 'Nam' : 'Nữ') + (namXemV ? ' · xem vận năm ' + namXemV : '') + ' ✓</p>');
+      step2(hoten, gioitinhV, namXemV);
+    });
+
+    function step2(hoten, gioitinhV, namXemV) {
+      const s2 = bubble('chatStep-' + cp + '-2', '<p>' + q2 + '</p>' +
+        '<div class="frow">' +
+          `<div class="fg" style="width:74px"><label>Ngày</label><select id="${pid('ngay', cp)}">${opts.ngayOpts}</select></div>` +
+          `<div class="fg" style="width:82px"><label>Tháng</label><select id="${pid('thang', cp)}">${opts.thangOpts}</select></div>` +
+          `<div class="fg" style="width:90px"><label>Năm</label><select id="${pid('nam', cp)}">${opts.namOpts}</select></div>` +
+        '</div>' +
+        `<button class="btn-go" type="button" id="${cp}-next2" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button>`);
+      document.getElementById(cp + '-next2').addEventListener('click', function () {
+        const ngay = +document.getElementById(pid('ngay', cp)).value;
+        const thang = +document.getElementById(pid('thang', cp)).value;
+        const nam = +document.getElementById(pid('nam', cp)).value;
+        collapse(s2, '<p>Ngày sinh: <b>' + ngay + '/' + thang + '/' + nam + '</b> ✓</p>');
+        step3(hoten, gioitinhV, namXemV, ngay, thang, nam);
+      });
+    }
+
+    function step3(hoten, gioitinhV, namXemV, ngay, thang, nam) {
+      const s3 = bubble('chatStep-' + cp + '-3', '<p>' + q3 + '</p>' +
+        '<div class="tvf-gio-row" style="margin-bottom:8px">' +
+          `<select id="${pid('tvf-gio', cp)}">${opts.gioOpts}</select>` +
+          `<select id="${pid('tvf-phut', cp)}">${opts.phutOpts}</select>` +
+          `<div class="tvf-gio-am-wrap"><span class="tvf-gio-am" id="${pid('tvf-gio-am', cp)}">Giờ âm: Tý</span><span class="tvf-gio-vn" id="${pid('tvf-gio-vn', cp)}"></span></div>` +
+        '</div>' +
+        '<label style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-mid);cursor:pointer;margin-bottom:6px">' +
+          `<input type="checkbox" id="${pid('tvf-foreign', cp)}"> Sinh ở ngoài Việt Nam?` +
+        '</label>' +
+        `<div id="${pid('tvf-utc-wrap', cp)}" style="display:none;margin-bottom:8px"><select id="${pid('tvf-utc', cp)}">${opts.utcOpts}</select></div>` +
+        `<p style="font-size:11.5px;margin-bottom:8px"><a href="/app/gio-sinh" target="_blank" style="color:#1455A4;font-weight:600">Không nhớ giờ sinh chính xác? Xác định giờ sinh →</a></p>` +
+        `<button class="btn-go" type="button" id="${cp}-next3" style="width:auto;padding:9px 16px;font-size:13px">${submitLabel}</button>` +
+        `<div class="err" id="${cp}-err3"></div>`);
+      const upd = () => updateGioAmDisplay(cp);
+      document.getElementById(pid('tvf-gio', cp)).addEventListener('input', upd);
+      document.getElementById(pid('tvf-phut', cp)).addEventListener('input', upd);
+      document.getElementById(pid('tvf-utc', cp)).addEventListener('input', upd);
+      document.getElementById(pid('tvf-foreign', cp)).addEventListener('change', function () { toggleUtc(cp); });
+      _updaters[cp] = upd; upd();
+      document.getElementById(cp + '-next3').addEventListener('click', function () {
+        const hh = parseInt(document.getElementById(pid('tvf-gio', cp)).value) || 0;
+        const mm = parseInt(document.getElementById(pid('tvf-phut', cp)).value) || 0;
+        const utcOff = parseInt(document.getElementById(pid('tvf-utc', cp))?.value ?? '420');
+        const vn = toVnHour(hh, mm, utcOff, ngay, thang, nam);
+        collapse(s3, '<p>Giờ sinh: <b>' + String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0') + '</b> ✓</p>');
+        const data = { hoten, gioitinh: gioitinhV, ngay, thang, nam, gioHour: vn.h, gioPhut: vn.m };
+        if (namXemV !== undefined) data.namXem = namXemV;
+        setData(data, prefix);
+        if (onDone) onDone(data);
+      });
+    }
+  }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
   // ── Public API ───────────────────────────────────────────────
   return {
     render,
+    renderChat,
     getData,
     setData,
     clear,

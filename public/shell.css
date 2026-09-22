@@ -871,6 +871,11 @@ font-family:inherit}
 .fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
 .fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+/* Bước 5/6 (chat-intake): `#birthPanel` ẩn mặc định, hội thoại thay thế nằm
+   trong rail — hint này lấp chỗ trống trong `.ws` để không trông vỡ trong
+   lúc chờ trả lời. Dùng chung cho mọi trang bật `SHELL_CHAT_INTAKE`. */
+.ws-intake-hint{display:flex;gap:10px;align-items:flex-start;max-width:600px;padding:14px 16px;border:1px dashed var(--line-2);border-radius:12px;color:var(--text-lt);font-size:13px;line-height:1.6}
+.ws-intake-hint .ic{width:16px;height:16px;flex:0 0 auto;margin-top:2px;color:var(--gold-soft)}
 /* Nút chạy tool — nền vàng gradient thay bản đỏ cũ (`background:var(--red)`,
    đồng loạt trên 37 trang trước đợt này). `.bg-label`/`.ic`/`small` là 3 phần
    TUỲ CHỌN (icon lấp lánh + nhãn chính + dòng phụ giá) — một `<button

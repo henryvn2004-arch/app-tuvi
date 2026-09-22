@@ -142,10 +142,14 @@ async function run(page: Page) {
 // — nó trùng với box "Tải PDF" tĩnh cùng cột phụ (xem mục "Dọn 3 chỗ trùng
 // xem/tải bản mẫu" trong nhật ký). Bài kiểm chỉ còn giữ phần vẫn đúng: form
 // là màn hình đầu khi vào trang, và `#sampCta` không còn tồn tại trong DOM.
-test('form là màn hình đầu khi vào trang', async ({ page }) => {
+// Bước 6 (2026-09-22): #birthPanel chuyển ẩn mặc định — hội thoại trong rail
+// (#chat) mới là màn hình đầu THẬT (chat-first, xem nhật ký "Chat-first bước
+// 6"). Form cũ vẫn tồn tại nguyên vẹn, chỉ lùi thành đường "Sửa" sau kết quả.
+test('hội thoại (rail) là màn hình đầu khi vào trang, không phải form', async ({ page }) => {
   await stubApis(page);
   await page.goto('/app-luan-giai.html');
-  await expect(page.locator('#birthPanel')).toBeVisible();
+  await expect(page.locator('#birthPanel')).toBeHidden();
+  await expect(page.locator('#chat .msg.a').first()).toBeVisible();
   await expect(page.locator('#sampCta')).toHaveCount(0);
 });
 

@@ -26,6 +26,15 @@ test.describe('Tử Bình — Submit & Result (shell /app/bat-tu)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/app/bat-tu');
     await page.waitForLoadState('networkidle');
+    // Bước 6: #birthPanel ẩn mặc định (hội thoại trong rail thay thế làm màn
+    // nhập liệu đầu) — form thật vẫn NGUYÊN VẸN phía sau, dùng làm đường "Sửa"
+    // sau khi có kết quả. Các bài kiểm dưới đây đo ĐÚNG/SAI của bản thân việc
+    // tính toán/hiện kết quả, không phải đường nhập liệu — hiện form thật lên
+    // để tái dùng logic cũ, không phải lái qua hội thoại mới.
+    await page.evaluate(() => {
+      const el = document.getElementById('birthPanel');
+      if (el) el.style.display = 'block';
+    });
   });
 
   test('form container inject thành công', async ({ page }) => {

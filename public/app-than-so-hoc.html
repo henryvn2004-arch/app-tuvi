@@ -10,7 +10,7 @@
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/shell.css?v=52">
+<link rel="stylesheet" href="/shell.css?v=53">
 <style>
 .form-card{max-width:600px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
@@ -21,10 +21,7 @@
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 .err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
-/* Bước 5: form-card ẩn mặc định (hội thoại thay thế) — hint này lấp chỗ trống
-   để .ws không trông vỡ trong lúc chờ trả lời ở rail. Ẩn cùng lúc birthPanel. */
-.ws-intake-hint{display:flex;gap:10px;align-items:flex-start;max-width:600px;padding:14px 16px;border:1px dashed var(--line-2);border-radius:12px;color:var(--text-lt);font-size:13px;line-height:1.6}
-.ws-intake-hint .ic{width:16px;height:16px;flex:0 0 auto;margin-top:2px;color:var(--gold-soft)}
+/* .ws-intake-hint giờ dùng chung ở shell.css (bước 6) */
 #resPanel{display:none;max-width:680px}
 /* 4 num-card — "tài liệu" nền sáng cố định, khớp bản standalone */
 .res-block{border:1px solid #E8E8E8;border-radius:10px;background:#fff;overflow:hidden;margin-bottom:6px}
