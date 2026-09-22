@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-365 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+366 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 200 | 796,363 B |
+| `2026-09.md` | 201 | 800,901 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🔄 Chat-first bước 3: lan ra 9 tool free/deterministic — ĐO từng trang rồi mới bật |
 | 1 | 2026-09 | `2026-09.md` | 🔄 Chat-first bước 1+2: đảo vai Chat ↔ Workspace ở tầng SHELL + pilot Thần Số Học |
 | 1 | 2026-09 | `2026-09.md` | 💸 Sổ token Gemini bị nhân theo SỐ CHUNK — "rail chat lỗ 1,7× doanh thu" là ẢO |
 | 1 | 2026-09 | `2026-09.md` | 🧱 Sprint session thật kiểu ChatGPT/Claude — bước 6: tool-as-agent #3 (Thần Số Học) + 2 phát hiện "đã đủ" |
