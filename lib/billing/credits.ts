@@ -71,6 +71,33 @@ export async function getBalance(userId: string): Promise<number> {
 }
 
 /**
+ * Đã TỪNG nạp tiền THẬT (type='topup', KHÔNG tính 'topup_sandbox' — giao dịch
+ * test giữ lại để đối chiếu, không phải khách thật) hay chưa.
+ *
+ * 🔴 2026-09-22: đây là cửa DUY NHẤT trả lời câu "account này đã là khách trả
+ * tiền chưa" cho cầu dao xem-trước (5 route gọi `previewGate`) — CẤM dùng
+ * `getBalance(userId) > 0` thay cho hàm này. Balance > 0 SAI vì MỌI user mới
+ * đăng ký đã có balance ngay từ đầu (`signup_bonus`, mặc định 25 Lượng) —
+ * dùng balance làm điều kiện bypass nghĩa là ai đăng ký xong cũng bypass được
+ * hẳn cầu dao xem-trước, không riêng gì khách đã trả tiền thật. Đã cắn thật:
+ * account có `signup_bonus`/`admin_grant`/`referral_signup` (chưa từng
+ * `topup`) vẫn lọt qua bypass cũ, xem trước KHÔNG GIỚI HẠN — đúng cái cầu dao
+ * "làm quen sản phẩm" sinh ra để chặn. */
+export async function hasToppedUp(userId: string): Promise<boolean> {
+  if (!SUPABASE_URL || !SUPABASE_KEY || !userId) return false;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/credit_transactions?user_id=eq.${encodeURIComponent(userId)}&type=eq.topup&limit=1&select=id`,
+      { headers: SB_HEADERS, cache: 'no-store' },
+    );
+    if (!res.ok) return false;
+    return ((await res.json()) as unknown[]).length > 0;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Trừ Lượng atomic qua RPC. Trả về số dư mới, hoặc null nếu lỗi
  * (gọi nơi dùng tự xử lý — KHÔNG để mất tiền user mà vẫn chặn).
  */

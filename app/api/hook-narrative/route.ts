@@ -6,9 +6,9 @@
 // `ip_cap`/`global_cap`) → banner mời đăng ký/nạp Lượng; lý do khác (lỗi
 // mạng/LLM/parse hỏng) → ẨN HẲN khối, không báo lỗi.
 //
-// User đã đăng nhập VÀ còn Lượng > 0 trong ví → BỎ QUA cầu dao 3-lượt-đời,
-// không trừ tiền (xem đoạn gọi `getBalance` bên dưới) — cầu dao chỉ còn áp
-// cho khách chưa đăng nhập hoặc đã đăng nhập mà ví rỗng.
+// User đã TỪNG nạp tiền thật → BỎ QUA cầu dao 3-lượt-đời, không trừ tiền
+// (xem đoạn gọi `hasToppedUp` bên dưới) — cầu dao chỉ còn áp cho khách chưa
+// đăng nhập hoặc đã đăng nhập mà CHƯA từng nạp.
 //
 // Route CHỦ ĐỘNG generic theo `facts` chứ không đọc riêng lá số của tool nào —
 // cùng một bộ facts (đã chốt bởi `HookFacts.*` của tool đó) thì luôn ra cùng
@@ -29,7 +29,7 @@ import { logLlmUsage, logLlmParseFail } from '@/lib/agent/usage';
 import { previewGate, previewIpHash } from '@/lib/billing/anon-preview';
 import { previewCacheGet, previewCachePut } from '@/lib/llm/preview-cache';
 import { authUserFromRequest } from '@/lib/api/tool-helpers';
-import { getBalance } from '@/lib/billing/credits';
+import { hasToppedUp } from '@/lib/billing/credits';
 import { parseLlmJson } from '@/lib/llm/json';
 import { HOOK_NARRATIVE_SYSTEM, HOOK_NARRATIVE_SCHEMA, buildHookNarrativePrompt, type HookFactInput } from '@/lib/agent/hook-prompt';
 
@@ -142,14 +142,19 @@ export async function POST(request: NextRequest) {
   const auth = await authUserFromRequest(request);
   const pKey = 'error' in auth ? clean(body.anonId, 80) : auth.user.id;
 
-  // User đã đăng nhập VÀ còn Lượng trong ví → bỏ qua hẳn cầu dao 3-lượt-đời
+  // User đã TỪNG nạp tiền thật → bỏ qua hẳn cầu dao 3-lượt-đời
   // (`preview.free_runs`), không trừ tiền — tầng này là phần thưởng đi kèm
-  // của người đã có Lượng, không phải sản phẩm bán riêng. Cầu dao chỉ còn áp
-  // cho khách CHƯA đăng nhập hoặc đã đăng nhập mà ví rỗng (Henry chốt
-  // 2026-09-21, sau khi chính tài khoản mình bị chặn bởi cầu dao dùng
-  // CHUNG cho cả anon lẫn đã trả tiền).
-  const hasBalance = 'error' in auth ? false : (await getBalance(auth.user.id)) > 0;
-  if (!hasBalance) {
+  // của khách đã trả tiền, không phải sản phẩm bán riêng. Cầu dao chỉ còn áp
+  // cho khách CHƯA đăng nhập hoặc đã đăng nhập mà CHƯA từng nạp (Henry chốt
+  // 2026-09-21, sau khi chính tài khoản mình bị chặn bởi cầu dao dùng CHUNG
+  // cho cả anon lẫn đã trả tiền).
+  //
+  // 🔴 2026-09-22: SỬA từ `getBalance(...) > 0` sang `hasToppedUp` — balance
+  // > 0 SAI vì mọi user mới đăng ký đã có `signup_bonus` (25 Lượng) ngay từ
+  // đầu, nên bản cũ cho phép BẤT KỲ ai đăng ký xong cũng bypass hẳn cầu dao,
+  // không riêng khách đã trả tiền thật. Xem `hasToppedUp` (lib/billing/credits.ts).
+  const toppedUp = 'error' in auth ? false : await hasToppedUp(auth.user.id);
+  if (!toppedUp) {
     const gate = await previewGate(pKey, previewIpHash(request), toolId);
     if (!gate.allowed) return ok({ allowed: false, reason: gate.reason });
   }
