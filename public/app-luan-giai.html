@@ -562,6 +562,15 @@ function wsStepsSet(n){
 function _lasoDummyPromise(){ return TuviPaywall.loadSampleJson('/samples/laso-dummy.json'); }
 var _laSoDummy=null; // { "3": "văn mẫu phần 3", ... } — điền bởi doLuan(), đọc bởi buildLockedPlaceholderHtml
 _lasoDummyPromise(); // mồi fetch NGAY lúc nạp trang — tới lúc khách bấm nút thường đã có sẵn trong cache
+// 3 box "Giới thiệu" (.ws-promo) + "Bản luận giải mẫu" (.samp-cta) + "Phiên
+// gần đây" (#shellRecent) chỉ có ích LÚC CHƯA bấm Luận Giải — bấm xong thì
+// thừa, và (Henry 2026-09-22) còn cao hơn cột form đã rỗng nên đẩy #lgPanel
+// (chứa vòng quay loading của #hookHost) xuống dưới màn hình, trông như tool
+// không chạy. Ẩn NGAY lúc bấm nút, không chờ tới khi narrative xong.
+function _hideIntakeSideBoxes(){
+  var els=document.querySelectorAll('.ws-promo,.samp-cta,#shellRecent');
+  for(var i=0;i<els.length;i++)els[i].style.display='none';
+}
 async function doLuan(){
   var btn=document.getElementById('btnGo');
   var namxem=parseInt(document.getElementById('inpNamxem').value)||new Date().getFullYear();
@@ -593,6 +602,7 @@ async function doLuan(){
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart')); // ô giữa mang span [data-icon]
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('lgPanel').style.display='block';
+    _hideIntakeSideBoxes();
     wsStepsSet(2); // Xem trước lá số — điểm số + 1 phần miễn phí + tầng hook sắp hiện ra
     document.getElementById('btnEdit').style.display='';
     document.getElementById('btnBatTu').style.display='';
@@ -640,6 +650,7 @@ async function doLuan(){
     document.getElementById('lgBody').innerHTML='<div class="laso-error">Lỗi khi luận giải: '+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('lgPanel').style.display='block';
+    _hideIntakeSideBoxes();
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('lgPanel');
     if(window.console)console.error(e);
   }finally{
@@ -760,14 +771,10 @@ function mountHook(ls){
         tieuDe:'Bản đầy đủ trả lời làm gì với nó',
         items:['11 cung còn lại — mỗi cung một phần luận riêng, viết theo cổ pháp','Cách cục, tứ hoá và quy tắc của từng cung'],
         onUnlock:function(){ return initiateLuanGiaiChuyenSau('hook'); }
-      },
-      // Đã có bản luận thật để xem — 2 box tĩnh ở cột phụ (Giới thiệu + Bản
-      // luận giải mẫu) giờ thừa, nhường chỗ cho nội dung thật. KHÔNG đụng
-      // #shellRecent (lịch sử xem gần đây) — chỉ đúng 2 box này.
-      onNarrative:function(){
-        var promoEls=document.querySelectorAll('.ws-promo,.samp-cta');
-        for(var i=0;i<promoEls.length;i++)promoEls[i].style.display='none';
       }
+      // 3 box cột phụ (Giới thiệu/Bản luận giải mẫu/Phiên gần đây) đã bị
+      // `_hideIntakeSideBoxes()` ẩn ngay lúc bấm nút trong `doLuan()` — không
+      // cần đợi tới lúc narrative xong mới ẩn nữa.
     };
     window.HookLayer.run(host, spec);
   });
