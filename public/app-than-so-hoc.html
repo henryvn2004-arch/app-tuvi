@@ -21,6 +21,10 @@
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 .err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
+/* Bước 5: form-card ẩn mặc định (hội thoại thay thế) — hint này lấp chỗ trống
+   để .ws không trông vỡ trong lúc chờ trả lời ở rail. Ẩn cùng lúc birthPanel. */
+.ws-intake-hint{display:flex;gap:10px;align-items:flex-start;max-width:600px;padding:14px 16px;border:1px dashed var(--line-2);border-radius:12px;color:var(--text-lt);font-size:13px;line-height:1.6}
+.ws-intake-hint .ic{width:16px;height:16px;flex:0 0 auto;margin-top:2px;color:var(--gold-soft)}
 #resPanel{display:none;max-width:680px}
 /* 4 num-card — "tài liệu" nền sáng cố định, khớp bản standalone */
 .res-block{border:1px solid #E8E8E8;border-radius:10px;background:#fff;overflow:hidden;margin-bottom:6px}
@@ -80,7 +84,7 @@
         <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
         <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-      <div class="form-card" id="birthPanel">
+      <div class="form-card" id="birthPanel" style="display:none">
         <div class="fc-head"><span class="fc-ic" data-icon="hash"></span><h2>Ngày sinh & tên đầy đủ</h2></div>
         <p class="sub">Nhập ngày sinh và họ tên đầy đủ. Hệ thống tính theo hệ Pythagoras — Đường Đời, Định Mệnh, Linh Hồn, Sứ Mệnh và năm cá nhân hiện tại.</p>
         <div class="cost-box">
@@ -104,6 +108,10 @@
           <small>Miễn phí</small>
         </button>
         <div class="err" id="error-msg"></div>
+      </div>
+      <div class="ws-intake-hint" id="wsIntakeHint">
+        <span class="ic" data-icon="message-circle"></span>
+        <p>Trả lời thầy ở khung chat bên trái để lập bản đồ thần số — chỉ cần ngày sinh và họ tên.</p>
       </div>
       </div>
       <div class="ws-side-col">
@@ -131,11 +139,16 @@
 // mở màn vì nó không có paywall, không gọi API, tính hoàn toàn client-side
 // (`ThanSoTool.compute()`) ⇒ rủi ro tiền bằng 0 nếu bố cục mới không ăn.
 window.SHELL_CHATFIRST=true;
+// Bước 5: hội thoại từng bước thay form-card tĩnh (Henry chốt 2026-09-22, đảo
+// hướng quyết định "giữ form-as-card" trước đó). Pilot lại đúng trang này —
+// vẫn 0 rủi ro tiền, và form gốc chỉ có 2 câu hỏi (ngày sinh + tên) nên hội
+// thoại 2 bước không dài dòng.
+window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'than-so-hoc'};</script>
 <script src="/tools-shared/than-so-hoc.js?v=3"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=41" data-icons-only></script>
-<script src="/shell.js?v=97"></script>
+<script src="/shell.js?v=98"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/than-so-hoc.js với trang standalone.
 function calculate(){
@@ -149,6 +162,7 @@ function calculate(){
   if(!r.ok){ err.textContent=r.error; err.classList.add('active'); return; }
   document.getElementById('numResults').innerHTML=r.resultHTML;
   document.getElementById('birthPanel').style.display='none';
+  var _hint=document.getElementById('wsIntakeHint'); if(_hint) _hint.style.display='none';
   document.getElementById('resPanel').style.display='block';
   document.getElementById('btnEdit').style.display='';
   wsStepsSet(2); // Nhận kết quả — miễn phí, không có bước Thanh toán
@@ -187,6 +201,66 @@ function wsStepsSet(n){
     else if(i+1===n) steps[i].classList.add('active');
   }
 }
+
+// ── Bước 5: hội thoại từng bước trong rail ──
+// KHÔNG di chuyển #ngay/#thang/#nam/#ten thật (chúng nằm trong #birthPanel,
+// ẩn) — vì Shell.setContext() ghi đè TOÀN BỘ innerHTML của #chat lúc chào
+// (xem greet() trong shell.js), di chuyển node thật vào đó sẽ mất luôn node
+// khi chat thật bắt đầu. Bong bóng hội thoại dùng input RIÊNG (prefix `i`),
+// nộp xong mới CHÉP giá trị sang input thật rồi gọi calculate() y hệt cũ —
+// 0 thay đổi trong đường tính toán/paywall.
+function ava(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; }
+function startIntake(){
+  if(window.Shell&&Shell.pendingRestore&&Shell.pendingRestore())return; // khôi phục phiên cũ: bỏ qua hội thoại nhập liệu
+  var chat=document.getElementById('chat');
+  var empty=document.getElementById('railEmpty');
+  if(!chat)return;
+  if(empty)empty.style.display='none';
+  var s1=document.createElement('div'); s1.className='msg a'; s1.id='intakeStep1';
+  s1.innerHTML='<img class="msg-ava" src="'+ava()+'" alt="">'+
+    '<div class="msg-body"><p>Cho thầy xin ngày sinh dương lịch của con nhé.</p>'+
+    '<div class="frow">'+
+      '<div class="fg" style="width:74px"><label>Ngày</label><input type="number" id="iNgay" placeholder="15" min="1" max="31"></div>'+
+      '<div class="fg" style="width:74px"><label>Tháng</label><input type="number" id="iThang" placeholder="6" min="1" max="12"></div>'+
+      '<div class="fg" style="width:90px"><label>Năm</label><input type="number" id="iNam" placeholder="1990"></div>'+
+    '</div>'+
+    '<button class="btn-go" id="intakeNext1" type="button" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button>'+
+    '<div class="err" id="intakeErr1"></div></div>';
+  chat.appendChild(s1); chat.scrollTop=chat.scrollHeight;
+  document.getElementById('iNam').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();document.getElementById('intakeNext1').click();}});
+  document.getElementById('intakeNext1').addEventListener('click',function(){
+    var d=+document.getElementById('iNgay').value, m=+document.getElementById('iThang').value, y=+document.getElementById('iNam').value;
+    var err=document.getElementById('intakeErr1');
+    if(!d||!m||!y){ err.textContent='Nhập đủ ngày, tháng, năm sinh nhé.'; err.classList.add('active'); return; }
+    err.classList.remove('active');
+    s1.innerHTML='<img class="msg-ava" src="'+ava()+'" alt="">'+'<div class="msg-body"><p>Ngày sinh: <b>'+d+'/'+m+'/'+y+'</b> ✓</p></div>';
+    showIntakeStep2(d,m,y);
+  });
+  document.getElementById('iNgay').focus();
+}
+function showIntakeStep2(d,m,y){
+  var chat=document.getElementById('chat');
+  var s2=document.createElement('div'); s2.className='msg a'; s2.id='intakeStep2';
+  s2.innerHTML='<img class="msg-ava" src="'+ava()+'" alt="">'+
+    '<div class="msg-body"><p>Giờ cho thầy xin họ tên đầy đủ khai sinh — có dấu hay không đều được.</p>'+
+    '<div class="frow"><div class="fg" style="flex:1;min-width:160px"><input type="text" id="iTen" placeholder="Nguyễn Văn An"></div></div>'+
+    '<button class="btn-go" id="intakeNext2" type="button" style="width:auto;padding:9px 16px;font-size:13px">Tính thần số →</button>'+
+    '<div class="err" id="intakeErr2"></div></div>';
+  chat.appendChild(s2); chat.scrollTop=chat.scrollHeight;
+  function submit(){
+    document.getElementById('ngay').value=d;
+    document.getElementById('thang').value=m;
+    document.getElementById('nam').value=y;
+    document.getElementById('ten').value=document.getElementById('iTen').value;
+    calculate();
+    var e=document.getElementById('error-msg'), ie=document.getElementById('intakeErr2');
+    if(e&&e.classList.contains('active')){ ie.textContent=e.textContent; ie.classList.add('active'); }
+  }
+  document.getElementById('iTen').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submit();}});
+  document.getElementById('intakeNext2').addEventListener('click',submit);
+  document.getElementById('iTen').focus();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',startIntake);else startIntake();
 </script>
 <script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);calculate();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>
 </body>
