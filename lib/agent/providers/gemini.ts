@@ -439,23 +439,21 @@ export async function streamGeminiTurn(
   // được ghép vào lịch sử cho vòng sau. Code cũ chỉ giữ {name,args}, làm rớt
   // field này → vòng 2 luôn hỏng hình dạng request.
 
-  // 🔴 2026-09-21: KHÔNG dùng cache tường minh ở đây (đã thử, rút lại) — đo
-  // được trên prod thật: Google từ chối thẳng 400 "CachedContent can not be
-  // used with GenerateContent request setting system_instruction, tools or
-  // tool_config" bất cứ khi nào request còn `tools`, mà đường này (function-
-  // calling) LUÔN có tools ở mọi round trừ round cuối (`forceAnswer` — geminiTools
-  // null để ép trả lời). Google CHO PHÉP bake `tools` vào CachedContent lúc tạo,
-  // nhưng làm vậy thì round cuối KHÔNG CÒN CÁCH nào "tắt" tools đi được nữa
-  // (request dùng cachedContent cấm set lại tools, kể cả để omit) — phá vỡ
-  // đúng cơ chế "cấm tool ở vòng cuối để ép trả lời, chống lặp tool vô hạn"
-  // đã có. Đổi lại một tối ưu token lấy một lỗ hổng an toàn không đáng — rút
-  // cache khỏi HẲN đường này, giữ nguyên hành vi cũ 100%. Cache tường minh chỉ
-  // còn ở streamGemini (prose, KHÔNG BAO GIỜ có tools — an toàn, không đụng
-  // giới hạn này). Xem docs/nhat-ky/2026-09.md.
+  // 🔁 2026-09-22: cache tường minh CÓ BAKE `tools` — chi tiết đầy đủ + ràng
+  // buộc API ở đầu `gemini-cache.ts`. Tóm tắt: mọi vòng CÓ tools (mọi vòng
+  // trừ `forceAnswer` cuối) thử cache system+tools chung một resource; vòng
+  // `forceAnswer` (geminiTools=null, hiếm — chỉ khi chạm trần max_rounds)
+  // KHÔNG bao giờ cache, giữ nguyên gửi `system_instruction` trực tiếp để
+  // đảm bảo tools thật sự TẮT được. Cache lookup/tạo thất bại (null) → rơi
+  // về gửi system+tools đầy đủ như trước, KHÔNG throw — fail-soft.
+  const useToolsCache = Boolean(geminiTools && geminiTools.length);
+  const cacheName = useToolsCache ? await getOrCreateGeminiCache(GEMINI_MODEL, system, geminiTools) : null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const body: any = { system_instruction: { parts: [{ text: system }] }, contents };
+  const body: any = cacheName
+    ? { cachedContent: cacheName, contents }
+    : { system_instruction: { parts: [{ text: system }] }, contents };
   body.generationConfig = { maxOutputTokens: cfg.maxTokens, temperature: 0.7, thinkingConfig: { thinkingBudget: 0 } };
-  if (geminiTools && geminiTools.length) body.tools = geminiTools;
+  if (!cacheName && geminiTools && geminiTools.length) body.tools = geminiTools;
   const url =
     `${GEMINI_BASE}/${encodeURIComponent(GEMINI_MODEL)}:streamGenerateContent?alt=sse&key=${GEMINI_KEY}`;
 
