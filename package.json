@@ -73,7 +73,8 @@
     "check:lavong": "node scripts/check-la-vong.mjs",
     "check:webdriver": "node scripts/check-analytics-webdriver.mjs",
     "check:payossig": "node scripts/check-payos-signature.mjs",
-    "check:tabbar": "node scripts/check-tabbar-parity.mjs"
+    "check:tabbar": "node scripts/check-tabbar-parity.mjs",
+    "check:geminiusage": "node scripts/check-gemini-usage-once.mjs"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.9.0",

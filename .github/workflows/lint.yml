@@ -403,6 +403,14 @@ jobs:
       - name: Tabbar 5 nhãn khớp giữa shell.js và trang chủ
         run: npm run check:tabbar
 
+      # Gemini gửi `usageMetadata` ở MỌI chunk với số CỘNG DỒN, trong khi
+      # `meterGemini` (run.ts) cộng `+=` mỗi lần được gọi. Bắn theo từng chunk
+      # là nhân token lên theo số chunk — đã cắn thật: prod ghi 238.102 input
+      # token/lượt cho nhánh Gemini trong khi nhánh Anthropic ghi 4.418 cho
+      # CÙNG rail (~54×), kéo bảng biên lợi nhuận sai hẳn mà không ai báo.
+      - name: Gemini đẩy usage đúng 1 lần mỗi lời gọi API
+        run: npm run check:geminiusage
+
   typecheck:
     runs-on: ubuntu-latest
     # Cùng lý do với job `lint` ở trên — xem chú thích tại đó.
