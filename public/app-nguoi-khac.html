@@ -43,6 +43,7 @@
    tiếp. Xuống một cột ở máy hẹp. */
 .nk-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:760px){.nk-two{grid-template-columns:1fr}}
+body.chat-first-live .nk-two{grid-template-columns:1fr}
 .nk-col h4{font-family:var(--serif);font-size:14px;font-weight:700;margin-bottom:9px}
 .nk-col.yes h4{color:#1E6B3C}
 .nk-col.no h4{color:#A8342A}
@@ -343,6 +344,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='nguoi-khac';window.SHELL_HISTORY=true;
+// Bước 9: lan chat-first. Trang trả tiền NGAY lúc nộp (setContext nằm sau
+// TuviPaywall.requireCredits()) nên KHÔNG đo được layout kết quả thật trong
+// sandbox — đo thật sau khi deploy, cùng cách luan-giai (bước 4) từng làm.
+// Đã tự vá trước bẫy đọc qua CSS: .nk-two chỉ co 1 cột qua media viewport,
+// không đọc được bề rộng cột artifact — xem override bên dưới.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'nguoi-khac'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>

@@ -252,6 +252,14 @@
 </div>
 
 <script>window.SHELL_ACTIVE='chan-dung-tien-kiep';window.SHELL_HISTORY=true;
+// Bước 8: lan chat-first. Ảnh chân dung đọc ở CSS: .cdtk-top có flex-wrap:wrap
+// (ảnh 260px + chữ min-width 250px tự xuống dòng khi cột artifact hẹp lại
+// 420px, không tràn) — không có media-query theo VIEWPORT nào khác đụng tới
+// khối kết quả. Trang trả tiền NGAY lúc nộp (setContext nằm sau
+// TuviPaywall.requireCredits()) nên KHÔNG đo được layout ảnh thật trong
+// sandbox (403 CONNECT Supabase) — đo thật sau khi deploy, cùng cách
+// luan-giai (bước 4) từng làm.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'chan-dung-tien-kiep'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>

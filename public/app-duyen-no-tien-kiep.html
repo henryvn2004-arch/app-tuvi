@@ -25,6 +25,7 @@
    không phải một. Xuống một cột ở máy hẹp. */
 .dn-two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media(max-width:760px){.dn-two{grid-template-columns:1fr}}
+body.chat-first-live .dn-two{grid-template-columns:1fr}
 .dn-side{border:1px solid var(--line-2);border-radius:10px;padding:13px 14px;background:var(--paper)}
 .dn-side h3{font-family:var(--serif);font-size:14px;font-weight:700;margin-bottom:2px;color:var(--heading)}
 .dn-side p{font-size:11.5px;color:var(--text-lt);margin-bottom:10px}
@@ -251,6 +252,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='duyen-no-tien-kiep';window.SHELL_HISTORY=true;
+// Bước 9: lan chat-first. Trang trả tiền NGAY lúc nộp (setContext nằm sau
+// TuviPaywall.requireCredits()) nên KHÔNG đo được layout kết quả thật trong
+// sandbox — đo thật sau khi deploy. Đã tự vá trước bẫy đọc qua CSS: .dn-two
+// chỉ co 1 cột qua media viewport, không đọc được bề rộng cột artifact —
+// xem override bên dưới.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'duyen-no-tien-kiep'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>

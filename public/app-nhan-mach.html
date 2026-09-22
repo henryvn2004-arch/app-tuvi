@@ -280,6 +280,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='nhan-mach';window.SHELL_HISTORY=true;
+// Bước 9: lan chat-first. Trang trả tiền NGAY lúc nộp (setContext nằm sau
+// TuviPaywall.requireCredits()) nên KHÔNG đo được layout kết quả thật trong
+// sandbox — đo thật sau khi deploy. Đọc CSS không thấy media query nào theo
+// VIEWPORT đụng tới khối kết quả (toàn flex-wrap:wrap, tự co giãn theo cột) —
+// không cần vá thêm.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'nhan-mach'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>

@@ -44,6 +44,7 @@
 /* Hai cột NÊN / TRÁNH cạnh nhau — cha mẹ đọc so sánh, không đọc nối tiếp. */
 .dc-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:760px){.dc-two{grid-template-columns:1fr}}
+body.chat-first-live .dc-two{grid-template-columns:1fr}
 .dc-col h4{font-family:var(--serif);font-size:14px;font-weight:700;margin-bottom:9px}
 .dc-col.yes h4{color:#1E6B3C}
 .dc-col.no h4{color:#A8342A}
@@ -67,6 +68,7 @@
 .dc-basis-more ul{margin:8px 0 0 18px;color:#5a5145;line-height:1.9;font-size:12.8px}
 .dc-how{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 @media(max-width:760px){.dc-how{grid-template-columns:1fr}}
+body.chat-first-live .dc-how{grid-template-columns:1fr}
 .dc-howcard{border:1px solid #EFE7D6;border-radius:9px;padding:12px 13px;background:#FDFBF6}
 .dc-howcard h5{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#7A5F26;margin-bottom:6px}
 .dc-howcard p{font-size:12.8px;line-height:1.75;color:#2a2118;margin:0}
@@ -160,6 +162,7 @@
 .kh-card .warn{color:#8a5a2a}
 .hd-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:8px}
 @media(max-width:700px){.hd-grid{grid-template-columns:1fr}}
+body.chat-first-live .hd-grid{grid-template-columns:1fr}
 .hd-box h6{font-size:9.5px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:#7A5F26;margin-bottom:5px}
 .hd-box ul{margin:0 0 0 16px;padding:0}
 .hd-box li{font-size:12.4px;line-height:1.7;color:#2a2118;margin-bottom:4px}
@@ -463,6 +466,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='day-con';window.SHELL_HISTORY=true;
+// Bước 9: lan chat-first. Trang trả tiền NGAY lúc nộp (setContext nằm sau
+// TuviPaywall.requireCredits()) nên KHÔNG đo được layout kết quả thật trong
+// sandbox — đo thật sau khi deploy. Đã tự vá trước 3 bẫy đọc qua CSS
+// (.dc-two/.dc-how/.hd-grid chỉ co 1 cột qua media viewport, không đọc được
+// bề rộng cột artifact) — xem override bên dưới.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'day-con'};</script>
 <script src="/tuvi-ansao-engine.js?v=1"></script>
 <script src="/tuvi-laso-format.js?v=2"></script>

@@ -80,6 +80,11 @@
 .laso-cap{font-family:var(--serif);font-weight:700;font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:7px}
 .laso-cap .dotA,.laso-cap .dotB{width:10px;height:10px;border-radius:50%}
 @media(min-width:1200px){.laso-pair{flex-direction:row}.laso-one{flex:1}}
+/* Bước 9: cột artifact chat-first chỉ rộng 420px trên MỌI viewport — media
+   query trên đọc viewport nên vẫn ép nằm ngang ở đây. Ép về cột dọc riêng
+   cho trạng thái này (xem docs/luat/bay.md "Khối trong .ws co theo bề rộng CỘT"). */
+body.chat-first-live .laso-pair{flex-direction:column}
+body.chat-first-live .laso-one{flex:none}
 /* jump nav (9 phần luận giải chuyên sâu) */
 .jump{position:sticky;top:var(--ws-top-h,69px);z-index:4;background:var(--paper);border-bottom:1px solid var(--line);padding:8px 0;margin:0 0 18px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 .jump::-webkit-scrollbar{display:none}
@@ -185,6 +190,13 @@
   window.SHELL_ACTIVE=key;
   window.SHELL_HISTORY=true;
   window.SHELL_INTRO=INTRO[key];
+  // Bước 9: lan chat-first. doCompat() tính SO TUỔI hoàn toàn client-side rồi
+  // gọi Shell.setContext() ngay — không có cầu dao thanh toán chặn trước (phần
+  // trả phí là "luận sâu từng chiều" riêng, gate sau qua secLock). An toàn như
+  // nhóm free/deterministic ở bước 3/7. Đã vá kèm 1 bẫy đọc qua CSS: .laso-pair
+  // chuyển row ở @media(min-width:1200px) — đọc VIEWPORT nên vẫn nằm ngang dù
+  // cột artifact chỉ 420px trên desktop 1440px, xem override trong <style>.
+  window.SHELL_CHATFIRST=true;
 })();
 </script>
 <script src="/laso-chart.js?v=3"></script>
