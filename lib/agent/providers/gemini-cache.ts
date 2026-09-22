@@ -26,6 +26,21 @@
 // phép làm hỏng lượt chat. Việc đầu tiên sau khi merge: đọc log
 // `[gemini-cache]` trên prod xem có lỗi 400 lặp lại không (sai hình dạng)
 // hay cache thật sự được tạo + tái dùng.
+//
+// 🔁 2026-09-22 — thêm nhánh CACHE-KÈM-TOOLS cho đường function-calling
+// ('laso'). Google cấm `cachedContent` đi cùng `tools` trong CÙNG request,
+// nhưng CHO PHÉP bake `tools` vào NGAY LÚC TẠO cache — nên với các vòng có
+// tools (mọi vòng trừ vòng `forceAnswer` cuối), ta tạo cache MANG SẴN cả
+// `systemInstruction` lẫn `tools`, rồi mọi request sau chỉ gửi `cachedContent`
+// + `contents` (không set lại system/tools/tool_config — đúng ràng buộc).
+// Vòng `forceAnswer` (hiếm — chỉ khi chạm trần `max_rounds`, cơ chế chống lặp
+// tool vô hạn) CỐ Ý KHÔNG dùng cache này: nó cần tools=null để ép trả lời,
+// mà cache đã bake tools thì không cách nào "tắt" lại — vòng đó tiếp tục gửi
+// `system_instruction` trực tiếp, KHÔNG cache, y hệt hành vi trước đây (chi
+// phí một vòng hiếm không đáng để dựng cache thứ hai).
+// `tools` là tham số OPTIONAL trong `getOrCreateGeminiCache`/`createCache` —
+// bỏ trống (đường prose, `streamGemini`) giữ NGUYÊN hash cũ 100%, không mồ
+// côi cache đã tạo trước bản này.
 // ============================================================
 
 import { createHash } from 'crypto';
@@ -60,9 +75,15 @@ function ready(): boolean {
 // không phải nguồn sự thật.
 const MIN_CACHE_CHARS = 5_200;
 
-/** sha256(model|system) — CÙNG Ý TƯỞNG `lasoKey()` (lib/portraits/cache.ts). */
-function systemHash(model: string, system: string): string {
-  return createHash('sha256').update(`${model}|${system}`).digest('hex');
+/** sha256(model|system[|tools]) — CÙNG Ý TƯỞNG `lasoKey()` (lib/portraits/cache.ts).
+ * `tools` rỗng/undefined → khoá GIỮ NGUYÊN dạng cũ `model|system` (không mồ
+ * côi cache prose đã tạo trước khi tham số này xuất hiện). Có tools → chèn
+ * đoạn `tools:<json>` NGAY SAU model — hai cache cùng system nhưng khác bộ
+ * tools (vd có/không `memoryPort`) không bao giờ trùng khoá. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function systemHash(model: string, system: string, tools?: any[] | null): string {
+  const key = tools && tools.length ? `${model}|tools:${JSON.stringify(tools)}|${system}` : `${model}|${system}`;
+  return createHash('sha256').update(key).digest('hex');
 }
 
 interface CacheRow {
@@ -118,16 +139,24 @@ async function saveCache(hash: string, model: string, cacheName: string, expires
  * PR này, đúng hành vi cũ 100%. KHÔNG retry (khác `streamGemini`/
  * `streamGeminiTurn`): đây là lớp TỐI ƯU, không phải đường chính — retry ở
  * đây chỉ làm chậm lượt chat để đổi lấy một tối ưu có thể bỏ qua an toàn. */
-async function createCache(model: string, system: string): Promise<{ name: string; expiresAt: string; tokenCount: number | null } | null> {
+async function createCache(
+  model: string,
+  system: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tools?: any[] | null,
+): Promise<{ name: string; expiresAt: string; tokenCount: number | null } | null> {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const body: any = {
+      model: `models/${model}`,
+      systemInstruction: { parts: [{ text: system }] },
+      ttl: `${CACHE_TTL_SECONDS}s`,
+    };
+    if (tools && tools.length) body.tools = tools;
     const res = await fetch(`${CACHE_URL}?key=${GEMINI_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: `models/${model}`,
-        systemInstruction: { parts: [{ text: system }] },
-        ttl: `${CACHE_TTL_SECONDS}s`,
-      }),
+      body: JSON.stringify(body),
     });
     if (!res.ok) {
       const t = (await res.text()).slice(0, 300);
@@ -160,16 +189,25 @@ async function createCache(model: string, system: string): Promise<{ name: strin
 /**
  * 🔑 CỬA DUY NHẤT — tra cache còn sống, tạo mới nếu chưa có/đã hết hạn.
  *
+ * `tools` optional — truyền vào để bake CẢ tools lẫn system vào cache (đường
+ * function-calling, xem chú thích 2026-09-22 đầu file); bỏ trống cho đường
+ * prose thuần (`streamGemini`).
+ *
  * Trả `null` ở MỌI trường hợp không cache được (system quá ngắn, thiếu env,
  * lỗi mạng, Google từ chối) — caller (`streamGemini`/`streamGeminiTurn`)
  * PHẢI coi `null` là "gửi system đầy đủ như cũ", không phải lỗi.
  */
-export async function getOrCreateGeminiCache(model: string, system: string): Promise<string | null> {
+export async function getOrCreateGeminiCache(
+  model: string,
+  system: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tools?: any[] | null,
+): Promise<string | null> {
   if (!ready() || system.length < MIN_CACHE_CHARS) return null;
-  const hash = systemHash(model, system);
+  const hash = systemHash(model, system, tools);
   const existing = await lookupCache(hash, model);
   if (existing) return existing;
-  const created = await createCache(model, system);
+  const created = await createCache(model, system, tools);
   if (!created) return null;
   // Không await — ghi sổ không chặn lượt chat (giống mọi hàm `put`/log khác
   // trong repo, vd `insertHistoryRow`, `logLlmUsage`).
