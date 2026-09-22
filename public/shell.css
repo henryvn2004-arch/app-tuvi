@@ -45,6 +45,10 @@
      mép phải viewport). Hai chỗ chép cùng một số 336px là hẹn ngày trôi khỏi
      nhau; đổi bề rộng rail thì chỉ sửa đúng một dòng này. */
   --rail-w:336px;
+  /* Bề rộng cột ARTIFACT ở chế độ chat-first (`body.chat-first-live`): lúc đó
+     `.ws` thôi làm mặt chính và lùi về cột phải, chat chiếm `1fr`. Rộng hơn
+     `--rail-w` vì cột này chở BẢN LUẬN dài, còn rail chỉ chở bong bóng chat. */
+  --art-w:420px;
   --shadow:0 1px 2px rgba(15,42,61,.04),0 4px 16px rgba(15,42,61,.06);
   --shadow-lg:0 24px 60px rgba(15,42,61,.28),0 6px 18px rgba(15,42,61,.16);
 }
@@ -505,6 +509,27 @@ button.item{border:none;background:none;font:inherit;text-align:left}
   font-family:var(--serif);font-weight:600;font-size:12.5px;padding:7px 14px;border-radius:8px;white-space:nowrap}
 .tool-suggest .ts-go:hover{background:var(--navy-mid,#164B6D)}
 
+/* ── CHAT-FIRST — đảo vai Chat ↔ Workspace ──────────────────────────────────
+   Bật bằng `window.SHELL_CHATFIRST=true` ở trang, và CHỈ có hiệu lực sau khi
+   `Shell.setContext()` chạy (shell.js gắn `body.chat-first-live`) — tức sau
+   khi dữ liệu deterministic đã tính xong. Trước đó trang vẫn là FORM y như cũ.
+
+   🔑 Vì sao không đụng DOM: `.sb`/`.ws`/`.rail` là ba anh em ruột trong lưới
+   `.shell`, nên chỉ cần đổi `order` là chat về giữa (rộng `1fr`) còn `.ws` lùi
+   sang phải thành cột artifact. 53 trang tool giữ nguyên không sửa một dòng,
+   và mã sinh bản luận dài (script inline, bám id cứng như `lgBody`/`sec-N`)
+   không phải di dời đi đâu — nó vẫn chạy đúng chỗ cũ, chỉ đổi vai trò. */
+body.chat-first-live .shell { grid-template-columns: 246px 1fr var(--art-w) }
+body.chat-first-live .rail { order: 2; border-left: none; border-right: 1px solid var(--line) }
+body.chat-first-live .ws { order: 3 }
+/* 🪤 `.ws-fab` neo bằng `right:calc(var(--rail-w) + 16px)` vì nó GIẢ ĐỊNH rail
+   là cột phải cùng. Đảo cột xong thì `.ws` mới là cột phải cùng, nên trừ đi
+   `--rail-w` là đẩy cụm nút văng sang giữa màn, đè lên chat. */
+body.chat-first-live .ws-fab { right: 16px }
+/* Nút mở artifact = chính nút đóng rail, đổi nhãn (xem renderRail trong
+   shell.js). Chở CHỮ chứ không phải icon nên phải nhả rộng khỏi ô 28×28. */
+.rh-btn.rh-art { width: auto; padding: 0 10px; font-size: 11.5px; font-weight: 600; font-family: var(--serif) }
+
 /* ── RESPONSIVE (max-width:900px) — PHẢI để CUỐI file: các rule .rail/.sb đặt
    sau media query (vd .rail{position:relative} cho panel lịch sử) sẽ override
    mobile nếu media đứng trước → giữ khối này ở cuối để mobile thắng. ── */
@@ -537,6 +562,18 @@ button.item{border:none;background:none;font:inherit;text-align:left}
   /* Rail = trợ lý TOÀN MÀN trên điện thoại (was 360px drawer) → cảm giác app thật. */
   .rail{position:fixed;right:0;top:0;bottom:calc(64px + env(safe-area-inset-bottom));width:100vw;max-width:none;z-index:60;transform:translateX(100%);transition:transform .25s;border-left:none}
   .rail.open{transform:none}
+  /* Chat-first trên điện thoại: `.shell` chỉ còn MỘT cột và `.rail` là lớp phủ
+     `position:fixed`, nên `order` của khối chat-first phía trên KHÔNG có tác
+     dụng gì ở đây — việc lật hoàn toàn do `Shell.openRail()` lo, y như nút
+     "Trợ lý" vẫn làm. Chỉ cần gỡ nốt viền phải mà khối đó thêm cho desktop:
+     trên lớp phủ toàn màn nó chỉ là một nét kẻ dọc vô nghĩa. */
+  /* 🪤 PHẢI khai lại 1 cột ở đây: `body.chat-first-live .shell` nặng (0,2,0)
+     còn `.shell` của khối mobile chỉ (0,1,0) — độ đặc hiệu THẮNG media query,
+     nên không có dòng này thì điện thoại lĩnh nguyên lưới desktop và `.ws` bị
+     bóp còn 246px trên màn 393px. Đã ĐO thấy bằng trình duyệt thật
+     (`grid-template-columns` ra "246px 0px 420px"), không phải suy đoán. */
+  body.chat-first-live .shell{grid-template-columns:1fr}
+  body.chat-first-live .rail{border-right:none}
   .mobile-only{display:inline-flex}
   /* ── Thanh tiêu đề tool (.ws-top) trên điện thoại ────────────────────────
      Ở bề ngang 393px (iPhone), hàng ☰ + tiêu đề + 2–4 nút KHÔNG đủ chỗ. Vì

@@ -191,6 +191,20 @@
 
   var ACTIVE = window.SHELL_ACTIVE || '';
 
+  // ── CHAT-FIRST (đảo vai Chat ↔ Workspace) ──
+  // Bật per-tool bằng `window.SHELL_CHATFIRST = true` — CÙNG NẾP với
+  // `SHELL_ACTIVE`/`SHELL_HISTORY`/`SHELL_INTRO` mà 53 trang đã khai sẵn.
+  // Trang KHÔNG khai thì mọi thứ dưới đây là no-op tuyệt đối: đây là cửa duy
+  // nhất, không có đường nào khác bật được chế độ này. Cố ý opt-in vì
+  // `/app/luan-giai` nhận 100% click Google Ads — đổi phễu của nó phải là một
+  // quyết định riêng, có đo, chứ không phải hệ quả kèm theo của một bản vá shell.
+  //
+  // Vì sao chỉ cần bấy nhiêu: `.shell` là lưới 3 cột với `.sb`/`.ws`/`.rail` là
+  // BA ANH EM RUỘT, nên đảo vai = đổi `order` trong CSS, KHÔNG đụng DOM của
+  // trang nào. Và `Shell.setContext()` — 51/53 trang đã gọi — rơi đúng vào
+  // khoảnh khắc "dữ liệu deterministic đã tính xong", tức đúng lúc cần lật.
+  var CHATFIRST = !!window.SHELL_CHATFIRST;
+
   // ── MARKETING TRACKING ──
   // Nạp /track.js (nếu trang chưa có) để có window.Track + page_view; phát các
   // event funnel (tool_open/tool_run/chat_msg) từ shell. Emit an toàn: nếu Track
@@ -663,7 +677,12 @@
       '<div class="rail-h"><img class="rail-ava" src="' + authorAva() + '" alt="Trợ lý Luận Đường" data-tip="Đổi thầy luận giải">' +
       '<div><b>Trợ lý Luận Đường</b><span>' + esc(authorLabel()) + '</span></div>' +
       '<div class="tools">' +
-        '<button class="rh-btn mobile-only" data-tip="Đóng" aria-label="Đóng" data-act="rail-close">✕</button>' +
+        // Chat-first: đóng rail CHÍNH LÀ để lộ `.ws` nằm dưới — tức nút này đã
+        // sẵn là nút "mở artifact", chỉ thiếu cái tên đúng. Đổi nhãn thay vì
+        // thêm nút thứ hai làm cùng một việc.
+        (CHATFIRST
+          ? '<button class="rh-btn rh-art mobile-only" data-tip="Xem kết quả" aria-label="Xem kết quả" data-act="rail-close">Kết quả</button>'
+          : '<button class="rh-btn mobile-only" data-tip="Đóng" aria-label="Đóng" data-act="rail-close">✕</button>') +
         (HIST_ON ? '<button class="rh-btn" data-tip="Lịch sử hội thoại" aria-label="Lịch sử hội thoại" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></button>' : '') +
         '<button class="rh-btn" data-tip="Chia sẻ phiên" aria-label="Chia sẻ phiên" data-act="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>' +
         '<button class="rh-btn" data-tip="Hội thoại mới" aria-label="Hội thoại mới" data-act="newchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg></button>' +
@@ -2761,6 +2780,15 @@
       _railOpened = false; syncAskOrb();
       // Nạp ví để đồng hồ hiện "còn N câu" NGAY khi mở rail, chưa cần hỏi câu nào.
       loadRailStatus();
+      // Chat-first: ĐÂY là khoảnh khắc lật. Trước lời gọi này trang đang ở
+      // trạng thái FORM (`.ws` là mặt chính, đúng như hôm nay); sau nó thì dữ
+      // liệu deterministic đã có ⇒ chat thành mặt chính, `.ws` lùi thành
+      // artifact. Đặt TRƯỚC nhánh khôi phục phía dưới vì nhánh đó `return`
+      // sớm — để sau thì phiên khôi phục không bao giờ được lật.
+      if (CHATFIRST) {
+        document.body.classList.add('chat-first-live');
+        Shell.openRail(); // desktop: rail vốn luôn hiện, `.open` là no-op
+      }
       // KHÔI PHỤC phiên đã lưu (đi qua sessionStorage khi bấm 1 mục lịch sử):
       // thay transcript + sessionId, replay — KHÔNG gọi API, KHÔNG trừ Lượng.
       if (HIST_ON) try {
