@@ -10,7 +10,7 @@
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/shell.css?v=52">
+<link rel="stylesheet" href="/shell.css?v=53">
 <link rel="preload" href="/laso-chart.css?v=3" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/laso-chart.css?v=3"></noscript>
 <style>
@@ -299,7 +299,7 @@
       </div>
       <!-- Box nhập thông tin — đứng NGAY SAU thanh tiến trình (Henry 2026-09-14:
            trước đây có samp-cta chen giữa, nay samp-cta đã dời sang cột phụ). -->
-      <div class="form-card" id="birthPanel">
+      <div class="form-card" id="birthPanel" style="display:none">
         <div class="fc-head"><span class="fc-ic" data-icon="file-text"></span><h2>Nhập thông tin để lập lá số &amp; luận giải</h2></div>
         <p class="sub">Nhập họ tên, giới tính, ngày giờ sinh và năm muốn luận. Hệ thống tự an sao, lập lá số rồi luận giải từng phần. Nhận về bản luận đủ 13 phần: tổng quan và luận riêng 12 cung.</p>
         <div id="tuviFormHost"></div>
@@ -332,6 +332,10 @@
           <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnGoLabel">Lập lá số &amp; Luận giải ngay →</b></span>
           <small>Tốn <span class="vnd" data-tvp-price-vnd="laso"></span> <span class="cb-sub">(<span data-tvp-price="laso">…</span> Lượng)</span></small>
         </button>
+      </div>
+      <div class="ws-intake-hint" id="wsIntakeHint">
+        <span class="ic" data-icon="message-circle"></span>
+        <p>Trả lời thầy ở khung chat bên trái để lập lá số &amp; luận giải — họ tên, ngày giờ sinh và năm muốn luận.</p>
       </div>
       </div>
       <div class="ws-side-col">
@@ -419,6 +423,8 @@
 // (do duoc: be rong khoi chu 814px -> 376px). Nut "Ket qua" tren desktop no
 // rong `.ws` (body.art-wide) de doc dung kho; xem khoi CHATFIRST trong shell.js.
 window.SHELL_CHATFIRST=true;
+// Bước 6: hội thoại từng bước thay form-card (lan từ than-so-hoc, bước 5).
+window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=3"></script>
@@ -436,7 +442,7 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tools-shared/illus-nguong.js?v=1"></script>
 <script src="/tools-shared/illus-match.js?v=1"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=3"></script>
+<script src="/tuvi-form.js?v=4"></script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tools-shared/nguoi-than.js?v=1"></script>
@@ -456,6 +462,39 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 // sinh lịch sử với standalone) ──
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 NamLuanSelect.mount('inpNamxem');
+
+// ── Bước 6: hội thoại từng bước trong rail ──
+// TuviForm.renderChat() lo 3 bước chuẩn rồi ghi vào field thật (ẩn trong
+// #birthPanel) qua setData(). "Năm luận" là field riêng của trang, hỏi thêm
+// 1 bước — CÙNG bước đó hiện giá (data-tvp-price-vnd) vì `doLuan()` chạy
+// paywall NGAY khi bấm, không có bước xem-trước-miễn-phí như bat-tu. Luật
+// "chốt thanh toán đặt TRƯỚC bước tính" (CLAUDE.md) bắt buộc giá phải thấy
+// được ở ĐÚNG bước bấm submit, không phải chôn trong birthPanel đang ẩn.
+function chatAva(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; }
+function startIntake(){
+  if(window.Shell&&Shell.pendingRestore&&Shell.pendingRestore())return;
+  TuviForm.renderChat({ onDone:showNamxemStep });
+}
+function showNamxemStep(){
+  var chat=document.getElementById('chat');
+  var el=document.createElement('div'); el.className='msg a';
+  el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
+    '<div class="msg-body"><p>Con muốn luận vận năm nào?</p>'+
+    '<div class="frow"><div class="fg" style="width:90px"><label>Năm luận</label><select id="cInpNamxem"></select></div></div>'+
+    '<div class="cost-box" style="margin-top:10px"><div class="cb-l"><span class="cb-ic" data-icon="wallet"></span><div>'+
+    '<div class="cb-title">Chi phí sử dụng</div>'+
+    '<div class="cb-amt"><span class="vnd" data-tvp-price-vnd="laso"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="laso">…</span> Lượng)</span></div>'+
+    '</div></div></div>'+
+    '<button class="btn-go" type="button" id="namxemNext" style="width:auto;padding:9px 16px;font-size:13px;margin-top:8px">Lập lá số &amp; Luận giải ngay →</button></div>';
+  chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  NamLuanSelect.mount('cInpNamxem');
+  if(window.TuviPaywall)TuviPaywall.fillPriceSlots(el);
+  document.getElementById('namxemNext').addEventListener('click',function(){
+    document.getElementById('inpNamxem').value=document.getElementById('cInpNamxem').value;
+    doLuan();
+  });
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',startIntake);else startIntake();
 
 // Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
 // `_fillVndSlots` của app-chu-trinh-cuoc-doi.html. `ToolPrices.vndLabel` tự
