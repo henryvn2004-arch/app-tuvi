@@ -64,6 +64,10 @@
 /* Nên / Tránh — hai cột để đọc so sánh, không đọc nối tiếp */
 .hn-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:760px){.hn-two{grid-template-columns:1fr}}
+/* Bước 8: cột artifact chat-first chỉ rộng 420px trên MỌI viewport — media
+   query trên đọc viewport nên không khớp ở đây. Ép về 1 cột riêng cho
+   trạng thái này (xem docs/luat/bay.md "Khối trong .ws co theo bề rộng CỘT"). */
+body.chat-first-live .hn-two{grid-template-columns:1fr}
 .hn-col h4{font-family:var(--serif);font-size:14px;font-weight:700;margin-bottom:9px}
 .hn-col.yes h4{color:#1E6B3C}
 .hn-col.no h4{color:#A8342A}
@@ -334,6 +338,14 @@
 </div>
 
 <script>window.SHELL_ACTIVE='huong-nghiep-tre';window.SHELL_HISTORY=true;
+// Bước 8: lan chat-first. Trang trả tiền NGAY lúc nộp (setContext nằm sau
+// TuviPaywall.requireCredits()) nên KHÔNG đo được layout kết quả thật trong
+// sandbox (403 CONNECT Supabase) — đo thật sau khi deploy, cùng cách
+// luan-giai (bước 4) từng làm. Đã tự vá trước 1 bẫy đọc được qua code:
+// .hn-two là grid 2 cột chỉ co về 1 cột qua @media(max-width:760px) — media
+// query đó đọc VIEWPORT, không đọc bề rộng CỘT artifact (420px trên desktop
+// 1440px vẫn viewport 1440, media không khớp) — xem override bên dưới.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'huong-nghiep-tre'};</script>
 <script src="/tuvi-ansao-engine.js?v=1"></script>
 <script src="/tuvi-laso-format.js?v=2"></script>
