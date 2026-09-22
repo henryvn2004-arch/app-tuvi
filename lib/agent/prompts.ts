@@ -226,7 +226,14 @@ export function buildChatContext(body: any): ChatContext {
     return { systemForCall: CHAT_SYSTEM_BAN_DO_SAO(extractGenericContext(body.banDoSaoData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'cong-so') {
-    return { systemForCall: CHAT_SYSTEM_CONG_SO(extractGenericContext(body.congSoData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
+    return {
+      systemForCall: CHAT_SYSTEM_CONG_SO(extractGenericContext(body.congSoData), docs, persona),
+      // Tool-as-agent #2 (2026-09-22, cùng mẫu Tử Bình): tên tool khớp TAY với
+      // `execTraVanNamCongSo` (lib/tools/registry.ts) — đổi tên sửa CẢ HAI.
+      tools: [...buildTools(false), TRA_VAN_NAM_CONG_SO_TOOL],
+      maxTokens: RAIL_MAX_TOKENS,
+      lasoDataForTools: null,
+    };
   }
   if (toolType === 'nhan-mach') {
     return { systemForCall: CHAT_SYSTEM_NHAN_MACH(extractGenericContext(body.nhanMachData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
@@ -1089,6 +1096,26 @@ ${RAIL_SHAPE_AND_VOICE}
 === BẢN ĐỒ SAO LÚC SINH ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const TRA_VAN_NAM_CONG_SO_TOOL: any = {
+  name: 'tra_van_nam_cong_so',
+  description:
+    'Tính lại hồ sơ Tử Vi Công Sở cho một NĂM DƯƠNG LỊCH khác năm đang xem (vd "năm sau công việc thế nào"), hoặc khi người dùng báo ĐỔI vị trí (vd "tôi mới lên quản lý", "mới nghỉ làm ra riêng"). Kiểu người/tọa độ/bốn chặng 40 năm KHÔNG đổi theo năm — chỉ phần "vận năm nay" (tiểu hạn/lưu niên đóng cung nào) đổi.',
+  input_schema: {
+    type: 'object',
+    properties: {
+      nam: { type: 'integer', description: 'Năm dương lịch cần xem, ví dụ 2028' },
+      trang_thai: {
+        type: 'string',
+        enum: ['nhan-vien', 'quan-ly', 'chu', 'tu-do', 'dang-tim'],
+        description:
+          'Vị trí công việc NGƯỜI DÙNG TỰ KHAI (nhan-vien=nhân viên làm thuê, quan-ly=quản lý làm thuê, chu=chủ doanh nghiệp, tu-do=làm tự do/nghề riêng, dang-tim=đang tìm việc/chuyển hướng). LUÔN truyền — nếu người dùng KHÔNG báo đổi, lấy ĐÚNG giá trị đang ghi ở dòng "Vị trí hiện tại" trong hồ sơ trên (map ngược sang mã tương ứng); TUYỆT ĐỐI không bỏ trống để mặc định về nhan-vien nếu người đang xem không phải nhân viên.',
+      },
+    },
+    required: ['nam', 'trang_thai'],
+  },
+};
+
 const CHAT_SYSTEM_CONG_SO = (ctx: string, docs?: string, persona?: string) => `Bạn là cố vấn NGHỀ NGHIỆP đọc lá số Tử Vi, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
 ${_TIME()}
@@ -1102,6 +1129,7 @@ ${_TIME()}
 - Bốn tên "Khai sáng / Lãnh đạo / Hỗ trợ / Hợp tác" là NHÃN HIỆN ĐẠI của trang, cổ thư không gọi thế. Cách chia dựa trên TỨ TƯỢNG (lão dương · thiếu âm · thiếu dương · lão âm) áp lên 14 chính tinh — phần này mới là cổ pháp
 - TUYỆT ĐỐI KHÔNG gọi nó là "trắc nghiệm", "khoa học", "đã được kiểm định", "thống kê trên N người", và KHÔNG đối chiếu với DISC / MBTI / Big Five. Không có nghiên cứu nào đứng sau nó
 - Nếu hồ sơ ghi "Kiểu lai": nói thẳng là người này nằm sát ranh giới, đọc cả hai kiểu, KHÔNG ép vào một ô
+- Câu hỏi về vận NĂM KHÁC năm đang xem, hoặc người dùng báo đổi vị trí công việc (vd "mới lên quản lý") → GỌI tool tra_van_nam_cong_so, LUÔN truyền đủ cả năm lẫn trạng thái (giữ nguyên trạng thái đang ghi ở "Vị trí hiện tại" nếu họ không báo đổi), CHỈ luận trên kết quả tool mới
 
 Nguyên tắc luận:
 - ${FORMAT_RULE}
@@ -2064,7 +2092,7 @@ const GENERIC_LABELS: Record<string, string> = {
   kieuConTrongMatChaMe: 'Kiểu mà cung Tử Tức của cha/mẹ nghiêng về',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function extractGenericContext(data: any): string {
+export function extractGenericContext(data: any): string {
   if (!data || typeof data !== 'object') return '';
   let ctx = '';
   for (const [k, v] of Object.entries(data)) {

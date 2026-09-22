@@ -14,11 +14,13 @@
 import { computeLaso, formatLasoContext, lasoSummary, clockToBranch, type Laso } from '@/lib/engine/laso';
 import { buildTools, execLasoTool, toolLabel } from '@/lib/agent/tools';
 import { computeTuBinh } from '@/lib/engine/tubinh';
+import { computeCongSo, railDataDayDu, resolveTrangThai, TRANG_THAI_LABEL } from '@/lib/engine/cong-so';
 // Chỉ MỘT chiều import (registry → prompts) — prompts.ts KHÔNG import lại
-// registry.ts, tránh vòng lặp. Định nghĩa tool `tra_van_nam_bat_tu` (JSON
-// schema, không phụ thuộc gì) nằm ở prompts.ts cạnh CHAT_SYSTEM_TU_BINH; tên
-// tool phải khớp TAY giữa hai file — đổi tên thì sửa CẢ HAI.
-import { extractTuBinhContext } from '@/lib/agent/prompts';
+// registry.ts, tránh vòng lặp. Định nghĩa tool `tra_van_nam_bat_tu` /
+// `tra_van_nam_cong_so` (JSON schema, không phụ thuộc gì) nằm ở prompts.ts
+// cạnh CHAT_SYSTEM_TU_BINH / CHAT_SYSTEM_CONG_SO; tên tool phải khớp TAY
+// giữa hai file — đổi tên thì sửa CẢ HAI.
+import { extractTuBinhContext, extractGenericContext } from '@/lib/agent/prompts';
 import type { BirthParams } from '@/lib/contract/v1';
 import { SUGGEST_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
@@ -245,6 +247,7 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
   if (name === 'quen_di') return execQuenDi(input, ctx);
   if (name === 'goi_y_cong_cu') return execGoiYCongCu(input, ctx);
   if (name === 'tra_van_nam_bat_tu') return execTraVanNamBatTu(input, ctx);
+  if (name === 'tra_van_nam_cong_so') return execTraVanNamCongSo(input, ctx);
   if (name === 'tra_cuu_tri_thuc') {
     return { content: await execTraCuu(input), label: 'Đang tra cứu sách cổ...' };
   }
@@ -473,6 +476,34 @@ async function execTraVanNamBatTu(input: Rec, ctx: ToolContext): Promise<ToolRun
     content: `BÁT TỰ NĂM ${nam} (chỉ luận đại vận/lưu niên trên đây, Tứ Trụ/Nhật Can/Dụng Thần/Cách Cục không đổi theo năm):\n\n` +
       extractTuBinhContext(res.data),
     label: `Đang tính Bát Tự năm ${nam}...`,
+  };
+}
+
+// ── Công Sở: tra vận NĂM KHÁC / đổi vị trí (tool-as-agent #2, 2026-09-22) ──
+// Trước đây scenario 'cong-so' PROSE-TĨNH y hệt tu-binh: client tính một lần
+// (`/api/cong-so` → `railDataDayDu`) rồi gửi qua `scenario.data`, model chỉ có
+// đúng năm/vị trí lúc đó. `ctx.ls` KHÔNG được seed cho scenario (chỉ nhánh
+// laso mới seed) nên phải tự computeLaso lại từ `ctx.birth` trước khi gọi
+// computeCongSo — cùng thế execLapLaSo đang làm, không có gì lạ.
+async function execTraVanNamCongSo(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  if (!ctx.birth) {
+    return { content: 'Chưa có ngày sinh trong ngữ cảnh để tính lại.', label: 'Công Sở' };
+  }
+  const nam = Math.floor(Number(input?.nam));
+  if (!Number.isFinite(nam)) {
+    return { content: 'Thiếu năm cần xem.', label: 'Công Sở' };
+  }
+  const lsRes = computeLaso(ctx.birth);
+  if (!lsRes.ok || !lsRes.ls) {
+    return { content: 'Không lập lại được lá số: ' + (lsRes.error || 'lỗi không rõ'), label: 'Công Sở' };
+  }
+  const trangThai = resolveTrangThai(input?.trang_thai as string | undefined);
+  const profile = computeCongSo(lsRes.ls, trangThai, nam);
+  return {
+    content:
+      `TỬ VI CÔNG SỞ NĂM ${nam} — vị trí "${TRANG_THAI_LABEL[trangThai]}" (chỉ luận trên đây, không bịa thêm):\n\n` +
+      extractGenericContext(railDataDayDu(profile)),
+    label: `Đang tính Công Sở năm ${nam}...`,
   };
 }
 
