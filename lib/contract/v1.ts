@@ -131,6 +131,15 @@ export interface ChatRequestV1 {
   /** Định danh phiên để lưu/nối hội thoại. Client tự sinh uuid. */
   session_id: string;
   messages: ChatMessage[];
+  /**
+   * 'delta' (bước 2 hướng tới session thật, 2026-09-22): `messages` chỉ chứa
+   * tin MỚI của lượt này — server ghép với lịch sử đã lưu ở `chat_sessions`
+   * (cùng `session_id`, shadow-write từ PR #999). Vắng mặt / 'full' (mặc
+   * định, client cũ) → giữ NGUYÊN hành vi gốc: `messages` phải là TOÀN BỘ
+   * lịch sử, server dùng thẳng, không đụng session. Additive — client cũ
+   * không gửi field này vẫn chạy y hệt trước.
+   */
+  historyMode?: 'full' | 'delta';
   /** true → SSE stream; false → JSON một lần. Mặc định true. */
   stream?: boolean;
   /** Tham số sinh nếu đã có (đỡ phải hỏi lại) — luồng LÁ SỐ. */
@@ -324,6 +333,9 @@ export function validateChatRequest(body: unknown):
   const client = b.client as Record<string, unknown> | undefined;
   if (!client || typeof client.platform !== 'string' || typeof client.version !== 'string') {
     return { ok: false, error: 'Thiếu client.platform / client.version' };
+  }
+  if (b.historyMode != null && b.historyMode !== 'full' && b.historyMode !== 'delta') {
+    return { ok: false, error: 'historyMode không hợp lệ' };
   }
 
   // 🪤 Thêm giá trị `wrap` mới thì PHẢI thêm cả ở đây, không chỉ ở kiểu union
