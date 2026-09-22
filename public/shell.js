@@ -722,7 +722,11 @@
       // Nút CHỈ có chữ (không chứa <svg>) nên `textContent` ở đây an toàn —
       // xem luật "nút chỉ-icon cấm textContent" trong docs/ICONS.md.
       _ab.textContent = wide ? 'Thu gọn' : 'Kết quả';
-      _ab.setAttribute('data-tip', wide ? 'Thu gọn kết quả' : 'Xem kết quả');
+      // `data-tip` và `aria-label` phải đổi CÙNG LÚC: đổi mỗi tooltip thì trình
+      // đọc màn hình vẫn đọc nhãn cũ ("Xem kết quả") trong khi nút đã là "Thu
+      // gọn". `npm run check:tooltip` canh đúng chỗ này — và đã bắt thật.
+      var _tip = wide ? 'Thu gọn kết quả' : 'Xem kết quả';
+      _ab.setAttribute('data-tip', _tip); _ab.setAttribute('aria-label', _tip);
     });
     host.querySelector('.rail-ava').addEventListener('click', openAuthorModal);
     host.querySelector('[data-act="attach"]').addEventListener('click', function () { var f = document.getElementById('railFile'); if (f) f.click(); });
