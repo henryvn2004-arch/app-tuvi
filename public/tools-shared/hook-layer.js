@@ -237,6 +237,26 @@ window.HookLayer = (function () {
     return '<div class="hkl-pending"><span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span></div>';
   }
 
+  // Tự nạp ai-loading-steps.js nếu trang chưa có — cùng lý do `_ensurePrices()`
+  // ở tuvi-paywall.js: thêm tay thẻ <script> vào 21 trang gọi `run()` thì sẽ
+  // sót (đã sót 10/21 lúc viết dòng này), sót trang nào là trang đó vẫn ăn
+  // spinner nhỏ `.rr-spin` — đúng thứ Henry báo "nhỏ xíu, không ai thấy được,
+  // không phải vòng tròn glowing quen thuộc" (2026-09-22).
+  function _ensureAiLoadingSteps() {
+    if (window.AiLoadingSteps) return Promise.resolve();
+    return new Promise(function (resolve) {
+      var el = document.getElementById('_tvmb_ai_loading_js');
+      if (!el) {
+        el = document.createElement('script');
+        el.id = '_tvmb_ai_loading_js';
+        el.src = '/tools-shared/ai-loading-steps.js';
+        document.head.appendChild(el);
+      }
+      el.addEventListener('load', function () { resolve(); });
+      el.addEventListener('error', function () { resolve(); }); // nạp hỏng → giữ nguyên spinner nhỏ
+    });
+  }
+
   /** Cửa DUY NHẤT cho tầng hook kể chuyện — xem chú thích đầu file. */
   function run(host, spec) {
     if (!host || !spec) return;
@@ -244,7 +264,23 @@ window.HookLayer = (function () {
     if (facts.length < 2) { host.innerHTML = ''; host.style.display = 'none'; return; }
     _ensureNarrativeCss();
     host.style.display = '';
-    host.innerHTML = _pendingHtml();
+    host.innerHTML = _pendingHtml(); // giữ chỗ ngay — không đợi ai-loading-steps.js nạp xong
+
+    // Orb glowing to (cùng bộ `AiLoadingSteps` dùng ở #lgPanel/pha vẽ ảnh) —
+    // thay cho `.rr-spin` 15px NGAY KHI script nạp xong, nếu lúc đó lượt gọi
+    // API bên dưới chưa xong. `done` chặn việc vẽ đè lên kết quả thật nếu
+    // fetch xong TRƯỚC khi script kịp nạp (đường mạng chậm/race hai request).
+    var done = false;
+    var waitCtl = null;
+    _ensureAiLoadingSteps().then(function () {
+      if (done || !window.AiLoadingSteps || !window.AiLoadingSteps.mountWait) return;
+      waitCtl = window.AiLoadingSteps.mountWait(host, {
+        label: 'Đang soạn phần mở đầu hấp dẫn hơn…',
+        center: true, orbSize: 96, fast: true,
+        expectSec: 7, expectText: '5-8 giây',
+      });
+      waitCtl.start();
+    });
 
     var tk = (window.Auth && window.Auth.isLoggedIn()) ? window.Auth.getSession().access_token : null;
     var headers = { 'Content-Type': 'application/json' };
@@ -258,6 +294,8 @@ window.HookLayer = (function () {
     fetch('/api/hook-narrative', { method: 'POST', headers: headers, body: JSON.stringify(body) })
       .then(function (r) { return r.json(); })
       .then(function (data) {
+        done = true;
+        if (waitCtl) waitCtl.stop();
         if (data && data.allowed) {
           _renderNarrative(host, spec, data, facts);
         } else if (data && (data.reason === 'key_cap' || data.reason === 'ip_cap' || data.reason === 'global_cap')) {
@@ -268,6 +306,8 @@ window.HookLayer = (function () {
         }
       })
       .catch(function () {
+        done = true;
+        if (waitCtl) waitCtl.stop();
         host.innerHTML = '';
         host.style.display = 'none';
       });

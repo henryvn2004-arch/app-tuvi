@@ -13,7 +13,7 @@ export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
-import { toolPaymentDenied } from '@/lib/billing/credits';
+import { toolPaymentDenied, getBalance } from '@/lib/billing/credits';
 import { refundIfSystemFailure } from '@/lib/ops/refund';
 import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage, logLlmParseFail } from '@/lib/agent/usage';
@@ -350,7 +350,10 @@ async function runPreview(request: NextRequest) {
 
   const auth = await authUserFromRequest(request);
   const pKey = 'error' in auth ? String(body.anonId || '') : auth.user.id;
-  const gate = await previewGate(pKey, previewIpHash(request), TOOL_ID);
+  // User đã đăng nhập VÀ còn Lượng > 0 trong ví → bỏ qua hẳn cầu dao
+  // 3-lượt-đời (cùng luật với /api/hook-narrative, 2026-09-21).
+  const hasBalance = 'error' in auth ? false : (await getBalance(auth.user.id)) > 0;
+  const gate = hasBalance ? { allowed: true as const, reason: 'ok' as const } : await previewGate(pKey, previewIpHash(request), TOOL_ID);
   if (!gate.allowed) {
     console.error(`[day-con] xem trước bị chặn (${gate.reason})`);
     return ok(khung);

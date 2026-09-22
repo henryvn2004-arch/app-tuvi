@@ -26,7 +26,7 @@ import { refundIfSystemFailure } from '@/lib/ops/refund';
 import { authUserFromRequest } from '@/lib/api/tool-helpers';
 import { previewGate, previewIpHash } from '@/lib/billing/anon-preview';
 import { previewKey, previewCacheGet, previewCachePut } from '@/lib/llm/preview-cache';
-import { hasAnySlugAccess, paywallDisabled } from '@/lib/billing/credits';
+import { hasAnySlugAccess, paywallDisabled, getBalance } from '@/lib/billing/credits';
 
 // ─── LLM client (Gemini-primary + Anthropic-backup) ────────────
 // Trả shape Anthropic ({content, stop_reason, usage}) dù provider nào → vòng
@@ -376,7 +376,12 @@ async function runPost(request: NextRequest) {
 
     const auth = await authUserFromRequest(request);
     const pKey = 'error' in auth ? (anonId || '') : auth.user.id;
-    const gate = await previewGate(pKey, previewIpHash(request), previewToolId);
+    // User đã đăng nhập VÀ còn Lượng > 0 trong ví → bỏ qua hẳn cầu dao
+    // 3-lượt-đời (cùng luật với /api/hook-narrative, 2026-09-21): tầng xem
+    // trước là phần thưởng đi kèm, không phải sản phẩm bán riêng, và không
+    // được lẫn quota của người có tiền với quota của khách ẩn danh.
+    const hasBalance = 'error' in auth ? false : (await getBalance(auth.user.id)) > 0;
+    const gate = hasBalance ? { allowed: true as const, reason: 'ok' as const } : await previewGate(pKey, previewIpHash(request), previewToolId);
     if (!gate.allowed) {
       // 402 chứ không 429: với client đây KHÔNG phải "thử lại sau" mà là "hết
       // phần miễn phí, tới lúc trả tiền" — và trang phải dựng đúng tấm tường đó
