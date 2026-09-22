@@ -837,6 +837,24 @@
     });
     return out;
   }
+  // ── Phiên SỐNG trong TAB — reload cùng ngữ cảnh thì nối lại, KHÔNG mất chat ──
+  // Khác "Lịch sử" (bấm chọn thủ công, sống mãi, mọi máy): đây tự động, sống
+  // trong sessionStorage (chết khi đóng tab) — đúng nghĩa "làm mới trang thì
+  // giữ, mở tab/máy khác thì sạch". Chỉ lưu CON TRỎ {id, fp} — bản ghi ĐẦY ĐỦ
+  // (messages/restore/title) đã có sẵn trong `app_hist_v1_<tool>` do
+  // `saveCurrent()` ghi, khỏi chép lại một bản nữa. fp (fingerprint) so khớp
+  // birth+scenario+wrap: đổi ngữ cảnh (chọn lá số khác, đổi tool) thì KHÔNG
+  // nối nhầm — sai khớp chỉ rơi về hành vi CŨ (khởi tạo phiên mới), an toàn.
+  function sessFp(o) {
+    try { return JSON.stringify({ b: normBirth(o.birth) || null, s: (o.scenario && o.scenario.type) || null, w: o.wrap || null }); }
+    catch (e) { return ''; }
+  }
+  function sessLiveKey(t) { return 'app_livesess_v1_' + t; }
+  function sessStash() {
+    if (!HIST_ON || !ACTIVE || !ctx || !messages.length) return;
+    try { sessionStorage.setItem(sessLiveKey(ACTIVE), JSON.stringify({ id: sessionId, fp: sessFp(ctx) })); }
+    catch (e) { /* quota / private mode — mất thì reload không nối lại, không hỏng gì */ }
+  }
   function histLocalUpsert(rec) {
     var arr = histLocal(rec.toolId).filter(function (s) { return s.id !== rec.id; });
     arr.unshift(rec); histWrite(rec.toolId, arr);
@@ -2691,6 +2709,25 @@
       // HỆ giữa hai lá số — thiếu vế này thì rail kể một thế giới khác hẳn thế
       // giới đang hiện trên màn hình.
       ctx = (o.birth || o.scenario) ? { birth: o.birth || null, scenario: o.scenario || null, wrap: o.wrap || null, wrapBirthB: o.wrapBirthB || null } : null;
+      // Reload TRONG CÙNG TAB, cùng ngữ cảnh → tự nối lại — dựng SẴN cờ
+      // `app_restore`/`app_restore_data` mà khối "KHÔI PHỤC phiên đã lưu" bên
+      // dưới vốn chỉ đọc khi người dùng BẤM 1 mục lịch sử; ở đây kích hoạt tự
+      // động bằng con trỏ `sessLiveKey` (sessionStorage, sống trong tab).
+      // `!sessionStorage.getItem('app_restore')`: yêu cầu khôi phục TƯỜNG MINH
+      // (vừa bấm 1 mục lịch sử khác) luôn thắng, không bị auto-resume đè.
+      if (HIST_ON && ctx && !sessionStorage.getItem('app_restore')) {
+        try {
+          var _ptr = JSON.parse(sessionStorage.getItem(sessLiveKey(ACTIVE)) || 'null');
+          if (_ptr && _ptr.id && _ptr.fp === sessFp(ctx)) {
+            var _rec = null;
+            histLocal(ACTIVE).forEach(function (s) { if (s.id === _ptr.id) _rec = s; });
+            if (_rec && _rec.messages && _rec.messages.length) {
+              sessionStorage.setItem('app_restore', JSON.stringify({ id: _rec.id, toolId: ACTIVE }));
+              sessionStorage.setItem('app_restore_data', JSON.stringify(_rec));
+            }
+          }
+        } catch (e) { /* ignore — không khớp/hỏng thì rơi về khởi tạo phiên mới như cũ */ }
+      }
       ctxCalls++;
       // Funnel: tool đã tính ra kết quả + gắn ngữ cảnh = "đã dùng tool" (activation).
       // `o.passive` — trang tự mồi rail lúc BOOT (chưa ai bấm gì, vd Tổng Quan
@@ -2961,6 +2998,9 @@
   function newChat() {
     messages = [];
     sessionId = newId();
+    // Xoá con trỏ phiên sống trong tab — không thì reload NGAY SAU "hội thoại
+    // mới" (chưa kịp gửi câu nào) sẽ nối nhầm lại đúng cái vừa bị đóng.
+    try { sessionStorage.removeItem(sessLiveKey(ACTIVE)); } catch (e) { /* ignore */ }
     if (ctx) {
       // Thread mới cùng ngữ cảnh: giữ restore/title, đổi id để không đè phiên cũ.
       curMeta = { restore: (curMeta && curMeta.restore) || { birth: birthSnapshot(), scenario: ctx.scenario || null }, title: (curMeta && curMeta.title) || 'Phiên', createdAt: Date.now() };
@@ -3125,6 +3165,7 @@
       typing.innerHTML = mdLite(acc);
       messages.push({ role: 'assistant', content: acc });
       saveCurrent();
+      sessStash();
       // Thẻ mời SAU khi câu trả lời đã hiện xong — chèn trước lúc đó thì nó đứng
       // chen giữa lúc người ta đang đọc, thành quảng cáo cắt ngang.
       maybeShowUpsell();
