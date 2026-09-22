@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-358 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+359 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 193 | 765,285 B |
+| `2026-09.md` | 194 | 768,312 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🧱 Sprint session thật kiểu ChatGPT/Claude — bước 2: ĐỌC từ `chat_sessions` |
 | 1 | 2026-09 | `2026-09.md` | 🧱 Sprint session thật kiểu ChatGPT/Claude — bước 1: SHADOW WRITE vào `chat_sessions` |
 | 1 | 2026-09 | `2026-09.md` | 🔴 Cầu dao xem-trước bypass NHẦM ai — `getBalance()>0` cho MỌI user mới đăng ký bypass được |
 | 1 | 2026-09 | `2026-09.md` | 💾 Cache tường minh Gemini CHO CẢ đường tools ('laso') — bake `tools` vào cache |

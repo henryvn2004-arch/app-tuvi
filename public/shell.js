@@ -3015,7 +3015,10 @@
       var token = await freshToken(); if (token) headers['Authorization'] = 'Bearer ' + token;
       // anon_id đi kèm để server đếm lượt DÙNG THỬ khi chưa đăng nhập. Người đã
       // đăng nhập vẫn gửi (vô hại — server bỏ qua vì có token).
-      var body = { session_id: sessionId, stream: true, messages: messages.slice(-12), client: { platform: 'web', version: '1.0.0', anon_id: anonId() } };
+      // historyMode:'delta' (bước 2 hướng tới session thật): chỉ gửi tin MỚI
+      // (um) — server tự ghép lịch sử từ chat_sessions (khớp cùng sessionId,
+      // đã ghi từ lượt trước). Đỡ gửi lại nguyên cục 12 tin (kèm ảnh) mỗi lượt.
+      var body = { session_id: sessionId, stream: true, historyMode: 'delta', messages: [um], client: { platform: 'web', version: '1.0.0', anon_id: anonId() } };
       if (ctx.birth) body.birth = ctx.birth;
       if (ctx.scenario) body.scenario = ctx.scenario;
       if (ctx.wrap) body.wrap = ctx.wrap;

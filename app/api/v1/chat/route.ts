@@ -27,7 +27,7 @@ import { buildToolDefs } from '@/lib/tools/registry';
 import { runAgent } from '@/lib/agent/run';
 import { getChatConfig, getConfigValue } from '@/lib/config/appConfig';
 import { getRailPrice } from '@/lib/billing/pricing';
-import { chatLogOutcome, chatSaveSession } from '@/lib/channels/store';
+import { chatLogOutcome, chatLoadSession, chatSaveSession } from '@/lib/channels/store';
 import {
   paywallDisabled,
   extractToken,
@@ -88,8 +88,27 @@ export async function POST(request: NextRequest) {
   if (!parsed.ok) return jsonError('bad_request', parsed.error, 400);
   if (!ANTHROPIC_API_KEY) return jsonError('internal', 'Thiếu cấu hình ANTHROPIC_API_KEY', 500);
 
-  const req: ChatRequestV1 = parsed.value;
+  const rawReq: ChatRequestV1 = parsed.value;
   const cfg = await getChatConfig();
+
+  // ── Đọc từ session (2026-09-22, bước 2 hướng tới session thật) ─────────
+  // `historyMode:'delta'`: `messages` chỉ chứa tin MỚI, ghép với lịch sử đã
+  // lưu ở `chat_sessions` (shadow-write từ PR #999, cùng `session_id`). Gán
+  // đè `req` MỘT LẦN ở đây — mọi nhánh phía dưới (gate Bậc 0, paywall,
+  // runAgent, chatSaveSession) đọc `req.messages`/`req.birth` như cũ, không
+  // sửa gì thêm. Session rỗng (lượt đầu / chưa từng lưu) → `req` giữ nguyên
+  // `rawReq`, hệt hành vi trước khi có field này.
+  let req: ChatRequestV1 = rawReq;
+  if (rawReq.historyMode === 'delta') {
+    const stored = await chatLoadSession('web', rawReq.session_id);
+    if (stored.messages.length) {
+      req = {
+        ...rawReq,
+        messages: [...stored.messages, ...rawReq.messages],
+        birth: rawReq.birth ?? stored.birth ?? undefined,
+      };
+    }
+  }
 
   // ── Bậc 0: chưa có lá số/scenario mà hội thoại đã dài ──────────
   // Vì sao ĐẶT TRƯỚC paywall pre-check: chặn ở đây tiết kiệm CẢ HAI ngân sách
@@ -187,16 +206,15 @@ export async function POST(request: NextRequest) {
   const stream = new ReadableStream({
     async start(controller) {
       const send = (chunk: string) => controller.enqueue(encoder.encode(chunk));
-      // Hạ tầng SESSION (2026-09-22, Sprint chuẩn bị session thật kiểu ChatGPT):
-      // gom lại câu trả lời ĐẦY ĐỦ từ các event 'text' để lưu vào `chat_sessions`
-      // sau khi lượt xong — CỬA DUY NHẤT ghi phiên rail hiện có (`chatSaveSession`,
-      // lib/channels/store.ts), đã chạy thật cho Telegram/Messenger/WhatsApp,
-      // giờ dùng luôn cho web (`platform='web'`, `chat_id=session_id`). CHỈ GHI
-      // (shadow write) — đường phục vụ lượt chat vẫn y hệt cũ, đọc `req.messages`
-      // client tự gửi, KHÔNG đổi hành vi. Mục đích: dựng dữ liệu phiên thật
-      // trước khi đổi UI/UX sang đọc từ đây (việc sau, chưa làm ở đây).
-      // Hình dạng frame CỐ ĐỊNH — do chính `sseEvent()` (lib/contract/v1.ts)
-      // dựng, không phải input người dùng, nên cắt chuỗi trực tiếp AN TOÀN.
+      // Hạ tầng SESSION (2026-09-22): gom lại câu trả lời ĐẦY ĐỦ từ các event
+      // 'text' để lưu vào `chat_sessions` sau khi lượt xong — CỬA DUY NHẤT ghi
+      // phiên rail hiện có (`chatSaveSession`, lib/channels/store.ts), đã chạy
+      // thật cho Telegram/Messenger/WhatsApp, giờ dùng luôn cho web
+      // (`platform='web'`, `chat_id=session_id`). `req` ở đây đã là bản ĐỌC-TỪ-
+      // SESSION (xem merge `historyMode:'delta'` phía trên request) nên lưu
+      // đúng lịch sử đầy đủ dù client chỉ gửi tin mới. Hình dạng frame SSE CỐ
+      // ĐỊNH — do chính `sseEvent()` (lib/contract/v1.ts) dựng, không phải input
+      // người dùng, nên cắt chuỗi trực tiếp AN TOÀN.
       const TEXT_PREFIX = 'event: text\ndata: ';
       let assistantText = '';
       const sendAndCollect = (chunk: string) => {
