@@ -140,7 +140,13 @@ export function buildChatContext(body: any): ChatContext {
   if (toolType === 'tu-binh') {
     return {
       systemForCall:    CHAT_SYSTEM_TU_BINH(extractTuBinhContext(body.tuBinhData), docs, persona),
-      tools:            buildTools(false),
+      // Pilot tool-as-agent (2026-09-22): trước đây tử bình PROSE-TĨNH — hỏi vận
+      // năm KHÁC là bó tay (chỉ có dữ liệu năm đang xem trong `ctx`). Thêm tool
+      // để model tự tính lại thay vì bắt CLIENT gửi lại nguyên request khác.
+      // Tên tool khớp `execTraVanNamBatTu` (lib/tools/registry.ts) — đổi tên
+      // phải sửa CẢ HAI nơi, đây là cặp ghép KHÔNG import lẫn nhau (tránh vòng
+      // lặp registry.ts ↔ prompts.ts).
+      tools:            [...buildTools(false), TRA_VAN_NAM_BAT_TU_TOOL],
       maxTokens:        RAIL_MAX_TOKENS,
       lasoDataForTools: null,
     };
@@ -1211,6 +1217,18 @@ Nguyên tắc:
 ${RAIL_SHAPE_AND_VOICE}
 ${docs ? '\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const TRA_VAN_NAM_BAT_TU_TOOL: any = {
+  name: 'tra_van_nam_bat_tu',
+  description:
+    'Tính lại đại vận/lưu niên Bát Tự cho MỘT NĂM DƯƠNG LỊCH khác năm đang xem ở trên (vd "năm 2028 thế nào", "sang năm ra sao"). Tứ Trụ/Nhật Can/Dụng Thần/Cách Cục KHÔNG đổi theo năm — chỉ đại vận + lưu niên đổi, tool tự tính lại đúng phần đó.',
+  input_schema: {
+    type: 'object',
+    properties: { nam: { type: 'integer', description: 'Năm dương lịch cần xem, ví dụ 2028' } },
+    required: ['nam'],
+  },
+};
+
 const CHAT_SYSTEM_TU_BINH = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Tử Bình Bát Tự (Tứ Trụ). Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
 THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}.
@@ -1220,6 +1238,7 @@ Nguyên tắc trả lời:
 - Dẫn chứng cụ thể từ Tứ Trụ: Nhật Can, Dụng Thần, Cách Cục, Ngũ Hành
 - Nói thẳng mạnh/yếu — cấm tâng bốc, cấm nước đôi né tránh
 - Câu hỏi về ngày tốt → gọi tool xem_ngay_tot; không tự bịa số liệu vận hạn
+- Câu hỏi về vận NĂM KHÁC năm đang xem ở dữ liệu dưới (vd "năm 2028 thế nào") → GỌI tool tra_van_nam_bat_tu với năm đó, CHỈ luận trên kết quả tool mới, TUYỆT ĐỐI không suy diễn từ đại vận/lưu niên của năm cũ
 - ${XUNG_HO_RULE}
 
 ${RAIL_SHAPE_AND_VOICE}
@@ -1636,7 +1655,7 @@ function extractCompatContext(compatData: any, toolType: string): string {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function extractTuBinhContext(tuBinhData: any): string {
+export function extractTuBinhContext(tuBinhData: any): string {
   if (!tuBinhData) return '';
   let ctx = '';
 
