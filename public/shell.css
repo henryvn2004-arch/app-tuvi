@@ -522,6 +522,15 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 body.chat-first-live .shell { grid-template-columns: 246px 1fr var(--art-w) }
 body.chat-first-live .rail { order: 2; border-left: none; border-right: 1px solid var(--line) }
 body.chat-first-live .ws { order: 3 }
+/* ── "Mở rộng kết quả" (`body.art-wide`, desktop) ───────────────────────────
+   Cột artifact 420px vừa cho kết quả NGẮN (9 tool free đã đo tràn=0), nhưng
+   KHÔNG đủ cho bản luận dài. Đo trên `/app/luan-giai` ở 1440px: bề rộng khối
+   chữ tụt **814px → 376px** khi bật chat-first — tức đọc bản luận 40 trang
+   qua một khe hẹp, trên màn hình rộng. Nên phải nở rộng ra được.
+   Chỉ cần ĐẢO xem cột nào giữ `1fr`: chat về đúng `--rail-w` như cũ, `.ws`
+   lấy phần còn lại. Cả hai vẫn thấy được ⇒ không có ngõ cụt, luôn quay lại
+   chat được mà không phải đóng gì. */
+body.chat-first-live.art-wide .shell { grid-template-columns: 246px var(--rail-w) 1fr }
 /* 🪤 `.ws-fab` neo bằng `right:calc(var(--rail-w) + 16px)` vì nó GIẢ ĐỊNH rail
    là cột phải cùng. Đảo cột xong thì `.ws` mới là cột phải cùng, nên trừ đi
    `--rail-w` là đẩy cụm nút văng sang giữa màn, đè lên chat. */

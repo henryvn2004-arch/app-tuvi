@@ -681,7 +681,7 @@
         // sẵn là nút "mở artifact", chỉ thiếu cái tên đúng. Đổi nhãn thay vì
         // thêm nút thứ hai làm cùng một việc.
         (CHATFIRST
-          ? '<button class="rh-btn rh-art mobile-only" data-tip="Xem kết quả" aria-label="Xem kết quả" data-act="rail-close">Kết quả</button>'
+          ? '<button class="rh-btn rh-art" data-tip="Xem kết quả" aria-label="Xem kết quả" data-act="artifact">Kết quả</button>'
           : '<button class="rh-btn mobile-only" data-tip="Đóng" aria-label="Đóng" data-act="rail-close">✕</button>') +
         (HIST_ON ? '<button class="rh-btn" data-tip="Lịch sử hội thoại" aria-label="Lịch sử hội thoại" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></button>' : '') +
         '<button class="rh-btn" data-tip="Chia sẻ phiên" aria-label="Chia sẻ phiên" data-act="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>' +
@@ -705,7 +705,25 @@
     host.querySelector('[data-act="newchat"]').addEventListener('click', newChat);
     var _hb = host.querySelector('[data-act="history"]'); if (_hb) _hb.addEventListener('click', toggleHistPanel);
     var _shb = host.querySelector('[data-act="share"]'); if (_shb) _shb.addEventListener('click', shareSession);
-    host.querySelector('[data-act="rail-close"]').addEventListener('click', function () { host.classList.remove('open'); syncBackdrop(); });
+    // 🪤 Ở chế độ chat-first nút này KHÔNG tồn tại (đã thay bằng `artifact`),
+    // nên phải hỏi trước — `querySelector` trả `null` là ném ngay tại boot,
+    // chết cả rail.
+    var _rc = host.querySelector('[data-act="rail-close"]');
+    if (_rc) _rc.addEventListener('click', function () { host.classList.remove('open'); syncBackdrop(); });
+    // Nút "Kết quả" của chat-first làm HAI việc khác nhau tuỳ khổ màn, vì ở hai
+    // khổ đó `.ws` nằm ở hai chỗ khác hẳn:
+    //  · mobile (≤900px): `.ws` nằm DƯỚI rail (rail là lớp phủ) ⇒ đóng rail là
+    //    thấy kết quả, y như nút ✕ cũ;
+    //  · desktop: cả hai cột cùng hiện, `.ws` chỉ hẹp ⇒ nở nó ra (`art-wide`).
+    var _ab = host.querySelector('[data-act="artifact"]');
+    if (_ab) _ab.addEventListener('click', function () {
+      if (window.matchMedia('(max-width:900px)').matches) { host.classList.remove('open'); syncBackdrop(); return; }
+      var wide = document.body.classList.toggle('art-wide');
+      // Nút CHỈ có chữ (không chứa <svg>) nên `textContent` ở đây an toàn —
+      // xem luật "nút chỉ-icon cấm textContent" trong docs/ICONS.md.
+      _ab.textContent = wide ? 'Thu gọn' : 'Kết quả';
+      _ab.setAttribute('data-tip', wide ? 'Thu gọn kết quả' : 'Xem kết quả');
+    });
     host.querySelector('.rail-ava').addEventListener('click', openAuthorModal);
     host.querySelector('[data-act="attach"]').addEventListener('click', function () { var f = document.getElementById('railFile'); if (f) f.click(); });
     document.getElementById('railFile').addEventListener('change', onPickFiles);
