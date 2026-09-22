@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-362 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+363 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 197 | 780,343 B |
+| `2026-09.md` | 198 | 784,684 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🧱 Sprint session thật kiểu ChatGPT/Claude — bước 6: tool-as-agent #3 (Thần Số Học) + 2 phát hiện "đã đủ" |
 | 1 | 2026-09 | `2026-09.md` | 🧱 Sprint session thật kiểu ChatGPT/Claude — bước 5: tool-as-agent #2 (Tử Vi Công Sở) |
 | 1 | 2026-09 | `2026-09.md` | 🧱 Sprint session thật kiểu ChatGPT/Claude — bước 4: điều tra 2 việc còn treo + pilot tool-as-agent (Tử Bình) |
 | 1 | 2026-09 | `2026-09.md` | 🧱 Sprint session thật kiểu ChatGPT/Claude — bước 3: PERSIST `sessionId` qua reload |

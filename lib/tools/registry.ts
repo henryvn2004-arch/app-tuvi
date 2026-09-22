@@ -15,11 +15,13 @@ import { computeLaso, formatLasoContext, lasoSummary, clockToBranch, type Laso }
 import { buildTools, execLasoTool, toolLabel } from '@/lib/agent/tools';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeCongSo, railDataDayDu, resolveTrangThai, TRANG_THAI_LABEL } from '@/lib/engine/cong-so';
+import { computeThanSoHoc } from '@/lib/engine/than-so-hoc';
 // Chỉ MỘT chiều import (registry → prompts) — prompts.ts KHÔNG import lại
 // registry.ts, tránh vòng lặp. Định nghĩa tool `tra_van_nam_bat_tu` /
-// `tra_van_nam_cong_so` (JSON schema, không phụ thuộc gì) nằm ở prompts.ts
-// cạnh CHAT_SYSTEM_TU_BINH / CHAT_SYSTEM_CONG_SO; tên tool phải khớp TAY
-// giữa hai file — đổi tên thì sửa CẢ HAI.
+// `tra_van_nam_cong_so` / `tra_nam_ca_nhan_than_so` (JSON schema, không phụ
+// thuộc gì) nằm ở prompts.ts cạnh CHAT_SYSTEM_TU_BINH / CHAT_SYSTEM_CONG_SO /
+// CHAT_SYSTEM_THAN_SO; tên tool phải khớp TAY giữa hai file — đổi tên thì sửa
+// CẢ HAI.
 import { extractTuBinhContext, extractGenericContext } from '@/lib/agent/prompts';
 import type { BirthParams } from '@/lib/contract/v1';
 import { SUGGEST_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
@@ -248,6 +250,7 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
   if (name === 'goi_y_cong_cu') return execGoiYCongCu(input, ctx);
   if (name === 'tra_van_nam_bat_tu') return execTraVanNamBatTu(input, ctx);
   if (name === 'tra_van_nam_cong_so') return execTraVanNamCongSo(input, ctx);
+  if (name === 'tra_nam_ca_nhan_than_so') return execTraNamCaNhanThanSo(input);
   if (name === 'tra_cuu_tri_thuc') {
     return { content: await execTraCuu(input), label: 'Đang tra cứu sách cổ...' };
   }
@@ -504,6 +507,31 @@ async function execTraVanNamCongSo(input: Rec, ctx: ToolContext): Promise<ToolRu
       `TỬ VI CÔNG SỞ NĂM ${nam} — vị trí "${TRANG_THAI_LABEL[trangThai]}" (chỉ luận trên đây, không bịa thêm):\n\n` +
       extractGenericContext(railDataDayDu(profile)),
     label: `Đang tính Công Sở năm ${nam}...`,
+  };
+}
+
+// ── Thần Số Học: tra NĂM CÁ NHÂN của năm khác (tool-as-agent #3, 2026-09-22) ──
+// KHÁC hai tool trên: trang `/than-so-hoc` KHÔNG gửi `birth` vào setContext
+// (chỉ gửi `scenario.data` đã tính sẵn từ ThanSoTool.compute() chạy CLIENT-SIDE)
+// nên `ctx.birth` luôn null ở đây — tool nhận thẳng dob/ten mà model copy lại
+// NGUYÊN VĂN từ dữ liệu đã cho (đã dặn trong CHAT_SYSTEM_THAN_SO), không đọc ctx.
+async function execTraNamCaNhanThanSo(input: Rec): Promise<ToolRunResult> {
+  const dob = String(input?.dob || '').trim();
+  const ten = String(input?.ten || '').trim();
+  const namXem = Math.floor(Number(input?.nam_xem));
+  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(dob);
+  if (!m || !ten || !Number.isFinite(namXem)) {
+    return { content: 'Thiếu hoặc sai định dạng ngày sinh (cần dd/mm/yyyy), tên, hoặc năm xem.', label: 'Thần Số Học' };
+  }
+  const res = computeThanSoHoc(Number(m[1]), Number(m[2]), Number(m[3]), ten, namXem);
+  if (!res.ok || !res.data) {
+    return { content: 'Không tính được: ' + (res.error || 'lỗi không rõ'), label: 'Thần Số Học' };
+  }
+  return {
+    content:
+      `THẦN SỐ HỌC NĂM XEM ${namXem} (chỉ Năm Cá Nhân + chặng hiện tại đổi theo năm; bốn số cốt lõi và biểu đồ GIỮ NGUYÊN như đã cho, không bịa lại):\n\n` +
+      extractGenericContext(res.data),
+    label: `Đang tính Năm Cá Nhân ${namXem}...`,
   };
 }
 

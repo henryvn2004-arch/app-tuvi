@@ -199,7 +199,17 @@ export function buildChatContext(body: any): ChatContext {
     return { systemForCall: CHAT_SYSTEM_NGU_HANH_TEN(extractGenericContext(body.nguHanhTenData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'than-so-hoc') {
-    return { systemForCall: CHAT_SYSTEM_THAN_SO(extractGenericContext(body.thanSoData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
+    return {
+      systemForCall: CHAT_SYSTEM_THAN_SO(extractGenericContext(body.thanSoData), docs, persona),
+      // Tool-as-agent #3 (2026-09-22, cùng mẫu Tử Bình/Công Sở): tên tool khớp
+      // TAY với `execTraNamCaNhanThanSo` (lib/tools/registry.ts) — đổi tên sửa
+      // CẢ HAI. KHÁC hai bước trước: trang không gửi `birth` (chỉ gửi
+      // `scenario.data` đã tính sẵn), nên tool nhận thẳng dob/ten thay vì đọc
+      // `ctx.birth`.
+      tools: [...buildTools(false), TRA_NAM_CA_NHAN_THAN_SO_TOOL],
+      maxTokens: RAIL_MAX_TOKENS,
+      lasoDataForTools: null,
+    };
   }
   if (toolType === 'bat-trach') {
     return { systemForCall: CHAT_SYSTEM_BAT_TRACH(extractGenericContext(body.batTrachData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
@@ -861,6 +871,7 @@ Nguyên tắc:
 - Trả lời dựa trên kết quả phân tích ban đầu đã cung cấp
 - Giải thích cụ thể: ngày nào tốt/kỵ và tại sao theo can chi, ngũ hành, tuổi người
 - Nói thẳng, có ngày tốt thì nói rõ, không có thì cảnh báo
+- Dữ liệu dưới đây chỉ là NỀN (can chi người xem + tháng/năm sự kiện) — bảng NGÀY TỐT CỤ THỂ trong tháng phải lấy từ tool xem_ngay_tot (đã có sẵn, gọi với đúng việc/tháng/năm). Hỏi tháng/năm KHÁC tháng đang xem, hoặc việc KHÁC (cưới hỏi/khai trương/nhập trạch/...) → GỌI LẠI xem_ngay_tot với tham số mới, đừng tự đoán ngày
 
 ${RAIL_SHAPE_AND_VOICE}
 
@@ -947,13 +958,29 @@ ${RAIL_SHAPE_AND_VOICE}
 === DỮ LIỆU NGŨ HÀNH TÊN ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const TRA_NAM_CA_NHAN_THAN_SO_TOOL: any = {
+  name: 'tra_nam_ca_nhan_than_so',
+  description:
+    'Tính lại NĂM CÁ NHÂN + chặng đỉnh cao/thử thách hiện tại cho một NĂM DƯƠNG LỊCH khác năm đang xem (vd "năm 2028 của tôi thế nào"). Bốn số cốt lõi (Đường Đời/Định Mệnh/Linh Hồn/Sứ Mệnh) và biểu đồ ngày sinh KHÔNG đổi theo năm nên tool này không tính lại chúng.',
+  input_schema: {
+    type: 'object',
+    properties: {
+      dob: { type: 'string', description: 'Ngày sinh, copy NGUYÊN VĂN từ dòng "dob" trong dữ liệu đã cho, định dạng dd/mm/yyyy' },
+      ten: { type: 'string', description: 'Tên, copy NGUYÊN VĂN từ dòng "ten" trong dữ liệu đã cho' },
+      nam_xem: { type: 'integer', description: 'Năm dương lịch cần xem, ví dụ 2028' },
+    },
+    required: ['dob', 'ten', 'nam_xem'],
+  },
+};
+
 const CHAT_SYSTEM_THAN_SO = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Thần Số Học (Numerology Pythagoras), phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
 ${_TIME()}
 
 Nguyên tắc:
 - ${FORMAT_RULE}
-- MỌI chỉ số dưới đây đã tính sẵn — **TUYỆT ĐỐI KHÔNG tự tính lại**, kể cả khi người hỏi đưa lại ngày sinh hay tên
+- MỌI chỉ số dưới đây đã tính sẵn — **TUYỆT ĐỐI KHÔNG tự nhẩm/suy diễn lại**, kể cả khi người hỏi đưa lại ngày sinh hay tên. Riêng câu hỏi về NĂM CÁ NHÂN của một năm KHÁC năm đang xem (vd "năm 2028 của tôi thế nào") → GỌI tool tra_nam_ca_nhan_than_so (dob/ten copy nguyên văn từ dữ liệu dưới, chỉ đổi nam_xem), CHỈ luận trên kết quả tool mới — bốn số cốt lõi và biểu đồ vẫn GIỮ NGUYÊN như đã cho vì không đổi theo năm
 - ⚠️ Số Đường Đời của trang này tính theo phép **rút gọn NGÀY, THÁNG, NĂM RIÊNG rồi mới cộng** (đúng quy ước thần số học Việt và Hans Decoz). KHÔNG được giải thích bằng lối "cộng tất cả chữ số một lượt" — hai lối cho kết quả khác nhau ở 12% số ngày sinh, và nói lối kia là mâu thuẫn với chính con số đang hiện trên màn hình
 - Bốn số CỐT LÕI: Đường Đời (hành trình chính) · Định Mệnh (tài năng bẩm sinh) · Linh Hồn (khao khát nội tâm) · Sứ Mệnh (cách hiện ra ngoài). Nêu chúng bổ trợ hay mâu thuẫn nhau, ứng vào sự nghiệp/tình cảm
 - Các lớp BỔ SUNG, chỉ dùng khi câu hỏi chạm tới: Ngày Sinh · Thái Độ · Trưởng Thành · Năm Cá Nhân · Biểu Đồ Ngày Sinh (mũi tên mạnh/trống) · Bài Học Còn Thiếu · Đam Mê Tiềm Ẩn · Nợ Nghiệp Quật · Đỉnh Cao & Thử Thách · Nghề Nghiệp Phù Hợp · Tam Giác Vàng Hướng Nghiệp. **Đừng đọc vanh vách cả bảng** — chọn đúng vài lớp trả lời được câu đang hỏi
