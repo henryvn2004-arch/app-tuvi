@@ -204,6 +204,12 @@
   // trang nào. Và `Shell.setContext()` — 51/53 trang đã gọi — rơi đúng vào
   // khoảnh khắc "dữ liệu deterministic đã tính xong", tức đúng lúc cần lật.
   var CHATFIRST = !!window.SHELL_CHATFIRST;
+  // Bước 5: hội thoại từng bước thay form tĩnh (thay vì chỉ lật vai SAU khi có
+  // kết quả như CHATFIRST). Trang tự dựng câu hỏi ngay trong #chat lúc boot,
+  // nên rail phải là mặt chính TỪ ĐẦU — không đợi tới setContext(). Cờ RIÊNG
+  // với CHATFIRST vì mở rail sớm cho 11 trang form-tĩnh còn lại sẽ chôn form
+  // thật của họ vào cột artifact hẹp trước khi có gì để lật.
+  var CHAT_INTAKE = !!window.SHELL_CHAT_INTAKE;
 
   // ── MARKETING TRACKING ──
   // Nạp /track.js (nếu trang chưa có) để có window.Track + page_view; phát các
@@ -3579,6 +3585,9 @@
     loadCatalog();
     startPulse();
     renderRail();
+    // Bước 5: rail lật vai NGAY khi boot (không đợi setContext) — trang tự vẽ
+    // câu hỏi hội thoại vào #chat ngay sau đây trong script của chính nó.
+    if (CHAT_INTAKE) { document.body.classList.add('chat-first-live'); Shell.openRail(); }
     renderTabbar();
     trackWsTopHeight();
     registerNativePush();
