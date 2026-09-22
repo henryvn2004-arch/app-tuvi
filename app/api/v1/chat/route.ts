@@ -27,7 +27,7 @@ import { buildToolDefs } from '@/lib/tools/registry';
 import { runAgent } from '@/lib/agent/run';
 import { getChatConfig, getConfigValue } from '@/lib/config/appConfig';
 import { getRailPrice } from '@/lib/billing/pricing';
-import { chatLogOutcome } from '@/lib/channels/store';
+import { chatLogOutcome, chatSaveSession } from '@/lib/channels/store';
 import {
   paywallDisabled,
   extractToken,
@@ -187,8 +187,39 @@ export async function POST(request: NextRequest) {
   const stream = new ReadableStream({
     async start(controller) {
       const send = (chunk: string) => controller.enqueue(encoder.encode(chunk));
+      // Hạ tầng SESSION (2026-09-22, Sprint chuẩn bị session thật kiểu ChatGPT):
+      // gom lại câu trả lời ĐẦY ĐỦ từ các event 'text' để lưu vào `chat_sessions`
+      // sau khi lượt xong — CỬA DUY NHẤT ghi phiên rail hiện có (`chatSaveSession`,
+      // lib/channels/store.ts), đã chạy thật cho Telegram/Messenger/WhatsApp,
+      // giờ dùng luôn cho web (`platform='web'`, `chat_id=session_id`). CHỈ GHI
+      // (shadow write) — đường phục vụ lượt chat vẫn y hệt cũ, đọc `req.messages`
+      // client tự gửi, KHÔNG đổi hành vi. Mục đích: dựng dữ liệu phiên thật
+      // trước khi đổi UI/UX sang đọc từ đây (việc sau, chưa làm ở đây).
+      // Hình dạng frame CỐ ĐỊNH — do chính `sseEvent()` (lib/contract/v1.ts)
+      // dựng, không phải input người dùng, nên cắt chuỗi trực tiếp AN TOÀN.
+      const TEXT_PREFIX = 'event: text\ndata: ';
+      let assistantText = '';
+      const sendAndCollect = (chunk: string) => {
+        if (chunk.startsWith(TEXT_PREFIX)) {
+          try {
+            const json = chunk.slice(TEXT_PREFIX.length, chunk.length - 2); // bỏ '\n\n' cuối
+            assistantText += (JSON.parse(json) as { delta?: string }).delta || '';
+          } catch {
+            /* mảnh SSE dở — bỏ qua, không chặn stream thật */
+          }
+        }
+        send(chunk);
+      };
       try {
-        const { toolsUsed, suggestions, toolSuggest } = await runAgent(req, cfg, send, null, memoryUserId);
+        const { toolsUsed, suggestions, toolSuggest, birth } = await runAgent(req, cfg, sendAndCollect, null, memoryUserId);
+        if (assistantText) {
+          void chatSaveSession(
+            'web',
+            req.session_id,
+            [...(req.messages || []), { role: 'assistant', content: assistantText }],
+            birth ?? req.birth ?? null,
+          );
+        }
 
         // ── Trừ Lượng sau khi trả lời thành công ──────────────────
         let paywall: DoneEvent['paywall'] = { blocked: false };
