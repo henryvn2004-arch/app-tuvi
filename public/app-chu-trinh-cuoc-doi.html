@@ -287,6 +287,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='chu-trinh-cuoc-doi';window.SHELL_HISTORY=true;
+// Bước 7: lan chat-first (đảo vai Chat ↔ Workspace SAU khi có kết quả) sang
+// tool free/deterministic thứ 10 — khảo sát bằng cờ inject trước khi sửa file
+// (đúng kỷ luật bước 3): mốc chia sẻ workspace có sẵn ở #lgPanel,
+// Shell.setContext() đã gọi, layout 420px không tràn (đo Playwright, cả
+// trước/sau submit).
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=3"></script>
