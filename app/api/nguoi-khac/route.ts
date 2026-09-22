@@ -17,7 +17,7 @@ export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
-import { toolPaymentDenied, getBalance } from '@/lib/billing/credits';
+import { toolPaymentDenied, hasToppedUp } from '@/lib/billing/credits';
 import { refundIfSystemFailure } from '@/lib/ops/refund';
 import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage, logLlmParseFail } from '@/lib/agent/usage';
@@ -344,10 +344,12 @@ async function runPreview(request: NextRequest) {
 
   const auth = await authUserFromRequest(request);
   const pKey = 'error' in auth ? String(body.anonId || '') : auth.user.id;
-  // User đã đăng nhập VÀ còn Lượng > 0 trong ví → bỏ qua hẳn cầu dao
-  // 3-lượt-đời (cùng luật với /api/hook-narrative, 2026-09-21).
-  const hasBalance = 'error' in auth ? false : (await getBalance(auth.user.id)) > 0;
-  const gate = hasBalance ? { allowed: true as const, reason: 'ok' as const } : await previewGate(pKey, previewIpHash(request), TOOL_ID);
+  // User đã TỪNG nạp tiền thật → bỏ qua hẳn cầu dao 3-lượt-đời (cùng luật với
+  // /api/hook-narrative). SỬA 2026-09-22: `getBalance(...) > 0` SAI vì mọi
+  // user mới đăng ký đã có `signup_bonus` ngay từ đầu — xem `hasToppedUp`
+  // (lib/billing/credits.ts).
+  const toppedUp = 'error' in auth ? false : await hasToppedUp(auth.user.id);
+  const gate = toppedUp ? { allowed: true as const, reason: 'ok' as const } : await previewGate(pKey, previewIpHash(request), TOOL_ID);
   if (!gate.allowed) {
     console.error(`[nguoi-khac] xem trước bị chặn (${gate.reason})`);
     return ok(khung);

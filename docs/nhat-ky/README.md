@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-356 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+357 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 191 | 758,693 B |
+| `2026-09.md` | 192 | 761,020 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🔴 Cầu dao xem-trước bypass NHẦM ai — `getBalance()>0` cho MỌI user mới đăng ký bypass được |
 | 1 | 2026-09 | `2026-09.md` | 💾 Cache tường minh Gemini CHO CẢ đường tools ('laso') — bake `tools` vào cache |
 | 1 | 2026-09 | `2026-09.md` | 🩹 Gemini-tools rớt 400 "missing thought_signature" — bug CŨ hơn PR #989, lộ ra khi đo lại cache |
 | 1 | 2026-09 | `2026-09.md` | 🩹 Hotfix cache Gemini (Sprint 1.1) — 400 "CachedContent... tools" trên prod THẬT |
