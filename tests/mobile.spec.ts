@@ -63,43 +63,33 @@ test.describe('Mobile — hamburger menu', () => {
   });
 });
 
-// ── Mobile — form usability ───────────────────────────────────────────────────
+// ── Mobile — hội thoại nhập liệu (bước 6) ─────────────────────────────────────
 // Trang laso THẬT là app-luan-giai.html (/luan-giai.html cũ nay 301 sang
-// /app/luan-giai — Henry, 2026-09-14, xem plan productize luận giải). Form
-// dùng chung TuviForm nhưng host id đổi: #tuvi-form-container (cũ) →
-// #tuviFormHost (mới, xem app-luan-giai.html).
-test.describe('Mobile — Luận Giải form', () => {
-  test('form inputs có thể tap và nhập liệu', async ({ page }) => {
+// /app/luan-giai — Henry, 2026-09-14, xem plan productize luận giải).
+// Bước 6 (2026-09-22): #birthPanel/#tuviFormHost tĩnh chuyển ẩn mặc định —
+// `TuviForm.renderChat()` dựng hội thoại 4 bước trong #chat thay thế, đây
+// mới là màn hình đầu THẬT trên mobile. Field ảo bước 1 dùng prefix 'cx'
+// (renderChat gọi không prefix → cp='c'+('' || 'x')='cx', xem tuvi-form.js).
+test.describe('Mobile — Luận Giải hội thoại', () => {
+  test('bước hỏi tên/giới tính có thể tap và nhập liệu', async ({ page }) => {
     await page.goto('/app-luan-giai.html');
     await page.waitForLoadState('networkidle');
     await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
 
-    // Form phải đủ rộng để nhìn thấy trên mobile
-    const container = page.locator('#tuviFormHost');
-    await expect(container).toBeVisible({ timeout: 8000 });
-
-    const box = await container.boundingBox();
-    expect(box?.width).toBeGreaterThan(200);
+    const nameInput = page.locator('#cx-hoten');
+    await expect(nameInput).toBeVisible({ timeout: 8000 });
+    const box = await nameInput.boundingBox();
+    expect(box?.width).toBeGreaterThan(100);
   });
 
-  test('submit button không bị crop trên mobile', async ({ page }) => {
+  test('nút "Tiếp tục" không bị crop trên mobile', async ({ page }) => {
     await page.goto('/app-luan-giai.html');
     await page.waitForLoadState('networkidle');
-    // 🪤 app-luan-giai.html gọi `TuviForm.render('tuviFormHost', {mode:'compact'})`
-    // — mode:'compact' KHÔNG dựng `.btn-submit`/`#tvf-submit-btn` (khối đó chỉ
-    // tồn tại ở nhánh mode:'full' của tuvi-form.js, xem `buildFull`/render()).
-    // Compact "tái dùng .frow/.fg/.btn-go sẵn có của trang gọi" đúng như comment
-    // ngay trong tuvi-form.js — nút submit THẬT của trang này là `#btnGo`
-    // (`.btn-go`, `onclick="doLuan()"`), đứng ngoài #tuviFormHost, cùng nút mà
-    // bài kiểm "grid 12 cung" bên dưới gọi gián tiếp qua `doLuan()`. Selector
-    // cũ `.btn-submit, #tvf-submit-btn` không timeout vì tải chậm — nó đỏ vì
-    // phần tử KHÔNG BAO GIỜ tồn tại trên trang này, hai lượt sửa timeout trước
-    // đó đều sai gốc.
-    const btn = page.locator('#btnGo, .btn-go').first();
+    const btn = page.locator('#cx-next1');
     await expect(btn).toBeVisible({ timeout: 20_000 });
 
     const box = await btn.boundingBox();
-    expect(box?.width).toBeGreaterThan(80);
+    expect(box?.width).toBeGreaterThan(50);
     expect(box?.height).toBeGreaterThan(30);
   });
 });
