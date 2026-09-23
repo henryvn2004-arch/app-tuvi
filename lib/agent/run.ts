@@ -64,6 +64,7 @@ import {
   resolveMoiLo as resolveMoiLoTre,
 } from '@/lib/engine/huong-nghiep-tre';
 import { huongNghiepTreRailWrapper } from '@/lib/agent/huong-nghiep-tre-prompt';
+import { resolveAvatarId } from '@/lib/media/tool-avatar-prompt';
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
@@ -260,9 +261,19 @@ async function runAgentInner(
     : null;
   const ctx = newToolContext(null, {
     profiles, birth: req.birth ?? null, memory: memoryPort,
-    // Tool ĐANG mở — để không gợi ý lại chính nó. Lấy từ scenario.type; nhánh
-    // lá số không có scenario nên là 'laso'.
-    activeTool: req.scenario?.type || 'laso',
+    // Tool ĐANG mở — để không gợi ý lại chính nó. Có scenario thì lấy thẳng
+    // scenario.type (chắc chắn đúng — client TỰ mở đúng scenario đó). Nhánh
+    // lá số/GENERAL không có scenario: `client.page` (giai đoạn 3, best-effort,
+    // xem chú thích trong lib/contract/v1.ts) cho biết ACTUAL trang đang gửi —
+    // 🐞 trước đây rơi cứng về 'laso' cho MỌI trang birth-only (kể cả trang
+    // KHÔNG phải Luận Giải, vd /app#chat tâm sự), khiến `goi_y_san_pham`
+    // KHÔNG BAO GIỜ gợi ý được 'laso' dù đang đứng ở trang nào đi nữa. Kênh
+    // chưa gửi `client.page` (bot/app cũ) → rơi về đúng hành vi cũ, không hỏng.
+    // `resolveAvatarId` quy `client.page` (SHELL_ACTIVE, vd 'luan-giai') về
+    // ĐÚNG tool_id thật ('laso') — thiếu bước này thì so sánh với tool_id luôn
+    // trật (TOOL_AVATAR_ALIAS, lib/media/tool-avatar-prompt.ts — nguồn CHUNG
+    // với alias hiển thị avatar, không chép tay lần ba).
+    activeTool: req.scenario?.type || (req.client?.page ? resolveAvatarId(req.client.page) : null) || 'laso',
   });
   const toolsUsed: string[] = [];
   // Birth đã biết (req.birth truyền sẵn) hoặc do agent lập qua tool lap_la_so

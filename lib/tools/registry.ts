@@ -24,7 +24,7 @@ import { computeThanSoHoc } from '@/lib/engine/than-so-hoc';
 // CẢ HAI.
 import { extractTuBinhContext, extractGenericContext } from '@/lib/agent/prompts';
 import type { BirthParams } from '@/lib/contract/v1';
-import { SUGGEST_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
+import { SUGGEST_TOOL_DEF, SUGGEST_PRODUCT_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
 type Rec = Record<string, unknown>;
 
@@ -182,6 +182,7 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false): any[] {
     ...profileTools,
     ...memoryTools,
     SUGGEST_TOOL_DEF,
+    SUGGEST_PRODUCT_TOOL_DEF,
     {
       name: 'lap_la_so',
       description:
@@ -247,7 +248,10 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
   if (name === 'liet_ke_la_so') return execLietKeLaSo(ctx);
   if (name === 'ghi_nho') return execGhiNho(input, ctx);
   if (name === 'quen_di') return execQuenDi(input, ctx);
-  if (name === 'goi_y_cong_cu') return execGoiYCongCu(input, ctx);
+  // `goi_y_san_pham` (giai đoạn 3 cross-sell, 2026-09-23) dùng CHUNG hàm này —
+  // hai tool chỉ khác MÔ TẢ (lib/tools/suggest-tool.ts), hành vi hệt nhau:
+  // tra `tool_pricing`, ghi CÙNG `ctx.toolSuggestion`, cùng trần 1 lần/hội thoại.
+  if (name === 'goi_y_cong_cu' || name === 'goi_y_san_pham') return execGoiYCongCu(input, ctx);
   if (name === 'tra_van_nam_bat_tu') return execTraVanNamBatTu(input, ctx);
   if (name === 'tra_van_nam_cong_so') return execTraVanNamCongSo(input, ctx);
   if (name === 'tra_nam_ca_nhan_than_so') return execTraNamCaNhanThanSo(input);
