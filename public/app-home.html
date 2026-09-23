@@ -1406,6 +1406,13 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
       }
     }catch(e){ if(window.console)console.error('[today]',e); }
 
+    // Cửa concierge `/app#chat` (Henry 2026-09-23: nút "Chat" ở trang chủ tĩnh
+    // — index-sample-v3.html, KHÔNG có shell.js nên không mở rail tại chỗ được
+    // — trỏ thẳng vào một tool cụ thể, người mới vào thấy ngay cái form xin
+    // họ tên, không biết đang dùng gì). Rail vừa được `Shell.setContext()` mồi
+    // sẵn câu chào + chip ở trên xong — mở LUÔN, khỏi bắt bấm thêm một lần nữa.
+    if(location.hash==='#chat'){ try{ Shell.openRail(); }catch(e){} }
+
     // 🔑 CHỈ MỞ rail, KHÔNG tự gửi câu hỏi. Trước đây nút này bắn thẳng
     // "Hôm nay vận của tôi thế nào?" — tức trả lời hộ người ta câu "muốn nói
     // gì", và đóng khung mọi cuộc trò chuyện thành một lượt tra vận. Nay thầy

@@ -553,12 +553,16 @@ button { font: inherit; cursor: pointer; }
 <!-- ═══════════════ BOTTOM NAV — mobile ═══════════════ -->
 <!-- Bước 12: nhãn PHẢI khớp tuyệt đối 5 nhãn của `renderTabbar()` trong
      shell.js (check:tabbar canh) — đích được phép khác vì trang này TĨNH,
-     không nạp shell.js nên không có rail/sidebar thật ("Chat" trỏ thẳng vào
-     một trang tool cụ thể để bắt đầu trò chuyện, không mở rail tại chỗ). -->
+     không nạp shell.js nên không có rail/sidebar thật. "Chat" trỏ vào
+     `/app#chat` (Khám phá + cửa concierge, xem `wire()` trong app-home.html)
+     — TRƯỚC ĐÂY trỏ thẳng `/app-luan-giai.html`: người mới bấm Chat rơi
+     thẳng vào form xin họ tên của MỘT tool cụ thể (Luận Giải), không có câu
+     giới thiệu nào cả (Henry 2026-09-23, ảnh chụp mobile báo "chỉ ra cái
+     form, chả biết đang dùng tool gì"). -->
 <nav class="bottom-nav">
   <a class="bn-item" href="/app-home.html"><span class="ic" data-icon="compass"></span>Khám phá</a>
   <a class="bn-item" href="/app-tai-khoan.html#lichsu"><span class="ic" data-icon="clock"></span>Lịch sử</a>
-  <a class="bn-item bn-center" href="/app-luan-giai.html">
+  <a class="bn-item bn-center" href="/app#chat">
     <div class="bn-center-circle">
       <svg viewBox="0 0 24 24" fill="none" stroke="#16232c" stroke-width="1.6"><path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/></svg>
     </div>
