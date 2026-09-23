@@ -471,7 +471,12 @@ NamLuanSelect.mount('inpNamxem');
 // "chốt thanh toán đặt TRƯỚC bước tính" (CLAUDE.md) bắt buộc giá phải thấy
 // được ở ĐÚNG bước bấm submit, không phải chôn trong birthPanel đang ẩn.
 function chatAva(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; }
+function _tpwResuming(){ try{ return new URL(location.href).searchParams.get('tpwResume')==='1'; }catch(e){ return false; } }
 function startIntake(){
+  // Quay về sau nạp Lượng: LG_RESUME_KEY IIFE bên dưới tự điền form + gọi
+  // doLuan() thẳng — hỏi lại từ đầu ở đây là hỏi thừa, đã có đủ dữ liệu.
+  // (Bước 10: bẫy phát hiện khi lan renderChat() sang các trang có resume-flow.)
+  if(_tpwResuming())return;
   if(window.Shell&&Shell.pendingRestore&&Shell.pendingRestore())return;
   TuviForm.renderChat({ onDone:showNamxemStep });
 }

@@ -121,7 +121,7 @@ body.chat-first-live .laso-one{flex:none}
         <span class="sc-txt"><b>Bản luận giải mẫu</b><span>Tải PDF Xem Tuổi Vợ Chồng đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
         <a class="sc-btn" href="/tai-mau/mau-xem-tuoi.pdf" target="_blank" rel="noopener">Tải PDF →</a>
       </div>
-      <div class="form-card" id="birthPanel">
+      <div class="form-card" id="birthPanel" style="display:none">
         <div class="fc-head"><span class="fc-ic" data-icon="heart-handshake"></span><h2 id="fH2">Nhập ngày sinh hai người (dương lịch)</h2></div>
         <p class="sub" id="fSub">Chấm 8 yếu tố tương hợp giữa hai lá số của hai bạn. Bạn nghe hai bên gia đình bàn ra tán vào chuyện tuổi tác. Dùng khi đang tính chuyện cưới xin và cần một câu trả lời rõ.</p>
         <p class="price-note" id="fSubPrice" data-tvp-price-label="xem-tuoi">…</p>
@@ -156,6 +156,10 @@ body.chat-first-live .laso-one{flex:none}
           <span class="bg-label"><span class="ic" data-icon="heart-handshake"></span><b id="btnGoLabel">So tuổi →</b></span>
           <small id="btnGoSub">Tốn <span class="vnd" data-tvp-price-vnd="xem-tuoi"></span> <span class="cb-sub">(<span data-tvp-price="xem-tuoi">…</span> Lượng)</span></small>
         </button>
+      </div>
+      <div class="ws-intake-hint" id="wsIntakeHint">
+        <span class="ic" data-icon="message-circle"></span>
+        <p id="wsIntakeHintTxt">Trả lời thầy ở khung chat bên trái để nhập ngày sinh hai người.</p>
       </div>
 
       <div id="xtPanel" data-ws-result>
@@ -197,6 +201,11 @@ body.chat-first-live .laso-one{flex:none}
   // chuyển row ở @media(min-width:1200px) — đọc VIEWPORT nên vẫn nằm ngang dù
   // cột artifact chỉ 420px trên desktop 1440px, xem override trong <style>.
   window.SHELL_CHATFIRST=true;
+  // Bước 10: hội thoại nhập liệu 2 người — renderChat() lo người A (prefix
+  // 'a'), onDone gọi lại renderChat() lo người B (prefix 'b'), onDone cuối
+  // gọi doCompat() y hệt nút "So tuổi" cũ. Nhãn câu hỏi/giới tính mặc định
+  // lấy theo MODE (đặt SAU khi MODE dựng xong, xem cuối file).
+  window.SHELL_CHAT_INTAKE=true;
 })();
 </script>
 <script src="/laso-chart.js?v=3"></script>
@@ -263,6 +272,31 @@ var MODE=MODES[MODE_KEY];
 // + parity giờ sinh lịch sử với standalone) ──
 TuviForm.render('a-fields', {prefix:'a', mode:'compact', gioitinh:'nam'});
 TuviForm.render('b-fields', {prefix:'b', mode:'compact', gioitinh:'nu'});
+
+// ── Bước 10: hội thoại nhập liệu 2 người trong rail ──
+// renderChat() lo người A rồi ghi vào field thật 'a-*' (ẩn trong #birthPanel)
+// qua setData(), onDone gọi lại renderChat() cho người B, onDone cuối gọi
+// doCompat() y hệt nút "So tuổi →" cũ — không đổi gì ở đường tính toán.
+document.getElementById('wsIntakeHintTxt').textContent = 'Trả lời thầy ở khung chat bên trái để nhập ngày sinh của ' + MODE.pA.toLowerCase() + ' và ' + MODE.pB.toLowerCase() + '.';
+function _tpwResuming(){ try{ return new URL(location.href).searchParams.get('tpwResume')==='1'; }catch(e){ return false; } }
+function startIntake(){
+  // Quay về sau nạp Lượng: XT_RESUME_KEY IIFE bên dưới tự điền form + gọi
+  // doCompat() thẳng — hỏi lại từ đầu ở đây là hỏi thừa, đã có đủ dữ liệu.
+  if(_tpwResuming())return;
+  if(window.Shell&&Shell.pendingRestore&&Shell.pendingRestore())return;
+  TuviForm.renderChat({
+    prefix:'a', gioitinh:'nam',
+    q1:'Cho thầy xin thông tin của ' + MODE.pA + ' (' + MODE.phA + ') nhé.',
+    onDone:function(){
+      TuviForm.renderChat({
+        prefix:'b', gioitinh:'nu',
+        q1:'Giờ đến lượt ' + MODE.pB + ' (' + MODE.phB + ').',
+        onDone:doCompat
+      });
+    }
+  });
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',startIntake);else startIntake();
 
 // Quay lại từ lượt nạp Lượng (xem `TuviPaywall._insufficient`/`resumeIfPending`)
 // sau khi đã hết Lượng ngay lúc mở khoá — trang này là MULTI-PAGE (điều hướng

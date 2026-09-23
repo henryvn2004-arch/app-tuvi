@@ -217,7 +217,7 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
         <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
         <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-      <div class="form-card" id="birthPanel">
+      <div class="form-card" id="birthPanel" style="display:none">
         <div class="fc-head"><span class="fc-ic" data-icon="baby"></span><h2>Ngày sinh của con</h2></div>
         <p class="sub">Chọn điều đang lo, nhập ngày giờ sinh của con. Nhận cách dạy phù hợp và việc nên làm từ tối nay.</p>
 
@@ -273,6 +273,10 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
           </button>
         </div>
         <div class="err" id="error-msg"></div>
+      </div>
+      <div class="ws-intake-hint" id="wsIntakeHint">
+        <span class="ic" data-icon="message-circle"></span>
+        <p>Trả lời thầy ở khung chat bên trái để cho biết điều bạn đang lo và ngày sinh của con.</p>
       </div>
       </div>
       <div class="ws-side-col">
@@ -472,6 +476,10 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
 // (.dc-two/.dc-how/.hd-grid chỉ co 1 cột qua media viewport, không đọc được
 // bề rộng cột artifact) — xem override bên dưới.
 window.SHELL_CHATFIRST=true;
+// Bước 10: hội thoại nhập liệu. 2 bước: điều đang lo (đọc thẳng option từ
+// #moiLo thật, nguồn DUY NHẤT) → renderChat() lo ngày/giờ sinh của con. Xong
+// mới hỏi đối chiếu lá số cha/mẹ — bỏ qua nếu shell đã nhớ sẵn.
+window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'day-con'};</script>
 <script src="/tuvi-ansao-engine.js?v=1"></script>
 <script src="/tuvi-laso-format.js?v=2"></script>
@@ -532,6 +540,55 @@ try {
 } catch (e) { /* không có shell / chưa nhớ gì — phần này không bắt buộc */ }
 
 onMoiLoChange();
+
+// ── Bước 10: hội thoại nhập liệu trong rail ──
+// 2 bước: điều đang lo (đọc thẳng option từ #moiLo thật, cùng danh sách
+// LO_HINT phía trên) → renderChat() lo ngày/giờ sinh của con. Xong mới hỏi
+// đối chiếu lá số cha/mẹ — bỏ qua câu hỏi nếu shell đã tự điền sẵn.
+function chatAva(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; }
+function _tpwResuming(){ try{ return new URL(location.href).searchParams.get('tpwResume')==='1'; }catch(e){ return false; } }
+function startIntake(){
+  if(_tpwResuming())return;
+  if(window.Shell&&Shell.pendingRestore&&Shell.pendingRestore())return;
+  chatStepMoiLo();
+}
+function chatStepMoiLo(){
+  var chat=document.getElementById('chat');
+  var empty=document.getElementById('railEmpty'); if(empty) empty.style.display='none';
+  var el=document.createElement('div'); el.className='msg a';
+  el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
+    '<div class="msg-body"><p>Điều bạn đang lo về con là gì?</p>'+
+    '<div class="frow"><div class="fg" style="flex:1"><label>Điều đang lo</label><select id="cMoiLo">'+document.getElementById('moiLo').innerHTML+'</select></div></div>'+
+    '<button class="btn-go" type="button" id="loNext" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button></div>';
+  chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  document.getElementById('loNext').addEventListener('click',function(){
+    var sel=document.getElementById('cMoiLo');
+    var lo=sel.value, label=sel.selectedOptions[0].text;
+    document.getElementById('moiLo').value=lo; onMoiLoChange();
+    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Điều đang lo: <b>'+esc(label)+'</b> ✓</p></div>';
+    TuviForm.renderChat({ q1:'Cho thầy xin thông tin của con nhé.', onDone:chatStepSelfAsk });
+  });
+}
+function chatStepSelfAsk(){
+  var already=TuviForm.getData('self');
+  if(already&&already.ngay){ analyze(); return; }
+  var chat=document.getElementById('chat');
+  var el=document.createElement('div'); el.className='msg a';
+  el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
+    '<div class="msg-body"><p>Bạn có muốn đối chiếu thêm với lá số của chính bạn (cha hoặc mẹ) không? Có thêm mục "Hai bên với nhau".</p>'+
+    '<button class="btn-go" type="button" id="selfYes" style="width:auto;padding:9px 16px;font-size:13px;margin-right:8px">Có, đối chiếu →</button>'+
+    '<button class="btn" type="button" id="selfNo" style="width:auto;padding:9px 16px;font-size:13px">Bỏ qua</button></div>';
+  chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  document.getElementById('selfYes').addEventListener('click',function(){
+    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Đối chiếu thêm với lá số của bạn ✓</p></div>';
+    TuviForm.renderChat({ prefix:'self', showName:false, onDone:analyze });
+  });
+  document.getElementById('selfNo').addEventListener('click',function(){
+    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Bỏ qua đối chiếu lá số của bạn.</p></div>';
+    analyze();
+  });
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',startIntake);else startIntake();
 
 // Quay lại từ lượt nạp Lượng (hết Lượng ngay lúc bấm — xem
 // `TuviPaywall._insufficient`/`resumeIfPending`). Trang MULTI-PAGE (điều

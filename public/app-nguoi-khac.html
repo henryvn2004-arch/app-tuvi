@@ -117,7 +117,7 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
         <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
         <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-      <div class="form-card" id="birthPanel">
+      <div class="form-card" id="birthPanel" style="display:none">
         <div class="fc-head"><span class="fc-ic" data-icon="user"></span><h2>Ngày sinh của người bạn muốn hiểu</h2></div>
         <p class="sub">Nhập ngày giờ sinh người đó, mối quan hệ và việc bạn đang cần làm với họ để phân tích lá số theo đúng việc bạn nêu.</p>
 
@@ -187,6 +187,10 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
           </button>
         </div>
         <div class="err" id="error-msg"></div>
+      </div>
+      <div class="ws-intake-hint" id="wsIntakeHint">
+        <span class="ic" data-icon="message-circle"></span>
+        <p>Trả lời thầy ở khung chat bên trái để cho biết người bạn muốn hiểu là ai và ngày sinh của họ.</p>
       </div>
       </div>
       <div class="ws-side-col">
@@ -350,6 +354,11 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
 // Đã tự vá trước bẫy đọc qua CSS: .nk-two chỉ co 1 cột qua media viewport,
 // không đọc được bề rộng cột artifact — xem override bên dưới.
 window.SHELL_CHATFIRST=true;
+// Bước 10: hội thoại nhập liệu. 3 bước riêng của trang (quan hệ/việc cần làm)
+// đọc THẲNG option từ #quanHe/#viecCanLam thật (nguồn DUY NHẤT, không chép
+// tay danh sách) rồi renderChat() lo ngày/giờ sinh người cần xem — xong mới
+// hỏi có đối chiếu lá số của chính mình không (bỏ qua nếu shell đã nhớ sẵn).
+window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'nguoi-khac'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
@@ -469,6 +478,74 @@ try {
 } catch (e) { /* không có shell / chưa nhớ gì — bỏ qua, phần này không bắt buộc */ }
 
 onQuanHeChange();
+
+// ── Bước 10: hội thoại nhập liệu trong rail ──
+// 3 bước: quan hệ → việc cần làm (đọc thẳng option từ #quanHe/#viecCanLam
+// thật, cùng danh sách NK_VIEC/QH_HINT phía trên) → renderChat() lo ngày/giờ
+// sinh người cần xem. Xong mới hỏi đối chiếu lá số của bạn — bỏ qua câu hỏi
+// nếu shell đã tự điền sẵn (`_remembered` ở trên).
+function chatAva(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; }
+function _tpwResuming(){ try{ return new URL(location.href).searchParams.get('tpwResume')==='1'; }catch(e){ return false; } }
+function startIntake(){
+  // Quay về sau nạp Lượng: NK_RESUME_KEY IIFE bên dưới tự điền form + gọi
+  // analyze() thẳng — hỏi lại từ đầu ở đây là hỏi thừa, đã có đủ dữ liệu.
+  if(_tpwResuming())return;
+  if(window.Shell&&Shell.pendingRestore&&Shell.pendingRestore())return;
+  chatStepQuanHe();
+}
+function chatStepQuanHe(){
+  var chat=document.getElementById('chat');
+  var empty=document.getElementById('railEmpty'); if(empty) empty.style.display='none';
+  var el=document.createElement('div'); el.className='msg a';
+  el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
+    '<div class="msg-body"><p>Người bạn muốn hiểu là ai với bạn?</p>'+
+    '<div class="frow"><div class="fg" style="flex:1"><label>Người này là</label><select id="cQuanHe">'+document.getElementById('quanHe').innerHTML+'</select></div></div>'+
+    '<button class="btn-go" type="button" id="qhNext" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button></div>';
+  chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  document.getElementById('qhNext').addEventListener('click',function(){
+    var sel=document.getElementById('cQuanHe');
+    var qh=sel.value, label=sel.selectedOptions[0].text;
+    document.getElementById('quanHe').value=qh; onQuanHeChange();
+    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Người này là: <b>'+esc(label)+'</b> ✓</p></div>';
+    chatStepViec();
+  });
+}
+function chatStepViec(){
+  var chat=document.getElementById('chat');
+  var el=document.createElement('div'); el.className='msg a';
+  el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
+    '<div class="msg-body"><p>Bạn đang cần làm gì với người này?</p>'+
+    '<div class="frow"><div class="fg" style="flex:1"><label>Việc cần làm</label><select id="cViec">'+document.getElementById('viecCanLam').innerHTML+'</select></div></div>'+
+    '<button class="btn-go" type="button" id="viecNext" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button></div>';
+  chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  document.getElementById('viecNext').addEventListener('click',function(){
+    var sel=document.getElementById('cViec');
+    var viec=sel.value, label=sel.selectedOptions[0].text;
+    document.getElementById('viecCanLam').value=viec;
+    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Việc cần làm: <b>'+esc(label)+'</b> ✓</p></div>';
+    TuviForm.renderChat({ q1:'Cho thầy xin thông tin của người này nhé.', onDone:chatStepSelfAsk });
+  });
+}
+function chatStepSelfAsk(){
+  var already=TuviForm.getData('self');
+  if(already&&already.ngay){ analyze(); return; }
+  var chat=document.getElementById('chat');
+  var el=document.createElement('div'); el.className='msg a';
+  el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
+    '<div class="msg-body"><p>Bạn có muốn đối chiếu thêm với lá số của chính bạn không? Có thêm mục "Người này với bạn".</p>'+
+    '<button class="btn-go" type="button" id="selfYes" style="width:auto;padding:9px 16px;font-size:13px;margin-right:8px">Có, đối chiếu →</button>'+
+    '<button class="btn" type="button" id="selfNo" style="width:auto;padding:9px 16px;font-size:13px">Bỏ qua</button></div>';
+  chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  document.getElementById('selfYes').addEventListener('click',function(){
+    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Đối chiếu thêm với lá số của bạn ✓</p></div>';
+    TuviForm.renderChat({ prefix:'self', showName:false, onDone:analyze });
+  });
+  document.getElementById('selfNo').addEventListener('click',function(){
+    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Bỏ qua đối chiếu lá số của bạn.</p></div>';
+    analyze();
+  });
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',startIntake);else startIntake();
 
 // Quay lại từ lượt nạp Lượng (hết Lượng ngay lúc bấm — xem
 // `TuviPaywall._insufficient`/`resumeIfPending`). Trang MULTI-PAGE (điều
