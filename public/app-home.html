@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Luận Đường — Tử Vi Minh Bảo</title>
-<meta name="description" content="Luận Đường — không gian mệnh lý: lá số Tử Vi, Bát Tự, xem tuổi, đặt tên, chọn ngày — chọn một công cụ để bắt đầu và hỏi trợ lý theo ngữ cảnh.">
+<meta name="description" content="Luận Đường — hỏi Thầy về vận mệnh, lá số Tử Vi, Bát Tự, xem tuổi, đặt tên, chọn ngày, ngay trong một cuộc trò chuyện.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <!-- 🔴 BẮT BUỘC cho đường bật thông báo trên iPhone, không phải tag trang trí.
      Apple chỉ mở Web Push cho trang đã "Thêm vào Màn hình chính" và chạy ở chế
@@ -33,10 +33,21 @@
    trong một cột hẹp — chữ ngày vỡ làm 3 dòng, tranh tràn ra ngoài. Khai
    container ở đây rồi mọi luật co giãn của thẻ hỏi `@container home`. */
 .home-body{max-width:920px;container:home / inline-size}
-.hero{background:linear-gradient(135deg,var(--navy),#0d2a49);border-radius:16px;padding:26px 28px;margin-bottom:24px;color:#fff;position:relative;overflow:hidden}
-.hero .seal{position:absolute;right:-10px;top:-14px;font-size:150px;line-height:1;color:rgba(212,175,55,.13);font-family:var(--serif);pointer-events:none}
-.hero h1{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:7px}
-.hero p{font-size:13.5px;color:rgba(255,255,255,.82);line-height:1.6;max-width:560px}
+/* ── Bước 11: hộp mời trò chuyện — khối ĐẦU trang, đứng TRƯỚC ô tìm công cụ.
+   Bấm vào là mở rail (`Shell.openRail()`), dùng CHUNG ngữ cảnh `wire()` đã
+   mồi sẵn (Vận Hôm Nay hoặc lá số đã nhớ) — không phải một ô chat riêng
+   phải tự trả lời, chỉ là cửa TO hơn vào đúng cuộc trò chuyện đã có sẵn ở
+   `todayCard` bên dưới. Thay cho `.hero`/`.hero h1`/`.hero p`/`.hero .seal`
+   (CSS chết từ trước workshop 2026-09 — đã kiểm `grep class="hero"` ra 0
+   kết quả trong HTML, không phải xoá nhầm thứ đang dùng). */
+.hero-ask{display:flex;align-items:center;gap:14px;width:100%;background:linear-gradient(135deg,var(--navy),#0d2a49);border:none;border-radius:16px;padding:18px 20px;margin-bottom:18px;color:#fff;cursor:pointer;text-align:left;font-family:inherit;box-shadow:var(--shadow);transition:.15s}
+.hero-ask:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(6,26,46,.18)}
+.hero-ask-ic{width:42px;height:42px;flex:0 0 auto;border-radius:11px;background:rgba(212,175,55,.16);color:var(--gold);display:flex;align-items:center;justify-content:center}
+.hero-ask-ic svg{width:22px;height:22px}
+.hero-ask-tx{flex:1;min-width:0}
+.hero-ask-tx b{display:block;font-family:var(--serif);font-size:16px;font-weight:700;margin-bottom:3px}
+.hero-ask-tx span{display:block;font-size:12.5px;color:rgba(255,255,255,.78);line-height:1.5}
+.hero-ask-go{flex:0 0 auto;font-size:20px;color:var(--gold)}
 .grp-title{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--text-mid);margin:22px 2px 12px;display:flex;align-items:center;gap:9px}
 .grp-title::after{content:"";flex:1;height:1px;background:var(--line)}
 /* ── KHUNG CHỜ #nextCard ────────────────────────────────────────────────────
@@ -420,6 +431,21 @@
     </div>
     <div class="ws-body">
       <div class="home-body">
+        <!-- Bước 11: hộp mời trò chuyện — khối ĐẦU trang, trước cả ô tìm công
+             cụ. `wire()` (cuối file) đã mồi ngữ cảnh rail (Vận Hôm Nay hoặc lá
+             số đã nhớ) NGAY từ lúc tải trang; bấm vào đây chỉ mở đúng cuộc trò
+             chuyện đó ra to hơn — không phải một ô chat riêng, không tự trả
+             lời câu hỏi thay người dùng (cùng nguyên tắc `todayAsk` bên dưới:
+             CHỈ mở rail, không tự gửi gì). Giữ nguyên lưới công cụ phía dưới —
+             đổi trọng tâm trang, không bỏ danh sách. -->
+        <button class="hero-ask" type="button" id="heroAsk" aria-label="Hỏi Thầy Luận Đường">
+          <span class="hero-ask-ic" data-icon="sparkles"></span>
+          <span class="hero-ask-tx">
+            <b>Hỏi Thầy Luận Đường</b>
+            <span id="heroAskSub">Vận hôm nay, lá số, hay bất cứ điều gì bạn đang vướng…</span>
+          </span>
+          <span class="hero-ask-go" aria-hidden="true">→</span>
+        </button>
         <!-- SPRINGBOARD — workshop 2026-09: 99% khách trên mobile, 46 công cụ
              giấu sau nút "Xem tất cả" gập lại đo được CHỈ 4,8% người vào /app
              từng mở tiếp một công cụ nào. Thay bằng: header + ô tìm → gợi ý có
@@ -1380,20 +1406,24 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
       }
     }catch(e){ if(window.console)console.error('[today]',e); }
 
-    var ask=el('todayAsk');
-    ask.onclick=function(){
-      // 🔑 CHỈ MỞ rail, KHÔNG tự gửi câu hỏi. Trước đây nút này bắn thẳng
-      // "Hôm nay vận của tôi thế nào?" — tức trả lời hộ người ta câu "muốn nói
-      // gì", và đóng khung mọi cuộc trò chuyện thành một lượt tra vận. Nay thầy
-      // chào trước, người dùng chọn: bấm chip, hay tự kể chuyện của mình.
-      // Người chưa có lá số vẫn giữ đường cũ — rail của họ là kịch bản
-      // `hoang-dao` (không có hồ sơ, không có lá số), mở ra mà im lặng thì
-      // không có gì để bắt chuyện.
+    // 🔑 CHỈ MỞ rail, KHÔNG tự gửi câu hỏi. Trước đây nút này bắn thẳng
+    // "Hôm nay vận của tôi thế nào?" — tức trả lời hộ người ta câu "muốn nói
+    // gì", và đóng khung mọi cuộc trò chuyện thành một lượt tra vận. Nay thầy
+    // chào trước, người dùng chọn: bấm chip, hay tự kể chuyện của mình.
+    // Người chưa có lá số vẫn giữ đường cũ — rail của họ là kịch bản
+    // `hoang-dao` (không có hồ sơ, không có lá số), mở ra mà im lặng thì
+    // không có gì để bắt chuyện. Dùng CHUNG cho `todayAsk` (bước 5) VÀ
+    // `heroAsk` (bước 11, khối đầu trang) — hai cửa vào MỘT cuộc trò chuyện,
+    // không phải hai ô chat riêng.
+    var openTodayChat=function(){
       try{
         if(hasBirth){ Shell.openRail(); var ta=document.getElementById('railInput'); if(ta) ta.focus(); }
         else Shell.ask('Hôm nay là ngày gì, tôi nên làm gì và tránh gì?');
       }catch(e){}
     };
+    el('todayAsk').onclick=openTodayChat;
+    var heroAsk=el('heroAsk');
+    if(heroAsk) heroAsk.onclick=openTodayChat;
 
     // Nút "Hỏi trợ lý" của khối chào lần đầu — CHỈ mở rail, không tự gửi gì.
     // `Shell.setContext` phía trên đã mồi sẵn câu chào + chip gợi ý (kịch bản
