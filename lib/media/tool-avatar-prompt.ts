@@ -426,6 +426,13 @@ export const TOOL_AVATARS: ToolAvatarSpec[] = [
     centralSubject:
       'The master holds a small round card showing a simple face silhouette softly wrapped by a swirling qi-cloud line drifting up around it like rising mist, studying it with a bright, quietly serene expression — the picture of good complexion and good fortune.',
   },
+  {
+    id: 'but-tuong',
+    label: 'Bút Tướng',
+    context: 'Ký trực tiếp trên màn hình, luận 6 trục Thần·Khí·Cốt·Nhục·Huyết·Thế theo cổ pháp thư pháp.',
+    centralSubject:
+      'The master holds a small card showing one flowing signature stroke rendered as a single elegant curved brush line (no legible letters), a tiny ink-dot flourish trailing at its tail, studying it with quiet, focused scrutiny.',
+  },
 
   // ── Phong Cách AI — nhóm thầy/cô "phong-cach-ai" ──
   {
