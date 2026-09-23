@@ -2751,19 +2751,30 @@
   }
 
   // Hàng gợi ý trên ô nhập: ẩn khi đang trả lời / hết gợi ý / chưa có ngữ cảnh.
+  // Chip có 2 dạng: chuỗi (mặc định xưa nay — bấm = gửi CÂU HỎI qua `ask()`)
+  // hoặc {label,href,toolId?} (Lớp 1 concierge, giai đoạn 2 bước 15 —
+  // bấm = ĐIỀU HƯỚNG THẲNG sang tool, không qua model, không tốn Lượng/lượt
+  // dùng thử). Chuỗi vẫn là dạng CHÍNH — 53 trang đang gọi `chips:['...']`
+  // không đổi gì; `href` là NGOẠI LỆ chỉ trang tự khai mới có.
   function renderSuggs() {
     var host = document.getElementById('railSugg');
     if (!host) return;
     if (!ctx || streaming || !ctxChips.length) { host.innerHTML = ''; host.style.display = 'none'; return; }
     host.style.display = '';
     host.innerHTML = '<div class="sugg-row">' +
-      ctxChips.map(function (c, i) { return '<button class="chip" type="button" data-i="' + i + '">' + esc(c) + '</button>'; }).join('') +
+      ctxChips.map(function (c, i) { return '<button class="chip" type="button" data-i="' + i + '">' + esc(typeof c === 'string' ? c : c.label) + '</button>'; }).join('') +
       '</div>';
     host.querySelectorAll('[data-i]').forEach(function (el) {
       el.addEventListener('click', function () {
-        var i = +el.getAttribute('data-i'); var q = ctxChips[i];
-        if (q == null) return;
-        ctxChips.splice(i, 1); renderSuggs(); ask(q);
+        var i = +el.getAttribute('data-i'); var c = ctxChips[i];
+        if (c == null) return;
+        ctxChips.splice(i, 1); renderSuggs();
+        if (typeof c === 'string') { ask(c); return; }
+        // Chốt lại ở client, cùng luật với `showToolSuggest()`: chỉ điều
+        // hướng NỘI BỘ site, không nhận javascript:/link ngoài.
+        if (!c.href || c.href.charAt(0) !== '/' || c.href.indexOf('//') === 0) return;
+        try { track('cta_click', { tool_id: c.toolId || null, slug: 'concierge_chip_nav' }); } catch (e) { /* ignore */ }
+        location.href = c.href;
       });
     });
   }
