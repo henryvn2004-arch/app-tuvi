@@ -63,6 +63,11 @@ const projectGlobals = {
   MaiHoaTool: 'readonly',
   LucNhamTool: 'readonly',
   DaiLucNham: 'readonly',
+  // Bước 18 (chat-first, nhóm ảnh/tướng thuật trả phí): cùng lớp — nạp lười
+  // qua `ensureScripts()`. `TuviPaywall` gốc từ `public/tuvi-paywall.js` (một
+  // file riêng, không phải tools-shared) nhưng cùng cơ chế nạp động.
+  TuviPaywall: 'readonly',
+  BuTuongTool: 'readonly',
 };
 
 const sharedRules = {
