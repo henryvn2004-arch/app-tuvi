@@ -1343,6 +1343,22 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
   var CHIPS_TAM_SU=['Dạo này con thấy mệt mỏi quá','Con đang bế tắc chuyện công việc',
                     'Vận hôm nay của con thế nào?','Thời gian tới có gì đáng lưu ý không?'];
 
+  // Lớp 1 concierge (2026-09-23, tiếp bước 14 — Lớp 2 dùng model qua
+  // goi_y_cong_cu ở kịch bản hoang-dao): chip ĐIỀU HƯỚNG THẲNG cho người
+  // CHƯA có lá số — biết ngay 4 ý định phổ biến nhất thì trỏ thẳng, khỏi
+  // vòng qua model đoán. `href`/`toolId` do renderSuggs() (shell.js) nhận
+  // dạng {label,href,toolId} — khác chip chuỗi (bấm = gửi câu hỏi qua ask()).
+  // Đích lấy từ tool_pricing (tool_id → app_path) TẠI THỜI ĐIỂM viết mục này
+  // — đổi route ở admin thì phải sửa lại đây tay (không có API tra ở client
+  // lúc build danh sách này).
+  var CHIPS_CONCIERGE=[
+    {label:'Chuyện tình duyên, hôn nhân',href:'/app/xem-tuoi',toolId:'xem-tuoi'},
+    {label:'Công việc, sự nghiệp',href:'/app/cong-so',toolId:'cong-so'},
+    {label:'Chọn ngày làm việc lớn',href:'/app/chon-ngay',toolId:'chon-ngay-tot'},
+    {label:'Lập lá số xem vận riêng',href:'/app/luan-giai',toolId:'laso'},
+    'Hôm nay nên làm gì, tránh gì?'
+  ];
+
   /* ── Mồi rail + nút ────────────────────────────────────────────────────── */
   /* Báo trạng thái cho nút BIỂU TƯỢNG. Bản cũ ghi `btn.textContent='✓ Đã chép
      link'` — với nút chỉ có icon thì lệnh đó XOÁ LUÔN cái SVG bên trong, nút
@@ -1400,7 +1416,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
           scenario:{type:'hoang-dao',data:flat},
           label:'Vận ngày '+td.d+'/'+td.mo,
           greeting:'Hôm nay là ngày **'+cc+'** (hành '+v.ngay.canHanh+'). Bạn định làm việc gì để tôi chọn giờ đẹp? Lập lá số để tôi luận vận riêng cho bạn.',
-          chips:['Hôm nay nên làm gì, tránh gì?','Giờ nào đẹp để xuất hành?','Lập lá số xem vận của tôi','Ngày mai có tốt không?'],
+          chips:CHIPS_CONCIERGE,
           passive:true
         });
       }

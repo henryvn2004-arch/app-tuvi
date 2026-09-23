@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-383 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+384 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 218 | 854,006 B |
+| `2026-09.md` | 219 | 860,253 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🔄 Chat-first bước 14: concierge engine đoán ý định — Lớp 1 chip điều hướng + Lớp 2 `goi_y_cong_cu` cho kịch bản `hoang-dao` (giai đoạn 2) |
 | 1 | 2026-09 | `2026-09.md` | 🔄 Chat-first bước 13: câu mở đầu trong rail + cửa concierge `/app#chat` (giai đoạn 1) |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Chat rail tool "Số Đẹp" luôn báo "kết nối trục trặc" — `scenario.type` thiếu trong cổng validate |
 | 1 | 2026-09 | `2026-09.md` | 🩹 Bàn phím ảo iOS Safari che khung nhập chat (`.rail-in`) |
