@@ -236,6 +236,37 @@
     (document.head || document.documentElement).appendChild(s);
   }
 
+  // ── iOS SAFARI: BÀN PHÍM ẢO CHE KHUNG NHẬP CHAT ──
+  // `.rail` mobile là position:fixed, bottom:calc(90px+safe-area) — số đó
+  // tính theo LAYOUT viewport. Bàn phím ảo trên iOS Safari KHÔNG thu nhỏ
+  // layout viewport, nó chỉ thu VÙNG NHÌN THẤY THẬT (`visualViewport`) —
+  // đúng bẫy `window.innerHeight` đã ghi trong CLAUDE.md (trước giờ chỉ vá
+  // cho overlay/popup, chưa vá cho `.rail`). Không đồng bộ thì `.rail-in`
+  // (khung nhập, nằm cuối `.rail` vì `.rail` là flex column) bị bàn phím che
+  // một phần hoặc toàn bộ. `covered` = phần layout viewport bị bàn phím (hoặc
+  // scroll của chính visualViewport) nuốt mất — đẩy `bottom` của `.rail` lên
+  // đúng bấy nhiêu để `.rail-in` luôn nổi ngay trên mép bàn phím.
+  //
+  // Chỉ can thiệp khi CHÊNH LỆCH THẬT SỰ lớn (> KB_MIN) — thanh địa chỉ
+  // Safari tự thu/giãn cũng đổi `visualViewport.height` vài chục px, đừng
+  // đọc nhầm thành "bàn phím vừa mở". Đóng bàn phím / desktop → xoá style
+  // inline, trả lại đúng CSS gốc (90px dành cho tabbar nổi, xem nhật ký vá
+  // "Panel chat đè nút Chat" 2026-09-23).
+  var RAIL_KB_MIN = 150;
+  function syncRailKeyboard() {
+    var vv = window.visualViewport;
+    var rail = document.getElementById('shell-rail');
+    if (!vv || !rail) return;
+    if (!window.matchMedia('(max-width:900px)').matches) { rail.style.bottom = ''; return; }
+    var covered = window.innerHeight - vv.height - vv.offsetTop;
+    rail.style.bottom = covered > RAIL_KB_MIN ? covered + 'px' : '';
+  }
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', syncRailKeyboard);
+    window.visualViewport.addEventListener('scroll', syncRailKeyboard);
+  }
+  window.addEventListener('resize', syncRailKeyboard);
+
   // ── VÒNG LẶP GIỚI THIỆU (viral loop) ──
   // Người nhận link chia sẻ đáp xuống /app/<tool>?ref=CODE — trước đây CHỈ
   // homepage và /cong-cu bắt được ?ref=, nên mắt xích "A chia sẻ → B đăng ký →
