@@ -528,9 +528,13 @@ window.TuviForm = (() => {
       prefix     = '',
       gioitinh   = 'nam',
       showName   = true,
+      showGender = true,
       showNamXem = false,
+      skipHour   = false, // than-so-hoc: không cần giờ sinh — dừng sau bước 2
       submitLabel = 'Tiếp tục →',
-      q1 = showName ? 'Cho thầy xin họ tên và giới tính của con nhé.' : 'Giới tính của con là gì?',
+      q1 = showName
+        ? (showGender ? 'Cho thầy xin họ tên và giới tính của con nhé.' : 'Cho thầy xin họ tên đầy đủ của con nhé.')
+        : 'Giới tính của con là gì?',
       q2 = 'Ngày sinh dương lịch của con là ngày nào?',
       q3 = 'Giờ sinh của con là mấy giờ?',
       onDone,
@@ -557,7 +561,7 @@ window.TuviForm = (() => {
     const s1 = bubble('chatStep-' + cp + '-1', '<p>' + q1 + '</p>' +
       '<div class="frow">' +
         (showName ? `<div class="fg" style="flex:1.6;min-width:150px"><label>Họ và tên</label><input type="text" id="${pid('hoten', cp)}" placeholder="Nguyễn Văn A" autocomplete="off"></div>` : '') +
-        `<div class="fg" style="width:90px"><label>Giới tính</label><select id="${pid('gioitinh', cp)}"><option value="nam"${gioitinh === 'nam' ? ' selected' : ''}>Nam</option><option value="nu"${gioitinh === 'nu' ? ' selected' : ''}>Nữ</option></select></div>` +
+        (showGender ? `<div class="fg" style="width:90px"><label>Giới tính</label><select id="${pid('gioitinh', cp)}"><option value="nam"${gioitinh === 'nam' ? ' selected' : ''}>Nam</option><option value="nu"${gioitinh === 'nu' ? ' selected' : ''}>Nữ</option></select></div>` : '') +
         (showNamXem ? `<div class="fg" style="width:90px"><label>Năm xem vận</label><input type="number" id="${pid('namXem', cp)}" value="${namXemDefault}" min="1900" max="2100"></div>` : '') +
       '</div>' +
       `<button class="btn-go" type="button" id="${cp}-next1" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button>`);
@@ -565,9 +569,13 @@ window.TuviForm = (() => {
     focusFirst();
     document.getElementById(cp + '-next1').addEventListener('click', function () {
       const hoten = showName ? (document.getElementById(pid('hoten', cp))?.value || '').trim() : '';
-      const gioitinhV = document.getElementById(pid('gioitinh', cp))?.value || 'nam';
+      const gioitinhV = showGender ? (document.getElementById(pid('gioitinh', cp))?.value || 'nam') : gioitinh;
       const namXemV = showNamXem ? (parseInt(document.getElementById(pid('namXem', cp))?.value) || namXemDefault) : undefined;
-      collapse(s1, '<p>' + (hoten ? '<b>' + esc(hoten) + '</b> · ' : '') + (gioitinhV === 'nam' ? 'Nam' : 'Nữ') + (namXemV ? ' · xem vận năm ' + namXemV : '') + ' ✓</p>');
+      const parts = [];
+      if (hoten) parts.push('<b>' + esc(hoten) + '</b>');
+      if (showGender) parts.push(gioitinhV === 'nam' ? 'Nam' : 'Nữ');
+      if (namXemV) parts.push('xem vận năm ' + namXemV);
+      collapse(s1, '<p>' + parts.join(' · ') + ' ✓</p>');
       step2(hoten, gioitinhV, namXemV);
     });
 
@@ -578,12 +586,19 @@ window.TuviForm = (() => {
           `<div class="fg" style="width:82px"><label>Tháng</label><select id="${pid('thang', cp)}">${opts.thangOpts}</select></div>` +
           `<div class="fg" style="width:90px"><label>Năm</label><select id="${pid('nam', cp)}">${opts.namOpts}</select></div>` +
         '</div>' +
-        `<button class="btn-go" type="button" id="${cp}-next2" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button>`);
+        `<button class="btn-go" type="button" id="${cp}-next2" style="width:auto;padding:9px 16px;font-size:13px">${skipHour ? submitLabel : 'Tiếp tục →'}</button>`);
       document.getElementById(cp + '-next2').addEventListener('click', function () {
         const ngay = +document.getElementById(pid('ngay', cp)).value;
         const thang = +document.getElementById(pid('thang', cp)).value;
         const nam = +document.getElementById(pid('nam', cp)).value;
         collapse(s2, '<p>Ngày sinh: <b>' + ngay + '/' + thang + '/' + nam + '</b> ✓</p>');
+        if (skipHour) {
+          const data = { hoten, gioitinh: gioitinhV, ngay, thang, nam };
+          if (namXemV !== undefined) data.namXem = namXemV;
+          setData(data, prefix);
+          if (onDone) onDone(data);
+          return;
+        }
         step3(hoten, gioitinhV, namXemV, ngay, thang, nam);
       });
     }

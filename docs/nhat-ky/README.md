@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-377 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+380 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 212 | 838,168 B |
+| `2026-09.md` | 215 | 844,711 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,9 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 📈 Gắn đo lường trải nghiệm rail chat: `chat_reply`/`chat_error` |
+| 1 | 2026-09 | `2026-09.md` | 🩹 Panel chat đè lên nút "Chat" nổi giữa tabbar — hụt clearance sau bước 12 |
+| 1 | 2026-09 | `2026-09.md` | 🩹 `app-than-so-hoc.html` lệch định dạng chat-intake — pilot bước 5 chưa từng gộp vào `renderChat()` |
 | 1 | 2026-09 | `2026-09.md` | 📝 Ghi lại: environment nào có `OPENAI_API_KEY` + mạng ra prod — đã đoán sai 1 lần |
 | 1 | 2026-09 | `2026-09.md` | 🩹 `but-tuong` thiếu avatar — bỏ sót khỏi `TOOL_AVATARS`, không phải lệch tên |
 | 1 | 2026-09 | `2026-09.md` | 🔄 Chat-first bước 12: bottom nav — Chat làm trung tâm |

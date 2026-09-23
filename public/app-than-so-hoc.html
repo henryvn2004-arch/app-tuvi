@@ -97,7 +97,7 @@
           <div class="fg" style="width:74px"><label>Ngày</label><input type="number" id="ngay" placeholder="15" min="1" max="31"></div>
           <div class="fg" style="width:74px"><label>Tháng</label><input type="number" id="thang" placeholder="6" min="1" max="12"></div>
           <div class="fg" style="width:90px"><label>Năm</label><input type="number" id="nam" placeholder="1990"></div>
-          <div class="fg" style="flex:1;min-width:160px"><label>Họ tên đầy đủ</label><input type="text" id="ten" placeholder="Nguyễn Văn An"></div>
+          <div class="fg" style="flex:1;min-width:160px"><label>Họ tên đầy đủ</label><input type="text" id="hoten" placeholder="Nguyễn Văn An"></div>
         </div>
         <div class="hint">Nhập tên khai sinh đầy đủ — <b>gõ có dấu hay không dấu đều được</b>, kết quả như nhau.</div>
         <button class="btn-go" id="btnGo" onclick="calculate()">
@@ -143,9 +143,11 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'than-so-hoc'};</script>
 <script src="/tools-shared/than-so-hoc.js?v=3"></script>
+<script src="/tools-shared/vn-timezone.js?v=1"></script>
+<script src="/tuvi-form.js?v=5"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=41" data-icons-only></script>
-<script src="/shell.js?v=98"></script>
+<script src="/shell.js?v=99"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/than-so-hoc.js với trang standalone.
 function calculate(){
@@ -155,7 +157,7 @@ function calculate(){
     parseInt(document.getElementById('ngay').value),
     parseInt(document.getElementById('thang').value),
     parseInt(document.getElementById('nam').value),
-    document.getElementById('ten').value);
+    document.getElementById('hoten').value);
   if(!r.ok){ err.textContent=r.error; err.classList.add('active'); return; }
   document.getElementById('numResults').innerHTML=r.resultHTML;
   document.getElementById('birthPanel').style.display='none';
@@ -199,63 +201,23 @@ function wsStepsSet(n){
   }
 }
 
-// ── Bước 5: hội thoại từng bước trong rail ──
-// KHÔNG di chuyển #ngay/#thang/#nam/#ten thật (chúng nằm trong #birthPanel,
-// ẩn) — vì Shell.setContext() ghi đè TOÀN BỘ innerHTML của #chat lúc chào
-// (xem greet() trong shell.js), di chuyển node thật vào đó sẽ mất luôn node
-// khi chat thật bắt đầu. Bong bóng hội thoại dùng input RIÊNG (prefix `i`),
-// nộp xong mới CHÉP giá trị sang input thật rồi gọi calculate() y hệt cũ —
-// 0 thay đổi trong đường tính toán/paywall.
-function ava(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; }
+// ── Bước 5→13: hội thoại từng bước trong rail ──
+// Trước đây file này TỰ viết tay 2 bong bóng hỏi-đáp (bản pilot bước 5, có
+// trước cả renderChat()) — lệch định dạng với 7 trang kia (input số thay vì
+// select) vì chưa bao giờ được gộp lại. Nay dùng CHUNG TuviForm.renderChat()
+// (tuvi-form.js) như mọi trang khác: showGender:false (thần số học không cần
+// giới tính) + skipHour:true (không cần giờ sinh) — renderChat() tự ghi vào
+// field thật #ngay/#thang/#nam/#hoten (ẩn trong #birthPanel, id khớp sẵn) qua
+// setData() rồi mới gọi onDone(), y hệt các trang khác.
 function startIntake(){
   if(window.Shell&&Shell.pendingRestore&&Shell.pendingRestore())return; // khôi phục phiên cũ: bỏ qua hội thoại nhập liệu
-  var chat=document.getElementById('chat');
-  var empty=document.getElementById('railEmpty');
-  if(!chat)return;
-  if(empty)empty.style.display='none';
-  var s1=document.createElement('div'); s1.className='msg a'; s1.id='intakeStep1';
-  s1.innerHTML='<img class="msg-ava" src="'+ava()+'" alt="">'+
-    '<div class="msg-body"><p>Cho thầy xin ngày sinh dương lịch của con nhé.</p>'+
-    '<div class="frow">'+
-      '<div class="fg" style="width:74px"><label>Ngày</label><input type="number" id="iNgay" placeholder="15" min="1" max="31"></div>'+
-      '<div class="fg" style="width:74px"><label>Tháng</label><input type="number" id="iThang" placeholder="6" min="1" max="12"></div>'+
-      '<div class="fg" style="width:90px"><label>Năm</label><input type="number" id="iNam" placeholder="1990"></div>'+
-    '</div>'+
-    '<button class="btn-go" id="intakeNext1" type="button" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button>'+
-    '<div class="err" id="intakeErr1"></div></div>';
-  chat.appendChild(s1); chat.scrollTop=chat.scrollHeight;
-  document.getElementById('iNam').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();document.getElementById('intakeNext1').click();}});
-  document.getElementById('intakeNext1').addEventListener('click',function(){
-    var d=+document.getElementById('iNgay').value, m=+document.getElementById('iThang').value, y=+document.getElementById('iNam').value;
-    var err=document.getElementById('intakeErr1');
-    if(!d||!m||!y){ err.textContent='Nhập đủ ngày, tháng, năm sinh nhé.'; err.classList.add('active'); return; }
-    err.classList.remove('active');
-    s1.innerHTML='<img class="msg-ava" src="'+ava()+'" alt="">'+'<div class="msg-body"><p>Ngày sinh: <b>'+d+'/'+m+'/'+y+'</b> ✓</p></div>';
-    showIntakeStep2(d,m,y);
+  TuviForm.renderChat({
+    showGender: false,
+    skipHour: true,
+    q1: 'Cho thầy xin họ tên đầy đủ khai sinh nhé — có dấu hay không đều được.',
+    submitLabel: 'Tính thần số →',
+    onDone: calculate
   });
-  document.getElementById('iNgay').focus();
-}
-function showIntakeStep2(d,m,y){
-  var chat=document.getElementById('chat');
-  var s2=document.createElement('div'); s2.className='msg a'; s2.id='intakeStep2';
-  s2.innerHTML='<img class="msg-ava" src="'+ava()+'" alt="">'+
-    '<div class="msg-body"><p>Giờ cho thầy xin họ tên đầy đủ khai sinh — có dấu hay không đều được.</p>'+
-    '<div class="frow"><div class="fg" style="flex:1;min-width:160px"><input type="text" id="iTen" placeholder="Nguyễn Văn An"></div></div>'+
-    '<button class="btn-go" id="intakeNext2" type="button" style="width:auto;padding:9px 16px;font-size:13px">Tính thần số →</button>'+
-    '<div class="err" id="intakeErr2"></div></div>';
-  chat.appendChild(s2); chat.scrollTop=chat.scrollHeight;
-  function submit(){
-    document.getElementById('ngay').value=d;
-    document.getElementById('thang').value=m;
-    document.getElementById('nam').value=y;
-    document.getElementById('ten').value=document.getElementById('iTen').value;
-    calculate();
-    var e=document.getElementById('error-msg'), ie=document.getElementById('intakeErr2');
-    if(e&&e.classList.contains('active')){ ie.textContent=e.textContent; ie.classList.add('active'); }
-  }
-  document.getElementById('iTen').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submit();}});
-  document.getElementById('intakeNext2').addEventListener('click',submit);
-  document.getElementById('iTen').focus();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',startIntake);else startIntake();
 </script>
