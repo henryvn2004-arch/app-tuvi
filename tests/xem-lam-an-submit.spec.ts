@@ -5,12 +5,23 @@ import { test, expect } from '@playwright/test';
 // #tuvi-form-a/#tuvi-form-b/#btn-analyze/#result-section/#nam-xem
 // → #a-fields/#b-fields/#btnGo/#xtPanel (data-ws-result) — không còn field
 // "năm xem" (calcTuongHop không nhận tham số năm).
+// 2026-09-23 (chat-first bước 10): SHELL_CHAT_INTAKE ẩn #birthPanel mặc định
+// (hội thoại trong rail thay thế làm màn nhập liệu đầu) — form thật vẫn
+// NGUYÊN VẸN phía sau, dùng làm đường "Sửa" sau khi có kết quả. Các bài kiểm
+// dưới đây đo ĐÚNG/SAI của bản thân việc tính toán/hiện kết quả, không phải
+// đường nhập liệu — hiện form thật lên để tái dùng logic cũ, không phải lái
+// qua hội thoại mới (cùng mẫu `tu-binh-submit.spec.ts` đã dùng từ bước 6; hội
+// thoại thật đã verify riêng bằng tay, xem docs/nhat-ky/2026-09.md bước 10).
 
 test.describe('Xem Tuổi Làm Ăn — Submit & Result (shell /app/xem-lam-an)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/app/xem-lam-an');
     await page.waitForLoadState('networkidle');
     await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
+    await page.evaluate(() => {
+      const el = document.getElementById('birthPanel');
+      if (el) el.style.display = 'block';
+    });
   });
 
   test('hai form panels hiện (a-fields và b-fields)', async ({ page }) => {
