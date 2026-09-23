@@ -43,3 +43,21 @@ cd tuvi-engine && npm ci && cd ..
 npx playwright install chromium
 ```
 ESLint dùng flat config (`eslint.config.js`) nên VS Code cần extension version mới (ESLint v3+).
+
+## Claude Code Remote environments (Henry's account, 2026-09-23)
+Session mặc định (environment "Default") **không có** `OPENAI_API_KEY`/`ANTHROPIC_API_KEY`
+và **không ra được mạng** tới `tuviminhbao.com` (egress proxy chặn 403 ở CONNECT —
+`curl` ra thẳng lỗi `connect_rejected`, không phải site sập). Việc cần sinh ảnh
+(`scripts/gen-tool-avatars.mjs`, `gen-hero-banners.mjs`, …) hay kiểm layout/data
+thật trên prod phải mở **session mới ở environment khác** — dùng
+`mcp__Claude_Code_Remote__create_session` với `environment_id` đúng, checkout đúng
+branch cần, giao việc rõ, rồi đọc kết quả qua `get_session`.
+
+⚠️ **Đừng đoán environment nào có gì qua TÊN** — đã đoán sai 1 lần: environment tên
+"app-tuvi + GA4" (`env_01JCqKCLu8YtHoFg5NFCNYPs`) **KHÔNG** có mạng ra
+`tuviminhbao.com` (test thật ra `connect_rejected`, giống hệt Default). Environment
+tên **"OpenAI Key"** (`env_01Khi54Dffp38bzpmjYSGrYg`) mới là nơi có CẢ HAI —
+`OPENAI_API_KEY` **và** mạng ra `tuviminhbao.com` thật (đã xác nhận: sinh ảnh avatar
+thật + audit layout 112 lượt tải trang trên prod, PR #1013/#1014). `list_environments`
+liệt kê ID nhưng KHÔNG lộ policy mạng/key — phải thử thật (hoặc hỏi Henry) trước khi
+giao việc, đừng tin tên.

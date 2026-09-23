@@ -339,9 +339,11 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   ID đúng dạng). Business Settings → System Users: GÁN ad account cho System
   User trước, generate token SAU. Xem `lib/analytics/meta-ads.ts`.
 - **`brand_voice_docs` trên DB vẫn là bản CŨ** — chạy `node scripts/load-brand-voice.mjs`
-  ở máy có `OPENAI_API_KEY` (container phiên không có).
-- **`ANTHROPIC_API_KEY` không đọc được trong container** (`GEMINI_API_KEY`/
-  `OPENAI_API_KEY` thì đọc được) — mọi phép đo phải gọi Anthropic đều chạy ở nơi khác.
+  ở máy có `OPENAI_API_KEY` (container phiên mặc định không có).
+- **`ANTHROPIC_API_KEY`/`OPENAI_API_KEY` KHÔNG đọc được trong container/environment
+  mặc định** (`GEMINI_API_KEY` thì có), **và không có mạng ra `tuviminhbao.com`**
+  (proxy 403 ở CONNECT) — việc cần 1 trong 2 thứ đó phải mở session ở environment
+  khác. ĐỪNG đoán qua TÊN environment, xem `docs/QC.md` "Claude Code Remote environments".
 ### Nợ kỹ thuật đã ghi nhận
 - `seo_pages` (7.080 trang tương hợp) đang được cron `/api/cron/viral-seo-pages`
   (120 dòng/ngày, ~59 ngày) viết lại theo viral-core — migration đã áp dụng
