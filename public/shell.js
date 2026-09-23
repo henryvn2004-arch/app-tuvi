@@ -2835,6 +2835,53 @@
     'mai-hoa': { kind: 'draw', run: function (chat, toolId) { return runMaiHoa(chat, toolId); } },
     'ky-mon': { kind: 'draw', run: function (chat, toolId) { return runKyMon(chat, toolId); } },
     'luc-nham': { kind: 'draw', run: function (chat, toolId) { return runLucNham(chat, toolId); } },
+
+    // ── Bước 18: nhóm ẢNH/TƯỚNG THUẬT TRẢ PHÍ — Henry "làm luôn nhóm
+    // webcam/mic (tướng thuật) đi". Khác bước 17 (toàn bộ MIỄN PHÍ): các tool
+    // dưới đây qua `TuviPaywall.requireCredits()` — đã đọc kỹ hàm đó trong
+    // `tuvi-paywall.js`, xác nhận nó là overlay TOÀN CỤC (modal đăng nhập/giá/
+    // thiếu Lượng tự vẽ, không phụ thuộc DOM trang), an toàn gọi từ rail dù
+    // đang mở ở trang nào. `paidToolInit()`/`restorePaywallCfg()` xử lý một
+    // bẫy tiền thật — xem chú thích ngay tại đó, đừng bỏ qua khi sửa.
+    // 🪤 "Webcam" ở đây = `<input type=file accept=image/*>` (mobile tự mở
+    // Camera/Thư viện), KHÔNG dựng khung xem trước `<video>` sống — cả 11
+    // trang tướng thuật ĐỀU có sẵn đường tải-ảnh này song song với
+    // `getUserMedia`, không phải suy diễn/rút gọn trái phép.
+    // Cố ý CHƯA làm: `thanh-tuong`/`thanh-tuong-pro` (ghi âm 14-37s, cần
+    // UI ghi âm/đếm ngược mà một bong bóng chat hẹp chưa đủ chỗ — xem nhật
+    // ký bước 18). Các field phụ suy từ ảnh bằng MediaPipe (`geoNote`/
+    // `irisNote`/`faceMeasurements`) CỐ Ý bỏ qua (gửi `null`) — cả 6 trang
+    // dùng chúng đều coi là tuỳ chọn/best-effort, request vẫn chạy đúng khi
+    // thiếu, xác nhận bằng đọc code chứ không đoán.
+    'dien-tuong': { kind: 'draw', run: function (chat, toolId, label) { return runDienTuong(chat, toolId, label); } },
+    'khi-sac': { kind: 'draw', run: function (chat, toolId, label) { return runKhiSac(chat, toolId, label); } },
+    'nhan-tuong': { kind: 'draw', run: function (chat, toolId, label) { return runNhanTuong(chat, toolId, label); } },
+    'thu-tuong': { kind: 'draw', run: function (chat, toolId, label) { return runThuTuong(chat, toolId, label); } },
+    'personal-color': { kind: 'draw', run: function (chat, toolId, label) { return runPersonalColor(chat, toolId, label); } },
+    'da-lieu-ai': { kind: 'draw', run: function (chat, toolId, label) { return runDaLieuAi(chat, toolId, label); } },
+    'trang-diem-phan-tich': { kind: 'draw', run: function (chat, toolId, label) { return runTrangDiem(chat, toolId, label); } },
+    'kieu-toc-phan-tich': { kind: 'draw', run: function (chat, toolId, label) { return runKieuToc(chat, toolId, label); } },
+    'ban-lam-viec': { kind: 'draw', run: function (chat, toolId, label) { return runBanLamViec(chat, toolId, label); } },
+    'cua-hang-phong-thuy': { kind: 'draw', run: function (chat, toolId, label) { return runCuaHangPhongThuy(chat, toolId, label); } },
+    'phong-thuy': { kind: 'draw', run: function (chat, toolId, label) { return runPhongThuy(chat, toolId, label); } },
+    'but-tuong': { kind: 'draw', run: function (chat, toolId, label) { return runButTuong(chat, toolId, label); } },
+    'mau-sac-hop-menh': { kind: 'draw', run: function (chat, toolId, label) { return runMauSacHopMenh(chat, toolId, label); } },
+    'trang-phuc-theo-ngay': { kind: 'draw', run: function (chat, toolId, label) { return runTrangPhucTheoNgay(chat, toolId, label); } },
+  };
+  // 🪤 `goi_y_cong_cu`/`goi_y_san_pham` gửi tool_id THẬT theo `tool_pricing`
+  // (vd 'dat-ten-con', 'chon-ngay-tot') — có thể KHÁC `window.SHELL_ACTIVE`
+  // trang tự khai (vd 'dat-ten', 'chon-ngay'), lệch y hệt danh sách
+  // `TOOL_AVATAR_ALIAS` (lib/media/tool-avatar-prompt.ts). Chip Lớp 1 (viết
+  // tay trong từng app-*.html) lại dùng kiểu SHELL_ACTIVE. INLINE_TOOLS ở
+  // trên khai theo kiểu SHELL_ACTIVE (khớp Lớp 1) — bảng dưới đây quy đổi
+  // NGƯỢC (tool_id thật → khoá SHELL_ACTIVE) để `goi_y_cong_cu` cũng tra
+  // trúng, không rơi về điều hướng oan.
+  var INLINE_TOOL_ALIAS = {
+    'tu-binh': 'bat-tu',
+    'chon-ngay-tot': 'chon-ngay',
+    'dat-ten-con': 'dat-ten',
+    'laso': 'laso',
+    'xem-tuoi-sinh-con': 'sinh-con',
   };
   function setHeaderTitle(title) {
     var el = document.getElementById('railHTitle');
@@ -2856,7 +2903,7 @@
   // INLINE_TOOLS, hoặc gọi API giữa chừng hỏng) — trả về false thì người gọi
   // tự location.href = path như hành vi cũ.
   function startInlineTool(toolId, label, path) {
-    var spec = INLINE_TOOLS[toolId];
+    var spec = INLINE_TOOLS[toolId] || INLINE_TOOLS[INLINE_TOOL_ALIAS[toolId]];
     if (!spec || typeof TuviForm === 'undefined') return false;
     var chat = document.getElementById('chat');
     if (!chat) return false;
@@ -3435,6 +3482,632 @@
             });
           }).catch(function () { showErr('Không dựng được khóa Lục Nhâm. Thử lại giúp con nhé.'); });
         });
+    });
+  }
+
+  // ── Bước 18: hạ tầng dùng chung cho nhóm ảnh/tướng thuật TRẢ PHÍ ───────
+  // `PAID_PRODUCT_BY_TOOL`: toolId (khoá SHELL_ACTIVE, cũng là khoá
+  // INLINE_TOOLS) → đúng chuỗi `product` mà `TuviPaywall.init()`/
+  // `generateToolSlug()` của TRANG THẬT dùng — đọc từng trang, không suy.
+  var PAID_PRODUCT_BY_TOOL = {
+    'dien-tuong': 'dien-tuong',
+    'khi-sac': 'khi-sac',
+    'nhan-tuong': 'nhan-tuong',
+    'thu-tuong': 'thu-tuong',
+    'personal-color': 'personal-color',
+    'da-lieu-ai': 'da-lieu-ai',
+    'trang-diem-phan-tich': 'trang-diem-phan-tich',
+    'kieu-toc-phan-tich': 'kieu-toc-phan-tich',
+    'ban-lam-viec': 'ban-lam-viec',
+    'cua-hang-phong-thuy': 'cua-hang-phong-thuy',
+    'phong-thuy': 'phong-thuy',
+    'but-tuong': 'but-tuong',
+    'mau-sac-hop-menh': 'mau-sac-hop-menh',
+    'trang-phuc-theo-ngay': 'trang-phuc-theo-ngay',
+  };
+  // 🪤 Bẫy tiền thật: `TuviPaywall.init({product})` ghi vào biến MODULE-LEVEL
+  // `_cfg` bên trong tuvi-paywall.js — không có getter, không có ngăn xếp.
+  // `_price()`/lượt trừ Lượng bên trong `requireCredits()` đọc `_cfg.product`
+  // tại THỜI ĐIỂM GỌI. Trang GỐC (nơi rail đang mở) có thể đã tự
+  // `TuviPaywall.init({product:'X'})` một lần lúc tải trang (36/53 trang
+  // dùng tuvi-paywall.js) — gọi `.init({product:'Y'})` cho tool vừa chuyển
+  // inline sẽ ĐÈ mất `_cfg` của trang gốc. Nút "Phân tích" GỐC của trang đó
+  // KHÔNG tự gọi lại `.init()` mỗi lần bấm (chỉ 1 lần lúc tải trang) — bấm
+  // nó SAU khi rail đã đổi `_cfg` sẽ tính/trừ theo GIÁ CỦA TOOL KHÁC. Vá:
+  // gọi lại `.init()` với đúng sản phẩm của TRANG GỐC (`ACTIVE`) ngay khi
+  // luồng trả phí inline kết thúc — thành công lẫn lỗi đều phải gọi.
+  function paidToolInit(toolId) {
+    if (typeof TuviPaywall === 'undefined') return;
+    TuviPaywall.init({ product: PAID_PRODUCT_BY_TOOL[toolId] || toolId });
+  }
+  function restorePaywallCfg() {
+    var p = PAID_PRODUCT_BY_TOOL[ACTIVE];
+    if (p && typeof TuviPaywall !== 'undefined' && TuviPaywall.init) TuviPaywall.init({ product: p });
+  }
+  // Đọc luồng SSE `data: {t:...}` / `[DONE]` / `{err}` — Y HỆT vòng lặp lặp
+  // lại nguyên văn ở cả 5 trang ảnh/tướng thuật dùng SSE (dien-tuong/khi-sac/
+  // nhan-tuong/thu-tuong/but-tuong), gộp một chỗ thay vì chép 5 lần.
+  // Lỗi HTTP không-200 từ /api/tuong-mat·/api/but-tuong: trang thật đọc
+  // `d.error` trong body JSON trước khi rơi về mã trạng thái — SSE chỉ mở
+  // sau khi qua được cửa này.
+  function resErrMsg(res) {
+    return res.json().catch(function () { return {}; }).then(function (d) { return d.error || 'Lỗi ' + res.status; });
+  }
+  function sseStream(res, onToken) {
+    var reader = res.body.getReader(), dec = new TextDecoder();
+    var full = '', buf = '';
+    function pump() {
+      return reader.read().then(function (r) {
+        if (r.done) return full;
+        buf += dec.decode(r.value, { stream: true });
+        var lines = buf.split('\n'); buf = lines.pop() || '';
+        for (var i = 0; i < lines.length; i++) {
+          var line = lines[i];
+          if (line.indexOf('data: ') !== 0) continue;
+          var raw = line.slice(6).trim();
+          if (raw === '[DONE]') break;
+          try {
+            var j = JSON.parse(raw);
+            if (j.err) throw new Error(j.err);
+            if (j.t) { full += j.t; if (onToken) onToken(full); }
+          } catch (e) { if (e.message && e.message.indexOf('JSON') === -1) throw e; }
+        }
+        return pump();
+      });
+    }
+    return pump();
+  }
+  // Bong bóng "đang phân tích…" tự cập nhật khi SSE đổ chữ về — dùng `mdLite`
+  // (cùng bộ dựng markdown rail chat đang dùng cho lời chào), KHÔNG phải
+  // `renderMarkdown()` riêng của từng trang (khối `[TỐT|CẢNH BÁO]` → thẻ
+  // `.fb-card` — dựng lại đúng thẻ đó trong 1 bong bóng chat hẹp là việc
+  // khác, cố ý đơn giản hoá về văn bản thuần).
+  function inlStreamBubble(chat) {
+    var id = 'inlS' + (++_inlSeq);
+    var el = inlBubble(chat, id, '<p><i>Đang phân tích…</i></p>');
+    return {
+      update: function (text) { inlCollapse(el, mdLite(text)); chat.scrollTop = chat.scrollHeight; },
+      el: el,
+    };
+  }
+  // Bong bóng chọn ẢNH — `<input type=file accept=image/*>` (mobile tự mở
+  // Camera/Thư viện, KHÔNG dựng `<video>` xem trước sống). `extraHtml` là
+  // field phụ tuỳ tool (năm sinh, giới tính…), ghép vào CÙNG bong bóng.
+  function inlPhotoBubble(chat, introHtml, extraHtml, btnLabel, onSubmit) {
+    var id = 'inlP' + (++_inlSeq);
+    var el = inlBubble(chat, id, introHtml +
+      '<div class="frow" style="margin-top:6px"><input type="file" accept="image/*" id="' + id + '-file"></div>' +
+      '<div id="' + id + '-prev"></div>' +
+      extraHtml +
+      '<button class="btn-go" type="button" id="' + id + '-go" style="width:auto;padding:9px 16px;font-size:13px;margin-top:6px" disabled>' + esc(btnLabel) + '</button>' +
+      '<p id="' + id + '-err" style="display:none;color:#c0392b;font-size:12px;margin-top:6px"></p>');
+    var photo = null;
+    var fileEl = document.getElementById(id + '-file');
+    var goEl = document.getElementById(id + '-go');
+    fileEl.addEventListener('change', function () {
+      var f = fileEl.files && fileEl.files[0];
+      if (!f) return;
+      var rd = new FileReader();
+      rd.onload = function () {
+        var dataUrl = String(rd.result);
+        photo = { base64: dataUrl.split(',')[1], mediaType: f.type || 'image/jpeg', dataUrl: dataUrl };
+        var prev = document.getElementById(id + '-prev');
+        if (prev) prev.innerHTML = '<img src="' + dataUrl + '" style="max-width:140px;max-height:140px;border-radius:8px;display:block;margin-top:6px">';
+        if (goEl) goEl.disabled = false;
+      };
+      rd.readAsDataURL(f);
+    });
+    var busy = false;
+    goEl.addEventListener('click', function () {
+      if (busy || !photo) return;
+      busy = true; goEl.disabled = true;
+      var showErr = function (msg) {
+        busy = false; if (goEl) goEl.disabled = false;
+        var e = document.getElementById(id + '-err');
+        if (e) { e.textContent = msg || 'Có lỗi, thử lại giúp con nhé.'; e.style.display = 'block'; }
+      };
+      try { onSubmit(photo, el, showErr); } catch (e) { showErr(e && e.message); }
+    });
+    return el;
+  }
+  // Điền giá THẬT (Lượng + VNĐ) vào nút bấm SAU khi bong bóng đã hiện — luật
+  // "VNĐ là giá CHÍNH ở mọi câu nói giá cho khách" (CLAUDE.md). `requireCredits`
+  // KHÔNG hỏi xác nhận trước khi trừ khi đủ số dư — giá trên nút là lần DUY
+  // NHẤT khách thấy số trước khi bị trừ, không phải chi tiết trang trí.
+  function paidBtnPrice(product, bubbleEl, baseLabel) {
+    ensureScripts(['/tool-prices.js?v=9'], function () {
+      if (typeof window.ToolPrices === 'undefined' || !window.ToolPrices.load) return;
+      window.ToolPrices.load().then(function () {
+        var cost = window.ToolPrices.get(product);
+        if (cost == null) return;
+        var btn = bubbleEl.querySelector('.btn-go');
+        if (!btn) return;
+        var vnd = window.ToolPrices.vndLabel(cost);
+        btn.textContent = baseLabel + ' — ' + cost + ' Lượng' + (vnd ? ' (' + vnd + ')' : '');
+      }, function () {});
+    });
+  }
+
+  // ── SSE (dien-tuong/khi-sac/nhan-tuong/thu-tuong) — ảnh → /api/tuong-mat,
+  // đọc luồng chữ đổ thẳng vào MỘT bong bóng chat. Rail context CHỈ đặt 1 lần
+  // lúc mở (y hệt cả 4 trang thật — không trang nào gọi lại setContext() sau
+  // khi có kết quả), streamed text ở lại trong lịch sử chat làm "kết quả".
+  function runTuongMatSSE(chat, toolId, opts) {
+    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=37'], function (err) {
+      if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
+      Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
+      var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', '', 'Phân tích →', function (photo, bubbleEl, showErr) {
+        inlCollapse(bubbleEl, '<p>Ảnh đã gửi ✓</p>');
+        paidToolInit(toolId);
+        var slug = TuviPaywall.generateToolSlug(opts.product);
+        TuviPaywall.requireCredits(slug, function () {
+          var stream = inlStreamBubble(chat);
+          var body = { image: photo.base64, mediaType: photo.mediaType, action: opts.action };
+          for (var k in opts.bodyExtra) body[k] = opts.bodyExtra[k];
+          return fetch('/api/tuong-mat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+            .then(function (res) {
+              if (!res.ok) return resErrMsg(res).then(function (m) { throw new Error(m); });
+              return sseStream(res, function (partial) { stream.update(partial); });
+            })
+            .then(function (full) {
+              if (!full) throw new Error('Không có kết quả.');
+              stream.update(full);
+              if (window.Shell && Shell.setShareable) Shell.setShareable({ kind: 'text', toolId: toolId, title: opts.shareTitle, text: full });
+            })
+            .catch(function (e) { stream.update('Xin lỗi, ' + esc((e && e.message) || 'không phân tích được, thử lại giúp con nhé.')); })
+            .then(function () { restorePaywallCfg(); });
+        });
+      });
+      paidBtnPrice(opts.product, bubble, 'Phân tích');
+    });
+  }
+  function runDienTuong(chat, toolId) {
+    runTuongMatSSE(chat, toolId, {
+      product: 'dien-tuong', action: 'dien-tuong', bodyExtra: { irisNote: null, geoNote: null },
+      label: 'Diện Tướng', placeholder: 'Hỏi thầy về tướng mặt…',
+      greeting: 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ phân tích theo nhân tướng học cổ pháp. Sau khi có kết quả, cứ hỏi tôi thêm bất cứ điều gì.',
+      chips: ['Tam Đình là gì?', 'Ngũ Quan gồm những gì?', 'Tướng mặt có thay đổi được không?'],
+      uploadHint: 'Gửi ảnh khuôn mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
+      shareTitle: 'Diện Tướng của tôi',
+    });
+  }
+  function runKhiSac(chat, toolId) {
+    runTuongMatSSE(chat, toolId, {
+      product: 'khi-sac', action: 'khi-sac', bodyExtra: {},
+      label: 'Khí Sắc', placeholder: 'Hỏi thầy về khí sắc…',
+      greeting: 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ luận khí sắc theo Ma Y Thần Tướng. Sau khi có kết quả, cứ hỏi tôi thêm bất cứ điều gì.',
+      chips: ['Ấn Đường là gì?', '5 sắc Ngũ Hành nghĩa là gì?', 'Khí sắc khác Diện Tướng thế nào?'],
+      uploadHint: 'Gửi ảnh khuôn mặt gần đây (không trang điểm đậm) của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
+      shareTitle: 'Khí Sắc của tôi',
+    });
+  }
+  function runNhanTuong(chat, toolId) {
+    runTuongMatSSE(chat, toolId, {
+      product: 'nhan-tuong', action: 'nhan-tuong', bodyExtra: { irisNote: null },
+      label: 'Nhãn Tướng', placeholder: 'Hỏi thầy về nhãn tướng…',
+      greeting: 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ zoom vào đôi mắt và phân tích theo Nhãn Pháp cổ truyền. Sau khi có kết quả, cứ hỏi tôi thêm.',
+      chips: ['Phượng nhãn là gì?', 'Tam Bạch Nhãn có ý nghĩa gì?', 'Ánh mắt nói lên điều gì?'],
+      uploadHint: 'Gửi ảnh cận vùng mắt (nhìn thẳng, đủ sáng) của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
+      shareTitle: 'Nhãn Tướng của tôi',
+    });
+  }
+  function runThuTuong(chat, toolId) {
+    runTuongMatSSE(chat, toolId, {
+      product: 'thu-tuong', action: 'thu-tuong', bodyExtra: { geoNote: null },
+      label: 'Thủ Tướng', placeholder: 'Hỏi thầy về thủ tướng…',
+      greeting: 'Chào bạn. Gửi ảnh lòng bàn tay ngay trong chat (xòe phẳng, hướng lên), tôi sẽ phân tích theo thủ tướng học cổ pháp. Sau khi có kết quả, cứ hỏi tôi thêm.',
+      chips: ['Tam Đại Chỉ là gì?', 'Đường vận mệnh nói lên điều gì?', 'Tay thuận và tay không thuận khác nhau thế nào?'],
+      uploadHint: 'Gửi ảnh lòng bàn tay (xòe phẳng, hướng lên) của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
+      shareTitle: 'Thủ Tướng của tôi',
+    });
+  }
+
+  // ── JSON một lần (personal-color/da-lieu-ai/trang-diem/kieu-toc) — ảnh →
+  // /api/tuong-mat, kết quả JSON. Trang thật gọi LẠI Shell.setContext() sau
+  // khi có kết quả (label/greeting/chips theo đúng response) — replay y hệt.
+  function runTuongMatJSON(chat, toolId, opts) {
+    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=37'], function (err) {
+      if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
+      Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
+      var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', opts.extraFieldsHtml || '', 'Phân tích →', function (photo, bubbleEl, showErr) {
+        var fields = opts.readExtra ? opts.readExtra() : {};
+        if (opts.validate && !opts.validate(fields)) { showErr(opts.validateMsg); return; }
+        inlCollapse(bubbleEl, '<p>Ảnh đã gửi ✓</p>');
+        paidToolInit(toolId);
+        var slug = TuviPaywall.generateToolSlug(opts.product);
+        TuviPaywall.requireCredits(slug, function () {
+          var pending = inlBubble(chat, 'inlJ' + (++_inlSeq), '<p><i>Đang phân tích…</i></p>');
+          var body = { action: opts.action, image: photo.base64, mediaType: photo.mediaType };
+          var extra = opts.bodyExtra ? opts.bodyExtra(fields) : {};
+          for (var k in extra) body[k] = extra[k];
+          var headers = { 'Content-Type': 'application/json' };
+          if (opts.auth) { var tok = getToken(); if (tok) headers['Authorization'] = 'Bearer ' + tok; }
+          return fetch('/api/tuong-mat', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+            .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+            .then(function (r) {
+              if (!r.ok || r.data.error) throw new Error(r.data.error || 'Lỗi phân tích.');
+              var ctx = opts.buildContext(r.data);
+              Shell.setContext({ toolId: toolId, label: ctx.label, greeting: ctx.greeting, chips: ctx.chips });
+            })
+            .catch(function (e) { inlCollapse(pending, '<p>Xin lỗi, ' + esc((e && e.message) || 'không phân tích được, thử lại giúp con nhé.') + '</p>'); })
+            .then(function () { restorePaywallCfg(); });
+        });
+      });
+      paidBtnPrice(opts.product, bubble, 'Phân tích');
+    });
+  }
+  function runPersonalColor(chat, toolId) {
+    runTuongMatJSON(chat, toolId, {
+      product: 'personal-color', action: 'personal-color',
+      label: 'Personal Color', placeholder: 'Hỏi thầy về tông màu cá nhân…',
+      greeting: 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ phân tích undertone và season màu phù hợp. Sau khi có kết quả, cứ hỏi tôi thêm.',
+      chips: ['Tôi thuộc season nào?', 'Vì sao nên tránh màu này?', 'Nên phối đồ thế nào theo season?'],
+      uploadHint: 'Gửi ảnh khuôn mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng). Năm sinh không bắt buộc.',
+      extraFieldsHtml: '<div class="frow"><div class="fg" style="width:110px"><label>Năm sinh (tuỳ chọn)</label><input type="number" id="inlPcYear" min="1920" max="2010"></div></div>',
+      readExtra: function () { return { namSinh: parseInt(document.getElementById('inlPcYear').value) || null }; },
+      auth: true,
+      bodyExtra: function (f) { return { namSinh: f.namSinh }; },
+      buildContext: function (d) {
+        var season = d.season_vn || d.season || '';
+        return {
+          label: 'Personal Color — ' + season,
+          greeting: 'Bạn thuộc season **' + season + '**, undertone ' + (d.undertone || '') + '. Bạn muốn hỏi thêm về màu sắc hay outfit?',
+          chips: ['Vì sao tôi thuộc season này?', 'Nên tránh màu nào?', 'Nên phối đồ thế nào theo season?'],
+        };
+      },
+    });
+  }
+  function runDaLieuAi(chat, toolId) {
+    runTuongMatJSON(chat, toolId, {
+      product: 'da-lieu-ai', action: 'da-lieu-ai',
+      label: 'Da Liệu Toàn Diện', placeholder: 'Hỏi thầy về da liễu…',
+      greeting: 'Chào bạn. Gửi ảnh da mặt ngay trong chat, tôi sẽ phân tích kết hợp Đông Tây y và bản mệnh ngũ hành. Sau khi có kết quả, cứ hỏi tôi thêm.',
+      chips: ['Da tôi hợp mệnh gì?', 'Thành phần mỹ phẩm nên tránh?', 'Cách chăm da theo Đông y?'],
+      uploadHint: 'Gửi ảnh da mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng). Năm sinh không bắt buộc.',
+      extraFieldsHtml: '<div class="frow"><div class="fg" style="width:110px"><label>Năm sinh (tuỳ chọn)</label><input type="number" id="inlDlYear" min="1920" max="2010"></div></div>',
+      readExtra: function () { return { namSinh: parseInt(document.getElementById('inlDlYear').value) || null }; },
+      auth: true,
+      bodyExtra: function (f) { return { namSinh: f.namSinh }; },
+      buildContext: function (d) {
+        var pd = d.phan_tich_da || {};
+        var loaiDa = pd.loai_da || 'da thường';
+        return {
+          label: 'Da Liệu — ' + loaiDa,
+          greeting: 'Kết quả phân tích da: **' + loaiDa + '**' + (pd.muc_do ? ' — ' + pd.muc_do : '') + '. Bạn muốn hỏi thêm về Đông y, ăn uống hay mỹ phẩm?',
+          chips: ['Vì sao da tôi thuộc loại này?', 'Nên dùng sản phẩm nào trước?', 'Cách cải thiện theo Đông y?'],
+        };
+      },
+    });
+  }
+  function runTrangDiem(chat, toolId) {
+    runTuongMatJSON(chat, toolId, {
+      product: 'trang-diem-phan-tich', action: 'trang-diem-phan-tich',
+      label: 'Trang Điểm', placeholder: 'Hỏi thầy về trang điểm hợp tướng…',
+      greeting: 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ gợi ý phong cách makeup hợp tướng và bản mệnh. Sau khi có kết quả, cứ hỏi tôi thêm.',
+      chips: ['Vì sao phong cách này hợp tôi?', 'Màu son nào hợp tông da tôi?', 'Trang điểm ảnh hưởng vận khí thế nào?'],
+      uploadHint: 'Gửi ảnh khuôn mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng). Năm sinh không bắt buộc.',
+      extraFieldsHtml: '<div class="frow"><div class="fg" style="width:110px"><label>Năm sinh (tuỳ chọn)</label><input type="number" id="inlTdYear" min="1920" max="2010"></div></div>',
+      readExtra: function () { return { namSinh: parseInt(document.getElementById('inlTdYear').value) || null }; },
+      auth: true,
+      // `faceMeasurements` (MediaPipe FaceMesh) CỐ Ý null — xem chú thích đầu
+      // nhóm bước 18, tuỳ chọn/best-effort trên chính trang thật.
+      bodyExtra: function (f) { return { namSinh: f.namSinh, faceMeasurements: null }; },
+      buildContext: function (d) {
+        return {
+          label: 'Trang Điểm — ' + (d.faceShapeVN || ''),
+          greeting: 'Khuôn mặt của bạn: **' + (d.faceShapeVN || '') + '**' + (d.napAmHanh ? ', mệnh ' + d.napAmHanh : '') + '. Bạn muốn hỏi thêm về phong cách trang điểm nào?',
+          chips: ['Vì sao phong cách này hợp tôi?', 'Màu son nào hợp tông da tôi?', 'Trang điểm ảnh hưởng vận khí thế nào?'],
+        };
+      },
+    });
+  }
+  function runKieuToc(chat, toolId) {
+    runTuongMatJSON(chat, toolId, {
+      product: 'kieu-toc-phan-tich', action: 'kieu-toc-phan-tich',
+      label: 'Kiểu Tóc & Kính Mắt Hợp Tướng Mặt', placeholder: 'Hỏi thầy về kiểu tóc hợp tướng…',
+      greeting: 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ gợi ý kiểu tóc và kính mắt hợp tướng. Sau khi có kết quả, cứ hỏi tôi thêm.',
+      chips: ['Mặt tôi hợp kiểu tóc nào?', 'Vì sao nên tránh kiểu này?', 'Kính mắt nào hợp tướng mặt tôi?'],
+      uploadHint: 'Gửi ảnh khuôn mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
+      extraFieldsHtml: '<div class="frow"><div class="fg" style="width:100px"><label>Giới tính</label><select id="inlKtGt"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div></div>',
+      readExtra: function () { return { gender: document.getElementById('inlKtGt').value }; },
+      auth: false, // trang thật KHÔNG gửi Authorization cho tool này — đọc code, không đoán.
+      bodyExtra: function (f) { return { gender: f.gender, faceMeasurements: null }; },
+      buildContext: function (d) {
+        return {
+          label: 'Kiểu Tóc — ' + (d.faceShapeVN || ''),
+          greeting: 'Khuôn mặt của bạn thuộc dạng **' + (d.faceShapeVN || '') + '**. Bạn muốn hỏi thêm về kiểu tóc hay kính mắt hợp tướng?',
+          chips: ['Vì sao kiểu này hợp mặt tôi?', 'Nên tránh kiểu tóc nào?', 'Kính mắt nào hợp tướng mặt tôi?'],
+        };
+      },
+    });
+  }
+
+  // ── Phong thủy có ẢNH + guaNumber (ban-lam-viec/cua-hang-phong-thuy/
+  // phong-thuy) — dùng LẠI BatTrachTool.getCungMenh() đã nạp cho tool
+  // 'bat-trach' (bước 17), không chép công thức lần hai.
+  var DOOR_DIR_OPTS = [['S', 'Nam'], ['N', 'Bắc'], ['E', 'Đông'], ['W', 'Tây'], ['SE', 'Đông Nam'], ['SW', 'Tây Nam'], ['NE', 'Đông Bắc'], ['NW', 'Tây Bắc']];
+  function runPhongThuyPhoto(chat, toolId, opts) {
+    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=37', '/tools-shared/bat-trach.js?v=2'], function (err) {
+      if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
+      Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
+      var extraOpts = opts.extraOptions.map(function (o) { return '<option value="' + esc(o[0]) + '">' + esc(o[1]) + '</option>'; }).join('');
+      var doorOpts = DOOR_DIR_OPTS.map(function (o) { return '<option value="' + o[0] + '">' + o[1] + '</option>'; }).join('');
+      var fieldsHtml =
+        '<div class="frow" style="margin-top:6px">' +
+          '<div class="fg" style="width:100px"><label>Năm sinh</label><input type="number" id="inlPtYear" min="1900" max="2100"></div>' +
+          '<div class="fg" style="width:90px"><label>Giới tính</label><select id="inlPtGt"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>' +
+        '</div>' +
+        '<div class="frow">' +
+          '<div class="fg" style="flex:1;min-width:140px"><label>' + esc(opts.extraFieldLabel) + '</label><select id="inlPtExtra">' + extraOpts + '</select></div>' +
+          '<div class="fg" style="width:110px"><label>Hướng cửa</label><select id="inlPtDoor">' + doorOpts + '</select></div>' +
+        '</div>';
+      var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', fieldsHtml, 'Phân tích →', function (photo, bubbleEl, showErr) {
+        var y = parseInt(document.getElementById('inlPtYear').value);
+        var g = document.getElementById('inlPtGt').value;
+        var extraV = document.getElementById('inlPtExtra').value;
+        var door = document.getElementById('inlPtDoor').value;
+        if (!y) { showErr('Vui lòng nhập năm sinh.'); return; }
+        var gua = BatTrachTool.getCungMenh(y, g);
+        inlCollapse(bubbleEl, '<p>Ảnh đã gửi ✓</p>');
+        paidToolInit(toolId);
+        var slug = TuviPaywall.generateToolSlug(opts.product);
+        TuviPaywall.requireCredits(slug, function () {
+          var pending = inlBubble(chat, 'inlPt' + (++_inlSeq), '<p><i>Đang chấm điểm phong thủy…</i></p>');
+          var body = { imageBase64: photo.base64, imageType: photo.mediaType, doorDir: door, guaNumber: gua, namSinh: y, gioiTinh: g };
+          body[opts.bodyExtraKey] = extraV;
+          var tok = getToken();
+          var headers = { 'Content-Type': 'application/json' };
+          if (tok) headers['Authorization'] = 'Bearer ' + tok;
+          return fetch('/api/phong-thuy?action=' + opts.apiAction, { method: 'POST', headers: headers, body: JSON.stringify(body) })
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+              if (!data.success) throw new Error(data.error || 'Phân tích thất bại.');
+              var before = (data.analysis && data.analysis.beforeScore) || 0;
+              var after = (data.analysis && data.analysis.afterScore) || 0;
+              var ctx = opts.buildContext(before, after);
+              Shell.setContext({ toolId: toolId, label: ctx.label, greeting: ctx.greeting, chips: ctx.chips });
+            })
+            .catch(function (e) { inlCollapse(pending, '<p>Xin lỗi, ' + esc((e && e.message) || 'không chấm điểm được, thử lại giúp con nhé.') + '</p>'); })
+            .then(function () { restorePaywallCfg(); });
+        });
+      });
+      paidBtnPrice(opts.product, bubble, 'Phân tích');
+    });
+  }
+  function runBanLamViec(chat, toolId) {
+    runPhongThuyPhoto(chat, toolId, {
+      product: 'ban-lam-viec', apiAction: 'ban-lam-viec',
+      label: 'Phong Thủy Bàn Làm Việc', placeholder: 'Hỏi thầy về phong thủy bàn làm việc…',
+      greeting: 'Chào bạn. Điền năm sinh và gửi ảnh góc làm việc ngay trong chat, tôi sẽ chấm điểm phong thủy theo Bát Trạch. Sau khi có kết quả, cứ hỏi tôi thêm.',
+      chips: ['Hướng ngồi Sinh Khí là gì?', 'Cách tăng vận trí tuệ?', 'Không nên đặt gì trên bàn?'],
+      uploadHint: 'Gửi ảnh góc làm việc của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
+      extraFieldLabel: 'Công việc chính',
+      extraOptions: [['office', 'Làm việc văn phòng'], ['study', 'Học tập / Ôn thi'], ['creative', 'Sáng tạo / Thiết kế']],
+      bodyExtraKey: 'workType',
+      buildContext: function (before, after) {
+        return {
+          label: 'Bàn Làm Việc — điểm ' + before + '→' + after,
+          greeting: 'Điểm phong thủy bàn làm việc hiện tại: **' + before + '/100**, sau điều chỉnh có thể lên **' + after + '/100**. Bạn muốn hỏi thêm về đề xuất nào?',
+          chips: ['Vì sao điểm hiện tại thấp?', 'Ưu tiên làm gì trước?', 'Vật phẩm nào nên mua trước?'],
+        };
+      },
+    });
+  }
+  function runCuaHangPhongThuy(chat, toolId) {
+    runPhongThuyPhoto(chat, toolId, {
+      product: 'cua-hang-phong-thuy', apiAction: 'cua-hang',
+      label: 'Phong Thủy Cửa Hàng & Văn Phòng', placeholder: 'Hỏi thầy về phong thủy cửa hàng…',
+      greeting: 'Chào bạn. Điền năm sinh và gửi ảnh cửa hàng/văn phòng ngay trong chat, tôi sẽ chấm điểm bố trí thu ngân, cửa chính theo Bát Trạch. Sau khi có kết quả, cứ hỏi tôi thêm.',
+      chips: ['Vị trí thu ngân nên đặt đâu?', 'Cách kích hoạt tài vị?', 'Két sắt nên quay hướng nào?'],
+      uploadHint: 'Gửi ảnh cửa hàng/văn phòng của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
+      extraFieldLabel: 'Loại không gian',
+      extraOptions: [['store', 'Cửa hàng kinh doanh'], ['office', 'Văn phòng công ty'], ['restaurant', 'Nhà hàng / Quán ăn']],
+      bodyExtraKey: 'spaceType',
+      buildContext: function (before, after) {
+        return {
+          label: 'Cửa Hàng & Văn Phòng — điểm ' + before + '→' + after,
+          greeting: 'Điểm phong thủy cửa hàng/văn phòng hiện tại: **' + before + '/100**, sau điều chỉnh có thể lên **' + after + '/100**. Bạn muốn hỏi thêm về đề xuất nào?',
+          chips: ['Vì sao điểm hiện tại thấp?', 'Ưu tiên làm gì trước?', 'Vật phẩm nào nên mua trước?'],
+        };
+      },
+    });
+  }
+  function runPhongThuy(chat, toolId) {
+    runPhongThuyPhoto(chat, toolId, {
+      product: 'phong-thuy', apiAction: 'analyze',
+      label: 'Phong Thủy Nội Thất', placeholder: 'Hỏi thầy về phong thủy…',
+      greeting: 'Chào bạn. Điền năm sinh và gửi ảnh phòng ngay trong chat, tôi sẽ chấm điểm phong thủy theo Bát Trạch. Sau khi có kết quả, cứ hỏi tôi thêm.',
+      chips: ['Bát Trạch Minh Cảnh là gì?', 'Cách hóa giải hướng xấu?', 'Phòng ngủ nên tránh gì?'],
+      uploadHint: 'Gửi ảnh căn phòng của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
+      extraFieldLabel: 'Loại phòng',
+      extraOptions: [['bedroom', 'Phòng ngủ'], ['living', 'Phòng khách'], ['workspace', 'Phòng làm việc']],
+      bodyExtraKey: 'roomType',
+      buildContext: function (before, after) {
+        return {
+          label: 'Phong Thủy — điểm ' + before + '→' + after,
+          greeting: 'Điểm phong thủy hiện tại: **' + before + '/100**, sau điều chỉnh có thể lên **' + after + '/100**. Bạn muốn hỏi thêm về đề xuất nào?',
+          chips: ['Vì sao điểm hiện tại thấp?', 'Ưu tiên làm gì trước?', 'Vật phẩm nào nên mua trước?'],
+        };
+      },
+    });
+  }
+
+  // ── Bút Tướng — chữ ký. Canvas vẽ SỐNG cần một khung tương tác lớn hơn một
+  // bong bóng chat hẹp — dùng ĐÚNG lối dự phòng trang thật đã có sẵn (tab
+  // "Ảnh Chữ Ký": tải ảnh rồi đo qua `BuTuongTool.analyzeImageData()`, đo
+  // được 3/6 trục Cốt/Nhục/Thế — không phải suy diễn, chính trang thật cũng
+  // chỉ đo được ngần đó khi người dùng chọn nhánh ảnh thay vì ký sống).
+  function runButTuong(chat, toolId) {
+    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=37', '/tools-shared/but-tuong.js'], function (err) {
+      if (err || typeof TuviPaywall === 'undefined' || typeof BuTuongTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
+      Shell.setContext({
+        toolId: toolId, label: 'Bút Tướng', placeholder: 'Hỏi thầy về bút tướng…',
+        greeting: 'Chào bạn. Gửi ảnh chữ ký ngay trong chat (chụp/scan rõ nét trên nền sáng), tôi sẽ đo các trục cổ pháp và luận giúp bạn. Sau khi có kết quả, cứ hỏi tôi thêm.',
+        chips: ['Trục Thần là gì?', 'Cốt và Nhục khác nhau thế nào?', 'Ngũ hành nét liên quan gì tới dụng thần?'],
+      });
+      var bubble = inlPhotoBubble(chat,
+        '<p>Gửi ảnh chữ ký của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng). Đo được 3/6 trục từ ảnh tĩnh (Cốt/Nhục/Thế) — muốn đo đủ 6 trục thì ký trực tiếp trên trang <a href="/app/but-tuong" target="_blank">Bút Tướng</a>.</p>',
+        '', 'Phân tích →', function (photo, bubbleEl, showErr) {
+          var img = new Image();
+          img.onload = function () {
+            var MAX = 500, w = img.naturalWidth, h = img.naturalHeight;
+            if (w > MAX || h > MAX) { if (w > h) { h = Math.round((h * MAX) / w); w = MAX; } else { w = Math.round((w * MAX) / h); h = MAX; } }
+            var cv = document.createElement('canvas');
+            cv.width = w; cv.height = h;
+            cv.getContext('2d').drawImage(img, 0, 0, w, h);
+            var imageData = cv.getContext('2d').getImageData(0, 0, w, h);
+            var metrics = BuTuongTool.analyzeImageData(imageData);
+            if (!metrics) { showErr('Không đọc được nét mực từ ảnh này.'); return; }
+            inlCollapse(bubbleEl, '<p>Ảnh đã gửi ✓</p>');
+            paidToolInit(toolId);
+            var slug = TuviPaywall.generateToolSlug('but-tuong');
+            TuviPaywall.requireCredits(slug, function () {
+              var stream = inlStreamBubble(chat);
+              return fetch('/api/but-tuong', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ metrics: metrics, birth: null, signedWord: null }) })
+                .then(function (res) {
+                  if (!res.ok) return resErrMsg(res).then(function (m) { throw new Error(m); });
+                  return sseStream(res, function (partial) { stream.update(partial); });
+                })
+                .then(function (full) {
+                  if (!full) throw new Error('Không có kết quả.');
+                  stream.update(full);
+                  if (window.Shell && Shell.setShareable) Shell.setShareable({ kind: 'text', toolId: toolId, title: 'Bút Tướng của tôi', text: full });
+                })
+                .catch(function (e) { stream.update('Xin lỗi, ' + esc((e && e.message) || 'không phân tích được, thử lại giúp con nhé.')); })
+                .then(function () { restorePaywallCfg(); });
+            });
+          };
+          img.onerror = function () { showErr('Không đọc được ảnh này.'); };
+          img.src = photo.dataUrl;
+        });
+      paidBtnPrice('but-tuong', bubble, 'Phân tích');
+    });
+  }
+
+  // ── Trả phí KHÔNG cần ảnh (mau-sac-hop-menh/trang-phuc-theo-ngay) — vẫn
+  // qua requireCredits(), chỉ khác chỗ input là field chứ không phải ảnh.
+  function runMauSacHopMenh(chat, toolId) {
+    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=37', '/tools-shared/bat-trach.js?v=2'], function (err) {
+      if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
+      Shell.setContext({
+        toolId: toolId, label: 'Màu Sắc Hợp Mệnh', placeholder: 'Hỏi thầy về màu sắc hợp mệnh…',
+        greeting: 'Chào bạn. Cho thầy xin năm sinh và giới tính ngay trong chat, tôi sẽ tư vấn màu sắc trang phục theo Ngũ Hành Nạp Âm. Sau khi có kết quả, cứ hỏi tôi thêm.',
+        chips: ['Vì sao mệnh tôi hợp màu này?', 'Màu nào nên tránh khi phỏng vấn?', 'Cách phối đồ theo màu mệnh?'],
+      });
+      var bubble = inlStep(chat,
+        '<p>Cho thầy xin năm sinh và giới tính của con nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).</p>' +
+        '<div class="frow">' +
+          '<div class="fg" style="width:110px"><label>Năm sinh</label><input type="number" id="inlMsYear" min="1900" max="2025"></div>' +
+          '<div class="fg" style="width:100px"><label>Giới tính</label><select id="inlMsGt"><option value="male">Nam</option><option value="female">Nữ</option></select></div>' +
+        '</div>',
+        'Xem màu hợp mệnh →', function (el, showErr) {
+          var y = parseInt(document.getElementById('inlMsYear').value);
+          var g = document.getElementById('inlMsGt').value;
+          if (!y) { showErr('Vui lòng nhập năm sinh.'); return; }
+          var gua = BatTrachTool.getCungMenh(y, g === 'male' ? 'nam' : 'nu');
+          inlCollapse(el, '<p>Năm sinh <b>' + y + '</b> · ' + (g === 'male' ? 'Nam' : 'Nữ') + ' ✓</p>');
+          paidToolInit(toolId);
+          var slug = TuviPaywall.generateToolSlug('mau-sac-hop-menh');
+          TuviPaywall.requireCredits(slug, function () {
+            var pending = inlBubble(chat, 'inlMs' + (++_inlSeq), '<p><i>Đang tra màu hợp mệnh…</i></p>');
+            var tok = getToken();
+            var headers = { 'Content-Type': 'application/json' };
+            if (tok) headers['Authorization'] = 'Bearer ' + tok;
+            return fetch('/api/phong-thuy?action=mau-sac', { method: 'POST', headers: headers, body: JSON.stringify({ namSinh: y, gioiTinh: g, guaNumber: gua }) })
+              .then(function (res) { return res.json(); })
+              .then(function (data) {
+                if (data.error) throw new Error(data.error);
+                var napAmHanh = data.napAmHanh || '';
+                var primary = (data.colorData && data.colorData.primary) || [];
+                Shell.setContext({
+                  toolId: toolId, label: 'Màu Sắc Hợp Mệnh — Mệnh ' + napAmHanh,
+                  greeting: 'Bạn thuộc **mệnh ' + napAmHanh + '**. Màu chủ đạo: ' + primary.slice(0, 3).join(', ') + '. Bạn muốn hỏi thêm về màu sắc hay phối đồ?',
+                  chips: ['Vì sao mệnh tôi hợp màu này?', 'Màu nào nên tránh khi phỏng vấn?', 'Cách phối đồ theo màu mệnh?'],
+                });
+              })
+              .catch(function (e) { inlCollapse(pending, '<p>Xin lỗi, ' + esc((e && e.message) || 'không tra được, thử lại giúp con nhé.') + '</p>'); })
+              .then(function () { restorePaywallCfg(); });
+          });
+        });
+      paidBtnPrice('mau-sac-hop-menh', bubble, 'Xem màu hợp mệnh');
+    });
+  }
+  var TRANG_PHUC_MUC_DICH = [
+    ['ra ngoài thông thường', 'Thường ngày'],
+    ['phỏng vấn xin việc, cần tạo ấn tượng chuyên nghiệp', 'Phỏng vấn'],
+    ['hẹn hò, gặp người yêu, cần thu hút và lãng mạn', 'Hẹn hò'],
+    ['gặp đối tác kinh doanh, ký kết hợp đồng', 'Kinh doanh'],
+    ['sự kiện quan trọng, tiệc tùng, cần nổi bật', 'Sự kiện'],
+    ['đi du lịch, thư giãn, cần thoải mái', 'Du lịch'],
+  ];
+  // Tương sinh/tương khắc Ngũ Hành — chép nguyên `_SINH`/`_KHAC` +
+  // `getRelation()` của app-trang-phuc-theo-ngay.html (không tự suy công
+  // thức cổ pháp, dù là bảng ai cũng biết).
+  var TP_SINH = { Kim: 'Thủy', Thủy: 'Mộc', Mộc: 'Hỏa', Hỏa: 'Thổ', Thổ: 'Kim' };
+  var TP_KHAC = { Kim: 'Mộc', Mộc: 'Thổ', Thổ: 'Thủy', Thủy: 'Hỏa', Hỏa: 'Kim' };
+  function tpGetRelation(menh, ngay) {
+    if (menh === ngay) return { text: 'Ngày đồng hành — bình ổn, thuận lợi' };
+    if (TP_SINH[ngay] === menh) return { text: 'Ngày sinh Mệnh ✦ Cực kỳ thuận lợi' };
+    if (TP_SINH[menh] === ngay) return { text: 'Mệnh sinh Ngày — hao tổn chút ít, vẫn tốt' };
+    if (TP_KHAC[ngay] === menh) return { text: 'Ngày khắc Mệnh ✦ Cần hóa giải bằng màu' };
+    return { text: 'Mệnh khắc Ngày — ngày trung bình, cẩn thận' };
+  }
+  function runTrangPhucTheoNgay(chat, toolId) {
+    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=37'], function (err) {
+      if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
+      Shell.setContext({
+        toolId: toolId, label: 'Trang Phục Theo Ngày', placeholder: 'Hỏi thầy về trang phục theo ngày…',
+        greeting: 'Chào bạn. Điền năm sinh, ngày đi và mục đích ngay trong chat, tôi sẽ tư vấn màu và phong cách hợp ngày. Sau khi có kết quả, cứ hỏi tôi thêm.',
+        chips: ['Vì sao ngày này khắc mệnh tôi?', 'Nên hóa giải thế nào?', 'Màu điểm nhấn nào tốt nhất?'],
+      });
+      var t = new Date();
+      var todayStr = t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
+      var mucDichOpts = TRANG_PHUC_MUC_DICH.map(function (m) { return '<option value="' + esc(m[0]) + '">' + esc(m[1]) + '</option>'; }).join('');
+      var bubble = inlStep(chat,
+        '<p>Cho thầy xin năm sinh, giới tính, ngày định đi và mục đích nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).</p>' +
+        '<div class="frow">' +
+          '<div class="fg" style="width:110px"><label>Năm sinh</label><input type="number" id="inlTpYear" min="1920" max="2010"></div>' +
+          '<div class="fg" style="width:90px"><label>Giới tính</label><select id="inlTpGt"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>' +
+          '<div class="fg" style="width:150px"><label>Ngày đi</label><input type="date" id="inlTpNgay" value="' + todayStr + '"></div>' +
+        '</div>' +
+        '<div class="frow"><div class="fg" style="flex:1;min-width:150px"><label>Mục đích</label><select id="inlTpMd">' + mucDichOpts + '</select></div></div>',
+        'Xem trang phục →', function (el, showErr) {
+          var y = parseInt(document.getElementById('inlTpYear').value);
+          var g = document.getElementById('inlTpGt').value;
+          var ngayDi = document.getElementById('inlTpNgay').value;
+          var mucDich = document.getElementById('inlTpMd').value;
+          if (!y || !ngayDi) { showErr('Vui lòng nhập năm sinh và ngày định đi.'); return; }
+          var parts = ngayDi.split('-');
+          var dd = +parts[2], mm = +parts[1], yy = +parts[0];
+          inlCollapse(el, '<p>Năm sinh <b>' + y + '</b> · ' + ngayDi + ' ✓</p>');
+          paidToolInit(toolId);
+          var slug = TuviPaywall.generateToolSlug('trang-phuc-theo-ngay');
+          TuviPaywall.requireCredits(slug, function () {
+            var pending = inlBubble(chat, 'inlTp' + (++_inlSeq), '<p><i>Đang xem trang phục hợp ngày…</i></p>');
+            var tok = getToken();
+            var headers = { 'Content-Type': 'application/json' };
+            if (tok) headers['Authorization'] = 'Bearer ' + tok;
+            return fetch('/api/phong-thuy?action=trang-phuc-theo-ngay', {
+              method: 'POST', headers: headers,
+              body: JSON.stringify({ namSinh: y, gioiTinh: g, ngay: dd, thang: mm, nam: yy, mucDich: mucDich }),
+            })
+              .then(function (res) { return res.json(); })
+              .then(function (data) {
+                if (data.error) throw new Error(data.error);
+                var menhHanh = data.menhHanh || 'Thổ';
+                var ngayHanh = data.ngayHanh || 'Thổ';
+                var rel = tpGetRelation(menhHanh, ngayHanh);
+                Shell.setContext({
+                  toolId: toolId, label: 'Trang Phục Theo Ngày — ' + rel.text,
+                  greeting: 'Mệnh **' + menhHanh + '**, ngày **' + ngayHanh + '** — ' + rel.text + '. Bạn muốn hỏi thêm về màu sắc hay phong cách?',
+                  chips: ['Vì sao ngày này khắc mệnh tôi?', 'Nên hóa giải thế nào?', 'Màu điểm nhấn nào tốt nhất?'],
+                });
+              })
+              .catch(function (e) { inlCollapse(pending, '<p>Xin lỗi, ' + esc((e && e.message) || 'không tra được, thử lại giúp con nhé.') + '</p>'); })
+              .then(function () { restorePaywallCfg(); });
+          });
+        });
+      paidBtnPrice('trang-phuc-theo-ngay', bubble, 'Xem trang phục');
     });
   }
 

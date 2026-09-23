@@ -63,6 +63,9 @@ const projectGlobals = {
   MaiHoaTool: 'readonly',
   LucNhamTool: 'readonly',
   DaiLucNham: 'readonly',
+  // Bước 18 (chat-first, nhóm ảnh/tướng thuật trả phí): cùng lớp — nạp lười
+  // qua `ensureScripts()`.
+  BuTuongTool: 'readonly',
 };
 
 const sharedRules = {
@@ -177,6 +180,17 @@ export default [
     files: ['app/**/*.{js,mjs}'],
     languageOptions: {
       globals: { ...globals.node, ...projectGlobals },
+    },
+  },
+
+  // `public/shell.js` nạp lười `TuviPaywall` (bước 18) — KHÔNG đưa vào
+  // `projectGlobals` dùng chung: `public/tuvi-paywall.js` tự khai
+  // `const TuviPaywall = …` ở gốc file, đưa vào global chung đụng
+  // `no-redeclare` ngay tại chính file đó — cùng bẫy `CHI` đã ghi chú ở trên.
+  {
+    files: ['public/shell.js'],
+    languageOptions: {
+      globals: { TuviPaywall: 'readonly' },
     },
   },
 
