@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-386 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+387 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 221 | 872,962 B |
+| `2026-09.md` | 222 | 879,143 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🔄 Chat-first bước 17: mở `INLINE_TOOLS` từ 6 lên 27 tool — `kind:'fields'`/`kind:'draw'` |
 | 1 | 2026-09 | `2026-09.md` | 🔄 Chat-first bước 16: chuyển tool NGAY TRONG rail — không điều hướng trang khi bấm gợi ý |
 | 1 | 2026-09 | `2026-09.md` | 🔄 Chat-first bước 15: cross-sell sản phẩm trong chat — `goi_y_san_pham` + vá `activeTool` sai lệch (giai đoạn 3) |
 | 1 | 2026-09 | `2026-09.md` | 🔄 Chat-first bước 14: concierge engine đoán ý định — Lớp 1 chip điều hướng + Lớp 2 `goi_y_cong_cu` cho kịch bản `hoang-dao` (giai đoạn 2) |

@@ -2767,13 +2767,74 @@
   // hỏi thêm câu đó — CỐ Ý đơn giản hoá, rơi về mặc định `'nhan-vien'` của
   // chính hàm đó (không phải bịa số 0). Người dùng có thể tự nói trạng thái
   // thật trong chat, model vẫn hiểu được dù không có field cấu trúc.
+  //
+  // Bước 17 (Henry 2026-09-23, "sao ko áp dụng cho toàn bộ các tool?") — mở
+  // rộng sang 2 nhóm tool KHÔNG cần ngày sinh: `kind:'fields'` (nhập tay vài
+  // trường rồi tính client-side/API riêng của tool, vd năm sinh/dãy số/sự
+  // kiện) và `kind:'draw'` (rút quẻ/gieo quẻ — không nhập hoặc chỉ 1-2 field).
+  // Cả hai đọc ĐÚNG hàm tính + đúng chuỗi setContext() của trang thật (xem
+  // các hàm run* bên dưới), KHÔNG suy diễn công thức.
+  //
+  // 🪤 Các engine tools-shared/*.js CHỈ được nạp trên CHÍNH trang của tool đó
+  // (vd KimLauTool chỉ có mặt trên app-kim-lau.html) — rail chat có thể mở từ
+  // BẤT KỲ trang nào (`/app#chat`, một trang tool khác…), nên gọi thẳng
+  // `KimLauTool.compute` ở đây SẼ ReferenceError trên mọi trang khác. Mọi
+  // hàm run* PHẢI qua `ensureScripts()` để tự nạp lười (lazy-load) engine cần
+  // thiết trước khi tính — xem hàm đó ngay dưới đây.
+  //
+  // Cố ý CHƯA đưa vào đây (không phải quên, xem docs/nhat-ky bước 17):
+  //  1) trả phí nhiều bước (preview→đăng nhập→thanh toán→sinh ảnh/truyện,
+  //     dùng `wrap:` thay vì `scenario:`): chan-dung-tien-kiep, day-con,
+  //     duyen-no-tien-kiep, huong-nghiep-tre, nguoi-khac — cần thiết kế UI
+  //     thanh toán/hiện ảnh kết quả NGAY TRONG rail hẹp, chưa có, không bịa.
+  //  2) cần webcam/canvas/mic, không phải bong bóng chữ: but-tuong (vẽ chữ
+  //     ký), thanh-tuong/thanh-tuong-pro (ghi âm giọng nói), và 11 tool tướng
+  //     thuật cần ẢNH THẬT (dien-tuong, khi-sac, nhan-tuong, thu-tuong,
+  //     personal-color, trang-diem, da-lieu-ai, kieu-toc-phan-tich,
+  //     ban-lam-viec, cua-hang-phong-thuy, phong-thuy) — nút đính kèm ảnh rail
+  //     (#railAttach) đã có nhưng đi vào chat hội thoại chung, KHÔNG gọi đúng
+  //     API trả phí riêng từng tool (vd cần tính `guaNumber`/`faceMeasurements`
+  //     trước) — cần quyết định sản phẩm trước, không tự bịa luồng thanh toán.
+  //  3) tương tác không phải field cố định: gio-sinh (khảo sát nhiều vòng để
+  //     đoán giờ sinh), nhan-mach (chọn từ sổ liên hệ đã lưu, cần đăng nhập +
+  //     có sẵn lá số), ngu-hanh-ten (phải sửa tay ngũ hành từng âm tiết trước
+  //     khi tính), ban-do-sao (cần chọn toạ độ/múi giờ nơi sinh, không chỉ
+  //     ngày giờ).
   var INLINE_TOOLS = {
     'laso': { kind: 'birth' },
     'chu-trinh-cuoc-doi': { kind: 'birth' },
     'cong-so': { kind: 'birth', api: '/api/cong-so' },
+    'van-han-nam': { kind: 'birth' },
+    'bat-tu': {
+      kind: 'birth', scenarioType: 'tu-binh', scenarioData: {},
+      // Chips CỐ ĐỊNH thay cho `buildBatTuChips(bt)` của trang thật — hàm đó
+      // cần `bt` (kết quả `window.tinhBatTu`, engine lớn chỉ nạp trên chính
+      // trang Bát Tự) để cá nhân hoá câu hỏi theo cách cục thật. Đơn giản hoá
+      // CỐ Ý: rail vẫn đúng bộ não (`scenario.type:'tu-binh'`), chỉ gợi ý
+      // chung chung thay vì theo đúng lá số — model vẫn tự tính đúng khi hỏi.
+      greeting: function (b) { return 'Tứ trụ của **' + esc(b.name || 'bạn') + '** đã sẵn sàng. Hỏi tôi về nhật can, dụng thần, cách cục hay đại vận nhé.'; },
+      chips: ['Nhật can của tôi mạnh hay yếu?', 'Dụng thần là gì, hành nào?', 'Cách cục Bát Tự của tôi là gì?', 'Đại vận hiện tại thế nào?'],
+    },
     'xem-tuoi': { kind: 'birth2' },
     'xem-lam-an': { kind: 'birth2' },
     'tuong-hop': { kind: 'birth2' },
+    'kim-lau': { kind: 'fields', run: function (chat, toolId) { return runKimLau(chat, toolId); } },
+    'nap-am': { kind: 'fields', run: function (chat, toolId) { return runNapAm(chat, toolId); } },
+    'bat-trach': { kind: 'fields', run: function (chat, toolId) { return runBatTrach(chat, toolId); } },
+    'so-dep': { kind: 'fields', run: function (chat, toolId) { return runSoDep(chat, toolId); } },
+    'sinh-con': { kind: 'fields', run: function (chat, toolId) { return runSinhCon(chat, toolId); } },
+    'hoang-dao': { kind: 'fields', run: function (chat, toolId) { return runHoangDao(chat, toolId); } },
+    'ngay-tot': { kind: 'fields', run: function (chat, toolId) { return runNgayTot(chat, toolId); } },
+    'dat-ten': { kind: 'fields', run: function (chat, toolId) { return runDatTen(chat, toolId); } },
+    'dat-ten-dn': { kind: 'fields', run: function (chat, toolId) { return runDatTenDn(chat, toolId); } },
+    'chon-ngay': { kind: 'fields', run: function (chat, toolId) { return runChonNgay(chat, toolId); } },
+    'tarot': { kind: 'draw', run: function (chat, toolId) { return runTarot(chat, toolId); } },
+    'oracle': { kind: 'draw', run: function (chat, toolId) { return runOracle(chat, toolId); } },
+    'boi-bai-tay': { kind: 'draw', run: function (chat, toolId) { return runBoiBaiTay(chat, toolId); } },
+    'kinh-dich': { kind: 'draw', run: function (chat, toolId) { return runKinhDich(chat, toolId); } },
+    'mai-hoa': { kind: 'draw', run: function (chat, toolId) { return runMaiHoa(chat, toolId); } },
+    'ky-mon': { kind: 'draw', run: function (chat, toolId) { return runKyMon(chat, toolId); } },
+    'luc-nham': { kind: 'draw', run: function (chat, toolId) { return runLucNham(chat, toolId); } },
   };
   function setHeaderTitle(title) {
     var el = document.getElementById('railHTitle');
@@ -2807,6 +2868,10 @@
     var sugg = document.getElementById('railSugg'); if (sugg) { sugg.innerHTML = ''; sugg.style.display = 'none'; }
     var rc = document.getElementById('railCtx'); if (rc) rc.style.display = 'none'; // ẩn banner "Đang gắn:" cũ trong lúc nhập — setContext() cuối luồng tự hiện lại đúng label mới
     setHeaderTitle(label);
+    if (spec.kind === 'fields' || spec.kind === 'draw') {
+      spec.run(chat, toolId, label, path);
+      return true;
+    }
     if (spec.kind === 'birth2') {
       // prefix 'inla'/'inlb' — KHÔNG dùng bare 'a'/'b': trang gốc (nơi thẻ
       // gợi ý vừa hiện) có thể có SẴN field thật cùng tên (vd chính app-
@@ -2844,10 +2909,13 @@
       onDone: function (d) {
         var birth = inlineBirth(d);
         if (!spec.api) {
-          Shell.setContext({
+          var ctx0 = {
             toolId: toolId, birth: birth, label: label,
-            greeting: 'Lá số **' + esc(birth.name || 'bạn') + '** đã sẵn sàng. Hỏi tôi bất cứ điều gì.',
-          });
+            greeting: spec.greeting ? spec.greeting(birth) : 'Lá số **' + esc(birth.name || 'bạn') + '** đã sẵn sàng. Hỏi tôi bất cứ điều gì.',
+          };
+          if (spec.scenarioType) ctx0.scenario = { type: spec.scenarioType, data: spec.scenarioData || {} };
+          if (spec.chips) ctx0.chips = spec.chips;
+          Shell.setContext(ctx0);
           return;
         }
         var qs = 'd=' + birth.day + '&m=' + birth.month + '&y=' + birth.year + '&gio=' + birth.hourBranch + '&gt=' + birth.gender;
@@ -2864,6 +2932,510 @@
       },
     });
     return true;
+  }
+
+  // ── Bước 17: hạ tầng dùng chung cho kind:'fields'/'draw' ──────────────
+  // Nạp lười (lazy-load) một engine tools-shared/*.js CHƯA có trên trang hiện
+  // tại — bắt buộc vì các trang chỉ tự nạp engine của CHÍNH nó (xem chú thích
+  // ở INLINE_TOOLS). `cb(err)` — err có giá trị nếu MỘT script bất kỳ lỗi.
+  function ensureScripts(srcs, cb) {
+    var need = srcs.filter(function (s) { return !document.querySelector('script[src="' + s + '"]'); });
+    if (!need.length) { cb(); return; }
+    var left = need.length, failed = null;
+    need.forEach(function (s) {
+      var el = document.createElement('script');
+      el.src = s;
+      el.onload = function () { if (--left <= 0) cb(failed); };
+      el.onerror = function () { failed = failed || new Error('Không nạp được ' + s); if (--left <= 0) cb(failed); };
+      document.head.appendChild(el);
+    });
+  }
+  function inlBubble(chat, id, html) {
+    var el = document.createElement('div');
+    el.className = 'msg a'; el.id = id;
+    el.innerHTML = '<img class="msg-ava" src="' + authorAva() + '" alt="">' + '<div class="msg-body">' + html + '</div>';
+    chat.appendChild(el); chat.scrollTop = chat.scrollHeight;
+    return el;
+  }
+  function inlCollapse(el, html) {
+    el.innerHTML = '<img class="msg-ava" src="' + authorAva() + '" alt="">' + '<div class="msg-body">' + html + '</div>';
+  }
+  var _inlSeq = 0;
+  // Một bong bóng hỏi-đáp CHUNG cho mọi tool 'fields'/'draw': `fieldsHtml` là
+  // markup field do từng hàm run* tự viết (không có bộ dựng field chung —
+  // mỗi tool một hình dạng field thật khác nhau, ép chung khuôn dễ sai hơn
+  // là viết tay từng tool, đúng nếp `renderChat()` của tuvi-form.js).
+  function inlStep(chat, fieldsHtml, btnLabel, onGo) {
+    var id = 'inlF' + (++_inlSeq);
+    var el = inlBubble(chat, id, fieldsHtml +
+      '<button class="btn-go" type="button" id="' + id + '-go" style="width:auto;padding:9px 16px;font-size:13px;margin-top:6px">' + esc(btnLabel) + '</button>' +
+      '<p id="' + id + '-err" style="display:none;color:#c0392b;font-size:12px;margin-top:6px"></p>');
+    var busy = false;
+    document.getElementById(id + '-go').addEventListener('click', function () {
+      if (busy) return; busy = true;
+      var showErr = function (msg) {
+        busy = false;
+        var e = document.getElementById(id + '-err');
+        if (e) { e.textContent = msg || 'Có lỗi, thử lại giúp con nhé.'; e.style.display = 'block'; }
+      };
+      try { onGo(el, showErr); } catch (e) { showErr(e && e.message); }
+    });
+    return el;
+  }
+
+  // ── kind:'fields' — nhập tay vài trường rồi tính, KHÔNG cần ngày sinh ──
+  function runKimLau(chat, toolId) {
+    ensureScripts(['/tools-shared/kim-lau.js?v=2'], function (err) {
+      if (err || typeof KimLauTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Kim Lâu.'); return; }
+      inlStep(chat,
+        '<p>Cho thầy xin năm sinh dương lịch của con nhé.</p>' +
+        '<div class="frow"><div class="fg" style="width:110px"><label>Năm sinh</label><input type="number" id="inlKlYear" min="1900" max="2010" placeholder="1998"></div></div>',
+        'Xem Kim Lâu →', function (el, showErr) {
+          var y = parseInt(document.getElementById('inlKlYear').value);
+          var r = KimLauTool.compute(y);
+          if (!r.ok) { showErr(r.error); return; }
+          inlCollapse(el, '<p>Năm sinh: <b>' + y + '</b> ✓</p>');
+          Shell.setContext({
+            toolId: toolId, scenario: { type: 'kim-lau', data: r.data },
+            label: 'Kim Lâu · tuổi ' + r.data.canChi,
+            greeting: 'Đã tra Kim Lâu · Tam Tai · Hoang Ốc cho tuổi **' + esc(r.data.canChi) + '** (20 năm tới). Bạn muốn hỏi gì?',
+            chips: ['Năm nào đẹp nhất để làm nhà?', 'Năm nào cưới hỏi được?', 'Phạm Kim Lâu thì hóa giải sao?', 'Tam Tai kiêng những gì?'],
+          });
+        });
+    });
+  }
+  function runNapAm(chat, toolId) {
+    ensureScripts(['/tools-shared/nap-am.js?v=3'], function (err) {
+      if (err || typeof NapAmTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Nạp Âm.'); return; }
+      inlStep(chat,
+        '<p>Cho thầy xin năm sinh dương lịch của con nhé.</p>' +
+        '<div class="frow"><div class="fg" style="width:110px"><label>Năm sinh</label><input type="number" id="inlNaYear" min="1900" max="2100" placeholder="1998"></div></div>',
+        'Xem Nạp Âm →', function (el, showErr) {
+          var y = parseInt(document.getElementById('inlNaYear').value);
+          var r = NapAmTool.compute(y);
+          if (!r.ok) { showErr(r.error); return; }
+          inlCollapse(el, '<p>Năm sinh: <b>' + y + '</b> ✓</p>');
+          // Rail nhận tầng ứng dụng phẳng, giống trang thật (`_ctx` gộp
+          // r.data + NapAmTool.ungDung(hanh)) — `extractGenericContext` bỏ
+          // im lặng mọi giá trị object nên KHÔNG lồng `ungDung` làm khoá con.
+          var u = NapAmTool.ungDung(r.data.hanh) || {};
+          var ctx = {}; for (var k in r.data) ctx[k] = r.data[k];
+          ctx.mauHop = u.mauHop; ctx.mauKy = u.mauKy; ctx.phuongVi = u.phuongVi;
+          ctx.tuoiHop = u.hanhHop; ctx.tuoiKy = u.hanhKy; ctx.soHop = u.so; ctx.chatLieu = u.chatLieu;
+          Shell.setContext({
+            toolId: toolId, scenario: { type: 'nap-am', data: ctx },
+            label: 'Nạp âm ' + r.data.canChi + ' · ' + r.data.napAm,
+            greeting: 'Năm **' + r.data.nam + '** — bản mệnh **' + esc(r.data.napAm) + '** (hành ' + esc(r.data.hanh) + '). Bạn muốn tôi luận điều gì?',
+            chips: ['Hợp màu gì, kỵ màu gì?', 'Hướng nhà/bàn làm việc nào hợp?', 'Tuổi nào hợp, tuổi nào khắc?', 'Vật phẩm phong thủy nào nên đeo?'],
+          });
+        });
+    });
+  }
+  function runBatTrach(chat, toolId) {
+    ensureScripts(['/tools-shared/bat-trach.js?v=2'], function (err) {
+      if (err || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Bát Trạch.'); return; }
+      inlStep(chat,
+        '<p>Cho thầy xin năm sinh và giới tính của con nhé.</p>' +
+        '<div class="frow">' +
+          '<div class="fg" style="width:110px"><label>Năm sinh</label><input type="number" id="inlBtYear" min="1900" max="2100" placeholder="1990"></div>' +
+          '<div class="fg" style="width:100px"><label>Giới tính</label><select id="inlBtGender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>' +
+        '</div>',
+        'Xem Bát Trạch →', function (el, showErr) {
+          var y = parseInt(document.getElementById('inlBtYear').value);
+          var g = document.getElementById('inlBtGender').value;
+          var r = BatTrachTool.compute(y, g);
+          if (!r.ok) { showErr(r.error); return; }
+          inlCollapse(el, '<p>Năm sinh: <b>' + y + '</b> · ' + (g === 'nam' ? 'Nam' : 'Nữ') + ' ✓</p>');
+          Shell.setContext({
+            toolId: toolId, scenario: { type: 'bat-trach', data: r.data },
+            label: 'Bát Trạch · ' + r.data.menhQuai + ' · ' + r.data.nhom,
+            greeting: 'Cung mệnh của bạn là **' + esc(r.data.menhQuai) + '** (' + esc(r.data.nhom) + '). Bạn muốn hỏi hướng cho việc gì?',
+            chips: ['Hướng nhà nào hợp nhất?', 'Bếp nên đặt hướng nào?', 'Giường ngủ quay hướng nào?', 'Buộc ở hướng xấu thì hóa giải sao?'],
+          });
+        });
+    });
+  }
+  function runSoDep(chat, toolId) {
+    ensureScripts(['/tools-shared/bat-trach.js?v=2', '/tools-shared/mai-hoa.js?v=1', '/tools-shared/kinh-dich.js?v=5', '/tools-shared/kinh-dich-hao.js?v=1', '/tools-shared/kinh-dich-doc.js?v=1', '/tools-shared/nap-am.js?v=3', '/tools-shared/so-dep.js?v=2'], function (err) {
+      if (err || typeof SoDepTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Số Đẹp.'); return; }
+      inlStep(chat,
+        '<p>Cho thầy dãy số con muốn chấm điểm nhé (số điện thoại, biển số…).</p>' +
+        '<div class="frow">' +
+          '<div class="fg" style="flex:1;min-width:140px"><label>Dãy số</label><input type="text" id="inlSdSo" placeholder="09xxxxxxxx" inputmode="numeric"></div>' +
+          '<div class="fg" style="width:100px"><label>Năm sinh (tuỳ chọn)</label><input type="number" id="inlSdNam" min="1900" max="2100"></div>' +
+          '<div class="fg" style="width:90px"><label>Giới tính</label><select id="inlSdGt"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>' +
+        '</div>',
+        'Chấm điểm →', function (el, showErr) {
+          var so = document.getElementById('inlSdSo').value;
+          var namSinh = parseInt(document.getElementById('inlSdNam').value) || undefined;
+          var gioiTinh = document.getElementById('inlSdGt').value;
+          var r = SoDepTool.danhGia(so, { namSinh: namSinh, gioiTinh: gioiTinh });
+          if (!r.ok) { showErr(r.error); return; }
+          inlCollapse(el, '<p>Dãy số: <b>' + esc(so) + '</b> ✓</p>');
+          var d = r.data, dt = d.dongThuan;
+          var ctx = {
+            soSach: d.soSach, doDai: d.doDai,
+            dongThuanTot: dt.tot, dongThuanXau: dt.xau, dongThuanTong: dt.tongPhieu,
+            t1Diem: d.t1.diem100, t1NoiBat: (d.t1.noiBat || []).join(', '),
+            t2Que: d.t2.ok ? d.t2.que.ten : null,
+            t3HanhThieu: (d.t3.hanhThieu || []).join(', '),
+            t5SoChuDao: d.t5.soChuDao,
+          };
+          Shell.setContext({
+            toolId: toolId, scenario: { type: 'so-dep', data: ctx },
+            label: 'Số đẹp ' + d.soSach,
+            greeting: 'Dãy số **' + d.soSach + '** — ' + (dt.tongPhieu ? dt.tot + '/' + dt.tongPhieu + ' trường phái nói tốt' : 'quá ngắn để tính đồng thuận') + '. Bạn muốn tôi luận điều gì?',
+            chips: ['Dãy số này có nên dùng không?', 'Sao Bát Tinh nổi bật nghĩa là gì?', 'Quẻ Dịch lập được nói lên điều gì?', 'Nên đổi số nào để tốt hơn?'],
+          });
+        });
+    });
+  }
+  function runSinhCon(chat, toolId) {
+    ensureScripts(['/tools-shared/xem-tuoi-sinh-con.js?v=1'], function (err) {
+      if (err || typeof XemTuoiSinhConTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Xem Tuổi Sinh Con.'); return; }
+      inlStep(chat,
+        '<p>Cho thầy xin năm sinh dương lịch của bố và mẹ nhé.</p>' +
+        '<div class="frow">' +
+          '<div class="fg" style="width:110px"><label>Năm sinh bố</label><input type="number" id="inlScBo" min="1900" max="2100" placeholder="1990"></div>' +
+          '<div class="fg" style="width:110px"><label>Năm sinh mẹ</label><input type="number" id="inlScMe" min="1900" max="2100" placeholder="1992"></div>' +
+        '</div>',
+        'Xem năm sinh con →', function (el, showErr) {
+          var namBo = parseInt(document.getElementById('inlScBo').value);
+          var namMe = parseInt(document.getElementById('inlScMe').value);
+          if (!namBo || !namMe) { showErr('Vui lòng nhập đủ năm sinh của bố và mẹ.'); return; }
+          var r = XemTuoiSinhConTool.compute(namBo, namMe);
+          if (!r.ok) { showErr(r.error); return; }
+          var iBo = r.previewBo, iMe = r.previewMe;
+          inlCollapse(el, '<p>Bố <b>' + namBo + '</b> · Mẹ <b>' + namMe + '</b> ✓</p>');
+          Shell.setContext({
+            toolId: toolId, scenario: { type: 'xem-tuoi-sinh-con', data: { namBo: namBo, namMe: namMe } },
+            label: 'Sinh con · bố ' + iBo.canChi + ' × mẹ ' + iMe.canChi,
+            greeting: 'Đã chấm hợp/xung địa chi 15 năm tới (bố **' + esc(iBo.canChi) + '** · mẹ **' + esc(iMe.canChi) + '**). Năm thuận nhất: **' + esc(r.data.namTot) + '**. Bạn muốn tôi tư vấn gì trước?',
+            chips: ['Năm nào tốt nhất để sinh con?', 'Vì sao năm đó hợp cả bố lẫn mẹ?', 'Năm nào nên tránh sinh con?', 'Con tuổi gì hợp với bố mẹ nhất?'],
+          });
+        });
+    });
+  }
+  function runHoangDao(chat, toolId) {
+    ensureScripts(['/tools-shared/hoang-dao.js?v=2', '/tools-shared/hoang-lich.js?v=1'], function (err) {
+      if (err || typeof HoangDaoTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Giờ Hoàng Đạo.'); return; }
+      var t = new Date();
+      inlStep(chat,
+        '<p>Con muốn xem giờ Hoàng Đạo ngày nào?</p>' +
+        '<div class="frow">' +
+          '<div class="fg" style="width:74px"><label>Ngày</label><input type="number" id="inlHdD" min="1" max="31" value="' + t.getDate() + '"></div>' +
+          '<div class="fg" style="width:82px"><label>Tháng</label><input type="number" id="inlHdM" min="1" max="12" value="' + (t.getMonth() + 1) + '"></div>' +
+          '<div class="fg" style="width:90px"><label>Năm</label><input type="number" id="inlHdY" min="1900" max="2100" value="' + t.getFullYear() + '"></div>' +
+        '</div>',
+        'Xem giờ Hoàng Đạo →', function (el, showErr) {
+          var d = document.getElementById('inlHdD').value, m = document.getElementById('inlHdM').value, y = document.getElementById('inlHdY').value;
+          var r = HoangDaoTool.compute(d, m, y);
+          if (!r.ok) { showErr(r.error); return; }
+          inlCollapse(el, '<p>Ngày <b>' + d + '/' + m + '/' + y + '</b> ✓</p>');
+          Shell.setContext({
+            toolId: toolId, scenario: { type: 'hoang-dao', data: r.data },
+            label: 'Giờ Hoàng Đạo · ' + r.data.ngayDL,
+            greeting: 'Ngày **' + r.data.ngayDL + '** (' + r.data.canChiNgay + '). Đã tra giờ Hoàng Đạo / Hắc Đạo. Bạn định làm việc gì, để tôi chọn giờ đẹp?',
+            chips: ['Giờ nào tốt để khai trương?', 'Xuất hành nên đi giờ nào?', 'Ký hợp đồng giờ nào hợp?', 'Giờ nào cần tránh tuyệt đối?'],
+          });
+          // Nâng cấp không đồng bộ giống trang thật (`HoangLich.gan`) — cố ý
+          // KHÔNG chặn context đầu (rail phải dùng được ngay cả khi chậm/chết).
+          if (typeof HoangLich !== 'undefined' && HoangLich.gan) {
+            HoangLich.gan(document.createElement('div'), +d, +m, +y).then(function (hl) {
+              var extra = HoangLich.railData(hl); if (!extra) return;
+              Shell.setContext({
+                toolId: toolId, scenario: { type: 'hoang-dao', data: Object.assign({}, r.data, extra) },
+                label: 'Giờ Hoàng Đạo · ' + r.data.ngayDL,
+                greeting: 'Ngày **' + r.data.ngayDL + '** (' + r.data.canChiNgay + ') — trực **' + extra.truc + '**, sao **' + extra.nhiThapBatTu + '**. Đã có đủ giờ hoàng đạo, việc nên/kiêng và thần sát. Bạn định làm việc gì?',
+                chips: ['Giờ nào tốt để khai trương?', 'Hôm nay nên làm gì, kiêng gì?', 'Ký hợp đồng giờ nào hợp?', 'Tuổi tôi có bị xung ngày này không?'],
+              });
+            });
+          }
+        });
+    });
+  }
+  function runNgayTot(chat, toolId) {
+    ensureScripts(['/tools-shared/ngay-tot.js?v=2'], function (err) {
+      if (err || typeof NgayTotTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Ngày Tốt.'); return; }
+      var t = new Date();
+      inlStep(chat,
+        '<p>Con muốn xem lịch ngày tốt tháng nào?</p>' +
+        '<div class="frow">' +
+          '<div class="fg" style="width:82px"><label>Tháng</label><input type="number" id="inlNtM" min="1" max="12" value="' + (t.getMonth() + 1) + '"></div>' +
+          '<div class="fg" style="width:90px"><label>Năm</label><input type="number" id="inlNtY" min="2020" max="2030" value="' + t.getFullYear() + '"></div>' +
+        '</div>',
+        'Xem ngày tốt →', function (el, showErr) {
+          var m = document.getElementById('inlNtM').value, y = document.getElementById('inlNtY').value;
+          var r = NgayTotTool.compute(m, y);
+          if (!r.ok) { showErr(r.error); return; }
+          inlCollapse(el, '<p>Tháng <b>' + m + '/' + y + '</b> ✓</p>');
+          Shell.setContext({
+            toolId: toolId, scenario: { type: 'ngay-tot', data: r.data },
+            label: 'Ngày tốt · tháng ' + r.data.thang + '/' + r.data.nam,
+            greeting: 'Đã xem lịch **tháng ' + r.data.thang + '/' + r.data.nam + '**. Bạn định làm việc gì để tôi chọn ngày đẹp nhất?',
+            chips: ['Ngày nào đẹp để cưới hỏi?', 'Ngày nào tốt để khởi công/nhập trạch?', 'Vì sao tránh ngày kị?', 'Khai trương nên chọn ngày nào?'],
+          });
+        });
+    });
+  }
+  var DAT_TEN_DN_NGANH = ['Thương mại / bán lẻ', 'Ăn uống / F&B / nhà hàng', 'Bất động sản / xây dựng', 'Công nghệ / phần mềm', 'Thời trang / làm đẹp', 'Giáo dục / đào tạo', 'Y tế / sức khỏe', 'Tài chính / dịch vụ', 'Sản xuất / công nghiệp', 'Du lịch / khách sạn', 'Khác'];
+  var DAT_TEN_DN_LOAI = ['', 'Công ty', 'Thương hiệu / shop', 'Cửa hàng', 'Hộ kinh doanh'];
+  var CHON_NGAY_SU_KIEN = ['Cưới hỏi', 'Ăn hỏi / dạm ngõ', 'Khai trương', 'Nhập trạch (về nhà mới)', 'Động thổ / khởi công', 'Ký kết hợp đồng', 'Xuất hành', 'Mua xe'];
+  function runDatTen(chat, toolId) {
+    ensureScripts(['/can-chi.js?v=1'], function (err) {
+      if (err || typeof CanChi === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Đặt Tên.'); return; }
+      inlStep(chat,
+        '<p>Cho thầy xin họ của bé và năm sinh của bé, bố, mẹ nhé.</p>' +
+        '<div class="frow">' +
+          '<div class="fg" style="flex:1;min-width:100px"><label>Họ</label><input type="text" id="inlDtHo" placeholder="Nguyễn"></div>' +
+          '<div class="fg" style="width:100px"><label>Giới tính con</label><select id="inlDtGt"><option value="nam">Bé trai</option><option value="nu">Bé gái</option></select></div>' +
+        '</div>' +
+        '<div class="frow">' +
+          '<div class="fg" style="width:110px"><label>Năm sinh con</label><input type="number" id="inlDtNamCon" min="1900" max="2100" value="' + new Date().getFullYear() + '"></div>' +
+          '<div class="fg" style="width:110px"><label>Năm sinh bố</label><input type="number" id="inlDtNamBo" min="1900" max="2100"></div>' +
+          '<div class="fg" style="width:110px"><label>Năm sinh mẹ</label><input type="number" id="inlDtNamMe" min="1900" max="2100"></div>' +
+        '</div>',
+        'Xem nền mệnh →', function (el, showErr) {
+          var ho = document.getElementById('inlDtHo').value.trim();
+          var gt = document.getElementById('inlDtGt').value;
+          var namCon = parseInt(document.getElementById('inlDtNamCon').value);
+          var namBo = parseInt(document.getElementById('inlDtNamBo').value);
+          var namMe = parseInt(document.getElementById('inlDtNamMe').value);
+          if (!ho || !namCon || !namBo || !namMe) { showErr('Vui lòng nhập đủ họ và năm sinh của con, bố, mẹ.'); return; }
+          var iCon = CanChi.ccInfo(namCon);
+          var gtLabel = gt === 'nu' ? 'Bé gái' : 'Bé trai';
+          inlCollapse(el, '<p>' + esc(ho) + ' · ' + gtLabel + ' · con ' + namCon + ' · bố ' + namBo + ' · mẹ ' + namMe + ' ✓</p>');
+          Shell.setContext({
+            toolId: toolId, scenario: { type: 'dat-ten-con', data: { ho: ho, gioiTinh: gt, namCon: namCon, namBo: namBo, namMe: namMe } },
+            label: 'Đặt tên ' + gtLabel + ' họ ' + ho + ' · ' + iCon.canChi,
+            greeting: 'Nền mệnh của bé đã sẵn sàng (con **' + esc(iCon.canChi) + '** · ' + esc(iCon.hanh) + '). Bạn muốn tôi gợi ý tên theo hướng nào?',
+            chips: ['Gợi ý 12 tên hợp mệnh kèm ý nghĩa', 'Tên đệm nào hợp cho bé?', 'Con cần bổ ngũ hành gì?', 'Tên hợp cả tuổi bố và mẹ?'],
+          });
+        });
+    });
+  }
+  function runDatTenDn(chat, toolId) {
+    ensureScripts(['/can-chi.js?v=1'], function (err) {
+      if (err || typeof CanChi === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Đặt Tên Doanh Nghiệp.'); return; }
+      var nganhOpts = DAT_TEN_DN_NGANH.map(function (n) { return '<option value="' + esc(n) + '">' + esc(n) + '</option>'; }).join('');
+      var loaiOpts = DAT_TEN_DN_LOAI.map(function (n) { return '<option value="' + esc(n) + '">' + (n ? esc(n) : '— Không chọn —') + '</option>'; }).join('');
+      inlStep(chat,
+        '<p>Cho thầy xin năm sinh chủ và ngành nghề của doanh nghiệp nhé.</p>' +
+        '<div class="frow">' +
+          '<div class="fg" style="width:110px"><label>Năm sinh chủ</label><input type="number" id="inlDdNam" min="1900" max="2100"></div>' +
+          '<div class="fg" style="flex:1;min-width:160px"><label>Ngành nghề</label><select id="inlDdNganh">' + nganhOpts + '</select></div>' +
+        '</div>' +
+        '<div class="frow">' +
+          '<div class="fg" style="flex:1;min-width:120px"><label>Tên người chủ (tuỳ chọn)</label><input type="text" id="inlDdTenChu"></div>' +
+          '<div class="fg" style="width:150px"><label>Loại hình (tuỳ chọn)</label><select id="inlDdLoai">' + loaiOpts + '</select></div>' +
+        '</div>' +
+        '<div class="frow"><div class="fg" style="flex:1;min-width:140px"><label>Tên đang cân nhắc (tuỳ chọn)</label><input type="text" id="inlDdTenGoiY"></div></div>',
+        'Xem nền mệnh chủ →', function (el, showErr) {
+          var tenChu = document.getElementById('inlDdTenChu').value.trim();
+          var namChu = parseInt(document.getElementById('inlDdNam').value);
+          var nganh = document.getElementById('inlDdNganh').value;
+          var loaiHinh = document.getElementById('inlDdLoai').value;
+          var tenGoiY = document.getElementById('inlDdTenGoiY').value.trim();
+          if (!namChu || !nganh) { showErr('Vui lòng nhập năm sinh người chủ và chọn ngành nghề.'); return; }
+          var iChu = CanChi.ccInfo(namChu);
+          inlCollapse(el, '<p>' + esc(nganh) + ' · chủ ' + namChu + ' ✓</p>');
+          Shell.setContext({
+            toolId: toolId, scenario: { type: 'dat-ten-dn', data: { tenChu: tenChu, namChu: namChu, nganh: nganh, loaiHinh: loaiHinh, tenGoiY: tenGoiY } },
+            label: 'Đặt tên DN · ' + nganh + ' · chủ ' + iChu.canChi,
+            greeting: 'Nền mệnh chủ đã sẵn sàng (chủ **' + esc(iChu.canChi) + '** · ' + esc(iChu.hanh) + ', ngành ' + esc(nganh.toLowerCase()) + '). ' + (tenGoiY ? 'Bạn muốn tôi chấm tên **' + esc(tenGoiY) + '** hay gợi ý tên mới?' : 'Bạn muốn tôi gợi ý tên theo hướng nào?'),
+            chips: tenGoiY
+              ? ['Chấm tên "' + tenGoiY + '" hợp mệnh chủ và ngành không?', 'Gợi ý 5 tên khác hợp hơn', 'Tên nên bổ ngũ hành gì?', 'Slogan nào hợp với tên này?']
+              : ['Gợi ý 5 tên hợp mệnh kèm ý nghĩa', 'Tên nên bổ ngũ hành gì cho chủ?', 'Tên nào hợp khí chất ngành này?', 'Tránh chữ/âm nào khi đặt tên?'],
+          });
+        });
+    });
+  }
+  function runChonNgay(chat, toolId) {
+    ensureScripts(['/can-chi.js?v=1'], function (err) {
+      if (err || typeof CanChi === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Chọn Ngày Tốt.'); return; }
+      var t = new Date();
+      var suKienOpts = CHON_NGAY_SU_KIEN.map(function (s) { return '<option value="' + esc(s) + '">' + esc(s) + '</option>'; }).join('');
+      var thangOpts = ''; for (var i = 1; i <= 12; i++) thangOpts += '<option value="' + i + '"' + (i === t.getMonth() + 1 ? ' selected' : '') + '>Tháng ' + i + '</option>';
+      inlStep(chat,
+        '<p>Con định làm việc gì, cho ai, và tháng nào nhé.</p>' +
+        '<div class="frow"><div class="fg" style="flex:1;min-width:150px"><label>Việc cần chọn ngày</label><select id="inlCnSk">' + suKienOpts + '</select></div></div>' +
+        '<div class="frow">' +
+          '<div class="fg" style="flex:1;min-width:120px"><label>Họ tên chủ sự</label><input type="text" id="inlCnHt"></div>' +
+          '<div class="fg" style="width:100px"><label>Năm sinh</label><input type="number" id="inlCnNs" min="1900" max="2100"></div>' +
+        '</div>' +
+        '<div class="frow">' +
+          '<div class="fg" style="width:110px"><label>Tháng dự định</label><select id="inlCnThang">' + thangOpts + '</select></div>' +
+          '<div class="fg" style="width:90px"><label>Năm</label><input type="number" id="inlCnNam" min="1900" max="2100" value="' + t.getFullYear() + '"></div>' +
+        '</div>',
+        'Xem nền can chi →', function (el, showErr) {
+          var suKien = document.getElementById('inlCnSk').value;
+          var hoTen = document.getElementById('inlCnHt').value.trim();
+          var namSinh = parseInt(document.getElementById('inlCnNs').value);
+          var thangNum = parseInt(document.getElementById('inlCnThang').value);
+          var namNum = parseInt(document.getElementById('inlCnNam').value);
+          if (!hoTen || !namSinh || !thangNum || !namNum) { showErr('Vui lòng nhập họ tên, năm sinh, tháng và năm dự định.'); return; }
+          var info = CanChi.ccInfo(namSinh);
+          inlCollapse(el, '<p>' + esc(suKien) + ' · ' + esc(hoTen) + ' · T' + thangNum + '/' + namNum + ' ✓</p>');
+          Shell.setContext({
+            toolId: toolId, scenario: { type: 'chon-ngay-tot', data: { suKien: suKien, hoTen: hoTen, namSinh: namSinh, thangNum: thangNum, namNum: namNum } },
+            label: 'Chọn ngày ' + suKien + ' · ' + hoTen + ' · T' + thangNum + '/' + namNum,
+            greeting: 'Đã lập nền cho việc **' + esc(suKien) + '** (chủ sự tuổi **' + esc(info.canChi) + '**). Bạn muốn tôi tư vấn gì trước?',
+            chips: ['Ngày nào đẹp nhất trong tháng này?', 'Giờ hoàng đạo cho việc này?', 'Ngày nào cần tuyệt đối tránh?', 'Hướng xuất hành tốt trong ngày đó?'],
+          });
+        });
+    });
+  }
+
+  // ── kind:'draw' — rút quẻ/gieo quẻ, không cần ngày sinh ────────────────
+  function runTarot(chat, toolId) {
+    Shell.setContext({
+      toolId: toolId, label: 'Tarot 78 Lá', placeholder: 'Hỏi thầy về lá bài vừa rút…',
+      greeting: 'Chào bạn. Hỏi tôi về một câu hỏi hay tình huống bạn đang gặp, tôi sẽ rút bài và luận giúp bạn — hoặc mở trang Tarot nếu muốn tự tay rút.',
+      chips: ['Major Arcana khác Minor Arcana thế nào?', 'Lá bài ngược nghĩa là gì?', 'Nên hỏi Tarot câu hỏi kiểu gì?'],
+    });
+  }
+  function runOracle(chat, toolId) {
+    Shell.setContext({
+      toolId: toolId, label: 'Oracle Phương Đông', placeholder: 'Hỏi thầy về thẻ vừa rút…',
+      greeting: 'Chào bạn. Định tâm rồi hỏi tôi điều bạn đang trăn trở, tôi sẽ rút thẻ Oracle và luận giúp bạn — hoặc mở trang Oracle nếu muốn tự tay rút.',
+      chips: ['Oracle khác Tarot ở điểm nào?', 'Nên hỏi Oracle câu hỏi kiểu gì?', 'Ngũ Hành trong Oracle nghĩa là gì?'],
+    });
+  }
+  function runBoiBaiTay(chat, toolId) {
+    Shell.setContext({
+      toolId: toolId, label: 'Bói Bài Tây', placeholder: 'Hỏi thầy về lá bài vừa rút…',
+      greeting: 'Chào bạn. Hỏi tôi về một câu hỏi hay tình huống bạn đang gặp, tôi sẽ rút bài Tây và luận giúp bạn — hoặc mở trang Bói Bài Tây nếu muốn tự tay rút.',
+      chips: ['4 chất bài nghĩa là gì?', 'Bói bài Tây khác Tarot ra sao?', 'Nên hỏi câu hỏi kiểu gì khi rút bài?'],
+    });
+  }
+  function runKinhDich(chat, toolId) {
+    ensureScripts(['/tools-shared/kinh-dich.js?v=5', '/tools-shared/kinh-dich-hao.js?v=1', '/tools-shared/kinh-dich-doc.js?v=1'], function (err) {
+      if (err || typeof KinhDichTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Kinh Dịch.'); return; }
+      inlStep(chat,
+        '<p>Con muốn hỏi việc gì (tuỳ chọn), rồi thầy gieo quẻ cho con — 6 hào một lượt.</p>' +
+        '<div class="frow"><div class="fg" style="flex:1;min-width:160px"><label>Câu hỏi (tuỳ chọn)</label><input type="text" id="inlKdCauHoi" maxlength="100" placeholder="VD: Việc này nên tiến hay lui?"></div></div>',
+        'Gieo quẻ (6 hào) →', function (el, showErr) {
+          var cHoi = document.getElementById('inlKdCauHoi').value.trim();
+          // Cùng công thức gieo 3 đồng xu/hào của toss() trang thật (app-kinh-
+          // dich.html) — chỉ bỏ hoạt cảnh lật xu từng hào, gieo đủ 6 hào một
+          // lượt cho hợp bong bóng chat.
+          var lines = [];
+          for (var i = 0; i < 6; i++) {
+            var val = [0, 1, 2].map(function () { return Math.random() < 0.5 ? 3 : 2; }).reduce(function (a, b) { return a + b; }, 0);
+            lines.push({ val: val, yang: val === 7 || val === 9, changing: val === 6 || val === 9 });
+          }
+          var r = KinhDichTool.resolve(lines);
+          inlCollapse(el, '<p>Đã gieo đủ 6 hào ✓</p>');
+          var d = KinhDichTool.railData(r, cHoi, lines);
+          Shell.setContext({
+            toolId: toolId, scenario: { type: 'kinh-dich', data: d },
+            label: 'Gieo quẻ · ' + r.que.n + (r.cQue ? ' → ' + r.cQue.n : ''),
+            greeting: 'Quẻ đã lập — quẻ chính **' + r.que.n + '** (' + r.que.zh + ')' + (r.cQue ? ', quẻ biến **' + r.cQue.n + '**' : ' (không hào động)') + '. Tôi sẽ luận theo câu hỏi của bạn.',
+            chips: ['Luận quẻ này cho câu hỏi của tôi', 'Hào động nói lên điều gì?', 'Quẻ biến cho thấy xu hướng nào?', 'Nên hành động thế nào lúc này?'],
+          });
+        });
+    });
+  }
+  function runMaiHoa(chat, toolId) {
+    ensureScripts(['/tools-shared/mai-hoa.js?v=1', '/tools-shared/kinh-dich.js?v=5', '/tools-shared/kinh-dich-hao.js?v=1'], function (err) {
+      if (err || typeof MaiHoaTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Mai Hoa.'); return; }
+      inlStep(chat,
+        '<p>Thầy lập quẻ theo giờ hiện tại, hoặc con nghĩ một con số bất kỳ cho thầy gieo theo số đó — con muốn cách nào?</p>' +
+        '<div class="frow">' +
+          '<div class="fg" style="width:160px"><label>Cách gieo</label><select id="inlMhMode"><option value="gio">Theo giờ hiện tại</option><option value="so">Theo một con số</option></select></div>' +
+          '<div class="fg" style="width:120px"><label>Con số</label><input type="number" id="inlMhSo" min="1" step="1" placeholder="VD: 27" disabled></div>' +
+        '</div>' +
+        '<div class="frow"><div class="fg" style="flex:1;min-width:160px"><label>Câu hỏi (tuỳ chọn)</label><input type="text" id="inlMhCauHoi" maxlength="100"></div></div>',
+        'Lập quẻ →', function (el, showErr) {
+          var mode = document.getElementById('inlMhMode').value;
+          var cHoi = document.getElementById('inlMhCauHoi').value.trim();
+          var g = mode === 'so' ? MaiHoaTool.gieoTheoSo(document.getElementById('inlMhSo').value) : MaiHoaTool.gieoTheoGio();
+          if (!g.ok) { showErr(g.error); return; }
+          var r = MaiHoaTool.resolve(g);
+          if (!r.ok) { showErr(r.error || 'Không lập được quẻ.'); return; }
+          inlCollapse(el, '<p>Đã lập quẻ ✓</p>');
+          var d = MaiHoaTool.railData(r, cHoi);
+          var tenChinh = r.chinh.que ? r.chinh.que.q.n : '';
+          Shell.setContext({
+            toolId: toolId, scenario: { type: 'mai-hoa', data: d },
+            label: 'Mai Hoa · ' + tenChinh + ' — ' + r.ketLuan.ten,
+            greeting: 'Quẻ đã lập — Thể **' + r.the.n + '** (' + r.the.hanh + '), Dụng **' + r.dung.n + '** (' + r.dung.hanh + '), tức **' + r.ketLuan.ten + '**. Tôi sẽ luận theo câu hỏi của bạn.',
+            chips: ['Luận quẻ này cho câu hỏi của tôi', 'Thể bị Dụng khắc thì nên làm gì?', 'Hỗ quái cho thấy khúc giữa ra sao?', 'Biến quái nói kết cục thế nào?'],
+          });
+        });
+      var modeSel = document.getElementById('inlMhMode');
+      if (modeSel) modeSel.addEventListener('change', function () {
+        var so = document.getElementById('inlMhSo');
+        if (so) { so.disabled = modeSel.value !== 'so'; if (!so.disabled) so.focus(); }
+      });
+    });
+  }
+  function runKyMon(chat, toolId) {
+    ensureScripts(['/tools-shared/ky-mon.js?v=1'], function (err) {
+      if (err || typeof KyMonTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Kỳ Môn.'); return; }
+      inlStep(chat,
+        '<p>Để trống là thầy lập bàn theo giờ hiện tại — hoặc con chọn giờ khác và câu hỏi (tuỳ chọn).</p>' +
+        '<div class="frow"><div class="fg" style="width:190px"><label>Thời điểm (tuỳ chọn)</label><input type="datetime-local" id="inlKmT"></div></div>' +
+        '<div class="frow"><div class="fg" style="flex:1;min-width:160px"><label>Câu hỏi (tuỳ chọn)</label><input type="text" id="inlKmCauHoi" maxlength="100"></div></div>',
+        'Lập bàn Kỳ Môn →', function (el, showErr) {
+          var raw = document.getElementById('inlKmT').value;
+          var cHoi = document.getElementById('inlKmCauHoi').value.trim();
+          var q = raw ? '?t=' + encodeURIComponent(new Date(raw).toISOString()) : '';
+          fetch('/api/qimen' + q, { headers: { accept: 'application/json' } })
+            .then(function (r) { return r.json(); })
+            .then(function (b) {
+              if (!b || !b.ok) throw new Error((b && b.error) || 'Không dựng được bàn.');
+              inlCollapse(el, '<p>Đã lập bàn ✓</p>');
+              var d = Object.assign({}, b.rail, { cauHoi: cHoi });
+              var doNhat = b.cungs.filter(function (c) { return c.hang === 1; })[0];
+              Shell.setContext({
+                toolId: toolId, scenario: { type: 'ky-mon', data: d },
+                label: 'Kỳ Môn · ' + b.cuc + ' · giờ ' + b.canChi.gio,
+                greeting: 'Bàn đã lập — **' + b.cuc + '**, tiết ' + b.tietKhi + ' ' + b.nguyen + ', trực phù **' + b.trucPhu + '**, trực sử **' + b.trucSu + '**.' + (doNhat ? ' Hướng xếp hạng cao nhất là **' + doNhat.huong + '**.' : '') + ' Tôi sẽ luận theo việc bạn hỏi.',
+                chips: ['Việc của tôi nên đi hướng nào?', 'Giờ này hợp làm việc gì nhất?', 'Hướng nào phải tránh và vì sao?', 'Trực phù trực sử nói lên điều gì?'],
+              });
+            })
+            .catch(function (e) { showErr(e.message || 'Không dựng được bàn Kỳ Môn.'); });
+        });
+    });
+  }
+  function runLucNham(chat, toolId) {
+    ensureScripts(['/tools-shared/luc-nham.js?v=2', '/tools-shared/dai-luc-nham.js?v=1'], function (err) {
+      if (err || typeof LucNhamTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Lục Nhâm.'); return; }
+      var t = new Date();
+      var curGio = Math.floor(((t.getHours() * 60 + 60) % (24 * 60)) / 120) % 12;
+      var gioNames = ['Tý (23–01h)', 'Sửu (01–03h)', 'Dần (03–05h)', 'Mão (05–07h)', 'Thìn (07–09h)', 'Tỵ (09–11h)', 'Ngọ (11–13h)', 'Mùi (13–15h)', 'Thân (15–17h)', 'Dậu (17–19h)', 'Tuất (19–21h)', 'Hợi (21–23h)'];
+      var gioOpts = gioNames.map(function (n, i) { return '<option value="' + i + '"' + (i === curGio ? ' selected' : '') + '>Giờ ' + n + '</option>'; }).join('');
+      inlStep(chat,
+        '<p>Con muốn lập khóa Lục Nhâm cho ngày giờ nào?</p>' +
+        '<div class="frow">' +
+          '<div class="fg" style="width:74px"><label>Ngày</label><input type="number" id="inlLnD" min="1" max="31" value="' + t.getDate() + '"></div>' +
+          '<div class="fg" style="width:82px"><label>Tháng</label><input type="number" id="inlLnM" min="1" max="12" value="' + (t.getMonth() + 1) + '"></div>' +
+          '<div class="fg" style="width:90px"><label>Năm</label><input type="number" id="inlLnY" min="1900" max="2100" value="' + t.getFullYear() + '"></div>' +
+        '</div>' +
+        '<div class="frow"><div class="fg" style="flex:1;min-width:170px"><label>Giờ cần xem</label><select id="inlLnGio">' + gioOpts + '</select></div></div>',
+        'Lập khóa Lục Nhâm →', function (el, showErr) {
+          var _d = document.getElementById('inlLnD').value, _m = document.getElementById('inlLnM').value, _y = document.getElementById('inlLnY').value;
+          var _g = +document.getElementById('inlLnGio').value || 0;
+          var r = LucNhamTool.compute(_d, _m, _y, _g);
+          if (!r.ok) { showErr(r.error); return; }
+          if (typeof DaiLucNham === 'undefined' || !DaiLucNham.ve) { showErr('Không dựng được khóa Lục Nhâm.'); return; }
+          inlCollapse(el, '<p>Đang lập khóa…</p>');
+          var hh = (_g * 2) % 24;
+          var khiTu = new Date(Date.UTC(+_y, +_m - 1, +_d, hh - 7, 0, 0));
+          DaiLucNham.ve(document.createElement('div'), khiTu).then(function (j) {
+            if (!j) { showErr('Không dựng được khóa Lục Nhâm — số liệu chưa verify được lúc này.'); return; }
+            var k = j.khoa, so = k.tamTruyen[0];
+            inlCollapse(el, '<p>Ngày <b>' + _d + '/' + _m + '/' + _y + '</b> · giờ <b>' + k.canChi.gio + '</b> ✓</p>');
+            Shell.setContext({
+              toolId: toolId, scenario: { type: 'luc-nham', data: Object.assign({ ngayDL: r.data.ngayDL, gio: r.data.gio }, j.rail) },
+              label: 'Lục Nhâm · ' + k.canChi.ngay + ' giờ ' + k.canChi.gio,
+              greeting: 'Đã lập khóa **Đại Lục Nhâm** — ngày ' + k.canChi.ngay + ', giờ ' + k.canChi.gio + ', ' + k.truDem + '. Thủ truyền theo phép **' + k.phap.ten + '**, sơ truyền **' + so.chi + ' · ' + so.tuong + '**. Bạn muốn hỏi việc gì?',
+              chips: ['Việc này thành hay bại?', 'Bao giờ có kết quả?', 'Nên tiến hay nên lui?', 'Tam truyền nói gì về diễn tiến?'],
+            });
+          }).catch(function () { showErr('Không dựng được khóa Lục Nhâm. Thử lại giúp con nhé.'); });
+        });
+    });
   }
 
   function greet(o) {
