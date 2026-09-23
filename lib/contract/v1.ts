@@ -82,6 +82,18 @@ export interface ClientInfo {
    * server. Đừng bao giờ dùng field này cho quyền hạn hay tính phí.
    */
   anon_id?: string;
+  /**
+   * `window.SHELL_ACTIVE` của trang đang gửi (giai đoạn 3 chat-first,
+   * 2026-09-23) — TÍN HIỆU BEST-EFFORT, không phải danh tính (client tự khai).
+   * DÙNG DUY NHẤT để chặn tự-gợi-ý chính tool đang mở khi gợi ý sản phẩm
+   * (`goi_y_san_pham`, lib/agent/run.ts `activeTool`): nhánh LÁ SỐ/GENERAL
+   * không gửi `scenario` nên trước đây KHÔNG có tín hiệu nào biết đang đứng ở
+   * trang nào — `activeTool` rơi về mặc định `'laso'` CHO MỌI TRANG birth-only
+   * (kể cả trang KHÔNG phải Luận Giải), khiến 'laso' không bao giờ gợi ý được.
+   * Thiếu field này (kênh bot/app cũ chưa gửi) → rơi về đúng hành vi mặc định
+   * cũ, không hỏng gì. Đừng dùng cho quyền hạn/tính phí — cùng lý do `anon_id`.
+   */
+  page?: string;
 }
 
 // ── Kịch bản phi-lá-số (additive — Sprint 1.2) ──────────────

@@ -110,3 +110,55 @@ export const SUGGEST_TOOL_DEF = {
     required: ['tool_id', 'ly_do'],
   },
 };
+
+// Giai đoạn 3 chat-first (2026-09-23) — cross-sell BẢN BÁO CÁO ĐẦY ĐỦ (PDF/
+// email) trong lúc trò chuyện. DÙNG CHUNG dispatcher + `resolveToolSuggestion`
+// với `goi_y_cong_cu` ở trên (registry.ts nối `goi_y_san_pham` vào CÙNG hàm
+// `execGoiYCongCu` — hành vi hệt nhau: tra `tool_pricing`, ghi vào CÙNG
+// `ctx.toolSuggestion`, cùng trần "1 lần/cuộc trò chuyện"). CHỈ khác MÔ TẢ —
+// tức khác LÚC được gọi: `goi_y_cong_cu` là "chỗ tính hộ việc bạn chưa tính
+// được", còn đây là "món để giữ lại" — không cần thiếu dữ liệu gì cả, chỉ cần
+// cuộc trò chuyện đã đủ sâu để một bản viết trọn thành văn bản có giá trị.
+//
+// 🔑 Sản phẩm HÔM NAY chỉ có ĐÚNG 2 mã — đã soát bằng cách tìm chính trang nào
+// gọi `ReportDelivery.mount()` (tools-shared/report-delivery.js, tải PDF/gửi
+// email thật), KHÔNG suy đoán từ tên bảng `*_reports` (day-con/nguoi-khac/
+// nhan-mach/huong-nghiep-tre có bảng đó nhưng chỉ lưu METADATA, không có PDF
+// theo TỪNG lá số — đừng liệt thêm vào đây khi thấy tên bảng giống). Thêm sản
+// phẩm mới (light novel, voice, vật phẩm, vé…) — nếu SAU NÀY nó cũng là một
+// `tool_pricing` row có `app_path` thật thì chỉ cần thêm mã vào danh sách bên
+// dưới; nếu là hàng không phải "mở trang tool" (vật phẩm vật lý, vé, affiliate
+// ngoài site) thì CẦN cơ chế khác — `resolveToolSuggestion` bắt buộc `app_path`
+// bắt đầu bằng "/", không mở được link ngoài.
+export const SUGGEST_PRODUCT_TOOL_DEF = {
+  name: 'goi_y_san_pham',
+  description:
+    "Gợi ý MỘT bản báo cáo ĐẦY ĐỦ (viết hẳn thành văn bản dài, tải được PDF hoặc gửi email) khi cuộc trò chuyện đã đi đủ sâu vào đúng chủ đề của nó. " +
+    "KHÁC goi_y_cong_cu (đó là chỗ TÍNH HỘ việc bạn chưa tính được) — đây là MÓN ĐỂ GIỮ LẠI, không cần thiếu dữ liệu gì. " +
+    'DÙNG RẤT DÈ: mặc định là KHÔNG gọi. Chỉ gọi khi cả năm điều sau cùng đúng — ' +
+    '(1) đã luận đủ RỘNG/SÂU về đúng chủ đề của bản báo cáo (không gọi ngay đầu cuộc trò chuyện, phải có thứ thật để mời viết ra); ' +
+    '(2) người dùng CHƯA đang xem hay chưa vừa nhận đúng bản báo cáo đó; ' +
+    '(3) không phải lúc họ đang buồn/bế tắc/kể chuyện riêng; ' +
+    '(4) bạn đã trả lời họ tử tế TRƯỚC, không dùng gợi ý để né trả lời; ' +
+    '(5) trong cả cuộc trò chuyện này bạn CHƯA gọi lần nào (kể cả goi_y_cong_cu). ' +
+    'CHỈ được chọn tool_id trong ĐÚNG hai mã sau, không suy diễn thêm — ' +
+    '"laso" (Luận Giải Tử Vi — tổng quan, 12 cung, tứ hóa) khi đã luận đủ RỘNG về CHÍNH lá số nói chung; ' +
+    '"chu-trinh-cuoc-doi" (Chu Trình Cuộc Đời — đại vận theo từng giai đoạn) khi đã luận đủ SÂU về VẬN HẠN nhiều năm/giai đoạn. ' +
+    'TUYỆT ĐỐI KHÔNG gọi cho mã nào khác hai mã trên. KHÔNG nhắc giá, KHÔNG nói "mua", KHÔNG nói "chỉ với N Lượng" — hệ thống tự lo phần đó.',
+  input_schema: {
+    type: 'object',
+    properties: {
+      tool_id: {
+        type: 'string',
+        enum: ['laso', 'chu-trinh-cuoc-doi'],
+        description: 'Đúng "laso" hoặc "chu-trinh-cuoc-doi" — không có mã thứ ba.',
+      },
+      ly_do: {
+        type: 'string',
+        description:
+          'MỘT câu ngắn (tối đa 140 ký tự) nói bản báo cáo đó viết trọn thêm điều gì so với những gì vừa luận trong chat. Viết như một lời mời, không như quảng cáo.',
+      },
+    },
+    required: ['tool_id', 'ly_do'],
+  },
+};

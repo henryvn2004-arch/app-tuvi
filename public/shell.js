@@ -3160,7 +3160,10 @@
       // historyMode:'delta' (bước 2 hướng tới session thật): chỉ gửi tin MỚI
       // (um) — server tự ghép lịch sử từ chat_sessions (khớp cùng sessionId,
       // đã ghi từ lượt trước). Đỡ gửi lại nguyên cục 12 tin (kèm ảnh) mỗi lượt.
-      var body = { session_id: sessionId, stream: true, historyMode: 'delta', messages: [um], client: { platform: 'web', version: '1.0.0', anon_id: anonId() } };
+      // `client.page` (giai đoạn 3 chat-first) = ACTIVE trang đang gửi — chỉ để
+      // server chặn tự-gợi-ý chính tool đang mở khi gợi ý sản phẩm, xem chú
+      // thích `page` trong lib/contract/v1.ts. Không dùng cho quyền hạn/tính phí.
+      var body = { session_id: sessionId, stream: true, historyMode: 'delta', messages: [um], client: { platform: 'web', version: '1.0.0', anon_id: anonId(), page: ACTIVE } };
       if (ctx.birth) body.birth = ctx.birth;
       if (ctx.scenario) body.scenario = ctx.scenario;
       if (ctx.wrap) body.wrap = ctx.wrap;
