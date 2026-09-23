@@ -628,9 +628,9 @@ window.TuviForm = (() => {
 
     function step3(hoten, gioitinhV, namXemV, ngay, thang, nam) {
       const s3 = bubble('chatStep-' + cp + '-3', '<p>' + q3 + '</p>' +
-        '<div class="tvf-gio-row" style="margin-bottom:8px">' +
-          `<select id="${pid('tvf-gio', cp)}">${opts.gioOpts}</select>` +
-          `<select id="${pid('tvf-phut', cp)}">${opts.phutOpts}</select>` +
+        '<div class="frow" style="margin-bottom:8px">' +
+          `<div class="fg" style="width:74px"><label>Giờ</label><select id="${pid('tvf-gio', cp)}">${opts.gioOpts}</select></div>` +
+          `<div class="fg" style="width:74px"><label>Phút</label><select id="${pid('tvf-phut', cp)}">${opts.phutOpts}</select></div>` +
           `<div class="tvf-gio-am-wrap"><span class="tvf-gio-am" id="${pid('tvf-gio-am', cp)}">Giờ âm: Tý</span><span class="tvf-gio-vn" id="${pid('tvf-gio-vn', cp)}"></span></div>` +
         '</div>' +
         '<label style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-mid);cursor:pointer;margin-bottom:6px">' +

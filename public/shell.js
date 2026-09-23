@@ -758,6 +758,7 @@
     //  · desktop: cả hai cột cùng hiện, `.ws` chỉ hẹp ⇒ nở nó ra (`art-wide`).
     var _ab = host.querySelector('[data-act="artifact"]');
     if (_ab) _ab.addEventListener('click', function () {
+      _ab.classList.remove('has-new');
       if (window.matchMedia('(max-width:900px)').matches) { host.classList.remove('open'); syncBackdrop(); return; }
       var wide = document.body.classList.toggle('art-wide');
       // Nút CHỈ có chữ (không chứa <svg>) nên `textContent` ở đây an toàn —
@@ -4113,8 +4114,23 @@
 
   function greet(o) {
     var chat = document.getElementById('chat');
-    chat.innerHTML =
-      '<div class="msg a"><img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body">' + mdLite(o.greeting || 'Lá số đã sẵn sàng. Bạn muốn tôi soi điều gì trước?') + '</div></div>';
+    var html = '<div class="msg a"><img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body">' + mdLite(o.greeting || 'Lá số đã sẵn sàng. Bạn muốn tôi soi điều gì trước?') + '</div></div>';
+    // Henry 2026-09-23: luồng nhập liệu NGAY TRONG #chat (TuviForm.renderChat
+    // prefix 'inl*'/'c*', hoặc inlStep/inlPhotoBubble/inlStreamBubble bước
+    // 17/18 — id luôn bắt đầu 'chatStep-'/'inl') vừa dựng xong các bong bóng
+    // tóm tắt (tên · giới tính ✓ / ngày sinh ✓ / giờ sinh ✓) NGAY TRƯỚC lượt
+    // gọi này — đó chính là phần "highlight" cho user đọc lại trước khi hỏi.
+    // Ghi đè innerHTML xoá sạch chúng, chỉ còn lại câu chào trơ trọi. Các bong
+    // bóng này CHẮC CHẮN thuộc phiên hiện tại (startInlineTool() luôn
+    // `chat.innerHTML=''` trước khi bắt đầu một luồng mới — xem ở trên), nên
+    // cứ thấy là giữ, không cần cờ riêng.
+    var keepTrail = chat.querySelector('[id^="chatStep-"],[id^="inl"]');
+    if (keepTrail) {
+      chat.insertAdjacentHTML('beforeend', html);
+      chat.scrollTop = chat.scrollHeight;
+    } else {
+      chat.innerHTML = html;
+    }
     // Gợi ý câu hỏi: hàng chip CỐ ĐỊNH trên ô nhập, còn suốt hội thoại (bấm
     // thì bớt dần), thay vì chỉ hiện 1 lần ở lời chào.
     if (o.chips !== undefined) { ctxChipsOrig = (o.chips || []).slice(); ctxChips = ctxChipsOrig.slice(); }
@@ -4224,6 +4240,10 @@
       document.getElementById('railSend').disabled = false;
       var att = document.getElementById('railAttach'); if (att) { att.disabled = false; att.setAttribute('data-tip', 'Gửi ảnh'); }
       greet(o);
+      // Henry 2026-09-23: vừa có kết quả MỚI (lá số/kịch bản) mà user có thể
+      // đang ở khung chat, chưa biết `.ws` đã có gì để xem — chấm đỏ trên nút
+      // "Kết quả", tắt khi bấm (renderRail() [data-act="artifact"]).
+      var _abNew = document.querySelector('.rh-art'); if (_abNew) _abNew.classList.add('has-new');
       // Ngữ cảnh mới = phiên hỏi mới: đếm lại từ đầu và cho thẻ mời hiện lại.
       _askCount = 0; _upsellShown = false; _cungAsked = []; _suggestShown = false; pendingSuggest = null;
       // Vừa có thứ để hỏi → mời bằng orb trên nút Hỏi (mobile). Ngữ cảnh MỚI
