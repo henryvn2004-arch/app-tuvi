@@ -3392,36 +3392,36 @@
   }
 
   // ── BOTTOM TAB BAR (mobile) ──
-  // Chèn 1 lần vào body; CSS chỉ hiện ≤900px. Cho phép chạm 1 phát tới Trợ lý
-  // (rail) và Tài khoản (sidebar — đã đổi từ "Công cụ" 2026-09 vì sidebar giờ
-  // là hồ sơ/ví/sổ lá số, không còn danh mục công cụ). Trang chủ / Góp Ý là
-  // link điều hướng. Active theo trang đang mở.
-  // 5 mục — bài học workshop 2026-09: người dùng xong một tool KHÔNG biết bấm
-  // vào đâu để quay lại Luận Đường. "Trang chủ" nay là trang chủ THẬT
-  // (tuviminhbao.com, ngoài shell) — icon nhà GIỮ NGUYÊN như trước, chỉ đổi
-  // đích. Nút "Home" nổi giữa mới là đường về springboard /app; bấm khi ĐANG
-  // đứng ở /app cũng an toàn — <a href="/app"> tự điều hướng lại, kéo luôn
-  // cuộn trang về đỉnh vì đây là MPA (không có router chặn lại điều hướng).
+  // Bước 12: Chat làm trung tâm — nút NỔI giữa hàng (vị trí trước đây thuộc về
+  // "Home") nay mở rail, đúng tinh thần chat-first của toàn bộ redesign
+  // (bước 1-11: mọi trang đều đẩy chat lên hàng đầu). "Home" đổi tên "Khám
+  // phá" (giữ NGUYÊN đích /app + icon âm dương — dấu hiệu Luận Đường, chỉ đổi
+  // vị trí + chữ), lùi về một ô `.tab` thường. "Trang chủ" (link ra
+  // tuviminhbao.com, ngoài shell) NHƯỜNG CHỖ cho "Lịch sử" — trỏ thẳng vào tab
+  // `data-tab="lichsu"` ĐÃ CÓ SẴN trong /app/tai-khoan (gộp lịch sử mọi công
+  // cụ từ `app_hist_v1_*` + server, xem `local()` trong app-tai-khoan.html) —
+  // không dựng trang mới, chỉ thêm một cửa vào thẳng tính năng đã có.
+  // Tài khoản (sidebar) không đổi. Active theo trang đang mở.
   function renderTabbar() {
     if (document.getElementById('shell-tabbar')) return;
     var isHome = ACTIVE === 'home';
     var isAcct = ACTIVE === 'ho-so' || ACTIVE === 'vi-luong' || ACTIVE === 'tai-khoan';
     var TI = {
-      home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
       chat: '<path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/>',
       user: '<circle cx="12" cy="8" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0" stroke-linecap="round"/>',
       inbox: '<polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
-      // Âm dương — dấu hiệu của Luận Đường, tách biệt hẳn icon nhà của
-      // "Trang chủ" để hai đích không lẫn vào nhau trên cùng một thanh.
+      // Âm dương — dấu hiệu của Luận Đường, cho "Khám phá" (springboard /app).
       yin: '<circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9 9 9 0 0 1 0-18z"/><circle cx="12" cy="7.5" r="1"/><circle cx="12" cy="16.5" r="1"/>',
+      // Đồng hồ — "Lịch sử".
+      clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round" stroke-linejoin="round"/>',
     };
     function ti(n) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">' + TI[n] + '</svg>'; }
     var nav = document.createElement('nav');
     nav.className = 'tabbar'; nav.id = 'shell-tabbar';
     nav.innerHTML =
-      '<a class="tab" href="/">' + ti('home') + 'Trang chủ</a>' +
-      '<button class="tab" type="button" data-tab="rail">' + ti('chat') + 'Trợ lý</button>' +
-      '<div class="tab-home' + (isHome ? ' active' : '') + '"><a class="tab-home-btn" href="/app" aria-label="Về Luận Đường">' + ti('yin') + '</a><span>Home</span></div>' +
+      '<a class="tab' + (isHome ? ' active' : '') + '" href="/app">' + ti('yin') + 'Khám phá</a>' +
+      '<a class="tab" href="/app/tai-khoan#lichsu">' + ti('clock') + 'Lịch sử</a>' +
+      '<div class="tab-home"><button class="tab-home-btn" type="button" data-tab="rail" aria-label="Hỏi Thầy">' + ti('chat') + '</button><span>Chat</span></div>' +
       '<button class="tab" type="button" data-tab="tools">' + ti('user') + 'Tài khoản</button>' +
       '<a class="tab' + (isAcct ? ' active' : '') + '" href="/app/tai-khoan#gopy">' + ti('inbox') + 'Góp Ý</a>';
     document.body.appendChild(nav);
