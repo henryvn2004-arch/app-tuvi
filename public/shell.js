@@ -3106,6 +3106,10 @@
     streaming = true; setSend(false); renderSuggs();
 
     var acc = '';
+    // Đo trải nghiệm chat THẬT thay vì đoán: ttft_ms (chữ đầu xuất hiện sau bao
+    // lâu — cái người dùng CẢM NHẬN là "nhanh/chậm") và total_ms (trọn câu trả
+    // lời). chat_msg (ở trên) chỉ đếm CÓ hỏi, không nói được có mượt hay không.
+    var _t0 = Date.now(), _ttft = null;
     try {
       var headers = { 'Content-Type': 'application/json' };
       var token = await freshToken(); if (token) headers['Authorization'] = 'Bearer ' + token;
@@ -3207,9 +3211,12 @@
         var parts = buf.split('\n\n'); buf = parts.pop();
         for (var i = 0; i < parts.length; i++) {
           var ev = parseSSE(parts[i]); if (!ev) continue;
-          if (ev.name === 'text' && ev.data.delta) { acc += ev.data.delta; typing.innerHTML = mdLite(acc); chat.scrollTop = chat.scrollHeight; }
+          if (ev.name === 'text' && ev.data.delta) { if (_ttft === null) _ttft = Date.now() - _t0; acc += ev.data.delta; typing.innerHTML = mdLite(acc); chat.scrollTop = chat.scrollHeight; }
           else if (ev.name === 'status' && !acc) { typing.innerHTML = '<span class="typing" style="gap:6px">' + esc(ev.data.text || 'Đang xem…') + ' <i></i><i></i><i></i></span>'; }
-          else if (ev.name === 'error') { acc = acc || ('Xin lỗi, gặp trục trặc: ' + esc(ev.data.message || '')); }
+          else if (ev.name === 'error') {
+            acc = acc || ('Xin lỗi, gặp trục trặc: ' + esc(ev.data.message || ''));
+            try { track('chat_error', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { kind: 'stream', message: String(ev.data.message || '').slice(0, 200) } }); } catch (e) { /* ignore */ }
+          }
           else if (ev.name === 'done' && ev.data) {
             if (ev.data.suggestions && ev.data.suggestions.length) ctxChips = ev.data.suggestions.slice(0, 4);
             applyPaywallInfo(ev.data.paywall);
@@ -3219,6 +3226,7 @@
       }
       if (!acc) acc = '(không có nội dung)';
       typing.innerHTML = mdLite(acc);
+      try { track('chat_reply', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { ttft_ms: _ttft, total_ms: Date.now() - _t0, chars: acc.length } }); } catch (e) { /* ignore */ }
       messages.push({ role: 'assistant', content: acc });
       saveCurrent();
       sessStash();
@@ -3231,6 +3239,7 @@
     } catch (e) {
       typing.innerHTML = '<p>Xin lỗi, kết nối trục trặc. Thử lại giúp tôi nhé.</p>';
       messages.pop();
+      try { track('chat_error', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { kind: 'network', message: String((e && e.message) || e || '').slice(0, 200), after_ms: Date.now() - _t0 } }); } catch (e2) { /* ignore */ }
       if (window.console) console.error('[shell.rail]', e);
     } finally {
       streaming = false; setSend(true); renderSuggs(); chat.scrollTop = chat.scrollHeight;

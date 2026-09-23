@@ -105,6 +105,14 @@ const ALLOWED = new Set([
   // trong email resend. `report_link_view` = có ai thật sự MỞ link đó không
   // (khác việc chỉ gửi email đi, chưa chắc ai bấm vào).
   'report_link_view',
+  // Đo trải nghiệm rail chat (2026-09) — `chat_msg` (có sẵn) chỉ đếm CÓ hỏi,
+  // không nói được mượt hay không. Tách riêng:
+  //   chat_reply = trả lời xong, mang meta.ttft_ms (chữ đầu xuất hiện sau bao
+  //                lâu — thứ người dùng CẢM NHẬN là nhanh/chậm) + meta.total_ms
+  //   chat_error = KHÔNG trả lời được — meta.kind 'network' (fetch/stream vỡ)
+  //                hoặc 'stream' (server tự báo lỗi giữa chừng qua SSE). Trước
+  //                đợt này lỗi loại này chỉ rơi vào console.error, không ai đo.
+  'chat_reply', 'chat_error',
 ]);
 
 // Coi là "vừa đăng ký" nếu tài khoản tạo trong 15 phút gần đây (né tính nhầm
