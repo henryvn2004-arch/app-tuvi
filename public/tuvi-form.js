@@ -24,6 +24,7 @@
 window.TuviForm = (() => {
   const CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
   const _updaters = {}; // prefix → update fn
+  let _introShown = false; // renderChat() có thể gọi lại nhiều lần (2 người) — chỉ chào 1 lần/trang
 
   // ── Helpers ──────────────────────────────────────────────────
   function pid(id, prefix) { return prefix ? `${prefix}-${id}` : id; }
@@ -543,6 +544,28 @@ window.TuviForm = (() => {
     if (!chat) return;
     const empty = document.getElementById('railEmpty');
     if (empty) empty.style.display = 'none';
+    // Câu mở đầu (Henry 2026-09-23: bấm tool/nút Chat rồi thấy thẳng cái form
+    // xin họ tên, không biết đang dùng tool gì) — LẤY NGUYÊN chữ đã có sẵn ở
+    // box giới thiệu tĩnh `#introHost .intro-t/.intro-d` (shell.js `introOnce`
+    // đã dựng xong TRƯỚC dòng này chạy, xem thứ tự DOMContentLoaded trong
+    // shell.js) thay vì viết một bản chép tay thứ hai — đúng luật "một nguồn
+    // chữ" trong CLAUDE.md. Chỉ hiện 1 lần/trang dù renderChat() gọi lại cho
+    // người thứ hai (xem-tuoi, tương hợp…).
+    if (!_introShown) {
+      _introShown = true;
+      const introT = document.querySelector('#introHost .intro-t');
+      const introD = document.querySelector('#introHost .intro-d');
+      const title = introT ? introT.textContent.trim() : '';
+      const desc = introD ? introD.textContent.trim() : '';
+      if (title || desc) {
+        const av = () => { const a = document.querySelector('.rail-ava'); return a ? a.src : '/thay-tuvi.webp'; };
+        const el = document.createElement('div');
+        el.className = 'msg a';
+        el.innerHTML = '<img class="msg-ava" src="' + av() + '" alt="">' +
+          '<div class="msg-body"><p>' + (title ? '<b>' + esc(title) + '</b><br>' : '') + esc(desc) + '</p></div>';
+        chat.appendChild(el);
+      }
+    }
     const cp = 'c' + (prefix || 'x'); // prefix RIÊNG cho field ảo trong chat — không trùng field thật
     const opts = buildOptions();
     const namXemDefault = new Date().getFullYear();
