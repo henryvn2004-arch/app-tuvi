@@ -712,7 +712,11 @@
     if (!host) return;
     host.innerHTML =
       '<div class="rail-h"><img class="rail-ava" src="' + authorAva() + '" alt="Trợ lý Luận Đường" data-tip="Đổi thầy luận giải">' +
-      '<div><b>Trợ lý Luận Đường</b><span>' + esc(authorLabel()) + '</span></div>' +
+      // id="railHTitle": Henry 2026-09-23 — bấm gợi ý chuyển tool NGAY TRONG
+      // rail (startInlineTool, không điều hướng trang) thì tiêu đề đổi sang
+      // TÊN TOOL thay vì tên chung "Trợ lý Luận Đường", cho biết đang ở luồng
+      // nào. Xem setHeaderTitle().
+      '<div><b id="railHTitle">Trợ lý Luận Đường</b><span>' + esc(authorLabel()) + '</span></div>' +
       '<div class="tools">' +
         // Chat-first: đóng rail CHÍNH LÀ để lộ `.ws` nằm dưới — tức nút này đã
         // sẵn là nút "mở artifact", chỉ thiếu cái tên đúng. Đổi nhãn thay vì
@@ -2740,6 +2744,128 @@
     return name && data != null ? { name: name, data: data } : null;
   }
 
+  // ── CHUYỂN TOOL NGAY TRONG RAIL (không điều hướng trang) ──────────────
+  // Henry 2026-09-23: bấm một gợi ý (chip Lớp 1 hoặc thẻ goi_y_cong_cu/
+  // goi_y_san_pham) trước đây `location.href` sang trang tool đó — đứt mạch
+  // hội thoại, phải nhập lại từ đầu trên một trang khác. Với TOOL đã kiểm
+  // chứng luồng birth/scenario KHÔNG cần DOM riêng của trang gốc (renderChat()
+  // tự dựng bong bóng hỏi ngày sinh, setData() không tìm thấy field thật thì
+  // lặng lẽ bỏ qua — không đòi hỏi trang phải có sẵn form ẩn), thì dựng lại
+  // ĐÚNG luồng nhập liệu của trang đó NGAY trong #chat rồi gọi Shell.setContext
+  // hệt như trang gốc từng làm — không có "trang gốc" nào bị mất, không tính
+  // lại công thức: `cong-so` vẫn gọi `/api/cong-so`, `xem-tuoi`/`tuong-hop`/
+  // `xem-lam-an` vẫn để SERVER tự lập lại 2 lá số từ birthA/birthB (xem
+  // `lib/agent/run.ts`), `laso`/`chu-trinh-cuoc-doi` chỉ cần birth.
+  //
+  // 🔴 CHỈ áp dụng cho tool trong bảng này — tool khác vẫn điều hướng như cũ.
+  // Mỗi tool ở đây đã đọc ĐÚNG luồng nhập của trang thật (app-<tool>.html) để
+  // chép lại, không đoán. Muốn thêm tool mới: đọc trang đó trước, đừng suy từ
+  // tool na ná.
+  // 🪤 `cong-so`: trang thật CÒN hỏi thêm "Tình trạng nghề nghiệp" (`tt` —
+  // nhân viên/quản lý/chủ/tự do/đang tìm, đổi GIỌNG cả bản đọc — xem
+  // `resolveTrangThai` trong lib/engine/cong-so.ts). Luồng inline này KHÔNG
+  // hỏi thêm câu đó — CỐ Ý đơn giản hoá, rơi về mặc định `'nhan-vien'` của
+  // chính hàm đó (không phải bịa số 0). Người dùng có thể tự nói trạng thái
+  // thật trong chat, model vẫn hiểu được dù không có field cấu trúc.
+  var INLINE_TOOLS = {
+    'laso': { kind: 'birth' },
+    'chu-trinh-cuoc-doi': { kind: 'birth' },
+    'cong-so': { kind: 'birth', api: '/api/cong-so' },
+    'xem-tuoi': { kind: 'birth2' },
+    'xem-lam-an': { kind: 'birth2' },
+    'tuong-hop': { kind: 'birth2' },
+  };
+  function setHeaderTitle(title) {
+    var el = document.getElementById('railHTitle');
+    if (el) el.textContent = title || 'Trợ lý Luận Đường';
+  }
+  function inlineBirth(d) {
+    var gioIdx = window.VnTimezone ? window.VnTimezone.hourMinToGioIdx(d.gioHour, d.gioPhut) : 0;
+    return { day: d.ngay, month: d.thang, year: d.nam, hourBranch: gioIdx, gender: d.gioitinh, name: d.hoten || undefined };
+  }
+  function inlineErrorBubble(chat, msg, fallbackPath) {
+    var el = document.createElement('div');
+    el.className = 'msg a';
+    el.innerHTML = '<img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body"><p>Xin lỗi, ' + esc(msg) + '</p>' +
+      (fallbackPath ? '<p><a href="' + esc(fallbackPath) + '">Mở trang công cụ →</a></p>' : '') + '</div>';
+    chat.appendChild(el);
+    chat.scrollTop = chat.scrollHeight;
+  }
+  // toolId/label/path: path là đích ĐIỀU HƯỚNG DỰ PHÒNG (tool không có trong
+  // INLINE_TOOLS, hoặc gọi API giữa chừng hỏng) — trả về false thì người gọi
+  // tự location.href = path như hành vi cũ.
+  function startInlineTool(toolId, label, path) {
+    var spec = INLINE_TOOLS[toolId];
+    if (!spec || typeof TuviForm === 'undefined') return false;
+    var chat = document.getElementById('chat');
+    if (!chat) return false;
+    streaming = false;
+    chat.innerHTML = '';
+    var ta = document.getElementById('railInput'), send = document.getElementById('railSend');
+    if (ta) { ta.disabled = true; ta.placeholder = 'Trả lời câu hỏi ở trên…'; }
+    if (send) send.disabled = true;
+    var sugg = document.getElementById('railSugg'); if (sugg) { sugg.innerHTML = ''; sugg.style.display = 'none'; }
+    var rc = document.getElementById('railCtx'); if (rc) rc.style.display = 'none'; // ẩn banner "Đang gắn:" cũ trong lúc nhập — setContext() cuối luồng tự hiện lại đúng label mới
+    setHeaderTitle(label);
+    if (spec.kind === 'birth2') {
+      // prefix 'inla'/'inlb' — KHÔNG dùng bare 'a'/'b': trang gốc (nơi thẻ
+      // gợi ý vừa hiện) có thể có SẴN field thật cùng tên (vd chính app-
+      // xem-tuoi.html dùng đúng prefix 'a'/'b') — renderChat() luôn setData()
+      // vào field thật khớp prefix nếu có, ghi đè âm thầm. Namespace riêng thì
+      // setData() không tìm thấy gì mà ghi, đúng đường an toàn đã thiết kế.
+      TuviForm.renderChat({
+        prefix: 'inla', gioitinh: 'nam',
+        q1: 'Cho thầy xin thông tin người thứ nhất nhé.',
+        onDone: function (a) {
+          TuviForm.renderChat({
+            prefix: 'inlb', gioitinh: 'nu',
+            q1: 'Giờ đến người thứ hai.',
+            onDone: function (b) {
+              var birthA = inlineBirth(a), birthB = inlineBirth(b);
+              birthA.name = birthA.name || 'Người A'; birthB.name = birthB.name || 'Người B';
+              Shell.setContext({
+                toolId: toolId,
+                scenario: { type: toolId, data: { birthA: birthA, birthB: birthB, nameA: birthA.name, nameB: birthB.name } },
+                label: label,
+                greeting: 'Đã có đủ thông tin **' + esc(birthA.name) + '** và **' + esc(birthB.name) + '**. Hỏi tôi để luận nhé.',
+              });
+            },
+          });
+        },
+      });
+      return true;
+    }
+    // kind === 'birth' — cùng lý do trên: prefix riêng, không phải ''
+    // (trang gốc có thể có sẵn field thật #hoten/#ngay/… không prefix, vd
+    // chính app-home.html tự gọi TuviForm.render('tmeFields',{...}) cho khối
+    // "Vận riêng của bạn" — setData(d,'') sẽ ghi đè im lặng vào đúng đó).
+    TuviForm.renderChat({
+      prefix: 'inl',
+      onDone: function (d) {
+        var birth = inlineBirth(d);
+        if (!spec.api) {
+          Shell.setContext({
+            toolId: toolId, birth: birth, label: label,
+            greeting: 'Lá số **' + esc(birth.name || 'bạn') + '** đã sẵn sàng. Hỏi tôi bất cứ điều gì.',
+          });
+          return;
+        }
+        var qs = 'd=' + birth.day + '&m=' + birth.month + '&y=' + birth.year + '&gio=' + birth.hourBranch + '&gt=' + birth.gender;
+        fetch(spec.api + '?' + qs, { cache: 'no-store' })
+          .then(function (r) { return r.json(); })
+          .then(function (j) {
+            if (!j || !j.ok) throw new Error(j && j.error || 'không dựng được hồ sơ.');
+            Shell.setContext({
+              toolId: toolId, birth: birth, scenario: { type: toolId, data: j.rail }, label: label,
+              greeting: 'Hồ sơ **' + esc(birth.name || 'bạn') + '** đã sẵn sàng. Hỏi tôi bất cứ điều gì.',
+            });
+          })
+          .catch(function (e) { inlineErrorBubble(chat, e.message + ' Thử lại giúp con nhé.', path); });
+      },
+    });
+    return true;
+  }
+
   function greet(o) {
     var chat = document.getElementById('chat');
     chat.innerHTML =
@@ -2774,6 +2900,9 @@
         // hướng NỘI BỘ site, không nhận javascript:/link ngoài.
         if (!c.href || c.href.charAt(0) !== '/' || c.href.indexOf('//') === 0) return;
         try { track('cta_click', { tool_id: c.toolId || null, slug: 'concierge_chip_nav' }); } catch (e) { /* ignore */ }
+        // Chuyển NGAY TRONG rail nếu tool đã kiểm luồng (startInlineTool) —
+        // chỉ điều hướng khi tool chưa được đưa vào INLINE_TOOLS.
+        if (c.toolId && startInlineTool(c.toolId, c.label, c.href)) return;
         location.href = c.href;
       });
     });
@@ -2798,6 +2927,13 @@
       // HỆ giữa hai lá số — thiếu vế này thì rail kể một thế giới khác hẳn thế
       // giới đang hiện trên màn hình.
       ctx = (o.birth || o.scenario) ? { birth: o.birth || null, scenario: o.scenario || null, wrap: o.wrap || null, wrapBirthB: o.wrapBirthB || null } : null;
+      // `o.toolId` (Henry 2026-09-23, startInlineTool): chuyển tool NGAY TRONG
+      // rail của MỘT trang khác (vd bấm gợi ý ở /app#chat, KHÔNG điều hướng)
+      // thì `ACTIVE` vẫn là trang GỐC ('home'), không phải tool thật đang dùng
+      // — dùng thẳng ACTIVE cho track/lịch sử/markToolUsed là gán NHẦM tool.
+      // `ACT` là tool_id THẬT của lượt này; mọi nơi dưới đây thay ACTIVE→ACT.
+      // 53 lượt gọi cũ không truyền toolId → ACT === ACTIVE, hệt hành vi cũ.
+      var ACT = o.toolId || ACTIVE;
       // Reload TRONG CÙNG TAB, cùng ngữ cảnh → tự nối lại — dựng SẴN cờ
       // `app_restore`/`app_restore_data` mà khối "KHÔI PHỤC phiên đã lưu" bên
       // dưới vốn chỉ đọc khi người dùng BẤM 1 mục lịch sử; ở đây kích hoạt tự
@@ -2806,12 +2942,12 @@
       // (vừa bấm 1 mục lịch sử khác) luôn thắng, không bị auto-resume đè.
       if (HIST_ON && ctx && !sessionStorage.getItem('app_restore')) {
         try {
-          var _ptr = JSON.parse(sessionStorage.getItem(sessLiveKey(ACTIVE)) || 'null');
+          var _ptr = JSON.parse(sessionStorage.getItem(sessLiveKey(ACT)) || 'null');
           if (_ptr && _ptr.id && _ptr.fp === sessFp(ctx)) {
             var _rec = null;
-            histLocal(ACTIVE).forEach(function (s) { if (s.id === _ptr.id) _rec = s; });
+            histLocal(ACT).forEach(function (s) { if (s.id === _ptr.id) _rec = s; });
             if (_rec && _rec.messages && _rec.messages.length) {
-              sessionStorage.setItem('app_restore', JSON.stringify({ id: _rec.id, toolId: ACTIVE }));
+              sessionStorage.setItem('app_restore', JSON.stringify({ id: _rec.id, toolId: ACT }));
               sessionStorage.setItem('app_restore_data', JSON.stringify(_rec));
             }
           }
@@ -2824,9 +2960,9 @@
       // cờ này thì MỌI lượt vào /app đều tự ghi tool_run='home' — đã đo được
       // đúng 1-1 với số khách, thổi phồng toàn bộ phễu tool_run trên site.
       if (!o.passive) {
-        try { track('tool_run', { tool_id: ACTIVE, slug: (o.scenario && o.scenario.type) || null }); } catch (e) { /* ignore */ }
+        try { track('tool_run', { tool_id: ACT, slug: (o.scenario && o.scenario.type) || null }); } catch (e) { /* ignore */ }
       }
-      markToolUsed(ACTIVE);
+      markToolUsed(ACT);
       messages = [];
       sessionId = newId();
       // Meta cho thread mới: restore payload đủ để dựng lại center (mặc định =
@@ -2864,7 +3000,7 @@
       if (HIST_ON) try {
         var rsMeta = JSON.parse(sessionStorage.getItem('app_restore') || 'null');
         var rs = JSON.parse(sessionStorage.getItem('app_restore_data') || 'null');
-        if (rsMeta && rs && rsMeta.toolId === ACTIVE && rs.id) {
+        if (rsMeta && rs && rsMeta.toolId === ACT && rs.id) {
           sessionStorage.removeItem('app_restore'); sessionStorage.removeItem('app_restore_data');
           sessionId = rs.id;
           messages = (rs.messages || []).map(function (m) { return { role: m.role, content: m.content }; });
@@ -3313,16 +3449,20 @@
     // ⛔ KHÔNG hiện giá — xem lib/tools/suggest-tool.ts. Thẻ chỉ nói CÔNG CỤ
     // NÀO và GIÚP ĐƯỢC GÌ; người chat thường xuyên vốn đã có Lượng, dán giá
     // vào đúng lúc họ đang cần giúp là biến chỉ đường thành chào hàng.
+    // `<button>` chứ không `<a href>` (bản cũ) — chuyển NGAY TRONG rail nếu
+    // tool đã kiểm luồng (startInlineTool), chỉ điều hướng khi chưa kiểm.
     d.innerHTML =
       '<div class="ts-b"><div class="ts-t">' + esc(s.label) + '</div>' +
       '<div class="ts-d">' + esc(s.lyDo || '') + '</div></div>' +
-      '<a class="ts-go" href="' + esc(s.path) + '">Mở</a>';
+      '<button class="ts-go" type="button">Mở</button>';
     chat.appendChild(d);
     chat.scrollTop = chat.scrollHeight;
     try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_shown' }); } catch (e) { /* ignore */ }
     var go = d.querySelector('.ts-go');
     if (go) go.addEventListener('click', function () {
       try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_open' }); } catch (e) { /* ignore */ }
+      if (startInlineTool(s.toolId, s.label, s.path)) return;
+      location.href = s.path;
     });
   }
 
