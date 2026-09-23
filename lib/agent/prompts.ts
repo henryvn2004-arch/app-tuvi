@@ -19,6 +19,12 @@ import { todayVN, todayVNLunar } from "@/lib/engine/van-ngay";
 import { tuongHopScores } from "@/lib/engine/tuong-hop";
 import { matchVanHanCombos, formatComboLines, type LayerCung } from "@/lib/agent/vanHanCombos";
 import { chuanHoaDauThanh } from "@/lib/vn-text";
+// Giai đoạn 2 chat-first (2026-09-23): `SUGGEST_TOOL_DEF` (tool `goi_y_cong_cu`)
+// — AN TOÀN import thẳng vì `lib/tools/suggest-tool.ts` là module LÁ (không
+// import gì khác), khác với `lib/tools/registry.ts` (đã import NGƯỢC từ file
+// này — xem `TRA_VAN_NAM_BAT_TU_TOOL` bên dưới — nên registry.ts mới là phía
+// PHẢI tránh, không phải mọi thứ trong `lib/tools/*`).
+import { SUGGEST_TOOL_DEF } from "@/lib/tools/suggest-tool";
 
 // "Hôm nay" gửi cho LLM PHẢI theo giờ VN, không theo giờ server (Vercel chạy
 // UTC) — nếu không, trong khung 00:00–06:59 giờ VN (=17:00–23:59 UTC hôm
@@ -224,7 +230,17 @@ export function buildChatContext(body: any): ChatContext {
     return { systemForCall: CHAT_SYSTEM_KY_MON(extractKyMonContext(body.kyMonData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'hoang-dao') {
-    return { systemForCall: CHAT_SYSTEM_HOANG_DAO(extractGenericContext(body.hoangDaoData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
+    // Giai đoạn 2 chat-first — CỬA CONCIERGE THẬT: đây là kịch bản duy nhất
+    // chạy khi người dùng CHƯA có lá số VÀ CHƯA chọn tool (`/app#chat` khi
+    // chưa lưu ngày sinh, xem `wire()` app-home.html) — tức đúng lúc ý định
+    // chưa biết. Thêm `goi_y_cong_cu` vào ĐÂY (24 kịch bản khác giữ nguyên,
+    // cố ý KHÔNG lan rộng trong PR này — mở khắp nơi là đổi hành vi 24 luồng
+    // đã ổn định, cần đo riêng) để model có đường trỏ sang đúng tool khi câu
+    // hỏi lệch khỏi "giờ tốt hôm nay" (vd hỏi chuyện tình duyên, đặt tên con).
+    // Không cần thêm chữ hướng dẫn nào khác — mô tả của chính tool đã đủ
+    // (xem lib/tools/suggest-tool.ts): tự nói khi nào gọi/khi nào im, không
+    // gọi lúc người ta đang tâm sự, không nhắc giá.
+    return { systemForCall: CHAT_SYSTEM_HOANG_DAO(extractGenericContext(body.hoangDaoData), docs, persona), tools: [...buildTools(false), SUGGEST_TOOL_DEF], maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'ngay-tot') {
     return { systemForCall: CHAT_SYSTEM_NGAY_TOT(extractGenericContext(body.ngayTotData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
