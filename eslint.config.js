@@ -46,6 +46,23 @@ const projectGlobals = {
   // chạy, nên `Pchip` là biến tự do hợp lệ tại runtime dù ESLint lint TỪNG file
   // riêng lẻ không thấy khai báo — cùng lớp với HookCharts/TU_HOA ở trên.
   Pchip: 'readonly',
+  // Bước 17 (chat-first): public/shell.js `startInlineTool()` nạp LƯỜI các
+  // engine tools-shared/*.js này bằng `ensureScripts()` (thẻ <script> động,
+  // ESLint lint tĩnh không thấy) rồi gọi thẳng biến toàn cục của chúng —
+  // cùng lớp với HookCharts/Pchip ở trên.
+  KimLauTool: 'readonly',
+  NapAmTool: 'readonly',
+  BatTrachTool: 'readonly',
+  SoDepTool: 'readonly',
+  XemTuoiSinhConTool: 'readonly',
+  HoangDaoTool: 'readonly',
+  HoangLich: 'readonly',
+  NgayTotTool: 'readonly',
+  CanChi: 'readonly',
+  KinhDichTool: 'readonly',
+  MaiHoaTool: 'readonly',
+  LucNhamTool: 'readonly',
+  DaiLucNham: 'readonly',
 };
 
 const sharedRules = {
