@@ -132,7 +132,7 @@ body.chat-first-live .dn-two{grid-template-columns:1fr}
         <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
         <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-      <div class="form-card" id="birthPanel">
+      <div class="form-card" id="birthPanel" style="display:none">
         <div class="fc-head"><span class="fc-ic" data-icon="temple"></span><h2>Nhập ngày sinh (dương lịch)</h2></div>
         <p class="sub">Nhập họ tên, giới tính và ngày giờ sinh của những người muốn xem (2–5 người) để dựng câu chuyện duyên nợ kèm tranh minh hoạ.</p>
 
@@ -173,6 +173,10 @@ body.chat-first-live .dn-two{grid-template-columns:1fr}
           </button>
         </div>
         <div class="err" id="error-msg"></div>
+      </div>
+      <div class="ws-intake-hint" id="wsIntakeHint">
+        <span class="ic" data-icon="message-circle"></span>
+        <p>Trả lời thầy ở khung chat bên trái để nhập ngày sinh từng người (2–5 người).</p>
       </div>
       </div>
       <div class="ws-side-col">
@@ -258,6 +262,11 @@ body.chat-first-live .dn-two{grid-template-columns:1fr}
 // chỉ co 1 cột qua media viewport, không đọc được bề rộng cột artifact —
 // xem override bên dưới.
 window.SHELL_CHATFIRST=true;
+// Bước 10: hội thoại nhập liệu. Luôn hỏi đủ 2 người mặc định (khớp
+// `_renderSlot(0)`/`_renderSlot(1)` chạy sẵn lúc tải trang), rồi hỏi "thêm
+// người nữa?" lặp tới tối đa MAX_NGUOI=5 — `addPerson()` dựng slot thật
+// TRƯỚC khi renderChat() ghi vào, không đổi gì ở đường tính toán.
+window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'duyen-no-tien-kiep'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
@@ -415,6 +424,46 @@ var DN_RESUME_KEY = 'dntk_pending_resume';
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', runAutoAnalyze);
   else runAutoAnalyze();
 })();
+
+// ── Bước 10: hội thoại nhập liệu trong rail ──
+// Luôn hỏi đủ 2 người mặc định (slot 'a'/'b' đã dựng sẵn ở trên), rồi hỏi
+// "thêm người nữa?" lặp tới tối đa MAX_NGUOI — addPerson() dựng slot thật
+// TRƯỚC khi renderChat() ghi vào, không đổi gì ở đường tính toán cũ.
+function chatAva(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; }
+function _tpwResuming(){ try{ return new URL(location.href).searchParams.get('tpwResume')==='1'; }catch(e){ return false; } }
+function startIntake(){
+  if(_tpwResuming())return;
+  if(window.Shell&&Shell.pendingRestore&&Shell.pendingRestore())return;
+  chatOnePerson(0, function(){ chatOnePerson(1, function(){ chatAskMore(2); }); });
+}
+function chatOnePerson(idx, onDone){
+  var key=SLOT_KEYS[idx];
+  TuviForm.renderChat({
+    prefix:key, gioitinh: idx===1?'nu':'nam',
+    q1:'Cho thầy xin thông tin của ' + SLOT_TITLE[idx] + (SLOT_SUB[idx] ? ' (' + SLOT_SUB[idx] + ')' : '') + '.',
+    onDone:onDone
+  });
+}
+function chatAskMore(nextIdx){
+  if(nextIdx>=MAX_NGUOI){ analyze(); return; }
+  var chat=document.getElementById('chat');
+  var el=document.createElement('div'); el.className='msg a';
+  el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
+    '<div class="msg-body"><p>Bạn có muốn thêm ' + esc(SLOT_TITLE[nextIdx].toLowerCase()) + ' vào câu chuyện không? (tối đa ' + MAX_NGUOI + ' người)</p>'+
+    '<button class="btn-go" type="button" id="addMoreYes" style="width:auto;padding:9px 16px;font-size:13px;margin-right:8px">Có, thêm người →</button>'+
+    '<button class="btn" type="button" id="addMoreNo" style="width:auto;padding:9px 16px;font-size:13px">Đủ rồi, xem ngay →</button></div>';
+  chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  document.getElementById('addMoreYes').addEventListener('click',function(){
+    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Thêm ' + esc(SLOT_TITLE[nextIdx]) + ' ✓</p></div>';
+    addPerson();
+    chatOnePerson(nextIdx, function(){ chatAskMore(nextIdx+1); });
+  });
+  document.getElementById('addMoreNo').addEventListener('click',function(){
+    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Đủ ' + nextIdx + ' người, xem ngay.</p></div>';
+    analyze();
+  });
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',startIntake);else startIntake();
 
 function showError(msg) {
   var e = document.getElementById('error-msg');
