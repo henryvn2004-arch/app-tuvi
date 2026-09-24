@@ -4326,6 +4326,13 @@
       var r = document.getElementById('shell-rail'); if (r) { r.classList.add('open'); syncBackdrop(); armRailHistory(); }
       _railOpened = true; syncAskOrb();
     },
+    // Đợt 1 (2026-09-24): sheet dùng chung — trượt lên (mobile)/vào từ phải
+    // (desktop) nội dung chi tiết mở từ một thẻ trong chat. `html` là nội
+    // dung sẽ đổ vào `.tv-sheet-body` (chuỗi HTML, KHÔNG phải node); gọi tay
+    // `window.mountIcons` sau nếu nội dung dựng thêm icon SAU khi sheet đã mở
+    // (openSheet tự mount icon một lượt lúc mở, không theo dõi thay đổi sau đó).
+    openSheet: function (html, opts) { openSheetUI(html, opts); },
+    closeSheet: function () { closeSheetByUser(); },
     // Empty-state "Phiên gần đây": tool đặt <div id="shellRecent"></div> ở khối
     // nhập rồi gọi Shell.renderRecent() (hoặc shell tự gọi lúc boot). No-op nếu
     // tool chưa bật window.SHELL_HISTORY.
@@ -4842,32 +4849,147 @@
   }
   // Đợt 0 (2026-09-24): nút back VẬT LÝ của điện thoại/trình duyệt phải đóng
   // được lớp chat (rail) trên mobile — trước đây back thoát thẳng khỏi trang,
-  // không có đường lui nào cho lớp phủ. `Shell.openRail()` là NƠI DUY NHẤT
-  // thêm class `open` cho `#shell-rail` (grep xác nhận), nên chỉ cần chặn ở
-  // đây: PUSH một mốc lịch sử "giả" lúc rail mở trên mobile, POP nó (đóng
-  // rail) khi back được bấm. `closeRailUI()` là cửa DUY NHẤT để đóng rail từ
-  // UI (✕/←/"Kết quả" mobile/backdrop) — tự tiêu thụ mốc giả đó bằng
-  // `history.back()` để không để lại một bước lùi "chết" (bấm back xong
-  // không thấy gì đổi) khi khách đóng chat bằng tay thay vì bằng nút back.
-  var _railHistPushed = false;
-  function armRailHistory() {
-    if (_railHistPushed) return;
-    if (!window.matchMedia('(max-width:900px)').matches) return; // desktop: rail không phải lớp phủ
-    _railHistPushed = true;
-    try { history.pushState({ tvmbRailOpen: true }, ''); } catch (e) { /* ignore */ }
+  // không có đường lui nào cho lớp phủ.
+  // Đợt 1 (2026-09-24): thêm SHEET (Shell.openSheet, xem bên dưới) — có thể
+  // mở CHỒNG LÊN rail đang mở (rail hiện chat, sheet hiện chi tiết report),
+  // nên một cờ `_railHistPushed` boolean của Đợt 0 không tả được trạng thái
+  // CHỒNG LỚP này (đóng sheet xong back thêm lần nữa lẽ ra phải đóng rail,
+  // không phải thoát trang). Thay bằng NGĂN XẾP tên lớp — mỗi lớp mở PUSH
+  // một mốc lịch sử, back "bóc" đúng lớp TRÊN CÙNG, y hệt ngăn xếp modal
+  // chuẩn. `armRailHistory`/`closeRailUI` giữ nguyên TÊN + CHỮ KÝ (3 chỗ gọi
+  // ở trên không đổi) — chỉ đổi ruột sang gọi `pushUiLayer`/`popUiLayerByUI`.
+  var _uiLayerStack = []; // ['rail'|'sheet', ...] — phần tử cuối là lớp TRÊN CÙNG
+  function pushUiLayer(kind) {
+    if (!window.matchMedia('(max-width:900px)').matches) return; // desktop: không dùng lớp phủ toàn màn
+    _uiLayerStack.push(kind);
+    try { history.pushState({ tvmbUiLayer: kind }, ''); } catch (e) { /* ignore */ }
   }
+  // Đóng bằng TAY (✕/backdrop/vuốt) — nếu lớp này ĐANG là đỉnh ngăn xếp, tiêu
+  // thụ mốc lịch sử của nó (`history.back()`) để không để lại một bước lùi
+  // "chết" (bấm back xong không thấy gì đổi). Không phải đỉnh (sheet đang mở
+  // TRÊN rail mà có gì đó đóng rail trước) thì chỉ gỡ khỏi ngăn xếp, không
+  // đụng lịch sử — mốc của nó vẫn còn đó, đợi đúng lượt back sau mới tiêu.
+  // 🪤 `history.back()` gọi TAY ở đây CŨNG tự nổ `popstate`, y hệt back VẬT
+  // LÝ của khách — thiếu cờ chặn thì đóng sheet bằng ✕ sẽ bắn thêm một
+  // popstate "ké", bị handler bên dưới hiểu nhầm thành back thật và đóng LÂY
+  // cả rail bên dưới nó (bắt bằng Playwright: X sheet xong rail cũng mất
+  // theo, dù không hề đụng tới rail). `_suppressNextPopstate` chỉ nuốt ĐÚNG
+  // MỘT popstate — của chính lượt `history.back()` này — không nuốt lượt sau.
+  var _suppressNextPopstate = false;
+  function popUiLayerByUI(kind) {
+    var i = _uiLayerStack.lastIndexOf(kind);
+    if (i === -1) return;
+    var wasTop = i === _uiLayerStack.length - 1;
+    _uiLayerStack.splice(i, 1);
+    if (wasTop) {
+      _suppressNextPopstate = true;
+      try { history.back(); } catch (e) { _suppressNextPopstate = false; }
+    }
+  }
+  window.addEventListener('popstate', function () {
+    if (_suppressNextPopstate) { _suppressNextPopstate = false; return; } // popstate "ké" từ history.back() tự gọi ở trên — đã xử lý xong ở popUiLayerByUI rồi
+    var top = _uiLayerStack.pop();
+    if (!top) return; // không phải mốc của rail/sheet — để trình duyệt tự xử lý
+    if (top === 'rail') {
+      var r = document.getElementById('shell-rail');
+      if (r && r.classList.contains('open')) { r.classList.remove('open'); syncBackdrop(); }
+    } else if (top === 'sheet') {
+      closeSheetVisual();
+    }
+  });
+  function armRailHistory() { pushUiLayer('rail'); }
   function closeRailUI() {
     var r = document.getElementById('shell-rail');
     if (r) r.classList.remove('open');
     syncBackdrop();
-    if (_railHistPushed) { _railHistPushed = false; try { history.back(); } catch (e) { /* ignore */ } }
+    popUiLayerByUI('rail');
   }
-  window.addEventListener('popstate', function (e) {
-    if (!_railHistPushed) return; // không phải mốc của rail — để trình duyệt tự xử lý
-    _railHistPushed = false;
-    var r = document.getElementById('shell-rail');
-    if (r && r.classList.contains('open')) { r.classList.remove('open'); syncBackdrop(); }
-  });
+
+  // ── SHEET (Shell.openSheet/closeSheet) — Đợt 1 (2026-09-24) ────────────────
+  // Nguồn DUY NHẤT cho "trượt lên xem chi tiết" gọi được từ MỌI trang: một
+  // thẻ trong chat (highlight/report) bấm vào thì trượt lên nội dung đầy đủ,
+  // có ✕ + vuốt xuống (mobile) + nút back vật lý đều đóng được — không cần
+  // trang tự dựng overlay riêng. Độc lập hoàn toàn với lưới 3 cột
+  // `.shell`/`art-wide` đã có (không đụng CSS đó), nên dùng an toàn ở BẤT KỲ
+  // trang nào, kể cả trang chưa bật `SHELL_CHATFIRST`.
+  function ensureSheetEl() {
+    var d = document.getElementById('tvSheet');
+    if (d) return d;
+    d = document.createElement('div');
+    d.className = 'tv-sheet'; d.id = 'tvSheet'; d.hidden = true;
+    d.innerHTML =
+      '<div class="tv-sheet-backdrop"></div>' +
+      '<div class="tv-sheet-panel" role="dialog" aria-modal="true">' +
+        '<div class="tv-sheet-grab"></div>' +
+        '<div class="tv-sheet-head"><b class="tv-sheet-title"></b>' +
+          '<button class="tv-sheet-close" type="button" aria-label="Đóng" data-tip="Đóng">✕</button></div>' +
+        '<div class="tv-sheet-body"></div>' +
+      '</div>';
+    document.body.appendChild(d);
+    d.querySelector('.tv-sheet-backdrop').addEventListener('click', closeSheetByUser);
+    d.querySelector('.tv-sheet-close').addEventListener('click', closeSheetByUser);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !d.hidden) closeSheetByUser(); });
+    wireSheetDrag(d.querySelector('.tv-sheet-panel'), d.querySelector('.tv-sheet-grab'));
+    return d;
+  }
+  // Vuốt xuống để đóng — chỉ neo vào tay cầm (`.tv-sheet-grab`), không phải
+  // toàn bộ panel: nội dung report có thể tự cuộn dọc, chiếm luôn cử chỉ đó
+  // thì cuộn đọc và vuốt-đóng giẫm chân nhau (đã thấy kiểu bug này ở overlay
+  // khác trong repo — xem luật "mọi overlay chặn đường phải có đường thoát
+  // KHÔNG PHỤ THUỘC vị trí" trong CLAUDE.md, Esc + tap-ngoài là hai đường độc
+  // lập với vuốt, nên vuốt hỏng vẫn còn đường thoát khác).
+  function wireSheetDrag(panel, grab) {
+    if (!grab) return;
+    var startY = null, dy = 0, dragging = false;
+    function isMobile() { return window.matchMedia('(max-width:900px)').matches; }
+    function onMove(e) {
+      if (!dragging) return;
+      var y = (e.touches ? e.touches[0].clientY : e.clientY);
+      dy = Math.max(0, y - startY);
+      panel.style.transition = 'none';
+      panel.style.transform = 'translateY(' + dy + 'px)';
+    }
+    function onUp() {
+      if (!dragging) return;
+      dragging = false;
+      panel.style.transition = '';
+      panel.style.transform = '';
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      if (dy > 110) closeSheetByUser(); // kéo đủ xa (>110px) mới tính là đóng, nhích tay không tính
+      dy = 0;
+    }
+    grab.addEventListener('pointerdown', function (e) {
+      if (!isMobile()) return;
+      dragging = true; startY = e.clientY;
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+    });
+  }
+  // Đóng phần NHÌN THẤY được (ẩn panel sau khi transition trượt xuống xong) —
+  // dùng cho CẢ đường UI (✕/backdrop/vuốt, qua closeSheetByUser) LẪN đường
+  // back vật lý (popstate ở trên, gọi thẳng hàm này — không qua
+  // popUiLayerByUI vì mốc lịch sử lúc đó ĐÃ bị tiêu bởi chính popstate rồi).
+  function closeSheetVisual() {
+    var d = document.getElementById('tvSheet');
+    if (!d || d.hidden) return;
+    d.classList.remove('open');
+    document.body.classList.remove('sheet-open');
+    setTimeout(function () { if (d && !d.classList.contains('open')) d.hidden = true; }, 260);
+  }
+  function closeSheetByUser() { closeSheetVisual(); popUiLayerByUI('sheet'); }
+  function openSheetUI(html, opts) {
+    opts = opts || {};
+    var d = ensureSheetEl();
+    d.querySelector('.tv-sheet-title').textContent = opts.title || '';
+    d.querySelector('.tv-sheet-body').innerHTML = html || '';
+    if (window.mountIcons) window.mountIcons(d.querySelector('.tv-sheet-body'));
+    d.hidden = false;
+    void d.offsetWidth; // ép reflow — không thì thêm .open ngay sau khi bỏ [hidden] không kích hoạt transition
+    d.classList.add('open');
+    document.body.classList.add('sheet-open');
+    pushUiLayer('sheet');
+  }
   window.shellSyncBackdrop = syncBackdrop;
   // Số dư Lượng ngay dưới tên trong sidebar — trước đây chỗ đó chỉ có "Xem hồ
   // sơ →" tĩnh, người dùng không biết còn bao nhiêu Lượng tới khi bí giữa
