@@ -65,7 +65,7 @@ cú bấm mới tới trong lúc lượt trước còn đang fetch, tránh chồ
 reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt động đúng
 (soft-nav qua `popstate`).
 
-## Phạm vi hiện tại — 24/96 trang trong `SOFT_PAGES`
+## Phạm vi hiện tại — 28/96 trang trong `SOFT_PAGES`
 
 | Trang | Soft-nav? | Vì sao |
 |---|---|---|
@@ -75,9 +75,10 @@ reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt đ
 | Kỳ Môn, Mai Hoa, Ngũ Hành Tên, Kinh Dịch (Đợt 4) | ✅ | Vá đúng nguyên nhân gốc — xem mục Đợt 4 bên dưới, không phải IIFE |
 | Đặt Tên, Đặt Tên Doanh Nghiệp, Chọn Ngày, Công Sở (Đợt 5) | ✅ | CÓ `tuvi-paywall.js` nhưng module đã được vá (đợt audit trước) + 4 trang này không tự gọi thư viện có timer nào — xem mục Đợt 5 bên dưới |
 | Nhân Mạch, Giờ Sinh, Hướng Nghiệp Trẻ, Bút Tướng (Đợt 7) | ✅ | 2/4 gọi `AiLoadingSteps` (giờ an toàn nhờ Đợt 6) — xem mục Đợt 7 bên dưới |
+| Khí Sắc, Trang Điểm, Vận Hạn Năm, Xem Tuổi/Xem Làm Ăn/Tương Hợp (Đợt 8) | ✅ | Phát hiện + vá một bug thật ĐÃ SỐNG từ Đợt 5/7 (lệch `?v=` của `tuvi-ansao-engine.js`) — xem mục Đợt 8 bên dưới |
 | Nạp Lượng (`topup.html`) | ❌ full reload | Có `setInterval` chờ thanh toán + lịch sử bug đua nhau (`nhat-ky/2026-08.md` "Purchase từng bắn trùng"). Soft-nav không huỷ `document` → interval cũ có thể sống sót qua lượt chuyển tab. Rủi ro cao hơn lợi ích tốc độ trên đúng đường tiền. |
 | Hồ Sơ (`account-core.js`, 1637 dòng, hàng chục hàm async: History/Ví/Kết nối Telegram-WhatsApp-Messenger/MCP key/Nhiệm vụ/Giới thiệu) | ❌ full reload | Không đủ thời gian dò hết — môi trường này không có Supabase/auth thật để bấm qua từng tab của trang mà đo. Một lỗi đã bắt được (`initProfile`) đã vá, nhưng đó chỉ là MỘT trong hàng chục hàm khả nghi cùng họ. |
-| **27 trang còn lại có `tuvi-paywall.js`** | ❌ full reload | `ai-loading-steps.js` đã có lưới an toàn (Đợt 6) — nhưng vẫn cần audit RIÊNG từng trang (double-run + stress test) trước khi mở. |
+| **23 trang còn lại có `tuvi-paywall.js`** | ❌ full reload | `ai-loading-steps.js` đã có lưới an toàn (Đợt 6) — nhưng vẫn cần audit RIÊNG từng trang (double-run + stress test + kiểm `?v=` mọi script dùng chung) trước khi mở. |
 
 ## CHƯA làm — cố ý, không phải thiếu sót
 
@@ -106,6 +107,19 @@ reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt đ
 3. Test bằng kịch bản giống Đợt 1: bấm nhanh, ngẫu nhiên, độ trễ đua nhau,
    bắt `page.on('pageerror')`.
 4. Nghĩa địa giúp giảm rủi ro nhưng không phải giấy phép bỏ qua bước 2-3.
+5. **So `?v=` của MỌI `<script src>` dùng chung với trang đích, đối chiếu
+   toàn bộ trang ĐÃ có trong `SOFT_PAGES`** (không chỉ so với các trang
+   thêm CÙNG đợt) — lệch version cho MỘT script KHÔNG bọc IIFE (không chỉ
+   `tuvi-paywall.js`) là double-load + `SyntaxError` redeclare khi soft-nav
+   giữa hai trang lệch version, dù cả hai trang RIÊNG LẺ đều double-run
+   sạch. Phát hiện ở Đợt 8: `tuvi-ansao-engine.js` (không IIFE, khai
+   `const _CAN`/`_CHI` top-level) đã sống 2 version khác nhau
+   (`?v=1` ở Công Sở/Hướng Nghiệp Trẻ từ Đợt 5/7, không hậu tố ở
+   Hoàng Đạo/Mai Hoa/Ngày Tốt từ Đợt 2-4) NGAY TRONG `SOFT_PAGES` — bug
+   THẬT đã sống từ Đợt 5, chỉ lộ ra khi stress test Đợt 8 mở rộng đủ tổ
+   hợp trang để chạm đúng cặp lệch version. Script CÓ bọc IIFE (kiểm bằng
+   mắt: mở đầu bằng `(function() {`/`(function(root){`) thì double-load
+   vô hại, không cần đồng bộ version.
 
 ## Audit `public/tuvi-paywall.js` (2026-09-24) — module bị loại trừ ở Đợt 1-2
 
@@ -383,3 +397,87 @@ run check:*` (50 bộ, sau khi vá `check:slug`) qua hết.
 
 **CHƯA làm:** 27 trang còn lại của nhóm `tuvi-paywall.js` — việc của
 một đợt sau, cùng quy trình.
+
+## Đợt 8: 4 trang mới + phát hiện bug THẬT đã sống từ Đợt 5 (2026-09-24)
+
+Chọn 4 trang tiếp theo theo đúng quy trình: **Khí Sắc, Trang Điểm**
+(vá `let`/`const` top-level → `var`, không gọi `AiLoadingSteps`) ·
+**Vận Hạn Năm, Xem Tuổi** (script riêng sạch sẵn, CÓ gọi
+`AiLoadingSteps`). `app-xem-tuoi.html` phục vụ BA route
+(`/app/xem-tuoi`, `/app/xem-lam-an`, `/app/tuong-hop`, cùng file, tự
+chọn nhánh bằng `location.pathname` đọc ở top-level) — cả ba đều phải
+vào `SOFT_PAGES` cùng lúc.
+
+**Bug THẬT phát hiện trong lúc audit — đã sống từ Đợt 5, không phải lỗi
+mới:** stress test mở rộng lộ `SyntaxError: Identifier '_CAN' has
+already been declared` khi soft-nav QUA LẠI giữa các trang KHÔNG cùng
+đợt. Truy ra: `public/tuvi-ansao-engine.js` (engine an sao — "nguồn số
+DUY NHẤT", theo CLAUDE.md — KHÔNG được sửa nội dung) khai `const
+_CAN`/`_CHI` Ở TOP-LEVEL, KHÔNG bọc IIFE. Công Sở (Đợt 5) và Hướng
+Nghiệp Trẻ (Đợt 7) nạp `tuvi-ansao-engine.js?v=1`, trong khi Hoàng Đạo
+(Đợt 2), Mai Hoa/Ngày Tốt (Đợt 4) nạp KHÔNG hậu tố `?v=`. Hai URL khác
+nhau ⇒ `loadedSrc` (cơ chế dedup của `shell-soft-nav.js`) coi là HAI
+script riêng biệt ⇒ soft-nav từ Hoàng Đạo sang Công Sở (hoặc ngược lại)
+NẠP LẠI file, `const _CAN` khai lần hai ⇒ `SyntaxError` giữa chừng.
+
+**Vì sao lọt qua audit của cả Đợt 5 lẫn Đợt 7:** quy trình cũ chỉ so
+`?v=` của SCRIPT ĐANG THÊM với CÁC TRANG CÙNG ĐỢT (đúng bài học đã ghi
+ở audit `tuvi-paywall.js`: "mọi trang cùng một đợt PHẢI cùng `?v=`"),
+không so với TOÀN BỘ `SOFT_PAGES` đã có sẵn từ các đợt TRƯỚC — Công Sở
+(Đợt 5) không soft-nav thử với Hoàng Đạo (Đợt 2) vì hai đợt cách nhau,
+và bộ `PAGES` trong mỗi lần stress test trước đó không đủ rộng để tình
+cờ chạm đúng cặp lệch version. Đợt 8 mở rộng danh sách trang trong
+stress test (đưa Kim Lâu/Kỳ Môn/Kinh Dịch/Bát Trạch VÀO CHUNG một lượt
+với Công Sở/Nhân Mạch/Bút Tướng) mới tình cờ chạm phải.
+
+**Đã vá:** đổi `<script src="/tuvi-ansao-engine.js?v=1">` → không hậu
+tố ở `app-cong-so.html`, `app-huong-nghiep-tre.html`, VÀ
+`app-day-con.html` (chưa vào `SOFT_PAGES` nhưng cùng lỗi tiềm ẩn, vá
+luôn cho gọn — tránh đợt sau giẫm lại) — khớp với đa số (11/14 trang
+đang dùng file này không có hậu tố). KHÔNG đụng vào nội dung
+`tuvi-ansao-engine.js` — đúng luật "không sửa mò công thức cổ pháp".
+
+**Quét chéo các script dùng chung khác:** cùng phương pháp phát hiện
+thêm 3 mismatch nữa (`poster.js` `?v=5` vs `?v=4` ở Công Sở,
+`tools-shared/bat-trach.js` `?v=2` vs `?v=1`, `tools-shared/kinh-dich.js`
+`?v=1` vs `?v=5`, `tools-shared/illus-match.js` `?v=1` vs `?v=2`) —
+kiểm cả 4 đều bọc IIFE (`(function(){...})()`/`(function(root){...})(...)`)
+nên double-load vô hại, KHÔNG cần vá. Chỉ file KHÔNG bọc IIFE mới cần
+đồng bộ `?v=`.
+
+**Verify:** Playwright cục bộ — 90 lượt bấm ngẫu nhiên xen kẽ 16 trang
+(mở rộng có chủ đích để phủ tổ hợp cũ×mới, không chỉ 4 trang mới): sau
+khi vá, 0 `pageerror`. Soft-nav qua lại 3 route CÙNG FILE
+(`tuong-hop` ↔ `xem-lam-an` ↔ `xem-tuoi`): `MODE_KEY` (đọc
+`location.pathname` ở top-level) cập nhật đúng mỗi lần. 4 trang mới bấm
+sang Nạp Lượng/Hồ Sơ: vẫn full reload đúng như cũ. `node --check` bản
+NHÂN ĐÔI: sạch cả 4. `npm run lint` (0 lỗi) · `npx prettier@3.9.6
+--check` sạch · toàn bộ `npm run check:*` (50 bộ) qua hết.
+
+🪤 **Bẫy tự vấp rồi tự sửa trong đợt này (thứ hai) — helper test tái
+dùng CÙNG một `id` cho link giả mà không xoá link cũ:** `clickTo()` tạo
+`<a id="__test_link__">` gắn thẳng vào `document.body` (KHÔNG bị nghĩa
+địa chôn, vì nghĩa địa chỉ chôn con của `#ws`) — click lần hai tạo thêm
+một `<a>` CÙNG id mà không xoá cái cũ, `getElementById` trả về phần tử
+ĐẦU TIÊN trong document order (bản CŨ, href cũ) chứ không phải bản vừa
+thêm. Bài kiểm tưởng đã bấm sang trang mới nhưng thực ra bấm lại đúng
+link cũ — dương tính giả kiểu "không điều hướng được". Sửa: xoá link
+test cũ (nếu có) trước khi tạo link mới. Không phải lỗi sản phẩm — lỗi
+trong chính bài kiểm.
+
+🪤 **CDN bên ngoài trong sandbox — `net::ERR_CERT_AUTHORITY_INVALID`
+đọc thành soft-nav lỗi nếu không truy tận gốc:** trang Vận Hạn Năm nạp
+Chart.js từ `cdn.jsdelivr.net` — sandbox chặn TLS (cùng họ lỗi đã gặp
+với Supabase, xem `CLAUDE.md`), request đó fail trong Playwright dù
+`curl` cùng URL trả `200` (proxy dùng CA khác nhau cho hai công cụ).
+Load thất bại ⇒ `catch` của `go()` hợp lệ fallback `location.href` —
+ĐÚNG THIẾT KẾ "NGUYÊN TẮC AN TOÀN", không phải bug. Xác nhận bằng cách
+gắn tạm `console.error` vào nhánh `catch`/`inflight` của
+`shell-soft-nav.js` (gỡ ngay sau khi xác nhận, không commit bản có log)
+để đọc ĐÚNG lý do trước khi kết luận — tưởng là hard-reload ngẫu nhiên
+nhưng có nguyên nhân xác định được.
+
+**Cố ý CHƯA làm:** 23 trang còn lại của nhóm `tuvi-paywall.js` — việc
+của một đợt sau. Khuyến nghị mạnh: đợt sau BẮT BUỘC làm bước 5 mới
+(kiểm `?v=` với TOÀN BỘ `SOFT_PAGES`, không chỉ trang cùng đợt) trước
+khi thêm bất kỳ trang nào.
