@@ -41,8 +41,10 @@ window.ToolPrices = (function () {
   // lưới springboard /app, xem public/app-home.html · v6: thêm sale_credits/
   // sale_starts_at/sale_ends_at — khuyến mãi có thời hạn, xem ghi chú ở `get()`
   // · v7: thêm `_data.banners` (bảng `home_banners`, hellobot-ui-redesign
-  // Đợt 2) — banner trượt ngang trên Trang chủ, xem `banners()`.)
-  var CACHE_KEY = 'tvmb_prices_v7';
+  // Đợt 2) — banner trượt ngang trên Trang chủ, xem `banners()`.
+  // · v8: thêm `_data.masters` (bảng `master_profiles`, Đợt 3) — 15 thầy +
+  // `tool_ids` (công cụ thầy đó đứng tên), xem `masters()`/`masterForTool()`.)
+  var CACHE_KEY = 'tvmb_prices_v8';
   var TTL_MS = 120000; // 2 phút — đủ để đi hết một phiên duyệt, đủ ngắn để admin đổi giá thấy ngay
 
   // Bản đọc được LẦN GẦN NHẤT, sống qua phiên (localStorage, khác cache 2 phút
@@ -141,12 +143,19 @@ window.ToolPrices = (function () {
       _get(
         'home_banners?enabled=eq.true&select=id,title,subtitle,image_url,cta_tool_id,sort_order,starts_at,ends_at&order=sort_order.asc'
       ),
+      // Đợt 3: 15 thầy + công cụ mỗi thầy đứng tên (`tool_ids`). Dùng cho
+      // trang `/app/thay` VÀ để shell.js đổi avatar/tên thầy trong rail theo
+      // ĐÚNG thầy phụ trách công cụ đang mở — xem `masterForTool()`.
+      _get(
+        'master_profiles?select=id,display_name,discipline,tagline,greeting,tool_ids,sort_order&order=sort_order.asc'
+      ),
     ])
       .then(function (res) {
         var toolRows = res[0];
         var pkgRows = res[1];
         var groupRows = Array.isArray(res[2]) ? res[2] : [];
         var bannerRows = Array.isArray(res[3]) ? res[3] : [];
+        var masterRows = Array.isArray(res[4]) ? res[4] : [];
         // Giá công cụ là phần bắt buộc; thiếu nó thì coi như đọc hụt cả cụm.
         if (!Array.isArray(toolRows)) return null;
         var tools = {};
@@ -169,7 +178,7 @@ window.ToolPrices = (function () {
                 return p.credits > 0 && p.amount_vnd > 0;
               })
           : [];
-        _data = { tools: tools, rows: toolRows, packages: packages, groups: groupRows, banners: bannerRows };
+        _data = { tools: tools, rows: toolRows, packages: packages, groups: groupRows, banners: bannerRows, masters: masterRows };
         _writeCache(_data);
         _writeNav(_data);
         return _data;
@@ -364,6 +373,38 @@ window.ToolPrices = (function () {
       });
   }
 
+  /** Trọn 15 dòng `master_profiles` (hellobot-ui-redesign Đợt 3), hoặc mảng
+   *  rỗng nếu chưa đọc được. Nhận `d` trực tiếp — cùng lý do với
+   *  `activeBanners(d)` ở trên. */
+  function masters(d) {
+    return (d && d.masters) || [];
+  }
+
+  /**
+   * Thầy đứng tên một trang — nhận `activeSlug` (`window.SHELL_ACTIVE`, ví dụ
+   * 'bat-tu', 'chon-ngay'), KHÔNG phải `tool_pricing.tool_id` ('tu-binh',
+   * 'chon-ngay-tot') — hai thứ này KHÁC NHAU với nhiều công cụ (slug trang vs
+   * khoá giá), nên phải tra qua `app_path` trước rồi mới tìm thầy theo đúng
+   * `tool_id` đó. `null` nếu trang không khớp công cụ nào, công cụ chưa được
+   * gán cho thầy nào (Thái Hư/Tinh Quang hiện chưa có công cụ riêng), hoặc
+   * chưa đọc được dữ liệu.
+   */
+  function masterForTool(activeSlug, d) {
+    if (!activeSlug) return null;
+    var toolRows = (d && d.rows) || [];
+    var row = null;
+    for (var i = 0; i < toolRows.length; i++) {
+      if (toolRows[i] && toolRows[i].app_path === '/app/' + activeSlug) { row = toolRows[i]; break; }
+    }
+    if (!row) return null;
+    var list = masters(d);
+    for (var j = 0; j < list.length; j++) {
+      var m = list[j];
+      if (m && Array.isArray(m.tool_ids) && m.tool_ids.indexOf(row.tool_id) >= 0) return m;
+    }
+    return null;
+  }
+
   /**
    * Nhóm của một dòng công cụ, theo thứ tự ưu tiên:
    *   1. `need_tags` khai rõ (lọc bỏ khoá không có trong `tool_groups`)
@@ -517,6 +558,8 @@ window.ToolPrices = (function () {
     groups: groups,
     groupsOf: groupsOf,
     activeBanners: activeBanners,
+    masters: masters,
+    masterForTool: masterForTool,
     appPath: appPath,
     pagePath: pagePath,
     navFallback: navFallback,
