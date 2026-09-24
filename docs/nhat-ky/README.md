@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-393 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+394 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 2: mở rộng soft-nav sang 5 trang công cụ miễn phí |
 | 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 1: SPA-hoá 3/5 tab app-shell + prefetch/view-transitions toàn site |
 | 1 | 2026-09 | `2026-09.md` | 🐞 hellobot-ui-redesign: 2 lỗi Henry test thật trên điện thoại sau Đợt 1-5 |
 | 1 | 2026-09 | `2026-09.md` | 🌐 hellobot-ui-redesign Đợt 5: nền i18n tối thiểu — bỏ phần "tách nền tảng thanh toán native" |
