@@ -68,7 +68,7 @@ const nextConfig = {
       // không nạp shell.js) — tránh fork một nguồn giá thứ hai. Bọc nó vào
       // khung sidebar/tabbar là việc của đợt sau (topup.html hiện đứng riêng,
       // giống hệt cách "Nạp thêm" trong rail vẫn trỏ thẳng /topup.html).
-      { source: '/app/nap-luong',       destination: '/topup.html'           },
+      { source: '/app/nap-luong',       destination: '/topup.html?shellTab=1' },
       { source: '/app/hoang-dao',       destination: '/app-hoang-dao.html'   },
       { source: '/app/ngay-tot',        destination: '/app-ngay-tot.html'    },
       { source: '/app/luc-nham',        destination: '/app-luc-nham.html'    },
