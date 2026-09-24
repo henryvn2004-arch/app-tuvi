@@ -4589,9 +4589,12 @@
       if (ctx.wrap) body.wrap = ctx.wrap;
       if (ctx.wrapBirthB) body.wrapBirthB = ctx.wrapBirthB;
       // Văn phong thầy: gửi top-level (luồng lá số) + trong scenario (luồng kịch bản).
+      // `authorId` (hellobot-ui-redesign Đợt 4) là khoá THẬT đổi giọng — server
+      // tra vào lib/agent/personas.ts, không tin authorName/authorStyle (giữ lại
+      // CHỈ để hiển thị, cùng lý do đã ghi ở lib/contract/v1.ts).
       if (_author) {
-        body.authorName = _author.name; body.authorStyle = _author.style;
-        if (body.scenario) { body.scenario = Object.assign({}, body.scenario, { authorName: _author.name, authorStyle: _author.style }); }
+        body.authorName = _author.name; body.authorStyle = _author.style; body.authorId = _author.id;
+        if (body.scenario) { body.scenario = Object.assign({}, body.scenario, { authorName: _author.name, authorStyle: _author.style, authorId: _author.id }); }
       }
       var res = await fetch('/api/v1/chat', { method: 'POST', headers: headers, body: JSON.stringify(body) });
       // ── 401 dù VỪA gửi token → ép xoay MỘT lần rồi thử lại ─────────────

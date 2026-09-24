@@ -25,6 +25,7 @@ import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
 import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine, RAIL_MAX_TOKENS, LASO_MAX_TOKENS } from '@/lib/agent/prompts';
+import { personaVoice } from '@/lib/agent/personas';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
 import {
@@ -387,16 +388,20 @@ async function runAgentInner(
 
     // Prompt: LUÔN dùng TEMPLATE chung lib/agent/prompts (một nguồn với
     // /api/lasotuvi — sửa hình dạng/luật luận 1 chỗ; chứa shape 3 lớp +
-    // luật vận hạn theo tầng + độ dài chuẩn). app_config.chat.system_prompt
-    // (nếu có) KHÔNG còn thay thế template mà chèn vào như LỚP TÔNG (persona)
-    // — chỉnh giọng văn trong DB không cần deploy, shape vẫn được giữ.
-    // 2026-09-19 (Henry): gỡ persona tác giả (authorName/authorStyle, "thầy")
-    // khỏi tone — cùng quyết định với `buildChatContext` (lib/agent/prompts.ts):
-    // không đo ra khác biệt giọng đáng kể, chỉ tốn thêm ký tự. `cfgIn.systemPrompt`
-    // (LỚP TÔNG cấu hình DB) không liên quan, vẫn giữ nguyên.
-    const tone = cfgIn.systemPrompt
+    // luật vận hạn theo tầng + độ dài chuẩn). `tone` là LỚP GIỌNG, gồm TỐI ĐA
+    // hai khối ghép lại — CÙNG khe với `persona` của `buildChatContext`
+    // (lib/agent/prompts.ts), luồng lá số (`req.birth`, không qua scenario)
+    // không đi qua đó nên phải tự ghép ở đây:
+    //   1. Persona thật của thầy (hellobot-ui-redesign Đợt 4, ĐẢO quyết định
+    //      gỡ persona 2026-09-19 — xem lib/agent/personas.ts giải thích vì sao
+    //      lần này khác). `req.authorId` khớp `master_profiles.id`.
+    //   2. `app_config.chat.system_prompt` — LỚP TÔNG chỉnh trong DB, không
+    //      cần deploy, KHÔNG đổi hình dạng/độ dài/luật luận bên dưới.
+    const personaTxt = personaVoice(req.authorId);
+    const adminTone = cfgIn.systemPrompt
       ? `TÔNG/PHONG CÁCH (tùy chỉnh — CHỈ đổi giọng văn, KHÔNG đổi hình dạng/độ dài/luật luận bên dưới):\n${cfgIn.systemPrompt}`
       : undefined;
+    const tone = [personaTxt, adminTone].filter(Boolean).join('\n\n') || undefined;
     system = hasLaso
       ? CHAT_SYSTEM_LASO(lasoCtx, undefined, tone)
       : CHAT_SYSTEM_GENERAL(undefined, tone);
@@ -555,6 +560,28 @@ async function runAgentInner(
         const tb = last.content.find((b: any) => b.type === 'text');
         if (tb) tb.text += '\n\n' + focusHintText;
         else last.content.push({ type: 'text', text: focusHintText });
+      }
+    }
+  }
+
+  // hellobot-ui-redesign Đợt 4: câu hỏi NỐI TIẾP (không phải câu mở đầu phiên)
+  // thì xin trả lời ngắn — CÙNG kỹ thuật với focusHintText ngay trên: nhét vào
+  // CUỐI tin user, KHÔNG sửa system, để system giữ nguyên cho prompt cache.
+  // Đếm user turns trên `req.messages` ĐÃ GỘP lịch sử (xem merge
+  // `historyMode:'delta'` ở app/api/v1/chat/route.ts trước khi gọi runAgent)
+  // — > 1 nghĩa là ít nhất một câu đã hỏi trước đó trong CÙNG phiên.
+  const userTurns = (req.messages as ChatMessage[]).filter((m) => m.role === 'user').length;
+  if (userTurns > 1 && convo.length) {
+    const last = convo[convo.length - 1];
+    const hint = '[Câu hỏi nối tiếp trong cùng hội thoại — trả lời ngắn gọn (khoảng 40–90 từ), đi thẳng vào điều mới, đừng lặp lại phần đã nói ở lượt trước.]';
+    if (last?.role === 'user') {
+      if (typeof last.content === 'string') {
+        last.content = last.content + '\n\n' + hint;
+      } else if (Array.isArray(last.content)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const tb = last.content.find((b: any) => b.type === 'text');
+        if (tb) tb.text += '\n\n' + hint;
+        else last.content.push({ type: 'text', text: hint });
       }
     }
   }
@@ -1248,6 +1275,9 @@ function scenarioToBody(scenario: ScenarioInput, messages: ChatMessage[]): any {
     docs: scenario.docs,
     authorName: scenario.authorName,
     authorStyle: scenario.authorStyle,
+    // hellobot-ui-redesign Đợt 4: khoá tra persona thật — xem buildChatContext
+    // trong lib/agent/prompts.ts + lib/agent/personas.ts.
+    authorId: scenario.authorId,
   };
   const field = SCENARIO_FIELD[scenario.type];
   if (field) body[field] = scenario.data;
