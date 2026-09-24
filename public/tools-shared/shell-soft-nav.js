@@ -63,6 +63,10 @@
     '/app/luc-nham': 1,
     '/app/ngay-tot': 1,
     '/app/than-so-hoc': 1,
+    '/app/ky-mon': 1,
+    '/app/mai-hoa': 1,
+    '/app/ngu-hanh-ten': 1,
+    '/app/kinh-dich': 1,
   };
   var TIMEOUT_MS = 8000;
   var inflight = false;

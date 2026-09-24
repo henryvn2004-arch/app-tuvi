@@ -160,6 +160,7 @@ window.SHELL_INTRO={key:'ky-mon'};</script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=41" data-icons-only></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script>
 // Bàn dựng ở SERVER (/api/qimen). Trang chỉ gọi + vẽ, dùng chung module
 // /tools-shared/ky-mon.js với trang standalone /tools/ky-mon.html.
@@ -175,7 +176,7 @@ function wsStepsSet(n){
     else if(i+1===n) steps[i].classList.add('active');
   }
 }
-let _b = null;
+var _b = null; // var: script này chạy lại được qua soft-nav (xem docs/luat/spa-nav.md), `let` top-level ném SyntaxError redeclare ở lượt ghé lại hai
 
 function _err(id, msg) {
   const el = document.getElementById(id);

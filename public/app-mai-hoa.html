@@ -177,6 +177,7 @@ window.SHELL_INTRO={key:'mai-hoa'};</script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=41" data-icons-only></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/mai-hoa.js với trang standalone
 // /tools/mai-hoa.html. Trang chỉ lo DOM + nối rail.
@@ -192,8 +193,8 @@ function wsStepsSet(n){
     else if(i+1===n) steps[i].classList.add('active');
   }
 }
-let _mode = 'gio';
-let _r = null;
+var _mode = 'gio'; // var: chạy lại được qua soft-nav — xem docs/luat/spa-nav.md
+var _r = null;
 
 function setMode(m) {
   _mode = m;
