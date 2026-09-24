@@ -304,7 +304,16 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 .tpw-qr-countdown b{color:#C0392B}
 .tpw-qr-status{font-size:.88rem;color:#444;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:.4rem;min-height:1.3rem}
 .tpw-qr-btn{background:#061A2E;color:#C9A84C;border:none;padding:.6rem 1.4rem;border-radius:6px;cursor:pointer;font-size:.88rem;font-family:inherit;font-weight:600}
-.tpw-qr-btn:hover{background:#0D3B5E}`;
+.tpw-qr-btn:hover{background:#0D3B5E}
+/* Nút MoMo — chỉ hiện khi server xác nhận CÓ cấu hình (hỏi qua momo-status),
+   đứng TRÊN cả khối deep link ngân hàng: khi khách có app MoMo, đây là đường
+   1-click THẬT SỰ tự điền sẵn số tiền (khác deep link ngân hàng vẫn phải dán
+   tay số TK) — xem docs/nhat-ky/2026-09.md. Màu hồng thương hiệu MoMo để
+   khách nhận ra ngay, không lẫn với nút navy/vàng của site. */
+.tpw-momo-btn{display:block;width:100%;margin-bottom:6px;padding:11px 12px;border:0;border-radius:10px;background:#A50064;color:#fff;font-size:.88rem;font-weight:600;cursor:pointer;font-family:inherit}
+.tpw-momo-btn:hover{background:#8a0054}
+.tpw-momo-btn[disabled]{opacity:.6;cursor:default}
+.tpw-momo-hint{font-size:.72rem;color:#555;line-height:1.4;margin-bottom:12px;text-align:left}`;
     document.head.appendChild(s);
   }
 
@@ -897,6 +906,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         '<div class="tpw-qr-title">Chuyển Khoản Ngân Hàng</div>' +
         '<div class="tpw-qr-credits" id="tpw-qr-credits"></div>' +
         '<div class="tpw-qr-amount" id="tpw-qr-amount"></div>' +
+        '<div id="tpw-momo" hidden></div>' +
         '<div id="tpw-qr-apps" hidden></div>' +
         '<div class="tpw-qr-box" id="tpw-qr-box"></div>' +
         '<div class="tpw-qr-info" id="tpw-qr-info"></div>' +
@@ -1111,13 +1121,51 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     if (_bdlLoading) return _bdlLoading;
     _bdlLoading = new Promise((resolve) => {
       const s = document.createElement('script');
-      s.src = '/tools-shared/bank-deeplink.js?v=2';
+      s.src = '/tools-shared/bank-deeplink.js?v=3';
       s.onload = () => resolve();
       // Fail-open: tải lỗi thì đơn giản không hiện khối deep link, QR vẫn dùng được.
       s.onerror = () => resolve();
       document.head.appendChild(s);
     });
     return _bdlLoading;
+  }
+
+  // ── MoMo — rail thanh toán THỨ HAI, độc lập với QR chuyển khoản ────────
+  // `_momoAvailable`: null = chưa hỏi, true/false = đã biết trong PHIÊN này
+  // (Henry bật MOMO_* env giữa chừng thì khách đang mở trang phải tải lại
+  // mới thấy nút — chấp nhận được, MoMo chưa phải rail duy nhất).
+  let _momoAvailable = null;
+  function _checkMomoAvailable() {
+    if (_momoAvailable !== null) return Promise.resolve(_momoAvailable);
+    return fetch('/api/payment?action=momo-status', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((d) => { _momoAvailable = !!d.available; return _momoAvailable; })
+      .catch(() => false); // đọc hụt → coi như CHƯA có, không cache (thử lại lượt sau)
+  }
+
+  /** Tạo đơn MoMo cho đúng `amountVnd` rồi điều hướng sang trang MoMo dựng —
+   *  cùng ý định `PENDING_KEY` đã ghi TRƯỚC khi modal QR mở (xem
+   *  `requireCredits`) lo phần quay lại: `resumeIfPending` không phân biệt
+   *  khách rời trang qua đường nào, chỉ cần ý định còn khớp + còn hạn. */
+  async function _payWithMomo(amountVnd) {
+    const btn = document.getElementById('tpw-momo-btn');
+    const userId = window.Auth?.getUser()?.id || '';
+    if (!userId) return;
+    if (btn) { btn.disabled = true; btn.textContent = 'Đang mở MoMo…'; }
+    try {
+      const r = await fetch('/api/payment?action=create-momo', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ packageId: 'custom', userId, customAmountVnd: amountVnd }),
+      });
+      const d = await r.json();
+      if (!r.ok || !d.payUrl) throw new Error(d.error || 'Không tạo được đơn MoMo');
+      try { if (window.Track) window.Track.event('qr_deeplink_click', { tool_id: (_cfg && _cfg.product) || '', meta: { bank: 'momo' } }); } catch (e) { /* đo hỏng không được chặn thanh toán */ }
+      location.href = d.payUrl;
+    } catch (e) {
+      console.error('[tuvi-paywall] create-momo', e);
+      if (btn) { btn.disabled = false; btn.textContent = 'Thanh toán nhanh qua MoMo →'; }
+      _qrStatus('Không mở được MoMo — thử lại hoặc dùng cách bên dưới.', false);
+    }
   }
 
   /** Mở modal QR cho đúng `amountVnd` (đã quy đổi bởi `_qrAmountFor`), gắn với
@@ -1162,6 +1210,21 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       // rơi về tường /topup.html cũ" khỏi "thấy QR rồi mới bỏ".
       try { if (window.Track) window.Track.event('qr_shown', { tool_id: (_cfg && _cfg.product) || '', meta: { amount_vnd: d.amountVND, credits: d.credits } }); } catch (e) { /* đo hỏng không được chặn hiện QR */ }
 
+      // MoMo — chỉ hiện khi server xác nhận CÓ cấu hình (`_checkMomoAvailable`,
+      // hỏi 1 lần/phiên). Đứng riêng khỏi lượt tạo đơn payOS ở trên: tạo đơn
+      // MoMo chỉ khi khách THẬT SỰ bấm nút, tránh sinh dòng `momo_orders` bỏ
+      // không mỗi lần mở modal.
+      _checkMomoAvailable().then((avail) => {
+        const momoEl = document.getElementById('tpw-momo');
+        if (!momoEl) return;
+        if (!avail) { momoEl.hidden = true; momoEl.innerHTML = ''; return; }
+        momoEl.hidden = false;
+        momoEl.innerHTML =
+          '<button type="button" class="tpw-momo-btn" id="tpw-momo-btn">Thanh toán nhanh qua MoMo →</button>' +
+          '<div class="tpw-momo-hint">Có app MoMo hoặc thẻ đã liên kết: mở app tự điền sẵn số tiền, chỉ cần xác nhận.</div>';
+        document.getElementById('tpw-momo-btn').addEventListener('click', () => _payWithMomo(amountVnd));
+      });
+
       // Nội dung CK đến TỪ SERVER — cùng luật đã vá ở topup.html (một chuỗi
       // cho cả hai phía, không tự dựng lại ở client).
       const memo = d.description || ('TVMB' + _qrOrderCode);
@@ -1190,8 +1253,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         // một cú bấm.
         if (appsEl && !appsEl.dataset.bdlBound) {
           appsEl.dataset.bdlBound = '1';
-          appsEl.addEventListener('bdl:click', () => {
-            try { if (window.Track) window.Track.event('qr_deeplink_click', { tool_id: (_cfg && _cfg.product) || '' }); } catch (e) { /* đo hỏng không được chặn mở app */ }
+          appsEl.addEventListener('bdl:click', (e) => {
+            try { if (window.Track) window.Track.event('qr_deeplink_click', { tool_id: (_cfg && _cfg.product) || '', meta: { bank: (e.detail && e.detail.bank) || '' } }); } catch (e) { /* đo hỏng không được chặn mở app */ }
           });
         }
       });

@@ -107,8 +107,12 @@ export async function alertNewSignup(opts: {
  * — cùng chỗ đã bắn Purchase GA4/Meta (`fireServerPurchase`), KHÔNG phải mọi
  * lần webhook được gọi (webhook có thể gọi lại nhiều lần cho cùng một đơn).
  */
+const PROVIDER_LABEL: Record<'bank' | 'paypal' | 'momo', string> = {
+  bank: 'chuyển khoản ngân hàng', paypal: 'PayPal', momo: 'MoMo',
+};
+
 export async function alertNewPayment(opts: {
-  provider: 'bank' | 'paypal';
+  provider: 'bank' | 'paypal' | 'momo';
   amountVnd: number;
   credits: number;
   userId: string;
@@ -116,7 +120,7 @@ export async function alertNewPayment(opts: {
   if (!TG_CHAT_ID && !WA_NUMBER) return;
   const time = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
   const text =
-    `💰 CÓ NGƯỜI TRẢ TIỀN — ${opts.provider === 'bank' ? 'chuyển khoản ngân hàng' : 'PayPal'}\n` +
+    `💰 CÓ NGƯỜI TRẢ TIỀN — ${PROVIDER_LABEL[opts.provider]}\n` +
     `Số tiền: ${opts.amountVnd.toLocaleString('vi-VN')}đ → +${opts.credits} Lượng\n` +
     `User: ${opts.userId}\n` +
     `Lúc: ${time}`;

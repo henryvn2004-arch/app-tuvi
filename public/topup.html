@@ -329,6 +329,13 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         <button type="button" class="pay-method" id="mPaypal" aria-pressed="false" onclick="setMethod('paypal')">
           <span data-icon="credit-card"></span> PayPal / Thẻ
         </button>
+        <!-- Ẩn mặc định — chỉ hiện khi `/api/payment?action=momo-status` xác
+             nhận CÓ cấu hình (Henry đăng ký merchant xong), xem `checkMomoAvailable()`.
+             Hiện sẵn mà chưa cấu hình là cho khách thật bấm vào một cổng không
+             chạy, giữa lúc họ đang cố trả tiền. -->
+        <button type="button" class="pay-method" id="mMomo" aria-pressed="false" onclick="setMethod('momo')" hidden>
+          <span data-icon="wallet"></span> MoMo
+        </button>
       </div>
     </div>
 
@@ -518,17 +525,35 @@ function showAlert(type, msg) {
 // PayPal là đường cho thẻ quốc tế. Bản cũ để PayPal làm nút chính (đậm màu) còn
 // chuyển khoản làm nút phụ — ngược với thực tế, mà lại tốn gấp đôi số nút trên
 // mỗi thẻ (8 nút cho 4 gói). Chọn phương thức MỘT lần, mỗi thẻ còn một nút.
+const METHOD_META = {
+  bank:   { icon: 'landmark',    label: 'Chuyển khoản' },
+  paypal: { icon: 'credit-card', label: 'PayPal' },
+  momo:   { icon: 'wallet',      label: 'MoMo' },
+};
 function setMethod(m) {
-  State.method = m === 'paypal' ? 'paypal' : 'bank';
-  const isBank = State.method === 'bank';
-  document.getElementById('mBank').setAttribute('aria-pressed', String(isBank));
-  document.getElementById('mPaypal').setAttribute('aria-pressed', String(!isBank));
+  State.method = METHOD_META[m] ? m : 'bank';
+  document.getElementById('mBank').setAttribute('aria-pressed', String(State.method === 'bank'));
+  document.getElementById('mPaypal').setAttribute('aria-pressed', String(State.method === 'paypal'));
+  const mm = document.getElementById('mMomo');
+  if (mm) mm.setAttribute('aria-pressed', String(State.method === 'momo'));
   renderPackages();
-  document.getElementById('btnCustomLabel').textContent = isBank ? 'Chuyển khoản' : 'PayPal';
+  document.getElementById('btnCustomLabel').textContent = METHOD_META[State.method].label;
   const cIc = document.getElementById('btnCustomIcon');
-  cIc.setAttribute('data-icon', isBank ? 'landmark' : 'credit-card');
+  cIc.setAttribute('data-icon', METHOD_META[State.method].icon);
   cIc.innerHTML = '';
   mount(document.getElementById('btnCustom'));
+}
+
+// MoMo chỉ hiện khi server xác nhận CÓ cấu hình — hỏi 1 lần lúc trang tải.
+function checkMomoAvailable() {
+  fetch('/api/payment?action=momo-status', { cache: 'no-store' })
+    .then(r => r.json())
+    .then(d => {
+      if (!d.available) return;
+      const mm = document.getElementById('mMomo');
+      if (mm) { mm.hidden = false; mount(mm); }
+    })
+    .catch(() => {}); // đọc hụt → giữ ẩn, không sao (bank/PayPal vẫn còn)
 }
 
 // ── Gói nạp ──────────────────────────────────────────────────
@@ -550,7 +575,8 @@ function renderPackages() {
   // suy từ dữ liệu nên đổi giá dưới DB là con số tự đúng, không viết cứng.
   const rates = list.map(p => p.amount_vnd / p.credits);
   const worst = Math.max.apply(null, rates);
-  const isBank = State.method === 'bank';
+  const btnIcon = { bank: 'qr-code', paypal: 'credit-card', momo: 'wallet' }[State.method];
+  const btnLabel = METHOD_META[State.method].label;
 
   // Đang mở khoá dở một tool cụ thể (xem `renderPendingBanner`) → nổi bật gói
   // RẺ NHẤT đủ trả, không phải gói "phổ biến nhất" mặc định — khách tới đây
@@ -575,9 +601,9 @@ function renderPackages() {
       // Giá đã to đùng ngay trên nút → nhắc lại trong nút là thừa. Giữ ngữ cảnh
       // cho trình đọc màn hình bằng aria-label vì 4 nút giờ đọc giống hệt nhau.
       + '<button class="btn-pkg" id="btn-' + esc(p.package_id) + '" onclick="payPackage(\'' + esc(p.package_id) + '\')"'
-      + ' aria-label="' + (isBank ? 'Chuyển khoản' : 'Thanh toán PayPal') + ' gói ' + esc(p.label) + ' — ' + vnd(p.amount_vnd) + '">'
-      + ic(isBank ? 'qr-code' : 'credit-card')
-      + '<span>' + (isBank ? 'Chuyển khoản' : 'PayPal') + '</span></button>'
+      + ' aria-label="Thanh toán ' + btnLabel + ' gói ' + esc(p.label) + ' — ' + vnd(p.amount_vnd) + '">'
+      + ic(btnIcon)
+      + '<span>' + btnLabel + '</span></button>'
       + '</div>';
   }).join('');
   const el = document.getElementById('packages');
@@ -588,7 +614,7 @@ function renderPackages() {
 
 /** Nhãn gốc của nút — để khôi phục sau khi nhả trạng thái "đang kết nối". */
 function btnLabelFor() {
-  return State.method === 'bank' ? 'Chuyển khoản' : 'PayPal';
+  return METHOD_META[State.method].label;
 }
 
 async function loadPackages() {
@@ -811,6 +837,22 @@ function checkCancelledPayment() {
         resumeToTool();
       })
       .catch(() => {});
+    return;
+  }
+  // MoMo trả khách về ĐÂY qua `redirectUrl` server khai — không phải chốt
+  // đơn (IPN mới là cửa cộng Lượng thật), chỉ đọc `check-momo` để hiện đúng
+  // trạng thái ngay khi khách quay lại, cùng khuôn với đường payOS ở trên.
+  if (p.get('payment') === 'success' && p.get('method') === 'momo' && p.get('orderId')) {
+    window.history.replaceState({}, '', '/topup.html');
+    fetch('/api/payment?action=check-momo&orderId=' + encodeURIComponent(p.get('orderId')))
+      .then(r => r.json())
+      .then(d => {
+        if (!d.paid) return;
+        loadStatus();
+        showAlert('success', `Nạp thành công ${d.credits} Lượng!`);
+        resumeToTool();
+      })
+      .catch(() => {});
   }
 }
 
@@ -935,10 +977,12 @@ function readCustomVnd() {
 
 // ── Thanh toán ───────────────────────────────────────────────
 function payPackage(packageId) {
-  return State.method === 'bank' ? window.initiateBankTopup(packageId) : initiateTopup(packageId);
+  if (State.method === 'bank') return window.initiateBankTopup(packageId);
+  if (State.method === 'momo') return initiateMomoTopup(packageId);
+  return initiateTopup(packageId);
 }
 function payCustom() {
-  return State.method === 'bank' ? window.initiateBankTopup('custom') : initiateTopup('custom');
+  return payPackage('custom');
 }
 
 function busyBtn(packageId, busy) {
@@ -975,6 +1019,35 @@ async function initiateTopup(packageId) {
   } catch (e) {
     busyBtn(packageId, false);
     showAlert('error', 'Lỗi kết nối PayPal: ' + (e.message || 'Vui lòng thử lại.'));
+  }
+}
+
+async function initiateMomoTopup(packageId) {
+  if (!window.Auth?.isLoggedIn()) {
+    window.showAuthModal(async () => { await initiateMomoTopup(packageId); });
+    return;
+  }
+  const userId = window.Auth.getUser()?.id;
+  let customAmountVnd = null;
+  if (packageId === 'custom') {
+    customAmountVnd = readCustomVnd();
+    if (customAmountVnd === null) return;
+  }
+
+  busyBtn(packageId, true);
+  try {
+    const body = { packageId, userId };
+    if (customAmountVnd) body.customAmountVnd = customAmountVnd;
+    const data = await (await fetch('/api/payment?action=create-momo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })).json();
+    if (data.payUrl) { window.location.href = data.payUrl; return; }
+    throw new Error(data.error || 'Không tạo được đơn MoMo');
+  } catch (e) {
+    busyBtn(packageId, false);
+    showAlert('error', 'Lỗi kết nối MoMo: ' + (e.message || 'Vui lòng thử lại.'));
   }
 }
 
@@ -1106,6 +1179,7 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 else mount();
 
 setMethod('bank');
+checkMomoAvailable();
 checkCancelledPayment();
 loadStatus().then(loadReferralInfo).then(showPromoSection);
 // 🪤 `renderPendingBanner` phải chạy SAU `loadPackages`, không phải song song:
@@ -1149,7 +1223,7 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
   </div>
 </div>
 
-<script src="/tools-shared/bank-deeplink.js?v=2"></script>
+<script src="/tools-shared/bank-deeplink.js?v=3"></script>
 <script>
 (function(){
   let _oc = null, _timer = null, _cnt = 0, _lastFocus = null;

@@ -54,6 +54,11 @@ export const REQUIRED_ENV: EnvSpec[] = [
   // là cửa cộng Lượng mở ra Internet) ⇒ mất lưới đỡ cho khách trả tiền xong mà
   // đóng tab, và mất im lặng: PayPal cứ gửi, mình cứ trả 401.
   { key: 'PAYPAL_WEBHOOK_ID', feature: 'Webhook PayPal — lưới đỡ cộng Lượng khi khách không quay lại trang', critical: false },
+  { key: 'MOMO_PARTNER_CODE', feature: 'Nạp Lượng qua MoMo', critical: false },
+  { key: 'MOMO_ACCESS_KEY', feature: 'Nạp Lượng qua MoMo', critical: false },
+  { key: 'MOMO_SECRET_KEY', feature: 'Nạp Lượng qua MoMo + xác thực IPN', critical: false },
+  // Cùng bẫy với PAYPAL_MODE: thiếu KHÔNG ném lỗi, route rơi về test-payment.momo.vn.
+  { key: 'MOMO_MODE', feature: 'Chọn MoMo live hay test (thiếu = test)', critical: false },
 
   // ── Kênh phụ ──
   { key: 'FIREBASE_SERVICE_ACCOUNT', feature: 'Push app (FCM)', critical: false },
