@@ -159,7 +159,7 @@ body.chat-first-live .laso-one{flex:none}
       </div>
       <div class="ws-intake-hint" id="wsIntakeHint">
         <span class="ic" data-icon="message-circle"></span>
-        <p id="wsIntakeHintTxt">Trả lời thầy ở khung chat bên trái để nhập ngày sinh hai người.</p>
+        <p id="wsIntakeHintTxt">Trả lời thầy ở khung chat để nhập ngày sinh hai người.</p>
       </div>
 
       <div id="xtPanel" data-ws-result>
@@ -278,7 +278,7 @@ TuviForm.render('b-fields', {prefix:'b', mode:'compact', gioitinh:'nu'});
 // renderChat() lo người A rồi ghi vào field thật 'a-*' (ẩn trong #birthPanel)
 // qua setData(), onDone gọi lại renderChat() cho người B, onDone cuối gọi
 // doCompat() y hệt nút "So tuổi →" cũ — không đổi gì ở đường tính toán.
-document.getElementById('wsIntakeHintTxt').textContent = 'Trả lời thầy ở khung chat bên trái để nhập ngày sinh của ' + MODE.pA.toLowerCase() + ' và ' + MODE.pB.toLowerCase() + '.';
+document.getElementById('wsIntakeHintTxt').textContent = 'Trả lời thầy ở khung chat để nhập ngày sinh của ' + MODE.pA.toLowerCase() + ' và ' + MODE.pB.toLowerCase() + '.';
 function _tpwResuming(){ try{ return new URL(location.href).searchParams.get('tpwResume')==='1'; }catch(e){ return false; } }
 function startIntake(){
   // Quay về sau nạp Lượng: XT_RESUME_KEY IIFE bên dưới tự điền form + gọi

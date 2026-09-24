@@ -335,7 +335,7 @@
       </div>
       <div class="ws-intake-hint" id="wsIntakeHint">
         <span class="ic" data-icon="message-circle"></span>
-        <p>Trả lời thầy ở khung chat bên trái để lập lá số &amp; luận giải — họ tên, ngày giờ sinh và năm muốn luận.</p>
+        <p>Trả lời thầy ở khung chat để lập lá số &amp; luận giải — họ tên, ngày giờ sinh và năm muốn luận.</p>
       </div>
       </div>
       <div class="ws-side-col">
@@ -467,10 +467,18 @@ NamLuanSelect.mount('inpNamxem');
 // ── Bước 6: hội thoại từng bước trong rail ──
 // TuviForm.renderChat() lo 3 bước chuẩn rồi ghi vào field thật (ẩn trong
 // #birthPanel) qua setData(). "Năm luận" là field riêng của trang, hỏi thêm
-// 1 bước — CÙNG bước đó hiện giá (data-tvp-price-vnd) vì `doLuan()` chạy
-// paywall NGAY khi bấm, không có bước xem-trước-miễn-phí như bat-tu. Luật
-// "chốt thanh toán đặt TRƯỚC bước tính" (CLAUDE.md) bắt buộc giá phải thấy
-// được ở ĐÚNG bước bấm submit, không phải chôn trong birthPanel đang ẩn.
+// 1 bước ở đây.
+// Đợt 0 (2026-09-24): chú thích CŨ ở chỗ này nói doLuan() "chạy paywall NGAY
+// khi bấm" nên bước này PHẢI hiện giá — không còn đúng từ khi dời lằn ranh
+// free/paid (Pha 3, xem renderLuan/forceUnlocked): doLuan() giờ chỉ dựng bản
+// XEM TRƯỚC miễn phí (phần 1 + điểm số), tiền chỉ trừ SAU, lúc bấm "Mở bản
+// đầy đủ" (initiateLuanGiaiChuyenSau → TuviPaywall.requireCredits). Hộp "Chi
+// phí … mỗi lượt N Lượng" ở ĐÚNG bước bấm nút MIỄN PHÍ này là số thật nhưng
+// SAI CHỖ — khách đọc thành "bấm là mất tiền", một phần lý do "bấm gì cũng
+// thấy tiền" (đóng vai khách 2026-09-24). Đổi thành "Miễn phí". Luật "chốt
+// thanh toán đặt TRƯỚC bước tính" (CLAUDE.md) vẫn giữ nguyên — nó nói về nơi
+// ĐẶT gate thanh toán so với việc TRỪ tiền, không bắt phải hiện giá trước một
+// bước không hề trừ tiền.
 function chatAva(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; }
 function _tpwResuming(){ try{ return new URL(location.href).searchParams.get('tpwResume')==='1'; }catch(e){ return false; } }
 function startIntake(){
@@ -489,13 +497,22 @@ function showNamxemStep(){
     '<div class="frow"><div class="fg" style="width:90px"><label>Năm luận</label><select id="cInpNamxem"></select></div></div>'+
     '<div class="cost-box" style="margin-top:10px"><div class="cb-l"><span class="cb-ic" data-icon="wallet"></span><div>'+
     '<div class="cb-title">Chi phí sử dụng</div>'+
-    '<div class="cb-amt"><span class="vnd" data-tvp-price-vnd="laso"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="laso">…</span> Lượng)</span></div>'+
+    '<div class="cb-amt">Miễn phí — xem tổng quan &amp; 1 phần trước, tính tiền khi mở bản đầy đủ</div>'+
     '</div></div></div>'+
     '<button class="btn-go" type="button" id="namxemNext" style="width:auto;padding:9px 16px;font-size:13px;margin-top:8px">Lập lá số &amp; Luận giải ngay →</button></div>';
   chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
   NamLuanSelect.mount('cInpNamxem');
-  if(window.TuviPaywall)TuviPaywall.fillPriceSlots(el);
+  // Đợt 0 (2026-09-24): khoá + đổi nhãn NGAY lúc bấm, cùng mẫu `doLuan()` với
+  // `#btnGo` — trước đây nút này KHÔNG bị khoá, bấm nhiều lần trong lúc
+  // `doLuan()` (async) đang chạy thì mỗi lần chạy xong lại đẩy thêm một dòng
+  // "Bản luận … đã sẵn sàng" trùng nhau vào chat (đóng vai khách bắt được:
+  // bấm 5 lần ra 5 dòng). `doLuan()` tự mở khoá `#btnGo` ở `finally`, nhưng
+  // đó là NÚT KHÁC (`#birthPanel`, đã ẩn) — nút chat này không có gì mở khoá
+  // lại nên phải tự vô hiệu hoá vĩnh viễn sau lượt bấm đầu tiên.
   document.getElementById('namxemNext').addEventListener('click',function(){
+    var btn=this;
+    if(btn.disabled)return;
+    btn.disabled=true; btn.textContent='Đang lập lá số…';
     document.getElementById('inpNamxem').value=document.getElementById('cInpNamxem').value;
     doLuan();
   });
@@ -670,7 +687,11 @@ async function doLuan(){
     Shell.setContext({
       birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
       label:'Luận giải '+(name||'lá số')+' · '+dd+'/'+mm+'/'+yyyy+' · năm '+namxem,
-      greeting:'Bản luận của **'+(name||'bạn')+'** đã sẵn sàng. Hỏi tôi để đào sâu bất kỳ phần nào — 12 cung, cách cục, tứ hóa.',
+      // Đợt 0 (2026-09-24): "đã sẵn sàng" đọc như đã có bản ĐẦY ĐỦ, trong khi
+      // lúc này mới chỉ có phần 1 "Tổng Quan Lá Số" (FREE_PHAN=1) miễn phí,
+      // 12 cung còn lại vẫn khoá. Đổi rõ thành "bản xem trước" — khớp với
+      // renderLuan() thật sự đang khoá gì, tránh khách tưởng đã có bản đủ.
+      greeting:'Bản **xem trước** của **'+(name||'bạn')+'** đã xong — phần tổng quan. Hỏi tôi để đào sâu, hoặc mở bản đầy đủ để đọc hết 12 cung, cách cục, tứ hóa.',
       chips:buildLuanChips(ls,namxem)
     });
     // Chia sẻ: TOÀN BỘ nội dung đang hiển thị trên màn hình (`liveText:true`
