@@ -622,7 +622,11 @@
     h += '<div class="sb-foot-grp">' +
          '<a class="item" href="/contact.html">' + svg('message-circle') + ' Hỗ trợ</a>' +
          '<button class="item" type="button" data-act="theme">' + svg('sun') + ' Đổi nền</button>' +
-         '<a class="item danger" href="#" data-act="signout">' + svg('door-open') + ' Đăng xuất</a>' +
+         // Đợt 0 (2026-09-24): mặc định ẨN — khách vô danh CHƯA từng đăng
+         // nhập vẫn thấy "Đăng xuất" là bịa ra một hành động không có thật.
+         // `paintAuth()` (mỗi lượt sidebar dựng lại HOẶC session đổi) tự hiện
+         // lại khi có `Auth.getSession().user` thật.
+         '<a class="item danger" href="#" data-act="signout" id="sbSignout" style="display:none">' + svg('door-open') + ' Đăng xuất</a>' +
          '</div>';
     h += '<div class="sb-brandmini"><img src="/seal.webp" alt=""><div class="sb-brandmini-tx"><b>TỬ VI MINH BẢO</b><span>Tri mệnh lý – Thuận thế hành</span></div></div>';
 
@@ -731,11 +735,17 @@
       // nào. Xem setHeaderTitle().
       '<div><b id="railHTitle">Trợ lý Luận Đường</b><span>' + esc(authorLabel()) + '</span></div>' +
       '<div class="tools">' +
-        // Chat-first: đóng rail CHÍNH LÀ để lộ `.ws` nằm dưới — tức nút này đã
-        // sẵn là nút "mở artifact", chỉ thiếu cái tên đúng. Đổi nhãn thay vì
-        // thêm nút thứ hai làm cùng một việc.
+        // Đợt 0 (2026-09-24, đóng vai khách chụp màn hình thật): chat-first
+        // trên mobile KHÔNG có đường lui rõ ràng — "Kết quả" đọc như một
+        // ĐÍCH ĐẾN, không đọc như nút đóng, nên khách nhìn mãi mới thấy. Thêm
+        // hẳn nút ← riêng, luôn nằm đầu tiên bên trái (chỗ khách quen tìm nút
+        // back), làm ĐÚNG MỘT việc: đóng lớp chat, lộ `.ws` bên dưới — cùng
+        // hành vi với `rail-close`/`closeRailUI()`. "Kết quả" giữ nguyên vai
+        // trò nút hành động (đổi tên "Thu gọn" trên desktop), không kiêm
+        // nhiệm làm nút back nữa.
         (CHATFIRST
-          ? '<button class="rh-btn rh-art" data-tip="Xem kết quả" aria-label="Xem kết quả" data-act="artifact">Kết quả</button>'
+          ? '<button class="rh-btn mobile-only rh-back" data-tip="Đóng, xem kết quả" aria-label="Đóng, xem kết quả" data-act="rail-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M15 5 8 12l7 7"/></svg></button>' +
+            '<button class="rh-btn rh-art" data-tip="Xem kết quả" aria-label="Xem kết quả" data-act="artifact">Kết quả</button>'
           : '<button class="rh-btn mobile-only" data-tip="Đóng" aria-label="Đóng" data-act="rail-close">✕</button>') +
         (HIST_ON ? '<button class="rh-btn" data-tip="Lịch sử hội thoại" aria-label="Lịch sử hội thoại" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></button>' : '') +
         '<button class="rh-btn" data-tip="Chia sẻ phiên" aria-label="Chia sẻ phiên" data-act="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>' +
@@ -763,16 +773,18 @@
     // nên phải hỏi trước — `querySelector` trả `null` là ném ngay tại boot,
     // chết cả rail.
     var _rc = host.querySelector('[data-act="rail-close"]');
-    if (_rc) _rc.addEventListener('click', function () { host.classList.remove('open'); syncBackdrop(); });
+    if (_rc) _rc.addEventListener('click', closeRailUI);
+    var _rb = host.querySelector('[data-act="rail-back"]');
+    if (_rb) _rb.addEventListener('click', closeRailUI);
     // Nút "Kết quả" của chat-first làm HAI việc khác nhau tuỳ khổ màn, vì ở hai
     // khổ đó `.ws` nằm ở hai chỗ khác hẳn:
     //  · mobile (≤900px): `.ws` nằm DƯỚI rail (rail là lớp phủ) ⇒ đóng rail là
-    //    thấy kết quả, y như nút ✕ cũ;
+    //    thấy kết quả, y như nút ← (rail-back)/✕ cũ;
     //  · desktop: cả hai cột cùng hiện, `.ws` chỉ hẹp ⇒ nở nó ra (`art-wide`).
     var _ab = host.querySelector('[data-act="artifact"]');
     if (_ab) _ab.addEventListener('click', function () {
       _ab.classList.remove('has-new');
-      if (window.matchMedia('(max-width:900px)').matches) { host.classList.remove('open'); syncBackdrop(); return; }
+      if (window.matchMedia('(max-width:900px)').matches) { closeRailUI(); return; }
       var wide = document.body.classList.toggle('art-wide');
       // Nút CHỈ có chữ (không chứa <svg>) nên `textContent` ở đây an toàn —
       // xem luật "nút chỉ-icon cấm textContent" trong docs/ICONS.md.
@@ -4311,7 +4323,7 @@
     // Mở rail = lời mời đã được nhận → tắt orb. Nếu không tắt thì nó nhấp nháy
     // suốt cả lượt hỏi đáp, tức nài người ta làm đúng cái họ vừa làm.
     openRail: function () {
-      var r = document.getElementById('shell-rail'); if (r) { r.classList.add('open'); syncBackdrop(); }
+      var r = document.getElementById('shell-rail'); if (r) { r.classList.add('open'); syncBackdrop(); armRailHistory(); }
       _railOpened = true; syncAskOrb();
     },
     // Empty-state "Phiên gần đây": tool đặt <div id="shellRecent"></div> ở khối
@@ -4828,6 +4840,34 @@
     // Ẩn bottom tab khi drawer (sidebar/rail) đang mở để không đè input rail toàn màn.
     document.body.classList.toggle('drawer-open', open);
   }
+  // Đợt 0 (2026-09-24): nút back VẬT LÝ của điện thoại/trình duyệt phải đóng
+  // được lớp chat (rail) trên mobile — trước đây back thoát thẳng khỏi trang,
+  // không có đường lui nào cho lớp phủ. `Shell.openRail()` là NƠI DUY NHẤT
+  // thêm class `open` cho `#shell-rail` (grep xác nhận), nên chỉ cần chặn ở
+  // đây: PUSH một mốc lịch sử "giả" lúc rail mở trên mobile, POP nó (đóng
+  // rail) khi back được bấm. `closeRailUI()` là cửa DUY NHẤT để đóng rail từ
+  // UI (✕/←/"Kết quả" mobile/backdrop) — tự tiêu thụ mốc giả đó bằng
+  // `history.back()` để không để lại một bước lùi "chết" (bấm back xong
+  // không thấy gì đổi) khi khách đóng chat bằng tay thay vì bằng nút back.
+  var _railHistPushed = false;
+  function armRailHistory() {
+    if (_railHistPushed) return;
+    if (!window.matchMedia('(max-width:900px)').matches) return; // desktop: rail không phải lớp phủ
+    _railHistPushed = true;
+    try { history.pushState({ tvmbRailOpen: true }, ''); } catch (e) { /* ignore */ }
+  }
+  function closeRailUI() {
+    var r = document.getElementById('shell-rail');
+    if (r) r.classList.remove('open');
+    syncBackdrop();
+    if (_railHistPushed) { _railHistPushed = false; try { history.back(); } catch (e) { /* ignore */ } }
+  }
+  window.addEventListener('popstate', function (e) {
+    if (!_railHistPushed) return; // không phải mốc của rail — để trình duyệt tự xử lý
+    _railHistPushed = false;
+    var r = document.getElementById('shell-rail');
+    if (r && r.classList.contains('open')) { r.classList.remove('open'); syncBackdrop(); }
+  });
   window.shellSyncBackdrop = syncBackdrop;
   // Số dư Lượng ngay dưới tên trong sidebar — trước đây chỗ đó chỉ có "Xem hồ
   // sơ →" tĩnh, người dùng không biết còn bao nhiêu Lượng tới khi bí giữa
@@ -4856,6 +4896,11 @@
         var e1 = document.getElementById('sbName'); if (e1) e1.textContent = nm;
         var e3 = document.getElementById('sbAva'); if (e3) e3.textContent = (nm[0] || '?').toUpperCase();
       }
+      // Đợt 0 (2026-09-24): "Đăng xuất" chỉ hiện khi CÓ session thật — mặc
+      // định ẩn ở markup (renderSidebar), tự hiện/ẩn lại mỗi lượt paintAuth()
+      // chạy (login xong, hoặc session đổi qua interval ở boot()).
+      var so = document.getElementById('sbSignout');
+      if (so) so.style.display = (s && s.user) ? '' : 'none';
       paintSidebarBalance();
     } catch (e) { /* ignore */ }
   }
@@ -5078,8 +5123,9 @@
     if (!document.getElementById('shell-backdrop')) {
       var b = document.createElement('div'); b.className = 'backdrop'; b.id = 'shell-backdrop';
       b.addEventListener('click', function () {
-        var sb = document.getElementById('shell-sidebar'), rl = document.getElementById('shell-rail');
-        if (sb) sb.classList.remove('open'); if (rl) rl.classList.remove('open'); syncBackdrop();
+        var sb = document.getElementById('shell-sidebar');
+        if (sb) sb.classList.remove('open');
+        closeRailUI(); // tự gọi syncBackdrop() + tiêu thụ mốc lịch sử nếu rail đang mở
       });
       document.body.appendChild(b);
     }

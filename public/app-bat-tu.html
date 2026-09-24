@@ -202,7 +202,7 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
       </div>
       <div class="ws-intake-hint" id="wsIntakeHint">
         <span class="ic" data-icon="message-circle"></span>
-        <p>Trả lời thầy ở khung chat bên trái để lập tứ trụ — ngày giờ sinh và năm muốn luận.</p>
+        <p>Trả lời thầy ở khung chat để lập tứ trụ — ngày giờ sinh và năm muốn luận.</p>
       </div>
       </div>
       <div class="ws-side-col">
@@ -310,7 +310,15 @@ function showNamxemStep(){
     '<button class="btn-go" type="button" id="namxemNext" style="width:auto;padding:9px 16px;font-size:13px">Lập Bát Tự →</button></div>';
   chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
   NamLuanSelect.mount('cInpNamxem');
+  // Đợt 0 (2026-09-24): khoá + đổi nhãn NGAY lúc bấm — cùng lỗi/cùng vá với
+  // app-luan-giai.html (nút này không tự mở khoá lại như `#btnGo`/`doBatTu()`
+  // finally, vì đó là NÚT KHÁC đã ẩn trong `#birthPanel`). Không khoá thì bấm
+  // nhiều lần trong lúc doBatTu() đang chạy sẽ đẩy nhiều dòng "Tứ trụ … đã
+  // sẵn sàng" trùng nhau vào chat.
   document.getElementById('namxemNext').addEventListener('click',function(){
+    var btn=this;
+    if(btn.disabled)return;
+    btn.disabled=true; btn.textContent='Đang an tứ trụ…';
     document.getElementById('inpNamxem').value=document.getElementById('cInpNamxem').value;
     doBatTu();
   });
