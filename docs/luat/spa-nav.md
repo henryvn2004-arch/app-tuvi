@@ -77,7 +77,7 @@ reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt đ
 | Nhân Mạch, Giờ Sinh, Hướng Nghiệp Trẻ, Bút Tướng (Đợt 7) | ✅ | 2/4 gọi `AiLoadingSteps` (giờ an toàn nhờ Đợt 6) — xem mục Đợt 7 bên dưới |
 | Khí Sắc, Trang Điểm, Vận Hạn Năm, Xem Tuổi/Xem Làm Ăn/Tương Hợp (Đợt 8) | ✅ | Phát hiện + vá một bug thật ĐÃ SỐNG từ Đợt 5/7 (lệch `?v=` của `tuvi-ansao-engine.js`) — xem mục Đợt 8 bên dưới |
 | 23 trang còn lại của nhóm `tuvi-paywall.js` (Đợt 9) | ✅ | Hết cả nhóm — xem mục Đợt 9 bên dưới. Cố ý loại `thanh-tuong-pro` (bug rò mic có sẵn, không liên quan soft-nav) |
-| Nạp Lượng (`topup.html`) | ❌ full reload | Có `setInterval` chờ thanh toán + lịch sử bug đua nhau (`nhat-ky/2026-08.md` "Purchase từng bắn trùng"). Soft-nav không huỷ `document` → interval cũ có thể sống sót qua lượt chuyển tab. Rủi ro cao hơn lợi ích tốc độ trên đúng đường tiền. |
+| Nạp Lượng (`topup.html`) | ❌ full reload, CHỐT VĨNH VIỄN (Đợt 12) | Không có `<main id="ws">` — KHÔNG PHẢI trang app-shell, mà là trang thanh toán dùng chung toàn site (paywall CTA, `profile.html`, `faqs.html`…). Cộng thêm `setInterval`+`visibilitychange` poll thanh toán với lịch sử race đã cắn thật (`nhat-ky/2026-09.md` "QR chuyển khoản tại chỗ nổ LẦN HAI thật", vá 2026-09-08). Đưa vào `SOFT_PAGES` cần dựng lại khung `#ws` cho một trang không có shell — rủi ro tái tạo đúng họ race vừa vá tận gốc, đổi lấy lợi ích gần như bằng 0 (khách chỉ ghé trang này một lần để trả tiền, không tab-hop). Xem mục Đợt 12 bên dưới. |
 | Hồ Sơ (`account-core.js`, Đợt 11) | ✅ | Audit đầy đủ ~30 hàm async bằng static analysis + harness stub `Auth`, không cần backend thật — xem mục Đợt 11 bên dưới |
 | Thầy Tướng Chuyên Sâu (`thanh-tuong-pro.html`, Đợt 10) | ✅ | Vá vòng đời mic (`releaseMic()` + cờ `_leftPage`) — xem mục Đợt 10 bên dưới |
 
@@ -739,3 +739,39 @@ toàn bộ 49 bộ `npm run check:*` qua hết.
 route Hồ Sơ tính riêng) — CHỈ CÒN `topup.html` ngoài `SOFT_PAGES`, vì lý
 do đã ghi ở đầu file này (`setInterval` chờ thanh toán + lịch sử bug đua
 nhau, rủi ro cao hơn lợi ích tốc độ trên đúng đường tiền).
+
+## Đợt 12: audit `topup.html` — CHỐT VĨNH VIỄN giữ full reload (2026-09-24)
+
+Henry xác nhận rủi ro tiền thật đã nêu ("Cẩn thận vào"), yêu cầu cứ audit
+để chốt dứt điểm thay vì để treo mãi. Đọc `public/topup.html` (1445 dòng)
+trước khi viết bất cứ gì.
+
+**Phát hiện quyết định (không chỉ là rủi ro, mà là KHÔNG THỂ ghép cơ chế
+hiện có):** trang dùng `<main class="wrap">`, KHÔNG có `<main id="ws">` —
+điều kiện tiên quyết `shell-soft-nav.js` cần để swap nội dung. Trang cũng
+không nạp `shell.js` (không gọi `boot()`, không tabbar/sidebar) vì nó
+KHÔNG PHẢI một tab app-shell — nó là trang thanh toán dùng chung TOÀN
+site, được trỏ tới từ paywall CTA (`tuvi-paywall.js`), `profile.html`,
+`faqs.html`, và các trang khác ngoài `SOFT_PAGES`. Route `/app/nap-luong`
+chỉ là MỘT trong nhiều lối vào, không phải lối vào chính.
+
+Cộng với rủi ro đã biết: `checkBankPoll` có cùng cặp `setInterval`+
+`visibilitychange` từng gây gọi trùng `requireCredits()` thật (vá tận gốc
+2026-09-08, xem mục "QR chuyển khoản tại chỗ nổ LẦN HAI thật" ở
+`nhat-ky/2026-09.md`) — bằng khoá cờ `_oc` về `null` NGAY khi vào nhánh
+`paid`, trước `setTimeout`. Vá đó đúng cho đời sống trang hiện tại (unload
+= trình duyệt tự dọn timer). Đưa trang vào `SOFT_PAGES` sẽ đổi hẳn giả
+định đó: `document` không còn bị huỷ giữa các lượt điều hướng, tái mở
+đúng cửa sổ race vừa đóng — cho lợi ích gần bằng 0, vì khách chỉ ở trang
+này một lần để trả tiền rồi rời hẳn, không tab-hop giữa các công cụ như
+các trang app-shell khác.
+
+**Quyết định: KHÔNG thêm `/app/nap-luong` vào `SOFT_PAGES`, không sửa gì
+ở `topup.html`.** Đây không phải "chưa kịp làm" — cấu trúc trang (không
+`#ws`, không phải app-shell) khiến việc ghép vào cơ chế soft-nav hiện có
+đòi dựng lại toàn bộ khung trang cho một trang đường tiền, đổi lấy tốc độ
+mà người dùng thực tế không cần (một lượt ghé, một lần trả tiền). Cơ chế
+fallback sẵn có (`shell-soft-nav.js`: rớt về `location.href` khi thiếu
+`#ws` ở đích) đã đảm bảo hành vi hiện tại luôn đúng — không có gì hỏng vì
+để nguyên. 97/98 trang app-shell giữ nguyên, `topup.html` là ngoại lệ CỐ
+Ý VĨNH VIỄN, không phải việc treo chờ đợt sau.
