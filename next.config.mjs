@@ -61,6 +61,8 @@ const nextConfig = {
       // khai SHELL_ACTIVE='ho-so' từ trước, không cần fork trang.
       { source: '/app/ho-so',           destination: '/app-tai-khoan.html'   },
       { source: '/app/thay',            destination: '/app-thay.html'        },
+      // Đợt 3: trang chi tiết một thầy — file tĩnh, tự đọc lại `id` qua query.
+      { source: '/app/thay/:id',        destination: '/app-thay-chi-tiet.html?id=:id' },
       { source: '/app/tro-chuyen',      destination: '/app-tro-chuyen.html'  },
       // Nạp Lượng dùng LẠI topup.html (đã là trang chốt gói/thanh toán chuẩn,
       // không nạp shell.js) — tránh fork một nguồn giá thứ hai. Bọc nó vào

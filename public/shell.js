@@ -407,6 +407,15 @@
       if (applyCatalog(ToolPrices.navFallback())) { renderSidebar(); buildCmds(); }
       return ToolPrices.load().then(function (d) {
         if (d && applyCatalog(d)) { renderSidebar(); buildCmds(); }
+        // hellobot-ui-redesign Đợt 3: trang công cụ có thầy đứng tên (`Đợt 3`,
+        // master_profiles.tool_ids) thì rail đổi sang ĐÚNG thầy đó, thay cho
+        // lượt chọn ngẫu nhiên của pickAuthor() lúc boot (chưa có mạng để tra
+        // ai đứng tên). Trang KHÔNG có thầy riêng (Trang chủ, Hồ Sơ, hoặc
+        // công cụ chưa gán) giữ nguyên thầy đã chọn ngẫu nhiên/đã ghim trước.
+        if (d && ACTIVE) {
+          var m = ToolPrices.masterForTool(ACTIVE, d);
+          if (m) setAuthor(m.id);
+        }
       });
     });
   }

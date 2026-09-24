@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Thầy — Tử Vi Minh Bảo</title>
+<link rel="icon" type="image/webp" href="/seal.webp"/>
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
+<link rel="stylesheet" href="/shell.css?v=53"/>
+<style>
+.ws-body{padding:22px 26px 60px;max-width:640px}
+.tm-head{display:flex;gap:16px;align-items:center;margin-bottom:6px}
+.tm-ava{width:76px;height:76px;border-radius:50%;object-fit:cover;flex:0 0 auto;background:var(--paper-2)}
+.tm-name{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--heading)}
+.tm-disc{display:inline-block;font-size:12px;font-weight:700;color:var(--gold-soft);background:var(--paper-2);border-radius:20px;padding:2px 10px;margin-top:4px}
+.tm-tag{font-size:13.5px;color:var(--text-mid);font-style:italic;margin:16px 0}
+.tm-greet{border-left:3px solid var(--gold-soft);padding:10px 14px;font-size:13.5px;color:var(--heading);background:var(--paper);border-radius:0 8px 8px 0;line-height:1.7;margin-bottom:20px}
+.tm-cta{display:flex;align-items:center;gap:8px;justify-content:center;width:100%;background:linear-gradient(135deg,var(--navy),#0d2a49);color:#fff;border:none;border-radius:12px;padding:13px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:26px}
+.tm-sub{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--heading);margin:0 0 10px}
+.tm-tools{display:flex;flex-direction:column;gap:8px}
+.tm-tool{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--white);border-radius:10px;padding:10px 12px;text-decoration:none;color:var(--heading);font-size:13.5px}
+.tm-tool:hover{border-color:var(--gold-soft)}
+.tm-empty{font-size:13px;color:var(--text-lt)}
+.tm-back{font-size:12.5px;color:var(--text-lt);text-decoration:none;display:inline-block;margin-bottom:16px}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b id="tmTitle">Thầy</b><span>Chuyên môn, công cụ và cách bắt đầu trò chuyện</span></div>
+    </div>
+    <div class="ws-body" id="tmBody">
+      <a class="tm-back" href="/app/thay">← Các Thầy</a>
+      <div id="tmLoading" style="padding:2rem 0;text-align:center;color:var(--text-lt);font-size:13px">Đang tải…</div>
+      <div id="tmContent" style="display:none"></div>
+    </div>
+  </main>
+</div>
+
+<script src="/nav.js?v=41" data-icons-only></script>
+<script src="/auth.js?v=2"></script>
+<script>window.SHELL_ACTIVE='thay';</script>
+<script src="/shell.js?v=100"></script>
+<script>
+(function(){
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  // `/app/thay/:id` viết lại thành `?id=:id` ở next.config.mjs — đọc query,
+  // không đọc path (trang này là file tĩnh, không biết path thật của mình).
+  var id = new URLSearchParams(location.search).get('id') || '';
+
+  function toolTile(row){
+    return '<a class="tm-tool" href="' + esc(row.app_path) + '">' + esc(row.label) + '</a>';
+  }
+
+  function render(m, toolRows){
+    document.getElementById('tmLoading').style.display = 'none';
+    var content = document.getElementById('tmContent');
+    if (!m) {
+      content.innerHTML = '<p class="tm-empty">Không tìm thấy thầy này.</p>';
+      content.style.display = 'block';
+      return;
+    }
+    document.title = 'Thầy ' + m.display_name + ' — Tử Vi Minh Bảo';
+    document.getElementById('tmTitle').textContent = 'Thầy ' + m.display_name;
+    var tools = (m.tool_ids || [])
+      .map(function(tid){ for (var i=0;i<toolRows.length;i++) if (toolRows[i].tool_id===tid) return toolRows[i]; return null; })
+      .filter(Boolean);
+    content.innerHTML =
+      '<div class="tm-head">' +
+        '<img class="tm-ava" src="/authors/' + esc(m.id) + '.jpg" alt="">' +
+        '<div><div class="tm-name">Thầy ' + esc(m.display_name) + '</div>' +
+        (m.discipline ? '<span class="tm-disc">' + esc(m.discipline) + '</span>' : '') + '</div>' +
+      '</div>' +
+      (m.tagline ? '<p class="tm-tag">"' + esc(m.tagline) + '"</p>' : '') +
+      (m.greeting ? '<div class="tm-greet">' + esc(m.greeting) + '</div>' : '') +
+      '<button type="button" class="tm-cta" id="tmChat"><span data-icon="message-circle"></span>Trò chuyện với Thầy ' + esc(m.display_name) + '</button>' +
+      '<div class="tm-sub">Công cụ Thầy ' + esc(m.display_name) + ' đứng tên</div>' +
+      (tools.length
+        ? '<div class="tm-tools">' + tools.map(toolTile).join('') + '</div>'
+        : '<p class="tm-empty">Thầy ' + esc(m.display_name) + ' hiện chưa đứng tên công cụ nào — vẫn có thể trò chuyện trực tiếp qua Luận Đường.</p>');
+    content.style.display = 'block';
+    if (window.mountIcons) window.mountIcons(content);
+    document.getElementById('tmChat').addEventListener('click', function(){
+      try { if (window.Shell && Shell.chooseAuthor) Shell.chooseAuthor(m.id); } catch(e) {}
+      location.href = '/app#chat';
+    });
+  }
+
+  function boot(){
+    if (!window.ToolPrices) { render(null, []); return; }
+    ToolPrices.load().then(function(d){
+      var list = ToolPrices.masters(d);
+      var m = null;
+      for (var i=0;i<list.length;i++) if (list[i].id === id) { m = list[i]; break; }
+      render(m, ToolPrices.rows());
+    });
+  }
+  if (window.Shell) boot(); else document.addEventListener('DOMContentLoaded', boot);
+})();
+</script>
+</body>
+</html>
