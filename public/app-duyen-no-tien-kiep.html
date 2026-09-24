@@ -277,6 +277,7 @@ window.SHELL_INTRO={key:'duyen-no-tien-kiep'};</script>
   <script src="/nav.js?v=41" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/portrait-recover.js?v=2"></script>
 <script>
@@ -532,13 +533,20 @@ function _cacheQuery(births) {
 // đủ ≥2 lá số hợp lệ, hé mối duyên TRUNG TÂM (kind/label/gist) làm hook. Nghe
 // UỶ QUYỀN trên #personGrid (bubbling input/change) thay vì sửa tuvi-form.js
 // dùng chung — nó không có callback onChange riêng theo instance.
-var _hookQuery = null, _hookTimer = null;
+var _hookQuery = null, _hookTimer = null, _hookLeftPage = false;
 function _scheduleHookCheck() {
   clearTimeout(_hookTimer);
   _hookTimer = setTimeout(_maybeMountHook, 500);
 }
 document.getElementById('personGrid').addEventListener('input', _scheduleHookCheck);
 document.getElementById('personGrid').addEventListener('change', _scheduleHookCheck);
+// `hookHost` là id DÙNG CHUNG với hàng chục trang khác (mọi trang có
+// hook-layer.js) — nếu soft-nav rời trang trong lúc fetch còn treo, kết quả
+// về trễ sẽ ghi NHẦM vào #hookHost của trang MỚI (cùng họ lỗi đã vá ở
+// ai-loading-steps.js, xem docs/luat/spa-nav.md). Cờ này chặn continuation
+// ghi DOM sau khi đã rời trang — không cần huỷ fetch, chỉ cần không dùng
+// kết quả của nó.
+document.addEventListener('tvmb:softnav', function () { _hookLeftPage = true; clearTimeout(_hookTimer); });
 
 async function _maybeMountHook() {
   var births = [];
@@ -558,6 +566,7 @@ async function _maybeMountHook() {
       body: JSON.stringify({ births: births }),
     });
     var data = await res.json();
+    if (_hookLeftPage) return; // đã soft-nav rời trang trong lúc chờ — bỏ kết quả
     if (q !== _hookQuery) return; // đã đổi input trong lúc chờ, bỏ kết quả cũ
     if (!res.ok || !data.success) { document.getElementById('hookHost').innerHTML = ''; _clearDummyPortraits(); return; }
     mountHook(data);

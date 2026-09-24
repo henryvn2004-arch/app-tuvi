@@ -495,6 +495,7 @@ window.SHELL_INTRO={key:'day-con'};</script>
   <script src="/nav.js?v=41" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 
@@ -554,6 +555,7 @@ function startIntake(){
 }
 function chatStepMoiLo(){
   var chat=document.getElementById('chat');
+  if(!chat)return; // lưới an toàn soft-nav — xem chú thích ở Shell.setContext (shell.js)
   var empty=document.getElementById('railEmpty'); if(empty) empty.style.display='none';
   var el=document.createElement('div'); el.className='msg a';
   el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+

@@ -172,6 +172,7 @@ window.SHELL_INTRO={key:'tarot'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=37"></script>
   <script src="/nav.js?v=41" data-icons-only></script><script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script>
 function initTarot(){
   Shell.setContext({
@@ -187,7 +188,7 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // Port NGUYÊN VĂN từ public/tools/tarot.html — 78 lá + logic rút/trải bài
 // giữ nguyên, không gọi model, không paywall (miễn phí).
 // ══════════════════════════════════════════════════════════════════════
-const CARDS = [
+var CARDS = [
 // ── MAJOR ARCANA (0–21) ─────────────────────────────────────
 {id:0,name:'Kẻ Khờ',en:'The Fool',type:'major',sym:'🌟',num:'0',
  up:'Khởi đầu mới, tự do, tinh thần phiêu lưu, tiềm năng vô hạn. Bước vào hành trình mới với lòng tin và trái tim rộng mở. Đây là thời điểm của những khả năng vô tận.',
@@ -510,7 +511,7 @@ const CARDS = [
 // 78 sym là emoji màu (biểu tượng đại diện từng lá) — đổi sang icon SVG chuẩn
 // của site. renderCardSym duyệt từng codepoint nên tự đúng cho cả trường hợp
 // một lá gộp 2 emoji ('🔥🔥' — Hai Gậy) lẫn trường hợp 1 emoji thông thường.
-const SYM_ICON = {'🌟':'star','⚡':'zap','🌙':'moon','🌸':'flower','👑':'crown','⛪':'temple','❤️':'heart','🏆':'trophy','🦁':'dumbbell','🕯️':'lamp','☸️':'rotate-cw','⚖️':'scale','🙃':'rotate-cw','🌑':'moon','🌊':'waves','🔗':'link','⭐':'star','🌕':'moon','☀️':'sun','📯':'volume-2','🌍':'globe','🔥':'flame','🔥🔥':['flame','flame'],'⛵':'compass','🎉':'gift','⚔️':'zap','🏅':'award','🛡️':'shield-check','💨':'zap','🩹':'shield-check','😓':'hourglass','🌱':'leaf','💧':'droplet','💑':'heart-handshake','🥂':'gift','😑':'x-circle','😢':'droplet','🌷':'flower','🌈':'rainbow','🚶':'compass','😊':'smile','🏡':'home','🐟':'droplet','🔮':'sparkles','🙈':'x-circle','💔':'heart','😴':'moon','😈':'alert-triangle','🦊':'alert-triangle','🔒':'lock','😨':'alert-triangle','🌅':'sunrise','🔍':'search','👸':'crown','💰':'dollar-sign','🤹':'scale','🏗️':'settings','💎':'gem','🥶':'alert-triangle','🤲':'gift','🔨':'settings','🌿':'leaf','🏰':'landmark','📚':'book-open','🐂':'anchor','🌻':'flower','🏦':'landmark'};
+var SYM_ICON = {'🌟':'star','⚡':'zap','🌙':'moon','🌸':'flower','👑':'crown','⛪':'temple','❤️':'heart','🏆':'trophy','🦁':'dumbbell','🕯️':'lamp','☸️':'rotate-cw','⚖️':'scale','🙃':'rotate-cw','🌑':'moon','🌊':'waves','🔗':'link','⭐':'star','🌕':'moon','☀️':'sun','📯':'volume-2','🌍':'globe','🔥':'flame','🔥🔥':['flame','flame'],'⛵':'compass','🎉':'gift','⚔️':'zap','🏅':'award','🛡️':'shield-check','💨':'zap','🩹':'shield-check','😓':'hourglass','🌱':'leaf','💧':'droplet','💑':'heart-handshake','🥂':'gift','😑':'x-circle','😢':'droplet','🌷':'flower','🌈':'rainbow','🚶':'compass','😊':'smile','🏡':'home','🐟':'droplet','🔮':'sparkles','🙈':'x-circle','💔':'heart','😴':'moon','😈':'alert-triangle','🦊':'alert-triangle','🔒':'lock','😨':'alert-triangle','🌅':'sunrise','🔍':'search','👸':'crown','💰':'dollar-sign','🤹':'scale','🏗️':'settings','💎':'gem','🥶':'alert-triangle','🤲':'gift','🔨':'settings','🌿':'leaf','🏰':'landmark','📚':'book-open','🐂':'anchor','🌻':'flower','🏦':'landmark'};
 function renderCardSym(sym) {
   var v = SYM_ICON[sym];
   if (!v) return sym;
@@ -518,7 +519,7 @@ function renderCardSym(sym) {
   return keys.map(function(k){ return '<span class="ic" data-icon="' + k + '"></span>'; }).join('');
 }
 
-const SPREADS = {
+var SPREADS = {
   1: [{pos:'Thông Điệp',desc:'Năng lượng và thông điệp chính cho câu hỏi của bạn'}],
   3: [
     {pos:'Quá Khứ',desc:'Nền tảng và những gì đã dẫn đến tình huống hiện tại'},
@@ -539,11 +540,11 @@ const SPREADS = {
   ]
 };
 
-const SUIT_COLORS = {major:'#c9a84c',wands:'#E74C3C',cups:'#1455A4',swords:'#7F8C8D',pentacles:'#1E6B3C'};
-const SUIT_VI = {major:'Bí Ẩn Lớn',wands:'Gậy ♦ Lửa',cups:'Cốc ♦ Nước',swords:'Kiếm ♦ Gió',pentacles:'Tiền ♦ Đất'};
+var SUIT_COLORS = {major:'#c9a84c',wands:'#E74C3C',cups:'#1455A4',swords:'#7F8C8D',pentacles:'#1E6B3C'};
+var SUIT_VI = {major:'Bí Ẩn Lớn',wands:'Gậy ♦ Lửa',cups:'Cốc ♦ Nước',swords:'Kiếm ♦ Gió',pentacles:'Tiền ♦ Đất'};
 
-let _spread = 1;
-let _drawn = [];
+var _spread = 1;
+var _drawn = [];
 
 function setSpread(n, btn) {
   _spread = n;

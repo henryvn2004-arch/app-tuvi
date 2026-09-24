@@ -215,6 +215,7 @@ window.SHELL_INTRO={key:'nhan-tuong'};</script>
   <script src="/nav.js?v=41" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script>
 function initNhanTuong(){
   Shell.setContext({
@@ -244,8 +245,8 @@ function wsStepsSet(n) {
     else if (i + 1 === n) steps[i].classList.add('active');
   }
 }
-let _imageData = null, _mediaType = 'image/jpeg', _camStream = null;
-let _mpReady = false, _irisNote = null, _currentSlug = '';
+var _imageData = null, _mediaType = 'image/jpeg', _camStream = null;
+var _mpReady = false, _irisNote = null, _currentSlug = '';
 
 function loadMediaPipe(cb) {
   if (_mpReady) { cb(null); return; }
@@ -583,7 +584,7 @@ function resetTool() {
 // Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
 // CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tách thành thẻ
 // trích dẫn màu (.fb-card, xem shell.css), cùng cơ chế với app-luan-giai.html.
-const HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
+var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
 function renderMd(md){
   return md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -645,6 +646,14 @@ async function _saveTuongReading(tool, resultText, imageData, mediaType) {
     }).catch(() => {});
   } catch(e) {}
 }
+
+// Lưới an toàn soft-nav: camera thật (đèn báo trên máy) không tự tắt khi
+// soft-nav rời trang — chỉ dừng track của MediaStream, KHÔNG gọi
+// stopCamera() đầy đủ vì hàm đó đụng thẳng vào id UI riêng của trang này
+// (không có null-check), có thể ném lỗi nếu trang MỚI không cùng cấu trúc.
+document.addEventListener('tvmb:softnav', function () {
+  if (_camStream) { _camStream.getTracks().forEach(function (t) { t.stop(); }); _camStream = null; }
+});
 </script>
 </body>
 </html>

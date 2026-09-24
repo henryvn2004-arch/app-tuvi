@@ -210,6 +210,7 @@ window.SHELL_INTRO={key:'dien-tuong'};</script>
   <script src="/nav.js?v=41" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script>
 function initDienTuong(){
   Shell.setContext({
@@ -226,11 +227,11 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // geometry analysis + gate Lượng (TuviPaywall) + SSE 'delta' stream tới
 // /api/tuong-mat?action=dien-tuong. Không PDF, không multi-phần.
 // ══════════════════════════════════════════════════════════════════════
-let _imageData = null;
-let _mediaType = 'image/jpeg';
-let _camStream = null;
-let _mpReady = false;
-let _currentSlug = '';
+var _imageData = null;
+var _mediaType = 'image/jpeg';
+var _camStream = null;
+var _mpReady = false;
+var _currentSlug = '';
 
 function loadMediaPipe(cb) {
   if (_mpReady) { cb(null); return; }
@@ -670,7 +671,7 @@ function wsStepsSet(n){
 // Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
 // CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tách thành thẻ
 // trích dẫn màu (.fb-card, xem shell.css), cùng cơ chế với app-luan-giai.html.
-const HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
+var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
 function renderMarkdown(md) {
   return md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -732,6 +733,15 @@ async function _saveTuongReading(tool, resultText, imageData, mediaType) {
     }).catch(() => {});
   } catch(e) {}
 }
+
+// Lưới an toàn soft-nav: camera thật (đèn báo trên máy) không tự tắt khi
+// soft-nav rời trang (`document` không bị destroy) — chỉ dừng track của
+// MediaStream, KHÔNG gọi stopCamera() đầy đủ vì hàm đó đụng thẳng vào các
+// id UI riêng của trang này (không có null-check), có thể ném lỗi nếu
+// trang MỚI không cùng cấu trúc.
+document.addEventListener('tvmb:softnav', function () {
+  if (_camStream) { _camStream.getTracks().forEach(function (t) { t.stop(); }); _camStream = null; }
+});
 </script>
 </body>
 </html>

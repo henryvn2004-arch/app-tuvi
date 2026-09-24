@@ -292,6 +292,7 @@ window.SHELL_INTRO={key:'trang-phuc-theo-ngay'};</script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
   <script src="/nav.js?v=41" data-icons-only></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 function initTrangPhucNgay(){
@@ -308,9 +309,9 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // Port từ public/tools/trang-phuc-theo-ngay.html — giữ nguyên can-chi
 // ngày (mirror engine) + gate Lượng (trang-phuc-theo-ngay + tryon).
 // ══════════════════════════════════════════════════════════════════════
-const _CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
-const _CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-const _NAP_AM={
+var _TPTN_CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+var _TPTN_CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+var _NAP_AM={
   'Giáp Tý':'Kim','Ất Sửu':'Kim','Bính Dần':'Hỏa','Đinh Mão':'Hỏa','Mậu Thìn':'Mộc','Kỷ Tỵ':'Mộc',
   'Canh Ngọ':'Thổ','Tân Mùi':'Thổ','Nhâm Thân':'Kim','Quý Dậu':'Kim','Giáp Tuất':'Hỏa','Ất Hợi':'Hỏa',
   'Bính Tý':'Thủy','Đinh Sửu':'Thủy','Mậu Dần':'Thổ','Kỷ Mão':'Thổ','Canh Thìn':'Kim','Tân Tỵ':'Kim',
@@ -322,7 +323,7 @@ const _NAP_AM={
   'Nhâm Tý':'Mộc','Quý Sửu':'Mộc','Giáp Dần':'Thủy','Ất Mão':'Thủy','Bính Thìn':'Thổ','Đinh Tỵ':'Thổ',
   'Mậu Ngọ':'Hỏa','Kỷ Mùi':'Hỏa','Canh Thân':'Mộc','Tân Dậu':'Mộc','Nhâm Tuất':'Thủy','Quý Hợi':'Thủy',
 };
-const _NAP_AM_YEAR={
+var _NAP_AM_YEAR={
   'Giáp Tý':'Kim','Ất Sửu':'Kim','Bính Dần':'Hỏa','Đinh Mão':'Hỏa','Mậu Thìn':'Mộc','Kỷ Tỵ':'Mộc',
   'Canh Ngọ':'Thổ','Tân Mùi':'Thổ','Nhâm Thân':'Kim','Quý Dậu':'Kim','Giáp Tuất':'Hỏa','Ất Hợi':'Hỏa',
   'Bính Tý':'Thủy','Đinh Sửu':'Thủy','Mậu Dần':'Thổ','Kỷ Mão':'Thổ','Canh Thìn':'Kim','Tân Tỵ':'Kim',
@@ -341,11 +342,11 @@ function jd(dd,mm,yy){
   if(j<2299161)j=dd+Math.floor((153*m+2)/5)+365*y+Math.floor(y/4)-32083;
   return j;
 }
-function dayCanChi(dd,mm,yy){ const j=jd(dd,mm,yy); return `${_CAN[(j+9)%10]} ${_CHI[(j+1)%12]}`; }
-function yearCanChi(y){ return `${_CAN[(y-4+400)%10]} ${_CHI[(y-4+480)%12]}`; }
+function dayCanChi(dd,mm,yy){ const j=jd(dd,mm,yy); return `${_TPTN_CAN[(j+9)%10]} ${_TPTN_CHI[(j+1)%12]}`; }
+function yearCanChi(y){ return `${_TPTN_CAN[(y-4+400)%10]} ${_TPTN_CHI[(y-4+480)%12]}`; }
 
-const _SINH={Kim:'Thủy',Thủy:'Mộc',Mộc:'Hỏa',Hỏa:'Thổ',Thổ:'Kim'};
-const _KHAC={Kim:'Mộc',Mộc:'Thổ',Thổ:'Thủy',Thủy:'Hỏa',Hỏa:'Kim'};
+var _SINH={Kim:'Thủy',Thủy:'Mộc',Mộc:'Hỏa',Hỏa:'Thổ',Thổ:'Kim'};
+var _KHAC={Kim:'Mộc',Mộc:'Thổ',Thổ:'Thủy',Thủy:'Hỏa',Hỏa:'Kim'};
 function getRelation(menh,ngay){
   if(menh===ngay)return{code:'binh_hoa',text:'Ngày đồng hành — bình ổn, thuận lợi',icon:'scale',color:'linear-gradient(135deg,#1a3a2a,#2e5a42)'};
   if(_SINH[ngay]===menh)return{code:'ngay_sinh_menh',text:'Ngày sinh Mệnh ✦ Cực kỳ thuận lợi',icon:'star',color:'linear-gradient(135deg,#1a2a10,#2e5010)'};
@@ -354,34 +355,34 @@ function getRelation(menh,ngay){
   return{code:'menh_khac_ngay',text:'Mệnh khắc Ngày — ngày trung bình, cẩn thận',icon:'info',color:'linear-gradient(135deg,#3a2a10,#6b4510)'};
 }
 
-const STYLE_META={
+var STYLE_META={
   glass_skin:{icon:'sparkles',name:'Glass Skin Korea'},j_sheer:{icon:'leaf',name:'J-Beauty Sheer'},
   kdrama_glam:{icon:'star',name:'K-Drama Glam'},guochao:{icon:'crown',name:'Guochao Editorial'},
   hoa_dan:{icon:'flower',name:'Hoa Đán Soft'},dark_muse:{icon:'moon',name:'Dark Muse'},
   clean_casual:{icon:'shirt',name:'Clean Casual'},warm_earth:{icon:'sun',name:'Warm Earth'},
 };
-const OUTFIT_META=[
+var OUTFIT_META=[
   {key:'top',icon:'shirt',cat:'Áo'},
   {key:'bottom',icon:'shirt',cat:'Quần / Váy'},
   {key:'outer',icon:'shirt',cat:'Áo Khoác'},
   {key:'shoes',icon:'package',cat:'Giày'},
   {key:'accessory',icon:'gem',cat:'Phụ Kiện'},
 ];
-const COLOR_HEX={'Trắng':'#FFFFFF','Bạc':'#C0C0C0','Xám nhạt':'#D3D3D3','Vàng kim':'#D4AF37','Be':'#D4B896','Kem':'#FFF8DC','Xanh lá':'#2E8B57','Xanh ngọc':'#40E0D0','Xanh lam':'#87CEEB','Nâu gỗ':'#8B4513','Đen':'#111111','Navy':'#000080','Xanh dương':'#1E90FF','Xám đậm':'#696969','Đỏ':'#CC0000','Cam':'#FF6600','Hồng':'#FF69B4','Vàng':'#FFD700','Nâu':'#8B6914','Cam đất':'#CC7722','Xanh rêu':'#6B8E23','Tím':'#800080','Tím đỏ':'#800040','Hồng phấn':'#FFB6C1'};
+var COLOR_HEX={'Trắng':'#FFFFFF','Bạc':'#C0C0C0','Xám nhạt':'#D3D3D3','Vàng kim':'#D4AF37','Be':'#D4B896','Kem':'#FFF8DC','Xanh lá':'#2E8B57','Xanh ngọc':'#40E0D0','Xanh lam':'#87CEEB','Nâu gỗ':'#8B4513','Đen':'#111111','Navy':'#000080','Xanh dương':'#1E90FF','Xám đậm':'#696969','Đỏ':'#CC0000','Cam':'#FF6600','Hồng':'#FF69B4','Vàng':'#FFD700','Nâu':'#8B6914','Cam đất':'#CC7722','Xanh rêu':'#6B8E23','Tím':'#800080','Tím đỏ':'#800040','Hồng phấn':'#FFB6C1'};
 
-let _mucDich='ra ngoài thông thường';
-let _resultData=null;
-let _tryonImgData=null,_tryonMediaType='image/jpeg',_tryonStyle='cong-so',_tryonResultUrl=null;
-const ANALYSIS_STEPS=[
+var _mucDich='ra ngoài thông thường';
+var _resultData=null;
+var _tryonImgData=null,_tryonMediaType='image/jpeg',_tryonStyle='cong-so',_tryonResultUrl=null;
+var ANALYSIS_STEPS=[
   {label:'Tính can chi ngày & quan hệ ngũ hành',ms:900},
   {label:'Tư vấn trang phục hợp ngày',ms:0},
 ];
-const TRYON_STEPS=[
+var TRYON_STEPS=[
   {label:'Chuẩn bị trang phục theo ngũ hành',ms:1200},
   {label:'Đang tạo ảnh trang phục',ms:0},
 ];
-let _analysisLoadingCtl=null;
-let _tryonLoadingCtl=null;
+var _analysisLoadingCtl=null;
+var _tryonLoadingCtl=null;
 
 function setPurpose(el,val){
   document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));

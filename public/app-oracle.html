@@ -152,6 +152,7 @@ window.SHELL_INTRO={key:'oracle'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=37"></script>
   <script src="/nav.js?v=41" data-icons-only></script><script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script>
 function initOracle(){
   Shell.setContext({
@@ -167,7 +168,7 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // Port NGUYÊN VĂN từ public/tools/oracle.html — 40 lá + logic rút bài
 // giữ nguyên, không gọi model, không paywall (miễn phí).
 // ══════════════════════════════════════════════════════════════════════
-const CARDS = [
+var CARDS = [
 // ── ÂM DƯƠNG (8 lá) ─────────────────────────────────────────
 {id:0,sym:'☯',name:'Âm Dương',cat:'am-duong',catVI:'Âm Dương',
  msg:'Vạn vật tồn tại trong sự đối lập hài hoà. Điều mà bạn cho là tối tăm đang chứa đựng mầm sáng; điều sáng chói đang mang trong mình hạt nhân của bóng tối. Đừng cưỡng lại sự đối lập — hãy tìm sự cân bằng trong đó.',
@@ -338,7 +339,7 @@ const CARDS = [
 // Bát quái (☰☷☵☲☳☴☶☱) là ký hiệu Kinh Dịch, không phải emoji trang trí — giữ
 // nguyên dạng chữ (đơn sắc theo font, cùng lớp với ✦/★ đã được whitelist).
 // 32 biểu tượng còn lại là emoji màu, đổi sang icon SVG chuẩn của site.
-const SYM_ICON = {
+var SYM_ICON = {
   '☯':'aperture','🌓':'moon','🌑':'moon','☀':'sun','🔄':'rotate-cw','⚖':'scale',
   '🌊':'waves','🌀':'tornado','🌿':'leaf','🔥':'flame','🏔':'anchor','🪙':'gem',
   '💧':'droplet','🌱':'leaf','⚡':'zap','🌲':'leaf','🐉':'crown','🌟':'star',
@@ -350,8 +351,8 @@ function renderCardSym(sym) {
   return key ? '<span class="ic" data-icon="' + key + '"></span>' : sym;
 }
 
-const CAT_COLORS = {'am-duong':'#c9a84c','ngu-hanh':'#1E6B3C','bat-quai':'#1455A4','can-chi':'#9A7B3A','cuoc-doi':'#C0392B'};
-const SPREAD_LABELS = {
+var CAT_COLORS = {'am-duong':'#c9a84c','ngu-hanh':'#1E6B3C','bat-quai':'#1455A4','can-chi':'#9A7B3A','cuoc-doi':'#C0392B'};
+var SPREAD_LABELS = {
   1: [{pos:'Thông Điệp',desc:'Điều vũ trụ muốn bạn biết lúc này'}],
   3: [{pos:'Nhân',desc:'Nguyên nhân gốc rễ của tình huống'},{pos:'Duyên',desc:'Hoàn cảnh và điều kiện hiện tại'},{pos:'Quả',desc:'Hướng đi và kết quả nếu tiếp tục'}],
   5: [
@@ -376,7 +377,7 @@ function wsStepsSet(n) {
     else if (i + 1 === n) steps[i].classList.add('active');
   }
 }
-let _spread = 1, _drawn = [];
+var _spread = 1, _drawn = [];
 
 function setSpread(n, btn) {
   _spread = n;

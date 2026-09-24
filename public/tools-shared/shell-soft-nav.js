@@ -81,9 +81,43 @@
     '/app/xem-tuoi': 1,
     '/app/xem-lam-an': 1,
     '/app/tuong-hop': 1,
+    '/app/ban-lam-viec': 1,
+    '/app/bat-tu': 1,
+    '/app/boi-bai-tay': 1,
+    '/app/chan-dung-tien-kiep': 1,
+    '/app/chan-dung-vo-chong': 1,
+    '/app/chu-trinh-cuoc-doi': 1,
+    '/app/cua-hang-phong-thuy': 1,
+    '/app/da-lieu-ai': 1,
+    '/app/day-con': 1,
+    '/app/dien-tuong': 1,
+    '/app/duyen-no-tien-kiep': 1,
+    '/app/kieu-toc': 1,
+    '/app/la-so': 1,
+    '/app/luan-giai': 1,
+    '/app/mau-sac-hop-menh': 1,
+    '/app/nguoi-khac': 1,
+    '/app/nhan-tuong': 1,
+    '/app/oracle': 1,
+    '/app/personal-color': 1,
+    '/app/phong-thuy': 1,
+    '/app/tarot': 1,
+    '/app/thanh-tuong': 1,
+    '/app/thu-tuong': 1,
+    '/app/trang-phuc-theo-ngay': 1,
   };
   var TIMEOUT_MS = 8000;
   var inflight = false;
+  // Bấm khi `inflight` (soft-nav trước còn chưa xong) → rớt về full reload
+  // (bên dưới). Nhưng `location.href=…` KHÔNG huỷ ngay promise chain của
+  // go() đang chạy dở — tài liệu cũ (đang unload dần) vẫn còn JS sống trong
+  // khoảng ngắn giữa lúc gọi và lúc trình duyệt thật sự điều hướng. Nếu
+  // chain cũ tới đúng lúc đó mới `runInlineScript` → DOM đang bị trình
+  // duyệt tháo dỡ dở, `getElementById` ra `null` giữa chừng (bắt được ở
+  // stress test Đợt 9: `#shell-rail` biến mất hoàn toàn, `document.body`
+  // cũng null). Cờ này bật NGAY khi gọi fullReload, mọi bước còn lại của
+  // MỌI chain go() đang treo phải tự kiểm trước khi đụng DOM.
+  var navigating = false;
 
   // Script CHUNG đã nạp sẵn ở lượt tải trang ĐẦU (nav/auth/shell + mọi script
   // riêng của trang đầu tiên) — không nạp lại. Khoá theo URL đã chuẩn hoá
@@ -101,6 +135,7 @@
   }
 
   function fullReload(href) {
+    navigating = true;
     location.href = href;
   }
 
@@ -142,6 +177,11 @@
     var p = Promise.resolve();
     scripts.forEach(function (old) {
       p = p.then(function () {
+        // Mỗi script trong dãy chờ script trước xong mới chạy (comment ở
+        // trên) — nghĩa là CÓ những nhịp `await` giữa hai script liên tiếp,
+        // đủ để một cú bấm khác rớt vào fullReload (`navigating=true`) trong
+        // lúc dãy này còn chạy dở. Script sau không được đụng DOM nữa.
+        if (navigating) return null;
         if (old.src) {
           if (loadedSrc[old.src]) return;
           loadedSrc[old.src] = true;
@@ -231,6 +271,7 @@
   }
 
   function go(path, replaceHistory) {
+    if (navigating) return; // đã có full reload thật đang chạy — đừng đụng gì thêm
     if (inflight) { fullReload(path); return; }
     inflight = true;
     markExistingHeadStyles();
@@ -241,6 +282,10 @@
       })
     )
       .then(function (html) {
+        // Xem khai báo `navigating` ở đầu file: một cú bấm khác đã rớt vào
+        // fullReload trong lúc fetch này còn bay — tài liệu hiện tại sắp bị
+        // trình duyệt tháo dỡ thật, đừng vẽ/gắn gì vào đó nữa.
+        if (navigating) return;
         var doc = new DOMParser().parseFromString(html, 'text/html');
         var newWs = doc.querySelector('main#ws');
         var curWs = document.querySelector('main#ws');
@@ -258,12 +303,13 @@
         return runPageScripts(bodyScripts);
       })
       .then(function () {
+        if (navigating) return;
         updateTabbarActive(path);
         try { if (window.Track) window.Track.event('page_view', { meta: { from: 'soft_nav' } }); } catch (e) { /* ignore */ }
         document.dispatchEvent(new CustomEvent('tvmb:softnav', { detail: { path: path } }));
       })
       .catch(function () {
-        fullReload(path);
+        if (!navigating) fullReload(path);
       })
       .then(function () { inflight = false; });
   }

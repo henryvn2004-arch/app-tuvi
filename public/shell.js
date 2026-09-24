@@ -4247,6 +4247,15 @@
       // của chính người dùng — nhãn nói SAI người mà không có gì báo.
       curMeta = { restore: Object.assign({ birth: normBirth(o.birth) || birthSnapshot(), selfBirth: birthOwned, scenario: o.scenario || null, form: snapshotForm() }, o.restore || {}), title: o.title || o.label || 'Phiên', createdAt: Date.now() };
       var c = document.getElementById('railCtx'), t = document.getElementById('railCtxTxt');
+      // Lưới an toàn soft-nav (cùng họ lỗi `initProfile()`/`authLoading` đã vá
+      // ở Hồ Sơ, xem shell-soft-nav.js): `#shell-rail` (chứa `railCtx`/`chat`/
+      // `railInput`…) dựng ĐÚNG MỘT LẦN ở boot() và không bao giờ dựng lại —
+      // trong cửa sổ cực hẹp khi một cú bấm khác vừa rớt về full reload thật
+      // (`location.href=`), tài liệu hiện tại có thể đã bị trình duyệt tháo
+      // dỡ dở trước khi JS đang chạy kịp dừng. Lúc đó toàn bộ `#shell-rail`
+      // biến mất — không riêng `railCtx` — nên vẽ tiếp là vô nghĩa (trang sắp
+      // bị thay hẳn); bỏ qua CẢ setContext, đừng ném lỗi giữa chừng.
+      if (!c || !t) return;
       if (o.label) { c.style.display = ''; t.innerHTML = 'Đang gắn: <b>' + esc(o.label) + '</b>'; }
       var ta = document.getElementById('railInput');
       ta.disabled = false; ta.placeholder = o.placeholder || 'Hỏi bất cứ điều gì về lá số này…';

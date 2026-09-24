@@ -216,6 +216,7 @@ window.SHELL_INTRO={key:'thanh-tuong'};</script>
   <script src="/nav.js?v=41" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script>
 function initThanhTuong(){
   Shell.setContext({
@@ -232,17 +233,17 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // extraction (pitch/tốc độ/âm lượng/âm sắc/ổn định, client-side, KHÔNG gửi
 // file audio) + gate Lượng + SSE stream tới /api/tuong-mat?action=thanh-tuong.
 // ══════════════════════════════════════════════════════════════════════
-let _audioCtx = null;
-let _analyser = null;
-let _stream = null;
-let _recorder = null;
-let _chunks = [];
-let _isRecording = false;
-let _recordTimer = null;
-let _countdownTimer = null;
-let _animFrame = null;
-let _features = null;
-let _currentSlug = '';
+var _audioCtx = null;
+var _analyser = null;
+var _stream = null;
+var _recorder = null;
+var _chunks = [];
+var _isRecording = false;
+var _recordTimer = null;
+var _countdownTimer = null;
+var _animFrame = null;
+var _features = null;
+var _currentSlug = '';
 
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
 // có sẵn trong flow cũ (ghi âm → thanh toán → kết quả), không tạo trạng thái
@@ -259,8 +260,8 @@ function wsStepsSet(n){
   }
 }
 
-const RECORD_MS = 14000;
-const COUNTDOWN = 3;
+var RECORD_MS = 14000;
+var COUNTDOWN = 3;
 
 async function toggleRecord() {
   if (_isRecording) { stopRecording(); return; }
@@ -389,7 +390,7 @@ function startWaveform() {
   draw();
 }
 
-let _progressInterval = null;
+var _progressInterval = null;
 function startProgressBar() {
   const bar = document.getElementById('timerBar');
   let elapsed = 0;
@@ -747,7 +748,7 @@ function resetTool() {
 // Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
 // CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tách thành thẻ
 // trích dẫn màu (.fb-card, xem shell.css), cùng cơ chế với app-luan-giai.html.
-const HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
+var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
 function renderMd(md) {
   return md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -795,6 +796,20 @@ async function _saveTuongReading(tool, resultText, imageData, mediaType) {
     }).catch(() => {});
   } catch(e) {}
 }
+
+// Lưới an toàn soft-nav: micro thật (đèn báo trên máy), interval đếm giờ và
+// vòng lặp requestAnimationFrame vẽ sóng âm không tự dừng khi soft-nav rời
+// trang — dừng đúng các tài nguyên đó, KHÔNG gọi resetTool() đầy đủ vì hàm
+// đó đụng thẳng vào id UI riêng của trang này (không có null-check).
+document.addEventListener('tvmb:softnav', function () {
+  clearTimeout(_recordTimer);
+  clearInterval(_countdownTimer);
+  cancelAnimationFrame(_animFrame);
+  if (_stream) { _stream.getTracks().forEach(function (t) { t.stop(); }); _stream = null; }
+  if (_audioCtx) { _audioCtx.close().catch(function () {}); _audioCtx = null; }
+  _recorder = null;
+  _isRecording = false;
+});
 </script>
 </body>
 </html>

@@ -346,6 +346,7 @@ window.SHELL_INTRO={key:'phong-thuy'};</script>
 <script src="/tuvi-paywall.js?v=37"></script>
   <script src="/nav.js?v=41" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/bat-trach.js?v=2"></script>
 <script>
@@ -384,30 +385,30 @@ function wsStepsSet(n){
 // (nguồn DUY NHẤT, dùng chung với /tools/bat-trach.html). Bản chép tay cũ ở
 // đây sai 12/64 ô Du Niên + dùng công thức cung mệnh SAI (tổng 4 chữ số năm
 // thay vì 2 chữ số cuối — xem ghi chú đầu file bat-trach.js).
-const GUA_DATA=BatTrachTool.guaDataLegacy();
-const DIR_VN={N:'Bắc',NE:'Đông Bắc',E:'Đông',SE:'Đông Nam',S:'Nam',SW:'Tây Nam',W:'Tây',NW:'Tây Bắc',C:'Trung Tâm'};
-const BAGUA=[['SE','S','SW'],['E','C','W'],['NE','N','NW']];
-const TIER_BG={best:'#1E6B3C',good:'#2D8E52',ok:'#5B8A3C',neutral:'#6B7280',warn:'#B45309',bad:'#B91C1C',worst:'#7F1D1D'};
-const TIER_CLR={best:'#86EFAC',good:'#BBF7D0',ok:'#D9F99D',neutral:'#E5E7EB',warn:'#FCD34D',bad:'#FCA5A5',worst:'#FECACA'};
+var GUA_DATA=BatTrachTool.guaDataLegacy();
+var DIR_VN={N:'Bắc',NE:'Đông Bắc',E:'Đông',SE:'Đông Nam',S:'Nam',SW:'Tây Nam',W:'Tây',NW:'Tây Bắc',C:'Trung Tâm'};
+var BAGUA=[['SE','S','SW'],['E','C','W'],['NE','N','NW']];
+var TIER_BG={best:'#1E6B3C',good:'#2D8E52',ok:'#5B8A3C',neutral:'#6B7280',warn:'#B45309',bad:'#B91C1C',worst:'#7F1D1D'};
+var TIER_CLR={best:'#86EFAC',good:'#BBF7D0',ok:'#D9F99D',neutral:'#E5E7EB',warn:'#FCD34D',bad:'#FCA5A5',worst:'#FECACA'};
 
 function calcGua(y,g){return BatTrachTool.getCungMenh(y,g==='male'?'nam':'nu');}
 
 function cellQuality(dir,gua){if(!gua||dir==='C')return'neutral';const g=GUA_DATA[gua];if(!g)return'neutral';if(g.good[dir]){const v=g.good[dir];return v.includes('Sinh')?'best':v.includes('Thiên')?'good':'ok';}if(g.bad[dir]){const v=g.bad[dir];return v.includes('Tuyệt')?'worst':v.includes('Ngũ')?'bad':'warn';}return'neutral';}
 function getQLabel(dir,gua){if(!gua)return'';const g=GUA_DATA[gua];return(g?.good[dir]||g?.bad[dir]||'');}
-const ITEM_ICON={bed:'home',desk:'briefcase',sofa:'home',altar:'temple',stove:'flame',plant:'leaf',mirror:'aperture',door:'door-open',toilet:'droplet',water:'droplet',wardrobe:'door-open',tv:'monitor',table:'package'};
+var ITEM_ICON={bed:'home',desk:'briefcase',sofa:'home',altar:'temple',stove:'flame',plant:'leaf',mirror:'aperture',door:'door-open',toilet:'droplet',water:'droplet',wardrobe:'door-open',tv:'monitor',table:'package'};
 function getFIcon(id){return '<span class="ic" data-icon="'+(ITEM_ICON[id]||'package')+'"></span>';}
 
-let _gua=null,_img64=null,_imgType='image/jpeg';
-const ANALYSIS_STEPS=[
+var _gua=null,_img64=null,_imgType='image/jpeg';
+var ANALYSIS_STEPS=[
   {label:'Nhận diện đồ vật trong ảnh',ms:6000},
   {label:'Phân tích Bát Trạch & đưa đề xuất',ms:0},
 ];
-const RENDER_STEPS=[
+var RENDER_STEPS=[
   {label:'Chuẩn bị prompt render theo ngũ hành',ms:1200},
   {label:'Đang render lại phòng',ms:0},
 ];
-let _analysisLoadingCtl=null;
-let _renderLoadingCtl=null;
+var _analysisLoadingCtl=null;
+var _renderLoadingCtl=null;
 
 function onYearChange(){
   const y=parseInt(document.getElementById('namSinh').value),g=document.getElementById('gioiTinh').value;
@@ -550,9 +551,9 @@ function renderResults(data){
 }
 
 // ── Room Render state ─────────────────────────────────────────
-let _renderGua = null, _renderRoomType = 'bedroom', _renderGioiTinh = 'male';
-let _ptBefore = null, _ptAfter = null, _ptAdvice = '';
-let _renderRecs = [], _renderResultUrl = null, _renderSlug = null;
+var _renderGua = null, _renderRoomType = 'bedroom', _renderGioiTinh = 'male';
+var _ptBefore = null, _ptAfter = null, _ptAdvice = '';
+var _renderRecs = [], _renderResultUrl = null, _renderSlug = null;
 
 function resetRender() {
   document.getElementById('renderIdle').style.display = 'block';

@@ -289,6 +289,7 @@ window.SHELL_INTRO={key:'mau-sac-hop-menh'};</script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
   <script src="/nav.js?v=41" data-icons-only></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 function initMauSac(){
@@ -305,9 +306,9 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // Port từ public/tools/mau-sac-hop-menh.html — giữ nguyên Bát Trạch +
 // Nạp Âm calc + gate Lượng (mau-sac-hop-menh + trang-phuc-tryon).
 // ══════════════════════════════════════════════════════════════════════
-const GUA_DATA={1:{name:'Khảm',elem:'Thủy',icon:'☵'},2:{name:'Khôn',elem:'Thổ',icon:'☷'},3:{name:'Chấn',elem:'Mộc',icon:'☳'},4:{name:'Tốn',elem:'Mộc',icon:'☴'},6:{name:'Càn',elem:'Kim',icon:'☰'},7:{name:'Đoài',elem:'Kim',icon:'☱'},8:{name:'Cấn',elem:'Thổ',icon:'☶'},9:{name:'Ly',elem:'Hỏa',icon:'☲'}};
+var GUA_DATA={1:{name:'Khảm',elem:'Thủy',icon:'☵'},2:{name:'Khôn',elem:'Thổ',icon:'☷'},3:{name:'Chấn',elem:'Mộc',icon:'☳'},4:{name:'Tốn',elem:'Mộc',icon:'☴'},6:{name:'Càn',elem:'Kim',icon:'☰'},7:{name:'Đoài',elem:'Kim',icon:'☱'},8:{name:'Cấn',elem:'Thổ',icon:'☶'},9:{name:'Ly',elem:'Hỏa',icon:'☲'}};
 
-const COLOR_HEX={
+var COLOR_HEX={
   'Trắng':'#FFFFFF','Bạc':'#C0C0C0','Xám nhạt':'#D3D3D3','Vàng kim':'#D4AF37',
   'Vàng đất':'#C8973A','Be':'#D4B896','Kem':'#FFF8DC','Be đậm':'#D2B48C',
   'Xanh lá':'#2E8B57','Xanh ngọc':'#40E0D0','Xanh lam nhạt':'#87CEEB','Nâu gỗ':'#8B4513',
@@ -319,11 +320,11 @@ const COLOR_HEX={
   'Nâu ấm':'#8B6914','Cam đất':'#CC7722','Vàng nhạt':'#F5DEB3','Nâu vàng':'#DAA520',
   'Kem đậm':'#FAEBD7','Xám kim loại':'#A8A9AD','Tím':'#800080','Xanh tím':'#6A0DAD',
 };
-const NH_BG={Kim:'linear-gradient(135deg,#C0C0C0,#D4AF37)',Mộc:'linear-gradient(135deg,#2E8B57,#40E0D0)',Thủy:'linear-gradient(135deg,#000080,#1E90FF)',Hỏa:'linear-gradient(135deg,#CC0000,#FF6600)',Thổ:'linear-gradient(135deg,#C8973A,#8B6914)'};
-const NH_ICON={Kim:'settings',Mộc:'leaf',Thủy:'droplet',Hỏa:'flame',Thổ:'globe'};
+var NH_BG={Kim:'linear-gradient(135deg,#C0C0C0,#D4AF37)',Mộc:'linear-gradient(135deg,#2E8B57,#40E0D0)',Thủy:'linear-gradient(135deg,#000080,#1E90FF)',Hỏa:'linear-gradient(135deg,#CC0000,#FF6600)',Thổ:'linear-gradient(135deg,#C8973A,#8B6914)'};
+var NH_ICON={Kim:'settings',Mộc:'leaf',Thủy:'droplet',Hỏa:'flame',Thổ:'globe'};
 
-const NAP_AM_MAP={};
-const base=[[1924,'Hỏa'],[1926,'Thổ'],[1928,'Mộc'],[1930,'Kim'],[1932,'Thủy'],[1934,'Hỏa'],[1936,'Thổ'],[1938,'Mộc'],[1940,'Kim'],[1942,'Thủy'],[1944,'Hỏa'],[1946,'Thổ'],[1948,'Mộc'],[1950,'Kim'],[1952,'Thủy'],[1954,'Hỏa'],[1956,'Thổ'],[1958,'Mộc'],[1960,'Kim'],[1962,'Thủy'],[1964,'Hỏa'],[1966,'Thổ'],[1968,'Mộc'],[1970,'Kim'],[1972,'Thủy'],[1974,'Hỏa'],[1976,'Thổ'],[1978,'Mộc'],[1980,'Kim'],[1982,'Thủy'],[1984,'Hỏa'],[1986,'Thổ'],[1988,'Mộc'],[1990,'Kim'],[1992,'Thủy'],[1994,'Hỏa'],[1996,'Thổ'],[1998,'Mộc'],[2000,'Kim'],[2002,'Thủy'],[2004,'Hỏa'],[2006,'Thổ'],[2008,'Mộc'],[2010,'Kim'],[2012,'Thủy'],[2014,'Hỏa'],[2016,'Thổ'],[2018,'Mộc'],[2020,'Kim'],[2022,'Thủy'],[2024,'Hỏa']];
+var NAP_AM_MAP={};
+var base=[[1924,'Hỏa'],[1926,'Thổ'],[1928,'Mộc'],[1930,'Kim'],[1932,'Thủy'],[1934,'Hỏa'],[1936,'Thổ'],[1938,'Mộc'],[1940,'Kim'],[1942,'Thủy'],[1944,'Hỏa'],[1946,'Thổ'],[1948,'Mộc'],[1950,'Kim'],[1952,'Thủy'],[1954,'Hỏa'],[1956,'Thổ'],[1958,'Mộc'],[1960,'Kim'],[1962,'Thủy'],[1964,'Hỏa'],[1966,'Thổ'],[1968,'Mộc'],[1970,'Kim'],[1972,'Thủy'],[1974,'Hỏa'],[1976,'Thổ'],[1978,'Mộc'],[1980,'Kim'],[1982,'Thủy'],[1984,'Hỏa'],[1986,'Thổ'],[1988,'Mộc'],[1990,'Kim'],[1992,'Thủy'],[1994,'Hỏa'],[1996,'Thổ'],[1998,'Mộc'],[2000,'Kim'],[2002,'Thủy'],[2004,'Hỏa'],[2006,'Thổ'],[2008,'Mộc'],[2010,'Kim'],[2012,'Thủy'],[2014,'Hỏa'],[2016,'Thổ'],[2018,'Mộc'],[2020,'Kim'],[2022,'Thủy'],[2024,'Hỏa']];
 base.forEach(([y,h])=>{NAP_AM_MAP[y]=h;NAP_AM_MAP[y+1]=h;});
 
 function calcGua(y,g){let s=String(y).split('').reduce((a,c)=>a+parseInt(c),0);while(s>=10)s=String(s).split('').reduce((a,c)=>a+parseInt(c),0);let r;if(g==='male'){r=y>=2000?9-s:10-s;if(r<=0)r+=9;if(r===5)r=2;}else{r=y>=2000?s+6:s+5;while(r>=10)r=String(r).split('').reduce((a,c)=>a+parseInt(c),0);if(r===5)r=8;}return r;}
@@ -340,22 +341,22 @@ function wsStepsSet(n){
     else if(i+1===n) steps[i].classList.add('active');
   }
 }
-let _gua=null;
-const ANALYSIS_STEPS=[
+var _gua=null;
+var ANALYSIS_STEPS=[
   {label:'Tính quái số & nạp âm bản mệnh',ms:900},
   {label:'Tư vấn màu sắc & phối đồ',ms:0},
 ];
-const TRYON_STEPS=[
+var TRYON_STEPS=[
   {label:'Chuẩn bị trang phục theo mệnh',ms:1200},
   {label:'Đang tạo ảnh trang phục',ms:0},
 ];
-let _analysisLoadingCtl=null;
-let _tryonLoadingCtl=null;
+var _analysisLoadingCtl=null;
+var _tryonLoadingCtl=null;
 
 // Bản sao NHỎ của NH_COLORS.primary (app/api/phong-thuy/route.ts) — CHỈ danh
 // sách màu CHÍNH, để hé làm hook. Bản đầy đủ (secondary/avoid + styleGuide AI)
 // vẫn nằm sau requireCredits().
-const PRIMARY_BY_HANH={
+var PRIMARY_BY_HANH={
   'Kim':['Trắng','Bạc','Xám nhạt','Vàng kim'],
   'Mộc':['Xanh lá','Xanh ngọc','Xanh lam nhạt','Nâu gỗ'],
   'Thủy':['Đen','Navy','Xanh dương đậm','Xanh biển'],
@@ -540,13 +541,13 @@ function renderResults(data){
   });
 }
 
-let _napAmHanh = null;
-let _tryonGender = 'male';
-let _tryonImageData = null;
-let _tryonMediaType = 'image/jpeg';
-let _tryonStyle = 'cong-so';
-let _tryonResultUrl = null;
-let _tryonCurrentSlug = null;
+var _napAmHanh = null;
+var _tryonGender = 'male';
+var _tryonImageData = null;
+var _tryonMediaType = 'image/jpeg';
+var _tryonStyle = 'cong-so';
+var _tryonResultUrl = null;
+var _tryonCurrentSlug = null;
 
 function onTryonFile(e) { if (e.target.files[0]) loadTryonFile(e.target.files[0]); }
 function handleTryonDrop(e) { const f = e.dataTransfer.files[0]; if (f) loadTryonFile(f); }
