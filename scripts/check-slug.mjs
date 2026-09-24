@@ -61,7 +61,11 @@ function firstToken(src, toolId) {
   const results = hits.map((m) => {
     const head = m[1];
     if (head === 'TOOL_ID') {
-      const idMatch = src.match(/const\s+TOOL_ID\s*=\s*['"]([^'"]+)['"]/);
+      // `var` chấp nhận song song `const`: soft-nav (docs/luat/spa-nav.md) đổi
+      // các trang chạy lại được qua điều hướng mềm từ `const`/`let` top-level
+      // sang `var` (tránh SyntaxError redeclare) — cú pháp đổi, giá trị và vị
+      // trí kiểm tra (phải bắt đầu bằng tool_id) giữ nguyên.
+      const idMatch = src.match(/(?:const|var)\s+TOOL_ID\s*=\s*['"]([^'"]+)['"]/);
       return { head, resolved: idMatch ? idMatch[1] : null };
     }
     const str = head.match(/^['"`]([^'"`]*)/);

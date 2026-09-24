@@ -71,6 +71,10 @@
     '/app/dat-ten-dn': 1,
     '/app/chon-ngay': 1,
     '/app/cong-so': 1,
+    '/app/nhan-mach': 1,
+    '/app/gio-sinh': 1,
+    '/app/huong-nghiep-tre': 1,
+    '/app/but-tuong': 1,
   };
   var TIMEOUT_MS = 8000;
   var inflight = false;
