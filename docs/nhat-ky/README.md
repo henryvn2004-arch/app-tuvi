@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-402 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+403 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 237 | 941,719 B |
+| `2026-09.md` | 238 | 947,692 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -27,6 +27,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 💰 Đặt nền MoMo — rail thanh toán thứ hai, chưa BẬT |
 | 1 | 2026-09 | `2026-09.md` | 💰 Nút "Lưu ảnh QR" — tự điền đủ khi khách chỉ có MỘT điện thoại |
+| 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 8: 4 trang mới + vá bug thật đã sống từ Đợt 5 (lệch ?v= của tuvi-ansao-engine.js) |
 | 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 7: 4 trang đầu tiên gọi AiLoadingSteps vào SOFT_PAGES |
 | 1 | 2026-09 | `2026-09.md` | 🔒 Vá `ai-loading-steps.js`: lưới an toàn tvmb:softnav cho registry controller |
 | 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 5: mở SOFT_PAGES cho 4 trang đầu tiên của nhóm tuvi-paywall.js |
