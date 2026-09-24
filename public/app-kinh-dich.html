@@ -188,6 +188,7 @@ window.SHELL_INTRO={key:'kinh-dich'};</script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=41" data-icons-only></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/kinh-dich.js (bảng 64 quẻ + tra quẻ) với
 // trang standalone. Gieo/animation ở đây (DOM-specific), showResult gọi module.
@@ -203,9 +204,10 @@ function wsStepsSet(n){
     else if(i+1===n) steps[i].classList.add('active');
   }
 }
-let currentLines = [];
-let step = 0;
-let isFlipping = false;
+var currentLines = []; // var: chạy lại được qua soft-nav — xem docs/luat/spa-nav.md
+var step = 0;
+var isFlipping = false;
+var _tossInterval = null; // module-level để softnav guard bên dưới clear được
 
 function toss() {
   if (isFlipping) return;
@@ -218,11 +220,12 @@ function toss() {
   const coins = [0, 1, 2].map(i => document.getElementById('coin' + i));
   coins.forEach(c => { c.classList.remove('heads', 'tails', 'flipping'); c.textContent = '?'; });
   let flipCount = 0;
-  const interval = setInterval(() => {
+  _tossInterval = setInterval(() => {
     coins.forEach(c => { c.classList.add('flipping'); c.textContent = Math.random() > 0.5 ? '正' : '反'; });
     flipCount++;
     if (flipCount >= 6) {
-      clearInterval(interval);
+      clearInterval(_tossInterval);
+      _tossInterval = null;
       const results = [0, 1, 2].map(() => Math.random() < 0.5 ? 3 : 2);
       const sum = results.reduce((a, b) => a + b, 0);
       setTimeout(() => {
@@ -340,6 +343,16 @@ function reset() {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _restore); else _restore();
 })();
+
+// Lưới an toàn soft-nav: animation tung xu chạy TỐI ĐA 600ms rồi tự
+// clearInterval, không phải poll dài như tuvi-paywall.js — nhưng nếu khách
+// bấm nút Tabbar ĐÚNG lúc đang tung (cửa sổ hẹp), interval vẫn sống sót qua
+// soft-nav và cuối cùng gọi showResult() → Shell.setContext(...) đè rail
+// context của trang MỚI bằng dữ liệu Kinh Dịch. Dừng NGAY khi rời trang.
+document.addEventListener('tvmb:softnav', function () {
+  if (_tossInterval) { clearInterval(_tossInterval); _tossInterval = null; }
+  isFlipping = false;
+});
 </script>
 </body>
 </html>

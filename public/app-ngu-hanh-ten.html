@@ -205,6 +205,7 @@ window.SHELL_INTRO={key:'ngu-hanh-ten'};</script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=41" data-icons-only></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script>
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
 // có sẵn trong flow cũ (form → kết quả), không tạo trạng thái mới. `n` các
@@ -220,7 +221,7 @@ function wsStepsSet(n) {
   }
 }
 // Ô giữa dùng CHUNG module /tools-shared/ngu-hanh-ten.js với trang standalone.
-let _syls = [];
+var _syls = []; // var: chạy lại được qua soft-nav — xem docs/luat/spa-nav.md
 
 function calculate() {
   const err = document.getElementById('error-msg');

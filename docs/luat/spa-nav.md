@@ -65,14 +65,14 @@ cú bấm mới tới trong lúc lượt trước còn đang fetch, tránh chồ
 reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt động đúng
 (soft-nav qua `popstate`).
 
-## Phạm vi hiện tại — 12/96 trang trong `SOFT_PAGES`
+## Phạm vi hiện tại — 16/96 trang trong `SOFT_PAGES`
 
 | Trang | Soft-nav? | Vì sao |
 |---|---|---|
 | Trang chủ, Các Thầy, Trò chuyện (Đợt 1) | ✅ | Test qua, không còn lỗi biết được |
 | Kim Lâu, Nạp Âm, Số Đẹp, Bản Đồ Sao, Hoàng Đạo (Đợt 2) | ✅ | Miễn phí, không `tuvi-paywall.js`, không `setInterval` riêng, script double-run sạch, stress test 60 lượt/8 trang không lỗi |
 | Bát Trạch, Lục Nhâm, Ngày Tốt, Thần Số Học (Đợt 3) | ✅ | Cùng tiêu chí Đợt 2, script double-run sạch, stress test 90 lượt/12 trang không lỗi |
-| Kỳ Môn, Mai Hoa, Ngũ Hành Tên, Kinh Dịch | ❌ full reload | Kiểm double-run PHÁT HIỆN THẬT: cả 4 khai `let`/`const` ở TOP-LEVEL script (không bọc IIFE) — `node --check` trên bản script nhân đôi báo `SyntaxError: Identifier '...' has already been declared`. Ghé lại đúng trang đó lần thứ hai qua soft-nav sẽ ném lỗi giữa chừng. Cần bọc lại IIFE trước khi thêm vào `SOFT_PAGES` — chưa làm vì không muốn sửa vội dưới áp lực thời gian; để đợt sau. |
+| Kỳ Môn, Mai Hoa, Ngũ Hành Tên, Kinh Dịch (Đợt 4) | ✅ | Vá đúng nguyên nhân gốc — xem mục Đợt 4 bên dưới, không phải IIFE |
 | Nạp Lượng (`topup.html`) | ❌ full reload | Có `setInterval` chờ thanh toán + lịch sử bug đua nhau (`nhat-ky/2026-08.md` "Purchase từng bắn trùng"). Soft-nav không huỷ `document` → interval cũ có thể sống sót qua lượt chuyển tab. Rủi ro cao hơn lợi ích tốc độ trên đúng đường tiền. |
 | Hồ Sơ (`account-core.js`, 1637 dòng, hàng chục hàm async: History/Ví/Kết nối Telegram-WhatsApp-Messenger/MCP key/Nhiệm vụ/Giới thiệu) | ❌ full reload | Không đủ thời gian dò hết — môi trường này không có Supabase/auth thật để bấm qua từng tab của trang mà đo. Một lỗi đã bắt được (`initProfile`) đã vá, nhưng đó chỉ là MỘT trong hàng chục hàm khả nghi cùng họ. |
 | **Mọi trang có `tuvi-paywall.js`** (`public/tuvi-paywall.js` — bản thật, KHÔNG phải file `tuvi-paywall.js` ở gốc repo, đã lỗi thời/không được serve) | ❌ full reload | Module này có `_qrTimer`/`_qrPoll` — CÙNG HỌ `setInterval` chờ thanh toán như `topup.html`. Rủi ro y hệt trên MỌI trang dùng module này, không chỉ Nạp Lượng — loại trừ cả nhóm cho tới khi có đợt audit riêng cho luồng trả-tại-chỗ bằng QR. |
@@ -88,8 +88,6 @@ reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt đ
   (worktree khác, nhánh `claude/audit-tuvi-paywall-softnav`) soát cụ thể
   module `tuvi-paywall.js` để mở khoá nhóm trang trả-tại-chỗ bằng QR — xem
   PR nhánh đó khi xong, đừng audit trùng.
-- **4 trang cần bọc IIFE trước** (Kỳ Môn, Mai Hoa, Ngũ Hành Tên, Kinh Dịch —
-  xem bảng trên) — việc nhỏ nhưng cần sửa mã, không phải chỉ thêm whitelist.
 - **View Transitions + prefetch-on-intent** (đã làm, xem `public/nav.js`,
   phủ 91/96 trang) là lớp NỀN riêng, áp dụng được cho MỌI trang kể cả 84
   trang chưa SPA-hoá — không phụ thuộc việc mở rộng `SOFT_PAGES`.
@@ -162,3 +160,84 @@ callback trang cũ không bao giờ chạy. Red-team: bỏ bản vá chạy lạ
 đúng ở bước "modal ẩn" (poll vẫn sống).
 
 **CHƯA làm:** không thêm trang nào vào `SOFT_PAGES` (quyết định của đợt sau).
+
+## Đợt 4: 4 trang bị loại ở Đợt 3 — vá bằng `var`, KHÔNG bọc IIFE (2026-09-24)
+
+Đợt 3 loại Kỳ Môn/Mai Hoa/Ngũ Hành Tên/Kinh Dịch vì double-run báo
+`SyntaxError` trên `let _b`/`let _mode, _r`/`let _syls`/`let currentLines,
+step, isFlipping` — và ghi nợ "cần bọc IIFE". Nhìn lại: **bọc IIFE là thừa
+và rủi ro hơn cần thiết.**
+
+**Vì sao không cần IIFE:** nguyên nhân duy nhất của `SyntaxError` là
+`let`/`const`/`class` khai Ở TOP-LEVEL của một `<script>` không cho phép
+đứng tên trùng với chính nó ở lượt chạy lại (spec ES2015, lexical
+declaration). `var` và `function` khai ở top-level thì KHÔNG bị luật này —
+chạy lại chỉ gán/định nghĩa lại, không ném lỗi, giữ nguyên hành vi (biến về
+giá trị khởi tạo — đúng thứ một trang "mới mở" cần). Bốn trang này CHỈ hỏng
+đúng ở các biến trạng thái top-level đó (`_b`, `_mode`, `_r`, `_syls`,
+`currentLines`, `step`, `isFlipping`) — mọi hàm khác đều là `function`
+(không tự đứt) và các nút bấm dùng `onclick="tenHam()"` (đọc hàm từ `window`,
+không đứng trong closure riêng). Đổi `let`/`const` → `var` cho ĐÚNG các biến
+đó là vá tận gốc, 1 dòng/biến, không đụng gì khác.
+
+Nếu bọc IIFE thay vào đó: mọi hàm hiện đang là global (`lapBan`, `gieo`,
+`calculate`, `toss`, `reset`, …) sẽ biến mất khỏi `window`, làm **mọi**
+`onclick="..."` trên 4 trang này câm — phải tự expose lại từng hàm ra
+`window.tenHam = tenHam` hoặc viết lại toàn bộ `onclick` thành
+`addEventListener`, đúng khối lượng sửa mà Đợt 3 đã né vì áp lực thời gian.
+`var` đạt cùng mục tiêu an toàn mà không đụng tới bất kỳ `onclick` nào.
+
+**Phát hiện thêm khi audit Kinh Dịch — timer bounded cũng cần lưới an toàn:**
+`toss()` chạy `setInterval` hoạt ảnh tung xu, tối đa 600ms rồi tự
+`clearInterval` — khác họ poll-vô-hạn của `tuvi-paywall.js`, nhưng vẫn CÓ
+cửa sổ rủi ro thật: bấm chuyển tab đúng lúc đang tung HÀO THỨ 6 (hào cuối) →
+soft-nav không destroy `document` → interval cũ sống hết 600ms trên trang
+MỚI → tự gọi `showResult()` → `Shell.setContext({scenario:{type:'kinh-dich'
+,...}})` ĐÈ rail context của trang khách đang đứng, dù URL đã đổi.
+
+**Đã đo được bằng red-team (không phải suy đoán):** dựng lại đúng kịch bản —
+set `step=5` (giả 5 hào đã gieo), gọi `toss()` gieo hào thứ 6, chờ 150ms
+(giữa hoạt ảnh), bấm sang trang khác, patch `Shell.setContext` để bắt cuộc
+gọi lạ. KHÔNG có bản vá: tại mốc ~1100ms (sau khi rời trang ~800ms),
+`Shell.setContext` bị gọi với `scenario.type: 'kinh-dich'` trong khi
+`location.pathname` đã là trang khác — xác nhận đúng lỗi ngờ tới, không phải
+tưởng tượng. CÓ bản vá: `step` giữ nguyên ở 5 (interval bị `clearInterval`
+giữa chừng), `stray` luôn `null` suốt 2s theo dõi.
+
+**Đã vá:** thêm `document.addEventListener('tvmb:softnav', …)` gọi
+`clearInterval(_tossInterval)` + `isFlipping = false` — tái dùng đúng biến
+`_tossInterval` (nâng từ biến cục bộ `interval` trong `toss()` lên top-level
+`var` để handler ngoài với tới), không viết đường huỷ thứ hai.
+
+**Verify:** Playwright cục bộ (server Node giả rewrite `/app/*`, không qua
+Next thật):
+- 60 lượt bấm ngẫu nhiên xen kẽ ĐỦ 8 trang (Đợt 1-3 + 4 trang mới), đo bằng
+  marker `window.__marker__` sống/chết qua điều hướng (KHÔNG dùng sự kiện
+  `framenavigated` của Playwright để suy hard-reload — `history.pushState`
+  CŨNG bắn `framenavigated`, dùng nó ra kết quả dương tính giả 100% ở lượt đo
+  đầu tiên, đã tự vấp rồi tự sửa ngay trong đợt này, ghi lại ở bẫy bên dưới):
+  0 hard-reload, 0 `pageerror`.
+- Kịch bản tung xu giữa chừng (150ms sau `toss()`, gieo hào BẤT KỲ, không
+  riêng hào cuối) rồi chuyển trang: 0 hard-reload, 0 lỗi.
+- 4 trang mới bấm sang Nạp Lượng/Hồ Sơ: vẫn full reload đúng như cũ (cơ chế
+  loại trừ theo đích, không phụ thuộc nguồn).
+- `node --check` trên bản mỗi trang NHÂN ĐÔI: sạch cả 4 (trước đây báo lỗi).
+- `npm run lint` (0 lỗi) · `npx prettier@3.9.6 --check` sạch · toàn bộ
+  `npm run check:*` (50 bộ) qua hết, kể cả `check:terms`/`check:payossig`
+  (khác PR audit tuvi-paywall.js trước đó — môi trường lần này build sẵn
+  `tuvi-engine/dist` từ đầu, không hụt package).
+
+🪤 **Bẫy tự vấp trong đợt này — `framenavigated` không phân biệt được
+soft-nav với hard-reload:** Playwright bắn sự kiện `framenavigated` cho CẢ
+điều hướng cùng tài liệu (`history.pushState`/`replaceState`, đúng cơ chế
+`shell-soft-nav.js` dùng) LẪN điều hướng thật. Đếm số lần `framenavigated`
+để suy "có reload không" cho ra 100% dương tính giả — kể cả cặp trang đã
+CHỨNG MINH an toàn từ Đợt 1-3. Phép đo đúng: đặt một biến đánh dấu trên
+`window` TRƯỚC khi bấm, đọc lại SAU — biến còn sống nghĩa là JS context
+không bị huỷ (soft-nav), biến mất/`page.evaluate` ném lỗi context-destroyed
+nghĩa là hard-reload thật.
+
+**CHƯA làm:** 84 trang còn lại (đa số `tuvi-paywall.js`) không đổi; nhóm
+`tuvi-paywall.js` giờ đã có bản vá riêng (PR audit) nhưng CHƯA trang nào
+trong nhóm đó được thêm vào `SOFT_PAGES` — vẫn là quyết định của một đợt
+sau.
