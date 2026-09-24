@@ -947,6 +947,27 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     if (_qrLastFocus && _qrLastFocus.focus) _qrLastFocus.focus();
   }
 
+  // ── Lưới an toàn soft-nav ──────────────────────────────────────────
+  // `shell-soft-nav.js` bắn `document.dispatchEvent(new CustomEvent('tvmb:
+  // softnav', …))` sau MỖI lượt chuyển trang KHÔNG reload (xem
+  // docs/luat/spa-nav.md) — trang không nạp `shell-soft-nav.js` (topup.html,
+  // mọi trang ngoài `/app/*`) không bao giờ bắn sự kiện này, nên listener
+  // này chỉ là lưới an toàn THÊM VÀO, không đổi hành vi ở những trang đó.
+  //
+  // Vì sao cần: `_qrTimer`/`_qrPoll` là interval CHỜ THANH TOÁN — không có
+  // gì tự huỷ nó khi người dùng rời trang bằng soft-nav (DOM/JS context
+  // KHÔNG bị destroy như reload thật, khác giả định "trang chỉ rời đi bằng
+  // reload" mà toàn bộ file này được viết theo). Interval sống sót gọi tiếp
+  // `_qrPoll` trên trang MỚI; nếu server báo `paid` đúng lúc đó, nó chạy
+  // `requireCredits(slug, callback)` với `slug`/`callback` CỦA TRANG CŨ —
+  // đúng họ rủi ro đã loại trừ toàn bộ nhóm dùng `tuvi-paywall.js` khỏi
+  // `SOFT_PAGES` (`docs/luat/spa-nav.md`). Dừng poll NGAY khi rời trang,
+  // TÁI DÙNG đúng `_closeQr()` (đường huỷ khi khách tự bấm đóng/Esc) — không
+  // viết đường huỷ thứ hai lệch nhau.
+  document.addEventListener('tvmb:softnav', function () {
+    if (_qrOrderCode) _closeQr();
+  });
+
   let _qrResumeSlug = null, _qrResumeCallback = null, _qrResumeAmount = null, _qrExpired = false;
 
   /** Ghi "13:45" (mm:ss) vào #tpw-qr-countdown, hoặc chuỗi hết hạn khi hết giờ. */
