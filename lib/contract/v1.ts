@@ -135,9 +135,16 @@ export interface ScenarioInput {
   data: Record<string, unknown>;
   /** Tài liệu RAG kèm theo (tùy chọn — kịch bản không có tool tra cứu). */
   docs?: string;
-  /** Persona tác giả (tùy chọn). */
+  /** Persona tác giả (tùy chọn) — tên/câu mô tả để HIỂN THỊ (avatar, tên trên
+   *  rail), KHÔNG dùng để đổi giọng — server không tin chuỗi tự do từ client. */
   authorName?: string;
   authorStyle?: string;
+  /**
+   * hellobot-ui-redesign Đợt 4 (additive): khoá thật để ĐỔI GIỌNG, tra vào
+   * `lib/agent/personas.ts` (PERSONAS), khớp `master_profiles.id` — vd.
+   * 'tu-nguyen', 'thanh-hu'. Id lạ/rỗng ⇒ không có persona, KHÔNG lỗi.
+   */
+  authorId?: string;
 }
 
 // ── REQUEST: POST /api/v1/chat ──────────────────────────────
@@ -163,6 +170,8 @@ export interface ChatRequestV1 {
   /** Persona tác giả cho luồng LÁ SỐ (birth). Với scenario, đặt trong scenario. */
   authorName?: string;
   authorStyle?: string;
+  /** Đợt 4: khoá đổi giọng thật cho luồng LÁ SỐ — xem chú thích ở ScenarioInput. */
+  authorId?: string;
   /**
    * "Vỏ bọc" kể chuyện cho luồng LÁ SỐ — KHÔNG đổi dữ liệu, chỉ đổi cách nói.
    *

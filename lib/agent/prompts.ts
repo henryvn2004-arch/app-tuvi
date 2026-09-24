@@ -25,6 +25,7 @@ import { chuanHoaDauThanh } from "@/lib/vn-text";
 // này — xem `TRA_VAN_NAM_BAT_TU_TOOL` bên dưới — nên registry.ts mới là phía
 // PHẢI tránh, không phải mọi thứ trong `lib/tools/*`).
 import { SUGGEST_TOOL_DEF } from "@/lib/tools/suggest-tool";
+import { personaVoice } from "@/lib/agent/personas";
 
 // "Hôm nay" gửi cho LLM PHẢI theo giờ VN, không theo giờ server (Vercel chạy
 // UTC) — nếu không, trong khung 00:00–06:59 giờ VN (=17:00–23:59 UTC hôm
@@ -126,13 +127,16 @@ export const LASO_MAX_TOKENS = 1350;
 export function buildChatContext(body: any): ChatContext {
   const toolType    = body.toolType || 'laso';
   const docs        = body.docs as string | undefined;
-  // 2026-09-19 (Henry): gỡ persona tác giả (authorName/authorStyle) khỏi
-  // system prompt — đo không ra khác biệt giọng đáng kể trong ngân sách 120–180
-  // từ + khung 5 lớp đã siết sẵn, chỉ tốn thêm ký tự mỗi lượt gọi. UI "chọn
-  // thầy" (tuvi-chat.html/shell.js) CỐ Ý giữ nguyên — chỉ còn là trang trí
-  // (tên/avatar), không còn đổi câu trả lời. Vẫn giữ tham số `persona` rỗng
-  // xuyên suốt các hàm CHAT_SYSTEM_* bên dưới để không phải sửa 20+ chữ ký hàm.
-  const persona = '';
+  // 2026-09-24 (hellobot-ui-redesign Đợt 4): MỞ LẠI persona — ĐẢO quyết định
+  // 2026-09-19 ("gỡ vì không đo ra khác biệt"). Lý do đảo lại KHÔNG phải bản
+  // cũ sai, mà bản cũ (AUTHOR_ROSTER, mô tả TÍNH CÁCH) không cho model thứ gì
+  // cụ thể để bám — xem lib/agent/personas.ts. Bản mới có bắt buộc phải qua
+  // `node scripts/eval-personas.mjs` (chấm mù ≥80%) TRƯỚC khi coi là xong;
+  // đừng lặp lại sai lầm merge mà không đo.
+  // `authorId` khớp `master_profiles.id`/AUTHOR_ROSTER — client gửi lên qua
+  // `body.authorId` (lá số) hoặc `body.scenario.authorId` (đã gộp ở nơi gọi
+  // buildChatContext, xem scenarioToBody trong lib/agent/run.ts).
+  const persona = personaVoice(body.authorId) || '';
 
   if (toolType === 'xem-tuoi' || toolType === 'xem-lam-an' || toolType === 'tuong-hop') {
     return {
