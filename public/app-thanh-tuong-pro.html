@@ -265,7 +265,7 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // 'thanh-tuong-pro' (10đ) khi TuviPaywall.init — bản port này dùng đúng
 // product 'thanh-tuong-pro' ngay từ đầu.
 // ══════════════════════════════════════════════════════════════════════
-const TASKS = [
+var TASKS = [
   {
     id: 'baseline',
     num: '1/4',
@@ -304,7 +304,7 @@ const TASKS = [
   }
 ];
 
-let state = {
+var state = {
   gender: null,
   age: null,
   currentIdx: 0,
@@ -330,37 +330,37 @@ function wsStepsSet(n){
   }
 }
 
-const $ = id => document.getElementById(id);
-const genderOpts = $('genderOpts');
-const ageInput = $('ageInput');
-const startBtn = $('startBtn');
-const tasksSection = $('tasksSection');
-const taskCard = $('taskCard');
-const taskNum = $('taskNum');
-const taskTime = $('taskTime');
-const taskTitle = $('taskTitle');
-const taskInstruction = $('taskInstruction');
-const taskText = $('taskText');
-const recordBtn = $('recordBtn');
-const countdown = $('countdown');
-const timerWrap = $('timerWrap');
-const timerBar = $('timerBar');
-const waveWrap = $('waveWrap');
-const waveCanvas = $('waveCanvas');
-const recordStatus = $('recordStatus');
-const taskDone = $('taskDone');
-const taskDoneText = $('taskDoneText');
-const nextBtn = $('nextBtn');
-const retryBtn = $('retryBtn');
-const taskProgress = $('taskProgress');
-const featuresPanel = $('featuresPanel');
-const featuresGrid = $('featuresGrid');
-const featuresWarn = $('featuresWarn');
-const nguamBadge = $('nguamBadge');
-const analyzeWrap = $('analyzeWrap');
-const analyzeBtn = $('analyzeBtn');
-const resultsPanel = $('resultsPanel');
-const resultsCard = $('resultsCard');
+var $ = id => document.getElementById(id);
+var genderOpts = $('genderOpts');
+var ageInput = $('ageInput');
+var startBtn = $('startBtn');
+var tasksSection = $('tasksSection');
+var taskCard = $('taskCard');
+var taskNum = $('taskNum');
+var taskTime = $('taskTime');
+var taskTitle = $('taskTitle');
+var taskInstruction = $('taskInstruction');
+var taskText = $('taskText');
+var recordBtn = $('recordBtn');
+var countdown = $('countdown');
+var timerWrap = $('timerWrap');
+var timerBar = $('timerBar');
+var waveWrap = $('waveWrap');
+var waveCanvas = $('waveCanvas');
+var recordStatus = $('recordStatus');
+var taskDone = $('taskDone');
+var taskDoneText = $('taskDoneText');
+var nextBtn = $('nextBtn');
+var retryBtn = $('retryBtn');
+var taskProgress = $('taskProgress');
+var featuresPanel = $('featuresPanel');
+var featuresGrid = $('featuresGrid');
+var featuresWarn = $('featuresWarn');
+var nguamBadge = $('nguamBadge');
+var analyzeWrap = $('analyzeWrap');
+var analyzeBtn = $('analyzeBtn');
+var resultsPanel = $('resultsPanel');
+var resultsCard = $('resultsCard');
 
 genderOpts.addEventListener('click', e => {
   const opt = e.target.closest('.gender-opt');
@@ -1185,7 +1185,7 @@ Spectral centroid: ${fmt(t.centroid, 0)} Hz
 Phân tích theo đúng 6 phần quy định. Bắt buộc dẫn nguyên văn kinh điển (phiên âm Hán-Việt kèm dịch). Nếu sustainDuration < 2.5s HOẶC shimmer > 1.2dB → bắt buộc phán "Khí bất túc" ở phần 2.`;
 }
 
-let _currentSlug = '';
+var _currentSlug = '';
 
 analyzeBtn.addEventListener('click', async () => {
   wsStepsSet(3); // Thanh toán — chốt tường trước khi gọi model
@@ -1275,7 +1275,7 @@ async function _doThanhTuongAnalyze() {
 // Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
 // CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tách thành thẻ
 // trích dẫn màu (.fb-card, xem shell.css), cùng cơ chế với app-luan-giai.html.
-const HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
+var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
 function renderMarkdown(md){
   let h = md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')

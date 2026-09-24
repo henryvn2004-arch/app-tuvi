@@ -285,6 +285,7 @@ window.SHELL_INTRO={key:'kieu-toc-phan-tich'};</script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
   <script src="/nav.js?v=41" data-icons-only></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 function initKieuToc(){
@@ -301,8 +302,8 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // Port từ public/tools/kieu-toc-ai.html — giữ nguyên MediaPipe FaceMesh đo
 // mặt + gate Lượng 2 sản phẩm (phân tích + tryon) + luồng camera/upload.
 // ══════════════════════════════════════════════════════════════════════
-const SB_TEMPLATES = 'https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/hair-templates';
-const TEMPLATE_MAP = {
+var SB_TEMPLATES = 'https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/hair-templates';
+var TEMPLATE_MAP = {
   undercut:    'undercut_nam',    pompadour:   'pompadour_nam',  curtain:     'curtain_nam',
   buzz:        'buzz_nam',        textured:    'textured_nam',   two_block:   'two_block_nam',
   side_part:   'side_part_nam',   slick_back:  'slick_back_nam',
@@ -340,7 +341,7 @@ function _hairThumb(id, gender) {
   return `<div class="ic" data-icon="scissors" style="width:52px;height:64px;display:flex;align-items:center;justify-content:center;background:var(--paper);border:1px solid var(--border-lt);border-radius:7px;font-size:22px"></div>`;
 }
 
-const STYLE_META = {
+var STYLE_META = {
   undercut:    { name: 'Undercut',         sub: 'Fade hai bên sát, đỉnh dài — cổ điển hiện đại' },
   pompadour:   { name: 'Pompadour',        sub: 'Bờm vuốt cao phía trước — vintage-modern' },
   curtain:     { name: 'Curtain Bangs',    sub: 'Mái rèm rẽ ngôi giữa, tự nhiên' },
@@ -373,7 +374,7 @@ const STYLE_META = {
   money_piece: { name: 'Money Piece',      sub: 'Highlight frame mặt 2 bên — trendy, ít tốn công' },
 };
 
-const GLASSES_META = {
+var GLASSES_META = {
   rectangle: { name: 'Gọng Chữ Nhật',   sub: 'Gọng mỏng hiện đại — phù hợp hầu hết khuôn mặt',  icon: 'glasses' },
   round:     { name: 'Gọng Tròn Retro',  sub: 'Phong cách Hàn/vintage — làm mềm khuôn mặt vuông',  icon: 'circle-dot' },
   oval:      { name: 'Gọng Oval',        sub: 'Nhẹ nhàng tinh tế — hài hòa với mọi khuôn mặt',     icon: 'glasses' },
@@ -382,20 +383,20 @@ const GLASSES_META = {
   aviator:   { name: 'Aviator',          sub: 'Giọt nước cổ điển — unisex, mạnh mẽ tự tin',         icon: 'glasses' },
 };
 
-const ALL_STYLES_NAM = ['undercut','pompadour','curtain','buzz','textured','two_block','side_part','slick_back','cushion_perm','layered_curl','perm_wave'];
-const ALL_STYLES_NU  = ['curtain_nu','wolf','bob','long_layers','pixie','side_waves','wispy','shag','lob','blunt_fringe','textured_wavy','pompadour_nu','undercut_nu','korean_perm','hime','jellyfish','butterfly','aline_bob','glass_hair','money_piece'];
+var ALL_STYLES_NAM = ['undercut','pompadour','curtain','buzz','textured','two_block','side_part','slick_back','cushion_perm','layered_curl','perm_wave'];
+var ALL_STYLES_NU  = ['curtain_nu','wolf','bob','long_layers','pixie','side_waves','wispy','shag','lob','blunt_fringe','textured_wavy','pompadour_nu','undercut_nu','korean_perm','hime','jellyfish','butterfly','aline_bob','glass_hair','money_piece'];
 
-const SHAPE_ICON = { oval: 'user', round: 'circle-dot', square: 'user', heart: 'heart', oblong: 'user' };
+var SHAPE_ICON = { oval: 'user', round: 'circle-dot', square: 'user', heart: 'heart', oblong: 'user' };
 
-let _imageData = null;
-let _mediaType = 'image/jpeg';
-let _faceMeasurements = null;
-let _gender = 'nam';
-let _analysisResult = null;
-let _currentSlug = null;
-let _camStream = null;
-let _tryonImgUrl = null;
-let _selectedStyleId = null;
+var _imageData = null;
+var _mediaType = 'image/jpeg';
+var _faceMeasurements = null;
+var _gender = 'nam';
+var _analysisResult = null;
+var _currentSlug = null;
+var _camStream = null;
+var _tryonImgUrl = null;
+var _selectedStyleId = null;
 
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
 // có sẵn trong flow cũ (form → paywall → kết quả, KHÔNG có tầng xem trước).
@@ -411,16 +412,16 @@ function wsStepsSet(n) {
     else if (i + 1 === n) steps[i].classList.add('active');
   }
 }
-const ANALYSIS_STEPS = [
+var ANALYSIS_STEPS = [
   { label: 'Đo khuôn mặt bằng MediaPipe', ms: 1000 },
   { label: 'Phân tích hình dạng khuôn mặt', ms: 0 },
 ];
-const TRYON_STEPS = [
+var TRYON_STEPS = [
   { label: 'Chuẩn bị ảnh & prompt', ms: 1200 },
   { label: 'Đang tạo ảnh kiểu tóc mới', ms: 0 },
 ];
-let _analysisLoadingCtl = null;
-let _tryonLoadingCtl = null;
+var _analysisLoadingCtl = null;
+var _tryonLoadingCtl = null;
 
 function setGender(g, btn) {
   _gender = g;

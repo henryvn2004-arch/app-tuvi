@@ -219,6 +219,7 @@ window.SHELL_INTRO={key:'thu-tuong'};</script>
   <script src="/nav.js?v=41" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script>
 function initThuTuong(){
   Shell.setContext({
@@ -234,8 +235,8 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // Port từ public/tools/thu-tuong-ai.html — MediaPipe Hands geometry
 // + gate Lượng + SSE 'delta' stream tới /api/tuong-mat?action=thu-tuong.
 // ══════════════════════════════════════════════════════════════════════
-let _imageData=null, _mediaType='image/jpeg', _camStream=null;
-let _mpHandsReady=false, _handGeoNote=null, _currentSlug='';
+var _imageData=null, _mediaType='image/jpeg', _camStream=null;
+var _mpHandsReady=false, _handGeoNote=null, _currentSlug='';
 
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
 // có sẵn trong flow cũ (tải ảnh → thanh toán → kết quả), không tạo trạng
@@ -264,7 +265,7 @@ function loadHands(cb) {
   document.head.appendChild(s);
 }
 
-const HAND_CONNECTIONS = [
+var HAND_CONNECTIONS = [
   [0,1],[1,2],[2,3],[3,4],
   [0,5],[5,6],[6,7],[7,8],
   [5,9],[9,10],[10,11],[11,12],
@@ -272,9 +273,9 @@ const HAND_CONNECTIONS = [
   [13,17],[17,18],[18,19],[19,20],
   [0,17]
 ];
-const FINGER_TIPS = [4,8,12,16,20];
-const FINGER_MCPS = [2,5,9,13,17];
-const FINGER_NAMES = ['Ngón cái','Ngón trỏ','Ngón giữa','Ngón áp út','Ngón út'];
+var FINGER_TIPS = [4,8,12,16,20];
+var FINGER_MCPS = [2,5,9,13,17];
+var FINGER_NAMES = ['Ngón cái','Ngón trỏ','Ngón giữa','Ngón áp út','Ngón út'];
 
 function detectHand(imgEl, cb) {
   loadHands((err) => {
@@ -560,7 +561,7 @@ function resetTool() {
 // Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
 // CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tách thành thẻ
 // trích dẫn màu (.fb-card, xem shell.css), cùng cơ chế với app-luan-giai.html.
-const HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
+var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
 function renderMd(md){
   return md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -622,6 +623,14 @@ async function _saveTuongReading(tool, resultText, imageData, mediaType) {
     }).catch(() => {});
   } catch(e) {}
 }
+
+// Lưới an toàn soft-nav: camera thật (đèn báo trên máy) không tự tắt khi
+// soft-nav rời trang — chỉ dừng track của MediaStream, KHÔNG gọi
+// stopCamera() đầy đủ vì hàm đó đụng thẳng vào id UI riêng của trang này
+// (không có null-check), có thể ném lỗi nếu trang MỚI không cùng cấu trúc.
+document.addEventListener('tvmb:softnav', function () {
+  if (_camStream) { _camStream.getTracks().forEach(function (t) { t.stop(); }); _camStream = null; }
+});
 </script>
 </body>
 </html>

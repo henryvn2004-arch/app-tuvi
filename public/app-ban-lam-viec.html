@@ -330,6 +330,7 @@ window.SHELL_INTRO={key:'ban-lam-viec'};</script>
 <script src="/tuvi-paywall.js?v=37"></script>
   <script src="/nav.js?v=41" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/bat-trach.js?v=2"></script>
 <script>
@@ -351,22 +352,22 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // (nguồn DUY NHẤT, dùng chung với /tools/bat-trach.html). Bản chép tay cũ ở
 // đây sai 12/64 ô Du Niên + dùng công thức cung mệnh SAI (tổng 4 chữ số năm
 // thay vì 2 chữ số cuối — xem ghi chú đầu file bat-trach.js).
-const GUA_DATA=BatTrachTool.guaDataLegacy();
-const DIR_VN={N:'Bắc',NE:'Đông Bắc',E:'Đông',SE:'Đông Nam',S:'Nam',SW:'Tây Nam',W:'Tây',NW:'Tây Bắc',C:'Trung Tâm'};
+var GUA_DATA=BatTrachTool.guaDataLegacy();
+var DIR_VN={N:'Bắc',NE:'Đông Bắc',E:'Đông',SE:'Đông Nam',S:'Nam',SW:'Tây Nam',W:'Tây',NW:'Tây Bắc',C:'Trung Tâm'};
 
 function calcGua(y,g){return BatTrachTool.getCungMenh(y,g==='male'?'nam':'nu');}
 
-let _gua=null,_img64=null,_imgType='image/jpeg';
-const ANALYSIS_STEPS=[
+var _gua=null,_img64=null,_imgType='image/jpeg';
+var ANALYSIS_STEPS=[
   {label:'Nhận diện đồ vật trong ảnh',ms:6000},
   {label:'Phân tích Bát Trạch & đưa đề xuất',ms:0},
 ];
-const RENDER_STEPS=[
+var RENDER_STEPS=[
   {label:'Chuẩn bị prompt render theo ngũ hành',ms:1200},
   {label:'Đang render không gian mới',ms:0},
 ];
-let _analysisLoadingCtl=null;
-let _renderLoadingCtl=null;
+var _analysisLoadingCtl=null;
+var _renderLoadingCtl=null;
 
 function onYearChange(){
   const y=parseInt(document.getElementById('namSinh').value);
@@ -517,7 +518,7 @@ function renderResults(data){
   });
 }
 
-const ITEM_ICON={bed:'home',desk:'briefcase',sofa:'home',altar:'temple',stove:'flame',plant:'leaf',mirror:'aperture',door:'door-open',toilet:'droplet',water:'droplet',wardrobe:'door-open',tv:'monitor',monitor:'monitor',laptop:'monitor',lamp:'lamp',phone:'monitor',notebook:'book-open',keyboard:'monitor',mouse:'monitor',clock:'clock',speaker:'volume-2',printer:'file-text',drawer:'package',cashier:'dollar-sign',entrance:'door-open',display:'store',storage:'package',counter:'store',safe:'lock',seating:'home',sign:'pin',light:'lightbulb'};
+var ITEM_ICON={bed:'home',desk:'briefcase',sofa:'home',altar:'temple',stove:'flame',plant:'leaf',mirror:'aperture',door:'door-open',toilet:'droplet',water:'droplet',wardrobe:'door-open',tv:'monitor',monitor:'monitor',laptop:'monitor',lamp:'lamp',phone:'monitor',notebook:'book-open',keyboard:'monitor',mouse:'monitor',clock:'clock',speaker:'volume-2',printer:'file-text',drawer:'package',cashier:'dollar-sign',entrance:'door-open',display:'store',storage:'package',counter:'store',safe:'lock',seating:'home',sign:'pin',light:'lightbulb'};
 function getIcon(id){return '<span class="ic" data-icon="'+(ITEM_ICON[id]||'package')+'"></span>';}
 function renderExtraResults(data){
   const a=data.analysis;
@@ -525,8 +526,8 @@ function renderExtraResults(data){
   if(a.focusTips){document.getElementById('focusCard').style.display='block';document.getElementById('focusContent').textContent=a.focusTips;}
 }
 
-let _renderGua=null,_renderWorkType='workspace',_renderGender='male',_renderRecs=[],_renderResultUrl=null,_renderSlug=null;
-let _ptBefore=null,_ptAfter=null,_ptAdvice='';
+var _renderGua=null,_renderWorkType='workspace',_renderGender='male',_renderRecs=[],_renderResultUrl=null,_renderSlug=null;
+var _ptBefore=null,_ptAfter=null,_ptAdvice='';
 function resetRender(){document.getElementById('renderIdle').style.display='block';document.getElementById('renderLoading').style.display='none';document.getElementById('renderResult').style.display='none';document.getElementById('renderErr').style.display='none';_renderResultUrl=null;}
 async function doRoomRender(){
   if(!_img64)return;

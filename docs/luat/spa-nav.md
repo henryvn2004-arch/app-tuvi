@@ -65,7 +65,7 @@ cú bấm mới tới trong lúc lượt trước còn đang fetch, tránh chồ
 reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt động đúng
 (soft-nav qua `popstate`).
 
-## Phạm vi hiện tại — 28/96 trang trong `SOFT_PAGES`
+## Phạm vi hiện tại — 51/96 trang trong `SOFT_PAGES` (54 route, `/app/la-so`+`/app/luan-giai` chung file)
 
 | Trang | Soft-nav? | Vì sao |
 |---|---|---|
@@ -76,9 +76,10 @@ reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt đ
 | Đặt Tên, Đặt Tên Doanh Nghiệp, Chọn Ngày, Công Sở (Đợt 5) | ✅ | CÓ `tuvi-paywall.js` nhưng module đã được vá (đợt audit trước) + 4 trang này không tự gọi thư viện có timer nào — xem mục Đợt 5 bên dưới |
 | Nhân Mạch, Giờ Sinh, Hướng Nghiệp Trẻ, Bút Tướng (Đợt 7) | ✅ | 2/4 gọi `AiLoadingSteps` (giờ an toàn nhờ Đợt 6) — xem mục Đợt 7 bên dưới |
 | Khí Sắc, Trang Điểm, Vận Hạn Năm, Xem Tuổi/Xem Làm Ăn/Tương Hợp (Đợt 8) | ✅ | Phát hiện + vá một bug thật ĐÃ SỐNG từ Đợt 5/7 (lệch `?v=` của `tuvi-ansao-engine.js`) — xem mục Đợt 8 bên dưới |
+| 23 trang còn lại của nhóm `tuvi-paywall.js` (Đợt 9) | ✅ | Hết cả nhóm — xem mục Đợt 9 bên dưới. Cố ý loại `thanh-tuong-pro` (bug rò mic có sẵn, không liên quan soft-nav) |
 | Nạp Lượng (`topup.html`) | ❌ full reload | Có `setInterval` chờ thanh toán + lịch sử bug đua nhau (`nhat-ky/2026-08.md` "Purchase từng bắn trùng"). Soft-nav không huỷ `document` → interval cũ có thể sống sót qua lượt chuyển tab. Rủi ro cao hơn lợi ích tốc độ trên đúng đường tiền. |
 | Hồ Sơ (`account-core.js`, 1637 dòng, hàng chục hàm async: History/Ví/Kết nối Telegram-WhatsApp-Messenger/MCP key/Nhiệm vụ/Giới thiệu) | ❌ full reload | Không đủ thời gian dò hết — môi trường này không có Supabase/auth thật để bấm qua từng tab của trang mà đo. Một lỗi đã bắt được (`initProfile`) đã vá, nhưng đó chỉ là MỘT trong hàng chục hàm khả nghi cùng họ. |
-| **23 trang còn lại có `tuvi-paywall.js`** | ❌ full reload | `ai-loading-steps.js` đã có lưới an toàn (Đợt 6) — nhưng vẫn cần audit RIÊNG từng trang (double-run + stress test + kiểm `?v=` mọi script dùng chung) trước khi mở. |
+| Thầy Tướng Chuyên Sâu (`thanh-tuong-pro.html`) | ❌ full reload | Bug rò tài nguyên có sẵn, ĐỘC LẬP với soft-nav — mic (`state.stream`) không bao giờ `.getTracks().forEach(t=>t.stop())` ở BẤT KỲ luồng nào, kể cả xong việc bình thường. Vá riêng, đợt sau. |
 
 ## CHƯA làm — cố ý, không phải thiếu sót
 
@@ -120,6 +121,13 @@ reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt đ
    hợp trang để chạm đúng cặp lệch version. Script CÓ bọc IIFE (kiểm bằng
    mắt: mở đầu bằng `(function() {`/`(function(root){`) thì double-load
    vô hại, không cần đồng bộ version.
+6. **Đổi `let`/`const` top-level → `var` thì soát TÊN BIẾN trùng với MỌI
+   script dùng chung đang có trong `SOFT_PAGES`**, không chỉ double-run
+   sạch chính trang đó — `var`/`const` không cho trộn cùng tên trong
+   cùng scope dù script nào khai trước. Phát hiện ở Đợt 9:
+   `trang-phuc-theo-ngay.html` đổi `_CAN`/`_CHI` sang `var` xong vẫn vỡ
+   vì `tuvi-ansao-engine.js` (nhiều trang khác đã nạp) khai `const` cùng
+   tên. `node --check` nhân đôi KHÔNG bắt được va chạm chéo này.
 
 ## Audit `public/tuvi-paywall.js` (2026-09-24) — module bị loại trừ ở Đợt 1-2
 
@@ -481,3 +489,130 @@ nhưng có nguyên nhân xác định được.
 của một đợt sau. Khuyến nghị mạnh: đợt sau BẮT BUỘC làm bước 5 mới
 (kiểm `?v=` với TOÀN BỘ `SOFT_PAGES`, không chỉ trang cùng đợt) trước
 khi thêm bất kỳ trang nào.
+
+## Đợt 9: hết nhóm `tuvi-paywall.js` (23 trang) + bug cấu trúc thật ở tầng điều phối (2026-09-24)
+
+Henry: "Làm nốt luôn đi" — gộp cả 23 trang còn lại của nhóm
+`tuvi-paywall.js` vào MỘT đợt (khác các đợt trước, mỗi lần 4 trang):
+Bàn Làm Việc, Bát Tự, Bói Bài Tây, Chân Dung Tiền Kiếp, Chân Dung Vợ
+Chồng, Chu Trình Cuộc Đời, Cửa Hàng Phong Thuỷ, Da Liễu AI, Dạy Con,
+Diện Tướng, Duyên Nợ Tiền Kiếp, Kiểu Tóc, Lá Số/Luận Giải (chung file
+`app-luan-giai.html`, hai route), Màu Sắc Hợp Mệnh, Người Khác, Nhân
+Tướng, Oracle, Personal Color, Phong Thuỷ, Tarot, Thần Tướng, Thủ
+Tướng, Trang Phục Theo Ngày. Cố ý LOẠI `thanh-tuong-pro.html` — xem
+mục riêng bên dưới.
+
+**Vá theo nhóm rủi ro, không phải một khuôn cho tất cả:**
+- 16 trang có `let`/`const` top-level → đổi `var` (khuôn Đợt 4/7).
+- `trang-phuc-theo-ngay.html`: đổi `var _CAN`/`_CHI` xong VẪN vỡ ở
+  stress test diện rộng — va với chính `const _CAN`/`_CHI` top-level
+  của `tuvi-ansao-engine.js` (nhiều trang khác trong `SOFT_PAGES` đã
+  nạp file đó). Khác họ lỗi Đợt 8 (đó là lệch `?v=` của CÙNG một
+  script) — đây là HAI SCRIPT KHÁC NHAU tình cờ trùng tên biến
+  top-level, và `var`/`const` không cho phép trộn tên trong cùng một
+  scope dù ai khai trước. Vá: đổi tên biến riêng của trang
+  (`_CAN`/`_CHI` → `_TPTN_CAN`/`_TPTN_CHI`), không đụng gì khác.
+  **Bài học cho đợt sau:** đổi `let`/`const`→`var` không chỉ cần double-run
+  sạch CHÍNH trang đó — còn phải soát tên biến top-level không trùng
+  với bất kỳ script DÙNG CHUNG nào khác đang có mặt trong `SOFT_PAGES`.
+- Diện Tướng, Nhân Tướng, Thủ Tướng, Thần Tướng: dùng camera
+  (`getUserMedia`) — soft-nav không destroy `document` nên đèn camera
+  không tự tắt khi rời trang nếu không vá. `stopCamera()`/`resetTool()`
+  có sẵn của từng trang KHÔNG dùng được trực tiếp (đụng thẳng nhiều id
+  UI riêng không kiểm null, ném lỗi nếu trang đích không cùng cấu
+  trúc) — vá bằng listener `tvmb:softnav` TỐI GIẢN, CHỈ dừng
+  `MediaStream`/`AudioContext`/timer, không đụng DOM.
+- Duyên Nợ Tiền Kiếp: preview trực tiếp (debounce input, không phải
+  form submit) ghi kết quả `fetch` trễ vào `#hookHost` — id DÙNG CHUNG
+  hàng chục trang khác. Cùng họ lỗi `ai-loading-steps.js` (Đợt 6) nhưng
+  ở mã BESPOKE của một trang, không phải thư viện dùng chung — vá bằng
+  cờ `_hookLeftPage` set ở `tvmb:softnav`, continuation của `fetch`
+  kiểm cờ trước khi ghi DOM.
+- `thanh-tuong-pro.html`: soát `getTracks()`/`.stop()` toàn file — **0
+  kết quả**. Mic không được dừng ở BẤT KỲ nhánh nào, kể cả lúc xong
+  việc bình thường — bug ĐỘC LẬP với soft-nav, không phải thứ một vá
+  `tvmb:softnav` sửa trọn vẹn. Loại khỏi đợt này, để việc riêng.
+
+**Bug cấu trúc thật — race ở CHÍNH tầng điều phối `shell-soft-nav.js`,
+không phải ở trang nào:** stress test 200 lượt/47 trang bắt được
+`TypeError: Cannot read properties of null (reading 'style')` (và
+`'appendChild'`) ở NHIỀU trang khác nhau, kể cả trang đã shipped từ
+Đợt 1-8 — tức không phải lỗi RIÊNG của 23 trang mới, mà lỗi CÓ SẴN
+trong cơ chế dùng chung, chỉ cần đủ trang + đủ tần suất bấm mới lộ.
+
+*Cơ chế đã đo được:* `go()` khi thấy `inflight` (soft-nav trước còn
+đang fetch) thì rớt về `fullReload()` (`location.href=…`) — ĐÚNG THIẾT
+KẾ. Nhưng gán `location.href` KHÔNG lập tức huỷ JS đang chạy của tài
+liệu hiện tại; có một khoảng ngắn tài liệu CŨ vẫn "sống" trong khi
+trình duyệt đang tháo dỡ nó để nạp trang mới. Nếu một cú bấm KHÁC (tới
+một trang thứ ba) diễn ra sát đúng lúc đó, promise chain của `go()` cho
+cú bấm đó có thể chạy hết `fetch` + `runPageScripts` NGAY TRÊN tài liệu
+đang bị tháo dỡ — `runInlineScript()` của trang thứ ba thực thi
+`initXxx()` gọi `Shell.setContext()` đúng khoảnh khắc `#shell-rail`
+(chứa `railCtx`/`chat`/`railInput`… — dựng ĐÚNG MỘT LẦN ở `boot()`,
+không bao giờ dựng lại) đã bị trình duyệt gỡ khỏi DOM cùng phần còn lại
+của tài liệu cũ → `getElementById` ra `null` giữa chừng. Vì `#chat`
+cũng nằm trong `#shell-rail`, bất kỳ trang nào tự vẽ trực tiếp vào
+`#chat` (như `chatStepMoiLo()` ở Dạy Con) mắc đúng họ lỗi này.
+
+**Đã vá — hai lớp, không phải một:**
+1. `shell-soft-nav.js`: thêm cờ `navigating`, bật NGAY trong
+   `fullReload()` trước khi gán `location.href`; MỌI bước còn lại của
+   MỌI chain `go()` đang treo (đầu vào, sau khi `fetch` resolve, trước
+   mỗi script trong `runPageScripts`, trước bước cuối) tự kiểm cờ này
+   trước khi đụng DOM. Giảm tần suất đáng kể nhưng KHÔNG triệt để (thí
+   nghiệm đo lại vẫn thấy lỗi lọt qua — cửa sổ đủ hẹp để né được vài
+   điểm kiểm nhưng không phải TẤT CẢ, giữa lúc `runInlineScript()`
+   đang thực thi và lúc trình duyệt thật sự tháo DOM là JS đơn luồng
+   nên không chèn được kiểm tra ở giữa).
+2. **Vá thật (chặn đứng) — null-guard ngay tại `Shell.setContext()`**
+   (chokepoint DUY NHẤT mọi trang gọi để gắn rail): nếu `railCtx`/
+   `railCtxTxt` không có (nghĩa là `#shell-rail` đã mất, bất kể vì lý
+   do gì) thì `return` ngay, không vẽ tiếp — cùng khuôn mẫu ĐÃ CÓ SẴN
+   trong chính file này cho `initProfile()`/`authLoading` (Hồ Sơ). Đây
+   mới là lưới chặn TẬN GỐC — lớp 1 chỉ giảm khả năng chạm phải, lớp 2
+   làm cho CHẠM PHẢI cũng an toàn. `chatStepMoiLo()` (Dạy Con) vá
+   riêng bằng null-guard `chat` cùng lý do.
+
+**Vì sao chỉ vá `setContext()` mà không audit hết mọi hàm ghi vào
+`#shell-rail`:** đúng nguyên tắc "vá TẬN GỐC một lần" đã dùng cho
+nghĩa địa (Đợt 1) và `ai-loading-steps.js` (Đợt 6) — `setContext()` là
+chokepoint mọi trang gọi để bắt đầu phiên rail, chặn ở đó phủ được
+TUYỆT ĐẠI ĐA SỐ đường vào. `chatStepMoiLo()` là ngoại lệ ĐÃ BẮT ĐƯỢC
+bằng stress test nên vá theo, không phải audit đầy đủ mọi hàm DÙNG
+`#chat` trực tiếp trên 50+ trang — nợ tương tự nợ đã ghi ở Hồ Sơ.
+
+**Verify:** Playwright cục bộ, server giả có thêm ĐỘ TRỄ NGẪU NHIÊN
+30-220ms cho fetch trang (mô phỏng mạng thật, mở rộng cửa sổ đua —
+không có độ trễ này thì race gần như không lộ trên local) — 200 lượt
+bấm ngẫu nhiên/47 trang, lặp lại 8+ lần liên tiếp SAU khi vá lớp 2:
+0 `pageerror` mọi lần, kể cả lượt có 20-40 hard-reload thật. TRƯỚC khi
+vá lớp 2 (chỉ có lớp 1): vẫn thấy lỗi lọt ở khoảng nửa số lượt chạy —
+xác nhận lớp 2 mới là lưới chặn thật. `node --check` bản NHÂN ĐÔI: sạch
+cả 24 file (23 mới + Dạy Con). `npm run lint` (0 lỗi, chỉ cảnh báo cũ
+không liên quan) · `npx prettier@3.9.6 --check` sạch mọi file đã sửa ·
+`npm run check:slug`/`check:shellboot`/`check:navph`/`check:groups`/
+`check:webdriver` qua hết.
+
+🪤 **Bẫy tự vấp trong đợt này — double-run sạch từng file KHÔNG chứng
+minh hết va chạm biến top-level:** `node --check` nhân đôi MỘT file chỉ
+bắt được redeclare TRONG chính file đó, không bắt được va chạm CHÉO
+với script khác đang cùng có mặt trong phiên SPA (`_CAN`/`_CHI` ở
+`trang-phuc-theo-ngay.html` vs `tuvi-ansao-engine.js`). Đợt sau đổi
+`let`/`const`→`var` phải thêm bước: liệt kê toàn bộ tên biến top-level
+CỦA MỌI script dùng chung ĐANG có trong `SOFT_PAGES`, đối chiếu tên
+mới định đổi.
+
+🪤 **Bẫy thứ hai — race ở tầng điều phối không lộ khi test riêng từng
+trang, chỉ lộ khi test đủ RỘNG (nhiều trang) và đủ TRỄ (mạng chậm):**
+tám lượt chạy đầu KHÔNG có độ trễ nhân tạo cho thấy 0 lỗi dù cùng bộ
+trang/cùng số lượt bấm — thêm độ trễ 30-220ms cho fetch trang mới lộ
+race ổn định. Kết luận "0 lỗi" từ một môi trường local NHANH HƠN mạng
+thật là kết luận vội — bài học chung: race phụ thuộc TIMING cần test ở
+tốc độ mạng THẬT hoặc mô phỏng trễ, không chỉ tốc độ localhost.
+
+**Cố ý CHƯA làm:** `thanh-tuong-pro.html` — cần vá đúng vòng đời
+`MediaStream` (dừng ở MỌI nhánh thoát, không riêng lúc soft-nav) trước
+khi đủ điều kiện vào `SOFT_PAGES`, việc của một đợt sau. Toàn bộ 96
+trang app-shell giờ chỉ còn `topup.html`, `Hồ Sơ`, và
+`thanh-tuong-pro.html` ngoài `SOFT_PAGES`.
