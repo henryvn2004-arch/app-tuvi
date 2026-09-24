@@ -327,6 +327,14 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 ## 🔭 Việc đang treo (cập nhật khi xong, đừng để mục chết nằm lại)
 
 ### Việc tay Henry — code không làm thay được
+- **MoMo (rail thanh toán thứ hai, đã đặt nền — chưa BẬT)**: đăng ký merchant
+  MoMo AIO/`payWithMethod`, lấy `MOMO_PARTNER_CODE`/`MOMO_ACCESS_KEY`/
+  `MOMO_SECRET_KEY`, set trên Vercel (`MOMO_MODE` để trống = môi trường test).
+  Chạy `_patches/migration-momo-settle.sql` trong Supabase SQL editor. Gửi
+  lại tài liệu chữ ký mới nhất từ Merchant Portal để Claude đối chiếu
+  `lib/billing/momo.ts` (viết từ tài liệu công khai, CHƯA test tay) — bắt buộc
+  trước khi set `MOMO_MODE=live`. Thử MỘT đơn thật ở `test-payment.momo.vn`
+  trước. Chi tiết: `docs/nhat-ky/2026-09.md` "Đặt nền MoMo".
 - **Facebook Page**: token chết (`code 190`), **54 bài `queued` từ 02/08**. Cấp lại
   token Page vĩnh viễn (5 bước in trong `FB_TOKEN_EXPIRED`, `lib/media/publish.ts`).
   ⚠️ Chỉ **copy** App Secret, **TUYỆT ĐỐI không Reset** — Messenger/WhatsApp đang

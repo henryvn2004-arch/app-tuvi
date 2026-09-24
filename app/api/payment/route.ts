@@ -9,6 +9,7 @@ export const maxDuration = 15;
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { signPayOSData } from '@/lib/billing/payos';
+import { signMomoCreate, MOMO_CREATE_ENDPOINT } from '@/lib/billing/momo';
 import { getPackages, quoteCustomVnd, vndPerCredit } from '@/lib/billing/packages';
 // Mọi thứ chạm PayPal ở MỘT chỗ (lib/billing/paypal) — webhook dùng chung bản
 // đó, nên không có hai đường tiền song song để mà trôi lệch.
@@ -792,8 +793,122 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
     if (bin && !bankName) console.warn('[create-bank] BIN chua co trong BANK_BY_BIN:', bin);
     return ok({ orderCode, checkoutUrl: d.checkoutUrl, accountNumber: d.accountNumber,
       accountName: d.accountName, bin: d.bin, bankName, bankCode, amountVND,
+      // Chuỗi VietQR payOS phát ra — client vẽ thành ảnh để khách LƯU rồi quét
+      // bằng chính app ngân hàng trên cùng máy (`bank-deeplink.js`).
+      qrCode: d.qrCode || null,
       credits, label, description });
   } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: create-momo ────────────────────────────────────────
+// Cùng khuôn với `handleCreateBank` — chỉ khác cổng. Đứng riêng thay vì gọi
+// chung một hàm: hai cổng có tham số ký khác nhau, gộp lại chỉ để tiết kiệm
+// vài dòng đổi lại thành một hàm chung phải if/else theo cổng ở giữa, khó đọc
+// hơn hai hàm thẳng.
+async function handleCreateMomo(body: Record<string, unknown>): Promise<Response> {
+  const partnerCode = process.env.MOMO_PARTNER_CODE || '';
+  const accessKey   = process.env.MOMO_ACCESS_KEY   || '';
+  const secretKey   = process.env.MOMO_SECRET_KEY   || '';
+  if (!partnerCode || !accessKey || !secretKey) return err('MoMo chưa được cấu hình', 501);
+
+  const packageId = String(body.packageId || '');
+  const userId    = String(body.userId    || '');
+  if (!userId) return err('Missing userId', 400);
+
+  let amountVND: number;
+  let credits: number;
+  let label: string;
+
+  if (packageId === 'custom') {
+    const customAmountVnd = Number(body.customAmountVnd || 0);
+    if (customAmountVnd < 50_000 || customAmountVnd > 5_000_000)
+      return err('Custom amount must be 50.000đ – 5.000.000đ', 400);
+    amountVND = customAmountVnd;
+    credits   = (await quoteCustomVnd(customAmountVnd)).credits;
+    if (credits <= 0) return err('Không quy đổi được số Lượng cho số tiền này', 500);
+    label = `Nap ${credits} Luong`;
+  } else {
+    const pkgs  = await getPackages();
+    const found = pkgs[packageId];
+    if (!found) return err(`Invalid packageId. Use: ${Object.keys(pkgs).join(', ')}`, 400);
+    amountVND = found.amountVnd;
+    credits   = found.credits;
+    label     = `${found.label} – ${found.credits} Luong`;
+  }
+
+  const orderId     = `TVMBMM${Date.now()}`;
+  const requestId    = orderId;
+  const orderInfo    = 'Nap Luong tuviminhbao.com';
+  const redirectUrl  = `${SITE_URL}/topup.html?payment=success&method=momo&orderId=${orderId}`;
+  // MoMo gọi IPN NGƯỢC LẠI server này — phải là URL công khai (prod), không
+  // gọi được vào preview/dev. Cùng ràng buộc với `PAYPAL_WEBHOOK_ID`/webhook payOS.
+  const ipnUrl       = `${SITE_URL}/api/momo-webhook`;
+  const requestType  = 'payWithMethod';
+  const extraData    = ''; // Không dùng để chốt đơn (xem lib/billing/momo.ts) — để trống là hợp lệ.
+
+  const signature = signMomoCreate(
+    { accessKey, amount: amountVND, extraData, ipnUrl, orderId, orderInfo, partnerCode, redirectUrl, requestId, requestType },
+    secretKey,
+  );
+
+  try {
+    const res = await fetch(MOMO_CREATE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        partnerCode, partnerName: 'Tử Vi Minh Bảo', storeId: 'TuviMinhBao',
+        requestId, amount: amountVND, orderId, orderInfo, redirectUrl, ipnUrl,
+        lang: 'vi', extraData, requestType, signature, autoCapture: true, orderGroupId: '',
+      }),
+    });
+    const momoData = await res.json();
+    if (Number(momoData.resultCode) !== 0) return err(momoData.message || 'MoMo error');
+
+    await fetch(`${SUPABASE_URL}/rest/v1/momo_orders`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Prefer': 'resolution=ignore-duplicates' },
+      body: JSON.stringify({
+        order_id: orderId, user_id: userId, package_id: packageId,
+        amount_vnd: amountVND, credits, label,
+        status: 'pending', created_at: new Date().toISOString(),
+      }),
+    });
+
+    return ok({
+      orderId, payUrl: momoData.payUrl || null,
+      // `deeplink` mở THẲNG app MoMo (nếu khách đã cài) — đường 1-click thật
+      // sự tự điền sẵn số tiền/nội dung, nhưng chỉ chạy khi khách có app MoMo
+      // (ví MoMo hoặc thẻ đã liên kết). `payUrl` là trang web MoMo dựng, luôn
+      // mở được, tự đề nghị mở app nếu máy có cài.
+      deeplink: momoData.deeplink || null,
+      qrCodeUrl: momoData.qrCodeUrl || null,
+      amountVND, credits, label,
+    });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: momo-status ─────────────────────────────────────────
+// Client cần biết CÓ hiện nút MoMo hay không TRƯỚC khi vẽ nút — chưa có
+// MOMO_PARTNER_CODE/MOMO_ACCESS_KEY/MOMO_SECRET_KEY (Henry chưa đăng ký xong
+// merchant) mà vẫn hiện nút cho khách thật bấm thì ra lỗi "chưa cấu hình"
+// giữa lúc khách đang cố trả tiền — tệ hơn không có nút. Chỉ trả CÓ/KHÔNG,
+// đúng luật `lib/ops/preflight.ts`: không rò giá trị biến môi trường.
+function handleMomoStatus(): Response {
+  const available = !!(process.env.MOMO_PARTNER_CODE && process.env.MOMO_ACCESS_KEY && process.env.MOMO_SECRET_KEY);
+  return ok({ available });
+}
+
+// ── GET: check-momo ────────────────────────────────────────────
+async function handleCheckMomo(sp: URLSearchParams): Promise<Response> {
+  const orderId = sp.get('orderId') || '';
+  if (!orderId) return err('Missing orderId', 400);
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/momo_orders?order_id=eq.${encodeURIComponent(orderId)}&select=status,credits,amount_vnd&limit=1`,
+    { cache: 'no-store', headers: SB_HEADERS }
+  );
+  const rows: { status: string; credits: number; amount_vnd: number }[] = res.ok ? await res.json() : [];
+  if (!rows.length) return err('Order not found', 404);
+  return ok({ paid: rows[0].status === 'paid', credits: rows[0].credits, amountVND: rows[0].amount_vnd });
 }
 
 // ── GET: check-bank ───────────────────────────────────────────
@@ -1582,6 +1697,8 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-social-proof') return handleAdminSocialProofList(request, searchParams);
   if (action === 'admin-backlinks') return handleAdminBacklinks(request);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
+  if (action === 'check-momo')  return handleCheckMomo(searchParams);
+  if (action === 'momo-status') return handleMomoStatus();
   return err('Invalid action.', 400);
 }
 
@@ -3593,6 +3710,7 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-users-upsert') return handleAdminUsersUpsert(request, body);
   if (action === 'admin-users-set-active') return handleAdminUsersSetActive(request, body);
   if (action === 'create-bank')       return handleCreateBank(body);
+  if (action === 'create-momo')       return handleCreateMomo(body);
   if (action === 'referral-register') return handleReferralRegister(request, body);
   if (action === 'onboarding-sync')   return handleOnboardingSync(request);
   if (action === 'memory-edit')       return handleMemoryEdit(request, body);
