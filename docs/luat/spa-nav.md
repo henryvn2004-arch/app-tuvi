@@ -1,8 +1,9 @@
-# SPA-hoá tốc độ — Đợt 1 (2026-09-24)
+# SPA-hoá tốc độ — Đợt 1-2 (2026-09-24)
 
 Henry test thật trên điện thoại: "bấm nút chậm" (mỗi lần chuyển tab app-shell
 là một lượt tải trang HTML đầy đủ). Yêu cầu: SPA-hoá **toàn bộ 96 trang**.
-Đợt 1 KHÔNG làm được toàn bộ trong một lượt — lý do và ranh giới ghi ở đây.
+Không làm được toàn bộ trong một lượt — mở rộng dần theo đợt, lý do và ranh
+giới hiện tại ghi ở đây (cập nhật mỗi đợt, đừng tạo file mới).
 
 ## Kiến trúc
 
@@ -52,29 +53,32 @@ nhưng đây là vá hú hoạ, không phải audit đầy đủ (xem "CHƯA là
 ## Verify
 
 Playwright cục bộ (server Node giả các rewrite `/app/*`, không qua Next.js
-vì môi trường build ở đây thiếu `SUPABASE_URL`): 40 lượt bấm ngẫu nhiên xen
-kẽ 3 trang, độ trễ ngẫu nhiên 10-160ms (cố tình đua) — 0 lần reload, 0 lỗi.
-Nút Back/Forward trình duyệt hoạt động đúng (soft-nav qua `popstate`).
+vì môi trường build ở đây thiếu `SUPABASE_URL`): Đợt 1 — 40 lượt bấm ngẫu
+nhiên xen kẽ 3 trang, độ trễ ngẫu nhiên 10-160ms (cố tình đua) — 0 lần
+reload, 0 lỗi. Đợt 2 — mở rộng lên 60 lượt xen kẽ đủ 8 trang, cùng kịch
+bản — vẫn 0 lần reload, 0 lỗi. Nút Back/Forward trình duyệt hoạt động đúng
+(soft-nav qua `popstate`).
 
-## Phạm vi Đợt 1 — 3/5 tab
+## Phạm vi hiện tại — 8/96 trang trong `SOFT_PAGES`
 
-| Tab | Soft-nav? | Vì sao |
+| Trang | Soft-nav? | Vì sao |
 |---|---|---|
-| Trang chủ, Các Thầy, Trò chuyện | ✅ | Test qua, không còn lỗi biết được |
+| Trang chủ, Các Thầy, Trò chuyện (Đợt 1) | ✅ | Test qua, không còn lỗi biết được |
+| Kim Lâu, Nạp Âm, Số Đẹp, Bản Đồ Sao, Hoàng Đạo (Đợt 2) | ✅ | Miễn phí, không `tuvi-paywall.js`, không `setInterval` riêng, script double-run sạch, stress test 60 lượt/8 trang không lỗi |
 | Nạp Lượng (`topup.html`) | ❌ full reload | Có `setInterval` chờ thanh toán + lịch sử bug đua nhau (`nhat-ky/2026-08.md` "Purchase từng bắn trùng"). Soft-nav không huỷ `document` → interval cũ có thể sống sót qua lượt chuyển tab. Rủi ro cao hơn lợi ích tốc độ trên đúng đường tiền. |
 | Hồ Sơ (`account-core.js`, 1637 dòng, hàng chục hàm async: History/Ví/Kết nối Telegram-WhatsApp-Messenger/MCP key/Nhiệm vụ/Giới thiệu) | ❌ full reload | Không đủ thời gian dò hết — môi trường này không có Supabase/auth thật để bấm qua từng tab của trang mà đo. Một lỗi đã bắt được (`initProfile`) đã vá, nhưng đó chỉ là MỘT trong hàng chục hàm khả nghi cùng họ. |
+| **Mọi trang có `tuvi-paywall.js`** (`public/tuvi-paywall.js` — bản thật, KHÔNG phải file `tuvi-paywall.js` ở gốc repo, đã lỗi thời/không được serve) | ❌ full reload | Module này có `_qrTimer`/`_qrPoll` — CÙNG HỌ `setInterval` chờ thanh toán như `topup.html`. Rủi ro y hệt trên MỌI trang dùng module này, không chỉ Nạp Lượng — loại trừ cả nhóm cho tới khi có đợt audit riêng cho luồng trả-tại-chỗ bằng QR. |
 
 ## CHƯA làm — cố ý, không phải thiếu sót
 
-- **93 trang công cụ còn lại** (lá số, xem tướng, phong thủy, Bát Tự…) —
-  Henry muốn SPA-hoá TOÀN BỘ 96 trang, nhưng đây là việc nhiều phiên: mỗi
-  trang cần cùng một vòng kiểm — dò `setInterval`/polling, dò hàm async có
-  thể chạm DOM sau khi rời trang, test thật bằng Playwright — trước khi thêm
-  vào whitelist `SOFT_PAGES`. Cơ chế nghĩa địa giảm rủi ro nhưng KHÔNG loại
-  bỏ hoàn toàn (không cứu được `setInterval` polling thật, chỉ cứu callback
-  một lần chạm DOM).
+- **88 trang còn lại** (đa số có `tuvi-paywall.js` — lá số, xem tướng, phong
+  thủy, Bát Tự…) — mỗi trang/nhóm cần cùng một vòng kiểm — dò `setInterval`/
+  polling, dò hàm async có thể chạm DOM sau khi rời trang, test thật bằng
+  Playwright — trước khi thêm vào whitelist `SOFT_PAGES`. Cơ chế nghĩa địa
+  giảm rủi ro nhưng KHÔNG loại bỏ hoàn toàn (không cứu được `setInterval`
+  polling thật, chỉ cứu callback một lần chạm DOM).
 - **View Transitions + prefetch-on-intent** (đã làm, xem `public/nav.js`,
-  phủ 91/96 trang) là lớp NỀN riêng, áp dụng được cho MỌI trang kể cả 93
+  phủ 91/96 trang) là lớp NỀN riêng, áp dụng được cho MỌI trang kể cả 88
   trang chưa SPA-hoá — không phụ thuộc việc mở rộng `SOFT_PAGES`.
 - **Chưa đo hiệu năng thật trước/sau** bằng Lighthouse — môi trường build ở
   đây không có mạng ổn định ra `tuviminhbao.com` (đã ghi trong `CLAUDE.md`)

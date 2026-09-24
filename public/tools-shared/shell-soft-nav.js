@@ -7,6 +7,15 @@
 // đọc gì từ HTML tĩnh của từng trang, xem `renderSidebar`/`renderTabbar`/
 // `renderRail`), nên không cần dựng lại giữa các trang này.
 //
+// Đợt 2 (2026-09-24) — mở rộng sang 5 trang công cụ MIỄN PHÍ, không paywall,
+// không polling: Kim Lâu · Nạp Âm · Số Đẹp · Bản Đồ Sao · Hoàng Đạo. Chọn
+// theo đúng quy trình `docs/luat/spa-nav.md`: không `tuvi-paywall.js` (module
+// đó có `_qrTimer` — cùng họ `setInterval` chờ thanh toán như `topup.html`,
+// rủi ro y hệt lý do loại Nạp Lượng ở Đợt 1) + không `setInterval` riêng +
+// script trang double-run sạch (`node --check` trên bản NHÂN ĐÔI nội dung
+// script, bắt lỗi redeclare `const/let/class` top-level) + stress test
+// Playwright (bấm ngẫu nhiên xen kẽ, độ trễ đua nhau) không lỗi.
+//
 // CỐ Ý CHƯA áp dụng cho 2/5 tab còn lại:
 // - `/app/nap-luong` (topup.html): có `setInterval` chờ thanh toán + lịch sử
 //   bug đua nhau đã ghi trong docs/nhat-ky/2026-08.md ("Purchase từng bắn
@@ -33,7 +42,16 @@
 (function () {
   'use strict';
 
-  var SOFT_PAGES = { '/app': 1, '/app/thay': 1, '/app/tro-chuyen': 1 };
+  var SOFT_PAGES = {
+    '/app': 1,
+    '/app/thay': 1,
+    '/app/tro-chuyen': 1,
+    '/app/kim-lau': 1,
+    '/app/nap-am': 1,
+    '/app/so-dep': 1,
+    '/app/ban-do-sao': 1,
+    '/app/hoang-dao': 1,
+  };
   var TIMEOUT_MS = 8000;
   var inflight = false;
 
