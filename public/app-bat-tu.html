@@ -303,6 +303,7 @@ function startIntake(){
 }
 function showNamxemStep(){
   var chat=document.getElementById('chat');
+  if(!chat)return; // lưới an toàn soft-nav — xem chú thích ở Shell.setContext (shell.js)
   var el=document.createElement('div'); el.className='msg a';
   el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
     '<div class="msg-body"><p>Con muốn luận vận năm nào?</p>'+

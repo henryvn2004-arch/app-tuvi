@@ -106,6 +106,8 @@
     '/app/thanh-tuong-pro': 1,
     '/app/thu-tuong': 1,
     '/app/trang-phuc-theo-ngay': 1,
+    '/app/tai-khoan': 1,
+    '/app/ho-so': 1,
   };
   var TIMEOUT_MS = 8000;
   var inflight = false;
