@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-395 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+396 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 225 | 894,629 B |
+| `2026-09.md` | 231 | 913,995 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🔒 Audit `tuvi-paywall.js` cho soft-nav: vá poll QR sống sót qua điều hướng mềm |
 | 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 3: thêm 4 trang, phát hiện họ lỗi mới (top-level `let` redeclare) |
 | 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 2: mở rộng soft-nav sang 5 trang công cụ miễn phí |
 | 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 1: SPA-hoá 3/5 tab app-shell + prefetch/view-transitions toàn site |

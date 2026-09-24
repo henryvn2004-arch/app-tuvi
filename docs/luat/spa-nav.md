@@ -106,3 +106,59 @@ reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt đ
 3. Test bằng kịch bản giống Đợt 1: bấm nhanh, ngẫu nhiên, độ trễ đua nhau,
    bắt `page.on('pageerror')`.
 4. Nghĩa địa giúp giảm rủi ro nhưng không phải giấy phép bỏ qua bước 2-3.
+
+## Audit `public/tuvi-paywall.js` (2026-09-24) — module bị loại trừ ở Đợt 1-2
+
+Đợt 1-2 loại trừ NGUYÊN nhóm 40+ trang dùng module này (không phải file
+`tuvi-paywall.js` ở gốc repo, đã lỗi thời/không được serve — bản thật ở
+`public/`) khỏi `SOFT_PAGES` vì `_qrTimer`/`_qrPoll` — cùng họ `setInterval`
+chờ thanh toán như `topup.html` — nhưng không kịp audit trong đợt đó. Việc
+này audit riêng module đó (không mở `SOFT_PAGES` — đó là quyết định của một
+đợt sau).
+
+**Vòng đời poll:** `_openBankQr` → `setInterval(…,3000)` (`_qrTimer`) gọi
+`_qrPoll` mỗi 3s + `visibilitychange` gọi thêm khi quay lại tab. Thành công
+thì tự `clearInterval`/null `_qrOrderCode` rồi chạy `requireCredits(slug,
+callback)` — `slug`/`callback` là CLOSURE của trang lúc mở QR. Đường huỷ khi
+khách tự đóng modal/Esc: `_closeQr()`.
+
+**Đã vá:** `document.addEventListener('tvmb:softnav', …)` gọi ĐÚNG
+`_closeQr()` khi `_qrOrderCode` đang có giá trị — TÁI DÙNG, không viết đường
+huỷ thứ hai. Không vá thì soft-nav không destroy `document` → interval sống
+sót qua lượt chuyển trang → `check-bank` báo `paid` đúng lúc khách đã sang
+tool khác sẽ chạy `requireCredits` của TRANG CŨ trên bối cảnh trang MỚI —
+đúng họ rủi ro đã loại trừ cả nhóm để tránh. Trang không nạp
+`shell-soft-nav.js` (topup.html, ngoài `/app/*`) không bao giờ bắn sự kiện
+này nên không đổi gì hành vi ở đó.
+
+**Phần còn lại của file — audit "callback trễ chạm DOM null" (họ lỗi đã vá ở
+`account-core.js`/`app-thay.html`):** mọi `getElementById` (29 lần) đều nhắm
+phần tử module TỰ TẠO, gắn vào `document.body`/`document.head` (modal QR,
+banner, refund modal, script nạp lười) — KHÔNG nằm trong `#ws`, không bị
+`#ws.innerHTML=` của soft-nav xoá mất, nên KHÔNG cùng họ rủi ro null như các
+script trang riêng. Các hàm ghi vào phần tử DO TRANG TRUYỀN VÀO
+(`lockPreview(host)`, `mountCostHints`, `_softLock`/`_hintAnchors`) đã tự
+kiểm bằng đúng kiểu codebase dùng (`document.body.contains(veil)`,
+`afterEl.parentNode`, `_visible()`) — nghĩa địa của `shell-soft-nav.js` giữ
+các phần tử này SỐNG (vô hình) đủ lâu nên await dang dở ghi vào đó không ném
+lỗi, chỉ ghi vô hại vào DOM đã chôn. **Không tìm thấy thêm lỗi null-crash nào
+cần vá** trong lượt audit này.
+
+**IIFE + double-run:** `const TuviPaywall = (() => {...})()` — IIFE thật,
+không rò biến ngoài `window.TuviPaywall`. `node --check` trên bản NHÂN ĐÔI
+báo lỗi redeclare, NHƯNG file nạp qua `<script src="/tuvi-paywall.js?v=NN">`
+(không phải script rời trong `body`) — `shell-soft-nav.js` chỉ chạy lại
+script KHÔNG `src`, script CÓ `src` bị bỏ qua nếu URL đã nạp (`loadedSrc`).
+🪤 **Cờ cần nhớ nếu mở `SOFT_PAGES` cho nhóm này:** mọi trang cùng một đợt
+PHẢI cùng `?v=` của `tuvi-paywall.js` — lệch version thì soft-nav coi là
+"chưa nạp", chèn `<script>` thứ hai, IIFE thứ hai ném `SyntaxError` lúc parse
+(không chạy — `TuviPaywall` cũ còn nguyên — nhưng xả lỗi console).
+
+**Verify:** harness Playwright riêng (server Node tĩnh + trang nạp CHÍNH
+`public/tuvi-paywall.js`, stub `Auth`/`ToolPrices`/`fetch`) chạy thật
+`requireCredits → _insufficient → _openBankQr`, xác nhận poll chạy thật rồi
+bắn `tvmb:softnav` → modal ẩn NGAY + 0 lượt `check-bank` thêm trong 9.5s +
+callback trang cũ không bao giờ chạy. Red-team: bỏ bản vá chạy lại — fail
+đúng ở bước "modal ẩn" (poll vẫn sống).
+
+**CHƯA làm:** không thêm trang nào vào `SOFT_PAGES` (quyết định của đợt sau).
