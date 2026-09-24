@@ -393,6 +393,33 @@ function wsStepsSet(n){
 function _ctcdDummyPromise(){ return TuviPaywall.loadSampleJson('/samples/chu-trinh-cuoc-doi-dummy.json'); }
 var _ctcdDummy=null;
 _ctcdDummyPromise();
+// Đợt 1 phần 4 (2026-09-24): thẻ report trong chat — cùng mẫu app-luan-giai.html
+// (tool anh em, cùng cấu trúc #lgScores/doLuan/initLuanGiaiGate). Đọc lại
+// điểm đã render trong `#lgScores` (KHÔNG tính lại) rồi bấm "Xem" = bấm HỘ
+// đúng nút "Kết quả" (`[data-act="artifact"]`) có sẵn — không thêm đường
+// mới, không đụng gì trong luồng thanh toán (Luận giải chuyên sâu AI vẫn
+// khoá riêng, không đổi).
+function appendReportCard(){
+  var chat=document.getElementById('chat');
+  var scores=document.getElementById('lgScores');
+  if(!chat||!scores) return;
+  var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; })();
+  var cards=Array.prototype.slice.call(scores.querySelectorAll('.sc')).map(function(sc){
+    var lb=sc.querySelector('.lb'), vl=sc.querySelector('.vl');
+    var v=vl&&vl.firstChild?vl.firstChild.textContent:'—';
+    return '<div class="chat-hl-n"><b>'+esc(v)+'</b><span>'+esc(lb?lb.textContent:'')+'</span></div>';
+  }).join('');
+  if(!cards) return;
+  var el=document.createElement('div'); el.className='msg a';
+  el.innerHTML='<img class="msg-ava" src="'+av+'" alt="">'+
+    '<div class="msg-body"><div class="chat-hl"><div class="chat-hl-row">'+cards+'</div>'+
+    '<button type="button" class="chat-hl-cta" id="lgOpenResult">Xem 9 đại vận →</button></div></div>';
+  chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  document.getElementById('lgOpenResult').addEventListener('click',function(){
+    var ab=document.querySelector('[data-act="artifact"]');
+    if(ab) ab.click();
+  });
+}
 async function doLuan(){
   var btn=document.getElementById('btnGo');
   var namxem=parseInt(document.getElementById('inpNamxem').value)||new Date().getFullYear();
@@ -446,6 +473,7 @@ async function doLuan(){
       text:_shareHead,
       liveText:true
     });
+    appendReportCard();
     initLuanGiaiGate(ls);
   }catch(e){
     document.getElementById('lgBody').innerHTML='<div class="laso-error">Lỗi khi luận giải: '+esc(e.message)+'</div>';
