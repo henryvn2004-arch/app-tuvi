@@ -16,6 +16,14 @@
 // script, bắt lỗi redeclare `const/let/class` top-level) + stress test
 // Playwright (bấm ngẫu nhiên xen kẽ, độ trễ đua nhau) không lỗi.
 //
+// Đợt 3 (2026-09-24) — thêm 4 trang miễn phí khác cùng tiêu chí: Bát Trạch ·
+// Lục Nhâm · Ngày Tốt · Thần Số Học. Kiểm 8 ứng viên (thêm cả Kỳ Môn · Mai
+// Hoa · Ngũ Hành Tên · Kinh Dịch) bằng double-run — 4 trong số đó ĐÃ FAIL:
+// `let`/`const` khai ở TOP-LEVEL script (không bọc IIFE), redeclare khi
+// điều hướng mềm ghé lại lần hai sẽ ném `SyntaxError` giữa chừng. CỐ Ý loại
+// 4 trang đó ra khỏi Đợt 3 (Kỳ Môn/Mai Hoa/Ngũ Hành Tên/Kinh Dịch cần bọc
+// lại IIFE trước, để đợt sau) thay vì sửa vội dưới áp lực thời gian.
+//
 // CỐ Ý CHƯA áp dụng cho 2/5 tab còn lại:
 // - `/app/nap-luong` (topup.html): có `setInterval` chờ thanh toán + lịch sử
 //   bug đua nhau đã ghi trong docs/nhat-ky/2026-08.md ("Purchase từng bắn
@@ -51,6 +59,10 @@
     '/app/so-dep': 1,
     '/app/ban-do-sao': 1,
     '/app/hoang-dao': 1,
+    '/app/bat-trach': 1,
+    '/app/luc-nham': 1,
+    '/app/ngay-tot': 1,
+    '/app/than-so-hoc': 1,
   };
   var TIMEOUT_MS = 8000;
   var inflight = false;
