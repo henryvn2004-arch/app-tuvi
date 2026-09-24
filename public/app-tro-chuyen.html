@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Trò chuyện — Tử Vi Minh Bảo</title>
+<meta name="description" content="Toàn bộ hội thoại với Luận Đường — mở lại bất kỳ lúc nào, hoặc bắt đầu một câu hỏi mới."/>
+<link rel="icon" type="image/webp" href="/seal.webp"/>
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
+<link rel="stylesheet" href="/shell.css?v=53"/>
+<style>
+.ws-body{padding:22px 26px 60px;max-width:720px}
+.tc-new{display:flex;align-items:center;gap:10px;border:1px dashed var(--line-2);border-radius:12px;padding:14px 16px;margin-bottom:22px;background:var(--paper);cursor:pointer;width:100%;text-align:left;font:inherit;color:inherit}
+.tc-new:hover{border-color:var(--gold-soft)}
+.tc-new b{display:block;font-family:var(--serif);font-size:14px;color:var(--heading)}
+.tc-new span{display:block;font-size:12px;color:var(--text-lt);margin-top:2px}
+.tc-new .tc-plus{width:34px;height:34px;border-radius:50%;background:var(--gold-soft);color:#2a1e05;display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 auto}
+.tc-list{display:flex;flex-direction:column;gap:8px}
+.tc-item{display:flex;align-items:center;gap:11px;border:1px solid var(--line);background:var(--white);border-radius:11px;padding:11px 12px;text-decoration:none}
+.tc-ic{width:34px;height:34px;border-radius:50%;background:var(--paper-2);display:flex;align-items:center;justify-content:center;color:var(--gold-soft);flex:0 0 auto}
+.tc-ic svg{width:17px;height:17px}
+.tc-tx{flex:1;min-width:0}
+.tc-tx b{display:block;font-size:13.5px;color:var(--heading);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tc-tx span{display:block;font-size:11.5px;color:var(--text-lt);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Trò chuyện</b><span>Mọi hội thoại với Luận Đường, gộp từ mọi công cụ</span></div>
+    </div>
+    <div class="ws-body">
+      <button type="button" class="tc-new" id="tcNew">
+        <span class="tc-plus">+</span>
+        <span><b>Hỏi mới</b><span>Bắt đầu một câu hỏi — hệ thống tự chọn đúng công cụ</span></span>
+      </button>
+      <div id="tcLoading" style="padding:2.5rem 0;text-align:center;color:var(--text-lt);font-size:13px">Đang tải…</div>
+      <div id="tcEmpty" style="display:none;padding:2rem 1rem;text-align:center;color:var(--text-lt);font-size:13.5px;line-height:1.7">
+        Chưa có hội thoại nào.<br>Bấm "Hỏi mới" ở trên, hoặc mở bất kỳ công cụ nào và hỏi trợ lý.
+      </div>
+      <div class="tc-list" id="tcList"></div>
+    </div>
+  </main>
+</div>
+
+<script src="/nav.js?v=41" data-icons-only></script>
+<script src="/auth.js?v=2"></script>
+<script>window.SHELL_ACTIVE='tro-chuyen';</script>
+<script src="/shell.js?v=100"></script>
+<script>
+(function(){
+  // 2026-09-24 (hellobot-ui-redesign): trang "Trò chuyện" — hộp thư hội thoại
+  // GỘP mọi công cụ, thay cho việc lịch sử bị chia lẻ theo từng trang tool.
+  //
+  // 🔁 Cách hợp nhất local + server GIỐNG HỆT tab "Lịch Sử" trong
+  // app-tai-khoan.html (local() + /api/tuvi-chats, lọc type bắt đầu 'app-') —
+  // CỐ Ý chép lại đúng logic đó thay vì gọi chéo (hai trang độc lập, không
+  // export hàm dùng chung). Sửa cách hợp nhất thì PHẢI sửa CẢ HAI nơi. Việc
+  // gộp app-tai-khoan.html#lichsu THÀNH một link trỏ vào đây là việc của đợt
+  // sau (đợt 1 chỉ dựng trang mới, không đụng trang tai-khoan).
+  var TOOLMAP = { 'luan-giai': 'Luận giải Tử Vi', 'la-so': 'Lá số Tử Vi', 'bat-tu': 'Lá số Bát Tự', 'xem-tuoi': 'Xem tuổi vợ chồng', 'xem-lam-an': 'Xem tuổi làm ăn', 'tuong-hop': 'Tương hợp tuổi', 'sinh-con': 'Xem tuổi sinh con', 'chon-ngay': 'Chọn ngày tốt', 'dat-ten': 'Đặt tên con', 'dat-ten-dn': 'Đặt tên doanh nghiệp', 'ngu-hanh-ten': 'Ngũ hành tên', 'nap-am': 'Nạp âm ngũ hành', 'than-so-hoc': 'Thần số học', 'kim-lau': 'Kim Lâu & Tam Tai', 'bat-trach': 'Hướng Bát Trạch', 'kinh-dich': 'Kinh Dịch', 'xem-tuong': 'Xem tướng', 'phong-thuy': 'Phong thủy' };
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function rel(ts){
+    var d = Date.now() - ts;
+    if (d < 60000) return 'vừa xong';
+    if (d < 3600000) return Math.floor(d/60000) + ' phút trước';
+    if (d < 86400000) return Math.floor(d/3600000) + ' giờ trước';
+    return Math.floor(d/86400000) + ' ngày trước';
+  }
+  function local(){
+    var out = [];
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && k.indexOf('app_hist_v1_') === 0) {
+        var tool = k.slice(12);
+        try { (JSON.parse(localStorage.getItem(k)) || []).forEach(function (s) { out.push({ id: s.id, tool: tool, title: s.title, updatedAt: s.updatedAt, lastMsg: s.lastMsg }); }); }
+        catch (e) { /* ignore */ }
+      }
+    }
+    return out;
+  }
+  function render(list){
+    document.getElementById('tcLoading').style.display = 'none';
+    var seen = {}, arr = [];
+    list.forEach(function (s) { if (s && s.id && !seen[s.id]) { seen[s.id] = 1; arr.push(s); } });
+    arr.sort(function (a, b) { return (b.updatedAt || 0) - (a.updatedAt || 0); });
+    if (!arr.length) { document.getElementById('tcEmpty').style.display = 'block'; document.getElementById('tcList').innerHTML = ''; return; }
+    document.getElementById('tcEmpty').style.display = 'none';
+    document.getElementById('tcList').innerHTML = arr.map(function (s) {
+      var label = TOOLMAP[s.tool] || s.tool;
+      return '<a class="tc-item" href="/app/' + esc(s.tool) + '?restore=' + encodeURIComponent(s.id) + '">' +
+        '<span class="tc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/></svg></span>' +
+        '<span class="tc-tx"><b>' + esc(s.title || label) + '</b>' +
+        '<span>' + esc(label) + (s.updatedAt ? ' · ' + rel(s.updatedAt) : '') + (s.lastMsg ? ' · ' + esc(String(s.lastMsg).slice(0, 46)) : '') + '</span></span>' +
+      '</a>';
+    }).join('');
+  }
+  document.getElementById('tcNew').addEventListener('click', function(){ location.href = '/app#chat'; });
+
+  var loc = local();
+  render(loc);
+  try {
+    Promise.resolve(
+      window.Auth && Auth.getFreshToken
+        ? Auth.getFreshToken()
+        : ((window.Auth && Auth.getSession && Auth.getSession()) || {}).access_token
+    ).then(function (tok) {
+      if (!tok) return;
+      return fetch('/api/tuvi-chats', { headers: { Authorization: 'Bearer ' + tok } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) {
+          if (!j || !j.chats) return;
+          var srv = j.chats
+            .filter(function (c) { return (c.type || '').indexOf('app-') === 0; })
+            .map(function (c) { return { id: c.id, tool: (c.type || '').slice(4), title: c.label, updatedAt: +new Date(c.updated_at), lastMsg: c.last_msg }; });
+          render(loc.concat(srv));
+        });
+    }).catch(function () { /* lịch sử máy khác chỉ là tiện ích thêm — hỏng thì vẫn còn bản local */ });
+  } catch (e) { /* ignore */ }
+})();
+</script>
+</body>
+</html>

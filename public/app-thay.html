@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Các Thầy — Tử Vi Minh Bảo</title>
+<meta name="description" content="15 thầy luận giải của Tử Vi Minh Bảo — mỗi thầy một chuyên môn, một giọng luận riêng."/>
+<link rel="icon" type="image/webp" href="/seal.webp"/>
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
+<link rel="stylesheet" href="/shell.css?v=53"/>
+<style>
+.ws-body{padding:22px 26px 60px;max-width:920px}
+.thay-search{width:100%;max-width:360px;border:1px solid var(--line-2);border-radius:10px;padding:9px 12px;font:inherit;font-size:13px;color:var(--heading);background:var(--white);margin-bottom:18px}
+.thay-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.thay-card{display:flex;gap:12px;border:1px solid var(--line);background:var(--white);border-radius:13px;padding:14px}
+.thay-ava{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:0 0 auto;background:var(--paper-2)}
+.thay-tx{flex:1;min-width:0}
+.thay-tx b{display:block;font-family:var(--serif);font-size:14.5px;color:var(--heading)}
+.thay-tag{display:block;font-size:12px;color:var(--text-lt);margin:3px 0 10px;line-height:1.5}
+.thay-cta{font-size:12.5px;font-weight:700;color:var(--gold-soft);background:none;border:none;padding:0;cursor:pointer;font-family:inherit}
+.thay-cta:hover{text-decoration:underline}
+.thay-empty{padding:2.5rem 1rem;text-align:center;color:var(--text-lt);font-size:13.5px}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Các Thầy</b><span>15 thầy luận giải — mỗi thầy một chuyên môn, một giọng riêng</span></div>
+    </div>
+    <div class="ws-body">
+      <input class="thay-search" type="search" id="thaySearch" placeholder="Tìm thầy theo tên…" autocomplete="off">
+      <div class="thay-grid" id="thayGrid"></div>
+      <p class="thay-empty" id="thayEmpty" style="display:none">Không tìm thấy thầy nào khớp.</p>
+    </div>
+  </main>
+</div>
+
+<script src="/nav.js?v=41" data-icons-only></script>
+<script src="/auth.js?v=2"></script>
+<script>window.SHELL_ACTIVE='thay';</script>
+<script src="/shell.js?v=100"></script>
+<script>
+(function(){
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  // Câu đầu của `style` làm câu cửa miệng — CÙNG cách cắt mà openAuthorModal()
+  // của shell.js đã dùng cho modal "Chọn thầy luận giải" (KHÔNG chép công thức
+  // khác, chỉ chép đúng 1 dòng `.split`).
+  function tagline(a){ return a.style.split(/\.\s/)[0] + '.'; }
+
+  function render(list){
+    var grid = document.getElementById('thayGrid');
+    var empty = document.getElementById('thayEmpty');
+    if (!list.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    grid.innerHTML = list.map(function(a){
+      return '<div class="thay-card">' +
+        '<img class="thay-ava" src="/authors/' + a.id + '.jpg" alt="" loading="lazy">' +
+        '<div class="thay-tx">' +
+          '<b>Thầy ' + esc(a.name) + '</b>' +
+          '<span class="thay-tag">' + esc(tagline(a)) + '</span>' +
+          '<button type="button" class="thay-cta" data-id="' + a.id + '">Trò chuyện →</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function boot(){
+    // AUTHOR_ROSTER là nguồn duy nhất, expose qua Shell.authorRoster
+    // (public/shell.js) — không chép tay danh sách 15 thầy lần hai ở đây.
+    var roster = (window.Shell && Shell.authorRoster) || [];
+    render(roster);
+    document.getElementById('thaySearch').addEventListener('input', function(e){
+      var q = e.target.value.trim().toLowerCase();
+      render(!q ? roster : roster.filter(function(a){ return a.name.toLowerCase().indexOf(q) >= 0; }));
+    });
+    document.getElementById('thayGrid').addEventListener('click', function(e){
+      var btn = e.target.closest('.thay-cta'); if (!btn) return;
+      var id = btn.getAttribute('data-id');
+      // Ghim thầy cho phiên này rồi mở LUÔN cửa concierge đã có sẵn (`/app#chat`,
+      // xem app-home.html) — không dựng luồng khởi động chat thứ hai.
+      try { if (window.Shell && Shell.chooseAuthor) Shell.chooseAuthor(id); } catch(e2) {}
+      location.href = '/app#chat';
+    });
+  }
+  if (window.Shell) boot(); else document.addEventListener('DOMContentLoaded', boot);
+})();
+</script>
+</body>
+</html>

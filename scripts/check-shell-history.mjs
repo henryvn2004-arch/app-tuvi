@@ -26,6 +26,8 @@ const EXEMPT = {
   'app-home.html': 'bảng điều khiển, không phải công cụ — không sinh phiên nào',
   'app-tai-khoan.html': 'trang tài khoản, không phải công cụ',
   'app-so-la-so.html': 'sổ lá số — danh sách + gán nhóm quan hệ, không phải công cụ',
+  'app-thay.html': 'Các Thầy — danh sách 15 thầy, không phải công cụ',
+  'app-tro-chuyen.html': 'Trò chuyện — trang NÓ CHÍNH LÀ danh sách phiên hội thoại gộp mọi công cụ (xem tcList trong trang), không cần khối "Phiên gần đây" của MỘT tool riêng lẻ',
 };
 
 const bad = [];

@@ -559,17 +559,20 @@ button { font: inherit; cursor: pointer; }
      thẳng vào form xin họ tên của MỘT tool cụ thể (Luận Giải), không có câu
      giới thiệu nào cả (Henry 2026-09-23, ảnh chụp mobile báo "chỉ ra cái
      form, chả biết đang dùng tool gì"). -->
+<!-- 2026-09-24 (hellobot-ui-redesign): 5 nhãn PHẢI khớp tuyệt đối renderTabbar()
+     của public/shell.js (thứ tự + văn bản) — check:tabbar-parity khoá bất
+     biến này. Đích được phép khác (trang này KHÔNG nạp shell.js/rail). -->
 <nav class="bottom-nav">
-  <a class="bn-item" href="/app-home.html"><span class="ic" data-icon="compass"></span>Khám phá</a>
-  <a class="bn-item" href="/app-tai-khoan.html#lichsu"><span class="ic" data-icon="clock"></span>Lịch sử</a>
-  <a class="bn-item bn-center" href="/app#chat">
+  <a class="bn-item" href="/app-home.html"><span class="ic" data-icon="compass"></span>Trang chủ</a>
+  <a class="bn-item" href="/app/thay"><span class="ic" data-icon="star"></span>Các Thầy</a>
+  <a class="bn-item bn-center" href="/app/tro-chuyen">
     <div class="bn-center-circle">
       <svg viewBox="0 0 24 24" fill="none" stroke="#16232c" stroke-width="1.6"><path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/></svg>
     </div>
-    Chat
+    Trò chuyện
   </a>
-  <a class="bn-item" href="/app-tai-khoan.html"><span class="ic" data-icon="user"></span>Tài khoản</a>
-  <a class="bn-item" href="/app-tai-khoan.html#gopy"><span class="ic" data-icon="inbox"></span>Góp Ý</a>
+  <a class="bn-item" href="/app/nap-luong"><span class="ic" data-icon="wallet"></span>Nạp Lượng</a>
+  <a class="bn-item" href="/app/ho-so"><span class="ic" data-icon="settings"></span>Hồ Sơ</a>
 </nav>
 
 <script src="/nav.js?v=41"></script>
