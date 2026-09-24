@@ -61,8 +61,16 @@
   // Nay nhóm lấy từ bảng `tool_groups`, công cụ lấy từ `tool_pricing`, đường dẫn
   // lấy từ cột `app_path`. Chỉ hai nhóm dưới đây là CỐ ĐỊNH vì chúng không phải
   // công cụ: lối về trang tổng quan, và khu tài khoản (có ô số dư).
+  //
+  // 2026-09-24 (hellobot-ui-redesign): rút cấu trúc sidebar về ĐÚNG 5 đích của
+  // tabbar mobile (renderTabbar bên dưới) — Tổng quan · Các Thầy · Trò chuyện ·
+  // Nạp Lượng · Hồ Sơ. "Nhiệm Vụ"/"Kết Nối" không còn là mục sidebar riêng —
+  // chúng là tab BÊN TRONG /app/ho-so (app-tai-khoan.html, SHELL_ACTIVE='ho-so'
+  // giữ nguyên). Giữ nguyên id 'ho-so' để không phá mountToolIcon()/Cmd+K.
   var FIXED_TOP = { group: 'Luận Đường', open: true, items: [
     { id: 'home', label: 'Tổng quan', href: '/app', icon: 'home' },
+    { id: 'thay', label: 'Các Thầy', href: '/app/thay', icon: 'star' },
+    { id: 'tro-chuyen', label: 'Trò chuyện', href: '/app/tro-chuyen', icon: 'message-circle' },
   ] };
   // Nhóm này KHÔNG render thành nav (renderSidebar tự vẽ tay khối "Lá số đã
   // lưu") — chỉ để mountToolIcon()/Cmd+K/buildCmds() tìm ra icon+href đúng khi
@@ -71,14 +79,10 @@
     { id: 'so-la-so', label: 'Lá số đã lưu', href: '/app/so-la-so', icon: 'folder' },
   ] };
   var FIXED_BOTTOM = { group: 'Tài khoản', open: true, items: [
-    { id: 'vi-luong', label: 'Ví Lượng', href: '/app/tai-khoan#credits', icon: 'wallet', balance: true },
-    // Trang Tổng quan (`app-home.html`) vẫn giữ nguyên các thẻ Mời bạn/Nhiệm vụ
-    // luôn hiện — đó là chỗ nhắc CHỦ ĐỘNG. Mục này là chỗ NGƯỜI DÙNG tự tìm tới
-    // khi cần soát lại: đã làm xong Khởi Hành chưa, link mời bạn đâu, mấy lượt
-    // "Khoe kết quả" đã nộp tới đâu rồi.
-    { id: 'nhiem-vu', label: 'Nhiệm Vụ', href: '/app/tai-khoan#nhiemvu', icon: 'trophy' },
-    { id: 'ket-noi',  label: 'Kết Nối', href: '/app/tai-khoan#ketnoi', icon: 'link' },
-    { id: 'ho-so',    label: 'Tài Khoản & Cài Đặt', href: '/app/tai-khoan#account', icon: 'settings' },
+    { id: 'nap-luong', label: 'Nạp Lượng', href: '/app/nap-luong', icon: 'wallet', balance: true },
+    // Nhiệm Vụ · Kết Nối · Tài Khoản & Cài Đặt giờ là tab bên trong trang này
+    // (app-tai-khoan.html) — xem ghi chú 2026-09-24 ở FIXED_TOP.
+    { id: 'ho-so',    label: 'Hồ Sơ', href: '/app/ho-so', icon: 'settings' },
   ] };
 
   // Bắt đầu bằng CHỈ các nhóm cố định. Dữ liệu về thì `applyCatalog` chèn các
@@ -570,7 +574,7 @@
     if (!host) return;
     var h = '';
 
-    h += '<a class="sb-profile" href="/app/tai-khoan#account">' +
+    h += '<a class="sb-profile" href="/app/ho-so#account">' +
          '<div class="ava" id="sbAva">?</div>' +
          '<div class="sb-profile-tx"><div class="nm" id="sbName">Khách</div><div class="sub" id="sbSub">Đăng nhập →</div></div>' +
          '<span class="sb-profile-chev">' + CHEV + '</span></a>';
@@ -4484,6 +4488,12 @@
      * phép đo đúng — và đã được nút Chia sẻ dùng thật từ trước.
      */
     hasResult: function () { return !!currentShare(); },
+    // Nguồn 15 thầy (id/name/style) cho trang `/app/thay` (Các Thầy) — CÙNG
+    // mảng AUTHOR_ROSTER dùng cho modal "Chọn thầy luận giải" của rail, không
+    // chép tay lần hai. `chooseAuthor(id)` ghim thầy đó cho phiên hiện tại
+    // (localStorage `tvc_author_v1`) rồi tự sơn lại rail nếu rail đang mở.
+    authorRoster: AUTHOR_ROSTER,
+    chooseAuthor: setAuthor,
   };
   window.Shell = Shell;
 
@@ -4851,47 +4861,40 @@
   }
 
   // ── BOTTOM TAB BAR (mobile) ──
-  // Bước 12: Chat làm trung tâm — nút NỔI giữa hàng (vị trí trước đây thuộc về
-  // "Home") nay mở rail, đúng tinh thần chat-first của toàn bộ redesign
-  // (bước 1-11: mọi trang đều đẩy chat lên hàng đầu). "Home" đổi tên "Khám
-  // phá" (giữ NGUYÊN đích /app + icon âm dương — dấu hiệu Luận Đường, chỉ đổi
-  // vị trí + chữ), lùi về một ô `.tab` thường. "Trang chủ" (link ra
-  // tuviminhbao.com, ngoài shell) NHƯỜNG CHỖ cho "Lịch sử" — trỏ thẳng vào tab
-  // `data-tab="lichsu"` ĐÃ CÓ SẴN trong /app/tai-khoan (gộp lịch sử mọi công
-  // cụ từ `app_hist_v1_*` + server, xem `local()` trong app-tai-khoan.html) —
-  // không dựng trang mới, chỉ thêm một cửa vào thẳng tính năng đã có.
-  // Tài khoản (sidebar) không đổi. Active theo trang đang mở.
+  // 2026-09-24 (hellobot-ui-redesign): 5 tab khớp ĐÚNG 5 đích của sidebar
+  // desktop (FIXED_TOP/FIXED_BOTTOM ở đầu file) — Trang chủ · Các Thầy ·
+  // Trò chuyện · Nạp Lượng · Hồ Sơ. Cả 5 giờ là LIÊN KẾT THẬT (kể cả tab giữa
+  // "Trò chuyện" — trước đây là nút mở rail nổi, nay là trang tổng hợp hội
+  // thoại `/app/tro-chuyen`, đúng mô hình Hellobot: tab Chat là một trang danh
+  // sách, không phải overlay). Đổi 5 nhãn thì PHẢI đổi khớp
+  // `.bottom-nav` của `public/index-sample-v3.html` — `check:tabbar-parity`
+  // khoá đúng bất biến này (thứ tự + văn bản, href được phép khác nhau).
   function renderTabbar() {
     if (document.getElementById('shell-tabbar')) return;
     var isHome = ACTIVE === 'home';
-    var isAcct = ACTIVE === 'ho-so' || ACTIVE === 'vi-luong' || ACTIVE === 'tai-khoan';
+    var isThay = ACTIVE === 'thay';
+    var isTro  = ACTIVE === 'tro-chuyen';
+    var isNap  = ACTIVE === 'nap-luong';
+    var isHoso = ACTIVE === 'ho-so' || ACTIVE === 'vi-luong' || ACTIVE === 'tai-khoan';
     var TI = {
       chat: '<path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/>',
       user: '<circle cx="12" cy="8" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0" stroke-linecap="round"/>',
-      inbox: '<polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
-      // Âm dương — dấu hiệu của Luận Đường, cho "Khám phá" (springboard /app).
+      // Cùng path với ICONS.star/ICONS.wallet (đầu file) — một glyph, hai chỗ vẽ.
+      star: '<path d="m12 3 2.6 5.9 6.4.5-4.9 4.2 1.5 6.3L12 17l-5.6 3.4 1.5-6.3L3 9.9l6.4-.5z"/>',
+      wallet: '<path d="M2 7h20v12H2z"/><path d="M16 12h4"/>',
+      // Âm dương — dấu hiệu của Luận Đường, cho "Trang chủ" (springboard /app).
       yin: '<circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9 9 9 0 0 1 0-18z"/><circle cx="12" cy="7.5" r="1"/><circle cx="12" cy="16.5" r="1"/>',
-      // Đồng hồ — "Lịch sử".
-      clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round" stroke-linejoin="round"/>',
     };
     function ti(n) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">' + TI[n] + '</svg>'; }
     var nav = document.createElement('nav');
     nav.className = 'tabbar'; nav.id = 'shell-tabbar';
     nav.innerHTML =
-      '<a class="tab' + (isHome ? ' active' : '') + '" href="/app">' + ti('yin') + 'Khám phá</a>' +
-      '<a class="tab" href="/app/tai-khoan#lichsu">' + ti('clock') + 'Lịch sử</a>' +
-      '<div class="tab-home"><button class="tab-home-btn" type="button" data-tab="rail" aria-label="Hỏi Thầy">' + ti('chat') + '</button><span>Chat</span></div>' +
-      '<button class="tab" type="button" data-tab="tools">' + ti('user') + 'Tài khoản</button>' +
-      '<a class="tab' + (isAcct ? ' active' : '') + '" href="/app/tai-khoan#gopy">' + ti('inbox') + 'Góp Ý</a>';
+      '<a class="tab' + (isHome ? ' active' : '') + '" href="/app">' + ti('yin') + 'Trang chủ</a>' +
+      '<a class="tab' + (isThay ? ' active' : '') + '" href="/app/thay">' + ti('star') + 'Các Thầy</a>' +
+      '<a class="tab-home' + (isTro ? ' active' : '') + '" href="/app/tro-chuyen"><span class="tab-home-btn" aria-hidden="true">' + ti('chat') + '</span><span>Trò chuyện</span></a>' +
+      '<a class="tab' + (isNap ? ' active' : '') + '" href="/app/nap-luong">' + ti('wallet') + 'Nạp Lượng</a>' +
+      '<a class="tab' + (isHoso ? ' active' : '') + '" href="/app/ho-so">' + ti('user') + 'Hồ Sơ</a>';
     document.body.appendChild(nav);
-    // Đi qua CHÍNH Shell.openRail (thay vì tự mở) để lời mời tắt được ở CẢ hai
-    // đường mở rail — mở bằng tab mà orb vẫn nhấp nháy thì nó nói sai.
-    nav.querySelector('[data-tab="rail"]').addEventListener('click', function () {
-      Shell.openRail();
-    });
-    nav.querySelector('[data-tab="tools"]').addEventListener('click', function () {
-      var s = document.getElementById('shell-sidebar'); if (s) { s.classList.add('open'); syncBackdrop(); }
-    });
   }
 
   // ── APP NATIVE (Capacitor): đăng ký PUSH ──

@@ -56,6 +56,17 @@ const nextConfig = {
       { source: '/app/cong-so',         destination: '/app-cong-so.html'     },
       { source: '/app/tai-khoan',       destination: '/app-tai-khoan.html'   },
       { source: '/app/so-la-so',        destination: '/app-so-la-so.html'    },
+      // hellobot-ui-redesign (2026-09-24): 5 đích của tabbar/sidebar mới.
+      // /app/ho-so và /app/tai-khoan CÙNG một file — app-tai-khoan.html đã tự
+      // khai SHELL_ACTIVE='ho-so' từ trước, không cần fork trang.
+      { source: '/app/ho-so',           destination: '/app-tai-khoan.html'   },
+      { source: '/app/thay',            destination: '/app-thay.html'        },
+      { source: '/app/tro-chuyen',      destination: '/app-tro-chuyen.html'  },
+      // Nạp Lượng dùng LẠI topup.html (đã là trang chốt gói/thanh toán chuẩn,
+      // không nạp shell.js) — tránh fork một nguồn giá thứ hai. Bọc nó vào
+      // khung sidebar/tabbar là việc của đợt sau (topup.html hiện đứng riêng,
+      // giống hệt cách "Nạp thêm" trong rail vẫn trỏ thẳng /topup.html).
+      { source: '/app/nap-luong',       destination: '/topup.html'           },
       { source: '/app/hoang-dao',       destination: '/app-hoang-dao.html'   },
       { source: '/app/ngay-tot',        destination: '/app-ngay-tot.html'    },
       { source: '/app/luc-nham',        destination: '/app-luc-nham.html'    },
