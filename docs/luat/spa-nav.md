@@ -65,7 +65,7 @@ cú bấm mới tới trong lúc lượt trước còn đang fetch, tránh chồ
 reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt động đúng
 (soft-nav qua `popstate`).
 
-## Phạm vi hiện tại — 20/96 trang trong `SOFT_PAGES`
+## Phạm vi hiện tại — 24/96 trang trong `SOFT_PAGES`
 
 | Trang | Soft-nav? | Vì sao |
 |---|---|---|
@@ -74,9 +74,10 @@ reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt đ
 | Bát Trạch, Lục Nhâm, Ngày Tốt, Thần Số Học (Đợt 3) | ✅ | Cùng tiêu chí Đợt 2, script double-run sạch, stress test 90 lượt/12 trang không lỗi |
 | Kỳ Môn, Mai Hoa, Ngũ Hành Tên, Kinh Dịch (Đợt 4) | ✅ | Vá đúng nguyên nhân gốc — xem mục Đợt 4 bên dưới, không phải IIFE |
 | Đặt Tên, Đặt Tên Doanh Nghiệp, Chọn Ngày, Công Sở (Đợt 5) | ✅ | CÓ `tuvi-paywall.js` nhưng module đã được vá (đợt audit trước) + 4 trang này không tự gọi thư viện có timer nào — xem mục Đợt 5 bên dưới |
+| Nhân Mạch, Giờ Sinh, Hướng Nghiệp Trẻ, Bút Tướng (Đợt 7) | ✅ | 2/4 gọi `AiLoadingSteps` (giờ an toàn nhờ Đợt 6) — xem mục Đợt 7 bên dưới |
 | Nạp Lượng (`topup.html`) | ❌ full reload | Có `setInterval` chờ thanh toán + lịch sử bug đua nhau (`nhat-ky/2026-08.md` "Purchase từng bắn trùng"). Soft-nav không huỷ `document` → interval cũ có thể sống sót qua lượt chuyển tab. Rủi ro cao hơn lợi ích tốc độ trên đúng đường tiền. |
 | Hồ Sơ (`account-core.js`, 1637 dòng, hàng chục hàm async: History/Ví/Kết nối Telegram-WhatsApp-Messenger/MCP key/Nhiệm vụ/Giới thiệu) | ❌ full reload | Không đủ thời gian dò hết — môi trường này không có Supabase/auth thật để bấm qua từng tab của trang mà đo. Một lỗi đã bắt được (`initProfile`) đã vá, nhưng đó chỉ là MỘT trong hàng chục hàm khả nghi cùng họ. |
-| **31 trang còn lại có `tuvi-paywall.js`** | ❌ full reload | `ai-loading-steps.js` giờ đã có lưới an toàn (Đợt 6) — nhưng CHƯA trang nào trong nhóm này được thêm vào `SOFT_PAGES`, vẫn cần audit RIÊNG từng trang (double-run + stress test) trước khi mở. |
+| **27 trang còn lại có `tuvi-paywall.js`** | ❌ full reload | `ai-loading-steps.js` đã có lưới an toàn (Đợt 6) — nhưng vẫn cần audit RIÊNG từng trang (double-run + stress test) trước khi mở. |
 
 ## CHƯA làm — cố ý, không phải thiếu sót
 
@@ -336,3 +337,49 @@ lỗi. `node --check` sạch · `npm run lint` (0 lỗi) · `npx prettier@3.9.6
 `AiLoadingSteps` vào `SOFT_PAGES` — module giờ AN TOÀN HƠN để làm vậy,
 nhưng mỗi trang vẫn cần audit riêng (double-run + stress test) theo đúng
 quy trình, việc của một đợt sau.
+
+## Đợt 7: 4 trang đầu tiên gọi `AiLoadingSteps` vào `SOFT_PAGES` (2026-09-24)
+
+Đợt 6 vá `ai-loading-steps.js` — đợt này là lượt MỞ KHOÁ đầu tiên: chọn
+4 trang trong nhóm `tuvi-paywall.js` còn lại, theo đúng quy trình cũ
+(double-run + không `setInterval` RIÊNG ngoài `AiLoadingSteps` + stress
+test), cố ý trộn cả trang CÓ và KHÔNG gọi thư viện đó để phủ cả hai
+nhánh: **Nhân Mạch, Hướng Nghiệp Trẻ** (gọi `AiLoadingSteps.mount`) ·
+**Giờ Sinh, Bút Tướng** (không gọi, script riêng sạch sẵn).
+
+**Đã vá:** Nhân Mạch và Hướng Nghiệp Trẻ đã sạch top-level `let`/`const`
+từ trước — chỉ thêm script tag + route. Giờ Sinh (`TOOL_ID`,
+`_birth/_answers/_pub/_lastResult/_slug`, `GS_RESUME_KEY`/
+`GS_RESUME_TTL_MS`, `_lastPreview`) và Bút Tướng (`_strokeSets`,
+`_curStrokes`, `_curStroke`, `_drawing`, `_t0`, `_metrics`, `_birth`,
+`_signedWord`, `_currentSlug`, `canvas`, `ctx`, `_uploadedImg`,
+`_previewObjUrl`, `HOOK_TAG_CLASS`) đổi `let`/`const` top-level → `var`,
+đúng khuôn mẫu Đợt 4.
+
+🪤 **Bẫy mới — checker payment-safety đọc CÚ PHÁP KEYWORD, không chỉ giá
+trị:** `npm run check:slug` (canh luật "slug thanh toán PHẢI bắt đầu
+bằng đúng tool_id", đã cắn thật vụ Duyên Nợ trừ tiền hai lần) đỏ ngay
+sau khi đổi Giờ Sinh — bộ dò regex CỨNG `const\s+TOOL_ID\s*=\s*['"]...`
+để đọc giá trị `TOOL_ID`, và `var` không khớp cú pháp đó dù giá trị y
+hệt. Đây KHÔNG phải lý do bỏ đổi `var` hay bỏ trang khỏi đợt — sửa
+ĐÚNG chỗ: nới regex của `scripts/check-slug.mjs` chấp nhận CẢ
+`const`/`var` (an toàn được kiểm — resolved value phải bắt đầu bằng
+tool_id — giữ nguyên hệt, chỉ nới cú pháp nhận diện). Đổi kiểu này khác
+với "làm nhẹ bộ dò": không bộ nào ĐANG bắt được lỗi thật bị tắt hay thu
+hẹp, chỉ dạy nó nhận thêm MỘT cách khai báo hợp lệ mới mà chính đợt này
+tạo ra. Nhắc cho đợt sau: bất kỳ trang nào khác trong `CHECKS` của
+`check-slug.mjs` (`day-con`, `nguoi-khac`, `chan-dung-tien-kiep`,
+`chan-dung-vo-chong`) đổi `TOOL_ID` sang `var` để vào `SOFT_PAGES` đều
+đã được bộ dò nhận, không cần sửa gì thêm.
+
+**Verify:** Playwright cục bộ — 80 lượt bấm ngẫu nhiên xen kẽ 12 trang
+(Đợt 1-5 + 4 trang mới): 0 hard-reload, 0 `pageerror`. 4 trang mới bấm
+sang Nạp Lượng/Hồ Sơ: vẫn full reload đúng như cũ. Riêng thêm: bắt đầu
+một `AiLoadingSteps.mount().start()` giả trên Nhân Mạch/Hướng Nghiệp
+Trẻ rồi soft-nav đi giữa chừng — không hard-reload, không lỗi (đúng
+nhờ lưới an toàn Đợt 6). `node --check` bản NHÂN ĐÔI: sạch cả 4. `npm
+run lint` (0 lỗi) · `npx prettier@3.9.6 --check` sạch · toàn bộ `npm
+run check:*` (50 bộ, sau khi vá `check:slug`) qua hết.
+
+**CHƯA làm:** 27 trang còn lại của nhóm `tuvi-paywall.js` — việc của
+một đợt sau, cùng quy trình.

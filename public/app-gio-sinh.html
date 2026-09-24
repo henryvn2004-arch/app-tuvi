@@ -247,9 +247,10 @@ window.SHELL_INTRO={key:'gio-sinh'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/nav.js?v=41" data-icons-only></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script>
-const TOOL_ID='gio-sinh';
-let _birth=null,_answers=[],_pub=null,_lastResult=null,_slug='';
+var TOOL_ID='gio-sinh'; // var: chạy lại được qua soft-nav — xem docs/luat/spa-nav.md
+var _birth=null,_answers=[],_pub=null,_lastResult=null,_slug='';
 TuviPaywall.init({product:TOOL_ID,slug:function(){return _slug;}});
 
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
@@ -303,7 +304,7 @@ function _fillVndSlots(host,product){
 // tự chạy tiếp lượt mở khoá hay không" để `TuviPaywall.resumeIfPending` tự
 // quyết (nó chỉ tự chạy khi CÓ ý định mở khoá thật còn treo — không phải mọi
 // lượt tính thử) — ở đây chỉ cần dựng lại ĐÚNG form rồi gọi lại `start()`.
-const GS_RESUME_KEY='gs_pending_birth', GS_RESUME_TTL_MS=30*60*1000;
+var GS_RESUME_KEY='gs_pending_birth', GS_RESUME_TTL_MS=30*60*1000;
 function _gsSaveResume(){
   if(!_birth) return;
   try{ sessionStorage.setItem(GS_RESUME_KEY,JSON.stringify({birth:_birth,ts:Date.now()})); }catch(e){ /* ignore */ }
@@ -380,7 +381,7 @@ async function start(){
   finally{btn.disabled=false; const _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent='Xem 12 giờ khả nghi';}
 }
 
-let _lastPreview=null;
+var _lastPreview=null;
 
 function renderFree(j){
   _lastPreview=j;
