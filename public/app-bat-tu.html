@@ -355,6 +355,33 @@ function wsStepsSet(n){
 function scoreColor(t){ return t>=6.5?'var(--green)':t>=4?'var(--gold-soft)':'var(--red)'; }
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
 
+// Đợt 1 phần 3 (2026-09-24): thẻ report trong chat — cùng mẫu app-luan-giai.html
+// (tool anh em, cùng khuôn TuviPaywall.requireCredits khoá riêng phần AI sâu).
+// Đọc lại điểm đã render trong `#btScores` (KHÔNG tính lại) rồi bấm "Xem" =
+// bấm HỘ đúng nút "Kết quả" (`[data-act="artifact"]`) có sẵn — không thêm
+// đường mới, không đụng gì trong luồng thanh toán.
+function appendReportCard(){
+  var chat=document.getElementById('chat');
+  var scores=document.getElementById('btScores');
+  if(!chat||!scores) return;
+  var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; })();
+  var cards=Array.prototype.slice.call(scores.querySelectorAll('.sc')).map(function(sc){
+    var lb=sc.querySelector('.lb'), vl=sc.querySelector('.vl');
+    var v=vl&&vl.firstChild?vl.firstChild.textContent:'—';
+    return '<div class="chat-hl-n"><b>'+esc(v)+'</b><span>'+esc(lb?lb.textContent:'')+'</span></div>';
+  }).join('');
+  if(!cards) return;
+  var el=document.createElement('div'); el.className='msg a';
+  el.innerHTML='<img class="msg-ava" src="'+av+'" alt="">'+
+    '<div class="msg-body"><div class="chat-hl"><div class="chat-hl-row">'+cards+'</div>'+
+    '<button type="button" class="chat-hl-cta" id="btOpenResult">Xem tứ trụ đầy đủ →</button></div></div>';
+  chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  document.getElementById('btOpenResult').addEventListener('click',function(){
+    var ab=document.querySelector('[data-act="artifact"]');
+    if(ab) ab.click();
+  });
+}
+
 function doBatTu(){
   var btn=document.getElementById('btnGo');
   var namxem=parseInt(document.getElementById('inpNamxem').value)||new Date().getFullYear();
@@ -408,6 +435,7 @@ function doBatTu(){
       text:_btHead,
       liveText:true
     });
+    appendReportCard();
     initBatTuGate(bt);
   }catch(e){
     document.getElementById('btBody').innerHTML='<div class="laso-error">Lỗi khi tính Bát Tự: '+esc(e.message)+'</div>';

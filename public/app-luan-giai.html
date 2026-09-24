@@ -639,6 +639,35 @@ function _hideIntakeSideBoxes(){
   var els=document.querySelectorAll('.ws-promo,.samp-cta,#shellRecent');
   for(var i=0;i<els.length;i++)els[i].style.display='none';
 }
+// Đợt 1 phần 2 (2026-09-24): thẻ report trong chat cho tool TRẢ PHÍ — cố ý
+// KHÔNG đụng gì tới `#lgPanel`/paywall/`TuviPaywall.requireCredits` (luật
+// tiền trong CLAUDE.md, và `#lgPanel` còn phải đứng nguyên vị trí trong
+// `.ws` cho @media print — di dời nó vào sheet sẽ vỡ luật in PDF ở
+// shell.css). Thẻ chỉ đọc lại 3 con số đã render trong `#lgScores` (DOM,
+// không tính lại) rồi bấm "Xem" = bấm HỘ đúng nút "Kết quả" (`[data-act=
+// "artifact"]`) đã có sẵn và đã chạy đúng — không thêm đường mới, không
+// thêm sheet, không đổi bất cứ gì trong luồng thanh toán.
+function appendReportCard(){
+  var chat=document.getElementById('chat');
+  var scores=document.getElementById('lgScores');
+  if(!chat||!scores) return;
+  var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; })();
+  var cards=Array.prototype.slice.call(scores.querySelectorAll('.sc')).map(function(sc){
+    var lb=sc.querySelector('.lb'), vl=sc.querySelector('.vl');
+    var v=vl&&vl.firstChild?vl.firstChild.textContent:'—';
+    return '<div class="chat-hl-n"><b>'+esc(v)+'</b><span>'+esc(lb?lb.textContent:'')+'</span></div>';
+  }).join('');
+  if(!cards) return; // renderLuan() lỗi hoặc chưa kịp dựng #lgScores — đừng đẩy thẻ rỗng
+  var el=document.createElement('div'); el.className='msg a';
+  el.innerHTML='<img class="msg-ava" src="'+av+'" alt="">'+
+    '<div class="msg-body"><div class="chat-hl"><div class="chat-hl-row">'+cards+'</div>'+
+    '<button type="button" class="chat-hl-cta" id="lgOpenResult">Xem lá số 12 cung →</button></div></div>';
+  chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  document.getElementById('lgOpenResult').addEventListener('click',function(){
+    var ab=document.querySelector('[data-act="artifact"]');
+    if(ab) ab.click();
+  });
+}
 async function doLuan(){
   var btn=document.getElementById('btnGo');
   var namxem=parseInt(document.getElementById('inpNamxem').value)||new Date().getFullYear();
@@ -710,6 +739,7 @@ async function doLuan(){
       text:_shareHead,
       liveText:true
     });
+    appendReportCard();
     initLuanGiaiGate(ls);
     // Mục "Ai Sinh Cùng Ngày Với Bạn". Đặt SAU khi bản luận đã dựng xong: nó
     // là phần phụ, không được chặn hay làm chậm thứ người dùng vừa trả tiền.
