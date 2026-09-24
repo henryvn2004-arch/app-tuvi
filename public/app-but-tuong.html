@@ -219,6 +219,7 @@ window.SHELL_INTRO={key:'but-tuong'};</script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
   <script src="/nav.js?v=41" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script>
 function initButTuong(){
   Shell.setContext({
@@ -235,18 +236,18 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // 'delta' stream tới /api/but-tuong. Engine đo dùng chung ở
 // /tools-shared/but-tuong.js (window.BuTuongTool).
 // ══════════════════════════════════════════════════════════════════════
-let _strokeSets = [];
-let _curStrokes = [];
-let _curStroke = null;
-let _drawing = false;
-let _t0 = null;
-let _metrics = null;
-let _birth = null;
-let _signedWord = '';
-let _currentSlug = '';
+var _strokeSets = []; // var: chạy lại được qua soft-nav — xem docs/luat/spa-nav.md
+var _curStrokes = [];
+var _curStroke = null;
+var _drawing = false;
+var _t0 = null;
+var _metrics = null;
+var _birth = null;
+var _signedWord = '';
+var _currentSlug = '';
 
-const canvas = document.getElementById('signCanvas');
-const ctx = canvas.getContext('2d');
+var canvas = document.getElementById('signCanvas');
+var ctx = canvas.getContext('2d');
 ctx.lineWidth = 2.2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1a1a1a';
 
 function ptFromEvent(e) {
@@ -325,8 +326,8 @@ function switchTab(id, btn) {
   document.getElementById('pane-'+id).classList.add('active');
 }
 
-let _uploadedImg = null;
-let _previewObjUrl = null;
+var _uploadedImg = null;
+var _previewObjUrl = null;
 function onDragOver(e){e.preventDefault();document.getElementById('uploadArea').classList.add('dragover');}
 function onDragLeave(){document.getElementById('uploadArea').classList.remove('dragover');}
 function onDrop(e){e.preventDefault();document.getElementById('uploadArea').classList.remove('dragover');const f=e.dataTransfer.files[0];if(f)processFile(f);}
@@ -542,7 +543,7 @@ function resetTool() {
 // Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
 // CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tách thành thẻ
 // trích dẫn màu (.fb-card, xem shell.css), cùng cơ chế với app-luan-giai.html.
-const HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
+var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
 function renderMd(md){
   return md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
