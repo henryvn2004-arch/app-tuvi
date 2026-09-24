@@ -180,6 +180,30 @@ function calculate(){
   if(r.data.noNghiepQuat!=='(không có)')_tsLines.push('Nợ nghiệp quật: '+r.data.noNghiepQuat);
   Shell.setShareable({kind:'text',toolId:'than-so-hoc',title:'Thần số học của '+r.data.ten,text:_tsLines.join('\n')});
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+  appendHighlightCard(r);
+}
+// Đợt 1 (2026-09-24, pilot chat-first): trước đây `Shell.setContext()` chỉ
+// thả một câu chào chữ vào chat — 4 con số cốt lõi và toàn bộ 13 chỉ số chỉ
+// thấy được sau khi RỜI chat (đóng rail / bấm "Kết quả"). Giờ thêm NGAY một
+// thẻ 4 con số + nút mở sheet (Shell.openSheet, shell.js) chứa TOÀN BỘ
+// `resultHTML` — khách không phải rời chat mới thấy gì. Cộng thêm, KHÔNG
+// thay: `#resPanel` giữa trang vẫn y nguyên (đường "Kết quả" cũ), phòng khi
+// khách đang ở desktop rộng muốn đọc ngay bên cạnh chat thay vì mở sheet.
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function appendHighlightCard(r){
+  var chat=document.getElementById('chat');
+  if(!chat) return;
+  var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; })();
+  var nums=[['Đường Đời',r.data.soDuongDoi],['Định Mệnh',r.data.soDinhMenh],['Linh Hồn',r.data.soLinhHon],['Sứ Mệnh',r.data.soSuMenh]];
+  var rowHtml=nums.map(function(n){ return '<div class="chat-hl-n"><b>'+esc(n[1])+'</b><span>'+esc(n[0])+'</span></div>'; }).join('');
+  var el=document.createElement('div'); el.className='msg a';
+  el.innerHTML='<img class="msg-ava" src="'+av+'" alt="">'+
+    '<div class="msg-body"><div class="chat-hl"><div class="chat-hl-row">'+rowHtml+'</div>'+
+    '<button type="button" class="chat-hl-cta" id="tshOpenSheet">Xem đầy đủ 13 chỉ số →</button></div></div>';
+  chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  document.getElementById('tshOpenSheet').addEventListener('click',function(){
+    Shell.openSheet(document.getElementById('numResults').innerHTML, {title:'Thần số học · '+r.data.ten});
+  });
 }
 function showForm(){
   document.getElementById('resPanel').style.display='none';
