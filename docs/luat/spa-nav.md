@@ -1,4 +1,4 @@
-# SPA-hoá tốc độ — Đợt 1-2 (2026-09-24)
+# SPA-hoá tốc độ — Đợt 1-3 (2026-09-24)
 
 Henry test thật trên điện thoại: "bấm nút chậm" (mỗi lần chuyển tab app-shell
 là một lượt tải trang HTML đầy đủ). Yêu cầu: SPA-hoá **toàn bộ 96 trang**.
@@ -56,29 +56,42 @@ Playwright cục bộ (server Node giả các rewrite `/app/*`, không qua Next.
 vì môi trường build ở đây thiếu `SUPABASE_URL`): Đợt 1 — 40 lượt bấm ngẫu
 nhiên xen kẽ 3 trang, độ trễ ngẫu nhiên 10-160ms (cố tình đua) — 0 lần
 reload, 0 lỗi. Đợt 2 — mở rộng lên 60 lượt xen kẽ đủ 8 trang, cùng kịch
-bản — vẫn 0 lần reload, 0 lỗi. Nút Back/Forward trình duyệt hoạt động đúng
+bản — vẫn 0 lần reload, 0 lỗi. Đợt 3 — 90 lượt xen kẽ đủ 12 trang; ở độ
+trễ CỰC ĐOAN (10-160ms) thấy ~89/90 "hard reload" — ĐÂY LÀ ĐÚNG THIẾT KẾ,
+không phải bug: cờ `inflight` trong `go()` cố ý rớt về full reload khi một
+cú bấm mới tới trong lúc lượt trước còn đang fetch, tránh chồng hai lượt
+điều hướng lên nhau; không con người nào bấm nhanh cỡ đó. Đo lại ở độ trễ
+150-350ms (khoảng double-tap thực tế) và 500ms cố định — cả hai đều 0 lần
+reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt động đúng
 (soft-nav qua `popstate`).
 
-## Phạm vi hiện tại — 8/96 trang trong `SOFT_PAGES`
+## Phạm vi hiện tại — 12/96 trang trong `SOFT_PAGES`
 
 | Trang | Soft-nav? | Vì sao |
 |---|---|---|
 | Trang chủ, Các Thầy, Trò chuyện (Đợt 1) | ✅ | Test qua, không còn lỗi biết được |
 | Kim Lâu, Nạp Âm, Số Đẹp, Bản Đồ Sao, Hoàng Đạo (Đợt 2) | ✅ | Miễn phí, không `tuvi-paywall.js`, không `setInterval` riêng, script double-run sạch, stress test 60 lượt/8 trang không lỗi |
+| Bát Trạch, Lục Nhâm, Ngày Tốt, Thần Số Học (Đợt 3) | ✅ | Cùng tiêu chí Đợt 2, script double-run sạch, stress test 90 lượt/12 trang không lỗi |
+| Kỳ Môn, Mai Hoa, Ngũ Hành Tên, Kinh Dịch | ❌ full reload | Kiểm double-run PHÁT HIỆN THẬT: cả 4 khai `let`/`const` ở TOP-LEVEL script (không bọc IIFE) — `node --check` trên bản script nhân đôi báo `SyntaxError: Identifier '...' has already been declared`. Ghé lại đúng trang đó lần thứ hai qua soft-nav sẽ ném lỗi giữa chừng. Cần bọc lại IIFE trước khi thêm vào `SOFT_PAGES` — chưa làm vì không muốn sửa vội dưới áp lực thời gian; để đợt sau. |
 | Nạp Lượng (`topup.html`) | ❌ full reload | Có `setInterval` chờ thanh toán + lịch sử bug đua nhau (`nhat-ky/2026-08.md` "Purchase từng bắn trùng"). Soft-nav không huỷ `document` → interval cũ có thể sống sót qua lượt chuyển tab. Rủi ro cao hơn lợi ích tốc độ trên đúng đường tiền. |
 | Hồ Sơ (`account-core.js`, 1637 dòng, hàng chục hàm async: History/Ví/Kết nối Telegram-WhatsApp-Messenger/MCP key/Nhiệm vụ/Giới thiệu) | ❌ full reload | Không đủ thời gian dò hết — môi trường này không có Supabase/auth thật để bấm qua từng tab của trang mà đo. Một lỗi đã bắt được (`initProfile`) đã vá, nhưng đó chỉ là MỘT trong hàng chục hàm khả nghi cùng họ. |
 | **Mọi trang có `tuvi-paywall.js`** (`public/tuvi-paywall.js` — bản thật, KHÔNG phải file `tuvi-paywall.js` ở gốc repo, đã lỗi thời/không được serve) | ❌ full reload | Module này có `_qrTimer`/`_qrPoll` — CÙNG HỌ `setInterval` chờ thanh toán như `topup.html`. Rủi ro y hệt trên MỌI trang dùng module này, không chỉ Nạp Lượng — loại trừ cả nhóm cho tới khi có đợt audit riêng cho luồng trả-tại-chỗ bằng QR. |
 
 ## CHƯA làm — cố ý, không phải thiếu sót
 
-- **88 trang còn lại** (đa số có `tuvi-paywall.js` — lá số, xem tướng, phong
+- **84 trang còn lại** (đa số có `tuvi-paywall.js` — lá số, xem tướng, phong
   thủy, Bát Tự…) — mỗi trang/nhóm cần cùng một vòng kiểm — dò `setInterval`/
   polling, dò hàm async có thể chạm DOM sau khi rời trang, test thật bằng
   Playwright — trước khi thêm vào whitelist `SOFT_PAGES`. Cơ chế nghĩa địa
   giảm rủi ro nhưng KHÔNG loại bỏ hoàn toàn (không cứu được `setInterval`
-  polling thật, chỉ cứu callback một lần chạm DOM).
+  polling thật, chỉ cứu callback một lần chạm DOM). Đang có một audit riêng
+  (worktree khác, nhánh `claude/audit-tuvi-paywall-softnav`) soát cụ thể
+  module `tuvi-paywall.js` để mở khoá nhóm trang trả-tại-chỗ bằng QR — xem
+  PR nhánh đó khi xong, đừng audit trùng.
+- **4 trang cần bọc IIFE trước** (Kỳ Môn, Mai Hoa, Ngũ Hành Tên, Kinh Dịch —
+  xem bảng trên) — việc nhỏ nhưng cần sửa mã, không phải chỉ thêm whitelist.
 - **View Transitions + prefetch-on-intent** (đã làm, xem `public/nav.js`,
-  phủ 91/96 trang) là lớp NỀN riêng, áp dụng được cho MỌI trang kể cả 88
+  phủ 91/96 trang) là lớp NỀN riêng, áp dụng được cho MỌI trang kể cả 84
   trang chưa SPA-hoá — không phụ thuộc việc mở rộng `SOFT_PAGES`.
 - **Chưa đo hiệu năng thật trước/sau** bằng Lighthouse — môi trường build ở
   đây không có mạng ổn định ra `tuviminhbao.com` (đã ghi trong `CLAUDE.md`)
