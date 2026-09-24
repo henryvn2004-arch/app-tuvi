@@ -197,6 +197,26 @@ function calculate(){
   }
   Shell.setShareable({kind:'text',toolId:'nap-am',title:'Nạp âm '+r.data.napAm+' — năm '+r.data.nam,text:_naLines.join('\n')});
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+  appendHighlightCard(r);
+}
+// Đợt 1 phần 5 (2026-09-24): thẻ highlight trong chat — cùng mẫu app-than-so-hoc.html
+// (tool pilot chat-first, cũng 100% miễn phí, 0 rủi ro tiền). Tool này KHÔNG
+// nạp laso-chart.js nên chưa có `esc()` toàn cục — khai riêng ở đây.
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function appendHighlightCard(r){
+  var chat=document.getElementById('chat');
+  if(!chat) return;
+  var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; })();
+  var nums=[['Can Chi',r.data.canChi],['Nạp Âm',r.data.napAm],['Hành',r.data.hanh]];
+  var rowHtml=nums.map(function(n){ return '<div class="chat-hl-n"><b>'+esc(n[1])+'</b><span>'+esc(n[0])+'</span></div>'; }).join('');
+  var el=document.createElement('div'); el.className='msg a';
+  el.innerHTML='<img class="msg-ava" src="'+av+'" alt="">'+
+    '<div class="msg-body"><div class="chat-hl"><div class="chat-hl-row">'+rowHtml+'</div>'+
+    '<button type="button" class="chat-hl-cta" id="naOpenSheet">Xem đầy đủ →</button></div></div>';
+  chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  document.getElementById('naOpenSheet').addEventListener('click',function(){
+    Shell.openSheet(document.getElementById('resPanel').innerHTML, {title:'Nạp âm '+r.data.napAm+' · năm '+r.data.nam});
+  });
 }
 function showForm(){
   document.getElementById('resPanel').style.display='none';
