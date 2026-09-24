@@ -448,6 +448,7 @@ function chatOnePerson(idx, onDone){
 function chatAskMore(nextIdx){
   if(nextIdx>=MAX_NGUOI){ analyze(); return; }
   var chat=document.getElementById('chat');
+  if(!chat)return; // lưới an toàn soft-nav — xem chú thích ở Shell.setContext (shell.js)
   var el=document.createElement('div'); el.className='msg a';
   el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
     '<div class="msg-body"><p>Bạn có muốn thêm ' + esc(SLOT_TITLE[nextIdx].toLowerCase()) + ' vào câu chuyện không? (tối đa ' + MAX_NGUOI + ' người)</p>'+

@@ -65,7 +65,7 @@ cú bấm mới tới trong lúc lượt trước còn đang fetch, tránh chồ
 reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt động đúng
 (soft-nav qua `popstate`).
 
-## Phạm vi hiện tại — 52/96 trang trong `SOFT_PAGES` (55 route, `/app/la-so`+`/app/luan-giai` chung file)
+## Phạm vi hiện tại — 53/96 trang trong `SOFT_PAGES` (57 route, `/app/la-so`+`/app/luan-giai` và `/app/tai-khoan`+`/app/ho-so` chung file)
 
 | Trang | Soft-nav? | Vì sao |
 |---|---|---|
@@ -78,7 +78,7 @@ reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt đ
 | Khí Sắc, Trang Điểm, Vận Hạn Năm, Xem Tuổi/Xem Làm Ăn/Tương Hợp (Đợt 8) | ✅ | Phát hiện + vá một bug thật ĐÃ SỐNG từ Đợt 5/7 (lệch `?v=` của `tuvi-ansao-engine.js`) — xem mục Đợt 8 bên dưới |
 | 23 trang còn lại của nhóm `tuvi-paywall.js` (Đợt 9) | ✅ | Hết cả nhóm — xem mục Đợt 9 bên dưới. Cố ý loại `thanh-tuong-pro` (bug rò mic có sẵn, không liên quan soft-nav) |
 | Nạp Lượng (`topup.html`) | ❌ full reload | Có `setInterval` chờ thanh toán + lịch sử bug đua nhau (`nhat-ky/2026-08.md` "Purchase từng bắn trùng"). Soft-nav không huỷ `document` → interval cũ có thể sống sót qua lượt chuyển tab. Rủi ro cao hơn lợi ích tốc độ trên đúng đường tiền. |
-| Hồ Sơ (`account-core.js`, 1637 dòng, hàng chục hàm async: History/Ví/Kết nối Telegram-WhatsApp-Messenger/MCP key/Nhiệm vụ/Giới thiệu) | ❌ full reload | Không đủ thời gian dò hết — môi trường này không có Supabase/auth thật để bấm qua từng tab của trang mà đo. Một lỗi đã bắt được (`initProfile`) đã vá, nhưng đó chỉ là MỘT trong hàng chục hàm khả nghi cùng họ. |
+| Hồ Sơ (`account-core.js`, Đợt 11) | ✅ | Audit đầy đủ ~30 hàm async bằng static analysis + harness stub `Auth`, không cần backend thật — xem mục Đợt 11 bên dưới |
 | Thầy Tướng Chuyên Sâu (`thanh-tuong-pro.html`, Đợt 10) | ✅ | Vá vòng đời mic (`releaseMic()` + cờ `_leftPage`) — xem mục Đợt 10 bên dưới |
 
 ## CHƯA làm — cố ý, không phải thiếu sót
@@ -128,6 +128,16 @@ reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt đ
    `trang-phuc-theo-ngay.html` đổi `_CAN`/`_CHI` sang `var` xong vẫn vỡ
    vì `tuvi-ansao-engine.js` (nhiều trang khác đã nạp) khai `const` cùng
    tên. `node --check` nhân đôi KHÔNG bắt được va chạm chéo này.
+7. **Bắt được MỘT lỗi cụ thể ở MỘT trang → quét lại mẫu đó trên TOÀN BỘ
+   `SOFT_PAGES`, đừng chỉ vá đúng chỗ bị bắt.** Phát hiện ở Đợt 11: mẫu
+   `var chat=document.getElementById('chat'); ...; chat.appendChild(...)`
+   không kiểm null đã vá cho MỘT hàm ở Dạy Con (Đợt 9) — nhưng cùng mẫu
+   đó (hàm `chatStepXxx()` thường được COPY giữa các trang chat-intake)
+   còn sống ở hàm THỨ HAI trong CHÍNH file đó, cộng 6 chỗ khác ở Người
+   Khác/Bát Tự/Duyên Nợ Tiền Kiếp/Luận Giải — không lộ ra ở Đợt 9 chỉ vì
+   stress test lúc đó không tình cờ chạm đúng combo trang+timing. Quét
+   bằng script (không phải mắt): tìm khai báo biến rồi kiểm dòng NGAY SAU
+   có `if(!biến)` hay không.
 
 ## Audit `public/tuvi-paywall.js` (2026-09-24) — module bị loại trừ ở Đợt 1-2
 
@@ -657,3 +667,75 @@ prettier@3.9.6 --check` sạch · `check:slug`/`check:shellboot`/
 **Kết quả:** 96/96 trang app-shell giờ đã SPA-hoá TOÀN BỘ, trừ đúng 2
 ngoại lệ CỐ Ý còn lại (`topup.html`, Hồ Sơ) — cả hai đã ghi rõ lý do ở
 đầu file này.
+
+## Đợt 11: mở khoá Hồ Sơ (account-core.js) — 97/98 trang, chỉ còn topup.html (2026-09-24)
+
+Hồ Sơ (`account-core.js`, dùng chung cho `/app/tai-khoan` VÀ `/app/ho-so`)
+là ngoại lệ còn lại từ Đợt 1: "không đủ thời gian dò hết — môi trường này
+không có Supabase/auth thật để bấm qua từng tab". Đợt này audit đầy đủ
+bằng phương pháp KHÁC — không cần auth thật, kiểm bằng static analysis +
+harness stub.
+
+**Soát trước khi đụng code:** so toàn bộ 108 id DOM của `app-tai-khoan.html`
+với 765 id gộp từ 52 file HTML khác đang có trong `SOFT_PAGES` — chỉ
+trùng `#ws`/`#shell-sidebar` (cả hai do `shell.js` quản lý, không phải
+rủi ro). `grep setInterval/setTimeout` — không có `setInterval` nào (chỉ
+`setTimeout` bounded, xa nhất 4000ms). Nghĩa là họ rủi ro "trùng id giữa
+hai trang" (AiLoadingSteps Đợt 6, thanh-tuong-pro Đợt 10) KHÔNG áp dụng ở
+đây — rủi ro còn lại chỉ là "callback trễ chạm DOM null" thuần tuý.
+
+**Cơ chế cần vá — mốc 15 giây của nghĩa địa, không phải chỉ có ID trùng:**
+`buryOldContent()` giữ phần tử `#ws` cũ SỐNG (vô hình) đúng 15 giây rồi
+`removeChild` thật. `initProfile()` (Đợt 1) đã có null-guard vì lý do
+này — nhưng đó là fix HÚ HOẠ theo lời file tự nhận ("không phải audit đầy
+đủ"). Đợt này đọc hết ~30 hàm `async` trong `account-core.js`, phân loại
+2 nhóm: (1) DOM ghi qua BIẾN THAM CHIẾU chụp TRƯỚC lần `await` đầu tiên —
+luôn an toàn dù trang có bị lôi đi đâu, vì đó chỉ là object JS, không
+phải lượt tra `getElementById` mới; (2) DOM tra LẠI bằng `getElementById`
+SAU một `await` — đúng họ rủi ro, ném `null.property` nếu gọi sau mốc 15
+giây (fetch chậm, mất mạng, hoặc chỉ đơn giản người dùng lướt nhanh).
+
+**Đã vá (nhóm 2, tìm được ở):** `renderProfileHeader()` (gọi sau vòng đợi
+auth tối đa 1.5s), MCP key (`loadMcpKey`/`genMcpKey`), liên kết Telegram/
+WhatsApp/Messenger (`btnTgLink`/`btnWaLink`/`btnMsgrLink` onclick — 3 chỗ
+CÙNG MẪU lặp lại y hệt), panel mời bạn (`loadReferralPanel`), giao dịch
+Ví Lượng (`loadCredits` nhánh catch), modal Luận Giải/Xem Tuổi
+(`openLuanModal`/`openXemTuoiModal`/`showLuanSection`/`showXemSection`),
+modal Chat (`appendMessage` — chặn ở ĐÚNG MỘT hàm, phủ cả `openChatModal`
+lẫn `sendChat`), lưu tên hiển thị/đổi mật khẩu. Mỗi chỗ: chụp phần tử ra
+biến rồi `if (el) ...`, không phá cấu trúc hàm.
+
+🪤 **Bẫy tự vấp — quét MẪU cũ (`#chat` unguarded) LẶP LẠI ở nhiều trang
+chưa từng soát:** trong lúc chạy stress test diện rộng cho Đợt 11 (thêm
+`/app/tai-khoan`/`/app/ho-so` vào bộ trang), bắt được `TypeError` TẠI
+`/app/nguoi-khac` — KHÔNG liên quan gì tới Hồ Sơ. Truy ra: cùng mẫu lỗi
+`chatStepXxx()` ghi `#chat` không kiểm null đã vá cho `chatStepMoiLo()`
+(Dạy Con, Đợt 9) — nhưng lượt vá đó CHỈ sửa đúng hàm bị bắt lỗi lúc đó,
+không quét lại toàn bộ `SOFT_PAGES` cho CÙNG MẪU. Quét lại bằng script
+(tìm `var chat=document.getElementById('chat')` không có `if(!chat)`
+ngay dòng sau) lộ ra **7 chỗ nữa** chưa vá: `chatStepSelfAsk()` (Dạy Con
+— hàm THỨ HAI trong CÙNG FILE, sót vì Đợt 9 chỉ sửa hàm bị bắt), 3 hàm ở
+Người Khác (`chatStepQuanHe`/`chatStepViec`/`chatStepSelfAsk`), 1 ở Bát
+Tự, 1 ở Duyên Nợ Tiền Kiếp, 1 ở Luận Giải (`showNamxemStep`). Vá cả 7
+bằng đúng khuôn `if(!chat)return;`. **Bài học:** vá một lỗi CỤ THỂ mà
+stress test bắt được không thay thế được việc quét lại TOÀN BỘ mẫu đó
+trên MỌI trang trong `SOFT_PAGES` — nhất là khi hàm đó rõ ràng được COPY
+giữa các trang cùng loại (chat-intake).
+
+**Verify:** harness Playwright riêng — chặn setter `window.Auth` để cưỡng
+ép `isLoggedIn()=true` dù `auth.js` tự gán đè `window.Auth` sau đó (bẫy
+tự vấp: lần đầu stub thẳng bị `auth.js` ghi đè, `dashboard shown after
+boot: false` — sửa bằng `Object.defineProperty` getter/setter chặn MỌI
+lượt gán). Chặn `page.route('**/api/**')` trễ 600-1800ms mô phỏng mạng
+chậm. Bấm qua đủ 6 tab, mỗi tab soft-nav rời đi GIỮA lúc fetch còn treo
+rồi quay lại — lặp 4 lần liên tiếp: `dashboard shown: true`, 0
+`pageerror` mọi lần. Stress test chính (200 lượt/49 trang, có
+`/app/tai-khoan`+`/app/ho-so`) × 10+ lượt (bao gồm cả trước/sau khi vá 7
+chỗ `#chat` sót): 0 `pageerror`. `node --check` bản NHÂN ĐÔI sạch cho cả
+7 file. `npm run lint` (0 lỗi) · `npx prettier@3.9.6 --check` sạch ·
+toàn bộ 49 bộ `npm run check:*` qua hết.
+
+**Kết quả:** 97/98 trang app-shell đã SPA-hoá (98 = 96 trang gốc + 2
+route Hồ Sơ tính riêng) — CHỈ CÒN `topup.html` ngoài `SOFT_PAGES`, vì lý
+do đã ghi ở đầu file này (`setInterval` chờ thanh toán + lịch sử bug đua
+nhau, rủi ro cao hơn lợi ích tốc độ trên đúng đường tiền).

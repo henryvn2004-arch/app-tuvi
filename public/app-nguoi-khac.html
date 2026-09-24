@@ -496,6 +496,7 @@ function startIntake(){
 }
 function chatStepQuanHe(){
   var chat=document.getElementById('chat');
+  if(!chat)return; // lưới an toàn soft-nav — xem chú thích ở Shell.setContext (shell.js)
   var empty=document.getElementById('railEmpty'); if(empty) empty.style.display='none';
   var el=document.createElement('div'); el.className='msg a';
   el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
@@ -513,6 +514,7 @@ function chatStepQuanHe(){
 }
 function chatStepViec(){
   var chat=document.getElementById('chat');
+  if(!chat)return; // lưới an toàn soft-nav — xem chú thích ở Shell.setContext (shell.js)
   var el=document.createElement('div'); el.className='msg a';
   el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
     '<div class="msg-body"><p>Bạn đang cần làm gì với người này?</p>'+
@@ -531,6 +533,7 @@ function chatStepSelfAsk(){
   var already=TuviForm.getData('self');
   if(already&&already.ngay){ analyze(); return; }
   var chat=document.getElementById('chat');
+  if(!chat)return; // lưới an toàn soft-nav — xem chú thích ở Shell.setContext (shell.js)
   var el=document.createElement('div'); el.className='msg a';
   el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
     '<div class="msg-body"><p>Bạn có muốn đối chiếu thêm với lá số của chính bạn không? Có thêm mục "Người này với bạn".</p>'+

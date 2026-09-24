@@ -6,10 +6,19 @@
    (window.mountIcons/iconHtml từ nav.js, hoặc shim ở trang shell).
    sourceType: script (không module) — hàm top-level = global cho onclick.
    ============================================================ */
-const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
+var SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
+var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
-let _pUser = null;
+var _pUser = null;
+// Lưới an toàn soft-nav: mọi hàm `load*`/`render*` dưới đây có thể còn treo
+// sau một `fetch()` khi người dùng đã soft-nav rời trang — "nghĩa địa" của
+// shell-soft-nav.js giữ phần tử id cũ SỐNG (vô hình) chỉ 15 giây; fetch chậm
+// hơn mốc đó thì phần tử THẬT SỰ biến mất, `getElementById` ra `null` giữa
+// chừng. Cờ này chặn TỪNG continuation trước khi đụng DOM — không đủ để gộp
+// lại một chỗ vì các hàm nằm rải khắp file, không đi qua một chokepoint
+// chung như `Shell.setContext()`.
+var _hoSoLeftPage = false;
+document.addEventListener('tvmb:softnav', () => { _hoSoLeftPage = true; });
 // 🔑 KHÔNG chụp token vào biến rồi dùng cả phiên trang: access token Supabase
 // sống ~1 giờ, mà trang Tài khoản hay bị để mở rất lâu → mọi lượt gọi sau đó
 // ăn 401 với đúng người đang đăng nhập. Đọc SỐNG mỗi lần dùng; auth.js lo
@@ -20,8 +29,8 @@ async function _tok() {
     return window.Auth?.getSession()?.access_token || null; // đường lùi: auth.js bản cũ còn trong cache
   } catch (e) { return null; }
 }
-let _pHistoryData = null;
-let _pChatState = { slug: null, product: 'laso', messages: [], lasoContext: null };
+var _pHistoryData = null;
+var _pChatState = { slug: null, product: 'laso', messages: [], lasoContext: null };
 
 // ── AUTH INIT ──
 async function initProfile() {
@@ -142,12 +151,15 @@ function renderProfileHeader() {
   const createdAt = _pUser.created_at ? new Date(_pUser.created_at).toLocaleDateString('vi-VN',{year:'numeric',month:'long'}) : '';
   const letter = (displayName || email || '?')[0].toUpperCase();
 
-  document.getElementById('avatarLetter').textContent = letter;
-  document.getElementById('userEmail').textContent = email;
-  document.getElementById('userDisplayName').textContent = displayName || 'Người Dùng';
-  document.getElementById('userSince').textContent = createdAt ? `Thành viên từ ${createdAt}` : '';
-  document.getElementById('accEmail').value = email;
-  document.getElementById('accName').value = displayName;
+  // Lưới an toàn soft-nav (xem _hoSoLeftPage đầu file): initProfile() gọi hàm
+  // này SAU vòng đợi auth tối đa 1.5s — đủ lâu để soft-nav rời trang.
+  var setEl = (id, prop, val) => { var el = document.getElementById(id); if (el) el[prop] = val; };
+  setEl('avatarLetter', 'textContent', letter);
+  setEl('userEmail', 'textContent', email);
+  setEl('userDisplayName', 'textContent', displayName || 'Người Dùng');
+  setEl('userSince', 'textContent', createdAt ? `Thành viên từ ${createdAt}` : '');
+  setEl('accEmail', 'value', email);
+  setEl('accName', 'value', displayName);
 
   // Detect OAuth provider
   const identities = _pUser.identities || [];
@@ -210,6 +222,7 @@ async function loadHistory() {
   });
   if (!resp.ok) { console.error('history load failed'); return; }
   _pHistoryData = await resp.json();
+  if (_hoSoLeftPage) return;
 
   renderLasos(_pHistoryData.lasos || []);
   renderXemTuoi(_pHistoryData.xemTuoi || []);
@@ -222,8 +235,8 @@ async function loadHistory() {
 }
 
 // ── RENDER LÁ SỐ ──
-const GIO_MAP = {Tý:'Tý',Sửu:'Sửu',Dần:'Dần',Mão:'Mão',Thìn:'Thìn',Tỵ:'Tỵ',Ngọ:'Ngọ',Mùi:'Mùi',Thân:'Thân',Dậu:'Dậu',Tuất:'Tuất',Hợi:'Hợi'};
-const PHAN_LABELS = {
+var GIO_MAP = {Tý:'Tý',Sửu:'Sửu',Dần:'Dần',Mão:'Mão',Thìn:'Thìn',Tỵ:'Tỵ',Ngọ:'Ngọ',Mùi:'Mùi',Thân:'Thân',Dậu:'Dậu',Tuất:'Tuất',Hợi:'Hợi'};
+var PHAN_LABELS = {
   '1':'Tổng Quan','2':'Cung Mệnh','3':'Tâm Tính','4':'Học Vấn',
   '5':'Phụ Mẫu','6':'Phúc Đức','7':'Điền Trạch','8':'Quan Lộc',
   '9':'Nô Bộc','10':'Thiên Di','11':'Tật Ách','12':'Tài Bạch',
@@ -423,7 +436,7 @@ async function loadHeaderBalance() {
 // 2 ô tổng số ở đầu tab Kết Nối — trên đúng 4 kênh có backend thật (AI qua
 // MCP + Telegram + WhatsApp + Messenger). KHÔNG thêm Zalo/Discord: chưa có
 // route liên kết cho hai kênh đó.
-const _connStats = { mcp: false, tg: false, wa: false, msgr: false };
+var _connStats = { mcp: false, tg: false, wa: false, msgr: false };
 function updateConnStats() {
   const ok = (_connStats.mcp ? 1 : 0) + (_connStats.tg ? 1 : 0) + (_connStats.wa ? 1 : 0) + (_connStats.msgr ? 1 : 0);
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
@@ -448,7 +461,8 @@ async function loadMcpKey() {
   try {
     const res = await fetch('/api/mcp/key', { headers: { Authorization: `Bearer ${await _tok()}` } });
     const d = res.ok ? await res.json() : {};
-    if (d && d.url) { document.getElementById('mcpUrl').value = d.url; _mcpShow('ready'); }
+    if (_hoSoLeftPage) return;
+    if (d && d.url) { const el = document.getElementById('mcpUrl'); if (el) el.value = d.url; _mcpShow('ready'); }
     else _mcpShow('nokey');
   } catch { _mcpShow('nokey'); }
 }
@@ -458,9 +472,10 @@ async function genMcpKey() {
   try {
     const res = await fetch('/api/mcp/key', { method: 'POST', headers: { Authorization: `Bearer ${await _tok()}` } });
     const d = await res.json();
-    if (d && d.url) { document.getElementById('mcpUrl').value = d.url; _mcpShow('ready'); }
+    if (_hoSoLeftPage) return;
+    if (d && d.url) { const el = document.getElementById('mcpUrl'); if (el) el.value = d.url; _mcpShow('ready'); }
     else alert('Không tạo được key, thử lại sau nhé.');
-  } catch { alert('Lỗi mạng, thử lại sau nhé.'); }
+  } catch { if (!_hoSoLeftPage) alert('Lỗi mạng, thử lại sau nhé.'); }
   finally { btn.disabled = false; btn.textContent = 'Tạo đường kết nối'; }
 }
 async function copyMcpUrl() {
@@ -520,16 +535,17 @@ document.getElementById('btnTgLink').onclick = async () => {
       headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = await res.json();
+    if (_hoSoLeftPage) return;
     if (d.url) {
       // Mở bot Telegram với token /start → bot tự gắn ví.
       window.open(d.url, '_blank');
-      document.getElementById('tgLinkStatus').innerHTML =
-        ic('hourglass') + ' Đã mở Telegram — bấm "Bắt đầu / Start" trong bot để hoàn tất, rồi tải lại trang.';
+      const st = document.getElementById('tgLinkStatus');
+      if (st) st.innerHTML = ic('hourglass') + ' Đã mở Telegram — bấm "Bắt đầu / Start" trong bot để hoàn tất, rồi tải lại trang.';
     } else {
       alert('Không tạo được liên kết, thử lại sau nhé.');
     }
   } catch {
-    alert('Lỗi mạng, thử lại sau nhé.');
+    if (!_hoSoLeftPage) alert('Lỗi mạng, thử lại sau nhé.');
   } finally {
     btn.disabled = false; btn.textContent = 'Liên kết Telegram';
   }
@@ -582,16 +598,17 @@ document.getElementById('btnWaLink').onclick = async () => {
       headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = await res.json();
+    if (_hoSoLeftPage) return;
     if (d.url) {
       // Mở WhatsApp với tin soạn sẵn "/link <token>" → gửi để bot gắn ví.
       window.open(d.url, '_blank');
-      document.getElementById('waLinkStatus').innerHTML =
-        ic('hourglass') + ' Đã mở WhatsApp — bấm GỬI tin soạn sẵn để hoàn tất, rồi tải lại trang.';
+      const st = document.getElementById('waLinkStatus');
+      if (st) st.innerHTML = ic('hourglass') + ' Đã mở WhatsApp — bấm GỬI tin soạn sẵn để hoàn tất, rồi tải lại trang.';
     } else {
       alert('Không tạo được liên kết, thử lại sau nhé.');
     }
   } catch {
-    alert('Lỗi mạng, thử lại sau nhé.');
+    if (!_hoSoLeftPage) alert('Lỗi mạng, thử lại sau nhé.');
   } finally {
     btn.disabled = false; btn.textContent = 'Liên kết WhatsApp';
   }
@@ -644,17 +661,18 @@ document.getElementById('btnMsgrLink').onclick = async () => {
       headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = await res.json();
+    if (_hoSoLeftPage) return;
     if (d.url) {
       // Mở Messenger với m.me/<page>?ref=<token> → bot tự gắn ví.
       window.open(d.url, '_blank');
       const fallback = d.token ? ` Nếu chưa tự liên kết, gửi tin: /link ${escHtml(d.token)}` : '';
-      document.getElementById('msgrLinkStatus').innerHTML =
-        ic('hourglass') + ' Đã mở Messenger — bấm "Bắt đầu / Get Started" hoặc gửi 1 tin để hoàn tất, rồi tải lại trang.' + fallback;
+      const st = document.getElementById('msgrLinkStatus');
+      if (st) st.innerHTML = ic('hourglass') + ' Đã mở Messenger — bấm "Bắt đầu / Get Started" hoặc gửi 1 tin để hoàn tất, rồi tải lại trang.' + fallback;
     } else {
       alert('Không tạo được liên kết, thử lại sau nhé.');
     }
   } catch {
-    alert('Lỗi mạng, thử lại sau nhé.');
+    if (!_hoSoLeftPage) alert('Lỗi mạng, thử lại sau nhé.');
   } finally {
     btn.disabled = false; btn.textContent = 'Liên kết Messenger';
   }
@@ -672,7 +690,7 @@ document.getElementById('btnMsgrUnlink').onclick = async () => {
 };
 
 // ── TAB KẾT NỐI (AI qua MCP + các kênh chat) ──
-let _ketnoiLoaded = false;
+var _ketnoiLoaded = false;
 function loadKetnoi() {
   loadMcpKey();
   loadTelegramLink();
@@ -693,6 +711,7 @@ async function loadReferralPanel() {
     d = await r.json();
   } catch (e) { return; }
   if (!d || !d.code) return;
+  if (_hoSoLeftPage) return;
 
   const reward = Number(d.rewardPerInvite) || 0;
   const cap = Number(d.cap) || 0;
@@ -924,17 +943,18 @@ async function loadCredits() {
     // Color shift when high usage
     if (bar && pct >= 80) bar.style.background = 'linear-gradient(90deg,#c0392b,#e74c3c)';
   } catch(e) {
-    document.getElementById('transactionList').innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không thể tải lịch sử.</div>';
+    const tl = document.getElementById('transactionList');
+    if (tl) tl.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không thể tải lịch sử.</div>';
   }
 }
 
-const VILU_LABELS = { topup:'Nạp Lượng', use_laso:'Luận Giải Lá Số', use_xem_tuoi:'Xem Tuổi Vợ Chồng', use_xem_lam_an:'Xem Tuổi Làm Ăn', admin_grant:'Cấp Lượng (quản trị)', chat:'Hỏi trợ lý' };
+var VILU_LABELS = { topup:'Nạp Lượng', use_laso:'Luận Giải Lá Số', use_xem_tuoi:'Xem Tuổi Vợ Chồng', use_xem_lam_an:'Xem Tuổi Làm Ăn', admin_grant:'Cấp Lượng (quản trị)', chat:'Hỏi trợ lý' };
 function viluLabel(t) { return VILU_LABELS[t.type] || t.description || t.type; }
 
-let _viluTxns = [];
-let _viluPage = 1;
-let _viluBound = false;
-const VILU_PAGE_SIZE = 10;
+var _viluTxns = [];
+var _viluPage = 1;
+var _viluBound = false;
+var VILU_PAGE_SIZE = 10;
 
 function renderTransactions(list) {
   _viluTxns = list || [];
@@ -1029,7 +1049,7 @@ function renderViluTable() {
 }
 
 // ── RENDER XEM TƯỚNG ──
-const TUONG_TOOL_LABELS = {
+var TUONG_TOOL_LABELS = {
   'dien-tuong':     { label: 'Diện Tướng', cls: 'dien', icon: 'smile' },
   'nhan-tuong':     { label: 'Nhãn Tướng', cls: 'nhan', icon: 'eye' },
   'thu-tuong':      { label: 'Thủ Tướng',  cls: 'thu',  icon: 'hand' },
@@ -1117,16 +1137,19 @@ async function openLuanModal(slug, name) {
     headers: { Authorization: `Bearer ${await _tok()}` }
   });
   const data = await resp.json();
+  if (_hoSoLeftPage) return;
   if (!data || !data.luan_giai) {
-    document.getElementById('luanContentArea').innerHTML = '<div style="color:var(--red);padding:1rem">Không tìm thấy luận giải.</div>';
+    const ca = document.getElementById('luanContentArea');
+    if (ca) ca.innerHTML = '<div style="color:var(--red);padding:1rem">Không tìm thấy luận giải.</div>';
     return;
   }
 
   const keys = Object.keys(data.luan_giai).sort((a,b) => parseInt(a)-parseInt(b));
-  
+
   // Build tab buttons
   const tabsHtml = keys.map(k => `<button class="luan-tab ${k==='1'?'active':''}" onclick="switchLuanTab('${k}',this)">${PHAN_LABELS[k]||('P'+k)}</button>`).join('');
-  document.getElementById('luanTabBtns').innerHTML = tabsHtml;
+  const tb = document.getElementById('luanTabBtns');
+  if (tb) tb.innerHTML = tabsHtml;
 
   // Store data and show first
   window._luanData = data.luan_giai;
@@ -1135,7 +1158,8 @@ async function openLuanModal(slug, name) {
 
 function showLuanSection(key) {
   const text = window._luanData?.[key] || '';
-  document.getElementById('luanContentArea').innerHTML = `<div class="luan-content">${marked.parse(text)}</div>`;
+  const ca = document.getElementById('luanContentArea');
+  if (ca) ca.innerHTML = `<div class="luan-content">${marked.parse(text)}</div>`;
 }
 
 function switchLuanTab(key, btn) {
@@ -1155,8 +1179,10 @@ async function openXemTuoiModal(id, personA, personB) {
     headers: { Authorization: `Bearer ${await _tok()}` }
   });
   const data = await resp.json();
+  if (_hoSoLeftPage) return;
   if (!data || !data.result_json) {
-    document.getElementById('luanContentArea').innerHTML = '<div style="color:var(--red);padding:1rem">Không tìm thấy kết quả.</div>';
+    const ca = document.getElementById('luanContentArea');
+    if (ca) ca.innerHTML = '<div style="color:var(--red);padding:1rem">Không tìm thấy kết quả.</div>';
     return;
   }
 
@@ -1166,17 +1192,20 @@ async function openXemTuoiModal(id, personA, personB) {
 
   if (sectionKeys.length > 0) {
     const tabsHtml = sectionKeys.map((k,i) => `<button class="luan-tab ${i===0?'active':''}" onclick="switchXemTab('${k}',this)">${SECTION_LABELS[i]||k}</button>`).join('');
-    document.getElementById('luanTabBtns').innerHTML = tabsHtml;
+    const tb = document.getElementById('luanTabBtns');
+    if (tb) tb.innerHTML = tabsHtml;
     window._xemData = rj;
     showXemSection(sectionKeys[0]);
   } else {
-    document.getElementById('luanContentArea').innerHTML = `<div class="luan-content">${marked.parse(JSON.stringify(rj,null,2))}</div>`;
+    const ca = document.getElementById('luanContentArea');
+    if (ca) ca.innerHTML = `<div class="luan-content">${marked.parse(JSON.stringify(rj,null,2))}</div>`;
   }
 }
 
 function showXemSection(key) {
   const text = window._xemData?.[key] || '';
-  document.getElementById('luanContentArea').innerHTML = `<div class="luan-content">${marked.parse(typeof text === 'string' ? text : JSON.stringify(text,null,2))}</div>`;
+  const ca = document.getElementById('luanContentArea');
+  if (ca) ca.innerHTML = `<div class="luan-content">${marked.parse(typeof text === 'string' ? text : JSON.stringify(text,null,2))}</div>`;
 }
 function switchXemTab(key, btn) {
   document.querySelectorAll('.luan-tab').forEach(b => b.classList.remove('active'));
@@ -1211,6 +1240,7 @@ async function openChatModal(slug, name, product) {
 
 function appendMessage(role, content) {
   const el = document.getElementById('chatMessages');
+  if (!el) return;
   const div = document.createElement('div');
   div.className = `msg ${role}`;
   if (role === 'assistant') div.innerHTML = `<div class="msg-sender">${ic("moon",13)} Thầy Tử Vi</div>${marked.parse(content)}`;
@@ -1297,8 +1327,10 @@ async function saveDisplayName() {
     });
     if (resp.ok) {
       alert.innerHTML = '<div class="alert success">✓ Đã lưu tên hiển thị.</div>';
-      document.getElementById('userDisplayName').textContent = name || 'Người Dùng';
-      document.getElementById('avatarLetter').textContent = (name || 'N')[0].toUpperCase();
+      const nd = document.getElementById('userDisplayName');
+      if (nd) nd.textContent = name || 'Người Dùng';
+      const al = document.getElementById('avatarLetter');
+      if (al) al.textContent = (name || 'N')[0].toUpperCase();
     } else throw new Error();
   } catch {
     alert.innerHTML = '<div class="alert error">✗ Lưu thất bại. Thử lại.</div>';
@@ -1320,8 +1352,10 @@ async function changePassword() {
     });
     if (resp.ok) {
       alert.innerHTML = '<div class="alert success">✓ Đã đổi mật khẩu thành công.</div>';
-      document.getElementById('newPwd').value = '';
-      document.getElementById('confirmPwd').value = '';
+      const np = document.getElementById('newPwd');
+      if (np) np.value = '';
+      const cp = document.getElementById('confirmPwd');
+      if (cp) cp.value = '';
     } else throw new Error();
   } catch {
     alert.innerHTML = '<div class="alert error">✗ Đổi mật khẩu thất bại.</div>';
@@ -1341,9 +1375,9 @@ function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 // Nội dung ở đây do MODEL sinh ra, nên mọi lượt vẽ đều phải thoát HTML. Nút
 // bấm gắn theo CHỈ SỐ (số do chính mình sinh ra) chứ KHÔNG nội suy nội dung
 // vào thuộc tính onclick — dấu nháy trong chuỗi là vỡ thẻ, bài học đã ghi.
-let _memItems = [];
-let _memKinds = {};
-let _memMax = 40;
+var _memItems = [];
+var _memKinds = {};
+var _memMax = 40;
 
 async function loadMemory() {
   const box = document.getElementById('memList');
@@ -1466,7 +1500,7 @@ initProfile();
 // là HAI (/profile.html và /app/tai-khoan) — chép markup sang cả hai là mở
 // đường cho chúng trôi lệch nhau. Trang chỉ khai nút tab + một khung rỗng.
 
-const FB_KINDS = [
+var FB_KINDS = [
   ['noi_dung',  'Nội dung luận giải'],
   ['bug',       'Lỗi kỹ thuật'],
   ['tinh_nang', 'Đề xuất tính năng'],
@@ -1476,14 +1510,14 @@ const FB_KINDS = [
 // Nhãn hiện cho NGƯỜI GÓP Ý — cố ý khác nhãn trong admin: 'bo_qua' ở đây là
 // "Đã xem", không phải "Bỏ qua". Người ta bỏ công viết, đừng trả về mặt chữ
 // nói rằng công đó bị vứt.
-const FB_STATUS = {
+var FB_STATUS = {
   moi:        ['Đã nhận',    'chip-blue',  'chip-blue-line',  'blue'],
   dang_xu_ly: ['Đang xử lý', 'chip-amber', 'chip-amber-line', 'tx-amber'],
   da_xu_ly:   ['Đã xử lý',   'chip-green', 'chip-green-line', 'green'],
   bo_qua:     ['Đã xem',     'chip-blue',  'chip-blue-line',  'text-lt'],
 };
-const FB_MAX = 2000;
-let _fbBusy = false;
+var FB_MAX = 2000;
+var _fbBusy = false;
 
 async function loadFeedback() {
   const host = document.getElementById('tab-gopy');
