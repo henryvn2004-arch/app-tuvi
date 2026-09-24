@@ -39,8 +39,10 @@ window.ToolPrices = (function () {
   // · v3: thêm app_path/page_path + bảng tool_groups · v4: thêm parts/credits_per_part
   // — giá theo phần cho tool chia nhỏ như laso · v5: thêm home_rank — thứ tự
   // lưới springboard /app, xem public/app-home.html · v6: thêm sale_credits/
-  // sale_starts_at/sale_ends_at — khuyến mãi có thời hạn, xem ghi chú ở `get()`)
-  var CACHE_KEY = 'tvmb_prices_v6';
+  // sale_starts_at/sale_ends_at — khuyến mãi có thời hạn, xem ghi chú ở `get()`
+  // · v7: thêm `_data.banners` (bảng `home_banners`, hellobot-ui-redesign
+  // Đợt 2) — banner trượt ngang trên Trang chủ, xem `banners()`.)
+  var CACHE_KEY = 'tvmb_prices_v7';
   var TTL_MS = 120000; // 2 phút — đủ để đi hết một phiên duyệt, đủ ngắn để admin đổi giá thấy ngay
 
   // Bản đọc được LẦN GẦN NHẤT, sống qua phiên (localStorage, khác cache 2 phút
@@ -49,7 +51,12 @@ window.ToolPrices = (function () {
   // bao giờ lấy từ đây — luật "đọc hụt thì trả null, không đoán" giữ nguyên.
   // v4: thêm home_rank — springboard cần nó để lưới KHÔNG rơi về sort_order
   // (thứ tự trang giá) trong lúc chờ mạng.
-  var NAV_KEY = 'tvmb_nav_v4';
+  // v5: thêm `banners` (bảng `home_banners`) — CÙNG lý do: banner Trang chủ
+  // không lấy từ đây được thì phải chờ mạng, tức nhấp nháy có/không mỗi lần
+  // đổi trang trong cùng phiên. Không giữ `sort_order`/id đã lọc hiệu lực sẵn
+  // ở đây — `banners()` (hàm public) tự lọc lại `starts_at/ends_at` theo giờ
+  // ĐANG GỌI dù nguồn là bản fallback này hay bản mạng, không phải giờ lúc ghi.
+  var NAV_KEY = 'tvmb_nav_v5';
 
   var _inflight = null;
   var _data = null; // { tools: {id: credits}, packages: [...] }
@@ -126,11 +133,20 @@ window.ToolPrices = (function () {
       ),
       _get('credit_packages?enabled=eq.true&select=package_id,credits,amount_vnd,label&order=sort_order.asc'),
       _get('tool_groups?enabled=eq.true&select=key,title,subtitle,icon,sort_order,default_categories&order=sort_order.asc'),
+      // hellobot-ui-redesign Đợt 2: banner trượt ngang Trang chủ. `enabled`
+      // lọc ở SERVER; cửa sổ `starts_at`/`ends_at` lọc ở CLIENT trong
+      // `banners()` (giống hệt cách `_saleActive` lọc `sale_starts_at/ends_at`
+      // — so "còn hiệu lực NGAY LÚC NÀY" cần đồng hồ máy khách, một truy vấn
+      // tĩnh không diễn tả được "chưa tới"/"đã hết hạn").
+      _get(
+        'home_banners?enabled=eq.true&select=id,title,subtitle,image_url,cta_tool_id,sort_order,starts_at,ends_at&order=sort_order.asc'
+      ),
     ])
       .then(function (res) {
         var toolRows = res[0];
         var pkgRows = res[1];
         var groupRows = Array.isArray(res[2]) ? res[2] : [];
+        var bannerRows = Array.isArray(res[3]) ? res[3] : [];
         // Giá công cụ là phần bắt buộc; thiếu nó thì coi như đọc hụt cả cụm.
         if (!Array.isArray(toolRows)) return null;
         var tools = {};
@@ -153,7 +169,7 @@ window.ToolPrices = (function () {
                 return p.credits > 0 && p.amount_vnd > 0;
               })
           : [];
-        _data = { tools: tools, rows: toolRows, packages: packages, groups: groupRows };
+        _data = { tools: tools, rows: toolRows, packages: packages, groups: groupRows, banners: bannerRows };
         _writeCache(_data);
         _writeNav(_data);
         return _data;
@@ -306,6 +322,49 @@ window.ToolPrices = (function () {
   }
 
   /**
+   * Banner trượt ngang Trang chủ (`home_banners`) CÒN HIỆU LỰC ngay lúc gọi —
+   * `enabled` đã lọc ở server, đây lọc thêm cửa sổ `starts_at`..`ends_at`
+   * (thiếu mốc nào thì mốc đó coi như không giới hạn, cùng luật `_saleActive`).
+   * Mỗi banner trả kèm `href` — đường `/app/<slug>` của `cta_tool_id`, tra qua
+   * CHÍNH `tool_pricing` đã nạp (không phải bảng riêng) nên banner trỏ tới một
+   * công cụ đã bị gỡ/đổi tên sẽ tự rớt `href` về `''`, KHÔNG dẫn ra đường chết.
+   * Mảng rỗng nếu chưa đọc được hoặc không banner nào còn hiệu lực.
+   *
+   * Nhận `d` TRỰC TIẾP (giống cách `renderSpringboard(d)` của app-home.html
+   * đọc thẳng `d.groups`/`d.rows`) thay vì đọc `_data` nội bộ — trang gọi hàm
+   * này CẢ với `navFallback()` (vẽ ngay, trước khi có mạng) LẪN bản `load()`
+   * đã về, nên hàm phải trung lập với nguồn, không riêng cho bản đã nạp.
+   */
+  function activeBanners(d) {
+    var bannerRows = (d && d.banners) || [];
+    var toolRows = (d && d.rows) || [];
+    var now = Date.now();
+    function rowFor(toolId) {
+      for (var i = 0; i < toolRows.length; i++) {
+        if (toolRows[i] && toolRows[i].tool_id === toolId) return toolRows[i];
+      }
+      return null;
+    }
+    return bannerRows
+      .filter(function (b) {
+        if (!b) return false;
+        if (b.starts_at && new Date(b.starts_at).getTime() > now) return false;
+        if (b.ends_at && new Date(b.ends_at).getTime() < now) return false;
+        return true;
+      })
+      .map(function (b) {
+        var toolRow = b.cta_tool_id ? rowFor(b.cta_tool_id) : null;
+        return {
+          id: b.id,
+          title: b.title,
+          subtitle: b.subtitle || '',
+          imageUrl: b.image_url || '',
+          href: toolRow ? appPath(toolRow) : '',
+        };
+      });
+  }
+
+  /**
    * Nhóm của một dòng công cụ, theo thứ tự ưu tiên:
    *   1. `need_tags` khai rõ (lọc bỏ khoá không có trong `tool_groups`)
    *   2. nhóm mặc định suy từ `category`
@@ -368,6 +427,7 @@ window.ToolPrices = (function () {
         JSON.stringify({
           at: Date.now(),
           groups: d.groups || [],
+          banners: d.banners || [],
           // Chỉ giữ đúng phần cần để dựng menu — KHÔNG giữ `credits`, để không
           // ai vô tình lấy giá từ bản có thể đã cũ.
           rows: (d.rows || []).map(function (r) {
@@ -456,6 +516,7 @@ window.ToolPrices = (function () {
     quoteCustomVnd: quoteCustomVnd,
     groups: groups,
     groupsOf: groupsOf,
+    activeBanners: activeBanners,
     appPath: appPath,
     pagePath: pagePath,
     navFallback: navFallback,
