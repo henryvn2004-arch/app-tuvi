@@ -28,7 +28,7 @@ async function resolveEmail(userId: string): Promise<string | null> {
 export interface InvoiceInput {
   userId: string;
   orderId: string;
-  provider: 'paypal' | 'bank';
+  provider: 'paypal' | 'bank' | 'momo';
   credits: number;
   amountVnd: number;
   label: string;
@@ -62,7 +62,7 @@ export async function sendInvoiceEmail(input: InvoiceInput): Promise<void> {
 <tr><td style="padding:6px 0;color:#888">Gói</td><td style="padding:6px 0;text-align:right">${input.label}</td></tr>
 <tr><td style="padding:6px 0;color:#888">Số Lượng nạp</td><td style="padding:6px 0;text-align:right">${input.credits} Lượng</td></tr>
 <tr><td style="padding:6px 0;color:#888">Số tiền</td><td style="padding:6px 0;text-align:right">${vnd(input.amountVnd)}</td></tr>
-<tr><td style="padding:6px 0;color:#888">Cổng thanh toán</td><td style="padding:6px 0;text-align:right">${input.provider === 'paypal' ? 'PayPal' : 'Chuyển khoản ngân hàng'}</td></tr>
+<tr><td style="padding:6px 0;color:#888">Cổng thanh toán</td><td style="padding:6px 0;text-align:right">${{ paypal: 'PayPal', bank: 'Chuyển khoản ngân hàng', momo: 'MoMo' }[input.provider]}</td></tr>
 <tr><td colspan="2" style="border-top:1px solid #e5e5e5;padding-top:10px;margin-top:6px"></td></tr>
 <tr><td style="padding:6px 0;font-weight:bold;color:#061A2E">Số dư hiện tại</td><td style="padding:6px 0;text-align:right;font-weight:bold;color:#C0392B">${input.balance} Lượng</td></tr>
 </table>
