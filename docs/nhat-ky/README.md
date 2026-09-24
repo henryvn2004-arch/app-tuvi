@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-390 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+391 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🌐 hellobot-ui-redesign Đợt 5: nền i18n tối thiểu — bỏ phần "tách nền tảng thanh toán native" |
 | 1 | 2026-09 | `2026-09.md` | 🎭 hellobot-ui-redesign Đợt 4: mở lại persona 15 thầy — có ĐO, không lặp lại 09-19 |
 | 1 | 2026-09 | `2026-09.md` | 🐞 Chat-first bước 19: 3 lỗi UI Henry test thật trên prod sau bước 17/18 |
 | 1 | 2026-09 | `2026-09.md` | 💰 Chat-first bước 18: nhóm ảnh/tướng thuật TRẢ PHÍ NGAY TRONG rail — 14 tool |

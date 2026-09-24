@@ -29,6 +29,12 @@
 
   var DOWNLOAD_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></svg>';
 
+  // Chuỗi hiển thị đi qua tools-shared/i18n.js (docs/luat/i18n.md). `fallback`
+  // giữ đúng chuỗi tiếng Việt cũ phòng trang cache HTML chưa có script mới.
+  function t(key, params, fallback) {
+    return window.I18n && window.I18n.t ? window.I18n.t(key, params) : fallback;
+  }
+
   function mount(opts) {
     var host = document.getElementById(opts.hostId);
     if (!host) return null;
@@ -51,18 +57,30 @@
     function tick(done, total) {
       host.hidden = false;
       host.classList.add('pending');
-      if (titleEl) titleEl.textContent = 'Đang đóng bản báo cáo…';
-      if (subEl) subEl.textContent = done + ' / ' + total + ' phần đã xong';
+      if (titleEl) titleEl.textContent = t('report.building', null, 'Đang đóng bản báo cáo…');
+      if (subEl) {
+        subEl.textContent = t(
+          'report.buildingSub',
+          { done: done, total: total },
+          done + ' / ' + total + ' phần đã xong'
+        );
+      }
     }
 
     function ready(total) {
       host.hidden = false;
       host.classList.remove('pending');
-      if (titleEl) titleEl.textContent = '✦ Báo cáo của bạn đã sẵn sàng';
-      if (subEl) subEl.textContent = total + ' phần luận giải · tải PDF hoặc gửi vào email để giữ lại';
+      if (titleEl) titleEl.textContent = t('report.readyTitle', null, '✦ Báo cáo của bạn đã sẵn sàng');
+      if (subEl) {
+        subEl.textContent = t(
+          'report.readySub',
+          { total: total },
+          total + ' phần luận giải · tải PDF hoặc gửi vào email để giữ lại'
+        );
+      }
       if (pdfBtn) pdfBtn.disabled = false;
       if (pdfIcon) pdfIcon.innerHTML = DOWNLOAD_ICON;
-      if (pdfLabel) pdfLabel.textContent = 'Tải PDF';
+      if (pdfLabel) pdfLabel.textContent = t('report.pdfLabel', null, 'Tải PDF');
       if (mailBtn && !sent) mailBtn.disabled = false;
       trackReady();
     }
@@ -111,22 +129,23 @@
     function runSend() {
       var origLabel = mailLabel.textContent;
       mailBtn.disabled = true;
-      mailLabel.textContent = 'Đang gửi...';
+      mailLabel.textContent = t('report.sending', null, 'Đang gửi...');
       doSend().then(function (r) {
         if (r.ok) {
           sent = true;
           mailBtn.classList.add('sent');
-          mailLabel.textContent = '✓ Đã gửi email';
+          mailLabel.textContent = t('report.sent', null, '✓ Đã gửi email');
           try { if (window.Track) window.Track.event('report_email_sent', { tool_id: opts.tool }); } catch (e) { /* ignore */ }
         } else {
           mailBtn.disabled = false;
           mailLabel.textContent = origLabel;
-          alert('Gửi email chưa thành công: ' + (r.error || 'lỗi không rõ') + '. Thử lại sau ít phút.');
+          var errMsg = r.error || t('report.sendFailUnknown', null, 'lỗi không rõ');
+          alert(t('report.sendFail', { error: errMsg }, 'Gửi email chưa thành công: ' + errMsg + '. Thử lại sau ít phút.'));
         }
       }).catch(function (e) {
         mailBtn.disabled = false;
         mailLabel.textContent = origLabel;
-        alert('Gửi email lỗi: ' + e.message);
+        alert(t('report.sendError', { error: e.message }, 'Gửi email lỗi: ' + e.message));
       });
     }
 
@@ -148,9 +167,13 @@
       if (isAnon) {
         if (window.showClaimModal) {
           window.showClaimModal({
-            title: 'Nhận báo cáo qua email',
-            desc: 'Thêm email + mật khẩu để tụi mình gửi bản PDF báo cáo về hộp thư — đây cũng là tài khoản để bạn đăng nhập lại và xem lại báo cáo bất cứ lúc nào.',
-            submitLabel: 'Nhận báo cáo →',
+            title: t('report.claimTitle', null, 'Nhận báo cáo qua email'),
+            desc: t(
+              'report.claimDesc',
+              null,
+              'Thêm email + mật khẩu để tụi mình gửi bản PDF báo cáo về hộp thư — đây cũng là tài khoản để bạn đăng nhập lại và xem lại báo cáo bất cứ lúc nào.'
+            ),
+            submitLabel: t('report.claimSubmit', null, 'Nhận báo cáo →'),
             callback: runSend,
           });
         }
