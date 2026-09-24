@@ -19,7 +19,7 @@
 .ls-count{font-size:11.5px;font-weight:700;color:var(--text-lt);background:var(--paper-2);border-radius:20px;padding:1px 9px}
 .ls-empty-g{font-size:12.5px;color:var(--text-lt);border:1px dashed var(--line-2);border-radius:9px;padding:12px 14px;margin:0}
 .ls-rows{display:flex;flex-direction:column;gap:8px}
-.ls-row{display:flex;align-items:center;gap:11px;border:1px solid var(--line);background:var(--white);border-radius:11px;padding:10px 12px}
+.ls-row{display:flex;flex-wrap:wrap;align-items:center;gap:11px;border:1px solid var(--line);background:var(--white);border-radius:11px;padding:10px 12px}
 .ls-ava{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold-soft),var(--gold));display:flex;align-items:center;justify-content:center;color:#2a1e05;font-weight:700;font-size:13.5px;font-family:var(--serif);flex:0 0 auto}
 .ls-tx{flex:1;min-width:0}
 .ls-tx b{display:block;font-size:13.5px;color:var(--heading);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -29,6 +29,15 @@
 .ls-del:hover{border-color:#e2b6b0;color:#C0392B}
 .ls-del .ls-ic{width:14px;height:14px}
 .ls-del .ls-ic svg{width:100%;height:100%}
+.ls-rep-btn{font-size:12.5px;color:var(--text-mid);background:var(--paper);border:1px solid var(--line-2);border-radius:7px;padding:6px 10px;font-family:inherit;flex:0 0 auto;cursor:pointer}
+.ls-rep-btn:hover{border-color:var(--gold-soft)}
+.ls-rep-wrap{flex:1 1 100%;order:9}
+.ls-rep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:7px;margin-top:9px}
+.ls-rep-tile{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line-2);border-radius:9px;padding:8px 10px;background:var(--white);cursor:pointer;text-align:left;font-family:inherit}
+.ls-rep-tile:hover{border-color:var(--gold-soft)}
+.ls-rep-tile b{font-size:12px;color:var(--heading)}
+.ls-rep-tile span{font-size:10.5px;color:var(--text-lt)}
+.ls-rep-tile.owned span{color:#3f7a4d}
 @media(max-width:600px){
   .ls-row{flex-wrap:wrap}
   .ls-sel{margin-left:45px}
@@ -42,7 +51,7 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Lá số đã lưu</b><span>Sổ lá số theo tài khoản — xếp theo nhóm quan hệ</span></div>
+      <div class="ws-title"><b>Lá số đã lưu</b><span>Sổ lá số theo tài khoản — xếp theo nhóm quan hệ. Bấm "Báo cáo" trên một lá số để xem/tạo report cho lá số đó.</span></div>
     </div>
     <div class="ws-body">
       <div id="lsLoading" style="padding:3rem 0;text-align:center;color:var(--text-lt);font-size:13px">Đang tải…</div>
@@ -69,6 +78,24 @@
     { key:'ban_be',      label:'Bạn bè',      icon:'users' },
     { key:'dong_nghiep', label:'Đồng nghiệp', icon:'briefcase' },
     { key:'khac',        label:'Khác',        icon:'folder' },
+  ];
+  // Tủ Báo Cáo — 11 tool ăn ngày/giờ sinh. URL khớp next.config.mjs rewrites.
+  // 7 tool ĐẦU có badge "Đã có" thật (owns{} từ /api/reports?withCharts=1 —
+  // chỉ nhóm này report_key = lasoKey() tính thẳng từ birth thô, xem
+  // lib/reports/chartMatch.ts). 4 tool CUỐI slug nhúng canChiNam/gioChi (SUY
+  // RA từ việc an sao) nên KHÔNG đoán report_key ở đây — luôn hiện "Xem/Tạo".
+  var REPORT_TOOLS = [
+    { id:'chan-dung-vo-chong', label:'Chân Dung Vợ/Chồng',  url:'/app/chan-dung-vo-chong', badge:true },
+    { id:'chan-dung-tien-kiep', label:'Chân Dung Tiền Kiếp', url:'/app/chan-dung-tien-kiep', badge:true },
+    { id:'duyen-no-tien-kiep', label:'Duyên Nợ Tiền Kiếp',  url:'/app/duyen-no-tien-kiep', badge:true },
+    { id:'nguoi-khac',        label:'Người Khác',          url:'/app/nguoi-khac',        badge:true },
+    { id:'day-con',           label:'Dạy Con',             url:'/app/day-con',           badge:true },
+    { id:'nhan-mach',         label:'Nhân Mạch',           url:'/app/nhan-mach',         badge:true },
+    { id:'huong-nghiep-tre',  label:'Hướng Nghiệp Trẻ',    url:'/app/huong-nghiep-tre',  badge:true },
+    { id:'laso',              label:'Luận Giải Tử Vi',     url:'/app/luan-giai',         badge:false },
+    { id:'tu-binh',           label:'Tử Bình Bát Tự',      url:'/app/bat-tu',            badge:false },
+    { id:'chu-trinh-cuoc-doi',label:'Chu Trình Cuộc Đời',  url:'/app/chu-trinh-cuoc-doi',badge:false },
+    { id:'van-han-nam',       label:'Vận Hạn Năm',         url:'/app/van-han-nam',       badge:false },
   ];
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function birthShort(b){
@@ -108,10 +135,12 @@
           h += '<div class="ls-row">' +
                '<div class="ls-ava">' + esc((name[0] || '?').toUpperCase()) + '</div>' +
                '<div class="ls-tx"><b>' + esc(name) + '</b><span>' + esc(birthShort(it.birth)) + '</span></div>' +
+               '<button type="button" class="ls-rep-btn" data-rep="' + it.id + '">Báo cáo</button>' +
                '<select class="ls-sel" data-id="' + it.id + '">' +
                  RELATIONS.map(function(g2){ return '<option value="' + g2.key + '"' + (g2.key === groupKey(it) ? ' selected' : '') + '>' + esc(g2.label) + '</option>'; }).join('') +
                '</select>' +
                '<button type="button" class="ls-del" data-id="' + it.id + '" title="Xoá khỏi sổ"><span class="ls-ic" data-icon="trash-2"></span></button>' +
+               '<div class="ls-rep-wrap" id="lsRep-' + it.id + '" style="display:none"></div>' +
                '</div>';
         });
         h += '</div>';
@@ -123,6 +152,39 @@
 
     var focus = new URLSearchParams(location.search).get('g');
     if (focus) { var el = document.getElementById('lsg-' + focus); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  }
+
+  var CURRENT_ITEMS = {}; // id -> item (birth + owns), cho panel Tủ Báo Cáo dựng lười
+
+  function reportPanelHtml(it){
+    var owns = it.owns || {};
+    return '<div class="ls-rep-grid">' + REPORT_TOOLS.map(function(t){
+      var isOwned = t.badge && owns[t.id];
+      return '<button type="button" class="ls-rep-tile' + (isOwned ? ' owned' : '') + '" data-goto="' + t.url + '" data-chart="' + it.id + '">' +
+             '<b>' + esc(t.label) + '</b>' +
+             '<span>' + (isOwned ? '✓ Đã có · Xem lại' : 'Xem / Tạo') + '</span>' +
+             '</button>';
+    }).join('') + '</div>';
+  }
+
+  function onReportToggle(e){
+    var btn = e.target.closest('.ls-rep-btn'); if (!btn) return;
+    var id = btn.getAttribute('data-rep');
+    var wrap = document.getElementById('lsRep-' + id);
+    if (!wrap) return;
+    if (wrap.style.display !== 'none') { wrap.style.display = 'none'; return; }
+    var it = CURRENT_ITEMS[id];
+    if (it) wrap.innerHTML = reportPanelHtml(it);
+    wrap.style.display = 'block';
+  }
+
+  // Chuyển tới trang tool với ĐÚNG lá số này — dùng lại cơ chế app_birth có
+  // sẵn toàn site (shell.js normBirth đọc lại localStorage này ở mọi trang).
+  function onReportGoto(e){
+    var tile = e.target.closest('.ls-rep-tile'); if (!tile) return;
+    var it = CURRENT_ITEMS[tile.getAttribute('data-chart')];
+    if (it && it.birth) { try { localStorage.setItem('app_birth', JSON.stringify(it.birth)); } catch (err) { /* ignore */ } }
+    location.href = tile.getAttribute('data-goto');
   }
 
   function onSelect(e){
@@ -150,14 +212,23 @@
   }
   document.getElementById('lsGroups').addEventListener('change', onSelect);
   document.getElementById('lsGroups').addEventListener('click', onDelete);
+  document.getElementById('lsGroups').addEventListener('click', onReportToggle);
+  document.getElementById('lsGroups').addEventListener('click', onReportGoto);
 
   function load(){
     return token().then(function(tok){
       if (!tok) { document.getElementById('lsLoading').style.display = 'none'; document.getElementById('lsGuest').style.display = 'block'; return; }
       document.getElementById('lsGuest').style.display = 'none';
-      return fetch('/api/charts', { headers: { Authorization: 'Bearer ' + tok } })
-        .then(function(r){ return r.ok ? r.json() : { items: [] }; })
-        .then(function(d){ render((d && d.items) || []); });
+      // `?withCharts=1` nối thêm owns{} (7 tool chân dung) cho panel Tủ Báo
+      // Cáo — vẫn cùng danh sách lá số như /api/charts (xem app/api/reports).
+      return fetch('/api/reports?withCharts=1', { headers: { Authorization: 'Bearer ' + tok } })
+        .then(function(r){ return r.ok ? r.json() : { charts: [] }; })
+        .then(function(d){
+          var items = (d && d.charts) || [];
+          CURRENT_ITEMS = {};
+          items.forEach(function(it){ CURRENT_ITEMS[it.id] = it; });
+          render(items);
+        });
     }).catch(function(){ document.getElementById('lsLoading').style.display = 'none'; });
   }
 
