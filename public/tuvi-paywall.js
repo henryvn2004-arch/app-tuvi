@@ -1111,7 +1111,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     if (_bdlLoading) return _bdlLoading;
     _bdlLoading = new Promise((resolve) => {
       const s = document.createElement('script');
-      s.src = '/tools-shared/bank-deeplink.js?v=2';
+      s.src = '/tools-shared/bank-deeplink.js?v=3';
       s.onload = () => resolve();
       // Fail-open: tải lỗi thì đơn giản không hiện khối deep link, QR vẫn dùng được.
       s.onerror = () => resolve();
@@ -1190,8 +1190,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         // một cú bấm.
         if (appsEl && !appsEl.dataset.bdlBound) {
           appsEl.dataset.bdlBound = '1';
-          appsEl.addEventListener('bdl:click', () => {
-            try { if (window.Track) window.Track.event('qr_deeplink_click', { tool_id: (_cfg && _cfg.product) || '' }); } catch (e) { /* đo hỏng không được chặn mở app */ }
+          appsEl.addEventListener('bdl:click', (e) => {
+            try { if (window.Track) window.Track.event('qr_deeplink_click', { tool_id: (_cfg && _cfg.product) || '', meta: { bank: (e.detail && e.detail.bank) || '' } }); } catch (e) { /* đo hỏng không được chặn mở app */ }
           });
         }
       });

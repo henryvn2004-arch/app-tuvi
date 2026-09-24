@@ -1078,7 +1078,8 @@
     pickQuote: pickQuote,
     qrLink: qrLink,
     saveBlob: saveBlob,
-    // Mở ra để test đối chiếu ma trận QR với thư viện chuẩn — KHÔNG dùng ở trang.
+    // Mở ra để test đối chiếu ma trận QR với thư viện chuẩn, và cho
+    // `tools-shared/bank-deeplink.js` vẽ ảnh QR chuyển khoản (một bộ mã, không chép).
     qrMatrix: QR.build,
     WIDTH: W,
     HEIGHT: H,

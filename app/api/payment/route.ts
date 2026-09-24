@@ -792,6 +792,9 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
     if (bin && !bankName) console.warn('[create-bank] BIN chua co trong BANK_BY_BIN:', bin);
     return ok({ orderCode, checkoutUrl: d.checkoutUrl, accountNumber: d.accountNumber,
       accountName: d.accountName, bin: d.bin, bankName, bankCode, amountVND,
+      // Chuỗi VietQR payOS phát ra — client vẽ thành ảnh để khách LƯU rồi quét
+      // bằng chính app ngân hàng trên cùng máy (`bank-deeplink.js`).
+      qrCode: d.qrCode || null,
       credits, label, description });
   } catch (e: unknown) { return err((e as Error).message); }
 }

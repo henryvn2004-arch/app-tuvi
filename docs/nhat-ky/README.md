@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 💰 Nút "Lưu ảnh QR" — tự điền đủ khi khách chỉ có MỘT điện thoại |
 | 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 5: mở SOFT_PAGES cho 4 trang đầu tiên của nhóm tuvi-paywall.js |
 | 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 4: mở soft-nav cho 4 trang bị loại ở Đợt 3, vá bằng `var` thay vì IIFE |
 | 1 | 2026-09 | `2026-09.md` | 🔒 Audit `tuvi-paywall.js` cho soft-nav: vá poll QR sống sót qua điều hướng mềm |
