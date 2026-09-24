@@ -16,6 +16,7 @@ import { getPackages, quoteCustomVnd, vndPerCredit } from '@/lib/billing/package
 import { PAYPAL_BASE, PAYPAL_CURRENCY, VND_PER_USD, getPayPalToken, humanIssueMessage, settlePayPalTopup } from '@/lib/billing/paypal';
 import { getToolPrice, getToolParts } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
+import { recordUserReport } from '@/lib/reports/userReports';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining, railFreeGrant, railBonusTurnsPerPurchase } from '@/lib/billing/viral-budget';
 import { anonTrialStatus } from '@/lib/billing/anon-trial';
 import { voucherListActive, voucherConsume, pickBestVoucher } from '@/lib/billing/vouchers';
@@ -488,6 +489,15 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
         : description,
       slug: slug || undefined,
     });
+
+    // Tab "Tủ Báo Cáo": chỉ 4 tool này build slug TẤT ĐỊNH từ lá số (không có
+    // Date.now()) nên slug tái dùng được làm report_key — coi
+    // _patches/migration-user-reports.sql. Các tool khác dùng slug có
+    // Date.now(), không phản ánh "cùng một report" giữa các lượt mua nên CỐ Ý
+    // không ghi ở đây.
+    if (slug && (product === 'laso' || product === 'tu-binh' || product === 'chu-trinh-cuoc-doi' || product === 'van-han-nam')) {
+      recordUserReport({ userId: user.id, toolId: product, reportKey: slug, slug });
+    }
 
     // Tiêu voucher SAU khi đã trừ tiền thành công — CỐ Ý, không đảo thứ tự.
     // Nếu bước này thất bại (đua 2 tab cùng bấm cùng lúc, hiếm), khách ĐÃ trả
