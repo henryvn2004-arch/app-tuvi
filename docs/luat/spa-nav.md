@@ -65,7 +65,7 @@ cú bấm mới tới trong lúc lượt trước còn đang fetch, tránh chồ
 reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt động đúng
 (soft-nav qua `popstate`).
 
-## Phạm vi hiện tại — 51/96 trang trong `SOFT_PAGES` (54 route, `/app/la-so`+`/app/luan-giai` chung file)
+## Phạm vi hiện tại — 52/96 trang trong `SOFT_PAGES` (55 route, `/app/la-so`+`/app/luan-giai` chung file)
 
 | Trang | Soft-nav? | Vì sao |
 |---|---|---|
@@ -79,7 +79,7 @@ reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt đ
 | 23 trang còn lại của nhóm `tuvi-paywall.js` (Đợt 9) | ✅ | Hết cả nhóm — xem mục Đợt 9 bên dưới. Cố ý loại `thanh-tuong-pro` (bug rò mic có sẵn, không liên quan soft-nav) |
 | Nạp Lượng (`topup.html`) | ❌ full reload | Có `setInterval` chờ thanh toán + lịch sử bug đua nhau (`nhat-ky/2026-08.md` "Purchase từng bắn trùng"). Soft-nav không huỷ `document` → interval cũ có thể sống sót qua lượt chuyển tab. Rủi ro cao hơn lợi ích tốc độ trên đúng đường tiền. |
 | Hồ Sơ (`account-core.js`, 1637 dòng, hàng chục hàm async: History/Ví/Kết nối Telegram-WhatsApp-Messenger/MCP key/Nhiệm vụ/Giới thiệu) | ❌ full reload | Không đủ thời gian dò hết — môi trường này không có Supabase/auth thật để bấm qua từng tab của trang mà đo. Một lỗi đã bắt được (`initProfile`) đã vá, nhưng đó chỉ là MỘT trong hàng chục hàm khả nghi cùng họ. |
-| Thầy Tướng Chuyên Sâu (`thanh-tuong-pro.html`) | ❌ full reload | Bug rò tài nguyên có sẵn, ĐỘC LẬP với soft-nav — mic (`state.stream`) không bao giờ `.getTracks().forEach(t=>t.stop())` ở BẤT KỲ luồng nào, kể cả xong việc bình thường. Vá riêng, đợt sau. |
+| Thầy Tướng Chuyên Sâu (`thanh-tuong-pro.html`, Đợt 10) | ✅ | Vá vòng đời mic (`releaseMic()` + cờ `_leftPage`) — xem mục Đợt 10 bên dưới |
 
 ## CHƯA làm — cố ý, không phải thiếu sót
 
@@ -616,3 +616,44 @@ tốc độ mạng THẬT hoặc mô phỏng trễ, không chỉ tốc độ loc
 khi đủ điều kiện vào `SOFT_PAGES`, việc của một đợt sau. Toàn bộ 96
 trang app-shell giờ chỉ còn `topup.html`, `Hồ Sơ`, và
 `thanh-tuong-pro.html` ngoài `SOFT_PAGES`.
+
+## Đợt 10: vá vòng đời mic của `thanh-tuong-pro.html`, mở khoá nốt trang cuối (2026-09-24)
+
+Nợ để lại từ Đợt 9: mic (`getUserMedia`, lưu ở `state.stream`) mở MỘT LẦN
+ở bài đo đầu tiên, dùng lại cho cả 4 bài, nhưng KHÔNG CÓ chỗ nào gọi
+`.stop()` — kể cả sau khi bài cuối xong việc và trang chuyển sang màn
+kết quả (đèn mic vẫn sáng suốt phần xem kết quả/thanh toán). Đây là bug
+ĐỘC LẬP với soft-nav — tồn tại kể cả khi trang không nằm trong
+`SOFT_PAGES`.
+
+**Đã vá:** `releaseMic()` — dừng `state.stream.getTracks()` + đóng
+`state.audioCtx` — gọi ở `compileAndShowFeatures()`, đúng thời điểm mic
+hết việc thật (mọi bài đã ghi, `tasksSection` ẩn, không còn đường quay
+lại `recordBtn`).
+
+**Soát để mở `SOFT_PAGES`:** trang này CHIA SẺ 4 id DOM
+(`recordBtn`/`waveCanvas`/`timerBar`/`waveWrap`) với `app-thanh-tuong.html`
+(đã ở `SOFT_PAGES` từ Đợt 9) — đúng họ rủi ro "trùng id giữa hai trang"
+đã biết (AiLoadingSteps Đợt 6, hookHost Đợt 9): nếu soft-nav rời trang
+NGAY GIỮA một phiên ghi âm dở dang, `startRecording()`'s continuation
+(sau mỗi `await`) và vòng `requestAnimationFrame` vẽ sóng âm
+(`draw()`) có thể ghi nhầm vào DOM SỐNG của `app-thanh-tuong.html`. Vá
+bằng cờ `state._leftPage` (đặt `true` ở `tvmb:softnav`, cùng khuôn với
+`_hookLeftPage` ở Duyên Nợ Tiền Kiếp Đợt 9) — kiểm ở mọi điểm nối `await`
+trong `startRecording()` VÀ trong `draw()`; `releaseMic()` gọi CHUNG
+listener đó.
+
+**Verify:** harness Playwright riêng — stub `getUserMedia`/`AudioContext`
+(đếm `.stop()`/`.close()`, không cần mic thật) — chạy hết 4 bài đo:
+`stopCalls=1 closeCalls=1`, 0 lỗi. Soft-nav rời trang GIỮA bài đo (sau
+countdown, `audioCtx` đã tồn tại) sang `app-thanh-tuong.html`: cũng
+`stopCalls=1 closeCalls=1`, 0 lỗi — xác nhận vòng `draw()`/continuation
+KHÔNG ghi tiếp vào DOM của trang mới. Stress test chính (200 lượt/48
+trang, độ trễ mạng giả lập, 4 lượt liên tiếp): 0 `pageerror`. `node
+--check` bản NHÂN ĐÔI sạch. `npm run lint` (0 lỗi) · `npx
+prettier@3.9.6 --check` sạch · `check:slug`/`check:shellboot`/
+`check:navph`/`check:groups`/`check:webdriver` qua hết.
+
+**Kết quả:** 96/96 trang app-shell giờ đã SPA-hoá TOÀN BỘ, trừ đúng 2
+ngoại lệ CỐ Ý còn lại (`topup.html`, Hồ Sơ) — cả hai đã ghi rõ lý do ở
+đầu file này.

@@ -103,6 +103,7 @@
     '/app/phong-thuy': 1,
     '/app/tarot': 1,
     '/app/thanh-tuong': 1,
+    '/app/thanh-tuong-pro': 1,
     '/app/thu-tuong': 1,
     '/app/trang-phuc-theo-ngay': 1,
   };

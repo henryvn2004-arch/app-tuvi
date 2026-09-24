@@ -246,6 +246,7 @@ window.SHELL_INTRO={key:'thanh-tuong-pro'};</script>
   <script src="/nav.js?v=41" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script>
 function initThanhTuongPro(){
   Shell.setContext({
@@ -312,7 +313,8 @@ var state = {
   audioCtx: null,
   stream: null,
   recorder: null,
-  isRecording: false
+  isRecording: false,
+  _leftPage: false
 };
 
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
@@ -433,19 +435,24 @@ async function startRecording() {
         audio: { echoCancellation:false, noiseSuppression:false, autoGainControl:false }
       });
     }
+    if (state._leftPage) return;
     recordBtn.disabled = true;
     countdown.classList.add('visible');
     for (let i = 3; i >= 1; i--) {
+      if (state._leftPage) return;
       countdown.textContent = i;
       await wait(900);
     }
+    if (state._leftPage) return;
     countdown.classList.remove('visible');
     await recordBuffer(t.duration);
+    if (state._leftPage) return;
     recordBtn.classList.remove('recording');
     recordBtn.classList.add('processing');
     recordBtn.textContent = 'Đang phân tích…';
     recordStatus.textContent = 'Đang tính toán đặc trưng âm học…';
     await wait(60);
+    if (state._leftPage) return;
     const features = analyzeTask(t.id, state._lastBuffer, state._sampleRate);
     state.results[t.id] = features;
     recordBtn.classList.remove('processing');
@@ -502,7 +509,7 @@ async function recordBuffer(durationSec) {
   const startTime = performance.now();
   let stopRAF = false;
   function draw() {
-    if (stopRAF) return;
+    if (stopRAF || state._leftPage) return;
     analyser.getByteTimeDomainData(waveData);
     const ctx = waveCanvas.getContext('2d');
     const w = waveCanvas.width, h = waveCanvas.height;
@@ -540,6 +547,27 @@ async function recordBuffer(durationSec) {
 }
 
 function wait(ms){return new Promise(r=>setTimeout(r,ms))}
+
+// Mic (`state.stream`) mở MỘT LẦN ở bài đầu, dùng lại cho cả 4 bài — nhưng
+// trước đây KHÔNG CÓ chỗ nào gọi `.stop()`, kể cả sau khi bài cuối xong việc
+// (đèn mic sáng suốt phần xem kết quả/thanh toán). Gọi ở ĐÚNG một chỗ:
+// `compileAndShowFeatures()` — thời điểm mic hết việc thật (mọi bài đã ghi).
+function releaseMic(){
+  if (state.stream) { state.stream.getTracks().forEach(t => t.stop()); state.stream = null; }
+  if (state.audioCtx) { state.audioCtx.close().catch(()=>{}); state.audioCtx = null; }
+}
+
+// Lưới an toàn soft-nav: nếu chưa xong hết 4 bài mà đã rời trang, mic vẫn
+// còn mở (đèn báo trên máy) — chỉ dừng tài nguyên, KHÔNG đụng DOM (trang
+// đích có thể không cùng cấu trúc). `_leftPage` chặn thêm continuation của
+// `startRecording()`/vòng `draw()` (rAF) ghi vào `recordBtn`/`waveCanvas`/
+// `timerBar`/`waveWrap` — các id này DÙNG CHUNG với app-thanh-tuong.html
+// (đã ở SOFT_PAGES); không chặn thì một phiên ghi âm dở dang có thể ghi
+// nhầm vào DOM của trang đó sau khi soft-nav qua.
+document.addEventListener('tvmb:softnav', () => {
+  state._leftPage = true;
+  releaseMic();
+});
 
 function vadTrim(buf, fs, thrFactor=0.05) {
   const frame = Math.floor(fs * 0.025);
@@ -936,6 +964,7 @@ function miniSummary(taskId, f) {
 }
 
 function compileAndShowFeatures() {
+  releaseMic(); // mọi bài đã ghi xong — mic không còn việc gì cho hết phần đời còn lại của trang
   const r = state.results;
   const b = r.baseline, s = r.sustain, c = r.count, t = r.tonal;
 
