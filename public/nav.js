@@ -386,6 +386,56 @@
     }
   }
 
+  // ── TÁI CẤU TRÚC TỐC ĐỘ (2026-09-24), phần 1: hai win AN TOÀN TUYỆT ĐỐI ──
+  // Đặt Ở ĐÂY (trước nhánh icons-only bên dưới) để chạy trên CẢ 91/96 trang
+  // nạp nav.js, không phụ thuộc icons-only hay full mode. Cả hai đều là
+  // progressive enhancement THUẦN — trình duyệt không hỗ trợ thì im lặng bỏ
+  // qua, không đổi hành vi/DOM/luồng nào đang chạy, không chạm shell.js.
+  //
+  // 1) Cross-document View Transitions — mượt lượt CHUYỂN TRANG (vẫn là
+  //    full reload thật, không phải SPA), trình duyệt tự crossfade thay vì
+  //    chớp trắng. `@view-transition` là at-rule chưa biết với trình duyệt
+  //    cũ → bị bỏ qua như mọi at-rule lạ, không phải lỗi.
+  if (!document.getElementById('nav-view-transitions')) {
+    var vtReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!vtReduced) {
+      var vt = document.createElement('style');
+      vt.id = 'nav-view-transitions';
+      vt.textContent = '@view-transition{navigation:auto}';
+      document.head.appendChild(vt);
+    }
+  }
+  // 2) Prefetch theo Ý ĐỊNH — `touchstart`/`pointerdown` bắn TRƯỚC `click`
+  //    (trước khi ngón tay nhấc lên), tranh thủ vài chục-vài trăm ms đó để
+  //    trình duyệt tải sẵn HTML đích vào cache. Chỉ link nội bộ tuyệt đối
+  //    (`/xyz`), bỏ qua `_blank`/`download`/link ngoài — không đổi gì nếu
+  //    người dùng cuối cùng không bấm (tab đóng, kéo tay đi chỗ khác thì
+  //    request vẫn tự hoàn tất nhưng chỉ tốn băng thông, không tốn gì khác).
+  (function () {
+    var seen = {};
+    function prefetch(href) {
+      if (seen[href]) return;
+      seen[href] = true;
+      try {
+        var l = document.createElement('link');
+        l.rel = 'prefetch';
+        l.href = href;
+        l.as = 'document';
+        document.head.appendChild(l);
+      } catch (e) { /* ignore */ }
+    }
+    function onIntent(e) {
+      var a = e.target && e.target.closest && e.target.closest('a[href]');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (!href || href.charAt(0) !== '/' || href.charAt(1) === '/') return;
+      if (a.target === '_blank' || a.hasAttribute('download')) return;
+      prefetch(href);
+    }
+    document.addEventListener('touchstart', onIntent, { passive: true, capture: true });
+    document.addEventListener('pointerdown', onIntent, { capture: true });
+  })();
+
   // ── CHẾ ĐỘ CHỈ-ICON ────────────────────────────────────────────
   // 27 trang shell và 2 trang admin CỐ Ý không nạp nav.js: nav.js tự chèn thanh
   // nav lên đầu <body>, mà mấy trang đó có chrome riêng. Hệ quả là chúng không

@@ -31,17 +31,24 @@ async function initProfile() {
     await new Promise(r => setTimeout(r, 100));
   }
 
-  document.getElementById('authLoading').style.display = 'none';
+  // Null-safe: nếu người dùng đã rời trang (điều hướng mềm sang trang khác)
+  // TRONG lúc đợi ở trên, các id này không còn trong DOM hiện tại nữa — gọi
+  // thẳng `.style` sẽ ném lỗi giữa chừng, cắt ngang các dòng CÒN LẠI của hàm
+  // (kể cả với trang tải mới bình thường, phòng hờ nếu id trang đổi tên).
+  var elAuthLoading = document.getElementById('authLoading');
+  if (elAuthLoading) elAuthLoading.style.display = 'none';
 
   if (!window.Auth?.isLoggedIn()) {
-    document.getElementById('notLoggedIn').style.display = 'block';
+    var elNotLoggedIn = document.getElementById('notLoggedIn');
+    if (elNotLoggedIn) elNotLoggedIn.style.display = 'block';
     return;
   }
 
   _pUser  = window.Auth.getUser();
 
   renderProfileHeader();
-  document.getElementById('dashboard').style.display = 'block';
+  var elDashboard = document.getElementById('dashboard');
+  if (elDashboard) elDashboard.style.display = 'block';
   loadHistory();
   setupTabs();
   setupHistFilters();
