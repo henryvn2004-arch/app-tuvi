@@ -40,6 +40,32 @@
 (function () {
   var STYLE_ID = 'ai-loading-steps-style';
 
+  // ── Lưới an toàn soft-nav ──────────────────────────────────────────
+  // `shell-soft-nav.js` bắn `tvmb:softnav` sau MỖI lượt chuyển trang KHÔNG
+  // reload (xem docs/luat/spa-nav.md) — trang không nạp `shell-soft-nav.js`
+  // không bao giờ bắn sự kiện này, nên listener này chỉ THÊM VÀO, không đổi
+  // hành vi ở những trang đó.
+  //
+  // Vì sao cần: `mount()`/`mountWait()` chạy `setInterval`/`setTimeout` bên
+  // TRONG chính module — trang gọi chỉ truyền `containerId`, không thấy được
+  // timer nào. Soft-nav không destroy `document` nên các timer đó sống sót
+  // qua lượt chuyển trang; `tickElapsed`/`paint` tra lại phần tử bằng CHUỖI
+  // ID mỗi tick — nếu trang MỚI dùng CHUNG quy ước ID container (rất nhiều
+  // trang gọi `AiLoadingSteps` dùng cùng tên như `loadingSteps`), timer của
+  // trang CŨ ghi "Đã chờ N giây"/đổi bước NHẦM vào khung loading của trang
+  // MỚI đang chạy — phát hiện khi audit Nhân Mạch cho Đợt 5
+  // (`docs/nhat-ky/2026-09.md`). Đăng ký MỌI controller đang chạy vào
+  // `_active`, gọi đúng `stop()` có sẵn của từng cái khi rời trang — tái
+  // dùng, không viết đường huỷ thứ hai.
+  var _active = [];
+  document.addEventListener('tvmb:softnav', function () {
+    var list = _active.slice();
+    _active.length = 0;
+    list.forEach(function (c) {
+      try { c.stop(); } catch (e) { /* ignore */ }
+    });
+  });
+
   function ensureStyle() {
     if (document.getElementById(STYLE_ID)) return;
     var css =
@@ -322,6 +348,7 @@
       }
 
       elapsedTimer = setInterval(tickElapsed, 1000);
+      if (_active.indexOf(controller) < 0) _active.push(controller);
     }
 
     function finish() {
@@ -330,6 +357,8 @@
       if (elapsedTimer) { clearInterval(elapsedTimer); elapsedTimer = null; }
       rows.forEach(function (r) { r.state = 'done'; });
       render(el, rows, head);
+      var i = _active.indexOf(controller);
+      if (i >= 0) _active.splice(i, 1);
     }
 
     function stop() {
@@ -338,9 +367,12 @@
       if (elapsedTimer) { clearInterval(elapsedTimer); elapsedTimer = null; }
       rows = [];
       el.innerHTML = '';
+      var i = _active.indexOf(controller);
+      if (i >= 0) _active.splice(i, 1);
     }
 
-    return { start: start, finish: finish, stop: stop };
+    var controller = { start: start, finish: finish, stop: stop };
+    return controller;
   }
 
   // ============================================================
@@ -444,7 +476,7 @@
             : 'Vẫn đang chạy, đừng đóng trang (đã chờ ' + s + ' giây)';
     }
 
-    return {
+    var controller = {
       start: function () {
         if (timer) clearInterval(timer);
         startedAt = Date.now();
@@ -452,10 +484,16 @@
         build();
         paint();
         timer = setInterval(paint, 1000);
+        if (_active.indexOf(controller) < 0) _active.push(controller);
       },
       note: function (t) { override = t || ''; if (timer) paint(); },
-      stop: function () { if (timer) { clearInterval(timer); timer = null; } },
+      stop: function () {
+        if (timer) { clearInterval(timer); timer = null; }
+        var i = _active.indexOf(controller);
+        if (i >= 0) _active.splice(i, 1);
+      },
     };
+    return controller;
   }
 
   // ============================================================

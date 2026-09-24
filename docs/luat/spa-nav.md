@@ -76,7 +76,7 @@ reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt đ
 | Đặt Tên, Đặt Tên Doanh Nghiệp, Chọn Ngày, Công Sở (Đợt 5) | ✅ | CÓ `tuvi-paywall.js` nhưng module đã được vá (đợt audit trước) + 4 trang này không tự gọi thư viện có timer nào — xem mục Đợt 5 bên dưới |
 | Nạp Lượng (`topup.html`) | ❌ full reload | Có `setInterval` chờ thanh toán + lịch sử bug đua nhau (`nhat-ky/2026-08.md` "Purchase từng bắn trùng"). Soft-nav không huỷ `document` → interval cũ có thể sống sót qua lượt chuyển tab. Rủi ro cao hơn lợi ích tốc độ trên đúng đường tiền. |
 | Hồ Sơ (`account-core.js`, 1637 dòng, hàng chục hàm async: History/Ví/Kết nối Telegram-WhatsApp-Messenger/MCP key/Nhiệm vụ/Giới thiệu) | ❌ full reload | Không đủ thời gian dò hết — môi trường này không có Supabase/auth thật để bấm qua từng tab của trang mà đo. Một lỗi đã bắt được (`initProfile`) đã vá, nhưng đó chỉ là MỘT trong hàng chục hàm khả nghi cùng họ. |
-| **31 trang còn lại có `tuvi-paywall.js`** | ❌ full reload | Module chung đã an toàn (đợt audit trước), nhưng mỗi trang vẫn cần audit RIÊNG — xem "Phát hiện mới: `AiLoadingSteps.mount()`" ở mục Đợt 5, nhiều trang trong nhóm này gọi thư viện có `setInterval` chưa có lưới an toàn soft-nav. |
+| **31 trang còn lại có `tuvi-paywall.js`** | ❌ full reload | `ai-loading-steps.js` giờ đã có lưới an toàn (Đợt 6) — nhưng CHƯA trang nào trong nhóm này được thêm vào `SOFT_PAGES`, vẫn cần audit RIÊNG từng trang (double-run + stress test) trước khi mở. |
 
 ## CHƯA làm — cố ý, không phải thiếu sót
 
@@ -283,8 +283,56 @@ reload đúng như cũ. `node --check` bản NHÂN ĐÔI: sạch cả 4. `npm ru
 (0 lỗi) · `npx prettier@3.9.6 --check` sạch · toàn bộ `npm run check:*`
 (50 bộ) qua hết.
 
-**CHƯA làm:** 31 trang còn lại của nhóm `tuvi-paywall.js` — phần lớn gọi
-`AiLoadingSteps.mount`/`mountWait` (mọi tool có bước chờ AI/vẽ ảnh) và
-CẦN đợi module đó có lưới an toàn `tvmb:softnav` trước. Việc kế tiếp hợp
-lý: vá `ai-loading-steps.js` (thêm registry các controller đang chạy +
-listener `tvmb:softnav` gọi `stop()` tất cả), rồi mới mở tiếp nhóm này.
+**CHƯA làm (lúc viết mục này):** 31 trang còn lại của nhóm `tuvi-paywall.js`
+— phần lớn gọi `AiLoadingSteps.mount`/`mountWait` và cần đợi module đó có
+lưới an toàn `tvmb:softnav` trước. Việc kế tiếp: vá `ai-loading-steps.js`
+— xem mục Đợt 6 bên dưới (đã làm xong).
+
+## Đợt 6: vá `ai-loading-steps.js` — lưới an toàn `tvmb:softnav` cho registry controller (2026-09-24)
+
+Module dùng chung `public/tools-shared/ai-loading-steps.js`
+(`AiLoadingSteps.mount()`/`mountWait()`) tự chạy `setInterval`/`setTimeout`
+BÊN TRONG chính nó — trang gọi chỉ truyền `containerId`, nên `grep
+setInterval` trên script riêng của trang (quy trình Đợt 1-5) không bắt
+được rủi ro này (phát hiện khi audit Nhân Mạch cho Đợt 5).
+
+**Cơ chế lỗi đã ĐO ĐƯỢC (không phải suy đoán):** `tickElapsed()`/`paint()`
+tra lại phần tử bằng CHUỖI ID (`document.getElementById(el.id +
+'-elapsed')`) mỗi tick, không giữ tham chiếu cố định. Rất nhiều trang
+dùng CHUNG quy ước container `id="loadingSteps"` — nếu soft-nav sang một
+trang KHÁC cũng dùng ID đó trong lúc interval của trang CŨ còn sống,
+`getElementById` (theo THỨ TỰ TÀI LIỆU, không theo script nào gọi) trả về
+phần tử SỐNG của trang MỚI — interval cũ ghi đè lên tiến trình của tool
+MỚI đang chạy.
+
+**Đã vá:** thêm `var _active = []` cấp module + MỘT
+`document.addEventListener('tvmb:softnav', …)` ở top-level gọi `stop()`
+(tái dùng, không viết đường huỷ thứ hai) trên MỌI controller đang `start()`
+rồi xoá registry — đúng khuôn mẫu đã dùng cho `tuvi-paywall.js`. `mount()`
+đăng ký `controller` vào `_active` trong `start()`, gỡ trong `finish()` VÀ
+`stop()` (cả hai nhánh thoát). `mountWait()` đăng ký trong `start()`, gỡ
+trong `stop()`.
+
+**Verify — red-team định lượng (không chỉ nhìn có/không lỗi):** dựng
+harness Playwright (trang tĩnh nạp CHÍNH `ai-loading-steps.js`) mô phỏng
+ĐÚNG cơ chế nghĩa địa của `shell-soft-nav.js`: bury container CŨ (đã
+`start()` sẵn, interval đang chạy) vào một `<div data-softnav-grave>` nối
+SAU trong document order, chèn container MỚI cùng `id="loadingSteps"`
+TRƯỚC nghĩa địa, rồi để trang B tự `mount().start()` như thật. Đếm số lần
+`MutationObserver` bắt được ghi vào `#loadingSteps-elapsed` (phần tử SỐNG
+của trang B) trong 4.5s:
+- KHÔNG bắn `tvmb:softnav` (red-team, tái hiện lỗi CŨ): **6 lần ghi** — gần
+  gấp đôi một nguồn đơn (interval A còn sống VÀ ghi chồng lên B).
+- CÓ bắn `tvmb:softnav` (bản vá): **2 lần ghi** — khớp đúng một nguồn duy
+  nhất (chỉ B).
+
+Regression: `finish()`/`stop()` ở nhánh thành công gỡ registry đúng —
+bắn `tvmb:softnav` SAU khi đã `finish()` không còn gì để dừng, không ném
+lỗi. Bắn `tvmb:softnav` liên tiếp hai lần khi registry rỗng cũng không
+lỗi. `node --check` sạch · `npm run lint` (0 lỗi) · `npx prettier@3.9.6
+--check` sạch · toàn bộ `npm run check:*` (50 bộ) qua hết.
+
+**CHƯA làm:** chưa thêm trang nào trong nhóm `tuvi-paywall.js` gọi
+`AiLoadingSteps` vào `SOFT_PAGES` — module giờ AN TOÀN HƠN để làm vậy,
+nhưng mỗi trang vẫn cần audit riêng (double-run + stress test) theo đúng
+quy trình, việc của một đợt sau.
