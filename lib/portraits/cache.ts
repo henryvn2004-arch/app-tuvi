@@ -24,6 +24,7 @@
 
 import { createHash } from 'crypto';
 import type { BirthParams } from '@/lib/contract/v1';
+import { recordUserReport } from '@/lib/reports/userReports';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -260,6 +261,15 @@ export function insertHistoryRow(toolId: PortraitToolId, row: Record<string, unk
     headers: { ...SB_HEADERS, Prefer: 'return=minimal' },
     body: JSON.stringify(row),
   }).catch(() => {});
+
+  // Cũng ghi vào tab "Tủ Báo Cáo" — dòng lịch sử trên CHÍNH LÀ căn cứ trả tiền
+  // (userOwnsLaso đọc lại bảng đó), nên ghi user_reports NGAY TẠI ĐÂY không
+  // thêm rủi ro thật/giả, chỉ có thể làm tab thiếu một report nếu lỗi mạng.
+  const userId = typeof row.user_id === 'string' ? row.user_id : '';
+  const lasoKeyVal = typeof row.laso_key === 'string' ? row.laso_key : '';
+  if (userId && lasoKeyVal) {
+    recordUserReport({ userId, toolId, reportKey: lasoKeyVal });
+  }
 }
 
 /**
