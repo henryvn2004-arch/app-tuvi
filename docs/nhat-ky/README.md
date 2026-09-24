@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 12: audit topup.html — chốt VĨNH VIỄN giữ full reload |
 | 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 11: mở khoá Hồ Sơ (account-core.js), chỉ còn topup.html ngoài SOFT_PAGES |
 | 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 10: vá vòng đời mic thanh-tuong-pro.html, SPA-hoá xong 96/96 trang |
 | 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 9: hết nhóm tuvi-paywall.js (23 trang) + bug cấu trúc thật ở tầng điều phối |
