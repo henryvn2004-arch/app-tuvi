@@ -175,6 +175,7 @@ window.SHELL_INTRO={key:'khi-sac'};</script>
   <script src="/nav.js?v=41" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/shell.js?v=100"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script>
 function initKhiSac(){
   Shell.setContext({
@@ -190,10 +191,10 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // Port từ public/tools/khi-sac-ai.html — giữ nguyên luồng nén ảnh + gate
 // Lượng (TuviPaywall) + SSE 'delta' stream tới /api/tuong-mat?action=khi-sac.
 // ══════════════════════════════════════════════════════════════════════
-let _imageData = null;
-let _mediaType = 'image/jpeg';
-let _previewDataUrl = null;
-let _currentSlug = null;
+var _imageData = null; // var: chạy lại được qua soft-nav — xem docs/luat/spa-nav.md
+var _mediaType = 'image/jpeg';
+var _previewDataUrl = null;
+var _currentSlug = null;
 
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
 // có sẵn trong flow cũ (form → paywall → kết quả, KHÔNG có tầng xem trước).
@@ -389,7 +390,7 @@ async function _saveKhiSacReading(resultText) {
 // CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts — Khí Sắc mượn
 // riêng khối này, KHÔNG dùng arcDoc()) — tách thành thẻ trích dẫn màu
 // (.fb-card, xem shell.css), cùng cơ chế với app-luan-giai.html.
-const HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
+var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
 function renderMarkdown(md) {
   return md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')

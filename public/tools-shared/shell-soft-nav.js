@@ -75,6 +75,12 @@
     '/app/gio-sinh': 1,
     '/app/huong-nghiep-tre': 1,
     '/app/but-tuong': 1,
+    '/app/khi-sac': 1,
+    '/app/trang-diem': 1,
+    '/app/van-han-nam': 1,
+    '/app/xem-tuoi': 1,
+    '/app/xem-lam-an': 1,
+    '/app/tuong-hop': 1,
   };
   var TIMEOUT_MS = 8000;
   var inflight = false;
