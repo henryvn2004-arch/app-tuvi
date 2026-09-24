@@ -65,7 +65,7 @@ cú bấm mới tới trong lúc lượt trước còn đang fetch, tránh chồ
 reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt động đúng
 (soft-nav qua `popstate`).
 
-## Phạm vi hiện tại — 16/96 trang trong `SOFT_PAGES`
+## Phạm vi hiện tại — 20/96 trang trong `SOFT_PAGES`
 
 | Trang | Soft-nav? | Vì sao |
 |---|---|---|
@@ -73,9 +73,10 @@ reload, 0 lỗi trên đủ 12 trang. Nút Back/Forward trình duyệt hoạt đ
 | Kim Lâu, Nạp Âm, Số Đẹp, Bản Đồ Sao, Hoàng Đạo (Đợt 2) | ✅ | Miễn phí, không `tuvi-paywall.js`, không `setInterval` riêng, script double-run sạch, stress test 60 lượt/8 trang không lỗi |
 | Bát Trạch, Lục Nhâm, Ngày Tốt, Thần Số Học (Đợt 3) | ✅ | Cùng tiêu chí Đợt 2, script double-run sạch, stress test 90 lượt/12 trang không lỗi |
 | Kỳ Môn, Mai Hoa, Ngũ Hành Tên, Kinh Dịch (Đợt 4) | ✅ | Vá đúng nguyên nhân gốc — xem mục Đợt 4 bên dưới, không phải IIFE |
+| Đặt Tên, Đặt Tên Doanh Nghiệp, Chọn Ngày, Công Sở (Đợt 5) | ✅ | CÓ `tuvi-paywall.js` nhưng module đã được vá (đợt audit trước) + 4 trang này không tự gọi thư viện có timer nào — xem mục Đợt 5 bên dưới |
 | Nạp Lượng (`topup.html`) | ❌ full reload | Có `setInterval` chờ thanh toán + lịch sử bug đua nhau (`nhat-ky/2026-08.md` "Purchase từng bắn trùng"). Soft-nav không huỷ `document` → interval cũ có thể sống sót qua lượt chuyển tab. Rủi ro cao hơn lợi ích tốc độ trên đúng đường tiền. |
 | Hồ Sơ (`account-core.js`, 1637 dòng, hàng chục hàm async: History/Ví/Kết nối Telegram-WhatsApp-Messenger/MCP key/Nhiệm vụ/Giới thiệu) | ❌ full reload | Không đủ thời gian dò hết — môi trường này không có Supabase/auth thật để bấm qua từng tab của trang mà đo. Một lỗi đã bắt được (`initProfile`) đã vá, nhưng đó chỉ là MỘT trong hàng chục hàm khả nghi cùng họ. |
-| **Mọi trang có `tuvi-paywall.js`** (`public/tuvi-paywall.js` — bản thật, KHÔNG phải file `tuvi-paywall.js` ở gốc repo, đã lỗi thời/không được serve) | ❌ full reload | Module này có `_qrTimer`/`_qrPoll` — CÙNG HỌ `setInterval` chờ thanh toán như `topup.html`. Rủi ro y hệt trên MỌI trang dùng module này, không chỉ Nạp Lượng — loại trừ cả nhóm cho tới khi có đợt audit riêng cho luồng trả-tại-chỗ bằng QR. |
+| **31 trang còn lại có `tuvi-paywall.js`** | ❌ full reload | Module chung đã an toàn (đợt audit trước), nhưng mỗi trang vẫn cần audit RIÊNG — xem "Phát hiện mới: `AiLoadingSteps.mount()`" ở mục Đợt 5, nhiều trang trong nhóm này gọi thư viện có `setInterval` chưa có lưới an toàn soft-nav. |
 
 ## CHƯA làm — cố ý, không phải thiếu sót
 
@@ -241,3 +242,49 @@ nghĩa là hard-reload thật.
 `tuvi-paywall.js` giờ đã có bản vá riêng (PR audit) nhưng CHƯA trang nào
 trong nhóm đó được thêm vào `SOFT_PAGES` — vẫn là quyết định của một đợt
 sau.
+
+## Đợt 5: mở `SOFT_PAGES` cho 4 trang ĐẦU TIÊN của nhóm `tuvi-paywall.js` (2026-09-24)
+
+Module `tuvi-paywall.js` đã được vá an toàn cho soft-nav (đợt audit trước,
+merge trước đợt này) — việc còn lại là audit TỪNG TRANG trong nhóm ~35
+trang dùng module đó, đúng quy trình đã lập (double-run + không
+`setInterval` riêng + stress test). Đợt này chọn 4 trang đơn giản nhất
+theo tiêu chí đó: **Đặt Tên, Đặt Tên Doanh Nghiệp, Chọn Ngày, Công Sở**
+(0 top-level `let`/`const`, 0 `setInterval`/`setTimeout` TRONG SCRIPT
+RIÊNG của trang, cùng `?v=37` của `tuvi-paywall.js`).
+
+**Phát hiện mới — quy trình cũ bỏ sót timer khởi bằng THƯ VIỆN DÙNG
+CHUNG:** `grep setInterval` trên script RIÊNG của trang không bắt được
+timer mà trang khởi qua một hàm thư viện — cụ thể `public/tools-shared/
+ai-loading-steps.js` (`AiLoadingSteps.mount()`/`mountWait()`) tự chạy
+`setInterval` đếm giây + `setTimeout` chuyển bước bên trong module, trang
+gọi nó chỉ truyền `containerId`. Kiểm tra ban đầu định đưa **Nhân Mạch**
+vào đợt này (0 `setInterval` trong chính script của nó) — soát kỹ hơn lộ
+ra nó gọi `AiLoadingSteps.mount('loadingSteps', …)`, và hàm `tickElapsed`
+bên trong tra lại phần tử bằng CHUỖI ID (`document.getElementById(el.id +
+'-elapsed')`), không giữ tham chiếu — nếu soft-nav sang một trang KHÁC
+cũng dùng cùng quy ước ID `loadingSteps` (rất nhiều trang trong nhóm này
+dùng chung thư viện) trong lúc interval còn sống, nó ghi "Đã chờ N giây"
+nhầm vào khung loading của TOOL MỚI. Module `ai-loading-steps.js` hiện
+CHƯA có lưới an toàn `tvmb:softnav` (khác `tuvi-paywall.js`/Kinh Dịch đã
+vá) — cần vá RIÊNG module đó (theo dõi mọi controller đang `start()`, gọi
+`stop()` hàng loạt khi soft-nav) trước khi mở `SOFT_PAGES` cho bất kỳ
+trang nào gọi `AiLoadingSteps.mount`/`mountWait`. Đã loại Nhân Mạch khỏi
+đợt này vì lý do đó — không phải audit sai, mà audit ĐÚNG hơn quy trình cũ.
+
+**Đã vá:** thêm `<script src="/tools-shared/shell-soft-nav.js?v=1">` ngay
+sau `shell.js` trên cả 4 trang; thêm 4 route vào `SOFT_PAGES`. Không cần
+sửa mã nào khác — cả 4 đã sạch sẵn.
+
+**Verify:** Playwright cục bộ (server Node giả rewrite, mở rộng route
+map) — 70 lượt bấm ngẫu nhiên xen kẽ 10 trang (Đợt 1-4 + 4 trang mới): 0
+hard-reload, 0 `pageerror`. 4 trang mới bấm sang Nạp Lượng/Hồ Sơ: vẫn full
+reload đúng như cũ. `node --check` bản NHÂN ĐÔI: sạch cả 4. `npm run lint`
+(0 lỗi) · `npx prettier@3.9.6 --check` sạch · toàn bộ `npm run check:*`
+(50 bộ) qua hết.
+
+**CHƯA làm:** 31 trang còn lại của nhóm `tuvi-paywall.js` — phần lớn gọi
+`AiLoadingSteps.mount`/`mountWait` (mọi tool có bước chờ AI/vẽ ảnh) và
+CẦN đợi module đó có lưới an toàn `tvmb:softnav` trước. Việc kế tiếp hợp
+lý: vá `ai-loading-steps.js` (thêm registry các controller đang chạy +
+listener `tvmb:softnav` gọi `stop()` tất cả), rồi mới mở tiếp nhóm này.

@@ -67,6 +67,10 @@
     '/app/mai-hoa': 1,
     '/app/ngu-hanh-ten': 1,
     '/app/kinh-dich': 1,
+    '/app/dat-ten': 1,
+    '/app/dat-ten-dn': 1,
+    '/app/chon-ngay': 1,
+    '/app/cong-so': 1,
   };
   var TIMEOUT_MS = 8000;
   var inflight = false;
