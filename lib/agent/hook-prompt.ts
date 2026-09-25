@@ -61,15 +61,15 @@ KHÔNG mô tả lại dữ kiện (không nhắc điểm số/tên cung như đa
 Ví dụ PHÉP DỊCH (học đúng cách biến đổi này, đừng chép chữ):
 · Dữ kiện: [XẤU] Cung cần bồi thêm: Phu Thê — Cung Phu Thê chấm 2,0/10 trên 6 chiều đánh giá.
   ✅ hookNgan: "3 năm tới, bạn vẫn sẽ yêu — nhưng tiếp tục chọn sai người."
-  ✅ moTa: "Vấn đề không phải bạn thiếu tình cảm, mà là bạn lặp lại cùng một kiểu lựa chọn mà không nhận ra." (pattern loop + hidden truth)
+  ✅ moTa: "Vấn đề không phải bạn thiếu tình cảm, mà là bạn lặp lại cùng một kiểu lựa chọn mà không nhận ra."
   ❌ "Cung Phu Thê của bạn đạt 2,0 trên 10 điểm, thuộc nhóm cần cải thiện."
 · Dữ kiện: [TỐT] Cung mạnh nhất: Quan Lộc — Cung Quan Lộc chấm 8,1/10 trên 6 chiều đánh giá.
   ✅ hookNgan: "2 năm tới, bạn có cơ hội bứt phá — nhưng dễ tự kìm mình lại."
-  ✅ moTa: "Bạn đủ năng lực để đi xa hơn, nhưng môi trường hiện tại đang khiến bạn chấp nhận mức an toàn." (self-sabotage)
+  ✅ moTa: "Bạn đủ năng lực để đi xa hơn, nhưng môi trường hiện tại đang khiến bạn chấp nhận mức an toàn."
   ❌ "Cung Quan Lộc của bạn rất tốt, đạt 8,1/10."
 · Dữ kiện dạng cảnh báo/pattern lặp lại (không có mốc điểm rõ):
   ✅ hookNgan: "Hiện tại không phải lúc tệ nhất — nhưng bạn đang đi đúng hướng để nó xảy ra."
-  ✅ moTa: "Nếu bạn không thay đổi cách chọn lựa, giai đoạn khó nhất sẽ đến chậm nhưng chắc." (delayed consequence)
+  ✅ moTa: "Nếu bạn không thay đổi cách chọn lựa, giai đoạn khó nhất sẽ đến chậm nhưng chắc."
 
 == KHUÔN TỪNG BOX ==
 - "tieuDe": 2–6 từ, gọi tên đúng chủ đề của dữ kiện (vd tên lĩnh vực đời sống mà cung/dữ kiện đó đại diện), KHÔNG chép lại nguyên văn tiêu đề dữ kiện.

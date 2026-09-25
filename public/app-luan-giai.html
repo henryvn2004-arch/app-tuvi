@@ -10,7 +10,7 @@
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/shell.css?v=53">
+<link rel="stylesheet" href="/shell.css?v=54">
 <link rel="preload" href="/laso-chart.css?v=3" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/laso-chart.css?v=3"></noscript>
 <style>
@@ -427,7 +427,7 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
-<script src="/laso-chart.js?v=3"></script>
+<script src="/laso-chart.js?v=4"></script>
 <script src="/luan-giai-core.js?v=4"></script>
 <!-- Chart.js ĐÃ GỠ: canvas #chart-daivan-overview là của phần 14, mà tool này
      dừng ở phần 13 (phần 14 dời sang app-chu-trinh-cuoc-doi.html) — xem chú
@@ -442,7 +442,7 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tools-shared/illus-nguong.js?v=1"></script>
 <script src="/tools-shared/illus-match.js?v=1"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=5"></script>
+<script src="/tuvi-form.js?v=6"></script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tools-shared/nguoi-than.js?v=1"></script>
@@ -503,6 +503,7 @@ function showNamxemStep(){
     '</div></div></div>'+
     '<button class="btn-go" type="button" id="namxemNext" style="width:auto;padding:9px 16px;font-size:13px;margin-top:8px">Lập lá số &amp; Luận giải ngay →</button></div>';
   chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  if(window.mountIcons) window.mountIcons(el); // icon ví của hộp "Chi phí sử dụng" — dựng bằng innerHTML
   NamLuanSelect.mount('cInpNamxem');
   // Đợt 0 (2026-09-24): khoá + đổi nhãn NGAY lúc bấm, cùng mẫu `doLuan()` với
   // `#btnGo` — trước đây nút này KHÔNG bị khoá, bấm nhiều lần trong lúc

@@ -45,6 +45,13 @@ function clean(v: unknown, max: number): string {
     .slice(0, max);
 }
 
+// Model từng chép nguyên nhãn kỹ thuật của ví dụ prompt ra cuối câu, vd
+// "…mức an toàn. (self-sabotage)" — lọt thẳng tới màn hình khách. Prompt đã bỏ
+// nhãn, lọc thêm ở đây cho cả dòng cũ đang nằm trong cache.
+function stripNote(s: string): string {
+  return s.replace(/\s*\([a-z][a-z +-]*\)$/, '');
+}
+
 function validRawFacts(v: unknown): v is Record<string, unknown>[] {
   if (!Array.isArray(v) || v.length < MIN_FACTS || v.length > MAX_FACTS) return false;
   return v.every((f) => {
@@ -92,8 +99,8 @@ function parseHookResult(raw: unknown, wantBoxes: number): HookNarrativeResult |
     if (!b || typeof b !== 'object') return null;
     const bo = b as Record<string, unknown>;
     const tieuDe = clean(bo.tieuDe, 40);
-    const hookNgan = clean(bo.hookNgan, 160);
-    const moTa = clean(bo.moTa, 240);
+    const hookNgan = stripNote(clean(bo.hookNgan, 160));
+    const moTa = stripNote(clean(bo.moTa, 240));
     if (!tieuDe || !hookNgan || !moTa) return null;
     boxes.push({ tieuDe, hookNgan, moTa });
   }
@@ -133,7 +140,8 @@ export async function POST(request: NextRequest) {
   const hit = await previewCacheGet(cacheKey);
   if (hit) {
     try {
-      return ok({ ...(JSON.parse(hit) as HookNarrativeResult), allowed: true, cached: true });
+      const cachedResult = parseHookResult(JSON.parse(hit), facts.length);
+      if (cachedResult) return ok({ ...cachedResult, allowed: true, cached: true });
     } catch (e) {
       console.error('[hook-narrative] cache hỏng, dựng lại:', (e as Error)?.message);
     }
