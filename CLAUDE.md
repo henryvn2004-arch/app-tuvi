@@ -73,6 +73,8 @@ grep mò — repo có file 400 KB+ (`public/tuvi-ansao-engine.js`, `public/admin
   `arcCore` / `arcDoc` / `arcGiong` (ba họ prompt KHÁC nhau, xem luật bên dưới).
 - **`lib/agent/run.ts`** — `runAgent`, vòng lặp tool-use, ghi `llm_usage`.
 - **`lib/agent/tools.ts`** — định nghĩa tool + `TOOLS_INSTRUCTION`.
+- **`lib/agent/luan-chu-de.ts`** — rail biết đọc CUNG NÀO cho việc gì (11 chủ đề). Khối đi vào
+  USER message (không system — giữ cache). Thêm chủ đề: `CHU_DE` + bảng `Y_DINH_*` (`check:topics`).
 - **`lib/agent/luan-giai-doc.ts`** — **`cachedSystemFor(laSoText, phan?)` là nguồn
   DUY NHẤT cho `system` khi bật `cacheSystem`** (Luận Giải · Chu Trình Cuộc Đời ·
   Vận Hạn 12 Tháng). Tự ghép chuỗi tay ở nơi khác là cache miss ngay lượt đầu.
@@ -358,11 +360,8 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   (proxy 403 ở CONNECT) — việc cần 1 trong 2 thứ đó phải mở session ở environment
   khác. ĐỪNG đoán qua TÊN environment, xem `docs/QC.md` "Claude Code Remote environments".
 ### Nợ kỹ thuật đã ghi nhận
-- `seo_pages` (7.080 trang tương hợp) đang được cron `/api/cron/viral-seo-pages`
-  (120 dòng/ngày, ~59 ngày) viết lại theo viral-core — migration đã áp dụng
-  2026-09-06, CHƯA chạy lượt nào (đợi 11:30 VN đầu tiên). Rải theo NGÀY vì chi
-  phí LLM theo lượt gọi, KHÔNG phải để tránh lastmod — `seo_pages` không có cột
-  `updated_at`, PATCH không chạm `created_at` nên không ảnh hưởng sitemap.
+- `seo_pages` (7.080 trang) đang được cron `viral-seo-pages` viết lại theo viral-core,
+  120 dòng/ngày từ 07/09 (~hết đầu 11/2026). Rải theo NGÀY vì chi phí LLM, không vì lastmod.
 
 ## QC & Testing — cấu hình đầy đủ ở `docs/QC.md`
 
