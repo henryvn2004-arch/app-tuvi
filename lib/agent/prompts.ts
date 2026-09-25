@@ -1363,7 +1363,9 @@ ${MAU_ARC}
 // chứ không phải tên cung — gộp sẽ đổi ý nghĩa, không phải dọn trùng lặp.
 const FOCUS_TOPICS: Record<string, string[]> = {
   'tài chính|tài lộc|tiền|thu nhập|làm giàu|tài bạch': ['Tài Bạch', 'Phúc Đức'],
-  'sự nghiệp|công việc|nghề|quan lộc|thăng tiến':       ['Quan Lộc', 'Mệnh'],
+  'sự nghiệp|công việc|việc làm|nghề|quan lộc|thăng tiến|thăng chức|lên chức|tăng lương|chuyển việc|nhảy việc|đổi việc|nghỉ việc|xin việc|thất nghiệp|công ty|khởi nghiệp|làm riêng|công chức': ['Quan Lộc', 'Mệnh'],
+  'cấp trên|sếp tôi|lãnh đạo':                           ['Quan Lộc', 'Phụ Mẫu'],
+  'đồng nghiệp|cấp dưới':                                ['Quan Lộc', 'Nô Bộc'],
   'tình duyên|hôn nhân|vợ chồng|tình cảm|phu thê':      ['Phu Thê', 'Mệnh'],
   'con cái|con cháu|tử tức':                             ['Tử Tức'],
   'sức khỏe|bệnh|thân thể|tật ách':                     ['Tật Ách'],
@@ -1385,12 +1387,21 @@ const FOCUS_MATCHERS: Array<[RegExp, string[]]> = Object.entries(FOCUS_TOPICS).m
 
 // Cung liên quan tới câu hỏi (luôn có Mệnh; hỏi chung → thêm Quan/Tài/Phu Thê;
 // năm/vận → thêm '__daiVan__'). Giữ NGUYÊN logic cũ để parity /api/lasotuvi.
+// Chỉ các cung câu hỏi THẬT SỰ trúng — KHÔNG có nhánh mặc định. Dùng để biết
+// câu hỏi thuộc chủ đề nào (lib/agent/luan-chu-de.ts): nhánh mặc định của
+// `relevantPalaces` luôn thêm Quan Lộc nên không phân biệt được.
+export function relevantPalacesStrict(question: string): Set<string> {
+  const q = chuanHoaDauThanh((question || '').toLowerCase());
+  const hit = new Set<string>();
+  for (const [re, names] of FOCUS_MATCHERS) {
+    if (re.test(q)) names.forEach((n) => hit.add(n));
+  }
+  return hit;
+}
+
 export function relevantPalaces(question: string): Set<string> {
   const q = chuanHoaDauThanh((question || '').toLowerCase());
-  const relevant = new Set<string>(['Mệnh']);
-  for (const [re, names] of FOCUS_MATCHERS) {
-    if (re.test(q)) names.forEach((n) => relevant.add(n));
-  }
+  const relevant = new Set<string>(['Mệnh', ...relevantPalacesStrict(question)]);
   if (relevant.size === 1) ['Quan Lộc', 'Tài Bạch', 'Phu Thê'].forEach((n) => relevant.add(n));
   if (/năm\s*\d{4}/i.test(q)) relevant.add('__daiVan__');
   return relevant;

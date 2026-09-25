@@ -23,6 +23,7 @@ import { computeThanSoHoc } from '@/lib/engine/than-so-hoc';
 // CHAT_SYSTEM_THAN_SO; tên tool phải khớp TAY giữa hai file — đổi tên thì sửa
 // CẢ HAI.
 import { extractTuBinhContext, extractGenericContext } from '@/lib/agent/prompts';
+import { lanKinhSuNghiepNam } from '@/lib/agent/luan-chu-de';
 import type { BirthParams } from '@/lib/contract/v1';
 import { SUGGEST_TOOL_DEF, SUGGEST_PRODUCT_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
@@ -72,6 +73,9 @@ export interface ToolContext {
   activeProfile: string | null;
   // mo_la_so mở một lá số KHÁC → đổi chủ thể → kênh reset thread hội thoại.
   subjectSwitched: boolean;
+  // Chủ đề câu hỏi lượt này (lib/agent/luan-chu-de.ts) — tra_tieu_van gắn thêm
+  // lăng kính chủ đề vào kết quả. null = không chủ đề nào đã dựng.
+  chuDe: string | null;
 }
 
 export function newToolContext(
@@ -92,6 +96,7 @@ export function newToolContext(
     toolSuggestion: null,
     activeProfile: null,
     subjectSwitched: false,
+    chuDe: null,
   };
 }
 
@@ -266,7 +271,14 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
     }
     // Lưới an toàn: tra_tieu_van thiếu năm → mặc định năm hiện tại (VN).
     const arg = name === 'tra_tieu_van' && !input?.nam ? { ...input, nam: currentYearVN() } : input;
-    return { content: execLasoTool(name, ctx.ls, arg), label: toolLabel(name) };
+    let content = execLasoTool(name, ctx.ls, arg);
+    if (name === 'tra_tieu_van' && ctx.chuDe === 'su-nghiep') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const tv = ((ctx.ls as any)?.tieuVanScores || []).find((t: any) => Number(t.nam) === Number(arg?.nam));
+      const lk = tv ? lanKinhSuNghiepNam(ctx.ls, tv) : '';
+      if (lk) content += '\n' + lk;
+    }
+    return { content, label: toolLabel(name) };
   }
 
   return { content: 'Công cụ không tồn tại.', label: 'Công cụ lạ' };
