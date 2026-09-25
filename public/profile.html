@@ -44,6 +44,26 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .credit-widget-value small{font-size:.7rem;font-weight:400;color:rgba(255,255,255,.4);font-family:Arial,sans-serif;display:block}
 .btn-topup-sm{display:block;margin-top:.45rem;background:#c9a84c;color:#061A2E;font-size:.7rem;font-weight:700;padding:.3rem .5rem;border-radius:4px;text-decoration:none;text-align:center}
 .btn-topup-sm:hover{background:#f0d080}
+.profile-actions{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;justify-content:flex-end}
+.credit-hero{background:var(--navy);border-radius:12px;padding:1.5rem 2rem;margin-bottom:1.25rem}
+.credit-hero-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:.25rem}
+.credit-hero-bal{color:#c9a84c;font-family:'Noto Serif',serif;font-size:2rem;font-weight:700}
+.credit-hero-btn{background:#c9a84c;color:#061A2E;padding:.75rem 1.5rem;border-radius:8px;font-size:.88rem;font-weight:700;text-decoration:none;align-self:flex-start;display:inline-flex;align-items:center;gap:.4rem}
+.quick-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem}
+.quick-tool{display:flex;flex-direction:column;align-items:center;gap:.4rem;background:#fff;border:1px solid var(--border-lt);border-radius:12px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)}
+.quick-tool .qt-ic{width:22px;height:22px;color:#7C6942}
+.qt-tx{display:flex;flex-direction:column;gap:.2rem}
+.qt-name{font-size:.8rem;font-weight:700}
+.qt-price{font-size:.72rem;color:var(--gold);font-weight:700}
+.vilu-tbl-wrap{overflow-x:auto;border:1px solid var(--border-lt);border-radius:10px}
+table.vilu-tbl{width:100%;border-collapse:collapse;font-size:.82rem;min-width:560px}
+table.vilu-tbl th{text-align:left;color:var(--text-lt);font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;font-weight:700;padding:.7rem .85rem;border-bottom:1px solid var(--border-lt);white-space:nowrap}
+table.vilu-tbl td{padding:.7rem .85rem;border-bottom:1px solid var(--border-lt);color:var(--text);vertical-align:middle}
+table.vilu-tbl tr:last-child td{border-bottom:none}
+.vilu-amt{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.vilu-amt.pos{color:var(--green)}
+.vilu-amt.neg{color:var(--red)}
+.vilu-mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.74rem;color:var(--text-lt)}
 
 /* ── TABS ── */
 .tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.75rem;background:var(--bg);border-radius:8px 8px 0 0;overflow:hidden}
@@ -206,13 +226,76 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .alert.success{background:#F0FAF4;color:var(--green);border:1px solid #C3E6D0}
 .alert.error{background:#FFF5F5;color:var(--red);border:1px solid #F5C6C6}
 
-@media(max-width:600px){
-  .profile-header{flex-direction:column;text-align:center;gap:1rem;padding:1.5rem}
-  .tabs{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .tabs::-webkit-scrollbar{display:none}
-  .tab-btn{min-width:95px;font-size:.77rem;padding:.7rem .35rem;white-space:nowrap}
-  .card-grid{grid-template-columns:1fr}
-  .xem-item{flex-wrap:wrap}
+/* Mobile kiểu app — cùng hướng với /app/ho-so (app-tai-khoan.html). `#dashboard`
+   đứng trước để thắng các <style> riêng từng tab (khai bằng #id, nằm SAU). */
+@media(max-width:640px){
+  .page-wrap{padding:1rem 1rem 2.5rem}
+  #dashboard .profile-header{flex-wrap:wrap;gap:.8rem 1rem;padding:1rem;border-radius:16px;margin-bottom:1rem}
+  #dashboard .avatar{width:50px;height:50px;font-size:1.35rem}
+  #dashboard .profile-info{min-width:0}
+  #dashboard .profile-email{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.8rem}
+  #dashboard .profile-name{font-size:1.1rem}
+  #dashboard .profile-actions{flex-basis:100%;flex-wrap:nowrap;justify-content:space-between}
+  #dashboard .credit-widget{flex:1;min-width:0;display:flex;align-items:center;gap:.55rem;text-align:left;padding:.45rem .45rem .45rem .8rem;border-radius:999px}
+  #dashboard .credit-widget-label{display:none}
+  #dashboard .credit-widget-value{font-size:1.05rem;white-space:nowrap}
+  #dashboard .credit-widget-value small{display:inline;margin-left:.2rem}
+  #dashboard .btn-topup-sm{margin:0 0 0 auto;padding:.4rem .75rem;border-radius:999px;white-space:nowrap}
+  #dashboard .profile-signout{flex:none;padding:.5rem .85rem;border-radius:999px}
+
+  #dashboard .tabs{gap:.4rem;border-bottom:none;background:none;border-radius:0;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;margin:0 -1rem 1rem;padding:0 1rem}
+  #dashboard .tabs::-webkit-scrollbar{display:none}
+  #dashboard .tab-btn{flex:none;top:0;border-bottom:none;border-radius:999px;padding:.5rem .9rem;font-size:.8rem;white-space:nowrap;background:#fff;color:var(--text-mid)}
+  #dashboard .tab-btn.active{background:var(--navy);color:#fff}
+  #dashboard .tab-btn.active .tab-ic{color:#c9a84c}
+
+  #dashboard #tab-lichsu .hist-filters{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -1rem 1rem;padding:0 1rem}
+  #dashboard #tab-lichsu .hist-filters::-webkit-scrollbar{display:none}
+  #dashboard #tab-lichsu .hist-chip{flex:none;padding:.4rem .8rem;font-size:.8rem}
+  #dashboard #tab-lichsu .hist-group{margin-bottom:1.25rem}
+
+  #dashboard .card-grid{grid-template-columns:1fr}
+  #dashboard .xem-item{padding:.75rem .85rem;gap:.75rem;border-radius:14px}
+  #dashboard .xem-score{width:44px;height:44px;font-size:.95rem}
+  #dashboard .xem-info{min-width:0}
+  #dashboard .xem-names{font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #dashboard .xem-item .btn-sm{padding:.4rem .75rem}
+  #dashboard .tuong-grid{grid-template-columns:1fr;gap:.6rem}
+  #dashboard .tuong-card{display:flex;align-items:center;border-radius:14px}
+  #dashboard .tuong-thumb,#dashboard .tuong-thumb-placeholder{width:72px;height:72px;margin:.7rem 0 .7rem .7rem;border-radius:10px;flex:none;font-size:1.4rem}
+  #dashboard .tuong-card-body{flex:1;min-width:0;padding:.65rem .85rem}
+  #dashboard .tuong-tool-badge{margin-bottom:.3rem}
+  #dashboard .tuong-preview{-webkit-line-clamp:2;font-size:.78rem;margin-bottom:.3rem}
+  #dashboard .chat-item{padding:.75rem .85rem;gap:.75rem;border-radius:14px}
+  #dashboard .chat-info{min-width:0}
+  #dashboard .chat-slug,#dashboard .chat-meta{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #dashboard .empty-state{padding:2rem .5rem}
+
+  #dashboard .credit-hero{padding:1.1rem;border-radius:16px;margin-bottom:1rem}
+  #dashboard .credit-hero-top{flex-wrap:nowrap;align-items:center}
+  #dashboard .credit-hero-bal{font-size:1.6rem;white-space:nowrap}
+  #dashboard .credit-hero-btn{flex:none;align-self:center;padding:.6rem 1rem;border-radius:999px;font-size:.84rem}
+  #dashboard .quick-tools{grid-template-columns:1fr;gap:0;background:#fff;border:1px solid var(--border-lt);border-radius:14px;overflow:hidden;margin-bottom:1rem}
+  #dashboard .quick-tool{flex-direction:row;gap:.75rem;text-align:left;border:none;border-radius:0;padding:.75rem .9rem}
+  #dashboard .quick-tool+.quick-tool{border-top:1px solid var(--border-lt)}
+  #dashboard .quick-tool .qt-ic{flex:none}
+  #dashboard .qt-tx{flex:1;min-width:0;gap:.1rem}
+  #dashboard .qt-name{font-size:.88rem}
+  #dashboard .qt-price{font-size:.76rem}
+
+  #dashboard .account-section{padding:1rem;border-radius:14px}
+  #dashboard .account-section h3{margin-bottom:.8rem}
+  #dashboard .vilu-tbl-wrap{border:none;overflow:visible}
+  #dashboard table.vilu-tbl,#dashboard table.vilu-tbl tbody{display:block;min-width:0}
+  #dashboard table.vilu-tbl thead{display:none}
+  #dashboard table.vilu-tbl tr{display:grid;grid-template-columns:1fr auto;grid-template-areas:"nd amt" "time ma";gap:.15rem .75rem;padding:.65rem 0;border-bottom:1px solid var(--border-lt)}
+  #dashboard table.vilu-tbl tr:last-child{border-bottom:none}
+  #dashboard table.vilu-tbl td{padding:0;border:none}
+  #dashboard table.vilu-tbl td:nth-child(1),#dashboard table.vilu-tbl td:nth-child(3){display:none}
+  #dashboard table.vilu-tbl td:nth-child(2){grid-area:time;font-size:.74rem;color:var(--text-lt)}
+  #dashboard table.vilu-tbl td:nth-child(4){grid-area:nd;font-weight:600;min-width:0}
+  #dashboard table.vilu-tbl td:nth-child(5){grid-area:amt;text-align:right}
+  #dashboard table.vilu-tbl td:nth-child(6){grid-area:ma;text-align:right}
 }
 </style>
 </head>
@@ -249,7 +332,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         <div class="profile-since" id="userSince"></div>
         <div id="providerBadge" style="display:none" class="provider-badge"></div>
       </div>
-      <div style="display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;justify-content:flex-end">
+      <div class="profile-actions">
         <div class="credit-widget">
           <div class="credit-widget-label">Lượng</div>
           <div class="credit-widget-value" id="headerCreditBalance"><small>...</small></div>
@@ -331,14 +414,14 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
     <!-- Tab: Credits -->
     <div class="tab-content" id="tab-credits">
-      <div style="background:var(--navy);border-radius:12px;padding:1.5rem 2rem;margin-bottom:1.25rem">
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:.25rem">
+      <div class="credit-hero">
+        <div class="credit-hero-top">
           <div>
             <div style="color:rgba(255,255,255,.55);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Số Dư Lượng</div>
-            <div id="tabCreditBalance" style="color:#c9a84c;font-family:'Noto Serif',serif;font-size:2rem;font-weight:700">…</div>
+            <div id="tabCreditBalance" class="credit-hero-bal">…</div>
             <div style="color:rgba(255,255,255,.4);font-size:.75rem;margin-top:.3rem">Không hết hạn</div>
           </div>
-          <a href="/topup.html" style="background:#c9a84c;color:#061A2E;padding:.75rem 1.5rem;border-radius:8px;font-size:.88rem;font-weight:700;text-decoration:none;align-self:flex-start;display:inline-flex;align-items:center;gap:.4rem"><span data-icon="wallet" style="width:16px;height:16px"></span> Nạp Lượng</a>
+          <a href="/topup.html" class="credit-hero-btn"><span data-icon="wallet" style="width:16px;height:16px"></span> Nạp Lượng</a>
         </div>
         <div class="credit-progress-wrap">
           <div class="credit-progress-label">
@@ -350,21 +433,18 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
           </div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem">
-        <a href="/" style="background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)">
-          <div style="font-size:1.4rem;margin-bottom:.35rem"><span data-icon="sparkles" style="width:22px;height:22px;color:#7C6942"></span></div>
-          <div style="font-size:.8rem;font-weight:700">Luận Giải Lá Số</div>
-          <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">190 lượng</div>
+      <div class="quick-tools">
+        <a class="quick-tool" href="/">
+          <span class="qt-ic" data-icon="sparkles"></span>
+          <span class="qt-tx"><span class="qt-name">Luận Giải Lá Số</span><span class="qt-price" data-tvp-price-label="laso">…</span></span>
         </a>
-        <a href="/app/xem-tuoi" style="background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)">
-          <div style="font-size:1.4rem;margin-bottom:.35rem"><span data-icon="heart-handshake" style="width:22px;height:22px;color:#7C6942"></span></div>
-          <div style="font-size:.8rem;font-weight:700">Xem Tuổi Vợ Chồng</div>
-          <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">90 lượng</div>
+        <a class="quick-tool" href="/app/xem-tuoi">
+          <span class="qt-ic" data-icon="heart-handshake"></span>
+          <span class="qt-tx"><span class="qt-name">Xem Tuổi Vợ Chồng</span><span class="qt-price" data-tvp-price-label="xem-tuoi">…</span></span>
         </a>
-        <a href="/app/xem-lam-an" style="background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)">
-          <div style="font-size:1.4rem;margin-bottom:.35rem"><span data-icon="briefcase" style="width:22px;height:22px;color:#7C6942"></span></div>
-          <div style="font-size:.8rem;font-weight:700">Xem Tuổi Làm Ăn</div>
-          <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">90 lượng</div>
+        <a class="quick-tool" href="/app/xem-lam-an">
+          <span class="qt-ic" data-icon="briefcase"></span>
+          <span class="qt-tx"><span class="qt-name">Xem Tuổi Làm Ăn</span><span class="qt-price" data-tvp-price-label="xem-lam-an">…</span></span>
         </a>
       </div>
       <div class="account-section">
@@ -688,6 +768,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 </div>
 
 <script src="/nav.js?v=42"></script>
+<script id="_tvmb_prices_js" src="/tool-prices.js?v=10"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/account-core.js?v=11"></script>
 </body>
