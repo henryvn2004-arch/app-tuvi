@@ -19,7 +19,9 @@ Bạn là QA đóng vai NGƯỜI DÙNG THẬT lần đầu vào tuviminhbao.com 
 2. Cả mobile 390px lẫn desktop 1440px.
 3. Dữ liệu mẫu: nam 15/08/1990 dương lịch giờ Ngọ; nữ 29/02/1996 giờ Dần. Thử bỏ trống/nhập sai.
 4. Đi hết phần free tới paywall/đăng nhập rồi DỪNG. KHÔNG thanh toán, KHÔNG đăng ký/OTP,
-   KHÔNG upload ảnh người thật (tự vẽ canvas).
+   KHÔNG upload ảnh người thật (tự vẽ canvas). ⚠️ Bấm CTA trả phí khi là khách = tạo THẬT
+   một phiên ẩn danh + một đơn QR treo trên prod (guest checkout) — đọc giá trên trang,
+   chỉ bấm tới modal QR khi được giao đúng việc đó, và ghi lại mã đơn đã tạo.
 5. Soi: lỗi JS/HTTP, layout vỡ, CTA mơ hồ, bước thừa, paywall có nói rõ giá (VNĐ chính,
    Lượng phụ), khách vô danh được gì, emoji màu (cấm), khoe "AI" (cấm trừ trang pháp lý),
    link dẫn nhầm, reload/back mất dữ liệu form.
