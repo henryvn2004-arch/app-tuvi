@@ -3190,7 +3190,7 @@
     });
   }
   function runHoangDao(chat, toolId) {
-    ensureScripts(['/tools-shared/hoang-dao.js?v=2', '/tools-shared/hoang-lich.js?v=1'], function (err) {
+    ensureScripts(['/tools-shared/hoang-dao.js?v=3', '/tools-shared/hoang-lich.js?v=1'], function (err) {
       if (err || typeof HoangDaoTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Giờ Hoàng Đạo.'); return; }
       var t = new Date();
       inlStep(chat,
@@ -3473,7 +3473,7 @@
     });
   }
   function runLucNham(chat, toolId) {
-    ensureScripts(['/tools-shared/luc-nham.js?v=2', '/tools-shared/dai-luc-nham.js?v=1'], function (err) {
+    ensureScripts(['/tools-shared/luc-nham.js?v=3', '/tools-shared/dai-luc-nham.js?v=1'], function (err) {
       if (err || typeof LucNhamTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Lục Nhâm.'); return; }
       var t = new Date();
       var curGio = Math.floor(((t.getHours() * 60 + 60) % (24 * 60)) / 120) % 12;

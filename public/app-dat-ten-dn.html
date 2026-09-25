@@ -10,7 +10,7 @@
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/shell.css?v=54">
+<link rel="stylesheet" href="/shell.css?v=55">
 <style>
 .form-card{max-width:600px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
@@ -21,7 +21,7 @@
 .cc-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .cc-card{flex:1;min-width:150px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow)}
 .cc-card .who{font-size:10.5px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.04em}
-.cc-card .cc{font-family:var(--serif);font-size:19px;font-weight:600;margin-top:2px}
+.cc-card .cc{font-family:var(--serif);font-size:19px;font-weight:600;margin-top:2px;overflow-wrap:anywhere}
 .cc-card .na{font-size:12px;color:var(--text-mid);margin-top:2px}
 .cc-card .na b{color:var(--hanh,var(--gold-soft))}
 .note{background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:10px;padding:12px 15px;font-size:13px;color:var(--text-mid);line-height:1.65;margin-bottom:6px}
@@ -124,7 +124,7 @@
           </div>
         </div>
         <div class="frow" style="margin-bottom:13px">
-          <div class="fg" style="flex:1;min-width:200px"><label>Tên đang cân nhắc (tùy chọn)</label><input type="text" id="inpTenGoiY" placeholder="Để trống nếu muốn được gợi ý mới"></div>
+          <div class="fg" style="flex:1;min-width:200px"><label>Tên đang cân nhắc (tùy chọn)</label><input type="text" id="inpTenGoiY" maxlength="60" placeholder="Để trống nếu muốn được gợi ý mới"></div>
         </div>
         <button class="btn-go" id="btnGo" onclick="doDatTenDn()">
           <span class="bg-label"><span class="ic" data-icon="building-2"></span><b id="btnGoLabel">Lập nền →</b></span>
@@ -194,7 +194,7 @@ window.SHELL_INTRO={key:'dat-ten-dn'};</script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
   <script src="/nav.js?v=42" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
-<script src="/shell.js?v=101"></script>
+<script src="/shell.js?v=102"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -241,7 +241,7 @@ function doDatTenDn(){
   btn.disabled=true;
   try{
     var iChu=CanChi.ccInfo(namChu);
-    document.getElementById('resHead').textContent='Nền mệnh chủ · '+esc(nganh)+(loaiHinh?' · '+esc(loaiHinh):'');
+    document.getElementById('resHead').textContent='Nền mệnh chủ · '+nganh+(loaiHinh?' · '+loaiHinh:'');
     function ccCard(who,val,sub,hanh){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(val)+'</div>'+(sub?'<div class="na" style="--hanh:'+(HANH_COLOR[hanh]||'var(--gold-soft)')+'">'+esc(sub)+'</div>':'')+'</div>'; }
     document.getElementById('ccRow').innerHTML=
       ccCard('Tuổi chủ'+(tenChu?' · '+tenChu:''),iChu.canChi,iChu.napAm+' · '+iChu.hanh,iChu.hanh)+

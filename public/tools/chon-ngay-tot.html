@@ -119,6 +119,7 @@
       <div class="form-group">
         <label class="form-label">Năm sinh (dương lịch)</label>
         <input class="form-input" id="namSinh" type="number" placeholder="VD: 1990" min="1930" max="2010" oninput="onFormChange()">
+        <div class="form-hint" id="namSinhHint" style="display:none;color:#B3261E">Vui lòng nhập năm sinh hợp lệ (1930-2010).</div>
       </div>
     </div>
 
@@ -218,7 +219,10 @@ const _NH_COLOR = {Kim:'#a0937d',Mộc:'#27ae60',Hỏa:'#C46A5E',Thổ:'#e67e22'
 const _THANG_CAN_BASE = {0:2,1:4,2:6,3:8,4:0,5:2,6:4,7:6,8:8,9:0}; // canIdx offset by namIdx%10
 
 function _getInfo(year) {
-  if (!year || isNaN(year)) return null;
+  // Can-chi tính theo modulo 60 nên năm âm/quá xa (vd -50) vẫn "tính ra" một
+  // kết quả trông hợp lý — khớp `min`/`max` đã khai trên chính input#namSinh,
+  // vì HTML min/max chỉ chặn nút mũi tên, không chặn gõ tay.
+  if (!year || isNaN(year) || year < 1930 || year > 2010) return null;
   const pos = ((year-1924)%60+60)%60;
   return {canChi:_CAN[pos%10]+' '+_CHI[pos%12], napAm:_NA_TEN[Math.floor(pos/2)], hanh:_NA[Math.floor(pos/2)], chiIdx:pos%12};
 }
@@ -258,6 +262,7 @@ function onFormChange() {
     const badge = document.getElementById('nhNguoi');
     badge.textContent = info.hanh; badge.style.background = _NH_COLOR[info.hanh]||'#888';
   } else { preview.classList.remove('show'); }
+  document.getElementById('namSinhHint').style.display = (ns && !info) ? '' : 'none';
 
   const ready = suKien && hoTen && info && thang && nam;
   document.getElementById('analyzeBtn').disabled = !ready;

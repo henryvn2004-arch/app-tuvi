@@ -26,6 +26,11 @@
   function compute(ngay, thang, nam, gioChi) {
     ngay = parseInt(ngay); thang = parseInt(thang); nam = parseInt(nam); gioChi = parseInt(gioChi) || 0;
     if (!ngay || ngay < 1 || ngay > 31 || !thang || !nam) return { ok: false, error: 'Vui lòng nhập ngày tháng năm.' };
+    // `toJDN` là công thức Julian Day thuần toán học, vẫn "tính ra" một kết
+    // quả cho ngày không tồn tại (vd 31/2) mà không báo lỗi.
+    if (new Date(nam, thang - 1, ngay).getDate() !== ngay) {
+      return { ok: false, error: 'Tháng ' + thang + '/' + nam + ' không có ngày ' + ngay + ' — vui lòng chọn lại.' };
+    }
     // Chỉ số vòng 60 (Giáp Tý = 0) = (JDN + 49) mod 60. Neo kiểm chứng:
     // 1/1/2000 = JDN 2451545 = Mậu Ngọ. 🔴 Bản cũ dùng ANCHOR = 2434290, sai 19
     // vị trí trên MỌI ngày → can ngày sai → thần tướng đang trực sai theo.
