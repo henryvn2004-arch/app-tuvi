@@ -1366,7 +1366,9 @@ const FOCUS_TOPICS: Record<string, string[]> = {
   'sự nghiệp|công việc|việc làm|nghề|quan lộc|thăng tiến|thăng chức|lên chức|tăng lương|chuyển việc|nhảy việc|đổi việc|nghỉ việc|xin việc|thất nghiệp|công ty|khởi nghiệp|làm riêng|công chức': ['Quan Lộc', 'Mệnh'],
   'cấp trên|sếp tôi|lãnh đạo':                           ['Quan Lộc', 'Phụ Mẫu'],
   'đồng nghiệp|cấp dưới':                                ['Quan Lộc', 'Nô Bộc'],
-  'tình duyên|hôn nhân|vợ chồng|tình cảm|phu thê':      ['Phu Thê', 'Mệnh'],
+  // 'tình cảm' đứng một mình CỐ Ý bỏ (T1, Henry 2026-09-25): mơ hồ, có thể là tình
+  // cảm gia đình. 'quay lại' cũng không ở đây — dễ là "quay lại công ty cũ".
+  'tình duyên|tình yêu|người yêu|bạn đời|vợ tôi|chồng tôi|vợ tương lai|chồng tương lai|vợ sau này|chồng sau này|bồ bịch|có bồ|hẹn hò|kết hôn|lấy vợ|lấy chồng|hôn nhân|vợ chồng|ly hôn|ly thân|chia tay|ngoại tình|lăng nhăng|người thứ ba|tái hôn|độc thân|đào hoa|phu thê': ['Phu Thê', 'Mệnh'],
   'con cái|con cháu|tử tức':                             ['Tử Tức'],
   'sức khỏe|bệnh|thân thể|tật ách':                     ['Tật Ách'],
   'nhà đất|bất động sản|điền trạch':                    ['Điền Trạch'],

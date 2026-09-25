@@ -385,7 +385,7 @@ async function runAgentInner(
         // Câu hỏi trúng một chủ đề đã dựng kỹ năng (lib/agent/luan-chu-de.ts) →
         // khối chủ đề THAY focusHint; tra_tieu_van đọc ctx.chuDe để gắn lăng kính.
         ctx.chuDe = chuDeCuaCauHoi(lastQ);
-        focusHintText = khoiChuDe(lastQ, res.ls) || focusHint(lastQ);
+        focusHintText = khoiChuDe(lastQ, res.ls, req.birth.gender ?? null) || focusHint(lastQ);
       }
     }
     const hasLaso = !!ctx.ls;
