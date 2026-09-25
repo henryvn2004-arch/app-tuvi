@@ -226,12 +226,20 @@ VỀ TUỔI DỮ LIỆU ("signupTruthThisWeek.tracking_since" = event sớm nh�
   bảng giao dịch/tài khoản, có từ trước) nên vẫn so bình thường được.
 
 VỀ KHỐI "trafficQuality" — ĐỌC KHỐI NÀY TRƯỚC MỌI KHỐI KHÁC, nó quyết định cách đọc tất cả phần còn lại:
-- Site đang bị một ĐỘI MÁY quét đều mỗi ngày. Chúng KHÔNG tự khai là bot nên phải bắt bằng hành vi:
-  "fleet_bot" là số lượt đã bắt được, "fleet_uas" liệt kê đích danh chuỗi User-Agent của chúng.
-  "known_bot" là loại tự khai (Ahrefs, GPTBot…).
-- "human" = khách THẬT còn lại sau khi trừ fleet_bot và known_bot. ĐÂY là con số khách DUY NHẤT được
-  phép gọi là người. "total" là số THÔ gồm cả máy — cấm dùng nó làm mẫu số cho bất kỳ tỉ lệ nào, và
-  cấm nêu nó như lưu lượng của site.
+- Site đang bị một ĐỘI MÁY quét đều mỗi ngày. Chúng KHÔNG tự khai là bot nên phải bắt bằng hành vi,
+  và có BA loại, đọc đúng loại nào đang chiếm đa số vì chúng nói lên vấn đề khác nhau:
+  "known_bot" là loại tự khai (Ahrefs, GPTBot…) · "fleet_bot" là một chuỗi User-Agent y hệt dùng bởi
+  rất nhiều anon_id với hành vi gần như đồng nhất, "fleet_uas" liệt kê đích danh chuỗi đó ·
+  "phantom_bot" là traffic ma phát hiện THEO TỪNG anon_id (không gộp cả cụm UA, vì UA phổ biến như
+  Chrome mặc định cũng có người thật dùng chung): đúng 2 sự kiện, 0 referrer, 0 đăng nhập, chỉ sống
+  1 ngày rồi biến mất — dấu hiệu lộ ra ngày 25/09/2026: 84% "human" khi đó khớp hình dạng này, 97,7%
+  trong số đó chỉ dùng 2 chuỗi UA generic, và trước khi có bucket này chúng còn bị tính NHẦM vào
+  "engaged" (mục tốt nhất) vì một sự kiện auto-fire (mở tool 'home') nằm sẵn trong danh sách tương
+  tác thật. TUYỆT ĐỐI không gọi phantom_bot là "traffic thật ít tương tác" — nó là traffic KHÔNG rõ
+  nguồn gốc, khác hẳn drive_by (traffic có referrer/UTM, chỉ là bỏ đi sau 1 lượt).
+- "human" = khách THẬT còn lại sau khi trừ known_bot + fleet_bot + phantom_bot. ĐÂY là con số khách
+  DUY NHẤT được phép gọi là người. "total" là số THÔ gồm cả máy — cấm dùng nó làm mẫu số cho bất kỳ
+  tỉ lệ nào, và cấm nêu nó như lưu lượng của site.
 - Trong "human" còn chia tiếp theo CHẤT LƯỢNG: engaged (có tương tác thật hoặc quay lại ngày khác) /
   browsed (xem vài trang) / drive_by (đúng 1 lượt rồi đi). Ba nhóm cộng lại đúng bằng "human". Đây là
   thang chất lượng của NGƯỜI THẬT — TUYỆT ĐỐI không đọc drive_by thành máy, máy đã bị tách ra rồi.
@@ -250,6 +258,12 @@ VỀ SỐ KHÁCH VÀ NGƯỜI DÙNG HOẠT ĐỘNG — chỗ này ĐÃ báo đ�
   digest chạy lúc 8h sáng nên dau_today mới đếm được một phần của ngày, luôn thấp, và luôn đọc thành
   "đang sụt".
 - mau_prev_human = 0 nghĩa là chưa đủ 60 ngày dữ liệu — bỏ qua, đừng tính % MAU.
+- Mọi field "_human" (visitors_human, wau_human, mau_human, dau_*_human...) tính LẠI từ đầu mỗi lần
+  gọi RPC, không phải số đã chốt cứng theo ngày — nên hai kỳ trong CÙNG một bản digest luôn được đo
+  bằng CÙNG một định nghĩa "người thật" tại thời điểm gọi. Nếu founder đối chiếu bản digest HÔM NAY
+  với một bản digest CŨ (đọc lại tin Telegram trước 25/09/2026), số "human" có thể chênh lệch lớn dù
+  traffic thật không đổi — đó là vì định nghĩa bot vừa được vá thêm (xem "trafficQuality" ở trên,
+  mục phantom_bot), không phải traffic sụt thật. Đừng gọi đó là một xu hướng.
 
 VỀ TIỀN — chỉ MỘT con số trong snapshot là tiền thật:
 - revenue*.real_vnd là tiền đã đối chiếu. revenue*.estimated_vnd suy ra từ số Lượng, phải gọi đúng
