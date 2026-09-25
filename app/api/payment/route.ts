@@ -391,6 +391,25 @@ async function handleCapture(body: Record<string, unknown>): Promise<Response> {
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── Combo (Đợt 4 phần 2, 2026-09): mua gộp nhiều tool trong MỘT lượt trừ.
+// Giá đọc như tool thường (tool_pricing.credits, qua getToolPrice) — combo
+// KHÔNG có logic giá riêng, chỉ khác ở chỗ MỞ KHOÁ nhiều slug cùng lúc.
+// Whitelist CỨNG, không suy từ tên: thêm combo mới phải sửa ở đây, tránh
+// một `product` lạ bị hiểu nhầm là combo rồi mở khoá bậy.
+const COMBO_MEMBERS: Record<string, string[]> = {
+  'combo-laso-tubinh': ['laso', 'tu-binh'],
+};
+// use_laso/use_tubinh — PHẢI khớp đúng TOOL_TYPE mỗi tool tự khai (xem
+// tuvi-paywall.js TOOL_TYPE và app-chu-trinh-cuoc-doi.html/app-van-han-nam.html
+// khai tay) — sai một chữ là dòng log ghi type khác tool thật, chỉ ảnh hưởng
+// thống kê/lịch sử hiển thị, KHÔNG ảnh hưởng quyền truy cập (đó là theo slug).
+const COMBO_MEMBER_TYPE: Record<string, string> = {
+  'laso': 'use_laso',
+  'tu-binh': 'use_tubinh',
+  'chu-trinh-cuoc-doi': 'use_chu_trinh_cuoc_doi',
+  'van-han-nam': 'use_van_han_nam',
+};
+
 // ── POST: deduct ──────────────────────────────────────────────
 async function handleDeduct(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
   const authHeader = request.headers.get('Authorization') || '';
@@ -405,8 +424,23 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
   // Mua MỘT PHẦN của tool chia nhỏ (vd laso: 1/13 phần thay vì trọn bó) —
   // `part` VẮNG MẶT giữ NGUYÊN hành vi mua-trọn cũ, không đổi gì.
   const partNum      = body.part != null ? parseInt(String(body.part), 10) : null;
+  const comboMembers = COMBO_MEMBERS[product] || null;
 
   if (!toolType) return err('Missing toolType', 400);
+
+  // Combo: cần ĐỦ slug thật của TỪNG tool thành viên (client tự tính bằng
+  // đúng công thức của trang tool đó — server không đoán/tái tạo). Thiếu một
+  // slug thì từ chối THẲNG, không mở khoá thiếu.
+  let comboSlugs: Record<string, string> | null = null;
+  if (comboMembers) {
+    const raw = (body.slugs && typeof body.slugs === 'object' ? body.slugs : {}) as Record<string, unknown>;
+    comboSlugs = {};
+    for (const m of comboMembers) {
+      const s = typeof raw[m] === 'string' ? String(raw[m]).trim() : '';
+      if (!s) return err(`Thiếu slug cho tool "${m}" trong combo.`, 400);
+      comboSlugs[m] = s;
+    }
+  }
 
   let amount: number;
   if (product && partNum != null && partNum > 0) {
@@ -441,6 +475,15 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
     if (slug) {
       const already = await hasSlugAccess(user.id, slug);
       if (already) return ok({ success: true, alreadyPaid: true });
+    }
+    // Combo: đã trả cho ĐỦ mọi slug thành viên rồi (mua rời trước, hoặc mua
+    // combo này rồi bấm lại) → không trừ lần hai. Trả `alreadyPaid` giống
+    // đường tool đơn — client tự biết mở khoá cả 2/4 trang.
+    if (comboSlugs) {
+      const owned = await Promise.all(
+        comboMembers!.map((m) => hasSlugAccess(user.id, comboSlugs![m])),
+      );
+      if (owned.every(Boolean)) return ok({ success: true, alreadyPaid: true });
     }
 
     // ── CẦU DAO NGÂN SÁCH ẢNH FREE (V2.2) ──
@@ -480,23 +523,49 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
       throw e;
     }
 
-    await logTransaction({
-      userId: user.id,
-      amount: -chargeAmount,
-      type: toolType,
-      description: voucherPick
-        ? `${description} [voucher ${voucherPick.voucher.voucherId} -${voucherPick.discount}L]`
-        : description,
-      slug: slug || undefined,
-    });
+    if (comboSlugs) {
+      // Một lượt trừ (`chargeAmount`), NHIỀU dòng sổ — mỗi dòng khớp ĐÚNG slug
+      // thật của một tool thành viên để `hasSlugAccess` của TRANG TOOL ĐÓ
+      // (không đổi gì ở 2 trang) nhận ra "đã trả tiền". Chia đều chargeAmount
+      // cho N thành viên (dư đưa vào các thành viên ĐẦU) — chỉ để SỔ giải
+      // thích được tổng tiền, không ảnh hưởng quyền truy cập (đó là theo slug,
+      // không theo amount).
+      const n = comboMembers!.length;
+      const base = Math.floor(chargeAmount / n);
+      const extra = chargeAmount - base * n;
+      await Promise.all(
+        comboMembers!.map((m, i) =>
+          logTransaction({
+            userId: user.id,
+            amount: -(base + (i < extra ? 1 : 0)),
+            type: COMBO_MEMBER_TYPE[m] || `use_${m.replace(/-/g, '_')}`,
+            description: `${description} — mở khoá ${m}`,
+            slug: comboSlugs![m],
+          }),
+        ),
+      );
+      for (const m of comboMembers!) {
+        recordUserReport({ userId: user.id, toolId: m, reportKey: comboSlugs[m], slug: comboSlugs[m] });
+      }
+    } else {
+      await logTransaction({
+        userId: user.id,
+        amount: -chargeAmount,
+        type: toolType,
+        description: voucherPick
+          ? `${description} [voucher ${voucherPick.voucher.voucherId} -${voucherPick.discount}L]`
+          : description,
+        slug: slug || undefined,
+      });
 
-    // Tab "Tủ Báo Cáo": chỉ 4 tool này build slug TẤT ĐỊNH từ lá số (không có
-    // Date.now()) nên slug tái dùng được làm report_key — coi
-    // _patches/migration-user-reports.sql. Các tool khác dùng slug có
-    // Date.now(), không phản ánh "cùng một report" giữa các lượt mua nên CỐ Ý
-    // không ghi ở đây.
-    if (slug && (product === 'laso' || product === 'tu-binh' || product === 'chu-trinh-cuoc-doi' || product === 'van-han-nam')) {
-      recordUserReport({ userId: user.id, toolId: product, reportKey: slug, slug });
+      // Tab "Tủ Báo Cáo": chỉ 4 tool này build slug TẤT ĐỊNH từ lá số (không có
+      // Date.now()) nên slug tái dùng được làm report_key — coi
+      // _patches/migration-user-reports.sql. Các tool khác dùng slug có
+      // Date.now(), không phản ánh "cùng một report" giữa các lượt mua nên CỐ Ý
+      // không ghi ở đây.
+      if (slug && (product === 'laso' || product === 'tu-binh' || product === 'chu-trinh-cuoc-doi' || product === 'van-han-nam')) {
+        recordUserReport({ userId: user.id, toolId: product, reportKey: slug, slug });
+      }
     }
 
     // Tiêu voucher SAU khi đã trừ tiền thành công — CỐ Ý, không đảo thứ tự.
