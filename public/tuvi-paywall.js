@@ -701,10 +701,13 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       // nếu không trang hứa ~95.000đ rồi QR đòi 109.000đ. Chưa quy đổi được thì
       // rơi về câu cũ, không bịa số.
       const qrVnd = _qrAmountFor(cost);
-      money = (qrVnd != null
-        ? 'Mở đầy đủ: chuyển khoản <b>' + qrVnd.toLocaleString('vi-VN') + 'đ</b> <span class="tpw-sub">(nạp lẻ ' +
-          window.ToolPrices.quoteCustomVnd(qrVnd) + ' Lượng, lượt này dùng ' + cost + ')</span>'
-        : 'Mở đầy đủ tốn ' + _vndFirst(cost, vndLbl)) + ' · bấm mở là trả tiền và đọc ngay, ' +
+      // Giữ "N Lượng" (giá THẬT của lượt này) làm số chính — số tiền QR đứng
+      // TIẾP THEO, không thay thế nó, vì QR quy đổi theo bậc nạp lẻ nên luôn
+      // ≥ giá gói và không phải con số khách cần nhớ khi so giá.
+      money = 'Mở đầy đủ tốn ' + _vndFirst(cost, vndLbl) +
+        (qrVnd != null
+          ? ' <span class="tpw-sub">(chuyển khoản ' + qrVnd.toLocaleString('vi-VN') + 'đ)</span>'
+          : '') + ' · bấm mở là trả tiền và đọc ngay, ' +
         'không cần đăng ký trước. <a onclick="TuviPaywall._login()">Đã có tài khoản? Đăng nhập</a>';
     } else if (balance < cost) {
       money = 'Bạn còn <b>' + balance + '</b> · cần ' + _vndFirst(cost, vndLbl) + ' — thiếu ' + (cost - balance) +
