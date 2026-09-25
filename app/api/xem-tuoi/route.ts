@@ -13,6 +13,7 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { LUAN_ARC, MAU_ARC, DOC_ARC_TUONG_HOP, ARC_GIONG_NGU_HANH, relevantPalaces } from '@/lib/agent/prompts';
+import { khoiChuDe } from '@/lib/agent/luan-chu-de';
 
 // ─── Chat system prompts ──────────────────────────────────────
 // ⚠️ ĐÂY LÀ BẢN CHÉP TAY, đứng ngoài `buildChatContext`. Nó phục vụ khung chat
@@ -127,6 +128,17 @@ function fmtLaso(ls: any, label: string, q: string): string {
       ctx += '\n';
     });
   }
+  // Lăng kính chủ đề (lib/agent/luan-chu-de.ts) — SAME hàm với rail chat
+  // chính (`/app`): nền cung động/tĩnh, luật CAO/VỪA/THẤP theo năm, quét năm
+  // thuận, dòng an toàn riêng chủ đề. Trang này trước chỉ có `relevantPalaces`
+  // (liệt kê cung, không phân tích) — hai trang cùng hỏi "vợ chồng tôi có nên
+  // mở công ty" sẽ được đọc khác nhau nếu chỉ vá một bên, nên gọi CHUNG một
+  // nguồn thay vì chép lại luật. Trả '' nếu câu hỏi không khớp chủ đề nào đã
+  // dựng — không thêm gì, `relevantPalaces` ở trên vẫn là lưới đỡ.
+  // `ls` (computeLaso) không mang giới tính — trang này không gửi lên; hàm
+  // nhận null vẫn chạy đúng, chỉ mất vài chỗ phrasing riêng theo giới.
+  const chuDeBlock = khoiChuDe(q, ls, null);
+  if (chuDeBlock) ctx += '\n' + chuDeBlock + '\n';
   return ctx;
 }
 

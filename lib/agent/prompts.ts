@@ -25,6 +25,7 @@ import { chuanHoaDauThanh } from "@/lib/vn-text";
 // này — xem `TRA_VAN_NAM_BAT_TU_TOOL` bên dưới — nên registry.ts mới là phía
 // PHẢI tránh, không phải mọi thứ trong `lib/tools/*`).
 import { SUGGEST_TOOL_DEF } from "@/lib/tools/suggest-tool";
+import { khoiChuDeCoDinh } from "@/lib/agent/luan-chu-de";
 import { personaVoice } from "@/lib/agent/personas";
 
 // "Hôm nay" gửi cho LLM PHẢI theo giờ VN, không theo giờ server (Vercel chạy
@@ -139,8 +140,9 @@ export function buildChatContext(body: any): ChatContext {
   const persona = personaVoice(body.authorId) || '';
 
   if (toolType === 'xem-tuoi' || toolType === 'xem-lam-an' || toolType === 'tuong-hop') {
+    const lastQCompat = (body.messages as { role: string; content: string }[] | undefined)?.at(-1)?.content || '';
     return {
-      systemForCall:    CHAT_SYSTEM_COMPAT(extractCompatContext(body.compatData, toolType), toolType, docs, persona),
+      systemForCall:    CHAT_SYSTEM_COMPAT(extractCompatContext(body.compatData, toolType, lastQCompat), toolType, docs, persona),
       tools:            buildTools(false),
       maxTokens:        RAIL_MAX_TOKENS,
       lasoDataForTools: null,
@@ -1684,7 +1686,7 @@ export function extractLasoContext(lasoData: any, question: string, opts?: { ful
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function extractCompatContext(compatData: any, toolType: string): string {
+function extractCompatContext(compatData: any, toolType: string, lastQ: string): string {
   if (!compatData) return '';
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function fmtLs(ls: any, name: string): string {
@@ -1725,6 +1727,18 @@ function extractCompatContext(compatData: any, toolType: string): string {
   const nA = nameA || 'Người A';
   const nB = nameB || 'Người B';
   let out = fmtLs(lsA, nA) + '\n' + fmtLs(lsB, nB);
+
+  // Lăng kính chủ đề (lib/agent/luan-chu-de.ts) — chủ đề CỐ ĐỊNH theo toolType
+  // (trang này không đoán từ câu hỏi như rail chính): xem-lam-an luôn đọc
+  // tài chính + sự nghiệp; xem-tuoi/tuong-hop luôn đọc tình duyên. Nền cung
+  // động/tĩnh, luật CAO/VỪA/THẤP theo năm, quét năm thuận — cùng một nguồn với
+  // rail chính, không chép lại luật riêng cho trang này. Gọi CHO TỪNG người vì
+  // hai lá số khác cung khác sao. Trả '' khi lá số thiếu cung — không thêm gì.
+  const chuDeIds = toolType === 'xem-lam-an' ? ['su-nghiep', 'tai-chinh'] : ['tinh-duyen'];
+  const chuDeA = khoiChuDeCoDinh(chuDeIds, lastQ, lsA, null);
+  const chuDeB = khoiChuDeCoDinh(chuDeIds, lastQ, lsB, null);
+  if (chuDeA) out += `\n${nA} — ${chuDeA}\n`;
+  if (chuDeB) out += `\n${nB} — ${chuDeB}\n`;
 
   // BẢNG ĐIỂM 8 CHIỀU — thứ trang vẽ to nhất và là thứ người dùng hỏi về.
   // Trước đây rail KHÔNG nhận một dòng nào của bảng này (0/8 tiêu chí, không
