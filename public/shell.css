@@ -551,7 +551,7 @@ body.chat-first-live.art-wide .shell { grid-template-columns: 246px var(--rail-w
 body.chat-first-live .ws-fab { right: 16px }
 /* Nút mở artifact = chính nút đóng rail, đổi nhãn (xem renderRail trong
    shell.js). Chở CHỮ chứ không phải icon nên phải nhả rộng khỏi ô 28×28. */
-.rh-btn.rh-art { width: auto; padding: 0 10px; font-size: 11.5px; font-weight: 600; font-family: var(--serif); position: relative }
+.rh-btn.rh-art { width: auto; padding: 0 10px; font-size: 11.5px; font-weight: 600; font-family: var(--serif); position: relative; white-space: nowrap }
 /* Henry 2026-09-23: kết quả mới tính xong (setContext/greet) mà user đang ở
    khung chat — chấm đỏ nhắc bấm sang xem, tắt ngay khi bấm (renderRail). */
 .rh-btn.rh-art.has-new::after { content: ''; position: absolute; top: -3px; right: -3px; width: 9px; height: 9px; border-radius: 50%; background: #d0392b; border: 1.5px solid var(--paper) }
