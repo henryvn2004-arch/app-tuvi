@@ -663,7 +663,14 @@ body.sheet-open{overflow:hidden}
   /* Bottom tab: hiện trên mobile, chừa chỗ cuối trang, LUÔN sticky kể cả khi
      sidebar/rail đang mở (xem ghi chú ở .sb/.rail phía trên). */
   .tabbar{display:grid}
-  .ws-body{padding-bottom:76px}
+  /* `.shell .ws-body` (0,2,0) thay vì `.ws-body` (0,1,0): nhiều trang tự khai
+     `.ws-body{padding:...}` KHÔNG bọc trong @media — cùng specificity thì
+     rule của trang nạp SAU thắng, nuốt mất khoảng chừa tabbar này, nút CTA
+     cuối trang dài (vd "Mua Combo →" ở app-combo-tron-bo.html) rơi đúng vùng
+     nút tròn nổi `.tab-home-btn` che, không bấm được. 76px cũng SAI — đo thật
+     (Playwright) tabbar cao ~90px kể cả nút Home nổi, khớp số `.sb`/`.rail`/
+     `.backdrop` đã dùng phía trên. */
+  .shell .ws-body{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
   /* Cụm sticky phải leo lên TRÊN tabbar (~64px + safe-area), và tự ẩn cùng
      lúc với nó khi sidebar/rail đang mở toàn màn — rail phủ kín thì cụm nút
      nổi bên trên chỉ còn là chướng ngại vật. */

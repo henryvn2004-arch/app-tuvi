@@ -44,6 +44,12 @@
     if (!ngay || ngay < 1 || ngay > 31 || !thang || thang < 1 || thang > 12 || !nam) {
       return { ok: false, error: 'Vui lòng nhập ngày tháng năm hợp lệ.' };
     }
+    // `toJDN` là công thức Julian Day thuần toán học, vẫn "tính ra" một kết
+    // quả cho ngày không tồn tại (vd 31/2) mà không báo lỗi — kiểm số ngày
+    // tối đa của đúng tháng/năm đó (Date tự xét năm nhuận) trước khi tính.
+    if (new Date(nam, thang - 1, ngay).getDate() !== ngay) {
+      return { ok: false, error: 'Tháng ' + thang + '/' + nam + ' không có ngày ' + ngay + ' — vui lòng chọn lại.' };
+    }
     var cc = getNgayCanChi(nam, thang, ngay);
     var canChiNgay = CAN[cc.can] + ' ' + CHI[cc.chi];
     var alStr = '';

@@ -44,7 +44,27 @@ window.TuviForm = (() => {
   }
   const { toVnHour, hourMinToGioIdx } = window.VnTimezone;
 
+  // Dropdown "Ngày" liệt kê cố định 1-31 bất kể tháng nào đang chọn — chọn
+  // được 31/2 thì lá số tính SAI ÂM THẦM (JD vẫn ra một ngày khác, không báo
+  // lỗi). Disable option quá số ngày của tháng NGAY khi tháng/năm đổi, giống
+  // <input type=date> gốc, để không bao giờ chọn được ngày không tồn tại —
+  // chặn từ gốc thay vì bắt lỗi sau khi submit như mode chat (tuvi-form.js
+  // renderChat `err2`). Áp dụng cho MỌI mode dùng <select> ngày/tháng/năm
+  // (full/person/compact) vì cả ba đều gọi `_update` qua oninput chung.
+  function clampNgayForMonth(prefix = '') {
+    const thangEl = gel('thang', prefix);
+    const namEl   = gel('nam', prefix);
+    const ngayEl  = gel('ngay', prefix);
+    if (!thangEl || !namEl || !ngayEl) return;
+    const thang  = parseInt(thangEl.value) || 1;
+    const nam    = parseInt(namEl.value) || new Date().getFullYear();
+    const maxDay = new Date(nam, thang, 0).getDate(); // ngày cuối tháng đó, tự xét năm nhuận
+    for (const o of ngayEl.options) o.disabled = parseInt(o.value) > maxDay;
+    if ((parseInt(ngayEl.value) || 0) > maxDay) ngayEl.value = String(maxDay);
+  }
+
   function updateGioAmDisplay(prefix = '') {
+    clampNgayForMonth(prefix);
     const hh     = parseInt(gel('tvf-gio', prefix)?.value) || 0;
     const mm     = parseInt(gel('tvf-phut', prefix)?.value) || 0;
     const utcOff = parseInt(gel('tvf-utc', prefix)?.value ?? '420');
