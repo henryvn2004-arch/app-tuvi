@@ -208,6 +208,24 @@
         <div id="hookHost"></div>
         <div class="vh-unlock" id="vhUnlock" style="display:none"></div>
         <div class="vh-progress" id="vhProgress" style="display:none"></div>
+        <!-- Thẻ "Báo cáo đã sẵn sàng" — Đợt 4 (2026-09): lan productize luận giải
+             (tools-shared/report-delivery.js) sang tool thứ 3, cùng khuôn TĨNH
+             đã dùng ở app-luan-giai.html/app-chu-trinh-cuoc-doi.html. -->
+        <div class="report-ready" id="vhReportCard" hidden>
+          <div class="rr-eyebrow">紫微明寶 · Báo cáo của bạn</div>
+          <div class="rr-title" id="vhReportTitle">Đang đóng bản báo cáo…</div>
+          <div class="rr-sub" id="vhReportSub"></div>
+          <div class="rr-actions">
+            <button type="button" class="rr-btn pri" id="vhBtnPdf" disabled>
+              <span class="ic" id="vhBtnPdfIcon"><span class="rr-spin"></span></span>
+              <span id="vhBtnPdfLabel">Đang dựng…</span>
+            </button>
+            <button type="button" class="rr-btn" id="vhBtnEmail" disabled>
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg></span>
+              <span id="vhBtnEmailLabel">Gửi vào email</span>
+            </button>
+          </div>
+        </div>
         <!-- Bản đồ 12 tháng — dựng NGAY cùng lần vẽ với 16 phần bên dưới, đủ
              12 ô từ đầu (nhãn tháng là dữ liệu engine, có sẵn và miễn phí).
              Mức + từ khoá của từng ô điền dần khi phần chữ của tháng đó sinh
@@ -270,6 +288,8 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tools-shared/shell-soft-nav.js?v=1"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
+<script src="/tools-shared/i18n.js?v=1"></script>
+<script src="/tools-shared/report-delivery.js?v=1"></script>
 <script>
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 TuviPaywall.init({product:'van-han-nam'});
@@ -326,7 +346,7 @@ function wsStepsSet(n){
 }
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-var _astrolabe=null,_hoTen='',_ngay=0,_thang=0,_nam=0,_gioitinh='nam',_laSoText=null;
+var _astrolabe=null,_hoTen='',_ngay=0,_thang=0,_nam=0,_gioitinh='nam',_laSoText=null,_reportHandle=null;
 var _khung=null,_labels=null,_tongPhan=0,_pendingSlug=null,_store={};
 // Văn MẪU (dummy, 16 phần) — sinh sẵn bằng scripts/gen-tool-sample.mjs cho MỘT
 // lá số mẫu khác (public/samples/van-han-nam-dummy.json), khoá theo LOCAL p
@@ -410,6 +430,25 @@ async function doXem(){
     var kd=await kr.json();
     if(!kd||!kd.khung) throw new Error((kd&&kd.error)||'Không dựng được khung 12 tháng.');
     _khung=kd.khung;_labels=kd.labels;_tongPhan=kd.tongPhan;
+    // Mount NGAY ĐÂY, không phải _pageInit — `_tongPhan` phụ thuộc lá số vừa
+    // tính (khác app-chu-trinh-cuoc-doi.html: TONG_PHAN ở đó là hằng số 11,
+    // biết trước khi mount). Mount ở _pageInit sẽ đóng băng `opts.total=0`
+    // vào closure của collectPhans() → nút Tải PDF/Gửi email thu về RỖNG.
+    if(window.ReportDelivery){
+      _reportHandle=ReportDelivery.mount({
+        hostId:'vhReportCard', titleId:'vhReportTitle', subId:'vhReportSub',
+        pdfBtnId:'vhBtnPdf', pdfIconId:'vhBtnPdfIcon', pdfLabelId:'vhBtnPdfLabel',
+        mailBtnId:'vhBtnEmail', mailLabelId:'vhBtnEmailLabel',
+        tool:'van-han-nam', total:_tongPhan,
+        getBoxId:function(p){ return 'claude-content-'+p; },
+        getLabel:function(p){ return (_labels&&_labels[p])||('Phần '+p); },
+        getMeta:function(){ return {
+          hoTen:_hoTen||'',
+          ngaySinh:[_ngay,_thang,_nam].filter(Boolean).join('/'),
+          gioiTinh:_gioitinh==='nam'?'Nam':(_gioitinh==='nu'?'Nữ':(_gioitinh||'')),
+        }; },
+      });
+    }
     var t0=_khung.thangs[0];
     TOOL_TYPE='van-han-nam-al'+t0.namAL+'-'+String(t0.thangAL).padStart(2,'0')+(t0.isLeap?'n':'');
 
@@ -676,6 +715,7 @@ function _renderCached(store){
   document.getElementById('vhUnlock').style.display='none';
   document.getElementById('vhProgress').style.display='none';
   _paintSecLocks(false);
+  _reportHandle&&_reportHandle.ready(_tongPhan);
 }
 async function initGate(){
   var conv=_astrolabe._conv||{};
@@ -798,6 +838,7 @@ async function _startAI(){
   _paintSecLocks(false);
   _store={};
   _pace&&_pace.reset();
+  _reportHandle&&_reportHandle.tick(0,_tongPhan);
   // Kimi K3 (primary) ~120 giây/phần — chạy tuần tự 12+ phần có thể chờ rất
   // lâu. Bể PhanPool chạy PHAN_CONCURRENCY phần song song (mỗi phần độc lập,
   // không đọc kết quả phần khác) ⇒ giảm tổng thời gian chờ ~PHAN_CONCURRENCY
@@ -826,12 +867,14 @@ async function _startAI(){
     progressEl:'vhProgress',
     progressPrefix:'Đang luận phần',
     pace:_pace,
+    onProgress:function(done,total){ _reportHandle&&_reportHandle.tick(done,total); },
     // Phần 1 đã chạy ở lượt mồi trên — bể chỉ cần TRẢ LẠI kết quả đó, không
     // gọi lại API (gọi lại là tốn thêm một lượt model vô ích).
     runPart:function(p){ return p===1?Promise.resolve(primeOk):_runPhanVanHan(p); },
   });
   if(result.ok){
     document.getElementById('vhProgress').textContent='✓ Luận vận hạn hoàn tất';
+    _reportHandle&&_reportHandle.ready(_tongPhan);
     _saveResult();
   }else{
     document.getElementById('vhProgress').textContent=
@@ -953,6 +996,7 @@ window._vhRetry=function(p){
       var n=0; for(var k=1;k<=_tongPhan;k++)if(_store[k])n++;
       if(n>=_tongPhan){
         document.getElementById('vhProgress').textContent='✓ Luận vận hạn hoàn tất';
+        _reportHandle&&_reportHandle.ready(_tongPhan);
         _saveResult();
       }
     }
