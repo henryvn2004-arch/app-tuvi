@@ -21,6 +21,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { relevantPalacesStrict, primaryPalacesStrict } from '@/lib/agent/prompts';
 import { currentNamXem } from '@/lib/engine/namxem';
+import { lunarMonthsFrom, resolveNguyetHanForLunarMonth, resolveNhatHanIdx } from '@/lib/engine/van-ngay';
 import { chuanHoaDauThanh } from '@/lib/vn-text';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1058,39 +1059,70 @@ function khoiMotChuDe(cd: ChuDe, question: string, ls: any, gioi: 'nam' | 'nu' |
 }
 
 /**
- * Lăng kính chủ đề cho kết quả `tra_tieu_van`: hạn năm có chạm cung chính gốc
- * không, yếu tố động / sao chủ đề ở hai cung hạn, và mức biến động theo luật
- * Henry chốt cho chủ đề đó (cung chính gốc có yếu tố động + tiểu hạn có yếu tố
- * của chủ đề ⇒ CAO).
+ * Lăng kính chủ đề cho kết quả tra hạn (năm · tháng · ngày): hạn có chạm cung
+ * chính gốc không, yếu tố động / sao chủ đề ở từng cung hạn, và mức biến động
+ * theo luật Henry chốt cho chủ đề (cung chính gốc có yếu tố động + tầng hạn
+ * CHÍNH của mốc đó có yếu tố của chủ đề ⇒ CAO). Tầng chính = tầng đầu `tangs`:
+ * tiểu hạn cho năm, nguyệt hạn cho tháng, nhật hạn cho ngày.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function lanKinhNam(chuDe: string | null, ls: any, tv: any): string {
-  const cd = chuDe ? CHU_DE[chuDe] : null;
-  const palaces = ls?.palaces || [];
-  const c = cd ? idxCung(palaces, cd.cung) : -1;
-  if (!cd || c < 0 || !tv) return '';
+function lanKinh(cd: ChuDe, palaces: Palace[], tieuDe: string, tangs: Array<[string, string]>, ky: string, luatThem = ''): string {
+  const c = idxCung(palaces, cd.cung);
+  if (c < 0) return '';
   const nen = nhanNen(cd, palaces, c);
-  const out: string[] = [`── LĂNG KÍNH ${cd.ten} năm ${tv.nam} (server tính) ──`];
+  const out: string[] = [`── LĂNG KÍNH ${cd.ten} ${tieuDe} (server tính) ──`];
   out.push(`- ${cd.cung} gốc: nền ${nen.nhan}.`);
-  let dongTieuHan: string[] = [];
+  let dongChinh: string[] = [];
   let coCham = false;
-  for (const [tang, ten] of [['Tiểu hạn', tv.tieuHanCung], ['Lưu niên', tv.luuNienCung]] as const) {
+  tangs.forEach(([tang, ten], k) => {
     const h = idxCung(palaces, ten);
-    if (h < 0) continue;
+    if (h < 0) return;
     const cham = cachCham(h, c, cd.cung);
     if (cham) coCham = true;
     const dong = cd.hanDong(palaces, h);
-    if (tang === 'Tiểu hạn') dongTieuHan = dong;
+    if (k === 0) dongChinh = dong;
     out.push(`- ${tang} ${ten}: ${cham ? `CHẠM ${cd.cung} (${cham})` : `không chạm ${cd.cung}`}; ${cd.tenHanDong}: ${dong.length ? dong.join(', ') : 'không'}; ${fmtSao(cd, palaces[h])}.`);
-  }
-  const muc = nen.dong.length && dongTieuHan.length ? 'CAO' : nen.dong.length || dongTieuHan.length ? 'VỪA' : 'THẤP';
-  out.push(`- Khả năng ${cd.bienDong}: ${muc} — luật: ${cd.luatBienDong}.`);
-  // Luật mức biến động KHÔNG đòi hạn chạm cung chính (nền gốc + tiểu hạn), nên
+  });
+  const tangChinh = tangs[0][0].toLowerCase();
+  const muc = nen.dong.length && dongChinh.length ? 'CAO' : nen.dong.length || dongChinh.length ? 'VỪA' : 'THẤP';
+  out.push(`- Khả năng ${cd.bienDong}: ${muc} — luật: ${cd.luatBienDong}${luatThem}.`);
+  // Luật mức biến động KHÔNG đòi hạn chạm cung chính (nền gốc + tầng chính), nên
   // CAO mà không chạm là trường hợp có thật — đừng bảo "không phải tâm điểm".
   out.push(coCham
     ? `- Hai tầng hạn vẫn gọi tên, nhưng LUẬN QUA ý nghĩa ${cd.nghia}.`
     : muc === 'CAO'
-      ? `- Không tầng nào chạm ${cd.cung}, nhưng mức biến động CAO do nền gốc + sao ở tiểu hạn ⇒ nói rõ ${cd.nghia} năm nay có sóng, song không đến từ chính cung ${cd.cung}; vẫn gọi tên hai cung hạn nhưng chỉ nói phần ảnh hưởng tới ${cd.nghia}.`
-      : `- Không tầng nào chạm ${cd.cung} ⇒ nói rõ năm nay ${cd.nghia} KHÔNG phải tâm điểm biến động, chủ yếu đi theo nền gốc; vẫn gọi tên hai cung hạn nhưng chỉ nói phần ảnh hưởng tới ${cd.nghia}.`);
+      ? `- Không tầng nào chạm ${cd.cung}, nhưng mức biến động CAO do nền gốc + sao ở ${tangChinh} ⇒ nói rõ ${cd.nghia} ${ky} có sóng, song không đến từ chính cung ${cd.cung}; vẫn gọi tên hai cung hạn nhưng chỉ nói phần ảnh hưởng tới ${cd.nghia}.`
+      : `- Không tầng nào chạm ${cd.cung} ⇒ nói rõ ${ky} ${cd.nghia} KHÔNG phải tâm điểm biến động, chủ yếu đi theo nền gốc; vẫn gọi tên hai cung hạn nhưng chỉ nói phần ảnh hưởng tới ${cd.nghia}.`);
   return out.join('\n');
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function lanKinhNam(chuDe: string | null, ls: any, tv: any): string {
+  const cd = chuDe ? CHU_DE[chuDe] : null;
+  if (!cd || !tv) return '';
+  return lanKinh(cd, ls?.palaces || [], `năm ${tv.nam}`, [['Tiểu hạn', tv.tieuHanCung], ['Lưu niên', tv.luuNienCung]], 'năm nay');
+}
+
+// Tháng: tầng chính là NGUYỆT HẠN, tiểu hạn là nền năm. `input` y như của `tra_nguyet_van`.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function lanKinhThang(chuDe: string, ls: any, input: any): string {
+  const cd = CHU_DE[chuDe];
+  const thang = Number(input?.thang), nam = Number(input?.nam), ngayRaw = Number(input?.ngay);
+  if (!cd || !thang || !nam) return '';
+  const span = lunarMonthsFrom(ngayRaw >= 1 && ngayRaw <= 31 ? ngayRaw : 15, thang, nam, 1)[0];
+  const rs = span && resolveNguyetHanForLunarMonth(ls, span.thangAL, span.namAL);
+  if (!rs || !rs.ok) return '';
+  const palaces = ls?.palaces || [];
+  return lanKinh(cd, palaces, `tháng ${span.thangAL} ÂL`, [['Nguyệt hạn', palaces[rs.nguyetHanIdx]?.cungName], ['Tiểu hạn', rs.tv.tieuHanCung]], 'tháng này', ' (mức THÁNG: xét nguyệt hạn thay tiểu hạn)');
+}
+
+// Ngày: tầng chính là NHẬT HẠN, nguyệt hạn là nền tháng. `input` y như của `tra_nhat_van`.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function lanKinhNgay(chuDe: string, ls: any, input: any): string {
+  const cd = CHU_DE[chuDe];
+  const ngay = Number(input?.ngay), thang = Number(input?.thang), nam = Number(input?.nam);
+  if (!cd || !ngay || !thang || !nam) return '';
+  const rs = resolveNhatHanIdx(ls, ngay, thang, nam);
+  if (!rs.ok) return '';
+  const palaces = ls?.palaces || [];
+  return lanKinh(cd, palaces, `ngày ${ngay}/${thang}/${nam}`, [['Nhật hạn', palaces[rs.nhatHanIdx]?.cungName], ['Nguyệt hạn', palaces[rs.nguyetHanIdx]?.cungName]], 'ngày này', ' (mức NGÀY: xét nhật hạn thay tiểu hạn)');
 }
