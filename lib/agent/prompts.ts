@@ -1362,7 +1362,9 @@ ${MAU_ARC}
 // khác hẳn (thần sát, lưu niên...) và trả về field-key nội bộ của batTuData
 // chứ không phải tên cung — gộp sẽ đổi ý nghĩa, không phải dọn trùng lặp.
 const FOCUS_TOPICS: Record<string, string[]> = {
-  'tài chính|tài lộc|tiền|thu nhập|làm giàu|tài bạch': ['Tài Bạch', 'Phúc Đức'],
+  // 'tiền' đứng riêng CỐ Ý bỏ (F1, Henry 2026-09-25): khớp oan "tiền kiếp", "tiền
+  // đồ", "tiền bối". 'kinh doanh|làm ăn|buôn bán' Henry chốt thuộc TÀI CHÍNH.
+  'tài chính|tài lộc|tiền bạc|tiền của|tiền nong|kiếm tiền|giữ tiền|giữ được tiền|vay tiền|mượn tiền|thu nhập|làm giàu|giàu có|tôi giàu|sẽ giàu|giàu lên|phát tài|đầu tư|chứng khoán|cổ phiếu|tiền ảo|vay nợ|nợ nần|cho vay|mất tiền|hao tài|phá sản|bị lừa|thua lỗ|kinh doanh|làm ăn|buôn bán|tài bạch': ['Tài Bạch', 'Phúc Đức'],
   'sự nghiệp|công việc|việc làm|nghề|quan lộc|thăng tiến|thăng chức|lên chức|tăng lương|chuyển việc|nhảy việc|đổi việc|nghỉ việc|xin việc|thất nghiệp|công ty|khởi nghiệp|làm riêng|công chức': ['Quan Lộc', 'Mệnh'],
   'cấp trên|sếp tôi|lãnh đạo':                           ['Quan Lộc', 'Phụ Mẫu'],
   'đồng nghiệp|cấp dưới':                                ['Quan Lộc', 'Nô Bộc'],
