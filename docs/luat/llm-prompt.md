@@ -81,6 +81,24 @@ trả JSON có schema — chỉ chở GIỌNG, đụng bố cục là phá schem
   **đọc ngược lại** rồi mới báo xong — đã cắn 4 lần (có lần chuỗi mô tả giao dịch
   gõ không dấu đi thẳng tới người dùng).
 
+## Luận theo chủ đề — `lib/agent/luan-chu-de.ts`
+
+Rail chat biết đọc cung nào cho việc gì: 11 chủ đề (sự nghiệp, tình duyên, tài chính,
+con cái, cha mẹ, anh em, họ hàng, sức khỏe, nhà đất, bạn bè/quý nhân, đi xa), mỗi chủ
+đề Henry duyệt từng mục. Diễn biến: `nhat-ky/2026-09.md` (#1054 → #1064).
+
+- **Khối chủ đề đi vào USER message, không vào system** — system giữ nguyên từng byte
+  để prompt cache hit. Lăng kính năm/tháng/ngày gắn vào KẾT QUẢ tool (`registry.ts`).
+- **Chủ đề nhận theo cung ĐỨNG ĐẦU mỗi dòng `FOCUS_TOPICS`** (`primaryPalacesStrict`),
+  không theo mọi cung trúng — dòng tài chính trỏ cả Phúc Đức, lấy hết là đụng Họ hàng.
+- **Quét năm (`namTot`): chùm tam phương của cung hạn chạm cung chính LUÔN chứa chính
+  cung chính** ⇒ sao nằm sẵn ở gốc làm mọi năm chạm đều "trúng". Chủ đề mới bật
+  `chiToa` (chỉ xét sao tọa ở cung hạn); chủ đề cũ giữ nguyên để parity.
+- **Luật "sức khỏe của người khác" dò theo CỤM chỉ người** ("bố tôi", "anh trai tôi"),
+  không theo chủ đề — theo chủ đề thì "tình duyên và sức khỏe" mất phần sức khỏe.
+- Sửa khuôn chung (`lanKinh`, `nhanNen`, `quetNam`) phải kiểm **parity Sự nghiệp từng
+  byte** + bộ nhận diện câu hỏi (56 câu) trước khi đẩy.
+
 ## Nợ đã ghi nhận
 
 - `trimLaSo` / `buildPrompt` (bản không cache) là **code chết** — 0 route gọi.
