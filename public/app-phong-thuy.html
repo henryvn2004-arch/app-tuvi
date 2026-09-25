@@ -158,7 +158,7 @@
       <div class="pt-card">
         <h2><span class="pt-num">1</span> Bản Mệnh &amp; Thông Tin Phòng</h2>
         <div class="pt-row">
-          <div class="pt-fg"><label>Năm sinh dương lịch</label><input type="number" id="namSinh" placeholder="VD: 1990" min="1900" max="2025" oninput="onYearChange()"></div>
+          <div class="pt-fg"><label>Năm sinh dương lịch</label><input type="number" id="namSinh" placeholder="VD: 1990" min="1900" oninput="onYearChange()"></div>
           <div class="pt-fg"><label>Giới tính</label>
             <select id="gioiTinh" onchange="onYearChange()">
               <option value="male">Nam</option>
@@ -344,9 +344,9 @@
 window.SHELL_INTRO={key:'phong-thuy'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=37"></script>
-  <script src="/nav.js?v=41" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
+  <script src="/nav.js?v=42" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=100"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=2"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/bat-trach.js?v=2"></script>
 <script>
@@ -411,8 +411,9 @@ var _analysisLoadingCtl=null;
 var _renderLoadingCtl=null;
 
 function onYearChange(){
+  document.getElementById('errorBox').classList.remove('show'); // sửa lại năm thì lỗi cũ phải tắt
   const y=parseInt(document.getElementById('namSinh').value),g=document.getElementById('gioiTinh').value;
-  if(!y||y<1900||y>2025){document.getElementById('guaBadge').classList.remove('show');return;}
+  if(!y||y<1900||y>new Date().getFullYear()){document.getElementById('guaBadge').classList.remove('show');return;}
   _gua=calcGua(y,g);const d=GUA_DATA[_gua];if(!d)return;
   document.getElementById('guaIcon').textContent=d.icon;
   document.getElementById('guaName').textContent='Quái '+_gua+' — '+d.name+' ('+d.elem+')';
@@ -438,7 +439,7 @@ function resizeImg(file){return new Promise((res,rej)=>{const r=new FileReader()
 async function doAnalyze(){
   document.getElementById('errorBox').classList.remove('show');
   const y=parseInt(document.getElementById('namSinh').value),g=document.getElementById('gioiTinh').value;
-  if(!y||y<1900||y>2025){showErr('Vui lòng nhập năm sinh hợp lệ');return;}
+  if(!y||y<1900||y>new Date().getFullYear()){showErr('Vui lòng nhập năm sinh hợp lệ');return;}
   if(!_img64){showErr('Vui lòng chọn ảnh phòng');return;}
   if(!window.Auth?.isLoggedIn()){window.Auth?.require?.(()=>doAnalyze());return;}
   _gua=calcGua(y,g);

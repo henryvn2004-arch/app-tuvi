@@ -738,7 +738,7 @@
   // PWA: smart install prompt (deferred load)
   window.addEventListener('load', function () {
     var s = document.createElement('script');
-    s.src = '/pwa-install.js';
+    s.src = '/pwa-install.js?v=2';
     document.head.appendChild(s);
   });
 

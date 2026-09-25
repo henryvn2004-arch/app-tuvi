@@ -367,10 +367,10 @@ window.SHELL_INTRO={key:'nguoi-khac'};</script>
 <script src="/tuvi-paywall.js?v=37"></script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=41" data-icons-only></script>
+  <script src="/nav.js?v=42" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=100"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=2"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 
@@ -796,7 +796,7 @@ function _renderLockWall(qh, viec, khoaRaw) {
     host: host,
     title: 'Còn ' + khoa.length + ' phần chưa mở về người này',
     items: khoa,
-    cta: 'Đăng ký để mở cẩm nang đầy đủ',
+    cta: 'Mở cẩm nang đầy đủ',
     slug: function () { return _currentSlug; },
     onUnlock: function () { return _doGenerate(false, qh, viec); },
   });

@@ -263,7 +263,7 @@ async function handleMauSac(request: NextRequest, body: Record<string, unknown>)
 
   const { namSinh, gioiTinh } = body as Record<string, string>;
   const year = parseInt(String(namSinh || 0));
-  if (!year || year < 1900 || year > 2025) return err('Invalid year');
+  if (!year || year < 1900 || year > new Date().getFullYear()) return err('Invalid year');
 
   // Calc gua + napam
   function calcGua(y: number, g: string): number {

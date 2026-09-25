@@ -1074,10 +1074,10 @@ function renderTuong(list) {
       <div class="icon">${ic('eye',44)}</div>
       <p>Chưa có kết quả xem tướng nào được lưu.<br>Đăng nhập trước khi xem tướng để lưu lịch sử.</p>
       <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
-        <a href="/tuong-mat-ai.html" class="btn-primary">Diện Tướng</a>
-        <a href="/nhan-tuong-ai.html" class="btn-primary btn-gold">Nhãn Tướng</a>
-        <a href="/thu-tuong-ai.html" class="btn-primary" style="background:var(--blue)">Thủ Tướng</a>
-        <a href="/thanh-tuong-ai.html" class="btn-primary" style="background:var(--green)">Thanh Tướng</a>
+        <a href="/app/dien-tuong" class="btn-primary">Diện Tướng</a>
+        <a href="/app/nhan-tuong" class="btn-primary btn-gold">Nhãn Tướng</a>
+        <a href="/app/thu-tuong" class="btn-primary" style="background:var(--blue)">Thủ Tướng</a>
+        <a href="/app/thanh-tuong" class="btn-primary" style="background:var(--green)">Thanh Tướng</a>
       </div>
     </div>`;
     return;

@@ -259,7 +259,7 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/laso-chart.js?v=4"></script>
 <script src="/tools-shared/pchip.js?v=1"></script>
 <script src="/tools-shared/daivan-chart.js?v=1"></script>
-<script src="/luan-giai-core.js?v=4"></script>
+<script src="/luan-giai-core.js?v=5"></script>
 <!-- `defer` ở đây là VỆ SINH TỐC ĐỘ, KHÔNG phải bản vá CLS. Không có nó, thẻ này
      chặn parse ngay trước `tuvi-form.js`, tức thêm hẳn một chặng mạng tới bên thứ
      ba vào đường tới hạn của form. Nhưng cú nhảy `.frow` thì nó KHÔNG chữa: prod
@@ -283,9 +283,9 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
-<script src="/nav.js?v=41" data-icons-only></script>
+<script src="/nav.js?v=42" data-icons-only></script>
 <script src="/shell.js?v=100"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=2"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script src="/tools-shared/i18n.js?v=1"></script>
@@ -765,7 +765,7 @@ function _renderUnlockBlock(){
     host:host,
     title:'⊙ Bản luận vận hạn chưa mở',
     items:['Luận riêng cho từng tháng trong 12 tháng tới','Tổng quan lá số, hành trình đại vận và tiểu vận năm nay'],
-    cta:'Đăng ký để mở bản luận đầy đủ',
+    cta:'Mở bản luận đầy đủ',
     slug:function(){return _pendingSlug;},
     onUnlock:function(){ return _startAI(); },
   });

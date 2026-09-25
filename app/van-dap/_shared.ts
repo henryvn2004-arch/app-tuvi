@@ -186,7 +186,7 @@ export function renderMethodBanner(): string {
 }
 
 export function footerScripts(): string {
-  return `<script src="/track.js?v=4" defer></script><script src="/nav.js?v=41" defer></script>`;
+  return `<script src="/track.js?v=4" defer></script><script src="/nav.js?v=42" defer></script>`;
 }
 
 /**

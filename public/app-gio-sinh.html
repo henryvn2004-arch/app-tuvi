@@ -245,9 +245,9 @@ window.SHELL_INTRO={key:'gio-sinh'};</script>
      tại, paywall coi người ĐANG ĐĂNG NHẬP là khách và bắt đăng nhập lại.
      `check:shellboot` canh đúng chỗ này. -->
 <script src="/auth.js?v=2"></script>
-<script src="/nav.js?v=41" data-icons-only></script>
+<script src="/nav.js?v=42" data-icons-only></script>
 <script src="/shell.js?v=100"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=2"></script>
 <script>
 var TOOL_ID='gio-sinh'; // var: chạy lại được qua soft-nav — xem docs/luat/spa-nav.md
 var _birth=null,_answers=[],_pub=null,_lastResult=null,_slug='';
@@ -461,7 +461,7 @@ function buildLock(){
     host:host,
     title:'⊙ Hồ sơ giờ sinh chưa mở',
     items:['Đủ 12 lá số khả nghi (Mệnh + Tật Ách từng giờ)','Bộ câu hỏi dựng riêng theo ngày sinh','Xếp hạng 12 giờ theo khả năng','Bằng chứng khớp/lệch từng câu','Mức tin cậy và lời khuyên chốt giờ'],
-    cta:'Đăng ký để mở đủ 12 lá số + khảo sát',
+    cta:'Mở đủ 12 lá số + khảo sát',
     slug:function(){return _slug;},
     onUnlock:function(){return runSurvey();},
   });

@@ -145,7 +145,7 @@
     let h = '';
     const majorStars = pal.majorStars || [];
     const allStars = pal.stars || [];
-    h += `<div class="pregen-block"><div class="pregen-title">⭐ Chính tinh cung</div>`;
+    h += `<div class="pregen-block"><div class="pregen-title">✦ Chính tinh cung</div>`;
     if (majorStars.length === 0) {
       const xung = pal.xungChieuCung;
       const xungStars = xung ? (xung.majorStars || []).map((s) => `${s.ten}(${s.brightness || ''})`).join(', ') : '';
@@ -153,7 +153,7 @@
     } else {
       majorStars.forEach((s) => {
         const bCol = s.brightness === 'Miếu' || s.brightness === 'Vượng' ? '#4ade80' : s.brightness === 'Đắc' ? '#86efac' : s.brightness === 'Bình hòa' || s.brightness === 'Bình' ? '#60a5fa' : '#f87171';
-        h += `<div class="pregen-yn yn-neutral"><span style="font-weight:600;color:#ddd">${s.ten}</span> <span style="color:${bCol};font-size:11px">(${s.brightness || ''})</span>${s.hoa ? ` <span style="color:#5FA8D3">[Hóa ${s.hoa}]</span>` : ''}</div>`;
+        h += `<div class="pregen-yn yn-neutral"><span style="font-weight:600;color:inherit">${s.ten}</span> <span style="color:${bCol};font-size:11px">(${s.brightness || ''})</span>${s.hoa ? ` <span style="color:#5FA8D3">[Hóa ${s.hoa}]</span>` : ''}</div>`;
       });
     }
     h += `</div>`;
@@ -298,25 +298,25 @@
             const ttScore=sc.thienThoi?.score??sc.thienThoi, dlScore=sc.diaLoi?.score??sc.diaLoi, nhScore=sc.nhanHoa?.score??sc.nhanHoa;
             const ttBar=(ttScore/5*100).toFixed(0), dlBar=(dlScore/1*100).toFixed(0), nhBar=(nhScore/4*100).toFixed(0), totBar=(sc.tong/10*100).toFixed(0);
             const totCol=sc.tong>=7?'#4ade80':sc.tong>=4?'#60a5fa':'#f87171';
-            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> Scoring đại vận — Cung ${dvCungName} (${dvDC})</div><div class="score-bars">
+            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> Chấm điểm đại vận — Cung ${dvCungName} (${dvDC})</div><div class="score-bars">
               <div class="score-bar-row"><span class="score-label">Thiên Thời</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${ttBar}%;background:#c9a84c"></div></div><span class="score-val">${ttScore}/5</span></div>
               <div class="score-bar-row"><span class="score-label">Địa Lợi</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${dlBar}%;background:#0E7490"></div></div><span class="score-val">${dlScore}/1</span></div>
               <div class="score-bar-row"><span class="score-label">Nhân Hòa</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${nhBar}%;background:#7B2FBE"></div></div><span class="score-val">${nhScore}/4</span></div>
-              <div class="score-bar-row" style="border-top:1px solid #1e2e42;padding-top:6px;margin-top:2px"><span class="score-label" style="font-weight:600;color:#ddd">Tổng ${sc.flag}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${totBar}%;background:${totCol}"></div></div><span class="score-val" style="color:${totCol};font-weight:600">${sc.tong}/10</span></div>
+              <div class="score-bar-row" style="border-top:1px solid #1e2e42;padding-top:6px;margin-top:2px"><span class="score-label" style="font-weight:600;color:inherit">Tổng</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${totBar}%;background:${totCol}"></div></div><span class="score-val" style="color:${totCol};font-weight:600">${sc.tong}/10</span></div>
             </div>${sc.nhanHoa?.boMenh?`<div style="font-size:11px;color:#666;margin-top:6px">Bộ Mệnh: <span style="color:#aaa">${sc.nhanHoa.boMenh}</span> → Bộ ĐV: <span style="color:#aaa">${sc.nhanHoa.boVan}</span></div>`:''}</div>`;
           }
           const majorStars=dvPalace.majorStars||[], allStars=dvPalace.stars||[];
           const SAT=['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp'];
           const BAI=['Thiên Khốc','Thiên Hư','Tang Môn','Bạch Hổ','Đại Hao','Tiểu Hao'];
           const CAT=['Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt','Tả Phù','Hữu Bật','Lộc Tồn','Hóa Lộc','Hóa Quyền','Hóa Khoa'];
-          preGenHtml += `<div class="pregen-block"><div class="pregen-title">⭐ Chính tinh cung đại vận</div>`;
+          preGenHtml += `<div class="pregen-block"><div class="pregen-title">✦ Chính tinh cung đại vận</div>`;
           if (majorStars.length===0) {
             const xung=dvPalace.xungChieuCung, xungStars=xung?(xung.majorStars||[]).map(s=>`${s.ten}(${s.brightness||''})`).join(', '):'';
             preGenHtml += `<div class="pregen-yn yn-neutral">Vô chính diệu${xungStars?` — mượn từ cung xung: <span style="color:#5FA8D3">${xungStars}</span>`:''}</div>`;
           } else {
             majorStars.forEach(s => {
               const bCol=s.brightness==='Miếu'||s.brightness==='Vượng'?'#4ade80':s.brightness==='Đắc'?'#86efac':s.brightness==='Bình hòa'||s.brightness==='Bình'?'#60a5fa':'#f87171';
-              preGenHtml += `<div class="pregen-yn yn-neutral"><span style="font-weight:600;color:#ddd">${s.ten}</span> <span style="color:${bCol};font-size:11px">(${s.brightness||''})</span>${s.hoa?` <span style="color:#5FA8D3">[Hóa ${s.hoa}]</span>`:''}</div>`;
+              preGenHtml += `<div class="pregen-yn yn-neutral"><span style="font-weight:600;color:inherit">${s.ten}</span> <span style="color:${bCol};font-size:11px">(${s.brightness||''})</span>${s.hoa?` <span style="color:#5FA8D3">[Hóa ${s.hoa}]</span>`:''}</div>`;
             });
           }
           preGenHtml += `</div>`;

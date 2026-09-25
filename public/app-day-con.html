@@ -492,10 +492,10 @@ window.SHELL_INTRO={key:'day-con'};</script>
 <script src="/tuvi-paywall.js?v=37"></script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=41" data-icons-only></script>
+  <script src="/nav.js?v=42" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=100"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=2"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 
@@ -584,7 +584,7 @@ function chatStepSelfAsk(){
   chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
   document.getElementById('selfYes').addEventListener('click',function(){
     el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Đối chiếu thêm với lá số của bạn ✓</p></div>';
-    TuviForm.renderChat({ prefix:'self', showName:false, onDone:analyze });
+    TuviForm.renderChat({ prefix:'self', showName:false, q1:'Giới tính của bạn (cha/mẹ) là gì?', q2:'Ngày sinh dương lịch của bạn là ngày nào?', q3:'Giờ sinh của bạn là mấy giờ?', onDone:analyze });
   });
   document.getElementById('selfNo').addEventListener('click',function(){
     el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Bỏ qua đối chiếu lá số của bạn.</p></div>';
@@ -916,7 +916,7 @@ function _renderLockWall(lo) {
       'Làm gì từ tối nay — nên làm và nên tránh',
       'Điều bạn đang lo, viết riêng theo lá số con',
     ],
-    cta: 'Đăng ký để mở bản hướng dẫn đầy đủ',
+    cta: 'Mở bản hướng dẫn đầy đủ',
     slug: function () { return _currentSlug; },
     onUnlock: function () { return _doGenerate(false, lo); },
   });

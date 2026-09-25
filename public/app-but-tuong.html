@@ -125,11 +125,11 @@
       <div class="dt-card" id="inputCard">
         <div class="fc-head"><span class="fc-ic" data-icon="pen-line"></span><h2>Ký chữ ký</h2></div>
         <p class="sub">Ký trực tiếp trên màn hình hoặc tải ảnh chữ ký có sẵn. Hệ thống đo 6 trục nét bút, luận giải theo cổ pháp thư pháp.</p>
-        <div class="dt-privacy"><span>🔒</span><div>Chữ ký KHÔNG được lưu — chỉ các chỉ số đo được mới gửi đi luận giải.</div></div>
+        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Chữ ký KHÔNG được lưu — chỉ các chỉ số đo được mới gửi đi luận giải.</div></div>
 
         <div class="dt-input-tabs">
-          <button class="dt-input-tab active" onclick="switchTab('sign',this)">✍ Ký Trực Tiếp</button>
-          <button class="dt-input-tab" onclick="switchTab('upload',this)">📁 Ảnh Chữ Ký</button>
+          <button class="dt-input-tab active" onclick="switchTab('sign',this)"><span class="ic" data-icon="pen-line"></span> Ký Trực Tiếp</button>
+          <button class="dt-input-tab" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Ảnh Chữ Ký</button>
         </div>
 
         <div class="dt-input-pane active" id="pane-sign">
@@ -217,9 +217,9 @@ window.SHELL_INTRO={key:'but-tuong'};</script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=37"></script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
-  <script src="/nav.js?v=41" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
+  <script src="/nav.js?v=42" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=100"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=2"></script>
 <script>
 function initButTuong(){
   Shell.setContext({

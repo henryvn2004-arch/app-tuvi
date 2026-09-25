@@ -212,10 +212,10 @@ window.SHELL_INTRO={key:'nhan-tuong'};</script>
 <script src="/tuvi-paywall.js?v=37"></script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
-  <script src="/nav.js?v=41" data-icons-only></script>
+  <script src="/nav.js?v=42" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=100"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=2"></script>
 <script>
 function initNhanTuong(){
   Shell.setContext({
@@ -431,8 +431,8 @@ function onFileSelect(e) { const f=e.target.files[0]; if(f) processFile(f); }
 
 function processFile(file) {
   const err=document.getElementById('error-msg'); err.classList.remove('active');
-  if (!file.type.startsWith('image/')) { err.textContent='Vui lòng chọn file ảnh.'; err.classList.add('active'); return; }
-  if (file.size > 5*1024*1024) { err.textContent='Ảnh quá lớn (tối đa 5MB).'; err.classList.add('active'); return; }
+  if (!file.type.startsWith('image/')) { err.textContent='Vui lòng chọn file ảnh.'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); return; }
+  if (file.size > 5*1024*1024) { err.textContent='Ảnh quá lớn (tối đa 5MB).'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); return; }
   const img = new Image();
   const ou = URL.createObjectURL(file);
   img.onload = () => {
@@ -445,6 +445,7 @@ function processFile(file) {
     _imageData=dataUrl.split(',')[1]; _mediaType='image/jpeg';
     showPreview(dataUrl);
   };
+  img.onerror = () => { URL.revokeObjectURL(ou); err.textContent='Không đọc được ảnh này — vui lòng chọn ảnh JPG hoặc PNG.'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); };
   img.src=ou;
 }
 
@@ -469,7 +470,7 @@ function showPreview(dataUrl) {
     } else {
       const err=document.getElementById('error-msg');
       err.textContent='⚠ Không nhận diện được mặt rõ ràng. Vẫn có thể phân tích nhưng nên dùng ảnh thẳng mặt hơn.';
-      err.classList.add('active');
+      err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
     }
   });
   if (imgEl.complete && imgEl.naturalWidth) run(); else imgEl.onload = run;
@@ -496,7 +497,7 @@ async function openCamera() {
     document.getElementById('camBtns').style.display='flex';
   } catch(e) {
     const err=document.getElementById('error-msg');
-    err.textContent='Không thể mở camera.'; err.classList.add('active');
+    err.textContent='Không thể mở camera.'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
   }
 }
 function capturePhoto() {
@@ -511,7 +512,7 @@ function capturePhoto() {
 function stopCamera() {
   if(_camStream){_camStream.getTracks().forEach(t=>t.stop());_camStream=null;}
   const vid=document.getElementById('camVideo');
-  if(vid){vid.style.display='none'; vid.srcObject=null;}
+  if(vid){vid.srcObject=null; /* KHÔNG ẩn <video>: openCamera không bật lại ⇒ mở lần 2 chỉ còn nút, camWrap ẩn là đủ */}
   document.getElementById('camBtns').style.display='none';
   document.getElementById('preCamTips').style.display='block';
   document.getElementById('camWrap').style.display='none';
@@ -568,7 +569,7 @@ async function _doAnalyze() {
     document.getElementById('aiResult').innerHTML='';
     document.getElementById('resultCard').style.display='none';
     const err=document.getElementById('error-msg');
-    err.textContent='Lỗi: '+(e.message||'Không thể kết nối.'); err.classList.add('active');
+    err.textContent='Lỗi: '+(e.message||'Không thể kết nối.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
   }
 }
 

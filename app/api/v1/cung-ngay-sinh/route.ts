@@ -69,7 +69,9 @@ interface Row {
  * dùng để MATCH. */
 function parseT1(key: string) {
   const [canChi, thang, ngay] = key.split('|');
-  return { canChi, thang: Number(thang), ngay: Number(ngay) };
+  // Khoá lưu can chi DÍNH liền ("CanhNgọ") — chỉ dùng để hiển thị nên tách lại
+  // thành "Canh Ngọ", không đụng khoá dùng để MATCH.
+  return { canChi: (canChi || '').replace(/(\p{Ll})(\p{Lu})/gu, '$1 $2'), thang: Number(thang), ngay: Number(ngay) };
 }
 
 const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
@@ -156,12 +158,17 @@ export async function GET(req: NextRequest) {
   const t0 = `${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 
   const pool: { row: Row; tier: Tier }[] = [];
+  // Dòng Wikidata chưa có nhãn tên chỉ còn mã ("Q42356664") — hiện ra là rác.
+  const add = (rows: Row[], tier: Tier) =>
+    rows.forEach((row) => {
+      if (!/^Q\d+$/.test(String(row.name || '').trim())) pool.push({ row, tier });
+    });
   try {
     // T2/T2b KHÔNG ép có ảnh (xem `pick`); T1/T0 thì ép.
-    if (t2) (await fetchTier('key_t2', t2, SLOTS, false)).forEach((row) => pool.push({ row, tier: 't2' }));
-    if (t2b) (await fetchTier('key_t2b', t2b, SLOTS, false)).forEach((row) => pool.push({ row, tier: 't2b' }));
-    if (pool.length < SLOTS) (await fetchTier('key_t1', t1, SLOTS * 3, true)).forEach((row) => pool.push({ row, tier: 't1' }));
-    if (pool.length < SLOTS) (await fetchTier('key_t0', t0, SLOTS * 3, true)).forEach((row) => pool.push({ row, tier: 't0' }));
+    if (t2) add(await fetchTier('key_t2', t2, SLOTS, false), 't2');
+    if (t2b) add(await fetchTier('key_t2b', t2b, SLOTS, false), 't2b');
+    if (pool.length < SLOTS) add(await fetchTier('key_t1', t1, SLOTS * 3, true), 't1');
+    if (pool.length < SLOTS) add(await fetchTier('key_t0', t0, SLOTS * 3, true), 't0');
   } catch (e) {
     // Best-effort: mục này KHÔNG được làm hỏng bản luận giải phía trên.
     console.error('[cung-ngay-sinh]', e);

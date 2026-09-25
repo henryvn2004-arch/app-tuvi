@@ -307,6 +307,9 @@
       })
       .then(function () {
         if (navigating) return;
+        // nav.js đã nạp ⇒ runPageScripts bỏ qua nó, nên không ai gọi lại
+        // mountIcons cho #ws vừa thay ⇒ mọi [data-icon] tĩnh ra ô trống.
+        if (window.mountIcons) window.mountIcons(document.querySelector('main#ws'));
         updateTabbarActive(path);
         try { if (window.Track) window.Track.event('page_view', { meta: { from: 'soft_nav' } }); } catch (e) { /* ignore */ }
         document.dispatchEvent(new CustomEvent('tvmb:softnav', { detail: { path: path } }));
