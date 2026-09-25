@@ -51,6 +51,15 @@ window.TuviForm = (() => {
   // chặn từ gốc thay vì bắt lỗi sau khi submit như mode chat (tuvi-form.js
   // renderChat `err2`). Áp dụng cho MỌI mode dùng <select> ngày/tháng/năm
   // (full/person/compact) vì cả ba đều gọi `_update` qua oninput chung.
+  //
+  // 🐞 CHỈ disable option, KHÔNG ghi đè `.value` ở đây — trang gọi thường
+  // render Ngày→Tháng→Năm theo đúng thứ tự đó, nên chọn Ngày=29 rồi Tháng=2
+  // (lúc Năm còn giữ mặc định KHÔNG nhuận) sẽ làm hàm này tính maxDay=28 và
+  // GHI ĐÈ ngay lập tức — mất trắng lựa chọn 29, và khi người dùng đổi Năm
+  // sang năm nhuận NGAY SAU ĐÓ thì giá trị 29 đã không còn để phục hồi (bắt
+  // thật ở /app/van-han-nam, /app/huong-nghiep-tre — ux-tester đợt 3,
+  // 2026-09-25). Chốt giá trị cuối cùng ở `getData()` — nơi đọc đủ CẢ BA
+  // trường cùng lúc — thay vì chốt sớm mỗi lần một trường đổi.
   function clampNgayForMonth(prefix = '') {
     const thangEl = gel('thang', prefix);
     const namEl   = gel('nam', prefix);
@@ -60,7 +69,6 @@ window.TuviForm = (() => {
     const nam    = parseInt(namEl.value) || new Date().getFullYear();
     const maxDay = new Date(nam, thang, 0).getDate(); // ngày cuối tháng đó, tự xét năm nhuận
     for (const o of ngayEl.options) o.disabled = parseInt(o.value) > maxDay;
-    if ((parseInt(ngayEl.value) || 0) > maxDay) ngayEl.value = String(maxDay);
   }
 
   function updateGioAmDisplay(prefix = '') {
@@ -486,10 +494,16 @@ window.TuviForm = (() => {
     const hh     = parseInt(gel('tvf-gio', prefix)?.value) || 0;
     const mm     = parseInt(gel('tvf-phut', prefix)?.value) || 0;
     const utcOff = parseInt(gel('tvf-utc', prefix)?.value ?? '420');
-    const ngay   = parseInt(gel('ngay', prefix)?.value) || 0;
+    let   ngay   = parseInt(gel('ngay', prefix)?.value) || 0;
     const thang  = parseInt(gel('thang', prefix)?.value) || 0;
     const nam    = parseInt(gel('nam', prefix)?.value) || 0;
-    const vn     = toVnHour(hh, mm, utcOff, ngay, thang, nam);
+    // Chốt "Ngày" hợp lệ TẠI ĐÂY — đọc đủ cả ba trường cùng lúc, không chốt
+    // sớm như `clampNgayForMonth` (chỉ disable option, xem chú thích ở đó).
+    if (ngay && thang && nam) {
+      const maxDay = new Date(nam, thang, 0).getDate();
+      if (ngay > maxDay) ngay = maxDay;
+    }
+    const vn = toVnHour(hh, mm, utcOff, ngay, thang, nam);
     return {
       hoten:    (gel('hoten', prefix)?.value || '').trim(),
       ngay, thang, nam,
