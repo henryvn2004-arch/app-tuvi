@@ -74,8 +74,8 @@ export interface ToolContext {
   // mo_la_so mở một lá số KHÁC → đổi chủ thể → kênh reset thread hội thoại.
   subjectSwitched: boolean;
   // Chủ đề câu hỏi lượt này (lib/agent/luan-chu-de.ts) — tra_tieu_van gắn thêm
-  // lăng kính chủ đề vào kết quả. null = không chủ đề nào đã dựng.
-  chuDe: string | null;
+  // lăng kính chủ đề vào kết quả (tối đa 2 khi câu hỏi có hai trọng tâm). [] = không chủ đề nào đã dựng.
+  chuDe: string[];
 }
 
 export function newToolContext(
@@ -96,7 +96,7 @@ export function newToolContext(
     toolSuggestion: null,
     activeProfile: null,
     subjectSwitched: false,
-    chuDe: null,
+    chuDe: [],
   };
 }
 
@@ -272,11 +272,13 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
     // Lưới an toàn: tra_tieu_van thiếu năm → mặc định năm hiện tại (VN).
     const arg = name === 'tra_tieu_van' && !input?.nam ? { ...input, nam: currentYearVN() } : input;
     let content = execLasoTool(name, ctx.ls, arg);
-    if (name === 'tra_tieu_van' && ctx.chuDe) {
+    if (name === 'tra_tieu_van' && ctx.chuDe.length) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const tv = ((ctx.ls as any)?.tieuVanScores || []).find((t: any) => Number(t.nam) === Number(arg?.nam));
-      const lk = tv ? lanKinhNam(ctx.chuDe, ctx.ls, tv) : '';
-      if (lk) content += '\n' + lk;
+      for (const cd of tv ? ctx.chuDe : []) {
+        const lk = lanKinhNam(cd, ctx.ls, tv);
+        if (lk) content += '\n' + lk;
+      }
     }
     return { content, label: toolLabel(name) };
   }
