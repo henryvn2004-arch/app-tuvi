@@ -67,6 +67,21 @@ const BANG = [
     /const Y_DINH_TU_TUC: Record<string, string> = \{([\s\S]*?)\n\};/,
   ],
   [
+    'lib/agent/luan-chu-de.ts',
+    'Y_DINH_CHA_ME',
+    /const Y_DINH_CHA_ME: Record<string, string> = \{([\s\S]*?)\n\};/,
+  ],
+  [
+    'lib/agent/luan-chu-de.ts',
+    'Y_DINH_ANH_EM',
+    /const Y_DINH_ANH_EM: Record<string, string> = \{([\s\S]*?)\n\};/,
+  ],
+  [
+    'lib/agent/luan-chu-de.ts',
+    'Y_DINH_HO_HANG',
+    /const Y_DINH_HO_HANG: Record<string, string> = \{([\s\S]*?)\n\};/,
+  ],
+  [
     'app/api/tubinh/route.ts',
     'topicMap',
     /const topicMap: Record<string, string\[\]> = \{([\s\S]*?)\n {2}\};/,
