@@ -55,6 +55,9 @@
 .tay{background:#fff8ec;color:#9A7B3A}
 .bt-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
 @media(max-width:640px){.bt-grid{grid-template-columns:1fr}}
+/* Cột artifact chat-first chỉ rộng 420px trên MỌI viewport — media query trên
+   đọc viewport nên không khớp ở đây (xem docs/luat/bay.md). */
+body.chat-first-live .bt-grid{grid-template-columns:1fr}
 .ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 </style>
 </head>
@@ -162,6 +165,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='bat-trach';window.SHELL_HISTORY=true;
+// Chat-first (xem khối CHATFIRST trong shell.js) — free/deterministic,
+// setContext() chạy ngay sau BatTrachTool.compute(), không có paywall. Vá
+// kèm bẫy grid+media-query của .bt-grid (xem rule body.chat-first-live ở
+// trên, cùng mẫu huong-nghiep-tre).
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'bat-trach'};</script>
 <script src="/tools-shared/bat-trach.js?v=1"></script>
 <script src="/auth.js?v=2"></script>

@@ -61,6 +61,10 @@
 .mh-tai button:disabled{opacity:.6;cursor:not-allowed}
 .mh-err{margin-top:10px;font-size:12.5px;color:#B0392B}
 @media(max-width:640px){.mh-doi{grid-template-columns:1fr;gap:18px}.mh-changs{grid-template-columns:1fr}}
+/* Cột artifact chat-first chỉ rộng 420px trên MỌI viewport — media query trên
+   đọc viewport nên không khớp ở đây (xem docs/luat/bay.md). */
+body.chat-first-live .mh-doi{grid-template-columns:1fr;gap:18px}
+body.chat-first-live .mh-changs{grid-template-columns:1fr}
 </style>
 </head>
 <body>
@@ -168,6 +172,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='mai-hoa';window.SHELL_HISTORY=true;
+// Chat-first (xem khối CHATFIRST trong shell.js) — free/deterministic,
+// setContext() chạy trong showResult() SAU KHI gieo quẻ (không paywall). Vá
+// kèm 2 bẫy grid+media-query của .mh-doi/.mh-changs (rule body.chat-first-live
+// ở trên, cùng mẫu huong-nghiep-tre).
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'mai-hoa'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/kinh-dich-hao.js?v=1"></script>

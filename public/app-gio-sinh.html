@@ -236,6 +236,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='gio-sinh';window.SHELL_HISTORY=true;
+// Chat-first (xem khối CHATFIRST trong shell.js) — setContext() chạy ngay sau
+// bản xem-trước MIỄN PHÍ (fetch /api/gio-sinh?preview=1), đứng TRƯỚC
+// TuviPaywall.requireCredits() của bước khảo sát thu hẹp trả phí — cùng nhóm
+// dat-ten/chon-ngay. .grid12 dùng auto-fill/minmax (co theo cột thật, không
+// theo viewport) nên không cần vá CSS.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'gio-sinh'};</script>
 
 <script src="/tuvi-paywall.js?v=38"></script>
