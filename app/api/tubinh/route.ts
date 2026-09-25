@@ -175,14 +175,21 @@ function extractTuBinhContext(batTuData: any, question: string): string {
   // 🔴 Mẫu phải là CỤM ĐỦ NGHĨA, tuyệt đối không để âm tiết đơn ('quan', 'sao',
   // 'chức'). Tiếng Việt viết RỜI từng âm tiết nên 'quan' khớp luôn "tổng quan",
   // "quan hệ", "quan tâm", "liên quan", "quan điểm"; 'sao' khớp "tại sao",
-  // "vì sao", "làm sao", "ra sao". Hậu quả KHÔNG phải thừa một mục — nó cướp
-  // mất nhánh mặc định: câu mở như "cho tôi xem tổng quan" đáng ra nhận đủ 4
-  // mục (quanSat · tai · phuThe · daiVan) thì chỉ nhận đúng 1 mục lạc đề, và
-  // model phải luận chay phần còn lại. Đo được 14/17 câu mở dính lỗi này.
+  // "vì sao", "làm sao", "ra sao".
   //
   // ⛔ Và ĐỪNG vá bằng cách thêm biên từ (\b): đo rồi, ra 0/20 — vì trong
   // "tổng quan" thì "quan" THẬT SỰ là một âm tiết đứng riêng, biên từ vẫn
   // khớp. Biên từ chỉ cứu được ngôn ngữ viết liền, không cứu tiếng Việt.
+  //
+  // ⚠️ 2026-09-25: 'tai' · 'quanSat' · 'phuThe' · 'tuTuc' · 'suckhoe' KHÔNG
+  // narrow context như comment cũ mô tả — chỉ 'daiVan' · 'luuNien' · 'thanSat'
+  // được `relevant.has()` đọc lại bên dưới, năm khoá kia bị gán vào `relevant`
+  // rồi bỏ xó. Không xoá — Tử Bình KHÔNG có 12 cung để chọn như luan-chu-de.ts
+  // (lib/agent), tứ trụ/thập thần/dụng thần/cách cục/đại vận/ngũ hành đã đủ
+  // gọn để gửi TRỌN cho MỌI câu hỏi; gán mù vào cổ pháp gender-hoá (Tài=vợ với
+  // nam, Thực Thương=con với nữ...) mà hệ thống chưa xác nhận là NGHI SAI THÌ
+  // GHI LẠI, không tự vá — 5 khoá này giữ nguyên làm chỗ neo phân loại câu hỏi
+  // cho việc sau, KHÔNG được coi là đã có tác dụng.
   const topicMap: Record<string, string[]> = {
     'tài chính|tiền|tài lộc|làm giàu|thu nhập': ['tai'],
     'sự nghiệp|công việc|nghề nghiệp|quan lộc|thăng tiến|thăng chức|chức vụ|thất nghiệp': ['quanSat'],
@@ -190,8 +197,8 @@ function extractTuBinhContext(batTuData: any, question: string): string {
     'con cái|con cháu': ['tuTuc'],
     'sức khỏe|bệnh|thân thể': ['suckhoe'],
     'đại vận|tiểu vận|vận hạn|vận trình': ['daiVan'],
-    'lưu niên|năm nay|năm tới': ['luuNien'],
-    'thần sát|sao xấu|sao tốt|hung tinh|cát tinh|sao chiếu|sao nào|sao gì': ['thanSat'],
+    'lưu niên|năm nay|năm này|năm sau|sang năm|năm tới': ['luuNien'],
+    'thần sát|sao xấu|sao tốt|hung tinh|cát tinh|sao chiếu|sao nào|sao gì|quý nhân|đào hoa|văn xương|dịch mã|hồng diễm|học đường|dương nhẫn|cô thần|quả tú|không vong': ['thanSat'],
   };
 
   // Dò trên bản ĐÃ CHUẨN HOÁ VỊ TRÍ DẤU THANH (lib/vn-text.ts) — "sức khoẻ"
@@ -202,6 +209,8 @@ function extractTuBinhContext(batTuData: any, question: string): string {
   for (const [pattern, keys] of Object.entries(topicMap)) {
     if (new RegExp(chuanHoaDauThanh(pattern), 'i').test(qn)) keys.forEach(k => relevant.add(k));
   }
+  // Hỏi thẳng một năm cụ thể ("năm 2027 ra sao") — số không cần chuẩn hoá dấu.
+  if (/\b(19|20)\d{2}\b/.test(q)) relevant.add('luuNien');
   if (relevant.size === 0) ['quanSat', 'tai', 'phuThe', 'daiVan'].forEach(k => relevant.add(k));
 
   // Đại vận hiện tại + kế tiếp
