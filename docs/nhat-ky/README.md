@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🕵️ Agent `ux-tester` — đóng vai khách đi từng tool trên prod + 3 đợt vá |
 | 1 | 2026-09 | `2026-09.md` | 🏠 Kỹ năng luận theo chủ đề — GIA ĐẠO (cha mẹ · anh em · họ hàng) |
 | 1 | 2026-09 | `2026-09.md` | 🐛 `ToolPrices.masterForTool is not a function` trên /app, /app/ho-so — lệch `?v=` |
 | 1 | 2026-09 | `2026-09.md` | 👶 Kỹ năng luận theo chủ đề — CON CÁI + phân xử câu trúng nhiều chủ đề |
