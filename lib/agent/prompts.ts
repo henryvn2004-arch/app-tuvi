@@ -1374,10 +1374,11 @@ const FOCUS_TOPICS: Record<string, string[]> = {
   'con cái|con cháu|tử tức|sinh con|sinh thêm|hiếm muộn|muộn con|mang thai|có bầu|đứa con|con trai tôi|con gái tôi|con tôi|mấy con|bao nhiêu con|có con không|có con chưa|tôi có con|sẽ có con|có em bé|con có hiếu|nhờ được con': ['Tử Tức'],
   'sức khỏe|bệnh|thân thể|tật ách':                     ['Tật Ách'],
   'nhà đất|bất động sản|điền trạch':                    ['Điền Trạch'],
-  'anh em|huynh đệ':                                     ['Huynh Đệ'],
+  'anh em|anh chị em|anh trai|chị gái|em trai|em gái|huynh đệ|con một': ['Huynh Đệ'],
   'bạn bè|nô bộc|nhân viên|đối tác':                    ['Nô Bộc'],
   'du lịch|di chuyển|thiên di|nước ngoài':               ['Thiên Di'],
-  'cha mẹ|phụ mẫu':                                      ['Phụ Mẫu'],
+  'cha mẹ|bố mẹ|ba mẹ|bố tôi|mẹ tôi|cha tôi|song thân|phụ mẫu': ['Phụ Mẫu'],
+  'họ hàng|dòng họ|họ nội|họ ngoại|tổ tiên|mồ mả|mộ phần|nhà thờ họ|từ đường|phúc đức|phúc phần|bà con': ['Phúc Đức'],
   'đại vận|tiểu vận|vận hạn|vận trình':                 ['__daiVan__'],
 };
 
@@ -1399,6 +1400,18 @@ export function relevantPalacesStrict(question: string): Set<string> {
   const hit = new Set<string>();
   for (const [re, names] of FOCUS_MATCHERS) {
     if (re.test(q)) names.forEach((n) => hit.add(n));
+  }
+  return hit;
+}
+
+// Chỉ cung ĐỨNG ĐẦU của mỗi dòng trúng — là cung CHÍNH của chủ đề đó. Các cung
+// sau chỉ là cung đọc kèm (vd tài chính kèm Phúc Đức): lấy cả chúng để nhận diện
+// chủ đề thì "năm nay tiền bạc" trúng luôn Họ hàng (Phúc Đức) và hai chủ đề hòa.
+export function primaryPalacesStrict(question: string): Set<string> {
+  const q = chuanHoaDauThanh((question || '').toLowerCase());
+  const hit = new Set<string>();
+  for (const [re, names] of FOCUS_MATCHERS) {
+    if (re.test(q)) hit.add(names[0]);
   }
   return hit;
 }
