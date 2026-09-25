@@ -72,6 +72,7 @@ const nextConfig = {
       { source: '/app/hoang-dao',       destination: '/app-hoang-dao.html'   },
       { source: '/app/ngay-tot',        destination: '/app-ngay-tot.html'    },
       { source: '/app/luc-nham',        destination: '/app-luc-nham.html'    },
+      { source: '/app/combo-laso-tubinh', destination: '/app-combo-laso-tubinh.html' },
       { source: '/app/chan-dung-vo-chong', destination: '/app-chan-dung-vo-chong.html' },
       { source: '/app/chan-dung-tien-kiep', destination: '/app-chan-dung-tien-kiep.html' },
       { source: '/app/duyen-no-tien-kiep', destination: '/app-duyen-no-tien-kiep.html' },
