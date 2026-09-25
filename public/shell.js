@@ -2504,9 +2504,9 @@
     // Hỏi ví lúc này là nhận về trạng thái khách vô danh. Thà im lặng vài giây —
     // vòng theo dõi phiên ở cuối file sẽ gọi lại ngay khi biết chắc.
     if (!token && window.Auth && Auth.isRestoring && Auth.isRestoring()) return;
-    var url = token
-      ? '/api/payment?action=rail-status'
-      : '/api/payment?action=rail-status&anon=' + encodeURIComponent(anonId());
+    // `anon` gửi CẢ khi có token: phiên ẩn danh (guest checkout) ví rỗng vẫn
+    // đếm câu dùng thử theo anon_id — xem handleRailStatus.
+    var url = '/api/payment?action=rail-status&anon=' + encodeURIComponent(anonId());
     var opts = token ? { headers: { Authorization: 'Bearer ' + token } } : {};
     fetch(url, opts)
       .then(function (r) { return r.ok ? r.json() : null; })

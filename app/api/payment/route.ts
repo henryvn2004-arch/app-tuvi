@@ -3084,6 +3084,20 @@ async function handleRailStatus(request: NextRequest, sp: URLSearchParams): Prom
       railFreeRemaining(user.id),
       vndPerCredit(),
     ]);
+    // Phiên ẩn danh (guest checkout) mà ví chưa đủ một câu ⇒ vẫn là khách dùng
+    // thử — cùng luật `/api/v1/chat`. Trước đây bấm nút trả phí một tool là mở
+    // phiên này và đồng hồ rail nhảy thẳng "Đã dùng hết lượt hỏi".
+    if (user.is_anonymous && freeTurns <= 0 && railPrice != null && balance < railPrice) {
+      const t = await anonTrialStatus(String(sp.get('anon') || '').slice(0, 64));
+      return ok({
+        anon: true,
+        anonTrialLeft: t.left,
+        anonTrialCap: t.cap,
+        railPrice,
+        lasoPrice,
+        vndPerCredit: vndRate,
+      });
+    }
     return ok({
       balance,
       railPrice: railPrice != null ? railPrice : null,

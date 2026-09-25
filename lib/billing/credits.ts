@@ -30,6 +30,8 @@ const SB_HEADERS = {
 export interface AuthUser {
   id: string;
   email?: string;
+  /** Phiên ẩn danh THẬT của Supabase (guest checkout, `requireCredits()` tự mở). */
+  isAnonymous?: boolean;
 }
 
 /** Rút access_token từ header Authorization: Bearer <token>. */
@@ -47,8 +49,8 @@ export async function getUserFromToken(token: string): Promise<AuthUser | null> 
       cache: 'no-store',
     });
     if (!res.ok) return null;
-    const u = (await res.json()) as { id?: string; email?: string };
-    return u?.id ? { id: u.id, email: u.email } : null;
+    const u = (await res.json()) as { id?: string; email?: string; is_anonymous?: boolean };
+    return u?.id ? { id: u.id, email: u.email, isAnonymous: !!u.is_anonymous } : null;
   } catch {
     return null;
   }

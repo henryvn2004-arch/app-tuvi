@@ -252,9 +252,9 @@
   }
 
   // Active state detection
-  var TUONG_PATHS  = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html','/tools/thanh-tuong-ai.html','/tools/thanh-tuong-pro.html','/tools/khi-sac-ai.html'];
+  var TUONG_PATHS  = ['/app/dien-tuong','/app/nhan-tuong','/app/thu-tuong','/app/thanh-tuong','/tools/thanh-tuong-pro.html','/tools/khi-sac-ai.html'];
   var LAM_DEP_PATHS = ['/tools/kieu-toc-ai.html','/tools/mau-sac-hop-menh.html'];
-  var PHONG_PATHS  = ['/tools/phong-thuy.html','/tools/ban-lam-viec.html','/tools/cua-hang-phong-thuy.html','/tools/bat-trach.html','/kim-lau'];
+  var PHONG_PATHS  = ['/app/phong-thuy','/tools/ban-lam-viec.html','/tools/cua-hang-phong-thuy.html','/tools/bat-trach.html','/kim-lau'];
   var NGAY_PATHS   = ['/ngay-tot','/tools/hoang-dao.html','/tools/ngay-tot.html','/tools/luc-nham.html','/tools/han-nam.html','/tools/chon-ngay-tot.html'];
   var TENCHU_PATHS  = ['/tools/dat-ten-con.html','/tools/dat-ten-doanh-nghiep.html'];
   var BAIVIET_PATHS = ['/van-dap','/nghien-cuu','/tac-gia','/phuong-phap'];
@@ -572,8 +572,8 @@
     // khi `tool_pricing` đang có 55 tool bật). Giá và trạng thái free chỉ nêu ở
     // trang tool / tool trong shell, nơi đọc thẳng `tool_pricing`.
     + ddItem('/cong-cu',                'layout-grid', 'Tất cả công cụ')
-    + ddItem('/tools/tuong-mat-ai.html','smile',       'Xem tướng qua ảnh')
-    + ddItem('/tools/phong-thuy.html',  'compass',     'Phong thủy qua ảnh')
+    + ddItem('/app/dien-tuong','smile',       'Xem tướng qua ảnh')
+    + ddItem('/app/phong-thuy',  'compass',     'Phong thủy qua ảnh')
     + ddSection('Tra cứu')
     + ddItem('/menh-kho.html', 'gem',           'Mệnh Khố — 438K lá số')
     + ddItem('/ngay-tot',      'calendar-days', 'Ngày Tốt — Lịch vạn niên')

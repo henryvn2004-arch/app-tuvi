@@ -18,13 +18,13 @@
     { id:'han-nam',      url:'/tools/han-nam.html',            icon:'🔄', name:'Hạn Năm',                  cat:['tuvi','van-han'],               tags:['hạn năm','vận hạn','sao hạn'] },
     { id:'nap-am',       url:'/tools/nap-am.html',             icon:'🌀', name:'Nạp Âm Ngũ Hành',          cat:['tuvi','tinh-cach'],             tags:['nạp âm','ngũ hành','bản mệnh'] },
     // Xem Tướng
-    { id:'tuong-mat',    url:'/tools/tuong-mat-ai.html',       icon:'😊', name:'Xem Tướng Mặt',            cat:['tuong','tinh-cach'],            tags:['tướng mặt','nhân tướng','khuôn mặt'] },
-    { id:'nhan-tuong',   url:'/tools/nhan-tuong-ai.html',      icon:'👁', name:'Nhãn Tướng — Xem Mắt',     cat:['tuong','tinh-cach'],            tags:['tướng mắt','nhãn tướng','đôi mắt'] },
-    { id:'thu-tuong',    url:'/tools/thu-tuong-ai.html',       icon:'✋', name:'Thủ Tướng — Chỉ Tay',      cat:['tuong','tinh-cach'],            tags:['chỉ tay','thủ tướng','bàn tay'] },
-    { id:'thanh-tuong',  url:'/tools/thanh-tuong-ai.html',     icon:'🎤', name:'Thanh Tướng — Giọng Nói',  cat:['tuong','tinh-cach'],            tags:['giọng nói','thanh tướng'] },
+    { id:'tuong-mat',    url:'/app/dien-tuong',       icon:'😊', name:'Xem Tướng Mặt',            cat:['tuong','tinh-cach'],            tags:['tướng mặt','nhân tướng','khuôn mặt'] },
+    { id:'nhan-tuong',   url:'/app/nhan-tuong',      icon:'👁', name:'Nhãn Tướng — Xem Mắt',     cat:['tuong','tinh-cach'],            tags:['tướng mắt','nhãn tướng','đôi mắt'] },
+    { id:'thu-tuong',    url:'/app/thu-tuong',       icon:'✋', name:'Thủ Tướng — Chỉ Tay',      cat:['tuong','tinh-cach'],            tags:['chỉ tay','thủ tướng','bàn tay'] },
+    { id:'thanh-tuong',  url:'/app/thanh-tuong',     icon:'🎤', name:'Thanh Tướng — Giọng Nói',  cat:['tuong','tinh-cach'],            tags:['giọng nói','thanh tướng'] },
     { id:'khi-sac',      url:'/tools/khi-sac-ai.html',         icon:'🌅', name:'Khí Sắc — Vận Khí',        cat:['tuong','van-han'],              tags:['khí sắc','vận khí','khuôn mặt'] },
     // Phong Thủy
-    { id:'phong-thuy',   url:'/tools/phong-thuy.html',         icon:'🧭', name:'Phong Thủy Nội Thất',      cat:['phongthu','gia-dinh'],          tags:['phong thủy','nội thất','bố trí phòng'] },
+    { id:'phong-thuy',   url:'/app/phong-thuy',         icon:'🧭', name:'Phong Thủy Nội Thất',      cat:['phongthu','gia-dinh'],          tags:['phong thủy','nội thất','bố trí phòng'] },
     { id:'ban-lam-viec', url:'/tools/ban-lam-viec.html',       icon:'🖥', name:'Phong Thủy Bàn Làm Việc',  cat:['phongthu','cong-viec'],         tags:['phong thủy','bàn làm việc','văn phòng'] },
     { id:'cua-hang',     url:'/tools/cua-hang-phong-thuy.html',icon:'🏪', name:'Phong Thủy Cửa Hàng',      cat:['phongthu','cong-viec','tai-chinh'], tags:['phong thủy','cửa hàng','kinh doanh'] },
     { id:'bat-trach',    url:'/tools/bat-trach.html',           icon:'🧿', name:'Hướng Bát Trạch',          cat:['phongthu','gia-dinh'],          tags:['bát trạch','hướng nhà','phong thủy'] },
