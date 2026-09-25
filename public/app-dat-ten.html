@@ -10,7 +10,7 @@
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/shell.css?v=55">
+<link rel="stylesheet" href="/shell.css?v=56">
 <style>
 .form-card{max-width:600px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
@@ -94,7 +94,7 @@
         <p class="sub">Nhập họ, giới tính và năm sinh của con, bố, mẹ để tính nạp âm ngũ hành và lập nền đặt tên.</p>
         <p class="price-note" data-tvp-price-label="dat-ten-con">…</p>
         <div class="frow">
-          <div class="fg" style="flex:2;min-width:150px"><label>Họ (của con)</label><input type="text" id="inpHo" placeholder="Nguyễn"></div>
+          <div class="fg" style="flex:2;min-width:150px"><label>Họ (của con)</label><input type="text" id="inpHo" maxlength="30" placeholder="Nguyễn"></div>
           <div class="fg" style="width:110px"><label>Giới tính con</label><select id="inpGt"><option value="nam">Bé trai</option><option value="nu">Bé gái</option></select></div>
         </div>
         <div class="frow" style="margin-bottom:13px">
@@ -173,7 +173,7 @@ window.SHELL_INTRO={key:'dat-ten'};</script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
   <script src="/nav.js?v=42" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
-<script src="/shell.js?v=102"></script>
+<script src="/shell.js?v=103"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -193,7 +193,7 @@ function doDatTen(){
   try{
     var iCon=CanChi.ccInfo(namCon),iBo=CanChi.ccInfo(namBo),iMe=CanChi.ccInfo(namMe);
     var gtLabel=gt==='nu'?'Bé gái':'Bé trai';
-    document.getElementById('resHead').textContent='Nền can chi · ngũ hành '+esc(ho)+' — '+gtLabel;
+    document.getElementById('resHead').textContent='Nền can chi · ngũ hành '+ho+' — '+gtLabel;
     function ccCard(who,i){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(i.canChi)+'</div><div class="na" style="--hanh:'+HANH_COLOR[i.hanh]+'">'+esc(i.napAm)+' · <b>'+esc(i.hanh)+'</b></div></div>'; }
     document.getElementById('ccRow').innerHTML=ccCard('Con ('+gtLabel+')',iCon)+ccCard('Bố',iBo)+ccCard('Mẹ',iMe);
     document.getElementById('resNote').innerHTML='Mệnh con nạp âm <b>'+esc(iCon.napAm)+'</b> — hành <b>'+esc(iCon.hanh)+'</b>. Đặt tên nên chọn chữ có ngũ hành <b>tương sinh</b> cho con (hành <b>'+esc(_hanhSinhCho(iCon.hanh))+'</b> sinh <b>'+esc(iCon.hanh)+'</b>) hoặc <b>đồng hành</b> để bồi mệnh, tránh hành khắc. Hỏi trợ lý để có danh sách tên cụ thể hợp cả con lẫn bố mẹ.';
