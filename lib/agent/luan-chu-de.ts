@@ -60,7 +60,7 @@ interface ChuDe {
   // Phân loại một sao ở cung đang xét (null = không liên quan chủ đề).
   loaiSao: (s: Sao) => LoaiSao | null;
   // Nền cung chính: yếu tố ĐỘNG + yếu tố ỔN (đã xét mượn chính tinh).
-  nen: (palaces: Palace[], i: number) => { dong: string[]; on: string[]; tenOn: string };
+  nen: (palaces: Palace[], i: number) => { dong: string[]; on: string[]; tenOn: string; tenDong?: string };
   // Yếu tố ở TIỂU HẠN dùng cho luật mức biến động (Henry chốt từng chủ đề).
   hanDong: (palaces: Palace[], h: number) => string[];
   tenHanDong: string;
@@ -68,7 +68,9 @@ interface ChuDe {
   luatBienDong: string;
   // Năm "tốt" để quét khi hỏi bao giờ: sao cần có trong chùm tam phương cung hạn.
   // Không khai = chủ đề chưa được duyệt luật quét năm → không quét.
-  namTot?: { ten: string; thieu: string; hop: (s: Sao) => boolean };
+  // chiToa: chỉ xét sao TỌA ở cung hạn — chùm tam phương của một cung hạn chạm cung
+  // chính luôn gồm chính cung chính, nên sao ở gốc sẽ làm MỌI năm chạm đều "trúng".
+  namTot?: { ten: string; thieu: string; hop: (s: Sao) => boolean; chiToa?: boolean };
   // Các dòng riêng của chủ đề (cung đọc theo kiểu hỏi, luật riêng…).
   dongRieng: (x: { palaces: Palace[]; i: number; yd: Set<string>; gioi: 'nam' | 'nu' | null }) => string[];
   tinhChat: Record<string, string>;
@@ -90,11 +92,11 @@ function fmtSao(cd: ChuDe, p: Palace): string {
 }
 
 function nhanNen(cd: ChuDe, palaces: Palace[], i: number): { nhan: string; dong: string[] } {
-  const { dong, on, tenOn } = cd.nen(palaces, i);
+  const { dong, on, tenOn, tenDong = 'Sát Phá Tham' } = cd.nen(palaces, i);
   const t = dong.length && !on.length ? `BIẾN ĐỘNG (${dong.join(', ')})`
     : on.length && !dong.length ? `ỔN ĐỊNH (${on.join(', ')})`
     : dong.length ? `vừa động vừa giữ (${[...dong, ...on].join(', ')})`
-    : `trung tính (không có Sát Phá Tham lẫn ${tenOn})`;
+    : `trung tính (không có ${tenDong} lẫn ${tenOn})`;
   return { nhan: t, dong };
 }
 
@@ -129,7 +131,7 @@ function quetNam(cd: ChuDe, ls: Palace, c: number, tuNam: number, soNam = 10): s
       if (h < 0) continue;
       const cham = cachCham(h, c, cd.cung);
       if (!cham) continue;
-      const tot = uniq([h, xung(h), ...tamHop(h)].flatMap((j) => starsOf(palaces[j]).filter(nt.hop).map(nhan)));
+      const tot = uniq((nt.chiToa ? [h] : [h, xung(h), ...tamHop(h)]).flatMap((j) => starsOf(palaces[j]).filter(nt.hop).map(nhan)));
       if (tot.length) bits.push(`${tang} ${ten} ${cham}; ${tot.join(', ')}`);
     }
     if (bits.length) {
@@ -684,6 +686,290 @@ const HO_HANG: ChuDe = {
   duoiTinhChat: '',
 };
 
+// ── SỨC KHỎE (K1–K6) ─────────────────────────────────────────
+// Tật Ách: sát tinh / Kỵ / Tang Hổ là yếu tố ĐỘNG; Tử Phủ Đồng Lương + sao giải
+// (Giải Thần, Thiên Giải, Địa Giải, Thiên Quan, Thiên Phúc, Thiên Y, Khoa) là yếu tố ỔN.
+const Y_DINH_SUC_KHOE: Record<string, string> = {
+  'bao giờ|khi nào|năm nào|lúc nào|giai đoạn nào': 'thoi-diem',
+  'bệnh gì|dễ bị bệnh|hay bị bệnh|bệnh tật|yếu chỗ nào|bộ phận nào|cơ thể yếu|dễ mắc': 'benh',
+  'tai nạn|phẫu thuật|dao kéo|mổ xẻ|xe cộ|té ngã|va chạm': 'tai-nan',
+  'tuổi thọ|sống lâu|sống thọ|chết sớm|đoản thọ|thọ bao nhiêu': 'tho',
+  'có nên mổ|nên đi khám|nên kiêng|nên tập|giữ gìn': 'quyet-dinh',
+};
+const SK_GIAI = ['Giải Thần', 'Thiên Giải', 'Địa Giải', 'Thiên Quan', 'Thiên Phúc', 'Thiên Y'];
+const SK_TANG = ['Tang Môn', 'Bạch Hổ'];
+const skHung = (s: Sao) => s.hoa === 'Kỵ' || SAT_TINH.has(s.ten) || s.ten === 'Thiên Hình' || SK_TANG.includes(s.ten);
+const SK_TAI_NAN = ['Thiên Hình', 'Kình Dương', 'Đà La', 'Hỏa Tinh', 'Linh Tinh', 'Địa Không', 'Địa Kiếp'];
+const SUC_KHOE: ChuDe = {
+  id: 'suc-khoe',
+  ten: 'SỨC KHỎE',
+  cung: 'Tật Ách',
+  nghia: 'sức khỏe',
+  yDinh: matchers(Y_DINH_SUC_KHOE),
+  tenNhomSao: 'sao sức khỏe',
+  loaiSao: loaiTheo(['Tử Vi', 'Thiên Phủ', 'Thiên Đồng', 'Thiên Lương', ...SK_GIAI], [...HUNG_CHUNG, 'Hỏa Tinh', 'Linh Tinh', ...SK_TANG]),
+  nen: (palaces, i) => {
+    const chinh = chinhTinhXet(palaces, i).filter((s: Sao) => ['Tử Vi', 'Thiên Phủ', 'Thiên Đồng', 'Thiên Lương'].includes(s.ten));
+    const daCo = new Set(chinh.map((s: Sao) => s.ten));
+    return {
+      dong: uniq(starsOf(palaces[i]).filter(skHung).map(nhan)),
+      on: uniq([
+        ...chinh.map(nhan),
+        ...starsOf(palaces[i]).filter((s: Sao) => !daCo.has(s.ten) && (SK_GIAI.includes(s.ten) || s.hoa === 'Khoa')).map(nhan),
+      ]),
+      tenOn: 'sao cứu giải',
+      tenDong: 'sát tinh/Kỵ',
+    };
+  },
+  hanDong: (palaces, h) => uniq(starsOf(palaces[h]).filter(skHung).map(nhan)),
+  tenHanDong: 'sát tinh/Kỵ/Tang Hổ',
+  bienDong: 'sức khỏe có sóng (ốm vặt, va chạm nhỏ, cần giữ gìn)',
+  luatBienDong: 'Tật Ách gốc có sát tinh/Kỵ + tiểu hạn có sát tinh, Kỵ hoặc Tang Môn/Bạch Hổ; sao cứu giải ở gốc làm nhẹ đi',
+  namTot: { ten: 'Năm cần giữ gìn sức khỏe', thieu: 'Kỵ hoặc Tang Môn/Bạch Hổ', hop: (s: Sao) => s.hoa === 'Kỵ' || SK_TANG.includes(s.ten), chiToa: true },
+  dongRieng: ({ palaces, i, yd }) => {
+    const L = [
+      'Cung đọc: Tật Ách (chính); tam phương: Huynh Đệ, Điền Trạch, Phụ Mẫu (xung); Mệnh là thể chất gốc. Trọng số tọa thủ > xung chiếu > tam hợp.',
+      '@NEN',
+    ];
+    const tc = tinhChat(SUC_KHOE, palaces, i);
+    if (tc) L.push(tc);
+    if (yd.has('tai-nan')) {
+      const di = idxCung(palaces, 'Thiên Di');
+      const o = (j: number) => uniq(starsOf(palaces[j]).filter((s: Sao) => SK_TAI_NAN.includes(s.ten)).map((s: Sao) => s.ten));
+      const ta = o(i), td = di >= 0 ? o(di) : [];
+      L.push(`Hỏi TAI NẠN / DAO KÉO: Tật Ách — ${ta.join(', ') || 'không có sao dao kéo'}; Thiên Di (đường xá) — ${td.join(', ') || 'không có sao dao kéo'}. Thiên Hình chủ dao kéo/mổ xẻ, Kình Đà chủ va chạm, Hỏa Linh chủ bỏng/sốt. Nói nguy cơ + cách phòng, KHÔNG phán chắc sẽ gặp.`);
+    }
+    if (yd.has('tho')) L.push('Hỏi TUỔI THỌ: KHÔNG nêu số tuổi, không nói năm mất; chỉ nói thể chất gốc bền hay yếu và giai đoạn cần giữ gìn.');
+    L.push('@NAM');
+    L.push('AN TOÀN: KHÔNG chẩn đoán bệnh, không phán bệnh nan y / tuổi thọ / năm mất, không khuyên thuốc hay bỏ điều trị; có triệu chứng thì khuyên đi khám bác sĩ.');
+    return L;
+  },
+  // Ngũ hành chính tinh → tạng phủ (K3).
+  tinhChat: {
+    'Tử Vi': 'Thổ — tỳ vị, tiêu hóa',
+    'Thiên Phủ': 'Thổ — dạ dày, tiêu hóa',
+    'Thiên Cơ': 'Mộc — gan mật, thần kinh, tay chân',
+    'Thiên Lương': 'Mộc — gan, dạ dày',
+    'Thái Dương': 'Hỏa — đầu, mắt, tim, huyết áp',
+    'Liêm Trinh': 'Hỏa — tim mạch, máu huyết',
+    'Vũ Khúc': 'Kim — phổi, hô hấp, răng',
+    'Thất Sát': 'Kim — phổi, hô hấp; dễ va chạm',
+    'Thiên Đồng': 'Thủy — thận, bàng quang, bài tiết',
+    'Thái Âm': 'Thủy — thận, nội tiết, mắt',
+    'Tham Lang': 'Thủy — gan thận, sinh lý',
+    'Cự Môn': 'Thủy — miệng, họng, dạ dày',
+    'Thiên Tướng': 'Thủy — da, bàng quang',
+    'Phá Quân': 'Thủy — thận, bài tiết; dễ va chạm',
+  },
+  tenTinhChat: 'Vùng cơ thể cần để ý',
+  chiDanTinhChat: 'theo ngũ hành chính tinh Tật Ách: ',
+  duoiTinhChat: 'Chỉ là XU HƯỚNG thể chất để lưu ý, không phải chẩn đoán.',
+};
+
+// ── NHÀ ĐẤT (N1–N6) ──────────────────────────────────────────
+// Điền Trạch: yếu tố ĐỘNG = Sát Phá Tham / Kỵ / Không Kiếp / Hao (mua bán, đổi dời);
+// yếu tố ỔN = Tử Phủ, Thái Âm, Thiên Lương + Lộc (giữ được nhà, tích sản).
+const Y_DINH_NHA_DAT: Record<string, string> = {
+  'có nên|nên mua|nên bán|nên xây|nên sửa|nên chuyển nhà|nên đầu tư': 'quyet-dinh',
+  'bao giờ|khi nào|năm nào|lúc nào': 'thoi-diem',
+  'động thổ|nhập trạch|về nhà mới|chọn ngày|xem ngày|ngày tốt': 'chon-ngay',
+  'thừa kế|nhà tổ|hương hỏa|của để lại|chia nhà|tranh chấp đất': 'thua-ke',
+  'có nhà không|nhà riêng|mua được nhà|sở hữu nhà|an cư|bất động sản': 'so-huu',
+};
+const ND_HAO = ['Đại Hao', 'Tiểu Hao', 'Địa Không', 'Địa Kiếp'];
+const NHA_DAT: ChuDe = {
+  id: 'nha-dat',
+  ten: 'NHÀ ĐẤT',
+  cung: 'Điền Trạch',
+  nghia: 'nhà đất',
+  yDinh: matchers(Y_DINH_NHA_DAT),
+  tenNhomSao: 'sao nhà đất',
+  loaiSao: loaiTheo(['Tử Vi', 'Thiên Phủ', 'Thiên Lương', 'Lộc Tồn', 'Tả Phụ', 'Hữu Bật'], [...HUNG_CHUNG, 'Đại Hao', 'Tiểu Hao', 'Tuần', 'Triệt', 'Tuần+Triệt'], true),
+  nen: (palaces, i) => {
+    const chinh = chinhTinhXet(palaces, i);
+    return {
+      dong: uniq([
+        ...chinh.filter((s: Sao) => SAT_PHA_THAM.has(s.ten)).map((s: Sao) => s.ten),
+        ...starsOf(palaces[i]).filter((s: Sao) => s.hoa === 'Kỵ' || ND_HAO.includes(s.ten)).map(nhan),
+      ]),
+      on: uniq([
+        // Thái Âm chỉ giữ nhà khi miếu/vượng; chính tinh mang Kỵ đã tính bên động.
+        ...chinh
+          .filter((s: Sao) => s.hoa !== 'Kỵ' && (['Tử Vi', 'Thiên Phủ', 'Thiên Lương'].includes(s.ten) || (s.ten === 'Thái Âm' && /Miếu|Vượng/.test(s.brightness || ''))))
+          .map(nhan),
+        ...starsOf(palaces[i]).filter((s: Sao) => s.ten === 'Lộc Tồn' || (s.hoa === 'Lộc' && !chinh.includes(s))).map(nhan),
+      ]),
+      tenOn: 'Tử Phủ/Lộc',
+      tenDong: 'Sát Phá Tham/Hao',
+    };
+  },
+  hanDong: (palaces, h) =>
+    uniq(starsOf(palaces[h]).filter((s: Sao) => s.hoa === 'Kỵ' || s.ten === 'Thiên Mã' || ND_HAO.includes(s.ten) || SAT_TINH.has(s.ten)).map(nhan)),
+  tenHanDong: 'Mã/Hao/sát tinh/Kỵ',
+  bienDong: 'nhà đất có thay đổi (mua bán, dọn nhà, sửa sang)',
+  luatBienDong: 'Điền Trạch gốc có Sát Phá Tham/Kỵ/Hao + tiểu hạn có Thiên Mã, Hao, sát tinh hoặc Kỵ',
+  namTot: { ten: 'Năm thuận tậu nhà đất', thieu: 'Lộc (Lộc Tồn/Hóa Lộc)', hop: (s: Sao) => s.ten === 'Lộc Tồn' || s.hoa === 'Lộc', chiToa: true },
+  dongRieng: ({ palaces, yd }) => {
+    const L = [
+      'Cung đọc: Điền Trạch (chính — nhà cửa, đất đai, của để dành); tam phương: Tật Ách, Huynh Đệ, Tử Tức (xung); thêm Tài Bạch (tiền để mua). Trọng số tọa thủ > xung chiếu > tam hợp.',
+      '@NEN',
+    ];
+    const tb = idxCung(palaces, 'Tài Bạch');
+    if (tb >= 0) L.push(`Tài Bạch (tiền để mua): ${fmtSao(TAI_CHINH, palaces[tb])}.`);
+    L.push('@NAM');
+    if (yd.has('quyet-dinh')) {
+      L.push('Kiểu hỏi QUYẾT ĐỊNH (mua / bán / xây / sửa): câu đầu trả lời có / không / chưa. Căn cứ theo thứ tự: nền Điền Trạch gốc → năm nay hạn có chạm Điền Trạch không, gặp Lộc hay Hao/Kỵ → Tài Bạch có đủ lực không.');
+    }
+    if (yd.has('chon-ngay')) L.push('Hỏi CHỌN NGÀY động thổ / nhập trạch: lá số chỉ nói NĂM thuận hay không; ngày cụ thể phải GỌI xem_ngay_tot, không tự chọn ngày.');
+    if (yd.has('thua-ke')) L.push('Hỏi THỪA KẾ / NHÀ TỔ: đọc thêm Phúc Đức (của ông bà) và Phụ Mẫu; có tranh chấp thì nói nguy cơ và cách giữ hòa khí, KHÔNG xúi kiện.');
+    L.push('AN TOÀN: KHÔNG nêu giá, khu vực, dự án cụ thể; không khuyên vay bao nhiêu hay đòn bẩy bao nhiêu %.');
+    return L;
+  },
+  tinhChat: {},
+  tenTinhChat: '',
+  chiDanTinhChat: '',
+  duoiTinhChat: '',
+};
+
+// ── BẠN BÈ / QUÝ NHÂN (B1–B6) ────────────────────────────────
+const Y_DINH_BAN_BE: Record<string, string> = {
+  'có nên|nên hợp tác|nên tin|nên chơi|nên làm chung': 'quyet-dinh',
+  'bao giờ|khi nào|năm nào|lúc nào': 'thoi-diem',
+  'quý nhân|người giúp|được giúp|nâng đỡ|ai giúp|giúp đỡ': 'quy-nhan',
+  'tiểu nhân|bị hại|đâm sau lưng|phản bội|lợi dụng|kẻ xấu|hãm hại': 'tieu-nhan',
+  'nhân viên|cấp dưới|thuộc hạ|tuyển người|đội nhóm': 'thuoc-ha',
+  'đối tác|hợp tác|cộng sự|làm ăn chung': 'doi-tac',
+};
+const BB_QUY = ['Thiên Khôi', 'Thiên Việt', 'Tả Phụ', 'Hữu Bật'];
+function dongQuyNhan(palaces: Palace[]): string {
+  const o = BB_QUY.map((ten) => {
+    const p = palaces.find((x: Palace) => coSao(x, ten));
+    return `${ten} ở ${p ? p.cungName : 'không thấy'}`;
+  });
+  return `Quý nhân (server tra): ${o.join(' · ')}. Quý nhân đến qua việc mà cung đó chủ (Quan Lộc → công việc, Thiên Di → đi xa/người ngoài, Phụ Mẫu → người trên…).`;
+}
+const BAN_BE: ChuDe = {
+  id: 'ban-be',
+  ten: 'BẠN BÈ / QUÝ NHÂN',
+  cung: 'Nô Bộc',
+  nghia: 'chuyện bạn bè, cộng sự',
+  yDinh: matchers(Y_DINH_BAN_BE),
+  tenNhomSao: 'sao về bạn bè',
+  loaiSao: loaiTheo(['Tử Vi', 'Thiên Phủ', 'Thiên Đồng', 'Thiên Lương', ...BB_QUY], [...HUNG_CHUNG, 'Hỏa Tinh', 'Linh Tinh', 'Phục Binh', 'Quan Phù']),
+  nen: (palaces, i) => {
+    const chinh = chinhTinhXet(palaces, i);
+    return {
+      dong: uniq([
+        ...chinh.filter((s: Sao) => SAT_PHA_THAM.has(s.ten)).map((s: Sao) => s.ten),
+        ...starsOf(palaces[i]).filter((s: Sao) => s.hoa === 'Kỵ' || SAT_TINH.has(s.ten)).map(nhan),
+      ]),
+      on: uniq([
+        ...chinh.filter((s: Sao) => s.hoa !== 'Kỵ' && ['Tử Vi', 'Thiên Phủ', 'Thiên Đồng', 'Thiên Lương'].includes(s.ten)).map(nhan),
+        ...starsOf(palaces[i]).filter((s: Sao) => BB_QUY.includes(s.ten)).map((s: Sao) => s.ten),
+      ]),
+      tenOn: 'Tử Phủ Đồng Lương/quý nhân',
+      tenDong: 'Sát Phá Tham/sát tinh',
+    };
+  },
+  hanDong: (palaces, h) =>
+    uniq(starsOf(palaces[h]).filter((s: Sao) => s.hoa === 'Kỵ' || SAT_TINH.has(s.ten) || s.ten === 'Phục Binh' || s.ten === 'Quan Phù').map(nhan)),
+  tenHanDong: 'sát tinh/Kỵ/Phục Binh/Quan Phù',
+  bienDong: 'quan hệ bạn bè – cộng sự có sóng (va chạm, bị lợi dụng, thị phi)',
+  luatBienDong: 'Nô Bộc gốc có Sát Phá Tham/sát tinh/Kỵ + tiểu hạn có sát tinh, Kỵ, Phục Binh hoặc Quan Phù',
+  namTot: { ten: 'Năm dễ gặp quý nhân', thieu: 'Khôi/Việt hoặc Tả/Hữu', hop: (s: Sao) => BB_QUY.includes(s.ten), chiToa: true },
+  dongRieng: ({ palaces, yd }) => {
+    const L = [
+      'Cung đọc: Nô Bộc (chính — bạn bè, cộng sự, cấp dưới); tam phương: Tử Tức, Phụ Mẫu, Huynh Đệ (xung). Trọng số tọa thủ > xung chiếu > tam hợp.',
+      '@NEN',
+    ];
+    if (yd.has('quy-nhan') || !yd.size) L.push(dongQuyNhan(palaces));
+    L.push('@NAM');
+    if (yd.has('quyet-dinh')) {
+      L.push('Kiểu hỏi QUYẾT ĐỊNH (tin / hợp tác / làm chung): câu đầu trả lời có / không / chưa. Căn cứ: nền Nô Bộc gốc → năm nay hạn có chạm Nô Bộc không, gặp quý nhân hay Phục Binh/Kỵ.');
+    }
+    if (yd.has('doi-tac')) L.push('Hỏi ĐỐI TÁC / HỢP TÁC làm ăn: đọc thêm Tài Bạch (tiền chung) và Quan Lộc (việc chung); hợp tuổi với một người CỤ THỂ thì cần ngày sinh người đó.');
+    if (yd.has('thuoc-ha')) L.push('Hỏi NHÂN VIÊN / CẤP DƯỚI: Nô Bộc có quý nhân/Tử Phủ = người dưới đắc lực; sát tinh/Kỵ = khó giữ người, dễ bị qua mặt.');
+    L.push('AN TOÀN: KHÔNG chỉ đích danh ai là kẻ xấu (tuổi, tên, giới tính); chỉ nói kiểu hoàn cảnh cần đề phòng.');
+    return L;
+  },
+  tinhChat: {},
+  tenTinhChat: '',
+  chiDanTinhChat: '',
+  duoiTinhChat: '',
+};
+
+// ── XUẤT NGOẠI / ĐI XA (X1–X6) ───────────────────────────────
+const Y_DINH_DI_XA: Record<string, string> = {
+  'có nên|nên đi|nên định cư|nên du học|nên ra nước ngoài|nên đi xa': 'quyet-dinh',
+  'bao giờ|khi nào|năm nào|lúc nào': 'thoi-diem',
+  'định cư|xuất ngoại|du học|xuất khẩu lao động|ra nước ngoài|sống ở nước ngoài': 'xuat-ngoai',
+  'đi đường|xe cộ|tai nạn|đi lại|bình an|an toàn': 'an-toan',
+  'làm ăn xa|tha hương|xa quê|ra ngoài|người ngoài|xã giao': 'ngoai',
+};
+const DX_TAC = ['Tuần', 'Triệt', 'Tuần+Triệt', 'Đà La'];
+function dongThienMa(palaces: Palace[]): string {
+  const p = palaces.find((x: Palace) => coSao(x, 'Thiên Mã'));
+  if (!p) return 'Thiên Mã: không thấy trong lá số.';
+  const loc = starsOf(p).filter((s: Sao) => s.ten === 'Lộc Tồn' || s.hoa === 'Lộc').map(nhan);
+  const tac = uniq(starsOf(p).filter((s: Sao) => DX_TAC.includes(s.ten)).map((s: Sao) => s.ten));
+  const bits = [
+    loc.length ? `gặp ${loc.join(', ')} = LỘC MÃ GIAO TRÌ (đi xa sinh tài)` : '',
+    tac.length ? `gặp ${tac.join(', ')} = Mã TRẮC TRỞ (đi hay vướng, lỡ hẹn, giấy tờ chậm)` : '',
+  ].filter(Boolean);
+  return `Thiên Mã (server tra): ở ${p.cungName} (${p.diaChi})${bits.length ? '; ' + bits.join('; ') : '; không gặp Lộc lẫn Tuần/Triệt/Đà La'}.`;
+}
+const DI_XA: ChuDe = {
+  id: 'di-xa',
+  ten: 'XUẤT NGOẠI / ĐI XA',
+  cung: 'Thiên Di',
+  nghia: 'chuyện đi xa',
+  yDinh: matchers(Y_DINH_DI_XA),
+  tenNhomSao: 'sao đi xa',
+  loaiSao: loaiTheo(['Tử Vi', 'Thiên Phủ', 'Thiên Mã', 'Lộc Tồn', ...BB_QUY], [...HUNG_CHUNG, 'Hỏa Tinh', 'Linh Tinh', 'Tuần', 'Triệt', 'Tuần+Triệt']),
+  nen: (palaces, i) => {
+    const chinh = chinhTinhXet(palaces, i);
+    return {
+      dong: uniq([
+        ...chinh.filter((s: Sao) => SAT_PHA_THAM.has(s.ten)).map((s: Sao) => s.ten),
+        ...starsOf(palaces[i]).filter((s: Sao) => s.hoa === 'Kỵ' || s.ten === 'Thiên Mã').map(nhan),
+      ]),
+      on: chinh.filter((s: Sao) => s.hoa !== 'Kỵ' && ['Tử Vi', 'Thiên Phủ', 'Thiên Đồng', 'Thiên Lương'].includes(s.ten)).map(nhan),
+      tenOn: 'Tử Phủ Đồng Lương',
+      tenDong: 'Sát Phá Tham/Thiên Mã',
+    };
+  },
+  hanDong: (palaces, h) => uniq(starsOf(palaces[h]).filter((s: Sao) => s.hoa === 'Kỵ' || s.ten === 'Thiên Mã' || SAT_TINH.has(s.ten)).map(nhan)),
+  tenHanDong: 'Thiên Mã/sát tinh/Kỵ',
+  bienDong: 'đi xa, dời chỗ, đổi môi trường sống',
+  luatBienDong: 'Thiên Di gốc có Sát Phá Tham/Thiên Mã/Kỵ + tiểu hạn có Thiên Mã, sát tinh hoặc Kỵ',
+  namTot: { ten: 'Năm thuận đi xa / xuất ngoại', thieu: 'Thiên Mã hoặc Lộc', hop: (s: Sao) => s.ten === 'Thiên Mã' || s.ten === 'Lộc Tồn' || s.hoa === 'Lộc', chiToa: true },
+  dongRieng: ({ palaces, i, yd }) => {
+    const L = [
+      'Cung đọc: Thiên Di (chính — ra ngoài, đi xa, xuất ngoại, người ngoài); tam phương: Phu Thê, Phúc Đức, Mệnh (xung). Trọng số tọa thủ > xung chiếu > tam hợp.',
+      '@NEN',
+      dongThienMa(palaces),
+      '@NAM',
+    ];
+    if (yd.has('quyet-dinh')) {
+      L.push('Kiểu hỏi QUYẾT ĐỊNH (đi / ở, định cư, du học): câu đầu trả lời có / không / chưa. Căn cứ theo thứ tự: nền Thiên Di gốc → Thiên Mã (giao trì hay trắc trở) → năm nay hạn có chạm Thiên Di không, gặp Mã/Lộc hay sát tinh/Kỵ.');
+    }
+    if (yd.has('ngoai')) {
+      const tb = idxCung(palaces, 'Tài Bạch');
+      if (tb >= 0) L.push(`Hỏi LÀM ĂN XA: đọc thêm Tài Bạch — ${fmtSao(TAI_CHINH, palaces[tb])}; Lộc Mã giao trì là dấu hiệu đi xa sinh tài.`);
+    }
+    if (yd.has('an-toan')) {
+      const o = uniq(starsOf(palaces[i]).filter((s: Sao) => SK_TAI_NAN.includes(s.ten)).map((s: Sao) => s.ten));
+      L.push(`Hỏi AN TOÀN ĐI ĐƯỜNG: Thiên Di có ${o.length ? o.join(', ') : 'không có sao dao kéo/va chạm'}. Nói nguy cơ + cách phòng, KHÔNG phán chắc sẽ gặp nạn.`);
+    }
+    L.push('AN TOÀN: KHÔNG tư vấn visa, hồ sơ, luật di trú hay nước nào dễ đậu; không hứa chắc sẽ đi được.');
+    return L;
+  },
+  tinhChat: {},
+  tenTinhChat: '',
+  chiDanTinhChat: '',
+  duoiTinhChat: '',
+};
+
 const CHU_DE: Record<string, ChuDe> = {
   'su-nghiep': SU_NGHIEP,
   'tinh-duyen': TINH_DUYEN,
@@ -692,6 +978,10 @@ const CHU_DE: Record<string, ChuDe> = {
   'cha-me': CHA_ME,
   'anh-em': ANH_EM,
   'ho-hang': HO_HANG,
+  'suc-khoe': SUC_KHOE,
+  'nha-dat': NHA_DAT,
+  'ban-be': BAN_BE,
+  'di-xa': DI_XA,
 };
 
 const CON_TOI = /con (trai |gái )?tôi/;
@@ -699,6 +989,8 @@ const yDinhCua = (cd: ChuDe, q: string) => cd.yDinh.filter(([re]) => re.test(q))
 
 /**
  * Chủ đề của câu hỏi, hoặc null. Câu trúng NHIỀU cung chính thì phân xử:
+ *  0. sức khỏe + một chủ đề NGƯỜI (cha mẹ, anh em, con, vợ chồng…) → chủ đề người;
+ *     tài chính + nhà đất / đi xa → nhà đất / đi xa;
  *  1. hỏi về ĐỨA CON ("con tôi…") hoặc có cụm riêng của con cái → con cái — nếu
  *     không, "con trai tôi có nên chuyển việc" sẽ đọc Quan Lộc của CHA MẸ;
  *  2. hỏi về người phối ngẫu ("vợ tôi"/"chồng tôi", không phải "vợ chồng tôi") → tình duyên;
@@ -707,7 +999,11 @@ const yDinhCua = (cd: ChuDe, q: string) => cd.yDinh.filter(([re]) => re.test(q))
  */
 export function chuDeCuaCauHoi(question: string): string | null {
   const hit = primaryPalacesStrict(question);
-  const ds = Object.values(CHU_DE).filter((cd) => hit.has(cd.cung));
+  let ds = Object.values(CHU_DE).filter((cd) => hit.has(cd.cung));
+  // Sức khỏe của NGƯỜI KHÁC ("bố tôi có bệnh gì") đọc cung của người đó, không phải Tật Ách của đương số.
+  if (ds.length > 1 && ds.includes(SUC_KHOE)) ds = ds.filter((cd) => cd !== SUC_KHOE);
+  // Tiền mà hỏi đích danh nhà / đất ("đầu tư bất động sản") hay đi xa ("đi làm ăn xa") → chủ đề đó; khối của nó đã kèm Tài Bạch.
+  if ((ds.includes(NHA_DAT) || ds.includes(DI_XA)) && ds.includes(TAI_CHINH)) ds = ds.filter((cd) => cd !== TAI_CHINH);
   if (ds.length <= 1) return ds[0]?.id ?? null;
   const q = norm(question);
   if (ds.includes(CON_CAI) && (CON_TOI.test(q) || yDinhCua(CON_CAI, q).some((y) => y === 'so-con' || y === 'quyet-dinh'))) return CON_CAI.id;
