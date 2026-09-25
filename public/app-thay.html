@@ -65,7 +65,7 @@
     if (!list.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
     empty.style.display = 'none';
     grid.innerHTML = list.map(function(m){
-      return '<a class="thay-card" href="/app/thay/' + esc(m.id) + '">' +
+      return '<a class="thay-card" href="/tac-gia/' + esc(m.id) + '">' +
         '<img class="thay-ava" src="/authors/' + esc(m.id) + '.jpg" alt="" loading="lazy">' +
         '<div class="thay-tx">' +
           '<b>Thầy ' + esc(m.display_name) + '</b>' +
