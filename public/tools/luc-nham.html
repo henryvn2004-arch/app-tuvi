@@ -95,10 +95,6 @@
     <div class="res-block" style="margin-bottom:16px">
       <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
       <div class="res-block-body" id="activeBox" style="margin-bottom:20px"></div>
-      <div class="res-block-body">
-        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:12px">Tất Cả 12 Thần Tướng Trong Ngày</div>
-        <div class="than-wheel" id="thanWheel"></div>
-      </div>
     </div>
   </div>
   <div class="tool-cta">
@@ -113,7 +109,7 @@
   <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
   <div class="footer-links"><a href="/san-pham-dich-vu.html">Sản Phẩm &amp; Dịch Vụ</a><a href="/chinh-sach-bao-mat.html">Chính Sách Bảo Mật</a><a href="/dieu-khoan-dich-vu.html">Điều Khoản Sử Dụng</a><a href="/huong-dan-thanh-toan.html">Hướng Dẫn Thanh Toán</a><a href="/mien-tru-trach-nhiem.html">Miễn Trừ Trách Nhiệm</a></div>
 </footer>
-<script src="/tools-shared/luc-nham.js?v=3"></script>
+<script src="/tools-shared/luc-nham.js?v=4"></script>
 <script src="/tools-shared/dai-luc-nham.js?v=1"></script>
 <script>
 // `luc-nham.js` nay CHỈ dùng để kiểm ngày và dựng tiêu đề (can chi ngày của nó
@@ -131,7 +127,6 @@ function calculate(){
   var err=document.getElementById('error-msg');err.classList.remove('active');
   if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
   document.getElementById('resTitle').textContent=r.titleText;
-  document.getElementById('thanWheel').innerHTML='';
   document.getElementById('result-section').classList.add('active');
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
   DaiLucNham.ve(document.getElementById('activeBox'),_khiTu(_d,_m,_y,_g));

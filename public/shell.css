@@ -152,7 +152,12 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .btn:hover{border-color:var(--gold-soft);color:var(--text)}
 .btn.pri{background:var(--red);border-color:var(--red);color:#fff}
 .btn:disabled{opacity:.5;cursor:not-allowed}
-.ws-body{padding:18px 22px 44px}
+/* `min-width:0`: `.ws` là flex column (dòng trên), `.ws-body` là flex-item con
+   nên mặc định `min-width:auto` — một bảng rộng bọc `overflow-x:auto` bên
+   trong (vd `.km-bang-wrap` ở Kỳ Môn) vẫn đẩy được `.ws-body` rộng ra, tràn
+   cả trang ngang trên mobile thay vì cuộn RIÊNG trong bảng. Bẫy flex kinh
+   điển — không đụng gì khác vì mọi khối đang vừa cột thì hành vi giữ nguyên. */
+.ws-body{padding:18px 22px 44px;min-width:0}
 /* ── CỤM NÚT STICKY GÓC PHẢI DƯỚI ─────────────────────────────────────
    Chia sẻ · Hỏi · Lưu PDF · Đăng Facebook. Trước đây cả bốn nằm trong
    `.ws-top` — một thanh CUỘN THEO trang, nên đọc xong một khối luận dài

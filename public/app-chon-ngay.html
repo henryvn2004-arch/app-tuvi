@@ -10,7 +10,7 @@
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/shell.css?v=55">
+<link rel="stylesheet" href="/shell.css?v=56">
 <style>
 .form-card{max-width:600px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
@@ -104,7 +104,7 @@
               <option value="Mua xe">Mua xe</option>
             </select>
           </div>
-          <div class="fg" style="flex:1;min-width:130px"><label>Họ tên người chủ sự</label><input type="text" id="inpHoTen" placeholder="Nguyễn Văn A"></div>
+          <div class="fg" style="flex:1;min-width:130px"><label>Họ tên người chủ sự</label><input type="text" id="inpHoTen" maxlength="50" placeholder="Nguyễn Văn A"></div>
         </div>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="width:120px"><label>Năm sinh</label><input type="number" id="inpNamSinh" placeholder="1990" min="1900" max="2100"></div>
@@ -182,7 +182,7 @@ window.SHELL_INTRO={key:'chon-ngay'};</script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
   <script src="/nav.js?v=42" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
-<script src="/shell.js?v=102"></script>
+<script src="/shell.js?v=103"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -242,7 +242,7 @@ function doChonNgay(){
     var info=CanChi.ccInfo(namSinh);
     var thangCC=CanChi.ccThangCanChi(thangNum,namNum);
     var namCC=(CanChi.ccInfo(namNum)||{}).canChi||'';
-    document.getElementById('resHead').textContent=suKien+' · '+esc(hoTen);
+    document.getElementById('resHead').textContent=suKien+' · '+hoTen;
     function ccCard(who,cc,na){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(cc)+'</div>'+(na?'<div class="na">'+esc(na)+'</div>':'')+'</div>'; }
     document.getElementById('ccRow').innerHTML=
       ccCard('Tuổi chủ sự',info.canChi,info.napAm+' · '+info.hanh)+
