@@ -106,6 +106,16 @@ const BANG = [
     'topicMap',
     /const topicMap: Record<string, string\[\]> = \{([\s\S]*?)\n {2}\};/,
   ],
+  [
+    'lib/qimen/chu-de.ts',
+    'qimen-tu-khoa',
+    /const TU_KHOA: Record<string, ChuDeId> = \{([\s\S]*?)\n\};/,
+  ],
+  [
+    'lib/liuren/chu-de.ts',
+    'liuren-tu-khoa',
+    /const TU_KHOA: Record<string, ChuDeId> = \{([\s\S]*?)\n\};/,
+  ],
 ];
 
 let loi = 0;

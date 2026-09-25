@@ -185,8 +185,11 @@ function calculate(){
     if(!j){Shell.setShareable(null);return;}
     var k=j.khoa, so=k.tamTruyen[0];
     // ⚠️ payload gửi rail phải PHẲNG — `extractGenericContext` bỏ qua object.
+    // Ngoại lệ CỐ Ý: `khoa` (KhoaLucNham gốc, có tamTruyen/tuKhoa/thanSat cấu
+    // trúc) đi kèm để lib/liuren/chu-de.ts lọc theo chủ đề câu hỏi — chuỗi đã
+    // format ở `j.rail` không tách lại được tên thiên tướng một cách đáng tin.
     Shell.setContext({
-      scenario:{type:'luc-nham',data:Object.assign({ngayDL:r.data.ngayDL,gio:r.data.gio},j.rail)},
+      scenario:{type:'luc-nham',data:Object.assign({ngayDL:r.data.ngayDL,gio:r.data.gio,khoa:k},j.rail)},
       label:'Lục Nhâm · '+k.canChi.ngay+' giờ '+k.canChi.gio,
       greeting:'Đã lập khóa **Đại Lục Nhâm** — ngày '+k.canChi.ngay+', giờ '+k.canChi.gio+', '+k.truDem+
                '. Thủ truyền theo phép **'+k.phap.ten+'**, sơ truyền **'+so.chi+' · '+so.tuong+'**. Bạn muốn hỏi việc gì?',
