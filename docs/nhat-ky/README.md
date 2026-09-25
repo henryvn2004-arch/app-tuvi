@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-420 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+421 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 255 | 993,315 B |
+| `2026-09.md` | 256 | 997,008 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -26,6 +26,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 🕵️ Agent `ux-tester` đợt 3 — regression tự gây ra ở đợt 2 + chữ sai ngữ cảnh |
+| 1 | 2026-09 | `2026-09.md` | 🔗 Skill luận theo chủ đề — nối sang xem-tuổi/xem-làm-ăn/tương-hợp |
 | 1 | 2026-09 | `2026-09.md` | 🕵️ Agent `ux-tester` đợt 2 — phủ nốt 34 tool còn lại + vá 6 bug thật |
 | 1 | 2026-09 | `2026-09.md` | 🕵️ Agent `ux-tester` — đóng vai khách đi từng tool trên prod + 3 đợt vá |
 | 1 | 2026-09 | `2026-09.md` | 🀄 Tử Bình chat — `topicMap` chỉ CÒN 3/8 khoá có tác dụng |

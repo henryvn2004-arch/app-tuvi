@@ -1031,6 +1031,24 @@ export function khoiChuDe(question: string, ls: any, gioi: 'nam' | 'nu' | null =
   return `(Câu hỏi có HAI trọng tâm — trả lời ĐỦ cả hai, mỗi phần căn cứ đúng cung của nó, không trộn sao của phần này sang phần kia.)\n${khoi.join('\n')}`;
 }
 
+/**
+ * Khối chủ đề cho tool ĐÃ BIẾT SẴN chủ đề — không đoán qua câu hỏi như
+ * `khoiChuDe`. Dùng cho các trang đứng NGOÀI rail chính, mỗi trang gắn cứng
+ * một chủ đề (vd `xem-lam-an` → tài chính/sự nghiệp, `tuong-hop`/`xem-tuoi`
+ * chế độ hai lá số → tình duyên) — xem `app/api/xem-tuoi/route.ts` /
+ * `lib/agent/prompts.ts::extractCompatContext`. Vẫn đọc câu hỏi để bắt yDinh
+ * (quyết định/thời điểm…) và quét năm nếu người dùng hỏi thời điểm. Chủ đề
+ * ở `topicIds` không hợp lệ hoặc lá số thiếu cung → chuỗi rỗng, caller giữ
+ * nguyên phần context cũ (lưới đỡ), không phải lỗi.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function khoiChuDeCoDinh(topicIds: string[], question: string, ls: any, gioi: 'nam' | 'nu' | null = null): string {
+  if (!ls?.palaces) return '';
+  const khoi = topicIds.map((id) => CHU_DE[id]).filter(Boolean).map((cd) => khoiMotChuDe(cd, question, ls, gioi)).filter(Boolean);
+  if (khoi.length < 2) return khoi[0] || '';
+  return `(Trang này xem CẢ hai trọng tâm sau, mỗi phần căn cứ đúng cung của nó, không trộn sao của phần này sang phần kia.)\n${khoi.join('\n')}`;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function khoiMotChuDe(cd: ChuDe, question: string, ls: any, gioi: 'nam' | 'nu' | null): string {
   const palaces = ls.palaces;
