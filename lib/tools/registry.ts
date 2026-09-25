@@ -23,7 +23,7 @@ import { computeThanSoHoc } from '@/lib/engine/than-so-hoc';
 // CHAT_SYSTEM_THAN_SO; tên tool phải khớp TAY giữa hai file — đổi tên thì sửa
 // CẢ HAI.
 import { extractTuBinhContext, extractGenericContext } from '@/lib/agent/prompts';
-import { lanKinhNam } from '@/lib/agent/luan-chu-de';
+import { lanKinhNam, lanKinhThang, lanKinhNgay } from '@/lib/agent/luan-chu-de';
 import type { BirthParams } from '@/lib/contract/v1';
 import { SUGGEST_TOOL_DEF, SUGGEST_PRODUCT_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
@@ -277,6 +277,13 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
       const tv = ((ctx.ls as any)?.tieuVanScores || []).find((t: any) => Number(t.nam) === Number(arg?.nam));
       for (const cd of tv ? ctx.chuDe : []) {
         const lk = lanKinhNam(cd, ctx.ls, tv);
+        if (lk) content += '\n' + lk;
+      }
+    }
+    // Tháng / ngày: cùng lăng kính, tầng chính là nguyệt hạn / nhật hạn.
+    if ((name === 'tra_nguyet_van' || name === 'tra_nhat_van') && ctx.chuDe.length) {
+      for (const cd of ctx.chuDe) {
+        const lk = name === 'tra_nguyet_van' ? lanKinhThang(cd, ctx.ls, arg) : lanKinhNgay(cd, ctx.ls, arg);
         if (lk) content += '\n' + lk;
       }
     }
