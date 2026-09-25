@@ -28,6 +28,7 @@ import { SUGGEST_TOOL_DEF } from "@/lib/tools/suggest-tool";
 import { khoiChuDeCoDinh } from "@/lib/agent/luan-chu-de";
 import { personaVoice } from "@/lib/agent/personas";
 import { khoiChuDe as khoiChuDeKyMon } from "@/lib/qimen/chu-de";
+import { khoiChuDe as khoiChuDeLucNham } from "@/lib/liuren/chu-de";
 
 // "Hôm nay" gửi cho LLM PHẢI theo giờ VN, không theo giờ server (Vercel chạy
 // UTC) — nếu không, trong khung 00:00–06:59 giờ VN (=17:00–23:59 UTC hôm
@@ -253,7 +254,17 @@ export function buildChatContext(body: any): ChatContext {
     return { systemForCall: CHAT_SYSTEM_NGAY_TOT(extractGenericContext(body.ngayTotData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'luc-nham') {
-    return { systemForCall: CHAT_SYSTEM_LUC_NHAM(extractGenericContext(body.lucNhamData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
+    // Lăng kính chủ đề (lib/liuren/chu-de.ts) — cần KhoaLucNham gốc
+    // (`data.khoa`, trang gửi kèm bên cạnh rail đã format), câu hỏi lấy từ
+    // tin nhắn CUỐI (trang này không có ô "câu hỏi" riêng như Kỳ Môn).
+    const lnData = body.lucNhamData as { khoa?: import('@/lib/liuren/ke').KhoaLucNham } | undefined;
+    const lnLastQ = (body.messages as { role: string; content: string }[] | undefined)?.at(-1)?.content || '';
+    let lnCtx = extractGenericContext(lnData);
+    if (lnData?.khoa) {
+      const khoi = khoiChuDeLucNham(lnLastQ, lnData.khoa);
+      if (khoi) lnCtx += khoi;
+    }
+    return { systemForCall: CHAT_SYSTEM_LUC_NHAM(lnCtx, docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'ban-do-sao') {
     return { systemForCall: CHAT_SYSTEM_BAN_DO_SAO(extractGenericContext(body.banDoSaoData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };

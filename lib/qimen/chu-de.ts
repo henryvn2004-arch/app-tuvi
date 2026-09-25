@@ -24,15 +24,18 @@ type ChuDeId =
   | 'tai-chinh' | 'su-nghiep' | 'tinh-duyen' | 'kien-tung'
   | 'suc-khoe' | 'di-xa' | 'an-ninh' | 'hoc-hanh';
 
-const TU_KHOA: Record<ChuDeId, RegExp> = {
-  'tai-chinh': /tài chính|làm ăn|kinh doanh|đầu tư|buôn bán|mua bán|tiền bạc|cầu tài|vay nợ|đòi nợ/i,
-  'su-nghiep': /sự nghiệp|công việc|xin việc|thăng chức|khởi nghiệp|hợp tác|ký hợp đồng|đàm phán/i,
-  'tinh-duyen': /tình duyên|hôn nhân|kết hôn|cầu hôn|người yêu|tình cảm|cưới hỏi/i,
-  'kien-tung': /kiện tụng|tranh chấp|kiện cáo|pháp lý|tòa án|khẩu thiệt|thị phi/i,
-  'suc-khoe': /sức khỏe|bệnh tật|ốm đau|khám bệnh|tai nạn|tai ách/i,
-  'di-xa': /đi xa|xuất hành|du lịch|chuyển nhà|công tác xa|đi lại|lên đường/i,
-  'an-ninh': /mất trộm|trộm cắp|an ninh|thất lạc|lừa đảo|lừa gạt/i,
-  'hoc-hanh': /thi cử|học hành|thi tuyển|văn thư|hồ sơ|nộp đơn/i,
+// Khoá = cụm đủ nghĩa nối bằng `|` (cùng khuôn `FOCUS_TOPICS`/`Y_DINH_*` ở
+// lib/agent/luan-chu-de.ts) để `scripts/check-topic-patterns.mjs` canh được —
+// xem mục `qimen-tu-khoa` trong bộ dò đó. ĐỪNG đổi sang RegExp literal.
+const TU_KHOA: Record<string, ChuDeId> = {
+  'tài chính|làm ăn|kinh doanh|đầu tư|buôn bán|mua bán|tiền bạc|cầu tài|vay nợ|đòi nợ': 'tai-chinh',
+  'sự nghiệp|công việc|xin việc|thăng chức|khởi nghiệp|hợp tác|ký hợp đồng|đàm phán': 'su-nghiep',
+  'tình duyên|hôn nhân|kết hôn|cầu hôn|người yêu|tình cảm|cưới hỏi': 'tinh-duyen',
+  'kiện tụng|tranh chấp|kiện cáo|pháp lý|tòa án|khẩu thiệt|thị phi': 'kien-tung',
+  'sức khỏe|bệnh tật|ốm đau|khám bệnh|tai nạn|tai ách': 'suc-khoe',
+  'đi xa|xuất hành|du lịch|chuyển nhà|công tác xa|đi lại|lên đường': 'di-xa',
+  'mất trộm|trộm cắp|an ninh|thất lạc|lừa đảo|lừa gạt': 'an-ninh',
+  'thi cử|học hành|thi tuyển|văn thư|hồ sơ|nộp đơn': 'hoc-hanh',
 };
 
 /** Tên cửa/sao/thần được xếp vào từng chủ đề — đọc từ `nghia` đã có trong `terms.ts`. */
@@ -59,8 +62,8 @@ export function cacChuDe(cauHoi: string): ChuDeId[] {
   const q = String(cauHoi || '');
   if (!q.trim()) return [];
   const ra: ChuDeId[] = [];
-  for (const id of Object.keys(TU_KHOA) as ChuDeId[]) {
-    if (TU_KHOA[id].test(q)) ra.push(id);
+  for (const [mau, id] of Object.entries(TU_KHOA)) {
+    if (new RegExp(mau, 'i').test(q)) ra.push(id);
     if (ra.length >= 2) break;
   }
   return ra;

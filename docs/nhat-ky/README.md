@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-423 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+424 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 258 | 1,001,736 B |
+| `2026-09.md` | 259 | 1,003,570 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🧭 Lăng kính chủ đề cho Lục Nhâm + đưa `TU_KHOA` của cả hai vào `check:topics` |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Lăng kính chủ đề cho Kỳ Môn — lọc cửa/sao/thần theo `nghia` sẵn có |
 | 1 | 2026-09 | `2026-09.md` | 🧹 Dọn 3 mục nhẹ còn treo từ đợt `ux-tester` — không phải công thức cổ pháp |
 | 1 | 2026-09 | `2026-09.md` | 🕵️ Agent `ux-tester` đợt 3 — regression tự gây ra ở đợt 2 + chữ sai ngữ cảnh |
