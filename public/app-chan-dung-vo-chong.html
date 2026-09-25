@@ -102,7 +102,7 @@
         <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
         <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-      <div class="form-card" id="birthPanel">
+      <div class="form-card" id="birthPanel" style="display:none">
         <div class="fc-head"><span class="fc-ic" data-icon="image"></span><h2>Nhập ngày sinh của bạn (dương lịch)</h2></div>
         <p class="sub">Nhập ngày sinh, không cần thêm gì khác. Hệ thống đọc cung Phu Thê rồi dựng chân dung — hình thể suy từ sao, ảnh và luận giải chi tiết.</p>
         <div id="tuviFormHost"></div>
@@ -128,6 +128,10 @@
           <small>Tốn <span class="vnd" data-tvp-price-vnd="chan-dung-vo-chong"></span> <span class="cb-sub">(<span data-tvp-price="chan-dung-vo-chong">…</span> Lượng)</span></small>
         </button>
         <div class="err" id="error-msg"></div>
+      </div>
+      <div class="ws-intake-hint" id="wsIntakeHint">
+        <span class="ic" data-icon="message-circle"></span>
+        <p>Trả lời thầy ở khung chat để vẽ chân dung — chỉ cần ngày giờ sinh của bạn.</p>
       </div>
       </div>
       <div class="ws-side-col">
@@ -243,6 +247,11 @@
 // layout ảnh thật trong sandbox (403 CONNECT Supabase) — đo thật sau khi
 // deploy, cùng cách luan-giai (bước 4) từng làm.
 window.SHELL_CHATFIRST=true;
+// Bước 11: hội thoại nhập liệu thay form-card (lan từ duyen-no-tien-kiep, bước
+// 10) — thí điểm "chat là mặt chính TỪ ĐẦU" trên nhóm chân dung. So sánh sống
+// với 3 tool anh em đã chuyển trước (day-con/duyen-no-tien-kiep/nguoi-khac) —
+// xem `startIntake()` cuối file. KHÔNG đổi gì ở đường tính toán/`analyze()` cũ.
+window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'chan-dung-vo-chong'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
@@ -874,6 +883,22 @@ function _mountInviteCta() {
   document.head.appendChild(s);
 }
 
+
+// ── Bước 11: hội thoại nhập liệu trong rail ──
+// Cùng công thức luan-giai/duyen-no-tien-kiep: TuviForm.renderChat() lo 3 bước
+// chuẩn (họ tên tuỳ chọn, ngày giờ sinh, giới tính) rồi ghi vào field thật (ẩn
+// trong #birthPanel) qua setData() — analyze() phía trên đọc lại y hệt, không
+// đổi gì. `_tpwResuming()`/`pendingRestore()` chặn hỏi lại khi đang quay về từ
+// lượt nạp Lượng hoặc soft-nav phục hồi — cùng lưới an toàn của luan-giai.
+// Không có bước hỏi thêm nào sau đó (khác duyen-no-tien-kiep/luan-giai) nên
+// không cần tự dựng bong bóng chat tay — bỏ `chatAva()`, không dùng tới.
+function _tpwResuming(){ try{ return new URL(location.href).searchParams.get('tpwResume')==='1'; }catch(e){ return false; } }
+function startIntake(){
+  if(_tpwResuming())return;
+  if(window.Shell&&Shell.pendingRestore&&Shell.pendingRestore())return;
+  TuviForm.renderChat({ onDone:analyze });
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',startIntake);else startIntake();
 
 // ── B2 — nhận hand-off từ trang chia sẻ `/ket-qua` ───────────────────────────
 // Người mở link của bạn bè nhập ngày sinh NGAY TẠI trang chia sẻ rồi được đưa
