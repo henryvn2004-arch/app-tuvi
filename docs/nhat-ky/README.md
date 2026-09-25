@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-411 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+412 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 246 | 970,666 B |
+| `2026-09.md` | 247 | 973,031 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -26,6 +26,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 🐛 `ToolPrices.masterForTool is not a function` trên /app, /app/ho-so — lệch `?v=` |
+| 1 | 2026-09 | `2026-09.md` | 👶 Kỹ năng luận theo chủ đề — CON CÁI + phân xử câu trúng nhiều chủ đề |
 | 1 | 2026-09 | `2026-09.md` | 💰 Kỹ năng luận theo chủ đề — TÀI CHÍNH + vá mâu thuẫn "CAO mà không phải tâm điểm" |
 | 1 | 2026-09 | `2026-09.md` | 💞 Kỹ năng luận theo chủ đề — TÌNH DUYÊN + gom khuôn chung |
 | 1 | 2026-09 | `2026-09.md` | 🎯 Kỹ năng luận theo chủ đề — SỰ NGHIỆP |
