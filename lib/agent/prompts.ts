@@ -1371,7 +1371,7 @@ const FOCUS_TOPICS: Record<string, string[]> = {
   // 'tình cảm' đứng một mình CỐ Ý bỏ (T1, Henry 2026-09-25): mơ hồ, có thể là tình
   // cảm gia đình. 'quay lại' cũng không ở đây — dễ là "quay lại công ty cũ".
   'tình duyên|tình yêu|người yêu|bạn đời|vợ tôi|chồng tôi|vợ tương lai|chồng tương lai|vợ sau này|chồng sau này|bồ bịch|có bồ|hẹn hò|kết hôn|lấy vợ|lấy chồng|hôn nhân|vợ chồng|ly hôn|ly thân|chia tay|ngoại tình|lăng nhăng|người thứ ba|tái hôn|độc thân|đào hoa|phu thê': ['Phu Thê', 'Mệnh'],
-  'con cái|con cháu|tử tức':                             ['Tử Tức'],
+  'con cái|con cháu|tử tức|sinh con|sinh thêm|hiếm muộn|muộn con|mang thai|có bầu|đứa con|con trai tôi|con gái tôi|con tôi|mấy con|bao nhiêu con|có con không|có con chưa|tôi có con|sẽ có con|có em bé|con có hiếu|nhờ được con': ['Tử Tức'],
   'sức khỏe|bệnh|thân thể|tật ách':                     ['Tật Ách'],
   'nhà đất|bất động sản|điền trạch':                    ['Điền Trạch'],
   'anh em|huynh đệ':                                     ['Huynh Đệ'],
