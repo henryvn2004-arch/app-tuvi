@@ -5,7 +5,16 @@
    trang luận giải. Màu hardcode (không dùng biến theme của shell) — lá
    số luôn là "tài liệu trắng" nhất quán, không đổi theo dark mode.
    ============================================================ */
-.laso-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,auto);border:2px solid #333;background:#fff;border-radius:8px;overflow:hidden;color:#1a1a1a}
+/* `.ws-fab` (shell.css) là cụm nút Chia sẻ/Hỏi/Facebook/PDF `position:fixed`
+   neo GÓC PHẢI DƯỚI VIEWPORT (z-index:40), thiết kế cho bài luận văn xuôi —
+   ở đó cụm nút hạ cánh vào khoảng trắng giữa các đoạn. Lưới lá số thì KHÔNG
+   có khoảng trắng: 16 ô kín chữ tới sát viền, nên hễ ô nào (đặc biệt cột
+   ngoài cùng bên phải, "Tài Bạch"/"Tật Ách") rơi đúng dải 200px cao × 44px
+   rộng ở đáy màn hình là bị nút tròn ĐÈ LÊN chữ — đã chụp thật, khách báo
+   "lá số bị bể". z-index cao hơn fab (41 > 40) để LƯỚI luôn nổi trên cụm
+   nút khi chúng chồng nhau — nút mất chỗ bấm ĐÚNG dải đó, nhưng khách vẫn
+   bấm được ở vị trí cuộn khác; đổi ngược lại (che chữ) tệ hơn nhiều. */
+.laso-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,auto);border:2px solid #333;background:#fff;border-radius:8px;overflow:hidden;color:#1a1a1a;position:relative;z-index:41}
 .cung-cell{border:1px solid #888;padding:7px 7px 20px;min-height:170px;position:relative;display:flex;flex-direction:column;background:#fff;overflow:hidden}
 .cung-cell:hover{background:#FFFDF7}
 .cung-cell.cur-van{outline:2px solid #1E6B3C;outline-offset:-2px}
