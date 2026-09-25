@@ -398,6 +398,7 @@ async function handleCapture(body: Record<string, unknown>): Promise<Response> {
 // một `product` lạ bị hiểu nhầm là combo rồi mở khoá bậy.
 const COMBO_MEMBERS: Record<string, string[]> = {
   'combo-laso-tubinh': ['laso', 'tu-binh'],
+  'combo-tron-bo': ['laso', 'tu-binh', 'chu-trinh-cuoc-doi', 'van-han-nam'],
 };
 // use_laso/use_tubinh — PHẢI khớp đúng TOOL_TYPE mỗi tool tự khai (xem
 // tuvi-paywall.js TOOL_TYPE và app-chu-trinh-cuoc-doi.html/app-van-han-nam.html

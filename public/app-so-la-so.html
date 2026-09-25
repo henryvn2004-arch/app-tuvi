@@ -165,12 +165,14 @@
              '<span>' + (isOwned ? '✓ Đã có · Xem lại' : 'Xem / Tạo') + '</span>' +
              '</button>';
     }).join('') + '</div>' +
-    // Combo mua gộp — chỉ 2 tool đầu (laso+tu-binh) có giá combo hôm nay
-    // (Đợt 4 phần 2, 2026-09). Luôn hiện, không kiểm owns: mua lại (nếu đã
-    // sở hữu cả hai) chỉ trả về `alreadyPaid`, không mất Lượng — xem
-    // handleDeduct::comboSlugs trong app/api/payment/route.ts.
+    // Combo mua gộp (Đợt 4 phần 2+4, 2026-09). Luôn hiện, không kiểm owns:
+    // mua lại (nếu đã sở hữu đủ) chỉ trả về `alreadyPaid`, không mất Lượng —
+    // xem handleDeduct::comboSlugs trong app/api/payment/route.ts.
     '<button type="button" class="ls-rep-tile" data-goto="/app/combo-laso-tubinh" data-chart="' + it.id + '" style="grid-column:1/-1;border-color:var(--gold-soft)">' +
     '<b>🎁 Combo: Luận Giải + Tử Bình</b><span>Mua gộp cả hai, giá rẻ hơn mua rời</span>' +
+    '</button>' +
+    '<button type="button" class="ls-rep-tile" data-goto="/app/combo-tron-bo" data-chart="' + it.id + '" style="grid-column:1/-1;border-color:var(--gold-soft)">' +
+    '<b>🎁 Combo: Trọn Bộ 4 Tool</b><span>Luận Giải + Tử Bình + Chu Trình Cuộc Đời + Vận Hạn Năm</span>' +
     '</button>';
   }
 
