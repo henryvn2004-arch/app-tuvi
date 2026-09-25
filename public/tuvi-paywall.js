@@ -464,7 +464,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       hint.style.display = '';
       if (balance == null) {
         hint.className = 'tpw-hint';
-        hint.innerHTML = 'Thao tác này tốn <b>' + cost + ' Lượng</b> · ' +
+        // VNĐ là giá CHÍNH với khách (Henry, 2026-09-20) — cùng `_vndFirst` của lockPreview.
+        hint.innerHTML = 'Thao tác này tốn ' + _vndFirst(cost, window.ToolPrices ? window.ToolPrices.vndLabel(cost) : '') + ' · ' +
           '<a onclick="TuviPaywall._login()">đăng nhập</a> để xem số dư';
       } else if (balance < cost) {
         hint.className = 'tpw-hint low';

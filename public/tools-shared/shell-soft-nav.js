@@ -273,6 +273,11 @@
     }, 15000);
   }
 
+  // Trang ĐANG vẽ trong #ws. popstate cùng pathname KHÔNG phải đổi trang: shell.js
+  // tự pushState một mốc lịch sử (cùng URL) khi mở rail/sheet trên mobile rồi
+  // `history.back()` lúc đóng — thiếu phép so này thì bấm "Kết quả" (đóng rail)
+  // tải lại #ws và XOÁ TRẮNG kết quả khách vừa lập.
+  var shownPath = location.pathname;
   function go(path, replaceHistory) {
     if (navigating) return; // đã có full reload thật đang chạy — đừng đụng gì thêm
     if (inflight) { fullReload(path); return; }
@@ -299,6 +304,7 @@
         swapHeadStyles(doc);
         buryOldContent(curWs);
         curWs.innerHTML = newWs.innerHTML;
+        shownPath = path;
         closeOverlays();
         if (!replaceHistory) history.pushState({ softNav: true }, '', path);
         window.scrollTo(0, 0);
@@ -334,6 +340,7 @@
     });
 
     window.addEventListener('popstate', function () {
+      if (location.pathname === shownPath) return; // mốc rail/sheet của shell.js, không phải đổi trang
       if (SOFT_PAGES[location.pathname]) go(location.pathname, true);
     });
   }

@@ -222,7 +222,9 @@
   function compute(ngay, thang, nam, tenRaw, namXem) {
     ngay = parseInt(ngay, 10); thang = parseInt(thang, 10); nam = parseInt(nam, 10);
     if (!ngay || !thang || !nam) return { ok: false, error: 'Vui lòng nhập ngày tháng năm sinh.' };
-    if (ngay < 1 || ngay > 31 || thang < 1 || thang > 12 || nam < 1000 || nam > 9999) {
+    // 31/2 lọt `ngay > 31` rồi vẫn ra số chủ đạo như thật — kiểm ngày CÓ trong tháng.
+    if (ngay < 1 || thang < 1 || thang > 12 || nam < 1000 || nam > 9999 ||
+        new Date(nam, thang - 1, ngay).getDate() !== ngay) {
       return { ok: false, error: 'Ngày tháng năm sinh không hợp lệ.' };
     }
     var ten = boDau(tenRaw);

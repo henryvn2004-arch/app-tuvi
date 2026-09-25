@@ -12,6 +12,7 @@
   function compute(thang, nam, todayObj) {
     thang = parseInt(thang); nam = parseInt(nam);
     if (!nam || nam < 2020 || nam > 2030) return { ok: false, error: 'Nhập năm hợp lệ (2020–2030).' };
+    if (!thang || thang < 1 || thang > 12) return { ok: false, error: 'Chọn tháng từ 1 đến 12.' };
     var today = todayObj || new Date();
     var firstDay = new Date(nam, thang - 1, 1).getDay();
     var daysInMonth = new Date(nam, thang, 0).getDate();

@@ -44,7 +44,10 @@ const BUDGET = 8;
 
 function validBirth(b: unknown): b is BirthParams {
   const x = b as BirthParams | undefined;
-  return Boolean(x && Number(x.year) > 0 && Number(x.month) > 0 && Number(x.day) > 0);
+  if (!x) return false;
+  const y = Number(x.year), m = Number(x.month), d = Number(x.day);
+  // Ngày phải CÓ thật — 31/2 từng được nhận và tính (tool thu tiền).
+  return y > 0 && m >= 1 && m <= 12 && d >= 1 && new Date(Date.UTC(y, m - 1, d)).getUTCDate() === d;
 }
 
 /** Chuẩn hoá bộ trả lời client gửi lên — KHÔNG tin shape từ client. */

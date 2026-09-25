@@ -142,13 +142,13 @@ window.SHELL_CHATFIRST=true;
 // thoại 2 bước không dài dòng.
 window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'than-so-hoc'};</script>
-<script src="/tools-shared/than-so-hoc.js?v=3"></script>
+<script src="/tools-shared/than-so-hoc.js?v=4"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=6"></script>
+<script src="/tuvi-form.js?v=7"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=42" data-icons-only></script>
 <script src="/shell.js?v=100"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=2"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/than-so-hoc.js với trang standalone.
 function calculate(){
@@ -239,6 +239,7 @@ function startIntake(){
   TuviForm.renderChat({
     showGender: false,
     skipHour: true,
+    requireName: true,
     q1: 'Cho thầy xin họ tên đầy đủ khai sinh nhé — có dấu hay không đều được.',
     submitLabel: 'Tính thần số →',
     onDone: calculate

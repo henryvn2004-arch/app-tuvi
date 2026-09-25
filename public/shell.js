@@ -3228,7 +3228,7 @@
     });
   }
   function runNgayTot(chat, toolId) {
-    ensureScripts(['/tools-shared/ngay-tot.js?v=2'], function (err) {
+    ensureScripts(['/tools-shared/ngay-tot.js?v=3'], function (err) {
       if (err || typeof NgayTotTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Ngày Tốt.'); return; }
       var t = new Date();
       inlStep(chat,
@@ -3659,7 +3659,7 @@
   // lúc mở (y hệt cả 4 trang thật — không trang nào gọi lại setContext() sau
   // khi có kết quả), streamed text ở lại trong lịch sử chat làm "kết quả".
   function runTuongMatSSE(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=37'], function (err) {
+    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', '', 'Phân tích →', function (photo, bubbleEl, showErr) {
@@ -3732,7 +3732,7 @@
   // /api/tuong-mat, kết quả JSON. Trang thật gọi LẠI Shell.setContext() sau
   // khi có kết quả (label/greeting/chips theo đúng response) — replay y hệt.
   function runTuongMatJSON(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=37'], function (err) {
+    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', opts.extraFieldsHtml || '', 'Phân tích →', function (photo, bubbleEl, showErr) {
@@ -3853,7 +3853,7 @@
   // 'bat-trach' (bước 17), không chép công thức lần hai.
   var DOOR_DIR_OPTS = [['S', 'Nam'], ['N', 'Bắc'], ['E', 'Đông'], ['W', 'Tây'], ['SE', 'Đông Nam'], ['SW', 'Tây Nam'], ['NE', 'Đông Bắc'], ['NW', 'Tây Bắc']];
   function runPhongThuyPhoto(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=37', '/tools-shared/bat-trach.js?v=2'], function (err) {
+    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38', '/tools-shared/bat-trach.js?v=2'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var extraOpts = opts.extraOptions.map(function (o) { return '<option value="' + esc(o[0]) + '">' + esc(o[1]) + '</option>'; }).join('');
@@ -3964,7 +3964,7 @@
   // được 3/6 trục Cốt/Nhục/Thế — không phải suy diễn, chính trang thật cũng
   // chỉ đo được ngần đó khi người dùng chọn nhánh ảnh thay vì ký sống).
   function runButTuong(chat, toolId) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=37', '/tools-shared/but-tuong.js'], function (err) {
+    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38', '/tools-shared/but-tuong.js'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BuTuongTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Bút Tướng', placeholder: 'Hỏi thầy về bút tướng…',
@@ -4013,7 +4013,7 @@
   // ── Trả phí KHÔNG cần ảnh (mau-sac-hop-menh/trang-phuc-theo-ngay) — vẫn
   // qua requireCredits(), chỉ khác chỗ input là field chứ không phải ảnh.
   function runMauSacHopMenh(chat, toolId) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=37', '/tools-shared/bat-trach.js?v=2'], function (err) {
+    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38', '/tools-shared/bat-trach.js?v=2'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Màu Sắc Hợp Mệnh', placeholder: 'Hỏi thầy về màu sắc hợp mệnh…',
@@ -4079,7 +4079,7 @@
     return { text: 'Mệnh khắc Ngày — ngày trung bình, cẩn thận' };
   }
   function runTrangPhucTheoNgay(chat, toolId) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=37'], function (err) {
+    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Trang Phục Theo Ngày', placeholder: 'Hỏi thầy về trang phục theo ngày…',

@@ -534,6 +534,7 @@ window.TuviForm = (() => {
       showGender = true,
       showNamXem = false,
       skipHour   = false, // than-so-hoc: không cần giờ sinh — dừng sau bước 2
+      requireName = false, // than-so-hoc: tính TỪ họ tên, trống là trang báo lỗi vào #birthPanel đang ẩn ⇒ kẹt
       submitLabel = 'Tiếp tục →',
       q1 = showName
         ? (showGender ? 'Cho thầy xin họ tên và giới tính của con nhé.' : 'Cho thầy xin họ tên đầy đủ của con nhé.')
@@ -589,13 +590,17 @@ window.TuviForm = (() => {
         (showGender ? `<div class="fg" style="width:90px"><label>Giới tính</label><select id="${pid('gioitinh', cp)}"><option value="nam"${gioitinh === 'nam' ? ' selected' : ''}>Nam</option><option value="nu"${gioitinh === 'nu' ? ' selected' : ''}>Nữ</option></select></div>` : '') +
         (showNamXem ? `<div class="fg" style="width:90px"><label>Năm xem vận</label><input type="number" id="${pid('namXem', cp)}" value="${namXemDefault}" min="1900" max="2100"></div>` : '') +
       '</div>' +
-      `<button class="btn-go" type="button" id="${cp}-next1" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button>`);
+      `<button class="btn-go" type="button" id="${cp}-next1" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button>` +
+      `<div class="err tvf-err" id="${cp}-err1" role="alert"></div>`);
     const focusFirst = () => { const f = document.getElementById(pid('hoten', cp)) || document.getElementById(pid('gioitinh', cp)); if (f) f.focus(); };
     focusFirst();
     document.getElementById(cp + '-next1').addEventListener('click', function () {
       const hoten = showName ? (document.getElementById(pid('hoten', cp))?.value || '').trim() : '';
       const gioitinhV = showGender ? (document.getElementById(pid('gioitinh', cp))?.value || 'nam') : gioitinh;
       const namXemV = showNamXem ? (parseInt(document.getElementById(pid('namXem', cp))?.value) || namXemDefault) : undefined;
+      const err1 = document.getElementById(cp + '-err1');
+      if (requireName && !hoten) { err1.textContent = 'Vui lòng nhập họ tên.'; return; }
+      err1.textContent = '';
       const parts = [];
       if (hoten) parts.push('<b>' + esc(hoten) + '</b>');
       if (showGender) parts.push(gioitinhV === 'nam' ? 'Nam' : 'Nữ');
