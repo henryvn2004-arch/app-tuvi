@@ -2,7 +2,7 @@
 // ============================================================
 // KỸ NĂNG LUẬN THEO CHỦ ĐỀ — hỏi chuyện gì thì nhìn cung nào, sao nào, đọc
 // tầng thời gian ra sao. Nội dung cổ pháp do Henry duyệt từng mục (2026-09-25):
-// SỰ NGHIỆP (S1–S7), TÌNH DUYÊN (T1–T7). Thêm chủ đề = thêm MỘT `ChuDe` vào
+// SỰ NGHIỆP (S1–S7), TÌNH DUYÊN (T1–T7), TÀI CHÍNH (F1–F7). Thêm chủ đề = thêm MỘT `ChuDe` vào
 // `CHU_DE` bên dưới (chỉ khai dữ liệu); phần chạm cung / quét năm / lăng kính
 // năm là khuôn dùng chung. KHÔNG rải luật vào system prompt.
 //
@@ -305,7 +305,85 @@ const TINH_DUYEN: ChuDe = {
   duoiTinhChat: 'Sát Phá Tham ở Phu Thê chủ hôn nhân biến động, nên lấy muộn; Tử Phủ Đồng Lương chủ ổn định.',
 };
 
-const CHU_DE: Record<string, ChuDe> = { 'su-nghiep': SU_NGHIEP, 'tinh-duyen': TINH_DUYEN };
+// ── TÀI CHÍNH (F1–F7) ────────────────────────────────────────
+const Y_DINH_TAI_CHINH: Record<string, string> = {
+  'có nên|nên đầu tư|nên vay|nên cho vay|nên mua|nên bán|nên góp vốn': 'quyet-dinh',
+  'bao giờ|khi nào|năm nào|lúc nào': 'thoi-diem',
+  'có giàu|giàu không|kiếm tiền|giữ được tiền|giữ tiền|cách kiếm': 'ban-chat',
+  'mất tiền|hao tài|nợ nần|vay nợ|bị lừa|phá sản|thua lỗ|cho vay|đòi nợ': 'hao-tai',
+  'kinh doanh|làm ăn|buôn bán|làm công': 'lam-an',
+};
+const TC_TAI = new Set(['Vũ Khúc', 'Thiên Phủ', 'Thái Âm', 'Lộc Tồn', 'Thiên Mã']);
+const TC_HAO = new Set([
+  'Địa Không', 'Địa Kiếp', 'Đại Hao', 'Tiểu Hao', 'Kình Dương', 'Đà La',
+  'Kiếp Sát', 'Phá Toái', 'Tuần', 'Triệt', 'Tuần+Triệt',
+]);
+// Sao HAO dùng cho luật năm (F5.3): Không Kiếp, Đại/Tiểu Hao, Hóa Kỵ.
+const laSaoHao = (s: Sao) => s.hoa === 'Kỵ' || ['Địa Không', 'Địa Kiếp', 'Đại Hao', 'Tiểu Hao'].includes(s.ten);
+const coLoc = (p: Palace) => starsOf(p).some((s: Sao) => s.ten === 'Lộc Tồn' || s.hoa === 'Lộc');
+
+const TAI_CHINH: ChuDe = {
+  id: 'tai-chinh',
+  ten: 'TÀI CHÍNH',
+  cung: 'Tài Bạch',
+  nghia: 'tiền bạc',
+  yDinh: matchers(Y_DINH_TAI_CHINH),
+  tenNhomSao: 'sao tài chính',
+  loaiSao: (s) => (s.hoa === 'Kỵ' ? 'hung' : s.hoa === 'Lộc' ? 'cát' : TC_TAI.has(s.ten) ? 'cát' : TC_HAO.has(s.ten) ? 'hung' : null),
+  // F5.4: nền Tài Bạch ĐỘNG = Sát Phá Tham (tọa/mượn) / Không Kiếp / Đại–Tiểu Hao;
+  // GIỮ CỦA = Tử Phủ Vũ Tướng.
+  nen: (palaces, i) => ({
+    dong: uniq([
+      ...chinhTinhXet(palaces, i).filter((s: Sao) => SAT_PHA_THAM.has(s.ten)).map((s: Sao) => s.ten),
+      ...starsOf(palaces[i]).filter((s: Sao) => ['Địa Không', 'Địa Kiếp', 'Đại Hao', 'Tiểu Hao'].includes(s.ten)).map((s: Sao) => s.ten),
+    ]),
+    on: chinhTinhXet(palaces, i).filter((s: Sao) => ['Tử Vi', 'Thiên Phủ', 'Vũ Khúc', 'Thiên Tướng'].includes(s.ten)).map((s: Sao) => s.ten),
+    tenOn: 'Tử Phủ Vũ Tướng',
+  }),
+  // F5.4: tiểu hạn có sao HAO hoặc Thiên Mã (tọa thủ).
+  hanDong: (palaces, h) => uniq(starsOf(palaces[h]).filter((s: Sao) => laSaoHao(s) || s.ten === 'Thiên Mã').map(nhan)),
+  tenHanDong: 'sao hao/Thiên Mã',
+  bienDong: 'tiền bạc biến động (vào ra mạnh, được lớn hoặc hao lớn)',
+  luatBienDong: 'Tài Bạch gốc có yếu tố động (Sát Phá Tham/Không Kiếp/Đại–Tiểu Hao) + tiểu hạn có sao hao hoặc Thiên Mã',
+  namTot: { ten: 'Năm có lộc', thieu: 'Lộc Tồn/Hóa Lộc', hop: (s) => s.ten === 'Lộc Tồn' || s.hoa === 'Lộc' },
+  dongRieng: ({ palaces, i, yd }) => {
+    const cung = ['Tài Bạch (chính)', 'tam phương: Mệnh, Quan Lộc, Phúc Đức (xung)', 'Điền Trạch (kho giữ của)'];
+    if (yd.has('quyet-dinh') || yd.has('hao-tai')) cung.push('Nô Bộc (cho vay mượn, đối tác góp vốn)');
+    if (yd.has('lam-an')) cung.push('Nô Bộc (cho vay mượn, đối tác góp vốn)');
+    const L = [`Cung đọc: ${uniq(cung).join('; ')}. Trọng số tọa thủ > xung chiếu > tam hợp.`];
+    L.push('@NEN');
+    const dt = idxCung(palaces, 'Điền Trạch');
+    if (dt >= 0) L.push(`Điền Trạch (kho giữ của): ${fmtSao(TAI_CHINH, palaces[dt])}.`);
+    const tb = palaces[i];
+    if (coLoc(tb) && (coSao(tb, 'Địa Không') || coSao(tb, 'Địa Kiếp'))) L.push('Tài Bạch có Lộc gặp Không Kiếp: cách LỘC TAN — tiền đến rồi đi.');
+    if (coSao(tb, 'Vũ Khúc') && coLoc(tb)) L.push('Tài Bạch có Vũ Khúc gặp Lộc Tồn/Hóa Lộc: cách GIÀU.');
+    L.push('@NAM');
+    if (yd.has('quyet-dinh')) {
+      L.push('Kiểu hỏi QUYẾT ĐỊNH: câu đầu trả lời có / không / chưa. Căn cứ theo thứ tự: nền Tài Bạch gốc (động hay giữ của) → năm nay hạn có chạm Tài Bạch không, gặp sao tài hay sao hao.');
+    }
+    if (yd.has('hao-tai')) {
+      L.push('Hỏi HAO TÀI / NỢ / BỊ LỪA: căn cứ sao hao ở Tài Bạch, Điền Trạch (kho) và các năm hạn chạm Tài Bạch có Không Kiếp/Hao/Kỵ; nói nguy cơ và cách phòng, không đổ lỗi cho ai.');
+    }
+    if (yd.has('lam-an')) {
+      L.push('Hỏi LÀM ĂN: căn cứ nền Tài Bạch (động hay giữ của) để nói hợp tự làm ăn, chịu lên xuống, hay hợp giữ nguồn tiền đều.');
+    }
+    L.push('AN TOÀN: KHÔNG khuyên mã cổ phiếu, kênh đầu tư, số tiền hay TỈ LỆ % vốn cụ thể; KHÔNG hứa trúng số/chắc thắng — chỉ nói thời điểm thuận/nghịch, mức rủi ro, nên phòng gì.');
+    return L;
+  },
+  tinhChat: {
+    'Vũ Khúc': 'quyết đoán, đụng thẳng vào tiền', 'Thiên Phủ': 'giữ của giỏi', 'Thái Âm': 'tích tiểu thành đại',
+    'Tử Vi': 'tiền nhờ vị thế', 'Thất Sát': 'tiền từ mạo hiểm, lên xuống mạnh', 'Phá Quân': 'kiếm nhanh, tiêu nhanh',
+    'Tham Lang': 'nhiều nguồn, tiền từ giao tế', 'Cự Môn': 'tiền từ lời nói, cạnh tranh',
+    'Thiên Cơ': 'tiền từ tính toán, linh hoạt', 'Thiên Lương': 'tiền đều, không hợp đầu cơ',
+    'Thái Dương': 'tiền từ danh tiếng, hay chi cho người', 'Liêm Trinh': 'tiền trong khuôn khổ, dễ dính giấy tờ',
+    'Thiên Đồng': 'tay trắng làm nên', 'Thiên Tướng': 'tiền từ trung gian, dịch vụ',
+  },
+  tenTinhChat: 'Cách kiếm tiền',
+  chiDanTinhChat: '',
+  duoiTinhChat: 'Sát Phá Tham ở Tài Bạch chủ tiền biến động; Tử Phủ Vũ Tướng chủ giữ của.',
+};
+
+const CHU_DE: Record<string, ChuDe> = { 'su-nghiep': SU_NGHIEP, 'tinh-duyen': TINH_DUYEN, 'tai-chinh': TAI_CHINH };
 
 /**
  * Chủ đề của câu hỏi, hoặc null. Câu trúng CẢ HAI cung chính (vd "vợ chồng cùng
@@ -376,8 +454,12 @@ export function lanKinhNam(chuDe: string | null, ls: any, tv: any): string {
   }
   const muc = nen.dong.length && dongTieuHan.length ? 'CAO' : nen.dong.length || dongTieuHan.length ? 'VỪA' : 'THẤP';
   out.push(`- Khả năng ${cd.bienDong}: ${muc} — luật: ${cd.luatBienDong}.`);
+  // Luật mức biến động KHÔNG đòi hạn chạm cung chính (nền gốc + tiểu hạn), nên
+  // CAO mà không chạm là trường hợp có thật — đừng bảo "không phải tâm điểm".
   out.push(coCham
     ? `- Hai tầng hạn vẫn gọi tên, nhưng LUẬN QUA ý nghĩa ${cd.nghia}.`
-    : `- Không tầng nào chạm ${cd.cung} ⇒ nói rõ năm nay ${cd.nghia} KHÔNG phải tâm điểm biến động, chủ yếu đi theo nền gốc; vẫn gọi tên hai cung hạn nhưng chỉ nói phần ảnh hưởng tới ${cd.nghia}.`);
+    : muc === 'CAO'
+      ? `- Không tầng nào chạm ${cd.cung}, nhưng mức biến động CAO do nền gốc + sao ở tiểu hạn ⇒ nói rõ ${cd.nghia} năm nay có sóng, song không đến từ chính cung ${cd.cung}; vẫn gọi tên hai cung hạn nhưng chỉ nói phần ảnh hưởng tới ${cd.nghia}.`
+      : `- Không tầng nào chạm ${cd.cung} ⇒ nói rõ năm nay ${cd.nghia} KHÔNG phải tâm điểm biến động, chủ yếu đi theo nền gốc; vẫn gọi tên hai cung hạn nhưng chỉ nói phần ảnh hưởng tới ${cd.nghia}.`);
   return out.join('\n');
 }
