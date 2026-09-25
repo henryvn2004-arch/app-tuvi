@@ -23,7 +23,7 @@ import { computeThanSoHoc } from '@/lib/engine/than-so-hoc';
 // CHAT_SYSTEM_THAN_SO; tên tool phải khớp TAY giữa hai file — đổi tên thì sửa
 // CẢ HAI.
 import { extractTuBinhContext, extractGenericContext } from '@/lib/agent/prompts';
-import { lanKinhSuNghiepNam } from '@/lib/agent/luan-chu-de';
+import { lanKinhNam } from '@/lib/agent/luan-chu-de';
 import type { BirthParams } from '@/lib/contract/v1';
 import { SUGGEST_TOOL_DEF, SUGGEST_PRODUCT_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
@@ -272,10 +272,10 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
     // Lưới an toàn: tra_tieu_van thiếu năm → mặc định năm hiện tại (VN).
     const arg = name === 'tra_tieu_van' && !input?.nam ? { ...input, nam: currentYearVN() } : input;
     let content = execLasoTool(name, ctx.ls, arg);
-    if (name === 'tra_tieu_van' && ctx.chuDe === 'su-nghiep') {
+    if (name === 'tra_tieu_van' && ctx.chuDe) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const tv = ((ctx.ls as any)?.tieuVanScores || []).find((t: any) => Number(t.nam) === Number(arg?.nam));
-      const lk = tv ? lanKinhSuNghiepNam(ctx.ls, tv) : '';
+      const lk = tv ? lanKinhNam(ctx.chuDe, ctx.ls, tv) : '';
       if (lk) content += '\n' + lk;
     }
     return { content, label: toolLabel(name) };
