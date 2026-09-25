@@ -82,6 +82,7 @@
 .profile-since{color:rgba(255,255,255,.45);font-size:.78rem;margin-top:.3rem}
 .profile-signout{background:rgba(192,57,43,.2);border:1px solid rgba(220,80,60,.45);color:#f5a49a;padding:.5rem 1.1rem;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:600;transition:all .2s}
 .profile-signout:hover{background:rgba(192,57,43,.45);color:#fff;border-color:rgba(220,80,60,.8)}
+.profile-actions{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;justify-content:flex-end}
 .provider-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;color:rgba(255,255,255,.45);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:.15rem .6rem;margin-top:.35rem;width:fit-content}
 .credit-progress-wrap{margin:.85rem 0 .5rem}
 .credit-progress-label{display:flex;justify-content:space-between;font-size:.74rem;color:rgba(255,255,255,.5);margin-bottom:.45rem}
@@ -93,6 +94,10 @@
 .credit-widget-value small{font-size:.7rem;font-weight:400;color:rgba(255,255,255,.4);font-family:Arial,sans-serif;display:block}
 .btn-topup-sm{display:block;margin-top:.45rem;background:#c9a84c;color:#061A2E;font-size:.7rem;font-weight:700;padding:.3rem .5rem;border-radius:4px;text-decoration:none;text-align:center}
 .btn-topup-sm:hover{background:#f0d080}
+.credit-hero{background:var(--navy);border-radius:12px;padding:1.5rem 2rem;margin-bottom:1.25rem}
+.credit-hero-bal{color:#c9a84c;font-family:'Noto Serif',serif;font-size:2rem;font-weight:700}
+.credit-hero-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:.25rem}
+.credit-hero-btn{background:#c9a84c;color:#061A2E;padding:.75rem 1.5rem;border-radius:8px;font-size:.88rem;font-weight:700;text-decoration:none;align-self:flex-start;display:inline-flex;align-items:center;gap:.4rem}
 
 /* ── TABS ── */
 .tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.75rem;background:var(--bg);border-radius:8px 8px 0 0;overflow:hidden}
@@ -118,24 +123,28 @@
 .btn-sm{padding:.45rem 1rem;font-size:.8rem}
 
 /* ── LASO CARDS ── */
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
-.laso-card{background:var(--surface);border:1px solid var(--border-lt);border-radius:var(--radius);overflow:hidden;transition:box-shadow .2s;cursor:pointer}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.75rem}
+.laso-card{background:var(--surface);border:1px solid var(--border-lt);border-radius:14px;overflow:hidden;transition:box-shadow .2s;cursor:pointer}
 .laso-card:hover{box-shadow:0 4px 16px rgba(6,26,46,.1)}
-.card-top{background:var(--navy);padding:1rem 1.2rem;display:flex;align-items:center;gap:.75rem}
-.card-avatar{width:40px;height:40px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif',serif;font-size:1.1rem;color:#fff;font-weight:700;flex-shrink:0}
-.card-title{color:#fff;font-family:'Noto Serif',serif;font-size:.95rem;font-weight:700;line-height:1.3}
-.card-subtitle{color:rgba(255,255,255,.6);font-size:.76rem;margin-top:.15rem}
-.card-body{padding:1rem 1.2rem}
-.card-badges{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.85rem}
-.badge{background:var(--gold-lt);color:var(--tx-gold);border:1px solid var(--chip-gold-line);font-size:.72rem;padding:.2rem .55rem;border-radius:20px;font-weight:600}
+.lc-main{display:flex;gap:.75rem;padding:.85rem .95rem .8rem}
+.card-avatar{width:42px;height:42px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif',serif;font-size:1.1rem;color:#fff;font-weight:700;flex-shrink:0}
+.lc-info{flex:1;min-width:0}
+.lc-head{display:flex;align-items:baseline;justify-content:space-between;gap:.5rem}
+.card-title{color:var(--heading);font-family:'Noto Serif',serif;font-size:1rem;font-weight:700;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lc-date{flex:none;font-size:.72rem;color:var(--text-lt)}
+.lc-meta{font-size:.8rem;color:var(--text-lt);margin-top:.1rem}
+.card-badges{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.5rem}
+.badge{background:var(--gold-lt);color:var(--tx-gold);border:1px solid var(--chip-gold-line);font-size:.72rem;padding:.15rem .55rem;border-radius:20px;font-weight:600}
+.badge.gold{background:var(--gold);color:#fff;border-color:var(--gold)}
 .badge.blue{background:var(--chip-blue);color:var(--blue);border-color:var(--chip-blue-line)}
-.card-date{color:var(--text-lt);font-size:.75rem;margin-bottom:.85rem}
-.card-actions{display:flex;gap:.5rem}
+.card-actions{display:flex;border-top:1px solid var(--border-lt)}
+.lc-act{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:.35rem;padding:.65rem .4rem;background:none;border:none;font:inherit;font-size:.8rem;font-weight:600;color:var(--text-mid);cursor:pointer;white-space:nowrap}
+.lc-act+.lc-act{border-left:1px solid var(--border-lt)}
+.lc-act:hover,.lc-act:active{background:var(--bg-soft);color:var(--heading)}
+.lc-act.gold{color:var(--tx-gold)}
 .btn-outline{flex:1;padding:.5rem;font-size:.78rem;font-weight:600;border:1px solid var(--border);border-radius:5px;background:var(--surface);cursor:pointer;text-align:center;color:var(--text-mid);transition:all .2s;text-decoration:none;display:inline-block}
 .btn-outline:hover{border-color:var(--heading);color:var(--heading);background:var(--bg-soft)}
 .btn-outline.navy{border-color:var(--heading);color:var(--heading)}
-.btn-outline.gold{border-color:var(--tx-gold);color:var(--tx-gold)}
-.btn-outline.gold:hover{background:var(--gold-lt)}
 
 /* ── XEM TUOI LIST ── */
 .xem-list{display:flex;flex-direction:column;gap:.75rem}
@@ -146,6 +155,7 @@
 .xem-score.mid{color:var(--tx-amber);border-color:var(--chip-amber-line);background:var(--chip-amber)}
 .xem-score.low{color:var(--red);border-color:var(--red);background:var(--chip-red)}
 .xem-info{flex:1}
+.xem-item .btn-outline{flex:none}
 .xem-type{font-size:.72rem;color:var(--text-lt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem}
 .xem-names{font-weight:700;font-size:.95rem;color:var(--heading);font-family:'Noto Serif',serif}
 .xem-date{font-size:.76rem;color:var(--text-lt);margin-top:.2rem}
@@ -250,13 +260,78 @@
 .alert.success{background:var(--chip-green);color:var(--green);border:1px solid var(--chip-green-line)}
 .alert.error{background:var(--chip-red);color:var(--red);border:1px solid var(--chip-red-line)}
 
-@media(max-width:600px){
-  .profile-header{flex-direction:column;text-align:center;gap:1rem;padding:1.5rem}
-  .tabs{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .tabs::-webkit-scrollbar{display:none}
-  .tab-btn{min-width:95px;font-size:.77rem;padding:.7rem .35rem;white-space:nowrap}
-  .card-grid{grid-template-columns:1fr}
-  .xem-item{flex-wrap:wrap}
+/* Mobile kiểu app: thẻ bo 14px, hàng ngang gọn, chip cuộn ngang thay vì xuống dòng.
+   Trang này KHÔNG có rail ⇒ .ws rộng bằng viewport trên mobile, media query theo
+   viewport đo đúng. `.acct-scope` đứng trước để thắng các <style> riêng từng tab
+   (khai bằng #id, nằm SAU trong tài liệu). */
+@media(max-width:640px){
+  .acct-scope .page-wrap{padding:1rem 1rem 2.5rem}
+  .acct-scope .profile-header{flex-wrap:wrap;gap:.8rem 1rem;padding:1rem;border-radius:16px;margin-bottom:1rem}
+  .acct-scope .avatar{width:50px;height:50px;font-size:1.35rem}
+  .acct-scope .profile-info{min-width:0}
+  .acct-scope .profile-email{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.8rem}
+  .acct-scope .profile-name{font-size:1.1rem}
+  .acct-scope .profile-actions{flex-basis:100%;flex-wrap:nowrap;justify-content:space-between}
+  .acct-scope .credit-widget{flex:1;min-width:0;display:flex;align-items:center;gap:.55rem;text-align:left;padding:.45rem .45rem .45rem .8rem;border-radius:999px}
+  .acct-scope .credit-widget-label{display:none}
+  .acct-scope .credit-widget-value{font-size:1.05rem;white-space:nowrap}
+  .acct-scope .credit-widget-value small{display:inline;margin-left:.2rem}
+  .acct-scope .btn-topup-sm{margin:0 0 0 auto;padding:.4rem .75rem;border-radius:999px;white-space:nowrap}
+  .acct-scope .profile-signout{flex:none;padding:.5rem .85rem;border-radius:999px}
+
+  .acct-scope .tabs{gap:.4rem;border-bottom:none;background:none;border-radius:0;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;margin:0 -1rem 1rem;padding:0 1rem}
+  .acct-scope .tabs::-webkit-scrollbar{display:none}
+  .acct-scope .tab-btn{flex:none;top:0;border-bottom:none;border-radius:999px;padding:.5rem .9rem;font-size:.8rem;white-space:nowrap;background:var(--bg-soft);color:var(--text-mid)}
+  .acct-scope .tab-btn.active{background:var(--navy);color:#fff}
+  .acct-scope .tab-btn.active .tab-ic{color:#c9a84c}
+
+  .acct-scope #tab-lichsu .hist-stats,.acct-scope #tab-credits .vilu-stats,.acct-scope #tab-nhiemvu .nq-stats,.acct-scope #tab-ketnoi .conn-stats{display:flex;gap:0;background:var(--surface);border:1px solid var(--border-lt);border-radius:14px;padding:.65rem 0;margin-bottom:1rem}
+  .acct-scope #tab-lichsu .hist-stat,.acct-scope #tab-credits .vilu-stat,.acct-scope #tab-nhiemvu .nq-stat,.acct-scope #tab-ketnoi .conn-stat{flex:1;min-width:0;flex-direction:column;gap:.1rem;text-align:center;background:none;border:none;border-radius:0;padding:0 .3rem}
+  .acct-scope #tab-lichsu .hist-stat+.hist-stat,.acct-scope #tab-credits .vilu-stat+.vilu-stat,.acct-scope #tab-nhiemvu .nq-stat+.nq-stat,.acct-scope #tab-ketnoi .conn-stat+.conn-stat{border-left:1px solid var(--border-lt)}
+  .acct-scope #tab-lichsu .hist-stat-ic,.acct-scope #tab-credits .vilu-stat-ic,.acct-scope #tab-nhiemvu .nq-stat-ic,.acct-scope #tab-ketnoi .conn-stat-ic{display:none}
+  .acct-scope #tab-lichsu .hist-stat-l,.acct-scope #tab-credits .vilu-stat-l,.acct-scope #tab-nhiemvu .nq-stat-l,.acct-scope #tab-ketnoi .conn-stat-l{font-size:.66rem;line-height:1.3}
+
+  .acct-scope #tab-lichsu .hist-filters{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -1rem 1rem;padding:0 1rem}
+  .acct-scope #tab-lichsu .hist-filters::-webkit-scrollbar{display:none}
+  .acct-scope #tab-lichsu .hist-chip{flex:none;padding:.4rem .8rem;font-size:.8rem}
+  .acct-scope #tab-lichsu .hist-group{margin-bottom:1.25rem}
+
+  .acct-scope .card-grid{grid-template-columns:1fr}
+  .acct-scope .xem-item{padding:.75rem .85rem;gap:.75rem;border-radius:14px}
+  .acct-scope .xem-score{width:44px;height:44px;font-size:.95rem}
+  .acct-scope .xem-info{min-width:0}
+  .acct-scope .xem-names{font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .acct-scope .xem-item .btn-sm{padding:.4rem .75rem}
+  .acct-scope .tuong-grid{grid-template-columns:1fr;gap:.6rem}
+  .acct-scope .tuong-card{display:flex;align-items:center;border-radius:14px}
+  .acct-scope .tuong-thumb,.acct-scope .tuong-thumb-placeholder{width:72px;height:72px;margin:.7rem 0 .7rem .7rem;border-radius:10px;flex:none;font-size:1.4rem}
+  .acct-scope .tuong-card-body{flex:1;min-width:0;padding:.65rem .85rem}
+  .acct-scope .tuong-tool-badge{margin-bottom:.3rem}
+  .acct-scope .tuong-preview{-webkit-line-clamp:2;font-size:.78rem;margin-bottom:.3rem}
+  .acct-scope .chat-item{padding:.75rem .85rem;gap:.75rem;border-radius:14px}
+  .acct-scope .chat-info{min-width:0}
+  .acct-scope .chat-slug,.acct-scope .chat-meta{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .acct-scope .empty-state{padding:2rem .5rem}
+
+  .acct-scope .credit-hero{padding:1.1rem;border-radius:16px;margin-bottom:1rem}
+  .acct-scope .credit-hero-top{flex-wrap:nowrap;align-items:center}
+  .acct-scope .credit-hero-bal{font-size:1.6rem;white-space:nowrap}
+  .acct-scope .credit-hero-btn{flex:none;align-self:center;padding:.6rem 1rem;border-radius:999px;font-size:.84rem}
+  .acct-scope .account-section{padding:1rem;border-radius:14px}
+  .acct-scope .account-section h3{margin-bottom:.8rem}
+  .acct-scope #tab-credits .vilu-filters select{flex:1 1 100%}
+  .acct-scope #tab-credits .vilu-tbl-wrap{border:none;overflow:visible}
+  .acct-scope #tab-credits table.vilu-tbl,.acct-scope #tab-credits table.vilu-tbl tbody{display:block;min-width:0}
+  .acct-scope #tab-credits table.vilu-tbl thead{display:none}
+  .acct-scope #tab-credits table.vilu-tbl tr{display:grid;grid-template-columns:1fr auto;grid-template-areas:"nd amt" "time ma";gap:.15rem .75rem;padding:.65rem 0;border-bottom:1px solid var(--border-lt)}
+  .acct-scope #tab-credits table.vilu-tbl tr:last-child{border-bottom:none}
+  .acct-scope #tab-credits table.vilu-tbl td{padding:0;border:none}
+  .acct-scope #tab-credits table.vilu-tbl td:nth-child(1),.acct-scope #tab-credits table.vilu-tbl td:nth-child(3){display:none}
+  .acct-scope #tab-credits table.vilu-tbl td:nth-child(2){grid-area:time;font-size:.74rem;color:var(--text-lt)}
+  .acct-scope #tab-credits table.vilu-tbl td:nth-child(4){grid-area:nd;font-weight:600;min-width:0}
+  .acct-scope #tab-credits table.vilu-tbl td:nth-child(5){grid-area:amt;text-align:right}
+  .acct-scope #tab-credits table.vilu-tbl td:nth-child(6){grid-area:ma;text-align:right}
+  .acct-scope #tab-account .setnav-btn{flex:none;width:auto;white-space:nowrap}
 }
 </style>
 </head>
@@ -297,7 +372,7 @@
         <div class="profile-since" id="userSince"></div>
         <div id="providerBadge" style="display:none" class="provider-badge"></div>
       </div>
-      <div style="display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;justify-content:flex-end">
+      <div class="profile-actions">
         <div class="credit-widget">
           <div class="credit-widget-label">Lượng</div>
           <div class="credit-widget-value" id="headerCreditBalance"><small>...</small></div>
@@ -348,7 +423,6 @@
         #tab-lichsu .hist-search-row{margin-bottom:1.15rem}
         #tab-lichsu .hist-search{width:100%;border:1px solid var(--border-lt);border-radius:999px;padding:.55rem 1.1rem;font-size:.83rem;color:var(--text);background:var(--surface);font-family:inherit}
         #tab-lichsu .hist-search:focus{outline:2px solid var(--tx-gold);border-color:var(--tx-gold)}
-        @media(max-width:640px){#tab-lichsu .hist-stats{grid-template-columns:repeat(2,1fr)}}
       </style>
 
       <div class="hist-stats">
@@ -400,14 +474,14 @@
 
     <!-- Tab: Credits -->
     <div class="tab-content" id="tab-credits">
-      <div style="background:var(--navy);border-radius:12px;padding:1.5rem 2rem;margin-bottom:1.25rem">
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:.25rem">
+      <div class="credit-hero">
+        <div class="credit-hero-top">
           <div>
             <div style="color:rgba(255,255,255,.55);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Số Dư Lượng</div>
-            <div id="tabCreditBalance" style="color:#c9a84c;font-family:'Noto Serif',serif;font-size:2rem;font-weight:700">…</div>
-            <div style="color:rgba(255,255,255,.4);font-size:.75rem;margin-top:.3rem">$1 = 10 lượng · Không hết hạn</div>
+            <div id="tabCreditBalance" class="credit-hero-bal">…</div>
+            <div style="color:rgba(255,255,255,.4);font-size:.75rem;margin-top:.3rem">Không hết hạn</div>
           </div>
-          <a href="/topup.html" style="background:#c9a84c;color:#061A2E;padding:.75rem 1.5rem;border-radius:8px;font-size:.88rem;font-weight:700;text-decoration:none;align-self:flex-start;display:inline-flex;align-items:center;gap:.4rem"><span data-icon="wallet" style="width:16px;height:16px"></span> Nạp Lượng</a>
+          <a href="/topup.html" class="credit-hero-btn"><span data-icon="wallet" style="width:16px;height:16px"></span> Nạp Lượng</a>
         </div>
         <div class="credit-progress-wrap">
           <div class="credit-progress-label">
@@ -443,7 +517,6 @@
         #tab-credits .vilu-pgbtn{min-width:28px;height:28px;padding:0 .4rem;border:1px solid var(--border-lt);background:var(--surface);border-radius:6px;font-size:.8rem;color:var(--text-mid);cursor:pointer;font-family:inherit}
         #tab-credits .vilu-pgbtn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
         #tab-credits .vilu-pgbtn:disabled{opacity:.4;cursor:default}
-        @media(max-width:640px){#tab-credits .vilu-stats{grid-template-columns:1fr}}
       </style>
 
       <div class="vilu-stats">
@@ -507,7 +580,6 @@
         #tab-nhiemvu .nq-stat-ic [data-icon]{width:17px;height:17px}
         #tab-nhiemvu .nq-stat-v{font-family:'Noto Serif',serif;font-size:1.05rem;font-weight:700;color:var(--heading);line-height:1.15;font-variant-numeric:tabular-nums}
         #tab-nhiemvu .nq-stat-l{font-size:.72rem;color:var(--text-lt);margin-top:.1rem}
-        @media(max-width:640px){#tab-nhiemvu .nq-stats{grid-template-columns:repeat(2,1fr)}}
       </style>
 
       <div class="nq-stats">
@@ -947,7 +1019,7 @@ window.ACCOUNT_SHELL_CHAT = function () {
   } catch (e) { /* ignore */ }
 };
 </script>
-<script src="/account-core.js?v=10"></script>
+<script src="/account-core.js?v=11"></script>
 <script>
 // Mở đúng tab theo hash (#credits / #ketnoi / #account / #lichsu) khi vào từ sidebar.
 (function(){function openHash(){var h=(location.hash||'').replace('#','');if(h){var b=document.querySelector('[data-tab="'+h+'"]');if(b)b.click();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(openHash,300);});else setTimeout(openHash,300);})();

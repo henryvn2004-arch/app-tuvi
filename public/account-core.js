@@ -274,31 +274,26 @@ function lasoCard(l) {
   const date = new Date(l.created_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
   const name = l.person_name || l.slug;
   const letter = name[0].toUpperCase();
-  const gioi = l.gioi_tinh === 'nam' ? '♂ Nam' : '♀ Nữ';
+  // Chữ trơn, không ♂/♀: iOS vẽ hai ký tự đó bằng font dự phòng, lệch baseline khỏi dòng.
+  const gioi = l.gioi_tinh === 'nam' ? 'Nam' : 'Nữ';
   const ngaySinh = `${l.ngay_sinh}/${l.thang_sinh}/${l.nam_sinh}`;
-  // Cung Mệnh + cục hiện ngay subtitle trên card-top
   const menhCuc = [l.cung_menh ? `Mệnh ${l.cung_menh}` : '', l.cuc || ''].filter(Boolean).join(' · ');
-  const chinh = l.chinh_tinh ? `<span class="badge blue" style="margin-top:.5rem">${l.chinh_tinh}</span>` : '';
-  const napAm = l.nap_am ? `<span class="badge" style="margin-top:.5rem">${escHtml(l.nap_am)}</span>` : '';
+  const menh = menhCuc ? `<span class="badge gold">${escHtml(menhCuc)}</span>` : '';
+  const chinh = l.chinh_tinh ? `<span class="badge blue">${escHtml(l.chinh_tinh)}</span>` : '';
+  const napAm = l.nap_am ? `<span class="badge">${escHtml(l.nap_am)}</span>` : '';
   return `<div class="laso-card" onclick="openLuanModal('${l.slug}','${escHtml(name)}')">
-    <div class="card-top">
+    <div class="lc-main">
       <div class="card-avatar">${letter}</div>
-      <div>
-        <div class="card-title">${escHtml(name)}</div>
-        <div class="card-subtitle">${ngaySinh} · Giờ ${l.gio_chi} · ${gioi}</div>
-        ${menhCuc ? `<div class="card-subtitle" style="color:#c9a84c;margin-top:.2rem;font-weight:600">${menhCuc}</div>` : ''}
+      <div class="lc-info">
+        <div class="lc-head"><span class="card-title">${escHtml(name)}</span><span class="lc-date">${date}</span></div>
+        <div class="lc-meta">${ngaySinh} · Giờ ${l.gio_chi} · ${gioi}</div>
+        ${menh || chinh || napAm ? `<div class="card-badges">${menh}${chinh}${napAm}</div>` : ''}
       </div>
     </div>
-    <div class="card-body">
-      <div class="card-badges" style="margin-bottom:.6rem">
-        ${chinh}${napAm}
-      </div>
-      <div class="card-date">${ic('calendar',13)} ${date}</div>
-      <div class="card-actions">
-        <button class="btn-outline navy" onclick="event.stopPropagation();openLuanModal('${l.slug}','${escHtml(name)}')">${ic('book-open',14)} Xem Lại</button>
-        <button class="btn-outline gold" onclick="event.stopPropagation();openChatModal('${l.slug}','${escHtml(name)}','laso')">${ic('message-circle',14)} Chat</button>
-        ${isLuanGiaiPdfSlug(l.slug) ? `<button class="btn-outline" onclick="event.stopPropagation();resendLuanGiaiPdf('${l.slug}',this)">${ic('mail',14)} Gửi PDF</button>` : ''}
-      </div>
+    <div class="card-actions">
+      <button class="lc-act" onclick="event.stopPropagation();openLuanModal('${l.slug}','${escHtml(name)}')">${ic('book-open',15)} Xem lại</button>
+      <button class="lc-act gold" onclick="event.stopPropagation();openChatModal('${l.slug}','${escHtml(name)}','laso')">${ic('message-circle',15)} Chat</button>
+      ${isLuanGiaiPdfSlug(l.slug) ? `<button class="lc-act" onclick="event.stopPropagation();resendLuanGiaiPdf('${l.slug}',this)">${ic('mail',15)} Gửi PDF</button>` : ''}
     </div>
   </div>`;
 }
