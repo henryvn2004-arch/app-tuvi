@@ -32,6 +32,8 @@ const EXEMPT = {
     'Trò chuyện — trang NÓ CHÍNH LÀ danh sách phiên hội thoại gộp mọi công cụ (xem tcList trong trang), không cần khối "Phiên gần đây" của MỘT tool riêng lẻ',
   'app-combo-laso-tubinh.html':
     'trang mua combo — một lượt nhập ngày sinh rồi mua, không sinh nội dung/hội thoại riêng để lưu lại (2 tool thành viên đã có lịch sử riêng của chúng)',
+  'app-combo-tron-bo.html':
+    'trang mua combo — một lượt nhập ngày sinh rồi mua, không sinh nội dung/hội thoại riêng để lưu lại (4 tool thành viên đã có lịch sử riêng của chúng)',
 };
 
 const bad = [];

@@ -28,8 +28,9 @@ const DIR = path.join(ROOT, 'public');
 // (danh sách + gán nhóm quan hệ — không có kết quả nào để chia sẻ). `thay` là
 // danh sách 15 thầy, `tro-chuyen` là hộp thư hội thoại — cả hai đều KHÔNG
 // từng sinh một "kết quả" để chia sẻ, chỉ điều hướng sang trang/phiên khác.
-// `combo-laso-tubinh` bán 2 tool đã có nút Chia sẻ riêng — trang combo chỉ
-// hiện xác nhận đã mua + link, không sinh nội dung mới nào để chia sẻ.
+// `combo-laso-tubinh`/`combo-tron-bo` bán các tool đã có nút Chia sẻ riêng —
+// trang combo chỉ hiện xác nhận đã mua + link, không sinh nội dung mới để
+// chia sẻ.
 const NOT_A_TOOL = new Set([
   'home',
   'ho-so',
@@ -37,6 +38,7 @@ const NOT_A_TOOL = new Set([
   'thay',
   'tro-chuyen',
   'combo-laso-tubinh',
+  'combo-tron-bo',
 ]);
 
 const problems = [];
