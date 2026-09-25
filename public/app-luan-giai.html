@@ -362,12 +362,13 @@
       </div>
 
       <div id="lgPanel" data-ws-result>
-        <!-- Tầng hook (Pha 2 pilot) — đứng TRƯỚC lgScores, dựng bởi
-             mountHook() sau khi renderLuan() xong. Rỗng cho tới khi
-             HookLayer.run() chạy; không có gì thì tự để trống, không
-             chặn/làm chậm phần lgScores/miniChart/lgBody phía dưới. -->
+        <!-- Tầng hook (Pha 2 pilot) — dựng bởi mountHook() sau khi renderLuan()
+             xong. Rỗng cho tới khi HookLayer.run() chạy; không có gì thì tự để
+             trống, không chặn/làm chậm phần miniChart/lgBody phía dưới.
+             Đợt 2 phần 5 (2026-09-25): card điểm số thô (#lgScores) đã BỎ —
+             khối narrative này giờ là highlight DUY NHẤT, echo thẳng vào chat
+             qua appendHookHighlightCard() (xem onNarrative trong mountHook()). -->
         <div id="hookHost"></div>
-        <div class="scores" id="lgScores"></div>
         <div class="lg-save-prompt" id="lgSavePrompt" style="display:none"></div>
         <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
         <div class="chart-wrap" id="miniChart"></div>
@@ -604,7 +605,6 @@ var LG_RESUME_KEY='lg_pending_resume';
 var CUNG_ORDER=['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
 var SC_DIMS=['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
 function cungTotal(sc){ if(!sc)return null; var d=SC_DIMS.map(function(k){return sc[k]}).filter(function(v){return typeof v==='number'}); return d.length?Math.round(d.reduce(function(a,b){return a+b},0)/d.length*10)/10:null; }
-function scoreColor(t){ return t>=7?'var(--green)':t>=5?'var(--gold-soft)':'var(--red)'; }
 
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
 // có sẵn trong flow cũ (form → xem trước → paywall → kết quả), không tạo
@@ -640,34 +640,41 @@ function _hideIntakeSideBoxes(){
   var els=document.querySelectorAll('.ws-promo,.samp-cta,#shellRecent');
   for(var i=0;i<els.length;i++)els[i].style.display='none';
 }
-// Đợt 1 phần 2 (2026-09-24): thẻ report trong chat cho tool TRẢ PHÍ — cố ý
+// Đợt 2 phần 5 (2026-09-25): thẻ highlight trong chat — thay bản cũ
+// (appendReportCard, đọc lại điểm số thô #lgScores) bằng đúng bản LLM kể
+// chuyện đã render trong `#hookHost` (mountHook/HookLayer.run — cùng nội
+// dung khách thấy trên `.ws`, không tính/gọi model lần hai). Gọi từ
+// `spec.onNarrative` của mountHook() NÊN chỉ chạy khi narrative THẬT SỰ lên
+// hình (allowed:true) — quota hết/lỗi mạng thì hàm này không được gọi, chat
+// im lặng như cũ, không hiện gì hỏng dở (cùng triết lý HookLayer.run()).
 // KHÔNG đụng gì tới `#lgPanel`/paywall/`TuviPaywall.requireCredits` (luật
-// tiền trong CLAUDE.md, và `#lgPanel` còn phải đứng nguyên vị trí trong
-// `.ws` cho @media print — di dời nó vào sheet sẽ vỡ luật in PDF ở
-// shell.css). Thẻ chỉ đọc lại 3 con số đã render trong `#lgScores` (DOM,
-// không tính lại) rồi bấm "Xem" = bấm HỘ đúng nút "Kết quả" (`[data-act=
-// "artifact"]`) đã có sẵn và đã chạy đúng — không thêm đường mới, không
-// thêm sheet, không đổi bất cứ gì trong luồng thanh toán.
-function appendReportCard(){
+// tiền trong CLAUDE.md) — nút "Xem" chỉ bấm HỘ đúng nút "Kết quả"
+// (`[data-act="artifact"]`) đã có sẵn, không thêm đường mới.
+function appendHookHighlightCard(){
   var chat=document.getElementById('chat');
-  var scores=document.getElementById('lgScores');
-  if(!chat||!scores) return;
+  var host=document.getElementById('hookHost');
+  if(!chat||!host) return;
+  var boxes=Array.prototype.slice.call(host.querySelectorAll('.hkl-nb-box'));
+  if(!boxes.length) return;
   var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; })();
-  var cards=Array.prototype.slice.call(scores.querySelectorAll('.sc')).map(function(sc){
-    var lb=sc.querySelector('.lb'), vl=sc.querySelector('.vl');
-    var v=vl&&vl.firstChild?vl.firstChild.textContent:'—';
-    return '<div class="chat-hl-n"><b>'+esc(v)+'</b><span>'+esc(lb?lb.textContent:'')+'</span></div>';
+  var rows=boxes.map(function(b){
+    var t=b.querySelector('.hkl-nb-box-head b'), h=b.querySelector('.hkl-nb-hook');
+    return '<div class="chat-hl-box"><b>'+esc(t?t.textContent:'')+'</b><span>'+esc(h?h.textContent:'')+'</span></div>';
   }).join('');
-  if(!cards) return; // renderLuan() lỗi hoặc chưa kịp dựng #lgScores — đừng đẩy thẻ rỗng
   var el=document.createElement('div'); el.className='msg a';
   el.innerHTML='<img class="msg-ava" src="'+av+'" alt="">'+
-    '<div class="msg-body"><div class="chat-hl"><div class="chat-hl-row">'+cards+'</div>'+
+    '<div class="msg-body"><div class="chat-hl"><div class="chat-hl-h">'+boxes.length+' điều quan trọng nhất</div>'+
+    '<div class="chat-hl-boxes">'+rows+'</div>'+
     '<button type="button" class="chat-hl-cta" id="lgOpenResult">Xem lá số 12 cung →</button></div></div>';
-  chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  chat.appendChild(el);
   document.getElementById('lgOpenResult').addEventListener('click',function(){
     var ab=document.querySelector('[data-act="artifact"]');
     if(ab) ab.click();
   });
+  var follow=document.createElement('div'); follow.className='msg a';
+  follow.innerHTML='<img class="msg-ava" src="'+av+'" alt=""><div class="msg-body"><p>Bạn muốn thầy đào sâu điều nào trước?</p></div>';
+  chat.appendChild(follow);
+  chat.scrollTop=chat.scrollHeight;
 }
 async function doLuan(){
   var btn=document.getElementById('btnGo');
@@ -740,7 +747,6 @@ async function doLuan(){
       text:_shareHead,
       liveText:true
     });
-    appendReportCard();
     initLuanGiaiGate(ls);
     // Mục "Ai Sinh Cùng Ngày Với Bạn". Đặt SAU khi bản luận đã dựng xong: nó
     // là phần phụ, không được chặn hay làm chậm thứ người dùng vừa trả tiền.
@@ -770,22 +776,6 @@ async function doLuan(){
 // đúng người này đã trả tiền cho ĐÚNG slug này — không suy từ trạng thái
 // đăng nhập nữa.
 function renderLuan(ls,fd,namxem,forceUnlocked){
-  // totals per cung
-  var totals={};var arr=[];
-  CUNG_ORDER.forEach(function(cn){ var t=cungTotal(ls.cungScores&&ls.cungScores[cn]); totals[cn]=t; if(t!=null)arr.push({cn:cn,t:t}); });
-  var overall=arr.length?Math.round(arr.reduce(function(a,b){return a+b.t},0)/arr.length*10)/10:null;
-  var dvHT=ls.daiVanHienTai, dvTong=dvHT&&dvHT.scoring?dvHT.scoring.tong:null;
-  var tvCung=ls.palaces&&ls.palaces[ls.tieuHanIdx];
-  var sorted=arr.slice().sort(function(a,b){return b.t-a.t});
-  var top3=sorted.slice(0,3), bot3=sorted.slice(-3).reverse();
-
-  // score cards
-  document.getElementById('lgScores').innerHTML=
-    card('Tổng quan lá số',overall) + card('Đại vận '+(dvHT?dvHT.tuoiStart+'–'+dvHT.tuoiEnd+'t':''),dvTong) +
-    '<div class="sc"><div class="lb">Cách cục</div><div class="vl" style="font-size:19px;color:var(--heading)">'+((ls.cachCuc&&ls.cachCuc.length)||0)+'</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>';
-
-  function card(lb,t){ var col=t!=null?scoreColor(t):'var(--text-lt)'; return '<div class="sc"><div class="lb">'+esc(lb)+'</div><div class="vl" style="color:'+col+'">'+(t!=null?t:'—')+'<small>/10</small></div><div class="pbar"><i style="width:'+(t!=null?t*10:0)+'%;background:'+col+'"></i></div></div>'; }
-
   // ── 24 phần — port deterministic (LuanGiaiCore.buildPreGenHtml) + nút hỏi rail mỗi phần ──
   // LUÔN dựng ĐỦ 24 phần vào DOM — kể cả khách chưa đăng ký. Cấu trúc (tiêu
   // đề, có bao nhiêu phần) là thứ MỌI người thấy được; khách chưa đăng ký chỉ
@@ -823,12 +813,11 @@ function renderLuan(ls,fd,namxem,forceUnlocked){
   // _tensionLine() (_worstCung dùng chung) nên câu chữ và chấm đánh dấu trên
   // mục lục LUÔN chỉ về đúng một phần. ls.cungScores đã tính XONG ở client
   // (deterministic, không cần AI) nên đánh dấu được NGAY LÚC render, không
-  // phải chờ bản xem trước — cùng dữ liệu score cards/buildLuanChips đã hiện
-  // công khai ở trên, không phải tín hiệu mới.
+  // phải chờ bản xem trước — cùng dữ liệu buildLuanChips đã hiện công khai
+  // ở trên, không phải tín hiệu mới.
   var _worst=_worstCung(ls);
   renderJump(LABELS,_worst?CUNG_ORDER.indexOf(_worst.cn)+2:null);
   wirePhanAsk(document.getElementById('lgBody'));
-  return {overall:overall, dvTong:dvTong};
 }
 
 // ── Tầng hook (Pha 2 pilot — workplan tầng hook) ─────────────────────────
@@ -874,10 +863,13 @@ function mountHook(ls){
         tieuDe:'Bản đầy đủ trả lời làm gì với nó',
         items:['11 cung còn lại — mỗi cung một phần luận riêng, viết theo cổ pháp','Cách cục, tứ hoá và quy tắc của từng cung'],
         onUnlock:function(){ return initiateLuanGiaiChuyenSau('hook'); }
-      }
+      },
       // 3 box cột phụ (Giới thiệu/Bản luận giải mẫu/Phiên gần đây) đã bị
       // `_hideIntakeSideBoxes()` ẩn ngay lúc bấm nút trong `doLuan()` — không
       // cần đợi tới lúc narrative xong mới ẩn nữa.
+      // Đợt 2 phần 5 (2026-09-25): echo NGAY narrative này vào chat — xem
+      // appendHookHighlightCard(). Chỉ bắn khi allowed:true (xem chú thích ở đó).
+      onNarrative:appendHookHighlightCard
     };
     window.HookLayer.run(host, spec);
   });
