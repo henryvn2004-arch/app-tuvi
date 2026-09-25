@@ -127,7 +127,8 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    CỘT giữa sidebar (246px) và rail (--rail-w), KHÔNG theo viewport (xem bẫy
    trong CLAUDE.md). `@container ws (...)` bên dưới hỏi đúng bề rộng cột này. */
 .ws{background:var(--paper);overflow-y:auto;display:flex;flex-direction:column;position:relative;container:ws/inline-size}
-.ws-top{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding:12px 22px;display:flex;align-items:center;gap:14px}
+/* z-index phải VƯỢT `.laso-grid` (41, laso-chart.css) — thấp hơn là lưới lá số cuộn ĐÈ LÊN header dính. */
+.ws-top{position:sticky;top:0;z-index:42;background:var(--paper);border-bottom:1px solid var(--line);padding:12px 22px;display:flex;align-items:center;gap:14px}
 /* Icon cố định cạnh tên tool trên `.ws-top` — xem `mountToolIcon()` trong
    shell.js. Icon (không phải ảnh minh hoạ .intro-avatar): ở cỡ 32-40px một
    icon đơn sắc đọc rõ hơn hẳn ảnh 1024×1024 thu nhỏ hết chi tiết. */
@@ -1065,7 +1066,7 @@ font-family:inherit}
 /* Thanh DÍNH "Đây là BẢN MẪU" — hiện phía trên kết quả khi bản mẫu đang tự mở
    (hoặc mở tay). Chuyển từ app-luan-giai.html (nơi định nghĩa gốc) sang đây
    (2026-09) để dùng chung — nhiều trang giờ auto-show sample lúc vào trang. */
-.samp-bar{position:sticky;top:var(--ws-top-h,69px);z-index:6;background:var(--navy);color:#fff;border-radius:14px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:var(--shadow)}
+.samp-bar{position:sticky;top:var(--ws-top-h,69px);z-index:43;background:var(--navy);color:#fff;border-radius:14px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:var(--shadow)}
 .samp-bar .sb-txt{flex:1;min-width:180px;font-size:12.5px;line-height:1.5}
 .samp-bar .sb-txt b{color:var(--gold)}
 .samp-bar button{flex:0 0 auto;background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--serif)}

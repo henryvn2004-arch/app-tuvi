@@ -464,7 +464,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       hint.style.display = '';
       if (balance == null) {
         hint.className = 'tpw-hint';
-        hint.innerHTML = 'Thao tác này tốn <b>' + cost + ' Lượng</b> · ' +
+        // VNĐ là giá CHÍNH với khách (Henry, 2026-09-20) — cùng `_vndFirst` của lockPreview.
+        hint.innerHTML = 'Thao tác này tốn ' + _vndFirst(cost, window.ToolPrices ? window.ToolPrices.vndLabel(cost) : '') + ' · ' +
           '<a onclick="TuviPaywall._login()">đăng nhập</a> để xem số dư';
       } else if (balance < cost) {
         hint.className = 'tpw-hint low';
@@ -695,7 +696,18 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       // tiền" mà không biết bao nhiêu. Giá đọc từ `tool_pricing` như mọi chỗ
       // khác; đọc hụt thì hàm này đã dừng từ trên (`_priceUnknown`), nên tới
       // được đây là chắc chắn có số thật, không phải số đoán.
-      money = 'Mở đầy đủ tốn ' + _vndFirst(cost, vndLbl) + ' · bấm mở là trả tiền và đọc ngay, ' +
+      // Khách vô danh trả bằng QR nạp lẻ (`_qrAmountFor`, đơn giá bậc vào cửa)
+      // chứ không theo đơn giá gói của `vndLabel` — nói ĐÚNG số tiền sẽ chuyển,
+      // nếu không trang hứa ~95.000đ rồi QR đòi 109.000đ. Chưa quy đổi được thì
+      // rơi về câu cũ, không bịa số.
+      const qrVnd = _qrAmountFor(cost);
+      // Giữ "N Lượng" (giá THẬT của lượt này) làm số chính — số tiền QR đứng
+      // TIẾP THEO, không thay thế nó, vì QR quy đổi theo bậc nạp lẻ nên luôn
+      // ≥ giá gói và không phải con số khách cần nhớ khi so giá.
+      money = 'Mở đầy đủ tốn ' + _vndFirst(cost, vndLbl) +
+        (qrVnd != null
+          ? ' <span class="tpw-sub">(chuyển khoản ' + qrVnd.toLocaleString('vi-VN') + 'đ)</span>'
+          : '') + ' · bấm mở là trả tiền và đọc ngay, ' +
         'không cần đăng ký trước. <a onclick="TuviPaywall._login()">Đã có tài khoản? Đăng nhập</a>';
     } else if (balance < cost) {
       money = 'Bạn còn <b>' + balance + '</b> · cần ' + _vndFirst(cost, vndLbl) + ' — thiếu ' + (cost - balance) +
@@ -979,6 +991,9 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   });
 
   let _qrResumeSlug = null, _qrResumeCallback = null, _qrResumeAmount = null, _qrExpired = false;
+  // Số Lượng lượt này THẬT SỰ cần — để modal nói rõ vì sao số tiền QR (đơn giá
+  // nạp lẻ) cao hơn giá tool (đơn giá gói). `null` khi mở QR từ đường khác.
+  let _qrNeed = null;
 
   /** Ghi "13:45" (mm:ss) vào #tpw-qr-countdown, hoặc chuỗi hết hạn khi hết giờ. */
   function _paintQrCountdown(secLeft) {
@@ -1201,7 +1216,17 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       if (!r.ok) throw new Error(d.error || 'Lỗi tạo đơn');
       _qrOrderCode = d.orderCode;
 
-      document.getElementById('tpw-qr-credits').textContent = d.credits + ' Lượng';
+      // Khách thấy giá tool theo đơn giá GÓI (~500đ/Lượng) nhưng QR nạp lẻ theo
+      // đơn giá bậc vào cửa (cao hơn) — nói thẳng ra thay vì để 95k thành 109k
+      // không một lời giải thích (đóng vai khách bắt được 2026-09-25).
+      const creditsEl = document.getElementById('tpw-qr-credits');
+      if (_qrNeed != null && d.credits >= _qrNeed) {
+        const du = d.credits - _qrNeed;
+        creditsEl.innerHTML = d.credits + ' Lượng · lượt này dùng ' + _qrNeed + (du > 0 ? ', dư ' + du + ' giữ trong ví' : '') +
+          '<br><small>Nạp lẻ tính theo đơn giá lẻ — <a href="/topup.html">mua gói</a> thì mỗi Lượng rẻ hơn.</small>';
+      } else {
+        creditsEl.textContent = d.credits + ' Lượng';
+      }
       document.getElementById('tpw-qr-amount').textContent =
         new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(d.amountVND);
       // Pha 0 — modal đã hiện số tiền THẬT, tách khỏi `unlock_click` (bấm nút
@@ -1314,7 +1339,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     // `/topup.html` như cũ, không bịa số.
     if (callback && _isAnonymous()) {
       const amountVnd = _qrAmountFor(need);
-      if (amountVnd != null) { _openBankQr(amountVnd, slug, callback); return; }
+      if (amountVnd != null) { _qrNeed = need; _openBankQr(amountVnd, slug, callback); return; }
     }
     // VNĐ lên làm giá CHÍNH (Henry, 2026-09-20) — cùng luật với `lockPreview`,
     // xem `_vndFirst`. `vndLabel` tự trả '' khi chưa đọc được `credit_packages`,

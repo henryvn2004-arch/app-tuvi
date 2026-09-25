@@ -60,8 +60,12 @@
     if (document.getElementById('pwa-banner')) return;
     var banner = document.createElement('div');
     banner.id = 'pwa-banner';
+    // Đứng TRÊN tabbar của app-shell (fixed đáy, z 49) — bottom:0 thì che kín
+    // 5 tab cho tới khi khách tự tìm nút ×. +16px cho nút Chat nổi lòi lên.
+    var tb = document.querySelector('.tabbar');
+    var bottom = tb && getComputedStyle(tb).display !== 'none' ? tb.offsetHeight + 16 : 0;
     banner.innerHTML =
-      '<div style="position:fixed;bottom:0;left:0;right:0;background:#061A2E;color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;z-index:9999;box-shadow:0 -2px 12px rgba(0,0,0,.3);font-family:Arial,sans-serif">'
+      '<div style="position:fixed;bottom:' + bottom + 'px;left:0;right:0;background:#061A2E;color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;z-index:9999;box-shadow:0 -2px 12px rgba(0,0,0,.3);font-family:Arial,sans-serif">'
       + '<img src="/seal.webp" style="width:40px;height:40px;border-radius:8px;flex-shrink:0" alt="">'
       + '<div style="flex:1;min-width:0">'
       + '<div style="font-size:14px;font-weight:700;margin-bottom:2px">Tử Vi Minh Bảo</div>'
@@ -88,8 +92,12 @@
     if (document.getElementById('pwa-banner')) return;
     var banner = document.createElement('div');
     banner.id = 'pwa-banner';
+    // Đứng TRÊN tabbar của app-shell (fixed đáy, z 49) — bottom:0 thì che kín
+    // 5 tab cho tới khi khách tự tìm nút ×. +16px cho nút Chat nổi lòi lên.
+    var tb = document.querySelector('.tabbar');
+    var bottom = tb && getComputedStyle(tb).display !== 'none' ? tb.offsetHeight + 16 : 0;
     banner.innerHTML =
-      '<div style="position:fixed;bottom:0;left:0;right:0;background:#061A2E;color:#fff;padding:14px 16px;z-index:9999;box-shadow:0 -2px 12px rgba(0,0,0,.3);font-family:Arial,sans-serif">'
+      '<div style="position:fixed;bottom:' + bottom + 'px;left:0;right:0;background:#061A2E;color:#fff;padding:14px 16px;z-index:9999;box-shadow:0 -2px 12px rgba(0,0,0,.3);font-family:Arial,sans-serif">'
       + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
       + '<div style="font-size:14px;font-weight:700">Thêm vào màn hình chính</div>'
       + '<button id="pwa-dismiss-btn" style="background:transparent;color:rgba(255,255,255,.5);border:none;font-size:20px;cursor:pointer;padding:0;line-height:1">×</button>'

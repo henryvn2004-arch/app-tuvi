@@ -115,7 +115,7 @@
     const dvA = (lsA.daiVanHienTai && lsA.daiVanHienTai.scoring && lsA.daiVanHienTai.scoring.tong) != null ? lsA.daiVanHienTai.scoring.tong : 5;
     const dvB = (lsB.daiVanHienTai && lsB.daiVanHienTai.scoring && lsB.daiVanHienTai.scoring.tong) != null ? lsB.daiVanHienTai.scoring.tong : 5;
     const s8 = { score: r1((dvA + dvB) / 2), w: 0.05, label: 'Vận Hành', detail: 'ĐV ' + nameA + ': ' + dvA + '/10 · ĐV ' + nameB + ': ' + dvB + '/10',
-      a: dvA + '/10 ' + (dvA >= 7 ? '🟢' : dvA >= 4 ? '🟡' : '🔴'), b: dvB + '/10 ' + (dvB >= 7 ? '🟢' : dvB >= 4 ? '🟡' : '🔴') };
+      a: dvA + '/10', b: dvB + '/10' }; // bỏ 🟢🟡🔴 — UI cấm emoji màu (docs/ICONS.md)
 
     const items = [s1, s2, s3, s7, s4, s5, s6, s8];
     const total = r1(items.reduce((sum, m) => sum + m.score * m.w * 10, 0));

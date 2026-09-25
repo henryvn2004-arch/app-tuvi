@@ -138,7 +138,7 @@ from (values
   ('personal-color',null,'/tools/personal-color.html'),
   ('personal-color-tryon',null,'/tools/personal-color.html'),
   ('phong-thuy','/app/phong-thuy','/tools/phong-thuy.html'),
-  ('phong-thuy-render',null,'/tools/phong-thuy-render.html'),
+  ('phong-thuy-render',null,'/app/cua-hang-phong-thuy'), -- trang /tools/phong-thuy-render.html CHƯA từng tồn tại (404 từ /cong-cu); render nằm trong Cửa Hàng & VP
   ('sao-nam',null,'/tools/sao-nam.html'),
   ('tarot',null,'/tools/tarot.html'),
   ('than-so-hoc','/app/than-so-hoc','/tools/than-so-hoc.html'),

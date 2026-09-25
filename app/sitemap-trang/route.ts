@@ -32,6 +32,11 @@ const STATIC_PAGES = [
     '/van-han',               // van-han hub
     '/app/xem-tuoi',          // 301 từ /xem-tuoi.html cũ, 2026-09-19
     '/app/xem-lam-an',        // 301 từ /xem-lam-an.html cũ, 2026-09-19
+    '/app/dien-tuong',        // 308 từ /tools/tuong-mat-ai.html cũ, 2026-09-25
+    '/app/nhan-tuong',        // 308 từ /tools/nhan-tuong-ai.html cũ, 2026-09-25
+    '/app/thu-tuong',         // 308 từ /tools/thu-tuong-ai.html cũ, 2026-09-25
+    '/app/thanh-tuong',       // 308 từ /tools/thanh-tuong-ai.html cũ, 2026-09-25
+    '/app/phong-thuy',        // 308 từ /tools/phong-thuy.html cũ, 2026-09-25
     '/contact.html',
     '/faqs.html',
     // Category hubs
@@ -91,18 +96,13 @@ const STATIC_PAGES = [
     '/tools/nap-am.html',
     '/tools/ngay-tot.html',
     '/tools/ngu-hanh-ten.html',
-    '/tools/nhan-tuong-ai.html',
     '/tools/oracle.html',
-    '/tools/phong-thuy.html',
     '/tools/sao-nam.html',
     '/tools/tarot.html',
     '/tools/than-so-hoc.html',
-    '/tools/thanh-tuong-ai.html',
     '/tools/thanh-tuong-pro.html',
-    '/tools/thu-tuong-ai.html',
     '/tools/tu-tru.html',
     '/tools/tuong-hop.html',
-    '/tools/tuong-mat-ai.html',
     '/tools/van-thang.html',
     '/tools/xem-tuoi-sinh-con.html',
 ];

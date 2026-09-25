@@ -143,6 +143,27 @@ export async function POST(request: NextRequest) {
   // fallback cfg.cost (app_config 'chat.cost') nếu chưa có row / đọc hụt.
   // Dùng CHUNG một hàm với 3 bot để không kênh nào thu lệch giá.
   const cost = await getRailPrice(cfg.cost);
+  // Cấp một lượt DÙNG THỬ theo anon_id; trả Response khi phải chặn, null khi cho qua.
+  const consumeAnonTrial = async (): Promise<Response | null> => {
+    const hasImages = (req.messages || []).some(
+      (m) => Array.isArray((m as { images?: unknown[] }).images) && ((m as { images?: unknown[] }).images as unknown[]).length > 0,
+    );
+    if (hasImages) {
+      return jsonError('unauthorized', 'Cần đăng nhập để gửi ảnh', 401);
+    }
+    const trial = await anonTrialConsume(req.client?.anon_id || '', clientIpHash(request));
+    if (!trial.allowed) {
+      // Mọi lý do (hết lượt / chạm trần IP / chạm trần ngày / tắt) đều trả CÙNG
+      // một mã cho client: lời mời đăng ký. Nói ra "hôm nay hệ thống hết ngân
+      // sách dùng thử" thì vừa khó hiểu vừa mời người ta thử lại lúc khác thay
+      // vì đăng ký ngay.
+      return jsonError('anon_trial_exhausted', 'Đăng nhập để hỏi tiếp', 401, {
+        anonTrial: { left: 0, reason: trial.reason },
+      });
+    }
+    anonTrialLeft = trial.left;
+    return null;
+  };
   if (!paywallDisabled() && cost > 0) {
     const token = extractToken(request);
     if (!token) {
@@ -154,23 +175,8 @@ export async function POST(request: NextRequest) {
       // CHẶN ẢNH ở lượt anon: ảnh đẩy input token lên nhiều lần so với câu chữ,
       // mà cầu dao được tính theo LƯỢT. Cho ảnh vào thì một lượt có thể đắt gấp
       // chục lần lượt khác và trần mất nghĩa.
-      const hasImages = (req.messages || []).some(
-        (m) => Array.isArray((m as { images?: unknown[] }).images) && ((m as { images?: unknown[] }).images as unknown[]).length > 0,
-      );
-      if (hasImages) {
-        return jsonError('unauthorized', 'Cần đăng nhập để gửi ảnh', 401);
-      }
-      const trial = await anonTrialConsume(req.client?.anon_id || '', clientIpHash(request));
-      if (!trial.allowed) {
-        // Mọi lý do (hết lượt / chạm trần IP / chạm trần ngày / tắt) đều trả CÙNG
-        // một mã cho client: lời mời đăng ký. Nói ra "hôm nay hệ thống hết ngân
-        // sách dùng thử" thì vừa khó hiểu vừa mời người ta thử lại lúc khác thay
-        // vì đăng ký ngay.
-        return jsonError('anon_trial_exhausted', 'Đăng nhập để hỏi tiếp', 401, {
-          anonTrial: { left: 0, reason: trial.reason },
-        });
-      }
-      anonTrialLeft = trial.left;
+      const blocked = await consumeAnonTrial();
+      if (blocked) return blocked;
       // Lượt anon KHÔNG tính phí và KHÔNG có chargeUserId → bỏ qua toàn bộ
       // nhánh trừ Lượng bên dưới.
     } else {
@@ -182,11 +188,20 @@ export async function POST(request: NextRequest) {
       freeTurnLeft = await railFreeRemaining(user.id);
       const balance = await getBalance(user.id);
       if (freeTurnLeft <= 0 && balance < cost) {
-        // Trả kèm `price` để client dịch được sang "còn N câu hỏi" / "cần thêm N
-        // câu" — nói bằng CÂU thì người dùng hiểu ngay, nói bằng Lượng thì không.
-        return jsonError('paywall', `Không đủ Lượng (cần ${cost}, còn ${balance})`, 402, { balance, price: cost });
+        // Phiên ẩn danh (guest checkout) mở ra chỉ vì khách BẤM nút trả phí một
+        // tool — ví 0 — trước đây rơi vào đây và mất sạch câu dùng thử theo
+        // anon_id dù chưa trả đồng nào. Ví chưa đủ thì vẫn là khách dùng thử.
+        if (user.isAnonymous) {
+          const blocked = await consumeAnonTrial();
+          if (blocked) return blocked;
+        } else {
+          // Trả kèm `price` để client dịch được sang "còn N câu hỏi" / "cần thêm N
+          // câu" — nói bằng CÂU thì người dùng hiểu ngay, nói bằng Lượng thì không.
+          return jsonError('paywall', `Không đủ Lượng (cần ${cost}, còn ${balance})`, 402, { balance, price: cost });
+        }
+      } else {
+        chargeUserId = user.id;
       }
-      chargeUserId = user.id;
     }
   }
 

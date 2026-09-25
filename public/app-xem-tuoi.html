@@ -10,7 +10,7 @@
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/shell.css?v=53">
+<link rel="stylesheet" href="/shell.css?v=54">
 <link rel="preload" href="/laso-chart.css?v=3" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/laso-chart.css?v=3"></noscript>
 <style>
@@ -170,7 +170,7 @@ body.chat-first-live .laso-one{flex:none}
         <div id="hookHost"></div>
         <div class="jump" id="xtJump"></div>
         <div class="xt-unlock" id="xtUnlock" style="display:none">
-          <button class="btn-go" id="btnUnlock" onclick="initiateXemTuoiChuyenSau()">✦ Luận giải chuyên sâu — <span data-tvp-price="xem-tuoi">…</span> Lượng →</button>
+          <button class="btn-go" id="btnUnlock" onclick="initiateXemTuoiChuyenSau()">✦ Luận giải chuyên sâu — <span class="vnd" data-tvp-price-vnd="xem-tuoi"></span> <span class="cb-sub">(<span data-tvp-price="xem-tuoi">…</span> Lượng)</span> →</button>
           <p>Viết riêng cho hai người này theo cổ pháp — tổng quan và từng chiều hòa hợp.</p>
         </div>
         <div class="xt-progress" id="xtProgress" style="display:none"></div>
@@ -208,21 +208,21 @@ body.chat-first-live .laso-one{flex:none}
   window.SHELL_CHAT_INTAKE=true;
 })();
 </script>
-<script src="/laso-chart.js?v=3"></script>
+<script src="/laso-chart.js?v=4"></script>
 <script src="/tuvi-ansao-engine.js"></script>
-<script src="/tuong-hop.js?v=1"></script>
-<script src="/tuong-hop-lam-an.js?v=1"></script>
+<script src="/tuong-hop.js?v=3"></script>
+<script src="/tuong-hop-lam-an.js?v=2"></script>
 <script src="/tools-shared/illus-match.js?v=2"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=5"></script>
+<script src="/tuvi-form.js?v=7"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=37"></script>
-  <script src="/nav.js?v=41" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=100"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
+<script src="/tuvi-paywall.js?v=38"></script>
+  <script src="/nav.js?v=42" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=101"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
@@ -967,6 +967,8 @@ function applyMode(){
   var paid=!!PAID_MODES[MODE_KEY];
   var cb=document.getElementById('costBox'); if(cb) cb.style.display=paid?'flex':'none';
   var sub=document.getElementById('btnGoSub'); if(sub) sub.style.display=paid?'':'none';
+  // PDF mẫu chỉ có cho Xem Tuổi Vợ Chồng — ở mode Làm Ăn/Tương Hợp thẻ này mời tải nhầm sản phẩm.
+  document.querySelectorAll('.samp-cta').forEach(function(el){ el.style.display = MODE_KEY==='xem-tuoi' ? '' : 'none'; });
   if(paid){
     TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,MODE_KEY); });
   }

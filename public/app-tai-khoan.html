@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/shell.css?v=53"/>
+<link rel="stylesheet" href="/shell.css?v=54"/>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
 /* Trang Tài khoản trong shell: 2 cột (sidebar + nội dung, không rail) */
@@ -888,9 +888,9 @@ window.mountIcons=window.mountIcons||function(root){var sc=root||document;sc.que
 window.iconHtml=window.iconHtml||function(k){return (window.ICONS&&window.ICONS[k])||'';};
 </script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=41" data-icons-only></script>
-<script src="/shell.js?v=100"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=1"></script>
+  <script src="/nav.js?v=42" data-icons-only></script>
+<script src="/shell.js?v=101"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script>
 // HỘI THOẠI (shell history) cho tab Lịch Sử của hub Tài khoản: gộp mọi công cụ
 // từ localStorage (app_hist_v1_*) + server (/api/tuvi-chats type app-*). Bấm 1
@@ -947,7 +947,7 @@ window.ACCOUNT_SHELL_CHAT = function () {
   } catch (e) { /* ignore */ }
 };
 </script>
-<script src="/account-core.js?v=9"></script>
+<script src="/account-core.js?v=10"></script>
 <script>
 // Mở đúng tab theo hash (#credits / #ketnoi / #account / #lichsu) khi vào từ sidebar.
 (function(){function openHash(){var h=(location.hash||'').replace('#','');if(h){var b=document.querySelector('[data-tab="'+h+'"]');if(b)b.click();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(openHash,300);});else setTimeout(openHash,300);})();

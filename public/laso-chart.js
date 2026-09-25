@@ -82,7 +82,12 @@ function renderCenter(ls, fd) {
   const now = new Date();
   const pad = x => String(x).padStart(2, '0');
   const nowStr = `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
-  const dvScore = dvHT && dvHT.scoring ? ' ' + dvHT.scoring.flag + ' ' + dvHT.scoring.tong + 'đ' : '';
+  // `scoring.flag` của engine là emoji màu (🟢🟡🔴) — UI cấm emoji màu (docs/ICONS.md),
+  // nên đổi sang chấm ● đơn sắc tô màu theo cùng ngưỡng.
+  const DV_FLAG_COLOR = { '🟢': '#1E6B3C', '🟡': '#B8860B', '🔴': '#C0392B' };
+  const dvScore = dvHT && dvHT.scoring
+    ? ' <span style="color:' + (DV_FLAG_COLOR[dvHT.scoring.flag] || '#333') + ';font-weight:700">● ' + dvHT.scoring.tong + 'đ</span>'
+    : '';
   return `<div class="cung-center"><div class="center-la-so">
     <div class="center-title">✦ ${esc((fd.name || '—').toUpperCase())} ✦</div>
     <hr class="center-divider">

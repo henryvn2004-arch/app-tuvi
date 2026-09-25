@@ -186,6 +186,16 @@ const nextConfig = {
       // vẫn còn phục vụ được thẳng ở `/khao-luan.html`) — xoá file, chặn
       // bằng redirect trước filesystem, cùng khuôn các dòng trên.
       { source: '/khao-luan.html', destination: '/van-dap', permanent: true },
+      // 5 trang tướng học/phong thủy /tools/*.html trùng chức năng với bản
+      // shell /app/* (cùng API, cùng tool_id — đóng vai khách bắt được
+      // 2026-09-25: khách tưởng nhầm là hai dịch vụ khác nhau, một bản còn ghi
+      // sai "Miễn Phí"). `tool_pricing.page_path` của các tool này đã là NULL
+      // từ trước (không dòng nào trỏ về đây) — an toàn chặn trước filesystem.
+      { source: '/tools/tuong-mat-ai.html',  destination: '/app/dien-tuong',  permanent: true },
+      { source: '/tools/nhan-tuong-ai.html', destination: '/app/nhan-tuong', permanent: true },
+      { source: '/tools/thu-tuong-ai.html',  destination: '/app/thu-tuong',  permanent: true },
+      { source: '/tools/thanh-tuong-ai.html',destination: '/app/thanh-tuong',permanent: true },
+      { source: '/tools/phong-thuy.html',    destination: '/app/phong-thuy', permanent: true },
     ];
   },
 };
