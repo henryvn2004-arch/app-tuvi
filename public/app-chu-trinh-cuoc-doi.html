@@ -236,14 +236,16 @@
       </div>
 
       <div id="lgPanel" data-ws-result>
-        <div class="scores" id="lgScores"></div>
         <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
         <div class="chart-wrap" id="miniChart"></div>
         <div class="jump" id="lgJump"></div>
         <!-- Khối hook (fact, KHÔNG chart) — tool này đã có sẵn biểu đồ đại
              vận (LuanGiaiCore.renderInlineDaiVanLineChart) trong Phần 1 (luôn
              free), dựng lại lifeArc ở đây là trùng lặp. Chỉ hé đỉnh/đáy đời +
-             cách cục hiếm — chưa có chỗ nào gọi thẳng bằng chữ. -->
+             cách cục hiếm — chưa có chỗ nào gọi thẳng bằng chữ.
+             Đợt 2 phần 5 (2026-09-25): card điểm số thô (#lgScores) đã BỎ —
+             khối này giờ là highlight DUY NHẤT, echo thẳng vào chat qua
+             appendHookHighlightCard() (xem onNarrative trong mountHook()). -->
         <div id="hookHost"></div>
         <div class="lg-unlock" id="lgUnlock" style="display:none"></div>
         <div class="lg-progress" id="lgProgress" style="display:none"></div>
@@ -369,8 +371,6 @@ var LG_RESUME_KEY='ctcd_pending_resume';
   else runAutoLuan();
 })();
 
-function scoreColor(t){ return t>=7?'var(--green)':t>=5?'var(--gold-soft)':'var(--red)'; }
-
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
 // có sẵn trong flow cũ (form → xem trước → paywall → kết quả), không tạo
 // trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
@@ -393,32 +393,41 @@ function wsStepsSet(n){
 function _ctcdDummyPromise(){ return TuviPaywall.loadSampleJson('/samples/chu-trinh-cuoc-doi-dummy.json'); }
 var _ctcdDummy=null;
 _ctcdDummyPromise();
-// Đợt 1 phần 4 (2026-09-24): thẻ report trong chat — cùng mẫu app-luan-giai.html
-// (tool anh em, cùng cấu trúc #lgScores/doLuan/initLuanGiaiGate). Đọc lại
-// điểm đã render trong `#lgScores` (KHÔNG tính lại) rồi bấm "Xem" = bấm HỘ
-// đúng nút "Kết quả" (`[data-act="artifact"]`) có sẵn — không thêm đường
-// mới, không đụng gì trong luồng thanh toán (Luận giải chuyên sâu AI vẫn
-// khoá riêng, không đổi).
-function appendReportCard(){
+// Đợt 2 phần 5 (2026-09-25): thẻ highlight trong chat — thay bản cũ
+// (appendReportCard, đọc lại điểm số thô #lgScores) bằng đúng bản LLM kể
+// chuyện đã render trong `#hookHost` (mountHook/HookLayer.run — cùng nội
+// dung khách thấy trên `.ws`, không tính/gọi model lần hai). Gọi từ
+// `spec.onNarrative` của mountHook() (bắn TRỄ hơn ở tool này — chỉ chạy
+// trong `_renderUnlockBlock`, xem chú thích ở đó) NÊN chỉ chạy khi narrative
+// THẬT SỰ lên hình (allowed:true) — quota hết/lỗi mạng thì hàm này không
+// được gọi, chat im lặng như cũ. Nút "Xem" chỉ bấm HỘ đúng nút "Kết quả"
+// (`[data-act="artifact"]`) có sẵn — không thêm đường mới, không đụng gì
+// trong luồng thanh toán (Luận giải chuyên sâu AI vẫn khoá riêng, không đổi).
+function appendHookHighlightCard(){
   var chat=document.getElementById('chat');
-  var scores=document.getElementById('lgScores');
-  if(!chat||!scores) return;
+  var host=document.getElementById('hookHost');
+  if(!chat||!host) return;
+  var boxes=Array.prototype.slice.call(host.querySelectorAll('.hkl-nb-box'));
+  if(!boxes.length) return;
   var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; })();
-  var cards=Array.prototype.slice.call(scores.querySelectorAll('.sc')).map(function(sc){
-    var lb=sc.querySelector('.lb'), vl=sc.querySelector('.vl');
-    var v=vl&&vl.firstChild?vl.firstChild.textContent:'—';
-    return '<div class="chat-hl-n"><b>'+esc(v)+'</b><span>'+esc(lb?lb.textContent:'')+'</span></div>';
+  var rows=boxes.map(function(b){
+    var t=b.querySelector('.hkl-nb-box-head b'), h=b.querySelector('.hkl-nb-hook');
+    return '<div class="chat-hl-box"><b>'+esc(t?t.textContent:'')+'</b><span>'+esc(h?h.textContent:'')+'</span></div>';
   }).join('');
-  if(!cards) return;
   var el=document.createElement('div'); el.className='msg a';
   el.innerHTML='<img class="msg-ava" src="'+av+'" alt="">'+
-    '<div class="msg-body"><div class="chat-hl"><div class="chat-hl-row">'+cards+'</div>'+
+    '<div class="msg-body"><div class="chat-hl"><div class="chat-hl-h">'+boxes.length+' điều quan trọng nhất</div>'+
+    '<div class="chat-hl-boxes">'+rows+'</div>'+
     '<button type="button" class="chat-hl-cta" id="lgOpenResult">Xem 9 đại vận →</button></div></div>';
-  chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
+  chat.appendChild(el);
   document.getElementById('lgOpenResult').addEventListener('click',function(){
     var ab=document.querySelector('[data-act="artifact"]');
     if(ab) ab.click();
   });
+  var follow=document.createElement('div'); follow.className='msg a';
+  follow.innerHTML='<img class="msg-ava" src="'+av+'" alt=""><div class="msg-body"><p>Bạn muốn thầy đào sâu điều nào trước?</p></div>';
+  chat.appendChild(follow);
+  chat.scrollTop=chat.scrollHeight;
 }
 async function doLuan(){
   var btn=document.getElementById('btnGo');
@@ -473,7 +482,6 @@ async function doLuan(){
       text:_shareHead,
       liveText:true
     });
-    appendReportCard();
     initLuanGiaiGate(ls);
   }catch(e){
     document.getElementById('lgBody').innerHTML='<div class="laso-error">Lỗi khi luận giải: '+esc(e.message)+'</div>';
@@ -548,23 +556,6 @@ function taiAnhArc(){
 }
 
 function renderLuan(ls,fd,namxem,forceUnlocked){
-  var dvHT=ls.daiVanHienTai, dvTong=dvHT&&dvHT.scoring?dvHT.scoring.tong:null;
-  // Chiều đại vận (Thuận/Nghịch) — CÙNG công thức `thuận` mà chính engine dùng
-  // để dựng dãy 9 đại vận (tuvi-ansao-engine.js, hàm tinhDaiVan): dương nam/âm
-  // nữ đi THUẬN theo 12 cung, âm nam/dương nữ đi NGHỊCH. Đây là dữ kiện CÓ
-  // THẬT trong cổ pháp, không phải suy diễn — chỉ là engine không xuất field
-  // này ra `ls` nên phải tính lại đúng công thức đó ở đây.
-  var dvThuan=(ls.amDuong==='dương'&&_gioitinh==='nam')||(ls.amDuong==='âm'&&_gioitinh==='nu');
-  var tvCung=ls.palaces&&ls.palaces[ls.tieuHanIdx];
-
-  // 🔴 Đại vận là tầng DUY NHẤT có điểm/10 THẬT (luật đã đo, xem
-  // lib/engine/cong-so.ts) — tiểu vận KHÔNG có điểm cổ pháp thật, nên thẻ
-  // "Tiểu vận" hiện TÊN CUNG (chữ), tuyệt đối không bịa ra một con số /10.
-  document.getElementById('lgScores').innerHTML=
-    card('Đại vận hiện tại'+(dvHT?' ('+dvHT.tuoiStart+'–'+dvHT.tuoiEnd+'t)':''),dvTong) +
-    textCard('Chiều đại vận',dvThuan?'Thuận':'Nghịch',dvThuan?'var(--tx-green)':'var(--gold-soft)') +
-    textCard('Tiểu vận năm '+namxem,(tvCung&&tvCung.cungName)||'—','var(--heading)');
-
   // ── 11 phần (engine phan 14-24) — port deterministic (LuanGiaiCore.buildPreGenHtml) + nút hỏi rail mỗi phần ──
   var LABELS=LuanGiaiCore.phanLabels(ls);
   var loggedIn=_lgLoggedIn();
@@ -609,13 +600,7 @@ function renderLuan(ls,fd,namxem,forceUnlocked){
 
   renderJump(LABELS);
   wirePhanAsk(document.getElementById('lgBody'));
-  return {dvTong:dvTong, tvCungName:tvCung&&tvCung.cungName};
 }
-
-function card(lb,t){ var col=t!=null?scoreColor(t):'var(--text-lt)'; return '<div class="sc"><div class="lb">'+esc(lb)+'</div><div class="vl" style="color:'+col+'">'+(t!=null?t:'—')+'<small>/10</small></div><div class="pbar"><i style="width:'+(t!=null?t*10:0)+'%;background:'+col+'"></i></div></div>'; }
-// Thẻ CHỮ (không phải điểm/10) — dùng cho "Chiều đại vận"/"Tiểu vận năm N",
-// hai giá trị KHÔNG có căn cứ để chấm điểm cổ pháp thật.
-function textCard(lb,val,color){ return '<div class="sc"><div class="lb">'+esc(lb)+'</div><div class="vl" style="font-size:19px;color:'+(color||'var(--heading)')+'">'+esc(val)+'</div><div class="pbar"><i style="width:100%;background:'+(color||'var(--gold-soft)')+'"></i></div></div>'; }
 
 function _lgLoggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Auth.isLoggedIn()); }
 // ── Liên kết sang tool khác — CHỈ áp cho phần có MỘT MỐI LIÊN HỆ THẬT. Phần 1
@@ -1059,7 +1044,9 @@ function mountHook(ls){
     // KHÔNG truyền `illus` — phan 1 "Tổng quan đại vận" gộp cả 9 đại vận, không
     // map được về MỘT ảnh minh hoạ duy nhất (xem chú thích ở `illusBannerHtml`
     // ngay trên: "KHÔNG đoán"). `upgrade()`/`_narrativeHtml` tự bỏ qua khi thiếu.
-    var spec={tool:'chu-trinh-cuoc-doi',toolLabel:'Chu Trình Cuộc Đời',charts:[],facts:facts};
+    // Đợt 2 phần 5 (2026-09-25): echo NGAY narrative này vào chat — xem
+    // appendHookHighlightCard(). Chỉ bắn khi allowed:true (xem chú thích ở đó).
+    var spec={tool:'chu-trinh-cuoc-doi',toolLabel:'Chu Trình Cuộc Đời',charts:[],facts:facts,onNarrative:appendHookHighlightCard};
     window.HookLayer.run(host, spec);
   });
 }
