@@ -389,7 +389,7 @@
       if (!el) {
         el = document.createElement('script');
         el.id = '_tvmb_prices_js';
-        el.src = '/tool-prices.js?v=9';
+        el.src = '/tool-prices.js?v=10';
         document.head.appendChild(el);
       }
       el.addEventListener('load', function () { resolve(); });
@@ -3641,7 +3641,7 @@
   // KHÔNG hỏi xác nhận trước khi trừ khi đủ số dư — giá trên nút là lần DUY
   // NHẤT khách thấy số trước khi bị trừ, không phải chi tiết trang trí.
   function paidBtnPrice(product, bubbleEl, baseLabel) {
-    ensureScripts(['/tool-prices.js?v=9'], function () {
+    ensureScripts(['/tool-prices.js?v=10'], function () {
       if (typeof window.ToolPrices === 'undefined' || !window.ToolPrices.load) return;
       window.ToolPrices.load().then(function () {
         var cost = window.ToolPrices.get(product);

@@ -246,6 +246,11 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   rơi vào "Khác" trong 4 phút).
 - Migration an toàn (tạo dòng ở `enabled=false`, `on conflict do update` không
   đụng cột đó) thì chạy TRƯỚC deploy được; câu BẬT thì không.
+- **Đổi HÀM/LOGIC trong `public/*.js` phải bump `?v=` ở MỌI nơi `<script src>`
+  gọi file đó** (bump `CACHE_KEY` sessionStorage KHÔNG thay được việc này — hai
+  cơ chế cache khác nhau) — quên là browser cũ dính bản JS thiếu hàm mới, lỗi
+  kiểu `X.hamMoi is not a function`. Đã cắn 2 lần: `tuvi-ansao-engine.js`
+  (nhật ký Đợt 8) · `tool-prices.js::masterForTool` (2026-09-25).
 
 ### 📊 Đo lường — `docs/luat/bay.md`
 - **Traffic: luôn dùng bản `_human`.** 83% "visitors" là máy; GA4 không lọc được,
