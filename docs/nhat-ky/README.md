@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-407 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+408 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 241 | 959,991 B |
+| `2026-09.md` | 243 | 963,703 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🐛 `ToolPrices.masterForTool is not a function` trên /app, /app/ho-so — lệch `?v=` |
 | 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 12: audit topup.html — chốt VĨNH VIỄN giữ full reload |
 | 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 11: mở khoá Hồ Sơ (account-core.js), chỉ còn topup.html ngoài SOFT_PAGES |
 | 1 | 2026-09 | `2026-09.md` | ⚡ Tái cấu trúc tốc độ Đợt 10: vá vòng đời mic thanh-tuong-pro.html, SPA-hoá xong 96/96 trang |
