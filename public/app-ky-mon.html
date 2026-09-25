@@ -217,7 +217,10 @@ function showResult() {
   wsStepsSet(2); // Xem kết quả — bàn đã lập xong
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
 
-  const d = Object.assign({}, b.rail, { cauHoi: cHoi });
+  // `cungs` (BanKyMon gốc, có cửa/sao/thần TỪNG cung) đi kèm `b.rail` (đã format
+  // thành chuỗi) để rail chat dùng lăng kính chủ đề (lib/qimen/chu-de.ts) — chuỗi
+  // đã format không tách lại được tên cửa/sao/thần một cách đáng tin.
+  const d = Object.assign({}, b.rail, { cauHoi: cHoi, cungs: b.cungs });
   const doNhat = b.cungs.filter(function (c) { return c.hang === 1; })[0];
   Shell.setContext({
     scenario: { type: 'ky-mon', data: d },
