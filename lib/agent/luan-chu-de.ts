@@ -983,33 +983,39 @@ const CHU_DE: Record<string, ChuDe> = {
   'ban-be': BAN_BE,
   'di-xa': DI_XA,
 };
+// Câu nhắc đích danh MỘT NGƯỜI khác ("bố tôi", "anh trai tôi", "cha mẹ") — hỏi sức khỏe kèm
+// cụm này là sức khỏe của người đó. Dò theo CỤM, không theo chủ đề: "tình duyên và sức
+// khỏe năm nay" trúng chủ đề Tình duyên mà không nói về người nào.
+const NGUOI_KHAC = /(^|\s)(bố|mẹ|cha|ba|ông|bà|anh|chị|em|con|vợ|chồng|người yêu|bạn)( (trai|gái|ruột|thân|bè|đời))? (tôi|mình)|bố mẹ|cha mẹ|ba mẹ|song thân/;
 
 const CON_TOI = /con (trai |gái )?tôi/;
 const yDinhCua = (cd: ChuDe, q: string) => cd.yDinh.filter(([re]) => re.test(q)).map(([, y]) => y);
 
 /**
- * Chủ đề của câu hỏi, hoặc null. Câu trúng NHIỀU cung chính thì phân xử:
- *  0. sức khỏe + một chủ đề NGƯỜI (cha mẹ, anh em, con, vợ chồng…) → chủ đề người;
+ * Các chủ đề của câu hỏi: [] · [một] · [hai]. Câu trúng NHIỀU cung chính thì phân xử:
+ *  0. sức khỏe + câu nhắc đích danh một NGƯỜI khác ("bố tôi", "anh trai tôi") → chủ đề người đó;
  *     tài chính + nhà đất / đi xa → nhà đất / đi xa;
  *  1. hỏi về ĐỨA CON ("con tôi…") hoặc có cụm riêng của con cái → con cái — nếu
  *     không, "con trai tôi có nên chuyển việc" sẽ đọc Quan Lộc của CHA MẸ;
  *  2. hỏi về người phối ngẫu ("vợ tôi"/"chồng tôi", không phải "vợ chồng tôi") → tình duyên;
- *  3. chủ đề khớp NHIỀU kiểu hỏi riêng hơn thắng; hòa → null, để `focusHint` cũ
- *     nêu đủ các cung thay vì chọn bừa một.
+ *  3. chủ đề khớp NHIỀU kiểu hỏi riêng hơn thắng;
+ *  4. hòa mà chỉ còn HAI chủ đề ("tiền và sức khỏe năm nay") → dựng CẢ HAI; hòa từ
+ *     ba trở lên → [], để `focusHint` cũ nêu đủ các cung thay vì chọn bừa.
  */
-export function chuDeCuaCauHoi(question: string): string | null {
+export function cacChuDe(question: string): string[] {
   const hit = primaryPalacesStrict(question);
   let ds = Object.values(CHU_DE).filter((cd) => hit.has(cd.cung));
   // Sức khỏe của NGƯỜI KHÁC ("bố tôi có bệnh gì") đọc cung của người đó, không phải Tật Ách của đương số.
-  if (ds.length > 1 && ds.includes(SUC_KHOE)) ds = ds.filter((cd) => cd !== SUC_KHOE);
+  if (ds.length > 1 && ds.includes(SUC_KHOE) && NGUOI_KHAC.test(norm(question))) ds = ds.filter((cd) => cd !== SUC_KHOE);
   // Tiền mà hỏi đích danh nhà / đất ("đầu tư bất động sản") hay đi xa ("đi làm ăn xa") → chủ đề đó; khối của nó đã kèm Tài Bạch.
   if ((ds.includes(NHA_DAT) || ds.includes(DI_XA)) && ds.includes(TAI_CHINH)) ds = ds.filter((cd) => cd !== TAI_CHINH);
-  if (ds.length <= 1) return ds[0]?.id ?? null;
+  if (ds.length <= 1) return ds.map((cd) => cd.id);
   const q = norm(question);
-  if (ds.includes(CON_CAI) && (CON_TOI.test(q) || yDinhCua(CON_CAI, q).some((y) => y === 'so-con' || y === 'quyet-dinh'))) return CON_CAI.id;
-  if (ds.includes(TINH_DUYEN) && /(vợ|chồng) tôi/.test(q) && !/vợ chồng tôi/.test(q)) return TINH_DUYEN.id;
+  if (ds.includes(CON_CAI) && (CON_TOI.test(q) || yDinhCua(CON_CAI, q).some((y) => y === 'so-con' || y === 'quyet-dinh'))) return [CON_CAI.id];
+  if (ds.includes(TINH_DUYEN) && /(vợ|chồng) tôi/.test(q) && !/vợ chồng tôi/.test(q)) return [TINH_DUYEN.id];
   const diem = ds.map((cd) => ({ id: cd.id, n: new Set(yDinhCua(cd, q)).size })).sort((a, b) => b.n - a.n);
-  return diem[0].n > 0 && diem[0].n > diem[1].n ? diem[0].id : null;
+  if (diem[0].n > 0 && diem[0].n > diem[1].n) return [diem[0].id];
+  return ds.length === 2 ? ds.map((cd) => cd.id) : [];
 }
 
 /**
@@ -1018,9 +1024,14 @@ export function chuDeCuaCauHoi(question: string): string | null {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function khoiChuDe(question: string, ls: any, gioi: 'nam' | 'nu' | null = null): string {
-  const id = chuDeCuaCauHoi(question);
-  const cd = id ? CHU_DE[id] : null;
-  if (!cd || !ls?.palaces) return '';
+  if (!ls?.palaces) return '';
+  const khoi = cacChuDe(question).map((id) => khoiMotChuDe(CHU_DE[id], question, ls, gioi)).filter(Boolean);
+  if (khoi.length < 2) return khoi[0] || '';
+  return `(Câu hỏi có HAI trọng tâm — trả lời ĐỦ cả hai, mỗi phần căn cứ đúng cung của nó, không trộn sao của phần này sang phần kia.)\n${khoi.join('\n')}`;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function khoiMotChuDe(cd: ChuDe, question: string, ls: any, gioi: 'nam' | 'nu' | null): string {
   const palaces = ls.palaces;
   const i = idxCung(palaces, cd.cung);
   if (i < 0) return '';

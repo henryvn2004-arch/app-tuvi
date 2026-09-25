@@ -25,7 +25,7 @@ import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
 import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine, RAIL_MAX_TOKENS, LASO_MAX_TOKENS } from '@/lib/agent/prompts';
-import { chuDeCuaCauHoi, khoiChuDe } from '@/lib/agent/luan-chu-de';
+import { cacChuDe, khoiChuDe } from '@/lib/agent/luan-chu-de';
 import { personaVoice } from '@/lib/agent/personas';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
@@ -384,7 +384,7 @@ async function runAgentInner(
         lasoCtx = nguoiXemLine(req.birth.name, req.birth.gender) + extractLasoContext(res.ls, '', { full: true });
         // Câu hỏi trúng một chủ đề đã dựng kỹ năng (lib/agent/luan-chu-de.ts) →
         // khối chủ đề THAY focusHint; tra_tieu_van đọc ctx.chuDe để gắn lăng kính.
-        ctx.chuDe = chuDeCuaCauHoi(lastQ);
+        ctx.chuDe = cacChuDe(lastQ);
         focusHintText = khoiChuDe(lastQ, res.ls, req.birth.gender ?? null) || focusHint(lastQ);
       }
     }
