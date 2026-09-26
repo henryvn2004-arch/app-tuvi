@@ -248,6 +248,10 @@ window.HookCharts = (function () {
     if (_cssInjected) return;
     _cssInjected = true;
     const st = document.createElement('style');
+    // `id` là dấu hiệu DUY NHẤT `shell-soft-nav.js` dùng để biết đây là style
+    // DÙNG CHUNG (đừng gỡ khi soft-nav đổi trang) — thiếu id thì style này bị
+    // gỡ ở lần đổi trang thứ hai, cùng họ bug đã vá ở `tuvi-form.js`.
+    st.id = 'hook-charts-css';
     st.textContent = _CSS;
     document.head.appendChild(st);
   }

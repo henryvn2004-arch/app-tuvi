@@ -25,6 +25,15 @@ window.TuviForm = (() => {
   const CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
   const _updaters = {}; // prefix → update fn
   let _introShown = false; // renderChat() có thể gọi lại nhiều lần (2 người) — chỉ chào 1 lần/trang
+  // `tuvi-form.js` là script DÙNG CHUNG, không tải lại khi soft-nav đổi trang
+  // (`shell-soft-nav.js` chỉ nạp lại script CHƯA có trong `loadedSrc`) — thiếu
+  // `_resetIntro()` thì "1 lần/trang" ở trên thành "1 lần/tab trình duyệt":
+  // bấm sang tool chat-first thứ hai trong cùng tab sẽ KHÔNG có bong bóng
+  // giới thiệu. Gọi từ `shell-soft-nav.js` NGAY khi script cờ của trang đích
+  // chạy (cùng chỗ gọi `Shell._resyncTool()`) — TRƯỚC khi trang đích gọi
+  // `renderChat()`. Không dùng sự kiện `tvmb:softnav` (bắn SAU khi script
+  // trang đích đã chạy xong, tức SAU cả `renderChat()`) vì sai thứ tự: cờ chỉ
+  // kịp reset cho lượt điều hướng KẾ TIẾP, không phải lượt vừa xong.
 
   // ── Helpers ──────────────────────────────────────────────────
   function pid(id, prefix) { return prefix ? `${prefix}-${id}` : id; }
@@ -164,6 +173,12 @@ window.TuviForm = (() => {
     if (_cssInjected) return;
     _cssInjected = true;
     const style = document.createElement('style');
+    // `id` là dấu hiệu DUY NHẤT `shell-soft-nav.js` dùng để nhận ra đây là
+    // style DÙNG CHUNG (đừng gỡ khi đổi trang) chứ không phải khối `<style>`
+    // riêng của MỘT app-*.html — thiếu id này soft-nav gỡ mất CSS `.tvf-ic`/
+    // `.tvf-chev`/`.tvf-pretty` ở lần đổi trang thứ hai, icon phình to bằng
+    // kích thước SVG gốc (thiếu `width/height`) và form vỡ layout.
+    style.id = 'tvf-css';
     style.textContent = `
 .tvf-gio-row { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
 .tvf-gio-row select { flex:1; min-width:60px; }
@@ -720,5 +735,7 @@ window.TuviForm = (() => {
     _update:    (prefix = '') => { (_updaters[prefix] || _updaters[''] || (() => {}))(); },
     _toggleUtc: (prefix = '') => toggleUtc(prefix),
     _toggleTip: (iconEl) => toggleTip(iconEl),
+    // xem chú thích ở khai báo `_introShown` phía trên
+    _resetIntro: () => { _introShown = false; },
   };
 })();

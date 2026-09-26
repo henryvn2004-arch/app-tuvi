@@ -56,6 +56,10 @@
     if (_cssDone) return;
     _cssDone = true;
     var s = document.createElement('style');
+    // `id` là dấu hiệu DUY NHẤT `shell-soft-nav.js` dùng để biết đây là style
+    // DÙNG CHUNG (đừng gỡ khi soft-nav đổi trang) — thiếu id thì style này bị
+    // gỡ ở lần đổi trang thứ hai, cùng họ bug đã vá ở `tuvi-form.js`.
+    s.id = 'tvfb-css';
     // Bám token của shell.css (mọi trang app-* đều nạp) nên tự đúng cả light
     // lẫn dark; vẫn kèm giá trị lùi phòng khi được nhúng ở trang khác.
     s.textContent = [
