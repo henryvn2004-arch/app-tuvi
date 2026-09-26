@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Xem tuổi vợ chồng — Tử Vi Minh Bảo</title>
-<meta name="description" content="So tuổi vợ chồng theo lá số Tử Vi: điểm hòa hợp 8 chiều (tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính) — và hỏi trợ lý Luận Đường luận sâu.">
+<meta name="description" content="So tuổi vợ chồng theo lá số Tử Vi: điểm hòa hợp 8 chiều (tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính) — và hỏi Thầy luận sâu.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/shell.css?v=57">
+<link rel="stylesheet" href="/shell.css?v=59">
 <link rel="preload" href="/laso-chart.css?v=3" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/laso-chart.css?v=3"></noscript>
 <style>
@@ -218,10 +218,10 @@ body.chat-first-live .laso-one{flex:none}
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=12"></script>
-<script src="/auth.js?v=2"></script>
+<script src="/tuvi-form.js?v=13"></script>
+<script src="/auth.js?v=4"></script>
 <script src="/tuvi-paywall.js?v=38"></script>
-  <script src="/nav.js?v=43" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=106"></script>
+  <script src="/nav.js?v=45" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=108"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=44"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
@@ -593,7 +593,7 @@ function illusBannerHtml(idx,r,gioi,label){
     ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
 }
 function sec(n,title,tag,inner){ return '<section class="sec" id="sec-'+n+'"><div class="sec-h"><div class="sec-n">'+(n+1)+'</div><h3>'+esc(title)+'</h3>'+(tag?'<span class="tag">'+esc(tag)+'</span>':'')+'</div>'+inner+'</section>'; }
-function ask(t){ return '<div class="ask" data-ask="'+esc(t)+'">✦ Hỏi trợ lý: "'+esc(t)+'"</div>'; }
+function ask(t){ return '<div class="ask" data-ask="'+esc(t)+'">✦ Hỏi Thầy: "'+esc(t)+'"</div>'; }
 // Khoá-mini (ẨN mặc định, xem chú thích ở _paintSecLocksXt) — CHỈ dựng cho
 // xem-tuoi/xem-lam-an (tuong-hop hoàn toàn miễn phí, không có gì để mở khoá).
 function secLock(idx){ return PAID_MODES[MODE_KEY]?TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+idx,product:MODE_KEY}):''; }

@@ -72,7 +72,7 @@ OTP thật đã nhận được (xem `docs/nhat-ky/2026-09.md`). Còn `EMAIL_FRO
 | Hoá đơn nạp Lượng | `settlePayPalTopup` + `bank-webhook`, chokepoint `credited` | `lib/email/invoice.ts` → `sendTransactionalEmail` | LUÔN bật |
 | PDF luận giải | Nút "Gửi email" (`public/tools-shared/report-delivery.js`, dùng chung cho `app-luan-giai.html`/`app-chu-trinh-cuoc-doi.html` — `public/luan-giai.html` đã RETIRE, xem `docs/nhat-ky/2026-09.md` "Retire /luan-giai.html") | `app/api/luan-giai/email-pdf` → `lib/pdf/luan-giai.tsx` (react-pdf, KHÔNG Puppeteer) → `sendTransactionalEmail` (đính kèm) | Theo yêu cầu user |
 | Reminder (còn Lượng, idle) | Cron tuần `email-reminder-idle` | `lib/marketing/email-reminder.ts` — dùng lại RPC `dashboard_at_risk` | **TẮT** — `app_config['marketing.email_reminder_idle'].enabledBudgetPerRun` = 0 |
-| Cross-sell (tool liên quan) | Cron tuần `email-cross-sell` | `lib/marketing/email-cross-sell.ts` — RPC `cross_sell_candidates` (cặp tool tay chọn) | **TẮT** — `app_config['marketing.email_cross_sell'].enabledBudgetPerRun` = 0 |
+| Cross-sell (tool liên quan) | Cron `email-cross-sell` **T6 + CN** 08:00 VN | `lib/marketing/email-cross-sell.ts` — RPC `cross_sell_candidates` (cặp tool tay chọn); **tối đa 1 thư/người/lượt ⇒ 2 thư/tuần** | **BẬT** sau khi PR lên prod — `_patches/migration-email-cross-sell-on.sql` (budget 100/lượt) |
 | Broadcast (admin soạn tay) | `admin.html` → `handleAdminChannelBroadcast` (platform=email) | Nạp `email_broadcast_queue`, cron `email-broadcast-drain` (mỗi 15 phút) rút dần | Sẵn sàng, admin bấm mới gửi |
 
 Reminder/cross-sell khoá TẮT theo đúng khuôn công tắc của autopilot

@@ -307,7 +307,8 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
   // `goi_y_san_pham` (giai đoạn 3 cross-sell, 2026-09-23) dùng CHUNG hàm này —
   // hai tool chỉ khác MÔ TẢ (lib/tools/suggest-tool.ts), hành vi hệt nhau:
   // tra `tool_pricing`, ghi CÙNG `ctx.toolSuggestion`, cùng trần 1 lần/hội thoại.
-  if (name === 'goi_y_cong_cu' || name === 'goi_y_san_pham') return execGoiYCongCu(input, ctx);
+  if (name === 'goi_y_cong_cu' || name === 'goi_y_san_pham')
+    return execGoiYCongCu(input, ctx, name === 'goi_y_san_pham' ? 'report' : 'tool');
   if (name === 'moi_thay_bat_tu') return execMoiThayBatTu(input, ctx);
   if (name === 'moi_thay_luc_nham') return execMoiThayLucNham(input, ctx);
   if (name === 'tra_van_nam_bat_tu') return execTraVanNamBatTu(input, ctx);
@@ -515,7 +516,7 @@ async function execQuenDi(input: Rec, ctx: ToolContext): Promise<ToolRunResult> 
 // ── Gợi ý công cụ (bước 4) ──────────────────────────────────
 // Giữ ĐÚNG MỘT thẻ mỗi lượt: model gọi hai lần thì lần sau bị bỏ. Trần "một
 // lần mỗi cuộc trò chuyện" thì client giữ (nó mới là bên có trạng thái phiên).
-async function execGoiYCongCu(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+async function execGoiYCongCu(input: Rec, ctx: ToolContext, kind: 'tool' | 'report'): Promise<ToolRunResult> {
   if (ctx.toolSuggestion) {
     return { content: 'Đã gợi ý một công cụ trong lượt này rồi. Đừng gợi ý thêm.', label: 'Đang tra danh mục' };
   }
@@ -528,7 +529,7 @@ async function execGoiYCongCu(input: Rec, ctx: ToolContext): Promise<ToolRunResu
       label: 'Đang tra danh mục',
     };
   }
-  ctx.toolSuggestion = s;
+  ctx.toolSuggestion = { ...s, kind };
   return {
     content: `Đã hiện thẻ "${s.label}" cho người dùng. Đừng nhắc lại trong lời văn, đừng nói giá, cứ trả lời tiếp tự nhiên.`,
     label: 'Đang tra danh mục',

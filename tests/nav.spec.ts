@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const PAGES = ['/', '/app-luan-giai.html', '/app/xem-tuoi', '/app/bat-tu', '/phong-thuy.html'];
+const PAGES = ['/', '/app-luan-giai.html', '/app/xem-tuoi', '/app/bat-tu', '/menh-kho.html'];
 
 test.describe('Navigation', () => {
   test('logo visible và link về trang chủ', async ({ page }) => {
@@ -10,7 +10,7 @@ test.describe('Navigation', () => {
     // NAV CHUNG (không riêng gì laso/xem-tuoi) nên dùng một trang tĩnh còn giữ
     // layout cổ điển thay vì đi theo laso/xem-tuoi/tu-binh vào retire
     // (2026-09-14 luan-giai.html, 2026-09-19 xem-tuoi.html/xem-lam-an.html/tu-binh.html).
-    await page.goto('/phong-thuy.html');
+    await page.goto('/menh-kho.html');
     await page.waitForLoadState('networkidle');
     const logo = page.locator('.nav-logo, .nav-brand, a[href="/"], a[href="index.html"]').first();
     await expect(logo).toBeVisible();

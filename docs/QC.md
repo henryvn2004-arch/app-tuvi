@@ -61,3 +61,18 @@ tên **"OpenAI Key"** (`env_01Khi54Dffp38bzpmjYSGrYg`) mới là nơi có CẢ H
 thật + audit layout 112 lượt tải trang trên prod, PR #1013/#1014). `list_environments`
 liệt kê ID nhưng KHÔNG lộ policy mạng/key — phải thử thật (hoặc hỏi Henry) trước khi
 giao việc, đừng tin tên.
+
+⚠️ **Playwright trong container báo `ERR_CERT_AUTHORITY_INVALID` với MỌI host**
+dù `curl` cùng URL trả `200` và README proxy nói NSS đã cấu hình — NSS db thật ra
+TRỐNG (`certutil -L -d sql:/root/.pki/nssdb` không thấy CA nào). Vá:
+```bash
+apt-get install -y libnss3-tools   # nếu chưa có certutil
+awk '/BEGIN CERT/{n++} {print > ("ca-" n ".pem")}' /root/.ccr/ca-bundle.crt
+for f in ca-*.pem; do
+  openssl x509 -in "$f" -noout -subject | grep -q 'O *= *Anthropic' &&
+    certutil -A -d sql:/root/.pki/nssdb -t "C,," -n "anthropic-$f" -i "$f"
+done
+```
+Đừng dùng `ignoreHTTPSErrors` (che triệu chứng, không phải vá gốc). Sau bước này
+`scripts/ux/harness.mjs` vào được prod thật (agent `ux-tester` audit W1, 2026-09-26).
+Chỉ cần làm MỘT LẦN mỗi container mới — mất khi session/container bị thu hồi.

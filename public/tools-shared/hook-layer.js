@@ -85,7 +85,11 @@ window.HookLayer = (function () {
     var items = Array.isArray(g.items) ? g.items.map(function (i) { return '<li>' + esc(i) + '</li>'; }).join('') : '';
     var product = esc(g.product || toolId || '');
     var ctaLabel = esc(g.cta || 'Mở bản đầy đủ');
-    var priceSpan = product ? ' — <span data-tvp-price="' + product + '">…</span> Lượng' : '';
+    // VNĐ là giá CHÍNH ở paywall (luật CLAUDE.md, chốt Henry 2026-09-20) — dùng
+    // `data-tvp-price-label` (đã đúng thứ tự VNĐ trước, Lượng phụ trong ngoặc,
+    // xem `ToolPrices.priceLabel()`), KHÔNG tự ghép `data-tvp-price` (số Lượng
+    // thô) + " Lượng" như trước — vi phạm thẳng luật đó.
+    var priceSpan = product ? ' — <span data-tvp-price-label="' + product + '">…</span>' : '';
     var inner =
       (g.tieuDe ? '<b>' + esc(g.tieuDe) + '</b>' : '') +
       (items ? '<ul class="hkl-gate-ul">' + items + '</ul>' : '');

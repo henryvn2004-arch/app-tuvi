@@ -11,7 +11,7 @@
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/theme.css?v=1">
+<link rel="stylesheet" href="/theme.css?v=2">
 <style>
 :root{--gold-br:#c9a84c}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -259,12 +259,12 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 <script src="/track.js?v=8"></script>
 <script>try{window.Track&&window.Track.event&&window.Track.event('topup_start',{meta:{from:'topup_page'}})}catch(e){}</script>
 <script src="/tool-prices.js?v=10"></script>
-<script src="/auth.js?v=2"></script>
+<script src="/auth.js?v=4"></script>
 <script src="/promo.js?v=1"></script>
 </head>
 <body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<script src="/nav.js?v=43"></script>
+<script src="/nav.js?v=45"></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
 
 <main class="wrap">
@@ -443,7 +443,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
     </div>
     <div class="faq-item">
       <div class="faq-q">Quà Lượng chào mừng khi đăng ký dùng được gì?</div>
-      <div class="faq-a" id="faqWelcome">Dùng được cho các công cụ luận giải chuyên sâu và trò chuyện với Trợ lý Luận Đường. Mức phí của từng công cụ hiển thị ngay trên trang công cụ đó.</div>
+      <div class="faq-a" id="faqWelcome">Dùng được cho các công cụ luận giải chuyên sâu và hỏi Thầy. Mức phí của từng công cụ hiển thị ngay trên trang công cụ đó.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q">Lượng có dùng chung tài khoản được không?</div>
@@ -675,7 +675,7 @@ async function loadStatus() {
       // Không hứa cứng "tra cứu miễn phí hoàn toàn" ở đây — giá từng công cụ đọc
       // từ `tool_pricing` và chỉ nêu ở trang công cụ, nên đổi giá là tự đúng.
       document.getElementById('faqWelcome').textContent = bonus
-        + ' Lượng, dùng được cho các công cụ luận giải chuyên sâu và trò chuyện với Trợ lý Luận Đường. '
+        + ' Lượng, dùng được cho các công cụ luận giải chuyên sâu và hỏi Thầy. '
         + 'Mức phí của từng công cụ hiển thị ngay trên trang công cụ đó.';
     }
     return;
@@ -687,7 +687,7 @@ async function loadStatus() {
       + '<div class="balance-label">Số dư hiện tại</div>'
       + '<div class="balance-value">' + (data.balance ?? 0) + ' <span>Lượng</span></div>'
       + '</div>'
-      + '<a class="balance-link" href="/profile.html">Xem lịch sử ' + ic('chevron-down') + '</a></div>';
+      + '<a class="balance-link" href="/app/ho-so">Xem lịch sử ' + ic('chevron-down') + '</a></div>';
     ssDone(slot);
     mount(slot);
   } catch (e) {
@@ -1434,7 +1434,7 @@ document.addEventListener('keydown', function(e){
   nav.innerHTML =
     '<a href="/app">' + icon('<circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9 9 9 0 0 1 0-18z"/><circle cx="12" cy="7.5" r="1"/><circle cx="12" cy="16.5" r="1"/>') + 'Trang chủ</a>' +
     '<a href="/app/thay">' + icon('<path d="m12 3 2.6 5.9 6.4.5-4.9 4.2 1.5 6.3L12 17l-5.6 3.4 1.5-6.3L3 9.9l6.4-.5z"/>') + 'Các Thầy</a>' +
-    '<a class="tvmb-home" href="/app/tro-chuyen"><span class="tvmb-home-btn" aria-hidden="true">' + icon('<path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/>') + '</span><span>Trò chuyện</span></a>' +
+    '<a class="tvmb-home" href="/app/tro-chuyen"><span class="tvmb-home-btn" aria-hidden="true">' + icon('<path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/>') + '</span><span>Hỏi Thầy</span></a>' +
     '<a class="active" href="/app/nap-luong">' + icon('<path d="M2 7h20v12H2z"/><path d="M16 12h4"/>') + 'Nạp Lượng</a>' +
     '<a href="/app/ho-so">' + icon('<circle cx="12" cy="8" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0" stroke-linecap="round"/>') + 'Hồ Sơ</a>';
   document.body.appendChild(nav);

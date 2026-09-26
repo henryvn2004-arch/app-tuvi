@@ -279,7 +279,8 @@ export const JOBS: JobSpec[] = [
     everyMinutes: 7 * D, schedule: 'T3 08:00 VN hằng tuần', sink: 'email_log', path: '/api/cron/email-reminder-idle',
     since: '2026-09-14' },
   { key: 'email-cross-sell', label: 'Email — gợi ý tool liên quan', source: 'vercel',
-    everyMinutes: 7 * D, schedule: 'T5 08:00 VN hằng tuần', sink: 'email_log', path: '/api/cron/email-cross-sell',
+    // T6 + CN: khoảng trống LỚN NHẤT là CN → T6 = 5 ngày.
+    everyMinutes: 5 * D, schedule: 'T6 + CN 08:00 VN hằng tuần', sink: 'email_log', path: '/api/cron/email-cross-sell',
     since: '2026-09-14' },
   // "Đơn rơi" — nhắc user đã bấm mở khoá một tool nhưng chưa hoàn tất mua,
   // xem lib/marketing/email-abandoned-checkout.ts. MẶC ĐỊNH TẮT (budget=0).

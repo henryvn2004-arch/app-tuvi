@@ -283,9 +283,9 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .lib-cta a{display:inline-block;background:#C46A5E;color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:11px 28px;border-radius:9px}
 @media(max-width:700px){.bc,.lib-hero,.lib-body{padding-left:20px;padding-right:20px}.lib-hero-title{font-size:28px}.lib-grid{grid-template-columns:1fr}}
 </style>
-<script src="/auth.js?v=2"></script>
+<script src="/auth.js?v=4"></script>
 </head><body><div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=43" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
 <div class="bc"><a href="/">Trang Chủ</a><span>›</span><span>Thư Viện</span></div>
 
 <div class="lib-hero">
@@ -300,7 +300,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
   <div class="lib-cta">
     <b>Muốn xem lá số của riêng bạn?</b>
     <p>Nhập ngày sinh — luận giải cá nhân hóa theo đúng lá số của bạn, không phải nội dung tổng hợp.</p>
-    <a href="${BASE}/app?utm_source=thu-vien&utm_medium=internal&utm_campaign=library">Vào Luận Đường →</a>
+    <a href="${BASE}/app?utm_source=thu-vien&utm_medium=internal&utm_campaign=library">Hỏi Thầy →</a>
   </div>
 </div>
 

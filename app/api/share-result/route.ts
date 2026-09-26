@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
   if (!kind) return err('kind phải là "image" hoặc "text"', 400);
 
   const toolId = String(b.toolId || 'app').slice(0, 40);
-  const title = String(b.title || 'Kết quả Luận Đường').slice(0, 160);
+  const title = String(b.title || 'Kết quả luận giải').slice(0, 160);
 
   // blocks: mảng "thẻ" tùy chọn để trang /ket-qua render lại y hệt card
   // (.res-block) của workspace — mỗi phần tử chỉ mang TEXT/URL thô, được

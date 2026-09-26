@@ -46,3 +46,25 @@ Muốn bật thì tự khai trong `.claude/settings.json`, và cần Python + `r
 
 Không có submodule/lockfile — muốn nâng cấp thì clone lại upstream rồi copy theo bố cục trên.
 Kiểm sau khi nâng: mọi thư mục skill phải có `SKILL.md` với frontmatter `name` + `description`.
+
+---
+
+# Bộ skill thiết kế — bản vendor (2026-09-26)
+
+| Skill | Nguồn (commit) | Giấy phép |
+|---|---|---|
+| `emil-design-eng` `review-animations` `improve-animations` `find-animation-opportunities` `animate` `animation-vocabulary` `mobile-native` | https://github.com/emilkowalski/skill (`d16ebe6`) | MIT — `emil-design-eng/LICENSE` |
+| `impeccable` | https://github.com/pbakaus/impeccable, thư mục `plugin/skills/impeccable` (`9d715cc`, v4.4.0) | Apache 2.0 — `impeccable/LICENSE` + `NOTICE.md` |
+| `taste-skill` `redesign-skill` | https://github.com/Leonxlnx/taste-skill (`c184364`) | MIT — `taste-skill/LICENSE` |
+
+**Đã CỐ Ý bỏ:** Emil `write-swift` `animate-expo` (native) · `ask-sonner` `pick-ui-library`
+`prototype` (React) · `apple-design`. Taste: các biến thể phong cách (`brutalist` `soft`
+`minimalist` `stitch` `gpt-*` `v1`), `imagegen-*`, `image-to-code`, `brandkit`, `output-skill` —
+site đã có bản sắc riêng, không cần skill đổi phong cách.
+
+⚠️ **Luật repo thắng skill:** `CLAUDE.md` (cấm emoji màu, cấm khoe "AI", giá VNĐ chính,
+bump `?v=`, CLS) đứng trên mọi gợi ý của các skill này. Taste/Impeccable khuyên "làm lại cho
+khác" thì với site này chỉ áp ở chế độ TINH CHỈNH (refinement), không redesign.
+
+`impeccable/scripts/impeccable context` chạy được trong container (tự tải binary lần đầu,
+không ghi file vào repo). Chưa có `PRODUCT.md`/`DESIGN.md` — skill sẽ đề nghị `init`.

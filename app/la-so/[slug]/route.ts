@@ -13,6 +13,7 @@ import { join } from 'path';
 import { NOINDEX_FOLLOW } from '@/lib/seo/index-policy';
 import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 import { ORG_ID } from '@/lib/seo/entity';
+import { vndPerCredit } from '@/lib/billing/packages';
 
 // ⚠️ Module-level: must run before any request so that if loadEngine() sets
 // globalThis.window = globalThis, Next.js URL parsing (getLocationOrigin)
@@ -262,7 +263,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     <a class="cta-btn" href="${appLuanGiaiHref(parseIsrSlug(slug))}">Xem Luận Giải →</a>
   </div>
 </div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=43" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
 </body></html>`;
 }
 
@@ -312,7 +313,7 @@ ${commonHead}
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 ${bcHTML}
 ${row.rendered_html}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=43" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
 </body></html>`;
   }
   const luanGiai: Record<string,string> = (row.luan_giai as Record<string,string>) || {};
@@ -328,7 +329,7 @@ ${commonHead}
 ${bcHTML}
 <h1>${title}</h1>
 <div>${bodyHTML}</div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=43" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
 </body></html>`;
 }
 
@@ -414,6 +415,39 @@ function appLuanGiaiHref(p: IsrParams | null): string {
   // tính href, mà `&` trần trong HTML attribute là sai chuẩn (trình duyệt hiện
   // nay vẫn đọc đúng, nhưng trang này render ~438K lần và bị bộ máy SEO soi).
   return esc(`/app/luan-giai?${q.toString()}`);
+}
+
+// Y hệt `appLuanGiaiHref` nhưng cho MỘT tool bất kỳ (khối "Bước Tiếp Theo") —
+// KHÔNG kèm `auto=1`: tool trả phí thì chỉ điền sẵn form, người đọc tự bấm
+// chạy (giữ đúng chặn "không tự chạy report tốn Lượng khi chưa bấm").
+function appToolHref(basePath: string, p: IsrParams | null): string {
+  if (!p) return basePath;
+  const q = new URLSearchParams({
+    ngay: String(p.dd),
+    thang: String(p.mm),
+    nam: String(p.year),
+    gio: String(GIO_HOURS[p.gioIdx]),
+    gioitinh: p.gioi,
+    namxem: String(p.namXem),
+  });
+  return esc(`${basePath}?${q.toString()}`);
+}
+
+// Mở "Hỏi Thầy" (rail chat chung, `/app`) với ngày sinh điền sẵn — `auto=1` ở
+// ĐÂY chỉ tự chạy AN SAO (lập lá số), một phép tính MIỄN PHÍ, không phải một
+// report trả phí, nên không vi phạm chặn "không tự chạy report tốn Lượng".
+function appChatHref(p: IsrParams | null): string {
+  if (!p) return '/app';
+  const q = new URLSearchParams({
+    ngay: String(p.dd),
+    thang: String(p.mm),
+    nam: String(p.year),
+    gio: String(GIO_HOURS[p.gioIdx]),
+    gioitinh: p.gioi,
+    namxem: String(p.namXem),
+    auto: '1',
+  });
+  return esc(`/app?${q.toString()}`);
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -1297,9 +1331,60 @@ async function fetchRelatedArticles(cungMenh: string, chinhTinh: string): Promis
 }
 
 // ────────────────────────────────────────────────────────────────────────────
+// "Bước Tiếp Theo" — 2 thẻ cuối trang: 1 báo cáo liên quan (bổ sung cho
+// "Xem Luận Giải" đã có ở sidebar) + 1 mở Hỏi Thầy. ~7.000 trang /la-so/* là
+// mặt SEO lớn nhất của site, TRƯỚC ĐÂY 0 lối quay lại chat — khác `/khao-luan/*`
+// vốn đã có (docs/UX-AUDIT-PLAN.md "W5: Bán chéo").
+//
+// Đây là SERVER — đọc thẳng `tool_pricing`/`credit_packages` là ĐÚNG luật
+// "client KHÔNG chép giá" (luật đó cấm CLIENT đoán/chép số; server đọc DB
+// chính là nguồn). KHÔNG hardcode nhãn/giá — thiếu dòng thì bỏ hẳn thẻ report,
+// KHÔNG dựng thẻ với giá đoán.
+// ────────────────────────────────────────────────────────────────────────────
+type NextStepTool = { toolId: string; label: string; appPath: string; credits: number } | null;
+
+async function withTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
+  return Promise.race([
+    p.catch(() => fallback),
+    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
+  ]);
+}
+
+async function fetchNextStepTool(toolId: string): Promise<NextStepTool> {
+  const r = await sbFetch<{ label: string; app_path: string; credits: number }>(
+    `${SB_URL}/rest/v1/tool_pricing?tool_id=eq.${encodeURIComponent(toolId)}&enabled=eq.true&select=label,app_path,credits&limit=1`,
+  );
+  const row = r.rows[0];
+  if (!row || typeof row.app_path !== 'string' || !row.app_path.startsWith('/')) return null;
+  return { toolId, label: String(row.label || toolId), appPath: row.app_path, credits: Number(row.credits) || 0 };
+}
+
+function buildNextStepHTML(tool: NextStepTool, params: IsrParams, vndRate: number | null): string {
+  const chatCard = `<a class="ns-card" href="${appChatHref(params)}">
+    <div class="ns-card-eyebrow">Hỏi Thầy</div>
+    <div class="ns-card-t">Hỏi thêm về lá số này</div>
+    <div class="ns-card-d">Mở Luận Đường, ngày giờ sinh đã điền sẵn — hỏi tự do, không cần nhập lại.</div>
+  </a>`;
+  if (!tool) {
+    return `<div class="next-step"><div class="ns-title">Bước Tiếp Theo</div><div class="ns-grid ns-grid-1">${chatCard}</div></div>`;
+  }
+  const vnd = vndRate ? Math.ceil((tool.credits * vndRate) / 1000) * 1000 : null;
+  const priceLabel = vnd ? `~${vnd.toLocaleString('vi-VN')}đ (${tool.credits} Lượng)` : `${tool.credits} Lượng`;
+  const reportCard = `<a class="ns-card ns-card-report" href="${appToolHref(tool.appPath, params)}">
+    <div class="ns-card-eyebrow">Báo cáo liên quan</div>
+    <div class="ns-card-t">${esc(tool.label)}</div>
+    <div class="ns-card-d">Viết trọn thành văn bản, ngày giờ sinh đã điền sẵn — ${esc(priceLabel)} mỗi lượt.</div>
+  </a>`;
+  return `<div class="next-step">
+    <div class="ns-title">Bước Tiếp Theo</div>
+    <div class="ns-grid">${reportCard}${chatCard}</div>
+  </div>`;
+}
+
+// ────────────────────────────────────────────────────────────────────────────
 // ISR: full HTML builder
 // ────────────────────────────────────────────────────────────────────────────
-function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles: ArticleStub[]): string {
+function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles: ArticleStub[], nextStepTool: NextStepTool, vndRate: number | null): string {
   const palaces    = (ls.palaces as Rec[]) || [];
   const menhP      = palaces.find(p => p.isMenh) as Rec|undefined;
   const cungMenh   = String(menhP?.cungName || '');
@@ -1362,6 +1447,7 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles:
   const textHTML       = renderTextBlocks(ls);
   const sections24HTML = render24Sections(ls, params);
   const relatedHTML    = buildRelatedLinks(params);
+  const nextStepHTML   = buildNextStepHTML(nextStepTool, params, vndRate);
 
   return `<!DOCTYPE html>
 <html lang="vi"><head>
@@ -1408,6 +1494,17 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 .faq-q{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px}
 .faq-a{font-size:13px;color:var(--text-mid);line-height:1.6}
 .sections-24{margin-top:32px}
+.next-step{margin-top:32px;padding-top:24px;border-top:2px solid var(--border-lt)}
+.ns-title{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:14px}
+.ns-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ns-grid-1{grid-template-columns:1fr;max-width:360px}
+.ns-card{display:block;padding:18px;border-radius:10px;text-decoration:none;color:inherit;background:var(--bg-soft);border:1px solid var(--border-lt);transition:box-shadow .15s}
+.ns-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.ns-card-report{background:linear-gradient(135deg,#171a4a,#2d2060);color:#fff;border:none}
+.ns-card-eyebrow{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;opacity:.7;margin-bottom:6px}
+.ns-card-t{font-size:15px;font-weight:700;margin-bottom:6px}
+.ns-card-d{font-size:12.5px;line-height:1.55;opacity:.85}
+@media(max-width:700px){.ns-grid{grid-template-columns:1fr}}
 .s24{background:#fff;border:1px solid var(--border-lt);border-radius:10px;padding:18px 20px;margin-bottom:16px}
 .s24h{font-family:Arial,sans-serif;font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--border-lt)}
 .s24b p{font-size:13px;color:var(--text-mid);line-height:1.75;margin-bottom:10px}
@@ -1493,6 +1590,8 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
   <div class="sections-24">
     ${sections24HTML}
   </div>
+
+  ${nextStepHTML}
 </div>
 ${relatedArticles.length ? `<div style="background:#F9F4EB;border-top:2px solid #E8E4D9;padding:24px;margin-top:0">
 <div style="max-width:1000px;margin:0 auto">
@@ -1506,7 +1605,7 @@ ${relatedArticles.length ? `<div style="background:#F9F4EB;border-top:2px solid 
 </div>
 </div>` : ''}
 ${relatedHTML}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=43" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
 <script src="/share.js" defer></script>
 <script src="/pwa-push.js?v=2" defer></script>
 <script>
@@ -1605,7 +1704,13 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
           //    lên 9,1s mà chắc chắn trả về rỗng.
           const sbAlive = pub.ok || pre.ok;
           const relatedArticles = sbAlive ? await fetchRelatedArticles(cungMenh, chinhTinh) : [];
-          const html = buildIsrHTML(ls, isrParams, slug, relatedArticles);
+          // Cùng gate `sbAlive` — Supabase vừa không trả lời được thì đừng hỏi
+          // thêm cho một khối TRANG TRÍ khác; thẻ chat vẫn hiện (không cần DB).
+          const nextStepTool = sbAlive
+            ? await withTimeout(fetchNextStepTool('chu-trinh-cuoc-doi'), SB_TIMEOUT_MS, null)
+            : null;
+          const vndRate = sbAlive ? await withTimeout(vndPerCredit(), SB_TIMEOUT_MS, 500) : 500;
+          const html = buildIsrHTML(ls, isrParams, slug, relatedArticles, nextStepTool, vndRate);
           return new NextResponse(html, { headers: {
             'Content-Type': 'text/html; charset=utf-8',
             'Cache-Control': publicKnown

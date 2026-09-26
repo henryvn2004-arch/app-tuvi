@@ -118,7 +118,7 @@ ${msgHtml}
   </div>
   <div class="cta">
     <p>Bắt đầu hội thoại tử vi của riêng bạn</p>
-    <a href="${BASE}/tuvi-chat.html">Mở Tử Vi Chat →</a>
+    <a href="${BASE}/app/tro-chuyen">Hỏi Thầy →</a>
   </div>
 </div>
 ${GA4_TRACK_SNIPPET}

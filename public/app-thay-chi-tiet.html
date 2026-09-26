@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/shell.css?v=57"/>
+<link rel="stylesheet" href="/shell.css?v=59"/>
 <style>
 .ws-body{padding:22px 26px 60px;max-width:640px}
 .tm-head{display:flex;gap:16px;align-items:center;margin-bottom:6px}
@@ -44,10 +44,10 @@
   </main>
 </div>
 
-<script src="/nav.js?v=43" data-icons-only></script>
-<script src="/auth.js?v=2"></script>
+<script src="/nav.js?v=45" data-icons-only></script>
+<script src="/auth.js?v=4"></script>
 <script>window.SHELL_ACTIVE='thay';</script>
-<script src="/shell.js?v=106"></script>
+<script src="/shell.js?v=108"></script>
 <script>
 (function(){
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -80,11 +80,11 @@
       '</div>' +
       (m.tagline ? '<p class="tm-tag">"' + esc(m.tagline) + '"</p>' : '') +
       (m.greeting ? '<div class="tm-greet">' + esc(m.greeting) + '</div>' : '') +
-      '<button type="button" class="tm-cta" id="tmChat"><span data-icon="message-circle"></span>Trò chuyện với Thầy ' + esc(m.display_name) + '</button>' +
+      '<button type="button" class="tm-cta" id="tmChat"><span data-icon="message-circle"></span>Hỏi Thầy ' + esc(m.display_name) + '</button>' +
       '<div class="tm-sub">Công cụ Thầy ' + esc(m.display_name) + ' đứng tên</div>' +
       (tools.length
         ? '<div class="tm-tools">' + tools.map(toolTile).join('') + '</div>'
-        : '<p class="tm-empty">Thầy ' + esc(m.display_name) + ' hiện chưa đứng tên công cụ nào — vẫn có thể trò chuyện trực tiếp qua Luận Đường.</p>');
+        : '<p class="tm-empty">Thầy ' + esc(m.display_name) + ' hiện chưa đứng tên công cụ nào — vẫn có thể hỏi trực tiếp qua Hỏi Thầy.</p>');
     content.style.display = 'block';
     if (window.mountIcons) window.mountIcons(content);
     document.getElementById('tmChat').addEventListener('click', function(){

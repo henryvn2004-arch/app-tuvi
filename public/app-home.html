@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luận Đường — Tử Vi Minh Bảo</title>
-<meta name="description" content="Luận Đường — hỏi Thầy về vận mệnh, lá số Tử Vi, Bát Tự, xem tuổi, đặt tên, chọn ngày, ngay trong một cuộc trò chuyện.">
+<title>Hỏi Thầy — Tử Vi Minh Bảo</title>
+<meta name="description" content="Hỏi Thầy về vận mệnh, lá số Tử Vi, Bát Tự, xem tuổi, đặt tên, chọn ngày, ngay trong một cuộc trò chuyện.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <!-- 🔴 BẮT BUỘC cho đường bật thông báo trên iPhone, không phải tag trang trí.
      Apple chỉ mở Web Push cho trang đã "Thêm vào Màn hình chính" và chạy ở chế
@@ -25,7 +25,7 @@
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/shell.css?v=57">
+<link rel="stylesheet" href="/shell.css?v=59">
 <style>
 /* Thẻ Vận Hôm Nay phải co theo bề rộng CỘT chứ không theo viewport: trên
    desktop `.ws` chỉ còn ~360px sau khi trừ sidebar 246px + rail 336px, nên
@@ -458,10 +458,10 @@
              lời câu hỏi thay người dùng (cùng nguyên tắc `todayAsk` bên dưới:
              CHỈ mở rail, không tự gửi gì). Giữ nguyên lưới công cụ phía dưới —
              đổi trọng tâm trang, không bỏ danh sách. -->
-        <button class="hero-ask" type="button" id="heroAsk" aria-label="Hỏi Thầy Luận Đường">
+        <button class="hero-ask" type="button" id="heroAsk" aria-label="Hỏi Thầy">
           <span class="hero-ask-ic" data-icon="sparkles"></span>
           <span class="hero-ask-tx">
-            <b>Hỏi Thầy Luận Đường</b>
+            <b>Hỏi Thầy</b>
             <span id="heroAskSub">Vận hôm nay, lá số, hay bất cứ điều gì bạn đang vướng…</span>
           </span>
           <span class="hero-ask-go" aria-hidden="true">→</span>
@@ -558,13 +558,13 @@
 <script>window.SHELL_ACTIVE='home';</script>
 <script src="/tools-shared/hoang-dao.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=12"></script>
+<script src="/tuvi-form.js?v=13"></script>
 <script src="/poster.js?v=5" defer></script>
 <script src="/tool-prices.js?v=10"></script>
-<script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=43" data-icons-only></script>
+<script src="/auth.js?v=4"></script>
+  <script src="/nav.js?v=45" data-icons-only></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
-<script src="/shell.js?v=106"></script>
+<script src="/shell.js?v=108"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=44"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -1371,15 +1371,33 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       .catch(function(){ fin(null); });
   }
 
-  function greetingFor(cc,nm,away,worry){
+  // W4 item 4 (docs/UX-AUDIT-PLAN.md): quay lại TRONG NGÀY (away===0, đã hỏi
+  // ít nhất 1 lần trước đó — khác away<0 "chưa từng") thì mở lời bằng CHÍNH
+  // "vận hôm nay" của người đó, đọc thẳng `v.caNhan` (engine `van-ngay.ts`
+  // `computeVanNgayCaNhan`, đã tính SẴN trong `wire()` — không gọi LLM, không
+  // tính lại gì ở đây). `vanHomNay` rỗng khi chưa có tầng cá nhân (lá số hỏng/
+  // API lỗi) → rơi về câu chào chung như trước, không hỏi lại đã hỏi rồi.
+  function greetingFor(cc,nm,away,worry,vanHomNay){
     var xung=nm?(', '+nm):'';
     if(away<0) return 'Chào con'+xung+'. Thầy ở đây — con muốn kể gì cũng được: chuyện đi làm, chuyện trong nhà, '
       + 'hay chỉ là hôm nay thấy mệt. Mà nếu muốn xem vận ngày **'+cc+'** hôm nay thì thầy soi luôn.';
+    if(away===0&&vanHomNay) return vanHomNay;
     if(away>=1&&worry) return 'Mấy hôm nay con thế nào'+xung+'? Lần trước con có nhắc chuyện **'+worry+'** — '
       + 'chuyện đó tới đâu rồi con?';
     if(away>=3) return 'Lâu rồi con chưa ghé'+xung+'. Dạo này ổn cả chứ? Có gì muốn kể với thầy không?';
     if(away>=1) return 'Con lại ghé rồi'+xung+'. Hôm nay thế nào — có chuyện gì trong lòng không?';
     return 'Thầy đây'+xung+'. Con còn muốn hỏi gì nữa không, hay có chuyện gì muốn kể?';
+  }
+
+  // Câu "vận hôm nay" CÁ NHÂN, dựng thẳng từ `v.caNhan` (deterministic, engine
+  // `computeVanNgayCaNhan` — KHÔNG LLM). `null` khi thiếu tầng cá nhân.
+  function vanHomNayText(cc,v,nm){
+    var cn=v&&v.caNhan; if(!cn||!cn.cungNhatHan) return null;
+    var xung=nm?(', '+nm):'';
+    var sao=(cn.chinhTinh||[]).slice(0,2).join(', ');
+    return 'Con lại ghé rồi'+xung+'. Hôm nay ngày **'+cc+'**, nhật hạn của con đang ở cung **'+cn.cungNhatHan+'**'
+      + (cn.linhVuc?' ('+cn.linhVuc+')':'') + (sao?' — có '+sao:'') + '.'
+      + (cn.bixung?' Ngày xung tuổi, con cẩn thận việc lớn nhé.':'') + ' Con muốn hỏi thêm gì không?';
   }
 
   // Chips = câu người dùng BẤM ĐỂ GỬI. Trộn hai đường: mở lòng và tra cứu.
@@ -1436,12 +1454,13 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
         // Mồi NGAY bằng câu chào chung để rail dùng được liền, rồi NÂNG CẤP khi
         // hồ sơ về (nếu có mối lo). setContext lượt sau dựng lại thread — vô hại
         // vì người dùng chưa gõ gì trong ~1,5s đầu.
+        var vanHomNay=(away===0)?vanHomNayText(cc,v,nm):null;
         var prime=function(worry){
           Shell.setContext({
             birth:birth,
-            label:'Trò chuyện với Thầy'+(nm?' · '+nm:''),
+            label:'Hỏi Thầy'+(nm?' · '+nm:''),
             placeholder:'Kể cho thầy nghe…',
-            greeting:greetingFor(cc,nm,away,worry),
+            greeting:greetingFor(cc,nm,away,worry,vanHomNay),
             chips:CHIPS_TAM_SU,
             passive:true
           });
@@ -1529,7 +1548,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       var url='https://tuviminhbao.com/app';
       var hlist=hours.map(function(h){return h.chi+(h.range?' ('+h.range+')':'');}).join(', ');
       var txt='Vận ngày '+td.d+'/'+td.mo+' — Ngày '+cc+' (hành '+v.ngay.canHanh+')'
-        +(v.danhGia?', '+v.danhGia.tinhChat:'')+'. Giờ hoàng đạo: '+hlist+'. Xem vận của bạn tại Luận Đường:';
+        +(v.danhGia?', '+v.danhGia.tinhChat:'')+'. Giờ hoàng đạo: '+hlist+'. Hỏi Thầy về vận của bạn tại:';
       if(navigator.share){ navigator.share({title:'Vận hôm nay — Tử Vi Minh Bảo',text:txt,url:url}).catch(function(){}); return; }
       var full=txt+' '+url, done=function(){ flashIcon(shareBtn,'check',1800); };
       if(navigator.clipboard){ navigator.clipboard.writeText(full).then(done,function(){}); }
@@ -1718,7 +1737,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     var done=0; for(var i=0;i<_khSteps.length;i++) if(_khSteps[i].done) done++;
 
     var h='<div class="kh-card"><div class="kh-eyebrow">Khởi Hành</div>'
-      +'<div class="kh-h">3 bước đầu tiên trên Luận Đường</div>'
+      +'<div class="kh-h">3 bước đầu tiên</div>'
       +'<div class="kh-sub">Làm xong cả ba, nhận thẳng <b>+'+(+kh.credits||15)+' Lượng</b> vào ví — đủ cho một lượt luận tiếp theo.</div>'
       +khBarHtml(done,_khSteps.length);
     if(_khGot>0) h+='<div class="kh-got">✓ Vừa cộng <b>+'+_khGot+' Lượng</b> vào ví bạn.</div>';
@@ -1764,7 +1783,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     var allDone=done===_khGuestDefs.length;
 
     var h='<div class="kh-card"><div class="kh-eyebrow">Khởi Hành</div>'
-      +'<div class="kh-h">3 bước đầu tiên trên Luận Đường</div>'
+      +'<div class="kh-h">3 bước đầu tiên</div>'
       +'<div class="kh-sub">Làm xong cả ba, mở khoá <b>+'+_khGuestCredits+' Lượng</b> — nhận được ngay khi bạn tạo tài khoản.</div>'
       +khBarHtml(done,_khGuestDefs.length)+'<div class="kh-steps">';
     var seenNext=false;
@@ -1868,7 +1887,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     // ⚠️ Câu này phải khớp `start_url` của manifest (`/?utm_source=pwa`) — mở
     // biểu tượng vừa thêm là về TRANG CHỦ, không về thẳng Luận Đường. Bỏ bước
     // "vào Luận Đường" là dẫn người ta tới một trang không có nút này.
-    'ios-need-install':['err','iPhone/iPad chỉ cho bật thông báo khi trang đã nằm ở Màn hình chính. Bấm nút Chia sẻ ở thanh dưới Safari → "Thêm vào MH chính" → mở biểu tượng vừa thêm → vào Luận Đường → bấm lại nút này.'],
+    'ios-need-install':['err','iPhone/iPad chỉ cho bật thông báo khi trang đã nằm ở Màn hình chính. Bấm nút Chia sẻ ở thanh dưới Safari → "Thêm vào MH chính" → mở biểu tượng vừa thêm → bấm lại nút này.'],
     unsupported:['err','Trình duyệt này không hỗ trợ thông báo. Thử bằng Chrome trên Android hoặc máy tính.'],
     error:['err','Chưa bật được. Thử lại sau ít phút giúp tôi.']
   };
@@ -1968,8 +1987,8 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       // #khoiHanhCard ở /app) — neo THẲNG vào nút mở tab đó, đúng nơi bấm
       // được thật, thay vì trỏ vào một khối không còn tồn tại.
       sel:'.tab-home-btn',
-      t:'Đây là đường về Luận Đường',
-      d:'Bấm vào đây từ BẤT KỲ đâu để quay lại màn hình này. Mở khoá Lượng ở tab Tài khoản → Nhiệm Vụ: lập lá số, hỏi Thầy một câu, thử một công cụ.'
+      t:'Đây là nút Hỏi Thầy',
+      d:'Bấm vào đây từ BẤT KỲ đâu để mở lại các cuộc hỏi Thầy. Mở khoá Lượng ở tab Tài khoản → Nhiệm Vụ: lập lá số, hỏi Thầy một câu, thử một công cụ.'
     },
     {
       sel:'#railInput',
@@ -2187,8 +2206,20 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     if(target) place(target,data,_i===STEPS.length-1); else finish();
   }
 
+  // Vào kèm câu hỏi có sẵn (`?q=` từ trang chủ — biến `HOME_ASK` đọc cùng
+  // tham số này nằm trong MỘT IIFE khác, không global, nên đọc lại thẳng ở
+  // đây). Người đó đã tự thao tác thành công một lần, không cần dạy lại — và
+  // đúng lúc này câu trả lời đầu tiên đang render, tour đè lên là che mất
+  // khoảnh khắc quan trọng nhất (audit W1 J1, 2026-09-26).
+  function hasHomeAsk(){
+    try{ return !!new URLSearchParams(location.search).get('q'); }
+    catch(e){ return false; }
+  }
+
   function start(){
-    if(seen()||isReturningUser()) return;
+    // Không `markSeen()` ở nhánh này: lần SAU vào tay không kèm `?q=` vẫn nên
+    // thấy tour nếu chưa từng thấy.
+    if(seen()||isReturningUser()||hasHomeAsk()) return;
     // Không bước nào có điểm neo (trang lỗi, hoặc các khối cùng chưa kịp
     // dựng) → đừng tạo một overlay không trỏ vào đâu cả.
     var any=false;

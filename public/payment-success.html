@@ -113,8 +113,8 @@ body {
   <div class="subtitle" id="msg">Vui lòng chờ trong giây lát</div>
 </div>
 
-<script src="/auth.js?v=2"></script>
-<script src="/nav.js?v=43" data-icons-only></script>
+<script src="/auth.js?v=4"></script>
+<script src="/nav.js?v=45" data-icons-only></script>
 <script>
 // `nav.js?v=43` ở chế độ `data-icons-only` CỐ Ý không nạp Meta Pixel (xem
 // nav.js#297). Nhưng đây là trang XÁC NHẬN THANH TOÁN — đúng nơi PHẢI bắn
@@ -247,7 +247,7 @@ function showSuccess(slug, credits, balance) {
       Cảm ơn bạn đã tin dùng Tử Vi Minh Bảo.<br>
       Dùng credits để luận giải lá số và xem tuổi.
     </div>
-    <a href="/profile.html#credits" class="btn btn-gold" style="display:block;margin-bottom:16px">
+    <a href="/app/ho-so#credits" class="btn btn-gold" style="display:block;margin-bottom:16px">
       Xem tài khoản →
     </a>
     <div style="font-size:12px;color:#999;margin-bottom:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Hoặc sử dụng ngay</div>
@@ -259,7 +259,7 @@ function showSuccess(slug, credits, balance) {
     </div>
   `;
   // Auto redirect to profile after 4s
-  setTimeout(() => { window.location.href = '/profile.html'; }, 4500);
+  setTimeout(() => { window.location.href = '/app/ho-so'; }, 4500);
 }
 
 function showError(msg) {

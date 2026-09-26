@@ -97,28 +97,6 @@ test.describe('Vấn Đáp (/van-dap)', () => {
   });
 });
 
-// ── Kiến Thức Tử Vi ───────────────────────────────────────────────────────────
-test.describe('Kiến Thức Tử Vi (kien-thuc-tuvi.html)', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/kien-thuc-tuvi.html');
-    await page.waitForLoadState('networkidle');
-  });
-
-  test('page load — cards hiện', async ({ page }) => {
-    await expect(page.locator('.hub-card, .hub-card-grid, h1, h2').first()).toBeVisible({ timeout: 8000 });
-  });
-
-  test('hub cards render (ít nhất 3)', async ({ page }) => {
-    const cards = page.locator('.hub-card');
-    expect(await cards.count()).toBeGreaterThanOrEqual(3);
-  });
-
-  test('section titles hiện', async ({ page }) => {
-    const sections = page.locator('.hub-sec-title, h2, h3');
-    expect(await sections.count()).toBeGreaterThanOrEqual(1);
-  });
-});
-
 // ── Resources / Tài Liệu Hub ─────────────────────────────────────────────────
 test.describe('Resources (resources.html)', () => {
   test.beforeEach(async ({ page }) => {

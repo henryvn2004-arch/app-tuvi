@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=43" as="script">
+<link rel="preload" href="/nav.js?v=45" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Tứ Trụ Bát Tự — Lá Số Tứ Trụ Chi Tiết | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Tứ Trụ Bát Tự — Lá Số Tứ Trụ Chi Tiết | Tử Vi Minh Bảo"/>
@@ -18,6 +18,14 @@
 <link rel="canonical" href="https://www.tuviminhbao.com/tools/tu-tru.html">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="stylesheet" href="/tools/tools.css">
+<!-- Rail "Hỏi Thầy" bọc thêm (W3, docs/UX-AUDIT-PLAN.md) — CHỈ nạp shell.css/js
+     để mount #shell-rail, KHÔNG dựng sidebar/topbar/tabbar đầy đủ như /app/*
+     (renderSidebar()/renderTabbar() của shell.js tự no-op khi thiếu host
+     tương ứng). SHELL_ACTIVE='bat-tu' vì paywall/tool-cta của trang này đã
+     trỏ /app/luan-giai — nhưng bản thân công cụ là Tứ Trụ Bát Tự nên khoá
+     rail đi đúng SHELL_ACTIVE='bat-tu' (app-bat-tu.html), không phải
+     'luan-giai', để mở khóa đúng bối cảnh chat Bát Tự. -->
+<link rel="stylesheet" href="/shell.css?v=59">
 <style>
 .pillars-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-radius:8px;overflow:hidden;margin-bottom:24px}
 .pillar{background:#fff;padding:24px 12px;text-align:center}
@@ -49,6 +57,17 @@
 .pm-txt{font-size:13px;color:var(--text-mid);line-height:1.7;margin-bottom:6px}
 .pm-shen{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
 @media(max-width:600px){.pillars-wrap{grid-template-columns:repeat(2,1fr)}.pm-grid{grid-template-columns:1fr}}
+
+/* Rail "Hỏi Thầy" bọc thêm — cùng khối với an-sao.html. Xem chú thích đầy đủ
+   ở đó; tóm tắt: dưới 900px shell.css tự biến `.rail` thành lớp phủ toàn màn
+   hình, không đụng gì; trên 900px đóng khung thành một khối chat độc lập.
+   Ngưỡng 901px cố ý tách khỏi breakpoint 900px của shell.css. */
+.rail-embed{margin:48px 0 8px}
+.rail-embed-label{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--text-lt);margin-bottom:16px;display:flex;align-items:center;gap:16px}
+.rail-embed-label::after{content:'';flex:1;height:1px;background:var(--border)}
+@media(min-width:901px){
+  #shell-rail{max-width:420px;margin:0 auto;height:600px;border:1px solid var(--border);border-radius:10px}
+}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Tứ Trụ Bát Tự là gì?","acceptedAnswer":{"@type":"Answer","text":"Tứ Trụ Bát Tự là phương pháp luận mệnh dựa trên 4 trụ (năm, tháng, ngày, giờ sinh), mỗi trụ gồm 1 Thiên Can và 1 Địa Chi tạo thành 8 chữ phản ánh vận mệnh một người."}},{"@type":"Question","name":"Tứ Trụ khác Tử Vi Đẩu Số như thế nào?","acceptedAnswer":{"@type":"Answer","text":"Tứ Trụ dùng hệ Can-Chi để phân tích ngũ hành và tương tác giữa các yếu tố, thiên về phân tích đại vận theo thập niên. Tử Vi dùng 108 sao trên 12 cung, chi tiết hơn về từng lĩnh vực cuộc đời."}},{"@type":"Question","name":"Giờ sinh có ảnh hưởng lớn đến lá số Tứ Trụ không?","acceptedAnswer":{"@type":"Answer","text":"Rất lớn. Giờ sinh tạo ra Thời Trụ là trụ thứ tư, ảnh hưởng đến vận trình từ trung niên trở đi. Sai giờ sinh có thể dẫn đến luận sai toàn bộ lá số."}}]}
@@ -140,6 +159,12 @@
     <div class="tool-cta-title">Tứ Trụ + Lá Số = Góc Nhìn Toàn Diện</div>
     <div class="tool-cta-desc">Tứ Trụ phân tích cấu trúc cơ bản từ 8 chữ. Tử Vi Đẩu Số bổ sung vận trình chi tiết từng giai đoạn — hai hệ thống cổ đại phương Đông bổ trợ nhau rất tốt.</div>
     <a class="tool-cta-btn" href="/app/luan-giai">Xem Lá Số Tử Vi →</a>
+  </div>
+  <!-- Rail "Hỏi Thầy" — luôn hiện, không đợi bấm "Xem Tứ Trụ" (visitor bỏ
+       ngang trước khi tính vẫn có đường vào chat, không phải ngõ cụt). -->
+  <div class="rail-embed">
+    <div class="rail-embed-label">Hỏi Thầy</div>
+    <aside class="rail" id="shell-rail"></aside>
   </div>
 </div>
 <footer class="site-footer">
@@ -381,6 +406,8 @@ async function calculate(){
 <script src="/testimonials.js"></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
 <script src="/related-tools.js?v=3"></script>
-<script src="/nav.js?v=43" defer></script>
+<script src="/nav.js?v=45" defer></script>
+<script>window.SHELL_ACTIVE='bat-tu';</script>
+<script src="/shell.js?v=108"></script>
 </body>
 </html>

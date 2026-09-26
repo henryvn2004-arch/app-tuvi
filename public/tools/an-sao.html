@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=43" as="script">
+<link rel="preload" href="/nav.js?v=45" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>An Sao Lá Số Tử Vi — Tra Cứu Vị Trí 108 Sao | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="An Sao Lá Số Tử Vi — Tra Cứu Vị Trí 108 Sao | Tử Vi Minh Bảo"/>
@@ -24,6 +24,12 @@
 <!-- Chart.js ĐÃ GỠ: chuỗi "Chart" không xuất hiện lần nào trong trang này,
      và không script nào nó nạp có dùng tới. Cùng bệnh với app-luan-giai. -->
 <link rel="stylesheet" href="/tools/tools.css">
+<!-- Rail "Hỏi Thầy" bọc thêm (W3, docs/UX-AUDIT-PLAN.md) — CHỈ nạp shell.css/js
+     để mount #shell-rail, KHÔNG dựng sidebar/topbar/tabbar đầy đủ như /app/*
+     (renderSidebar()/renderTabbar() của shell.js tự no-op khi thiếu host
+     tương ứng). SHELL_ACTIVE='luan-giai' vì paywall của trang này đã trỏ
+     /app/luan-giai từ trước — cùng khoá đã chạy thật ở app-luan-giai.html. -->
+<link rel="stylesheet" href="/shell.css?v=59">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
@@ -139,6 +145,21 @@ select.form-input{cursor:pointer}
 .footer-tagline{font-size:12px;margin-top:8px;color:rgba(255,255,255,.35);line-height:1.6}
 .footer-bottom{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,.25)}
 .footer-bottom img{width:20px;height:20px;object-fit:contain;opacity:.3;border-radius:3px}
+
+/* Rail "Hỏi Thầy" bọc thêm — trang này không có lưới 3 cột `.shell` của
+   /app/*, nên `.rail` (shell.css) mặc định chỉ là 1 khối `position:relative`
+   cao theo nội dung. Dưới 900px shell.css TỰ chuyển nó thành lớp phủ toàn
+   màn hình `position:fixed` (mở qua nút "Hỏi" nổi) — KHÔNG đụng gì ở đây.
+   Trên 900px thì đóng khung nó thành một khối chat độc lập, không kéo full
+   width trang. Ngưỡng 901px cố ý tách khỏi breakpoint 900px của shell.css
+   (xem ghi chú "Ngưỡng PHẢI cách xa breakpoint mobile" trong chính shell.css)
+   để khỏi tranh specificity với `.rail{position:fixed}` ở dưới 900px. */
+.rail-embed{margin:48px 0 8px}
+.rail-embed-label{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--text-lt);margin-bottom:16px;display:flex;align-items:center;gap:16px}
+.rail-embed-label::after{content:'';flex:1;height:1px;background:var(--border)}
+@media(min-width:901px){
+  #shell-rail{max-width:420px;margin:0 auto;height:600px;border:1px solid var(--border);border-radius:10px}
+}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"An sao Tử Vi là gì?","acceptedAnswer":{"@type":"Answer","text":"An sao là bước xác định vị trí các chính tinh và phụ tinh vào 12 cung của lá số Tử Vi Đẩu Số dựa trên năm, tháng, ngày, giờ sinh theo lịch âm."}},{"@type":"Question","name":"Có bao nhiêu sao trong Tử Vi Đẩu Số?","acceptedAnswer":{"@type":"Answer","text":"Hệ thống Tử Vi Đẩu Số có 108 sao, gồm 14 chính tinh và nhiều phụ tinh, mỗi sao mang ý nghĩa riêng về tính cách, vận mệnh và các lĩnh vực cuộc đời."}},{"@type":"Question","name":"An sao có khác nhau giữa nam và nữ không?","acceptedAnswer":{"@type":"Answer","text":"Có. Một số sao như Tả Phù, Hữu Bật, Văn Khúc, Văn Xương được an theo chiều thuận hoặc nghịch khác nhau tùy giới tính của người xem lá số."}}]}
@@ -236,6 +257,13 @@ select.form-input{cursor:pointer}
       <a class="btn-paywall" href="/app/luan-giai">Xem Đầy Đủ & Mở Khóa Luận Giải →</a>
       <div style="font-size:11px;color:#aaa;margin-top:12px"><span class="ic" data-icon="lock"></span> Dùng được cho mọi công cụ · <a href="/topup.html" style="color:#9A7B3A">Nạp thêm credits →</a></div>
     </div>
+  </div>
+
+  <!-- Rail "Hỏi Thầy" — luôn hiện, không đợi submit form (visitor bỏ ngang
+       trước khi an sao vẫn có đường vào chat, không phải ngõ cụt). -->
+  <div class="rail-embed">
+    <div class="rail-embed-label">Hỏi Thầy</div>
+    <aside class="rail" id="shell-rail"></aside>
   </div>
 
 </div><!-- .page -->
@@ -336,6 +364,8 @@ TuviForm.render('tuvi-form-container', { onSubmit: luanGiai, submitLabel: 'An Sa
 <script src="/testimonials.js"></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
 <script src="/related-tools.js?v=3"></script>
-<script src="/nav.js?v=43" defer></script>
+<script src="/nav.js?v=45" defer></script>
+<script>window.SHELL_ACTIVE='luan-giai';</script>
+<script src="/shell.js?v=108"></script>
 </body>
 </html>

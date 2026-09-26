@@ -144,7 +144,7 @@ ul{margin:0 0 10px 20px;color:var(--text-mid)}li{margin-bottom:5px}
     <h2>Hạn mức · Limits</h2>
     <ul>
       <li>Lập lá số, tương hợp, tra sao, và vận hạn <b>năm hiện tại trở về quá khứ</b>: không giới hạn.</li>
-      <li>Vận hạn <b>năm tương lai</b> cần key riêng — lấy trong <a href="/profile.html">hồ sơ tài khoản</a>, rồi đổi URL thành <code>${SEO_BASE}/mcp/&lt;key&gt;</code>.</li>
+      <li>Vận hạn <b>năm tương lai</b> cần key riêng — lấy trong <a href="/app/ho-so">hồ sơ tài khoản</a>, rồi đổi URL thành <code>${SEO_BASE}/mcp/&lt;key&gt;</code>.</li>
       <li>Không SLA. Đây là dịch vụ tặng kèm. <span class="en">No SLA.</span></li>
       <li>Tử Vi là tra cứu văn hoá, không phải lời khuyên y tế/tài chính/pháp lý.</li>
     </ul>
@@ -159,7 +159,7 @@ ul{margin:0 0 10px 20px;color:var(--text-mid)}li{margin-bottom:5px}
     </ul>
   </section>
 </div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=43" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
 </body>
 </html>`;
 

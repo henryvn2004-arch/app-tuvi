@@ -631,6 +631,19 @@ window.TuviForm = (() => {
       }
     }
     const cp = 'c' + (prefix || 'x'); // prefix RIÊNG cho field ảo trong chat — không trùng field thật
+    // Draft nháp qua reload (audit W1 J5, 2026-09-26): reload giữa chừng
+    // trước đây mất TOÀN BỘ đã gõ, quay lại step 1 không cảnh báo. Lưu vào
+    // `sessionStorage` (mất khi đóng tab — không phải dữ liệu cần giữ lâu),
+    // khoá theo TRANG + `cp` nên hai renderChat() khác `prefix` trên cùng
+    // trang (vd tương hợp 2 người) không đụng nhau. Chỉ lưu SAU khi qua được
+    // validate của từng bước — không lưu dữ liệu chưa hợp lệ.
+    const draftKey = 'tvf_draft_' + cp + '_' + location.pathname;
+    const draft = (() => {
+      try { const d = JSON.parse(sessionStorage.getItem(draftKey) || 'null'); return d && typeof d === 'object' ? d : null; }
+      catch (e) { return null; }
+    })();
+    const saveDraft = (step, data) => { try { sessionStorage.setItem(draftKey, JSON.stringify({ step, ...data })); } catch (e) { /* ignore */ } };
+    const clearDraft = () => { try { sessionStorage.removeItem(draftKey); } catch (e) { /* ignore */ } };
     const opts = buildOptions();
     const namXemDefault = new Date().getFullYear();
     const av = () => { const a = document.querySelector('.rail-ava'); return a ? a.src : '/authors/thai-hu.jpg'; };
@@ -645,13 +658,21 @@ window.TuviForm = (() => {
       el.innerHTML = '<img class="msg-ava" src="' + av() + '" alt="">' + '<div class="msg-body">' + html + '</div>';
     };
 
+    const collapsedS1Html = (hoten, gioitinhV, namXemV) => {
+      const parts = [];
+      if (hoten) parts.push('<b>' + esc(hoten) + '</b>');
+      if (showGender) parts.push(gioitinhV === 'nam' ? 'Nam' : 'Nữ');
+      if (namXemV) parts.push('xem vận năm ' + namXemV);
+      return '<p>' + parts.join(' · ') + ' ✓</p>';
+    };
+
     // ── Sổ lá số trong chat (Henry 2026-09-26) ──────────────────────────────
     // Form gõ tay (startManual) LUÔN dựng NGAY — hành vi cũ không đổi, kể cả
     // khi có sổ (test `mobile.spec.ts` "bước hỏi tên/giới tính" đợi #cx-hoten
     // hiện gần như ngay lập tức, không đợi mạng). Sổ lá số (nếu đăng nhập và
     // có mục) chỉ ĐẮP THÊM một bong bóng "Con hỏi cho ai?" đứng SAU, cho bấm
     // tắt thay vì gõ lại — best-effort, tới muộn/hỏng thì thôi, không chặn gì.
-    let manualS1 = null; // gán trong startManual(); ẩn đi nếu người dùng chọn từ sổ
+    let manualBubbles = []; // bong bóng của flow gõ tay/khôi phục draft — ẩn hết nếu chọn từ sổ
     function birthShort(b) {
       if (!b) return '';
       const g = b.gioitinh === 'nu' ? 'Nữ' : 'Nam';
@@ -695,7 +716,10 @@ window.TuviForm = (() => {
         if (!it || !it.birth) return;
         const name = it.label || it.birth.hoten || '';
         collapse(el, '<p>Hỏi cho <b>' + esc(name) + '</b> ✓</p>');
-        if (manualS1) manualS1.style.display = 'none';
+        // Ẩn MỌI bong bóng gõ tay/khôi phục draft đang dở (không chỉ bước 1 —
+        // reload giữa chừng có thể đã resume tới bước 2/3 trước khi bấm đây).
+        manualBubbles.forEach((b) => { if (b) b.style.display = 'none'; });
+        clearDraft();
         try { if (window.Shell && window.Shell.rememberBirth) window.Shell.rememberBirth(it.birth); } catch (e2) { /* ignore */ }
         finishWithBirth(it.birth);
       });
@@ -726,6 +750,21 @@ window.TuviForm = (() => {
     }
 
     function startManual() {
+      // Khôi phục draft nếu có (audit W1 J5, 2026-09-26) — nhảy thẳng tới
+      // đúng bước còn dang dở, KHÔNG hỏi lại từ đầu. `draft.ngay` có nghĩa là
+      // bước 2 (ngày sinh) đã xong, đủ điều kiện nhảy thẳng vào bước 3.
+      if (draft && draft.ngay && draft.thang && draft.nam) {
+        manualBubbles.push(bubble('chatStep-' + cp + '-1', collapsedS1Html(draft.hoten, draft.gioitinh, draft.namXem)));
+        manualBubbles.push(bubble('chatStep-' + cp + '-2', '<p>Ngày sinh: <b>' + draft.ngay + '/' + draft.thang + '/' + draft.nam + '</b> ✓</p>'));
+        step3(draft.hoten, draft.gioitinh, draft.namXem, draft.ngay, draft.thang, draft.nam);
+        return;
+      }
+      if (draft && draft.step >= 1) {
+        manualBubbles.push(bubble('chatStep-' + cp + '-1', collapsedS1Html(draft.hoten, draft.gioitinh, draft.namXem)));
+        step2(draft.hoten, draft.gioitinh, draft.namXem);
+        return;
+      }
+
       const s1 = bubble('chatStep-' + cp + '-1', '<p>' + q1 + '</p>' +
         '<div class="frow">' +
           (showName ? `<div class="fg" style="flex:1.6;min-width:150px"><label>Họ và tên</label><input type="text" id="${pid('hoten', cp)}" placeholder="Nguyễn Văn A" autocomplete="off"></div>` : '') +
@@ -734,7 +773,7 @@ window.TuviForm = (() => {
         '</div>' +
         `<button class="btn-go" type="button" id="${cp}-next1" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button>` +
         `<div class="err tvf-err" id="${cp}-err1" role="alert"></div>`);
-      manualS1 = s1;
+      manualBubbles.push(s1);
       const focusFirst = () => { const f = document.getElementById(pid('hoten', cp)) || document.getElementById(pid('gioitinh', cp)); if (f) f.focus(); };
       focusFirst();
       document.getElementById(cp + '-next1').addEventListener('click', function () {
@@ -744,11 +783,8 @@ window.TuviForm = (() => {
         const err1 = document.getElementById(cp + '-err1');
         if (requireName && !hoten) { err1.textContent = 'Vui lòng nhập họ tên.'; return; }
         err1.textContent = '';
-        const parts = [];
-        if (hoten) parts.push('<b>' + esc(hoten) + '</b>');
-        if (showGender) parts.push(gioitinhV === 'nam' ? 'Nam' : 'Nữ');
-        if (namXemV) parts.push('xem vận năm ' + namXemV);
-        collapse(s1, '<p>' + parts.join(' · ') + ' ✓</p>');
+        collapse(s1, collapsedS1Html(hoten, gioitinhV, namXemV));
+        saveDraft(1, { hoten, gioitinh: gioitinhV, namXem: namXemV });
         step2(hoten, gioitinhV, namXemV);
       });
 
@@ -761,6 +797,7 @@ window.TuviForm = (() => {
           '</div>' +
           `<button class="btn-go" type="button" id="${cp}-next2" style="width:auto;padding:9px 16px;font-size:13px">${skipHour ? submitLabel : 'Tiếp tục →'}</button>` +
           `<div class="err tvf-err" id="${cp}-err2" role="alert"></div>`);
+        manualBubbles.push(s2);
         document.getElementById(cp + '-next2').addEventListener('click', function () {
           const ngay = +document.getElementById(pid('ngay', cp)).value;
           const thang = +document.getElementById(pid('thang', cp)).value;
@@ -776,10 +813,12 @@ window.TuviForm = (() => {
           if (skipHour) {
             const data = { hoten, gioitinh: gioitinhV, ngay, thang, nam };
             if (namXemV !== undefined) data.namXem = namXemV;
+            clearDraft();
             setData(data, prefix);
             if (onDone) onDone(data);
             return;
           }
+          saveDraft(2, { hoten, gioitinh: gioitinhV, namXem: namXemV, ngay, thang, nam });
           step3(hoten, gioitinhV, namXemV, ngay, thang, nam);
         });
       }
@@ -798,6 +837,7 @@ window.TuviForm = (() => {
           `<p style="font-size:11.5px;margin-bottom:8px"><a href="/app/gio-sinh" target="_blank" style="color:#1455A4;font-weight:600">Không nhớ giờ sinh chính xác? Xác định giờ sinh →</a></p>` +
           `<button class="btn-go" type="button" id="${cp}-next3" style="width:auto;padding:9px 16px;font-size:13px">${submitLabel}</button>` +
           `<div class="err" id="${cp}-err3"></div>`);
+        manualBubbles.push(s3);
         const upd = () => updateGioAmDisplay(cp);
         document.getElementById(pid('tvf-gio', cp)).addEventListener('input', upd);
         document.getElementById(pid('tvf-phut', cp)).addEventListener('input', upd);
@@ -812,6 +852,7 @@ window.TuviForm = (() => {
           collapse(s3, '<p>Giờ sinh: <b>' + String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0') + '</b> ✓</p>');
           const data = { hoten, gioitinh: gioitinhV, ngay, thang, nam, gioHour: vn.h, gioPhut: vn.m };
           if (namXemV !== undefined) data.namXem = namXemV;
+          clearDraft();
           setData(data, prefix);
           if (onDone) onDone(data);
         });
