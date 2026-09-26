@@ -25,7 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
-| 1 | 2026-09 | `2026-09.md` | 🧪 Test phễu khách → đăng ký → trả tiền trên prod — chốt hướng chat-first + gói tháng |
+| 1 | 2026-09 | `2026-09.md` | 🧪 Test phễu khách → đăng ký → trả tiền trên prod — chốt hướng chat-first + chỉ bán gói Lượng |
 | 1 | 2026-09 | `2026-09.md` | 🔄 Chat-first — rà nốt 33 trang còn lại, bật thêm 5, giữ nguyên 28 |
 | 1 | 2026-09 | `2026-09.md` | 🔄 Chat-first bỏ sót `dat-ten`/`dat-ten-dn` — 2 trang chưa từng được khảo sát |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Lăng kính chủ đề cho Lục Nhâm + đưa `TU_KHOA` của cả hai vào `check:topics` |
