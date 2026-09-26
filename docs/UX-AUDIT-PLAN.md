@@ -187,22 +187,78 @@ nạp file đó.
 - [x] Viết `PRODUCT.md` + `DESIGN.md` cho impeccable, NHÁP từ
       `docs/BRAND-VOICE.md` + token hiện có. **Henry duyệt phần "sự thật sản
       phẩm"** (chân dung khách, điều không được hứa).
-- [ ] `scripts/ux/crawl.mjs` (tầng 1) + chạy lần đầu làm mốc (baseline).
-- [ ] Ghi vào `docs/QC.md` cách cho Chromium tin CA của proxy (certutil).
+- [~] `scripts/ux/crawl.mjs` (tầng 1, quét tự động mọi trang) — **descope**:
+      4 agent W1 phủ đủ 8 hành trình bằng live-click + code-review, không cần
+      máy quét riêng để có mốc baseline. Làm lại nếu sau này cần đo lại diện
+      rộng (vd sau W6).
+- [x] Ghi vào `docs/QC.md` cách cho Chromium tin CA của proxy (certutil).
       Thiếu bước này harness báo `ERR_CERT_AUTHORITY_INVALID` với mọi host.
 
-### W1: Audit (chỉ đọc, không sửa)
-- [ ] Chạy J1–J8 → `docs/ux-audit/`. Tổng hợp một bảng P0–P3.
-- [ ] Bảng thuật ngữ + danh sách chữ cần đổi (trích từ `copy/*.txt`).
+### W1: Audit (chỉ đọc, không sửa) — XONG 2026-09-26
+- [x] Chạy J1–J8 (4 agent, mỗi agent 2 hành trình) → `docs/ux-audit/{J1-J2,J3-J4,J5,J6-J7,J8}.md`.
+      Vài phát hiện P0 rõ ràng (đúng hard rule CLAUDE.md) đã sửa NGAY trong lúc
+      audit thay vì chờ W2, xem mục 4.1 dưới.
+- [x] Bảng thuật ngữ: không cần bảng riêng — "Hỏi Thầy" đã là tên DUY NHẤT sau
+      W3 (mục 4 quyết định #1), 4 agent xác nhận không còn sót tên khác trong
+      chữ hiển thị (chỉ còn ở comment nội bộ, không ảnh hưởng người dùng).
+
+#### 4.1 Bảng ưu tiên P0–P3 (gộp từ 4 báo cáo, đã khử trùng lặp)
+
+⚠️ **Một lớp phát hiện lặp lại ở CẢ 4 báo cáo không phải bug**: agent so `curl`
+prod (chạy nhánh `main`) với repo trên nhánh PR này — dĩ nhiên lệch, vì **PR
+#1085 chưa merge**. Tên "Trợ lý Luận Đường"/"Trò chuyện" agent thấy trên prod
+sẽ tự hết ngay khi PR này lên `main` và deploy, không cần sửa gì thêm. Đã lược
+khỏi bảng dưới, chỉ giữ các phát hiện THẬT về code/nội dung.
+
+| # | Mức | Hành trình | Phát hiện | Trạng thái |
+|---|---|---|---|---|
+| 1 | P0 | J1/J2 | `hook-layer.js` nút mở khoá thiếu VNĐ (chỉ hiện Lượng) | **Đã sửa** (`public/tools-shared/hook-layer.js`, PR này) |
+| 2 | P0 | J3/J4 | Bảng giá `/cong-cu` đảo ngược VNĐ/Lượng | **Đã sửa** (PR này) |
+| 3 | P0 | J3/J4 | Số công cụ lệch 3 nơi (59+/53/50), thật là 50 | **Đã sửa** (PR này) |
+| 4 | P1 | J1 | Tour onboarding ("BƯỚC 1/7") tự bật 2.4s sau khi vào `/app`, che câu trả lời đầu tiên trên mobile | Chưa sửa → **W2** |
+| 5 | P1 | J5 | Reload giữa chừng form mất toàn bộ dữ liệu đã nhập, không cảnh báo/khôi phục | Chưa sửa → **W2** |
+| 6 | P1 | J3/J4 | `/tools/an-sao.html`, `/tools/tu-tru.html` (còn sống) không có rail chat — ngõ cụt SEO | Chưa sửa → **W3 nối dài** (gom 2 trang này vào `/app/*` như 38 trang đã làm) |
+| 7 | P1 | J3/J4 | `/la-so/[slug]` (~7.000 trang, loại SEO nhiều nhất) — HTML gốc không có CTA nào về chat | Chưa sửa → **W5** (khối "Bước tiếp theo") |
+| 8 | P2 | J1/J2 | `tuvi-form.js` `pid()` sinh field trùng (ẩn + hiện) cho cùng input | Cần xác nhận thêm rồi sửa → **W2** |
+| 9 | P2 | J3/J4 | 2 kiểu form khác nhau giữa các tool cùng khung `/app/*` (wizard vs chat-first) | Ghi nhận, cần Henry xác nhận có chủ đích không trước khi đồng bộ |
+| 10 | P2 | J8 | 5 `@keyframes` trong `shell.css` + 19/21 trang không tôn trọng `prefers-reduced-motion` | Chưa sửa → **W6** |
+| 11 | P2 | J8 | `.shell{height:100vh}` nên là `100dvh` | Chưa sửa → **W6** |
+| 12 | P1 | J8 | 0/3 CTA chính (`.send`/`.btn-go`/`.stm-btn`) có phản hồi khi nhấn | Chưa sửa → **W6** |
+| 13 | P1 | J8 | 0/231 chỗ `:hover` được gate `@media(hover:hover)` | Chưa sửa → **W6** |
+| 14 | Nhẹ | J6/J7 | `auth.js` menu avatar trỏ `/profile.html` đã xoá (có 308, chỉ dư 1 round-trip) | **Đã sửa** (PR này) |
+| 15 | Nghi ngờ | J1–J6 | `401 GET /api/auth/session` lặp lại ở mọi trang khách — có thể là hành vi kỳ vọng | Cần đọc route xác nhận → **W2** |
+| 16 | Nghi ngờ | J1 | Trang chủ ghi "270.000+ lá số người thật" — không có trong `PRODUCT.md` Evidence on Hand | **Henry xác nhận nguồn số**, nếu không có thì bỏ |
+| 17 | P3 | J1/J2/J3 | 2 lỗi 502 thoáng qua (font/ảnh), tab đăng ký wrap 2 dòng, banner PWA che footer mobile | Theo dõi, không chặn — **W2/W6** |
+
+Điểm tốt xác nhận qua cả 4 báo cáo (không sửa nhầm): bản free luận giải là nội
+dung thật theo lá số vừa nhập; tường hết lượt minh bạch số Lượng; modal đăng ký
+mở đúng tab; chip gợi ý bám sát điểm số cung thật; `.tool-suggest` không hiện
+giá; sidebar ẩn khối rỗng cho tới khi có dữ liệu; không emoji màu, không khoe
+"AI" ở bất kỳ đâu đã kiểm.
 
 ### W2: Lỗi và niềm tin (P0)
 - [ ] Nhãn "Trò chuyện" bị gạch chân xanh ở tab bar `/app`. Logo và slogan
-      bị cắt trên header landing 390px.
-- [ ] Lỗi console, 401 và `ERR_FAILED` khi tải trang (mục đích của từng
-      request lấy từ crawl). `[cong-cu] thiếu page_path/app_path, đã ẩn:
-      rail-message`.
+      bị cắt trên header landing 390px. (Chưa re-verify sau đợt rename — có
+      thể đã hết vì text đổi; kiểm lại khi review W3 trên preview thật.)
+- [ ] `401 GET /api/auth/session` lặp lại ở MỌI trang khách (xác nhận ở J1,
+      J3/J4, J5) — đọc route xác nhận có nên trả 401 cho khách ẩn danh hay
+      trả 200 rỗng; noise này che lỗi thật khác trong console.
 - [~] Số "online" giả + toast mua hàng giả: Henry quyết **để nguyên**.
-- [ ] Một con số "N công cụ", đọc từ catalog, không gõ tay.
+- [x] Một con số "N công cụ", đọc từ catalog, không gõ tay — sửa `<title>`/
+      meta tĩnh của `/cong-cu` và trang chủ khớp số thật (50), heading vốn đã
+      tự cập nhật đúng bằng JS từ trước.
+- [ ] Tour onboarding ("BƯỚC 1/7", `app-home.html:2210`) che câu trả lời đầu
+      tiên trên mobile — hoãn tới sau khi tin nhắn đầu render xong, hoặc bỏ
+      qua hẳn khi vào kèm `?q=` (J1, P1).
+- [ ] Reload giữa chừng form (`/app/luan-giai`) mất toàn bộ dữ liệu đã nhập,
+      không cảnh báo/khôi phục — lưu state từng bước vào `sessionStorage`
+      (J5, P1).
+- [ ] `tuvi-form.js` `pid()` sinh 2 bản field (ẩn + hiện) cho cùng input —
+      xác nhận là chủ đích (mobile/desktop) hay rò rỉ template, rồi ẩn hẳn
+      bản thừa bằng `display:none` thay vì kích thước 0 (J1/J2, P2).
+- [ ] Trang chủ ghi "270.000+ lá số người thật" — không có trong `PRODUCT.md`
+      Evidence on Hand. **Henry xác nhận nguồn số này có thật không**; nếu
+      không kiểm chứng được thì bỏ hoặc đổi câu không cần số cụ thể (J1, P3).
 
 ### W3: Một sản phẩm, một khuôn mặt
 - [x] Một tên cho cửa chat ở MỌI nơi: **"Hỏi Thầy"**. `tuvi-chat.html` xoá + 308.
@@ -213,6 +269,10 @@ nạp file đó.
       `/tools/*.html` còn trùng về `/app/*`. Gỡ hoặc 301 các trang mồ côi.
       ⚠️ Làm theo thứ tự: redirect trước, xoá file sau; kiểm sitemap và
       `seo_pages` không trỏ vào URL sắp chết.
+- [ ] 2 trang sót lại từ đợt 38 trang hôm nay: `/tools/an-sao.html`,
+      `/tools/tu-tru.html` — xác nhận (J3/J4) vẫn trả 200 trực tiếp, không
+      `SHELL_ACTIVE`, không rail chat. Gom về `/app/*` cùng cách đã làm, hoặc
+      tối thiểu nạp `shell.js` + `#shell-rail`.
 
 ### W4: Chat-first mượt (chi tiết tương tác cho P3 bên plan kia)
 - [ ] Rail không bao giờ trống: chưa có lá số thì thầy vẫn trả lời câu
@@ -229,20 +289,36 @@ nạp file đó.
 - [ ] Bảng chủ đề → report, `goi_y_san_pham` mở rộng và nối mọi kịch bản,
       `maybeShowUpsell` theo chủ đề.
 - [ ] Khối "Bước tiếp theo" ở cuối kết quả `/app/*` và cuối report-delivery.
+      Ưu tiên cao nhất: `/la-so/[slug]` (~7.000 trang, loại SEO nhiều nhất) —
+      xác nhận (J3/J4) HTML gốc không có CTA nào về chat, khác `/khao-luan/*`
+      đã có CTA rõ ràng.
 - [x] Email bán chéo: T6 + CN, tối đa 1 thư/người/lượt. Bật budget sau deploy, đo 2 tuần.
 
 ### W6: Độ mượt và hệ thống thị giác (Emil + impeccable polish)
+
+Số đo mốc (J8, `docs/ux-audit/J8.md`) — dùng để biết đã xong chưa, không đoán:
+
+| Việc | Đo trước (2026-09-26) | Đích |
+|---|---|---|
+| `.send`/`.btn-go`/`.stm-btn` có `:active` | 0/3 | 3/3 |
+| `:hover` được gate `@media(hover:hover)` | 0/231 | phần lớn 231 |
+| `@keyframes` tôn trọng `prefers-reduced-motion` | 1/6 (`shell.css`) · 2/21 (trang) | toàn bộ |
+| `.shell{height:100vh}` → `100dvh` | chưa | đã đổi |
+
 - [ ] `theme.css`: thêm token `--ease-out`, `--ease-in-out`, `--dur-1/2/3`,
       `--shadow-1/2/3`.
 - [ ] `shell.css`:
-  - khối `prefers-reduced-motion` toàn cục;
+  - khối `prefers-reduced-motion` toàn cục (tắt `sbpPulse`/`sbDotPulse`/`shBlink`);
   - `:hover` bọc `@media (hover:hover)`;
-  - phản hồi nhấn `scale(.97)` cho nút chính;
-  - đổi `transition: all` sang thuộc tính cụ thể.
+  - phản hồi nhấn `scale(.97)` cho nút chính (`.send`/`.btn-go`/`.stm-btn`,
+    dùng easing có sẵn `cubic-bezier(.23,1,.32,1)`, dòng 557);
+  - đổi `transition: all` sang thuộc tính cụ thể (0 chỗ trong `shell.css`
+    chính nó, nhưng 85 chỗ rải ở các trang `app-*.html`).
 - [ ] Từng trang theo thứ tự traffic: bỏ Arial, gom gradient và shadow về
       token. Không đổi bố cục (tinh chỉnh, không redesign). Giữ luật CLS.
-- [ ] Emil `mobile-native`: `100dvh`, input không zoom (≥16px), tắt tap
-      highlight, safe-area.
+- [ ] Emil `mobile-native`: `.shell` đổi `100vh`→`100dvh`, input không zoom
+      (≥16px), tắt tap highlight, `touch-action:manipulation` cho nút/link,
+      safe-area (đã đúng ở `shell.css`, thiếu ở `theme.css`).
 
 ### W7: Đo lại và chốt
 - [ ] Chạy lại crawl, J1 và J2, so với baseline W0. Đọc 3 chỉ số mục 0 sau
