@@ -232,25 +232,30 @@ button { font: inherit; cursor: pointer; }
 
 @media (max-width: 680px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
 
-/* ── Bottom nav (mobile app-shell, chỉ ở trang chủ trong bản mẫu này) ── */
+/* ── Bottom nav (mobile app-shell, chỉ ở trang chủ trong bản mẫu này) ──
+   Màu NÂU ĐẬM khớp `.tabbar` của shell.css (app-shell) — trước đây trang này
+   tự vẽ tab bar nền trắng riêng, lệch hẳn với /app/* (W3 audit "một khuôn
+   mặt"). Chỉ đổi màu/token, KHÔNG đổi cấu trúc — 5 nhãn vẫn khoá bởi
+   `check:tabbar` (check-tabbar-parity.mjs) so với `renderTabbar()`. */
 .bottom-nav { display: none; }
 @media (max-width: 680px) {
   body { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
   .bottom-nav {
     display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
-    background: #fff; border-top: 1px solid var(--line);
+    background: linear-gradient(180deg,#3D2818,#2B1B10); border-top: 1px solid rgba(200,169,106,.18);
     padding: 8px 6px calc(6px + env(safe-area-inset-bottom));
-    box-shadow: 0 -6px 18px rgba(22,35,44,0.06);
+    box-shadow: 0 -6px 20px rgba(15,42,61,.22);
   }
   .bn-item {
     flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
-    color: var(--ink-faint); font-size: 10.5px; font-weight: 700; padding: 4px 0;
+    color: #7d8794; font-size: 10.5px; font-weight: 700; padding: 4px 0;
   }
   .bn-item .ic { width: 21px; height: 21px; }
-  .bn-item.active { color: var(--navy); }
+  .bn-item.active { color: var(--gold); }
   .bn-center { position: relative; margin-top: -22px; }
   .bn-center-circle {
     width: 46px; height: 46px; border-radius: 50%; background: var(--gold);
+    border: 4px solid #2B1B10;
     display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 14px rgba(200,169,106,0.5);
     margin-bottom: 2px;
   }
@@ -422,7 +427,7 @@ button { font: inherit; cursor: pointer; }
   <a class="bn-item" href="/app/ho-so"><span class="ic" data-icon="settings"></span>Hồ Sơ</a>
 </nav>
 
-<script src="/nav.js?v=44"></script>
+<script src="/nav.js?v=45"></script>
 <script>window.TestimonialsNoAutoRun = true;</script>
 <script src="/testimonials.js?v=1"></script>
 <script>

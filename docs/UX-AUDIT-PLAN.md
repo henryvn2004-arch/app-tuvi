@@ -274,9 +274,19 @@ giá; sidebar ẩn khối rỗng cho tới khi có dữ liệu; không emoji mà
 
 ### W3: Một sản phẩm, một khuôn mặt
 - [x] Một tên cho cửa chat ở MỌI nơi: **"Hỏi Thầy"**. `tuvi-chat.html` xoá + 308.
-- [ ] Một khung header + tab bar cho landing lẫn `/app` (giữ
-      `check:tabbar`). `topup` nằm trong khung (khớp P2 bên plan kia: tờ nạp
-      tại chỗ).
+- [x] Một khung header + tab bar cho landing lẫn `/app` (giữ
+      `check:tabbar`). Hội tụ về style **`/app` (shell.js)** — nền hoạt động
+      chính, nhiều traffic hơn: hamburger mobile của `nav.js` chuyển từ SAU
+      logo/auth-area sang ĐẦU `.topnav` (khớp `.ws-top` của app-shell); tab bar
+      dưới của `index-sample-v3.html` đổi nền trắng → nâu đậm
+      `linear-gradient(#3D2818,#2B1B10)` + chữ/active theo `--sb-txt-dim`/
+      `--gold`, khớp `.tabbar` của shell.css. Chỉ đổi màu/vị trí CSS, không
+      đụng cấu trúc/hành vi — `check:tabbar` (chỉ khoá 5 nhãn, không khoá màu)
+      vẫn xanh. `topup` nằm trong khung: `topup.html` vốn đã nạp `nav.js` full
+      mode (có header) + đã tự vẽ tab bar nâu đậm riêng khi vào qua
+      `/app/nap-luong?shellTab=1` (`.tvmb-shelltab`, làm từ đợt trước) — nay
+      hamburger của header đó cũng đã về đúng vị trí bên trái theo cùng bản vá.
+      `public/nav.js`, `public/index-sample-v3.html`.
 - [x] (phần xoá/301) 301 các
       `/tools/*.html` còn trùng về `/app/*`. Gỡ hoặc 301 các trang mồ côi.
       ⚠️ Làm theo thứ tự: redirect trước, xoá file sau; kiểm sitemap và

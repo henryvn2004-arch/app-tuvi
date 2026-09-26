@@ -1,4 +1,4 @@
-// nav.js — Shared navigation component v20 (footer: thêm link Câu Hỏi Thường Gặp vào cột "Về Chúng Tôi")
+// nav.js — Shared navigation component v21 (W3: hamburger mobile chuyển sang bên trái, khớp app-shell)
 (function () {
   var path = window.location.pathname;
 
@@ -440,7 +440,7 @@
   // Thay vì đẻ bảng icon thứ hai trong shell.js (28 icon, tên khác hẳn, thiếu
   // 11/15 icon cần dùng — đúng cái "hai bảng trôi khỏi nhau" đã cảnh báo),
   // mấy trang đó nạp CHÍNH file này kèm `data-icons-only`:
-  //     <script src="/nav.js?v=44" data-icons-only></script>
+  //     <script src="/nav.js?v=45" data-icons-only></script>
   // Lúc đó nav.js CHỈ cấp ICONS/iconHtml/mountIcons/EMOJI_TO_ICON + CSS icon,
   // rồi dừng — KHÔNG dựng thanh nav, KHÔNG chèn GA4, KHÔNG chèn conversion.js,
   // KHÔNG chèn auth.js. Một nguồn icon duy nhất cho cả site.
@@ -588,7 +588,13 @@
     + ddItem('/van-dap',    'message-circle', 'Vấn Đáp')
     + '</div></div>';
 
+  // Hamburger đứng TRƯỚC logo trong DOM (thay vì sau `.nav-links`/auth-area như
+  // bản cũ) để khớp vị trí "hamburger bên trái" của app-shell (`.ws-top` trong
+  // mỗi `app-*.html`: nút menu luôn là con ĐẦU TIÊN, trước tiêu đề) — W3 audit
+  // "một khuôn mặt". Chỉ đổi thứ tự DOM/flex, không đổi hành vi/target; ở
+  // desktop (>700px) nút này vẫn `display:none` nên không ai thấy khác.
   var html = '<nav class="topnav">'
+    + '<button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">' + ICONS.menu + '</button>'
     + '<a class="nav-logo" href="/"><img src="/seal.webp" alt="">'
     + '<div class="nav-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div></a>'
     + '<div class="nav-links" id="nav-links">'
@@ -597,7 +603,6 @@
     + dd_cn
     + '</div>'
     + '<div id="nav-auth-area"></div>'
-    + '<button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">' + ICONS.menu + '</button>'
     + '</nav>';
 
   var old = document.querySelector('nav.topnav');
