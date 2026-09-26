@@ -5,7 +5,7 @@
   "scripts": {
     "predev": "node scripts/ensure-engine-built.mjs",
     "dev": "next dev",
-    "prebuild": "cd tuvi-engine && npm ci && npm run build",
+    "prebuild": "cd tuvi-engine && npm ci && npm run build && cd .. && node scripts/minify-public.mjs",
     "build": "next build",
     "build:engine": "cd tuvi-engine && npm run build",
     "start": "next start",
@@ -73,7 +73,6 @@
     "check:lavong": "node scripts/check-la-vong.mjs",
     "check:webdriver": "node scripts/check-analytics-webdriver.mjs",
     "check:payossig": "node scripts/check-payos-signature.mjs",
-    "check:tabbar": "node scripts/check-tabbar-parity.mjs",
     "check:geminiusage": "node scripts/check-gemini-usage-once.mjs"
   },
   "dependencies": {

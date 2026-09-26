@@ -1395,51 +1395,6 @@ document.addEventListener('keydown', function(e){
 });
 </script>
 
-<!-- hellobot-ui-redesign: trang này dùng CHUNG cho mọi lối vào nạp Lượng
-     (paywall CTA, /topup.html trực tiếp, VÀ tab "Nạp Lượng" của app-shell qua
-     rewrite /app/nap-luong?shellTab=1) — vá 5 tab thay vì dựng riêng
-     app-nap-luong.html. Style CỐ Ý không dùng chung class .tabbar/.tab của
-     shell.css: trang này nạp theme.css, không nạp shell.css (900+ dòng, class
-     tên chung như .btn/.card rất dễ đụng), nên tự vẽ HTML/CSS riêng đủ giống
-     mắt thường thay vì kéo cả file về chỉ để lấy 15 dòng CSS. Namespace
-     `tvmb-shelltab` để không đụng bất cứ class nào trang này đã có. -->
-<script>
-(function () {
-  if (new URLSearchParams(location.search).get('shellTab') !== '1') return;
-  var style = document.createElement('style');
-  style.textContent =
-    '.tvmb-shelltab{display:none}' +
-    '@media(max-width:900px){' +
-      '.tvmb-shelltab{display:grid;grid-template-columns:1fr 1fr 72px 1fr 1fr;align-items:end;' +
-        'position:fixed;left:0;right:0;bottom:0;z-index:49;' +
-        'background:linear-gradient(180deg,#3D2818,#2B1B10);border-top:1px solid rgba(200,169,106,.18);' +
-        'padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(15,42,61,.22)}' +
-      'body{padding-bottom:76px}' +
-    '}' +
-    '.tvmb-shelltab a{appearance:none;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;' +
-      'align-items:center;gap:3px;padding:9px 4px 8px;color:#c9b8a6;font-family:inherit;font-size:10.5px;' +
-      'line-height:1;text-decoration:none;-webkit-tap-highlight-color:transparent}' +
-    '.tvmb-shelltab a svg{width:22px;height:22px;display:block;stroke-width:1.7}' +
-    '.tvmb-shelltab a.active{color:var(--gold-br)}' +
-    '.tvmb-shelltab a.tvmb-home{position:relative;top:-15px}' +
-    '.tvmb-shelltab .tvmb-home-btn{width:52px;height:52px;border-radius:50%;border:4px solid #2B1B10;' +
-      'background:linear-gradient(160deg,var(--gold-br),#e2c877);display:flex;align-items:center;justify-content:center;' +
-      'box-shadow:0 6px 16px rgba(15,42,61,.35)}' +
-    '.tvmb-shelltab .tvmb-home-btn svg{stroke:#2B1B10;stroke-width:2}';
-  document.head.appendChild(style);
-
-  function icon(path) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">' + path + '</svg>'; }
-  var nav = document.createElement('nav');
-  nav.className = 'tvmb-shelltab';
-  nav.innerHTML =
-    '<a href="/app">' + icon('<circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9 9 9 0 0 1 0-18z"/><circle cx="12" cy="7.5" r="1"/><circle cx="12" cy="16.5" r="1"/>') + 'Trang chủ</a>' +
-    '<a href="/app/thay">' + icon('<path d="m12 3 2.6 5.9 6.4.5-4.9 4.2 1.5 6.3L12 17l-5.6 3.4 1.5-6.3L3 9.9l6.4-.5z"/>') + 'Các Thầy</a>' +
-    '<a class="tvmb-home" href="/app/tro-chuyen"><span class="tvmb-home-btn" aria-hidden="true">' + icon('<path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/>') + '</span><span>Hỏi Thầy</span></a>' +
-    '<a class="active" href="/app/nap-luong">' + icon('<path d="M2 7h20v12H2z"/><path d="M16 12h4"/>') + 'Nạp Lượng</a>' +
-    '<a href="/app/ho-so">' + icon('<circle cx="12" cy="8" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0" stroke-linecap="round"/>') + 'Hồ Sơ</a>';
-  document.body.appendChild(nav);
-})();
-</script>
 
 </body>
 </html>

@@ -62,21 +62,22 @@
   // lấy từ cột `app_path`. Chỉ hai nhóm dưới đây là CỐ ĐỊNH vì chúng không phải
   // công cụ: lối về trang tổng quan, và khu tài khoản (có ô số dư).
   //
-  // 2026-09-24 (hellobot-ui-redesign): rút cấu trúc sidebar về ĐÚNG 5 đích của
-  // tabbar mobile (renderTabbar bên dưới) — Tổng quan · Các Thầy · Trò chuyện ·
-  // Nạp Lượng · Hồ Sơ. "Nhiệm Vụ"/"Kết Nối" không còn là mục sidebar riêng —
-  // chúng là tab BÊN TRONG /app/ho-so (app-tai-khoan.html, SHELL_ACTIVE='ho-so'
-  // giữ nguyên). Giữ nguyên id 'ho-so' để không phá mountToolIcon()/Cmd+K.
+  // 2026-09-26 (navigation-ui-redesign): sidebar vẽ tay theo khuôn ChatGPT
+  // (`SB_NAV`/`SB_MORE` ở renderSidebar), KHÔNG còn vẽ từ nhóm này — nhóm chỉ
+  // còn để Cmd+K/mountToolIcon() tìm ra nhãn+icon+href của các trang khung.
+  // Giữ nguyên id 'home'/'ho-so' để không phá mountToolIcon()/Cmd+K.
   var FIXED_TOP = { group: 'Tử Vi Minh Bảo', open: true, items: [
-    { id: 'home', label: 'Tổng quan', href: '/app', icon: 'home' },
-    { id: 'thay', label: 'Các Thầy', href: '/app/thay', icon: 'star' },
-    { id: 'tro-chuyen', label: 'Hỏi Thầy', href: '/app/tro-chuyen', icon: 'message-circle' },
+    { id: 'home', label: 'Hỏi Thầy mới', href: '/app', icon: 'pen-line' },
+    { id: 'thay', label: 'Các Thầy', href: '/app/thay', icon: 'users' },
+    { id: 'cong-cu', label: 'Công cụ', href: '/app/cong-cu', icon: 'layout-grid' },
+    { id: 'bao-cao', label: 'Báo cáo', href: '/app/bao-cao', icon: 'file-text' },
+    { id: 'tro-chuyen', label: 'Tất cả lượt Hỏi Thầy', href: '/app/tro-chuyen', icon: 'message-circle' },
   ] };
   // Nhóm này KHÔNG render thành nav (renderSidebar tự vẽ tay khối "Lá số đã
   // lưu") — chỉ để mountToolIcon()/Cmd+K/buildCmds() tìm ra icon+href đúng khi
   // ACTIVE rơi vào trang này, cùng cơ chế FIXED_TOP/FIXED_BOTTOM đã dùng.
   var FIXED_META = { group: 'Sổ lá số', open: false, items: [
-    { id: 'so-la-so', label: 'Lá số đã lưu', href: '/app/so-la-so', icon: 'folder' },
+    { id: 'so-la-so', label: 'Lá số', href: '/app/so-la-so', icon: 'folder' },
   ] };
   var FIXED_BOTTOM = { group: 'Tài khoản', open: true, items: [
     { id: 'nap-luong', label: 'Nạp Lượng', href: '/app/nap-luong', icon: 'wallet', balance: true },
@@ -132,6 +133,9 @@
   }
 
   var ICONS = {
+    maximize: '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',
+    'panel-left': '<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/>',
+    'more-horizontal': '<path d="M5 12h.01M12 12h.01M19 12h.01" stroke-width="3" stroke-linecap="round"/>',
     grid: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>',
     rows: '<path d="M4 5h16M4 12h16M4 19h16"/>',
     doc: '<path d="M4 19V5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 12h8"/>',
@@ -190,10 +194,12 @@
   function svg(name, cls) {
     return '<svg class="' + (cls || 'ic') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + iconInner(name, ICONS.dot) + '</svg>';
   }
-  var CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>';
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
   var ACTIVE = window.SHELL_ACTIVE || '';
+  // Sidebar thu gọn (desktop) — gắn class lên <html> NGAY lúc file này chạy,
+  // trước lần vẽ đầu, để cột không giật 260px → 60px sau khi trang đã hiện.
+  try { if (localStorage.getItem('sb_mini_v1') === '1') document.documentElement.classList.add('sb-mini'); } catch (e) { /* ignore */ }
 
   // ── CHAT-FIRST (đảo vai Chat ↔ Workspace) ──
   // Bật per-tool bằng `window.SHELL_CHATFIRST = true` — CÙNG NẾP với
@@ -214,6 +220,14 @@
   // với CHATFIRST vì mở rail sớm cho 11 trang form-tĩnh còn lại sẽ chôn form
   // thật của họ vào cột artifact hẹp trước khi có gì để lật.
   var CHAT_INTAKE = !!window.SHELL_CHAT_INTAKE;
+  // Màn chat trang chủ kiểu ChatGPT (`/app`, 2026-09-26): rail là CỘT CHÍNH
+  // duy nhất (không `.ws`, không lớp phủ), câu đầu tiên đi qua Minh Bảo dẫn
+  // đường (`navigate()`) để mời đúng thầy trước khi gọi model. Chỉ trang khai
+  // `window.SHELL_CHAT_HOME = true` mới vào chế độ này.
+  var CHAT_HOME = !!window.SHELL_CHAT_HOME;
+  var _navDone = false;   // đã mời thầy xong trong cuộc trò chuyện này chưa
+  var _skipEcho = false;  // lượt gửi sau khi mời thầy: câu hỏi đã hiện rồi
+  var _ctxOpts = null;    // lời gọi setContext gần nhất — newChat() dựng lại màn chào
 
   // ── MARKETING TRACKING ──
   // Nạp /track.js (nếu trang chưa có) để có window.Track + page_view; phát các
@@ -420,117 +434,6 @@
     });
   }
 
-  // Tracker "đang online / lượt hỏi hôm nay" (ngay trên ô "Tìm công cụ, lệnh…").
-  //
-  // ⚠️ MÔ PHỎNG THEO YÊU CẦU HENRY (chốt 2026-08-26, sau khi xem số THẬT trên
-  // prod ra "0 đang online · 0 lượt hỏi hôm nay" — đúng vì traffic thật lúc đó
-  // gần như bằng 0, nhưng nhìn "chết"): "hiển thị số ảo đi, nhìn cho nó sôi
-  // động, cho số nó nhảy nhảy đi, khi nào có traffic thật thì tính sau".
-  //
-  // /api/pulse + RPC pulse_stats() (SỐ THẬT, xem migration-pulse-tracker.sql)
-  // VẪN CÒN NGUYÊN, không đụng tới — khi nào traffic thật đủ lớn để hiện tử
-  // tế, đổi lại bằng cách gọi _loadPulseReal() thay simulatePulse() ở startPulse()
-  // dưới đây, không cần sửa gì khác.
-  var _pulseData = null;
-  var _pulseDayKey = null; // yyyy-mm-dd theo giờ VN — qua nửa đêm thì reset "hôm nay"
-
-  function vnNow() {
-    var d = new Date();
-    return new Date(d.getTime() + (7 * 60 - d.getTimezoneOffset()) * 60000);
-  }
-
-  // Đường cong "giờ cao điểm" trong ngày (0h–23h giờ VN) — sáng/tối đông hơn
-  // trưa/khuya, cho baseline trông giống app có người dùng thật thay vì phẳng lì.
-  var PULSE_HOUR_CURVE = [
-    0.22, 0.18, 0.15, 0.14, 0.16, 0.22, 0.35, 0.5, 0.62, 0.7, 0.75, 0.72,
-    0.68, 0.72, 0.8, 0.88, 0.9, 0.86, 0.92, 0.88, 0.8, 0.65, 0.5, 0.34,
-  ];
-
-  function pulseDayKey(d) {
-    return d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
-  }
-
-  // Henry chốt tiếp (2026-08-26, cùng ngày): "cho con số nó to to lên tí, phải
-  // 2-3000 ah, rồi vài 5-10 giây cho nó nhảy, cho nó sinh động" — nới biên độ
-  // baseline lên hàng nghìn (khớp cỡ ảnh mẫu ban đầu "1123 PROMPTS TODAY", chỉ
-  // to hơn) + đổi nhịp tick từ CỐ ĐỊNH 4s sang NGẪU NHIÊN 5-10s (setTimeout đệ
-  // quy, không phải setInterval) cho nhịp trông tự nhiên hơn một máy đếm đều.
-
-  // Henry chốt tiếp (2026-09-20): "cho số nó to lên, chục trăm ngàn" + tách rõ
-  // hành vi hai số — `online` phải THẤY nó nhảy liên tục (cả lên lẫn xuống),
-  // `promptsToday` thì CHỈ cộng dồn (không bao giờ lùi). Biên độ random-walk
-  // của `online` phải tỉ lệ với baseline mới, không thì trên nền chục ngàn
-  // bước nhảy vài chục/tick (baseline cũ) sẽ KHÔNG THẤY nhảy nữa.
-
-  /** Bước mô phỏng: seed lần đầu theo giờ VN hiện tại, sau đó random-walk nhẹ
-   * quanh baseline. `online` dao động cả hai chiều mỗi tick; `promptsToday`
-   * CHỈ TĂNG trong ngày (giống một bộ đếm thật) và tự reset khi qua ngày mới
-   * giờ VN. */
-  function simulatePulse() {
-    var now = vnNow();
-    var dayKey = pulseDayKey(now);
-    var factor = PULSE_HOUR_CURVE[now.getHours()];
-    if (!_pulseData || _pulseDayKey !== dayKey) {
-      _pulseDayKey = dayKey;
-      _pulseData = {
-        online: Math.round(5000 + factor * 25000 + Math.random() * 1500),
-        promptsToday: Math.round(40000 + factor * 130000 + Math.random() * 2000),
-      };
-    } else {
-      var driftOnline = Math.round((Math.random() - 0.42) * 400); // lệch nhẹ về tăng, nhảy cả hai chiều
-      var target = Math.round(5000 + factor * 25000);
-      // Kéo nhẹ về baseline của giờ hiện tại (tránh trôi dạt quá xa qua nhiều giờ) + nhiễu ngẫu nhiên.
-      _pulseData.online = Math.max(3000, Math.min(35000, Math.round(_pulseData.online * 0.9 + target * 0.1 + driftOnline)));
-      if (Math.random() < 0.55) {
-        _pulseData.promptsToday += Math.round(Math.random() * 150) + (Math.random() < 0.12 ? 400 : 0);
-      }
-    }
-    return _pulseData;
-  }
-
-  function paintPulse(d) {
-    var host = document.getElementById('sbPulse');
-    if (!host) return;
-    host.hidden = false;
-    var o = document.getElementById('sbpOnline'); if (o) o.textContent = d.online.toLocaleString('vi-VN');
-    var p = document.getElementById('sbpPrompts'); if (p) p.textContent = d.promptsToday.toLocaleString('vi-VN');
-  }
-
-  var _pulseTimer = null;
-  function schedulePulseTick() {
-    var delay = 5000 + Math.random() * 5000; // 5-10s, ngẫu nhiên mỗi lượt cho nhịp tự nhiên
-    _pulseTimer = setTimeout(function () {
-      paintPulse(simulatePulse());
-      schedulePulseTick();
-    }, delay);
-  }
-  function startPulse() {
-    paintPulse(simulatePulse());
-    if (_pulseTimer) clearTimeout(_pulseTimer);
-    schedulePulseTick();
-  }
-
-  // Đường SỐ THẬT — giữ nguyên, chưa gọi (xem ghi chú ⚠️ ở trên).
-  function _loadPulseReal() {
-    fetch('/api/pulse', { cache: 'no-store' })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (d) {
-        if (!d || typeof d.online !== 'number' || typeof d.promptsToday !== 'number') return;
-        _pulseData = d;
-        paintPulse(d);
-      })
-      .catch(function () { /* best-effort — giữ nguyên số cũ (nếu có), không rơi về giả */ });
-  }
-
-  // Chấm nhắc "Khởi Hành" chưa xong (public/app-home.html ghi cờ này mỗi lần
-  // đồng bộ ở trang chủ). Đọc localStorage thay vì gọi API riêng ở ĐÂY: sidebar
-  // dựng trên MỌI trang /app, thêm một lượt mạng vào đó là chậm cho cả site chỉ
-  // để phục vụ một chấm nhắc — thà chấp nhận độ trễ (chỉ cập nhật sau lượt ghé
-  // trang chủ gần nhất) còn hơn cả site chậm đi.
-  function khoiHanhPending() {
-    try { return localStorage.getItem('tvp_kh_pending') === '1'; } catch (e) { return false; }
-  }
-
   // Icon cố định cạnh tên tool trên `.ws-top` (thanh tiêu đề sticky) — DÙNG
   // LẠI icon sẵn có của mỗi công cụ trong TOOLS (`tool_pricing.icon`, cùng
   // nguồn với sidebar/Cmd+K), không phải ảnh minh hoạ. Ảnh 1024×1024 thu nhỏ
@@ -551,176 +454,232 @@
     titleEl.parentNode.insertBefore(box, titleEl);
   }
 
-  // Nhóm quan hệ cho "Lá số đã lưu" — CÙNG 4 khoá với `RELATIONS` phía server
-  // (`app/api/charts/route.ts`). Đổi ở đây thì phải đổi cả bên đó.
-  var LASO_RELATIONS = [
-    { key: 'gia_dinh', label: 'Gia đình', icon: 'home' },
-    { key: 'ban_be', label: 'Bạn bè', icon: 'users' },
-    { key: 'dong_nghiep', label: 'Đồng nghiệp', icon: 'briefcase' },
-    { key: 'khac', label: 'Khác', icon: 'folder' },
+  // ── SIDEBAR KIỂU CHATGPT (2026-09-26) ──
+  // Mỗi mục là MỘT TRANG, bấm là đi — không còn nhóm xổ ra/gập lại. "Gần đây"
+  // là hội thoại gộp MỌI công cụ (cùng nguồn với `/app/tro-chuyen`: localStorage
+  // `app_hist_v1_*` + `/api/tuvi-chats`). Tài khoản dồn xuống đáy, bấm mở menu.
+  // Bỏ hẳn tabbar dưới đáy điện thoại: mọi đích của nó đều nằm ở đây.
+  // `href` phải khớp đường dẫn mà `shell-soft-nav.js` dùng để tô mục đang mở.
+  var SB_NAV = [
+    { id: 'thay', label: 'Các Thầy', href: '/app/thay', icon: 'users' },
+    { id: 'cong-cu', label: 'Công cụ', href: '/app/cong-cu', icon: 'layout-grid' },
+    { id: 'so-la-so', label: 'Lá số', href: '/app/so-la-so', icon: 'folder' },
+    { id: 'bao-cao', label: 'Báo cáo', href: '/app/bao-cao', icon: 'file-text' },
+    { id: 'thu-vien', label: 'Thư viện', href: '/thu-vien', icon: 'book-open' },
+    { id: 'hoang-dao', label: 'Hôm nay', href: '/app/hoang-dao', icon: 'sunrise' },
   ];
-
-  function groupHtml(title, items, khPending) {
-    var h = '<div class="grp"><div class="grp-h" data-act="grp">' + esc(title) + ' ' + CHEV + '</div><nav class="grp-nav">';
-    items.forEach(function (it) {
-      var active = it.id === ACTIVE ? ' active' : '';
-      var pill = it.balance ? '<span class="pill" id="sbBalance">—</span>' : '';
-      var dot = (khPending && it.id === 'home') ? '<span class="sb-dot" title="Còn việc chưa xong ở Khởi Hành"></span>' : '';
-      h += '<a class="item' + active + '" href="' + it.href + '">' + (it.icon ? svg(it.icon) : '') + ' ' + esc(it.label) + ' ' + pill + dot + '</a>';
-    });
-    h += '</nav></div>';
-    return h;
+  var SB_MORE = [
+    { id: 'tro-chuyen', label: 'Tất cả lượt Hỏi Thầy', href: '/app/tro-chuyen', icon: 'message-circle' },
+    { id: 'nhiem-vu', label: 'Nhiệm vụ nhận Lượng', href: '/app/ho-so#nhiemvu', icon: 'check-circle' },
+    { id: 'moi-ban', label: 'Mời bạn bè', href: '/app/ho-so#ketnoi', icon: 'gift' },
+    { id: 'nap-luong', label: 'Nạp Lượng', href: '/app/nap-luong', icon: 'wallet' },
+  ];
+  var SB_RECENT_MAX = 20;
+  var SB_MINI_KEY = 'sb_mini_v1';
+  function sbItem(it, extra) {
+    return '<a class="sbn-item' + (it.id === ACTIVE ? ' active' : '') + '" href="' + it.href + '" data-tip="' + esc(it.label) + '" aria-label="' + esc(it.label) + '"' + (extra || '') + '>' +
+      svg(it.icon) + '<span class="sbn-tx">' + esc(it.label) + '</span></a>';
   }
-
-  // ── RENDER SIDEBAR ──
-  // 2026-09: bỏ danh sách công cụ khỏi sidebar — đã hiện sẵn giữa trang Trang
-  // chủ (springboard), lặp lại ở đây là thừa (TOOLS vẫn giữ ĐẦY ĐỦ dữ liệu cho
-  // Cmd+K/icon ws-top, xem applyCatalog ở trên). Hồ sơ lên đầu thay cho
-  // `.sb-brand` cũ; "Lá số đã lưu" (nhóm theo quan hệ, loadSidebarCharts()) và
-  // "Công cụ yêu thích" (top 3 tool_run, loadSidebarFavTools()) đều nạp async.
   function renderSidebar() {
     var host = document.getElementById('shell-sidebar');
     if (!host) return;
-    var h = '';
-
-    h += '<a class="sb-profile" href="/app/ho-so#account">' +
-         '<div class="ava" id="sbAva">?</div>' +
-         '<div class="sb-profile-tx"><div class="nm" id="sbName">Khách</div><div class="sub" id="sbSub">Đăng nhập →</div></div>' +
-         '<span class="sb-profile-chev">' + CHEV + '</span></a>';
-
-    // Tracker "đang online / lượt hỏi hôm nay" — MÔ PHỎNG (xem ghi chú ⚠️ ở
-    // simulatePulse()). `_pulseData` được seed TRƯỚC lần renderSidebar() đầu
-    // (boot()) nên luôn có số ngay từ khung hình đầu; fallback "…" chỉ phòng
-    // hờ trường hợp gọi renderSidebar() sớm bất thường.
-    h += '<div class="sb-pulse" id="sbPulse"' + (_pulseData ? '' : ' hidden') + '>' +
-         '<span class="sbp-row"><span class="sbp-dot"></span><b id="sbpOnline">' + (_pulseData ? esc(_pulseData.online.toLocaleString('vi-VN')) : '…') + '</b> đang online</span>' +
-         '<span class="sbp-row">' + svg('bolt', 'sbp-ic') + '<b id="sbpPrompts">' + (_pulseData ? esc(_pulseData.promptsToday.toLocaleString('vi-VN')) : '…') + '</b> lượt hỏi hôm nay</span>' +
-         '</div>';
-
-    // "Tổng quan" (đường về `/app`) — vẫn cần trên desktop dù mobile đã có nút
-    // Home riêng ở tabbar dưới. Giữ NGUYÊN item của FIXED_TOP để chấm nhắc
-    // Khởi Hành (khoiHanhPending) đi đúng theo, không tách logic ra hai chỗ.
-    h += groupHtml('Tử Vi Minh Bảo', FIXED_TOP.items, khoiHanhPending());
-    h += groupHtml('Tài khoản', FIXED_BOTTOM.items, false);
-
-    // "Lá số đã lưu" — khung tĩnh trước, số đếm thật đổ vào sau (loadSidebarCharts).
-    // Ẩn tới khi biết chắc đã đăng nhập, tránh nháy khung rỗng cho khách vãng lai.
-    h += '<div class="grp" id="sbLasoGrp" hidden><div class="grp-h" data-act="grp">Lá số đã lưu ' + CHEV + '</div><nav class="grp-nav">';
-    LASO_RELATIONS.forEach(function (g) {
-      h += '<a class="item" href="/app/so-la-so?g=' + g.key + '">' + svg(g.icon) + ' ' + esc(g.label) + ' <span class="pill" id="sbLasoCount-' + g.key + '">0</span></a>';
-    });
-    h += '</nav></div>';
-
-    // "Công cụ yêu thích" — 3 công cụ user CHẠY NHIỀU LẦN NHẤT (đếm qua event
-    // tool_run, xem /api/tool-usage), không phải "vừa mở gần đây". Chỉ hiện khi
-    // có dữ liệu thật (xem paintSidebarFavTools). "Xem tất cả" trỏ về Trang chủ
-    // — nơi đã liệt kê ĐẦY ĐỦ danh mục công cụ (springboard).
-    h += '<div class="grp" id="sbFavGrp" hidden><div class="grp-h" data-act="grp">Công cụ yêu thích' +
-         '<a class="grp-link" href="/app">Xem tất cả</a></div><nav class="grp-nav" id="sbFavList"></nav></div>';
-
-    h += '<div class="sb-spacer"></div>';
-    h += '<div class="sb-foot-grp">' +
-         '<a class="item" href="/contact.html">' + svg('message-circle') + ' Hỗ trợ</a>' +
-         '<button class="item" type="button" data-act="theme">' + svg('sun') + ' Đổi nền</button>' +
-         // Đợt 0 (2026-09-24): mặc định ẨN — khách vô danh CHƯA từng đăng
-         // nhập vẫn thấy "Đăng xuất" là bịa ra một hành động không có thật.
-         // `paintAuth()` (mỗi lượt sidebar dựng lại HOẶC session đổi) tự hiện
-         // lại khi có `Auth.getSession().user` thật.
-         '<a class="item danger" href="#" data-act="signout" id="sbSignout" style="display:none">' + svg('door-open') + ' Đăng xuất</a>' +
-         '</div>';
-    h += '<div class="sb-brandmini"><img src="/seal.webp" alt=""><div class="sb-brandmini-tx"><b>TỬ VI MINH BẢO</b><span>Tri mệnh lý – Thuận thế hành</span></div></div>';
-
+    var h = '<div class="sbn-top">' +
+      '<a class="sbn-brand" href="/app"><img src="/seal-128.webp" alt="" width="28" height="28"><b>Minh Bảo</b></a>' +
+      '<button class="sbn-ib" type="button" data-sbn="search" data-tip="Tìm kiếm (Ctrl K)" aria-label="Tìm kiếm">' + svg('search') + '</button>' +
+      '<button class="sbn-ib" type="button" data-sbn="collapse" data-tip="Thu gọn thanh bên" aria-label="Thu gọn thanh bên">' + svg('panel-left') + '</button>' +
+      '</div><nav class="sbn-scroll" aria-label="Điều hướng">' +
+      '<a class="sbn-item" href="/app" data-sbn="new" data-tip="Hỏi Thầy mới" aria-label="Hỏi Thầy mới">' + svg('pen-line') + '<span class="sbn-tx">Hỏi Thầy mới</span></a>';
+    SB_NAV.forEach(function (it) { h += sbItem(it); });
+    h += '<button class="sbn-item" type="button" data-sbn="more" aria-expanded="false">' + svg('more-horizontal') + '<span class="sbn-tx">Thêm</span></button>' +
+      '<div class="sbn-more" hidden>';
+    SB_MORE.forEach(function (it) { h += sbItem(it); });
+    h += '</div>' +
+      '<div class="sbn-sec"><span>Gần đây</span><a href="/app/tro-chuyen">Xem tất cả</a></div>' +
+      '<div class="sbn-recent" id="sbRecent"></div>' +
+      '</nav>' +
+      '<div class="sbn-foot">' +
+        '<div class="sbn-menu" id="sbMenu" hidden>' +
+          '<div class="sbn-mail" id="sbMail"></div>' +
+          '<a class="sbn-item" href="/app/ho-so#account">' + svg('user') + '<span class="sbn-tx">Hồ sơ &amp; cài đặt</span></a>' +
+          '<a class="sbn-item" href="/app/nap-luong">' + svg('wallet') + '<span class="sbn-tx">Nạp Lượng</span><span class="sbn-bal" id="sbBalance"></span></a>' +
+          '<button class="sbn-item" type="button" data-act="theme">' + svg('moon') + '<span class="sbn-tx">Đổi nền sáng/tối</span></button>' +
+          '<hr>' +
+          '<a class="sbn-item" href="/contact.html">' + svg('message-circle') + '<span class="sbn-tx">Hỗ trợ</span></a>' +
+          // Mặc định ẨN — khách chưa đăng nhập thấy "Đăng xuất" là bịa ra một
+          // hành động không có thật. `paintAuth()` tự hiện khi có session.
+          '<a class="sbn-item danger" href="#" data-act="signout" id="sbSignout" style="display:none">' + svg('door-open') + '<span class="sbn-tx">Đăng xuất</span></a>' +
+        '</div>' +
+        '<button class="sbn-item sbn-me" type="button" data-sbn="me" aria-haspopup="true" aria-expanded="false">' +
+          '<span class="ava" id="sbAva">?</span>' +
+          '<span class="sbn-tx"><b id="sbName">Khách</b><span id="sbSub">Đăng nhập để lưu lịch sử</span></span>' +
+        '</button>' +
+      '</div>';
     host.innerHTML = h;
     mountToolIcon();
-    // group collapse
-    host.querySelectorAll('.grp-h').forEach(function (el) {
-      el.addEventListener('click', function () { el.parentElement.classList.toggle('closed'); });
-    });
-    var themeBtn = host.querySelector('[data-act="theme"]');
-    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
-    var signout = host.querySelector('[data-act="signout"]');
-    if (signout) signout.addEventListener('click', function (e) {
-      e.preventDefault();
-      try { window.Auth && Auth.signOut && Auth.signOut(); } catch (err) { /* ignore */ }
-      location.href = '/';
-    });
-    // Khối avatar/tên vừa bị dựng lại TRẮNG ("Khách"/"Đăng nhập →") — nếu danh
-    // mục tải xong SAU lượt paintAuth() đầu (đua nhau, tuỳ tốc độ mạng) thì tên
-    // thật + số dư vừa sơn xong bị đè mất, không có gì sơn lại. Gọi ngay tại
-    // đây để đúng bất kể ai chạy trước.
+    wireSidebar(host);
     paintAuth();
-    loadSidebarCharts();
-    loadSidebarFavTools();
+    renderSidebarRecent();
+  }
+  function setSbMini(on) {
+    document.documentElement.classList.toggle('sb-mini', on);
+    try { localStorage.setItem(SB_MINI_KEY, on ? '1' : '0'); } catch (e) { /* ignore */ }
+    var b = document.querySelector('[data-sbn="collapse"]');
+    if (b) {
+      var tip = on ? 'Mở thanh bên' : 'Thu gọn thanh bên';
+      b.setAttribute('data-tip', tip); b.setAttribute('aria-label', tip);
+    }
+  }
+  function wireSidebar(host) {
+    var menu = host.querySelector('#sbMenu'), me = host.querySelector('[data-sbn="me"]');
+    host.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-sbn],[data-act]');
+      if (!t || !host.contains(t)) return;
+      var k = t.getAttribute('data-sbn') || t.getAttribute('data-act');
+      if (k === 'new' && CHAT_HOME) {
+        // Đang ở màn chat rồi: "Hỏi Thầy mới" dọn tại chỗ, không tải trang.
+        e.preventDefault(); newChat();
+        if (window.matchMedia('(max-width:900px)').matches) { host.classList.remove('open'); syncBackdrop(); }
+      } else if (k === 'collapse') {
+        // Điện thoại: nút này là "đóng ngăn kéo"; desktop: thu gọn thành dải icon.
+        if (window.matchMedia('(max-width:900px)').matches) { host.classList.remove('open'); syncBackdrop(); }
+        else setSbMini(!document.documentElement.classList.contains('sb-mini'));
+      } else if (k === 'search') {
+        e.preventDefault(); openCmd();
+      } else if (k === 'more') {
+        var box = host.querySelector('.sbn-more');
+        box.hidden = !box.hidden; t.setAttribute('aria-expanded', String(!box.hidden));
+      } else if (k === 'me') {
+        // Khách chưa đăng nhập: không có gì để mở — đưa thẳng tới trang đăng nhập.
+        var s = window.Auth && Auth.getSession && Auth.getSession();
+        if (!(s && s.user)) { location.href = '/app/ho-so#account'; return; }
+        menu.hidden = !menu.hidden; me.setAttribute('aria-expanded', String(!menu.hidden));
+      } else if (k === 'theme') {
+        toggleTheme(); menu.hidden = true;
+      } else if (k === 'signout') {
+        e.preventDefault();
+        try { window.Auth && Auth.signOut && Auth.signOut(); } catch (err) { /* ignore */ }
+        location.href = '/';
+      }
+    });
+    document.addEventListener('click', function (e) {
+      if (!menu.hidden && !menu.contains(e.target) && !me.contains(e.target)) { menu.hidden = true; me.setAttribute('aria-expanded', 'false'); }
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { menu.hidden = true; me.setAttribute('aria-expanded', 'false'); } });
+    // Điện thoại: bấm một mục là đi — đóng ngăn kéo (soft-nav không tải lại trang).
+    host.addEventListener('click', function (e) {
+      if (e.target.closest('a[href]') && window.matchMedia('(max-width:900px)').matches) { host.classList.remove('open'); syncBackdrop(); }
+    });
   }
 
-  // ── SỔ LÁ SỐ TRONG SIDEBAR: đếm theo nhóm ──
-  // Dùng CHUNG /api/charts (đã có sẵn cho `user-charts.js`) — không mở thêm
-  // route riêng cho sidebar. Trần 30 dòng của sổ (MAX_CHARTS, xem route) đủ
-  // nhỏ để gộp tại đây, không cần server tính sẵn.
-  function sidebarRelationKey(it) {
-    var r = it && it.relation;
-    return LASO_RELATIONS.some(function (g) { return g.key === r; }) ? r : 'khac';
+  // ── "GẦN ĐÂY": hội thoại gộp mọi công cụ ──
+  // CÙNG cách hợp nhất với `/app/tro-chuyen` (local + /api/tuvi-chats lọc type
+  // 'app-'). Bản server chỉ xin MỘT lần mỗi tab rồi giữ trong sessionStorage
+  // 10 phút — sidebar dựng trên MỌI trang, gọi API mỗi lượt chuyển trang là
+  // bắt cả site chờ một danh sách phụ.
+  var SB_RECENT_SS = 'sb_recent_srv_v1';
+  function sbRecentLocal() {
+    var out = [];
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.indexOf('app_hist_v1_') === 0) {
+          var tool = k.slice(12);
+          (JSON.parse(localStorage.getItem(k)) || []).forEach(function (s) { out.push({ id: s.id, tool: tool, title: s.title, updatedAt: s.updatedAt, q: sessTopic(s) }); });
+        }
+      }
+    } catch (e) { /* ignore */ }
+    return out;
   }
-  function loadSidebarCharts() {
-    var host = document.getElementById('shell-sidebar');
-    if (!host || !getToken()) return; // khách vãng lai — không có sổ, giữ ẩn
+  function sbRecentHref(s) { return (s.tool === 'home' ? '/app' : '/app/' + s.tool) + '?restore=' + encodeURIComponent(s.id); }
+  function paintSidebarRecent(list) {
+    var el = document.getElementById('sbRecent');
+    if (!el) return;
+    var seen = {}, arr = [];
+    list.forEach(function (s) { if (s && s.id && !seen[s.id]) { seen[s.id] = 1; arr.push(s); } });
+    arr.sort(function (a, b) { return (b.updatedAt || 0) - (a.updatedAt || 0); });
+    if (!arr.length) { el.innerHTML = '<div class="sbn-empty">Các lượt Hỏi Thầy của bạn sẽ hiện ở đây.</div>'; return; }
+    var cur = sessionId;
+    el.innerHTML = arr.slice(0, SB_RECENT_MAX).map(function (s) {
+      var t = findToolItem(s.tool);
+      var name = s.q || s.title || (t && t.label) || 'Hỏi Thầy';
+      return '<a class="sbn-item' + (s.id === cur ? ' active' : '') + '" href="' + sbRecentHref(s) + '"><span class="sbn-tx">' + esc(name) + '</span></a>';
+    }).join('');
+  }
+  function renderSidebarRecent() {
+    var loc = sbRecentLocal();
+    var cached = null;
+    try { cached = JSON.parse(sessionStorage.getItem(SB_RECENT_SS) || 'null'); } catch (e) { /* ignore */ }
+    paintSidebarRecent(loc.concat(cached && cached.list ? cached.list : []));
+    if (cached && Date.now() - cached.t < 600000) return;
+    if (!getToken()) return; // khách vãng lai — chỉ có bản trên máy
     freshToken().then(function (tok) {
       if (!tok) return;
-      return fetch('/api/charts', { headers: { Authorization: 'Bearer ' + tok } })
+      return fetch('/api/tuvi-chats', { headers: { Authorization: 'Bearer ' + tok } })
         .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (d) { paintSidebarCharts((d && d.items) || []); });
-    }).catch(function () { /* sổ chỉ là tiện ích — hỏng thì im lặng */ });
-  }
-  function paintSidebarCharts(items) {
-    var grp = document.getElementById('sbLasoGrp');
-    if (!grp) return;
-    var counts = { gia_dinh: 0, ban_be: 0, dong_nghiep: 0, khac: 0 };
-    items.forEach(function (it) { counts[sidebarRelationKey(it)]++; });
-    LASO_RELATIONS.forEach(function (g) {
-      var el = document.getElementById('sbLasoCount-' + g.key);
-      if (el) el.textContent = counts[g.key];
-    });
-    grp.hidden = false;
+        .then(function (j) {
+          if (!j || !j.chats) return;
+          var srv = j.chats
+            .filter(function (c) { return (c.type || '').indexOf('app-') === 0; })
+            .map(function (c) { return { id: c.id, tool: (c.type || '').slice(4), title: c.label, updatedAt: +new Date(c.updated_at), q: c.last_msg ? String(c.last_msg).slice(0, 80) : '' }; });
+          try { sessionStorage.setItem(SB_RECENT_SS, JSON.stringify({ t: Date.now(), list: srv })); } catch (e) { /* ignore */ }
+          paintSidebarRecent(sbRecentLocal().concat(srv));
+        });
+    }).catch(function () { /* danh sách phụ — hỏng thì còn bản trên máy */ });
   }
 
-  // ── "CÔNG CỤ YÊU THÍCH" TRONG SIDEBAR: 3 tool user CHẠY NHIỀU LẦN NHẤT ──
-  // Nguồn /api/tool-usage — đếm event `tool_run` trong bảng `events` (cùng
-  // bảng lib/ops/tool-usage-alerts.ts dùng cho digest vận hành). `tool_id` trả
-  // về là SLUG (window.SHELL_ACTIVE) TRÙNG với `id` của mục trong TOOLS, nên
-  // khớp thẳng vào TOOLS đang có sẵn ở client để lấy label/href/icon — không
-  // cần gọi thêm tool_pricing.
-  var SB_FAV_SHOW = 3;
   function findToolItem(id) {
     var found = null;
     TOOLS.forEach(function (g) { g.items.forEach(function (it) { if (it.id === id) found = it; }); });
     return found;
   }
-  function loadSidebarFavTools() {
-    var host = document.getElementById('shell-sidebar');
-    if (!host || !getToken()) return; // khách vãng lai — chưa có lịch sử để đếm
-    freshToken().then(function (tok) {
-      if (!tok) return;
-      return fetch('/api/tool-usage', { headers: { Authorization: 'Bearer ' + tok } })
-        .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (d) { paintSidebarFavTools((d && d.items) || []); });
-    }).catch(function () { /* chỉ là tiện ích — hỏng thì im lặng */ });
+
+
+  // ── KHUNG KẾT QUẢ KIỂU ARTIFACT (Claude, 2026-09-26) ──
+  // Chat-first trên desktop: `.ws` là khung bên phải. Thêm vào đầu khung hai
+  // nút như artifact của Claude — Mở rộng (`art-wide`, chat co về --rail-w) và
+  // Đóng (`art-closed`, chat chiếm trọn). Trong chat có THẺ KẾT QUẢ để mở lại.
+  // Điện thoại: `.ws` nằm DƯỚI lớp chat, thẻ kết quả = đóng lớp chat.
+  function setArtWideLabel(wide) {
+    var ab = document.querySelector('.rh-art');
+    if (ab) {
+      ab.textContent = wide ? 'Thu gọn' : 'Kết quả';
+      var tip = wide ? 'Thu gọn kết quả' : 'Xem kết quả';
+      ab.setAttribute('data-tip', tip); ab.setAttribute('aria-label', tip);
+    }
   }
-  function paintSidebarFavTools(items) {
-    var grp = document.getElementById('sbFavGrp');
-    var list = document.getElementById('sbFavList');
-    if (!grp || !list) return;
-    // tool_id có thể trỏ vào công cụ đã bỏ khỏi danh mục (tool_pricing đổi/gỡ)
-    // — bỏ qua để không dẫn tới đường chết, KHÔNG lấy chỗ đó chèn tool khác.
-    var rows = items
-      .map(function (it) { return { count: it.count, tool: findToolItem(it.tool_id) }; })
-      .filter(function (r) { return r.tool; })
-      .slice(0, SB_FAV_SHOW);
-    if (!rows.length) { grp.hidden = true; return; }
-    list.innerHTML = rows.map(function (r) {
-      return '<a class="item" href="' + r.tool.href + '">' + (r.tool.icon ? svg(r.tool.icon) : '') +
-        ' ' + esc(r.tool.label) + ' <span class="pill">' + esc(String(r.count)) + '</span></a>';
-    }).join('');
-    grp.hidden = false;
+  function openArtPanel() {
+    if (window.matchMedia('(max-width:900px)').matches) { closeRailUI(); return; }
+    document.body.classList.remove('art-closed');
+    var ab = document.querySelector('.rh-art'); if (ab) ab.classList.remove('has-new');
+  }
+  function mountArtControls() {
+    var top = document.querySelector('.ws-top');
+    if (!top || top.querySelector('.ws-art-ctl')) return;
+    var box = document.createElement('div');
+    box.className = 'ws-art-ctl';
+    box.innerHTML =
+      '<button type="button" class="ws-art-btn" data-art="wide" data-tip="Mở rộng" aria-label="Mở rộng">' + svg('maximize') + '</button>' +
+      '<button type="button" class="ws-art-btn" data-art="close" data-tip="Đóng" aria-label="Đóng">' + svg('x') + '</button>';
+    top.appendChild(box);
+    box.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-art]'); if (!b) return;
+      if (b.getAttribute('data-art') === 'close') {
+        document.body.classList.add('art-closed'); document.body.classList.remove('art-wide'); setArtWideLabel(false);
+      } else {
+        var wide = document.body.classList.toggle('art-wide'); setArtWideLabel(wide);
+        var tip = wide ? 'Thu hẹp' : 'Mở rộng';
+        b.setAttribute('data-tip', tip); b.setAttribute('aria-label', tip);
+      }
+    });
+  }
+  function appendArtCard() {
+    var chat = document.getElementById('chat'); if (!chat) return;
+    var old = chat.querySelector('.art-card'); if (old) old.remove();
+    var card = document.createElement('button');
+    card.type = 'button'; card.className = 'art-card';
+    card.innerHTML = '<span class="art-ic">' + svg('file-text') + '</span><span class="art-tx"><b>' + esc(wsTitleText()) + '</b><span>Kết quả · Bấm để mở</span></span>';
+    card.addEventListener('click', openArtPanel);
+    chat.appendChild(card); chat.scrollTop = chat.scrollHeight;
   }
 
   // ── RENDER RAIL ──
@@ -728,12 +687,17 @@
     var host = document.getElementById('shell-rail');
     if (!host) return;
     host.innerHTML =
-      '<div class="rail-h"><img class="rail-ava" src="' + authorAva() + '" alt="Hỏi Thầy" data-tip="Đổi thầy luận giải">' +
+      '<header class="rail-h">' +
+      // ☰ mở sidebar trên điện thoại — từ 2026-09-26 không còn tabbar dưới
+      // đáy, khung chat phủ toàn màn phải tự có lối vào điều hướng. Màn chat
+      // trang chủ: đầu khung là MINH BẢO (ấn) cho tới khi một thầy được mời vào.
+      '<button class="rh-btn rh-menu mobile-only" type="button" data-act="sb-open" data-tip="Mở thanh bên" aria-label="Mở thanh bên">' + svg('menu') + '</button>' +
+      '<img class="rail-ava" src="' + (CHAT_HOME && !_navDone ? '/seal-128.webp' : authorAva()) + '" alt="Hỏi Thầy" data-tip="Đổi thầy luận giải">' +
       // id="railHTitle": Henry 2026-09-23 — bấm gợi ý chuyển tool NGAY TRONG
       // rail (startInlineTool, không điều hướng trang) thì tiêu đề đổi sang
       // TÊN TOOL thay vì tên chung "Trợ lý Luận Đường", cho biết đang ở luồng
       // nào. Xem setHeaderTitle().
-      '<div><b id="railHTitle">Hỏi Thầy</b><span>' + esc(authorLabel()) + '</span></div>' +
+      '<div><b id="railHTitle">' + (CHAT_HOME ? (_navDone ? esc(authorLabel()) : 'Minh Bảo') : 'Hỏi Thầy') + '</b><span>' + (CHAT_HOME ? (_navDone ? 'Đang tiếp chuyện' : 'Người dẫn đường') : esc(authorLabel())) + '</span></div>' +
       '<div class="tools">' +
         // Đợt 0 (2026-09-24, đóng vai khách chụp màn hình thật): chat-first
         // trên mobile KHÔNG có đường lui rõ ràng — "Kết quả" đọc như một
@@ -743,14 +707,16 @@
         // hành vi với `rail-close`/`closeRailUI()`. "Kết quả" giữ nguyên vai
         // trò nút hành động (đổi tên "Thu gọn" trên desktop), không kiêm
         // nhiệm làm nút back nữa.
-        (CHATFIRST
+        (CHAT_HOME
+          ? ''
+          : CHATFIRST
           ? '<button class="rh-btn mobile-only rh-back" data-tip="Đóng, xem kết quả" aria-label="Đóng, xem kết quả" data-act="rail-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M15 5 8 12l7 7"/></svg></button>' +
             '<button class="rh-btn rh-art" data-tip="Xem kết quả" aria-label="Xem kết quả" data-act="artifact">Kết quả</button>'
           : '<button class="rh-btn mobile-only" data-tip="Đóng" aria-label="Đóng" data-act="rail-close">✕</button>') +
-        (HIST_ON ? '<button class="rh-btn" data-tip="Lịch sử hội thoại" aria-label="Lịch sử hội thoại" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></button>' : '') +
+        (HIST_ON && !CHAT_HOME ? '<button class="rh-btn" data-tip="Lịch sử hội thoại" aria-label="Lịch sử hội thoại" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></button>' : '') +
         '<button class="rh-btn" data-tip="Chia sẻ phiên" aria-label="Chia sẻ phiên" data-act="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>' +
         '<button class="rh-btn" data-tip="Hội thoại mới" aria-label="Hội thoại mới" data-act="newchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg></button>' +
-      '</div></div>' +
+      '</div></header>' +
       (HIST_ON ? '<div class="rail-hist" id="railHist" style="display:none"></div>' : '') +
       '<div class="ctx" id="railCtx" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:13px;height:13px;flex:0 0 auto"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg> <span id="railCtxTxt"></span></div>' +
       '<div class="chat" id="chat">' +
@@ -785,6 +751,8 @@
     if (_ab) _ab.addEventListener('click', function () {
       _ab.classList.remove('has-new');
       if (window.matchMedia('(max-width:900px)').matches) { closeRailUI(); return; }
+      // Khung kết quả đang ĐÓNG (nút ✕ của nó) thì bấm lần này là MỞ lại.
+      if (document.body.classList.contains('art-closed')) { openArtPanel(); return; }
       var wide = document.body.classList.toggle('art-wide');
       // Nút CHỈ có chữ (không chứa <svg>) nên `textContent` ở đây an toàn —
       // xem luật "nút chỉ-icon cấm textContent" trong docs/ICONS.md.
@@ -795,7 +763,11 @@
       var _tip = wide ? 'Thu gọn kết quả' : 'Xem kết quả';
       _ab.setAttribute('data-tip', _tip); _ab.setAttribute('aria-label', _tip);
     });
-    host.querySelector('.rail-ava').addEventListener('click', openAuthorModal);
+    host.querySelector('.rail-ava').addEventListener('click', function () { openAuthorModal(CHAT_HOME ? joinThay : null); });
+    var _sbo = host.querySelector('[data-act="sb-open"]');
+    if (_sbo) _sbo.addEventListener('click', function () {
+      var sb = document.getElementById('shell-sidebar'); if (sb) { sb.classList.add('open'); syncBackdrop(); }
+    });
     host.querySelector('[data-act="attach"]').addEventListener('click', function () { var f = document.getElementById('railFile'); if (f) f.click(); });
     document.getElementById('railFile').addEventListener('change', onPickFiles);
     var ta = document.getElementById('railInput');
@@ -1070,6 +1042,7 @@
       messages: msgs, lastMsg: (last || '').slice(0, 140), createdAt: curMeta.createdAt || Date.now(), updatedAt: Date.now() };
     histLocalUpsert(rec); histSrvUpsert(rec);
     renderRecentAll();
+    paintSidebarRecent(sbRecentLocal());
   }
   function relTime(ts) {
     var s = Math.floor((Date.now() - ts) / 1000);
@@ -1092,6 +1065,7 @@
       else html += '<div class="msg a"><img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body">' + mdLite(m.content) + '</div></div>';
     });
     chat.innerHTML = html; chat.scrollTop = chat.scrollHeight;
+    if (CHAT_HOME && html) { _navDone = true; document.body.classList.remove('chat-empty'); }
   }
   // Khôi phục 1 phiên: nạp lại center bằng cách reload trang với ?auto=1 (tính
   // lại deterministic, FREE), transcript đưa qua sessionStorage cho setContext.
@@ -1359,7 +1333,7 @@
     el.innerHTML = '<div class="intro-thay"><img src="/authors/' + esc(m.id) + '.jpg" alt="" onerror="this.remove()">' +
       '<span>Thầy <b>' + esc(m.display_name || '') + '</b> đứng tên' + (m.discipline ? ' · ' + esc(m.discipline) : '') + '</span></div>';
   }
-  function openAuthorModal() {
+  function openAuthorModal(cb) {
     var rows = AUTHOR_ROSTER.map(function (a) {
       var sel = _author && _author.id === a.id;
       var tagline = a.style.split(/\.\s/)[0] + '.';
@@ -1388,9 +1362,10 @@
       var pick = pool[Math.floor(Math.random() * pool.length)] || AUTHOR_ROSTER[0];
       setAuthor(pick.id);
       close();
+      if (cb) cb(pick.id);
     });
     wrap.querySelectorAll('.sam-row').forEach(function (btn) {
-      btn.addEventListener('click', function () { setAuthor(btn.getAttribute('data-id')); close(); });
+      btn.addEventListener('click', function () { var id = btn.getAttribute('data-id'); setAuthor(id); close(); if (cb) cb(id); });
     });
   }
 
@@ -4259,6 +4234,16 @@
 
   function greet(o) {
     var chat = document.getElementById('chat');
+    // Màn chat trang chủ: chưa ai nói gì thì KHÔNG có bong bóng chào của thầy
+    // — chỉ ấn Minh Bảo + một câu hỏi, ô nhập nằm giữa màn (kiểu ChatGPT).
+    if (CHAT_HOME && o.hero) {
+      chat.innerHTML = '<div class="home-hero"><img src="/seal-128.webp" alt="" width="64" height="64"><h1>' + esc(o.hero) + '</h1>' +
+        (o.heroSub ? '<p>' + esc(o.heroSub) + '</p>' : '') + '</div>';
+      document.body.classList.add('chat-empty');
+      if (o.chips !== undefined) { ctxChipsOrig = (o.chips || []).slice(); ctxChips = ctxChipsOrig.slice(); ctxChipsSrc = 'static'; }
+      renderSuggs();
+      return;
+    }
     var html = '<div class="msg a"><img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body">' + mdLite(o.greeting || 'Lá số đã sẵn sàng. Bạn muốn tôi soi điều gì trước?') + '</div></div>';
     // Henry 2026-09-23: luồng nhập liệu NGAY TRONG #chat (TuviForm.renderChat
     // prefix 'inl*'/'c*', hoặc inlStep/inlPhotoBubble/inlStreamBubble bước
@@ -4336,6 +4321,7 @@
       // (tool Duyên Nợ Tiền Kiếp). Mối duyên và nền văn minh chung suy từ QUAN
       // HỆ giữa hai lá số — thiếu vế này thì rail kể một thế giới khác hẳn thế
       // giới đang hiện trên màn hình.
+      if (CHAT_HOME) { _ctxOpts = o; _navDone = false; }
       ctx = (o.birth || o.scenario) ? { birth: o.birth || null, scenario: o.scenario || null, wrap: o.wrap || null, wrapBirthB: o.wrapBirthB || null } : null;
       // `o.toolId` (Henry 2026-09-23, startInlineTool): chuyển tool NGAY TRONG
       // rail của MỘT trang khác (vd bấm gợi ý ở /app#chat, KHÔNG điều hướng)
@@ -4416,6 +4402,9 @@
       // sớm — để sau thì phiên khôi phục không bao giờ được lật.
       if (CHATFIRST) {
         document.body.classList.add('chat-first-live');
+        document.body.classList.remove('art-closed');
+        mountArtControls();
+        appendArtCard();
         Shell.openRail(); // desktop: rail vốn luôn hiện, `.open` là no-op
       }
       // KHÔI PHỤC phiên đã lưu (đi qua sessionStorage khi bấm 1 mục lịch sử):
@@ -4442,6 +4431,21 @@
       } catch (e) { /* ignore */ }
     },
     ask: function (t) { ask(t); },
+    // Màn chat trang chủ mồi rail NGAY bằng kịch bản tạm rồi mới có số liệu
+    // ngày (fetch /api/van-ngay) — thay DỮ LIỆU của kịch bản đang gắn mà không
+    // dựng lại hội thoại (setContext lượt hai sẽ xoá câu người ta vừa gõ).
+    updateScenarioData: function (d) { if (ctx && ctx.scenario) ctx.scenario.data = d; },
+    // Trang chủ nhận `?q=&thay=` (đã chọn thầy ở trang chủ tĩnh `/`): vào
+    // thẳng thầy đó, bỏ bước dẫn đường.
+    joinThay: function (id, q) {
+      if (q) {
+        var chat = document.getElementById('chat');
+        var hero = chat && chat.querySelector('.home-hero'); if (hero) hero.remove();
+        document.body.classList.remove('chat-empty');
+        if (chat) { var u = document.createElement('div'); u.className = 'msg u'; u.textContent = q; chat.appendChild(u); }
+      }
+      _navQ = q || ''; joinThay(id);
+    },
     openCmd: openCmd,
     toggleTheme: toggleTheme,
     // Mở rail = lời mời đã được nhận → tắt orb. Nếu không tắt thì nó nhấp nháy
@@ -4466,12 +4470,15 @@
       ACTIVE = window.SHELL_ACTIVE || '';
       CHATFIRST = !!window.SHELL_CHATFIRST;
       CHAT_INTAKE = !!window.SHELL_CHAT_INTAKE;
+      CHAT_HOME = !!window.SHELL_CHAT_HOME; _navDone = false; _ctxOpts = null;
+      document.body.classList.toggle('chat-home', CHAT_HOME);
+      if (!CHAT_HOME) document.body.classList.remove('chat-empty');
       HIST_ON = !!window.SHELL_HISTORY;
       // Phiên chat/lá số là CỦA TRANG CŨ — tool mới chưa gọi setContext() nên
       // "trang chưa dựng được gì" (đúng giá trị khởi tạo ban đầu của các biến
       // này, xem khai báo `var ctx/messages/sessionId/curMeta/ctxCalls/birthOwned`).
       ctx = null; messages = []; sessionId = newId(); curMeta = null; ctxCalls = 0; birthOwned = false;
-      document.body.classList.remove('chat-first-live', 'art-wide');
+      document.body.classList.remove('chat-first-live', 'art-wide', 'art-closed');
       renderRail();
       if (CHAT_INTAKE) { document.body.classList.add('chat-first-live'); Shell.openRail(); }
     },
@@ -4696,12 +4703,88 @@
     if (ctx) {
       // Thread mới cùng ngữ cảnh: giữ restore/title, đổi id để không đè phiên cũ.
       curMeta = { restore: (curMeta && curMeta.restore) || { birth: birthSnapshot(), scenario: ctx.scenario || null }, title: (curMeta && curMeta.title) || 'Phiên', createdAt: Date.now() };
-      ctxChips = ctxChipsOrig.slice(); ctxChipsSrc = 'static'; greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' });
+      ctxChips = ctxChipsOrig.slice(); ctxChipsSrc = 'static';
+      if (CHAT_HOME && _ctxOpts) { _navDone = false; paintHomeHeader(); greet(_ctxOpts); }
+      else greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' });
       // Hội thoại mới → đếm lại câu, và cho thẻ mời có cơ hội hiện lại (một lần
       // mỗi hội thoại, không phải một lần mỗi phiên trình duyệt).
       _askCount = 0; _upsellShown = false; _cungAsked = []; _suggestShown = false; pendingSuggest = null;
       renderRailMeter();
     }
+  }
+
+
+  // ── MINH BẢO DẪN ĐƯỜNG (màn chat trang chủ, 2026-09-26) ──
+  // Câu đầu tiên KHÔNG đi thẳng vào model: hỏi `/api/thay-hoi` (đọc chủ đề,
+  // không gọi model, không tốn Lượng) xem thầy nào phụ trách, rồi mời thầy đó
+  // vào. Người dùng bấm "Mời thầy vào" thì mới gửi câu hỏi — bằng giọng của
+  // đúng thầy vừa vào (`setAuthor` → `authorId` gửi kèm lượt chat).
+  function paintHomeHeader() {
+    var host = document.getElementById('shell-rail'); if (!host) return;
+    var ava = host.querySelector('.rail-ava'); if (ava) ava.src = _navDone ? authorAva() : '/seal-128.webp';
+    var t = document.getElementById('railHTitle'); if (t) t.textContent = _navDone ? authorLabel() : 'Minh Bảo';
+    var sp = host.querySelector('.rail-h span'); if (sp) sp.textContent = _navDone ? 'Đang tiếp chuyện' : 'Người dẫn đường';
+  }
+  function navBubble(html) {
+    var chat = document.getElementById('chat');
+    var row = document.createElement('div'); row.className = 'msg a nav';
+    row.innerHTML = '<img class="msg-ava" src="/seal-128.webp" alt=""><div class="msg-body"><div class="nav-nm">Minh Bảo · người dẫn đường</div>' + html + '</div>';
+    chat.appendChild(row); chat.scrollTop = chat.scrollHeight;
+    return row;
+  }
+  function authorById(id) { return AUTHOR_ROSTER.filter(function (a) { return a.id === id; })[0] || null; }
+  var _navQ = '';
+  function navigate(text) {
+    var input = document.getElementById('railInput');
+    input.value = ''; autoGrow(input);
+    document.body.classList.remove('chat-empty');
+    var chat = document.getElementById('chat');
+    var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
+    var u = document.createElement('div'); u.className = 'msg u'; u.textContent = text; chat.appendChild(u);
+    _navQ = text;
+    var wait = navBubble('<span class="typing"><i></i><i></i><i></i></span>');
+    setSend(false); streaming = true; renderSuggs();
+    try { track('nav_route', { tool_id: ACTIVE || 'home' }); } catch (e) { /* ignore */ }
+    var done = false;
+    var finish = function (r) {
+      if (done) return; done = true;
+      streaming = false; setSend(true); renderSuggs();
+      wait.remove();
+      var a = authorById(r && r.thay) || authorById('thai-hu') || AUTHOR_ROSTER[0];
+      var nghia = r && r.nghia;
+      var mon = r && r.mon;
+      var row = navBubble('<p>' + (nghia ? 'Chuyện ' + esc(nghia) + ' thì' : 'Câu này thì') + ' người xem kỹ nhất là <b>Thầy ' + esc(a.name) + '</b>. Mình mời thầy vào nhé?</p>' +
+        '<div class="nav-card"><img src="/authors/' + a.id + '.jpg" alt="" width="48" height="48" loading="lazy"><div><b>Thầy ' + esc(a.name) + '</b>' + (mon ? '<span>' + esc(mon) + '</span>' : '') + '</div></div>' +
+        '<div class="nav-acts"><button type="button" class="nav-ok">Mời thầy vào</button><button type="button" class="nav-other">Chọn thầy khác</button></div>');
+      var lock = function () { row.querySelectorAll('button').forEach(function (b) { b.disabled = true; }); };
+      row.querySelector('.nav-ok').addEventListener('click', function () { lock(); joinThay(a.id); });
+      row.querySelector('.nav-other').addEventListener('click', function () { openAuthorModal(function (id) { lock(); joinThay(id); }); });
+    };
+    // Mạng chậm/lỗi thì vẫn phải mời được ai đó — rơi về thầy tiếp khách.
+    setTimeout(function () { finish(null); }, 4000);
+    fetch('/api/thay-hoi?q=' + encodeURIComponent(text.slice(0, 500)), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(finish)
+      .catch(function () { finish(null); });
+  }
+  function joinThay(id) {
+    if (!authorById(id)) return;
+    setAuthor(id);
+    if (_navDone) { paintHomeHeader(); return; } // đổi thầy giữa chừng: chỉ đổi người nói
+    _navDone = true;
+    paintHomeHeader();
+    var a = authorById(id), chat = document.getElementById('chat');
+    var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
+    document.body.classList.remove('chat-empty');
+    var sys = document.createElement('div'); sys.className = 'nav-sys';
+    sys.innerHTML = '<img src="/authors/' + a.id + '.jpg" alt="" width="18" height="18">Thầy ' + esc(a.name) + ' đã vào tiếp chuyện';
+    chat.appendChild(sys);
+    try { track('nav_join', { tool_id: ACTIVE || 'home', meta: { thay: id } }); } catch (e) { /* ignore */ }
+    if (!_navQ || !ctx) return;
+    var input = document.getElementById('railInput');
+    input.value = _navQ; _navQ = '';
+    _skipEcho = true;
+    sendMsg();
   }
 
   async function sendMsg() {
@@ -4710,6 +4793,8 @@
     var text = input.value.trim();
     var imgs = pendingImages.slice();
     if (!text && !imgs.length) return;
+    // Câu ĐẦU TIÊN ở màn chat trang chủ: Minh Bảo mời đúng thầy trước đã.
+    if (CHAT_HOME && !_navDone && !imgs.length) { navigate(text); return; }
     try { track('chat_msg', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { has_img: imgs.length > 0 } }); } catch (e) { /* ignore */ }
     // Bước 2 của "Khởi Hành" (public/app-home.html) cho KHÁCH VÔ DANH: server
     // không có user_id để tra `events.chat_msg`, nên bậc 0 tự đếm ở máy. Cờ này
@@ -4724,11 +4809,13 @@
     input.value = ''; autoGrow(input);
     var chat = document.getElementById('chat');
     var empty = document.getElementById('railEmpty'); if (empty) empty.remove();
+    document.body.classList.remove('chat-empty');
     var u = document.createElement('div'); u.className = 'msg u';
-    if (imgs.length) {
+    if (_skipEcho) { _skipEcho = false; u = null; }
+    else if (imgs.length) {
       u.innerHTML = '<div class="msg-imgs">' + imgs.map(function (im) { return '<img src="' + im.url + '" alt="">'; }).join('') + '</div>' + (text ? '<div>' + esc(text) + '</div>' : '');
     } else { u.textContent = text; }
-    chat.appendChild(u);
+    if (u) chat.appendChild(u);
     var um = { role: 'user', content: text };
     if (imgs.length) um.images = imgs.map(function (im) { return { data: im.data, mediaType: im.mediaType }; });
     messages.push(um);
@@ -5029,8 +5116,11 @@
   function syncBackdrop() {
     var b = document.getElementById('shell-backdrop'); if (!b) return;
     var open = (document.getElementById('shell-sidebar') && document.getElementById('shell-sidebar').classList.contains('open')) ||
-      (document.getElementById('shell-rail') && document.getElementById('shell-rail').classList.contains('open'));
+      (!CHAT_HOME && document.getElementById('shell-rail') && document.getElementById('shell-rail').classList.contains('open'));
     b.classList.toggle('on', open);
+    // Ngăn kéo sidebar có thể mở CHỒNG lên khung chat toàn màn (☰ trong rail):
+    // lúc đó lớp nền mờ phải nổi lên trên rail để chạm ra ngoài là đóng.
+    document.body.classList.toggle('sb-drawer', !!(document.getElementById('shell-sidebar') && document.getElementById('shell-sidebar').classList.contains('open')));
     // Ẩn bottom tab khi drawer (sidebar/rail) đang mở để không đè input rail toàn màn.
     document.body.classList.toggle('drawer-open', open);
   }
@@ -5084,7 +5174,7 @@
       closeSheetVisual();
     }
   });
-  function armRailHistory() { pushUiLayer('rail'); }
+  function armRailHistory() { if (!CHAT_HOME) pushUiLayer('rail'); }
   function closeRailUI() {
     var r = document.getElementById('shell-rail');
     if (r) r.classList.remove('open');
@@ -5191,9 +5281,9 @@
       var known = _rc.balance != null && !_rc.anon;
       var txt = known ? _rc.balance.toLocaleString('vi-VN') : null;
       var sub = document.getElementById('sbSub');
-      if (sub) sub.innerHTML = txt != null ? ('<b>' + txt + ' Lượng</b> · Nạp thêm →') : 'Xem hồ sơ →';
+      if (sub) sub.innerHTML = txt != null ? ('<b>' + txt + '</b> Lượng') : 'Tài khoản';
       var pill = document.getElementById('sbBalance');
-      if (pill) pill.textContent = txt != null ? txt : '—';
+      if (pill) pill.textContent = txt != null ? txt + ' Lượng' : '';
     } catch (e) { /* ignore */ }
   }
 
@@ -5204,6 +5294,7 @@
         var nm = (s.user.email || 'Bạn').split('@')[0];
         var e1 = document.getElementById('sbName'); if (e1) e1.textContent = nm;
         var e3 = document.getElementById('sbAva'); if (e3) e3.textContent = (nm[0] || '?').toUpperCase();
+        var e4 = document.getElementById('sbMail'); if (e4) e4.textContent = s.user.email || '';
       }
       // Đợt 0 (2026-09-24): "Đăng xuất" chỉ hiện khi CÓ session thật — mặc
       // định ẩn ở markup (renderSidebar), tự hiện/ẩn lại mỗi lượt paintAuth()
@@ -5233,43 +5324,6 @@
       try { new ResizeObserver(apply).observe(top); return; } catch (e) { /* ignore */ }
     }
     window.addEventListener('resize', apply);
-  }
-
-  // ── BOTTOM TAB BAR (mobile) ──
-  // 2026-09-24 (hellobot-ui-redesign): 5 tab khớp ĐÚNG 5 đích của sidebar
-  // desktop (FIXED_TOP/FIXED_BOTTOM ở đầu file) — Trang chủ · Các Thầy ·
-  // Trò chuyện · Nạp Lượng · Hồ Sơ. Cả 5 giờ là LIÊN KẾT THẬT (kể cả tab giữa
-  // "Trò chuyện" — trước đây là nút mở rail nổi, nay là trang tổng hợp hội
-  // thoại `/app/tro-chuyen`, đúng mô hình Hellobot: tab Chat là một trang danh
-  // sách, không phải overlay). Đổi 5 nhãn thì PHẢI đổi khớp
-  // `.bottom-nav` của `public/index-sample-v3.html` — `check:tabbar-parity`
-  // khoá đúng bất biến này (thứ tự + văn bản, href được phép khác nhau).
-  function renderTabbar() {
-    if (document.getElementById('shell-tabbar')) return;
-    var isHome = ACTIVE === 'home';
-    var isThay = ACTIVE === 'thay';
-    var isTro  = ACTIVE === 'tro-chuyen';
-    var isNap  = ACTIVE === 'nap-luong';
-    var isHoso = ACTIVE === 'ho-so' || ACTIVE === 'vi-luong' || ACTIVE === 'tai-khoan';
-    var TI = {
-      chat: '<path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/>',
-      user: '<circle cx="12" cy="8" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0" stroke-linecap="round"/>',
-      // Cùng path với ICONS.star/ICONS.wallet (đầu file) — một glyph, hai chỗ vẽ.
-      star: '<path d="m12 3 2.6 5.9 6.4.5-4.9 4.2 1.5 6.3L12 17l-5.6 3.4 1.5-6.3L3 9.9l6.4-.5z"/>',
-      wallet: '<path d="M2 7h20v12H2z"/><path d="M16 12h4"/>',
-      // Âm dương — dấu hiệu của Luận Đường, cho "Trang chủ" (springboard /app).
-      yin: '<circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9 9 9 0 0 1 0-18z"/><circle cx="12" cy="7.5" r="1"/><circle cx="12" cy="16.5" r="1"/>',
-    };
-    function ti(n) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">' + TI[n] + '</svg>'; }
-    var nav = document.createElement('nav');
-    nav.className = 'tabbar'; nav.id = 'shell-tabbar';
-    nav.innerHTML =
-      '<a class="tab' + (isHome ? ' active' : '') + '" href="/app">' + ti('yin') + 'Trang chủ</a>' +
-      '<a class="tab' + (isThay ? ' active' : '') + '" href="/app/thay">' + ti('star') + 'Các Thầy</a>' +
-      '<a class="tab-home' + (isTro ? ' active' : '') + '" href="/app/tro-chuyen"><span class="tab-home-btn" aria-hidden="true">' + ti('chat') + '</span><span>Hỏi Thầy</span></a>' +
-      '<a class="tab' + (isNap ? ' active' : '') + '" href="/app/nap-luong">' + ti('wallet') + 'Nạp Lượng</a>' +
-      '<a class="tab' + (isHoso ? ' active' : '') + '" href="/app/ho-so">' + ti('user') + 'Hồ Sơ</a>';
-    document.body.appendChild(nav);
   }
 
   // ── APP NATIVE (Capacitor): đăng ký PUSH ──
@@ -5359,6 +5413,10 @@
   function tipShow(host) {
     var txt = host.getAttribute('data-tip');
     if (!txt) return;
+    // Mục sidebar đang hiện chữ thì tooltip chỉ nhắc lại đúng chữ đó — chỉ cần
+    // khi sidebar thu gọn thành dải icon (`html.sb-mini`, nhãn bị ẩn).
+    var lb = host.querySelector && host.querySelector('.sbn-tx');
+    if (lb && lb.offsetParent) return;
     clearTimeout(tipHideT);
     tipTarget = host;
     tipShowT = setTimeout(function () {
@@ -5417,15 +5475,13 @@
     // Sau reload: nhận cờ fromshare để bắn beacon chuyển đổi sau câu hỏi đầu tiên.
     try { _fromshareId = sessionStorage.getItem('app_fromshare_id') || null; if (_fromshareId) sessionStorage.removeItem('app_fromshare_id'); } catch (e) { /* ignore */ }
     pickAuthor();
-    simulatePulse(); // seed TRƯỚC renderSidebar() đầu tiên — khỏi nháy "…"
     renderSidebar();
     loadCatalog();
-    startPulse();
+    if (CHAT_HOME) document.body.classList.add('chat-home');
     renderRail();
     // Bước 5: rail lật vai NGAY khi boot (không đợi setContext) — trang tự vẽ
     // câu hỏi hội thoại vào #chat ngay sau đây trong script của chính nó.
     if (CHAT_INTAKE) { document.body.classList.add('chat-first-live'); Shell.openRail(); }
-    renderTabbar();
     trackWsTopHeight();
     registerNativePush();
     ensureCmdk();
@@ -5433,7 +5489,10 @@
       var b = document.createElement('div'); b.className = 'backdrop'; b.id = 'shell-backdrop';
       b.addEventListener('click', function () {
         var sb = document.getElementById('shell-sidebar');
-        if (sb) sb.classList.remove('open');
+        // Chạm nền mờ chỉ đóng LỚP TRÊN CÙNG: ngăn kéo sidebar mở chồng lên
+        // khung chat (☰ trong rail) thì đóng ngăn kéo là trả người ta về đúng
+        // cuộc chat đang dở — đóng luôn rail là đá họ ra trang kết quả.
+        if (sb && sb.classList.contains('open')) { sb.classList.remove('open'); syncBackdrop(); return; }
         closeRailUI(); // tự gọi syncBackdrop() + tiêu thụ mốc lịch sử nếu rail đang mở
       });
       document.body.appendChild(b);
@@ -5465,7 +5524,7 @@
       // chốt `_rc.anon=true`, và với máy đã tiêu hết 3 câu dùng thử thì nó hiện
       // "Đã hết câu dùng thử · Đăng ký nhận thêm" cho ĐÚNG một người đang đăng
       // nhập. Lịch sử đã có đường tự lành ở ngay dòng này từ trước; ví thì chưa.
-      if (tok && !hadTok) { hadTok = true; pushLocalToServer(); refreshHistoryUI(); loadRailStatus(); loadSidebarCharts(); } // đăng nhập vừa sẵn sàng → đẩy local + kéo lịch sử + nạp lại ví + sổ lá số
+      if (tok && !hadTok) { hadTok = true; pushLocalToServer(); refreshHistoryUI(); loadRailStatus(); renderSidebarRecent(); } // đăng nhập vừa sẵn sàng → đẩy local + kéo lịch sử + nạp lại ví + sổ lá số
       // Dừng NGAY khi đã bắt được token; còn không thì kiên nhẫn tới ~18 giây.
       // Mốc cũ 9 giây là quá ngắn cho lượt refresh phải đi qua cookie server —
       // quá hạn thì đồng hồ ví kẹt vĩnh viễn ở trạng thái khách vô danh.

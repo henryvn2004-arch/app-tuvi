@@ -114,7 +114,7 @@ trigger↔template↔công tắc bật-tắt: `docs/luat/email.md`.
 sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh báo · autopilot).
 
 ### Client
-`public/shell.js` + `shell.css` (app-shell `/app`, 35 trang) · `tuvi-paywall.js`
+`public/shell.js` + `shell.css` (app-shell; `/app` = `app-chat.html`, `/app/cong-cu` = `app-home.html`) · `tuvi-paywall.js`
 (tường trả phí) · `tool-prices.js` (giá) · `poster.js` (ảnh 9:16 + QR) ·
 `nav.js` (icon dùng chung) · `track.js` (đo) · `referral.js`.
 
@@ -259,6 +259,8 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   cơ chế cache khác nhau) — quên là browser cũ dính bản JS thiếu hàm mới, lỗi
   kiểu `X.hamMoi is not a function`. Đã cắn 2 lần: `tuvi-ansao-engine.js`
   (nhật ký Đợt 8) · `tool-prices.js::masterForTool` (2026-09-25).
+- **`public/` JS/CSS bị bỏ chú thích lúc build Vercel** (`scripts/minify-public.mjs`) ⇒ số dòng lỗi
+  prod ≠ nguồn; mã chạy thật cấm dựa vào chú thích/`fn.toString()`.
 
 ### 📊 Đo lường — `docs/luat/bay.md`
 - **Traffic: luôn dùng bản `_human`.** 83% "visitors" là máy; GA4 không lọc được,

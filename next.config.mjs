@@ -21,7 +21,11 @@ const nextConfig = {
   async rewrites() {
     return [
       { source: '/',                    destination: '/index-sample-v3.html' },
-      { source: '/app',                 destination: '/app-home.html'        },
+      // 2026-09-26: `/app` = màn chat kiểu ChatGPT; bảng điều khiển cũ (vận
+      // hôm nay + danh mục) chuyển sang `/app/cong-cu`.
+      { source: '/app',                 destination: '/app-chat.html'        },
+      { source: '/app/cong-cu',         destination: '/app-home.html'        },
+      { source: '/app/bao-cao',         destination: '/app-bao-cao.html'     },
       { source: '/app/la-so',           destination: '/app-luan-giai.html'   },
       { source: '/app/luan-giai',       destination: '/app-luan-giai.html'   },
       { source: '/app/chu-trinh-cuoc-doi', destination: '/app-chu-trinh-cuoc-doi.html' },
