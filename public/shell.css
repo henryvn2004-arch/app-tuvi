@@ -488,7 +488,14 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .stm-ava{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);margin-bottom:12px}
 .stm-t{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--heading);margin-bottom:8px}
 .stm-d{font-size:13.5px;color:var(--text-mid);line-height:1.6;margin-bottom:18px}
-.stm-btn{display:block;background:var(--red,#C46A5E);color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:12px 20px;border-radius:10px;margin-bottom:8px}
+/* `width:100%;box-sizing:border-box` BẮT BUỘC dù đã có `display:block`: form
+   control (`<button>`) không tôn trọng `display:block` cho việc TÍNH WIDTH
+   như div thường — mặc định vẫn shrink-to-fit theo nội dung rồi neo trái
+   (margin không tự auto), đo thật bằng Playwright: card rộng 354px, nút chỉ
+   176px và dính mép trái thay vì full-width/center. Không phải lỗi trình
+   duyệt cụ thể — cùng bẫy sẽ tái diễn ở mọi `<button>` thiếu `width` tường
+   minh trong card `text-align:center`. */
+.stm-btn{display:block;width:100%;box-sizing:border-box;background:var(--red,#C46A5E);color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:12px 20px;border-radius:10px;margin-bottom:8px}
 .stm-btn:hover{filter:brightness(1.06)}
 .stm-later{border:none;background:transparent;color:var(--text-lt);font-size:12.5px;cursor:pointer;font-family:inherit;padding:4px}
 .stm-later:hover{color:var(--text-mid)}
