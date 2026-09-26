@@ -1420,6 +1420,13 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     },ms||1800);
   }
 
+  // Câu hỏi đầu tiên từ trang chủ chat (index-sample-v3.html) qua
+  // `?q=…&thay=…#chat` — đọc MỘT lần, gửi MỘT lần dù wire() chạy mấy lượt.
+  var HOME_ASK=(function(){
+    try{ var p=new URLSearchParams(location.search); return {q:(p.get('q')||'').trim().slice(0,500),thay:p.get('thay'),sent:false}; }
+    catch(e){ return {q:'',thay:null,sent:false}; }
+  })();
+
   function wire(v,td,birth,hasBirth,hours){
     var cc=v.ngay.canChi;
     try{
@@ -1440,7 +1447,9 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
           });
         };
         prime(null);
-        if(away>=1) fetchWorry(function(w){ if(w) prime(w); });
+        // Có câu hỏi từ trang chủ thì KHÔNG nâng cấp lời chào: setContext lượt
+        // sau dựng lại thread, xoá mất câu vừa gửi và câu trả lời đang chạy.
+        if(away>=1 && !HOME_ASK.q) fetchWorry(function(w){ if(w) prime(w); });
       } else {
         // ⚠️ `extractGenericContext` BỎ QUA mọi giá trị là object → payload phải
         // PHẲNG, nếu không rail nhận được đúng mấy dòng rồi luận chay.
@@ -1472,7 +1481,21 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     // — trỏ thẳng vào một tool cụ thể, người mới vào thấy ngay cái form xin
     // họ tên, không biết đang dùng gì). Rail vừa được `Shell.setContext()` mồi
     // sẵn câu chào + chip ở trên xong — mở LUÔN, khỏi bắt bấm thêm một lần nữa.
-    if(location.hash==='#chat'){ try{ Shell.openRail(); }catch(e){} }
+    // Trang chủ chat (index-sample-v3.html) gửi câu hỏi đầu tiên qua
+    // `?q=…&thay=…#chat`: ghim đúng thầy phụ trách (`thay` do /api/thay-hoi
+    // chọn theo chủ đề — setAuthor tự bỏ qua id lạ) rồi gửi luôn câu đó. Xoá
+    // query khỏi URL trước khi gửi để tải lại trang không hỏi lại lần hai.
+    if(HOME_ASK.q){
+      if(!HOME_ASK.sent){
+        HOME_ASK.sent=true;
+        try{
+          if(HOME_ASK.thay) Shell.chooseAuthor(HOME_ASK.thay);
+          history.replaceState(null,'',location.pathname+location.hash);
+          Shell.ask(HOME_ASK.q);
+        }catch(e){ if(window.console)console.error('[home-ask]',e); }
+      }
+    }
+    else if(location.hash==='#chat'){ try{ Shell.openRail(); }catch(e){} }
 
     // 🔑 CHỈ MỞ rail, KHÔNG tự gửi câu hỏi. Trước đây nút này bắn thẳng
     // "Hôm nay vận của tôi thế nào?" — tức trả lời hộ người ta câu "muốn nói
