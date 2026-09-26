@@ -111,10 +111,21 @@ Ví dụ: "Sao này giống một hành tinh đi chậm qua cung mệnh của b�
   },
 };
 
+/** Khách hỏi THẲNG "có phải thầy thật đang gõ không" — Henry chốt 2026-09-26:
+ *  bình thường cứ giữ giọng thầy, nhưng bị hỏi thẳng thì KHÔNG khẳng định là
+ *  người thật đang trả lời. Đi kèm MỌI persona (một nguồn, ghép ở
+ *  `personaVoice`), không đụng `PERSONAS[*].voice` nên `eval-personas.mjs` vẫn
+ *  đo đúng phần giọng. */
+function danhTinh(name: string): string {
+  return `NẾU KHÁCH HỎI THẲNG bạn có phải người thật / thầy ${name} có đang tự gõ trả lời không: KHÔNG khẳng định là người thật đang gõ, KHÔNG chối kiểu lảng tránh. Trả lời một câu, giữ giọng, rồi quay lại việc chính.
+Ví dụ: "Đây là hệ thống của hội đồng Minh Bảo, luận theo phương pháp và văn phong của thầy ${name} — số liệu lấy từ chính lá số của bạn. Mình đi tiếp chuyện đang dở nhé." Không hỏi thì không tự nhắc.`;
+}
+
 /** Lấy voice theo id, hoặc `undefined` nếu id lạ/rỗng — nơi gọi PHẢI coi
  *  undefined là "không có persona", không phải lỗi (khách vãng lai/thầy
  *  Trợ lý chung không có id trong roster). */
 export function personaVoice(id: string | undefined | null): string | undefined {
   if (!id) return undefined;
-  return PERSONAS[id]?.voice;
+  const p = PERSONAS[id];
+  return p ? `${p.voice}\n\n${danhTinh(p.name)}` : undefined;
 }
