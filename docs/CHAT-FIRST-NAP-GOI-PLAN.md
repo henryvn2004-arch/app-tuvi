@@ -8,8 +8,8 @@
 
 1. **Giữ nguyên hệ Lượng.** Lượng vẫn là đơn vị, hệ thống vẫn trừ Lượng như
    trừ token. **Không** làm subscription, không hạn mức ngày/tuần.
-2. **Giữ 4 gói hiện tại, tăng Lượng mỗi gói.** Gói Phổ Thông đổi giá thành
-   **399.000đ**. Gói là để mua Lượng, không phải mua quyền dùng theo thời hạn.
+2. **Giữ 4 gói hiện tại.** Hướng là tăng Lượng mỗi gói, Phổ Thông 399.000đ —
+   nhưng **số cụ thể tính sau cùng** (Henry, 26/09). Gói là để mua Lượng.
 3. **Bỏ mua lẻ từng report.** Không còn trả tiền riêng cho một report, không
    còn QR số tiền lẻ (`package_id='custom'`), không còn guest checkout theo
    từng tool. Muốn dùng thì **đăng ký → nạp gói → dùng**.
@@ -54,29 +54,32 @@
 | B11 | Chưa test được (bị chặn quyền thao tác tiếp trên prod). | — | ? |
 
 
-### Giá vốn — ràng buộc khi tăng Lượng mỗi gói
+### Giá vốn chat — đo lại 2026-09-26: chat LÃI ĐẬM, cache đang chạy
 
-`events.llm_usage`, 30 ngày:
+> ⚠️ **Đính chính.** Bản đầu của file này ghi "chat ~4.060đ/câu, gói VIP đang
+> chat lỗ". **Sai.** Con số đó là trung bình 30 ngày của `events.llm_usage`,
+> phần lớn là các dòng từ ~07/09 đến 22/09 bị **ghi phồng ~54×** do lỗi sổ
+> token Gemini nhân theo số chunk (đã vá 22/09 — nhật ký "Sổ token Gemini bị
+> nhân theo SỐ CHUNK"). Chỉ được đo trên dữ liệu SAU bản vá.
 
-| | Giá vốn/lượt | Đang thu |
+Đo 23–25/09/2026 (36 câu chat, gemini-3.8-flash; mẫu còn nhỏ):
+
+| Khoản | Tổng | Mỗi câu |
 |---|---|---|
-| Chat (`rail-message` = 10 Lượng, gemini-3.8-flash) | **~4.060đ** (p90 8.120đ) — vào **~193k token/lượt**, chỉ ~25k trúng cache | 10 Lượng = 3.700–5.690đ tuỳ gói |
-| Report Luận Giải (`laso`, 190 Lượng) | ~300đ/phần × 13 phần ≈ **4–6k/bản** (ước, chưa gom theo lượt chạy) | 190 Lượng ≈ 70–108k → biên rất dày |
-| Ảnh minh hoạ (`illus`) | ~1.100đ/ảnh | kèm report |
+| Gọi model (`tool_id='chat'`): ~1,2k token vào + **~27k trúng cache** + ~224 token ra | 3.415đ | ~95đ (p90 163đ) |
+| Lưu cache tường minh (`tool_id='gemini-cache'`, 14 lần tạo, ghi theo trần TTL 1h) | 4.979đ | ~138đ |
+| **Tổng giá vốn một câu** | 8.394đ | **~233đ** |
 
-Một câu chat thu về bao nhiêu tuỳ khách mua gói nào:
+- 10 Lượng/câu thu về 3.700–5.690đ tuỳ gói ⇒ **biên chat ~94–96%**.
+- Cache tường minh (`lib/agent/providers/gemini-cache.ts`) **đang chạy đúng**:
+  phần lớn system + lá số được đọc từ cache với giá 10%.
+- `thinkingBudget: 0` có hiệu lực thật với gemini-3.8-flash (gọi thử
+  26/09: không có `thoughtsTokenCount`; bỏ tham số thì có 606 token nghĩ) ⇒
+  sổ không bỏ sót token nghĩ.
+- Report vẫn rẻ (~300đ/phần), biên rất dày.
 
-| Gói hiện tại | Giá | Lượng | đ/Lượng | 1 câu chat thu về |
-|---|---|---|---|---|
-| Khởi Đầu | 199.000đ | 350 | 569 | 5.690đ |
-| Phổ Thông | 400.000đ | 800 | 500 | 5.000đ |
-| Cao Cấp | 699.000đ | 1.600 | 437 | 4.370đ |
-| VIP | 999.000đ | 2.700 | 370 | **3.700đ < giá vốn 4.060đ** |
-
-⇒ Khách gói VIP **đang chat lỗ ngay bây giờ**. Tăng Lượng mỗi gói (mỗi Lượng
-rẻ đi) mà giữ chat 10 Lượng/câu thì mọi gói đều tiến về lỗ khi chat. Report thì
-không có vấn đề (biên rất dày). ⇒ **P1 (hạ giá vốn chat) phải xong TRƯỚC hoặc
-CÙNG LÚC với đợt tăng Lượng**, không được đi sau.
+⇒ **Giá vốn KHÔNG phải ràng buộc** cho việc tăng Lượng mỗi gói. Còn lại ba
+việc nhỏ về SỔ SÁCH, không phải về chi phí thật (xem P1).
 
 ---
 
@@ -127,32 +130,19 @@ CÙNG LÚC với đợt tăng Lượng**, không được đi sau.
 
 ---
 
-## 3. Pricing — gói Lượng mới (số để bàn, trừ giá Phổ Thông đã chốt)
+## 3. Pricing — gói Lượng (giữ nguyên, tính lại sau cùng)
 
 ### Luật đặt số
-- **Sàn chat:** ở gói rẻ nhất tính theo Lượng (VIP), 10 Lượng phải ≥ **2× giá
-  vốn một câu**. Với giá vốn hiện tại 4.060đ là ≥ 812đ/Lượng — tức là **không
-  thể tăng Lượng chút nào** trước khi hạ giá vốn. Sau P1 (≤ 1.500đ/câu) sàn là
-  ≥ 300đ/Lượng.
-- **Bậc giảm dần theo gói lớn** để khách nạp gói lớn (ít lần, mỗi lần nhiều tiền).
-- **Giá trị 1 Lượng suy từ gói thứ hai** (Phổ Thông) theo luật hiện tại —
-  399.000đ/1.000 Lượng = **399đ**. Đổi gói phải sửa kèm cả ba: SQL `credit_vnd()`
-  · `vndPerCredit()` · `FALLBACK` (`lib/billing/packages.ts`), xem `docs/luat/tien.md`.
-
-### Đề xuất (áp dụng SAU khi P1 đạt ≤ 1.500đ/câu)
-
-| Gói | Giá | Lượng cũ → mới | đ/Lượng | Quy ra | 1 câu chat thu về | Biên chat (giá vốn 1.500đ) |
-|---|---|---|---|---|---|---|
-| Khởi Đầu | 199.000đ | 350 → **450** (+29%) | 442 | 45 câu, hoặc 2 report 190 | 4.420đ | 2,9× |
-| Phổ Thông | **399.000đ** | 800 → **1.000** (+25%) | 399 | 100 câu, hoặc 5 report | 3.990đ | 2,7× |
-| Cao Cấp | 699.000đ | 1.600 → **2.000** (+25%) | 350 | 200 câu, hoặc 10 report | 3.500đ | 2,3× |
-| VIP | 999.000đ | 2.700 → **3.200** (+19%) | 312 | 320 câu, hoặc 16 report | 3.120đ | 2,1× |
-
-- Giá report giữ nguyên theo Lượng (190/150/610…) — biên vẫn dày dù Lượng rẻ đi.
-- Quà đăng ký 50 Lượng = 5 câu: giữ, đủ để thấy chất lượng thầy.
-- Nếu **P1 chưa xong** mà vẫn muốn tăng Lượng ngay: phải nâng chat lên
-  **15 Lượng/câu** (`tool_pricing['rail-message']`) cùng lúc, nếu không gói
-  VIP lỗ nặng hơn (312đ × 10 = 3.120đ < 4.060đ).
+- Henry chốt 26/09: **giữ số Lượng các gói như hiện tại**; làm xong các phần
+  khác rồi ngồi tính lại một lần.
+- Khi tính: giá vốn chat ~233đ/câu nên kể cả gói có Lượng rẻ nhất vẫn dư biên;
+  ràng buộc thật là **tâm lý giá và tỷ lệ chuyển đổi**, không phải giá vốn.
+- **Giá trị 1 Lượng suy từ gói thứ hai** (Phổ Thông). Đổi gói phải sửa kèm cả
+  ba: SQL `credit_vnd()` · `vndPerCredit()` · `FALLBACK`
+  (`lib/billing/packages.ts`), xem `docs/luat/tien.md`.
+- Nháp để tham khảo lúc tính lại (Phổ Thông 399k): Khởi Đầu 450 · Phổ Thông
+  1.000 · Cao Cấp 2.000 · VIP 3.200 Lượng — ở mức này 10 Lượng vẫn thu về
+  3.120–4.420đ, gấp >13 lần giá vốn một câu.
 
 ### Rủi ro phải đo khi bỏ mua lẻ
 - **Khách ẩn danh đang là nguồn trả tiền chính:** 60 ngày, 14/20 người trả tiền
@@ -167,8 +157,8 @@ CÙNG LÚC với đợt tăng Lượng**, không được đi sau.
 
 ## 4. Workplan
 
-Thứ tự: **P0 vá phễu đang chảy máu** → **P1 hạ giá vốn chat** (điều kiện để tăng
-Lượng) → P2 đổi gói + bỏ mua lẻ → P3 chat-first + report tự chạy → P4 đo.
+Thứ tự: **P0 vá phễu đang chảy máu** → P1 sổ chi phí chat cho đúng (nhỏ) →
+P2 đổi gói + bỏ mua lẻ → P3 chat-first + report tự chạy → P4 đo.
 
 ### P0 — Vá phễu hiện tại (nhỏ, làm được ngay)
 - [ ] Nút "Đăng ký miễn phí" mở đúng tab Đăng ký (`openAnonSignupModal` → cần
@@ -183,14 +173,22 @@ Lượng) → P2 đổi gói + bỏ mua lẻ → P3 chat-first + report tự ch�
 > Các mục QR/giá lệch (95k vs 109k, người đăng nhập bị đẩy sang `/topup.html`)
 > **không vá riêng** — P2 thay hẳn đường đó bằng tờ nạp gói.
 
-### P1 — Hạ giá vốn một câu chat (điều kiện để tăng Lượng)
-- [ ] Đo: 193k token vào/lượt gồm những gì (lá số text, tools, lịch sử, system).
-- [ ] Đưa phần tĩnh (system + lá số) vào cache thật (Gemini explicit cache /
-      Anthropic `cacheSystem`), cắt lịch sử dài bằng tóm tắt.
-- [ ] Mục tiêu: **≤ 1.500đ/câu** trung bình, p90 ≤ 3.000đ.
+### P1 — Sổ chi phí chat cho đúng (cache đã chạy, không cần hạ giá vốn)
+- [x] Điều tra "cache không ăn": cache ĐÃ ăn từ bản vá 22/09; con số cao là
+      dữ liệu ghi phồng cũ (xem mục Giá vốn).
+- [ ] `dashboard_margin.chat_cost_vnd` cộng thêm `tool_id='gemini-cache'`
+      (`_patches/migration-dashboard-margin-gemini-cache.sql` — chạy trên
+      Supabase rồi đọc ngược lại). Bản cũ bỏ sót ~59% giá vốn chat.
+- [ ] Dòng `events.llm_usage` Gemini từ ~07/09 → 22/09 vẫn mang `cost_vnd`
+      phồng ~54× — mọi báo cáo đọc khoảng đó đều sai (hiện `dashboard_margin`
+      7 ngày báo chat LỖ: 610k chi phí / 550k doanh thu). Cần Henry duyệt
+      cách xử lý: đánh dấu loại trừ, hay chờ tự rơi khỏi cửa sổ.
+- [ ] (Tuỳ chọn, tiết kiệm nhỏ) TTL trượt cho cache: TTL ngắn + gia hạn mỗi lần
+      dùng thay vì cố định 1h — phí lưu hiện là ~59% giá vốn chat nhưng tuyệt
+      đối chỉ ~50k/tháng ở lưu lượng hiện tại.
 
 ### P2 — Gói mới + bỏ mua lẻ
-- [ ] Cập nhật `credit_packages` (4 gói, Phổ Thông 399k) qua Admin; sửa kèm
+- [ ] (Sau khi tính lại giá) cập nhật `credit_packages` qua Admin; sửa kèm
       `credit_vnd()` · `vndPerCredit()` · `FALLBACK` theo luật `tien.md`.
 - [ ] Bỏ QR số tiền lẻ: `_qrAmountFor` / `package_id='custom'` ở đường tool
       (`tuvi-paywall.js`), `create-bank` chỉ nhận `package_id` của gói.

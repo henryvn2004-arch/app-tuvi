@@ -258,8 +258,8 @@ VỀ TIỀN — chỉ MỘT con số trong snapshot là tiền thật:
   đang lưu hành là do hệ thống TẶNG (quà đăng ký, thưởng giới thiệu), nên nêu con số đó như "doanh
   thu" là báo tin mừng giả. real_vnd = 0 thì phải nói thẳng là chưa có giao dịch nào, kể cả khi
   chat_revenue_vnd lớn.
-- margin.chat_cost_vnd = 0 KHÔNG có nghĩa rail miễn phí: bảng chi phí chỉ đo Anthropic, mà rail đang
-  chạy Gemini. Cấm suy ra "biên lợi nhuận 100%".
+- margin.chat_cost_vnd = 0 KHÔNG có nghĩa rail miễn phí: đó là dấu hiệu sổ chi phí đang hỏng (không
+  ghi được dòng nào), không phải chat không tốn gì. Cấm suy ra "biên lợi nhuận 100%".
 
 VỀ KHỐI "ga4" (Google Analytics 4, 7 ngày qua) — đọc kỹ, đây là chỗ dễ kết luận sai nhất:
 - ga4 = null nghĩa là CHƯA nối được GA4. Khi đó nói thẳng một câu "chưa đọc được GA4" và chỉ luận
