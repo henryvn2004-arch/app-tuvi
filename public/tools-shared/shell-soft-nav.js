@@ -178,6 +178,7 @@
   // boot (đăng ký trùng listener `document`/`window`, dựng trùng DOM).
   function runPageScripts(scripts) {
     var p = Promise.resolve();
+    var syncedFlags = false;
     scripts.forEach(function (old) {
       p = p.then(function () {
         // Mỗi script trong dãy chờ script trước xong mới chạy (comment ở
@@ -193,6 +194,22 @@
           return loadExternalScript(attrs);
         }
         runInlineScript(old.textContent);
+        // Script cờ per-trang (`window.SHELL_ACTIVE='...'`, luôn là script đầu
+        // tiên KHÔNG-src của mỗi app-*.html — xem contract ở đầu shell.js) vừa
+        // chạy xong: đồng bộ NGAY vào shell.js (biến ACTIVE/CHATFIRST/
+        // CHAT_INTAKE/HIST_ON của nó "đóng băng" từ lượt tải trang đầu tiên,
+        // xem `Shell._resyncTool`) TRƯỚC KHI script nội dung của trang (chạy
+        // sau trong CHÍNH dãy này, vd renderChat/startIntake) kịp ghi vào
+        // `#chat` — `_resyncTool` dọn `#chat` về rỗng, gọi sau nội dung sẽ
+        // xoá mất nội dung vừa ghi.
+        if (!syncedFlags && /window\.SHELL_ACTIVE\s*=/.test(old.textContent)) {
+          syncedFlags = true;
+          if (window.Shell && window.Shell._resyncTool) window.Shell._resyncTool();
+          // Cùng thứ tự bắt buộc như trên: reset TRƯỚC khi trang đích tự gọi
+          // `TuviForm.renderChat()` (script SAU trong CHÍNH dãy này) — xem
+          // chú thích ở khai báo `_introShown` trong tuvi-form.js.
+          if (window.TuviForm && window.TuviForm._resetIntro) window.TuviForm._resetIntro();
+        }
         return null;
       });
     });
@@ -204,12 +221,24 @@
   // ở app-thay.html). Đánh dấu `data-page-style` để lượt sau biết gỡ ĐÚNG
   // khối cũ trước khi chèn khối mới — không đánh dấu thì rời trang A còn
   // rule của A đè lên trang B.
+  //
+  // Ranh giới phân biệt "style riêng của trang" với "style DÙNG CHUNG do JS
+  // chèn" (nav.js/auth.js/tuvi-paywall.js/tuvi-form.js/feedback.js/hook-*.js…
+  // — mỗi module tự canh chèn-trùng bằng `document.getElementById(id)`) là
+  // CÓ `id` hay KHÔNG: style riêng của trang luôn VÔ DANH, style dùng chung
+  // luôn có `id` ổn định. KHÔNG dùng danh sách liệt kê tay (`KNOWN_SHARED_IDS`
+  // cũ chỉ có 3 id) — bản đó bỏ sót `tvf-css`/`tvfb-css`/`hook-charts-css`/
+  // `hook-layer-css` (chưa có id lúc viết luật này), khiến soft-nav gỡ mất
+  // CSS `.tvf-ic`/`.tvf-chev`/`.tvf-pretty` ở lần đổi trang thứ hai — icon
+  // phình to bằng kích thước SVG gốc (thiếu `width/height` khi mất CSS), lá
+  // số/hook-chart mất luôn layout lưới, rơi về danh sách dọc mặc định của
+  // trình duyệt. Henry báo thật 2026-09-26 (docs/nhat-ky). Quy tắc "có id"
+  // tự phủ MỌI module tương lai theo đúng nếp đã có, không cần sửa lại đây.
   function markExistingHeadStyles() {
     var already = document.querySelectorAll('style[data-page-style]');
     if (already.length) return; // đã đánh dấu ở lượt soft-nav trước
-    var KNOWN_SHARED_IDS = { 'nav-css': 1, 'footer-css': 1, 'nav-view-transitions': 1 };
     Array.prototype.forEach.call(document.querySelectorAll('head > style'), function (el) {
-      if (el.id && KNOWN_SHARED_IDS[el.id]) return;
+      if (el.id) return;
       el.setAttribute('data-page-style', '1');
     });
   }
@@ -223,6 +252,37 @@
       s.setAttribute('data-page-style', '1');
       s.textContent = el.textContent;
       document.head.appendChild(s);
+    });
+  }
+
+  // `<link rel="stylesheet">`/`<link rel="preload" as="style">` riêng của
+  // trang (vd `/laso-chart.css` — chỉ các tool có lá số mới nạp) KHÔNG được
+  // `go()` đối chiếu trước bản vá này: nó chỉ thay `#ws` + script, chưa từng
+  // đụng `<link>`. Soft-nav TỚI một trang cần stylesheet mà trang NGUỒN chưa
+  // từng nạp (vd từ Trang chủ bấm sang Chu Trình Cuộc Đời) thì stylesheet đó
+  // vĩnh viễn không có mặt trong `<head>` — lá số/chart render ra danh sách
+  // dọc mặc định của trình duyệt (mất toàn bộ CSS lưới định vị), giống hệt
+  // vẻ ngoài "bể class" nhưng gốc rễ là THIẾU HẲN stylesheet, không phải mất
+  // riêng lẻ vài rule. Henry báo thật 2026-09-26. Khớp theo `href` TUYỆT ĐỐI
+  // (trình duyệt tự chuẩn hoá qua `.href`) nên không nạp trùng dù trang cũ
+  // đã có; bỏ luôn cơ chế preload-rồi-đổi-rel (chỉ có tác dụng cho lượt vẽ
+  // ĐẦU của toàn trang, đằng này trang đã vẽ xong từ lâu) — nạp thẳng
+  // `rel="stylesheet"`, không chặn hiển thị gì thêm ở thời điểm này.
+  function ensureHeadStylesheets(doc) {
+    var seen = {};
+    Array.prototype.forEach.call(document.querySelectorAll('head > link[rel]'), function (l) {
+      var rel = (l.getAttribute('rel') || '').toLowerCase();
+      if (rel === 'stylesheet' || rel === 'preload') seen[l.href] = true; // `.href` = URL tuyệt đối
+    });
+    Array.prototype.forEach.call(doc.querySelectorAll('head > link[rel]'), function (l) {
+      var rel = (l.getAttribute('rel') || '').toLowerCase();
+      var isStyle = rel === 'stylesheet' || (rel === 'preload' && (l.getAttribute('as') || '').toLowerCase() === 'style');
+      if (!isStyle || seen[l.href]) return;
+      seen[l.href] = true;
+      var nl = document.createElement('link');
+      nl.rel = 'stylesheet';
+      nl.href = l.href;
+      document.head.appendChild(nl);
     });
   }
 
@@ -302,12 +362,21 @@
 
         document.title = doc.title || document.title;
         swapHeadStyles(doc);
+        ensureHeadStylesheets(doc);
         buryOldContent(curWs);
         curWs.innerHTML = newWs.innerHTML;
         shownPath = path;
         closeOverlays();
         if (!replaceHistory) history.pushState({ softNav: true }, '', path);
         window.scrollTo(0, 0);
+
+        // Cờ per-trang (SHELL_ACTIVE/CHATFIRST/CHAT_INTAKE/HISTORY/INTRO) sống
+        // trong `window`, KHÔNG theo `document` — về mặc định TRƯỚC khi script
+        // của trang đích chạy. Thiếu bước này thì một trang không tự khai lại
+        // đủ cờ (vd Trang chủ chỉ khai SHELL_ACTIVE, không khai CHATFIRST) sẽ
+        // THỪA HƯỞNG cờ thật của trang vừa rời thay vì mặc định false/rỗng.
+        window.SHELL_ACTIVE = ''; window.SHELL_CHATFIRST = false; window.SHELL_CHAT_INTAKE = false;
+        window.SHELL_HISTORY = false; window.SHELL_INTRO = null;
 
         return runPageScripts(bodyScripts);
       })

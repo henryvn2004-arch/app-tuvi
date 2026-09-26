@@ -357,6 +357,10 @@ window.HookLayer = (function () {
     if (_cssInjected) return;
     _cssInjected = true;
     var st = document.createElement('style');
+    // `id` là dấu hiệu DUY NHẤT `shell-soft-nav.js` dùng để biết đây là style
+    // DÙNG CHUNG (đừng gỡ khi soft-nav đổi trang) — cùng họ bug đã vá ở
+    // `tuvi-form.js` (docs/nhat-ky, Henry báo icon phình to 2026-09-26).
+    st.id = 'hook-layer-css';
     st.textContent =
       '.hkl-block{background:var(--white);border:1px solid var(--line);border-radius:12px;' +
         'padding:18px 20px;box-shadow:var(--shadow);margin-bottom:18px;max-width:880px}' +
@@ -400,6 +404,7 @@ window.HookLayer = (function () {
     _narrativeCssInjected = true;
     _ensureCss();
     var st = document.createElement('style');
+    st.id = 'hook-layer-narrative-css'; // xem chú thích id ở `_ensureCss()` phía trên
     st.textContent =
       '.hkl-pending{display:flex;align-items:center;gap:10px;padding:24px 4px;color:var(--text-lt);font-size:13px}' +
       '.hkl-gateonly{text-align:center;padding:26px 20px}' +
