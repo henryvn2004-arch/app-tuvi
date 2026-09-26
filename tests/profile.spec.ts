@@ -2,14 +2,14 @@ import { test, expect } from '@playwright/test';
 
 // Profile tests chạy với auth state (storageState từ auth.setup.ts)
 
-test.describe('Profile (profile.html) — logged in', () => {
+test.describe('Hồ Sơ (/app/ho-so) — logged in', () => {
   // Helper: check if dashboard is visible after auth
   async function isDashboardVisible(page: any): Promise<boolean> {
     return page.locator('#dashboard').isVisible({ timeout: 12000 }).catch(() => false);
   }
 
   test.beforeEach(async ({ page }) => {
-    await page.goto('/profile.html');
+    await page.goto('/app/ho-so');
     // ⚠️ CỐ Ý KHÔNG `waitForLoadState('networkidle')` ở ĐÂY. Trang này là trang
     // DUY NHẤT chạy đã-đăng-nhập: `auth.js` làm mới token, `loadRailStatus` hỏi
     // ví, cộng beacon đo lường — tức nó gần như không bao giờ về "im mạng" đủ
@@ -82,7 +82,7 @@ test.describe('Profile (profile.html) — logged in', () => {
   test('không có JS errors nghiêm trọng', async ({ page }) => {
     const errors: string[] = [];
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-    await page.goto('/profile.html');
+    await page.goto('/app/ho-so');
     await page.waitForLoadState('load');
     await page.waitForSelector('#dashboard, #notLoggedIn', { timeout: 10000 }).catch(() => {});
     const critical = errors.filter(e =>

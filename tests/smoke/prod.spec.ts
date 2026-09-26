@@ -120,7 +120,7 @@ test.describe('Prod smoke @smoke', () => {
 
   test('3 SEO landing pages load 200', async ({ request }) => {
     // Hardcoded popular SEO slugs — không đi qua DB để giữ smoke đơn giản
-    const slugs = ['/menh-kho.html', '/kien-thuc-tuvi.html', '/van-dap'];
+    const slugs = ['/menh-kho.html', '/kien-thuc-tuvi', '/van-dap'];
 
     for (const slug of slugs) {
       const resp = await request.get(slug);
