@@ -173,16 +173,25 @@ P2 đổi gói + bỏ mua lẻ → P3 chat-first + report tự chạy → P4 đo
 > Các mục QR/giá lệch (95k vs 109k, người đăng nhập bị đẩy sang `/topup.html`)
 > **không vá riêng** — P2 thay hẳn đường đó bằng tờ nạp gói.
 
-### P1 — Sổ chi phí chat cho đúng (cache đã chạy, không cần hạ giá vốn)
+### P1 — Sổ chi phí chat cho đúng (cache đã chạy, không cần hạ giá vốn) — XONG 2026-09-26
 - [x] Điều tra "cache không ăn": cache ĐÃ ăn từ bản vá 22/09; con số cao là
       dữ liệu ghi phồng cũ (xem mục Giá vốn).
-- [ ] `dashboard_margin.chat_cost_vnd` cộng thêm `tool_id='gemini-cache'`
-      (`_patches/migration-dashboard-margin-gemini-cache.sql` — chạy trên
-      Supabase rồi đọc ngược lại). Bản cũ bỏ sót ~59% giá vốn chat.
-- [ ] Dòng `events.llm_usage` Gemini từ ~07/09 → 22/09 vẫn mang `cost_vnd`
-      phồng ~54× — mọi báo cáo đọc khoảng đó đều sai (hiện `dashboard_margin`
-      7 ngày báo chat LỖ: 610k chi phí / 550k doanh thu). Cần Henry duyệt
-      cách xử lý: đánh dấu loại trừ, hay chờ tự rơi khỏi cửa sổ.
+- [x] `dashboard_margin.chat_cost_vnd` cộng thêm `tool_id='gemini-cache'`
+      (`_patches/migration-dashboard-margin-gemini-cache.sql`) — **đã chạy
+      trên Supabase, đọc ngược lại khớp**. Bản cũ bỏ sót ~59% giá vốn chat.
+- [x] Dòng `events.llm_usage` Gemini bị phồng — **đã sửa tận gốc**, không chỉ
+      loại trừ. Phạm vi xác minh từng dòng (không suy đoán): CHỈ
+      `tool_id='chat'`, 204 dòng, `2026-09-08 16:40` → `2026-09-22 08:19:40`
+      (mốc code vá thật, soi từng dòng quanh mốc — input token rơi từ hàng
+      trăm nghìn xuống hàng chục ngay tại đó). Các `tool_id` khác (laso,
+      chu-trinh-cuoc-doi, tu-binh…) ĐÃ đối chứng KHÔNG bị ảnh hưởng (input
+      ổn định xuyên suốt, cost suy ngược khớp trước/sau). Không phục hồi được
+      số đúng (Gemini không trả lại raw chunk) nên KHÔNG đoán — xoá field
+      `cost_vnd`/`*_tokens` sai (mọi `SUM` tự bỏ qua NULL, không cần sửa từng
+      RPC), giữ số cũ trong `meta.gemini_chunk_bug` để truy vết. Xem
+      `_patches/migration-fix-gemini-chunk-inflated-events.sql`. Đọc ngược:
+      `dashboard_margin` 60 ngày sau vá = chi phí 197.928đ / doanh thu
+      1.152.000đ (biên ~83%, hợp lý).
 - [ ] (Tuỳ chọn, tiết kiệm nhỏ) TTL trượt cho cache: TTL ngắn + gia hạn mỗi lần
       dùng thay vì cố định 1h — phí lưu hiện là ~59% giá vốn chat nhưng tuyệt
       đối chỉ ~50k/tháng ở lưu lượng hiện tại.
