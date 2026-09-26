@@ -183,9 +183,15 @@ P2 đổi gói + bỏ mua lẻ → P3 chat-first + report tự chạy → P4 đo
       nhận `overflow-x:auto` là cố ý (bảng 480px cuộn ngang trên viewport
       hẹp), `.ws-body{min-width:0}` đã vá đúng từ trước. Nhận định ban đầu
       trong bản đầu file này (dựa trên ảnh chụp tĩnh) sai.
-- [ ] Chưa làm — cần xem trực quan thật trên trình duyệt, không sửa mù:
-      "nội dung lòi dưới ô chat" và "màn đầu trang chủ không có CTA" (đổi bố
-      cục trang chủ/hero cũng là quyết định thiết kế, nên hỏi Henry trước).
+- [x] "Màn đầu trang chủ không có CTA" — đo thật (Playwright, 390×844): không
+      phải hero ảnh quá cao, mà 3 feat-chip chen giữa mô tả và CTA đẩy nút
+      xuống y≈839, sau lưng `.bottom-nav`. Vá bằng flex `order` trong
+      `@media(max-width:680px)`: CTA lên trước feat-chip/proof. `index-sample-v3.html`.
+- [x] "Nội dung lòi dưới ô chat" — không phải bug rail: `.rail`/`.sb` chừa
+      90px đáy (đo theo nút Home nổi giữa `.tabbar`) nhưng hai bên hông
+      `.tabbar` chỉ cao 75px thật, hở 15px lộ `.home-body` bên dưới. Vá bằng
+      `.tabbar::before` nối nền lên đúng 15px, đứng sau nút Home nên không che.
+      `shell.css`.
 > Các mục QR/giá lệch (95k vs 109k, người đăng nhập bị đẩy sang `/topup.html`)
 > **không vá riêng** — P2 thay hẳn đường đó bằng tờ nạp gói.
 
