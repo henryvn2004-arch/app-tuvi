@@ -184,6 +184,12 @@
   chỉ nói phần tử có trong layout, không nói nó đang được nhìn thấy.
 - **Mọi overlay chặn đường phải có đường thoát không phụ thuộc vị trí** (Esc).
   `nhat-ky/2026-09.md` "Tour onboarding nhốt người dùng".
+- **Phần tử con của GRID/FLEX giữ `z-index` dù `position:static`** (2026-09-26):
+  màn chat `/app` đặt rail `position:static` trên điện thoại nhưng luật `.rail`
+  chung vẫn mang `z-index:60` ⇒ rail (đứng SAU `.sb` trong DOM) phủ lên cả ngăn
+  kéo lẫn nền mờ, bấm ☰ "không có gì xảy ra" dù `.sb.open` đúng. Đổi vị trí về
+  static thì PHẢI trả `z-index:auto`. Dò: `document.elementFromPoint` ngay chỗ
+  ngăn kéo — ra `#railInput` là đúng bệnh này.
 
 ## Tiếng Việt
 

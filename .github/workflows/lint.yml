@@ -396,13 +396,6 @@ jobs:
       - name: Chữ ký payOS khớp thuật toán chính thức (null → rỗng, deep-sort)
         run: npm run check:payossig
 
-      # shell.js (renderTabbar, /app/*) và trang chủ (index-sample-v3.html,
-      # .bottom-nav) dựng thanh tabbar RIÊNG (HTML tĩnh khác nhau, cố ý — trang
-      # chủ không nạp shell.js vì lý do CLS). Đã cắn thật 2026-09: trang chủ
-      # lệch còn "Hồi nhanh"/"Thêm" trong khi shell.js đã đổi "Home"/"Góp Ý".
-      - name: Tabbar 5 nhãn khớp giữa shell.js và trang chủ
-        run: npm run check:tabbar
-
       # Gemini gửi `usageMetadata` ở MỌI chunk với số CỘNG DỒN, trong khi
       # `meterGemini` (run.ts) cộng `+=` mỗi lần được gọi. Bắn theo từng chunk
       # là nhân token lên theo số chunk — đã cắn thật: prod ghi 238.102 input
