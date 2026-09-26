@@ -245,9 +245,12 @@ window.Auth = {
   refresh: () => _ensureFreshToken(true),
 
   // Require login — show modal if not logged in, then run callback
-  require: function(callback) {
+  // `tab` optional ('signin'|'signup') — nơi gọi biết khách chưa từng có tài
+  // khoản (vd bấm "Đăng ký miễn phí" ở tường hết lượt thử) truyền 'signup' để
+  // modal mở ĐÚNG tab thay vì luôn mặc định Đăng nhập.
+  require: function(callback, tab) {
     if (_session) { callback(); return; }
-    showAuthModal(callback);
+    showAuthModal(callback, tab);
   },
 
   signOut: async function() {
@@ -288,8 +291,18 @@ async function signInEmail(email, password) {
 }
 
 // ── Sign Up with Email/Password ──
+//
+// 🔴 `redirect_to` PHẢI truyền — thiếu nó, link xác nhận trong email rơi về
+// URL mặc định của project Supabase (Site URL cấu hình ở Dashboard, KHÔNG
+// phải trang khách vừa đứng), làm mất lá số đang xem và mất `auth_return_to`
+// đã lưu. GoTrue đọc redirect từ QUERY PARAM `redirect_to` của chính request
+// `/signup` — cùng cơ chế `signInGoogle`/`signInFacebook` đã dùng, đưa về
+// `auth-callback.html` (nơi đã xử lý sẵn `access_token` trong hash, dùng
+// chung cho cả OAuth lẫn link xác nhận email — GoTrue verify redirect với
+// đúng hình dạng hash đó).
 async function signUpEmail(email, password) {
-  const res = await fetch(`${SUPA_URL}/auth/v1/signup`, {
+  const redirectTo = encodeURIComponent(window.location.origin + '/auth-callback.html');
+  const res = await fetch(`${SUPA_URL}/auth/v1/signup?redirect_to=${redirectTo}`, {
     method: 'POST',
     headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
@@ -559,11 +572,12 @@ function updateNavUI() {
 // ── Auth Modal ──
 let _pendingCallback = null;
 
-function showAuthModal(callback) {
+function showAuthModal(callback, tab) {
   _pendingCallback = callback;
   _ensurePromoJs();
   if (document.getElementById('auth-modal')) {
     document.getElementById('auth-modal').style.display = 'flex';
+    if (tab && tab !== _currentTab) switchTab(tab);
     _prefillPromo();
     return;
   }
@@ -592,9 +606,15 @@ function showAuthModal(callback) {
            đó (Google chặn hẳn UA webview), nên đường DUY NHẤT còn lại là form
            email bên dưới — ẩn cả khối để khỏi mời bấm vào một nút chắc chắn kẹt. -->
       <div id="auth-oauth-block">
-        <button onclick="signInGoogle()" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:border-color 0.15s" onmouseover="this.style.borderColor='#4285f4'" onmouseout="this.style.borderColor='#ddd'">
-          <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
-          Tiếp tục với Google
+        <!-- 68% đăng ký thật đi qua Google (đo 60 ngày, docs/nhat-ky) — làm nổi
+             bật hơn Facebook: viền/nền xanh dương nhạt mặc định (không chỉ khi
+             hover) + nhãn "Nhanh nhất". Facebook giữ style trung tính cũ. -->
+        <button onclick="signInGoogle()" style="width:100%;padding:11px 14px;border:1.5px solid #A8C7FA;border-radius:8px;background:#F4F8FF;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:600;color:#1a1a2e;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:border-color 0.15s,background-color 0.15s" onmouseover="this.style.borderColor='#4285f4';this.style.background='#EAF1FF'" onmouseout="this.style.borderColor='#A8C7FA';this.style.background='#F4F8FF'">
+          <span style="display:flex;align-items:center;gap:10px">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+            Tiếp tục với Google
+          </span>
+          <span style="font-size:10.5px;font-weight:700;color:#4285f4;letter-spacing:.02em">NHANH NHẤT</span>
         </button>
         <button onclick="signInFacebook()" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:16px;transition:border-color 0.15s" onmouseover="this.style.borderColor='#1877F2'" onmouseout="this.style.borderColor='#ddd'">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
@@ -633,10 +653,13 @@ function showAuthModal(callback) {
     if (oauthBlock) oauthBlock.style.display = 'none';
     const note = document.getElementById('auth-webview-note');
     if (note) note.style.display = 'block';
-    // Khách bấm quảng cáo hầu như luôn là người MỚI — mở thẳng tab Đăng ký để
-    // khỏi phải tự bấm qua, và để họ thấy ngay có Lượng tặng.
-    if (_currentTab !== 'signup') switchTab('signup');
   }
+  // Khách bấm quảng cáo (webview) hoặc bấm CTA "Đăng ký" (tab='signup' do nơi
+  // gọi truyền vào — vd tường hết lượt thử) hầu như luôn là người MỚI — mở
+  // thẳng tab Đăng ký để khỏi phải tự bấm qua, và để họ thấy ngay có Lượng
+  // tặng. Nhánh này chỉ chạy lượt DOM đầu tiên (modal đã tồn tại thì hàm trả
+  // sớm ở đầu, xử lý tab riêng ở đó) nên `_currentTab` ở đây luôn là mặc định.
+  if ((tab === 'signup' || _isEmbeddedWebview()) && _currentTab !== 'signup') switchTab('signup');
   setTimeout(() => document.getElementById('auth-email')?.focus(), 100);
   _prefillPromo();
 }
@@ -823,6 +846,11 @@ async function submitAuth() {
   // Cất mã TRƯỚC khi gọi mạng: nếu đăng ký thành công thì `promo.js` bắt
   // `SIGNED_IN` và đổi ngay; nếu hỏng thì mã vẫn còn đó cho lượt sau.
   if (_currentTab === 'signup') _stashPromoCode();
+  // Lưu đường quay lại TRƯỚC khi gọi mạng — cùng cơ chế OAuth (signInGoogle):
+  // khách bấm link xác nhận trong email, GoTrue verify redirect về
+  // auth-callback.html, trang đó đọc `auth_return_to` để đưa đúng về đây
+  // thay vì về trang chủ (mất lá số đang xem).
+  if (_currentTab === 'signup') _rememberAuthReturn();
 
   try {
     if (_currentTab === 'signin') {
@@ -841,7 +869,11 @@ async function submitAuth() {
           document.getElementById('auth-email').value = email;
           showAuthError('Email này đã có tài khoản — nhập mật khẩu để đăng nhập.');
         } else {
-          showAuthError('Đã gửi email xác nhận — vui lòng kiểm tra hộp thư.');
+          // Trung tính, KHÔNG phải lỗi — tài khoản đã tạo, email đã gửi thật.
+          // Chữ đỏ (showAuthError) khiến người mới đọc thành "đăng ký hỏng" rồi
+          // bỏ đi, dù việc còn lại chỉ là bấm link trong email (đúng chỗ 31%
+          // người đăng ký email không bao giờ quay lại — xem docs/nhat-ky).
+          showAuthNotice('Đã gửi email xác nhận tới ' + email + ' — bấm vào link trong email để hoàn tất, trang sẽ tự quay lại đây.');
         }
         btn.textContent = _currentTab === 'signin' ? 'Đăng nhập' : 'Tạo tài khoản';
         btn.disabled = false;
@@ -871,7 +903,16 @@ async function submitAuth() {
 
 function showAuthError(msg) {
   const el = document.getElementById('auth-error');
-  if (el) { el.textContent = msg; el.style.display = 'block'; }
+  if (el) { el.textContent = msg; el.style.color = '#C0392B'; el.style.display = 'block'; }
+}
+
+// Thông báo TRUNG TÍNH trong cùng khung (vd "đã gửi email xác nhận") — khác
+// `showAuthError`: đổi màu về xanh dương thẫm thay vì đỏ. Dùng chung phần tử
+// #auth-error để khỏi thêm DOM mới; `showAuthError` tự trả màu đỏ ở lượt gọi
+// sau nên không lẫn giữa hai loại thông báo.
+function showAuthNotice(msg) {
+  const el = document.getElementById('auth-error');
+  if (el) { el.textContent = msg; el.style.color = '#0D3B5E'; el.style.display = 'block'; }
 }
 
 // ── Free credits welcome banner ──

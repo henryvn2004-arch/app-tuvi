@@ -2603,7 +2603,10 @@
       wrap.querySelector('[data-act="do-signup"]').addEventListener('click', function () {
         close();
         try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'anon_trial_wall' } }); } catch (e) { /* ignore */ }
-        if (window.Auth && Auth.require) Auth.require(function () { loadRailStatus(); refreshHistoryUI && refreshHistoryUI(); });
+        // 'signup' — nút này LÀ lời mời đăng ký, không phải đăng nhập; khách
+        // bấm vào đây chưa từng có tài khoản (đã cắn: modal từng mở mặc định
+        // tab Đăng nhập, người mới không biết phải tự bấm qua tab bên cạnh).
+        if (window.Auth && Auth.require) Auth.require(function () { loadRailStatus(); refreshHistoryUI && refreshHistoryUI(); }, 'signup');
       });
     }
     if (_anonBonus != null) { build(_anonBonus); return; }

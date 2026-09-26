@@ -455,6 +455,10 @@ function doBatTu(){
     if(window.console)console.error(e);
   }finally{
     btn.disabled=false; var _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent='Lập Bát Tự →';
+    // Cùng vá với app-luan-giai.html: `#namxemNext` khoá vĩnh viễn ở text
+    // "Đang an tứ trụ…" ngay lúc bấm (chống double-submit) nhưng KHÔNG tự
+    // đổi lại khi xong — đứng nguyên như đang treo dù việc đã hoàn tất.
+    var _nxt=document.getElementById('namxemNext'); if(_nxt) _nxt.textContent='✓ Đã an tứ trụ';
   }
 }
 function reBatTu(){ var y=parseInt(document.getElementById('barNamxem').value); if(y)document.getElementById('inpNamxem').value=y; doBatTu(); }

@@ -764,6 +764,13 @@ async function doLuan(){
     if(window.console)console.error(e);
   }finally{
     btn.disabled=false; var _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent='Lập lá số & Luận giải ngay →';
+    // Nút chat `#namxemNext` (xem `startIntake` phía trên) đặt text "Đang lập
+    // lá số…" NGAY lúc bấm rồi khoá vĩnh viễn — cố ý, chống double-submit đẻ
+    // ra nhiều dòng "đã sẵn sàng" trùng nhau. Nhưng text đó đứng nguyên MÃI
+    // MÃI trong lịch sử hội thoại kể cả sau khi việc đã xong, đọc như bị kẹt.
+    // Đổi sang trạng thái XONG ở đây — chạy trong CẢ nhánh lỗi (catch ở trên
+    // không return sớm) lẫn thành công, nên luôn khớp thực tế.
+    var _nxt=document.getElementById('namxemNext'); if(_nxt) _nxt.textContent='✓ Đã lập lá số';
   }
 }
 
