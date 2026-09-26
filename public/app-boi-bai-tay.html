@@ -51,6 +51,9 @@
 .bt-q label{display:block;font-size:12.5px;color:var(--text-mid);margin-bottom:6px}
 .bt-q input{width:100%;padding:10px 12px;border:1px solid var(--line-2);border-radius:8px;font-family:inherit;font-size:13.5px;background:var(--paper);color:var(--text)}
 @media(max-width:480px){.pcm-topics{grid-template-columns:1fr}.pc-scene{width:66px;height:100px}.pc-scene.lg{width:80px;height:120px}}
+/* Cột artifact chat-first chỉ rộng 420px trên MỌI viewport — media query trên
+   đọc viewport nên không khớp ở đây (xem docs/luat/bay.md). */
+body.chat-first-live .pcm-topics{grid-template-columns:1fr}
 </style>
 </head>
 <body>
@@ -147,22 +150,17 @@
 </div>
 
 <script>window.SHELL_ACTIVE='boi-bai-tay';window.SHELL_HISTORY=true;
+// Chat-first (xem khối CHATFIRST trong shell.js) — setContext() TRƯỚC ĐÂY gọi
+// ngay lúc tải trang (trước khi rút bài), cùng lý do bị từ chối như `tarot`
+// ở bước 3 (2026-09-22). Nay dời xuống renderResult() — SAU khi rút xong —
+// nên bật cờ an toàn. Vá kèm bẫy grid+media-query của .pcm-topics.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'boi-bai-tay'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=38"></script>
   <script src="/nav.js?v=42" data-icons-only></script><script src="/shell.js?v=103"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script>
-function initBoiBaiTay(){
-  Shell.setContext({
-    label:'Bói Bài Tây',
-    placeholder:'Hỏi thầy về lá bài vừa rút…',
-    greeting:'Chào bạn. Chọn kiểu trải bài rồi rút — tôi ở đây nếu bạn muốn hỏi thêm về lá bài hay cách áp dụng vào tình huống của mình.',
-    chips:['4 chất bài nghĩa là gì?','Bói bài Tây khác Tarot ra sao?','Nên hỏi câu hỏi kiểu gì khi rút bài?']
-  });
-}
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initBoiBaiTay); else initBoiBaiTay();
-
 // ══════════════════════════════════════════════════════════════════════
 // Port NGUYÊN VĂN từ public/tools/boi-bai-tay.html — 52 lá + logic rút
 // bài giữ nguyên, không gọi model, không paywall (miễn phí).
@@ -353,6 +351,13 @@ function renderResult() {
   window.mountIcons && window.mountIcons(document.getElementById('readingResult'));
 
   Shell.setShareable({ kind:'text', toolId:'boi-bai-tay', title:'Kết quả bói bài Tây của tôi', text: shareText() });
+  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+  const first = _drawn[0];
+  Shell.setContext({
+    label: 'Bói Bài Tây — ' + _drawn.length + ' lá',
+    greeting: (q ? 'Câu hỏi của bạn: "' + q + '". ' : '') + 'Lá đầu tiên bạn rút được: **' + first.rank.label + ' ' + first.suit.name + '**. Bạn muốn hỏi thêm về lá bài nào?',
+    chips: ['4 chất bài nghĩa là gì?', 'Bói bài Tây khác Tarot ra sao?', 'Nên hỏi câu hỏi kiểu gì khi rút bài?']
+  });
   setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 500);
 }
 
