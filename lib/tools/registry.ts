@@ -25,6 +25,7 @@ import { computeThanSoHoc } from '@/lib/engine/than-so-hoc';
 import { extractTuBinhContext, extractGenericContext } from '@/lib/agent/prompts';
 import { lanKinhNam, lanKinhThang, lanKinhNgay } from '@/lib/agent/luan-chu-de';
 import { personaVoice } from '@/lib/agent/personas';
+import { lapKhoa, railData as railDataLucNham } from '@/lib/liuren/ke';
 import type { BirthParams } from '@/lib/contract/v1';
 import { SUGGEST_TOOL_DEF, SUGGEST_PRODUCT_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
@@ -262,6 +263,28 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false): any[] {
         required: ['nam', 'ly_do'],
       },
     },
+    // Cặp thứ hai (P1 2026-09-26): Linh Cơ (Đại Lục Nhâm) đối chiếu MỘT VIỆC
+    // CỤ THỂ đang phân vân NGAY LÚC HỎI — khác Tâm Kính ở chỗ không cần năm/
+    // ngày sinh, chỉ cần thời điểm hiện tại (`lapKhoa()` không tham số = giờ
+    // chiêm = giờ hỏi). Cùng zero-friction: khách không phải nhập gì thêm.
+    {
+      name: 'moi_thay_luc_nham',
+      description:
+        'Mời THẦY LINH CƠ (chuyên Đại Lục Nhâm) vào cùng trả lời, để người dùng nghe thêm góc ĐỐI CHIẾU từ một môn khác cho MỘT VIỆC CỤ THỂ đang phân vân NGAY LÚC NÀY (thành/bại, nên tiến hay lui, chừng nào có kết quả) — KHÔNG dùng cho câu hỏi vận năm/tháng chung chung (đã có moi_thay_bat_tu cho việc đó). ' +
+        'DÙNG RẤT DÈ: mặc định là KHÔNG gọi. Chỉ gọi khi cả bốn điều sau cùng đúng — ' +
+        '(1) người dùng đang hỏi về MỘT VIỆC CỤ THỂ, có thể trả lời được ngay bây giờ (vd "có nên ký hợp đồng này", "việc này có thành không") — không phải hỏi vận hạn dài hạn; ' +
+        '(2) bạn đã luận xong bằng Tử Vi TRƯỚC RỒI — đây là góc nhìn THÊM, không phải để né câu hỏi; ' +
+        '(3) trong cả cuộc trò chuyện này bạn CHƯA gọi tool này (hay moi_thay_bat_tu) lần nào; ' +
+        '(4) không phải lúc người dùng đang buồn/bế tắc/kể chuyện riêng — lúc đó chỉ nên lắng nghe. ' +
+        'Sau khi gọi, hệ thống tự đưa Linh Cơ vào nói bằng khóa Lục Nhâm THẬT lập ngay lúc này — bạn KHÔNG tự luận thay Linh Cơ, KHÔNG bịa thiên tướng/tam truyền, và KHÔNG nhắc trước trong lời văn rằng bạn "sắp mời" ai đó.',
+      input_schema: {
+        type: 'object',
+        properties: {
+          ly_do: { type: 'string', description: 'MỘT câu ngắn nói vì sao đáng nghe thêm góc Lục Nhâm cho việc này.' },
+        },
+        required: ['ly_do'],
+      },
+    },
   ];
 }
 
@@ -286,6 +309,7 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
   // tra `tool_pricing`, ghi CÙNG `ctx.toolSuggestion`, cùng trần 1 lần/hội thoại.
   if (name === 'goi_y_cong_cu' || name === 'goi_y_san_pham') return execGoiYCongCu(input, ctx);
   if (name === 'moi_thay_bat_tu') return execMoiThayBatTu(input, ctx);
+  if (name === 'moi_thay_luc_nham') return execMoiThayLucNham(input, ctx);
   if (name === 'tra_van_nam_bat_tu') return execTraVanNamBatTu(input, ctx);
   if (name === 'tra_van_nam_cong_so') return execTraVanNamCongSo(input, ctx);
   if (name === 'tra_nam_ca_nhan_than_so') return execTraNamCaNhanThanSo(input);
@@ -544,6 +568,35 @@ async function execMoiThayBatTu(input: Rec, ctx: ToolContext): Promise<ToolRunRe
       extractTuBinhContext(res.data) +
       '\n\nLuận xong phần Tâm Kính thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn để khép lại — không lặp lại số liệu Tâm Kính vừa nêu.',
     label: `Đang mời thầy Tâm Kính xem Bát Tự năm ${nam}...`,
+  };
+}
+
+// ── Mời thầy khác — cặp thứ hai: Linh Cơ / Đại Lục Nhâm (P1 2026-09-26) ──
+// Cùng khuôn execMoiThayBatTu, khác nguồn số: `lapKhoa()` không cần ngày sinh,
+// chỉ cần THỜI ĐIỂM HỎI (chiêm thời = giờ hiện tại — đúng cổ pháp Lục Nhâm,
+// không phải lỗi thiếu tham số). `railData()` đã PHẲNG sẵn cho rail
+// (lib/liuren/ke.ts), đi thẳng qua `extractGenericContext` — đúng cách
+// `toolType==='luc-nham'` đang dùng ở buildChatContext, không dựng lại.
+async function execMoiThayLucNham(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  if (ctx.masterInvited) {
+    return { content: 'Đã mời một thầy khác trong lượt này rồi. Đừng mời thêm.', label: 'Mời Linh Cơ' };
+  }
+  let khoa;
+  try {
+    khoa = lapKhoa();
+  } catch (e) {
+    return { content: 'Không lập được khóa Lục Nhâm: ' + (e instanceof Error ? e.message : 'lỗi không rõ') + '. Đừng nhắc tới việc mời trong câu trả lời.', label: 'Mời Linh Cơ' };
+  }
+  ctx.masterInvited = true;
+  return {
+    content:
+      `— THẦY LINH CƠ (Đại Lục Nhâm) VỪA VÀO PHÒNG, ĐÃ LẬP KHÓA NGAY LÚC NÀY —\n` +
+      'Viết tiếp phần này bằng giọng THẬT của Linh Cơ (không phải giọng của bạn), mở một dòng riêng bằng "**Linh Cơ:**", luận theo đúng trình tự tam truyền → tứ khóa → thiên tướng, CHỈ dựa vào khóa dưới đây — không tự lập lại hay đổi một chi nào:\n' +
+      (personaVoice('linh-co') || '') +
+      '\n\n' +
+      extractGenericContext(railDataLucNham(khoa)) +
+      '\n\nLuận xong phần Linh Cơ thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn để khép lại — không lặp lại số liệu Linh Cơ vừa nêu.',
+    label: 'Đang mời thầy Linh Cơ lập khóa Lục Nhâm...',
   };
 }
 

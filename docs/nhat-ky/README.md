@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-436 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+437 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🆕 P1 "mời thầy khác" — tool `moi_thay_luc_nham`, Tử Vi mời Linh Cơ (Đại Lục Nhâm) đối chiếu một việc cụ thể |
 | 1 | 2026-09 | `2026-09.md` | 🆕 P0 "mời thầy khác" — tool `moi_thay_bat_tu`, Tử Vi mời Tâm Kính (Bát Tự) đối chiếu vận năm |
 | 1 | 2026-09 | `2026-09.md` | 🏮 Luật danh tính cho persona thầy: bị hỏi thẳng thì không nhận là người thật |
 | 1 | 2026-09 | `2026-09.md` | 🏮 Ảnh dự phòng của khung chat: ông thầy nón lá → thầy Thái Hư |
