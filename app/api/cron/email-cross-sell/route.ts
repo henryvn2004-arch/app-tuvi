@@ -1,5 +1,5 @@
 // app/api/cron/email-cross-sell/route.ts
-// Cron TUẦN — gợi ý tool liên quan qua email cho user đã dùng tool A mà chưa
+// Cron T6 + CN hằng tuần — gợi ý tool liên quan qua email cho user đã dùng tool A mà chưa
 // từng dùng tool B (cặp tay chọn, xem lib/marketing/email-cross-sell.ts).
 // MẶC ĐỊNH TẮT (enabledBudgetPerRun=0 trong app_config['marketing.email_cross_sell']).
 export const dynamic = 'force-dynamic';

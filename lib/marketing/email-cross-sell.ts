@@ -9,6 +9,10 @@
 // sai cặp thành gợi ý vô nghĩa còn tệ hơn không gợi ý gì. `tool_id` phải khớp
 // đúng `SHELL_ACTIVE` của từng trang (xem public/*.html).
 //
+// Nhịp: cron chạy T6 + CN (Henry chốt 2026-09-26: tối đa 2 thư/tuần/người) —
+// mỗi lượt một người nhận TỐI ĐA MỘT thư dù khớp nhiều cặp (`sentTo`), cặp
+// còn lại để lượt sau. Bỏ chặn này là một người khớp 3 cặp nhận 3 thư cùng sáng.
+//
 // Cùng khuôn công tắc với autopilot/email-reminder: mặc định TẮT
 // (`app_config['marketing.email_cross_sell']`, budget=0), Henry tự bật.
 // Là email QUẢNG BÁ nên qua `sendMarketingEmail`.
@@ -34,19 +38,19 @@ interface CrossSellPair {
 
 const PAIRS: CrossSellPair[] = [
   { from: 'luan-giai', to: 'bat-tu', toLabel: 'Bát Tự (Tứ Trụ)',
-    toUrl: 'https://tuviminhbao.com/bat-tu.html',
+    toUrl: 'https://tuviminhbao.com/app/bat-tu',
     reason: 'Bạn đã xem Tử Vi Đẩu Số — Bát Tự soi mệnh theo góc Can Chi Tứ Trụ, một lớp phân tích khác bổ trợ cho lá số vừa xem.' },
   { from: 'bat-tu', to: 'luan-giai', toLabel: 'Tử Vi Đẩu Số — Luận Giải',
     toUrl: 'https://tuviminhbao.com/app/luan-giai',
     reason: 'Bạn đã xem Bát Tự — Luận Giải Tử Vi Đẩu Số cho góc nhìn 12 cung/vận hạn chi tiết theo từng năm.' },
   { from: 'bat-trach', to: 'chon-ngay', toLabel: 'Chọn Ngày Tốt',
-    toUrl: 'https://tuviminhbao.com/chon-ngay.html',
+    toUrl: 'https://tuviminhbao.com/app/chon-ngay',
     reason: 'Bạn đã xem hướng nhà hợp mệnh — Chọn Ngày Tốt giúp chọn thời điểm động thổ/nhập trạch hợp mệnh luôn.' },
   { from: 'chan-dung-tien-kiep', to: 'duyen-no-tien-kiep', toLabel: 'Duyên Nợ Tiền Kiếp',
-    toUrl: 'https://tuviminhbao.com/duyen-no-tien-kiep.html',
+    toUrl: 'https://tuviminhbao.com/app/duyen-no-tien-kiep',
     reason: 'Bạn đã xem Chân Dung Tiền Kiếp — Duyên Nợ Tiền Kiếp soi thêm về các mối duyên gắn với kiếp trước.' },
   { from: 'day-con', to: 'huong-nghiep-tre', toLabel: 'Hướng Nghiệp Trẻ',
-    toUrl: 'https://tuviminhbao.com/huong-nghiep-tre.html',
+    toUrl: 'https://tuviminhbao.com/app/huong-nghiep-tre',
     reason: 'Bạn đã xem cách Dạy Con hợp mệnh — Hướng Nghiệp Trẻ gợi ý luôn định hướng ngành nghề phù hợp về sau.' },
 ];
 
@@ -85,13 +89,14 @@ export interface CrossSellResult {
   pairs: { from: string; to: string; candidates: number }[];
 }
 
-/** Cron TUẦN — xem lib/ops/jobs.ts key `email-cross-sell`. */
+/** Cron T6 + CN — xem lib/ops/jobs.ts key `email-cross-sell`. */
 export async function runEmailCrossSell(): Promise<CrossSellResult> {
   const cfg = { ...CROSS_SELL_DEFAULTS, ...(await getConfig<Partial<CrossSellConfig>>('marketing.email_cross_sell', {})) };
   if (cfg.enabledBudgetPerRun <= 0) return { ran: false, sent: 0, pairs: [] };
 
   let sent = 0;
   let budgetLeft = cfg.enabledBudgetPerRun;
+  const sentTo = new Set<string>();
   const pairsReport: CrossSellResult['pairs'] = [];
 
   for (const pair of PAIRS) {
@@ -107,7 +112,7 @@ export async function runEmailCrossSell(): Promise<CrossSellResult> {
 
     for (const c of candidates) {
       if (budgetLeft <= 0) break;
-      if (!c.email) continue;
+      if (!c.email || sentTo.has(c.user_id)) continue;
       const result = await sendMarketingEmail({
         dedupeKey: `crosssell-${c.user_id}-${pair.from}-${pair.to}`,
         template: 'cross-sell',
@@ -117,6 +122,7 @@ export async function runEmailCrossSell(): Promise<CrossSellResult> {
         userId: c.user_id,
       });
       if (result.ok) {
+        sentTo.add(c.user_id);
         sent++;
         budgetLeft--;
       }
