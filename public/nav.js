@@ -280,11 +280,6 @@
     '.nav-brand-text{min-width:0;overflow:hidden}',
     '.nav-logo .name{font-size:16px;font-weight:700;color:#FF4000;font-family:\'Noto Serif\',Georgia,serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
     '.nav-logo .url{font-size:9px;color:#767676;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
-    // Mascot Minh Bảo — góc phải topnav (guideline §5.1 "Logo + slogan nhẹ,
-    // mascot nhỏ bên phải"). Ẩn dưới 900px: hết chỗ khi hamburger xuất hiện,
-    // và cột nav-links đã chiếm hết flex:1 ở màn hẹp.
-    '.nav-mascot{width:34px;height:34px;object-fit:contain;flex-shrink:0;margin-left:4px}',
-    '@media(max-width:900px){.nav-mascot{display:none}}',
     '.nav-links{display:flex;align-items:center;gap:2px;flex:1;overflow:visible}',
     '.nav-link{color:#0F2A3D;opacity:.75;font-size:13px;text-decoration:none;padding:6px 10px;border-radius:6px;transition:all .15s;white-space:nowrap;cursor:pointer;display:inline-flex;align-items:center;gap:4px}',
     '.nav-link:hover{opacity:1;background:rgba(15,42,61,.06)}',
@@ -445,7 +440,7 @@
   // Thay vì đẻ bảng icon thứ hai trong shell.js (28 icon, tên khác hẳn, thiếu
   // 11/15 icon cần dùng — đúng cái "hai bảng trôi khỏi nhau" đã cảnh báo),
   // mấy trang đó nạp CHÍNH file này kèm `data-icons-only`:
-  //     <script src="/nav.js?v=29" data-icons-only></script>
+  //     <script src="/nav.js?v=43" data-icons-only></script>
   // Lúc đó nav.js CHỈ cấp ICONS/iconHtml/mountIcons/EMOJI_TO_ICON + CSS icon,
   // rồi dừng — KHÔNG dựng thanh nav, KHÔNG chèn GA4, KHÔNG chèn conversion.js,
   // KHÔNG chèn auth.js. Một nguồn icon duy nhất cho cả site.
@@ -596,12 +591,6 @@
   var html = '<nav class="topnav">'
     + '<a class="nav-logo" href="/"><img src="/seal.webp" alt="">'
     + '<div class="nav-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div></a>'
-    // Mascot NGAY SAU logo, KHÔNG ở rìa phải: #nav-auth-area tự đặt
-    // `position:fixed;right:56px` (auth.js updateNavUI) — thoát hẳn khỏi
-    // flexbox của .topnav, nên một sibling flex mới ở cuối KHÔNG đẩy được nó
-    // ra, chỉ đè lên nhau (đã thấy lúc test: mascot chồng lên nút "Đăng nhập").
-    // Đặt cạnh logo là vùng chắc chắn không ai khác tranh chỗ.
-    + '<img class="nav-mascot" src="/mascot/corner-v2.webp" alt="" width="34" height="34" loading="eager" decoding="async">'
     + '<div class="nav-links" id="nav-links">'
     + '<a class="nav-link nav-cta-ld' + (isActive('/app')?' active':'') + '" href="/app" title="Lập lá số và hỏi trợ lý Luận Đường — vào đây để dùng công cụ">✦ Luận Đường</a>'
     + dd_kp

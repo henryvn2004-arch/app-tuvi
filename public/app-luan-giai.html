@@ -10,7 +10,7 @@
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/shell.css?v=56">
+<link rel="stylesheet" href="/shell.css?v=57">
 <link rel="preload" href="/laso-chart.css?v=3" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/laso-chart.css?v=3"></noscript>
 <style>
@@ -250,17 +250,7 @@
            một bản duy nhất — thêm bản chép trong SHELL_INTRO là để nó trôi. -->
       <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
-        <!-- `check-intro-card.mjs` bắt buộc trang có box tĩnh phải giữ đúng
-             <img class="intro-avatar"> khớp SHELL_INTRO.key (cơ chế dùng
-             CHUNG với 34 trang khác chưa gắn ảnh nhóm) — ẩn đi vì `.intro-photo`
-             bên dưới đã thay thế vai trò hiển thị, không xoá hẳn khỏi HTML. -->
-        <img class="intro-avatar" src="/tool-avatars/laso.webp" alt="" style="display:none" onerror="this.remove()">
-        <!-- Banner thủy mặc nhóm "Tử Vi Đẩu Số" (scripts/gen-hero-banners.mjs) LÀ
-             nền của cả box — không phải thumbnail nhỏ cạnh chữ (Henry 2026-09-14,
-             vòng 5: "cái hình chính là cái banner luôn, ghi chữ đè lên bên trái").
-             `::after` bên dưới (shell.css) phủ lớp gradient để chữ đọc được dù
-             ảnh nhóm nào cũng vậy — không cần biết trước tông màu ảnh. -->
-        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.webp" alt="" onerror="this.remove()">
+        <img class="intro-avatar" src="/tool-avatars/laso.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Luận giải Tử Vi</div>
@@ -453,9 +443,9 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
-  <script src="/nav.js?v=42" data-icons-only></script>
-<script src="/shell.js?v=103"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=3"></script>
+  <script src="/nav.js?v=43" data-icons-only></script>
+<script src="/shell.js?v=104"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=43"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script src="/tools-shared/i18n.js?v=1"></script>

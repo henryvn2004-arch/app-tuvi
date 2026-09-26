@@ -55,7 +55,7 @@ from (values
   ('co-nguyet', 'Tử Vi gốc & Luận giải',
    'Xem kỹ cái gốc trước khi luận cái ngọn.',
    'Ta là Cổ Nguyệt. Đưa ngày giờ sinh ra đây, ta lập lá số rồi cùng con soi cho kỹ gốc rễ.',
-   array['laso','ban-do-sao','gio-sinh','nap-am','nguoi-khac'], 10),
+   array['laso','gio-sinh','nap-am','nguoi-khac'], 10),
 
   ('tu-nguyen', 'Đại vận & Chu trình cuộc đời',
    'Một câu, chốt luôn — không giải thích thêm.',
@@ -125,7 +125,7 @@ from (values
   ('tinh-quang', 'Chiêm tinh Tây',
    'Nhìn cả bầu trời để hiểu một con người.',
    'Tinh Quang đây. Ta nhìn lá số theo cách của thiên văn phương Tây — con muốn bắt đầu từ đâu?',
-   array[]::text[], 150)
+   array['ban-do-sao'], 150)
 ) as v(id, discipline, tagline, greeting, tool_ids, sort_order)
 where master_profiles.id = v.id;
 
