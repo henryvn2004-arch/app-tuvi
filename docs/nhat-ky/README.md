@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🏮 Minh Bảo là hội đồng 15 thầy — gỡ cậu bé + bộ chibi, trang chủ chat |
 | 1 | 2026-09 | `2026-09.md` | 🩹 P0 — vá phễu đăng ký: tab đúng, email redirect, Google nổi bật, nút kẹt, CTA lệch trái |
 | 1 | 2026-09 | `2026-09.md` | 🩹 Sửa tận gốc dữ liệu `events.llm_usage` Gemini bị phồng + `dashboard_margin` cộng thiếu phí cache |
 | 1 | 2026-09 | `2026-09.md` | 🧪 Test phễu khách → đăng ký → trả tiền trên prod — chốt hướng chat-first + chỉ bán gói Lượng |
