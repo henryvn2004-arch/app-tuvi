@@ -545,7 +545,7 @@ function updateNavUI() {
             <a href="/topup.html" style="background:#C8A96A;color:#061A2E;font-size:11px;font-weight:700;padding:5px 10px;border-radius:5px;text-decoration:none" onmouseover="this.style.background='#E0CBA0'" onmouseout="this.style.background='#C8A96A'">+ Nạp</a>
           </div>
           ${isAnon ? `<button onclick="window.showClaimModal&&showClaimModal();document.getElementById('nav-profile-menu').style.display='none'" style="display:flex;align-items:center;gap:6px;width:100%;padding:9px 16px;font-size:13px;font-weight:700;color:#9A7B3A;background:#FBF8F1;border:none;border-bottom:1px solid #f0f0f0;text-align:left;cursor:pointer;font-family:inherit">⚠ Lưu tài khoản — tránh mất Lượng</button>` : ''}
-          <a href="/profile.html" style="display:block;padding:9px 16px;font-size:13px;color:#333;text-decoration:none" onmouseover="this.style.background='#f8f8f8'" onmouseout="this.style.background=''">Hồ sơ của tôi</a>
+          <a href="/app/ho-so" style="display:block;padding:9px 16px;font-size:13px;color:#333;text-decoration:none" onmouseover="this.style.background='#f8f8f8'" onmouseout="this.style.background=''">Hồ sơ của tôi</a>
           <div style="border-top:1px solid #f0f0f0;margin-top:4px"></div>
           <button onclick="Auth.signOut()" style="display:block;width:100%;padding:9px 16px;font-size:13px;color:#C0392B;background:none;border:none;text-align:left;cursor:pointer;font-family:inherit" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background=''">Đăng xuất</button>
         </div>
