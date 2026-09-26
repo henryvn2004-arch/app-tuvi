@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-432 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+435 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 267 | 1,033,581 B |
+| `2026-09.md` | 270 | 1,039,770 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,9 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🏮 Luật danh tính cho persona thầy: bị hỏi thẳng thì không nhận là người thật |
+| 1 | 2026-09 | `2026-09.md` | 🏮 Ảnh dự phòng của khung chat: ông thầy nón lá → thầy Thái Hư |
+| 1 | 2026-09 | `2026-09.md` | 🏮 Minh Bảo là hội đồng 15 thầy — gỡ cậu bé + bộ chibi, trang chủ chat |
 | 1 | 2026-09 | `2026-09.md` | 🩹 P0 — 2 việc UI còn lại: CTA hero bị 3 feat-chip đẩy khuất, nội dung home-body lòi dưới ô chat |
 | 1 | 2026-09 | `2026-09.md` | 🩹 P0 — vá phễu đăng ký: tab đúng, email redirect, Google nổi bật, nút kẹt, CTA lệch trái |
 | 1 | 2026-09 | `2026-09.md` | 🩹 Sửa tận gốc dữ liệu `events.llm_usage` Gemini bị phồng + `dashboard_margin` cộng thiếu phí cache |

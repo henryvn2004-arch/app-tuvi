@@ -191,8 +191,7 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
       <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
-        <img class="intro-avatar" src="/tool-avatars/day-con.webp" alt="" style="display:none" onerror="this.remove()">
-        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.webp" alt="" onerror="this.remove()">
+        <img class="intro-avatar" src="/tool-avatars/day-con.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Dạy Con Theo Lá Số</div>
@@ -492,10 +491,10 @@ window.SHELL_INTRO={key:'day-con'};</script>
 <script src="/tuvi-paywall.js?v=38"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=42" data-icons-only></script>
+  <script src="/nav.js?v=43" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
-<script src="/shell.js?v=104"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=4"></script>
+<script src="/shell.js?v=106"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=44"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 
@@ -546,7 +545,7 @@ onMoiLoChange();
 // 2 bước: điều đang lo (đọc thẳng option từ #moiLo thật, cùng danh sách
 // LO_HINT phía trên) → renderChat() lo ngày/giờ sinh của con. Xong mới hỏi
 // đối chiếu lá số cha/mẹ — bỏ qua câu hỏi nếu shell đã tự điền sẵn.
-function chatAva(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; }
+function chatAva(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/authors/thai-hu.jpg'; }
 function _tpwResuming(){ try{ return new URL(location.href).searchParams.get('tpwResume')==='1'; }catch(e){ return false; } }
 function startIntake(){
   if(_tpwResuming())return;

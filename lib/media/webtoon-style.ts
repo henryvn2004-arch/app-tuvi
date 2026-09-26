@@ -1,5 +1,13 @@
 // lib/media/webtoon-style.ts
 // ============================================================
+// ⛔ ĐÃ NGHỈ 2026-09-26 (Henry chốt): Minh Bảo đổi từ cậu bé thành HỘI ĐỒNG
+// 15 thầy thật (`master_profiles`, chân dung chì `public/authors/`). Cậu bé và
+// bộ thầy/cô chibi 11 nhóm (`master-groups.ts`) đã gỡ khỏi site: avatar công
+// cụ `public/tool-avatars/` nay là tranh ĐỒ VẬT, banner `.intro-card` bỏ hẳn.
+// Đừng chạy lại `gen-tool-avatars.mjs` / `gen-hero-banners.mjs` /
+// `app/api/admin/hero-banners` — chúng sẽ vẽ lại đúng thứ vừa gỡ. Mã giữ lại
+// vì `lib/agent/run.ts` còn dùng `resolveAvatarId` (bảng alias, không vẽ gì).
+// ============================================================
 // NGUỒN DUY NHẤT cho phong cách webtoon (Minh Bảo, Ghibli/chibi) — Henry chốt
 // 2026-09-16 ("style ghibli này cũng là style của website luôn nhé"). Mọi bộ
 // sinh ảnh nhân vật (hero-banner-prompt.ts, và về sau tool-avatar-prompt.ts /

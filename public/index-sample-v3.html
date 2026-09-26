@@ -157,164 +157,54 @@ button { font: inherit; cursor: pointer; }
   .tool-card span { font-size: 11.5px; }
 }
 
-/* ── Công cụ nổi bật — slider banner theo mẫu Henry duyệt ─────── */
-.ftb-sec { padding: 40px 0 8px; }
-.ftb-viewport { position: relative; }
-/* min-height khớp .ftb-card: #ftb-track rỗng trong HTML tĩnh, JS mới
-   `innerHTML=` 5 slide vào — thiếu chỗ này thì khối "bung" từ 0 lên ~460px
-   ngay sau khi layout đã ổn định, đẩy section.tools-sec xuống (CLS ~0,62,
-   xảy ra khi script chạy chậm hơn lần vẽ đầu — timing nên không phải lần
-   đo nào cũng dính). loading="eager" trên ảnh slide 0 không đủ: khối cha
-   vẫn rỗng cho tới khi JS chạy. */
-.ftb-track-wrap { overflow: hidden; border-radius: var(--radius-lg); min-height: 460px; }
-.ftb-track { display: flex; transition: transform .45s cubic-bezier(.4,0,.2,1); will-change: transform; }
-.ftb-slide { flex: 0 0 100%; min-width: 0; }
-.ftb-card {
-  background: linear-gradient(135deg, #fff 0%, var(--cream) 100%);
-  border: 1px solid var(--line); border-radius: var(--radius-lg);
-  display: grid; grid-template-columns: 1fr 1fr; align-items: center; overflow: hidden; min-height: 460px;
-}
-.ftb-text { padding: 40px 44px; }
-.ftb-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #8a6a2f; background: var(--gold-soft); padding: 6px 14px; border-radius: 999px; margin-bottom: 18px; }
-.ftb-badge .ic { width: 13px; height: 13px; }
-.ftb-title { font-size: 30px; line-height: 1.22; font-weight: 800; color: var(--ink); margin: 0 0 12px; }
-.ftb-sub { font-size: 14.5px; color: var(--ink-soft); line-height: 1.65; margin: 0 0 24px; max-width: 42ch; }
-.ftb-feats { display: flex; gap: 22px; margin-bottom: 26px; }
-.ftb-feat { flex: 1; min-width: 0; }
-.ftb-feat-ic { width: 38px; height: 38px; border-radius: 11px; background: var(--gold-soft); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
-.ftb-feat-ic .ic { width: 18px; height: 18px; color: #8a6a2f; }
-.ftb-feat b { display: block; font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.3; margin-bottom: 2px; }
-.ftb-feat span { display: block; font-size: 11.5px; color: var(--ink-faint); line-height: 1.35; }
-.ftb-cta { display: inline-flex; align-items: center; gap: 6px; background: var(--navy); color: #fff; font-weight: 700; font-size: 14.5px; padding: 13px 22px; border-radius: 12px; border: none; margin-bottom: 22px; }
-.ftb-proof { display: flex; align-items: center; gap: 10px; }
-.ftb-avatars { display: flex; }
-.ftb-avatars img { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; margin-left: -8px; object-fit: cover; display: block; }
-.ftb-avatars img:first-child { margin-left: 0; }
-.ftb-proof-txt { font-size: 12px; color: var(--ink-faint); text-decoration: none; cursor: pointer; }
-.ftb-proof-txt:hover { color: var(--ink); text-decoration: underline; }
+/* ── Hỏi thầy — màn hình đầu (trang chủ chat, 2026-09-26) ──────────
+   Nhìn vào là biết đây là chỗ HỎI: lời chào + ô hỏi + vài câu gợi ý, không
+   carousel, không tranh. Khách gõ → /api/thay-hoi chọn thầy theo chủ đề →
+   /app?q=…&thay=…#chat (rail của app-home.html gửi luôn câu đó). */
+.ask-sec { padding: 56px 0 36px; }
+.ask-wrap { max-width: 760px; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }
+.ask-host { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-soft); }
+.ask-host img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px var(--line); }
+.ask-host b { color: var(--ink); }
+.ask-sec h1 { font-size: 40px; line-height: 1.2; font-weight: 800; margin: 0; color: var(--ink); text-wrap: balance; }
+.ask-sub { font-size: 15.5px; line-height: 1.65; color: var(--ink-soft); margin: 0; max-width: 54ch; }
+.ask-box { width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 1px 2px rgba(15,42,61,.05), 0 10px 30px rgba(15,42,61,.07); padding: 14px 14px 10px 18px; text-align: left; }
+.ask-box:focus-within { border-color: var(--gold); }
+.ask-box textarea { width: 100%; border: 0; outline: 0; resize: none; background: transparent; font: inherit; font-size: 16px; line-height: 1.5; color: var(--ink); min-height: 52px; }
+.ask-box textarea::placeholder { color: var(--ink-faint); }
+.ask-row { display: flex; align-items: center; gap: 10px; }
+.ask-note { font-size: 12px; color: var(--ink-faint); flex: 1; }
+.ask-send { width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; flex: none; }
+.ask-send svg { width: 18px; height: 18px; }
+.ask-send:disabled { opacity: .6; cursor: progress; }
+.ask-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.ask-chip { font-size: 13.5px; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; }
+.ask-chip:hover { border-color: var(--gold); }
+.ask-tools { font-size: 13px; color: var(--ink-soft); margin: 0; line-height: 1.9; }
+.ask-tools a { color: var(--ink); border-bottom: 1px solid var(--line); margin: 0 4px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-.ftb-art { position: relative; height: 100%; min-height: 330px; }
-.ftb-art img { width: 100%; height: 100%; object-fit: cover; object-position: 68% 38%; }
-
-.ftb-btn { position: absolute; top: 50%; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 17px; color: var(--navy); box-shadow: 0 4px 14px rgba(22,35,44,.08); display: flex; align-items: center; justify-content: center; transform: translateY(-50%); z-index: 5; }
-.ftb-prev { left: -18px; }
-.ftb-next { right: -18px; }
-.ftb-dots { display: flex; justify-content: center; gap: 8px; margin-top: 18px; }
-.ftb-dot { width: 8px; height: 8px; box-sizing: content-box; padding: 6px; background-clip: content-box; border-radius: 50%; background-color: var(--line); cursor: pointer; border: none; }
-.ftb-dot.active { background-color: var(--navy); }
-
-@media (max-width: 820px) {
-  .ftb-card { grid-template-columns: 1fr; min-height: 0; }
-  .ftb-text { padding: 26px 22px 22px; text-align: center; }
-  .ftb-feats { gap: 10px; }
-  .ftb-feat-ic { margin-left: auto; margin-right: auto; }
-  .ftb-sub { max-width: none; }
-  .ftb-proof { justify-content: center; }
-  .ftb-art { min-height: 220px; order: -1; }
-  .ftb-btn { display: none; }
-  /* .ftb-card bỏ min-height ở breakpoint này (card co theo nội dung) —
-     giữ chỗ DƯ cho .ftb-track-wrap để khối JS-chèn không bung từ 0. */
-  .ftb-track-wrap { min-height: 760px; }
-}
+/* ── Hội đồng 15 thầy ────────────────────────────────────────── */
+.council-sec { padding: 28px 0 8px; }
+.council-sub { font-size: 14px; color: var(--ink-soft); margin: -6px 0 18px; max-width: 70ch; }
+.council-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px 12px; }
+.council-grid a { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.council-grid img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px var(--line); background: #f4f2ec; }
+.council-grid b { font-family: 'Noto Serif', Georgia, serif; font-size: 14px; color: var(--ink); }
+.council-grid span { font-size: 12px; color: var(--ink-soft); line-height: 1.35; }
 
 @media (max-width: 680px) {
-  /* bottom-nav cố định che tới y≈844 (viewport 390×844) — 3 feat-chip
-     xen giữa mô tả và CTA đẩy nút hành động chính xuống dưới, bị che
-     khuất. Đưa CTA lên ngay sau mô tả để luôn nằm trong màn hình đầu. */
-  .ftb-text { display: flex; flex-direction: column; }
-  .ftb-cta { order: 1; margin-bottom: 16px; }
-  .ftb-feats { order: 2; }
-  .ftb-proof { order: 3; }
-}
-
-/* ── Tử Vi Nghiệm Chứng — core DNA, giữa hero và công cụ chính ── */
-.dna-sec { padding: 8px 0 28px; }
-.dna-card {
-  position: relative;
-  background: linear-gradient(160deg, var(--cream) 0%, #f8f3e8 55%, var(--cream) 100%);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  padding: 40px 44px 36px;
-  overflow: hidden;
-}
-.dna-seal { position: absolute; top: 24px; right: 28px; width: 46px; height: 46px; opacity: .92; }
-.dna-seal img { width: 100%; height: 100%; object-fit: contain; }
-.dna-head { max-width: 640px; margin: 0 auto 30px; text-align: center; }
-.dna-eyebrow { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 11.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 12px; }
-.dna-eyebrow .ic { width: 13px; height: 13px; }
-.dna-title { font-size: 27px; font-weight: 800; color: var(--ink); margin: 0 0 14px; }
-.dna-sub { font-size: 14.5px; line-height: 1.7; color: var(--ink-soft); margin: 0; }
-.dna-badges { display: none; }
-
-/* ── 4 thẻ chi tiết (AstroDataBank / Khởi tạo / Đối chiếu / Thẩm định) ── */
-.dna-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 0 0 20px; position: relative; z-index: 1; }
-.dna-item { background: rgba(255,255,255,.7); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 20px 18px; position: relative; }
-.dna-item-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
-.dna-item-ic { width: 38px; height: 38px; border-radius: 11px; background: var(--gold-soft); display: flex; align-items: center; justify-content: center; flex: none; }
-.dna-item-ic .ic { width: 18px; height: 18px; color: #8a6a2f; }
-.dna-item-num { font-family: 'Noto Serif', serif; font-size: 12px; font-weight: 700; color: var(--ink-faint); }
-.dna-item b { display: block; font-size: 15px; font-weight: 800; color: var(--ink); margin-bottom: 2px; }
-.dna-item-sub { display: block; font-size: 12px; font-weight: 700; color: #8a6a2f; margin-bottom: 8px; }
-.dna-item p { font-size: 12.5px; color: var(--ink-faint); line-height: 1.55; margin: 0 0 14px; }
-.dna-item-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.dna-item-tags > span { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 700; color: var(--ink-soft); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 4px 9px; }
-.dna-item-tags .ic { width: 11px; height: 11px; color: #8a6a2f; flex: none; }
-
-/* ── Quy trình xử lý dữ liệu ─────────────────────────────────── */
-.dna-process { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 26px 32px 24px; position: relative; z-index: 1; }
-.dna-process-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
-.dna-process-label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #8a6a2f; }
-.dna-process-label .ic { width: 13px; height: 13px; }
-.dna-process-label.muted { color: var(--ink-faint); font-weight: 700; }
-
-.dna-flow { display: flex; align-items: flex-start; justify-content: center; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
-.dna-flow-step { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 92px; }
-.dna-flow-step img { width: 70px; height: 58px; object-fit: contain; background: var(--cream); border: 1px solid var(--line); border-radius: 10px; padding: 6px; }
-.dna-flow-step span { font-size: 12px; font-weight: 700; color: var(--ink); }
-.dna-flow-arrow { color: var(--ink-faint); font-size: 15px; flex: none; margin-top: 22px; }
-
-.dna-process-foot { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; padding-top: 20px; border-top: 1px solid var(--line); }
-.dna-process-list { list-style: none; margin: 0; padding: 0; font-size: 11px; font-weight: 700; letter-spacing: .02em; color: #8a6a2f; }
-.dna-process-list li { display: flex; align-items: center; gap: 6px; line-height: 1.7; }
-.dna-process-list li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); flex: none; }
-.dna-cta { display: inline-flex; align-items: center; gap: 6px; background: var(--navy); color: #fff; font-weight: 800; font-size: 14px; padding: 13px 24px; border-radius: 12px; }
-.dna-process-tagline { font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-faint); }
-
-@media (max-width: 820px) {
-  .dna-card { padding: 32px 22px 28px; }
-  .dna-grid { grid-template-columns: repeat(2, 1fr); }
-  .dna-title { font-size: 23px; }
-  .dna-seal { width: 34px; height: 34px; top: 18px; right: 18px; }
-  .dna-process { padding: 22px 18px 20px; }
-  .dna-process-foot { justify-content: center; text-align: center; }
-}
-
-/* ── Mobile: cards 1 cột + badge tin cậy + flow 3 cột/hàng ─────── */
-@media (max-width: 680px) {
-  .dna-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 18px 0 0; }
-  .dna-badges > span { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: #8a6a2f; background: var(--gold-soft); border-radius: 999px; padding: 7px 14px; }
-  .dna-badges .ic { width: 14px; height: 14px; }
-
-  .dna-grid { grid-template-columns: 1fr; }
-
-  .dna-flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 4px; }
-  .dna-flow-step { width: auto; }
-  .dna-flow-step img { width: 56px; height: 46px; }
-  .dna-flow-arrow { display: none; }
-  .dna-flow-step:not(:nth-of-type(3n)) { position: relative; }
-  .dna-flow-step:not(:nth-of-type(3n))::after { content: '→'; position: absolute; top: 18px; right: -12px; color: var(--ink-faint); font-size: 13px; }
-
-  .dna-process-foot { flex-direction: column; gap: 16px; }
-  .dna-process-list { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 12px 16px; }
-  .dna-process-list li::before { content: '✓'; width: auto; height: auto; border-radius: 0; background: none; color: #2f8f6f; font-size: 12px; font-weight: 800; }
-  .dna-cta { width: 100%; justify-content: center; }
+  .ask-sec { padding: 32px 0 24px; }
+  .ask-sec h1 { font-size: 29px; }
+  .ask-sub { font-size: 14.5px; }
+  .council-grid { grid-template-columns: repeat(3, 1fr); }
+  .council-grid img { width: 60px; height: 60px; }
 }
 
 /* ── Explore more ───────────────────────────────────────────── */
 .explore-sec { padding: 28px 0; }
 .explore-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .explore-card { border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--line); background: var(--card); }
-.explore-card img { width: 100%; height: 130px; object-fit: cover; }
 .explore-body { padding: 18px 20px 22px; }
 .explore-body h3 { font-size: 16px; margin: 0 0 6px; font-weight: 800; }
 .explore-body p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; margin: 0 0 14px; }
@@ -374,110 +264,33 @@ button { font: inherit; cursor: pointer; }
 <!-- ═══════════════ HEADER — dùng chung nav.js, KHÔNG tự dựng riêng ═══════════════ -->
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 
-<!-- ═══════════════ CÔNG CỤ NỔI BẬT — slider 5 banner, đầu trang ═══════════════ -->
-<section class="ftb-sec">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="ic" data-icon="star"></span>
-      <h1>Công cụ nổi bật</h1>
+<!-- ═══════════════ HỎI THẦY — màn hình đầu ═══════════════ -->
+<!-- Minh Bảo là HỘI ĐỒNG 15 thầy (master_profiles). Thầy Thái Hư tiếp khách;
+     câu hỏi tự do đi qua /api/thay-hoi để chuyển đúng thầy theo chủ đề. Form
+     vẫn chạy khi không có JS (GET /app?q=…). Mỗi câu gợi ý đã gắn sẵn thầy. -->
+<section class="ask-sec">
+  <div class="wrap ask-wrap">
+    <div class="ask-host">
+      <img src="/authors/thai-hu.jpg" alt="Thầy Thái Hư" width="44" height="44" fetchpriority="high">
+      <span><b>Thầy Thái Hư</b> tiếp chuyện · Hội đồng Minh Bảo</span>
     </div>
-    <div class="ftb-viewport">
-      <div class="ftb-track-wrap"><div class="ftb-track" id="ftb-track"></div></div>
-      <button class="ftb-btn ftb-prev" id="ftb-prev" aria-label="Trước">‹</button>
-      <button class="ftb-btn ftb-next" id="ftb-next" aria-label="Sau">›</button>
-      <div class="ftb-dots" id="ftb-dots"></div>
+    <h1 class="serif">Bạn đang băn khoăn điều gì?</h1>
+    <p class="ask-sub">Kể cho thầy nghe. Câu hỏi của bạn sẽ đến đúng thầy phụ trách trong hội đồng 15 thầy, mỗi thầy một môn, luận theo lá số của riêng bạn.</p>
+    <form class="ask-box" id="askForm" action="/app" method="get">
+      <label for="askInput" class="sr-only">Câu hỏi của bạn</label>
+      <textarea id="askInput" name="q" rows="2" maxlength="500" required placeholder="Ví dụ: Năm tới tôi có nên nghỉ việc ra làm riêng không?"></textarea>
+      <div class="ask-row">
+        <span class="ask-note">Hỏi thử miễn phí, không cần đăng nhập</span>
+        <button type="submit" class="ask-send" id="askSend" aria-label="Gửi câu hỏi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
+    </form>
+    <div class="ask-chips">
+      <a class="ask-chip" href="/app?q=N%C4%83m%20sau%20t%C3%B4i%20c%C6%B0%E1%BB%9Bi%20%C4%91%C6%B0%E1%BB%A3c%20kh%C3%B4ng%3F&amp;thay=dau-nam#chat">Năm sau tôi cưới được không?</a>
+      <a class="ask-chip" href="/app?q=Ti%E1%BB%81n%20b%E1%BA%A1c%20n%C4%83m%20t%E1%BB%9Bi%20c%E1%BB%A7a%20t%C3%B4i%20ra%20sao%3F&amp;thay=dieu-khong#chat">Tiền bạc năm tới của tôi ra sao?</a>
+      <a class="ask-chip" href="/app?q=Th%C3%A1ng%20n%C3%A0o%20t%E1%BB%91t%20%C4%91%E1%BB%83%20chuy%E1%BB%83n%20nh%C3%A0%3F&amp;thay=nhat-nguyen#chat">Tháng nào tốt để chuyển nhà?</a>
+      <a class="ask-chip" href="/app?q=%C4%90%E1%BA%B7t%20t%C3%AAn%20con%20th%E1%BA%BF%20n%C3%A0o%20cho%20h%E1%BB%A3p%20m%E1%BB%87nh%3F&amp;thay=thien-an#chat">Đặt tên con thế nào cho hợp mệnh?</a>
     </div>
-  </div>
-</section>
-
-<!-- ═══════════════ TỬ VI NGHIỆM CHỨNG — core DNA ═══════════════ -->
-<section class="dna-sec">
-  <div class="wrap">
-    <div class="dna-card">
-      <div class="dna-seal"><img src="/seal.webp" alt="" loading="lazy"></div>
-      <div class="dna-head">
-        <div class="dna-eyebrow"><span class="ic" data-icon="sparkles"></span>Phương pháp luận giải</div>
-        <h2 class="dna-title serif">Tử Vi Nghiệm Chứng</h2>
-        <p class="dna-sub">Hệ thống được xây dựng từ dữ liệu thực tế và một quy trình luận giải có kiểm chứng nhiều lớp.</p>
-        <div class="dna-badges">
-          <span><span class="ic" data-icon="shield-check"></span>Dữ liệu thật</span>
-          <span><span class="ic" data-icon="users"></span>Con người thật</span>
-          <span><span class="ic" data-icon="bar-chart-3"></span>Giá trị thật</span>
-        </div>
-      </div>
-      <div class="dna-grid">
-        <div class="dna-item">
-          <div class="dna-item-top"><div class="dna-item-ic"><span class="ic" data-icon="globe"></span></div><span class="dna-item-num">01</span></div>
-          <b>AstroDataBank</b>
-          <span class="dna-item-sub">270.000+ hồ sơ người thật</span>
-          <p>Cơ sở dữ liệu lá số và tiểu sử đã kiểm chứng, được tổng hợp từ nhiều nguồn đáng tin cậy, đa dạng về quốc gia, nghề nghiệp, thời đại.</p>
-          <div class="dna-item-tags">
-            <span><span class="ic" data-icon="file-text"></span>270.000+</span>
-            <span><span class="ic" data-icon="globe"></span>Đa quốc gia</span>
-            <span><span class="ic" data-icon="check"></span>Đã kiểm chứng</span>
-          </div>
-        </div>
-        <div class="dna-item">
-          <div class="dna-item-top"><div class="dna-item-ic"><span class="ic" data-icon="book-open"></span></div><span class="dna-item-num">02</span></div>
-          <b>Khởi tạo mô hình</b>
-          <span class="dna-item-sub">Lập lá số theo cổ pháp</span>
-          <p>Lập lá số theo các phương pháp chính thống, kết hợp xử lý dữ liệu, chuẩn hoá thông tin và tạo luận giải sơ khai.</p>
-          <div class="dna-item-tags">
-            <span><span class="ic" data-icon="settings"></span>Chuẩn hoá</span>
-            <span><span class="ic" data-icon="compass"></span>Đa trường phái</span>
-          </div>
-        </div>
-        <div class="dna-item">
-          <div class="dna-item-top"><div class="dna-item-ic"><span class="ic" data-icon="search"></span></div><span class="dna-item-num">03</span></div>
-          <b>Đối chiếu thực nghiệm</b>
-          <span class="dna-item-sub">So khớp với cuộc đời thực</span>
-          <p>So sánh, đối chiếu giữa dự đoán và diễn biến cuộc đời thật, đo mức độ phù hợp theo từng quy tắc và lĩnh vực cuộc sống.</p>
-          <div class="dna-item-tags">
-            <span><span class="ic" data-icon="bar-chart-3"></span>Phân tích thống kê</span>
-            <span><span class="ic" data-icon="clock"></span>Đo mức độ phù hợp</span>
-          </div>
-        </div>
-        <div class="dna-item">
-          <div class="dna-item-top"><div class="dna-item-ic"><span class="ic" data-icon="shield-check"></span></div><span class="dna-item-num">04</span></div>
-          <b>Thẩm định &amp; tối ưu</b>
-          <span class="dna-item-sub">Huấn luyện và hiệu chỉnh liên tục</span>
-          <p>Chuyên gia thẩm định, đối chiếu từng bản luận để phát hiện điểm mạnh, điểm cần cải thiện, từ đó tối ưu mô hình luận giải.</p>
-          <div class="dna-item-tags">
-            <span><span class="ic" data-icon="users"></span>Hội đồng chuyên gia</span>
-            <span><span class="ic" data-icon="rotate-cw"></span>Cập nhật liên tục</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="dna-process">
-        <div class="dna-process-head">
-          <span class="dna-process-label"><span class="ic" data-icon="circle-dot"></span>Quy trình xử lý dữ liệu</span>
-          <span class="dna-process-label muted">Từ dữ liệu thực tế → đến tri thức ứng dụng</span>
-        </div>
-        <div class="dna-flow">
-          <div class="dna-flow-step"><img src="/images/homepage-dna/flow-01-dulieu.webp" alt="Dữ liệu — hồ sơ người thật"><span>Dữ liệu</span></div>
-          <span class="dna-flow-arrow">→</span>
-          <div class="dna-flow-step"><img src="/images/homepage-dna/flow-02-laso.webp" alt="Lá số Tử Vi theo cổ pháp"><span>Lá số</span></div>
-          <span class="dna-flow-arrow">→</span>
-          <div class="dna-flow-step"><img src="/images/homepage-dna/flow-03-doichieu.webp" alt="Đối chiếu với cuộc đời thực"><span>Đối chiếu</span></div>
-          <span class="dna-flow-arrow">→</span>
-          <div class="dna-flow-step"><img src="/images/homepage-dna/flow-04-thamdinh.webp" alt="Thẩm định độ phù hợp"><span>Thẩm định</span></div>
-          <span class="dna-flow-arrow">→</span>
-          <div class="dna-flow-step"><img src="/images/homepage-dna/flow-05-toiuu.webp" alt="Tối ưu mô hình luận giải"><span>Tối ưu</span></div>
-          <span class="dna-flow-arrow">→</span>
-          <div class="dna-flow-step"><img src="/images/homepage-dna/flow-06-diengiai.webp" alt="Diễn giải bản luận giải hoàn chỉnh"><span>Diễn giải</span></div>
-        </div>
-        <div class="dna-process-foot">
-          <ul class="dna-process-list">
-            <li>Dữ liệu thật</li>
-            <li>Con người thật</li>
-            <li>Giá trị thật</li>
-          </ul>
-          <a class="dna-cta" href="/phuong-phap">Xem cách hệ thống hoạt động →</a>
-          <span class="dna-process-tagline">Khoa học × Cổ học × Thực tiễn</span>
-        </div>
-      </div>
-    </div>
+    <p class="ask-tools">Hoặc mở thẳng:<a href="/app-luan-giai.html">Lá số tử vi</a><a href="/app-bat-tu.html">Bát Tự</a><a href="/app-xem-tuoi.html">Xem tuổi vợ chồng</a><a href="/app-ngay-tot.html">Ngày tốt</a><a href="/cong-cu">Tất cả công cụ</a></p>
   </div>
 </section>
 
@@ -510,6 +323,33 @@ button { font: inherit; cursor: pointer; }
   </div>
 </section>
 
+<!-- ═══════════════ HỘI ĐỒNG 15 THẦY ═══════════════ -->
+<!-- Tên + môn chép từ `master_profiles` (display_name, discipline, sort_order)
+     để trang tĩnh có sẵn chữ cho SEO. Đổi tên/môn một thầy thì sửa cả ở đây. -->
+<section class="council-sec">
+  <div class="wrap">
+    <div class="sec-head"><span class="ic" data-icon="users"></span><h2>Hội đồng 15 thầy</h2><a class="more" href="/app/thay">Xem các thầy →</a></div>
+    <p class="council-sub">Mỗi thầy phụ trách một môn và đứng tên các công cụ của môn đó. Bạn hỏi chuyện gì, thầy phụ trách chuyện đó trả lời.</p>
+    <div class="council-grid">
+      <a href="/app/thay/co-nguyet"><img src="/authors/co-nguyet.jpg" alt="Thầy Cổ Nguyệt" width="72" height="72" loading="lazy"><b>Cổ Nguyệt</b><span>Tử Vi gốc &amp; Luận giải</span></a>
+      <a href="/app/thay/tu-nguyen"><img src="/authors/tu-nguyen.jpg" alt="Thầy Tử Nguyên" width="72" height="72" loading="lazy"><b>Tử Nguyên</b><span>Đại vận &amp; Chu trình cuộc đời</span></a>
+      <a href="/app/thay/nhat-nguyen"><img src="/authors/nhat-nguyen.jpg" alt="Thầy Nhật Nguyên" width="72" height="72" loading="lazy"><b>Nhật Nguyên</b><span>Vận ngắn hạn &amp; Chọn ngày</span></a>
+      <a href="/app/thay/dau-nam"><img src="/authors/dau-nam.jpg" alt="Thầy Đẩu Nam" width="72" height="72" loading="lazy"><b>Đẩu Nam</b><span>Tình duyên &amp; Hôn nhân</span></a>
+      <a href="/app/thay/ngoc-tinh"><img src="/authors/ngoc-tinh.jpg" alt="Thầy Ngọc Tinh" width="72" height="72" loading="lazy"><b>Ngọc Tinh</b><span>Tương hợp &amp; Duyên nợ</span></a>
+      <a href="/app/thay/dieu-khong"><img src="/authors/dieu-khong.jpg" alt="Thầy Diệu Không" width="72" height="72" loading="lazy"><b>Diệu Không</b><span>Sự nghiệp &amp; Tiền bạc</span></a>
+      <a href="/app/thay/tam-kinh"><img src="/authors/tam-kinh.jpg" alt="Thầy Tâm Kính" width="72" height="72" loading="lazy"><b>Tâm Kính</b><span>Bát Tự &amp; Kỳ Môn</span></a>
+      <a href="/app/thay/huyen-khong"><img src="/authors/huyen-khong.jpg" alt="Thầy Huyền Không" width="72" height="72" loading="lazy"><b>Huyền Không</b><span>Phong Thủy</span></a>
+      <a href="/app/thay/bac-minh"><img src="/authors/bac-minh.jpg" alt="Thầy Bắc Minh" width="72" height="72" loading="lazy"><b>Bắc Minh</b><span>Xem Tướng</span></a>
+      <a href="/app/thay/linh-son"><img src="/authors/linh-son.jpg" alt="Thầy Linh Sơn" width="72" height="72" loading="lazy"><b>Linh Sơn</b><span>Sự nghiệp cạnh tranh &amp; Nhân mạch</span></a>
+      <a href="/app/thay/thien-an"><img src="/authors/thien-an.jpg" alt="Thầy Thiên Ẩn" width="72" height="72" loading="lazy"><b>Thiên Ẩn</b><span>Đặt Tên &amp; Dạy Con</span></a>
+      <a href="/app/thay/linh-co"><img src="/authors/linh-co.jpg" alt="Thầy Linh Cơ" width="72" height="72" loading="lazy"><b>Linh Cơ</b><span>Kinh Dịch &amp; Mai Hoa</span></a>
+      <a href="/app/thay/thanh-hu"><img src="/authors/thanh-hu.jpg" alt="Thầy Thanh Hư" width="72" height="72" loading="lazy"><b>Thanh Hư</b><span>Tarot &amp; Thần Số</span></a>
+      <a href="/app/thay/thai-hu"><img src="/authors/thai-hu.jpg" alt="Thầy Thái Hư" width="72" height="72" loading="lazy"><b>Thái Hư</b><span>Hỏi nhanh, phản biện</span></a>
+      <a href="/app/thay/tinh-quang"><img src="/authors/tinh-quang.jpg" alt="Thầy Tinh Quang" width="72" height="72" loading="lazy"><b>Tinh Quang</b><span>Chiêm tinh Tây</span></a>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════ KHÁCH HÀNG NÓI GÌ ═══════════════ -->
 <div id="home-rv-host"></div>
 
@@ -519,7 +359,6 @@ button { font: inherit; cursor: pointer; }
     <div class="sec-head"><span class="ic" data-icon="leaf"></span><h2>Khám phá thêm</h2></div>
     <div class="explore-grid">
       <a class="explore-card" href="/menh-kho.html">
-        <img src="/mascot/library-v2-sm.webp" alt="Minh Bảo ngồi đọc sách giữa các giá sách cổ" loading="lazy">
         <div class="explore-body">
           <h3>Thư viện 100.000+ lá số</h3>
           <p>Lá số tính sẵn theo ngày sinh, đầy đủ cho các năm 1960–2026.</p>
@@ -527,7 +366,6 @@ button { font: inherit; cursor: pointer; }
         </div>
       </a>
       <a class="explore-card" href="/van-dap">
-        <img src="/mascot/articles-v2-sm.webp" alt="Minh Bảo ngồi viết dưới gốc cây" loading="lazy">
         <div class="explore-body">
           <h3>Bài viết &amp; Kiến thức</h3>
           <p>Học để hiểu mình, hiểu người, hiểu đời.</p>
@@ -535,7 +373,6 @@ button { font: inherit; cursor: pointer; }
         </div>
       </a>
       <a class="explore-card dark" href="/thu-vien/nguoi-cung-ngay-sinh">
-        <img src="/mascot/community-v2-sm.webp" alt="Minh Bảo cùng các bạn nhỏ quây quần bên đèn lồng dưới trăng" loading="lazy">
         <div class="explore-body">
           <h3>Dữ liệu lá số</h3>
           <p>272.783 người nổi tiếng — tra ai sinh cùng ngày với bạn, theo dương lịch hoặc âm lịch.</p>
@@ -550,7 +387,7 @@ button { font: inherit; cursor: pointer; }
 <div class="wrap">
   <div class="footer-quote-sec">
     <p>"Tử vi là ngọn đèn nhỏ, soi đường cho những người biết lắng nghe."</p>
-    <p><b>— Minh Bảo</b></p>
+    <p><b>— Hội đồng Minh Bảo</b></p>
   </div>
   <div class="stats-row">
     <div class="stat-tile"><div class="stat-ic t-gold"><span class="ic" data-icon="file-text"></span></div><div><div class="stat-v">518.400+</div><div class="stat-k">Lá số đã đối chiếu</div></div></div>
@@ -585,187 +422,43 @@ button { font: inherit; cursor: pointer; }
   <a class="bn-item" href="/app/ho-so"><span class="ic" data-icon="settings"></span>Hồ Sơ</a>
 </nav>
 
-<script src="/nav.js?v=42"></script>
+<script src="/nav.js?v=43"></script>
 <script>window.TestimonialsNoAutoRun = true;</script>
 <script src="/testimonials.js?v=1"></script>
 <script>
 (function () {
-  // ── Công cụ nổi bật — slider 5 banner, mỗi banner một tool ──────────
+  // ── Hỏi thầy: chọn thầy theo chủ đề rồi mở rail của thầy đó ─────────
+  // /api/thay-hoi chậm/hỏng thì vẫn đi, giao cho thầy Thái Hư — khách đã
+  // bấm gửi thì không được kẹt lại ở trang chủ.
   (function () {
-    var track = document.getElementById('ftb-track');
-    var dotsEl = document.getElementById('ftb-dots');
-    var prevBtn = document.getElementById('ftb-prev');
-    var nextBtn = document.getElementById('ftb-next');
-    if (!track) return;
-
-    var BANNERS = [
-      {
-        badge: 'Luận Giải Tử Vi',
-        title: 'Tiền bạc, tình duyên, sự nghiệp — lá số nói gì?',
-        sub: 'Luận giải trọn 13 phần theo đúng lá số của bạn — tổng quan và luận riêng từng cung, không phải bài viết chung chung ai đọc cũng thấy đúng.',
-        feats: [
-          ['wallet', 'Tài Bạch — tiền bạc năm nay', 'Thời điểm nên giữ, nên chi'],
-          ['heart', 'Phu Thê — đường tình duyên', 'Hôn nhân, người thương hợp mình'],
-          ['briefcase', 'Quan Lộc — sự nghiệp đang ở đâu', 'Nên tiến hay nên giữ vững'],
-        ],
-        cta: 'Xem lá số của bạn →',
-        href: '/app-luan-giai.html',
-        img: '/mascot/featured-laso.webp',
-        alt: 'Thư cầm quyển luận giải Tử Vi khoe với bạn bè ở quán cà phê vỉa hè Sài Gòn, không khí vui vẻ',
-      },
-      {
-        badge: 'Chu Trình Cuộc Đời',
-        title: '9 đại vận cuộc đời — chặng nào khó, chặng nào thuận?',
-        sub: '9 đại vận trọn đời và tiểu vận năm nay, theo điểm số cổ pháp — gợi ý chặng nào nên giữ sức, chặng nào thuận lợi hơn.',
-        feats: [
-          ['hourglass', 'Chặng nào khó, chặng nào thuận lợi hơn', 'Soi trọn 9 đại vận cuộc đời'],
-          ['bar-chart-3', 'Điểm số từng chặng', 'Thiên thời – địa lợi – nhân hòa'],
-          ['calendar-days', 'Tiểu vận năm nay', 'Việc nên làm ngay lúc này'],
-        ],
-        cta: 'Xem chu trình của bạn →',
-        href: '/app-chu-trinh-cuoc-doi.html',
-        img: '/mascot/featured-chu-trinh.webp',
-        alt: 'Trí cầm quyển luận giải Chu Trình Cuộc Đời, đồng nghiệp xúm quanh bàn làm việc ở văn phòng cười nói vui vẻ',
-      },
-      {
-        badge: 'Tử Bình Bát Tự',
-        title: 'Ngũ hành trong bạn — đang thiếu gì, thừa gì?',
-        sub: 'Lập tứ trụ năm – tháng – ngày – giờ, luận theo sinh khắc ngũ hành — nền tảng cổ pháp lâu đời hơn cả Tử Vi.',
-        feats: [
-          ['hash', 'Biết mệnh đang thiếu hành gì', 'Từ đúng ngày – tháng – giờ sinh'],
-          ['scale', 'Sức khỏe, tính cách theo ngũ hành', 'Cân bằng ra sao, nên bổ khuyết gì'],
-          ['file-text', 'Luận giải chuyên sâu', 'Không rút gọn như bản miễn phí'],
-        ],
-        cta: 'Lập tứ trụ của bạn →',
-        href: '/app-bat-tu.html',
-        img: '/mascot/featured-tu-binh.webp',
-        alt: 'Thư ăn tối cùng bạn thân trong nhà hàng, quyển luận giải Tứ Trụ Bát Tự đặt trên bàn, trò chuyện nhẹ nhàng',
-      },
-      {
-        badge: 'Chân Dung Vợ Chồng',
-        title: 'Người bạn đời tương lai có thể trông như thế nào?',
-        sub: 'Từ cung Phu Thê trong lá số, phác hoạ hình dung về người bạn đời tương lai — kèm mô tả tính cách, phong thái.',
-        feats: [
-          ['heart', 'Chân dung từ cung Phu Thê', 'Dựa trên ngày, giờ sinh của bạn'],
-          ['image', 'Ngoại hình và thần thái cụ thể', 'Không mơ hồ, không chung chung'],
-          ['users', 'Tính cách và mức độ hợp nhau', 'Gợi ý vì sao hai người có thể hợp'],
-        ],
-        cta: 'Xem chân dung của bạn →',
-        href: '/app-chan-dung-vo-chong.html',
-        img: '/mascot/featured-vo-chong.webp',
-        alt: 'Trí và Thư ăn kem bên Hồ Gươm Hà Nội, Thư chỉ vào quyển luận giải giải thích, Trí gật gù đồng tình',
-      },
-      {
-        badge: 'Dạy Con Theo Lá Số',
-        title: 'Con tiếp thu kiểu gì — cách dạy nào thực sự hiệu quả?',
-        sub: 'Nhập lá số của con — gợi ý cách con tiếp thu, cách ra bài để con chịu làm, và kiểu kỷ luật dễ phản tác dụng.',
-        feats: [
-          ['baby', 'Cách con tiếp thu nhanh nhất', 'Học kiểu gì thì vào, kiểu gì thì trôi'],
-          ['lightbulb', 'Kỷ luật nào dễ phản tác dụng', 'Trước khi mọi thứ đi quá xa'],
-          ['heart-handshake', 'Điểm hay va chạm với con', 'Không phải vì con hư'],
-        ],
-        cta: 'Xem lá số của con →',
-        href: '/app-day-con.html',
-        img: '/mascot/featured-day-con.webp',
-        alt: 'Trí chỉ quyển luận giải Dạy Con Theo Lá Số cho Thư xem trên sofa nhà ở Đà Lạt, hai con nhỏ chơi đồ chơi dưới sàn',
-      },
-    ];
-
-    // Avatar khách hàng: 6 ảnh chân dung dựng sẵn (public/mascot/avatars/),
-    // KHÔNG phải ảnh khách thật — chỉ để dải "đông người dùng" nhìn có sức
-    // sống hơn khối tròn màu trơn cũ. Không gắn tên/trích dẫn vào các avatar
-    // này (khác hẳn phần "Khách hàng nói gì" thật ở #rv-section) nên không
-    // giả làm bằng chứng của một người cụ thể.
-    var AVATAR_IMGS = [
-      '/mascot/avatars/nu-tre.webp',
-      '/mascot/avatars/nam-tre.webp',
-      '/mascot/avatars/nu-trung-nien.webp',
-      '/mascot/avatars/nam-trung-nien.webp',
-      '/mascot/avatars/nu-lon-tuoi.webp',
-      '/mascot/avatars/nam-lon-tuoi.webp',
-    ];
-    function pickAvatars(n) {
-      var pool = AVATAR_IMGS.slice();
-      for (var i = pool.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+    var form = document.getElementById('askForm');
+    var ta = document.getElementById('askInput');
+    var btn = document.getElementById('askSend');
+    if (!form || !ta) return;
+    ta.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+        e.preventDefault();
+        if (form.requestSubmit) form.requestSubmit(); else form.dispatchEvent(new Event('submit', { cancelable: true }));
       }
-      return pool.slice(0, n);
-    }
-
-    track.innerHTML = BANNERS.map(function (b, i) {
-      var feats = b.feats
-        .map(function (f) {
-          return (
-            '<div class="ftb-feat"><div class="ftb-feat-ic"><span class="ic" data-icon="' + f[0] + '"></span></div>' +
-            '<b>' + f[1] + '</b><span>' + f[2] + '</span></div>'
-          );
-        })
-        .join('');
-      var avatars = pickAvatars(4).map(function (src) { return '<img src="' + src + '" alt="" loading="lazy">'; }).join('');
-      // Slide 0 luôn hiện ngay từ đầu (và là phần tử LCP của trang) — KHÔNG
-      // được lazy: lazy trên ảnh luôn-hiển-thị là nguyên nhân đã xác minh của
-      // CLS ~0,62 trên section.tools-sec (ảnh "bung" ra sau khi layout đã ổn
-      // định, đẩy mọi thứ bên dưới xuống). Slide 1-4 ngoài khung nhìn ban đầu
-      // nên vẫn lazy như cũ.
-      var artLoading = i === 0 ? 'eager' : 'lazy';
-      var artFetchPriority = i === 0 ? ' fetchpriority="high"' : '';
-      return (
-        '<div class="ftb-slide"><div class="ftb-card">' +
-        '<div class="ftb-text">' +
-        '<div class="ftb-badge"><span class="ic" data-icon="star"></span>' + b.badge + '</div>' +
-        '<h3 class="ftb-title serif">' + b.title + '</h3>' +
-        '<p class="ftb-sub">' + b.sub + '</p>' +
-        '<div class="ftb-feats">' + feats + '</div>' +
-        '<a class="ftb-cta" href="' + b.href + '">' + b.cta + '</a>' +
-        '<div class="ftb-proof"><div class="ftb-avatars">' + avatars + '</div>' +
-        '<a class="ftb-proof-txt" href="#rv-section">Xem đánh giá thật của người dùng ↓</a></div>' +
-        '</div>' +
-        '<div class="ftb-art"><img src="' + b.img + '" alt="' + b.alt + '" loading="' + artLoading + '"' + artFetchPriority + '></div>' +
-        '</div></div>'
-      );
-    }).join('');
-    if (window.mountIcons) window.mountIcons(track);
-
-    var total = BANNERS.length;
-    var idx = 0;
-    var autoT = null;
-
-    dotsEl.innerHTML = '';
-    for (var d = 0; d < total; d++) {
-      var dot = document.createElement('button');
-      dot.className = 'ftb-dot' + (d === 0 ? ' active' : '');
-      dot.setAttribute('aria-label', 'Banner ' + (d + 1));
-      (function (di) { dot.addEventListener('click', function () { stopAuto(); goTo(di); startAuto(); }); })(d);
-      dotsEl.appendChild(dot);
-    }
-
-    function updateDots() {
-      var dots = dotsEl.querySelectorAll('.ftb-dot');
-      dots.forEach(function (dt, i) { dt.classList.toggle('active', i === idx); });
-    }
-
-    function goTo(newIdx) {
-      idx = (newIdx + total) % total;
-      track.style.transform = 'translateX(-' + idx * 100 + '%)';
-      updateDots();
-    }
-
-    function startAuto() { stopAuto(); autoT = setInterval(function () { goTo(idx + 1); }, 6000); }
-    function stopAuto() { if (autoT) { clearInterval(autoT); autoT = null; } }
-
-    prevBtn.addEventListener('click', function () { stopAuto(); goTo(idx - 1); startAuto(); });
-    nextBtn.addEventListener('click', function () { stopAuto(); goTo(idx + 1); startAuto(); });
-
-    var touchX = 0;
-    track.addEventListener('touchstart', function (e) { touchX = e.touches[0].clientX; stopAuto(); }, { passive: true });
-    track.addEventListener('touchend', function (e) {
-      var diff = touchX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) goTo(diff > 0 ? idx + 1 : idx - 1);
-      startAuto();
-    }, { passive: true });
-
-    startAuto();
+    });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var q = ta.value.trim().slice(0, 500);
+      if (!q) { ta.focus(); return; }
+      if (btn) btn.disabled = true;
+      var gone = false;
+      function go(thay) {
+        if (gone) return;
+        gone = true;
+        try { if (window.Track) window.Track.event('cta_click', { tool_id: 'app-home', meta: { has_q: true, from: 'home_ask', thay: thay } }); } catch (err) { /* đo đếm không được chặn đường đi */ }
+        location.href = '/app?q=' + encodeURIComponent(q) + '&thay=' + encodeURIComponent(thay) + '#chat';
+      }
+      setTimeout(function () { go('thai-hu'); }, 1500);
+      fetch('/api/thay-hoi?q=' + encodeURIComponent(q), { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) { go((j && j.thay) || 'thai-hu'); })
+        .catch(function () { go('thai-hu'); });
+    });
   })();
 
   // ── Khách hàng nói gì — tái dùng ĐÚNG data + logic slider của

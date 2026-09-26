@@ -58,8 +58,7 @@
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
       <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
-        <img class="intro-avatar" src="/tool-avatars/than-so-hoc.webp" alt="" style="display:none" onerror="this.remove()">
-        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/than-so-hoc-01.webp" alt="" onerror="this.remove()">
+        <img class="intro-avatar" src="/tool-avatars/than-so-hoc.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Thần số học</div>
@@ -146,9 +145,9 @@ window.SHELL_INTRO={key:'than-so-hoc'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=10"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=42" data-icons-only></script>
-<script src="/shell.js?v=104"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=4"></script>
+  <script src="/nav.js?v=43" data-icons-only></script>
+<script src="/shell.js?v=106"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=44"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/than-so-hoc.js với trang standalone.
 function calculate(){
@@ -193,7 +192,7 @@ function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,
 function appendHighlightCard(r){
   var chat=document.getElementById('chat');
   if(!chat) return;
-  var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; })();
+  var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/authors/thai-hu.jpg'; })();
   var nums=[['Đường Đời',r.data.soDuongDoi],['Định Mệnh',r.data.soDinhMenh],['Linh Hồn',r.data.soLinhHon],['Sứ Mệnh',r.data.soSuMenh]];
   var rowHtml=nums.map(function(n){ return '<div class="chat-hl-n"><b>'+esc(n[1])+'</b><span>'+esc(n[0])+'</span></div>'; }).join('');
   var el=document.createElement('div'); el.className='msg a';

@@ -250,17 +250,7 @@
            một bản duy nhất — thêm bản chép trong SHELL_INTRO là để nó trôi. -->
       <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
-        <!-- `check-intro-card.mjs` bắt buộc trang có box tĩnh phải giữ đúng
-             <img class="intro-avatar"> khớp SHELL_INTRO.key (cơ chế dùng
-             CHUNG với 34 trang khác chưa gắn ảnh nhóm) — ẩn đi vì `.intro-photo`
-             bên dưới đã thay thế vai trò hiển thị, không xoá hẳn khỏi HTML. -->
-        <img class="intro-avatar" src="/tool-avatars/laso.webp" alt="" style="display:none" onerror="this.remove()">
-        <!-- Banner thủy mặc nhóm "Tử Vi Đẩu Số" (scripts/gen-hero-banners.mjs) LÀ
-             nền của cả box — không phải thumbnail nhỏ cạnh chữ (Henry 2026-09-14,
-             vòng 5: "cái hình chính là cái banner luôn, ghi chữ đè lên bên trái").
-             `::after` bên dưới (shell.css) phủ lớp gradient để chữ đọc được dù
-             ảnh nhóm nào cũng vậy — không cần biết trước tông màu ảnh. -->
-        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.webp" alt="" onerror="this.remove()">
+        <img class="intro-avatar" src="/tool-avatars/laso.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Luận giải Tử Vi</div>
@@ -453,9 +443,9 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
-  <script src="/nav.js?v=42" data-icons-only></script>
-<script src="/shell.js?v=104"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=4"></script>
+  <script src="/nav.js?v=43" data-icons-only></script>
+<script src="/shell.js?v=106"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=44"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script src="/tools-shared/i18n.js?v=1"></script>
@@ -481,7 +471,7 @@ NamLuanSelect.mount('inpNamxem');
 // thanh toán đặt TRƯỚC bước tính" (CLAUDE.md) vẫn giữ nguyên — nó nói về nơi
 // ĐẶT gate thanh toán so với việc TRỪ tiền, không bắt phải hiện giá trước một
 // bước không hề trừ tiền.
-function chatAva(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; }
+function chatAva(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/authors/thai-hu.jpg'; }
 function _tpwResuming(){ try{ return new URL(location.href).searchParams.get('tpwResume')==='1'; }catch(e){ return false; } }
 function startIntake(){
   // Quay về sau nạp Lượng: LG_RESUME_KEY IIFE bên dưới tự điền form + gọi
@@ -656,7 +646,7 @@ function appendHookHighlightCard(){
   if(!chat||!host) return;
   var boxes=Array.prototype.slice.call(host.querySelectorAll('.hkl-nb-box'));
   if(!boxes.length) return;
-  var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; })();
+  var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/authors/thai-hu.jpg'; })();
   var rows=boxes.map(function(b){
     var t=b.querySelector('.hkl-nb-box-head b'), h=b.querySelector('.hkl-nb-hook');
     return '<div class="chat-hl-box"><b>'+esc(t?t.textContent:'')+'</b><span>'+esc(h?h.textContent:'')+'</span></div>';

@@ -13,7 +13,10 @@
    ⚠️ Vài tool_id KHÔNG trùng tên file (đặt tên icon từ Sprint đầu trước khi
    thống nhất dùng thẳng tool_id) — đừng "sửa cho khớp", 3 dòng lệch này là
    lịch sử, không phải lỗi: laso→luan-giai, tu-binh→tu-binh-bat-tu,
-   xem-lam-an→hop-tac-lam-an. */
+   xem-lam-an→hop-tac-lam-an.
+
+   `public/tool-avatars/<key>.webp` là BẢN SAO của đúng các file này (2026-09-26,
+   thay bộ thầy/cô chibi) — sửa/thêm một icon thì chép sang đó luôn. */
 (function (root) {
   var MAP = {
     // 16 icon đợt 1 (2026-09-17)

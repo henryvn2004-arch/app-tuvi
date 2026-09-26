@@ -549,7 +549,7 @@
     const av = document.createElement('div');
     av.className = 'tvc-av';
     if (role === 'bot') {
-      av.innerHTML = '<img src="/thay-tuvi.webp" style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:block;">';
+      av.innerHTML = '<img src="/authors/thai-hu.jpg" style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:block;">';
       av.style.background = 'transparent';
     } else {
       av.textContent = 'Bạn';

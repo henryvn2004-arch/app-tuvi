@@ -75,7 +75,7 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
 
   const thayName = (row.thay && row.thay.name) || 'Thầy Luận Đường';
   const thayId = (row.thay && row.thay.id) || '';
-  const ava = thayId ? `/authors/${esc(thayId)}.jpg` : '/thay-tuvi.webp';
+  const ava = thayId ? `/authors/${esc(thayId)}.jpg` : '/authors/thai-hu.jpg';
   const title = esc(row.title || 'Luận Đường');
   const url = `${SITE}/luan-duong/${esc(id)}`;
   // teaser mô tả = tin đầu tiên của thầy (cắt gọn) → OG unfurl hấp dẫn.
