@@ -223,6 +223,13 @@ window.TuviForm = (() => {
 .tvf-pretty .tvf-foreign-label { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); cursor:pointer; }
 .tvf-pretty .tvf-foreign-label input { width:16px; height:16px; cursor:pointer; margin:0; }
 .tvf-pretty .tvf-foreign-hint { font-size:11.5px; color:var(--text-lt); margin:2px 0 0 24px; }
+/* Sổ lá số trong chat (renderChat) — bong bóng "Con hỏi cho ai?", mỗi mục
+   một lá số đã lưu + một chip "Người mới" luôn đứng cuối. */
+.tvf-saved-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.tvf-saved-chip { display:flex; flex-direction:column; align-items:flex-start; gap:2px; border:1px solid var(--line-2); background:var(--white); border-radius:10px; padding:7px 12px; font-family:inherit; font-size:13px; color:var(--text); cursor:pointer; text-align:left; }
+.tvf-saved-chip:hover { border-color:var(--gold-soft); color:var(--gold-soft); }
+.tvf-saved-chip span { font-size:11px; color:var(--text-lt); }
+.tvf-saved-chip.tvf-saved-new { border-style:dashed; color:var(--text-lt); }
 `;
     document.head.appendChild(style);
   }
@@ -633,95 +640,177 @@ window.TuviForm = (() => {
       el.innerHTML = '<img class="msg-ava" src="' + av() + '" alt="">' + '<div class="msg-body">' + html + '</div>';
     };
 
-    const s1 = bubble('chatStep-' + cp + '-1', '<p>' + q1 + '</p>' +
-      '<div class="frow">' +
-        (showName ? `<div class="fg" style="flex:1.6;min-width:150px"><label>Họ và tên</label><input type="text" id="${pid('hoten', cp)}" placeholder="Nguyễn Văn A" autocomplete="off"></div>` : '') +
-        (showGender ? `<div class="fg" style="width:90px"><label>Giới tính</label><select id="${pid('gioitinh', cp)}"><option value="nam"${gioitinh === 'nam' ? ' selected' : ''}>Nam</option><option value="nu"${gioitinh === 'nu' ? ' selected' : ''}>Nữ</option></select></div>` : '') +
-        (showNamXem ? `<div class="fg" style="width:90px"><label>Năm xem vận</label><input type="number" id="${pid('namXem', cp)}" value="${namXemDefault}" min="1900" max="2100"></div>` : '') +
-      '</div>' +
-      `<button class="btn-go" type="button" id="${cp}-next1" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button>` +
-      `<div class="err tvf-err" id="${cp}-err1" role="alert"></div>`);
-    const focusFirst = () => { const f = document.getElementById(pid('hoten', cp)) || document.getElementById(pid('gioitinh', cp)); if (f) f.focus(); };
-    focusFirst();
-    document.getElementById(cp + '-next1').addEventListener('click', function () {
-      const hoten = showName ? (document.getElementById(pid('hoten', cp))?.value || '').trim() : '';
-      const gioitinhV = showGender ? (document.getElementById(pid('gioitinh', cp))?.value || 'nam') : gioitinh;
-      const namXemV = showNamXem ? (parseInt(document.getElementById(pid('namXem', cp))?.value) || namXemDefault) : undefined;
-      const err1 = document.getElementById(cp + '-err1');
-      if (requireName && !hoten) { err1.textContent = 'Vui lòng nhập họ tên.'; return; }
-      err1.textContent = '';
-      const parts = [];
-      if (hoten) parts.push('<b>' + esc(hoten) + '</b>');
-      if (showGender) parts.push(gioitinhV === 'nam' ? 'Nam' : 'Nữ');
-      if (namXemV) parts.push('xem vận năm ' + namXemV);
-      collapse(s1, '<p>' + parts.join(' · ') + ' ✓</p>');
-      step2(hoten, gioitinhV, namXemV);
-    });
+    // ── Sổ lá số trong chat (Henry 2026-09-26) ──────────────────────────────
+    // Đã đăng nhập + có lá số lưu sẵn (`window.UserCharts`, cùng nguồn với
+    // thanh "Sổ lá số" trên form tĩnh — xem user-charts.js) → hỏi "cho ai"
+    // TRƯỚC 3 bước gõ tay, bấm 1 cái là xong thay vì gõ lại từ đầu. Không có
+    // sổ/chưa đăng nhập/`UserCharts` chưa nạp kịp (best-effort, giống mọi module
+    // phụ khác trong file này) → rơi thẳng về flow gõ tay cũ, không chờ, không báo.
+    function birthShort(b) {
+      if (!b) return '';
+      const g = b.gioitinh === 'nu' ? 'Nữ' : 'Nam';
+      return g + ' · ' + (b.ngay || '?') + '/' + (b.thang || '?') + '/' + (b.nam || '?');
+    }
+    function finishWithBirth(birth) {
+      if (showNamXem) { askNamXem(birth); return; }
+      setData(birth, prefix);
+      if (onDone) onDone(Object.assign({}, birth));
+    }
+    function askNamXem(birth) {
+      const s = bubble('chatStep-' + cp + '-namxem', '<p>Con muốn xem vận năm nào?</p>' +
+        '<div class="frow"><div class="fg" style="width:90px"><label>Năm xem vận</label>' +
+        `<input type="number" id="${cp}-namxem-only" value="${namXemDefault}" min="1900" max="2100"></div></div>` +
+        `<button class="btn-go" type="button" id="${cp}-namxem-next" style="width:auto;padding:9px 16px;font-size:13px">${submitLabel}</button>`);
+      document.getElementById(cp + '-namxem-next').addEventListener('click', () => {
+        const namXemV = parseInt(document.getElementById(cp + '-namxem-only').value) || namXemDefault;
+        collapse(s, '<p>Xem vận năm <b>' + namXemV + '</b> ✓</p>');
+        const birthWithYear = Object.assign({}, birth, { namXem: namXemV });
+        setData(birthWithYear, prefix);
+        if (onDone) onDone(birthWithYear);
+      });
+    }
+    function renderSavedPicker(items) {
+      const el = bubble('chatStep-' + cp + '-saved', '<p>Con hỏi cho ai?</p>' +
+        '<div class="tvf-saved-chips">' +
+        items.map((it) => {
+          const name = esc(it.label || (it.birth && it.birth.hoten) || 'Không tên');
+          const sub = esc(birthShort(it.birth));
+          return `<button type="button" class="tvf-saved-chip" data-id="${esc(it.id)}">${name}<span>${sub}</span></button>`;
+        }).join('') +
+        '<button type="button" class="tvf-saved-chip tvf-saved-new" data-id="">+ Người mới</button>' +
+        '</div>');
+      el.querySelector('.tvf-saved-chips').addEventListener('click', (e) => {
+        const btn = e.target.closest('.tvf-saved-chip');
+        if (!btn) return;
+        const id = btn.getAttribute('data-id');
+        if (!id) { collapse(el, '<p>Người mới nhé.</p>'); startManual(); return; }
+        const it = items.find((x) => String(x.id) === id);
+        if (!it || !it.birth) return;
+        const name = it.label || it.birth.hoten || '';
+        collapse(el, '<p>Hỏi cho <b>' + esc(name) + '</b> ✓</p>');
+        try { if (window.Shell && window.Shell.rememberBirth) window.Shell.rememberBirth(it.birth); } catch (e2) { /* ignore */ }
+        finishWithBirth(it.birth);
+      });
+    }
+    function offerFrom(uc) {
+      uc.list().then((items) => {
+        if (!items || !items.length) { startManual(); return; }
+        renderSavedPicker(items);
+      }).catch(() => { startManual(); });
+    }
+    function tryOfferSaved() {
+      if (window.UserCharts && typeof window.UserCharts.list === 'function') { offerFrom(window.UserCharts); return; }
+      // `user-charts.js` được `shell.js` nạp LƯỜI (async) ngay lúc boot — nếu
+      // renderChat() (script CUỐI trang) chạy trước khi tải xong thì đợi đúng
+      // một lượt 'load' của thẻ script đó (id `tvmb-charts-js`, xem
+      // ensureUserChartsJs() trong shell.js), tối đa 1,5s. Không có thẻ (chưa
+      // đăng nhập, `ensureUserChartsJs()` thoát sớm) → rơi thẳng về flow gõ
+      // tay, không treo chờ vô ích.
+      const tag = document.getElementById('tvmb-charts-js');
+      if (!tag) { startManual(); return; }
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        if (window.UserCharts && typeof window.UserCharts.list === 'function') offerFrom(window.UserCharts);
+        else startManual();
+      };
+      tag.addEventListener('load', finish, { once: true });
+      setTimeout(finish, 1500);
+    }
 
-    function step2(hoten, gioitinhV, namXemV) {
-      const s2 = bubble('chatStep-' + cp + '-2', '<p>' + q2 + '</p>' +
+    function startManual() {
+      const s1 = bubble('chatStep-' + cp + '-1', '<p>' + q1 + '</p>' +
         '<div class="frow">' +
-          `<div class="fg" style="width:74px"><label>Ngày</label><select id="${pid('ngay', cp)}">${opts.ngayOpts}</select></div>` +
-          `<div class="fg" style="width:82px"><label>Tháng</label><select id="${pid('thang', cp)}">${opts.thangOpts}</select></div>` +
-          `<div class="fg" style="width:90px"><label>Năm</label><select id="${pid('nam', cp)}">${opts.namOpts}</select></div>` +
+          (showName ? `<div class="fg" style="flex:1.6;min-width:150px"><label>Họ và tên</label><input type="text" id="${pid('hoten', cp)}" placeholder="Nguyễn Văn A" autocomplete="off"></div>` : '') +
+          (showGender ? `<div class="fg" style="width:90px"><label>Giới tính</label><select id="${pid('gioitinh', cp)}"><option value="nam"${gioitinh === 'nam' ? ' selected' : ''}>Nam</option><option value="nu"${gioitinh === 'nu' ? ' selected' : ''}>Nữ</option></select></div>` : '') +
+          (showNamXem ? `<div class="fg" style="width:90px"><label>Năm xem vận</label><input type="number" id="${pid('namXem', cp)}" value="${namXemDefault}" min="1900" max="2100"></div>` : '') +
         '</div>' +
-        `<button class="btn-go" type="button" id="${cp}-next2" style="width:auto;padding:9px 16px;font-size:13px">${skipHour ? submitLabel : 'Tiếp tục →'}</button>` +
-        `<div class="err tvf-err" id="${cp}-err2" role="alert"></div>`);
-      document.getElementById(cp + '-next2').addEventListener('click', function () {
-        const ngay = +document.getElementById(pid('ngay', cp)).value;
-        const thang = +document.getElementById(pid('thang', cp)).value;
-        const nam = +document.getElementById(pid('nam', cp)).value;
-        // Chặn NGAY ở bước này: trước đây ngày trống đi tiếp thành "0/0/1985 ✓"
-        // rồi trang gọi alert + khoá nút vĩnh viễn; còn 31/2 thì Date tự lăn
-        // sang 3/3 và lập lá số SAI không báo gì.
-        const err = document.getElementById(cp + '-err2');
-        if (!ngay || !thang || !nam) { err.textContent = 'Vui lòng chọn đủ ngày, tháng, năm sinh.'; return; }
-        if (new Date(nam, thang - 1, ngay).getDate() !== ngay) { err.textContent = 'Tháng ' + thang + '/' + nam + ' không có ngày ' + ngay + ' — vui lòng chọn lại.'; return; }
-        err.textContent = '';
-        collapse(s2, '<p>Ngày sinh: <b>' + ngay + '/' + thang + '/' + nam + '</b> ✓</p>');
-        if (skipHour) {
-          const data = { hoten, gioitinh: gioitinhV, ngay, thang, nam };
+        `<button class="btn-go" type="button" id="${cp}-next1" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button>` +
+        `<div class="err tvf-err" id="${cp}-err1" role="alert"></div>`);
+      const focusFirst = () => { const f = document.getElementById(pid('hoten', cp)) || document.getElementById(pid('gioitinh', cp)); if (f) f.focus(); };
+      focusFirst();
+      document.getElementById(cp + '-next1').addEventListener('click', function () {
+        const hoten = showName ? (document.getElementById(pid('hoten', cp))?.value || '').trim() : '';
+        const gioitinhV = showGender ? (document.getElementById(pid('gioitinh', cp))?.value || 'nam') : gioitinh;
+        const namXemV = showNamXem ? (parseInt(document.getElementById(pid('namXem', cp))?.value) || namXemDefault) : undefined;
+        const err1 = document.getElementById(cp + '-err1');
+        if (requireName && !hoten) { err1.textContent = 'Vui lòng nhập họ tên.'; return; }
+        err1.textContent = '';
+        const parts = [];
+        if (hoten) parts.push('<b>' + esc(hoten) + '</b>');
+        if (showGender) parts.push(gioitinhV === 'nam' ? 'Nam' : 'Nữ');
+        if (namXemV) parts.push('xem vận năm ' + namXemV);
+        collapse(s1, '<p>' + parts.join(' · ') + ' ✓</p>');
+        step2(hoten, gioitinhV, namXemV);
+      });
+
+      function step2(hoten, gioitinhV, namXemV) {
+        const s2 = bubble('chatStep-' + cp + '-2', '<p>' + q2 + '</p>' +
+          '<div class="frow">' +
+            `<div class="fg" style="width:74px"><label>Ngày</label><select id="${pid('ngay', cp)}">${opts.ngayOpts}</select></div>` +
+            `<div class="fg" style="width:82px"><label>Tháng</label><select id="${pid('thang', cp)}">${opts.thangOpts}</select></div>` +
+            `<div class="fg" style="width:90px"><label>Năm</label><select id="${pid('nam', cp)}">${opts.namOpts}</select></div>` +
+          '</div>' +
+          `<button class="btn-go" type="button" id="${cp}-next2" style="width:auto;padding:9px 16px;font-size:13px">${skipHour ? submitLabel : 'Tiếp tục →'}</button>` +
+          `<div class="err tvf-err" id="${cp}-err2" role="alert"></div>`);
+        document.getElementById(cp + '-next2').addEventListener('click', function () {
+          const ngay = +document.getElementById(pid('ngay', cp)).value;
+          const thang = +document.getElementById(pid('thang', cp)).value;
+          const nam = +document.getElementById(pid('nam', cp)).value;
+          // Chặn NGAY ở bước này: trước đây ngày trống đi tiếp thành "0/0/1985 ✓"
+          // rồi trang gọi alert + khoá nút vĩnh viễn; còn 31/2 thì Date tự lăn
+          // sang 3/3 và lập lá số SAI không báo gì.
+          const err = document.getElementById(cp + '-err2');
+          if (!ngay || !thang || !nam) { err.textContent = 'Vui lòng chọn đủ ngày, tháng, năm sinh.'; return; }
+          if (new Date(nam, thang - 1, ngay).getDate() !== ngay) { err.textContent = 'Tháng ' + thang + '/' + nam + ' không có ngày ' + ngay + ' — vui lòng chọn lại.'; return; }
+          err.textContent = '';
+          collapse(s2, '<p>Ngày sinh: <b>' + ngay + '/' + thang + '/' + nam + '</b> ✓</p>');
+          if (skipHour) {
+            const data = { hoten, gioitinh: gioitinhV, ngay, thang, nam };
+            if (namXemV !== undefined) data.namXem = namXemV;
+            setData(data, prefix);
+            if (onDone) onDone(data);
+            return;
+          }
+          step3(hoten, gioitinhV, namXemV, ngay, thang, nam);
+        });
+      }
+
+      function step3(hoten, gioitinhV, namXemV, ngay, thang, nam) {
+        const s3 = bubble('chatStep-' + cp + '-3', '<p>' + q3 + '</p>' +
+          '<div class="frow" style="margin-bottom:8px">' +
+            `<div class="fg" style="width:74px"><label>Giờ</label><select id="${pid('tvf-gio', cp)}">${opts.gioOpts}</select></div>` +
+            `<div class="fg" style="width:74px"><label>Phút</label><select id="${pid('tvf-phut', cp)}">${opts.phutOpts}</select></div>` +
+            `<div class="tvf-gio-am-wrap"><span class="tvf-gio-am" id="${pid('tvf-gio-am', cp)}">Giờ âm: Tý</span><span class="tvf-gio-vn" id="${pid('tvf-gio-vn', cp)}"></span></div>` +
+          '</div>' +
+          '<label style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-mid);cursor:pointer;margin-bottom:6px">' +
+            `<input type="checkbox" id="${pid('tvf-foreign', cp)}"> Sinh ở ngoài Việt Nam?` +
+          '</label>' +
+          `<div id="${pid('tvf-utc-wrap', cp)}" style="display:none;margin-bottom:8px"><select id="${pid('tvf-utc', cp)}">${opts.utcOpts}</select></div>` +
+          `<p style="font-size:11.5px;margin-bottom:8px"><a href="/app/gio-sinh" target="_blank" style="color:#1455A4;font-weight:600">Không nhớ giờ sinh chính xác? Xác định giờ sinh →</a></p>` +
+          `<button class="btn-go" type="button" id="${cp}-next3" style="width:auto;padding:9px 16px;font-size:13px">${submitLabel}</button>` +
+          `<div class="err" id="${cp}-err3"></div>`);
+        const upd = () => updateGioAmDisplay(cp);
+        document.getElementById(pid('tvf-gio', cp)).addEventListener('input', upd);
+        document.getElementById(pid('tvf-phut', cp)).addEventListener('input', upd);
+        document.getElementById(pid('tvf-utc', cp)).addEventListener('input', upd);
+        document.getElementById(pid('tvf-foreign', cp)).addEventListener('change', function () { toggleUtc(cp); });
+        _updaters[cp] = upd; upd();
+        document.getElementById(cp + '-next3').addEventListener('click', function () {
+          const hh = parseInt(document.getElementById(pid('tvf-gio', cp)).value) || 0;
+          const mm = parseInt(document.getElementById(pid('tvf-phut', cp)).value) || 0;
+          const utcOff = parseInt(document.getElementById(pid('tvf-utc', cp))?.value ?? '420');
+          const vn = toVnHour(hh, mm, utcOff, ngay, thang, nam);
+          collapse(s3, '<p>Giờ sinh: <b>' + String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0') + '</b> ✓</p>');
+          const data = { hoten, gioitinh: gioitinhV, ngay, thang, nam, gioHour: vn.h, gioPhut: vn.m };
           if (namXemV !== undefined) data.namXem = namXemV;
           setData(data, prefix);
           if (onDone) onDone(data);
-          return;
-        }
-        step3(hoten, gioitinhV, namXemV, ngay, thang, nam);
-      });
+        });
+      }
     }
-
-    function step3(hoten, gioitinhV, namXemV, ngay, thang, nam) {
-      const s3 = bubble('chatStep-' + cp + '-3', '<p>' + q3 + '</p>' +
-        '<div class="frow" style="margin-bottom:8px">' +
-          `<div class="fg" style="width:74px"><label>Giờ</label><select id="${pid('tvf-gio', cp)}">${opts.gioOpts}</select></div>` +
-          `<div class="fg" style="width:74px"><label>Phút</label><select id="${pid('tvf-phut', cp)}">${opts.phutOpts}</select></div>` +
-          `<div class="tvf-gio-am-wrap"><span class="tvf-gio-am" id="${pid('tvf-gio-am', cp)}">Giờ âm: Tý</span><span class="tvf-gio-vn" id="${pid('tvf-gio-vn', cp)}"></span></div>` +
-        '</div>' +
-        '<label style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-mid);cursor:pointer;margin-bottom:6px">' +
-          `<input type="checkbox" id="${pid('tvf-foreign', cp)}"> Sinh ở ngoài Việt Nam?` +
-        '</label>' +
-        `<div id="${pid('tvf-utc-wrap', cp)}" style="display:none;margin-bottom:8px"><select id="${pid('tvf-utc', cp)}">${opts.utcOpts}</select></div>` +
-        `<p style="font-size:11.5px;margin-bottom:8px"><a href="/app/gio-sinh" target="_blank" style="color:#1455A4;font-weight:600">Không nhớ giờ sinh chính xác? Xác định giờ sinh →</a></p>` +
-        `<button class="btn-go" type="button" id="${cp}-next3" style="width:auto;padding:9px 16px;font-size:13px">${submitLabel}</button>` +
-        `<div class="err" id="${cp}-err3"></div>`);
-      const upd = () => updateGioAmDisplay(cp);
-      document.getElementById(pid('tvf-gio', cp)).addEventListener('input', upd);
-      document.getElementById(pid('tvf-phut', cp)).addEventListener('input', upd);
-      document.getElementById(pid('tvf-utc', cp)).addEventListener('input', upd);
-      document.getElementById(pid('tvf-foreign', cp)).addEventListener('change', function () { toggleUtc(cp); });
-      _updaters[cp] = upd; upd();
-      document.getElementById(cp + '-next3').addEventListener('click', function () {
-        const hh = parseInt(document.getElementById(pid('tvf-gio', cp)).value) || 0;
-        const mm = parseInt(document.getElementById(pid('tvf-phut', cp)).value) || 0;
-        const utcOff = parseInt(document.getElementById(pid('tvf-utc', cp))?.value ?? '420');
-        const vn = toVnHour(hh, mm, utcOff, ngay, thang, nam);
-        collapse(s3, '<p>Giờ sinh: <b>' + String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0') + '</b> ✓</p>');
-        const data = { hoten, gioitinh: gioitinhV, ngay, thang, nam, gioHour: vn.h, gioPhut: vn.m };
-        if (namXemV !== undefined) data.namXem = namXemV;
-        setData(data, prefix);
-        if (onDone) onDone(data);
-      });
-    }
+    tryOfferSaved();
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
