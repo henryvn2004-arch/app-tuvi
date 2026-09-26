@@ -43,7 +43,7 @@ function textParas(t: string): string {
 function page404(): Response {
   const html = `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Không tìm thấy báo cáo</title><meta name="robots" content="noindex, nofollow">
 <style>body{font-family:-apple-system,Segoe UI,Arial,sans-serif;background:#F4F2EC;color:#1a1a1a;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0;text-align:center;padding:20px}a{color:#9A7B3A}</style></head>
-<body><div><h1 style="font-family:Georgia,serif">Không tìm thấy báo cáo</h1><p>Link đã hết hạn hoặc không đúng — thử gửi lại PDF từ tài khoản của bạn (tab Lịch Sử).</p><p><a href="${SITE}/app">Vào Luận Đường →</a></p></div>
+<body><div><h1 style="font-family:Georgia,serif">Không tìm thấy báo cáo</h1><p>Link đã hết hạn hoặc không đúng — thử gửi lại PDF từ tài khoản của bạn (tab Lịch Sử).</p><p><a href="${SITE}/app">Hỏi Thầy →</a></p></div>
 </body></html>`;
   return new Response(html, { status: 404, headers: { 'content-type': 'text/html; charset=utf-8' } });
 }
@@ -124,7 +124,7 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
 <div class="wrap">
   <div class="top">
     <div class="top-row">
-      <div class="t"><b>${esc(title)}</b><span>${esc(subtitle || 'Tử Vi Minh Bảo · Luận Đường')}</span></div>
+      <div class="t"><b>${esc(title)}</b><span>${esc(subtitle || 'Tử Vi Minh Bảo · Hỏi Thầy')}</span></div>
       <img class="brand" src="/seal.webp" alt="Tử Vi Minh Bảo" width="40" height="40">
     </div>
   </div>

@@ -154,6 +154,9 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 - **Minh Bảo là HỘI ĐỒNG 15 thầy thật** (`master_profiles`, chân dung chì `/authors/<id>.jpg`), không còn
   cậu bé/thầy chibi · người chỉ vẽ MỘT kiểu, hình công cụ là ĐỒ VẬT (`tool-avatars/` = bản sao `mascot/tool-icons/`)
   · đừng chạy lại `gen-tool-avatars`/`gen-hero-banners`. `docs/nhat-ky/2026-09.md` "hội đồng 15 thầy".
+- **Cửa chat có ĐÚNG MỘT tên: "Hỏi Thầy"** (Henry chốt 2026-09-26) — không viết "Luận Đường",
+  "Trò chuyện", "Trợ lý" ở chữ hiển thị. URL cũ (`/app/tro-chuyen`, `/luan-duong/<id>`) giữ nguyên
+  để link đã chia sẻ không chết. `docs/UX-AUDIT-PLAN.md`.
 - **Chữ hiển thị: KHÔNG nhắc "AI"/"trí tuệ nhân tạo" như điểm nổi bật** — có dùng AI thật
   nhưng khoe ra là tự xếp chung rổ với hàng trăm app bói toán "AI" khác; viết theo cổ pháp/
   engine/hệ thống thay vào. Ba trang pháp lý là NGOẠI LỆ. `docs/luat/chu-hien-thi.md`.

@@ -943,7 +943,7 @@ function _showFreeCreditsWelcome() {
   // `dien-tuong`), và giá thật của nó là 8 chứ không phải 5. Đây là banner ĐẦU
   // TIÊN người vừa đăng ký nhìn thấy, nên nói sai giá ở đây là mất tin ngay lượt
   // đầu. Giá chỉ được nêu ở trang tool / tool trong shell (nơi đọc `tool_pricing`).
-  b.innerHTML = '<span class="ic-inline" data-icon="gift" data-icon-emoji="🎉" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎉</span> Chào mừng! Bạn đã nhận <strong>Lượng</strong> — mở Luận Đường để dùng thử';
+  b.innerHTML = '<span class="ic-inline" data-icon="gift" data-icon-emoji="🎉" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎉</span> Chào mừng! Bạn đã nhận <strong>Lượng</strong> — bấm Hỏi Thầy để dùng thử';
   if (window.mountIcons) window.mountIcons(b);
   document.body.appendChild(b);
   setTimeout(() => { b.style.transition = 'opacity .6s'; b.style.opacity = '0'; }, 5000);

@@ -682,14 +682,14 @@
         <div class="conn-stat"><div class="conn-stat-ic" style="background:var(--chip-red);color:var(--red)"><span data-icon="message-circle"></span></div><div><div class="conn-stat-v" id="connMissingCount">4/4</div><div class="conn-stat-l">Chưa kết nối</div></div></div>
       </div>
 
-      <p class="conn-intro">Dùng Tử Vi Minh Bảo ở mọi nơi bạn chat — trợ lý Luận Đường riêng, hoặc ngay trong Telegram · WhatsApp · Messenger, tất cả chung một ví Lượng.</p>
+      <p class="conn-intro">Dùng Tử Vi Minh Bảo ở mọi nơi bạn chat — Hỏi Thầy ngay trong trợ lý chat quen dùng, hoặc trong Telegram · WhatsApp · Messenger, tất cả chung một ví Lượng.</p>
 
       <!-- AI qua MCP -->
       <div class="conn-card conn-hero">
         <div class="conn-head">
           <div class="conn-ic" style="background:linear-gradient(120deg,#7b5cff,#4aa3ff)"><span data-icon="sparkles"></span></div>
           <div>
-            <div class="conn-title">Trợ lý Luận Đường của bạn <span class="conn-badge">Mới</span></div>
+            <div class="conn-title">Hỏi Thầy trong trợ lý chat của bạn <span class="conn-badge">Mới</span></div>
             <div class="conn-sub">Claude · ChatGPT · Gemini · Grok</div>
           </div>
         </div>
@@ -959,9 +959,9 @@
 window.mountIcons=window.mountIcons||function(root){var sc=root||document;sc.querySelectorAll('[data-icon]').forEach(function(el){var k=el.getAttribute('data-icon');if(window.ICONS[k])el.innerHTML=window.ICONS[k];});};
 window.iconHtml=window.iconHtml||function(k){return (window.ICONS&&window.ICONS[k])||'';};
 </script>
-<script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=43" data-icons-only></script>
-<script src="/shell.js?v=105"></script>
+<script src="/auth.js?v=3"></script>
+  <script src="/nav.js?v=44" data-icons-only></script>
+<script src="/shell.js?v=106"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=43"></script>
 <script>
 // HỘI THOẠI (shell history) cho tab Lịch Sử của hub Tài khoản: gộp mọi công cụ
@@ -985,7 +985,7 @@ window.ACCOUNT_SHELL_CHAT = function () {
     window._histCounts = window._histCounts || {};
     window._histCounts.chat = arr.length;
     if (window.updateHistStats) window.updateHistStats();
-    if (!arr.length) { content.innerHTML = '<div class="empty-state"><div class="icon"><span data-icon="message-circle" style="width:40px;height:40px;color:var(--tx-gold)"></span></div><p>Chưa có hội thoại nào. Mở một công cụ, hỏi trợ lý — phiên sẽ hiện ở đây.</p></div>'; if (window.mountIcons) window.mountIcons(content); return; }
+    if (!arr.length) { content.innerHTML = '<div class="empty-state"><div class="icon"><span data-icon="message-circle" style="width:40px;height:40px;color:var(--tx-gold)"></span></div><p>Chưa có hội thoại nào. Mở một công cụ, hỏi Thầy — phiên sẽ hiện ở đây.</p></div>'; if (window.mountIcons) window.mountIcons(content); return; }
     content.innerHTML = '<div class="chat-list">' + arr.map(function (s) {
       var label = TOOLMAP[s.tool] || s.tool;
       return '<a class="chat-item" href="/app/' + esc(s.tool) + '?restore=' + encodeURIComponent(s.id) + '" style="text-decoration:none">' +
@@ -1019,7 +1019,7 @@ window.ACCOUNT_SHELL_CHAT = function () {
   } catch (e) { /* ignore */ }
 };
 </script>
-<script src="/account-core.js?v=11"></script>
+<script src="/account-core.js?v=12"></script>
 <script>
 // Mở đúng tab theo hash (#credits / #ketnoi / #account / #lichsu) khi vào từ sidebar.
 (function(){function openHash(){var h=(location.hash||'').replace('#','');if(h){var b=document.querySelector('[data-tab="'+h+'"]');if(b)b.click();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(openHash,300);});else setTimeout(openHash,300);})();

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luận Đường — Tử Vi Minh Bảo</title>
-<meta name="description" content="Luận Đường — hỏi Thầy về vận mệnh, lá số Tử Vi, Bát Tự, xem tuổi, đặt tên, chọn ngày, ngay trong một cuộc trò chuyện.">
+<title>Hỏi Thầy — Tử Vi Minh Bảo</title>
+<meta name="description" content="Hỏi Thầy về vận mệnh, lá số Tử Vi, Bát Tự, xem tuổi, đặt tên, chọn ngày, ngay trong một cuộc trò chuyện.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <!-- 🔴 BẮT BUỘC cho đường bật thông báo trên iPhone, không phải tag trang trí.
      Apple chỉ mở Web Push cho trang đã "Thêm vào Màn hình chính" và chạy ở chế
@@ -458,10 +458,10 @@
              lời câu hỏi thay người dùng (cùng nguyên tắc `todayAsk` bên dưới:
              CHỈ mở rail, không tự gửi gì). Giữ nguyên lưới công cụ phía dưới —
              đổi trọng tâm trang, không bỏ danh sách. -->
-        <button class="hero-ask" type="button" id="heroAsk" aria-label="Hỏi Thầy Luận Đường">
+        <button class="hero-ask" type="button" id="heroAsk" aria-label="Hỏi Thầy">
           <span class="hero-ask-ic" data-icon="sparkles"></span>
           <span class="hero-ask-tx">
-            <b>Hỏi Thầy Luận Đường</b>
+            <b>Hỏi Thầy</b>
             <span id="heroAskSub">Vận hôm nay, lá số, hay bất cứ điều gì bạn đang vướng…</span>
           </span>
           <span class="hero-ask-go" aria-hidden="true">→</span>
@@ -561,10 +561,10 @@
 <script src="/tuvi-form.js?v=10"></script>
 <script src="/poster.js?v=5" defer></script>
 <script src="/tool-prices.js?v=10"></script>
-<script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=43" data-icons-only></script>
+<script src="/auth.js?v=3"></script>
+  <script src="/nav.js?v=44" data-icons-only></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
-<script src="/shell.js?v=105"></script>
+<script src="/shell.js?v=106"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=43"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -1439,7 +1439,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
         var prime=function(worry){
           Shell.setContext({
             birth:birth,
-            label:'Trò chuyện với Thầy'+(nm?' · '+nm:''),
+            label:'Hỏi Thầy'+(nm?' · '+nm:''),
             placeholder:'Kể cho thầy nghe…',
             greeting:greetingFor(cc,nm,away,worry),
             chips:CHIPS_TAM_SU,
@@ -1529,7 +1529,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       var url='https://tuviminhbao.com/app';
       var hlist=hours.map(function(h){return h.chi+(h.range?' ('+h.range+')':'');}).join(', ');
       var txt='Vận ngày '+td.d+'/'+td.mo+' — Ngày '+cc+' (hành '+v.ngay.canHanh+')'
-        +(v.danhGia?', '+v.danhGia.tinhChat:'')+'. Giờ hoàng đạo: '+hlist+'. Xem vận của bạn tại Luận Đường:';
+        +(v.danhGia?', '+v.danhGia.tinhChat:'')+'. Giờ hoàng đạo: '+hlist+'. Hỏi Thầy về vận của bạn tại:';
       if(navigator.share){ navigator.share({title:'Vận hôm nay — Tử Vi Minh Bảo',text:txt,url:url}).catch(function(){}); return; }
       var full=txt+' '+url, done=function(){ flashIcon(shareBtn,'check',1800); };
       if(navigator.clipboard){ navigator.clipboard.writeText(full).then(done,function(){}); }
@@ -1718,7 +1718,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     var done=0; for(var i=0;i<_khSteps.length;i++) if(_khSteps[i].done) done++;
 
     var h='<div class="kh-card"><div class="kh-eyebrow">Khởi Hành</div>'
-      +'<div class="kh-h">3 bước đầu tiên trên Luận Đường</div>'
+      +'<div class="kh-h">3 bước đầu tiên</div>'
       +'<div class="kh-sub">Làm xong cả ba, nhận thẳng <b>+'+(+kh.credits||15)+' Lượng</b> vào ví — đủ cho một lượt luận tiếp theo.</div>'
       +khBarHtml(done,_khSteps.length);
     if(_khGot>0) h+='<div class="kh-got">✓ Vừa cộng <b>+'+_khGot+' Lượng</b> vào ví bạn.</div>';
@@ -1764,7 +1764,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     var allDone=done===_khGuestDefs.length;
 
     var h='<div class="kh-card"><div class="kh-eyebrow">Khởi Hành</div>'
-      +'<div class="kh-h">3 bước đầu tiên trên Luận Đường</div>'
+      +'<div class="kh-h">3 bước đầu tiên</div>'
       +'<div class="kh-sub">Làm xong cả ba, mở khoá <b>+'+_khGuestCredits+' Lượng</b> — nhận được ngay khi bạn tạo tài khoản.</div>'
       +khBarHtml(done,_khGuestDefs.length)+'<div class="kh-steps">';
     var seenNext=false;
@@ -1868,7 +1868,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     // ⚠️ Câu này phải khớp `start_url` của manifest (`/?utm_source=pwa`) — mở
     // biểu tượng vừa thêm là về TRANG CHỦ, không về thẳng Luận Đường. Bỏ bước
     // "vào Luận Đường" là dẫn người ta tới một trang không có nút này.
-    'ios-need-install':['err','iPhone/iPad chỉ cho bật thông báo khi trang đã nằm ở Màn hình chính. Bấm nút Chia sẻ ở thanh dưới Safari → "Thêm vào MH chính" → mở biểu tượng vừa thêm → vào Luận Đường → bấm lại nút này.'],
+    'ios-need-install':['err','iPhone/iPad chỉ cho bật thông báo khi trang đã nằm ở Màn hình chính. Bấm nút Chia sẻ ở thanh dưới Safari → "Thêm vào MH chính" → mở biểu tượng vừa thêm → bấm lại nút này.'],
     unsupported:['err','Trình duyệt này không hỗ trợ thông báo. Thử bằng Chrome trên Android hoặc máy tính.'],
     error:['err','Chưa bật được. Thử lại sau ít phút giúp tôi.']
   };
@@ -1968,8 +1968,8 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       // #khoiHanhCard ở /app) — neo THẲNG vào nút mở tab đó, đúng nơi bấm
       // được thật, thay vì trỏ vào một khối không còn tồn tại.
       sel:'.tab-home-btn',
-      t:'Đây là đường về Luận Đường',
-      d:'Bấm vào đây từ BẤT KỲ đâu để quay lại màn hình này. Mở khoá Lượng ở tab Tài khoản → Nhiệm Vụ: lập lá số, hỏi Thầy một câu, thử một công cụ.'
+      t:'Đây là nút Hỏi Thầy',
+      d:'Bấm vào đây từ BẤT KỲ đâu để mở lại các cuộc hỏi Thầy. Mở khoá Lượng ở tab Tài khoản → Nhiệm Vụ: lập lá số, hỏi Thầy một câu, thử một công cụ.'
     },
     {
       sel:'#railInput',

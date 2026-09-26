@@ -67,10 +67,10 @@
   // Nạp Lượng · Hồ Sơ. "Nhiệm Vụ"/"Kết Nối" không còn là mục sidebar riêng —
   // chúng là tab BÊN TRONG /app/ho-so (app-tai-khoan.html, SHELL_ACTIVE='ho-so'
   // giữ nguyên). Giữ nguyên id 'ho-so' để không phá mountToolIcon()/Cmd+K.
-  var FIXED_TOP = { group: 'Luận Đường', open: true, items: [
+  var FIXED_TOP = { group: 'Tử Vi Minh Bảo', open: true, items: [
     { id: 'home', label: 'Tổng quan', href: '/app', icon: 'home' },
     { id: 'thay', label: 'Các Thầy', href: '/app/thay', icon: 'star' },
-    { id: 'tro-chuyen', label: 'Trò chuyện', href: '/app/tro-chuyen', icon: 'message-circle' },
+    { id: 'tro-chuyen', label: 'Hỏi Thầy', href: '/app/tro-chuyen', icon: 'message-circle' },
   ] };
   // Nhóm này KHÔNG render thành nav (renderSidebar tự vẽ tay khối "Lá số đã
   // lưu") — chỉ để mountToolIcon()/Cmd+K/buildCmds() tìm ra icon+href đúng khi
@@ -600,7 +600,7 @@
     // "Tổng quan" (đường về `/app`) — vẫn cần trên desktop dù mobile đã có nút
     // Home riêng ở tabbar dưới. Giữ NGUYÊN item của FIXED_TOP để chấm nhắc
     // Khởi Hành (khoiHanhPending) đi đúng theo, không tách logic ra hai chỗ.
-    h += groupHtml('Luận Đường', FIXED_TOP.items, khoiHanhPending());
+    h += groupHtml('Tử Vi Minh Bảo', FIXED_TOP.items, khoiHanhPending());
     h += groupHtml('Tài khoản', FIXED_BOTTOM.items, false);
 
     // "Lá số đã lưu" — khung tĩnh trước, số đếm thật đổ vào sau (loadSidebarCharts).
@@ -728,12 +728,12 @@
     var host = document.getElementById('shell-rail');
     if (!host) return;
     host.innerHTML =
-      '<div class="rail-h"><img class="rail-ava" src="' + authorAva() + '" alt="Trợ lý Luận Đường" data-tip="Đổi thầy luận giải">' +
+      '<div class="rail-h"><img class="rail-ava" src="' + authorAva() + '" alt="Hỏi Thầy" data-tip="Đổi thầy luận giải">' +
       // id="railHTitle": Henry 2026-09-23 — bấm gợi ý chuyển tool NGAY TRONG
       // rail (startInlineTool, không điều hướng trang) thì tiêu đề đổi sang
       // TÊN TOOL thay vì tên chung "Trợ lý Luận Đường", cho biết đang ở luồng
       // nào. Xem setHeaderTitle().
-      '<div><b id="railHTitle">Trợ lý Luận Đường</b><span>' + esc(authorLabel()) + '</span></div>' +
+      '<div><b id="railHTitle">Hỏi Thầy</b><span>' + esc(authorLabel()) + '</span></div>' +
       '<div class="tools">' +
         // Đợt 0 (2026-09-24, đóng vai khách chụp màn hình thật): chat-first
         // trên mobile KHÔNG có đường lui rõ ràng — "Kết quả" đọc như một
@@ -1366,7 +1366,7 @@
     var btn = document.querySelector('[data-act="share"]'); if (btn) btn.disabled = true;
     var payload = {
       toolId: ACTIVE || 'laso',
-      title: (curMeta && curMeta.title) || 'Luận Đường',
+      title: (curMeta && curMeta.title) || 'Hỏi Thầy',
       ctxLabel: _birthLabel(),
       thay: _author ? { id: _author.id, name: _author.name } : null,
       // restore: khung giữa (lá số/kịch bản) để người nhận NỐI PHIÊN hỏi tiếp.
@@ -1386,8 +1386,8 @@
         // Điện thoại (iOS/Android): mở SHARE SHEET native của hệ điều hành —
         // đủ WhatsApp, Messages, AirDrop, Zalo… đúng trải nghiệm quen thuộc.
         // Người dùng bấm ✕ (AbortError) thì thôi; lỗi khác → rơi về modal tự dựng.
-        var titleTxt = (curMeta && curMeta.title) || 'Luận Đường';
-        var modalOpts = { title: 'Chia sẻ phiên Luận Đường', desc: 'Ai có link đều đọc được lá số và toàn bộ hỏi đáp trong phiên này.', shareText: 'Xem phần luận giải của thầy cho lá số này: ' };
+        var titleTxt = (curMeta && curMeta.title) || 'Hỏi Thầy';
+        var modalOpts = { title: 'Chia sẻ phiên Hỏi Thầy', desc: 'Ai có link đều đọc được lá số và toàn bộ hỏi đáp trong phiên này.', shareText: 'Xem phần luận giải của thầy cho lá số này: ' };
         shareLink(url, { title: titleTxt + ' — Tử Vi Minh Bảo', text: 'Xem phần luận giải của thầy cho lá số này:', url: url }, modalOpts, onMedium);
       })
       .catch(function () { if (btn) btn.disabled = false; alert('Lỗi mạng khi tạo link chia sẻ.'); });
@@ -1721,7 +1721,7 @@
   function wsTitleText() {
     var b = document.querySelector('.ws-title b');
     var t = b ? String(b.textContent || '').trim() : '';
-    return t || 'Kết quả Luận Đường';
+    return t || 'Kết quả luận giải';
   }
 
   // Chuẩn hoá payload — MỘT phép duy nhất cho cả hai đường (tool đưa / shell
@@ -1743,7 +1743,7 @@
     return {
       kind: kind,
       toolId: o.toolId || ACTIVE || 'app',
-      title: String(o.title || 'Kết quả Luận Đường').slice(0, 160),
+      title: String(o.title || 'Kết quả luận giải').slice(0, 160),
       imageUrl: o.imageUrl || null,
       text: text,
       blocks: blocks,
@@ -2923,7 +2923,7 @@
   };
   function setHeaderTitle(title) {
     var el = document.getElementById('railHTitle');
-    if (el) el.textContent = title || 'Trợ lý Luận Đường';
+    if (el) el.textContent = title || 'Hỏi Thầy';
   }
   function inlineBirth(d) {
     var gioIdx = window.VnTimezone ? window.VnTimezone.hourMinToGioIdx(d.gioHour, d.gioPhut) : 0;
@@ -3671,7 +3671,7 @@
   // lúc mở (y hệt cả 4 trang thật — không trang nào gọi lại setContext() sau
   // khi có kết quả), streamed text ở lại trong lịch sử chat làm "kết quả".
   function runTuongMatSSE(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38'], function (err) {
+    ensureScripts(['/auth.js?v=3', '/tuvi-paywall.js?v=38'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', '', 'Phân tích →', function (photo, bubbleEl, showErr) {
@@ -3744,7 +3744,7 @@
   // /api/tuong-mat, kết quả JSON. Trang thật gọi LẠI Shell.setContext() sau
   // khi có kết quả (label/greeting/chips theo đúng response) — replay y hệt.
   function runTuongMatJSON(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38'], function (err) {
+    ensureScripts(['/auth.js?v=3', '/tuvi-paywall.js?v=38'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', opts.extraFieldsHtml || '', 'Phân tích →', function (photo, bubbleEl, showErr) {
@@ -3865,7 +3865,7 @@
   // 'bat-trach' (bước 17), không chép công thức lần hai.
   var DOOR_DIR_OPTS = [['S', 'Nam'], ['N', 'Bắc'], ['E', 'Đông'], ['W', 'Tây'], ['SE', 'Đông Nam'], ['SW', 'Tây Nam'], ['NE', 'Đông Bắc'], ['NW', 'Tây Bắc']];
   function runPhongThuyPhoto(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38', '/tools-shared/bat-trach.js?v=2'], function (err) {
+    ensureScripts(['/auth.js?v=3', '/tuvi-paywall.js?v=38', '/tools-shared/bat-trach.js?v=2'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var extraOpts = opts.extraOptions.map(function (o) { return '<option value="' + esc(o[0]) + '">' + esc(o[1]) + '</option>'; }).join('');
@@ -3976,7 +3976,7 @@
   // được 3/6 trục Cốt/Nhục/Thế — không phải suy diễn, chính trang thật cũng
   // chỉ đo được ngần đó khi người dùng chọn nhánh ảnh thay vì ký sống).
   function runButTuong(chat, toolId) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38', '/tools-shared/but-tuong.js'], function (err) {
+    ensureScripts(['/auth.js?v=3', '/tuvi-paywall.js?v=38', '/tools-shared/but-tuong.js'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BuTuongTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Bút Tướng', placeholder: 'Hỏi thầy về bút tướng…',
@@ -4025,7 +4025,7 @@
   // ── Trả phí KHÔNG cần ảnh (mau-sac-hop-menh/trang-phuc-theo-ngay) — vẫn
   // qua requireCredits(), chỉ khác chỗ input là field chứ không phải ảnh.
   function runMauSacHopMenh(chat, toolId) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38', '/tools-shared/bat-trach.js?v=2'], function (err) {
+    ensureScripts(['/auth.js?v=3', '/tuvi-paywall.js?v=38', '/tools-shared/bat-trach.js?v=2'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Màu Sắc Hợp Mệnh', placeholder: 'Hỏi thầy về màu sắc hợp mệnh…',
@@ -4091,7 +4091,7 @@
     return { text: 'Mệnh khắc Ngày — ngày trung bình, cẩn thận' };
   }
   function runTrangPhucTheoNgay(chat, toolId) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38'], function (err) {
+    ensureScripts(['/auth.js?v=3', '/tuvi-paywall.js?v=38'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Trang Phục Theo Ngày', placeholder: 'Hỏi thầy về trang phục theo ngày…',
@@ -4672,7 +4672,7 @@
           var _back = location.pathname + (/[?&]auto=1\b/.test(_s) ? _s : (_s ? _s + '&auto=1' : '?auto=1'));
           localStorage.setItem('auth_return_to', _back);
         } catch (e) { /* ignore */ }
-        typing.innerHTML = '<p>Cần <a href="#" id="railLoginLink" style="color:var(--blue);font-weight:600">đăng nhập</a> để hỏi trợ lý — xong sẽ tự quay lại luận tiếp. Lá số vẫn xem miễn phí.</p>';
+        typing.innerHTML = '<p>Cần <a href="#" id="railLoginLink" style="color:var(--blue);font-weight:600">đăng nhập</a> để hỏi Thầy — xong sẽ tự quay lại luận tiếp. Lá số vẫn xem miễn phí.</p>';
         var _openLogin = function () {
           if (window.Auth && Auth.require) {
             Auth.require(function () {
@@ -5088,7 +5088,7 @@
     nav.innerHTML =
       '<a class="tab' + (isHome ? ' active' : '') + '" href="/app">' + ti('yin') + 'Trang chủ</a>' +
       '<a class="tab' + (isThay ? ' active' : '') + '" href="/app/thay">' + ti('star') + 'Các Thầy</a>' +
-      '<a class="tab-home' + (isTro ? ' active' : '') + '" href="/app/tro-chuyen"><span class="tab-home-btn" aria-hidden="true">' + ti('chat') + '</span><span>Trò chuyện</span></a>' +
+      '<a class="tab-home' + (isTro ? ' active' : '') + '" href="/app/tro-chuyen"><span class="tab-home-btn" aria-hidden="true">' + ti('chat') + '</span><span>Hỏi Thầy</span></a>' +
       '<a class="tab' + (isNap ? ' active' : '') + '" href="/app/nap-luong">' + ti('wallet') + 'Nạp Lượng</a>' +
       '<a class="tab' + (isHoso ? ' active' : '') + '" href="/app/ho-so">' + ti('user') + 'Hồ Sơ</a>';
     document.body.appendChild(nav);

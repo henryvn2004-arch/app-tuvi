@@ -251,10 +251,10 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .cta-btn:hover{background:var(--gold-bright);color:var(--navy)}
 @media(max-width:700px){.bc,.article-wrap{padding-left:20px;padding-right:20px}.article-title{font-size:24px}}
 </style>
-<script src="/auth.js?v=2"></script>
+<script src="/auth.js?v=3"></script>
 </head><body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=43" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=44" defer></script>
 <div class="bc">
   <a href="/">Trang Chủ</a><span>›</span>
   <a href="/thu-vien">Thư Viện</a><span>›</span>

@@ -96,7 +96,7 @@ export async function collectPackItems(days = 7, limit = 5): Promise<PackItem[]>
     url: `${SITE}/ket-qua/${r.id}`,
     toolId: r.tool_id,
     toolLabel: TOOL_LABEL[r.tool_id] || r.tool_id,
-    title: (r.title || '').trim() || 'Kết quả Luận Đường',
+    title: (r.title || '').trim() || 'Kết quả luận giải',
     imageUrl: r.image_url,
     views: r.view_count || 0,
     createdAt: r.created_at,
