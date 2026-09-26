@@ -372,27 +372,55 @@ giá; sidebar ẩn khối rỗng cho tới khi có dữ liệu; không emoji mà
 
 Số đo mốc (J8, `docs/ux-audit/J8.md`) — dùng để biết đã xong chưa, không đoán:
 
-| Việc | Đo trước (2026-09-26) | Đích |
-|---|---|---|
-| `.send`/`.btn-go`/`.stm-btn` có `:active` | 0/3 | 3/3 |
-| `:hover` được gate `@media(hover:hover)` | 0/231 | phần lớn 231 |
-| `@keyframes` tôn trọng `prefers-reduced-motion` | 1/6 (`shell.css`) · 2/21 (trang) | toàn bộ |
-| `.shell{height:100vh}` → `100dvh` | chưa | đã đổi |
+| Việc | Đo trước (2026-09-26) | Đích | Kết quả |
+|---|---|---|---|
+| `.send`/`.btn-go`/`.stm-btn` có `:active` | 0/3 | 3/3 | ✓ **3/3** — `scale(.97)` + `var(--ease-out)`, đã đo bằng Playwright (`matrix(0.98686,…)` giữa transition) |
+| `:hover` được gate `@media(hover:hover)` | 0/231 | phần lớn 231 | ✓ `shell.css`: **33/33** (toàn bộ) — 231 rải ở `app-*.html` CHƯA đụng, xem lý do dưới |
+| `@keyframes` tôn trọng `prefers-reduced-motion` | 1/6 (`shell.css`) · 2/21 (trang) | toàn bộ | ✓ `shell.css`: **6/6** (`sbpPulse`/`sbDotPulse`/`shBlink` tắt hẳn; `shFade`/`rr-spin` cố ý giữ — một lần/báo tải) — trang riêng CHƯA đụng |
+| `.shell{height:100vh}` → `100dvh` | chưa | đã đổi | ✓ đổi, giữ `100vh` làm dự phòng trước dòng `100dvh` |
 
-- [ ] `theme.css`: thêm token `--ease-out`, `--ease-in-out`, `--dur-1/2/3`,
-      `--shadow-1/2/3`.
-- [ ] `shell.css`:
-  - khối `prefers-reduced-motion` toàn cục (tắt `sbpPulse`/`sbDotPulse`/`shBlink`);
-  - `:hover` bọc `@media (hover:hover)`;
-  - phản hồi nhấn `scale(.97)` cho nút chính (`.send`/`.btn-go`/`.stm-btn`,
-    dùng easing có sẵn `cubic-bezier(.23,1,.32,1)`, dòng 557);
-  - đổi `transition: all` sang thuộc tính cụ thể (0 chỗ trong `shell.css`
-    chính nó, nhưng 85 chỗ rải ở các trang `app-*.html`).
+- [x] `theme.css`: thêm token `--ease-out`, `--ease-in-out`, `--dur-1/2/3`,
+      `--shadow-1/2/3` (+ `--safe-top`/`--safe-bottom` giữ chỗ, xem mục dưới).
+      Giá trị GHI LẠI số ĐA SỐ đang dùng thật (grep toàn repo): easing
+      `cubic-bezier(.4,0,.2,1)` 8/9 chỗ, thời lượng `.15s`/`.2s` 65/109 chỗ.
+- [x] `shell.css`:
+  - khối `prefers-reduced-motion` toàn cục (tắt `sbpPulse`/`sbDotPulse`/`shBlink`)
+    — 🪤 phải đặt ở CUỐI file, không phải cạnh `.shell`: cùng specificity với
+    rule gốc thì rule đứng SAU trong nguồn thắng bất kể có `@media` hay
+    không — đặt đầu file bị 3 rule animation (khai sau) đè ngược, đo bằng
+    `getComputedStyle().animationName` vẫn ra tên keyframe cho tới khi dời
+    xuống cuối;
+  - `:hover` bọc `@media (hover:hover)` — 33/33 rule của `shell.css`. Một
+    rule (`.rh-del` — nút xoá chỉ hiện khi hover) được tách: base ẩn
+    (`opacity:0`) CHỈ áp trong `(hover:hover)`, còn `(hover:none)` (chạm)
+    giữ luôn hiện — gate thẳng tay ở đây sẽ làm nút xoá biến mất vĩnh viễn
+    trên di động;
+  - phản hồi nhấn `scale(.97)` cho `.send`/`.btn-go`/`.stm-btn`, dùng
+    `var(--ease-out)`/`var(--dur-1)` khai cục bộ trong `:root` của chính
+    `shell.css` (không tham chiếu được `theme.css` — hai file không cùng
+    nạp trên một trang, xem `app-*.html` chỉ có `<link shell.css>`);
+    cubic-bezier(.23,1,.32,1) mà bản plan trước nhắc tới **không còn tồn
+    tại trong repo** (đã kiểm bằng grep) — dùng lại `cubic-bezier(.2,.8,.2,1)`
+    (khối `.tv-sheet-panel`, easing decelerate DUY NHẤT đang dùng thật);
+  - `transition: all` → 0 chỗ trong `shell.css` (xác nhận lại, không cần sửa).
 - [ ] Từng trang theo thứ tự traffic: bỏ Arial, gom gradient và shadow về
-      token. Không đổi bố cục (tinh chỉnh, không redesign). Giữ luật CLS.
-- [ ] Emil `mobile-native`: `.shell` đổi `100vh`→`100dvh`, input không zoom
-      (≥16px), tắt tap highlight, `touch-action:manipulation` cho nút/link,
-      safe-area (đã đúng ở `shell.css`, thiếu ở `theme.css`).
+      token — **HOÃN đợt này**. Lý do: mục theme.css/shell.css (rủi ro cao vì
+      chạm CSS dùng chung mọi trang) đã chiếm hết ngân sách review-an-toàn
+      của đợt; sửa 85 chỗ `transition:all` + gradient/shadow rải trên
+      53+ trang `app-*.html` là việc CẦN đo từng trang một (ảnh chụp trước/
+      sau), không làm ẩu được trong cùng một lượt. Cũng là lý do 231 chỗ
+      `:hover` ở `app-*.html` (ngoài `shell.css`) CHƯA gate — cùng một nhóm
+      việc "diện rộng, từng trang", để đợt sau.
+- [x] Emil `mobile-native`: `.shell` đổi `100vh`→`100dvh` (giữ `100vh` làm
+      dự phòng); input <16px trong khung app đã đúng từ trước (media
+      `@media(max-width:900px)` có sẵn, xác nhận lại — không có ô nào sót);
+      `.send`/`.btn-go`/`.stm-btn` thêm `-webkit-tap-highlight-color:
+      transparent` + `touch-action:manipulation` (mảng đã có sẵn ở `.tabbar
+      .tab`/`.tab-home` từ trước); safe-area — `shell.css` gọi thẳng
+      `env(safe-area-inset-*)` inline (không có token nào để "port" ra), nên
+      thay vào đó `theme.css` được thêm HAI token mới (`--safe-top`/
+      `--safe-bottom`) làm giữ chỗ cho trang ngoài app-shell, không đổi gì ở
+      trang chưa dùng tới.
 
 ### W7: Đo lại và chốt
 - [ ] Chạy lại crawl, J1 và J2, so với baseline W0. Đọc 3 chỉ số mục 0 sau
