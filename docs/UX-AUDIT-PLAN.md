@@ -226,7 +226,7 @@ khỏi bảng dưới, chỉ giữ các phát hiện THẬT về code/nội dung
 | 12 | P1 | J8 | 0/3 CTA chính (`.send`/`.btn-go`/`.stm-btn`) có phản hồi khi nhấn | Chưa sửa → **W6** |
 | 13 | P1 | J8 | 0/231 chỗ `:hover` được gate `@media(hover:hover)` | Chưa sửa → **W6** |
 | 14 | Nhẹ | J6/J7 | `auth.js` menu avatar trỏ `/profile.html` đã xoá (có 308, chỉ dư 1 round-trip) | **Đã sửa** (PR này) |
-| 15 | Nghi ngờ | J1–J6 | `401 GET /api/auth/session` lặp lại ở mọi trang khách — có thể là hành vi kỳ vọng | Cần đọc route xác nhận → **W2** |
+| 15 | ✓ Đã đọc, KHÔNG phải bug | J1–J6 | `401 GET /api/auth/session` mỗi lượt tải trang khách | `public/auth.js` `initAuth()` gọi mù (không đọc được cookie HttpOnly từ JS — đó chính là lý do dùng HttpOnly, tránh ITP) mỗi khi KHÔNG có `localStorage`/cookie JS gợi ý có phiên. Guest mới thật sự không có phiên ⇒ 401 đúng REST. Không sửa được mà không bỏ lớp chống ITP; đây là chi phí kiến trúc, không phải lỗi. |
 | 16 | Nghi ngờ | J1 | Trang chủ ghi "270.000+ lá số người thật" — không có trong `PRODUCT.md` Evidence on Hand | **Henry xác nhận nguồn số**, nếu không có thì bỏ |
 | 17 | P3 | J1/J2/J3 | 2 lỗi 502 thoáng qua (font/ảnh), tab đăng ký wrap 2 dòng, banner PWA che footer mobile | Theo dõi, không chặn — **W2/W6** |
 
@@ -240,9 +240,11 @@ giá; sidebar ẩn khối rỗng cho tới khi có dữ liệu; không emoji mà
 - [ ] Nhãn "Trò chuyện" bị gạch chân xanh ở tab bar `/app`. Logo và slogan
       bị cắt trên header landing 390px. (Chưa re-verify sau đợt rename — có
       thể đã hết vì text đổi; kiểm lại khi review W3 trên preview thật.)
-- [ ] `401 GET /api/auth/session` lặp lại ở MỌI trang khách (xác nhận ở J1,
-      J3/J4, J5) — đọc route xác nhận có nên trả 401 cho khách ẩn danh hay
-      trả 200 rỗng; noise này che lỗi thật khác trong console.
+- [x] `401 GET /api/auth/session` mỗi lượt tải trang khách — **đã đọc code,
+      KHÔNG phải bug**: `auth.js` không đọc được cookie HttpOnly nên phải hỏi
+      server để biết có phiên không; guest thật sự không có phiên thì 401 là
+      đúng REST. Sửa sẽ phải bỏ lớp chống ITP (Safari xoá localStorage/cookie
+      JS sau 7 ngày) — đánh đổi không đáng. Xem hàng #15 mục 4.1.
 - [~] Số "online" giả + toast mua hàng giả: Henry quyết **để nguyên**.
 - [x] Một con số "N công cụ", đọc từ catalog, không gõ tay — sửa `<title>`/
       meta tĩnh của `/cong-cu` và trang chủ khớp số thật (50), heading vốn đã
