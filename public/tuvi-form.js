@@ -604,6 +604,19 @@ window.TuviForm = (() => {
       }
     }
     const cp = 'c' + (prefix || 'x'); // prefix RIÊNG cho field ảo trong chat — không trùng field thật
+    // Draft nháp qua reload (audit W1 J5, 2026-09-26): reload giữa chừng
+    // trước đây mất TOÀN BỘ đã gõ, quay lại step 1 không cảnh báo. Lưu vào
+    // `sessionStorage` (mất khi đóng tab — không phải dữ liệu cần giữ lâu),
+    // khoá theo TRANG + `cp` nên hai renderChat() khác `prefix` trên cùng
+    // trang (vd tương hợp 2 người) không đụng nhau. Chỉ lưu SAU khi qua được
+    // validate của từng bước — không lưu dữ liệu chưa hợp lệ.
+    const draftKey = 'tvf_draft_' + cp + '_' + location.pathname;
+    const draft = (() => {
+      try { const d = JSON.parse(sessionStorage.getItem(draftKey) || 'null'); return d && typeof d === 'object' ? d : null; }
+      catch (e) { return null; }
+    })();
+    const saveDraft = (step, data) => { try { sessionStorage.setItem(draftKey, JSON.stringify({ step, ...data })); } catch (e) { /* ignore */ } };
+    const clearDraft = () => { try { sessionStorage.removeItem(draftKey); } catch (e) { /* ignore */ } };
     const opts = buildOptions();
     const namXemDefault = new Date().getFullYear();
     const av = () => { const a = document.querySelector('.rail-ava'); return a ? a.src : '/authors/thai-hu.jpg'; };
@@ -617,6 +630,29 @@ window.TuviForm = (() => {
     const collapse = (el, html) => {
       el.innerHTML = '<img class="msg-ava" src="' + av() + '" alt="">' + '<div class="msg-body">' + html + '</div>';
     };
+
+    const collapsedS1Html = (hoten, gioitinhV, namXemV) => {
+      const parts = [];
+      if (hoten) parts.push('<b>' + esc(hoten) + '</b>');
+      if (showGender) parts.push(gioitinhV === 'nam' ? 'Nam' : 'Nữ');
+      if (namXemV) parts.push('xem vận năm ' + namXemV);
+      return '<p>' + parts.join(' · ') + ' ✓</p>';
+    };
+
+    // Khôi phục draft nếu có (xem `saveDraft` ở trên) — nhảy thẳng tới đúng
+    // bước còn dang dở, KHÔNG hỏi lại từ đầu. `draft.ngay` có nghĩa là bước 2
+    // (ngày sinh) đã xong, đủ điều kiện nhảy thẳng vào bước 3 (giờ sinh).
+    if (draft && draft.ngay && draft.thang && draft.nam) {
+      bubble('chatStep-' + cp + '-1', collapsedS1Html(draft.hoten, draft.gioitinh, draft.namXem));
+      bubble('chatStep-' + cp + '-2', '<p>Ngày sinh: <b>' + draft.ngay + '/' + draft.thang + '/' + draft.nam + '</b> ✓</p>');
+      step3(draft.hoten, draft.gioitinh, draft.namXem, draft.ngay, draft.thang, draft.nam);
+      return;
+    }
+    if (draft && draft.step >= 1) {
+      bubble('chatStep-' + cp + '-1', collapsedS1Html(draft.hoten, draft.gioitinh, draft.namXem));
+      step2(draft.hoten, draft.gioitinh, draft.namXem);
+      return;
+    }
 
     const s1 = bubble('chatStep-' + cp + '-1', '<p>' + q1 + '</p>' +
       '<div class="frow">' +
@@ -635,11 +671,8 @@ window.TuviForm = (() => {
       const err1 = document.getElementById(cp + '-err1');
       if (requireName && !hoten) { err1.textContent = 'Vui lòng nhập họ tên.'; return; }
       err1.textContent = '';
-      const parts = [];
-      if (hoten) parts.push('<b>' + esc(hoten) + '</b>');
-      if (showGender) parts.push(gioitinhV === 'nam' ? 'Nam' : 'Nữ');
-      if (namXemV) parts.push('xem vận năm ' + namXemV);
-      collapse(s1, '<p>' + parts.join(' · ') + ' ✓</p>');
+      collapse(s1, collapsedS1Html(hoten, gioitinhV, namXemV));
+      saveDraft(1, { hoten, gioitinh: gioitinhV, namXem: namXemV });
       step2(hoten, gioitinhV, namXemV);
     });
 
@@ -667,10 +700,12 @@ window.TuviForm = (() => {
         if (skipHour) {
           const data = { hoten, gioitinh: gioitinhV, ngay, thang, nam };
           if (namXemV !== undefined) data.namXem = namXemV;
+          clearDraft();
           setData(data, prefix);
           if (onDone) onDone(data);
           return;
         }
+        saveDraft(2, { hoten, gioitinh: gioitinhV, namXem: namXemV, ngay, thang, nam });
         step3(hoten, gioitinhV, namXemV, ngay, thang, nam);
       });
     }
@@ -703,6 +738,7 @@ window.TuviForm = (() => {
         collapse(s3, '<p>Giờ sinh: <b>' + String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0') + '</b> ✓</p>');
         const data = { hoten, gioitinh: gioitinhV, ngay, thang, nam, gioHour: vn.h, gioPhut: vn.m };
         if (namXemV !== undefined) data.namXem = namXemV;
+        clearDraft();
         setData(data, prefix);
         if (onDone) onDone(data);
       });
