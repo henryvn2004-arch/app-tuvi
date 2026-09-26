@@ -217,6 +217,16 @@ button { font: inherit; cursor: pointer; }
   .ftb-track-wrap { min-height: 760px; }
 }
 
+@media (max-width: 680px) {
+  /* bottom-nav cố định che tới y≈844 (viewport 390×844) — 3 feat-chip
+     xen giữa mô tả và CTA đẩy nút hành động chính xuống dưới, bị che
+     khuất. Đưa CTA lên ngay sau mô tả để luôn nằm trong màn hình đầu. */
+  .ftb-text { display: flex; flex-direction: column; }
+  .ftb-cta { order: 1; margin-bottom: 16px; }
+  .ftb-feats { order: 2; }
+  .ftb-proof { order: 3; }
+}
+
 /* ── Tử Vi Nghiệm Chứng — core DNA, giữa hero và công cụ chính ── */
 .dna-sec { padding: 8px 0 28px; }
 .dna-card {

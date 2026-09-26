@@ -317,6 +317,11 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    (sidebar) · Tài khoản. shell.js chèn #shell-tabbar vào body; chỉ hiện
    ≤900px; ẩn khi drawer/cmdk đang mở. Desktop KHÔNG đụng tới. ── */
 .tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:49;grid-template-columns:1fr 1fr 72px 1fr 1fr;align-items:end;background:linear-gradient(180deg,#3D2818,#2B1B10);border-top:1px solid rgba(200,169,106,.18);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(15,42,61,.22)}
+/* `.rail`/`.sb` chừa đúng 90px đáy (đo bằng nút Home nổi) nhưng khối
+   `.tabbar` thật chỉ cao ~75px ở hai bên (nút Home mới nổi lên -15px) — hở
+   ra 15px hai bên hông, để lộ nội dung `.home-body` phía dưới đè lên qua
+   khe đó. Nối nền lên đúng 15px, nằm SAU nút Home trong DOM nên không che nó. */
+.tabbar::before{content:'';position:absolute;left:0;right:0;top:-15px;height:15px;background:inherit}
 .tabbar .tab{appearance:none;-webkit-appearance:none;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;color:var(--sb-txt-dim);font-family:inherit;font-size:10.5px;line-height:1;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .tabbar .tab svg{width:22px;height:22px;display:block;stroke-width:1.7}
 .tabbar .tab.active{color:var(--gold)}
