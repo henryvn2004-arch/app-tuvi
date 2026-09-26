@@ -51,6 +51,9 @@
 .fb-trung{background:#e8f0fe;color:#1455A4}
 .fb-canh{background:#f5c0bc;color:#C0392B}
 @media(max-width:600px){.que-grid{grid-template-columns:1fr}}
+/* Cột artifact chat-first chỉ rộng 420px trên MỌI viewport — media query trên
+   đọc viewport nên không khớp ở đây (xem docs/luat/bay.md). */
+body.chat-first-live .que-grid{grid-template-columns:1fr}
 #resPanel{display:none;max-width:760px}
 .cauhoi-disp{font-size:13px;color:#666;font-style:italic;margin-bottom:16px;text-align:center}
 .ask{margin-top:16px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
@@ -79,6 +82,11 @@
 .kd-hao-doc{box-shadow:inset 0 0 0 1.5px var(--gold,#c9a227)}
 .kd-hao-tag{font-style:normal;font-size:10.5px;margin-left:6px;padding:1px 6px;border-radius:999px;background:var(--gold,#c9a227);color:#1a1a1a;font-weight:600;white-space:nowrap}
 @media(min-width:760px){.kd-anhs:has(.kd-anh+.kd-anh){grid-template-columns:1fr 1fr}}
+/* Bẫy NGƯỢC: đây là `min-width` (không phải `max-width` như .que-grid ở
+   trên) — viewport vẫn rộng khi chat-first-live bật (chỉ CỘT hẹp lại còn
+   420px), nên rule trên VẪN khớp và ép 2 cột ảnh minh hoạ vào cột hẹp. Ép về
+   1 cột riêng cho trạng thái này. */
+body.chat-first-live .kd-anhs{grid-template-columns:1fr}
 </style>
 </head>
 <body>
@@ -181,6 +189,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='kinh-dich';window.SHELL_HISTORY=true;
+// Chat-first (xem khối CHATFIRST trong shell.js) — free/deterministic,
+// setContext() chạy trong showResult() SAU KHI gieo đủ 6 hào (không paywall).
+// Vá kèm 2 bẫy grid+media-query của .que-grid/.kd-anhs (rule
+// body.chat-first-live ở trên, .kd-anhs còn là bẫy NGƯỢC min-width).
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'kinh-dich'};</script>
 <script src="/tools-shared/kinh-dich-doc.js?v=1"></script>
 <script src="/tools-shared/kinh-dich-hao.js?v=1"></script>

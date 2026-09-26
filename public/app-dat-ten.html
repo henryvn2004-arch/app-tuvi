@@ -166,6 +166,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='dat-ten';window.SHELL_HISTORY=true;
+// Chat-first (xem khối CHATFIRST trong shell.js) — tool free/deterministic
+// cùng nhóm cong-so/chu-trinh-cuoc-doi: setContext() chạy NGAY sau khi tính
+// nền can chi (không cầu dao), phần trả phí là "12 tên chuyên sâu" gate
+// riêng qua TuviPaywall sau đó. #resPanel dùng .cc-row (flex-wrap) + .cost-box
+// dùng chung — cùng mẫu đã kiểm an toàn ở 420px cột artifact.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'dat-ten'};</script>
 <script src="/can-chi.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
