@@ -260,8 +260,8 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .chat-hl-box b{display:block;font-family:var(--serif);font-size:13px;color:var(--heading);margin-bottom:2px}
 .chat-hl-box span{font-size:12px;color:var(--text-mid);line-height:1.5}
 .rail-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px;color:var(--text-lt);gap:10px}
-.rail-empty .ei{width:64px;height:96px;flex:0 0 auto}
-.rail-empty .ei img{width:100%;height:100%;object-fit:contain;display:block}
+.rail-empty .ei{width:72px;height:72px;flex:0 0 auto}
+.rail-empty .ei img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
 .rail-empty b{color:var(--text-mid);font-size:13.5px;font-family:var(--serif)}
 .rail-empty p{font-size:12px;line-height:1.5}
 .chips{display:flex;flex-wrap:wrap;gap:7px}
@@ -334,17 +334,17 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .tabbar .tab-home.active span{color:var(--gold)}
 
 /* ── EMPTY-STATE INTRO (danh thiếp CỐ ĐỊNH của tool — KHÔNG tự ẩn vĩnh viễn,
-   không có nút đóng). Box LÀ banner: `.intro-photo` phủ kín làm nền (position:
-   absolute, xem dưới), `.intro-body`/`.hero-pills` đè lên trên bằng z-index.
-   `overflow:hidden` bo tròn góc ảnh theo `border-radius` của box. `min-height`
-   đặt TRƯỚC khi ảnh tải xong (ảnh không góp vào chiều cao vì đã absolute) nên
-   không có CLS — chữ tĩnh trong HTML quyết định layout ngay từ khung đầu.
-   `.intro-avatar` (icon vuông 96/72px, `/tool-avatars/<key>.webp`) là DI SẢN
-   trước khi có banner nhóm — `check-intro-card.mjs` vẫn bắt buộc thẻ này khớp
-   `key` nên giữ trong HTML, ẩn hẳn bằng CSS bên dưới chứ không xoá. Toàn bộ
-   49 trang box tĩnh giờ đều đã gắn `.intro-photo` (2026-09-14, vòng 5). */
-.intro-card{position:relative;overflow:hidden;background:linear-gradient(135deg,#F3E7C8,#FBF6E8);border:1px solid var(--gold-soft);border-radius:22px;box-shadow:var(--shadow);margin-bottom:16px;min-height:230px;display:flex;flex-direction:column;justify-content:flex-end}
-.intro-card .intro-avatar{display:none}
+   không có nút đóng). Chữ tĩnh trong HTML quyết định layout ngay từ khung
+   đầu (không CLS). Hình của tool là `.intro-avatar` — tranh ĐỒ VẬT
+   (`/tool-avatars/<key>.webp`, cùng bộ với `mascot/tool-icons`) ở góc phải.
+   Banner webtoon theo nhóm (có thầy/cô chibi + cậu bé Minh Bảo) đã GỠ
+   2026-09-26: Minh Bảo nay là hội đồng 15 thầy thật, người chỉ vẽ một kiểu
+   là chân dung chì `/authors/<id>.jpg`. Thầy đứng tên công cụ hiện ở
+   `#introSrc` (`fillIntroMaster()` trong shell.js) — `min-height` giữ chỗ
+   trước khi dữ liệu thầy về để dòng đó không đẩy layout. */
+.intro-card{position:relative;overflow:hidden;background:linear-gradient(135deg,#F3E7C8,#FBF6E8);border:1px solid var(--gold-soft);border-radius:22px;box-shadow:var(--shadow);margin-bottom:16px}
+.intro-card .intro-avatar{position:absolute;top:18px;right:20px;width:84px;height:84px;border-radius:16px;object-fit:cover;background:#FBF6E8}
+.intro-card .intro-body{padding:18px 124px 4px 20px}
 .intro-card .intro-text{max-width:100%}
 /* Henry 2026-09-15 (vòng 10, "wording nhìn cho chuyên nghiệp"): tiêu đề đổi
    sang tông NÂU ẤM khớp mực thủy mặc (thay vì `var(--text)` đen trung tính)
@@ -354,55 +354,15 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .intro-card .intro-d{font-size:13.5px;color:var(--text-mid);line-height:1.7;border-left:3px solid var(--gold-soft);padding-left:14px}
 .intro-card .intro-d b{color:#5B3A1A}
 
-/* Banner webtoon khổ ngang (`scripts/gen-hero-banners.mjs`, dùng CHUNG theo
-   NHÓM cổ pháp — xem lib/media/hero-banner-prompt.ts) — LÀ nền của cả
-   `.intro-card`, không phải thumbnail cạnh chữ (Henry 2026-09-14, vòng 5).
-   Nguồn 1536×1024 trong khi khung banner RỘNG hơn nhiều theo TỈ LỆ (aspect
-   ~3-4:1 desktop) — `cover` (vòng 5-8) từng phải cắt dọc rất mạnh, ăn mất
-   mặt trời/núi ở giữa ảnh; bản `height:100%+aspect-ratio` (vòng 9) tự suy
-   `width` từ chiều cao lại TRÀN NGANG khỏi card trên mobile (card hẹp hơn
-   width suy ra) — `overflow:hidden` của card ăn mất TRỌN vẹt Minh Bảo (luôn
-   vẽ ở rìa TRÁI khung theo prompt `hero-banner-prompt.ts`), y hệt lỗi
-   "che hình" Henry báo 2026-09-16.
-   Đổi sang `object-fit:contain` + `object-position:right` — khung ảnh nay
-   BẰNG CẢ CARD (không tự suy width nữa) nên không bao giờ tràn, luôn thấy ĐỦ
-   100% nội dung. Bỏ hẳn `mask-image` phai 18% (vòng 10) — khung ảnh giờ khớp
-   ĐÚNG cạnh thật của ảnh, phai thêm là tự che phần Minh Bảo mà prompt đã cố
-   tình chừa trống cho chữ. Quy tắc này CHỈ còn áp dụng ở DESKTOP — mobile có
-   bố cục RIÊNG (xếp DỌC, xem `@media` bên dưới) vì card hẹp khiến ảnh chiếm
-   trọn bề rộng, không còn "phần trống dồn sang trái" nào để đặt chữ lên nữa. */
-.intro-card .intro-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:right center;z-index:0;background:#F3E7C8}
-/* Gradient PHỦ — đo thật bằng Playwright (`app-chu-trinh-cuoc-doi.html`, mô tả
-   DÀI nhất + `.hero-pills` 3 cột LUÔN bằng nhau nên cột 3 chạm sát đúng
-   `max-width` của khối chữ): ảnh bắt đầu ở ~46% bề rộng card tại 1280px
-   nhưng `.intro-body`/`.hero-pills` có `max-width:72%` — VÙNG CHỮ THẬT SỰ
-   RỘNG HƠN vùng ảnh, cột pill thứ 3 luôn đè lên ảnh dù ảnh đã hiện đủ. Dải
-   mờ tuyệt đối (0→18%) chỉ đủ cho TIÊU ĐỀ; đoạn 18→68% dùng ĐỘ MỜ 55% (không
-   phải 0%) — chữ vẫn đọc được nhưng Minh Bảo/mèo mờ ẢO thấy được thay vì
-   BIẾN MẤT dưới lớp phủ đặc như bản trước đó (đúng lỗi Henry báo). Từ 88%
-   trở đi trong suốt hẳn — vùng thầy/cô chắc chắn không có chữ đè lên. */
-.intro-card::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#F3E7C8 0%,#F3E7C8 18%,rgba(243,231,200,.55) 40%,rgba(243,231,200,.55) 68%,rgba(243,231,200,0) 88%)}
-.intro-card .intro-body{position:relative;z-index:2;padding:18px 20px 4px;max-width:72%}
-.intro-card .hero-pills{position:relative;z-index:2;max-width:72%;margin:0;padding:12px 20px 18px}
-/* Henry 2026-09-17, vòng 2 của lỗi "khó đọc" (ảnh chụp thật trên iPhone,
-   không phải giả lập): card hẹp buộc `.intro-photo` (object-fit:contain
-   trong khung bằng cả card) tràn kín 100% bề rộng — KHÔNG CÒN vùng nào chắc
-   chắn không ảnh để đặt chữ lên. Vá bằng GRADIENT (0,32 opacity) không đủ —
-   đo bằng ảnh chụp: màu phủ (#F3E7C8) quá GẦN tông với chính bức tranh (cũng
-   kem/nâu ấm) nên gần như KHÔNG đổi được độ tương phản, dù đúng dữ liệu CSS.
-   Không vá tiếp bằng cách tăng % mờ (chữ đọc được thì lại đúng lỗi "che
-   hình" ban đầu) — ĐỔI HẲN BỐ CỤC trên mobile: ảnh lên THÀNH MỘT DẢI NGANG
-   riêng ở ĐẦU card (dùng đúng thứ tự DOM sẵn có: photo → body → pills, chỉ
-   cần đổi `position` từ absolute sang static là xếp chồng dọc tự nhiên), chữ
-   xuống hẳn bên dưới trên nền `.intro-card` THUẦN — không còn ảnh nào đằng
-   sau chữ nữa nên không cần gradient/mờ gì hết. Desktop giữ nguyên bố cục
-   cũ (đủ rộng để 2 cột không chồng nhau). */
+.intro-card .hero-pills{margin:0;padding:12px 20px 18px}
+.intro-card #introSrc{min-height:34px;margin-top:10px}
+.intro-thay{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-mid)}
+.intro-thay img{width:28px;height:28px;border-radius:50%;object-fit:cover;flex:0 0 auto}
+.intro-thay b{color:#5B3A1A}
 @media(max-width:640px){
-  .intro-card{flex-direction:column;justify-content:flex-start}
-  .intro-card .intro-photo{position:static;inset:auto;width:100%;height:auto;aspect-ratio:1536/1024;object-fit:cover;object-position:center;display:block}
-  .intro-card::after{content:none}
-  .intro-card .intro-body{max-width:100%;padding:16px 16px 4px}
-  .intro-card .hero-pills{max-width:100%;padding:10px 16px 16px}
+  .intro-card .intro-avatar{top:16px;right:16px;width:56px;height:56px;border-radius:12px}
+  .intro-card .intro-body{padding:16px 84px 4px 16px}
+  .intro-card .hero-pills{padding:10px 16px 16px}
   .intro-card .intro-t{font-size:17px}
 }
 
@@ -1054,9 +1014,6 @@ font-family:inherit}
     align-items:start;
   }
   .ws-intake>#introHost{grid-area:hero}
-  .ws-intake>#introHost .intro-card{min-height:300px}
-  .ws-intake>#introHost .intro-card .intro-body{max-width:52%}
-  .ws-intake>#introHost .intro-card .hero-pills{max-width:52%}
   .ws-intake>.ws-main-col{grid-area:main;min-width:0}
   .ws-intake>.ws-side-col{grid-area:side;min-width:0}
 }

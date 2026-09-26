@@ -414,7 +414,7 @@
         // công cụ chưa gán) giữ nguyên thầy đã chọn ngẫu nhiên/đã ghim trước.
         if (d && ACTIVE) {
           var m = ToolPrices.masterForTool(ACTIVE, d);
-          if (m) setAuthor(m.id);
+          if (m) { setAuthor(m.id); fillIntroMaster(m); }
         }
       });
     });
@@ -754,8 +754,8 @@
       (HIST_ON ? '<div class="rail-hist" id="railHist" style="display:none"></div>' : '') +
       '<div class="ctx" id="railCtx" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:13px;height:13px;flex:0 0 auto"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg> <span id="railCtxTxt"></span></div>' +
       '<div class="chat" id="chat">' +
-        '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="/mascot/expr-vui-v2.webp" alt="Minh Bảo"></div><b>Chưa có lá số nào</b>' +
-        '<p>Bạn lập lá số ở khung giữa xong, Bảo trả lời liền —<br>chuyện sự nghiệp, tình duyên, năm nay, tháng tới, hỏi gì cũng được.</p></div>' +
+        '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="' + authorAva() + '" alt=""></div><b>Chưa có lá số nào</b>' +
+        '<p>Bạn lập lá số ở khung giữa xong, thầy trả lời liền —<br>chuyện sự nghiệp, tình duyên, năm nay, tháng tới, hỏi gì cũng được.</p></div>' +
       '</div>' +
       '<div class="rail-meter" id="railMeter" style="display:none"></div>' +
       '<div class="rail-sugg" id="railSugg" style="display:none"></div>' +
@@ -1301,6 +1301,15 @@
     var ava = host.querySelector('.rail-ava'); if (ava) ava.src = authorAva();
     var lbl = host.querySelector('.rail-h span'); if (lbl) lbl.textContent = authorLabel();
     var emptyAva = host.querySelector('#railEmpty img'); if (emptyAva) emptyAva.src = authorAva();
+  }
+  // Dòng "Thầy X đứng tên" trong `#introSrc` của thẻ giới thiệu công cụ —
+  // cùng nguồn `master_profiles.tool_ids` với avatar rail ở trên, để thẻ và
+  // khung chat luôn là MỘT thầy. Chỗ đã giữ sẵn bằng `min-height` (shell.css).
+  function fillIntroMaster(m) {
+    var el = document.getElementById('introSrc');
+    if (!el || !m) return;
+    el.innerHTML = '<div class="intro-thay"><img src="/authors/' + esc(m.id) + '.jpg" alt="" onerror="this.remove()">' +
+      '<span>Thầy <b>' + esc(m.display_name || '') + '</b> đứng tên' + (m.discipline ? ' · ' + esc(m.discipline) : '') + '</span></div>';
   }
   function openAuthorModal() {
     var rows = AUTHOR_ROSTER.map(function (a) {
@@ -2061,7 +2070,7 @@
     var avKey = (window.SHELL_INTRO && window.SHELL_INTRO.key) || ACTIVE;
     var avUrl = avKey ? Shell.avatarUrl(avKey) : '';
     head.innerHTML =
-      (avUrl ? '<img class="ws-print-avatar" src="' + avUrl + '" alt="">' : '') +
+      (avUrl ? '<img class="ws-print-avatar" src="' + avUrl + '" alt="" onerror="this.remove()">' : '') +
       '<div class="ws-print-head-text"><b>' + esc(wsTitleText()) + '</b>' +
       (sub ? '<span>' + esc(sub) + '</span>' : '') +
       '<span>tuviminhbao.com</span></div>';
@@ -4468,12 +4477,9 @@
           '<div id="introSrc"></div>' +
           '</div></div></div>';
       }
-      // Dòng "Theo <cổ pháp>..." KHÔNG còn điền vào banner nữa (Henry
-      // 2026-09-14: cho banner gọn lại) — `#introSrc` giữ lại rỗng vì
-      // `check-intro-card.mjs` vẫn bắt buộc thẻ này có mặt trên 49 trang
-      // tĩnh. Dòng nguồn/cổ pháp đầy đủ vẫn còn ở CUỐI kết quả qua
-      // `maybeAppendSrcNote()` — chỉ bỏ bản rút gọn trong banner, không bỏ
-      // minh bạch nguồn.
+      // `#introSrc` nay chở dòng "Thầy X đứng tên" (`fillIntroMaster`, điền
+      // khi catalog về). Dòng nguồn/cổ pháp đầy đủ vẫn ở CUỐI kết quả qua
+      // `maybeAppendSrcNote()`.
     },
     // Gọi khi trang đã chạy (có kết quả): ẩn intro cho LƯỢT XEM này (không
     // nhớ qua localStorage) — box quay lại mỗi khi mở trang mới.
