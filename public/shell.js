@@ -341,7 +341,7 @@
     if (window.TuviFeedback) return;
     if (document.getElementById('tvmb-feedback-js')) return;
     var s = document.createElement('script');
-    s.id = 'tvmb-feedback-js'; s.src = '/feedback.js?v=1'; s.async = true;
+    s.id = 'tvmb-feedback-js'; s.src = '/feedback.js?v=2'; s.async = true;
     (document.head || document.documentElement).appendChild(s);
   }
 
@@ -4337,6 +4337,31 @@
     openRail: function () {
       var r = document.getElementById('shell-rail'); if (r) { r.classList.add('open'); syncBackdrop(); armRailHistory(); }
       _railOpened = true; syncAskOrb();
+    },
+    // ── SOFT-NAV: đồng bộ lại cờ per-trang ──
+    // ACTIVE/CHATFIRST/CHAT_INTAKE/HIST_ON chỉ đọc window.SHELL_* MỘT LẦN lúc
+    // file này parse (dòng khai ở trên) — đúng với NẠP TRANG THẬT (script cờ
+    // của trang chạy TRƯỚC shell.js), sai với soft-nav (`shell-soft-nav.js`
+    // không tải lại `shell.js`, biến ở đây "đóng băng" mãi ở giá trị của trang
+    // ĐẦU TIÊN mở trong tab). Không đồng bộ lại thì `.ws`/`.rail` giữ nguyên
+    // vai của trang cũ — khách bấm 1 tool chat-first vẫn thấy `.ws` làm mặt
+    // chính, phải F5 mới đúng bố cục (Henry báo 2026-09-26).
+    // Gọi bởi `shell-soft-nav.js` NGAY SAU khi chạy script cờ của trang đích,
+    // TRƯỚC khi script nội dung (renderChat/startIntake) ghi vào `#chat` —
+    // thứ tự này bắt buộc: renderRail() dọn `#chat` về rỗng, gọi SAU sẽ xoá
+    // mất nội dung trang đích vừa ghi.
+    _resyncTool: function () {
+      ACTIVE = window.SHELL_ACTIVE || '';
+      CHATFIRST = !!window.SHELL_CHATFIRST;
+      CHAT_INTAKE = !!window.SHELL_CHAT_INTAKE;
+      HIST_ON = !!window.SHELL_HISTORY;
+      // Phiên chat/lá số là CỦA TRANG CŨ — tool mới chưa gọi setContext() nên
+      // "trang chưa dựng được gì" (đúng giá trị khởi tạo ban đầu của các biến
+      // này, xem khai báo `var ctx/messages/sessionId/curMeta/ctxCalls/birthOwned`).
+      ctx = null; messages = []; sessionId = newId(); curMeta = null; ctxCalls = 0; birthOwned = false;
+      document.body.classList.remove('chat-first-live', 'art-wide');
+      renderRail();
+      if (CHAT_INTAKE) { document.body.classList.add('chat-first-live'); Shell.openRail(); }
     },
     // Đợt 1 (2026-09-24): sheet dùng chung — trượt lên (mobile)/vào từ phải
     // (desktop) nội dung chi tiết mở từ một thẻ trong chat. `html` là nội

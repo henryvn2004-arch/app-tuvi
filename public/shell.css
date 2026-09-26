@@ -42,13 +42,23 @@
   --ws-top-h:69px;
   /* Bề rộng cột rail ở desktop — MỘT nguồn dùng ở CẢ `.shell` (grid-template-
      columns) LẪN `.ws-fab` (neo cụm nút sát mép phải WORKSPACE, không phải
-     mép phải viewport). Hai chỗ chép cùng một số 336px là hẹn ngày trôi khỏi
-     nhau; đổi bề rộng rail thì chỉ sửa đúng một dòng này. */
-  --rail-w:336px;
+     mép phải viewport). Chép số cứng ra hai chỗ là hẹn ngày trôi khỏi nhau;
+     đổi bề rộng rail thì chỉ sửa đúng một dòng này. Phải là PX THUẦN (không
+     `minmax()`/`%`) vì `.ws-fab` dùng nó trong `calc(var(--rail-w) + 16px)`. */
+  --rail-w:380px;
   /* Bề rộng cột ARTIFACT ở chế độ chat-first (`body.chat-first-live`): lúc đó
      `.ws` thôi làm mặt chính và lùi về cột phải, chat chiếm `1fr`. Rộng hơn
-     `--rail-w` vì cột này chở BẢN LUẬN dài, còn rail chỉ chở bong bóng chat. */
-  --art-w:420px;
+     `--rail-w` vì cột này chở BẢN LUẬN dài, còn rail chỉ chở bong bóng chat.
+     `minmax(420px,38%)` thay vì px cứng (Henry 2026-09-26, so với tỉ lệ
+     sidebar/chat/artifact của claude.ai — ảnh chụp đối chứng tay ra ~54/46
+     ở 1920px, còn 420px cứng ở đây chỉ còn ~22% cùng bề rộng, cột `.ws` bị ép
+     hẹp hơn hẳn dù chính cột này chở nội dung DÀI nhất trang, đã có ghi nhận
+     đau trước đó "814px → 376px" ở app-luan-giai.html). 420px vẫn là SÀN cho
+     màn hình hẹp; % chỉ ăn thêm trên màn rộng. `--art-w` CHỈ dùng trong
+     `grid-template-columns` (không dùng trong `calc()`/thuộc tính khác như
+     `--rail-w`) nên nhận `minmax()` an toàn — đổi `--rail-w` sang dạng này
+     sẽ làm hỏng `calc(var(--rail-w) + 16px)` của `.ws-fab` bên dưới. */
+  --art-w:minmax(420px,38%);
   --shadow:0 1px 2px rgba(15,42,61,.04),0 4px 16px rgba(15,42,61,.06);
   --shadow-lg:0 24px 60px rgba(15,42,61,.28),0 6px 18px rgba(15,42,61,.16);
 }
