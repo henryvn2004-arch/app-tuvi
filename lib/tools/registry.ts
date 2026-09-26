@@ -24,6 +24,8 @@ import { computeThanSoHoc } from '@/lib/engine/than-so-hoc';
 // CẢ HAI.
 import { extractTuBinhContext, extractGenericContext } from '@/lib/agent/prompts';
 import { lanKinhNam, lanKinhThang, lanKinhNgay } from '@/lib/agent/luan-chu-de';
+import { personaVoice } from '@/lib/agent/personas';
+import { lapKhoa, railData as railDataLucNham } from '@/lib/liuren/ke';
 import type { BirthParams } from '@/lib/contract/v1';
 import { SUGGEST_TOOL_DEF, SUGGEST_PRODUCT_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
@@ -76,6 +78,10 @@ export interface ToolContext {
   // Chủ đề câu hỏi lượt này (lib/agent/luan-chu-de.ts) — tra_tieu_van gắn thêm
   // lăng kính chủ đề vào kết quả (tối đa 2 khi câu hỏi có hai trọng tâm). [] = không chủ đề nào đã dựng.
   chuDe: string[];
+  // "Mời thầy khác" (P0 2026-09-26, xem execMoiThayBatTu) — true nếu lượt này
+  // ĐÃ mời một thầy khác vào phòng rồi. Cùng khuôn với `toolSuggestion`: chặn
+  // model mời hai lần trong CÙNG một lượt.
+  masterInvited: boolean;
 }
 
 export function newToolContext(
@@ -97,6 +103,7 @@ export function newToolContext(
     activeProfile: null,
     subjectSwitched: false,
     chuDe: [],
+    masterInvited: false,
   };
 }
 
@@ -234,6 +241,50 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false): any[] {
         required: ['query'],
       },
     },
+    // "Mời thầy khác" — 2nd opinion (P0 2026-09-26). Chỉ một cặp cố định cho
+    // vòng đầu: Tâm Kính (Bát Tự) đối chiếu vận NĂM — cùng năm/dữ liệu ngày
+    // sinh, không tốn thêm thao tác của người dùng. Xem execMoiThayBatTu.
+    {
+      name: 'moi_thay_bat_tu',
+      description:
+        'Mời THẦY TÂM KÍNH (chuyên Bát Tự/Tử Bình) vào cùng trả lời, để người dùng nghe thêm góc ĐỐI CHIẾU từ một môn khác cho MỘT NĂM cụ thể đang hỏi. ' +
+        'DÙNG RẤT DÈ: mặc định là KHÔNG gọi. Chỉ gọi khi cả bốn điều sau cùng đúng — ' +
+        '(1) người dùng đang hỏi vận hạn của một NĂM cụ thể (không phải tháng/ngày, không phải hỏi chung chung); ' +
+        '(2) bạn đã luận xong bằng Tử Vi TRƯỚC RỒI — đây là góc nhìn THÊM, không phải để né câu hỏi; ' +
+        '(3) trong cả cuộc trò chuyện này bạn CHƯA gọi tool này lần nào; ' +
+        '(4) không phải lúc người dùng đang buồn/bế tắc/kể chuyện riêng — lúc đó chỉ nên lắng nghe. ' +
+        'Sau khi gọi, hệ thống tự đưa Tâm Kính vào nói bằng dữ liệu Bát Tự THẬT — bạn KHÔNG tự luận thay Tâm Kính, KHÔNG bịa số liệu Bát Tự, và KHÔNG nhắc trước trong lời văn rằng bạn "sắp mời" ai đó.',
+      input_schema: {
+        type: 'object',
+        properties: {
+          nam: { type: 'integer', description: 'Năm dương lịch cần đối chiếu — lấy ĐÚNG năm người dùng vừa hỏi.' },
+          ly_do: { type: 'string', description: 'MỘT câu ngắn nói vì sao đáng nghe thêm góc Bát Tự cho năm này.' },
+        },
+        required: ['nam', 'ly_do'],
+      },
+    },
+    // Cặp thứ hai (P1 2026-09-26): Linh Cơ (Đại Lục Nhâm) đối chiếu MỘT VIỆC
+    // CỤ THỂ đang phân vân NGAY LÚC HỎI — khác Tâm Kính ở chỗ không cần năm/
+    // ngày sinh, chỉ cần thời điểm hiện tại (`lapKhoa()` không tham số = giờ
+    // chiêm = giờ hỏi). Cùng zero-friction: khách không phải nhập gì thêm.
+    {
+      name: 'moi_thay_luc_nham',
+      description:
+        'Mời THẦY LINH CƠ (chuyên Đại Lục Nhâm) vào cùng trả lời, để người dùng nghe thêm góc ĐỐI CHIẾU từ một môn khác cho MỘT VIỆC CỤ THỂ đang phân vân NGAY LÚC NÀY (thành/bại, nên tiến hay lui, chừng nào có kết quả) — KHÔNG dùng cho câu hỏi vận năm/tháng chung chung (đã có moi_thay_bat_tu cho việc đó). ' +
+        'DÙNG RẤT DÈ: mặc định là KHÔNG gọi. Chỉ gọi khi cả bốn điều sau cùng đúng — ' +
+        '(1) người dùng đang hỏi về MỘT VIỆC CỤ THỂ, có thể trả lời được ngay bây giờ (vd "có nên ký hợp đồng này", "việc này có thành không") — không phải hỏi vận hạn dài hạn; ' +
+        '(2) bạn đã luận xong bằng Tử Vi TRƯỚC RỒI — đây là góc nhìn THÊM, không phải để né câu hỏi; ' +
+        '(3) trong cả cuộc trò chuyện này bạn CHƯA gọi tool này (hay moi_thay_bat_tu) lần nào; ' +
+        '(4) không phải lúc người dùng đang buồn/bế tắc/kể chuyện riêng — lúc đó chỉ nên lắng nghe. ' +
+        'Sau khi gọi, hệ thống tự đưa Linh Cơ vào nói bằng khóa Lục Nhâm THẬT lập ngay lúc này — bạn KHÔNG tự luận thay Linh Cơ, KHÔNG bịa thiên tướng/tam truyền, và KHÔNG nhắc trước trong lời văn rằng bạn "sắp mời" ai đó.',
+      input_schema: {
+        type: 'object',
+        properties: {
+          ly_do: { type: 'string', description: 'MỘT câu ngắn nói vì sao đáng nghe thêm góc Lục Nhâm cho việc này.' },
+        },
+        required: ['ly_do'],
+      },
+    },
   ];
 }
 
@@ -258,6 +309,8 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
   // tra `tool_pricing`, ghi CÙNG `ctx.toolSuggestion`, cùng trần 1 lần/hội thoại.
   if (name === 'goi_y_cong_cu' || name === 'goi_y_san_pham')
     return execGoiYCongCu(input, ctx, name === 'goi_y_san_pham' ? 'report' : 'tool');
+  if (name === 'moi_thay_bat_tu') return execMoiThayBatTu(input, ctx);
+  if (name === 'moi_thay_luc_nham') return execMoiThayLucNham(input, ctx);
   if (name === 'tra_van_nam_bat_tu') return execTraVanNamBatTu(input, ctx);
   if (name === 'tra_van_nam_cong_so') return execTraVanNamCongSo(input, ctx);
   if (name === 'tra_nam_ca_nhan_than_so') return execTraNamCaNhanThanSo(input);
@@ -480,6 +533,71 @@ async function execGoiYCongCu(input: Rec, ctx: ToolContext, kind: 'tool' | 'repo
   return {
     content: `Đã hiện thẻ "${s.label}" cho người dùng. Đừng nhắc lại trong lời văn, đừng nói giá, cứ trả lời tiếp tự nhiên.`,
     label: 'Đang tra danh mục',
+  };
+}
+
+// ── Mời thầy khác — 2nd opinion (P0 2026-09-26) ─────────────────────────
+// Tái dùng ĐÚNG engine + formatter của tra_van_nam_bat_tu (computeTuBinh +
+// extractTuBinhContext) — không chép công thức lần hai. Khác ở chỗ đây
+// KHÔNG trả số liệu thô cho CHÍNH thầy đang nói luận tiếp, mà đóng gói kèm
+// giọng thật của Tâm Kính (lib/agent/personas.ts) và một chỉ dẫn tường
+// thuật — mô hình VẪN LÀ MỘT lượt gọi model DUY NHẤT (không mở thêm lượt
+// gọi provider nào), chỉ đổi giọng ngay trong phần còn lại của câu trả lời.
+// `ctx.masterInvited`: chặn mời quá 1 lần/lượt, cùng khuôn `toolSuggestion`.
+async function execMoiThayBatTu(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  if (ctx.masterInvited) {
+    return { content: 'Đã mời một thầy khác trong lượt này rồi. Đừng mời thêm.', label: 'Mời Tâm Kính' };
+  }
+  if (!ctx.birth) {
+    return { content: 'Chưa có ngày sinh trong ngữ cảnh — không mời được Tâm Kính. Đừng nhắc tới việc mời trong câu trả lời.', label: 'Mời Tâm Kính' };
+  }
+  const nam = Math.floor(Number(input?.nam));
+  if (!Number.isFinite(nam)) {
+    return { content: 'Thiếu năm cần xem — không mời được Tâm Kính.', label: 'Mời Tâm Kính' };
+  }
+  const res = computeTuBinh(ctx.birth, nam);
+  if (!res.ok || !res.data) {
+    return { content: 'Không tính được Bát Tự để mời Tâm Kính: ' + (res.error || 'lỗi không rõ') + '. Đừng nhắc tới việc mời trong câu trả lời.', label: 'Mời Tâm Kính' };
+  }
+  ctx.masterInvited = true;
+  return {
+    content:
+      `— THẦY TÂM KÍNH (Bát Tự) VỪA VÀO PHÒNG, ĐÃ XEM XONG NĂM ${nam} —\n` +
+      'Viết tiếp phần này bằng giọng THẬT của Tâm Kính (không phải giọng của bạn), mở một dòng riêng bằng "**Tâm Kính:**", CHỈ luận từ đúng dữ liệu Bát Tự dưới đây — không tự thêm số liệu ngoài đây:\n' +
+      (personaVoice('tam-kinh') || '') +
+      '\n\n' +
+      extractTuBinhContext(res.data) +
+      '\n\nLuận xong phần Tâm Kính thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn để khép lại — không lặp lại số liệu Tâm Kính vừa nêu.',
+    label: `Đang mời thầy Tâm Kính xem Bát Tự năm ${nam}...`,
+  };
+}
+
+// ── Mời thầy khác — cặp thứ hai: Linh Cơ / Đại Lục Nhâm (P1 2026-09-26) ──
+// Cùng khuôn execMoiThayBatTu, khác nguồn số: `lapKhoa()` không cần ngày sinh,
+// chỉ cần THỜI ĐIỂM HỎI (chiêm thời = giờ hiện tại — đúng cổ pháp Lục Nhâm,
+// không phải lỗi thiếu tham số). `railData()` đã PHẲNG sẵn cho rail
+// (lib/liuren/ke.ts), đi thẳng qua `extractGenericContext` — đúng cách
+// `toolType==='luc-nham'` đang dùng ở buildChatContext, không dựng lại.
+async function execMoiThayLucNham(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  if (ctx.masterInvited) {
+    return { content: 'Đã mời một thầy khác trong lượt này rồi. Đừng mời thêm.', label: 'Mời Linh Cơ' };
+  }
+  let khoa;
+  try {
+    khoa = lapKhoa();
+  } catch (e) {
+    return { content: 'Không lập được khóa Lục Nhâm: ' + (e instanceof Error ? e.message : 'lỗi không rõ') + '. Đừng nhắc tới việc mời trong câu trả lời.', label: 'Mời Linh Cơ' };
+  }
+  ctx.masterInvited = true;
+  return {
+    content:
+      `— THẦY LINH CƠ (Đại Lục Nhâm) VỪA VÀO PHÒNG, ĐÃ LẬP KHÓA NGAY LÚC NÀY —\n` +
+      'Viết tiếp phần này bằng giọng THẬT của Linh Cơ (không phải giọng của bạn), mở một dòng riêng bằng "**Linh Cơ:**", luận theo đúng trình tự tam truyền → tứ khóa → thiên tướng, CHỈ dựa vào khóa dưới đây — không tự lập lại hay đổi một chi nào:\n' +
+      (personaVoice('linh-co') || '') +
+      '\n\n' +
+      extractGenericContext(railDataLucNham(khoa)) +
+      '\n\nLuận xong phần Linh Cơ thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn để khép lại — không lặp lại số liệu Linh Cơ vừa nêu.',
+    label: 'Đang mời thầy Linh Cơ lập khóa Lục Nhâm...',
   };
 }
 
