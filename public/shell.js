@@ -2479,6 +2479,44 @@
     return null;
   }
 
+  // Chủ đề (CUNG vừa hỏi, khoá bằng tên bare — bỏ tiền tố "Cung " của
+  // TOPIC_CUNG ở trên) → công cụ liên quan, xếp theo ưu tiên. `maybeShowUpsell`
+  // dùng bảng này để KHÔNG luôn mời Luận Giải — mời đúng thứ khớp điều vừa hỏi.
+  // 'laso' luôn đứng cuối làm phao cứu sinh: chắc chắn có trong `tool_pricing`
+  // (sản phẩm cốt lõi) nên tra tới cuối luôn ra một thẻ.
+  // 🔑 Đây là bản DÀNH RIÊNG CHO CLIENT — server có bản riêng, hẹp hơn, ở
+  // `lib/tools/suggest-tool.ts` (`SUGGEST_PRODUCT_TOOL_DEF`, chỉ 2 mã). Hai nơi
+  // CHƯA hợp nhất một nguồn (xem docs/UX-AUDIT-PLAN.md "W5: Bán chéo").
+  var TOPIC_REPORT_CANDIDATES = {
+    'Tài Bạch': ['xem-lam-an', 'chu-trinh-cuoc-doi', 'laso'],
+    'Quan Lộc': ['cong-so', 'chu-trinh-cuoc-doi', 'laso'],
+    'Phu Thê': ['xem-tuoi', 'chan-dung-vo-chong', 'laso'],
+    'Tử Tức': ['day-con', 'huong-nghiep-tre', 'xem-tuoi-sinh-con', 'laso'],
+    'Tật Ách': ['van-han-nam', 'laso'],
+    'Phụ Mẫu': ['chu-trinh-cuoc-doi', 'laso'],
+    'Điền Trạch': ['bat-trach', 'laso'],
+    'Thiên Di': ['xem-lam-an', 'chu-trinh-cuoc-doi', 'laso'],
+    'Nô Bộc': ['nhan-mach', 'laso'],
+    'Huynh Đệ': ['nhan-mach', 'laso'],
+    'Phúc Đức': ['chu-trinh-cuoc-doi', 'laso'],
+    'Mệnh': ['chu-trinh-cuoc-doi', 'laso'],
+  };
+  // Trả dòng `tool_pricing` (đã enabled, có `app_path` — `ToolPrices.rows()`
+  // chỉ nạp đúng những dòng đó) của ứng viên ĐẦU TIÊN còn tồn tại, hoặc null
+  // nếu `ToolPrices` chưa nạp xong (nơi gọi tự rơi về hành vi cũ khi đó).
+  function pickTopicReport(cung) {
+    var bare = String(cung || '').replace(/^Cung\s+/, '');
+    var candidates = TOPIC_REPORT_CANDIDATES[bare] || ['laso'];
+    var rs = (window.ToolPrices && ToolPrices.rows()) || [];
+    if (!rs.length) return null;
+    for (var i = 0; i < candidates.length; i++) {
+      for (var j = 0; j < rs.length; j++) {
+        if (rs[j] && rs[j].tool_id === candidates[i] && rs[j].app_path) return rs[j];
+      }
+    }
+    return null;
+  }
+
   // Trạng thái ví cho rail. `price` để null nghĩa là CHƯA BIẾT giá → đồng hồ im
   // lặng thay vì đoán. Đoán giá rồi hiện sai số câu là nói sai với người dùng
   // ngay trên thứ họ dùng để quyết định.
@@ -2646,17 +2684,24 @@
 
   // Thẻ mời — chèn vào giữa dòng hội thoại SAU câu thứ 3, gọi tên đúng cung mà
   // người ta vừa hỏi. Bán ở khoảnh khắc đã tỏ ý quan tâm, không phải lúc cạn ví.
+  // Từ 2026-09-26 (W5): KHÔNG còn luôn mời Luận Giải — `pickTopicReport` chọn
+  // công cụ khớp đúng CUNG vừa hỏi, rơi về Luận Giải khi không có ứng viên
+  // riêng hoặc `ToolPrices` chưa nạp xong (giữ đúng hành vi cũ cho ca đó).
   function maybeShowUpsell() {
-    if (_upsellShown || !ctx || !ctx.birth) return;   // cần lá số thật mới mời Luận Giải
-    if (ACTIVE === 'luan-giai') return;               // đang ở chính tool đó rồi
+    if (_upsellShown || !ctx || !ctx.birth) return;   // cần lá số thật mới mời báo cáo
     if (_askCount < 3) return;
-    if (_rc.lasoPrice == null) return;                // chưa biết giá thì không hứa gì
-    _upsellShown = true;
 
     var cung = null;
     for (var i = _cungAsked.length - 1; i >= 0; i--) { if (_cungAsked[i]) { cung = _cungAsked[i]; break; } }
-    var rest = LG_PHAN.filter(function (p) { return p !== cung; });
-    var preview = rest.slice(0, 5).join(' · ');
+    var pick = pickTopicReport(cung);
+    var toolId = pick ? pick.tool_id : 'laso';
+    if (ACTIVE === toolId) return;                    // đang ở chính tool đó rồi
+
+    var label = (pick && pick.label) || 'Luận Giải';
+    var path = (pick && pick.app_path) || '/app/luan-giai';
+    var price = pick ? (window.ToolPrices ? ToolPrices.get(toolId) : null) : _rc.lasoPrice;
+    if (price == null) return;                        // chưa biết giá thì không hứa gì
+    _upsellShown = true;
 
     var lead = cung
       ? 'Mấy câu vừa rồi của bạn xoay quanh <b>' + esc(cung) + '</b>.'
@@ -2666,21 +2711,36 @@
     if (!chat) return;
     var card = document.createElement('div');
     card.className = 'rail-upsell';
-    card.innerHTML =
-      '<div class="ru-t">' + lead + '</div>' +
-      '<div class="ru-d">Bản <b>Luận Giải</b> soi trọn <b>' + LG_PHAN.length + ' mục</b> của chính lá số này — ' +
-        (cung ? esc(cung) + ' có mục riêng, cùng ' : '') + rest.length + ' mục còn lại: ' +
-        '<span class="ru-list">' + esc(preview) + '…</span></div>' +
-      '<div class="ru-f">' +
-        '<a class="ru-btn" href="/app/luan-giai">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng</a>' +
-        '<span class="ru-price">≈ ' + creditVnd(_rc.lasoPrice) + '</span>' +
-      '</div>';
+    // toolId === 'laso' (mặc định hoặc chọn đúng ứng viên): giữ bản thẻ CŨ, đã
+    // đo và tinh chỉnh — có xem trước N mục. Tool khác thì thẻ GỌN hơn: không
+    // có danh sách mục để nêu cho công cụ đó.
+    if (toolId === 'laso') {
+      var rest = LG_PHAN.filter(function (p) { return p !== cung; });
+      var preview = rest.slice(0, 5).join(' · ');
+      card.innerHTML =
+        '<div class="ru-t">' + lead + '</div>' +
+        '<div class="ru-d">Bản <b>Luận Giải</b> soi trọn <b>' + LG_PHAN.length + ' mục</b> của chính lá số này — ' +
+          (cung ? esc(cung) + ' có mục riêng, cùng ' : '') + rest.length + ' mục còn lại: ' +
+          '<span class="ru-list">' + esc(preview) + '…</span></div>' +
+        '<div class="ru-f">' +
+          '<a class="ru-btn" href="' + esc(path) + '">Xem trọn ' + LG_PHAN.length + ' mục — ' + price + ' Lượng</a>' +
+          '<span class="ru-price">≈ ' + creditVnd(price) + '</span>' +
+        '</div>';
+    } else {
+      card.innerHTML =
+        '<div class="ru-t">' + lead + '</div>' +
+        '<div class="ru-d">Bản <b>' + esc(label) + '</b> viết trọn thành văn bản đúng điều bạn vừa hỏi, thay vì hỏi lẻ từng câu.</div>' +
+        '<div class="ru-f">' +
+          '<a class="ru-btn" href="' + esc(path) + '">Xem ' + esc(label) + ' — ' + price + ' Lượng</a>' +
+          '<span class="ru-price">≈ ' + creditVnd(price) + '</span>' +
+        '</div>';
+    }
     chat.appendChild(card);
     chat.scrollTop = chat.scrollHeight;
-    try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'rail_upsell_shown', cung: cung || null } }); } catch (e) { /* ignore */ }
+    try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'rail_upsell_shown', cung: cung || null, suggest_tool: toolId } }); } catch (e) { /* ignore */ }
     var btn = card.querySelector('.ru-btn');
     if (btn) btn.addEventListener('click', function () {
-      try { track('cta_click', { tool_id: 'laso', meta: { from: 'rail_upsell', cung: cung || null } }); } catch (e) { /* ignore */ }
+      try { track('cta_click', { tool_id: toolId, meta: { from: 'rail_upsell', cung: cung || null } }); } catch (e) { /* ignore */ }
     });
   }
 

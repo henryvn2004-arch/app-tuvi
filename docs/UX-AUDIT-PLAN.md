@@ -338,12 +338,34 @@ giá; sidebar ẩn khối rỗng cho tới khi có dữ liệu; không emoji mà
       từ mock.
 
 ### W5: Bán chéo (mục 3)
-- [ ] Bảng chủ đề → report, `goi_y_san_pham` mở rộng và nối mọi kịch bản,
-      `maybeShowUpsell` theo chủ đề.
-- [ ] Khối "Bước tiếp theo" ở cuối kết quả `/app/*` và cuối report-delivery.
-      Ưu tiên cao nhất: `/la-so/[slug]` (~7.000 trang, loại SEO nhiều nhất) —
-      xác nhận (J3/J4) HTML gốc không có CTA nào về chat, khác `/khao-luan/*`
-      đã có CTA rõ ràng.
+- [x] Bảng chủ đề (CUNG) → report + `maybeShowUpsell` theo chủ đề (2026-09-26):
+      `public/shell.js` `TOPIC_REPORT_CANDIDATES`/`pickTopicReport` — thẻ mời
+      giờ chọn đúng công cụ khớp CUNG vừa hỏi (đọc `ToolPrices.rows()`, đã lọc
+      `enabled`+`app_path` thật), rơi về Luận Giải khi không có ứng viên riêng.
+      Verify: Playwright mock (`/api/v1/chat` + tool_pricing), 3 câu "công việc"
+      → thẻ ra đúng "Tử Vi Công Sở & Hướng Nghiệp"/`/app/cong-so`, không phải
+      Luận Giải; gate 1 thẻ/phiên vẫn giữ (kiểm thêm 2 lượt, đếm lại = 1).
+      **Chưa làm**: `goi_y_san_pham` (server, `lib/tools/suggest-tool.ts`) vẫn
+      chỉ 2 mã cũ — bảng client ở trên CHƯA hợp nhất với bản server; xem mục d.
+- [x] Khối "Bước tiếp theo" ở `/la-so/[slug]` (2026-09-26, ƯU TIÊN CAO NHẤT —
+      ~7.000 trang, loại SEO nhiều nhất, trước đây 0 CTA chat): `buildIsrHTML`
+      + `buildNextStepHTML`/`fetchNextStepTool`/`appChatHref` trong
+      `app/la-so/[slug]/route.ts` — 2 thẻ cuối trang (trước khối "Đọc thêm từ
+      nghiên cứu"): 1 báo cáo liên quan (đọc thẳng `tool_pricing`, hiện là
+      "Chu Trình Cuộc Đời") + 1 mở Hỏi Thầy (`/app?...&auto=1`, `auto=1` ở đây
+      chỉ tự chạy An Sao MIỄN PHÍ, không phải report trả phí). Đã qua
+      `tsc --noEmit` + đọc kỹ JSX/template; **KHÔNG chạy được `next dev`/
+      `next build` thật trong sandbox này** (cần `SUPABASE_SERVICE_KEY` +
+      mạng ra Supabase mà môi trường hiện tại không có — xem `docs/QC.md`
+      "Claude Code Remote environments") nên chưa xem trang render bằng mắt.
+  - [ ] Chưa làm: khối tương tự cho `laso_public`/`laso_pregen` (hai nhánh cũ
+        của cùng route, ít traffic hơn ISR) và cho các trang `/app/*` khác
+        (item e) — hoãn để giữ đợt an toàn, nhỏ.
+- [ ] `goi_y_san_pham` (server) mở rộng sang cả 24 kịch bản rail + hợp nhất
+      một nguồn với bảng chủ đề→report ở trên (item c/d, hoãn — rủi ro chạm
+      vào tool LLM đang chạy thật, cần đo riêng trước khi đổi enum).
+- [ ] Khối "Bước tiếp theo" ở cuối `report-delivery.js` và các trang `/app/*`
+      còn lại (item d/e, hoãn — diện rộng, để đợt sau).
 - [x] Email bán chéo: T6 + CN, tối đa 1 thư/người/lượt. Bật budget sau deploy, đo 2 tuần.
 
 ### W6: Độ mượt và hệ thống thị giác (Emil + impeccable polish)
