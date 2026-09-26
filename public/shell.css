@@ -253,6 +253,10 @@ html.sb-mini .sbn-menu{right:auto;width:240px}
 .msg.a{color:var(--text);display:flex;gap:8px;align-items:flex-start;max-width:100%}
 .msg-ava{width:24px;height:24px;border-radius:6px;object-fit:cover;flex:0 0 auto;margin-top:1px;border:1px solid rgba(200,169,106,.35)}
 .msg-body{flex:1;min-width:0}
+/* "Mời thầy khác" (P3 2026-09-26) — bong bóng của thầy KHÁCH vừa được mời
+   vào, tách khỏi bong bóng thầy chính (xem splitBySpeaker, shell.js). */
+.msg.a.msg-guest{margin-left:14px;padding-left:10px;border-left:2px solid var(--gold-soft)}
+.msg-speaker{font-size:11px;font-weight:700;color:var(--gold-soft);text-transform:uppercase;letter-spacing:.02em;margin-bottom:3px}
 .msg.a b,.msg.a strong{color:var(--text);font-weight:700}
 .msg.a p{margin-bottom:8px}
 .msg.a em{color:var(--gold-soft);font-style:normal;font-weight:600}

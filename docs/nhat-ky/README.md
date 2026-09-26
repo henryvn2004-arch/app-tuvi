@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-440 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+443 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 275 | 1,059,721 B |
+| `2026-09.md` | 278 | 1,067,522 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -26,6 +26,9 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 🧭 Điều hướng kiểu ChatGPT — sidebar trang, màn chat `/app`, Minh Bảo dẫn đường, kết quả như artifact |
+| 1 | 2026-09 | `2026-09.md` | 🆕 P4 "mời thầy khác" — đo click-through qua event `master_invite` |
+| 1 | 2026-09 | `2026-09.md` | 🆕 P3 "mời thầy khác" — @mention gọi đích danh + bong bóng riêng theo thầy |
+| 1 | 2026-09 | `2026-09.md` | 🆕 P2 "mời thầy khác" — tool `moi_thay_ky_mon`, Tử Vi mời Tâm Kính (Kỳ Môn) đối chiếu hướng/giờ hành sự |
 | 1 | 2026-09 | `2026-09.md` | 🎯 W7 — đo lại và chốt: J1/J2 re-verify sống, 3 chỉ số mục 0 CHƯA đo được |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Audit UX bằng 3 bộ skill thiết kế — dọn trang, "Hỏi Thầy", email bán chéo |
 | 1 | 2026-09 | `2026-09.md` | 🆕 P1 "mời thầy khác" — tool `moi_thay_luc_nham`, Tử Vi mời Linh Cơ (Đại Lục Nhâm) đối chiếu một việc cụ thể |
