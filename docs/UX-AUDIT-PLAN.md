@@ -298,15 +298,44 @@ giá; sidebar ẩn khối rỗng cho tới khi có dữ liệu; không emoji mà
       `shell.css`/`shell.js` + `#shell-rail`, giữ nguyên form/kết quả cổ pháp.
 
 ### W4: Chat-first mượt (chi tiết tương tác cho P3 bên plan kia)
-- [ ] Rail không bao giờ trống: chưa có lá số thì thầy vẫn trả lời câu
-      chung, rồi hỏi ngày sinh **bằng form nhỏ ngay trong bong bóng chat**
-      (tái dùng `TuviForm.renderChat`).
-- [ ] Câu hỏi từ trang chủ (`/app?q=`) phải ra câu trả lời, không dừng ở
-      form.
-- [ ] Chip sau mỗi câu: tối đa 3, ưu tiên một chip "đào sâu" và một chip
-      "chủ đề kế bên".
-- [ ] Điểm quay lại: "vận hôm nay" làm tin nhắn đầu rail khi người dùng mở
-      lại trong ngày (nguồn `lib/engine/van-ngay.ts`, engine, không LLM).
+- [ ] Rail không bao giờ trống: **CHỈ đúng ở `/app` (app-home.html)** — trang
+      này đã luôn mồi rail bằng kịch bản `hoang-dao` (chưa có lá số) hoặc lá
+      số đã nhớ (`wire()`), không bao giờ để input khoá. **CHƯA đúng ở 8 trang
+      tool dùng `SHELL_CHAT_INTAKE=true`** (`app-luan-giai.html`,
+      `app-bat-tu.html`, `app-xem-tuoi.html`, `app-nguoi-khac.html`,
+      `app-day-con.html`, `app-than-so-hoc.html`,
+      `app-duyen-no-tien-kiep.html`, `app-chan-dung-vo-chong.html`): vào thẳng
+      các trang này, `startIntake()` chạy TRƯỚC `Shell.setContext` nên `ctx`
+      vẫn `null` và input vẫn khoá cho tới khi xong 3 bước — bấm gõ tự do
+      không gửi được. Bỏ ngoài kỳ này: sửa an toàn cho cả 8 trang (đổi toolType
+      gửi lên rail LLM khi chưa có birth, tránh xung đột với draft/sổ lá số/
+      resume-flow đã có ở `TuviForm.renderChat`) là việc rộng hơn một bản vá
+      ngoại lệ — cần bàn thiết kế riêng trước khi đụng 8 trang cùng lúc.
+- [x] Câu hỏi từ trang chủ (`/app?q=`) phải ra câu trả lời, không dừng ở
+      form. **Đã đúng từ trước** (không phải việc mới) — `app-home.html`
+      `HOME_ASK` đọc `?q=`/`&thay=` rồi gọi thẳng `Shell.ask()` (qua
+      `wire()`, dù có hay chưa có lá số nhớ trên máy), đi qua ĐÚNG pipeline
+      `ask()`/`sendMsg()`/`/api/v1/chat` như gõ tay. Xác nhận bằng Playwright
+      (mock `/api/v1/chat`, mở `/app-home.html?q=...&thay=...#chat`): request
+      thật được gửi, không dừng ở form.
+- [x] Chip sau mỗi câu: tối đa 3. `CHAT_SUGGEST_RULES` (`lib/agent/run.ts`)
+      đã dặn model đúng 3 gợi ý và giờ xếp vai: gợi ý 1 "đào sâu" đúng chủ đề
+      vừa luận, gợi ý 2 sang "chủ đề kế bên", gợi ý 3 tự do — cắt cứng
+      `.slice(0,3)` ở cả server (`run.ts`) và client (`shell.js`, thay
+      `slice(0,4)`) làm lưới an toàn khi model lỡ ghi thêm. Xác nhận bằng
+      Playwright: server mock trả 4 gợi ý, rail chỉ render 3 chip.
+- [x] Điểm quay lại: "vận hôm nay" làm tin nhắn đầu rail khi người dùng mở
+      lại trong ngày. `app-home.html` `daysAway()`/`Shell.lastChatAt()` đã có
+      sẵn (từ #507) nhưng chỉ phân biệt "chưa từng/≥1 ngày/≥3 ngày" — thêm
+      nhánh `away===0` (đã hỏi trong CÙNG ngày, không phải lần đầu):
+      `vanHomNayText()` dựng câu chào thẳng từ `v.caNhan` (cung nhật hạn +
+      chính tinh + lĩnh vực, nguồn `computeVanNgayCaNhan` trong
+      `lib/engine/van-ngay.ts`, đã tính sẵn trong `wire()` — KHÔNG gọi LLM).
+      Rỗng khi thiếu tầng cá nhân thì rơi về câu chào chung như cũ (không
+      crash, không hỏi lại "đã hỏi rồi"). Xác nhận bằng Playwright: mock
+      `app_hist_v1_home` (chat 2 giờ trước, cùng ngày) + `app_birth` +
+      `/api/van-ngay` POST trả `caNhan`, greeting đầu rail chứa đúng cung/sao
+      từ mock.
 
 ### W5: Bán chéo (mục 3)
 - [ ] Bảng chủ đề → report, `goi_y_san_pham` mở rộng và nối mọi kịch bản,

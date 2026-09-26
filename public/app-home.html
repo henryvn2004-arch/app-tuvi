@@ -564,7 +564,7 @@
 <script src="/auth.js?v=4"></script>
   <script src="/nav.js?v=45" data-icons-only></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
-<script src="/shell.js?v=106"></script>
+<script src="/shell.js?v=107"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=44"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -1371,15 +1371,33 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       .catch(function(){ fin(null); });
   }
 
-  function greetingFor(cc,nm,away,worry){
+  // W4 item 4 (docs/UX-AUDIT-PLAN.md): quay lại TRONG NGÀY (away===0, đã hỏi
+  // ít nhất 1 lần trước đó — khác away<0 "chưa từng") thì mở lời bằng CHÍNH
+  // "vận hôm nay" của người đó, đọc thẳng `v.caNhan` (engine `van-ngay.ts`
+  // `computeVanNgayCaNhan`, đã tính SẴN trong `wire()` — không gọi LLM, không
+  // tính lại gì ở đây). `vanHomNay` rỗng khi chưa có tầng cá nhân (lá số hỏng/
+  // API lỗi) → rơi về câu chào chung như trước, không hỏi lại đã hỏi rồi.
+  function greetingFor(cc,nm,away,worry,vanHomNay){
     var xung=nm?(', '+nm):'';
     if(away<0) return 'Chào con'+xung+'. Thầy ở đây — con muốn kể gì cũng được: chuyện đi làm, chuyện trong nhà, '
       + 'hay chỉ là hôm nay thấy mệt. Mà nếu muốn xem vận ngày **'+cc+'** hôm nay thì thầy soi luôn.';
+    if(away===0&&vanHomNay) return vanHomNay;
     if(away>=1&&worry) return 'Mấy hôm nay con thế nào'+xung+'? Lần trước con có nhắc chuyện **'+worry+'** — '
       + 'chuyện đó tới đâu rồi con?';
     if(away>=3) return 'Lâu rồi con chưa ghé'+xung+'. Dạo này ổn cả chứ? Có gì muốn kể với thầy không?';
     if(away>=1) return 'Con lại ghé rồi'+xung+'. Hôm nay thế nào — có chuyện gì trong lòng không?';
     return 'Thầy đây'+xung+'. Con còn muốn hỏi gì nữa không, hay có chuyện gì muốn kể?';
+  }
+
+  // Câu "vận hôm nay" CÁ NHÂN, dựng thẳng từ `v.caNhan` (deterministic, engine
+  // `computeVanNgayCaNhan` — KHÔNG LLM). `null` khi thiếu tầng cá nhân.
+  function vanHomNayText(cc,v,nm){
+    var cn=v&&v.caNhan; if(!cn||!cn.cungNhatHan) return null;
+    var xung=nm?(', '+nm):'';
+    var sao=(cn.chinhTinh||[]).slice(0,2).join(', ');
+    return 'Con lại ghé rồi'+xung+'. Hôm nay ngày **'+cc+'**, nhật hạn của con đang ở cung **'+cn.cungNhatHan+'**'
+      + (cn.linhVuc?' ('+cn.linhVuc+')':'') + (sao?' — có '+sao:'') + '.'
+      + (cn.bixung?' Ngày xung tuổi, con cẩn thận việc lớn nhé.':'') + ' Con muốn hỏi thêm gì không?';
   }
 
   // Chips = câu người dùng BẤM ĐỂ GỬI. Trộn hai đường: mở lòng và tra cứu.
@@ -1436,12 +1454,13 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
         // Mồi NGAY bằng câu chào chung để rail dùng được liền, rồi NÂNG CẤP khi
         // hồ sơ về (nếu có mối lo). setContext lượt sau dựng lại thread — vô hại
         // vì người dùng chưa gõ gì trong ~1,5s đầu.
+        var vanHomNay=(away===0)?vanHomNayText(cc,v,nm):null;
         var prime=function(worry){
           Shell.setContext({
             birth:birth,
             label:'Hỏi Thầy'+(nm?' · '+nm:''),
             placeholder:'Kể cho thầy nghe…',
-            greeting:greetingFor(cc,nm,away,worry),
+            greeting:greetingFor(cc,nm,away,worry,vanHomNay),
             chips:CHIPS_TAM_SU,
             passive:true
           });

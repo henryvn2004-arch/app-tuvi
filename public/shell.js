@@ -4753,7 +4753,9 @@
             try { track('chat_error', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { kind: 'stream', message: String(ev.data.message || '').slice(0, 200) } }); } catch (e) { /* ignore */ }
           }
           else if (ev.name === 'done' && ev.data) {
-            if (ev.data.suggestions && ev.data.suggestions.length) { ctxChips = ev.data.suggestions.slice(0, 4); ctxChipsSrc = 'suggest'; }
+            // W4 item 3 (docs/UX-AUDIT-PLAN.md): tối đa 3 chip — CHAT_SUGGEST_RULES
+            // (lib/agent/run.ts) đã dặn model đúng 3, đây là lưới an toàn phía client.
+            if (ev.data.suggestions && ev.data.suggestions.length) { ctxChips = ev.data.suggestions.slice(0, 3); ctxChipsSrc = 'suggest'; }
             applyPaywallInfo(ev.data.paywall);
             if (ev.data.toolSuggest) pendingSuggest = ev.data.toolSuggest;
           }
