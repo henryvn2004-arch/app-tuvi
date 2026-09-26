@@ -423,8 +423,18 @@ Số đo mốc (J8, `docs/ux-audit/J8.md`) — dùng để biết đã xong chư
       trang chưa dùng tới.
 
 ### W7: Đo lại và chốt
-- [ ] Chạy lại crawl, J1 và J2, so với baseline W0. Đọc 3 chỉ số mục 0 sau
-      2 tuần. Ghi nhật ký `docs/nhat-ky/`.
+- [~] Chạy lại crawl, J1 và J2, so với baseline W0. Đọc 3 chỉ số mục 0 sau
+      2 tuần. Ghi nhật ký `docs/nhat-ky/`. **Chỉ xong phần re-verify J1/J2 sống
+      2026-09-26** (static server cục bộ + Playwright 390px, đối chiếu từng
+      phát hiện P0/P1 ở `docs/ux-audit/J1-J2.md` — xem nhật ký "W7 — đo lại và
+      chốt"): #1 giá thiếu VNĐ, #2 tour che câu trả lời đầu, #3 tên chat, tab
+      bar gạch chân, draft form, rail an-sao/tu-tru, upsell theo chủ đề, CTA
+      `/la-so/[slug]` — đều xác nhận đã sửa trong code hiện tại. **CHƯA xong
+      phần đọc 3 chỉ số mục 0** — plan tự ghi rõ "sau 2 tuần", mà PR #1085 còn
+      draft, chưa merge `main`, nên chưa có giờ nào chạy thật trên prod. Không
+      bịa số. Addendum: **sau khi PR này merge + deploy, chờ đúng 2 tuần rồi
+      đọc lại `chat_msg`/`chat_reply`/D1-D7 và `rail_suggest_*`/`cta_click`
+      trong Supabase/analytics** để điền vào bảng mục 0, đóng hẳn dòng này.
 
 ---
 

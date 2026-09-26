@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-436 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+437 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 271 | 1,041,783 B |
+| `2026-09.md` | 272 | 1,047,289 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🎯 W7 — đo lại và chốt: J1/J2 re-verify sống, 3 chỉ số mục 0 CHƯA đo được |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Audit UX bằng 3 bộ skill thiết kế — dọn trang, "Hỏi Thầy", email bán chéo |
 | 1 | 2026-09 | `2026-09.md` | 🏮 Luật danh tính cho persona thầy: bị hỏi thẳng thì không nhận là người thật |
 | 1 | 2026-09 | `2026-09.md` | 🏮 Ảnh dự phòng của khung chat: ông thầy nón lá → thầy Thái Hư |
