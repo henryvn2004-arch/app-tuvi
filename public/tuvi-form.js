@@ -597,10 +597,15 @@ window.TuviForm = (() => {
         : 'Giới tính của con là gì?',
       q2 = 'Ngày sinh dương lịch của con là ngày nào?',
       q3 = 'Giờ sinh của con là mấy giờ?',
-      onDone,
+      onDone: onDoneRaw,
     } = options;
     const chat = document.getElementById('chat');
     if (!chat) return;
+    // Form gõ tay và bong bóng "sổ lá số" chạy SONG SONG (xem chú thích dưới)
+    // — người dùng có thể lý thuyết hoàn tất cả hai (gõ xong step3 ĐÚNG lúc
+    // sổ vừa tải xong và họ bấm một lá số cũ). Khoá lại còn ĐÚNG MỘT lần gọi.
+    let _done = false;
+    const onDone = onDoneRaw ? (data) => { if (_done) return; _done = true; onDoneRaw(data); } : undefined;
     const empty = document.getElementById('railEmpty');
     if (empty) empty.style.display = 'none';
     // Câu mở đầu (Henry 2026-09-23: bấm tool/nút Chat rồi thấy thẳng cái form
@@ -641,11 +646,12 @@ window.TuviForm = (() => {
     };
 
     // ── Sổ lá số trong chat (Henry 2026-09-26) ──────────────────────────────
-    // Đã đăng nhập + có lá số lưu sẵn (`window.UserCharts`, cùng nguồn với
-    // thanh "Sổ lá số" trên form tĩnh — xem user-charts.js) → hỏi "cho ai"
-    // TRƯỚC 3 bước gõ tay, bấm 1 cái là xong thay vì gõ lại từ đầu. Không có
-    // sổ/chưa đăng nhập/`UserCharts` chưa nạp kịp (best-effort, giống mọi module
-    // phụ khác trong file này) → rơi thẳng về flow gõ tay cũ, không chờ, không báo.
+    // Form gõ tay (startManual) LUÔN dựng NGAY — hành vi cũ không đổi, kể cả
+    // khi có sổ (test `mobile.spec.ts` "bước hỏi tên/giới tính" đợi #cx-hoten
+    // hiện gần như ngay lập tức, không đợi mạng). Sổ lá số (nếu đăng nhập và
+    // có mục) chỉ ĐẮP THÊM một bong bóng "Con hỏi cho ai?" đứng SAU, cho bấm
+    // tắt thay vì gõ lại — best-effort, tới muộn/hỏng thì thôi, không chặn gì.
+    let manualS1 = null; // gán trong startManual(); ẩn đi nếu người dùng chọn từ sổ
     function birthShort(b) {
       if (!b) return '';
       const g = b.gioitinh === 'nu' ? 'Nữ' : 'Nam';
@@ -683,20 +689,21 @@ window.TuviForm = (() => {
         const btn = e.target.closest('.tvf-saved-chip');
         if (!btn) return;
         const id = btn.getAttribute('data-id');
-        if (!id) { collapse(el, '<p>Người mới nhé.</p>'); startManual(); return; }
+        // Form gõ tay đã hiện sẵn — "+ Người mới" chỉ cần dẹp bong bóng này đi.
+        if (!id) { collapse(el, '<p>Người mới nhé.</p>'); return; }
         const it = items.find((x) => String(x.id) === id);
         if (!it || !it.birth) return;
         const name = it.label || it.birth.hoten || '';
         collapse(el, '<p>Hỏi cho <b>' + esc(name) + '</b> ✓</p>');
+        if (manualS1) manualS1.style.display = 'none';
         try { if (window.Shell && window.Shell.rememberBirth) window.Shell.rememberBirth(it.birth); } catch (e2) { /* ignore */ }
         finishWithBirth(it.birth);
       });
     }
     function offerFrom(uc) {
       uc.list().then((items) => {
-        if (!items || !items.length) { startManual(); return; }
-        renderSavedPicker(items);
-      }).catch(() => { startManual(); });
+        if (items && items.length) renderSavedPicker(items);
+      }).catch(() => { /* best-effort — im lặng bỏ qua */ });
     }
     function tryOfferSaved() {
       if (window.UserCharts && typeof window.UserCharts.list === 'function') { offerFrom(window.UserCharts); return; }
@@ -704,16 +711,15 @@ window.TuviForm = (() => {
       // renderChat() (script CUỐI trang) chạy trước khi tải xong thì đợi đúng
       // một lượt 'load' của thẻ script đó (id `tvmb-charts-js`, xem
       // ensureUserChartsJs() trong shell.js), tối đa 1,5s. Không có thẻ (chưa
-      // đăng nhập, `ensureUserChartsJs()` thoát sớm) → rơi thẳng về flow gõ
-      // tay, không treo chờ vô ích.
+      // đăng nhập, `ensureUserChartsJs()` thoát sớm) → thôi, form gõ tay đã
+      // hiện sẵn rồi (startManual() gọi độc lập, không đợi cái này).
       const tag = document.getElementById('tvmb-charts-js');
-      if (!tag) { startManual(); return; }
+      if (!tag) return;
       let done = false;
       const finish = () => {
         if (done) return;
         done = true;
         if (window.UserCharts && typeof window.UserCharts.list === 'function') offerFrom(window.UserCharts);
-        else startManual();
       };
       tag.addEventListener('load', finish, { once: true });
       setTimeout(finish, 1500);
@@ -728,6 +734,7 @@ window.TuviForm = (() => {
         '</div>' +
         `<button class="btn-go" type="button" id="${cp}-next1" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button>` +
         `<div class="err tvf-err" id="${cp}-err1" role="alert"></div>`);
+      manualS1 = s1;
       const focusFirst = () => { const f = document.getElementById(pid('hoten', cp)) || document.getElementById(pid('gioitinh', cp)); if (f) f.focus(); };
       focusFirst();
       document.getElementById(cp + '-next1').addEventListener('click', function () {
@@ -810,6 +817,7 @@ window.TuviForm = (() => {
         });
       }
     }
+    startManual();
     tryOfferSaved();
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
