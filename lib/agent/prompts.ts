@@ -2235,9 +2235,11 @@ const KY_MON_LABELS: Record<string, string> = {
   trucPhu: 'Trực phù (sao trực)', trucSu: 'Trực sử (cửa trực)',
   huongDoNhat: 'Hướng xếp hạng cao nhất',
 };
-/** Cùng lý do với Mai Hoa: bàn 9 cung là MẢNG, hàm generic sẽ nuốt mất. */
+/** Cùng lý do với Mai Hoa: bàn 9 cung là MẢNG, hàm generic sẽ nuốt mất.
+ *  Export (P2 "mời thầy khác" 2026-09-26): registry.ts dùng lại nguyên hàm này
+ *  để mời Tâm Kính bằng Kỳ Môn, không dựng formatter thứ tư. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function extractKyMonContext(data: any): string {
+export function extractKyMonContext(data: any): string {
   if (!data || typeof data !== 'object') return '';
   let ctx = '';
   for (const [k, v] of Object.entries(data)) {
