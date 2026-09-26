@@ -216,7 +216,7 @@ khỏi bảng dưới, chỉ giữ các phát hiện THẬT về code/nội dung
 | 2 | P0 | J3/J4 | Bảng giá `/cong-cu` đảo ngược VNĐ/Lượng | **Đã sửa** (PR này) |
 | 3 | P0 | J3/J4 | Số công cụ lệch 3 nơi (59+/53/50), thật là 50 | **Đã sửa** (PR này) |
 | 4 | P1 | J1 | Tour onboarding ("BƯỚC 1/7") tự bật 2.4s sau khi vào `/app`, che câu trả lời đầu tiên trên mobile | Chưa sửa → **W2** |
-| 5 | P1 | J5 | Reload giữa chừng form mất toàn bộ dữ liệu đã nhập, không cảnh báo/khôi phục | Chưa sửa → **W2** |
+| 5 | P1 | J5 | Reload giữa chừng form mất toàn bộ dữ liệu đã nhập, không cảnh báo/khôi phục | **Đã sửa** (PR này) — draft `sessionStorage`, nhảy thẳng tới bước dang dở |
 | 6 | P1 | J3/J4 | `/tools/an-sao.html`, `/tools/tu-tru.html` (còn sống) không có rail chat — ngõ cụt SEO | Chưa sửa → **W3 nối dài** (gom 2 trang này vào `/app/*` như 38 trang đã làm) |
 | 7 | P1 | J3/J4 | `/la-so/[slug]` (~7.000 trang, loại SEO nhiều nhất) — HTML gốc không có CTA nào về chat | Chưa sửa → **W5** (khối "Bước tiếp theo") |
 | 8 | ✓ Đã đọc, KHÔNG phải bug | J1/J2 | `tuvi-form.js` field trùng (ẩn + hiện) | Kiến trúc cố ý: `#birthPanel` (`TuviForm.render`) là form THẬT ẩn bằng `display:none` đúng chuẩn (`app-luan-giai.html:292`), `TuviForm.renderChat()` là hội thoại ghi vào form đó qua `setData()`. Trình duyệt tự loại `display:none` khỏi autofill/accessibility tree — không phải rò rỉ template. |
@@ -252,9 +252,10 @@ giá; sidebar ẩn khối rỗng cho tới khi có dữ liệu; không emoji mà
 - [ ] Tour onboarding ("BƯỚC 1/7", `app-home.html:2210`) che câu trả lời đầu
       tiên trên mobile — hoãn tới sau khi tin nhắn đầu render xong, hoặc bỏ
       qua hẳn khi vào kèm `?q=` (J1, P1).
-- [ ] Reload giữa chừng form (`/app/luan-giai`) mất toàn bộ dữ liệu đã nhập,
-      không cảnh báo/khôi phục — lưu state từng bước vào `sessionStorage`
-      (J5, P1).
+- [x] Reload giữa chừng form mất toàn bộ dữ liệu đã nhập — lưu draft từng
+      bước vào `sessionStorage` (`tuvi-form.js` `renderChat()`), nhảy thẳng
+      tới bước dang dở khi mount lại, tự xoá khi hoàn tất. Đã verify sống
+      qua static server cục bộ (J5, P1).
 - [x] `tuvi-form.js` field trùng (ẩn + hiện) — **đã đọc code, KHÔNG phải
       bug**: kiến trúc cố ý (form thật ẩn `display:none` + chat ghi qua
       `setData()`). Xem hàng #8 mục 4.1.
