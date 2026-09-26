@@ -5403,7 +5403,10 @@
       var b = document.createElement('div'); b.className = 'backdrop'; b.id = 'shell-backdrop';
       b.addEventListener('click', function () {
         var sb = document.getElementById('shell-sidebar');
-        if (sb) sb.classList.remove('open');
+        // Chạm nền mờ chỉ đóng LỚP TRÊN CÙNG: ngăn kéo sidebar mở chồng lên
+        // khung chat (☰ trong rail) thì đóng ngăn kéo là trả người ta về đúng
+        // cuộc chat đang dở — đóng luôn rail là đá họ ra trang kết quả.
+        if (sb && sb.classList.contains('open')) { sb.classList.remove('open'); syncBackdrop(); return; }
         closeRailUI(); // tự gọi syncBackdrop() + tiêu thụ mốc lịch sử nếu rail đang mở
       });
       document.body.appendChild(b);

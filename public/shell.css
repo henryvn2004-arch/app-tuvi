@@ -627,7 +627,7 @@ body.chat-first-live.art-closed .rail{--col-pad:max(14px,calc((100% - 736px)/2))
 body.chat-first-live.art-closed .chat{padding-left:var(--col-pad);padding-right:var(--col-pad)}
 body.chat-first-live.art-closed .rail-in,body.chat-first-live.art-closed .rail-sugg,body.chat-first-live.art-closed .rail-meter,body.chat-first-live.art-closed .ctx{padding-left:var(--col-pad);padding-right:var(--col-pad)}
 body.chat-first-live.art-closed .ctx{margin-left:var(--col-pad);margin-right:var(--col-pad);padding-left:10px;padding-right:10px}
-.art-card{appearance:none;font:inherit;text-align:left;display:flex;align-items:center;gap:12px;width:100%;max-width:420px;border:1px solid var(--line);background:var(--white);border-radius:14px;padding:11px 13px;cursor:pointer;color:var(--text);margin-left:32px}
+.art-card{appearance:none;font:inherit;text-align:left;display:flex;align-items:center;gap:12px;width:calc(100% - 32px);max-width:420px;flex:0 0 auto;border:1px solid var(--line);background:var(--white);border-radius:14px;padding:11px 13px;cursor:pointer;color:var(--text);margin-left:32px}
 @media(hover:hover){.art-card:hover{border-color:var(--gold-soft)}}
 .art-card .art-ic{width:38px;height:38px;border-radius:9px;background:var(--paper-2);display:flex;align-items:center;justify-content:center;color:var(--gold-soft);flex:0 0 auto}
 .art-card .art-ic svg{width:18px;height:18px}
@@ -679,7 +679,7 @@ body.chat-first-live.art-closed .ctx{margin-left:var(--col-pad);margin-right:var
   body.chat-first-live .rail{border-right:none}
   body.chat-first-live .ws-art-ctl{display:none}
   body.chat-first-live.art-closed .ws{display:flex}
-  .art-card{margin-left:0}
+  .art-card{margin-left:0;width:100%}
   /* Màn chat trang chủ trên điện thoại: rail KHÔNG phải lớp phủ mà là chính
      trang — đứng yên, phủ trọn màn, không có nút đóng. */
   body.chat-home .shell{grid-template-columns:1fr}

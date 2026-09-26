@@ -95,7 +95,9 @@
     'chu-trinh-cuoc-doi': { label:'Chu Trình Cuộc Đời', url:'/app/chu-trinh-cuoc-doi', tab:'laso' },
     'van-han-nam':        { label:'Vận Hạn 12 Tháng Tới', url:'/app/van-han-nam', tab:'laso' }
   };
-  var ROWS = [], TAB = 'all', Q = '';
+  // `ROWS === null` = chưa có danh sách (khách, hoặc đang tải) — lọc/tìm khi đó
+  // KHÔNG được vẽ gì, không thì "Chưa có báo cáo nào" hiện chồng lên lời mời đăng nhập.
+  var ROWS = null, TAB = 'all', Q = '';
   function el(id){ return document.getElementById(id); }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function rel(ts){
@@ -138,6 +140,7 @@
     return rows;
   }
   function paint(){
+    if (!ROWS) return;
     var list = ROWS.filter(function(r){
       var t = TOOLS[r.tool];
       if (TAB !== 'all' && t.tab !== TAB) return false;
