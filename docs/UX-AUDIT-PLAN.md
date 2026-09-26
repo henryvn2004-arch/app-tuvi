@@ -217,7 +217,7 @@ khỏi bảng dưới, chỉ giữ các phát hiện THẬT về code/nội dung
 | 3 | P0 | J3/J4 | Số công cụ lệch 3 nơi (59+/53/50), thật là 50 | **Đã sửa** (PR này) |
 | 4 | P1 | J1 | Tour onboarding ("BƯỚC 1/7") tự bật 2.4s sau khi vào `/app`, che câu trả lời đầu tiên trên mobile | Chưa sửa → **W2** |
 | 5 | P1 | J5 | Reload giữa chừng form mất toàn bộ dữ liệu đã nhập, không cảnh báo/khôi phục | **Đã sửa** (PR này) — draft `sessionStorage`, nhảy thẳng tới bước dang dở |
-| 6 | P1 | J3/J4 | `/tools/an-sao.html`, `/tools/tu-tru.html` (còn sống) không có rail chat — ngõ cụt SEO | Chưa sửa → **W3 nối dài** (gom 2 trang này vào `/app/*` như 38 trang đã làm) |
+| 6 | P1 | J3/J4 | `/tools/an-sao.html`, `/tools/tu-tru.html` (còn sống) không có rail chat — ngõ cụt SEO | **Đã sửa (PR này)** — không gộp về `/app/*` (2 tool này không có bản `/app/*` tương ứng), bọc thêm `shell.css`/`shell.js` + `#shell-rail` (SHELL_ACTIVE `'luan-giai'`/`'bat-tu'`), giữ nguyên form/kết quả cổ pháp |
 | 7 | P1 | J3/J4 | `/la-so/[slug]` (~7.000 trang, loại SEO nhiều nhất) — HTML gốc không có CTA nào về chat | Chưa sửa → **W5** (khối "Bước tiếp theo") |
 | 8 | ✓ Đã đọc, KHÔNG phải bug | J1/J2 | `tuvi-form.js` field trùng (ẩn + hiện) | Kiến trúc cố ý: `#birthPanel` (`TuviForm.render`) là form THẬT ẩn bằng `display:none` đúng chuẩn (`app-luan-giai.html:292`), `TuviForm.renderChat()` là hội thoại ghi vào form đó qua `setData()`. Trình duyệt tự loại `display:none` khỏi autofill/accessibility tree — không phải rò rỉ template. |
 | 9 | P2 | J3/J4 | 2 kiểu form khác nhau giữa các tool cùng khung `/app/*` (wizard vs chat-first) | Ghi nhận, cần Henry xác nhận có chủ đích không trước khi đồng bộ |
@@ -281,10 +281,11 @@ giá; sidebar ẩn khối rỗng cho tới khi có dữ liệu; không emoji mà
       `/tools/*.html` còn trùng về `/app/*`. Gỡ hoặc 301 các trang mồ côi.
       ⚠️ Làm theo thứ tự: redirect trước, xoá file sau; kiểm sitemap và
       `seo_pages` không trỏ vào URL sắp chết.
-- [ ] 2 trang sót lại từ đợt 38 trang hôm nay: `/tools/an-sao.html`,
+- [x] 2 trang sót lại từ đợt 38 trang hôm nay: `/tools/an-sao.html`,
       `/tools/tu-tru.html` — xác nhận (J3/J4) vẫn trả 200 trực tiếp, không
-      `SHELL_ACTIVE`, không rail chat. Gom về `/app/*` cùng cách đã làm, hoặc
-      tối thiểu nạp `shell.js` + `#shell-rail`.
+      `SHELL_ACTIVE`, không rail chat. Không có bản `/app/*` tương ứng để gộp
+      (2 công cụ miễn phí, không phải bản trùng) ⇒ tối thiểu: nạp
+      `shell.css`/`shell.js` + `#shell-rail`, giữ nguyên form/kết quả cổ pháp.
 
 ### W4: Chat-first mượt (chi tiết tương tác cho P3 bên plan kia)
 - [ ] Rail không bao giờ trống: chưa có lá số thì thầy vẫn trả lời câu
