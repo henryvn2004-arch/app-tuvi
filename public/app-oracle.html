@@ -148,22 +148,17 @@
 </div>
 
 <script>window.SHELL_ACTIVE='oracle';window.SHELL_HISTORY=true;
+// Chat-first (xem khối CHATFIRST trong shell.js) — setContext() TRƯỚC ĐÂY gọi
+// ngay lúc tải trang (trước khi rút thẻ), cùng lý do bị từ chối như `tarot`
+// ở bước 3 (2026-09-22). Nay dời xuống renderResult() — SAU khi rút xong —
+// nên bật cờ an toàn.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'oracle'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=38"></script>
   <script src="/nav.js?v=42" data-icons-only></script><script src="/shell.js?v=103"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script>
-function initOracle(){
-  Shell.setContext({
-    label:'Oracle Phương Đông',
-    placeholder:'Hỏi thầy về thẻ vừa rút…',
-    greeting:'Chào bạn. Định tâm rồi rút thẻ ở khung bên trái — tôi ở đây nếu bạn muốn chiêm nghiệm sâu hơn về thông điệp vừa nhận.',
-    chips:['Oracle khác Tarot ở điểm nào?','Nên hỏi Oracle câu hỏi kiểu gì?','Ngũ Hành trong Oracle nghĩa là gì?']
-  });
-}
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initOracle); else initOracle();
-
 // ══════════════════════════════════════════════════════════════════════
 // Port NGUYÊN VĂN từ public/tools/oracle.html — 40 lá + logic rút bài
 // giữ nguyên, không gọi model, không paywall (miễn phí).
@@ -450,6 +445,13 @@ function renderResult() {
   window.mountIcons && window.mountIcons(document.getElementById('readingResult'));
 
   Shell.setShareable({ kind:'text', toolId:'oracle', title:'Kết quả Oracle của tôi', text: shareText() });
+  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+  const first = _drawn[0];
+  Shell.setContext({
+    label: 'Oracle Phương Đông — ' + _drawn.length + ' thẻ',
+    greeting: (q ? 'Câu hỏi của bạn: "' + q + '". ' : '') + 'Thẻ đầu tiên bạn rút được: **' + first.name + '**. Bạn muốn chiêm nghiệm sâu hơn về điều gì?',
+    chips: ['Oracle khác Tarot ở điểm nào?', 'Nên hỏi Oracle câu hỏi kiểu gì?', 'Ngũ Hành trong Oracle nghĩa là gì?']
+  });
   setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 600);
 }
 
