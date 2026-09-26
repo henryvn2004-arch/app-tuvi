@@ -834,6 +834,7 @@
   // ── CHAT STATE ──
   var ctx = null;            // { birth } | { scenario }  (+ wrap tùy chọn)
   var ctxChips = [];         // gợi ý câu hỏi CÒN LẠI (đã bấm thì bỏ đi)
+  var ctxChipsSrc = 'static'; // 'static' (trang khai) | 'suggest' (model gợi sau câu trả lời) — để đo
   var ctxChipsOrig = [];     // bản gốc để reset khi "hội thoại mới"
   var messages = [];
   var sessionId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now());
@@ -4170,7 +4171,7 @@
     }
     // Gợi ý câu hỏi: hàng chip CỐ ĐỊNH trên ô nhập, còn suốt hội thoại (bấm
     // thì bớt dần), thay vì chỉ hiện 1 lần ở lời chào.
-    if (o.chips !== undefined) { ctxChipsOrig = (o.chips || []).slice(); ctxChips = ctxChipsOrig.slice(); }
+    if (o.chips !== undefined) { ctxChipsOrig = (o.chips || []).slice(); ctxChips = ctxChipsOrig.slice(); ctxChipsSrc = 'static'; }
     renderSuggs();
   }
 
@@ -4193,7 +4194,11 @@
         var i = +el.getAttribute('data-i'); var c = ctxChips[i];
         if (c == null) return;
         ctxChips.splice(i, 1); renderSuggs();
-        if (typeof c === 'string') { ask(c); return; }
+        if (typeof c === 'string') {
+          // Chip hỏi là đòn bẩy chính giữ người ở lại chat — trước đây bấm không để lại dấu gì.
+          try { track('cta_click', { slug: 'rail_chip_ask', meta: { src: ctxChipsSrc, idx: i } }); } catch (e) { /* ignore */ }
+          ask(c); return;
+        }
         // Chốt lại ở client, cùng luật với `showToolSuggest()`: chỉ điều
         // hướng NỘI BỘ site, không nhận javascript:/link ngoài.
         if (!c.href || c.href.charAt(0) !== '/' || c.href.indexOf('//') === 0) return;
@@ -4559,7 +4564,7 @@
     if (ctx) {
       // Thread mới cùng ngữ cảnh: giữ restore/title, đổi id để không đè phiên cũ.
       curMeta = { restore: (curMeta && curMeta.restore) || { birth: birthSnapshot(), scenario: ctx.scenario || null }, title: (curMeta && curMeta.title) || 'Phiên', createdAt: Date.now() };
-      ctxChips = ctxChipsOrig.slice(); greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' });
+      ctxChips = ctxChipsOrig.slice(); ctxChipsSrc = 'static'; greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' });
       // Hội thoại mới → đếm lại câu, và cho thẻ mời có cơ hội hiện lại (một lần
       // mỗi hội thoại, không phải một lần mỗi phiên trình duyệt).
       _askCount = 0; _upsellShown = false; _cungAsked = []; _suggestShown = false; pendingSuggest = null;
@@ -4723,7 +4728,7 @@
             try { track('chat_error', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { kind: 'stream', message: String(ev.data.message || '').slice(0, 200) } }); } catch (e) { /* ignore */ }
           }
           else if (ev.name === 'done' && ev.data) {
-            if (ev.data.suggestions && ev.data.suggestions.length) ctxChips = ev.data.suggestions.slice(0, 4);
+            if (ev.data.suggestions && ev.data.suggestions.length) { ctxChips = ev.data.suggestions.slice(0, 4); ctxChipsSrc = 'suggest'; }
             applyPaywallInfo(ev.data.paywall);
             if (ev.data.toolSuggest) pendingSuggest = ev.data.toolSuggest;
           }
@@ -4781,10 +4786,10 @@
       '<button class="ts-go" type="button">Mở</button>';
     chat.appendChild(d);
     chat.scrollTop = chat.scrollHeight;
-    try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_shown' }); } catch (e) { /* ignore */ }
+    try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_shown', meta: { kind: s.kind || 'tool' } }); } catch (e) { /* ignore */ }
     var go = d.querySelector('.ts-go');
     if (go) go.addEventListener('click', function () {
-      try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_open' }); } catch (e) { /* ignore */ }
+      try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_open', meta: { kind: s.kind || 'tool' } }); } catch (e) { /* ignore */ }
       if (startInlineTool(s.toolId, s.label, s.path)) return;
       location.href = s.path;
     });
