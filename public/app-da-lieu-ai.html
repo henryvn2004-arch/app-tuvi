@@ -26,6 +26,10 @@
 .btn-change{background:none;border:1px solid var(--line-2);border-radius:6px;padding:4px 13px;font-size:11px;color:var(--text-mid);cursor:pointer;margin-top:8px}
 .pt-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
 @media(max-width:480px){.pt-row{grid-template-columns:1fr}}
+/* Cột artifact chat-first chỉ rộng ~420px trên MỌI viewport — media
+   query trên đọc viewport nên không khớp ở đây. Ép về 1 cột riêng cho trạng
+   thái này (xem docs/luat/bay.md "Khối trong .ws co theo bề rộng CỘT"). */
+body.chat-first-live .pt-row{grid-template-columns:1fr}
 .pt-fg{display:flex;flex-direction:column;gap:5px}
 .pt-fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .pt-fg input,.pt-fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
@@ -59,6 +63,7 @@
 .tab-panel{display:none} .tab-panel.show{display:block}
 .dongy-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:560px){.dongy-grid{grid-template-columns:1fr}}
+body.chat-first-live .dongy-grid{grid-template-columns:1fr}
 .dongy-item{background:var(--paper);border:1px solid var(--border-lt);border-radius:10px;padding:13px}
 .dongy-label{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px}
 .dongy-val{font-size:13px;color:var(--text-mid);line-height:1.6}
@@ -67,6 +72,7 @@
 .dongy-full .dongy-val{color:var(--text-mid)}
 .food-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:560px){.food-grid{grid-template-columns:1fr}}
+body.chat-first-live .food-grid{grid-template-columns:1fr}
 .food-col-title{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .food-col-title.good{color:#2E8B57} .food-col-title.bad{color:var(--red)}
 .food-list{display:flex;flex-direction:column;gap:8px}
@@ -80,6 +86,7 @@
 .thuc-duong-box strong{color:var(--gold-soft);font-size:11px;display:block;margin-bottom:4px}
 .ingredient-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px}
 @media(max-width:560px){.ingredient-grid{grid-template-columns:1fr}}
+body.chat-first-live .ingredient-grid{grid-template-columns:1fr}
 .ing-title{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:5px}
 .ing-title.good{color:#2E8B57} .ing-title.bad{color:var(--red)}
 .ing-list{display:flex;flex-direction:column;gap:7px}
@@ -90,6 +97,7 @@
 .ing-hanh{display:inline-block;font-size:9px;padding:1px 7px;border-radius:8px;background:#e8f5e9;color:#2E8B57;border:1px solid #c6e8d0;margin-top:3px;font-weight:600}
 .routine-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 @media(max-width:560px){.routine-grid{grid-template-columns:1fr}}
+body.chat-first-live .routine-grid{grid-template-columns:1fr}
 .routine-item{background:var(--paper);border-radius:9px;padding:12px}
 .routine-time{font-size:11px;font-weight:700;color:var(--heading);margin-bottom:5px;display:flex;align-items:center;gap:5px}
 .routine-steps{font-size:12px;color:var(--text-mid);line-height:1.6}
@@ -263,6 +271,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='da-lieu-ai';window.SHELL_HISTORY=true;
+// Chat-first (xem khối CHATFIRST trong shell.js). setContext() giờ CHỈ gọi sau khi có kết quả trả phí
+// (renderResults) — bỏ gọi sớm lúc boot để tránh ép khung tải ảnh vào cột
+// artifact hẹp trước khi có dữ liệu thật. Vá kèm bẫy grid+media-query của
+// .pt-row/.dongy-grid/.food-grid/.ingredient-grid/.routine-grid (xem rule
+// body.chat-first-live ở trên, cùng mẫu huong-nghiep-tre).
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'da-lieu-ai'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=38"></script>
@@ -272,16 +286,6 @@ window.SHELL_INTRO={key:'da-lieu-ai'};</script>
 <script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
-function initDaLieuAi(){
-  Shell.setContext({
-    label:'Da Liệu Toàn Diện',
-    placeholder:'Hỏi thầy về da liễu…',
-    greeting:'Chào bạn. Tải ảnh da mặt ở khung bên trái, tôi sẽ phân tích kết hợp Đông Tây y và bản mệnh ngũ hành. Sau khi có kết quả, cứ hỏi tôi thêm.',
-    chips:['Da tôi hợp mệnh gì?','Thành phần mỹ phẩm nên tránh?','Cách chăm da theo Đông y?']
-  });
-}
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initDaLieuAi); else initDaLieuAi();
-
 // ══════════════════════════════════════════════════════════════════════
 // Port từ public/tools/da-lieu-ai.html — giữ nguyên luồng nén ảnh (EXIF
 // fix qua createImageBitmap) + gate Lượng qua TuviPaywall.

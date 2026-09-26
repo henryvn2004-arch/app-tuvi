@@ -207,6 +207,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='nhan-tuong';window.SHELL_HISTORY=true;
+// Chat-first (xem khối CHATFIRST trong shell.js) — setContext() chỉ chạy
+// SAU khi kết quả SSE trả về xong (trong _doAnalyze), không còn gọi ở boot,
+// tránh ép khung tải/chụp ảnh vào cột artifact hẹp khi user còn thao tác.
+// Cùng mẫu trang-diem/chan-dung-tien-kiep.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'nhan-tuong'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=38"></script>
@@ -217,16 +222,6 @@ window.SHELL_INTRO={key:'nhan-tuong'};</script>
 <script src="/shell.js?v=103"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script>
-function initNhanTuong(){
-  Shell.setContext({
-    label:'Nhãn Tướng',
-    placeholder:'Hỏi thầy về nhãn tướng…',
-    greeting:'Chào bạn. Tải hoặc chụp ảnh khuôn mặt ở khung bên trái, tôi sẽ zoom vào đôi mắt và phân tích theo Nhãn Pháp cổ truyền. Sau khi có kết quả, cứ hỏi tôi thêm.',
-    chips:['Phượng nhãn là gì?','Tam Bạch Nhãn có ý nghĩa gì?','Ánh mắt nói lên điều gì?']
-  });
-}
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initNhanTuong); else initNhanTuong();
-
 // ══════════════════════════════════════════════════════════════════════
 // Port từ public/tools/nhan-tuong-ai.html — MediaPipe FaceMesh eye-zoom
 // + gate Lượng + SSE 'delta' stream tới /api/tuong-mat?action=nhan-tuong.
@@ -565,6 +560,15 @@ async function _doAnalyze() {
     // Chia sẻ CHỈ text luận giải của AI — KHÔNG bao giờ đính kèm ảnh mắt thật
     // của user (riêng tư), dù ảnh đã tải lên để phân tích.
     Shell.setShareable({ kind:'text', toolId:'nhan-tuong', title:'Nhãn Tướng của tôi', text:full });
+    // setContext() chỉ chạy TỚI ĐÂY — sau khi có kết quả thật (chat-first),
+    // không còn gọi ở boot. Kết quả là văn xuôi SSE thuần, không có field
+    // cấu trúc để trích số liệu nên greeting không bịa dữ kiện.
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    Shell.setContext({
+      label: 'Nhãn Tướng',
+      greeting: 'Đã phân tích xong nhãn tướng của bạn theo Liễu Trang Thần Tướng. Bạn muốn hỏi thêm điều gì?',
+      chips: ['Phượng nhãn là gì?', 'Tam Bạch Nhãn có ý nghĩa gì?', 'Ánh mắt nói lên điều gì?']
+    });
   } catch(e){
     document.getElementById('aiResult').innerHTML='';
     document.getElementById('resultCard').style.display='none';

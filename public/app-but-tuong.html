@@ -211,6 +211,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='but-tuong';window.SHELL_HISTORY=true;
+// Chat-first (xem khối CHATFIRST trong shell.js) — setContext() giờ chỉ chạy
+// SAU khi có kết quả luận giải đầy đủ (trong _doAnalyze), không còn gọi lúc
+// boot — tránh bóp canvas ký/upload ảnh (#inputCard) vào cột artifact 420px
+// trong lúc người dùng còn đang ký/chọn ảnh.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'but-tuong'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tools-shared/but-tuong.js"></script>
@@ -221,16 +226,6 @@ window.SHELL_INTRO={key:'but-tuong'};</script>
 <script src="/shell.js?v=103"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script>
-function initButTuong(){
-  Shell.setContext({
-    label:'Bút Tướng',
-    placeholder:'Hỏi thầy về bút tướng…',
-    greeting:'Chào bạn. Ký chữ ký ở khung bên trái (ký với tốc độ thật, đừng cố ý ký chậm), tôi sẽ đo 6 trục cổ pháp và luận giúp bạn. Sau khi có kết quả, cứ hỏi tôi thêm.',
-    chips:['Trục Thần là gì?','Vì sao ký nhiều lần lại đo được độ ổn định?','Ngũ hành nét liên quan gì tới dụng thần?']
-  });
-}
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initButTuong); else initButTuong();
-
 // ══════════════════════════════════════════════════════════════════════
 // Port từ public/tools/but-tuong-ai.html — canvas ký + gate Lượng + SSE
 // 'delta' stream tới /api/but-tuong. Engine đo dùng chung ở
@@ -523,6 +518,21 @@ async function _doAnalyze() {
     if (!full) throw new Error('Không có kết quả.');
     el.innerHTML = renderMd(full);
     _saveButTuongReading(full);
+
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    var _btBest = null, _btBestScore = -1;
+    if (_metrics && _metrics.truc) {
+      Object.keys(_metrics.truc).forEach(function (k) {
+        var t = _metrics.truc[k];
+        if (t && typeof t.score === 'number' && t.score > _btBestScore) { _btBestScore = t.score; _btBest = k; }
+      });
+    }
+    var _btBestName = _btBest ? window.BuTuongTool.TRUC_META[_btBest].ten : '';
+    Shell.setContext({
+      label: 'Bút Tướng — điểm ' + (_metrics ? _metrics.tongDiem : '') + '/100',
+      greeting: 'Điểm tổng chữ ký của bạn: **' + (_metrics ? _metrics.tongDiem : '') + '/100**' + (_btBestName ? ', trục mạnh nhất là **' + _btBestName + '** (' + _btBestScore + '/100)' : '') + '. Bạn muốn hỏi thêm về phần luận giải nào?',
+      chips: ['Trục Thần là gì?', 'Vì sao ký nhiều lần lại đo được độ ổn định?', 'Ngũ hành nét liên quan gì tới dụng thần?']
+    });
     Shell.setShareable({ kind:'text', toolId:'but-tuong', title:'Bút Tướng của tôi', text: full });
   } catch (e) {
     document.getElementById('aiResult').innerHTML = '';

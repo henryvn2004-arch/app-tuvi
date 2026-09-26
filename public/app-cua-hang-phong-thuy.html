@@ -18,6 +18,10 @@
 .pt-num{width:22px;height:22px;background:var(--navy);color:var(--gold);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
 .pt-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 @media(max-width:500px){.pt-row{grid-template-columns:1fr}}
+/* Cột artifact chat-first chỉ rộng 420px trên MỌI viewport — media query trên
+   đọc viewport nên không khớp ở đây. Ép về 1 cột riêng cho trạng thái này
+   (xem docs/luat/bay.md "Khối trong .ws co theo bề rộng CỘT"). */
+body.chat-first-live .pt-row{grid-template-columns:1fr}
 .pt-fg{display:flex;flex-direction:column;gap:5px}
 .pt-fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .pt-fg input,.pt-fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
@@ -322,6 +326,10 @@
 </div>
 
 <script>window.SHELL_ACTIVE='cua-hang-phong-thuy';window.SHELL_HISTORY=true;
+// Chat-first (xem khối CHATFIRST trong shell.js) — setContext() giờ chỉ chạy
+// SAU khi có kết quả trả phí (trong renderResults), không còn gọi lúc boot —
+// tránh bóp .ws-intake (form nhập năm sinh/ảnh) vào cột artifact 420px quá sớm.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'cua-hang-phong-thuy'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=38"></script>
@@ -331,16 +339,6 @@ window.SHELL_INTRO={key:'cua-hang-phong-thuy'};</script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/bat-trach.js?v=2"></script>
 <script>
-function initCuaHangPhongThuy(){
-  Shell.setContext({
-    label:'Phong Thủy Cửa Hàng & Văn Phòng',
-    placeholder:'Hỏi thầy về phong thủy cửa hàng…',
-    greeting:'Chào bạn. Điền năm sinh và tải ảnh cửa hàng/văn phòng ở khung bên trái, tôi sẽ chấm điểm bố trí thu ngân, cửa chính theo Bát Trạch. Sau khi có kết quả, cứ hỏi tôi thêm.',
-    chips:['Vị trí thu ngân nên đặt đâu?','Cách kích hoạt tài vị?','Két sắt nên quay hướng nào?']
-  });
-}
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initCuaHangPhongThuy); else initCuaHangPhongThuy();
-
 // ══════════════════════════════════════════════════════════════════════
 // Port từ public/tools/cua-hang-phong-thuy.html — giữ nguyên Bát Trạch
 // calc + gate Lượng qua TuviPaywall (product 'cua-hang-phong-thuy' +
@@ -504,9 +502,10 @@ function renderResults(data){
   setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'nearest'}),200);
 
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
+  var _guaD=GUA_DATA[_gua];
   Shell.setContext({
     label:'Cửa Hàng & Văn Phòng — điểm '+before+'→'+after,
-    greeting:'Điểm phong thủy cửa hàng/văn phòng hiện tại: **'+before+'/100**, sau điều chỉnh có thể lên **'+after+'/100**. Bạn muốn hỏi thêm về đề xuất nào?',
+    greeting:'Điểm phong thủy cửa hàng/văn phòng hiện tại: **'+before+'/100**, sau điều chỉnh có thể lên **'+after+'/100**'+(_guaD?', mệnh quái của bạn là **'+_gua+' — '+_guaD.name+'**':'')+'. Bạn muốn hỏi thêm về đề xuất nào?',
     chips:['Vì sao điểm hiện tại thấp?','Ưu tiên làm gì trước?','Vật phẩm nào nên mua trước?']
   });
   _ptBefore=before; _ptAfter=after; _ptAdvice=analysis.generalAdvice||'';

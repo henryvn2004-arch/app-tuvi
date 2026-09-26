@@ -239,6 +239,10 @@
 </div>
 
 <script>window.SHELL_ACTIVE='thanh-tuong-pro';window.SHELL_HISTORY=true;
+// setContext() chỉ gọi SAU khi có kết quả thật (cuối _doThanhTuongAnalyze, sau
+// khi luồng SSE ghi xong), không gọi lúc boot — khảo sát 4 chặng (~37s, nhập
+// thông tin/ghi âm/xem chỉ số đo) cần trọn `.ws`, không phải cột artifact 420px.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'thanh-tuong-pro'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=38"></script>
@@ -248,16 +252,6 @@ window.SHELL_INTRO={key:'thanh-tuong-pro'};</script>
 <script src="/shell.js?v=103"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script>
-function initThanhTuongPro(){
-  Shell.setContext({
-    label:'Thanh Tướng Pro',
-    placeholder:'Hỏi thầy về thanh tướng…',
-    greeting:'Chào bạn. Chọn giới tính, nhập tuổi rồi làm 4 bài đo giọng ở khung bên trái — hệ thống sẽ phân tích chuyên sâu 12 chỉ số âm học. Sau khi có kết quả, cứ hỏi tôi thêm.',
-    chips:['Jitter và Shimmer là gì?','HNR thấp nói lên điều gì?','Khác gì bản Thanh Tướng thường?']
-  });
-}
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initThanhTuongPro); else initThanhTuongPro();
-
 // ══════════════════════════════════════════════════════════════════════
 // Port từ public/tools/thanh-tuong-pro.html — giữ nguyên TOÀN BỘ acoustic
 // engine (YIN pitch, jitter/shimmer/HNR, FFT formants, sustain/speech-rate)
@@ -1289,6 +1283,13 @@ async function _doThanhTuongAnalyze() {
       // Chia sẻ CHỈ text luận giải của AI — KHÔNG đính kèm bản ghi âm giọng
       // nói thật của user (riêng tư).
       Shell.setShareable({ kind:'text', toolId:'thanh-tuong-pro', title:'Thanh Tướng Pro của tôi', text:content });
+
+      if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+      Shell.setContext({
+        label: 'Thanh Tướng Pro — ' + nguam.label,
+        greeting: 'Giọng của bạn thuộc **' + nguam.label + '** (đo qua 4 bài, 12 chỉ số âm học). Bạn muốn hỏi thêm về thanh tướng học?',
+        chips: ['Jitter và Shimmer là gì?', 'HNR thấp nói lên điều gì?', 'Khác gì bản Thanh Tướng thường?']
+      });
     }
 
     if (_analyzeBtnLb) _analyzeBtnLb.textContent = 'Luận Giải Lại';
