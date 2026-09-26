@@ -1290,7 +1290,7 @@
       localStorage.setItem('tvc_author_v1', _author.id);
     } catch (e) { _author = AUTHOR_ROSTER[0]; }
   }
-  function authorAva() { return _author ? '/authors/' + _author.id + '.jpg' : '/thay-tuvi.webp'; }
+  function authorAva() { return _author ? '/authors/' + _author.id + '.jpg' : '/authors/thai-hu.jpg'; }
   function authorLabel() { return _author ? 'Thầy ' + _author.name : 'Hiểu đúng lá số đang mở'; }
   function setAuthor(id) {
     var f = AUTHOR_ROSTER.filter(function (a) { return a.id === id; })[0];

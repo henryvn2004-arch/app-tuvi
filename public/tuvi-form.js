@@ -595,7 +595,7 @@ window.TuviForm = (() => {
       const title = introT ? introT.textContent.trim() : '';
       const desc = introD ? introD.textContent.trim() : '';
       if (title || desc) {
-        const av = () => { const a = document.querySelector('.rail-ava'); return a ? a.src : '/thay-tuvi.webp'; };
+        const av = () => { const a = document.querySelector('.rail-ava'); return a ? a.src : '/authors/thai-hu.jpg'; };
         const el = document.createElement('div');
         el.className = 'msg a';
         el.innerHTML = '<img class="msg-ava" src="' + av() + '" alt="">' +
@@ -606,7 +606,7 @@ window.TuviForm = (() => {
     const cp = 'c' + (prefix || 'x'); // prefix RIÊNG cho field ảo trong chat — không trùng field thật
     const opts = buildOptions();
     const namXemDefault = new Date().getFullYear();
-    const av = () => { const a = document.querySelector('.rail-ava'); return a ? a.src : '/thay-tuvi.webp'; };
+    const av = () => { const a = document.querySelector('.rail-ava'); return a ? a.src : '/authors/thai-hu.jpg'; };
     const bubble = (id, html) => {
       const el = document.createElement('div');
       el.className = 'msg a'; el.id = id;
