@@ -40,6 +40,10 @@
 .features-title{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-lt);margin-bottom:10px}
 .features-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media(max-width:480px){.features-grid{grid-template-columns:1fr}}
+/* Chat-first: cột artifact chỉ rộng ~420px trên MỌI viewport — media query
+   trên đọc viewport nên không khớp ở đây. Ép về 1 cột riêng cho trạng thái
+   này (xem docs/luat/bay.md "Khối trong .ws co theo bề rộng CỘT"). */
+body.chat-first-live .features-grid{grid-template-columns:1fr}
 .feature-item{display:flex;flex-direction:column;gap:2px;padding:8px 10px;background:var(--white);border-radius:6px;border:1px solid var(--border-lt)}
 .feature-label{font-size:10px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.8px}
 .feature-value{font-size:13px;font-weight:600;color:var(--heading)}
@@ -210,6 +214,10 @@
 </div>
 
 <script>window.SHELL_ACTIVE='thanh-tuong';window.SHELL_HISTORY=true;
+// setContext() chỉ gọi SAU khi có kết quả thật (cuối _doAnalyze, sau khi
+// luồng SSE ghi xong), không gọi lúc boot — phiên ghi âm ~14s cần trọn `.ws`,
+// không phải cột artifact 420px.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'thanh-tuong'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=38"></script>
@@ -218,16 +226,6 @@ window.SHELL_INTRO={key:'thanh-tuong'};</script>
 <script src="/shell.js?v=103"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script>
-function initThanhTuong(){
-  Shell.setContext({
-    label:'Thanh Tướng',
-    placeholder:'Hỏi thầy về thanh tướng…',
-    greeting:'Chào bạn. Nhấn nút ghi âm ở khung bên trái, đọc đoạn thơ hiển thị — tôi sẽ phân tích giọng nói theo Ngũ Âm cổ pháp. Sau khi có kết quả, cứ hỏi tôi thêm.',
-    chips:['Ngũ Âm là gì?','Giọng trầm nói lên điều gì?','Thanh tướng có đổi được không?']
-  });
-}
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initThanhTuong); else initThanhTuong();
-
 // ══════════════════════════════════════════════════════════════════════
 // Port từ public/tools/thanh-tuong-ai.html — giữ nguyên Web Audio feature
 // extraction (pitch/tốc độ/âm lượng/âm sắc/ổn định, client-side, KHÔNG gửi
@@ -708,6 +706,14 @@ async function _doAnalyze() {
     // Chia sẻ CHỈ text luận giải của AI — KHÔNG đính kèm bản ghi âm giọng nói
     // thật của user (riêng tư, và cũng chưa có cơ chế lưu audio public).
     Shell.setShareable({ kind:'text', toolId:'thanh-tuong', title:'Thanh Tướng của tôi', text:full });
+
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    var _nguAm = _features ? estimateNguAm(_features) : null;
+    Shell.setContext({
+      label: 'Thanh Tướng' + (_nguAm ? ' — ' + _nguAm.label.split(' — ')[0] : ''),
+      greeting: 'Giọng của bạn thuộc **' + (_nguAm ? _nguAm.label : 'Ngũ Âm') + '**. Bạn muốn hỏi thêm về thanh tướng học?',
+      chips: ['Ngũ Âm là gì?', 'Giọng trầm nói lên điều gì?', 'Thanh tướng có đổi được không?']
+    });
   } catch(e) {
     document.getElementById('aiResult').innerHTML = '';
     document.getElementById('resultCard').style.display = 'none';

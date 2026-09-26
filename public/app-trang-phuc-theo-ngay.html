@@ -17,6 +17,10 @@
 .tn-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
 .pt-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 @media(max-width:480px){.pt-row{grid-template-columns:1fr}}
+/* Chat-first: cột artifact chỉ rộng ~420px trên MỌI viewport — media query
+   trên đọc viewport nên không khớp ở đây. Ép về 1 cột riêng cho trạng thái
+   này (xem docs/luat/bay.md "Khối trong .ws co theo bề rộng CỘT"). */
+body.chat-first-live .pt-row{grid-template-columns:1fr}
 .pt-fg{display:flex;flex-direction:column;gap:5px}
 .pt-fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .pt-fg input,.pt-fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
@@ -286,6 +290,10 @@
 </div>
 
 <script>window.SHELL_ACTIVE='trang-phuc-theo-ngay';window.SHELL_HISTORY=true;
+// setContext() chỉ gọi SAU khi có kết quả thật (trong renderResults), không
+// gọi lúc boot — form nhập năm sinh/ngày đi/mục đích cần trọn `.ws`, không
+// phải cột artifact 420px. Xem renderResults() bên dưới.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'trang-phuc-theo-ngay'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=38"></script>
@@ -295,16 +303,6 @@ window.SHELL_INTRO={key:'trang-phuc-theo-ngay'};</script>
 <script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
-function initTrangPhucNgay(){
-  Shell.setContext({
-    label:'Trang Phục Theo Ngày',
-    placeholder:'Hỏi thầy về trang phục theo ngày…',
-    greeting:'Chào bạn. Điền năm sinh, ngày đi và mục đích ở khung bên trái, tôi sẽ tư vấn màu và phong cách hợp ngày. Sau khi có kết quả, cứ hỏi tôi thêm.',
-    chips:['Vì sao ngày này khắc mệnh tôi?','Nên hóa giải thế nào?','Màu điểm nhấn nào tốt nhất?']
-  });
-}
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initTrangPhucNgay); else initTrangPhucNgay();
-
 // ══════════════════════════════════════════════════════════════════════
 // Port từ public/tools/trang-phuc-theo-ngay.html — giữ nguyên can-chi
 // ngày (mirror engine) + gate Lượng (trang-phuc-theo-ngay + tryon).

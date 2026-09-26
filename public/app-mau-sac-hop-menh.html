@@ -17,6 +17,10 @@
 .ms-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
 .pt-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
 @media(max-width:500px){.pt-row{grid-template-columns:1fr}}
+/* Chat-first: cột artifact chỉ rộng ~420px trên MỌI viewport — media query
+   trên đọc viewport nên không khớp ở đây. Ép về 1 cột riêng cho trạng thái
+   này (xem docs/luat/bay.md "Khối trong .ws co theo bề rộng CỘT"). */
+body.chat-first-live .pt-row{grid-template-columns:1fr}
 .pt-fg{display:flex;flex-direction:column;gap:5px}
 .pt-fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .pt-fg input,.pt-fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
@@ -283,6 +287,10 @@
 </div>
 
 <script>window.SHELL_ACTIVE='mau-sac-hop-menh';window.SHELL_HISTORY=true;
+// setContext() chỉ gọi SAU khi có kết quả thật (trong renderResults), không
+// gọi lúc boot — form nhập năm sinh/giới tính cần trọn `.ws`, không phải cột
+// artifact 420px. Xem renderResults() bên dưới.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'mau-sac-hop-menh'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=38"></script>
@@ -292,16 +300,6 @@ window.SHELL_INTRO={key:'mau-sac-hop-menh'};</script>
 <script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
-function initMauSac(){
-  Shell.setContext({
-    label:'Màu Sắc Hợp Mệnh',
-    placeholder:'Hỏi thầy về màu sắc hợp mệnh…',
-    greeting:'Chào bạn. Điền năm sinh và giới tính ở khung bên trái, tôi sẽ tư vấn màu sắc trang phục theo Ngũ Hành Nạp Âm. Sau khi có kết quả, cứ hỏi tôi thêm.',
-    chips:['Vì sao mệnh tôi hợp màu này?','Màu nào nên tránh khi phỏng vấn?','Cách phối đồ theo màu mệnh?']
-  });
-}
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMauSac); else initMauSac();
-
 // ══════════════════════════════════════════════════════════════════════
 // Port từ public/tools/mau-sac-hop-menh.html — giữ nguyên Bát Trạch +
 // Nạp Âm calc + gate Lượng (mau-sac-hop-menh + trang-phuc-tryon).

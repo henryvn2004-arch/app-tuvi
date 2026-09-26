@@ -169,6 +169,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='khi-sac';window.SHELL_HISTORY=true;
+// Chat-first (xem khối CHATFIRST trong shell.js) — setContext() chỉ chạy
+// SAU khi kết quả SSE trả về xong (trong _doAnalyze), không còn gọi ở boot,
+// tránh ép khung tải ảnh vào cột artifact hẹp khi user còn thao tác. Cùng
+// mẫu trang-diem/chan-dung-tien-kiep.
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'khi-sac'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=38"></script>
@@ -177,16 +182,6 @@ window.SHELL_INTRO={key:'khi-sac'};</script>
 <script src="/shell.js?v=103"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script>
-function initKhiSac(){
-  Shell.setContext({
-    label:'Khí Sắc',
-    placeholder:'Hỏi thầy về khí sắc…',
-    greeting:'Chào bạn. Tải ảnh khuôn mặt ở khung bên trái, tôi sẽ luận khí sắc theo Ma Y Thần Tướng. Sau khi có kết quả, cứ hỏi tôi thêm bất cứ điều gì.',
-    chips:['Ấn Đường là gì?','5 sắc Ngũ Hành nghĩa là gì?','Khí sắc khác Diện Tướng thế nào?']
-  });
-}
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initKhiSac); else initKhiSac();
-
 // ══════════════════════════════════════════════════════════════════════
 // Port từ public/tools/khi-sac-ai.html — giữ nguyên luồng nén ảnh + gate
 // Lượng (TuviPaywall) + SSE 'delta' stream tới /api/tuong-mat?action=khi-sac.
@@ -352,6 +347,15 @@ async function _doAnalyze() {
     document.getElementById('results-actions').style.display = 'block';
     _saveKhiSacReading(full);
     Shell.setShareable({ kind:'text', toolId:'khi-sac', title:'Khí Sắc của tôi', text:full });
+    // setContext() chỉ chạy TỚI ĐÂY — sau khi có kết quả thật (chat-first),
+    // không còn gọi ở boot. Kết quả là văn xuôi SSE thuần, không có field
+    // cấu trúc để trích số liệu nên greeting không bịa dữ kiện.
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    Shell.setContext({
+      label: 'Khí Sắc',
+      greeting: 'Đã luận xong khí sắc của bạn theo Ma Y Thần Tướng. Bạn muốn hỏi thêm điều gì?',
+      chips: ['Ấn Đường là gì?', '5 sắc Ngũ Hành nghĩa là gì?', 'Khí sắc khác Diện Tướng thế nào?']
+    });
   } catch (e) {
     document.getElementById('results-content').innerHTML = '';
     document.getElementById('results-content').style.display = 'block';

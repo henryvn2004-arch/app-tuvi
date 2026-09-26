@@ -28,6 +28,10 @@
 .tip-badge{font-size:11px;padding:4px 10px;border-radius:12px;background:#faf0ff;border:1px solid #e0c0f0;color:#7a2d9a}
 .pt-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
 @media(max-width:480px){.pt-row{grid-template-columns:1fr}}
+/* Cột artifact chat-first chỉ rộng ~420px trên MỌI viewport — media
+   query trên đọc viewport nên không khớp ở đây. Ép về 1 cột riêng cho trạng
+   thái này (xem docs/luat/bay.md "Khối trong .ws co theo bề rộng CỘT"). */
+body.chat-first-live .pt-row{grid-template-columns:1fr}
 .pt-fg{display:flex;flex-direction:column;gap:5px}
 .pt-fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .pt-fg input,.pt-fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
@@ -61,6 +65,7 @@
 .swatch-wrap.avoid .swatch{opacity:.55;border-style:dashed}
 .rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 @media(max-width:540px){.rec-grid{grid-template-columns:1fr}}
+body.chat-first-live .rec-grid{grid-template-columns:1fr}
 .rec-card{background:var(--paper);border:1px solid var(--border-lt);border-radius:10px;padding:14px}
 .rec-icon{font-size:22px;margin-bottom:6px}
 .rec-title{font-size:12px;font-weight:700;color:var(--heading);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
@@ -95,6 +100,8 @@
 .outfit-item-cat{font-size:10px;font-weight:700;color:var(--text-lt);text-transform:uppercase;margin-bottom:2px}
 .outfit-item-val{font-size:12px;color:var(--text-mid)}
 .outfit-ly-do{font-size:11px;color:var(--tx-blue);background:var(--gold-lt);border-radius:6px;padding:6px 10px;line-height:1.5}
+.tryon-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+body.chat-first-live .tryon-grid{grid-template-columns:1fr}
 .tryon-upload{border:2px dashed var(--line-2);border-radius:10px;padding:24px 16px;text-align:center;cursor:pointer;background:var(--paper);position:relative;transition:all .2s}
 .tryon-upload:hover,.tryon-upload.drag{border-color:#9b59b6;background:#faf0ff}
 .tryon-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
@@ -102,6 +109,7 @@
 .btn-tryon{width:100%;padding:12px;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--serif);margin-top:10px}
 .btn-tryon:hover{opacity:.88} .btn-tryon:disabled{opacity:.45;cursor:not-allowed}
 .ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+body.chat-first-live .ba-grid{grid-template-columns:1fr}
 .ba-label{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text-lt);margin-bottom:5px}
 .ba-img{width:100%;border-radius:8px;aspect-ratio:3/4;object-fit:cover}
 .btn-cancel{background:none;border:1px solid var(--line-2);border-radius:8px;padding:10px 18px;font-size:13px;color:var(--text-mid);cursor:pointer;font-family:inherit}
@@ -295,7 +303,7 @@
             Upload ảnh toàn thân → hệ thống thay trang phục đúng màu season <strong id="tryonSeasonLabel"></strong> của bạn
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+          <div class="tryon-grid">
             <div>
               <div style="font-size:11px;font-weight:700;color:var(--text-lt);margin-bottom:6px">CHỌN STYLE</div>
               <div style="display:flex;flex-direction:column;gap:6px">
@@ -357,6 +365,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='personal-color';window.SHELL_HISTORY=true;
+// Chat-first (xem khối CHATFIRST trong shell.js). setContext() giờ CHỈ gọi sau khi có kết quả trả phí
+// (renderResults) — bỏ gọi sớm lúc boot để tránh ép khung tải ảnh vào cột
+// artifact hẹp trước khi có dữ liệu thật. Vá kèm bẫy grid+media-query của
+// .pt-row/.rec-grid/.ba-grid/.tryon-grid (xem rule body.chat-first-live ở
+// trên, cùng mẫu huong-nghiep-tre).
+window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'personal-color'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=38"></script>
@@ -366,16 +380,6 @@ window.SHELL_INTRO={key:'personal-color'};</script>
 <script src="/tools-shared/shell-soft-nav.js?v=3"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
-function initPersonalColor(){
-  Shell.setContext({
-    label:'Personal Color',
-    placeholder:'Hỏi thầy về tông màu cá nhân…',
-    greeting:'Chào bạn. Tải ảnh khuôn mặt ở khung bên trái, tôi sẽ phân tích undertone và season màu phù hợp. Sau khi có kết quả, cứ hỏi tôi thêm.',
-    chips:['Tôi thuộc season nào?','Vì sao nên tránh màu này?','Nên phối đồ thế nào theo season?']
-  });
-}
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPersonalColor); else initPersonalColor();
-
 // Thanh tiến trình (`.ws-steps`) — chỉ phản ánh trạng thái đã có sẵn trong
 // flow cũ (form → thanh toán → kết quả), không tạo trạng thái mới. `n` các
 // bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền navy).
