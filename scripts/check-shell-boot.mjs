@@ -35,7 +35,7 @@ const DIR = 'public';
 const REQUIRED = [
   [
     'src="/auth.js',
-    '<script src="/auth.js?v=3"></script>',
+    '<script src="/auth.js?v=4"></script>',
     'người đang đăng nhập bị bắt đăng nhập lại',
   ],
   [

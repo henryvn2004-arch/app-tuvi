@@ -283,7 +283,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .lib-cta a{display:inline-block;background:#C46A5E;color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:11px 28px;border-radius:9px}
 @media(max-width:700px){.bc,.lib-hero,.lib-body{padding-left:20px;padding-right:20px}.lib-hero-title{font-size:28px}.lib-grid{grid-template-columns:1fr}}
 </style>
-<script src="/auth.js?v=3"></script>
+<script src="/auth.js?v=4"></script>
 </head><body><div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=44" defer></script>
 <div class="bc"><a href="/">Trang Chủ</a><span>›</span><span>Thư Viện</span></div>
