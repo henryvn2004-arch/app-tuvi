@@ -225,6 +225,19 @@ export interface ChatRequestV1 {
    * Server tự chặn ở `MAX_BOND_MEMBERS`, không tin số lượng client gửi lên.
    */
   wrapBirths?: BirthParams[];
+  /**
+   * "@mention" — khách gõ đích danh một thầy khác trong hội đồng ("@Tâm Kính",
+   * "@Linh Cơ") ở luồng LÁ SỐ (P3 "mời thầy khác" 2026-09-26). Server chèn một
+   * gợi ý NGẮN vào cuối tin user (kỹ thuật giống `focusHintText`/`khoiChuDe`,
+   * KHÔNG vào system — giữ prompt-cache ổn định) nói model nên gọi tool
+   * `moi_thay_*` của ĐÚNG thầy này nếu câu hỏi hợp, bỏ qua điều kiện "DÙNG RẤT
+   * DÈ" thường lệ.
+   *
+   * CỐ Ý là ENUM chứ không phải chuỗi tự do (cùng lý do `wrap`): chỉ liệt kê
+   * ID những thầy ĐÃ có tool mời thật (`lib/tools/registry.ts`). Thêm thầy mới
+   * có tool riêng thì thêm ID vào đây VÀ vào whitelist trong `validateChatRequest`.
+   */
+  addressMaster?: 'tam-kinh' | 'linh-co';
   client: ClientInfo;
 }
 
@@ -385,6 +398,11 @@ export function validateChatRequest(body: unknown):
   }
   if (b.wrapBirths != null && !Array.isArray(b.wrapBirths)) {
     return { ok: false, error: 'wrapBirths không hợp lệ' };
+  }
+  // 🪤 Thêm thầy mới có tool mời riêng (`moi_thay_*`, lib/tools/registry.ts)
+  // thì thêm ID vào đây — kiểu union ở trên chỉ chặn lúc biên dịch.
+  if (b.addressMaster != null && b.addressMaster !== 'tam-kinh' && b.addressMaster !== 'linh-co') {
+    return { ok: false, error: 'addressMaster không hợp lệ' };
   }
 
   if (b.scenario != null) {
