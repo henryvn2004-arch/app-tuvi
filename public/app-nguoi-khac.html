@@ -361,14 +361,14 @@ window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'nguoi-khac'};</script>
 <script src="/laso-chart.js?v=4"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=9"></script>
+<script src="/tuvi-form.js?v=10"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=38"></script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=43" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
-<script src="/shell.js?v=104"></script>
+<script src="/shell.js?v=105"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=43"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
@@ -484,7 +484,7 @@ onQuanHeChange();
 // thật, cùng danh sách NK_VIEC/QH_HINT phía trên) → renderChat() lo ngày/giờ
 // sinh người cần xem. Xong mới hỏi đối chiếu lá số của bạn — bỏ qua câu hỏi
 // nếu shell đã tự điền sẵn (`_remembered` ở trên).
-function chatAva(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; }
+function chatAva(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/authors/thai-hu.jpg'; }
 function _tpwResuming(){ try{ return new URL(location.href).searchParams.get('tpwResume')==='1'; }catch(e){ return false; } }
 function startIntake(){
   // Quay về sau nạp Lượng: NK_RESUME_KEY IIFE bên dưới tự điền form + gọi

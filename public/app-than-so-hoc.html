@@ -143,10 +143,10 @@ window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'than-so-hoc'};</script>
 <script src="/tools-shared/than-so-hoc.js?v=4"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=9"></script>
+<script src="/tuvi-form.js?v=10"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=43" data-icons-only></script>
-<script src="/shell.js?v=104"></script>
+<script src="/shell.js?v=105"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=43"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/than-so-hoc.js với trang standalone.
@@ -192,7 +192,7 @@ function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,
 function appendHighlightCard(r){
   var chat=document.getElementById('chat');
   if(!chat) return;
-  var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; })();
+  var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/authors/thai-hu.jpg'; })();
   var nums=[['Đường Đời',r.data.soDuongDoi],['Định Mệnh',r.data.soDinhMenh],['Linh Hồn',r.data.soLinhHon],['Sứ Mệnh',r.data.soSuMenh]];
   var rowHtml=nums.map(function(n){ return '<div class="chat-hl-n"><b>'+esc(n[1])+'</b><span>'+esc(n[0])+'</span></div>'; }).join('');
   var el=document.createElement('div'); el.className='msg a';

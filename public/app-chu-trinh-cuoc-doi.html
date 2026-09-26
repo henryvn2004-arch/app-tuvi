@@ -318,7 +318,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/tools-shared/illus-nguong.js?v=1"></script>
 <script src="/tools-shared/illus-match.js?v=1"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=9"></script>
+<script src="/tuvi-form.js?v=10"></script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
@@ -329,7 +329,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=6"></script>
   <script src="/nav.js?v=43" data-icons-only></script>
-<script src="/shell.js?v=104"></script>
+<script src="/shell.js?v=105"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=43"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
@@ -408,7 +408,7 @@ function appendHookHighlightCard(){
   if(!chat||!host) return;
   var boxes=Array.prototype.slice.call(host.querySelectorAll('.hkl-nb-box'));
   if(!boxes.length) return;
-  var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/thay-tuvi.webp'; })();
+  var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/authors/thai-hu.jpg'; })();
   var rows=boxes.map(function(b){
     var t=b.querySelector('.hkl-nb-box-head b'), h=b.querySelector('.hkl-nb-hook');
     return '<div class="chat-hl-box"><b>'+esc(t?t.textContent:'')+'</b><span>'+esc(h?h.textContent:'')+'</span></div>';
