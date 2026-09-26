@@ -6529,13 +6529,27 @@ function renderMktFunnel(f, tq) {
 // (`visitors_human`) chứ không còn là GA4 nữa, nên hai bên cùng một định nghĩa
 // "máy" — cả hai đi qua `bot_anon_ids()`. Vẫn để thành dải riêng vì nó chia
 // nhóm theo CHẤT hành vi, còn thanh trên đếm đầu người.
+//
+// 🔴 25/09/2026 — Henry hỏi "cả ngàn visit/ngày mà không ai signup, vô lý quá".
+// Điều tra ra: 84% "human" khi đó chỉ có ĐÚNG 2 sự kiện (page_view + tool_open
+// tự động bắn khi mở tool_id='home'), 0 referrer, 0 đăng nhập, chỉ sống đúng 1
+// ngày rồi biến mất, 97,7% dùng 2 chuỗi UA generic (Chrome Windows/Android Pixel-5)
+// — traffic ma, không phải người. Lọt lưới `fleet_bot` vì tỉ lệ sự kiện/người của
+// nó đúng 2,00 (ngưỡng cũ chỉ bắt <1,1) — và trước bản vá này còn bị xếp NHẦM vào
+// "engaged" (bucket tốt nhất!) vì 'tool_open' nằm sẵn trong danh sách sự kiện
+// tương tác thật. Vá bằng bucket MỚI `phantom_bot` (hàm `bot_phantom_anon_ids`,
+// bắt theo TỪNG anon_id — không gộp cả cụm UA vì 2 UA đó cũng có người thật dùng
+// chung). Sau vá: visitors_human tuần đó tụt 2.059→377, human/tổng lưu lượng
+// traffic_quality 30 ngày cũng tụt tương ứng — ĐÚNG, không phải hồi quy.
 function renderTrafficQuality(tq, paid) {
   if (!tq || tq.total == null) return '';
-  // `bot` gộp CẢ HAI cách nhận: `known_bot` (UA tự khai) + `fleet_bot` (đội máy,
-  // nhận qua hành vi). Bỏ `fleet_bot` ra là dải này nói "12 máy" ngay cạnh badge
-  // phễu nói "−489 máy" — hai con số cãi nhau trong cùng một màn hình.
+  // `bot` gộp BA cách nhận: `known_bot` (UA tự khai) + `fleet_bot` (đội máy,
+  // nhận qua hành vi — tỉ lệ sự kiện/người gần 1) + `phantom_bot` (traffic ma,
+  // nhận theo từng anon_id — đúng 2 sự kiện, 0 referrer, 0 đăng nhập, 1 ngày).
+  // Bỏ sót cái nào là dải này nói "12 máy" ngay cạnh badge phễu nói "−489 máy"
+  // — hai con số cãi nhau trong cùng một màn hình.
   const eng = tq.engaged || 0, drive = tq.drive_by || 0, brow = tq.browsed || 0;
-  const bot = (tq.known_bot || 0) + (tq.fleet_bot || 0);
+  const bot = (tq.known_bot || 0) + (tq.fleet_bot || 0) + (tq.phantom_bot || 0);
   const tot = tq.total || 0;
   const pct = (n) => tot > 0 ? Math.round((n / tot) * 100) : 0;
   const seg = (n, color, label) => n <= 0 ? '' :
@@ -6550,13 +6564,13 @@ function renderTrafficQuality(tq, paid) {
   return `<div style="margin-top:.9rem;padding-top:.8rem;border-top:1px solid var(--border-lt)">
     <div class="stat-label" style="margin-bottom:.35rem" title="RPC traffic_quality — cùng nguồn với CMO digest gửi Telegram">Chất lượng lưu lượng (đo nội bộ, ${tot.toLocaleString()} danh tính)</div>
     <div style="display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--border-lt)">
-      ${seg(eng, 'var(--green)', 'Tương tác thật')}${seg(brow, 'var(--blue)', 'Xem vài trang')}${seg(drive, 'var(--text-lt)', 'Ghé 1 lượt rồi đi')}${seg(bot, 'var(--red)', 'Máy (UA tự khai + đội máy nhận qua hành vi)')}
+      ${seg(eng, 'var(--green)', 'Tương tác thật')}${seg(brow, 'var(--blue)', 'Xem vài trang')}${seg(drive, 'var(--text-lt)', 'Ghé 1 lượt rồi đi')}${seg(bot, 'var(--red)', 'Máy (UA tự khai + đội máy nhận qua hành vi + traffic ma nhận theo anon_id)')}
     </div>
     <div style="margin-top:.45rem;font-size:.7rem;color:var(--text-lt);line-height:1.55">
       <strong style="color:var(--tx-green)">${eng.toLocaleString()}</strong> tương tác thật
       · <strong style="color:var(--text-mid)">${brow.toLocaleString()}</strong> xem vài trang
       · <strong style="color:var(--text-mid)">${drive.toLocaleString()}</strong> ghé 1 lượt rồi đi
-      · <strong style="color:var(--text-mid)">${bot.toLocaleString()}</strong> máy${(tq.fleet_bot || 0) > 0 ? ` <span style="opacity:.75">(${(tq.known_bot || 0).toLocaleString()} tự khai + ${(tq.fleet_bot || 0).toLocaleString()} đội máy)</span>` : ''}${botNote}
+      · <strong style="color:var(--text-mid)">${bot.toLocaleString()}</strong> máy${(tq.fleet_bot || 0) > 0 || (tq.phantom_bot || 0) > 0 ? ` <span style="opacity:.75">(${(tq.known_bot || 0).toLocaleString()} tự khai + ${(tq.fleet_bot || 0).toLocaleString()} đội máy + ${(tq.phantom_bot || 0).toLocaleString()} traffic ma)</span>` : ''}${botNote}
       ${convEng ? `<br>Chuyển đổi trên mẫu số ĐÃ LỌC (paid ÷ tương tác thật): <strong style="color:var(--text)">${convEng}</strong>` : ''}
     </div>
   </div>`;
@@ -6782,8 +6796,8 @@ function mktExportCSV() {
   const tq = _mktData.trafficQuality;
   if (tq && tq.total != null) {
     rows.push(['# Chất lượng lưu lượng (nội bộ, RPC traffic_quality)']);
-    rows.push(['total', 'engaged', 'browsed', 'drive_by', 'known_bot']);
-    rows.push([tq.total || 0, tq.engaged || 0, tq.browsed || 0, tq.drive_by || 0, tq.known_bot || 0]);
+    rows.push(['total', 'engaged', 'browsed', 'drive_by', 'known_bot', 'fleet_bot', 'phantom_bot']);
+    rows.push([tq.total || 0, tq.engaged || 0, tq.browsed || 0, tq.drive_by || 0, tq.known_bot || 0, tq.fleet_bot || 0, tq.phantom_bot || 0]);
     rows.push([]);
   }
   rows.push(['# Sources']);
