@@ -27,6 +27,7 @@ const EXEMPT = {
   'app-tai-khoan.html': 'trang tài khoản, không phải công cụ',
   'app-so-la-so.html': 'sổ lá số — danh sách + gán nhóm quan hệ, không phải công cụ',
   'app-thay.html': 'Các Thầy — danh sách 15 thầy, không phải công cụ',
+  'app-bao-cao.html': 'Báo cáo — danh sách báo cáo đã có (bấm là sang công cụ), không phải công cụ',
   'app-thay-chi-tiet.html': 'chi tiết một thầy — bio + danh sách công cụ, không phải công cụ',
   'app-tro-chuyen.html':
     'Trò chuyện — trang NÓ CHÍNH LÀ danh sách phiên hội thoại gộp mọi công cụ (xem tcList trong trang), không cần khối "Phiên gần đây" của MỘT tool riêng lẻ',
@@ -34,6 +35,13 @@ const EXEMPT = {
     'trang mua combo — một lượt nhập ngày sinh rồi mua, không sinh nội dung/hội thoại riêng để lưu lại (2 tool thành viên đã có lịch sử riêng của chúng)',
   'app-combo-tron-bo.html':
     'trang mua combo — một lượt nhập ngày sinh rồi mua, không sinh nội dung/hội thoại riêng để lưu lại (4 tool thành viên đã có lịch sử riêng của chúng)',
+};
+
+// Trang CÓ lưu phiên (bắt buộc cờ) nhưng KHÔNG cần khối "Phiên gần đây" trên
+// trang, vì danh sách phiên đã hiện ở chỗ khác. Cũng phải ghi lý do.
+const MOUNT_OPTIONAL = {
+  'app-chat.html':
+    'màn chat trang chủ — không có khung `.ws`; phiên của nó hiện ở mục "Gần đây" trong sidebar (renderSidebarRecent, shell.js)',
 };
 
 const bad = [];
@@ -47,7 +55,7 @@ for (const f of fs.readdirSync(DIR).sort()) {
   if (EXEMPT[f]) continue;
   checked++;
   const hasFlag = /window\.SHELL_HISTORY\s*=\s*true/.test(src);
-  const hasMount = src.includes('id="shellRecent"');
+  const hasMount = src.includes('id="shellRecent"') || !!MOUNT_OPTIONAL[f];
   if (hasFlag && hasMount) continue;
   const missing = [];
   if (!hasFlag) missing.push('window.SHELL_HISTORY=true (cạnh window.SHELL_ACTIVE)');

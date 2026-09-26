@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Tử Vi Minh Bảo</title>
+<meta name="description" content="Kể chuyện của bạn, Minh Bảo mời đúng thầy trong hội đồng 15 thầy vào xem: lá số Tử Vi, Bát Tự, xem tuổi, đặt tên, chọn ngày.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<!-- Manifest + thẻ apple: bắt buộc cho Web Push trên iPhone (chỉ mở cho trang
+     đã "Thêm vào Màn hình chính" ở chế độ standalone) — xem ghi chú dài ở
+     app-home.html, nơi khối này xuất hiện lần đầu. -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tử Vi MB">
+<link rel="apple-touch-icon" href="/seal-180.png">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
+<link rel="stylesheet" href="/shell.css?v=60">
+</head>
+<body class="chat-home chat-empty">
+<!-- Màn chat trang chủ kiểu ChatGPT (2026-09-26). Toàn bộ khung chat là rail
+     của shell.js (`window.SHELL_CHAT_HOME`): sidebar | cột chat. `#ws` để trống
+     và ẩn — chỉ có mặt vì soft-nav thay nội dung trang qua `main#ws`.
+     Bảng điều khiển cũ (vận hôm nay + danh mục) nay ở `/app/cong-cu`. -->
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+  <main class="ws" id="ws"></main>
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='home';window.SHELL_CHAT_HOME=true;window.SHELL_HISTORY=true;</script>
+<script src="/nav.js?v=45" data-icons-only></script>
+<script src="/auth.js?v=4"></script>
+<script src="/shell.js?v=109"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=45"></script>
+<script>
+(function(){
+  // Chạy lại được nhiều lần (soft-nav quay về /app chạy lại script này) —
+  // mọi thứ nằm trong IIFE, không khai `let/const` ở top-level.
+  // Phải chờ `boot()` của shell.js dựng rail xong (nó chạy ở DOMContentLoaded,
+  // đăng ký TRƯỚC listener này) — gọi setContext sớm hơn thì rail chưa có
+  // `#railCtx`/`#chat`, setContext thoát im lặng. Soft-nav: trang đã tải xong.
+  function init(){
+  function vnToday(){
+    try{ var s=new Date().toLocaleString('en-CA',{timeZone:'Asia/Ho_Chi_Minh',year:'numeric',month:'2-digit',day:'2-digit'});
+      var m=s.match(/(\d{4})-(\d{2})-(\d{2})/); if(m) return {y:+m[1],mo:+m[2],d:+m[3]}; }catch(e){}
+    var t=new Date(); return {y:t.getFullYear(),mo:t.getMonth()+1,d:t.getDate()};
+  }
+  function iso(t){ return t.y+'-'+('0'+t.mo).slice(-2)+'-'+('0'+t.d).slice(-2); }
+
+  // Câu mở hội thoại: người ta BẤM là gửi, và câu nào cũng đi qua Minh Bảo
+  // dẫn đường trước (mời đúng thầy), nên trộn cả mở lòng lẫn tra cứu.
+  var CHIPS=['Người yêu có thật lòng với mình không?','Năm nay có nên nhảy việc?',
+             'Chọn ngày khai trương cửa hàng','Đặt tên cho con sắp sinh','Hôm nay nên làm gì, tránh gì?'];
+
+  // `?q=…&thay=…` — câu hỏi mang từ trang chủ tĩnh `/` (đã chọn thầy ở đó
+  // qua /api/thay-hoi): vào thẳng thầy đó. Xoá query để tải lại không hỏi lại.
+  var ask=null;
+  try{ var p=new URLSearchParams(location.search); var q=(p.get('q')||'').trim().slice(0,500);
+       if(q) ask={q:q,thay:p.get('thay')||'thai-hu'}; }catch(e){}
+
+  var birth=null;
+  try{ birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi(Shell.getRememberedBirth()):null; }catch(e){}
+  var hasBirth=!!(birth&&birth.day&&birth.month&&birth.year);
+  var nm=hasBirth?String(birth.name||'').trim():'';
+  var today=vnToday();
+
+  var base={
+    label:'Hỏi Thầy',
+    placeholder:'Kể chuyện của bạn…',
+    hero:nm?('Chào '+nm+', hôm nay có chuyện gì?'):'Hôm nay bạn có chuyện gì?',
+    heroSub:'Kể vài dòng thôi. Minh Bảo sẽ mời đúng thầy trong hội đồng 15 thầy vào xem cho bạn.',
+    chips:CHIPS,
+    passive:true
+  };
+  // Có lá số: rail gửi thẳng ngày sinh, server tự lập lá số. Chưa có: kịch bản
+  // `hoang-dao` (vận NGÀY hôm nay — cửa concierge, có sẵn công cụ gợi ý tool).
+  // Mồi rail NGAY để ô nhập dùng được liền; số liệu ngày về sau thì chỉ thay
+  // DỮ LIỆU của kịch bản (updateScenarioData), không dựng lại hội thoại.
+  if(hasBirth) Shell.setContext(Object.assign({birth:birth},base));
+  else Shell.setContext(Object.assign({scenario:{type:'hoang-dao',data:{ngayDL:today.d+'/'+today.mo+'/'+today.y}}},base));
+
+  if(!hasBirth){
+    fetch('/api/van-ngay?d='+iso(today)+'&tuan=0')
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(v){
+        if(!v||!v.ok||!v.ngay) return;
+        // ⚠️ `extractGenericContext` BỎ QUA mọi giá trị là object → payload phải
+        // PHẲNG (cùng khuôn với app-home.html `wire()`).
+        var flat=v._flat||{
+          ngayDL:today.d+'/'+today.mo+'/'+today.y, amLich:v.ngay.am, thuTrongTuan:v.ngay.thu,
+          canChiNgay:v.ngay.canChi, canHanh:v.ngay.canHanh,
+          truc:v.truc?v.truc.ten+' ('+v.truc.tinhChat+')':'', tu:v.tu?v.tu.ten+' ('+v.tu.tinhChat+')':'',
+          saoNgay:v.saoNgay?v.saoNgay.ten+' — '+v.saoNgay.yNghia+(v.saoNgay.hoangDao?' [hoàng đạo]':' [hắc đạo]'):'',
+          tinhChatNgay:v.danhGia?v.danhGia.tinhChat:'', ngayKy:(v.ngayKy||[]).join(', '),
+          xungTuoi:v.xung?v.xung.chi:'',
+          vietNen:(v.nen||[]).map(function(x){return x.ten;}).join(', '),
+          vietKieng:(v.kieng||[]).map(function(x){return x.ten;}).join(', '),
+          gioHoangDao:(v.gioTot||[]).map(function(h){return h.chi+' ('+h.range+')';}).join(' · '),
+          mauHop:(v.mau&&v.mau.list||[]).join(', '),
+          huongHyThan:v.huong?v.huong.hyThan:'', huongTaiThan:v.huong?v.huong.taiThan:''
+        };
+        Shell.updateScenarioData(flat);
+      })
+      .catch(function(){ /* vẫn chat được — chỉ thiếu số liệu ngày cho thầy */ });
+  }
+
+  if(ask){
+    try{ history.replaceState(null,'',location.pathname); }catch(e){}
+    Shell.joinThay(ask.thay,ask.q);
+  }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+</body>
+</html>

@@ -24,7 +24,8 @@ const ROOT = process.cwd();
 const DIR = path.join(ROOT, 'public');
 
 // Trang shell KHÔNG phải tool: không có khung kết quả để chia sẻ.
-// `home` là dashboard, `ho-so` là trang tài khoản, `so-la-so` là sổ lá số
+// `home` là màn chat trang chủ (kết quả đi qua công cụ riêng), `cong-cu` là
+// danh mục công cụ, `bao-cao` là danh sách báo cáo đã có, `ho-so` là trang tài khoản, `so-la-so` là sổ lá số
 // (danh sách + gán nhóm quan hệ — không có kết quả nào để chia sẻ). `thay` là
 // danh sách 15 thầy, `tro-chuyen` là hộp thư hội thoại — cả hai đều KHÔNG
 // từng sinh một "kết quả" để chia sẻ, chỉ điều hướng sang trang/phiên khác.
@@ -33,6 +34,8 @@ const DIR = path.join(ROOT, 'public');
 // chia sẻ.
 const NOT_A_TOOL = new Set([
   'home',
+  'cong-cu',
+  'bao-cao',
   'ho-so',
   'so-la-so',
   'thay',

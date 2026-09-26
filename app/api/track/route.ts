@@ -58,6 +58,10 @@ const ALLOWED = new Set([
   // không mở (nội dung tin nhắc rỗng — đúng bệnh vừa vá). Gộp lại thì cả ba
   // trông giống nhau: một con số 0.
   'push_optin_shown', 'push_optin_result', 'push_open',
+  // Màn chat trang chủ (2026-09-26): Minh Bảo dẫn đường. `nav_route` = câu đầu
+  // tiên đi qua bước mời thầy; `nav_join` = khách bấm mời (meta.thay). Khoảng
+  // cách giữa hai số là tỉ lệ người bỏ đi ngay ở thẻ mời.
+  'nav_route', 'nav_join',
   // Bắt lỗi JS phía client — thay phần Sentry đang gỡ dần (7/89 trang, 0 trang
   // /app/*, và không đo được lỗi CHẠY TRONG TRÌNH DUYỆT). Bắn từ track.js qua
   // window.onerror/unhandledrejection, đã lọc nhiễu + chặn lũ ở CLIENT trước

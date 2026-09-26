@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Báo cáo — Tử Vi Minh Bảo</title>
+<link rel="icon" type="image/webp" href="/seal.webp"/>
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
+<link rel="stylesheet" href="/shell.css?v=60"/>
+<style>
+/* Báo cáo — kiểu trang Library của ChatGPT: tab lọc + ô tìm + bảng một dòng
+   một báo cáo. Mở một dòng = sang đúng công cụ với đúng lá số (đã trả tiền thì
+   công cụ tự trả lại bản đã có, không trừ thêm). */
+.ws-body{padding:22px 26px 60px;max-width:960px}
+.bc-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.bc-tabs{display:flex;gap:4px;flex-wrap:wrap;flex:1;min-width:0}
+.bc-tab{appearance:none;border:0;background:none;font:inherit;font-size:13.5px;color:var(--text-mid);padding:7px 14px;border-radius:999px;cursor:pointer}
+@media(hover:hover){.bc-tab:hover{background:var(--paper-2)}}
+.bc-tab.on{background:var(--paper-2);color:var(--text);font-weight:600}
+.bc-find{display:flex;align-items:center;gap:8px;border:1px solid var(--line-2);border-radius:999px;padding:6px 14px;background:var(--white);flex:0 1 260px;min-width:0}
+.bc-find input{border:0;outline:0;background:none;font:inherit;font-size:13.5px;color:var(--text);min-width:0;flex:1}
+.bc-find .ic{width:15px;height:15px;color:var(--text-lt);flex:0 0 auto}
+.bc-tbl{width:100%;border-collapse:collapse}
+.bc-tbl th{text-align:left;font-weight:500;font-size:12px;color:var(--text-lt);padding:8px 10px;border-bottom:1px solid var(--line)}
+.bc-tbl td{padding:12px 10px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle}
+.bc-tbl tr.bc-row{cursor:pointer}
+@media(hover:hover){.bc-tbl tr.bc-row:hover td{background:var(--paper-2)}}
+.bc-nm{display:flex;align-items:center;gap:12px;min-width:0}
+.bc-ic{width:34px;height:34px;border-radius:9px;background:var(--paper-2);display:flex;align-items:center;justify-content:center;color:var(--gold-soft);flex:0 0 auto}
+.bc-ic svg{width:17px;height:17px}
+.bc-nm b{display:block;color:var(--heading);font-weight:600}
+.bc-nm span{display:block;font-size:12px;color:var(--text-lt)}
+.bc-muted{color:var(--text-lt);font-size:12.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bc-msg{padding:3rem 1rem;text-align:center;color:var(--text-lt);font-size:13.5px;line-height:1.7}
+@media(max-width:640px){.ws-body{padding:16px 14px 40px}.bc-tbl .bc-hide{display:none}.bc-find{flex:1 1 100%}}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Báo cáo</b><span>Mọi bản luận bạn đã có — mở lại không tốn thêm Lượng</span></div>
+    </div>
+    <div class="ws-body">
+      <div class="bc-bar">
+        <div class="bc-tabs" id="bcTabs">
+          <button type="button" class="bc-tab on" data-tab="all">Tất cả</button>
+          <button type="button" class="bc-tab" data-tab="laso">Lá số &amp; vận hạn</button>
+          <button type="button" class="bc-tab" data-tab="chandung">Chân dung &amp; duyên</button>
+        </div>
+        <label class="bc-find"><span class="ic" data-icon="search"></span><input id="bcFind" type="search" placeholder="Tìm báo cáo…" aria-label="Tìm báo cáo"></label>
+      </div>
+      <div id="bcLoading" class="bc-msg">Đang tải…</div>
+      <div id="bcGuest" class="bc-msg" style="display:none">
+        <p style="margin-bottom:1rem">Đăng nhập để xem các báo cáo bạn đã có.</p>
+        <button class="btn" type="button" onclick="window.showAuthModal && showAuthModal(function(){location.reload();})">Đăng nhập / Đăng ký</button>
+      </div>
+      <div id="bcEmpty" class="bc-msg" style="display:none">Chưa có báo cáo nào.<br>Bản luận bạn mở ở bất kỳ công cụ nào sẽ tự vào đây.</div>
+      <table class="bc-tbl" id="bcTbl" style="display:none">
+        <thead><tr><th>Tên</th><th class="bc-hide">Loại</th><th>Cập nhật</th></tr></thead>
+        <tbody id="bcBody"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script src="/nav.js?v=45" data-icons-only></script>
+<script src="/auth.js?v=4"></script>
+<script>window.SHELL_ACTIVE='bao-cao';</script>
+<script src="/shell.js?v=109"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=45"></script>
+<script>
+(function(){
+  // CÙNG bảng công cụ với "Tủ Báo Cáo" của app-so-la-so.html (REPORT_TOOLS) —
+  // `tool_id` khớp `user_reports.tool_id`, `url` khớp next.config.mjs. Nhóm
+  // `chandung` là 7 tool mà /api/reports?withCharts=1 biết lá số nào đã sở
+  // hữu (lib/reports/chartMatch.ts); nhóm `laso` chỉ biết "đã có", không biết
+  // cho lá số nào.
+  var TOOLS = {
+    'chan-dung-vo-chong': { label:'Chân Dung Vợ/Chồng', url:'/app/chan-dung-vo-chong', tab:'chandung' },
+    'chan-dung-tien-kiep':{ label:'Chân Dung Tiền Kiếp', url:'/app/chan-dung-tien-kiep', tab:'chandung' },
+    'duyen-no-tien-kiep': { label:'Duyên Nợ Tiền Kiếp', url:'/app/duyen-no-tien-kiep', tab:'chandung' },
+    'nguoi-khac':         { label:'Lá Số Người Khác', url:'/app/nguoi-khac', tab:'chandung' },
+    'day-con':            { label:'Dạy Con Theo Lá Số', url:'/app/day-con', tab:'chandung' },
+    'nhan-mach':          { label:'Sổ Nhân Mạch', url:'/app/nhan-mach', tab:'chandung' },
+    'huong-nghiep-tre':   { label:'Hướng Nghiệp Sớm Cho Con', url:'/app/huong-nghiep-tre', tab:'chandung' },
+    'laso':               { label:'Luận Giải Lá Số', url:'/app/luan-giai', tab:'laso' },
+    'tu-binh':            { label:'Tử Bình Bát Tự', url:'/app/bat-tu', tab:'laso' },
+    'chu-trinh-cuoc-doi': { label:'Chu Trình Cuộc Đời', url:'/app/chu-trinh-cuoc-doi', tab:'laso' },
+    'van-han-nam':        { label:'Vận Hạn 12 Tháng Tới', url:'/app/van-han-nam', tab:'laso' }
+  };
+  var ROWS = [], TAB = 'all', Q = '';
+  function el(id){ return document.getElementById(id); }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function rel(ts){
+    if(!ts) return '';
+    var d = Date.now() - ts;
+    if (d < 3600000) return Math.max(1, Math.floor(d/60000)) + ' phút trước';
+    if (d < 86400000) return Math.floor(d/3600000) + ' giờ trước';
+    if (d < 30*86400000) return Math.floor(d/86400000) + ' ngày trước';
+    var t = new Date(ts); return t.getDate() + '/' + (t.getMonth()+1) + '/' + t.getFullYear();
+  }
+  function who(c){
+    var b = c && c.birth || {};
+    var nm = (c && c.label) || b.hoten || '';
+    var d = b.ngay ? (+b.ngay) + '/' + (+b.thang) + '/' + b.nam : '';
+    return [nm, d].filter(Boolean).join(' · ');
+  }
+  function build(j){
+    var rows = [], charts = j.charts || [];
+    // 7 tool chân dung: biết đúng lá số nào đã sở hữu → mỗi (lá số × tool) một dòng.
+    charts.forEach(function(c){
+      Object.keys(c.owns || {}).forEach(function(tid){
+        if (!c.owns[tid] || !TOOLS[tid]) return;
+        rows.push({ tool: tid, sub: who(c), birth: c.birth, ts: 0 });
+      });
+    });
+    // Còn lại: chỉ biết "đã có" + thời điểm — một dòng mỗi bản ghi.
+    var seenChartTool = {};
+    rows.forEach(function(r){ seenChartTool[r.tool] = 1; });
+    (j.reports || []).forEach(function(r){
+      var t = TOOLS[r.tool_id]; if (!t) return;
+      var ts = +new Date(r.updated_at || r.created_at) || 0;
+      if (seenChartTool[r.tool_id]) {
+        // Gắn thời điểm mới nhất vào các dòng lá số của tool này (đủ để xếp).
+        rows.forEach(function(x){ if (x.tool === r.tool_id && ts > x.ts) x.ts = ts; });
+        return;
+      }
+      rows.push({ tool: r.tool_id, sub: '', birth: null, ts: ts });
+    });
+    rows.sort(function(a,b){ return b.ts - a.ts; });
+    return rows;
+  }
+  function paint(){
+    var list = ROWS.filter(function(r){
+      var t = TOOLS[r.tool];
+      if (TAB !== 'all' && t.tab !== TAB) return false;
+      if (Q && (t.label + ' ' + r.sub).toLowerCase().indexOf(Q) < 0) return false;
+      return true;
+    });
+    el('bcLoading').style.display = 'none';
+    el('bcEmpty').style.display = list.length ? 'none' : 'block';
+    el('bcTbl').style.display = list.length ? '' : 'none';
+    el('bcBody').innerHTML = list.map(function(r, i){
+      var t = TOOLS[r.tool];
+      return '<tr class="bc-row" data-i="' + ROWS.indexOf(r) + '"><td><div class="bc-nm"><span class="bc-ic" data-icon="file-text"></span><span><b>' + esc(t.label) + '</b>' +
+        (r.sub ? '<span>' + esc(r.sub) + '</span>' : '') + '</span></div></td>' +
+        '<td class="bc-hide bc-muted">' + (t.tab === 'laso' ? 'Lá số &amp; vận hạn' : 'Chân dung &amp; duyên') + '</td>' +
+        '<td class="bc-muted">' + esc(rel(r.ts)) + '</td></tr>';
+    }).join('');
+    if (window.mountIcons) window.mountIcons(el('bcBody'));
+  }
+  el('bcTabs').addEventListener('click', function(e){
+    var b = e.target.closest('.bc-tab'); if (!b) return;
+    Array.prototype.forEach.call(el('bcTabs').children, function(x){ x.classList.toggle('on', x === b); });
+    TAB = b.getAttribute('data-tab'); paint();
+  });
+  el('bcFind').addEventListener('input', function(){ Q = this.value.trim().toLowerCase(); paint(); });
+  // Mở = sang công cụ với ĐÚNG lá số — cùng cơ chế `app_birth` mà Tủ Báo Cáo
+  // của sổ lá số dùng (shell.js normBirth đọc lại ở mọi trang).
+  el('bcBody').addEventListener('click', function(e){
+    var tr = e.target.closest('tr.bc-row'); if (!tr) return;
+    var r = ROWS[+tr.getAttribute('data-i')]; if (!r) return;
+    if (r.birth) { try { localStorage.setItem('app_birth', JSON.stringify(r.birth)); } catch (err) { /* ignore */ } }
+    location.href = TOOLS[r.tool].url;
+  });
+
+  function token(){
+    try {
+      return Promise.resolve((window.Auth && Auth.getFreshToken) ? Auth.getFreshToken()
+        : ((window.Auth && Auth.getSession && Auth.getSession()) || {}).access_token || null);
+    } catch (e) { return Promise.resolve(null); }
+  }
+  token().then(function(tok){
+    if (!tok) { el('bcLoading').style.display = 'none'; el('bcGuest').style.display = 'block'; return; }
+    return fetch('/api/reports?withCharts=1', { headers: { Authorization: 'Bearer ' + tok } })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(j){
+        if (!j) { el('bcLoading').textContent = 'Chưa tải được danh sách báo cáo. Thử tải lại trang.'; return; }
+        ROWS = build(j); paint();
+      });
+  }).catch(function(e){
+    console.error('[bao-cao]', e);
+    el('bcLoading').textContent = 'Chưa tải được danh sách báo cáo. Thử tải lại trang.';
+  });
+})();
+</script>
+</body>
+</html>
