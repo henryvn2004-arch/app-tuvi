@@ -331,7 +331,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    là điểm chạm dễ nhất trên thanh (to hơn, tách khỏi nền navy bằng viền vàng
    khớp màu thương hiệu). `top:-15px` kéo nó lên khỏi hàng mà vẫn nằm trong
    `.tabbar` để không phải tính lại vị trí tuyệt đối riêng. */
-.tabbar .tab-home{display:flex;flex-direction:column;align-items:center;position:relative;top:-15px}
+.tabbar .tab-home{display:flex;flex-direction:column;align-items:center;position:relative;top:-15px;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .tabbar .tab-home-btn{appearance:none;-webkit-appearance:none;width:52px;height:52px;border-radius:50%;border:4px solid #2B1B10;background:linear-gradient(160deg,var(--gold),var(--gold-soft));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(15,42,61,.35);cursor:pointer}
 .tabbar .tab-home-btn svg{width:24px;height:24px;stroke:#2B1B10;stroke-width:2}
 .tabbar .tab-home-btn:active{transform:scale(.94)}

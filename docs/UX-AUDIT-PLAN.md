@@ -237,9 +237,18 @@ giá; sidebar ẩn khối rỗng cho tới khi có dữ liệu; không emoji mà
 "AI" ở bất kỳ đâu đã kiểm.
 
 ### W2: Lỗi và niềm tin (P0)
-- [ ] Nhãn "Trò chuyện" bị gạch chân xanh ở tab bar `/app`. Logo và slogan
-      bị cắt trên header landing 390px. (Chưa re-verify sau đợt rename — có
-      thể đã hết vì text đổi; kiểm lại khi review W3 trên preview thật.)
+- [x] Nhãn "Hỏi Thầy" bị gạch chân xanh ở tab bar `/app` — **đã re-verify sống**
+      (static server cục bộ, Vercel preview yêu cầu đăng nhập nên không dùng
+      được): `.tabbar .tab` có `text-decoration:none` nhưng `.tab-home` (nút
+      tròn giữa) không được liệt vào — thiếu sót thật, không cố ý. **Đã sửa**
+      (PR này, `shell.css`).
+- [~] Logo/slogan header landing bị cắt ở 390px — **đã re-verify sống, vẫn
+      còn, nhưng là đánh đổi CỐ Ý** (`nav.js` dòng ~309: `max-width:calc(100vw
+      - 220px)` chừa đủ chỗ cho badge Lượng + avatar khi ĐÃ đăng nhập — rộng
+      hơn cần thiết ở trạng thái khách, nhưng comment gốc giải thích rõ lý do
+      "ước lượng RỘNG để không tái phạm khi nội dung auth đổi"). Không tự ý
+      thu hẹp mà không đo lại rủi ro logo đè lên nút đăng nhập/badge — để lại
+      cho W6 nếu muốn làm mức chừa chỗ tuỳ theo trạng thái đăng nhập.
 - [x] `401 GET /api/auth/session` mỗi lượt tải trang khách — **đã đọc code,
       KHÔNG phải bug**: `auth.js` không đọc được cookie HttpOnly nên phải hỏi
       server để biết có phiên không; guest thật sự không có phiên thì 401 là
