@@ -32,4 +32,32 @@
   --bg-soft: #f5f4f0;
   --red: #c0392b;
   --green: #1e6b3c;
+
+  /* ── Token độ mượt (W6, 2026-09) — GHI LẠI easing/thời lượng/bóng đã dùng
+     ĐA SỐ trên site, không bịa số mới. Đo bằng grep toàn repo:
+     cubic-bezier(.4,0,.2,1) chiếm 8/9 chỗ dùng cubic-bezier ⇒ ease-in-out;
+     cubic-bezier(.2,.8,.2,1) là easing decelerate duy nhất đang dùng (khối
+     trượt `.tv-sheet-panel` ở shell.css) ⇒ ease-out. Thời lượng: .15s/.2s
+     chiếm 65/109 lần khai transition trong public/*.css và app-*.html ⇒
+     dur-1/dur-2; .4s là mốc trên của các transition "chậm" hiện có ⇒ dur-3.
+     Bóng nhại đúng công thức --shadow/--shadow-lg của shell.css (bóng pha
+     navy, không dùng đen thuần) để hai file thống nhất một ngôn ngữ thị
+     giác dù không chung :root. */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-1: 0.15s;
+  --dur-2: 0.25s;
+  --dur-3: 0.4s;
+  --shadow-1: 0 1px 2px rgba(6, 26, 46, 0.05), 0 2px 8px rgba(6, 26, 46, 0.06);
+  --shadow-2: 0 2px 6px rgba(6, 26, 46, 0.08), 0 8px 24px rgba(6, 26, 46, 0.1);
+  --shadow-3:
+    0 12px 32px rgba(6, 26, 46, 0.22), 0 4px 12px rgba(6, 26, 46, 0.14);
+
+  /* Safe-area — chưa file nào ngoài shell.css chạm tới inset thật (nó gọi
+     thẳng `env(safe-area-inset-*)` inline, không qua token), nên đây chỉ
+     GIỮ CHỖ hai biến cho trang ngoài app-shell muốn tự né notch/home-indicator
+     mà không phải nhớ cú pháp `env(...,fallback)`. Thêm token không đổi gì ở
+     trang chưa dùng tới nó. */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
