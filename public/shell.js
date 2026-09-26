@@ -67,10 +67,10 @@
   // Nạp Lượng · Hồ Sơ. "Nhiệm Vụ"/"Kết Nối" không còn là mục sidebar riêng —
   // chúng là tab BÊN TRONG /app/ho-so (app-tai-khoan.html, SHELL_ACTIVE='ho-so'
   // giữ nguyên). Giữ nguyên id 'ho-so' để không phá mountToolIcon()/Cmd+K.
-  var FIXED_TOP = { group: 'Luận Đường', open: true, items: [
+  var FIXED_TOP = { group: 'Tử Vi Minh Bảo', open: true, items: [
     { id: 'home', label: 'Tổng quan', href: '/app', icon: 'home' },
     { id: 'thay', label: 'Các Thầy', href: '/app/thay', icon: 'star' },
-    { id: 'tro-chuyen', label: 'Trò chuyện', href: '/app/tro-chuyen', icon: 'message-circle' },
+    { id: 'tro-chuyen', label: 'Hỏi Thầy', href: '/app/tro-chuyen', icon: 'message-circle' },
   ] };
   // Nhóm này KHÔNG render thành nav (renderSidebar tự vẽ tay khối "Lá số đã
   // lưu") — chỉ để mountToolIcon()/Cmd+K/buildCmds() tìm ra icon+href đúng khi
@@ -600,7 +600,7 @@
     // "Tổng quan" (đường về `/app`) — vẫn cần trên desktop dù mobile đã có nút
     // Home riêng ở tabbar dưới. Giữ NGUYÊN item của FIXED_TOP để chấm nhắc
     // Khởi Hành (khoiHanhPending) đi đúng theo, không tách logic ra hai chỗ.
-    h += groupHtml('Luận Đường', FIXED_TOP.items, khoiHanhPending());
+    h += groupHtml('Tử Vi Minh Bảo', FIXED_TOP.items, khoiHanhPending());
     h += groupHtml('Tài khoản', FIXED_BOTTOM.items, false);
 
     // "Lá số đã lưu" — khung tĩnh trước, số đếm thật đổ vào sau (loadSidebarCharts).
@@ -728,12 +728,12 @@
     var host = document.getElementById('shell-rail');
     if (!host) return;
     host.innerHTML =
-      '<div class="rail-h"><img class="rail-ava" src="' + authorAva() + '" alt="Trợ lý Luận Đường" data-tip="Đổi thầy luận giải">' +
+      '<div class="rail-h"><img class="rail-ava" src="' + authorAva() + '" alt="Hỏi Thầy" data-tip="Đổi thầy luận giải">' +
       // id="railHTitle": Henry 2026-09-23 — bấm gợi ý chuyển tool NGAY TRONG
       // rail (startInlineTool, không điều hướng trang) thì tiêu đề đổi sang
       // TÊN TOOL thay vì tên chung "Trợ lý Luận Đường", cho biết đang ở luồng
       // nào. Xem setHeaderTitle().
-      '<div><b id="railHTitle">Trợ lý Luận Đường</b><span>' + esc(authorLabel()) + '</span></div>' +
+      '<div><b id="railHTitle">Hỏi Thầy</b><span>' + esc(authorLabel()) + '</span></div>' +
       '<div class="tools">' +
         // Đợt 0 (2026-09-24, đóng vai khách chụp màn hình thật): chat-first
         // trên mobile KHÔNG có đường lui rõ ràng — "Kết quả" đọc như một
@@ -834,6 +834,7 @@
   // ── CHAT STATE ──
   var ctx = null;            // { birth } | { scenario }  (+ wrap tùy chọn)
   var ctxChips = [];         // gợi ý câu hỏi CÒN LẠI (đã bấm thì bỏ đi)
+  var ctxChipsSrc = 'static'; // 'static' (trang khai) | 'suggest' (model gợi sau câu trả lời) — để đo
   var ctxChipsOrig = [];     // bản gốc để reset khi "hội thoại mới"
   var messages = [];
   var sessionId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now());
@@ -1413,7 +1414,7 @@
     var btn = document.querySelector('[data-act="share"]'); if (btn) btn.disabled = true;
     var payload = {
       toolId: ACTIVE || 'laso',
-      title: (curMeta && curMeta.title) || 'Luận Đường',
+      title: (curMeta && curMeta.title) || 'Hỏi Thầy',
       ctxLabel: _birthLabel(),
       thay: _author ? { id: _author.id, name: _author.name } : null,
       // restore: khung giữa (lá số/kịch bản) để người nhận NỐI PHIÊN hỏi tiếp.
@@ -1433,8 +1434,8 @@
         // Điện thoại (iOS/Android): mở SHARE SHEET native của hệ điều hành —
         // đủ WhatsApp, Messages, AirDrop, Zalo… đúng trải nghiệm quen thuộc.
         // Người dùng bấm ✕ (AbortError) thì thôi; lỗi khác → rơi về modal tự dựng.
-        var titleTxt = (curMeta && curMeta.title) || 'Luận Đường';
-        var modalOpts = { title: 'Chia sẻ phiên Luận Đường', desc: 'Ai có link đều đọc được lá số và toàn bộ hỏi đáp trong phiên này.', shareText: 'Xem phần luận giải của thầy cho lá số này: ' };
+        var titleTxt = (curMeta && curMeta.title) || 'Hỏi Thầy';
+        var modalOpts = { title: 'Chia sẻ phiên Hỏi Thầy', desc: 'Ai có link đều đọc được lá số và toàn bộ hỏi đáp trong phiên này.', shareText: 'Xem phần luận giải của thầy cho lá số này: ' };
         shareLink(url, { title: titleTxt + ' — Tử Vi Minh Bảo', text: 'Xem phần luận giải của thầy cho lá số này:', url: url }, modalOpts, onMedium);
       })
       .catch(function () { if (btn) btn.disabled = false; alert('Lỗi mạng khi tạo link chia sẻ.'); });
@@ -1768,7 +1769,7 @@
   function wsTitleText() {
     var b = document.querySelector('.ws-title b');
     var t = b ? String(b.textContent || '').trim() : '';
-    return t || 'Kết quả Luận Đường';
+    return t || 'Kết quả luận giải';
   }
 
   // Chuẩn hoá payload — MỘT phép duy nhất cho cả hai đường (tool đưa / shell
@@ -1790,7 +1791,7 @@
     return {
       kind: kind,
       toolId: o.toolId || ACTIVE || 'app',
-      title: String(o.title || 'Kết quả Luận Đường').slice(0, 160),
+      title: String(o.title || 'Kết quả luận giải').slice(0, 160),
       imageUrl: o.imageUrl || null,
       text: text,
       blocks: blocks,
@@ -2525,6 +2526,44 @@
     return null;
   }
 
+  // Chủ đề (CUNG vừa hỏi, khoá bằng tên bare — bỏ tiền tố "Cung " của
+  // TOPIC_CUNG ở trên) → công cụ liên quan, xếp theo ưu tiên. `maybeShowUpsell`
+  // dùng bảng này để KHÔNG luôn mời Luận Giải — mời đúng thứ khớp điều vừa hỏi.
+  // 'laso' luôn đứng cuối làm phao cứu sinh: chắc chắn có trong `tool_pricing`
+  // (sản phẩm cốt lõi) nên tra tới cuối luôn ra một thẻ.
+  // 🔑 Đây là bản DÀNH RIÊNG CHO CLIENT — server có bản riêng, hẹp hơn, ở
+  // `lib/tools/suggest-tool.ts` (`SUGGEST_PRODUCT_TOOL_DEF`, chỉ 2 mã). Hai nơi
+  // CHƯA hợp nhất một nguồn (xem docs/UX-AUDIT-PLAN.md "W5: Bán chéo").
+  var TOPIC_REPORT_CANDIDATES = {
+    'Tài Bạch': ['xem-lam-an', 'chu-trinh-cuoc-doi', 'laso'],
+    'Quan Lộc': ['cong-so', 'chu-trinh-cuoc-doi', 'laso'],
+    'Phu Thê': ['xem-tuoi', 'chan-dung-vo-chong', 'laso'],
+    'Tử Tức': ['day-con', 'huong-nghiep-tre', 'xem-tuoi-sinh-con', 'laso'],
+    'Tật Ách': ['van-han-nam', 'laso'],
+    'Phụ Mẫu': ['chu-trinh-cuoc-doi', 'laso'],
+    'Điền Trạch': ['bat-trach', 'laso'],
+    'Thiên Di': ['xem-lam-an', 'chu-trinh-cuoc-doi', 'laso'],
+    'Nô Bộc': ['nhan-mach', 'laso'],
+    'Huynh Đệ': ['nhan-mach', 'laso'],
+    'Phúc Đức': ['chu-trinh-cuoc-doi', 'laso'],
+    'Mệnh': ['chu-trinh-cuoc-doi', 'laso'],
+  };
+  // Trả dòng `tool_pricing` (đã enabled, có `app_path` — `ToolPrices.rows()`
+  // chỉ nạp đúng những dòng đó) của ứng viên ĐẦU TIÊN còn tồn tại, hoặc null
+  // nếu `ToolPrices` chưa nạp xong (nơi gọi tự rơi về hành vi cũ khi đó).
+  function pickTopicReport(cung) {
+    var bare = String(cung || '').replace(/^Cung\s+/, '');
+    var candidates = TOPIC_REPORT_CANDIDATES[bare] || ['laso'];
+    var rs = (window.ToolPrices && ToolPrices.rows()) || [];
+    if (!rs.length) return null;
+    for (var i = 0; i < candidates.length; i++) {
+      for (var j = 0; j < rs.length; j++) {
+        if (rs[j] && rs[j].tool_id === candidates[i] && rs[j].app_path) return rs[j];
+      }
+    }
+    return null;
+  }
+
   // Trạng thái ví cho rail. `price` để null nghĩa là CHƯA BIẾT giá → đồng hồ im
   // lặng thay vì đoán. Đoán giá rồi hiện sai số câu là nói sai với người dùng
   // ngay trên thứ họ dùng để quyết định.
@@ -2692,17 +2731,24 @@
 
   // Thẻ mời — chèn vào giữa dòng hội thoại SAU câu thứ 3, gọi tên đúng cung mà
   // người ta vừa hỏi. Bán ở khoảnh khắc đã tỏ ý quan tâm, không phải lúc cạn ví.
+  // Từ 2026-09-26 (W5): KHÔNG còn luôn mời Luận Giải — `pickTopicReport` chọn
+  // công cụ khớp đúng CUNG vừa hỏi, rơi về Luận Giải khi không có ứng viên
+  // riêng hoặc `ToolPrices` chưa nạp xong (giữ đúng hành vi cũ cho ca đó).
   function maybeShowUpsell() {
-    if (_upsellShown || !ctx || !ctx.birth) return;   // cần lá số thật mới mời Luận Giải
-    if (ACTIVE === 'luan-giai') return;               // đang ở chính tool đó rồi
+    if (_upsellShown || !ctx || !ctx.birth) return;   // cần lá số thật mới mời báo cáo
     if (_askCount < 3) return;
-    if (_rc.lasoPrice == null) return;                // chưa biết giá thì không hứa gì
-    _upsellShown = true;
 
     var cung = null;
     for (var i = _cungAsked.length - 1; i >= 0; i--) { if (_cungAsked[i]) { cung = _cungAsked[i]; break; } }
-    var rest = LG_PHAN.filter(function (p) { return p !== cung; });
-    var preview = rest.slice(0, 5).join(' · ');
+    var pick = pickTopicReport(cung);
+    var toolId = pick ? pick.tool_id : 'laso';
+    if (ACTIVE === toolId) return;                    // đang ở chính tool đó rồi
+
+    var label = (pick && pick.label) || 'Luận Giải';
+    var path = (pick && pick.app_path) || '/app/luan-giai';
+    var price = pick ? (window.ToolPrices ? ToolPrices.get(toolId) : null) : _rc.lasoPrice;
+    if (price == null) return;                        // chưa biết giá thì không hứa gì
+    _upsellShown = true;
 
     var lead = cung
       ? 'Mấy câu vừa rồi của bạn xoay quanh <b>' + esc(cung) + '</b>.'
@@ -2712,21 +2758,36 @@
     if (!chat) return;
     var card = document.createElement('div');
     card.className = 'rail-upsell';
-    card.innerHTML =
-      '<div class="ru-t">' + lead + '</div>' +
-      '<div class="ru-d">Bản <b>Luận Giải</b> soi trọn <b>' + LG_PHAN.length + ' mục</b> của chính lá số này — ' +
-        (cung ? esc(cung) + ' có mục riêng, cùng ' : '') + rest.length + ' mục còn lại: ' +
-        '<span class="ru-list">' + esc(preview) + '…</span></div>' +
-      '<div class="ru-f">' +
-        '<a class="ru-btn" href="/app/luan-giai">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng</a>' +
-        '<span class="ru-price">≈ ' + creditVnd(_rc.lasoPrice) + '</span>' +
-      '</div>';
+    // toolId === 'laso' (mặc định hoặc chọn đúng ứng viên): giữ bản thẻ CŨ, đã
+    // đo và tinh chỉnh — có xem trước N mục. Tool khác thì thẻ GỌN hơn: không
+    // có danh sách mục để nêu cho công cụ đó.
+    if (toolId === 'laso') {
+      var rest = LG_PHAN.filter(function (p) { return p !== cung; });
+      var preview = rest.slice(0, 5).join(' · ');
+      card.innerHTML =
+        '<div class="ru-t">' + lead + '</div>' +
+        '<div class="ru-d">Bản <b>Luận Giải</b> soi trọn <b>' + LG_PHAN.length + ' mục</b> của chính lá số này — ' +
+          (cung ? esc(cung) + ' có mục riêng, cùng ' : '') + rest.length + ' mục còn lại: ' +
+          '<span class="ru-list">' + esc(preview) + '…</span></div>' +
+        '<div class="ru-f">' +
+          '<a class="ru-btn" href="' + esc(path) + '">Xem trọn ' + LG_PHAN.length + ' mục — ' + price + ' Lượng</a>' +
+          '<span class="ru-price">≈ ' + creditVnd(price) + '</span>' +
+        '</div>';
+    } else {
+      card.innerHTML =
+        '<div class="ru-t">' + lead + '</div>' +
+        '<div class="ru-d">Bản <b>' + esc(label) + '</b> viết trọn thành văn bản đúng điều bạn vừa hỏi, thay vì hỏi lẻ từng câu.</div>' +
+        '<div class="ru-f">' +
+          '<a class="ru-btn" href="' + esc(path) + '">Xem ' + esc(label) + ' — ' + price + ' Lượng</a>' +
+          '<span class="ru-price">≈ ' + creditVnd(price) + '</span>' +
+        '</div>';
+    }
     chat.appendChild(card);
     chat.scrollTop = chat.scrollHeight;
-    try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'rail_upsell_shown', cung: cung || null } }); } catch (e) { /* ignore */ }
+    try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'rail_upsell_shown', cung: cung || null, suggest_tool: toolId } }); } catch (e) { /* ignore */ }
     var btn = card.querySelector('.ru-btn');
     if (btn) btn.addEventListener('click', function () {
-      try { track('cta_click', { tool_id: 'laso', meta: { from: 'rail_upsell', cung: cung || null } }); } catch (e) { /* ignore */ }
+      try { track('cta_click', { tool_id: toolId, meta: { from: 'rail_upsell', cung: cung || null } }); } catch (e) { /* ignore */ }
     });
   }
 
@@ -2970,7 +3031,7 @@
   };
   function setHeaderTitle(title) {
     var el = document.getElementById('railHTitle');
-    if (el) el.textContent = title || 'Trợ lý Luận Đường';
+    if (el) el.textContent = title || 'Hỏi Thầy';
   }
   function inlineBirth(d) {
     var gioIdx = window.VnTimezone ? window.VnTimezone.hourMinToGioIdx(d.gioHour, d.gioPhut) : 0;
@@ -3718,7 +3779,7 @@
   // lúc mở (y hệt cả 4 trang thật — không trang nào gọi lại setContext() sau
   // khi có kết quả), streamed text ở lại trong lịch sử chat làm "kết quả".
   function runTuongMatSSE(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38'], function (err) {
+    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=38'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', '', 'Phân tích →', function (photo, bubbleEl, showErr) {
@@ -3791,7 +3852,7 @@
   // /api/tuong-mat, kết quả JSON. Trang thật gọi LẠI Shell.setContext() sau
   // khi có kết quả (label/greeting/chips theo đúng response) — replay y hệt.
   function runTuongMatJSON(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38'], function (err) {
+    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=38'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', opts.extraFieldsHtml || '', 'Phân tích →', function (photo, bubbleEl, showErr) {
@@ -3912,7 +3973,7 @@
   // 'bat-trach' (bước 17), không chép công thức lần hai.
   var DOOR_DIR_OPTS = [['S', 'Nam'], ['N', 'Bắc'], ['E', 'Đông'], ['W', 'Tây'], ['SE', 'Đông Nam'], ['SW', 'Tây Nam'], ['NE', 'Đông Bắc'], ['NW', 'Tây Bắc']];
   function runPhongThuyPhoto(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38', '/tools-shared/bat-trach.js?v=2'], function (err) {
+    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=38', '/tools-shared/bat-trach.js?v=2'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var extraOpts = opts.extraOptions.map(function (o) { return '<option value="' + esc(o[0]) + '">' + esc(o[1]) + '</option>'; }).join('');
@@ -4023,7 +4084,7 @@
   // được 3/6 trục Cốt/Nhục/Thế — không phải suy diễn, chính trang thật cũng
   // chỉ đo được ngần đó khi người dùng chọn nhánh ảnh thay vì ký sống).
   function runButTuong(chat, toolId) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38', '/tools-shared/but-tuong.js'], function (err) {
+    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=38', '/tools-shared/but-tuong.js'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BuTuongTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Bút Tướng', placeholder: 'Hỏi thầy về bút tướng…',
@@ -4072,7 +4133,7 @@
   // ── Trả phí KHÔNG cần ảnh (mau-sac-hop-menh/trang-phuc-theo-ngay) — vẫn
   // qua requireCredits(), chỉ khác chỗ input là field chứ không phải ảnh.
   function runMauSacHopMenh(chat, toolId) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38', '/tools-shared/bat-trach.js?v=2'], function (err) {
+    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=38', '/tools-shared/bat-trach.js?v=2'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Màu Sắc Hợp Mệnh', placeholder: 'Hỏi thầy về màu sắc hợp mệnh…',
@@ -4138,7 +4199,7 @@
     return { text: 'Mệnh khắc Ngày — ngày trung bình, cẩn thận' };
   }
   function runTrangPhucTheoNgay(chat, toolId) {
-    ensureScripts(['/auth.js?v=2', '/tuvi-paywall.js?v=38'], function (err) {
+    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=38'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Trang Phục Theo Ngày', placeholder: 'Hỏi thầy về trang phục theo ngày…',
@@ -4217,7 +4278,7 @@
     }
     // Gợi ý câu hỏi: hàng chip CỐ ĐỊNH trên ô nhập, còn suốt hội thoại (bấm
     // thì bớt dần), thay vì chỉ hiện 1 lần ở lời chào.
-    if (o.chips !== undefined) { ctxChipsOrig = (o.chips || []).slice(); ctxChips = ctxChipsOrig.slice(); }
+    if (o.chips !== undefined) { ctxChipsOrig = (o.chips || []).slice(); ctxChips = ctxChipsOrig.slice(); ctxChipsSrc = 'static'; }
     renderSuggs();
   }
 
@@ -4240,7 +4301,11 @@
         var i = +el.getAttribute('data-i'); var c = ctxChips[i];
         if (c == null) return;
         ctxChips.splice(i, 1); renderSuggs();
-        if (typeof c === 'string') { ask(c); return; }
+        if (typeof c === 'string') {
+          // Chip hỏi là đòn bẩy chính giữ người ở lại chat — trước đây bấm không để lại dấu gì.
+          try { track('cta_click', { slug: 'rail_chip_ask', meta: { src: ctxChipsSrc, idx: i } }); } catch (e) { /* ignore */ }
+          ask(c); return;
+        }
         // Chốt lại ở client, cùng luật với `showToolSuggest()`: chỉ điều
         // hướng NỘI BỘ site, không nhận javascript:/link ngoài.
         if (!c.href || c.href.charAt(0) !== '/' || c.href.indexOf('//') === 0) return;
@@ -4631,7 +4696,7 @@
     if (ctx) {
       // Thread mới cùng ngữ cảnh: giữ restore/title, đổi id để không đè phiên cũ.
       curMeta = { restore: (curMeta && curMeta.restore) || { birth: birthSnapshot(), scenario: ctx.scenario || null }, title: (curMeta && curMeta.title) || 'Phiên', createdAt: Date.now() };
-      ctxChips = ctxChipsOrig.slice(); greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' });
+      ctxChips = ctxChipsOrig.slice(); ctxChipsSrc = 'static'; greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' });
       // Hội thoại mới → đếm lại câu, và cho thẻ mời có cơ hội hiện lại (một lần
       // mỗi hội thoại, không phải một lần mỗi phiên trình duyệt).
       _askCount = 0; _upsellShown = false; _cungAsked = []; _suggestShown = false; pendingSuggest = null;
@@ -4751,7 +4816,7 @@
           var _back = location.pathname + (/[?&]auto=1\b/.test(_s) ? _s : (_s ? _s + '&auto=1' : '?auto=1'));
           localStorage.setItem('auth_return_to', _back);
         } catch (e) { /* ignore */ }
-        typing.innerHTML = '<p>Cần <a href="#" id="railLoginLink" style="color:var(--blue);font-weight:600">đăng nhập</a> để hỏi trợ lý — xong sẽ tự quay lại luận tiếp. Lá số vẫn xem miễn phí.</p>';
+        typing.innerHTML = '<p>Cần <a href="#" id="railLoginLink" style="color:var(--blue);font-weight:600">đăng nhập</a> để hỏi Thầy — xong sẽ tự quay lại luận tiếp. Lá số vẫn xem miễn phí.</p>';
         var _openLogin = function () {
           if (window.Auth && Auth.require) {
             Auth.require(function () {
@@ -4815,7 +4880,9 @@
             try { track('chat_error', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { kind: 'stream', message: String(ev.data.message || '').slice(0, 200) } }); } catch (e) { /* ignore */ }
           }
           else if (ev.name === 'done' && ev.data) {
-            if (ev.data.suggestions && ev.data.suggestions.length) ctxChips = ev.data.suggestions.slice(0, 4);
+            // W4 item 3 (docs/UX-AUDIT-PLAN.md): tối đa 3 chip — CHAT_SUGGEST_RULES
+            // (lib/agent/run.ts) đã dặn model đúng 3, đây là lưới an toàn phía client.
+            if (ev.data.suggestions && ev.data.suggestions.length) { ctxChips = ev.data.suggestions.slice(0, 3); ctxChipsSrc = 'suggest'; }
             applyPaywallInfo(ev.data.paywall);
             if (ev.data.toolSuggest) pendingSuggest = ev.data.toolSuggest;
           }
@@ -4892,10 +4959,10 @@
       '<button class="ts-go" type="button">Mở</button>';
     chat.appendChild(d);
     chat.scrollTop = chat.scrollHeight;
-    try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_shown' }); } catch (e) { /* ignore */ }
+    try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_shown', meta: { kind: s.kind || 'tool' } }); } catch (e) { /* ignore */ }
     var go = d.querySelector('.ts-go');
     if (go) go.addEventListener('click', function () {
-      try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_open' }); } catch (e) { /* ignore */ }
+      try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_open', meta: { kind: s.kind || 'tool' } }); } catch (e) { /* ignore */ }
       if (startInlineTool(s.toolId, s.label, s.path)) return;
       location.href = s.path;
     });
@@ -5199,7 +5266,7 @@
     nav.innerHTML =
       '<a class="tab' + (isHome ? ' active' : '') + '" href="/app">' + ti('yin') + 'Trang chủ</a>' +
       '<a class="tab' + (isThay ? ' active' : '') + '" href="/app/thay">' + ti('star') + 'Các Thầy</a>' +
-      '<a class="tab-home' + (isTro ? ' active' : '') + '" href="/app/tro-chuyen"><span class="tab-home-btn" aria-hidden="true">' + ti('chat') + '</span><span>Trò chuyện</span></a>' +
+      '<a class="tab-home' + (isTro ? ' active' : '') + '" href="/app/tro-chuyen"><span class="tab-home-btn" aria-hidden="true">' + ti('chat') + '</span><span>Hỏi Thầy</span></a>' +
       '<a class="tab' + (isNap ? ' active' : '') + '" href="/app/nap-luong">' + ti('wallet') + 'Nạp Lượng</a>' +
       '<a class="tab' + (isHoso ? ' active' : '') + '" href="/app/ho-so">' + ti('user') + 'Hồ Sơ</a>';
     document.body.appendChild(nav);

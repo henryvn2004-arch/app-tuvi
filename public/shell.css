@@ -61,6 +61,11 @@
   --art-w:minmax(420px,38%);
   --shadow:0 1px 2px rgba(15,42,61,.04),0 4px 16px rgba(15,42,61,.06);
   --shadow-lg:0 24px 60px rgba(15,42,61,.28),0 6px 18px rgba(15,42,61,.16);
+  /* Token độ mượt (W6) — cùng giá trị với `theme.css` (trang ngoài app-shell),
+     khai LẶP LẠI ở đây vì hai file không cùng nạp trên một trang. Nguồn số:
+     xem chú thích ở `theme.css`. */
+  --ease-out:cubic-bezier(.2,.8,.2,1);
+  --dur-1:.15s;
 }
 :root[data-theme="dark"]{
   --text:#e9e6df; --text-mid:#b7b3a9; --text-lt:#8a867c; --ink:#e9e6df; --ink-mid:#b7b3a9; --ink-lt:#8a867c;
@@ -77,7 +82,11 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
-.shell{display:grid;grid-template-columns:246px 1fr var(--rail-w);height:100vh;min-height:600px}
+/* `100vh` trên iOS Safari tính cả vùng sau thanh địa chỉ (co giãn khi cuộn),
+   che mất đáy trang dưới thanh đó. `100dvh` (dynamic viewport) trừ đúng phần
+   đang HIỂN THỊ — khai `100vh` trước làm mức dự phòng cho trình duyệt chưa
+   hiểu `dvh` (dòng sau ghi đè khi hỗ trợ, không cần @supports). */
+.shell{display:grid;grid-template-columns:246px 1fr var(--rail-w);height:100vh;height:100dvh;min-height:600px}
 
 /* ── SIDEBAR ── */
 .sb{background:linear-gradient(180deg,#2B1B10,#3D2818);color:var(--sb-txt);display:flex;flex-direction:column;overflow-y:auto}
@@ -88,7 +97,7 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
    ảnh chụp mobile), còn hồ sơ cũ lại chỉ nằm ở ĐÁY. Gộp về một khối, đưa lên
    TRÊN — đúng chỗ người dùng tìm khi cần xem ví/đăng xuất. */
 .sb-profile{display:flex;align-items:center;gap:11px;padding:14px 16px;text-decoration:none;border-bottom:1px solid var(--sb-line)}
-.sb-profile:hover{background:rgba(255,255,255,.03)}
+@media(hover:hover){.sb-profile:hover{background:rgba(255,255,255,.03)}}
 .sb-profile-tx{flex:1;min-width:0}
 .sb-profile-tx .nm{font-family:var(--serif);font-size:14.5px;color:#fff;font-weight:600;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sb-profile-tx .sub{font-size:11px;color:var(--gold);margin-top:2px}
@@ -105,17 +114,17 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .grp-h{display:flex;align-items:center;gap:7px;padding:6px 2px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--sb-txt-dim);font-weight:600;cursor:pointer;user-select:none}
 .grp-h .chev{margin-left:auto;transition:transform .2s;opacity:.5;width:13px;height:13px}
 .grp-h .grp-link{margin-left:auto;text-transform:none;letter-spacing:0;font-size:11px;font-weight:600;color:var(--gold-soft);cursor:pointer;text-decoration:none}
-.grp-h .grp-link:hover{color:var(--gold)}
+@media(hover:hover){.grp-h .grp-link:hover{color:var(--gold)}}
 .grp.closed .chev{transform:rotate(-90deg)}.grp.closed .grp-nav{display:none}
 .item{display:flex;align-items:center;gap:10px;padding:7px 8px;margin:1px 0;border-radius:7px;color:var(--sb-txt);cursor:pointer;font-size:13px;position:relative;text-decoration:none;width:100%;box-sizing:border-box}
 button.item{border:none;background:none;font:inherit;text-align:left}
-.item:hover{background:rgba(255,255,255,.05);color:#fff}
+@media(hover:hover){.item:hover{background:rgba(255,255,255,.05);color:#fff}}
 .item.active{background:linear-gradient(90deg,rgba(200,169,106,.16),rgba(200,169,106,.02));color:#fff;font-weight:500}
 .item.active::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:var(--gold)}
-.item.danger:hover{background:rgba(192,57,43,.14);color:#f0b2a8}
-.item.danger:hover .ic{opacity:.9;color:#f0b2a8}
+@media(hover:hover){.item.danger:hover{background:rgba(192,57,43,.14);color:#f0b2a8}}
+@media(hover:hover){.item.danger:hover .ic{opacity:.9;color:#f0b2a8}}
 .ic{width:15px;height:15px;flex:0 0 auto;opacity:.5}
-.item:hover .ic,.item.active .ic{opacity:.9}.item.active .ic{color:var(--gold)}
+.item.active .ic{opacity:.9;color:var(--gold)}@media(hover:hover){.item:hover .ic{opacity:.9}}
 .pill{margin-left:auto;font-size:9.5px;padding:1px 6px;border-radius:20px;background:rgba(30,107,60,.22);color:#6fce97}
 .pill.cost{background:rgba(200,169,106,.16);color:var(--gold)}
 /* Chấm nhắc "Khởi Hành" chưa xong cạnh mục Tổng quan — xem khoiHanhPending()
@@ -159,7 +168,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    nó vốn đã vô dụng nếu shell.js chưa nạp. */
 .ws-top .ws-actions button[onclick*="openRail"]{display:none}
 .btn{font-size:12.5px;border:1px solid var(--line-2);background:var(--white);color:var(--text-mid);border-radius:8px;padding:7px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
-.btn:hover{border-color:var(--gold-soft);color:var(--text)}
+@media(hover:hover){.btn:hover{border-color:var(--gold-soft);color:var(--text)}}
 .btn.pri{background:var(--red);border-color:var(--red);color:#fff}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 /* `min-width:0`: `.ws` là flex column (dòng trên), `.ws-body` là flex-item con
@@ -201,7 +210,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .ws-fab .btn{width:44px;height:44px;padding:0;justify-content:center;border-radius:50%;background:var(--white);box-shadow:var(--shadow-lg);position:relative;pointer-events:auto}
 .ws-fab .btn svg{width:19px;height:19px;flex:0 0 auto}
 .ws-fab .fbtn-fb{background:#1877F2;border-color:#1877F2;color:#fff}
-.ws-fab .fbtn-fb:hover{background:#1466d6;border-color:#1466d6;color:#fff}
+@media(hover:hover){.ws-fab .fbtn-fb:hover{background:#1466d6;border-color:#1466d6;color:#fff}}
 /* Tooltip DÙNG CHUNG cho mọi `[data-tip]` trong shell — MỘT node `.tip` gắn
    ở <body>, `shell.js` định vị bằng `getBoundingClientRect()` rồi set left/
    top trực tiếp (không dùng `::after` + `position:absolute` như bản cũ, vì
@@ -230,7 +239,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .rail-h span{font-size:10.5px;color:var(--text-lt)}
 .rail-h .tools{margin-left:auto;display:flex;gap:4px}
 .rh-btn{width:28px;height:28px;border-radius:7px;border:1px solid var(--line-2);background:var(--paper);color:var(--text-mid);display:flex;align-items:center;justify-content:center;cursor:pointer}
-.rh-btn:hover{border-color:var(--gold-soft);color:var(--text)}
+@media(hover:hover){.rh-btn:hover{border-color:var(--gold-soft);color:var(--text)}}
 .ctx{margin:11px 14px 0;font-size:11px;color:var(--text-lt);background:var(--paper-2);border:1px dashed var(--line-2);border-radius:8px;padding:7px 10px;display:flex;gap:7px;align-items:center}
 .ctx b{color:var(--text-mid)}
 .chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
@@ -264,7 +273,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .chat-hl-n b{display:block;font-family:var(--serif);font-size:19px;color:var(--blue)}
 .chat-hl-n span{font-size:10px;color:var(--text-lt)}
 .chat-hl-cta{margin-top:10px;width:100%;border:1px solid var(--gold-soft);background:var(--gold-lt);color:var(--gold-soft);border-radius:8px;padding:9px 10px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer}
-.chat-hl-cta:hover{background:var(--gold-soft);color:#fff}
+@media(hover:hover){.chat-hl-cta:hover{background:var(--gold-soft);color:#fff}}
 /* Đợt 2 phần 5 (2026-09-25): biến thể của `.chat-hl` cho highlight LLM
    (tiêu đề + câu hook mỗi box) — khác `.chat-hl-row/-n` (số + nhãn ngắn),
    dùng khi echo `#hookHost` (mountHook/HookLayer.run) vào chat. */
@@ -281,13 +290,13 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .chips{display:flex;flex-wrap:wrap;gap:7px}
 .chips-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-lt);margin-bottom:-3px}
 .chip{font-size:12px;border:1px solid var(--line-2);background:var(--paper);color:var(--text-mid);border-radius:20px;padding:6px 12px;cursor:pointer;font-family:inherit}
-.chip:hover{border-color:var(--gold-soft);color:var(--text);background:var(--gold-lt)}
+@media(hover:hover){.chip:hover{border-color:var(--gold-soft);color:var(--text);background:var(--gold-lt)}}
 .rail-in{border-top:1px solid var(--line);padding:10px 13px;display:flex;align-items:flex-end;gap:9px}
 .rail-in textarea{flex:1;border:1px solid var(--line-2);border-radius:18px;padding:9px 14px;color:var(--text);font-size:12.5px;background:var(--paper);font-family:inherit;resize:none;outline:none;max-height:96px;line-height:1.4}
 .rail-in textarea:focus{border-color:var(--gold-soft)}
 .rail-in textarea:disabled{opacity:.6}
 .rail-attach{flex:0 0 auto;width:34px;height:34px;border:none;background:none;color:var(--text-lt);cursor:pointer;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0}
-.rail-attach:hover:not(:disabled){background:var(--paper-2);color:var(--gold-soft)}
+@media(hover:hover){.rail-attach:hover:not(:disabled){background:var(--paper-2);color:var(--gold-soft)}}
 .rail-attach:disabled{opacity:.4;cursor:not-allowed}
 .rail-thumbs{display:flex;flex-wrap:wrap;gap:6px;padding:8px 13px 0}
 .rail-thumbs .thumb{position:relative;width:52px;height:52px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
@@ -295,8 +304,10 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .rail-thumbs .thumb button{position:absolute;top:1px;right:1px;width:16px;height:16px;border:none;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:12px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
 .msg.u .msg-imgs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px}
 .msg.u .msg-imgs img{width:120px;max-width:100%;border-radius:8px;display:block}
-.send{width:33px;height:33px;border-radius:50%;background:var(--red);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}
+.send{width:33px;height:33px;border-radius:50%;background:var(--red);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto;-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:transform var(--dur-1) var(--ease-out)}
 .send:disabled{opacity:.5;cursor:not-allowed}
+.send:active{transform:scale(.97)}
+@media(prefers-reduced-motion:reduce){.send{transition:none}.send:active{transform:none}}
 .typing{display:inline-flex;gap:3px;align-items:center;color:var(--text-lt);font-size:12px}
 .typing i{width:5px;height:5px;border-radius:50%;background:var(--gold-soft);display:inline-block;animation:shBlink 1.2s infinite}
 .typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
@@ -316,8 +327,8 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .row{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:9px;cursor:pointer;font-size:14px;color:var(--text);text-decoration:none}
 .row .ri{width:17px;height:17px;flex:0 0 auto;color:var(--text-lt)}
 .row .rsub{margin-left:auto;font-size:11.5px;color:var(--text-lt)}
-.row.sel,.row:hover{background:var(--gold-lt)}
-.row.sel .ri,.row:hover .ri{color:var(--gold-soft)}
+.row.sel{background:var(--gold-lt)}@media(hover:hover){.row:hover{background:var(--gold-lt)}}
+.row.sel .ri{color:var(--gold-soft)}@media(hover:hover){.row:hover .ri{color:var(--gold-soft)}}
 .cmdk-empty{padding:26px;text-align:center;color:var(--text-lt);font-size:13px}
 
 /* ── THEME TOGGLE + MOBILE ── */
@@ -345,7 +356,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    là điểm chạm dễ nhất trên thanh (to hơn, tách khỏi nền navy bằng viền vàng
    khớp màu thương hiệu). `top:-15px` kéo nó lên khỏi hàng mà vẫn nằm trong
    `.tabbar` để không phải tính lại vị trí tuyệt đối riêng. */
-.tabbar .tab-home{display:flex;flex-direction:column;align-items:center;position:relative;top:-15px}
+.tabbar .tab-home{display:flex;flex-direction:column;align-items:center;position:relative;top:-15px;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .tabbar .tab-home-btn{appearance:none;-webkit-appearance:none;width:52px;height:52px;border-radius:50%;border:4px solid #2B1B10;background:linear-gradient(160deg,var(--gold),var(--gold-soft));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(15,42,61,.35);cursor:pointer}
 .tabbar .tab-home-btn svg{width:24px;height:24px;stroke:#2B1B10;stroke-width:2}
 .tabbar .tab-home-btn:active{transform:scale(.94)}
@@ -390,7 +401,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .sugg-row{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .sugg-row::-webkit-scrollbar{display:none}
 .sugg-row .chip{white-space:nowrap;flex:0 0 auto;font-family:inherit;font-size:12px;border:1px solid var(--line-2);background:var(--paper);color:var(--text-mid);border-radius:20px;padding:6px 12px;cursor:pointer}
-.sugg-row .chip:hover{border-color:var(--gold-soft);color:var(--text);background:var(--gold-lt)}
+@media(hover:hover){.sugg-row .chip:hover{border-color:var(--gold-soft);color:var(--text);background:var(--gold-lt)}}
 
 /* ── LỊCH SỬ HỘI THOẠI (panel trượt trong rail + "phiên gần đây" empty-state) ── */
 .rail{position:relative}
@@ -398,25 +409,25 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 @keyframes shFade{from{opacity:0}to{opacity:1}}
 .rh-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line);font-size:12px;font-weight:600;color:var(--text-mid);font-family:var(--serif)}
 .rh-x{width:24px;height:24px;border:none;background:transparent;color:var(--text-lt);font-size:19px;line-height:1;cursor:pointer;border-radius:6px}
-.rh-x:hover{background:var(--paper-2);color:var(--text)}
+@media(hover:hover){.rh-x:hover{background:var(--paper-2);color:var(--text)}}
 .rh-list{flex:1;overflow-y:auto;padding:6px}
 .rh-empty{padding:26px 16px;text-align:center;color:var(--text-lt);font-size:12.5px}
 .rh-item{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:9px;cursor:pointer}
-.rh-item:hover{background:var(--paper)}
+@media(hover:hover){.rh-item:hover{background:var(--paper)}}
 .rh-main{flex:1;min-width:0}
 .rh-t{font-size:12.8px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rh-sub{font-size:11px;color:var(--text-lt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
 .rh-del{flex:0 0 auto;width:24px;height:24px;border:none;background:transparent;color:var(--text-lt);font-size:17px;line-height:1;cursor:pointer;border-radius:6px;opacity:0}
-.rh-item:hover .rh-del{opacity:1}
-.rh-del:hover{background:var(--paper-2);color:var(--tx-red)}
+@media(hover:none){.rh-del{opacity:1}}@media(hover:hover){.rh-item:hover .rh-del{opacity:1}}
+@media(hover:hover){.rh-del:hover{background:var(--paper-2);color:var(--tx-red)}}
 /* "Phiên gần đây" ở khối nhập (empty-state) */
 #shellRecent{margin-top:14px}
 .recent-h{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-lt);margin-bottom:8px;font-weight:600}
 .recent-all{font:inherit;text-transform:none;letter-spacing:0;color:var(--text-lt);background:none;border:0;padding:2px 5px;margin:-2px -5px;border-radius:6px;cursor:pointer;flex:0 0 auto}
-.recent-all:hover{color:var(--text);background:var(--paper-2)}
+@media(hover:hover){.recent-all:hover{color:var(--text);background:var(--paper-2)}}
 .recent-list{display:flex;flex-direction:column;gap:6px}
 .recent-item{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:var(--white);border-radius:9px;padding:9px 12px;cursor:pointer;font-family:inherit}
-.recent-item:hover{border-color:var(--gold-soft);background:var(--gold-lt)}
+@media(hover:hover){.recent-item:hover{border-color:var(--gold-soft);background:var(--gold-lt)}}
 /* min-width:0 là thứ BẮT BUỘC để text-overflow của con chạy được trong flex —
    thiếu nó thì câu hỏi dài đẩy phình dòng thay vì bị cắt bằng dấu ba chấm. */
 .recent-item .ri-m{min-width:0;display:flex;flex-direction:column;gap:2px}
@@ -428,7 +439,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .sh-share-modal{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(15,42,61,.42);backdrop-filter:blur(3px)}
 .ssm-card{position:relative;width:min(440px,94vw);background:var(--white);border:1px solid var(--line-2);border-radius:20px;box-shadow:var(--shadow-lg);padding:20px 20px 18px}
 .ssm-x{position:absolute;top:10px;right:10px;width:26px;height:26px;border:none;background:transparent;color:var(--text-lt);font-size:18px;line-height:1;cursor:pointer;border-radius:6px}
-.ssm-x:hover{background:var(--paper-2);color:var(--text)}
+@media(hover:hover){.ssm-x:hover{background:var(--paper-2);color:var(--text)}}
 .ssm-t{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
 .ssm-d{font-size:12.5px;color:var(--text-lt);margin-bottom:14px;line-height:1.5}
 .ssm-row{display:flex;gap:7px;margin-bottom:12px}
@@ -436,7 +447,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .ssm-copy{flex:0 0 auto;border:none;background:var(--navy);color:#fff;border-radius:8px;padding:8px 14px;font-size:12.5px;cursor:pointer;font-family:inherit}
 .ssm-share{display:flex;gap:8px}
 .ssm-b{flex:1;text-align:center;text-decoration:none;font-size:12.5px;border:1px solid var(--line-2);border-radius:8px;padding:8px 10px;color:var(--text-mid);background:var(--paper)}
-.ssm-b:hover{border-color:var(--gold-soft);color:var(--text)}
+@media(hover:hover){.ssm-b:hover{border-color:var(--gold-soft);color:var(--text)}}
 .ssm-b.fb{border-color:#1877F2;color:#1877F2}.ssm-b.zl{border-color:#0068FF;color:#0068FF}.ssm-b.wa{border-color:#25D366;color:#128C7E}
 .ssm-field{margin-bottom:11px}
 .ssm-label{display:block;font-size:11.5px;color:var(--text-lt);margin-bottom:4px}
@@ -448,10 +459,10 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 
 .sam-card{position:relative;width:min(420px,94vw);max-height:82vh;display:flex;flex-direction:column;background:var(--white);border:1px solid var(--line-2);border-radius:20px;box-shadow:var(--shadow-lg);padding:20px 20px 14px}
 .sam-rand{border:1px dashed var(--line-2);background:var(--paper);border-radius:9px;padding:9px 12px;font-size:12.5px;color:var(--text-mid);cursor:pointer;font-family:inherit;margin-bottom:12px;text-align:center}
-.sam-rand:hover{border-color:var(--gold-soft);color:var(--text)}
+@media(hover:hover){.sam-rand:hover{border-color:var(--gold-soft);color:var(--text)}}
 .sam-list{overflow-y:auto;display:flex;flex-direction:column;gap:4px;margin:0 -6px;padding:0 6px}
 .sam-row{display:flex;align-items:center;gap:10px;text-align:left;border:1px solid transparent;background:transparent;border-radius:10px;padding:8px;cursor:pointer;font-family:inherit}
-.sam-row:hover{background:var(--paper-2)}
+@media(hover:hover){.sam-row:hover{background:var(--paper-2)}}
 .sam-row.sel{border-color:var(--gold-soft);background:var(--paper)}
 .sam-ava{width:38px;height:38px;border-radius:50%;object-fit:cover;flex:0 0 auto;background:var(--paper-2)}
 .sam-info{min-width:0;flex:1;display:flex;flex-direction:column;gap:1px}
@@ -463,7 +474,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .sh-topup-modal{position:fixed;inset:0;z-index:72;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(15,42,61,.46);backdrop-filter:blur(3px)}
 .stm-card{position:relative;width:min(400px,94vw);background:var(--white);border:1px solid var(--line-2);border-radius:22px;box-shadow:var(--shadow-lg);padding:26px 22px 20px;text-align:center}
 .stm-x{position:absolute;top:10px;right:10px;width:26px;height:26px;border:none;background:transparent;color:var(--text-lt);font-size:18px;line-height:1;cursor:pointer;border-radius:6px}
-.stm-x:hover{background:var(--paper-2);color:var(--text)}
+@media(hover:hover){.stm-x:hover{background:var(--paper-2);color:var(--text)}}
 .stm-ava{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);margin-bottom:12px}
 .stm-t{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--heading);margin-bottom:8px}
 .stm-d{font-size:13.5px;color:var(--text-mid);line-height:1.6;margin-bottom:18px}
@@ -474,15 +485,16 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    176px và dính mép trái thay vì full-width/center. Không phải lỗi trình
    duyệt cụ thể — cùng bẫy sẽ tái diễn ở mọi `<button>` thiếu `width` tường
    minh trong card `text-align:center`. */
-.stm-btn{display:block;width:100%;box-sizing:border-box;background:var(--red,#C46A5E);color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:12px 20px;border-radius:10px;margin-bottom:8px}
-.stm-btn:hover{filter:brightness(1.06)}
+.stm-btn{display:block;width:100%;box-sizing:border-box;background:var(--red,#C46A5E);color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:12px 20px;border-radius:10px;margin-bottom:8px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:transform var(--dur-1) var(--ease-out),filter var(--dur-1) var(--ease-out)}
+.stm-btn:active{transform:scale(.97)}@media(hover:hover){.stm-btn:hover{filter:brightness(1.06)}}
+@media(prefers-reduced-motion:reduce){.stm-btn{transition:none}.stm-btn:active{transform:none}}
 .stm-later{border:none;background:transparent;color:var(--text-lt);font-size:12.5px;cursor:pointer;font-family:inherit;padding:4px}
-.stm-later:hover{color:var(--text-mid)}
+@media(hover:hover){.stm-later:hover{color:var(--text-mid)}}
 /* Lối phụ trong tường hết-lượt: nạp Lượng để hỏi lẻ từng câu. Cố ý làm NHẠT hơn
    nút chính (xem trọn 24 mục) — mua trọn bản mới là thứ đáng cho họ, hỏi lẻ chỉ
    là lựa chọn còn lại. */
 .stm-alt{display:block;font-size:12.5px;color:var(--text-lt);text-decoration:none;margin-bottom:10px}
-.stm-alt:hover{color:var(--tx-blue)}
+@media(hover:hover){.stm-alt:hover{color:var(--tx-blue)}}
 
 /* ── ĐỒNG HỒ ĐẾM CÂU (rail) ──
    Đếm bằng CÂU chứ không bằng Lượng: "còn 24 Lượng" không ai biết nhiều hay ít,
@@ -491,7 +503,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .rail-meter .rm-t b{color:var(--text-mid);font-weight:700}
 .rail-meter .rm-sub{opacity:.75}
 .rail-meter .rm-a{color:var(--tx-blue);font-weight:600;text-decoration:none;white-space:nowrap}
-.rail-meter .rm-a:hover{text-decoration:underline}
+@media(hover:hover){.rail-meter .rm-a:hover{text-decoration:underline}}
 .rail-meter.low .rm-t b{color:var(--gold,#C8A96A)}
 .rail-meter.out .rm-t{color:var(--red,#C46A5E);font-weight:600}
 
@@ -506,7 +518,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .rail-upsell .ru-list{color:var(--text-lt);font-style:italic}
 .rail-upsell .ru-f{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .rail-upsell .ru-btn{background:var(--navy);color:var(--gold-bright,#c9a84c);text-decoration:none;font-family:var(--serif);font-weight:600;font-size:13px;padding:9px 15px;border-radius:8px;white-space:nowrap}
-.rail-upsell .ru-btn:hover{background:var(--navy-mid,#164B6D)}
+@media(hover:hover){.rail-upsell .ru-btn:hover{background:var(--navy-mid,#164B6D)}}
 .rail-upsell .ru-price{font-size:11.5px;color:var(--text-lt)}
 
 /* Thẻ gợi ý công cụ trong lúc trò chuyện (bước 4). CỐ Ý nhẹ hơn .rail-upsell:
@@ -521,7 +533,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .tool-suggest .ts-go{flex-shrink:0;background:var(--navy);color:var(--gold-bright,#c9a84c);text-decoration:none;
   font-family:var(--serif);font-weight:600;font-size:12.5px;padding:7px 14px;border-radius:8px;white-space:nowrap;
   border:none;cursor:pointer}
-.tool-suggest .ts-go:hover{background:var(--navy-mid,#164B6D)}
+@media(hover:hover){.tool-suggest .ts-go:hover{background:var(--navy-mid,#164B6D)}}
 
 /* ── CHAT-FIRST — đảo vai Chat ↔ Workspace ──────────────────────────────────
    Bật bằng `window.SHELL_CHATFIRST=true` ở trang, và CHỈ có hiệu lực sau khi
@@ -576,7 +588,7 @@ body.chat-first-live .ws-fab { right: 16px }
 .tv-sheet-head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);flex:0 0 auto}
 .tv-sheet-title{flex:1;min-width:0;font-family:var(--serif);font-size:15.5px;font-weight:700;color:var(--heading);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tv-sheet-close{width:30px;height:30px;border-radius:8px;border:1px solid var(--line-2);background:var(--paper);color:var(--text-mid);flex:0 0 auto;cursor:pointer;font-size:14px;font-family:inherit}
-.tv-sheet-close:hover{border-color:var(--gold-soft);color:var(--text)}
+@media(hover:hover){.tv-sheet-close:hover{border-color:var(--gold-soft);color:var(--text)}}
 .tv-sheet-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 20px calc(20px + env(safe-area-inset-bottom))}
 body.sheet-open{overflow:hidden}
 
@@ -941,7 +953,9 @@ font-family:inherit}
    TUỲ CHỌN (icon lấp lánh + nhãn chính + dòng phụ giá) — một `<button
    class="btn-go">Chữ thường</button>` không có 3 phần đó vẫn hiện đúng hình
    (nền vàng, bo góc, canh giữa), chỉ thiếu icon/dòng phụ. */
-.btn-go{background:linear-gradient(160deg,var(--gold),var(--gold-soft));color:var(--navy);border:none;border-radius:16px;padding:13px 20px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:var(--serif);width:100%;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:var(--shadow)}
+.btn-go{background:linear-gradient(160deg,var(--gold),var(--gold-soft));color:var(--navy);border:none;border-radius:16px;padding:13px 20px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:var(--serif);width:100%;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:var(--shadow);-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:transform var(--dur-1) var(--ease-out)}
+.btn-go:active{transform:scale(.97)}
+@media(prefers-reduced-motion:reduce){.btn-go{transition:none}.btn-go:active{transform:none}}
 .btn-go .bg-label{display:flex;align-items:center;gap:7px}
 .btn-go .ic{width:16px;height:16px;display:inline-flex}
 .btn-go .ic svg{width:100%;height:100%}
@@ -1095,3 +1109,16 @@ font-family:inherit}
 /* Đang dựng — chưa đủ N phần. Spinner thay icon tải, nút vẫn khoá. */
 .rr-spin{width:15px;height:15px;border:2px solid rgba(15,42,61,.18);border-top-color:var(--navy);border-radius:50%;animation:rr-spin .7s linear infinite;flex:0 0 auto}
 @keyframes rr-spin{to{transform:rotate(360deg)}}
+
+/* ── prefers-reduced-motion (W6) — PHẢI đứng CUỐI file: đồng specificity với
+   `.sbp-dot`/`.sb-dot`/`.typing i` gốc (mỗi bên (0,1,0)/(0,1,1)) nên bên nào
+   đứng SAU trong nguồn thắng, bất kể có nằm trong @media hay không. Đặt khối
+   này ở TRÊN đầu file (cạnh `.shell`) đã bị chính 3 rule animation (khai SAU
+   nó) ghi đè ngược — đo bằng Playwright `getComputedStyle().animationName`
+   vẫn ra "sbpPulse" dù có `prefers-reduced-motion:reduce`. Chỉ tắt 3
+   keyframe LẶP VÔ HẠN (chấm báo hoạt động/gõ chữ) — không đụng `shFade` (một
+   lần, không lặp) hay `rr-spin` (spinner báo đang tải, tắt là mất tín hiệu
+   đang chờ). */
+@media(prefers-reduced-motion:reduce){
+  .sbp-dot,.sb-dot,.typing i{animation:none}
+}

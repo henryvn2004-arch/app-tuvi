@@ -30,6 +30,8 @@ export interface ToolSuggestion {
   path: string;
   /** Một câu vì sao nó giúp được — do model viết, đã cắt trần. */
   lyDo: string;
+  /** `goi_y_san_pham` → 'report', `goi_y_cong_cu` → 'tool'. Chỉ để client tách hai loại khi đo. */
+  kind?: 'tool' | 'report';
 }
 
 const MAX_LY_DO = 140;

@@ -1201,6 +1201,8 @@ async function streamTurn(
     }
   }
 
+  // W4 item 3 (docs/UX-AUDIT-PLAN.md): tối đa 3 chip — CHAT_SUGGEST_RULES đã
+  // dặn model đúng 3, đây là lưới an toàn khi model lỡ ghi thêm.
   const suggestions =
     suppressSuggest || markerAt < 0
       ? []
@@ -1209,7 +1211,7 @@ async function streamTurn(
           .split('|')
           .map((s) => s.trim())
           .filter(Boolean)
-          .slice(0, 4);
+          .slice(0, 3);
 
   return { stopReason, toolUses, assistantContent, suggestions, usage };
 }
@@ -1239,7 +1241,10 @@ const CHAT_SUGGEST_RULES =
   'Câu trả lời VỪA RỒI của bạn có kết bằng một câu hỏi ngược lại người dùng (cần họ kể/xác nhận thêm thông tin) → ' +
   '3 gợi ý PHẢI là CÂU TRẢ LỜI ngắn, gọn cho đúng câu hỏi đó (vd bạn hỏi "chuyện này kéo dài bao lâu rồi" → gợi ý ' +
   '"Mấy tháng nay rồi" / "Mới đây thôi" / "Cả năm nay rồi" — không phải hỏi lại nguyên câu đó). ' +
-  'Nếu câu trả lời của bạn KHÔNG kết bằng câu hỏi ngược thì 3 gợi ý là CÂU HỎI TIẾP mà người dùng muốn hỏi bạn, bám sát nội dung vừa luận. ' +
+  'Nếu câu trả lời của bạn KHÔNG kết bằng câu hỏi ngược thì 3 gợi ý là CÂU HỎI TIẾP mà người dùng muốn hỏi bạn, bám sát nội dung vừa luận — ' +
+  'xếp theo thứ tự: gợi ý 1 ĐÀO SÂU thêm đúng chủ đề vừa luận (hỏi chi tiết/diễn biến tiếp theo của CHÍNH chủ đề đó), ' +
+  'gợi ý 2 sang một CHỦ ĐỀ KẾ BÊN có liên quan nhưng khác góc (vd vừa luận công việc thì gợi ý 2 hỏi về tài chính hoặc sức khoẻ), ' +
+  'gợi ý 3 tự do, bám sát hội thoại. ' +
   'Viết bằng LỜI THƯỜNG như người dùng sẽ tự gõ — không mở đầu bằng tên riêng ' +
   'chuyên môn (tên sao, cung, quẻ, can chi…), trừ khi họ vừa hỏi thẳng về đúng thứ đó. ' +
   'Ví dụ khi hỏi tiếp: SUGGEST: Công việc năm sau thế nào? | Có nên đổi nghề không? | Tiền bạc thì sao? ' +

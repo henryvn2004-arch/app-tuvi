@@ -943,7 +943,7 @@ async function loadCredits() {
   }
 }
 
-var VILU_LABELS = { topup:'Nạp Lượng', use_laso:'Luận Giải Lá Số', use_xem_tuoi:'Xem Tuổi Vợ Chồng', use_xem_lam_an:'Xem Tuổi Làm Ăn', admin_grant:'Cấp Lượng (quản trị)', chat:'Hỏi trợ lý' };
+var VILU_LABELS = { topup:'Nạp Lượng', use_laso:'Luận Giải Lá Số', use_xem_tuoi:'Xem Tuổi Vợ Chồng', use_xem_lam_an:'Xem Tuổi Làm Ăn', admin_grant:'Cấp Lượng (quản trị)', chat:'Hỏi Thầy' };
 function viluLabel(t) { return VILU_LABELS[t.type] || t.description || t.type; }
 
 var _viluTxns = [];

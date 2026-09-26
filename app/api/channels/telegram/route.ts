@@ -69,7 +69,7 @@ const MSG_LIMIT = 4096;
 const MAX_TG_IMAGES = 3; // khớp MAX_IMAGES_PER_MSG trong runAgent
 
 const WELCOME =
-  'Xin chào! Mình là trợ lý Tử Vi Minh Bảo 🔮\n\n' +
+  'Xin chào! Đây là Hỏi Thầy — Tử Vi Minh Bảo 🔮\n\n' +
   'Hỏi mình bất cứ điều gì về tử vi, vận hạn, tuổi tác... Để lập lá số, ' +
   'cho mình biết: giới tính, ngày/tháng/năm sinh (dương lịch), và giờ sinh.\n\n' +
   'Ví dụ: "Nữ, 03/06/1998, giờ Sửu, năm nay làm ăn sao?"\n\n' +

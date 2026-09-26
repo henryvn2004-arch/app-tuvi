@@ -13,7 +13,7 @@ import { loadOgFonts, ogFallbackRedirect } from '@/lib/og/font';
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   const ctx = (sp.get('ctx') || '').slice(0, 80);
-  const thay = (sp.get('thay') || 'Thầy Luận Đường').slice(0, 40);
+  const thay = (sp.get('thay') || 'Hội đồng Minh Bảo').slice(0, 40);
   const q = (sp.get('q') || '').replace(/\s+/g, ' ').trim().slice(0, 150);
 
   const fonts = await loadOgFonts([400, 700], req);

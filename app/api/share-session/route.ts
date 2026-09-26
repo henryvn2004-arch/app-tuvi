@@ -70,11 +70,11 @@ export async function POST(request: NextRequest) {
   if (!messages.length) return err('Phiên chưa có nội dung để chia sẻ', 400);
 
   const toolId = String(b.toolId || 'laso').slice(0, 40);
-  const title = String(b.title || 'Luận Đường').slice(0, 160);
+  const title = String(b.title || 'Hỏi Thầy').slice(0, 160);
   const ctxLabel = b.ctxLabel ? String(b.ctxLabel).slice(0, 200) : null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const thayIn = (b.thay || {}) as any;
-  const thay = { id: String(thayIn.id || '').slice(0, 40), name: String(thayIn.name || 'Thầy Luận Đường').slice(0, 80) };
+  const thay = { id: String(thayIn.id || '').slice(0, 40), name: String(thayIn.name || 'Hội đồng Minh Bảo').slice(0, 80) };
   // restore: payload dựng lại khung giữa (lá số/kịch bản) để người nhận nối phiên
   // hỏi tiếp. Chỉ giữ nếu là object gọn (JSON < ~8KB) — chống nhồi rác.
   let restore: unknown = null;

@@ -7,9 +7,8 @@ const KEY_PAGES = [
   { path: '/app-luan-giai.html', name: 'Luận Giải' },
   { path: '/app/xem-tuoi',   name: 'Xem Tuổi' },
   { path: '/app/bat-tu',     name: 'Tử Bình' },
-  { path: '/phong-thuy.html',name: 'Phong Thuỷ' },
   { path: '/topup.html',     name: 'Topup' },
-  { path: '/profile.html',   name: 'Profile' },
+  { path: '/app/ho-so',      name: 'Hồ Sơ' },
 ];
 
 for (const { path, name } of KEY_PAGES) {

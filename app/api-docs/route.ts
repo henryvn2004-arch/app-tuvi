@@ -185,7 +185,7 @@ th{background:var(--bg-soft);font-weight:600;color:var(--navy)}
     </ul>
   </section>
 </div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=43" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
 </body>
 </html>`;
 

@@ -5,13 +5,13 @@
 <script src="https://js.sentry-cdn.com/f884fb7e9d257df10ecb6dbe562141cb.min.js" crossorigin="anonymous" defer></script>
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
-<meta name="description" content="Cổng tử vi · tử bình · tướng số · phong thủy theo cổ pháp. 59+ công cụ — luận giải lá số, xem tướng, phong thủy, đặt tên, chọn ngày tốt, bói bài. Tri Mệnh Lý — Thuận Thế Hành.">
+<meta name="description" content="Cổng tử vi · tử bình · tướng số · phong thủy theo cổ pháp. 50 công cụ — luận giải lá số, xem tướng, phong thủy, đặt tên, chọn ngày tốt, bói bài. Tri Mệnh Lý — Thuận Thế Hành.">
 <meta name="keywords" content="tử vi, tử bình, tướng số, phong thủy, xem tuổi, đặt tên con, ngày tốt, tarot, kinh dịch, ai">
 <link rel="manifest" href="/manifest.json">
 <link rel="canonical" href="https://www.tuviminhbao.com">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tử Vi Minh Bảo — Cổng Mệnh Lý · 59+ Công Cụ Cổ Pháp</title>
-<meta property="og:title" content="Tử Vi Minh Bảo — Cổng Mệnh Lý · 59+ Công Cụ Cổ Pháp">
+<title>Tử Vi Minh Bảo — Cổng Mệnh Lý · 50 Công Cụ Cổ Pháp</title>
+<meta property="og:title" content="Tử Vi Minh Bảo — Cổng Mệnh Lý · 50 Công Cụ Cổ Pháp">
 <meta property="og:description" content="Tử vi · Tử Bình · Tướng số · Phong thủy theo cổ pháp. Luận giải cá nhân hóa.">
 <meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
 <meta property="og:url" content="https://www.tuviminhbao.com">
@@ -20,7 +20,7 @@
 <meta property="og:locale" content="vi_VN">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tử Vi Minh Bảo — Cổng Mệnh Lý">
-<meta name="twitter:description" content="59+ công cụ tử vi · tử bình · tướng số · phong thủy theo cổ pháp.">
+<meta name="twitter:description" content="50 công cụ tử vi · tử bình · tướng số · phong thủy theo cổ pháp.">
 <meta name="twitter:image" content="https://www.tuviminhbao.com/seal.webp">
 
 <!-- Fonts: Noto Serif (Vietnamese subset, auto via Google Fonts) -->
@@ -50,7 +50,7 @@
   "alternateName": "紫微明寶",
   "url": "https://www.tuviminhbao.com",
   "logo": { "@type": "ImageObject", "url": "https://www.tuviminhbao.com/seal.webp" },
-  "description": "Cổng mệnh lý tổng hợp 59+ công cụ — tử vi, tử bình, tướng số, phong thủy theo cổ pháp",
+  "description": "Cổng mệnh lý tổng hợp 50 công cụ — tử vi, tử bình, tướng số, phong thủy theo cổ pháp",
   "areaServed": ["VN", "US", "AU", "CA"]
 }
 </script>
@@ -232,25 +232,30 @@ button { font: inherit; cursor: pointer; }
 
 @media (max-width: 680px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
 
-/* ── Bottom nav (mobile app-shell, chỉ ở trang chủ trong bản mẫu này) ── */
+/* ── Bottom nav (mobile app-shell, chỉ ở trang chủ trong bản mẫu này) ──
+   Màu NÂU ĐẬM khớp `.tabbar` của shell.css (app-shell) — trước đây trang này
+   tự vẽ tab bar nền trắng riêng, lệch hẳn với /app/* (W3 audit "một khuôn
+   mặt"). Chỉ đổi màu/token, KHÔNG đổi cấu trúc — 5 nhãn vẫn khoá bởi
+   `check:tabbar` (check-tabbar-parity.mjs) so với `renderTabbar()`. */
 .bottom-nav { display: none; }
 @media (max-width: 680px) {
   body { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
   .bottom-nav {
     display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
-    background: #fff; border-top: 1px solid var(--line);
+    background: linear-gradient(180deg,#3D2818,#2B1B10); border-top: 1px solid rgba(200,169,106,.18);
     padding: 8px 6px calc(6px + env(safe-area-inset-bottom));
-    box-shadow: 0 -6px 18px rgba(22,35,44,0.06);
+    box-shadow: 0 -6px 20px rgba(15,42,61,.22);
   }
   .bn-item {
     flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
-    color: var(--ink-faint); font-size: 10.5px; font-weight: 700; padding: 4px 0;
+    color: #7d8794; font-size: 10.5px; font-weight: 700; padding: 4px 0;
   }
   .bn-item .ic { width: 21px; height: 21px; }
-  .bn-item.active { color: var(--navy); }
+  .bn-item.active { color: var(--gold); }
   .bn-center { position: relative; margin-top: -22px; }
   .bn-center-circle {
     width: 46px; height: 46px; border-radius: 50%; background: var(--gold);
+    border: 4px solid #2B1B10;
     display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 14px rgba(200,169,106,0.5);
     margin-bottom: 2px;
   }
@@ -416,13 +421,13 @@ button { font: inherit; cursor: pointer; }
     <div class="bn-center-circle">
       <svg viewBox="0 0 24 24" fill="none" stroke="#16232c" stroke-width="1.6"><path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/></svg>
     </div>
-    Trò chuyện
+    Hỏi Thầy
   </a>
   <a class="bn-item" href="/app/nap-luong"><span class="ic" data-icon="wallet"></span>Nạp Lượng</a>
   <a class="bn-item" href="/app/ho-so"><span class="ic" data-icon="settings"></span>Hồ Sơ</a>
 </nav>
 
-<script src="/nav.js?v=43"></script>
+<script src="/nav.js?v=45"></script>
 <script>window.TestimonialsNoAutoRun = true;</script>
 <script src="/testimonials.js?v=1"></script>
 <script>

@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Trò chuyện — Tử Vi Minh Bảo</title>
-<meta name="description" content="Toàn bộ hội thoại với Luận Đường — mở lại bất kỳ lúc nào, hoặc bắt đầu một câu hỏi mới."/>
+<title>Hỏi Thầy — Tử Vi Minh Bảo</title>
+<meta name="description" content="Toàn bộ các cuộc hỏi Thầy — mở lại bất kỳ lúc nào, hoặc bắt đầu một câu hỏi mới."/>
 <link rel="icon" type="image/webp" href="/seal.webp"/>
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/shell.css?v=58"/>
+<link rel="stylesheet" href="/shell.css?v=60"/>
 <style>
 .ws-body{padding:22px 26px 60px;max-width:720px}
 .tc-new{display:flex;align-items:center;gap:10px;border:1px dashed var(--line-2);border-radius:12px;padding:14px 16px;margin-bottom:22px;background:var(--paper);cursor:pointer;width:100%;text-align:left;font:inherit;color:inherit}
@@ -34,7 +34,7 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Trò chuyện</b><span>Mọi hội thoại với Luận Đường, gộp từ mọi công cụ</span></div>
+      <div class="ws-title"><b>Hỏi Thầy</b><span>Mọi cuộc hỏi Thầy, gộp từ mọi công cụ</span></div>
     </div>
     <div class="ws-body">
       <button type="button" class="tc-new" id="tcNew">
@@ -43,15 +43,15 @@
       </button>
       <div id="tcLoading" style="padding:2.5rem 0;text-align:center;color:var(--text-lt);font-size:13px">Đang tải…</div>
       <div id="tcEmpty" style="display:none;padding:2rem 1rem;text-align:center;color:var(--text-lt);font-size:13.5px;line-height:1.7">
-        Chưa có hội thoại nào.<br>Bấm "Hỏi mới" ở trên, hoặc mở bất kỳ công cụ nào và hỏi trợ lý.
+        Chưa có hội thoại nào.<br>Bấm "Hỏi mới" ở trên, hoặc mở bất kỳ công cụ nào và hỏi Thầy.
       </div>
       <div class="tc-list" id="tcList"></div>
     </div>
   </main>
 </div>
 
-<script src="/nav.js?v=43" data-icons-only></script>
-<script src="/auth.js?v=2"></script>
+<script src="/nav.js?v=45" data-icons-only></script>
+<script src="/auth.js?v=4"></script>
 <script>window.SHELL_ACTIVE='tro-chuyen';</script>
 <script src="/shell.js?v=108"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=44"></script>

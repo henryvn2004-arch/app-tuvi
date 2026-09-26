@@ -81,7 +81,7 @@ export const KHOI_HANH_STEPS: KhoiHanhStepDef[] = [
   {
     key: 'lap_la_so',
     title: 'Vén màn lá số của bạn',
-    desc: 'Mọi lời Thầy luận, mọi công cụ trên Luận Đường đều bắt đầu từ đây. Nhập ngày giờ sinh — chưa đầy 10 giây, xem ngay.',
+    desc: 'Mọi lời Thầy luận, mọi công cụ đều bắt đầu từ đây. Nhập ngày giờ sinh — chưa đầy 10 giây, xem ngay.',
     cta: 'Lập lá số',
     href: '',
     table: 'user_charts',

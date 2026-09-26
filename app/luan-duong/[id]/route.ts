@@ -45,7 +45,7 @@ const TOOL_ROUTE: Record<string, string> = {
 function page404(): Response {
   const html = `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Không tìm thấy phiên</title>
 <style>body{font-family:-apple-system,Segoe UI,Arial,sans-serif;background:#F4F2EC;color:#1a1a1a;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0;text-align:center;padding:20px}a{color:#9A7B3A}</style></head>
-<body><div><h1 style="font-family:Georgia,serif">Phiên không tồn tại</h1><p>Link chia sẻ đã bị gỡ hoặc không đúng.</p><p><a href="${SITE}/app">Vào Luận Đường →</a></p></div>
+<body><div><h1 style="font-family:Georgia,serif">Phiên không tồn tại</h1><p>Link chia sẻ đã bị gỡ hoặc không đúng.</p><p><a href="${SITE}/app">Hỏi Thầy →</a></p></div>
 ${GA4_TRACK_SNIPPET}
 </body></html>`;
   return new Response(html, { status: 404, headers: { 'content-type': 'text/html; charset=utf-8' } });
@@ -73,14 +73,14 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
   }
   if (!row || row.revoked) return page404();
 
-  const thayName = (row.thay && row.thay.name) || 'Thầy Luận Đường';
+  const thayName = (row.thay && row.thay.name) || 'Hội đồng Minh Bảo';
   const thayId = (row.thay && row.thay.id) || '';
   const ava = thayId ? `/authors/${esc(thayId)}.jpg` : '/authors/thai-hu.jpg';
-  const title = esc(row.title || 'Luận Đường');
+  const title = esc(row.title || 'Hỏi Thầy');
   const url = `${SITE}/luan-duong/${esc(id)}`;
   // teaser mô tả = tin đầu tiên của thầy (cắt gọn) → OG unfurl hấp dẫn.
   const firstThay = (row.messages || []).find((m) => m.role === 'assistant');
-  const teaser = (firstThay?.content || 'Luận giải Tử Vi bởi thầy Luận Đường.').replace(/[*#\n]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180);
+  const teaser = (firstThay?.content || 'Luận giải Tử Vi bởi Hội đồng Minh Bảo.').replace(/[*#\n]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180);
   const desc = esc(teaser);
   // OG card ĐỘNG cá nhân hoá (tên/ngày + thầy + trích lời thầy) → preview hấp dẫn
   // hơn ảnh seal tĩnh → tăng click vào phễu chia sẻ. (esc lần nữa cho ngoặc kép HTML.)
@@ -152,7 +152,7 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
 <div class="wrap">
   <div class="top">
     <img src="${esc(ava)}" alt="">
-    <div class="t"><b>${title}</b><span>Luận bởi ${esc(thayName)} · Luận Đường</span></div>
+    <div class="t"><b>${title}</b><span>Luận bởi ${esc(thayName)} · Hỏi Thầy</span></div>
     <img class="brand" src="/seal.webp" alt="Tử Vi Minh Bảo" width="40" height="40">
   </div>
   ${row.ctx_label ? `<div class="ctxbar">✦ <b>${esc(row.ctx_label)}</b></div>` : ''}

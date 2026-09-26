@@ -23,7 +23,7 @@ Tử Vi Minh Bảo là hệ thống đầu tiên và duy nhất luận giải T�
 - Xem vận hạn theo tuổi và năm: https://www.tuviminhbao.com/van-han/
 - Tra cứu lá số: https://www.tuviminhbao.com/menh-kho.html
 - Xem tuổi hợp: https://www.tuviminhbao.com/app/xem-tuoi
-- Phong thủy: https://www.tuviminhbao.com/phong-thuy.html
+- Phong thủy: https://www.tuviminhbao.com/phong-thuy
 
 ## Thư Viện Tra Cứu
 - Cổng tra cứu tổng: https://www.tuviminhbao.com/thu-vien

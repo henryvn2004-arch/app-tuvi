@@ -65,7 +65,7 @@ async function signupOffer(
 function page404(): Response {
   const html = `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Không tìm thấy kết quả</title>
 <style>body{font-family:-apple-system,Segoe UI,Arial,sans-serif;background:#F4F2EC;color:#1a1a1a;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0;text-align:center;padding:20px}a{color:#9A7B3A}</style></head>
-<body><div><h1 style="font-family:Georgia,serif">Kết quả không tồn tại</h1><p>Link chia sẻ đã bị gỡ hoặc không đúng.</p><p><a href="${SITE}/app">Vào Luận Đường →</a></p></div>${GA4_TRACK_SNIPPET}
+<body><div><h1 style="font-family:Georgia,serif">Kết quả không tồn tại</h1><p>Link chia sẻ đã bị gỡ hoặc không đúng.</p><p><a href="${SITE}/app">Hỏi Thầy →</a></p></div>${GA4_TRACK_SNIPPET}
 </body></html>`;
   return new Response(html, { status: 404, headers: { 'content-type': 'text/html; charset=utf-8' } });
 }
@@ -102,7 +102,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   // khi quà THẬT SỰ ≥ giá tool — hứa hụt ngay lần đầu là mất niềm tin.
   const offer = await signupOffer(sb, row.tool_id);
 
-  const title = esc(row.title || 'Kết quả Luận Đường');
+  const title = esc(row.title || 'Kết quả luận giải');
   const url = `${SITE}/ket-qua/${esc(id)}`;
   const isImage = row.kind === 'image' && row.image_url;
   const hasBlocks = Array.isArray(row.blocks) && row.blocks.length > 0;
@@ -261,7 +261,7 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
 <body>
 <div class="wrap">
   <div class="top">
-    <div class="t"><b>${title}</b><span>Tử Vi Minh Bảo · Luận Đường</span></div>
+    <div class="t"><b>${title}</b><span>Tử Vi Minh Bảo · Hỏi Thầy</span></div>
     <img class="brand" src="/seal.webp" alt="Tử Vi Minh Bảo" width="40" height="40">
   </div>
   <div class="body">${body}</div>

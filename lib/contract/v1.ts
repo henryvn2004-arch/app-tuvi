@@ -299,7 +299,7 @@ export interface DoneEvent {
    *
    * ⛔ KHÔNG có trường giá, cố ý. Xem lib/tools/suggest-tool.ts.
    */
-  toolSuggest?: { toolId: string; label: string; path: string; lyDo: string };
+  toolSuggest?: { toolId: string; label: string; path: string; lyDo: string; kind?: 'tool' | 'report' };
 }
 
 /** event: error — lỗi có mã để client xử lý */
