@@ -182,9 +182,9 @@ lint và typecheck. Đổi `public/*.js` hay `*.css` thì bump `?v=` ở mọi n
 nạp file đó.
 
 ### W0: Nền đo và bối cảnh (không đổi giao diện)
-- [ ] Event cho click chip gợi ý: `chat_chip_click` với `{source: static|suggest, idx}`.
-- [ ] Tách `rail_suggest_*` thành `tool` và `report`, thêm `topic` + `master`.
-- [ ] Viết `PRODUCT.md` + `DESIGN.md` cho impeccable, NHÁP từ
+- [x] Click chip gợi ý: `cta_click` slug `rail_chip_ask`, `meta.src = static|suggest`, `meta.idx`.
+- [x] `rail_suggest_*` mang `meta.kind = tool|report`. (`topic` + `master`: làm cùng W5.)
+- [x] Viết `PRODUCT.md` + `DESIGN.md` cho impeccable, NHÁP từ
       `docs/BRAND-VOICE.md` + token hiện có. **Henry duyệt phần "sự thật sản
       phẩm"** (chân dung khách, điều không được hứa).
 - [ ] `scripts/ux/crawl.mjs` (tầng 1) + chạy lần đầu làm mốc (baseline).
@@ -201,17 +201,15 @@ nạp file đó.
 - [ ] Lỗi console, 401 và `ERR_FAILED` khi tải trang (mục đích của từng
       request lấy từ crawl). `[cong-cu] thiếu page_path/app_path, đã ẩn:
       rail-message`.
-- [ ] Số "online" giả + toast mua hàng giả: **gỡ, hoặc thay bằng số thật**
-      (tuỳ Henry quyết).
+- [~] Số "online" giả + toast mua hàng giả: Henry quyết **để nguyên**.
 - [ ] Một con số "N công cụ", đọc từ catalog, không gõ tay.
 
 ### W3: Một sản phẩm, một khuôn mặt
-- [ ] Một tên cho cửa chat ở MỌI nơi (Henry chọn, xem mục 5). Gỡ link tới
-      `tuvi-chat.html`.
+- [x] Một tên cho cửa chat ở MỌI nơi: **"Hỏi Thầy"**. `tuvi-chat.html` xoá + 308.
 - [ ] Một khung header + tab bar cho landing lẫn `/app` (giữ
       `check:tabbar`). `topup` nằm trong khung (khớp P2 bên plan kia: tờ nạp
       tại chỗ).
-- [ ] Link nội bộ dùng `/app/<tool>`, không dùng `.html` trần. 301 các
+- [x] (phần xoá/301) 301 các
       `/tools/*.html` còn trùng về `/app/*`. Gỡ hoặc 301 các trang mồ côi.
       ⚠️ Làm theo thứ tự: redirect trước, xoá file sau; kiểm sitemap và
       `seo_pages` không trỏ vào URL sắp chết.
@@ -231,7 +229,7 @@ nạp file đó.
 - [ ] Bảng chủ đề → report, `goi_y_san_pham` mở rộng và nối mọi kịch bản,
       `maybeShowUpsell` theo chủ đề.
 - [ ] Khối "Bước tiếp theo" ở cuối kết quả `/app/*` và cuối report-delivery.
-- [ ] Email bán chéo: bật với ngân sách nhỏ (**Henry quyết**), đo 2 tuần.
+- [x] Email bán chéo: T6 + CN, tối đa 1 thư/người/lượt. Bật budget sau deploy, đo 2 tuần.
 
 ### W6: Độ mượt và hệ thống thị giác (Emil + impeccable polish)
 - [ ] `theme.css`: thêm token `--ease-out`, `--ease-in-out`, `--dur-1/2/3`,
@@ -252,18 +250,15 @@ nạp file đó.
 
 ---
 
-## 5. Cần Henry quyết (chặn việc)
+## 5. Quyết định của Henry (2026-09-26)
 
-1. **Tên cửa chat:** "Hỏi Thầy" · "Luận Đường" · "Trò chuyện"? Đề xuất
-   **"Hỏi Thầy"**: động từ, rõ việc, khớp với hội đồng 15 thầy. "Luận Đường"
-   để làm tên thương hiệu phụ nếu muốn giữ.
-2. **Số online giả + toast mua hàng giả:** gỡ hẳn, hay thay bằng số thật
-   (có thể nhỏ)?
-3. **Trang mồ côi, `/tools/*.html` cũ, `profile.html`:** được phép 301 hoặc
-   xoá không?
-4. **Email bán chéo:** bật lại với ngân sách bao nhiêu thư mỗi tuần?
-5. **`PRODUCT.md`:** duyệt bản nháp chân dung khách và những điều không được
-   hứa.
+| # | Câu hỏi | Chốt | Trạng thái |
+|---|---|---|---|
+| 1 | Tên cửa chat | **Một tên duy nhất: "Hỏi Thầy"** (bỏ cả "Luận Đường") | ✓ đổi toàn bộ chữ hiển thị, luật ghi vào `CLAUDE.md` |
+| 2 | Số online giả + toast hoạt động | **Để đó, không sửa** | Bỏ khỏi W2 |
+| 3 | Trang mồ côi + `/tools/*.html` trùng | **Xoá, dọn gọn** | ✓ 38 `/tools/*.html` → 308 về `/app/*`; 16 trang cũ xoá + 308 |
+| 4 | Email bán chéo | **2 thư/tuần, vào T6 và CN** | ✓ code (cron T6+CN, tối đa 1 thư/người/lượt). Budget bật SAU deploy: `_patches/migration-email-cross-sell-on.sql` |
+| 5 | `PRODUCT.md` | Khách: **dân văn phòng 22–65 tuổi, chủ yếu nữ** | ✓ `PRODUCT.md` + `DESIGN.md` ở gốc repo |
 
 ## 6. Không làm (để khỏi trôi phạm vi)
 - Không redesign hay đổi phong cách (taste / impeccable chỉ chạy ở chế độ
