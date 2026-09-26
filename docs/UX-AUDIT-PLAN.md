@@ -219,7 +219,7 @@ khỏi bảng dưới, chỉ giữ các phát hiện THẬT về code/nội dung
 | 5 | P1 | J5 | Reload giữa chừng form mất toàn bộ dữ liệu đã nhập, không cảnh báo/khôi phục | Chưa sửa → **W2** |
 | 6 | P1 | J3/J4 | `/tools/an-sao.html`, `/tools/tu-tru.html` (còn sống) không có rail chat — ngõ cụt SEO | Chưa sửa → **W3 nối dài** (gom 2 trang này vào `/app/*` như 38 trang đã làm) |
 | 7 | P1 | J3/J4 | `/la-so/[slug]` (~7.000 trang, loại SEO nhiều nhất) — HTML gốc không có CTA nào về chat | Chưa sửa → **W5** (khối "Bước tiếp theo") |
-| 8 | P2 | J1/J2 | `tuvi-form.js` `pid()` sinh field trùng (ẩn + hiện) cho cùng input | Cần xác nhận thêm rồi sửa → **W2** |
+| 8 | ✓ Đã đọc, KHÔNG phải bug | J1/J2 | `tuvi-form.js` field trùng (ẩn + hiện) | Kiến trúc cố ý: `#birthPanel` (`TuviForm.render`) là form THẬT ẩn bằng `display:none` đúng chuẩn (`app-luan-giai.html:292`), `TuviForm.renderChat()` là hội thoại ghi vào form đó qua `setData()`. Trình duyệt tự loại `display:none` khỏi autofill/accessibility tree — không phải rò rỉ template. |
 | 9 | P2 | J3/J4 | 2 kiểu form khác nhau giữa các tool cùng khung `/app/*` (wizard vs chat-first) | Ghi nhận, cần Henry xác nhận có chủ đích không trước khi đồng bộ |
 | 10 | P2 | J8 | 5 `@keyframes` trong `shell.css` + 19/21 trang không tôn trọng `prefers-reduced-motion` | Chưa sửa → **W6** |
 | 11 | P2 | J8 | `.shell{height:100vh}` nên là `100dvh` | Chưa sửa → **W6** |
@@ -255,9 +255,9 @@ giá; sidebar ẩn khối rỗng cho tới khi có dữ liệu; không emoji mà
 - [ ] Reload giữa chừng form (`/app/luan-giai`) mất toàn bộ dữ liệu đã nhập,
       không cảnh báo/khôi phục — lưu state từng bước vào `sessionStorage`
       (J5, P1).
-- [ ] `tuvi-form.js` `pid()` sinh 2 bản field (ẩn + hiện) cho cùng input —
-      xác nhận là chủ đích (mobile/desktop) hay rò rỉ template, rồi ẩn hẳn
-      bản thừa bằng `display:none` thay vì kích thước 0 (J1/J2, P2).
+- [x] `tuvi-form.js` field trùng (ẩn + hiện) — **đã đọc code, KHÔNG phải
+      bug**: kiến trúc cố ý (form thật ẩn `display:none` + chat ghi qua
+      `setData()`). Xem hàng #8 mục 4.1.
 - [ ] Trang chủ ghi "270.000+ lá số người thật" — không có trong `PRODUCT.md`
       Evidence on Hand. **Henry xác nhận nguồn số này có thật không**; nếu
       không kiểm chứng được thì bỏ hoặc đổi câu không cần số cụ thể (J1, P3).
