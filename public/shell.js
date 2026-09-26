@@ -1299,6 +1299,13 @@
     }
     return null;
   }
+  // Đo click-through "mời thầy khác" (P4 2026-09-26) — khớp TÊN TOOL server
+  // gọi (lib/tools/registry.ts) với thầy/môn để gắn nhãn khi bắn `master_invite`.
+  var MOI_THAY_TOOLS = {
+    moi_thay_bat_tu:   { master: 'tam-kinh', discipline: 'bat-tu' },
+    moi_thay_luc_nham: { master: 'linh-co',  discipline: 'luc-nham' },
+    moi_thay_ky_mon:   { master: 'tam-kinh', discipline: 'ky-mon' },
+  };
   // Tách câu trả lời thành nhiều "tiếng nói" theo mốc "**Tên thầy:**" đứng đầu
   // dòng — server (execMoiThay*, lib/tools/registry.ts) LUÔN dặn model mở một
   // dòng riêng đúng dạng này khi một thầy khác vừa được mời vào. Đoạn ĐẦU
@@ -4790,6 +4797,19 @@
           var ev = parseSSE(parts[i]); if (!ev) continue;
           if (ev.name === 'text' && ev.data.delta) { if (_ttft === null) _ttft = Date.now() - _t0; acc += ev.data.delta; typing.innerHTML = mdLite(acc); chat.scrollTop = chat.scrollHeight; }
           else if (ev.name === 'status' && !acc) { typing.innerHTML = '<span class="typing" style="gap:6px">' + esc(ev.data.text || 'Đang xem…') + ' <i></i><i></i><i></i></span>'; }
+          else if (ev.name === 'tool_call' && ev.data && MOI_THAY_TOOLS[ev.data.name]) {
+            // Đo "mời thầy khác" (P4 2026-09-26) — bắn NGAY khi tool chạy, không
+            // đợi câu trả lời xong (đo đúng lúc thầy khác THẬT SỰ được gọi, không
+            // phải lúc người dùng đọc xong). `via` phân biệt tự gợi ý (model tự
+            // quyết) hay do khách @ đích danh (addressMaster đã gửi lượt này).
+            var _inv = MOI_THAY_TOOLS[ev.data.name];
+            try {
+              track('master_invite', {
+                tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null,
+                meta: { master: _inv.master, discipline: _inv.discipline, via: (typeof addressed !== 'undefined' && addressed) ? 'mention' : 'auto' },
+              });
+            } catch (e) { /* ignore */ }
+          }
           else if (ev.name === 'error') {
             acc = acc || ('Xin lỗi, gặp trục trặc: ' + esc(ev.data.message || ''));
             try { track('chat_error', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { kind: 'stream', message: String(ev.data.message || '').slice(0, 200) } }); } catch (e) { /* ignore */ }
