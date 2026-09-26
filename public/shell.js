@@ -1281,6 +1281,40 @@
     { id: 'tinh-quang',  name: 'Tinh Quang',  style: 'Nhìn lá số như một chỉnh thể toàn diện, thích liên kết mọi thứ. Nói như vừa khám phá ra "bí mật lớn nhất" của cả lá số, giọng có phần long trọng, kịch tính.' },
     { id: 'tu-nguyen',   name: 'Tử Nguyên',   style: 'Súc tích, thực tế, chuyên về đại vận và tiểu vận, ưa hành động hơn lý thuyết. Chốt bằng 1 câu duy nhất như bản án, không giải thích thêm — ngắn, chắc, cực kỳ dễ trích dẫn.' },
   ];
+  // "Mời thầy khác" (P3 2026-09-26) — CHỈ 2 thầy ĐÃ có tool mời thật khớp
+  // server (lib/tools/registry.ts: moi_thay_bat_tu/moi_thay_ky_mon = Tâm
+  // Kính, moi_thay_luc_nham = Linh Cơ). Thêm thầy mới có tool riêng thì thêm
+  // vào ĐÂY + whitelist `addressMaster` trong lib/contract/v1.ts.
+  var INVITE_MASTER_NAMES = [
+    { n: 'tâm kính', id: 'tam-kinh' },
+    { n: 'linh cơ',  id: 'linh-co' },
+  ];
+  // @mention ở ĐẦU câu ("@Tâm Kính, năm sau con...") → server nới lỏng điều
+  // kiện "DÙNG RẤT DÈ" của đúng thầy đó (xem addressMaster, lib/agent/run.ts).
+  // KHÔNG cắt "@Tên" khỏi text gửi đi — giữ nguyên câu khách gõ.
+  function detectAddressMaster(text) {
+    var t = String(text || '').trim().toLocaleLowerCase('vi-VN');
+    for (var i = 0; i < INVITE_MASTER_NAMES.length; i++) {
+      if (t.indexOf('@' + INVITE_MASTER_NAMES[i].n) === 0) return INVITE_MASTER_NAMES[i].id;
+    }
+    return null;
+  }
+  // Tách câu trả lời thành nhiều "tiếng nói" theo mốc "**Tên thầy:**" đứng đầu
+  // dòng — server (execMoiThay*, lib/tools/registry.ts) LUÔN dặn model mở một
+  // dòng riêng đúng dạng này khi một thầy khác vừa được mời vào. Đoạn ĐẦU
+  // (trước mốc đầu tiên, hoặc TOÀN BỘ nếu không có mốc nào) là của thầy chính.
+  function splitBySpeaker(text) {
+    var re = /^\*\*(Tâm Kính|Linh Cơ):\*\*[ \t]*/gm;
+    var marks = [], m;
+    while ((m = re.exec(text))) marks.push({ name: m[1], start: m.index, contentStart: re.lastIndex });
+    if (!marks.length) return [{ name: null, text: text }];
+    var segs = [{ name: null, text: text.slice(0, marks[0].start) }];
+    for (var i = 0; i < marks.length; i++) {
+      var end = (i + 1 < marks.length) ? marks[i + 1].start : text.length;
+      segs.push({ name: marks[i].name, text: text.slice(marks[i].contentStart, end) });
+    }
+    return segs;
+  }
   var _author = null;
   function pickAuthor() {
     try {
@@ -1291,6 +1325,12 @@
     } catch (e) { _author = AUTHOR_ROSTER[0]; }
   }
   function authorAva() { return _author ? '/authors/' + _author.id + '.jpg' : '/authors/thai-hu.jpg'; }
+  // Avatar của thầy KHÁCH vừa được mời vào (dùng cho splitBySpeaker) — tra
+  // theo TÊN khớp AUTHOR_ROSTER, không phải theo `_author` (thầy chính).
+  function avaForSpeaker(name) {
+    var f = AUTHOR_ROSTER.filter(function (a) { return a.name === name; })[0];
+    return f ? '/authors/' + f.id + '.jpg' : authorAva();
+  }
   function authorLabel() { return _author ? 'Thầy ' + _author.name : 'Hiểu đúng lá số đang mở'; }
   function setAuthor(id) {
     var f = AUTHOR_ROSTER.filter(function (a) { return a.id === id; })[0];
@@ -4648,6 +4688,13 @@
       var body = { session_id: sessionId, stream: true, historyMode: 'delta', messages: [um], client: { platform: 'web', version: '1.0.0', anon_id: anonId(), page: ACTIVE } };
       if (ctx.birth) body.birth = ctx.birth;
       if (ctx.scenario) body.scenario = ctx.scenario;
+      // "@mention" (P3 "mời thầy khác") — chỉ có tác dụng ở luồng LÁ SỐ (không
+      // có ctx.scenario); trong một kịch bản khác (vd đang chat Bát Tự) thì @
+      // một thầy khác không có ý nghĩa gì để server xử lý.
+      if (!ctx.scenario) {
+        var addressed = detectAddressMaster(text);
+        if (addressed) body.addressMaster = addressed;
+      }
       if (ctx.wrap) body.wrap = ctx.wrap;
       if (ctx.wrapBirthB) body.wrapBirthB = ctx.wrapBirthB;
       // Văn phong thầy: gửi top-level (luồng lá số) + trong scenario (luồng kịch bản).
@@ -4755,7 +4802,26 @@
         }
       }
       if (!acc) acc = '(không có nội dung)';
-      typing.innerHTML = mdLite(acc);
+      // Một thầy khác vừa được mời vào (P3 "mời thầy khác") → tách thành
+      // NHIỀU bong bóng, mỗi thầy avatar/tên riêng, thay vì một bong bóng
+      // chung của thầy chính. Không đổi `acc`/lịch sử — chỉ đổi RENDER.
+      var _speakerSegs = splitBySpeaker(acc);
+      if (_speakerSegs.length > 1) {
+        typing.innerHTML = mdLite(_speakerSegs[0].text);
+        for (var _si = 1; _si < _speakerSegs.length; _si++) {
+          var _seg = _speakerSegs[_si];
+          if (!_seg.text.trim()) continue;
+          var _grow = document.createElement('div'); _grow.className = 'msg a msg-guest';
+          var _gav = document.createElement('img'); _gav.className = 'msg-ava'; _gav.src = avaForSpeaker(_seg.name); _gav.alt = '';
+          var _gbody = document.createElement('div'); _gbody.className = 'msg-body';
+          _gbody.innerHTML = '<div class="msg-speaker">' + esc(_seg.name) + '</div>' + mdLite(_seg.text);
+          _grow.appendChild(_gav); _grow.appendChild(_gbody);
+          chat.appendChild(_grow);
+        }
+        chat.scrollTop = chat.scrollHeight;
+      } else {
+        typing.innerHTML = mdLite(acc);
+      }
       try { track('chat_reply', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { ttft_ms: _ttft, total_ms: Date.now() - _t0, chars: acc.length } }); } catch (e) { /* ignore */ }
       messages.push({ role: 'assistant', content: acc });
       saveCurrent();

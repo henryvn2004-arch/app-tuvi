@@ -26,7 +26,7 @@ import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from 
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
 import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine, RAIL_MAX_TOKENS, LASO_MAX_TOKENS } from '@/lib/agent/prompts';
 import { cacChuDe, khoiChuDe } from '@/lib/agent/luan-chu-de';
-import { personaVoice } from '@/lib/agent/personas';
+import { personaVoice, PERSONAS } from '@/lib/agent/personas';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
 import {
@@ -578,6 +578,27 @@ async function runAgentInner(
   if (userTurns > 1 && convo.length) {
     const last = convo[convo.length - 1];
     const hint = '[Câu hỏi nối tiếp trong cùng hội thoại — trả lời ngắn gọn (khoảng 40–90 từ), đi thẳng vào điều mới, đừng lặp lại phần đã nói ở lượt trước.]';
+    if (last?.role === 'user') {
+      if (typeof last.content === 'string') {
+        last.content = last.content + '\n\n' + hint;
+      } else if (Array.isArray(last.content)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const tb = last.content.find((b: any) => b.type === 'text');
+        if (tb) tb.text += '\n\n' + hint;
+        else last.content.push({ type: 'text', text: hint });
+      }
+    }
+  }
+
+  // "@mention" — khách gọi đích danh một thầy khác (P3 "mời thầy khác"
+  // 2026-09-26). CÙNG kỹ thuật với focusHintText/userTurns ở trên: nhét vào
+  // CUỐI tin user, KHÔNG sửa system (giữ prompt-cache ổn định). Chỉ nới lỏng
+  // điều kiện "DÙNG RẤT DÈ" của tool — KHÔNG ép gọi tool cụ thể nào, vì Tâm
+  // Kính có HAI môn (Bát Tự/Kỳ Môn) và chỉ model mới biết câu hỏi hợp cái nào.
+  if (req.addressMaster && convo.length) {
+    const displayName = PERSONAS[req.addressMaster]?.name || req.addressMaster;
+    const hint = `[Người dùng vừa gọi đích danh thầy ${displayName} (@${displayName}) — nếu câu hỏi hợp với đúng MỘT trong các tool "mời thầy khác" của thầy này, hãy GỌI NGAY tool đó trong lượt này, bỏ qua điều kiện "DÙNG RẤT DÈ" ở mô tả tool. Nếu câu hỏi không hợp môn nào của thầy ${displayName}, cứ trả lời bình thường bằng giọng của bạn và nói rõ vì sao thầy đó không giúp được cho câu này.]`;
+    const last = convo[convo.length - 1];
     if (last?.role === 'user') {
       if (typeof last.content === 'string') {
         last.content = last.content + '\n\n' + hint;
