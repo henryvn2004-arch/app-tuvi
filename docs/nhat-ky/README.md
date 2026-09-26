@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🧭 Điều hướng kiểu ChatGPT — sidebar trang, màn chat `/app`, Minh Bảo dẫn đường, kết quả như artifact |
 | 1 | 2026-09 | `2026-09.md` | 🎯 W7 — đo lại và chốt: J1/J2 re-verify sống, 3 chỉ số mục 0 CHƯA đo được |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Audit UX bằng 3 bộ skill thiết kế — dọn trang, "Hỏi Thầy", email bán chéo |
 | 1 | 2026-09 | `2026-09.md` | 🆕 P1 "mời thầy khác" — tool `moi_thay_luc_nham`, Tử Vi mời Linh Cơ (Đại Lục Nhâm) đối chiếu một việc cụ thể |
