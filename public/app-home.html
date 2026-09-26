@@ -41,7 +41,7 @@
    (CSS chết từ trước workshop 2026-09 — đã kiểm `grep class="hero"` ra 0
    kết quả trong HTML, không phải xoá nhầm thứ đang dùng). */
 .hero-ask{display:flex;align-items:center;gap:14px;width:100%;background:linear-gradient(135deg,var(--navy),#0d2a49);border:none;border-radius:16px;padding:18px 20px;margin-bottom:18px;color:#fff;cursor:pointer;text-align:left;font-family:inherit;box-shadow:var(--shadow);transition:.15s}
-.hero-ask:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(6,26,46,.18)}
+@media(hover:hover){.hero-ask:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(6,26,46,.18)}}
 .hero-ask-ic{width:42px;height:42px;flex:0 0 auto;border-radius:11px;background:rgba(212,175,55,.16);color:var(--gold);display:flex;align-items:center;justify-content:center}
 .hero-ask-ic svg{width:22px;height:22px}
 .hero-ask-tx{flex:1;min-width:0}
@@ -79,7 +79,7 @@
    nói được VÌ SAO thì đọc như quảng cáo mù (xem lib/tools/suggest-tool.ts). */
 .next-wrap{margin-bottom:22px}
 .nx-main{display:flex;gap:13px;align-items:flex-start;background:var(--white);border:1px solid var(--gold-soft);border-radius:14px;padding:16px 17px;box-shadow:var(--shadow);text-decoration:none;transition:.15s}
-.nx-main:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(6,26,46,.09)}
+@media(hover:hover){.nx-main:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(6,26,46,.09)}}
 .nx-main .ic{width:44px;height:44px;flex:0 0 auto;border-radius:11px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .nx-main .ic svg{width:23px;height:23px}
 .nx-main .ic img{width:100%;height:100%;object-fit:cover}
@@ -140,7 +140,7 @@
 /* ── Header springboard (ô tìm) — tên hiệu đã có ở .ws-top, không lặp lại ── */
 .hb-header{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
 .hb-search{display:flex;align-items:center;gap:8px;width:100%;background:var(--paper-2);border:1px solid var(--line);border-radius:11px;padding:10px 13px;color:var(--text-lt);font-family:inherit;font-size:13px;cursor:pointer;text-align:left}
-.hb-search:hover{border-color:var(--gold-soft)}
+@media(hover:hover){.hb-search:hover{border-color:var(--gold-soft)}}
 .hb-search svg{width:16px;height:16px;flex:0 0 auto}
 .hb-search span{flex:1}
 /* ── CỐT LÕI — mồi khám phá "Cách hệ thống hoạt động" (/phuong-phap).
@@ -149,7 +149,7 @@
    chồng (mobile) — không đưa vào flex-order được vì mô tả nằm CHUNG khối
    với tiêu đề mà chevron thì không được kéo dài theo mô tả. */
 .core-card{position:relative;display:flex;align-items:center;gap:20px;background:var(--white);border:1px solid var(--gold-soft);border-radius:16px;padding:18px 46px 18px 20px;margin-bottom:18px;box-shadow:var(--shadow);text-decoration:none;color:inherit;transition:.15s}
-.core-card:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(6,26,46,.09)}
+@media(hover:hover){.core-card:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(6,26,46,.09)}}
 .core-main{display:flex;gap:14px;align-items:flex-start;flex:1 1 260px;min-width:0}
 .core-ic{width:46px;height:46px;flex:0 0 auto;border-radius:50%;background:var(--paper-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--navy)}
 .core-ic svg{width:24px;height:24px}
@@ -327,10 +327,10 @@
 .tme-src b{color:var(--text-mid);font-weight:600}
 .tme-edit{background:none;border:1px solid var(--line-2);color:var(--text-mid);border-radius:20px;
   padding:2px 11px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
-.tme-edit:hover{background:var(--paper-2);border-color:var(--gold-soft);color:var(--heading)}
+@media(hover:hover){.tme-edit:hover{background:var(--paper-2);border-color:var(--gold-soft);color:var(--heading)}}
 .tme-cta{margin-top:10px;background:var(--red);color:#fff;border:none;border-radius:9px;
   padding:9px 16px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
-.tme-cta:hover{filter:brightness(1.06)}
+@media(hover:hover){.tme-cta:hover{filter:brightness(1.06)}}
 /* Form nhập lá số ngay trong thẻ. CỐ Ý không đá người dùng sang trang khác:
    chỗ này là đáy phễu của khối cá nhân, mỗi lần chuyển trang là một lần rơi.
    ⚠️ Bản cũ tô cho nền NAVY (chữ trắng, ô trong suốt). Thẻ nay nền sáng nên
@@ -356,7 +356,7 @@
 @container home (max-width:600px){.today-next{grid-template-columns:repeat(3,1fr);gap:7px}}
 .tday{background:var(--white);border:1px solid var(--line);border-radius:13px;padding:11px 8px;
   display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;font:inherit;color:inherit;transition:.13s}
-.tday:hover{border-color:var(--line-2);background:var(--paper)}
+@media(hover:hover){.tday:hover{border-color:var(--line-2);background:var(--paper)}}
 .tday.on{background:var(--ok-bg);border-color:var(--ok-line)}
 .tday.on.v-xau{background:var(--no-bg);border-color:var(--no-line)}
 .tday.on.v-binh{background:var(--hr-bg);border-color:var(--hr-line)}
@@ -372,7 +372,7 @@
   .tday-tx b{font-size:13.5px}.tday-tx span{font-size:10.5px}}
 .tall{background:var(--white);border:1px solid var(--line);border-radius:13px;padding:9px 14px;
   display:flex;align-items:center;gap:10px;cursor:pointer;font:inherit;color:var(--text-mid);white-space:nowrap;transition:.13s}
-.tall:hover{border-color:var(--line-2);background:var(--paper)}
+@media(hover:hover){.tall:hover{border-color:var(--line-2);background:var(--paper)}}
 .tall .ic{width:20px;height:20px;flex:0 0 auto;color:var(--text-lt)}
 .tall .ic svg{width:100%;height:100%;display:block}
 .tall b{display:block;font-size:13px;color:var(--heading);font-weight:700;line-height:1.25}
@@ -388,7 +388,7 @@
 .today-week[hidden]{display:none}
 .tw-cell{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:8px 2px 7px;
   text-align:center;cursor:pointer;font-family:inherit;color:inherit;transition:.13s}
-.tw-cell:hover{background:var(--paper);border-color:var(--line-2)}
+@media(hover:hover){.tw-cell:hover{background:var(--paper);border-color:var(--line-2)}}
 .tw-cell.on{border-color:var(--gold);background:var(--gold-lt)}
 .tw-thu{font-size:10px;color:var(--text-lt);font-weight:600}
 .tw-d{font-size:14px;font-weight:600;color:var(--heading);margin:2px 0 5px;font-family:var(--serif)}
@@ -400,14 +400,14 @@
   .tw-thu{font-size:9px}.tw-d{font-size:12px;margin:1px 0 4px}}
 .today-back{background:none;border:none;color:var(--text-lt);font-size:12.5px;font-family:inherit;
   cursor:pointer;padding:0;margin-bottom:7px;display:none;text-decoration:underline}
-.today-back:hover{color:var(--heading)}
+@media(hover:hover){.today-back:hover{color:var(--heading)}}
 .today-cta{display:flex;gap:10px;margin-top:18px}
 @container home (max-width:600px){.today-cta{margin-top:14px;gap:8px}}
 .today-ask{flex:1;background:linear-gradient(180deg,#D4483A,var(--red));color:#fff;border:none;border-radius:14px;
   padding:16px 20px;font-size:19px;font-weight:700;font-family:var(--serif);cursor:pointer;white-space:nowrap;
   display:inline-flex;align-items:center;justify-content:center;gap:11px;
   box-shadow:0 4px 14px rgba(192,57,43,.28);transition:.13s}
-.today-ask:hover{filter:brightness(1.06);box-shadow:0 6px 18px rgba(192,57,43,.34)}
+@media(hover:hover){.today-ask:hover{filter:brightness(1.06);box-shadow:0 6px 18px rgba(192,57,43,.34)}}
 .today-ask .ic{width:22px;height:22px;flex:0 0 auto}
 .today-ask .ic svg{width:100%;height:100%;display:block}
 @container home (max-width:430px){.today-ask{font-size:16px;padding:14px 10px;gap:8px}.today-ask .ic{width:19px;height:19px}}
@@ -415,7 +415,7 @@
    luôn cái SVG bên trong. Đổi icon qua `flashIcon()` rồi trả về. */
 .today-icbtn{width:56px;flex:0 0 auto;background:var(--paper);border:1px solid var(--line);border-radius:14px;
   cursor:pointer;color:var(--text-mid);display:flex;align-items:center;justify-content:center;transition:.13s}
-.today-icbtn:hover{background:var(--paper-2);border-color:var(--line-2);color:var(--heading)}
+@media(hover:hover){.today-icbtn:hover{background:var(--paper-2);border-color:var(--line-2);color:var(--heading)}}
 .today-icbtn svg{width:21px;height:21px;display:block}
 .today-icbtn[disabled]{opacity:.5;cursor:default}
 @container home (max-width:430px){.today-icbtn{width:46px;border-radius:12px}.today-icbtn svg{width:19px;height:19px}}
@@ -436,7 +436,7 @@
 .tour-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .tour-skip{background:none;border:none;color:var(--text-lt);font-size:11.5px;cursor:pointer;font-family:inherit;text-decoration:underline;padding:4px 0}
 .tour-next{background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:8px;padding:7px 15px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
-.tour-next:hover{filter:brightness(1.06)}
+@media(hover:hover){.tour-next:hover{filter:brightness(1.06)}}
 </style>
 </head>
 <body>
