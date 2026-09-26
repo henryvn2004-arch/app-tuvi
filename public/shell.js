@@ -484,10 +484,10 @@
     var host = document.getElementById('shell-sidebar');
     if (!host) return;
     var h = '<div class="sbn-top">' +
-      '<a class="sbn-brand" href="/app"><img src="/seal.webp" alt="" width="28" height="28"><b>Minh Bảo</b></a>' +
+      '<a class="sbn-brand" href="/app"><img src="/seal-128.webp" alt="" width="28" height="28"><b>Minh Bảo</b></a>' +
       '<button class="sbn-ib" type="button" data-sbn="search" data-tip="Tìm kiếm (Ctrl K)" aria-label="Tìm kiếm">' + svg('search') + '</button>' +
       '<button class="sbn-ib" type="button" data-sbn="collapse" data-tip="Thu gọn thanh bên" aria-label="Thu gọn thanh bên">' + svg('panel-left') + '</button>' +
-      '</div><div class="sbn-scroll">' +
+      '</div><nav class="sbn-scroll" aria-label="Điều hướng">' +
       '<a class="sbn-item" href="/app" data-sbn="new" data-tip="Cuộc trò chuyện mới" aria-label="Cuộc trò chuyện mới">' + svg('pen-line') + '<span class="sbn-tx">Cuộc trò chuyện mới</span></a>';
     SB_NAV.forEach(function (it) { h += sbItem(it); });
     h += '<button class="sbn-item" type="button" data-sbn="more" aria-expanded="false">' + svg('more-horizontal') + '<span class="sbn-tx">Thêm</span></button>' +
@@ -496,7 +496,7 @@
     h += '</div>' +
       '<div class="sbn-sec"><span>Gần đây</span><a href="/app/tro-chuyen">Xem tất cả</a></div>' +
       '<div class="sbn-recent" id="sbRecent"></div>' +
-      '</div>' +
+      '</nav>' +
       '<div class="sbn-foot">' +
         '<div class="sbn-menu" id="sbMenu" hidden>' +
           '<div class="sbn-mail" id="sbMail"></div>' +
@@ -687,12 +687,12 @@
     var host = document.getElementById('shell-rail');
     if (!host) return;
     host.innerHTML =
-      '<div class="rail-h">' +
+      '<header class="rail-h">' +
       // ☰ mở sidebar trên điện thoại — từ 2026-09-26 không còn tabbar dưới
       // đáy, khung chat phủ toàn màn phải tự có lối vào điều hướng. Màn chat
       // trang chủ: đầu khung là MINH BẢO (ấn) cho tới khi một thầy được mời vào.
       '<button class="rh-btn rh-menu mobile-only" type="button" data-act="sb-open" data-tip="Mở thanh bên" aria-label="Mở thanh bên">' + svg('menu') + '</button>' +
-      '<img class="rail-ava" src="' + (CHAT_HOME && !_navDone ? '/seal.webp' : authorAva()) + '" alt="Hỏi Thầy" data-tip="Đổi thầy luận giải">' +
+      '<img class="rail-ava" src="' + (CHAT_HOME && !_navDone ? '/seal-128.webp' : authorAva()) + '" alt="Hỏi Thầy" data-tip="Đổi thầy luận giải">' +
       // id="railHTitle": Henry 2026-09-23 — bấm gợi ý chuyển tool NGAY TRONG
       // rail (startInlineTool, không điều hướng trang) thì tiêu đề đổi sang
       // TÊN TOOL thay vì tên chung "Trợ lý Luận Đường", cho biết đang ở luồng
@@ -716,7 +716,7 @@
         (HIST_ON && !CHAT_HOME ? '<button class="rh-btn" data-tip="Lịch sử hội thoại" aria-label="Lịch sử hội thoại" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></button>' : '') +
         '<button class="rh-btn" data-tip="Chia sẻ phiên" aria-label="Chia sẻ phiên" data-act="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>' +
         '<button class="rh-btn" data-tip="Hội thoại mới" aria-label="Hội thoại mới" data-act="newchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg></button>' +
-      '</div></div>' +
+      '</div></header>' +
       (HIST_ON ? '<div class="rail-hist" id="railHist" style="display:none"></div>' : '') +
       '<div class="ctx" id="railCtx" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:13px;height:13px;flex:0 0 auto"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg> <span id="railCtxTxt"></span></div>' +
       '<div class="chat" id="chat">' +
@@ -4190,7 +4190,7 @@
     // Màn chat trang chủ: chưa ai nói gì thì KHÔNG có bong bóng chào của thầy
     // — chỉ ấn Minh Bảo + một câu hỏi, ô nhập nằm giữa màn (kiểu ChatGPT).
     if (CHAT_HOME && o.hero) {
-      chat.innerHTML = '<div class="home-hero"><img src="/seal.webp" alt="" width="64" height="64"><h1>' + esc(o.hero) + '</h1>' +
+      chat.innerHTML = '<div class="home-hero"><img src="/seal-128.webp" alt="" width="64" height="64"><h1>' + esc(o.hero) + '</h1>' +
         (o.heroSub ? '<p>' + esc(o.heroSub) + '</p>' : '') + '</div>';
       document.body.classList.add('chat-empty');
       if (o.chips !== undefined) { ctxChipsOrig = (o.chips || []).slice(); ctxChips = ctxChipsOrig.slice(); ctxChipsSrc = 'static'; }
@@ -4674,14 +4674,14 @@
   // đúng thầy vừa vào (`setAuthor` → `authorId` gửi kèm lượt chat).
   function paintHomeHeader() {
     var host = document.getElementById('shell-rail'); if (!host) return;
-    var ava = host.querySelector('.rail-ava'); if (ava) ava.src = _navDone ? authorAva() : '/seal.webp';
+    var ava = host.querySelector('.rail-ava'); if (ava) ava.src = _navDone ? authorAva() : '/seal-128.webp';
     var t = document.getElementById('railHTitle'); if (t) t.textContent = _navDone ? authorLabel() : 'Minh Bảo';
     var sp = host.querySelector('.rail-h span'); if (sp) sp.textContent = _navDone ? 'Đang tiếp chuyện' : 'Người dẫn đường';
   }
   function navBubble(html) {
     var chat = document.getElementById('chat');
     var row = document.createElement('div'); row.className = 'msg a nav';
-    row.innerHTML = '<img class="msg-ava" src="/seal.webp" alt=""><div class="msg-body"><div class="nav-nm">Minh Bảo · người dẫn đường</div>' + html + '</div>';
+    row.innerHTML = '<img class="msg-ava" src="/seal-128.webp" alt=""><div class="msg-body"><div class="nav-nm">Minh Bảo · người dẫn đường</div>' + html + '</div>';
     chat.appendChild(row); chat.scrollTop = chat.scrollHeight;
     return row;
   }
