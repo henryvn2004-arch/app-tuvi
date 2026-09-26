@@ -258,9 +258,9 @@ giá; sidebar ẩn khối rỗng cho tới khi có dữ liệu; không emoji mà
 - [x] Một con số "N công cụ", đọc từ catalog, không gõ tay — sửa `<title>`/
       meta tĩnh của `/cong-cu` và trang chủ khớp số thật (50), heading vốn đã
       tự cập nhật đúng bằng JS từ trước.
-- [ ] Tour onboarding ("BƯỚC 1/7", `app-home.html:2210`) che câu trả lời đầu
-      tiên trên mobile — hoãn tới sau khi tin nhắn đầu render xong, hoặc bỏ
-      qua hẳn khi vào kèm `?q=` (J1, P1).
+- [x] Tour onboarding ("BƯỚC 1/7", `app-home.html:2210`) che câu trả lời đầu
+      tiên trên mobile — bỏ qua hẳn khi vào kèm `?q=` (người đã tự thao tác
+      thành công, không cần dạy lại). Không `markSeen()` ở nhánh này (J1, P1).
 - [x] Reload giữa chừng form mất toàn bộ dữ liệu đã nhập — lưu draft từng
       bước vào `sessionStorage` (`tuvi-form.js` `renderChat()`), nhảy thẳng
       tới bước dang dở khi mount lại, tự xoá khi hoàn tất. Đã verify sống
