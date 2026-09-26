@@ -160,16 +160,32 @@ việc nhỏ về SỔ SÁCH, không phải về chi phí thật (xem P1).
 Thứ tự: **P0 vá phễu đang chảy máu** → P1 sổ chi phí chat cho đúng (nhỏ) →
 P2 đổi gói + bỏ mua lẻ → P3 chat-first + report tự chạy → P4 đo.
 
-### P0 — Vá phễu hiện tại (nhỏ, làm được ngay)
-- [ ] Nút "Đăng ký miễn phí" mở đúng tab Đăng ký (`openAnonSignupModal` → cần
-      `showAuthModal` nhận tham số tab, `shell.js:2606`, `auth.js:562`).
-- [ ] Đăng ký email: đổi sang mã OTP 6 số ngay trong modal (hoặc tắt Confirm
-      email); nếu giữ link thì truyền `redirect_to` về đúng trang + báo thành
-      công bằng màu trung tính, không dùng `showAuthError` (`auth.js:822`).
-- [ ] Đẩy nút Google lên làm lựa chọn chính trong modal (68% đăng ký là Google).
-- [ ] UI: nút "Đang lập lá số…" đổi thành trạng thái xong; nội dung lòi dưới
-      ô chat; bảng 12 cung tràn phải; nút modal lệch trái; màn đầu trang chủ
-      không có CTA.
+### P0 — Vá phễu hiện tại (nhỏ, làm được ngay) — phần lớn XONG 2026-09-26
+- [x] Nút "Đăng ký miễn phí" mở đúng tab Đăng ký. `Auth.require(callback, tab)`
+      → `showAuthModal(callback, tab)`; `shell.js:2606` gọi kèm `'signup'`.
+- [x] Đăng ký email: **giữ link** (không đổi OTP — cần đổi cấu hình Supabase
+      Dashboard, ngoài phạm vi code). `signUpEmail()` truyền
+      `redirect_to=auth-callback.html` (khớp cơ chế OAuth có sẵn) +
+      `submitAuth()` gọi `_rememberAuthReturn()` trước khi signup. Thông báo
+      thành công đổi màu trung tính (`showAuthNotice`, khác `showAuthError`
+      đỏ) — `auth.js`.
+- [x] Nút Google làm nổi bật hơn Facebook trong modal (viền/nền xanh dương
+      nhạt mặc định, nhãn "NHANH NHẤT") — vị trí đã đúng từ trước (Google/FB
+      luôn đứng TRÊN form email ở mọi tab), chỉ thiếu độ nổi bật.
+- [x] Nút "Đang lập lá số…"/"Đang an tứ trụ…" đổi sang trạng thái xong khi
+      `doLuan()`/`doBatTu()` hoàn tất (`app-luan-giai.html`, `app-bat-tu.html`)
+      — trước đó đứng nguyên text "Đang…" vĩnh viễn dù đã xong.
+- [x] Nút CTA trong tường hết Lượng (`.stm-btn`) hết lệch trái — thêm
+      `width:100%;box-sizing:border-box` (`<button display:block>` không tự
+      full-width như div, đo bằng Playwright xác nhận: 176px/354px, dính mép
+      trái). `shell.css`.
+- [x] ~~Bảng 12 cung tràn phải mobile~~ — **không phải bug**: đọc code xác
+      nhận `overflow-x:auto` là cố ý (bảng 480px cuộn ngang trên viewport
+      hẹp), `.ws-body{min-width:0}` đã vá đúng từ trước. Nhận định ban đầu
+      trong bản đầu file này (dựa trên ảnh chụp tĩnh) sai.
+- [ ] Chưa làm — cần xem trực quan thật trên trình duyệt, không sửa mù:
+      "nội dung lòi dưới ô chat" và "màn đầu trang chủ không có CTA" (đổi bố
+      cục trang chủ/hero cũng là quyết định thiết kế, nên hỏi Henry trước).
 > Các mục QR/giá lệch (95k vs 109k, người đăng nhập bị đẩy sang `/topup.html`)
 > **không vá riêng** — P2 thay hẳn đường đó bằng tờ nạp gói.
 
