@@ -19,6 +19,7 @@ import {
   type BirthParams,
 } from '@/lib/contract/v1';
 import { buildToolDefs, executeTool, newToolContext, buildBirthFromInput, type ProfilePort } from '@/lib/tools/registry';
+import { listFamily } from '@/lib/charts/family';
 import { type ToolSuggestion } from '@/lib/tools/suggest-tool';
 import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
@@ -519,7 +520,11 @@ async function runAgentInner(
       }
     }
 
-    tools = buildToolDefs(!!profiles, !!memoryPort);
+    // "Cả nhà mình" (docs/DAC-TRUNG-PLAN.md) — chỉ luồng LÁ SỐ, chỉ người đã
+    // đăng nhập. Một lượt đọc `user_charts`; hụt thì [] và rail chạy như cũ.
+    if (userId && hasLaso) ctx.family = await listFamily(userId, req.birth ?? null);
+    ctx.question = lastQ;
+    tools = buildToolDefs(!!profiles, !!memoryPort, ctx.family.length > 0);
   }
 
   // Chốt cfg cho cả lượt: trần token là min(DB, per-prompt). Clone chứ không
@@ -604,6 +609,26 @@ async function runAgentInner(
         ? 'moi_thay_luc_nham (Linh Cơ chiêm ngay lúc này chính chuyện người dùng đang hỏi)'
         : 'moi_thay_bat_tu (mặc định; không nói năm thì lấy năm hiện tại), hoặc moi_thay_ky_mon nếu câu hỏi là về hướng/giờ hành sự';
     const hint = `[Người dùng vừa bấm mời đích danh thầy ${displayName} — BẮT BUỘC gọi tool ${tool} trong lượt này, bỏ qua MỌI điều kiện ở mô tả tool (kể cả loại câu hỏi và "đã mời trong cuộc trò chuyện này rồi"). Thầy ${displayName} xem CÙNG câu hỏi theo góc môn của mình — KHÔNG từ chối, KHÔNG giải thích vì sao môn đó "không hợp".]`;
+    const last = convo[convo.length - 1];
+    if (last?.role === 'user') {
+      if (typeof last.content === 'string') {
+        last.content = last.content + '\n\n' + hint;
+      } else if (Array.isArray(last.content)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const tb = last.content.find((b: any) => b.type === 'text');
+        if (tb) tb.text += '\n\n' + hint;
+        else last.content.push({ type: 'text', text: hint });
+      }
+    }
+  }
+
+  // "Cả nhà mình" — tên người nhà đi vào CUỐI tin user (không vào system: sổ
+  // đổi thì system vẫn giữ nguyên byte cho cache). `addressMember` (khách gõ
+  // "@Tên người nhà") thì bắt buộc đọc đúng người đó.
+  if (ctx.family.length && convo.length) {
+    const target = req.addressMember ? ctx.family.find((m) => m.id === req.addressMember) : null;
+    let hint = `[SỔ NGƯỜI NHÀ của người đang hỏi (đã có lá số): ${ctx.family.map((m) => m.ten).join(' · ')}. Câu hỏi nói về một người trong đây → gọi xem_nguoi_nha; hỏi chuyện chung cả nhà → gọi tra_ca_nha.]`;
+    if (target) hint += `\n[Người dùng vừa gọi đích danh @${target.ten} — BẮT BUỘC gọi xem_nguoi_nha với ten="${target.ten}" trong lượt này và trả lời về ${target.ten}.]`;
     const last = convo[convo.length - 1];
     if (last?.role === 'user') {
       if (typeof last.content === 'string') {

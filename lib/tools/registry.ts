@@ -22,12 +22,14 @@ import { computeThanSoHoc } from '@/lib/engine/than-so-hoc';
 // thuộc gì) nằm ở prompts.ts cạnh CHAT_SYSTEM_TU_BINH / CHAT_SYSTEM_CONG_SO /
 // CHAT_SYSTEM_THAN_SO; tên tool phải khớp TAY giữa hai file — đổi tên thì sửa
 // CẢ HAI.
-import { extractTuBinhContext, extractGenericContext, extractKyMonContext } from '@/lib/agent/prompts';
+import { extractTuBinhContext, extractGenericContext, extractKyMonContext, extractLasoContext } from '@/lib/agent/prompts';
 import { lanKinhNam, lanKinhThang, lanKinhNgay } from '@/lib/agent/luan-chu-de';
 import { personaVoice } from '@/lib/agent/personas';
 import { lapKhoa, railData as railDataLucNham } from '@/lib/liuren/ke';
 import { dungBan, railData as railDataKyMon } from '@/lib/qimen/board';
 import type { BirthParams } from '@/lib/contract/v1';
+import { findMember, type FamilyMember } from '@/lib/charts/family';
+import { buildKhung12Thang, type ThangKhung } from '@/lib/engine/van-han-12';
 import { SUGGEST_TOOL_DEF, SUGGEST_PRODUCT_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
 type Rec = Record<string, unknown>;
@@ -83,6 +85,12 @@ export interface ToolContext {
   // ĐÃ mời một thầy khác vào phòng rồi. Cùng khuôn với `toolSuggestion`: chặn
   // model mời hai lần trong CÙNG một lượt.
   masterInvited: boolean;
+  // "Cả nhà mình" (docs/DAC-TRUNG-PLAN.md) — người nhà trong Sổ Lá Số của
+  // người đang hỏi, runAgent nạp sẵn (lib/charts/family.ts). [] = chưa đăng
+  // nhập / chưa lưu ai ⇒ xem_nguoi_nha / tra_ca_nha không được đăng ký.
+  family: FamilyMember[];
+  // Câu hỏi mới nhất — xem_nguoi_nha khoanh cung liên quan trên lá số người nhà.
+  question: string;
 }
 
 export function newToolContext(
@@ -105,6 +113,8 @@ export function newToolContext(
     subjectSwitched: false,
     chuDe: [],
     masterInvited: false,
+    family: [],
+    question: '',
   };
 }
 
@@ -120,7 +130,7 @@ function currentYearVN(): number {
 // ── Định nghĩa tool (Anthropic tool-use schema) ─────────────
 // hasProfiles=true (kênh chat có sổ lá số) → thêm 3 tool quản lý sổ.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function buildToolDefs(hasProfiles = false, hasMemory = false): any[] {
+export function buildToolDefs(hasProfiles = false, hasMemory = false, hasFamily = false): any[] {
   // TẦNG 2 — chỉ đăng ký khi có danh tính (đã đăng nhập). Lượt anon không có
   // hồ sơ để ghi, mà `client.anon_id` do client tự khai nên KHÔNG phải danh tính.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -191,9 +201,39 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false): any[] {
         },
       ]
     : [];
+  // "Cả nhà mình" — chỉ đăng ký khi sổ CÓ người nhà (runAgent đã nạp
+  // ctx.family). Không có ai thì tool vô dụng mà vẫn tốn token mô tả.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const familyTools: any[] = hasFamily
+    ? [
+        {
+          name: 'xem_nguoi_nha',
+          description:
+            'Đọc lá số của MỘT NGƯỜI NHÀ đã lưu trong sổ của người đang hỏi (chồng/vợ/con/bố mẹ/anh chị em). ' +
+            'Gọi khi câu hỏi nói về CHÍNH người đó ("chồng em năm nay", "@Anh Tuấn tháng này đi xa được không") — lá số trong ngữ cảnh chỉ là của NGƯỜI HỎI, đừng đoán người nhà qua cung Phu Thê/Tử Tức khi đã có lá số thật của họ. ' +
+            'CHỈ dùng tên có trong dòng "SỔ NGƯỜI NHÀ" ở tin nhắn người dùng.',
+          input_schema: {
+            type: 'object',
+            properties: {
+              ten: { type: 'string', description: 'Tên người nhà đúng như trong sổ, vd "Anh Tuấn"' },
+              nam: { type: 'integer', description: 'Năm dương lịch cần xem vận; bỏ trống = năm hiện tại' },
+            },
+            required: ['ten'],
+          },
+        },
+        {
+          name: 'tra_ca_nha',
+          description:
+            'Xếp lá số của NGƯỜI HỎI và CẢ NHÀ (mọi người trong sổ người nhà) cạnh nhau theo 12 tháng âm tới: mỗi người mỗi tháng hạn vào cung nào, gặp sao gì, và những tháng nhiều người trong nhà cùng gặp sát/bại tinh. ' +
+            'Gọi khi hỏi chuyện CHUNG của cả nhà ("nhà mình năm nay thế nào", "tháng nào cả nhà nên giữ tiền", "hai vợ chồng tháng nào cùng xấu"). Chỉ hỏi về MỘT người nhà thì dùng xem_nguoi_nha.',
+          input_schema: { type: 'object', properties: {} },
+        },
+      ]
+    : [];
   return [
     ...profileTools,
     ...memoryTools,
+    ...familyTools,
     SUGGEST_TOOL_DEF,
     SUGGEST_PRODUCT_TOOL_DEF,
     {
@@ -338,6 +378,8 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
   if (name === 'moi_thay_bat_tu') return execMoiThayBatTu(input, ctx);
   if (name === 'moi_thay_luc_nham') return execMoiThayLucNham(input, ctx);
   if (name === 'moi_thay_ky_mon') return execMoiThayKyMon(input, ctx);
+  if (name === 'xem_nguoi_nha') return execXemNguoiNha(input, ctx);
+  if (name === 'tra_ca_nha') return execTraCaNha(ctx);
   if (name === 'tra_van_nam_bat_tu') return execTraVanNamBatTu(input, ctx);
   if (name === 'tra_van_nam_cong_so') return execTraVanNamCongSo(input, ctx);
   if (name === 'tra_nam_ca_nhan_than_so') return execTraNamCaNhanThanSo(input);
@@ -768,4 +810,109 @@ async function execTraCuu(input: Rec): Promise<string> {
   } catch (e) {
     return 'Lỗi tra cứu: ' + (e instanceof Error ? e.message : 'không rõ');
   }
+}
+
+// ── "Cả nhà mình" (docs/DAC-TRUNG-PLAN.md) ──────────────────
+// Người nhà KHÔNG có mặt trong cuộc trò chuyện — cùng tinh thần luật đạo đức
+// của lib/agent/nguoi-khac-prompt.ts nhưng nhẹ hơn: đây là người trong nhà,
+// người hỏi có lý do chính đáng để lo cho họ (cha mẹ hỏi con, vợ hỏi chồng).
+const LUAT_NGUOI_NHA =
+  'Người này KHÔNG có mặt — nói theo hướng người hỏi nên đỡ, nhắc, đồng hành với họ thế nào. ' +
+  'KHÔNG phán bệnh tật, tai nạn, chuyện xấu như điều chắc chắn; KHÔNG so ai "số tốt hơn" ai trong nhà.';
+
+function vnToday(): { d: number; m: number; y: number } {
+  const p = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', day: 'numeric', month: 'numeric', year: 'numeric' })
+    .formatToParts(new Date());
+  const g = (t: string) => Number(p.find((x) => x.type === t)?.value);
+  return { d: g('day'), m: g('month'), y: g('year') };
+}
+
+function birthLine(b: BirthParams): string {
+  const gio = b.hourBranch != null && b.hourBranch >= 0 && b.hourBranch < 12 ? `, giờ ${CHI_GIO[b.hourBranch]}` : '';
+  return `${b.gender === 'nu' ? 'nữ' : 'nam'}, sinh ${b.day}/${b.month}/${b.year}${b.isLunar ? ' âm lịch' : ''}${gio}`;
+}
+const CHI_GIO = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
+
+async function execXemNguoiNha(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  const m = findMember(ctx.family, input?.ten);
+  if (!m) {
+    const names = ctx.family.map((x) => x.ten).join(', ') || '(trống)';
+    return { content: `Không có "${String(input?.ten || '')}" trong sổ người nhà (sổ đang có: ${names}). Hỏi lại người dùng đó là ai, đừng đoán.`, label: 'Tìm lá số người nhà' };
+  }
+  const nam = Math.floor(Number(input?.nam || currentYearVN()));
+  const res = computeLaso(m.birth, Number.isFinite(nam) ? nam : undefined);
+  if (!res.ok || !res.ls) {
+    return {
+      content: `Chưa lập được lá số ${m.ten}: ${String(res.error || 'lỗi không rõ').replace(/\.$/, '')}. Nói với người dùng cần bổ sung gì (thường là giờ sinh) ở trang Sổ lá số — đừng tự luận thay.`,
+      label: `Đọc lá số ${m.ten}`,
+    };
+  }
+  return {
+    content:
+      `— LÁ SỐ NGƯỜI NHÀ: ${m.ten} (${birthLine(m.birth)}) —\n` +
+      `Đây là lá số của ${m.ten}, KHÔNG phải của người đang hỏi. Chuyện của ${m.ten} thì luận từ đúng dữ liệu dưới đây; lá số người hỏi (trong phần hệ thống) chỉ dùng khi cần nói chuyện giữa hai người. ${LUAT_NGUOI_NHA}\n\n` +
+      extractLasoContext(res.ls, ctx.question) +
+      '\n\n' +
+      execLasoTool('tra_tieu_van', res.ls, { nam }),
+    label: `Đang đọc lá số ${m.ten}...`,
+  };
+}
+
+/** Một ô tháng gọn: "Tài Bạch (sát: Kình Dương · bại: Đại Hao · cát: Hóa Lộc)". */
+function oThang(t: ThangKhung): string {
+  if (t.loi) return '?';
+  const bits = [
+    t.satTinh.length ? 'sát: ' + t.satTinh.join(', ') : '',
+    t.baiTinh.length ? 'bại: ' + t.baiTinh.join(', ') : '',
+    t.catTinh.length ? 'cát: ' + t.catTinh.join(', ') : '',
+  ].filter(Boolean);
+  return t.cungNguyetHan + (bits.length ? ` (${bits.join(' · ')})` : '');
+}
+
+async function execTraCaNha(ctx: ToolContext): Promise<ToolRunResult> {
+  const today = vnToday();
+  const people: { ten: string; birth: BirthParams }[] = [];
+  if (ctx.birth) people.push({ ten: String(ctx.birth.name || '').trim() || 'Người hỏi', birth: ctx.birth });
+  for (const m of ctx.family) people.push({ ten: m.ten, birth: m.birth });
+
+  const rows: { ten: string; thangs: ThangKhung[] }[] = [];
+  const thieu: string[] = [];
+  const dong: string[] = [];
+  for (const p of people) {
+    const res = computeLaso(p.birth, today.y);
+    if (!res.ok || !res.ls) { thieu.push(`${p.ten} (${String(res.error || 'không lập được lá số').replace(/\.$/, '')})`); continue; }
+    const k = buildKhung12Thang(res.ls as Rec, today.d, today.m, today.y);
+    rows.push({ ten: p.ten, thangs: k.thangs });
+    const t0 = k.thangs[0];
+    dong.push(`- ${p.ten} (${birthLine(p.birth)}): tiểu hạn ${t0?.cungTieuHan || '?'}, lưu niên ${t0?.cungLuuNien || '?'}`);
+  }
+  if (rows.length < 2) {
+    return { content: 'Chưa đủ hai lá số lập được để xếp cả nhà cạnh nhau' + (thieu.length ? ': ' + thieu.join('; ') : '') + '. Nói người dùng bổ sung ở trang Sổ lá số.', label: 'Xếp lá số cả nhà' };
+  }
+
+  const L: string[] = [];
+  L.push(`— CẢ NHÀ ${rows.length} NGƯỜI, 12 THÁNG ÂM TỚI (engine tính, mỗi ô là cung nguyệt hạn + sao trong chùm tam phương tứ chính) —`);
+  L.push(LUAT_NGUOI_NHA);
+  L.push(...dong);
+  const n = rows[0].thangs.length;
+  // Tháng mà HAI người trở lên cùng hạn vào MỘT cung (vd cả hai vợ chồng
+  // cùng Tài Bạch) — dữ kiện engine thuần, không chấm điểm. ĐỪNG đếm sát/bại
+  // để "chấm tháng xấu": chùm tam phương tứ chính hiếm khi sạch sao xấu nên
+  // gần như tháng nào cũng trúng, và đó là một công thức tự đặt.
+  const trung: string[] = [];
+  for (let i = 0; i < n; i++) {
+    const t = rows[0].thangs[i];
+    L.push(`${t.nhan}${t.dangDienRa ? ' (đang diễn ra)' : ''}:`);
+    const theoCung = new Map<string, string[]>();
+    for (const r of rows) {
+      const x = r.thangs[i];
+      if (!x) continue;
+      L.push(`  · ${r.ten}: ${oThang(x)}`);
+      if (!x.loi) theoCung.set(x.cungNguyetHan, [...(theoCung.get(x.cungNguyetHan) || []), r.ten]);
+    }
+    for (const [cung, ai] of theoCung) if (ai.length >= 2) trung.push(`${t.nhan}: ${ai.join(', ')} cùng hạn vào ${cung}`);
+  }
+  L.push(trung.length ? 'THÁNG NHIỀU NGƯỜI CÙNG HẠN VÀO MỘT CUNG: ' + trung.join(' · ') : 'Không tháng nào hai người cùng hạn vào một cung.');
+  if (thieu.length) L.push('Chưa xếp được: ' + thieu.join('; ') + ' — nhắc người dùng bổ sung ở trang Sổ lá số.');
+  return { content: L.join('\n'), label: `Đang xếp lá số cả nhà (${rows.length} người)...` };
 }

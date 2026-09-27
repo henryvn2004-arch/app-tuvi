@@ -238,6 +238,13 @@ export interface ChatRequestV1 {
    * có tool riêng thì thêm ID vào đây VÀ vào whitelist trong `validateChatRequest`.
    */
   addressMaster?: 'tam-kinh' | 'linh-co';
+  /**
+   * "Cả nhà mình" (additive, 2026-09-27) — khách gõ "@Tên người nhà": id của
+   * mục `user_charts` (nhóm gia_dinh) ⇒ server bắt model đọc lá số người đó
+   * (xem_nguoi_nha). Server chỉ khớp trong sổ CỦA CHÍNH người đăng nhập — id
+   * lạ/của người khác thì bị bỏ qua im lặng, không lộ gì.
+   */
+  addressMember?: number;
   client: ClientInfo;
 }
 
@@ -403,6 +410,10 @@ export function validateChatRequest(body: unknown):
   // thì thêm ID vào đây — kiểu union ở trên chỉ chặn lúc biên dịch.
   if (b.addressMaster != null && b.addressMaster !== 'tam-kinh' && b.addressMaster !== 'linh-co') {
     return { ok: false, error: 'addressMaster không hợp lệ' };
+  }
+
+  if (b.addressMember != null && !(Number.isInteger(b.addressMember) && (b.addressMember as number) > 0)) {
+    return { ok: false, error: 'addressMember không hợp lệ' };
   }
 
   if (b.scenario != null) {

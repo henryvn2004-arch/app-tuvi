@@ -790,8 +790,46 @@
   // dấu ("@tam" → Tâm Kính). Chọn = thay "@chữ-đang-gõ" bằng "@Tên ". Chỉ ở
   // luồng lá số (`ctx.birth && !ctx.scenario`) — ngoài đó "@" không có nghĩa.
   function foldVi(s) { return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase(); }
+  // "Cả nhà mình" (docs/DAC-TRUNG-PLAN.md) — người nhà trong Sổ lá số (nhóm
+  // gia_dinh) đứng ĐẦU menu "@": một cử chỉ gọi được cả người lẫn thầy. Tải
+  // lười ở lần gõ "@" đầu tiên; chưa đăng nhập / lỗi mạng → [] im lặng.
+  var _family = null, _familyLoading = false;
+  function loadFamily(done) {
+    if (_family || _familyLoading) return;
+    var tk = getToken(); if (!tk) { _family = []; return; }
+    _familyLoading = true;
+    fetch('/api/charts', { headers: { Authorization: 'Bearer ' + tk } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        var b = ctx && ctx.birth;
+        _family = ((d && d.items) || []).filter(function (it) {
+          var x = it.birth || {};
+          if (it.relation !== 'gia_dinh' || !x.ngay) return false;
+          // Lá số đang xem (chính người hỏi) không phải "người nhà".
+          return !(b && +x.ngay === +b.day && +x.thang === +b.month && +x.nam === +b.year);
+        }).map(function (it) {
+          return { id: it.id, name: String(it.label || (it.birth && it.birth.hoten) || ('Người nhà ' + it.birth.nam)).trim() };
+        });
+      })
+      .catch(function () { _family = []; })
+      .then(function () { _familyLoading = false; if (done) done(); });
+  }
+  // "@Tên người nhà" ở bất kỳ đâu trong câu → id `user_charts` (addressMember,
+  // lib/contract/v1.ts). Tên dài khớp trước để "@Bé An" không bị "@Bé" nuốt.
+  function detectAddressMember(text) {
+    if (!_family || !_family.length) return null;
+    var t = String(text || '').toLocaleLowerCase('vi-VN');
+    var list = _family.slice().sort(function (a, b) { return b.name.length - a.name.length; });
+    var best = null, at = -1;
+    for (var i = 0; i < list.length; i++) {
+      var k = t.indexOf('@' + list[i].name.toLocaleLowerCase('vi-VN'));
+      if (k >= 0 && (at < 0 || k < at)) { at = k; best = list[i].id; }
+    }
+    return best;
+  }
   function mentionCandidates() {
     var out = [];
+    (_family || []).forEach(function (m) { out.push({ a: m, sub: 'Người nhà', member: true }); });
     if (_author) out.push({ a: _author, sub: 'Đang tiếp chuyện' });
     GUEST_MASTERS.forEach(function (g) {
       var a = authorById(g.id);
@@ -809,7 +847,8 @@
     function paint() {
       pop.innerHTML = items.map(function (x, i) {
         return '<div class="mp-it' + (i === sel ? ' on' : '') + '" role="option" aria-selected="' + (i === sel) + '" data-i="' + i + '">' +
-          '<img src="/authors/' + x.a.id + '.jpg" alt=""><span><b>' + esc(x.a.name) + '</b><em>' + esc(x.sub) + '</em></span></div>';
+          (x.member ? '<i class="mp-ini" aria-hidden="true">' + esc(x.a.name.replace(/^(anh|chị|em|bé|con|cô|chú|bác|ông|bà)\s+/i, '').charAt(0).toUpperCase()) + '</i>'
+            : '<img src="/authors/' + x.a.id + '.jpg" alt="">') + '<span><b>' + esc(x.a.name) + '</b><em>' + esc(x.sub) + '</em></span></div>';
       }).join('');
     }
     function update() {
@@ -817,6 +856,7 @@
       var upto = ta.value.slice(0, ta.selectionStart || 0);
       var m = /(^|\s)@([^\s@]*)$/.exec(upto);
       if (!m) { close(); return; }
+      if (!_family) loadFamily(update);
       var q = foldVi(m[2]);
       items = mentionCandidates().filter(function (x) { return !q || foldVi(x.a.name).indexOf(q) >= 0; });
       if (!items.length) { close(); return; }
@@ -831,7 +871,7 @@
       ta.value = ta.value.slice(0, start) + ins + ta.value.slice(caret);
       var pos = start + ins.length;
       ta.setSelectionRange(pos, pos);
-      try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'mention_pick', master: x.a.id } }); } catch (e) { /* ignore */ }
+      try { track('cta_click', { tool_id: ACTIVE, meta: x.member ? { from: 'mention_pick', member: true } : { from: 'mention_pick', master: x.a.id } }); } catch (e) { /* ignore */ }
       close(); autoGrow(ta); ta.focus();
     }
     ta.addEventListener('input', function () { sel = 0; update(); });
@@ -5192,6 +5232,8 @@
         // mời chính mình.
         if (addressed && _author && addressed === _author.id) addressed = null;
         if (addressed) body.addressMaster = addressed;
+        var member = detectAddressMember(text);
+        if (member) body.addressMember = member;
       }
       if (ctx.wrap) body.wrap = ctx.wrap;
       if (ctx.wrapBirthB) body.wrapBirthB = ctx.wrapBirthB;
