@@ -5163,6 +5163,10 @@
       // một thầy khác không có ý nghĩa gì để server xử lý.
       if (!ctx.scenario) {
         var addressed = detectAddressMaster(text);
+        // "@" đúng thầy ĐANG tiếp chuyện (vd vào từ trang "Các Thầy" chọn Tâm
+        // Kính) thì không có ai để "mời vào" — gửi addressMaster là ép thầy tự
+        // mời chính mình.
+        if (addressed && _author && addressed === _author.id) addressed = null;
         if (addressed) body.addressMaster = addressed;
       }
       if (ctx.wrap) body.wrap = ctx.wrap;
