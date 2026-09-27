@@ -457,6 +457,9 @@ html.sb-mini .sbn-menu{right:auto;width:240px}
 .stm-ava{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);margin-bottom:12px}
 .stm-t{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--heading);margin-bottom:8px}
 .stm-d{font-size:13.5px;color:var(--text-mid);line-height:1.6;margin-bottom:18px}
+.stm-ul{list-style:none;margin:10px 0 0;padding:0;text-align:left}
+.stm-ul li{display:flex;gap:8px;align-items:flex-start;margin:6px 0}
+.stm-ck{color:var(--blue);font-weight:700;flex:none}
 /* `width:100%;box-sizing:border-box` BẮT BUỘC dù đã có `display:block`: form
    control (`<button>`) không tôn trọng `display:block` cho việc TÍNH WIDTH
    như div thường — mặc định vẫn shrink-to-fit theo nội dung rồi neo trái

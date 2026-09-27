@@ -124,6 +124,16 @@ export async function railBonusTurnsPerPurchase(): Promise<number> {
   return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
 }
 
+/** Số câu hỏi Thầy TẶNG khi đăng ký (0 = tắt). Nguồn thứ BA của
+ *  `rail_free_turns`, cấp một lần ở `/api/signup-signal`. Đếm bằng CÂU chứ
+ *  không bằng Lượng: quà Lượng từng bị cắt nửa IM LẶNG khi giá rail tăng 5→10
+ *  (tuần 14/09) — lượt tặng thì không trôi theo giá. Vốn thật ~70–130đ/câu
+ *  (đo `events` llm_usage tool_id='chat', Gemini Flash, 2026-09). */
+export async function railSignupFreeTurns(): Promise<number> {
+  const n = Number(await getConfigValue<number>('rail.signup_free_turns', 10));
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
+}
+
 /** Còn bao nhiêu lượt rail tặng (để cổng paywall không chặn oan người hết Lượng
  *  nhưng vẫn còn lượt tặng). */
 export async function railFreeRemaining(userId: string): Promise<number> {

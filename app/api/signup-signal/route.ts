@@ -9,6 +9,7 @@ import { NextRequest } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { createHash } from 'crypto';
 import { ok, err, options, parseBody } from '@/lib/cors';
+import { railFreeGrant, railSignupFreeTurns } from '@/lib/billing/viral-budget';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -87,6 +88,18 @@ export async function POST(request: NextRequest) {
     // Chỉ thu hồi SAU khi chèn tín hiệu thành công (đảm bảo 1 lần/user).
     if (willClaw) {
       await sb.rpc('revoke_signup_bonus', { p_user: user.id, p_amount: bonusAmount });
+    }
+
+    // Câu hỏi Thầy TẶNG khi đăng ký — cùng cửa "1 lần/user" với tín hiệu ở trên.
+    // Chỉ cấp khi DB ĐÃ cấp quà đăng ký (`bonusAmount > 0` — trigger đã loại
+    // phiên ẩn danh) và không bị thu hồi. Kiểm lại `is_anonymous` + tài khoản
+    // mới (<24h) ở đây vì tài khoản CŨ chưa từng bắn beacon cũng đi qua cửa này.
+    const isNew = Date.now() - new Date(user.created_at).getTime() < 24 * 3600 * 1000;
+    if (!willClaw && bonusAmount > 0 && !user.is_anonymous && isNew) {
+      const n = await railSignupFreeTurns();
+      if (n > 0 && !(await railFreeGrant(user.id, n))) {
+        console.error('[signup-signal] rail_free_grant thất bại', user.id);
+      }
     }
     return ok({ ok: true, clawed: willClaw });
   } catch (e: unknown) {

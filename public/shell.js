@@ -2644,13 +2644,18 @@
   // đăng ký (miễn phí) chứ không phải nạp tiền. Con số quà đăng ký lấy từ
   // SERVER — hứa "25 Lượng" mà DB đổi thành số khác là hứa hụt ngay lần đầu,
   // đúng lỗi đã gặp ở topup.html.
-  var _anonBonus = null; // Lượng quà đăng ký, đọc 1 lần
-  function openAnonSignupModal() {
+  var _anonBonus = null; // {bonus, freeTurns} quà đăng ký, đọc 1 lần
+  function openAnonSignupModal(pendingQ) {
     if (document.querySelector('.sh-topup-modal')) return;
     var thay = authorLabel();
     var price = _rc.price;
-    function build(bonus) {
-      var câu = (bonus && price) ? Math.floor(bonus / price) : null;
+    function build(g) {
+      // Tổng câu hỏi được thêm = câu TẶNG (`rail.signup_free_turns`, cấp ở
+      // /api/signup-signal) + số câu mà Lượng quà đủ trả. Đếm bằng CÂU vì
+      // "50 Lượng" là con số trừu tượng, "15 câu" thì ai cũng hiểu.
+      var bonus = g && g.bonus, free = (g && g.freeTurns) || 0;
+      var câu = free + ((bonus && price) ? Math.floor(bonus / price) : 0);
+      var li = function (t) { return '<li><span class="stm-ck">✓</span><span>' + t + '</span></li>'; };
       var wrap = document.createElement('div');
       wrap.className = 'sh-topup-modal';
       wrap.innerHTML =
@@ -2658,10 +2663,13 @@
           '<button class="stm-x" aria-label="Đóng">✕</button>' +
           '<img class="stm-ava" src="' + authorAva() + '" alt="">' +
           '<div class="stm-t">Hết phần dùng thử rồi…</div>' +
-          '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn nói về lá số này. ' +
-            (câu ? 'Đăng ký (miễn phí) là được tặng <b>' + bonus + ' Lượng</b> — đủ hỏi thêm <b>' + câu + ' câu</b> nữa.'
-                 : 'Đăng ký miễn phí để được tặng Lượng và hỏi tiếp.') +
-            ' Lá số đang xem vẫn giữ nguyên.</div>' +
+          '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn nói về lá số này. Đăng ký miễn phí để:' +
+            '<ul class="stm-ul">' +
+              li(câu ? 'Hỏi Thầy thêm <b>' + câu + ' câu</b> miễn phí' + (pendingQ ? ' — câu vừa rồi được trả lời ngay' : '')
+                     : 'Được tặng lượt hỏi Thầy miễn phí') +
+              li('Lưu lá số và cuộc trò chuyện — đổi máy vẫn còn') +
+              li('Mỗi sáng nhận vận ngày riêng cho lá số của bạn') +
+            '</ul></div>' +
           '<button class="stm-btn" type="button" data-act="do-signup">Đăng ký miễn phí →</button>' +
           '<button class="stm-later" type="button">Để sau</button>' +
         '</div>';
@@ -2676,15 +2684,24 @@
         // 'signup' — nút này LÀ lời mời đăng ký, không phải đăng nhập; khách
         // bấm vào đây chưa từng có tài khoản (đã cắn: modal từng mở mặc định
         // tab Đăng nhập, người mới không biết phải tự bấm qua tab bên cạnh).
-        if (window.Auth && Auth.require) Auth.require(function () { loadRailStatus(); refreshHistoryUI && refreshHistoryUI(); }, 'signup');
+        if (window.Auth && Auth.require) Auth.require(function () {
+          loadRailStatus(); refreshHistoryUI && refreshHistoryUI();
+          // Đăng ký tại chỗ (email, không tải lại trang) → hỏi lại ngay câu dở.
+          // Đường OAuth tải lại trang thì setContext đọc `app_pending_ask`.
+          if (pendingQ) {
+            try { sessionStorage.removeItem('app_pending_ask'); localStorage.removeItem('auth_return_to'); } catch (e) { /* ignore */ }
+            pushLocalToServer();
+            ask(pendingQ);
+          }
+        }, 'signup');
       });
     }
     if (_anonBonus != null) { build(_anonBonus); return; }
-    // Quà đăng ký nằm trong app_config `credits.signup_bonus_variants` (mảng) —
-    // lấy mức THẤP NHẤT để không hứa quá.
+    // Quà đăng ký nằm trong app_config (`credits.signup_bonus_variants` lấy mức
+    // THẤP NHẤT + `rail.signup_free_turns`) — đọc từ server, không chép số.
     fetch('/api/payment?action=signup-bonus')
       .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (d) { _anonBonus = (d && d.bonus) || null; build(_anonBonus); })
+      .then(function (d) { _anonBonus = d ? { bonus: d.bonus || null, freeTurns: Number(d.freeTurns) || 0 } : null; build(_anonBonus); })
       .catch(function () { build(null); });
   }
 
@@ -5049,10 +5066,19 @@
         try { var _ed = await res.clone().json(); _isTrial = _ed && _ed.code === 'anon_trial_exhausted'; } catch (e) { /* ignore */ }
         if (_isTrial) {
           _rc.anon = true; _rc.anonLeft = 0; renderRailMeter();
-          typing.innerHTML = '<p>Hết phần dùng thử. <a href="#" id="railSignupLink" style="color:var(--blue);font-weight:600">Đăng ký miễn phí</a> để được tặng Lượng và hỏi tiếp — lá số vẫn xem miễn phí.</p>';
+          // GIỮ câu đang hỏi dở — cùng cơ chế nhánh đăng nhập bên dưới. Trước đây
+          // câu này bị bỏ: đăng ký xong (nhất là OAuth, tải lại trang) người ta
+          // phải tự gõ lại, và 45% người đăng ký không hỏi thêm câu nào.
+          var _tq = text;
+          try {
+            sessionStorage.setItem('app_pending_ask', JSON.stringify({ q: _tq, t: Date.now() }));
+            var _ts = location.search;
+            localStorage.setItem('auth_return_to', location.pathname + (/[?&]auto=1\b/.test(_ts) ? _ts : (_ts ? _ts + '&auto=1' : '?auto=1')));
+          } catch (e) { /* ignore */ }
+          typing.innerHTML = '<p>Hết phần dùng thử. <a href="#" id="railSignupLink" style="color:var(--blue);font-weight:600">Đăng ký miễn phí</a> để hỏi tiếp — câu vừa rồi sẽ được trả lời ngay sau khi đăng ký.</p>';
           var _sl = document.getElementById('railSignupLink');
-          if (_sl) _sl.addEventListener('click', function (ev) { ev.preventDefault(); openAnonSignupModal(); });
-          openAnonSignupModal();
+          if (_sl) _sl.addEventListener('click', function (ev) { ev.preventDefault(); openAnonSignupModal(_tq); });
+          openAnonSignupModal(_tq);
           streaming = false; setSend(true); messages.pop(); return;
         }
         // Chưa đăng nhập → LƯU câu hỏi + đường quay lại (kèm ?auto=1 để tự lập
