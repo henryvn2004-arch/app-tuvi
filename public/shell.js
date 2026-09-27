@@ -4385,6 +4385,7 @@
       // bị thay hẳn); bỏ qua CẢ setContext, đừng ném lỗi giữa chừng.
       if (!c || !t) return;
       if (o.label) { c.style.display = ''; t.innerHTML = 'Đang gắn: <b>' + esc(o.label) + '</b>'; }
+      if (CHAT_HOME) paintHomeCtx(); // màn chat trang chủ: nhãn là LÁ SỐ đang hỏi, không phải tên kênh
       var ta = document.getElementById('railInput');
       ta.disabled = false; ta.placeholder = o.placeholder || 'Hỏi bất cứ điều gì về lá số này…';
       document.getElementById('railSend').disabled = false;
@@ -4452,6 +4453,7 @@
       }
       _navQ = q || ''; _navNeedBirth = !!needBirth; joinThay(id);
     },
+    meetThay: function (id) { if (!authorById(id) || _navDone) return; _navQ = ''; joinThay(id); introThay(id); },
     openCmd: openCmd,
     toggleTheme: toggleTheme,
     // Mở rail = lời mời đã được nhận → tắt orb. Nếu không tắt thì nó nhấp nháy
@@ -4797,7 +4799,7 @@
   // nguồn với mọi tool chat-first), nạp lười: `tuvi-form.js` ném lỗi nếu
   // `vn-timezone.js` chưa có, nên nạp TUẦN TỰ. Có lá số thì rail gửi `birth`,
   // server tự lập lá số — y như lúc trang mở với lá số đã nhớ.
-  function askBirthHome(cb) {
+  function askBirthHome(cb, q1) {
     var chat = document.getElementById('chat');
     if (!chat || !ctx) return;
     var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
@@ -4820,8 +4822,8 @@
         }
         TuviForm.renderChat({
           prefix: 'home',
-          q1: cb ? 'Chuyện này thầy phải xem lá số của con mới nói cho sát. Cho thầy xin họ tên và giới tính nhé.'
-                 : 'Cho mình xin họ tên và giới tính của bạn nhé.',
+          q1: q1 || (cb ? 'Chuyện này thầy phải xem lá số của con mới nói cho sát. Cho thầy xin họ tên và giới tính nhé.'
+                 : 'Cho mình xin họ tên và giới tính của bạn nhé.'),
           onDone: function (d) {
             try { Shell.rememberBirth(d); } catch (e) { /* ignore */ }
             var b = inlineBirth(d);
@@ -4829,12 +4831,29 @@
             if (_ctxOpts) { _ctxOpts.birth = b; delete _ctxOpts.scenario; }
             release();
             try { track('nav_birth', { tool_id: ACTIVE || 'home', meta: { from: cb ? 'join' : 'hero' } }); } catch (e) { /* ignore */ }
+            paintHomeCtx();
             if (cb) { cb(); return; }
-            navBubble('<p>Đã có lá số của <b>' + esc(b.name || 'bạn') + '</b>. Giờ kể chuyện của bạn đi, mình mời đúng thầy vào xem.</p>');
+            if (_navDone) thayBubble('<p>Thầy đã lập lá số của <b>' + esc(b.name || 'con') + '</b>. Con hỏi tiếp đi.</p>');
+            else navBubble('<p>Đã có lá số của <b>' + esc(b.name || 'bạn') + '</b>. Giờ kể chuyện của bạn đi, mình mời đúng thầy vào xem.</p>');
             if (input) input.focus();
           },
         });
       });
+    });
+  }
+  // Thanh "Đang xem lá số: <tên · ngày sinh> [Đổi]" đầu khung chat trang chủ —
+  // Henry 2026-09-27: khách phải biết cuộc chat này đang hỏi cho LÁ SỐ nào.
+  // Chưa có lá số thì ẩn (lời chào đã có nút "Lập lá số").
+  function paintHomeCtx() {
+    var c = document.getElementById('railCtx'), t = document.getElementById('railCtxTxt');
+    if (!c || !t) return;
+    var b = ctx && ctx.birth;
+    if (!b || !b.day || !b.month || !b.year) { c.style.display = 'none'; return; }
+    c.style.display = '';
+    t.innerHTML = 'Đang xem lá số: <b>' + esc((b.name ? b.name + ' · ' : '') + b.day + '/' + b.month + '/' + b.year) + '</b>' +
+      '<button type="button" class="ctx-chg">Đổi</button>';
+    t.querySelector('.ctx-chg').addEventListener('click', function () {
+      askBirthHome(null, _navDone ? 'Con muốn thầy xem lá số của ai? Cho thầy xin họ tên và giới tính nhé.' : null);
     });
   }
   var _navNeedBirth = false;
@@ -4859,12 +4878,11 @@
       var nghia = r && r.nghia;
       var mon = r && r.mon;
       _navNeedBirth = !!(r && r.chuDe); // chủ đề cung (tình duyên, công việc…) cần lá số
-      var row = navBubble('<p>' + (nghia ? 'Chuyện ' + esc(nghia) + ' thì' : 'Câu này thì') + ' người xem kỹ nhất là <b>Thầy ' + esc(a.name) + '</b>. Mình mời thầy vào nhé?</p>' +
-        '<div class="nav-card"><img src="/authors/' + a.id + '.jpg" alt="" width="48" height="48" loading="lazy"><div><b>Thầy ' + esc(a.name) + '</b>' + (mon ? '<span>' + esc(mon) + '</span>' : '') + '</div></div>' +
-        '<div class="nav-acts"><button type="button" class="nav-ok">Mời thầy vào</button><button type="button" class="nav-other">Chọn thầy khác</button></div>');
-      var lock = function () { row.querySelectorAll('button').forEach(function (b) { b.disabled = true; }); };
-      row.querySelector('.nav-ok').addEventListener('click', function () { lock(); joinThay(a.id); });
-      row.querySelector('.nav-other').addEventListener('click', function () { openAuthorModal(function (id) { lock(); joinThay(id); }); });
+      navBubble('<p>' + (nghia ? 'Chuyện ' + esc(nghia) + ' thì' : 'Câu này thì') + ' người xem kỹ nhất là <b>Thầy ' + esc(a.name) + '</b>. Mình mời thầy vào ngay.</p>' +
+        '<div class="nav-card"><img src="/authors/' + a.id + '.jpg" alt="" width="48" height="48" loading="lazy"><div><b>Thầy ' + esc(a.name) + '</b>' + (mon ? '<span>' + esc(mon) + '</span>' : '') + '</div></div>');
+      // Henry 2026-09-27: mời thầy vào LUÔN, không bắt khách bấm "Mời thầy vào"
+      // — chờ một nhịp ngắn cho kịp đọc thẻ thầy rồi mới vào.
+      setTimeout(function () { joinThay(a.id); }, 700);
     };
     // Mạng chậm/lỗi thì vẫn phải mời được ai đó — rơi về thầy tiếp khách.
     setTimeout(function () { finish(null); }, 4000);
@@ -4895,6 +4913,41 @@
     };
     if (_navNeedBirth && !ctx.birth) { _navNeedBirth = false; askBirthHome(send); return; }
     send();
+  }
+
+  // Bấm vào một thầy ở trang chủ `/` (`/app?thay=<id>`, không kèm câu hỏi):
+  // thầy vào thẳng, tự giới thiệu mình xem gì (câu chào + môn đọc từ
+  // `master_profiles` qua ToolPrices — nguồn duy nhất, không chép chữ), rồi
+  // xin ngày sinh nếu chưa có lá số. Bắc Minh (xem tướng qua ảnh) và Linh Cơ
+  // (gieo quẻ) không cần lá số nên không xin.
+  var NO_BIRTH_THAY = { 'bac-minh': 1, 'linh-co': 1 };
+  function thayBubble(html) {
+    var chat = document.getElementById('chat');
+    var row = document.createElement('div'); row.className = 'msg a';
+    row.innerHTML = '<img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body">' + html + '</div>';
+    chat.appendChild(row); chat.scrollTop = chat.scrollHeight;
+  }
+  function introThay(id) {
+    var a = authorById(id); if (!a) return;
+    var done = false;
+    var say = function (m) {
+      if (done) return; done = true;
+      var input = document.getElementById('railInput');
+      thayBubble('<p>' + esc((m && m.greeting) || ('Thầy ' + a.name + ' đây.')) + '</p>' +
+        (m && m.discipline ? '<p>Thầy chuyên xem <b>' + esc(m.discipline) + '</b>.</p>' : ''));
+      if (NO_BIRTH_THAY[id] || !ctx || ctx.birth) { if (input) input.focus(); return; }
+      askBirthHome(function () {
+        thayBubble('<p>Thầy đã lập lá số của <b>' + esc((ctx.birth && ctx.birth.name) || 'con') + '</b>. Con muốn thầy xem chuyện gì trước?</p>');
+        if (input) input.focus();
+      }, 'Để thầy xem cho sát, cho thầy xin họ tên và giới tính của con trước nhé.');
+    };
+    setTimeout(function () { say(null); }, 3000); // mạng chậm thì vẫn chào
+    ensureToolPrices().then(function () {
+      if (!window.ToolPrices) return say(null);
+      window.ToolPrices.load().then(function (d) {
+        say(window.ToolPrices.masters(d).filter(function (m) { return m.id === id; })[0] || null);
+      }, function () { say(null); });
+    });
   }
 
   async function sendMsg() {
