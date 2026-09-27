@@ -257,53 +257,58 @@ export async function GET(): Promise<Response> {
     url: `${BASE}${s.href}`,
   })),
 })}</script>
+<link rel="stylesheet" href="/shell.css?v=62">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#0F2A3D;--gold:#7C6942;--gold-bright:#C8A96A;--text:#1a1a1a;--text-mid:#4a4a4a;--text-lt:#6b6b6b;--border:#D8D4CB;--border-lt:#E8E8E8;--bg:#fff;--bg-soft:#F4F2EC;--serif:'Noto Serif',Georgia,serif}
-body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
-.bc{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:12px 40px;font-size:12px;color:var(--text-lt);display:flex;gap:8px;align-items:center}
-.bc a{color:var(--text-lt);text-decoration:none}.bc a:hover{color:var(--navy)}.bc span{color:var(--border)}
-.lib-hero{background:var(--bg-soft);color:var(--navy);padding:64px 40px 48px;text-align:center;border-bottom:3px solid var(--gold-bright)}
-.lib-hero-label{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
-.lib-hero-title{font-family:var(--serif);font-size:38px;font-weight:600;margin-bottom:16px;line-height:1.25}
-.lib-hero-desc{font-size:15px;color:var(--text-mid);max-width:600px;margin:0 auto 28px;line-height:1.7}
-.lib-hero-count{display:inline-block;background:#F9F4EB;border:1px solid #e8d9b0;color:var(--gold);padding:8px 20px;font-size:13px;font-weight:600}
-.lib-body{max-width:1000px;margin:0 auto;padding:48px 40px 80px;width:100%;flex:1}
-.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
-.lib-card{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:var(--bg);border:1px solid var(--border-lt);border-radius:12px;padding:24px;transition:border-color .12s,box-shadow .12s}
-.lib-card:hover{border-color:var(--gold);box-shadow:0 6px 20px rgba(15,42,61,.08)}
-.lib-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
-.lib-card-title{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--navy);line-height:1.35}
-.lib-card-count{flex-shrink:0;font-size:12px;font-weight:600;color:var(--gold);background:#F9F4EB;border:1px solid #e8d9b0;border-radius:20px;padding:3px 10px;white-space:nowrap}
-.lib-card-desc{font-size:13.5px;color:var(--text-mid);line-height:1.6;flex:1}
-.lib-card-cta{margin-top:14px;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--gold)}
-.lib-cta{margin-top:40px;background:var(--bg-soft);border:1px solid var(--border);border-radius:14px;padding:28px;text-align:center}
-.lib-cta b{font-family:var(--serif);font-size:17px;display:block;margin-bottom:6px;color:var(--navy)}
-.lib-cta p{font-size:13.5px;color:var(--text-mid);margin-bottom:16px}
-.lib-cta a{display:inline-block;background:#C46A5E;color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:11px 28px;border-radius:9px}
-@media(max-width:700px){.bc,.lib-hero,.lib-body{padding-left:20px;padding-right:20px}.lib-hero-title{font-size:28px}.lib-grid{grid-template-columns:1fr}}
+/* Nằm TRONG khung app (sidebar chung của shell.js) — bấm "Thư viện" ở sidebar
+   không còn rơi ra trang có menu ☰ riêng của nav.js. Màu dùng biến của
+   shell.css để theo luôn giao diện tối. */
+.ws-body{padding:22px 26px 60px;max-width:1000px}
+.lib-hero{padding:4px 0 22px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.lib-hero-title{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--heading);line-height:1.3;margin:0 0 8px}
+.lib-hero-desc{font-size:14px;color:var(--text-mid);max-width:640px;line-height:1.7;margin:0 0 12px}
+.lib-hero-count{display:inline-block;background:var(--gold-lt);border:1px solid var(--line-2);color:var(--gold-soft);border-radius:20px;padding:4px 14px;font-size:12.5px;font-weight:600}
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.lib-card{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:var(--white);border:1px solid var(--line);border-radius:13px;padding:18px}
+.lib-card:hover{border-color:var(--gold-soft)}
+.lib-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
+.lib-card-title{font-family:var(--serif);font-size:16.5px;font-weight:600;color:var(--heading);line-height:1.35;margin:0}
+.lib-card-count{flex-shrink:0;font-size:12px;font-weight:600;color:var(--gold-soft);background:var(--gold-lt);border-radius:20px;padding:2px 10px;white-space:nowrap}
+.lib-card-desc{font-size:13px;color:var(--text-mid);line-height:1.6;flex:1;margin:0}
+.lib-card-cta{margin-top:12px;font-size:12px;font-weight:600;color:var(--gold-soft)}
+.lib-cta{margin-top:28px;background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+.lib-cta b{font-family:var(--serif);font-size:16px;display:block;margin-bottom:6px;color:var(--heading)}
+.lib-cta p{font-size:13.5px;color:var(--text-mid);margin:0 0 14px}
+.lib-cta a{display:inline-block;background:var(--red);color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:10px 26px;border-radius:9px}
+@media(max-width:700px){.ws-body{padding:16px 16px 48px}.lib-hero-title{font-size:22px}.lib-grid{grid-template-columns:1fr}}
 </style>
+</head><body>
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Thư viện</b><span>Tra cứu tử vi &amp; huyền học theo cổ pháp</span></div>
+    </div>
+    <div class="ws-body">
+      <div class="lib-hero">
+        <h1 class="lib-hero-title">Thư Viện Tử Vi &amp; Huyền Học</h1>
+        <p class="lib-hero-desc">Tổng hợp tri thức tử vi đẩu số theo cổ pháp — tra cứu theo mục, đọc khảo luận chuyên sâu, hoặc đối chiếu tư liệu gốc. Không cần nhập ngày sinh.</p>
+        ${totalKnown > 0 ? `<span class="lib-hero-count">${totalKnown}+ mục nội dung</span>` : ''}
+      </div>
+      <div class="lib-grid">${cards}</div>
+      <div class="lib-cta">
+        <b>Muốn xem lá số của riêng bạn?</b>
+        <p>Nhập ngày sinh — luận giải cá nhân hóa theo đúng lá số của bạn, không phải nội dung tổng hợp.</p>
+        <a href="/app?utm_source=thu-vien&utm_medium=internal&utm_campaign=library">Hỏi Thầy →</a>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/track.js?v=4" defer></script>
+<script src="/nav.js?v=45" data-icons-only></script>
 <script src="/auth.js?v=4"></script>
-</head><body><div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
-<div class="bc"><a href="/">Trang Chủ</a><span>›</span><span>Thư Viện</span></div>
-
-<div class="lib-hero">
-  <div class="lib-hero-label">Tra Cứu</div>
-  <h1 class="lib-hero-title">Thư Viện Tử Vi &amp; Huyền Học</h1>
-  <p class="lib-hero-desc">Tổng hợp tri thức tử vi đẩu số theo cổ pháp — tra cứu theo mục, đọc khảo luận chuyên sâu, hoặc đối chiếu tư liệu gốc. Không cần nhập ngày sinh.</p>
-  ${totalKnown > 0 ? `<span class="lib-hero-count">${totalKnown}+ mục nội dung</span>` : ''}
-</div>
-
-<div class="lib-body">
-  <div class="lib-grid">${cards}</div>
-  <div class="lib-cta">
-    <b>Muốn xem lá số của riêng bạn?</b>
-    <p>Nhập ngày sinh — luận giải cá nhân hóa theo đúng lá số của bạn, không phải nội dung tổng hợp.</p>
-    <a href="${BASE}/app?utm_source=thu-vien&utm_medium=internal&utm_campaign=library">Hỏi Thầy →</a>
-  </div>
-</div>
-
+<script>window.SHELL_ACTIVE='thu-vien';</script>
+<script src="/shell.js?v=112"></script>
 </body></html>`;
 
   return new NextResponse(html, {
