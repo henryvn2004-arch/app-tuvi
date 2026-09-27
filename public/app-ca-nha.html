@@ -43,6 +43,9 @@
 .cn-cta a{display:inline-flex;align-items:center;border-radius:999px;padding:10px 16px;font-size:13.5px;font-weight:600;text-decoration:none}
 .cn-cta .go{background:var(--navy);color:#fff}
 .cn-cta .sub{border:1px solid var(--line-2);color:var(--text-mid)}
+.cn-lich p{font-size:13px;color:var(--text-mid);line-height:1.55;margin:0 0 10px}
+.cn-lich-act{display:flex;gap:8px;flex-wrap:wrap}
+.cn-lich-act button{border:1px solid var(--line-2);background:var(--white);color:var(--heading);border-radius:999px;padding:9px 15px;font:inherit;font-size:13px;cursor:pointer}
 .cn-msg{padding:2.5rem 1rem;text-align:center;color:var(--text-lt);font-size:13.5px;line-height:1.7}
 @media(max-width:600px){.ws-body{padding:16px 16px 60px}}
 </style>
@@ -80,6 +83,12 @@
           <a class="go" id="cnAsk" href="/app">Hỏi thầy về cả nhà</a>
           <a class="sub" href="/app/so-la-so">Sổ lá số</a>
         </div>
+        <div class="cn-lich" id="cnLich" style="display:none">
+          <h2 class="cn-h2">Lịch riêng</h2>
+          <p>Đưa ngày tốt và ngày xung tuổi của riêng con vào lịch điện thoại. Lịch tự cập nhật mỗi ngày.</p>
+          <div class="cn-lich-act"><button type="button" data-k="ical">iPhone / Mac</button><button type="button" data-k="google">Google Lịch</button></div>
+          <p class="cn-lich-msg" id="cnLichMsg" hidden></p>
+        </div>
       </div>
     </div>
   </main>
@@ -88,7 +97,7 @@
 <script src="/nav.js?v=45" data-icons-only></script>
 <script src="/auth.js?v=4"></script>
 <script>window.SHELL_ACTIVE='so-la-so';</script>
-<script src="/shell.js?v=123"></script>
+<script src="/shell.js?v=124"></script>
 <script>
 (function(){
   // Số liệu: app/api/ca-nha (lib/engine/ca-nha.ts — cùng nguồn với tool rail
@@ -156,6 +165,17 @@
     }
     $('cnAsk').href = '/app?q=' + encodeURIComponent(ASK) + '&thay=thai-hu&laso=1';
     $('cnAsk').onclick = function(){ try { window.Track && Track.event && Track.event('cta_click', { tool_id: 'ca-nha', slug: 'ask_family' }); } catch(e){} };
+    // Lịch riêng — lá số "của con" là app_birth máy này; không có thì ẩn.
+    if (owner() && window.Shell && Shell.moLichRieng) {
+      $('cnLich').style.display = '';
+      $('cnLich').onclick = function(e){
+        var b = e.target.closest('button[data-k]'); if (!b) return;
+        Shell.moLichRieng(b.getAttribute('data-k')).then(function(okk){
+          var m = $('cnLichMsg'); m.hidden = false;
+          m.textContent = okk ? 'Xong rồi — lịch tự cập nhật mỗi ngày.' : 'Chưa thêm được lịch, con thử lại sau nhé.';
+        });
+      };
+    }
     $('cnMain').style.display = '';
   }
 

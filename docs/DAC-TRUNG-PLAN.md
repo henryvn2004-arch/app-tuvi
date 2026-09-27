@@ -77,11 +77,17 @@ Chữ hiển thị: "Mời **nhóm** hội chẩn" — KHÔNG "hội đồng" (l
      sáng; khoá `nhac_at` TRƯỚC khi gửi để không nhắn đôi). Chưa nối thì thầy vẫn hỏi lại
      trong màn chat chính. Ngay sau lần ghi sổ đầu tiên hỏi MỘT lần "con muốn thầy nhắn
      qua đâu? [Telegram] [Chỉ khi con mở app]" → nối bot qua `/api/channels/telegram/link`.
-   - **GĐ3 — Web push theo người** (chưa làm): push hiện CHỈ có đường gửi hàng loạt
+   - **GĐ3 — Web push theo người** (Henry 2026-09-27: TẠM chỉ Telegram, chưa làm): push hiện CHỈ có đường gửi hàng loạt
      (`_patches/edge-send-daily-push.deno.ts`, tag `van-ngay`). Cần sửa + deploy lại
      edge function (thêm lọc `user_id`, `tag` riêng) — đụng thông báo vận ngày đang chạy
      nên hỏi Henry trước.
-3. **Lịch riêng**.
+3. **Lịch riêng** ✅: feed `.ics` `GET /api/lich?t=<token>` (token = chartId + HMAC(chartId,
+   userId) ký bằng `SUPABASE_SERVICE_KEY` — ứng dụng lịch không gửi header đăng nhập),
+   `POST /api/lich {chartId}` cấp link webcal + Google Lịch. Nguồn số `computeTuan()`
+   (lib/engine/van-ngay.ts). Chỉ đưa ngày tốt (không xung tuổi) + ngày XUNG CHÍNH TUỔI —
+   ngày xấu chung bỏ (19/60 ngày ⇒ lịch thành tường cảnh báo). Lộ ra: lần quay lại thứ 3
+   trên màn chat chính (khi Sổ tiên tri không có gì hỏi lại) + khối "Lịch riêng" ở
+   `/app/ca-nha`. Một hàm client: `Shell.moLichRieng(kind)`.
 4. **Hội chẩn** — chờ 1–2 tuần số liệu `master_invite` trước.
 5. **Việc đời thật** — phải kịp trước tháng Chạp.
 6. Thầy có tính cách — không có việc giới thiệu; chỉnh `personas.ts` khi cần.
