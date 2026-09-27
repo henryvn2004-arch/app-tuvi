@@ -4860,12 +4860,11 @@
       var nghia = r && r.nghia;
       var mon = r && r.mon;
       _navNeedBirth = !!(r && r.chuDe); // chủ đề cung (tình duyên, công việc…) cần lá số
-      var row = navBubble('<p>' + (nghia ? 'Chuyện ' + esc(nghia) + ' thì' : 'Câu này thì') + ' người xem kỹ nhất là <b>Thầy ' + esc(a.name) + '</b>. Mình mời thầy vào nhé?</p>' +
-        '<div class="nav-card"><img src="/authors/' + a.id + '.jpg" alt="" width="48" height="48" loading="lazy"><div><b>Thầy ' + esc(a.name) + '</b>' + (mon ? '<span>' + esc(mon) + '</span>' : '') + '</div></div>' +
-        '<div class="nav-acts"><button type="button" class="nav-ok">Mời thầy vào</button><button type="button" class="nav-other">Chọn thầy khác</button></div>');
-      var lock = function () { row.querySelectorAll('button').forEach(function (b) { b.disabled = true; }); };
-      row.querySelector('.nav-ok').addEventListener('click', function () { lock(); joinThay(a.id); });
-      row.querySelector('.nav-other').addEventListener('click', function () { openAuthorModal(function (id) { lock(); joinThay(id); }); });
+      navBubble('<p>' + (nghia ? 'Chuyện ' + esc(nghia) + ' thì' : 'Câu này thì') + ' người xem kỹ nhất là <b>Thầy ' + esc(a.name) + '</b>. Mình mời thầy vào ngay.</p>' +
+        '<div class="nav-card"><img src="/authors/' + a.id + '.jpg" alt="" width="48" height="48" loading="lazy"><div><b>Thầy ' + esc(a.name) + '</b>' + (mon ? '<span>' + esc(mon) + '</span>' : '') + '</div></div>');
+      // Henry 2026-09-27: mời thầy vào LUÔN, không bắt khách bấm "Mời thầy vào"
+      // — chờ một nhịp ngắn cho kịp đọc thẻ thầy rồi mới vào.
+      setTimeout(function () { joinThay(a.id); }, 700);
     };
     // Mạng chậm/lỗi thì vẫn phải mời được ai đó — rơi về thầy tiếp khách.
     setTimeout(function () { finish(null); }, 4000);
