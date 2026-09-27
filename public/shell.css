@@ -408,6 +408,17 @@ body.chat-home .rail-report,body.chat-first-live.art-closed .rail-report{margin-
 
 /* ── HÀNG GỢI Ý CÂU HỎI (chip cố định trên ô nhập rail, cuộn ngang) ── */
 .rail-sugg{padding:8px 13px 0}
+.fam-strip{display:flex;align-items:center;gap:6px;padding:8px 13px 0;overflow-x:auto;scrollbar-width:none}
+.fam-strip::-webkit-scrollbar{display:none}
+.fam-strip .fs-l{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--gold-soft);flex:0 0 auto}
+.fam-strip .fs-c{flex:0 0 auto;border:1px solid var(--line-2);background:var(--white);border-radius:999px;padding:4px 10px;font:inherit;font-size:12.5px;color:var(--heading);cursor:pointer}
+@media(hover:hover){.fam-strip .fs-c:hover{border-color:var(--gold)}}
+.fam-inv{margin:10px 0 4px;padding:12px 14px;border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:12px;background:var(--white)}
+.fam-inv .fi-t{font-family:var(--serif);font-size:14px;line-height:1.5;color:var(--heading)}
+.fam-inv .fi-d{font-size:12px;color:var(--text-lt);margin-top:4px}
+.fam-inv .fi-act{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.fam-inv .fi-go{border:0;background:var(--navy);color:#fff;border-radius:999px;padding:8px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.fam-inv .fi-skip{border:1px solid var(--line-2);background:transparent;color:var(--text-mid);border-radius:999px;padding:8px 14px;font:inherit;font-size:13px;cursor:pointer}
 .sugg-row{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .sugg-row::-webkit-scrollbar{display:none}
 .sugg-row .chip{white-space:nowrap;flex:0 0 auto;font-family:inherit;font-size:12px;border:1px solid var(--line-2);background:var(--paper);color:var(--text-mid);border-radius:20px;padding:6px 12px;cursor:pointer}

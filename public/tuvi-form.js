@@ -592,6 +592,10 @@ window.TuviForm = (() => {
       skipHour   = false, // than-so-hoc: không cần giờ sinh — dừng sau bước 2
       requireName = false, // than-so-hoc: tính TỪ họ tên, trống là trang báo lỗi vào #birthPanel đang ẩn ⇒ kẹt
       submitLabel = 'Tiếp tục →',
+      // false = không đắp bong bóng "Con hỏi cho ai?" từ Sổ lá số. Luồng mời
+      // thêm lá số NGƯỜI NHÀ (shell.js) cần một người MỚI, và bấm chip ở đó còn
+      // gọi `Shell.rememberBirth` — đổi luôn lá số đang nhớ của chính người hỏi.
+      savedPicker = true,
       q1 = showName
         ? (showGender ? 'Cho thầy xin họ tên và giới tính của con nhé.' : 'Cho thầy xin họ tên đầy đủ của con nhé.')
         : 'Giới tính của con là gì?',
@@ -859,7 +863,7 @@ window.TuviForm = (() => {
       }
     }
     startManual();
-    tryOfferSaved();
+    if (savedPicker) tryOfferSaved();
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
