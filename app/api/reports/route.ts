@@ -10,7 +10,10 @@
 //
 // `?withCharts=1` nối thêm với Sổ Lá Số (`user_charts`) — trả kèm, cho mỗi
 // lá số đã lưu, report_key CHỜ SẴN của 7 tool chân dung (xem
-// lib/reports/chartMatch.ts vì sao CHỈ 7 tool, không phải cả 11).
+// lib/reports/chartMatch.ts vì sao CHỈ 7 tool, không phải cả 11), và `lasos`:
+// các bản Luận Giải / Chu Trình ĐÃ LƯU (`laso_public` của chính user) để trang
+// Báo cáo hiện tên người + nút "Gửi PDF" — đọc từ đây chứ không từ
+// user_reports vì dòng trước khi có user_reports không nằm trong bảng đó.
 export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
@@ -18,6 +21,7 @@ import { ok, err, options } from '@/lib/cors';
 import { authUserFromRequest } from '@/lib/api/tool-helpers';
 import { portraitReportKeysForChart } from '@/lib/reports/chartMatch';
 import type { ChartBirth } from '@/lib/charts/key';
+import { classifyLuanGiaiSlug } from '@/lib/pdf/luan-giai-slug';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -52,6 +56,32 @@ export async function GET(request: NextRequest) {
         `&select=id,label,birth,relation,last_used_at&order=last_used_at.desc&limit=30`,
       { headers: SB_HEADERS, cache: 'no-store' },
     );
+    const lasoRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/laso_public` +
+        `?user_id=eq.${encodeURIComponent(auth.user.id)}&luan_giai=not.is.null` +
+        `&select=slug,person_name,ngay_sinh,thang_sinh,nam_sinh,created_at&order=created_at.desc&limit=100`,
+      { headers: SB_HEADERS, cache: 'no-store' },
+    );
+    if (!lasoRes.ok) console.error('[reports] laso_public', lasoRes.status);
+    const lasoRaw = lasoRes.ok
+      ? ((await lasoRes.json()) as {
+          slug: string;
+          person_name: string | null;
+          ngay_sinh: number | null;
+          thang_sinh: number | null;
+          nam_sinh: number | null;
+          created_at: string;
+        }[])
+      : [];
+    const lasos = lasoRaw.flatMap((l) => {
+      const tool = classifyLuanGiaiSlug(l.slug);
+      if (!tool) return [];
+      const ngay = [l.ngay_sinh, l.thang_sinh, l.nam_sinh].every((v) => v != null)
+        ? `${l.ngay_sinh}/${l.thang_sinh}/${l.nam_sinh}`
+        : '';
+      return [{ tool, slug: l.slug, name: l.person_name || '', ngay, created_at: l.created_at }];
+    });
+
     const chartsRaw = chartsRes.ok
       ? ((await chartsRes.json()) as { id: number; label: string; birth: ChartBirth; relation: string | null }[])
       : [];
@@ -63,7 +93,7 @@ export async function GET(request: NextRequest) {
       return { id: c.id, label: c.label, birth: c.birth, relation: c.relation, owns };
     });
 
-    return ok({ reports: rows, charts });
+    return ok({ reports: rows, charts, lasos });
   } catch (e: unknown) {
     return err((e as Error).message);
   }

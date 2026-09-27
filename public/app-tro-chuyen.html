@@ -53,19 +53,17 @@
 <script src="/nav.js?v=45" data-icons-only></script>
 <script src="/auth.js?v=4"></script>
 <script>window.SHELL_ACTIVE='tro-chuyen';</script>
-<script src="/shell.js?v=117"></script>
+<script src="/shell.js?v=118"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=45"></script>
 <script>
 (function(){
   // 2026-09-24 (hellobot-ui-redesign): trang "Trò chuyện" — hộp thư hội thoại
   // GỘP mọi công cụ, thay cho việc lịch sử bị chia lẻ theo từng trang tool.
   //
-  // 🔁 Cách hợp nhất local + server GIỐNG HỆT tab "Lịch Sử" trong
-  // app-tai-khoan.html (local() + /api/tuvi-chats, lọc type bắt đầu 'app-') —
-  // CỐ Ý chép lại đúng logic đó thay vì gọi chéo (hai trang độc lập, không
-  // export hàm dùng chung). Sửa cách hợp nhất thì PHẢI sửa CẢ HAI nơi. Việc
-  // gộp app-tai-khoan.html#lichsu THÀNH một link trỏ vào đây là việc của đợt
-  // sau (đợt 1 chỉ dựng trang mới, không đụng trang tai-khoan).
+  // Đây là nơi DUY NHẤT liệt kê hội thoại (tab "Lịch Sử" ở Hồ sơ đã gỡ,
+  // 2026-09-27 — Hồ sơ chỉ còn lối tắt trỏ về đây). Link mở lại phiên đi qua
+  // `window.shellRestoreHref` (shell.js), KHÔNG tự ghép `/app/<tool>` — mã tool
+  // `home` ghép ra `/app/home` là 404.
   var TOOLMAP = { 'luan-giai': 'Luận giải Tử Vi', 'la-so': 'Lá số Tử Vi', 'bat-tu': 'Lá số Bát Tự', 'xem-tuoi': 'Xem tuổi vợ chồng', 'xem-lam-an': 'Xem tuổi làm ăn', 'tuong-hop': 'Tương hợp tuổi', 'sinh-con': 'Xem tuổi sinh con', 'chon-ngay': 'Chọn ngày tốt', 'dat-ten': 'Đặt tên con', 'dat-ten-dn': 'Đặt tên doanh nghiệp', 'ngu-hanh-ten': 'Ngũ hành tên', 'nap-am': 'Nạp âm ngũ hành', 'than-so-hoc': 'Thần số học', 'kim-lau': 'Kim Lâu & Tam Tai', 'bat-trach': 'Hướng Bát Trạch', 'kinh-dich': 'Kinh Dịch', 'xem-tuong': 'Xem tướng', 'phong-thuy': 'Phong thủy' };
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function rel(ts){
@@ -96,7 +94,7 @@
     document.getElementById('tcEmpty').style.display = 'none';
     document.getElementById('tcList').innerHTML = arr.map(function (s) {
       var label = TOOLMAP[s.tool] || s.tool;
-      return '<a class="tc-item" href="/app/' + esc(s.tool) + '?restore=' + encodeURIComponent(s.id) + '">' +
+      return '<a class="tc-item" href="' + esc(window.shellRestoreHref(s.tool, s.id)) + '">' +
         '<span class="tc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/></svg></span>' +
         '<span class="tc-tx"><b>' + esc(s.title || label) + '</b>' +
         '<span>' + esc(label) + (s.updatedAt ? ' · ' + rel(s.updatedAt) : '') + (s.lastMsg ? ' · ' + esc(String(s.lastMsg).slice(0, 46)) : '') + '</span></span>' +
