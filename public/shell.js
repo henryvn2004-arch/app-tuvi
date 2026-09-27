@@ -471,7 +471,7 @@
   var SB_MORE = [
     { id: 'tro-chuyen', label: 'Tất cả lượt Hỏi Thầy', href: '/app/tro-chuyen', icon: 'message-circle' },
     { id: 'nhiem-vu', label: 'Nhiệm vụ nhận Lượng', href: '/app/ho-so#nhiemvu', icon: 'check-circle' },
-    { id: 'moi-ban', label: 'Mời bạn bè', href: '/app/ho-so#ketnoi', icon: 'gift' },
+    { id: 'moi-ban', label: 'Mời bạn bè', href: '/app/ho-so#moiban', icon: 'gift' },
     { id: 'nap-luong', label: 'Nạp Lượng', href: '/app/nap-luong', icon: 'wallet' },
   ];
   var SB_RECENT_MAX = 20;
@@ -590,7 +590,13 @@
     } catch (e) { /* ignore */ }
     return out;
   }
-  function sbRecentHref(s) { return (s.tool === 'home' ? '/app' : '/app/' + s.tool) + '?restore=' + encodeURIComponent(s.id); }
+  // NGUỒN DUY NHẤT dựng link mở lại một phiên — `/app/tro-chuyen` và trang Hồ
+  // sơ gọi qua `window.shellRestoreHref`. Mã tool (SHELL_ACTIVE) KHÔNG phải lúc
+  // nào cũng là đường dẫn: tự ghép `/app/<tool>` là 404 (`/app/home` — chính là
+  // lượt Hỏi Thầy phổ biến nhất). Thêm công cụ mà mã ≠ route thì khai ở đây.
+  var RESTORE_ROUTE = { 'home': '/app', 'kieu-toc-phan-tich': '/app/kieu-toc', 'trang-diem-phan-tich': '/app/trang-diem' };
+  function sbRecentHref(s) { return (RESTORE_ROUTE[s.tool] || '/app/' + s.tool) + '?restore=' + encodeURIComponent(s.id); }
+  window.shellRestoreHref = function (tool, id) { return sbRecentHref({ tool: tool, id: id }); };
   function paintSidebarRecent(list) {
     var el = document.getElementById('sbRecent');
     if (!el) return;

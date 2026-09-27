@@ -1,7 +1,8 @@
 /* ============================================================
-   account-core.js — Logic trang Tài khoản (Hồ sơ / Ví Lượng /
-   Kết nối / Lịch sử). Tách từ profile.html để DÙNG CHUNG giữa
-   trang standalone /profile VÀ trang shell /app/tai-khoan.
+   account-core.js — Logic trang Hồ sơ `/app/ho-so` (= /app/tai-khoan,
+   app-tai-khoan.html): 3 tab Ví Lượng / Kết nối / Cài đặt. Lịch sử
+   (lá số, báo cáo, lượt Hỏi Thầy) KHÔNG ở đây — nó là trang riêng của
+   sidebar (/app/so-la-so, /app/bao-cao, /app/tro-chuyen).
    Thao tác trên id cố định; host tự lo chrome + icon renderer
    (window.mountIcons/iconHtml từ nav.js, hoặc shim ở trang shell).
    sourceType: script (không module) — hàm top-level = global cho onclick.
@@ -29,8 +30,8 @@ async function _tok() {
     return window.Auth?.getSession()?.access_token || null; // đường lùi: auth.js bản cũ còn trong cache
   } catch (e) { return null; }
 }
+// Lá số gần nhất — CHỈ để đính kèm vào góp ý (fbMeta), nạp lười khi mở Góp ý.
 var _pHistoryData = null;
-var _pChatState = { slug: null, product: 'laso', messages: [], lasoContext: null };
 
 // ── AUTH INIT ──
 async function initProfile() {
@@ -58,13 +59,10 @@ async function initProfile() {
   renderProfileHeader();
   var elDashboard = document.getElementById('dashboard');
   if (elDashboard) elDashboard.style.display = 'block';
-  loadHistory();
-  setupTabs();
-  setupHistFilters();
-  setupHistSearch();
+  // Sub-nav Cài đặt gắn TRƯỚC setupTabs(): hash `#gopy` bấm vào pane ngay lúc mở tab.
   setupAccountSettingsNav();
+  setupTabs();
   setupThemeChoice();
-  loadHeaderBalance();
   if (window.mountIcons) window.mountIcons();
 }
 
@@ -75,31 +73,7 @@ function ic(key, px) {
   return '<span style="display:inline-flex;width:' + px + 'px;height:' + px + 'px;vertical-align:-2px;color:currentColor">' + svg + '</span>';
 }
 
-// Chip lọc trong tab Lịch Sử: hiện/ẩn từng nhóm công cụ.
-function setupHistFilters() {
-  const chips = document.querySelectorAll('#tab-lichsu .hist-chip');
-  const groups = document.querySelectorAll('#tab-lichsu .hist-group');
-  chips.forEach(chip => chip.addEventListener('click', () => {
-    chips.forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    const f = chip.dataset.filter;
-    groups.forEach(g => { g.style.display = (f === 'all' || g.dataset.group === f) ? '' : 'none'; });
-  }));
-}
-
-// Ô tìm kiếm trong tab Lịch Sử: lọc theo chữ trên mọi thẻ (không đụng chip nhóm).
-function setupHistSearch() {
-  const input = document.getElementById('histSearch');
-  if (!input) return;
-  input.addEventListener('input', () => {
-    const q = input.value.trim().toLowerCase();
-    document.querySelectorAll('#tab-lichsu .laso-card, #tab-lichsu .xem-item, #tab-lichsu .tuong-card, #tab-lichsu .chat-item').forEach(el => {
-      el.style.display = (!q || el.textContent.toLowerCase().indexOf(q) !== -1) ? '' : 'none';
-    });
-  });
-}
-
-// Sub-nav trong tab Tài Khoản (Thông tin cá nhân/Bảo mật/Giao diện/Kết nối).
+// Sub-nav trong tab Cài đặt (Thông tin cá nhân/Bảo mật/Giao diện/Góp ý).
 function setupAccountSettingsNav() {
   const btns = document.querySelectorAll('#tab-account .setnav-btn');
   const panes = document.querySelectorAll('#tab-account .setpane');
@@ -109,6 +83,7 @@ function setupAccountSettingsNav() {
     btn.classList.add('active');
     const key = btn.dataset.pane;
     panes.forEach(p => p.classList.toggle('active', p.dataset.pane === key));
+    if (key === 'gopy') loadFeedback();
   }));
 }
 
@@ -132,17 +107,6 @@ function setupThemeChoice() {
     paint();
   }));
   paint();
-}
-
-// 4 ô tổng số ở đầu tab Lịch Sử — mỗi renderXxx() cập nhật phần của mình rồi gọi lại đây.
-window._histCounts = window._histCounts || { lasos: 0, xemtuoi: 0, tuong: 0, chat: 0 };
-function updateHistStats() {
-  const c = window._histCounts;
-  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v || 0; };
-  set('statLasos', c.lasos);
-  set('statXemTuoi', c.xemtuoi);
-  set('statTuong', c.tuong);
-  set('statChat', c.chat);
 }
 
 function renderProfileHeader() {
@@ -193,222 +157,48 @@ function setupTabs() {
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       btn.classList.add('active');
       document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-      if (btn.dataset.tab === 'credits') loadCredits();
+      if (btn.dataset.tab === 'credits') { loadCredits(); loadQuestTasks(); loadMyShares(); }
       if (btn.dataset.tab === 'ketnoi') loadKetnoi();
-      if (btn.dataset.tab === 'thaynho') loadMemory();
-      if (btn.dataset.tab === 'gopy') loadFeedback();
-      if (btn.dataset.tab === 'nhiemvu') { loadReferralPanel(); loadQuestTasks(); loadMyShares(); }
     });
   });
-  // Mở thẳng một tab qua địa chỉ: `/profile.html#ketnoi`. Trước đây tab chỉ đổi
-  // được bằng cú bấm, nên MỌI liên kết từ nơi khác đều đổ người ta xuống tab
-  // Lịch Sử rồi để họ tự đi tìm — thẻ nhiệm vụ M3 trỏ tới đây là gặp đúng chỗ
-  // đó. Chỉ nhận đúng tên tab đã khai (không phải chuỗi tự do từ URL).
-  openTabFromHash();
+  // Mở thẳng một tab qua địa chỉ (`/app/ho-so#ketnoi`) — sidebar, thẻ nhiệm vụ,
+  // trang nạp tiền đều trỏ bằng hash. Không có hash thì nạp tab mặc định.
+  if (!openTabFromHash()) { const b = document.querySelector('.tab-btn.active'); if (b) b.click(); }
   window.addEventListener('hashchange', openTabFromHash);
 }
 
+// Hash → [tab, pane Cài đặt | khối cần cuộn tới]. Gồm cả tên tab CŨ (trang từng
+// có 6 tab) để mọi link đã phát ra ngoài — sidebar bản cũ còn trong cache, email,
+// `lib/onboarding/tasks.ts` — vẫn rơi đúng chỗ thay vì tab mặc định.
+var HASH_ALIAS = {
+  credits: ['credits'], lichsu: ['credits'],
+  nhiemvu: ['credits', 'qtCard'], moiban: ['credits', 'refSection'],
+  ketnoi: ['ketnoi'],
+  account: ['account'], caidat: ['account'], gopy: ['account', 'gopy'],
+};
+var _scrollTarget = null;
+function scrollToPending() {
+  const el = _scrollTarget && document.getElementById(_scrollTarget);
+  if (!el || el.style.display === 'none') return;
+  _scrollTarget = null;
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 function openTabFromHash() {
   const key = String(location.hash || '').replace(/^#/, '').trim();
-  if (!key) return;
-  const btn = document.querySelector('.tab-btn[data-tab="' + CSS.escape(key) + '"]');
-  if (btn) btn.click();
-}
-
-// ── LOAD HISTORY ──
-async function loadHistory() {
-  const resp = await fetch('/api/history?action=list', {
-    headers: { Authorization: `Bearer ${await _tok()}` }
-  });
-  if (!resp.ok) { console.error('history load failed'); return; }
-  _pHistoryData = await resp.json();
-  if (_hoSoLeftPage) return;
-
-  renderLasos(_pHistoryData.lasos || []);
-  renderXemTuoi(_pHistoryData.xemTuoi || []);
-  renderTuong(_pHistoryData.tuong || []);
-  // Hub shell (app-tai-khoan) thay danh sách chat cũ (chat_history theo trang SEO)
-  // bằng HỘI THOẠI shell (tuvi_chats app-* + localStorage). /profile giữ bản cũ.
-  if (window.ACCOUNT_SHELL_CHAT) window.ACCOUNT_SHELL_CHAT();
-  else renderChatList(_pHistoryData.chatList || []);
-  renderPurchases(_pHistoryData.purchases || []);
-}
-
-// ── RENDER LÁ SỐ ──
-var GIO_MAP = {Tý:'Tý',Sửu:'Sửu',Dần:'Dần',Mão:'Mão',Thìn:'Thìn',Tỵ:'Tỵ',Ngọ:'Ngọ',Mùi:'Mùi',Thân:'Thân',Dậu:'Dậu',Tuất:'Tuất',Hợi:'Hợi'};
-var PHAN_LABELS = {
-  '1':'Tổng Quan','2':'Cung Mệnh','3':'Tâm Tính','4':'Học Vấn',
-  '5':'Phụ Mẫu','6':'Phúc Đức','7':'Điền Trạch','8':'Quan Lộc',
-  '9':'Nô Bộc','10':'Thiên Di','11':'Tật Ách','12':'Tài Bạch',
-  '13':'Tử Tức','14':'Phu Thê','15':'Huynh Đệ','16':'Đại Vận',
-  '17':'Tiểu Hạn','18':'Lưu Niên','19':'Cách Cục','20':'Sự Nghiệp',
-  '21':'Tình Cảm','22':'Sức Khoẻ','23':'Tài Lộc','24':'Vận Mệnh'
-};
-
-function renderLasos(lasos) {
-  document.getElementById('lasosLoading').style.display = 'none';
-  document.getElementById('lasosContent').style.display = 'block';
-
-  const count = lasos.length;
-  if (count > 0) {
-    const badge = document.getElementById('countLasos');
-    badge.textContent = count; badge.style.display = '';
+  const a = HASH_ALIAS[key];
+  if (!a) return false;
+  const btn = document.querySelector('.tab-btn[data-tab="' + a[0] + '"]');
+  if (!btn) return false;
+  btn.click();
+  if (a[0] === 'account' && a[1]) {
+    const p = document.querySelector('#tab-account .setnav-btn[data-pane="' + a[1] + '"]');
+    if (p) p.click();
+  } else if (a[1]) {
+    // #refSection chỉ hiện SAU khi my-referral trả về — loadReferralPanel() gọi lại.
+    _scrollTarget = a[1];
+    scrollToPending();
   }
-  window._histCounts.lasos = count;
-  updateHistStats();
-
-  const el = document.getElementById('lasosContent');
-  if (count === 0) {
-    el.innerHTML = `<div class="empty-state">
-      <div class="icon">${ic('sparkles',44)}</div>
-      <p>Bạn chưa có lá số nào được lưu.<br>Hãy lập lá số và đăng nhập để lưu lịch sử.</p>
-      <a href="/" class="btn-primary">Lập Lá Số Ngay</a>
-    </div>`;
-    return;
-  }
-
-  el.innerHTML = `<div class="card-grid">${lasos.map(l => lasoCard(l)).join('')}</div>`;
-}
-
-function lasoCard(l) {
-  const date = new Date(l.created_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
-  const name = l.person_name || l.slug;
-  const letter = name[0].toUpperCase();
-  // Chữ trơn, không ♂/♀: iOS vẽ hai ký tự đó bằng font dự phòng, lệch baseline khỏi dòng.
-  const gioi = l.gioi_tinh === 'nam' ? 'Nam' : 'Nữ';
-  const ngaySinh = `${l.ngay_sinh}/${l.thang_sinh}/${l.nam_sinh}`;
-  const menhCuc = [l.cung_menh ? `Mệnh ${l.cung_menh}` : '', l.cuc || ''].filter(Boolean).join(' · ');
-  const menh = menhCuc ? `<span class="badge gold">${escHtml(menhCuc)}</span>` : '';
-  const chinh = l.chinh_tinh ? `<span class="badge blue">${escHtml(l.chinh_tinh)}</span>` : '';
-  const napAm = l.nap_am ? `<span class="badge">${escHtml(l.nap_am)}</span>` : '';
-  return `<div class="laso-card" onclick="openLuanModal('${l.slug}','${escHtml(name)}')">
-    <div class="lc-main">
-      <div class="card-avatar">${letter}</div>
-      <div class="lc-info">
-        <div class="lc-head"><span class="card-title">${escHtml(name)}</span><span class="lc-date">${date}</span></div>
-        <div class="lc-meta">${ngaySinh} · Giờ ${l.gio_chi} · ${gioi}</div>
-        ${menh || chinh || napAm ? `<div class="card-badges">${menh}${chinh}${napAm}</div>` : ''}
-      </div>
-    </div>
-    <div class="card-actions">
-      <button class="lc-act" onclick="event.stopPropagation();openLuanModal('${l.slug}','${escHtml(name)}')">${ic('book-open',15)} Xem lại</button>
-      <button class="lc-act gold" onclick="event.stopPropagation();openChatModal('${l.slug}','${escHtml(name)}','laso')">${ic('message-circle',15)} Chat</button>
-      ${isLuanGiaiPdfSlug(l.slug) ? `<button class="lc-act" onclick="event.stopPropagation();resendLuanGiaiPdf('${l.slug}',this)">${ic('mail',15)} Gửi PDF</button>` : ''}
-    </div>
-  </div>`;
-}
-
-// 🔑 Chỉ hiện nút cho 2 tool CÓ PDF luận giải (laso/chu-trinh-cuoc-doi) — lọc
-// HIỂN THỊ thôi, quyết định thật (và chặn tool khác) nằm ở server
-// (`classifySlug`, app/api/luan-giai/resend-pdf/route.ts) theo ĐÚNG cùng quy
-// ước tiền tố slug (xem `makeLasoSlug`, lib/engine/laso.ts) — đừng để hai bản
-// trôi khỏi nhau.
-function isLuanGiaiPdfSlug(slug) {
-  return !(slug.indexOf('tu-binh-') === 0 || slug.indexOf('van-han-nam-al') === 0);
-}
-
-// ── GỬI LẠI PDF (Pha 5 — "đời sống sau báo cáo") ──
-async function resendLuanGiaiPdf(slug, btn) {
-  const orig = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = 'Đang gửi…';
-  try { window.Track && window.Track.event && window.Track.event('report_resend_click'); } catch (e) { /* ignore */ }
-  try {
-    const res = await fetch('/api/luan-giai/resend-pdf', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${await _tok()}` },
-      body: JSON.stringify({ slug }),
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) { alert('Gửi lại chưa thành công: ' + (data.error || 'lỗi không rõ') + '. Thử lại sau ít phút.'); btn.innerHTML = orig; btn.disabled = false; return; }
-    try { window.Track && window.Track.event && window.Track.event('report_resend_sent'); } catch (e) { /* ignore */ }
-    btn.innerHTML = `${ic('check',14)} Đã gửi`;
-    setTimeout(() => { btn.innerHTML = orig; btn.disabled = false; }, 4000);
-  } catch (e) {
-    alert('Gửi lại lỗi: ' + e.message);
-    btn.innerHTML = orig;
-    btn.disabled = false;
-  }
-}
-
-// ── RENDER XEM TUOI ──
-function renderXemTuoi(list) {
-  document.getElementById('xemTuoiLoading').style.display = 'none';
-  document.getElementById('xemTuoiContent').style.display = 'block';
-
-  if (list.length > 0) {
-    const badge = document.getElementById('countXemTuoi');
-    badge.textContent = list.length; badge.style.display = '';
-  }
-  window._histCounts.xemtuoi = list.length;
-  updateHistStats();
-
-  const el = document.getElementById('xemTuoiContent');
-  if (list.length === 0) {
-    el.innerHTML = `<div class="empty-state">
-      <div class="icon">${ic('heart-handshake',44)}</div>
-      <p>Chưa có kết quả xem tuổi nào được lưu.</p>
-      <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
-        <a href="/app/xem-tuoi" class="btn-primary">Xem Tuổi Vợ Chồng</a>
-        <a href="/app/xem-lam-an" class="btn-primary btn-gold">Xem Tuổi Làm Ăn</a>
-      </div>
-    </div>`;
-    return;
-  }
-
-  el.innerHTML = `<div class="xem-list">${list.map(x => xemItem(x)).join('')}</div>`;
-}
-
-function xemItem(x) {
-  const date = new Date(x.created_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
-  const score = x.total_score || 0;
-  const cls = score >= 75 ? 'high' : score >= 50 ? 'mid' : 'low';
-  const typeLabel = x.product_type === 'xem-lam-an' ? 'Xem tuổi làm ăn' : 'Xem tuổi vợ chồng';
-  const icon = x.product_type === 'xem-lam-an' ? ic('briefcase',14) : ic('heart-handshake',14);
-  return `<div class="xem-item">
-    <div class="xem-score ${cls}">${score}</div>
-    <div class="xem-info">
-      <div class="xem-type">${icon} ${typeLabel}</div>
-      <div class="xem-names">${escHtml(x.person_a || '')} × ${escHtml(x.person_b || '')}</div>
-      <div class="xem-date">${ic('calendar',13)} ${date}</div>
-    </div>
-    <button class="btn-outline navy btn-sm" onclick="openXemTuoiModal('${x.id}','${escHtml(x.person_a||'')}','${escHtml(x.person_b||'')}')">Xem Lại</button>
-  </div>`;
-}
-
-// ── RENDER CHAT LIST ──
-function renderChatList(list) {
-  document.getElementById('chatListLoading').style.display = 'none';
-  document.getElementById('chatListContent').style.display = 'block';
-
-  if (list.length > 0) {
-    const badge = document.getElementById('countChat');
-    badge.textContent = list.length; badge.style.display = '';
-  }
-
-  const el = document.getElementById('chatListContent');
-  if (list.length === 0) {
-    el.innerHTML = `<div class="empty-state">
-      <div class="icon">${ic('message-circle',44)}</div>
-      <p>Chưa có lịch sử trò chuyện nào.</p>
-    </div>`;
-    return;
-  }
-
-  el.innerHTML = `<div class="chat-list">${list.map(c => chatListItem(c)).join('')}</div>`;
-}
-
-function chatListItem(c) {
-  const date = new Date(c.updated_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
-  const icon = c.product === 'xem-tuoi' ? ic('heart-handshake',18) : c.product === 'xem-lam-an' ? ic('briefcase',18) : ic('sparkles',18);
-  return `<div class="chat-item" onclick="openChatModal('${c.laso_slug}','${c.laso_slug}','${c.product}')">
-    <div class="chat-icon">${icon}</div>
-    <div class="chat-info">
-      <div class="chat-slug">${c.laso_slug}</div>
-      <div class="chat-meta">${ic('message-circle',13)} Cập nhật ${date}</div>
-    </div>
-    <span style="color:var(--gold);font-size:.8rem">Tiếp tục →</span>
-  </div>`;
+  return true;
 }
 
 // ── CREDIT FUNCTIONS ──
@@ -418,13 +208,12 @@ async function loadHeaderBalance() {
     const res = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(_pUser.id));
     const d = await res.json();
     const bal = d.balance ?? 0;
-    const h = document.getElementById('headerCreditBalance');
-    if (h) h.innerHTML = bal + ' <small>lượng</small>';
     const t = document.getElementById('tabCreditBalance');
     if (t) t.textContent = bal + ' lượng';
   } catch(e) {
-    const h = document.getElementById('headerCreditBalance');
-    if (h) h.innerHTML = '<small>—</small>';
+    console.error('[loadHeaderBalance]', e);
+    const t = document.getElementById('tabCreditBalance');
+    if (t) t.textContent = '—';
   }
 }
 
@@ -725,8 +514,6 @@ async function loadReferralPanel() {
   if (bar && cap > 0) setTimeout(() => { bar.style.width = Math.min(100, Math.round(used / cap * 100)) + '%'; }, 100);
   document.getElementById('refTotalCount').textContent = d.invited || 0;
   document.getElementById('refEarnedCount').textContent = d.creditsEarned || 0;
-  _nqStats.invited = d.invited || 0;
-  updateNqStats();
 
   const btn = document.getElementById('refCopyBtn');
   if (btn && !btn.dataset.wired) {
@@ -739,9 +526,10 @@ async function loadReferralPanel() {
     });
   }
   sec.style.display = '';
+  scrollToPending();
 }
 
-// ── TAB NHIỆM VỤ — Khởi Hành + Kênh liên lạc ────────────────────────────────
+// ── NHẬN THÊM LƯỢNG (trong tab Ví) — Khởi Hành + Kênh liên lạc ────────────────────────────────
 // Cùng nguồn dữ liệu với thẻ Khởi Hành trên Tổng Quan
 // (`/api/payment?action=onboarding-sync`, lib/onboarding/tasks.ts) — server
 // tự kiểm bằng chứng và tự cộng, trang này CHỈ vẽ. Khác Tổng Quan ở chỗ:
@@ -754,19 +542,6 @@ async function loadReferralPanel() {
 // questTaskGo(). Không nội suy chuỗi từ server vào thuộc tính onclick: dấu
 // nháy trong chuỗi là vỡ thẻ (cùng lý do đã ghi ở phần Thầy Nhớ bên dưới).
 var _qtDefs = [];
-
-// 4 ô tổng số ở đầu tab Nhiệm Vụ — mỗi phần (Khởi Hành/kênh liên lạc/mời
-// bạn/chia sẻ) ghi đúng phần của mình rồi gọi lại đây, không suy ra khung
-// "nhiệm vụ hàng ngày/tuần" không có backend đứng sau.
-var _nqStats = { khDone: 0, khTotal: 0, khCredits: 0, chDone: 0, chTotal: 0, chCredits: 0, invited: 0, shares: 0 };
-function updateNqStats() {
-  const s = _nqStats;
-  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-  set('nqDoneRatio', (s.khDone + s.chDone) + '/' + (s.khTotal + s.chTotal));
-  set('nqCredits', s.khCredits + s.chCredits);
-  set('nqInvited', s.invited);
-  set('nqShares', s.shares);
-}
 
 async function loadQuestTasks() {
   var host = document.getElementById('qtBody');
@@ -798,10 +573,6 @@ function renderQuestTasks(kh) {
   if (!host) return;
   let done = 0;
   for (let i = 0; i < kh.steps.length; i++) if (kh.steps[i].done) done++;
-  _nqStats.khDone = done;
-  _nqStats.khTotal = kh.steps.length;
-  _nqStats.khCredits = kh.claimed ? (+kh.credits || 0) : 0;
-  updateNqStats();
 
   let h = kh.claimed
     ? '<div class="qt-top"><div class="qt-count" style="color:var(--green)">✓ Đã hoàn tất — +' + (+kh.credits || 0) + ' Lượng đã vào ví.</div></div>'
@@ -824,10 +595,6 @@ function renderChannelTasks(indexOffset, tasks) {
   const card = document.getElementById('chCard');
   const host = document.getElementById('chBody');
   if (!card || !host) return;
-  _nqStats.chDone = tasks.filter(function (t) { return t.done; }).length;
-  _nqStats.chTotal = tasks.length;
-  _nqStats.chCredits = tasks.filter(function (t) { return t.done; }).reduce(function (s, t) { return s + (+t.credits || 0); }, 0);
-  updateNqStats();
   if (!tasks.length || tasks.every(function (t) { return t.done; })) { card.style.display = 'none'; return; }
 
   const granted = tasks.filter(function (t) { return t.justGranted; })
@@ -851,12 +618,12 @@ function questTaskGo() {
   // hôm nay", hoặc quyền thông báo trình duyệt) — tab này không có UI đó, đưa
   // người ta tới đúng chỗ có thay vì cố dựng lại một bản thứ hai ở đây.
   if (!href) { location.href = '/app'; return; }
-  // Trỏ VÀO CHÍNH trang đang đứng (`/app/tai-khoan#<tab>`) thì chuyển tab TẠI
-  // CHỖ thay vì tải lại cả trang.
-  const m = /^\/app\/tai-khoan#(.+)$/.exec(href);
-  if (m) {
-    const b = document.querySelector('.tab-btn[data-tab="' + CSS.escape(m[1]) + '"]');
-    if (b) { b.click(); return; }
+  // Trỏ VÀO CHÍNH trang đang đứng (`/app/tai-khoan#<tab>` hay `/app/ho-so#…`)
+  // thì chuyển tab TẠI CHỖ thay vì tải lại cả trang.
+  const m = /^\/app\/(?:tai-khoan|ho-so)#(.+)$/.exec(href);
+  if (m && HASH_ALIAS[m[1]]) {
+    if (location.hash === '#' + m[1]) openTabFromHash(); else location.hash = m[1];
+    return;
   }
   location.href = href;
 }
@@ -885,8 +652,6 @@ async function loadMyShares() {
 function renderMyShares(list) {
   const host = document.getElementById('spBody');
   if (!host) return;
-  _nqStats.shares = list.length;
-  updateNqStats();
   if (!list.length) {
     host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Bạn chưa chia sẻ lượt nào.</div>';
     return;
@@ -955,13 +720,6 @@ function renderTransactions(list) {
   _viluTxns = list || [];
   _viluPage = 1;
 
-  // 3 ô tổng số — trên đúng số giao dịch vừa tải (không phải toàn bộ lịch sử).
-  let tongNap = 0, tongChi = 0;
-  _viluTxns.forEach(t => { if (t.amount > 0) tongNap += t.amount; else tongChi += Math.abs(t.amount); });
-  const setStat = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
-  setStat('viluTongNap', '+' + tongNap);
-  setStat('viluTongChi', '-' + tongChi);
-  setStat('viluSoGD', _viluTxns.length);
 
   // Dropdown lọc theo loại — liệt kê đúng các `type` có trong dữ liệu, không bịa nhóm.
   const typeSel = document.getElementById('viluTypeFilter');
@@ -1043,273 +801,6 @@ function renderViluTable() {
   }
 }
 
-// ── RENDER XEM TƯỚNG ──
-var TUONG_TOOL_LABELS = {
-  'dien-tuong':     { label: 'Diện Tướng', cls: 'dien', icon: 'smile' },
-  'nhan-tuong':     { label: 'Nhãn Tướng', cls: 'nhan', icon: 'eye' },
-  'thu-tuong':      { label: 'Thủ Tướng',  cls: 'thu',  icon: 'hand' },
-  'thanh-tuong':    { label: 'Thanh Tướng', cls: 'thanh', icon: 'mic' },
-  'thanh-tuong-pro':{ label: 'Thanh Tướng Pro', cls: 'thanh', icon: 'mic' },
-};
-
-function renderTuong(list) {
-  document.getElementById('tuongLoading').style.display = 'none';
-  document.getElementById('tuongContent').style.display = 'block';
-
-  if (list.length > 0) {
-    const badge = document.getElementById('countTuong');
-    badge.textContent = list.length; badge.style.display = '';
-  }
-  window._histCounts.tuong = list.length;
-  updateHistStats();
-
-  const el = document.getElementById('tuongContent');
-  if (list.length === 0) {
-    el.innerHTML = `<div class="empty-state">
-      <div class="icon">${ic('eye',44)}</div>
-      <p>Chưa có kết quả xem tướng nào được lưu.<br>Đăng nhập trước khi xem tướng để lưu lịch sử.</p>
-      <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
-        <a href="/app/dien-tuong" class="btn-primary">Diện Tướng</a>
-        <a href="/app/nhan-tuong" class="btn-primary btn-gold">Nhãn Tướng</a>
-        <a href="/app/thu-tuong" class="btn-primary" style="background:var(--blue)">Thủ Tướng</a>
-        <a href="/app/thanh-tuong" class="btn-primary" style="background:var(--green)">Thanh Tướng</a>
-      </div>
-    </div>`;
-    return;
-  }
-
-  el.innerHTML = `<div class="tuong-grid">${list.map(t => tuongCard(t)).join('')}</div>`;
-}
-
-function tuongCard(t) {
-  const meta = TUONG_TOOL_LABELS[t.tool] || { label: t.tool, cls: 'dien', icon: 'sparkles' };
-  const date = new Date(t.created_at).toLocaleDateString('vi-VN', { day:'2-digit', month:'2-digit', year:'numeric' });
-  // Strip markdown for preview
-  const preview = (t.result_text || '').replace(/#{1,3} .+/g,'').replace(/\*\*/g,'').replace(/\n+/g,' ').trim().slice(0, 120) + '...';
-  const thumbHtml = t.thumbnail
-    ? `<img class="tuong-thumb" src="${escHtml(t.thumbnail)}" alt="${meta.label}" loading="lazy"/>`
-    : `<div class="tuong-thumb-placeholder">${ic(meta.icon,32)}</div>`;
-  return `<div class="tuong-card" onclick="openTuongModal('${escHtml(t.id)}','${meta.label}','${escHtml(t.thumbnail||'')}','${escHtml((t.result_text||'').replace(/'/g,'&#39;'))}')">
-    ${thumbHtml}
-    <div class="tuong-card-body">
-      <span class="tuong-tool-badge ${meta.cls}">${ic(meta.icon,14)} ${meta.label}</span>
-      <div class="tuong-preview">${escHtml(preview)}</div>
-      <div class="tuong-date">${ic('calendar',13)} ${date}</div>
-    </div>
-  </div>`;
-}
-
-function openTuongModal(id, label, thumbnail, resultText) {
-  document.getElementById('tuongModalTitle').textContent = label;
-  const thumb = document.getElementById('tuongModalThumb');
-  if (thumbnail) {
-    thumb.src = thumbnail; thumb.style.display = 'block';
-  } else {
-    thumb.style.display = 'none';
-  }
-  // Render markdown-ish result text
-  const html = resultText
-    .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#39;/g,"'")
-    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
-    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-    .split(/\n\n+/).map(p => p.startsWith('<h') ? p : `<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
-  document.getElementById('tuongModalContent').innerHTML = html;
-  openModal('tuongModal');
-}
-
-// ── RENDER PURCHASES (no-op in credit system) ──
-function renderPurchases(list) {}
-
-// ── OPEN LUAN GIAI MODAL ──
-async function openLuanModal(slug, name) {
-  document.getElementById('luanModalTitle').textContent = `Luận Giải — ${name}`;
-  document.getElementById('luanTabBtns').innerHTML = '';
-  document.getElementById('luanContentArea').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-lt)">Đang tải...</div>';
-  openModal('luanModal');
-
-  const resp = await fetch(`/api/history?action=laso&slug=${encodeURIComponent(slug)}`, {
-    headers: { Authorization: `Bearer ${await _tok()}` }
-  });
-  const data = await resp.json();
-  if (_hoSoLeftPage) return;
-  if (!data || !data.luan_giai) {
-    const ca = document.getElementById('luanContentArea');
-    if (ca) ca.innerHTML = '<div style="color:var(--red);padding:1rem">Không tìm thấy luận giải.</div>';
-    return;
-  }
-
-  const keys = Object.keys(data.luan_giai).sort((a,b) => parseInt(a)-parseInt(b));
-
-  // Build tab buttons
-  const tabsHtml = keys.map(k => `<button class="luan-tab ${k==='1'?'active':''}" onclick="switchLuanTab('${k}',this)">${PHAN_LABELS[k]||('P'+k)}</button>`).join('');
-  const tb = document.getElementById('luanTabBtns');
-  if (tb) tb.innerHTML = tabsHtml;
-
-  // Store data and show first
-  window._luanData = data.luan_giai;
-  showLuanSection('1');
-}
-
-function showLuanSection(key) {
-  const text = window._luanData?.[key] || '';
-  const ca = document.getElementById('luanContentArea');
-  if (ca) ca.innerHTML = `<div class="luan-content">${marked.parse(text)}</div>`;
-}
-
-function switchLuanTab(key, btn) {
-  document.querySelectorAll('.luan-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  showLuanSection(key);
-}
-
-// ── OPEN XEM TUOI MODAL (reuse luan modal) ──
-async function openXemTuoiModal(id, personA, personB) {
-  document.getElementById('luanModalTitle').textContent = `${personA} × ${personB}`;
-  document.getElementById('luanTabBtns').innerHTML = '';
-  document.getElementById('luanContentArea').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-lt)">Đang tải...</div>';
-  openModal('luanModal');
-
-  const resp = await fetch(`/api/history?action=xem_tuoi&id=${id}`, {
-    headers: { Authorization: `Bearer ${await _tok()}` }
-  });
-  const data = await resp.json();
-  if (_hoSoLeftPage) return;
-  if (!data || !data.result_json) {
-    const ca = document.getElementById('luanContentArea');
-    if (ca) ca.innerHTML = '<div style="color:var(--red);padding:1rem">Không tìm thấy kết quả.</div>';
-    return;
-  }
-
-  const rj = data.result_json;
-  const sectionKeys = Object.keys(rj).filter(k => k !== 'total' && k !== 'summary');
-  const SECTION_LABELS = ['Xét Tuổi','Ngũ Hành','Tư Tưởng','Tính Cách','Quan Hệ','Con Cái / Đối Tác','Tài Chính','Vận Hạn'];
-
-  if (sectionKeys.length > 0) {
-    const tabsHtml = sectionKeys.map((k,i) => `<button class="luan-tab ${i===0?'active':''}" onclick="switchXemTab('${k}',this)">${SECTION_LABELS[i]||k}</button>`).join('');
-    const tb = document.getElementById('luanTabBtns');
-    if (tb) tb.innerHTML = tabsHtml;
-    window._xemData = rj;
-    showXemSection(sectionKeys[0]);
-  } else {
-    const ca = document.getElementById('luanContentArea');
-    if (ca) ca.innerHTML = `<div class="luan-content">${marked.parse(JSON.stringify(rj,null,2))}</div>`;
-  }
-}
-
-function showXemSection(key) {
-  const text = window._xemData?.[key] || '';
-  const ca = document.getElementById('luanContentArea');
-  if (ca) ca.innerHTML = `<div class="luan-content">${marked.parse(typeof text === 'string' ? text : JSON.stringify(text,null,2))}</div>`;
-}
-function switchXemTab(key, btn) {
-  document.querySelectorAll('.luan-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  showXemSection(key);
-}
-
-// ── CHAT MODAL ──
-async function openChatModal(slug, name, product) {
-  _pChatState.slug = slug;
-  _pChatState.product = product || 'laso';
-  _pChatState.messages = [];
-
-  document.getElementById('chatModalTitle').textContent = `Vấn Đáp — ${name}`;
-  document.getElementById('chatModalSub').textContent = slug;
-  document.getElementById('chatMessages').innerHTML = '';
-  openModal('chatModal');
-
-  // Load existing chat history
-  const resp = await fetch(`/api/history?action=chat&slug=${encodeURIComponent(slug)}`, {
-    headers: { Authorization: `Bearer ${await _tok()}` }
-  });
-  const data = await resp.json();
-  _pChatState.messages = data.messages || [];
-
-  if (_pChatState.messages.length > 0) {
-    _pChatState.messages.forEach(m => appendMessage(m.role, m.content));
-  } else {
-    appendMessage('assistant', 'Kính chào quý vị. Tôi đã xem qua lá số của bạn. Bạn muốn hỏi điều gì?');
-  }
-}
-
-function appendMessage(role, content) {
-  const el = document.getElementById('chatMessages');
-  if (!el) return;
-  const div = document.createElement('div');
-  div.className = `msg ${role}`;
-  if (role === 'assistant') div.innerHTML = `<div class="msg-sender">${ic("moon",13)} Thầy Tử Vi</div>${marked.parse(content)}`;
-  else div.textContent = content;
-  el.appendChild(div);
-  el.scrollTop = el.scrollHeight;
-}
-
-async function sendChat() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text) return;
-
-  input.value = '';
-  appendMessage('user', text);
-  _pChatState.messages.push({ role: 'user', content: text });
-
-  const btn = document.getElementById('chatSendBtn');
-  btn.disabled = true;
-
-  // Typing indicator
-  const typing = document.createElement('div');
-  typing.className = 'msg assistant';
-  typing.id = 'typingIndicator';
-  typing.innerHTML = `<div class="msg-sender">${ic("moon",13)} Thầy Tử Vi</div><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>`;
-  document.getElementById('chatMessages').appendChild(typing);
-  document.getElementById('chatMessages').scrollTop = 99999;
-
-  try {
-    // Build messages array for API (last 10 messages for context)
-    const history = _pChatState.messages.slice(-10);
-
-    const resp = await fetch('/api/lasotuvi?action=chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: history,
-        slug: _pChatState.slug,
-        product: _pChatState.product
-      })
-    });
-    const data = await resp.json();
-    // `answer` PHẢI đứng đầu — đó là tên field THẬT mà `/api/lasotuvi?action=chat`
-    // trả về (`handleChat` kết bằng `ok({ answer: finalText || ... })`, và `ok()`
-    // trong lib/cors.ts trả phẳng chứ không bọc thêm tầng nào).
-    //
-    // 🐞 Thiếu nó thì cả ba nhánh dưới đều undefined → panel chat trong
-    // profile.html LUÔN hiện "Xin lỗi, có lỗi xảy ra." dù model đã trả lời xong,
-    // và người dùng không có cách nào biết là câu trả lời có thật. Ba nhánh
-    // `content`/`text`/`reply` giữ lại cho các shape cũ, nhưng không nhánh nào
-    // trong số đó khớp endpoint hiện tại.
-    const reply = data.answer || data.content || data.text || data.reply || 'Xin lỗi, có lỗi xảy ra.';
-
-    typing.remove();
-    _pChatState.messages.push({ role: 'assistant', content: reply });
-    appendMessage('assistant', reply);
-
-    // Save to DB
-    await fetch('/api/history?action=save_chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${await _tok()}` },
-      body: JSON.stringify({
-        slug: _pChatState.slug,
-        product: _pChatState.product,
-        messages: _pChatState.messages.slice(-30)  // keep last 30 messages
-      })
-    });
-  } catch(e) {
-    typing.remove();
-    appendMessage('assistant', 'Xin lỗi, có lỗi kết nối. Vui lòng thử lại.');
-  }
-  btn.disabled = false;
-}
-
 // ── ACCOUNT ACTIONS ──
 async function saveDisplayName() {
   const name = document.getElementById('accName').value.trim();
@@ -1357,11 +848,6 @@ async function changePassword() {
   }
   setTimeout(() => { alert.innerHTML = ''; }, 3000);
 }
-
-// ── MODAL HELPERS ──
-function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
-document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', function(e) { if (e.target === this) closeModal(this.id); }));
 
 // ── UTILS ──
 function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
@@ -1470,12 +956,6 @@ async function memPost(action, body) {
   } catch (e) { alert('Lỗi mạng.'); return false; }
 }
 
-// ── Handle #credits anchor ──
-if (window.location.hash === '#credits') {
-  document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => { const b = document.querySelector('[data-tab="credits"]'); if (b) b.click(); }, 1500);
-  });
-}
 // ── BOOT ──
 initProfile();
 
@@ -1515,7 +995,7 @@ var FB_MAX = 2000;
 var _fbBusy = false;
 
 async function loadFeedback() {
-  const host = document.getElementById('tab-gopy');
+  const host = document.getElementById('gopyHost');
   if (!host) return;
   if (!host.dataset.built) {
     host.innerHTML = fbFormHtml();
@@ -1524,6 +1004,17 @@ async function loadFeedback() {
     if (ta) ta.addEventListener('input', fbCount);
   }
   await fbLoadList();
+  if (!_pHistoryData) loadRecentLasos();
+}
+
+// Ba lá số gần nhất cho fbMeta — trước đây có sẵn nhờ tab Lịch Sử; nay nạp
+// riêng, chỉ khi người ta mở Góp ý. Hụt thì góp ý vẫn gửi, chỉ thiếu ngữ cảnh.
+async function loadRecentLasos() {
+  try {
+    const resp = await fetch('/api/history?action=list', { headers: { Authorization: `Bearer ${await _tok()}` } });
+    if (resp.ok) _pHistoryData = await resp.json();
+    else console.error('[loadRecentLasos]', resp.status);
+  } catch (e) { console.error('[loadRecentLasos]', e); }
 }
 
 function fbFormHtml() {
@@ -1579,7 +1070,7 @@ function fbMeta() {
   try {
     m.screen = window.innerWidth + 'x' + window.innerHeight;
     m.theme = document.documentElement.getAttribute('data-theme') || 'light';
-    const bal = document.getElementById('headerCreditBalance');
+    const bal = document.getElementById('tabCreditBalance');
     if (bal) m.balance = (bal.textContent || '').trim();
     // Ba lá số gần nhất: gần như mọi góp ý về NỘI DUNG đều nói về một trong số
     // chúng, mà người gửi thì không bao giờ chép slug vào.

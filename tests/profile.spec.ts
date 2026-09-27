@@ -38,45 +38,23 @@ test.describe('Hồ Sơ (/app/ho-so) — logged in', () => {
     expect(text).toContain('@');
   });
 
-  test('tabs profile render đủ', async ({ page }) => {
+  test('3 tab + lối tắt sang Lá số / Báo cáo / Hỏi Thầy', async ({ page }) => {
     if (!await isDashboardVisible(page)) { console.warn('Chưa login, bỏ qua'); return; }
-    const tabs = page.locator('.tab-btn');
-    expect(await tabs.count()).toBeGreaterThanOrEqual(4);
-  });
-
-  test('tab Credits — hiện số dư', async ({ page }) => {
-    if (!await isDashboardVisible(page)) { console.warn('Chưa login, bỏ qua'); return; }
-    const creditsTab = page.locator('.tab-btn[data-tab="credits"], .tab-btn').filter({ hasText: /credits|tín dụng|số dư/i }).first();
-    if (await creditsTab.isVisible().catch(() => false)) {
-      await creditsTab.click();
-      await page.waitForSelector('#tab-credits', { state: 'visible', timeout: 5000 }).catch(() => {});
-      await expect(page.locator('#tab-credits')).toBeVisible({ timeout: 3000 });
+    await expect(page.locator('.tab-btn')).toHaveCount(3);
+    await expect(page.locator('#tab-credits')).toBeVisible();
+    for (const href of ['/app/so-la-so', '/app/bao-cao', '/app/tro-chuyen']) {
+      await expect(page.locator(`.my-links a[href="${href}"]`)).toBeVisible();
     }
   });
 
-  test('tab Lịch Sử — lịch sử hiện (hoặc empty state) + chip filter', async ({ page }) => {
+  test('hash cũ #nhiemvu → tab Ví, #gopy → Cài đặt/Góp ý', async ({ page }) => {
     if (!await isDashboardVisible(page)) { console.warn('Chưa login, bỏ qua'); return; }
-    const lichSuTab = page.locator('.tab-btn[data-tab="lichsu"]').first();
-    if (await lichSuTab.isVisible().catch(() => false)) {
-      await lichSuTab.click();
-      await page.waitForTimeout(1000);
-      await expect(page.locator('#tab-lichsu')).toBeVisible({ timeout: 3000 });
-      // chip filter Lá Số → chỉ nhóm lasos hiện
-      const chip = page.locator('#tab-lichsu .hist-chip[data-filter="lasos"]');
-      if (await chip.isVisible().catch(() => false)) {
-        await chip.click();
-        await expect(page.locator('#tab-lichsu .hist-group[data-group="lasos"]')).toBeVisible();
-      }
-    }
-  });
-
-  test('tab Account — form hoặc thông tin tài khoản hiện', async ({ page }) => {
-    if (!await isDashboardVisible(page)) { console.warn('Chưa login, bỏ qua'); return; }
-    const accTab = page.locator('.tab-btn[data-tab="account"], .tab-btn').filter({ hasText: /account|tài khoản/i }).first();
-    if (await accTab.isVisible().catch(() => false)) {
-      await accTab.click();
-      await page.waitForTimeout(500);
-    }
+    await page.evaluate(() => { location.hash = 'nhiemvu'; });
+    await expect(page.locator('#tab-credits')).toBeVisible();
+    await expect(page.locator('#qtCard')).toBeVisible();
+    await page.evaluate(() => { location.hash = 'gopy'; });
+    await expect(page.locator('#tab-account')).toBeVisible();
+    await expect(page.locator('#gopyHost')).toBeVisible();
   });
 
   test('không có JS errors nghiêm trọng', async ({ page }) => {

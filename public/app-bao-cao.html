@@ -34,6 +34,11 @@
 .bc-nm b{display:block;color:var(--heading);font-weight:600}
 .bc-nm span{display:block;font-size:12px;color:var(--text-lt)}
 .bc-muted{color:var(--text-lt);font-size:12.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bc-when{display:flex;align-items:center;justify-content:flex-end;gap:10px}
+.bc-pdf{appearance:none;border:1px solid var(--line-2);background:var(--white);color:var(--text-mid);font:inherit;font-size:12.5px;padding:5px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.bc-pdf svg{width:13px;height:13px}
+@media(hover:hover){.bc-pdf:hover{border-color:var(--gold-soft);color:var(--heading)}}
+.bc-pdf:disabled{opacity:.6;cursor:default}
 .bc-msg{padding:3rem 1rem;text-align:center;color:var(--text-lt);font-size:13.5px;line-height:1.7}
 @media(max-width:640px){.ws-body{padding:16px 14px 40px}.bc-tbl .bc-hide{display:none}.bc-find{flex:1 1 100%}}
 </style>
@@ -123,11 +128,20 @@
         rows.push({ tool: tid, sub: who(c), birth: c.birth, ts: 0 });
       });
     });
+    // Luận Giải / Chu Trình đã lưu (laso_public của chính mình): biết TÊN + slug
+    // → mỗi bản một dòng, có nút "Gửi PDF". Bản user_reports trùng slug bỏ qua.
+    var seenSlug = {};
+    (j.lasos || []).forEach(function(l){
+      if (!TOOLS[l.tool]) return;
+      seenSlug[l.slug] = 1;
+      rows.push({ tool: l.tool, sub: [l.name, l.ngay].filter(Boolean).join(' · '), birth: null, slug: l.slug, ts: +new Date(l.created_at) || 0 });
+    });
     // Còn lại: chỉ biết "đã có" + thời điểm — một dòng mỗi bản ghi.
     var seenChartTool = {};
     rows.forEach(function(r){ seenChartTool[r.tool] = 1; });
     (j.reports || []).forEach(function(r){
       var t = TOOLS[r.tool_id]; if (!t) return;
+      if (r.slug && seenSlug[r.slug]) return;
       var ts = +new Date(r.updated_at || r.created_at) || 0;
       if (seenChartTool[r.tool_id]) {
         // Gắn thời điểm mới nhất vào các dòng lá số của tool này (đủ để xếp).
@@ -155,7 +169,9 @@
       return '<tr class="bc-row" data-i="' + ROWS.indexOf(r) + '"><td><div class="bc-nm"><span class="bc-ic" data-icon="file-text"></span><span><b>' + esc(t.label) + '</b>' +
         (r.sub ? '<span>' + esc(r.sub) + '</span>' : '') + '</span></div></td>' +
         '<td class="bc-hide bc-muted">' + (t.tab === 'laso' ? 'Lá số &amp; vận hạn' : 'Chân dung &amp; duyên') + '</td>' +
-        '<td class="bc-muted">' + esc(rel(r.ts)) + '</td></tr>';
+        '<td class="bc-muted"><div class="bc-when">' + esc(rel(r.ts)) +
+        (r.slug ? '<button type="button" class="bc-pdf" data-pdf="' + esc(r.slug) + '"><span data-icon="mail"></span>Gửi PDF</button>' : '') +
+        '</div></td></tr>';
     }).join('');
     if (window.mountIcons) window.mountIcons(el('bcBody'));
   }
@@ -168,11 +184,36 @@
   // Mở = sang công cụ với ĐÚNG lá số — cùng cơ chế `app_birth` mà Tủ Báo Cáo
   // của sổ lá số dùng (shell.js normBirth đọc lại ở mọi trang).
   el('bcBody').addEventListener('click', function(e){
+    var pdf = e.target.closest('.bc-pdf'); if (pdf) { sendPdf(pdf); return; }
     var tr = e.target.closest('tr.bc-row'); if (!tr) return;
     var r = ROWS[+tr.getAttribute('data-i')]; if (!r) return;
     if (r.birth) { try { localStorage.setItem('app_birth', JSON.stringify(r.birth)); } catch (err) { /* ignore */ } }
     location.href = TOOLS[r.tool].url;
   });
+
+  // Gửi lại PDF qua email (chuyển từ thẻ lá số ở Hồ sơ cũ, 2026-09-27). Server
+  // tự kiểm quyền sở hữu + loại tool không có PDF (app/api/luan-giai/resend-pdf).
+  function sendPdf(btn){
+    var orig = btn.innerHTML;
+    btn.disabled = true; btn.textContent = 'Đang gửi…';
+    try { window.Track && Track.event && Track.event('report_resend_click'); } catch (e) { /* ignore */ }
+    token().then(function(tok){
+      return fetch('/api/luan-giai/resend-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
+        body: JSON.stringify({ slug: btn.getAttribute('data-pdf') })
+      }).then(function(res){ return res.json().catch(function(){ return {}; }).then(function(d){ return { ok: res.ok, d: d }; }); });
+    }).then(function(r){
+      if (!r.ok) { alert('Gửi lại chưa thành công: ' + (r.d.error || 'lỗi không rõ') + '. Thử lại sau ít phút.'); btn.innerHTML = orig; btn.disabled = false; return; }
+      try { window.Track && Track.event && Track.event('report_resend_sent'); } catch (e) { /* ignore */ }
+      btn.textContent = '✓ Đã gửi vào email';
+      setTimeout(function(){ btn.innerHTML = orig; btn.disabled = false; }, 4000);
+    }).catch(function(e){
+      console.error('[bao-cao] resend-pdf', e);
+      alert('Gửi lại lỗi: ' + e.message);
+      btn.innerHTML = orig; btn.disabled = false;
+    });
+  }
 
   function token(){
     try {

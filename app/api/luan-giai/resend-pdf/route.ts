@@ -1,6 +1,6 @@
 // app/api/luan-giai/resend-pdf/route.ts
 // ============================================================
-// "Gửi lại PDF" — nút ở tab Lịch Sử (Lá Số) trên profile/tài khoản, cho lá số
+// "Gửi lại PDF" — nút trên dòng Luận Giải / Chu Trình ở trang Báo cáo, cho lá số
 // ĐÃ luận giải xong TRƯỚC ĐÓ (có thể vài ngày/tuần trước), không phải ngay
 // sau khi vừa sinh xong như `email-pdf/route.ts`. Khác route đó ở CHỖ LẤY
 // NỘI DUNG: route đó nhận `phans` client gửi kèm (vừa hiển thị xong, còn
@@ -13,9 +13,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getUserFromSupabaseToken } from '@/lib/admin/auth';
 import { sendTransactionalEmail } from '@/lib/email/send';
-import { renderLuanGiaiPdf, TOOL_META, type LuanGiaiToolId } from '@/lib/pdf/luan-giai';
+import { renderLuanGiaiPdf, TOOL_META } from '@/lib/pdf/luan-giai';
 import { buildPhans } from '@/lib/pdf/phan-labels';
 import { getOrCreateReportToken } from '@/lib/pdf/report-link';
+import { classifyLuanGiaiSlug } from '@/lib/pdf/luan-giai-slug';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -23,19 +24,6 @@ export const maxDuration = 45;
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
-
-// 🔑 Slug của 2 tool CÓ nút "Gửi lại PDF" phân biệt bằng TIỀN TỐ (xem
-// `makeLasoSlug`, lib/engine/laso.ts): chu-trinh-cuoc-doi luôn có tiền tố
-// riêng; laso (kể cả trang 24-phần CŨ đã retire) luôn KHÔNG tiền tố. Slug của
-// tool khác lưu chung bảng `laso_public` (Bát Tự `tu-binh-*`, Vận Hạn Năm
-// `van-han-nam-al*`) bị loại rõ ràng — không có nút này, tránh dựng nhầm PDF
-// "Luận Giải Tử Vi" từ nội dung Bát Tự (khoá phần trùng số nhưng khác ý nghĩa
-// hoàn toàn giữa các tool).
-function classifySlug(slug: string): LuanGiaiToolId | null {
-  if (slug.startsWith('chu-trinh-cuoc-doi-')) return 'chu-trinh-cuoc-doi';
-  if (slug.startsWith('tu-binh-') || slug.startsWith('van-han-nam-al')) return null;
-  return 'laso';
-}
 
 export async function POST(req: NextRequest) {
   const token = (req.headers.get('authorization') || '').replace('Bearer ', '').trim();
@@ -51,7 +39,7 @@ export async function POST(req: NextRequest) {
   const slug = String(body.slug || '').trim();
   if (!slug) return NextResponse.json({ error: 'Thiếu slug' }, { status: 400 });
 
-  const toolId = classifySlug(slug);
+  const toolId = classifyLuanGiaiSlug(slug);
   if (!toolId) return NextResponse.json({ error: 'Lá số này không hỗ trợ gửi lại PDF' }, { status: 400 });
 
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
