@@ -368,7 +368,7 @@ body.chat-home .rail-report,body.chat-first-live.art-closed .rail-report{margin-
    đầu (không CLS). Hình của tool là `.intro-avatar` — tranh ĐỒ VẬT
    (`/tool-avatars/<key>.webp`, cùng bộ với `mascot/tool-icons`) ở góc phải.
    Banner webtoon theo nhóm (có thầy/cô chibi + cậu bé Minh Bảo) đã GỠ
-   2026-09-26: Minh Bảo nay là hội đồng 15 thầy thật, người chỉ vẽ một kiểu
+   2026-09-26: Minh Bảo nay là nhóm 15 thầy thật, người chỉ vẽ một kiểu
    là chân dung chì `/authors/<id>.jpg`. Thầy đứng tên công cụ hiện ở
    `#introSrc` (`fillIntroMaster()` trong shell.js) — `min-height` giữ chỗ
    trước khi dữ liệu thầy về để dòng đó không đẩy layout. */

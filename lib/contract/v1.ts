@@ -226,7 +226,7 @@ export interface ChatRequestV1 {
    */
   wrapBirths?: BirthParams[];
   /**
-   * "@mention" — khách gõ đích danh một thầy khác trong hội đồng ("@Tâm Kính",
+   * "@mention" — khách gõ đích danh một thầy khác trong nhóm ("@Tâm Kính",
    * "@Linh Cơ") ở luồng LÁ SỐ (P3 "mời thầy khác" 2026-09-26). Server chèn một
    * gợi ý NGẮN vào cuối tin user (kỹ thuật giống `focusHintText`/`khoiChuDe`,
    * KHÔNG vào system — giữ prompt-cache ổn định) nói model nên gọi tool

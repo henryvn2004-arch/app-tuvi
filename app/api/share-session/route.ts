@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
   const ctxLabel = b.ctxLabel ? String(b.ctxLabel).slice(0, 200) : null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const thayIn = (b.thay || {}) as any;
-  const thay = { id: String(thayIn.id || '').slice(0, 40), name: String(thayIn.name || 'Hội đồng Minh Bảo').slice(0, 80) };
+  const thay = { id: String(thayIn.id || '').slice(0, 40), name: String(thayIn.name || 'Nhóm Minh Bảo').slice(0, 80) };
   // restore: payload dựng lại khung giữa (lá số/kịch bản) để người nhận nối phiên
   // hỏi tiếp. Chỉ giữ nếu là object gọn (JSON < ~8KB) — chống nhồi rác.
   let restore: unknown = null;

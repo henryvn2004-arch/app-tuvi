@@ -20,7 +20,7 @@ web
 
 - Tử Vi Minh Bảo (tuviminhbao.com) luận mệnh lý theo cổ pháp: Tử Vi Đẩu Số, Bát Tự,
   xem tuổi, chọn ngày, đặt tên, phong thủy, tướng học, cùng khoảng 50 công cụ khác.
-- Cửa vào chính là **Hỏi Thầy**: một cuộc trò chuyện với hội đồng 15 thầy, luận trên
+- Cửa vào chính là **Hỏi Thầy**: một cuộc trò chuyện với nhóm 15 thầy, luận trên
   lá số thật của người hỏi. Report (bản luận dài, PDF) chạy ra từ cuộc trò chuyện
   đó.
 - **Thành công** gồm ba chỉ số:
@@ -33,7 +33,7 @@ web
 
 - Mọi con số (cung, sao, tứ hóa, đại vận, điểm) do **engine cổ pháp tất định** tính.
   Lời luận chỉ diễn giải trên số đó, không tự tính lại.
-- Người luận là **hội đồng 15 thầy có thật** (`master_profiles`), mỗi thầy một môn,
+- Người luận là **nhóm 15 thầy có thật** (`master_profiles`), mỗi thầy một môn,
   không phải một chatbot vô danh.
 
 ## Operating Context

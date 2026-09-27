@@ -151,9 +151,9 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 - **Guest checkout (Supabase Anonymous Sign-ins)** — `requireCredits()` tự mở phiên ẩn danh
   THẬT trong `auth.users` (tạo được bằng xoá cookie) ⇒ **MỌI đường phát thưởng phải tự kiểm
   `user.is_anonymous` trước khi cấp**, thiếu một chỗ là cày vô hạn. Khác `anon-trial.ts`. `docs/luat/tien.md`.
-- **Minh Bảo là HỘI ĐỒNG 15 thầy thật** (`master_profiles`, chân dung chì `/authors/<id>.jpg`), không còn
+- **Minh Bảo là NHÓM 15 thầy thật** — chữ hiển thị viết "nhóm", KHÔNG "hội đồng" (Henry chốt 2026-09-27) (`master_profiles`, chân dung chì `/authors/<id>.jpg`), không còn
   cậu bé/thầy chibi · người chỉ vẽ MỘT kiểu, hình công cụ là ĐỒ VẬT (`tool-avatars/` = bản sao `mascot/tool-icons/`)
-  · đừng chạy lại `gen-tool-avatars`/`gen-hero-banners`. `docs/nhat-ky/2026-09.md` "hội đồng 15 thầy".
+  · đừng chạy lại `gen-tool-avatars`/`gen-hero-banners`. `docs/nhat-ky/2026-09.md` "hội đồng 15 thầy" · "Đổi \"hội đồng\" → \"nhóm\"".
 - **Cửa chat có ĐÚNG MỘT tên: "Hỏi Thầy"** (Henry chốt 2026-09-26) — không viết "Luận Đường",
   "Trò chuyện", "Trợ lý" ở chữ hiển thị. URL cũ (`/app/tro-chuyen`, `/luan-duong/<id>`) giữ nguyên
   để link đã chia sẻ không chết. `docs/UX-AUDIT-PLAN.md`.

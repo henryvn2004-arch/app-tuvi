@@ -73,14 +73,14 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
   }
   if (!row || row.revoked) return page404();
 
-  const thayName = (row.thay && row.thay.name) || 'Hội đồng Minh Bảo';
+  const thayName = (row.thay && row.thay.name) || 'Nhóm Minh Bảo';
   const thayId = (row.thay && row.thay.id) || '';
   const ava = thayId ? `/authors/${esc(thayId)}.jpg` : '/authors/thai-hu.jpg';
   const title = esc(row.title || 'Hỏi Thầy');
   const url = `${SITE}/luan-duong/${esc(id)}`;
   // teaser mô tả = tin đầu tiên của thầy (cắt gọn) → OG unfurl hấp dẫn.
   const firstThay = (row.messages || []).find((m) => m.role === 'assistant');
-  const teaser = (firstThay?.content || 'Luận giải Tử Vi bởi Hội đồng Minh Bảo.').replace(/[*#\n]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180);
+  const teaser = (firstThay?.content || 'Luận giải Tử Vi bởi Nhóm Minh Bảo.').replace(/[*#\n]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180);
   const desc = esc(teaser);
   // OG card ĐỘNG cá nhân hoá (tên/ngày + thầy + trích lời thầy) → preview hấp dẫn
   // hơn ảnh seal tĩnh → tăng click vào phễu chia sẻ. (esc lần nữa cho ngoặc kép HTML.)

@@ -184,7 +184,7 @@ button { font: inherit; cursor: pointer; }
 .ask-tools a { color: var(--ink); border-bottom: 1px solid var(--line); margin: 0 4px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* ── Hội đồng 15 thầy ────────────────────────────────────────── */
+/* ── Nhóm 15 thầy ────────────────────────────────────────── */
 .council-sec { padding: 28px 0 8px; }
 .council-sub { font-size: 14px; color: var(--ink-soft); margin: -6px 0 18px; max-width: 70ch; }
 .council-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px 12px; }
@@ -240,17 +240,17 @@ button { font: inherit; cursor: pointer; }
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 
 <!-- ═══════════════ HỎI THẦY — màn hình đầu ═══════════════ -->
-<!-- Minh Bảo là HỘI ĐỒNG 15 thầy (master_profiles). Thầy Thái Hư tiếp khách;
+<!-- Minh Bảo là NHÓM 15 thầy (master_profiles). Thầy Thái Hư tiếp khách;
      câu hỏi tự do đi qua /api/thay-hoi để chuyển đúng thầy theo chủ đề. Form
      vẫn chạy khi không có JS (GET /app?q=…). Mỗi câu gợi ý đã gắn sẵn thầy. -->
 <section class="ask-sec">
   <div class="wrap ask-wrap">
     <div class="ask-host">
       <img src="/authors/thai-hu.jpg" alt="Thầy Thái Hư" width="44" height="44" fetchpriority="high">
-      <span><b>Thầy Thái Hư</b> tiếp chuyện · Hội đồng Minh Bảo</span>
+      <span><b>Thầy Thái Hư</b> tiếp chuyện · Nhóm Minh Bảo</span>
     </div>
     <h1 class="serif">Bạn đang băn khoăn điều gì?</h1>
-    <p class="ask-sub">Kể cho thầy nghe. Câu hỏi của bạn sẽ đến đúng thầy phụ trách trong hội đồng 15 thầy, mỗi thầy một môn, luận theo lá số của riêng bạn.</p>
+    <p class="ask-sub">Kể cho thầy nghe. Câu hỏi của bạn sẽ đến đúng thầy phụ trách trong nhóm 15 thầy, mỗi thầy một môn, luận theo lá số của riêng bạn.</p>
     <form class="ask-box" id="askForm" action="/app" method="get">
       <label for="askInput" class="sr-only">Câu hỏi của bạn</label>
       <textarea id="askInput" name="q" rows="2" maxlength="500" required placeholder="Ví dụ: Năm tới tôi có nên nghỉ việc ra làm riêng không?"></textarea>
@@ -362,7 +362,7 @@ button { font: inherit; cursor: pointer; }
 <div class="wrap">
   <div class="footer-quote-sec">
     <p>"Tử vi là ngọn đèn nhỏ, soi đường cho những người biết lắng nghe."</p>
-    <p><b>— Hội đồng Minh Bảo</b></p>
+    <p><b>— Nhóm Minh Bảo</b></p>
   </div>
   <div class="stats-row">
     <div class="stat-tile"><div class="stat-ic t-gold"><span class="ic" data-icon="file-text"></span></div><div><div class="stat-v">518.400+</div><div class="stat-k">Lá số đã đối chiếu</div></div></div>
