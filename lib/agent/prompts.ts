@@ -125,6 +125,12 @@ export const RAIL_MAX_TOKENS = 1500;
  * hẳn tần suất chạm mép so với 900.
  */
 export const LASO_MAX_TOKENS = 1350;
+/**
+ * Lượt HỘI CHẨN (tool `hoi_chan`, docs/DAC-TRUNG-PLAN.md): Tử Vi + Tâm Kính +
+ * Linh Cơ + dòng Kết trong một lượt ≈ 350 từ, gấp đôi lượt lá số thường. Chỉ
+ * áp khi khách tự bấm mời nhóm (`req.hoiChan`), không đụng trần các lượt khác.
+ */
+export const HOI_CHAN_MAX_TOKENS = 2400;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function buildChatContext(body: any): ChatContext {

@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-455 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+456 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 290 | 1,081,921 B |
+| `2026-09.md` | 291 | 1,096,720 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🩺 Hội chẩn — ba thầy cùng xem một quyết định lớn |
 | 1 | 2026-09 | `2026-09.md` | 🧧 Việc đời thật — Tết cả nhà: tuổi xông đất + giờ, hướng xuất hành |
 | 1 | 2026-09 | `2026-09.md` | 📅 Lịch riêng — ngày tốt / ngày xung tuổi vào lịch điện thoại |
 | 1 | 2026-09 | `2026-09.md` | 📨 Thầy tự nhắn GĐ2 — nhắn Telegram khi lời phán đến hạn |

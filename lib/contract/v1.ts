@@ -245,6 +245,13 @@ export interface ChatRequestV1 {
    * lạ/của người khác thì bị bỏ qua im lặng, không lộ gì.
    */
   addressMember?: number;
+  /**
+   * Hội chẩn (additive, docs/DAC-TRUNG-PLAN.md) — khách bấm "Mời nhóm hội chẩn"
+   * dưới một câu hỏi quyết định lớn ⇒ server đăng ký tool `hoi_chan` và bắt
+   * model gọi nó: thầy chính (Tử Vi) + Tâm Kính (Bát Tự) + Linh Cơ (Lục Nhâm)
+   * cùng xem MỘT việc trong MỘT lượt. Chỉ có tác dụng ở luồng LÁ SỐ.
+   */
+  hoiChan?: boolean;
   client: ClientInfo;
 }
 
@@ -421,6 +428,10 @@ export function validateChatRequest(body: unknown):
   // thì thêm ID vào đây — kiểu union ở trên chỉ chặn lúc biên dịch.
   if (b.addressMaster != null && b.addressMaster !== 'tam-kinh' && b.addressMaster !== 'linh-co') {
     return { ok: false, error: 'addressMaster không hợp lệ' };
+  }
+
+  if (b.hoiChan != null && typeof b.hoiChan !== 'boolean') {
+    return { ok: false, error: 'hoiChan không hợp lệ' };
   }
 
   if (b.addressMember != null && !(Number.isInteger(b.addressMember) && (b.addressMember as number) > 0)) {

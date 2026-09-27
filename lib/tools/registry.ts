@@ -139,7 +139,7 @@ function currentYearVN(): number {
 // ── Định nghĩa tool (Anthropic tool-use schema) ─────────────
 // hasProfiles=true (kênh chat có sổ lá số) → thêm 3 tool quản lý sổ.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function buildToolDefs(hasProfiles = false, hasMemory = false, hasFamily = false): any[] {
+export function buildToolDefs(hasProfiles = false, hasMemory = false, hasFamily = false, hasHoiChan = false): any[] {
   // TẦNG 2 — chỉ đăng ký khi có danh tính (đã đăng nhập). Lượt anon không có
   // hồ sơ để ghi, mà `client.anon_id` do client tự khai nên KHÔNG phải danh tính.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -262,10 +262,32 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false, hasFamily 
         },
       ]
     : [];
+  // Hội chẩn (docs/DAC-TRUNG-PLAN.md) — CHỈ đăng ký ở lượt khách bấm "Mời nhóm
+  // hội chẩn" (`req.hoiChan`). Không để model tự gọi: ba thầy cùng lên tiếng là
+  // câu trả lời dài gấp ba, chỉ đáng khi khách tự xin.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const hoiChanTools: any[] = hasHoiChan
+    ? [
+        {
+          name: 'hoi_chan',
+          description:
+            'Mời NHÓM HỘI CHẨN: Tâm Kính (Bát Tự) và Linh Cơ (Đại Lục Nhâm) cùng bạn (Tử Vi) xem MỘT quyết định người dùng đang cân nhắc. ' +
+            'Chỉ gọi khi hệ thống báo người dùng vừa bấm mời nhóm hội chẩn. Hệ thống trả về dữ liệu THẬT của hai môn kia và cách trình bày.',
+          input_schema: {
+            type: 'object',
+            properties: {
+              viec: { type: 'string', description: 'Việc cần quyết, một câu ngắn (vd "nghỉ việc mở quán cà phê năm nay").' },
+            },
+            required: ['viec'],
+          },
+        },
+      ]
+    : [];
   return [
     ...profileTools,
     ...memoryTools,
     ...familyTools,
+    ...hoiChanTools,
     SUGGEST_TOOL_DEF,
     SUGGEST_PRODUCT_TOOL_DEF,
     {
@@ -424,6 +446,7 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
     return execGoiYCongCu(input, ctx, name === 'goi_y_san_pham' ? 'report' : 'tool');
   if (name === 'moi_thay_bat_tu') return execMoiThayBatTu(input, ctx);
   if (name === 'moi_thay_luc_nham') return execMoiThayLucNham(input, ctx);
+  if (name === 'hoi_chan') return execHoiChan(input, ctx);
   if (name === 'moi_thay_ky_mon') return execMoiThayKyMon(input, ctx);
   if (name === 'xem_nguoi_nha') return execXemNguoiNha(input, ctx);
   if (name === 'tra_ca_nha') return execTraCaNha(ctx);
@@ -727,6 +750,63 @@ async function execMoiThayLucNham(input: Rec, ctx: ToolContext): Promise<ToolRun
       extractGenericContext(railDataLucNham(khoa)) +
       '\n\nLuận xong phần Linh Cơ thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn để khép lại — không lặp lại số liệu Linh Cơ vừa nêu.',
     label: 'Đang mời thầy Linh Cơ lập khóa Lục Nhâm...',
+  };
+}
+
+// ── Hội chẩn (docs/DAC-TRUNG-PLAN.md) ────────────────────────────────────
+// Ba môn cùng xem MỘT việc trong MỘT lượt model: gộp đúng nguồn số của
+// execMoiThayBatTu (computeTuBinh năm nay) và execMoiThayLucNham (lapKhoa giờ
+// hỏi) — không công thức mới. Mỗi thầy phải nói RÕ nghiêng Thuận hay Nghịch,
+// để khách thấy chỗ các môn gặp nhau và chỗ vênh nhau — đó mới là giá trị của
+// hội chẩn, không phải ba đoạn văn song song. Thiếu Bát Tự (không có ngày sinh)
+// thì vẫn hội chẩn với hai môn còn lại, không bịa.
+async function execHoiChan(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  const label = 'Đang mời nhóm hội chẩn...';
+  if (ctx.masterInvited) {
+    return { content: 'Đã mời thầy khác trong lượt này rồi. Đừng mời thêm.', label };
+  }
+  const viec = String(input?.viec || ctx.question || '').replace(/\s+/g, ' ').trim().slice(0, 200);
+  const nam = currentYearVN();
+  const bt = ctx.birth ? computeTuBinh(ctx.birth, nam) : null;
+  let khoa;
+  try {
+    khoa = lapKhoa();
+  } catch (e) {
+    console.error('[hoi_chan] lapKhoa lỗi:', (e as Error)?.message);
+  }
+  const coBatTu = !!(bt && bt.ok && bt.data);
+  if (!coBatTu && !khoa) {
+    return { content: 'Không dựng được dữ liệu Bát Tự lẫn Lục Nhâm — không hội chẩn được. Trả lời bằng Tử Vi như thường, đừng nhắc tới hội chẩn.', label };
+  }
+  ctx.masterInvited = true;
+  const phan: string[] = [];
+  if (coBatTu) {
+    phan.push(
+      `━━ PHẦN TÂM KÍNH (Bát Tự, vận năm ${nam}) ━━\n` +
+        (personaVoice('tam-kinh') || '') +
+        '\n\n' +
+        extractTuBinhContext(bt!.data!),
+    );
+  }
+  if (khoa) {
+    phan.push(
+      '━━ PHẦN LINH CƠ (Đại Lục Nhâm, khóa lập ngay lúc hỏi) ━━\n' +
+        (personaVoice('linh-co') || '') +
+        '\n\n' +
+        extractGenericContext(railDataLucNham(khoa)),
+    );
+  }
+  const thuTu = [coBatTu ? '"**Tâm Kính:**"' : '', khoa ? '"**Linh Cơ:**"' : ''].filter(Boolean).join(' rồi ');
+  return {
+    content:
+      `— NHÓM HỘI CHẨN ĐÃ VÀO PHÒNG, CÙNG XEM: ${viec || 'việc người dùng vừa hỏi'} —\n` +
+      'Trình bày ĐÚNG thứ tự, mỗi thầy mở một dòng riêng bằng tên in đậm:\n' +
+      '1. Phần của bạn (Tử Vi) ĐỨNG TRƯỚC, không cần tên — nếu đã viết rồi thì thôi, đừng viết lại.\n' +
+      `2. ${thuTu} — mỗi thầy 2–4 câu, bằng giọng THẬT của thầy đó, CHỈ dựa vào dữ liệu của môn mình dưới đây, câu đầu nói rõ việc này nghiêng THUẬN, NGHỊCH hay CÒN TUỲ, rồi mới nêu lý do.\n` +
+      '3. Cuối cùng một dòng "**Kết:**" bằng giọng của bạn: các môn gặp nhau ở đâu, vênh nhau ở đâu, và MỘT việc nên làm trước. Vênh thì nói thẳng là vênh — KHÔNG ép cho khớp.\n' +
+      'Không tự thêm số liệu ngoài dữ liệu dưới đây. Không nói giá, không nói "hội đồng".\n\n' +
+      phan.join('\n\n'),
+    label,
   };
 }
 

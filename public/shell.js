@@ -1711,20 +1711,26 @@
     moi_thay_bat_tu:   { master: 'tam-kinh', discipline: 'bat-tu' },
     moi_thay_luc_nham: { master: 'linh-co',  discipline: 'luc-nham' },
     moi_thay_ky_mon:   { master: 'tam-kinh', discipline: 'ky-mon' },
+    hoi_chan:          { master: 'nhom',     discipline: 'hoi-chan' },
   };
   // Tách câu trả lời thành nhiều "tiếng nói" theo mốc "**Tên thầy:**" đứng đầu
   // dòng — server (execMoiThay*, lib/tools/registry.ts) LUÔN dặn model mở một
   // dòng riêng đúng dạng này khi một thầy khác vừa được mời vào. Đoạn ĐẦU
   // (trước mốc đầu tiên, hoặc TOÀN BỘ nếu không có mốc nào) là của thầy chính.
+  // "**Kết:**" (hội chẩn, tool `hoi_chan`) là lời chốt của THẦY CHÍNH ⇒ bong
+  // bóng riêng mang avatar thầy chính, giữ nguyên chữ "Kết:" trong nội dung.
   function splitBySpeaker(text) {
-    var re = /^\*\*(Tâm Kính|Linh Cơ):\*\*[ \t]*/gm;
+    var re = /^\*\*(Tâm Kính|Linh Cơ|Kết):\*\*[ \t]*/gm;
     var marks = [], m;
-    while ((m = re.exec(text))) marks.push({ name: m[1], start: m.index, contentStart: re.lastIndex });
+    while ((m = re.exec(text))) {
+      if (m[1] === 'Kết') marks.push({ name: null, host: true, start: m.index, contentStart: m.index });
+      else marks.push({ name: m[1], start: m.index, contentStart: re.lastIndex });
+    }
     if (!marks.length) return [{ name: null, text: text }];
     var segs = [{ name: null, text: text.slice(0, marks[0].start) }];
     for (var i = 0; i < marks.length; i++) {
       var end = (i + 1 < marks.length) ? marks[i + 1].start : text.length;
-      segs.push({ name: marks[i].name, text: text.slice(marks[i].contentStart, end) });
+      segs.push({ name: marks[i].name, host: !!marks[i].host, text: text.slice(marks[i].contentStart, end) });
     }
     return segs;
   }
@@ -5493,6 +5499,7 @@
     // Câu GỐC cho hàng "Nghe thêm môn khác" — lượt mời mang câu gốc theo, để
     // lần bấm tiếp không lồng "@Tên, @Tên, …" vào nhau.
     var _soQ = _soPendingQ || text; _soPendingQ = null;
+    var _hc = _hcNext; _hcNext = false;
     input.value = ''; autoGrow(input);
     var chat = document.getElementById('chat');
     var empty = document.getElementById('railEmpty'); if (empty) empty.remove();
@@ -5546,6 +5553,7 @@
         if (addressed) body.addressMaster = addressed;
         var member = detectAddressMember(text);
         if (member) body.addressMember = member;
+        if (_hc) body.hoiChan = true;
       }
       if (ctx.wrap) body.wrap = ctx.wrap;
       if (ctx.wrapBirthB) body.wrapBirthB = ctx.wrapBirthB;
@@ -5657,10 +5665,12 @@
             // phải lúc người dùng đọc xong). `via` phân biệt tự gợi ý (model tự
             // quyết) hay do khách @ đích danh (addressMaster đã gửi lượt này).
             var _inv = MOI_THAY_TOOLS[ev.data.name];
+            // Khách đã thấy thầy khác lên tiếng ⇒ đủ điều kiện thấy nút hội chẩn.
+            try { localStorage.setItem(HC_READY, '1'); } catch (e) { /* ignore */ }
             try {
               track('master_invite', {
                 tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null,
-                meta: { master: _inv.master, discipline: _inv.discipline, via: (typeof addressed !== 'undefined' && addressed) ? 'mention' : 'auto' },
+                meta: { master: _inv.master, discipline: _inv.discipline, via: body.hoiChan ? 'hoi_chan' : (typeof addressed !== 'undefined' && addressed) ? 'mention' : 'auto' },
               });
             } catch (e) { /* ignore */ }
           }
@@ -5690,9 +5700,10 @@
           var _seg = _speakerSegs[_si];
           if (!_seg.text.trim()) continue;
           var _grow = document.createElement('div'); _grow.className = 'msg a msg-guest';
-          var _gav = document.createElement('img'); _gav.className = 'msg-ava'; _gav.src = avaForSpeaker(_seg.name); _gav.alt = '';
+          var _gav = document.createElement('img'); _gav.className = 'msg-ava'; _gav.src = _seg.host ? authorAva() : avaForSpeaker(_seg.name); _gav.alt = '';
           var _gbody = document.createElement('div'); _gbody.className = 'msg-body';
-          _gbody.innerHTML = '<div class="msg-speaker">' + esc(_seg.name) + '</div>' + mdLite(_seg.text);
+          var _gname = _seg.host ? (_author ? _author.name : '') : _seg.name;
+          _gbody.innerHTML = (_gname ? '<div class="msg-speaker">' + esc(_gname) + '</div>' : '') + mdLite(_seg.text);
           _grow.appendChild(_gav); _grow.appendChild(_gbody);
           chat.appendChild(_grow);
         }
@@ -5740,6 +5751,24 @@
     { id: 'linh-co',  mon: 'Lục Nhâm' },
   ];
   var _soPendingQ = null; // câu GỐC khi lượt đang gửi là một lượt "môn khác"
+  // ── HỘI CHẨN (docs/DAC-TRUNG-PLAN.md) ──
+  // Nút "Mời nhóm hội chẩn" nằm CHUNG hàng "Nghe thêm môn khác", chỉ hiện khi:
+  // câu hỏi là một QUYẾT ĐỊNH LỚN · khách đã từng thấy thầy khác lên tiếng
+  // (HC_READY, đặt khi có `master_invite`) · thầy chính không phải Tâm Kính/
+  // Linh Cơ (tool `hoi_chan` luôn mời đúng hai thầy đó). Hiện rồi mà không bấm
+  // ⇒ im 14 ngày (luật 4); bấm ⇒ lượt sau gửi `hoiChan:true`.
+  var HC_READY = 'tvmb_hc_ready', HC_QUIET = 'tvmb_hc_quiet';
+  var _hcNext = false;
+  var QUYET_DINH_RE = /(có nên|nên hay không|hay là thôi|quyết định|ký hợp đồng|mua nhà|mua đất|xây nhà|cưới|kết hôn|ly hôn|đầu tư|nghỉ việc|chuyển việc|đổi việc|nhảy việc|khởi nghiệp|mở công ty|mở quán|mở cửa hàng|kinh doanh riêng|ra riêng|vay ngân hàng|du học|định cư)/;
+  function hoiChanDu(q) {
+    if (!QUYET_DINH_RE.test(String(q || '').toLocaleLowerCase('vi-VN'))) return false;
+    if (_author && (_author.id === 'tam-kinh' || _author.id === 'linh-co')) return false;
+    try {
+      if (!localStorage.getItem(HC_READY)) return false;
+      if (Date.now() < Number(localStorage.getItem(HC_QUIET) || 0)) return false;
+    } catch (e) { return false; }
+    return !!(authorById('tam-kinh') && authorById('linh-co'));
+  }
   function appendSecondOpinion(q, spoke) {
     var chat = document.getElementById('chat');
     if (!chat) return;
@@ -5748,16 +5777,36 @@
     if (!q || !ctx || !ctx.birth || ctx.scenario) return;
     var picks = GUEST_MASTERS.map(function (g) { var a = authorById(g.id); return a ? { a: a, mon: g.mon } : null; })
       .filter(function (x) { return x && (!spoke || spoke.indexOf(x.a.name) < 0); });
+    // Hai thầy khách đều đã nói trong câu này (vừa hội chẩn xong) ⇒ không mời lại.
+    var hc = picks.length === GUEST_MASTERS.length && hoiChanDu(q);
     if (!picks.length) return;
     var bar = document.createElement('div');
     bar.className = 'msg-2nd';
     bar.innerHTML = '<span class="m2-l">' + svg('users') + 'Nghe thêm môn khác</span>' + picks.map(function (x) {
       return '<button type="button" class="m2-a" data-id="' + x.a.id + '" aria-label="Mời Thầy ' + esc(x.a.name) + ' xem bằng ' + esc(x.mon) + '">' +
         '<img src="/authors/' + x.a.id + '.jpg" alt=""><span>' + esc(x.a.name) + ' <em>· ' + esc(x.mon) + '</em></span></button>';
-    }).join('');
+    }).join('') + (hc
+      ? '<button type="button" class="m2-a m2-hc" aria-label="Mời nhóm hội chẩn, 3 thầy cùng xem">' +
+        '<span class="m2-stack"><img src="' + authorAva() + '" alt=""><img src="/authors/tam-kinh.jpg" alt=""><img src="/authors/linh-co.jpg" alt=""></span>' +
+        '<span>Mời nhóm hội chẩn <em>· 3 thầy</em></span></button>'
+      : '');
     chat.appendChild(bar);
     chat.scrollTop = chat.scrollHeight;
+    if (hc) {
+      // Hiện một lần = đã "gặp"; không bấm thì lần sau im 14 ngày.
+      try { localStorage.setItem(HC_QUIET, String(Date.now() + 14 * 864e5)); } catch (e) { /* ignore */ }
+      try { track('invite_shown', { tool_id: ACTIVE, meta: { from: 'hoi_chan' } }); } catch (e) { /* ignore */ }
+    }
     bar.addEventListener('click', function (e) {
+      var h = e.target.closest('.m2-hc');
+      if (h && !streaming) {
+        try { localStorage.removeItem(HC_QUIET); } catch (e2) { /* ignore */ }
+        try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'hoi_chan' } }); } catch (e2) { /* ignore */ }
+        _hcNext = true;
+        _soPendingQ = q;
+        ask(q);
+        return;
+      }
       var b = e.target.closest('.m2-a'); if (!b || streaming) return;
       var a = authorById(b.getAttribute('data-id'));
       if (!a) return;
