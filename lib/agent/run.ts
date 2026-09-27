@@ -26,7 +26,7 @@ import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
-import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine, RAIL_MAX_TOKENS, LASO_MAX_TOKENS } from '@/lib/agent/prompts';
+import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine, RAIL_MAX_TOKENS, LASO_MAX_TOKENS, HOI_CHAN_MAX_TOKENS } from '@/lib/agent/prompts';
 import { cacChuDe, khoiChuDe } from '@/lib/agent/luan-chu-de';
 import { personaVoice, PERSONAS } from '@/lib/agent/personas';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
@@ -265,6 +265,7 @@ async function runAgentInner(
   // siết thêm được bằng cách HẠ chat.max_tokens (không nâng ngược lên được —
   // độ dài rail là quyết định sản phẩm, nằm ở code).
   let railMaxTokens = RAIL_MAX_TOKENS;
+  let hoiChan = false;
   // Seed ctx với birth đang xem (req.birth) → "lưu lá số này tên X" chạy được cả
   // khi lượt này không gọi lại lap_la_so. profiles bật 3 tool sổ (kênh chat).
   // Port hồ sơ đã BIND SẴN userId → tool chỉ truyền nội dung, không truyền
@@ -411,6 +412,10 @@ async function runAgentInner(
       }
     }
     const hasLaso = !!ctx.ls;
+    // Hội chẩn (docs/DAC-TRUNG-PLAN.md): ba thầy trong một lượt ⇒ chữ dài hơn
+    // lượt thường. Nới trần RIÊNG lượt này — trần chung 1350 cắt giữa phần Kết.
+    hoiChan = !!req.hoiChan && hasLaso;
+    if (hoiChan) railMaxTokens = Math.max(railMaxTokens, HOI_CHAN_MAX_TOKENS);
 
     // Prompt: LUÔN dùng TEMPLATE chung lib/agent/prompts (một nguồn với
     // /api/lasotuvi — sửa hình dạng/luật luận 1 chỗ; chứa shape 3 lớp +
@@ -549,7 +554,7 @@ async function runAgentInner(
       if (vai && !req.addressMember && canMoiThem(vai, ctx.family)) side.familyInvite = { vaiTro: vai };
     }
     ctx.question = lastQ;
-    tools = buildToolDefs(!!profiles, !!memoryPort, ctx.family.length > 0);
+    tools = buildToolDefs(!!profiles, !!memoryPort, ctx.family.length > 0, hoiChan);
   }
 
   // Chốt cfg cho cả lượt: trần token là min(DB, per-prompt). Clone chứ không
@@ -634,6 +639,23 @@ async function runAgentInner(
         ? 'moi_thay_luc_nham (Linh Cơ chiêm ngay lúc này chính chuyện người dùng đang hỏi)'
         : 'moi_thay_bat_tu (mặc định; không nói năm thì lấy năm hiện tại), hoặc moi_thay_ky_mon nếu câu hỏi là về hướng/giờ hành sự';
     const hint = `[Người dùng vừa bấm mời đích danh thầy ${displayName} — BẮT BUỘC gọi tool ${tool} trong lượt này, bỏ qua MỌI điều kiện ở mô tả tool (kể cả loại câu hỏi và "đã mời trong cuộc trò chuyện này rồi"). Thầy ${displayName} xem CÙNG câu hỏi theo góc môn của mình — KHÔNG từ chối, KHÔNG giải thích vì sao môn đó "không hợp".]`;
+    const last = convo[convo.length - 1];
+    if (last?.role === 'user') {
+      if (typeof last.content === 'string') {
+        last.content = last.content + '\n\n' + hint;
+      } else if (Array.isArray(last.content)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const tb = last.content.find((b: any) => b.type === 'text');
+        if (tb) tb.text += '\n\n' + hint;
+        else last.content.push({ type: 'text', text: hint });
+      }
+    }
+  }
+
+  // Hội chẩn — khách bấm "Mời nhóm hội chẩn" ⇒ LUÔN gọi hoi_chan. Cùng kỹ
+  // thuật: gợi ý vào CUỐI tin user, không đụng system (giữ prompt cache).
+  if (hoiChan && convo.length) {
+    const hint = '[Người dùng vừa bấm mời NHÓM HỘI CHẨN cho câu hỏi này — luận ngắn bằng Tử Vi TRƯỚC (3–5 câu), rồi BẮT BUỘC gọi tool hoi_chan và trình bày đúng như tool dặn. Lượt này được dài hơn giới hạn "trả lời ngắn" ở trên, nhưng tổng cả nhóm không quá khoảng 350 từ.]';
     const last = convo[convo.length - 1];
     if (last?.role === 'user') {
       if (typeof last.content === 'string') {

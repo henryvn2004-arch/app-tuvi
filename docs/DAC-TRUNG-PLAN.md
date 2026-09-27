@@ -88,7 +88,14 @@ Chữ hiển thị: "Mời **nhóm** hội chẩn" — KHÔNG "hội đồng" (l
    ngày xấu chung bỏ (19/60 ngày ⇒ lịch thành tường cảnh báo). Lộ ra: lần quay lại thứ 3
    trên màn chat chính (khi Sổ tiên tri không có gì hỏi lại) + khối "Lịch riêng" ở
    `/app/ca-nha`. Một hàm client: `Shell.moLichRieng(kind)`.
-4. **Hội chẩn** — chờ 1–2 tuần số liệu `master_invite` trước.
+4. **Hội chẩn** ✅: tool rail `hoi_chan` — CHỈ đăng ký ở lượt khách bấm (`req.hoiChan`), thầy
+   chính luận Tử Vi trước, rồi Tâm Kính (Bát Tự năm nay, `computeTuBinh`) và Linh Cơ (Lục Nhâm lập
+   giờ hỏi, `lapKhoa`) mỗi thầy nói rõ THUẬN/NGHỊCH/CÒN TUỲ, cuối cùng dòng "**Kết:**" nói chỗ các
+   môn gặp nhau và chỗ vênh (không ép khớp). Trần token riêng lượt này `HOI_CHAN_MAX_TOKENS`.
+   Nút "Mời nhóm hội chẩn · 3 thầy" nằm trong hàng "Nghe thêm môn khác", chỉ hiện khi câu hỏi là
+   quyết định lớn (`QUYET_DINH_RE`, shell.js) + khách đã từng thấy thầy khác lên tiếng + thầy chính
+   không phải Tâm Kính/Linh Cơ; hiện mà không bấm ⇒ im 14 ngày. Không chờ số liệu: đo ra
+   `master_invite` = 0 là do `/api/track` thiếu loại này trong ALLOWED (ghi thành `other`) — đã vá.
 5. **Việc đời thật — Tết** ✅: tool rail `xem_tet_ca_nha` (luôn có ở luồng lá số): tuổi
    xông đất theo chủ nhà = người hỏi (`computeXongDat`, năm ÂM — sinh tháng 1–2 dương có thể
    thuộc năm âm trước) + giờ hoàng đạo, hướng Hỷ/Tài thần mùng 1–3 (`computeVanNgay`) + ngày

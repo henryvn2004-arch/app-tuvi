@@ -280,6 +280,10 @@ body.chat-home .rail-report,body.chat-first-live.art-closed .rail-report{margin-
 .msg-2nd .m2-a img{width:22px;height:22px;border-radius:50%;object-fit:cover}
 .msg-2nd .m2-a em{font-style:normal;color:var(--text-lt)}
 @media(hover:hover){.msg-2nd .m2-a:hover{border-color:var(--gold-soft);color:var(--text)}}
+.msg-2nd .m2-hc{border-color:var(--gold-soft);color:var(--text)}
+.msg-2nd .m2-stack{display:inline-flex}
+.msg-2nd .m2-stack img{border:1.5px solid var(--white)}
+.msg-2nd .m2-stack img+img{margin-left:-8px}
 .msg.a b,.msg.a strong{color:var(--text);font-weight:700}
 .msg.a p{margin-bottom:8px}
 .msg.a em{color:var(--gold-soft);font-style:normal;font-weight:600}

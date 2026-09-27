@@ -58,6 +58,11 @@ const ALLOWED = new Set([
   // không mở (nội dung tin nhắc rỗng — đúng bệnh vừa vá). Gộp lại thì cả ba
   // trông giống nhau: một con số 0.
   'push_optin_shown', 'push_optin_result', 'push_open',
+  // "Mời thầy khác" / hội chẩn — shell.js bắn từ 2026-09-26 nhưng thiếu ở đây
+  // nên mọi lượt bị ghi thành 'other' (đo 2026-09-27: 0 dòng master_invite,
+  // 2 dòng 'other' mang meta.master). Hội chẩn đo bằng chính event này
+  // (meta.discipline='hoi-chan').
+  'master_invite',
   // Màn chat trang chủ (2026-09-26): Minh Bảo dẫn đường. `nav_route` = câu đầu
   // tiên đi qua bước mời thầy; `nav_join` = khách bấm mời (meta.thay). Khoảng
   // cách giữa hai số là tỉ lệ người bỏ đi ngay ở thẻ mời. `nav_birth` = lập lá số
