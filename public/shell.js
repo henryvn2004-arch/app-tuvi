@@ -773,7 +773,80 @@
     document.getElementById('railFile').addEventListener('change', onPickFiles);
     var ta = document.getElementById('railInput');
     ta.addEventListener('input', function () { autoGrow(ta); });
+    mountMentionPicker(ta); // PHẢI đứng trước handler Enter — menu mở thì Enter là CHỌN, không phải gửi
     ta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); } });
+  }
+
+  // ── MENU "@" CHỌN THẦY (kiểu WhatsApp, Henry 2026-09-27) ──
+  // Gõ "@" trong ô chat → sổ danh sách thầy CÓ MẶT trong cuộc trò chuyện:
+  // thầy đang tiếp chuyện + các thầy môn khác mời được (GUEST_MASTERS — chỉ
+  // họ có `addressMaster`, xem detectAddressMaster). Gõ tiếp để lọc, không cần
+  // dấu ("@tam" → Tâm Kính). Chọn = thay "@chữ-đang-gõ" bằng "@Tên ". Chỉ ở
+  // luồng lá số (`ctx.birth && !ctx.scenario`) — ngoài đó "@" không có nghĩa.
+  function foldVi(s) { return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase(); }
+  function mentionCandidates() {
+    var out = [];
+    if (_author) out.push({ a: _author, sub: 'Đang tiếp chuyện' });
+    GUEST_MASTERS.forEach(function (g) {
+      var a = authorById(g.id);
+      if (a && (!_author || a.id !== _author.id)) out.push({ a: a, sub: g.mon });
+    });
+    return out;
+  }
+  function mountMentionPicker(ta) {
+    var host = ta.parentNode; if (!host) return;
+    var pop = document.createElement('div');
+    pop.className = 'mention-pop'; pop.setAttribute('role', 'listbox'); pop.hidden = true;
+    host.appendChild(pop);
+    var items = [], sel = 0, start = -1;
+    function close() { pop.hidden = true; items = []; start = -1; }
+    function paint() {
+      pop.innerHTML = items.map(function (x, i) {
+        return '<div class="mp-it' + (i === sel ? ' on' : '') + '" role="option" aria-selected="' + (i === sel) + '" data-i="' + i + '">' +
+          '<img src="/authors/' + x.a.id + '.jpg" alt=""><span><b>' + esc(x.a.name) + '</b><em>' + esc(x.sub) + '</em></span></div>';
+      }).join('');
+    }
+    function update() {
+      if (!ctx || !ctx.birth || ctx.scenario || ta.disabled) { close(); return; }
+      var upto = ta.value.slice(0, ta.selectionStart || 0);
+      var m = /(^|\s)@([^\s@]*)$/.exec(upto);
+      if (!m) { close(); return; }
+      var q = foldVi(m[2]);
+      items = mentionCandidates().filter(function (x) { return !q || foldVi(x.a.name).indexOf(q) >= 0; });
+      if (!items.length) { close(); return; }
+      start = upto.length - m[2].length - 1; // vị trí dấu "@"
+      if (sel >= items.length) sel = 0;
+      paint(); pop.hidden = false;
+    }
+    function pick(i) {
+      var x = items[i]; if (!x || start < 0) return;
+      var caret = ta.selectionStart || 0;
+      var ins = '@' + x.a.name + ' ';
+      ta.value = ta.value.slice(0, start) + ins + ta.value.slice(caret);
+      var pos = start + ins.length;
+      ta.setSelectionRange(pos, pos);
+      try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'mention_pick', master: x.a.id } }); } catch (e) { /* ignore */ }
+      close(); autoGrow(ta); ta.focus();
+    }
+    ta.addEventListener('input', function () { sel = 0; update(); });
+    ta.addEventListener('click', update);
+    ta.addEventListener('blur', function () { setTimeout(close, 150); });
+    ta.addEventListener('keydown', function (e) {
+      if (pop.hidden) return;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        sel = (sel + (e.key === 'ArrowDown' ? 1 : items.length - 1)) % items.length; paint();
+      } else if ((e.key === 'Enter' && !e.shiftKey) || e.key === 'Tab') {
+        e.preventDefault(); e.stopImmediatePropagation(); pick(sel);
+      } else if (e.key === 'Escape') {
+        e.preventDefault(); close();
+      }
+    });
+    // pointerdown + preventDefault: giữ focus ở ô nhập ⇒ bàn phím iOS không sập khi chạm chọn.
+    pop.addEventListener('pointerdown', function (e) { e.preventDefault(); });
+    pop.addEventListener('click', function (e) {
+      var it = e.target.closest('.mp-it'); if (it) pick(Number(it.getAttribute('data-i')));
+    });
   }
 
   // ── Ảnh đính kèm (vision): xem tướng / phong thủy qua ảnh ──
@@ -1265,15 +1338,19 @@
     { n: 'tâm kính', id: 'tam-kinh' },
     { n: 'linh cơ',  id: 'linh-co' },
   ];
-  // @mention ở ĐẦU câu ("@Tâm Kính, năm sau con...") → server nới lỏng điều
-  // kiện ở mô tả tool của đúng thầy đó (xem addressMaster, lib/agent/run.ts).
+  // @mention ở BẤT KỲ đâu trong câu ("năm sau con… @Tâm Kính xem giúp") →
+  // server bắt model mời đúng thầy đó (xem addressMaster, lib/agent/run.ts).
+  // Nhiều "@" thì lấy cái đứng TRƯỚC. Menu "@" (mountMentionPicker) chèn tên
+  // ngay chỗ con trỏ nên không còn buộc đứng đầu câu.
   // KHÔNG cắt "@Tên" khỏi text gửi đi — giữ nguyên câu khách gõ.
   function detectAddressMaster(text) {
-    var t = String(text || '').trim().toLocaleLowerCase('vi-VN');
+    var t = String(text || '').toLocaleLowerCase('vi-VN');
+    var best = null, at = -1;
     for (var i = 0; i < INVITE_MASTER_NAMES.length; i++) {
-      if (t.indexOf('@' + INVITE_MASTER_NAMES[i].n) === 0) return INVITE_MASTER_NAMES[i].id;
+      var k = t.indexOf('@' + INVITE_MASTER_NAMES[i].n);
+      if (k >= 0 && (at < 0 || k < at)) { at = k; best = INVITE_MASTER_NAMES[i].id; }
     }
-    return null;
+    return best;
   }
   // Đo click-through "mời thầy khác" (P4 2026-09-26) — khớp TÊN TOOL server
   // gọi (lib/tools/registry.ts) với thầy/môn để gắn nhãn khi bắn `master_invite`.
@@ -5086,6 +5163,10 @@
       // một thầy khác không có ý nghĩa gì để server xử lý.
       if (!ctx.scenario) {
         var addressed = detectAddressMaster(text);
+        // "@" đúng thầy ĐANG tiếp chuyện (vd vào từ trang "Các Thầy" chọn Tâm
+        // Kính) thì không có ai để "mời vào" — gửi addressMaster là ép thầy tự
+        // mời chính mình.
+        if (addressed && _author && addressed === _author.id) addressed = null;
         if (addressed) body.addressMaster = addressed;
       }
       if (ctx.wrap) body.wrap = ctx.wrap;
