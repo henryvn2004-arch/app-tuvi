@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-445 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+446 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🪜 Phễu chuyển đổi — dùng thử 6 câu, đăng ký tặng 10 câu, 2nd opinion đa môn nổ sớm, thanh trạng thái báo cáo |
 | 1 | 2026-09 | `2026-09.md` | 👥 Trang chủ "Các Thầy" — bấm thầy là vào chat thẳng, thầy tự giới thiệu rồi xin ngày sinh |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Màn chat `/app` — bộ đếm dưới lời chào, xin ngày sinh ngay trong chat, `/` bỏ thanh nút đáy |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Điều hướng kiểu ChatGPT — sidebar trang, màn chat `/app`, Minh Bảo dẫn đường, kết quả như artifact |

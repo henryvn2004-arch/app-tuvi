@@ -17,7 +17,7 @@ import { PAYPAL_BASE, PAYPAL_CURRENCY, VND_PER_USD, getPayPalToken, humanIssueMe
 import { getToolPrice, getToolParts } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { recordUserReport } from '@/lib/reports/userReports';
-import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining, railFreeGrant, railBonusTurnsPerPurchase } from '@/lib/billing/viral-budget';
+import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining, railFreeGrant, railBonusTurnsPerPurchase, railSignupFreeTurns } from '@/lib/billing/viral-budget';
 import { anonTrialStatus } from '@/lib/billing/anon-trial';
 import { voucherListActive, voucherConsume, pickBestVoucher } from '@/lib/billing/vouchers';
 import { getToolRevenue } from '@/lib/marketing/tool-profit';
@@ -243,7 +243,8 @@ async function handleSignupBonus(): Promise<Response> {
     .map((v) => Number(v))
     .filter((n) => Number.isFinite(n) && n > 0);
   // Không đọc được → null, để giao diện lùi về câu chung chung thay vì hứa sai.
-  return ok({ bonus: variants.length ? Math.min(...variants) : null });
+  // `freeTurns`: câu hỏi Thầy TẶNG khi đăng ký (cấp ở /api/signup-signal).
+  return ok({ bonus: variants.length ? Math.min(...variants) : null, freeTurns: await railSignupFreeTurns() });
 }
 
 // ── GET: khoi-hanh-defs — CÔNG KHAI, cùng lý do handleSignupBonus. Khách VÔ

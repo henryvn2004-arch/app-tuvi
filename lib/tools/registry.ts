@@ -248,9 +248,9 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false): any[] {
     {
       name: 'moi_thay_bat_tu',
       description:
-        'Mời THẦY TÂM KÍNH (chuyên Bát Tự/Tử Bình) vào cùng trả lời, để người dùng nghe thêm góc ĐỐI CHIẾU từ một môn khác cho MỘT NĂM cụ thể đang hỏi. ' +
-        'DÙNG RẤT DÈ: mặc định là KHÔNG gọi. Chỉ gọi khi cả bốn điều sau cùng đúng — ' +
-        '(1) người dùng đang hỏi vận hạn của một NĂM cụ thể (không phải tháng/ngày, không phải hỏi chung chung); ' +
+        'Mời THẦY TÂM KÍNH (chuyên Bát Tự/Tử Bình) vào cùng trả lời, để người dùng nghe thêm góc ĐỐI CHIẾU từ một môn khác cho vận của MỘT NĂM (năm đang hỏi, hoặc năm nay). ' +
+        'GỌI SỚM: câu ĐẦU TIÊN trong cuộc trò chuyện hợp môn này thì gọi NGAY (không đợi người dùng hỏi sâu) — nghe nhiều môn cùng xem một chuyện là điều người dùng không có ở chatbot thường. Gọi khi đủ bốn điều — ' +
+        '(1) người dùng hỏi về vận hạn, sự nghiệp, tài lộc hay tình duyên gắn với một khoảng thời gian (năm nay, sắp tới, một năm cụ thể) — không nói năm thì lấy năm hiện tại; KHÔNG gọi cho câu hỏi tháng/ngày hay câu hỏi tính cách thuần tuý; ' +
         '(2) bạn đã luận xong bằng Tử Vi TRƯỚC RỒI — đây là góc nhìn THÊM, không phải để né câu hỏi; ' +
         '(3) trong cả cuộc trò chuyện này bạn CHƯA gọi bất kỳ tool mời-thầy-khác nào (moi_thay_luc_nham, moi_thay_ky_mon) lần nào; ' +
         '(4) không phải lúc người dùng đang buồn/bế tắc/kể chuyện riêng — lúc đó chỉ nên lắng nghe. ' +
@@ -258,7 +258,7 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false): any[] {
       input_schema: {
         type: 'object',
         properties: {
-          nam: { type: 'integer', description: 'Năm dương lịch cần đối chiếu — lấy ĐÚNG năm người dùng vừa hỏi.' },
+          nam: { type: 'integer', description: 'Năm dương lịch cần đối chiếu — lấy ĐÚNG năm người dùng vừa hỏi; không nói năm thì lấy năm hiện tại.' },
           ly_do: { type: 'string', description: 'MỘT câu ngắn nói vì sao đáng nghe thêm góc Bát Tự cho năm này.' },
         },
         required: ['nam', 'ly_do'],
@@ -272,7 +272,7 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false): any[] {
       name: 'moi_thay_luc_nham',
       description:
         'Mời THẦY LINH CƠ (chuyên Đại Lục Nhâm) vào cùng trả lời, để người dùng nghe thêm góc ĐỐI CHIẾU từ một môn khác cho MỘT VIỆC CỤ THỂ đang phân vân NGAY LÚC NÀY (thành/bại, nên tiến hay lui, chừng nào có kết quả) — KHÔNG dùng cho câu hỏi vận năm/tháng chung chung (đã có moi_thay_bat_tu cho việc đó). ' +
-        'DÙNG RẤT DÈ: mặc định là KHÔNG gọi. Chỉ gọi khi cả bốn điều sau cùng đúng — ' +
+        'GỌI SỚM: câu ĐẦU TIÊN trong cuộc trò chuyện hợp môn này thì gọi NGAY (không đợi người dùng hỏi sâu) — nghe nhiều môn cùng xem một chuyện là điều người dùng không có ở chatbot thường. Gọi khi đủ bốn điều — ' +
         '(1) người dùng đang hỏi về MỘT VIỆC CỤ THỂ, có thể trả lời được ngay bây giờ (vd "có nên ký hợp đồng này", "việc này có thành không") — không phải hỏi vận hạn dài hạn; ' +
         '(2) bạn đã luận xong bằng Tử Vi TRƯỚC RỒI — đây là góc nhìn THÊM, không phải để né câu hỏi; ' +
         '(3) trong cả cuộc trò chuyện này bạn CHƯA gọi bất kỳ tool mời-thầy-khác nào (moi_thay_bat_tu, moi_thay_ky_mon) lần nào; ' +
@@ -297,7 +297,7 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false): any[] {
       name: 'moi_thay_ky_mon',
       description:
         'Mời THẦY TÂM KÍNH (chuyên Kỳ Môn Độn Giáp) vào cùng trả lời, để người dùng nghe thêm góc ĐỐI CHIẾU cho câu hỏi VỀ HƯỚNG hoặc GIỜ HÀNH SỰ NGAY LÚC NÀY (giờ này nên đi hướng nào, hợp làm việc gì, tránh hướng nào) — KHÔNG dùng cho câu hỏi vận năm (đã có moi_thay_bat_tu) hay câu hỏi thành/bại chung của một việc (đã có moi_thay_luc_nham cho việc đó). ' +
-        'DÙNG RẤT DÈ: mặc định là KHÔNG gọi. Chỉ gọi khi cả bốn điều sau cùng đúng — ' +
+        'GỌI SỚM: câu ĐẦU TIÊN trong cuộc trò chuyện hợp môn này thì gọi NGAY (không đợi người dùng hỏi sâu) — nghe nhiều môn cùng xem một chuyện là điều người dùng không có ở chatbot thường. Gọi khi đủ bốn điều — ' +
         '(1) người dùng đang hỏi cụ thể về HƯỚNG hoặc THỜI ĐIỂM để làm một việc (vd "giờ này xuất hành hướng nào", "bây giờ đi gặp đối tác được không") — không phải hỏi vận hạn dài hạn hay hỏi thành/bại chung chung; ' +
         '(2) bạn đã luận xong bằng Tử Vi TRƯỚC RỒI — đây là góc nhìn THÊM, không phải để né câu hỏi; ' +
         '(3) trong cả cuộc trò chuyện này bạn CHƯA gọi bất kỳ tool mời-thầy-khác nào (moi_thay_bat_tu, moi_thay_luc_nham) lần nào; ' +
@@ -578,7 +578,9 @@ async function execMoiThayBatTu(input: Rec, ctx: ToolContext): Promise<ToolRunRe
   if (!ctx.birth) {
     return { content: 'Chưa có ngày sinh trong ngữ cảnh — không mời được Tâm Kính. Đừng nhắc tới việc mời trong câu trả lời.', label: 'Mời Tâm Kính' };
   }
-  const nam = Math.floor(Number(input?.nam));
+  // Thiếu năm → năm hiện tại (VN), cùng lưới an toàn với tra_tieu_van: mô tả
+  // tool nay cho gọi với câu "sự nghiệp năm nay" không nêu số năm.
+  const nam = Math.floor(Number(input?.nam || currentYearVN()));
   if (!Number.isFinite(nam)) {
     return { content: 'Thiếu năm cần xem — không mời được Tâm Kính.', label: 'Mời Tâm Kính' };
   }

@@ -593,11 +593,11 @@ async function runAgentInner(
   // "@mention" — khách gọi đích danh một thầy khác (P3 "mời thầy khác"
   // 2026-09-26). CÙNG kỹ thuật với focusHintText/userTurns ở trên: nhét vào
   // CUỐI tin user, KHÔNG sửa system (giữ prompt-cache ổn định). Chỉ nới lỏng
-  // điều kiện "DÙNG RẤT DÈ" của tool — KHÔNG ép gọi tool cụ thể nào, vì Tâm
+  // các điều kiện ở mô tả tool — KHÔNG ép gọi tool cụ thể nào, vì Tâm
   // Kính có HAI môn (Bát Tự/Kỳ Môn) và chỉ model mới biết câu hỏi hợp cái nào.
   if (req.addressMaster && convo.length) {
     const displayName = PERSONAS[req.addressMaster]?.name || req.addressMaster;
-    const hint = `[Người dùng vừa gọi đích danh thầy ${displayName} (@${displayName}) — nếu câu hỏi hợp với đúng MỘT trong các tool "mời thầy khác" của thầy này, hãy GỌI NGAY tool đó trong lượt này, bỏ qua điều kiện "DÙNG RẤT DÈ" ở mô tả tool. Nếu câu hỏi không hợp môn nào của thầy ${displayName}, cứ trả lời bình thường bằng giọng của bạn và nói rõ vì sao thầy đó không giúp được cho câu này.]`;
+    const hint = `[Người dùng vừa gọi đích danh thầy ${displayName} (@${displayName}) — nếu câu hỏi hợp với đúng MỘT trong các tool "mời thầy khác" của thầy này, hãy GỌI NGAY tool đó trong lượt này, bỏ qua mọi điều kiện ở mô tả tool (kể cả "đã mời trong cuộc trò chuyện này rồi"). Nếu câu hỏi không hợp môn nào của thầy ${displayName}, cứ trả lời bình thường bằng giọng của bạn và nói rõ vì sao thầy đó không giúp được cho câu này.]`;
     const last = convo[convo.length - 1];
     if (last?.role === 'user') {
       if (typeof last.content === 'string') {

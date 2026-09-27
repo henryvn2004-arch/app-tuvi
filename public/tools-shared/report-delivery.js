@@ -54,7 +54,16 @@
       try { if (window.Track) window.Track.event('report_ready_shown', { tool_id: opts.tool }); } catch (e) { /* ignore */ }
     }
 
+    // Báo trạng thái cho thanh "báo cáo" đầu khung chat (shell.js
+    // `paintReportBar`) — một nguồn trạng thái cho cả thẻ trong trang lẫn rail.
+    function emit(state, done, total) {
+      try {
+        window.dispatchEvent(new CustomEvent('tvmb:report', { detail: { tool: opts.tool, state: state, done: done, total: total } }));
+      } catch (e) { /* trình duyệt quá cũ không có CustomEvent — thanh rail chỉ là trợ giúp */ }
+    }
+
     function tick(done, total) {
+      emit('building', done, total);
       host.hidden = false;
       host.classList.add('pending');
       if (titleEl) titleEl.textContent = t('report.building', null, 'Đang đóng bản báo cáo…');
@@ -68,6 +77,7 @@
     }
 
     function ready(total) {
+      emit('ready', total, total);
       host.hidden = false;
       host.classList.remove('pending');
       if (titleEl) titleEl.textContent = t('report.readyTitle', null, '✦ Báo cáo của bạn đã sẵn sàng');
