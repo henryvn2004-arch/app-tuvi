@@ -719,6 +719,7 @@
       '</div></header>' +
       (HIST_ON ? '<div class="rail-hist" id="railHist" style="display:none"></div>' : '') +
       '<div class="ctx" id="railCtx" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:13px;height:13px;flex:0 0 auto"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg> <span id="railCtxTxt"></span></div>' +
+      '<button type="button" class="rail-report" id="railReport" style="display:none"></button>' +
       '<div class="chat" id="chat">' +
         '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="' + authorAva() + '" alt=""></div><b>Chưa có lá số nào</b>' +
         '<p>Bạn lập lá số ở khung giữa xong, thầy trả lời liền —<br>chuyện sự nghiệp, tình duyên, năm nay, tháng tới, hỏi gì cũng được.</p></div>' +
@@ -2635,7 +2636,57 @@
     el.innerHTML = '<span class="rm-t">' + txt + '</span>' + act;
     var su = el.querySelector('[data-act="anon-signup"]');
     if (su) su.addEventListener('click', function (ev) { ev.preventDefault(); openAnonSignupModal(); });
+    paintReportBar();
   }
+
+  // ── THANH TRẠNG THÁI BÁO CÁO (phễu chuyển đổi bước 3, 2026-09-27) ──
+  // Dính đầu khung chat, cho người ta luôn biết "mình đang có gì, còn gì chưa
+  // mở" mà không cần popup. Ba trạng thái:
+  //  · locked   — có lá số, chưa ở trang báo cáo: "Luận Giải N mục" + giá,
+  //               bấm sang /app/luan-giai. Chưa biết giá thì ẨN (không hứa).
+  //  · building — trang báo cáo đang viết: "Đang viết k/N phần…".
+  //  · ready    — viết xong: "Báo cáo đã sẵn sàng", bấm mở khung kết quả.
+  // building/ready đến từ sự kiện `tvmb:report` do tools-shared/report-delivery.js
+  // phát (MỘT nguồn trạng thái với thẻ "Báo cáo đã sẵn sàng" trong trang).
+  // Không có API nào cho chat biết khách đã mua Luận Giải của lá số này hay
+  // chưa (quyền nằm ở portrait_cache theo lá số) — nên ngoài trang báo cáo
+  // chỉ có trạng thái locked; đừng đoán "đã mua".
+  var _rep = null; // { state: 'building'|'ready', done, total }
+  window.addEventListener('tvmb:report', function (e) {
+    var d = e && e.detail; if (!d || !d.state) return;
+    _rep = { state: d.state, done: d.done || 0, total: d.total || 0 };
+    paintReportBar();
+  });
+  function paintReportBar() {
+    var el = document.getElementById('railReport');
+    if (!el) return;
+    var html = '', go = null;
+    if (_rep && _rep.state === 'building') {
+      html = '<span class="rr-ic rr-spin"></span><span class="rr-t"><b>Đang viết báo cáo…</b><span>' +
+        _rep.done + ' / ' + _rep.total + ' phần đã xong</span></span>';
+      go = openArtPanel;
+    } else if (_rep && _rep.state === 'ready') {
+      html = '<span class="rr-ic rr-ok">' + svg('check') + '</span><span class="rr-t"><b>Báo cáo đã sẵn sàng</b><span>' +
+        esc(wsTitleText()) + ' · ' + _rep.total + ' phần</span></span><span class="rr-go">Xem →</span>';
+      go = openArtPanel;
+    } else if (ctx && ctx.birth && !REPORT_PAGES[ACTIVE] && _rc.lasoPrice != null) {
+      html = '<span class="rr-ic">' + svg('lock') + '</span><span class="rr-t"><b>Luận Giải ' + LG_PHAN.length +
+        ' mục cho lá số này</b><span>' + creditVnd(_rc.lasoPrice) + ' (' + _rc.lasoPrice + ' Lượng) · chưa mở</span></span>' +
+        '<span class="rr-go">Xem →</span>';
+      go = function () {
+        try { track('cta_click', { tool_id: 'laso', meta: { from: 'rail_report_bar' } }); } catch (e) { /* ignore */ }
+        location.href = '/app/luan-giai';
+      };
+    }
+    if (!html) { el.style.display = 'none'; el.innerHTML = ''; el.onclick = null; return; }
+    el.innerHTML = html;
+    el.className = 'rail-report' + (_rep ? ' rr-' + _rep.state : ' rr-locked');
+    el.style.display = '';
+    el.onclick = go;
+  }
+  // Trang TỰ viết báo cáo (có ReportDelivery) — thanh "chưa mở" không mời
+  // sang chính nó; trạng thái ở đó lấy từ sự kiện `tvmb:report`.
+  var REPORT_PAGES = { 'luan-giai': 1, 'chu-trinh-cuoc-doi': 1, 'van-han-nam': 1 };
 
   // Đọc lại ví từ event `done` của server — nguồn chính xác nhất, và không tốn
   // thêm một lượt mạng nào.
@@ -4986,6 +5037,9 @@
     // chính câu hỏi, không cần đợi câu trả lời.
     _askCount++;
     _cungAsked.push(detectCung(text));
+    // Câu GỐC cho nút "Hỏi ý thầy khác" — lượt ý-thầy-khác mang câu gốc theo,
+    // để lần bấm tiếp không lồng tiền tố "Thầy X nhìn câu này…" vào nhau.
+    var _soQ = _soPendingQ || text; _soPendingQ = null;
     input.value = ''; autoGrow(input);
     var chat = document.getElementById('chat');
     var empty = document.getElementById('railEmpty'); if (empty) empty.remove();
@@ -5189,6 +5243,7 @@
       messages.push({ role: 'assistant', content: acc });
       saveCurrent();
       sessStash();
+      appendSecondOpinion(_soQ);
       // Thẻ mời SAU khi câu trả lời đã hiện xong — chèn trước lúc đó thì nó đứng
       // chen giữa lúc người ta đang đọc, thành quảng cáo cắt ngang.
       maybeShowUpsell();
@@ -5203,6 +5258,42 @@
     } finally {
       streaming = false; setSend(true); renderSuggs(); chat.scrollTop = chat.scrollHeight;
     }
+  }
+
+  // ── HỎI Ý THẦY KHÁC (phễu chuyển đổi bước 2, 2026-09-27) ──
+  // Hội đồng nhiều thầy là thứ ChatGPT/Gemini không có, nhưng trước đây chỉ
+  // đổi được thầy qua avatar (tooltip) hoặc gõ "@Tên" — khách không tự thấy.
+  // Dưới câu trả lời MỚI NHẤT (từ câu thứ 2, chỉ luồng lá số) hiện 3 thầy
+  // khác; bấm là đổi thầy và hỏi lại ĐÚNG câu gốc — mất một câu như thường.
+  // Loại NO_BIRTH_THAY (tướng qua ảnh / gieo quẻ): không luận lá số.
+  var _soPendingQ = null; // câu GỐC khi lượt đang gửi là một lượt "ý thầy khác"
+  function appendSecondOpinion(q) {
+    var chat = document.getElementById('chat');
+    if (!chat) return;
+    var olds = chat.querySelectorAll('.msg-2nd');
+    for (var i = 0; i < olds.length; i++) olds[i].remove();
+    if (!q || !_author || !ctx || !ctx.birth || ctx.scenario || _askCount < 2) return;
+    var pool = AUTHOR_ROSTER.filter(function (a) { return a.id !== _author.id && !NO_BIRTH_THAY[a.id]; });
+    for (var j = pool.length - 1; j > 0; j--) { var k = Math.floor(Math.random() * (j + 1)); var t = pool[j]; pool[j] = pool[k]; pool[k] = t; }
+    var picks = pool.slice(0, 3);
+    var bar = document.createElement('div');
+    bar.className = 'msg-2nd';
+    bar.innerHTML = '<span class="m2-l">' + svg('users') + 'Hỏi ý thầy khác</span>' + picks.map(function (a) {
+      return '<button type="button" class="m2-a" data-id="' + a.id + '" aria-label="Hỏi ý Thầy ' + esc(a.name) + '">' +
+        '<img src="/authors/' + a.id + '.jpg" alt="">' + esc(a.name) + '</button>';
+    }).join('');
+    chat.appendChild(bar);
+    chat.scrollTop = chat.scrollHeight;
+    bar.addEventListener('click', function (e) {
+      var b = e.target.closest('.m2-a'); if (!b || streaming) return;
+      var from = _author && _author.id, a = authorById(b.getAttribute('data-id'));
+      if (!a) return;
+      try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'second_opinion', master_from: from, master_to: a.id } }); } catch (e2) { /* ignore */ }
+      setAuthor(a.id);
+      if (CHAT_HOME) paintHomeHeader();
+      _soPendingQ = q;
+      ask('Thầy ' + a.name + ' nhìn câu này thế nào: ' + q);
+    });
   }
 
   // ── THẺ GỢI Ý CÔNG CỤ (bước 4) ──

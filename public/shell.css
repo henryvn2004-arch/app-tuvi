@@ -249,6 +249,20 @@ html.sb-mini .sbn-menu{right:auto;width:240px}
 .rh-btn>.ic{width:16px;height:16px;flex:0 0 auto}
 .ctx{margin:11px 14px 0;font-size:11px;color:var(--text-lt);background:var(--paper-2);border:1px dashed var(--line-2);border-radius:8px;padding:7px 10px;display:flex;gap:7px;align-items:center}
 .ctx b{color:var(--text-mid)}
+.rail-report{appearance:none;font:inherit;text-align:left;display:flex;align-items:center;gap:10px;margin:10px 14px 0;padding:8px 11px;border:1px solid var(--line);border-radius:10px;background:var(--white);color:var(--text);cursor:pointer;flex:0 0 auto}
+@media(hover:hover){.rail-report:hover{border-color:var(--gold-soft)}}
+.rail-report .rr-ic{width:28px;height:28px;border-radius:7px;background:var(--paper-2);color:var(--gold-soft);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.rail-report .rr-ic svg{width:15px;height:15px}
+.rail-report .rr-t{min-width:0;flex:1;display:flex;flex-direction:column;line-height:1.35}
+.rail-report .rr-t b{font-size:12.5px;color:var(--heading);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-report .rr-t span{font-size:11.5px;color:var(--text-lt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-report .rr-go{font-size:12px;font-weight:600;color:var(--tx-blue);white-space:nowrap}
+.rail-report .rr-spin::after{content:'';width:13px;height:13px;border-radius:50%;border:2px solid var(--line-2);border-top-color:var(--gold-soft);animation:rrspin .9s linear infinite}
+.rail-report.rr-ready{border-color:var(--gold-soft)}
+.rail-report .rr-ok{color:var(--tx-blue)}
+@keyframes rrspin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.rail-report .rr-spin::after{animation:none}}
+body.chat-home .rail-report,body.chat-first-live.art-closed .rail-report{margin-left:var(--col-pad);margin-right:var(--col-pad)}
 .chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
 .msg{font-size:13px;line-height:1.62;max-width:100%}
 .msg.u{align-self:flex-end;background:var(--navy);color:#eef2f6;padding:9px 12px;border-radius:12px 12px 3px 12px;max-width:86%}
@@ -259,6 +273,12 @@ html.sb-mini .sbn-menu{right:auto;width:240px}
    vào, tách khỏi bong bóng thầy chính (xem splitBySpeaker, shell.js). */
 .msg.a.msg-guest{margin-left:14px;padding-left:10px;border-left:2px solid var(--gold-soft)}
 .msg-speaker{font-size:11px;font-weight:700;color:var(--gold-soft);text-transform:uppercase;letter-spacing:.02em;margin-bottom:3px}
+.msg-2nd{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:-4px 0 0 32px}
+.msg-2nd .m2-l{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-lt);margin-right:2px}
+.msg-2nd .m2-l svg{width:13px;height:13px}
+.msg-2nd .m2-a{appearance:none;font:inherit;font-size:12px;display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 3px;border:1px solid var(--line);border-radius:999px;background:var(--white);color:var(--text-mid);cursor:pointer}
+.msg-2nd .m2-a img{width:22px;height:22px;border-radius:50%;object-fit:cover}
+@media(hover:hover){.msg-2nd .m2-a:hover{border-color:var(--gold-soft);color:var(--text)}}
 .msg.a b,.msg.a strong{color:var(--text);font-weight:700}
 .msg.a p{margin-bottom:8px}
 .msg.a em{color:var(--gold-soft);font-style:normal;font-weight:600}

@@ -25,7 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
-| 1 | 2026-09 | `2026-09.md` | 🪜 Phễu chuyển đổi bước 1 — dùng thử 6 câu, đăng ký tặng 10 câu hỏi Thầy, giữ câu hỏi dở |
+| 1 | 2026-09 | `2026-09.md` | 🪜 Phễu chuyển đổi — dùng thử 6 câu, đăng ký tặng 10 câu, "Hỏi ý thầy khác", thanh trạng thái báo cáo |
 | 1 | 2026-09 | `2026-09.md` | 👥 Trang chủ "Các Thầy" — bấm thầy là vào chat thẳng, thầy tự giới thiệu rồi xin ngày sinh |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Màn chat `/app` — bộ đếm dưới lời chào, xin ngày sinh ngay trong chat, `/` bỏ thanh nút đáy |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Điều hướng kiểu ChatGPT — sidebar trang, màn chat `/app`, Minh Bảo dẫn đường, kết quả như artifact |
