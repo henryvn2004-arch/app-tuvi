@@ -54,9 +54,16 @@ Chữ hiển thị: "Mời **nhóm** hội chẩn" — KHÔNG "hội đồng" (l
      Thanh "Cả nhà" trên ô nhập hiện khi sổ đã có người. "Để sau" → im 14 ngày;
      mỗi phiên tối đa một lần; lượt có thẻ mời thì không hiện thẻ gợi ý công cụ.
      Giờ sinh vẫn bắt buộc (form có sẵn link "Xác định giờ sinh →").
-   - **GĐ3 — trang Cả nhà mình + thẻ "Nhà mình năm nay"**: dựng trên
-     `/app/so-la-so` lọc `gia_dinh`; lưới 12 tháng từ `buildKhung12Thang` (engine,
-     0 lượt LLM — miễn phí đúng nghĩa); "Sắp tới trong nhà" là cầu sang Thầy tự nhắn.
+   - **GĐ3 — trang Cả nhà mình** ✅: `/app/ca-nha` (`app-ca-nha.html` +
+     `app/api/ca-nha`), vào từ nhãn "Cả nhà →" trên thanh chat. Thẻ người (tiểu
+     hạn/lưu niên năm nay, thiếu giờ thì dẫn sang `/app/gio-sinh`), lưới 12 tháng
+     âm (ô = cung nguyệt hạn, bấm xem sao), "Tháng cả nhà nên để ý" (cùng hạn một
+     cung), nút "Hỏi thầy về cả nhà". Engine thuần, 0 lượt LLM ⇒ miễn phí thật —
+     thay cho ý "thẻ Nhà mình năm nay miễn phí lần đầu". Phép tính dùng chung với
+     tool `tra_ca_nha`: `lib/engine/ca-nha.ts`.
+     ⚠️ Bản mẫu tô ô "thuận / bình / cần giữ" — KHÔNG làm: repo không có công thức
+     chấm tháng, tự đặt một cái là vi phạm luật cổ pháp. "Sắp tới trong nhà"
+     (sinh nhật âm, Tết) để dành cho Thầy tự nhắn / Việc đời thật.
 2. **Sổ tiên tri + Thầy tự nhắn** (chung một đường nhắn).
 3. **Lịch riêng**.
 4. **Hội chẩn** — chờ 1–2 tuần số liệu `master_invite` trước.

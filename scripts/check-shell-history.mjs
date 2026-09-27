@@ -26,6 +26,7 @@ const EXEMPT = {
   'app-home.html': 'bảng điều khiển, không phải công cụ — không sinh phiên nào',
   'app-tai-khoan.html': 'trang tài khoản, không phải công cụ',
   'app-so-la-so.html': 'sổ lá số — danh sách + gán nhóm quan hệ, không phải công cụ',
+  'app-ca-nha.html': 'Cả nhà mình — bảng 12 tháng dựng từ Sổ lá số (engine, không LLM), không sinh hội thoại; hỏi thầy thì sang /app',
   'app-thay.html': 'Các Thầy — danh sách 15 thầy, không phải công cụ',
   'app-bao-cao.html': 'Báo cáo — danh sách báo cáo đã có (bấm là sang công cụ), không phải công cụ',
   'app-thay-chi-tiet.html': 'chi tiết một thầy — bio + danh sách công cụ, không phải công cụ',

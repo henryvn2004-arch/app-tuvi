@@ -927,7 +927,9 @@
     if (!ctx || !ctx.birth || ctx.scenario || !getToken()) { el.style.display = 'none'; return; }
     if (!_family) { loadFamily(paintFamilyStrip); return; }
     if (!_family.length) { el.style.display = 'none'; return; }
-    el.innerHTML = '<span class="fs-l">Cả nhà</span>' + _family.map(function (m, i) {
+    // Nhãn "Cả nhà" là LINK sang trang Cả nhà mình (GĐ3) — tên tính năng chỉ
+    // lộ ra SAU khi khách đã thấy thầy đọc người nhà (luật "làm trước, gọi tên sau").
+    el.innerHTML = '<a class="fs-l" href="/app/ca-nha">Cả nhà</a>' + _family.map(function (m, i) {
       return '<button type="button" class="fs-c" data-i="' + i + '">@' + esc(m.name) + '</button>';
     }).join('');
     el.style.display = '';

@@ -29,7 +29,8 @@ import { lapKhoa, railData as railDataLucNham } from '@/lib/liuren/ke';
 import { dungBan, railData as railDataKyMon } from '@/lib/qimen/board';
 import type { BirthParams } from '@/lib/contract/v1';
 import { findMember, type FamilyMember } from '@/lib/charts/family';
-import { buildKhung12Thang, type ThangKhung } from '@/lib/engine/van-han-12';
+import type { ThangKhung } from '@/lib/engine/van-han-12';
+import { khungCaNha, type NguoiNhaVao } from '@/lib/engine/ca-nha';
 import { SUGGEST_TOOL_DEF, SUGGEST_PRODUCT_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
 type Rec = Record<string, unknown>;
@@ -820,13 +821,6 @@ const LUAT_NGUOI_NHA =
   'Người này KHÔNG có mặt — nói theo hướng người hỏi nên đỡ, nhắc, đồng hành với họ thế nào. ' +
   'KHÔNG phán bệnh tật, tai nạn, chuyện xấu như điều chắc chắn; KHÔNG so ai "số tốt hơn" ai trong nhà.';
 
-function vnToday(): { d: number; m: number; y: number } {
-  const p = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', day: 'numeric', month: 'numeric', year: 'numeric' })
-    .formatToParts(new Date());
-  const g = (t: string) => Number(p.find((x) => x.type === t)?.value);
-  return { d: g('day'), m: g('month'), y: g('year') };
-}
-
 function birthLine(b: BirthParams): string {
   const gio = b.hourBranch != null && b.hourBranch >= 0 && b.hourBranch < 12 ? `, giờ ${CHI_GIO[b.hourBranch]}` : '';
   return `${b.gender === 'nu' ? 'nữ' : 'nam'}, sinh ${b.day}/${b.month}/${b.year}${b.isLunar ? ' âm lịch' : ''}${gio}`;
@@ -870,49 +864,28 @@ function oThang(t: ThangKhung): string {
 }
 
 async function execTraCaNha(ctx: ToolContext): Promise<ToolRunResult> {
-  const today = vnToday();
-  const people: { ten: string; birth: BirthParams }[] = [];
+  const people: NguoiNhaVao[] = [];
   if (ctx.birth) people.push({ ten: String(ctx.birth.name || '').trim() || 'Người hỏi', birth: ctx.birth });
   for (const m of ctx.family) people.push({ ten: m.ten, birth: m.birth });
-
-  const rows: { ten: string; thangs: ThangKhung[] }[] = [];
-  const thieu: string[] = [];
-  const dong: string[] = [];
-  for (const p of people) {
-    const res = computeLaso(p.birth, today.y);
-    if (!res.ok || !res.ls) { thieu.push(`${p.ten} (${String(res.error || 'không lập được lá số').replace(/\.$/, '')})`); continue; }
-    const k = buildKhung12Thang(res.ls as Rec, today.d, today.m, today.y);
-    rows.push({ ten: p.ten, thangs: k.thangs });
-    const t0 = k.thangs[0];
-    dong.push(`- ${p.ten} (${birthLine(p.birth)}): tiểu hạn ${t0?.cungTieuHan || '?'}, lưu niên ${t0?.cungLuuNien || '?'}`);
-  }
-  if (rows.length < 2) {
+  const k = khungCaNha(people);
+  const co = k.nguoi.filter((n) => !n.loi);
+  const thieu = k.nguoi.filter((n) => n.loi).map((n) => `${n.ten} (${n.loi})`);
+  if (co.length < 2) {
     return { content: 'Chưa đủ hai lá số lập được để xếp cả nhà cạnh nhau' + (thieu.length ? ': ' + thieu.join('; ') : '') + '. Nói người dùng bổ sung ở trang Sổ lá số.', label: 'Xếp lá số cả nhà' };
   }
-
   const L: string[] = [];
-  L.push(`— CẢ NHÀ ${rows.length} NGƯỜI, 12 THÁNG ÂM TỚI (engine tính, mỗi ô là cung nguyệt hạn + sao trong chùm tam phương tứ chính) —`);
+  L.push(`— CẢ NHÀ ${co.length} NGƯỜI, 12 THÁNG ÂM TỚI (engine tính, mỗi ô là cung nguyệt hạn + sao trong chùm tam phương tứ chính) —`);
   L.push(LUAT_NGUOI_NHA);
-  L.push(...dong);
-  const n = rows[0].thangs.length;
-  // Tháng mà HAI người trở lên cùng hạn vào MỘT cung (vd cả hai vợ chồng
-  // cùng Tài Bạch) — dữ kiện engine thuần, không chấm điểm. ĐỪNG đếm sát/bại
-  // để "chấm tháng xấu": chùm tam phương tứ chính hiếm khi sạch sao xấu nên
-  // gần như tháng nào cũng trúng, và đó là một công thức tự đặt.
-  const trung: string[] = [];
-  for (let i = 0; i < n; i++) {
-    const t = rows[0].thangs[i];
+  for (const n of co) L.push(`- ${n.ten} (${birthLine(n.birth)}): tiểu hạn ${n.cungTieuHan}, lưu niên ${n.cungLuuNien}`);
+  k.thangs.forEach((t, i) => {
     L.push(`${t.nhan}${t.dangDienRa ? ' (đang diễn ra)' : ''}:`);
-    const theoCung = new Map<string, string[]>();
-    for (const r of rows) {
-      const x = r.thangs[i];
-      if (!x) continue;
-      L.push(`  · ${r.ten}: ${oThang(x)}`);
-      if (!x.loi) theoCung.set(x.cungNguyetHan, [...(theoCung.get(x.cungNguyetHan) || []), r.ten]);
-    }
-    for (const [cung, ai] of theoCung) if (ai.length >= 2) trung.push(`${t.nhan}: ${ai.join(', ')} cùng hạn vào ${cung}`);
-  }
-  L.push(trung.length ? 'THÁNG NHIỀU NGƯỜI CÙNG HẠN VÀO MỘT CUNG: ' + trung.join(' · ') : 'Không tháng nào hai người cùng hạn vào một cung.');
+    for (const n of co) if (n.thangs[i]) L.push(`  · ${n.ten}: ${oThang(n.thangs[i])}`);
+  });
+  L.push(
+    k.trung.length
+      ? 'THÁNG NHIỀU NGƯỜI CÙNG HẠN VÀO MỘT CUNG: ' + k.trung.map((x) => `${x.nhan}: ${x.ai.join(', ')} cùng hạn vào ${x.cung}`).join(' · ')
+      : 'Không tháng nào hai người cùng hạn vào một cung.',
+  );
   if (thieu.length) L.push('Chưa xếp được: ' + thieu.join('; ') + ' — nhắc người dùng bổ sung ở trang Sổ lá số.');
-  return { content: L.join('\n'), label: `Đang xếp lá số cả nhà (${rows.length} người)...` };
+  return { content: L.join('\n'), label: `Đang xếp lá số cả nhà (${co.length} người)...` };
 }

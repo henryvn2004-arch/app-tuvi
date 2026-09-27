@@ -60,6 +60,8 @@ const nextConfig = {
       { source: '/app/cong-so',         destination: '/app-cong-so.html'     },
       { source: '/app/tai-khoan',       destination: '/app-tai-khoan.html'   },
       { source: '/app/so-la-so',        destination: '/app-so-la-so.html'    },
+      // "Cả nhà mình" GĐ3 (docs/DAC-TRUNG-PLAN.md) — vào từ thanh "Cả nhà" trong chat.
+      { source: '/app/ca-nha',          destination: '/app-ca-nha.html'      },
       // hellobot-ui-redesign (2026-09-24): 5 đích của tabbar/sidebar mới.
       // /app/ho-so và /app/tai-khoan CÙNG một file — app-tai-khoan.html đã tự
       // khai SHELL_ACTIVE='ho-so' từ trước, không cần fork trang.
