@@ -403,14 +403,31 @@ Số đo mốc (J8, `docs/ux-audit/J8.md`) — dùng để biết đã xong chư
     tại trong repo** (đã kiểm bằng grep) — dùng lại `cubic-bezier(.2,.8,.2,1)`
     (khối `.tv-sheet-panel`, easing decelerate DUY NHẤT đang dùng thật);
   - `transition: all` → 0 chỗ trong `shell.css` (xác nhận lại, không cần sửa).
-- [ ] Từng trang theo thứ tự traffic: bỏ Arial, gom gradient và shadow về
-      token — **HOÃN đợt này**. Lý do: mục theme.css/shell.css (rủi ro cao vì
-      chạm CSS dùng chung mọi trang) đã chiếm hết ngân sách review-an-toàn
-      của đợt; sửa 85 chỗ `transition:all` + gradient/shadow rải trên
-      53+ trang `app-*.html` là việc CẦN đo từng trang một (ảnh chụp trước/
-      sau), không làm ẩu được trong cùng một lượt. Cũng là lý do 231 chỗ
-      `:hover` ở `app-*.html` (ngoài `shell.css`) CHƯA gate — cùng một nhóm
-      việc "diện rộng, từng trang", để đợt sau.
+- [x] Từng trang theo thứ tự traffic: bỏ Arial, gom gradient và shadow về
+      token, gate `:hover` — **đợt 1/N, xong 6 trang** (`app-luan-giai.html`
+      · `app-bat-tu.html` · `app-home.html` · `app-xem-tuoi.html` ·
+      `app-cong-so.html` · `app-tai-khoan.html`, đo ảnh chụp trước/sau ở
+      390px và 1440px + `(hover:none)`, không lệch pixel ngoài nhiễu số đếm
+      "đang online"/avatar thầy random). Kết quả từng mục:
+  - Arial: chỉ 2 chỗ thật sự sai (`app-tai-khoan.html`, `font-family:
+    Arial,sans-serif` trần) → đổi thành chuỗi body đầy đủ trong `DESIGN.md`
+    (`-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif`). 4/6
+    trang không có Arial ngoài chuỗi đó (không phải nợ — DESIGN.md nói rõ
+    Arial làm dự phòng CUỐI chuỗi là ĐÚNG, không phải lỗi cần gom).
+  - Gradient/shadow: gradient trùng lặp qua nhiều trang (vd
+    `linear-gradient(135deg,var(--gold-soft),var(--gold))` ở 8 file) không
+    khớp token nào có sẵn trong `theme.css`/`shell.css` mà không PHẢI bịa
+    token mới — để nguyên theo đúng tinh thần "trích xuất, không tái thiết
+    kế". `box-shadow` trong 6 trang này đã dùng `var(--shadow)` sẵn ở hầu
+    hết chỗ; số ít còn lại là shadow một lớp, không khớp `--shadow-1/2/3`
+    (hai lớp) đủ để đổi mà không đổi hình — giữ nguyên.
+  - `:hover`: gate nốt 17 rule còn trần trong 6 trang trên (
+    `app-luan-giai.html` 1 · `app-home.html` 13 · `app-tai-khoan.html` 16,
+    trong đó tách riêng `.lc-act:hover,.lc-act:active` để `:active` không
+    bị khoá theo). Không rule nào thuộc dạng ẩn/hiện CHỈ bằng hover (đã
+    kiểm bằng grep `opacity:0`/`display:none` quanh mỗi rule).
+      **Còn lại ~47 trang `app-*.html` khác + phần `:hover` của chúng —
+      để đợt sau**, cùng lý do cũ: diện rộng, cần đo từng trang một.
 - [x] Emil `mobile-native`: `.shell` đổi `100vh`→`100dvh` (giữ `100vh` làm
       dự phòng); input <16px trong khung app đã đúng từ trước (media
       `@media(max-width:900px)` có sẵn, xác nhận lại — không có ô nào sót);
