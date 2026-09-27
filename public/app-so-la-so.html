@@ -39,8 +39,13 @@
 .ls-rep-tile span{font-size:10.5px;color:var(--text-lt)}
 .ls-rep-tile.owned span{color:#3f7a4d}
 @media(max-width:600px){
-  .ls-row{flex-wrap:wrap}
-  .ls-sel{margin-left:45px}
+  .ls-row{display:grid;grid-template-columns:34px 1fr auto;grid-template-areas:"ava info del" "btn btn sel";row-gap:8px;align-items:center}
+  .ls-ava{grid-area:ava}
+  .ls-tx{grid-area:info;min-width:0}
+  .ls-del{grid-area:del}
+  .ls-rep-btn{grid-area:btn;width:100%}
+  .ls-sel{grid-area:sel}
+  .ls-rep-wrap{grid-column:1 / -1}
 }
 </style>
 </head>
