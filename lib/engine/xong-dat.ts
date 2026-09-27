@@ -53,6 +53,19 @@ export function nextTetYear(todayIso?: string): number {
   return cand[0] ?? XONG_DAT_YEARS[XONG_DAT_YEARS.length - 1];
 }
 
+/**
+ * Mùa Tết SẮP TỚI so với hôm nay — cho "Việc đời thật" (docs/DAC-TRUNG-PLAN.md)
+ * biết lúc nào nên mời xem xông đất/xuất hành. Một nguồn với bảng TET ở trên.
+ * `conNgay` < 0 nghĩa là không còn Tết nào trong bảng (hết tầm phục vụ).
+ */
+export function tetSapToi(todayIso?: string): { namXem: number; tetIso: string; conNgay: number } {
+  const today = todayIso || new Date().toISOString().slice(0, 10);
+  const namXem = nextTetYear(today);
+  const iso = tetIso(namXem);
+  const conNgay = iso ? Math.round((Date.parse(iso) - Date.parse(today)) / 864e5) : -1;
+  return { namXem, tetIso: iso, conNgay };
+}
+
 const inPair = (pairs: number[][], a: number, b: number) =>
   pairs.some((p) => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
 const inGroup = (groups: number[][], a: number, b: number) =>

@@ -89,7 +89,13 @@ Chữ hiển thị: "Mời **nhóm** hội chẩn" — KHÔNG "hội đồng" (l
    trên màn chat chính (khi Sổ tiên tri không có gì hỏi lại) + khối "Lịch riêng" ở
    `/app/ca-nha`. Một hàm client: `Shell.moLichRieng(kind)`.
 4. **Hội chẩn** — chờ 1–2 tuần số liệu `master_invite` trước.
-5. **Việc đời thật** — phải kịp trước tháng Chạp.
+5. **Việc đời thật — Tết** ✅: tool rail `xem_tet_ca_nha` (luôn có ở luồng lá số): tuổi
+   xông đất theo chủ nhà = người hỏi (`computeXongDat`, năm ÂM — sinh tháng 1–2 dương có thể
+   thuộc năm âm trước) + giờ hoàng đạo, hướng Hỷ/Tài thần mùng 1–3 (`computeVanNgay`) + ngày
+   nào xung tuổi ai trong nhà. Lời mời trong 45 ngày trước Tết trên màn chat chính (sau Sổ
+   tiên tri và Lịch riêng — mỗi phiên một thứ), một lần/mùa, "Để sau" im 14 ngày; số ngày tới
+   Tết lấy từ `/api/xong-dat?mua=1` (một nguồn với bảng TET). Cưới hỏi / mua nhà: CHƯA làm
+   riêng — rail đã gợi ý đúng công cụ (Chọn ngày, Kim Lâu, Bát Trạch) qua `goi_y_cong_cu`.
 6. Thầy có tính cách — không có việc giới thiệu; chỉnh `personas.ts` khi cần.
 
 ## Luật riêng của "Cả nhà mình"

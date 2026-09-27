@@ -8,12 +8,18 @@
 // gánh thay vì mỗi lượt đều chạm hàm.
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server';
-import { computeXongDat, XONG_DAT_YEARS } from '@/lib/engine/xong-dat';
+import { computeXongDat, tetSapToi, XONG_DAT_YEARS } from '@/lib/engine/xong-dat';
 
 export const runtime = 'nodejs';
 
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
+  // `?mua=1` — còn bao nhiêu ngày tới Tết (lời mời "Việc đời thật" trong chat,
+  // public/shell.js). Một nguồn với bảng TET của engine, client không chép ngày.
+  if (sp.get('mua') === '1') {
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date());
+    return NextResponse.json(tetSapToi(today), { headers: { 'Cache-Control': 'public, s-maxage=3600' } });
+  }
   const nam = Number(sp.get('nam'));
   const namXem = Number(sp.get('namXem'));
 
