@@ -25,7 +25,9 @@
 import { PERSONAS } from '../lib/agent/personas.ts';
 
 const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
-const MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+// Mặc định PHẢI khớp model rail thật (lib/llm/complete.ts + lib/agent/providers/gemini.ts) —
+// bản cũ ghi cứng 'gemini-2.5-flash' nên eval đo một model prod không dùng.
+const MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 if (!GEMINI_KEY) {
   console.error('❌ Thiếu GEMINI_API_KEY — export biến này trước khi chạy.');
   process.exit(1);
@@ -41,7 +43,11 @@ const QUESTIONS = [
 
 const ids = Object.keys(PERSONAS);
 
-async function callGemini(system, userMsg, maxOutputTokens = 300) {
+// 🪤 Gemini 3.x PHỚT LỜ `thinkingBudget: 0` — đo 2026-09-27 trên gemini-3.8-flash: vẫn nghĩ
+// 280–760 token/lượt, và token nghĩ ăn CHUNG `maxOutputTokens`. Trần cũ 300 (sinh) / 5 (chấm)
+// làm 7/10 câu bị cắt MAX_TOKENS sau ~12 token chữ ⇒ giám khảo đoán giọng từ nửa câu mở đầu
+// (78,7% "chưa đạt" hoá ra là đo hỏng). Trần phải chừa chỗ cho phần nghĩ.
+async function callGemini(system, userMsg, maxOutputTokens = 1500) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(MODEL)}:generateContent?key=${GEMINI_KEY}`;
   const resp = await fetch(url, {
     method: 'POST',
@@ -58,6 +64,10 @@ async function callGemini(system, userMsg, maxOutputTokens = 300) {
   });
   if (!resp.ok) throw new Error(`Gemini ${resp.status} — ${(await resp.text()).slice(0, 300)}`);
   const j = await resp.json();
+  // Câu cụt thì giám khảo chấm trên nửa câu — báo lỗi to, đừng âm thầm tính điểm.
+  const fr = j.candidates?.[0]?.finishReason;
+  if (fr && fr !== 'STOP')
+    throw new Error(`finishReason=${fr} (nghĩ ${j.usageMetadata?.thoughtsTokenCount ?? 0} token)`);
   return (j.candidates?.[0]?.content?.parts || [])
     .map((p) => p.text || '')
     .join('')
@@ -117,7 +127,11 @@ async function main() {
 
       let guessLetter;
       try {
-        const raw = await callGemini(judgeSystem(descs), `Đoạn văn cần đoán:\n"""${answer}"""`, 5);
+        const raw = await callGemini(
+          judgeSystem(descs),
+          `Đoạn văn cần đoán:\n"""${answer}"""`,
+          1500
+        );
         guessLetter = (raw.match(/[A-O]/) || [])[0];
       } catch (e) {
         console.error(`  ✗ chấm lỗi (${id}): ${e.message}`);

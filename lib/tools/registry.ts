@@ -719,7 +719,7 @@ async function execMoiThayBatTu(input: Rec, ctx: ToolContext): Promise<ToolRunRe
       (personaKhach('tam-kinh') || '') +
       '\n\n' +
       extractTuBinhContext(res.data) +
-      '\n\nLuận xong phần Tâm Kính thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn — được đáp lại thầy khách đúng tính cách của bạn (đồng ý, vặn lại hay bổ sung) — không lặp lại số liệu Tâm Kính vừa nêu.',
+      '\n\nLuận xong phần Tâm Kính thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn, mở một dòng riêng bằng "**Kết:**" (thiếu mốc này thì câu của bạn hiện trong khung của thầy khách) — được đáp lại thầy khách đúng tính cách của bạn (đồng ý, vặn lại hay bổ sung) — không lặp lại số liệu Tâm Kính vừa nêu.',
     label: `Đang mời thầy Tâm Kính xem Bát Tự năm ${nam}...`,
   };
 }
@@ -748,7 +748,7 @@ async function execMoiThayLucNham(input: Rec, ctx: ToolContext): Promise<ToolRun
       (personaKhach('linh-co') || '') +
       '\n\n' +
       extractGenericContext(railDataLucNham(khoa)) +
-      '\n\nLuận xong phần Linh Cơ thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn — được đáp lại thầy khách đúng tính cách của bạn (đồng ý, vặn lại hay bổ sung) — không lặp lại số liệu Linh Cơ vừa nêu.',
+      '\n\nLuận xong phần Linh Cơ thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn, mở một dòng riêng bằng "**Kết:**" (thiếu mốc này thì câu của bạn hiện trong khung của thầy khách) — được đáp lại thầy khách đúng tính cách của bạn (đồng ý, vặn lại hay bổ sung) — không lặp lại số liệu Linh Cơ vừa nêu.',
     label: 'Đang mời thầy Linh Cơ lập khóa Lục Nhâm...',
   };
 }
@@ -834,7 +834,7 @@ async function execMoiThayKyMon(input: Rec, ctx: ToolContext): Promise<ToolRunRe
       (personaKhach('tam-kinh') || '') +
       '\n\n' +
       extractKyMonContext(railDataKyMon(ban)) +
-      '\n\nLuận xong phần Tâm Kính thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn — được đáp lại thầy khách đúng tính cách của bạn (đồng ý, vặn lại hay bổ sung) — không lặp lại số liệu Tâm Kính vừa nêu.',
+      '\n\nLuận xong phần Tâm Kính thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn, mở một dòng riêng bằng "**Kết:**" (thiếu mốc này thì câu của bạn hiện trong khung của thầy khách) — được đáp lại thầy khách đúng tính cách của bạn (đồng ý, vặn lại hay bổ sung) — không lặp lại số liệu Tâm Kính vừa nêu.',
     label: 'Đang mời thầy Tâm Kính dựng bàn Kỳ Môn...',
   };
 }
