@@ -66,8 +66,14 @@
      xem chú thích ở `theme.css`. */
   --ease-out:cubic-bezier(.2,.8,.2,1);
   --dur-1:.15s;
+  /* Sidebar kiểu ChatGPT (2026-09-26): nền SÁNG trùng tông giấy, chữ đậm,
+     hover/active là lớp phủ trong suốt — không còn khối nâu gradient. */
+  --sb-w:260px; --sb-bg:#F4F2EC; --sb-fg:#1a1a1a; --sb-fg-dim:#6b665c;
+  --sb-hover:rgba(15,42,61,.06); --sb-on:rgba(15,42,61,.09);
 }
 :root[data-theme="dark"]{
+  --sb-bg:#12100c; --sb-fg:#e9e6df; --sb-fg-dim:#958f82;
+  --sb-hover:rgba(255,255,255,.06); --sb-on:rgba(255,255,255,.1);
   --text:#e9e6df; --text-mid:#b7b3a9; --text-lt:#8a867c; --ink:#e9e6df; --ink-mid:#b7b3a9; --ink-lt:#8a867c;
   --line:#2a2f38; --line-2:#333944; --border-lt:#2a2f38;
   --paper:#0f141b; --paper-2:#141b24; --white:#161d27;
@@ -86,64 +92,63 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
    che mất đáy trang dưới thanh đó. `100dvh` (dynamic viewport) trừ đúng phần
    đang HIỂN THỊ — khai `100vh` trước làm mức dự phòng cho trình duyệt chưa
    hiểu `dvh` (dòng sau ghi đè khi hỗ trợ, không cần @supports). */
-.shell{display:grid;grid-template-columns:246px 1fr var(--rail-w);height:100vh;height:100dvh;min-height:600px}
+.shell{display:grid;grid-template-columns:var(--sb-w) 1fr var(--rail-w);height:100vh;height:100dvh;min-height:600px}
 
-/* ── SIDEBAR ── */
-.sb{background:linear-gradient(180deg,#2B1B10,#3D2818);color:var(--sb-txt);display:flex;flex-direction:column;overflow-y:auto}
-.sb::-webkit-scrollbar{width:8px}.sb::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:8px}
+/* ── SIDEBAR (kiểu ChatGPT, 2026-09-26) ──
+   Mỗi mục là MỘT TRANG (không xổ nhóm). Trên: ấn · tìm · thu gọn. Giữa: mục
+   điều hướng + "Gần đây" (hội thoại gộp mọi công cụ). Dưới: tài khoản, bấm
+   mở menu. Desktop thu gọn thành dải icon 60px (`html.sb-mini`), điện thoại
+   là ngăn kéo trượt từ trái (khối RESPONSIVE cuối file). */
+.sb{background:var(--sb-bg);color:var(--sb-fg);display:flex;flex-direction:column;min-height:0;border-right:1px solid var(--line);overflow:hidden}
 .seal{width:34px;height:34px;border-radius:7px;object-fit:cover;border:1px solid rgba(200,169,106,.45);flex:0 0 auto;display:block}
-/* Hồ sơ — đầu sidebar trên MỌI trang (2026-09, thay `.sb-brand`/`.sb-foot` cũ):
-   trước đây tên hiệu lặp lại y hệt `.ws-top` của Trang chủ (Henry chỉ ra qua
-   ảnh chụp mobile), còn hồ sơ cũ lại chỉ nằm ở ĐÁY. Gộp về một khối, đưa lên
-   TRÊN — đúng chỗ người dùng tìm khi cần xem ví/đăng xuất. */
-.sb-profile{display:flex;align-items:center;gap:11px;padding:14px 16px;text-decoration:none;border-bottom:1px solid var(--sb-line)}
-@media(hover:hover){.sb-profile:hover{background:rgba(255,255,255,.03)}}
-.sb-profile-tx{flex:1;min-width:0}
-.sb-profile-tx .nm{font-family:var(--serif);font-size:14.5px;color:#fff;font-weight:600;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sb-profile-tx .sub{font-size:11px;color:var(--gold);margin-top:2px}
-.sb-profile-chev{color:var(--sb-txt-dim);opacity:.6;flex:0 0 auto;width:14px;height:14px}
-.sb-profile-chev svg{width:100%;height:100%}
-.sb-pulse{margin:10px 16px 8px;padding-bottom:9px;border-bottom:1px solid var(--sb-line);display:flex;flex-direction:column;gap:4px}
-.sb-pulse[hidden]{display:none}
-.sbp-row{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--sb-txt-dim)}
-.sbp-row b{color:var(--sb-txt);font-weight:600}
-.sbp-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#6fce97;flex:0 0 auto;animation:sbpPulse 1.8s ease-in-out infinite}
-@keyframes sbpPulse{0%,100%{box-shadow:0 0 0 0 rgba(95,191,135,.45)}50%{box-shadow:0 0 0 4px rgba(95,191,135,0)}}
-.sbp-ic{width:12px;height:12px;flex:0 0 auto;opacity:.65;color:var(--gold)}
-.grp{margin-top:9px;padding:0 8px}
-.grp-h{display:flex;align-items:center;gap:7px;padding:6px 2px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--sb-txt-dim);font-weight:600;cursor:pointer;user-select:none}
-.grp-h .chev{margin-left:auto;transition:transform .2s;opacity:.5;width:13px;height:13px}
-.grp-h .grp-link{margin-left:auto;text-transform:none;letter-spacing:0;font-size:11px;font-weight:600;color:var(--gold-soft);cursor:pointer;text-decoration:none}
-@media(hover:hover){.grp-h .grp-link:hover{color:var(--gold)}}
-.grp.closed .chev{transform:rotate(-90deg)}.grp.closed .grp-nav{display:none}
-.item{display:flex;align-items:center;gap:10px;padding:7px 8px;margin:1px 0;border-radius:7px;color:var(--sb-txt);cursor:pointer;font-size:13px;position:relative;text-decoration:none;width:100%;box-sizing:border-box}
-button.item{border:none;background:none;font:inherit;text-align:left}
-@media(hover:hover){.item:hover{background:rgba(255,255,255,.05);color:#fff}}
-.item.active{background:linear-gradient(90deg,rgba(200,169,106,.16),rgba(200,169,106,.02));color:#fff;font-weight:500}
-.item.active::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:var(--gold)}
-@media(hover:hover){.item.danger:hover{background:rgba(192,57,43,.14);color:#f0b2a8}}
-@media(hover:hover){.item.danger:hover .ic{opacity:.9;color:#f0b2a8}}
-.ic{width:15px;height:15px;flex:0 0 auto;opacity:.5}
-.item.active .ic{opacity:.9;color:var(--gold)}@media(hover:hover){.item:hover .ic{opacity:.9}}
-.pill{margin-left:auto;font-size:9.5px;padding:1px 6px;border-radius:20px;background:rgba(30,107,60,.22);color:#6fce97}
-.pill.cost{background:rgba(200,169,106,.16);color:var(--gold)}
-/* Chấm nhắc "Khởi Hành" chưa xong cạnh mục Tổng quan — xem khoiHanhPending()
-   trong shell.js. Tự pulse nhẹ để bắt mắt mà không cần chữ, đứng gọn cạnh
-   nhãn nên không phá bố cục có/không có .pill. */
-.sb-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-left:6px;flex:0 0 auto;animation:sbDotPulse 1.8s ease-in-out infinite}
-@keyframes sbDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(200,169,106,.45)}50%{box-shadow:0 0 0 4px rgba(200,169,106,0)}}
-.ava{width:29px;height:29px;border-radius:50%;background:linear-gradient(135deg,var(--gold-soft),var(--gold));display:flex;align-items:center;justify-content:center;color:#2a1e05;font-weight:700;font-size:13px;flex:0 0 auto}
-.sb-spacer{flex:1}
-.sb-foot-grp{padding:8px 8px;border-top:1px solid var(--sb-line)}
-.sb-brandmini{display:flex;align-items:center;gap:9px;padding:12px 14px 16px;opacity:.55}
-.sb-brandmini img{width:24px;height:24px;border-radius:6px;object-fit:cover;flex:0 0 auto}
-.sb-brandmini-tx{min-width:0;flex:1}
-.sb-brandmini b{display:block;font-family:var(--serif);font-size:11px;color:#fff;font-weight:600;letter-spacing:.02em;line-height:1.25;white-space:nowrap}
-.sb-brandmini span{display:block;font-size:9px;color:var(--sb-txt-dim);white-space:normal;line-height:1.35}
+.sbn-top{display:flex;align-items:center;gap:4px;padding:10px 8px 6px 12px;flex:0 0 auto}
+.sbn-brand{display:flex;align-items:center;gap:9px;flex:1;min-width:0;text-decoration:none;color:var(--sb-fg)}
+.sbn-brand img{width:28px;height:28px;border-radius:50%;flex:0 0 auto;display:block}
+.sbn-brand b{font-family:var(--serif);font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sbn-ib{appearance:none;border:0;background:none;width:36px;height:36px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;color:var(--sb-fg-dim);cursor:pointer;flex:0 0 auto;padding:0}
+.sbn-ib svg{width:19px;height:19px}
+@media(hover:hover){.sbn-ib:hover{background:var(--sb-hover);color:var(--sb-fg)}}
+.sbn-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:2px 8px 12px}
+.sbn-scroll::-webkit-scrollbar{width:8px}.sbn-scroll::-webkit-scrollbar-thumb{background:var(--sb-on);border-radius:8px}
+.sbn-item{appearance:none;border:0;background:none;width:100%;display:flex;align-items:center;gap:11px;padding:8px 10px;border-radius:9px;color:var(--sb-fg);font:inherit;font-size:14px;line-height:1.3;text-align:left;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.sbn-item svg{width:18px;height:18px;flex:0 0 auto;color:var(--sb-fg-dim)}
+.sbn-item .sbn-tx{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(hover:hover){.sbn-item:hover{background:var(--sb-hover)}}
+.sbn-item.active{background:var(--sb-on);font-weight:500}
+.sbn-item.active svg{color:var(--sb-fg)}
+.sbn-more[hidden]{display:none}
+.sbn-sec{display:flex;align-items:center;justify-content:space-between;padding:18px 10px 6px;font-size:12.5px;color:var(--sb-fg-dim)}
+.sbn-sec a{color:var(--sb-fg-dim);text-decoration:none;font-size:12px}
+@media(hover:hover){.sbn-sec a:hover{color:var(--sb-fg)}}
+.sbn-recent .sbn-item{padding:7px 10px;font-size:13.5px}
+.sbn-empty{padding:4px 10px;font-size:12.5px;color:var(--sb-fg-dim);line-height:1.5}
+.sbn-foot{flex:0 0 auto;padding:8px;border-top:1px solid var(--line);position:relative}
+.sbn-me .ava{width:30px;height:30px;border-radius:50%;background:var(--navy);color:#F9F4EB;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;flex:0 0 auto}
+.sbn-me .sbn-tx b{display:block;font-weight:500;overflow:hidden;text-overflow:ellipsis}
+.sbn-me .sbn-tx span{display:block;font-size:12px;color:var(--sb-fg-dim);overflow:hidden;text-overflow:ellipsis}
+.sbn-me .sbn-tx span b{display:inline;color:var(--gold-soft);font-weight:600}
+.sbn-menu{position:absolute;left:8px;right:8px;bottom:calc(100% + 4px);background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-lg);padding:6px;z-index:5}
+.sbn-menu[hidden]{display:none}
+.sbn-menu hr{border:0;border-top:1px solid var(--line);margin:4px 6px}
+.sbn-mail{padding:6px 10px 4px;font-size:12.5px;color:var(--sb-fg-dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sbn-mail:empty{display:none}
+.sbn-bal{margin-left:auto;font-size:12px;color:var(--sb-fg-dim);font-variant-numeric:tabular-nums}
+@media(hover:hover){.sbn-item.danger:hover{color:var(--tx-red)}}
+/* Thu gọn (desktop): dải icon như ChatGPT. Class đặt trên <html> NGAY lúc
+   shell.js chạy (trước lần vẽ đầu) để khỏi giật cột 260 → 60. */
+@media(min-width:901px){
+html.sb-mini{--sb-w:60px}
+html.sb-mini .sbn-brand b,html.sb-mini .sbn-tx,html.sb-mini .sbn-sec,html.sb-mini .sbn-recent,html.sb-mini .sbn-more,html.sb-mini [data-sbn="more"],html.sb-mini .sbn-bal,html.sb-mini [data-sbn="search"]{display:none}
+html.sb-mini .sbn-top{flex-direction:column;padding:10px 0 6px;gap:6px}
+html.sb-mini .sbn-brand{flex:0 0 auto}
+html.sb-mini .sbn-scroll{padding:2px 10px 12px}
+html.sb-mini .sbn-item{justify-content:center;padding:9px 0}
+html.sb-mini .sbn-menu{right:auto;width:240px}
+}
 
 /* ── WORKSPACE FRAME ── */
 /* `container-type` ở ĐÂY (khối cha), không ở khối con — `.ws` co theo bề rộng
-   CỘT giữa sidebar (246px) và rail (--rail-w), KHÔNG theo viewport (xem bẫy
+   CỘT giữa sidebar (--sb-w) và rail (--rail-w), KHÔNG theo viewport (xem bẫy
    trong CLAUDE.md). `@container ws (...)` bên dưới hỏi đúng bề rộng cột này. */
 .ws{background:var(--paper);overflow-y:auto;display:flex;flex-direction:column;position:relative;container:ws/inline-size}
 /* z-index phải VƯỢT `.laso-grid` (41, laso-chart.css) — thấp hơn là lưới lá số cuộn ĐÈ LÊN header dính. */
@@ -183,7 +188,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    trên di động là thanh đó đã trôi khỏi màn hình từ lâu, không ai thấy để
    bấm. Nay `position:fixed`, luôn đứng đúng một chỗ bất kể cuộn tới đâu.
    Dựng bởi `fabHost()` trong shell.js. Luật ẨN khi có drawer (sidebar/rail)
-   mở nằm TRONG khối responsive dưới cùng, cạnh `.tabbar` — trên desktop
+   mở nằm TRONG khối responsive dưới cùng — trên desktop
    rail luôn hiện sẵn (không phải drawer che màn hình) nên KHÔNG được ẩn ở
    đây, chỉ ẩn trên di động nơi rail phủ kín màn hình khi mở.
 
@@ -334,34 +339,6 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 /* ── THEME TOGGLE + MOBILE ── */
 .mobile-only{display:none}
 .shell svg{display:block}
-
-/* ── BOTTOM TAB BAR (mobile) — điều hướng chạm bằng ngón cái. 5 mục:
-   Trang chủ (ra tuviminhbao.com) · Trợ lý (rail) · HOME nổi giữa (về thẳng
-   springboard /app từ bất kỳ đâu — bài học từ workshop 2026-09: người dùng
-   xong một tool thì KHÔNG biết bấm vào đâu để quay lại Luận Đường) · Công cụ
-   (sidebar) · Tài khoản. shell.js chèn #shell-tabbar vào body; chỉ hiện
-   ≤900px; ẩn khi drawer/cmdk đang mở. Desktop KHÔNG đụng tới. ── */
-.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:49;grid-template-columns:1fr 1fr 72px 1fr 1fr;align-items:end;background:linear-gradient(180deg,#3D2818,#2B1B10);border-top:1px solid rgba(200,169,106,.18);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(15,42,61,.22)}
-/* `.rail`/`.sb` chừa đúng 90px đáy (đo bằng nút Home nổi) nhưng khối
-   `.tabbar` thật chỉ cao ~75px ở hai bên (nút Home mới nổi lên -15px) — hở
-   ra 15px hai bên hông, để lộ nội dung `.home-body` phía dưới đè lên qua
-   khe đó. Nối nền lên đúng 15px, nằm SAU nút Home trong DOM nên không che nó. */
-.tabbar::before{content:'';position:absolute;left:0;right:0;top:-15px;height:15px;background:inherit}
-.tabbar .tab{appearance:none;-webkit-appearance:none;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;color:var(--sb-txt-dim);font-family:inherit;font-size:10.5px;line-height:1;text-decoration:none;-webkit-tap-highlight-color:transparent}
-.tabbar .tab svg{width:22px;height:22px;display:block;stroke-width:1.7}
-.tabbar .tab.active{color:var(--gold)}
-.tabbar .tab:active{background:rgba(255,255,255,.05)}
-/* Nút Home — CỐ Ý nổi lên trên hàng, không phải một `.tab` như 4 nút còn lại:
-   đây là đường thoát duy nhất từ MỌI trang tool về lại springboard, nên phải
-   là điểm chạm dễ nhất trên thanh (to hơn, tách khỏi nền navy bằng viền vàng
-   khớp màu thương hiệu). `top:-15px` kéo nó lên khỏi hàng mà vẫn nằm trong
-   `.tabbar` để không phải tính lại vị trí tuyệt đối riêng. */
-.tabbar .tab-home{display:flex;flex-direction:column;align-items:center;position:relative;top:-15px;text-decoration:none;-webkit-tap-highlight-color:transparent}
-.tabbar .tab-home-btn{appearance:none;-webkit-appearance:none;width:52px;height:52px;border-radius:50%;border:4px solid #2B1B10;background:linear-gradient(160deg,var(--gold),var(--gold-soft));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(15,42,61,.35);cursor:pointer}
-.tabbar .tab-home-btn svg{width:24px;height:24px;stroke:#2B1B10;stroke-width:2}
-.tabbar .tab-home-btn:active{transform:scale(.94)}
-.tabbar .tab-home span{margin-top:3px;font-size:10.5px;color:var(--sb-txt-dim)}
-.tabbar .tab-home.active span{color:var(--gold)}
 
 /* ── EMPTY-STATE INTRO (danh thiếp CỐ ĐỊNH của tool — KHÔNG tự ẩn vĩnh viễn,
    không có nút đóng). Chữ tĩnh trong HTML quyết định layout ngay từ khung
@@ -545,7 +522,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    sang phải thành cột artifact. 53 trang tool giữ nguyên không sửa một dòng,
    và mã sinh bản luận dài (script inline, bám id cứng như `lgBody`/`sec-N`)
    không phải di dời đi đâu — nó vẫn chạy đúng chỗ cũ, chỉ đổi vai trò. */
-body.chat-first-live .shell { grid-template-columns: 246px 1fr var(--art-w) }
+body.chat-first-live .shell { grid-template-columns: var(--sb-w) 1fr var(--art-w) }
 body.chat-first-live .rail { order: 2; border-left: none; border-right: 1px solid var(--line) }
 body.chat-first-live .ws { order: 3 }
 /* ── "Mở rộng kết quả" (`body.art-wide`, desktop) ───────────────────────────
@@ -556,7 +533,7 @@ body.chat-first-live .ws { order: 3 }
    Chỉ cần ĐẢO xem cột nào giữ `1fr`: chat về đúng `--rail-w` như cũ, `.ws`
    lấy phần còn lại. Cả hai vẫn thấy được ⇒ không có ngõ cụt, luôn quay lại
    chat được mà không phải đóng gì. */
-body.chat-first-live.art-wide .shell { grid-template-columns: 246px var(--rail-w) 1fr }
+body.chat-first-live.art-wide .shell { grid-template-columns: var(--sb-w) var(--rail-w) 1fr }
 /* 🪤 `.ws-fab` neo bằng `right:calc(var(--rail-w) + 16px)` vì nó GIẢ ĐỊNH rail
    là cột phải cùng. Đảo cột xong thì `.ws` mới là cột phải cùng, nên trừ đi
    `--rail-w` là đẩy cụm nút văng sang giữa màn, đè lên chat. */
@@ -592,6 +569,76 @@ body.chat-first-live .ws-fab { right: 16px }
 .tv-sheet-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 20px calc(20px + env(safe-area-inset-bottom))}
 body.sheet-open{overflow:hidden}
 
+/* ── MÀN CHAT TRANG CHỦ kiểu ChatGPT (`body.chat-home`, 2026-09-26) ─────────
+   `/app` = một cột chat duy nhất: sidebar | rail (1fr). `.ws` vẫn có trong DOM
+   (soft-nav cần `#ws`) nhưng ẩn. Nội dung chat canh giữa, rộng tối đa ~768px
+   bằng padding (không bằng max-width) để thanh cuộn vẫn nằm sát mép phải.
+   Lúc chưa ai nói gì (`body.chat-empty`): lời chào + ô nhập dồn vào GIỮA màn,
+   gửi câu đầu thì ô nhập tụt xuống đáy — y hệt ChatGPT. */
+body.chat-home .shell{grid-template-columns:var(--sb-w) 1fr}
+body.chat-home .ws{display:none}
+body.chat-home .rail{border-left:0;background:var(--paper);--col-pad:max(16px,calc((100% - 736px)/2))}
+body.chat-home .rail-h{border-bottom:0;padding:10px 14px;background:var(--paper)}
+body.chat-home .rail-ava{border-radius:50%;border:0}
+body.chat-home .rail-h b{font-size:15px}
+body.chat-home .rail-h span{font-size:11.5px}
+body.chat-home .ctx{display:none!important}
+body.chat-home .chat{padding:12px var(--col-pad) 18px;gap:20px}
+body.chat-home .rail-sugg,body.chat-home .rail-meter,body.chat-home .rail-thumbs{padding-left:var(--col-pad);padding-right:var(--col-pad)}
+body.chat-home .msg{font-size:15px;line-height:1.7}
+body.chat-home .msg.u{background:var(--paper-2);color:var(--text);border-radius:18px;padding:10px 16px;max-width:78%}
+body.chat-home .msg-ava{width:30px;height:30px;border-radius:50%;border:0}
+body.chat-home .rail-in{border-top:0;margin:8px var(--col-pad) calc(14px + env(safe-area-inset-bottom));padding:8px 8px 8px 10px;background:var(--white);border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow)}
+body.chat-home .rail-in textarea{border:0;background:none;font-size:15px;padding:7px 4px;max-height:200px}
+body.chat-home .rail-in textarea:focus{border:0}
+body.chat-home .send{width:36px;height:36px;background:var(--navy)}
+body.chat-home.chat-empty .sugg-row{flex-wrap:wrap;justify-content:center;overflow:visible}
+body.chat-home .sugg-row .chip{font-size:13px;padding:8px 14px;background:var(--white)}
+body.chat-home.chat-empty .chat{flex:0 0 auto;margin-top:auto;overflow:visible}
+body.chat-home.chat-empty .rail-in{margin-bottom:6px}
+body.chat-home.chat-empty .rail-sugg{order:5;padding-top:8px;margin-bottom:auto}
+body.chat-home.chat-empty .rail-meter{order:6}
+.home-hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:0 8px 10px}
+.home-hero img{width:64px;height:64px;border-radius:50%;display:block}
+.home-hero h1{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--heading);line-height:1.3;text-wrap:balance;margin-top:6px}
+.home-hero p{font-size:14px;color:var(--text-lt);max-width:440px;line-height:1.55}
+.msg.a.nav .msg-ava{border:0;border-radius:50%}
+.nav-nm{font-size:12px;color:var(--text-lt);margin-bottom:2px}
+.nav-card{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--white);border-radius:14px;padding:12px;margin-top:4px;max-width:420px}
+.nav-card img{width:48px;height:48px;border-radius:50%;object-fit:cover;flex:0 0 auto}
+.nav-card b{display:block;font-family:var(--serif);font-size:15px;color:var(--heading)}
+.nav-card span{display:block;font-size:12.5px;color:var(--text-lt)}
+.nav-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.nav-acts button{appearance:none;font:inherit;font-size:13.5px;border-radius:10px;padding:8px 14px;cursor:pointer;border:1px solid var(--line-2);background:var(--white);color:var(--text)}
+.nav-acts .nav-ok{background:var(--navy);border-color:var(--navy);color:#F9F4EB;font-weight:600}
+.nav-acts button:disabled{opacity:.5;cursor:default}
+.nav-sys{align-self:center;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold);border-radius:999px;padding:4px 12px}
+.nav-sys img{width:18px;height:18px;border-radius:50%;object-fit:cover}
+/* Trang không có rail (Các Thầy, Sổ lá số…): trước đây vẫn chừa cột rail trống. */
+.shell:not(:has(> .rail)){grid-template-columns:var(--sb-w) 1fr}
+
+/* ── Khung kết quả kiểu artifact (Claude): nút Mở rộng / Đóng ở đầu `.ws`,
+   thẻ kết quả trong chat. Chỉ desktop — điện thoại `.ws` là lớp dưới chat. */
+.ws-art-ctl{display:none}
+body.chat-first-live .ws-art-ctl{display:flex;gap:4px;margin-left:8px;flex:0 0 auto}
+.ws-art-btn{appearance:none;width:32px;height:32px;border-radius:8px;border:0;background:none;color:var(--text-mid);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.ws-art-btn svg{width:17px;height:17px}
+@media(hover:hover){.ws-art-btn:hover{background:var(--paper-2);color:var(--text)}}
+body.chat-first-live.art-closed .shell{grid-template-columns:var(--sb-w) 1fr}
+body.chat-first-live.art-closed .ws{display:none}
+/* Đóng khung kết quả thì chat chiếm trọn: canh giữa cột chữ như màn chat trang chủ. */
+body.chat-first-live.art-closed .rail{--col-pad:max(14px,calc((100% - 736px)/2))}
+body.chat-first-live.art-closed .chat{padding-left:var(--col-pad);padding-right:var(--col-pad)}
+body.chat-first-live.art-closed .rail-in,body.chat-first-live.art-closed .rail-sugg,body.chat-first-live.art-closed .rail-meter,body.chat-first-live.art-closed .ctx{padding-left:var(--col-pad);padding-right:var(--col-pad)}
+body.chat-first-live.art-closed .ctx{margin-left:var(--col-pad);margin-right:var(--col-pad);padding-left:10px;padding-right:10px}
+.art-card{appearance:none;font:inherit;text-align:left;display:flex;align-items:center;gap:12px;width:calc(100% - 32px);max-width:420px;flex:0 0 auto;border:1px solid var(--line);background:var(--white);border-radius:14px;padding:11px 13px;cursor:pointer;color:var(--text);margin-left:32px}
+@media(hover:hover){.art-card:hover{border-color:var(--gold-soft)}}
+.art-card .art-ic{width:38px;height:38px;border-radius:9px;background:var(--paper-2);display:flex;align-items:center;justify-content:center;color:var(--gold-soft);flex:0 0 auto}
+.art-card .art-ic svg{width:18px;height:18px}
+.art-card .art-tx{min-width:0}
+.art-card b{display:block;font-size:13.5px;font-family:var(--serif);color:var(--heading);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.art-card .art-tx span{font-size:12px;color:var(--text-lt)}
+
 /* ── RESPONSIVE (max-width:900px) — PHẢI để CUỐI file: các rule .rail/.sb đặt
    sau media query (vd .rail{position:relative} cho panel lịch sử) sẽ override
    mobile nếu media đứng trước → giữ khối này ở cuối để mobile thắng. ── */
@@ -613,20 +660,14 @@ body.sheet-open{overflow:hidden}
      Chỉ áp trên mobile; desktop giữ nguyên 13.5px vì ở đó không có zoom. */
   .shell .ws input,.shell .ws select,.shell .ws textarea{font-size:16px}
   .shell{grid-template-columns:1fr}
-  /* Chừa đủ chiều cao tabbar THẬT (~90px) + safe-area ở ĐÁY cho .sb/.rail/.backdrop
-     — trước đây cả ba phủ tới `bottom:0` rồi che tabbar, buộc phải ẩn hẳn
-     tabbar khi drawer mở (`body.drawer-open .tabbar{display:none}`, đã bỏ).
-     Hệ quả cũ: bấm "Trợ lý" mở rail TOÀN MÀN là mất luôn nút Home — chỉ còn
-     nút Đóng ở đầu rail mà đa số người dùng không thấy (Henry báo qua ảnh
-     chụp). Tabbar giờ LUÔN sticky, mọi trang có shell (Trang chủ, Tài khoản…).
-     🐞 Từng ghi "~64px" — SAI, đo thật (Playwright, `.tabbar` height 72px) ra
-     tabbar cao hơn số đó, CỘNG nút `.tab-home` nổi `top:-15px` lòi thêm 14px
-     lên trên mép tabbar. 64px hụt mất ~22px ⇒ rail (z-index cao hơn tabbar)
-     đè lên PHẦN TRÊN nút Chat nổi giữa — Henry chụp ảnh bắt được 2026-09-23. */
-  .sb{position:fixed;left:0;top:0;bottom:calc(90px + env(safe-area-inset-bottom));width:270px;z-index:60;transform:translateX(-100%);transition:transform .25s}
+  /* Ngăn kéo trái kiểu ChatGPT: phủ trọn chiều cao (không còn tabbar dưới
+     đáy từ 2026-09-26 — mọi đích điều hướng nằm trong sidebar). */
+  .sb{position:fixed;left:0;top:0;bottom:0;width:min(84vw,300px);z-index:60;transform:translateX(-100%);transition:transform .25s var(--ease-out);border-right:0;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+  /* Bóng chỉ khi MỞ — lúc đóng (dịch -100%) bóng vẫn tràn vào mép trái màn hình. */
+  .sb.open{box-shadow:var(--shadow-lg)}
   .sb.open{transform:none}
   /* Rail = trợ lý TOÀN MÀN trên điện thoại (was 360px drawer) → cảm giác app thật. */
-  .rail{position:fixed;right:0;top:0;bottom:calc(90px + env(safe-area-inset-bottom));width:100vw;max-width:none;z-index:60;transform:translateX(100%);transition:transform .25s;border-left:none}
+  .rail{position:fixed;right:0;top:0;bottom:0;width:100vw;max-width:none;z-index:60;transform:translateX(100%);transition:transform .25s;border-left:none}
   .rail.open{transform:none}
   /* Chat-first trên điện thoại: `.shell` chỉ còn MỘT cột và `.rail` là lớp phủ
      `position:fixed`, nên `order` của khối chat-first phía trên KHÔNG có tác
@@ -640,6 +681,20 @@ body.sheet-open{overflow:hidden}
      (`grid-template-columns` ra "246px 0px 420px"), không phải suy đoán. */
   body.chat-first-live .shell{grid-template-columns:1fr}
   body.chat-first-live .rail{border-right:none}
+  body.chat-first-live .ws-art-ctl{display:none}
+  body.chat-first-live.art-closed .ws{display:flex}
+  .art-card{margin-left:0;width:100%}
+  /* Màn chat trang chủ trên điện thoại: rail KHÔNG phải lớp phủ mà là chính
+     trang — đứng yên, phủ trọn màn, không có nút đóng. */
+  body.chat-home .shell{grid-template-columns:1fr}
+  /* 🪤 `z-index:auto` là BẮT BUỘC: phần tử con của lưới vẫn giữ `z-index:60`
+     (luật `.rail` phía trên) dù `position:static`, và vì đứng SAU `.sb` trong
+     DOM nên nó phủ lên cả ngăn kéo lẫn lớp nền mờ — bấm ☰ không thấy gì. */
+  body.chat-home .rail{position:static;transform:none;width:auto;height:100%;min-height:0;z-index:auto}
+  body.chat-home .sugg-row,body.chat-home.chat-empty .sugg-row{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto}
+  body.chat-home .rail-in textarea{font-size:16px}
+  body.chat-home .home-hero h1{font-size:22px}
+  .shell:not(:has(> .rail)){grid-template-columns:1fr}
   .mobile-only{display:inline-flex}
   /* ── Thanh tiêu đề tool (.ws-top) trên điện thoại ────────────────────────
      Ở bề ngang 393px (iPhone), hàng ☰ + tiêu đề + 2–4 nút KHÔNG đủ chỗ. Vì
@@ -667,25 +722,19 @@ body.sheet-open{overflow:hidden}
   .ws-actions{flex:1 0 100%;max-width:100%;margin-left:0;gap:6px;overflow-x:auto;scrollbar-width:none}
   .ws-actions::-webkit-scrollbar{display:none}
   .ws-actions .btn{flex:0 0 auto;white-space:nowrap;padding:7px 10px}
-  /* `bottom` khớp .sb/.rail phía trên — không phủ lên tabbar, để tabbar luôn
-     bấm được trực tiếp (không phải đóng drawer trước mới bấm Home được). */
-  .backdrop{position:fixed;left:0;right:0;top:0;bottom:calc(90px + env(safe-area-inset-bottom));background:rgba(15,42,61,.4);z-index:55;display:none}
+  .backdrop{position:fixed;inset:0;background:rgba(15,42,61,.4);z-index:55;display:none}
+  /* Sidebar mở chồng lên rail toàn màn: ngăn kéo (70) > nền mờ (65) > rail (60). */
+  .sb{z-index:70}
+  body.sb-drawer .backdrop{z-index:65}
+  /* Lịch sử hội thoại đã có ở mục "Gần đây" của sidebar — bớt một nút trên
+     thanh đầu khung chat vốn chật ở 393px. */
+  .rail-h .rh-btn[data-act="history"]{display:none}
+  .rail-h .rh-menu{order:-1}
   .backdrop.on{display:block}
-  /* Bottom tab: hiện trên mobile, chừa chỗ cuối trang, LUÔN sticky kể cả khi
-     sidebar/rail đang mở (xem ghi chú ở .sb/.rail phía trên). */
-  .tabbar{display:grid}
-  /* `.shell .ws-body` (0,2,0) thay vì `.ws-body` (0,1,0): nhiều trang tự khai
-     `.ws-body{padding:...}` KHÔNG bọc trong @media — cùng specificity thì
-     rule của trang nạp SAU thắng, nuốt mất khoảng chừa tabbar này, nút CTA
-     cuối trang dài (vd "Mua Combo →" ở app-combo-tron-bo.html) rơi đúng vùng
-     nút tròn nổi `.tab-home-btn` che, không bấm được. 76px cũng SAI — đo thật
-     (Playwright) tabbar cao ~90px kể cả nút Home nổi, khớp số `.sb`/`.rail`/
-     `.backdrop` đã dùng phía trên. */
-  .shell .ws-body{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
-  /* Cụm sticky phải leo lên TRÊN tabbar (~64px + safe-area), và tự ẩn cùng
-     lúc với nó khi sidebar/rail đang mở toàn màn — rail phủ kín thì cụm nút
-     nổi bên trên chỉ còn là chướng ngại vật. */
-  .ws-fab{bottom:calc(78px + env(safe-area-inset-bottom));right:14px}
+  /* Cụm sticky tự ẩn khi sidebar/rail đang mở toàn màn — rail phủ kín thì
+     cụm nút nổi bên trên chỉ còn là chướng ngại vật. */
+  .shell .ws-body{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+  .ws-fab{bottom:calc(16px + env(safe-area-inset-bottom));right:14px}
   body.drawer-open .ws-fab{display:none}
   /* Sheet trên điện thoại: full-screen trượt từ DƯỚI lên (was panel phải
      desktop) — cùng khuôn 92vh + bo góc trên với các sheet/modal khác trong
@@ -769,7 +818,7 @@ font-family:inherit}
    Trang muốn giấu thêm khối nào thì khai `data-print-skip` — cùng lối với
    `data-share-skip` của bản chia sẻ, không phải nhớ thêm khái niệm mới. */
 @media print {
-  .sb, .rail, .ws-top, .tabbar, .backdrop, #introHost, #shellRecent,
+  .sb, .rail, .ws-top, .backdrop, #introHost, #shellRecent,
   .mobile-only, .jump, .ask, .btn, button, input, select, textarea,
   .tpw-lock-veil, .tpw-lock-blur, .tpw-wall, .tpw-prev, .ws-intake,
   [data-print-skip], [data-share-skip] { display: none !important; }

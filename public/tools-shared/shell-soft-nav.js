@@ -52,6 +52,8 @@
 
   var SOFT_PAGES = {
     '/app': 1,
+    '/app/cong-cu': 1,
+    '/app/bao-cao': 1,
     '/app/thay': 1,
     '/app/tro-chuyen': 1,
     '/app/kim-lau': 1,
@@ -286,11 +288,14 @@
     });
   }
 
-  function updateTabbarActive(path) {
-    var tabbar = document.getElementById('shell-tabbar');
-    if (!tabbar) return;
-    Array.prototype.forEach.call(tabbar.querySelectorAll('a'), function (a) {
-      a.classList.toggle('active', a.getAttribute('href') === path);
+  // Tô mục đang mở trong sidebar (2026-09-26: tabbar dưới đáy đã bỏ, mọi đích
+  // điều hướng nằm trong `#shell-sidebar`). So đúng pathname, bỏ #/?.
+  function updateNavActive(path) {
+    var sb = document.getElementById('shell-sidebar');
+    if (!sb) return;
+    Array.prototype.forEach.call(sb.querySelectorAll('.sbn-scroll > a.sbn-item, .sbn-more > a.sbn-item'), function (a) {
+      var h = (a.getAttribute('href') || '').split(/[?#]/)[0];
+      a.classList.toggle('active', h === path && h !== '/app');
     });
   }
 
@@ -376,7 +381,7 @@
         // đủ cờ (vd Trang chủ chỉ khai SHELL_ACTIVE, không khai CHATFIRST) sẽ
         // THỪA HƯỞNG cờ thật của trang vừa rời thay vì mặc định false/rỗng.
         window.SHELL_ACTIVE = ''; window.SHELL_CHATFIRST = false; window.SHELL_CHAT_INTAKE = false;
-        window.SHELL_HISTORY = false; window.SHELL_INTRO = null;
+        window.SHELL_HISTORY = false; window.SHELL_INTRO = null; window.SHELL_CHAT_HOME = false;
 
         return runPageScripts(bodyScripts);
       })
@@ -385,7 +390,7 @@
         // nav.js đã nạp ⇒ runPageScripts bỏ qua nó, nên không ai gọi lại
         // mountIcons cho #ws vừa thay ⇒ mọi [data-icon] tĩnh ra ô trống.
         if (window.mountIcons) window.mountIcons(document.querySelector('main#ws'));
-        updateTabbarActive(path);
+        updateNavActive(path);
         try { if (window.Track) window.Track.event('page_view', { meta: { from: 'soft_nav' } }); } catch (e) { /* ignore */ }
         document.dispatchEvent(new CustomEvent('tvmb:softnav', { detail: { path: path } }));
       })

@@ -1,13 +1,15 @@
 // Service Worker — Tử Vi Minh Bảo
 // Strategy: cache-first for static assets, network-first for HTML/API
-const CACHE_VERSION = 'tuvi-v5';
+const CACHE_VERSION = 'tuvi-v6';
 const STATIC_CACHE = CACHE_VERSION + '-static';
 const OFFLINE_URL = '/offline.html';
 
 const STATIC_ASSETS = [
   '/manifest.json',
   '/seal.webp',
-  '/seal.png',
+  // Bản 512px (~99 KB) — KHÔNG phải `/seal.png` gốc 1024px (1,1 MB): tải sẵn
+  // lúc cài SW nghĩa là mọi khách mới trên 4G gánh 1,1 MB ngay lượt đầu.
+  '/seal-512.png',
   '/offline.html',
 ];
 

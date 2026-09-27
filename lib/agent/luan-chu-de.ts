@@ -1003,6 +1003,11 @@ const yDinhCua = (cd: ChuDe, q: string) => cd.yDinh.filter(([re]) => re.test(q))
  *  4. hòa mà chỉ còn HAI chủ đề ("tiền và sức khỏe năm nay") → dựng CẢ HAI; hòa từ
  *     ba trở lên → [], để `focusHint` cũ nêu đủ các cung thay vì chọn bừa.
  */
+/** Cụm gọi tên chủ đề ("công việc", "tình cảm"…) cho câu nói với khách — màn chat trang chủ. */
+export function nghiaChuDe(id: string | null): string | null {
+  return (id && CHU_DE[id]?.nghia) || null;
+}
+
 export function cacChuDe(question: string): string[] {
   const hit = primaryPalacesStrict(question);
   let ds = Object.values(CHU_DE).filter((cd) => hit.has(cd.cung));
