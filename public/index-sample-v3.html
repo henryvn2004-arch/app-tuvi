@@ -232,36 +232,6 @@ button { font: inherit; cursor: pointer; }
 
 @media (max-width: 680px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
 
-/* ── Bottom nav (mobile app-shell, chỉ ở trang chủ trong bản mẫu này) ──
-   Màu NÂU ĐẬM khớp `.tabbar` của shell.css (app-shell) — trước đây trang này
-   tự vẽ tab bar nền trắng riêng, lệch hẳn với /app/* (W3 audit "một khuôn
-   mặt"). Chỉ đổi màu/token, KHÔNG đổi cấu trúc — 5 nhãn vẫn khoá bởi
-   `check:tabbar` (check-tabbar-parity.mjs) so với `renderTabbar()`. */
-.bottom-nav { display: none; }
-@media (max-width: 680px) {
-  body { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
-  .bottom-nav {
-    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
-    background: linear-gradient(180deg,#3D2818,#2B1B10); border-top: 1px solid rgba(200,169,106,.18);
-    padding: 8px 6px calc(6px + env(safe-area-inset-bottom));
-    box-shadow: 0 -6px 20px rgba(15,42,61,.22);
-  }
-  .bn-item {
-    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
-    color: #7d8794; font-size: 10.5px; font-weight: 700; padding: 4px 0;
-  }
-  .bn-item .ic { width: 21px; height: 21px; }
-  .bn-item.active { color: var(--gold); }
-  .bn-center { position: relative; margin-top: -22px; }
-  .bn-center-circle {
-    width: 46px; height: 46px; border-radius: 50%; background: var(--gold);
-    border: 4px solid #2B1B10;
-    display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 14px rgba(200,169,106,0.5);
-    margin-bottom: 2px;
-  }
-  .bn-center-circle svg { width: 24px; height: 24px; }
-}
-
 </style>
 </head>
 <body>
@@ -290,8 +260,8 @@ button { font: inherit; cursor: pointer; }
       </div>
     </form>
     <div class="ask-chips">
-      <a class="ask-chip" href="/app?q=N%C4%83m%20sau%20t%C3%B4i%20c%C6%B0%E1%BB%9Bi%20%C4%91%C6%B0%E1%BB%A3c%20kh%C3%B4ng%3F&amp;thay=dau-nam#chat">Năm sau tôi cưới được không?</a>
-      <a class="ask-chip" href="/app?q=Ti%E1%BB%81n%20b%E1%BA%A1c%20n%C4%83m%20t%E1%BB%9Bi%20c%E1%BB%A7a%20t%C3%B4i%20ra%20sao%3F&amp;thay=dieu-khong#chat">Tiền bạc năm tới của tôi ra sao?</a>
+      <a class="ask-chip" href="/app?q=N%C4%83m%20sau%20t%C3%B4i%20c%C6%B0%E1%BB%9Bi%20%C4%91%C6%B0%E1%BB%A3c%20kh%C3%B4ng%3F&amp;thay=dau-nam&amp;laso=1#chat">Năm sau tôi cưới được không?</a>
+      <a class="ask-chip" href="/app?q=Ti%E1%BB%81n%20b%E1%BA%A1c%20n%C4%83m%20t%E1%BB%9Bi%20c%E1%BB%A7a%20t%C3%B4i%20ra%20sao%3F&amp;thay=dieu-khong&amp;laso=1#chat">Tiền bạc năm tới của tôi ra sao?</a>
       <a class="ask-chip" href="/app?q=Th%C3%A1ng%20n%C3%A0o%20t%E1%BB%91t%20%C4%91%E1%BB%83%20chuy%E1%BB%83n%20nh%C3%A0%3F&amp;thay=nhat-nguyen#chat">Tháng nào tốt để chuyển nhà?</a>
       <a class="ask-chip" href="/app?q=%C4%90%E1%BA%B7t%20t%C3%AAn%20con%20th%E1%BA%BF%20n%C3%A0o%20cho%20h%E1%BB%A3p%20m%E1%BB%87nh%3F&amp;thay=thien-an#chat">Đặt tên con thế nào cho hợp mệnh?</a>
     </div>
@@ -402,31 +372,6 @@ button { font: inherit; cursor: pointer; }
   </div>
 </div>
 
-<!-- ═══════════════ BOTTOM NAV — mobile ═══════════════ -->
-<!-- Bước 12: nhãn PHẢI khớp tuyệt đối 5 nhãn của `renderTabbar()` trong
-     shell.js (check:tabbar canh) — đích được phép khác vì trang này TĨNH,
-     không nạp shell.js nên không có rail/sidebar thật. "Chat" trỏ vào
-     `/app#chat` (Khám phá + cửa concierge, xem `wire()` trong app-home.html)
-     — TRƯỚC ĐÂY trỏ thẳng `/app-luan-giai.html`: người mới bấm Chat rơi
-     thẳng vào form xin họ tên của MỘT tool cụ thể (Luận Giải), không có câu
-     giới thiệu nào cả (Henry 2026-09-23, ảnh chụp mobile báo "chỉ ra cái
-     form, chả biết đang dùng tool gì"). -->
-<!-- 2026-09-24 (hellobot-ui-redesign): 5 nhãn PHẢI khớp tuyệt đối renderTabbar()
-     của public/shell.js (thứ tự + văn bản) — check:tabbar-parity khoá bất
-     biến này. Đích được phép khác (trang này KHÔNG nạp shell.js/rail). -->
-<nav class="bottom-nav">
-  <a class="bn-item" href="/app-home.html"><span class="ic" data-icon="compass"></span>Trang chủ</a>
-  <a class="bn-item" href="/app/thay"><span class="ic" data-icon="star"></span>Các Thầy</a>
-  <a class="bn-item bn-center" href="/app/tro-chuyen">
-    <div class="bn-center-circle">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#16232c" stroke-width="1.6"><path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/></svg>
-    </div>
-    Hỏi Thầy
-  </a>
-  <a class="bn-item" href="/app/nap-luong"><span class="ic" data-icon="wallet"></span>Nạp Lượng</a>
-  <a class="bn-item" href="/app/ho-so"><span class="ic" data-icon="settings"></span>Hồ Sơ</a>
-</nav>
-
 <script src="/nav.js?v=45"></script>
 <script>window.TestimonialsNoAutoRun = true;</script>
 <script src="/testimonials.js?v=1"></script>
@@ -452,16 +397,16 @@ button { font: inherit; cursor: pointer; }
       if (!q) { ta.focus(); return; }
       if (btn) btn.disabled = true;
       var gone = false;
-      function go(thay) {
+      function go(thay, laSo) {
         if (gone) return;
         gone = true;
         try { if (window.Track) window.Track.event('cta_click', { tool_id: 'app-home', meta: { has_q: true, from: 'home_ask', thay: thay } }); } catch (err) { /* đo đếm không được chặn đường đi */ }
-        location.href = '/app?q=' + encodeURIComponent(q) + '&thay=' + encodeURIComponent(thay) + '#chat';
+        location.href = '/app?q=' + encodeURIComponent(q) + '&thay=' + encodeURIComponent(thay) + (laSo ? '&laso=1' : '') + '#chat';
       }
       setTimeout(function () { go('thai-hu'); }, 1500);
       fetch('/api/thay-hoi?q=' + encodeURIComponent(q), { cache: 'no-store' })
         .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (j) { go((j && j.thay) || 'thai-hu'); })
+        .then(function (j) { go((j && j.thay) || 'thai-hu', !!(j && j.chuDe)); })
         .catch(function () { go('thai-hu'); });
     });
   })();
