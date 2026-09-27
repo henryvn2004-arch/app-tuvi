@@ -34,7 +34,7 @@
 <script>window.SHELL_ACTIVE='home';window.SHELL_CHAT_HOME=true;window.SHELL_HISTORY=true;</script>
 <script src="/nav.js?v=45" data-icons-only></script>
 <script src="/auth.js?v=4"></script>
-<script src="/shell.js?v=111"></script>
+<script src="/shell.js?v=112"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=45"></script>
 <script>
 (function(){
@@ -61,7 +61,9 @@
   // ngày sinh trước nếu chưa có. Xoá query để tải lại không hỏi lại.
   var ask=null;
   try{ var p=new URLSearchParams(location.search); var q=(p.get('q')||'').trim().slice(0,500);
-       if(q) ask={q:q,thay:p.get('thay')||'thai-hu',laSo:p.get('laso')==='1'}; }catch(e){}
+       if(q) ask={q:q,thay:p.get('thay')||'thai-hu',laSo:p.get('laso')==='1'};
+       // Chỉ `?thay=` (bấm vào một thầy ở `/`): thầy vào thẳng, tự giới thiệu rồi xin ngày sinh.
+       else if(p.get('thay')) ask={thay:p.get('thay')}; }catch(e){}
 
   var birth=null;
   try{ birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi(Shell.getRememberedBirth()):null; }catch(e){}
@@ -111,7 +113,7 @@
 
   if(ask){
     try{ history.replaceState(null,'',location.pathname); }catch(e){}
-    Shell.joinThay(ask.thay,ask.q,ask.laSo);
+    if(ask.q) Shell.joinThay(ask.thay,ask.q,ask.laSo); else Shell.meetThay(ask.thay);
   }
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);

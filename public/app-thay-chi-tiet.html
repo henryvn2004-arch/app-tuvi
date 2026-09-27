@@ -47,13 +47,17 @@
 <script src="/nav.js?v=45" data-icons-only></script>
 <script src="/auth.js?v=4"></script>
 <script>window.SHELL_ACTIVE='thay';</script>
-<script src="/shell.js?v=111"></script>
+<!-- boot() cần ToolPrices ĐỒNG BỘ (cùng lý do với app-thay.html) — thiếu dòng này là mọi thầy ra "Không tìm thấy thầy này". -->
+<script id="_tvmb_prices_js" src="/tool-prices.js?v=10"></script>
+<script src="/shell.js?v=112"></script>
 <script>
 (function(){
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  // `/app/thay/:id` viết lại thành `?id=:id` ở next.config.mjs — đọc query,
-  // không đọc path (trang này là file tĩnh, không biết path thật của mình).
-  var id = new URLSearchParams(location.search).get('id') || '';
+  // `/app/thay/:id` viết lại thành `?id=:id` ở next.config.mjs — nhưng rewrite
+  // KHÔNG đổi URL trên trình duyệt, nên `location.search` trống: đọc id từ path,
+  // query chỉ còn là lối lùi khi mở thẳng file tĩnh.
+  var id = (location.pathname.match(/^\/app\/thay\/([a-z-]+)/) || [])[1] ||
+           new URLSearchParams(location.search).get('id') || '';
 
   function toolTile(row){
     return '<a class="tm-tool" href="' + esc(row.app_path) + '">' + esc(row.label) + '</a>';

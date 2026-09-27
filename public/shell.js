@@ -4452,6 +4452,7 @@
       }
       _navQ = q || ''; _navNeedBirth = !!needBirth; joinThay(id);
     },
+    meetThay: function (id) { if (!authorById(id) || _navDone) return; _navQ = ''; joinThay(id); introThay(id); },
     openCmd: openCmd,
     toggleTheme: toggleTheme,
     // Mở rail = lời mời đã được nhận → tắt orb. Nếu không tắt thì nó nhấp nháy
@@ -4797,7 +4798,7 @@
   // nguồn với mọi tool chat-first), nạp lười: `tuvi-form.js` ném lỗi nếu
   // `vn-timezone.js` chưa có, nên nạp TUẦN TỰ. Có lá số thì rail gửi `birth`,
   // server tự lập lá số — y như lúc trang mở với lá số đã nhớ.
-  function askBirthHome(cb) {
+  function askBirthHome(cb, q1) {
     var chat = document.getElementById('chat');
     if (!chat || !ctx) return;
     var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
@@ -4820,8 +4821,8 @@
         }
         TuviForm.renderChat({
           prefix: 'home',
-          q1: cb ? 'Chuyện này thầy phải xem lá số của con mới nói cho sát. Cho thầy xin họ tên và giới tính nhé.'
-                 : 'Cho mình xin họ tên và giới tính của bạn nhé.',
+          q1: q1 || (cb ? 'Chuyện này thầy phải xem lá số của con mới nói cho sát. Cho thầy xin họ tên và giới tính nhé.'
+                 : 'Cho mình xin họ tên và giới tính của bạn nhé.'),
           onDone: function (d) {
             try { Shell.rememberBirth(d); } catch (e) { /* ignore */ }
             var b = inlineBirth(d);
@@ -4895,6 +4896,41 @@
     };
     if (_navNeedBirth && !ctx.birth) { _navNeedBirth = false; askBirthHome(send); return; }
     send();
+  }
+
+  // Bấm vào một thầy ở trang chủ `/` (`/app?thay=<id>`, không kèm câu hỏi):
+  // thầy vào thẳng, tự giới thiệu mình xem gì (câu chào + môn đọc từ
+  // `master_profiles` qua ToolPrices — nguồn duy nhất, không chép chữ), rồi
+  // xin ngày sinh nếu chưa có lá số. Bắc Minh (xem tướng qua ảnh) và Linh Cơ
+  // (gieo quẻ) không cần lá số nên không xin.
+  var NO_BIRTH_THAY = { 'bac-minh': 1, 'linh-co': 1 };
+  function thayBubble(html) {
+    var chat = document.getElementById('chat');
+    var row = document.createElement('div'); row.className = 'msg a';
+    row.innerHTML = '<img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body">' + html + '</div>';
+    chat.appendChild(row); chat.scrollTop = chat.scrollHeight;
+  }
+  function introThay(id) {
+    var a = authorById(id); if (!a) return;
+    var done = false;
+    var say = function (m) {
+      if (done) return; done = true;
+      var input = document.getElementById('railInput');
+      thayBubble('<p>' + esc((m && m.greeting) || ('Thầy ' + a.name + ' đây.')) + '</p>' +
+        (m && m.discipline ? '<p>Thầy chuyên xem <b>' + esc(m.discipline) + '</b>.</p>' : ''));
+      if (NO_BIRTH_THAY[id] || !ctx || ctx.birth) { if (input) input.focus(); return; }
+      askBirthHome(function () {
+        thayBubble('<p>Thầy đã lập lá số của <b>' + esc((ctx.birth && ctx.birth.name) || 'con') + '</b>. Con muốn thầy xem chuyện gì trước?</p>');
+        if (input) input.focus();
+      }, 'Để thầy xem cho sát, cho thầy xin họ tên và giới tính của con trước nhé.');
+    };
+    setTimeout(function () { say(null); }, 3000); // mạng chậm thì vẫn chào
+    ensureToolPrices().then(function () {
+      if (!window.ToolPrices) return say(null);
+      window.ToolPrices.load().then(function (d) {
+        say(window.ToolPrices.masters(d).filter(function (m) { return m.id === id; })[0] || null);
+      }, function () { say(null); });
+    });
   }
 
   async function sendMsg() {
