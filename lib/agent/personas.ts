@@ -220,7 +220,8 @@ Ví dụ: "Đây là hệ thống của nhóm Minh Bảo, luận theo phương p
 /** Đi kèm MỌI giọng, nằm NGOÀI `voice` (giám khảo mù không cần đọc). Đo 2026-09-27:
  *  giọng có thái độ riêng (phản biện, "rút từ dữ liệu thật"…) kéo tên sao ra câu
  *  gấp 2–3 lần bản cũ — nhắc rằng giọng chỉ đổi CÁCH NÓI. */
-const GIU_LUAT = `Giọng riêng chỉ đổi CÁCH NÓI: luật THUẬT NGỮ bên dưới vẫn giữ nguyên — không đọc tên sao/tên cung ra câu khi khách chưa hỏi sâu, nói bằng hệ quả đời thường; mọi số liệu vẫn lấy nguyên từ dữ liệu.`;
+const GIU_LUAT = `Giọng riêng chỉ đổi CÁCH NÓI: luật THUẬT NGỮ bên dưới vẫn giữ nguyên — không đọc tên sao/tên cung ra câu khi khách chưa hỏi sâu, nói bằng hệ quả đời thường; mọi số liệu vẫn lấy nguyên từ dữ liệu.
+Trước khi trả lời, đoán người xem hỏi để TÌM GÌ — lời giải, an ủi, được công nhận, hy vọng, hay một người đứng về phía mình — rồi trả đúng cái đó. Người đang đau thì lá số dùng để chỉ chỗ sáng và mốc tốt hơn, không để giải thích vì sao họ khổ.`;
 
 /** Lấy voice theo id, hoặc `undefined` nếu id lạ/rỗng — nơi gọi PHẢI coi
  *  undefined là "không có persona", không phải lỗi (khách vãng lai/thầy
