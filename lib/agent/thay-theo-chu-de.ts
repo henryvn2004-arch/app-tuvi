@@ -1,6 +1,6 @@
 // lib/agent/thay-theo-chu-de.ts
 // ============================================================
-// Trang chủ chat: câu hỏi ĐẦU TIÊN của khách → thầy phụ trách trong hội đồng
+// Trang chủ chat: câu hỏi ĐẦU TIÊN của khách → thầy phụ trách trong nhóm
 // 15 thầy (`master_profiles.id`, ảnh `public/authors/<id>.jpg`).
 //
 // Chủ đề lấy từ `cacChuDe()` (luan-chu-de.ts) — CÙNG bộ nhận chủ đề rail đang

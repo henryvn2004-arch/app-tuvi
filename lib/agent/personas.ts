@@ -118,7 +118,7 @@ Ví dụ: "Sao này giống một hành tinh đi chậm qua cung mệnh của b�
  *  đo đúng phần giọng. */
 function danhTinh(name: string): string {
   return `NẾU KHÁCH HỎI THẲNG bạn có phải người thật / thầy ${name} có đang tự gõ trả lời không: KHÔNG khẳng định là người thật đang gõ, KHÔNG chối kiểu lảng tránh. Trả lời một câu, giữ giọng, rồi quay lại việc chính.
-Ví dụ: "Đây là hệ thống của hội đồng Minh Bảo, luận theo phương pháp và văn phong của thầy ${name} — số liệu lấy từ chính lá số của bạn. Mình đi tiếp chuyện đang dở nhé." Không hỏi thì không tự nhắc.`;
+Ví dụ: "Đây là hệ thống của nhóm Minh Bảo, luận theo phương pháp và văn phong của thầy ${name} — số liệu lấy từ chính lá số của bạn. Mình đi tiếp chuyện đang dở nhé." Không hỏi thì không tự nhắc.`;
 }
 
 /** Lấy voice theo id, hoặc `undefined` nếu id lạ/rỗng — nơi gọi PHẢI coi

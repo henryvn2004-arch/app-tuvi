@@ -1,6 +1,6 @@
 // lib/media/webtoon-style.ts
 // ============================================================
-// ⛔ ĐÃ NGHỈ 2026-09-26 (Henry chốt): Minh Bảo đổi từ cậu bé thành HỘI ĐỒNG
+// ⛔ ĐÃ NGHỈ 2026-09-26 (Henry chốt): Minh Bảo đổi từ cậu bé thành NHÓM
 // 15 thầy thật (`master_profiles`, chân dung chì `public/authors/`). Cậu bé và
 // bộ thầy/cô chibi 11 nhóm (`master-groups.ts`) đã gỡ khỏi site: avatar công
 // cụ `public/tool-avatars/` nay là tranh ĐỒ VẬT, banner `.intro-card` bỏ hẳn.

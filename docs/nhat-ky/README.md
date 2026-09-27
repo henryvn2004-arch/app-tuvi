@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-446 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+447 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 280 | 1,067,522 B |
+| `2026-09.md` | 282 | 1,079,097 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🏷️ Đổi "hội đồng" → "nhóm" ở chữ hiển thị |
 | 1 | 2026-09 | `2026-09.md` | 🪜 Phễu chuyển đổi — dùng thử 6 câu, đăng ký tặng 10 câu, 2nd opinion đa môn nổ sớm, thanh trạng thái báo cáo |
 | 1 | 2026-09 | `2026-09.md` | 👥 Trang chủ "Các Thầy" — bấm thầy là vào chat thẳng, thầy tự giới thiệu rồi xin ngày sinh |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Màn chat `/app` — bộ đếm dưới lời chào, xin ngày sinh ngay trong chat, `/` bỏ thanh nút đáy |
