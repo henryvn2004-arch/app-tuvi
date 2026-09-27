@@ -731,6 +731,7 @@
         '<p>Bạn lập lá số ở khung giữa xong, thầy trả lời liền —<br>chuyện sự nghiệp, tình duyên, năm nay, tháng tới, hỏi gì cũng được.</p></div>' +
       '</div>' +
       '<div class="rail-meter" id="railMeter" style="display:none"></div>' +
+      '<div class="fam-strip" id="famStrip" style="display:none"></div>' +
       '<div class="rail-sugg" id="railSugg" style="display:none"></div>' +
       '<div class="rail-thumbs" id="railThumbs" style="display:none"></div>' +
       '<div class="rail-in">' +
@@ -826,6 +827,121 @@
       if (k >= 0 && (at < 0 || k < at)) { at = k; best = list[i].id; }
     }
     return best;
+  }
+  // ── "Cả nhà mình" GĐ2: thẻ mời thêm lá số người nhà + thanh "Cả nhà" ──
+  // Server (lib/charts/family.ts `canMoiThem`) chỉ bắn `familyInvite` khi câu
+  // vừa hỏi nhắc chồng/vợ/con/bố/mẹ mà sổ CHƯA có người đó. Ở đây thêm hai
+  // chốt của luật giới thiệu: mỗi phiên tối đa một lần, bấm "Để sau" thì im
+  // 14 ngày. Form là `TuviForm.renderChat` (một nguồn với mọi form trong chat).
+  var FAM_VAI = {
+    chong: { nhan: 'Chồng', cua: 'chồng con', goi: 'anh ấy', gt: 'nam' },
+    vo:    { nhan: 'Vợ',    cua: 'vợ con',    goi: 'chị ấy', gt: 'nu' },
+    con:   { nhan: 'Con',   cua: 'cháu',      goi: 'cháu',   gt: 'nam' },
+    bo:    { nhan: 'Bố',    cua: 'bố con',    goi: 'ông',    gt: 'nam' },
+    me:    { nhan: 'Mẹ',    cua: 'mẹ con',    goi: 'bà',     gt: 'nu' },
+  };
+  var FAM_SNOOZE = 'tvmb_canha_snooze', FAM_SHOWN = 'tvmb_canha_shown';
+  function showFamilyInvite(inv, q) {
+    var v = inv && FAM_VAI[inv.vaiTro];
+    var chat = document.getElementById('chat');
+    if (!v || !chat || !getToken()) return false;
+    try {
+      if (Number(localStorage.getItem(FAM_SNOOZE) || 0) > Date.now()) return false;
+      if (sessionStorage.getItem(FAM_SHOWN)) return false;
+      sessionStorage.setItem(FAM_SHOWN, '1');
+    } catch (e) { /* ignore */ }
+    var d = document.createElement('div');
+    d.className = 'fam-inv';
+    d.innerHTML =
+      '<div class="fi-t">Thầy mới nhìn ' + v.goi + ' qua lá số của con thôi. Cho thầy ngày sinh của ' + v.cua +
+      ', thầy đọc thẳng lá số ' + v.goi + '.</div>' +
+      '<div class="fi-d">Lưu vào Sổ lá số, miễn phí. Lần sau gõ @ là gọi được.</div>' +
+      '<div class="fi-act"><button type="button" class="fi-go">Thêm lá số ' + v.cua.replace(/ con$/, '') + '</button>' +
+      '<button type="button" class="fi-skip">Để sau</button></div>';
+    chat.appendChild(d);
+    chat.scrollTop = chat.scrollHeight;
+    try { track('cta_click', { tool_id: ACTIVE, slug: 'family_invite_shown', meta: { vai: inv.vaiTro } }); } catch (e) { /* ignore */ }
+    d.querySelector('.fi-skip').addEventListener('click', function () {
+      try { localStorage.setItem(FAM_SNOOZE, String(Date.now() + 14 * 864e5)); } catch (e) { /* ignore */ }
+      try { track('cta_click', { tool_id: ACTIVE, slug: 'family_invite_skip', meta: { vai: inv.vaiTro } }); } catch (e) { /* ignore */ }
+      d.remove();
+    });
+    d.querySelector('.fi-go').addEventListener('click', function () {
+      try { track('cta_click', { tool_id: ACTIVE, slug: 'family_invite_open', meta: { vai: inv.vaiTro } }); } catch (e) { /* ignore */ }
+      d.remove();
+      startFamilyForm(inv.vaiTro, v, q);
+    });
+    return true;
+  }
+  function startFamilyForm(vai, v, q) {
+    var chat = document.getElementById('chat');
+    ensureScripts(['/tools-shared/vn-timezone.js?v=1'], function (e1) {
+      ensureScripts(['/tuvi-form.js?v=14'], function (e2) {
+        if (e1 || e2 || typeof TuviForm === 'undefined') {
+          inlineErrorBubble(chat, 'chưa mở được form ngày sinh.', '/app/so-la-so');
+          return;
+        }
+        TuviForm.renderChat({
+          prefix: 'canha',
+          gioitinh: v.gt,
+          savedPicker: false,
+          q1: 'Con gọi ' + v.goi + ' là gì (vd "' + (vai === 'chong' ? 'Anh Tuấn' : vai === 'con' ? 'Bé An' : v.nhan) + '"), giới tính gì?',
+          q2: 'Ngày sinh dương lịch của ' + v.goi + '?',
+          q3: 'Giờ sinh của ' + v.goi + ' là mấy giờ?',
+          submitLabel: 'Lập lá số →',
+          onDone: function (b) { saveFamilyChart(vai, v, b, q); },
+        });
+      });
+    });
+  }
+  function saveFamilyChart(vai, v, b, q) {
+    var chat = document.getElementById('chat');
+    var ten = String(b.hoten || '').trim() || v.nhan;
+    fetch('/api/charts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (getToken() || '') },
+      body: JSON.stringify({ birth: Object.assign({}, b, { vaiTro: vai }), label: ten, relation: 'gia_dinh' }),
+    })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (res) {
+        if (!res || !res.item) { inlineErrorBubble(chat, 'chưa lưu được lá số ' + ten + '. Con thử lại ở Sổ lá số nhé.', '/app/so-la-so'); return; }
+        try { track('cta_click', { tool_id: ACTIVE, slug: 'family_invite_saved', meta: { vai: vai } }); } catch (e) { /* ignore */ }
+        _family = null;
+        loadFamily(function () {
+          paintFamilyStrip();
+          // Hỏi lại ĐÚNG câu gốc, lần này gọi đích danh người vừa thêm ⇒ thầy
+          // đọc thẳng lá số của họ (addressMember → xem_nguoi_nha).
+          var input = document.getElementById('railInput');
+          if (!input || streaming) return;
+          input.value = '@' + ten + ' ' + (q || ('năm nay ' + v.goi + ' thế nào thầy?'));
+          sendMsg();
+        });
+      })
+      .catch(function () { inlineErrorBubble(chat, 'mạng chập chờn, chưa lưu được lá số ' + ten + '.', '/app/so-la-so'); });
+  }
+  // Thanh "Cả nhà" trên ô nhập — chỉ hiện khi sổ ĐÃ có người nhà (làm trước,
+  // gọi tên sau). Bấm tên = chèn "@Tên " vào đầu ô, cùng cử chỉ với menu "@".
+  function paintFamilyStrip() {
+    var el = document.getElementById('famStrip');
+    if (!el) return;
+    if (!ctx || !ctx.birth || ctx.scenario || !getToken()) { el.style.display = 'none'; return; }
+    if (!_family) { loadFamily(paintFamilyStrip); return; }
+    if (!_family.length) { el.style.display = 'none'; return; }
+    // Nhãn "Cả nhà" là LINK sang trang Cả nhà mình (GĐ3) — tên tính năng chỉ
+    // lộ ra SAU khi khách đã thấy thầy đọc người nhà (luật "làm trước, gọi tên sau").
+    el.innerHTML = '<a class="fs-l" href="/app/ca-nha">Cả nhà</a>' + _family.map(function (m, i) {
+      return '<button type="button" class="fs-c" data-i="' + i + '">@' + esc(m.name) + '</button>';
+    }).join('');
+    el.style.display = '';
+    el.onclick = function (e) {
+      var b = e.target.closest('.fs-c'); if (!b) return;
+      var m = _family[Number(b.getAttribute('data-i'))]; var ta = document.getElementById('railInput');
+      if (!m || !ta || ta.disabled) return;
+      var tag = '@' + m.name + ' ';
+      if (ta.value.indexOf(tag) !== 0) ta.value = tag + ta.value.replace(/^\s+/, '');
+      ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); autoGrow(ta);
+      try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'family_strip' } }); } catch (e2) { /* ignore */ }
+    };
   }
   function mentionCandidates() {
     var out = [];
@@ -5023,7 +5139,7 @@
       setSend(true); renderSuggs();
     };
     ensureScripts(['/tools-shared/vn-timezone.js?v=1'], function (e1) {
-      ensureScripts(['/tuvi-form.js?v=13'], function (e2) {
+      ensureScripts(['/tuvi-form.js?v=14'], function (e2) {
         if (e1 || e2 || typeof TuviForm === 'undefined') {
           release();
           inlineErrorBubble(chat, 'chưa mở được form ngày sinh.', '/app/la-so');
@@ -5362,6 +5478,7 @@
             if (ev.data.suggestions && ev.data.suggestions.length) { ctxChips = ev.data.suggestions.slice(0, 3); ctxChipsSrc = 'suggest'; }
             applyPaywallInfo(ev.data.paywall);
             if (ev.data.toolSuggest) pendingSuggest = ev.data.toolSuggest;
+            if (ev.data.familyInvite) pendingFamily = ev.data.familyInvite;
           }
         }
       }
@@ -5394,7 +5511,12 @@
       // Thẻ mời SAU khi câu trả lời đã hiện xong — chèn trước lúc đó thì nó đứng
       // chen giữa lúc người ta đang đọc, thành quảng cáo cắt ngang.
       maybeShowUpsell();
+      // Mỗi lượt tối đa MỘT thẻ (docs/DAC-TRUNG-PLAN.md luật 3): mời thêm người
+      // nhà thắng thẻ gợi ý công cụ — nó mới là cái khách đang cần ngay lúc này.
+      if (pendingFamily && showFamilyInvite(pendingFamily, _soQ)) pendingSuggest = null;
+      pendingFamily = null;
       if (pendingSuggest) { showToolSuggest(pendingSuggest); pendingSuggest = null; }
+      paintFamilyStrip();
       // Đến từ link chia sẻ + đã hỏi thật lần đầu → ghi nhận 1 lượt chuyển đổi.
       if (_fromshareId && !_convFired) { _convFired = true; trackConvert(_fromshareId); }
     } catch (e) {
@@ -5454,6 +5576,7 @@
   // trong mô tả tool, nhưng dặn không phải là chặn — nó quên là mỗi lượt một
   // thẻ, và một khung chat đầy thẻ mời thì đọc thành quảng cáo.
   var pendingSuggest = null;   // thẻ của lượt này, dựng sau khi chữ hiện xong
+  var pendingFamily = null;    // "Cả nhà mình" GĐ2 — thẻ mời thêm lá số người nhà
   var _suggestShown = false;   // đã hiện thẻ trong cuộc trò chuyện này chưa
 
   function showToolSuggest(s) {

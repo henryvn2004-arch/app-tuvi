@@ -19,7 +19,7 @@ import {
   type BirthParams,
 } from '@/lib/contract/v1';
 import { buildToolDefs, executeTool, newToolContext, buildBirthFromInput, type ProfilePort } from '@/lib/tools/registry';
-import { listFamily } from '@/lib/charts/family';
+import { listFamily, vaiTroTrongCau, canMoiThem, type VaiTro } from '@/lib/charts/family';
 import { type ToolSuggestion } from '@/lib/tools/suggest-tool';
 import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
@@ -152,6 +152,9 @@ export interface AgentResult {
   // Thẻ "công cụ này giúp được" (bước 4). null ở hầu hết lượt — model được dặn
   // mặc định là IM. Kênh bot bỏ qua field này (chỉ web dựng thẻ bấm được).
   toolSuggest?: ToolSuggestion | null;
+  // "Cả nhà mình" GĐ2 — câu hỏi nhắc tới một người nhà mà sổ CHƯA có lá số
+  // người đó ⇒ web dựng thẻ mời thêm ngay dưới câu trả lời. Vắng ở hầu hết lượt.
+  familyInvite?: { vaiTro: VaiTro } | null;
 }
 
 /** Kết cục một lượt thử provider. `midStream` = đã stream chữ/chạy tool rồi mới
@@ -217,7 +220,11 @@ export async function runAgent(
     rounds: 0,
   };
   try {
-    return await runAgentInner(req, cfgIn, send, profiles, userId, meter);
+    // `side` gom cờ phụ mà runAgentInner đặt ở MỘT chỗ — thân hàm có 9 điểm
+    // return (xem TurnMeter), gắn vào từng điểm là sót.
+    const side: { familyInvite?: { vaiTro: VaiTro } } = {};
+    const r = await runAgentInner(req, cfgIn, send, profiles, userId, meter, side);
+    return side.familyInvite ? { ...r, familyInvite: side.familyInvite } : r;
   } finally {
     // Tag cost theo scenario.type nếu có (khớp tool_pricing), ngược lại 'chat' —
     // CHÍNH type mà /api/v1/chat + gate.ts ghi vào credit_transactions cho MỌI
@@ -241,6 +248,7 @@ async function runAgentInner(
   profiles: ProfilePort | null,
   userId: string | null,
   meter: TurnMeter,
+  side: { familyInvite?: { vaiTro: VaiTro } },
 ): Promise<AgentResult> {
   // Trần token của MỘT lượt rail. 🔴 Trước đây runAgent dùng THẲNG cfg.maxTokens
   // (app_config['chat.max_tokens'], prod = 3000) và BỎ QUA con số mà
@@ -522,7 +530,11 @@ async function runAgentInner(
 
     // "Cả nhà mình" (docs/DAC-TRUNG-PLAN.md) — chỉ luồng LÁ SỐ, chỉ người đã
     // đăng nhập. Một lượt đọc `user_charts`; hụt thì [] và rail chạy như cũ.
-    if (userId && hasLaso) ctx.family = await listFamily(userId, req.birth ?? null);
+    if (userId && hasLaso) {
+      ctx.family = await listFamily(userId, req.birth ?? null);
+      const vai = vaiTroTrongCau(lastQ);
+      if (vai && !req.addressMember && canMoiThem(vai, ctx.family)) side.familyInvite = { vaiTro: vai };
+    }
     ctx.question = lastQ;
     tools = buildToolDefs(!!profiles, !!memoryPort, ctx.family.length > 0);
   }

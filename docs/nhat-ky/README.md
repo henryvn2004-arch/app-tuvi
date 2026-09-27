@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-449 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+451 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 284 | 1,081,921 B |
+| `2026-09.md` | 286 | 1,081,921 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,8 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 👪 "Cả nhà mình" GĐ3 — trang `/app/ca-nha`: lá số cả nhà xếp cạnh nhau 12 tháng âm |
+| 1 | 2026-09 | `2026-09.md` | 👪 "Cả nhà mình" GĐ2 — thầy mời thêm lá số người nhà ngay trong chat |
 | 1 | 2026-09 | `2026-09.md` | 👪 "Cả nhà mình" GĐ1 — thầy đọc được lá số người nhà |
 | 1 | 2026-09 | `2026-09.md` | 🗂️ Hồ sơ gọn còn 3 tab + vá link khôi phục phiên 404 |
 | 1 | 2026-09 | `2026-09.md` | 🏷️ Đổi "hội đồng" → "nhóm" ở chữ hiển thị |

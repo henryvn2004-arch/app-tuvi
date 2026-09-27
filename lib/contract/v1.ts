@@ -307,6 +307,12 @@ export interface DoneEvent {
    * ⛔ KHÔNG có trường giá, cố ý. Xem lib/tools/suggest-tool.ts.
    */
   toolSuggest?: { toolId: string; label: string; path: string; lyDo: string; kind?: 'tool' | 'report' };
+  /**
+   * "Cả nhà mình" GĐ2 (additive) — câu vừa hỏi nhắc tới một người nhà mà Sổ
+   * lá số CHƯA có ⇒ client dựng thẻ "thêm lá số người nhà" dưới câu trả lời.
+   * Chỉ có ở lượt đã đăng nhập, luồng lá số. Kênh bot bỏ qua.
+   */
+  familyInvite?: { vaiTro: 'chong' | 'vo' | 'con' | 'bo' | 'me' };
 }
 
 /** event: error — lỗi có mã để client xử lý */
