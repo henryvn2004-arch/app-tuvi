@@ -828,6 +828,60 @@
     }
     return best;
   }
+  // ── SỔ TIÊN TRI (docs/DAC-TRUNG-PLAN.md) ──
+  // Server chỉ gắn `done.tienTri` khi GHI THÀNH CÔNG (lib/tien-tri/store.ts).
+  // Lần ghi: một dòng rất nhỏ dưới câu trả lời, không giải thích gì thêm.
+  // Tới hạn: thầy hỏi lại ngay trong màn chat chính (askTienTri) — một lần/phiên.
+  function ngayVN(iso) { var p = String(iso || '').split('-'); return p.length === 3 ? (+p[2]) + '/' + (+p[1]) + '/' + p[0] : iso; }
+  function noteTienTri(t) {
+    var chat = document.getElementById('chat');
+    if (!chat || !t || !t.ngay) return;
+    var d = document.createElement('div');
+    d.className = 'tt-note';
+    d.textContent = 'Thầy ghi vào Sổ tiên tri · hỏi lại con ngày ' + ngayVN(t.ngay);
+    chat.appendChild(d);
+    chat.scrollTop = chat.scrollHeight;
+    try { track('cta_click', { tool_id: ACTIVE, slug: 'tien_tri_ghi' }); } catch (e) { /* ignore */ }
+  }
+  function askTienTri() {
+    var tk = getToken();
+    if (!tk || streaming || messages.length) return;
+    try { if (sessionStorage.getItem('tvmb_tt_asked')) return; sessionStorage.setItem('tvmb_tt_asked', '1'); } catch (e) { /* ignore */ }
+    fetch('/api/tien-tri', { headers: { Authorization: 'Bearer ' + tk } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        var it = d && d.item;
+        var chat = document.getElementById('chat');
+        if (!it || !chat || streaming || messages.length) return;
+        var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
+        document.body.classList.remove('chat-empty');
+        var a = (it.author_id && authorById(it.author_id)) || _author;
+        var row = document.createElement('div'); row.className = 'msg a';
+        row.innerHTML = '<img class="msg-ava" src="' + (a ? '/authors/' + a.id + '.jpg' : authorAva()) + '" alt=""><div class="msg-body">' +
+          '<p>Hôm ' + esc(ngayVN(String(it.created_at || '').slice(0, 10))) + ' thầy' + (a ? ' ' + esc(a.name) : '') + ' có nói: <i>“' + esc(it.noi_dung) + '”</i></p>' +
+          '<p>Chuyện đó thế nào rồi con?</p>' +
+          '<div class="tt-act"><button type="button" data-k="dung">Đúng rồi thầy</button><button type="button" data-k="chua">Chưa thấy gì</button><button type="button" data-k="de_sau">Để sau</button></div></div>';
+        chat.appendChild(row); chat.scrollTop = chat.scrollHeight;
+        try { track('cta_click', { tool_id: ACTIVE, slug: 'tien_tri_hoi_lai' }); } catch (e) { /* ignore */ }
+        row.querySelector('.tt-act').addEventListener('click', function (e) {
+          var b = e.target.closest('button'); if (!b) return;
+          var k = b.getAttribute('data-k');
+          var act = row.querySelector('.tt-act'); if (act) act.remove();
+          fetch('/api/tien-tri?id=' + encodeURIComponent(it.id), {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tk },
+            body: JSON.stringify({ ket_qua: k }),
+          }).catch(function () { /* ignore — hỏi lại lần sau */ });
+          try { track('cta_click', { tool_id: ACTIVE, slug: 'tien_tri_tra_loi', meta: { kq: k } }); } catch (e2) { /* ignore */ }
+          if (k === 'de_sau') { row.remove(); return; }
+          thayBubble(k === 'dung'
+            ? '<p>Thầy ghi lại rồi. Có gì con cứ kể tiếp, thầy xem tiếp cho.</p>'
+            : '<p>Thầy ghi lại. Lá số chỉ nói chiều hướng, không phải chuyện chắc chắn xảy ra — chưa thấy gì cũng là điều tốt.</p>');
+        });
+      })
+      .catch(function () { /* im lặng — sổ hỏng thì màn chat vẫn như cũ */ });
+  }
+
   // ── "Cả nhà mình" GĐ2: thẻ mời thêm lá số người nhà + thanh "Cả nhà" ──
   // Server (lib/charts/family.ts `canMoiThem`) chỉ bắn `familyInvite` khi câu
   // vừa hỏi nhắc chồng/vợ/con/bố/mẹ mà sổ CHƯA có người đó. Ở đây thêm hai
@@ -4726,6 +4780,9 @@
       _railOpened = false; syncAskOrb();
       // Nạp ví để đồng hồ hiện "còn N câu" NGAY khi mở rail, chưa cần hỏi câu nào.
       loadRailStatus();
+      // Sổ tiên tri: màn chat chính, có lá số, đã đăng nhập → thầy hỏi lại lời
+      // phán đã đến hạn (nếu có). Chờ một nhịp để không chen vào lời chào.
+      if (CHAT_HOME && o.birth) setTimeout(askTienTri, 1200);
       // Chat-first: ĐÂY là khoảnh khắc lật. Trước lời gọi này trang đang ở
       // trạng thái FORM (`.ws` là mặt chính, đúng như hôm nay); sau nó thì dữ
       // liệu deterministic đã có ⇒ chat thành mặt chính, `.ws` lùi thành
@@ -5479,6 +5536,7 @@
             applyPaywallInfo(ev.data.paywall);
             if (ev.data.toolSuggest) pendingSuggest = ev.data.toolSuggest;
             if (ev.data.familyInvite) pendingFamily = ev.data.familyInvite;
+            if (ev.data.tienTri) pendingTienTri = ev.data.tienTri;
           }
         }
       }
@@ -5513,6 +5571,7 @@
       maybeShowUpsell();
       // Mỗi lượt tối đa MỘT thẻ (docs/DAC-TRUNG-PLAN.md luật 3): mời thêm người
       // nhà thắng thẻ gợi ý công cụ — nó mới là cái khách đang cần ngay lúc này.
+      if (pendingTienTri) { noteTienTri(pendingTienTri); pendingTienTri = null; }
       if (pendingFamily && showFamilyInvite(pendingFamily, _soQ)) pendingSuggest = null;
       pendingFamily = null;
       if (pendingSuggest) { showToolSuggest(pendingSuggest); pendingSuggest = null; }
@@ -5577,6 +5636,7 @@
   // thẻ, và một khung chat đầy thẻ mời thì đọc thành quảng cáo.
   var pendingSuggest = null;   // thẻ của lượt này, dựng sau khi chữ hiện xong
   var pendingFamily = null;    // "Cả nhà mình" GĐ2 — thẻ mời thêm lá số người nhà
+  var pendingTienTri = null;   // Sổ tiên tri — lượt này thầy vừa ghi một lời phán
   var _suggestShown = false;   // đã hiện thẻ trong cuộc trò chuyện này chưa
 
   function showToolSuggest(s) {

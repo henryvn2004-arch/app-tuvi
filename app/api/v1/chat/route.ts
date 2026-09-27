@@ -244,7 +244,7 @@ export async function POST(request: NextRequest) {
         send(chunk);
       };
       try {
-        const { toolsUsed, suggestions, toolSuggest, familyInvite, birth } = await runAgent(req, cfg, sendAndCollect, null, memoryUserId);
+        const { toolsUsed, suggestions, toolSuggest, familyInvite, tienTri, birth } = await runAgent(req, cfg, sendAndCollect, null, memoryUserId);
         if (assistantText) {
           void chatSaveSession(
             'web',
@@ -294,7 +294,8 @@ export async function POST(request: NextRequest) {
           // Thẻ gợi ý công cụ — vắng mặt ở hầu hết lượt. `?? undefined` để
           // không bắn `toolSuggest: null` xuống client mỗi lượt cho tốn byte.
           toolSuggest: toolSuggest ?? undefined,
-          familyInvite: familyInvite ?? undefined }));
+          familyInvite: familyInvite ?? undefined,
+          tienTri: tienTri ?? undefined }));
         void chatLogOutcome('web', req.session_id, true);
       } catch (e) {
         send(sse.error({ code: 'internal', message: e instanceof Error ? e.message : 'Lỗi không xác định' }));

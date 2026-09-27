@@ -57,6 +57,8 @@ export interface ProfilePort {
 export interface MemoryPort {
   remember(loai: string, noiDung: string): Promise<boolean>;
   forget(idPrefix: string): Promise<boolean>;
+  // Sổ tiên tri (lib/tien-tri/store.ts) — cùng danh tính bind sẵn như hai hàm trên.
+  ghiTienTri(noiDung: string, ngay: string): Promise<{ ok: true; ngay: string } | { ok: false; lyDo: string }>;
 }
 
 // Trạng thái dùng chung trong MỘT request (lá số đã lập được
@@ -86,6 +88,8 @@ export interface ToolContext {
   // ĐÃ mời một thầy khác vào phòng rồi. Cùng khuôn với `toolSuggestion`: chặn
   // model mời hai lần trong CÙNG một lượt.
   masterInvited: boolean;
+  // Sổ tiên tri — true nếu lượt này đã ghi một lời phán. Tối đa MỘT lời/lượt.
+  tienTriGhi: boolean;
   // "Cả nhà mình" (docs/DAC-TRUNG-PLAN.md) — người nhà trong Sổ Lá Số của
   // người đang hỏi, runAgent nạp sẵn (lib/charts/family.ts). [] = chưa đăng
   // nhập / chưa lưu ai ⇒ xem_nguoi_nha / tra_ca_nha không được đăng ký.
@@ -114,6 +118,7 @@ export function newToolContext(
     subjectSwitched: false,
     chuDe: [],
     masterInvited: false,
+    tienTriGhi: false,
     family: [],
     question: '',
   };
@@ -157,6 +162,29 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false, hasFamily 
               noi_dung: { type: 'string', description: 'Điều cần nhớ, tối đa 200 ký tự' },
             },
             required: ['loai', 'noi_dung'],
+          },
+        },
+        {
+          name: 'ghi_so_tien_tri',
+          description:
+            'Ghi vào SỔ TIÊN TRI của người này MỘT điều bạn VỪA phán trong chính câu trả lời này, để tới hạn thầy hỏi lại xem có đúng không. ' +
+            'CHỈ ghi khi đủ ba điều: (1) lời phán CỤ THỂ, kiểm chứng được (một chuyện sẽ xảy ra hoặc nên tránh), không phải lời khuyên chung chung kiểu "nên giữ sức khỏe"; ' +
+            '(2) có MỐC thời gian rõ (tháng âm, quý, năm) và mốc đó nằm trong khoảng 1 tuần đến 13 tháng tới; ' +
+            '(3) cả cuộc trò chuyện này bạn CHƯA ghi lời nào. KHÔNG ghi chuyện bệnh tật, tai nạn, tang sự. ' +
+            'Gọi lặng lẽ — KHÔNG nhắc trong lời văn rằng bạn đã ghi (giao diện tự hiện một dòng nhỏ).',
+          input_schema: {
+            type: 'object',
+            properties: {
+              noi_dung: {
+                type: 'string',
+                description: 'Lời phán, gọn một câu, xưng như đang nói với người này (vd "Cuối tháng 10 âm con dễ hao tài vì bạn bè rủ rê"). Tối đa 300 ký tự.',
+              },
+              hoi_lai_ngay: {
+                type: 'string',
+                description: 'Ngày DƯƠNG lịch YYYY-MM-DD để hỏi lại — ngay SAU khi mốc trong lời phán đã qua (vd phán "cuối tháng 10 âm" thì chọn đầu tháng 11 âm quy ra dương). Dựa vào ngày hôm nay trong phần thời gian của hệ thống.',
+              },
+            },
+            required: ['noi_dung', 'hoi_lai_ngay'],
           },
         },
         {
@@ -371,6 +399,7 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
   if (name === 'liet_ke_la_so') return execLietKeLaSo(ctx);
   if (name === 'ghi_nho') return execGhiNho(input, ctx);
   if (name === 'quen_di') return execQuenDi(input, ctx);
+  if (name === 'ghi_so_tien_tri') return execGhiSoTienTri(input, ctx);
   // `goi_y_san_pham` (giai đoạn 3 cross-sell, 2026-09-23) dùng CHUNG hàm này —
   // hai tool chỉ khác MÔ TẢ (lib/tools/suggest-tool.ts), hành vi hệt nhau:
   // tra `tool_pricing`, ghi CÙNG `ctx.toolSuggestion`, cùng trần 1 lần/hội thoại.
@@ -581,6 +610,16 @@ async function execQuenDi(input: Rec, ctx: ToolContext): Promise<ToolRunResult> 
     content: ok ? 'Đã xoá khỏi hồ sơ.' : 'Không tìm thấy mục đó trong hồ sơ.',
     label: 'Đang lắng nghe',
   };
+}
+
+async function execGhiSoTienTri(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  const label = 'Đang ghi sổ';
+  if (!ctx.memory) return { content: 'Chưa đăng nhập nên không có sổ để ghi. Bỏ qua, đừng nhắc tới.', label };
+  if (ctx.tienTriGhi) return { content: 'Lượt này đã ghi một lời vào sổ rồi. Đừng ghi thêm.', label };
+  const r = await ctx.memory.ghiTienTri(String(input?.noi_dung || ''), String(input?.hoi_lai_ngay || ''));
+  if (!r.ok) return { content: `Không ghi được (${r.lyDo}). Bỏ qua, đừng nhắc tới trong câu trả lời.`, label };
+  ctx.tienTriGhi = true;
+  return { content: `Đã ghi, sẽ hỏi lại ngày ${r.ngay}. ĐỪNG nhắc chuyện ghi sổ trong lời văn.`, label };
 }
 
 // ── Gợi ý công cụ (bước 4) ──────────────────────────────────

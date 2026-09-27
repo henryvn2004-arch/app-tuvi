@@ -19,6 +19,7 @@ import {
   type BirthParams,
 } from '@/lib/contract/v1';
 import { buildToolDefs, executeTool, newToolContext, buildBirthFromInput, type ProfilePort } from '@/lib/tools/registry';
+import { ghiLoiTienTri } from '@/lib/tien-tri/store';
 import { listFamily, vaiTroTrongCau, canMoiThem, type VaiTro } from '@/lib/charts/family';
 import { type ToolSuggestion } from '@/lib/tools/suggest-tool';
 import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
@@ -155,11 +156,16 @@ export interface AgentResult {
   // "Cả nhà mình" GĐ2 — câu hỏi nhắc tới một người nhà mà sổ CHƯA có lá số
   // người đó ⇒ web dựng thẻ mời thêm ngay dưới câu trả lời. Vắng ở hầu hết lượt.
   familyInvite?: { vaiTro: VaiTro } | null;
+  // Sổ tiên tri — lượt này vừa ghi một lời phán; web hiện "hỏi lại con ngày …".
+  tienTri?: { ngay: string } | null;
 }
 
 /** Kết cục một lượt thử provider. `midStream` = đã stream chữ/chạy tool rồi mới
  *  hỏng → TUYỆT ĐỐI không được thử provider khác (sẽ ra hai câu trả lời chồng
  *  nhau trên màn hình người dùng). */
+/** Cờ phụ của một lượt, gom ở MỘT chỗ thay vì gắn vào từng điểm return. */
+type TurnSide = { familyInvite?: { vaiTro: VaiTro }; tienTri?: { ngay: string } };
+
 type ProviderOutcome = { ok: true; result: AgentResult } | { ok: false; midStream: boolean };
 
 // ── Agent loop ──────────────────────────────────────────────
@@ -222,9 +228,9 @@ export async function runAgent(
   try {
     // `side` gom cờ phụ mà runAgentInner đặt ở MỘT chỗ — thân hàm có 9 điểm
     // return (xem TurnMeter), gắn vào từng điểm là sót.
-    const side: { familyInvite?: { vaiTro: VaiTro } } = {};
+    const side: TurnSide = {};
     const r = await runAgentInner(req, cfgIn, send, profiles, userId, meter, side);
-    return side.familyInvite ? { ...r, familyInvite: side.familyInvite } : r;
+    return { ...r, ...side };
   } finally {
     // Tag cost theo scenario.type nếu có (khớp tool_pricing), ngược lại 'chat' —
     // CHÍNH type mà /api/v1/chat + gate.ts ghi vào credit_transactions cho MỌI
@@ -248,7 +254,7 @@ async function runAgentInner(
   profiles: ProfilePort | null,
   userId: string | null,
   meter: TurnMeter,
-  side: { familyInvite?: { vaiTro: VaiTro } },
+  side: TurnSide,
 ): Promise<AgentResult> {
   // Trần token của MỘT lượt rail. 🔴 Trước đây runAgent dùng THẲNG cfg.maxTokens
   // (app_config['chat.max_tokens'], prod = 3000) và BỎ QUA con số mà
@@ -268,6 +274,13 @@ async function runAgentInner(
         remember: (loai: string, noiDung: string) =>
           rememberFact(userId, loai, noiDung).then((r) => r.ok),
         forget: (idPrefix: string) => forgetFact(userId, idPrefix),
+        // Ghi thành công mới báo client (qua `side` → done.tienTri) — `tool_call`
+        // bắn TRƯỚC khi tool chạy nên không dùng được để nói "đã ghi".
+        ghiTienTri: async (noiDung: string, ngay: string) => {
+          const r = await ghiLoiTienTri(userId, noiDung, ngay, { authorId: req.authorId ?? null, sessionId: req.session_id });
+          if (r.ok) side.tienTri = { ngay: r.ngay };
+          return r;
+        },
       }
     : null;
   const ctx = newToolContext(null, {
