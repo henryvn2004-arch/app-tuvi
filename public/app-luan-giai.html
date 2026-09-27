@@ -479,6 +479,10 @@ function startIntake(){
   // (Bước 10: bẫy phát hiện khi lan renderChat() sang các trang có resume-flow.)
   if(_tpwResuming())return;
   if(window.Shell&&Shell.pendingRestore&&Shell.pendingRestore())return;
+  // Đến bằng ?auto=1 CÓ lá số (link thanh báo cáo trong chat mang ngày sinh
+  // qua URL, hoặc lá số đã nhớ): _pageInit tự điền + doLuan() — hiện thêm form
+  // "Cho thầy xin họ tên" trống là bắt khách tưởng phải nhập lại.
+  if(window.Shell&&Shell.autoRun&&Shell.autoRun()&&(Shell._birthFromQuery()||Shell.getRememberedBirth()))return;
   TuviForm.renderChat({ onDone:showNamxemStep });
 }
 function showNamxemStep(){
