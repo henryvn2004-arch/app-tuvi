@@ -144,3 +144,47 @@ export async function traLoi(userId: string, id: string, kq: 'dung' | 'chua' | '
     return false;
   }
 }
+
+// ── Thầy tự nhắn (GĐ2) ────────────────────────────────────────
+export interface LoiCanNhac extends LoiTienTri {
+  user_id: string;
+}
+
+/** Lời phán đến hạn, chưa trả lời, CHƯA từng nhắn qua kênh ngoài — cho cron. */
+export async function listCanNhac(limit = 200): Promise<LoiCanNhac[]> {
+  if (!SB_URL || !SB_KEY) return [];
+  try {
+    const res = await fetch(
+      `${SB_URL}/rest/v1/loi_tien_tri?trang_thai=eq.cho&nhac_at=is.null&hoi_lai_ngay=lte.${homNayVN()}` +
+        `&select=id,user_id,noi_dung,hoi_lai_ngay,author_id,created_at&order=hoi_lai_ngay.asc&limit=${limit}`,
+      { headers: headers(), cache: 'no-store' },
+    );
+    if (!res.ok) {
+      console.error('[tien-tri] đọc danh sách cần nhắc hỏng:', res.status);
+      return [];
+    }
+    const rows = (await res.json()) as LoiCanNhac[];
+    return Array.isArray(rows) ? rows : [];
+  } catch (e) {
+    console.error('[tien-tri] đọc danh sách cần nhắc lỗi:', (e as Error)?.message);
+    return [];
+  }
+}
+
+/** Đánh dấu đã nhắn — `nhac_at=is.null` trong bộ lọc để hai lượt cron chồng nhau không nhắn đôi. */
+export async function danhDauDaNhac(id: string): Promise<boolean> {
+  if (!SB_URL || !SB_KEY) return false;
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/loi_tien_tri?id=eq.${id}&nhac_at=is.null`, {
+      method: 'PATCH',
+      headers: headers({ Prefer: 'return=representation' }),
+      body: JSON.stringify({ nhac_at: new Date().toISOString() }),
+      cache: 'no-store',
+    });
+    if (!res.ok) return false;
+    const rows = await res.json();
+    return Array.isArray(rows) && rows.length > 0;
+  } catch {
+    return false;
+  }
+}

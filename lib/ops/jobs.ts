@@ -275,6 +275,10 @@ export const JOBS: JobSpec[] = [
   // xem lib/marketing/email-reminder.ts / email-cross-sell.ts. `since` = ngày
   // merge: job chưa từng chạy nên cron_runs trống, thiếu mốc này bộ dò kêu
   // ngay "CHƯA HỀ chạy".
+  // Sổ tiên tri GĐ2 (docs/DAC-TRUNG-PLAN.md) — nhắn Telegram lời phán đến hạn.
+  { key: 'tien-tri-nhac', label: 'Thầy tự nhắn — Sổ tiên tri đến hạn', source: 'vercel', everyMinutes: D,
+    schedule: '08:10 VN hằng ngày', sink: 'loi_tien_tri.nhac_at + Telegram', path: '/api/cron/tien-tri-nhac',
+    since: '2026-09-28' },
   { key: 'email-reminder-idle', label: 'Email — nhắc user còn Lượng (idle)', source: 'vercel',
     everyMinutes: 7 * D, schedule: 'T3 08:00 VN hằng tuần', sink: 'email_log', path: '/api/cron/email-reminder-idle',
     since: '2026-09-14' },
