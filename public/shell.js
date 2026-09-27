@@ -2752,7 +2752,7 @@
         '<span class="rr-go">Xem →</span>';
       go = function () {
         try { track('cta_click', { tool_id: 'laso', meta: { from: 'rail_report_bar' } }); } catch (e) { /* ignore */ }
-        location.href = '/app/luan-giai';
+        location.href = luanGiaiHref();
       };
     }
     if (!html) { el.style.display = 'none'; el.innerHTML = ''; el.onclick = null; return; }
@@ -2760,6 +2760,22 @@
     el.className = 'rail-report' + (_rep ? ' rr-' + _rep.state : ' rr-locked');
     el.style.display = '';
     el.onclick = go;
+  }
+  // Link sang Luận Giải MANG THEO lá số đang xem + ?auto=1 ⇒ trang báo cáo tự
+  // chạy tới phần xem trước, không bắt khách nhập lại (Henry 2026-09-27: bấm
+  // thanh báo cáo trên iPhone ra form TRỐNG). Dùng đúng đường `_birthFromQuery`
+  // của trang SEO (URL ĐÈ lá số đã nhớ ⇒ đúng lá số đang xem, kể cả vừa "Đổi").
+  // `gio` là giờ DƯƠNG 0–23: địa chi i ↔ giờ 2i (ngược của birthToApi).
+  // Lá số âm lịch (không đi qua đây nhưng vẫn chặn) ⇒ không truyền ngày, để
+  // trang tự dùng lá số đã nhớ thay vì lập nhầm theo ngày dương.
+  function luanGiaiHref() {
+    var b = ctx && ctx.birth;
+    if (!b || b.isLunar || !b.day || !b.month || !b.year) return '/app/luan-giai';
+    var q = ['ngay=' + b.day, 'thang=' + b.month, 'nam=' + b.year, 'gioitinh=' + (b.gender === 'nu' ? 'nu' : 'nam')];
+    if (b.hourBranch != null && b.hourBranch >= 0) q.push('gio=' + (b.hourBranch * 2));
+    if (b.name) q.push('ten=' + encodeURIComponent(b.name));
+    q.push('auto=1');
+    return '/app/luan-giai?' + q.join('&');
   }
   // Trang TỰ viết báo cáo (có ReportDelivery) — thanh "chưa mở" không mời
   // sang chính nó; trạng thái ở đó lấy từ sự kiện `tvmb:report`.
@@ -2866,6 +2882,7 @@
 
     var label = (pick && pick.label) || 'Luận Giải';
     var path = (pick && pick.app_path) || '/app/luan-giai';
+    if (path === '/app/luan-giai') path = luanGiaiHref();
     var price = pick ? (window.ToolPrices ? ToolPrices.get(toolId) : null) : _rc.lasoPrice;
     if (price == null) return;                        // chưa biết giá thì không hứa gì
     _upsellShown = true;
@@ -2936,7 +2953,7 @@
           ? '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
               '. Bản <b>Luận Giải</b> soi trọn <b>' + LG_PHAN.length + ' mục</b> của chính lá số này — ' +
               esc(preview) + '… — thay vì hỏi lẻ từng câu.</div>' +
-            '<a class="stm-btn" href="/app/luan-giai">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng (≈ ' + creditVnd(_rc.lasoPrice) + ')</a>' +
+            '<a class="stm-btn" href="' + esc(luanGiaiHref()) + '">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng (≈ ' + creditVnd(_rc.lasoPrice) + ')</a>' +
             '<a class="stm-alt" href="/topup.html">Hoặc nạp Lượng để hỏi tiếp từng câu →</a>'
           : '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
               ', nhưng phần Lượng trong ví đã cạn. Nạp thêm để thầy luận tiếp mạch còn dang dở nhé.</div>' +
@@ -4720,6 +4737,7 @@
       // parseInt(null) = NaN → mọi so sánh false → thiếu tham số là tự loại.
       if (!(ngay >= 1 && ngay <= 31) || !(thang >= 1 && thang <= 12) || !(nam >= 1900 && nam <= 2100)) return null;
       b = { ngay: ngay, thang: thang, nam: nam, gioitinh: p.get('gioitinh') === 'nu' ? 'nu' : 'nam' };
+      if (p.get('ten')) b.hoten = String(p.get('ten')).slice(0, 60);
       gio = parseInt(p.get('gio'), 10);
       if (gio >= 0 && gio <= 23) { b.gioHour = gio; b.gioPhut = 0; }
       nx = parseInt(p.get('namxem'), 10);
@@ -5250,7 +5268,7 @@
           var _pd = await res.clone().json();
           if (_pd) applyPaywallInfo({ balance: _pd.balance, price: _pd.price });
         } catch (e) { /* ignore */ }
-        typing.innerHTML = '<p>Đã hết lượt hỏi. Lá số vẫn xem miễn phí — bạn có thể xem <a href="/app/luan-giai" style="color:var(--blue);font-weight:600">bản Luận Giải trọn ' + LG_PHAN.length + ' mục</a> hoặc <a href="/topup.html" style="color:var(--blue);font-weight:600">nạp thêm</a> để hỏi tiếp.</p>';
+        typing.innerHTML = '<p>Đã hết lượt hỏi. Lá số vẫn xem miễn phí — bạn có thể xem <a href="' + esc(luanGiaiHref()) + '" style="color:var(--blue);font-weight:600">bản Luận Giải trọn ' + LG_PHAN.length + ' mục</a> hoặc <a href="/topup.html" style="color:var(--blue);font-weight:600">nạp thêm</a> để hỏi tiếp.</p>';
         openTopupModal();
         streaming = false; setSend(true); messages.pop(); return;
       }
