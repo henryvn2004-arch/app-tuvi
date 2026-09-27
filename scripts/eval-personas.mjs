@@ -25,7 +25,9 @@
 import { PERSONAS } from '../lib/agent/personas.ts';
 
 const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
-const MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+// Mặc định PHẢI khớp model rail thật (lib/llm/complete.ts + lib/agent/providers/gemini.ts) —
+// bản cũ ghi cứng 'gemini-2.5-flash' nên eval đo một model prod không dùng.
+const MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 if (!GEMINI_KEY) {
   console.error('❌ Thiếu GEMINI_API_KEY — export biến này trước khi chạy.');
   process.exit(1);
