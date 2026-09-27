@@ -592,12 +592,18 @@ async function runAgentInner(
 
   // "@mention" — khách gọi đích danh một thầy khác (P3 "mời thầy khác"
   // 2026-09-26). CÙNG kỹ thuật với focusHintText/userTurns ở trên: nhét vào
-  // CUỐI tin user, KHÔNG sửa system (giữ prompt-cache ổn định). Chỉ nới lỏng
-  // các điều kiện ở mô tả tool — KHÔNG ép gọi tool cụ thể nào, vì Tâm
-  // Kính có HAI môn (Bát Tự/Kỳ Môn) và chỉ model mới biết câu hỏi hợp cái nào.
+  // CUỐI tin user, KHÔNG sửa system (giữ prompt-cache ổn định). Khách bấm
+  // mời đích danh (nút "Nghe thêm môn khác", shell.js) ⇒ LUÔN mời: thầy khách
+  // xem CÙNG câu hỏi theo góc môn mình. Bản cũ cho model từ chối khi "câu không
+  // hợp môn" — đo prod 2026-09-27: bấm Linh Cơ dưới câu "sự nghiệp năm nay" bị
+  // từ chối mà vẫn mất một câu. Tâm Kính có HAI môn nên chỉ nêu tool MẶC ĐỊNH.
   if (req.addressMaster && convo.length) {
     const displayName = PERSONAS[req.addressMaster]?.name || req.addressMaster;
-    const hint = `[Người dùng vừa gọi đích danh thầy ${displayName} (@${displayName}) — nếu câu hỏi hợp với đúng MỘT trong các tool "mời thầy khác" của thầy này, hãy GỌI NGAY tool đó trong lượt này, bỏ qua mọi điều kiện ở mô tả tool (kể cả "đã mời trong cuộc trò chuyện này rồi"). Nếu câu hỏi không hợp môn nào của thầy ${displayName}, cứ trả lời bình thường bằng giọng của bạn và nói rõ vì sao thầy đó không giúp được cho câu này.]`;
+    const tool =
+      req.addressMaster === 'linh-co'
+        ? 'moi_thay_luc_nham (Linh Cơ chiêm ngay lúc này chính chuyện người dùng đang hỏi)'
+        : 'moi_thay_bat_tu (mặc định; không nói năm thì lấy năm hiện tại), hoặc moi_thay_ky_mon nếu câu hỏi là về hướng/giờ hành sự';
+    const hint = `[Người dùng vừa bấm mời đích danh thầy ${displayName} — BẮT BUỘC gọi tool ${tool} trong lượt này, bỏ qua MỌI điều kiện ở mô tả tool (kể cả loại câu hỏi và "đã mời trong cuộc trò chuyện này rồi"). Thầy ${displayName} xem CÙNG câu hỏi theo góc môn của mình — KHÔNG từ chối, KHÔNG giải thích vì sao môn đó "không hợp".]`;
     const last = convo[convo.length - 1];
     if (last?.role === 'user') {
       if (typeof last.content === 'string') {
