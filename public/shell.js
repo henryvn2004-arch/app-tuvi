@@ -891,7 +891,8 @@
       .then(function (d) {
         var it = d && d.item;
         var chat = document.getElementById('chat');
-        if (!it || !chat || streaming || messages.length) return;
+        if (!it) { offerLichRieng(); return; } // không có gì để hỏi lại → mới tới lượt lời mời khác
+        if (!chat || streaming || messages.length) return;
         var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
         document.body.classList.remove('chat-empty');
         var a = (it.author_id && authorById(it.author_id)) || _author;
@@ -919,6 +920,66 @@
         });
       })
       .catch(function () { /* im lặng — sổ hỏng thì màn chat vẫn như cũ */ });
+  }
+
+  // ── LỊCH RIÊNG (docs/DAC-TRUNG-PLAN.md) ──
+  // Feed .ics ngày tốt / ngày xung tuổi của riêng lá số đang nhớ (app/api/lich,
+  // lib/lich/feed.ts). Đăng ký một lần, ứng dụng lịch tự kéo lại mỗi ngày.
+  // Lộ ra ở lần quay lại thứ 3 (ngày khác nhau) trên màn chat chính, sau khi
+  // Sổ tiên tri không có gì để hỏi — mỗi phiên tối đa một thứ mới. "Để sau" im 14 ngày.
+  function moLichRieng(kind) {
+    var tk = getToken(), b = birthSnapshot();
+    if (!tk || !b || !b.ngay) return Promise.resolve(false);
+    // Mở tab TRƯỚC mọi lời gọi mạng — trình duyệt chặn window.open sau await.
+    var w = kind === 'google' ? window.open('about:blank', '_blank') : null;
+    var H = { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tk };
+    return fetch('/api/charts', { method: 'POST', headers: H, body: JSON.stringify({ birth: b, label: b.hoten || '' }) })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !d.item) throw new Error('chart');
+        return fetch('/api/lich', { method: 'POST', headers: H, body: JSON.stringify({ chartId: d.item.id }) });
+      })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !d.url) throw new Error('lich');
+        try { track('cta_click', { tool_id: ACTIVE, slug: 'lich_rieng_them', meta: { kind: kind } }); } catch (e) { /* ignore */ }
+        if (kind === 'google') { if (w) w.location.href = d.google; else location.href = d.google; }
+        else location.href = d.webcal;
+        return true;
+      })
+      .catch(function () { if (w) w.close(); return false; });
+  }
+  function offerLichRieng() {
+    var chat = document.getElementById('chat');
+    if (!chat || streaming || messages.length || !getToken() || !birthSnapshot()) return;
+    var today = new Date().toISOString().slice(0, 10), days = [];
+    try {
+      if (Number(localStorage.getItem('tvmb_lich_snooze') || 0) > Date.now()) return;
+      if (localStorage.getItem('tvmb_lich_done')) return;
+      days = JSON.parse(localStorage.getItem('tvmb_visit_days') || '[]');
+      if (days.indexOf(today) < 0) { days.push(today); localStorage.setItem('tvmb_visit_days', JSON.stringify(days.slice(-10))); }
+    } catch (e) { return; }
+    if (days.length < 3) return;
+    var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
+    document.body.classList.remove('chat-empty');
+    thayBubble('<p>Con muốn thầy đưa ngày tốt, ngày xung tuổi của riêng con vào lịch điện thoại không? Mỗi sáng mở lịch là thấy.</p>' +
+      '<div class="tt-act lich-act"><button type="button" data-k="ical">iPhone / Mac</button><button type="button" data-k="google">Google Lịch</button><button type="button" data-k="de_sau">Để sau</button></div>');
+    try { track('cta_click', { tool_id: ACTIVE, slug: 'lich_rieng_moi' }); } catch (e) { /* ignore */ }
+    var rows = chat.querySelectorAll('.msg.a'), act = rows.length ? rows[rows.length - 1].querySelector('.lich-act') : null;
+    if (act) act.addEventListener('click', function (e) {
+      var btn = e.target.closest('button'); if (!btn) return;
+      var k = btn.getAttribute('data-k');
+      if (k === 'de_sau') {
+        try { localStorage.setItem('tvmb_lich_snooze', String(Date.now() + 14 * 864e5)); } catch (e2) { /* ignore */ }
+        act.remove(); return;
+      }
+      try { localStorage.setItem('tvmb_lich_done', '1'); } catch (e2) { /* ignore */ }
+      act.remove();
+      moLichRieng(k).then(function (okk) {
+        thayBubble(okk ? '<p>Xong rồi. Lịch tự cập nhật mỗi ngày, con không phải làm gì thêm.</p>'
+          : '<p>Chưa thêm được lịch, con thử lại ở trang Cả nhà mình nhé.</p>');
+      });
+    });
   }
 
   // ── "Cả nhà mình" GĐ2: thẻ mời thêm lá số người nhà + thanh "Cả nhà" ──
@@ -4874,6 +4935,8 @@
       _navQ = q || ''; _navNeedBirth = !!needBirth; joinThay(id);
     },
     meetThay: function (id) { if (!authorById(id) || _navDone) return; _navQ = ''; joinThay(id); introThay(id); },
+    // Lịch riêng — trang Cả nhà mình gọi chung (một nguồn với lời mời trong chat).
+    moLichRieng: function (kind) { return moLichRieng(kind); },
     openCmd: openCmd,
     toggleTheme: toggleTheme,
     // Mở rail = lời mời đã được nhận → tắt orb. Nếu không tắt thì nó nhấp nháy
