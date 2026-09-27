@@ -4385,6 +4385,7 @@
       // bị thay hẳn); bỏ qua CẢ setContext, đừng ném lỗi giữa chừng.
       if (!c || !t) return;
       if (o.label) { c.style.display = ''; t.innerHTML = 'Đang gắn: <b>' + esc(o.label) + '</b>'; }
+      if (CHAT_HOME) paintHomeCtx(); // màn chat trang chủ: nhãn là LÁ SỐ đang hỏi, không phải tên kênh
       var ta = document.getElementById('railInput');
       ta.disabled = false; ta.placeholder = o.placeholder || 'Hỏi bất cứ điều gì về lá số này…';
       document.getElementById('railSend').disabled = false;
@@ -4830,12 +4831,29 @@
             if (_ctxOpts) { _ctxOpts.birth = b; delete _ctxOpts.scenario; }
             release();
             try { track('nav_birth', { tool_id: ACTIVE || 'home', meta: { from: cb ? 'join' : 'hero' } }); } catch (e) { /* ignore */ }
+            paintHomeCtx();
             if (cb) { cb(); return; }
-            navBubble('<p>Đã có lá số của <b>' + esc(b.name || 'bạn') + '</b>. Giờ kể chuyện của bạn đi, mình mời đúng thầy vào xem.</p>');
+            if (_navDone) thayBubble('<p>Thầy đã lập lá số của <b>' + esc(b.name || 'con') + '</b>. Con hỏi tiếp đi.</p>');
+            else navBubble('<p>Đã có lá số của <b>' + esc(b.name || 'bạn') + '</b>. Giờ kể chuyện của bạn đi, mình mời đúng thầy vào xem.</p>');
             if (input) input.focus();
           },
         });
       });
+    });
+  }
+  // Thanh "Đang xem lá số: <tên · ngày sinh> [Đổi]" đầu khung chat trang chủ —
+  // Henry 2026-09-27: khách phải biết cuộc chat này đang hỏi cho LÁ SỐ nào.
+  // Chưa có lá số thì ẩn (lời chào đã có nút "Lập lá số").
+  function paintHomeCtx() {
+    var c = document.getElementById('railCtx'), t = document.getElementById('railCtxTxt');
+    if (!c || !t) return;
+    var b = ctx && ctx.birth;
+    if (!b || !b.day || !b.month || !b.year) { c.style.display = 'none'; return; }
+    c.style.display = '';
+    t.innerHTML = 'Đang xem lá số: <b>' + esc((b.name ? b.name + ' · ' : '') + b.day + '/' + b.month + '/' + b.year) + '</b>' +
+      '<button type="button" class="ctx-chg">Đổi</button>';
+    t.querySelector('.ctx-chg').addEventListener('click', function () {
+      askBirthHome(null, _navDone ? 'Con muốn thầy xem lá số của ai? Cho thầy xin họ tên và giới tính nhé.' : null);
     });
   }
   var _navNeedBirth = false;
