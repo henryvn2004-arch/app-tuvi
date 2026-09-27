@@ -31,6 +31,9 @@ import type { BirthParams } from '@/lib/contract/v1';
 import { findMember, type FamilyMember } from '@/lib/charts/family';
 import type { ThangKhung } from '@/lib/engine/van-han-12';
 import { khungCaNha, type NguoiNhaVao } from '@/lib/engine/ca-nha';
+import { computeXongDat, tetSapToi, VERDICT_LABEL } from '@/lib/engine/xong-dat';
+import { computeVanNgay } from '@/lib/engine/van-ngay';
+import { lunarOf } from '@/lib/engine/laso';
 import { SUGGEST_TOOL_DEF, SUGGEST_PRODUCT_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
 type Rec = Record<string, unknown>;
@@ -299,6 +302,20 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false, hasFamily 
     },
     // Nhóm vận-hạn/ngày-tốt: dùng CHUNG lõi lib/agent (hasLaso=true).
     ...buildTools(true),
+    // "Việc đời thật" (docs/DAC-TRUNG-PLAN.md) — Tết: tuổi xông đất theo chủ nhà
+    // + ngày giờ, hướng xuất hành mùng 1–3 kèm ngày xung tuổi từng người nhà.
+    {
+      name: 'xem_tet_ca_nha',
+      description:
+        'Xem chuyện TẾT cho người hỏi (và cả nhà nếu sổ có người nhà): tuổi nào hợp xông đất nhà mình (chủ nhà = người hỏi), giờ hoàng đạo và hướng xuất hành mùng 1–3, và ngày nào xung tuổi người nào trong nhà. ' +
+        'Gọi khi hỏi về xông đất, xuất hành, đi lễ đầu năm, Tết nhà mình. Số liệu tra bảng cổ pháp — luận từ đúng dữ liệu trả về, không tự thêm tuổi hay giờ.',
+      input_schema: {
+        type: 'object',
+        properties: {
+          ca_nha: { type: 'boolean', description: 'true = xem cho cả nhà (mặc định); false = chỉ người hỏi' },
+        },
+      },
+    },
     {
       name: 'tra_cuu_tri_thuc',
       description:
@@ -410,6 +427,7 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
   if (name === 'moi_thay_ky_mon') return execMoiThayKyMon(input, ctx);
   if (name === 'xem_nguoi_nha') return execXemNguoiNha(input, ctx);
   if (name === 'tra_ca_nha') return execTraCaNha(ctx);
+  if (name === 'xem_tet_ca_nha') return execXemTetCaNha(input, ctx);
   if (name === 'tra_van_nam_bat_tu') return execTraVanNamBatTu(input, ctx);
   if (name === 'tra_van_nam_cong_so') return execTraVanNamCongSo(input, ctx);
   if (name === 'tra_nam_ca_nhan_than_so') return execTraNamCaNhanThanSo(input);
@@ -927,4 +945,63 @@ async function execTraCaNha(ctx: ToolContext): Promise<ToolRunResult> {
   );
   if (thieu.length) L.push('Chưa xếp được: ' + thieu.join('; ') + ' — nhắc người dùng bổ sung ở trang Sổ lá số.');
   return { content: L.join('\n'), label: `Đang xếp lá số cả nhà (${co.length} người)...` };
+}
+
+// ── "Việc đời thật": Tết cả nhà ─────────────────────────────
+/** Năm âm lịch + chi năm của một ngày sinh dương. Sinh tháng 1–2 dương mà âm
+ *  lịch còn tháng 11–12 thì thuộc năm âm TRƯỚC — xông đất tính theo năm âm. */
+function namAm(b: BirthParams): { nam: number; chi: string } | null {
+  if (!b.day || !b.month || !b.year) return null;
+  if (b.isLunar) {
+    const l = lunarOf(b.day, b.month, b.year);
+    return l ? { nam: b.year, chi: l.chiNam } : null;
+  }
+  const l = lunarOf(b.day, b.month, b.year);
+  if (!l) return null;
+  return { nam: l.thangAL > b.month + 1 ? b.year - 1 : b.year, chi: l.chiNam };
+}
+
+async function execXemTetCaNha(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  const label = 'Đang xem Tết nhà mình...';
+  if (!ctx.birth) return { content: 'Chưa có ngày sinh người hỏi — xin ngày sinh trước.', label };
+  const t = tetSapToi(new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date()));
+  if (!t.tetIso || t.conNgay < 0) return { content: 'Chưa có bảng Tết cho năm tới — nói người dùng hệ thống chưa phục vụ năm đó.', label };
+  const chu = namAm(ctx.birth);
+  if (!chu) return { content: 'Không quy được năm âm của người hỏi.', label };
+
+  const people: { ten: string; chi: string }[] = [{ ten: String(ctx.birth.name || '').trim() || 'Người hỏi', chi: chu.chi }];
+  if (input?.ca_nha !== false) {
+    for (const m of ctx.family) {
+      const n = namAm(m.birth);
+      if (n) people.push({ ten: m.ten, chi: n.chi });
+    }
+  }
+
+  const L: string[] = [];
+  const xd = computeXongDat(chu.nam, t.namXem);
+  L.push(`— TẾT ${t.namXem} (mùng 1 = ${t.tetIso.split('-').reverse().join('/')}, còn ${t.conNgay} ngày) —`);
+  if (xd) {
+    L.push(`XÔNG ĐẤT cho nhà chủ nhà ${people[0].ten} (tuổi ${xd.chuNha.canChi}, năm ${xd.namCanChi}):`);
+    for (const note of xd.chuNhaNote) L.push('  ! ' + note);
+    for (const c of xd.candidates.slice(0, 4)) {
+      L.push(`  · ${c.canChi} (sinh ${c.namSinh}, ${c.tuoi} tuổi) — ${VERDICT_LABEL[c.verdict]}: ${c.reasons.slice(0, 2).join('; ')}`);
+    }
+    const tranh = xd.candidates.filter((c) => c.verdict === 'nen-tranh').slice(0, 3).map((c) => c.canChi);
+    if (tranh.length) L.push(`  Tuổi nên tránh: ${tranh.join(', ')}`);
+    L.push('  Lưu ý bắt buộc nói lại cho người dùng: ' + xd.caveat);
+  }
+  L.push('XUẤT HÀNH mùng 1–3 (giờ hoàng đạo, hướng Hỷ thần / Tài thần, ngày xung tuổi ai trong nhà):');
+  const [yy, mm, dd] = t.tetIso.split('-').map(Number);
+  for (let i = 0; i < 3; i++) {
+    const d = new Date(Date.UTC(yy, mm - 1, dd + i));
+    const v = computeVanNgay(d.getUTCDate(), d.getUTCMonth() + 1, d.getUTCFullYear());
+    const xung = people.filter((p) => p.chi === v.xung.chi).map((p) => p.ten);
+    L.push(
+      `  · Mùng ${i + 1} (${v.ngay.duong}, ${v.ngay.canChi}, ngày ${v.danhGia.tinhChat}): giờ tốt ${v.gioTot.slice(0, 4).map((g) => `${g.chi} ${g.range}`).join(', ')}; ` +
+        `hướng Hỷ thần ${v.huong.hyThan}, Tài thần ${v.huong.taiThan}` +
+        (xung.length ? `; XUNG TUỔI: ${xung.join(', ')} — người này nên xuất hành ngày khác` : ''),
+    );
+  }
+  if (people.length > 1) L.push(`Cả nhà gồm: ${people.map((p) => `${p.ten} (tuổi ${p.chi})`).join(', ')}.`);
+  return { content: L.join('\n'), label };
 }

@@ -891,7 +891,7 @@
       .then(function (d) {
         var it = d && d.item;
         var chat = document.getElementById('chat');
-        if (!it) { offerLichRieng(); return; } // không có gì để hỏi lại → mới tới lượt lời mời khác
+        if (!it) { if (!offerLichRieng()) offerTet(); return; } // không có gì để hỏi lại → mới tới lượt lời mời khác, MỖI PHIÊN MỘT
         if (!chat || streaming || messages.length) return;
         var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
         document.body.classList.remove('chat-empty');
@@ -951,15 +951,15 @@
   }
   function offerLichRieng() {
     var chat = document.getElementById('chat');
-    if (!chat || streaming || messages.length || !getToken() || !birthSnapshot()) return;
+    if (!chat || streaming || messages.length || !getToken() || !birthSnapshot()) return false;
     var today = new Date().toISOString().slice(0, 10), days = [];
     try {
-      if (Number(localStorage.getItem('tvmb_lich_snooze') || 0) > Date.now()) return;
-      if (localStorage.getItem('tvmb_lich_done')) return;
+      if (Number(localStorage.getItem('tvmb_lich_snooze') || 0) > Date.now()) return false;
+      if (localStorage.getItem('tvmb_lich_done')) return false;
       days = JSON.parse(localStorage.getItem('tvmb_visit_days') || '[]');
       if (days.indexOf(today) < 0) { days.push(today); localStorage.setItem('tvmb_visit_days', JSON.stringify(days.slice(-10))); }
-    } catch (e) { return; }
-    if (days.length < 3) return;
+    } catch (e) { return false; }
+    if (days.length < 3) return false;
     var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
     document.body.classList.remove('chat-empty');
     thayBubble('<p>Con muốn thầy đưa ngày tốt, ngày xung tuổi của riêng con vào lịch điện thoại không? Mỗi sáng mở lịch là thấy.</p>' +
@@ -980,6 +980,43 @@
           : '<p>Chưa thêm được lịch, con thử lại ở trang Cả nhà mình nhé.</p>');
       });
     });
+    return true;
+  }
+  // ── VIỆC ĐỜI THẬT (docs/DAC-TRUNG-PLAN.md): Tết ──
+  // Trong 45 ngày trước Tết, thầy mời xem tuổi xông đất + giờ xuất hành cho cả
+  // nhà (tool rail `xem_tet_ca_nha`). Một lần mỗi mùa Tết; "Để sau" im 14 ngày.
+  // Số ngày tới Tết do server tính (/api/xong-dat?mua=1) — client không chép bảng Tết.
+  function offerTet() {
+    var chat = document.getElementById('chat');
+    if (!chat || streaming || messages.length || !getToken() || !birthSnapshot()) return;
+    try { if (Number(localStorage.getItem('tvmb_tet_snooze') || 0) > Date.now()) return; } catch (e) { return; }
+    fetch('/api/xong-dat?mua=1')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (t) {
+        if (!t || !(t.conNgay > 0 && t.conNgay <= 45) || streaming || messages.length) return;
+        var key = 'tvmb_tet_done_' + t.namXem;
+        try { if (localStorage.getItem(key)) return; } catch (e) { return; }
+        var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
+        document.body.classList.remove('chat-empty');
+        thayBubble('<p>Còn ' + t.conNgay + ' ngày nữa là Tết. Thầy xem tuổi xông đất hợp nhà con và giờ, hướng xuất hành mùng 1–3 cho cả nhà nhé?</p>' +
+          '<div class="tt-act tet-act"><button type="button" data-k="nha">Xem cho cả nhà</button><button type="button" data-k="minh">Chỉ mình con</button><button type="button" data-k="de_sau">Để sau</button></div>');
+        try { track('cta_click', { tool_id: ACTIVE, slug: 'tet_moi', meta: { con_ngay: t.conNgay } }); } catch (e) { /* ignore */ }
+        var rows = chat.querySelectorAll('.msg.a'), act = rows.length ? rows[rows.length - 1].querySelector('.tet-act') : null;
+        if (!act) return;
+        act.addEventListener('click', function (e) {
+          var btn = e.target.closest('button'); if (!btn) return;
+          var k = btn.getAttribute('data-k');
+          act.remove();
+          try { track('cta_click', { tool_id: ACTIVE, slug: 'tet_chon', meta: { k: k } }); } catch (e2) { /* ignore */ }
+          if (k === 'de_sau') { try { localStorage.setItem('tvmb_tet_snooze', String(Date.now() + 14 * 864e5)); } catch (e2) { /* ignore */ } return; }
+          try { localStorage.setItem(key, '1'); } catch (e2) { /* ignore */ }
+          var input = document.getElementById('railInput'); if (!input) return;
+          input.value = k === 'nha' ? 'Thầy xem giúp con tuổi xông đất và giờ, hướng xuất hành Tết năm nay cho cả nhà con.'
+            : 'Thầy xem giúp con tuổi xông đất và giờ, hướng xuất hành Tết năm nay cho con.';
+          sendMsg();
+        });
+      })
+      .catch(function () { /* ignore */ });
   }
 
   // ── "Cả nhà mình" GĐ2: thẻ mời thêm lá số người nhà + thanh "Cả nhà" ──
