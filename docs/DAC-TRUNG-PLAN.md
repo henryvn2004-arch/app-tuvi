@@ -103,7 +103,11 @@ Chữ hiển thị: "Mời **nhóm** hội chẩn" — KHÔNG "hội đồng" (l
    tiên tri và Lịch riêng — mỗi phiên một thứ), một lần/mùa, "Để sau" im 14 ngày; số ngày tới
    Tết lấy từ `/api/xong-dat?mua=1` (một nguồn với bảng TET). Cưới hỏi / mua nhà: CHƯA làm
    riêng — rail đã gợi ý đúng công cụ (Chọn ngày, Kim Lâu, Bát Trạch) qua `goi_y_cong_cu`.
-6. Thầy có tính cách — không có việc giới thiệu; chỉnh `personas.ts` khi cần.
+6. **Thầy có tính cách** ✅ — không giới thiệu. `personaKhach(id)` (`lib/agent/personas.ts`) = giọng
+   thầy + cách cư xử KHI LÀM KHÁCH trong phòng thầy khác (Tâm Kính gật phần gặp nhau rồi chỉ chỗ
+   vênh; Linh Cơ vào thẳng quẻ, ngược thì nói nhẹ mà không lùi). Mọi tool `moi_thay_*` + `hoi_chan`
+   dùng hàm này; câu chốt của thầy chính được đáp lại thầy khách đúng tính mình. Tách khỏi `voice`
+   để `eval-personas.mjs` vẫn đo giọng khi một mình.
 
 ## Luật riêng của "Cả nhà mình"
 
