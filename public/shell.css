@@ -278,6 +278,7 @@ body.chat-home .rail-report,body.chat-first-live.art-closed .rail-report{margin-
 .msg-2nd .m2-l svg{width:13px;height:13px}
 .msg-2nd .m2-a{appearance:none;font:inherit;font-size:12px;display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 3px;border:1px solid var(--line);border-radius:999px;background:var(--white);color:var(--text-mid);cursor:pointer}
 .msg-2nd .m2-a img{width:22px;height:22px;border-radius:50%;object-fit:cover}
+.msg-2nd .m2-a em{font-style:normal;color:var(--text-lt)}
 @media(hover:hover){.msg-2nd .m2-a:hover{border-color:var(--gold-soft);color:var(--text)}}
 .msg.a b,.msg.a strong{color:var(--text);font-weight:700}
 .msg.a p{margin-bottom:8px}

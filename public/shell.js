@@ -1266,7 +1266,7 @@
     { n: 'linh cơ',  id: 'linh-co' },
   ];
   // @mention ở ĐẦU câu ("@Tâm Kính, năm sau con...") → server nới lỏng điều
-  // kiện "DÙNG RẤT DÈ" của đúng thầy đó (xem addressMaster, lib/agent/run.ts).
+  // kiện ở mô tả tool của đúng thầy đó (xem addressMaster, lib/agent/run.ts).
   // KHÔNG cắt "@Tên" khỏi text gửi đi — giữ nguyên câu khách gõ.
   function detectAddressMaster(text) {
     var t = String(text || '').trim().toLocaleLowerCase('vi-VN');
@@ -5037,8 +5037,8 @@
     // chính câu hỏi, không cần đợi câu trả lời.
     _askCount++;
     _cungAsked.push(detectCung(text));
-    // Câu GỐC cho nút "Hỏi ý thầy khác" — lượt ý-thầy-khác mang câu gốc theo,
-    // để lần bấm tiếp không lồng tiền tố "Thầy X nhìn câu này…" vào nhau.
+    // Câu GỐC cho hàng "Nghe thêm môn khác" — lượt mời mang câu gốc theo, để
+    // lần bấm tiếp không lồng "@Tên, @Tên, …" vào nhau.
     var _soQ = _soPendingQ || text; _soPendingQ = null;
     input.value = ''; autoGrow(input);
     var chat = document.getElementById('chat');
@@ -5243,7 +5243,7 @@
       messages.push({ role: 'assistant', content: acc });
       saveCurrent();
       sessStash();
-      appendSecondOpinion(_soQ);
+      appendSecondOpinion(_soQ, _speakerSegs.map(function (x) { return x.name; }));
       // Thẻ mời SAU khi câu trả lời đã hiện xong — chèn trước lúc đó thì nó đứng
       // chen giữa lúc người ta đang đọc, thành quảng cáo cắt ngang.
       maybeShowUpsell();
@@ -5260,39 +5260,44 @@
     }
   }
 
-  // ── HỎI Ý THẦY KHÁC (phễu chuyển đổi bước 2, 2026-09-27) ──
-  // Hội đồng nhiều thầy là thứ ChatGPT/Gemini không có, nhưng trước đây chỉ
-  // đổi được thầy qua avatar (tooltip) hoặc gõ "@Tên" — khách không tự thấy.
-  // Dưới câu trả lời MỚI NHẤT (từ câu thứ 2, chỉ luồng lá số) hiện 3 thầy
-  // khác; bấm là đổi thầy và hỏi lại ĐÚNG câu gốc — mất một câu như thường.
-  // Loại NO_BIRTH_THAY (tướng qua ảnh / gieo quẻ): không luận lá số.
-  var _soPendingQ = null; // câu GỐC khi lượt đang gửi là một lượt "ý thầy khác"
-  function appendSecondOpinion(q) {
+  // ── NGHE THÊM MÔN KHÁC (phễu chuyển đổi bước 2, 2026-09-27) ──
+  // 2nd opinion ĐA MÔN là khác biệt với ChatGPT/Gemini: thầy môn KHÁC (Bát Tự,
+  // Lục Nhâm, Kỳ Môn) cùng xem MỘT chuyện. Cơ chế đã có sẵn — tool
+  // `moi_thay_*` + `addressMaster` (lib/tools/registry.ts, lib/agent/run.ts);
+  // trước đây chỉ gọi được bằng gõ "@Tên", khách không tự biết. Hàng này đặt
+  // nút ngay dưới câu trả lời MỚI NHẤT (luồng lá số — `addressMaster` chỉ có
+  // nghĩa ở đó): bấm = gửi lại CÂU GỐC kèm "@Tên" ⇒ server nhắc model gọi
+  // NGAY tool của thầy đó. Thầy đã lên tiếng trong câu này thì không mời lại.
+  var GUEST_MASTERS = [
+    { id: 'tam-kinh', mon: 'Bát Tự, Kỳ Môn' },
+    { id: 'linh-co',  mon: 'Lục Nhâm' },
+  ];
+  var _soPendingQ = null; // câu GỐC khi lượt đang gửi là một lượt "môn khác"
+  function appendSecondOpinion(q, spoke) {
     var chat = document.getElementById('chat');
     if (!chat) return;
     var olds = chat.querySelectorAll('.msg-2nd');
     for (var i = 0; i < olds.length; i++) olds[i].remove();
-    if (!q || !_author || !ctx || !ctx.birth || ctx.scenario || _askCount < 2) return;
-    var pool = AUTHOR_ROSTER.filter(function (a) { return a.id !== _author.id && !NO_BIRTH_THAY[a.id]; });
-    for (var j = pool.length - 1; j > 0; j--) { var k = Math.floor(Math.random() * (j + 1)); var t = pool[j]; pool[j] = pool[k]; pool[k] = t; }
-    var picks = pool.slice(0, 3);
+    if (!q || !ctx || !ctx.birth || ctx.scenario) return;
+    var picks = GUEST_MASTERS.map(function (g) { var a = authorById(g.id); return a ? { a: a, mon: g.mon } : null; })
+      .filter(function (x) { return x && (!spoke || spoke.indexOf(x.a.name) < 0); });
+    if (!picks.length) return;
     var bar = document.createElement('div');
     bar.className = 'msg-2nd';
-    bar.innerHTML = '<span class="m2-l">' + svg('users') + 'Hỏi ý thầy khác</span>' + picks.map(function (a) {
-      return '<button type="button" class="m2-a" data-id="' + a.id + '" aria-label="Hỏi ý Thầy ' + esc(a.name) + '">' +
-        '<img src="/authors/' + a.id + '.jpg" alt="">' + esc(a.name) + '</button>';
+    bar.innerHTML = '<span class="m2-l">' + svg('users') + 'Nghe thêm môn khác</span>' + picks.map(function (x) {
+      return '<button type="button" class="m2-a" data-id="' + x.a.id + '" aria-label="Mời Thầy ' + esc(x.a.name) + ' xem bằng ' + esc(x.mon) + '">' +
+        '<img src="/authors/' + x.a.id + '.jpg" alt=""><span>' + esc(x.a.name) + ' <em>· ' + esc(x.mon) + '</em></span></button>';
     }).join('');
     chat.appendChild(bar);
     chat.scrollTop = chat.scrollHeight;
     bar.addEventListener('click', function (e) {
       var b = e.target.closest('.m2-a'); if (!b || streaming) return;
-      var from = _author && _author.id, a = authorById(b.getAttribute('data-id'));
+      var a = authorById(b.getAttribute('data-id'));
       if (!a) return;
-      try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'second_opinion', master_from: from, master_to: a.id } }); } catch (e2) { /* ignore */ }
-      setAuthor(a.id);
-      if (CHAT_HOME) paintHomeHeader();
+      try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'second_opinion', master: a.id } }); } catch (e2) { /* ignore */ }
       _soPendingQ = q;
-      ask('Thầy ' + a.name + ' nhìn câu này thế nào: ' + q);
+      // "@Tên" ở ĐẦU câu là đúng mẫu `detectAddressMaster` bắt.
+      ask('@' + a.name + ', ' + q);
     });
   }
 
