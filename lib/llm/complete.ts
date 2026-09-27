@@ -218,7 +218,7 @@ async function geminiText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmResu
   if (truncated) {
     console.error(
       `[llm] gemini CẮT GIỮA CHỪNG (finishReason=MAX_TOKENS): max_tokens=${maxTokens}, ` +
-        `output_tokens=${j?.usageMetadata?.candidatesTokenCount}, chữ=${t.length}, kết thúc="…${t.slice(-40)}"`
+        `output_tokens=${j?.usageMetadata?.candidatesTokenCount}, nghĩ=${j?.usageMetadata?.thoughtsTokenCount ?? 0}, chữ=${t.length}, kết thúc="…${t.slice(-40)}"`
     );
   }
   return {
@@ -226,7 +226,9 @@ async function geminiText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmResu
     truncated,
     usage: {
       input_tokens: j?.usageMetadata?.promptTokenCount || 0,
-      output_tokens: j?.usageMetadata?.candidatesTokenCount || 0,
+      // + token NGHĨ: Gemini 3.x vẫn nghĩ dù `thinkingBudget:0`, và Google tính tiền
+      // chúng theo giá OUTPUT ("Output price (including thinking tokens)").
+      output_tokens: (j?.usageMetadata?.candidatesTokenCount || 0) + (j?.usageMetadata?.thoughtsTokenCount || 0),
       cache_creation_input_tokens: 0,
       cache_read_input_tokens: 0,
     },
@@ -723,7 +725,9 @@ async function geminiCallTools(
     stop_reason: hasTool ? 'tool_use' : 'end_turn',
     usage: {
       input_tokens: j?.usageMetadata?.promptTokenCount || 0,
-      output_tokens: j?.usageMetadata?.candidatesTokenCount || 0,
+      // + token NGHĨ: Gemini 3.x vẫn nghĩ dù `thinkingBudget:0`, và Google tính tiền
+      // chúng theo giá OUTPUT ("Output price (including thinking tokens)").
+      output_tokens: (j?.usageMetadata?.candidatesTokenCount || 0) + (j?.usageMetadata?.thoughtsTokenCount || 0),
     },
   };
 }

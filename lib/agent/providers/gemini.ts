@@ -132,7 +132,9 @@ function readUsage(evt: any): GeminiUsage | null {
     input_tokens: Math.max(0, prompt - cached),
     cache_creation_input_tokens: 0,
     cache_read_input_tokens: cached,
-    output_tokens: Number(u.candidatesTokenCount) || 0,
+    // + token NGHĨ — xem chú thích ở `lib/llm/complete.ts` (geminiText). Thiếu nó là
+    // `cost_vnd` ghi hụt ~30% trên gemini-3.8-flash (đo 2026-09-27).
+    output_tokens: (Number(u.candidatesTokenCount) || 0) + (Number(u.thoughtsTokenCount) || 0),
   };
 }
 
