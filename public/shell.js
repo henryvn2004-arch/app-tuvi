@@ -842,6 +842,45 @@
     chat.appendChild(d);
     chat.scrollTop = chat.scrollHeight;
     try { track('cta_click', { tool_id: ACTIVE, slug: 'tien_tri_ghi' }); } catch (e) { /* ignore */ }
+    askKenhNhac(t.ngay);
+  }
+  // "Thầy tự nhắn": hỏi ĐÚNG MỘT lần, ngay sau lần ghi sổ đầu tiên — lúc lý do
+  // đã nằm sẵn trước mắt khách (ngày hỏi lại), không cần thuyết phục gì thêm.
+  // Telegram → mở link nối bot (/api/channels/telegram/link); đã nối rồi thì
+  // không hỏi. Web push theo người chưa có đường gửi nên chưa đưa ra lựa chọn.
+  function askKenhNhac(ngay) {
+    var tk = getToken(), chat = document.getElementById('chat');
+    if (!tk || !chat) return;
+    try { if (localStorage.getItem('tvmb_tt_kenh')) return; } catch (e) { return; }
+    fetch('/api/channels/telegram/link', { headers: { Authorization: 'Bearer ' + tk } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (st) {
+        if (!st) return; // mạng hỏng thì để lần ghi sau hỏi lại
+        try { localStorage.setItem('tvmb_tt_kenh', '1'); } catch (e) { /* ignore */ }
+        if (st.linked) return;
+        var d = document.createElement('div');
+        d.className = 'tt-kenh';
+        d.innerHTML = '<span>Đến ngày ' + esc(ngayVN(ngay)) + ' con muốn thầy nhắn qua đâu?</span>' +
+          '<div class="tt-act"><button type="button" data-k="tg">Telegram</button><button type="button" data-k="app">Chỉ khi con mở app</button></div>';
+        chat.appendChild(d); chat.scrollTop = chat.scrollHeight;
+        d.addEventListener('click', function (e) {
+          var b = e.target.closest('button'); if (!b) return;
+          var k = b.getAttribute('data-k');
+          try { track('cta_click', { tool_id: ACTIVE, slug: 'tien_tri_kenh', meta: { kenh: k } }); } catch (e2) { /* ignore */ }
+          if (k !== 'tg') { d.remove(); return; }
+          // Mở tab TRƯỚC await — trình duyệt chặn window.open sau lời gọi mạng.
+          var w = window.open('about:blank', '_blank');
+          fetch('/api/channels/telegram/link', { method: 'POST', headers: { Authorization: 'Bearer ' + tk } })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (res) {
+              if (res && res.url) { if (w) w.location.href = res.url; else location.href = res.url; }
+              else if (w) w.close();
+              d.innerHTML = '<span>' + (res && res.url ? 'Con bấm Start trong Telegram là xong — tới ngày thầy nhắn.' : 'Chưa mở được Telegram, con thử lại ở trang Hồ sơ nhé.') + '</span>';
+            })
+            .catch(function () { if (w) w.close(); d.remove(); });
+        });
+      })
+      .catch(function () { /* ignore */ });
   }
   function askTienTri() {
     var tk = getToken();

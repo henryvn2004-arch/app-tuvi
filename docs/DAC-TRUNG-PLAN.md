@@ -72,11 +72,15 @@ Chữ hiển thị: "Mời **nhóm** hội chẩn" — KHÔNG "hội đồng" (l
      tri · hỏi lại con ngày …". Đến hạn → mở màn chat chính là thầy hỏi lại
      (Đúng rồi thầy / Chưa thấy gì / Để sau = lùi 3 ngày), `GET/PATCH /api/tien-tri`.
      Kết quả chỉ để đo nội bộ (SQL trên `loi_tien_tri.ket_qua`).
-   - **GĐ2 — Thầy tự nhắn**: cron hằng ngày quét `hoi_lai_ngay = hôm nay` còn `cho`,
-     nhắn Telegram (`chat_links` → `tgSendMessage`) + web push. ⚠️ Web push hiện CHỈ
-     có đường gửi hàng loạt (`_patches/edge-send-daily-push.deno.ts`, tag `van-ngay`)
-     ⇒ cần thêm lối gửi theo `user_id` với `tag` riêng (đừng dùng `van-ngay`, sẽ đè
-     thông báo vận ngày). Xin quyền ngay sau lần ghi sổ đầu tiên (`enablePushNow`).
+   - **GĐ2 — Thầy tự nhắn (Telegram)** ✅: cron `tien-tri-nhac` 08:10 VN — lời phán đến
+     hạn, chưa trả lời, chưa nhắn → khách đã nối bot thì nhắn Telegram (mỗi người ≤1 tin/
+     sáng; khoá `nhac_at` TRƯỚC khi gửi để không nhắn đôi). Chưa nối thì thầy vẫn hỏi lại
+     trong màn chat chính. Ngay sau lần ghi sổ đầu tiên hỏi MỘT lần "con muốn thầy nhắn
+     qua đâu? [Telegram] [Chỉ khi con mở app]" → nối bot qua `/api/channels/telegram/link`.
+   - **GĐ3 — Web push theo người** (chưa làm): push hiện CHỈ có đường gửi hàng loạt
+     (`_patches/edge-send-daily-push.deno.ts`, tag `van-ngay`). Cần sửa + deploy lại
+     edge function (thêm lọc `user_id`, `tag` riêng) — đụng thông báo vận ngày đang chạy
+     nên hỏi Henry trước.
 3. **Lịch riêng**.
 4. **Hội chẩn** — chờ 1–2 tuần số liệu `master_invite` trước.
 5. **Việc đời thật** — phải kịp trước tháng Chạp.

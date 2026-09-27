@@ -415,6 +415,8 @@ body.chat-home .rail-report,body.chat-first-live.art-closed .rail-report{margin-
 .fam-strip .fs-c{flex:0 0 auto;border:1px solid var(--line-2);background:var(--white);border-radius:999px;padding:4px 10px;font:inherit;font-size:12.5px;color:var(--heading);cursor:pointer}
 @media(hover:hover){.fam-strip .fs-c:hover{border-color:var(--gold)}}
 .tt-note{margin:2px 0 8px 42px;font-size:11.5px;color:var(--gold-soft);letter-spacing:.01em}
+.tt-kenh{margin:0 0 10px 42px;font-size:13px;color:var(--text-mid)}
+.tt-kenh .tt-act{margin-top:6px}
 .tt-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .tt-act button{border:1px solid var(--line-2);background:var(--white);color:var(--heading);border-radius:999px;padding:7px 13px;font:inherit;font-size:13px;cursor:pointer}
 .tt-act button[data-k="dung"]{border-color:var(--gold);background:var(--gold-lt)}
