@@ -65,6 +65,18 @@ Chữ hiển thị: "Mời **nhóm** hội chẩn" — KHÔNG "hội đồng" (l
      chấm tháng, tự đặt một cái là vi phạm luật cổ pháp. "Sắp tới trong nhà"
      (sinh nhật âm, Tết) để dành cho Thầy tự nhắn / Việc đời thật.
 2. **Sổ tiên tri + Thầy tự nhắn** (chung một đường nhắn).
+   - **GĐ1 — Sổ tiên tri** ✅: bảng `loi_tien_tri` (`_patches/migration-loi-tien-tri.sql`,
+     đã chạy trên prod), cửa duy nhất `lib/tien-tri/store.ts`. Tool `ghi_so_tien_tri`
+     (qua `MemoryPort` — userId bind phía server; ≤1 lời/lượt, ≤12 lời đang chờ; ngày
+     hỏi lại 7–400 ngày tới). Ghi xong `done.tienTri` → dòng nhỏ "Thầy ghi vào Sổ tiên
+     tri · hỏi lại con ngày …". Đến hạn → mở màn chat chính là thầy hỏi lại
+     (Đúng rồi thầy / Chưa thấy gì / Để sau = lùi 3 ngày), `GET/PATCH /api/tien-tri`.
+     Kết quả chỉ để đo nội bộ (SQL trên `loi_tien_tri.ket_qua`).
+   - **GĐ2 — Thầy tự nhắn**: cron hằng ngày quét `hoi_lai_ngay = hôm nay` còn `cho`,
+     nhắn Telegram (`chat_links` → `tgSendMessage`) + web push. ⚠️ Web push hiện CHỈ
+     có đường gửi hàng loạt (`_patches/edge-send-daily-push.deno.ts`, tag `van-ngay`)
+     ⇒ cần thêm lối gửi theo `user_id` với `tag` riêng (đừng dùng `van-ngay`, sẽ đè
+     thông báo vận ngày). Xin quyền ngay sau lần ghi sổ đầu tiên (`enablePushNow`).
 3. **Lịch riêng**.
 4. **Hội chẩn** — chờ 1–2 tuần số liệu `master_invite` trước.
 5. **Việc đời thật** — phải kịp trước tháng Chạp.

@@ -313,6 +313,11 @@ export interface DoneEvent {
    * Chỉ có ở lượt đã đăng nhập, luồng lá số. Kênh bot bỏ qua.
    */
   familyInvite?: { vaiTro: 'chong' | 'vo' | 'con' | 'bo' | 'me' };
+  /**
+   * Sổ tiên tri (additive) — lượt này thầy vừa ghi một lời phán có mốc thời
+   * gian; `ngay` = ngày (dương, YYYY-MM-DD) sẽ hỏi lại. Chỉ lượt đã đăng nhập.
+   */
+  tienTri?: { ngay: string };
 }
 
 /** event: error — lỗi có mã để client xử lý */
