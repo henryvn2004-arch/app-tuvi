@@ -4238,7 +4238,13 @@
     // — chỉ ấn Minh Bảo + một câu hỏi, ô nhập nằm giữa màn (kiểu ChatGPT).
     if (CHAT_HOME && o.hero) {
       chat.innerHTML = '<div class="home-hero"><img src="/seal-128.webp" alt="" width="64" height="64"><h1>' + esc(o.hero) + '</h1>' +
-        (o.heroSub ? '<p>' + esc(o.heroSub) + '</p>' : '') + '</div>';
+        (o.heroSub ? '<p>' + esc(o.heroSub) + '</p>' : '') +
+        // Chưa có lá số: mời lập ngay tại đây (thầy xin ngày sinh trong chat).
+        (!(ctx && ctx.birth) ? '<button type="button" class="home-birth">Lập lá số của bạn để thầy xem sát hơn →</button>' : '') +
+        '<p class="home-pulse"><span class="sbp-dot"></span><b id="hpOnline">…</b> người đang xem<span aria-hidden="true">·</span><b id="hpPrompts">…</b> lượt hỏi hôm nay</p></div>';
+      var hb = chat.querySelector('.home-birth');
+      if (hb) hb.addEventListener('click', function () { askBirthHome(null); });
+      startPulse();
       document.body.classList.add('chat-empty');
       if (o.chips !== undefined) { ctxChipsOrig = (o.chips || []).slice(); ctxChips = ctxChipsOrig.slice(); ctxChipsSrc = 'static'; }
       renderSuggs();
@@ -4437,14 +4443,14 @@
     updateScenarioData: function (d) { if (ctx && ctx.scenario) ctx.scenario.data = d; },
     // Trang chủ nhận `?q=&thay=` (đã chọn thầy ở trang chủ tĩnh `/`): vào
     // thẳng thầy đó, bỏ bước dẫn đường.
-    joinThay: function (id, q) {
+    joinThay: function (id, q, needBirth) {
       if (q) {
         var chat = document.getElementById('chat');
         var hero = chat && chat.querySelector('.home-hero'); if (hero) hero.remove();
         document.body.classList.remove('chat-empty');
         if (chat) { var u = document.createElement('div'); u.className = 'msg u'; u.textContent = q; chat.appendChild(u); }
       }
-      _navQ = q || ''; joinThay(id);
+      _navQ = q || ''; _navNeedBirth = !!needBirth; joinThay(id);
     },
     openCmd: openCmd,
     toggleTheme: toggleTheme,
@@ -4733,6 +4739,105 @@
     return row;
   }
   function authorById(id) { return AUTHOR_ROSTER.filter(function (a) { return a.id === id; })[0] || null; }
+
+  // ── Bộ đếm "đang xem / lượt hỏi hôm nay" dưới lời chào màn chat trang chủ ──
+  // ⚠️ SỐ MÔ PHỎNG THEO YÊU CẦU HENRY (chốt 2026-08-26, nới biên 2026-09-20:
+  // "cho số nó to lên, chục trăm ngàn"; gắn lại 2026-09-27 sau khi gỡ khỏi
+  // sidebar). Số THẬT vẫn ở `/api/pulse` + RPC `pulse_stats()` — khi traffic
+  // thật đủ lớn, thay `simulatePulse()` bằng một lượt fetch `/api/pulse`.
+  // Chỉ chạy khi lời chào còn trên màn (tick tự dừng khi `#hpOnline` biến
+  // mất) và bỏ qua lúc tab bị ẩn — không còn timer chạy nền trên mọi trang.
+  var _pulseData = null, _pulseDayKey = null, _pulseTimer = null;
+  var PULSE_HOUR_CURVE = [
+    0.22, 0.18, 0.15, 0.14, 0.16, 0.22, 0.35, 0.5, 0.62, 0.7, 0.75, 0.72,
+    0.68, 0.72, 0.8, 0.88, 0.9, 0.86, 0.92, 0.88, 0.8, 0.65, 0.5, 0.34,
+  ];
+  // `online` nhảy cả hai chiều quanh đường cong giờ VN; `promptsToday` CHỈ
+  // cộng dồn và tự về đầu khi qua ngày mới giờ VN.
+  function simulatePulse() {
+    var d = new Date(); var now = new Date(d.getTime() + (7 * 60 + d.getTimezoneOffset()) * 60000);
+    var dayKey = now.getFullYear() + '-' + now.getMonth() + '-' + now.getDate();
+    var factor = PULSE_HOUR_CURVE[now.getHours()];
+    if (!_pulseData || _pulseDayKey !== dayKey) {
+      _pulseDayKey = dayKey;
+      _pulseData = {
+        online: Math.round(5000 + factor * 25000 + Math.random() * 1500),
+        promptsToday: Math.round(40000 + factor * 130000 + Math.random() * 2000),
+      };
+    } else {
+      var target = Math.round(5000 + factor * 25000);
+      _pulseData.online = Math.max(3000, Math.min(35000, Math.round(_pulseData.online * 0.9 + target * 0.1 + (Math.random() - 0.42) * 400)));
+      if (Math.random() < 0.55) _pulseData.promptsToday += Math.round(Math.random() * 150) + (Math.random() < 0.12 ? 400 : 0);
+    }
+    return _pulseData;
+  }
+  function paintPulse() {
+    var o = document.getElementById('hpOnline'), p = document.getElementById('hpPrompts');
+    if (!o || !p) return false;
+    var d = simulatePulse();
+    o.textContent = d.online.toLocaleString('vi-VN');
+    p.textContent = d.promptsToday.toLocaleString('vi-VN');
+    return true;
+  }
+  function startPulse() {
+    if (_pulseTimer) clearTimeout(_pulseTimer);
+    if (!paintPulse()) return;
+    (function tick() {
+      _pulseTimer = setTimeout(function () {
+        if (document.hidden) { tick(); return; }
+        if (paintPulse()) tick(); else _pulseTimer = null;
+      }, 5000 + Math.random() * 5000); // 5-10s, nhịp ngẫu nhiên cho tự nhiên
+    })();
+  }
+
+  // ── Xin ngày sinh NGAY TRONG màn chat trang chủ ──
+  // Hai cửa: nút "Lập lá số" dưới lời chào, và khi câu hỏi đầu thuộc một chủ
+  // đề cung (`/api/thay-hoi` trả `chuDe`) mà chưa có lá số — thầy vừa vào sẽ
+  // xin ngày sinh trước rồi mới luận. Form là `TuviForm.renderChat` (một
+  // nguồn với mọi tool chat-first), nạp lười: `tuvi-form.js` ném lỗi nếu
+  // `vn-timezone.js` chưa có, nên nạp TUẦN TỰ. Có lá số thì rail gửi `birth`,
+  // server tự lập lá số — y như lúc trang mở với lá số đã nhớ.
+  function askBirthHome(cb) {
+    var chat = document.getElementById('chat');
+    if (!chat || !ctx) return;
+    var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
+    document.body.classList.remove('chat-empty');
+    var input = document.getElementById('railInput');
+    var ph = input ? input.placeholder : '';
+    if (input) { input.disabled = true; input.placeholder = 'Trả lời câu hỏi ở trên…'; }
+    setSend(false); streaming = true; renderSuggs();
+    var release = function () {
+      streaming = false;
+      if (input) { input.disabled = false; input.placeholder = ph; }
+      setSend(true); renderSuggs();
+    };
+    ensureScripts(['/tools-shared/vn-timezone.js?v=1'], function (e1) {
+      ensureScripts(['/tuvi-form.js?v=13'], function (e2) {
+        if (e1 || e2 || typeof TuviForm === 'undefined') {
+          release();
+          inlineErrorBubble(chat, 'chưa mở được form ngày sinh.', '/app/la-so');
+          return;
+        }
+        TuviForm.renderChat({
+          prefix: 'home',
+          q1: cb ? 'Chuyện này thầy phải xem lá số của con mới nói cho sát. Cho thầy xin họ tên và giới tính nhé.'
+                 : 'Cho mình xin họ tên và giới tính của bạn nhé.',
+          onDone: function (d) {
+            try { Shell.rememberBirth(d); } catch (e) { /* ignore */ }
+            var b = inlineBirth(d);
+            ctx.birth = b; ctx.scenario = null;
+            if (_ctxOpts) { _ctxOpts.birth = b; delete _ctxOpts.scenario; }
+            release();
+            try { track('nav_birth', { tool_id: ACTIVE || 'home', meta: { from: cb ? 'join' : 'hero' } }); } catch (e) { /* ignore */ }
+            if (cb) { cb(); return; }
+            navBubble('<p>Đã có lá số của <b>' + esc(b.name || 'bạn') + '</b>. Giờ kể chuyện của bạn đi, mình mời đúng thầy vào xem.</p>');
+            if (input) input.focus();
+          },
+        });
+      });
+    });
+  }
+  var _navNeedBirth = false;
   var _navQ = '';
   function navigate(text) {
     var input = document.getElementById('railInput');
@@ -4753,6 +4858,7 @@
       var a = authorById(r && r.thay) || authorById('thai-hu') || AUTHOR_ROSTER[0];
       var nghia = r && r.nghia;
       var mon = r && r.mon;
+      _navNeedBirth = !!(r && r.chuDe); // chủ đề cung (tình duyên, công việc…) cần lá số
       var row = navBubble('<p>' + (nghia ? 'Chuyện ' + esc(nghia) + ' thì' : 'Câu này thì') + ' người xem kỹ nhất là <b>Thầy ' + esc(a.name) + '</b>. Mình mời thầy vào nhé?</p>' +
         '<div class="nav-card"><img src="/authors/' + a.id + '.jpg" alt="" width="48" height="48" loading="lazy"><div><b>Thầy ' + esc(a.name) + '</b>' + (mon ? '<span>' + esc(mon) + '</span>' : '') + '</div></div>' +
         '<div class="nav-acts"><button type="button" class="nav-ok">Mời thầy vào</button><button type="button" class="nav-other">Chọn thầy khác</button></div>');
@@ -4781,10 +4887,14 @@
     chat.appendChild(sys);
     try { track('nav_join', { tool_id: ACTIVE || 'home', meta: { thay: id } }); } catch (e) { /* ignore */ }
     if (!_navQ || !ctx) return;
-    var input = document.getElementById('railInput');
-    input.value = _navQ; _navQ = '';
-    _skipEcho = true;
-    sendMsg();
+    var send = function () {
+      var input = document.getElementById('railInput');
+      input.value = _navQ; _navQ = '';
+      _skipEcho = true;
+      sendMsg();
+    };
+    if (_navNeedBirth && !ctx.birth) { _navNeedBirth = false; askBirthHome(send); return; }
+    send();
   }
 
   async function sendMsg() {
