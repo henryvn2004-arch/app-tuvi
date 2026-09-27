@@ -26,7 +26,7 @@ import { chuanHoaDauThanh } from "@/lib/vn-text";
 // PHẢI tránh, không phải mọi thứ trong `lib/tools/*`).
 import { SUGGEST_TOOL_DEF } from "@/lib/tools/suggest-tool";
 import { khoiChuDeCoDinh } from "@/lib/agent/luan-chu-de";
-import { personaVoice } from "@/lib/agent/personas";
+import { personaVoice, personaMau } from "@/lib/agent/personas";
 import { khoiChuDe as khoiChuDeKyMon } from "@/lib/qimen/chu-de";
 import { khoiChuDe as khoiChuDeLucNham } from "@/lib/liuren/chu-de";
 
@@ -134,6 +134,32 @@ export const HOI_CHAN_MAX_TOKENS = 2400;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function buildChatContext(body: any): ChatContext {
+  const c = buildChatContextTho(body);
+  return { ...c, systemForCall: apMauThay(c.systemForCall, body?.authorId) };
+}
+
+/**
+ * Ba câu mẫu trung tính (`MAU_BA_CA`) → ba câu mẫu viết bằng giọng thầy đang trả
+ * lời (`PERSONAS[id].mau`). THAY, không cộng: đo trên prompt thật (2026-09-27) ba
+ * mẫu trung tính kéo cả 15 thầy về cùng một câu mở, giọng thầy chỉ còn là chữ
+ * trang trí. Không có thầy / id lạ ⇒ trả nguyên, prompt không đổi byte nào.
+ * Nhận cả system dạng mảng block (nhánh `CHAT_RICH_RULES`).
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function apMauThay<T = any>(system: T, authorId?: string | null): T {
+  const mau = personaMau(authorId);
+  if (!mau) return system;
+  const thay = (t: string) => (t.includes(MAU_BA_CA) ? t.split(MAU_BA_CA).join(mau) : t);
+  if (typeof system === 'string') return thay(system) as T;
+  if (Array.isArray(system)) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return system.map((b: any) => (b && typeof b.text === 'string' ? { ...b, text: thay(b.text) } : b)) as T;
+  }
+  return system;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildChatContextTho(body: any): ChatContext {
   const toolType    = body.toolType || 'laso';
   const docs        = body.docs as string | undefined;
   // 2026-09-24 (hellobot-ui-redesign Đợt 4): MỞ LẠI persona — ĐẢO quyết định
@@ -535,10 +561,15 @@ export const LUAN_ARC_CHUNG = arcCore({
  * (cặp ✅/❌ lấy từ chính bộ môn đó — đây mới là thứ dạy được PHÉP BIẾN ĐỔI từ
  * dữ kiện sang câu, và là thứ đã vá được lỗi "mở câu bằng tên sao" ở đợt trước).
  */
-const mauArc = (nguon: string, tenGoi: string, phepDich: string) => `── MẪU (học NHỊP + GIỌNG; TUYỆT ĐỐI không bê nguyên chữ — phải thay bằng dữ kiện CÓ THẬT của ${nguon}) ──
-· "Tiền bạc em thế nào": **Kiếm tiền với anh không khó — giữ mới khó.** Tiền vào tay là có chỗ gọi tên ngay: bạn hỏi vay thì gật, thấy món hời là xuống tiền trước khi kịp tính. Mà cái tưởng là hoang ấy lại đúng là chỗ anh mạnh — người dám chi mới dám làm lớn, chỉ là chưa có hàng rào thôi. Tuần này mở riêng một tài khoản, lương về là chuyển sang 20% rồi quên nó đi.
+// Ba câu trả lời mẫu TRUNG TÍNH — tách thành hằng riêng để `apMauThay` (dưới)
+// THAY đúng khối này bằng ba mẫu viết theo giọng thầy đang trả lời (lib/agent/personas.ts
+// `mau`). Không có thầy thì prompt giữ nguyên từng byte như trước.
+export const MAU_BA_CA = `· "Tiền bạc em thế nào": **Kiếm tiền với anh không khó — giữ mới khó.** Tiền vào tay là có chỗ gọi tên ngay: bạn hỏi vay thì gật, thấy món hời là xuống tiền trước khi kịp tính. Mà cái tưởng là hoang ấy lại đúng là chỗ anh mạnh — người dám chi mới dám làm lớn, chỉ là chưa có hàng rào thôi. Tuần này mở riêng một tài khoản, lương về là chuyển sang 20% rồi quên nó đi.
 · Hỏi vặt "năm nay có nên đổi việc không": **Nên, nhưng đợi qua giữa năm.** Đầu năm anh dễ quyết vội rồi tiếc. Cứ soạn sẵn hồ sơ, tới tháng 7 rải là vừa nhịp.
-· "Em là người thế nào": **Nhìn thì mềm, mà việc đã định rồi thì không ai lay được.** Ai nhờ gì chị cũng ừ, nhưng cái mình muốn thì âm thầm làm tới cùng; giận ai cũng chẳng nói, chỉ xa dần ra. Chỗ người ta hay chê là khó gần lại chính là cái giữ chị đứng vững. Tuần này thử nói thẳng một lần với người hay nhờ vả nhất.
+· "Em là người thế nào": **Nhìn thì mềm, mà việc đã định rồi thì không ai lay được.** Ai nhờ gì chị cũng ừ, nhưng cái mình muốn thì âm thầm làm tới cùng; giận ai cũng chẳng nói, chỉ xa dần ra. Chỗ người ta hay chê là khó gần lại chính là cái giữ chị đứng vững. Tuần này thử nói thẳng một lần với người hay nhờ vả nhất.`;
+
+const mauArc = (nguon: string, tenGoi: string, phepDich: string) => `── MẪU (học NHỊP + GIỌNG; TUYỆT ĐỐI không bê nguyên chữ — phải thay bằng dữ kiện CÓ THẬT của ${nguon}) ──
+${MAU_BA_CA}
 Điểm chung: mở chắc, hành vi cụ thể tới mức soi được mình, một câu lật, ${tenGoi} chỉ ra khi được hỏi, chốt bằng việc làm được.
 ── PHÉP DỊCH (dữ kiện → câu). Học đúng phép biến đổi này, đừng chép chữ ──
 ${phepDich}`;
