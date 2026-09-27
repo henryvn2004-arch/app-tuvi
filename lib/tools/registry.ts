@@ -24,7 +24,7 @@ import { computeThanSoHoc } from '@/lib/engine/than-so-hoc';
 // CẢ HAI.
 import { extractTuBinhContext, extractGenericContext, extractKyMonContext, extractLasoContext } from '@/lib/agent/prompts';
 import { lanKinhNam, lanKinhThang, lanKinhNgay } from '@/lib/agent/luan-chu-de';
-import { personaVoice } from '@/lib/agent/personas';
+import { personaKhach } from '@/lib/agent/personas';
 import { lapKhoa, railData as railDataLucNham } from '@/lib/liuren/ke';
 import { dungBan, railData as railDataKyMon } from '@/lib/qimen/board';
 import type { BirthParams } from '@/lib/contract/v1';
@@ -716,10 +716,10 @@ async function execMoiThayBatTu(input: Rec, ctx: ToolContext): Promise<ToolRunRe
     content:
       `— THẦY TÂM KÍNH (Bát Tự) VỪA VÀO PHÒNG, ĐÃ XEM XONG NĂM ${nam} —\n` +
       'Viết tiếp phần này bằng giọng THẬT của Tâm Kính (không phải giọng của bạn), mở một dòng riêng bằng "**Tâm Kính:**", CHỈ luận từ đúng dữ liệu Bát Tự dưới đây — không tự thêm số liệu ngoài đây:\n' +
-      (personaVoice('tam-kinh') || '') +
+      (personaKhach('tam-kinh') || '') +
       '\n\n' +
       extractTuBinhContext(res.data) +
-      '\n\nLuận xong phần Tâm Kính thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn để khép lại — không lặp lại số liệu Tâm Kính vừa nêu.',
+      '\n\nLuận xong phần Tâm Kính thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn — được đáp lại thầy khách đúng tính cách của bạn (đồng ý, vặn lại hay bổ sung) — không lặp lại số liệu Tâm Kính vừa nêu.',
     label: `Đang mời thầy Tâm Kính xem Bát Tự năm ${nam}...`,
   };
 }
@@ -745,10 +745,10 @@ async function execMoiThayLucNham(input: Rec, ctx: ToolContext): Promise<ToolRun
     content:
       `— THẦY LINH CƠ (Đại Lục Nhâm) VỪA VÀO PHÒNG, ĐÃ LẬP KHÓA NGAY LÚC NÀY —\n` +
       'Viết tiếp phần này bằng giọng THẬT của Linh Cơ (không phải giọng của bạn), mở một dòng riêng bằng "**Linh Cơ:**", luận theo đúng trình tự tam truyền → tứ khóa → thiên tướng, CHỈ dựa vào khóa dưới đây — không tự lập lại hay đổi một chi nào:\n' +
-      (personaVoice('linh-co') || '') +
+      (personaKhach('linh-co') || '') +
       '\n\n' +
       extractGenericContext(railDataLucNham(khoa)) +
-      '\n\nLuận xong phần Linh Cơ thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn để khép lại — không lặp lại số liệu Linh Cơ vừa nêu.',
+      '\n\nLuận xong phần Linh Cơ thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn — được đáp lại thầy khách đúng tính cách của bạn (đồng ý, vặn lại hay bổ sung) — không lặp lại số liệu Linh Cơ vừa nêu.',
     label: 'Đang mời thầy Linh Cơ lập khóa Lục Nhâm...',
   };
 }
@@ -783,7 +783,7 @@ async function execHoiChan(input: Rec, ctx: ToolContext): Promise<ToolRunResult>
   if (coBatTu) {
     phan.push(
       `━━ PHẦN TÂM KÍNH (Bát Tự, vận năm ${nam}) ━━\n` +
-        (personaVoice('tam-kinh') || '') +
+        (personaKhach('tam-kinh') || '') +
         '\n\n' +
         extractTuBinhContext(bt!.data!),
     );
@@ -791,7 +791,7 @@ async function execHoiChan(input: Rec, ctx: ToolContext): Promise<ToolRunResult>
   if (khoa) {
     phan.push(
       '━━ PHẦN LINH CƠ (Đại Lục Nhâm, khóa lập ngay lúc hỏi) ━━\n' +
-        (personaVoice('linh-co') || '') +
+        (personaKhach('linh-co') || '') +
         '\n\n' +
         extractGenericContext(railDataLucNham(khoa)),
     );
@@ -831,10 +831,10 @@ async function execMoiThayKyMon(input: Rec, ctx: ToolContext): Promise<ToolRunRe
     content:
       `— THẦY TÂM KÍNH (Kỳ Môn Độn Giáp) VỪA VÀO PHÒNG, ĐÃ DỰNG BÀN NGAY LÚC NÀY —\n` +
       'Viết tiếp phần này bằng giọng THẬT của Tâm Kính (không phải giọng của bạn), mở một dòng riêng bằng "**Tâm Kính:**", đọc theo đúng thứ tự cửa (bát môn) → Tam Kỳ → sao/thần → cách cục, CHỈ dựa vào bàn dưới đây — không tự an lại hay đổi một cung nào:\n' +
-      (personaVoice('tam-kinh') || '') +
+      (personaKhach('tam-kinh') || '') +
       '\n\n' +
       extractKyMonContext(railDataKyMon(ban)) +
-      '\n\nLuận xong phần Tâm Kính thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn để khép lại — không lặp lại số liệu Tâm Kính vừa nêu.',
+      '\n\nLuận xong phần Tâm Kính thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn — được đáp lại thầy khách đúng tính cách của bạn (đồng ý, vặn lại hay bổ sung) — không lặp lại số liệu Tâm Kính vừa nêu.',
     label: 'Đang mời thầy Tâm Kính dựng bàn Kỳ Môn...',
   };
 }
