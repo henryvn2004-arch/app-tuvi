@@ -103,8 +103,12 @@ export interface IncomingTurn {
   authorId?: string;
   /** Tên hiển thị của thầy đó, chỉ để ghi lên tin "đang xem…". */
   authorName?: string;
-  /** URL công khai chân dung thầy — có thì tin "đang xem…" là ảnh thầy. */
+  /** URL công khai chân dung NHỎ của thầy — gửi kèm lời giới thiệu (`intro`). */
   authorAvatarUrl?: string;
+  /** Mời thầy khách xem cùng câu hỏi (engine `addressMaster` của web). */
+  addressMaster?: ChatRequestV1['addressMaster'];
+  /** Mời nhóm hội chẩn — 3 thầy cùng xem một quyết định lớn (`hoiChan`). */
+  hoiChan?: boolean;
   /** Lời thầy tự giới thiệu — chỉ có ở lượt ĐẦU cuộc trò chuyện; ghép lên
    *  trước chữ "đang xem…" trong cùng tin chờ (không thêm tin riêng). */
   intro?: string;
@@ -113,8 +117,8 @@ export interface IncomingTurn {
   userId?: string | null;
 }
 
-const WAIT_LASO = '🔮 Đang xem lá số của bạn, chờ một chút…';
-const WAIT_IMAGE = '🔮 Đang xem ảnh của bạn, chờ một chút…';
+const WAIT_LASO = 'Đang xem lá số của bạn, chờ một chút…';
+const WAIT_IMAGE = 'Đang xem ảnh của bạn, chờ một chút…';
 const DEFAULT_IMG_Q = 'Nhờ thầy xem giúp ảnh này.';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -166,16 +170,17 @@ export async function runConversation(
   await io.typing(chatId);
   const waitMsg = hasImage ? WAIT_IMAGE : WAIT_LASO;
   const waitText = incoming.authorName ? waitMsg.replace('Đang xem', `Thầy ${incoming.authorName} đang xem`) : waitMsg;
-  // Có chân dung thầy + kênh gửi được ảnh → tin chờ là ẢNH thầy kèm chữ (thay
-  // quả cầu 🔮): người dùng thấy đang nói chuyện với ai. Avatar người gửi của OA/
-  // Page thì nền tảng cố định, không đổi theo từng tin được. Tin ảnh không sửa
-  // được thành câu trả lời ⇒ progressId=null, câu trả lời đi thành tin mới.
+  // Lượt ĐẦU (có lời giới thiệu) + kênh gửi được ảnh → tin chờ là ảnh chân dung
+  // NHỎ của thầy kèm lời giới thiệu. Các lượt sau chỉ là chữ: app chat không
+  // cho chèn ảnh vào giữa dòng chữ như emoji, ảnh luôn thành một tin riêng —
+  // gửi mỗi lượt thì khung chat ngập ảnh (Henry, 2026-09-28). Avatar người gửi
+  // của OA/Page do nền tảng cố định. Tin ảnh không sửa được thành câu trả lời
+  // ⇒ progressId=null ở lượt đó, câu trả lời đi thành tin mới.
   let progressId: ProgressId = null;
-  const kem = (t: string) => (incoming.intro ? `${incoming.intro}\n\n${t}` : t);
-  if (incoming.authorAvatarUrl && io.sendImage) {
-    await io.sendImage(chatId, incoming.authorAvatarUrl, kem(waitText.replace(/^🔮\s*/u, '')));
+  if (incoming.intro && incoming.authorAvatarUrl && io.sendImage) {
+    await io.sendImage(chatId, incoming.authorAvatarUrl, `${incoming.intro}\n\n${waitText}`);
   } else {
-    progressId = await io.sendProgress(chatId, kem(waitText));
+    progressId = await io.sendProgress(chatId, incoming.intro ? `${incoming.intro}\n\n${waitText}` : waitText);
   }
 
   // Tải ảnh (nếu có) → base64. Lỗi tải thì bỏ qua, vẫn luận theo chữ.
@@ -216,7 +221,7 @@ export async function runConversation(
     const now = Date.now();
     if (progressId != null && now - lastEdit > 2500) {
       lastEdit = now;
-      io.editText(chatId, progressId, '🔮 ' + status).catch(() => {}); // tiến trình: hỏng thì thôi
+      io.editText(chatId, progressId, status).catch(() => {}); // tiến trình: hỏng thì thôi
     }
   };
 
@@ -229,6 +234,8 @@ export async function runConversation(
       // thẳng, không hỏi lại ngày sinh. Tin có ngày sinh mới → carryBirth=null.
       ...(carryBirth ? { birth: carryBirth } : {}),
       ...(incoming.authorId ? { authorId: incoming.authorId } : {}),
+      ...(incoming.addressMaster ? { addressMaster: incoming.addressMaster } : {}),
+      ...(incoming.hoiChan ? { hoiChan: true } : {}),
       client: { platform: io.platform, version: '1.0.0' },
     };
     const collector = createSSECollector(onStatus);
