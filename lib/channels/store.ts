@@ -248,17 +248,7 @@ export async function chatConsumeLinkToken(
     if (!row?.user_id || row.used_at) return null;
     if (row.expires_at && new Date(row.expires_at).getTime() < Date.now()) return null;
 
-    // Tài khoản đang trỏ trước đó (thường là tài khoản BÓNG tạo lúc nhắn tin
-    // đầu tiên — lib/channels/account.ts) → gộp vào tài khoản web sau khi đè map.
-    const prior = await chatResolveLinkedUser(platform, externalId);
-
-    // Ghi map (upsert: 1 external_id chỉ trỏ 1 tài khoản, link lại thì đè).
-    const up = await fetch(`${SUPABASE_URL}/rest/v1/chat_links`, {
-      method: 'POST',
-      headers: { ...SB_HEADERS, Prefer: 'resolution=merge-duplicates' },
-      body: JSON.stringify({ platform, external_id: externalId, user_id: row.user_id, linked_at: nowIso }),
-    });
-    if (!up.ok) return null;
+    if (!(await chatLinkAndMerge(platform, externalId, row.user_id))) return null;
 
     // Đánh dấu token đã dùng (best-effort).
     await fetch(`${SUPABASE_URL}/rest/v1/chat_link_tokens?token=eq.${encodeURIComponent(token)}`, {
@@ -267,26 +257,50 @@ export async function chatConsumeLinkToken(
       body: JSON.stringify({ used_at: nowIso }),
     }).catch(() => {});
 
-    // Gộp ví + sổ lá số của tài khoản bóng (RPC tự từ chối nếu `prior` không
-    // phải tài khoản bóng, và chỉ chạy MỘT lần — xem migration-chat-accounts).
-    if (prior && prior !== row.user_id) {
-      const mg = await fetch(`${SUPABASE_URL}/rest/v1/rpc/chat_merge_shadow`, {
-        method: 'POST',
-        headers: SB_HEADERS,
-        body: JSON.stringify({ p_shadow: prior, p_real: row.user_id }),
-      }).catch((e) => {
-        console.error('[chatConsumeLinkToken] gộp tài khoản bóng lỗi mạng', e);
-        return null;
-      });
-      if (mg && !mg.ok) {
-        console.error('[chatConsumeLinkToken] gộp tài khoản bóng lỗi', mg.status, await mg.text().catch(() => ''));
-      }
-    }
-
     return row.user_id;
   } catch {
     return null;
   }
+}
+
+/** Trỏ (kênh, external_id) về tài khoản `userId` rồi gộp tài khoản đang trỏ
+ *  trước đó (thường là tài khoản BÓNG tạo lúc nhắn tin đầu tiên — lib/channels/
+ *  account.ts) vào đó. Dùng chung cho "/link <mã>" (mã từ web) và gộp bằng
+ *  email ngay trong chat (lib/channels/email-link.ts). False nếu không ghi được map. */
+export async function chatLinkAndMerge(platform: string, externalId: string, userId: string): Promise<boolean> {
+  if (!ready() || !externalId || !userId) return false;
+  const prior = await chatResolveLinkedUser(platform, externalId);
+
+  // Ghi map (upsert: 1 external_id chỉ trỏ 1 tài khoản, link lại thì đè).
+  const up = await fetch(`${SUPABASE_URL}/rest/v1/chat_links`, {
+    method: 'POST',
+    headers: { ...SB_HEADERS, Prefer: 'resolution=merge-duplicates' },
+    body: JSON.stringify({ platform, external_id: externalId, user_id: userId, linked_at: new Date().toISOString() }),
+  }).catch((e) => {
+    console.error('[chatLinkAndMerge] ghi chat_links lỗi mạng', e);
+    return null;
+  });
+  if (!up?.ok) {
+    if (up) console.error('[chatLinkAndMerge] ghi chat_links lỗi', up.status, await up.text().catch(() => ''));
+    return false;
+  }
+
+  // Gộp ví + sổ lá số của tài khoản bóng (RPC tự từ chối nếu `prior` không
+  // phải tài khoản bóng, và chỉ chạy MỘT lần — xem migration-chat-accounts).
+  if (prior && prior !== userId) {
+    const mg = await fetch(`${SUPABASE_URL}/rest/v1/rpc/chat_merge_shadow`, {
+      method: 'POST',
+      headers: SB_HEADERS,
+      body: JSON.stringify({ p_shadow: prior, p_real: userId }),
+    }).catch((e) => {
+      console.error('[chatLinkAndMerge] gộp tài khoản bóng lỗi mạng', e);
+      return null;
+    });
+    if (mg && !mg.ok) {
+      console.error('[chatLinkAndMerge] gộp tài khoản bóng lỗi', mg.status, await mg.text().catch(() => ''));
+    }
+  }
+  return true;
 }
 
 /** Tra ngược external_id → user_id đã link (null nếu chưa). */

@@ -27,6 +27,7 @@ import { ensureChatUser } from './account';
 import { accountProfiles, saveChart } from './charts';
 import { createHandoffUrl, lasoPath } from './handoff';
 import { claimLoginCode, parseLoginCode } from './login';
+import { GOP_CMD, isShadowUser, maskEmail, parseEmail, startEmailLink, verifyEmailLink, hasPendingEmailLink } from './email-link';
 import { TOPUP_CMD, createChatTopup, parseTopup, topupCaption, topupChoices, vietQrImageUrl } from './topup';
 import { GUESTS, detectMention, guestById, guestFromMoi, hoiChanDuoc, moiCau, pickGuests, type GuestId } from './guests';
 import { toolCatalog } from './catalog';
@@ -105,14 +106,7 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   // ── Liên kết tài khoản web có sẵn (/link <mã> — mã tạo ở web) ─────────
   if (t === CMD.link || t.startsWith(`${CMD.link} `)) {
     const token = text.slice(CMD.link.length).trim();
-    if (!token) {
-      await io.sendText(
-        ev.chatId,
-        'Bạn đã có tài khoản ngay khi nhắn tin cho thầy — không cần liên kết gì thêm.\n\n' +
-          `Nếu bạn CÓ SẴN tài khoản trên web và muốn gộp về một ví: đăng nhập ${SITE}, vào Tài khoản → Kết nối, lấy mã rồi nhắn "/link <mã>" ở đây.`,
-      );
-      return;
-    }
+    if (!token) return handleGop(kit, ev, await ensureChatUser(kit.platform, ev.externalId));
     const uid = await chatConsumeLinkToken(kit.platform, token, ev.externalId);
     await io.sendText(
       ev.chatId,
@@ -126,6 +120,14 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   // Mọi đường còn lại cần tài khoản. null = thiếu cấu hình/lỗi → đường lùi
   // lượt free/ngày như trước (kênh không sập).
   const userId = await ensureChatUser(kit.platform, ev.externalId);
+
+  // ── Gộp tài khoản web ngay trong chat (email → mã 6 số) ──────────────
+  if (GOP_CMD.includes(t)) return handleGop(kit, ev, userId);
+  const email = parseEmail(text);
+  if (email) return handleGopEmail(kit, ev, userId, email);
+  if (userId && /^\d{6}$/.test(text) && (await hasPendingEmailLink(kit.platform, ev.externalId))) {
+    return handleGopMa(kit, ev, text, await getRailPrice(cfg.cost));
+  }
 
   // ── Mã đăng nhập web (trang /dang-nhap-chat) ──────────────────────────
   const loginCode = parseLoginCode(text);
@@ -286,14 +288,16 @@ async function accountGate(
   if (paywallDisabled() || cost <= 0) return { allowed: true };
   const [freeLeft, balance] = await Promise.all([railFreeRemaining(userId), getBalance(userId)]);
   if (freeLeft <= 0 && balance < cost) {
-    const rate = await vndPerCredit();
-    const choices = await topupChoices();
+    const [rate, choices, bong] = await Promise.all([vndPerCredit(), topupChoices(), isShadowUser(userId)]);
+    // Tài khoản bóng hết Lượng: rất có thể người này ĐÃ có ví trên web ⇒ mời gộp.
+    const gop: ChatButton[] = bong ? [{ title: 'Gộp tài khoản web', reply: 'Gộp tài khoản web' }] : [];
     await sendMenu(
       kit.io,
       ev.chatId,
       `Mỗi câu hỏi ${vnd(cost * rate)} (${cost} Lượng) — ví của bạn còn ${balance} Lượng.\n\n` +
-        'Nạp ngay tại đây: chọn mức, thầy gửi mã QR, quét bằng app ngân hàng là xong — không phải rời cuộc trò chuyện.',
-      choices.slice(0, kit.maxReplyButtons),
+        'Nạp ngay tại đây: chọn mức, thầy gửi mã QR, quét bằng app ngân hàng là xong — không phải rời cuộc trò chuyện.' +
+        (bong ? '\n\nĐã có tài khoản trên tuviminhbao.com? Bấm "Gộp tài khoản web" để dùng luôn ví đó ở đây.' : ''),
+      [...gop, ...choices.slice(0, Math.max(0, kit.maxReplyButtons - gop.length))],
     );
     return { allowed: false };
   }
@@ -316,7 +320,10 @@ async function accountGate(
 async function sendWelcome(kit: ChannelKit, ev: ChannelEvent, userId: string | null, cost: number): Promise<void> {
   const thay = await thayCuaChat(kit.platform, String(ev.chatId));
   const con = userId ? await conCauHoi(userId, cost) : '';
-  const vi = con ? `\n\n${con}` : '';
+  const bong = userId ? await isShadowUser(userId) : false;
+  const vi =
+    (con ? `\n\n${con}` : '') +
+    (bong ? '\n\nĐã có tài khoản trên tuviminhbao.com? Nhắn "Gộp tài khoản web" để dùng chung ví và sổ lá số.' : '');
   const web = userId ? await createHandoffUrl(userId, '/app/cong-cu') : null;
   await chaoThay(kit, ev, thay);
   await chonThay(kit.platform, String(ev.chatId), thay); // đánh dấu đã chào
@@ -346,6 +353,69 @@ async function chaoThay(kit: ChannelKit, ev: ChannelEvent, t: Thay): Promise<voi
   const loi = await gioiThieuThay(t);
   if (kit.io.sendImage) await kit.io.sendImage(ev.chatId, anhThay(t), loi);
   else await kit.io.sendText(ev.chatId, loi);
+}
+
+// ── Gộp tài khoản web (lib/channels/email-link.ts) ─────────────────────
+const DA_GOP = 'Tài khoản chat này đã dùng chung với tài khoản web của bạn rồi — ví Lượng và sổ lá số là một.';
+
+async function handleGop(kit: ChannelKit, ev: ChannelEvent, userId: string | null): Promise<void> {
+  if (userId && !(await isShadowUser(userId))) {
+    await kit.io.sendText(ev.chatId, DA_GOP);
+    return;
+  }
+  await kit.io.sendText(
+    ev.chatId,
+    'Nhắn email bạn đã dùng trên tuviminhbao.com (đăng ký bằng Google thì là địa chỉ Gmail đó), vd: ten@gmail.com\n\n' +
+      'Thầy gửi mã 6 số vào email để xác nhận. Nhắn mã lại đây là xong — Lượng và lá số ở đây gộp về tài khoản web.',
+  );
+}
+
+async function handleGopEmail(kit: ChannelKit, ev: ChannelEvent, userId: string | null, email: string): Promise<void> {
+  if (!userId) {
+    await kit.io.sendText(ev.chatId, ERR_MSG);
+    return;
+  }
+  if (!(await isShadowUser(userId))) {
+    await kit.io.sendText(ev.chatId, DA_GOP);
+    return;
+  }
+  const r = await startEmailLink(kit.platform, ev.externalId, email);
+  if (r === 'limited') {
+    await kit.io.sendText(ev.chatId, 'Bạn đã xin mã nhiều lần rồi — thử lại sau khoảng một giờ nhé.');
+    return;
+  }
+  if (r === 'error') {
+    await kit.io.sendText(ev.chatId, ERR_MSG);
+    return;
+  }
+  await kit.io.sendText(
+    ev.chatId,
+    `Nếu ${email} có tài khoản trên tuviminhbao.com, thầy vừa gửi mã 6 số vào đó (xem cả mục Spam/Quảng cáo). ` +
+      'Nhắn mã vào đây trong 10 phút để gộp.\n\n' +
+      'Không thấy thư? Có thể bạn đăng ký bằng email khác — nhắn email đó thay vào.',
+  );
+}
+
+async function handleGopMa(kit: ChannelKit, ev: ChannelEvent, code: string, cost: number): Promise<void> {
+  const r = await verifyEmailLink(kit.platform, ev.externalId, code);
+  if (r.ok) {
+    const con = await conCauHoi(r.userId, cost);
+    await kit.io.sendText(
+      ev.chatId,
+      `✅ Đã gộp vào tài khoản web ${maskEmail(r.email)}. Từ giờ ở đây dùng chung ví Lượng và sổ lá số với web.` +
+        (con ? `\n\n${con}` : ''),
+    );
+    return;
+  }
+  const msg =
+    r.reason === 'wrong'
+      ? `Mã chưa đúng — còn ${r.left} lần thử.`
+      : r.reason === 'locked'
+        ? 'Nhập sai quá nhiều lần. Nhắn lại email để lấy mã mới nhé.'
+        : r.reason === 'expired'
+          ? 'Mã đã hết hạn. Nhắn lại email để lấy mã mới nhé.'
+          : ERR_MSG;
+  await kit.io.sendText(ev.chatId, msg);
 }
 
 // ── Nhóm thầy ──────────────────────────────────────────────────────────
