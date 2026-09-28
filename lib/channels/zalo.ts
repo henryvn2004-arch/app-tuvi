@@ -172,31 +172,35 @@ async function getAccessToken(): Promise<string | null> {
 // Mã lỗi Zalo cho token hết hạn/không hợp lệ → làm mới một lần rồi gửi lại.
 const TOKEN_ERRORS = new Set([-216, -124]);
 
+// Gửi hỏng thì NÉM LỖI, không nuốt: core gửi tin "đang xem…" TRƯỚC khi gọi LLM
+// và chốt tính phí SAU khi giao câu trả lời — nuốt lỗi ở đây là người dùng
+// không nhận được gì mà vẫn bị trừ lượt/Lượng (đã xảy ra với lỗi -224 gói OA).
 async function postMessage(userId: string, message: Record<string, unknown>): Promise<void> {
   let token = await getAccessToken();
   for (let attempt = 0; token && attempt < 2; attempt++) {
+    let res: Response;
+    let data: { error?: number; message?: string };
     try {
-      const res = await fetch(SEND_URL, {
+      res = await fetch(SEND_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', access_token: token },
         body: JSON.stringify({ recipient: { user_id: userId }, message }),
       });
-      const data = (await res.json().catch(() => ({}))) as { error?: number; message?: string };
-      if (data.error === 0) return;
-      if (attempt === 0 && TOKEN_ERRORS.has(Number(data.error))) {
-        token = await refreshZaloToken();
-        continue;
-      }
-      console.error('[zalo] gửi tin lỗi', res.status, data.error, data.message);
-      return;
+      data = (await res.json().catch(() => ({}))) as { error?: number; message?: string };
     } catch (e) {
-      console.error('[zalo] gửi tin lỗi mạng', e);
-      return;
+      throw new Error(`[zalo] gửi tin lỗi mạng: ${e instanceof Error ? e.message : String(e)}`);
     }
+    if (data.error === 0) return;
+    if (attempt === 0 && TOKEN_ERRORS.has(Number(data.error))) {
+      token = await refreshZaloToken();
+      continue;
+    }
+    throw new Error(`[zalo] gửi tin lỗi HTTP ${res.status} error=${data.error} ${data.message ?? ''}`);
   }
+  throw new Error('[zalo] gửi tin lỗi: không có access token hợp lệ');
 }
 
-/** Gửi 1 tin văn bản (tự cắt nếu > giới hạn). */
+/** Gửi 1 tin văn bản (tự cắt nếu > giới hạn). Ném lỗi nếu Zalo không nhận. */
 export async function zaloSendText(userId: string, text: string): Promise<void> {
   for (const chunk of splitText(text || '…', MSG_LIMIT)) {
     await postMessage(userId, { text: chunk });
