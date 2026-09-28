@@ -65,8 +65,11 @@
        // Chỉ `?thay=` (bấm vào một thầy ở `/`): thầy vào thẳng, tự giới thiệu rồi xin ngày sinh.
        else if(p.get('thay')) ask={thay:p.get('thay')}; }catch(e){}
 
+  // Ngày sinh trên URL (`?ngay=&thang=&nam=&gio=&gioitinh=` — link "Hỏi Thầy"
+  // từ trang lá số /la-so/*) ĐÈ lá số đã nhớ: người bấm muốn hỏi về lá số
+  // TRONG link. Thiếu dòng này thì link mang ngày sinh tới mà chat vẫn xin lại.
   var birth=null;
-  try{ birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi(Shell.getRememberedBirth()):null; }catch(e){}
+  try{ birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi((Shell._birthFromQuery&&Shell._birthFromQuery())||Shell.getRememberedBirth()):null; }catch(e){}
   var hasBirth=!!(birth&&birth.day&&birth.month&&birth.year);
   var nm=hasBirth?String(birth.name||'').trim():'';
   var today=vnToday();
@@ -112,7 +115,13 @@
   }
 
   if(ask){
-    try{ history.replaceState(null,'',location.pathname); }catch(e){}
+    // GIỮ lại nhãn nguồn (utm_*/gclid/fbclid): track.js do shell.js nạp BẤT ĐỒNG
+    // BỘ, thường chạy SAU dòng này — xoá sạch query là lượt đến từ quảng cáo /
+    // MCP (`utm_source=mcp`) rơi vào "(none)" tuỳ may rủi.
+    try{ var keep=new URLSearchParams();
+         new URLSearchParams(location.search).forEach(function(v,k){ if(/^(utm_|gclid$|fbclid$)/.test(k)) keep.append(k,v); });
+         var ks=keep.toString();
+         history.replaceState(null,'',location.pathname+(ks?'?'+ks:'')); }catch(e){}
     if(ask.q) Shell.joinThay(ask.thay,ask.q,ask.laSo); else Shell.meetThay(ask.thay);
   }
   }

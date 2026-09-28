@@ -22,6 +22,7 @@ import { vanHanTool } from './tools/van-han';
 import { giaiThichTool } from './tools/giai-thich';
 import { tuongHopTool } from './tools/tuong-hop';
 import { luanGiaiTool } from './tools/luan-giai';
+import { hoiThayNote, hoiThayUrl } from './hoi-thay';
 
 export const TOOLS: McpTool[] = [anSaoTool, vanHanTool, luanGiaiTool, tuongHopTool, giaiThichTool];
 
@@ -53,7 +54,12 @@ export function jsonResult(data: unknown) {
 /** Cách một cửa lấy danh tính/hạn mức. Trả `{ error }` là từ chối cả lượt gọi. */
 export type InfoResolver = () => Promise<{ info?: McpKeyInfo; error?: string }>;
 
-export function buildMcpHandler(resolveInfo: InfoResolver, usageKey: string) {
+/**
+ * `hoiThay: true` (chỉ cửa công khai `/mcp`) — mỗi kết quả kèm một khối chữ
+ * thứ hai mang link Hỏi Thầy (lib/mcp/hoi-thay.ts). Khối JSON đầu giữ NGUYÊN
+ * dạng cũ để client đang parse nó không vỡ.
+ */
+export function buildMcpHandler(resolveInfo: InfoResolver, usageKey: string, opts: { hoiThay?: boolean } = {}) {
   return createMcpHandler(
     (server) => {
       for (const t of TOOLS) {
@@ -73,7 +79,10 @@ export function buildMcpHandler(resolveInfo: InfoResolver, usageKey: string) {
             }
             await logUsage(usageKey, t.name, args);
             const data = await t.run(args, v.info);
-            return jsonResult(data);
+            const out = jsonResult(data);
+            const url = opts.hoiThay ? hoiThayUrl(t.name, args) : null;
+            if (url) out.content.push({ type: 'text' as const, text: hoiThayNote(url) });
+            return out;
           },
         );
       }
