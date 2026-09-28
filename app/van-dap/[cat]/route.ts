@@ -4,7 +4,8 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 15;
 
 import { NextRequest, NextResponse } from 'next/server';
-import { khaoLuanCategory, fetchByCategory, renderCategoryPage, BASE_URL } from '../_shared';
+import { khaoLuanCategory, fetchByCategory, renderCategoryPage, BASE_URL, THAY_THEO_DANH_MUC } from '../_shared';
+import { fetchThayCard } from '@/lib/seo/ask-box';
 import { logAiCrawlerHit } from '@/lib/seo/ai-crawler-log';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ cat: string }> }) {
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   if (!khaoLuanCategory(cat)) return NextResponse.redirect(new URL('/van-dap', BASE_URL));
 
   const rows = await fetchByCategory(cat);
-  const html = renderCategoryPage({ cat, page: 1, rows });
+  const html = renderCategoryPage({ cat, page: 1, rows, thay: await fetchThayCard(THAY_THEO_DANH_MUC[cat] || 'co-nguyet') });
   return new NextResponse(html, {
     status: 200,
     headers: {

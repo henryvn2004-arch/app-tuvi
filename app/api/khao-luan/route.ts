@@ -6,6 +6,7 @@ import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 import { ORG_ID } from '@/lib/seo/entity';
 import { khaoLuanCategory } from '@/lib/content/khao-luan-categories';
 import { logAiCrawlerHit } from '@/lib/seo/ai-crawler-log';
+import { chipsChung, fetchThayCard, seoAsk, type ThayCard } from '@/lib/seo/ask-box';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -37,7 +38,7 @@ function formatDate(iso: string) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildHTML(article: any, slug: string, related: any[], master?: any) {
+function buildHTML(article: any, slug: string, related: any[], master: any, thay: ThayCard) {
   const url   = `${BASE_URL}/khao-luan/${slug}`;
   const title = escHtml(article.title);
   const desc  = escHtml(article.excerpt || article.title);
@@ -52,6 +53,11 @@ function buildHTML(article: any, slug: string, related: any[], master?: any) {
   const catMeta = article.category ? khaoLuanCategory(article.category) : undefined;
   const backHref = catMeta ? `/van-dap/${catMeta.id}` : '/van-dap';
   const backLabel = catMeta ? catMeta.label : 'Vấn Đáp';
+
+  // Ô "Hỏi Thầy" (lib/seo/ask-box.ts) — hỏi thẳng thầy tác giả bài này. Ô trên
+  // ngay sau đoạn trả lời ngắn (excerpt), ô cuối sau thân bài.
+  const q = String(article.title || '').slice(0, 90);
+  const ask = seoAsk({ fam: `khao-luan:${article.category || ''}`, thay, title: 'Hỏi thầy về trường hợp của bạn', chips: chipsChung(q), prefix: q });
 
   // QAPage/FAQPage: bài khảo luận VỐN ĐÃ đúng hình dạng hỏi-đáp (title = câu
   // hỏi, excerpt = câu trả lời ngắn tự đứng được — theo đúng HOOK_RULES), chỉ
@@ -155,6 +161,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 .method-box a{flex-shrink:0;background:var(--gold-bright);color:var(--navy);font-weight:700;font-size:13px;padding:10px 20px;border-radius:8px;text-decoration:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:700px){.breadcrumb,.article-wrap{padding-left:16px;padding-right:16px}.article-title{font-size:26px}.author-box{flex-direction:column;gap:12px}.method-box{flex-direction:column;align-items:flex-start}}
+${ask.css}
 </style>
 <script src="/auth.js" defer></script>
 </head>
@@ -169,7 +176,9 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   </div>
   <h1 class="article-title">${title}</h1>
   ${article.excerpt?`<div class="article-excerpt">${escHtml(article.excerpt)}</div>`:''}
+  ${ask.top}
   <div class="article-body">${body}</div>
+  ${ask.end}
   ${master ? `<div class="author-box">
     <div class="author-box-avatar" data-init="${escHtml(String(master.display_name||'?')[0])}">
       <img src="/authors/${escHtml(master.id)}.jpg" alt="${escHtml(master.display_name)}"
@@ -197,6 +206,7 @@ window._articleData = { category: ${JSON.stringify(article.category||'')}, tags:
 </script>
 <script src="/related-tools.js"></script>
 <script src="/testimonials.js"></script>
+${ask.tail}
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
 </body></html>`;
 }
@@ -245,7 +255,7 @@ export async function GET(request: NextRequest) {
       ];
       if (masterId) {
         promises.push(
-          fetch(`${SUPABASE_URL}/rest/v1/master_profiles?id=eq.${encodeURIComponent(masterId)}&select=id,display_name,bio&limit=1`, { headers: sbHeaders })
+          fetch(`${SUPABASE_URL}/rest/v1/master_profiles?id=eq.${encodeURIComponent(masterId)}&select=id,display_name,bio,discipline,greeting&limit=1`, { headers: sbHeaders })
             .then(r => r.ok ? r.json() : [])
         );
       }
@@ -265,7 +275,10 @@ export async function GET(request: NextRequest) {
       if (results[1]?.length) master = results[1][0];
     } catch { /* ignore */ }
 
-    const html = buildHTML(article, slug, related, master);
+    const thay: ThayCard = master
+      ? { id: master.id, name: master.display_name || null, mon: master.discipline || null, greeting: master.greeting || null }
+      : await fetchThayCard('co-nguyet');
+    const html = buildHTML(article, slug, related, master, thay);
     return new NextResponse(html, {
       status: 200,
       headers: {

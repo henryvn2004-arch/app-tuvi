@@ -18,6 +18,7 @@ export const revalidate = 604800; // dữ liệu celeb_births gần như tĩnh �
 
 import { NextRequest, NextResponse } from 'next/server';
 import { ORG_ID } from '@/lib/seo/entity';
+import { fetchThayCard, seoAsk } from '@/lib/seo/ask-box';
 import { celebPhoto } from '@/lib/celeb/photo';
 import { parseKeyT1 } from '@/lib/celeb/lunar-key';
 
@@ -217,6 +218,19 @@ export async function GET(
     },
   ]);
 
+  // Ô "Hỏi Thầy" (lib/seo/ask-box.ts) thay khối CTA cũ trỏ về trang chủ. Chỉ biết
+  // ngày/tháng (không năm, giờ) ⇒ câu hỏi mang ngày vào chữ, bật `laso`.
+  const ask = seoAsk({
+    fam: 'celeb', thay: await fetchThayCard('co-nguyet'), title: '',
+    endTitle: `Bạn cũng sinh ngày ${d}/${m}? Hỏi thầy ngay`,
+    chips: [
+      { q: `Tôi sinh ngày ${d}/${m}, thầy xem lá số giúp tôi`, laso: true },
+      { q: `Người sinh ngày ${d}/${m} có tính cách thế nào?`, laso: true },
+      { q: 'Năm nay của tôi nên chú ý điều gì?', laso: true },
+    ],
+    prefix: `Sinh ngày ${d}/${m}`,
+  });
+
   const html = `<!DOCTYPE html><html lang="vi"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>${esc(title)}</title>
@@ -268,13 +282,8 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .day-nav{display:flex;justify-content:space-between;gap:12px;margin-top:36px;padding-top:24px;border-top:1px solid var(--border-lt)}
 .day-nav a{font-size:13px;color:var(--navy);text-decoration:none;font-weight:600}
 .day-nav a:hover{color:var(--gold)}
-.cta-box{margin-top:44px;padding:32px;background:linear-gradient(135deg,#fdf6e9 0%,#fff9ef 100%);border:2px solid var(--gold-bright);color:var(--navy);text-align:center}
-.cta-box-label{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
-.cta-box h3{font-family:var(--serif);font-size:21px;margin-bottom:10px;font-weight:600;color:var(--navy)}
-.cta-box p{font-size:13.5px;color:var(--text-mid);margin-bottom:20px;line-height:1.6}
-.cta-btn{display:inline-block;background:var(--navy);color:var(--gold-bright);border:2px solid var(--gold-bright);padding:12px 32px;text-decoration:none;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;transition:all .18s}
-.cta-btn:hover{background:var(--gold-bright);color:var(--navy)}
 @media(max-width:700px){.bc,.article-wrap{padding-left:20px;padding-right:20px}.article-title{font-size:24px}}
+${ask.css}
 </style>
 <script src="/auth.js?v=6"></script>
 </head><body>
@@ -304,13 +313,9 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
     <a href="${hubUrl}">Xem lịch cả năm</a>
     <a href="${hubUrl}/${nextNgay}">Ngày sau →</a>
   </div>
-  <div class="cta-box">
-    <div class="cta-box-label">Tử Vi Minh Bảo</div>
-    <h3>Xem Lá Số Của Bạn</h3>
-    <p>Ngày sinh dương lịch chỉ cho biết cung hoàng đạo — muốn biết cung Mệnh, chính tinh và vận trình thật, cần lập lá số theo đúng ngày giờ âm lịch.</p>
-    <a class="cta-btn" href="/">Lập Lá Số →</a>
-  </div>
+  ${ask.end}
 </article>
+${ask.tail}
 </body></html>`;
 
   return new NextResponse(html, {

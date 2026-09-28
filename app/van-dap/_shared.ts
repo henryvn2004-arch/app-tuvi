@@ -10,6 +10,7 @@
 import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 import { ORG_ID } from '@/lib/seo/entity';
 import { KHAO_LUAN_CATEGORIES, khaoLuanCategory, khaoLuanCategoryLabel } from '@/lib/content/khao-luan-categories';
+import { chipsChung, seoAsk, type ThayCard } from '@/lib/seo/ask-box';
 
 export { KHAO_LUAN_CATEGORIES, khaoLuanCategory, khaoLuanCategoryLabel };
 
@@ -219,13 +220,28 @@ export function searchScript(): string {
 </script>`;
 }
 
+/**
+ * Thầy đứng ô "Hỏi Thầy" theo danh mục vấn đáp — khớp `THAY_THEO_CHU_DE`
+ * (lib/agent/thay-theo-chu-de.ts); danh mục không gán thì về thầy Tử Vi gốc.
+ */
+export const THAY_THEO_DANH_MUC: Record<string, string> = {
+  'hon-nhan': 'dau-nam', 'tai-chinh': 'dieu-khong', 'cong-viec': 'dieu-khong',
+  'dien-san': 'huyen-khong', 'quan-he': 'linh-son', 'con-cai': 'thien-an',
+};
+
 /** Trang danh mục — dùng chung cho page 1 (`[cat]/route.ts`) và page N (`[cat]/trang/[page]/route.ts`). */
 export function renderCategoryPage(opts: {
   cat: string;
   page: number;
   rows: KhaoLuanRow[];
+  thay: ThayCard;
 }): string {
   const meta = khaoLuanCategory(opts.cat)!;
+  // Ô "Hỏi Thầy" (lib/seo/ask-box.ts) — một ô, dưới lưới bài.
+  const ask = seoAsk({
+    fam: `van-dap:${opts.cat}`, thay: opts.thay, title: '', chips: chipsChung(meta.label),
+    endTitle: `Có câu hỏi riêng về ${meta.label.toLowerCase()}? Hỏi thầy ngay`, prefix: meta.label,
+  });
   const start = (opts.page - 1) * PAGE_SIZE;
   const pageRows = opts.rows.slice(start, start + PAGE_SIZE);
   const totalPages = Math.max(1, Math.ceil(opts.rows.length / PAGE_SIZE));
@@ -280,6 +296,7 @@ export function renderCategoryPage(opts: {
 ${renderHead({ title: `${meta.title} — Tử Vi Minh Bảo`, desc: meta.desc, url, schemas })}
 </head><body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
+<style>${ask.css}</style>
 <div class="breadcrumb"><a href="/">Trang Chủ</a><span>›</span><a href="/van-dap">Vấn Đáp</a><span>›</span><span>${esc(meta.label)}</span></div>
 <div class="vd-hero">
   <div class="vd-eyebrow">考論 · Vấn Đáp</div>
@@ -295,8 +312,10 @@ ${renderHead({ title: `${meta.title} — Tử Vi Minh Bảo`, desc: meta.desc, u
       : `<p class="vd-empty">Chưa có bài nào ở chủ đề này — đang được biên soạn, quay lại sớm.</p>`
   }
   ${pagerHtml}
+  ${ask.end}
   ${renderMethodBanner()}
 </div>
+${ask.tail}
 ${footerScripts()}
 ${searchScript()}
 </body></html>`;

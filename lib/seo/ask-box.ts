@@ -39,6 +39,10 @@ export const THAY_THEO_CHUYEN_MUC: Record<string, string> = {
   'phong-thuy': 'huyen-khong',
   'lam-dep': 'huyen-khong',
   'dat-ten': 'thien-an',
+  // Loại mục của /tu-dien + /thu-vien (khác tên chuyên mục /tu-vi).
+  'tuong-phap': 'bac-minh',
+  'ngay-tot': 'nhat-nguyen',
+  'ngu-hanh': 'huyen-khong',
 };
 
 export type ThayCard = { id: string; name: string | null; mon: string | null; greeting: string | null };
@@ -200,6 +204,30 @@ export function askHref(chip: AskChip, thayTrang: string, birth?: AskBirth | nul
   return `/app?${p.toString()}`;
 }
 
+/**
+ * Zalo OA "Tử vi Minh Bảo-tuviminhbaocom" — kênh chat thứ hai (lib/channels/zalo.ts,
+ * `chat_sessions.platform='zalo-oa'`). Link giải mã từ chính mã QR của OA (bỏ
+ * `?src=qr`); ảnh QR ở `public/zalo-oa-qr.png` là bản cắt sạch từ ảnh Henry gửi
+ * 2026-09-28 — đổi OA thì thay CẢ HAI.
+ */
+export const ZALO_OA_URL = 'https://zalo.me/4164696755090443744';
+
+/**
+ * Dải "Hỏi thầy qua Zalo". Máy tính: hiện QR để quét bằng điện thoại. Điện
+ * thoại: KHÔNG tự quét được màn hình mình ⇒ ẩn QR, nút "Mở Zalo" mở thẳng app.
+ * `full=false` (ô trên) chỉ còn một dòng link — ô trên đã dài, QR để ô cuối.
+ */
+function zaloStrip(full: boolean): string {
+  if (!full) {
+    return `<a class="ask-zalo-line" href="${ZALO_OA_URL}" target="_blank" rel="nofollow noopener">Hoặc nhắn thầy qua <b>Zalo</b> <span aria-hidden="true">→</span></a>`;
+  }
+  return `<div class="ask-zalo">
+    <img class="ask-zalo-qr" src="/zalo-oa-qr.png" width="104" height="104" alt="Mã QR Zalo OA Tử Vi Minh Bảo" loading="lazy" decoding="async">
+    <div class="ask-zalo-txt"><b>Hỏi thầy qua Zalo</b><span class="ask-zalo-pc">Mở Zalo trên điện thoại, quét mã này rồi nhắn câu hỏi — thầy trả lời ngay trong Zalo.</span><span class="ask-zalo-mb">Nhắn thẳng cho thầy trong Zalo, không cần mở web.</span></div>
+    <a class="ask-zalo-go" href="${ZALO_OA_URL}" target="_blank" rel="nofollow noopener">Mở Zalo <b aria-hidden="true">→</b></a>
+  </div>`;
+}
+
 export type AskBoxOpts = {
   /** Vị trí trên trang — vào `cta_click.meta.box`. */
   box: 'top' | 'end';
@@ -242,6 +270,7 @@ export function askBoxHTML(o: AskBoxOpts): string {
     <textarea name="q" rows="1" maxlength="500" required placeholder="${esc(o.placeholder)}" aria-label="Câu hỏi của bạn"></textarea>
     <button type="submit">Hỏi Thầy <b aria-hidden="true">→</b></button>
   </form>
+  ${zaloStrip(o.box === 'end')}
 </section>`;
 }
 
@@ -281,6 +310,17 @@ export const ASK_CSS = `
 .ask-bar-go span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ask-bar-go b{color:#C8A96A}
 .ask-bar-x{flex:none;width:32px;height:32px;border:0;border-radius:50%;background:transparent;color:rgba(255,255,255,.6);font-size:14px;cursor:pointer}
+.ask .ask-zalo-line{display:inline-block;margin-top:12px;font-size:14px;color:rgba(255,255,255,.85);text-decoration:none}
+.ask .ask-zalo-line b{color:#7FB3FF}
+.ask .ask-zalo-line:hover{color:#fff}
+.ask-zalo{display:flex;align-items:center;gap:14px;margin-top:16px;padding:12px 14px 12px 12px;border-radius:12px;background:#fff;color:#0F2A3D}
+.ask-zalo-qr{width:104px;height:104px;flex:none;display:block}
+.ask .ask-zalo-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;font-size:13px;line-height:1.5;color:#444}
+.ask .ask-zalo-txt b{font-size:15px;color:#0F2A3D}
+.ask-zalo-mb{display:none}
+.ask .ask-zalo-go{flex:none;display:inline-flex;align-items:center;gap:6px;background:#0068FF;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 16px;border-radius:999px;white-space:nowrap}
+.ask .ask-zalo-go:hover{background:#0056d6}
+@media(max-width:700px){.ask-zalo-qr,.ask-zalo-pc{display:none}.ask-zalo-mb{display:block}.ask-zalo{padding:12px 14px}}
 @media(max-width:600px){.ask{padding:18px 16px 16px;margin:22px -4px}.ask .ask-t{font-size:19px}.ask-f{flex-direction:column}.ask-f button{padding:13px 18px}}
 @media(prefers-reduced-motion:reduce){.ask-bar,.ask-chip{transition:none}}
 `;
@@ -302,6 +342,8 @@ export const ASK_SCRIPT = `<script>
   document.addEventListener('click',function(e){
     var a=e.target.closest&&e.target.closest('.ask-chip');
     if(a) tr(a,'chip',{pos:+a.getAttribute('data-pos')});
+    var z=e.target.closest&&e.target.closest('.ask-zalo-go,.ask-zalo-line');
+    if(z) tr(z,'zalo',{});
   });
   var forms=document.querySelectorAll('.ask-f');
   for(var i=0;i<forms.length;i++) (function(f){
@@ -359,3 +401,38 @@ export const ASK_SCRIPT = `<script>
   });
 })();
 </script>`;
+
+/**
+ * Gói đủ một trang SEO: CSS, ô trên, ô cuối, thanh dính + script. Route chỉ
+ * chèn 4 chỗ: `css` vào <style>, `top` sau đoạn mở đầu, `end` thay khối CTA
+ * cũ, `tail` trước </body>.
+ */
+export function seoAsk(o: {
+  fam: string;
+  thay: ThayCard;
+  chips: AskChip[];
+  title: string;
+  prefix?: string;
+  birth?: AskBirth | null;
+  barLabel?: string;
+  /** Trang chỉ dùng ô cuối (không có ô trên) thì truyền tiêu đề riêng cho nó. */
+  endTitle?: string;
+}): { css: string; top: string; end: string; tail: string } {
+  const base = { fam: o.fam, thay: o.thay, chips: o.chips, prefix: o.prefix, birth: o.birth };
+  const top = askBoxHTML({ ...base, box: 'top', title: o.title, placeholder: 'Gõ câu hỏi của bạn…' });
+  const end = askBoxHTML({ ...base, box: 'end', title: o.endTitle || 'Còn điều gì chưa rõ? Hỏi thầy ngay', placeholder: 'Kể chuyện của bạn…' });
+  const label = o.barLabel || (o.thay.name ? `Hỏi thầy ${o.thay.name} về bài này` : 'Hỏi thầy về bài này');
+  return { css: ASK_CSS, top, end, tail: askBarHTML(o.thay, label, o.fam) + ASK_SCRIPT };
+}
+
+/** Câu gợi ý chung khi trang không có dữ liệu riêng — chủ đề trang nằm trong câu. */
+export function chipsChung(chuDe: string): AskChip[] {
+  // Chủ đề hay là chính một câu hỏi ("… có nên mua nhà?") — bỏ dấu câu cuối để
+  // không ra "?:" hay "??".
+  const s = String(chuDe || '').trim().slice(0, 80).replace(/[\s?.!:;,]+$/, '');
+  return [
+    { q: `${s} — trường hợp của tôi thì sao?`, laso: true },
+    { q: `Năm nay của tôi nên chú ý điều gì?`, laso: true },
+    { q: `Xem lá số của tôi theo đúng giờ sinh`, laso: true },
+  ];
+}

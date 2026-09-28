@@ -3,6 +3,7 @@ export const revalidate = 86400;
 import { NextRequest, NextResponse } from 'next/server';
 import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 import { ORG_ID } from '@/lib/seo/entity';
+import { chipsChung, seoAsk } from '@/lib/seo/ask-box';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -97,6 +98,15 @@ function buildHTML(article: any, master: any, related: any[], slug: string) {
   const masterName = master?.display_name || '';
   const masterId   = master?.id || article.master_id || '';
   const masterUrl  = masterId ? `${BASE}/tac-gia/${masterId}` : '';
+
+  // Ô "Hỏi Thầy" (lib/seo/ask-box.ts) — hỏi thẳng thầy tác giả; bài không gắn
+  // thầy thì về thầy Tử Vi gốc (không tên, ô vẫn dựng).
+  const askQ = String(article.title || '').slice(0, 90);
+  const ask = seoAsk({
+    fam: `nghien-cuu:${article.category || ''}`,
+    thay: { id: masterId || 'co-nguyet', name: masterName || null, mon: master?.discipline || null, greeting: master?.greeting || null },
+    title: 'Hỏi thầy về trường hợp của bạn', chips: chipsChung(askQ), prefix: askQ,
+  });
 
   const faqItems = buildFaqItems(article.content || '', article.title || '');
   const faqSchema = faqItems.length ? {
@@ -194,6 +204,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 .related-item .rel-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .related-item .rel-author{font-size:11px;color:var(--gold);flex-shrink:0}
 @media(max-width:700px){.breadcrumb,.article-wrap{padding-left:16px;padding-right:16px}.article-title{font-size:24px}}
+${ask.css}
 </style>
 <script src="/auth.js" defer></script>
 </head>
@@ -219,20 +230,14 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
       ${master?.bio ? `<div class="author-bio">${esc(master.bio)}</div>` : ''}
     </div>
   </div>` : ''}
+  ${ask.top}
   <div class="article-body">${body}</div>
   ${masterName ? `<div class="article-sig">— ${esc(masterName)}</div>` : ''}
   <div class="article-nav">
     <a href="/nghien-cuu">← Về Nghiên Cứu</a>
     ${masterUrl ? `<a href="${esc(masterUrl)}">Bài khác của ${esc(masterName)} →</a>` : ''}
   </div>
-  <div style="margin-top:40px;padding:24px;background:linear-gradient(135deg,#0F2A3D,#13354F);border-radius:10px;color:#fff;text-align:center">
-    <div style="font-size:11px;letter-spacing:3px;color:#C8A96A;text-transform:uppercase;margin-bottom:8px">Tra Cứu Lá Số</div>
-    <div style="font-family:'Noto Serif',serif;font-size:20px;font-weight:600;margin-bottom:10px">Xem lá số tử vi của bạn</div>
-    <p style="font-size:13px;opacity:.85;margin-bottom:20px;line-height:1.6">Áp dụng kiến thức trong bài để phân tích lá số cụ thể — cách cục, đại vận, điểm 6 chiều.</p>
-    <a href="/app/luan-giai" style="display:inline-block;background:#7C6942;color:#fff;padding:12px 28px;border-radius:7px;text-decoration:none;font-weight:700;font-size:14px;margin-right:10px">Lập Lá Số Của Bạn →</a>
-    <a href="/menh-kho.html" style="display:inline-block;background:rgba(255,255,255,.12);color:#fff;padding:12px 20px;border-radius:7px;text-decoration:none;font-size:13px">Tra theo ngày sinh</a>
-    <a href="/nghien-cuu" style="display:inline-block;background:rgba(255,255,255,.12);color:#fff;padding:12px 20px;border-radius:7px;text-decoration:none;font-size:13px;margin-left:10px">Bài khác</a>
-  </div>
+  ${ask.end}
   <div id="share-bar-nghiencuu" style="margin-top:16px"></div>
   ${faqItems.length ? `<div class="related-section" style="margin-top:32px">
     <div class="related-title">Câu Hỏi Thường Gặp</div>
@@ -257,6 +262,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 </article>
 <script src="/related-tools.js"></script>
 <script src="/testimonials.js"></script>
+${ask.tail}
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
 <script src="/share.js" defer></script>
 <script>
@@ -312,7 +318,7 @@ export async function GET(
     // Fetch master profile and related articles in parallel
     const [masterRes, relatedRes] = await Promise.all([
       article.master_id
-        ? fetch(`${SB_URL}/rest/v1/master_profiles?id=eq.${encodeURIComponent(article.master_id)}&select=id,display_name,bio&limit=1`, { headers: sbHeaders })
+        ? fetch(`${SB_URL}/rest/v1/master_profiles?id=eq.${encodeURIComponent(article.master_id)}&select=id,display_name,bio,discipline,greeting&limit=1`, { headers: sbHeaders })
         : Promise.resolve(null),
       fetch(
         `${SB_URL}/rest/v1/master_articles?slug=neq.${encodeURIComponent(slug)}&category=eq.${encodeURIComponent(article.category || '')}&select=slug,title,master_id&${PUBLISHED_ONLY}&order=created_at.desc&limit=5`,
