@@ -7,6 +7,7 @@ export const revalidate = 86400;
 
 import { NextRequest, NextResponse } from 'next/server';
 import { ORG_ID } from '@/lib/seo/entity';
+import { fetchThayCard, seoAsk } from '@/lib/seo/ask-box';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -102,6 +103,18 @@ export async function GET(
         .join('')}
     </div>`
     : '';
+
+  // Ô "Hỏi Thầy" (lib/seo/ask-box.ts) — thay khối CTA cũ trỏ về trang chủ.
+  const ten = String(row.ten || '').slice(0, 60);
+  const ask = seoAsk({
+    fam: `thu-vien:${bst}`, thay: await fetchThayCard('co-nguyet'), title: `Hỏi thầy về ${ten}`,
+    chips: [
+      { q: `Lá số của tôi có ${ten} không, ảnh hưởng thế nào?`, laso: true },
+      { q: `${ten} tốt hay xấu với tôi?`, laso: true },
+      { q: 'Năm nay của tôi nên chú ý điều gì?', laso: true },
+    ],
+    prefix: ten,
+  });
 
   const url = `${BASE}/thu-vien/${bst}/${slug}`;
   const hubUrl = `${BASE}/thu-vien/${bst}`;
@@ -207,13 +220,8 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .rel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
 .rel-item{display:block;padding:11px 14px;background:var(--bg-soft);border:1px solid var(--border-lt);font-size:13px;color:var(--navy);text-decoration:none;line-height:1.4;transition:all .12s}
 .rel-item:hover{border-color:var(--gold);background:#fff;color:var(--gold)}
-.cta-box{margin-top:44px;padding:32px;background:linear-gradient(135deg,#fdf6e9 0%,#fff9ef 100%);border:2px solid var(--gold-bright);color:var(--navy);text-align:center}
-.cta-box-label{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
-.cta-box h3{font-family:var(--serif);font-size:21px;margin-bottom:10px;font-weight:600;color:var(--navy)}
-.cta-box p{font-size:13.5px;color:var(--text-mid);margin-bottom:20px;line-height:1.6}
-.cta-btn{display:inline-block;background:var(--navy);color:var(--gold-bright);border:2px solid var(--gold-bright);padding:12px 32px;text-decoration:none;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;transition:all .18s}
-.cta-btn:hover{background:var(--gold-bright);color:var(--navy)}
 @media(max-width:700px){.bc,.article-wrap{padding-left:20px;padding-right:20px}.article-title{font-size:24px}}
+${ask.css}
 </style>
 <script src="/auth.js?v=6"></script>
 </head><body>
@@ -232,16 +240,13 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
   </div>
   <h1 class="article-title">${esc(row.ten)}</h1>
   ${row.tra_loi_ngan ? `<div class="tln-box">${esc(row.tra_loi_ngan)}</div>` : ''}
+  ${ask.top}
   <div class="article-body">${renderProse(row.than || '')}</div>
   ${faqHTML}
+  ${ask.end}
   ${relatedHTML}
-  <div class="cta-box">
-    <div class="cta-box-label">Tử Vi Minh Bảo</div>
-    <h3>Xem Lá Số Của Bạn</h3>
-    <p>Áp dụng kiến thức cổ pháp vào lá số cá nhân — luận giải chuyên sâu chi tiết 24 phần.</p>
-    <a class="cta-btn" href="/">Xem Tử Vi →</a>
-  </div>
 </article>
+${ask.tail}
 </body></html>`;
 
   return new NextResponse(html, {

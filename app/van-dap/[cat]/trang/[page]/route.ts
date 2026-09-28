@@ -5,7 +5,8 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 15;
 
 import { NextRequest, NextResponse } from 'next/server';
-import { khaoLuanCategory, fetchByCategory, renderCategoryPage, categoryPageUrl, PAGE_SIZE, BASE_URL } from '../../../_shared';
+import { khaoLuanCategory, fetchByCategory, renderCategoryPage, categoryPageUrl, PAGE_SIZE, BASE_URL, THAY_THEO_DANH_MUC } from '../../../_shared';
+import { fetchThayCard } from '@/lib/seo/ask-box';
 import { logAiCrawlerHit } from '@/lib/seo/ai-crawler-log';
 
 export async function GET(
@@ -24,7 +25,7 @@ export async function GET(
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
   if (page > totalPages) return NextResponse.redirect(new URL(categoryPageUrl(cat, 1), BASE_URL));
 
-  const html = renderCategoryPage({ cat, page, rows });
+  const html = renderCategoryPage({ cat, page, rows, thay: await fetchThayCard(THAY_THEO_DANH_MUC[cat] || 'co-nguyet') });
   return new NextResponse(html, {
     status: 200,
     headers: {

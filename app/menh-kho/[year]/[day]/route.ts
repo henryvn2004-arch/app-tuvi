@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // không phải gỡ khỏi sitemap. Hub NĂM (51 trang) CỐ Ý vẫn index.
 import { NOINDEX_FOLLOW } from '@/lib/seo/index-policy';
 import { ORG_ID } from '@/lib/seo/entity';
+import { fetchThayCard, seoAsk } from '@/lib/seo/ask-box';
 
 const BASE      = 'https://www.tuviminhbao.com';
 const NAM_XEM   = 2027; // cập nhật hằng năm
@@ -92,6 +93,22 @@ export async function GET(
   const prevDay = dd > 1 ? `${pad(mm)}-${pad(dd-1)}` : (mm > 1 ? `${pad(mm-1)}-${pad(daysInMonth(mm-1,year))}` : null);
   const nextDay = dd < daysInMonth(mm, year) ? `${pad(mm)}-${pad(dd+1)}` : (mm < 12 ? `${pad(mm+1)}-01` : null);
 
+  // Ô "Hỏi Thầy" (lib/seo/ask-box.ts) thay khối CTA cũ. Trang chỉ có NGÀY sinh
+  // (thiếu giờ + giới) nên câu hỏi mang ngày vào chữ và bật `laso` — chat xin
+  // nốt giờ sinh, giới tính. Chỉ một ô, dưới lưới 24 lá số: việc chính của trang
+  // là chọn giờ, không chen lên trên.
+  const ask = seoAsk({
+    fam: 'menh-kho', thay: await fetchThayCard('co-nguyet'),
+    title: `Hỏi thầy về lá số ngày ${dd}/${mm}/${year}`,
+    endTitle: `Sinh ngày ${dd}/${mm}/${year}? Hỏi thầy ngay`,
+    chips: [
+      { q: `Tôi sinh ngày ${dd}/${mm}/${year}, thầy xem lá số giúp tôi`, laso: true },
+      { q: `Sinh ngày ${dd}/${mm}/${year} thì năm nay công việc thế nào?`, laso: true, thay: 'dieu-khong' },
+      { q: `Sinh ngày ${dd}/${mm}/${year} thì tình duyên ra sao?`, laso: true, thay: 'dau-nam' },
+    ],
+    prefix: `Sinh ngày ${dd}/${mm}/${year}`,
+  });
+
   const schema = JSON.stringify({
     '@context': 'https://schema.org', '@type': 'CollectionPage',
     name: title, description: desc, url, inLanguage: 'vi',
@@ -141,11 +158,9 @@ h1 em{font-style:italic;color:var(--gold)}
 .gio-link{flex:1;text-align:center;padding:6px 0;border-radius:4px;font-size:12px;font-weight:600;transition:all .12s}
 .gio-nam{background:var(--navy);color:#fff}.gio-nam:hover{background:#1455A4}
 .gio-nu{background:var(--gold);color:#fff}.gio-nu:hover{opacity:.85}
-.cta-box{padding:20px 24px;background:linear-gradient(135deg,#0F2A3D,#13354F);border-radius:8px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap}
-.cta-box p{font-size:13px;opacity:.85;max-width:480px;line-height:1.6}
-.cta-btn{background:#C8A96A;color:#0F2A3D;padding:9px 20px;border-radius:5px;font-weight:700;font-size:13px;white-space:nowrap}
 .note{font-size:12px;color:var(--text-lt);padding:10px 0;border-top:1px solid var(--border-lt)}
-@media(max-width:700px){.page,.bc{padding-left:14px;padding-right:14px}.grid{grid-template-columns:repeat(2,1fr)}h1{font-size:22px}.cta-box{flex-direction:column;text-align:center}}
+@media(max-width:700px){.page,.bc{padding-left:14px;padding-right:14px}.grid{grid-template-columns:repeat(2,1fr)}h1{font-size:22px}}
+${ask.css}
 </style>
 <script src="/auth.js" defer></script>
 </head><body>
@@ -171,13 +186,11 @@ h1 em{font-style:italic;color:var(--gold)}
 
   <div class="grid">${cardsHTML}</div>
 
-  <div class="cta-box">
-    <p>Muốn nhập ngày sinh khác và nhận luận giải chuyên sâu 24 phần?</p>
-    <a class="cta-btn" href="/app/luan-giai">Xem Lá Số →</a>
-  </div>
+  ${ask.end}
 
   <p class="note">* Lá số hiển thị vận hạn năm ${NAM_XEM}. Để xem năm khác, dùng công cụ luận giải trực tiếp.</p>
 </div>
+${ask.tail}
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
 </body></html>`;
 

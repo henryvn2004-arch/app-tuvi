@@ -3,6 +3,7 @@ export const revalidate = 86400;
 import { NextRequest, NextResponse } from 'next/server';
 import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 import { orgNode } from '@/lib/seo/same-as';
+import { seoAsk } from '@/lib/seo/ask-box';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -34,6 +35,19 @@ async function buildHTML(master: any, articles: any[], realArticleCount: number)
   // Một lượt đọc DB thêm — chấp nhận được ở đây vì route này vốn đã đọc DB
   // và chỉ có ~15 trang tác giả, KHÁC hẳn 438K trang /la-so/*.
   const orgSchema = await orgNode();
+
+  // Ô "Hỏi Thầy" (lib/seo/ask-box.ts): trang hồ sơ của chính thầy này ⇒ hỏi
+  // thẳng thầy (`thay=masterId`), không qua bộ chọn thầy. Một ô duy nhất (bản
+  // đầy đủ, có QR Zalo), đặt ngay dưới hồ sơ.
+  const ask = seoAsk({
+    fam: 'tac-gia', thay: { id: masterId, name: name || null, mon: master.discipline || null, greeting: master.greeting || null },
+    title: '', endTitle: name ? `Hỏi trực tiếp thầy ${name}` : 'Hỏi thầy',
+    chips: [
+      { q: name ? `Thầy ${name} xem giúp lá số của tôi` : 'Thầy xem giúp lá số của tôi', laso: true },
+      { q: 'Năm nay của tôi nên chú ý điều gì?', laso: true },
+      ...(specialty[0] ? [{ q: `Tôi muốn hỏi thầy về ${String(specialty[0]).slice(0, 60)}`, laso: true }] : []),
+    ],
+  });
 
   const schemas = JSON.stringify([
     {
@@ -134,6 +148,9 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 .back-link:hover{text-decoration:underline}
 .empty{color:var(--text-lt);font-style:italic;padding:32px 0}
 @media(max-width:700px){.breadcrumb{padding-left:16px;padding-right:16px}.profile-header{padding:32px 16px}.profile-inner{flex-direction:column;gap:16px}.main{grid-template-columns:1fr;padding:24px 16px}}
+.ask-wrap{max-width:860px;margin:0 auto;padding:0 40px;width:100%}
+@media(max-width:700px){.ask-wrap{padding:0 16px}}
+${ask.css}
 </style>
 <script src="/auth.js" defer></script>
 </head>
@@ -157,6 +174,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     </div>
   </div>
 </div>
+<div class="ask-wrap">${ask.end}</div>
 <div class="main">
   <section class="articles-section">
     <h2>Bài Viết Của ${esc(name)}</h2>
@@ -174,6 +192,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     </div>` : ''}
   </aside>
 </div>
+${ask.tail}
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
 </body></html>`;
 }

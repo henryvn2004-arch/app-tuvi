@@ -6,6 +6,7 @@ export const revalidate = false;
 import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { chipsForSeoPage, fetchThayCard, seoAsk, type ThayCard } from '@/lib/seo/ask-box';
 
 // Module-level location mock — prevents Next.js URL parsing crash after engine load
 {
@@ -191,10 +192,6 @@ tr:hover td{background:var(--bg-soft)}
 .cc-item{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:var(--bg-soft);border-radius:6px}
 .cc-badge{font-size:11px;font-weight:700;padding:2px 8px;background:#2a1f5e;color:#a78bfa;border-radius:4px;white-space:nowrap;flex-shrink:0}
 .cc-desc{font-size:13px;color:var(--text-mid);line-height:1.5}
-.cta-box{margin:36px 0;padding:28px 24px;background:linear-gradient(135deg,#0F2A3D,#13354F);border-radius:10px;color:#fff;text-align:center}
-.cta-box h2{font-size:20px;font-weight:400;margin-bottom:8px}
-.cta-box p{font-size:13px;opacity:.85;margin-bottom:18px;line-height:1.7;max-width:480px;margin-left:auto;margin-right:auto}
-.cta-btn{display:inline-block;background:#C8A96A;color:#0F2A3D;padding:11px 28px;border-radius:6px;font-weight:700;font-size:13px}
 .faq-block{padding:36px 0;border-bottom:1px solid var(--border-lt)}
 .faq-block>h2{font-size:20px;font-weight:400;color:var(--navy);margin-bottom:18px}
 .faq-item{margin-bottom:18px}
@@ -226,8 +223,9 @@ function pageShell(opts: {
   title: string; desc: string; url: string; bc: string;
   h1: string; heroDesc: string; body: string;
   faqItems: {q:string;a:string}[]; relLinks: string[];
+  ask: { css: string; top: string; end: string; tail: string };
 }) {
-  const { title, desc, url, bc, h1, heroDesc, body, faqItems, relLinks } = opts;
+  const { title, desc, url, bc, h1, heroDesc, body, faqItems, relLinks, ask } = opts;
   const articleSchema = JSON.stringify({ '@context':'https://schema.org','@type':'Article', headline:title, description:desc, url, inLanguage:'vi', author:{name:'Tử Vi Minh Bảo',url:BASE}, publisher:{name:'Tử Vi Minh Bảo',url:BASE} });
   const faqSchema = JSON.stringify({ '@context':'https://schema.org','@type':'FAQPage', mainEntity: faqItems.map(f => ({ '@type':'Question', name:f.q, acceptedAnswer:{text:f.a} })) });
   const faqHTML = faqItems.map(f => `<div class="faq-item"><h3 class="faq-q">${esc(f.q)}</h3><p class="faq-a">${esc(f.a)}</p></div>`).join('');
@@ -242,7 +240,7 @@ function pageShell(opts: {
 <link rel="canonical" href="${esc(url)}"><link rel="icon" type="image/webp" href="/seal.webp">
 <script type="application/ld+json">${articleSchema}</script>
 <script type="application/ld+json">${faqSchema}</script>
-<style>${CSS}</style>
+<style>${CSS}${ask.css}</style>
 <script src="/auth.js" defer></script>
 </head><body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
@@ -253,17 +251,29 @@ function pageShell(opts: {
     <h1>${h1}</h1>
     <p class="hero-desc">${heroDesc}</p>
   </div>
+  ${ask.top}
   ${body}
+  ${ask.end}
   <div class="faq-block"><h2>Câu Hỏi Thường Gặp</h2>${faqHTML}</div>
   <div class="rel-block"><div class="rel-title">Xem thêm</div><div class="rel-grid">${relLinks.join('')}</div></div>
 </div>
+${ask.tail}
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
 </body></html>`;
 }
 
+// Ô "Hỏi Thầy" (lib/seo/ask-box.ts) — thay khối CTA cũ trỏ /app/luan-giai.
+function vanHanAsk(thay: ThayCard, tuoi: string, namXem: number) {
+  return seoAsk({
+    fam: 'van-han', thay, title: `Hỏi thầy về vận hạn tuổi ${tuoi} năm ${namXem}`,
+    chips: chipsForSeoPage({ category: 'van-han', h1: `Năm ${namXem}`, can_chi: tuoi }),
+    prefix: `Vận hạn tuổi ${tuoi} năm ${namXem}`,
+  });
+}
+
 // ── Level 1 builder ──────────────────────────────────────────────────
 
-function buildL1(chiIdx: number, namXem: number): string {
+function buildL1(chiIdx: number, namXem: number, thay: ThayCard): string {
   const chiName = CHI_NAMES[chiIdx];
   const chiSlug = CHI_SLUGS[chiIdx];
   const years   = getYearsForChi(chiIdx).slice(-4); // 4 năm gần nhất
@@ -288,12 +298,6 @@ function buildL1(chiIdx: number, namXem: number): string {
         <p class="note"><a href="/van-han/${canChiSlug}-nam-${namXem}" style="color:var(--blue);font-size:12px">Xem chi tiết tuổi ${esc(yd.canChi)} năm ${namXem} →</a></p>
       </div>`;
     }),
-    // CTA
-    `<div class="cta-box">
-      <h2>Xem Chính Xác Theo Ngày Giờ Sinh</h2>
-      <p>Nhập đầy đủ ngày tháng năm và giờ sinh để nhận lá số cá nhân hoá.</p>
-      <a class="cta-btn" href="/app/luan-giai">Xem Lá Số →</a>
-    </div>`,
     // Cach cuc
     topCC.length > 0 ? `<div class="cc-block">
       <h2>Cách Cục Phổ Biến Tuổi ${esc(chiName)}</h2>
@@ -331,13 +335,13 @@ function buildL1(chiIdx: number, namXem: number): string {
     bc:    `<a href="/">Trang Chủ</a><span>›</span><a href="/van-han/">Vận Hạn</a><span>›</span><span>Tuổi ${esc(chiName)} Năm ${namXem}</span>`,
     h1:    `Tuổi <em>${esc(chiName)}</em> Vận Hạn Năm ${namXem}`,
     heroDesc: `Phân tích vận hạn năm ${namXem} cho người tuổi ${esc(chiName)} theo Tử Vi Đẩu Số cổ pháp — cung Mệnh, chính tinh, đại vận và điểm số theo từng giờ sinh.`,
-    body, faqItems, relLinks,
+    body, faqItems, relLinks, ask: vanHanAsk(thay, chiName, namXem),
   });
 }
 
 // ── Level 2 builder ──────────────────────────────────────────────────
 
-function buildL2(canIdx: number, chiIdx: number, namXem: number): string {
+function buildL2(canIdx: number, chiIdx: number, namXem: number, thay: ThayCard): string {
   const canName = CAN_NAMES[canIdx];
   const chiName = CHI_NAMES[chiIdx];
   const chiSlug = CHI_SLUGS[chiIdx];
@@ -361,11 +365,6 @@ function buildL2(canIdx: number, chiIdx: number, namXem: number): string {
       ${tableHTML(yd, namXem)}
       <p class="note">* Cung Mệnh có thể thay đổi theo tháng/ngày sinh thực tế</p>
     </div>`),
-    `<div class="cta-box">
-      <h2>Xem Lá Số Cá Nhân Hoá</h2>
-      <p>Nhập đầy đủ ngày tháng năm và giờ sinh để xem chính xác cung Mệnh, đại vận và tiểu vận năm ${namXem}.</p>
-      <a class="cta-btn" href="/app/luan-giai">Xem Lá Số →</a>
-    </div>`,
     topCC.length > 0 ? `<div class="cc-block">
       <h2>Cách Cục Của Tuổi ${esc(canChi)}</h2>
       <div class="sub">Các cách cục hay xuất hiện trong lá số người ${esc(canChi)}</div>
@@ -397,7 +396,7 @@ function buildL2(canIdx: number, chiIdx: number, namXem: number): string {
     bc:      `<a href="/">Trang Chủ</a><span>›</span><a href="/van-han/">Vận Hạn</a><span>›</span><a href="/van-han/tuoi-${chiSlug}-nam-${namXem}">Tuổi ${esc(chiName)} ${namXem}</a><span>›</span><span>${esc(canChi)}</span>`,
     h1:      `<em>${esc(canChi)}</em> Vận Hạn Năm ${namXem}`,
     heroDesc: `Phân tích chi tiết vận hạn năm ${namXem} cho người sinh năm ${esc(canChi)} — cung Mệnh, chính tinh, đại vận đang chạy và điểm số theo từng giờ sinh.`,
-    body, faqItems, relLinks,
+    body, faqItems, relLinks, ask: vanHanAsk(thay, canChi, namXem),
   });
 }
 
@@ -408,11 +407,12 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
+  const thay = await fetchThayCard('co-nguyet');
 
   // Thử Level 1 trước
   const l1 = parseL1(slug);
   if (l1) {
-    const html = buildL1(l1.chiIdx, l1.namXem);
+    const html = buildL1(l1.chiIdx, l1.namXem, thay);
     if (!html) return NextResponse.redirect(`${BASE}/van-han/`);
     return new NextResponse(html, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=31536000, stale-while-revalidate=86400' } });
   }
@@ -420,7 +420,7 @@ export async function GET(
   // Thử Level 2
   const l2 = parseL2(slug);
   if (l2) {
-    const html = buildL2(l2.canIdx, l2.chiIdx, l2.namXem);
+    const html = buildL2(l2.canIdx, l2.chiIdx, l2.namXem, thay);
     if (!html) return NextResponse.redirect(`${BASE}/van-han/`);
     return new NextResponse(html, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=31536000, stale-while-revalidate=86400' } });
   }
