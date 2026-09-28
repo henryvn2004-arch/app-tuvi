@@ -8,7 +8,7 @@ export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
-import { signPayOSData } from '@/lib/billing/payos';
+import { createPayOSOrder } from '@/lib/billing/payos-order';
 import { signMomoCreate, MOMO_CREATE_ENDPOINT } from '@/lib/billing/momo';
 import { getPackages, quoteCustomVnd, vndPerCredit } from '@/lib/billing/packages';
 // Mọi thứ chạm PayPal ở MỘT chỗ (lib/billing/paypal) — webhook dùng chung bản
@@ -828,57 +828,19 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
     label     = `${found.label} – ${found.credits} Luong`;
   }
 
-  const orderCode   = Date.now() % 999_999_999;
-  // 🔑 MỘT chuỗi cho cả hai phía. Bản trước khai với PayOS là `label` cắt 25
-  // ký tự ("Phổ Thông – 240 Luong") trong khi modal lại bảo khách ghi nội dung
-  // CK là `TVMB<orderCode>` — hai chuỗi KHÁC nhau cho cùng một đơn. Hiện vô
-  // hại vì PayOS khớp bằng số tài khoản ảo chứ không bằng nội dung, nhưng đó
-  // là vô hại NHỜ MAY: rơi vào kênh nào khớp bằng nội dung CK là khách gõ
-  // đúng theo màn hình mà tiền không ai nhận.
-  // Chọn `TVMB<orderCode>` chứ không chọn label: ASCII (ô nội dung CK của
-  // ngân hàng hay chối dấu tiếng Việt và dấu –), ngắn (≤13 ký tự, PayOS trần
-  // 25), và tự nó là khoá đối soát. Nhãn đọc được vẫn còn nguyên ở
-  // `bank_orders.label` và ở `credit_transactions.description`.
-  const description = `TVMB${orderCode}`;
-  const returnUrl   = `${SITE_URL}/topup.html?payment=success&method=bank&orderCode=${orderCode}`;
-  const cancelUrl   = `${SITE_URL}/topup.html?payment=cancelled`;
-  const sigData     = { amount: amountVND, cancelUrl, description, orderCode, returnUrl };
-
   try {
-    const res = await fetch('https://api-merchant.payos.vn/v2/payment-requests', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-client-id':  process.env.PAYOS_CLIENT_ID!,
-        'x-api-key':    process.env.PAYOS_API_KEY!,
-      },
-      body: JSON.stringify({ ...sigData, signature: signPayOSData(sigData, process.env.PAYOS_CHECKSUM_KEY!) }),
-    });
-    const payosData = await res.json();
-    if (payosData.code !== '00') return err(payosData.desc || 'payOS error');
-
-    await fetch(`${SUPABASE_URL}/rest/v1/bank_orders`, {
-      method: 'POST',
-      headers: { ...SB_HEADERS, 'Prefer': 'resolution=ignore-duplicates' },
-      body: JSON.stringify({
-        order_code: String(orderCode), user_id: userId,
-        package_id: packageId, amount_vnd: amountVND,
-        credits, label,
-        status: 'pending', created_at: new Date().toISOString(),
-      }),
-    });
-
-    const d = payosData.data;
-    const bin = String(d.bin || '');
+    // Tạo đơn + ghi bank_orders: nguồn chung với kênh chat (lib/billing/payos-order).
+    const o = await createPayOSOrder({ userId, packageId, amountVND, credits, label });
+    const bin = o.bin;
     const bankName = BANK_BY_BIN[bin] || null;
     const bankCode = BANK_CODE_BY_BIN[bin] || null;
     if (bin && !bankName) console.warn('[create-bank] BIN chua co trong BANK_BY_BIN:', bin);
-    return ok({ orderCode, checkoutUrl: d.checkoutUrl, accountNumber: d.accountNumber,
-      accountName: d.accountName, bin: d.bin, bankName, bankCode, amountVND,
+    return ok({ orderCode: o.orderCode, checkoutUrl: o.checkoutUrl, accountNumber: o.accountNumber,
+      accountName: o.accountName, bin: o.bin, bankName, bankCode, amountVND,
       // Chuỗi VietQR payOS phát ra — client vẽ thành ảnh để khách LƯU rồi quét
       // bằng chính app ngân hàng trên cùng máy (`bank-deeplink.js`).
-      qrCode: d.qrCode || null,
-      credits, label, description });
+      qrCode: o.qrCode,
+      credits, label, description: o.description });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 

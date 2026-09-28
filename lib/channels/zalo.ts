@@ -21,7 +21,14 @@
 import { createHash, timingSafeEqual } from 'crypto';
 import type { ChatMessage, BirthParams } from '@/lib/contract/v1';
 import { fetchGraphMedia } from './meta';
-import { splitText, type ChannelIO, type SessionStore, type ProfileStore } from './core';
+import {
+  splitText,
+  type ChannelIO,
+  type ChatButton,
+  type SessionStore,
+  type ProfileStore,
+} from './core';
+import { markdownToChat } from './format';
 import {
   chatLoadSession,
   chatSaveSession,
@@ -207,6 +214,43 @@ export async function zaloSendText(userId: string, text: string): Promise<void> 
   }
 }
 
+/** Số nút tối đa mỗi tin tư vấn (Zalo không ghi rõ trần — giữ gọn 5). */
+const MAX_BUTTONS = 5;
+
+/**
+ * Tin tư vấn kèm nút: `oa.open.url` mở link ngay trong Zalo, `oa.query.show`
+ * gửi lại chữ soạn sẵn thành tin của người dùng (webhook nhận như tin gõ tay).
+ * Chữ dài hơn trần 1 tin → gửi phần đầu thành tin thường, nút gắn vào đoạn cuối.
+ */
+export async function zaloSendButtons(userId: string, text: string, buttons: ChatButton[]): Promise<void> {
+  const parts = splitText(text || '…', MSG_LIMIT);
+  for (const p of parts.slice(0, -1)) await postMessage(userId, { text: p });
+  await postMessage(userId, {
+    text: parts[parts.length - 1],
+    attachment: {
+      type: 'template',
+      payload: {
+        buttons: buttons.slice(0, MAX_BUTTONS).map((b) =>
+          'url' in b
+            ? { title: b.title.slice(0, 100), type: 'oa.open.url', payload: { url: b.url } }
+            : { title: b.title.slice(0, 100), type: 'oa.query.show', payload: b.reply.slice(0, 1000) },
+        ),
+      },
+    },
+  });
+}
+
+/** Tin tư vấn đính kèm ảnh (theo URL công khai). */
+export async function zaloSendImage(userId: string, url: string, caption?: string): Promise<void> {
+  await postMessage(userId, {
+    ...(caption ? { text: caption.slice(0, MSG_LIMIT) } : {}),
+    attachment: {
+      type: 'template',
+      payload: { template_type: 'media', elements: [{ media_type: 'image', url }] },
+    },
+  });
+}
+
 // ── ChannelIO (Zalo không sửa được tin, không có API "đang soạn") ──
 export const zaloIO: ChannelIO = {
   platform: ZALO_PLATFORM,
@@ -220,6 +264,9 @@ export const zaloIO: ChannelIO = {
   },
   editText: async () => {},
   fetchImage: (ref) => fetchGraphMedia(ref), // ref = URL CDN Zalo cấp sẵn, không cần token
+  sendButtons: (chatId, text, buttons) => zaloSendButtons(String(chatId), text, buttons),
+  sendImage: (chatId, url, caption) => zaloSendImage(String(chatId), url, caption),
+  format: (t) => markdownToChat(t), // Zalo hiện chữ thô — ** và ## lộ nguyên
 };
 
 // ── SessionStore / ProfileStore (generic, platform='zalo-oa') ──
