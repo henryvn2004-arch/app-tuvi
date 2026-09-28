@@ -103,6 +103,11 @@ export interface IncomingTurn {
   authorId?: string;
   /** Tên hiển thị của thầy đó, chỉ để ghi lên tin "đang xem…". */
   authorName?: string;
+  /** URL công khai chân dung thầy — có thì tin "đang xem…" là ảnh thầy. */
+  authorAvatarUrl?: string;
+  /** Lời thầy tự giới thiệu — chỉ có ở lượt ĐẦU cuộc trò chuyện; ghép lên
+   *  trước chữ "đang xem…" trong cùng tin chờ (không thêm tin riêng). */
+  intro?: string;
   /** Tài khoản đã LIÊN KẾT (server tự giải qua chat_links, không lấy từ tin
    *  nhắn) → bật trí nhớ/người thân như web. null/vắng = không đọc/ghi hồ sơ. */
   userId?: string | null;
@@ -160,10 +165,18 @@ export async function runConversation(
 
   await io.typing(chatId);
   const waitMsg = hasImage ? WAIT_IMAGE : WAIT_LASO;
-  const progressId = await io.sendProgress(
-    chatId,
-    incoming.authorName ? waitMsg.replace('Đang xem', `Thầy ${incoming.authorName} đang xem`) : waitMsg,
-  );
+  const waitText = incoming.authorName ? waitMsg.replace('Đang xem', `Thầy ${incoming.authorName} đang xem`) : waitMsg;
+  // Có chân dung thầy + kênh gửi được ảnh → tin chờ là ẢNH thầy kèm chữ (thay
+  // quả cầu 🔮): người dùng thấy đang nói chuyện với ai. Avatar người gửi của OA/
+  // Page thì nền tảng cố định, không đổi theo từng tin được. Tin ảnh không sửa
+  // được thành câu trả lời ⇒ progressId=null, câu trả lời đi thành tin mới.
+  let progressId: ProgressId = null;
+  const kem = (t: string) => (incoming.intro ? `${incoming.intro}\n\n${t}` : t);
+  if (incoming.authorAvatarUrl && io.sendImage) {
+    await io.sendImage(chatId, incoming.authorAvatarUrl, kem(waitText.replace(/^🔮\s*/u, '')));
+  } else {
+    progressId = await io.sendProgress(chatId, kem(waitText));
+  }
 
   // Tải ảnh (nếu có) → base64. Lỗi tải thì bỏ qua, vẫn luận theo chữ.
   const images: ChatImage[] = [];
