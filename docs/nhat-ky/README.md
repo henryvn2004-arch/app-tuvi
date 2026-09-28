@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-463 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+464 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🧭 Gắn lại khối "Phương pháp luận giải — Tử Vi Nghiệm Chứng" lên trang chủ |
 | 1 | 2026-09 | `2026-09.md` | 📑 Báo cáo mở ra XEM ngay (khung trượt), không quay về form — bản chụp mọi kết quả |
 | 1 | 2026-09 | `2026-09.md` | 🫧 Bong bóng trống khi khách @ thẳng thầy khách |
 | 1 | 2026-09 | `2026-09.md` | 🧑‍🏫 Mời thầy theo NGỮ CẢNH thay cho cross-sell báo cáo |
