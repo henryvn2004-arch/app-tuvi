@@ -105,8 +105,10 @@ async function handleEvent(ev: MsgrMessaging, cfg: Awaited<ReturnType<typeof get
 
   // Bấm quick reply → payload là đúng câu soạn sẵn (nhãn nút bị cắt ≤20 ký tự).
   const text = (m.quick_reply?.payload || m.text || '').trim();
+  // Sticker (kể cả nút 👍) cũng đến dạng attachment 'image' kèm `sticker_id` —
+  // không phải ảnh để xem tướng/phong thủy, bỏ ra (còn chữ rỗng ⇒ lời nhắc chung).
   const imageRefs = (m.attachments || [])
-    .filter((a) => a.type === 'image' && a.payload?.url)
+    .filter((a) => a.type === 'image' && a.payload?.url && !a.payload.sticker_id)
     .map((a) => a.payload!.url as string);
 
   await handleChannelEvent(KIT, { chatId: psid, externalId: psid, text, imageRefs }, cfg);
@@ -128,7 +130,7 @@ interface MsgrMessaging {
     text?: string;
     is_echo?: boolean;
     quick_reply?: { payload?: string };
-    attachments?: { type?: string; payload?: { url?: string } }[];
+    attachments?: { type?: string; payload?: { url?: string; sticker_id?: number } }[];
   };
   // Liên kết ví: ref từ m.me?ref (referral) hoặc Get Started (postback.referral).
   referral?: { ref?: string };

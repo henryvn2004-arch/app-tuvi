@@ -120,6 +120,8 @@ export interface IncomingTurn {
 const WAIT_LASO = 'Đang xem lá số của bạn, chờ một chút…';
 const WAIT_IMAGE = 'Đang xem ảnh của bạn, chờ một chút…';
 const DEFAULT_IMG_Q = 'Nhờ thầy xem giúp ảnh này.';
+const IMG_FAIL =
+  'Thầy chưa mở được ảnh bạn gửi (ảnh quá lớn — trên 5MB — hoặc mạng chập chờn). Bạn gửi lại một ảnh nhỏ hơn giúp thầy nhé, lượt này không tính phí.';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -189,6 +191,15 @@ export async function runConversation(
     for (const ref of incoming.imageRefs.slice(0, io.maxImages)) {
       const img = await io.fetchImage(ref);
       if (img) images.push(img);
+    }
+    // Tải hụt HẾT ảnh thì dừng, không luận: trước đây lượt vẫn chạy với câu mồi
+    // "Nhờ thầy xem giúp ảnh này" mà model KHÔNG thấy ảnh nào ⇒ thầy bịa về một
+    // tấm ảnh không có, còn thu phí. Chưa chốt phí (chỉ chốt khi trả lời xong).
+    if (!images.length) {
+      console.error(`[runConversation] tải ảnh thất bại ${io.platform} refs=${incoming.imageRefs.length}`);
+      onOutcome?.(false, 'image_fetch_failed');
+      await deliver(io, chatId, progressId, IMG_FAIL);
+      return null;
     }
   }
 
