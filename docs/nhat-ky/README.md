@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-467 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+468 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 302 | 1,121,430 B |
+| `2026-09.md` | 303 | 1,125,551 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -27,6 +27,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 🔗 MCP công khai trả kèm link "Hỏi Thầy" + giữ utm khi /app dọn query |
 | 1 | 2026-09 | `2026-09.md` | 💬 Ô "Hỏi Thầy" trên trang SEO (/tu-vi, /la-so) — chat là cửa chính |
+| 1 | 2026-09 | `2026-09.md` | 🔗 Link chia sẻ phiên chỉ để XEM — người nhận hỏi thầy là PHIÊN MỚI trên lá số của chính họ |
 | 1 | 2026-09 | `2026-09.md` | 💬 Kênh Zalo OA — adapter Hỏi Thầy, token xoay vòng trong DB |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Gắn lại khối "Phương pháp luận giải — Tử Vi Nghiệm Chứng" lên trang chủ |
 | 1 | 2026-09 | `2026-09.md` | 📑 Báo cáo mở ra XEM ngay (khung trượt), không quay về form — bản chụp mọi kết quả |

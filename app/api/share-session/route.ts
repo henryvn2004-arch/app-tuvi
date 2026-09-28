@@ -22,9 +22,9 @@ function makeId(len = 10): string {
 
 export async function OPTIONS() { return options(); }
 
-// GET /api/share-session?id=<slug> — trả SNAPSHOT để NỐI PHIÊN (người nhận bấm
-// "Hỏi thầy tiếp"): khung giữa (restore) + transcript + thầy. RLS cho select công
-// khai khi revoked=false. KHÔNG lộ owner_user_id.
+// GET /api/share-session?id=<slug> — trả SNAPSHOT công khai (RLS cho select khi
+// revoked=false). KHÔNG lộ owner_user_id. shell.js `consumeFromShare` chỉ dùng
+// `thay` — người nhận KHÔNG nối phiên trên lá số của người chia sẻ.
 export async function GET(request: NextRequest) {
   const id = new URL(request.url).searchParams.get('id') || '';
   if (!/^[A-Za-z0-9]{6,16}$/.test(id)) return err('id không hợp lệ', 400);

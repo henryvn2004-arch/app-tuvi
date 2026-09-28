@@ -1,7 +1,7 @@
 // app/luan-duong/[id]/route.ts
 // Trang CÔNG KHAI read-only của một phiên Luận Đường được chia sẻ (như link ChatGPT).
 // Server-render (để OG unfurl trên FB/Zalo chạy) transcript hội thoại với thầy +
-// CTA "Đăng ký hỏi thầy tiếp". Snapshot lưu ở bảng shared_sessions.
+// CTA "hỏi thầy cho chính bạn" (mở PHIÊN MỚI, không nối phiên người chia sẻ). Snapshot lưu ở bảng shared_sessions.
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
@@ -161,7 +161,7 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
     <div class="cta-card">
       <span class="pill">✦ Tặng Lượng miễn phí khi đăng ký</span>
       <b>Muốn hỏi thầy cho chính bạn?</b>
-      <p>Đăng ký để hỏi tiếp thầy trong phiên này, hoặc tự lập lá số của riêng bạn — miễn phí.</p>
+      <p>Đây là lá số và phần hỏi đáp của người đã chia sẻ link — bạn chỉ xem được. Nhập ngày giờ sinh của bạn để thầy lập lá số riêng và luận cho chính bạn.</p>
       <a class="cta-btn" href="${SITE}${ctaRoute}?fromshare=${esc(id)}">Hỏi Thầy ${esc(thayName)} →</a>
     </div>
   </div>

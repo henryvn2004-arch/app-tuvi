@@ -53,6 +53,41 @@ export async function chatLoadSession(platform: string, chatId: number | string)
   }
 }
 
+// ── Thầy đang tiếp chuyện (chat_sessions.author_id) ───────
+// Tách khỏi chatLoadSession để lỗi đọc cột (chưa chạy migration-chat-author)
+// chỉ làm mất lựa chọn thầy — rơi về thầy mặc định — chứ không mất cả phiên.
+export async function chatGetAuthor(platform: string, chatId: number | string): Promise<string | null> {
+  if (!ready()) return null;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/chat_sessions?platform=eq.${encodeURIComponent(platform)}&chat_id=eq.${encodeURIComponent(String(chatId))}&select=author_id&limit=1`,
+      { cache: 'no-store', headers: SB_HEADERS },
+    );
+    if (!res.ok) return null;
+    const rows = (await res.json()) as { author_id?: string | null }[];
+    return rows[0]?.author_id || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function chatSetAuthor(platform: string, chatId: number | string, authorId: string): Promise<boolean> {
+  if (!ready()) return false;
+  try {
+    // merge-duplicates chỉ ghi đè cột có trong payload → messages/birth giữ nguyên.
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/chat_sessions`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, Prefer: 'resolution=merge-duplicates' },
+      body: JSON.stringify({ platform, chat_id: String(chatId), author_id: authorId }),
+    });
+    if (!res.ok) console.error('[chatSetAuthor] lỗi', res.status, await res.text().catch(() => ''));
+    return res.ok;
+  } catch (e) {
+    console.error('[chatSetAuthor] lỗi mạng', e);
+    return false;
+  }
+}
+
 export async function chatSaveSession(
   platform: string,
   chatId: number | string,

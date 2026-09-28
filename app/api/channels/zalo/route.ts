@@ -28,6 +28,7 @@ import {
 } from '@/lib/channels/zalo';
 import { consumeLinkToken, resolveLinkedUser, LINK_CMD } from '@/lib/channels/zaloLink';
 import { getRailPrice } from '@/lib/billing/pricing';
+import { thayCuaChat, timThay, chonThay, danhSachThay } from '@/lib/channels/author';
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -43,7 +44,7 @@ const WELCOME =
   'giới tính, ngày/tháng/năm sinh (dương lịch) và giờ sinh.\n\n' +
   'Ví dụ: "Nữ, 03/06/1998, giờ Sửu, năm nay làm ăn sao?"\n\n' +
   'Gửi ảnh khuôn mặt để xem tướng, ảnh nhà cửa để xem phong thủy.\n\n' +
-  'Lệnh: /new — trò chuyện mới · /link — dùng ví Lượng của bạn (nạp trên web).';
+  'Lệnh: /new — trò chuyện mới · /thay — xem và đổi thầy · /link — dùng ví Lượng của bạn (nạp trên web).';
 
 const freeCapMsg =
   `Bạn đã dùng hết ${FREE_DAILY} lượt miễn phí hôm nay (reset mỗi ngày). 🌙\n\n` +
@@ -75,8 +76,17 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const raw = await request.text();
-  if (!verifyZaloSignature(raw, request.headers.get('x-zevent-signature'))) {
-    return new Response('forbidden', { status: 401 });
+  const sig = request.headers.get('x-zevent-signature');
+  if (!verifyZaloSignature(raw, sig)) {
+    // Chữ ký sai/thiếu → BỎ QUA nhưng vẫn trả 200, không 401. Lý do: Zalo chỉ
+    // hiện OA Secret Key SAU KHI lưu được Webhook URL, mà lúc lưu nó POST thử
+    // và đòi 200 — trả 401 thì kẹt vòng (thiếu khoá → 401 → không lưu được →
+    // không thấy khoá). Bảo mật không đổi: request không hợp lệ vẫn không được
+    // xử lý. Log để lần ra khi khoá lệch (khoá thiếu thì mọi tin đều rơi ở đây).
+    console.error(
+      `[zalo] webhook chữ ký không hợp lệ — bỏ qua (oaKey=${process.env.ZALO_OA_SECRET_KEY ? 'có' : 'THIẾU'}, header=${sig ? 'có' : 'thiếu'})`,
+    );
+    return ok();
   }
   let ev: ZaloEvent;
   try {
@@ -97,7 +107,7 @@ async function handleEvent(ev: ZaloEvent, cfg: Awaited<ReturnType<typeof getChat
 
   if (name === 'follow') {
     const uid = ev.follower?.id;
-    if (uid) await zaloSendText(uid, WELCOME);
+    if (uid) await zaloSendText(uid, await chaoMung(uid));
     return;
   }
   // Chỉ xử lý tin người dùng gửi; bỏ qua echo (oa_send_*) và sự kiện khác.
@@ -123,7 +133,25 @@ async function handleEvent(ev: ZaloEvent, cfg: Awaited<ReturnType<typeof getChat
   }
 
   if (text === '/start' || text === '/help') {
-    await zaloSendText(uid, WELCOME);
+    await zaloSendText(uid, await chaoMung(uid));
+    return;
+  }
+
+  // /thay → danh sách; /thay <số|tên> → đổi thầy (nhớ theo cuộc trò chuyện).
+  if (text === '/thay' || text.startsWith('/thay ')) {
+    const arg = text.slice('/thay'.length).trim();
+    const hienTai = await thayCuaChat(ZALO_PLATFORM, uid);
+    if (!arg) {
+      await zaloSendText(uid, danhSachThay(hienTai));
+      return;
+    }
+    const moi = timThay(arg);
+    if (!moi) {
+      await zaloSendText(uid, `Không tìm thấy thầy "${arg}".\n\n${danhSachThay(hienTai)}`);
+      return;
+    }
+    const ok = await chonThay(ZALO_PLATFORM, uid, moi);
+    await zaloSendText(uid, ok ? `Từ giờ Thầy ${moi.name} tiếp chuyện với bạn. Bạn hỏi gì nào?` : ERR_MSG);
     return;
   }
 
@@ -163,16 +191,25 @@ async function handleEvent(ev: ZaloEvent, cfg: Awaited<ReturnType<typeof getChat
     return;
   }
 
+  // Cùng hai thứ web gửi mỗi lượt: thầy tiếp chuyện (đổi giọng) + tài khoản đã
+  // liên kết (trí nhớ, người thân). Tài khoản giải từ chat_links, không từ tin.
+  const [thay, userId] = await Promise.all([thayCuaChat(ZALO_PLATFORM, uid), resolveLinkedUser(uid)]);
+
   await runConversation(
     zaloIO,
     zaloStore,
-    { chatId: uid, text, imageRefs },
+    { chatId: uid, text, imageRefs, authorId: thay.id, authorName: thay.name, userId },
     cfg,
     ERR_MSG,
     gate.commit,
     zaloProfiles,
     (okRun, reason) => void chatLogOutcome(ZALO_PLATFORM, uid, okRun, reason),
   );
+}
+
+async function chaoMung(uid: string): Promise<string> {
+  const thay = await thayCuaChat(ZALO_PLATFORM, uid);
+  return `${WELCOME}\n\nThầy ${thay.name} đang tiếp chuyện với bạn — nhắn /thay để xem và đổi thầy khác trong nhóm.`;
 }
 
 function ok() {
