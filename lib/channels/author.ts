@@ -95,5 +95,7 @@ export async function gioiThieuThay(t: Thay): Promise<string> {
   return m?.discipline ? `${chao}\nThầy chuyên xem: ${m.discipline}.` : chao;
 }
 
-/** URL công khai chân dung chì của thầy (public/authors/<id>.jpg, ~30 KB). */
-export const anhThay = (t: Thay) => `https://www.tuviminhbao.com/authors/${t.id}.jpg`;
+/** URL công khai chân dung chì THU NHỎ của thầy (public/authors/nho/<id>.jpg,
+ *  96×96, ~3 KB — cắt từ bản gốc public/authors/<id>.jpg). App chat tự quyết
+ *  cỡ hiển thị ảnh; ảnh gốc to bị bày ra gần kín màn hình. */
+export const anhThay = (t: Thay) => `https://www.tuviminhbao.com/authors/nho/${t.id}.jpg`;
