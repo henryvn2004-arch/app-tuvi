@@ -17,7 +17,7 @@ import {
 import { ZALO_PLATFORM } from './zalo';
 
 /** OA ID (số) để dựng link mở OA. Trống → trả link trang chủ Zalo OA. */
-const OA_ID = (process.env.ZALO_OA_ID || '').replace(/\D/g, '');
+export const OA_ID = (process.env.ZALO_OA_ID || '').replace(/\D/g, '');
 
 export const LINK_CMD = '/link';
 
