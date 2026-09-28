@@ -35,6 +35,7 @@ import {
 import { checkEnv } from '@/lib/ops/preflight';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
+import { zaloConfigured } from '@/lib/channels/zalo';
 import { parseFirebaseServiceAccount, sendFcmPush } from '@/lib/channels/push';
 import { getGa4Breakdown } from '@/lib/analytics/ga4';
 import { getAdminUser } from '@/lib/admin/auth';
@@ -1169,8 +1170,8 @@ async function handleAdminCronTrigger(request: NextRequest, body: Record<string,
 
 // ── GET: admin-channels (trạng thái kênh chat + push, Command Center S4) ──
 // Đọc trực tiếp bảng generic chat_* (nguồn thật hiện tại — telegram_* cũ đã
-// "mồ côi" từ migration-channels-multiplatform). Zalo chưa có adapter → hard-code.
-const CHANNEL_PLATFORMS = ['telegram', 'messenger', 'whatsapp'] as const;
+// "mồ côi" từ migration-channels-multiplatform).
+const CHANNEL_PLATFORMS = ['telegram', 'messenger', 'whatsapp', 'zalo-oa'] as const;
 
 async function countExact(path: string): Promise<number> {
   try {
@@ -1208,10 +1209,10 @@ async function handleAdminChannels(request: NextRequest): Promise<Response> {
       const lastActive = rows.reduce<string | null>((max, r) => (!max || r.updated_at > max ? r.updated_at : max), null);
       const configured = p === 'telegram' ? !!process.env.TELEGRAM_BOT_TOKEN
         : p === 'messenger' ? !!process.env.MESSENGER_PAGE_ACCESS_TOKEN
+        : p === 'zalo-oa' ? zaloConfigured()
         : !!(process.env.WHATSAPP_PHONE_NUMBER_ID && process.env.WHATSAPP_TOKEN);
       return { platform: p, configured, users: rows.length, linked, msgs7d, lastActive };
     });
-    channels.push({ platform: 'zalo', configured: false, users: 0, linked: 0, msgs7d: 0, lastActive: null });
 
     return ok({
       channels,

@@ -17,7 +17,7 @@
 - ⏭ **Mở rộng tùy chọn (không chặn ra mắt):**
   - Kéo **phong-thuy + tuong-mat** (ảnh/multimodal) vào agent chat (hiện vẫn trang/API riêng).
   - `/api/lasotuvi` **GIỮ** (quyết định 2026-06-21): mode `phan` nuôi luận-giải 24 mục (chưa có bản v1), mode `action=chat` đã share CHUNG bộ não (`lib/agent/prompts.ts`+`tools.ts`) nên không drift → khai tử không đáng (lợi ích ~0, rủi ro gãy `luan-giai` thật).
-- 🔜 **Phase 2 (Zalo)** — bộ não đã sẵn; chờ Henry đăng ký OA/Mini App (mục 4.2).
+- 🟡 **Phase 2 (Zalo)** — adapter OA đã viết (`lib/channels/zalo.ts`, 2026-09-28), chờ key để bật; Mini App chưa làm (mục 4.2).
 - Status chi tiết + quy ước phiên: xem `CLAUDE.md` mục "🟢 ĐANG LÀM".
 
 ---
