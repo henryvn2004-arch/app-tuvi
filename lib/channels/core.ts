@@ -105,6 +105,9 @@ export interface IncomingTurn {
   authorName?: string;
   /** URL công khai chân dung thầy — có thì tin "đang xem…" là ảnh thầy. */
   authorAvatarUrl?: string;
+  /** Lời thầy tự giới thiệu — chỉ có ở lượt ĐẦU cuộc trò chuyện; ghép lên
+   *  trước chữ "đang xem…" trong cùng tin chờ (không thêm tin riêng). */
+  intro?: string;
   /** Tài khoản đã LIÊN KẾT (server tự giải qua chat_links, không lấy từ tin
    *  nhắn) → bật trí nhớ/người thân như web. null/vắng = không đọc/ghi hồ sơ. */
   userId?: string | null;
@@ -168,10 +171,11 @@ export async function runConversation(
   // Page thì nền tảng cố định, không đổi theo từng tin được. Tin ảnh không sửa
   // được thành câu trả lời ⇒ progressId=null, câu trả lời đi thành tin mới.
   let progressId: ProgressId = null;
+  const kem = (t: string) => (incoming.intro ? `${incoming.intro}\n\n${t}` : t);
   if (incoming.authorAvatarUrl && io.sendImage) {
-    await io.sendImage(chatId, incoming.authorAvatarUrl, waitText.replace(/^🔮\s*/u, ''));
+    await io.sendImage(chatId, incoming.authorAvatarUrl, kem(waitText.replace(/^🔮\s*/u, '')));
   } else {
-    progressId = await io.sendProgress(chatId, waitText);
+    progressId = await io.sendProgress(chatId, kem(waitText));
   }
 
   // Tải ảnh (nếu có) → base64. Lỗi tải thì bỏ qua, vẫn luận theo chữ.

@@ -22,13 +22,13 @@
 import { runConversation, type ChannelIO, type ChatButton, type ProfileStore, type SessionStore } from './core';
 import { buildAccessGate } from './gate';
 import { sendMenu } from './format';
-import { chatConsumeLinkToken, chatLogOutcome, chatLoadSession } from './store';
+import { chatConsumeLinkToken, chatGetAuthor, chatLogOutcome, chatLoadSession } from './store';
 import { ensureChatUser } from './account';
 import { accountProfiles, saveChart } from './charts';
 import { createHandoffUrl, lasoPath } from './handoff';
 import { claimLoginCode, parseLoginCode } from './login';
 import { TOPUP_CMD, createChatTopup, parseTopup, topupCaption, topupChoices, vietQrImageUrl } from './topup';
-import { THAY_LIST, chonThay, thayCuaChat, timThay } from './author';
+import { THAY_LIST, anhThay, chonThay, gioiThieuThay, thayCuaChat, timThay, type Thay } from './author';
 import { getRailPrice } from '@/lib/billing/pricing';
 import { paywallDisabled, getBalance, deductCredits, logTransaction } from '@/lib/billing/credits';
 import { railFreeRemaining, railFreeConsume } from '@/lib/billing/viral-budget';
@@ -171,6 +171,11 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   }
 
   const thay = await thayCuaChat(kit.platform, String(ev.chatId));
+  // Lượt ĐẦU cuộc trò chuyện: thầy tự giới thiệu ngắn, ghép chung tin chờ
+  // "đang xem…". Dấu "đã chào" = thầy ĐÃ được lưu vào chat_sessions.author_id
+  // (lời chào/đổi thầy cũng lưu) — /new xoá dòng phiên nên chào lại từ đầu.
+  const moiBatDau = !(await chatGetAuthor(kit.platform, String(ev.chatId)));
+  if (moiBatDau) await chonThay(kit.platform, String(ev.chatId), thay);
   const outcome = await runConversation(
     io,
     kit.store,
@@ -181,7 +186,8 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
       authorId: thay.id,
       authorName: thay.name,
       // Chân dung chì của nhóm 15 thầy (public/authors/<id>.jpg, ~30 KB).
-      authorAvatarUrl: `https://www.tuviminhbao.com/authors/${thay.id}.jpg`,
+      authorAvatarUrl: anhThay(thay),
+      ...(moiBatDau ? { intro: await gioiThieuThay(thay) } : {}),
       userId,
     },
     cfg,
@@ -241,15 +247,17 @@ async function sendWelcome(kit: ChannelKit, ev: ChannelEvent, userId: string | n
   const con = userId ? await conCauHoi(userId, cost) : '';
   const vi = con ? `\n\n${con}` : '';
   const web = userId ? await createHandoffUrl(userId, '/app/cong-cu') : null;
+  await chaoThay(kit, ev, thay);
+  await chonThay(kit.platform, String(ev.chatId), thay); // đánh dấu đã chào
   await sendMenu(
     kit.io,
     ev.chatId,
-    'Xin chào! Đây là Hỏi Thầy — Tử Vi Minh Bảo 🔮\n\n' +
+    'Đây là Hỏi Thầy — Tử Vi Minh Bảo.\n\n' +
       'Hỏi thầy bất cứ điều gì về tử vi, vận hạn, tuổi tác, công việc, tình duyên… Để lập lá số, cho thầy biết: ' +
       'giới tính, ngày/tháng/năm sinh (dương lịch) và giờ sinh.\n' +
       'Ví dụ: "Nữ, 03/06/1998, giờ Sửu, năm nay làm ăn sao?"\n\n' +
       'Gửi ảnh khuôn mặt để xem tướng, ảnh nhà cửa để xem phong thủy.\n\n' +
-      `Thầy ${thay.name} đang tiếp chuyện với bạn — nhóm Minh Bảo có ${THAY_LIST.length} thầy, đổi lúc nào cũng được.` +
+      `Nhóm Minh Bảo có ${THAY_LIST.length} thầy — đổi thầy lúc nào cũng được.` +
       vi,
     [
       { title: 'Đổi thầy', reply: CMD.thay },
@@ -260,6 +268,14 @@ async function sendWelcome(kit: ChannelKit, ev: ChannelEvent, userId: string | n
   );
 }
 
+/** Thầy tự giới thiệu: chân dung + lời chào + môn chuyên (kênh không gửi
+ *  được ảnh thì chỉ chữ). */
+async function chaoThay(kit: ChannelKit, ev: ChannelEvent, t: Thay): Promise<void> {
+  const loi = await gioiThieuThay(t);
+  if (kit.io.sendImage) await kit.io.sendImage(ev.chatId, anhThay(t), loi);
+  else await kit.io.sendText(ev.chatId, loi);
+}
+
 // ── Nhóm thầy ──────────────────────────────────────────────────────────
 async function handleThay(kit: ChannelKit, ev: ChannelEvent, arg: string): Promise<void> {
   const hienTai = await thayCuaChat(kit.platform, String(ev.chatId));
@@ -267,7 +283,11 @@ async function handleThay(kit: ChannelKit, ev: ChannelEvent, arg: string): Promi
     const moi = timThay(arg);
     if (moi) {
       const ok = await chonThay(kit.platform, String(ev.chatId), moi);
-      await kit.io.sendText(ev.chatId, ok ? `Từ giờ Thầy ${moi.name} tiếp chuyện với bạn. Bạn hỏi gì nào?` : ERR_MSG);
+      if (!ok) {
+        await kit.io.sendText(ev.chatId, ERR_MSG);
+        return;
+      }
+      await chaoThay(kit, ev, moi);
       return;
     }
     await kit.io.sendText(ev.chatId, `Không tìm thấy thầy "${arg}".`);

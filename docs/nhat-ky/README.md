@@ -25,7 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
-| 1 | 2026-09 | `2026-09.md` | 🧑‍🏫 Kênh chat: tin "đang xem…" là chân dung thầy thay quả cầu 🔮 |
+| 1 | 2026-09 | `2026-09.md` | 🧑‍🏫 Kênh chat: chân dung thầy thay quả cầu 🔮 + thầy tự giới thiệu khi bắt đầu chat |
 | 1 | 2026-09 | `2026-09.md` | 🔢 Kênh chat: "Còn N câu hỏi" sau mỗi câu trả lời + trong lời chào |
 | 1 | 2026-09 | `2026-09.md` | 🔗 MCP công khai trả kèm link "Hỏi Thầy" + giữ utm khi /app dọn query |
 | 1 | 2026-09 | `2026-09.md` | 💬 Ô "Hỏi Thầy" trên trang SEO (/tu-vi, /la-so) — chat là cửa chính |
