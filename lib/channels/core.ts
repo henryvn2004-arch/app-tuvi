@@ -77,6 +77,14 @@ export interface IncomingTurn {
   text: string;
   /** Ref ảnh đặc thù nền tảng (rỗng nếu không có ảnh). */
   imageRefs: string[];
+  /** Thầy đang tiếp chuyện (khớp `lib/agent/personas.ts`) — cùng khoá `authorId`
+   *  web gửi mỗi lượt. Vắng → giọng mặc định (hành xử cũ). */
+  authorId?: string;
+  /** Tên hiển thị của thầy đó, chỉ để ghi lên tin "đang xem…". */
+  authorName?: string;
+  /** Tài khoản đã LIÊN KẾT (server tự giải qua chat_links, không lấy từ tin
+   *  nhắn) → bật trí nhớ/người thân như web. null/vắng = không đọc/ghi hồ sơ. */
+  userId?: string | null;
 }
 
 const WAIT_LASO = '🔮 Đang xem lá số của bạn, chờ một chút…';
@@ -130,7 +138,11 @@ export async function runConversation(
     : null;
 
   await io.typing(chatId);
-  const progressId = await io.sendProgress(chatId, hasImage ? WAIT_IMAGE : WAIT_LASO);
+  const waitMsg = hasImage ? WAIT_IMAGE : WAIT_LASO;
+  const progressId = await io.sendProgress(
+    chatId,
+    incoming.authorName ? waitMsg.replace('Đang xem', `Thầy ${incoming.authorName} đang xem`) : waitMsg,
+  );
 
   // Tải ảnh (nếu có) → base64. Lỗi tải thì bỏ qua, vẫn luận theo chữ.
   const images: ChatImage[] = [];
@@ -182,10 +194,17 @@ export async function runConversation(
       // Đã có lá số từ phiên trước (và tin này KHÔNG kèm ngày sinh mới) → truyền
       // thẳng, không hỏi lại ngày sinh. Tin có ngày sinh mới → carryBirth=null.
       ...(carryBirth ? { birth: carryBirth } : {}),
+      ...(incoming.authorId ? { authorId: incoming.authorId } : {}),
       client: { platform: io.platform, version: '1.0.0' },
     };
     const collector = createSSECollector(onStatus);
-    const { birth: agentBirth, subjectSwitched, lasoCard } = await runAgent(req, cfg, collector.send, profilePort);
+    const { birth: agentBirth, subjectSwitched, lasoCard } = await runAgent(
+      req,
+      cfg,
+      collector.send,
+      profilePort,
+      incoming.userId ?? null,
+    );
     working = false;
 
     const err = collector.getError();
