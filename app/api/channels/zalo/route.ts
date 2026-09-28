@@ -75,8 +75,17 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const raw = await request.text();
-  if (!verifyZaloSignature(raw, request.headers.get('x-zevent-signature'))) {
-    return new Response('forbidden', { status: 401 });
+  const sig = request.headers.get('x-zevent-signature');
+  if (!verifyZaloSignature(raw, sig)) {
+    // Chữ ký sai/thiếu → BỎ QUA nhưng vẫn trả 200, không 401. Lý do: Zalo chỉ
+    // hiện OA Secret Key SAU KHI lưu được Webhook URL, mà lúc lưu nó POST thử
+    // và đòi 200 — trả 401 thì kẹt vòng (thiếu khoá → 401 → không lưu được →
+    // không thấy khoá). Bảo mật không đổi: request không hợp lệ vẫn không được
+    // xử lý. Log để lần ra khi khoá lệch (khoá thiếu thì mọi tin đều rơi ở đây).
+    console.error(
+      `[zalo] webhook chữ ký không hợp lệ — bỏ qua (oaKey=${process.env.ZALO_OA_SECRET_KEY ? 'có' : 'THIẾU'}, header=${sig ? 'có' : 'thiếu'})`,
+    );
+    return ok();
   }
   let ev: ZaloEvent;
   try {
