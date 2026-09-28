@@ -56,7 +56,7 @@ const PUBLIC_INFO: McpKeyInfo = {
   active: true,
 };
 
-const handler = buildMcpHandler(async () => ({ info: PUBLIC_INFO }), PUBLIC_KEY);
+const handler = buildMcpHandler(async () => ({ info: PUBLIC_INFO }), PUBLIC_KEY, { hoiThay: true });
 
 export async function GET(req: Request) {
   return handler(req);

@@ -115,7 +115,13 @@
   }
 
   if(ask){
-    try{ history.replaceState(null,'',location.pathname); }catch(e){}
+    // GIỮ lại nhãn nguồn (utm_*/gclid/fbclid): track.js do shell.js nạp BẤT ĐỒNG
+    // BỘ, thường chạy SAU dòng này — xoá sạch query là lượt đến từ quảng cáo /
+    // MCP (`utm_source=mcp`) rơi vào "(none)" tuỳ may rủi.
+    try{ var keep=new URLSearchParams();
+         new URLSearchParams(location.search).forEach(function(v,k){ if(/^(utm_|gclid$|fbclid$)/.test(k)) keep.append(k,v); });
+         var ks=keep.toString();
+         history.replaceState(null,'',location.pathname+(ks?'?'+ks:'')); }catch(e){}
     if(ask.q) Shell.joinThay(ask.thay,ask.q,ask.laSo); else Shell.meetThay(ask.thay);
   }
   }
