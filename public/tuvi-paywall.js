@@ -400,6 +400,12 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 
   // ── Overlay helper ────────────────────────────────────────────
   let _ov = null;
+  // Esc đóng — độc lập với click-ra-ngoài đã có, cùng luật CLAUDE.md "mọi
+  // overlay chặn đường phải có đường thoát KHÔNG PHỤ THUỘC vị trí". Mọi
+  // hộp dựng qua `_open()` đều là lời TỪ CHỐI có nút Đóng/Để sau riêng — Esc
+  // chỉ thêm một đường thoát nữa, không đường nào trong số đó là bắt buộc
+  // hoàn tất (không có giao dịch đang treo giữa chừng).
+  function _ovEsc(e) { if (e.key === 'Escape') _close(); }
   function _open(inner) {
     _close();
     _closeLock();  // không bày hai kiểu "chưa mở được" cùng lúc
@@ -410,10 +416,12 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     _ov.addEventListener('click', e => { if (e.target === _ov) _close(); });
     document.body.appendChild(_ov);
     document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', _ovEsc);
   }
   function _close() {
     if (_ov) { _ov.remove(); _ov = null; }
     document.body.style.overflow = '';
+    document.removeEventListener('keydown', _ovEsc);
   }
 
   // ── W3: dòng "còn bao nhiêu · tốn bao nhiêu" ngay dưới nút ────────────

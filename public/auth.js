@@ -952,6 +952,19 @@ function _showFreeCreditsWelcome() {
   setTimeout(() => { window.refreshNavCredits && window.refreshNavCredits(); }, 1000);
 }
 
+// ── Esc đóng modal đăng nhập/lưu tài khoản ──────────────────────────────
+// Cả hai modal đã có nút ✕ + click-ra-ngoài, nhưng thiếu Esc — đường thoát
+// KHÔNG PHỤ THUỘC vị trí con trỏ (CLAUDE.md: "mọi overlay chặn đường phải có
+// đường thoát Esc"). Một listener chung, kiểm `style.display` vì cả hai modal
+// đóng/mở bằng cách đó (không dùng class).
+document.addEventListener('keydown', function (e) {
+  if (e.key !== 'Escape') return;
+  const am = document.getElementById('auth-modal');
+  if (am && am.style.display !== 'none' && am.style.display !== '') { closeAuthModal(); return; }
+  const cm = document.getElementById('claim-modal');
+  if (cm && cm.style.display !== 'none' && cm.style.display !== '') closeClaimModal();
+});
+
 // Expose for inline use
 window.showAuthModal  = showAuthModal;
 window.refreshNavCredits = _loadNavCredits;

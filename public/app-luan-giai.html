@@ -169,13 +169,6 @@
    .tpw-ph làm bài kiểm đếm "11 phần khoá" ăn nhầm ô nối tiếp này thành 12. */
 .lg-cut-bars i{display:block;height:11px;border-radius:6px;background:linear-gradient(90deg,#e4ddcd,#f2ede2);margin-bottom:11px}
 .lg-cut-bars i:last-of-type{margin-bottom:0}
-/* Pha 3 — thanh CTA dính đáy: chỉ hiện SAU khi cuộn qua khỏi tường (xem
-   _wireStickyCta()). z-index dưới .rail/.sb (60) nên rail toàn màn trên mobile
-   tự phủ lên nó, không cần thêm luật ẩn riêng. Mép dưới khớp .tabbar (~64px +
-   safe-area) cùng quy ước .ws-fab/.sb/.rail ở shell.css. */
-.lg-sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--white);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));box-shadow:0 -4px 14px rgba(6,26,46,.12);display:none}
-.lg-sticky-cta .btn-go{width:100%;max-width:520px;margin:0 auto;display:block}
-@media(max-width:900px){.lg-sticky-cta{bottom:calc(64px + env(safe-area-inset-bottom))}}
 /* Gợi ý tool khác — chỉ hiện cho cung có mối liên hệ thật xác nhận, xem
    CUNG_TOOL_LINKS/cungRelatedHtml(). */
 .lg-related{margin-top:12px;display:flex;flex-direction:column;gap:6px}
@@ -365,15 +358,6 @@
         <div class="jump" id="lgJump"></div>
         <div class="lg-tension" id="lgTension" style="display:none"></div>
         <div class="lg-unlock" id="lgUnlock" style="display:none"></div>
-        <!-- Pha 3 (2026-09-14) — thanh CTA dính đáy: TĨNH ngay từ đầu (không
-             phải JS chèn sau) để `data-tvp-price` được auto-điền cùng lượt với
-             mọi ô giá khác của trang (tool-prices.js tự quét `document` lúc
-             DOMContentLoaded — xem ghi chú ở đầu tool-prices.js). Ẩn mặc định
-             qua CSS `.lg-sticky-cta{display:none}`; `_wireStickyCta()` bật/tắt
-             bằng `style.display` khi cuộn qua khỏi #lgUnlock. -->
-        <div class="lg-sticky-cta" id="lgStickyCta">
-          <button class="btn-go" type="button" onclick="initiateLuanGiaiChuyenSau('sticky')">✦ Mở luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button>
-        </div>
         <div class="lg-progress" id="lgProgress" style="display:none"></div>
         <!-- Thẻ "Báo cáo đã sẵn sàng" — Pha 2 productize luận giải (2026-09).
              TĨNH, ẩn bằng [hidden] (CLS-safe) — tools-shared/report-delivery.js
@@ -1152,36 +1136,10 @@ function _paintSecLocks(show){
     if(el) el.style.display=show?'flex':'none';
     if(!show) _hideCtaLg(p);
   }
-  // Pha 3 — thanh CTA dính đáy cũng là một lời mời mua, tắt cùng lúc với mọi
-  // CTA khác khi đã trả tiền (đã sinh AI, không còn gì để mời).
-  if(!show) _hideStickyCta();
 }
 function _hideCtaLg(p){
   var el=document.getElementById('lg-cta-'+p);
   if(el) el.style.display='none';
-}
-// Pha 3 (thanh CTA dính đáy, 2026-09-14) — chỉ hiện SAU khi khách cuộn QUA
-// KHỎI tường (#lgUnlock), vì lúc đó nút mở khoá chính đã trôi khỏi màn hình.
-// Cuộn ở phần 1-2 (trước khi chạm tường) hoặc còn thấy tường thì KHÔNG hiện —
-// tường đã đủ nổi bật, thêm thanh dính lúc đó chỉ là nhiễu.
-var _stickyObs=null;
-function _wireStickyCta(){
-  var bar=document.getElementById('lgStickyCta');
-  var wall=document.getElementById('lgUnlock');
-  var ws=document.getElementById('ws');
-  if(!bar||!wall||!ws||!window.IntersectionObserver) return;
-  if(_stickyObs) _stickyObs.disconnect();
-  _stickyObs=new IntersectionObserver(function(entries){
-    var e=entries[0];
-    var pastWall=!e.isIntersecting&&e.boundingClientRect.top<0;
-    bar.style.display=pastWall?'flex':'none';
-  },{root:ws,threshold:0});
-  _stickyObs.observe(wall);
-}
-function _hideStickyCta(){
-  if(_stickyObs){ _stickyObs.disconnect(); _stickyObs=null; }
-  var bar=document.getElementById('lgStickyCta');
-  if(bar) bar.style.display='none';
 }
 function wirePhanAsk(root){
   root.querySelectorAll('[data-ask]').forEach(function(el){
@@ -1609,11 +1567,6 @@ function _renderUnlockBlock(){
   // Bấm được nay không chỉ ở banner đầu trang — cả 24 phần (luôn nằm trong
   // DOM) cũng bật khoá-mini của chính nó, để cuộn qua khỏi banner vẫn còn chỗ mở.
   _paintSecLocks(true);
-  // Pha 3 — bắt đầu theo dõi vị trí tường để bật thanh CTA dính đáy đúng lúc
-  // cuộn qua khỏi nó. Gọi ở ĐÂY (một lần, đúng lúc tường vừa dựng xong) chứ
-  // không phải trong renderLuan() — tường có thể chưa tồn tại lúc đó (khách
-  // chưa đọc xong bản xem trước).
-  _wireStickyCta();
   if(_lgLoggedIn()){
     host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau(\'wall\')">✦ Luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button>'+
       '<p>Bạn vừa đọc 1 phần đầu miễn phí. 12 phần còn lại — mỗi cung một phần luận riêng theo cổ pháp — nằm trong bản đầy đủ, kèm bản PDF tải về hoặc gửi qua email.</p>';
