@@ -26,7 +26,8 @@ import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
-import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine, RAIL_MAX_TOKENS, LASO_MAX_TOKENS, HOI_CHAN_MAX_TOKENS } from '@/lib/agent/prompts';
+import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine, RAIL_MAX_TOKENS, LASO_MAX_TOKENS, HOI_CHAN_MAX_TOKENS, apMauThay } from '@/lib/agent/prompts';
+import { tinhNhip, nhipHint } from '@/lib/agent/nhip';
 import { cacChuDe, khoiChuDe } from '@/lib/agent/luan-chu-de';
 import { personaVoice, PERSONAS } from '@/lib/agent/personas';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
@@ -433,9 +434,10 @@ async function runAgentInner(
       ? `TÔNG/PHONG CÁCH (tùy chỉnh — CHỈ đổi giọng văn, KHÔNG đổi hình dạng/độ dài/luật luận bên dưới):\n${cfgIn.systemPrompt}`
       : undefined;
     const tone = [personaTxt, adminTone].filter(Boolean).join('\n\n') || undefined;
-    system = hasLaso
-      ? CHAT_SYSTEM_LASO(lasoCtx, undefined, tone)
-      : CHAT_SYSTEM_GENERAL(undefined, tone);
+    system = apMauThay(
+      hasLaso ? CHAT_SYSTEM_LASO(lasoCtx, undefined, tone) : CHAT_SYSTEM_GENERAL(undefined, tone),
+      req.authorId
+    );
     system += '\n\n' + timeContext(); // thời gian chuẩn múi giờ VN (đè bản inline của template)
     system += TOOLS_INSTRUCTION(hasLaso, !!profiles);
 
@@ -603,16 +605,18 @@ async function runAgentInner(
     }
   }
 
-  // hellobot-ui-redesign Đợt 4: câu hỏi NỐI TIẾP (không phải câu mở đầu phiên)
-  // thì xin trả lời ngắn — CÙNG kỹ thuật với focusHintText ngay trên: nhét vào
-  // CUỐI tin user, KHÔNG sửa system, để system giữ nguyên cho prompt cache.
-  // Đếm user turns trên `req.messages` ĐÃ GỘP lịch sử (xem merge
-  // `historyMode:'delta'` ở app/api/v1/chat/route.ts trước khi gọi runAgent)
-  // — > 1 nghĩa là ít nhất một câu đã hỏi trước đó trong CÙNG phiên.
-  const userTurns = (req.messages as ChatMessage[]).filter((m) => m.role === 'user').length;
-  if (userTurns > 1 && convo.length) {
+  // NHỊP từng lượt (lib/agent/nhip.ts, Henry 2026-09-27) — THAY luật cũ "câu
+  // nối tiếp 40–90 từ": độ dài theo SỨC NẶNG câu hỏi + bốc tất định không lặp
+  // hai lượt liền, và lượt nào được chêm câu đinh của thầy. Cùng kỹ thuật
+  // focusHintText: CUỐI tin user, không sửa system (giữ prompt cache).
+  // Hội chẩn / mời đích danh thầy khác có luật độ dài riêng ở hint của chúng.
+  if (!hoiChan && !req.addressMaster && convo.length) {
+    const cauHoi = (req.messages as ChatMessage[])
+      .filter((m) => m.role === 'user')
+      .map((m) => (typeof m.content === 'string' ? m.content : ''));
+    const thay = req.authorId ?? req.scenario?.authorId;
+    const hint = nhipHint(tinhNhip(cauHoi, thay), thay);
     const last = convo[convo.length - 1];
-    const hint = '[Câu hỏi nối tiếp trong cùng hội thoại — trả lời ngắn gọn (khoảng 40–90 từ), đi thẳng vào điều mới, đừng lặp lại phần đã nói ở lượt trước.]';
     if (last?.role === 'user') {
       if (typeof last.content === 'string') {
         last.content = last.content + '\n\n' + hint;
@@ -656,7 +660,7 @@ async function runAgentInner(
   // Hội chẩn — khách bấm "Mời nhóm hội chẩn" ⇒ LUÔN gọi hoi_chan. Cùng kỹ
   // thuật: gợi ý vào CUỐI tin user, không đụng system (giữ prompt cache).
   if (hoiChan && convo.length) {
-    const hint = '[Người dùng vừa bấm mời NHÓM HỘI CHẨN cho câu hỏi này — luận ngắn bằng Tử Vi TRƯỚC (3–5 câu), rồi BẮT BUỘC gọi tool hoi_chan và trình bày đúng như tool dặn. Lượt này được dài hơn giới hạn "trả lời ngắn" ở trên, nhưng tổng cả nhóm không quá khoảng 350 từ.]';
+    const hint = '[Người dùng vừa bấm mời NHÓM HỘI CHẨN cho câu hỏi này — luận ngắn bằng Tử Vi TRƯỚC (3–5 câu), rồi BẮT BUỘC gọi tool hoi_chan và trình bày đúng như tool dặn. Lượt này được dài hơn ngân sách thường, nhưng tổng cả nhóm không quá khoảng 350 từ.]';
     const last = convo[convo.length - 1];
     if (last?.role === 'user') {
       if (typeof last.content === 'string') {
