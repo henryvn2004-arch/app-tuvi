@@ -92,17 +92,24 @@ export async function tgSendMessageReturnId(chatId: number | string, text: strin
   }
 }
 
-/** Sửa nội dung 1 tin nhắn (dùng cho thanh tiến trình + chốt câu trả lời). */
-export async function tgEditMessage(chatId: number | string, messageId: number, text: string): Promise<void> {
-  if (!TG_TOKEN || !messageId) return;
+/** Sửa nội dung 1 tin nhắn (dùng cho thanh tiến trình + chốt câu trả lời).
+ *  Trả `true` chỉ khi Telegram nhận (không throw — caller quyết). */
+export async function tgEditMessage(chatId: number | string, messageId: number, text: string): Promise<boolean> {
+  if (!TG_TOKEN || !messageId) return false;
   try {
-    await fetch(`${TG_API}/editMessageText`, {
+    const r = await fetch(`${TG_API}/editMessageText`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: chatId, message_id: messageId, text: (text || '…').slice(0, TG_MSG_LIMIT), disable_web_page_preview: true }),
     });
-  } catch {
-    /* best-effort */
+    if (!r.ok) {
+      console.error(`[tgEditMessage] Telegram từ chối (HTTP ${r.status}) chat_id=${chatId}: ${(await r.text().catch(() => '')).slice(0, 500)}`);
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.error(`[tgEditMessage] lỗi mạng chat_id=${chatId}:`, e);
+    return false;
   }
 }
 

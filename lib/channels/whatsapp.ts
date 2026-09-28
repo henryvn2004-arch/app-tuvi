@@ -29,18 +29,30 @@ const MSG_LIMIT = 4096; // giới hạn body text WhatsApp
 const MAX_IMAGES = 3;
 
 // ── Send API ────────────────────────────────────────────────
-/** Gửi 1 tin văn bản (tự cắt nếu > giới hạn). */
-export async function waSendText(to: string, text: string): Promise<void> {
-  if (!PHONE_NUMBER_ID || !WA_TOKEN) return;
+/** Gửi 1 tin văn bản (tự cắt nếu > giới hạn). Trả `true` chỉ khi Meta nhận
+ *  ĐỦ mọi đoạn (không throw — cảnh báo admin dùng chung hàm này). */
+export async function waSendText(to: string, text: string): Promise<boolean> {
+  if (!PHONE_NUMBER_ID || !WA_TOKEN) return false;
   for (const chunk of splitText(text || '…', MSG_LIMIT)) {
-    await graphPost(`${PHONE_NUMBER_ID}/messages`, WA_TOKEN, {
+    const res = await graphPost(`${PHONE_NUMBER_ID}/messages`, WA_TOKEN, {
       messaging_product: 'whatsapp',
       recipient_type: 'individual',
       to,
       type: 'text',
       text: { body: chunk, preview_url: false },
     });
+    if (!res?.ok) {
+      console.error('[whatsapp] gửi tin lỗi', res?.status ?? 'network', await res?.text().catch(() => ''));
+      return false;
+    }
   }
+  return true;
+}
+
+// Gửi cho luồng hội thoại: hỏng thì NÉM LỖI để core không gọi LLM / không chốt
+// phí khi người dùng không nhận được gì.
+async function waSendOrThrow(to: string, text: string): Promise<void> {
+  if (!(await waSendText(to, text))) throw new Error('[whatsapp] gửi tin thất bại');
 }
 
 // ── Tải ảnh: media-id → url → bytes (base64) ────────────────
@@ -65,9 +77,9 @@ export const whatsappIO: ChannelIO = {
   msgLimit: MSG_LIMIT,
   maxImages: MAX_IMAGES,
   typing: async () => {}, // WhatsApp Cloud API không có typing tổng quát
-  sendText: (chatId, text) => waSendText(String(chatId), text),
+  sendText: (chatId, text) => waSendOrThrow(String(chatId), text),
   sendProgress: async (chatId, text) => {
-    await waSendText(String(chatId), text);
+    await waSendOrThrow(String(chatId), text);
     return null; // không edit được → tin tiến trình gửi 1 lần
   },
   editText: async () => {},

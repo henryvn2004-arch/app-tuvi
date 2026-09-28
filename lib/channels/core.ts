@@ -182,7 +182,7 @@ export async function runConversation(
     const now = Date.now();
     if (progressId != null && now - lastEdit > 2500) {
       lastEdit = now;
-      void io.editText(chatId, progressId, '🔮 ' + status);
+      io.editText(chatId, progressId, '🔮 ' + status).catch(() => {}); // tiến trình: hỏng thì thôi
     }
   };
 

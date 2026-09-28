@@ -111,11 +111,15 @@ const telegramIO: ChannelIO = {
   msgLimit: MSG_LIMIT,
   maxImages: MAX_TG_IMAGES,
   typing: (chatId) => tgSendChatAction(chatId, 'typing'),
+  // Gửi/sửa hỏng thì NÉM LỖI → core không chốt phí khi người dùng không nhận
+  // được câu trả lời (tgSendMessage/tgEditMessage tự nuốt lỗi, trả boolean).
   sendText: async (chatId, text) => {
-    await tgSendMessage(chatId, text);
+    if (!(await tgSendMessage(chatId, text))) throw new Error('[telegram] gửi tin thất bại');
   },
   sendProgress: tgSendMessageReturnId,
-  editText: (chatId, id, text) => tgEditMessage(chatId, Number(id), text),
+  editText: async (chatId, id, text) => {
+    if (!(await tgEditMessage(chatId, Number(id), text))) throw new Error('[telegram] sửa tin thất bại');
+  },
   fetchImage: tgFetchImage,
 };
 const telegramStore: SessionStore = { load: loadSession, save: saveSession };
@@ -149,7 +153,7 @@ export async function POST(request: NextRequest) {
   }
 
   // ACK NGAY, xử lý NỀN — Telegram chỉ cần 200 nhanh.
-  waitUntil(handleUpdate(update));
+  waitUntil(handleUpdate(update).catch((e) => console.error('[telegram] handleUpdate lỗi:', e)));
   return ok();
 }
 
