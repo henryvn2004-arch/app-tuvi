@@ -2943,43 +2943,46 @@
     });
   }
 
-  // ── NỐI PHIÊN từ link chia sẻ (?fromshare=<id>) ──
-  // Người nhận đọc /luan-duong/<id> rồi bấm "Hỏi thầy tiếp" → về /app/<tool>?fromshare=<id>.
-  // Ta tải snapshot (khung giữa + transcript + thầy), NHÉT qua đúng kênh khôi phục
-  // lịch sử (app_restore/app_restore_data + app_birth) rồi reload ?auto=1 — tool tự
-  // dựng lại lá số của người chia sẻ (deterministic, FREE) + replay hỏi đáp, sẵn
-  // sàng cho người nhận hỏi tiếp. Câu hỏi MỚI mới tính Lượng (401 → mời đăng nhập,
-  // tặng Lượng tân thủ). Trả true nếu đã tiếp quản (boot dừng, trang sắp reload).
+  // ── Đến từ link chia sẻ (?fromshare=<id>) ──
+  // Người nhận đọc /luan-duong/<id> (CHỈ XEM) rồi bấm "Hỏi Thầy" → về
+  // /app/<tool>?fromshare=<id>. Henry 2026-09-28: TRƯỚC ĐÂY ta nạp lại lá số +
+  // hỏi đáp của NGƯỜI CHIA SẺ (và ghi đè cả `app_birth` của người nhận) ⇒ người
+  // nhận hỏi tiếp trên lá số của người khác, thầy luận "không đúng gì cả". Nay:
+  // chỉ giữ đúng thầy + cờ đo phễu, mở PHIÊN MỚI; boot báo rõ lá số vừa xem là
+  // của người chia sẻ và xin ngày giờ sinh của chính người nhận (notifyFromShare).
+  // Trả true nếu đã tiếp quản (boot dừng, trang sắp reload).
   var _fromshareId = null, _convFired = false;
   function consumeFromShare() {
     var m = (location.search.match(/[?&]fromshare=([A-Za-z0-9]{6,16})\b/) || [])[1];
     if (!m) return false;
-    var toClean = function (withAuto) {
+    var toClean = function () {
       var s = location.search.replace(/([?&])fromshare=[^&]*/g, '$1').replace(/[?&]+$/, '').replace(/\?&/, '?').replace(/&&/g, '&');
-      if (withAuto && !/[?&]auto=1\b/.test(s)) s += (s.indexOf('?') >= 0 ? '&' : '?') + 'auto=1';
       location.replace(location.pathname + s);
     };
     fetch('/api/share-session?id=' + encodeURIComponent(m))
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
-        if (!j || !j.id) { toClean(false); return; } // hỏng/gỡ → bỏ param, boot thường
+        if (!j || !j.id) { toClean(); return; } // hỏng/gỡ → bỏ param, boot thường
         try {
           if (j.thay && j.thay.id) localStorage.setItem('tvc_author_v1', j.thay.id); // tiếp nối đúng thầy
-          var restore = j.restore || {};
-          if (restore.birth) localStorage.setItem('app_birth', JSON.stringify(restore.birth));
-          var sess = {
-            id: newId(), toolId: ACTIVE, restore: restore, title: j.title || 'Phiên',
-            messages: (j.messages || []).map(function (mm) { return { role: mm.role, content: mm.content }; }),
-            createdAt: Date.now(), updatedAt: Date.now(),
-          };
-          sessionStorage.setItem('app_restore', JSON.stringify({ id: sess.id, toolId: ACTIVE }));
-          sessionStorage.setItem('app_restore_data', JSON.stringify(sess));
           sessionStorage.setItem('app_fromshare_id', m);
         } catch (e) { /* ignore */ }
-        toClean(true);
+        toClean();
       })
-      .catch(function () { toClean(false); });
+      .catch(toClean);
     return true;
+  }
+  // Câu báo đầu rail cho người đến từ link chia sẻ — đứng TRƯỚC các câu hỏi
+  // ngày giờ sinh mà trang tự vẽ vào #chat ngay sau boot.
+  function notifyFromShare() {
+    var chat = document.getElementById('chat');
+    if (!chat) return;
+    var el = document.createElement('div');
+    el.className = 'msg a';
+    el.innerHTML = '<img class="msg-ava" src="' + authorAva() + '" alt="">' +
+      '<div class="msg-body"><p><b>Lá số con vừa xem là của người đã chia sẻ link, không phải của con.</b><br>' +
+      'Muốn thầy luận cho chính con thì cho thầy xin ngày giờ sinh của con — thầy mở một phiên mới riêng cho con.</p></div>';
+    chat.appendChild(el);
   }
   // Beacon đo phễu: người nhận nối phiên và hỏi thật lần đầu → +1 signup_count.
   function trackConvert(id) {
@@ -6328,6 +6331,7 @@
     loadCatalog();
     if (CHAT_HOME) document.body.classList.add('chat-home');
     renderRail();
+    if (_fromshareId) notifyFromShare();
     // Bước 5: rail lật vai NGAY khi boot (không đợi setContext) — trang tự vẽ
     // câu hỏi hội thoại vào #chat ngay sau đây trong script của chính nó.
     if (CHAT_INTAKE) { document.body.classList.add('chat-first-live'); Shell.openRail(); }
