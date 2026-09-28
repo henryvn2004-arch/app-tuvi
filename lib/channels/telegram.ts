@@ -6,7 +6,14 @@
 // ============================================================
 
 import type { ChatMessage, BirthParams, ChatImage } from '@/lib/contract/v1';
-import { splitText } from './core';
+import {
+  splitText,
+  type ChannelIO,
+  type ChatButton,
+  type SessionStore,
+  type ProfileStore,
+} from './core';
+import { markdownToChat } from './format';
 import {
   chatLoadSession,
   chatSaveSession,
@@ -245,3 +252,75 @@ export const listProfiles = (chatId: number | string) => chatListProfiles(PLATFO
 export const getProfile = (chatId: number | string, name: string) => chatGetProfile(PLATFORM, chatId, name);
 export const saveProfile = (chatId: number | string, name: string, birth: BirthParams) =>
   chatSaveProfile(PLATFORM, chatId, name, birth);
+
+// ── Nút + ảnh cho lượt hội thoại (best-effort, KHÔNG ném) ───
+// Link → inline keyboard (nút `url`). Câu soạn sẵn → reply keyboard: bấm là
+// gửi đúng chữ đó như tin gõ tay (callback_data trần 64 byte, không chở nổi
+// một câu hỏi gợi ý). Có cả hai loại → hai tin.
+async function tgCall(method: string, body: Record<string, unknown>): Promise<void> {
+  if (!TG_TOKEN) return;
+  try {
+    const r = await fetch(`${TG_API}/${method}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!r.ok) console.error(`[telegram] ${method} lỗi HTTP ${r.status}: ${(await r.text().catch(() => '')).slice(0, 300)}`);
+  } catch (e) {
+    console.error(`[telegram] ${method} lỗi mạng`, e);
+  }
+}
+
+export async function tgSendButtons(chatId: number | string, text: string, buttons: ChatButton[]): Promise<void> {
+  const urls = buttons.filter((b): b is { title: string; url: string } => 'url' in b);
+  const replies = buttons.filter((b): b is { title: string; reply: string } => 'reply' in b);
+  const parts = splitText(text || '…', TG_MSG_LIMIT);
+  for (const p of parts.slice(0, -1)) await tgSendMessage(chatId, p);
+  const last = parts[parts.length - 1];
+  if (urls.length) {
+    await tgCall('sendMessage', {
+      chat_id: chatId,
+      text: last,
+      disable_web_page_preview: true,
+      reply_markup: { inline_keyboard: urls.map((u) => [{ text: u.title, url: u.url }]) },
+    });
+  }
+  if (replies.length) {
+    await tgCall('sendMessage', {
+      chat_id: chatId,
+      text: urls.length ? 'Hoặc chọn nhanh:' : last,
+      disable_web_page_preview: true,
+      reply_markup: {
+        keyboard: replies.map((r) => [{ text: r.reply }]),
+        one_time_keyboard: true,
+        resize_keyboard: true,
+      },
+    });
+  }
+}
+
+export async function tgSendImage(chatId: number | string, url: string, caption?: string): Promise<void> {
+  await tgCall('sendPhoto', { chat_id: chatId, photo: url, ...(caption ? { caption: caption.slice(0, 1024) } : {}) });
+}
+
+export const telegramIO: ChannelIO = {
+  platform: PLATFORM,
+  msgLimit: TG_MSG_LIMIT,
+  maxImages: 3, // khớp MAX_IMAGES_PER_MSG trong runAgent
+  typing: (chatId) => tgSendChatAction(chatId, 'typing'),
+  // Gửi/sửa hỏng thì NÉM LỖI → core không chốt phí khi người dùng không nhận
+  // được câu trả lời (tgSendMessage/tgEditMessage tự nuốt lỗi, trả boolean).
+  sendText: async (chatId, text) => {
+    if (!(await tgSendMessage(chatId, text))) throw new Error('[telegram] gửi tin thất bại');
+  },
+  sendProgress: tgSendMessageReturnId,
+  editText: async (chatId, id, text) => {
+    if (!(await tgEditMessage(chatId, Number(id), text))) throw new Error('[telegram] sửa tin thất bại');
+  },
+  fetchImage: tgFetchImage,
+  sendButtons: tgSendButtons,
+  sendImage: tgSendImage,
+  format: (t) => markdownToChat(t), // gửi plain text (không parse_mode)
+};
+export const telegramStore: SessionStore = { load: loadSession, save: saveSession };
+export const telegramProfiles: ProfileStore = { list: listProfiles, get: getProfile, save: saveProfile };

@@ -19,6 +19,7 @@
 // ============================================================
 import { Resend } from 'resend';
 import { unsubscribeUrl } from './unsub-token';
+import { isShadowEmail } from '@/lib/channels/shadow-email';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 // Hai subdomain TÁCH RIÊNG để cô lập uy tín gửi: một khiếu nại spam ở thư
@@ -61,7 +62,7 @@ export interface SendEmailInput {
 
 export type SendEmailResult =
   | { ok: true }
-  | { ok: false; reason: 'duplicate' | 'unsubscribed' | 'not_configured' | 'send_failed' };
+  | { ok: false; reason: 'duplicate' | 'unsubscribed' | 'not_configured' | 'send_failed' | 'no_mailbox' };
 
 /** Chèn dòng `email_log` làm mutex. true = vừa chiếm được (chưa từng gửi). */
 async function claim(input: SendEmailInput, kind: 'transactional' | 'marketing'): Promise<boolean> {
@@ -124,6 +125,9 @@ async function dispatch(
   input: SendEmailInput,
   kind: 'transactional' | 'marketing',
 ): Promise<SendEmailResult> {
+  // Tài khoản tạo từ kênh chat mang email tổng hợp KHÔNG có hộp thư
+  // (lib/channels/account.ts) — gửi vào đó chỉ ra thư dội, hại uy tín domain gửi.
+  if (isShadowEmail(input.to)) return { ok: false, reason: 'no_mailbox' };
   const resend = getClient();
   if (!resend) return { ok: false, reason: 'not_configured' };
   if (!(await claim(input, kind))) return { ok: false, reason: 'duplicate' };

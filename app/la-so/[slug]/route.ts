@@ -14,6 +14,7 @@ import { NOINDEX_FOLLOW } from '@/lib/seo/index-policy';
 import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 import { ORG_ID } from '@/lib/seo/entity';
 import { vndPerCredit } from '@/lib/billing/packages';
+import { ASK_CSS, ASK_SCRIPT, askBarHTML, askBoxHTML, fetchThayCard, type AskChip, type ThayCard } from '@/lib/seo/ask-box';
 
 // ⚠️ Module-level: must run before any request so that if loadEngine() sets
 // globalThis.window = globalThis, Next.js URL parsing (getLocationOrigin)
@@ -123,8 +124,9 @@ function ogImg(base: string, title: string, sub: string): string {
   return `${base}/api/og?${new URLSearchParams({ title: title.slice(0,80), sub }).toString()}`;
 }
 
-function buildPregenHTML(row: Record<string,unknown>, slug: string): string {
+function buildPregenHTML(row: Record<string,unknown>, slug: string, thay: ThayCard): string {
   const url   = `${BASE}/la-so/${slug}`;
+  const ask   = lasoAsk(parseIsrSlug(slug), thay);
   const gt    = row.gioi_tinh === 'nu' ? 'Nữ' : 'Nam';
   const title = `Lá Số Tử Vi ${esc(row.can_chi)} ${gt} — Cung ${esc(row.cung_menh)} — Tử Vi Minh Bảo`;
   const desc  = `Lá số tử vi ${row.can_chi} ${gt.toLowerCase()}, cung mệnh ${row.cung_menh}, chính tinh ${row.chinh_tinh_menh || ''}, nạp âm ${row.nap_am || ''}. Xem cách cục đặc biệt và phân tích 12 cung theo cổ pháp.`;
@@ -232,6 +234,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 .cta-box p{font-size:14px;opacity:.85;margin-bottom:20px;line-height:1.6}
 .cta-btn{display:inline-block;background:#8b6dff;color:#fff;padding:13px 32px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px}
 @media(max-width:700px){.bc,.wrap{padding-left:16px;padding-right:16px}.hero-title{font-size:22px}}
+${ASK_CSS}
 </style>
 <script src="/auth.js" defer></script>
 </head><body>
@@ -253,6 +256,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
       ${row.gio_chi?`<span class="hero-tag">Giờ ${esc(row.gio_chi)}</span>`:''}
     </div>
   </div>
+  ${ask.top}
   ${cachCuc.length > 0 ? `<div class="section"><div class="section-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> Cách Cục Đặc Biệt <span style="font-size:12px;color:var(--text-lt);font-weight:400">(${cachCuc.length} cách cục)</span></div>${ccHTML}</div>` : ''}
   ${dvHTML ? `<div class="section"><div class="section-title"><span class="ic-inline" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📅</span> Đại Vận</div>${dvHTML}</div>` : ''}
   ${scoresHTML ? `<div class="section"><div class="section-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> Điểm 6 Chiều Từng Cung</div><div class="scores-grid">${scoresHTML}</div></div>` : ''}
@@ -263,7 +267,9 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     <a class="cta-btn" href="${appLuanGiaiHref(parseIsrSlug(slug))}">Xem Luận Giải →</a>
   </div>
 </div>
+${ask.bar}
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
+${ASK_SCRIPT}
 </body></html>`;
 }
 
@@ -448,6 +454,24 @@ function appChatHref(p: IsrParams | null): string {
     auto: '1',
   });
   return esc(`/app?${q.toString()}`);
+}
+
+// Ô "Hỏi Thầy" (lib/seo/ask-box.ts) — ngày sinh của trang đi kèm link nên thầy
+// mở chat với ĐÚNG lá số này, không hỏi lại ngày sinh. Slug không đúng khuôn
+// (không đọc được ngày sinh) thì câu gợi ý bật `laso` để chat xin ngày sinh.
+const THAY_LA_SO = 'co-nguyet';
+function lasoAsk(p: IsrParams | null, thay: ThayCard): { top: string; bar: string } {
+  const birth = p ? { ngay: p.dd, thang: p.mm, nam: p.year, gio: GIO_HOURS[p.gioIdx], gioitinh: p.gioi } : null;
+  const nam = p ? `năm ${p.namXem}` : 'năm nay';
+  const chips: AskChip[] = [
+    { q: `Lá số này ${nam} tình duyên thế nào?`, laso: !birth, thay: 'dau-nam' },
+    { q: `Lá số này ${nam} công việc có nên thay đổi không?`, laso: !birth, thay: 'dieu-khong' },
+    { q: `Đại vận hiện tại của lá số này tốt hay xấu?`, laso: !birth },
+  ];
+  const top = askBoxHTML({ box: 'top', fam: 'la-so', thay, chips, birth,
+    title: 'Hỏi thầy về lá số này', placeholder: 'Gõ câu hỏi về lá số này…' });
+  const bar = askBarHTML(thay, thay.name ? `Hỏi thầy ${thay.name} về lá số này` : 'Hỏi thầy về lá số này', 'la-so');
+  return { top, bar };
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -1363,7 +1387,7 @@ function buildNextStepHTML(tool: NextStepTool, params: IsrParams, vndRate: numbe
   const chatCard = `<a class="ns-card" href="${appChatHref(params)}">
     <div class="ns-card-eyebrow">Hỏi Thầy</div>
     <div class="ns-card-t">Hỏi thêm về lá số này</div>
-    <div class="ns-card-d">Mở Luận Đường, ngày giờ sinh đã điền sẵn — hỏi tự do, không cần nhập lại.</div>
+    <div class="ns-card-d">Mở Hỏi Thầy, ngày giờ sinh đã điền sẵn — hỏi tự do, không cần nhập lại.</div>
   </a>`;
   if (!tool) {
     return `<div class="next-step"><div class="ns-title">Bước Tiếp Theo</div><div class="ns-grid ns-grid-1">${chatCard}</div></div>`;
@@ -1384,7 +1408,7 @@ function buildNextStepHTML(tool: NextStepTool, params: IsrParams, vndRate: numbe
 // ────────────────────────────────────────────────────────────────────────────
 // ISR: full HTML builder
 // ────────────────────────────────────────────────────────────────────────────
-function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles: ArticleStub[], nextStepTool: NextStepTool, vndRate: number | null): string {
+function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles: ArticleStub[], nextStepTool: NextStepTool, vndRate: number | null, thay: ThayCard): string {
   const palaces    = (ls.palaces as Rec[]) || [];
   const menhP      = palaces.find(p => p.isMenh) as Rec|undefined;
   const cungMenh   = String(menhP?.cungName || '');
@@ -1448,6 +1472,7 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles:
   const sections24HTML = render24Sections(ls, params);
   const relatedHTML    = buildRelatedLinks(params);
   const nextStepHTML   = buildNextStepHTML(nextStepTool, params, vndRate);
+  const ask            = lasoAsk(params, thay);
 
   return `<!DOCTYPE html>
 <html lang="vi"><head>
@@ -1534,6 +1559,7 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 .sc-hoa{color:#E74C3C}.sc-kim{color:#7F8C8D}.sc-thuy{color:#1a1a1a}.sc-moc{color:#27AE60}.sc-tho{color:#D4A017}.sc-neutral{color:#333}
 .sc-hoa-loc{color:#D4A017;font-weight:700}.sc-hoa-quyen{color:#27AE60;font-weight:700}.sc-hoa-khoa{color:#1a1a1a;font-weight:700}.sc-hoa-ky{color:#1a1a1a;font-weight:700}
 @media(max-width:800px){.layout{grid-template-columns:1fr}.bc,.wrap{padding-left:14px;padding-right:14px}.hero-title{font-size:18px}.laso-grid{font-size:9px}.cung-cell{min-height:90px;padding:3px 4px 16px}.v2-chinh-item{font-size:10px}.v2-phu-item{font-size:8px}.v2-phu-area{grid-template-columns:1fr}}
+${ASK_CSS}
 </style>
 <script src="/auth.js" defer></script>
 </head><body>
@@ -1560,6 +1586,7 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
       `Người sinh năm ${esc(canChiNam)} ${esc(gtLabel.toLowerCase())}, ngày ${pad(dd)}/${pad(mm)}/${year} giờ ${esc(gioLabel)}, an vào cung Mệnh ${esc(cungMenh)}${chinhTinh?` với chính tinh ${esc(chinhTinh)}`:''}${napAm?`, nạp âm ${esc(napAm)}`:''}.${cachCuc.length>0?` Lá số có ${cachCuc.length} cách cục${cachCuc.length<=3?': '+cachCuc.slice(0,3).map(c=>esc(String(c.ten||''))).join(', '):'.'}.`:''}${diemMenh>0?` Điểm cung mệnh ${diemMenh.toFixed(1)}/10 theo thang 6 chiều (tiềm năng, bền vững, an toàn, quý nhân, minh bạch, tương hợp).`:''}`
     }</p>
   </div>
+  ${ask.top}
 
   <div class="layout">
     <div>
@@ -1605,7 +1632,9 @@ ${relatedArticles.length ? `<div style="background:#F9F4EB;border-top:2px solid 
 </div>
 </div>` : ''}
 ${relatedHTML}
+${ask.bar}
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
+${ASK_SCRIPT}
 <script src="/share.js" defer></script>
 <script src="/pwa-push.js?v=2" defer></script>
 <script>
@@ -1648,7 +1677,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
     });
   }
   if (pre.rows.length) {
-    return new NextResponse(buildPregenHTML(pre.rows[0], slug), {
+    const thay = await fetchThayCard(THAY_LA_SO);
+    return new NextResponse(buildPregenHTML(pre.rows[0], slug, thay), {
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
         'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
@@ -1710,7 +1740,12 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
             ? await withTimeout(fetchNextStepTool('chu-trinh-cuoc-doi'), SB_TIMEOUT_MS, null)
             : null;
           const vndRate = sbAlive ? await withTimeout(vndPerCredit(), SB_TIMEOUT_MS, 500) : 500;
-          const html = buildIsrHTML(ls, isrParams, slug, relatedArticles, nextStepTool, vndRate);
+          // Thẻ thầy chỉ là trang trí cho ô Hỏi Thầy — Supabase chết thì ô vẫn
+          // dựng (thiếu tên), không hỏi thêm.
+          const thay = sbAlive
+            ? await fetchThayCard(THAY_LA_SO)
+            : { id: THAY_LA_SO, name: null, mon: null, greeting: null };
+          const html = buildIsrHTML(ls, isrParams, slug, relatedArticles, nextStepTool, vndRate, thay);
           return new NextResponse(html, { headers: {
             'Content-Type': 'text/html; charset=utf-8',
             'Cache-Control': publicKnown

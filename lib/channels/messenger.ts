@@ -7,7 +7,14 @@
 
 import type { ChatImage, ChatMessage, BirthParams } from '@/lib/contract/v1';
 import { graphPost, fetchGraphMedia } from './meta';
-import { splitText, type ChannelIO, type SessionStore, type ProfileStore } from './core';
+import {
+  splitText,
+  type ChannelIO,
+  type ChatButton,
+  type SessionStore,
+  type ProfileStore,
+} from './core';
+import { markdownToChat } from './format';
 import {
   chatLoadSession,
   chatSaveSession,
@@ -51,6 +58,79 @@ async function msgrSendOrThrow(psid: string, text: string): Promise<void> {
   if (!(await msgrSendText(psid, text))) throw new Error('[messenger] gửi tin thất bại');
 }
 
+/** Messenger: button template ≤3 nút, chữ ≤640; quick reply ≤13, nhãn ≤20. */
+const TEMPLATE_TEXT_MAX = 640;
+const MAX_URL_BUTTONS = 3;
+const MAX_QUICK_REPLIES = 13;
+const TITLE_MAX = 20;
+
+const short = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
+
+/**
+ * Link → nút `web_url` của button template (mở ngay trong Messenger); câu soạn
+ * sẵn → quick reply (bấm = gửi đúng chữ đó, webhook đọc `quick_reply.payload`).
+ * Chữ dài hơn trần template → gửi chữ trước, template theo sau với câu ngắn.
+ */
+export async function msgrSendButtons(psid: string, text: string, buttons: ChatButton[]): Promise<void> {
+  if (!PAGE_TOKEN) return;
+  const urls = buttons.filter((b): b is { title: string; url: string } => 'url' in b).slice(0, MAX_URL_BUTTONS);
+  const replies = buttons
+    .filter((b): b is { title: string; reply: string } => 'reply' in b)
+    .slice(0, MAX_QUICK_REPLIES);
+  const quick = replies.length
+    ? {
+        quick_replies: replies.map((r) => ({
+          content_type: 'text',
+          title: short(r.title, TITLE_MAX),
+          payload: r.reply.slice(0, 1000),
+        })),
+      }
+    : {};
+
+  if (!urls.length) {
+    const parts = splitText(text || '…', MSG_LIMIT);
+    for (const p of parts.slice(0, -1)) await msgrSendText(psid, p);
+    await graphPost('me/messages', PAGE_TOKEN, {
+      recipient: { id: psid },
+      messaging_type: 'RESPONSE',
+      message: { text: parts[parts.length - 1], ...quick },
+    });
+    return;
+  }
+
+  let head = text || '…';
+  if (head.length > TEMPLATE_TEXT_MAX) {
+    await msgrSendText(psid, head);
+    head = '👇';
+  }
+  await graphPost('me/messages', PAGE_TOKEN, {
+    recipient: { id: psid },
+    messaging_type: 'RESPONSE',
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'button',
+          text: head,
+          buttons: urls.map((u) => ({ type: 'web_url', url: u.url, title: short(u.title, TITLE_MAX) })),
+        },
+      },
+      ...quick,
+    },
+  });
+}
+
+/** Gửi ảnh theo URL công khai. */
+export async function msgrSendImage(psid: string, url: string, caption?: string): Promise<void> {
+  if (!PAGE_TOKEN) return;
+  await graphPost('me/messages', PAGE_TOKEN, {
+    recipient: { id: psid },
+    messaging_type: 'RESPONSE',
+    message: { attachment: { type: 'image', payload: { url, is_reusable: true } } },
+  });
+  if (caption) await msgrSendText(psid, caption);
+}
+
 /** Báo trạng thái (typing_on / mark_seen). Best-effort. */
 async function msgrSenderAction(psid: string, action: 'typing_on' | 'mark_seen'): Promise<void> {
   if (!PAGE_TOKEN) return;
@@ -72,6 +152,9 @@ export const messengerIO: ChannelIO = {
   },
   editText: async () => {}, // không hỗ trợ (no-op; core không gọi khi progressId=null)
   fetchImage: (ref) => fetchGraphMedia(ref), // ref = URL CDN Meta cấp sẵn
+  sendButtons: (chatId, text, buttons) => msgrSendButtons(String(chatId), text, buttons),
+  sendImage: (chatId, url, caption) => msgrSendImage(String(chatId), url, caption),
+  format: (t) => markdownToChat(t), // Messenger không hiểu markdown
 };
 
 // ── SessionStore (generic, platform='messenger') ────────────
