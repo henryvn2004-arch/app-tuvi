@@ -251,6 +251,38 @@ export async function zaloSendImage(userId: string, url: string, caption?: strin
   });
 }
 
+// ── Gửi FILE (PDF báo cáo) ──────────────────────────────────
+// Zalo không nhận file theo URL: phải tải lên `upload/file` (PDF/DOC/DOCX/CSV,
+// ≤5MB, Zalo giữ 7 ngày, ~5.000 lượt/tháng) lấy `token`, rồi gửi tin tư vấn đính
+// kèm `{type:'file', payload:{token}}`. Hỏng thì NÉM LỖI (nơi gọi báo khách).
+const UPLOAD_FILE_URL = 'https://openapi.zalo.me/v2.0/oa/upload/file';
+
+export async function zaloSendFile(userId: string, data: Buffer, filename: string, caption?: string): Promise<void> {
+  if (caption) await zaloSendText(userId, caption);
+  let token = await getAccessToken();
+  for (let attempt = 0; token && attempt < 2; attempt++) {
+    const form = new FormData();
+    form.append('file', new Blob([new Uint8Array(data)], { type: 'application/pdf' }), filename);
+    let j: { error?: number; message?: string; data?: { token?: string } };
+    try {
+      const res = await fetch(UPLOAD_FILE_URL, { method: 'POST', headers: { access_token: token }, body: form });
+      j = (await res.json().catch(() => ({}))) as typeof j;
+    } catch (e) {
+      throw new Error(`[zalo] tải file lỗi mạng: ${e instanceof Error ? e.message : String(e)}`);
+    }
+    if (j.error === 0 && j.data?.token) {
+      await postMessage(userId, { attachment: { type: 'file', payload: { token: j.data.token } } });
+      return;
+    }
+    if (attempt === 0 && TOKEN_ERRORS.has(Number(j.error))) {
+      token = await refreshZaloToken();
+      continue;
+    }
+    throw new Error(`[zalo] tải file lỗi error=${j.error} ${j.message ?? ''}`);
+  }
+  throw new Error('[zalo] tải file lỗi: không có access token hợp lệ');
+}
+
 // ── ChannelIO (Zalo không sửa được tin, không có API "đang soạn") ──
 export const zaloIO: ChannelIO = {
   platform: ZALO_PLATFORM,
@@ -266,6 +298,7 @@ export const zaloIO: ChannelIO = {
   fetchImage: (ref) => fetchGraphMedia(ref), // ref = URL CDN Zalo cấp sẵn, không cần token
   sendButtons: (chatId, text, buttons) => zaloSendButtons(String(chatId), text, buttons),
   sendImage: (chatId, url, caption) => zaloSendImage(String(chatId), url, caption),
+  sendFile: (chatId, data, filename, caption) => zaloSendFile(String(chatId), data, filename, caption),
   format: (t) => markdownToChat(t), // Zalo hiện chữ thô — ** và ## lộ nguyên
 };
 

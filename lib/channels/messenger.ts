@@ -6,7 +6,7 @@
 // ============================================================
 
 import type { ChatImage, ChatMessage, BirthParams } from '@/lib/contract/v1';
-import { graphPost, fetchGraphMedia } from './meta';
+import { GRAPH_BASE, graphPost, fetchGraphMedia } from './meta';
 import {
   splitText,
   type ChannelIO,
@@ -121,6 +121,25 @@ export async function msgrSendButtons(psid: string, text: string, buttons: ChatB
 }
 
 /** Gửi ảnh theo URL công khai. */
+/**
+ * Gửi file (PDF) bằng upload multipart `filedata` vào `me/messages` — không cần
+ * URL công khai. Chú thích đi thành tin chữ trước. Hỏng thì NÉM LỖI.
+ */
+export async function msgrSendFile(psid: string, data: Buffer, filename: string, caption?: string): Promise<void> {
+  if (!PAGE_TOKEN) throw new Error('[messenger] chưa cấu hình Page token');
+  if (caption) await msgrSendText(psid, caption);
+  const form = new FormData();
+  form.append('recipient', JSON.stringify({ id: psid }));
+  form.append('messaging_type', 'RESPONSE');
+  form.append('message', JSON.stringify({ attachment: { type: 'file', payload: { is_reusable: false } } }));
+  form.append('filedata', new Blob([new Uint8Array(data)], { type: 'application/pdf' }), filename);
+  const r = await fetch(`${GRAPH_BASE}/me/messages?access_token=${encodeURIComponent(PAGE_TOKEN)}`, {
+    method: 'POST',
+    body: form,
+  });
+  if (!r.ok) throw new Error(`[messenger] gửi file lỗi HTTP ${r.status}: ${(await r.text().catch(() => '')).slice(0, 300)}`);
+}
+
 export async function msgrSendImage(psid: string, url: string, caption?: string): Promise<void> {
   if (!PAGE_TOKEN) return;
   await graphPost('me/messages', PAGE_TOKEN, {
@@ -154,6 +173,7 @@ export const messengerIO: ChannelIO = {
   fetchImage: (ref) => fetchGraphMedia(ref), // ref = URL CDN Meta cấp sẵn
   sendButtons: (chatId, text, buttons) => msgrSendButtons(String(chatId), text, buttons),
   sendImage: (chatId, url, caption) => msgrSendImage(String(chatId), url, caption),
+  sendFile: (chatId, data, filename, caption) => msgrSendFile(String(chatId), data, filename, caption),
   format: (t) => markdownToChat(t), // Messenger không hiểu markdown
 };
 

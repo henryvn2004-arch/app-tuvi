@@ -27,6 +27,7 @@ import { ensureChatUser } from './account';
 import { accountProfiles, saveChart } from './charts';
 import { createHandoffUrl, lasoPath } from './handoff';
 import { chartImageUrl, type ChartKind } from '@/lib/og/laso-image';
+import { listPaidReports, paidReportPdf } from '@/lib/pdf/paid-reports';
 import { currentNamXem } from '@/lib/engine/namxem';
 import { todayVN } from '@/lib/engine/van-ngay';
 import { claimLoginCode, parseLoginCode } from './login';
@@ -82,6 +83,7 @@ const CMD = {
   thayKhac: 'hỏi ý thầy khác',
   laso: ['sổ lá số', '/laso', '/so'],
   bieuDo: ['biểu đồ', 'bieu do', 'xem biểu đồ'],
+  pdf: ['nhận bản pdf', 'bản pdf', 'gửi pdf', 'nhận pdf', 'pdf', 'file pdf'],
   web: ['/web', 'mở trên web'],
   link: '/link',
   moiThay: '/moi',
@@ -169,6 +171,11 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   if (CMD.laso.includes(t)) return handleSoLaSo(kit, ev, userId);
 
   // Ảnh biểu đồ (engine, không tốn LLM ⇒ không tính phí): nút gửi đúng tên biểu đồ.
+  // Bản PDF luận giải ĐÃ MUA (lib/pdf/paid-reports.ts). Nút chọn bản gửi "PDF 2: …".
+  if (CMD.pdf.includes(t)) return handlePdf(kit, ev, userId, null);
+  const pdfSo = t.match(/^pdf (\d+)(:|$)/)?.[1];
+  if (pdfSo) return handlePdf(kit, ev, userId, Number(pdfSo) - 1);
+
   const bieuDo = BIEU_DO.find((b) => b.cau.includes(t));
   if (bieuDo || CMD.bieuDo.includes(t)) return handleBieuDo(kit, ev, bieuDo ?? null);
 
@@ -333,6 +340,8 @@ async function sendWelcome(kit: ChannelKit, ev: ChannelEvent, userId: string | n
     (con ? `\n\n${con}` : '') +
     (bong ? '\n\nĐã có tài khoản trên tuviminhbao.com? Nhắn "Gộp tài khoản web" để dùng chung ví và sổ lá số.' : '');
   const web = userId ? await createHandoffUrl(userId, '/app/cong-cu') : null;
+  // Đã mua bản luận giải nào → thêm nút nhận PDF ngay trong chat.
+  const coPdf = !!userId && !!kit.io.sendFile && (await listPaidReports(userId)).length > 0;
   await chaoThay(kit, ev, thay);
   await chonThay(kit.platform, String(ev.chatId), thay); // đánh dấu đã chào
   await sendMenu(
@@ -350,6 +359,7 @@ async function sendWelcome(kit: ChannelKit, ev: ChannelEvent, userId: string | n
       { title: 'Sổ lá số', reply: 'Sổ lá số' },
       { title: 'Nạp Lượng', reply: 'Nạp Lượng' },
       { title: 'Công cụ', reply: 'Công cụ' },
+      ...(coPdf ? [{ title: 'Bản PDF', reply: 'Bản PDF' }] : []),
       ...(web ? [{ title: 'Kho công cụ trên web', url: web }] : []),
     ],
   );
@@ -594,6 +604,53 @@ async function handleCongCu(kit: ChannelKit, ev: ChannelEvent, userId: string | 
     `${g.title}:\n${tools.map((t) => `• ${t.label}`).join('\n')}\n\nBấm để mở — đã đăng nhập sẵn, đúng lá số của bạn.`,
     [...btns, ...(g.tools.length > tools.length ? [tatCa] : [])],
   );
+}
+
+// ── Bản PDF luận giải đã mua (lib/pdf/paid-reports.ts) ──────────────────
+// Chỉ gửi bản đã trả tiền, chỉ các phần đã mua. Chưa mua gì → mời mua trên web.
+async function handlePdf(kit: ChannelKit, ev: ChannelEvent, userId: string | null, idx: number | null): Promise<void> {
+  const { io } = kit;
+  if (!userId || !io.sendFile) {
+    await io.sendText(ev.chatId, `Bạn xem và tải bản PDF luận giải tại ${SITE}/app/bao-cao nhé.`);
+    return;
+  }
+  const list = await listPaidReports(userId);
+  if (!list.length) {
+    const session = await kit.store.load(ev.chatId);
+    const url = await createHandoffUrl(userId, lasoPath(session.birth), session.birth);
+    await sendMenu(
+      io,
+      ev.chatId,
+      'Bạn chưa có bản luận giải nào đã mua. Mua bản luận giải đầy đủ trên web (trả bằng cùng ví Lượng), xong nhắn "bản PDF" là thầy gửi file vào đây.',
+      url ? [{ title: await nhanLuanGiai(), url }] : [],
+    );
+    return;
+  }
+  if (idx == null && list.length > 1) {
+    await sendMenu(
+      io,
+      ev.chatId,
+      'Bạn muốn nhận bản nào?',
+      list.slice(0, Math.min(kit.maxReplyButtons, 8)).map((r, i) => ({ title: `PDF ${i + 1}: ${r.label}`, reply: `PDF ${i + 1}: ${r.label}` })),
+    );
+    return;
+  }
+  const r = list[idx ?? 0];
+  if (!r) {
+    await io.sendText(ev.chatId, 'Không tìm thấy bản đó — nhắn "bản PDF" để xem lại danh sách nhé.');
+    return;
+  }
+  await io.sendText(ev.chatId, `Thầy đang in bản PDF ${r.label}…`);
+  try {
+    const pdf = await paidReportPdf(r);
+    await io.sendFile(ev.chatId, pdf.data, pdf.filename, `Bản PDF ${r.label} — lưu lại để đọc dần nhé.`);
+  } catch (e) {
+    console.error('[channel-router] gửi PDF lỗi', kit.platform, r.slug, e);
+    const url = await createHandoffUrl(userId, '/app/bao-cao');
+    await sendMenu(io, ev.chatId, 'Chưa gửi được file vào đây. Bạn mở bản đầy đủ trên web nhé:', [
+      { title: 'Mở báo cáo', url: url || `${SITE}/app/bao-cao` },
+    ]);
+  }
 }
 
 // ── Ảnh biểu đồ (lib/og/laso-image.ts + app/api/og/<kind>) ──────────────
