@@ -268,3 +268,33 @@ test('đã đăng nhập nhưng CHƯA trả tiền: vẫn thấy bản xem trư�
   await expect(page.locator('#dcLockHost button')).toBeVisible();
   await expect(page.locator('#dcLockHost')).toContainText('60 Lượng');
 });
+
+// (2026-09-28) Trang Báo cáo đọc BẢN CHỤP do shell.js gửi (`saveReportSnapshot`
+// → POST /api/reports/snapshot). Lời hứa với Henry: bản xem trước CŨNG được lưu,
+// và trả tiền xong thì lượt chụp sau mang bản đầy đủ. Đó là thứ bài này ĐO (đột
+// biến tắt `scheduleReportSnapshot` → đỏ). Các dòng `not.toContain` chỉ là lưới
+// đỡ: ở day-con, văn mẫu nằm trong khối đang ẩn nên `shownEl` đã loại trước cả
+// `SHARE_SKIP_SEL` (gỡ `.tpw-real-lock` khỏi đó bài vẫn xanh — đã thử).
+test('bản chụp Báo cáo: chụp cả bản xem trước, trả tiền xong chụp lại bản đầy đủ', async ({ page }) => {
+  const snaps: string[] = [];
+  await stubApis(page);
+  await page.route('**/api/reports/snapshot', (r) => {
+    snaps.push(r.request().postData() || '');
+    return r.fulfill({ status: 200, contentType: 'application/json', body: '{"saved":true}' });
+  });
+  await run(page, { loggedIn: true });
+
+  // Shell chờ yên 6s sau lần đổi DOM cuối rồi mới chụp.
+  await expect.poll(() => snaps.length, { timeout: 20000 }).toBeGreaterThan(0);
+  const preview = snaps[snaps.length - 1];
+  expect(preview).toContain('ĐOẠN VĂN MIỄN PHÍ MỘT');
+  expect(preview).not.toContain('CHỮ TRẢ PHÍ');
+  expect(preview).not.toContain('Văn mẫu');
+  expect(JSON.parse(preview).toolId).toBe('day-con');
+
+  const before = snaps.length;
+  await page.evaluate(() => (window as unknown as { _doGenerate(f: boolean, lo: string): Promise<void> })._doGenerate(false, 'hoc'));
+  await expect(page.locator('#dinhHuong')).toContainText('CHỮ TRẢ PHÍ định hướng', { timeout: 15000 });
+  await expect.poll(() => snaps.length, { timeout: 20000 }).toBeGreaterThan(before);
+  expect(snaps[snaps.length - 1]).toContain('CHỮ TRẢ PHÍ định hướng');
+});

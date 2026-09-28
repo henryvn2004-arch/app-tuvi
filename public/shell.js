@@ -2154,7 +2154,10 @@
   // gom và MỞ block mới, header = chữ trong heading đó. `/ket-qua` render mỗi
   // block thành 1 thẻ `.blk` riêng — người nhận thấy 12-13 phần TÁCH BẠCH,
   // không phải một cục chữ dính liền như bản domShareText phẳng.
-  function domShareBlocks(host) {
+  // `textCap`/`blockCap` tuỳ chọn: bản chụp BÁO CÁO (`reportSnapshot`) cần
+  // trọn bản luận dài, còn nút Chia sẻ giữ trần cũ (server share-result cắt ở đó).
+  function domShareBlocks(host, textCap, blockCap) {
+    var TEXT_CAP = textCap || SHARE_TEXT_CAP, BLOCK_CAP = blockCap || SHARE_BLOCK_CAP;
     var blocks = [], curHeader = null, line = [], buf = [], chars = 0;
     var flushLine = function () { if (line.length) { buf.push(line.join(' ')); line = []; } };
     var flushBlock = function () {
@@ -2163,7 +2166,7 @@
       buf = [];
       if (t) blocks.push({ header: curHeader, text: t });
     };
-    var stop = function () { return chars > SHARE_TEXT_CAP || blocks.length > SHARE_BLOCK_CAP; };
+    var stop = function () { return chars > TEXT_CAP || blocks.length > BLOCK_CAP; };
     var walk = function (el, depth) {
       if (depth > 24 || stop()) return;
       var kids = el.childNodes;
@@ -2255,7 +2258,95 @@
     renderFbBtn();
     renderPdfBtn(vis);
     maybeAppendSrcNote(host);
+    if (vis && currentShare()) scheduleReportSnapshot();
   }
+
+  // ── LƯU BÁO CÁO cho trang Báo cáo (`/app/bao-cao`, 2026-09-28) ──
+  // Henry: "báo cáo là những bản user đã bấm gen, kể cả xem trước lẫn đầy đủ;
+  // bấm vào phải HIỆN RA báo cáo". Mỗi khi vùng kết quả có nội dung, shell chụp
+  // ĐÚNG payload nút Chia sẻ (`currentShare()` — đã bỏ sẵn phần đang khoá
+  // paywall) rồi POST /api/reports/snapshot. Server gộp theo (công cụ, lá số)
+  // nên xem trước rồi mở khoá = cùng một dòng, lượt chụp sau ghi đè bản đầy đủ.
+  // Chờ yên 6s sau lần đổi DOM cuối (luận giải stream hàng trăm lượt) và chỉ gửi
+  // khi nội dung thật sự đổi. Không đăng nhập ⇒ không có Báo cáo ⇒ không gửi.
+  var SNAP_DELAY = 6000, SNAP_TEXT_CAP = 110000, SNAP_BLOCK_CAP = 38;
+  var _snapTimer = null, _snapSig = '';
+  function scheduleReportSnapshot() {
+    if (CHAT_HOME || !getToken()) return;
+    clearTimeout(_snapTimer);
+    _snapTimer = setTimeout(function () { _snapTimer = null; saveReportSnapshot(false); }, SNAP_DELAY);
+  }
+  function reportSnapshot() {
+    var s = currentShare();
+    if (!s) return null;
+    var host = wsResultHost();
+    var blocks;
+    // Khối tool TỰ dựng (ảnh AI, bố cục riêng) thắng; còn lại đọc DOM với trần
+    // lớn — bản Chia sẻ phẳng (`autoShare`) cắt ở 40.000 ký tự, không đủ cho
+    // một bản luận giải đã mở khoá.
+    if (s.blocks && s.blocks.length && !s.liveText) blocks = s.blocks.slice();
+    else if (host && s.kind === 'text') {
+      blocks = domShareBlocks(host, SNAP_TEXT_CAP, SNAP_BLOCK_CAP);
+      var bl = shareBirthLines({});
+      if (bl) blocks.unshift({ header: 'Lá số dùng để luận', text: bl });
+    } else blocks = [{ header: null, image: s.imageUrl || null, text: s.text || null }];
+    blocks = blocks.map(function (b) { return { header: b.header || null, image: b.image || null, text: b.text || null }; })
+      .filter(function (b) { return b.text || b.image; });
+    if (!blocks.length) return null;
+    var who = blocks.filter(function (b) { return b.header === 'Lá số dùng để luận'; })[0];
+    var whoText = who && who.text ? String(who.text) : '';
+    return {
+      toolId: s.toolId || ACTIVE,
+      toolLabel: wsTitleText(),
+      title: s.title,
+      subtitle: whoText ? whoText.split('\n')[0] : null,
+      imageUrl: s.imageUrl || null,
+      blocks: blocks,
+      // Chủ thể = lá số đã dùng (cùng người ⇒ cùng dòng); công cụ không dùng
+      // lá số thì theo PHIÊN, để mỗi lượt gieo quẻ/rút bài là một báo cáo riêng.
+      subject: whoText ? { laso: whoText } : { phien: sessionId },
+    };
+  }
+  function saveReportSnapshot(onLeave) {
+    var p;
+    try { p = reportSnapshot(); } catch (e) { console.error('[reportSnapshot]', e); return; }
+    if (!p) return;
+    var body = JSON.stringify(p);
+    var sig = body.length + ':' + hashStr(body);
+    if (sig === _snapSig) return;
+    var send = function (tok) {
+      if (!tok) return;
+      _snapSig = sig;
+      fetch('/api/reports/snapshot', {
+        method: 'POST', keepalive: !!onLeave && body.length < 60000,
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
+        body: body,
+      }).then(function (r) { if (!r.ok) { _snapSig = ''; console.error('[reportSnapshot] save', r.status); } })
+        .catch(function (e) { _snapSig = ''; console.error('[reportSnapshot] save', e); });
+    };
+    // Rời trang: không kịp chờ xoay token — dùng token hiện có (keepalive).
+    if (onLeave) send(getToken());
+    else freshToken().then(send).catch(function (e) { console.error('[reportSnapshot] token', e); });
+  }
+  function hashStr(str) {
+    var h = 5381;
+    for (var i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0;
+    return (h >>> 0).toString(36);
+  }
+  // Đang chờ nhịp yên mà người dùng rời trang/ẩn tab ⇒ gửi ngay, đừng để mất.
+  function flushReportSnapshot() {
+    if (!_snapTimer) return;
+    clearTimeout(_snapTimer); _snapTimer = null;
+    saveReportSnapshot(true);
+  }
+  window.addEventListener('pagehide', flushReportSnapshot);
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flushReportSnapshot(); });
+  // Điều hướng mềm (`shell-soft-nav.js`) thay #ws rồi mới bắn `tvmb:softnav` —
+  // flush lúc đó là chụp nhầm trang MỚI. Chốt ngay lúc bấm link (pha capture,
+  // chạy trước bộ chặn click của soft-nav), khi DOM còn là trang cũ.
+  document.addEventListener('click', function (e) {
+    if (_snapTimer && e.target && e.target.closest && e.target.closest('a[href]')) flushReportSnapshot();
+  }, true);
 
   // Ghi nguồn/cổ pháp cuối kết quả — bám ĐÚNG cơ chế phát hiện "vùng kết quả"
   // vừa dùng cho Chia sẻ/PDF (`wsResultHost` + ngưỡng `currentShare()`), nên
@@ -5104,6 +5195,7 @@
       shareable = normalizeShare(o); _shareMuted = false;
       renderShareBtn();
       renderFbBtn();
+      scheduleReportSnapshot();
     },
     // Kích hoạt CHÍNH luồng "Chia sẻ" của toolbar (native share sheet trên di
     // động, modal Facebook/Zalo/WhatsApp trên desktop) từ một nút do TRANG tự
