@@ -103,6 +103,9 @@ Chữ hiển thị: "Mời **nhóm** hội chẩn" — KHÔNG "hội đồng" (l
    tiên tri và Lịch riêng — mỗi phiên một thứ), một lần/mùa, "Để sau" im 14 ngày; số ngày tới
    Tết lấy từ `/api/xong-dat?mua=1` (một nguồn với bảng TET). Cưới hỏi / mua nhà: CHƯA làm
    riêng — rail đã gợi ý đúng công cụ (Chọn ngày, Kim Lâu, Bát Trạch) qua `goi_y_cong_cu`.
+6b. **Mời thầy theo ngữ cảnh** ✅ (2026-09-28): hàng "Nghe thêm môn khác" chọn 2 thầy khớp câu hỏi
+   (`pickGuests`, shell.js) trong 6 thầy có engine thật (`THAY_KHACH` + tool `moi_thay_chuyen_mon`,
+   registry.ts); thẻ cross-sell báo cáo + tool `goi_y_san_pham` đã gỡ.
 6. **Thầy có tính cách** ✅ — không giới thiệu. `personaKhach(id)` (`lib/agent/personas.ts`) = giọng
    thầy + cách cư xử KHI LÀM KHÁCH trong phòng thầy khác (Tâm Kính gật phần gặp nhau rồi chỉ chỗ
    vênh; Linh Cơ vào thẳng quẻ, ngược thì nói nhẹ mà không lùi). Mọi tool `moi_thay_*` + `hoi_chan`

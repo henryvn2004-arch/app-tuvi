@@ -1140,7 +1140,7 @@
     if (_author) out.push({ a: _author, sub: 'Đang tiếp chuyện' });
     GUEST_MASTERS.forEach(function (g) {
       var a = authorById(g.id);
-      if (a && (!_author || a.id !== _author.id)) out.push({ a: a, sub: g.mon });
+      if (a && (!_author || a.id !== _author.id) && guestDu(g)) out.push({ a: a, sub: g.mon });
     });
     return out;
   }
@@ -1683,13 +1683,18 @@
     { id: 'tinh-quang',  name: 'Tinh Quang',  style: 'Nhìn lá số như một chỉnh thể toàn diện, thích liên kết mọi thứ. Nói như vừa khám phá ra "bí mật lớn nhất" của cả lá số, giọng có phần long trọng, kịch tính.' },
     { id: 'tu-nguyen',   name: 'Tử Nguyên',   style: 'Súc tích, thực tế, chuyên về đại vận và tiểu vận, ưa hành động hơn lý thuyết. Chốt bằng 1 câu duy nhất như bản án, không giải thích thêm — ngắn, chắc, cực kỳ dễ trích dẫn.' },
   ];
-  // "Mời thầy khác" (P3 2026-09-26) — CHỈ 2 thầy ĐÃ có tool mời thật khớp
-  // server (lib/tools/registry.ts: moi_thay_bat_tu/moi_thay_ky_mon = Tâm
-  // Kính, moi_thay_luc_nham = Linh Cơ). Thêm thầy mới có tool riêng thì thêm
-  // vào ĐÂY + whitelist `addressMaster` trong lib/contract/v1.ts.
+  // "Mời thầy khác" — CHỈ những thầy ĐÃ có tool mời thật phía server
+  // (lib/tools/registry.ts: moi_thay_bat_tu/ky_mon = Tâm Kính, moi_thay_luc_nham
+  // = Linh Cơ, 4 thầy còn lại qua `moi_thay_chuyen_mon` / `THAY_KHACH`). Thêm
+  // thầy thì thêm vào ĐÂY + `GUEST_MASTERS` + whitelist `addressMaster`
+  // (lib/contract/v1.ts) + `THAY_KHACH` — thiếu một chỗ là mời rồi không ai vào.
   var INVITE_MASTER_NAMES = [
-    { n: 'tâm kính', id: 'tam-kinh' },
-    { n: 'linh cơ',  id: 'linh-co' },
+    { n: 'tâm kính',    id: 'tam-kinh' },
+    { n: 'linh cơ',     id: 'linh-co' },
+    { n: 'diệu không',  id: 'dieu-khong' },
+    { n: 'nhật nguyên', id: 'nhat-nguyen' },
+    { n: 'huyền không', id: 'huyen-khong' },
+    { n: 'thanh hư',    id: 'thanh-hu' },
   ];
   // @mention ở BẤT KỲ đâu trong câu ("năm sau con… @Tâm Kính xem giúp") →
   // server bắt model mời đúng thầy đó (xem addressMaster, lib/agent/run.ts).
@@ -1711,6 +1716,8 @@
     moi_thay_bat_tu:   { master: 'tam-kinh', discipline: 'bat-tu' },
     moi_thay_luc_nham: { master: 'linh-co',  discipline: 'luc-nham' },
     moi_thay_ky_mon:   { master: 'tam-kinh', discipline: 'ky-mon' },
+    // master = thầy khách bấm mời lượt này (`addressed`), xem chỗ bắn event.
+    moi_thay_chuyen_mon: { master: null, discipline: 'chuyen-mon' },
     hoi_chan:          { master: 'nhom',     discipline: 'hoi-chan' },
   };
   // Tách câu trả lời thành nhiều "tiếng nói" theo mốc "**Tên thầy:**" đứng đầu
@@ -1720,7 +1727,7 @@
   // "**Kết:**" (hội chẩn, tool `hoi_chan`) là lời chốt của THẦY CHÍNH ⇒ bong
   // bóng riêng mang avatar thầy chính, giữ nguyên chữ "Kết:" trong nội dung.
   function splitBySpeaker(text) {
-    var re = /^\*\*(Tâm Kính|Linh Cơ|Kết):\*\*[ \t]*/gm;
+    var re = /^\*\*(Tâm Kính|Linh Cơ|Diệu Không|Nhật Nguyên|Huyền Không|Thanh Hư|Kết):\*\*[ \t]*/gm;
     var marks = [], m;
     while ((m = re.exec(text))) {
       if (m[1] === 'Kết') marks.push({ name: null, host: true, start: m.index, contentStart: m.index });
@@ -2983,7 +2990,8 @@
   //
   // Bốn thay đổi, không cái nào cần thêm lượt LLM:
   //   1. Đồng hồ tính bằng CÂU, không bằng Lượng ("còn 12 câu hỏi").
-  //   2. Thẻ mời sau câu thứ 3, gọi tên ĐÚNG CUNG theo chủ đề đã hỏi.
+  //   2. (Đã gỡ 2026-09-28) Thẻ mời báo cáo sau câu thứ 3 — thay bằng mời thầy
+  //      đúng chuyên môn vào chat (`pickGuests`, hàng "Nghe thêm môn khác").
   //   3. Tường hết-lượt liệt kê CỤ THỂ mục chưa đọc trong 24 mục.
   //   4. Câu chữ nói bằng lá số, không bằng tiền.
 
@@ -3029,44 +3037,6 @@
     return null;
   }
 
-  // Chủ đề (CUNG vừa hỏi, khoá bằng tên bare — bỏ tiền tố "Cung " của
-  // TOPIC_CUNG ở trên) → công cụ liên quan, xếp theo ưu tiên. `maybeShowUpsell`
-  // dùng bảng này để KHÔNG luôn mời Luận Giải — mời đúng thứ khớp điều vừa hỏi.
-  // 'laso' luôn đứng cuối làm phao cứu sinh: chắc chắn có trong `tool_pricing`
-  // (sản phẩm cốt lõi) nên tra tới cuối luôn ra một thẻ.
-  // 🔑 Đây là bản DÀNH RIÊNG CHO CLIENT — server có bản riêng, hẹp hơn, ở
-  // `lib/tools/suggest-tool.ts` (`SUGGEST_PRODUCT_TOOL_DEF`, chỉ 2 mã). Hai nơi
-  // CHƯA hợp nhất một nguồn (xem docs/UX-AUDIT-PLAN.md "W5: Bán chéo").
-  var TOPIC_REPORT_CANDIDATES = {
-    'Tài Bạch': ['xem-lam-an', 'chu-trinh-cuoc-doi', 'laso'],
-    'Quan Lộc': ['cong-so', 'chu-trinh-cuoc-doi', 'laso'],
-    'Phu Thê': ['xem-tuoi', 'chan-dung-vo-chong', 'laso'],
-    'Tử Tức': ['day-con', 'huong-nghiep-tre', 'xem-tuoi-sinh-con', 'laso'],
-    'Tật Ách': ['van-han-nam', 'laso'],
-    'Phụ Mẫu': ['chu-trinh-cuoc-doi', 'laso'],
-    'Điền Trạch': ['bat-trach', 'laso'],
-    'Thiên Di': ['xem-lam-an', 'chu-trinh-cuoc-doi', 'laso'],
-    'Nô Bộc': ['nhan-mach', 'laso'],
-    'Huynh Đệ': ['nhan-mach', 'laso'],
-    'Phúc Đức': ['chu-trinh-cuoc-doi', 'laso'],
-    'Mệnh': ['chu-trinh-cuoc-doi', 'laso'],
-  };
-  // Trả dòng `tool_pricing` (đã enabled, có `app_path` — `ToolPrices.rows()`
-  // chỉ nạp đúng những dòng đó) của ứng viên ĐẦU TIÊN còn tồn tại, hoặc null
-  // nếu `ToolPrices` chưa nạp xong (nơi gọi tự rơi về hành vi cũ khi đó).
-  function pickTopicReport(cung) {
-    var bare = String(cung || '').replace(/^Cung\s+/, '');
-    var candidates = TOPIC_REPORT_CANDIDATES[bare] || ['laso'];
-    var rs = (window.ToolPrices && ToolPrices.rows()) || [];
-    if (!rs.length) return null;
-    for (var i = 0; i < candidates.length; i++) {
-      for (var j = 0; j < rs.length; j++) {
-        if (rs[j] && rs[j].tool_id === candidates[i] && rs[j].app_path) return rs[j];
-      }
-    }
-    return null;
-  }
-
   // Trạng thái ví cho rail. `price` để null nghĩa là CHƯA BIẾT giá → đồng hồ im
   // lặng thay vì đoán. Đoán giá rồi hiện sai số câu là nói sai với người dùng
   // ngay trên thứ họ dùng để quyết định.
@@ -3080,9 +3050,6 @@
   function anonId() {
     try { return localStorage.getItem('tvmb_anon') || ''; } catch (e) { return ''; }
   }
-  var _askCount = 0;      // số câu người dùng đã hỏi trong phiên này
-  var _upsellShown = false;
-  var _cungAsked = [];    // các cung đã chạm tới, theo thứ tự hỏi
 
   function railTurnsLeft() {
     // Khách chưa đăng nhập: đếm lượt DÙNG THỬ, không liên quan tới ví.
@@ -3313,69 +3280,6 @@
   function creditVnd(c) {
     var v = Math.ceil((c * (_rc.vndPerCredit || 500)) / 1000) * 1000;
     return v.toLocaleString('vi-VN') + 'đ';
-  }
-
-  // Thẻ mời — chèn vào giữa dòng hội thoại SAU câu thứ 3, gọi tên đúng cung mà
-  // người ta vừa hỏi. Bán ở khoảnh khắc đã tỏ ý quan tâm, không phải lúc cạn ví.
-  // Từ 2026-09-26 (W5): KHÔNG còn luôn mời Luận Giải — `pickTopicReport` chọn
-  // công cụ khớp đúng CUNG vừa hỏi, rơi về Luận Giải khi không có ứng viên
-  // riêng hoặc `ToolPrices` chưa nạp xong (giữ đúng hành vi cũ cho ca đó).
-  function maybeShowUpsell() {
-    if (_upsellShown || !ctx || !ctx.birth) return;   // cần lá số thật mới mời báo cáo
-    if (_askCount < 3) return;
-
-    var cung = null;
-    for (var i = _cungAsked.length - 1; i >= 0; i--) { if (_cungAsked[i]) { cung = _cungAsked[i]; break; } }
-    var pick = pickTopicReport(cung);
-    var toolId = pick ? pick.tool_id : 'laso';
-    if (ACTIVE === toolId) return;                    // đang ở chính tool đó rồi
-
-    var label = (pick && pick.label) || 'Luận Giải';
-    var path = (pick && pick.app_path) || '/app/luan-giai';
-    if (path === '/app/luan-giai') path = luanGiaiHref();
-    var price = pick ? (window.ToolPrices ? ToolPrices.get(toolId) : null) : _rc.lasoPrice;
-    if (price == null) return;                        // chưa biết giá thì không hứa gì
-    _upsellShown = true;
-
-    var lead = cung
-      ? 'Mấy câu vừa rồi của bạn xoay quanh <b>' + esc(cung) + '</b>.'
-      : 'Bạn đang hỏi khá sâu về lá số này.';
-
-    var chat = document.getElementById('chat');
-    if (!chat) return;
-    var card = document.createElement('div');
-    card.className = 'rail-upsell';
-    // toolId === 'laso' (mặc định hoặc chọn đúng ứng viên): giữ bản thẻ CŨ, đã
-    // đo và tinh chỉnh — có xem trước N mục. Tool khác thì thẻ GỌN hơn: không
-    // có danh sách mục để nêu cho công cụ đó.
-    if (toolId === 'laso') {
-      var rest = LG_PHAN.filter(function (p) { return p !== cung; });
-      var preview = rest.slice(0, 5).join(' · ');
-      card.innerHTML =
-        '<div class="ru-t">' + lead + '</div>' +
-        '<div class="ru-d">Bản <b>Luận Giải</b> soi trọn <b>' + LG_PHAN.length + ' mục</b> của chính lá số này — ' +
-          (cung ? esc(cung) + ' có mục riêng, cùng ' : '') + rest.length + ' mục còn lại: ' +
-          '<span class="ru-list">' + esc(preview) + '…</span></div>' +
-        '<div class="ru-f">' +
-          '<a class="ru-btn" href="' + esc(path) + '">Xem trọn ' + LG_PHAN.length + ' mục — ' + price + ' Lượng</a>' +
-          '<span class="ru-price">≈ ' + creditVnd(price) + '</span>' +
-        '</div>';
-    } else {
-      card.innerHTML =
-        '<div class="ru-t">' + lead + '</div>' +
-        '<div class="ru-d">Bản <b>' + esc(label) + '</b> viết trọn thành văn bản đúng điều bạn vừa hỏi, thay vì hỏi lẻ từng câu.</div>' +
-        '<div class="ru-f">' +
-          '<a class="ru-btn" href="' + esc(path) + '">Xem ' + esc(label) + ' — ' + price + ' Lượng</a>' +
-          '<span class="ru-price">≈ ' + creditVnd(price) + '</span>' +
-        '</div>';
-    }
-    chat.appendChild(card);
-    chat.scrollTop = chat.scrollHeight;
-    try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'rail_upsell_shown', cung: cung || null, suggest_tool: toolId } }); } catch (e) { /* ignore */ }
-    var btn = card.querySelector('.ru-btn');
-    if (btn) btn.addEventListener('click', function () {
-      try { track('cta_click', { tool_id: toolId, meta: { from: 'rail_upsell', cung: cung || null } }); } catch (e) { /* ignore */ }
-    });
   }
 
   // ── Modal HẾT LƯỢNG (giọng thầy) — bật khi rail nhận 402 ──
@@ -5008,7 +4912,7 @@
       // "Kết quả", tắt khi bấm (renderRail() [data-act="artifact"]).
       var _abNew = document.querySelector('.rh-art'); if (_abNew) _abNew.classList.add('has-new');
       // Ngữ cảnh mới = phiên hỏi mới: đếm lại từ đầu và cho thẻ mời hiện lại.
-      _askCount = 0; _upsellShown = false; _cungAsked = []; _suggestShown = false; pendingSuggest = null;
+      _suggestShown = false; pendingSuggest = null;
       // Vừa có thứ để hỏi → mời bằng orb trên nút Hỏi (mobile). Ngữ cảnh MỚI
       // là một lượt mời mới, nên mở lại cả cờ "đã mở rail".
       _railOpened = false; syncAskOrb();
@@ -5335,7 +5239,7 @@
       else greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' });
       // Hội thoại mới → đếm lại câu, và cho thẻ mời có cơ hội hiện lại (một lần
       // mỗi hội thoại, không phải một lần mỗi phiên trình duyệt).
-      _askCount = 0; _upsellShown = false; _cungAsked = []; _suggestShown = false; pendingSuggest = null;
+      _suggestShown = false; pendingSuggest = null;
       renderRailMeter();
     }
   }
@@ -5584,10 +5488,6 @@
     // chính dòng `events` mà `track('chat_msg', …)` ở trên vừa ghi (user_id gắn
     // được ngay nếu đã đăng nhập lúc bấm gửi), không cần đồng bộ cờ này lên server.
     try { localStorage.setItem('tvp_kh_hoi', '1'); } catch (e) { /* ignore */ }
-    // Đếm câu + ghi nhận chủ đề (cho thẻ mời) TRƯỚC khi gọi API — chủ đề suy từ
-    // chính câu hỏi, không cần đợi câu trả lời.
-    _askCount++;
-    _cungAsked.push(detectCung(text));
     // Câu GỐC cho hàng "Nghe thêm môn khác" — lượt mời mang câu gốc theo, để
     // lần bấm tiếp không lồng "@Tên, @Tên, …" vào nhau.
     var _soQ = _soPendingQ || text; _soPendingQ = null;
@@ -5762,7 +5662,7 @@
             try {
               track('master_invite', {
                 tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null,
-                meta: { master: _inv.master, discipline: _inv.discipline, via: body.hoiChan ? 'hoi_chan' : (typeof addressed !== 'undefined' && addressed) ? 'mention' : 'auto' },
+                meta: { master: _inv.master || (typeof addressed !== 'undefined' && addressed) || null, discipline: _inv.discipline, via: body.hoiChan ? 'hoi_chan' : (typeof addressed !== 'undefined' && addressed) ? 'mention' : 'auto' },
               });
             } catch (e) { /* ignore */ }
           }
@@ -5787,7 +5687,10 @@
       // chung của thầy chính. Không đổi `acc`/lịch sử — chỉ đổi RENDER.
       var _speakerSegs = splitBySpeaker(acc);
       if (_speakerSegs.length > 1) {
-        typing.innerHTML = mdLite(_speakerSegs[0].text);
+        // Thầy chính không nói gì trước (khách @ thẳng thầy khách, model vào
+        // luôn "**Tên:**") ⇒ bỏ hẳn bong bóng thầy chính, đừng để khung trống.
+        if (_speakerSegs[0].text.trim()) typing.innerHTML = mdLite(_speakerSegs[0].text);
+        else row.remove();
         for (var _si = 1; _si < _speakerSegs.length; _si++) {
           var _seg = _speakerSegs[_si];
           if (!_seg.text.trim()) continue;
@@ -5808,9 +5711,6 @@
       saveCurrent();
       sessStash();
       appendSecondOpinion(_soQ, _speakerSegs.map(function (x) { return x.name; }));
-      // Thẻ mời SAU khi câu trả lời đã hiện xong — chèn trước lúc đó thì nó đứng
-      // chen giữa lúc người ta đang đọc, thành quảng cáo cắt ngang.
-      maybeShowUpsell();
       // Mỗi lượt tối đa MỘT thẻ (docs/DAC-TRUNG-PLAN.md luật 3): mời thêm người
       // nhà thắng thẻ gợi ý công cụ — nó mới là cái khách đang cần ngay lúc này.
       if (pendingTienTri) { noteTienTri(pendingTienTri); pendingTienTri = null; }
@@ -5838,10 +5738,53 @@
   // nút ngay dưới câu trả lời MỚI NHẤT (luồng lá số — `addressMaster` chỉ có
   // nghĩa ở đó): bấm = gửi lại CÂU GỐC kèm "@Tên" ⇒ server nhắc model gọi
   // NGAY tool của thầy đó. Thầy đã lên tiếng trong câu này thì không mời lại.
+  // Từ 2026-09-28 (Henry): KHÔNG cố định Tâm Kính + Linh Cơ cả phiên — mỗi câu
+  // chọn 2 thầy KHỚP NGỮ CẢNH (hỏi tiền bạc → Diệu Không; hỏi "tháng nào" →
+  // Nhật Nguyên…), thiếu thì lùi về hai thầy mặc định (`macDinh`). `kw` là CỤM
+  // ĐỦ NGHĨA (luật tiếng Việt CLAUDE.md — "tiền" trần sẽ khớp "tiền kiếp");
+  // `cung` là cung `detectCung` suy ra. `can` = thầy đó cần dữ kiện gì mới xem
+  // được (server `THAY_KHACH[id].duLieu` trả null khi thiếu).
   var GUEST_MASTERS = [
-    { id: 'tam-kinh', mon: 'Bát Tự, Kỳ Môn' },
-    { id: 'linh-co',  mon: 'Lục Nhâm' },
+    { id: 'dieu-khong', mon: 'Sự nghiệp, tiền bạc', cung: ['Cung Tài Bạch', 'Cung Quan Lộc'],
+      kw: ['tiền bạc', 'kiếm tiền', 'dòng tiền', 'ra tiền', 'tiền vào', 'giữ tiền', 'tiền nong', 'tài chính', 'làm ăn', 'kinh doanh', 'buôn bán', 'đầu tư', 'tiền lương', 'tăng lương', 'thu nhập', 'công việc', 'sự nghiệp', 'thăng tiến', 'nghỉ việc', 'chuyển việc', 'đổi việc', 'khoản nợ', 'vay tiền', 'chi tiêu', 'thu hồi'] },
+    { id: 'nhat-nguyen', mon: 'Vận tháng, chọn ngày',
+      kw: ['tháng nào', 'tháng này', 'tháng sau', 'tháng tới', 'khi nào', 'lúc nào', 'bao giờ', 'thời điểm', 'chọn ngày', 'ngày nào', 'cuối năm', 'đầu năm', 'tuần này', 'tuần sau', 'sắp tới', 'âm lịch'] },
+    { id: 'huyen-khong', mon: 'Phong thủy, hướng nhà', cung: ['Cung Điền Trạch'],
+      kw: ['phong thủy', 'hướng nhà', 'hướng cửa', 'hướng bếp', 'hướng giường', 'bàn làm việc', 'phòng ngủ', 'chuyển nhà', 'mua nhà', 'xây nhà', 'sửa nhà', 'mua đất', 'hướng nào'],
+      can: function () { return ctx.birth.gender === 'nam' || ctx.birth.gender === 'nu'; } },
+    { id: 'thanh-hu', mon: 'Thần số học',
+      kw: ['con số', 'số điện thoại', 'biển số', 'số nhà', 'số may mắn', 'thần số', 'năm cá nhân', 'số đẹp'],
+      can: function () { return !!String(ctx.birth.name || '').trim() && !ctx.birth.isLunar; } },
+    { id: 'tam-kinh', mon: 'Bát Tự, Kỳ Môn', macDinh: true,
+      kw: ['năm nay', 'năm sau', 'năm tới', 'vận năm', 'xuất hành', 'giờ nào', 'bát tự', 'tứ trụ'] },
+    { id: 'linh-co', mon: 'Lục Nhâm', macDinh: true,
+      kw: ['có nên', 'có thành', 'được không', 'thành không', 'hay không', 'nên hay', 'gieo quẻ'] },
   ];
+  function guestDu(g) {
+    if (!ctx || !ctx.birth || !authorById(g.id)) return false;
+    try { return !g.can || g.can(); } catch (e) { return false; }
+  }
+  // Tối đa `n` thầy cho câu `q`: điểm = số cụm khớp ×2 + 1 nếu đúng cung; thầy
+  // đang tiếp chuyện / vừa lên tiếng trong câu này thì loại. Thiếu thì bù bằng
+  // thầy mặc định. Hoà điểm giữ thứ tự khai báo.
+  function pickGuests(q, spoke, n) {
+    var t = String(q || '').toLocaleLowerCase('vi-VN');
+    var cung = detectCung(q);
+    var ok = GUEST_MASTERS.filter(function (g) {
+      var a = authorById(g.id);
+      return guestDu(g) && (!_author || g.id !== _author.id) && (!spoke || spoke.indexOf(a.name) < 0);
+    });
+    var scored = ok.map(function (g, i) {
+      var sc = 0;
+      g.kw.forEach(function (k) { if (t.indexOf(k) >= 0) sc += 2; });
+      if (cung && g.cung && g.cung.indexOf(cung) >= 0) sc += 1;
+      return { g: g, sc: sc, i: i };
+    });
+    var hit = scored.filter(function (x) { return x.sc > 0; }).sort(function (a, b) { return b.sc - a.sc || a.i - b.i; }).map(function (x) { return x.g; });
+    var out = hit.slice(0, n);
+    ok.forEach(function (g) { if (out.length < n && g.macDinh && out.indexOf(g) < 0) out.push(g); });
+    return out;
+  }
   var _soPendingQ = null; // câu GỐC khi lượt đang gửi là một lượt "môn khác"
   // ── HỘI CHẨN (docs/DAC-TRUNG-PLAN.md) ──
   // Nút "Mời nhóm hội chẩn" nằm CHUNG hàng "Nghe thêm môn khác", chỉ hiện khi:
@@ -5867,10 +5810,10 @@
     var olds = chat.querySelectorAll('.msg-2nd');
     for (var i = 0; i < olds.length; i++) olds[i].remove();
     if (!q || !ctx || !ctx.birth || ctx.scenario) return;
-    var picks = GUEST_MASTERS.map(function (g) { var a = authorById(g.id); return a ? { a: a, mon: g.mon } : null; })
-      .filter(function (x) { return x && (!spoke || spoke.indexOf(x.a.name) < 0); });
-    // Hai thầy khách đều đã nói trong câu này (vừa hội chẩn xong) ⇒ không mời lại.
-    var hc = picks.length === GUEST_MASTERS.length && hoiChanDu(q);
+    var picks = pickGuests(q, spoke, 2).map(function (g) { return { a: authorById(g.id), mon: g.mon }; });
+    // Hội chẩn luôn mời Tâm Kính + Linh Cơ (tool `hoi_chan`) — một trong hai đã
+    // nói trong câu này (vừa hội chẩn / vừa mời) thì không mời nhóm lại.
+    var hc = !(spoke && (spoke.indexOf('Tâm Kính') >= 0 || spoke.indexOf('Linh Cơ') >= 0)) && hoiChanDu(q);
     if (!picks.length) return;
     var bar = document.createElement('div');
     bar.className = 'msg-2nd';

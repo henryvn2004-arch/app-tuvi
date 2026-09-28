@@ -33,8 +33,9 @@ import type { ThangKhung } from '@/lib/engine/van-han-12';
 import { khungCaNha, type NguoiNhaVao } from '@/lib/engine/ca-nha';
 import { computeXongDat, tetSapToi, VERDICT_LABEL } from '@/lib/engine/xong-dat';
 import { computeVanNgay } from '@/lib/engine/van-ngay';
+import { getCungMenh, guaOf } from '@/lib/engine/bat-trach';
 import { lunarOf } from '@/lib/engine/laso';
-import { SUGGEST_TOOL_DEF, SUGGEST_PRODUCT_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
+import { SUGGEST_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
 type Rec = Record<string, unknown>;
 
@@ -139,7 +140,7 @@ function currentYearVN(): number {
 // ── Định nghĩa tool (Anthropic tool-use schema) ─────────────
 // hasProfiles=true (kênh chat có sổ lá số) → thêm 3 tool quản lý sổ.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function buildToolDefs(hasProfiles = false, hasMemory = false, hasFamily = false, hasHoiChan = false): any[] {
+export function buildToolDefs(hasProfiles = false, hasMemory = false, hasFamily = false, hasHoiChan = false, thayKhach: string | null = null): any[] {
   // TẦNG 2 — chỉ đăng ký khi có danh tính (đã đăng nhập). Lượt anon không có
   // hồ sơ để ghi, mà `client.anon_id` do client tự khai nên KHÔNG phải danh tính.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -283,13 +284,33 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false, hasFamily 
         },
       ]
     : [];
+  // Mời thầy theo CHUYÊN MÔN (khách bấm "Nghe thêm môn khác" với một thầy ngoài
+  // Tâm Kính/Linh Cơ) — CHỈ đăng ký ở đúng lượt đó (`req.addressMaster`), enum
+  // khoá đúng MỘT thầy: model không tự mời thầy khác, không đổi được người mời.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const khachTools: any[] =
+    thayKhach && THAY_KHACH[thayKhach]
+      ? [
+          {
+            name: 'moi_thay_chuyen_mon',
+            description:
+              `Mời THẦY ${THAY_KHACH[thayKhach].ten} (${THAY_KHACH[thayKhach].mon}) vào cùng trả lời câu người dùng vừa hỏi. ` +
+              'Chỉ gọi khi hệ thống báo người dùng vừa bấm mời thầy này. Hệ thống trả về dữ liệu THẬT của môn đó và cách trình bày.',
+            input_schema: {
+              type: 'object',
+              properties: { thay: { type: 'string', enum: [thayKhach] } },
+              required: ['thay'],
+            },
+          },
+        ]
+      : [];
   return [
     ...profileTools,
     ...memoryTools,
     ...familyTools,
     ...hoiChanTools,
+    ...khachTools,
     SUGGEST_TOOL_DEF,
-    SUGGEST_PRODUCT_TOOL_DEF,
     {
       name: 'lap_la_so',
       description:
@@ -439,14 +460,12 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
   if (name === 'ghi_nho') return execGhiNho(input, ctx);
   if (name === 'quen_di') return execQuenDi(input, ctx);
   if (name === 'ghi_so_tien_tri') return execGhiSoTienTri(input, ctx);
-  // `goi_y_san_pham` (giai đoạn 3 cross-sell, 2026-09-23) dùng CHUNG hàm này —
-  // hai tool chỉ khác MÔ TẢ (lib/tools/suggest-tool.ts), hành vi hệt nhau:
-  // tra `tool_pricing`, ghi CÙNG `ctx.toolSuggestion`, cùng trần 1 lần/hội thoại.
-  if (name === 'goi_y_cong_cu' || name === 'goi_y_san_pham')
-    return execGoiYCongCu(input, ctx, name === 'goi_y_san_pham' ? 'report' : 'tool');
+  // (`goi_y_san_pham` — cross-sell báo cáo — đã gỡ 2026-09-28, xem suggest-tool.ts.)
+  if (name === 'goi_y_cong_cu') return execGoiYCongCu(input, ctx, 'tool');
   if (name === 'moi_thay_bat_tu') return execMoiThayBatTu(input, ctx);
   if (name === 'moi_thay_luc_nham') return execMoiThayLucNham(input, ctx);
   if (name === 'hoi_chan') return execHoiChan(input, ctx);
+  if (name === 'moi_thay_chuyen_mon') return execMoiThayChuyenMon(input, ctx);
   if (name === 'moi_thay_ky_mon') return execMoiThayKyMon(input, ctx);
   if (name === 'xem_nguoi_nha') return execXemNguoiNha(input, ctx);
   if (name === 'tra_ca_nha') return execTraCaNha(ctx);
@@ -750,6 +769,98 @@ async function execMoiThayLucNham(input: Rec, ctx: ToolContext): Promise<ToolRun
       extractGenericContext(railDataLucNham(khoa)) +
       '\n\nLuận xong phần Linh Cơ thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn, mở một dòng riêng bằng "**Kết:**" (thiếu mốc này thì câu của bạn hiện trong khung của thầy khách) — được đáp lại thầy khách đúng tính cách của bạn (đồng ý, vặn lại hay bổ sung) — không lặp lại số liệu Linh Cơ vừa nêu.',
     label: 'Đang mời thầy Linh Cơ lập khóa Lục Nhâm...',
+  };
+}
+
+// ── Mời thầy theo CHUYÊN MÔN (2026-09-28) ─────────────────────────────────
+// Hàng "Nghe thêm môn khác" chọn thầy theo NGỮ CẢNH câu hỏi (shell.js
+// `GUEST_MASTERS`), không cố định Tâm Kính + Linh Cơ. Mỗi thầy dưới đây luận
+// bằng ENGINE THẬT của môn mình (khớp `master_profiles.tool_ids`) — không có
+// công thức mới, không để model "đóng vai" thầy mà không có số. Thầy nào chưa có
+// engine chạy được chỉ từ ngày sinh thì CHƯA vào danh sách này.
+// Tâm Kính / Linh Cơ vẫn đi tool riêng (moi_thay_bat_tu / luc_nham / ky_mon).
+interface ThayKhach {
+  ten: string;
+  mon: string;
+  /** Dữ liệu engine cho câu hỏi này; null = không dựng được (thiếu dữ kiện). */
+  duLieu: (ctx: ToolContext) => string | null;
+}
+export const THAY_KHACH: Record<string, ThayKhach> = {
+  'dieu-khong': {
+    ten: 'Diệu Không',
+    mon: 'Sự nghiệp & Tiền bạc',
+    duLieu: (ctx) => {
+      const ls = ctx.ls || (ctx.birth ? computeLaso(ctx.birth).ls : null);
+      if (!ls) return null;
+      const nam = currentYearVN();
+      return `TỬ VI CÔNG SỞ NĂM ${nam} (sự nghiệp, tiền lương, quan hệ nơi làm):\n` + extractGenericContext(railDataDayDu(computeCongSo(ls, 'nhan-vien', nam)));
+    },
+  },
+  'nhat-nguyen': {
+    ten: 'Nhật Nguyên',
+    mon: 'Vận tháng & Chọn thời điểm',
+    duLieu: (ctx) => {
+      if (!ctx.birth) return null;
+      const k = khungCaNha([{ ten: String(ctx.birth.name || '').trim() || 'Người hỏi', birth: ctx.birth }]);
+      const n = k.nguoi[0];
+      if (!n || n.loi) return null;
+      const L = [`12 THÁNG ÂM TỚI (cung nguyệt hạn + sao trong chùm tam phương tứ chính; tiểu hạn ${n.cungTieuHan}, lưu niên ${n.cungLuuNien}):`];
+      k.thangs.forEach((t, i) => n.thangs[i] && L.push(`- ${t.nhan}${t.dangDienRa ? ' (đang diễn ra)' : ''}: ${oThang(n.thangs[i])}`));
+      return L.join('\n');
+    },
+  },
+  'huyen-khong': {
+    ten: 'Huyền Không',
+    mon: 'Phong thủy · Bát Trạch',
+    duLieu: (ctx) => {
+      const b = ctx.birth;
+      const na = b ? namAm(b) : null;
+      if (!b || !na || (b.gender !== 'nam' && b.gender !== 'nu')) return null;
+      const cung = getCungMenh(na.nam, b.gender);
+      const g = guaOf(cung);
+      const fmt = (o: Record<string, string>) => Object.entries(o).map(([sao, h]) => `${sao}: ${HUONG_VN[h] || h}`).join(', ');
+      return `BÁT TRẠCH — cung mệnh ${g.name} (${g.elem}), năm sinh âm ${na.nam}:\nHướng tốt: ${fmt(g.good)}\nHướng xấu: ${fmt(g.bad)}`;
+    },
+  },
+  'thanh-hu': {
+    ten: 'Thanh Hư',
+    mon: 'Thần số học',
+    duLieu: (ctx) => {
+      const b = ctx.birth;
+      const ten = String(b?.name || '').trim();
+      if (!b || b.isLunar || !b.day || !b.month || !b.year || !ten) return null;
+      const r = computeThanSoHoc(b.day, b.month, b.year, ten, currentYearVN());
+      return r.ok && r.data ? `THẦN SỐ HỌC của "${ten}":\n` + extractGenericContext(r.data) : null;
+    },
+  },
+};
+const HUONG_VN: Record<string, string> = { N: 'Bắc', S: 'Nam', E: 'Đông', W: 'Tây', NE: 'Đông Bắc', NW: 'Tây Bắc', SE: 'Đông Nam', SW: 'Tây Nam' };
+
+async function execMoiThayChuyenMon(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  const id = String(input?.thay || '');
+  const t = THAY_KHACH[id];
+  const label = t ? `Đang mời thầy ${t.ten}...` : 'Mời thầy';
+  if (!t) return { content: 'Không có thầy này trong nhóm. Trả lời bình thường, đừng nhắc tới việc mời.', label };
+  if (ctx.masterInvited) return { content: 'Đã mời một thầy khác trong lượt này rồi. Đừng mời thêm.', label };
+  let duLieu: string | null = null;
+  try {
+    duLieu = t.duLieu(ctx);
+  } catch (e) {
+    console.error('[moi_thay_chuyen_mon] ' + id + ' lỗi:', (e as Error)?.message);
+  }
+  if (!duLieu) {
+    return { content: `Chưa đủ dữ kiện để thầy ${t.ten} xem (${t.mon}). Trả lời bằng Tử Vi như thường và nói ngắn gọn thầy ${t.ten} cần thêm gì.`, label };
+  }
+  ctx.masterInvited = true;
+  return {
+    content:
+      `— THẦY ${t.ten.toUpperCase()} (${t.mon}) VỪA VÀO PHÒNG —\n` +
+      `Viết tiếp bằng giọng THẬT của ${t.ten} (không phải giọng của bạn), mở một dòng riêng bằng "**${t.ten}:**", xem ĐÚNG câu người dùng vừa hỏi qua lăng kính ${t.mon}, CHỈ dựa vào dữ liệu dưới đây — không tự thêm số liệu:\n` +
+      (personaKhach(id) || '') +
+      '\n\n' +
+      duLieu +
+      '\n\nLuận xong phần của thầy khách thì có thể chốt lại MỘT câu ngắn bằng giọng của chính bạn, mở một dòng riêng bằng "**Kết:**" — không lặp lại số liệu thầy khách vừa nêu.',
+    label,
   };
 }
 
