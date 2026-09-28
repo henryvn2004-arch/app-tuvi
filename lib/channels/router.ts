@@ -174,7 +174,16 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   const outcome = await runConversation(
     io,
     kit.store,
-    { chatId: ev.chatId, text, imageRefs: ev.imageRefs, authorId: thay.id, authorName: thay.name, userId },
+    {
+      chatId: ev.chatId,
+      text,
+      imageRefs: ev.imageRefs,
+      authorId: thay.id,
+      authorName: thay.name,
+      // Chân dung chì của nhóm 15 thầy (public/authors/<id>.jpg, ~30 KB).
+      authorAvatarUrl: `https://www.tuviminhbao.com/authors/${thay.id}.jpg`,
+      userId,
+    },
     cfg,
     ERR_MSG,
     gate.commit,
