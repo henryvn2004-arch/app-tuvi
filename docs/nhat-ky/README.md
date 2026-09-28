@@ -27,6 +27,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 🔗 Kênh chat: gộp tài khoản web ngay trong chat bằng email + mã 6 số |
 | 1 | 2026-09 | `2026-09.md` | 💬 Đợt 2 ô "Hỏi Thầy" — 11 họ trang SEO + mã QR Zalo OA |
+| 1 | 2026-09 | `2026-09.md` | 🗺️ Kênh chat: gửi ẢNH lá số 12 cung khi thầy lập lá số |
 | 1 | 2026-09 | `2026-09.md` | 📎 Kênh chat: tải ảnh hỏng thì báo khách, không luận bịa · bỏ sticker Messenger |
 | 1 | 2026-09 | `2026-09.md` | 🤝 Kênh chat: mời thầy khác/hội chẩn, menu Công cụ, nút Luận giải có giá |
 | 1 | 2026-09 | `2026-09.md` | 🖼️ Kênh chat: chân dung thầy thu nhỏ, chỉ gửi khi thầy giới thiệu |

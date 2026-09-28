@@ -22,6 +22,8 @@ import {
   type ClientPlatform,
 } from '@/lib/contract/v1';
 import { runAgent } from '@/lib/agent/run';
+import { lasoImageUrl } from '@/lib/og/laso-image';
+import { currentNamXem } from '@/lib/engine/namxem';
 import { type ProfilePort } from '@/lib/tools/registry';
 import { type ChatConfig } from '@/lib/config/appConfig';
 import { type ToolSuggestion } from '@/lib/tools/suggest-tool';
@@ -275,8 +277,21 @@ export async function runConversation(
     // trả lời gửi đi. Đây là bản CHUẨN người dùng nhận, không phụ thuộc LLM (dù
     // LLM luận lệch nhãn cung thì thẻ vẫn đúng). KHÔNG lưu thẻ vào history (giữ
     // sạch + tránh model thấy lại; lượt sau có lá số trong system rồi).
-    const delivered = lasoCard ? lasoCard + '\n\n———\n\n' + answer : answer;
-    await deliver(io, chatId, progressId, delivered);
+    // Kênh gửi được ảnh → gửi ẢNH lá số 12 cung (lib/og/laso-image.ts) thay thẻ
+    // chữ; ảnh đi TRƯỚC câu trả lời. Gửi ảnh hỏng → quay về thẻ chữ như cũ.
+    const imgUrl = lasoCard && io.sendImage ? lasoImageUrl(agentBirth, currentNamXem()) : null;
+    let sentImage = false;
+    if (imgUrl && io.sendImage) {
+      try {
+        if (progressId != null) await io.editText(chatId, progressId, 'Lá số của bạn đây:');
+        await io.sendImage(chatId, imgUrl);
+        sentImage = true;
+      } catch (e) {
+        console.error('[runConversation] gửi ảnh lá số lỗi', io.platform, e);
+      }
+    }
+    const delivered = lasoCard && !sentImage ? lasoCard + '\n\n———\n\n' + answer : answer;
+    await deliver(io, chatId, sentImage ? null : progressId, delivered);
     onOutcome?.(true);
     // Trả lời thành công → CHỐT tính phí (lỗi thì không tính, đã return trên).
     if (gateCommit) await gateCommit();
