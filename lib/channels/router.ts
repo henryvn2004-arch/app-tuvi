@@ -131,7 +131,7 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
     // Sáu chữ số trơn mà không khớp mã nào → coi là câu hỏi thường.
   }
 
-  if (CMD.menu.includes(t)) return sendWelcome(kit, ev, userId);
+  if (CMD.menu.includes(t)) return sendWelcome(kit, ev, userId, await getRailPrice(cfg.cost));
 
   if (CMD.moi.includes(t)) {
     await kit.clearSession(ev.chatId);
@@ -187,7 +187,7 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   // như tool web tự lưu) ⇒ mở web là thấy ngay, không nhập lại.
   if (userId && outcome.lasoShown && outcome.birth) void saveChart(userId, '', outcome.birth);
 
-  await sendFollowUps(kit, ev, userId, outcome);
+  await sendFollowUps(kit, ev, userId, outcome, cost);
 }
 
 // ── Cổng tính phí cho người CÓ tài khoản — y hệt /api/v1/chat ──────────
@@ -227,13 +227,10 @@ async function accountGate(
 }
 
 // ── Chào + menu ────────────────────────────────────────────────────────
-async function sendWelcome(kit: ChannelKit, ev: ChannelEvent, userId: string | null): Promise<void> {
+async function sendWelcome(kit: ChannelKit, ev: ChannelEvent, userId: string | null, cost: number): Promise<void> {
   const thay = await thayCuaChat(kit.platform, String(ev.chatId));
-  let vi = '';
-  if (userId) {
-    const [bal, free] = await Promise.all([getBalance(userId), railFreeRemaining(userId)]);
-    vi = `\n\nVí của bạn: ${bal} Lượng${free > 0 ? ` · ${free} câu hỏi tặng` : ''}.`;
-  }
+  const con = userId ? await conCauHoi(userId, cost) : '';
+  const vi = con ? `\n\n${con}` : '';
   const web = userId ? await createHandoffUrl(userId, '/app/cong-cu') : null;
   await sendMenu(
     kit.io,
@@ -338,6 +335,7 @@ async function sendFollowUps(
   ev: ChannelEvent,
   userId: string | null,
   outcome: NonNullable<Awaited<ReturnType<typeof runConversation>>>,
+  cost: number,
 ): Promise<void> {
   const btns: ChatButton[] = [];
   // Link sang web chỉ khi có tài khoản — đăng nhập sẵn + đúng lá số.
@@ -352,5 +350,20 @@ async function sendFollowUps(
   const room = Math.max(0, Math.min(kit.maxReplyButtons, 5) - btns.length - 1);
   for (const s of outcome.suggestions.slice(0, Math.min(room, 3))) btns.push({ title: s, reply: s });
   btns.push({ title: 'Hỏi ý thầy khác', reply: CMD.thay });
-  await sendMenu(kit.io, ev.chatId, outcome.toolSuggest?.lyDo || 'Bạn muốn hỏi tiếp gì?', btns);
+  const head = outcome.toolSuggest?.lyDo || 'Bạn muốn hỏi tiếp gì?';
+  const con = userId ? await conCauHoi(userId, cost) : '';
+  await sendMenu(kit.io, ev.chatId, con ? `${head}\n\n${con}` : head, btns);
+}
+
+/**
+ * "Còn N câu hỏi (M lượt tặng)" — cùng công thức đồng hồ rail web
+ * (`public/shell.js`: lượt tặng + floor(số dư / giá mỗi câu)). Đọc SAU khi
+ * lượt vừa rồi đã chốt phí. Rỗng khi miễn phí (paywall tắt/giá 0).
+ */
+async function conCauHoi(userId: string, cost: number): Promise<string> {
+  if (paywallDisabled() || cost <= 0) return '';
+  const [free, balance] = await Promise.all([railFreeRemaining(userId), getBalance(userId)]);
+  const n = free + Math.floor(balance / cost);
+  if (n <= 0) return `Bạn đã dùng hết câu hỏi — nhắn "${TOPUP_CMD}" để nạp ngay tại đây.`;
+  return `Còn ${n} câu hỏi${free > 0 ? ` (${free} lượt tặng)` : ''}.`;
 }
