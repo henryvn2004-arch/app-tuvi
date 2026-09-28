@@ -11,16 +11,12 @@
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="stylesheet" href="/shell.css?v=73"/>
 <style>
-/* Báo cáo — kiểu trang Library của ChatGPT: tab lọc + ô tìm + bảng một dòng
-   một báo cáo. Mở một dòng = sang đúng công cụ với đúng lá số (đã trả tiền thì
-   công cụ tự trả lại bản đã có, không trừ thêm). */
+/* Báo cáo — kiểu trang Library của ChatGPT: ô tìm + danh sách một dòng một
+   báo cáo. Bấm một dòng = khung XEM trượt ra từ phải (kiểu artifact), đọc bản
+   đã lưu — không quay về form công cụ, không gọi model, không trừ Lượng. */
 .ws-body{padding:22px 26px 60px;max-width:960px}
 .bc-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.bc-tabs{display:flex;gap:4px;flex-wrap:wrap;flex:1;min-width:0}
-.bc-tab{appearance:none;border:0;background:none;font:inherit;font-size:13.5px;color:var(--text-mid);padding:7px 14px;border-radius:999px;cursor:pointer}
-@media(hover:hover){.bc-tab:hover{background:var(--paper-2)}}
-.bc-tab.on{background:var(--paper-2);color:var(--text);font-weight:600}
-.bc-find{display:flex;align-items:center;gap:8px;border:1px solid var(--line-2);border-radius:999px;padding:6px 14px;background:var(--white);flex:0 1 260px;min-width:0}
+.bc-find{display:flex;align-items:center;gap:8px;border:1px solid var(--line-2);border-radius:999px;padding:6px 14px;background:var(--white);flex:0 1 320px;min-width:0}
 .bc-find input{border:0;outline:0;background:none;font:inherit;font-size:13.5px;color:var(--text);min-width:0;flex:1}
 .bc-find .ic{width:15px;height:15px;color:var(--text-lt);flex:0 0 auto}
 .bc-tbl{width:100%;border-collapse:collapse}
@@ -41,6 +37,30 @@
 .bc-pdf:disabled{opacity:.6;cursor:default}
 .bc-msg{padding:3rem 1rem;text-align:center;color:var(--text-lt);font-size:13.5px;line-height:1.7}
 @media(max-width:640px){.ws-body{padding:16px 14px 40px}.bc-tbl .bc-hide{display:none}.bc-find{flex:1 1 100%}}
+
+/* ── Khung xem báo cáo (trượt ra từ phải; điện thoại: phủ trọn màn) ── */
+.rv-back{position:fixed;inset:0;background:rgba(6,26,46,.38);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:80}
+.rv{position:fixed;top:0;right:0;bottom:0;width:min(760px,100%);background:var(--white);box-shadow:-12px 0 40px rgba(6,26,46,.18);transform:translateX(100%);visibility:hidden;transition:transform .26s cubic-bezier(.2,.8,.2,1),visibility 0s linear .26s;z-index:81;display:flex;flex-direction:column}
+.rv-open .rv-back{opacity:1;pointer-events:auto}
+/* visibility: khung đóng vẫn đổ bóng lên mép phải màn điện thoại nếu chỉ tịnh tiến ra ngoài. */
+.rv-open .rv{transform:none;visibility:visible;transition:transform .26s cubic-bezier(.2,.8,.2,1)}
+.rv-head{display:flex;align-items:flex-start;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.rv-ttl{flex:1;min-width:0}
+.rv-ttl b{display:block;font-family:'Noto Serif',serif;font-size:17px;color:var(--heading);line-height:1.35}
+.rv-ttl span{display:block;font-size:12.5px;color:var(--text-lt);margin-top:3px}
+.rv-x{appearance:none;border:1px solid var(--line-2);background:var(--white);color:var(--text-mid);width:34px;height:34px;border-radius:50%;cursor:pointer;font:inherit;font-size:16px;line-height:1;flex:none}
+@media(hover:hover){.rv-x:hover{border-color:var(--gold-soft);color:var(--heading)}}
+.rv-body{flex:1;overflow-y:auto;padding:20px 24px 48px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.rv-blk{margin-bottom:22px}
+.rv-blk h3{font-family:'Noto Serif',serif;font-size:15.5px;color:var(--heading);margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.rv-blk h4{font-size:14px;color:var(--heading);margin:14px 0 6px}
+.rv-blk p{font-size:14.5px;line-height:1.75;color:var(--text);margin:0 0 10px}
+.rv-blk ul{margin:0 0 10px 1.2em;padding:0}
+.rv-blk li{font-size:14.5px;line-height:1.7;color:var(--text);margin-bottom:4px}
+.rv-blk img{display:block;max-width:100%;border-radius:12px;margin:0 0 12px}
+.rv-blk.rv-who p{font-size:13px;color:var(--text-mid);margin:0}
+.rv-msg{padding:3rem 1rem;text-align:center;color:var(--text-lt);font-size:13.5px}
+@media(max-width:640px){.rv{width:100%}.rv-head{padding:12px 14px}.rv-body{padding:16px 16px 40px}}
 </style>
 </head>
 <body>
@@ -50,27 +70,33 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Báo cáo</b><span>Mọi bản luận bạn đã có — mở lại không tốn thêm Lượng</span></div>
+      <div class="ws-title"><b>Báo cáo</b><span>Mọi bản luận bạn đã mở — xem lại không tốn thêm Lượng</span></div>
     </div>
     <div class="ws-body">
       <div class="bc-bar">
-        <div class="bc-tabs" id="bcTabs">
-          <button type="button" class="bc-tab on" data-tab="all">Tất cả</button>
-          <button type="button" class="bc-tab" data-tab="laso">Lá số &amp; vận hạn</button>
-          <button type="button" class="bc-tab" data-tab="chandung">Chân dung &amp; duyên</button>
-        </div>
-        <label class="bc-find"><span class="ic" data-icon="search"></span><input id="bcFind" type="search" placeholder="Tìm báo cáo…" aria-label="Tìm báo cáo"></label>
+        <label class="bc-find"><span class="ic" data-icon="search"></span><input id="bcFind" type="search" placeholder="Tìm theo tên, công cụ…" aria-label="Tìm báo cáo"></label>
       </div>
       <div id="bcLoading" class="bc-msg">Đang tải…</div>
       <div id="bcGuest" class="bc-msg" style="display:none">
         <p style="margin-bottom:1rem">Đăng nhập để xem các báo cáo bạn đã có.</p>
         <button class="btn" type="button" onclick="window.showAuthModal && showAuthModal(function(){location.reload();})">Đăng nhập / Đăng ký</button>
       </div>
-      <div id="bcEmpty" class="bc-msg" style="display:none">Chưa có báo cáo nào.<br>Bản luận bạn mở ở bất kỳ công cụ nào sẽ tự vào đây.</div>
+      <div id="bcEmpty" class="bc-msg" style="display:none">Chưa có báo cáo nào.<br>Kết quả bạn xem ở bất kỳ công cụ nào (cả bản xem trước) sẽ tự lưu vào đây.</div>
       <table class="bc-tbl" id="bcTbl" style="display:none">
-        <thead><tr><th>Tên</th><th class="bc-hide">Loại</th><th>Cập nhật</th></tr></thead>
+        <thead><tr><th>Tên</th><th class="bc-hide">Công cụ</th><th>Cập nhật</th></tr></thead>
         <tbody id="bcBody"></tbody>
       </table>
+    </div>
+
+    <div class="rv-wrap" id="rvWrap">
+      <div class="rv-back" data-rv-close></div>
+      <aside class="rv" role="dialog" aria-modal="true" aria-labelledby="rvTitle" aria-hidden="true">
+        <div class="rv-head">
+          <div class="rv-ttl"><b id="rvTitle"></b><span id="rvSub"></span></div>
+          <button type="button" class="rv-x" data-rv-close aria-label="Đóng" data-tip="Đóng">✕</button>
+        </div>
+        <div class="rv-body" id="rvBody"></div>
+      </aside>
     </div>
   </main>
 </div>
@@ -78,33 +104,19 @@
 <script src="/nav.js?v=45" data-icons-only></script>
 <script src="/auth.js?v=4"></script>
 <script>window.SHELL_ACTIVE='bao-cao';</script>
-<script src="/shell.js?v=126"></script>
+<script src="/shell.js?v=127"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=45"></script>
 <script>
 (function(){
-  // CÙNG bảng công cụ với "Tủ Báo Cáo" của app-so-la-so.html (REPORT_TOOLS) —
-  // `tool_id` khớp `user_reports.tool_id`, `url` khớp next.config.mjs. Nhóm
-  // `chandung` là 7 tool mà /api/reports?withCharts=1 biết lá số nào đã sở
-  // hữu (lib/reports/chartMatch.ts); nhóm `laso` chỉ biết "đã có", không biết
-  // cho lá số nào.
-  var TOOLS = {
-    'chan-dung-vo-chong': { label:'Chân Dung Vợ/Chồng', url:'/app/chan-dung-vo-chong', tab:'chandung' },
-    'chan-dung-tien-kiep':{ label:'Chân Dung Tiền Kiếp', url:'/app/chan-dung-tien-kiep', tab:'chandung' },
-    'duyen-no-tien-kiep': { label:'Duyên Nợ Tiền Kiếp', url:'/app/duyen-no-tien-kiep', tab:'chandung' },
-    'nguoi-khac':         { label:'Lá Số Người Khác', url:'/app/nguoi-khac', tab:'chandung' },
-    'day-con':            { label:'Dạy Con Theo Lá Số', url:'/app/day-con', tab:'chandung' },
-    'nhan-mach':          { label:'Sổ Nhân Mạch', url:'/app/nhan-mach', tab:'chandung' },
-    'huong-nghiep-tre':   { label:'Hướng Nghiệp Sớm Cho Con', url:'/app/huong-nghiep-tre', tab:'chandung' },
-    'laso':               { label:'Luận Giải Lá Số', url:'/app/luan-giai', tab:'laso' },
-    'tu-binh':            { label:'Tử Bình Bát Tự', url:'/app/bat-tu', tab:'laso' },
-    'chu-trinh-cuoc-doi': { label:'Chu Trình Cuộc Đời', url:'/app/chu-trinh-cuoc-doi', tab:'laso' },
-    'van-han-nam':        { label:'Vận Hạn 12 Tháng Tới', url:'/app/van-han-nam', tab:'laso' }
-  };
-  // `ROWS === null` = chưa có danh sách (khách, hoặc đang tải) — lọc/tìm khi đó
-  // KHÔNG được vẽ gì, không thì "Chưa có báo cáo nào" hiện chồng lên lời mời đăng nhập.
-  var ROWS = null, TAB = 'all', Q = '';
+  // Danh sách = /api/reports?list=1: CHỈ báo cáo có nội dung đã lưu (bản chụp
+  // shell.js + bản Luận Giải/Chu Trình cũ) — xem lib/reports/snapshots.ts.
+  // Bấm = GET /api/reports/snapshot?id=… rồi vẽ vào khung trượt. KHÔNG quay về
+  // form công cụ (Henry 2026-09-28: "bấm vào phải hiện ra báo cáo").
+  // `ROWS === null` = chưa có danh sách (khách, hoặc đang tải) — tìm khi đó
+  // KHÔNG được vẽ gì, không thì "Chưa có báo cáo nào" chồng lên lời mời đăng nhập.
+  var ROWS = null, Q = '', VIEW_SEQ = 0;
   function el(id){ return document.getElementById(id); }
-  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function rel(ts){
     if(!ts) return '';
     var d = Date.now() - ts;
@@ -113,86 +125,109 @@
     if (d < 30*86400000) return Math.floor(d/86400000) + ' ngày trước';
     var t = new Date(ts); return t.getDate() + '/' + (t.getMonth()+1) + '/' + t.getFullYear();
   }
-  function who(c){
-    var b = c && c.birth || {};
-    var nm = (c && c.label) || b.hoten || '';
-    var d = b.ngay ? (+b.ngay) + '/' + (+b.thang) + '/' + b.nam : '';
-    return [nm, d].filter(Boolean).join(' · ');
-  }
-  function build(j){
-    var rows = [], charts = j.charts || [];
-    // 7 tool chân dung: biết đúng lá số nào đã sở hữu → mỗi (lá số × tool) một dòng.
-    charts.forEach(function(c){
-      Object.keys(c.owns || {}).forEach(function(tid){
-        if (!c.owns[tid] || !TOOLS[tid]) return;
-        rows.push({ tool: tid, sub: who(c), birth: c.birth, ts: 0 });
-      });
-    });
-    // Luận Giải / Chu Trình đã lưu (laso_public của chính mình): biết TÊN + slug
-    // → mỗi bản một dòng, có nút "Gửi PDF". Bản user_reports trùng slug bỏ qua.
-    var seenSlug = {};
-    (j.lasos || []).forEach(function(l){
-      if (!TOOLS[l.tool]) return;
-      seenSlug[l.slug] = 1;
-      rows.push({ tool: l.tool, sub: [l.name, l.ngay].filter(Boolean).join(' · '), birth: null, slug: l.slug, ts: +new Date(l.created_at) || 0 });
-    });
-    // Còn lại: chỉ biết "đã có" + thời điểm — một dòng mỗi bản ghi.
-    var seenChartTool = {};
-    rows.forEach(function(r){ seenChartTool[r.tool] = 1; });
-    (j.reports || []).forEach(function(r){
-      var t = TOOLS[r.tool_id]; if (!t) return;
-      if (r.slug && seenSlug[r.slug]) return;
-      var ts = +new Date(r.updated_at || r.created_at) || 0;
-      if (seenChartTool[r.tool_id]) {
-        // Gắn thời điểm mới nhất vào các dòng lá số của tool này (đủ để xếp).
-        rows.forEach(function(x){ if (x.tool === r.tool_id && ts > x.ts) x.ts = ts; });
-        return;
-      }
-      rows.push({ tool: r.tool_id, sub: '', birth: null, ts: ts });
-    });
-    rows.sort(function(a,b){ return b.ts - a.ts; });
-    return rows;
-  }
   function paint(){
     if (!ROWS) return;
     var list = ROWS.filter(function(r){
-      var t = TOOLS[r.tool];
-      if (TAB !== 'all' && t.tab !== TAB) return false;
-      if (Q && (t.label + ' ' + r.sub).toLowerCase().indexOf(Q) < 0) return false;
-      return true;
+      return !Q || ((r.toolLabel || '') + ' ' + r.title + ' ' + (r.subtitle || '')).toLowerCase().indexOf(Q) >= 0;
     });
     el('bcLoading').style.display = 'none';
     el('bcEmpty').style.display = list.length ? 'none' : 'block';
     el('bcTbl').style.display = list.length ? '' : 'none';
-    el('bcBody').innerHTML = list.map(function(r, i){
-      var t = TOOLS[r.tool];
-      return '<tr class="bc-row" data-i="' + ROWS.indexOf(r) + '"><td><div class="bc-nm"><span class="bc-ic" data-icon="file-text"></span><span><b>' + esc(t.label) + '</b>' +
-        (r.sub ? '<span>' + esc(r.sub) + '</span>' : '') + '</span></div></td>' +
-        '<td class="bc-hide bc-muted">' + (t.tab === 'laso' ? 'Lá số &amp; vận hạn' : 'Chân dung &amp; duyên') + '</td>' +
-        '<td class="bc-muted"><div class="bc-when">' + esc(rel(r.ts)) +
-        (r.slug ? '<button type="button" class="bc-pdf" data-pdf="' + esc(r.slug) + '"><span data-icon="mail"></span>Gửi PDF</button>' : '') +
+    el('bcBody').innerHTML = list.map(function(r){
+      var name = r.title && r.title !== r.toolLabel ? r.title : (r.toolLabel || r.title);
+      return '<tr class="bc-row" data-id="' + esc(r.id) + '"><td><div class="bc-nm"><span class="bc-ic" data-icon="' + (r.hasImage ? 'image' : 'file-text') + '"></span><span><b>' + esc(name) + '</b>' +
+        (r.subtitle ? '<span>' + esc(r.subtitle) + '</span>' : '') + '</span></div></td>' +
+        '<td class="bc-hide bc-muted">' + esc(r.toolLabel || '') + '</td>' +
+        '<td class="bc-muted"><div class="bc-when">' + esc(rel(+new Date(r.updatedAt))) +
+        (r.pdfSlug ? '<button type="button" class="bc-pdf" data-pdf="' + esc(r.pdfSlug) + '"><span data-icon="mail"></span>Gửi PDF</button>' : '') +
         '</div></td></tr>';
     }).join('');
     if (window.mountIcons) window.mountIcons(el('bcBody'));
   }
-  el('bcTabs').addEventListener('click', function(e){
-    var b = e.target.closest('.bc-tab'); if (!b) return;
-    Array.prototype.forEach.call(el('bcTabs').children, function(x){ x.classList.toggle('on', x === b); });
-    TAB = b.getAttribute('data-tab'); paint();
-  });
   el('bcFind').addEventListener('input', function(){ Q = this.value.trim().toLowerCase(); paint(); });
-  // Mở = sang công cụ với ĐÚNG lá số — cùng cơ chế `app_birth` mà Tủ Báo Cáo
-  // của sổ lá số dùng (shell.js normBirth đọc lại ở mọi trang).
   el('bcBody').addEventListener('click', function(e){
     var pdf = e.target.closest('.bc-pdf'); if (pdf) { sendPdf(pdf); return; }
     var tr = e.target.closest('tr.bc-row'); if (!tr) return;
-    var r = ROWS[+tr.getAttribute('data-i')]; if (!r) return;
-    if (r.birth) { try { localStorage.setItem('app_birth', JSON.stringify(r.birth)); } catch (err) { /* ignore */ } }
-    location.href = TOOLS[r.tool].url;
+    openView(tr.getAttribute('data-id'));
   });
 
-  // Gửi lại PDF qua email (chuyển từ thẻ lá số ở Hồ sơ cũ, 2026-09-27). Server
-  // tự kiểm quyền sở hữu + loại tool không có PDF (app/api/luan-giai/resend-pdf).
+  // ── Khung xem ──
+  // Chữ đã lưu là CHỮ THÔ (không bao giờ HTML): escape trước, rồi mới dựng
+  // đoạn / **đậm** / "## tiêu đề" / "- gạch đầu dòng".
+  function inline(s){ return s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>'); }
+  function textHtml(t){
+    return String(t).split(/\n{2,}/).map(function(par){
+      var lines = par.split('\n'), out = '', ul = [];
+      var flushUl = function(){ if (ul.length) { out += '<ul>' + ul.join('') + '</ul>'; ul = []; } };
+      var para = [];
+      var flushP = function(){ if (para.length) { out += '<p>' + para.join('<br>') + '</p>'; para = []; } };
+      lines.forEach(function(ln){
+        var e = inline(esc(ln));
+        var h = /^#{2,4}\s+(.+)$/.exec(ln);
+        if (h) { flushP(); flushUl(); out += '<h4>' + inline(esc(h[1])) + '</h4>'; return; }
+        var li = /^\s*[-•*]\s+(.+)$/.exec(ln);
+        if (li) { flushP(); ul.push('<li>' + inline(esc(li[1])) + '</li>'); return; }
+        flushUl(); para.push(e);
+      });
+      flushP(); flushUl();
+      return out;
+    }).join('');
+  }
+  function blockHtml(b){
+    var who = b.header === 'Lá số dùng để luận';
+    return '<section class="rv-blk' + (who ? ' rv-who' : '') + '">' +
+      (b.header && !who ? '<h3>' + esc(b.header) + '</h3>' : '') +
+      (b.image && /^https:\/\//.test(b.image) ? '<img src="' + esc(b.image) + '" alt="" loading="lazy">' : '') +
+      (b.text ? textHtml(b.text) : '') + '</section>';
+  }
+  function setOpen(on){
+    var w = el('rvWrap'); if (!w) return;
+    w.classList.toggle('rv-open', on);
+    w.querySelector('.rv').setAttribute('aria-hidden', on ? 'false' : 'true');
+  }
+  function openView(id){
+    var r = (ROWS || []).filter(function(x){ return x.id === id; })[0] || {};
+    el('rvTitle').textContent = r.title && r.title !== r.toolLabel ? r.title : (r.toolLabel || r.title || 'Báo cáo');
+    el('rvSub').textContent = r.subtitle || '';
+    el('rvBody').innerHTML = '<div class="rv-msg">Đang mở báo cáo…</div>';
+    el('rvBody').scrollTop = 0;
+    setOpen(true);
+    // Nút "quay lại" của điện thoại đóng khung thay vì rời trang.
+    try { history.pushState({ bcView: 1 }, ''); } catch (e) { /* ignore */ }
+    var seq = ++VIEW_SEQ;
+    token().then(function(tok){
+      return fetch('/api/reports/snapshot?id=' + encodeURIComponent(id), { headers: { Authorization: 'Bearer ' + tok } })
+        .then(function(res){ return res.json().catch(function(){ return {}; }).then(function(d){ return { ok: res.ok, d: d }; }); });
+    }).then(function(x){
+      if (seq !== VIEW_SEQ || !el('rvBody')) return; // đã đóng / mở báo cáo khác
+      if (!x.ok) { el('rvBody').innerHTML = '<div class="rv-msg">' + esc(x.d.error || 'Chưa mở được báo cáo. Thử lại sau ít phút.') + '</div>'; return; }
+      var d = x.d;
+      if (d.subtitle) el('rvSub').textContent = d.subtitle;
+      el('rvBody').innerHTML = (d.blocks || []).map(blockHtml).join('') || '<div class="rv-msg">Báo cáo này trống.</div>';
+    }).catch(function(e){
+      console.error('[bao-cao] view', e);
+      if (seq === VIEW_SEQ && el('rvBody')) el('rvBody').innerHTML = '<div class="rv-msg">Chưa mở được báo cáo. Thử lại sau ít phút.</div>';
+    });
+  }
+  function closeView(){
+    var w = el('rvWrap');
+    if (!w || !w.classList.contains('rv-open')) return;
+    VIEW_SEQ++;
+    setOpen(false);
+    if (history.state && history.state.bcView) { try { history.back(); } catch (e) { /* ignore */ } }
+  }
+  el('rvWrap').addEventListener('click', function(e){ if (e.target.closest('[data-rv-close]')) closeView(); });
+  // Trang này chạy lại khi điều hướng mềm ghé lần nữa — listener cấp window
+  // chỉ gắn MỘT lần, gọi qua `window.__bcView` (luôn trỏ bản mới nhất).
+  window.__bcView = { close: closeView, setOpen: setOpen };
+  if (!window.__bcViewWired) {
+    window.__bcViewWired = true;
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && window.__bcView && document.getElementById('rvWrap')) window.__bcView.close(); });
+    window.addEventListener('popstate', function(){ if (window.__bcView && document.getElementById('rvWrap')) window.__bcView.setOpen(false); });
+  }
+
+  // Gửi lại PDF qua email (chỉ bản Luận Giải / Chu Trình biết slug). Server tự
+  // kiểm quyền sở hữu + loại tool không có PDF (app/api/luan-giai/resend-pdf).
   function sendPdf(btn){
     var orig = btn.innerHTML;
     btn.disabled = true; btn.textContent = 'Đang gửi…';
@@ -223,15 +258,16 @@
   }
   token().then(function(tok){
     if (!tok) { el('bcLoading').style.display = 'none'; el('bcGuest').style.display = 'block'; return; }
-    return fetch('/api/reports?withCharts=1', { headers: { Authorization: 'Bearer ' + tok } })
+    return fetch('/api/reports?list=1', { headers: { Authorization: 'Bearer ' + tok } })
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(j){
+        if (!el('bcLoading')) return; // đã điều hướng mềm sang trang khác
         if (!j) { el('bcLoading').textContent = 'Chưa tải được danh sách báo cáo. Thử tải lại trang.'; return; }
-        ROWS = build(j); paint();
+        ROWS = j.items || []; paint();
       });
   }).catch(function(e){
     console.error('[bao-cao]', e);
-    el('bcLoading').textContent = 'Chưa tải được danh sách báo cáo. Thử tải lại trang.';
+    if (el('bcLoading')) el('bcLoading').textContent = 'Chưa tải được danh sách báo cáo. Thử tải lại trang.';
   });
 })();
 </script>
