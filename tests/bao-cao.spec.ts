@@ -50,6 +50,8 @@ test('bấm một báo cáo mở khung xem (không sang trang công cụ), Esc �
   await expect(page.locator('tr.bc-row')).toHaveCount(2);
   // Chỉ bản cũ biết slug mới có "Gửi PDF".
   await expect(page.locator('.bc-pdf')).toHaveCount(1);
+  // …và cạnh nó có "Gửi về Zalo" (gửi PDF vào kênh chat, /api/channels/send-pdf).
+  await expect(page.locator('.bc-chat')).toHaveCount(1);
 
   const url = page.url();
   await page.locator('tr.bc-row').nth(1).click();
