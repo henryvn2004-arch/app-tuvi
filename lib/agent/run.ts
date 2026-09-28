@@ -18,7 +18,7 @@ import {
   type ScenarioInput,
   type BirthParams,
 } from '@/lib/contract/v1';
-import { buildToolDefs, executeTool, newToolContext, buildBirthFromInput, type ProfilePort } from '@/lib/tools/registry';
+import { buildToolDefs, executeTool, newToolContext, buildBirthFromInput, THAY_KHACH, type ProfilePort } from '@/lib/tools/registry';
 import { ghiLoiTienTri } from '@/lib/tien-tri/store';
 import { listFamily, vaiTroTrongCau, canMoiThem, type VaiTro } from '@/lib/charts/family';
 import { type ToolSuggestion } from '@/lib/tools/suggest-tool';
@@ -554,7 +554,7 @@ async function runAgentInner(
       if (vai && !req.addressMember && canMoiThem(vai, ctx.family)) side.familyInvite = { vaiTro: vai };
     }
     ctx.question = lastQ;
-    tools = buildToolDefs(!!profiles, !!memoryPort, ctx.family.length > 0, hoiChan);
+    tools = buildToolDefs(!!profiles, !!memoryPort, ctx.family.length > 0, hoiChan, req.addressMaster && THAY_KHACH[req.addressMaster] ? req.addressMaster : null);
   }
 
   // Chốt cfg cho cả lượt: trần token là min(DB, per-prompt). Clone chứ không
@@ -634,8 +634,9 @@ async function runAgentInner(
   // từ chối mà vẫn mất một câu. Tâm Kính có HAI môn nên chỉ nêu tool MẶC ĐỊNH.
   if (req.addressMaster && convo.length) {
     const displayName = PERSONAS[req.addressMaster]?.name || req.addressMaster;
-    const tool =
-      req.addressMaster === 'linh-co'
+    const tool = THAY_KHACH[req.addressMaster]
+      ? `moi_thay_chuyen_mon với thay="${req.addressMaster}"`
+      : req.addressMaster === 'linh-co'
         ? 'moi_thay_luc_nham (Linh Cơ chiêm ngay lúc này chính chuyện người dùng đang hỏi)'
         : 'moi_thay_bat_tu (mặc định; không nói năm thì lấy năm hiện tại), hoặc moi_thay_ky_mon nếu câu hỏi là về hướng/giờ hành sự';
     const hint = `[Người dùng vừa bấm mời đích danh thầy ${displayName} — BẮT BUỘC gọi tool ${tool} trong lượt này, bỏ qua MỌI điều kiện ở mô tả tool (kể cả loại câu hỏi và "đã mời trong cuộc trò chuyện này rồi"). Thầy ${displayName} xem CÙNG câu hỏi theo góc môn của mình — KHÔNG từ chối, KHÔNG giải thích vì sao môn đó "không hợp".]`;

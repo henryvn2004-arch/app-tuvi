@@ -86,7 +86,7 @@ export interface ClientInfo {
    * `window.SHELL_ACTIVE` của trang đang gửi (giai đoạn 3 chat-first,
    * 2026-09-23) — TÍN HIỆU BEST-EFFORT, không phải danh tính (client tự khai).
    * DÙNG DUY NHẤT để chặn tự-gợi-ý chính tool đang mở khi gợi ý sản phẩm
-   * (`goi_y_san_pham`, lib/agent/run.ts `activeTool`): nhánh LÁ SỐ/GENERAL
+   * (`goi_y_cong_cu`, lib/agent/run.ts `activeTool`): nhánh LÁ SỐ/GENERAL
    * không gửi `scenario` nên trước đây KHÔNG có tín hiệu nào biết đang đứng ở
    * trang nào — `activeTool` rơi về mặc định `'laso'` CHO MỌI TRANG birth-only
    * (kể cả trang KHÔNG phải Luận Giải), khiến 'laso' không bao giờ gợi ý được.
@@ -237,7 +237,7 @@ export interface ChatRequestV1 {
    * ID những thầy ĐÃ có tool mời thật (`lib/tools/registry.ts`). Thêm thầy mới
    * có tool riêng thì thêm ID vào đây VÀ vào whitelist trong `validateChatRequest`.
    */
-  addressMaster?: 'tam-kinh' | 'linh-co';
+  addressMaster?: 'tam-kinh' | 'linh-co' | 'dieu-khong' | 'nhat-nguyen' | 'huyen-khong' | 'thanh-hu';
   /**
    * "Cả nhà mình" (additive, 2026-09-27) — khách gõ "@Tên người nhà": id của
    * mục `user_charts` (nhóm gia_dinh) ⇒ server bắt model đọc lá số người đó
@@ -426,7 +426,8 @@ export function validateChatRequest(body: unknown):
   }
   // 🪤 Thêm thầy mới có tool mời riêng (`moi_thay_*`, lib/tools/registry.ts)
   // thì thêm ID vào đây — kiểu union ở trên chỉ chặn lúc biên dịch.
-  if (b.addressMaster != null && b.addressMaster !== 'tam-kinh' && b.addressMaster !== 'linh-co') {
+  // (thêm 2026-09-28: 4 thầy của `THAY_KHACH` — tool `moi_thay_chuyen_mon`.)
+  if (b.addressMaster != null && !['tam-kinh', 'linh-co', 'dieu-khong', 'nhat-nguyen', 'huyen-khong', 'thanh-hu'].includes(b.addressMaster as string)) {
     return { ok: false, error: 'addressMaster không hợp lệ' };
   }
 

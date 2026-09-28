@@ -545,18 +545,7 @@ body.chat-home .rail-report,body.chat-first-live.art-closed .rail-report{margin-
 /* ── THẺ MỜI TRONG DÒNG HỘI THOẠI ──
    Chèn sau câu thứ 3, gọi tên đúng cung người ta vừa hỏi. Trông như một thẻ
    thông tin trong mạch chat, KHÔNG phải banner quảng cáo cắt ngang. */
-.rail-upsell{margin:12px 0 4px;padding:13px 14px;background:var(--gold-lt,#F9F4EB);border:1px solid var(--gold-soft,rgba(154,123,58,.3));border-radius:16px;animation:shFade .2s ease}
-.rail-upsell .ru-t{font-size:13px;color:var(--text);line-height:1.55;margin-bottom:5px}
-.rail-upsell .ru-t b{color:var(--heading)}
-.rail-upsell .ru-d{font-size:12.5px;color:var(--text-mid);line-height:1.6;margin-bottom:11px}
-.rail-upsell .ru-d b{color:var(--heading)}
-.rail-upsell .ru-list{color:var(--text-lt);font-style:italic}
-.rail-upsell .ru-f{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.rail-upsell .ru-btn{background:var(--navy);color:var(--gold-bright,#c9a84c);text-decoration:none;font-family:var(--serif);font-weight:600;font-size:13px;padding:9px 15px;border-radius:8px;white-space:nowrap}
-@media(hover:hover){.rail-upsell .ru-btn:hover{background:var(--navy-mid,#164B6D)}}
-.rail-upsell .ru-price{font-size:11.5px;color:var(--text-lt)}
 
-/* Thẻ gợi ý công cụ trong lúc trò chuyện (bước 4). CỐ Ý nhẹ hơn .rail-upsell:
    nền giấy + viền mảnh thay vì khối vàng — đây là lời CHỈ ĐƯỜNG, không phải
    lời mời mua, và nó xuất hiện đúng lúc người ta đang cần giúp. Không có ô
    giá nào ở đây, xem lib/tools/suggest-tool.ts. */
