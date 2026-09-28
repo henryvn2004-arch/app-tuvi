@@ -356,12 +356,18 @@ function showPopup() {
   document.body.appendChild(overlay);
   markPopupSeen();
 
+  // Esc — đường thoát KHÔNG PHỤ THUỘC vị trí, độc lập với nút ✕/click-ra-ngoài
+  // đã có (CLAUDE.md: mọi overlay chặn đường phải có đường thoát Esc).
+  const close = () => { document.removeEventListener('keydown', onEsc); closePopup(overlay); };
+  function onEsc(e) { if (e.key === 'Escape') close(); }
+  document.addEventListener('keydown', onEsc);
+
   // Close on overlay click
   overlay.addEventListener('click', e => {
-    if (e.target === overlay) closePopup(overlay);
+    if (e.target === overlay) close();
   });
-  overlay.querySelector('.cv-popup-close').addEventListener('click', () => closePopup(overlay));
-  overlay.querySelector('.cv-popup-secondary').addEventListener('click', () => closePopup(overlay));
+  overlay.querySelector('.cv-popup-close').addEventListener('click', close);
+  overlay.querySelector('.cv-popup-secondary').addEventListener('click', close);
 
   // CTA click — scroll to section or navigate
   overlay.querySelector('.cv-popup-cta').addEventListener('click', e => {
@@ -369,7 +375,7 @@ function showPopup() {
     if (href.startsWith('#')) {
       e.preventDefault();
       const target = document.querySelector(href);
-      if (target) { closePopup(overlay); setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 150); }
+      if (target) { close(); setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 150); }
     } else {
       // external navigate — let default happen
     }

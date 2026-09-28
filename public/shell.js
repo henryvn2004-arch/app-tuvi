@@ -1777,6 +1777,17 @@
     el.innerHTML = '<div class="intro-thay"><img src="/authors/' + esc(m.id) + '.jpg" alt="" onerror="this.remove()">' +
       '<span>Thầy <b>' + esc(m.display_name || '') + '</b> đứng tên' + (m.discipline ? ' · ' + esc(m.discipline) : '') + '</span></div>';
   }
+  // Đóng overlay tự dựng bằng Esc — đường thoát KHÔNG PHỤ THUỘC vị trí, độc
+  // lập với nút ✕/click-ra-ngoài đã có ở từng modal (CLAUDE.md: "mọi overlay
+  // chặn đường phải có đường thoát không phụ thuộc vị trí — Esc"). Trả về một
+  // hàm đóng THAY cho `closeFn` gốc — gọi hàm trả về (từ Esc HAY từ nút ✕/click
+  // ra ngoài) đều tự gỡ listener, không rò rỉ dù đóng bằng đường nào.
+  function _escCloses(closeFn) {
+    function onEsc(e) { if (e.key === 'Escape') wrapped(); }
+    function wrapped() { document.removeEventListener('keydown', onEsc); closeFn(); }
+    document.addEventListener('keydown', onEsc);
+    return wrapped;
+  }
   function openAuthorModal(cb) {
     var rows = AUTHOR_ROSTER.map(function (a) {
       var sel = _author && _author.id === a.id;
@@ -1798,7 +1809,7 @@
         '<div class="sam-list">' + rows + '</div>' +
       '</div>';
     document.body.appendChild(wrap);
-    var close = function () { wrap.remove(); };
+    var close = _escCloses(function () { wrap.remove(); });
     wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
     wrap.querySelector('.ssm-x').addEventListener('click', close);
     wrap.querySelector('.sam-rand').addEventListener('click', function () {
@@ -1924,7 +1935,7 @@
         '</div>' +
       '</div>';
     document.body.appendChild(wrap);
-    var close = function () { wrap.remove(); };
+    var close = _escCloses(function () { wrap.remove(); });
     wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
     wrap.querySelector('.ssm-x').addEventListener('click', close);
     wrap.querySelectorAll('.ssm-b').forEach(function (a) {
@@ -3144,7 +3155,7 @@
           '<button class="stm-later" type="button">Để sau</button>' +
         '</div>';
       document.body.appendChild(wrap);
-      var close = function () { wrap.remove(); };
+      var close = _escCloses(function () { wrap.remove(); });
       wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
       wrap.querySelector('.stm-x').addEventListener('click', close);
       wrap.querySelector('.stm-later').addEventListener('click', close);
@@ -3225,7 +3236,7 @@
       '</div>';
     document.body.appendChild(wrap);
     try { track('cta_click', { tool_id: ACTIVE, meta: { from: hasLaso ? 'rail_wall_laso' : 'rail_wall_topup' } }); } catch (e) { /* ignore */ }
-    var close = function () { wrap.remove(); };
+    var close = _escCloses(function () { wrap.remove(); });
     wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
     wrap.querySelector('.stm-x').addEventListener('click', close);
     wrap.querySelector('.stm-later').addEventListener('click', close);
@@ -6242,6 +6253,15 @@
     }
     document.addEventListener('keydown', function (e) {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); var o = document.getElementById('cmdk'); (o && o.classList.contains('open')) ? closeCmd() : openCmd(); }
+      // Ngăn kéo sidebar/rail di động — cùng thứ tự ưu tiên với chạm nền mờ
+      // (`#shell-backdrop` phía trên): sidebar trước, rồi rail. Esc là đường
+      // thoát KHÔNG PHỤ THUỘC vị trí, độc lập với chạm-ra-ngoài đã có.
+      else if (e.key === 'Escape') {
+        var sb2 = document.getElementById('shell-sidebar');
+        if (sb2 && sb2.classList.contains('open')) { sb2.classList.remove('open'); syncBackdrop(); return; }
+        var rl2 = document.getElementById('shell-rail');
+        if (rl2 && rl2.classList.contains('open')) closeRailUI();
+      }
     });
     // Theo dõi phiên đăng nhập tới khi SẴN SÀNG (Auth có thể refresh token async
     // qua cookie): cập nhật avatar/tên + nạp lại lịch sử NGAY khi token xuất hiện.
