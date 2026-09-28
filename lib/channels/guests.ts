@@ -47,6 +47,11 @@ const lower = (s: string) => String(s || '').toLocaleLowerCase('vi-VN');
 
 export const guestById = (id: string) => GUESTS.find((g) => g.id === id) || null;
 
+/** Câu nút "mời thầy khách" gửi đi — khách thấy nó thành tin của mình. */
+export const moiCau = (g: Guest) => `Mời Thầy ${g.ten} cùng xem`;
+/** Tin khớp ĐÚNG câu nút `moiCau` → thầy khách đó (so chữ thường). */
+export const guestFromMoi = (t: string) => GUESTS.find((g) => lower(moiCau(g)) === lower(t).trim()) || null;
+
 /** Tối đa `n` thầy khách cho câu `q` (bỏ thầy đang tiếp chuyện) — cùng luật web. */
 export function pickGuests(q: string, currentId: string, birth: BirthParams, n: number): Guest[] {
   const t = lower(q);

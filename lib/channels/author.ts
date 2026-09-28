@@ -50,11 +50,6 @@ export function timThay(arg: string): Thay | null {
 
 export const chonThay = (platform: string, chatId: string, t: Thay) => chatSetAuthor(platform, chatId, t.id);
 
-export function danhSachThay(dangChon: Thay): string {
-  const dong = THAY_LIST.map((t, i) => `${i + 1}. Thầy ${t.name}${t.id === dangChon.id ? ' (đang tiếp chuyện)' : ''}`);
-  return `Nhóm Minh Bảo có ${THAY_LIST.length} thầy:\n${dong.join('\n')}\n\nĐổi thầy: nhắn /thay <số hoặc tên>, vd "/thay 3" hoặc "/thay Tâm Kính".`;
-}
-
 // ── Lời thầy tự giới thiệu (master_profiles.greeting + discipline) ──
 // CÙNG nguồn với lời chào của web (`introThay`, public/shell.js) — Admin sửa
 // bảng là cả web lẫn kênh chat đổi theo, không deploy. Đọc hụt → câu mặc định.
