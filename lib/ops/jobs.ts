@@ -171,6 +171,11 @@ export const JOBS: JobSpec[] = [
     schedule: '09:00 VN hằng ngày', sink: 'anon_rail_hits + anon_preview_hits + luan_preview_cache',
     path: '/api/cron/prune-anon-trial',
     since: '2026-08-01' },
+  // Refresh token Zalo dùng MỘT LẦN và chết sau ~3 tháng không dùng — xem
+  // app/api/cron/zalo-token. Kênh chưa cấu hình thì chạy ra `skipped`.
+  { key: 'zalo-token', label: 'Làm mới token Zalo OA', source: 'vercel', everyMinutes: D,
+    schedule: '03:20 VN hằng ngày', sink: 'zalo_oa_tokens', path: '/api/cron/zalo-token',
+    since: '2026-09-28' },
   // `since` = ngày merge: job chưa từng chạy nên không có dòng nào trong
   // cron_runs; thiếu mốc này thì bộ dò lập tức kêu "CHƯA HỀ chạy" — đúng loại
   // cảnh báo giả đã phải đi vá một lượt hôm 30/07.

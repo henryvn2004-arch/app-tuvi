@@ -221,11 +221,14 @@ async function loadHeaderBalance() {
 // MCP + Telegram + WhatsApp + Messenger). KHÔNG thêm Zalo/Discord: chưa có
 // route liên kết cho hai kênh đó.
 var _connStats = { mcp: false, tg: false, wa: false, msgr: false };
+// Zalo chỉ vào mẫu số khi thẻ Zalo hiện (kênh đã cấu hình phía server).
+var _zaloAvailable = false, _zaloLinked = false;
 function updateConnStats() {
-  const ok = (_connStats.mcp ? 1 : 0) + (_connStats.tg ? 1 : 0) + (_connStats.wa ? 1 : 0) + (_connStats.msgr ? 1 : 0);
+  const ok = (_connStats.mcp ? 1 : 0) + (_connStats.tg ? 1 : 0) + (_connStats.wa ? 1 : 0) + (_connStats.msgr ? 1 : 0) + (_zaloAvailable && _zaloLinked ? 1 : 0);
+  const total = _zaloAvailable ? 5 : 4;
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-  set('connOkCount', ok + '/4');
-  set('connMissingCount', (4 - ok) + '/4');
+  set('connOkCount', ok + '/' + total);
+  set('connMissingCount', (total - ok) + '/' + total);
 }
 
 // ── AI QUA MCP (self-serve key riêng của user) ──
@@ -473,6 +476,74 @@ document.getElementById('btnMsgrUnlink').onclick = async () => {
   loadMessengerLink();
 };
 
+// ── LIÊN KẾT ZALO OA ──
+// Zalo không truyền được mã vào cuộc trò chuyện (không có ?ref như m.me) ⇒
+// hiện mã để người dùng nhắn "/link <mã>" cho OA.
+async function loadZaloLink() {
+  const card = document.getElementById('zaloCard');
+  const statusEl = document.getElementById('zaloLinkStatus');
+  const btnLink  = document.getElementById('btnZaloLink');
+  const btnUnlink = document.getElementById('btnZaloUnlink');
+  if (!card || !statusEl) return;
+  try {
+    const res = await fetch('/api/channels/zalo/link', {
+      headers: { Authorization: `Bearer ${await _tok()}` }
+    });
+    const d = res.ok ? await res.json() : { available: false, linked: false };
+    _zaloAvailable = !!d.available;
+    _zaloLinked = !!d.linked;
+    updateConnStats();
+    card.style.display = _zaloAvailable ? '' : 'none';
+    if (!_zaloAvailable) return;
+    if (d.linked) {
+      statusEl.innerHTML = '✓ Đã liên kết — bot Zalo dùng chung ví Lượng này.' + (d.zalo_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.zalo_id)) + '</span>' : '');
+      btnLink.style.display = 'none';
+      btnUnlink.style.display = 'inline-block';
+    } else {
+      statusEl.textContent = 'Chưa liên kết.';
+      btnLink.style.display = 'inline-block';
+      btnUnlink.style.display = 'none';
+    }
+  } catch {
+    statusEl.textContent = 'Không tải được trạng thái liên kết.';
+  }
+}
+
+document.getElementById('btnZaloLink').onclick = async () => {
+  const btn = document.getElementById('btnZaloLink');
+  btn.disabled = true; btn.textContent = 'Đang tạo mã…';
+  try {
+    const res = await fetch('/api/channels/zalo/link', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${await _tok()}` }
+    });
+    const d = await res.json();
+    if (_hoSoLeftPage) return;
+    if (d.token) {
+      const st = document.getElementById('zaloLinkStatus');
+      if (st) st.innerHTML = ic('hourglass') + ' Nhắn cho OA Tử Vi Minh Bảo trên Zalo đúng dòng sau (mã sống 15 phút), rồi tải lại trang: <code>/link ' + escHtml(d.token) + '</code>';
+      if (d.url) window.open(d.url, '_blank');
+    } else {
+      alert('Không tạo được liên kết, thử lại sau nhé.');
+    }
+  } catch {
+    if (!_hoSoLeftPage) alert('Lỗi mạng, thử lại sau nhé.');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Liên kết Zalo';
+  }
+};
+
+document.getElementById('btnZaloUnlink').onclick = async () => {
+  if (!confirm('Hủy liên kết Zalo? Bot sẽ không còn dùng ví Lượng của bạn.')) return;
+  try {
+    await fetch('/api/channels/zalo/link', {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${await _tok()}` }
+    });
+  } catch {}
+  loadZaloLink();
+};
+
 // ── TAB KẾT NỐI (AI qua MCP + các kênh chat) ──
 var _ketnoiLoaded = false;
 function loadKetnoi() {
@@ -480,6 +551,7 @@ function loadKetnoi() {
   loadTelegramLink();
   loadWhatsappLink();
   loadMessengerLink();
+  loadZaloLink();
   _ketnoiLoaded = true;
 }
 

@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-464 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+466 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 299 | 1,115,597 B |
+| `2026-09.md` | 301 | 1,119,709 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -26,6 +26,8 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 💬 Ô "Hỏi Thầy" trên trang SEO (/tu-vi, /la-so) — chat là cửa chính |
+| 1 | 2026-09 | `2026-09.md` | 💬 Kênh Zalo OA — adapter Hỏi Thầy, token xoay vòng trong DB |
+| 1 | 2026-09 | `2026-09.md` | 🧭 Gắn lại khối "Phương pháp luận giải — Tử Vi Nghiệm Chứng" lên trang chủ |
 | 1 | 2026-09 | `2026-09.md` | 📑 Báo cáo mở ra XEM ngay (khung trượt), không quay về form — bản chụp mọi kết quả |
 | 1 | 2026-09 | `2026-09.md` | 🫧 Bong bóng trống khi khách @ thẳng thầy khách |
 | 1 | 2026-09 | `2026-09.md` | 🧑‍🏫 Mời thầy theo NGỮ CẢNH thay cho cross-sell báo cáo |
