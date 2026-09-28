@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-471 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+474 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 306 | 1,133,157 B |
+| `2026-09.md` | 309 | 1,138,256 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -26,6 +26,9 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 💬 Đợt 2 ô "Hỏi Thầy" — 11 họ trang SEO + mã QR Zalo OA |
+| 1 | 2026-09 | `2026-09.md` | 🤝 Kênh chat: mời thầy khác/hội chẩn, menu Công cụ, nút Luận giải có giá |
+| 1 | 2026-09 | `2026-09.md` | 🖼️ Kênh chat: chân dung thầy thu nhỏ, chỉ gửi khi thầy giới thiệu |
+| 1 | 2026-09 | `2026-09.md` | 🧑‍🏫 Kênh chat: chân dung thầy thay quả cầu 🔮 + thầy tự giới thiệu khi bắt đầu chat |
 | 1 | 2026-09 | `2026-09.md` | 🔢 Kênh chat: "Còn N câu hỏi" sau mỗi câu trả lời + trong lời chào |
 | 1 | 2026-09 | `2026-09.md` | 🔗 MCP công khai trả kèm link "Hỏi Thầy" + giữ utm khi /app dọn query |
 | 1 | 2026-09 | `2026-09.md` | 💬 Ô "Hỏi Thầy" trên trang SEO (/tu-vi, /la-so) — chat là cửa chính |

@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
   }
 
   // ACK NGAY, xử lý NỀN — Telegram chỉ cần 200 nhanh.
-  waitUntil(handleUpdate(update));
+  waitUntil(handleUpdate(update).catch((e) => console.error('[telegram] handleUpdate lỗi:', e)));
   return ok();
 }
 

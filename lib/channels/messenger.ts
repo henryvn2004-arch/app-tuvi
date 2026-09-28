@@ -31,16 +31,31 @@ const MAX_IMAGES = 3; // khớp MAX_IMAGES_PER_MSG trong runAgent
 
 // ── Send API ────────────────────────────────────────────────
 /** Gửi 1 tin văn bản (tự cắt nếu > giới hạn). messaging_type RESPONSE = trả
- *  lời trong cửa sổ 24h, không cần xin quyền message tag. */
-export async function msgrSendText(psid: string, text: string): Promise<void> {
-  if (!PAGE_TOKEN) return;
+ *  lời trong cửa sổ 24h, không cần xin quyền message tag. Trả `true` chỉ khi
+ *  Meta nhận ĐỦ mọi đoạn (không throw — caller quyết). */
+export async function msgrSendText(psid: string, text: string): Promise<boolean> {
+  if (!PAGE_TOKEN) {
+    console.error('[messenger] thiếu MESSENGER_PAGE_ACCESS_TOKEN, không gửi được');
+    return false;
+  }
   for (const chunk of splitText(text || '…', MSG_LIMIT)) {
-    await graphPost('me/messages', PAGE_TOKEN, {
+    const res = await graphPost('me/messages', PAGE_TOKEN, {
       recipient: { id: psid },
       messaging_type: 'RESPONSE',
       message: { text: chunk },
     });
+    if (!res?.ok) {
+      console.error('[messenger] gửi tin lỗi', res?.status ?? 'network', await res?.text().catch(() => ''));
+      return false;
+    }
   }
+  return true;
+}
+
+// Gửi cho luồng hội thoại: hỏng thì NÉM LỖI để core không gọi LLM / không chốt
+// phí khi người dùng không nhận được gì.
+async function msgrSendOrThrow(psid: string, text: string): Promise<void> {
+  if (!(await msgrSendText(psid, text))) throw new Error('[messenger] gửi tin thất bại');
 }
 
 /** Messenger: button template ≤3 nút, chữ ≤640; quick reply ≤13, nhãn ≤20. */
@@ -130,9 +145,9 @@ export const messengerIO: ChannelIO = {
   msgLimit: MSG_LIMIT,
   maxImages: MAX_IMAGES,
   typing: (chatId) => msgrSenderAction(String(chatId), 'typing_on'),
-  sendText: (chatId, text) => msgrSendText(String(chatId), text),
+  sendText: (chatId, text) => msgrSendOrThrow(String(chatId), text),
   sendProgress: async (chatId, text) => {
-    await msgrSendText(String(chatId), text);
+    await msgrSendOrThrow(String(chatId), text);
     return null; // Messenger không edit tin → không có id tiến trình
   },
   editText: async () => {}, // không hỗ trợ (no-op; core không gọi khi progressId=null)

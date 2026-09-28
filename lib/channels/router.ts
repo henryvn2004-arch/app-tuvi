@@ -22,14 +22,16 @@
 import { runConversation, type ChannelIO, type ChatButton, type ProfileStore, type SessionStore } from './core';
 import { buildAccessGate } from './gate';
 import { sendMenu } from './format';
-import { chatConsumeLinkToken, chatLogOutcome, chatLoadSession } from './store';
+import { chatConsumeLinkToken, chatGetAuthor, chatLogOutcome, chatLoadSession } from './store';
 import { ensureChatUser } from './account';
 import { accountProfiles, saveChart } from './charts';
 import { createHandoffUrl, lasoPath } from './handoff';
 import { claimLoginCode, parseLoginCode } from './login';
 import { TOPUP_CMD, createChatTopup, parseTopup, topupCaption, topupChoices, vietQrImageUrl } from './topup';
-import { THAY_LIST, chonThay, thayCuaChat, timThay } from './author';
-import { getRailPrice } from '@/lib/billing/pricing';
+import { GUESTS, detectMention, guestById, guestFromMoi, hoiChanDuoc, moiCau, pickGuests, type GuestId } from './guests';
+import { toolCatalog } from './catalog';
+import { THAY_LIST, anhThay, chonThay, gioiThieuThay, thayCuaChat, timThay, type Thay } from './author';
+import { getRailPrice, getToolPrice } from '@/lib/billing/pricing';
 import { paywallDisabled, getBalance, deductCredits, logTransaction } from '@/lib/billing/credits';
 import { railFreeRemaining, railFreeConsume } from '@/lib/billing/viral-budget';
 import { vndPerCredit } from '@/lib/billing/packages';
@@ -66,15 +68,25 @@ export interface ChannelEvent {
 const norm = (s: string) => s.trim().toLowerCase();
 const vnd = (n: number) => `${Math.round(n).toLocaleString('vi-VN')}đ`;
 
-// Lệnh nhận cả dạng gõ tay lẫn chữ trên nút (nút gửi lại đúng chữ `reply`).
+// Lệnh = CÂU TIẾNG VIỆT mà nút gửi đi: Zalo hiện nguyên chữ `reply` thành tin
+// của khách, Telegram in nó lên bàn phím — khách không bao giờ phải gõ "/".
+// Dạng "/…" chỉ còn là bí danh cho nút cũ nằm trong lịch sử chat.
 const CMD = {
   menu: ['/start', '/help', '/menu', 'menu'],
-  moi: ['/new', '/reset'],
-  thay: '/thay',
-  laso: ['/laso', '/so', 'sổ lá số'],
-  web: ['/web'],
+  moi: ['/new', '/reset', 'trò chuyện mới'],
+  thay: ['đổi thầy', 'chọn thầy', '/thay'],
+  thayKhac: 'hỏi ý thầy khác',
+  laso: ['sổ lá số', '/laso', '/so'],
+  web: ['/web', 'mở trên web'],
   link: '/link',
+  moiThay: '/moi',
+  hoiChan: ['mời 3 thầy hội chẩn', '/hoichan'],
+  congCu: ['công cụ', 'cong cu', '/congcu'],
+  congCuNhom: 'công cụ:',
+  nap: ['nạp lượng', 'nạp tiền', TOPUP_CMD],
 };
+/** "nạp 100k" / "nạp 200.000đ" (nút nạp gửi đúng dạng này) → phần số tiền. */
+const NAP_SO_RE = /^(?:nạp|\/nap)\s+(\S.*)$/;
 
 export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg: ChatConfig): Promise<void> {
   const { io } = kit;
@@ -139,7 +151,14 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
     return;
   }
 
-  if (t === CMD.thay || t.startsWith(`${CMD.thay} `)) return handleThay(kit, ev, text.slice(CMD.thay.length).trim());
+  if (t === CMD.thayKhac) return handleThay(kit, ev, '');
+  const thayCmd = CMD.thay.find((c) => t === c || t.startsWith(`${c} `));
+  if (thayCmd) {
+    // "đổi thầy 3" / "Chọn Thầy Tâm Kính" là lệnh; "đổi thầy thì có khác gì…"
+    // (không ra tên thầy nào) là câu hỏi — để thầy trả lời.
+    const arg = text.slice(thayCmd.length).trim();
+    if (!arg || timThay(arg) || thayCmd.startsWith('/')) return handleThay(kit, ev, arg);
+  }
 
   if (CMD.laso.includes(t)) return handleSoLaSo(kit, ev, userId);
 
@@ -150,7 +169,53 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
     return;
   }
 
-  if (t === TOPUP_CMD || t.startsWith(`${TOPUP_CMD} `)) return handleTopup(kit, ev, userId, text.slice(TOPUP_CMD.length));
+  if (CMD.nap.includes(t)) return handleTopup(kit, ev, userId, '');
+  // "nạp 100k" là lệnh chỉ khi phần sau là SỐ TIỀN — "nạp tiền bằng gì" là câu hỏi.
+  const napSo = t.match(NAP_SO_RE)?.[1];
+  if (napSo && (t.startsWith('/') || /^[\d.,\s]+(k|đ|vnd|vnđ)?$/.test(napSo))) {
+    return handleTopup(kit, ev, userId, napSo);
+  }
+
+  // Chữ "công cụ" chỉ khớp khi đứng MỘT MÌNH — "công cụ nào xem được…" là câu hỏi.
+  if (CMD.congCu.includes(t)) return handleCongCu(kit, ev, userId, '');
+  if (t.startsWith(CMD.congCuNhom) || t.startsWith('/congcu ')) {
+    return handleCongCu(kit, ev, userId, t.replace(/^(công cụ:|\/congcu )/, '').trim());
+  }
+
+  // ── Mời thầy khác / hội chẩn (engine `addressMaster`/`hoiChan` của web) ──
+  // Nút gửi "Mời Thầy <tên> cùng xem" / "Mời 3 thầy hội chẩn" ⇒ hỏi lại CHÍNH câu
+  // vừa hỏi, lần này có thầy khách/nhóm cùng xem. Gõ "@Tâm Kính …" thì như web:
+  // mời ngay trong câu.
+  const session = await kit.store.load(ev.chatId);
+  let askText = text;
+  let addressMaster: GuestId | undefined;
+  let hoiChan = false;
+  const laHoiChan = CMD.hoiChan.includes(t);
+  const khach = guestFromMoi(t);
+  if (laHoiChan || khach || t.startsWith(`${CMD.moiThay} `)) {
+    const cauTruoc = [...session.messages]
+      .reverse()
+      .find((m) => m.role === 'user' && typeof m.content === 'string' && !m.content.trim().startsWith('/'));
+    if (!session.birth || !cauTruoc) {
+      await io.sendText(ev.chatId, 'Cho thầy ngày giờ sinh và một câu hỏi trước đã, rồi mới mời thầy khác cùng xem nhé.');
+      return;
+    }
+    const truoc = String(cauTruoc.content).replace(/^@[^,]*,\s*/, '');
+    if (laHoiChan) {
+      hoiChan = true;
+      askText = truoc;
+    } else {
+      const g = khach || guestById(t.slice(CMD.moiThay.length).trim());
+      if (!g) {
+        await io.sendText(ev.chatId, `Thầy khách mời được: ${GUESTS.map((x) => `Thầy ${x.ten} (${x.mon})`).join(', ')}.`);
+        return;
+      }
+      addressMaster = g.id;
+      askText = `@${g.ten}, ${truoc}`;
+    }
+  } else {
+    addressMaster = detectMention(text) ?? undefined;
+  }
 
   // ── Cổng tính phí (trước khi tốn token LLM) ───────────────────────────
   const cost = await getRailPrice(cfg.cost);
@@ -171,10 +236,26 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   }
 
   const thay = await thayCuaChat(kit.platform, String(ev.chatId));
+  // Lượt ĐẦU cuộc trò chuyện: thầy tự giới thiệu ngắn, ghép chung tin chờ
+  // "đang xem…". Dấu "đã chào" = thầy ĐÃ được lưu vào chat_sessions.author_id
+  // (lời chào/đổi thầy cũng lưu) — /new xoá dòng phiên nên chào lại từ đầu.
+  const moiBatDau = !(await chatGetAuthor(kit.platform, String(ev.chatId)));
+  if (moiBatDau) await chonThay(kit.platform, String(ev.chatId), thay);
   const outcome = await runConversation(
     io,
     kit.store,
-    { chatId: ev.chatId, text, imageRefs: ev.imageRefs, authorId: thay.id, authorName: thay.name, userId },
+    {
+      chatId: ev.chatId,
+      text: askText,
+      imageRefs: ev.imageRefs,
+      ...(addressMaster ? { addressMaster } : {}),
+      ...(hoiChan ? { hoiChan: true } : {}),
+      authorId: thay.id,
+      authorName: thay.name,
+      authorAvatarUrl: anhThay(thay),
+      ...(moiBatDau ? { intro: await gioiThieuThay(thay) } : {}),
+      userId,
+    },
     cfg,
     ERR_MSG,
     gate.commit,
@@ -187,7 +268,12 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   // như tool web tự lưu) ⇒ mở web là thấy ngay, không nhập lại.
   if (userId && outcome.lasoShown && outcome.birth) void saveChart(userId, '', outcome.birth);
 
-  await sendFollowUps(kit, ev, userId, outcome, cost);
+  await sendFollowUps(kit, ev, userId, outcome, cost, {
+    cauHoi: askText,
+    thayId: thay.id,
+    daMoi: !!addressMaster || hoiChan,
+    soTin: session.messages.length + 2,
+  });
 }
 
 // ── Cổng tính phí cho người CÓ tài khoản — y hệt /api/v1/chat ──────────
@@ -232,23 +318,34 @@ async function sendWelcome(kit: ChannelKit, ev: ChannelEvent, userId: string | n
   const con = userId ? await conCauHoi(userId, cost) : '';
   const vi = con ? `\n\n${con}` : '';
   const web = userId ? await createHandoffUrl(userId, '/app/cong-cu') : null;
+  await chaoThay(kit, ev, thay);
+  await chonThay(kit.platform, String(ev.chatId), thay); // đánh dấu đã chào
   await sendMenu(
     kit.io,
     ev.chatId,
-    'Xin chào! Đây là Hỏi Thầy — Tử Vi Minh Bảo 🔮\n\n' +
+    'Đây là Hỏi Thầy — Tử Vi Minh Bảo.\n\n' +
       'Hỏi thầy bất cứ điều gì về tử vi, vận hạn, tuổi tác, công việc, tình duyên… Để lập lá số, cho thầy biết: ' +
       'giới tính, ngày/tháng/năm sinh (dương lịch) và giờ sinh.\n' +
       'Ví dụ: "Nữ, 03/06/1998, giờ Sửu, năm nay làm ăn sao?"\n\n' +
       'Gửi ảnh khuôn mặt để xem tướng, ảnh nhà cửa để xem phong thủy.\n\n' +
-      `Thầy ${thay.name} đang tiếp chuyện với bạn — nhóm Minh Bảo có ${THAY_LIST.length} thầy, đổi lúc nào cũng được.` +
+      `Nhóm Minh Bảo có ${THAY_LIST.length} thầy — đổi thầy lúc nào cũng được.` +
       vi,
     [
-      { title: 'Đổi thầy', reply: CMD.thay },
-      { title: 'Sổ lá số', reply: CMD.laso[0] },
-      { title: 'Nạp Lượng', reply: TOPUP_CMD },
+      { title: 'Đổi thầy', reply: 'Đổi thầy' },
+      { title: 'Sổ lá số', reply: 'Sổ lá số' },
+      { title: 'Nạp Lượng', reply: 'Nạp Lượng' },
+      { title: 'Công cụ', reply: 'Công cụ' },
       ...(web ? [{ title: 'Kho công cụ trên web', url: web }] : []),
     ],
   );
+}
+
+/** Thầy tự giới thiệu: chân dung + lời chào + môn chuyên (kênh không gửi
+ *  được ảnh thì chỉ chữ). */
+async function chaoThay(kit: ChannelKit, ev: ChannelEvent, t: Thay): Promise<void> {
+  const loi = await gioiThieuThay(t);
+  if (kit.io.sendImage) await kit.io.sendImage(ev.chatId, anhThay(t), loi);
+  else await kit.io.sendText(ev.chatId, loi);
 }
 
 // ── Nhóm thầy ──────────────────────────────────────────────────────────
@@ -258,7 +355,11 @@ async function handleThay(kit: ChannelKit, ev: ChannelEvent, arg: string): Promi
     const moi = timThay(arg);
     if (moi) {
       const ok = await chonThay(kit.platform, String(ev.chatId), moi);
-      await kit.io.sendText(ev.chatId, ok ? `Từ giờ Thầy ${moi.name} tiếp chuyện với bạn. Bạn hỏi gì nào?` : ERR_MSG);
+      if (!ok) {
+        await kit.io.sendText(ev.chatId, ERR_MSG);
+        return;
+      }
+      await chaoThay(kit, ev, moi);
       return;
     }
     await kit.io.sendText(ev.chatId, `Không tìm thấy thầy "${arg}".`);
@@ -269,8 +370,8 @@ async function handleThay(kit: ChannelKit, ev: ChannelEvent, arg: string): Promi
     kit.io,
     ev.chatId,
     `Nhóm Minh Bảo có ${THAY_LIST.length} thầy — mỗi thầy một lối luận riêng, hỏi thêm thầy khác là có ý kiến thứ hai trên cùng lá số:\n` +
-      `${dong.join('\n')}\n\nĐổi thầy: bấm tên bên dưới, hoặc nhắn "/thay <số>", vd "/thay 3".`,
-    khac.slice(0, kit.maxReplyButtons).map(({ x, i }) => ({ title: `Thầy ${x.name}`, reply: `${CMD.thay} ${i + 1}` })),
+      `${dong.join('\n')}\n\nĐổi thầy: bấm tên bên dưới, hoặc nhắn "đổi thầy <số>", vd "đổi thầy 3".`,
+    khac.slice(0, kit.maxReplyButtons).map(({ x }) => ({ title: `Thầy ${x.name}`, reply: `Chọn Thầy ${x.name}` })),
   );
 }
 
@@ -336,23 +437,80 @@ async function sendFollowUps(
   userId: string | null,
   outcome: NonNullable<Awaited<ReturnType<typeof runConversation>>>,
   cost: number,
+  luot: { cauHoi: string; thayId: string; daMoi: boolean; soTin: number },
 ): Promise<void> {
-  const btns: ChatButton[] = [];
+  const links: ChatButton[] = [];
   // Link sang web chỉ khi có tài khoản — đăng nhập sẵn + đúng lá số.
   if (userId && outcome.toolSuggest?.path) {
     const url = await createHandoffUrl(userId, outcome.toolSuggest.path, outcome.birth);
-    if (url) btns.push({ title: outcome.toolSuggest.label, url });
+    if (url) links.push({ title: outcome.toolSuggest.label, url });
   }
-  if (userId && outcome.lasoShown && outcome.birth) {
+  // Bản luận giải đầy đủ (trang báo cáo trên web, trả bằng CÙNG ví): mời lúc
+  // vừa lập lá số, rồi nhắc lại mỗi ~3 lượt hỏi — không phải lượt nào cũng mời.
+  if (userId && outcome.birth && (outcome.lasoShown || luot.soTin % 6 === 0)) {
     const url = await createHandoffUrl(userId, lasoPath(outcome.birth), outcome.birth);
-    if (url) btns.push({ title: 'Xem lá số đầy đủ', url });
+    if (url) links.push({ title: await nhanLuanGiai(), url });
   }
-  const room = Math.max(0, Math.min(kit.maxReplyButtons, 5) - btns.length - 1);
-  for (const s of outcome.suggestions.slice(0, Math.min(room, 3))) btns.push({ title: s, reply: s });
-  btns.push({ title: 'Hỏi ý thầy khác', reply: CMD.thay });
+  // Mời thầy khác: thầy khách hợp câu hỏi (cùng luật web) + hội chẩn khi là
+  // quyết định lớn. Lượt vừa mời rồi thì thôi, chỉ để lối đổi thầy.
+  const moi: ChatButton[] = [];
+  if (outcome.birth && !luot.daMoi) {
+    const g = pickGuests(luot.cauHoi, luot.thayId, outcome.birth, 1)[0];
+    if (g) moi.push({ title: `Ý Thầy ${g.ten}`, reply: moiCau(g) });
+    if (hoiChanDuoc(luot.cauHoi, luot.thayId)) moi.push({ title: 'Mời 3 thầy hội chẩn', reply: 'Mời 3 thầy hội chẩn' });
+  }
+  if (!moi.length) moi.push({ title: 'Hỏi ý thầy khác', reply: 'Hỏi ý thầy khác' });
+  const room = Math.max(0, Math.min(kit.maxReplyButtons, 5) - links.length - moi.length);
+  const goiY: ChatButton[] = outcome.suggestions.slice(0, Math.min(room, 3)).map((q) => ({ title: q, reply: q }));
   const head = outcome.toolSuggest?.lyDo || 'Bạn muốn hỏi tiếp gì?';
   const con = userId ? await conCauHoi(userId, cost) : '';
-  await sendMenu(kit.io, ev.chatId, con ? `${head}\n\n${con}` : head, btns);
+  await sendMenu(kit.io, ev.chatId, con ? `${head}\n\n${con}` : head, [...links, ...moi, ...goiY]);
+}
+
+/** Nhãn nút bản luận giải đầy đủ — giá VNĐ là chính (luật "VNĐ là giá CHÍNH"),
+ *  đọc từ `tool_pricing['laso']`; đọc hụt thì không ghi giá (không chép số). */
+async function nhanLuanGiai(): Promise<string> {
+  const [credits, rate] = await Promise.all([getToolPrice('laso'), vndPerCredit()]);
+  return credits && credits > 0 ? `Luận giải ${vnd(credits * rate)}` : 'Luận giải đầy đủ';
+}
+
+// ── Menu công cụ (nhóm + công cụ đọc từ DB, mở web đã đăng nhập) ────────
+async function handleCongCu(kit: ChannelKit, ev: ChannelEvent, userId: string | null, arg: string): Promise<void> {
+  const groups = await toolCatalog();
+  const khoWeb = userId ? await createHandoffUrl(userId, '/app/cong-cu') : null;
+  const tatCa: ChatButton = { title: 'Xem tất cả trên web', url: khoWeb || `${SITE}/app/cong-cu` };
+  // Nút gửi "Công cụ: <tên nhóm>"; "/congcu <số>" của nút cũ vẫn nhận.
+  const i = Number(arg) - 1;
+  const g =
+    (arg && groups.find((x) => x.title.toLowerCase() === arg)) || (Number.isInteger(i) && i >= 0 ? groups[i] : undefined);
+  if (!g) {
+    if (!groups.length) return sendMenu(kit.io, ev.chatId, 'Kho công cụ của Tử Vi Minh Bảo:', [tatCa]).then(() => {});
+    await sendMenu(
+      kit.io,
+      ev.chatId,
+      'Bạn muốn xem về việc gì? Chọn một nhóm — hoặc cứ hỏi thẳng thầy, thầy tự chọn công cụ hợp.',
+      [
+        ...groups.slice(0, Math.max(1, kit.maxReplyButtons - 1)).map((x) => ({
+          title: x.title,
+          reply: `Công cụ: ${x.title}`,
+        })),
+        tatCa,
+      ],
+    );
+    return;
+  }
+  const tools = g.tools.slice(0, 4);
+  const btns: ChatButton[] = [];
+  for (const t of tools) {
+    const url = userId ? await createHandoffUrl(userId, t.path) : null;
+    btns.push({ title: t.label, url: url || `${SITE}${t.path}` });
+  }
+  await sendMenu(
+    kit.io,
+    ev.chatId,
+    `${g.title}:\n${tools.map((t) => `• ${t.label}`).join('\n')}\n\nBấm để mở — đã đăng nhập sẵn, đúng lá số của bạn.`,
+    [...btns, ...(g.tools.length > tools.length ? [tatCa] : [])],
+  );
 }
 
 /**
@@ -364,6 +522,6 @@ async function conCauHoi(userId: string, cost: number): Promise<string> {
   if (paywallDisabled() || cost <= 0) return '';
   const [free, balance] = await Promise.all([railFreeRemaining(userId), getBalance(userId)]);
   const n = free + Math.floor(balance / cost);
-  if (n <= 0) return `Bạn đã dùng hết câu hỏi — nhắn "${TOPUP_CMD}" để nạp ngay tại đây.`;
+  if (n <= 0) return `Bạn đã dùng hết câu hỏi — nhắn "Nạp Lượng" để nạp ngay tại đây.`;
   return `Còn ${n} câu hỏi${free > 0 ? ` (${free} lượt tặng)` : ''}.`;
 }

@@ -27,8 +27,10 @@ export async function topupChoices(): Promise<ChatButton[]> {
     .sort((a, b) => a.amountVnd - b.amountVnd);
   const small = await quoteCustomVnd(CUSTOM_MIN_VND);
   const out: ChatButton[] = [];
-  if (small.credits > 0) out.push({ title: `${vnd(CUSTOM_MIN_VND)} (${small.credits} Lượng)`, reply: `${TOPUP_CMD} ${CUSTOM_MIN_VND}` });
-  for (const p of pkgs.slice(0, 4)) out.push({ title: `${p.label} ${vnd(p.amountVnd)}`, reply: `${TOPUP_CMD} goi-${p.packageId}` });
+  // Nút gửi câu tự nhiên "Nạp 200.000đ" (khách thấy nó thành tin của mình);
+  // `parseTopup` nhận ra số tiền trùng một gói là chọn gói đó.
+  if (small.credits > 0) out.push({ title: `${vnd(CUSTOM_MIN_VND)} (${small.credits} Lượng)`, reply: `Nạp ${vnd(CUSTOM_MIN_VND)}` });
+  for (const p of pkgs.slice(0, 4)) out.push({ title: `${p.label} ${vnd(p.amountVnd)}`, reply: `Nạp ${vnd(p.amountVnd)}` });
   return out;
 }
 
@@ -38,7 +40,7 @@ export type TopupPick =
   | { kind: 'custom'; amountVnd: number; credits: number }
   | { kind: 'invalid' };
 
-/** "/nap" → menu · "/nap goi-120" → gói · "/nap 50000" / "/nap 100k" → nạp lẻ. */
+/** "" → menu · "goi-120" → gói · "200.000đ" / "100k" → gói nếu trùng số tiền một gói, không thì nạp lẻ. */
 export async function parseTopup(arg: string): Promise<TopupPick> {
   const a = arg.trim().toLowerCase();
   if (!a) return { kind: 'menu' };
@@ -47,9 +49,14 @@ export async function parseTopup(arg: string): Promise<TopupPick> {
     const pkg = await getPackage(g[1]);
     return pkg ? { kind: 'package', pkg } : { kind: 'invalid' };
   }
-  const m = a.replace(/[.,\s]/g, '').match(/^(\d+)(k)?$/);
+  const m = a
+    .replace(/[.,\s]/g, '')
+    .replace(/(đ|vnđ|vnd)$/, '')
+    .match(/^(\d+)(k)?$/);
   if (!m) return { kind: 'invalid' };
   const amountVnd = Number(m[1]) * (m[2] ? 1000 : 1);
+  const pkg = Object.values(await getPackages()).find((p) => p.credits > 0 && p.amountVnd === amountVnd);
+  if (pkg) return { kind: 'package', pkg };
   if (amountVnd < CUSTOM_MIN_VND || amountVnd > CUSTOM_MAX_VND) return { kind: 'invalid' };
   const q = await quoteCustomVnd(amountVnd);
   return q.credits > 0 ? { kind: 'custom', amountVnd, credits: q.credits } : { kind: 'invalid' };
