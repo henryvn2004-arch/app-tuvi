@@ -2955,32 +2955,47 @@
   function consumeFromShare() {
     var m = (location.search.match(/[?&]fromshare=([A-Za-z0-9]{6,16})\b/) || [])[1];
     if (!m) return false;
-    var toClean = function () {
+    var toClean = function (thayId) {
       var s = location.search.replace(/([?&])fromshare=[^&]*/g, '$1').replace(/[?&]+$/, '').replace(/\?&/, '?').replace(/&&/g, '&');
+      // Màn chat trang chủ (/app): `?thay=` là luồng có sẵn của app-chat.html —
+      // thầy vào thẳng, tự giới thiệu rồi XIN NGÀY SINH (Shell.meetThay).
+      if (CHAT_HOME && thayId && !/[?&]thay=/.test(s)) s += (s.indexOf('?') >= 0 ? '&' : '?') + 'thay=' + encodeURIComponent(thayId);
       location.replace(location.pathname + s);
     };
     fetch('/api/share-session?id=' + encodeURIComponent(m))
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
         if (!j || !j.id) { toClean(); return; } // hỏng/gỡ → bỏ param, boot thường
+        var thayId = (j.thay && j.thay.id) || '';
         try {
-          if (j.thay && j.thay.id) localStorage.setItem('tvc_author_v1', j.thay.id); // tiếp nối đúng thầy
+          if (thayId) localStorage.setItem('tvc_author_v1', thayId); // tiếp nối đúng thầy
           sessionStorage.setItem('app_fromshare_id', m);
+          // Lá số đang nhớ TRÙNG lá số người chia sẻ = vết của luồng cũ (từng ghi
+          // đè `app_birth` người nhận) → gỡ, để người nhận nhập ngày giờ sinh của mình.
+          if (sameBirth(birthSnapshot(), normBirth(j.restore && j.restore.birth))) localStorage.removeItem('app_birth');
         } catch (e) { /* ignore */ }
-        toClean();
+        toClean(thayId);
       })
-      .catch(toClean);
+      .catch(function () { toClean(); });
     return true;
+  }
+  function sameBirth(a, b) {
+    if (!a || !b || !a.ngay || !b.ngay) return false;
+    return ['ngay', 'thang', 'nam', 'gioitinh', 'gioHour', 'gioIdx'].every(function (k) { return a[k] == null || b[k] == null || String(a[k]) === String(b[k]); }) &&
+      a.thang === b.thang && a.nam === b.nam && a.gioitinh === b.gioitinh;
   }
   // Câu báo đầu rail cho người đến từ link chia sẻ — đứng TRƯỚC các câu hỏi
   // ngày giờ sinh mà trang tự vẽ vào #chat ngay sau boot.
+  // Màn chat trang chủ (CHAT_HOME) không dùng hàm này: câu báo đi kèm lời chào
+  // trong introThay() (joinThay dọn #chat trước khi thầy chào).
+  var FROMSHARE_NOTE = '<b>Lá số con vừa xem là của người đã chia sẻ link, không phải của con.</b>';
   function notifyFromShare() {
     var chat = document.getElementById('chat');
     if (!chat) return;
     var el = document.createElement('div');
     el.className = 'msg a';
     el.innerHTML = '<img class="msg-ava" src="' + authorAva() + '" alt="">' +
-      '<div class="msg-body"><p><b>Lá số con vừa xem là của người đã chia sẻ link, không phải của con.</b><br>' +
+      '<div class="msg-body"><p>' + FROMSHARE_NOTE + '<br>' +
       'Muốn thầy luận cho chính con thì cho thầy xin ngày giờ sinh của con — thầy mở một phiên mới riêng cho con.</p></div>';
     chat.appendChild(el);
   }
@@ -5471,7 +5486,9 @@
       if (done) return; done = true;
       var input = document.getElementById('railInput');
       thayBubble('<p>' + esc((m && m.greeting) || ('Thầy ' + a.name + ' đây.')) + '</p>' +
-        (m && m.discipline ? '<p>Thầy chuyên xem <b>' + esc(m.discipline) + '</b>.</p>' : ''));
+        (m && m.discipline ? '<p>Thầy chuyên xem <b>' + esc(m.discipline) + '</b>.</p>' : '') +
+        // Đến từ link chia sẻ: joinThay() đã dọn #chat nên câu báo phải đi cùng lời chào.
+        (_fromshareId ? '<p>' + FROMSHARE_NOTE + (ctx && ctx.birth ? ' Thầy xem cho con trên lá số của chính con.' : '') + '</p>' : ''));
       if (NO_BIRTH_THAY[id] || !ctx || ctx.birth) { if (input) input.focus(); return; }
       askBirthHome(function () {
         thayBubble('<p>Thầy đã lập lá số của <b>' + esc((ctx.birth && ctx.birth.name) || 'con') + '</b>. Con muốn thầy xem chuyện gì trước?</p>');
@@ -6331,7 +6348,7 @@
     loadCatalog();
     if (CHAT_HOME) document.body.classList.add('chat-home');
     renderRail();
-    if (_fromshareId) notifyFromShare();
+    if (_fromshareId && !CHAT_HOME) notifyFromShare();
     // Bước 5: rail lật vai NGAY khi boot (không đợi setContext) — trang tự vẽ
     // câu hỏi hội thoại vào #chat ngay sau đây trong script của chính nó.
     if (CHAT_INTAKE) { document.body.classList.add('chat-first-live'); Shell.openRail(); }
