@@ -25,6 +25,7 @@
 // ============================================================
 
 import { llmText } from '@/lib/llm/complete';
+import { parseLlmJson } from '@/lib/llm/json';
 import { getConfigValue } from '@/lib/config/appConfig';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -593,12 +594,19 @@ Trả JSON thuần một dòng, KHÔNG backtick:
 {"pass":true|false,"violations":[{"rule":"nuoc-di|thanh-ngu|vi-du|gioi-tinh|ket-chu-dong|bia-dan|sao-that${isTamLy ? '|chan-doan-y-khoa|khung-hoang-that' : ''}","detail":"nêu ngắn gọn chỗ sai"}]}`;
 
   try {
-    const raw = (await llmText({ prompt, maxTokens: 1050 })) // Nâng 50% (Henry chốt 2026-08-20)
-      .trim()
-      .replace(/^```(?:json)?\s*/i, '')
-      .replace(/```\s*$/, '')
-      .trim();
-    const parsed = JSON.parse(raw) as LlmVerdict;
+    // 🪤 Trần phải chừa chỗ cho token NGHĨ: gemini-3.8-flash vẫn nghĩ dù `thinkingBudget:0`
+    // (nghĩ nhiều khi bài có vi phạm thật), token nghĩ ăn CHUNG `maxTokens`. Trần 1050 cũ:
+    // log prod 2026-09-27 ra `output_tokens=36–39` ⇒ JSON cụt ⇒ tầng này fail-open, bài lên
+    // sóng không qua kiểm. Ép nghĩ tối đa (`thinkingLevel:'high'`) đo được 2.600–7.700 token
+    // nghĩ; trần 4000 vẫn hỏng 2/4, 8000 qua 7/8. Phán quyết thật chỉ ~250 token; trần chỉ
+    // chặn phần sinh dư — không tốn thêm cho lượt nghĩ ít.
+    const raw = await llmText({ prompt, maxTokens: 8000 });
+    const parsed = parseLlmJson(raw) as LlmVerdict | null;
+    if (!parsed) {
+      // parseLlmJson trả null chứ không ném — vẫn phải để lại dấu vết như nhánh catch.
+      console.warn('[brand-check] tầng LLM bỏ qua: không bóc được JSON, kết thúc="…' + raw.slice(-60) + '"');
+      return [];
+    }
     if (!Array.isArray(parsed.violations)) return [];
     return parsed.violations
       .filter((x) => x && typeof x.rule === 'string')
