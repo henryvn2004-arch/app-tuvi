@@ -19,6 +19,7 @@ import { ImageResponse } from 'next/og';
 import type { NextRequest } from 'next/server';
 import { loadOgFonts, ogFallbackRedirect } from '@/lib/og/font';
 import { readLasoImageParams } from '@/lib/og/laso-image';
+import { BrandFooter, FOOT } from '@/lib/og/brand';
 import { canChiNgayGio, canCung, computeLaso, starMeta } from '@/lib/engine/laso';
 import { ccInfo } from '@/lib/engine/diachi';
 
@@ -38,8 +39,6 @@ const W = 1080;
 const H = 1350;
 const PAD = 16;
 const HEAD = 64;
-const FOOT = 150;
-const QR = 132;
 const CW = (W - PAD * 2) / 4;
 const CH = (H - HEAD - FOOT - PAD) / 4;
 
@@ -305,7 +304,6 @@ export async function GET(req: NextRequest) {
   );
 
   const ngay = `${birth.day}/${birth.month}/${birth.year} ${birth.isLunar ? 'ÂL' : 'DL'}`;
-  const qrSrc = new URL('/zalo-oa-qr.png', req.nextUrl.origin).toString();
   return new ImageResponse(
     (
       <div style={{ display: 'flex', flexDirection: 'column', width: W, height: H, background: C.bg, fontFamily: 'BeVN' }}>
@@ -326,34 +324,10 @@ export async function GET(req: NextRequest) {
           </div>
           <div style={{ display: 'flex' }}>{[2, 1, 0, 11].map(cell)}</div>
         </div>
-        {/* Chân ảnh: QR Zalo OA (public/zalo-oa-qr.png, cắt từ mã QR chính thức
-            của OA, giải ra zalo.me/<OA_ID>). Ảnh này sẽ được chia sẻ tiếp — người
-            nhận quét/nhấn giữ ảnh trong Zalo là vào thẳng Tử Vi Minh Bảo. */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            height: FOOT,
-            padding: `0 ${PAD + 6}px`,
-          }}
-        >
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', fontSize: 24, fontWeight: 700, color: C.ink }}>
-              Quét mã để xem lá số của bạn trên Zalo
-            </div>
-            <div style={{ display: 'flex', fontSize: 18, color: C.mute, marginTop: 6 }}>
-              Zalo: Tử Vi Minh Bảo · nhấn giữ ảnh → Quét mã QR
-            </div>
-            <div style={{ display: 'flex', fontSize: 14, color: C.mute, marginTop: 10 }}>
-              Viền đỏ: cung Mệnh · Nền vàng: đại hạn đang đi · Số góc phải: tuổi vào đại hạn
-            </div>
-            <div style={{ display: 'flex', fontSize: 15, fontWeight: 700, color: C.gold, marginTop: 4 }}>
-              TỬ VI MINH BẢO · tuviminhbao.com
-            </div>
-          </div>
-          <img src={qrSrc} width={QR} height={QR} style={{ borderRadius: 8 }} />
-        </div>
+        <BrandFooter
+          origin={req.nextUrl.origin}
+          note="Viền đỏ: cung Mệnh · Nền vàng: đại hạn đang đi · Số góc phải: tuổi vào đại hạn"
+        />
       </div>
     ),
     {

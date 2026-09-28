@@ -93,6 +93,7 @@ let engineCache: {
   buildDaiVanLines: (...a: unknown[]) => unknown;
   canCungOf: (canNam: string, diaChi: string) => string;
   STAR_DATA: Record<string, { type?: string; element?: string }>;
+  Pchip: { pchipSeries: (pts: { x: number; y: number }[], opts?: { step?: number }) => { x: number; y: number }[] } | undefined;
 } | null = null;
 
 function loadEngine() {
@@ -113,7 +114,7 @@ function loadEngine() {
     'window',
     'globalThis',
     pchipCode + '\n' + code + '\n' + formatCode +
-      '\nreturn{convertDuongToAm,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines,canCungOf:window.canCungOf,STAR_DATA};',
+      '\nreturn{convertDuongToAm,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines,canCungOf:window.canCungOf,STAR_DATA,Pchip:window.Pchip};',
   ))(g, g) as typeof engineCache;
   return engineCache!;
 }
@@ -122,6 +123,14 @@ function loadEngine() {
  *  `canCungOf` của public/tuvi-laso-format.js. '' khi đầu vào không hợp lệ. */
 export function canCung(canNam: string, diaChi: string): string {
   return loadEngine().canCungOf(canNam, diaChi) || '';
+}
+
+/** Đường điểm theo NĂM nội suy pchip từ các mốc (x=tuổi, y=điểm) — CÙNG
+ *  `Pchip.pchipSeries` (public/tools-shared/pchip.js) mà biểu đồ đại vận trên
+ *  web dùng. Thiếu Pchip ⇒ trả nguyên các mốc (nối thẳng). */
+export function pchipSeries(pts: { x: number; y: number }[], step = 1): { x: number; y: number }[] {
+  const P = loadEngine().Pchip;
+  return P ? P.pchipSeries(pts, { step }) : pts;
 }
 
 /** Ngũ hành + loại sao (STAR_DATA của engine). null khi engine không biết sao đó. */

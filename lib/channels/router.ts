@@ -26,6 +26,9 @@ import { chatConsumeLinkToken, chatGetAuthor, chatLogOutcome, chatLoadSession } 
 import { ensureChatUser } from './account';
 import { accountProfiles, saveChart } from './charts';
 import { createHandoffUrl, lasoPath } from './handoff';
+import { chartImageUrl, type ChartKind } from '@/lib/og/laso-image';
+import { currentNamXem } from '@/lib/engine/namxem';
+import { todayVN } from '@/lib/engine/van-ngay';
 import { claimLoginCode, parseLoginCode } from './login';
 import { GOP_CMD, isShadowUser, maskEmail, parseEmail, startEmailLink, verifyEmailLink, hasPendingEmailLink } from './email-link';
 import { TOPUP_CMD, createChatTopup, parseTopup, topupCaption, topupChoices, vietQrImageUrl } from './topup';
@@ -78,6 +81,7 @@ const CMD = {
   thay: ['đổi thầy', 'chọn thầy', '/thay'],
   thayKhac: 'hỏi ý thầy khác',
   laso: ['sổ lá số', '/laso', '/so'],
+  bieuDo: ['biểu đồ', 'bieu do', 'xem biểu đồ'],
   web: ['/web', 'mở trên web'],
   link: '/link',
   moiThay: '/moi',
@@ -163,6 +167,10 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   }
 
   if (CMD.laso.includes(t)) return handleSoLaSo(kit, ev, userId);
+
+  // Ảnh biểu đồ (engine, không tốn LLM ⇒ không tính phí): nút gửi đúng tên biểu đồ.
+  const bieuDo = BIEU_DO.find((b) => b.cau.includes(t));
+  if (bieuDo || CMD.bieuDo.includes(t)) return handleBieuDo(kit, ev, bieuDo ?? null);
 
   if (CMD.web.includes(t)) {
     const session = await chatLoadSession(kit.platform, ev.chatId);
@@ -530,6 +538,11 @@ async function sendFollowUps(
     if (hoiChanDuoc(luot.cauHoi, luot.thayId)) moi.push({ title: 'Mời 3 thầy hội chẩn', reply: 'Mời 3 thầy hội chẩn' });
   }
   if (!moi.length) moi.push({ title: 'Hỏi ý thầy khác', reply: 'Hỏi ý thầy khác' });
+  // Một biểu đồ hợp câu vừa hỏi (ảnh engine vẽ, không tính phí).
+  if (outcome.birth) {
+    const b = bieuDoHop(luot.cauHoi, outcome.lasoShown);
+    moi.push({ title: b.nut, reply: b.nut });
+  }
   const room = Math.max(0, Math.min(kit.maxReplyButtons, 5) - links.length - moi.length);
   const goiY: ChatButton[] = outcome.suggestions.slice(0, Math.min(room, 3)).map((q) => ({ title: q, reply: q }));
   const head = outcome.toolSuggest?.lyDo || 'Bạn muốn hỏi tiếp gì?';
@@ -580,6 +593,77 @@ async function handleCongCu(kit: ChannelKit, ev: ChannelEvent, userId: string | 
     ev.chatId,
     `${g.title}:\n${tools.map((t) => `• ${t.label}`).join('\n')}\n\nBấm để mở — đã đăng nhập sẵn, đúng lá số của bạn.`,
     [...btns, ...(g.tools.length > tools.length ? [tatCa] : [])],
+  );
+}
+
+// ── Ảnh biểu đồ (lib/og/laso-image.ts + app/api/og/<kind>) ──────────────
+// Tên nút = câu khách gửi đi (không lộ "/"); nhận cả vài cách gõ tay thường gặp.
+const BIEU_DO: { kind: ChartKind; nut: string; cau: string[]; loi: string }[] = [
+  {
+    kind: 'duong-doi',
+    nut: 'Xem đường đời',
+    cau: ['xem đường đời', 'đường đời', 'biểu đồ đường đời'],
+    loi: 'Đường đời qua 9 đại vận của bạn — chấm là điểm từng đại vận, dải vàng là đại vận đang đi. Muốn thầy luận giai đoạn nào, cứ hỏi.',
+  },
+  {
+    kind: 'radar-cung',
+    nut: 'Điểm mạnh yếu',
+    cau: ['điểm mạnh yếu', 'điểm mạnh yếu 12 cung', 'mạnh yếu 12 cung'],
+    loi: 'Điểm mạnh yếu của 12 cung trong lá số — trục nào càng xa tâm, cung đó càng vượng. Hỏi thầy về cung nào cũng được.',
+  },
+  {
+    kind: 'van-12-thang',
+    nut: 'Vận 12 tháng',
+    cau: ['vận 12 tháng', 'vận 12 tháng tới', 'xem vận 12 tháng'],
+    loi: '12 tháng âm tới của bạn — mỗi dòng là cung nguyệt hạn cùng sao cát, sao sát của tháng đó. Nhờ thầy luận tháng nào thì nhắn tháng đó.',
+  },
+];
+
+/** Biểu đồ hợp câu vừa hỏi: vừa lập lá số → đường đời; hỏi về tháng/năm → 12
+ *  tháng; về đời/tương lai → đường đời; còn lại → điểm mạnh yếu 12 cung. */
+function bieuDoHop(q: string, lasoShown: boolean) {
+  const t = norm(q);
+  const by = (k: ChartKind) => BIEU_DO.find((b) => b.kind === k)!;
+  // Vừa lập lá số: câu đó thường chứa ngày sinh ("… tháng 8 …") — đừng để chữ
+  // "tháng" kéo sang biểu đồ 12 tháng.
+  if (lasoShown) return by('duong-doi');
+  if (/(tháng|năm nay|năm sau|năm tới|sắp tới|khi nào|bao giờ)/.test(t)) return by('van-12-thang');
+  if (/(cuộc đời|tương lai|sau này|đại vận|về già|tuổi già|giai đoạn)/.test(t)) return by('duong-doi');
+  return by('radar-cung');
+}
+
+async function handleBieuDo(kit: ChannelKit, ev: ChannelEvent, b: (typeof BIEU_DO)[number] | null): Promise<void> {
+  const session = await kit.store.load(ev.chatId);
+  if (!session.birth) {
+    await kit.io.sendText(ev.chatId, 'Cho thầy giới tính, ngày/tháng/năm sinh và giờ sinh trước đã, thầy lập lá số rồi vẽ biểu đồ cho bạn nhé.');
+    return;
+  }
+  if (!b) {
+    await sendMenu(
+      kit.io,
+      ev.chatId,
+      'Bạn muốn xem biểu đồ nào?',
+      BIEU_DO.map((x) => ({ title: x.nut, reply: x.nut })),
+    );
+    return;
+  }
+  const url = chartImageUrl(b.kind, session.birth, currentNamXem(), b.kind === 'van-12-thang' ? todayVN() : undefined);
+  if (!url || !kit.io.sendImage) {
+    await kit.io.sendText(ev.chatId, ERR_MSG);
+    return;
+  }
+  try {
+    await kit.io.sendImage(ev.chatId, url);
+  } catch (e) {
+    console.error('[channel-router] gửi ảnh biểu đồ lỗi', kit.platform, b.kind, e);
+    await kit.io.sendText(ev.chatId, ERR_MSG);
+    return;
+  }
+  await sendMenu(
+    kit.io,
+    ev.chatId,
+    b.loi,
+    BIEU_DO.filter((x) => x.kind !== b.kind).map((x) => ({ title: x.nut, reply: x.nut })),
   );
 }
 
