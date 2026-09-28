@@ -105,6 +105,10 @@ export interface IncomingTurn {
   authorName?: string;
   /** URL công khai chân dung NHỎ của thầy — gửi kèm lời giới thiệu (`intro`). */
   authorAvatarUrl?: string;
+  /** Mời thầy khách xem cùng câu hỏi (engine `addressMaster` của web). */
+  addressMaster?: ChatRequestV1['addressMaster'];
+  /** Mời nhóm hội chẩn — 3 thầy cùng xem một quyết định lớn (`hoiChan`). */
+  hoiChan?: boolean;
   /** Lời thầy tự giới thiệu — chỉ có ở lượt ĐẦU cuộc trò chuyện; ghép lên
    *  trước chữ "đang xem…" trong cùng tin chờ (không thêm tin riêng). */
   intro?: string;
@@ -230,6 +234,8 @@ export async function runConversation(
       // thẳng, không hỏi lại ngày sinh. Tin có ngày sinh mới → carryBirth=null.
       ...(carryBirth ? { birth: carryBirth } : {}),
       ...(incoming.authorId ? { authorId: incoming.authorId } : {}),
+      ...(incoming.addressMaster ? { addressMaster: incoming.addressMaster } : {}),
+      ...(incoming.hoiChan ? { hoiChan: true } : {}),
       client: { platform: io.platform, version: '1.0.0' },
     };
     const collector = createSSECollector(onStatus);

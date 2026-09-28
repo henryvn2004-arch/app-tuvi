@@ -28,8 +28,10 @@ import { accountProfiles, saveChart } from './charts';
 import { createHandoffUrl, lasoPath } from './handoff';
 import { claimLoginCode, parseLoginCode } from './login';
 import { TOPUP_CMD, createChatTopup, parseTopup, topupCaption, topupChoices, vietQrImageUrl } from './topup';
+import { GUESTS, detectMention, guestById, hoiChanDuoc, pickGuests, type GuestId } from './guests';
+import { toolCatalog } from './catalog';
 import { THAY_LIST, anhThay, chonThay, gioiThieuThay, thayCuaChat, timThay, type Thay } from './author';
-import { getRailPrice } from '@/lib/billing/pricing';
+import { getRailPrice, getToolPrice } from '@/lib/billing/pricing';
 import { paywallDisabled, getBalance, deductCredits, logTransaction } from '@/lib/billing/credits';
 import { railFreeRemaining, railFreeConsume } from '@/lib/billing/viral-budget';
 import { vndPerCredit } from '@/lib/billing/packages';
@@ -74,6 +76,9 @@ const CMD = {
   laso: ['/laso', '/so', 'sổ lá số'],
   web: ['/web'],
   link: '/link',
+  moiThay: '/moi',
+  hoiChan: '/hoichan',
+  congCu: ['/congcu', 'công cụ', 'cong cu'],
 };
 
 export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg: ChatConfig): Promise<void> {
@@ -152,6 +157,44 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
 
   if (t === TOPUP_CMD || t.startsWith(`${TOPUP_CMD} `)) return handleTopup(kit, ev, userId, text.slice(TOPUP_CMD.length));
 
+  // Chữ "công cụ" chỉ khớp khi đứng MỘT MÌNH — "công cụ nào xem được…" là câu hỏi.
+  if (CMD.congCu.includes(t) || t.startsWith(`${CMD.congCu[0]} `)) {
+    return handleCongCu(kit, ev, userId, t.slice(CMD.congCu[0].length).trim());
+  }
+
+  // ── Mời thầy khác / hội chẩn (engine `addressMaster`/`hoiChan` của web) ──
+  // Nút gửi "/moi <id>" hoặc "/hoichan" ⇒ hỏi lại CHÍNH câu vừa hỏi, lần này có
+  // thầy khách/nhóm cùng xem. Gõ "@Tâm Kính …" thì như web: mời ngay trong câu.
+  const session = await kit.store.load(ev.chatId);
+  let askText = text;
+  let addressMaster: GuestId | undefined;
+  let hoiChan = false;
+  const moiLenh = t === CMD.hoiChan || t.startsWith(`${CMD.moiThay} `);
+  if (moiLenh) {
+    const cauTruoc = [...session.messages]
+      .reverse()
+      .find((m) => m.role === 'user' && typeof m.content === 'string' && !m.content.trim().startsWith('/'));
+    if (!session.birth || !cauTruoc) {
+      await io.sendText(ev.chatId, 'Cho thầy ngày giờ sinh và một câu hỏi trước đã, rồi mới mời thầy khác cùng xem nhé.');
+      return;
+    }
+    const truoc = String(cauTruoc.content).replace(/^@[^,]*,\s*/, '');
+    if (t === CMD.hoiChan) {
+      hoiChan = true;
+      askText = truoc;
+    } else {
+      const g = guestById(t.slice(CMD.moiThay.length).trim());
+      if (!g) {
+        await io.sendText(ev.chatId, `Thầy khách mời được: ${GUESTS.map((x) => `Thầy ${x.ten} (${x.mon})`).join(', ')}.`);
+        return;
+      }
+      addressMaster = g.id;
+      askText = `@${g.ten}, ${truoc}`;
+    }
+  } else {
+    addressMaster = detectMention(text) ?? undefined;
+  }
+
   // ── Cổng tính phí (trước khi tốn token LLM) ───────────────────────────
   const cost = await getRailPrice(cfg.cost);
   const gate = userId
@@ -181,11 +224,12 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
     kit.store,
     {
       chatId: ev.chatId,
-      text,
+      text: askText,
       imageRefs: ev.imageRefs,
+      ...(addressMaster ? { addressMaster } : {}),
+      ...(hoiChan ? { hoiChan: true } : {}),
       authorId: thay.id,
       authorName: thay.name,
-      // Chân dung chì của nhóm 15 thầy (public/authors/<id>.jpg, ~30 KB).
       authorAvatarUrl: anhThay(thay),
       ...(moiBatDau ? { intro: await gioiThieuThay(thay) } : {}),
       userId,
@@ -202,7 +246,12 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   // như tool web tự lưu) ⇒ mở web là thấy ngay, không nhập lại.
   if (userId && outcome.lasoShown && outcome.birth) void saveChart(userId, '', outcome.birth);
 
-  await sendFollowUps(kit, ev, userId, outcome, cost);
+  await sendFollowUps(kit, ev, userId, outcome, cost, {
+    cauHoi: askText,
+    thayId: thay.id,
+    daMoi: !!addressMaster || hoiChan,
+    soTin: session.messages.length + 2,
+  });
 }
 
 // ── Cổng tính phí cho người CÓ tài khoản — y hệt /api/v1/chat ──────────
@@ -263,6 +312,7 @@ async function sendWelcome(kit: ChannelKit, ev: ChannelEvent, userId: string | n
       { title: 'Đổi thầy', reply: CMD.thay },
       { title: 'Sổ lá số', reply: CMD.laso[0] },
       { title: 'Nạp Lượng', reply: TOPUP_CMD },
+      { title: 'Công cụ', reply: CMD.congCu[0] },
       ...(web ? [{ title: 'Kho công cụ trên web', url: web }] : []),
     ],
   );
@@ -365,23 +415,78 @@ async function sendFollowUps(
   userId: string | null,
   outcome: NonNullable<Awaited<ReturnType<typeof runConversation>>>,
   cost: number,
+  luot: { cauHoi: string; thayId: string; daMoi: boolean; soTin: number },
 ): Promise<void> {
-  const btns: ChatButton[] = [];
+  const links: ChatButton[] = [];
   // Link sang web chỉ khi có tài khoản — đăng nhập sẵn + đúng lá số.
   if (userId && outcome.toolSuggest?.path) {
     const url = await createHandoffUrl(userId, outcome.toolSuggest.path, outcome.birth);
-    if (url) btns.push({ title: outcome.toolSuggest.label, url });
+    if (url) links.push({ title: outcome.toolSuggest.label, url });
   }
-  if (userId && outcome.lasoShown && outcome.birth) {
+  // Bản luận giải đầy đủ (trang báo cáo trên web, trả bằng CÙNG ví): mời lúc
+  // vừa lập lá số, rồi nhắc lại mỗi ~3 lượt hỏi — không phải lượt nào cũng mời.
+  if (userId && outcome.birth && (outcome.lasoShown || luot.soTin % 6 === 0)) {
     const url = await createHandoffUrl(userId, lasoPath(outcome.birth), outcome.birth);
-    if (url) btns.push({ title: 'Xem lá số đầy đủ', url });
+    if (url) links.push({ title: await nhanLuanGiai(), url });
   }
-  const room = Math.max(0, Math.min(kit.maxReplyButtons, 5) - btns.length - 1);
-  for (const s of outcome.suggestions.slice(0, Math.min(room, 3))) btns.push({ title: s, reply: s });
-  btns.push({ title: 'Hỏi ý thầy khác', reply: CMD.thay });
+  // Mời thầy khác: thầy khách hợp câu hỏi (cùng luật web) + hội chẩn khi là
+  // quyết định lớn. Lượt vừa mời rồi thì thôi, chỉ để lối đổi thầy.
+  const moi: ChatButton[] = [];
+  if (outcome.birth && !luot.daMoi) {
+    const g = pickGuests(luot.cauHoi, luot.thayId, outcome.birth, 1)[0];
+    if (g) moi.push({ title: `Ý Thầy ${g.ten}`, reply: `${CMD.moiThay} ${g.id}` });
+    if (hoiChanDuoc(luot.cauHoi, luot.thayId)) moi.push({ title: 'Mời 3 thầy hội chẩn', reply: CMD.hoiChan });
+  }
+  if (!moi.length) moi.push({ title: 'Hỏi ý thầy khác', reply: CMD.thay });
+  const room = Math.max(0, Math.min(kit.maxReplyButtons, 5) - links.length - moi.length);
+  const goiY: ChatButton[] = outcome.suggestions.slice(0, Math.min(room, 3)).map((q) => ({ title: q, reply: q }));
   const head = outcome.toolSuggest?.lyDo || 'Bạn muốn hỏi tiếp gì?';
   const con = userId ? await conCauHoi(userId, cost) : '';
-  await sendMenu(kit.io, ev.chatId, con ? `${head}\n\n${con}` : head, btns);
+  await sendMenu(kit.io, ev.chatId, con ? `${head}\n\n${con}` : head, [...links, ...moi, ...goiY]);
+}
+
+/** Nhãn nút bản luận giải đầy đủ — giá VNĐ là chính (luật "VNĐ là giá CHÍNH"),
+ *  đọc từ `tool_pricing['laso']`; đọc hụt thì không ghi giá (không chép số). */
+async function nhanLuanGiai(): Promise<string> {
+  const [credits, rate] = await Promise.all([getToolPrice('laso'), vndPerCredit()]);
+  return credits && credits > 0 ? `Luận giải ${vnd(credits * rate)}` : 'Luận giải đầy đủ';
+}
+
+// ── Menu công cụ (nhóm + công cụ đọc từ DB, mở web đã đăng nhập) ────────
+async function handleCongCu(kit: ChannelKit, ev: ChannelEvent, userId: string | null, arg: string): Promise<void> {
+  const groups = await toolCatalog();
+  const khoWeb = userId ? await createHandoffUrl(userId, '/app/cong-cu') : null;
+  const tatCa: ChatButton = { title: 'Xem tất cả trên web', url: khoWeb || `${SITE}/app/cong-cu` };
+  const i = Number(arg) - 1;
+  const g = Number.isInteger(i) && i >= 0 ? groups[i] : undefined;
+  if (!g) {
+    if (!groups.length) return sendMenu(kit.io, ev.chatId, 'Kho công cụ của Tử Vi Minh Bảo:', [tatCa]).then(() => {});
+    await sendMenu(
+      kit.io,
+      ev.chatId,
+      'Bạn muốn xem về việc gì? Chọn một nhóm — hoặc cứ hỏi thẳng thầy, thầy tự chọn công cụ hợp.',
+      [
+        ...groups.slice(0, Math.max(1, kit.maxReplyButtons - 1)).map((x, k) => ({
+          title: x.title,
+          reply: `${CMD.congCu[0]} ${k + 1}`,
+        })),
+        tatCa,
+      ],
+    );
+    return;
+  }
+  const tools = g.tools.slice(0, 4);
+  const btns: ChatButton[] = [];
+  for (const t of tools) {
+    const url = userId ? await createHandoffUrl(userId, t.path) : null;
+    btns.push({ title: t.label, url: url || `${SITE}${t.path}` });
+  }
+  await sendMenu(
+    kit.io,
+    ev.chatId,
+    `${g.title}:\n${tools.map((t) => `• ${t.label}`).join('\n')}\n\nBấm để mở — đã đăng nhập sẵn, đúng lá số của bạn.`,
+    [...btns, ...(g.tools.length > tools.length ? [tatCa] : [])],
+  );
 }
 
 /**
