@@ -91,6 +91,8 @@ let engineCache: {
   anSaoLaSo: (...a: unknown[]) => unknown;
   formatLaSoV2: (...a: unknown[]) => unknown;
   buildDaiVanLines: (...a: unknown[]) => unknown;
+  canCungOf: (canNam: string, diaChi: string) => string;
+  STAR_DATA: Record<string, { type?: string; element?: string }>;
 } | null = null;
 
 function loadEngine() {
@@ -111,9 +113,35 @@ function loadEngine() {
     'window',
     'globalThis',
     pchipCode + '\n' + code + '\n' + formatCode +
-      '\nreturn{convertDuongToAm,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines};',
+      '\nreturn{convertDuongToAm,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines,canCungOf:window.canCungOf,STAR_DATA};',
   ))(g, g) as typeof engineCache;
   return engineCache!;
+}
+
+/** Can của cung `diaChi` theo can năm sinh (Ngũ Hổ Độn) — nguồn:
+ *  `canCungOf` của public/tuvi-laso-format.js. '' khi đầu vào không hợp lệ. */
+export function canCung(canNam: string, diaChi: string): string {
+  return loadEngine().canCungOf(canNam, diaChi) || '';
+}
+
+/** Ngũ hành + loại sao (STAR_DATA của engine). null khi engine không biết sao đó. */
+export function starMeta(ten: string): { type: string; element: string } | null {
+  const d = loadEngine().STAR_DATA[ten];
+  return d ? { type: d.type || '', element: d.element || '' } : null;
+}
+
+/** Can chi NGÀY + GIỜ sinh (lịch dương) — engine `convertDuongToAm`. null khi ngoài tầm. */
+export function canChiNgayGio(
+  day: number,
+  month: number,
+  year: number,
+  hourBranch: number,
+): { ngay: string; gio: string; amLich: { day: number; month: number; year: number } } | null {
+  const conv = loadEngine().convertDuongToAm(day, month, year, GIO_HOURS[hourBranch]) as Rec | null;
+  const cc = conv?.canChi as Rec | undefined;
+  const al = conv?.amLich as { day: number; month: number; year: number } | undefined;
+  if (!cc || !al) return null;
+  return { ngay: String(cc.day || ''), gio: String(cc.hour || ''), amLich: al };
 }
 
 /**

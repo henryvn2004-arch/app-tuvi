@@ -279,10 +279,8 @@
     // TU_HOA/THIEN_CAN/DIA_CHI là global từ tuvi-ansao-engine.js (file này đã
     // phụ thuộc load-order của engine sẵn — xem STAR_DATA ở đầu file).
     function _tuHoaPhiTinh(ls, p) {
-      const canNam = (ls.canChiNam || '').split(' ')[0];
-      const ci = THIEN_CAN.indexOf(canNam), di = DIA_CHI.indexOf(p.diaChi);
-      if (ci < 0 || di < 0) return '';
-      const canCung = THIEN_CAN[((ci % 5) * 2 + di) % 10];
+      const canCung = canCungOf((ls.canChiNam || '').split(' ')[0], p.diaChi);
+      if (!canCung) return '';
       const hosts = TU_HOA[canCung];
       if (!hosts) return '';
       const parts = ['Lộc', 'Quyền', 'Khoa', 'Kỵ'].map(hoa => {
@@ -375,8 +373,19 @@
 
     return lines.join('\n');
   }
+  // Can của MỘT cung theo Ngũ Hổ Độn (can năm sinh → can cung Dần, rồi đi
+  // thuận). Nguồn cho server (`lib/engine/laso.ts` → ảnh lá số kênh chat) và
+  // cho `_tuHoaPhiTinh` ở trên. '' khi can/chi không hợp lệ.
+  // TU_HOA/THIEN_CAN/DIA_CHI là global của tuvi-ansao-engine.js.
+  function canCungOf(canNam, diaChi) {
+    const ci = THIEN_CAN.indexOf(canNam), di = DIA_CHI.indexOf(diaChi);
+    if (ci < 0 || di < 0) return '';
+    return THIEN_CAN[((ci % 5) * 2 + di) % 10];
+  }
+
   if (typeof window !== "undefined") {
     window.formatLaSoV2 = formatLaSoV2;
+    window.canCungOf = canCungOf;
     window.buildDaiVanLines = buildDaiVanLines;
     window.LASO_MARKERS = MARKERS;
     window.xuHuongCungW = xuHuongCungW;
