@@ -5595,7 +5595,10 @@
       // chung của thầy chính. Không đổi `acc`/lịch sử — chỉ đổi RENDER.
       var _speakerSegs = splitBySpeaker(acc);
       if (_speakerSegs.length > 1) {
-        typing.innerHTML = mdLite(_speakerSegs[0].text);
+        // Thầy chính không nói gì trước (khách @ thẳng thầy khách, model vào
+        // luôn "**Tên:**") ⇒ bỏ hẳn bong bóng thầy chính, đừng để khung trống.
+        if (_speakerSegs[0].text.trim()) typing.innerHTML = mdLite(_speakerSegs[0].text);
+        else row.remove();
         for (var _si = 1; _si < _speakerSegs.length; _si++) {
           var _seg = _speakerSegs[_si];
           if (!_seg.text.trim()) continue;

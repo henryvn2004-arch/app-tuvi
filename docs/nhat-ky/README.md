@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-461 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+462 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 296 | 1,109,741 B |
+| `2026-09.md` | 297 | 1,110,967 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🫧 Bong bóng trống khi khách @ thẳng thầy khách |
 | 1 | 2026-09 | `2026-09.md` | 🧑‍🏫 Mời thầy theo NGỮ CẢNH thay cho cross-sell báo cáo |
 | 1 | 2026-09 | `2026-09.md` | 🛡️ brand-check: JSON phán quyết bị token nghĩ ăn mất ⇒ tầng LLM fail-open |
 | 1 | 2026-09 | `2026-09.md` | 🎙️ Giọng 15 thầy v2.1 — đo trên prompt thật, nhịp dài ngắn, câu đinh rắc thưa |
