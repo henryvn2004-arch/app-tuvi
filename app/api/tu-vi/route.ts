@@ -3,6 +3,10 @@
 export const maxDuration = 15;
 import { NextRequest, NextResponse } from 'next/server';
 import { ORG_ID } from '@/lib/seo/entity';
+import {
+  ASK_CSS, ASK_SCRIPT, THAY_THEO_CHUYEN_MUC, askBarHTML, askBoxHTML, chipsForSeoPage, chuDeTrang, fetchThayCard,
+  type ThayCard,
+} from '@/lib/seo/ask-box';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -53,7 +57,7 @@ function renderMarkdown(text: string) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildHTML(page: any, slug: string, relatedHtml = '') {
+function buildHTML(page: any, slug: string, relatedHtml = '', thay: ThayCard = { id: 'co-nguyet', name: null, mon: null, greeting: null }) {
   const url   = `${BASE_URL}/tu-vi/${slug}`;
   const title = escHtml(page.title);
   const desc  = escHtml(page.meta_description || page.title);
@@ -100,6 +104,18 @@ function buildHTML(page: any, slug: string, relatedHtml = '') {
   const tool = catTool[page.category] || { href: '/app/luan-giai', label: 'Luận Giải Lá Số Của Bạn' };
   const hubUrl  = catHubUrl[page.category]  || BASE_URL+'/kien-thuc-tuvi';
   const hubName = catHubName[page.category] || 'Tử Vi';
+  // Ô "Hỏi Thầy" (lib/seo/ask-box.ts): chat là cửa chính của app, bài SEO mở
+  // câu chuyện. Ô trên đặt NGAY SAU đoạn trả lời đầu tiên — người đọc vừa có
+  // thắc mắc là thấy chỗ hỏi, mà đoạn trả lời vẫn đứng đầu cho Google/AI đọc.
+  const chuDe  = chuDeTrang(page.h1 || page.title || '');
+  const fam    = `tu-vi:${page.category || ''}`;
+  const chips  = chipsForSeoPage(page);
+  const askTop = askBoxHTML({ box: 'top', fam, thay, chips, title: `Hỏi thầy về ${chuDe}`,
+    placeholder: 'Gõ câu hỏi của bạn…', prefix: chuDe });
+  const askEnd = askBoxHTML({ box: 'end', fam, thay, chips, title: 'Còn điều gì chưa rõ? Hỏi thầy ngay',
+    placeholder: 'Kể chuyện của bạn…', prefix: chuDe });
+  const cut    = body.indexOf('</p>');
+  const bodyWithAsk = cut >= 0 ? body.slice(0, cut + 4) + askTop + body.slice(cut + 4) : askTop + body;
   const img     = `${BASE_URL}/api/og?${new URLSearchParams({ title: String(page.title||'').slice(0,80), sub: hubName }).toString()}`;
 
   const schema = JSON.stringify([
@@ -155,11 +171,9 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 .article-body h3{font-size:17px;font-weight:600;color:var(--text);margin:24px 0 10px}
 .article-body p{margin-bottom:16px}.article-body strong{color:var(--text);font-weight:600}
 .article-body a{color:var(--blue);text-decoration:underline}
-.cta-box{margin-top:40px;padding:28px 24px;background:linear-gradient(135deg,#171a4a 0%,#2d2060 100%);border-radius:12px;color:#fff;text-align:center}
-.cta-box h3{font-family:'Noto Serif',serif;font-size:20px;margin-bottom:10px;font-weight:600}
-.cta-box p{font-size:14px;opacity:.85;margin-bottom:20px;line-height:1.6}
-.cta-btn{display:inline-block;background:var(--purple);color:#fff;padding:13px 32px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;transition:opacity .15s}
-.cta-btn:hover{opacity:.88}
+.tool-alt{margin-top:-12px;font-size:14px;color:var(--text-lt);text-align:center}
+.tool-alt a{color:var(--blue);font-weight:600;text-decoration:none}.tool-alt a:hover{text-decoration:underline}
+${ASK_CSS}
 @media(max-width:700px){.breadcrumb,.article-wrap{padding-left:16px;padding-right:16px}.article-title{font-size:24px}}
         .rel-wrap{margin-top:32px;padding-top:24px;border-top:1px solid var(--border-lt)}
         .rel-title{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#999;margin-bottom:12px}
@@ -182,15 +196,14 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     <span class="meta-cat">${escHtml(catHubName[page.category] || 'Tử Vi')}</span>
   </div>
   <h1 class="article-title">${h1}</h1>
-  <div class="article-body">${body}</div>
-  <div class="cta-box">
-    <h3>Áp dụng cho chính bạn</h3>
-    <p>Luận giải chuyên sâu chi tiết — tính cách, vận hạn, tình duyên, sự nghiệp theo giờ sinh cụ thể</p>
-    <a class="cta-btn" href="${tool.href}">${escHtml(tool.label)} →</a>
-  </div>
+  <div class="article-body">${bodyWithAsk}</div>
+  ${askEnd}
+  <p class="tool-alt">Muốn tự tra? <a href="${tool.href}">${escHtml(tool.label)} →</a></p>
   ${relatedHtml}
 </article>
+${askBarHTML(thay, thay.name ? `Hỏi thầy ${thay.name} về bài này` : 'Hỏi thầy về bài này', fam)}
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
+${ASK_SCRIPT}
 </body></html>`;
 }
 
@@ -285,13 +298,16 @@ export async function GET(request: NextRequest) {
       return new NextResponse(buildNotFound(), { status: 404, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
     }
     const page = rows[0];
-    const sameCatRes = await fetch(
-      `${SUPABASE_URL}/rest/v1/seo_pages?slug=neq.${encodeURIComponent(slug)}&category=eq.${encodeURIComponent(page.category)}&select=slug,h1,title,category&limit=8`,
-      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
-    );
+    const [sameCatRes, thay] = await Promise.all([
+      fetch(
+        `${SUPABASE_URL}/rest/v1/seo_pages?slug=neq.${encodeURIComponent(slug)}&category=eq.${encodeURIComponent(page.category)}&select=slug,h1,title,category&limit=8`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+      ),
+      fetchThayCard(THAY_THEO_CHUYEN_MUC[page.category] || 'co-nguyet'),
+    ]);
     const sameCat = await sameCatRes.json() as any[];
     const relatedHtml = buildRelated(sameCat.slice(0,8), page.category);
-    const html = buildHTML(page, slug, relatedHtml);
+    const html = buildHTML(page, slug, relatedHtml, thay);
     return new NextResponse(html, {
       status: 200,
       headers: {
