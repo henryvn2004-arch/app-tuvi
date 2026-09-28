@@ -303,6 +303,17 @@ export async function tgSendImage(chatId: number | string, url: string, caption?
   await tgCall('sendPhoto', { chat_id: chatId, photo: url, ...(caption ? { caption: caption.slice(0, 1024) } : {}) });
 }
 
+/** Gửi file (PDF) bằng `sendDocument` multipart — không cần URL công khai. Hỏng thì NÉM LỖI. */
+export async function tgSendFile(chatId: number | string, data: Buffer, filename: string, caption?: string): Promise<void> {
+  if (!TG_TOKEN) throw new Error('[telegram] chưa cấu hình bot');
+  const form = new FormData();
+  form.append('chat_id', String(chatId));
+  form.append('document', new Blob([new Uint8Array(data)], { type: 'application/pdf' }), filename);
+  if (caption) form.append('caption', caption.slice(0, 1024));
+  const r = await fetch(`${TG_API}/sendDocument`, { method: 'POST', body: form });
+  if (!r.ok) throw new Error(`[telegram] sendDocument lỗi HTTP ${r.status}: ${(await r.text().catch(() => '')).slice(0, 300)}`);
+}
+
 export const telegramIO: ChannelIO = {
   platform: PLATFORM,
   msgLimit: TG_MSG_LIMIT,
@@ -318,6 +329,7 @@ export const telegramIO: ChannelIO = {
     if (!(await tgEditMessage(chatId, Number(id), text))) throw new Error('[telegram] sửa tin thất bại');
   },
   fetchImage: tgFetchImage,
+  sendFile: tgSendFile,
   sendButtons: tgSendButtons,
   sendImage: tgSendImage,
   format: (t) => markdownToChat(t), // gửi plain text (không parse_mode)

@@ -17,6 +17,14 @@ const nextConfig = {
   // đúng lỗi đã cắn (xem docs/nhat-ky/2026-09.md, "PDF câm dấu").
   outputFileTracingIncludes: {
     '/api/luan-giai/email-pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
+    // Cùng lý do: các route dưới cũng dựng PDF (resend-pdf · gửi PDF vào kênh chat
+    // từ web và từ webhook 4 kênh) — lib/pdf/paid-reports.ts.
+    '/api/luan-giai/resend-pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
+    '/api/channels/send-pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
+    '/api/channels/zalo': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
+    '/api/channels/telegram': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
+    '/api/channels/messenger': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
+    '/api/channels/whatsapp': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
   },
   async rewrites() {
     return [

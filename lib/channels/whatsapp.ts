@@ -155,6 +155,33 @@ export async function waSendImage(to: string, url: string, caption?: string): Pr
   await waPost({ to, type: 'image', image: { link: url, ...(caption ? { caption: caption.slice(0, BODY_MAX) } : {}) } });
 }
 
+/**
+ * Gửi file (PDF): tải lên `<phone-id>/media` lấy media id rồi gửi tin
+ * `document` — không cần URL công khai. Hỏng thì NÉM LỖI.
+ */
+export async function waSendFile(to: string, data: Buffer, filename: string, caption?: string): Promise<void> {
+  if (!PHONE_NUMBER_ID || !WA_TOKEN) throw new Error('[whatsapp] chưa cấu hình');
+  const form = new FormData();
+  form.append('messaging_product', 'whatsapp');
+  form.append('type', 'application/pdf');
+  form.append('file', new Blob([new Uint8Array(data)], { type: 'application/pdf' }), filename);
+  const up = await fetch(`${GRAPH_BASE}/${PHONE_NUMBER_ID}/media`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${WA_TOKEN}` },
+    body: form,
+  });
+  const j = (await up.json().catch(() => ({}))) as { id?: string };
+  if (!up.ok || !j.id) throw new Error(`[whatsapp] tải file lỗi HTTP ${up.status}`);
+  const res = await graphPost(`${PHONE_NUMBER_ID}/messages`, WA_TOKEN, {
+    messaging_product: 'whatsapp',
+    recipient_type: 'individual',
+    to,
+    type: 'document',
+    document: { id: j.id, filename, ...(caption ? { caption: caption.slice(0, BODY_MAX) } : {}) },
+  });
+  if (!res?.ok) throw new Error(`[whatsapp] gửi file lỗi HTTP ${res?.status ?? 'mạng'}`);
+}
+
 async function waFetchImage(mediaId: string): Promise<ChatImage | null> {
   if (!WA_TOKEN || !mediaId) return null;
   try {
@@ -185,6 +212,7 @@ export const whatsappIO: ChannelIO = {
   fetchImage: (ref) => waFetchImage(ref),
   sendButtons: (chatId, text, buttons) => waSendButtons(String(chatId), text, buttons),
   sendImage: (chatId, url, caption) => waSendImage(String(chatId), url, caption),
+  sendFile: (chatId, data, filename, caption) => waSendFile(String(chatId), data, filename, caption),
   format: (t) => markdownToChat(t, '*'), // WhatsApp đậm bằng *một* sao
 };
 

@@ -58,6 +58,8 @@ export interface ChannelIO {
   sendButtons?(chatId: number | string, text: string, buttons: ChatButton[]): Promise<void>;
   /** Gửi ảnh theo URL công khai (tùy chọn). */
   sendImage?(chatId: number | string, url: string, caption?: string): Promise<void>;
+  /** Gửi FILE (PDF báo cáo) từ bộ nhớ — tải lên nền tảng rồi gửi. Hỏng thì NÉM LỖI. */
+  sendFile?(chatId: number | string, data: Buffer, filename: string, caption?: string): Promise<void>;
   /** Đổi markdown của LLM sang kiểu chữ nền tảng hiểu (tùy chọn). */
   format?(text: string): string;
 }

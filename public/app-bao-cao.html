@@ -30,7 +30,7 @@
 .bc-nm b{display:block;color:var(--heading);font-weight:600}
 .bc-nm span{display:block;font-size:12px;color:var(--text-lt)}
 .bc-muted{color:var(--text-lt);font-size:12.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
-.bc-when{display:flex;align-items:center;justify-content:flex-end;gap:10px}
+.bc-when{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px 10px}
 .bc-pdf{appearance:none;border:1px solid var(--line-2);background:var(--white);color:var(--text-mid);font:inherit;font-size:12.5px;padding:5px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
 .bc-pdf svg{width:13px;height:13px}
 @media(hover:hover){.bc-pdf:hover{border-color:var(--gold-soft);color:var(--heading)}}
@@ -139,13 +139,15 @@
         (r.subtitle ? '<span>' + esc(r.subtitle) + '</span>' : '') + '</span></div></td>' +
         '<td class="bc-hide bc-muted">' + esc(r.toolLabel || '') + '</td>' +
         '<td class="bc-muted"><div class="bc-when">' + esc(rel(+new Date(r.updatedAt))) +
-        (r.pdfSlug ? '<button type="button" class="bc-pdf" data-pdf="' + esc(r.pdfSlug) + '"><span data-icon="mail"></span>Gửi PDF</button>' : '') +
+        (r.pdfSlug ? '<button type="button" class="bc-pdf" data-pdf="' + esc(r.pdfSlug) + '"><span data-icon="mail"></span>Gửi PDF</button>' +
+          '<button type="button" class="bc-pdf bc-chat" data-chat="' + esc(r.pdfSlug) + '"><span data-icon="message-circle"></span>Gửi về Zalo</button>' : '') +
         '</div></td></tr>';
     }).join('');
     if (window.mountIcons) window.mountIcons(el('bcBody'));
   }
   el('bcFind').addEventListener('input', function(){ Q = this.value.trim().toLowerCase(); paint(); });
   el('bcBody').addEventListener('click', function(e){
+    var chat = e.target.closest('.bc-chat'); if (chat) { sendChat(chat); return; }
     var pdf = e.target.closest('.bc-pdf'); if (pdf) { sendPdf(pdf); return; }
     var tr = e.target.closest('tr.bc-row'); if (!tr) return;
     openView(tr.getAttribute('data-id'));
@@ -246,6 +248,30 @@
     }).catch(function(e){
       console.error('[bao-cao] resend-pdf', e);
       alert('Gửi lại lỗi: ' + e.message);
+      btn.innerHTML = orig; btn.disabled = false;
+    });
+  }
+
+  // Gửi bản PDF vào Zalo/Messenger/Telegram/WhatsApp đã gắn với tài khoản.
+  // Server tự kiểm ĐÃ TRẢ TIỀN (chỉ gửi phần đã mua) — app/api/channels/send-pdf.
+  function sendChat(btn){
+    var orig = btn.innerHTML;
+    btn.disabled = true; btn.textContent = 'Đang gửi…';
+    try { window.Track && Track.event && Track.event('report_chat_click'); } catch (e) { /* ignore */ }
+    token().then(function(tok){
+      return fetch('/api/channels/send-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
+        body: JSON.stringify({ slug: btn.getAttribute('data-chat') })
+      }).then(function(res){ return res.json().catch(function(){ return {}; }).then(function(d){ return { ok: res.ok, d: d }; }); });
+    }).then(function(r){
+      if (!r.ok) { alert(r.d.error || 'Chưa gửi được. Thử lại sau ít phút.'); btn.innerHTML = orig; btn.disabled = false; return; }
+      try { window.Track && Track.event && Track.event('report_chat_sent'); } catch (e) { /* ignore */ }
+      btn.textContent = '✓ Đã gửi vào Zalo';
+      setTimeout(function(){ btn.innerHTML = orig; btn.disabled = false; }, 4000);
+    }).catch(function(e){
+      console.error('[bao-cao] send-pdf chat', e);
+      alert('Gửi lỗi: ' + e.message);
       btn.innerHTML = orig; btn.disabled = false;
     });
   }
