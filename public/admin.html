@@ -1721,7 +1721,7 @@
               <option value="email">Email (broadcast — hàng đợi, gửi dần)</option>
               <option value="messenger" disabled>Messenger (chưa hỗ trợ gửi tự do)</option>
               <option value="whatsapp" disabled>WhatsApp (chưa hỗ trợ gửi tự do)</option>
-              <option value="zalo" disabled>Zalo (chưa tích hợp)</option>
+              <option value="zalo" disabled>Zalo (chưa hỗ trợ gửi tự do — ngoài khung 48h phải dùng ZNS có phí)</option>
             </select>
             <div id="bc-subject-row" style="display:none">
               <div class="form-label">Tiêu đề email</div>
@@ -2973,7 +2973,7 @@ async function triggerCron(job, btn) {
 }
 
 // ── CHANNELS & PUSH ──
-const CH_LABEL = { telegram: 'Telegram', messenger: 'Messenger', whatsapp: 'WhatsApp', zalo: 'Zalo' };
+const CH_LABEL = { telegram: 'Telegram', messenger: 'Messenger', whatsapp: 'WhatsApp', 'zalo-oa': 'Zalo OA' };
 
 async function loadChannels() {
   const body = document.getElementById('ch-body');

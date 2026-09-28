@@ -90,7 +90,7 @@ grep mò — repo có file 400 KB+ (`public/tuvi-ansao-engine.js`, `public/admin
 ### Kênh & hợp đồng
 - **`lib/channels/core.ts`** `runConversation` + `ChannelIO` + `SessionStore` —
   trung lập nền tảng. Thêm kênh mới = viết adapter + route, KHÔNG sửa lõi.
-- Adapter: `telegram.ts` · `messenger.ts` · `whatsapp.ts`; chung `store.ts` /
+- Adapter: `telegram.ts` · `messenger.ts` · `whatsapp.ts` · `zalo.ts`; chung `store.ts` /
   `gate.ts` / `meta.ts`. **`lib/contract/v1.ts`** — hợp đồng API, additive-only.
 
 ### Tiền
@@ -354,6 +354,8 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   token Page vĩnh viễn (5 bước in trong `FB_TOKEN_EXPIRED`, `lib/media/publish.ts`).
   ⚠️ Chỉ **copy** App Secret, **TUYỆT ĐỐI không Reset** — Messenger/WhatsApp đang
   dùng chung giá trị đó.
+- **Zalo OA (code xong, chưa BẬT)**: key + webhook + token đầu — các bước ở
+  `_patches/migration-zalo-oa.sql` và `docs/nhat-ky/2026-09.md` "Kênh Zalo OA".
 - **Telegram channel**: thêm bot làm admin + đặt `TELEGRAM_CHANNEL_ID` rồi mới
   thêm `"telegram"` vào `social.channels`.
 - **Messenger** im lặng từ 27/06 — kiểm Page đã publish + có username chưa.

@@ -531,6 +531,21 @@
           <button id="btnMsgrUnlink" style="display:none;background:transparent;color:var(--red);border:1px solid var(--red);padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
         </div>
       </div>
+
+      <!-- Zalo OA — ẩn cho tới khi server báo kênh đã cấu hình (`available`
+           từ /api/channels/zalo/link), để không mời liên kết một OA chưa trả lời. -->
+      <div class="conn-card" id="zaloCard" style="display:none">
+        <div class="conn-head">
+          <div class="conn-ic" style="background:#0068FF"><span data-icon="message-circle"></span></div>
+          <div><div class="conn-title">Zalo</div><div class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
+        </div>
+        <p class="chan-desc">Nạp Lượng ở đây, nhắn Zalo OA Tử Vi Minh Bảo là dùng được luôn cùng ví.</p>
+        <div class="conn-row" id="zaloLinkBox">
+          <span id="zaloLinkStatus" class="conn-status">Đang kiểm tra…</span>
+          <button id="btnZaloLink" style="display:none;background:#0068FF;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Liên kết Zalo</button>
+          <button id="btnZaloUnlink" style="display:none;background:transparent;color:var(--red);border:1px solid var(--red);padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
+        </div>
+      </div>
     </div>
 
     <!-- Tab: Tài Khoản -->
@@ -640,6 +655,6 @@ window.iconHtml=window.iconHtml||function(k){return (window.ICONS&&window.ICONS[
   <script src="/nav.js?v=45" data-icons-only></script>
 <script src="/shell.js?v=129"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=45"></script>
-<script src="/account-core.js?v=13"></script>
+<script src="/account-core.js?v=14"></script>
 </body>
 </html>
