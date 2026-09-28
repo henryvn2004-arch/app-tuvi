@@ -6,6 +6,7 @@ import { fireServerPurchase } from '@/lib/marketing/server-conversions';
 import { alertNewPayment } from '@/lib/admin/alert';
 import { sendInvoiceEmail } from '@/lib/email/invoice';
 import { verifyPayOSSignature } from '@/lib/billing/payos';
+import { notifyUserOnChat } from '@/lib/channels/notify';
 
 const CHECKSUM_KEY = process.env.PAYOS_CHECKSUM_KEY!;
 const SUPABASE_URL = process.env.SUPABASE_URL!;
@@ -95,6 +96,12 @@ export async function POST(request: NextRequest) {
           userId, orderId: orderCode, provider: 'bank', credits: row.credits, amountVnd,
           label: `Chuyển khoản – ${row.credits} Lượng`, balance: row.balance,
         }));
+        // Khách nạp ngay trong Zalo/Messenger/WhatsApp/Telegram (ảnh QR do bot
+        // gửi) → báo luôn tại đó để họ hỏi tiếp, không phải đoán tiền đã vào chưa.
+        waitUntil(notifyUserOnChat(
+          userId,
+          `✅ Đã nhận ${amountVnd.toLocaleString('vi-VN')}đ — cộng ${row.credits} Lượng vào ví (còn ${row.balance} Lượng). Bạn hỏi tiếp thầy nhé!`,
+        ));
       } else {
         console.error('[bank-webhook] không tìm được user_id để bắn Purchase, orderCode=', orderCode);
       }

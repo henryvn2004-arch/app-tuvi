@@ -628,6 +628,11 @@ function showAuthModal(callback, tab) {
         </div>
       </div>
       <p id="auth-webview-note" style="display:none;font-size:12px;color:#7A5F26;background:#FBF8F1;border:1px solid #EADFC8;border-radius:8px;padding:9px 12px;margin-bottom:14px;line-height:1.6">Bạn đang mở trong ứng dụng Facebook/Instagram nên đăng nhập Google/Facebook không dùng được ở đây — dùng email bên dưới, chỉ mất chưa tới 1 phút.</p>
+      <!-- Người đã trò chuyện với thầy qua Zalo/Messenger/WhatsApp/Telegram đã có
+           sẵn tài khoản (tạo lúc nhắn tin đầu tiên) — vào bằng mã nhắn qua chat,
+           không cần email. Chạy được cả trong webview FB/IG nên đặt NGOÀI khối
+           OAuth. Trang: app/dang-nhap-chat/route.ts. -->
+      <a id="auth-chat-login" href="/dang-nhap-chat" onclick="this.href='/dang-nhap-chat?next='+encodeURIComponent(location.pathname+location.search)" style="display:block;text-align:center;padding:10px;border:1.5px solid #CFE3D6;border-radius:8px;background:#F3FAF5;font-size:13px;font-weight:600;color:#1E6B3C;text-decoration:none;margin-bottom:14px">Đã chat với thầy qua Zalo, Messenger? Đăng nhập bằng tin nhắn →</a>
 
       <!-- Email form -->
       <div id="auth-form">

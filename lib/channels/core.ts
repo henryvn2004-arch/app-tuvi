@@ -24,9 +24,15 @@ import {
 import { runAgent } from '@/lib/agent/run';
 import { type ProfilePort } from '@/lib/tools/registry';
 import { type ChatConfig } from '@/lib/config/appConfig';
+import { type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
 // id của tin "tiến trình" để edit dần — kiểu tùy nền tảng (Telegram: number).
 export type ProgressId = number | string | null;
+
+// Nút bấm dưới một tin: mở link, hoặc gửi lại một câu trả lời soạn sẵn (bấm
+// = như người dùng tự gõ `reply`). Mỗi nền tảng dựng theo kiểu của mình; kênh
+// không có nút thì `sendMenu` tự lùi về chữ.
+export type ChatButton = { title: string; url: string } | { title: string; reply: string };
 
 // ── I/O đặc thù nền tảng (adapter cài đặt) ──────────────────
 export interface ChannelIO {
@@ -46,6 +52,21 @@ export interface ChannelIO {
   editText(chatId: number | string, id: ProgressId, text: string): Promise<void>;
   /** Tải ảnh người dùng gửi (ref đặc thù nền tảng) → base64. */
   fetchImage(ref: string): Promise<ChatImage | null>;
+  /** Gửi tin kèm nút (tùy chọn — vắng thì `sendMenu` lùi về chữ). */
+  sendButtons?(chatId: number | string, text: string, buttons: ChatButton[]): Promise<void>;
+  /** Gửi ảnh theo URL công khai (tùy chọn). */
+  sendImage?(chatId: number | string, url: string, caption?: string): Promise<void>;
+  /** Đổi markdown của LLM sang kiểu chữ nền tảng hiểu (tùy chọn). */
+  format?(text: string): string;
+}
+
+/** Kết quả một lượt thành công — nơi gọi dùng để gửi nút gợi ý tiếp theo. */
+export interface TurnOutcome {
+  birth: BirthParams | null;
+  suggestions: string[];
+  toolSuggest: ToolSuggestion | null;
+  /** Lượt này vừa lập/mở một lá số (có thẻ lá số). */
+  lasoShown: boolean;
 }
 
 // ── Lưu phiên (adapter cài đặt — bảng tùy nền tảng) ─────────
@@ -125,7 +146,7 @@ export async function runConversation(
   /** Best-effort — báo kết quả lượt (thành công/lỗi) cho adapter log "Sức khỏe
    *  kênh" (Dashboard). KHÔNG throw, KHÔNG chặn luồng chính. */
   onOutcome?: (ok: boolean, reason?: string) => void,
-): Promise<void> {
+): Promise<TurnOutcome | null> {
   const { chatId } = incoming;
   const hasImage = incoming.imageRefs.length > 0;
   // Port sổ lá số đã bind chatId → trao cho runAgent để bật 3 tool sổ.
@@ -198,7 +219,7 @@ export async function runConversation(
       client: { platform: io.platform, version: '1.0.0' },
     };
     const collector = createSSECollector(onStatus);
-    const { birth: agentBirth, subjectSwitched, lasoCard } = await runAgent(
+    const { birth: agentBirth, subjectSwitched, lasoCard, suggestions, toolSuggest } = await runAgent(
       req,
       cfg,
       collector.send,
@@ -217,7 +238,7 @@ export async function runConversation(
       );
       onOutcome?.(false, err || 'empty_answer');
       await deliver(io, chatId, progressId, errMsg);
-      return;
+      return null;
     }
     // Vừa lập/mở lá số → chèn THẺ LÁ SỐ deterministic (engine render) lên đầu câu
     // trả lời gửi đi. Đây là bản CHUẨN người dùng nhận, không phụ thuộc LLM (dù
@@ -243,6 +264,12 @@ export async function runConversation(
       [...savePrior, savedUserMsg, { role: 'assistant', content: answer }],
       agentBirth,
     );
+    return {
+      birth: agentBirth ?? carryBirth ?? null,
+      suggestions: Array.isArray(suggestions) ? suggestions : [],
+      toolSuggest: toolSuggest ?? null,
+      lasoShown: !!lasoCard,
+    };
   } catch (e) {
     working = false;
     // Bắt cả exception bị ném (vd callAnthropic throw khi non-200) — trước đây
@@ -250,6 +277,7 @@ export async function runConversation(
     console.error('[runConversation] Lỗi không bắt được khi xử lý lượt:', e);
     onOutcome?.(false, e instanceof Error ? e.message.slice(0, 200) : 'unknown_exception');
     await deliver(io, chatId, progressId, errMsg);
+    return null;
   } finally {
     working = false;
     await keepTyping.catch(() => {});
@@ -257,7 +285,8 @@ export async function runConversation(
 }
 
 // Chốt nội dung vào tin tiến trình (edit); phần dư > msgLimit gửi tin mới.
-async function deliver(io: ChannelIO, chatId: number | string, progressId: ProgressId, text: string): Promise<void> {
+async function deliver(io: ChannelIO, chatId: number | string, progressId: ProgressId, raw: string): Promise<void> {
+  const text = io.format ? io.format(raw) : raw;
   if (progressId == null) {
     await io.sendText(chatId, text);
     return;

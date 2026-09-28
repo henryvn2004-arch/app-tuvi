@@ -12,7 +12,14 @@
 
 import type { ChatImage, ChatMessage, BirthParams } from '@/lib/contract/v1';
 import { GRAPH_BASE, graphPost, fetchGraphMedia } from './meta';
-import { splitText, type ChannelIO, type SessionStore, type ProfileStore } from './core';
+import {
+  splitText,
+  type ChannelIO,
+  type ChatButton,
+  type SessionStore,
+  type ProfileStore,
+} from './core';
+import { markdownToChat } from './format';
 import {
   chatLoadSession,
   chatSaveSession,
@@ -44,6 +51,98 @@ export async function waSendText(to: string, text: string): Promise<void> {
 }
 
 // ── Tải ảnh: media-id → url → bytes (base64) ────────────────
+// Giới hạn tin tương tác của WhatsApp Cloud API.
+const BODY_MAX = 1024;
+const REPLY_BUTTONS_MAX = 3;
+const BUTTON_TITLE_MAX = 20;
+const LIST_ROWS_MAX = 10;
+const ROW_TITLE_MAX = 24;
+const ROW_DESC_MAX = 72;
+const ID_MAX = 256;
+
+const short = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
+
+async function waPost(payload: Record<string, unknown>): Promise<void> {
+  if (!PHONE_NUMBER_ID || !WA_TOKEN) return;
+  await graphPost(`${PHONE_NUMBER_ID}/messages`, WA_TOKEN, {
+    messaging_product: 'whatsapp',
+    recipient_type: 'individual',
+    ...payload,
+  });
+}
+
+/**
+ * Link → tin `cta_url` (WhatsApp cho đúng MỘT nút link mỗi tin). Câu soạn sẵn
+ * → nút trả lời (≤3, nhãn ≤20) hoặc danh sách (≤10 dòng, mô tả ≤72) khi nhiều
+ * hơn/dài hơn. Bấm = webhook nhận `interactive.*_reply.id` = chính câu đó.
+ */
+export async function waSendButtons(to: string, text: string, buttons: ChatButton[]): Promise<void> {
+  const urls = buttons.filter((b): b is { title: string; url: string } => 'url' in b);
+  const replies = buttons.filter((b): b is { title: string; reply: string } => 'reply' in b);
+
+  let body = text || '…';
+  if (body.length > BODY_MAX) {
+    await waSendText(to, body);
+    body = '👇';
+  }
+
+  for (const u of urls) {
+    await waPost({
+      to,
+      type: 'interactive',
+      interactive: {
+        type: 'cta_url',
+        body: { text: body },
+        action: { name: 'cta_url', parameters: { display_text: short(u.title, BUTTON_TITLE_MAX), url: u.url } },
+      },
+    });
+    body = '👇';
+  }
+  if (!replies.length) return;
+
+  const fitsButtons =
+    replies.length <= REPLY_BUTTONS_MAX && replies.every((r) => r.title.length <= BUTTON_TITLE_MAX);
+  if (fitsButtons) {
+    await waPost({
+      to,
+      type: 'interactive',
+      interactive: {
+        type: 'button',
+        body: { text: urls.length ? 'Hoặc chọn nhanh:' : body },
+        action: {
+          buttons: replies.map((r) => ({ type: 'reply', reply: { id: r.reply.slice(0, ID_MAX), title: r.title } })),
+        },
+      },
+    });
+    return;
+  }
+  await waPost({
+    to,
+    type: 'interactive',
+    interactive: {
+      type: 'list',
+      body: { text: urls.length ? 'Hoặc chọn nhanh:' : body },
+      action: {
+        button: 'Chọn',
+        sections: [
+          {
+            rows: replies.slice(0, LIST_ROWS_MAX).map((r) => ({
+              id: r.reply.slice(0, ID_MAX),
+              title: short(r.title, ROW_TITLE_MAX),
+              ...(r.title.length > ROW_TITLE_MAX ? { description: short(r.title, ROW_DESC_MAX) } : {}),
+            })),
+          },
+        ],
+      },
+    },
+  });
+}
+
+/** Gửi ảnh theo URL công khai. */
+export async function waSendImage(to: string, url: string, caption?: string): Promise<void> {
+  await waPost({ to, type: 'image', image: { link: url, ...(caption ? { caption: caption.slice(0, BODY_MAX) } : {}) } });
+}
+
 async function waFetchImage(mediaId: string): Promise<ChatImage | null> {
   if (!WA_TOKEN || !mediaId) return null;
   try {
@@ -72,6 +171,9 @@ export const whatsappIO: ChannelIO = {
   },
   editText: async () => {},
   fetchImage: (ref) => waFetchImage(ref),
+  sendButtons: (chatId, text, buttons) => waSendButtons(String(chatId), text, buttons),
+  sendImage: (chatId, url, caption) => waSendImage(String(chatId), url, caption),
+  format: (t) => markdownToChat(t, '*'), // WhatsApp đậm bằng *một* sao
 };
 
 // ── SessionStore (generic, platform='whatsapp') ─────────────
