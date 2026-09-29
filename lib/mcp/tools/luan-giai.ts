@@ -22,6 +22,7 @@ const schema = {
   gio_sinh: z.union([z.number(), z.string()]).describe('Giờ sinh: số 0–23 hoặc tên giờ chi'),
   gioi_tinh: z.enum(['nam', 'nu']),
   am_lich: z.boolean().optional().describe('true nếu ngay_duong là ngày ÂM lịch'),
+  thang_nhuan: z.boolean().optional().describe('true nếu am_lich=true VÀ người dùng nói rõ sinh tháng NHUẬN (vd "tháng 4 nhuận"). Không nói nhuận thì bỏ trống.'),
 };
 
 function starNamesOf(p: Rec): string[] {
@@ -42,6 +43,7 @@ export const luanGiaiTool: McpTool = {
     const birth: BirthParams = {
       day: ngay.day, month: ngay.month, year: ngay.year,
       hourBranch, gender: args.gioi_tinh === 'nu' ? 'nu' : 'nam', isLunar: !!args.am_lich,
+      ...(args.am_lich && args.thang_nhuan === true ? { isLeapMonth: true } : {}),
     };
     const r = computeLaso(birth);
     if (!r.ok || !r.ls) return { error: r.error || 'Không lập được lá số.' };
