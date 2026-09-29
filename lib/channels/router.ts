@@ -22,7 +22,7 @@
 import { runConversation, type ChannelIO, type ChatButton, type ProfileStore, type SessionStore } from './core';
 import { buildAccessGate } from './gate';
 import { sendMenu } from './format';
-import { chatConsumeLinkToken, chatGetAuthor, chatLogOutcome, chatLoadSession } from './store';
+import { chatConsumeLinkToken, chatGetAuthor, chatLogEvent, chatLogOutcome, chatLoadMeta, chatLoadSession, chatPatchMeta, type ChatMeta } from './store';
 import { ensureChatUser } from './account';
 import { accountProfiles, saveChart } from './charts';
 import { createHandoffUrl, lasoPath } from './handoff';
@@ -33,10 +33,12 @@ import { todayVN } from '@/lib/engine/van-ngay';
 import { claimLoginCode, parseLoginCode } from './login';
 import { GOP_CMD, isShadowUser, maskEmail, parseEmail, startEmailLink, verifyEmailLink, hasPendingEmailLink } from './email-link';
 import { TOPUP_CMD, createChatTopup, parseTopup, topupCaption, topupChoices, vietQrImageUrl } from './topup';
-import { GUESTS, detectMention, guestById, guestFromMoi, hoiChanDuoc, moiCau, pickGuests, type GuestId } from './guests';
+import { GUESTS, detectMention, guestById, guestFromMoi, type GuestId } from './guests';
+import { LOI_SAN_PHAM, chonSanPham, chonTinhNang, lyDoSanPham, nhanLuanGiai, sanPhamDanhMuc } from './goi-y';
+import { cacChuDe } from '@/lib/agent/luan-chu-de';
 import { toolCatalog } from './catalog';
 import { THAY_LIST, anhThay, chonThay, gioiThieuThay, thayCuaChat, timThay, type Thay } from './author';
-import { getRailPrice, getToolPrice } from '@/lib/billing/pricing';
+import { getRailPrice } from '@/lib/billing/pricing';
 import { paywallDisabled, getBalance, deductCredits, logTransaction } from '@/lib/billing/credits';
 import { railFreeRemaining, railFreeConsume } from '@/lib/billing/viral-budget';
 import { vndPerCredit } from '@/lib/billing/packages';
@@ -91,6 +93,9 @@ const CMD = {
   congCu: ['công cụ', 'cong cu', '/congcu'],
   congCuNhom: 'công cụ:',
   nap: ['nạp lượng', 'nạp tiền', TOPUP_CMD],
+  tatNhac: ['tắt nhắc', 'tat nhac', '/tatnhac'],
+  batNhac: ['bật nhắc', 'bat nhac', '/batnhac'],
+  deSau: ['để sau', 'de sau'],
 };
 /** "nạp 100k" / "nạp 200.000đ" (nút nạp gửi đúng dạng này) → phần số tiền. */
 const NAP_SO_RE = /^(?:nạp|\/nap)\s+(\S.*)$/;
@@ -126,6 +131,24 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   // Mọi đường còn lại cần tài khoản. null = thiếu cấu hình/lỗi → đường lùi
   // lượt free/ngày như trước (kênh không sập).
   const userId = await ensureChatUser(kit.platform, ev.externalId);
+  // Trạng thái nút gợi ý + tin nhắc của phiên (null = chưa chạy migration-chat-nudge).
+  const meta = await chatLoadMeta(kit.platform, ev.chatId);
+  void ghiNhanTin(kit, ev, meta, t);
+
+  // ── Tin nhắc chủ động (cron chat-nudge) — lệnh không tốn lượt ─────────
+  if (CMD.tatNhac.includes(t) || CMD.batNhac.includes(t)) {
+    const tat = CMD.tatNhac.includes(t);
+    await chatPatchMeta(kit.platform, ev.chatId, tat ? { nudge_off: true } : { nudge_off: false, nudge_miss: 0 });
+    await io.sendText(
+      ev.chatId,
+      tat ? 'Đã tắt tin nhắc. Muốn bật lại thì nhắn "Bật nhắc" nhé.' : 'Đã bật lại tin nhắc — thỉnh thoảng thầy nhắn hỏi thăm bạn.',
+    );
+    return;
+  }
+  if (CMD.deSau.includes(t)) {
+    await io.sendText(ev.chatId, 'Ừ, lúc nào cần cứ nhắn thầy nhé.');
+    return;
+  }
 
   // ── Gộp tài khoản web ngay trong chat (email → mã 6 số) ──────────────
   if (GOP_CMD.includes(t)) return handleGop(kit, ev, userId);
@@ -285,11 +308,13 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   // như tool web tự lưu) ⇒ mở web là thấy ngay, không nhập lại.
   if (userId && outcome.lasoShown && outcome.birth) void saveChart(userId, '', outcome.birth);
 
-  await sendFollowUps(kit, ev, userId, outcome, cost, {
+  await sendFollowUps(kit, ev, userId, outcome, cost, meta, {
     cauHoi: askText,
     thayId: thay.id,
     daMoi: !!addressMaster || hoiChan,
-    soTin: session.messages.length + 2,
+    cauTruoc: session.messages
+      .filter((m) => m.role === 'user' && typeof m.content === 'string')
+      .map((m) => String(m.content)),
   });
 }
 
@@ -518,53 +543,109 @@ async function handleTopup(kit: ChannelKit, ev: ChannelEvent, userId: string | n
   await sendMenu(kit.io, ev.chatId, topupCaption(order), [{ title: 'Mở trang thanh toán', url: order.checkoutUrl }]);
 }
 
-// ── Nút gợi ý sau câu trả lời ──────────────────────────────────────────
+// ── Nút gợi ý sau câu trả lời (lib/channels/goi-y.ts) ────────────────
+// Thứ tự CỐ ĐỊNH: 1–3 câu hỏi liên quan → 1 tính năng → 1 sản phẩm (chỉ lúc nóng).
 async function sendFollowUps(
   kit: ChannelKit,
   ev: ChannelEvent,
   userId: string | null,
   outcome: NonNullable<Awaited<ReturnType<typeof runConversation>>>,
   cost: number,
-  luot: { cauHoi: string; thayId: string; daMoi: boolean; soTin: number },
+  meta: ChatMeta | null,
+  luot: { cauHoi: string; thayId: string; daMoi: boolean; cauTruoc: string[] },
 ): Promise<void> {
-  const links: ChatButton[] = [];
-  // Link sang web chỉ khi có tài khoản — đăng nhập sẵn + đúng lá số.
+  const gy = meta?.goiY || {};
+  const n = (gy.n || 0) + 1;
+
+  // Tầng 4 — tính năng. Thẻ công cụ model tự gợi ý (goi_y_cong_cu) thắng: nó
+  // đã đọc cả câu trả lời; không có thì chọn theo ngữ cảnh câu hỏi.
+  let tinhNang: ChatButton | null = null;
+  let tnId: string | undefined;
   if (userId && outcome.toolSuggest?.path) {
     const url = await createHandoffUrl(userId, outcome.toolSuggest.path, outcome.birth);
-    if (url) links.push({ title: outcome.toolSuggest.label, url });
+    if (url) {
+      tinhNang = { title: outcome.toolSuggest.label, url };
+      tnId = `cong-cu:${outcome.toolSuggest.toolId}`;
+    }
   }
-  // Bản luận giải đầy đủ (trang báo cáo trên web, trả bằng CÙNG ví): mời lúc
-  // vừa lập lá số, rồi nhắc lại mỗi ~3 lượt hỏi — không phải lượt nào cũng mời.
-  if (userId && outcome.birth && (outcome.lasoShown || luot.soTin % 6 === 0)) {
-    const url = await createHandoffUrl(userId, lasoPath(outcome.birth), outcome.birth);
-    if (url) links.push({ title: await nhanLuanGiai(), url });
+  if (!tinhNang) {
+    const tn = chonTinhNang({
+      cauHoi: luot.cauHoi,
+      thayId: luot.thayId,
+      birth: outcome.birth,
+      daMoi: luot.daMoi,
+      truoc: gy.tn,
+      bieuDo: bieuDoHop(luot.cauHoi, outcome.lasoShown),
+    });
+    if (tn && 'path' in tn.nut) {
+      const url = userId ? await createHandoffUrl(userId, tn.nut.path, outcome.birth) : `${SITE}${tn.nut.path}`;
+      if (url) tinhNang = { title: tn.nut.title, url };
+    } else if (tn && 'reply' in tn.nut) tinhNang = tn.nut;
+    if (tinhNang) tnId = tn?.id;
   }
-  // Mời thầy khác: thầy khách hợp câu hỏi (cùng luật web) + hội chẩn khi là
-  // quyết định lớn. Lượt vừa mời rồi thì thôi, chỉ để lối đổi thầy.
-  const moi: ChatButton[] = [];
-  if (outcome.birth && !luot.daMoi) {
-    const g = pickGuests(luot.cauHoi, luot.thayId, outcome.birth, 1)[0];
-    if (g) moi.push({ title: `Ý Thầy ${g.ten}`, reply: moiCau(g) });
-    if (hoiChanDuoc(luot.cauHoi, luot.thayId)) moi.push({ title: 'Mời 3 thầy hội chẩn', reply: 'Mời 3 thầy hội chẩn' });
+
+  // Tầng 5 — sản phẩm, chỉ ở thời điểm nóng (lyDoSanPham).
+  const dem = userId ? await demCau(userId, cost) : null;
+  let sanPham: ChatButton | null = null;
+  let lyDo: ReturnType<typeof lyDoSanPham> = null;
+  if (userId && outcome.birth) {
+    const chuDeGanDay = [...luot.cauTruoc.slice(-2), luot.cauHoi].map(chuDeCua);
+    lyDo = lyDoSanPham({
+      cauHoi: luot.cauHoi,
+      chuDeGanDay,
+      lasoShown: outcome.lasoShown,
+      conCau: dem ? dem.n : null,
+      luot: n,
+      spTruoc: gy.sp,
+    });
+    const sp = lyDo ? chonSanPham(sanPhamDanhMuc(lasoPath), chuDeGanDay[chuDeGanDay.length - 1] || []) : null;
+    const url = sp ? await createHandoffUrl(userId, sp.path(outcome.birth), outcome.birth) : null;
+    if (sp && url) sanPham = { title: await sp.nhan(), url };
+    else lyDo = null;
   }
-  if (!moi.length) moi.push({ title: 'Hỏi ý thầy khác', reply: 'Hỏi ý thầy khác' });
-  // Một biểu đồ hợp câu vừa hỏi (ảnh engine vẽ, không tính phí).
-  if (outcome.birth) {
-    const b = bieuDoHop(luot.cauHoi, outcome.lasoShown);
-    moi.push({ title: b.nut, reply: b.nut });
-  }
-  const room = Math.max(0, Math.min(kit.maxReplyButtons, 5) - links.length - moi.length);
+
+  const duoi = [tinhNang, sanPham].filter((b): b is ChatButton => !!b);
+  const room = Math.max(0, Math.min(kit.maxReplyButtons, 5) - duoi.length);
   const goiY: ChatButton[] = outcome.suggestions.slice(0, Math.min(room, 3)).map((q) => ({ title: q, reply: q }));
-  const head = outcome.toolSuggest?.lyDo || 'Bạn muốn hỏi tiếp gì?';
-  const con = userId ? await conCauHoi(userId, cost) : '';
-  await sendMenu(kit.io, ev.chatId, con ? `${head}\n\n${con}` : head, [...links, ...moi, ...goiY]);
+  const head = outcome.toolSuggest?.lyDo || (lyDo ? LOI_SAN_PHAM[lyDo] : 'Bạn muốn hỏi tiếp gì?');
+  const con = dem ? loiConCau(dem) : '';
+  await sendMenu(kit.io, ev.chatId, con ? `${head}\n\n${con}` : head, [...goiY, ...duoi]);
+
+  // Nhớ cho lượt sau: khoảng cách nút sản phẩm, nút tính năng vừa hiện, và các
+  // nút TRẢ LỜI vừa gửi (nút link không gửi chữ về nên không đếm được bấm).
+  const nut = [
+    ...outcome.suggestions.slice(0, goiY.length).map((q) => ({ t: norm(q), k: 'lien-quan' })),
+    ...(tinhNang && 'reply' in tinhNang ? [{ t: norm(tinhNang.reply), k: `tinh-nang:${tnId}` }] : []),
+  ];
+  void chatPatchMeta(kit.platform, ev.chatId, { goi_y: { n, sp: sanPham ? n : gy.sp, tn: tnId, nut } });
+  if (sanPham || tinhNang)
+    void chatLogEvent(kit.platform, ev.chatId, 'chat_goi_y', {
+      action: 'show',
+      tinh_nang: tnId || null,
+      san_pham: lyDo,
+    });
 }
 
-/** Nhãn nút bản luận giải đầy đủ — giá VNĐ là chính (luật "VNĐ là giá CHÍNH"),
- *  đọc từ `tool_pricing['laso']`; đọc hụt thì không ghi giá (không chép số). */
-async function nhanLuanGiai(): Promise<string> {
-  const [credits, rate] = await Promise.all([getToolPrice('laso'), vndPerCredit()]);
-  return credits && credits > 0 ? `Luận giải ${vnd(credits * rate)}` : 'Luận giải đầy đủ';
+/** Chủ đề của một câu hỏi — lỗi thì coi như không rõ chủ đề (không chặn lượt trả lời). */
+function chuDeCua(q: string): string[] {
+  try {
+    return cacChuDe(q);
+  } catch (e) {
+    console.error('[channel-router] cacChuDe lỗi', e);
+    return [];
+  }
+}
+
+/** Tin vừa tới là BẤM một nút gợi ý lượt trước? → ghi lượt bấm theo tầng. Và
+ *  khách trả lời trong 48h sau tin nhắc → xoá đếm "bị lờ" (lib/channels/nudge.ts). */
+async function ghiNhanTin(kit: ChannelKit, ev: ChannelEvent, meta: ChatMeta | null, t: string): Promise<void> {
+  if (!meta) return;
+  const bam = meta.goiY?.nut?.find((x) => x.t === t);
+  if (bam) await chatLogEvent(kit.platform, ev.chatId, 'chat_goi_y', { action: 'click', kind: bam.k });
+  if (meta.nudgedAt && meta.nudgeMiss > 0 && Date.now() - Date.parse(meta.nudgedAt) < 48 * 3600_000) {
+    await chatPatchMeta(kit.platform, ev.chatId, { nudge_miss: 0 });
+    await chatLogEvent(kit.platform, ev.chatId, 'chat_nudge', { action: 'reply' });
+  }
 }
 
 // ── Menu công cụ (nhóm + công cụ đọc từ DB, mở web đã đăng nhập) ────────
@@ -730,9 +811,18 @@ async function handleBieuDo(kit: ChannelKit, ev: ChannelEvent, b: (typeof BIEU_D
  * lượt vừa rồi đã chốt phí. Rỗng khi miễn phí (paywall tắt/giá 0).
  */
 async function conCauHoi(userId: string, cost: number): Promise<string> {
-  if (paywallDisabled() || cost <= 0) return '';
+  const d = await demCau(userId, cost);
+  return d ? loiConCau(d) : '';
+}
+
+/** Số câu hỏi còn lại; null khi miễn phí (paywall tắt/giá 0). */
+async function demCau(userId: string, cost: number): Promise<{ n: number; free: number } | null> {
+  if (paywallDisabled() || cost <= 0) return null;
   const [free, balance] = await Promise.all([railFreeRemaining(userId), getBalance(userId)]);
-  const n = free + Math.floor(balance / cost);
+  return { n: free + Math.floor(balance / cost), free };
+}
+
+function loiConCau({ n, free }: { n: number; free: number }): string {
   if (n <= 0) return `Bạn đã dùng hết câu hỏi — nhắn "Nạp Lượng" để nạp ngay tại đây.`;
   return `Còn ${n} câu hỏi${free > 0 ? ` (${free} lượt tặng)` : ''}.`;
 }
