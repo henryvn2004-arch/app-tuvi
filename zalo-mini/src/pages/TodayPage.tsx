@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Button, Spinner } from 'zmp-ui';
+import { Button, Spinner, useSnackbar } from 'zmp-ui';
 import { toBirthParams, type Chart } from '../lib/birth';
 import { loadMyChart } from '../lib/charts';
 import { fetchVanNgay, type VanNgay } from '../lib/van-ngay';
+import { shareApp } from '../lib/media';
 
 const TONE: Record<VanNgay['danhGia']['tinhChat'], string> = {
   tốt: 'good',
@@ -17,6 +18,7 @@ export default function TodayPage({
   onOpenCharts: () => void;
   onAsk: () => void;
 }) {
+  const { openSnackbar } = useSnackbar();
   const [mine, setMine] = useState<Chart | null>(null);
   const [data, setData] = useState<VanNgay | null>(null);
   const [error, setError] = useState('');
@@ -112,6 +114,17 @@ export default function TodayPage({
 
       <Button fullWidth onClick={onAsk}>
         Hỏi Thầy về hôm nay
+      </Button>
+      <Button
+        fullWidth
+        variant="secondary"
+        onClick={() =>
+          shareApp(`Ngày ${ngay.canChi} — ngày ${danhGia.tinhChat}`, danhGia.nhan)
+            .then((ok) => ok || openSnackbar({ text: 'Mở trong Zalo để chia sẻ', type: 'info' }))
+            .catch((e: Error) => openSnackbar({ text: e.message, type: 'error' }))
+        }
+      >
+        Chia sẻ cho bạn bè
       </Button>
     </div>
   );
