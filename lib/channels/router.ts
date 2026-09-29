@@ -30,13 +30,14 @@ import { chartImageUrl, type ChartKind } from '@/lib/og/laso-image';
 import type { BirthParams } from '@/lib/contract/v1';
 import { listPaidReports, paidReportPdf } from '@/lib/pdf/paid-reports';
 import { currentNamXem } from '@/lib/engine/namxem';
+import { computeLaso } from '@/lib/engine/laso';
 import { todayVN } from '@/lib/engine/van-ngay';
 import { claimLoginCode, parseLoginCode } from './login';
 import { GOP_CMD, isShadowUser, maskEmail, parseEmail, startEmailLink, verifyEmailLink, hasPendingEmailLink } from './email-link';
 import { TOPUP_CMD, createChatTopup, parseTopup, topupCaption, topupChoices, vietQrImageUrl } from './topup';
 import { GUESTS, detectMention, guestById, guestFromMoi, moiCau, type GuestId } from './guests';
 import { LOI_SAN_PHAM, chonSanPham, chonTinhNang, lyDoSanPham, nhanLuanGiai, nhanMon, sanPhamDanhMuc } from './goi-y';
-import { cacChuDe } from '@/lib/agent/luan-chu-de';
+import { cacChuDe, cungChuDe } from '@/lib/agent/luan-chu-de';
 import { toolCatalog } from './catalog';
 import { THAY_LIST, anhThay, chonThay, gioiThieuThay, thayCuaChat, timThay, type Thay } from './author';
 import { getRailPrice } from '@/lib/billing/pricing';
@@ -200,6 +201,8 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   const pdfSo = t.match(/^pdf (\d+)(:|$)/)?.[1];
   if (pdfSo) return handlePdf(kit, ev, userId, Number(pdfSo) - 1);
 
+  const cungLenh = cungTuLenh(t);
+  if (cungLenh || t === XEM_TUNG_CUNG.toLowerCase() || t === 'từng cung') return handleCung(kit, ev, cungLenh);
   const bieuDo = BIEU_DO.find((b) => b.cau.includes(t));
   if (bieuDo || CMD.bieuDo.includes(t)) return handleBieuDo(kit, ev, bieuDo ?? null);
 
@@ -783,9 +786,10 @@ const BIEU_DO: { kind: ChartKind; nut: string; cau: string[]; loi: string; thay?
 const veDuoc = (kind: ChartKind, birth: BirthParams) => kind !== 'than-so' || !!String(birth.name || '').trim();
 const THIEU_TEN = 'Thần số học tính từ HỌ TÊN khai sinh. Nhắn thầy họ tên đầy đủ nhé, rồi bấm lại "Thần số học".';
 
-/** Biểu đồ hợp câu vừa hỏi: vừa lập lá số → đường đời; hỏi về tháng/năm → 12
- *  tháng; về đời/tương lai → đường đời; còn lại → điểm mạnh yếu 12 cung. */
-function bieuDoHop(q: string, lasoShown: boolean) {
+/** Biểu đồ hợp câu vừa hỏi: vừa lập lá số → đường đời; hướng nhà → Bát Trạch;
+ *  Bát Tự → tứ trụ; đúng một chủ đề → ảnh cung đó; hỏi về tháng/năm → 12 tháng;
+ *  về đời/tương lai → đường đời; còn lại → điểm mạnh yếu 12 cung. */
+function bieuDoHop(q: string, lasoShown: boolean): { nut: string } {
   const t = norm(q);
   const by = (k: ChartKind) => BIEU_DO.find((b) => b.kind === k)!;
   // Vừa lập lá số: câu đó thường chứa ngày sinh ("… tháng 8 …") — đừng để chữ
@@ -793,9 +797,63 @@ function bieuDoHop(q: string, lasoShown: boolean) {
   if (lasoShown) return by('duong-doi');
   if (/(hướng nhà|hướng cửa|hướng bếp|hướng giường|hướng bàn|phong thủy|bát trạch)/.test(t)) return by('bat-trach');
   if (/(bát tự|tứ trụ|tử bình|nhật chủ|dụng thần)/.test(t)) return by('tu-tru');
+  // Câu hỏi đúng một chủ đề (tiền, tình duyên, công việc…) → ảnh chính cung đó.
+  const cung = cungChuDe(chuDeCua(q)[0] || null);
+  if (cung) return { nut: `Xem cung ${cung}` };
   if (/(tháng|năm nay|năm sau|năm tới|sắp tới|khi nào|bao giờ)/.test(t)) return by('van-12-thang');
   if (/(cuộc đời|tương lai|sau này|đại vận|về già|tuổi già|giai đoạn)/.test(t)) return by('duong-doi');
   return by('radar-cung');
+}
+
+// ── Ảnh MỘT cung (app/api/og/cung) — "Cung Tài Bạch" / "Xem cung Tài Bạch" ──
+const CUNG_TEN = ['Mệnh', 'Phụ Mẫu', 'Phúc Đức', 'Điền Trạch', 'Quan Lộc', 'Nô Bộc', 'Thiên Di', 'Tật Ách', 'Tài Bạch', 'Tử Tức', 'Phu Thê', 'Huynh Đệ'];
+/** "cung tài bạch" / "xem cung tài bạch" → "Tài Bạch"; không phải lệnh ảnh cung → null. */
+function cungTuLenh(t: string): string | null {
+  const m = t.match(/^(?:xem )?cung (.+)$/);
+  return (m && CUNG_TEN.find((c) => c.toLowerCase() === m[1].trim())) || null;
+}
+const XEM_TUNG_CUNG = 'Xem từng cung';
+
+async function handleCung(kit: ChannelKit, ev: ChannelEvent, cung: string | null): Promise<void> {
+  const session = await kit.store.load(ev.chatId);
+  if (!session.birth) {
+    await kit.io.sendText(ev.chatId, 'Cho thầy giới tính, ngày/tháng/năm sinh và giờ sinh trước đã, thầy lập lá số rồi vẽ từng cung cho bạn nhé.');
+    return;
+  }
+  const nut = (c: string) => ({ title: `Cung ${c}`, reply: `Xem cung ${c}` });
+  if (!cung) {
+    await sendMenu(
+      kit.io,
+      ev.chatId,
+      `Bạn muốn xem cung nào? Nhắn "Cung" + tên cung, ví dụ "Cung Tài Bạch".\n${CUNG_TEN.map((c) => `• ${c}`).join('\n')}`,
+      ['Mệnh', 'Quan Lộc', 'Tài Bạch', 'Phu Thê', 'Tật Ách'].slice(0, kit.maxReplyButtons).map(nut),
+    );
+    return;
+  }
+  const url = chartImageUrl('cung', session.birth, currentNamXem(), undefined, cung);
+  if (!url || !kit.io.sendImage) {
+    await kit.io.sendText(ev.chatId, ERR_MSG);
+    return;
+  }
+  try {
+    await kit.io.sendImage(ev.chatId, url);
+  } catch (e) {
+    console.error('[channel-router] gửi ảnh cung lỗi', kit.platform, cung, e);
+    await kit.io.sendText(ev.chatId, ERR_MSG);
+    return;
+  }
+  // Nút tiếp: hỏi thầy về chính cung này + ba cung tam phương tứ chính (đọc từ engine).
+  const r = computeLaso(session.birth, currentNamXem());
+  type P = { cungName: string; tamHopCungs?: { cungName: string }[]; xungChieuCung?: { cungName: string } | null };
+  const pal = ((r.ls?.palaces as P[] | undefined) || []).find((p) => p.cungName === cung);
+  const tp = pal ? [...(pal.tamHopCungs || []).map((p) => p.cungName), pal.xungChieuCung?.cungName || ''].filter(Boolean) : [];
+  const hoi = { title: 'Nhờ thầy luận cung này', reply: `Thầy luận kỹ giúp cung ${cung} của tôi` };
+  await sendMenu(
+    kit.io,
+    ev.chatId,
+    `Cung ${cung} của bạn — ô đỏ là cung này, ô vàng là tam phương tứ chính, mũi tên là Tứ Hóa Phi Tinh bay từ cung này đi. Lục giác bên phải là điểm 6 chiều của cung.`,
+    [hoi, ...tp.map(nut)].slice(0, kit.maxReplyButtons),
+  );
 }
 
 async function handleBieuDo(kit: ChannelKit, ev: ChannelEvent, b: (typeof BIEU_DO)[number] | null): Promise<void> {
@@ -812,7 +870,12 @@ async function handleBieuDo(kit: ChannelKit, ev: ChannelEvent, b: (typeof BIEU_D
   if (!b) {
     // Zalo chỉ 5 nút mà có tới 6 ảnh ⇒ liệt kê cả tên trong lời, gõ tên nào cũng nhận.
     const ds = BIEU_DO.filter((x) => veDuoc(x.kind, birth));
-    await sendMenu(kit.io, ev.chatId, `Bạn muốn xem ảnh nào?\n${ds.map((x) => `• ${x.nut}`).join('\n')}`, khac());
+    await sendMenu(
+      kit.io,
+      ev.chatId,
+      `Bạn muốn xem ảnh nào?\n${[...ds.map((x) => x.nut), `${XEM_TUNG_CUNG} (vd "Cung Tài Bạch")`].map((x) => `• ${x}`).join('\n')}`,
+      khac(),
+    );
     return;
   }
   if (!veDuoc(b.kind, birth)) {
