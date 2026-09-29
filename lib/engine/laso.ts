@@ -94,6 +94,7 @@ let engineCache: {
   buildDaiVanLines: (...a: unknown[]) => unknown;
   canCungOf: (canNam: string, diaChi: string) => string;
   STAR_DATA: Record<string, { type?: string; element?: string }>;
+  TU_HOA: Record<string, Record<string, string>>;
   Pchip: { pchipSeries: (pts: { x: number; y: number }[], opts?: { step?: number }) => { x: number; y: number }[] } | undefined;
 } | null = null;
 
@@ -115,7 +116,7 @@ function loadEngine() {
     'window',
     'globalThis',
     pchipCode + '\n' + code + '\n' + formatCode +
-      '\nreturn{convertDuongToAm,solarToLunar,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines,canCungOf:window.canCungOf,STAR_DATA,Pchip:window.Pchip};',
+      '\nreturn{convertDuongToAm,solarToLunar,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines,canCungOf:window.canCungOf,STAR_DATA,TU_HOA,Pchip:window.Pchip};',
   ))(g, g) as typeof engineCache;
   return engineCache!;
 }
@@ -124,6 +125,32 @@ function loadEngine() {
  *  `canCungOf` của public/tuvi-laso-format.js. '' khi đầu vào không hợp lệ. */
 export function canCung(canNam: string, diaChi: string): string {
   return loadEngine().canCungOf(canNam, diaChi) || '';
+}
+
+/**
+ * Tứ Hóa Phi Tinh tầng MỆNH BÀN của một cung: can của CHÍNH cung đó → 4 sao
+ * Lộc/Quyền/Khoa/Kỵ (bảng `TU_HOA` của engine) → cung đang chứa từng sao.
+ * CÙNG cơ chế `buildTuHoaPhiTinhHtml` (public/luan-giai-core.js) và
+ * `_tuHoaPhiTinh` (public/tuvi-laso-format.js) — đổi công thức nơi nào thì đổi
+ * cả ba. `null` khi không tra được can cung.
+ */
+export function tuHoaPhiTinh(
+  ls: Laso,
+  cungName: string,
+): { can: string; rows: { hoa: string; star: string; cung: string; diaChi: string; self: boolean }[] } | null {
+  type P = { cungName: string; diaChi: string; stars?: { ten?: string }[] };
+  const palaces = ((ls as Rec).palaces as P[]) || [];
+  const pal = palaces.find((p) => p.cungName === cungName);
+  if (!pal) return null;
+  const can = canCung(String((ls as Rec).canChiNam || '').split(' ')[0], pal.diaChi);
+  const hosts = can ? loadEngine().TU_HOA[can] : null;
+  if (!hosts) return null;
+  const rows = ['Lộc', 'Quyền', 'Khoa', 'Kỵ'].flatMap((hoa) => {
+    const star = hosts[hoa];
+    const t = star ? palaces.find((p) => (p.stars || []).some((x) => x.ten === star)) : undefined;
+    return star && t ? [{ hoa, star, cung: t.cungName, diaChi: t.diaChi, self: t.cungName === cungName }] : [];
+  });
+  return { can, rows };
 }
 
 /** Đường điểm theo NĂM nội suy pchip từ các mốc (x=tuổi, y=điểm) — CÙNG

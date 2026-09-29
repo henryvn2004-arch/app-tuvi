@@ -26,6 +26,14 @@ export const C = {
   curVan: '#FFF4D9',
 };
 
+/** Vị trí [hàng, cột] của từng địa chi (0=Tý…11=Hợi) trên lưới lá số 4×4 — Tý hàng dưới, cột 3. */
+export const LUOI_CHI: Record<number, [number, number]> = {
+  5: [0, 0], 6: [0, 1], 7: [0, 2], 8: [0, 3],
+  4: [1, 0], 9: [1, 3],
+  3: [2, 0], 10: [2, 3],
+  2: [3, 0], 1: [3, 1], 0: [3, 2], 11: [3, 3],
+};
+
 /** Màu ngũ hành — cùng bảng lá số Tử Vi (laso-chart.css, ảnh la-so-anh). */
 export const HANH_COLOR: Record<string, string> = {
   Kim: '#7F8C8D',

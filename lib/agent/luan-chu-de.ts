@@ -1008,6 +1008,11 @@ export function nghiaChuDe(id: string | null): string | null {
   return (id && CHU_DE[id]?.nghia) || null;
 }
 
+/** Cung chính của một chủ đề ("tai-chinh" → "Tài Bạch") — kênh chat gợi ảnh đúng cung. */
+export function cungChuDe(id: string | null): string | null {
+  return (id && CHU_DE[id]?.cung) || null;
+}
+
 export function cacChuDe(question: string): string[] {
   const hit = primaryPalacesStrict(question);
   let ds = Object.values(CHU_DE).filter((cd) => hit.has(cd.cung));
