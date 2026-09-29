@@ -17,6 +17,7 @@ const nguoiSchema = z.object({
   gio_sinh: z.union([z.number(), z.string()]).describe('Giờ sinh: số 0–23 hoặc tên giờ chi'),
   gioi_tinh: z.enum(['nam', 'nu']),
   am_lich: z.boolean().optional(),
+  thang_nhuan: z.boolean().optional().describe('true nếu am_lich=true VÀ người dùng nói rõ sinh tháng NHUẬN (vd "tháng 4 nhuận"). Không nói nhuận thì bỏ trống.'),
 });
 
 const schema = {
@@ -70,7 +71,7 @@ function buildBirth(p: Rec): BirthParams | { error: string } {
   if (!ngay) return { error: 'ngay_duong phải theo định dạng YYYY-MM-DD.' };
   const hb = parseGioSinh(p.gio_sinh as number | string);
   if (hb < 0) return { error: 'gio_sinh không hợp lệ (0–23 hoặc tên giờ chi).' };
-  return { day: ngay.day, month: ngay.month, year: ngay.year, hourBranch: hb, gender: p.gioi_tinh === 'nu' ? 'nu' : 'nam', isLunar: !!p.am_lich };
+  return { day: ngay.day, month: ngay.month, year: ngay.year, hourBranch: hb, gender: p.gioi_tinh === 'nu' ? 'nu' : 'nam', isLunar: !!p.am_lich, ...(p.am_lich === true && p.thang_nhuan === true ? { isLeapMonth: true } : {}) };
 }
 
 export const tuongHopTool: McpTool = {

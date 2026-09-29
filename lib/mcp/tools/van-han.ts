@@ -36,6 +36,7 @@ const schema = {
   gio_sinh: z.union([z.number(), z.string()]).describe('Giờ sinh: số 0–23 hoặc tên giờ chi'),
   gioi_tinh: z.enum(['nam', 'nu']),
   am_lich: z.boolean().optional().describe('true nếu ngay_duong là ngày ÂM lịch'),
+  thang_nhuan: z.boolean().optional().describe('true nếu am_lich=true VÀ người dùng nói rõ sinh tháng NHUẬN (vd "tháng 4 nhuận"). Không nói nhuận thì bỏ trống.'),
   nam_xem: z.number().int().min(1930).max(2200).describe('Năm dương lịch muốn xem vận hạn, ví dụ 2026'),
   thang: z.number().int().min(1).max(12).optional().describe('(Tùy chọn) Tháng dương lịch 1–12 → trả thêm hạn THÁNG (nguyệt hạn)'),
   ngay: z.number().int().min(1).max(31).optional().describe('(Tùy chọn) Ngày dương lịch 1–31 (cần kèm thang) → trả thêm hạn NGÀY (nhật hạn)'),
@@ -107,6 +108,7 @@ export const vanHanTool: McpTool = {
     const birth: BirthParams = {
       day: ngay.day, month: ngay.month, year: ngay.year,
       hourBranch, gender, isLunar: !!args.am_lich,
+      ...(args.am_lich && args.thang_nhuan === true ? { isLeapMonth: true } : {}),
     };
     const r = computeLaso(birth, nam);
     if (!r.ok || !r.ls) return { error: r.error || 'Không lập được lá số.' };
@@ -212,7 +214,7 @@ export const vanHanTool: McpTool = {
     }
 
     return {
-      input: { ngay_duong: args.ngay_duong, gioi_tinh: gender, am_lich: !!args.am_lich, nam_xem: nam, thang: thangNum ?? undefined, ngay: ngayNum ?? undefined },
+      input: { ngay_duong: args.ngay_duong, gioi_tinh: gender, am_lich: !!args.am_lich, thang_nhuan: !!args.am_lich && args.thang_nhuan === true, nam_xem: nam, thang: thangNum ?? undefined, ngay: ngayNum ?? undefined },
       tuoi_mu: ls.tuoiXem ?? (nam - ngay.year + 1),
       can_chi_nam_xem: `${canNamXem} ${chiNamXem}`,
       luu_thai_tue: thaiTuePalace
