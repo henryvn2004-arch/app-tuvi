@@ -151,10 +151,10 @@ if (!/const dl = solarDateOf\(birth\)/.test(tubinh) || !/ngayDL: day,/.test(tubi
   fail(
     'lib/engine/tubinh.ts: computeTuBinh không còn đổi ngày qua solarDateOf(birth) trước tinhBatTu'
   );
-const reg = readFileSync(join(ROOT, 'lib/tools/registry.ts'), 'utf-8');
-const namAm = reg.match(/function namAm\([\s\S]*?\n}/);
+const laso = readFileSync(join(ROOT, 'lib/engine/laso.ts'), 'utf-8');
+const namAm = laso.match(/export function namAm\([\s\S]*?\n}/);
 if (!namAm || !/lunarToSolar\(b\.day, b\.month, b\.year\)/.test(namAm[0]))
-  fail('lib/tools/registry.ts: namAm() nhánh isLunar không còn đổi âm→dương trước lunarOf');
+  fail('lib/engine/laso.ts: namAm() nhánh isLunar không còn đổi âm→dương trước lunarOf');
 
 if (bad) {
   console.error(`\ncheck-am-duong: ${bad} lỗi`);

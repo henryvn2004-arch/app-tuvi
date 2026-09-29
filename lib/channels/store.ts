@@ -88,6 +88,92 @@ export async function chatSetAuthor(platform: string, chatId: number | string, a
   }
 }
 
+// ── Nút gợi ý + tin nhắc (goi_y · nudged_at · nudge_miss · nudge_off) ──
+// _patches/migration-chat-nudge.sql. Tách khỏi chatLoadSession vì cùng lý do
+// author_id: chưa chạy migration thì chỉ mất phần nhớ này (null), không mất phiên.
+export interface GoiYState {
+  /** Đếm lượt hỏi của phiên (không bị cắt như `messages`, giữ 12 tin). */
+  n?: number;
+  /** `n` của lượt gần nhất có nút sản phẩm. */
+  sp?: number;
+  /** id nút tính năng lượt trước (không lặp hai lượt liền). */
+  tn?: string;
+  /** Nút vừa gửi: nhãn/câu trả lời + loại tầng — để nhận ra lượt sau là BẤM nút. */
+  nut?: { t: string; k: string }[];
+}
+export interface ChatMeta {
+  goiY: GoiYState | null;
+  nudgedAt: string | null;
+  nudgeMiss: number;
+  nudgeOff: boolean;
+}
+
+export async function chatLoadMeta(platform: string, chatId: number | string): Promise<ChatMeta | null> {
+  if (!ready()) return null;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/chat_sessions?platform=eq.${encodeURIComponent(platform)}&chat_id=eq.${encodeURIComponent(String(chatId))}&select=goi_y,nudged_at,nudge_miss,nudge_off&limit=1`,
+      { cache: 'no-store', headers: SB_HEADERS },
+    );
+    if (!res.ok) return null;
+    const r = ((await res.json()) as { goi_y?: GoiYState | null; nudged_at?: string | null; nudge_miss?: number; nudge_off?: boolean }[])[0];
+    if (!r) return { goiY: null, nudgedAt: null, nudgeMiss: 0, nudgeOff: false };
+    return { goiY: r.goi_y ?? null, nudgedAt: r.nudged_at ?? null, nudgeMiss: r.nudge_miss ?? 0, nudgeOff: !!r.nudge_off };
+  } catch {
+    return null;
+  }
+}
+
+/** Sửa vài cột của dòng phiên đã có. KHÔNG đụng `updated_at` — cột đó là "lần cuối KHÁCH nhắn", cron nhắc đọc nó. */
+export async function chatPatchMeta(
+  platform: string,
+  chatId: number | string,
+  patch: { goi_y?: GoiYState; nudged_at?: string; nudge_miss?: number; nudge_off?: boolean },
+): Promise<boolean> {
+  if (!ready()) return false;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/chat_sessions?platform=eq.${encodeURIComponent(platform)}&chat_id=eq.${encodeURIComponent(String(chatId))}`,
+      { method: 'PATCH', headers: { ...SB_HEADERS, Prefer: 'return=minimal' }, body: JSON.stringify(patch) },
+    );
+    if (!res.ok) console.error('[chatPatchMeta] lỗi', res.status, await res.text().catch(() => ''));
+    return res.ok;
+  } catch (e) {
+    console.error('[chatPatchMeta] lỗi mạng', e);
+    return false;
+  }
+}
+
+export interface NudgeRow {
+  chat_id: string;
+  updated_at: string;
+  birth: BirthParams | null;
+  messages: ChatMessage[] | null;
+  author_id: string | null;
+  nudged_at: string | null;
+  nudge_miss: number;
+}
+
+/** Phiên có lượt khách cuối nằm trong [from, to], chưa tắt nhắc, chưa bị lờ 2 lần.
+ *  null = truy vấn lỗi (vd chưa chạy migration) — caller KHÔNG gửi gì. */
+export async function chatNudgeCandidates(platform: string, fromIso: string, toIso: string): Promise<NudgeRow[] | null> {
+  if (!ready()) return null;
+  try {
+    const q =
+      `platform=eq.${encodeURIComponent(platform)}&updated_at=gte.${encodeURIComponent(fromIso)}&updated_at=lte.${encodeURIComponent(toIso)}` +
+      `&nudge_off=is.false&nudge_miss=lt.2&select=chat_id,updated_at,birth,messages,author_id,nudged_at,nudge_miss&order=updated_at.asc&limit=200`;
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/chat_sessions?${q}`, { cache: 'no-store', headers: SB_HEADERS });
+    if (!res.ok) {
+      console.error('[chatNudgeCandidates] lỗi', platform, res.status, await res.text().catch(() => ''));
+      return null;
+    }
+    return (await res.json()) as NudgeRow[];
+  } catch (e) {
+    console.error('[chatNudgeCandidates] lỗi mạng', platform, e);
+    return null;
+  }
+}
+
 export async function chatSaveSession(
   platform: string,
   chatId: number | string,
@@ -413,5 +499,26 @@ export async function chatLogOutcome(
     });
   } catch {
     /* best-effort */
+  }
+}
+
+/** Ghi một sự kiện kênh chat vào `events` (nút gợi ý hiện/bấm, tin nhắc gửi/được
+ *  trả lời…). Best-effort, KHÔNG throw — không được chặn lượt trả lời. */
+export async function chatLogEvent(
+  platform: string,
+  chatId: number | string,
+  eventType: string,
+  meta: Record<string, unknown>,
+): Promise<void> {
+  if (!ready()) return;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/events`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, Prefer: 'return=minimal' },
+      body: JSON.stringify({ event_type: eventType, platform, session_id: `${platform}-${chatId}`, meta }),
+    });
+    if (!res.ok) console.error('[chatLogEvent] lỗi', eventType, res.status);
+  } catch (e) {
+    console.error('[chatLogEvent] lỗi mạng', eventType, e);
   }
 }

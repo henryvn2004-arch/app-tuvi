@@ -222,6 +222,23 @@ export function solarDateOf(birth: BirthParams): { day: number; month: number; y
   return birth.isLunar ? lunarToSolar(day, month, year) : { day, month, year };
 }
 
+/** Năm âm lịch + chi năm của một ngày sinh dương. Sinh tháng 1–2 dương mà âm
+ *  lịch còn tháng 11–12 thì thuộc năm âm TRƯỚC — xông đất, cung mệnh Bát Trạch
+ *  tính theo năm âm. */
+export function namAm(b: BirthParams): { nam: number; chi: string } | null {
+  if (!b.day || !b.month || !b.year) return null;
+  if (b.isLunar) {
+    // Ngày ÂM không được đưa thẳng vào `lunarOf` (hàm nhận ngày DƯƠNG) — đổi
+    // sang dương trước, không thì sinh đầu năm âm ra chi năm của năm trước.
+    const dl = lunarToSolar(b.day, b.month, b.year);
+    const l = dl ? lunarOf(dl.day, dl.month, dl.year) : null;
+    return l ? { nam: b.year, chi: l.chiNam } : null;
+  }
+  const l = lunarOf(b.day, b.month, b.year);
+  if (!l) return null;
+  return { nam: l.thangAL > b.month + 1 ? b.year - 1 : b.year, chi: l.chiNam };
+}
+
 export type Laso = Rec;
 
 export interface ComputeLasoResult {
