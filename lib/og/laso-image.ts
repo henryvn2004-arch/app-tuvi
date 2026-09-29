@@ -82,8 +82,8 @@ export function chartImageUrl(
 ): string | null {
   const q = secret() ? birthQuery(b, namXem) : null;
   if (!q) return null;
-  // Thần số học cần họ tên + ngày DƯƠNG (engine Pythagoras) — thiếu thì không tạo link hỏng.
-  if (kind === 'than-so' && (b!.isLunar || !q.get('n'))) return null;
+  // Thần số học cần họ tên (route tự đổi ngày âm sang dương) — thiếu thì không tạo link hỏng.
+  if (kind === 'than-so' && !q.get('n')) return null;
   if (homNay) q.set('td', `${homNay.d}-${homNay.m}-${homNay.y}`);
   q.set('s', sign(kind, q));
   return `${BASE}${kind}?${q.toString()}`;

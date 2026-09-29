@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-485 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+486 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 320 | 1,166,559 B |
+| `2026-09.md` | 321 | 1,167,993 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -26,6 +26,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 📱 Zalo Mini App bước 2: vỏ `zalo-mini/` — Hôm nay · Hỏi Thầy · Sổ lá số |
+| 1 | 2026-09 | `2026-09.md` | 🌙 Kênh chat: người nhập ngày ÂM — ảnh lá số đủ can chi, Thần số học chạy được, link web đúng người |
 | 1 | 2026-09 | `2026-09.md` | 🀄 Bát Tự sai cho người nhập âm lịch — thêm cửa âm → dương duy nhất |
 | 1 | 2026-09 | `2026-09.md` | 🔘 Kênh chat: nút gợi ý 3 tầng + tin nhắc chủ động |
 | 1 | 2026-09 | `2026-09.md` | 📱 Zalo Mini App bước 1: đăng nhập → phiên Supabase · vá cửa ví `/api/payment` |

@@ -24,6 +24,7 @@
 import { randomBytes } from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 import type { BirthParams } from '@/lib/contract/v1';
+import { solarDateOf } from '@/lib/engine/laso';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -44,11 +45,13 @@ export function safeNext(p: unknown): string {
 
 /**
  * Lá số của kênh chat (BirthParams) → shape `app_birth` của web (TuviForm).
- * Âm lịch → null: web đọc app_birth như ngày DƯƠNG, truyền vào là lập nhầm.
+ * Web đọc app_birth như ngày DƯƠNG ⇒ âm lịch đổi sang dương trước (`solarDateOf`);
+ * không đổi được (ngày âm không tồn tại / ngoài 1900–2100) → null.
  */
 export function birthToWeb(b: BirthParams | null | undefined): Record<string, unknown> | null {
-  if (!b || b.isLunar || !b.day || !b.month || !b.year) return null;
-  const o: Record<string, unknown> = { ngay: b.day, thang: b.month, nam: b.year, gioitinh: b.gender === 'nu' ? 'nu' : 'nam' };
+  const dl = b ? solarDateOf(b) : null;
+  if (!b || !dl) return null;
+  const o: Record<string, unknown> = { ngay: dl.day, thang: dl.month, nam: dl.year, gioitinh: b.gender === 'nu' ? 'nu' : 'nam' };
   if (b.hourBranch != null && b.hourBranch >= 0) o.gioIdx = b.hourBranch;
   if (b.name) o.hoten = b.name;
   return o;
@@ -56,11 +59,12 @@ export function birthToWeb(b: BirthParams | null | undefined): Record<string, un
 
 /** Trang lá số/luận giải đúng người — cùng tham số `luanGiaiHref()` của shell.js. */
 export function lasoPath(b: BirthParams | null | undefined): string {
-  if (!b || b.isLunar || !b.day || !b.month || !b.year) return '/app/luan-giai';
+  const dl = b ? solarDateOf(b) : null;
+  if (!b || !dl) return '/app/luan-giai';
   const q = new URLSearchParams({
-    ngay: String(b.day),
-    thang: String(b.month),
-    nam: String(b.year),
+    ngay: String(dl.day),
+    thang: String(dl.month),
+    nam: String(dl.year),
     gioitinh: b.gender === 'nu' ? 'nu' : 'nam',
   });
   if (b.hourBranch != null && b.hourBranch >= 0) q.set('gio', String(b.hourBranch * 2));

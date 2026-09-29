@@ -33,7 +33,7 @@ export const GUESTS: Guest[] = [
     can: (b) => b.gender === 'nam' || b.gender === 'nu' },
   { id: 'thanh-hu', ten: 'Thanh Hư', mon: 'Thần số học',
     kw: ['con số', 'số điện thoại', 'biển số', 'số nhà', 'số may mắn', 'thần số', 'năm cá nhân', 'số đẹp'],
-    can: (b) => !!String(b.name || '').trim() && !b.isLunar },
+    can: (b) => !!String(b.name || '').trim() },
   { id: 'tam-kinh', ten: 'Tâm Kính', mon: 'Bát Tự, Kỳ Môn', macDinh: true,
     kw: ['năm nay', 'năm sau', 'năm tới', 'vận năm', 'xuất hành', 'giờ nào', 'bát tự', 'tứ trụ'] },
   { id: 'linh-co', ten: 'Linh Cơ', mon: 'Lục Nhâm', macDinh: true,
