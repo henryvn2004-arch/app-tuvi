@@ -120,14 +120,14 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 (tường trả phí) · `tool-prices.js` (giá) · `poster.js` (ảnh 9:16 + QR) ·
 `nav.js` (icon dùng chung) · `track.js` (đo) · `referral.js`.
 
-### 48 bộ dò (chạy trong CI lint) — `npm run check:*`
+### 49 bộ dò (chạy trong CI lint) — `npm run check:*`
 `prices` `nostore` `groups` `viec` `share` `history` `shellboot` `introcard` `navph`
 `formph` `formblock` `font`
 `authapi` `giosinh` `keyframes` `hoatdong` `hexagrams` `laso` `railfields`
 `railwrap` `cacheshape` `hao` `motifs` `illus` `terms` `publish` `thuvien` `jobs` `token`
 `prompt` `topics` `batrach` `sodep` `lunar` `vntz` `tooltip` `cns` `celebanh`
 `nguoithan` `nhatky` `slug` `lasogolden` `refbenchmarks` `lavong` `hooktag`
-`webdriver` `payossig` `amduong`.
+`webdriver` `payossig` `amduong` `saoluu`.
 **Bộ dò kêu oan là bộ dò bị tắt đi** — thà thu hẹp còn hơn để nó báo bừa.
 
 ## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
@@ -237,6 +237,8 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   **Bản vanilla BỎ cờ `isLeap`** — nợ CỐ Ý, đừng sửa mò.
 - **Khoá "cùng lá số" là ÂM LỊCH + giới tính, không phải ngày dương** (lá số lặp
   chu kỳ **60 năm**). ⚠️ `lasoKey()` băm ngày DƯƠNG — không tái dùng để gom lá số.
+- **Sao lưu năm (`anSaoLuuNam`) theo Thái Thứ Lang: gắn `luuStars` RIÊNG, cấm trộn vào `stars`**
+  (đổi cả chấm điểm/cách cục gốc). Lưu Kình/Đà cố định ±1 — KHÁC Kình/Đà gốc, đừng đồng bộ. `check:saoluu`.
 - **Bảng ĐỐI XỨNG tự kiểm được, không cần nguồn ngoài** (A nhìn B = B nhìn A).
   `BatTrachTool` (`tools-shared/bat-trach.js`) là nguồn DUY NHẤT; 3 bản chép tay cũ
   đều sai 12-15/64 ô. `npm run check:batrach`.
