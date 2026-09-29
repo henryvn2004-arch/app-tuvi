@@ -1,0 +1,232 @@
+:root {
+  --tv-navy: #0f2a3d;
+  --tv-gold: #c8a96a;
+  --tv-gold-lt: #f9f4eb;
+  --tv-red: #c46a5e;
+  --tv-green: #7fa7a3;
+  --tv-ink: #1a1a1a;
+  --tv-ink-lt: #666666;
+  --tv-line: #e6e3dc;
+  --tv-paper: #fbfaf7;
+  /* Màu chính của zmp-ui (nút, tab đang chọn) → navy thương hiệu (DESIGN.md). */
+  --zaui-light-color-primary: var(--tv-navy);
+  --zaui-light-bottom-navigation-active-color: var(--tv-navy);
+  --zaui-light-button-secondary-background: var(--tv-gold-lt);
+  --zaui-light-button-secondary-text: var(--tv-navy);
+  --zaui-light-button-tertiary-text: var(--tv-navy);
+}
+
+body {
+  background: var(--tv-paper);
+  color: var(--tv-ink);
+}
+
+.tv-main {
+  min-height: 100vh;
+  padding-bottom: calc(72px + env(safe-area-inset-bottom));
+}
+
+.tv-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.tv-center {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0;
+}
+
+.tv-card {
+  background: #fff;
+  border: 1px solid var(--tv-line);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.tv-card h1 {
+  margin: 4px 0 8px;
+  font-size: 22px;
+  color: var(--tv-navy);
+}
+
+.tv-card h2 {
+  margin: 8px 0 4px;
+  font-size: 15px;
+  color: var(--tv-navy);
+}
+
+.tv-card p,
+.tv-card ul {
+  margin: 4px 0;
+  line-height: 1.5;
+}
+
+.tv-card ul {
+  padding-left: 20px;
+}
+
+.tv-hero {
+  background: var(--tv-navy);
+  color: #fff;
+  border: 0;
+}
+
+.tv-hero h1 {
+  color: var(--tv-gold);
+}
+
+.tv-hero .tv-muted {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.tv-muted {
+  color: var(--tv-ink-lt);
+  font-size: 13px;
+}
+
+.tv-warn {
+  color: var(--tv-red);
+}
+
+.tv-empty {
+  color: var(--tv-ink-lt);
+  text-align: center;
+  padding: 16px;
+}
+
+.tv-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tv-hero .tv-badge {
+  margin-left: 0;
+}
+
+.tv-good {
+  background: #e3efec;
+  color: #2f5e58;
+}
+
+.tv-bad {
+  background: #f6e3df;
+  color: #8a3b30;
+}
+
+.tv-mid {
+  background: var(--tv-gold-lt);
+  color: #7c6942;
+}
+
+.tv-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--tv-gold-lt);
+}
+
+.tv-cta p {
+  flex: 1;
+}
+
+.tv-cta button {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.tv-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.tv-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tv-subject {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tv-chat {
+  padding-bottom: 80px;
+}
+
+.tv-msg {
+  max-width: 88%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.tv-msg p {
+  margin: 0 0 8px;
+  white-space: normal;
+}
+
+.tv-msg p:last-child {
+  margin-bottom: 0;
+}
+
+.tv-user {
+  align-self: flex-end;
+  background: var(--tv-navy);
+  color: #fff;
+}
+
+.tv-assistant {
+  align-self: flex-start;
+  background: #fff;
+  border: 1px solid var(--tv-line);
+}
+
+.tv-msg-error {
+  border-color: var(--tv-red);
+  color: var(--tv-red);
+}
+
+.tv-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tv-chip {
+  border: 1px solid var(--tv-gold);
+  background: var(--tv-gold-lt);
+  color: var(--tv-navy);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.tv-composer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(56px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 16px;
+  background: var(--tv-paper);
+  border-top: 1px solid var(--tv-line);
+}
+
+.tv-composer .zaui-input-wrapper {
+  flex: 1;
+}
