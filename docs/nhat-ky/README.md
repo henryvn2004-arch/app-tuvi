@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-481 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+482 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 316 | 1,156,125 B |
+| `2026-09.md` | 317 | 1,158,690 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 📱 Zalo Mini App bước 1: đăng nhập → phiên Supabase · vá cửa ví `/api/payment` |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Kênh chat: ảnh Tứ Trụ · Thần số học · Bát Trạch · Lục Nhâm · Kỳ Môn khi thầy khách vào xem |
 | 1 | 2026-09 | `2026-09.md` | 🎭 Giọng thầy: chiêu riêng thành điểm nhấn, không còn ở MỌI lượt |
 | 1 | 2026-09 | `2026-09.md` | 🔗 Kênh chat: gộp tài khoản web ngay trong chat bằng email + mã 6 số |

@@ -1177,7 +1177,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     if (btn) { btn.disabled = true; btn.textContent = 'Đang mở MoMo…'; }
     try {
       const r = await fetch('/api/payment?action=create-momo', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (await _freshToken()) },
         body: JSON.stringify({ packageId: 'custom', userId, customAmountVnd: amountVnd }),
       });
       const d = await r.json();
@@ -1217,7 +1217,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 
     try {
       const r = await fetch('/api/payment?action=create-bank', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (await _freshToken()) },
         body: JSON.stringify({ packageId: 'custom', userId, customAmountVnd: amountVnd }),
       });
       const d = await r.json();
@@ -1539,7 +1539,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       // 4. Balance check
       let balance = 0;
       try {
-        const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId));
+        const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId),
+          { headers: { Authorization: 'Bearer ' + (await _freshToken()) } });
         const d = await r.json();
         balance = d.balance ?? 0;
       } catch(e) {}
@@ -1727,7 +1728,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // ── Silent flow (cho chat: trừ ngầm, KHÔNG confirm modal) ─────
   async function _balanceFor(userId) {
     try {
-      const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId));
+      const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId),
+        { headers: { Authorization: 'Bearer ' + (await _freshToken()) } });
       return (await r.json()).balance ?? 0;
     } catch (e) { return 0; }
   }
