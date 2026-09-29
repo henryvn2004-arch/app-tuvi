@@ -1,19 +1,18 @@
 // lib/channels/goi-y.ts
 // ============================================================
-// NÚT GỢI Ý SAU MỖI CÂU TRẢ LỜI — ba tầng, xếp CỐ ĐỊNH (Henry 2026-09-29):
+// GỢI Ý SAU CÂU TRẢ LỜI — THƯA, không phải mỗi lượt (Henry 2026-09-29):
 //
-//   1–3. CÂU HỎI LIÊN QUAN (model sinh) — luôn có, đứng TRÊN CÙNG. Đây là thứ
-//        khách bấm nhiều nhất; bản cũ đẩy nó xuống dưới "Ý Thầy …".
-//   4.   TÍNH NĂNG — tối đa MỘT, chọn theo ngữ cảnh câu vừa hỏi. Nhãn là TÊN
-//        MÔN / TÊN VIỆC ("Đối chiếu bằng Tử Bình Bát Tự"), KHÔNG tên thầy — khách
-//        không biết "Thầy Tâm Kính" xem môn gì. Không lặp một nút hai lượt liền.
-//   5.   SẢN PHẨM — tối đa MỘT, chỉ ở THỜI ĐIỂM NÓNG (vừa lập lá số · khách khen ·
-//        hỏi sâu 3 lượt liền một chủ đề · sắp hết lượt), cách nhau ≥ `KHOANG_SP`
-//        lượt, KHÔNG BAO GIỜ khi khách đang đau/bế tắc (bán hàng đúng lúc người ta
-//        khóc là mất khách vĩnh viễn).
+//   Cuối câu trả lời thầy đã tự hỏi lại, nên KHÔNG còn chip câu hỏi liên quan
+//   mỗi lượt (làm tin loãng).
+//   • SẢN PHẨM — CHỈ ở hai lúc: vừa an xong lá số (bản luận giải) · khách vừa
+//     chọn kiểm chứng bằng môn khác (bản đầy đủ môn đó). Không khi khách đang
+//     đau/bế tắc (bán hàng đúng lúc người ta khóc là mất khách vĩnh viễn).
+//   • TÍNH NĂNG — cách nhau ≥ `KHOANG_GOI_Y` lượt, MỘT nút hợp ngữ cảnh. Nhãn là
+//     TÊN MÔN / TÊN VIỆC ("Đối chiếu bằng Tử Bình Bát Tự"), KHÔNG tên thầy —
+//     khách không biết "Thầy Tâm Kính" xem môn gì. Không lặp nút lần trước.
 //
 // Hàm ở đây THUẦN (không gọi mạng) trừ nhãn giá — router lo tài khoản/URL.
-// Thêm sản phẩm mới (báo cáo khác, affiliate) = thêm một dòng `SAN_PHAM`.
+// Thêm bản đầy đủ cho một môn = thêm một dòng `SAN_PHAM_MON`.
 // ============================================================
 
 import type { BirthParams } from '@/lib/contract/v1';
@@ -23,8 +22,8 @@ import { getToolPrice } from '@/lib/billing/pricing';
 import { vndPerCredit } from '@/lib/billing/packages';
 import { hoiChanDuoc, moiCau, pickGuests, type GuestId } from './guests';
 
-/** Số LƯỢT hỏi (không phải số tin) tối thiểu giữa hai lần hiện nút sản phẩm. */
-export const KHOANG_SP = 4;
+/** Số LƯỢT hỏi (không phải số tin) tối thiểu giữa hai lần mời tính năng. */
+export const KHOANG_GOI_Y = 4;
 
 const norm = (x: string) => chuanHoaDauThanh(String(x || '').toLowerCase().normalize('NFC'));
 const cum = (xs: string[]) => xs.map(norm);
@@ -86,48 +85,29 @@ export function chonTinhNang(c: NguCanhTinhNang): TinhNang | null {
   return ds.find((x) => x.id !== c.truoc) ?? ds[0] ?? null;
 }
 
-// ── Tầng 5: sản phẩm ─────────────────────────────────────────────────────
-const KHEN = cum([
-  'chuẩn quá', 'chuẩn thật', 'chuẩn luôn', 'chuẩn không cần chỉnh', 'đúng quá', 'đúng thật', 'đúng vậy', 'đúng y',
-  'hay quá', 'chính xác quá', 'trúng quá', 'thầy nói đúng', 'nói đúng quá', 'giống hệt', 'đúng hết',
-]);
+// ── Sản phẩm: CHỈ ở hai lúc (Henry 2026-09-29) ──────────────────────────
+// (1) lượt vừa an xong lá số → bản luận giải đầy đủ; (2) lượt khách vừa chọn
+// kiểm chứng bằng môn khác (mời thầy khách) → bản đầy đủ của môn đó. Ngoài hai
+// lúc này KHÔNG mời sản phẩm. Link sang web, lá số đã điền sẵn (handoff).
 
-export type LyDoSanPham = 'vua-lap-la-so' | 'khen' | 'hoi-sau' | 'sap-het-luot';
+/** Khách đang đau/bế tắc — không mời mua lúc này (mời lúc người ta khóc là mất khách). */
+export const dangDau = (q: string) => {
+  const nc = nhuCau(q);
+  return loaiCau(q) === 'be-tac' || nc === 'an-ui' || nc === 'phe-minh';
+};
 
-export interface NguCanhSanPham {
-  cauHoi: string;
-  /** Chủ đề (`cacChuDe`) của các câu hỏi GẦN NHẤT, câu hiện tại ở CUỐI. */
-  chuDeGanDay: string[][];
-  lasoShown: boolean;
-  /** Số câu hỏi còn lại (lượt tặng + ví); null = không tính phí. */
-  conCau: number | null;
-  /** Thứ tự lượt hỏi hiện tại (1 = lượt đầu). */
-  luot: number;
-  /** Lượt gần nhất đã hiện nút sản phẩm (`GoiYState.sp`). */
-  spTruoc?: number;
-}
+/** Bản đầy đủ trên web của môn thầy khách. Thiếu dòng = môn đó không có trang riêng. */
+export const SAN_PHAM_MON: Partial<Record<GuestId, { title: string; path: string }>> = {
+  'tam-kinh': { title: 'Xem trọn lá số Bát Tự', path: '/app/bat-tu' },
+  'thanh-hu': { title: 'Xem trọn Thần số học', path: '/app/than-so-hoc' },
+  'linh-co': { title: 'Gieo quẻ Lục Nhâm đầy đủ', path: '/app/luc-nham' },
+  'huyen-khong': { title: 'Xem trọn hướng nhà', path: '/app/bat-trach' },
+  'nhat-nguyen': { title: 'Xem vận hạn cả năm', path: '/app/van-han-nam' },
+};
 
-/** Lý do mời sản phẩm lượt này, hoặc null. Thứ tự: đau/bế tắc chặn TRƯỚC mọi thứ. */
-export function lyDoSanPham(c: NguCanhSanPham): LyDoSanPham | null {
-  const nc = nhuCau(c.cauHoi);
-  if (loaiCau(c.cauHoi) === 'be-tac' || nc === 'an-ui' || nc === 'phe-minh') return null;
-  if (c.spTruoc != null && c.luot - c.spTruoc < KHOANG_SP && !c.lasoShown) return null;
-  if (c.lasoShown) return 'vua-lap-la-so';
-  if (co(norm(c.cauHoi), KHEN)) return 'khen';
-  const [a, b, d] = c.chuDeGanDay.slice(-3);
-  if (a && b && d && d.length === 1 && a.includes(d[0]) && b.includes(d[0])) return 'hoi-sau';
-  if (c.conCau != null && c.conCau > 0 && c.conCau <= 2) return 'sap-het-luot';
-  return null;
-}
-
-export interface SanPham {
-  id: string;
-  /** Chủ đề hợp (`cacChuDe`); bỏ trống = hợp mọi chủ đề. */
-  hop?: string[];
-  nhan: () => Promise<string>;
-  /** Đường dẫn web (router bọc handoff đăng nhập sẵn). */
-  path: (birth: BirthParams) => string;
-}
+export const LOI_LA_SO =
+  'Muốn đọc trọn cả lá số (12 cung, các đại vận) thì mở bản luận giải đầy đủ ở nút dưới — hoặc cứ hỏi thầy ngay tại đây.';
+export const loiMon = (mon: string) => `Muốn xem trọn phần ${mon} thì mở ở nút dưới — hoặc cứ hỏi tiếp thầy ngay tại đây.`;
 
 /** Nhãn nút bản luận giải — giá VNĐ là chính (luật "VNĐ là giá CHÍNH"), đọc từ
  *  `tool_pricing['laso']`; đọc hụt thì không ghi giá (không chép số). */
@@ -135,21 +115,3 @@ export async function nhanLuanGiai(): Promise<string> {
   const [credits, rate] = await Promise.all([getToolPrice('laso'), vndPerCredit()]);
   return credits && credits > 0 ? `Luận giải ${Math.round(credits * rate).toLocaleString('vi-VN')}đ` : 'Luận giải đầy đủ';
 }
-
-/** Danh mục sản phẩm — sản phẩm HỢP CHỦ ĐỀ đứng trước, sản phẩm chung đứng cuối. */
-export function sanPhamDanhMuc(lasoPath: (b: BirthParams) => string): SanPham[] {
-  return [{ id: 'luan-giai', nhan: nhanLuanGiai, path: lasoPath }];
-}
-
-export function chonSanPham(ds: SanPham[], chuDe: string[]): SanPham | null {
-  return ds.find((p) => p.hop?.some((h) => chuDe.includes(h))) ?? ds.find((p) => !p.hop) ?? null;
-}
-
-/** Câu dẫn đi kèm nút sản phẩm — thay "Bạn muốn hỏi tiếp gì?" khi có lý do rõ. */
-export const LOI_SAN_PHAM: Record<LyDoSanPham, string> = {
-  'vua-lap-la-so': 'Bạn muốn hỏi tiếp gì? Muốn đọc trọn cả lá số một lượt thì có bản luận giải đầy đủ.',
-  khen: 'Thầy mừng là đúng với bạn. Bản luận giải đầy đủ đi hết 12 cung và các đại vận, đọc lúc nào cũng được.',
-  'hoi-sau': 'Chuyện này mình đã đi khá sâu — bản luận giải đầy đủ có trọn phần này và cả các mốc vận, để bạn đọc lại khi cần.',
-  'sap-het-luot': 'Bạn muốn hỏi tiếp gì? Sắp hết lượt hỏi — bản luận giải đầy đủ gom trọn lá số vào một bản để đọc lại.',
-};
-

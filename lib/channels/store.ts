@@ -94,6 +94,8 @@ export async function chatSetAuthor(platform: string, chatId: number | string, a
 export interface GoiYState {
   /** Đếm lượt hỏi của phiên (không bị cắt như `messages`, giữ 12 tin). */
   n?: number;
+  /** `n` của lượt gần nhất có mời tính năng/sản phẩm (giãn cách `KHOANG_GOI_Y`). */
+  g?: number;
   /** `n` của lượt gần nhất có nút sản phẩm. */
   sp?: number;
   /** id nút tính năng lượt trước (không lặp hai lượt liền). */
