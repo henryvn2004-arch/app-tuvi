@@ -31,13 +31,23 @@ npm run build        # ra www/ (zmp-vite-plugin sinh www/app-config.json)
 npm run dev          # xem trên trình duyệt; API Zalo không có ⇒ nativeStorage lùi về localStorage
 ```
 
-Deploy: `npx zmp-cli login` rồi `npm run deploy` (cần App ID Mini App).
+Deploy (Mini App ID `685441626982830157`, gắn vào Zalo App cũ của OA):
+
+```bash
+npm run login        # zmp login --app-id …; quét QR bằng Zalo tài khoản Admin/Developer
+npm run deploy       # Development = ghi đè, thử nhanh · Testing (-t) = có số, gửi duyệt được
+```
+
+`zmp login` ghi `APP_ID` + `ZMP_TOKEN` vào `zalo-mini/.env` — file đó đã bị
+`.gitignore`, **không commit** (token là khoá deploy).
 
 ## Việc tay trước khi chạy thật
 
-1. Tạo Mini App trên Zalo Developers, liên kết với OA.
-2. Vercel: đặt `ZALO_MINI_APP_SECRET` = App Secret của Zalo App chứa Mini App
-   (bỏ trống nếu cùng app với OA — route dùng `ZALO_APP_SECRET`).
+1. ~~Tạo Mini App~~ — đã tạo 2026-09-29, ID `685441626982830157`, dưới **Zalo App cũ
+   của OA**. Việc còn lại: xác thực chủ sở hữu (bắt buộc trước khi gửi duyệt,
+   3–5 ngày làm việc) · xin quyền **camera** ở Mini App Center → Quyền Mini App.
+2. Vercel: **để trống** `ZALO_MINI_APP_SECRET` — Mini App nằm cùng Zalo App với OA
+   nên route dùng `ZALO_APP_SECRET`. Chỉ đặt nếu sau này dời sang Zalo App khác.
 3. Khai **domain được phép gọi** trong cấu hình Mini App: `tuviminhbao.com` và
    `dciwkfdqhhddeymlisey.supabase.co`. Thiếu là mọi `fetch` bị Zalo chặn.
 4. Thử trên máy thật: đăng nhập có gộp được với tài khoản đã nhắn OA không
