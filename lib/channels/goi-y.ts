@@ -96,13 +96,14 @@ export const dangDau = (q: string) => {
   return loaiCau(q) === 'be-tac' || nc === 'an-ui' || nc === 'phe-minh';
 };
 
-/** Bản đầy đủ trên web của môn thầy khách. Thiếu dòng = môn đó không có trang riêng. */
+/** Bản đầy đủ trên web của môn thầy khách. Thiếu dòng = môn đó không có trang riêng.
+ *  `?auto=1` chỉ gắn cho trang CÓ `Shell.autoRun()` (lá số điền sẵn từ handoff → tự chạy). */
 export const SAN_PHAM_MON: Partial<Record<GuestId, { title: string; path: string }>> = {
-  'tam-kinh': { title: 'Xem trọn lá số Bát Tự', path: '/app/bat-tu' },
+  'tam-kinh': { title: 'Xem trọn lá số Bát Tự', path: '/app/bat-tu?auto=1' },
   'thanh-hu': { title: 'Xem trọn Thần số học', path: '/app/than-so-hoc' },
   'linh-co': { title: 'Gieo quẻ Lục Nhâm đầy đủ', path: '/app/luc-nham' },
   'huyen-khong': { title: 'Xem trọn hướng nhà', path: '/app/bat-trach' },
-  'nhat-nguyen': { title: 'Xem vận hạn cả năm', path: '/app/van-han-nam' },
+  'nhat-nguyen': { title: 'Xem vận hạn cả năm', path: '/app/van-han-nam?auto=1' },
 };
 
 export const LOI_LA_SO =
