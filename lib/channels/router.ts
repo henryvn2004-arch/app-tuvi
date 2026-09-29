@@ -36,7 +36,7 @@ import { claimLoginCode, parseLoginCode } from './login';
 import { GOP_CMD, isShadowUser, maskEmail, parseEmail, startEmailLink, verifyEmailLink, hasPendingEmailLink } from './email-link';
 import { TOPUP_CMD, createChatTopup, parseTopup, topupCaption, topupChoices, vietQrImageUrl } from './topup';
 import { GUESTS, detectMention, guestById, guestFromMoi, moiCau, type GuestId } from './guests';
-import { LOI_SAN_PHAM, chonSanPham, chonTinhNang, lyDoSanPham, nhanLuanGiai, nhanMon, sanPhamDanhMuc } from './goi-y';
+import { KHOANG_GOI_Y, LOI_SAN_PHAM, chonSanPham, chonTinhNang, lyDoSanPham, nhanLuanGiai, nhanMon, sanPhamDanhMuc } from './goi-y';
 import { cacChuDe, cungChuDe } from '@/lib/agent/luan-chu-de';
 import { THAY_LIST, anhThay, chonThay, gioiThieuThay, thayCuaChat, timThay, type Thay } from './author';
 import { getRailPrice } from '@/lib/billing/pricing';
@@ -720,8 +720,11 @@ async function hoiLaiKhiQuayLai(
   return true;
 }
 
-// ── Nút gợi ý sau câu trả lời (lib/channels/goi-y.ts) ────────────────
-// Thứ tự CỐ ĐỊNH: 1–3 câu hỏi liên quan → 1 tính năng → 1 sản phẩm (chỉ lúc nóng).
+// ── Gợi ý sau câu trả lời (lib/channels/goi-y.ts) ─────────────────────
+// Mặc định KHÔNG gửi gì thêm: cuối câu trả lời thầy đã tự hỏi lại, chip câu hỏi
+// mỗi lượt làm tin loãng (Henry 2026-09-29). Chỉ cách nhau ≥ `KHOANG_GOI_Y` lượt
+// mới mời MỘT việc hợp ngữ cảnh (môn khác để kiểm chứng · sản phẩm lúc nóng).
+// "Còn N câu" chỉ hiện khi sắp hết (loiConCau).
 async function sendFollowUps(
   kit: ChannelKit,
   ev: ChannelEvent,
@@ -733,42 +736,14 @@ async function sendFollowUps(
 ): Promise<void> {
   const gy = meta?.goiY || {};
   const n = (gy.n || 0) + 1;
-
-  // Tầng 4 — tính năng. Thẻ công cụ model tự gợi ý (goi_y_cong_cu) thắng: nó
-  // đã đọc cả câu trả lời; không có thì chọn theo ngữ cảnh câu hỏi.
-  let tinhNang: ChatButton | null = null;
-  let tnId: string | undefined;
-  if (NUT_WEB && userId && outcome.toolSuggest?.path) {
-    const url = await createHandoffUrl(userId, outcome.toolSuggest.path, outcome.birth);
-    if (url) {
-      tinhNang = { title: outcome.toolSuggest.label, url };
-      tnId = `cong-cu:${outcome.toolSuggest.toolId}`;
-    }
-  }
-  if (!tinhNang) {
-    const tn = chonTinhNang({
-      cauHoi: luot.cauHoi,
-      thayId: luot.thayId,
-      birth: outcome.birth,
-      daMoi: luot.daMoi,
-      truoc: gy.tn,
-      bieuDo: bieuDoHop(luot.cauHoi, outcome.lasoShown),
-    });
-    if (tn && 'path' in tn.nut) {
-      if (!NUT_WEB) tinhNang = null;
-      else {
-        const url = userId ? await createHandoffUrl(userId, tn.nut.path, outcome.birth) : `${SITE}${tn.nut.path}`;
-        if (url) tinhNang = { title: tn.nut.title, url };
-      }
-    } else if (tn && 'reply' in tn.nut) tinhNang = tn.nut;
-    if (tinhNang) tnId = tn?.id;
-  }
-
-  // Tầng 5 — sản phẩm, chỉ ở thời điểm nóng (lyDoSanPham).
   const dem = userId ? await demCau(userId, cost) : null;
+  const con = dem ? loiConCau(dem) : '';
+  const denLuot = n - (gy.g || 0) >= KHOANG_GOI_Y;
+
+  // Sản phẩm, chỉ ở thời điểm nóng (lyDoSanPham) — thắng tính năng.
   let sanPham: ChatButton | null = null;
   let lyDo: ReturnType<typeof lyDoSanPham> = null;
-  if (NUT_WEB && userId && outcome.birth) {
+  if (denLuot && NUT_WEB && userId && outcome.birth) {
     const chuDeGanDay = [...luot.cauTruoc.slice(-2), luot.cauHoi].map(chuDeCua);
     lyDo = lyDoSanPham({
       cauHoi: luot.cauHoi,
@@ -784,21 +759,52 @@ async function sendFollowUps(
     else lyDo = null;
   }
 
-  const duoi = [tinhNang, sanPham].filter((b): b is ChatButton => !!b);
-  const room = Math.max(0, Math.min(kit.maxReplyButtons, 5) - duoi.length);
-  const goiY: ChatButton[] = outcome.suggestions.slice(0, Math.min(room, 3)).map((q) => ({ title: q, reply: q }));
-  const head = (NUT_WEB && outcome.toolSuggest?.lyDo) || (lyDo ? LOI_SAN_PHAM[lyDo] : 'Bạn muốn hỏi tiếp gì?');
-  const con = dem ? loiConCau(dem) : '';
-  await sendMenu(kit.io, ev.chatId, con ? `${head}\n\n${con}` : head, [...goiY, ...duoi]);
+  // Tính năng. Thẻ công cụ model tự gợi ý (goi_y_cong_cu) thắng: nó đã đọc cả
+  // câu trả lời; không có thì chọn theo ngữ cảnh câu hỏi.
+  let tinhNang: ChatButton | null = null;
+  let tnId: string | undefined;
+  if (denLuot && !sanPham) {
+    if (NUT_WEB && userId && outcome.toolSuggest?.path) {
+      const url = await createHandoffUrl(userId, outcome.toolSuggest.path, outcome.birth);
+      if (url) {
+        tinhNang = { title: outcome.toolSuggest.label, url };
+        tnId = `cong-cu:${outcome.toolSuggest.toolId}`;
+      }
+    }
+    if (!tinhNang) {
+      const tn = chonTinhNang({
+        cauHoi: luot.cauHoi,
+        thayId: luot.thayId,
+        birth: outcome.birth,
+        daMoi: luot.daMoi,
+        truoc: gy.tn,
+        bieuDo: bieuDoHop(luot.cauHoi, outcome.lasoShown),
+      });
+      if (tn && 'path' in tn.nut) {
+        if (NUT_WEB) {
+          const url = userId ? await createHandoffUrl(userId, tn.nut.path, outcome.birth) : `${SITE}${tn.nut.path}`;
+          if (url) tinhNang = { title: tn.nut.title, url };
+        }
+      } else if (tn && 'reply' in tn.nut) tinhNang = tn.nut;
+      if (tinhNang) tnId = tn?.id;
+    }
+  }
 
-  // Nhớ cho lượt sau: khoảng cách nút sản phẩm, nút tính năng vừa hiện, và các
-  // nút TRẢ LỜI vừa gửi (nút link không gửi chữ về nên không đếm được bấm).
-  const nut = [
-    ...outcome.suggestions.slice(0, goiY.length).map((q) => ({ t: norm(q), k: 'lien-quan' })),
-    ...(tinhNang && 'reply' in tinhNang ? [{ t: norm(tinhNang.reply), k: `tinh-nang:${tnId}` }] : []),
-  ];
-  void chatPatchMeta(kit.platform, ev.chatId, { goi_y: { n, sp: sanPham ? n : gy.sp, tn: tnId, nut } });
-  if (sanPham || tinhNang)
+  const nutMoi = sanPham || tinhNang;
+  if (nutMoi) {
+    const head =
+      (tnId?.startsWith('cong-cu:') && outcome.toolSuggest?.lyDo) ||
+      (lyDo ? LOI_SAN_PHAM[lyDo] : 'Muốn xem thêm từ góc khác thì bấm nút dưới.');
+    await sendMenu(kit.io, ev.chatId, con ? `${head}\n\n${con}` : head, [nutMoi]);
+  } else if (con) await kit.io.sendText(ev.chatId, con);
+
+  // Nhớ cho lượt sau: lượt vừa mời (giãn cách), nút tính năng vừa hiện (không
+  // lặp), và nút TRẢ LỜI vừa gửi (nút link không gửi chữ về nên không đếm được bấm).
+  const nut = tinhNang && 'reply' in tinhNang ? [{ t: norm(tinhNang.reply), k: `tinh-nang:${tnId}` }] : [];
+  void chatPatchMeta(kit.platform, ev.chatId, {
+    goi_y: { n, g: nutMoi ? n : gy.g, sp: sanPham ? n : gy.sp, tn: tnId ?? gy.tn, nut },
+  });
+  if (nutMoi)
     void chatLogEvent(kit.platform, ev.chatId, 'chat_goi_y', {
       action: 'show',
       tinh_nang: tnId || null,
@@ -1083,7 +1089,9 @@ async function demCau(userId: string, cost: number): Promise<{ n: number; free: 
   return { n: free + Math.floor(balance / cost), free };
 }
 
+/** Chỉ lên tiếng khi SẮP HẾT (< 3 câu) — nhắc mỗi lượt làm tin loãng (Henry 2026-09-29). */
 function loiConCau({ n, free }: { n: number; free: number }): string {
+  if (n >= 3) return '';
   if (n <= 0) return `Bạn đã dùng hết câu hỏi — nhắn "Nạp Lượng" để nạp ngay tại đây.`;
   return `Còn ${n} câu hỏi${free > 0 ? ` (${free} lượt tặng)` : ''}.`;
 }

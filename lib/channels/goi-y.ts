@@ -1,16 +1,15 @@
 // lib/channels/goi-y.ts
 // ============================================================
-// NÚT GỢI Ý SAU MỖI CÂU TRẢ LỜI — ba tầng, xếp CỐ ĐỊNH (Henry 2026-09-29):
+// GỢI Ý SAU CÂU TRẢ LỜI — THƯA, không phải mỗi lượt (Henry 2026-09-29):
 //
-//   1–3. CÂU HỎI LIÊN QUAN (model sinh) — luôn có, đứng TRÊN CÙNG. Đây là thứ
-//        khách bấm nhiều nhất; bản cũ đẩy nó xuống dưới "Ý Thầy …".
-//   4.   TÍNH NĂNG — tối đa MỘT, chọn theo ngữ cảnh câu vừa hỏi. Nhãn là TÊN
-//        MÔN / TÊN VIỆC ("Đối chiếu bằng Tử Bình Bát Tự"), KHÔNG tên thầy — khách
-//        không biết "Thầy Tâm Kính" xem môn gì. Không lặp một nút hai lượt liền.
-//   5.   SẢN PHẨM — tối đa MỘT, chỉ ở THỜI ĐIỂM NÓNG (vừa lập lá số · khách khen ·
-//        hỏi sâu 3 lượt liền một chủ đề · sắp hết lượt), cách nhau ≥ `KHOANG_SP`
-//        lượt, KHÔNG BAO GIỜ khi khách đang đau/bế tắc (bán hàng đúng lúc người ta
-//        khóc là mất khách vĩnh viễn).
+//   Cuối câu trả lời thầy đã tự hỏi lại, nên KHÔNG còn chip câu hỏi liên quan
+//   mỗi lượt (làm tin loãng). Cách nhau ≥ `KHOANG_GOI_Y` lượt mới mời MỘT nút:
+//   • SẢN PHẨM — chỉ ở THỜI ĐIỂM NÓNG (vừa lập lá số · khách khen · hỏi sâu 3
+//     lượt liền một chủ đề · sắp hết lượt), KHÔNG BAO GIỜ khi khách đang đau/bế
+//     tắc (bán hàng đúng lúc người ta khóc là mất khách vĩnh viễn).
+//   • không thì TÍNH NĂNG hợp ngữ cảnh. Nhãn là TÊN MÔN / TÊN VIỆC ("Đối chiếu
+//     bằng Tử Bình Bát Tự"), KHÔNG tên thầy — khách không biết "Thầy Tâm Kính"
+//     xem môn gì. Không lặp nút lần trước.
 //
 // Hàm ở đây THUẦN (không gọi mạng) trừ nhãn giá — router lo tài khoản/URL.
 // Thêm sản phẩm mới (báo cáo khác, affiliate) = thêm một dòng `SAN_PHAM`.
@@ -23,7 +22,9 @@ import { getToolPrice } from '@/lib/billing/pricing';
 import { vndPerCredit } from '@/lib/billing/packages';
 import { hoiChanDuoc, moiCau, pickGuests, type GuestId } from './guests';
 
-/** Số LƯỢT hỏi (không phải số tin) tối thiểu giữa hai lần hiện nút sản phẩm. */
+/** Số LƯỢT hỏi (không phải số tin) tối thiểu giữa hai lần mời tính năng/sản phẩm. */
+export const KHOANG_GOI_Y = 4;
+/** Riêng sản phẩm: tối thiểu giữa hai lần hiện nút sản phẩm. */
 export const KHOANG_SP = 4;
 
 const norm = (x: string) => chuanHoaDauThanh(String(x || '').toLowerCase().normalize('NFC'));
