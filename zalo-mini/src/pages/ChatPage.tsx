@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, Input } from 'zmp-ui';
+import { Button, Icon, Input } from 'zmp-ui';
 import { toBirthParams, type Chart } from '../lib/birth';
 import { askThay, newSessionId } from '../lib/chat';
 import { loadMyChart } from '../lib/charts';
+import { pickImage, type PickedImage } from '../lib/media';
 import { RichText } from '../lib/text';
 
 interface Msg {
   role: 'user' | 'assistant';
   text: string;
   error?: boolean;
+  /** ảnh người hỏi gửi kèm (data URL xem trước) */
+  image?: string;
 }
 
 const GOI_Y = [
@@ -28,6 +31,7 @@ export default function ChatPage({
   const [sessionId, setSessionId] = useState(newSessionId);
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState('');
+  const [photo, setPhoto] = useState<PickedImage | null>(null);
   const [status, setStatus] = useState('');
   const [busy, setBusy] = useState(false);
   const [chips, setChips] = useState<string[]>(GOI_Y);
@@ -54,34 +58,55 @@ export default function ChatPage({
   const patchLast = (fn: (m: Msg) => Msg) =>
     setMsgs((ms) => [...ms.slice(0, -1), fn(ms[ms.length - 1]!)]);
 
+  async function attach() {
+    try {
+      setPhoto(await pickImage());
+    } catch {
+      /* người dùng huỷ chọn ảnh — không có gì để báo */
+    }
+  }
+
   async function send(text: string) {
-    const q = text.trim();
+    const shot = photo;
+    // Ảnh tướng mặt / chỉ tay / nhà cửa gửi không kèm chữ cũng được — Thầy tự xem.
+    const q = text.trim() || (shot ? 'Thầy xem giúp tấm ảnh này.' : '');
     if (!q || busy) return;
     setInput('');
+    setPhoto(null);
     setChips([]);
     setBusy(true);
-    setMsgs((ms) => [...ms, { role: 'user', text: q }, { role: 'assistant', text: '' }]);
+    setMsgs((ms) => [
+      ...ms,
+      { role: 'user', text: q, image: shot?.preview },
+      { role: 'assistant', text: '' },
+    ]);
     try {
-      await askThay(sessionId, q, toBirthParams(subject?.birth), {
-        onStatus: setStatus,
-        onText: (delta) => {
-          setStatus('');
-          patchLast((m) => ({ ...m, text: m.text + delta }));
+      await askThay(
+        sessionId,
+        q,
+        toBirthParams(subject?.birth),
+        {
+          onStatus: setStatus,
+          onText: (delta) => {
+            setStatus('');
+            patchLast((m) => ({ ...m, text: m.text + delta }));
+          },
+          onDone: (d) => {
+            if (d.paywall?.blocked) {
+              patchLast((m) => ({
+                ...m,
+                error: true,
+                text:
+                  m.text ||
+                  d.paywall?.reason ||
+                  'Đã hết lượt hỏi miễn phí. Nạp thêm Lượng trên tuviminhbao.com để hỏi tiếp.',
+              }));
+            }
+            setChips(d.suggestions?.slice(0, 3) || []);
+          },
         },
-        onDone: (d) => {
-          if (d.paywall?.blocked) {
-            patchLast((m) => ({
-              ...m,
-              error: true,
-              text:
-                m.text ||
-                d.paywall?.reason ||
-                'Đã hết lượt hỏi miễn phí. Nạp thêm Lượng trên tuviminhbao.com để hỏi tiếp.',
-            }));
-          }
-          setChips(d.suggestions?.slice(0, 3) || []);
-        },
-      });
+        shot ? [{ data: shot.data, mediaType: shot.mediaType }] : []
+      );
     } catch (e) {
       patchLast((m) => ({ ...m, error: true, text: m.text || (e as Error).message }));
     } finally {
@@ -117,7 +142,10 @@ export default function ChatPage({
               <span className="tv-muted">{status || 'Thầy đang xem…'}</span>
             )
           ) : (
-            m.text
+            <>
+              {m.image && <img className="tv-msg-img" src={m.image} alt="" />}
+              {m.text}
+            </>
           )}
         </div>
       ))}
@@ -133,6 +161,14 @@ export default function ChatPage({
       )}
       <div ref={endRef} />
 
+      {photo && (
+        <div className="tv-attach">
+          <img src={photo.preview} alt="" />
+          <button type="button" aria-label="Bỏ ảnh" onClick={() => setPhoto(null)}>
+            ✕
+          </button>
+        </div>
+      )}
       <form
         className="tv-composer"
         onSubmit={(e) => {
@@ -140,13 +176,22 @@ export default function ChatPage({
           void send(input);
         }}
       >
+        <Button
+          htmlType="button"
+          size="small"
+          variant="tertiary"
+          aria-label="Chụp hoặc chọn ảnh"
+          icon={<Icon icon="zi-camera" />}
+          disabled={busy}
+          onClick={attach}
+        />
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Nhập câu hỏi…"
           disabled={busy}
         />
-        <Button htmlType="submit" size="small" disabled={busy || !input.trim()}>
+        <Button htmlType="submit" size="small" disabled={busy || (!input.trim() && !photo)}>
           Gửi
         </Button>
       </form>

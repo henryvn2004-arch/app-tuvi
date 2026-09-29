@@ -9,10 +9,10 @@ của gốc bỏ qua thư mục này (giống `remotion/`, `tuvi-engine/`).
 | Tab | Gọi API | Ghi chú |
 |---|---|---|
 | **Hôm nay** | `GET/POST /api/van-ngay` | Miễn phí. Có "lá số của tôi" thì thêm tầng cá nhân (cung nhật hạn). |
-| **Hỏi Thầy** | `POST /api/v1/chat` (SSE, `historyMode:'delta'`) | Tính Lượng y như web. Đổi người được hỏi ⇒ phiên mới. |
+| **Hỏi Thầy** | `POST /api/v1/chat` (SSE, `historyMode:'delta'`) | Tính Lượng y như web. Đổi người được hỏi ⇒ phiên mới. Nút máy ảnh: chụp/chọn ảnh (tướng mặt, chỉ tay, nhà cửa) gửi kèm. |
 | **Công cụ** | `/api/v1/catalog` · `/api/channels/handoff/new` | Giá do server tính (VNĐ chính). Bấm ⇒ mở trang web của công cụ trong webview Zalo, đã đăng nhập + nạp sẵn "lá số của tôi". |
 | **Của tôi** | `/api/payment` (balance · create-bank · check-bank) · `credit_packages` · `/api/reports` | Số dư, nạp Lượng qua link payOS (chờ webhook báo đã trả), đọc lại báo cáo đã có. |
-| **Sổ lá số** | `/api/charts` (GET/POST/DELETE) | Cùng bảng `user_charts` với web — lưu bên nào cũng hiện bên kia. |
+| **Sổ lá số** | `/api/charts` (GET/POST/DELETE) · `/api/v1/laso-image` | Cùng bảng `user_charts` với web — lưu bên nào cũng hiện bên kia. Ảnh lá số: lưu về máy, chia sẻ vào chat Zalo. |
 
 Đăng nhập: `getAccessToken()` → `POST /api/channels/zalo-mini/login` → `tokenHash`
 → Supabase `/auth/v1/verify` → phiên Supabase (`src/lib/session.ts`). Có phiên rồi
