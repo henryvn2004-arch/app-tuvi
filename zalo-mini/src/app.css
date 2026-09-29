@@ -269,3 +269,35 @@ body {
 .tv-free {
   color: #2f5e58;
 }
+
+.tv-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid var(--tv-line);
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+
+.tv-card.tv-row {
+  padding: 14px 16px;
+  border: 1px solid var(--tv-line);
+}
+
+.tv-report img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 8px 0;
+}
+
+.tv-hero .zaui-btn {
+  margin-top: 8px;
+  background: var(--tv-gold);
+  color: var(--tv-navy);
+}
