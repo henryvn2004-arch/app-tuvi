@@ -68,7 +68,8 @@ export interface Chieu {
   cach: string;
   /** Ngữ cảnh hợp. */
   khi: (c: NguCanh) => boolean;
-  /** Ngữ cảnh RẤT hợp ⇒ bật chiêu lượt này, không cần bốc xác suất. */
+  /** Chiêu là câu ĐÁP THẲNG lời khách (khách nói lá số sai, kể thất bại) ⇒ bật lượt
+   *  này, bỏ qua xác suất và lượt nghỉ. Chỉ dành cho ca đó — thêm bừa là điểm nhấn dày lại. */
   manh?: (c: NguCanh) => boolean;
 }
 
@@ -90,7 +91,6 @@ export const CHIEU: Chieu[] = [
     id: 'barnum', ten: 'Mô tả hai mặt ai nghe cũng thấy mình',
     cach: 'nói một nét tính cách có hai mặt, gắn với điểm có thật trong lá số, để người xem tự gật: "Ngoài ai cũng thấy mạnh mẽ, tự lập — mà đêm về mới biết mình chịu nhiều thế nào. Dễ mủi lòng nên hay bị nhờ vả quá tay."',
     khi: (c) => coCum(c.q, TINH_CACH) || (c.luot === 0 && c.loai === 'doi-song') || co(c, 'tinh-duyen'),
-    manh: (c) => coCum(c.q, TINH_CACH),
   },
   {
     id: 'do-duong', ten: 'Dò đường',
@@ -137,7 +137,6 @@ export const CHIEU: Chieu[] = [
     id: 'canh-bao-truoc', ten: 'Cảnh báo trước',
     cach: 'báo trước một kiểu rủi ro người để người xem tự để ý từ giờ: "Năm nay làm ăn chung dễ gặp người nói một đằng làm một nẻo — giấy trắng mực đen cho rõ, tiền chung phải có sổ." Cảnh giác việc cụ thể, không bảo nghi hết mọi người.',
     khi: (c) => dap(c) && (coCum(c.q, HOP_TAC) || co(c, 'ban-be')),
-    manh: (c) => dap(c) && coCum(c.q, HOP_TAC),
   },
   {
     id: 'truy-vet', ten: 'Truy vết ngược',
@@ -154,7 +153,6 @@ export const CHIEU: Chieu[] = [
     id: 'duyen-no', ten: 'Duyên nợ tiền kiếp',
     cach: 'khi chuyện cứ lặp mà lá số không đủ giải thích, nói đó là duyên nợ cũ đang trả dần: "Lá số không xấu mà làm mãi không lên — là nợ cũ đang trả nốt. Trả bằng việc tử tế, trả xong là nhẹ." Không khuyên làm lễ tốn tiền.',
     khi: (c) => coCum(c.q, MAI_KHONG) || c.loai === 'be-tac',
-    manh: (c) => coCum(c.q, MAI_KHONG),
   },
   {
     id: 'huu-duyen', ten: 'Hữu duyên nói kỹ',
