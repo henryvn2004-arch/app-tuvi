@@ -169,7 +169,8 @@ export async function refreshZaloToken(): Promise<string | null> {
   return next.access_token;
 }
 
-async function getAccessToken(): Promise<string | null> {
+/** Access token OA còn hạn (tự làm mới). Dùng chung cho lib/channels/zalo-mini.ts. */
+export async function getAccessToken(): Promise<string | null> {
   const row = await readTokenRow();
   if (row && Date.parse(row.expires_at) - EXPIRY_SKEW_MS > Date.now()) return row.access_token;
   return refreshZaloToken();

@@ -643,6 +643,14 @@ async function loadPackages() {
   onCustomInput();
 }
 
+// Bearer cho số dư / tạo đơn — server chỉ phục vụ CHÍNH chủ userId.
+// `getFreshToken` tự xoay token hết hạn; lùi về ảnh chụp nếu auth.js bản cũ.
+async function _authHdr() {
+  let t = '';
+  try { t = (window.Auth?.getFreshToken ? await window.Auth.getFreshToken() : window.Auth?.getSession()?.access_token) || ''; } catch (e) { /* hết phiên → server 401 */ }
+  return { Authorization: 'Bearer ' + t };
+}
+
 // ── Số dư / quà đăng ký ──────────────────────────────────────
 async function loadStatus() {
   const deadline = Date.now() + 3000;
@@ -682,7 +690,7 @@ async function loadStatus() {
   }
 
   try {
-    const data = await (await fetch(`/api/payment?action=balance&userId=${encodeURIComponent(userId)}`)).json();
+    const data = await (await fetch(`/api/payment?action=balance&userId=${encodeURIComponent(userId)}`, { headers: await _authHdr() })).json();
     slot.innerHTML = '<div class="balance-bar"><div>'
       + '<div class="balance-label">Số dư hiện tại</div>'
       + '<div class="balance-value">' + (data.balance ?? 0) + ' <span>Lượng</span></div>'
@@ -1011,7 +1019,7 @@ async function initiateTopup(packageId) {
     if (customAmountVnd) body.customAmountVnd = customAmountVnd;
     const data = await (await fetch('/api/payment?action=topup', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...(await _authHdr()) },
       body: JSON.stringify(body),
     })).json();
     if (data.approvalUrl) { window.location.href = data.approvalUrl; return; }
@@ -1040,7 +1048,7 @@ async function initiateMomoTopup(packageId) {
     if (customAmountVnd) body.customAmountVnd = customAmountVnd;
     const data = await (await fetch('/api/payment?action=create-momo', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...(await _authHdr()) },
       body: JSON.stringify(body),
     })).json();
     if (data.payUrl) { window.location.href = data.payUrl; return; }
@@ -1278,7 +1286,7 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
       const body = { packageId, userId };
       if (customAmountVnd) body.customAmountVnd = customAmountVnd;
       const r = await fetch('/api/payment?action=create-bank', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+        method: 'POST', headers: { 'Content-Type': 'application/json', ...(await _authHdr()) }, body: JSON.stringify(body),
       });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || 'Lỗi tạo đơn');

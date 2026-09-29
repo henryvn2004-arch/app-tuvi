@@ -308,7 +308,7 @@ export async function GET(): Promise<Response> {
 <script src="/nav.js?v=45" data-icons-only></script>
 <script src="/auth.js?v=6"></script>
 <script>window.SHELL_ACTIVE='thu-vien';</script>
-<script src="/shell.js?v=131"></script>
+<script src="/shell.js?v=132"></script>
 </body></html>`;
 
   return new NextResponse(html, {

@@ -222,6 +222,19 @@ async function verifyAdmin(
   return { id: (user as any).id, email, role: admin.role, team: admin.team };
 }
 
+// ── Cửa chủ ví: số dư / tạo đơn nạp chỉ cho CHÍNH chủ `userId` ─────────
+// Trước đây `balance`, `create-bank`, `create-momo`, `topup` tin `userId` client
+// tự khai ⇒ ai có UUID là đọc được số dư người khác. Nay bắt Bearer và so khớp.
+// Trả Response lỗi, hoặc null = qua cửa.
+async function denyUnlessOwner(request: NextRequest, claimedUserId: string | null): Promise<Response | null> {
+  const h = request.headers.get('authorization') || '';
+  const token = h.replace(/^Bearer\s+/i, '').trim();
+  const user = token ? await getUserFromToken(token) : null;
+  if (!user?.id) return err('Cần đăng nhập', 401);
+  if (claimedUserId && claimedUserId !== user.id) return err('Không đúng tài khoản', 403);
+  return null;
+}
+
 // ── GET: balance ──────────────────────────────────────────────────
 async function handleBalance(sp: URLSearchParams): Promise<Response> {
   const userId = sp.get('userId') || '';
@@ -1699,7 +1712,7 @@ export async function OPTIONS() { return options(); }
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action');
-  if (action === 'balance')      return handleBalance(searchParams);
+  if (action === 'balance')      return (await denyUnlessOwner(request, searchParams.get('userId'))) ?? handleBalance(searchParams);
   if (action === 'check')        return handleCheck(searchParams);
   if (action === 'signup-bonus') return handleSignupBonus();
   if (action === 'khoi-hanh-defs') return handleKhoiHanhDefs();
@@ -3740,7 +3753,7 @@ export async function POST(request: NextRequest) {
   const body   = await parseBody(request);
   if (action === 'promo-redeem')      return handlePromoRedeem(request, body);
   if (action === 'admin-promo-code')  return handleAdminPromoCode(request, body);
-  if (action === 'topup')             return handleTopup(body);
+  if (action === 'topup')             return (await denyUnlessOwner(request, String(body.userId || ''))) ?? handleTopup(body);
   if (action === 'capture')           return handleCapture(body);
   if (action === 'deduct')            return handleDeduct(request, body);
   if (action === 'admin-grant')       return handleAdminGrant(request, body);
@@ -3767,8 +3780,8 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-mcp-update') return handleAdminMcpUpdate(request, body);
   if (action === 'admin-users-upsert') return handleAdminUsersUpsert(request, body);
   if (action === 'admin-users-set-active') return handleAdminUsersSetActive(request, body);
-  if (action === 'create-bank')       return handleCreateBank(body);
-  if (action === 'create-momo')       return handleCreateMomo(body);
+  if (action === 'create-bank')       return (await denyUnlessOwner(request, String(body.userId || ''))) ?? handleCreateBank(body);
+  if (action === 'create-momo')       return (await denyUnlessOwner(request, String(body.userId || ''))) ?? handleCreateMomo(body);
   if (action === 'referral-register') return handleReferralRegister(request, body);
   if (action === 'onboarding-sync')   return handleOnboardingSync(request);
   if (action === 'memory-edit')       return handleMemoryEdit(request, body);

@@ -205,7 +205,8 @@ function openTabFromHash() {
 async function loadHeaderBalance() {
   if (!_pUser) return;
   try {
-    const res = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(_pUser.id));
+    const res = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(_pUser.id),
+      { headers: { Authorization: 'Bearer ' + ((await _tok()) || '') } });
     const d = await res.json();
     const bal = d.balance ?? 0;
     const t = document.getElementById('tabCreditBalance');
@@ -762,7 +763,8 @@ async function loadCredits() {
       .filter(tx => tx.amount < 0 && new Date(tx.created_at) >= monthStart)
       .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
     // Get current balance to estimate total (used + remaining)
-    const balRes = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(_pUser.id));
+    const balRes = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(_pUser.id),
+      { headers: { Authorization: 'Bearer ' + ((await _tok()) || '') } });
     const balData = await balRes.json();
     const currentBal = balData.balance ?? 0;
     const totalThisMonth = monthUsed + currentBal;
