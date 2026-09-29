@@ -10,6 +10,7 @@ của gốc bỏ qua thư mục này (giống `remotion/`, `tuvi-engine/`).
 |---|---|---|
 | **Hôm nay** | `GET/POST /api/van-ngay` | Miễn phí. Có "lá số của tôi" thì thêm tầng cá nhân (cung nhật hạn). |
 | **Hỏi Thầy** | `POST /api/v1/chat` (SSE, `historyMode:'delta'`) | Tính Lượng y như web. Đổi người được hỏi ⇒ phiên mới. |
+| **Công cụ** | `/api/v1/catalog` · `/api/channels/handoff/new` | Giá do server tính (VNĐ chính). Bấm ⇒ mở trang web của công cụ trong webview Zalo, đã đăng nhập + nạp sẵn "lá số của tôi". |
 | **Sổ lá số** | `/api/charts` (GET/POST/DELETE) | Cùng bảng `user_charts` với web — lưu bên nào cũng hiện bên kia. |
 
 Đăng nhập: `getAccessToken()` → `POST /api/channels/zalo-mini/login` → `tokenHash`

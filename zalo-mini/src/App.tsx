@@ -4,8 +4,9 @@ import type { Chart } from './lib/birth';
 import TodayPage from './pages/TodayPage';
 import ChatPage from './pages/ChatPage';
 import ChartsPage from './pages/ChartsPage';
+import ToolsPage from './pages/ToolsPage';
 
-type Tab = 'today' | 'chat' | 'charts';
+type Tab = 'today' | 'chat' | 'tools' | 'charts';
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('today');
@@ -25,6 +26,7 @@ export default function App() {
             <TodayPage onOpenCharts={() => setTab('charts')} onAsk={() => setTab('chat')} />
           )}
           {tab === 'chat' && <ChatPage chart={askChart} onPickChart={() => setTab('charts')} />}
+          {tab === 'tools' && <ToolsPage />}
           {tab === 'charts' && <ChartsPage onAsk={askAbout} />}
         </main>
         <BottomNavigation fixed activeKey={tab} onChange={(k) => setTab(k as Tab)}>
@@ -34,6 +36,11 @@ export default function App() {
             icon={<Icon icon="zi-calendar" />}
           />
           <BottomNavigation.Item itemKey="chat" label="Hỏi Thầy" icon={<Icon icon="zi-chat" />} />
+          <BottomNavigation.Item
+            itemKey="tools"
+            label="Công cụ"
+            icon={<Icon icon="zi-grid-solid" />}
+          />
           <BottomNavigation.Item
             itemKey="charts"
             label="Sổ lá số"

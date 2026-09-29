@@ -15,6 +15,9 @@ export interface CatalogTool {
   toolId: string;
   label: string;
   path: string;
+  /** `tool_pricing.is_free` — đọc thẳng cột, KHÔNG suy từ credits<=0 (xem priceLabel ở tool-prices.js). */
+  isFree: boolean;
+  description: string | null;
 }
 export interface CatalogGroup {
   key: string;
@@ -35,6 +38,8 @@ interface ToolRow {
   app_path: string;
   home_rank: number | null;
   sort_order: number | null;
+  is_free: boolean | null;
+  description: string | null;
 }
 
 let cache: { at: number; groups: CatalogGroup[] } | null = null;
@@ -64,7 +69,7 @@ export async function toolCatalog(): Promise<CatalogGroup[]> {
     const [gs, ts] = await Promise.all([
       get<GroupRow>('tool_groups?enabled=eq.true&select=key,title,default_categories&order=sort_order.asc'),
       get<ToolRow>(
-        'tool_pricing?enabled=eq.true&app_path=not.is.null&select=tool_id,label,category,need_tags,app_path,home_rank,sort_order',
+        'tool_pricing?enabled=eq.true&app_path=not.is.null&select=tool_id,label,category,need_tags,app_path,home_rank,sort_order,is_free,description',
       ),
     ]);
     if (!gs || !ts) return [];
@@ -80,7 +85,13 @@ export async function toolCatalog(): Promise<CatalogGroup[]> {
         keys = hit ? [hit.key] : [];
       }
       for (const k of keys) {
-        groups.find((g) => g.key === k)?.tools.push({ toolId: t.tool_id, label: t.label || t.tool_id, path: t.app_path });
+        groups.find((g) => g.key === k)?.tools.push({
+          toolId: t.tool_id,
+          label: t.label || t.tool_id,
+          path: t.app_path,
+          isFree: t.is_free === true,
+          description: t.description || null,
+        });
       }
     }
     const out = groups.filter((g) => g.tools.length);
