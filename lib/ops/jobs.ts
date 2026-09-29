@@ -176,6 +176,11 @@ export const JOBS: JobSpec[] = [
   { key: 'zalo-token', label: 'Làm mới token Zalo OA', source: 'vercel', everyMinutes: D,
     schedule: '03:20 VN hằng ngày', sink: 'zalo_oa_tokens', path: '/api/cron/zalo-token',
     since: '2026-09-28' },
+  // Tin nhắc chủ động cho người đã chat ở kênh — lib/channels/nudge.ts. Ngoài
+  // 08–21h VN chạy ra `skipped` (vẫn ghi cron_runs). `since` = ngày merge.
+  { key: 'chat-nudge', label: 'Tin nhắc kênh chat', source: 'vercel', everyMinutes: H,
+    schedule: 'mỗi giờ (:07), gửi 08–21h VN', sink: 'chat_sessions.nudged_at + events', path: '/api/cron/chat-nudge',
+    since: '2026-09-29' },
   // `since` = ngày merge: job chưa từng chạy nên không có dòng nào trong
   // cron_runs; thiếu mốc này thì bộ dò lập tức kêu "CHƯA HỀ chạy" — đúng loại
   // cảnh báo giả đã phải đi vá một lượt hôm 30/07.
