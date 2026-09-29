@@ -27,7 +27,11 @@ type Rec = Record<string, unknown>;
 // nên giờ đại diện cho cùng kết quả với mọi giờ trong cùng địa chi).
 const GIO_HOURS = [23, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
 
-let engineCache: { tinhBatTu: (o: object) => Rec } | null = null;
+let engineCache: {
+  tinhBatTu: (o: object) => Rec;
+  hanhCan: Record<string, string>;
+  hanhChi: Record<string, string>;
+} | null = null;
 
 function loadEngine() {
   if (engineCache) return engineCache;
@@ -40,8 +44,18 @@ function loadEngine() {
   if (typeof exp.tinhBatTu !== 'function') {
     throw new Error('tubinh-ansao-engine: không tìm thấy tinhBatTu');
   }
-  engineCache = { tinhBatTu: exp.tinhBatTu as (o: object) => Rec };
+  engineCache = {
+    tinhBatTu: exp.tinhBatTu as (o: object) => Rec,
+    hanhCan: (exp.NGU_HANH_CAN_TB || {}) as Record<string, string>,
+    hanhChi: (exp.NGU_HANH_CHI_TB || {}) as Record<string, string>,
+  };
   return engineCache!;
+}
+
+/** Ngũ hành của một thiên can / địa chi — đọc bảng của CHÍNH engine (tô màu ảnh tứ trụ). */
+export function hanhCanChi(x: string): string {
+  const e = loadEngine();
+  return e.hanhCan[x] || e.hanhChi[x] || '';
 }
 
 export type TuBinh = Rec;

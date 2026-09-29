@@ -22,6 +22,7 @@ interface BatTrachApi {
   duNienStars(cung: number): { good: Record<string, Huong>; bad: Record<string, Huong> };
   CUNG_NAME: string[];
   CUNG_HANH: string[];
+  NHOM: string[];
 }
 
 let cache: BatTrachApi | null = null;
@@ -51,6 +52,11 @@ export function guaOf(cung: number): { name: string; elem: string; good: Record<
   const api = loadApi();
   const { good, bad } = api.duNienStars(cung);
   return { name: api.CUNG_NAME[cung], elem: api.CUNG_HANH[cung], good, bad };
+}
+
+/** "Đông" / "Tây" Tứ Mệnh của một cung. */
+export function nhomOf(cung: number): string {
+  return loadApi().NHOM[cung] || '';
 }
 
 /** Toàn bộ 8 cung (1-4, 6-9) — dùng để dựng bảng tra hoặc kiểm chứng. */
