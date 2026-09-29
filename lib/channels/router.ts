@@ -36,7 +36,7 @@ import { claimLoginCode, parseLoginCode } from './login';
 import { GOP_CMD, isShadowUser, maskEmail, parseEmail, startEmailLink, verifyEmailLink, hasPendingEmailLink } from './email-link';
 import { TOPUP_CMD, createChatTopup, parseTopup, topupCaption, topupChoices, vietQrImageUrl } from './topup';
 import { GUESTS, detectMention, guestById, guestFromMoi, moiCau, type GuestId } from './guests';
-import { KHOANG_GOI_Y, LOI_SAN_PHAM, chonSanPham, chonTinhNang, lyDoSanPham, nhanLuanGiai, nhanMon, sanPhamDanhMuc } from './goi-y';
+import { KHOANG_GOI_Y, LOI_LA_SO, SAN_PHAM_MON, chonTinhNang, dangDau, loiMon, nhanLuanGiai, nhanMon } from './goi-y';
 import { cacChuDe, cungChuDe } from '@/lib/agent/luan-chu-de';
 import { THAY_LIST, anhThay, chonThay, gioiThieuThay, thayCuaChat, timThay, type Thay } from './author';
 import { getRailPrice } from '@/lib/billing/pricing';
@@ -441,9 +441,7 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
     cauHoi: askText,
     thayId: thay.id,
     daMoi: !!addressMaster || hoiChan,
-    cauTruoc: session.messages
-      .filter((m) => m.role === 'user' && typeof m.content === 'string')
-      .map((m) => String(m.content)),
+    khach: addressMaster,
   });
 }
 
@@ -722,8 +720,9 @@ async function hoiLaiKhiQuayLai(
 
 // ── Gợi ý sau câu trả lời (lib/channels/goi-y.ts) ─────────────────────
 // Mặc định KHÔNG gửi gì thêm: cuối câu trả lời thầy đã tự hỏi lại, chip câu hỏi
-// mỗi lượt làm tin loãng (Henry 2026-09-29). Chỉ cách nhau ≥ `KHOANG_GOI_Y` lượt
-// mới mời MỘT việc hợp ngữ cảnh (môn khác để kiểm chứng · sản phẩm lúc nóng).
+// mỗi lượt làm tin loãng (Henry 2026-09-29). Sản phẩm CHỈ lúc vừa an lá số / vừa
+// chọn kiểm chứng bằng môn khác; ngoài ra cách ≥ `KHOANG_GOI_Y` lượt mới mời MỘT
+// tính năng hợp ngữ cảnh.
 // "Còn N câu" chỉ hiện khi sắp hết (loiConCau).
 async function sendFollowUps(
   kit: ChannelKit,
@@ -732,7 +731,7 @@ async function sendFollowUps(
   outcome: NonNullable<Awaited<ReturnType<typeof runConversation>>>,
   cost: number,
   meta: ChatMeta | null,
-  luot: { cauHoi: string; thayId: string; daMoi: boolean; cauTruoc: string[] },
+  luot: { cauHoi: string; thayId: string; daMoi: boolean; khach?: GuestId },
 ): Promise<void> {
   const gy = meta?.goiY || {};
   const n = (gy.n || 0) + 1;
@@ -740,23 +739,29 @@ async function sendFollowUps(
   const con = dem ? loiConCau(dem) : '';
   const denLuot = n - (gy.g || 0) >= KHOANG_GOI_Y;
 
-  // Sản phẩm, chỉ ở thời điểm nóng (lyDoSanPham) — thắng tính năng.
+  // Sản phẩm — CHỈ lượt vừa an xong lá số, hoặc lượt khách vừa chọn kiểm chứng
+  // bằng môn khác (goi-y.ts). Link web có lá số điền sẵn, bất kể `NUT_WEB`.
   let sanPham: ChatButton | null = null;
-  let lyDo: ReturnType<typeof lyDoSanPham> = null;
-  if (denLuot && NUT_WEB && userId && outcome.birth) {
-    const chuDeGanDay = [...luot.cauTruoc.slice(-2), luot.cauHoi].map(chuDeCua);
-    lyDo = lyDoSanPham({
-      cauHoi: luot.cauHoi,
-      chuDeGanDay,
-      lasoShown: outcome.lasoShown,
-      conCau: dem ? dem.n : null,
-      luot: n,
-      spTruoc: gy.sp,
-    });
-    const sp = lyDo ? chonSanPham(sanPhamDanhMuc(lasoPath), chuDeGanDay[chuDeGanDay.length - 1] || []) : null;
-    const url = sp ? await createHandoffUrl(userId, sp.path(outcome.birth), outcome.birth) : null;
-    if (sp && url) sanPham = { title: await sp.nhan(), url };
-    else lyDo = null;
+  let loiSp = '';
+  let spId: string | null = null;
+  if (userId && outcome.birth && !dangDau(luot.cauHoi)) {
+    const g = luot.khach ? guestById(luot.khach) : null;
+    const mon = luot.khach ? SAN_PHAM_MON[luot.khach] : undefined;
+    if (g && mon) {
+      const url = await createHandoffUrl(userId, mon.path, outcome.birth);
+      if (url) {
+        sanPham = { title: mon.title, url };
+        loiSp = loiMon(g.mon);
+        spId = `mon:${g.id}`;
+      }
+    } else if (!luot.khach && outcome.lasoShown) {
+      const url = await createHandoffUrl(userId, lasoPath(outcome.birth), outcome.birth);
+      if (url) {
+        sanPham = { title: await nhanLuanGiai(), url };
+        loiSp = LOI_LA_SO;
+        spId = 'luan-giai';
+      }
+    }
   }
 
   // Tính năng. Thẻ công cụ model tự gợi ý (goi_y_cong_cu) thắng: nó đã đọc cả
@@ -793,8 +798,9 @@ async function sendFollowUps(
   const nutMoi = sanPham || tinhNang;
   if (nutMoi) {
     const head =
+      loiSp ||
       (tnId?.startsWith('cong-cu:') && outcome.toolSuggest?.lyDo) ||
-      (lyDo ? LOI_SAN_PHAM[lyDo] : 'Muốn xem thêm từ góc khác thì bấm nút dưới.');
+      'Muốn xem thêm từ góc khác thì bấm nút dưới.';
     await sendMenu(kit.io, ev.chatId, con ? `${head}\n\n${con}` : head, [nutMoi]);
   } else if (con) await kit.io.sendText(ev.chatId, con);
 
@@ -808,7 +814,7 @@ async function sendFollowUps(
     void chatLogEvent(kit.platform, ev.chatId, 'chat_goi_y', {
       action: 'show',
       tinh_nang: tnId || null,
-      san_pham: lyDo,
+      san_pham: spId,
     });
 }
 
