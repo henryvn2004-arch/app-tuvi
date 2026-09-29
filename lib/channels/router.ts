@@ -856,6 +856,12 @@ const BIEU_DO: { kind: ChartKind; nut: string; cau: string[]; loi: string; thay?
     loi: '12 tháng âm tới của bạn — mỗi dòng là cung nguyệt hạn cùng sao cát, sao sát của tháng đó. Nhờ thầy luận tháng nào thì nhắn tháng đó.',
   },
   {
+    kind: 'van-ngay',
+    nut: 'Vận hôm nay',
+    cau: ['vận hôm nay', 'vận ngày', 'xem vận hôm nay', 'hôm nay thế nào'],
+    loi: 'Vận hôm nay theo lá số của bạn — tính chất ngày, cung nhật hạn, giờ hoàng đạo, và 7 ngày tới (viền đỏ là ngày xung tuổi).',
+  },
+  {
     kind: 'dai-van',
     nut: 'Chi tiết đại vận',
     cau: ['chi tiết đại vận', 'điểm đại vận', 'chấm điểm đại vận', 'bảng đại vận'],
@@ -902,6 +908,7 @@ function bieuDoHop(q: string, lasoShown: boolean): { nut: string } {
   // Câu hỏi đúng một chủ đề (tiền, tình duyên, công việc…) → ảnh chính cung đó.
   const cung = cungChuDe(chuDeCua(q)[0] || null);
   if (cung) return { nut: `Xem cung ${cung}` };
+  if (/(hôm nay|ngày mai|tuần này)/.test(t)) return by('van-ngay');
   if (/(tháng|năm nay|năm sau|năm tới|sắp tới|khi nào|bao giờ)/.test(t)) return by('van-12-thang');
   if (/(đại vận|giai đoạn|vận 10 năm|mười năm)/.test(t)) return by('dai-van');
   if (/(cuộc đời|tương lai|sau này|về già|tuổi già)/.test(t)) return by('duong-doi');
@@ -985,7 +992,7 @@ async function handleBieuDo(kit: ChannelKit, ev: ChannelEvent, b: (typeof BIEU_D
     await kit.io.sendText(ev.chatId, THIEU_TEN);
     return;
   }
-  const url = chartImageUrl(b.kind, session.birth, currentNamXem(), b.kind === 'van-12-thang' ? todayVN() : undefined);
+  const url = chartImageUrl(b.kind, session.birth, currentNamXem(), b.kind === 'van-12-thang' || b.kind === 'van-ngay' ? todayVN() : undefined);
   if (!url || !kit.io.sendImage) {
     await kit.io.sendText(ev.chatId, ERR_MSG);
     return;

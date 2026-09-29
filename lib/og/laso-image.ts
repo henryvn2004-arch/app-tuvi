@@ -10,8 +10,10 @@
 //   bat-trach    — 8 hướng tốt/xấu theo cung mệnh (thầy Huyền Không)
 //   cung         — MỘT cung: sơ đồ tam phương + Tứ Hóa Phi Tinh, điểm 6 chiều (khoá `c`)
 //   dai-van      — bảng 9 đại vận: Thiên Thời · Địa Lợi · Nhân Hòa · Tổng
+//   van-ngay     — vận MỘT ngày theo lá số (ngày xem ở khoá `td`) + dải 7 ngày tới
 //   ngay-tot     — lịch ngày tốt một tháng cho một việc (khoá `mo` + `hd`, ngày sinh chỉ để in tên)
 //   ca-nha       — cả nhà × 12 tháng âm tới (khoá `p` = danh sách người, `td` = hôm nay)
+//   tet          — Tết tới: tuổi xông đất + xuất hành mùng 1–3 (khoá `p`, người đầu là chủ nhà; `td`)
 //   luc-nham     — khóa Đại Lục Nhâm lập lúc hỏi (thầy Linh Cơ) — theo THỜI ĐIỂM `t`
 //   ky-mon       — bàn Kỳ Môn dựng lúc hỏi (thầy Tâm Kính) — theo THỜI ĐIỂM `t`
 //
@@ -33,11 +35,12 @@ export type ChartKind =
   | 'than-so'
   | 'bat-trach'
   | 'cung'
-  | 'dai-van';
+  | 'dai-van'
+  | 'van-ngay';
 /** Ảnh theo THỜI ĐIỂM hỏi (không cần ngày sinh) — cùng khoá ký, khác tham số. */
 export type TimeChartKind = 'luc-nham' | 'ky-mon';
 /** Ảnh mang tham số riêng (không phải một lá số) — ngày sinh người hỏi, nếu có, chỉ để in lên ảnh. */
-export type ExtraChartKind = 'ngay-tot' | 'ca-nha';
+export type ExtraChartKind = 'ngay-tot' | 'ca-nha' | 'tet';
 
 const BASE = 'https://www.tuviminhbao.com/api/og/';
 const KEYS = ['d', 'm', 'y', 'h', 'g', 'l', 'nx', 'n', 'td'] as const;
