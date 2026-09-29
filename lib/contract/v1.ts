@@ -63,6 +63,8 @@ export interface BirthParams {
   gender?: 'nam' | 'nu';
   /** true nếu day/month/year đã là ÂM lịch (mặc định false = dương) */
   isLunar?: boolean;
+  /** true nếu tháng âm ở trên là tháng NHUẬN (chỉ có nghĩa khi isLunar) */
+  isLeapMonth?: boolean;
   /** Tên hiển thị (tùy chọn) */
   name?: string;
 }
