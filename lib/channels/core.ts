@@ -351,7 +351,8 @@ export async function runConversation(
 function guestChartUrl(c: GuestChart, b: BirthParams | null): string | null {
   if ('khi' in c) return timeChartUrl(c.kind, c.khi, b);
   if (c.kind === 'ngay-tot') return extraChartUrl('ngay-tot', { mo: `${c.nam}-${c.thang}`, hd: c.viec }, b);
-  if (c.kind === 'ca-nha') return extraChartUrl('ca-nha', { p: encodePeople(c.nguoi) }, null, todayVN());
+  if ('nguoi' in c) return extraChartUrl(c.kind, { p: encodePeople(c.nguoi) }, null, todayVN());
+  if (c.kind === 'van-ngay') return chartImageUrl('van-ngay', b, c.ngay.y, c.ngay);
   return chartImageUrl(c.kind, b, c.nam ?? currentNamXem(), c.kind === 'van-12-thang' ? todayVN() : undefined);
 }
 
@@ -362,7 +363,9 @@ const ANH_CAPTION: Partial<Record<GuestChart['kind'], string>> = {
   'than-so': 'Thần số học thầy Thanh Hư vừa tính',
   'bat-trach': 'Hướng hợp tuổi thầy Huyền Không vừa xem',
   'van-12-thang': 'Vận 12 tháng âm tới',
+  'van-ngay': 'Vận ngày thầy vừa tra, kèm 7 ngày tới',
   'ngay-tot': 'Lịch ngày tốt cả tháng — viền vàng là ngày thầy chọn',
+  tet: 'Tết nhà mình — tuổi xông đất và ngày giờ xuất hành',
   'ca-nha': 'Cả nhà 12 tháng âm tới — ô vàng là tháng nhiều người cùng hạn một cung',
 };
 
