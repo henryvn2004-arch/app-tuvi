@@ -22,7 +22,8 @@ export async function POST(request: NextRequest) {
   if (!accessToken) return err('Thiếu accessToken', 400);
 
   const me = await verifyMiniAppToken(accessToken);
-  if (!me) return err('Phiên Zalo không hợp lệ, mở lại Mini App', 401);
+  // Kèm mã lỗi Zalo (không nhạy cảm) để chẩn đoán từ ảnh chụp màn hình người dùng gửi.
+  if ('error' in me) return err(`Phiên Zalo không hợp lệ (${me.error}), mở lại Mini App`, 401);
 
   const acc = await resolveMiniAppUser(me.id, body.idByOA);
   if (!acc) return err('Chưa tạo được tài khoản, thử lại sau giây lát', 503);

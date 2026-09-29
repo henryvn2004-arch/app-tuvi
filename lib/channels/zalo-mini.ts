@@ -28,7 +28,9 @@ export const ZALO_MINI_PLATFORM = 'zalo-mini';
 // Mini App thuộc một Zalo App; nếu khác app của OA thì đặt secret riêng.
 const APP_SECRET = process.env.ZALO_MINI_APP_SECRET || process.env.ZALO_APP_SECRET || '';
 
-const ME_URL = 'https://graph.zalo.me/v2.0/me?fields=id,name';
+// CHỈ `id`: từ zmp-sdk 2.35 token lấy không hỏi người dùng chỉ đọc được id — hỏi
+// thêm `name` là Zalo từ chối cả lượt (tên/ảnh cần authorize scope.userInfo).
+const ME_URL = 'https://graph.zalo.me/v2.0/me?fields=id';
 const OA_USER_URL = 'https://openapi.zalo.me/v3.0/oa/user/detail';
 
 export const zaloMiniConfigured = () => !!APP_SECRET;
@@ -36,24 +38,24 @@ export const zaloMiniConfigured = () => !!APP_SECRET;
 /** id Zalo chỉ gồm chữ số — chặn chuỗi lạ chui vào khoá/email tổng hợp. */
 const isZaloId = (s: unknown): s is string => typeof s === 'string' && /^\d{5,32}$/.test(s);
 
-/** Token Mini App → id người dùng theo app (đã Zalo xác nhận), hoặc null. */
-export async function verifyMiniAppToken(accessToken: string): Promise<{ id: string; name: string } | null> {
-  if (!APP_SECRET || !accessToken) return null;
+/** Token Mini App → id người dùng theo app (đã Zalo xác nhận), hoặc `{ error }` kèm mã lỗi Zalo. */
+export async function verifyMiniAppToken(accessToken: string): Promise<{ id: string } | { error: string }> {
+  if (!APP_SECRET || !accessToken) return { error: 'thiếu token' };
   const proof = createHmac('sha256', APP_SECRET).update(accessToken).digest('hex');
   try {
     const res = await fetch(ME_URL, {
       headers: { access_token: accessToken, appsecret_proof: proof },
       cache: 'no-store',
     });
-    const d = (await res.json().catch(() => ({}))) as { id?: string; name?: string; error?: number; message?: string };
+    const d = (await res.json().catch(() => ({}))) as { id?: string; error?: number; message?: string };
     if (d.error || !isZaloId(d.id)) {
-      if (d.error) console.error('[zalo-mini] /me từ chối token', d.error, d.message);
-      return null;
+      console.error('[zalo-mini] /me từ chối token', d.error, d.message);
+      return { error: d.error ? `Zalo ${d.error}` : 'Zalo không trả id' };
     }
-    return { id: d.id, name: d.name || '' };
+    return { id: d.id };
   } catch (e) {
     console.error('[zalo-mini] /me lỗi mạng', e);
-    return null;
+    return { error: 'lỗi mạng tới Zalo' };
   }
 }
 
