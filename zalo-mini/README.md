@@ -35,8 +35,12 @@ Deploy (Mini App ID `685441626982830157`, gắn vào Zalo App cũ của OA):
 
 ```bash
 npm run login        # zmp login --app-id …; quét QR bằng Zalo tài khoản Admin/Developer
-npm run deploy       # Development = ghi đè, thử nhanh · Testing (-t) = có số, gửi duyệt được
+npm run deploy       # deploy.mjs: vite build rồi đẩy www/ · hỏi Development (ghi đè) hay Testing (có số, gửi duyệt)
+npm run deploy -- -p -m "mô tả"   # không hỏi gì, đẩy bản Development
 ```
+
+Deploy xong CLI in QR + link `https://zalo.me/s/685441626982830157/?env=DEVELOPMENT&version=zdev-…`
+— mỗi lần deploy Development ra `version` MỚI, link cũ không còn đúng bản.
 
 `zmp login` ghi `APP_ID` + `ZMP_TOKEN` vào `zalo-mini/.env` — file đó đã bị
 `.gitignore`, **không commit** (token là khoá deploy).
