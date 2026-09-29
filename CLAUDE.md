@@ -358,8 +358,8 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   dùng chung giá trị đó.
 - **Chạy `_patches/migration-chat-accounts.sql`** (tài khoản từ kênh chat, link sang web, đăng nhập
   bằng tin nhắn). Thiếu thì kênh vẫn chạy nhưng mất nút sang web/gộp tài khoản.
-- **Zalo Mini App**: tạo Zalo App ID + liên kết OA, đăng ký Mini App (hỏi trước về nội dung tử vi),
-  merchant Zalopay + Checkout SDK → đưa ID cho Claude. Vỏ `zalo-mini/` + route đăng nhập đã có — việc tay ở `zalo-mini/README.md`. `docs/nhat-ky/2026-09.md` "Kênh chat thành app".
+- **Zalo Mini App** (ID `3253099590902231163`, dưới Zalo App của OA): xác thực chủ sở hữu, xin quyền camera,
+  `npm run login`+`deploy` trong `zalo-mini/` (QR Zalo), hỏi Zalo về nội dung tử vi + payOS. Vỏ `zalo-mini/` + route đăng nhập đã có — việc tay ở `zalo-mini/README.md`. `docs/nhat-ky/2026-09.md` "Kênh chat thành app".
 - **Telegram channel**: thêm bot làm admin + đặt `TELEGRAM_CHANNEL_ID` rồi mới
   thêm `"telegram"` vào `social.channels`.
 - **Messenger** im lặng từ 27/06 — kiểm Page đã publish + có username chưa.
