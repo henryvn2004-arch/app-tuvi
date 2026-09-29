@@ -24,6 +24,7 @@ const schema = {
   phut: z.number().int().min(0).max(59).optional().describe('Phút sinh (không đổi khối giờ, chỉ để tham chiếu)'),
   gioi_tinh: z.enum(['nam', 'nu']).describe("Giới tính: 'nam' hoặc 'nu'"),
   am_lich: z.boolean().optional().describe('true nếu ngay_duong thực ra là ngày ÂM lịch (mặc định false = dương lịch)'),
+  thang_nhuan: z.boolean().optional().describe('true nếu am_lich=true VÀ người dùng nói rõ sinh tháng NHUẬN (vd "tháng 4 nhuận"). Không nói nhuận thì bỏ trống.'),
 };
 
 function chieuDaiVan(amDuong: string, gender: string): string {
@@ -48,6 +49,7 @@ export const anSaoTool: McpTool = {
     const birth: BirthParams = {
       day: ngay.day, month: ngay.month, year: ngay.year,
       hourBranch, gender, isLunar: !!args.am_lich,
+      ...(args.am_lich && args.thang_nhuan === true ? { isLeapMonth: true } : {}),
     };
 
     const r = computeLaso(birth);
@@ -74,6 +76,7 @@ export const anSaoTool: McpTool = {
         gio_chi: hourBranch >= 0 ? CHI_NAMES[hourBranch] : null,
         gioi_tinh: gender,
         am_lich: !!args.am_lich,
+        thang_nhuan: !!args.am_lich && args.thang_nhuan === true,
       },
       can_chi_nam: ls.canChiNam ?? null,
       am_duong: amDuong,

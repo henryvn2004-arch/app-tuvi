@@ -19,10 +19,10 @@
 //      trên web đã đăng nhập sẵn, hỏi thầy khác).
 // ============================================================
 
-import { runConversation, type ChannelIO, type ChatButton, type ProfileStore, type SessionStore } from './core';
+import { messageHasNewBirth, runConversation, type ChannelIO, type ChatButton, type ProfileStore, type SessionStore } from './core';
 import { buildAccessGate } from './gate';
 import { sendMenu } from './format';
-import { chatConsumeLinkToken, chatGetAuthor, chatLogEvent, chatLogOutcome, chatLoadMeta, chatLoadSession, chatPatchMeta, type ChatMeta } from './store';
+import { chatConsumeLinkToken, chatGetAuthor, chatLogEvent, chatLogOutcome, chatLoadMeta, chatLoadSession, chatPatchMeta, chatSetAuthor, type ChatMeta } from './store';
 import { ensureChatUser } from './account';
 import { accountProfiles, saveChart } from './charts';
 import { createHandoffUrl, lasoPath } from './handoff';
@@ -152,8 +152,8 @@ const NAP_SO_RE = /^(?:nạp|\/nap)\s+(\S.*)$/;
 
 export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg: ChatConfig): Promise<void> {
   const { io } = kit;
-  const text = (ev.text || '').trim();
-  const t = norm(text);
+  let text = (ev.text || '').trim();
+  let t = norm(text);
   const hasImage = ev.imageRefs.length > 0;
 
   if (!text && !hasImage) {
@@ -199,6 +199,41 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
     await io.sendText(ev.chatId, 'Ừ, lúc nào cần cứ nhắn thầy nhé.');
     return;
   }
+
+  // ── Trả lời câu "câu này cho ai?" khi khách quay lại (hoiLaiKhiQuayLai) ──
+  // Câu khách hỏi lúc quay lại được giữ ở goi_y.cho; chọn xong thì trả lời ĐÚNG câu đó.
+  const cho = meta?.goiY?.cho;
+  let traLoiCho = false;
+  if (cho && t === norm(QUAY_LAI.tiep)) {
+    text = cho;
+    traLoiCho = true;
+  } else if (cho && t.startsWith(norm(QUAY_LAI.laSo))) {
+    const ten = text.slice(QUAY_LAI.laSo.length).trim();
+    const p = await (userId ? accountProfiles(userId, kit.profiles) : kit.profiles).get(ev.chatId, ten);
+    if (p) {
+      // Người khác ⇒ hội thoại mới trên lá số đã lưu (giữ thầy đang tiếp chuyện).
+      await kit.store.save(ev.chatId, [], p.birth);
+      text = cho;
+      traLoiCho = true;
+    }
+  } else if (cho && t === norm(QUAY_LAI.moi)) {
+    // Xoá hẳn lá số cũ khỏi phiên (lưu `null` thì chatSaveSession GIỮ lá số cũ ⇒ tin sau
+    // chưa kèm ngày sinh sẽ bị luận nhầm người), rồi trả lại thầy + câu đang giữ.
+    const thayCu = await chatGetAuthor(kit.platform, String(ev.chatId));
+    await kit.clearSession(ev.chatId);
+    if (thayCu) await chatSetAuthor(kit.platform, String(ev.chatId), thayCu);
+    await chatPatchMeta(kit.platform, ev.chatId, { goi_y: { cho } });
+    await io.sendText(
+      ev.chatId,
+      'Được. Cho thầy giới tính, ngày tháng năm sinh (dương hay âm lịch) và giờ sinh của người đó — thầy lập lá số rồi trả lời luôn câu bạn vừa hỏi.',
+    );
+    return;
+  } else if (cho && messageHasNewBirth(text)) {
+    // Chọn "người mới" rồi gửi ngày sinh (hoặc gửi thẳng ngày sinh) ⇒ ghép câu đã giữ.
+    text = `${text}\n${cho}`;
+    traLoiCho = true;
+  }
+  t = norm(text);
 
   // ── Gộp tài khoản web ngay trong chat (email → mã 6 số) ──────────────
   if (GOP_CMD.includes(t)) return handleGop(kit, ev, userId);
@@ -308,6 +343,24 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   let hoiChan = false;
   const laHoiChan = CMD.hoiChan.includes(t);
   const khach = guestFromMoi(t);
+  // Khách quay lại sau lâu vắng mà phiên cũ đang xem một lá số ⇒ hỏi "câu này cho ai?"
+  // trước khi trả lời (Henry 2026-09-29) — không thì câu "năm nay tôi thế nào" của người
+  // mẹ bị luận trên lá số đứa con xem từ hôm qua. Chỉ hỏi MỘT lần (đã có `cho` thì thôi),
+  // bỏ qua khi tin đã kèm ngày sinh mới (core tự hiểu là người mới) hoặc là nút mời thầy.
+  if (
+    !traLoiCho &&
+    !cho &&
+    !laHoiChan &&
+    !khach &&
+    !hasImage &&
+    session.birth &&
+    session.messages.length > 0 &&
+    meta?.updatedAt &&
+    Date.now() - Date.parse(meta.updatedAt) > QUAY_LAI.sauMs &&
+    !messageHasNewBirth(text) &&
+    (await hoiLaiKhiQuayLai(kit, ev, userId, meta, session.birth, text))
+  )
+    return;
   if (laHoiChan || khach || t.startsWith(`${CMD.moiThay} `)) {
     const cauTruoc = [...session.messages]
       .reverse()
@@ -622,6 +675,49 @@ async function handleTopup(kit: ChannelKit, ev: ChannelEvent, userId: string | n
   const img = vietQrImageUrl(order);
   if (img && kit.io.sendImage) await kit.io.sendImage(ev.chatId, img);
   await sendMenu(kit.io, ev.chatId, topupCaption(order), [{ title: 'Mở trang thanh toán', url: order.checkoutUrl }]);
+}
+
+// ── Khách quay lại sau lâu vắng ──────────────────────────────────────
+const QUAY_LAI = {
+  /** Vắng quá bấy nhiêu thì hỏi lại "câu này cho ai?". */
+  sauMs: 3 * 3600_000,
+  // Câu nút gửi đi (khách thấy thành tin của mình).
+  tiep: 'Tiếp lá số lần trước',
+  laSo: 'Hỏi cho lá số: ',
+  moi: 'Xem cho người mới',
+};
+
+const moTaLaSo = (b: BirthParams) => {
+  const ngay = `${b.gender === 'nu' ? 'Nữ' : 'Nam'} ${b.day}/${b.month}/${b.year}${b.isLunar ? ' ÂL' : ''}`;
+  return String(b.name || '').trim() ? `${String(b.name).trim()} (${ngay})` : ngay;
+};
+const cungLaSo = (a: BirthParams, b: BirthParams) =>
+  a.day === b.day && a.month === b.month && a.year === b.year && a.gender === b.gender && !!a.isLunar === !!b.isLunar;
+
+/** Giữ câu vừa hỏi rồi hỏi lại khách đang hỏi cho ai. false = không giữ được câu (lỗi ghi) ⇒
+ *  caller trả lời bình thường, thà trả lời trên lá số cũ còn hơn làm mất câu hỏi. */
+async function hoiLaiKhiQuayLai(
+  kit: ChannelKit,
+  ev: ChannelEvent,
+  userId: string | null,
+  meta: ChatMeta,
+  birth: BirthParams,
+  cau: string,
+): Promise<boolean> {
+  const ok = await chatPatchMeta(kit.platform, ev.chatId, { goi_y: { ...(meta.goiY || {}), cho: cau } });
+  if (!ok) return false;
+  const ds = await (userId ? accountProfiles(userId, kit.profiles) : kit.profiles).list(ev.chatId).catch((e) => {
+    console.error('[channel-router] đọc sổ lá số lỗi', e);
+    return [];
+  });
+  const max = Math.min(kit.maxReplyButtons, 5);
+  const khac = ds.filter((p) => String(p.name || '').trim() && !cungLaSo(p.birth, birth)).slice(0, Math.max(0, max - 2));
+  await sendMenu(kit.io, ev.chatId, `Chào lại bạn! Lần trước mình đang xem lá số ${moTaLaSo(birth)}. Câu này bạn hỏi cho ai?`, [
+    { title: `Tiếp lá số ${moTaLaSo(birth)}`, reply: QUAY_LAI.tiep },
+    ...khac.map((p) => ({ title: `Lá số ${p.name}`, reply: `${QUAY_LAI.laSo}${p.name}` })),
+    { title: QUAY_LAI.moi, reply: QUAY_LAI.moi },
+  ]);
+  return true;
 }
 
 // ── Nút gợi ý sau câu trả lời (lib/channels/goi-y.ts) ────────────────
