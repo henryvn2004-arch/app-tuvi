@@ -618,7 +618,7 @@ async function runAgentInner(
       .filter((m) => m.role === 'user')
       .map((m) => (typeof m.content === 'string' ? m.content : ''));
     const thay = req.authorId ?? req.scenario?.authorId;
-    const hint = nhipHint(tinhNhip(cauHoi, thay), thay);
+    const hint = nhipHint(tinhNhip(cauHoi, thay, cacChuDe), thay);
     const last = convo[convo.length - 1];
     if (last?.role === 'user') {
       if (typeof last.content === 'string') {
