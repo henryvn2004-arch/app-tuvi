@@ -82,11 +82,14 @@ dùng thử (`lib/billing/anon-trial.ts` + RPC `anon_rail_trial_consume`).
 - **3 trần độc lập**, mỗi cái bịt một đường lách: `anon.rail_trial_turns` (trần
   ĐỜI theo `anon_id`) · `anon.rail_ip_daily_cap` (bịt xoá-localStorage, phải NỚI
   vì NAT nhà mạng) · `anon.rail_global_daily_cap` (cầu dao ngân sách).
-  **Đặt bất kỳ trần nào = 0 là TẮT hẳn.**
+  `rail_trial_turns = 0` là TẮT hẳn dùng thử; trần IP/toàn hệ thống `= 0` là
+  **KHÔNG GIỚI HẠN** (đang để 0 từ 2026-09-29 — chat là kênh chính, NAT 4G/văn
+  phòng gộp nhiều người thật vào 1 IP, ads không được bị cầu dao chặn). Khi đó
+  đường lách xoá-localStorage KHÔNG còn gì chặn — canh chi phí bằng `llm_usage`.
 - **Fail-CLOSED** — ngược `viral-budget.ts` (fail-OPEN) và ngược có lý do: cầu
   dao ảnh gác người ĐÃ TRẢ TIỀN, còn đây là khách vô danh chưa trả gì.
 - **`client.anon_id` KHÔNG phải danh tính** — client tự khai. Đừng dùng cho
-  quyền hạn/tính phí. Trần theo IP + toàn hệ thống mới là lớp chống lạm dụng.
+  quyền hạn/tính phí. Trần theo IP + toàn hệ thống là lớp chống lạm dụng (khi bật).
 - **Lượt anon CHẶN ảnh** (ảnh đội input token lên nhiều lần mà trần đếm theo
   LƯỢT) và **tiêu quota ngay khi cấp phép**, không đợi model xong — đếm sau khi
   thành công là mở đường gọi model rồi ngắt kết nối để khỏi bị tính.

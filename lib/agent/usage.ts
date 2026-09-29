@@ -34,7 +34,10 @@ export interface LlmUsage {
 // (provider chính của lib/llm/complete.ts, "chat.standalone_provider").
 const MODEL_PRICING: Record<string, { input: number; output: number }> = {
   'claude-sonnet-4-6': { input: 3, output: 15 },
-  'claude-sonnet-5': { input: 3, output: 15 },
+  // Tra bảng giá Anthropic 2026-09-29: Sonnet 5 / 5.5 cùng $2/$10 (dòng Sonnet 5
+  // từng ghi 3/15 — giá của Sonnet 4.6). Sonnet 5.5 là backup rail từ 2026-09-29.
+  'claude-sonnet-5': { input: 2, output: 10 },
+  'claude-sonnet-5-5': { input: 2, output: 10 },
   'claude-opus-5': { input: 5, output: 25 }, // backup-1 (chốt Henry 2026-08-20) — cùng bậc giá 4.8/4.7
   'claude-opus-4-8': { input: 5, output: 25 },
   'claude-opus-4-7': { input: 5, output: 25 },
