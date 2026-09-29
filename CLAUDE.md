@@ -120,14 +120,14 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 (tường trả phí) · `tool-prices.js` (giá) · `poster.js` (ảnh 9:16 + QR) ·
 `nav.js` (icon dùng chung) · `track.js` (đo) · `referral.js`.
 
-### 47 bộ dò (chạy trong CI lint) — `npm run check:*`
+### 48 bộ dò (chạy trong CI lint) — `npm run check:*`
 `prices` `nostore` `groups` `viec` `share` `history` `shellboot` `introcard` `navph`
 `formph` `formblock` `font`
 `authapi` `giosinh` `keyframes` `hoatdong` `hexagrams` `laso` `railfields`
 `railwrap` `cacheshape` `hao` `motifs` `illus` `terms` `publish` `thuvien` `jobs` `token`
 `prompt` `topics` `batrach` `sodep` `lunar` `vntz` `tooltip` `cns` `celebanh`
 `nguoithan` `nhatky` `slug` `lasogolden` `refbenchmarks` `lavong` `hooktag`
-`webdriver` `payossig`.
+`webdriver` `payossig` `amduong`.
 **Bộ dò kêu oan là bộ dò bị tắt đi** — thà thu hẹp còn hơn để nó báo bừa.
 
 ## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
@@ -356,8 +356,6 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   token Page vĩnh viễn (5 bước in trong `FB_TOKEN_EXPIRED`, `lib/media/publish.ts`).
   ⚠️ Chỉ **copy** App Secret, **TUYỆT ĐỐI không Reset** — Messenger/WhatsApp đang
   dùng chung giá trị đó.
-- **Chạy `_patches/migration-chat-nudge.sql`** (nút gợi ý nhớ khoảng cách + cron tin nhắc kênh chat). Thiếu thì
-  cron `chat-nudge` không gửi gì.
 - **Chạy `_patches/migration-chat-accounts.sql`** (tài khoản từ kênh chat, link sang web, đăng nhập
   bằng tin nhắn). Thiếu thì kênh vẫn chạy nhưng mất nút sang web/gộp tài khoản.
 - **Zalo Mini App**: tạo Zalo App ID + liên kết OA, đăng ký Mini App (hỏi trước về nội dung tử vi),

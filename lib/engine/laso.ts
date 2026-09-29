@@ -88,6 +88,7 @@ export function clockToBranch(hour: number, minute = 0): number {
 // phải property của window/globalThis nếu load riêng qua 2 lần new Function).
 let engineCache: {
   convertDuongToAm: (...a: unknown[]) => unknown;
+  solarToLunar: (d: number, m: number, y: number) => { day: number; month: number; year: number } | null;
   anSaoLaSo: (...a: unknown[]) => unknown;
   formatLaSoV2: (...a: unknown[]) => unknown;
   buildDaiVanLines: (...a: unknown[]) => unknown;
@@ -114,7 +115,7 @@ function loadEngine() {
     'window',
     'globalThis',
     pchipCode + '\n' + code + '\n' + formatCode +
-      '\nreturn{convertDuongToAm,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines,canCungOf:window.canCungOf,STAR_DATA,Pchip:window.Pchip};',
+      '\nreturn{convertDuongToAm,solarToLunar,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines,canCungOf:window.canCungOf,STAR_DATA,Pchip:window.Pchip};',
   ))(g, g) as typeof engineCache;
   return engineCache!;
 }
@@ -182,13 +183,55 @@ export function lunarOf(
   };
 }
 
+// ── Âm → dương: NGUỒN DUY NHẤT là public/tools-shared/am-duong.js ──
+// Hàm đó dò ngày dương bằng CHÍNH `solarToLunar` của engine (không tự tính lịch).
+// Nạp qua `new Function` như `vn-timezone.js` để bộ dò `check:amduong` gọi
+// đúng cùng một file.
+type AmDuongApi = {
+  lunarToSolar: (
+    d: number,
+    m: number,
+    y: number,
+    s2l: (d: number, m: number, y: number) => { day: number; month: number; year: number } | null,
+  ) => { day: number; month: number; year: number } | null;
+};
+let amDuongCache: AmDuongApi | null = null;
+function loadAmDuong(): AmDuongApi {
+  if (amDuongCache) return amDuongCache;
+  const code = readFileSync(join(process.cwd(), 'public', 'tools-shared', 'am-duong.js'), 'utf-8');
+  const mod: { exports: Rec } = { exports: {} };
+  new Function('module', code)(mod);
+  amDuongCache = mod.exports as AmDuongApi;
+  return amDuongCache;
+}
+
+/**
+ * Ngày ÂM (ngày, tháng, năm âm) → ngày DƯƠNG. `null` khi ngày âm không tồn tại
+ * (vd 30 của tháng thiếu) hoặc ngoài tầm bảng 1900–2100.
+ * ⚠️ Tháng nhuận: bảng vanilla bỏ cờ `isLeap` nên luôn trả tháng THƯỜNG cùng số
+ * (xem đầu `am-duong.js`).
+ */
+export function lunarToSolar(day: number, month: number, year: number): { day: number; month: number; year: number } | null {
+  return loadAmDuong().lunarToSolar(Math.floor(day), Math.floor(month), Math.floor(year), loadEngine().solarToLunar);
+}
+
+/** Ngày sinh DƯƠNG của `birth` — đổi từ âm khi `isLunar`. `null` khi thiếu/không đổi được. */
+export function solarDateOf(birth: BirthParams): { day: number; month: number; year: number } | null {
+  const { day, month, year } = birth;
+  if (!day || !month || !year) return null;
+  return birth.isLunar ? lunarToSolar(day, month, year) : { day, month, year };
+}
+
 /** Năm âm lịch + chi năm của một ngày sinh dương. Sinh tháng 1–2 dương mà âm
  *  lịch còn tháng 11–12 thì thuộc năm âm TRƯỚC — xông đất, cung mệnh Bát Trạch
  *  tính theo năm âm. */
 export function namAm(b: BirthParams): { nam: number; chi: string } | null {
   if (!b.day || !b.month || !b.year) return null;
   if (b.isLunar) {
-    const l = lunarOf(b.day, b.month, b.year);
+    // Ngày ÂM không được đưa thẳng vào `lunarOf` (hàm nhận ngày DƯƠNG) — đổi
+    // sang dương trước, không thì sinh đầu năm âm ra chi năm của năm trước.
+    const dl = lunarToSolar(b.day, b.month, b.year);
+    const l = dl ? lunarOf(dl.day, dl.month, dl.year) : null;
     return l ? { nam: b.year, chi: l.chiNam } : null;
   }
   const l = lunarOf(b.day, b.month, b.year);
