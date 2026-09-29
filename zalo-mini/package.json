@@ -6,11 +6,12 @@
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {
-    "start": "zmp start",
+    "start": "npx -y zmp-cli@4.0.3 start",
     "dev": "vite",
     "build": "vite build",
     "typecheck": "tsc --noEmit",
-    "deploy": "zmp deploy"
+    "login": "npx -y zmp-cli@4.0.3 login --app-id 685441626982830157",
+    "deploy": "npx -y zmp-cli@4.0.3 deploy"
   },
   "browserslist": [
     "Android >= 5",

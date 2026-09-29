@@ -1,2 +1,4 @@
 node_modules/
 www/
+# zmp login ghi APP_ID + ZMP_TOKEN (khoá deploy) vào đây — KHÔNG commit.
+.env
