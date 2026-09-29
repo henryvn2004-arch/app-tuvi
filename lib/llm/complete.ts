@@ -10,11 +10,11 @@
 // (không cần deploy).
 // 🔴 LIVE 2026-08-24 (chốt Henry): Kimi K3 chạy KHÔNG ỔN ĐỊNH (hay chậm/
 // timeout) → CANONICAL_ORDER đặt Kimi CỐ ĐỊNH ở cuối chuỗi, bất kể ai làm
-// primary. Mặc định toàn site: Gemini Flash primary → Opus 5 → Kimi K3.
+// primary. Mặc định toàn site: Gemini Flash primary → Sonnet 5.5 → Kimi K3.
 // 🔴 LIVE 2026-09-03 (chốt Henry): các route "luận giải" một-lần
 // (lasotuvi/van-han-nam/tubinh/xem-tuoi/day-con/huong-nghiep-tre) đã GỠ ép
 // primary='anthropic' → nay CẢ SITE, tool lẫn rail chat, cùng một thứ tự:
-// Gemini 3.8 Flash → Opus 5 → Kimi K3. Cơ chế override `LlmTextOpts.provider`
+// Gemini 3.8 Flash → Sonnet 5.5 → Kimi K3. Cơ chế override `LlmTextOpts.provider`
 // vẫn còn nguyên nhưng HIỆN KHÔNG route nào dùng.
 // Căn cứ (104 lượt gọi thật, 4 lá số × 2 model × 13 phần, cùng input/prompt):
 // Opus 11.215đ & 102s vs Gemini 2.669đ & 16s mỗi lá số — rẻ 4,2× nhanh 6,2×,
@@ -47,12 +47,12 @@ const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY || '';
 // KHÔNG đọc được từ app_config, đổi MODEL thì phải sửa trực tiếp ở đây rồi
 // deploy; đổi THỨ TỰ thì không, chỉ cần đổi DB hoặc override `provider` ở
 // chỗ gọi.
-// 2026-09-29 (Henry): Opus 5 → Opus 5.5 — rẻ hơn 20% ($4/$20 vs $5/$25), và là
-// PRIMARY của mọi route luận giải (`luanGiai:true`, xem `providerOrder`). A/B
-// chấm mù 4 model trên prompt mới: Opus 5.5 đứng đầu 2/3 giám khảo — nhật ký
-// 2026-09.md "A/B Gemini 3.8 Flash vs Sonnet 5.5 vs Opus 5.5". Opus 5.5 KHÔNG
-// tắt được thinking và cấm prefill/sampling params — body dưới không gửi các thứ đó.
-const ANTHROPIC_MODEL = 'claude-opus-5-5';
+// 2026-09-29 (Henry): BACKUP cho cả luận giải lẫn standalone — Gemini 3.8 Flash
+// primary. Từng thử Opus 5.5 làm primary luận giải: preview 2 phần đo thật
+// ~12.400đ/lượt (ghi cache 21k token ×2 mỗi phần) ⇒ không có lãi — nhật ký
+// 2026-09.md "Luận giải về lại Gemini". Sonnet 5.5 ($2/$10) KHÔNG tắt được
+// thinking và cấm prefill/sampling params — body dưới không gửi các thứ đó.
+const ANTHROPIC_MODEL = 'claude-sonnet-5-5';
 // Cùng một đoạn tiếng Việt, Claude tốn ~2,7× token đầu ra so với Gemini (tokenizer
 // + thinking; đo 27 lượt thật, nhật ký trên). Trần `maxTokens` của các route được
 // chỉnh theo Gemini ⇒ nhánh Anthropic nhân hệ số này, không thì cắt giữa câu (4/18
@@ -61,7 +61,7 @@ const ANTHROPIC_MAX_TOKENS_FACTOR = 2.5;
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 // Kimi K3 (Moonshot AI), endpoint OpenAI-compatible Chat Completions. LUÔN
 // đứng CUỐI chuỗi (xem CANONICAL_ORDER) — không ổn định, chỉ dùng làm lưới đỡ
-// cuối cùng khi cả Gemini lẫn Opus đều hỏng.
+// cuối cùng khi cả Gemini lẫn Sonnet đều hỏng.
 const KIMI_KEY = process.env.KIMIK3_API_KEY || '';
 const KIMI_MODEL = process.env.KIMI_MODEL || 'kimi-k3';
 const KIMI_URL = 'https://api.moonshot.ai/v1/chat/completions';
@@ -122,8 +122,8 @@ export interface LlmTextOpts {
    */
   provider?: 'kimi' | 'anthropic' | 'gemini';
   /** Lượt này là bản LUẬN GIẢI bán cho khách ⇒ primary lấy từ app_config
-   * `chat.luan_giai_provider` (mặc định 'anthropic' = Opus 5.5, Henry chốt
-   * 2026-09-29), fallback vẫn theo `CANONICAL_ORDER` (⇒ Gemini rồi Kimi). TÁCH
+   * `chat.luan_giai_provider` (mặc định 'gemini', Henry chốt
+   * 2026-09-29), fallback vẫn theo `CANONICAL_ORDER` (⇒ Anthropic rồi Kimi). TÁCH
    * khỏi `chat.standalone_provider` vì khoá đó còn chi phối cron/marketing
    * (hàng nghìn lượt/tháng) — lật nó là lật cả những thứ không bán cho ai.
    * `provider` (nếu có) vẫn thắng. Nhánh Anthropic mặc định `effort:'low'` cho

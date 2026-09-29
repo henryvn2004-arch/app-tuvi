@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-511 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+512 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 346 | 1,207,988 B |
+| `2026-09.md` | 347 | 1,214,257 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | ↩️ Luận giải về lại Gemini primary / Sonnet 5.5 backup (Opus ~12.400đ/preview) + vá giá ghi cache ×2 |
 | 1 | 2026-09 | `2026-09.md` | 🔀 Luận giải sang Opus 5.5 primary + RAG `tuvi_docs` hết rỗng (ivfflat probes, ngưỡng 0,40) |
 | 1 | 2026-09 | `2026-09.md` | 🧪 A/B Gemini vs Sonnet 5.5 vs Opus 5.5 trên prompt mới + vá prefill JSON nhánh Anthropic |
 | 1 | 2026-09 | `2026-09.md` | 🖼️ Kênh chat: chân dung thầy nét lại — trọn tranh 640px thay bản 96×96 |
