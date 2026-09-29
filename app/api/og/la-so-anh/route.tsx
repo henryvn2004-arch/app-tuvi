@@ -32,6 +32,8 @@ type Palace = {
   isThan?: boolean;
   stars?: Star[];
   majorStars?: Star[];
+  /** Sao lưu năm xem — engine `danhGiaSaoLuu` (Thái Thứ Lang), không trộn vào `stars`. */
+  luuStars?: { ten: string }[];
 };
 type Item = { text: string; color: string; bold?: boolean };
 
@@ -41,6 +43,11 @@ const PAD = 16;
 const HEAD = 64;
 const CW = (W - PAD * 2) / 4;
 const CH = (H - HEAD - FOOT - PAD) / 4;
+// Chiều cao dành cho hai cột phụ tinh + hàng sao lưu trong một ô (đo trên ảnh thật).
+const COL_H = 150;
+const FS_MIN = 11;
+const LUU_ROW_H = 17;
+const LUU_PER_ROW = 3;
 
 const C = {
   bg: '#FBF8F1',
@@ -63,6 +70,8 @@ const BRIGHT: Record<string, string> = { Miếu: 'M', Vượng: 'V', Đắc: 'Đ
 const BAD_TYPES = new Set(['sát tinh', 'hung tinh', 'bại tinh', 'tuế_tinh']);
 const TRANG_SINH = new Set(['Tràng Sinh', 'Mộc Dục', 'Quan Đới', 'Lâm Quan', 'Đế Vượng', 'Suy', 'Bệnh', 'Tử', 'Mộ', 'Tuyệt', 'Thai', 'Dưỡng']);
 const TUAN_TRIET = new Set(['Tuần', 'Triệt', 'Tuần+Triệt']);
+// Sao lưu xấu (đỏ) — cùng tập `_LUU_XAU` của public/laso-chart.js; còn lại xanh.
+const LUU_XAU = new Set(['Lưu Tang Môn', 'Lưu Bạch Hổ', 'Lưu Thiên Khốc', 'Lưu Thiên Hư', 'Lưu Kình Dương', 'Lưu Đà La', 'Lưu Hóa Kỵ']);
 const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
 const POS = LUOI_CHI;
 
@@ -78,13 +87,13 @@ function napAmTen(canChi: string): string {
   return '';
 }
 
-function Col({ items, align }: { items: Item[]; align: 'flex-start' | 'flex-end' }) {
+function Col({ items, align, fs }: { items: Item[]; align: 'flex-start' | 'flex-end'; fs: number }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: align, width: '50%' }}>
       {items.map((it, i) => (
         <div
           key={`${it.text}-${i}`}
-          style={{ display: 'flex', fontSize: 16, lineHeight: 1.32, color: it.color, fontWeight: it.bold ? 700 : 400 }}
+          style={{ display: 'flex', fontSize: fs, lineHeight: 1.32, color: it.color, fontWeight: it.bold ? 700 : 400 }}
         >
           {it.text}
         </div>
@@ -116,6 +125,12 @@ function Cell({ p, canNam, dvTuoi, cur }: { p?: Palace; canNam: string; dvTuoi?:
   const triet = stars.some((s) => s.ten === 'Triệt' || s.ten === 'Tuần+Triệt');
   const tt = tuan && triet ? 'TUẦN · TRIỆT' : tuan ? 'TUẦN' : triet ? 'TRIỆT' : '';
   const can = canCung(canNam, p.diaChi);
+  const luu = p.luuStars || [];
+  // Chữ phụ tinh co lại khi ô đông (thêm hàng sao lưu càng dễ tràn) — tràn thì
+  // chân ô (Tràng Sinh · tuổi đại hạn) bị đẩy ra ngoài, đè lên ô dưới.
+  const luuH = luu.length ? Math.ceil(luu.length / LUU_PER_ROW) * LUU_ROW_H + 4 : 0;
+  const rows = Math.max(left.length, right.length, 1);
+  const fs = Math.max(FS_MIN, Math.min(16, Math.floor((COL_H - luuH) / (1.32 * rows))));
   return (
     <div
       style={{
@@ -152,10 +167,29 @@ function Cell({ p, canNam, dvTuoi, cur }: { p?: Palace; canNam: string; dvTuoi?:
           <div style={{ display: 'flex', fontSize: 17, color: C.mute }}>Vô chính diệu</div>
         )}
       </div>
-      <div style={{ display: 'flex', marginTop: 4, flexGrow: 1 }}>
-        <Col items={left} align="flex-start" />
-        <Col items={right} align="flex-end" />
+      <div style={{ display: 'flex', marginTop: 4, flexGrow: 1, flexShrink: 1, overflow: 'hidden' }}>
+        <Col items={left} align="flex-start" fs={fs} />
+        <Col items={right} align="flex-end" fs={fs} />
       </div>
+      {luu.length ? (
+        <div style={{ display: 'flex', flexWrap: 'wrap', borderTop: `1px dashed ${C.line}`, paddingTop: 2, marginBottom: 2 }}>
+          {luu.map((s) => (
+            <div
+              key={s.ten}
+              style={{
+                display: 'flex',
+                fontSize: 13,
+                lineHeight: `${LUU_ROW_H}px`,
+                fontWeight: 700,
+                marginRight: 7,
+                color: LUU_XAU.has(s.ten) ? '#C0392B' : '#1455A4',
+              }}
+            >
+              {s.ten.replace(/^Lưu /, 'L.').toUpperCase()}
+            </div>
+          ))}
+        </div>
+      ) : null}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
         <div style={{ display: 'flex', fontSize: 14, color: elColor(ts?.ten) }}>{ts?.ten || ''}</div>
         {tt ? <div style={{ display: 'flex', fontSize: 13, fontWeight: 700, color: C.ink }}>{tt}</div> : null}
