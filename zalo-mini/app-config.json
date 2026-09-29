@@ -1,0 +1,13 @@
+{
+  "app": {
+    "title": "Tử Vi Minh Bảo",
+    "textColor": "black",
+    "statusBar": "normal",
+    "actionBarHidden": false,
+    "hideAndroidBottomNavigationBar": false,
+    "hideIOSSafeAreaBottom": false
+  },
+  "listCSS": [],
+  "listSyncJS": [],
+  "listAsyncJS": []
+}
