@@ -10,7 +10,8 @@
 //
 // Ba lớp: (1) loại câu hỏi → phân bố độ dài · (2) bốc có trọng số, KHÔNG lặp một
 // mức hai lượt liền · (3) thầy lệch trục (`PERSONAS[*].nhipLech`).
-// Câu đinh: chỉ ở câu đời sống/vặt/giải thích, ~1/3 số lượt đủ điều kiện, KHÔNG
+// Câu đinh + chiêu riêng của thầy (câu mở cửa miệng, ẩn dụ đặc trưng — 2026-09-29):
+// chỉ ở câu đời sống/vặt/giải thích, ~1/3 số lượt đủ điều kiện, KHÔNG
 // hai lượt liền, KHÔNG BAO GIỜ khi khách bế tắc hoặc chỉ nói câu xã giao.
 //
 // Tất định: "ngẫu nhiên" băm từ chính chữ các câu hỏi ⇒ gọi lại cùng hội thoại
@@ -24,7 +25,7 @@
 import { chuanHoaDauThanh } from '@/lib/vn-text';
 import { PERSONAS } from '@/lib/agent/personas';
 
-export type LoaiCau = 'xa-giao' | 'vat' | 'doi-song' | 'giai-thich' | 'be-tac';
+export type LoaiCau = 'xa-giao' | 'hoi-thuong' | 'vat' | 'doi-song' | 'giai-thich' | 'be-tac';
 /** "Câu hỏi đằng sau câu hỏi" — người ta hỏi để tìm gì. Xem `nhuCau()`. */
 export type NhuCau = 'giai-dap' | 'an-ui' | 'cong-nhan' | 'hy-vong' | 'phe-minh';
 export type MucDai = 'mot-cau' | 'ngan' | 'vua' | 'dai';
@@ -53,6 +54,13 @@ const GIAI_THICH = cum([
 const XA_GIAO = cum([
   'cảm ơn', 'cám ơn', 'thanks', 'ok', 'oke', 'vâng', 'dạ', 'ừ', 'thật à', 'thật không', 'vậy à', 'thế à',
   'hay quá', 'đúng rồi', 'chuẩn', 'haha', 'hihi',
+]);
+// Hỏi về chính cuộc trò chuyện — không phải câu xin luận. Không bắt thì rơi vào
+// 'doi-song' ⇒ 80–260 từ + chiêu riêng cho câu "đang xem lá số của ai đó?"
+// (Henry 2026-09-29: thầy trả lời bằng một đoạn bóc tính cách).
+const HOI_THUONG = cum([
+  'lá số của ai', 'xem cho ai', 'đang xem ai', 'xem của ai', 'lá số này là của', 'đang xem lá số nào',
+  'thầy là ai', 'bạn là ai', 'mày là ai', 'ai đang trả lời', 'thầy tên gì', 'bạn tên gì',
 ]);
 const VAT = cum([
   'có nên', 'nên không', 'được không', 'có được', 'có hợp', 'hợp không', 'có tốt không', 'mấy giờ',
@@ -117,6 +125,7 @@ export function loaiCau(question: string): LoaiCau {
   // Xã giao = câu RẤT ngắn chứa cụm xã giao; "ok vậy tháng 7 có nên ký không" không phải xã giao.
   if (soTu <= 5 && XA_GIAO.some((c) => q === c || q.startsWith(c + ' ') || q.endsWith(' ' + c) || q.startsWith(c + ',')))
     return 'xa-giao';
+  if (soTu <= 12 && HOI_THUONG.some((c) => q.includes(c))) return 'hoi-thuong';
   if (soTu <= 14 && VAT.some((c) => q.includes(c))) return 'vat';
   return 'doi-song';
 }
@@ -124,6 +133,7 @@ export function loaiCau(question: string): LoaiCau {
 // Phân bố độ dài theo loại câu (trọng số, cộng = 100).
 const PHAN_BO: Record<LoaiCau, Partial<Record<MucDai, number>>> = {
   'xa-giao': { 'mot-cau': 100 },
+  'hoi-thuong': { 'mot-cau': 50, ngan: 50 },
   vat: { 'mot-cau': 25, ngan: 60, vua: 15 },
   'doi-song': { ngan: 25, vua: 55, dai: 20 },
   'giai-thich': { vua: 30, dai: 70 },
@@ -158,7 +168,7 @@ function boc(pb: Partial<Record<MucDai, number>>, r: number, tru?: MucDai): MucD
 }
 
 function lech(m: MucDai, l: number | undefined, loai: LoaiCau): MucDai {
-  if (!l || loai === 'xa-giao') return m;
+  if (!l || loai === 'xa-giao' || loai === 'hoi-thuong') return m;
   if (l === -2) return MUC.indexOf(m) > MUC.indexOf('ngan') ? 'ngan' : m;
   const i = Math.min(MUC.length - 1, Math.max(0, MUC.indexOf(m) + l));
   // Lệch lên không được biến câu hỏi vặt thành bài dài, lệch xuống không được
@@ -195,7 +205,7 @@ export function tinhNhip(cauHoi: string[], authorId?: string | null): NhipLuot {
     // Người đang đau không đọc nổi một bài dài — kể cả khi câu có chữ "tại sao".
     const pb =
       nc === 'an-ui' ? PHAN_BO_AN_UI : i === 0 && loai === 'doi-song' ? PHAN_BO_LUOT_DAU : PHAN_BO[loai];
-    const muc: MucDai = lech(boc(pb, bam('muc|' + khoa), loai === 'xa-giao' ? undefined : truoc?.muc), l, loai);
+    const muc: MucDai = lech(boc(pb, bam('muc|' + khoa), loai === 'xa-giao' || loai === 'hoi-thuong' ? undefined : truoc?.muc), l, loai);
     const duDieuKien = loai === 'vat' || loai === 'doi-song' || loai === 'giai-thich';
     // Không có thầy ⇒ không có "kiểu câu đinh" nào để chêm.
     // Câu đinh (có vần, bóc, trêu) chỉ hợp lượt tra cứu thuần — chêm vào lượt
@@ -210,12 +220,16 @@ export function tinhNhip(cauHoi: string[], authorId?: string | null): NhipLuot {
 export function nhipHint(n: NhipLuot, authorId?: string | null): string {
   const doDai = `độ dài ${LOI_MUC[n.muc]} (ghi đè NGÂN SÁCH mặc định; khách yêu cầu rõ độ dài thì theo khách)`;
   const ghiChuBeTac = n.loai === 'be-tac' ? '; khách đang nặng lòng: chậm lại, ít phân tích, có thể hỏi lại một câu' : '';
+  const ghiChuThuong =
+    n.loai === 'hoi-thuong' ? '; đây là câu hỏi thường về cuộc trò chuyện: đáp thẳng đúng điều được hỏi, không luận tính cách/vận số' : '';
+  // Không cho phép thì cấm cả CHIÊU RIÊNG (câu mở cửa miệng, ẩn dụ đặc trưng), không chỉ câu đinh —
+  // chỉ cấm câu đinh thì thầy vẫn mở MỌI lượt bằng "Nói thật nhé:" (Henry 2026-09-29).
   const dinh = n.dinh
-    ? 'lượt này ĐƯỢC chêm đúng MỘT câu đinh theo kiểu của thầy'
-    : 'lượt này KHÔNG chêm câu đinh/câu vần';
+    ? 'lượt này ĐƯỢC dùng chiêu riêng của thầy (câu mở đặc trưng/ẩn dụ riêng) và chêm tối đa MỘT câu đinh'
+    : 'lượt này KHÔNG dùng chiêu riêng: không câu mở cửa miệng, không ẩn dụ đặc trưng, không câu đinh/câu vần — trả lời thẳng như người thường, giọng thầy chỉ ở xưng hô và chọn chữ';
   const xung =
     authorId && PERSONAS[authorId]?.xung === 'co-cau' ? '; gọi người xem là "cậu" (nam) / "cô" (nữ), KHÔNG gọi anh/chị' : '';
-  const nhip = `[NHỊP LƯỢT NÀY: ${doDai}${ghiChuBeTac}; ${dinh}${xung}. Không lặp lại phần đã nói ở lượt trước.]`;
+  const nhip = `[NHỊP LƯỢT NÀY: ${doDai}${ghiChuBeTac}${ghiChuThuong}; ${dinh}${xung}. Không lặp lại phần đã nói ở lượt trước.]`;
   return n.nhuCau === 'giai-dap'
     ? nhip
     : `${nhip}\n[NHU CẦU ẨN (máy đoán — tự kiểm lại theo câu chữ, không khớp thì bỏ qua): ${LOI_NHU_CAU[n.nhuCau]}. Lượt này giữ giọng thầy ở cách dùng chữ, nhưng KHÔNG bóc, vặn, trêu hay chê người xem, và bỏ câu mở cửa miệng kiểu bác bỏ/bóc mẽ ("Sai câu hỏi rồi", "Nói thật nhé").]`;
