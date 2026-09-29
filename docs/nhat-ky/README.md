@@ -25,7 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
-| 1 | 2026-09 | `2026-09.md` | 👋 Kênh chat: thầy chào ngắn + hỏi "muốn xem gì" trước, ngày sinh hỏi sau |
+| 1 | 2026-09 | `2026-09.md` | 👋 Kênh chat: thầy chào ngắn + hỏi "muốn xem gì" trước, ngày sinh hỏi sau · menu Công cụ chỉ việc làm được trong chat |
 | 1 | 2026-09 | `2026-09.md` | 🖥 Zalo Web/PC không hiện nút gợi ý — in kèm lựa chọn thành chữ |
 | 1 | 2026-09 | `2026-09.md` | 🌗 Tháng nhuận: cờ `isLeapMonth` từ chat tới Bát Tự và ảnh |
 | 1 | 2026-09 | `2026-09.md` | 👛 Zalo Mini App bước 4: tab "Của tôi" — ví Lượng, nạp qua payOS, báo cáo đã có |

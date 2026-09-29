@@ -50,54 +50,12 @@ export function timThay(arg: string): Thay | null {
 
 export const chonThay = (platform: string, chatId: string, t: Thay) => chatSetAuthor(platform, chatId, t.id);
 
-// ── Lời thầy tự giới thiệu (master_profiles.greeting + discipline) ──
-// CÙNG nguồn với lời chào của web (`introThay`, public/shell.js) — Admin sửa
-// bảng là cả web lẫn kênh chat đổi theo, không deploy. Đọc hụt → câu mặc định.
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
-const INTRO_TTL_MS = 10 * 60_000;
-type Intro = { greeting?: string; discipline?: string; tagline?: string };
-let introCache: { at: number; map: Record<string, Intro> } | null = null;
-
-async function masterIntros(): Promise<Record<string, Intro>> {
-  if (introCache && Date.now() - introCache.at < INTRO_TTL_MS) return introCache.map;
-  const map: Record<string, Intro> = {};
-  if (SUPABASE_URL && SUPABASE_KEY) {
-    try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/master_profiles?select=id,greeting,discipline,tagline`, {
-        cache: 'no-store',
-        headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
-      });
-      if (res.ok) {
-        for (const r of (await res.json()) as ({ id: string } & Intro)[]) {
-          map[r.id] = {
-            greeting: r.greeting || undefined,
-            discipline: r.discipline || undefined,
-            tagline: r.tagline || undefined,
-          };
-        }
-      } else {
-        console.error('[author] đọc master_profiles lỗi', res.status);
-      }
-    } catch (e) {
-      console.error('[author] đọc master_profiles lỗi mạng', e);
-    }
-  }
-  // Đọc hụt thì không nhớ — lượt sau thử lại.
-  if (Object.keys(map).length) introCache = { at: Date.now(), map };
-  return map;
-}
-
-/** Lời thầy tự giới thiệu ngắn, đọc là hiểu ngay: chào + tên · sở trường ·
- *  câu tâm đắc. KHÔNG dùng `greeting` — nhiều câu chào hỏi ngược khách ("con có
- *  chắc đang hỏi đúng điều mình cần không?") khiến lượt đầu khó hiểu; việc hỏi
- *  khách muốn xem gì do nút chủ đề ngay sau đó lo. */
+// ── Lời thầy tự giới thiệu ──
+// Chỉ chào + tên. KHÔNG kèm môn chuyên/câu chào riêng (master_profiles): trên kênh
+// chat thầy nào cũng luận được mọi thứ, mặc định là Tử Vi — nêu "sở trường" chỉ
+// làm khách tưởng phải chọn đúng thầy (Henry chốt 2026-09-29).
 export async function gioiThieuThay(t: Thay): Promise<string> {
-  const m = (await masterIntros())[t.id];
-  const dong = [`Chào con, ta là Thầy ${t.name}.`];
-  if (m?.discipline) dong.push(`Sở trường: ${m.discipline}.`);
-  if (m?.tagline) dong.push(`“${m.tagline}”`);
-  return dong.join('\n');
+  return `Chào con, ta là Thầy ${t.name}.`;
 }
 
 /** URL công khai chân dung chì THU NHỎ của thầy (public/authors/nho/<id>.jpg,
