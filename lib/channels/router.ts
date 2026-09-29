@@ -38,7 +38,6 @@ import { TOPUP_CMD, createChatTopup, parseTopup, topupCaption, topupChoices, vie
 import { GUESTS, detectMention, guestById, guestFromMoi, moiCau, type GuestId } from './guests';
 import { LOI_SAN_PHAM, chonSanPham, chonTinhNang, lyDoSanPham, nhanLuanGiai, nhanMon, sanPhamDanhMuc } from './goi-y';
 import { cacChuDe, cungChuDe } from '@/lib/agent/luan-chu-de';
-import { toolCatalog } from './catalog';
 import { THAY_LIST, anhThay, chonThay, gioiThieuThay, thayCuaChat, timThay, type Thay } from './author';
 import { getRailPrice } from '@/lib/billing/pricing';
 import { paywallDisabled, getBalance, deductCredits, logTransaction } from '@/lib/billing/credits';
@@ -99,6 +98,55 @@ const CMD = {
   batNhac: ['bật nhắc', 'bat nhac', '/batnhac'],
   deSau: ['để sau', 'de sau'],
 };
+/**
+ * Việc thầy làm được NGAY TRONG CHAT (tool của runAgent) — nguồn cho nút chủ đề
+ * sau lời chào và menu "Công cụ". Không link sang web: rời chat là mất khách.
+ * `cau` = câu gửi thầy khi bấm; `huongDan` = việc cần ẢNH, trả lời hướng dẫn và
+ * không gọi thầy; `khongCanLaSo` = hỏi được khi chưa có ngày sinh (Lục Nhâm).
+ * Bấm việc cần lá số khi phiên CHƯA có ⇒ xin ngày giờ sinh (miễn phí, không gọi
+ * thầy), lượt khách gửi ngày sinh thì ghép lại câu của việc đó.
+ */
+interface ViecChat {
+  title: string;
+  cau?: string;
+  huongDan?: string;
+  khongCanLaSo?: boolean;
+}
+const CHU_DE_MO: ViecChat[] = [
+  { title: 'Tổng quan lá số', cau: 'Thầy luận giải tổng quan lá số Tử Vi của tôi.' },
+  { title: 'Vận hạn năm nay', cau: 'Vận hạn năm nay của tôi thế nào?' },
+  { title: 'Tình duyên', cau: 'Chuyện tình duyên, hôn nhân của tôi thế nào?' },
+  { title: 'Sự nghiệp, tiền bạc', cau: 'Sự nghiệp và tiền bạc của tôi thế nào?' },
+  { title: 'Sức khỏe, gia đạo', cau: 'Sức khỏe và gia đạo của tôi cần lưu ý gì?' },
+];
+const CONG_CU_CHAT: ViecChat[] = [
+  { title: 'Luận giải lá số', cau: 'Thầy luận giải tổng quan lá số Tử Vi của tôi.' },
+  { title: 'Vận hạn năm nay', cau: 'Vận hạn năm nay của tôi thế nào?' },
+  { title: 'Xem ngày tốt', cau: 'Tôi cần chọn ngày tốt để làm một việc quan trọng, thầy xem giúp.' },
+  {
+    title: 'Hỏi việc đang phân vân',
+    cau: 'Tôi đang phân vân một việc, thầy gieo quẻ xem giúp nên hay không.',
+    khongCanLaSo: true,
+  },
+  {
+    title: 'Xem tướng qua ảnh',
+    huongDan: 'Con gửi một ảnh chân dung rõ mặt, nhìn thẳng, đủ sáng — ta xem tướng cho.',
+  },
+  { title: 'Vận tháng này', cau: 'Tháng này của tôi thế nào, ngày nào cần lưu ý?' },
+  {
+    title: 'Phong thủy nhà ở',
+    huongDan: 'Con gửi ảnh chỗ cần xem (cửa chính, phòng khách, phòng ngủ, bàn làm việc…) — ta xem phong thủy cho.',
+  },
+];
+const VIEC_CHAT = [...CHU_DE_MO, ...CONG_CU_CHAT];
+/** Tạm TẮT mọi nút link sang web (gợi ý công cụ web, bản luận giải, mở sổ trên
+ *  web) — rời app chat là mất khách (Henry chốt 2026-09-29). Bật lại: true. */
+const NUT_WEB = false;
+const timViec = (s: string) => VIEC_CHAT.find((v) => v.title.toLowerCase() === s.trim().toLowerCase());
+const HOI_NGAY_SINH =
+  'Để luận cho đúng, con cho ta xin: giới tính, ngày/tháng/năm sinh (dương lịch) và giờ sinh.\n' +
+  'Ví dụ: "Nam, 09/05/1984, giờ Tý". Không nhớ giờ sinh thì cứ nói "không rõ giờ".';
+
 /** "nạp 100k" / "nạp 200.000đ" (nút nạp gửi đúng dạng này) → phần số tiền. */
 const NAP_SO_RE = /^(?:nạp|\/nap)\s+(\S.*)$/;
 
@@ -256,9 +304,8 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   }
 
   // Chữ "công cụ" chỉ khớp khi đứng MỘT MÌNH — "công cụ nào xem được…" là câu hỏi.
-  if (CMD.congCu.includes(t)) return handleCongCu(kit, ev, userId, '');
-  if (t.startsWith(CMD.congCuNhom) || t.startsWith('/congcu ')) {
-    return handleCongCu(kit, ev, userId, t.replace(/^(công cụ:|\/congcu )/, '').trim());
+  if (CMD.congCu.includes(t) || t.startsWith(CMD.congCuNhom) || t.startsWith('/congcu ')) {
+    return handleCongCu(kit, ev);
   }
 
   // ── Mời thầy khác / hội chẩn (engine `addressMaster`/`hoiChan` của web) ──
@@ -266,7 +313,32 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   // vừa hỏi, lần này có thầy khách/nhóm cùng xem. Gõ "@Tâm Kính …" thì như web:
   // mời ngay trong câu.
   const session = await kit.store.load(ev.chatId);
+
   let askText = text;
+  const viec = hasImage ? undefined : timViec(text);
+  if (viec?.huongDan) {
+    await io.sendText(ev.chatId, viec.huongDan);
+    return;
+  }
+  if (viec?.cau) {
+    if (!session.birth && !viec.khongCanLaSo) {
+      await io.sendText(ev.chatId, HOI_NGAY_SINH);
+      await kit.store.save(
+        ev.chatId,
+        [...session.messages, { role: 'user', content: viec.title }, { role: 'assistant', content: HOI_NGAY_SINH }],
+        null,
+      );
+      return;
+    }
+    askText = viec.cau;
+  }
+  // Lượt ngay sau khi xin ngày sinh cho một việc: ghép câu của việc đó vào. Không
+  // trông vào lịch sử — tin có ngày sinh mới làm core bỏ lịch sử (người mới).
+  const [truocDo, vuaHoi] = session.messages.slice(-2);
+  if (!viec && !session.birth && vuaHoi?.content === HOI_NGAY_SINH && typeof truocDo?.content === 'string') {
+    const cho = timViec(truocDo.content);
+    if (cho?.cau) askText = `${text}\n${cho.cau}`;
+  }
   let addressMaster: GuestId | undefined;
   let hoiChan = false;
   const laHoiChan = CMD.hoiChan.includes(t);
@@ -421,29 +493,33 @@ async function sendWelcome(kit: ChannelKit, ev: ChannelEvent, userId: string | n
   const vi =
     (con ? `\n\n${con}` : '') +
     (bong ? '\n\nĐã có tài khoản trên tuviminhbao.com? Nhắn "Gộp tài khoản web" để dùng chung ví và sổ lá số.' : '');
-  const web = userId ? await createHandoffUrl(userId, '/app/cong-cu') : null;
   // Đã mua bản luận giải nào → thêm nút nhận PDF ngay trong chat.
   const coPdf = !!userId && !!kit.io.sendFile && (await listPaidReports(userId)).length > 0;
   await chaoThay(kit, ev, thay);
   await chonThay(kit.platform, String(ev.chatId), thay); // đánh dấu đã chào
+  // Kênh nhiều chỗ nút thì thêm các lối tiện ích sau nút chủ đề; Zalo (5 nút)
+  // chỉ còn chủ đề — tiện ích đã nằm ở menu OA.
+  await hoiVanDe(kit, ev, vi, [
+    { title: 'Đổi thầy', reply: 'Đổi thầy' },
+    { title: 'Sổ lá số', reply: 'Sổ lá số' },
+    { title: 'Nạp Lượng', reply: 'Nạp Lượng' },
+    { title: 'Công cụ', reply: 'Công cụ' },
+    ...(coPdf ? [{ title: 'Bản PDF', reply: 'Bản PDF' }] : []),
+  ]);
+}
+
+/** Sau lời chào: hỏi khách đang băn khoăn chuyện gì (nút chủ đề). Ngày giờ sinh
+ *  xin SAU, khi khách đã chọn — xem `timViec` trong handleChannelEvent. */
+async function hoiVanDe(kit: ChannelKit, ev: ChannelEvent, them = '', nutThem: ChatButton[] = []): Promise<void> {
+  const session = await kit.store.load(ev.chatId);
   await sendMenu(
     kit.io,
     ev.chatId,
-    'Đây là Hỏi Thầy — Tử Vi Minh Bảo.\n\n' +
-      'Hỏi thầy bất cứ điều gì về tử vi, vận hạn, tuổi tác, công việc, tình duyên… Để lập lá số, cho thầy biết: ' +
-      'giới tính, ngày/tháng/năm sinh (dương lịch) và giờ sinh.\n' +
-      'Ví dụ: "Nữ, 03/06/1998, giờ Sửu, năm nay làm ăn sao?"\n\n' +
-      'Gửi ảnh khuôn mặt để xem tướng, ảnh nhà cửa để xem phong thủy.\n\n' +
-      `Nhóm Minh Bảo có ${THAY_LIST.length} thầy — đổi thầy lúc nào cũng được.` +
-      vi,
-    [
-      { title: 'Đổi thầy', reply: 'Đổi thầy' },
-      { title: 'Sổ lá số', reply: 'Sổ lá số' },
-      { title: 'Nạp Lượng', reply: 'Nạp Lượng' },
-      { title: 'Công cụ', reply: 'Công cụ' },
-      ...(coPdf ? [{ title: 'Bản PDF', reply: 'Bản PDF' }] : []),
-      ...(web ? [{ title: 'Kho công cụ trên web', url: web }] : []),
-    ],
+    (session.birth
+      ? 'Con muốn hỏi thêm chuyện gì? Chọn bên dưới hoặc cứ nhắn thẳng cho ta.'
+      : 'Con đang băn khoăn chuyện gì — công việc, tiền bạc, tình duyên, sức khỏe hay vận năm nay? Chọn bên dưới hoặc cứ kể thẳng cho ta.') +
+      them,
+    [...CHU_DE_MO.map((v) => ({ title: v.title, reply: v.title })), ...nutThem],
   );
 }
 
@@ -530,6 +606,7 @@ async function handleThay(kit: ChannelKit, ev: ChannelEvent, arg: string): Promi
         return;
       }
       await chaoThay(kit, ev, moi);
+      await hoiVanDe(kit, ev);
       return;
     }
     await kit.io.sendText(ev.chatId, `Không tìm thấy thầy "${arg}".`);
@@ -549,13 +626,13 @@ async function handleThay(kit: ChannelKit, ev: ChannelEvent, arg: string): Promi
 async function handleSoLaSo(kit: ChannelKit, ev: ChannelEvent, userId: string | null): Promise<void> {
   const store = userId ? accountProfiles(userId, kit.profiles) : kit.profiles;
   const list = await store.list(ev.chatId);
-  const web = userId ? await createHandoffUrl(userId, '/app/so-la-so') : null;
+  const web = NUT_WEB && userId ? await createHandoffUrl(userId, '/app/so-la-so') : null;
   const webBtn: ChatButton[] = web ? [{ title: 'Mở sổ trên web', url: web }] : [];
   if (!list.length) {
     await sendMenu(
       kit.io,
       ev.chatId,
-      'Sổ lá số của bạn đang trống. Lập một lá số rồi nhờ thầy lưu kèm tên (vd "lưu lá số này tên anh Tony") — lần sau nhắn "xem lá số Tony" là mở lại, trên web cũng thấy.',
+      'Sổ lá số của bạn đang trống. Lập một lá số rồi nhờ thầy lưu kèm tên (vd "lưu lá số này tên anh Tony") — lần sau nhắn "xem lá số Tony" là mở lại.',
       webBtn,
     );
     return;
@@ -661,7 +738,7 @@ async function sendFollowUps(
   // đã đọc cả câu trả lời; không có thì chọn theo ngữ cảnh câu hỏi.
   let tinhNang: ChatButton | null = null;
   let tnId: string | undefined;
-  if (userId && outcome.toolSuggest?.path) {
+  if (NUT_WEB && userId && outcome.toolSuggest?.path) {
     const url = await createHandoffUrl(userId, outcome.toolSuggest.path, outcome.birth);
     if (url) {
       tinhNang = { title: outcome.toolSuggest.label, url };
@@ -678,8 +755,11 @@ async function sendFollowUps(
       bieuDo: bieuDoHop(luot.cauHoi, outcome.lasoShown),
     });
     if (tn && 'path' in tn.nut) {
-      const url = userId ? await createHandoffUrl(userId, tn.nut.path, outcome.birth) : `${SITE}${tn.nut.path}`;
-      if (url) tinhNang = { title: tn.nut.title, url };
+      if (!NUT_WEB) tinhNang = null;
+      else {
+        const url = userId ? await createHandoffUrl(userId, tn.nut.path, outcome.birth) : `${SITE}${tn.nut.path}`;
+        if (url) tinhNang = { title: tn.nut.title, url };
+      }
     } else if (tn && 'reply' in tn.nut) tinhNang = tn.nut;
     if (tinhNang) tnId = tn?.id;
   }
@@ -688,7 +768,7 @@ async function sendFollowUps(
   const dem = userId ? await demCau(userId, cost) : null;
   let sanPham: ChatButton | null = null;
   let lyDo: ReturnType<typeof lyDoSanPham> = null;
-  if (userId && outcome.birth) {
+  if (NUT_WEB && userId && outcome.birth) {
     const chuDeGanDay = [...luot.cauTruoc.slice(-2), luot.cauHoi].map(chuDeCua);
     lyDo = lyDoSanPham({
       cauHoi: luot.cauHoi,
@@ -707,7 +787,7 @@ async function sendFollowUps(
   const duoi = [tinhNang, sanPham].filter((b): b is ChatButton => !!b);
   const room = Math.max(0, Math.min(kit.maxReplyButtons, 5) - duoi.length);
   const goiY: ChatButton[] = outcome.suggestions.slice(0, Math.min(room, 3)).map((q) => ({ title: q, reply: q }));
-  const head = outcome.toolSuggest?.lyDo || (lyDo ? LOI_SAN_PHAM[lyDo] : 'Bạn muốn hỏi tiếp gì?');
+  const head = (NUT_WEB && outcome.toolSuggest?.lyDo) || (lyDo ? LOI_SAN_PHAM[lyDo] : 'Bạn muốn hỏi tiếp gì?');
   const con = dem ? loiConCau(dem) : '';
   await sendMenu(kit.io, ev.chatId, con ? `${head}\n\n${con}` : head, [...goiY, ...duoi]);
 
@@ -748,42 +828,18 @@ async function ghiNhanTin(kit: ChannelKit, ev: ChannelEvent, meta: ChatMeta | nu
   }
 }
 
-// ── Menu công cụ (nhóm + công cụ đọc từ DB, mở web đã đăng nhập) ────────
-async function handleCongCu(kit: ChannelKit, ev: ChannelEvent, userId: string | null, arg: string): Promise<void> {
-  const groups = await toolCatalog();
-  const khoWeb = userId ? await createHandoffUrl(userId, '/app/cong-cu') : null;
-  const tatCa: ChatButton = { title: 'Xem tất cả trên web', url: khoWeb || `${SITE}/app/cong-cu` };
-  // Nút gửi "Công cụ: <tên nhóm>"; "/congcu <số>" của nút cũ vẫn nhận.
-  const i = Number(arg) - 1;
-  const g =
-    (arg && groups.find((x) => x.title.toLowerCase() === arg)) || (Number.isInteger(i) && i >= 0 ? groups[i] : undefined);
-  if (!g) {
-    if (!groups.length) return sendMenu(kit.io, ev.chatId, 'Kho công cụ của Tử Vi Minh Bảo:', [tatCa]).then(() => {});
-    await sendMenu(
-      kit.io,
-      ev.chatId,
-      'Bạn muốn xem về việc gì? Chọn một nhóm — hoặc cứ hỏi thẳng thầy, thầy tự chọn công cụ hợp.',
-      [
-        ...groups.slice(0, Math.max(1, kit.maxReplyButtons - 1)).map((x) => ({
-          title: x.title,
-          reply: `Công cụ: ${x.title}`,
-        })),
-        tatCa,
-      ],
-    );
-    return;
-  }
-  const tools = g.tools.slice(0, 4);
-  const btns: ChatButton[] = [];
-  for (const t of tools) {
-    const url = userId ? await createHandoffUrl(userId, t.path) : null;
-    btns.push({ title: t.label, url: url || `${SITE}${t.path}` });
-  }
+// ── Menu công cụ: CHỈ việc thầy làm được ngay trong chat (CONG_CU_CHAT) ──
+// Không liệt kê công cụ web: bấm là rời app chat, mất khách (Henry chốt
+// 2026-09-29). Nút cũ "Công cụ: <nhóm>" trong lịch sử chat cũng về đây.
+async function handleCongCu(kit: ChannelKit, ev: ChannelEvent): Promise<void> {
+  const vua = CONG_CU_CHAT.slice(0, kit.maxReplyButtons);
+  const con = CONG_CU_CHAT.slice(vua.length);
   await sendMenu(
     kit.io,
     ev.chatId,
-    `${g.title}:\n${tools.map((t) => `• ${t.label}`).join('\n')}\n\nBấm để mở — đã đăng nhập sẵn, đúng lá số của bạn.`,
-    [...btns, ...(g.tools.length > tools.length ? [tatCa] : [])],
+    'Việc thầy làm được ngay tại đây — chọn một, hoặc cứ hỏi thẳng:' +
+      (con.length ? `\n\nNgoài ra: ${con.map((v) => v.title.toLowerCase()).join(', ')} — nhắn đúng tên việc đó.` : ''),
+    vua.map((v) => ({ title: v.title, reply: v.title })),
   );
 }
 
