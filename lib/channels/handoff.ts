@@ -57,7 +57,7 @@ export function birthToWeb(b: BirthParams | null | undefined): Record<string, un
   return o;
 }
 
-/** Trang lá số/luận giải đúng người — cùng tham số `luanGiaiHref()` của shell.js. */
+/** Trang lá số/luận giải đúng người, tự chạy — cùng tham số `luanGiaiHref()` của shell.js. */
 export function lasoPath(b: BirthParams | null | undefined): string {
   const dl = b ? solarDateOf(b) : null;
   if (!b || !dl) return '/app/luan-giai';
@@ -69,6 +69,8 @@ export function lasoPath(b: BirthParams | null | undefined): string {
   });
   if (b.hourBranch != null && b.hourBranch >= 0) q.set('gio', String(b.hourBranch * 2));
   if (b.name) q.set('ten', b.name);
+  // auto=1: trang tự lập lá số + chạy bản xem trước (miễn phí), không bắt nhập lại form.
+  q.set('auto', '1');
   return `/app/luan-giai?${q.toString()}`;
 }
 
