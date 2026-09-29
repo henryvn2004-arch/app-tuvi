@@ -139,6 +139,9 @@ const CONG_CU_CHAT: ViecChat[] = [
   },
 ];
 const VIEC_CHAT = [...CHU_DE_MO, ...CONG_CU_CHAT];
+/** Tạm TẮT mọi nút link sang web (gợi ý công cụ web, bản luận giải, mở sổ trên
+ *  web) — rời app chat là mất khách (Henry chốt 2026-09-29). Bật lại: true. */
+const NUT_WEB = false;
 const timViec = (s: string) => VIEC_CHAT.find((v) => v.title.toLowerCase() === s.trim().toLowerCase());
 const HOI_NGAY_SINH =
   'Để luận cho đúng, con cho ta xin: giới tính, ngày/tháng/năm sinh (dương lịch) và giờ sinh.\n' +
@@ -570,13 +573,13 @@ async function handleThay(kit: ChannelKit, ev: ChannelEvent, arg: string): Promi
 async function handleSoLaSo(kit: ChannelKit, ev: ChannelEvent, userId: string | null): Promise<void> {
   const store = userId ? accountProfiles(userId, kit.profiles) : kit.profiles;
   const list = await store.list(ev.chatId);
-  const web = userId ? await createHandoffUrl(userId, '/app/so-la-so') : null;
+  const web = NUT_WEB && userId ? await createHandoffUrl(userId, '/app/so-la-so') : null;
   const webBtn: ChatButton[] = web ? [{ title: 'Mở sổ trên web', url: web }] : [];
   if (!list.length) {
     await sendMenu(
       kit.io,
       ev.chatId,
-      'Sổ lá số của bạn đang trống. Lập một lá số rồi nhờ thầy lưu kèm tên (vd "lưu lá số này tên anh Tony") — lần sau nhắn "xem lá số Tony" là mở lại, trên web cũng thấy.',
+      'Sổ lá số của bạn đang trống. Lập một lá số rồi nhờ thầy lưu kèm tên (vd "lưu lá số này tên anh Tony") — lần sau nhắn "xem lá số Tony" là mở lại.',
       webBtn,
     );
     return;
@@ -639,7 +642,7 @@ async function sendFollowUps(
   // đã đọc cả câu trả lời; không có thì chọn theo ngữ cảnh câu hỏi.
   let tinhNang: ChatButton | null = null;
   let tnId: string | undefined;
-  if (userId && outcome.toolSuggest?.path) {
+  if (NUT_WEB && userId && outcome.toolSuggest?.path) {
     const url = await createHandoffUrl(userId, outcome.toolSuggest.path, outcome.birth);
     if (url) {
       tinhNang = { title: outcome.toolSuggest.label, url };
@@ -656,8 +659,11 @@ async function sendFollowUps(
       bieuDo: bieuDoHop(luot.cauHoi, outcome.lasoShown),
     });
     if (tn && 'path' in tn.nut) {
-      const url = userId ? await createHandoffUrl(userId, tn.nut.path, outcome.birth) : `${SITE}${tn.nut.path}`;
-      if (url) tinhNang = { title: tn.nut.title, url };
+      if (!NUT_WEB) tinhNang = null;
+      else {
+        const url = userId ? await createHandoffUrl(userId, tn.nut.path, outcome.birth) : `${SITE}${tn.nut.path}`;
+        if (url) tinhNang = { title: tn.nut.title, url };
+      }
     } else if (tn && 'reply' in tn.nut) tinhNang = tn.nut;
     if (tinhNang) tnId = tn?.id;
   }
@@ -666,7 +672,7 @@ async function sendFollowUps(
   const dem = userId ? await demCau(userId, cost) : null;
   let sanPham: ChatButton | null = null;
   let lyDo: ReturnType<typeof lyDoSanPham> = null;
-  if (userId && outcome.birth) {
+  if (NUT_WEB && userId && outcome.birth) {
     const chuDeGanDay = [...luot.cauTruoc.slice(-2), luot.cauHoi].map(chuDeCua);
     lyDo = lyDoSanPham({
       cauHoi: luot.cauHoi,
@@ -685,7 +691,7 @@ async function sendFollowUps(
   const duoi = [tinhNang, sanPham].filter((b): b is ChatButton => !!b);
   const room = Math.max(0, Math.min(kit.maxReplyButtons, 5) - duoi.length);
   const goiY: ChatButton[] = outcome.suggestions.slice(0, Math.min(room, 3)).map((q) => ({ title: q, reply: q }));
-  const head = outcome.toolSuggest?.lyDo || (lyDo ? LOI_SAN_PHAM[lyDo] : 'Bạn muốn hỏi tiếp gì?');
+  const head = (NUT_WEB && outcome.toolSuggest?.lyDo) || (lyDo ? LOI_SAN_PHAM[lyDo] : 'Bạn muốn hỏi tiếp gì?');
   const con = dem ? loiConCau(dem) : '';
   await sendMenu(kit.io, ev.chatId, con ? `${head}\n\n${con}` : head, [...goiY, ...duoi]);
 
