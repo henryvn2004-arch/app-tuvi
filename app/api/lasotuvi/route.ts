@@ -493,10 +493,9 @@ async function runPost(request: NextRequest) {
     // ⚠️ `effort` và THINK_BUDGET trong `maxTok` GIỮ NGUYÊN dù Gemini bỏ qua
     // chúng: đó là ngân sách của nhánh Opus khi Gemini chết. Dọn đi là lượt
     // fallback bị cắt giữa câu.
-    // 🔺 2026-09-29 (Henry): LẬT LẠI — `luanGiai:true` ⇒ Opus 5.5 primary, Gemini
-    // backup (khoá `chat.luan_giai_provider`, KHÔNG phải `chat.standalone_provider`).
-    // Căn cứ: A/B chấm mù trên prompt mới (nhật ký 2026-09.md "A/B Gemini 3.8 Flash
-    // vs Sonnet 5.5 vs Opus 5.5"). Lật về Gemini không cần deploy: đổi khoá đó.
+    // 2026-09-29 (Henry): thử Opus 5.5 primary rồi LẬT VỀ trong ngày — preview
+    // ~12.400đ/lượt, không lãi. Nay Gemini primary, Sonnet 5.5 backup (khoá
+    // `chat.luan_giai_provider`, đổi không cần deploy). Nhật ký 2026-09.md.
     let r = await llmTextFull({ luanGiai: true, system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, effort: EFFORT });
 
     // ── Bị CẮT giữa câu → sinh lại MỘT lần với trần gấp đôi ────────────────

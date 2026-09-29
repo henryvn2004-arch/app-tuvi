@@ -28,9 +28,10 @@ export interface LlmUsage {
 }
 
 // Giá USD/1M token (sticker price, không tính intro discount tạm thời).
-// Cache write ×1.25 (TTL 5', hệ thống dùng TTL 1h thực tế đắt hơn 2x nhưng cứ
-// dùng mốc bảo thủ hơn — biên LN sẽ hơi thấp hơn thực tế, không thổi phồng).
-// Cache read ×0.1. Nguồn: bảng giá Anthropic hiện hành + Gemini 2.5 Flash
+// Cache write ×2 — giá của TTL 1h (`complete.ts`, `run.ts` đều đóng `ttl:'1h'`;
+// TTL 5' là ×1,25 nên chỗ nào còn dùng 5' thì bị ghi DƯ — đúng hướng). Từng ghi
+// ×1,25 với lý do "bảo thủ" là NGƯỢC: nó ghi THIẾU chi phí ⇒ thổi phồng biên LN
+// (đo 2026-09-29: preview Opus ghi 9.165đ, thật ~12.360đ). Cache read ×0.1. Nguồn: bảng giá Anthropic hiện hành + Gemini 2.5 Flash
 // (provider chính của lib/llm/complete.ts, "chat.standalone_provider").
 const MODEL_PRICING: Record<string, { input: number; output: number }> = {
   'claude-sonnet-4-6': { input: 3, output: 15 },
@@ -103,7 +104,7 @@ function calcCostVnd(model: string, u: LlmUsage): number {
   const p = pricingFor(model);
   const usd =
     (u.input_tokens * p.input +
-      u.cache_creation_input_tokens * p.input * 1.25 +
+      u.cache_creation_input_tokens * p.input * 2 +
       u.cache_read_input_tokens * p.input * 0.1 +
       u.output_tokens * p.output) /
     1e6;
