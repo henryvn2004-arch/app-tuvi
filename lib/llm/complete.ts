@@ -357,11 +357,10 @@ function buildAnthropicBody(o: LlmTextOpts, maxTokens: number, stream: boolean) 
   } else {
     messages = [{ role: 'user', content: o.prompt || '' }];
   }
-  // Anthropic không có JSON mode; tương đương gần nhất là PREFILL — mở sẵn lượt
-  // trả lời bằng '{' để model buộc phải viết tiếp thân JSON, hết đường thêm câu
-  // dẫn. Chỉ dùng cho non-stream (nhánh streaming không parse JSON).
-  // `anthropicText` nối lại '{' đã bị prefill nuốt mất.
-  if (o.json && !stream) messages = [...messages, { role: 'assistant', content: '{' }];
+  // KHÔNG prefill '{' cho `json` nữa (2026-09-29): Opus 5 trở đi trả 400 "This
+  // model does not support assistant message prefill" ⇒ MỌI lượt json:true rơi
+  // xuống nhánh này đều chết rồi lặng lẽ sang Kimi. Câu dẫn/fence quanh JSON do
+  // `parseLlmJson()` (lib/llm/json.ts) bóc — mọi chỗ gọi json:true bắt buộc qua đó.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const body: any = { model: ANTHROPIC_MODEL, max_tokens: maxTokens, messages };
   if (o.system) {
@@ -406,9 +405,7 @@ async function anthropicText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmR
     );
   }
   return {
-    // Nối lại dấu '{' của prefill (xem buildAnthropicBody) — API chỉ trả phần
-    // model viết TIẾP, không lặp lại phần đã mồi.
-    text: o.json ? '{' + t : t,
+    text: t,
     truncated,
     usage: {
       input_tokens: j?.usage?.input_tokens || 0,

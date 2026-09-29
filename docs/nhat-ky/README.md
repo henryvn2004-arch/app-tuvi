@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-507 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+508 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 342 | 1,206,339 B |
+| `2026-09.md` | 343 | 1,206,339 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🧪 A/B Gemini vs Sonnet 5.5 vs Opus 5.5 trên prompt mới + vá prefill JSON nhánh Anthropic |
 | 1 | 2026-09 | `2026-09.md` | 🔕 Kênh chat: bỏ chip gợi ý mỗi lượt · sản phẩm chỉ lúc an lá số/kiểm chứng môn khác · "Còn N câu" chỉ khi dưới 3 |
 | 1 | 2026-09 | `2026-09.md` | 🌠 Engine an 9 sao lưu năm xem (Thái Thứ Lang) + Lưu Tứ Hóa, hiện trên lá số |
 | 1 | 2026-09 | `2026-09.md` | 🗣️ Luận giải bớt thảo mai: bỏ "câu lật" bắt buộc, thêm CẢNH BÁO & CƠ HỘI |
