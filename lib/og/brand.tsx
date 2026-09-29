@@ -26,6 +26,14 @@ export const C = {
   curVan: '#FFF4D9',
 };
 
+/** Vị trí [hàng, cột] của từng địa chi (0=Tý…11=Hợi) trên lưới lá số 4×4 — Tý hàng dưới, cột 3. */
+export const LUOI_CHI: Record<number, [number, number]> = {
+  5: [0, 0], 6: [0, 1], 7: [0, 2], 8: [0, 3],
+  4: [1, 0], 9: [1, 3],
+  3: [2, 0], 10: [2, 3],
+  2: [3, 0], 1: [3, 1], 0: [3, 2], 11: [3, 3],
+};
+
 /** Màu ngũ hành — cùng bảng lá số Tử Vi (laso-chart.css, ảnh la-so-anh). */
 export const HANH_COLOR: Record<string, string> = {
   Kim: '#7F8C8D',
@@ -36,10 +44,10 @@ export const HANH_COLOR: Record<string, string> = {
 };
 
 /** "Minh Anh · Nam · 3/6/1998 DL · giờ Thìn" — dòng phụ chung của các ảnh theo ngày sinh. */
-export function birthLine(b: { name?: string; gender?: string; day?: number; month?: number; year?: number; isLunar?: boolean; hourBranch?: number | null }): string {
+export function birthLine(b: { name?: string; gender?: string; day?: number; month?: number; year?: number; isLunar?: boolean; isLeapMonth?: boolean; hourBranch?: number | null }): string {
   const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
   const gio = b.hourBranch != null && b.hourBranch >= 0 ? ` · giờ ${CHI[b.hourBranch]}` : '';
-  return `${b.name ? b.name + ' · ' : ''}${b.gender === 'nu' ? 'Nữ' : 'Nam'} · ${b.day}/${b.month}/${b.year} ${b.isLunar ? 'ÂL' : 'DL'}${gio}`;
+  return `${b.name ? b.name + ' · ' : ''}${b.gender === 'nu' ? 'Nữ' : 'Nam'} · ${b.day}/${b.month}${b.isLunar && b.isLeapMonth ? ' nhuận' : ''}/${b.year} ${b.isLunar ? 'ÂL' : 'DL'}${gio}`;
 }
 
 /** "10:15 29/9/2026" giờ Việt Nam — mốc lập khóa/dựng bàn in lên ảnh theo thời điểm. */

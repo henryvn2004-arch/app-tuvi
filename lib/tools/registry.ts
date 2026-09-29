@@ -107,7 +107,13 @@ export interface ToolContext {
   charts: GuestChart[];
 }
 
-export type GuestChart = { kind: ChartKind; nam?: number } | { kind: TimeChartKind; khi: string };
+export type GuestChart =
+  | { kind: Exclude<ChartKind, 'van-ngay'>; nam?: number }
+  | { kind: 'van-ngay'; ngay: { d: number; m: number; y: number } }
+  | { kind: TimeChartKind; khi: string }
+  | { kind: 'ngay-tot'; viec: string; thang: number; nam: number }
+  | { kind: 'ca-nha'; nguoi: { ten: string; birth: BirthParams }[] }
+  | { kind: 'tet'; nguoi: { ten: string; birth: BirthParams }[] };
 
 export function newToolContext(
   seedLs: Laso | null = null,
@@ -341,6 +347,11 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false, hasFamily 
             description:
               'Loại lịch của NGÀY/THÁNG/NĂM ở trên: "duong" nếu dương/tây lịch (mặc định), "am" nếu người dùng nói âm/ta lịch ("ÂL", "âm lịch", "lịch ta"). CHỈ gắn cờ — TUYỆT ĐỐI không tự đổi âm sang dương, hệ thống tự quy đổi.',
           },
+          leap_month: {
+            type: 'boolean',
+            description:
+              'CHỈ khi calendar="am" VÀ người dùng nói rõ sinh vào tháng NHUẬN (vd "tháng 4 nhuận", "tháng nhuận 2"). Không nói nhuận thì BỎ field này.',
+          },
           hourBranch: {
             type: 'integer',
             description:
@@ -493,6 +504,17 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
     // Lưới an toàn: tra_tieu_van thiếu năm → mặc định năm hiện tại (VN).
     const arg = name === 'tra_tieu_van' && !input?.nam ? { ...input, nam: currentYearVN() } : input;
     let content = execLasoTool(name, ctx.ls, arg);
+    // Lịch ngày tốt cả tháng gửi kèm ở kênh chat — cùng tham số tool vừa chấm (ảnh tự kiểm lại phạm vi).
+    const thang = Math.floor(Number(arg?.thang));
+    const namNT = Math.floor(Number(arg?.nam));
+    if (name === 'xem_ngay_tot' && thang >= 1 && thang <= 12 && namNT >= 2020 && namNT <= 2036 && arg?.viec) {
+      ctx.charts.push({ kind: 'ngay-tot', viec: String(arg.viec), thang, nam: namNT });
+    }
+    // Ảnh vận ngày — cùng ngày dương tool vừa tra (route tự tính lại từ lá số).
+    const ngayNV = Math.floor(Number(arg?.ngay));
+    if (name === 'tra_nhat_van' && ngayNV >= 1 && ngayNV <= 31 && thang >= 1 && thang <= 12 && namNT >= 1900 && namNT <= 2100) {
+      ctx.charts.push({ kind: 'van-ngay', ngay: { d: ngayNV, m: thang, y: namNT } });
+    }
     if (name === 'tra_tieu_van' && ctx.chuDe.length) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const tv = ((ctx.ls as any)?.tieuVanScores || []).find((t: any) => Number(t.nam) === Number(arg?.nam));
@@ -563,7 +585,16 @@ export function buildBirthFromInput(input: Rec): BirthParams | null {
   const day = Math.floor(Number(input.day));
   const month = Math.floor(Number(input.month));
   if (!Number.isFinite(year) || !Number.isFinite(day) || !Number.isFinite(month)) return null;
-  return { day, month, year, hourBranch: hb, gender: normGender(input.gender), isLunar: isLunarInput(input) };
+  const isLunar = isLunarInput(input);
+  return {
+    day,
+    month,
+    year,
+    hourBranch: hb,
+    gender: normGender(input.gender),
+    isLunar,
+    ...(isLunar && input.leap_month === true ? { isLeapMonth: true } : {}),
+  };
 }
 
 function execLapLaSo(input: Rec, ctx: ToolContext): ToolRunResult {
@@ -795,7 +826,7 @@ interface ThayKhach {
   /** Dữ liệu engine cho câu hỏi này; null = không dựng được (thiếu dữ kiện). */
   duLieu: (ctx: ToolContext) => string | null;
   /** Ảnh của môn này gửi kèm ở kênh chat (vắng = môn chưa có ảnh). */
-  anh?: ChartKind;
+  anh?: Exclude<ChartKind, 'van-ngay'>;
 }
 export const THAY_KHACH: Record<string, ThayKhach> = {
   'dieu-khong': {
@@ -1092,7 +1123,7 @@ const LUAT_NGUOI_NHA =
 
 function birthLine(b: BirthParams): string {
   const gio = b.hourBranch != null && b.hourBranch >= 0 && b.hourBranch < 12 ? `, giờ ${CHI_GIO[b.hourBranch]}` : '';
-  return `${b.gender === 'nu' ? 'nữ' : 'nam'}, sinh ${b.day}/${b.month}/${b.year}${b.isLunar ? ' âm lịch' : ''}${gio}`;
+  return `${b.gender === 'nu' ? 'nữ' : 'nam'}, sinh ${b.day}/${b.month}${b.isLunar && b.isLeapMonth ? ' nhuận' : ''}/${b.year}${b.isLunar ? ' âm lịch' : ''}${gio}`;
 }
 const CHI_GIO = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
 
@@ -1142,6 +1173,8 @@ async function execTraCaNha(ctx: ToolContext): Promise<ToolRunResult> {
   if (co.length < 2) {
     return { content: 'Chưa đủ hai lá số lập được để xếp cả nhà cạnh nhau' + (thieu.length ? ': ' + thieu.join('; ') : '') + '. Nói người dùng bổ sung ở trang Sổ lá số.', label: 'Xếp lá số cả nhà' };
   }
+  // Ảnh lưới cả nhà × 12 tháng gửi kèm ở kênh chat — đúng những người vừa xếp được.
+  ctx.charts.push({ kind: 'ca-nha', nguoi: co.map((n) => ({ ten: n.ten, birth: n.birth })) });
   const L: string[] = [];
   L.push(`— CẢ NHÀ ${co.length} NGƯỜI, 12 THÁNG ÂM TỚI (engine tính, mỗi ô là cung nguyệt hạn + sao trong chùm tam phương tứ chính) —`);
   L.push(LUAT_NGUOI_NHA);
@@ -1169,13 +1202,17 @@ async function execXemTetCaNha(input: Rec, ctx: ToolContext): Promise<ToolRunRes
   const chu = namAm(ctx.birth);
   if (!chu) return { content: 'Không quy được năm âm của người hỏi.', label };
 
-  const people: { ten: string; chi: string }[] = [{ ten: String(ctx.birth.name || '').trim() || 'Người hỏi', chi: chu.chi }];
+  const people: { ten: string; chi: string; birth: BirthParams }[] = [
+    { ten: String(ctx.birth.name || '').trim() || 'Người hỏi', chi: chu.chi, birth: ctx.birth },
+  ];
   if (input?.ca_nha !== false) {
     for (const m of ctx.family) {
       const n = namAm(m.birth);
-      if (n) people.push({ ten: m.ten, chi: n.chi });
+      if (n) people.push({ ten: m.ten, chi: n.chi, birth: m.birth });
     }
   }
+  // Ảnh Tết: chủ nhà chưa cho tên thì để trống (ảnh tự bỏ), không in nhãn "Người hỏi".
+  ctx.charts.push({ kind: 'tet', nguoi: people.map((p, i) => ({ ten: i ? p.ten : String(ctx.birth?.name || '').trim(), birth: p.birth })) });
 
   const L: string[] = [];
   const xd = computeXongDat(chu.nam, t.namXem);

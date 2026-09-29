@@ -19,7 +19,7 @@ import { ImageResponse } from 'next/og';
 import type { NextRequest } from 'next/server';
 import { loadOgFonts, ogFallbackRedirect } from '@/lib/og/font';
 import { readLasoImageParams } from '@/lib/og/laso-image';
-import { BrandFooter, FOOT } from '@/lib/og/brand';
+import { BrandFooter, FOOT, LUOI_CHI } from '@/lib/og/brand';
 import { canChiNgayGio, canCung, computeLaso, solarDateOf, starMeta } from '@/lib/engine/laso';
 import { ccInfo } from '@/lib/engine/diachi';
 
@@ -64,13 +64,7 @@ const BAD_TYPES = new Set(['sát tinh', 'hung tinh', 'bại tinh', 'tuế_tinh']
 const TRANG_SINH = new Set(['Tràng Sinh', 'Mộc Dục', 'Quan Đới', 'Lâm Quan', 'Đế Vượng', 'Suy', 'Bệnh', 'Tử', 'Mộ', 'Tuyệt', 'Thai', 'Dưỡng']);
 const TUAN_TRIET = new Set(['Tuần', 'Triệt', 'Tuần+Triệt']);
 const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
-// Vị trí [hàng, cột] của từng địa chi trên lưới 4×4 (Tý ở hàng dưới, cột 3).
-const POS: Record<number, [number, number]> = {
-  5: [0, 0], 6: [0, 1], 7: [0, 2], 8: [0, 3],
-  4: [1, 0], 9: [1, 3],
-  3: [2, 0], 10: [2, 3],
-  2: [3, 0], 1: [3, 1], 0: [3, 2], 11: [3, 3],
-};
+const POS = LUOI_CHI;
 
 const elColor = (ten?: string) => EL[starMeta(ten || '')?.element || ''] || C.ink;
 
@@ -221,12 +215,12 @@ export async function GET(req: NextRequest) {
   const rows: [string, string, string][] = lich && dl
     ? [
         ['Năm', `${dl.year} (${lich.amLich.year})`, canChiNam],
-        ['Tháng', `${dl.month} (${lich.amLich.month})`, ''],
+        ['Tháng', `${dl.month} (${lich.amLich.month}${birth.isLunar && birth.isLeapMonth ? ' nhuận' : ''})`, ''],
         ['Ngày', `${dl.day} (${lich.amLich.day})`, lich.ngay],
         ['Giờ', CHI[birth.hourBranch!], lich.gio],
       ]
     : [
-        ['Âm lịch', `${birth.day}/${birth.month}/${birth.year}`, canChiNam],
+        ['Âm lịch', `${birth.day}/${birth.month}${birth.isLeapMonth ? ' nhuận' : ''}/${birth.year}`, canChiNam],
         ['Giờ', CHI[birth.hourBranch!], ''],
       ];
   const info = [
@@ -305,7 +299,7 @@ export async function GET(req: NextRequest) {
     </div>
   );
 
-  const ngay = `${birth.day}/${birth.month}/${birth.year} ${birth.isLunar ? 'ÂL' : 'DL'}`;
+  const ngay = `${birth.day}/${birth.month}${birth.isLunar && birth.isLeapMonth ? ' nhuận' : ''}/${birth.year} ${birth.isLunar ? 'ÂL' : 'DL'}`;
   return new ImageResponse(
     (
       <div style={{ display: 'flex', flexDirection: 'column', width: W, height: H, background: C.bg, fontFamily: 'BeVN' }}>

@@ -40,12 +40,15 @@ Nghi sai thì GHI LẠI, không sửa. Đang treo:
   mò** — tháng nhuận là chuyện cổ pháp. `check:lunar` ghim hiện trạng: đổi là đỏ.
 - **Chiều ÂM → DƯƠNG chỉ có MỘT cửa: `lunarToSolar()` / `solarDateOf(birth)`**
   (`lib/engine/laso.ts` → `public/tools-shared/am-duong.js`). Hàm KHÔNG tự tính
-  lịch: dò ngày dương bằng chính `solarToLunar` của engine, lấy ngày khớp ĐẦU
-  TIÊN ⇒ ngày trong tháng nhuận quy về **tháng THƯỜNG cùng số** (quy ước, do bảng
-  vanilla bỏ `isLeap` và `BirthParams` không có trường nhuận). **Engine Bát Tự
+  lịch: dò ngày dương bằng chính `solarToLunar` của engine. **Tháng nhuận đi qua
+  cờ `BirthParams.isLeapMonth`** (chat: `lap_la_so.leap_month`; MCP: `thang_nhuan`; link ảnh: `ln=1`) —
+  hàm đếm ĐOẠN tháng (mỗi đoạn mở ở mùng 1; tháng nhuận nằm LIỀN sau tháng thường,
+  không có ngày hở) và lấy đoạn thứ hai; năm không nhuận tháng đó ⇒ `null`, không
+  lặng lẽ trả tháng thường. Thiếu cờ ⇒ tháng THƯỜNG. `computeLaso` vẫn an sao theo
+  SỐ tháng (không đổi cổ pháp), chỉ từ chối cờ nhuận sai năm. **Engine Bát Tự
   (`tinhBatTu`) nhận ngày DƯƠNG** — `birth.isLunar` mà đưa thẳng vào là tứ trụ sai
   hoàn toàn mà trông hợp lệ; `lunarOf()` cũng nhận ngày DƯƠNG. `npm run
-  check:amduong` · `nhat-ky/2026-09.md` "Bát Tự sai cho người nhập âm lịch".
+  check:amduong` · `nhat-ky/2026-09.md` "Bát Tự sai cho người nhập âm lịch" · "Tháng nhuận".
 
 ## Khoá "cùng lá số" là ÂM LỊCH, không phải ngày dương
 

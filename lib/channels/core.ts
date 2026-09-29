@@ -22,7 +22,7 @@ import {
   type ClientPlatform,
 } from '@/lib/contract/v1';
 import { runAgent } from '@/lib/agent/run';
-import { chartImageUrl, lasoImageUrl, timeChartUrl } from '@/lib/og/laso-image';
+import { chartImageUrl, encodePeople, extraChartUrl, lasoImageUrl, timeChartUrl } from '@/lib/og/laso-image';
 import { currentNamXem } from '@/lib/engine/namxem';
 import { todayVN } from '@/lib/engine/van-ngay';
 import { type GuestChart, type ProfilePort } from '@/lib/tools/registry';
@@ -350,6 +350,9 @@ export async function runConversation(
 /** Link ảnh cho một môn thầy khách vừa lập (null khi thiếu dữ kiện, vd Thần số học cần họ tên). */
 function guestChartUrl(c: GuestChart, b: BirthParams | null): string | null {
   if ('khi' in c) return timeChartUrl(c.kind, c.khi, b);
+  if (c.kind === 'ngay-tot') return extraChartUrl('ngay-tot', { mo: `${c.nam}-${c.thang}`, hd: c.viec }, b);
+  if ('nguoi' in c) return extraChartUrl(c.kind, { p: encodePeople(c.nguoi) }, null, todayVN());
+  if (c.kind === 'van-ngay') return chartImageUrl('van-ngay', b, c.ngay.y, c.ngay);
   return chartImageUrl(c.kind, b, c.nam ?? currentNamXem(), c.kind === 'van-12-thang' ? todayVN() : undefined);
 }
 
@@ -360,6 +363,10 @@ const ANH_CAPTION: Partial<Record<GuestChart['kind'], string>> = {
   'than-so': 'Thần số học thầy Thanh Hư vừa tính',
   'bat-trach': 'Hướng hợp tuổi thầy Huyền Không vừa xem',
   'van-12-thang': 'Vận 12 tháng âm tới',
+  'van-ngay': 'Vận ngày thầy vừa tra, kèm 7 ngày tới',
+  'ngay-tot': 'Lịch ngày tốt cả tháng — viền vàng là ngày thầy chọn',
+  tet: 'Tết nhà mình — tuổi xông đất và ngày giờ xuất hành',
+  'ca-nha': 'Cả nhà 12 tháng âm tới — ô vàng là tháng nhiều người cùng hạn một cung',
 };
 
 // Chốt nội dung vào tin tiến trình (edit); phần dư > msgLimit gửi tin mới.

@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-486 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+499 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 321 | 1167425 B |
+| `2026-09.md` | 334 | 1193339 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -26,6 +26,19 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 💬 Chat thành kênh chính: giá 4 Lượng/câu, bỏ trần IP + toàn hệ thống, backup Sonnet 5.5 |
+| 1 | 2026-09 | `2026-09.md` | 👋 Kênh chat: thầy chào ngắn + hỏi "muốn xem gì" trước, ngày sinh hỏi sau · menu Công cụ chỉ việc làm được trong chat |
+| 1 | 2026-09 | `2026-09.md` | 🧧 Kênh chat: ảnh vận ngày · Tết nhà mình |
+| 1 | 2026-09 | `2026-09.md` | 📅 Kênh chat: ảnh lịch ngày tốt · chấm điểm 9 đại vận · cả nhà × 12 tháng |
+| 1 | 2026-09 | `2026-09.md` | 🌗 Tháng nhuận cho công cụ MCP: tham số `thang_nhuan` |
+| 1 | 2026-09 | `2026-09.md` | 📰 Bản tin kinh tế – đời sống hằng ngày cho thầy (Gemini + Google Search) |
+| 1 | 2026-09 | `2026-09.md` | 🔁 Kênh chat: khách quay lại sau vài tiếng → hỏi "câu này cho ai?" |
+| 1 | 2026-09 | `2026-09.md` | 🖥 Zalo Web/PC không hiện nút gợi ý — in kèm lựa chọn thành chữ |
+| 1 | 2026-09 | `2026-09.md` | 🌗 Tháng nhuận: cờ `isLeapMonth` từ chat tới Bát Tự và ảnh |
+| 1 | 2026-09 | `2026-09.md` | 📸 Zalo Mini App bước 5: chụp ảnh gửi Hỏi Thầy · ảnh lá số (lưu/chia sẻ) · chia sẻ vận ngày |
+| 1 | 2026-09 | `2026-09.md` | 👛 Zalo Mini App bước 4: tab "Của tôi" — ví Lượng, nạp qua payOS, báo cáo đã có |
+| 1 | 2026-09 | `2026-09.md` | 🧰 Zalo Mini App bước 3: tab "Công cụ" — `/api/v1/catalog` + mở công cụ web đã đăng nhập |
+| 1 | 2026-09 | `2026-09.md` | 📱 Zalo Mini App bước 2: vỏ `zalo-mini/` — Hôm nay · Hỏi Thầy · Sổ lá số |
+| 1 | 2026-09 | `2026-09.md` | 🗺️ Kênh chat: ảnh TỪNG CUNG — sơ đồ tam phương + mũi tên Tứ Hóa Phi Tinh + lục giác 6 chiều |
 | 1 | 2026-09 | `2026-09.md` | 🌙 Kênh chat: người nhập ngày ÂM — ảnh lá số đủ can chi, Thần số học chạy được, link web đúng người |
 | 1 | 2026-09 | `2026-09.md` | 🀄 Bát Tự sai cho người nhập âm lịch — thêm cửa âm → dương duy nhất |
 | 1 | 2026-09 | `2026-09.md` | 🔘 Kênh chat: nút gợi ý 3 tầng + tin nhắc chủ động |
