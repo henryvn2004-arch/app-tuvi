@@ -779,9 +779,9 @@ const BIEU_DO: { kind: ChartKind; nut: string; cau: string[]; loi: string; thay?
   },
 ];
 
-/** Thần số học cần họ tên + ngày DƯƠNG — thiếu thì ẩn nút, bấm tay thì nhắc bổ sung. */
-const veDuoc = (kind: ChartKind, birth: BirthParams) => kind !== 'than-so' || (!!String(birth.name || '').trim() && !birth.isLunar);
-const THIEU_TEN = 'Thần số học tính từ HỌ TÊN khai sinh và ngày sinh DƯƠNG lịch. Nhắn thầy họ tên đầy đủ cùng ngày sinh dương lịch nhé, rồi bấm lại "Thần số học".';
+/** Thần số học cần họ tên (ngày âm đã tự đổi sang dương) — thiếu thì ẩn nút, bấm tay thì nhắc bổ sung. */
+const veDuoc = (kind: ChartKind, birth: BirthParams) => kind !== 'than-so' || !!String(birth.name || '').trim();
+const THIEU_TEN = 'Thần số học tính từ HỌ TÊN khai sinh. Nhắn thầy họ tên đầy đủ nhé, rồi bấm lại "Thần số học".';
 
 /** Biểu đồ hợp câu vừa hỏi: vừa lập lá số → đường đời; hỏi về tháng/năm → 12
  *  tháng; về đời/tương lai → đường đời; còn lại → điểm mạnh yếu 12 cung. */

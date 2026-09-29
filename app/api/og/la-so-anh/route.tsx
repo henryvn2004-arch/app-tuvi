@@ -20,7 +20,7 @@ import type { NextRequest } from 'next/server';
 import { loadOgFonts, ogFallbackRedirect } from '@/lib/og/font';
 import { readLasoImageParams } from '@/lib/og/laso-image';
 import { BrandFooter, FOOT } from '@/lib/og/brand';
-import { canChiNgayGio, canCung, computeLaso, starMeta } from '@/lib/engine/laso';
+import { canChiNgayGio, canCung, computeLaso, solarDateOf, starMeta } from '@/lib/engine/laso';
 import { ccInfo } from '@/lib/engine/diachi';
 
 type Star = { ten?: string; nhom?: string; brightness?: string; hoa?: string | null };
@@ -215,12 +215,14 @@ export async function GET(req: NextRequest) {
   const gioi = birth.gender === 'nu' ? 'NỮ' : 'NAM';
   const amDuong = String(ls.amDuong || '') === 'dương' ? 'DƯƠNG' : 'ÂM';
   const namXemCc = ccInfo(namXem)?.canChi || '';
-  const lich = birth.isLunar ? null : canChiNgayGio(birth.day!, birth.month!, birth.year!, birth.hourBranch!);
-  const rows: [string, string, string][] = lich
+  // Nhập âm lịch → đổi sang dương (`solarDateOf`) để vẫn có can chi ngày/giờ.
+  const dl = solarDateOf(birth);
+  const lich = dl ? canChiNgayGio(dl.day, dl.month, dl.year, birth.hourBranch!) : null;
+  const rows: [string, string, string][] = lich && dl
     ? [
-        ['Năm', `${birth.year} (${lich.amLich.year})`, canChiNam],
-        ['Tháng', `${birth.month} (${lich.amLich.month})`, ''],
-        ['Ngày', `${birth.day} (${lich.amLich.day})`, lich.ngay],
+        ['Năm', `${dl.year} (${lich.amLich.year})`, canChiNam],
+        ['Tháng', `${dl.month} (${lich.amLich.month})`, ''],
+        ['Ngày', `${dl.day} (${lich.amLich.day})`, lich.ngay],
         ['Giờ', CHI[birth.hourBranch!], lich.gio],
       ]
     : [

@@ -35,7 +35,7 @@ import { khungCaNha, type NguoiNhaVao } from '@/lib/engine/ca-nha';
 import { computeXongDat, tetSapToi, VERDICT_LABEL } from '@/lib/engine/xong-dat';
 import { computeVanNgay } from '@/lib/engine/van-ngay';
 import { getCungMenh, guaOf } from '@/lib/engine/bat-trach';
-import { namAm } from '@/lib/engine/laso';
+import { namAm, solarDateOf } from '@/lib/engine/laso';
 import { SUGGEST_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
 type Rec = Record<string, unknown>;
@@ -843,8 +843,10 @@ export const THAY_KHACH: Record<string, ThayKhach> = {
     duLieu: (ctx) => {
       const b = ctx.birth;
       const ten = String(b?.name || '').trim();
-      if (!b || b.isLunar || !b.day || !b.month || !b.year || !ten) return null;
-      const r = computeThanSoHoc(b.day, b.month, b.year, ten, currentYearVN());
+      // Pythagoras tính trên ngày DƯƠNG — nhập âm thì đổi trước (`solarDateOf`).
+      const dl = b ? solarDateOf(b) : null;
+      if (!dl || !ten) return null;
+      const r = computeThanSoHoc(dl.day, dl.month, dl.year, ten, currentYearVN());
       return r.ok && r.data ? `THẦN SỐ HỌC của "${ten}":\n` + extractGenericContext(r.data) : null;
     },
   },

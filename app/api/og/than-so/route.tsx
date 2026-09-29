@@ -5,8 +5,8 @@
 // Pythagoras 3-6-9 / 2-5-8 / 1-4-7 và mũi tên.
 //
 // Số liệu CHỈ lấy từ engine (`computeThanSoHoc` → public/tools-shared/than-so-hoc.js,
-// cùng file web chạy); lưới đọc từ `bieuDoCo` engine trả ra. Cần HỌ TÊN và ngày
-// DƯƠNG lịch — thiếu thì 400 (router không gửi link khi thiếu). Link ký, loại `than-so`.
+// cùng file web chạy); lưới đọc từ `bieuDoCo` engine trả ra. Cần HỌ TÊN (thiếu → 400,
+// router không gửi link); ngày âm tự đổi sang dương (`solarDateOf`). Link ký, loại `than-so`.
 export const runtime = 'nodejs';
 
 import { ImageResponse } from 'next/og';
@@ -15,6 +15,7 @@ import { loadOgFonts, ogFallbackRedirect } from '@/lib/og/font';
 import { readChartParams } from '@/lib/og/laso-image';
 import { BrandFooter, BrandHeader, C, H, W, birthLine } from '@/lib/og/brand';
 import { computeThanSoHoc } from '@/lib/engine/than-so-hoc';
+import { solarDateOf } from '@/lib/engine/laso';
 
 // Màu số theo `NUM_COLORS` của public/tools-shared/than-so-hoc.js (vòng số trên web).
 const NUM_COLORS = ['', '#C0392B', '#E67E22', '#F1C40F', '#2ECC71', '#1455A4', '#8E44AD', '#1ABC9C', '#E91E63', '#2C3E50', '#c9a84c', '#5FA8D3', '#1E6B3C'];
@@ -55,8 +56,10 @@ export async function GET(req: NextRequest) {
   if (!parsed) return new Response('forbidden', { status: 403 });
   const { birth, namXem } = parsed;
   const ten = String(birth.name || '').trim();
-  if (birth.isLunar || !ten || !birth.day || !birth.month || !birth.year) return new Response('need solar date + name', { status: 400 });
-  const r = computeThanSoHoc(birth.day, birth.month, birth.year, ten, namXem || undefined);
+  // Pythagoras tính trên ngày DƯƠNG — nhập âm thì đổi trước, cùng đường thầy Thanh Hư.
+  const dl = solarDateOf(birth);
+  if (!ten || !dl) return new Response('need name + valid date', { status: 400 });
+  const r = computeThanSoHoc(dl.day, dl.month, dl.year, ten, namXem || undefined);
   if (!r.ok || !r.data) return new Response(r.error || 'bad request', { status: 400 });
   const d = r.data as Record<string, unknown>;
   const num = (k: string) => Number(d[k]) || 0;
@@ -85,7 +88,11 @@ export async function GET(req: NextRequest) {
   return new ImageResponse(
     (
       <div style={{ display: 'flex', flexDirection: 'column', width: W, height: H, background: C.bg, fontFamily: 'BeVN' }}>
-        <BrandHeader title="Thần Số Học" sub={birthLine(birth)} />
+        <BrandHeader
+          title="Thần Số Học"
+          sub={birthLine(birth)}
+          sub2={birth.isLunar ? `Tính theo ngày dương lịch ${dl.day}/${dl.month}/${dl.year}` : undefined}
+        />
         <div style={{ display: 'flex', justifyContent: 'space-around', margin: '14px 30px 0' }}>
           <Num n={num('soDuongDoi')} label="Đường Đời" sub="từ ngày sinh" size={132} />
           <Num n={num('soDinhMenh')} label="Định Mệnh" sub="từ họ tên" size={132} />
