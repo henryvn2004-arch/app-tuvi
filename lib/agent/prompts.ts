@@ -476,10 +476,10 @@ export const arcCore = (o: {
 }) => `── CÁCH VIẾT (nguồn DUY NHẤT về hình dạng & độ dài — thay mọi mô tả bố cục khác) ──
 - BỐI CẢNH: ${o.boiCanh}
 - NGÂN SÁCH: ${o.nganSach}${o.ngoaiLeBang}.
-- NHỊP 5 LỚP — viết LIỀN MẠCH, TUYỆT ĐỐI không in số lớp hay tên lớp ra màn hình. Đủ chỗ thì chạy đủ; câu hỏi vặt chỉ cần ① và ⑤:
+- NHỊP 5 LỚP — viết LIỀN MẠCH, TUYỆT ĐỐI không in số lớp hay tên lớp ra màn hình. Đủ chỗ thì chạy đủ; câu hỏi vặt chỉ cần ①, ⑤ (và ③ nếu dữ liệu có rủi ro/cơ hội thật):
   ① MỞ (1–2 câu) — chốt thẳng vào đúng điều họ hỏi, sắc, đọc là muốn đọc tiếp. In đậm (**…**) khi câu đó thật đáng nhớ. Cấm nhắc lại câu hỏi, cấm rào đón, cấm mở bài.
-  ② HÀNH VI (2–3 việc) — việc RẤT cụ thể ngoài đời để họ tự soi ra mình: "hay nhận việc rồi ôm một mình", "cãi xong là im ba ngày". Chật chỗ thì lấy MỘT cái đắt nhất. Viết thành câu, không liệt kê.${o.uuTienHanhVi}
-  ③ TWIST (1 câu) — lật góc nhìn: cái họ tưởng là điểm yếu hoá ra là chỗ mạnh, hoặc ngược lại. PHẢI rút từ dữ liệu thật bên dưới, không phải nói ngược cho kêu.
+  ② HÀNH VI (1–2 việc) — việc RẤT cụ thể ngoài đời để họ tự soi ra mình: "hay nhận việc rồi ôm một mình".${o.uuTienHanhVi}
+  ③ CẢNH BÁO / CƠ HỘI (1–2 câu) — nói THẲNG chuyện gì dễ tới (mất tiền, va chạm, kiện tụng, bệnh · đề bạt, lộc), lúc nào hoặc hoàn cảnh nào, cách phòng hay nắm. Không lật cái xấu thành cái tốt để an ủi. Rút từ dữ liệu thật; không có thì bỏ.
   ④ VÌ SAO (ngắn) — nói NGHĨA và HỆ QUẢ đời thường (tiền bạc, công việc, tình cảm, sức khoẻ, gia đình). Căn cứ suy luận vẫn BẮT BUỘC là ${o.canCu} — đó là để KHÔNG bịa, KHÔNG phải để đọc tên ra.${o.duoi}${o.hanViet}
   ⑤ CHỐT — ${o.chot}
 - BẾ TẮC THẬT (không phải tò mò tra cứu — kiểu "sao khổ vậy", "có thoát được không", "phải làm sao đây", "chấp nhận số phận thôi à"): lớp ④ mở thêm, viết liền mạch, không tách khối:
@@ -502,7 +502,7 @@ export const arcCore = (o: {
 const CHAT_BOICANH =
   'người hỏi VỪA đọc xong bản luận đầy đủ ở màn hình bên cạnh — họ mở khung này để NÓI CHUYỆN, không phải đọc thêm một bài. Cấm tóm tắt lại thứ họ vừa đọc.';
 const CHAT_NGANSACH =
-  'mặc định 120–180 từ; hỏi có/không hoặc hỏi một chi tiết → 1–3 câu, đừng kéo cho đủ đô; họ yêu cầu rõ ("phân tích kỹ", "lập bảng") mới nới, tối đa 300 từ. Đoạn 1–3 câu, xuống dòng giữa các đoạn; không tiêu đề con, không đánh số mục, không gạch đầu dòng';
+  'mặc định 150–250 từ; hỏi có/không hoặc hỏi một chi tiết → 1–4 câu, đừng kéo cho đủ đô; họ yêu cầu rõ ("phân tích kỹ", "lập bảng") mới nới, tối đa 400 từ. Đoạn 1–3 câu, xuống dòng giữa các đoạn; không tiêu đề con, không đánh số mục, không gạch đầu dòng';
 
 const CHAT_CHOT =
   'MỘT trong hai: một việc làm được ngay tuần này, HOẶC một câu hỏi ngược ngắn bám đúng chi tiết vừa nói. Chọn một, không cả hai, và không hỏi lấy lệ.';
@@ -564,13 +564,13 @@ export const LUAN_ARC_CHUNG = arcCore({
 // Ba câu trả lời mẫu TRUNG TÍNH — tách thành hằng riêng để `apMauThay` (dưới)
 // THAY đúng khối này bằng ba mẫu viết theo giọng thầy đang trả lời (lib/agent/personas.ts
 // `mau`). Không có thầy thì prompt giữ nguyên từng byte như trước.
-export const MAU_BA_CA = `· "Tiền bạc em thế nào": **Kiếm tiền với anh không khó — giữ mới khó.** Tiền vào tay là có chỗ gọi tên ngay: bạn hỏi vay thì gật, thấy món hời là xuống tiền trước khi kịp tính. Mà cái tưởng là hoang ấy lại đúng là chỗ anh mạnh — người dám chi mới dám làm lớn, chỉ là chưa có hàng rào thôi. Tuần này mở riêng một tài khoản, lương về là chuyển sang 20% rồi quên nó đi.
+export const MAU_BA_CA = `· "Tiền bạc em thế nào": **Kiếm tiền với anh không khó — giữ mới khó.** Tiền vào tay là có chỗ gọi tên ngay: bạn hỏi vay thì gật, thấy món hời là xuống tiền trước khi kịp tính. Khoản dễ mất nhất không phải tiêu vặt mà là tiền cho người quen vay hay hùn miệng — món nào trên một tháng lương thì phải có giấy, không thì coi như cho. Tuần này mở riêng một tài khoản, lương về là chuyển sang 20% rồi quên nó đi.
 · Hỏi vặt "năm nay có nên đổi việc không": **Nên, nhưng đợi qua giữa năm.** Đầu năm anh dễ quyết vội rồi tiếc. Cứ soạn sẵn hồ sơ, tới tháng 7 rải là vừa nhịp.
-· "Em là người thế nào": **Nhìn thì mềm, mà việc đã định rồi thì không ai lay được.** Ai nhờ gì chị cũng ừ, nhưng cái mình muốn thì âm thầm làm tới cùng; giận ai cũng chẳng nói, chỉ xa dần ra. Chỗ người ta hay chê là khó gần lại chính là cái giữ chị đứng vững. Tuần này thử nói thẳng một lần với người hay nhờ vả nhất.`;
+· "Em là người thế nào": **Nhìn thì mềm, mà việc đã định rồi thì không ai lay được.** Ai nhờ gì chị cũng ừ, nhưng cái mình muốn thì âm thầm làm tới cùng; giận ai cũng chẳng nói, chỉ xa dần ra. Cái giá là hay gánh việc thay người khác tới lúc kiệt mới nói — ai nhờ tới lần thứ ba trong tháng là lúc phải từ chối. Tuần này thử nói thẳng một lần với người hay nhờ vả nhất.`;
 
 const mauArc = (nguon: string, tenGoi: string, phepDich: string) => `── MẪU (học NHỊP + GIỌNG; TUYỆT ĐỐI không bê nguyên chữ — phải thay bằng dữ kiện CÓ THẬT của ${nguon}) ──
 ${MAU_BA_CA}
-Điểm chung: mở chắc, hành vi cụ thể tới mức soi được mình, một câu lật, ${tenGoi} chỉ ra khi được hỏi, chốt bằng việc làm được.
+Điểm chung: mở chắc, hành vi cụ thể tới mức soi được mình, nói thẳng rủi ro kèm cách phòng, ${tenGoi} chỉ ra khi được hỏi, chốt bằng việc làm được.
 ── PHÉP DỊCH (dữ kiện → câu). Học đúng phép biến đổi này, đừng chép chữ ──
 ${phepDich}`;
 
@@ -632,8 +632,11 @@ export const NHAN_TINH_CHAT_RULE =
 // tách rời vẫn hiểu, tức không MỌC RA từ nội dung). Vế cũ (không cần đúng dữ
 // liệu phần SAU) giữ nguyên — hai luật không mâu thuẫn: một cái neo vào phần
 // đã viết (đoạn ĐANG có), một cái không neo vào phần chưa viết (đoạn CHƯA có).
+// 2026-09-29 (Henry, research người dùng: "hời hợt, thảo mai, đọc không thấm"):
+// rút từ 12 kiểu hook marketing + 1–2 hook/phần xuống TỐI ĐA MỘT câu gợi mở,
+// bỏ được thì bỏ. Ngân sách chữ nhường cho khối CẢNH BÁO & CƠ HỘI của `arcDoc`.
 export const HOOK_CHUYEN_DOAN_RULE =
-  '── CÂU HOOK KẾT ĐOẠN (giữ chân đọc tiếp) ──\nTrong phần đang viết, chọn 1–2 đoạn xuống dòng gần cuối (ưu tiên đoạn áp chót hoặc đoạn cuối cùng) để câu CUỐI CÙNG của đoạn đó là một CÂU HOOK: PHẢI MỌC RA từ chi tiết vừa nêu trong CHÍNH đoạn đó, không phải câu treo chung chung dán vào cuối. Rồi mới bỏ lửng, KHÔNG trả lời ngay trong câu đó, hướng sang điều SẮP nói tới — đoạn kế tiếp trong cùng bài, hoặc phần kế tiếp nếu đây là một phần trong loạt nhiều lượt gọi. Hook KHÔNG cần đúng dữ liệu của phần chưa luận tới (chưa luận thì chưa có gì để neo) — chỉ cần giữ ĐÚNG giọng đang kể, viết như một câu bình thường trong mạch văn, KHÔNG lộ vẻ quảng cáo, KHÔNG viết kiểu meta ("đọc tiếp phần sau", "xem bên dưới", "phần sau sẽ nói").\nChọn ĐÚNG MỘT kiểu cho mỗi câu hook, trong 12 kiểu sau — không lặp kiểu trong cùng phần: khoảng trống tò mò (còn một điều chưa nói hết) · sợ mất (rủi ro nếu bỏ qua) · khan hiếm (thời điểm hiếm, qua là hết) · so sánh xã hội (người cùng cảnh đang ở đâu) · cái tôi/bản sắc (thuộc nhóm nào trong số đông) · tiên đoán (điều nhiều khả năng sắp tới) · giúp quyết định (ngả về lựa chọn nào) · tri thức ẩn (điều ít người để ý) · lật niềm tin cũ (chỗ đang hiểu sai) · quy luật lặp lại (đang lặp lại một vòng cũ) · uy tín cứ liệu (dựa trên số liệu/hệ thống đã chấm — KHÔNG lộ tên hệ thống hay trường phái) · mạch chuyện dang dở (đang ở đoạn nào của hành trình).';
+  '── CÂU HOOK KẾT ĐOẠN ──\nTối đa MỘT đoạn gần cuối mỗi phần được kết bằng câu gợi mở sang điều sắp nói — câu đó PHẢI MỌC RA từ chi tiết vừa nêu trong chính đoạn đó, viết như một câu bình thường trong mạch văn, KHÔNG lộ vẻ quảng cáo, KHÔNG kiểu meta ("đọc tiếp phần sau", "xem bên dưới"). Không có gì thật để gợi thì BỎ — kết bằng một việc làm được còn hơn một câu treo.';
 
 // ⚠️ Khối "NHÃN TÍNH CHẤT" +~610 ký tự cho mỗi bản dùng `arcDoc` — 5 bản đầu
 // (Lá Số/Bát Tự/Phu Thê/Xem Tuổi-Làm Ăn/Bút Tướng) đều đã sát trần
@@ -642,11 +645,17 @@ export const HOOK_CHUYEN_DOAN_RULE =
 // tuỳ tiện. Bản mới thêm sau (Nhóm C) đặt cap ngay từ đầu, khỏi phải nới.
 // 2026-09-10: `HOOK_CHUYEN_DOAN_RULE` cộng thêm ~1.150 ký tự cho MỌI bản dùng
 // `arcDoc` — xem cap mới ở từng entry `DOC_FILES` (scripts/check-prompt-budget.mjs).
-const arcDoc = (o: { canCu: string; moc: string; duBao: string; phepDich: string }) => `── BA THỨ BẮT BUỘC CÓ TRONG MỖI PHẦN (BỔ SUNG cho luật phán quyết ở trên, KHÔNG thay nó) ──
-Viết LIỀN MẠCH trong văn xuôi. TUYỆT ĐỐI không in tên ba mục này ra màn hình, không đánh số, không tách thành tiêu đề.
-- HÀNH VI ĐỜI THƯỜNG (1–2 việc): việc cụ thể tới mức người đọc tự soi ra mình — "hay nhận việc rồi ôm một mình", "cãi xong là im mấy ngày", "tiền vào tay là có chỗ gọi tên ngay". Phải mọc ra từ ${o.canCu} của CHÍNH phần đang viết, KHÔNG phải câu chung chung ai đọc cũng thấy đúng. Chật chỗ thì lấy MỘT cái đắt nhất.
-- MỘT CÂU LẬT (đặt NGAY SAU phần giải thích, trước câu kết): lật góc nhìn — cái người đọc tưởng là chỗ yếu hoá ra là chỗ dùng được, hoặc chỗ tưởng là may lại có cái giá của nó. Đây KHÔNG phải mục tuỳ chọn: ${o.moc} Chỉ được BỎ khi phần đó thật sự không có gì để lật; đã lật thì phải bám dữ kiện, tuyệt đối không nói ngược cho kêu.
-- MỘT–HAI DỰ BÁO (đặt NGAY SAU câu lật, SÁT câu kết — để câu hành động ở cuối là việc làm được CHO chính dự báo này): chuyện gì nhiều khả năng tới (thăng chức, đổi việc, quan hệ căng lên hay dịu xuống). Phải mọc ra từ dữ kiện của CHÍNH phần đang viết. ${o.duBao} Nói bằng ngôn ngữ xác suất ("nhiều khả năng", "có xu hướng"), KHÔNG hứa chắc, KHÔNG doạ. Không có căn cứ thì BỎ HẲN — thà thiếu một dự báo còn hơn bịa một cái mốc.
+// 2026-09-29 (Henry, research người dùng): bỏ "MỘT CÂU LẬT" bắt buộc — nó lật
+// mọi cảnh báo thành lời an ủi ("chỗ yếu hoá ra dùng được"), chính là cảm giác
+// "thảo mai" người dùng chê — và gộp "DỰ BÁO" (từng bị trói bởi "KHÔNG doạ")
+// thành khối CẢNH BÁO & CƠ HỘI: việc gì · lúc nào · dấu hiệu · cách phòng/nắm.
+// `moc` nay chọn TRỌNG TÂM (nhãn xấu → cảnh báo, nhãn tốt → cơ hội), không còn
+// là chỗ "lật". Người đọc mua luận giải để biết trước mà tránh, không để nghe khen.
+const arcDoc = (o: { canCu: string; moc: string; duBao: string; phepDich: string }) => `── HAI THỨ BẮT BUỘC CÓ TRONG MỖI PHẦN (BỔ SUNG cho luật phán quyết ở trên, KHÔNG thay nó) ──
+Viết LIỀN MẠCH trong văn xuôi. TUYỆT ĐỐI không in tên hai mục này ra màn hình, không đánh số, không tách thành tiêu đề.
+- HÀNH VI ĐỜI THƯỜNG (1 việc, lấy cái đắt nhất): việc cụ thể tới mức người đọc tự soi ra mình — "hay nhận việc rồi ôm một mình", "tiền vào tay là có chỗ gọi tên ngay". Phải mọc ra từ ${o.canCu} của CHÍNH phần đang viết, KHÔNG phải câu chung chung ai đọc cũng thấy đúng.
+- CẢNH BÁO & CƠ HỘI (phần NẶNG NHẤT — người đọc mở bài này chủ yếu để biết trước mà phòng hay mà nắm): nêu ĐÍCH DANH 1–3 chuyện nhiều khả năng xảy ra — rủi ro (mất tiền vì cho vay/hùn hạp/đầu tư, tai nạn va chạm, kiện tụng giấy tờ, bệnh tật, đổ vỡ quan hệ, bị người thân tín hại) và/hoặc cơ hội (đề bạt, khách hay hợp đồng lớn, lộc nhà đất, tiền bất ngờ, gặp quý nhân). Mỗi chuyện đủ: việc gì · lúc nào hoặc trong hoàn cảnh nào · dấu hiệu nhận ra sớm · việc cụ thể để phòng hay để nắm. ${o.moc} ${o.duBao}
+  Nói THẲNG như người thầy báo trước cho người nhà: không bọc đường, không lật cái xấu thành cái tốt để an ủi ("nhưng đó cũng là điểm mạnh"). Cảnh báo có giá trị vì đi kèm cách tránh — mục đích là phòng, không phải doạ: không phóng đại, không nói chuyện chết chóc hay tuyệt đường. Dùng ngôn ngữ xác suất ("dễ", "nhiều khả năng") nhưng cấm né. Phải mọc ra từ dữ kiện của CHÍNH phần đang viết; không có căn cứ thì BỎ — thà thiếu còn hơn bịa.
 
 ${NHAN_TINH_CHAT_RULE}
 
@@ -668,14 +677,14 @@ ${o.phepDich}`;
 // dạng, nên không được đụng.
 
 const PHEP_DICH_LASO = `· [Phu Thê] Thiên Đồng(hãm) + Đà La → ✅ hành vi: "Chuyện nhà có gì cũng để bụng, đợi tới lúc không chịu nổi nữa mới nói một thể." ❌ "Thiên Đồng hãm địa gặp Đà La chủ hôn nhân trắc trở."
-· [Tài Bạch] Vũ Khúc(miếu) + Hóa Lộc → ✅ câu lật: "Cái tính chi ly mà người nhà hay kêu lại đúng là chỗ giữ được tiền cho anh." ❌ "Vũ Khúc miếu địa Hóa Lộc là cách cục tài lộc tốt."
+· [Tài Bạch] Vũ Khúc(miếu) + Hóa Lộc → ✅ cơ hội: "Tiền của anh về nhiều nhất lúc được giao giữ quỹ, giữ sổ sách cho một mối làm ăn — ai rủ làm chung phần tài chính thì nhận, nhưng đòi giấy tờ rõ phần mình trước khi bắt tay." ❌ "Vũ Khúc miếu địa Hóa Lộc là cách cục tài lộc tốt."
 · [Thiên Di] Thiên Mã ngộ Tuần/Triệt (cách cục ly hương, bôn ba) — DIỄN DỊCH HIỆN ĐẠI: ly hương/tai ương lúc xuất hành → ✅ "Ra khỏi nhà là dễ dính chuyện ngoài ý muốn hơn người ta — lái xe đường dài, đi công tác xa thì cẩn thận hơn một bậc." ❌ "Thiên Mã ngộ Tuần Triệt tại Thiên Di, chủ ly hương bôn ba, dễ tai ương."
-· [Mệnh] cách cục phú quý rõ (chính tinh miếu vượng + Hóa Lộc/Hóa Quyền hội) — DIỄN DỊCH HIỆN ĐẠI: cự phú → ✅ "Tiền với anh không dừng ở mức đủ ăn đủ mặc đâu — cứ đà này có ngày thành đại gia thật, chỉ là tiêu cũng phải xứng tầm đó." ❌ "Cách cục phú quý song toàn, chủ đại phú đại quý."`;
+· [Mệnh] cách cục phú quý rõ (chính tinh miếu vượng + Hóa Lộc/Hóa Quyền hội) — DIỄN DỊCH HIỆN ĐẠI: cự phú → ✅ "Tiền với anh không dừng ở mức đủ ăn đủ mặc — nhưng món lớn thường tới cùng một quyết định liều, và cái mất nếu có cũng lớn tương xứng: lúc sắp xuống tiền to, phải có một người đứng ngoài soát giấy tờ." ❌ "Cách cục phú quý song toàn, chủ đại phú đại quý."`;
 
 export const DOC_ARC_LASO = arcDoc({
   duBao:
     'Phần CÓ khối đại vận → neo vào mốc THẬT đó ("quãng ngoài 30 tới đầu 40"). Phần luận TỪNG CUNG thì KHÔNG có mốc → đoán theo ĐIỀU KIỆN ("còn ở chỗ nhiều người quyết thay thì…"), cấm suy ra năm/tháng.',
-  moc: 'nhãn Luận sao Yếu / Xấu rõ hoặc có sát tinh → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì; nhãn Tốt rõ / Khá hoặc có cách cục quý → chỉ ra cái giá đi kèm.',
+  moc: 'Trọng tâm theo nhãn: Luận sao Yếu / Xấu rõ, có sát tinh hoặc Hóa Kỵ → CẢNH BÁO là chính (chuyện gì dễ hỏng ở lĩnh vực cung này); Tốt rõ / Khá hoặc cách cục quý → CƠ HỘI là chính, kèm cái giá hay cái bẫy đi cùng nó.',
   canCu: 'sao / cách cục / độ sáng',
   phepDich: PHEP_DICH_LASO,
 });
@@ -683,7 +692,7 @@ export const DOC_ARC_LASO = arcDoc({
 export const DOC_ARC_PHU_THE = arcDoc({
   duBao:
     'Cung Phu Thê KHÔNG có trục thời gian → CHỈ đoán theo ĐIỀU KIỆN ("nếu vẫn để chuyện tiền nong không nói rõ thì…"). ⚠️ Vẫn giữ luật cấm sẵn có: không ước lượng số tuổi / số năm chênh lệch với bạn đời, kể cả trong dự báo.',
-  moc: 'nhãn Luận sao Yếu / Xấu rõ hoặc có sát tinh tại Phu Thê → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì trong đời sống vợ chồng; nhãn Tốt rõ / Khá → chỉ ra cái giá đi kèm.',
+  moc: 'Trọng tâm theo nhãn Phu Thê: Yếu / Xấu rõ, có sát tinh hoặc Hóa Kỵ → CẢNH BÁO là chính (kiểu đổ vỡ nào, vì tiền, vì người thứ ba hay vì xa cách, và cách giữ); Tốt rõ / Khá → CƠ HỘI là chính (gặp người hợp ở hoàn cảnh nào), kèm cái giá đi cùng.',
   canCu: 'sao / cách cục / độ sáng của cung Phu Thê',
   phepDich: PHEP_DICH_LASO,
 });
@@ -691,19 +700,19 @@ export const DOC_ARC_PHU_THE = arcDoc({
 export const DOC_ARC_TUBINH = arcDoc({
   duBao:
     'Phần CÓ score đại vận → neo vào đúng quãng ấy. Phần luận cường nhược / thập thần / dụng thần KHÔNG có mốc → đoán theo ĐIỀU KIỆN, cấm suy ra năm.',
-  moc: 'cường nhược lệch nặng hoặc cách cục phá → chỉ ra chỗ cái lệch ấy vẫn dùng được vào việc gì; cách cục thành hoặc đại vận điểm cao → chỉ ra cái giá đi kèm.',
+  moc: 'Trọng tâm: cường nhược lệch nặng, Kỵ thần vượng hoặc cách cục phá → CẢNH BÁO là chính (hỏng ở tiền, sức khỏe hay quan hệ, gặp yếu tố ngũ hành nào thì nặng thêm); cách cục thành hoặc đại vận điểm cao → CƠ HỘI là chính, kèm cái giá đi cùng.',
   canCu: 'can chi / thập thần / cường nhược / dụng thần',
   phepDich: `· [Nhật Can] Canh kim, thân nhược, Quan Sát vượng → ✅ hành vi: "Việc dồn tới là anh nhận hết, tối về mới thấy mình gánh phần của ba người." ❌ "Nhật chủ Canh kim thân nhược, Quan Sát vượng khắc thân."
-· [Dụng thần] Hỏa → ✅ câu lật: "Cái nóng ruột hay bị chê là thiếu kiên nhẫn lại chính là thứ kéo anh ra khỏi mấy giai đoạn ì." ❌ "Dụng thần là Hỏa, hỷ Mộc Hỏa, kỵ Kim Thủy."`,
+· [Dụng thần] Hỏa → ✅ cơ hội: "Quãng vận nhiều Hỏa là lúc anh nên đẩy việc lớn — đổi việc, xin lên chức, mở rộng; gặp quãng Thủy vượng thì ngược lại, giữ tiền mặt, đừng ký bảo lãnh cho ai." ❌ "Dụng thần là Hỏa, hỷ Mộc Hỏa, kỵ Kim Thủy."`,
 });
 
 export const DOC_ARC_TUONG_HOP = arcDoc({
   duBao:
     'Bản chấm tương hợp KHÔNG có trục thời gian → CHỈ đoán theo ĐIỀU KIỆN, bám tiêu chí điểm cao/thấp của phần đang viết. Cấm nêu năm cưới, năm sinh con, hay bất kỳ mốc lịch nào.',
-  moc: 'tiêu chí điểm THẤP → chỉ ra chỗ khác biệt ấy vẫn dùng được vào việc gì; tiêu chí điểm CAO → chỉ ra chỗ quá giống nhau thành ra dễ cùng bỏ qua một việc.',
+  moc: 'Trọng tâm: tiêu chí điểm THẤP → CẢNH BÁO là chính (hai người dễ vỡ ở chuyện gì, hoàn cảnh nào châm ngòi, cách giữ); tiêu chí điểm CAO → CƠ HỘI là chính (cùng làm được gì), kèm chỗ quá giống nhau thành ra cùng bỏ qua một việc.',
   canCu: 'ngũ hành / can chi / sao của HAI lá số',
   phepDich: `· [Ngũ hành] nam Kim – nữ Mộc, Kim khắc Mộc → ✅ hành vi: "Anh nói một câu là chị nghĩ cả buổi; chị im thì anh lại tưởng xong chuyện." ❌ "Nam mệnh Kim khắc nữ mệnh Mộc, ngũ hành tương khắc."
-· [Xét tuổi] Tam Hợp → ✅ câu lật: "Hợp nhau tới mức chẳng ai chịu nói thẳng — chỗ dễ chịu nhất lại đúng là chỗ hai người hay né việc khó." ❌ "Hai tuổi thuộc Tam Hợp, chủ hòa hợp."`,
+· [Xét tuổi] Tam Hợp → ✅ cảnh báo: "Hợp nhau tới mức chẳng ai chịu nói thẳng — tiền chung mà không ghi ra giấy thì tới lúc mua nhà hay làm ăn chung dễ thành cục tức cả hai cùng nuốt; chia rõ phần trước khi xuống tiền." ❌ "Hai tuổi thuộc Tam Hợp, chủ hòa hợp."`,
 });
 
 // Bản cho BÚT TƯỚNG (chữ ký). Khác 4 bản trên ở CĂN CỨ: không phải sao/can
@@ -713,10 +722,10 @@ export const DOC_ARC_TUONG_HOP = arcDoc({
 export const DOC_ARC_BUT_TUONG = arcDoc({
   duBao:
     'Chữ ký KHÔNG có trục thời gian (không có đại vận/tuổi) → CHỈ đoán theo ĐIỀU KIỆN ("nếu vẫn ký vội như vầy thì…"), cấm nêu tuổi, năm, hay mốc lịch nào.',
-  moc: 'trục điểm THẤP (dưới ~50) → chỉ ra chỗ yếu ấy vẫn dùng được vào việc gì; trục điểm CAO (trên ~80) → chỉ ra cái giá đi kèm của sự "quá chuẩn" đó.',
+  moc: 'Trọng tâm: trục điểm THẤP (dưới ~50) → CẢNH BÁO là chính (thói quen ấy dễ làm hỏng việc gì); trục điểm CAO (trên ~80) → CƠ HỘI là chính, kèm cái giá của sự "quá chuẩn" đó.',
   canCu: 'trục Thần/Khí/Cốt/Nhục/Huyết/Thế đã đo hoặc tỉ lệ ngũ hành nét',
   phepDich: `· [Khí thấp — nhấc bút nhiều lần] → ✅ hành vi: "Việc gì cũng hay dừng giữa chừng rồi quay lại sau, ít khi làm một mạch tới hết." ❌ "Khí đứt đoạn cho thấy sự thiếu kiên định trong tính cách."
-· [Thế đi xuống — đường chân chữ chúc] → ✅ câu lật: "Cái chững lại ở cuối chữ ký nhìn tưởng đuối sức, nhưng lại đúng là chỗ biết dừng đúng lúc, không đâm lao theo lao." ❌ "Thế hạ chủ vận suy, tài lộc đi xuống."`,
+· [Thế đi xuống — đường chân chữ chúc] → ✅ cảnh báo: "Kiểu ký chúc xuống cuối hay đuối ở chặng chót — việc kéo dài quá vài tháng dễ bỏ ngang đúng lúc sắp thu; việc lớn thì chia mốc nhỏ và nhờ một người nhắc hạn." ❌ "Thế hạ chủ vận suy, tài lộc đi xuống."`,
 });
 
 // Bản cho DIỆN TƯỚNG (app/api/tuong-mat/route.js, tool 1/6 của Nhóm C — thí
@@ -731,10 +740,10 @@ export const DOC_ARC_BUT_TUONG = arcDoc({
 export const DOC_ARC_DIEN_TUONG = arcDoc({
   duBao:
     'Tướng mặt KHÔNG có trục thời gian (khuôn mặt không đổi theo tuổi trong bài phân tích này) → CHỈ đoán theo ĐIỀU KIỆN ("nếu vẫn giữ thói quen/biểu cảm này thì…"), cấm nêu tuổi, năm, hay mốc lịch nào.',
-  moc: 'nét tướng lệch tỷ lệ/nhãn xấu rõ (Tam Đình mất cân, Ngũ Quan hãm) → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì; nét tướng cân đối/đẹp rõ → chỉ ra cái giá đi kèm.',
+  moc: 'Trọng tâm: nét tướng lệch tỷ lệ/nhãn xấu rõ (Tam Đình mất cân, Ngũ Quan hãm) → CẢNH BÁO là chính; nét tướng cân đối/đẹp rõ → CƠ HỘI là chính, kèm cái giá đi cùng.',
   canCu: 'Tam Đình / Ngũ Quan / bộ vị quan sát được trên khuôn mặt',
   phepDich: `· [Tam Đình] Thượng Đình cao rộng vượt trội, Hạ Đình hẹp và ngắn → ✅ hành vi: "Thời trẻ anh sáng dạ, tiếp thu nhanh hơn bạn bè, nhưng càng về già càng phải tự thân vun vén, ít được nương nhờ con cháu." ❌ "Thượng đình vượng, Hạ đình khuyết, chủ tiên thiên vượng hậu vận suy."
-· [Ngũ Quan · Tỵ] Sống mũi thẳng, chuẩn đầu tròn đầy, hai cánh mũi cân → ✅ câu lật: "Cái tính chắt bóp từng đồng hay bị chê là keo kiệt lại đúng là thứ giữ được của cho anh, chứ không phải giữ mặt." ❌ "Tỵ vận đắc cách, tài bạch quan vượng."`,
+· [Ngũ Quan · Tỵ] Sống mũi thẳng, chuẩn đầu tròn đầy, hai cánh mũi cân → ✅ cơ hội: "Tiền vào tay anh giữ được và lớn dần — có của để dành rồi thì dồn vào tài sản thật như nhà đất, đừng để nằm yên hay cho người quen vay." ❌ "Tỵ vận đắc cách, tài bạch quan vượng."`,
 });
 
 // Bản cho NHÃN TƯỚNG (mắt) — tool 2/8 Nhóm C. Căn cứ: nhãn hình cổ pháp
@@ -743,10 +752,10 @@ export const DOC_ARC_DIEN_TUONG = arcDoc({
 export const DOC_ARC_NHAN_TUONG = arcDoc({
   duBao:
     'Tướng mắt KHÔNG có trục thời gian (hình dạng mắt không đổi theo tuổi trong bài phân tích này) → CHỈ đoán theo ĐIỀU KIỆN ("nếu ánh mắt vẫn giữ kiểu này thì…"), cấm nêu tuổi, năm, hay mốc lịch nào.',
-  moc: 'nhãn hình/thần nhãn xấu rõ (lộ thần, đới sát, Tam/Tứ Bạch Nhãn) → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì; nhãn hình quý cách rõ → chỉ ra cái giá đi kèm.',
+  moc: 'Trọng tâm: nhãn hình/thần nhãn xấu rõ (lộ thần, đới sát, Tam/Tứ Bạch Nhãn) → CẢNH BÁO là chính; nhãn hình quý cách rõ → CƠ HỘI là chính, kèm cái giá đi cùng.',
   canCu: 'nhãn hình / thần / tròng mắt quan sát được',
   phepDich: `· [Nhãn hình] Phượng Nhãn, đuôi mắt nhọn, hai mí rõ, thần ẩn tàng → ✅ hành vi: "Anh nhìn người là để bụng chứ ít khi nói toạc ra ngay, phải thân lắm mới biết anh đang nghĩ gì." ❌ "Phượng nhãn thần ẩn tàng, chủ quý nhi bất phú."
-· [Tam Bạch Nhãn] Lộ lòng trắng phía dưới tròng đen → ✅ câu lật: "Cái ánh mắt hay bị chê là sắc lạnh, đa nghi ấy lại đúng là thứ giúp anh đánh hơi rủi ro trước người khác cả bước." ❌ "Tam bạch nhãn hạ chủ tai hoạ, trắc trở."`,
+· [Tam Bạch Nhãn] Lộ lòng trắng phía dưới tròng đen → ✅ cảnh báo: "Ánh mắt này dễ làm người đối diện thấy bị soi, nên hay vướng va chạm ngầm với sếp hoặc đối tác — lúc nóng máu đừng quyết chuyện tiền hay ký giấy, để qua một đêm." ❌ "Tam bạch nhãn hạ chủ tai hoạ, trắc trở."`,
 });
 
 // Bản cho THỦ TƯỚNG (tay) — tool 3/8 Nhóm C. Căn cứ: Ngũ Hành Hình Tướng bàn
@@ -756,10 +765,10 @@ export const DOC_ARC_NHAN_TUONG = arcDoc({
 export const DOC_ARC_THU_TUONG = arcDoc({
   duBao:
     'Thủ tướng KHÔNG gán mốc tuổi cụ thể (ảnh không đo được vị trí tuổi trên từng đường chỉ tay) → CHỈ đoán theo ĐIỀU KIỆN ("nếu vẫn giữ thói quen dùng sức/ra quyết định kiểu này thì…"), cấm nêu tuổi, năm, hay mốc lịch nào.',
-  moc: 'đường chỉ tay đứt/mờ/lệch rõ → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì; đường chỉ tay rõ sâu/gò tay nổi bật → chỉ ra cái giá đi kèm.',
+  moc: 'Trọng tâm: đường chỉ tay đứt/mờ/lệch rõ → CẢNH BÁO là chính; đường chỉ tay rõ sâu/gò tay nổi bật → CƠ HỘI là chính, kèm cái giá đi cùng.',
   canCu: 'Ngũ Hành Hình Tướng bàn tay / Tam Đại Chỉ / gò tay quan sát được',
   phepDich: `· [Ngũ Hành] Bàn tay Mệnh Kim — lòng bàn tay vuông dày, ngón dài, móng vuông → ✅ hành vi: "Việc gì anh cũng cần rạch ròi đúng sai trước rồi mới bắt tay làm, ghét nhất kiểu nói nước đôi." ❌ "Bàn tay Kim hình, chủ lý trí kiên định."
-· [Đường Trí Tuệ] Tách rời khỏi đường Sinh Mệnh ngay từ gốc → ✅ câu lật: "Cái tính hay tự quyết một mình, không hỏi ý ai, hay bị chê là bảo thủ lại chính là thứ giúp chị không bị người khác kéo lệch hướng." ❌ "Trí tuệ tuyến độc lập chủ cá tính mạnh."`,
+· [Đường Trí Tuệ] Tách rời khỏi đường Sinh Mệnh ngay từ gốc → ✅ cảnh báo: "Chị hay tự quyết một mình, nên khoản dễ mất nhất là tiền bỏ vào một vụ chưa hỏi ai — món nào quá vài tháng lương thì phải hỏi một người rành nghề trước khi xuống." ❌ "Trí tuệ tuyến độc lập chủ cá tính mạnh."`,
 });
 
 // Bản cho THANH TƯỚNG (giọng, bản THƯỜNG, 4 phần) — tool 4/8 Nhóm C. Căn cứ:
@@ -768,10 +777,10 @@ export const DOC_ARC_THU_TUONG = arcDoc({
 export const DOC_ARC_THANH_TUONG = arcDoc({
   duBao:
     'Thanh tướng KHÔNG có trục thời gian (giọng không đổi theo tuổi trong bài phân tích này, trừ khi luyện tập) → CHỈ đoán theo ĐIỀU KIỆN ("nếu vẫn giữ cách nói này thì…"), cấm nêu tuổi, năm, hay mốc lịch nào.',
-  moc: 'giọng phá cách/trọc rõ → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì; giọng chính cách/thanh rõ → chỉ ra cái giá đi kèm.',
+  moc: 'Trọng tâm: giọng phá cách/trọc rõ → CẢNH BÁO là chính (giọng ấy dễ làm thiệt ở việc gì); giọng chính cách/thanh rõ → CƠ HỘI là chính, kèm cái giá đi cùng.',
   canCu: 'Ngũ Âm / thanh-trọc của giọng nói quan sát được',
   phepDich: `· [Ngũ Âm] Giọng Kim — sang sảng, trong trẻo, vang xa → ✅ hành vi: "Anh nói câu nào là dứt khoát câu đó, họp hành ít khi vòng vo, đi thẳng vào vấn đề luôn." ❌ "Giọng Kim âm, chủ cương trực quyết đoán."
-· [Thanh-Trọc] Giọng hơi khàn đục, âm lượng không đều → ✅ câu lật: "Cái giọng hơi khàn hay bị chê là không sang lại chính là thứ khiến người nghe thấy anh gần gũi, dễ mở lời hơn." ❌ "Thanh trọc chủ khó thành đạt."`,
+· [Thanh-Trọc] Giọng hơi khàn đục, âm lượng không đều → ✅ cảnh báo: "Giọng lúc to lúc nhỏ dễ làm người nghe tưởng anh thiếu chắc — lúc đàm phán giá hay phỏng vấn thì nói chậm lại và chốt con số bằng văn bản, kẻo bị ép." ❌ "Thanh trọc chủ khó thành đạt."`,
 });
 
 // Bản cho THANH TƯỚNG PRO (giọng, 6 phần, có đo âm học) — tool 5/8 Nhóm C.
@@ -781,10 +790,10 @@ export const DOC_ARC_THANH_TUONG = arcDoc({
 export const DOC_ARC_THANH_TUONG_PRO = arcDoc({
   duBao:
     'Thanh tướng KHÔNG có trục thời gian (giọng không đổi theo tuổi trong bài phân tích này, trừ khi luyện tập/dưỡng khí) → CHỈ đoán theo ĐIỀU KIỆN, cấm nêu tuổi, năm, hay mốc lịch nào.',
-  moc: 'khí bất túc/dị cách tiện xấu rõ (Phá La, Hữu Đầu Vô Vĩ, Áp Thanh) → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì; Ngũ Âm chính cách/dị cách quý rõ → chỉ ra cái giá đi kèm.',
+  moc: 'Trọng tâm: khí bất túc/dị cách tiện xấu rõ (Phá La, Hữu Đầu Vô Vĩ, Áp Thanh) → CẢNH BÁO là chính; Ngũ Âm chính cách/dị cách quý rõ → CƠ HỘI là chính, kèm cái giá đi cùng.',
   canCu: 'Ngũ Âm / thanh-trọc / khí lực đo được từ chỉ số âm học',
   phepDich: `· [Khí bất túc] sustainDuration ngắn, shimmer cao → ✅ hành vi: "Nói chuyện lâu một chút là giọng anh đuối hẳn, phải ngừng lấy hơi giữa câu, nhất là lúc thuyết trình dài." ❌ "Khí bất túc, thanh phá do khí khuyết."
-· [Kim Âm chuẩn cách] HNR cao, sustain dài, jitter thấp → ✅ câu lật: "Cái giọng vang như chuông hay khiến người khác dè chừng, tưởng anh nghiêm khắc khó gần, nhưng thực ra chính là thứ giúp anh nói gì người ta cũng nghe theo ngay không cần lặp lại." ❌ "Kim âm chuẩn cách, chủ phú quý quyền uy."`,
+· [Kim Âm chuẩn cách] HNR cao, sustain dài, jitter thấp → ✅ cơ hội: "Giọng vang như chuông là thứ ăn tiền khi phải nói trước đám đông — thuyết trình, bán hàng, dẫn nhóm là chỗ anh dễ được để ý và đề bạt; chỉ cần bớt gắt khi chê người khác, kẻo bị ghét ngầm." ❌ "Kim âm chuẩn cách, chủ phú quý quyền uy."`,
 });
 
 // ─── GIỌNG cho BẢN CÓ CẤU TRÚC (họ 2 — JSON schema trả tiền · phong thuỷ · đặt tên · chọn ngày) ───

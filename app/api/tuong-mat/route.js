@@ -473,7 +473,7 @@ MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào sắc/vùng
 (ngũ sắc, độ sáng, độ tươi nhuận): phần này cát hay hung. Rồi mới giải thích
 vì sao.
 
-⚠️ KHÔNG dùng khối HÀNH VI ĐỜI THƯỜNG/CÂU LẬT/DỰ BÁO chung của các tool khác
+⚠️ KHÔNG dùng khối HÀNH VI ĐỜI THƯỜNG/CẢNH BÁO & CƠ HỘI chung của các tool khác
 ở đây — phần 4 "Dự Báo 1–3 Tháng Tới" ở trên ĐÃ là dự báo riêng của Khí Sắc,
 thêm một nguồn dự báo nữa là chồng luật. Chỉ mượn đúng nhãn tính chất:
 
