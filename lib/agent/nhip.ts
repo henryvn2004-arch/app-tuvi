@@ -148,6 +148,9 @@ const PHAN_BO: Record<LoaiCau, Partial<Record<MucDai, number>>> = {
 const PHAN_BO_LUOT_DAU: Partial<Record<MucDai, number>> = { vua: 60, dai: 40 };
 const PHAN_BO_AN_UI: Partial<Record<MucDai, number>> = { ngan: 35, vua: 65 };
 
+// Mức này CỐ Ý dày (~48% lượt có câu đinh hoặc chiêu, đo 4.000 lượt giả lập) — Henry
+// 2026-09-29: khách free chỉ có ~10 lượt, phải thấy "chất thầy" ngay trong đó để bị hook.
+// Đã thử hạ xuống ~19% (nghỉ 2 lượt, 0,2/0,2) và Henry thấy quá ít — đừng hạ lại mà không hỏi.
 const XAC_SUAT_DINH = 0.35;
 const XAC_SUAT_CHIEU = 0.4;
 /** Không bốc lại kiểu câu đinh / chiêu đã dùng trong ngần này lượt gần nhất. */
