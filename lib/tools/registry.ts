@@ -107,7 +107,11 @@ export interface ToolContext {
   charts: GuestChart[];
 }
 
-export type GuestChart = { kind: ChartKind; nam?: number } | { kind: TimeChartKind; khi: string };
+export type GuestChart =
+  | { kind: ChartKind; nam?: number }
+  | { kind: TimeChartKind; khi: string }
+  | { kind: 'ngay-tot'; viec: string; thang: number; nam: number }
+  | { kind: 'ca-nha'; nguoi: { ten: string; birth: BirthParams }[] };
 
 export function newToolContext(
   seedLs: Laso | null = null,
@@ -498,6 +502,12 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
     // Lưới an toàn: tra_tieu_van thiếu năm → mặc định năm hiện tại (VN).
     const arg = name === 'tra_tieu_van' && !input?.nam ? { ...input, nam: currentYearVN() } : input;
     let content = execLasoTool(name, ctx.ls, arg);
+    // Lịch ngày tốt cả tháng gửi kèm ở kênh chat — cùng tham số tool vừa chấm (ảnh tự kiểm lại phạm vi).
+    const thang = Math.floor(Number(arg?.thang));
+    const namNT = Math.floor(Number(arg?.nam));
+    if (name === 'xem_ngay_tot' && thang >= 1 && thang <= 12 && namNT >= 2020 && namNT <= 2036 && arg?.viec) {
+      ctx.charts.push({ kind: 'ngay-tot', viec: String(arg.viec), thang, nam: namNT });
+    }
     if (name === 'tra_tieu_van' && ctx.chuDe.length) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const tv = ((ctx.ls as any)?.tieuVanScores || []).find((t: any) => Number(t.nam) === Number(arg?.nam));
@@ -1156,6 +1166,8 @@ async function execTraCaNha(ctx: ToolContext): Promise<ToolRunResult> {
   if (co.length < 2) {
     return { content: 'Chưa đủ hai lá số lập được để xếp cả nhà cạnh nhau' + (thieu.length ? ': ' + thieu.join('; ') : '') + '. Nói người dùng bổ sung ở trang Sổ lá số.', label: 'Xếp lá số cả nhà' };
   }
+  // Ảnh lưới cả nhà × 12 tháng gửi kèm ở kênh chat — đúng những người vừa xếp được.
+  ctx.charts.push({ kind: 'ca-nha', nguoi: co.map((n) => ({ ten: n.ten, birth: n.birth })) });
   const L: string[] = [];
   L.push(`— CẢ NHÀ ${co.length} NGƯỜI, 12 THÁNG ÂM TỚI (engine tính, mỗi ô là cung nguyệt hạn + sao trong chùm tam phương tứ chính) —`);
   L.push(LUAT_NGUOI_NHA);
