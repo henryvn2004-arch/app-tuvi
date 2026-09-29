@@ -8,6 +8,7 @@
 //   tu-tru       — tứ trụ Bát Tự (thầy Tâm Kính)
 //   than-so      — biểu đồ Thần số học (thầy Thanh Hư; cần họ tên + ngày DƯƠNG)
 //   bat-trach    — 8 hướng tốt/xấu theo cung mệnh (thầy Huyền Không)
+//   cung         — MỘT cung: sơ đồ tam phương + Tứ Hóa Phi Tinh, điểm 6 chiều (khoá `c`)
 //   luc-nham     — khóa Đại Lục Nhâm lập lúc hỏi (thầy Linh Cơ) — theo THỜI ĐIỂM `t`
 //   ky-mon       — bàn Kỳ Môn dựng lúc hỏi (thầy Tâm Kính) — theo THỜI ĐIỂM `t`
 //
@@ -27,7 +28,8 @@ export type ChartKind =
   | 'van-12-thang'
   | 'tu-tru'
   | 'than-so'
-  | 'bat-trach';
+  | 'bat-trach'
+  | 'cung';
 /** Ảnh theo THỜI ĐIỂM hỏi (không cần ngày sinh) — cùng khoá ký, khác tham số. */
 export type TimeChartKind = 'luc-nham' | 'ky-mon';
 
@@ -38,13 +40,14 @@ function secret(): string {
   return process.env.MEDIA_SIGN_SECRET || process.env.SUPABASE_SERVICE_KEY || '';
 }
 
+/** Khoá thêm sau này (`t` mốc giờ, `c` tên cung, `ln` tháng NHUẬN) — chỉ vào chuỗi ký khi CÓ. */
+const EXTRA = ['t', 'c', 'ln'] as const;
+
 /** Chuỗi ký: loại ảnh + các khoá theo thứ tự cố định (thứ tự trên URL không ảnh hưởng).
- *  `t` (thời điểm) và `ln` (tháng NHUẬN) chỉ vào chuỗi khi CÓ — thêm vào KEYS thì mọi
- *  link đã gửi trước đây mất chữ ký. */
+ *  Khoá EXTRA chỉ vào chuỗi khi CÓ — thêm vào KEYS thì mọi link đã gửi trước đây mất chữ ký. */
 function canonical(kind: ChartKind | TimeChartKind, q: URLSearchParams): string {
-  const t = q.get('t');
-  const ln = q.get('ln');
-  return kind + '|' + KEYS.map((k) => `${k}=${q.get(k) ?? ''}`).join('&') + (t ? `&t=${t}` : '') + (ln ? `&ln=${ln}` : '');
+  const extra = EXTRA.map((k) => (q.get(k) ? `&${k}=${q.get(k)}` : '')).join('');
+  return kind + '|' + KEYS.map((k) => `${k}=${q.get(k) ?? ''}`).join('&') + extra;
 }
 
 function sign(kind: ChartKind | TimeChartKind, q: URLSearchParams): string {
@@ -83,9 +86,14 @@ export function chartImageUrl(
   b: BirthParams | null | undefined,
   namXem: number,
   homNay?: { d: number; m: number; y: number },
+  cung?: string,
 ): string | null {
   const q = secret() ? birthQuery(b, namXem) : null;
   if (!q) return null;
+  if (kind === 'cung') {
+    if (!cung) return null;
+    q.set('c', cung);
+  }
   // Thần số học cần họ tên (route tự đổi ngày âm sang dương) — thiếu thì không tạo link hỏng.
   if (kind === 'than-so' && !q.get('n')) return null;
   if (homNay) q.set('td', `${homNay.d}-${homNay.m}-${homNay.y}`);
@@ -140,7 +148,7 @@ export const lasoImageUrl = (b: BirthParams | null | undefined, namXem: number) 
 export function readChartParams(
   kind: ChartKind,
   q: URLSearchParams,
-): { birth: BirthParams; namXem: number; homNay: { d: number; m: number; y: number } | null } | null {
+): { birth: BirthParams; namXem: number; homNay: { d: number; m: number; y: number } | null; cung: string } | null {
   const s = q.get('s') || '';
   if (!secret() || !/^[0-9a-f]{24}$/.test(s)) return null;
   if (!timingSafeEqual(Buffer.from(s), Buffer.from(sign(kind, q)))) return null;
@@ -148,7 +156,7 @@ export function readChartParams(
   if (!birth) return null;
   const td = (q.get('td') || '').split('-').map(Number);
   const homNay = td.length === 3 && td.every((x) => x > 0) ? { d: td[0], m: td[1], y: td[2] } : null;
-  return { birth, namXem: Number(q.get('nx')), homNay };
+  return { birth, namXem: Number(q.get('nx')), homNay, cung: q.get('c') || '' };
 }
 
 /** Kiểm chữ ký link ảnh lưới lá số (giữ tên cũ cho route la-so-anh). */
