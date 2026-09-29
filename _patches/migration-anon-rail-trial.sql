@@ -61,7 +61,10 @@ alter table public.anon_rail_trial enable row level security;
 alter table public.anon_rail_hits  enable row level security;
 
 -- ── Cấu hình (đổi không cần deploy) ───────────────────────────
--- Đặt bất kỳ trần nào về 0 là TẮT hẳn tính năng dùng thử.
+-- `anon.rail_trial_turns` = 0 là TẮT hẳn dùng thử. Hai trần IP/toàn hệ thống
+-- = 0 là KHÔNG GIỚI HẠN (Henry chốt 2026-09-29: chat là kênh chính + sắp chạy
+-- ads; NAT 4G/văn phòng gộp cả trăm người thật vào 1 IP, còn cầu dao toàn hệ
+-- thống chặn đúng lúc ads đổ người vào). Trần theo anon_id vẫn giữ.
 insert into public.app_config (key, value, note) values
   ('anon.rail_trial_turns', to_jsonb(3),
    'Số câu rail cho khách CHƯA đăng ký, trần ĐỜI theo anon_id. 0 = tắt hẳn dùng thử.'),
@@ -82,7 +85,7 @@ create or replace function public.anon_rail_trial_consume(
   p_anon_id text,
   p_ip_hash text
 ) returns jsonb
-language plpgsql security definer set search_path = 'public' as $$
+language plpgsql security definer set search_path = public, pg_temp as $$
 declare
   v_turns_cap  int;
   v_ip_cap     int;
@@ -103,7 +106,7 @@ begin
   v_ip_cap     := coalesce(v_ip_cap, 0);
   v_global_cap := coalesce(v_global_cap, 0);
 
-  if v_turns_cap <= 0 or v_ip_cap <= 0 or v_global_cap <= 0 then
+  if v_turns_cap <= 0 then
     return jsonb_build_object('allowed', false, 'reason', 'disabled', 'left', 0);
   end if;
 
@@ -116,12 +119,15 @@ begin
     return jsonb_build_object('allowed', false, 'reason', 'anon_cap', 'left', 0, 'used_anon', v_used_anon);
   end if;
 
-  select count(*) into v_used_glob from anon_rail_hits where ts >= v_day_start;
-  if v_used_glob >= v_global_cap then
-    return jsonb_build_object('allowed', false, 'reason', 'global_cap', 'left', v_turns_cap - v_used_anon);
+  -- Trần <= 0 = không giới hạn: bỏ luôn câu đếm (đỡ quét anon_rail_hits mỗi lượt).
+  if v_global_cap > 0 then
+    select count(*) into v_used_glob from anon_rail_hits where ts >= v_day_start;
+    if v_used_glob >= v_global_cap then
+      return jsonb_build_object('allowed', false, 'reason', 'global_cap', 'left', v_turns_cap - v_used_anon);
+    end if;
   end if;
 
-  if p_ip_hash is not null then
+  if p_ip_hash is not null and v_ip_cap > 0 then
     select count(*) into v_used_ip from anon_rail_hits where ip_hash = p_ip_hash and ts >= v_day_start;
     if v_used_ip >= v_ip_cap then
       return jsonb_build_object('allowed', false, 'reason', 'ip_cap', 'left', v_turns_cap - v_used_anon);

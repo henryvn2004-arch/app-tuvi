@@ -76,7 +76,8 @@ export const DEFAULTS: ChatConfig = {
 
   // Model Anthropic dùng ở NHÁNH ANTHROPIC (dù nó đứng đầu hay đứng sau
   // Gemini — xem `standaloneProvider`/`providerRoutes` bên dưới).
-  model: 'claude-opus-5',
+  // Henry chốt 2026-09-29: Sonnet 5.5 thay Opus 5 (Opus ~4.500đ/câu, lỗ ở gói VIP).
+  model: 'claude-sonnet-5-5',
   maxRounds: 4,
   // 🔴 Henry chốt 2026-08-20 (retest sau khi bật Kimi K3): nhiều lượt bị CẮT
   // NGANG (rail chat lẫn Luận Giải) — nghi trần token của TỪNG PHẦN quá sát so

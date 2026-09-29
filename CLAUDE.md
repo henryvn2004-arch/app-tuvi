@@ -148,7 +148,7 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
   `ICONS` **và bump `nav.js?v=`** · nút CHỈ-icon **cấm `textContent`** (xoá mất `<svg>`).
   Luật đầy đủ + bẫy: `docs/ICONS.md`.
 - **Dùng thử rail cho khách CHƯA đăng nhập** — `/api/v1/chat` không 401 cứng; 3 trần độc lập
-  (`anon.rail_trial_turns` · `rail_ip_daily_cap` · `rail_global_daily_cap`, =0 là TẮT), **fail-CLOSED**,
+  (`anon.rail_trial_turns` =0 là TẮT; `rail_ip_daily_cap` · `rail_global_daily_cap` =0 là KHÔNG GIỚI HẠN), **fail-CLOSED**,
   chặn ảnh, tiêu quota ngay khi cấp phép. ⚠️ `client.anon_id` KHÔNG phải danh tính. `docs/luat/tien.md`.
 - **Guest checkout (Supabase Anonymous Sign-ins)** — `requireCredits()` tự mở phiên ẩn danh
   THẬT trong `auth.users` (tạo được bằng xoá cookie) ⇒ **MỌI đường phát thưởng phải tự kiểm
