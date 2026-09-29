@@ -99,6 +99,14 @@ const CMD = {
   batNhac: ['bật nhắc', 'bat nhac', '/batnhac'],
   deSau: ['để sau', 'de sau'],
 };
+/** Chủ đề mời chọn ngay sau lời chào (nút). Bấm mà phiên CHƯA có lá số ⇒ hỏi
+ *  ngày giờ sinh (miễn phí, không gọi thầy) và ghi chủ đề vào lịch sử để lượt
+ *  khách gửi ngày sinh, thầy trả lời đúng chủ đề đó. */
+const CHU_DE_MO = ['Tổng quan lá số', 'Vận hạn năm nay', 'Tình duyên', 'Sự nghiệp, tiền bạc', 'Sức khỏe, gia đạo'];
+const HOI_NGAY_SINH =
+  'Để xem, con cho ta: giới tính, ngày/tháng/năm sinh (dương lịch) và giờ sinh.\n' +
+  'Ví dụ: "Nam, 09/05/1984, giờ Tý". Không nhớ giờ sinh thì cứ nói "không rõ giờ".';
+
 /** "nạp 100k" / "nạp 200.000đ" (nút nạp gửi đúng dạng này) → phần số tiền. */
 const NAP_SO_RE = /^(?:nạp|\/nap)\s+(\S.*)$/;
 
@@ -231,7 +239,26 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   // vừa hỏi, lần này có thầy khách/nhóm cùng xem. Gõ "@Tâm Kính …" thì như web:
   // mời ngay trong câu.
   const session = await kit.store.load(ev.chatId);
+
+  const chuDe = CHU_DE_MO.find((c) => c.toLowerCase() === t);
+  if (chuDe && !session.birth && !hasImage) {
+    await io.sendText(ev.chatId, HOI_NGAY_SINH);
+    await kit.store.save(
+      ev.chatId,
+      [...session.messages, { role: 'user', content: chuDe }, { role: 'assistant', content: HOI_NGAY_SINH }],
+      null,
+    );
+    return;
+  }
+
   let askText = text;
+  // Lượt ngay sau khi hỏi ngày sinh cho một chủ đề: ghép chủ đề vào câu. Không
+  // trông vào lịch sử — tin có ngày sinh mới làm core bỏ lịch sử (người mới).
+  const [truocDo, vuaHoi] = session.messages.slice(-2);
+  if (!session.birth && vuaHoi?.content === HOI_NGAY_SINH && typeof truocDo?.content === 'string') {
+    const cd = CHU_DE_MO.find((c) => c === truocDo.content);
+    if (cd) askText = `${text}\nThầy xem giúp: ${cd}.`;
+  }
   let addressMaster: GuestId | undefined;
   let hoiChan = false;
   const laHoiChan = CMD.hoiChan.includes(t);
@@ -373,17 +400,17 @@ async function sendWelcome(kit: ChannelKit, ev: ChannelEvent, userId: string | n
   const coPdf = !!userId && !!kit.io.sendFile && (await listPaidReports(userId)).length > 0;
   await chaoThay(kit, ev, thay);
   await chonThay(kit.platform, String(ev.chatId), thay); // đánh dấu đã chào
+  // Chào xong hỏi NGAY khách muốn xem gì (nút chủ đề) — ngày giờ sinh hỏi SAU,
+  // khi khách đã chọn (xem CHU_DE_MO trong handleChannelEvent). Kênh nhiều chỗ
+  // nút thì thêm các lối tiện ích; Zalo (5 nút) đã có menu OA cho việc đó.
   await sendMenu(
     kit.io,
     ev.chatId,
-    'Đây là Hỏi Thầy — Tử Vi Minh Bảo.\n\n' +
-      'Hỏi thầy bất cứ điều gì về tử vi, vận hạn, tuổi tác, công việc, tình duyên… Để lập lá số, cho thầy biết: ' +
-      'giới tính, ngày/tháng/năm sinh (dương lịch) và giờ sinh.\n' +
-      'Ví dụ: "Nữ, 03/06/1998, giờ Sửu, năm nay làm ăn sao?"\n\n' +
-      'Gửi ảnh khuôn mặt để xem tướng, ảnh nhà cửa để xem phong thủy.\n\n' +
-      `Nhóm Minh Bảo có ${THAY_LIST.length} thầy — đổi thầy lúc nào cũng được.` +
+    `Con muốn xem điều gì? Chọn bên dưới, hoặc cứ nhắn thẳng câu hỏi.` +
+      `\n\nNhóm Minh Bảo có ${THAY_LIST.length} thầy — đổi thầy lúc nào cũng được.` +
       vi,
     [
+      ...CHU_DE_MO.map((c) => ({ title: c, reply: c })),
       { title: 'Đổi thầy', reply: 'Đổi thầy' },
       { title: 'Sổ lá số', reply: 'Sổ lá số' },
       { title: 'Nạp Lượng', reply: 'Nạp Lượng' },
@@ -477,6 +504,12 @@ async function handleThay(kit: ChannelKit, ev: ChannelEvent, arg: string): Promi
         return;
       }
       await chaoThay(kit, ev, moi);
+      await sendMenu(
+        kit.io,
+        ev.chatId,
+        'Con muốn xem điều gì? Chọn bên dưới, hoặc cứ nhắn thẳng câu hỏi.',
+        CHU_DE_MO.slice(0, kit.maxReplyButtons).map((c) => ({ title: c, reply: c })),
+      );
       return;
     }
     await kit.io.sendText(ev.chatId, `Không tìm thấy thầy "${arg}".`);

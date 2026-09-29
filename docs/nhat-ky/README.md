@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-491 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+492 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 326 | 1,177,435 B |
+| `2026-09.md` | 327 | 1,177,435 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 👋 Kênh chat: thầy chào ngắn + hỏi "muốn xem gì" trước, ngày sinh hỏi sau |
 | 1 | 2026-09 | `2026-09.md` | 🖥 Zalo Web/PC không hiện nút gợi ý — in kèm lựa chọn thành chữ |
 | 1 | 2026-09 | `2026-09.md` | 🌗 Tháng nhuận: cờ `isLeapMonth` từ chat tới Bát Tự và ảnh |
 | 1 | 2026-09 | `2026-09.md` | 👛 Zalo Mini App bước 4: tab "Của tôi" — ví Lượng, nạp qua payOS, báo cáo đã có |

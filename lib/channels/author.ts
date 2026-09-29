@@ -56,20 +56,25 @@ export const chonThay = (platform: string, chatId: string, t: Thay) => chatSetAu
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 const INTRO_TTL_MS = 10 * 60_000;
-let introCache: { at: number; map: Record<string, { greeting?: string; discipline?: string }> } | null = null;
+type Intro = { greeting?: string; discipline?: string; tagline?: string };
+let introCache: { at: number; map: Record<string, Intro> } | null = null;
 
-async function masterIntros(): Promise<Record<string, { greeting?: string; discipline?: string }>> {
+async function masterIntros(): Promise<Record<string, Intro>> {
   if (introCache && Date.now() - introCache.at < INTRO_TTL_MS) return introCache.map;
-  const map: Record<string, { greeting?: string; discipline?: string }> = {};
+  const map: Record<string, Intro> = {};
   if (SUPABASE_URL && SUPABASE_KEY) {
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/master_profiles?select=id,greeting,discipline`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/master_profiles?select=id,greeting,discipline,tagline`, {
         cache: 'no-store',
         headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
       });
       if (res.ok) {
-        for (const r of (await res.json()) as { id: string; greeting?: string; discipline?: string }[]) {
-          map[r.id] = { greeting: r.greeting || undefined, discipline: r.discipline || undefined };
+        for (const r of (await res.json()) as ({ id: string } & Intro)[]) {
+          map[r.id] = {
+            greeting: r.greeting || undefined,
+            discipline: r.discipline || undefined,
+            tagline: r.tagline || undefined,
+          };
         }
       } else {
         console.error('[author] đọc master_profiles lỗi', res.status);
@@ -83,11 +88,16 @@ async function masterIntros(): Promise<Record<string, { greeting?: string; disci
   return map;
 }
 
-/** Lời thầy tự giới thiệu ngắn: câu chào của thầy + môn chuyên xem. */
+/** Lời thầy tự giới thiệu ngắn, đọc là hiểu ngay: chào + tên · sở trường ·
+ *  câu tâm đắc. KHÔNG dùng `greeting` — nhiều câu chào hỏi ngược khách ("con có
+ *  chắc đang hỏi đúng điều mình cần không?") khiến lượt đầu khó hiểu; việc hỏi
+ *  khách muốn xem gì do nút chủ đề ngay sau đó lo. */
 export async function gioiThieuThay(t: Thay): Promise<string> {
   const m = (await masterIntros())[t.id];
-  const chao = m?.greeting || `Thầy ${t.name} đây.`;
-  return m?.discipline ? `${chao}\nThầy chuyên xem: ${m.discipline}.` : chao;
+  const dong = [`Chào con, ta là Thầy ${t.name}.`];
+  if (m?.discipline) dong.push(`Sở trường: ${m.discipline}.`);
+  if (m?.tagline) dong.push(`“${m.tagline}”`);
+  return dong.join('\n');
 }
 
 /** URL công khai chân dung chì THU NHỎ của thầy (public/authors/nho/<id>.jpg,
