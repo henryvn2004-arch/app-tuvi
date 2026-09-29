@@ -26,7 +26,6 @@
     { "path": "/api/cron/prune-anon-trial", "schedule": "0 2 * * *" },
     { "path": "/api/cron/zalo-token", "schedule": "20 20 * * *" },
     { "path": "/api/cron/chat-nudge", "schedule": "7 * * * *" },
-    { "path": "/api/cron/ban-tin", "schedule": "40 22 * * *" },
     { "path": "/api/cron/tien-tri-nhac", "schedule": "10 1 * * *" },
     { "path": "/api/cron/keyword-suggest", "schedule": "0 1 * * 2" },
     { "path": "/api/cron/topic-topup", "schedule": "0 1 * * 3" },
