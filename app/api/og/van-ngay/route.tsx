@@ -21,7 +21,7 @@ import { computeTuan, computeVanNgay, computeVanNgayCaNhan } from '@/lib/engine/
 const MAU: Record<string, string> = { tốt: C.green, xấu: C.red, bình: C.ink };
 const NEN: Record<string, string> = { tốt: '#E8F3EC', xấu: '#F8E9E6', bình: C.paper };
 // Như thẻ Vận Ngày trên web (LOAI_CAU, app-home.html): chỉ dịch `loai` — tên cách
-// cục trong dữ liệu có mục bị cắt cụt, văn cổ `tomTat` lại nói về cả đời người.
+// cục là thuật ngữ, văn cổ `tomTat` lại nói về cả đời người, không hợp ảnh một ngày.
 const LOAI_CAU: Record<string, string> = { tốt: 'thuận lợi', xấu: 'cần thận trọng', trung: 'bình ổn' };
 const QUAN_HE: Record<string, string> = {
   sinh: 'mệnh bạn sinh hành ngày — hao sức, nên giữ nhịp',
