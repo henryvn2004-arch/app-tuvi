@@ -22,9 +22,10 @@ import {
   type ClientPlatform,
 } from '@/lib/contract/v1';
 import { runAgent } from '@/lib/agent/run';
-import { lasoImageUrl } from '@/lib/og/laso-image';
+import { chartImageUrl, lasoImageUrl, timeChartUrl } from '@/lib/og/laso-image';
 import { currentNamXem } from '@/lib/engine/namxem';
-import { type ProfilePort } from '@/lib/tools/registry';
+import { todayVN } from '@/lib/engine/van-ngay';
+import { type GuestChart, type ProfilePort } from '@/lib/tools/registry';
 import { type ChatConfig } from '@/lib/config/appConfig';
 import { type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
@@ -254,7 +255,7 @@ export async function runConversation(
       client: { platform: io.platform, version: '1.0.0' },
     };
     const collector = createSSECollector(onStatus);
-    const { birth: agentBirth, subjectSwitched, lasoCard, suggestions, toolSuggest } = await runAgent(
+    const { birth: agentBirth, subjectSwitched, lasoCard, suggestions, toolSuggest, charts } = await runAgent(
       req,
       cfg,
       collector.send,
@@ -294,6 +295,20 @@ export async function runConversation(
     }
     const delivered = lasoCard && !sentImage ? lasoCard + '\n\n———\n\n' + answer : answer;
     await deliver(io, chatId, sentImage ? null : progressId, delivered);
+    // Thầy khách vừa lập lá số / khóa / bàn của môn mình → gửi ẢNH đó ngay sau
+    // câu trả lời (đúng năm, đúng mốc giờ thầy vừa luận). Hỏng thì chỉ log —
+    // câu trả lời đã tới, không làm hỏng lượt.
+    if (io.sendImage) {
+      for (const c of charts || []) {
+        const url = guestChartUrl(c, agentBirth ?? carryBirth);
+        if (!url) continue;
+        try {
+          await io.sendImage(chatId, url, ANH_CAPTION[c.kind]);
+        } catch (e) {
+          console.error('[runConversation] gửi ảnh thầy khách lỗi', io.platform, c.kind, e);
+        }
+      }
+    }
     onOutcome?.(true);
     // Trả lời thành công → CHỐT tính phí (lỗi thì không tính, đã return trên).
     if (gateCommit) await gateCommit();
@@ -331,6 +346,21 @@ export async function runConversation(
     await keepTyping.catch(() => {});
   }
 }
+
+/** Link ảnh cho một môn thầy khách vừa lập (null khi thiếu dữ kiện, vd Thần số học cần họ tên). */
+function guestChartUrl(c: GuestChart, b: BirthParams | null): string | null {
+  if ('khi' in c) return timeChartUrl(c.kind, c.khi, b);
+  return chartImageUrl(c.kind, b, c.nam ?? currentNamXem(), c.kind === 'van-12-thang' ? todayVN() : undefined);
+}
+
+const ANH_CAPTION: Partial<Record<GuestChart['kind'], string>> = {
+  'tu-tru': 'Tứ trụ Bát Tự thầy Tâm Kính vừa lập',
+  'luc-nham': 'Khóa Lục Nhâm thầy Linh Cơ vừa lập',
+  'ky-mon': 'Bàn Kỳ Môn thầy Tâm Kính vừa dựng',
+  'than-so': 'Thần số học thầy Thanh Hư vừa tính',
+  'bat-trach': 'Hướng hợp tuổi thầy Huyền Không vừa xem',
+  'van-12-thang': 'Vận 12 tháng âm tới',
+};
 
 // Chốt nội dung vào tin tiến trình (edit); phần dư > msgLimit gửi tin mới.
 async function deliver(io: ChannelIO, chatId: number | string, progressId: ProgressId, raw: string): Promise<void> {
