@@ -28,7 +28,7 @@ import {
   type SessionStore,
   type ProfileStore,
 } from './core';
-import { markdownToChat } from './format';
+import { buttonsAsText, markdownToChat } from './format';
 import {
   chatLoadSession,
   chatSaveSession,
@@ -222,16 +222,19 @@ const MAX_BUTTONS = 5;
  * Tin tư vấn kèm nút: `oa.open.url` mở link ngay trong Zalo, `oa.query.show`
  * gửi lại chữ soạn sẵn thành tin của người dùng (webhook nhận như tin gõ tay).
  * Chữ dài hơn trần 1 tin → gửi phần đầu thành tin thường, nút gắn vào đoạn cuối.
+ * ⚠️ Zalo Web/PC KHÔNG vẽ nút của tin tư vấn (chỉ app điện thoại) — lựa chọn
+ * phải in kèm thành chữ, không thì khách trên máy tính kẹt, không biết nhắn gì.
  */
 export async function zaloSendButtons(userId: string, text: string, buttons: ChatButton[]): Promise<void> {
-  const parts = splitText(text || '…', MSG_LIMIT);
+  const btns = buttons.slice(0, MAX_BUTTONS);
+  const parts = splitText(`${text || '…'}\n\n${buttonsAsText(btns)}`, MSG_LIMIT);
   for (const p of parts.slice(0, -1)) await postMessage(userId, { text: p });
   await postMessage(userId, {
     text: parts[parts.length - 1],
     attachment: {
       type: 'template',
       payload: {
-        buttons: buttons.slice(0, MAX_BUTTONS).map((b) =>
+        buttons: btns.map((b) =>
           'url' in b
             ? { title: b.title.slice(0, 100), type: 'oa.open.url', payload: { url: b.url } }
             : { title: b.title.slice(0, 100), type: 'oa.query.show', payload: b.reply.slice(0, 1000) },

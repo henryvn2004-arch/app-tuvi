@@ -94,6 +94,7 @@ let engineCache: {
   buildDaiVanLines: (...a: unknown[]) => unknown;
   canCungOf: (canNam: string, diaChi: string) => string;
   STAR_DATA: Record<string, { type?: string; element?: string }>;
+  TU_HOA: Record<string, Record<string, string>>;
   Pchip: { pchipSeries: (pts: { x: number; y: number }[], opts?: { step?: number }) => { x: number; y: number }[] } | undefined;
 } | null = null;
 
@@ -115,7 +116,7 @@ function loadEngine() {
     'window',
     'globalThis',
     pchipCode + '\n' + code + '\n' + formatCode +
-      '\nreturn{convertDuongToAm,solarToLunar,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines,canCungOf:window.canCungOf,STAR_DATA,Pchip:window.Pchip};',
+      '\nreturn{convertDuongToAm,solarToLunar,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines,canCungOf:window.canCungOf,STAR_DATA,TU_HOA,Pchip:window.Pchip};',
   ))(g, g) as typeof engineCache;
   return engineCache!;
 }
@@ -124,6 +125,32 @@ function loadEngine() {
  *  `canCungOf` của public/tuvi-laso-format.js. '' khi đầu vào không hợp lệ. */
 export function canCung(canNam: string, diaChi: string): string {
   return loadEngine().canCungOf(canNam, diaChi) || '';
+}
+
+/**
+ * Tứ Hóa Phi Tinh tầng MỆNH BÀN của một cung: can của CHÍNH cung đó → 4 sao
+ * Lộc/Quyền/Khoa/Kỵ (bảng `TU_HOA` của engine) → cung đang chứa từng sao.
+ * CÙNG cơ chế `buildTuHoaPhiTinhHtml` (public/luan-giai-core.js) và
+ * `_tuHoaPhiTinh` (public/tuvi-laso-format.js) — đổi công thức nơi nào thì đổi
+ * cả ba. `null` khi không tra được can cung.
+ */
+export function tuHoaPhiTinh(
+  ls: Laso,
+  cungName: string,
+): { can: string; rows: { hoa: string; star: string; cung: string; diaChi: string; self: boolean }[] } | null {
+  type P = { cungName: string; diaChi: string; stars?: { ten?: string }[] };
+  const palaces = ((ls as Rec).palaces as P[]) || [];
+  const pal = palaces.find((p) => p.cungName === cungName);
+  if (!pal) return null;
+  const can = canCung(String((ls as Rec).canChiNam || '').split(' ')[0], pal.diaChi);
+  const hosts = can ? loadEngine().TU_HOA[can] : null;
+  if (!hosts) return null;
+  const rows = ['Lộc', 'Quyền', 'Khoa', 'Kỵ'].flatMap((hoa) => {
+    const star = hosts[hoa];
+    const t = star ? palaces.find((p) => (p.stars || []).some((x) => x.ten === star)) : undefined;
+    return star && t ? [{ hoa, star, cung: t.cungName, diaChi: t.diaChi, self: t.cungName === cungName }] : [];
+  });
+  return { can, rows };
 }
 
 /** Đường điểm theo NĂM nội suy pchip từ các mốc (x=tuổi, y=điểm) — CÙNG
@@ -193,6 +220,7 @@ type AmDuongApi = {
     m: number,
     y: number,
     s2l: (d: number, m: number, y: number) => { day: number; month: number; year: number } | null,
+    nhuan?: boolean,
   ) => { day: number; month: number; year: number } | null;
 };
 let amDuongCache: AmDuongApi | null = null;
@@ -208,18 +236,23 @@ function loadAmDuong(): AmDuongApi {
 /**
  * Ngày ÂM (ngày, tháng, năm âm) → ngày DƯƠNG. `null` khi ngày âm không tồn tại
  * (vd 30 của tháng thiếu) hoặc ngoài tầm bảng 1900–2100.
- * ⚠️ Tháng nhuận: bảng vanilla bỏ cờ `isLeap` nên luôn trả tháng THƯỜNG cùng số
- * (xem đầu `am-duong.js`).
+ * `nhuan` = ngày thuộc tháng NHUẬN; năm đó không nhuận tháng `month` ⇒ `null`.
+ * Không truyền ⇒ tháng THƯỜNG cùng số (xem đầu `am-duong.js`).
  */
-export function lunarToSolar(day: number, month: number, year: number): { day: number; month: number; year: number } | null {
-  return loadAmDuong().lunarToSolar(Math.floor(day), Math.floor(month), Math.floor(year), loadEngine().solarToLunar);
+export function lunarToSolar(
+  day: number,
+  month: number,
+  year: number,
+  nhuan = false,
+): { day: number; month: number; year: number } | null {
+  return loadAmDuong().lunarToSolar(Math.floor(day), Math.floor(month), Math.floor(year), loadEngine().solarToLunar, nhuan);
 }
 
 /** Ngày sinh DƯƠNG của `birth` — đổi từ âm khi `isLunar`. `null` khi thiếu/không đổi được. */
 export function solarDateOf(birth: BirthParams): { day: number; month: number; year: number } | null {
   const { day, month, year } = birth;
   if (!day || !month || !year) return null;
-  return birth.isLunar ? lunarToSolar(day, month, year) : { day, month, year };
+  return birth.isLunar ? lunarToSolar(day, month, year, birth.isLeapMonth === true) : { day, month, year };
 }
 
 /** Năm âm lịch + chi năm của một ngày sinh dương. Sinh tháng 1–2 dương mà âm
@@ -230,7 +263,7 @@ export function namAm(b: BirthParams): { nam: number; chi: string } | null {
   if (b.isLunar) {
     // Ngày ÂM không được đưa thẳng vào `lunarOf` (hàm nhận ngày DƯƠNG) — đổi
     // sang dương trước, không thì sinh đầu năm âm ra chi năm của năm trước.
-    const dl = lunarToSolar(b.day, b.month, b.year);
+    const dl = lunarToSolar(b.day, b.month, b.year, b.isLeapMonth === true);
     const l = dl ? lunarOf(dl.day, dl.month, dl.year) : null;
     return l ? { nam: b.year, chi: l.chiNam } : null;
   }
@@ -278,6 +311,11 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
       namAL = Math.floor(year);
       if (thangAL < 1 || thangAL > 12 || ngayAL < 1 || ngayAL > 30) {
         return { ok: false, error: 'Ngày/tháng âm lịch không hợp lệ (tháng 1–12, ngày 1–30).' };
+      }
+      // Tháng NHUẬN: an sao theo SỐ tháng như cũ (không đổi cổ pháp), nhưng năm đó
+      // phải thật sự nhuận tháng ấy — không thì từ chối, đừng lặng lẽ an tháng thường.
+      if (birth.isLeapMonth && !lunarToSolar(ngayAL, thangAL, namAL, true)) {
+        return { ok: false, error: `Năm ${namAL} âm lịch không có ngày ${ngayAL} tháng ${thangAL} nhuận.` };
       }
       canNam = yearCan(namAL);
       chiNam = yearChi(namAL);
@@ -494,7 +532,7 @@ export function renderLasoCard(ls: Laso, birth?: BirthParams | null): string {
   const bits: string[] = [];
   if (birth) {
     bits.push(birth.gender === 'nu' ? 'Nữ' : 'Nam');
-    bits.push(`${birth.day}/${birth.month}/${birth.year} ${birth.isLunar ? 'ÂL' : 'DL'}`);
+    bits.push(`${birth.day}/${birth.month}${birth.isLunar && birth.isLeapMonth ? ' nhuận' : ''}/${birth.year} ${birth.isLunar ? 'ÂL' : 'DL'}`);
     if (birth.hourBranch != null && birth.hourBranch >= 0 && birth.hourBranch < 12) {
       bits.push('giờ ' + CHI_NAMES[birth.hourBranch]);
     }

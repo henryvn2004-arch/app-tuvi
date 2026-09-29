@@ -1,0 +1,35 @@
+{
+  "name": "tuvi-zalo-mini",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Zalo Mini App của tuviminhbao.com — vỏ mỏng gọi API web (Contract v1). Tách biệt với app Next.js ở gốc.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "start": "zmp start",
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "deploy": "zmp deploy"
+  },
+  "browserslist": [
+    "Android >= 5",
+    "IOS >= 9.3",
+    "Chrome >= 49",
+    "Safari >= 9.1"
+  ],
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zmp-sdk": "^2.53.0",
+    "zmp-ui": "^1.11.14"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21",
+    "zmp-vite-plugin": "^1.1.6"
+  }
+}

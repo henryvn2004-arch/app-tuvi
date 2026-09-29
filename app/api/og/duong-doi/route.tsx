@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
   ];
 
   const gioi = birth.gender === 'nu' ? 'Nữ' : 'Nam';
-  const sub = `${birth.name ? birth.name + ' · ' : ''}${gioi} · ${birth.day}/${birth.month}/${birth.year} ${birth.isLunar ? 'ÂL' : 'DL'} · giờ ${CHI[birth.hourBranch!]}`;
+  const sub = `${birth.name ? birth.name + ' · ' : ''}${gioi} · ${birth.day}/${birth.month}${birth.isLunar && birth.isLeapMonth ? ' nhuận' : ''}/${birth.year} ${birth.isLunar ? 'ÂL' : 'DL'} · giờ ${CHI[birth.hourBranch!]}`;
 
   return new ImageResponse(
     (
