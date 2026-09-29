@@ -760,6 +760,12 @@ const BIEU_DO: { kind: ChartKind; nut: string; cau: string[]; loi: string; thay?
     loi: '12 tháng âm tới của bạn — mỗi dòng là cung nguyệt hạn cùng sao cát, sao sát của tháng đó. Nhờ thầy luận tháng nào thì nhắn tháng đó.',
   },
   {
+    kind: 'dai-van',
+    nut: 'Chi tiết đại vận',
+    cau: ['chi tiết đại vận', 'điểm đại vận', 'chấm điểm đại vận', 'bảng đại vận'],
+    loi: 'Chín đại vận của bạn — mỗi vận 10 năm chấm theo Thiên Thời, Địa Lợi, Nhân Hòa; nền vàng là vận đang đi. Muốn thầy luận vận nào, cứ nhắn tuổi đó.',
+  },
+  {
     kind: 'tu-tru',
     nut: 'Lá số Bát Tự',
     cau: ['lá số bát tự', 'bát tự', 'tứ trụ', 'xem tứ trụ', 'lá số tứ trụ'],
@@ -801,7 +807,8 @@ function bieuDoHop(q: string, lasoShown: boolean): { nut: string } {
   const cung = cungChuDe(chuDeCua(q)[0] || null);
   if (cung) return { nut: `Xem cung ${cung}` };
   if (/(tháng|năm nay|năm sau|năm tới|sắp tới|khi nào|bao giờ)/.test(t)) return by('van-12-thang');
-  if (/(cuộc đời|tương lai|sau này|đại vận|về già|tuổi già|giai đoạn)/.test(t)) return by('duong-doi');
+  if (/(đại vận|giai đoạn|vận 10 năm|mười năm)/.test(t)) return by('dai-van');
+  if (/(cuộc đời|tương lai|sau này|về già|tuổi già)/.test(t)) return by('duong-doi');
   return by('radar-cung');
 }
 
@@ -868,7 +875,7 @@ async function handleBieuDo(kit: ChannelKit, ev: ChannelEvent, b: (typeof BIEU_D
       .slice(0, kit.maxReplyButtons)
       .map((x) => ({ title: x.nut, reply: x.nut }));
   if (!b) {
-    // Zalo chỉ 5 nút mà có tới 6 ảnh ⇒ liệt kê cả tên trong lời, gõ tên nào cũng nhận.
+    // Zalo chỉ 5 nút mà có nhiều ảnh hơn ⇒ liệt kê cả tên trong lời, gõ tên nào cũng nhận.
     const ds = BIEU_DO.filter((x) => veDuoc(x.kind, birth));
     await sendMenu(
       kit.io,
