@@ -58,7 +58,8 @@ export async function gioiThieuThay(t: Thay): Promise<string> {
   return `Chào con, ta là Thầy ${t.name}.`;
 }
 
-/** URL công khai chân dung chì THU NHỎ của thầy (public/authors/nho/<id>.jpg,
- *  96×96, ~3 KB — cắt từ bản gốc public/authors/<id>.jpg). App chat tự quyết
- *  cỡ hiển thị ảnh; ảnh gốc to bị bày ra gần kín màn hình. */
-export const anhThay = (t: Thay) => `https://www.tuviminhbao.com/authors/nho/${t.id}.jpg`;
+/** URL công khai chân dung chì cho kênh chat (public/authors/chat/<id>.jpg — trọn
+ *  tranh, cạnh dài 640px, ~60 KB, sinh từ bản gốc authors/<id>.png). App chat tự kéo
+ *  ảnh ra gần hết bề ngang: bản 96×96 cũ bị phóng to thành mờ (Henry 2026-09-29).
+ *  Đổi ảnh thì đổi cả THƯ MỤC — Zalo nhớ ảnh theo URL. */
+export const anhThay = (t: Thay) => `https://www.tuviminhbao.com/authors/chat/${t.id}.jpg`;
