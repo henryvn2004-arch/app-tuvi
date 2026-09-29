@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Checkbox, DatePicker, Input, Select, Spinner, useSnackbar } from 'zmp-ui';
-import { describeBirth, GIO, type Chart } from '../lib/birth';
+import { describeBirth, GIO, toBirthParams, type Chart } from '../lib/birth';
 import { deleteChart, listCharts, myChartId, saveChart, setMyChartId } from '../lib/charts';
+import { lasoImage, saveImage, shareImage } from '../lib/media';
 
 export default function ChartsPage({ onAsk }: { onAsk: (c: Chart) => void }) {
   const { openSnackbar } = useSnackbar();
@@ -9,6 +10,7 @@ export default function ChartsPage({ onAsk }: { onAsk: (c: Chart) => void }) {
   const [mine, setMine] = useState(myChartId);
   const [adding, setAdding] = useState(false);
   const [confirmDel, setConfirmDel] = useState<number | null>(null);
+  const [shot, setShot] = useState<{ id: number; url: string } | null>(null);
 
   // `openSnackbar` đổi identity mỗi lần render — để nó trong deps của `reload`
   // là effect bên dưới chạy lại vô hạn (gọi /api/charts liên tục). Giữ qua ref.
@@ -42,6 +44,29 @@ export default function ChartsPage({ onAsk }: { onAsk: (c: Chart) => void }) {
       await deleteChart(c.id);
       if (mine === c.id) markMine(null);
       reload();
+    } catch (e) {
+      fail(e);
+    }
+  }
+
+  async function showImage(c: Chart) {
+    const birth = toBirthParams(c.birth);
+    if (!birth) return;
+    try {
+      setShot({ id: c.id, url: await lasoImage(birth) });
+    } catch (e) {
+      fail(e);
+    }
+  }
+
+  async function run(action: () => Promise<unknown>, done: string) {
+    try {
+      const r = await action();
+      snack.current(
+        r === false
+          ? { text: 'Mở trong Zalo để chia sẻ', type: 'info' }
+          : { text: done, type: 'success' }
+      );
     } catch (e) {
       fail(e);
     }
@@ -92,10 +117,36 @@ export default function ChartsPage({ onAsk }: { onAsk: (c: Chart) => void }) {
                 Đây là tôi
               </Button>
             )}
+            <Button size="small" variant="secondary" onClick={() => showImage(c)}>
+              Ảnh lá số
+            </Button>
             <Button size="small" variant="tertiary" type="danger" onClick={() => remove(c)}>
               {confirmDel === c.id ? 'Bấm lần nữa để xoá' : 'Xoá'}
             </Button>
           </div>
+          {shot?.id === c.id && (
+            <div>
+              <img className="tv-shot" src={shot.url} alt={`Lá số ${c.label}`} />
+              <div className="tv-actions">
+                <Button
+                  size="small"
+                  onClick={() => run(() => saveImage(shot.url), 'Đã lưu ảnh về máy')}
+                >
+                  Lưu về máy
+                </Button>
+                <Button
+                  size="small"
+                  variant="secondary"
+                  onClick={() => run(() => shareImage(shot.url), 'Đã mở chia sẻ')}
+                >
+                  Chia sẻ
+                </Button>
+                <Button size="small" variant="tertiary" onClick={() => setShot(null)}>
+                  Đóng
+                </Button>
+              </div>
+            </div>
+          )}
         </section>
       ))}
     </div>
