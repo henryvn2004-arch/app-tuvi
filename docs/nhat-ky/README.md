@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-504 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+505 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 339 | 1,199,222 B |
+| `2026-09.md` | 340 | 1,201,002 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -26,6 +26,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 🔕 Kênh chat: bỏ chip gợi ý mỗi lượt · sản phẩm chỉ lúc an lá số/kiểm chứng môn khác · "Còn N câu" chỉ khi dưới 3 |
+| 1 | 2026-09 | `2026-09.md` | 🚀 Zalo Mini App: `npm run deploy` chạy được — deploy bản thử đầu tiên |
 | 1 | 2026-09 | `2026-09.md` | 🔑 Zalo Mini App: gắn Mini App ID + sửa `npm run deploy` gọi `zmp` không có |
 | 1 | 2026-09 | `2026-09.md` | 🗑️ Gỡ bản tin kinh tế hằng ngày |
 | 1 | 2026-09 | `2026-09.md` | 🏷️ `cach_cuc_all.json`: 47 tên cách cục không đọc được → tên đầy đủ |
