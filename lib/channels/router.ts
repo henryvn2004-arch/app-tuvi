@@ -27,14 +27,15 @@ import { ensureChatUser } from './account';
 import { accountProfiles, saveChart } from './charts';
 import { createHandoffUrl, lasoPath } from './handoff';
 import { chartImageUrl, type ChartKind } from '@/lib/og/laso-image';
+import type { BirthParams } from '@/lib/contract/v1';
 import { listPaidReports, paidReportPdf } from '@/lib/pdf/paid-reports';
 import { currentNamXem } from '@/lib/engine/namxem';
 import { todayVN } from '@/lib/engine/van-ngay';
 import { claimLoginCode, parseLoginCode } from './login';
 import { GOP_CMD, isShadowUser, maskEmail, parseEmail, startEmailLink, verifyEmailLink, hasPendingEmailLink } from './email-link';
 import { TOPUP_CMD, createChatTopup, parseTopup, topupCaption, topupChoices, vietQrImageUrl } from './topup';
-import { GUESTS, detectMention, guestById, guestFromMoi, type GuestId } from './guests';
-import { LOI_SAN_PHAM, chonSanPham, chonTinhNang, lyDoSanPham, nhanLuanGiai, sanPhamDanhMuc } from './goi-y';
+import { GUESTS, detectMention, guestById, guestFromMoi, moiCau, type GuestId } from './guests';
+import { LOI_SAN_PHAM, chonSanPham, chonTinhNang, lyDoSanPham, nhanLuanGiai, nhanMon, sanPhamDanhMuc } from './goi-y';
 import { cacChuDe } from '@/lib/agent/luan-chu-de';
 import { toolCatalog } from './catalog';
 import { THAY_LIST, anhThay, chonThay, gioiThieuThay, thayCuaChat, timThay, type Thay } from './author';
@@ -736,7 +737,7 @@ async function handlePdf(kit: ChannelKit, ev: ChannelEvent, userId: string | nul
 
 // ── Ảnh biểu đồ (lib/og/laso-image.ts + app/api/og/<kind>) ──────────────
 // Tên nút = câu khách gửi đi (không lộ "/"); nhận cả vài cách gõ tay thường gặp.
-const BIEU_DO: { kind: ChartKind; nut: string; cau: string[]; loi: string }[] = [
+const BIEU_DO: { kind: ChartKind; nut: string; cau: string[]; loi: string; thay?: GuestId }[] = [
   {
     kind: 'duong-doi',
     nut: 'Xem đường đời',
@@ -755,7 +756,32 @@ const BIEU_DO: { kind: ChartKind; nut: string; cau: string[]; loi: string }[] = 
     cau: ['vận 12 tháng', 'vận 12 tháng tới', 'xem vận 12 tháng'],
     loi: '12 tháng âm tới của bạn — mỗi dòng là cung nguyệt hạn cùng sao cát, sao sát của tháng đó. Nhờ thầy luận tháng nào thì nhắn tháng đó.',
   },
+  {
+    kind: 'tu-tru',
+    nut: 'Lá số Bát Tự',
+    cau: ['lá số bát tự', 'bát tự', 'tứ trụ', 'xem tứ trụ', 'lá số tứ trụ'],
+    loi: 'Tứ trụ Bát Tự của bạn — can chi năm, tháng, ngày, giờ; cột Ngày là Nhật chủ.',
+    thay: 'tam-kinh',
+  },
+  {
+    kind: 'bat-trach',
+    nut: 'Hướng hợp tuổi',
+    cau: ['hướng hợp tuổi', 'hướng nhà hợp tuổi', 'bát trạch', 'xem hướng nhà'],
+    loi: 'Tám hướng theo cung mệnh của bạn — ô xanh là hướng tốt nên đặt cửa, giường, bàn làm việc; ô đỏ là hướng nên tránh.',
+    thay: 'huyen-khong',
+  },
+  {
+    kind: 'than-so',
+    nut: 'Thần số học',
+    cau: ['thần số học', 'xem thần số học', 'số chủ đạo', 'con số chủ đạo'],
+    loi: 'Thần số học theo họ tên và ngày sinh của bạn — vòng tròn lớn là bốn con số lõi, lưới bên dưới là biểu đồ ngày sinh.',
+    thay: 'thanh-hu',
+  },
 ];
+
+/** Thần số học cần họ tên + ngày DƯƠNG — thiếu thì ẩn nút, bấm tay thì nhắc bổ sung. */
+const veDuoc = (kind: ChartKind, birth: BirthParams) => kind !== 'than-so' || (!!String(birth.name || '').trim() && !birth.isLunar);
+const THIEU_TEN = 'Thần số học tính từ HỌ TÊN khai sinh và ngày sinh DƯƠNG lịch. Nhắn thầy họ tên đầy đủ cùng ngày sinh dương lịch nhé, rồi bấm lại "Thần số học".';
 
 /** Biểu đồ hợp câu vừa hỏi: vừa lập lá số → đường đời; hỏi về tháng/năm → 12
  *  tháng; về đời/tương lai → đường đời; còn lại → điểm mạnh yếu 12 cung. */
@@ -765,6 +791,8 @@ function bieuDoHop(q: string, lasoShown: boolean) {
   // Vừa lập lá số: câu đó thường chứa ngày sinh ("… tháng 8 …") — đừng để chữ
   // "tháng" kéo sang biểu đồ 12 tháng.
   if (lasoShown) return by('duong-doi');
+  if (/(hướng nhà|hướng cửa|hướng bếp|hướng giường|hướng bàn|phong thủy|bát trạch)/.test(t)) return by('bat-trach');
+  if (/(bát tự|tứ trụ|tử bình|nhật chủ|dụng thần)/.test(t)) return by('tu-tru');
   if (/(tháng|năm nay|năm sau|năm tới|sắp tới|khi nào|bao giờ)/.test(t)) return by('van-12-thang');
   if (/(cuộc đời|tương lai|sau này|đại vận|về già|tuổi già|giai đoạn)/.test(t)) return by('duong-doi');
   return by('radar-cung');
@@ -776,13 +804,19 @@ async function handleBieuDo(kit: ChannelKit, ev: ChannelEvent, b: (typeof BIEU_D
     await kit.io.sendText(ev.chatId, 'Cho thầy giới tính, ngày/tháng/năm sinh và giờ sinh trước đã, thầy lập lá số rồi vẽ biểu đồ cho bạn nhé.');
     return;
   }
+  const birth = session.birth;
+  const khac = (bo?: ChartKind) =>
+    BIEU_DO.filter((x) => x.kind !== bo && veDuoc(x.kind, birth))
+      .slice(0, kit.maxReplyButtons)
+      .map((x) => ({ title: x.nut, reply: x.nut }));
   if (!b) {
-    await sendMenu(
-      kit.io,
-      ev.chatId,
-      'Bạn muốn xem biểu đồ nào?',
-      BIEU_DO.map((x) => ({ title: x.nut, reply: x.nut })),
-    );
+    // Zalo chỉ 5 nút mà có tới 6 ảnh ⇒ liệt kê cả tên trong lời, gõ tên nào cũng nhận.
+    const ds = BIEU_DO.filter((x) => veDuoc(x.kind, birth));
+    await sendMenu(kit.io, ev.chatId, `Bạn muốn xem ảnh nào?\n${ds.map((x) => `• ${x.nut}`).join('\n')}`, khac());
+    return;
+  }
+  if (!veDuoc(b.kind, birth)) {
+    await kit.io.sendText(ev.chatId, THIEU_TEN);
     return;
   }
   const url = chartImageUrl(b.kind, session.birth, currentNamXem(), b.kind === 'van-12-thang' ? todayVN() : undefined);
@@ -797,12 +831,10 @@ async function handleBieuDo(kit: ChannelKit, ev: ChannelEvent, b: (typeof BIEU_D
     await kit.io.sendText(ev.chatId, ERR_MSG);
     return;
   }
-  await sendMenu(
-    kit.io,
-    ev.chatId,
-    b.loi,
-    BIEU_DO.filter((x) => x.kind !== b.kind).map((x) => ({ title: x.nut, reply: x.nut })),
-  );
+  // Ảnh môn khác → nút mời đúng thầy môn đó luận (cùng câu nút "mời thầy" sẵn có).
+  const g = b.thay ? guestById(b.thay) : null;
+  const moi = g ? [{ title: nhanMon(g), reply: moiCau(g) }] : [];
+  await sendMenu(kit.io, ev.chatId, b.loi, [...moi, ...khac(b.kind)].slice(0, kit.maxReplyButtons));
 }
 
 /**

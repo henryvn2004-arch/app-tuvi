@@ -41,6 +41,9 @@ const NHAN_MON: Record<GuestId, string> = {
   'dieu-khong': 'Xem riêng tiền bạc, sự nghiệp',
 };
 
+/** Nhãn nút mời một thầy khách — tên môn/việc, không tên thầy. */
+export const nhanMon = (g: { id: GuestId; mon: string }) => NHAN_MON[g.id] || `Xem thêm môn ${g.mon}`;
+
 const NGUOI_KHAC = cum([
   'người yêu', 'bạn trai', 'bạn gái', 'người ấy', 'anh ấy', 'cô ấy', 'crush', 'vợ tôi', 'chồng tôi', 'vợ mình',
   'chồng mình', 'vợ em', 'chồng em', 'hợp tuổi', 'hợp nhau', 'hợp không', 'tuổi của', 'sếp tôi', 'đối tác',
@@ -77,7 +80,7 @@ export function chonTinhNang(c: NguCanhTinhNang): TinhNang | null {
   if (co(q, CHON_NGAY)) ds.push({ id: 'chon-ngay', nut: { title: 'Chọn ngày tốt cho việc này', reply: 'Chọn giúp tôi ngày tốt cho việc này' } });
   if (c.birth && !c.daMoi) {
     const g = pickGuests(c.cauHoi, c.thayId, c.birth, 1)[0];
-    if (g) ds.push({ id: `moi:${g.id}`, nut: { title: NHAN_MON[g.id] || `Xem thêm môn ${g.mon}`, reply: moiCau(g) } });
+    if (g) ds.push({ id: `moi:${g.id}`, nut: { title: nhanMon(g), reply: moiCau(g) } });
   }
   if (c.birth) ds.push({ id: `bieu-do:${c.bieuDo.nut}`, nut: { title: c.bieuDo.nut, reply: c.bieuDo.nut } });
   return ds.find((x) => x.id !== c.truoc) ?? ds[0] ?? null;

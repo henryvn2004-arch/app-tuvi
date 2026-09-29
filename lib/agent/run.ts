@@ -18,7 +18,7 @@ import {
   type ScenarioInput,
   type BirthParams,
 } from '@/lib/contract/v1';
-import { buildToolDefs, executeTool, newToolContext, buildBirthFromInput, THAY_KHACH, type ProfilePort } from '@/lib/tools/registry';
+import { buildToolDefs, executeTool, newToolContext, buildBirthFromInput, THAY_KHACH, type ProfilePort, type GuestChart } from '@/lib/tools/registry';
 import { ghiLoiTienTri } from '@/lib/tien-tri/store';
 import { listFamily, vaiTroTrongCau, canMoiThem, type VaiTro } from '@/lib/charts/family';
 import { type ToolSuggestion } from '@/lib/tools/suggest-tool';
@@ -154,6 +154,9 @@ export interface AgentResult {
   // Thẻ "công cụ này giúp được" (bước 4). null ở hầu hết lượt — model được dặn
   // mặc định là IM. Kênh bot bỏ qua field này (chỉ web dựng thẻ bấm được).
   toolSuggest?: ToolSuggestion | null;
+  // Ảnh môn khác thầy khách vừa lập trong lượt (Bát Tự, Lục Nhâm, …) — kênh chat
+  // gửi kèm câu trả lời; web bỏ qua (web có trang công cụ riêng).
+  charts?: GuestChart[];
   // "Cả nhà mình" GĐ2 — câu hỏi nhắc tới một người nhà mà sổ CHƯA có lá số
   // người đó ⇒ web dựng thẻ mời thêm ngay dưới câu trả lời. Vắng ở hầu hết lượt.
   familyInvite?: { vaiTro: VaiTro } | null;
@@ -819,6 +822,7 @@ async function runAgentInner(
           lasoCard,
           suggestions,
           toolSuggest: ctx.toolSuggestion,
+          charts: ctx.charts,
         },
       };
     } catch (e) {
@@ -894,6 +898,7 @@ async function runAgentInner(
           lasoCard,
           suggestions,
           toolSuggest: ctx.toolSuggestion,
+          charts: ctx.charts,
         },
       };
     } catch (e) {
@@ -922,6 +927,7 @@ async function runAgentInner(
         lasoCard: null,
         suggestions,
         toolSuggest: ctx.toolSuggestion,
+        charts: ctx.charts,
       };
     } catch (e) {
       console.error('[runAgent] Gemini lỗi → fallback Opus 5:', (e as Error)?.message);
@@ -952,6 +958,7 @@ async function runAgentInner(
         lasoCard: justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null,
         suggestions,
         toolSuggest: ctx.toolSuggestion,
+        charts: ctx.charts,
       };
     }
     // Hỏng sạch (chưa stream gì) → rơi xuống loop Anthropic bên dưới.
@@ -1006,6 +1013,7 @@ async function runAgentInner(
             lasoCard: null,
             suggestions,
             toolSuggest: ctx.toolSuggestion,
+            charts: ctx.charts,
           };
         } catch (e) {
           console.error('[runAgent] Fallback Gemini cũng lỗi:', (e as Error)?.message);
@@ -1034,6 +1042,7 @@ async function runAgentInner(
               lasoCard: justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null,
               suggestions,
               toolSuggest: ctx.toolSuggestion,
+              charts: ctx.charts,
             };
           }
           // Hỏng sạch (chưa stream gì) → hết đường, báo lỗi bên dưới.
@@ -1049,6 +1058,7 @@ async function runAgentInner(
               lasoCard: null,
               suggestions,
               toolSuggest: ctx.toolSuggestion,
+              charts: ctx.charts,
             };
           } catch (e) {
             console.error('[runAgent] Kimi (lưới đỡ cuối) cũng lỗi:', (e as Error)?.message);
@@ -1100,6 +1110,7 @@ async function runAgentInner(
     lasoCard,
     suggestions,
     toolSuggest: ctx.toolSuggestion,
+    charts: ctx.charts,
   };
 }
 

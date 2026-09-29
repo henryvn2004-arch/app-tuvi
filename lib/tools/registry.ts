@@ -28,13 +28,14 @@ import { personaKhach } from '@/lib/agent/personas';
 import { lapKhoa, railData as railDataLucNham } from '@/lib/liuren/ke';
 import { dungBan, railData as railDataKyMon } from '@/lib/qimen/board';
 import type { BirthParams } from '@/lib/contract/v1';
+import type { ChartKind, TimeChartKind } from '@/lib/og/laso-image';
 import { findMember, type FamilyMember } from '@/lib/charts/family';
 import type { ThangKhung } from '@/lib/engine/van-han-12';
 import { khungCaNha, type NguoiNhaVao } from '@/lib/engine/ca-nha';
 import { computeXongDat, tetSapToi, VERDICT_LABEL } from '@/lib/engine/xong-dat';
 import { computeVanNgay } from '@/lib/engine/van-ngay';
 import { getCungMenh, guaOf } from '@/lib/engine/bat-trach';
-import { lunarOf } from '@/lib/engine/laso';
+import { namAm } from '@/lib/engine/laso';
 import { SUGGEST_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
 type Rec = Record<string, unknown>;
@@ -100,7 +101,13 @@ export interface ToolContext {
   family: FamilyMember[];
   // Câu hỏi mới nhất — xem_nguoi_nha khoanh cung liên quan trên lá số người nhà.
   question: string;
+  // Ảnh môn khác vừa lập trong lượt (thầy khách / hội chẩn) — kênh chat gửi kèm
+  // câu trả lời (lib/og/laso-image.ts). Ghi ĐÚNG số liệu thầy vừa luận: năm xem
+  // Bát Tự, mốc lập khóa Lục Nhâm / dựng bàn Kỳ Môn.
+  charts: GuestChart[];
 }
+
+export type GuestChart = { kind: ChartKind; nam?: number } | { kind: TimeChartKind; khi: string };
 
 export function newToolContext(
   seedLs: Laso | null = null,
@@ -125,6 +132,7 @@ export function newToolContext(
     tienTriGhi: false,
     family: [],
     question: '',
+    charts: [],
   };
 }
 
@@ -731,6 +739,7 @@ async function execMoiThayBatTu(input: Rec, ctx: ToolContext): Promise<ToolRunRe
     return { content: 'Không tính được Bát Tự để mời Tâm Kính: ' + (res.error || 'lỗi không rõ') + '. Đừng nhắc tới việc mời trong câu trả lời.', label: 'Mời Tâm Kính' };
   }
   ctx.masterInvited = true;
+  ctx.charts.push({ kind: 'tu-tru', nam });
   return {
     content:
       `— THẦY TÂM KÍNH (Bát Tự) VỪA VÀO PHÒNG, ĐÃ XEM XONG NĂM ${nam} —\n` +
@@ -760,6 +769,7 @@ async function execMoiThayLucNham(input: Rec, ctx: ToolContext): Promise<ToolRun
     return { content: 'Không lập được khóa Lục Nhâm: ' + (e instanceof Error ? e.message : 'lỗi không rõ') + '. Đừng nhắc tới việc mời trong câu trả lời.', label: 'Mời Linh Cơ' };
   }
   ctx.masterInvited = true;
+  ctx.charts.push({ kind: 'luc-nham', khi: khoa.khi });
   return {
     content:
       `— THẦY LINH CƠ (Đại Lục Nhâm) VỪA VÀO PHÒNG, ĐÃ LẬP KHÓA NGAY LÚC NÀY —\n` +
@@ -784,6 +794,8 @@ interface ThayKhach {
   mon: string;
   /** Dữ liệu engine cho câu hỏi này; null = không dựng được (thiếu dữ kiện). */
   duLieu: (ctx: ToolContext) => string | null;
+  /** Ảnh của môn này gửi kèm ở kênh chat (vắng = môn chưa có ảnh). */
+  anh?: ChartKind;
 }
 export const THAY_KHACH: Record<string, ThayKhach> = {
   'dieu-khong': {
@@ -799,6 +811,7 @@ export const THAY_KHACH: Record<string, ThayKhach> = {
   'nhat-nguyen': {
     ten: 'Nhật Nguyên',
     mon: 'Vận tháng & Chọn thời điểm',
+    anh: 'van-12-thang',
     duLieu: (ctx) => {
       if (!ctx.birth) return null;
       const k = khungCaNha([{ ten: String(ctx.birth.name || '').trim() || 'Người hỏi', birth: ctx.birth }]);
@@ -812,6 +825,7 @@ export const THAY_KHACH: Record<string, ThayKhach> = {
   'huyen-khong': {
     ten: 'Huyền Không',
     mon: 'Phong thủy · Bát Trạch',
+    anh: 'bat-trach',
     duLieu: (ctx) => {
       const b = ctx.birth;
       const na = b ? namAm(b) : null;
@@ -825,6 +839,7 @@ export const THAY_KHACH: Record<string, ThayKhach> = {
   'thanh-hu': {
     ten: 'Thanh Hư',
     mon: 'Thần số học',
+    anh: 'than-so',
     duLieu: (ctx) => {
       const b = ctx.birth;
       const ten = String(b?.name || '').trim();
@@ -852,6 +867,7 @@ async function execMoiThayChuyenMon(input: Rec, ctx: ToolContext): Promise<ToolR
     return { content: `Chưa đủ dữ kiện để thầy ${t.ten} xem (${t.mon}). Trả lời bằng Tử Vi như thường và nói ngắn gọn thầy ${t.ten} cần thêm gì.`, label };
   }
   ctx.masterInvited = true;
+  if (t.anh) ctx.charts.push({ kind: t.anh });
   return {
     content:
       `— THẦY ${t.ten.toUpperCase()} (${t.mon}) VỪA VÀO PHÒNG —\n` +
@@ -890,6 +906,8 @@ async function execHoiChan(input: Rec, ctx: ToolContext): Promise<ToolRunResult>
     return { content: 'Không dựng được dữ liệu Bát Tự lẫn Lục Nhâm — không hội chẩn được. Trả lời bằng Tử Vi như thường, đừng nhắc tới hội chẩn.', label };
   }
   ctx.masterInvited = true;
+  if (coBatTu) ctx.charts.push({ kind: 'tu-tru', nam });
+  if (khoa) ctx.charts.push({ kind: 'luc-nham', khi: khoa.khi });
   const phan: string[] = [];
   if (coBatTu) {
     phan.push(
@@ -938,6 +956,7 @@ async function execMoiThayKyMon(input: Rec, ctx: ToolContext): Promise<ToolRunRe
     return { content: 'Không dựng được bàn Kỳ Môn: ' + (e instanceof Error ? e.message : 'lỗi không rõ') + '. Đừng nhắc tới việc mời trong câu trả lời.', label: 'Mời Tâm Kính' };
   }
   ctx.masterInvited = true;
+  ctx.charts.push({ kind: 'ky-mon', khi: ban.luc });
   return {
     content:
       `— THẦY TÂM KÍNH (Kỳ Môn Độn Giáp) VỪA VÀO PHÒNG, ĐÃ DỰNG BÀN NGAY LÚC NÀY —\n` +
@@ -1139,18 +1158,6 @@ async function execTraCaNha(ctx: ToolContext): Promise<ToolRunResult> {
 }
 
 // ── "Việc đời thật": Tết cả nhà ─────────────────────────────
-/** Năm âm lịch + chi năm của một ngày sinh dương. Sinh tháng 1–2 dương mà âm
- *  lịch còn tháng 11–12 thì thuộc năm âm TRƯỚC — xông đất tính theo năm âm. */
-function namAm(b: BirthParams): { nam: number; chi: string } | null {
-  if (!b.day || !b.month || !b.year) return null;
-  if (b.isLunar) {
-    const l = lunarOf(b.day, b.month, b.year);
-    return l ? { nam: b.year, chi: l.chiNam } : null;
-  }
-  const l = lunarOf(b.day, b.month, b.year);
-  if (!l) return null;
-  return { nam: l.thangAL > b.month + 1 ? b.year - 1 : b.year, chi: l.chiNam };
-}
 
 async function execXemTetCaNha(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
   const label = 'Đang xem Tết nhà mình...';
