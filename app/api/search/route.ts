@@ -23,10 +23,13 @@ export async function POST(request: NextRequest) {
     if (!embResp.ok) throw new Error(`OpenAI error: ${await embResp.text()}`);
     const embedding = (await embResp.json()).data[0].embedding;
 
+    // Ngưỡng 0,55 → 0,40 (2026-09-29): với text-embedding-3-small, đoạn ĐÚNG chủ đề
+    // trong tuvi_docs chỉ đạt ~0,45–0,56 (đo: "hạn nặng" → 5.1.x 0,48–0,50; "sao lưu" →
+    // 4.1 0,45; "đám tang" → 5.2 0,56), đoạn lạc đề thường <0,40 ⇒ 0,55 cắt mất gần hết.
     const searchResp = await fetch(`${SUPABASE_URL}/rest/v1/rpc/search_tuvi_docs`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
-      body: JSON.stringify({ query_embedding: embedding, match_count: matchCount, match_threshold: 0.55 }),
+      body: JSON.stringify({ query_embedding: embedding, match_count: matchCount, match_threshold: 0.4 }),
     });
     if (!searchResp.ok) throw new Error(`Supabase error: ${await searchResp.text()}`);
     const results = await searchResp.json() as { source: string; content: string }[];

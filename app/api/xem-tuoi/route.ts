@@ -199,7 +199,7 @@ Lưu ý đặc biệt: Đây là chế độ so sánh tương hợp 2 lá số. 
 // Provider-agnostic (Gemini-primary + Anthropic-backup) qua lib/llm/complete.
 // GIỮ NGUYÊN shape SSE mà frontend parse: data:{t} / {err} / [DONE].
 async function streamAnthropicResponse(system: string, user: string, maxTokens: number): Promise<Response> {
-  return llmStreamResponse({ system, prompt: user, maxTokens }, 'delta');
+  return llmStreamResponse({ luanGiai: true, system, prompt: user, maxTokens }, 'delta');
 }
 
 // ─── Đặt tên con ─────────────────────────────────────────────
@@ -334,6 +334,7 @@ async function runPost(request: NextRequest) {
     // ở app/api/lasotuvi/route.ts (cùng lượt chốt). Lật ngược không cần deploy:
     // `chat.standalone_provider` trong app_config.
     const luanGiai = await llmText({
+      luanGiai: true,
       system: LUAN_GIAI_TUONG_HOP_SYSTEM,
       prompt: userPrompt,
       maxTokens: 1800,

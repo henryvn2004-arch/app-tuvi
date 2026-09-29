@@ -171,6 +171,7 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
   const askStory = async (nudge: boolean): Promise<{ raw: string; model: string } | null> => {
     try {
       const llmRes = await llmTextFull({
+        luanGiai: true,
         system: PAST_LIFE_STORY_SYSTEM_PROMPT,
         prompt:
           buildPastLifeStoryPrompt(profile) +
@@ -274,6 +275,7 @@ async function handleImage(userId: string, birth: BirthParams, key: string, eraI
   let faceDescriptionEn = '';
   try {
     const llmRes = await llmTextFull({
+      luanGiai: true,
       system: PAST_LIFE_IMAGE_SYSTEM_PROMPT,
       prompt: buildPastLifeImagePrompt(profile, morph),
       json: true,

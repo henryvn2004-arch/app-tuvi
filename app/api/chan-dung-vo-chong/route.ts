@@ -172,6 +172,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   try {
     const laSoText = formatLaSoV2(lasoRes.ls);
     const llmRes = await llmTextFull({
+      luanGiai: true,
       system: PHU_THE_LUAN_GIAI_SYSTEM_PROMPT,
       prompt: buildPhuTheLuanGiaiPrompt(laSoText, undefined, userGender),
       // 1350→1750 (2026-09-07, Henry): PHU_THE_DESC nới 150-220→200-260 từ +
@@ -196,6 +197,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   let raw: string;
   try {
     const llmRes = await llmTextFull({
+      luanGiai: true,
       system: CHAN_DUNG_VO_CHONG_ANALYSIS_SYSTEM_PROMPT,
       prompt: buildChanDungVoChongAnalysisPrompt(morph, phuThe, phuTheLuanGiai, userGender),
       maxTokens: 1650, // nâng 50% (Henry chốt 2026-08-20)

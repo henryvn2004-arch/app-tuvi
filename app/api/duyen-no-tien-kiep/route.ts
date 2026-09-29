@@ -250,6 +250,7 @@ async function handleStory(grp: BondGroup, userId: string) {
   const askStory = async (nudge: boolean): Promise<{ raw: string; model: string } | null> => {
     try {
       const llmRes = await llmTextFull({
+        luanGiai: true,
         system: bondStorySystemPrompt(n),
         prompt:
           storyPrompt() +
@@ -340,6 +341,7 @@ async function handleImage(grp: BondGroup, userId: string) {
   let faces: string[] = [];
   try {
     const llmRes = await llmTextFull({
+      luanGiai: true,
       system: bondImageSystemPrompt(n),
       prompt:
         n === 2

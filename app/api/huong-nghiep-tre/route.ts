@@ -179,6 +179,7 @@ async function buildReport(
   const ask = async (nudge: boolean) => {
     try {
       const r = await llmTextFull({
+        luanGiai: true,
         system: HUONG_NGHIEP_TRE_SYSTEM_PROMPT,
         prompt:
           prompt +

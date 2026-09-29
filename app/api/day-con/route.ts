@@ -182,6 +182,7 @@ async function buildReport(
   const ask = async (nudge: boolean) => {
     try {
       const r = await llmTextFull({
+        luanGiai: true,
         system: DAY_CON_SYSTEM_PROMPT,
         prompt:
           prompt +

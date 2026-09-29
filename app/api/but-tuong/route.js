@@ -158,7 +158,7 @@ async function runPost(request) {
     const userText = `Hãy luận bút tướng cho chữ ký sau đây theo cổ pháp, đủ 5 phần.\n\n${lines.join('\n')}${dungThanContext(birth)}`;
 
     return await llmStreamResponse(
-      { system: SP_BUT_TUONG, prompt: userText, images: [], maxTokens: 4500 },
+      { luanGiai: true, system: SP_BUT_TUONG, prompt: userText, images: [], maxTokens: 4500 },
       'delta',
     );
   } catch (e) {
