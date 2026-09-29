@@ -5,8 +5,9 @@ import TodayPage from './pages/TodayPage';
 import ChatPage from './pages/ChatPage';
 import ChartsPage from './pages/ChartsPage';
 import ToolsPage from './pages/ToolsPage';
+import MePage from './pages/MePage';
 
-type Tab = 'today' | 'chat' | 'tools' | 'charts';
+type Tab = 'today' | 'chat' | 'tools' | 'charts' | 'me';
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('today');
@@ -28,6 +29,7 @@ export default function App() {
           {tab === 'chat' && <ChatPage chart={askChart} onPickChart={() => setTab('charts')} />}
           {tab === 'tools' && <ToolsPage />}
           {tab === 'charts' && <ChartsPage onAsk={askAbout} />}
+          {tab === 'me' && <MePage />}
         </main>
         <BottomNavigation fixed activeKey={tab} onChange={(k) => setTab(k as Tab)}>
           <BottomNavigation.Item
@@ -46,6 +48,7 @@ export default function App() {
             label="Sổ lá số"
             icon={<Icon icon="zi-bookmark" />}
           />
+          <BottomNavigation.Item itemKey="me" label="Của tôi" icon={<Icon icon="zi-user" />} />
         </BottomNavigation>
       </SnackbarProvider>
     </ZApp>
