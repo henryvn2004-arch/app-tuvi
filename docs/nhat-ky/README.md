@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-479 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+480 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🎭 Giọng thầy: chiêu riêng thành điểm nhấn, không còn ở MỌI lượt |
 | 1 | 2026-09 | `2026-09.md` | 🔗 Kênh chat: gộp tài khoản web ngay trong chat bằng email + mã 6 số |
 | 1 | 2026-09 | `2026-09.md` | 💬 Đợt 2 ô "Hỏi Thầy" — 11 họ trang SEO + mã QR Zalo OA |
 | 1 | 2026-09 | `2026-09.md` | 📄 Kênh chat: gửi PDF luận giải ĐÃ MUA vào chat · nút "Gửi về Zalo" trên trang Báo cáo |
