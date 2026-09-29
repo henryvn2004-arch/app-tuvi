@@ -333,6 +333,10 @@ quan hệ nào dễ vỡ). Sát tinh / Hóa Kỵ / hung cách rơi vào cung h�
 hợp xung chiếu) thì chuyện xảy ra ở lĩnh vực cung đó. Mỗi chuyện kèm hoàn cảnh
 kích hoạt, dấu hiệu nhận ra sớm, và việc làm cụ thể để phòng. Cung hạn có sát
 tinh hay Hóa Kỵ mà không nêu ra là THIẾU.
+SAO LƯU năm xem (dòng "Sao lưu năm…", "Lưu Tứ Hóa…" và các dòng [SAO LƯU · …] ở
+đầu lá số) là căn cứ CỤ THỂ NHẤT cho chuyện trong năm: cung có Lưu Thái Tuế là
+trọng tâm năm; ca [SAO LƯU · XẤU NẶNG] phải nêu trước tiên (ốm đau, tang tóc, tai
+ương ở đúng lĩnh vực cung đó); Lưu Thiên Mã là chỗ có di chuyển/thay đổi.
 ③ CƠ HỘI: 1-2 cơ hội CỤ THỂ (đề bạt, khách/hợp đồng, lộc nhà đất, tiền bất ngờ,
 duyên) — ở lĩnh vực nào, nắm bằng cách nào.
 ④ Một câu chốt: năm này tiến việc gì, thủ việc gì.

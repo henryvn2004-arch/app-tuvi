@@ -239,6 +239,28 @@
     return out;
   }
 
+  // Khối SAO LƯU của MỘT năm (kết quả `danhGiaSaoLuu` của engine) → các dòng text
+  // cho model. MỘT nguồn: formatLaSoV2 (năm xem của lá số) và tool tra_tieu_van
+  // của rail (năm bất kỳ, qua lib/engine/laso.ts) cùng gọi hàm này.
+  function formatSaoLuu(L, palaces) {
+    const out = [];
+    const cungOf = (idx) => {
+      const p = palaces.find(x => x.idx === idx);
+      return p ? `${p.cungName}(${p.diaChi})` : '?';
+    };
+    out.push(`Sao lưu năm ${L.canNamXem} ${L.chiNamXem}: ` +
+      Object.entries(L.sao).map(([ten, idx]) => `${ten} ${cungOf(idx)}`).join(' · '));
+    const hoa = ['Lộc', 'Quyền', 'Khoa', 'Kỵ'].map(h => {
+      const sao = L.tuHoa && L.tuHoa[h];
+      const p = sao && palaces.find(x => (x.stars || []).some(st => st.ten === sao));
+      return p ? `Lưu Hóa ${h}→${sao} ${cungOf(p.idx)}` : null;
+    }).filter(Boolean);
+    if (hoa.length) out.push(`Lưu Tứ Hóa (can năm xem ${L.canNamXem}, gắn sao cố định): ${hoa.join(' · ')}`);
+    const NHAN = { trong_tam: 'TRỌNG TÂM', xau_nang: 'XẤU NẶNG', xau: 'XẤU', tot: 'TỐT', du_kien: 'DỮ KIỆN' };
+    (L.diemNong || []).forEach(d => out.push(`  [SAO LƯU · ${NHAN[d.muc] || d.muc}] ${d.cung}: ${d.text}`));
+    return out;
+  }
+
   function formatLaSoV2(ls, conv, fmtOpts) {
     const lines = [];
     lines.push(MARKERS.laso);
@@ -258,6 +280,10 @@
       lines.push(`  → ${ttn.yNghia}`);
     }
     lines.push(`Tiểu hạn: ${ls.palaces[ls.tieuHanIdx]?.diaChi} (${ls.palaces[ls.tieuHanIdx]?.cungName}) | Lưu đại hạn: ${ls.palaces[ls.luuNienDaiHanIdx]?.diaChi} (${ls.palaces[ls.luuNienDaiHanIdx]?.cungName})`);
+    // Sao lưu năm xem (engine `danhGiaSaoLuu`, Thái Thứ Lang 4.1–4.4) — nằm ở ĐẦU
+    // lá số nên mọi phần (kể cả phần 1-13 đã bỏ chi tiết đại vận) đều thấy.
+    // Engine cũ trong cache trình duyệt chưa có `saoLuu` ⇒ bỏ qua, không vỡ.
+    if (ls.saoLuu && ls.saoLuu.sao) formatSaoLuu(ls.saoLuu, ls.palaces).forEach(l => lines.push(l));
     lines.push('');
 
     // (Đã bỏ khối "ĐIỂM ĐÁNH GIÁ" 6 chiều/cung — cơ chế tính điểm từng cung
@@ -385,6 +411,7 @@
 
   if (typeof window !== "undefined") {
     window.formatLaSoV2 = formatLaSoV2;
+    window.formatSaoLuu = formatSaoLuu;
     window.canCungOf = canCungOf;
     window.buildDaiVanLines = buildDaiVanLines;
     window.LASO_MARKERS = MARKERS;
