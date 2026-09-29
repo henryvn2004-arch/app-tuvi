@@ -52,7 +52,7 @@ Deploy xong CLI in QR + link `https://zalo.me/s/685441626982830157/?env=DEVELOPM
    3–5 ngày làm việc) · xin quyền **camera** ở Mini App Center → Quyền Mini App.
 2. Vercel: **để trống** `ZALO_MINI_APP_SECRET` — Mini App nằm cùng Zalo App với OA
    nên route dùng `ZALO_APP_SECRET`. Chỉ đặt nếu sau này dời sang Zalo App khác.
-3. Khai **domain được phép gọi** trong cấu hình Mini App: `tuviminhbao.com` và
+3. Khai **domain được phép gọi** trong cấu hình Mini App: `www.tuviminhbao.com` (KHÔNG apex — apex 307 sang www, không kèm CORS) và
    `dciwkfdqhhddeymlisey.supabase.co`. Thiếu là mọi `fetch` bị Zalo chặn.
 4. Thử trên máy thật: đăng nhập có gộp được với tài khoản đã nhắn OA không
    (server log `[zalo-mini] API OA không trả user_id_by_app` nghĩa là không).
