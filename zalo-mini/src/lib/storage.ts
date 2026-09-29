@@ -18,6 +18,9 @@ function store(): Store {
   return picked;
 }
 
+/** Đang chạy trong Zalo (API native có thật) hay trình duyệt thường (dev/test). */
+export const insideZalo = (): boolean => store() !== window.localStorage;
+
 export function load<T>(key: string): T | null {
   try {
     const s = store().getItem(key);

@@ -341,6 +341,11 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false, hasFamily 
             description:
               'Loại lịch của NGÀY/THÁNG/NĂM ở trên: "duong" nếu dương/tây lịch (mặc định), "am" nếu người dùng nói âm/ta lịch ("ÂL", "âm lịch", "lịch ta"). CHỈ gắn cờ — TUYỆT ĐỐI không tự đổi âm sang dương, hệ thống tự quy đổi.',
           },
+          leap_month: {
+            type: 'boolean',
+            description:
+              'CHỈ khi calendar="am" VÀ người dùng nói rõ sinh vào tháng NHUẬN (vd "tháng 4 nhuận", "tháng nhuận 2"). Không nói nhuận thì BỎ field này.',
+          },
           hourBranch: {
             type: 'integer',
             description:
@@ -563,7 +568,16 @@ export function buildBirthFromInput(input: Rec): BirthParams | null {
   const day = Math.floor(Number(input.day));
   const month = Math.floor(Number(input.month));
   if (!Number.isFinite(year) || !Number.isFinite(day) || !Number.isFinite(month)) return null;
-  return { day, month, year, hourBranch: hb, gender: normGender(input.gender), isLunar: isLunarInput(input) };
+  const isLunar = isLunarInput(input);
+  return {
+    day,
+    month,
+    year,
+    hourBranch: hb,
+    gender: normGender(input.gender),
+    isLunar,
+    ...(isLunar && input.leap_month === true ? { isLeapMonth: true } : {}),
+  };
 }
 
 function execLapLaSo(input: Rec, ctx: ToolContext): ToolRunResult {
@@ -1092,7 +1106,7 @@ const LUAT_NGUOI_NHA =
 
 function birthLine(b: BirthParams): string {
   const gio = b.hourBranch != null && b.hourBranch >= 0 && b.hourBranch < 12 ? `, giờ ${CHI_GIO[b.hourBranch]}` : '';
-  return `${b.gender === 'nu' ? 'nữ' : 'nam'}, sinh ${b.day}/${b.month}/${b.year}${b.isLunar ? ' âm lịch' : ''}${gio}`;
+  return `${b.gender === 'nu' ? 'nữ' : 'nam'}, sinh ${b.day}/${b.month}${b.isLunar && b.isLeapMonth ? ' nhuận' : ''}/${b.year}${b.isLunar ? ' âm lịch' : ''}${gio}`;
 }
 const CHI_GIO = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
 

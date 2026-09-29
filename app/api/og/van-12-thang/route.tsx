@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
   if (!fonts.length) return ogFallbackRedirect(req);
 
   const gioi = birth.gender === 'nu' ? 'Nữ' : 'Nam';
-  const sub = `${birth.name ? birth.name + ' · ' : ''}${gioi} · ${birth.day}/${birth.month}/${birth.year} ${birth.isLunar ? 'ÂL' : 'DL'} · giờ ${CHI[birth.hourBranch!]} · ${k.duongTu} → ${k.duongDen}`;
+  const sub = `${birth.name ? birth.name + ' · ' : ''}${gioi} · ${birth.day}/${birth.month}${birth.isLunar && birth.isLeapMonth ? ' nhuận' : ''}/${birth.year} ${birth.isLunar ? 'ÂL' : 'DL'} · giờ ${CHI[birth.hourBranch!]} · ${k.duongTu} → ${k.duongDen}`;
   const cell = (w: number, children: React.ReactNode, extra: React.CSSProperties = {}) => (
     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: w, ...extra }}>{children}</div>
   );

@@ -13,6 +13,9 @@
  *   3. VÉT CẠN 1900–2100: mọi ngày dương thuộc tháng THƯỜNG đi dương→âm→dương
  *      phải về đúng chỗ; ngày thuộc tháng NHUẬN phải về tháng thường cùng số
  *      (quy ước ghi ở đầu am-duong.js).
+ *   3b. Cờ NHUẬN: mọi ngày tháng nhuận đi dương→âm→dương(nhuận) phải về ĐÚNG chỗ;
+ *      tháng mà năm đó không nhuận thì (nhuận) phải ra null, không lặng lẽ trả
+ *      tháng thường.
  *   4. `computeTuBinh` + `namAm` còn đi qua bộ đổi (đọc tĩnh — CI Node 20 không
  *      chạy thẳng được TS).
  *
@@ -50,7 +53,7 @@ if (typeof raw !== 'function') {
   console.error('❌ am-duong.js không xuất lunarToSolar');
   process.exit(1);
 }
-const l2s = (d, m, y) => raw(d, m, y, V.solarToLunar);
+const l2s = (d, m, y, nhuan) => raw(d, m, y, V.solarToLunar, nhuan);
 const fmt = (o) => (o ? `${o.day}/${o.month}/${o.year}` : 'null');
 
 // ── 1. Cặp đã biết ────────────────────────────────────────────
@@ -83,30 +86,45 @@ const KNOWN = [
   [
     [15, 2, 2023],
     [6, 3, 2023],
-  ], // 2023 nhuận tháng 2 → lấy tháng THƯỜNG (tháng nhuận là 5/4/2023)
+  ], // 2023 nhuận tháng 2 → không cờ thì lấy tháng THƯỜNG…
+  [
+    [15, 2, 2023, true],
+    [5, 4, 2023],
+  ], // …và đúng tháng NHUẬN khi có cờ
+  [
+    [1, 2, 2023, true],
+    [22, 3, 2023],
+  ], // mùng 1 tháng 2 nhuận Quý Mão
 ];
-for (const [[d, m, y], [ed, em, ey]] of KNOWN) {
-  const r = l2s(d, m, y);
+for (const [[d, m, y, nhuan], [ed, em, ey]] of KNOWN) {
+  const r = l2s(d, m, y, nhuan);
   if (!r || r.day !== ed || r.month !== em || r.year !== ey)
     fail(`ÂL ${d}/${m}/${y} → ${fmt(r)}, đúng phải là ${ed}/${em}/${ey}`);
 }
 
 // ── 2. Ngày âm không tồn tại ─────────────────────────────────
 // Tháng 1 ÂL 2024 là tháng thiếu (10/2 → 9/3/2024, tháng 2 bắt đầu 10/3).
-for (const [d, m, y, why] of [
+for (const [d, m, y, why, nhuan] of [
   [30, 1, 2024, 'tháng 1/2024 chỉ có 29 ngày'],
   [1, 13, 2024, 'không có tháng 13'],
   [0, 1, 2024, 'không có ngày 0'],
   [1, 1, 1899, 'ngoài tầm bảng'],
+  [15, 3, 2023, 'Quý Mão chỉ nhuận tháng 2, không nhuận tháng 3', true],
+  [15, 2, 2024, 'Giáp Thìn không có tháng nhuận', true],
 ]) {
-  const r = l2s(d, m, y);
-  if (r) fail(`ÂL ${d}/${m}/${y} (${why}) phải trả null, đang trả ${fmt(r)}`);
+  const r = l2s(d, m, y, nhuan);
+  if (r)
+    fail(`ÂL ${d}/${m}${nhuan ? ' nhuận' : ''}/${y} (${why}) phải trả null, đang trả ${fmt(r)}`);
 }
 
 // ── 3. Vét cạn: dương → âm → dương ───────────────────────────
 const T = V._LUNAR_TABLE;
+// Tháng nhuận đọc THẲNG cột isLeap của bảng — nguồn độc lập với cách am-duong.js
+// đếm đoạn, nên hai bên phải khớp nhau mới qua.
+const LEAP = new Set(T.filter((r) => r[2]).map((r) => `${r[3]}-${r[1]}`));
 let n = 0,
-  nLeap = 0;
+  nLeap = 0,
+  nKhongNhuan = 0;
 for (let i = 0; i + 1 < T.length; i++) {
   const [sk, , leap] = T[i];
   const start = Date.UTC(Math.floor(sk / 10000), (Math.floor(sk / 100) % 100) - 1, sk % 100);
@@ -135,8 +153,19 @@ for (let i = 0; i + 1 < T.length; i++) {
         fail(
           `${dd}/${mm}/${yy} (tháng nhuận, ÂL ${fmt(al)}) → ${fmt(back)} — không phải tháng thường cùng số`
         );
-    } else if (back.day !== dd || back.month !== mm || back.year !== yy) {
-      fail(`${dd}/${mm}/${yy} → ÂL ${fmt(al)} → ${fmt(back)} (không về chỗ cũ)`);
+      const backN = l2s(al.day, al.month, al.year, true);
+      if (!backN || backN.day !== dd || backN.month !== mm || backN.year !== yy)
+        fail(`${dd}/${mm}/${yy} (tháng nhuận, ÂL ${fmt(al)}) → có cờ nhuận ra ${fmt(backN)}`);
+    } else {
+      if (back.day !== dd || back.month !== mm || back.year !== yy)
+        fail(`${dd}/${mm}/${yy} → ÂL ${fmt(al)} → ${fmt(back)} (không về chỗ cũ)`);
+      // Năm không nhuận tháng này ⇒ hỏi "nhuận" phải ra null.
+      if (!LEAP.has(`${al.year}-${al.month}`)) {
+        nKhongNhuan++;
+        const r = l2s(al.day, al.month, al.year, true);
+        if (r)
+          fail(`ÂL ${fmt(al)} nhuận: năm đó không nhuận tháng ${al.month} mà vẫn ra ${fmt(r)}`);
+      }
     }
     if (bad > 20) break;
   }
@@ -144,22 +173,32 @@ for (let i = 0; i + 1 < T.length; i++) {
 }
 if (n < 73000) fail(`Vét cạn chỉ chạm ${n} ngày — bảng/vòng lặp hỏng (phải ~73.000)`);
 if (nLeap < 2000) fail(`Vét cạn chỉ chạm ${nLeap} ngày tháng nhuận — nhánh nhuận không được kiểm`);
+if (nKhongNhuan < 60000)
+  fail(`Chỉ ${nKhongNhuan} ngày được hỏi "nhuận" ở tháng không nhuận — nhánh null không được kiểm`);
 
-// ── 4. Nơi gọi còn đi qua bộ đổi ─────────────────────────────
+// ── 4. Nơi gọi còn đi qua bộ đổi (và còn chở cờ nhuận) ───────
 const tubinh = readFileSync(join(ROOT, 'lib/engine/tubinh.ts'), 'utf-8');
 if (!/const dl = solarDateOf\(birth\)/.test(tubinh) || !/ngayDL: day,/.test(tubinh))
   fail(
     'lib/engine/tubinh.ts: computeTuBinh không còn đổi ngày qua solarDateOf(birth) trước tinhBatTu'
   );
 const laso = readFileSync(join(ROOT, 'lib/engine/laso.ts'), 'utf-8');
+const solarDateOf = laso.match(/export function solarDateOf\([\s\S]*?\n}/);
+if (
+  !solarDateOf ||
+  !/lunarToSolar\(day, month, year, birth\.isLeapMonth === true\)/.test(solarDateOf[0])
+)
+  fail('lib/engine/laso.ts: solarDateOf() không còn truyền cờ isLeapMonth vào lunarToSolar');
 const namAm = laso.match(/export function namAm\([\s\S]*?\n}/);
-if (!namAm || !/lunarToSolar\(b\.day, b\.month, b\.year\)/.test(namAm[0]))
-  fail('lib/engine/laso.ts: namAm() nhánh isLunar không còn đổi âm→dương trước lunarOf');
+if (!namAm || !/lunarToSolar\(b\.day, b\.month, b\.year, b\.isLeapMonth === true\)/.test(namAm[0]))
+  fail(
+    'lib/engine/laso.ts: namAm() nhánh isLunar không còn đổi âm→dương (kèm cờ nhuận) trước lunarOf'
+  );
 
 if (bad) {
   console.error(`\ncheck-am-duong: ${bad} lỗi`);
   process.exit(1);
 }
 console.log(
-  `✓ check-am-duong: ${KNOWN.length} cặp đã biết · vét cạn ${n} ngày (${nLeap} ngày tháng nhuận) · nơi gọi còn đổi âm→dương`
+  `✓ check-am-duong: ${KNOWN.length} cặp đã biết · vét cạn ${n} ngày (${nLeap} ngày tháng nhuận, ${nKhongNhuan} lượt hỏi nhuận sai tháng → null) · nơi gọi còn đổi âm→dương`
 );

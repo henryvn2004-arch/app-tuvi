@@ -215,12 +215,12 @@ export async function GET(req: NextRequest) {
   const rows: [string, string, string][] = lich && dl
     ? [
         ['Năm', `${dl.year} (${lich.amLich.year})`, canChiNam],
-        ['Tháng', `${dl.month} (${lich.amLich.month})`, ''],
+        ['Tháng', `${dl.month} (${lich.amLich.month}${birth.isLunar && birth.isLeapMonth ? ' nhuận' : ''})`, ''],
         ['Ngày', `${dl.day} (${lich.amLich.day})`, lich.ngay],
         ['Giờ', CHI[birth.hourBranch!], lich.gio],
       ]
     : [
-        ['Âm lịch', `${birth.day}/${birth.month}/${birth.year}`, canChiNam],
+        ['Âm lịch', `${birth.day}/${birth.month}${birth.isLeapMonth ? ' nhuận' : ''}/${birth.year}`, canChiNam],
         ['Giờ', CHI[birth.hourBranch!], ''],
       ];
   const info = [
@@ -299,7 +299,7 @@ export async function GET(req: NextRequest) {
     </div>
   );
 
-  const ngay = `${birth.day}/${birth.month}/${birth.year} ${birth.isLunar ? 'ÂL' : 'DL'}`;
+  const ngay = `${birth.day}/${birth.month}${birth.isLunar && birth.isLeapMonth ? ' nhuận' : ''}/${birth.year} ${birth.isLunar ? 'ÂL' : 'DL'}`;
   return new ImageResponse(
     (
       <div style={{ display: 'flex', flexDirection: 'column', width: W, height: H, background: C.bg, fontFamily: 'BeVN' }}>
