@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-485 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+486 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🔁 Kênh chat: khách quay lại sau vài tiếng → hỏi "câu này cho ai?" |
 | 1 | 2026-09 | `2026-09.md` | 🌙 Kênh chat: người nhập ngày ÂM — ảnh lá số đủ can chi, Thần số học chạy được, link web đúng người |
 | 1 | 2026-09 | `2026-09.md` | 🀄 Bát Tự sai cho người nhập âm lịch — thêm cửa âm → dương duy nhất |
 | 1 | 2026-09 | `2026-09.md` | 🔘 Kênh chat: nút gợi ý 3 tầng + tin nhắc chủ động |
