@@ -35,8 +35,12 @@ Deploy (Mini App ID `685441626982830157`, gắn vào Zalo App cũ của OA):
 
 ```bash
 npm run login        # zmp login --app-id …; quét QR bằng Zalo tài khoản Admin/Developer
-npm run deploy       # Development = ghi đè, thử nhanh · Testing (-t) = có số, gửi duyệt được
+npm run deploy       # deploy.mjs: vite build rồi đẩy www/ · hỏi Development (ghi đè) hay Testing (có số, gửi duyệt)
+npm run deploy -- -p -m "mô tả"   # không hỏi gì, đẩy bản Development
 ```
+
+Deploy xong CLI in QR + link `https://zalo.me/s/685441626982830157/?env=DEVELOPMENT&version=zdev-…`
+— mỗi lần deploy Development ra `version` MỚI, link cũ không còn đúng bản.
 
 `zmp login` ghi `APP_ID` + `ZMP_TOKEN` vào `zalo-mini/.env` — file đó đã bị
 `.gitignore`, **không commit** (token là khoá deploy).
@@ -48,7 +52,7 @@ npm run deploy       # Development = ghi đè, thử nhanh · Testing (-t) = có
    3–5 ngày làm việc) · xin quyền **camera** ở Mini App Center → Quyền Mini App.
 2. Vercel: **để trống** `ZALO_MINI_APP_SECRET` — Mini App nằm cùng Zalo App với OA
    nên route dùng `ZALO_APP_SECRET`. Chỉ đặt nếu sau này dời sang Zalo App khác.
-3. Khai **domain được phép gọi** trong cấu hình Mini App: `tuviminhbao.com` và
+3. Khai **domain được phép gọi** trong cấu hình Mini App: `www.tuviminhbao.com` (KHÔNG apex — apex 307 sang www, không kèm CORS) và
    `dciwkfdqhhddeymlisey.supabase.co`. Thiếu là mọi `fetch` bị Zalo chặn.
 4. Thử trên máy thật: đăng nhập có gộp được với tài khoản đã nhắn OA không
    (server log `[zalo-mini] API OA không trả user_id_by_app` nghĩa là không).
