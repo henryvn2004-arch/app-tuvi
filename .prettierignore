@@ -15,6 +15,7 @@ package-lock.json
 # Sub-package with own setup
 tuvi-engine/
 remotion/
+zalo-mini/
 
 # Mã CỦA NGƯỜI KHÁC (scripts/oracle/vendor/) — bản gốc, không sửa/format lại
 scripts/oracle/vendor/*.js
