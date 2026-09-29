@@ -14,6 +14,7 @@ import {
   type ActivityKey,
 } from '../../tuvi-engine/dist/ngay-tot/index.js';
 import { matchVanHanCombos, formatComboLines, type LayerCung } from './vanHanCombos';
+import { saoLuuLines } from '../engine/laso';
 import {
   resolveNhatHanIdx,
   lunarMonthsFrom,
@@ -234,6 +235,10 @@ export function execTraVanHan(lasoData: any, input: any): string {
     ...hanClusterLayers(palaces, luuNienIdx, 'lưu niên'),
   ];
   out += formatComboLines(matchVanHanCombos(yearLayers));
+  // Sao lưu CỦA CHÍNH năm hỏi (không phải năm xem của lá số) — nơi cụ thể hoá
+  // chuyện dễ xảy ra trong năm: tang tóc/ốm đau, hao tài, di chuyển.
+  const luu = saoLuuLines(palaces, nam);
+  if (luu.length) out += `- SAO LƯU năm ${nam} (đè lên sao gốc chỉ trong năm này; ca XẤU NẶNG/TỐT là sách nêu đích danh):\n${luu.map((l) => '    ' + l.trim()).join('\n')}\n`;
   out += `- Cách luận (BẮT BUỘC xét ĐỦ CẢ HAI tầng năm, KHÔNG được bỏ tầng nào): (A) TIỂU HẠN — cung ${tv.tieuHanCung} + tam hợp xung chiếu của nó; (B) LƯU NIÊN ĐẠI HẠN — cung ${tv.luuNienCung} + tam hợp xung chiếu của nó. Câu trả lời PHẢI gọi tên & luận CẢ hai cung ${tv.tieuHanCung} và ${tv.luuNienCung} (nếu trùng cung thì nói rõ hai tầng chồng nhau → ứng nghiệm mạnh hơn). Mỗi cung ĐỌC CẢ tọa thủ + tam hợp xung chiếu, TRỌNG SỐ: tọa thủ nặng nhất → xung chiếu → tam hợp (cung vô chính diệu thì MƯỢN chính tinh tam hợp/xung để luận) + tổ hợp sao năm nay. XÁC ĐỊNH tốt/xấu của năm theo cách cục + sao của CẢ hai tầng: cát tinh/cách tốt thì năm TỐT dù đại vận xấu, ngược lại XẤU dù đại vận tốt. SAU đó dùng điểm đại vận để chỉnh BIÊN ĐỘ: đại vận thấp thì cái tốt năm nay bị kìm, hưởng dè dặt, không rực rỡ (cái xấu nặng thêm); đại vận cao thì cái tốt bung rực rỡ (cái xấu đỡ nhẹ). KHÔNG bê theme đại vận áp đồng loạt, KHÔNG tự gán "điểm/10" cho năm.\n`;
   return out;
 }

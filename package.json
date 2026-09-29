@@ -72,6 +72,7 @@
     "oracle:lunar": "node scripts/oracle/report-lunar-diff.mjs",
     "oracle:tieuhan": "node scripts/oracle/verify-tieuhan.mjs",
     "check:lavong": "node scripts/check-la-vong.mjs",
+    "check:saoluu": "node scripts/check-sao-luu.mjs",
     "check:webdriver": "node scripts/check-analytics-webdriver.mjs",
     "check:payossig": "node scripts/check-payos-signature.mjs",
     "check:geminiusage": "node scripts/check-gemini-usage-once.mjs"

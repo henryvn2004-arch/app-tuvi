@@ -391,6 +391,12 @@ jobs:
       - name: La-Võng khớp Đà La (Thiên Lương) trên toàn miền
         run: npm run check:lavong
 
+      # Sao lưu năm xem (Thái Thứ Lang 4.1–4.4): khoá cứng ví dụ trong sách, luật
+      # hình học trên 60 năm can chi, bảng Lưu Lộc/Mã = bảng gốc, và sao lưu KHÔNG
+      # lọt vào palaces[].stars (mọi chấm điểm/cách cục gốc đọc mảng đó).
+      - name: Sao lưu năm xem khớp Thái Thứ Lang
+        run: npm run check:saoluu
+
       # Chữ ký payOS (webhook + tạo đơn) phải build chuỗi giống HỆT thuật toán
       # chính thức của payOS (deep-sort key TRƯỚC, null/undefined → CHUỖI RỖNG
       # chứ không phải "null"/"undefined"). Bug này đã cắn thật (PR #882):

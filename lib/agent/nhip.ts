@@ -37,9 +37,9 @@ const MUC: MucDai[] = ['mot-cau', 'ngan', 'vua', 'dai'];
 
 const LOI_MUC: Record<MucDai, string> = {
   'mot-cau': 'đúng MỘT câu, không thêm gì',
-  ngan: '2–3 câu, dưới ~50 từ — chỉ lớp ① và ⑤',
-  vua: 'khoảng 80–140 từ',
-  dai: 'khoảng 180–260 từ, được đi đủ 5 lớp',
+  ngan: '2–4 câu, dưới ~70 từ — lớp ① và ⑤, thêm ③ nếu dữ liệu có rủi ro/cơ hội thật',
+  vua: 'khoảng 100–180 từ',
+  dai: 'khoảng 220–350 từ, được đi đủ 5 lớp',
 };
 
 // Mẫu là CỤM ĐỦ NGHĨA (CLAUDE.md "Tiếng Việt"), so trên chuỗi đã chuẩn hoá dấu.
@@ -116,7 +116,7 @@ const LOI_NHU_CAU: Record<Exclude<NhuCau, 'giai-dap'>, string> = {
   'cong-nhan':
     'có vẻ người xem đã nghiêng về một quyết định và cần được CÔNG NHẬN rằng cảm giác của họ có lý. Nói điều đó trước, rồi mới nêu thời điểm/rủi ro từ dữ liệu; quyền quyết là của họ, đừng quyết thay',
   'hy-vong':
-    'câu hỏi xuất phát từ LO LẮNG về tương lai, thường kèm tự ti. Câu đầu trả lời có/không cho RÕ (đừng để treo), đưa MỐC có thật trong dữ liệu, rồi một việc trong tầm tay. Dữ liệu nói muộn/khó thì nói như một mốc đáng chờ ("duyên chín muộn", "quả ngọt về sau"), KHÔNG như khuyết điểm, không đổ cho tính cách hay "số buộc phải vậy"; không doạ, không hứa điều dữ liệu không nói',
+    'câu hỏi xuất phát từ LO LẮNG về tương lai, thường kèm tự ti. Câu đầu trả lời có/không cho RÕ (đừng để treo), đưa MỐC có thật trong dữ liệu, rồi một việc trong tầm tay. Dữ liệu nói muộn/khó thì nói THẲNG là muộn/khó, kèm mốc và việc cần làm để không lỡ — không đổ cho tính cách hay "số buộc phải vậy"; không doạ, không hứa điều dữ liệu không nói',
   'phe-minh':
     'người xem đang kể mình bị đối xử không đúng. ĐỨNG VỀ PHÍA họ trước — công nhận điều đó không ổn — rồi mới (nếu cần) gợi góc nhìn còn lại; không mở đầu bằng "lỗi ở cả hai phía", không bênh người kia',
 };
@@ -139,7 +139,9 @@ export function loaiCau(question: string): LoaiCau {
 const PHAN_BO: Record<LoaiCau, Partial<Record<MucDai, number>>> = {
   'xa-giao': { 'mot-cau': 100 },
   'hoi-thuong': { 'mot-cau': 50, ngan: 50 },
-  vat: { 'mot-cau': 25, ngan: 60, vua: 15 },
+  // 2026-09-29 (research người dùng): câu vặt phần lớn là "bao giờ/năm nào/có nên" —
+  // đúng câu hỏi dự báo — nên bớt câu cụt một dòng, nhường chỗ cho lớp ③ cảnh báo.
+  vat: { 'mot-cau': 10, ngan: 60, vua: 30 },
   'doi-song': { ngan: 25, vua: 55, dai: 20 },
   'giai-thich': { vua: 30, dai: 70 },
   'be-tac': { ngan: 30, vua: 70 },
