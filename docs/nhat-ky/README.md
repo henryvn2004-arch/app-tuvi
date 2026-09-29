@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-500 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+501 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🗑️ Gỡ bản tin kinh tế hằng ngày |
 | 1 | 2026-09 | `2026-09.md` | 💬 Chat thành kênh chính: giá 4 Lượng/câu, bỏ trần IP + toàn hệ thống, backup Sonnet 5.5 |
 | 1 | 2026-09 | `2026-09.md` | 🎨 /la-so: đoạn mô tả đầu trang chữ trắng trên nền kem |
 | 1 | 2026-09 | `2026-09.md` | 👋 Kênh chat: thầy chào ngắn + hỏi "muốn xem gì" trước, ngày sinh hỏi sau · menu Công cụ chỉ việc làm được trong chat |
