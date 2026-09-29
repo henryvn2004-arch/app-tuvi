@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-487 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+488 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 322 | 1,170,478 B |
+| `2026-09.md` | 323 | 1,171,493 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🖥 Zalo Web/PC không hiện nút gợi ý — in kèm lựa chọn thành chữ |
 | 1 | 2026-09 | `2026-09.md` | 📱 Zalo Mini App bước 2: vỏ `zalo-mini/` — Hôm nay · Hỏi Thầy · Sổ lá số |
 | 1 | 2026-09 | `2026-09.md` | 🗺️ Kênh chat: ảnh TỪNG CUNG — sơ đồ tam phương + mũi tên Tứ Hóa Phi Tinh + lục giác 6 chiều |
 | 1 | 2026-09 | `2026-09.md` | 🌙 Kênh chat: người nhập ngày ÂM — ảnh lá số đủ can chi, Thần số học chạy được, link web đúng người |
