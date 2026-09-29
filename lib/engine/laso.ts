@@ -220,6 +220,7 @@ type AmDuongApi = {
     m: number,
     y: number,
     s2l: (d: number, m: number, y: number) => { day: number; month: number; year: number } | null,
+    nhuan?: boolean,
   ) => { day: number; month: number; year: number } | null;
 };
 let amDuongCache: AmDuongApi | null = null;
@@ -235,18 +236,23 @@ function loadAmDuong(): AmDuongApi {
 /**
  * Ngày ÂM (ngày, tháng, năm âm) → ngày DƯƠNG. `null` khi ngày âm không tồn tại
  * (vd 30 của tháng thiếu) hoặc ngoài tầm bảng 1900–2100.
- * ⚠️ Tháng nhuận: bảng vanilla bỏ cờ `isLeap` nên luôn trả tháng THƯỜNG cùng số
- * (xem đầu `am-duong.js`).
+ * `nhuan` = ngày thuộc tháng NHUẬN; năm đó không nhuận tháng `month` ⇒ `null`.
+ * Không truyền ⇒ tháng THƯỜNG cùng số (xem đầu `am-duong.js`).
  */
-export function lunarToSolar(day: number, month: number, year: number): { day: number; month: number; year: number } | null {
-  return loadAmDuong().lunarToSolar(Math.floor(day), Math.floor(month), Math.floor(year), loadEngine().solarToLunar);
+export function lunarToSolar(
+  day: number,
+  month: number,
+  year: number,
+  nhuan = false,
+): { day: number; month: number; year: number } | null {
+  return loadAmDuong().lunarToSolar(Math.floor(day), Math.floor(month), Math.floor(year), loadEngine().solarToLunar, nhuan);
 }
 
 /** Ngày sinh DƯƠNG của `birth` — đổi từ âm khi `isLunar`. `null` khi thiếu/không đổi được. */
 export function solarDateOf(birth: BirthParams): { day: number; month: number; year: number } | null {
   const { day, month, year } = birth;
   if (!day || !month || !year) return null;
-  return birth.isLunar ? lunarToSolar(day, month, year) : { day, month, year };
+  return birth.isLunar ? lunarToSolar(day, month, year, birth.isLeapMonth === true) : { day, month, year };
 }
 
 /** Năm âm lịch + chi năm của một ngày sinh dương. Sinh tháng 1–2 dương mà âm
@@ -257,7 +263,7 @@ export function namAm(b: BirthParams): { nam: number; chi: string } | null {
   if (b.isLunar) {
     // Ngày ÂM không được đưa thẳng vào `lunarOf` (hàm nhận ngày DƯƠNG) — đổi
     // sang dương trước, không thì sinh đầu năm âm ra chi năm của năm trước.
-    const dl = lunarToSolar(b.day, b.month, b.year);
+    const dl = lunarToSolar(b.day, b.month, b.year, b.isLeapMonth === true);
     const l = dl ? lunarOf(dl.day, dl.month, dl.year) : null;
     return l ? { nam: b.year, chi: l.chiNam } : null;
   }
@@ -305,6 +311,11 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
       namAL = Math.floor(year);
       if (thangAL < 1 || thangAL > 12 || ngayAL < 1 || ngayAL > 30) {
         return { ok: false, error: 'Ngày/tháng âm lịch không hợp lệ (tháng 1–12, ngày 1–30).' };
+      }
+      // Tháng NHUẬN: an sao theo SỐ tháng như cũ (không đổi cổ pháp), nhưng năm đó
+      // phải thật sự nhuận tháng ấy — không thì từ chối, đừng lặng lẽ an tháng thường.
+      if (birth.isLeapMonth && !lunarToSolar(ngayAL, thangAL, namAL, true)) {
+        return { ok: false, error: `Năm ${namAL} âm lịch không có ngày ${ngayAL} tháng ${thangAL} nhuận.` };
       }
       canNam = yearCan(namAL);
       chiNam = yearChi(namAL);
@@ -521,7 +532,7 @@ export function renderLasoCard(ls: Laso, birth?: BirthParams | null): string {
   const bits: string[] = [];
   if (birth) {
     bits.push(birth.gender === 'nu' ? 'Nữ' : 'Nam');
-    bits.push(`${birth.day}/${birth.month}/${birth.year} ${birth.isLunar ? 'ÂL' : 'DL'}`);
+    bits.push(`${birth.day}/${birth.month}${birth.isLunar && birth.isLeapMonth ? ' nhuận' : ''}/${birth.year} ${birth.isLunar ? 'ÂL' : 'DL'}`);
     if (birth.hourBranch != null && birth.hourBranch >= 0 && birth.hourBranch < 12) {
       bits.push('giờ ' + CHI_NAMES[birth.hourBranch]);
     }

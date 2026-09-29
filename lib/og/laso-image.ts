@@ -46,8 +46,9 @@ function secret(): string {
   return process.env.MEDIA_SIGN_SECRET || process.env.SUPABASE_SERVICE_KEY || '';
 }
 
-/** Khoá thêm sau này (`t` mốc giờ, `c` tên cung) — chỉ vào chuỗi ký khi CÓ. */
-const EXTRA = ['t', 'c', 'mo', 'hd', 'p'] as const;
+/** Khoá thêm sau này (`t` mốc giờ, `c` tên cung, `ln` tháng NHUẬN, `mo`/`hd` lịch ngày tốt,
+ *  `p` danh sách người) — chỉ vào chuỗi ký khi CÓ, thứ tự cố định. */
+const EXTRA = ['t', 'c', 'ln', 'mo', 'hd', 'p'] as const;
 
 /** Chuỗi ký: loại ảnh + các khoá theo thứ tự cố định (thứ tự trên URL không ảnh hưởng).
  *  Khoá EXTRA chỉ vào chuỗi khi CÓ — thêm vào KEYS thì mọi link đã gửi trước đây mất chữ ký. */
@@ -65,7 +66,7 @@ function birthQuery(b: BirthParams | null | undefined, namXem: number): URLSearc
   if (!b || !b.day || !b.month || !b.year) return null;
   if (b.hourBranch == null || b.hourBranch < 0 || b.hourBranch > 11) return null;
   if (b.gender !== 'nam' && b.gender !== 'nu') return null;
-  return new URLSearchParams({
+  const q = new URLSearchParams({
     d: String(b.day),
     m: String(b.month),
     y: String(b.year),
@@ -78,6 +79,8 @@ function birthQuery(b: BirthParams | null | undefined, namXem: number): URLSearc
       .slice(0, 40),
     td: '',
   });
+  if (b.isLunar && b.isLeapMonth) q.set('ln', '1');
+  return q;
 }
 
 /**
@@ -117,6 +120,7 @@ function birthFrom(q: URLSearchParams): BirthParams | null {
     hourBranch: num('h'),
     gender: g,
     isLunar: q.get('l') === '1',
+    ...(q.get('l') === '1' && q.get('ln') === '1' ? { isLeapMonth: true } : {}),
     ...(q.get('n') ? { name: q.get('n') as string } : {}),
   };
 }
@@ -187,6 +191,7 @@ export function encodePeople(people: { ten: string; birth: BirthParams }[]): str
     x.birth.hourBranch ?? -1,
     x.birth.gender === 'nu' ? 'nu' : 'nam',
     x.birth.isLunar ? 1 : 0,
+    x.birth.isLunar && x.birth.isLeapMonth ? 1 : 0,
   ]);
   return Buffer.from(JSON.stringify(rows)).toString('base64url');
 }
@@ -202,6 +207,7 @@ export function decodePeople(p: string): { ten: string; birth: BirthParams }[] {
         hourBranch: Number(r[4]) >= 0 ? Number(r[4]) : undefined,
         gender: r[5] === 'nu' ? 'nu' : 'nam',
         isLunar: r[6] === 1,
+        ...(r[6] === 1 && r[7] === 1 ? { isLeapMonth: true } : {}),
       },
     }));
   } catch {
