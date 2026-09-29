@@ -100,9 +100,14 @@ export interface GoiYState {
   tn?: string;
   /** Nút vừa gửi: nhãn/câu trả lời + loại tầng — để nhận ra lượt sau là BẤM nút. */
   nut?: { t: string; k: string }[];
+  /** Câu khách hỏi lúc QUAY LẠI sau lâu vắng — giữ lại trong lúc thầy hỏi "câu này cho ai?"
+   *  (router `hoiLaiKhiQuayLai`), trả lời ngay khi khách chọn xong. */
+  cho?: string;
 }
 export interface ChatMeta {
   goiY: GoiYState | null;
+  /** Lần cuối KHÁCH nhắn (chat_sessions.updated_at). */
+  updatedAt: string | null;
   nudgedAt: string | null;
   nudgeMiss: number;
   nudgeOff: boolean;
@@ -112,13 +117,13 @@ export async function chatLoadMeta(platform: string, chatId: number | string): P
   if (!ready()) return null;
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/chat_sessions?platform=eq.${encodeURIComponent(platform)}&chat_id=eq.${encodeURIComponent(String(chatId))}&select=goi_y,nudged_at,nudge_miss,nudge_off&limit=1`,
+      `${SUPABASE_URL}/rest/v1/chat_sessions?platform=eq.${encodeURIComponent(platform)}&chat_id=eq.${encodeURIComponent(String(chatId))}&select=goi_y,updated_at,nudged_at,nudge_miss,nudge_off&limit=1`,
       { cache: 'no-store', headers: SB_HEADERS },
     );
     if (!res.ok) return null;
-    const r = ((await res.json()) as { goi_y?: GoiYState | null; nudged_at?: string | null; nudge_miss?: number; nudge_off?: boolean }[])[0];
-    if (!r) return { goiY: null, nudgedAt: null, nudgeMiss: 0, nudgeOff: false };
-    return { goiY: r.goi_y ?? null, nudgedAt: r.nudged_at ?? null, nudgeMiss: r.nudge_miss ?? 0, nudgeOff: !!r.nudge_off };
+    const r = ((await res.json()) as { goi_y?: GoiYState | null; updated_at?: string | null; nudged_at?: string | null; nudge_miss?: number; nudge_off?: boolean }[])[0];
+    if (!r) return { goiY: null, updatedAt: null, nudgedAt: null, nudgeMiss: 0, nudgeOff: false };
+    return { goiY: r.goi_y ?? null, updatedAt: r.updated_at ?? null, nudgedAt: r.nudged_at ?? null, nudgeMiss: r.nudge_miss ?? 0, nudgeOff: !!r.nudge_off };
   } catch {
     return null;
   }
@@ -128,7 +133,7 @@ export async function chatLoadMeta(platform: string, chatId: number | string): P
 export async function chatPatchMeta(
   platform: string,
   chatId: number | string,
-  patch: { goi_y?: GoiYState; nudged_at?: string; nudge_miss?: number; nudge_off?: boolean },
+  patch: { goi_y?: GoiYState | null; nudged_at?: string; nudge_miss?: number; nudge_off?: boolean },
 ): Promise<boolean> {
   if (!ready()) return false;
   try {
@@ -201,15 +206,23 @@ export async function chatSaveSession(
   }
 }
 
+/** "Trò chuyện mới": xoá hội thoại, lá số, thầy và nút gợi ý của phiên — nhưng GIỮ dòng
+ *  (không DELETE) để cờ tin nhắc (`nudge_off`, `nudge_miss`) không bị xoá theo: khách đã gõ
+ *  "Tắt nhắc" rồi bấm "Trò chuyện mới" thì vẫn phải là tắt. `author_id` về null ⇒ thầy chào lại. */
 export async function chatClearSession(platform: string, chatId: number | string): Promise<void> {
   if (!ready()) return;
   try {
-    await fetch(
+    const res = await fetch(
       `${SUPABASE_URL}/rest/v1/chat_sessions?platform=eq.${encodeURIComponent(platform)}&chat_id=eq.${encodeURIComponent(String(chatId))}`,
-      { method: 'DELETE', headers: SB_HEADERS },
+      {
+        method: 'PATCH',
+        headers: { ...SB_HEADERS, Prefer: 'return=minimal' },
+        body: JSON.stringify({ messages: [], birth: null, author_id: null, goi_y: null, updated_at: new Date().toISOString() }),
+      },
     );
-  } catch {
-    /* best-effort */
+    if (!res.ok) console.error('[chatClearSession] lỗi', res.status, await res.text().catch(() => ''));
+  } catch (e) {
+    console.error('[chatClearSession] lỗi mạng', e);
   }
 }
 
