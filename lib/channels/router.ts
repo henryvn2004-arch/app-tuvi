@@ -26,7 +26,7 @@ import { chatConsumeLinkToken, chatGetAuthor, chatLogEvent, chatLogOutcome, chat
 import { ensureChatUser } from './account';
 import { accountProfiles, saveChart } from './charts';
 import { createHandoffUrl, lasoPath } from './handoff';
-import { chartImageUrl, type ChartKind } from '@/lib/og/laso-image';
+import { chartImageUrl, lasoImageUrl, type ChartKind } from '@/lib/og/laso-image';
 import type { BirthParams } from '@/lib/contract/v1';
 import { listPaidReports, paidReportPdf } from '@/lib/pdf/paid-reports';
 import { currentNamXem } from '@/lib/engine/namxem';
@@ -204,9 +204,12 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
   // Câu khách hỏi lúc quay lại được giữ ở goi_y.cho; chọn xong thì trả lời ĐÚNG câu đó.
   const cho = meta?.goiY?.cho;
   let traLoiCho = false;
+  // Chọn lại lá số cũ/đã lưu → gửi lại ẢNH lá số trước câu trả lời (+ nút luận giải).
+  let laSoCu = false;
   if (cho && t === norm(QUAY_LAI.tiep)) {
     text = cho;
     traLoiCho = true;
+    laSoCu = true;
   } else if (cho && t.startsWith(norm(QUAY_LAI.laSo))) {
     const ten = text.slice(QUAY_LAI.laSo.length).trim();
     const p = await (userId ? accountProfiles(userId, kit.profiles) : kit.profiles).get(ev.chatId, ten);
@@ -215,6 +218,7 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
       await kit.store.save(ev.chatId, [], p.birth);
       text = cho;
       traLoiCho = true;
+      laSoCu = true;
     }
   } else if (cho && t === norm(QUAY_LAI.moi)) {
     // Xoá hẳn lá số cũ khỏi phiên (lưu `null` thì chatSaveSession GIỮ lá số cũ ⇒ tin sau
@@ -404,6 +408,13 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
     return;
   }
 
+  const anhLaSoCu = laSoCu && session.birth ? lasoImageUrl(session.birth, currentNamXem()) : null;
+  if (anhLaSoCu && session.birth && io.sendImage) {
+    await io
+      .sendImage(ev.chatId, anhLaSoCu, `Lá số ${moTaLaSo(session.birth)}`)
+      .catch((e) => console.error('[channel-router] gửi lại ảnh lá số lỗi', kit.platform, e));
+  }
+
   const thay = await thayCuaChat(kit.platform, String(ev.chatId));
   // Lượt ĐẦU cuộc trò chuyện: thầy tự giới thiệu ngắn, ghép chung tin chờ
   // "đang xem…". Dấu "đã chào" = thầy ĐÃ được lưu vào chat_sessions.author_id
@@ -442,6 +453,7 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
     thayId: thay.id,
     daMoi: !!addressMaster || hoiChan,
     khach: addressMaster,
+    laSoCu: laSoCu && !!session.birth,
   });
 }
 
@@ -731,7 +743,7 @@ async function sendFollowUps(
   outcome: NonNullable<Awaited<ReturnType<typeof runConversation>>>,
   cost: number,
   meta: ChatMeta | null,
-  luot: { cauHoi: string; thayId: string; daMoi: boolean; khach?: GuestId },
+  luot: { cauHoi: string; thayId: string; daMoi: boolean; khach?: GuestId; laSoCu?: boolean },
 ): Promise<void> {
   const gy = meta?.goiY || {};
   const n = (gy.n || 0) + 1;
@@ -739,7 +751,7 @@ async function sendFollowUps(
   const con = dem ? loiConCau(dem) : '';
   const denLuot = n - (gy.g || 0) >= KHOANG_GOI_Y;
 
-  // Sản phẩm — CHỈ lượt vừa an xong lá số, hoặc lượt khách vừa chọn kiểm chứng
+  // Sản phẩm — CHỈ lượt vừa an xong / mở lại lá số, hoặc lượt khách vừa chọn kiểm chứng
   // bằng môn khác (goi-y.ts). Link web có lá số điền sẵn, bất kể `NUT_WEB`.
   let sanPham: ChatButton | null = null;
   let loiSp = '';
@@ -754,7 +766,7 @@ async function sendFollowUps(
         loiSp = loiMon(g.mon);
         spId = `mon:${g.id}`;
       }
-    } else if (!luot.khach && outcome.lasoShown) {
+    } else if (!luot.khach && (outcome.lasoShown || luot.laSoCu)) {
       const url = await createHandoffUrl(userId, lasoPath(outcome.birth), outcome.birth);
       if (url) {
         sanPham = { title: await nhanLuanGiai(), url };
