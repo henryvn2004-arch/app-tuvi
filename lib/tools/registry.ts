@@ -381,7 +381,7 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false, hasFamily 
     {
       name: 'tra_cuu_tri_thuc',
       description:
-        'Tra cứu tri thức tử vi từ thư viện sách cổ (ý nghĩa sao, cách cục, luận đoán). Dùng khi cần dẫn chứng học thuật hoặc giải thích sâu một khái niệm.',
+        'Tra cứu tri thức tử vi từ thư viện sách cổ (ý nghĩa sao, cách cục, luận đoán vận hạn, sao lưu, hạn nặng/tang sự, đám tang). Dùng khi cần dẫn chứng học thuật hoặc giải thích sâu một khái niệm.',
       input_schema: {
         type: 'object',
         properties: {
@@ -1102,7 +1102,7 @@ async function execTraCuu(input: Rec): Promise<string> {
     const searchResp = await fetch(`${SUPABASE_URL}/rest/v1/rpc/search_tuvi_docs`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
-      body: JSON.stringify({ query_embedding: embedding, match_count: 6, match_threshold: 0.55 }),
+      body: JSON.stringify({ query_embedding: embedding, match_count: 6, match_threshold: 0.4 }), // 0,55 cắt mất gần hết — xem app/api/search/route.ts
     });
     if (!searchResp.ok) throw new Error('Supabase error');
     const results = (await searchResp.json()) as { source: string; content: string }[];
