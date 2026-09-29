@@ -16,8 +16,12 @@ export async function sendMenu(
   const btns = buttons.filter((b) => b.title);
   if (!btns.length) return io.sendText(chatId, text);
   if (io.sendButtons) return io.sendButtons(chatId, text, btns);
-  const lines = btns.map((b) => ('url' in b ? `• ${b.title}: ${b.url}` : `• ${b.title} — nhắn "${b.reply}"`));
-  return io.sendText(chatId, `${text}\n\n${lines.join('\n')}`);
+  return io.sendText(chatId, `${text}\n\n${buttonsAsText(btns)}`);
+}
+
+/** Nút → dòng chữ: link in thẳng ra, câu soạn sẵn thành "nhắn: …". */
+export function buttonsAsText(buttons: ChatButton[]): string {
+  return buttons.map((b) => ('url' in b ? `• ${b.title}: ${b.url}` : `• ${b.title} — nhắn "${b.reply}"`)).join('\n');
 }
 
 /**
