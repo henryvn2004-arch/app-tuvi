@@ -38,6 +38,14 @@ Nghi sai thì GHI LẠI, không sửa. Đang treo:
 - **Bản vanilla BỎ cờ `isLeap`** ⇒ ngày trong tháng nhuận đụng khoá với tháng
   thường (đo được: 336/365 ngày phân biệt ở năm có nhuận). **Nợ CỐ Ý, đừng sửa
   mò** — tháng nhuận là chuyện cổ pháp. `check:lunar` ghim hiện trạng: đổi là đỏ.
+- **Chiều ÂM → DƯƠNG chỉ có MỘT cửa: `lunarToSolar()` / `solarDateOf(birth)`**
+  (`lib/engine/laso.ts` → `public/tools-shared/am-duong.js`). Hàm KHÔNG tự tính
+  lịch: dò ngày dương bằng chính `solarToLunar` của engine, lấy ngày khớp ĐẦU
+  TIÊN ⇒ ngày trong tháng nhuận quy về **tháng THƯỜNG cùng số** (quy ước, do bảng
+  vanilla bỏ `isLeap` và `BirthParams` không có trường nhuận). **Engine Bát Tự
+  (`tinhBatTu`) nhận ngày DƯƠNG** — `birth.isLunar` mà đưa thẳng vào là tứ trụ sai
+  hoàn toàn mà trông hợp lệ; `lunarOf()` cũng nhận ngày DƯƠNG. `npm run
+  check:amduong` · `nhat-ky/2026-09.md` "Bát Tự sai cho người nhập âm lịch".
 
 ## Khoá "cùng lá số" là ÂM LỊCH, không phải ngày dương
 

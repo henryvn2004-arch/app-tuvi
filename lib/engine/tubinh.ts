@@ -19,6 +19,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { BirthParams } from '@/lib/contract/v1';
 import { currentNamXem } from '@/lib/engine/namxem';
+import { solarDateOf } from '@/lib/engine/laso';
 
 type Rec = Record<string, unknown>;
 
@@ -53,14 +54,16 @@ export interface ComputeTuBinhResult {
 }
 
 /**
- * Tính bát tự từ tham số sinh DƯƠNG lịch. namXem mặc định = năm hiện
- * tại (VN) để xác định đại vận hiện tại / lưu niên / tuổi xem.
+ * Tính bát tự. Engine cần ngày DƯƠNG (tiết khí) — `birth.isLunar` thì đổi âm →
+ * dương trước (`solarDateOf`). Trước đây ngày âm đi thẳng vào `ngayDL/thangDL`
+ * ⇒ tứ trụ sai hoàn toàn cho người nhập âm lịch trong chat.
+ * namXem mặc định = năm hiện tại (VN) để xác định đại vận hiện tại / lưu niên / tuổi xem.
  */
 export function computeTuBinh(birth: BirthParams, namXem?: number): ComputeTuBinhResult {
-  const { day, month, year, hourBranch, gender } = birth;
+  const { hourBranch, gender } = birth;
 
-  if (!day || !month || !year) {
-    return { ok: false, error: 'Thiếu ngày/tháng/năm sinh dương lịch.' };
+  if (!birth.day || !birth.month || !birth.year) {
+    return { ok: false, error: 'Thiếu ngày/tháng/năm sinh.' };
   }
   if (hourBranch == null || hourBranch < 0 || hourBranch > 11) {
     return { ok: false, error: 'Thiếu hoặc sai giờ sinh (cần địa chi giờ 0=Tý..11=Hợi).' };
@@ -68,6 +71,12 @@ export function computeTuBinh(birth: BirthParams, namXem?: number): ComputeTuBin
   if (gender !== 'nam' && gender !== 'nu') {
     return { ok: false, error: 'Thiếu giới tính (nam/nu).' };
   }
+
+  const dl = solarDateOf(birth);
+  if (!dl) {
+    return { ok: false, error: 'Ngày âm lịch không tồn tại hoặc ngoài tầm lịch (1900–2100).' };
+  }
+  const { day, month, year } = dl;
 
   try {
     const { tinhBatTu } = loadEngine();

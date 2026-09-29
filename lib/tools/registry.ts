@@ -34,7 +34,7 @@ import { khungCaNha, type NguoiNhaVao } from '@/lib/engine/ca-nha';
 import { computeXongDat, tetSapToi, VERDICT_LABEL } from '@/lib/engine/xong-dat';
 import { computeVanNgay } from '@/lib/engine/van-ngay';
 import { getCungMenh, guaOf } from '@/lib/engine/bat-trach';
-import { lunarOf } from '@/lib/engine/laso';
+import { lunarOf, lunarToSolar } from '@/lib/engine/laso';
 import { SUGGEST_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
 type Rec = Record<string, unknown>;
@@ -1144,7 +1144,10 @@ async function execTraCaNha(ctx: ToolContext): Promise<ToolRunResult> {
 function namAm(b: BirthParams): { nam: number; chi: string } | null {
   if (!b.day || !b.month || !b.year) return null;
   if (b.isLunar) {
-    const l = lunarOf(b.day, b.month, b.year);
+    // Ngày ÂM không được đưa thẳng vào `lunarOf` (hàm nhận ngày DƯƠNG) — đổi
+    // sang dương trước, không thì sinh đầu năm âm ra chi năm của năm trước.
+    const dl = lunarToSolar(b.day, b.month, b.year);
+    const l = dl ? lunarOf(dl.day, dl.month, dl.year) : null;
     return l ? { nam: b.year, chi: l.chiNam } : null;
   }
   const l = lunarOf(b.day, b.month, b.year);
