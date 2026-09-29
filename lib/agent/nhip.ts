@@ -11,8 +11,8 @@
 // Ba lớp: (1) loại câu hỏi → phân bố độ dài · (2) bốc có trọng số, KHÔNG lặp một
 // mức hai lượt liền · (3) thầy lệch trục (`PERSONAS[*].nhipLech`).
 // Câu đinh + dấu riêng của thầy (câu mở cửa miệng, ẩn dụ đặc trưng — 2026-09-29):
-// chỉ ở câu đời sống/vặt/giải thích, ~1/5 số lượt, nghỉ ít nhất 2 lượt sau mỗi
-// lần, KHÔNG BAO GIỜ khi khách bế tắc hoặc chỉ nói câu xã giao.
+// chỉ ở câu đời sống/vặt/giải thích, ~1/3 số lượt đủ điều kiện, KHÔNG
+// hai lượt liền, KHÔNG BAO GIỜ khi khách bế tắc hoặc chỉ nói câu xã giao.
 // Kiểu câu đinh + chiêu bốc từ kho CHUNG `lib/agent/chieu.ts` theo ngữ cảnh, không
 // lặp trong 3 lượt; chiêu có cổng riêng (khách đang đau vẫn được chiêu đỡ người).
 //
@@ -148,11 +148,8 @@ const PHAN_BO: Record<LoaiCau, Partial<Record<MucDai, number>>> = {
 const PHAN_BO_LUOT_DAU: Partial<Record<MucDai, number>> = { vua: 60, dai: 40 };
 const PHAN_BO_AN_UI: Partial<Record<MucDai, number>> = { ngan: 35, vua: 65 };
 
-// Chỉnh bằng đo (scratchpad sim 4.000 lượt), đừng đổi mò: xem chú thích ở `tinhNhip`.
-const XAC_SUAT_DINH = 0.2;
-const XAC_SUAT_CHIEU = 0.2;
-/** Số lượt nghỉ sau một lượt có điểm nhấn. */
-const NGHI = 2;
+const XAC_SUAT_DINH = 0.35;
+const XAC_SUAT_CHIEU = 0.4;
 /** Không bốc lại kiểu câu đinh / chiêu đã dùng trong ngần này lượt gần nhất. */
 const KHONG_LAP = 3;
 // Người đang đau / cần được công nhận: chỉ các chiêu đỡ người, không chiêu dò/doạ/đoán.
@@ -224,7 +221,6 @@ export function tinhNhip(
   // `as` chứ không khai kiểu: TS thu hẹp `null` ở lần gán đầu thành `never` trong vòng lặp.
   let truoc = null as NhipLuot | null;
   const daDung: string[][] = []; // kiểu + chiêu từng lượt, dựng lại tất định để không lặp
-  const nhan: boolean[] = []; // lượt nào đã có điểm nhấn — để đếm lượt nghỉ
   for (let i = 0; i < cauHoi.length; i++) {
     const q = cauHoi[i] || '';
     const loai = loaiCau(q);
@@ -235,14 +231,11 @@ export function tinhNhip(
       nc === 'an-ui' ? PHAN_BO_AN_UI : i === 0 && loai === 'doi-song' ? PHAN_BO_LUOT_DAU : PHAN_BO[loai];
     const muc: MucDai = lech(boc(pb, bam('muc|' + khoa), loai === 'xa-giao' || loai === 'hoi-thuong' ? undefined : truoc?.muc), l, loai);
     const duDieuKien = loai === 'vat' || loai === 'doi-song' || loai === 'giai-thich';
+    // Không có thầy ⇒ không có "kiểu câu đinh" nào để chêm.
+    // Câu đinh (có vần, bóc, trêu) chỉ hợp lượt tra cứu thuần — chêm vào lượt
+    // người ta cần an ủi/công nhận là đùa đúng chỗ đau.
+    const dinh: boolean = coThay && nc === 'giai-dap' && duDieuKien && !truoc?.dinh && muc !== 'mot-cau' && bam('dinh|' + khoa) < XAC_SUAT_DINH;
     const ganDay = new Set(daDung.slice(-KHONG_LAP).flat());
-    // ĐIỂM NHẤN (dấu riêng + câu đinh, hoặc chiêu) — người thật không mở miệng là nói
-    // câu đinh (Henry 2026-09-29). Đo 4.000 lượt giả lập (400 hội thoại × 10 lượt, 6
-    // thầy): bản đầu 48% lượt có điểm nhấn, 15% dính hai lượt liền. Nay tối đa MỘT
-    // điểm nhấn mỗi lượt, xong nghỉ `NGHI` lượt, xác suất 0,2/0,2 ⇒ ~19% lượt có điểm
-    // nhấn (câu đinh ~10%, chiêu ~9%), 0% hai lượt liền. Chỉ chiêu `manh` (khách nói lá
-    // số sai, kể thất bại) được bỏ qua lượt nghỉ — đó là đáp đúng câu khách, không phải chêm.
-    const dangNghi = nhan.slice(-NGHI).some(Boolean);
     let chuDe: string[] = [];
     try {
       chuDe = chuDeCua(q);
@@ -250,34 +243,31 @@ export function tinhNhip(
       chuDe = []; // chủ đề chỉ để lọc kiểu — hỏng thì bốc trên cả kho, không chặn lượt trả lời
     }
     const ctx: NguCanh = { q: norm(q), loai, nhuCau: nc, chuDe, luot: i };
-    let hop: Chieu[] = [];
-    if (coThay && loai !== 'xa-giao' && loai !== 'hoi-thuong') {
-      // Người đang đau / cần được công nhận: chỉ chiêu đỡ người.
-      const choPhep =
-        loai === 'be-tac' ? CHIEU_KHI_BE_TAC : nc === 'an-ui' || nc === 'phe-minh' || nc === 'cong-nhan' ? CHIEU_KHI_DAU : null;
-      hop = CHIEU.filter((c) => !ganDay.has(c.id) && (!choPhep || choPhep.includes(c.id)) && c.khi(ctx));
-    }
-    const manh = hop.filter((c) => c.manh?.(ctx));
-    // Không có thầy ⇒ không có "kiểu câu đinh" nào để chêm. Câu đinh (vần, bóc, trêu)
-    // chỉ hợp lượt tra cứu thuần — chêm vào lượt người ta cần an ủi là đùa đúng chỗ đau.
-    const dinh: boolean =
-      !manh.length && !dangNghi && coThay && nc === 'giai-dap' && duDieuKien && muc !== 'mot-cau' && bam('dinh|' + khoa) < XAC_SUAT_DINH;
     const kieu = dinh
       ? bocDeu(
           KIEU_DINH.filter((k) => !ganDay.has(k.id) && (!k.chuDe || k.chuDe.some((c) => chuDe.includes(c)))),
           bam(`kieu|${authorId}|${khoa}`),
         )?.id
       : undefined;
+    // Chiêu: có thầy, không phải câu xã giao/hỏi thường; ngữ cảnh RẤT hợp thì bật luôn,
+    // không thì bốc xác suất và không hai lượt liền.
     let chieu: string[] | undefined;
-    const con = hop.filter((c) => !manh.includes(c));
-    const dau = manh.length ? manh : !dinh && !dangNghi && con.length && bam(`chieu|${authorId}|${khoa}`) < XAC_SUAT_CHIEU ? con : [];
-    if (dau.length) {
-      const a = bocDeu(dau, bam(`chieu-chon|${authorId}|${khoa}`));
-      const b = bocDeu((manh.length ? [...manh, ...con] : con).filter((c) => c !== a), bam(`chieu-2|${authorId}|${khoa}`));
-      chieu = [a, b].filter((c): c is Chieu => !!c).map((c) => c.id);
+    if (coThay && loai !== 'xa-giao' && loai !== 'hoi-thuong') {
+      const choPhep =
+        loai === 'be-tac' ? CHIEU_KHI_BE_TAC : nc === 'an-ui' || nc === 'phe-minh' || nc === 'cong-nhan' ? CHIEU_KHI_DAU : null;
+      const hop = CHIEU.filter((c) => !ganDay.has(c.id) && (!choPhep || choPhep.includes(c.id)) && c.khi(ctx));
+      const manh = hop.filter((c) => c.manh?.(ctx));
+      const bat = manh.length > 0 || (hop.length > 0 && !truoc?.chieu && bam(`chieu|${authorId}|${khoa}`) < XAC_SUAT_CHIEU);
+      if (bat) {
+        const r = bam(`chieu-chon|${authorId}|${khoa}`);
+        const con = hop.filter((c) => !manh.includes(c));
+        const dau = manh.length ? manh : con;
+        const a = bocDeu(dau, r);
+        const b = bocDeu((manh.length ? [...manh, ...con] : con).filter((c) => c !== a), bam(`chieu-2|${authorId}|${khoa}`));
+        chieu = [a, b].filter((c): c is Chieu => !!c).map((c) => c.id);
+      }
     }
     daDung.push([...(kieu ? [kieu] : []), ...(chieu || [])]);
-    nhan.push(dinh || !!chieu);
     truoc = { loai, nhuCau: nc, muc, dinh, kieu, chieu };
   }
   return truoc || { loai: 'doi-song', nhuCau: 'giai-dap', muc: 'vua', dinh: false };
