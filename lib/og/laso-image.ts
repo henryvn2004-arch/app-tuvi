@@ -39,10 +39,12 @@ function secret(): string {
 }
 
 /** Chuỗi ký: loại ảnh + các khoá theo thứ tự cố định (thứ tự trên URL không ảnh hưởng).
- *  `t` chỉ vào chuỗi khi CÓ — thêm vào KEYS thì mọi link đã gửi trước đây mất chữ ký. */
+ *  `t` (thời điểm) và `ln` (tháng NHUẬN) chỉ vào chuỗi khi CÓ — thêm vào KEYS thì mọi
+ *  link đã gửi trước đây mất chữ ký. */
 function canonical(kind: ChartKind | TimeChartKind, q: URLSearchParams): string {
   const t = q.get('t');
-  return kind + '|' + KEYS.map((k) => `${k}=${q.get(k) ?? ''}`).join('&') + (t ? `&t=${t}` : '');
+  const ln = q.get('ln');
+  return kind + '|' + KEYS.map((k) => `${k}=${q.get(k) ?? ''}`).join('&') + (t ? `&t=${t}` : '') + (ln ? `&ln=${ln}` : '');
 }
 
 function sign(kind: ChartKind | TimeChartKind, q: URLSearchParams): string {
@@ -54,7 +56,7 @@ function birthQuery(b: BirthParams | null | undefined, namXem: number): URLSearc
   if (!b || !b.day || !b.month || !b.year) return null;
   if (b.hourBranch == null || b.hourBranch < 0 || b.hourBranch > 11) return null;
   if (b.gender !== 'nam' && b.gender !== 'nu') return null;
-  return new URLSearchParams({
+  const q = new URLSearchParams({
     d: String(b.day),
     m: String(b.month),
     y: String(b.year),
@@ -67,6 +69,8 @@ function birthQuery(b: BirthParams | null | undefined, namXem: number): URLSearc
       .slice(0, 40),
     td: '',
   });
+  if (b.isLunar && b.isLeapMonth) q.set('ln', '1');
+  return q;
 }
 
 /**
@@ -101,6 +105,7 @@ function birthFrom(q: URLSearchParams): BirthParams | null {
     hourBranch: num('h'),
     gender: g,
     isLunar: q.get('l') === '1',
+    ...(q.get('l') === '1' && q.get('ln') === '1' ? { isLeapMonth: true } : {}),
     ...(q.get('n') ? { name: q.get('n') as string } : {}),
   };
 }
