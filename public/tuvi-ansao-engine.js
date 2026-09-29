@@ -422,6 +422,11 @@ function anLucSat(canNam, chiNam, gioIdx, locTonIdx, amDuong, gioitinh) {
            'Địa Không':diaKhong,'Hỏa Tinh':hoaTinh,'Linh Tinh':linhTinh };
 }
 
+// Thiên Mã theo chi năm — dùng cho CẢ Thiên Mã gốc (chi năm sinh) lẫn Lưu Thiên
+// Mã (chi năm xem, Thái Thứ Lang 4.4: cùng bảng Dần Ngọ Tuất→Thân · Thân Tý Thìn→Dần
+// · Tỵ Dậu Sửu→Hợi · Hợi Mão Mùi→Tỵ).
+const THIEN_MA_THEO_CHI = {'Dần':'Thân','Ngọ':'Thân','Tuất':'Thân','Thân':'Dần','Tý':'Dần','Thìn':'Dần','Hợi':'Tỵ','Mão':'Tỵ','Mùi':'Tỵ','Tỵ':'Hợi','Dậu':'Hợi','Sửu':'Hợi'};
+
 // ─── PHỤ TINH ────────────────────────────────────────────────
 function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   // Tả Phụ: Thìn=T1, thuận đến tháng
@@ -462,9 +467,8 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const DAO_HOA = {'Tý':'Dậu','Ngọ':'Mão','Mão':'Tý','Dậu':'Ngọ','Dần':'Mão','Thân':'Dậu','Tỵ':'Ngọ','Hợi':'Tý','Thìn':'Dậu','Tuất':'Mão','Sửu':'Ngọ','Mùi':'Tý'};
   const daoHoa = dcIdx(DAO_HOA[chiNam] || 'Tý');
 
-  // Thiên Mã
-  const THIEN_MA = {'Dần':'Thân','Ngọ':'Thân','Tuất':'Thân','Thân':'Dần','Tý':'Dần','Thìn':'Dần','Hợi':'Tỵ','Mão':'Tỵ','Mùi':'Tỵ','Tỵ':'Hợi','Dậu':'Hợi','Sửu':'Hợi'};
-  const thienMa = dcIdx(THIEN_MA[chiNam] || 'Tý');
+  // Thiên Mã — bảng ở module scope (THIEN_MA_THEO_CHI), Lưu Thiên Mã dùng chung.
+  const thienMa = dcIdx(THIEN_MA_THEO_CHI[chiNam] || 'Tý');
 
   // Kiếp Sát
   const KIEP_SAT = {'Tỵ':'Dần','Dậu':'Dần','Sửu':'Dần','Dần':'Hợi','Ngọ':'Hợi','Tuất':'Hợi','Hợi':'Thân','Mão':'Thân','Mùi':'Thân','Thân':'Tỵ','Tý':'Tỵ','Thìn':'Tỵ'};
@@ -673,6 +677,113 @@ function tinhLuuDaiHan(daiVanCungIdx, ageIndex, amDuong, gioitinh) {
     const map = [s, x, mod12(x+1), x, mod12(x-1), mod12(x-2), mod12(x-3), mod12(x-4), mod12(x-5), mod12(x-6)];
     return map[ageIndex] ?? s;
   }
+}
+
+
+// ─── SAO LƯU NĂM XEM ─────────────────────────────────────────
+// Nguồn CHÍNH (Henry chốt 2026-09-29): Văn Đằng Thái Thứ Lang, "Nhận định ảnh
+// hưởng của những sao lưu động" (mục 4.1–4.4) — ĐÚNG 9 sao, CHỈ lưu theo NĂM:
+//   4.1 Lưu Thái Tuế tại cung mang chi năm xem · Lưu Tang Môn = Thái Tuế +2 thuận
+//       · Lưu Bạch Hổ xung chiếu Lưu Tang Môn (= Thái Tuế +8).
+//   4.2 Lưu Thiên Khốc: Ngọ là năm Tý, đếm NGHỊCH tới chi năm xem · Lưu Thiên Hư:
+//       Ngọ là năm Tý, đếm THUẬN.
+//   4.3 Lưu Lộc Tồn theo can năm xem (bảng như Lộc Tồn gốc) · Lưu Kình Dương cung
+//       TRƯỚC (+1) · Lưu Đà La cung SAU (−1).
+//   4.4 Lưu Thiên Mã theo chi năm xem (bảng như Thiên Mã gốc).
+// Ví dụ trong sách đều khớp (khoá cứng ở scripts/check-sao-luu.mjs): năm Mùi →
+// Tang Dậu, Hổ Mão, Khốc Hợi, Hư Sửu; Ất → Lộc Mão, Kình Thìn, Đà Dần; Tý → Mã Dần.
+// Đối chiếu nguồn thứ hai (tuvicohoc, "Nguyên tắc an sao lưu"): cùng danh sách 9
+// sao, cùng lối an (chi năm: Thái Tuế/Tang/Hổ/Khốc/Hư/Mã; can năm: Lộc/Kình/Đà) ⇒
+// không lệch. Các sao lưu Việt Viêm Tử thêm (vòng Thái Tuế, Thiên Không, Quán
+// Sách, vòng Lộc Tồn/Bác Sĩ, Tràng Sinh, Khôi Việt) và Lưu Triệt/Song Hao theo
+// "kinh nghiệm" — CỐ Ý không an: ngoài Thái Thứ Lang, và chính nguồn đó ghi hai
+// cách an vòng Bác Sĩ/Tràng Sinh mâu thuẫn nhau.
+// ⚠️ Lưu Kình/Đà CỐ ĐỊNH +1/−1 theo sách — KHÁC Kình/Đà GỐC (`anLucSat`, trường
+// phái Thiên Lương, đảo chiều theo âm dương × giới). Đừng "đồng bộ" hai bên.
+// Lưu Tứ Hóa: Thái Thứ Lang KHÔNG an. Theo tuvicohoc "quan điểm 3": can NĂM XEM tra
+// bảng `TU_HOA`, gắn vào sao CỐ ĐỊNH — nguồn phụ, gắn nhãn riêng để phân biệt.
+function anSaoLuuNam(namXem) {
+  const can = THIEN_CAN[((namXem - 4) % 10 + 10) % 10];
+  const chi = DIA_CHI[((namXem - 4) % 12 + 12) % 12];
+  const tt = dcIdx(chi);
+  const loc = dcIdx(LOC_TON_START[can]);
+  return {
+    namXem, canNamXem: can, chiNamXem: chi,
+    sao: {
+      'Lưu Thái Tuế': tt,
+      'Lưu Tang Môn': mod12(tt + 2),
+      'Lưu Bạch Hổ': mod12(tt + 8),
+      'Lưu Thiên Khốc': mod12(dcIdx('Ngọ') - tt),
+      'Lưu Thiên Hư': mod12(dcIdx('Ngọ') + tt),
+      'Lưu Lộc Tồn': loc,
+      'Lưu Kình Dương': mod12(loc + 1),
+      'Lưu Đà La': mod12(loc - 1),
+      'Lưu Thiên Mã': dcIdx(THIEN_MA_THEO_CHI[chi]),
+    },
+    tuHoa: TU_HOA[can] || {},
+  };
+}
+
+// Gắn sao lưu năm `namXem` vào lá số ĐÃ AN (không đổi `palaces[].stars` — mọi
+// chấm điểm/cách cục gốc đọc mảng đó, trộn sao lưu vào là đổi cả lá số gốc).
+// Trả về { ...anSaoLuuNam, theoCung: { [idx]: [{ten, loai, sao?}] }, diemNong: [...] }.
+// `diemNong` CHỈ chép đúng các ca Thái Thứ Lang nêu đích danh (đồng cung) — không
+// tự đặt ngưỡng "nhiều sát tinh": ca đó chỉ liệt kê sát/bại tinh đồng cung để
+// người luận tự cân.
+function danhGiaSaoLuu(palaces, namXem) {
+  const L = anSaoLuuNam(namXem);
+  const byIdx = {};
+  for (const p of palaces) byIdx[p.idx] = p;
+  const names = (idx) => ((byIdx[idx] && byIdx[idx].stars) || []).map(s => s.ten);
+  const cungOf = (idx) => (byIdx[idx] ? `${byIdx[idx].cungName} (${byIdx[idx].diaChi})` : DIA_CHI[idx]);
+  const has = (idx, ten) => names(idx).includes(ten);
+  const hasTuanTriet = (idx) => names(idx).some(n => n === 'Tuần' || n === 'Triệt' || n === 'Tuần+Triệt');
+  const satBai = (idx) => names(idx).filter(n => {
+    const d = typeof STAR_DATA !== 'undefined' ? STAR_DATA[n] : null;
+    return d && (d.type === 'sát tinh' || d.type === 'bại tinh');
+  });
+
+  const theoCung = {};
+  const push = (idx, item) => { (theoCung[idx] = theoCung[idx] || []).push(item); };
+  for (const [ten, idx] of Object.entries(L.sao)) push(idx, { ten, loai: 'luu' });
+  for (const hoa of ['Lộc', 'Quyền', 'Khoa', 'Kỵ']) {
+    const sao = L.tuHoa[hoa];
+    const p = sao && palaces.find(x => (x.stars || []).some(s => s.ten === sao));
+    if (p) push(p.idx, { ten: 'Lưu Hóa ' + hoa, loai: 'luu_hoa', sao });
+  }
+
+  const diemNong = [];
+  const add = (muc, idx, text) => diemNong.push({ muc, cung: cungOf(idx), text });
+  const S = L.sao;
+  add('trong_tam', S['Lưu Thái Tuế'], 'Lưu Thái Tuế — mọi sự hay dở của năm đều liên quan mật thiết tới cung này (gặp sao tốt thì rực rỡ, gặp sao xấu thì mờ ám)');
+  const dongCungGoc = [
+    ['Lưu Tang Môn', 'Tang Môn', 'Lưu Tang Môn gặp Tang Môn cố định đồng cung — nguy hại nhất: ốm đau, tang tóc; gốc đại hạn và tiểu hạn cùng xấu thì rất khó cứu giải'],
+    ['Lưu Bạch Hổ', 'Bạch Hổ', 'Lưu Bạch Hổ gặp Bạch Hổ cố định đồng cung — nguy hại nhất: ốm đau, tang tóc; gốc đại hạn và tiểu hạn cùng xấu thì rất khó cứu giải'],
+    ['Lưu Thiên Khốc', 'Thiên Khốc', 'Lưu Thiên Khốc gặp Thiên Khốc cố định đồng cung — khó tránh tai ương, họa hại nếu không có nhiều sao tốt cứu giải'],
+    ['Lưu Thiên Hư', 'Thiên Hư', 'Lưu Thiên Hư gặp Thiên Hư cố định đồng cung — khó tránh tai ương, họa hại nếu không có nhiều sao tốt cứu giải'],
+    ['Lưu Kình Dương', 'Kình Dương', 'Lưu Kình Dương gặp Kình Dương cố định đồng cung — khó tránh tai họa lớn'],
+    ['Lưu Đà La', 'Đà La', 'Lưu Đà La gặp Đà La cố định đồng cung — khó tránh tai họa lớn'],
+  ];
+  for (const [luu, goc, text] of dongCungGoc) if (has(S[luu], goc)) add('xau_nang', S[luu], text);
+  for (const luu of ['Lưu Kình Dương', 'Lưu Đà La']) {
+    if (has(S[luu], 'Thất Sát')) add('xau_nang', S[luu], `${luu} gặp Thất Sát đồng cung — đáng lo ngại nhất trong các ca Kình/Đà lưu`);
+  }
+  for (const luu of ['Lưu Tang Môn', 'Lưu Bạch Hổ', 'Lưu Thiên Khốc', 'Lưu Thiên Hư', 'Lưu Kình Dương', 'Lưu Đà La']) {
+    const sb = satBai(S[luu]).filter(n => n !== luu.replace(/^Lưu /, '')); // sao gốc cùng tên đã báo ở ca XẤU NẶNG
+    if (sb.length) add('du_kien', S[luu], `${luu} đồng cung sát/bại tinh: ${sb.join(', ')} (sách: gặp NHIỀU sát/bại tinh thì dễ ốm đau, buồn phiền, tang tóc — ít thì nhẹ)`);
+  }
+  const loc = S['Lưu Lộc Tồn'];
+  const locTot = ['Lộc Tồn', 'Thiên Mã'].filter(n => has(loc, n));
+  if (locTot.length) add('tot', loc, `Lưu Lộc Tồn gặp ${locTot.join(', ')} cố định — mọi sự hanh thông, danh tài hưng vượng`);
+  const locXau = ['Địa Không', 'Địa Kiếp', 'Đại Hao', 'Tiểu Hao'].filter(n => has(loc, n));
+  if (locXau.length) add('xau', loc, `Lưu Lộc Tồn gặp ${locXau.join(', ')} — hao tán tiền bạc, nhiều chuyện phiền lòng`);
+  const ma = S['Lưu Thiên Mã'];
+  add('trong_tam', ma, 'Lưu Thiên Mã — trong năm có di chuyển hay thay đổi (chỗ ở, nghề, đi xa) liên quan tới cung này');
+  const maTot = ['Thiên Mã', 'Lộc Tồn'].filter(n => has(ma, n)).concat(ma === loc ? ['Lưu Lộc Tồn'] : []);
+  if (maTot.length) add('tot', ma, `Lưu Thiên Mã gặp ${maTot.join(', ')} đồng cung — danh tài hưng vượng`);
+  if (hasTuanTriet(ma)) add('xau', ma, 'Lưu Thiên Mã gặp Tuần/Triệt án ngữ — Mã kỵ Tuần Triệt, việc di chuyển/thay đổi dễ trắc trở');
+
+  return { ...L, theoCung, diemNong };
 }
 
 
@@ -2488,6 +2599,10 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     }
   }
 
+  // Sao lưu năm xem (Thái Thứ Lang) — gắn RIÊNG `luuStars`, không trộn vào `stars`.
+  const saoLuu = danhGiaSaoLuu(palaces, namXem);
+  for (const p of palaces) p.luuStars = saoLuu.theoCung[p.idx] || [];
+
   // Tính scoring cho 9 đại vận
   const napAmHanh = getNapAm(canChiNam);
   const daiVansScored = tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAmHanh, chiNam);
@@ -2547,6 +2662,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
       },
       napAmHanh, tuoiXem, chiNam
     ),
+    saoLuu,
     tieuVanScores: _tieuVanScores,
     nguyetVanScores: _nguyetVanScores,
   };

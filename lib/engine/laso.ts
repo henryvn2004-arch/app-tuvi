@@ -96,6 +96,8 @@ let engineCache: {
   STAR_DATA: Record<string, { type?: string; element?: string }>;
   TU_HOA: Record<string, Record<string, string>>;
   Pchip: { pchipSeries: (pts: { x: number; y: number }[], opts?: { step?: number }) => { x: number; y: number }[] } | undefined;
+  danhGiaSaoLuu: (palaces: unknown[], namXem: number) => unknown;
+  formatSaoLuu: (saoLuu: unknown, palaces: unknown[]) => string[];
 } | null = null;
 
 function loadEngine() {
@@ -116,9 +118,18 @@ function loadEngine() {
     'window',
     'globalThis',
     pchipCode + '\n' + code + '\n' + formatCode +
-      '\nreturn{convertDuongToAm,solarToLunar,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines,canCungOf:window.canCungOf,STAR_DATA,TU_HOA,Pchip:window.Pchip};',
+      '\nreturn{convertDuongToAm,solarToLunar,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines,canCungOf:window.canCungOf,STAR_DATA,TU_HOA,Pchip:window.Pchip,danhGiaSaoLuu,formatSaoLuu:window.formatSaoLuu};',
   ))(g, g) as typeof engineCache;
   return engineCache!;
+}
+
+/** Các dòng SAO LƯU của năm `nam` (Thái Thứ Lang 4.1–4.4 + Lưu Tứ Hóa) trên lá số
+ *  ĐÃ AN — cho tool hỏi một năm BẤT KỲ (lá số chỉ mang sẵn sao lưu của năm xem).
+ *  Công thức và chữ đều từ engine/format vanilla, ở đây chỉ nối dây. */
+export function saoLuuLines(palaces: unknown[], nam: number): string[] {
+  const E = loadEngine();
+  if (!Array.isArray(palaces) || !palaces.length || !nam) return [];
+  return E.formatSaoLuu(E.danhGiaSaoLuu(palaces, nam), palaces);
 }
 
 /** Can của cung `diaChi` theo can năm sinh (Ngũ Hổ Độn) — nguồn:

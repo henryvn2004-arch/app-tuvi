@@ -453,7 +453,9 @@ async function runPost(request: NextRequest) {
     // ngân sách TỪ khiêm tốn, không phải do trần — xem docs/nhat-ky/2026-09.md.
     // Ngân sách mới vẫn còn cách trần rất xa nên không cần nới; nới mù ở đây
     // là tốn thêm mà không giải quyết gì cả.
-    const maxTok = THINK_BUDGET + (phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
+    // phan 24 nới 2100→2400 (2026-09-29): 250-300 → 550-700 từ (khối CẢNH BÁO/CƠ
+    // HỘI năm xem — research người dùng), bằng trần phần cung cùng cỡ chữ.
+    const maxTok = THINK_BUDGET + (phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2400
       : (phan >= 2 && phan <= 13) ? 2400 : (phan >= 15 && phan <= 23) ? 2500 : 1500);
     // 2026-09-02 — hạ độ nghĩ cho ĐÚNG nhóm route văn dài này. A/B mù 48 bản
     // (2 lá số × 8 phần × 3 nhánh, prompt thật): effort 'low' rẻ hơn 39%

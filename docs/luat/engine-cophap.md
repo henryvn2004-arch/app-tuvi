@@ -68,3 +68,21 @@ A cũng phải ra X; lệch là sai chắc chắn. `BatTrachTool.duNienStars()` 
 8 sao Bát Trạch — 3 bản chép tay cũ (bản này + `route.ts` + 7 trang Vision) đều
 tự mâu thuẫn, sai 12-15/64 ô mỗi bản. `npm run check:batrach` ·
 `nhat-ky/2026-08.md` "Bảng Du Niên Bát Trạch".
+
+## Sao lưu năm xem — `anSaoLuuNam` / `danhGiaSaoLuu`
+
+Nguồn chính (Henry chốt 2026-09-29): Văn Đằng Thái Thứ Lang mục 4.1–4.4 — đúng 9 sao,
+chỉ lưu theo NĂM. Đối chiếu tuvicohoc: cùng 9 sao, cùng lối an ⇒ không lệch.
+- **Gắn `palaces[].luuStars` + `ls.saoLuu`, KHÔNG trộn vào `palaces[].stars`** — mọi chấm
+  điểm, cách cục, `cungScores`, golden đọc mảng đó; trộn vào là lá số GỐC đổi theo năm xem.
+- **Lưu Kình = Lưu Lộc +1, Lưu Đà = −1 CỐ ĐỊNH** (ví dụ sách: Ất Mùi → Lộc Mão, Kình Thìn,
+  Đà Dần). Kình/Đà GỐC (`anLucSat`) theo Thiên Lương đảo chiều theo âm dương × giới — hai
+  bên KHÁC nhau có chủ ý, đừng "đồng bộ".
+- **Lưu Tứ Hóa không có trong Thái Thứ Lang** — dùng tuvicohoc "quan điểm 3" (can năm xem
+  + `TU_HOA`, gắn vào sao cố định). Hai quan điểm còn lại (không an / an theo giờ với lưu
+  chính tinh) chưa dùng.
+- **Chưa an** (ngoài Thái Thứ Lang, hoặc nguồn tự ghi hai cách mâu thuẫn): lưu vòng Thái Tuế
+  đầy đủ, Thiên Không, Quán Sách, vòng Bác Sĩ/Lộc Tồn, Tràng Sinh, Khôi Việt (Việt Viêm Tử),
+  Lưu Triệt/Song Hao ("kinh nghiệm"), sao lưu theo tháng/ngày/giờ.
+- `diemNong` chỉ chép ca sách nêu ĐÍCH DANH; "gặp nhiều sát/bại tinh" không có ngưỡng trong
+  sách ⇒ chỉ liệt kê làm DỮ KIỆN, không tự gắn nhãn XẤU. `npm run check:saoluu`.

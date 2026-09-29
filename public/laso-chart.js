@@ -23,6 +23,8 @@ const _CHINH_COLOR = {
 const _TRANG_SINH_SET = new Set(['Tràng Sinh', 'Mộc Dục', 'Quan Đới', 'Lâm Quan', 'Đế Vượng', 'Suy', 'Bệnh', 'Tử', 'Mộ', 'Tuyệt', 'Thai', 'Dưỡng']);
 const _BAD_TYPES = new Set(['sát tinh', 'hung tinh', 'bại tinh', 'tuế_tinh']);
 const _BC_MAP = { Miếu: 'M', Vượng: 'V', Đắc: 'Đ', Bình: 'B', Hãm: 'H' };
+// Sao lưu mang tính hung (tô đỏ) — theo Thái Thứ Lang 4.1–4.3 + Lưu Hóa Kỵ.
+const _LUU_XAU = new Set(['Lưu Tang Môn', 'Lưu Bạch Hổ', 'Lưu Thiên Khốc', 'Lưu Thiên Hư', 'Lưu Kình Dương', 'Lưu Đà La', 'Lưu Hóa Kỵ']);
 
 // ── HELPERS ──
 function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -65,10 +67,18 @@ function renderCungCell(p, dvTuoi, canNamIdx, isCurVan) {
   let catH = phuStars.filter(s => !_isHung(s)).map(renderPhu).join('');
   const hungH = phuStars.filter(s => _isHung(s)).map(renderPhu).join('');
   for (const s of hoaFromChinh) { const hc = s.hoa === 'Lộc' ? 'sc-hoa-loc' : s.hoa === 'Quyền' ? 'sc-hoa-quyen' : s.hoa === 'Khoa' ? 'sc-hoa-khoa' : 'sc-hoa-ky'; catH += `<div class="v2-phu-item ${hc}" style="font-weight:700">HÓA ${esc(s.hoa.toUpperCase())}</div>`; }
+  // Sao lưu năm xem (engine `luuStars`, Thái Thứ Lang) — hàng riêng, in nghiêng,
+  // viết tắt "L." để không lẫn với sao gốc cùng tên. Engine cũ chưa có → rỗng.
+  const luuH = (p.luuStars || []).map(s => {
+    const xau = _LUU_XAU.has(s.ten);
+    const tip = s.sao ? `${s.ten} (${s.sao}) — chỉ tác dụng trong năm xem` : `${s.ten} — chỉ tác dụng trong năm xem`;
+    return `<span class="v2-luu-item${xau ? ' luu-xau' : ''}" title="${esc(tip)}">${esc(s.ten.replace(/^Lưu /, 'L.').toUpperCase())}</span>`;
+  }).join('');
   return `<div class="cung-cell${isCurVan ? ' cur-van' : ''}">
     <div class="v2-cell-header"><span class="v2-can-chi">${esc(canChi.toUpperCase())}</span><span class="v2-cung-name">${esc(p.cungName.toUpperCase())}${thanBadge}</span></div>
     <div class="v2-chinh-area">${chinhH}</div>
     <div class="v2-phu-area"><div class="v2-phu-col">${catH}</div><div class="v2-phu-col v2-phu-col-right">${hungH}</div></div>
+    ${luuH ? `<div class="v2-luu-area">${luuH}</div>` : ''}
     <div class="v2-footer"><span class="v2-trang-sinh">${tsS ? esc(tsS.ten.toUpperCase()) : ''}</span><span class="v2-dai-van">${dvTuoi == null ? '' : dvTuoi}</span></div>
     ${tt}
   </div>`;
