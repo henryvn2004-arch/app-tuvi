@@ -769,7 +769,7 @@ function danhGiaSaoLuu(palaces, namXem) {
     if (has(S[luu], 'Thất Sát')) add('xau_nang', S[luu], `${luu} gặp Thất Sát đồng cung — đáng lo ngại nhất trong các ca Kình/Đà lưu`);
   }
   for (const luu of ['Lưu Tang Môn', 'Lưu Bạch Hổ', 'Lưu Thiên Khốc', 'Lưu Thiên Hư', 'Lưu Kình Dương', 'Lưu Đà La']) {
-    const sb = satBai(S[luu]);
+    const sb = satBai(S[luu]).filter(n => n !== luu.replace(/^Lưu /, '')); // sao gốc cùng tên đã báo ở ca XẤU NẶNG
     if (sb.length) add('du_kien', S[luu], `${luu} đồng cung sát/bại tinh: ${sb.join(', ')} (sách: gặp NHIỀU sát/bại tinh thì dễ ốm đau, buồn phiền, tang tóc — ít thì nhẹ)`);
   }
   const loc = S['Lưu Lộc Tồn'];
