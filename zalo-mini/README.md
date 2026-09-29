@@ -31,7 +31,7 @@ npm run build        # ra www/ (zmp-vite-plugin sinh www/app-config.json)
 npm run dev          # xem trên trình duyệt; API Zalo không có ⇒ nativeStorage lùi về localStorage
 ```
 
-Deploy (Mini App ID `3253099590902231163`, gắn vào Zalo App cũ của OA):
+Deploy (Mini App ID `685441626982830157`, gắn vào Zalo App cũ của OA):
 
 ```bash
 npm run login        # zmp login --app-id …; quét QR bằng Zalo tài khoản Admin/Developer
@@ -43,7 +43,7 @@ npm run deploy       # Development = ghi đè, thử nhanh · Testing (-t) = có
 
 ## Việc tay trước khi chạy thật
 
-1. ~~Tạo Mini App~~ — đã tạo 2026-09-29, ID `3253099590902231163`, dưới **Zalo App cũ
+1. ~~Tạo Mini App~~ — đã tạo 2026-09-29, ID `685441626982830157`, dưới **Zalo App cũ
    của OA**. Việc còn lại: xác thực chủ sở hữu (bắt buộc trước khi gửi duyệt,
    3–5 ngày làm việc) · xin quyền **camera** ở Mini App Center → Quyền Mini App.
 2. Vercel: **để trống** `ZALO_MINI_APP_SECRET` — Mini App nằm cùng Zalo App với OA

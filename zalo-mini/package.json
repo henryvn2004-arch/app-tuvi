@@ -10,7 +10,7 @@
     "dev": "vite",
     "build": "vite build",
     "typecheck": "tsc --noEmit",
-    "login": "npx -y zmp-cli@4.0.3 login --app-id 3253099590902231163",
+    "login": "npx -y zmp-cli@4.0.3 login --app-id 685441626982830157",
     "deploy": "npx -y zmp-cli@4.0.3 deploy"
   },
   "browserslist": [
