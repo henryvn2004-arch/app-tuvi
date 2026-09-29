@@ -108,10 +108,12 @@ export interface ToolContext {
 }
 
 export type GuestChart =
-  | { kind: ChartKind; nam?: number }
+  | { kind: Exclude<ChartKind, 'van-ngay'>; nam?: number }
+  | { kind: 'van-ngay'; ngay: { d: number; m: number; y: number } }
   | { kind: TimeChartKind; khi: string }
   | { kind: 'ngay-tot'; viec: string; thang: number; nam: number }
-  | { kind: 'ca-nha'; nguoi: { ten: string; birth: BirthParams }[] };
+  | { kind: 'ca-nha'; nguoi: { ten: string; birth: BirthParams }[] }
+  | { kind: 'tet'; nguoi: { ten: string; birth: BirthParams }[] };
 
 export function newToolContext(
   seedLs: Laso | null = null,
@@ -508,6 +510,11 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
     if (name === 'xem_ngay_tot' && thang >= 1 && thang <= 12 && namNT >= 2020 && namNT <= 2036 && arg?.viec) {
       ctx.charts.push({ kind: 'ngay-tot', viec: String(arg.viec), thang, nam: namNT });
     }
+    // Ảnh vận ngày — cùng ngày dương tool vừa tra (route tự tính lại từ lá số).
+    const ngayNV = Math.floor(Number(arg?.ngay));
+    if (name === 'tra_nhat_van' && ngayNV >= 1 && ngayNV <= 31 && thang >= 1 && thang <= 12 && namNT >= 1900 && namNT <= 2100) {
+      ctx.charts.push({ kind: 'van-ngay', ngay: { d: ngayNV, m: thang, y: namNT } });
+    }
     if (name === 'tra_tieu_van' && ctx.chuDe.length) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const tv = ((ctx.ls as any)?.tieuVanScores || []).find((t: any) => Number(t.nam) === Number(arg?.nam));
@@ -819,7 +826,7 @@ interface ThayKhach {
   /** Dữ liệu engine cho câu hỏi này; null = không dựng được (thiếu dữ kiện). */
   duLieu: (ctx: ToolContext) => string | null;
   /** Ảnh của môn này gửi kèm ở kênh chat (vắng = môn chưa có ảnh). */
-  anh?: ChartKind;
+  anh?: Exclude<ChartKind, 'van-ngay'>;
 }
 export const THAY_KHACH: Record<string, ThayKhach> = {
   'dieu-khong': {
@@ -1195,13 +1202,17 @@ async function execXemTetCaNha(input: Rec, ctx: ToolContext): Promise<ToolRunRes
   const chu = namAm(ctx.birth);
   if (!chu) return { content: 'Không quy được năm âm của người hỏi.', label };
 
-  const people: { ten: string; chi: string }[] = [{ ten: String(ctx.birth.name || '').trim() || 'Người hỏi', chi: chu.chi }];
+  const people: { ten: string; chi: string; birth: BirthParams }[] = [
+    { ten: String(ctx.birth.name || '').trim() || 'Người hỏi', chi: chu.chi, birth: ctx.birth },
+  ];
   if (input?.ca_nha !== false) {
     for (const m of ctx.family) {
       const n = namAm(m.birth);
-      if (n) people.push({ ten: m.ten, chi: n.chi });
+      if (n) people.push({ ten: m.ten, chi: n.chi, birth: m.birth });
     }
   }
+  // Ảnh Tết: chủ nhà chưa cho tên thì để trống (ảnh tự bỏ), không in nhãn "Người hỏi".
+  ctx.charts.push({ kind: 'tet', nguoi: people.map((p, i) => ({ ten: i ? p.ten : String(ctx.birth?.name || '').trim(), birth: p.birth })) });
 
   const L: string[] = [];
   const xd = computeXongDat(chu.nam, t.namXem);
