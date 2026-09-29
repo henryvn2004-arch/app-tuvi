@@ -237,8 +237,6 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   **Bản vanilla BỎ cờ `isLeap`** — nợ CỐ Ý, đừng sửa mò.
 - **Khoá "cùng lá số" là ÂM LỊCH + giới tính, không phải ngày dương** (lá số lặp
   chu kỳ **60 năm**). ⚠️ `lasoKey()` băm ngày DƯƠNG — không tái dùng để gom lá số.
-- **Sao lưu năm (`anSaoLuuNam`) theo Thái Thứ Lang: gắn `luuStars` RIÊNG, cấm trộn vào `stars`**
-  (đổi cả chấm điểm/cách cục gốc). Lưu Kình/Đà cố định ±1 — KHÁC Kình/Đà gốc, đừng đồng bộ. `check:saoluu`.
 - **Bảng ĐỐI XỨNG tự kiểm được, không cần nguồn ngoài** (A nhìn B = B nhìn A).
   `BatTrachTool` (`tools-shared/bat-trach.js`) là nguồn DUY NHẤT; 3 bản chép tay cũ
   đều sai 12-15/64 ô. `npm run check:batrach`.
