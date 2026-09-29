@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-492 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+494 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -25,6 +25,8 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 📰 Bản tin kinh tế – đời sống hằng ngày cho thầy (Gemini + Google Search) |
+| 1 | 2026-09 | `2026-09.md` | 🔁 Kênh chat: khách quay lại sau vài tiếng → hỏi "câu này cho ai?" |
 | 1 | 2026-09 | `2026-09.md` | 🖥 Zalo Web/PC không hiện nút gợi ý — in kèm lựa chọn thành chữ |
 | 1 | 2026-09 | `2026-09.md` | 🌗 Tháng nhuận: cờ `isLeapMonth` từ chat tới Bát Tự và ảnh |
 | 1 | 2026-09 | `2026-09.md` | 📸 Zalo Mini App bước 5: chụp ảnh gửi Hỏi Thầy · ảnh lá số (lưu/chia sẻ) · chia sẻ vận ngày |
