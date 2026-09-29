@@ -47,7 +47,17 @@ const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY || '';
 // KHÔNG đọc được từ app_config, đổi MODEL thì phải sửa trực tiếp ở đây rồi
 // deploy; đổi THỨ TỰ thì không, chỉ cần đổi DB hoặc override `provider` ở
 // chỗ gọi.
-const ANTHROPIC_MODEL = 'claude-opus-5';
+// 2026-09-29 (Henry): Opus 5 → Opus 5.5 — rẻ hơn 20% ($4/$20 vs $5/$25), và là
+// PRIMARY của mọi route luận giải (`luanGiai:true`, xem `providerOrder`). A/B
+// chấm mù 4 model trên prompt mới: Opus 5.5 đứng đầu 2/3 giám khảo — nhật ký
+// 2026-09.md "A/B Gemini 3.8 Flash vs Sonnet 5.5 vs Opus 5.5". Opus 5.5 KHÔNG
+// tắt được thinking và cấm prefill/sampling params — body dưới không gửi các thứ đó.
+const ANTHROPIC_MODEL = 'claude-opus-5-5';
+// Cùng một đoạn tiếng Việt, Claude tốn ~2,7× token đầu ra so với Gemini (tokenizer
+// + thinking; đo 27 lượt thật, nhật ký trên). Trần `maxTokens` của các route được
+// chỉnh theo Gemini ⇒ nhánh Anthropic nhân hệ số này, không thì cắt giữa câu (4/18
+// lượt Claude cắt ở trần cũ). Trần chỉ chặn phần sinh dư — không tốn thêm đồng nào.
+const ANTHROPIC_MAX_TOKENS_FACTOR = 2.5;
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 // Kimi K3 (Moonshot AI), endpoint OpenAI-compatible Chat Completions. LUÔN
 // đứng CUỐI chuỗi (xem CANONICAL_ORDER) — không ổn định, chỉ dùng làm lưới đỡ
@@ -111,6 +121,14 @@ export interface LlmTextOpts {
    * (vd cron viết bài muốn Kimi dù DB đang ưu tiên Gemini cho toàn site).
    */
   provider?: 'kimi' | 'anthropic' | 'gemini';
+  /** Lượt này là bản LUẬN GIẢI bán cho khách ⇒ primary lấy từ app_config
+   * `chat.luan_giai_provider` (mặc định 'anthropic' = Opus 5.5, Henry chốt
+   * 2026-09-29), fallback vẫn theo `CANONICAL_ORDER` (⇒ Gemini rồi Kimi). TÁCH
+   * khỏi `chat.standalone_provider` vì khoá đó còn chi phối cron/marketing
+   * (hàng nghìn lượt/tháng) — lật nó là lật cả những thứ không bán cho ai.
+   * `provider` (nếu có) vẫn thắng. Nhánh Anthropic mặc định `effort:'low'` cho
+   * lượt này (đo: rẻ hơn, chữ không kém — xem `effort`). */
+  luanGiai?: boolean;
   /** Độ "nghĩ" của model cho ĐÚNG lượt này — map thẳng sang
    * `output_config.effort` của Anthropic. CHỈ nhánh Anthropic đọc field này;
    * Gemini/Kimi bỏ qua. Bỏ trống = mặc định của model (`high`).
@@ -362,7 +380,7 @@ function buildAnthropicBody(o: LlmTextOpts, maxTokens: number, stream: boolean) 
   // xuống nhánh này đều chết rồi lặng lẽ sang Kimi. Câu dẫn/fence quanh JSON do
   // `parseLlmJson()` (lib/llm/json.ts) bóc — mọi chỗ gọi json:true bắt buộc qua đó.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const body: any = { model: ANTHROPIC_MODEL, max_tokens: maxTokens, messages };
+  const body: any = { model: ANTHROPIC_MODEL, max_tokens: Math.round(maxTokens * ANTHROPIC_MAX_TOKENS_FACTOR), messages };
   if (o.system) {
     // cacheSystem opt-in (xem LlmTextOpts): bọc `system` thành 1 khối content
     // với breakpoint TTL 1h — 5' mặc định KHÔNG đủ cho lượt chạy dài (24 phần
@@ -375,7 +393,8 @@ function buildAnthropicBody(o: LlmTextOpts, maxTokens: number, stream: boolean) 
       : o.system;
   }
   // `effort` phải nằm TRONG `output_config`, không phải field top-level.
-  if (o.effort) body.output_config = { effort: o.effort };
+  const effort = o.effort || (o.luanGiai ? 'low' : undefined);
+  if (effort) body.output_config = { effort };
   if (stream) body.stream = true;
   return body;
 }
@@ -452,13 +471,14 @@ const CANONICAL_ORDER = ['anthropic', 'gemini', 'kimi'];
 // KHÔNG đụng đến `chat.standalone_provider` trong DB — cấu hình đó vẫn quyết
 // định primary cho mọi lượt KHÔNG truyền override. Có override → bỏ qua hẳn
 // bước đọc DB (đỡ một round-trip Supabase không cần thiết).
-async function providerOrder(override?: string): Promise<string[]> {
+async function providerOrder(override?: string, luanGiai?: boolean): Promise<string[]> {
   if (override && CANONICAL_ORDER.includes(override)) {
     return [override, ...CANONICAL_ORDER.filter((p) => p !== override)];
   }
   let primary = 'gemini';
   try {
-    primary = (await getChatConfig()).standaloneProvider || 'gemini';
+    const cfg = await getChatConfig();
+    primary = (luanGiai ? cfg.luanGiaiProvider : cfg.standaloneProvider) || 'gemini';
   } catch {
     /* getChatConfig không throw; phòng hờ → gemini (Kimi không ổn định, không
      * làm fallback-của-fallback được — xem CANONICAL_ORDER phía trên). */
@@ -494,7 +514,7 @@ export interface LlmTextFullResult {
  */
 export async function llmTextFull(o: LlmTextOpts): Promise<LlmTextFullResult> {
   const maxTokens = o.maxTokens ?? 2000;
-  const order = await providerOrder(o.provider);
+  const order = await providerOrder(o.provider, o.luanGiai);
   const t0 = Date.now();
   let lastErr: unknown;
   for (const p of order) {
@@ -556,7 +576,7 @@ export async function llmStreamResponse(
   // override provider ở caller (vd tubinh/route.ts luồng 16 phần) bị ÂM THẦM
   // bỏ qua, vẫn chạy đúng thứ tự mặc định dù đã truyền `provider:'anthropic'`.
   // llmTextFull/callLLMTools không dính bệnh này (đã truyền đúng từ đầu).
-  const order = await providerOrder(o.provider);
+  const order = await providerOrder(o.provider, o.luanGiai);
   const enc = new TextEncoder();
 
   const emitDelta = (t: string) =>

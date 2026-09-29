@@ -171,6 +171,7 @@ async function buildReport(p: NhanMachProfile, userId: string, key: string, coLa
   const ask = async (nudge: boolean) => {
     try {
       const r = await llmTextFull({
+        luanGiai: true,
         system: NHAN_MACH_SYSTEM_PROMPT,
         prompt:
           prompt +

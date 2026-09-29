@@ -695,7 +695,7 @@ async function runPost(request: NextRequest) {
     // ⚠️ `'anthropic'` còn lại ở THAM SỐ THỨ HAI bên dưới KHÔNG phải provider —
     // đó là `format`, chọn byte-shape SSE mà tu-binh.html parse. Giữ nguyên.
     return await llmStreamResponse(
-      { system: SYSTEM_PROMPT_TUBINH, prompt: userPrompt, maxTokens: phanInfo.maxTokens },
+      { luanGiai: true, system: SYSTEM_PROMPT_TUBINH, prompt: userPrompt, maxTokens: phanInfo.maxTokens },
       'anthropic',
       { 'X-Phan': String(phanNum), 'X-Phan-Ten': encodeURIComponent(phanInfo.ten) },
     );

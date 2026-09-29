@@ -259,7 +259,8 @@ async function runPost(request: NextRequest) {
     // Flash primary, Opus 5 lùi xuống lưới đỡ ngay sau. Số đo và lý do đầy đủ
     // ở app/api/lasotuvi/route.ts (cùng lượt chốt). Lật ngược không cần deploy:
     // `chat.standalone_provider` trong app_config.
-    let rr = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem, effort: EFFORT });
+    // 2026-09-29: `luanGiai:true` ⇒ Opus 5.5 primary, Gemini backup (`chat.luan_giai_provider`).
+    let rr = await llmTextFull({ luanGiai: true, system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem, effort: EFFORT });
     // Cùng lớp lỗi với lasotuvi/route.ts (xem chú thích dài ở đó): output chạm
     // trần `max_tokens` là bị API cắt GIỮA CÂU, mà trước 2026-09 không nhánh
     // provider nào đọc `stop_reason` nên bản cụt đi thẳng tới khách đã trả tiền.
@@ -268,7 +269,7 @@ async function runPost(request: NextRequest) {
     if (rr.truncated) {
       console.error(`[van-han-nam] phần ${phan} bị cắt ở trần ${maxTok} — sinh lại với ${maxTok * 2}`);
       try {
-        const retry = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem, effort: EFFORT });
+        const retry = await llmTextFull({ luanGiai: true, system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem, effort: EFFORT });
         if (!retry.truncated || retry.text.length > rr.text.length) rr = retry;
       } catch (e) {
         console.error(`[van-han-nam] sinh lại phần ${phan} hỏng, giữ bản đầu:`, (e as Error).message);

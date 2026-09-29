@@ -642,6 +642,7 @@ Dùng các số đo này để xác định hình dạng khuôn mặt CHÍNH XÁ
   let text;
   try {
     text = await llmText({
+      luanGiai: true,
       system: SP_NGOAI_HINH + measurementContext,
       prompt: `Giới tính: ${genderLabel}. IDs kiểu tóc hợp lệ: ${validHairIds}. Phân tích và trả về JSON. Chọn TẤT CẢ ${gender === 'nu' ? '5-7' : '5'} kiểu phù hợp nhất trong danh sách.`,
       images: [{ data: image, mediaType }],
@@ -829,6 +830,7 @@ Theo cổ pháp, người mệnh ${napAmHanh} hợp với phong cách: ${menhMak
   let text;
   try {
     text = await llmText({
+      luanGiai: true,
       system: SP_TRANG_DIEM + napAmContext + measurementContext,
       prompt: 'Phân tích khuôn mặt và trả về JSON phong cách makeup phù hợp.',
       images: [{ data: image, mediaType }],
@@ -1007,6 +1009,7 @@ Phần an_uong cũng phải tính đến mệnh ${menhHanh} (VD: mệnh Hỏa c�
   let text;
   try {
     text = await llmText({
+      luanGiai: true,
       system: SP_DA_LIEU + menhContext,
       prompt: 'Phân tích tình trạng da trong ảnh và trả về JSON tư vấn holistic đầy đủ 4 phần.',
       images: [{ data: image, mediaType }],
@@ -1175,6 +1178,7 @@ Nếu kết quả phân tích ảnh cho phép, ưu tiên season này. Nếu tôn
   let raw;
   try {
     raw = await llmText({
+      luanGiai: true,
       system: SP_PERSONAL_COLOR + menhContext,
       prompt: 'Phân tích personal color từ ảnh này và trả về JSON.',
       images: [{ data: image, mediaType }],
@@ -1518,7 +1522,7 @@ async function runPost(request) {
     // Stream qua helper Gemini-primary + Anthropic-backup. GIỮ NGUYÊN shape
     // SSE mà frontend parse: data:{t} / {err} / [DONE] (format 'delta').
     return await llmStreamResponse(
-      { system: systemPrompt, prompt: userText, images, maxTokens },
+      { luanGiai: true, system: systemPrompt, prompt: userText, images, maxTokens },
       'delta',
     );
 

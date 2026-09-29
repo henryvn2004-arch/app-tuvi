@@ -686,7 +686,7 @@ Trả về JSON thuần túy:
   let raw: string;
   try {
     // Nâng 50% cùng đợt (Henry chốt 2026-08-20).
-    raw = await llmText({ system: ARC_GIONG_NGU_HANH, prompt, maxTokens: 1500 });
+    raw = await llmText({ luanGiai: true, system: ARC_GIONG_NGU_HANH, prompt, maxTokens: 1500 });
   } catch {
     return err('Lỗi hệ thống.', 500);
   }

@@ -48,6 +48,14 @@ export interface ChatConfig {
    */
   standaloneProvider: string;
   /**
+   * Provider ĐỨNG ĐẦU cho các lượt LUẬN GIẢI bán cho khách (`llmText*` gọi với
+   * `luanGiai:true` — lasotuvi, van-han-nam, tubinh, xem-tuoi, tuong-mat, …).
+   * TÁCH khỏi `standaloneProvider` (khoá đó còn chi phối cron/marketing). Henry
+   * chốt 2026-09-29: 'anthropic' (Opus 5.5) primary → Gemini 3.8 Flash backup.
+   * Đổi qua `chat.luan_giai_provider` trong app_config, KHÔNG cần deploy.
+   */
+  luanGiaiProvider: string;
+  /**
    * Định tuyến provider LLM theo từng kịch bản (toolType) → 'gemini' |
    * 'anthropic', dùng bởi rail chat (lib/agent/run.ts). Key '_default' áp cho
    * kịch bản không liệt kê. Chỉ có tác dụng cho các kịch bản prose-thuần an
@@ -95,6 +103,7 @@ export const DEFAULTS: ChatConfig = {
   // Giá trị dưới đây chỉ là fallback-khi-Supabase-không-đọc-được — DB LIVE
   // `chat.standalone_provider` mới là thứ quyết định thật lúc chạy.
   standaloneProvider: 'gemini',
+  luanGiaiProvider: 'anthropic',
   // 🔴 CHỐT HENRY 2026-08-24 (vá cùng ngày, sau lượt Opus-primary ở trên):
   // "Toàn bộ chat rail dùng gemini flash hết. Ko có opus luôn. Vì phần chat
   // nó user dùng nhiều. Mà opus api thì mắc lắm" — rail chat (lượt hỏi-đáp
@@ -130,6 +139,7 @@ const KEY_MAP: Record<string, keyof ChatConfig> = {
   'chat.cost': 'cost',
   'chat.provider_routes': 'providerRoutes',
   'chat.standalone_provider': 'standaloneProvider',
+  'chat.luan_giai_provider': 'luanGiaiProvider',
   'chat.companion': 'companion',
 };
 

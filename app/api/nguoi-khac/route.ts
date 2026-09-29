@@ -194,6 +194,7 @@ async function buildReport(
   const ask = async (nudge: boolean) => {
     try {
       const r = await llmTextFull({
+        luanGiai: true,
         system: NGUOI_KHAC_SYSTEM_PROMPT,
         prompt:
           prompt +

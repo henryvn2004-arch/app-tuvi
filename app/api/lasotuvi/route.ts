@@ -493,9 +493,11 @@ async function runPost(request: NextRequest) {
     // ⚠️ `effort` và THINK_BUDGET trong `maxTok` GIỮ NGUYÊN dù Gemini bỏ qua
     // chúng: đó là ngân sách của nhánh Opus khi Gemini chết. Dọn đi là lượt
     // fallback bị cắt giữa câu.
-    // Lật ngược KHÔNG cần deploy: đổi `chat.standalone_provider` trong
-    // app_config sang 'anthropic'. Chi tiết: nhat-ky/2026-09.md.
-    let r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, effort: EFFORT });
+    // 🔺 2026-09-29 (Henry): LẬT LẠI — `luanGiai:true` ⇒ Opus 5.5 primary, Gemini
+    // backup (khoá `chat.luan_giai_provider`, KHÔNG phải `chat.standalone_provider`).
+    // Căn cứ: A/B chấm mù trên prompt mới (nhật ký 2026-09.md "A/B Gemini 3.8 Flash
+    // vs Sonnet 5.5 vs Opus 5.5"). Lật về Gemini không cần deploy: đổi khoá đó.
+    let r = await llmTextFull({ luanGiai: true, system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, effort: EFFORT });
 
     // ── Bị CẮT giữa câu → sinh lại MỘT lần với trần gấp đôi ────────────────
     // Đo 2026-09 trên 46 bản luận ĐÃ BÁN: 77/974 phần (7,9%) kết thúc giữa câu,
@@ -512,7 +514,7 @@ async function runPost(request: NextRequest) {
     if (r.truncated) {
       console.error(`[lasotuvi] phần ${phan} bị cắt ở trần ${maxTok} — sinh lại với ${maxTok * 2}`);
       try {
-        const retry = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem: true, effort: EFFORT });
+        const retry = await llmTextFull({ luanGiai: true, system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem: true, effort: EFFORT });
         // Chỉ nhận bản mới khi nó THẬT SỰ khá hơn: hết cụt, hoặc chí ít dài hơn.
         // Lượt hai vẫn có thể cụt (văn dài hơn trần mới) — lúc đó bản dài hơn
         // vẫn là bản ít thiệt cho người đọc hơn.
