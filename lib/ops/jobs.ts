@@ -178,11 +178,6 @@ export const JOBS: JobSpec[] = [
     since: '2026-09-28' },
   // Tin nhắc chủ động cho người đã chat ở kênh — lib/channels/nudge.ts. Ngoài
   // 08–21h VN chạy ra `skipped` (vẫn ghi cron_runs). `since` = ngày merge.
-  // Bản tin kinh tế – đời sống cho rail chat — lib/ban-tin.ts (Gemini + Google Search,
-  // KHÔNG fallback: model khác không tra mạng). Lỗi thì giữ bản hôm trước. `since` = ngày merge.
-  { key: 'ban-tin', label: 'Bản tin kinh tế hằng ngày', source: 'vercel', everyMinutes: D,
-    schedule: '05:40 VN hằng ngày', sink: 'ban_tin_ngay', path: '/api/cron/ban-tin',
-    since: '2026-09-29' },
   { key: 'chat-nudge', label: 'Tin nhắc kênh chat', source: 'vercel', everyMinutes: H,
     schedule: 'mỗi giờ (:07), gửi 08–21h VN', sink: 'chat_sessions.nudged_at + events', path: '/api/cron/chat-nudge',
     since: '2026-09-29' },

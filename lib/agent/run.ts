@@ -29,7 +29,6 @@ import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from 
 import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine, RAIL_MAX_TOKENS, LASO_MAX_TOKENS, HOI_CHAN_MAX_TOKENS, apMauThay } from '@/lib/agent/prompts';
 import { tinhNhip, nhipHint } from '@/lib/agent/nhip';
 import { cacChuDe, khoiChuDe } from '@/lib/agent/luan-chu-de';
-import { khoiBanTin } from '@/lib/ban-tin';
 import { personaVoice, PERSONAS } from '@/lib/agent/personas';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
@@ -416,10 +415,6 @@ async function runAgentInner(
         focusHintText = khoiChuDe(lastQ, res.ls, req.birth.gender ?? null) || focusHint(lastQ);
       }
     }
-    // Bản tin kinh tế – đời sống hằng ngày (lib/ban-tin.ts): câu dính tiền/việc/nhà đất ⇒
-    // chèn CÙNG chỗ với khối chủ đề (cuối tin user, không đụng system ⇒ cache không vỡ).
-    const banTin = await khoiBanTin(lastQ, ctx.chuDe || []);
-    if (banTin) focusHintText = focusHintText ? `${focusHintText}\n\n${banTin}` : banTin;
     const hasLaso = !!ctx.ls;
     // Hội chẩn (docs/DAC-TRUNG-PLAN.md): ba thầy trong một lượt ⇒ chữ dài hơn
     // lượt thường. Nới trần RIÊNG lượt này — trần chung 1350 cắt giữa phần Kết.
