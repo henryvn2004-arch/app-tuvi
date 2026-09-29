@@ -16,6 +16,7 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 import { NextRequest, NextResponse } from 'next/server';
+import { CORS_HEADERS, options } from '@/lib/cors';
 import { computeVanNgay, computeVanNgayCaNhan, computeTuan, todayVN } from '@/lib/engine/van-ngay';
 import { computeLaso } from '@/lib/engine/laso';
 import type { BirthParams } from '@/lib/contract/v1';
@@ -33,6 +34,15 @@ function parseDate(s: string | null): { y: number; m: number; d: number } | null
   return { y, m: mo, d };
 }
 
+// CORS: Zalo Mini App gọi từ domain của Zalo (POST JSON ⇒ có preflight OPTIONS).
+function json(body: unknown, init?: { status?: number; headers?: Record<string, string> }) {
+  return NextResponse.json(body, { status: init?.status, headers: { ...CORS_HEADERS, ...init?.headers } });
+}
+
+export async function OPTIONS() {
+  return options();
+}
+
 /**
  * `?tuan=0` tắt dải 7 ngày. Bấm vào một ngày trong dải thì thẻ chỉ cần dữ liệu
  * của NGÀY đó — dải vẫn neo ở hôm nay, xin lại 7 ngày nữa là phí băng thông và
@@ -44,12 +54,12 @@ export async function GET(req: NextRequest) {
   try {
     const data = computeVanNgay(q.d, q.m, q.y);
     const tuan = sp.get('tuan') === '0' ? undefined : computeTuan(q.d, q.m, q.y);
-    return NextResponse.json(
+    return json(
       { ok: true, ...data, ...(tuan ? { tuan } : {}) },
       { headers: { 'Cache-Control': DAY_CACHE } },
     );
   } catch (e) {
-    return NextResponse.json({ ok: false, error: (e as Error).message }, { status: 500 });
+    return json({ ok: false, error: (e as Error).message }, { status: 500 });
   }
 }
 
@@ -58,7 +68,7 @@ export async function POST(req: NextRequest) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ ok: false, error: 'Body không phải JSON.' }, { status: 400 });
+    return json({ ok: false, error: 'Body không phải JSON.' }, { status: 400 });
   }
   const q = parseDate(body?.d || null) || todayVN();
   const wantTuan = body?.tuan !== false;
@@ -67,14 +77,14 @@ export async function POST(req: NextRequest) {
   try {
     day = computeVanNgay(q.d, q.m, q.y);
   } catch (e) {
-    return NextResponse.json({ ok: false, error: (e as Error).message }, { status: 500 });
+    return json({ ok: false, error: (e as Error).message }, { status: 500 });
   }
 
   // Không có lá số → trả đúng tầng ngày, KHÔNG lỗi. Thẻ vẫn dùng được cho
   // khách chưa từng lập lá số; chỗ trống của khối cá nhân chính là CTA.
   const birth = body?.birth;
   if (!birth || !birth.day || !birth.month || !birth.year) {
-    return NextResponse.json({
+    return json({
       ok: true, ...day,
       ...(wantTuan ? { tuan: computeTuan(q.d, q.m, q.y) } : {}),
     });
@@ -83,7 +93,7 @@ export async function POST(req: NextRequest) {
   try {
     const r = computeLaso(birth, q.y);
     if (!r.ok) {
-      return NextResponse.json({
+      return json({
         ok: true, ...day, caNhanError: r.error,
         ...(wantTuan ? { tuan: computeTuan(q.d, q.m, q.y) } : {}),
       });
@@ -92,7 +102,7 @@ export async function POST(req: NextRequest) {
     const caNhan = computeVanNgayCaNhan(ls, day, q.d, q.m, q.y);
     // Chi năm sinh để đánh dấu ngày xung tuổi CHÍNH người này trong dải.
     const chiNamSinh = String(ls.canChiNam || '').split(' ')[1] || undefined;
-    return NextResponse.json({
+    return json({
       ok: true, ...day,
       ...(wantTuan ? { tuan: computeTuan(q.d, q.m, q.y, 7, chiNamSinh) } : {}),
       ...(caNhan ? { caNhan } : {}),
@@ -100,7 +110,7 @@ export async function POST(req: NextRequest) {
   } catch (e) {
     // Lá số hỏng KHÔNG được kéo sập cả thẻ — tầng ngày vẫn đúng và vẫn đáng xem.
     console.warn('[van-ngay] tính lá số hỏng:', (e as Error).message);
-    return NextResponse.json({
+    return json({
       ok: true, ...day,
       ...(wantTuan ? { tuan: computeTuan(q.d, q.m, q.y) } : {}),
     });
