@@ -33,7 +33,7 @@ type Palace = {
   stars?: Star[];
   majorStars?: Star[];
   /** Sao lưu năm xem — engine `danhGiaSaoLuu` (Thái Thứ Lang), không trộn vào `stars`. */
-  luuStars?: { ten: string }[];
+  luuStars?: { ten: string; xau?: boolean }[];
 };
 type Item = { text: string; color: string; bold?: boolean };
 
@@ -70,8 +70,6 @@ const BRIGHT: Record<string, string> = { Miếu: 'M', Vượng: 'V', Đắc: 'Đ
 const BAD_TYPES = new Set(['sát tinh', 'hung tinh', 'bại tinh', 'tuế_tinh']);
 const TRANG_SINH = new Set(['Tràng Sinh', 'Mộc Dục', 'Quan Đới', 'Lâm Quan', 'Đế Vượng', 'Suy', 'Bệnh', 'Tử', 'Mộ', 'Tuyệt', 'Thai', 'Dưỡng']);
 const TUAN_TRIET = new Set(['Tuần', 'Triệt', 'Tuần+Triệt']);
-// Sao lưu xấu (đỏ) — cùng tập `_LUU_XAU` của public/laso-chart.js; còn lại xanh.
-const LUU_XAU = new Set(['Lưu Tang Môn', 'Lưu Bạch Hổ', 'Lưu Thiên Khốc', 'Lưu Thiên Hư', 'Lưu Kình Dương', 'Lưu Đà La', 'Lưu Hóa Kỵ']);
 const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
 const POS = LUOI_CHI;
 
@@ -182,7 +180,7 @@ function Cell({ p, canNam, dvTuoi, cur }: { p?: Palace; canNam: string; dvTuoi?:
                 lineHeight: `${LUU_ROW_H}px`,
                 fontWeight: 700,
                 marginRight: 7,
-                color: LUU_XAU.has(s.ten) ? '#C0392B' : '#1455A4',
+                color: s.xau ? '#C0392B' : '#1455A4', // cờ `xau` do engine đánh dấu
               }}
             >
               {s.ten.replace(/^Lưu /, 'L.').toUpperCase()}

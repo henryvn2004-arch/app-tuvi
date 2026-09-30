@@ -726,10 +726,13 @@ function anSaoLuuNam(namXem) {
 
 // Gắn sao lưu năm `namXem` vào lá số ĐÃ AN (không đổi `palaces[].stars` — mọi
 // chấm điểm/cách cục gốc đọc mảng đó, trộn sao lưu vào là đổi cả lá số gốc).
-// Trả về { ...anSaoLuuNam, theoCung: { [idx]: [{ten, loai, sao?}] }, diemNong: [...] }.
+// Trả về { ...anSaoLuuNam, theoCung: { [idx]: [{ten, loai, xau, sao?}] }, diemNong: [...] }.
+// `xau` = sao lưu mang tính hung (Thái Thứ Lang 4.1–4.3 + Lưu Hóa Kỵ) — MỌI nơi vẽ
+// đọc cờ này để tô đỏ, không tự giữ danh sách riêng.
 // `diemNong` CHỈ chép đúng các ca Thái Thứ Lang nêu đích danh (đồng cung) — không
 // tự đặt ngưỡng "nhiều sát tinh": ca đó chỉ liệt kê sát/bại tinh đồng cung để
 // người luận tự cân.
+const LUU_XAU = new Set(['Lưu Tang Môn', 'Lưu Bạch Hổ', 'Lưu Thiên Khốc', 'Lưu Thiên Hư', 'Lưu Kình Dương', 'Lưu Đà La']);
 function danhGiaSaoLuu(palaces, namXem) {
   const L = anSaoLuuNam(namXem);
   const byIdx = {};
@@ -745,11 +748,11 @@ function danhGiaSaoLuu(palaces, namXem) {
 
   const theoCung = {};
   const push = (idx, item) => { (theoCung[idx] = theoCung[idx] || []).push(item); };
-  for (const [ten, idx] of Object.entries(L.sao)) push(idx, { ten, loai: 'luu' });
+  for (const [ten, idx] of Object.entries(L.sao)) push(idx, { ten, loai: 'luu', xau: LUU_XAU.has(ten) });
   for (const hoa of ['Lộc', 'Quyền', 'Khoa', 'Kỵ']) {
     const sao = L.tuHoa[hoa];
     const p = sao && palaces.find(x => (x.stars || []).some(s => s.ten === sao));
-    if (p) push(p.idx, { ten: 'Lưu Hóa ' + hoa, loai: 'luu_hoa', sao });
+    if (p) push(p.idx, { ten: 'Lưu Hóa ' + hoa, loai: 'luu_hoa', sao, xau: hoa === 'Kỵ' });
   }
 
   const diemNong = [];
