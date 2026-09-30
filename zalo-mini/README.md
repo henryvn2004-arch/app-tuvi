@@ -45,6 +45,19 @@ Deploy xong CLI in QR + link `https://zalo.me/s/685441626982830157/?env=DEVELOPM
 `zmp login` ghi `APP_ID` + `ZMP_TOKEN` vào `zalo-mini/.env` — file đó đã bị
 `.gitignore`, **không commit** (token là khoá deploy).
 
+## Trạm chuyển tiếp ở Việt Nam (BẮT BUỘC cho đăng nhập)
+
+Zalo trả `-501` ("IP address not inside Vietnam") khi server đọc id người dùng
+(`graph.zalo.me/v2.0/me`) từ IP ngoài VN. Vercel chạy ở Mỹ ⇒ phải đi qua trạm Caddy
+trên VPS VN (FastByte, IP `103.195.237.45`, 59k/tháng, gia hạn hằng tháng):
+
+- Cài/cài lại: `scripts/zalo-relay-setup.sh` (đầu file có lệnh một dòng).
+- Vercel: `ZALO_GRAPH_RELAY_URL=https://103-195-237-45.sslip.io` +
+  `ZALO_GRAPH_RELAY_KEY` (khớp khoá truyền cho script). Thiếu hai biến ⇒ gọi thẳng
+  graph.zalo.me ⇒ `-501`.
+- VPS hết hạn / đổi IP ⇒ đăng nhập Mini App chết, câu lỗi hiện `(trạm HTTP …)` hoặc
+  `(lỗi mạng tới Zalo)`.
+
 ## Việc tay trước khi chạy thật
 
 1. ~~Tạo Mini App~~ — đã tạo 2026-09-29, ID `685441626982830157`, dưới **Zalo App cũ

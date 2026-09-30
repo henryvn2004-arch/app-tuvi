@@ -28,9 +28,13 @@ export const ZALO_MINI_PLATFORM = 'zalo-mini';
 // Mini App thuộc một Zalo App; nếu khác app của OA thì đặt secret riêng.
 const APP_SECRET = process.env.ZALO_MINI_APP_SECRET || process.env.ZALO_APP_SECRET || '';
 
-// CHỈ `id`: từ zmp-sdk 2.35 token lấy không hỏi người dùng chỉ đọc được id — hỏi
-// thêm `name` là Zalo từ chối cả lượt (tên/ảnh cần authorize scope.userInfo).
-const ME_URL = 'https://graph.zalo.me/v2.0/me?fields=id';
+// CHỈ `id`: token lấy không hỏi người dùng (zmp-sdk ≥2.35) chỉ đọc được id.
+// ⚠️ Zalo trả `-501` ("IP address not inside Vietnam") cho MỌI lượt đọc thông tin
+// người dùng từ IP ngoài VN — Vercel chạy ở Mỹ ⇒ đi qua trạm Caddy trên VPS VN
+// (scripts/zalo-relay-setup.sh): ZALO_GRAPH_RELAY_URL + ZALO_GRAPH_RELAY_KEY.
+const GRAPH_BASE = process.env.ZALO_GRAPH_RELAY_URL || 'https://graph.zalo.me';
+const RELAY_KEY = process.env.ZALO_GRAPH_RELAY_KEY || '';
+const ME_URL = `${GRAPH_BASE.replace(/\/+$/, '')}/v2.0/me?fields=id`;
 const OA_USER_URL = 'https://openapi.zalo.me/v3.0/oa/user/detail';
 
 export const zaloMiniConfigured = () => !!APP_SECRET;
@@ -44,13 +48,17 @@ export async function verifyMiniAppToken(accessToken: string): Promise<{ id: str
   const proof = createHmac('sha256', APP_SECRET).update(accessToken).digest('hex');
   try {
     const res = await fetch(ME_URL, {
-      headers: { access_token: accessToken, appsecret_proof: proof },
+      headers: {
+        access_token: accessToken,
+        appsecret_proof: proof,
+        ...(RELAY_KEY ? { 'X-Relay-Key': RELAY_KEY } : {}),
+      },
       cache: 'no-store',
     });
     const d = (await res.json().catch(() => ({}))) as { id?: string; error?: number; message?: string };
     if (d.error || !isZaloId(d.id)) {
       console.error('[zalo-mini] /me từ chối token', d.error, d.message);
-      return { error: d.error ? `Zalo ${d.error}` : 'Zalo không trả id' };
+      return { error: d.error ? `Zalo ${d.error}` : res.ok ? 'Zalo không trả id' : `trạm HTTP ${res.status}` };
     }
     return { id: d.id };
   } catch (e) {
