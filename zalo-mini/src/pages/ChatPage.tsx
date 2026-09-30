@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, Icon, Input } from 'zmp-ui';
+import { Button, Icon, Input, useSnackbar } from 'zmp-ui';
 import { toBirthParams, type Chart } from '../lib/birth';
 import { askThay, newSessionId } from '../lib/chat';
 import { loadMyChart } from '../lib/charts';
@@ -36,6 +36,7 @@ export default function ChatPage({
   const [busy, setBusy] = useState(false);
   const [chips, setChips] = useState<string[]>(GOI_Y);
   const endRef = useRef<HTMLDivElement>(null);
+  const { openSnackbar } = useSnackbar();
 
   // Không được chọn từ Sổ thì hỏi về lá số "của tôi" (nếu đã lưu).
   useEffect(() => {
@@ -61,8 +62,16 @@ export default function ChatPage({
   async function attach() {
     try {
       setPhoto(await pickImage());
-    } catch {
-      /* người dùng huỷ chọn ảnh — không có gì để báo */
+    } catch (e) {
+      // Huỷ chọn (-2003) thì im; lỗi khác phải hiện kèm mã — nuốt hết thì bấm
+      // máy ảnh không ra gì mà không ai biết vì sao (chưa được cấp quyền chọn
+      // media của Zalo, -1403…).
+      const { code, message } = e as { code?: number; message?: string };
+      if (code === -2003 || message === 'Chưa chọn ảnh') return;
+      openSnackbar({
+        text: `Chưa mở được ảnh${code ? ` (Zalo ${code})` : ''}: ${message || 'lỗi lạ'}`,
+        type: 'error',
+      });
     }
   }
 
@@ -99,7 +108,7 @@ export default function ChatPage({
                 text:
                   m.text ||
                   d.paywall?.reason ||
-                  'Đã hết lượt hỏi miễn phí. Nạp thêm Lượng trên tuviminhbao.com để hỏi tiếp.',
+                  'Đã hết lượt hỏi miễn phí và số dư Lượng chưa đủ cho câu hỏi này.',
               }));
             }
             setChips(d.suggestions?.slice(0, 3) || []);
