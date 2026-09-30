@@ -1,6 +1,6 @@
 // app/api/og/la-so-anh/route.tsx
 // ẢNH LÁ SỐ 12 CUNG cho kênh chat (Zalo/Messenger/WhatsApp/Telegram) — app chat
-// không có lưới lá số như web, nên gửi hẳn một tấm ảnh (1080×1350, chữ to cho
+// không có lưới lá số như web, nên gửi hẳn một tấm ảnh (1080×1500, chữ to cho
 // điện thoại).
 //
 // Bố cục theo khuôn lá số của phần mềm "An Sao — Tử Vi Thiên Lương" (bản tham
@@ -38,13 +38,14 @@ type Palace = {
 type Item = { text: string; color: string; bold?: boolean };
 
 const W = 1080;
-const H = 1350;
+const H = 1526; // cao hơn 4:5 của lib/og/brand — ô 9 sao + hàng sao lưu cần chỗ (+ dòng chú giải LEGEND_H)
+const LEGEND_H = 26;
 const PAD = 16;
 const HEAD = 64;
 const CW = (W - PAD * 2) / 4;
-const CH = (H - HEAD - FOOT - PAD) / 4;
+const CH = (H - HEAD - FOOT - PAD - LEGEND_H) / 4;
 // Chiều cao dành cho hai cột phụ tinh + hàng sao lưu trong một ô (đo trên ảnh thật).
-const COL_H = 150;
+const COL_H = 200;
 const FS_MIN = 11;
 const LUU_ROW_H = 17;
 const LUU_PER_ROW = 3;
@@ -72,6 +73,46 @@ const TRANG_SINH = new Set(['Tràng Sinh', 'Mộc Dục', 'Quan Đới', 'Lâm Q
 const TUAN_TRIET = new Set(['Tuần', 'Triệt', 'Tuần+Triệt']);
 const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
 const POS = LUOI_CHI;
+// Khuôn Thiên Lương — cùng bảng với public/laso-chart.js (_CHI_HANH/_TAM_HOP_MENH/_VOID_AT).
+const CHI_HANH = ['thủy', 'thổ', 'mộc', 'mộc', 'thổ', 'hỏa', 'hỏa', 'thổ', 'kim', 'kim', 'thổ', 'thủy'];
+const TAM_HOP_MENH = new Set(['Mệnh', 'Tài Bạch', 'Quan Lộc']);
+const VOID_AT: Record<string, [number, number]> = {
+  '0-1': [50, 75],
+  '2-3': [12.5, 75],
+  '4-5': [12.5, 25],
+  '6-7': [50, 25],
+  '8-9': [87.5, 25],
+  '10-11': [87.5, 75],
+};
+/** Vòng tiểu hạn (engine tieuHanRing) quanh trung cung: [chỉ số chi cung] → chữ chi của năm,
+ *  sát mép trung cung cạnh cung đó (ô góc → góc trung cung). Cùng cách đặt với laso-chart.js. */
+function tieuHanMarks(ring: unknown): { left: number; top: number; label: string; align: 'flex-start' | 'center' | 'flex-end' }[] {
+  if (!Array.isArray(ring)) return [];
+  const BW = 70, BH = 18, GAP = 4;
+  return (ring as number[]).map((y, chi) => {
+    const [r, c] = POS[chi];
+    const x = PAD + (c === 0 ? 1 : c === 3 ? 3 : c + 0.5) * CW;
+    const yy = (r === 0 ? 1 : r === 3 ? 3 : r + 0.5) * CH;
+    const left = c === 0 ? x + GAP : c === 3 ? x - GAP - BW : x - BW / 2;
+    const top = r === 0 ? yy + GAP : r === 3 ? yy - GAP - BH : yy - BH / 2;
+    const align = c === 0 ? 'flex-start' : c === 3 ? 'flex-end' : 'center';
+    return { left, top, label: CHI[y].toUpperCase(), align };
+  });
+}
+
+/** Nhãn Tuần/Triệt [toạ độ %, chữ] — vắt lên đường biên chung của cặp chi, đầu biên sát trung cung. */
+function voidMarks(palaces: Palace[]): { x: number; y: number; label: string }[] {
+  const pairOf = (pred: (s: Star) => boolean) =>
+    palaces
+      .filter((p) => (p.stars || []).some(pred))
+      .map((p) => CHI.indexOf(p.diaChi))
+      .sort((a, b) => a - b)
+      .join('-');
+  const tuan = pairOf((s) => s.ten === 'Tuần' || s.ten === 'Tuần+Triệt');
+  const triet = pairOf((s) => s.ten === 'Triệt' || s.ten === 'Tuần+Triệt');
+  const marks: [string, string][] = tuan && tuan === triet ? [[tuan, 'TUẦN - TRIỆT']] : [[tuan, 'TUẦN'], [triet, 'TRIỆT']];
+  return marks.filter(([k]) => VOID_AT[k]).map(([k, label]) => ({ x: VOID_AT[k][0], y: VOID_AT[k][1], label }));
+}
 
 const elColor = (ten?: string) => EL[starMeta(ten || '')?.element || ''] || C.ink;
 
@@ -100,7 +141,7 @@ function Col({ items, align, fs }: { items: Item[]; align: 'flex-start' | 'flex-
   );
 }
 
-function Cell({ p, canNam, dvTuoi, cur }: { p?: Palace; canNam: string; dvTuoi?: number; cur: boolean }) {
+function Cell({ p, canNam, dvTuoi, cur }: { p?: Palace; canNam: string; dvTuoi?: string; cur: boolean }) {
   if (!p) return <div style={{ display: 'flex', width: CW, height: CH }} />;
   const stars = p.stars || [];
   const chinh = p.majorStars || [];
@@ -114,14 +155,11 @@ function Cell({ p, canNam, dvTuoi, cur }: { p?: Palace; canNam: string; dvTuoi?:
     const ten = s.ten || '';
     if (s.nhom === 'chinh' || TRANG_SINH.has(ten) || TUAN_TRIET.has(ten)) continue;
     const bad = BAD_TYPES.has(starMeta(ten)?.type || '');
-    const b = bad && s.brightness && BRIGHT[s.brightness] ? ` (${BRIGHT[s.brightness]})` : '';
+    const b = s.brightness && BRIGHT[s.brightness] ? ` (${BRIGHT[s.brightness]})` : '';
     (bad ? right : left).push({ text: ten + b, color: elColor(ten) });
     if (s.hoa) (s.hoa === 'Kỵ' ? right : left).push({ text: `Hóa ${s.hoa}`, color: HOA_COLOR[s.hoa] || C.ink, bold: true });
   }
   const ts = stars.find((s) => TRANG_SINH.has(s.ten || ''));
-  const tuan = stars.some((s) => s.ten === 'Tuần' || s.ten === 'Tuần+Triệt');
-  const triet = stars.some((s) => s.ten === 'Triệt' || s.ten === 'Tuần+Triệt');
-  const tt = tuan && triet ? 'TUẦN · TRIỆT' : tuan ? 'TUẦN' : triet ? 'TRIỆT' : '';
   const can = canCung(canNam, p.diaChi);
   const luu = p.luuStars || [];
   // Chữ phụ tinh co lại khi ô đông (thêm hàng sao lưu càng dễ tràn) — tràn thì
@@ -136,20 +174,35 @@ function Cell({ p, canNam, dvTuoi, cur }: { p?: Palace; canNam: string; dvTuoi?:
         flexDirection: 'column',
         width: CW,
         height: CH,
-        padding: '6px 9px',
-        background: cur ? C.curVan : C.paper,
+        // Đệm trên/dưới 12px: nhãn Tuần/Triệt vắt lên biên ô (cao ~18px) không đè chữ.
+        padding: '12px 9px 12px',
+        position: 'relative',
+        background: cur ? C.curVan : '#F7F7F7', // nền ô xám nhạt như khuôn Thiên Lương
         border: `1px solid ${C.line}`,
         ...(p.isMenh ? { border: `3px solid ${C.red}` } : {}),
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-        <div style={{ display: 'flex', fontSize: 15, color: C.mute }}>{`${can} ${p.diaChi}`.trim().toUpperCase()}</div>
-        <div style={{ display: 'flex', fontSize: 19, fontWeight: 700, color: p.isMenh ? C.red : C.ink }}>
-          {p.cungName.toUpperCase()}
-          {p.isThan ? ' (THÂN)' : ''}
+      {/* Khuôn Thiên Lương: can chi (màu hành của chi) trái + tên cung giữa cùng một hàng. */}
+      <div style={{ display: 'flex', alignItems: 'baseline' }}>
+        <div style={{ display: 'flex', fontSize: 14, fontWeight: 700, whiteSpace: 'nowrap', color: EL[CHI_HANH[CHI.indexOf(p.diaChi)]] || C.ink }}>
+          {`${can} ${p.diaChi}`.trim().toUpperCase()}
+        </div>
+        <div style={{ display: 'flex', flexGrow: 1, justifyContent: 'center', alignItems: 'baseline' }}>
+          <div
+            style={{
+              display: 'flex',
+              fontSize: 18,
+              fontWeight: 700,
+              color: '#1d2f6f',
+              ...(TAM_HOP_MENH.has(p.cungName) ? { border: '2px solid #1d2f6f', padding: '0 5px', borderRadius: 3 } : {}),
+            }}
+          >
+            {p.cungName.toUpperCase()}
+          </div>
+          {p.isThan ? <div style={{ display: 'flex', fontSize: 13, fontWeight: 700, color: C.red, marginLeft: 3, whiteSpace: 'nowrap' }}>(THÂN)</div> : null}
         </div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 6, minHeight: 56 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 2, minHeight: 56 }}>
         {chinh.length ? (
           chinh.map((s) => (
             <div key={s.ten} style={{ display: 'flex', alignItems: 'baseline', fontSize: 23, fontWeight: 700, color: elColor(s.ten) }}>
@@ -188,11 +241,12 @@ function Cell({ p, canNam, dvTuoi, cur }: { p?: Palace; canNam: string; dvTuoi?:
           ))}
         </div>
       ) : null}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-        <div style={{ display: 'flex', fontSize: 14, color: elColor(ts?.ten) }}>{ts?.ten || ''}</div>
-        {tt ? <div style={{ display: 'flex', fontSize: 13, fontWeight: 700, color: C.ink }}>{tt}</div> : null}
-        <div style={{ display: 'flex', fontSize: 17, fontWeight: 700, color: cur ? C.red : C.gold }}>
-          {dvTuoi != null ? dvTuoi : ''}
+      {/* Chân ô: Tràng Sinh GIỮA, tuổi vào đại hạn góc PHẢI (số to) — khuôn Thiên Lương. */}
+      <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+        <div style={{ display: 'flex', flexGrow: 1, flexBasis: 0 }} />
+        <div style={{ display: 'flex', fontSize: 14, fontWeight: 700, color: elColor(ts?.ten) }}>{(ts?.ten || '').toUpperCase()}</div>
+        <div style={{ display: 'flex', flexGrow: 1, flexBasis: 0, justifyContent: 'flex-end', fontSize: 24, fontWeight: 700, color: C.ink, lineHeight: 1 }}>
+          {dvTuoi || ''}
         </div>
       </div>
     </div>
@@ -230,7 +284,7 @@ export async function GET(req: NextRequest) {
     const p = byChi[chi];
     const dv = p ? daiVans.find((d) => d.cungIdx === p.idx) : undefined;
     const cur = !!(p && dvHT && dvHT.cungIdx === p.idx);
-    return <Cell key={chi} p={p} canNam={canNam} dvTuoi={dv?.tuoiStart} cur={cur} />;
+    return <Cell key={chi} p={p} canNam={canNam} dvTuoi={dv ? String(dv.tuoiStart) : undefined} cur={cur} />;
   };
 
   // ── Trung cung ──
@@ -279,7 +333,7 @@ export async function GET(req: NextRequest) {
         position: 'relative',
         width: CW * 2,
         height: CH * 2,
-        background: C.bg,
+        background: '#fff',
         border: `1px solid ${C.line}`,
       }}
     >
@@ -343,7 +397,7 @@ export async function GET(req: NextRequest) {
           </div>
           <div style={{ display: 'flex', fontSize: 17, color: C.mute }}>{`${ngay} · giờ ${CHI[birth.hourBranch!]}`}</div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', padding: `0 ${PAD}px` }}>
+        <div style={{ display: 'flex', flexDirection: 'column', padding: `0 ${PAD}px`, position: 'relative' }}>
           <div style={{ display: 'flex' }}>{[5, 6, 7, 8].map(cell)}</div>
           <div style={{ display: 'flex' }}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>{[4, 3].map(cell)}</div>
@@ -351,10 +405,47 @@ export async function GET(req: NextRequest) {
             <div style={{ display: 'flex', flexDirection: 'column' }}>{[9, 10].map(cell)}</div>
           </div>
           <div style={{ display: 'flex' }}>{[2, 1, 0, 11].map(cell)}</div>
+          {tieuHanMarks(ls.tieuHanRing).map((m) => (
+            <div
+              key={`th-${m.label}-${m.left}`}
+              style={{ display: 'flex', position: 'absolute', left: m.left, top: m.top, width: 70, height: 18, justifyContent: m.align, alignItems: 'center', fontSize: 13, fontWeight: 700, color: '#8a8a8a' }}
+            >
+              {m.label}
+            </div>
+          ))}
+          {/* Tuần/Triệt: nhãn đen vắt lên đường biên chung của cặp cung (khuôn Thiên Lương). */}
+          {voidMarks(palaces).map((m) => (
+            <div
+              key={m.label}
+              style={{
+                display: 'flex',
+                position: 'absolute',
+                left: PAD + (m.x / 100) * CW * 4 - 70,
+                top: (m.y / 100) * CH * 4 - 10,
+                width: 140,
+                height: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <div style={{ display: 'flex', fontSize: 13, fontWeight: 700, letterSpacing: 1, color: '#fff', background: '#111', padding: '0 8px', borderRadius: 3 }}>
+                {m.label}
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* Chú giải — khuôn Thiên Lương; màu ngũ hành cùng bảng EL đang tô sao. */}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: LEGEND_H, fontSize: 15, color: '#1455A4' }}>
+          <div style={{ display: 'flex' }}>(M):Miếu Địa · (V):Vượng Địa · (Đ):Đắc Địa · (B):Bình Hòa · (H):Hãm Địa</div>
+          {(['kim', 'mộc', 'thủy', 'hỏa', 'thổ'] as const).map((e) => (
+            <div key={e} style={{ display: 'flex', marginLeft: 12, fontWeight: 700, color: EL[e] }}>
+              {e.charAt(0).toUpperCase() + e.slice(1)}
+            </div>
+          ))}
         </div>
         <BrandFooter
           origin={req.nextUrl.origin}
-          note="Viền đỏ: cung Mệnh · Nền vàng: đại hạn đang đi · Số góc phải: tuổi vào đại hạn"
+          note="Viền đỏ: cung Mệnh · Nền vàng: đại hạn đang đi · Số góc phải dưới: tuổi vào đại hạn"
         />
       </div>
     ),

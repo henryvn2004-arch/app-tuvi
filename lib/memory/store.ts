@@ -204,7 +204,7 @@ export function formatMemoryForPrompt(items: MemoryItem[]): string {
   return `── THẦY ĐANG NHỚ GÌ VỀ NGƯỜI NÀY (hồ sơ riêng, tích qua các lần trò chuyện trước) ──
 Dùng để hiểu bối cảnh và nối tiếp câu chuyện — KHÔNG phải để liệt kê lại cho họ nghe.
 - TUYỆT ĐỐI không đọc thuộc lòng hồ sơ này ("theo tôi nhớ thì con đang…"). Nó chỉ để bạn biết mà nói cho trúng.
-- Nhắc tới một điều cũ CHỈ khi nó thật sự dính tới chuyện đang nói, và nhắc tự nhiên như người quen: "chỗ làm mới ổn hơn chưa con?".
+- Đây KHÔNG phải danh sách việc để đôn đốc. Nhắc tới một điều cũ CHỈ khi chính họ đang nói về nó, và nhắc MỘT lần — hỏi rồi thì thôi, đừng lượt nào cũng hỏi lại.
 - Hồ sơ có thể ĐÃ CŨ. Nếu điều họ vừa nói mâu thuẫn với hồ sơ thì tin điều VỪA NGHE, rồi ghi lại bằng ghi_nho.
 ${dong}`;
 }

@@ -125,7 +125,9 @@ export interface IncomingTurn {
   userId?: string | null;
 }
 
-const WAIT_LASO = 'Đang xem lá số của bạn, chờ một chút…';
+// Trung tính: khách hỏi chuyện đời (không về lá số) mà tin chờ ghi "đang xem lá số" là
+// báo trước thầy sắp lôi lá số ra (Henry 2026-09-30).
+const WAIT_LASO = 'Đang nghĩ, chờ một chút…';
 const WAIT_IMAGE = 'Đang xem ảnh của bạn, chờ một chút…';
 const DEFAULT_IMG_Q = 'Nhờ thầy xem giúp ảnh này.';
 const IMG_FAIL =
@@ -181,7 +183,7 @@ export async function runConversation(
   const waitMsg = hasImage ? WAIT_IMAGE : WAIT_LASO;
   const waitText =
     (incoming.heard ? `Thầy nghe: "${incoming.heard}"\n\n` : '') +
-    (incoming.authorName ? waitMsg.replace('Đang xem', `Thầy ${incoming.authorName} đang xem`) : waitMsg);
+    (incoming.authorName ? waitMsg.replace(/^Đang/, `Thầy ${incoming.authorName} đang`) : waitMsg);
   // Lượt ĐẦU (có lời giới thiệu) + kênh gửi được ảnh → tin chờ là ảnh chân dung
   // NHỎ của thầy kèm lời giới thiệu. Các lượt sau chỉ là chữ: app chat không
   // cho chèn ảnh vào giữa dòng chữ như emoji, ảnh luôn thành một tin riêng —

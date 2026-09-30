@@ -23,6 +23,40 @@ const _CHINH_COLOR = {
 const _TRANG_SINH_SET = new Set(['Tràng Sinh', 'Mộc Dục', 'Quan Đới', 'Lâm Quan', 'Đế Vượng', 'Suy', 'Bệnh', 'Tử', 'Mộ', 'Tuyệt', 'Thai', 'Dưỡng']);
 const _BAD_TYPES = new Set(['sát tinh', 'hung tinh', 'bại tinh', 'tuế_tinh']);
 const _BC_MAP = { Miếu: 'M', Vượng: 'V', Đắc: 'Đ', Bình: 'B', Hãm: 'H' };
+// ── Khuôn Thiên Lương (Henry chốt 2026-09-30, ảnh mẫu của phần mềm) ──
+// Hành của địa chi → màu can chi đầu ô (Tý..Hợi).
+const _CHI_HANH = ['thuy', 'tho', 'moc', 'moc', 'tho', 'hoa', 'hoa', 'tho', 'kim', 'kim', 'tho', 'thuy'];
+// Mệnh + hai cung tam hợp của nó được đóng khung.
+const _TAM_HOP_MENH = new Set(['Mệnh', 'Tài Bạch', 'Quan Lộc']);
+// Nhãn Tuần/Triệt vắt lên đường biên chung của CẶP chi bị chiếm, đầu biên sát
+// trung cung — toạ độ % của lưới 4×4 (cặp khoá theo chỉ số chi 0=Tý, xếp tăng).
+// Nguồn: voidInnerAnchor() của Thiên Lương (scripts/oracle/vendor/).
+const _VOID_AT = { '0-1': [50, 75], '2-3': [12.5, 75], '4-5': [12.5, 25], '6-7': [50, 25], '8-9': [87.5, 25], '10-11': [87.5, 75] };
+function _voidLabels(palaces) {
+  const pairOf = (pred) => palaces.filter(p => (p.stars || []).some(pred)).map(p => CHI.indexOf(p.diaChi)).sort((a, b) => a - b).join('-');
+  const tuan = pairOf(s => s.ten === 'Tuần' || s.ten === 'Tuần+Triệt');
+  const triet = pairOf(s => s.ten === 'Triệt' || s.ten === 'Tuần+Triệt');
+  const marks = tuan && tuan === triet ? [[tuan, 'TUẦN - TRIỆT']] : [[tuan, 'TUẦN'], [triet, 'TRIỆT']];
+  return marks.filter(([k]) => _VOID_AT[k]).map(([k, l]) => `<div class="v2-void" style="left:${_VOID_AT[k][0]}%;top:${_VOID_AT[k][1]}%">${l}</div>`).join('');
+}
+// Vòng tiểu hạn (engine `tieuHanRing`): chữ chi của năm có tiểu hạn vào cung, in sát mép
+// TRUNG CUNG cạnh cung đó — ô góc thì ở góc trung cung. [chỉ số chi] → [left%, top%, transform].
+const _GRID_POS = { 5: [0, 0], 6: [0, 1], 7: [0, 2], 8: [0, 3], 4: [1, 0], 9: [1, 3], 3: [2, 0], 10: [2, 3], 2: [3, 0], 1: [3, 1], 0: [3, 2], 11: [3, 3] };
+function _tieuHanLabels(ring) {
+  if (!Array.isArray(ring)) return '';
+  const IN = '3px', OUT = 'calc(-100% - 3px)';
+  return ring.map((y, chi) => {
+    const [r, c] = _GRID_POS[chi];
+    const x = c === 0 ? 25 : c === 3 ? 75 : c * 25 + 12.5;
+    const top = r === 0 ? 25 : r === 3 ? 75 : r * 25 + 12.5;
+    const tx = c === 0 ? IN : c === 3 ? OUT : '-50%';
+    const ty = r === 0 ? IN : r === 3 ? OUT : '-50%';
+    return `<div class="v2-th" style="left:${x}%;top:${top}%;transform:translate(${tx},${ty})" title="Tiểu hạn năm ${CHI[y]} vào cung ${CHI[chi]}">${CHI[y].toUpperCase()}</div>`;
+  }).join('');
+}
+// Chú giải chân lá số — khuôn Thiên Lương. Màu lấy đúng class .sc-* đang tô sao.
+const _LEGEND = '<div class="v2-legend"><span>(M):Miếu Địa</span><span>(V):Vượng Địa</span><span>(Đ):Đắc Địa</span><span>(B):Bình Hòa</span><span>(H):Hãm Địa</span>'
+  + '<span class="v2-legend-hanh"><b class="sc-kim">Kim</b><b class="sc-moc">Mộc</b><b class="sc-thuy">Thủy</b><b class="sc-hoa">Hỏa</b><b class="sc-tho">Thổ</b></span></div>';
 
 // ── HELPERS ──
 function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -39,25 +73,19 @@ function _isHung(s) { const d = (typeof STAR_DATA !== 'undefined') ? STAR_DATA[s
 function renderCungCell(p, dvTuoi, canNamIdx, isCurVan) {
   const di = CHI.indexOf(p.diaChi), ci = _getCungCan(canNamIdx, di);
   const canChi = CAN[ci] + ' ' + CHI[di];
-  const thanBadge = p.isThan ? ` <span class="v2-badge-than">THÂN</span>` : '';
+  const thanBadge = p.isThan ? ` <span class="v2-than">(THÂN)</span>` : '';
   const tsS = p.stars.find(s => _TRANG_SINH_SET.has(s.ten));
-  let tt = '';
-  const tuanS = p.stars.find(s => s.ten === 'Tuần' || s.ten === 'Tuần+Triệt');
-  const trietS = p.stars.find(s => s.ten === 'Triệt' || s.ten === 'Tuần+Triệt');
-  if (tuanS && trietS) tt = '<span class="v2-tuan-tag">TUẦN+TRIỆT</span>';
-  else if (tuanS) tt = '<span class="v2-tuan-tag">TUẦN</span>';
-  else if (trietS) tt = '<span class="v2-triet-tag">TRIỆT</span>';
   let chinhH = ''; const hoaFromChinh = [];
   for (const s of p.majorStars) {
     const cls = 'sc-' + (_CHINH_COLOR[s.ten] || 'neutral');
-    const b = s.brightness ? ` <span style="font-size:10px">(${_bShort(s.brightness)})</span>` : '';
+    const b = s.brightness ? ` (${_bShort(s.brightness)})` : '';
     if (s.hoa) hoaFromChinh.push(s);
     chinhH += `<div class="v2-chinh-item ${cls}">${esc(s.ten.toUpperCase())}${b}</div>`;
   }
   const phuStars = p.stars.filter(s => s.nhom !== 'chinh' && !_TRANG_SINH_SET.has(s.ten) && s.ten !== 'Tuần' && s.ten !== 'Triệt' && s.ten !== 'Tuần+Triệt');
   const renderPhu = s => {
     const cls = _getStarCls(s); const hung = _isHung(s);
-    const b = (hung && s.brightness) ? ` <span style="font-size:8px">(${_bShort(s.brightness)})</span>` : '';
+    const b = s.brightness && _bShort(s.brightness) ? ` <span style="font-size:8px">(${_bShort(s.brightness)})</span>` : '';
     let nm = esc(s.ten.toUpperCase());
     if (s.hoa) { const hc = s.hoa === 'Lộc' ? 'sc-hoa-loc' : s.hoa === 'Quyền' ? 'sc-hoa-quyen' : s.hoa === 'Khoa' ? 'sc-hoa-khoa' : 'sc-hoa-ky'; nm += ` <span class="${hc}" style="font-size:8px">[${esc(s.hoa.charAt(0))}]</span>`; }
     return `<div class="v2-phu-item ${cls}" style="${hung ? 'font-weight:600' : ''}">${nm}${b}</div>`;
@@ -72,13 +100,14 @@ function renderCungCell(p, dvTuoi, canNamIdx, isCurVan) {
     const tip = s.sao ? `${s.ten} (${s.sao}) — chỉ tác dụng trong năm xem` : `${s.ten} — chỉ tác dụng trong năm xem`;
     return `<span class="v2-luu-item${xau ? ' luu-xau' : ''}" title="${esc(tip)}">${esc(s.ten.replace(/^Lưu /, 'L.').toUpperCase())}</span>`;
   }).join('');
+  // Khuôn Thiên Lương: can chi (màu hành của chi) + tên cung cùng một hàng; chân ô
+  // Tràng Sinh giữa, tuổi vào đại hạn góc phải; Tuần/Triệt vẽ ở cấp lưới (_voidLabels).
   return `<div class="cung-cell${isCurVan ? ' cur-van' : ''}">
-    <div class="v2-cell-header"><span class="v2-can-chi">${esc(canChi.toUpperCase())}</span><span class="v2-cung-name">${esc(p.cungName.toUpperCase())}${thanBadge}</span></div>
+    <div class="v2-cell-header"><span class="v2-can-chi sc-${_CHI_HANH[di]}">${esc(canChi.toUpperCase())}</span><span class="v2-cung-name"><span class="${_TAM_HOP_MENH.has(p.cungName) ? 'tam-hop' : ''}">${esc(p.cungName.toUpperCase())}</span>${thanBadge}</span></div>
     <div class="v2-chinh-area">${chinhH}</div>
     <div class="v2-phu-area"><div class="v2-phu-col">${catH}</div><div class="v2-phu-col v2-phu-col-right">${hungH}</div></div>
     ${luuH ? `<div class="v2-luu-area">${luuH}</div>` : ''}
-    <div class="v2-footer"><span class="v2-trang-sinh">${tsS ? esc(tsS.ten.toUpperCase()) : ''}</span><span class="v2-dai-van">${dvTuoi == null ? '' : dvTuoi}</span></div>
-    ${tt}
+    <div class="v2-footer"><span class="v2-trang-sinh ${tsS ? _getElemClass(tsS.ten) : ''}">${tsS ? esc(tsS.ten.toUpperCase()) : ''}</span><span class="v2-dai-van">${dvTuoi == null ? '' : esc(dvTuoi)}</span></div>
   </div>`;
 }
 
@@ -134,5 +163,5 @@ function renderGrid(ls, fd) {
     const dv = ls.daiVans.find(d => d.cungIdx === p.idx);
     html += renderCungCell(p, dv ? dv.tuoiStart : undefined, canNamIdx, isCurVan);
   }
-  return html + '</div>';
+  return html + _tieuHanLabels(ls.tieuHanRing) + _voidLabels(ls.palaces) + '</div>' + _LEGEND;
 }

@@ -592,6 +592,35 @@ function curDaiVan(ls: Rec, dvs: Rec[]): Rec | undefined {
   return dvs.find((d) => Number(d.tuoiStart) <= t && t <= Number(d.tuoiEnd));
 }
 
+// Khuôn Thiên Lương — cùng bảng với public/laso-chart.js (_CHI_HANH/_TAM_HOP_MENH/_VOID_AT).
+const CHI_HANH = ['thuy','tho','moc','moc','tho','hoa','hoa','tho','kim','kim','tho','thuy'];
+const TAM_HOP_MENH = new Set(['Mệnh','Tài Bạch','Quan Lộc']);
+const VOID_AT: Record<string, [number, number]> = { '0-1':[50,75], '2-3':[12.5,75], '4-5':[12.5,25], '6-7':[50,25], '8-9':[87.5,25], '10-11':[87.5,75] };
+function voidLabels(palaces: Rec[]): string {
+  const pairOf = (pred: (s: Rec) => boolean) => palaces.filter(p => ((p.stars as Rec[]) || []).some(pred)).map(p => DCHI.indexOf(String(p.diaChi||''))).sort((a, b) => a - b).join('-');
+  const tuan = pairOf(s => s.ten === 'Tuần' || s.ten === 'Tuần+Triệt');
+  const triet = pairOf(s => s.ten === 'Triệt' || s.ten === 'Tuần+Triệt');
+  const marks: [string, string][] = tuan && tuan === triet ? [[tuan, 'TUẦN - TRIỆT']] : [[tuan, 'TUẦN'], [triet, 'TRIỆT']];
+  return marks.filter(([k]) => VOID_AT[k]).map(([k, l]) => `<div class="v2-void" style="left:${VOID_AT[k][0]}%;top:${VOID_AT[k][1]}%">${l}</div>`).join('');
+}
+
+// Vòng tiểu hạn quanh trung cung (engine tieuHanRing) — cùng cách đặt với public/laso-chart.js.
+function tieuHanLabels(ring: unknown): string {
+  if (!Array.isArray(ring)) return '';
+  const IN = '3px', OUT = 'calc(-100% - 3px)';
+  return (ring as number[]).map((y, chi) => {
+    const [r, c] = DCHI_TO_POS[chi];
+    const x = c === 0 ? 25 : c === 3 ? 75 : c * 25 + 12.5;
+    const top = r === 0 ? 25 : r === 3 ? 75 : r * 25 + 12.5;
+    const tx = c === 0 ? IN : c === 3 ? OUT : '-50%';
+    const ty = r === 0 ? IN : r === 3 ? OUT : '-50%';
+    return `<div class="v2-th" style="left:${x}%;top:${top}%;transform:translate(${tx},${ty})" title="Tiểu hạn năm ${DCHI[y]} vào cung ${DCHI[chi]}">${DCHI[y].toUpperCase()}</div>`;
+  }).join('');
+}
+// Chú giải chân lá số — khuôn Thiên Lương; màu lấy đúng class .sc-* đang tô sao.
+const LEGEND_HTML = '<div class="v2-legend"><span>(M):Miếu Địa</span><span>(V):Vượng Địa</span><span>(Đ):Đắc Địa</span><span>(B):Bình Hòa</span><span>(H):Hãm Địa</span>'
+  + '<span class="v2-legend-hanh"><b class="sc-kim">Kim</b><b class="sc-moc">Mộc</b><b class="sc-thuy">Thủy</b><b class="sc-hoa">Hỏa</b><b class="sc-tho">Thổ</b></span></div>';
+
 function renderGrid(ls: Rec, canIdx: number): string {
   const palaces = (ls.palaces as Rec[]) || [];
   const dcMap: Record<number, Rec> = {};
@@ -634,7 +663,7 @@ function renderGrid(ls: Rec, canIdx: number): string {
     let chinhH = '';
     for (const s of majStars) {
       const cls = 'sc-'+(CHINH_CLS[String(s.ten||'')] ? CHINH_CLS[String(s.ten||'')] : 'neutral');
-      const b = s.brightness ? ` <span style="font-size:10px">(${BC_MAP[String(s.brightness)]||''})</span>` : '';
+      const b = s.brightness ? ` (${BC_MAP[String(s.brightness)]||''})` : '';
       if (s.hoa) hoaFromChinh.push(s);
       const _tenChinhDisplay = starLink(String(s.ten||''), esc(String(s.ten||'')).toUpperCase());
       chinhH += `<div class="v2-chinh-item ${cls}">${_tenChinhDisplay}${b}</div>`;
@@ -668,15 +697,11 @@ function renderGrid(ls: Rec, canIdx: number): string {
     }
 
     const tsS = allStars.find(s => TS_SET.has(String(s.ten||'')));
-    const hasTuan  = allStars.some(s => s.ten==='Tuần'||s.ten==='Tuần+Triệt');
-    const hasTriet = allStars.some(s => s.ten==='Triệt'||s.ten==='Tuần+Triệt');
-    let tt = '';
-    if (hasTuan && hasTriet) tt = '<span class="v2-tuan-tag">TUẦN+TRIỆT</span>';
-    else if (hasTuan)  tt = '<span class="v2-tuan-tag">TUẦN</span>';
-    else if (hasTriet) tt = '<span class="v2-triet-tag">TRIỆT</span>';
-
-    const dvTuoi = isDVCung && curDV ? `${curDV.tuoiStart}–${curDV.tuoiEnd}` : '';
-    const thanBadge = isThan ? ` <span class="v2-badge-than">THÂN</span>` : '';
+    // Khuôn Thiên Lương (cùng public/laso-chart.js): tuổi VÀO đại hạn góc phải dưới,
+    // Tràng Sinh giữa chân ô; Tuần/Triệt vẽ ở cấp lưới (voidLabels).
+    const dvCell = dvs.find(d => Number(d.cungIdx) === dcIdx);
+    const dvTuoi = dvCell ? String(dvCell.tuoiStart) : '';
+    const thanBadge = isThan ? ` <span class="v2-than">(THÂN)</span>` : '';
     // Sao lưu năm xem (engine `luuStars`, cờ `xau` do engine đánh dấu) — cùng cách
     // hiện với public/laso-chart.js.
     const luuH = ((p.luuStars as Rec[]) || []).map(s => {
@@ -687,8 +712,8 @@ function renderGrid(ls: Rec, canIdx: number): string {
 
     return `<div class="cung-cell${isMenh?' is-menh':''}${isDVCung?' cur-van':''}">
       <div class="v2-cell-header">
-        <span class="v2-can-chi">${esc(canChiHeader).toUpperCase()}</span>
-        <span class="v2-cung-name">${esc(cungName).toUpperCase()}${thanBadge}</span>
+        <span class="v2-can-chi sc-${CHI_HANH[dcIdx]}">${esc(canChiHeader).toUpperCase()}</span>
+        <span class="v2-cung-name"><span class="${TAM_HOP_MENH.has(cungName) ? 'tam-hop' : ''}">${esc(cungName).toUpperCase()}</span>${thanBadge}</span>
       </div>
       <div class="v2-chinh-area">${chinhH}</div>
       <div class="v2-phu-area">
@@ -697,10 +722,9 @@ function renderGrid(ls: Rec, canIdx: number): string {
       </div>
       ${luuH ? `<div class="v2-luu-area">${luuH}</div>` : ''}
       <div class="v2-footer">
-        <span class="v2-trang-sinh">${tsS ? esc(String(tsS.ten||'')).toUpperCase() : ''}</span>
+        <span class="v2-trang-sinh ${tsS ? STAR_CLS[String(tsS.ten||'')]||'' : ''}">${tsS ? esc(String(tsS.ten||'')).toUpperCase() : ''}</span>
         <span class="v2-dai-van">${esc(dvTuoi)}</span>
       </div>
-      ${tt}
     </div>`;
   }
 
@@ -728,7 +752,7 @@ function renderGrid(ls: Rec, canIdx: number): string {
       html += cell ? renderCell(cell) : `<div class="cung-cell cung-empty"></div>`;
     }
   }
-  html += '</div>';
+  html += tieuHanLabels(ls.tieuHanRing) + voidLabels(palaces) + '</div>' + LEGEND_HTML;
   return html;
 }
 
@@ -1543,15 +1567,18 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 .s24b p{font-size:13px;color:var(--text-mid);line-height:1.75;margin-bottom:10px}
 .s24b p:last-child{margin-bottom:0}
 .s24b strong{color:var(--navy)}
-.laso-grid{display:grid;grid-template-columns:repeat(4,1fr);border:2px solid #555;background:#555;gap:1px}
-.cung-cell{border:1px solid #888;padding:7px 7px 22px;min-height:150px;position:relative;display:flex;flex-direction:column;background:#fff;overflow:hidden}
+.laso-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);border:2px solid #555;background:#555;gap:1px;position:relative}
+.cung-cell{border:1px solid #888;padding:8px 7px 26px;min-height:150px;position:relative;display:flex;flex-direction:column;background:#F7F7F7;overflow:hidden}
 .cung-cell.is-menh{border:2px solid #7C6942;background:#FFFDF7}
 .cung-cell.cur-van{outline:2px solid #7FA7A3;outline-offset:-2px}
 .cung-empty{background:#f8f8f8;min-height:150px}
-.grid-center{border:2px solid #7C6942;background:#F9F4EB;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;grid-column:span 2;grid-row:span 2}
-.v2-cell-header{display:flex;flex-direction:column;align-items:center;margin-bottom:4px;gap:2px}
-.v2-can-chi{font-size:9px;color:#777;font-weight:500;width:100%;text-align:left}
-.v2-cung-name{font-size:10px;color:#222;font-weight:700;text-transform:uppercase;text-align:center;width:100%;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap}
+.grid-center{border:1px solid #999;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px 26px;grid-column:span 2;grid-row:span 2}
+.v2-cell-header{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 4px;margin-bottom:4px}
+.v2-can-chi{font-size:8px;font-weight:600;text-transform:uppercase;white-space:nowrap}
+.v2-cung-name{flex:1 1 auto;font-size:10px;color:#1d2f6f;font-weight:700;text-transform:uppercase;text-align:center;letter-spacing:.3px}
+.v2-cung-name>span{white-space:nowrap}
+.v2-cung-name .tam-hop{border:1.5px solid #1d2f6f;padding:0 3px;border-radius:2px}
+.v2-than{color:#C0392B;white-space:nowrap}
 .v2-badge-than{font-size:8px;background:#555;color:#fff;padding:1px 4px;border-radius:2px}
 .v2-chinh-area{margin-bottom:4px;text-align:center;min-height:35px}
 .v2-chinh-item{font-family:'Noto Serif',Georgia,serif;font-size:12.5px;font-weight:700;line-height:1.4;text-align:center}
@@ -1562,14 +1589,21 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 .v2-luu-area{display:flex;flex-wrap:wrap;gap:0 5px;margin-top:2px;padding-top:1px;border-top:1px dashed #ddd}
 .v2-luu-item{font-size:8.5px;line-height:1.4;font-style:italic;font-weight:600;color:#1455A4;cursor:help}
 .v2-luu-item.luu-xau{color:#C0392B}
-.v2-footer{position:absolute;bottom:3px;left:6px;right:6px;display:flex;justify-content:space-between;align-items:center}
-.v2-trang-sinh{font-size:9px;color:#999}
-.v2-dai-van{font-size:9px;color:#666;font-weight:700}
-.v2-tuan-tag,.v2-triet-tag{position:absolute;bottom:-1px;left:0;right:0;font-size:8px;text-align:center;padding:1px;color:#fff}
-.v2-tuan-tag{background:#2c4a00}.v2-triet-tag{background:#4a0000}
+/* Chân ô: Tràng Sinh giữa, tuổi vào đại hạn góc phải (số to) — khuôn Thiên Lương. */
+.v2-footer{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;position:absolute;bottom:7px;left:6px;right:6px}
+.v2-trang-sinh{grid-column:2;font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+.v2-dai-van{grid-column:3;justify-self:end;font-size:13px;color:#1a1a1a;font-weight:700;line-height:1}
+/* Tuần/Triệt: nhãn đen vắt lên đường biên chung của cặp cung (toạ độ ở VOID_AT). */
+.v2-void{position:absolute;transform:translate(-50%,-50%);background:#111;color:#fff;font-size:8px;font-weight:700;letter-spacing:.5px;line-height:1.4;padding:0 5px;border-radius:2px;z-index:6;white-space:nowrap;pointer-events:none}
+.v2-th{position:absolute;font-size:8px;font-weight:600;color:#8a8a8a;letter-spacing:.5px;line-height:1.2;z-index:5;white-space:nowrap;pointer-events:none}
+.v2-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:2px 10px;font-size:10px;color:#1455A4;padding:6px 4px 2px}
+.v2-legend-hanh{display:inline-flex;gap:8px;margin-left:8px}
+.v2-legend-hanh b{font-weight:700}
+/* Cột hẹp (~90px): Tràng Sinh căn giữa + số tuổi không đủ chỗ — lùi về trái/phải. */
+@media(max-width:800px){.v2-footer{display:flex;justify-content:space-between;align-items:flex-end}.v2-dai-van{font-size:11px}.v2-void{font-size:7px;padding:0 3px;letter-spacing:0}}
 .sc-hoa{color:#E74C3C}.sc-kim{color:#7F8C8D}.sc-thuy{color:#1a1a1a}.sc-moc{color:#27AE60}.sc-tho{color:#D4A017}.sc-neutral{color:#333}
 .sc-hoa-loc{color:#D4A017;font-weight:700}.sc-hoa-quyen{color:#27AE60;font-weight:700}.sc-hoa-khoa{color:#1a1a1a;font-weight:700}.sc-hoa-ky{color:#1a1a1a;font-weight:700}
-@media(max-width:800px){.layout{grid-template-columns:1fr}.bc,.wrap{padding-left:14px;padding-right:14px}.hero-title{font-size:18px}.laso-grid{font-size:9px}.cung-cell{min-height:90px;padding:3px 4px 16px}.v2-chinh-item{font-size:10px}.v2-phu-item{font-size:8px}.v2-phu-area{grid-template-columns:1fr}}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.bc,.wrap{padding-left:14px;padding-right:14px}.hero-title{font-size:18px}.laso-grid{font-size:9px}.cung-cell{min-height:90px;padding:7px 4px 24px}.v2-chinh-item{font-size:10px}.v2-phu-item{font-size:8px}.v2-phu-area{grid-template-columns:1fr}}
 ${ASK_CSS}
 </style>
 <script src="/auth.js" defer></script>
