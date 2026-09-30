@@ -604,6 +604,23 @@ function voidLabels(palaces: Rec[]): string {
   return marks.filter(([k]) => VOID_AT[k]).map(([k, l]) => `<div class="v2-void" style="left:${VOID_AT[k][0]}%;top:${VOID_AT[k][1]}%">${l}</div>`).join('');
 }
 
+// Vòng tiểu hạn quanh trung cung (engine tieuHanRing) — cùng cách đặt với public/laso-chart.js.
+function tieuHanLabels(ring: unknown): string {
+  if (!Array.isArray(ring)) return '';
+  const IN = '3px', OUT = 'calc(-100% - 3px)';
+  return (ring as number[]).map((y, chi) => {
+    const [r, c] = DCHI_TO_POS[chi];
+    const x = c === 0 ? 25 : c === 3 ? 75 : c * 25 + 12.5;
+    const top = r === 0 ? 25 : r === 3 ? 75 : r * 25 + 12.5;
+    const tx = c === 0 ? IN : c === 3 ? OUT : '-50%';
+    const ty = r === 0 ? IN : r === 3 ? OUT : '-50%';
+    return `<div class="v2-th" style="left:${x}%;top:${top}%;transform:translate(${tx},${ty})" title="Tiểu hạn năm ${DCHI[y]} vào cung ${DCHI[chi]}">${DCHI[y].toUpperCase()}</div>`;
+  }).join('');
+}
+// Chú giải chân lá số — khuôn Thiên Lương; màu lấy đúng class .sc-* đang tô sao.
+const LEGEND_HTML = '<div class="v2-legend"><span>(M):Miếu Địa</span><span>(V):Vượng Địa</span><span>(Đ):Đắc Địa</span><span>(B):Bình Hòa</span><span>(H):Hãm Địa</span>'
+  + '<span class="v2-legend-hanh"><b class="sc-kim">Kim</b><b class="sc-moc">Mộc</b><b class="sc-thuy">Thủy</b><b class="sc-hoa">Hỏa</b><b class="sc-tho">Thổ</b></span></div>';
+
 function renderGrid(ls: Rec, canIdx: number): string {
   const palaces = (ls.palaces as Rec[]) || [];
   const dcMap: Record<number, Rec> = {};
@@ -735,7 +752,7 @@ function renderGrid(ls: Rec, canIdx: number): string {
       html += cell ? renderCell(cell) : `<div class="cung-cell cung-empty"></div>`;
     }
   }
-  html += voidLabels(palaces) + '</div>';
+  html += tieuHanLabels(ls.tieuHanRing) + voidLabels(palaces) + '</div>' + LEGEND_HTML;
   return html;
 }
 
@@ -1551,11 +1568,11 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 .s24b p:last-child{margin-bottom:0}
 .s24b strong{color:var(--navy)}
 .laso-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);border:2px solid #555;background:#555;gap:1px;position:relative}
-.cung-cell{border:1px solid #888;padding:8px 7px 26px;min-height:150px;position:relative;display:flex;flex-direction:column;background:#fff;overflow:hidden}
+.cung-cell{border:1px solid #888;padding:8px 7px 26px;min-height:150px;position:relative;display:flex;flex-direction:column;background:#F7F7F7;overflow:hidden}
 .cung-cell.is-menh{border:2px solid #7C6942;background:#FFFDF7}
 .cung-cell.cur-van{outline:2px solid #7FA7A3;outline-offset:-2px}
 .cung-empty{background:#f8f8f8;min-height:150px}
-.grid-center{border:2px solid #7C6942;background:#F9F4EB;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;grid-column:span 2;grid-row:span 2}
+.grid-center{border:1px solid #999;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px 26px;grid-column:span 2;grid-row:span 2}
 .v2-cell-header{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 4px;margin-bottom:4px}
 .v2-can-chi{font-size:8px;font-weight:600;text-transform:uppercase;white-space:nowrap}
 .v2-cung-name{flex:1 1 auto;font-size:10px;color:#1d2f6f;font-weight:700;text-transform:uppercase;text-align:center;letter-spacing:.3px}
@@ -1578,6 +1595,10 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 .v2-dai-van{grid-column:3;justify-self:end;font-size:13px;color:#1a1a1a;font-weight:700;line-height:1}
 /* Tuần/Triệt: nhãn đen vắt lên đường biên chung của cặp cung (toạ độ ở VOID_AT). */
 .v2-void{position:absolute;transform:translate(-50%,-50%);background:#111;color:#fff;font-size:8px;font-weight:700;letter-spacing:.5px;line-height:1.4;padding:0 5px;border-radius:2px;z-index:6;white-space:nowrap;pointer-events:none}
+.v2-th{position:absolute;font-size:8px;font-weight:600;color:#8a8a8a;letter-spacing:.5px;line-height:1.2;z-index:5;white-space:nowrap;pointer-events:none}
+.v2-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:2px 10px;font-size:10px;color:#1455A4;padding:6px 4px 2px}
+.v2-legend-hanh{display:inline-flex;gap:8px;margin-left:8px}
+.v2-legend-hanh b{font-weight:700}
 /* Cột hẹp (~90px): Tràng Sinh căn giữa + số tuổi không đủ chỗ — lùi về trái/phải. */
 @media(max-width:800px){.v2-footer{display:flex;justify-content:space-between;align-items:flex-end}.v2-dai-van{font-size:11px}.v2-void{font-size:7px;padding:0 3px;letter-spacing:0}}
 .sc-hoa{color:#E74C3C}.sc-kim{color:#7F8C8D}.sc-thuy{color:#1a1a1a}.sc-moc{color:#27AE60}.sc-tho{color:#D4A017}.sc-neutral{color:#333}

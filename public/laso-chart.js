@@ -39,6 +39,24 @@ function _voidLabels(palaces) {
   const marks = tuan && tuan === triet ? [[tuan, 'TUẦN - TRIỆT']] : [[tuan, 'TUẦN'], [triet, 'TRIỆT']];
   return marks.filter(([k]) => _VOID_AT[k]).map(([k, l]) => `<div class="v2-void" style="left:${_VOID_AT[k][0]}%;top:${_VOID_AT[k][1]}%">${l}</div>`).join('');
 }
+// Vòng tiểu hạn (engine `tieuHanRing`): chữ chi của năm có tiểu hạn vào cung, in sát mép
+// TRUNG CUNG cạnh cung đó — ô góc thì ở góc trung cung. [chỉ số chi] → [left%, top%, transform].
+const _GRID_POS = { 5: [0, 0], 6: [0, 1], 7: [0, 2], 8: [0, 3], 4: [1, 0], 9: [1, 3], 3: [2, 0], 10: [2, 3], 2: [3, 0], 1: [3, 1], 0: [3, 2], 11: [3, 3] };
+function _tieuHanLabels(ring) {
+  if (!Array.isArray(ring)) return '';
+  const IN = '3px', OUT = 'calc(-100% - 3px)';
+  return ring.map((y, chi) => {
+    const [r, c] = _GRID_POS[chi];
+    const x = c === 0 ? 25 : c === 3 ? 75 : c * 25 + 12.5;
+    const top = r === 0 ? 25 : r === 3 ? 75 : r * 25 + 12.5;
+    const tx = c === 0 ? IN : c === 3 ? OUT : '-50%';
+    const ty = r === 0 ? IN : r === 3 ? OUT : '-50%';
+    return `<div class="v2-th" style="left:${x}%;top:${top}%;transform:translate(${tx},${ty})" title="Tiểu hạn năm ${CHI[y]} vào cung ${CHI[chi]}">${CHI[y].toUpperCase()}</div>`;
+  }).join('');
+}
+// Chú giải chân lá số — khuôn Thiên Lương. Màu lấy đúng class .sc-* đang tô sao.
+const _LEGEND = '<div class="v2-legend"><span>(M):Miếu Địa</span><span>(V):Vượng Địa</span><span>(Đ):Đắc Địa</span><span>(B):Bình Hòa</span><span>(H):Hãm Địa</span>'
+  + '<span class="v2-legend-hanh"><b class="sc-kim">Kim</b><b class="sc-moc">Mộc</b><b class="sc-thuy">Thủy</b><b class="sc-hoa">Hỏa</b><b class="sc-tho">Thổ</b></span></div>';
 
 // ── HELPERS ──
 function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -145,5 +163,5 @@ function renderGrid(ls, fd) {
     const dv = ls.daiVans.find(d => d.cungIdx === p.idx);
     html += renderCungCell(p, dv ? dv.tuoiStart : undefined, canNamIdx, isCurVan);
   }
-  return html + _voidLabels(ls.palaces) + '</div>';
+  return html + _tieuHanLabels(ls.tieuHanRing) + _voidLabels(ls.palaces) + '</div>' + _LEGEND;
 }

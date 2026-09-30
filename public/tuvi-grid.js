@@ -35,6 +35,20 @@ const TuviGrid = (() => {
     const marks = tuan && tuan === triet ? [[tuan, 'TUẦN - TRIỆT']] : [[tuan, 'TUẦN'], [triet, 'TRIỆT']];
     return marks.filter(([k]) => _VOID_AT[k]).map(([k, l]) => `<div class="v2-void" style="left:${_VOID_AT[k][0]}%;top:${_VOID_AT[k][1]}%">${l}</div>`).join('');
   }
+  // Vòng tiểu hạn quanh trung cung — cùng cách đặt với _tieuHanLabels của public/laso-chart.js.
+  const _GRID_POS = {5:[0,0],6:[0,1],7:[0,2],8:[0,3],4:[1,0],9:[1,3],3:[2,0],10:[2,3],2:[3,0],1:[3,1],0:[3,2],11:[3,3]};
+  function _tieuHanLabels(ring) {
+    if (!Array.isArray(ring)) return '';
+    const IN = '3px', OUT = 'calc(-100% - 3px)';
+    return ring.map((y, chi) => {
+      const [r, c] = _GRID_POS[chi];
+      const x = c === 0 ? 25 : c === 3 ? 75 : c * 25 + 12.5;
+      const top = r === 0 ? 25 : r === 3 ? 75 : r * 25 + 12.5;
+      const tx = c === 0 ? IN : c === 3 ? OUT : '-50%';
+      const ty = r === 0 ? IN : r === 3 ? OUT : '-50%';
+      return `<div class="v2-th" style="left:${x}%;top:${top}%;transform:translate(${tx},${ty})" title="Tiểu hạn năm ${_CHI[y]} vào cung ${_CHI[chi]}">${_CHI[y].toUpperCase()}</div>`;
+    }).join('');
+  }
 
   function _getElemClass(n) {
     const d = (typeof STAR_DATA !== 'undefined') ? STAR_DATA[n] : null;
@@ -146,7 +160,7 @@ const TuviGrid = (() => {
         cells += renderCell(p, dv?.tuoiStart, canNamIdx, isCurVan);
       }
     }
-    return cells + _voidLabels(ls.palaces);
+    return cells + _tieuHanLabels(ls.tieuHanRing) + _voidLabels(ls.palaces);
   }
 
   // ── NAP AM full names ─────────────────────────────────────────
@@ -357,7 +371,7 @@ const TuviGrid = (() => {
       ".tvm-bar-fill{height:100%;background:#c9a84c;border-radius:2px;animation:tvm-bar 2.5s ease-in-out infinite}",
       // V2 Grid
       ".laso-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);border:2px solid #333;background:#fff;position:relative}",
-      ".cung-cell{border:1px solid #888;padding:8px 7px 26px;min-height:140px;position:relative;display:flex;flex-direction:column;background:#fff;overflow:hidden}",
+      ".cung-cell{border:1px solid #888;padding:8px 7px 26px;min-height:140px;position:relative;display:flex;flex-direction:column;background:#F7F7F7;overflow:hidden}",
       ".cung-cell:hover{background:#FFFDF7}",
       ".cung-cell.cur-van{outline:2px solid #1E6B3C;outline-offset:-2px}",
       ".v2-cell-header{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 4px;margin-bottom:4px}",
@@ -379,19 +393,20 @@ const TuviGrid = (() => {
       ".v2-trang-sinh{grid-column:2;font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}",
       ".v2-dai-van{grid-column:3;justify-self:end;font-size:13px;color:#1a1a1a;font-weight:700;line-height:1}",
       ".v2-void{position:absolute;transform:translate(-50%,-50%);background:#111;color:#fff;font-size:8px;font-weight:700;letter-spacing:.5px;line-height:1.4;padding:0 5px;border-radius:2px;z-index:6;white-space:nowrap;pointer-events:none}",
+      ".v2-th{position:absolute;font-size:8px;font-weight:600;color:#8a8a8a;letter-spacing:.5px;line-height:1.2;z-index:5;white-space:nowrap;pointer-events:none}",
       // Star colors
       ".sc-hoa{color:#E74C3C}.sc-kim{color:#7F8C8D}.sc-thuy{color:#1a1a1a}.sc-moc{color:#27AE60}.sc-tho{color:#D4A017}.sc-neutral{color:#333}",
       ".sc-tu-hoa{font-weight:700;text-decoration:underline dotted 1px}",
       ".bright{font-size:8px;opacity:1;color:#7EC8E3;margin-left:1px}",
       ".hoa{font-size:9px;margin-left:1px}",
       // Center panel
-      ".cung-center{border-right:1px solid #ccc;border-bottom:1px solid #ccc;grid-column:span 2;grid-row:span 2;background:#F5F4F0;display:flex;align-items:center;justify-content:center;padding:12px}",
+      ".cung-center{border-right:1px solid #ccc;border-bottom:1px solid #ccc;grid-column:span 2;grid-row:span 2;background:#fff;display:flex;align-items:center;justify-content:center;padding:18px 26px}",
       ".center-la-so{width:100%;display:flex;flex-direction:column;align-items:center}",
       ".center-title{color:#061A2E;font-weight:700;font-size:12px;margin-bottom:6px;text-align:center;letter-spacing:1px}",
       ".center-row{font-size:11px;color:#444;margin:2px 0;width:100%;text-align:left;padding-left:4px;line-height:1.6}",
       ".center-divider{width:80%;border:none;border-top:1px solid #ccc;margin:4px 0}",
       // Responsive
-      "@media(max-width:700px){.cung-cell{min-height:80px;padding:7px 3px 24px}.v2-chinh-item{font-size:10px}.v2-phu-item{font-size:8px}.cung-center{padding:6px}.center-title{font-size:10px}.center-row{font-size:9px}}",
+      "@media(max-width:700px){.cung-cell{min-height:80px;padding:7px 3px 24px}.v2-chinh-item{font-size:10px}.v2-phu-item{font-size:8px}.cung-center{padding:14px 30px}.center-title{font-size:10px}.center-row{font-size:9px}}",
       "@media(max-width:480px){.v2-phu-area{grid-template-columns:1fr}.cung-cell{min-height:90px;padding:7px 4px 24px}.v2-footer{display:flex;justify-content:space-between;align-items:flex-end}.v2-dai-van{font-size:11px}.v2-void{font-size:7px;padding:0 3px;letter-spacing:0}.v2-trang-sinh{font-size:7px;letter-spacing:0}}",
     ].join('\n');
     document.head.appendChild(s);

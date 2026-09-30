@@ -38,11 +38,12 @@ type Palace = {
 type Item = { text: string; color: string; bold?: boolean };
 
 const W = 1080;
-const H = 1500; // cao hơn 4:5 của lib/og/brand — ô 9 sao + hàng sao lưu cần chỗ, không thì chữ co về 11px
+const H = 1526; // cao hơn 4:5 của lib/og/brand — ô 9 sao + hàng sao lưu cần chỗ (+ dòng chú giải LEGEND_H)
+const LEGEND_H = 26;
 const PAD = 16;
 const HEAD = 64;
 const CW = (W - PAD * 2) / 4;
-const CH = (H - HEAD - FOOT - PAD) / 4;
+const CH = (H - HEAD - FOOT - PAD - LEGEND_H) / 4;
 // Chiều cao dành cho hai cột phụ tinh + hàng sao lưu trong một ô (đo trên ảnh thật).
 const COL_H = 200;
 const FS_MIN = 11;
@@ -83,6 +84,22 @@ const VOID_AT: Record<string, [number, number]> = {
   '8-9': [87.5, 25],
   '10-11': [87.5, 75],
 };
+/** Vòng tiểu hạn (engine tieuHanRing) quanh trung cung: [chỉ số chi cung] → chữ chi của năm,
+ *  sát mép trung cung cạnh cung đó (ô góc → góc trung cung). Cùng cách đặt với laso-chart.js. */
+function tieuHanMarks(ring: unknown): { left: number; top: number; label: string; align: 'flex-start' | 'center' | 'flex-end' }[] {
+  if (!Array.isArray(ring)) return [];
+  const BW = 70, BH = 18, GAP = 4;
+  return (ring as number[]).map((y, chi) => {
+    const [r, c] = POS[chi];
+    const x = PAD + (c === 0 ? 1 : c === 3 ? 3 : c + 0.5) * CW;
+    const yy = (r === 0 ? 1 : r === 3 ? 3 : r + 0.5) * CH;
+    const left = c === 0 ? x + GAP : c === 3 ? x - GAP - BW : x - BW / 2;
+    const top = r === 0 ? yy + GAP : r === 3 ? yy - GAP - BH : yy - BH / 2;
+    const align = c === 0 ? 'flex-start' : c === 3 ? 'flex-end' : 'center';
+    return { left, top, label: CHI[y].toUpperCase(), align };
+  });
+}
+
 /** Nhãn Tuần/Triệt [toạ độ %, chữ] — vắt lên đường biên chung của cặp chi, đầu biên sát trung cung. */
 function voidMarks(palaces: Palace[]): { x: number; y: number; label: string }[] {
   const pairOf = (pred: (s: Star) => boolean) =>
@@ -160,7 +177,7 @@ function Cell({ p, canNam, dvTuoi, cur }: { p?: Palace; canNam: string; dvTuoi?:
         // Đệm trên/dưới 12px: nhãn Tuần/Triệt vắt lên biên ô (cao ~18px) không đè chữ.
         padding: '12px 9px 12px',
         position: 'relative',
-        background: cur ? C.curVan : C.paper,
+        background: cur ? C.curVan : '#F7F7F7', // nền ô xám nhạt như khuôn Thiên Lương
         border: `1px solid ${C.line}`,
         ...(p.isMenh ? { border: `3px solid ${C.red}` } : {}),
       }}
@@ -316,7 +333,7 @@ export async function GET(req: NextRequest) {
         position: 'relative',
         width: CW * 2,
         height: CH * 2,
-        background: C.bg,
+        background: '#fff',
         border: `1px solid ${C.line}`,
       }}
     >
@@ -388,6 +405,14 @@ export async function GET(req: NextRequest) {
             <div style={{ display: 'flex', flexDirection: 'column' }}>{[9, 10].map(cell)}</div>
           </div>
           <div style={{ display: 'flex' }}>{[2, 1, 0, 11].map(cell)}</div>
+          {tieuHanMarks(ls.tieuHanRing).map((m) => (
+            <div
+              key={`th-${m.label}-${m.left}`}
+              style={{ display: 'flex', position: 'absolute', left: m.left, top: m.top, width: 70, height: 18, justifyContent: m.align, alignItems: 'center', fontSize: 13, fontWeight: 700, color: '#8a8a8a' }}
+            >
+              {m.label}
+            </div>
+          ))}
           {/* Tuần/Triệt: nhãn đen vắt lên đường biên chung của cặp cung (khuôn Thiên Lương). */}
           {voidMarks(palaces).map((m) => (
             <div
@@ -406,6 +431,15 @@ export async function GET(req: NextRequest) {
               <div style={{ display: 'flex', fontSize: 13, fontWeight: 700, letterSpacing: 1, color: '#fff', background: '#111', padding: '0 8px', borderRadius: 3 }}>
                 {m.label}
               </div>
+            </div>
+          ))}
+        </div>
+        {/* Chú giải — khuôn Thiên Lương; màu ngũ hành cùng bảng EL đang tô sao. */}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: LEGEND_H, fontSize: 15, color: '#1455A4' }}>
+          <div style={{ display: 'flex' }}>(M):Miếu Địa · (V):Vượng Địa · (Đ):Đắc Địa · (B):Bình Hòa · (H):Hãm Địa</div>
+          {(['kim', 'mộc', 'thủy', 'hỏa', 'thổ'] as const).map((e) => (
+            <div key={e} style={{ display: 'flex', marginLeft: 12, fontWeight: 700, color: EL[e] }}>
+              {e.charAt(0).toUpperCase() + e.slice(1)}
             </div>
           ))}
         </div>

@@ -20,7 +20,7 @@
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js"></script>
-<script src="/tuvi-grid.js?v=6"></script>
+<script src="/tuvi-grid.js?v=7"></script>
 <!-- Chart.js ĐÃ GỠ: chuỗi "Chart" không xuất hiện lần nào trong trang này,
      và không script nào nó nạp có dùng tới. Cùng bệnh với app-luan-giai. -->
 <link rel="stylesheet" href="/tools/tools.css">
@@ -228,15 +228,10 @@ select.form-input{cursor:pointer}
     <div class="laso-wrap">
       <div class="laso-label">Lá Số — 12 Cung</div>
       <div class="laso-grid" id="laso-grid"></div>
-      <div class="laso-legend" id="laso-legend" style="display:none">
-        <span style="font-weight:700;color:#555;margin-right:8px">Độ sáng:</span>
-        (M) Miếu &nbsp;·&nbsp; (V) Vượng &nbsp;·&nbsp; (Đ) Đắc &nbsp;·&nbsp; (B) Bình hòa &nbsp;·&nbsp; (H) Hãm
-        <span style="margin-left:16px;font-weight:700;color:#555">Ngũ hành:</span>
-        <span style="color:#C46A5E;font-weight:700">■</span> Hỏa &nbsp;
-        <span style="color:#7F8C8D;font-weight:700">■</span> Kim &nbsp;
-        <span style="color:#1a1a1a;font-weight:700">■</span> Thủy &nbsp;
-        <span style="color:#7FA7A3;font-weight:700">■</span> Mộc &nbsp;
-        <span style="color:#8B6914;font-weight:700">■</span> Thổ
+      <div class="laso-legend" id="laso-legend" style="display:none;text-align:center;color:#1455A4">
+        <!-- Khuôn Thiên Lương — màu lấy đúng class .sc-* đang tô sao (tuvi-grid.js) -->
+        (M):Miếu Địa &nbsp; (V):Vượng Địa &nbsp; (Đ):Đắc Địa &nbsp; (B):Bình Hòa &nbsp; (H):Hãm Địa
+        <span style="margin-left:12px;font-weight:700"><span class="sc-kim">Kim</span> &nbsp;<span class="sc-moc">Mộc</span> &nbsp;<span class="sc-thuy">Thủy</span> &nbsp;<span class="sc-hoa">Hỏa</span> &nbsp;<span class="sc-tho">Thổ</span></span>
       </div>
     </div>
 
