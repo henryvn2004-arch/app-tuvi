@@ -544,9 +544,8 @@ body.chat-home .rail-report,body.chat-first-live.art-closed .rail-report{margin-
 
 /* ── THẺ MỜI TRONG DÒNG HỘI THOẠI ──
    Chèn sau câu thứ 3, gọi tên đúng cung người ta vừa hỏi. Trông như một thẻ
-   thông tin trong mạch chat, KHÔNG phải banner quảng cáo cắt ngang. */
-
-   nền giấy + viền mảnh thay vì khối vàng — đây là lời CHỈ ĐƯỜNG, không phải
+   thông tin trong mạch chat, KHÔNG phải banner quảng cáo cắt ngang.
+   Nền giấy + viền mảnh thay vì khối vàng — đây là lời CHỈ ĐƯỜNG, không phải
    lời mời mua, và nó xuất hiện đúng lúc người ta đang cần giúp. Không có ô
    giá nào ở đây, xem lib/tools/suggest-tool.ts. */
 .tool-suggest{display:flex;align-items:center;gap:11px;margin:10px 0 4px;padding:11px 13px;
@@ -558,6 +557,8 @@ body.chat-home .rail-report,body.chat-first-live.art-closed .rail-report{margin-
   font-family:var(--serif);font-weight:600;font-size:12.5px;padding:7px 14px;border-radius:8px;white-space:nowrap;
   border:none;cursor:pointer}
 @media(hover:hover){.tool-suggest .ts-go:hover{background:var(--navy-mid,#164B6D)}}
+.tool-suggest .ts-kem{display:block;margin-top:6px;padding:0;background:none;border:none;cursor:pointer;text-align:left;
+  font-family:var(--serif);font-size:12.5px;font-weight:600;color:var(--tx-blue);text-decoration:underline;text-underline-offset:2px}
 
 /* ── CHAT-FIRST — đảo vai Chat ↔ Workspace ──────────────────────────────────
    Bật bằng `window.SHELL_CHATFIRST=true` ở trang, và CHỈ có hiệu lực sau khi

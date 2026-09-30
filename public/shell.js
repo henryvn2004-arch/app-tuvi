@@ -5902,6 +5902,7 @@
     _suggestShown = true;
     var chat = document.getElementById('chat');
     if (!chat) return;
+    var kem = s.kem && s.kem.label && String(s.kem.path || '').charAt(0) === '/' && String(s.kem.path).indexOf('//') !== 0 ? s.kem : null;
     var d = document.createElement('div');
     d.className = 'tool-suggest';
     // ⛔ KHÔNG hiện giá — xem lib/tools/suggest-tool.ts. Thẻ chỉ nói CÔNG CỤ
@@ -5911,7 +5912,11 @@
     // tool đã kiểm luồng (startInlineTool), chỉ điều hướng khi chưa kiểm.
     d.innerHTML =
       '<div class="ts-b"><div class="ts-t">' + esc(s.label) + '</div>' +
-      '<div class="ts-d">' + esc(s.lyDo || '') + '</div></div>' +
+      '<div class="ts-d">' + esc(s.lyDo || '') + '</div>' +
+      // Công cụ đi KÈM (lib/tools/suggest-tool.ts `KEM`) — nút phụ trên cùng
+      // thẻ, không phải thẻ thứ hai (luật một thẻ mỗi cuộc trò chuyện giữ nguyên).
+      (kem ? '<button class="ts-kem" type="button">Xem kèm: ' + esc(kem.label) + ' →</button>' : '') +
+      '</div>' +
       '<button class="ts-go" type="button">Mở</button>';
     chat.appendChild(d);
     chat.scrollTop = chat.scrollHeight;
@@ -5921,6 +5926,12 @@
       try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_open', meta: { kind: s.kind || 'tool' } }); } catch (e) { /* ignore */ }
       if (startInlineTool(s.toolId, s.label, s.path)) return;
       location.href = s.path;
+    });
+    var kemBtn = kem && d.querySelector('.ts-kem');
+    if (kemBtn) kemBtn.addEventListener('click', function () {
+      try { track('cta_click', { tool_id: kem.toolId, slug: 'rail_suggest_open', meta: { kind: 'kem', from: s.toolId } }); } catch (e) { /* ignore */ }
+      if (startInlineTool(kem.toolId, kem.label, kem.path)) return;
+      location.href = kem.path;
     });
   }
 

@@ -32,9 +32,38 @@ export interface ToolSuggestion {
   lyDo: string;
   /** 'tool' (goi_y_cong_cu). 'report' là của `goi_y_san_pham` đã gỡ 2026-09-28 — giữ kiểu cho dữ liệu đo cũ. */
   kind?: 'tool' | 'report';
+  /** Công cụ đi KÈM trên cùng thẻ (bảng `KEM`) — nút thứ hai, không phải thẻ thứ hai. */
+  kem?: { toolId: string; label: string; path: string };
 }
 
 const MAX_LY_DO = 140;
+
+/**
+ * Gợi ý A thì mời kèm B trên CÙNG thẻ. Vận Hạn 12 Tháng → Chu Trình Cuộc Đời
+ * (Henry 2026-09-30): khách hỏi "năm nay" thì nhiều, hỏi "10 năm tới" thì hiếm —
+ * đợi hỏi đại vận mới mời Chu Trình thì gần như không ai thấy nó.
+ */
+const KEM: Record<string, string> = { 'van-han-nam': 'chu-trinh-cuoc-doi' };
+
+/** Đọc một dòng danh mục đang BẬT có trang để mở; thiếu gì thì null. */
+async function docDanhMuc(id: string): Promise<{ toolId: string; label: string; path: string } | null> {
+  const res = await fetch(
+    `${SB_URL}/rest/v1/tool_pricing?tool_id=eq.${encodeURIComponent(id)}` + `&enabled=eq.true&select=tool_id,label,app_path&limit=1`,
+    {
+      headers: { apikey: SB_KEY!, Authorization: `Bearer ${SB_KEY}` },
+      cache: 'no-store',
+    },
+  );
+  if (!res.ok) return null;
+  const rows = (await res.json()) as { tool_id: string; label?: string; app_path?: string }[];
+  const row = Array.isArray(rows) ? rows[0] : null;
+  if (!row) return null;
+  // Đường dẫn phải do DANH MỤC cấp, không tự ghép '/app/'+id: tool đổi route
+  // là thẻ dẫn vào chỗ chết mà không có gì báo.
+  const path = typeof row.app_path === 'string' && row.app_path.startsWith('/') ? row.app_path : null;
+  if (!path) return null;
+  return { toolId: row.tool_id, label: String(row.label || row.tool_id), path };
+}
 
 /**
  * Tra danh mục và dựng thẻ gợi ý. Trả null khi tool không tồn tại / đang tắt /
@@ -57,25 +86,11 @@ export async function resolveToolSuggestion(
   if (!why) return null;
 
   try {
-    const res = await fetch(
-      `${SB_URL}/rest/v1/tool_pricing?tool_id=eq.${encodeURIComponent(id)}` +
-        `&enabled=eq.true&select=tool_id,label,app_path&limit=1`,
-      {
-        headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` },
-        cache: 'no-store',
-      },
-    );
-    if (!res.ok) return null;
-    const rows = (await res.json()) as { tool_id: string; label?: string; app_path?: string }[];
-    const row = Array.isArray(rows) ? rows[0] : null;
+    const row = await docDanhMuc(id);
     if (!row) return null;
-
-    // Đường dẫn phải do DANH MỤC cấp, không tự ghép '/app/'+id: tool đổi route
-    // là thẻ dẫn vào chỗ chết mà không có gì báo.
-    const path = typeof row.app_path === 'string' && row.app_path.startsWith('/') ? row.app_path : null;
-    if (!path) return null;
-
-    return { toolId: row.tool_id, label: String(row.label || row.tool_id), path, lyDo: why };
+    const kemId = KEM[row.toolId];
+    const kem = kemId && kemId !== dangMo ? await docDanhMuc(kemId).catch(() => null) : null;
+    return { ...row, lyDo: why, ...(kem ? { kem } : {}) };
   } catch {
     return null;
   }
