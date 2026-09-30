@@ -62,6 +62,18 @@ for (let ci = 0; ci < 10; ci++) {
           namXem: 1990 + tuoi - 1,
         });
         const ourIdx = ls.tieuHanIdx;
+        // Vòng tiểu hạn (chữ quanh trung cung của khuôn Thiên Lương) — chỉ cần so 1 lần mỗi
+        // can-chi × giới; oracle đánh số 1..12 (1=Tý), engine 0..11.
+        if (tuoi === 1) {
+          const ring = O.tieuHanRing(cj + 1, ci + 1, g2.oracle);
+          for (let p = 0; p < 12; p++) {
+            total++;
+            if (!ls.tieuHanRing || ls.tieuHanRing[p] !== ring.labels[p + 1] - 1)
+              bad.push(
+                `${CAN[ci]} ${CHI[cj]} ${g2.our} vòng tiểu hạn cung ${CHI[p]}: ours=${ls.tieuHanRing && ls.tieuHanRing[p]} oracle=${ring.labels[p + 1] - 1}`
+              );
+          }
+        }
         // viewChi là SỰ KIỆN LỊCH: chi của năm dương tương ứng luôn tiến +1 mỗi
         // năm, KHÔNG phụ thuộc hướng thuận/nghịch của thuật toán tiểu hạn (hướng
         // đó chỉ quyết định CUNG, không quyết định chi của năm đang xem) — nếu
@@ -87,5 +99,7 @@ if (bad.length) {
   console.error(bad.slice(0, 20).join('\n'));
   process.exitCode = 1;
 } else {
-  console.log('✓ Tiểu Hạn khớp 100% oracle trên toàn miền 60 can-chi × 2 giới × 12 tuổi.');
+  console.log(
+    '✓ Tiểu Hạn + vòng tiểu hạn khớp 100% oracle trên toàn miền 60 can-chi × 2 giới × 12 tuổi.'
+  );
 }
