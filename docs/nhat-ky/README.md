@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-513 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+514 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 348 | 1,216,357 B |
+| `2026-09.md` | 349 | 1,217,850 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🇻🇳 Zalo Mini App: `-501` IP ngoài Việt Nam — trạm Caddy trên VPS VN chuyển `/v2.0/me` |
 | 1 | 2026-09 | `2026-09.md` | ↩️ Luận giải về lại Gemini primary / Sonnet 5.5 backup (Opus ~12.400đ/preview) + vá giá ghi cache ×2 |
 | 1 | 2026-09 | `2026-09.md` | 🔑 Zalo Mini App: đăng nhập báo "Phiên Zalo không hợp lệ" — `/me` chỉ hỏi `id` |
 | 1 | 2026-09 | `2026-09.md` | 🔀 Luận giải sang Opus 5.5 primary + RAG `tuvi_docs` hết rỗng (ivfflat probes, ngưỡng 0,40) |
