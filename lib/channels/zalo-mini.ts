@@ -47,12 +47,12 @@ export async function verifyMiniAppToken(accessToken: string): Promise<{ id: str
   if (!APP_SECRET || !accessToken) return { error: 'thiếu token' };
   const proof = createHmac('sha256', APP_SECRET).update(accessToken).digest('hex');
   try {
-    const res = await fetch(ME_URL, {
-      headers: {
-        access_token: accessToken,
-        appsecret_proof: proof,
-        ...(RELAY_KEY ? { 'X-Relay-Key': RELAY_KEY } : {}),
-      },
+    // Token + proof đi QUERY, không đi header: header `access_token` (có gạch dưới)
+    // bị rơi khi qua trạm Caddy ⇒ Zalo trả 100 "Invalid parameter access_token".
+    // Gọi thẳng graph.zalo.me thì hai cách như nhau (đã đo: cùng ra 452 với token giả).
+    const qs = `&access_token=${encodeURIComponent(accessToken)}&appsecret_proof=${proof}`;
+    const res = await fetch(ME_URL + qs, {
+      headers: RELAY_KEY ? { 'X-Relay-Key': RELAY_KEY } : {},
       cache: 'no-store',
     });
     const d = (await res.json().catch(() => ({}))) as { id?: string; error?: number; message?: string };
