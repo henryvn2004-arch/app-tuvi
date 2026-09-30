@@ -10,8 +10,8 @@ của gốc bỏ qua thư mục này (giống `remotion/`, `tuvi-engine/`).
 |---|---|---|
 | **Hôm nay** | `GET/POST /api/van-ngay` | Miễn phí. Có "lá số của tôi" thì thêm tầng cá nhân (cung nhật hạn). |
 | **Hỏi Thầy** | `POST /api/v1/chat` (SSE, `historyMode:'delta'`) | Tính Lượng y như web. Đổi người được hỏi ⇒ phiên mới. Nút máy ảnh: chụp/chọn ảnh (tướng mặt, chỉ tay, nhà cửa) gửi kèm. |
-| **Công cụ** | `/api/v1/catalog` · `/api/channels/handoff/new` | Giá do server tính (VNĐ chính). Bấm ⇒ mở trang web của công cụ trong webview Zalo, đã đăng nhập + nạp sẵn "lá số của tôi". |
-| **Của tôi** | `/api/payment` (balance · create-bank · check-bank) · `credit_packages` · `/api/reports` | Số dư, nạp Lượng qua link payOS (chờ webhook báo đã trả), đọc lại báo cáo đã có. |
+| **Công cụ** | — (tính ngay trong app) | Kinh Dịch, Kim Lâu, Bát Trạch, Nạp Âm, Sinh Con, Thần Số Học chạy bằng CHÍNH `public/tools-shared/*.js` của web, CSS kết quả đọc lúc build từ `public/app-<trang>.html` (`web-tools-vite.mts`). Bấm "Hỏi Thầy…" ⇒ tab Hỏi Thầy kèm `scenario` như rail web. KHÔNG mở trang web. |
+| **Của tôi** | `/api/payment?action=balance` · `/api/reports` · `/api/channels/zalo-mini/link-email` | Số dư (dùng chung web), đọc lại báo cáo đã có, **gộp tài khoản web** (email + mã 6 số, cùng luồng `lib/channels/email-link.ts` của kênh chat). KHÔNG bán gói nạp. |
 | **Sổ lá số** | `/api/charts` (GET/POST/DELETE) · `/api/v1/laso-image` | Cùng bảng `user_charts` với web — lưu bên nào cũng hiện bên kia. Ảnh lá số: lưu về máy, chia sẻ vào chat Zalo. |
 
 Đăng nhập: `getAccessToken()` → `POST /api/channels/zalo-mini/login` → `tokenHash`
@@ -20,6 +20,17 @@ thì gọi API web bằng `Authorization: Bearer` như trình duyệt.
 
 "Lá số của tôi" chỉ là id ghi nhớ trên máy (`nativeStorage`), giống web giữ
 `app_birth` ở localStorage.
+
+## Chính sách Zalo định hình app (đọc trước khi thêm tính năng)
+
+Duyệt Mini App từ chối: **nạp tiền vào ví/tài khoản trong app** (Lượng là ví nội bộ)
+và **dẫn người dùng ra website ngoài** (chỉ trang chính sách/điều khoản được mở).
+Nên Mini App chỉ HIỆN + TIÊU số dư chung, không có nút nạp, không `openWebview`
+sang trang công cụ. Công cụ muốn có trong app thì phải chạy trong app (xem tab
+Công cụ). Bán trong app (nếu cần) phải qua Zalo Checkout SDK — chưa làm.
+
+Web sửa `public/tools-shared/*.js` hay CSS kết quả của các trang công cụ trên ⇒
+build + deploy lại Mini App mới có bản mới (code đóng gói lúc build).
 
 ## Chạy / build
 

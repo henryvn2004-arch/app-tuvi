@@ -144,7 +144,7 @@ export async function startEmailLink(
 <p>Có người vừa yêu cầu gộp cuộc trò chuyện Hỏi Thầy trên kênh chat vào tài khoản <b>${email}</b> tại tuviminhbao.com.</p>
 <p>Mã xác nhận của bạn:</p>
 <p style="font-size:28px;font-weight:700;letter-spacing:6px">${code}</p>
-<p>Nhắn mã này vào cuộc trò chuyện với thầy để hoàn tất. Mã dùng được trong ${CODE_TTL_MIN} phút.</p>
+<p>Nhắn mã này vào cuộc trò chuyện với thầy (hoặc nhập vào Zalo Mini App, nếu bạn gộp từ đó) để hoàn tất. Mã dùng được trong ${CODE_TTL_MIN} phút.</p>
 <p style="color:#888;font-size:13px">Nếu không phải bạn yêu cầu, cứ bỏ qua thư này — tài khoản của bạn không thay đổi gì.</p>`,
     });
     if (!sent.ok) {

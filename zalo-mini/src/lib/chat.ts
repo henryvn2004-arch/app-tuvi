@@ -45,7 +45,8 @@ export async function askThay(
   text: string,
   birth: BirthParams | null,
   h: ChatHandlers,
-  images: { data: string; mediaType: string }[] = []
+  images: { data: string; mediaType: string }[] = [],
+  scenario: { type: string; data: Record<string, unknown> } | null = null
 ): Promise<void> {
   const res = await authFetch('/api/v1/chat', {
     method: 'POST',
@@ -55,6 +56,7 @@ export async function askThay(
       historyMode: 'delta',
       messages: [{ role: 'user', content: text, ...(images.length ? { images } : {}) }],
       ...(birth ? { birth } : {}),
+      ...(scenario ? { scenario } : {}),
       client: CLIENT,
     }),
   });

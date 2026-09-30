@@ -343,3 +343,64 @@ body {
   border-radius: 8px;
   margin: 8px 0;
 }
+
+/* ── Công cụ chạy trong app (src/pages/tools/WebTools.tsx) ── */
+.tv-title {
+  margin: 0;
+  font-size: 20px;
+  color: var(--tv-navy);
+}
+
+.tv-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tv-row3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.4fr;
+  gap: 8px;
+}
+
+/* Khung kết quả: CSS riêng của từng trang web nằm dưới .tvw-<id>
+   (virtual:web-tools.css); đây chỉ là nền chung. */
+.tvw {
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.tvw img {
+  max-width: 100%;
+  height: auto;
+}
+
+.tv-hao {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tv-hao > div {
+  display: grid;
+  grid-template-columns: 48px 1fr 40px;
+  align-items: center;
+  gap: 10px;
+}
+
+.tv-hao-duong,
+.tv-hao-am {
+  height: 10px;
+  border-radius: 2px;
+  background: var(--tv-navy);
+}
+
+.tv-hao-am {
+  background: linear-gradient(90deg, var(--tv-navy) 44%, transparent 44% 56%, var(--tv-navy) 56%);
+}
+
+.tv-hao-dong .tv-hao-duong,
+.tv-hao-dong .tv-hao-am {
+  --tv-navy: var(--tv-red);
+}
