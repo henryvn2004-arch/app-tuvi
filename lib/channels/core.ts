@@ -117,6 +117,9 @@ export interface IncomingTurn {
   /** Lời thầy tự giới thiệu — chỉ có ở lượt ĐẦU cuộc trò chuyện; ghép lên
    *  trước chữ "đang xem…" trong cùng tin chờ (không thêm tin riêng). */
   intro?: string;
+  /** Lời chép từ tin THOẠI — ghi lên đầu tin chờ, không thêm tin riêng (Zalo
+   *  chỉ cho 8 tin tư vấn miễn phí mỗi lần khách nhắn). */
+  heard?: string;
   /** Tài khoản đã LIÊN KẾT (server tự giải qua chat_links, không lấy từ tin
    *  nhắn) → bật trí nhớ/người thân như web. null/vắng = không đọc/ghi hồ sơ. */
   userId?: string | null;
@@ -176,7 +179,9 @@ export async function runConversation(
 
   await io.typing(chatId);
   const waitMsg = hasImage ? WAIT_IMAGE : WAIT_LASO;
-  const waitText = incoming.authorName ? waitMsg.replace('Đang xem', `Thầy ${incoming.authorName} đang xem`) : waitMsg;
+  const waitText =
+    (incoming.heard ? `Thầy nghe: "${incoming.heard}"\n\n` : '') +
+    (incoming.authorName ? waitMsg.replace('Đang xem', `Thầy ${incoming.authorName} đang xem`) : waitMsg);
   // Lượt ĐẦU (có lời giới thiệu) + kênh gửi được ảnh → tin chờ là ảnh chân dung
   // NHỎ của thầy kèm lời giới thiệu. Các lượt sau chỉ là chữ: app chat không
   // cho chèn ảnh vào giữa dòng chữ như emoji, ảnh luôn thành một tin riêng —

@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🎙️ Zalo OA nghe được tin nhắn THOẠI |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Zalo Mini App theo chính sách Zalo: bỏ nạp Lượng, công cụ chạy trong app, gộp tài khoản web |
 | 1 | 2026-09 | `2026-09.md` | 🔑 Trạm Zalo VN: token đi query, không đi header — Caddy làm rơi header `access_token` (Zalo 100) |
 | 1 | 2026-09 | `2026-09.md` | 🔴 Sao lưu: engine tự đánh dấu xấu + hiện ở /tools/an-sao và /la-so/<slug> |
