@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-521 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+522 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🎙️ Zalo OA nghe được tin nhắn THOẠI |
 | 1 | 2026-09 | `2026-09.md` | 🎭 15 thầy: dấu riêng thôi làm câu mở + tin chờ trung tính "Thầy X đang nghĩ…" |
 | 1 | 2026-09 | `2026-09.md` | 💬 Rail: thêm chế độ ĐÀM ĐẠO + cấm đôn đốc lặp ("nộp hồ sơ chưa?" mọi lượt) |
 | 1 | 2026-09 | `2026-09.md` | 🔴 Hỏi hạn năm: model bỏ qua sao lưu — dời khối lên trước tổ hợp + thêm vào luật VẬN HẠN |
