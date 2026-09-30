@@ -23,6 +23,7 @@ import {
   zaloProfiles,
   zaloClearSession,
 } from '@/lib/channels/zalo';
+import { transcribeVoice } from '@/lib/channels/voice';
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -85,7 +86,19 @@ async function handleEvent(ev: ZaloEvent, cfg: Awaited<ReturnType<typeof getChat
   const uid = ev.sender?.id;
   if (!uid) return;
 
-  const text = (ev.message?.text || '').trim();
+  let text = (ev.message?.text || '').trim();
+  // Tin THOẠI → chép lời rồi chạy như tin chữ. Câu nghe được hiện lên tin chờ
+  // (`heard`, core.ts) để khách thấy ngay nếu thầy nghe nhầm ngày giờ sinh.
+  const voice = name === 'user_send_audio';
+  if (voice) {
+    const url = (ev.message?.attachments || []).find((a) => a.type === 'audio')?.payload?.url || '';
+    const heard = await transcribeVoice(url, ZALO_PLATFORM);
+    if (!heard) {
+      await zaloIO.sendText(uid, 'Thầy chưa nghe rõ tin thoại này. Bạn nói lại chậm hơn, hoặc gõ chữ giúp thầy nhé.');
+      return;
+    }
+    text = heard;
+  }
   const imageRefs =
     name === 'user_send_image'
       ? (ev.message?.attachments || [])
@@ -93,7 +106,7 @@ async function handleEvent(ev: ZaloEvent, cfg: Awaited<ReturnType<typeof getChat
           .map((a) => a.payload!.url as string)
       : [];
 
-  await handleChannelEvent(KIT, { chatId: uid, externalId: uid, text, imageRefs }, cfg);
+  await handleChannelEvent(KIT, { chatId: uid, externalId: uid, text, imageRefs, ...(voice ? { heard: true } : {}) }, cfg);
 }
 
 function ok() {

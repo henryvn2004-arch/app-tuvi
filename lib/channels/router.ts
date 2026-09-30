@@ -71,6 +71,9 @@ export interface ChannelEvent {
   externalId: string;
   text: string;
   imageRefs: string[];
+  /** `text` là lời chép từ tin THOẠI (lib/channels/voice.ts) — ghi lên tin chờ để
+   *  khách thấy thầy nghe gì (nghe nhầm ngày sinh là lập sai lá số). */
+  heard?: boolean;
 }
 
 const norm = (s: string) => s.trim().toLowerCase();
@@ -435,6 +438,7 @@ export async function handleChannelEvent(kit: ChannelKit, ev: ChannelEvent, cfg:
       authorAvatarUrl: anhThay(thay),
       ...(moiBatDau ? { intro: await gioiThieuThay(thay) } : {}),
       userId,
+      ...(ev.heard ? { heard: ev.text } : {}),
     },
     cfg,
     ERR_MSG,

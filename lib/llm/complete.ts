@@ -544,6 +544,37 @@ export async function llmText(o: LlmTextOpts): Promise<string> {
   return (await llmTextFull(o)).text;
 }
 
+/**
+ * Chép lời một đoạn ghi âm (tin nhắn thoại ở kênh chat) ra chữ. CHỈ Gemini —
+ * Anthropic/Kimi không nhận audio nên KHÔNG có fallback: lỗi thì ném, caller
+ * báo khách gõ chữ. Audio đi qua `images` vì `buildGeminiBody` chuyển nguyên
+ * `mediaType` vào `inline_data` (Gemini nhận mọi MIME ở đó).
+ * Trả `text` rỗng khi đoạn ghi âm không có lời nghe được.
+ */
+export async function llmTranscribeAudio(data: string, mediaType: string): Promise<LlmTextFullResult> {
+  const t0 = Date.now();
+  const r = await geminiText(
+    {
+      prompt:
+        'Chép lại NGUYÊN VĂN lời nói tiếng Việt trong đoạn ghi âm này. Ngày, tháng, năm, giờ viết bằng chữ số ' +
+        '(vd "sinh ngày 12/3/1990 lúc 7 giờ sáng"). Chỉ trả về lời đã chép, không thêm lời dẫn hay ghi chú. ' +
+        'Không nghe ra lời nào thì trả về đúng: (im lặng)',
+      images: [{ data, mediaType }],
+      temperature: 0,
+    },
+    1000,
+  );
+  const text = r.text.trim();
+  return {
+    text: /^\(im lặng\)\.?$/i.test(text) ? '' : text,
+    usage: r.usage,
+    truncated: !!r.truncated,
+    provider: 'gemini',
+    model: GEMINI_MODEL,
+    durationMs: Date.now() - t0,
+  };
+}
+
 // ─── Streaming ─────────────────────────────────────────────────
 export type StreamFormat = 'anthropic' | 'delta';
 
