@@ -1,68 +1,45 @@
-import { useEffect, useRef, useState } from 'react';
-import { Spinner, useSnackbar } from 'zmp-ui';
-import { toBirthParams } from '../lib/birth';
+import { useEffect, useState } from 'react';
+import { Button } from 'zmp-ui';
+import type { ChartBirth } from '../lib/birth';
 import { loadMyChart } from '../lib/charts';
-import { fetchCatalog, openTool, priceText, type ToolGroup, type ToolItem } from '../lib/tools';
+import type { Scenario } from '../lib/web-tools';
+import { NATIVE_TOOLS, type NativeTool } from './tools/WebTools';
 
-export default function ToolsPage() {
-  const { openSnackbar } = useSnackbar();
-  const snack = useRef(openSnackbar);
-  snack.current = openSnackbar;
-  const [groups, setGroups] = useState<ToolGroup[] | null>(null);
-  const [error, setError] = useState('');
-  const [opening, setOpening] = useState<string | null>(null);
+// Công cụ chạy NGAY trong app (src/pages/tools/WebTools.tsx) — không mở trang web:
+// chính sách Zalo cấm dẫn người dùng ra website ngoài.
+export default function ToolsPage({ onAsk }: { onAsk: (s: Scenario) => void }) {
+  const [mine, setMine] = useState<ChartBirth | null>(null);
+  const [open, setOpen] = useState<NativeTool | null>(null);
 
+  // Có "lá số của tôi" thì điền sẵn năm sinh, giới tính, họ tên.
   useEffect(() => {
-    fetchCatalog()
-      .then(setGroups)
-      .catch((e: Error) => setError(e.message));
+    loadMyChart()
+      .then((c) => setMine(c?.birth || null))
+      .catch(() => setMine(null));
   }, []);
 
-  async function open(t: ToolItem) {
-    if (opening) return;
-    setOpening(t.toolId);
-    try {
-      const mine = await loadMyChart().catch(() => null);
-      await openTool(t, toBirthParams(mine?.birth));
-    } catch (e) {
-      snack.current({ text: (e as Error).message, type: 'error' });
-    } finally {
-      setOpening(null);
-    }
-  }
-
-  if (error) return <p className="tv-empty">{error}</p>;
-  if (!groups)
+  if (open)
     return (
-      <div className="tv-center">
-        <Spinner />
+      <div className="tv-page">
+        <Button size="small" variant="tertiary" onClick={() => setOpen(null)}>
+          ← Công cụ
+        </Button>
+        <h1 className="tv-title">{open.label}</h1>
+        <open.View mine={mine} onAsk={onAsk} />
       </div>
     );
 
   return (
     <div className="tv-page">
-      {groups.map((g) => (
-        <section key={g.key}>
-          <h2 className="tv-group">{g.title}</h2>
-          <div className="tv-tools">
-            {g.tools.map((t) => (
-              <button
-                key={t.toolId}
-                type="button"
-                className="tv-card tv-tool"
-                onClick={() => open(t)}
-                disabled={!!opening}
-              >
-                <strong>{t.label}</strong>
-                {t.description && <span className="tv-muted">{t.description}</span>}
-                <span className={t.free ? 'tv-price tv-free' : 'tv-price'}>
-                  {opening === t.toolId ? 'Đang mở…' : priceText(t)}
-                </span>
-              </button>
-            ))}
-          </div>
-        </section>
-      ))}
+      <div className="tv-tools">
+        {NATIVE_TOOLS.map((t) => (
+          <button key={t.id} type="button" className="tv-card tv-tool" onClick={() => setOpen(t)}>
+            <strong>{t.label}</strong>
+            <span className="tv-muted">{t.desc}</span>
+            <span className="tv-price tv-free">Miễn phí</span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

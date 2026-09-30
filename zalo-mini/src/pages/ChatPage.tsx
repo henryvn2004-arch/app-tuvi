@@ -5,6 +5,7 @@ import { askThay, newSessionId } from '../lib/chat';
 import { loadMyChart } from '../lib/charts';
 import { pickImage, type PickedImage } from '../lib/media';
 import { RichText } from '../lib/text';
+import type { Scenario } from '../lib/web-tools';
 
 interface Msg {
   role: 'user' | 'assistant';
@@ -22,9 +23,12 @@ const GOI_Y = [
 
 export default function ChatPage({
   chart,
+  scenario,
   onPickChart,
 }: {
   chart: Chart | null;
+  /** Kết quả công cụ vừa xem (tab Công cụ) — có thì hỏi về kết quả đó thay vì lá số. */
+  scenario: Scenario | null;
   onPickChart: () => void;
 }) {
   const [subject, setSubject] = useState<Chart | null>(chart);
@@ -34,7 +38,7 @@ export default function ChatPage({
   const [photo, setPhoto] = useState<PickedImage | null>(null);
   const [status, setStatus] = useState('');
   const [busy, setBusy] = useState(false);
-  const [chips, setChips] = useState<string[]>(GOI_Y);
+  const [chips, setChips] = useState<string[]>(scenario?.chips || GOI_Y);
   const endRef = useRef<HTMLDivElement>(null);
   const { openSnackbar } = useSnackbar();
 
@@ -46,13 +50,13 @@ export default function ChatPage({
       .catch(() => setSubject(null));
   }, [chart]);
 
-  // Đổi người được hỏi ⇒ phiên mới: server ghép lịch sử theo session_id, trộn
-  // hai lá số vào một phiên là Thầy luận nhầm người.
+  // Đổi người/kết quả được hỏi ⇒ phiên mới: server ghép lịch sử theo session_id,
+  // trộn hai lá số vào một phiên là Thầy luận nhầm người.
   useEffect(() => {
     setSessionId(newSessionId());
     setMsgs([]);
-    setChips(GOI_Y);
-  }, [subject?.id]);
+    setChips(scenario?.chips || GOI_Y);
+  }, [subject?.id, scenario]);
 
   useEffect(() => endRef.current?.scrollIntoView({ behavior: 'smooth' }), [msgs, status]);
 
@@ -114,7 +118,8 @@ export default function ChatPage({
             setChips(d.suggestions?.slice(0, 3) || []);
           },
         },
-        shot ? [{ data: shot.data, mediaType: shot.mediaType }] : []
+        shot ? [{ data: shot.data, mediaType: shot.mediaType }] : [],
+        scenario ? { type: scenario.type, data: scenario.data } : null
       );
     } catch (e) {
       patchLast((m) => ({ ...m, error: true, text: m.text || (e as Error).message }));
@@ -128,7 +133,7 @@ export default function ChatPage({
     <div className="tv-page tv-chat">
       <div className="tv-subject">
         <span className="tv-muted">Đang hỏi về:</span>{' '}
-        <strong>{subject?.label || 'chưa chọn lá số'}</strong>
+        <strong>{scenario?.label || subject?.label || 'chưa chọn lá số'}</strong>
         <Button size="small" variant="tertiary" onClick={onPickChart}>
           Đổi
         </Button>
@@ -136,7 +141,9 @@ export default function ChatPage({
 
       {msgs.length === 0 && (
         <p className="tv-empty">
-          {subject
+          {scenario
+            ? 'Hỏi Thầy về kết quả bạn vừa xem.'
+            : subject
             ? 'Hỏi Thầy bất cứ điều gì về lá số này.'
             : 'Hỏi Thầy bất cứ điều gì. Có lá số trong Sổ thì Thầy luận sát hơn.'}
         </p>
