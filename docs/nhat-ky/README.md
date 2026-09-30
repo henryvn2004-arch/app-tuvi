@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 356 | 1,234,052 B |
+| `2026-09.md` | 358 | 1,238,159 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -27,6 +27,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 🔁 Gợi ý Vận Hạn 12 Tháng thì mời KÈM Chu Trình Cuộc Đời · vá thẻ gợi ý mất khung |
 | 1 | 2026-09 | `2026-09.md` | 🎙️ Zalo OA nghe được tin nhắn THOẠI |
+| 1 | 2026-09 | `2026-09.md` | 📄 Nút Lưu PDF chết trong trình duyệt Zalo/FB + popup "luận giải xong" |
 | 1 | 2026-09 | `2026-09.md` | 🎭 15 thầy: dấu riêng thôi làm câu mở + tin chờ trung tính "Thầy X đang nghĩ…" |
 | 1 | 2026-09 | `2026-09.md` | 💬 Rail: thêm chế độ ĐÀM ĐẠO + cấm đôn đốc lặp ("nộp hồ sơ chưa?" mọi lượt) |
 | 1 | 2026-09 | `2026-09.md` | 🔴 Hỏi hạn năm: model bỏ qua sao lưu — dời khối lên trước tổ hợp + thêm vào luật VẬN HẠN |

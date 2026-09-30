@@ -32,7 +32,39 @@
   // Chuỗi hiển thị đi qua tools-shared/i18n.js (docs/luat/i18n.md). `fallback`
   // giữ đúng chuỗi tiếng Việt cũ phòng trang cache HTML chưa có script mới.
   function t(key, params, fallback) {
-    return window.I18n && window.I18n.t ? window.I18n.t(key, params) : fallback;
+    var s = window.I18n && window.I18n.t ? window.I18n.t(key, params) : fallback;
+    return s === key ? fallback : s; // I18n.t trả NGUYÊN khoá khi DICT chưa có
+  }
+
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+  // Loại tài khoản đang đăng nhập — quyết định câu "lần sau vào bằng gì":
+  //   chat  = tài khoản tạo từ Zalo/Messenger/WhatsApp/Telegram (email bóng
+  //           `<kênh>.<id>@chat.tuviminhbao.com`, KHÔNG có hộp thư — lib/channels/shadow-email.ts)
+  //   anon  = phiên khách (guest checkout), mất khi xoá trình duyệt
+  //   email = tài khoản email thật
+  var CHAT_NAMES = { zalo: 'Zalo', messenger: 'Messenger', whatsapp: 'WhatsApp', telegram: 'Telegram' };
+  function account() {
+    var A = window.Auth;
+    if (!A || !A.isLoggedIn || !A.isLoggedIn()) return { kind: 'none' };
+    if (A.isAnonymous && A.isAnonymous()) return { kind: 'anon' };
+    var email = String((A.getUser && A.getUser() && A.getUser().email) || '').toLowerCase();
+    var m = email.match(/^([a-z0-9_-]+)\.[^@]*@chat\.tuviminhbao\.com$/);
+    if (m) return { kind: 'chat', chatName: CHAT_NAMES[m[1].replace(/-.*$/, '')] || 'Zalo' };
+    return { kind: 'email', email: email };
+  }
+  function authHeaders() {
+    var s = window.Auth && window.Auth.getSession && window.Auth.getSession();
+    var h = { 'Content-Type': 'application/json' };
+    if (s && s.access_token) h.Authorization = 'Bearer ' + s.access_token;
+    return h;
+  }
+  function postJson(url, body) {
+    return fetch(url, { method: 'POST', headers: authHeaders(), body: JSON.stringify(body) }).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (d) {
+        return { ok: res.ok && d.ok !== false, url: d.url, error: d.error };
+      });
+    });
   }
 
   function mount(opts) {
@@ -76,7 +108,9 @@
       }
     }
 
-    function ready(total) {
+    // `o.announce` — CHỈ khi lượt này vừa luận xong thật (không phải mở lại
+    // bản cũ): hiện popup "đã xong · lưu PDF · đã lưu vào tài khoản".
+    function ready(total, o) {
       emit('ready', total, total);
       host.hidden = false;
       host.classList.remove('pending');
@@ -92,7 +126,88 @@
       if (pdfIcon) pdfIcon.innerHTML = DOWNLOAD_ICON;
       if (pdfLabel) pdfLabel.textContent = t('report.pdfLabel', null, 'Tải PDF');
       if (mailBtn && !sent) mailBtn.disabled = false;
+      if (mailBtn && !sent && account().kind === 'chat') {
+        mailLabel.textContent = t('report.chatLabel', { chat: account().chatName }, 'Gửi PDF vào ' + account().chatName);
+      }
       trackReady();
+      if (o && o.announce) announce(total);
+    }
+
+    // Nguồn PDF dựng ở server — cho trình duyệt nhúng (Zalo/FB…), nơi
+    // `window.print()` không chạy (shell.js `inAppPdf`). Chỉ khi trang khai
+    // `getSlug` (Luận Giải · Chu Trình — lib/pdf/paid-reports.ts). Chờ
+    // `opts.saved()` (POST /api/save-laso đang bay) để server đọc được bản mới.
+    function afterSave() {
+      var p = opts.saved && opts.saved();
+      return (p && p.then ? p : Promise.resolve()).catch(function () { /* lưu hỏng thì server tự báo thiếu */ });
+    }
+    function serverOpen() {
+      return afterSave().then(function () { return postJson('/api/luan-giai/pdf', { slug: opts.getSlug() }); });
+    }
+    function serverToChat() {
+      return afterSave().then(function () { return postJson('/api/channels/send-pdf', { slug: opts.getSlug() }); });
+    }
+    if (opts.getSlug && window.Shell && window.Shell.setServerPdf) {
+      window.Shell.setServerPdf({
+        open: serverOpen,
+        get toChat() { return account().kind === 'chat' ? serverToChat : null; },
+        get chatName() { return account().chatName; },
+      });
+    }
+
+    // Popup "đã luận giải xong" — một lần cho mỗi bản (sessionStorage). Nói rõ
+    // bản đã nằm trong tài khoản + LẦN SAU VÀO BẰNG GÌ, vì khách tới từ Zalo
+    // đang dùng tài khoản bóng không có email/mật khẩu để nhớ.
+    function announce(total) {
+      var key = 'tvmb_done_' + opts.tool + '_' + ((opts.getSlug && opts.getSlug()) || location.search);
+      try { if (sessionStorage.getItem(key)) return; sessionStorage.setItem(key, '1'); } catch (e) { /* chế độ riêng tư — vẫn hiện */ }
+      var acc = account();
+      var note = acc.kind === 'chat'
+        ? 'Tài khoản này gắn với ' + acc.chatName + ' của bạn. Lần sau chỉ cần nhắn thầy qua ' + acc.chatName + ' là mở lại được; trên máy khác thì chọn Đăng nhập → “Đăng nhập bằng tin nhắn”.'
+        : acc.kind === 'anon'
+          ? 'Bạn đang dùng phiên khách — bản này chỉ nằm trên trình duyệt này. Lưu tài khoản (email + mật khẩu) để không mất và mở lại trên máy khác.'
+          : acc.kind === 'email'
+            ? 'Đăng nhập bằng ' + acc.email + ' trên bất kỳ máy nào để xem lại.'
+            : '';
+      var canShare = window.Shell && window.Shell.hasResult && window.Shell.hasResult();
+      var wrap = document.createElement('div');
+      wrap.className = 'sh-share-modal';
+      wrap.innerHTML =
+        '<div class="ssm-card" role="dialog" aria-modal="true">' +
+          '<button class="ssm-x" aria-label="Đóng">✕</button>' +
+          '<div class="ssm-t">' + esc(t('report.doneTitle', null, '✦ Luận giải đã hoàn tất')) + '</div>' +
+          '<div class="ssm-d">' + esc(t('report.doneDesc', { total: total }, 'Bản báo cáo ' + total + ' phần đã được lưu vào tài khoản của bạn — xem lại bất cứ lúc nào ở mục Báo cáo.')) + '</div>' +
+          (note ? '<div class="ssm-note">' + esc(note) + '</div>' : '') +
+          '<div class="ssm-acts">' +
+            (acc.kind === 'anon' && window.showClaimModal ? '<button type="button" class="ssm-act pri" data-a="claim">Lưu tài khoản</button>' : '') +
+            '<button type="button" class="ssm-act' + (acc.kind === 'anon' ? '' : ' pri') + '" data-a="pdf">Lưu PDF</button>' +
+            (canShare ? '<button type="button" class="ssm-act" data-a="share">Chia sẻ</button>' : '') +
+            '<a class="ssm-act" href="/app/bao-cao" data-a="list">Xem ở mục Báo cáo</a>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(wrap);
+      function onEsc(e) { if (e.key === 'Escape') close(); }
+      function close() { document.removeEventListener('keydown', onEsc); wrap.remove(); }
+      document.addEventListener('keydown', onEsc);
+      wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
+      wrap.querySelector('.ssm-x').addEventListener('click', close);
+      wrap.querySelectorAll('[data-a]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var a = b.getAttribute('data-a');
+          try { if (window.Track) window.Track.event('report_done_action', { tool_id: opts.tool, meta: { action: a, account: acc.kind } }); } catch (e) { /* ignore */ }
+          if (a === 'list') return; // để link tự điều hướng
+          close();
+          if (a === 'pdf') { if (window.Shell && window.Shell.printNow) window.Shell.printNow(); else window.print(); }
+          else if (a === 'share') window.Shell.shareNow();
+          else if (a === 'claim') window.showClaimModal({
+            title: t('report.claimTitle', null, 'Nhận báo cáo qua email'),
+            desc: t('report.claimDesc', null, 'Thêm email + mật khẩu để tụi mình gửi bản PDF báo cáo về hộp thư — đây cũng là tài khoản để bạn đăng nhập lại và xem lại báo cáo bất cứ lúc nào.'),
+            submitLabel: t('report.claimSubmit', null, 'Nhận báo cáo →'),
+            callback: runSend,
+          });
+        });
+      });
+      try { if (window.Track) window.Track.event('report_done_shown', { tool_id: opts.tool, meta: { account: acc.kind } }); } catch (e) { /* ignore */ }
     }
 
     // Nhặt lại đúng nội dung ĐÃ HIỂN THỊ trên trang — không gọi lại LLM,
@@ -166,8 +281,32 @@
     //                           cáo" — claimAccount xong mới gửi, vì gửi cần
     //                           MỘT email thật để nhận, phiên ẩn danh không có
     //   đã có tài khoản thật  → gửi thẳng
+    function runChatSend() {
+      var origLabel = mailLabel.textContent;
+      mailBtn.disabled = true;
+      mailLabel.textContent = t('report.sending', null, 'Đang gửi...');
+      serverToChat().then(function (r) {
+        if (r.ok) {
+          sent = true;
+          mailBtn.classList.add('sent');
+          mailLabel.textContent = '✓ Đã gửi vào ' + account().chatName;
+        } else {
+          mailBtn.disabled = false;
+          mailLabel.textContent = origLabel;
+          alert(r.error || 'Chưa gửi được, thử lại sau ít phút.');
+        }
+      }, function () {
+        mailBtn.disabled = false;
+        mailLabel.textContent = origLabel;
+        alert('Lỗi mạng, thử lại sau ít phút.');
+      });
+    }
+
     function onMailClick() {
       if (sent) return;
+      // Tài khoản từ kênh chat chỉ có email BÓNG (send.ts chặn gửi) — gửi
+      // thẳng bản PDF vào Zalo/Messenger của họ thay vì hỏi email.
+      if (opts.getSlug && account().kind === 'chat') { runChatSend(); return; }
       var isLoggedIn = !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn());
       var isAnon = isLoggedIn && window.Auth.isAnonymous && window.Auth.isAnonymous();
       if (!isLoggedIn) {

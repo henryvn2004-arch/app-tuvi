@@ -481,6 +481,11 @@ body.chat-home .rail-report,body.chat-first-live.art-closed .rail-report{margin-
 .ssm-b{flex:1;text-align:center;text-decoration:none;font-size:12.5px;border:1px solid var(--line-2);border-radius:8px;padding:8px 10px;color:var(--text-mid);background:var(--paper)}
 @media(hover:hover){.ssm-b:hover{border-color:var(--gold-soft);color:var(--text)}}
 .ssm-b.fb{border-color:#1877F2;color:#1877F2}.ssm-b.zl{border-color:#0068FF;color:#0068FF}.ssm-b.wa{border-color:#25D366;color:#128C7E}
+.ssm-acts{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.ssm-act{width:100%;border:1px solid var(--line-2);border-radius:10px;padding:11px 14px;font-size:13.5px;font-weight:600;color:var(--text);background:var(--paper);cursor:pointer;font-family:inherit;text-align:center;text-decoration:none;box-sizing:border-box}
+.ssm-act.pri{border-color:var(--navy);background:var(--navy);color:#fff}
+.ssm-act:disabled{opacity:.7;cursor:default}
+.ssm-note{font-size:12.5px;line-height:1.55;color:var(--text-mid);background:var(--paper-2);border-radius:8px;padding:9px 11px;margin-bottom:12px}
 .ssm-field{margin-bottom:11px}
 .ssm-label{display:block;font-size:11.5px;color:var(--text-lt);margin-bottom:4px}
 .ssm-in.full{width:100%;box-sizing:border-box;resize:vertical}
