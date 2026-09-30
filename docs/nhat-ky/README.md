@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-518 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+519 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 353 | 1,226,778 B |
+| `2026-09.md` | 354 | 1,228,635 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🔴 Hỏi hạn năm: model bỏ qua sao lưu — dời khối lên trước tổ hợp + thêm vào luật VẬN HẠN |
 | 1 | 2026-09 | `2026-09.md` | 🧩 Lá số 4 nơi vẽ theo khuôn Thiên Lương (Tuần/Triệt trên biên cặp cung, tuổi đại hạn góc phải dưới) |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Zalo Mini App theo chính sách Zalo: bỏ nạp Lượng, công cụ chạy trong app, gộp tài khoản web |
 | 1 | 2026-09 | `2026-09.md` | 🔑 Trạm Zalo VN: token đi query, không đi header — Caddy làm rơi header `access_token` (Zalo 100) |

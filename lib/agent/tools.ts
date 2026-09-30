@@ -227,6 +227,11 @@ export function execTraVanHan(lasoData: any, input: any): string {
   if (dv) out += `- KHUNG ĐẠI VẬN ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd} tuổi)${dvPalace?.cungName ? `, đóng tại cung ${dvPalace.cungName}` : ''}${dv.scoring?.tong != null ? `: điểm ${dv.scoring.tong}/10 ${dv.scoring.flag || ''}` : ''} — điểm này ĐÃ gói tam hợp xung chiếu của cung đại vận; chỉ GIỚI HẠN BIÊN ĐỘ (cao = cái tốt rực rỡ/cái xấu đỡ nhẹ; thấp = cái tốt bị kìm/cái xấu nặng thêm), KHÔNG quyết định tốt/xấu của năm.\n`;
   out += `- Tiểu hạn nhập cung ${tv.tieuHanCung}:\n    ${describeHanCungRich(palaces, tieuHanIdx)}\n`;
   out += `- Lưu niên đại hạn vào cung ${tv.luuNienCung}:\n    ${describeHanCungRich(palaces, luuNienIdx)}\n`;
+  // Sao lưu CỦA CHÍNH năm hỏi (không phải năm xem của lá số) — nơi cụ thể hoá
+  // chuyện dễ xảy ra trong năm: tang tóc/ốm đau, hao tài, di chuyển. Đặt NGAY sau hai
+  // cung hạn, TRƯỚC danh sách tổ hợp dài — để cuối thì model bỏ qua (Henry test 2026-09-30).
+  const luu = saoLuuLines(palaces, nam);
+  if (luu.length) out += `- SAO LƯU năm ${nam} (đè lên sao gốc chỉ trong năm này; ca XẤU NẶNG/TỐT là sách nêu đích danh):\n${luu.map((l) => '    ' + l.trim()).join('\n')}\n`;
   // Tổ hợp sao chéo tầng (mức NĂM): đại vận (tọa — điểm đã gói tam hợp) + tiểu
   // hạn & lưu niên KÈM tam hợp xung chiếu để bắt cách cục do sao chiếu tạo thành.
   const yearLayers: LayerCung[] = [
@@ -235,11 +240,7 @@ export function execTraVanHan(lasoData: any, input: any): string {
     ...hanClusterLayers(palaces, luuNienIdx, 'lưu niên'),
   ];
   out += formatComboLines(matchVanHanCombos(yearLayers));
-  // Sao lưu CỦA CHÍNH năm hỏi (không phải năm xem của lá số) — nơi cụ thể hoá
-  // chuyện dễ xảy ra trong năm: tang tóc/ốm đau, hao tài, di chuyển.
-  const luu = saoLuuLines(palaces, nam);
-  if (luu.length) out += `- SAO LƯU năm ${nam} (đè lên sao gốc chỉ trong năm này; ca XẤU NẶNG/TỐT là sách nêu đích danh):\n${luu.map((l) => '    ' + l.trim()).join('\n')}\n`;
-  out += `- Cách luận (BẮT BUỘC xét ĐỦ CẢ HAI tầng năm, KHÔNG được bỏ tầng nào): (A) TIỂU HẠN — cung ${tv.tieuHanCung} + tam hợp xung chiếu của nó; (B) LƯU NIÊN ĐẠI HẠN — cung ${tv.luuNienCung} + tam hợp xung chiếu của nó. Câu trả lời PHẢI gọi tên & luận CẢ hai cung ${tv.tieuHanCung} và ${tv.luuNienCung} (nếu trùng cung thì nói rõ hai tầng chồng nhau → ứng nghiệm mạnh hơn). Mỗi cung ĐỌC CẢ tọa thủ + tam hợp xung chiếu, TRỌNG SỐ: tọa thủ nặng nhất → xung chiếu → tam hợp (cung vô chính diệu thì MƯỢN chính tinh tam hợp/xung để luận) + tổ hợp sao năm nay. XÁC ĐỊNH tốt/xấu của năm theo cách cục + sao của CẢ hai tầng: cát tinh/cách tốt thì năm TỐT dù đại vận xấu, ngược lại XẤU dù đại vận tốt. SAU đó dùng điểm đại vận để chỉnh BIÊN ĐỘ: đại vận thấp thì cái tốt năm nay bị kìm, hưởng dè dặt, không rực rỡ (cái xấu nặng thêm); đại vận cao thì cái tốt bung rực rỡ (cái xấu đỡ nhẹ). KHÔNG bê theme đại vận áp đồng loạt, KHÔNG tự gán "điểm/10" cho năm.${luu.length ? ' SAO LƯU ở trên là căn cứ CỤ THỂ NHẤT cho chuyện trong năm: cung có Lưu Thái Tuế là trọng tâm năm; ca XẤU NẶNG nói TRƯỚC và nói thẳng (ốm đau, tang sự, tai ương ở đúng lĩnh vực cung đó) kèm cách phòng; Lưu Hóa Kỵ/Kình/Đà rơi cung nào thì trục trặc ở lĩnh vực cung đó; Lưu Lộc Tồn/Hóa Lộc là chỗ có lộc; Lưu Thiên Mã là chỗ có di chuyển/thay đổi.' : ''}\n`;
+  out += `- Cách luận (BẮT BUỘC xét ĐỦ các tầng năm, KHÔNG được bỏ tầng nào): (A) TIỂU HẠN — cung ${tv.tieuHanCung} + tam hợp xung chiếu của nó; (B) LƯU NIÊN ĐẠI HẠN — cung ${tv.luuNienCung} + tam hợp xung chiếu của nó${luu.length ? '; (C) SAO LƯU — PHẢI nêu cung Lưu Thái Tuế và mọi dòng [SAO LƯU · XẤU NẶNG]/[SAO LƯU · XẤU] ở trên' : ''}. Câu trả lời PHẢI gọi tên & luận CẢ hai cung ${tv.tieuHanCung} và ${tv.luuNienCung} (nếu trùng cung thì nói rõ hai tầng chồng nhau → ứng nghiệm mạnh hơn). Mỗi cung ĐỌC CẢ tọa thủ + tam hợp xung chiếu, TRỌNG SỐ: tọa thủ nặng nhất → xung chiếu → tam hợp (cung vô chính diệu thì MƯỢN chính tinh tam hợp/xung để luận) + tổ hợp sao năm nay. XÁC ĐỊNH tốt/xấu của năm theo cách cục + sao của CẢ hai tầng: cát tinh/cách tốt thì năm TỐT dù đại vận xấu, ngược lại XẤU dù đại vận tốt. SAU đó dùng điểm đại vận để chỉnh BIÊN ĐỘ: đại vận thấp thì cái tốt năm nay bị kìm, hưởng dè dặt, không rực rỡ (cái xấu nặng thêm); đại vận cao thì cái tốt bung rực rỡ (cái xấu đỡ nhẹ). KHÔNG bê theme đại vận áp đồng loạt, KHÔNG tự gán "điểm/10" cho năm.${luu.length ? ' SAO LƯU ở trên là căn cứ CỤ THỂ NHẤT cho chuyện trong năm: cung có Lưu Thái Tuế là trọng tâm năm; ca XẤU NẶNG nói TRƯỚC và nói thẳng (ốm đau, tang sự, tai ương ở đúng lĩnh vực cung đó) kèm cách phòng; Lưu Hóa Kỵ/Kình/Đà rơi cung nào thì trục trặc ở lĩnh vực cung đó; Lưu Lộc Tồn/Hóa Lộc là chỗ có lộc; Lưu Thiên Mã là chỗ có di chuyển/thay đổi.' : ''}\n`;
   return out;
 }
 
