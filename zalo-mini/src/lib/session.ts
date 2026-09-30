@@ -85,14 +85,29 @@ async function renew(rt: string | undefined): Promise<Session> {
   }
 }
 
-/** id tài khoản (claim `sub` của access token) — /api/payment cần kèm userId và tự so với token. */
-export async function currentUserId(): Promise<string> {
+async function claims(): Promise<{ sub?: string; email?: string }> {
   const payload = (await freshToken()).split('.')[1] || '';
   const b64 = payload.replace(/-/g, '+').replace(/_/g, '/');
-  const json = atob(b64 + '='.repeat((4 - (b64.length % 4)) % 4));
-  const sub = (JSON.parse(json) as { sub?: string }).sub;
+  return JSON.parse(atob(b64 + '='.repeat((4 - (b64.length % 4)) % 4)));
+}
+
+/** id tài khoản (claim `sub` của access token) — /api/payment cần kèm userId và tự so với token. */
+export async function currentUserId(): Promise<string> {
+  const sub = (await claims()).sub;
   if (!sub) throw new Error('Phiên đăng nhập không hợp lệ');
   return sub;
+}
+
+/** Tài khoản BÓNG tạo từ Zalo (email tổng hợp `@chat.tuviminhbao.com`, lib/channels/
+ *  shadow-email.ts) — chưa gộp với tài khoản web nào. */
+export async function isZaloOnlyAccount(): Promise<boolean> {
+  return /@chat\.tuviminhbao\.com$/i.test((await claims()).email || '');
+}
+
+/** Bỏ phiên hiện có rồi đăng nhập Zalo lại — sau khi gộp, id Mini App đã trỏ sang tài khoản web. */
+export async function relogin(): Promise<void> {
+  current = null;
+  await freshToken(true);
 }
 
 /** fetch tới API web kèm Bearer; 401 thì xoay token một lần rồi gọi lại. */
