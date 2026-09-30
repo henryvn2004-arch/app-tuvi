@@ -288,7 +288,7 @@ export function nhipHint(n: NhipLuot, authorId?: string | null): string {
   // chỉ cấm câu đinh thì thầy vẫn mở MỌI lượt bằng "Nói thật nhé:" (Henry 2026-09-29).
   const kd = n.kieu ? KIEU_DINH.find((k) => k.id === n.kieu) : undefined;
   const dinh = n.dinh
-    ? `lượt này ĐƯỢC dùng dấu riêng của thầy và chêm đúng MỘT câu đinh kiểu ${kd ? `"${kd.ten}" — vd ${kd.vd}; tự đặt câu MỚI về đúng chuyện của người xem, không chép ví dụ` : 'của thầy'}`
+    ? `lượt này ĐƯỢC dùng dấu riêng của thầy (chen giữa/cuối, không làm câu mở) và chêm đúng MỘT câu đinh kiểu ${kd ? `"${kd.ten}" — vd ${kd.vd}; tự đặt câu MỚI về đúng chuyện của người xem, không chép ví dụ` : 'của thầy'}`
     : 'lượt này KHÔNG dùng dấu riêng: không câu mở cửa miệng, không ẩn dụ đặc trưng, không câu đinh/câu vần — trả lời thẳng như người thường, giọng thầy chỉ ở xưng hô và chọn chữ';
   const xung =
     authorId && PERSONAS[authorId]?.xung === 'co-cau' ? '; gọi người xem là "cậu" (nam) / "cô" (nữ), KHÔNG gọi anh/chị' : '';
