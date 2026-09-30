@@ -136,6 +136,7 @@ export function loadOracle() {
     'tieuHanStartByBirthBranch',
     'tieuHanDirection',
     'tieuHanBranch',
+    'tieuHanRing',
     'luuDaiHanBranch',
     'lunarMonthCanChi',
     'amDuongThuanLy',

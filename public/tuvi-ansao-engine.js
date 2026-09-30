@@ -2483,6 +2483,11 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
   // Chi năm xem
   const chiNamXem = DIA_CHI[(namXem + 8) % 12];
   const tieuHanIdx = tinhTieuHan(chiNam, gioitinh, tuoiXem, amDuong);
+  // Vòng tiểu hạn: [chỉ số chi của cung] → chỉ số chi của NĂM có tiểu hạn rơi vào cung đó
+  // (tuổi 1..12, CHÍNH hàm tinhTieuHan — không công thức mới). Khuôn Thiên Lương in chữ này
+  // quanh trung cung; `npm run oracle:tieuhan` đối chiếu với tieuHanRing() của Thiên Lương.
+  const tieuHanRing = new Array(12);
+  for (let t = 1; t <= 12; t++) tieuHanRing[tinhTieuHan(chiNam, gioitinh, t, amDuong)] = mod12(dcIdx(chiNam) + t - 1);
   // Lưu niên đại hạn: từ cung ĐV hiện tại đếm tới chi năm xem
   const daiVanHienTaiObj = daiVans.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd);
   const ageIndex = daiVanHienTaiObj ? tuoiXem - daiVanHienTaiObj.tuoiStart : 0;
@@ -2634,6 +2639,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     daiVans: daiVansScored,
     daiVanHienTai: daiVansScored.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd) || daiVanHienTai,
     tieuHanIdx,
+    tieuHanRing,
     tuoiXem,
     chiNamXem,
     luuNienDaiHanIdx,
