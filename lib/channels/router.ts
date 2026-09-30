@@ -758,6 +758,7 @@ async function sendFollowUps(
   // Sản phẩm — CHỈ lượt vừa an xong / mở lại lá số, hoặc lượt khách vừa chọn kiểm chứng
   // bằng môn khác (goi-y.ts). Link web có lá số điền sẵn, bất kể `NUT_WEB`.
   let sanPham: ChatButton | null = null;
+  let spKem: ChatButton | null = null;
   let loiSp = '';
   let spId: string | null = null;
   if (userId && outcome.birth && !dangDau(luot.cauHoi)) {
@@ -769,6 +770,8 @@ async function sendFollowUps(
         sanPham = { title: mon.title, url };
         loiSp = loiMon(g.mon);
         spId = `mon:${g.id}`;
+        const kemUrl = mon.kem ? await createHandoffUrl(userId, mon.kem.path, outcome.birth) : null;
+        if (mon.kem && kemUrl) spKem = { title: mon.kem.title, url: kemUrl };
       }
     } else if (!luot.khach && (outcome.lasoShown || luot.laSoCu)) {
       const url = await createHandoffUrl(userId, lasoPath(outcome.birth), outcome.birth);
@@ -817,7 +820,7 @@ async function sendFollowUps(
       loiSp ||
       (tnId?.startsWith('cong-cu:') && outcome.toolSuggest?.lyDo) ||
       'Muốn xem thêm từ góc khác thì bấm nút dưới.';
-    await sendMenu(kit.io, ev.chatId, con ? `${head}\n\n${con}` : head, [nutMoi]);
+    await sendMenu(kit.io, ev.chatId, con ? `${head}\n\n${con}` : head, sanPham && spKem ? [sanPham, spKem] : [nutMoi]);
   } else if (con) await kit.io.sendText(ev.chatId, con);
 
   // Nhớ cho lượt sau: lượt vừa mời (giãn cách), nút tính năng vừa hiện (không
