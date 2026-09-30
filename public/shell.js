@@ -2459,7 +2459,77 @@
     }
     s.addEventListener('load', function () { if (window.QR) cb(); });
   }
+  // ── TRÌNH DUYỆT NHÚNG TRONG APP (Zalo, Facebook/Messenger, Instagram…) ──
+  // `window.print()` ở WKWebView (iOS) / WebView (Android) của app khác là
+  // NO-OP IM LẶNG — không lỗi, không hộp thoại. Henry báo 2026-09-30: mở bản
+  // luận giải từ link Zalo, bấm "Lưu PDF" không ra gì. Ở đó đi đường khác:
+  // trang nào có bản PDF dựng ở SERVER (`Shell.setServerPdf`, hiện là Luận
+  // Giải + Chu Trình qua report-delivery.js) thì mở file đó / gửi vào kênh
+  // chat; còn lại chỉ bảo mở bằng Safari/Chrome — không giả vờ in.
+  function isInAppBrowser() {
+    var ua = navigator.userAgent || '';
+    if (/Zalo|FBAN|FBAV|FB_IAB|FBIOS|Instagram|Line\/|TikTok|musical_ly|; wv\)/i.test(ua)) return true;
+    // iOS: Safari, Chrome (CriOS), Firefox (FxiOS), Edge đều mang "Safari/";
+    // WKWebView của app khác thì không. Web app đã thêm vào màn hình chính
+    // (`navigator.standalone`) cũng thiếu token đó nhưng vẫn in được.
+    return /iPhone|iPad|iPod/.test(ua) && !/Safari\//.test(ua) && !navigator.standalone;
+  }
+  function inAppName() {
+    var ua = navigator.userAgent || '';
+    if (/Zalo/i.test(ua)) return 'Zalo';
+    if (/FBAN|FBAV|FB_IAB|FBIOS/i.test(ua)) return 'Facebook';
+    if (/Instagram/i.test(ua)) return 'Instagram';
+    return 'ứng dụng này';
+  }
+  // {open(): Promise<{ok,url?,error?}>, toChat?(): Promise<{ok,error?}>, chatName?} | null
+  var serverPdf = null;
+  function inAppPdf() {
+    try { track('pdf_download', { tool_id: ACTIVE, meta: { inapp: 1 } }); } catch (e) { /* ignore */ }
+    var src = serverPdf;
+    var wrap = document.createElement('div');
+    wrap.className = 'sh-share-modal';
+    wrap.innerHTML =
+      '<div class="ssm-card">' +
+        '<button class="ssm-x" aria-label="Đóng">✕</button>' +
+        '<div class="ssm-t">Lưu bản PDF</div>' +
+        '<div class="ssm-d">Trình duyệt bên trong ' + esc(inAppName()) + ' không in/lưu PDF trực tiếp được' +
+          (src ? ' — chọn một cách dưới đây.' : '. Sao chép link, mở bằng Safari hoặc Chrome rồi bấm Lưu PDF.') + '</div>' +
+        (src ? '<div class="ssm-acts">' +
+          '<button type="button" class="ssm-act pri" data-a="open">Mở file PDF</button>' +
+          (src.toChat ? '<button type="button" class="ssm-act" data-a="chat">Gửi PDF vào ' + esc(src.chatName || 'Zalo') + '</button>' : '') +
+        '</div>' : '') +
+        '<div class="ssm-note" hidden></div>' +
+        '<div class="ssm-row"><input class="ssm-in" readonly value="' + esc(location.href) + '"><button class="ssm-copy">Sao chép link</button></div>' +
+      '</div>';
+    document.body.appendChild(wrap);
+    var close = _escCloses(function () { wrap.remove(); });
+    wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
+    wrap.querySelector('.ssm-x').addEventListener('click', close);
+    var note = wrap.querySelector('.ssm-note');
+    var say = function (msg) { note.textContent = msg; note.hidden = false; };
+    wrap.querySelectorAll('.ssm-act').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var isChat = b.getAttribute('data-a') === 'chat';
+        var orig = b.textContent;
+        b.disabled = true; b.textContent = isChat ? 'Đang gửi…' : 'Đang dựng PDF…';
+        (isChat ? src.toChat() : src.open()).then(function (r) {
+          b.disabled = false; b.textContent = orig;
+          if (!r || !r.ok) { say((r && r.error) || 'Chưa tạo được PDF, thử lại sau ít phút.'); return; }
+          if (isChat) { b.textContent = '✓ Đã gửi — mở ' + (src.chatName || 'Zalo') + ' để xem'; b.disabled = true; return; }
+          location.href = r.url; // điều hướng: webview iOS hiện thẳng file, Android tự tải về
+        }, function () { b.disabled = false; b.textContent = orig; say('Lỗi mạng, thử lại sau ít phút.'); });
+      });
+    });
+    var inp = wrap.querySelector('.ssm-in');
+    wrap.querySelector('.ssm-copy').addEventListener('click', function () {
+      inp.select();
+      var done = function () { wrap.querySelector('.ssm-copy').textContent = 'Đã chép ✓'; };
+      if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(done, function () { try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } });
+      else { try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } }
+    });
+  }
   function printWorkspace() {
+    if (isInAppBrowser()) { inAppPdf(); return; }
     try { track('pdf_download', { tool_id: ACTIVE }); } catch (e) { /* ignore */ }
     var isBook = ensurePrintBook();
     if (!isBook) ensurePrintHead(); // bìa sách đã tự mang tên+ngày sinh, khỏi lặp đầu trang cũ
@@ -5226,6 +5296,9 @@
     // dùng cho thẻ "Báo cáo đã sẵn sàng" (tools-shared/report-delivery.js).
     // CÙNG một đường với FAB `wsPdfBtn` — không dựng đường in thứ hai.
     printNow: function () { printWorkspace(); },
+    // Bản PDF dựng ở SERVER cho trình duyệt nhúng trong app (xem inAppPdf) —
+    // report-delivery.js khai khi trang biết slug bản đã mua; null để gỡ.
+    setServerPdf: function (o) { serverPdf = o || null; },
     /**
      * Khung giữa ĐANG có một kết quả thật hay chưa — CÙNG ngưỡng mà nút Chia
      * sẻ / Lưu PDF / dòng ghi nguồn đã dùng (`currentShare()`).

@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-521 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+522 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 356 | 1,234,052 B |
+| `2026-09.md` | 357 | 1,236,245 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 📄 Nút Lưu PDF chết trong trình duyệt Zalo/FB + popup "luận giải xong" |
 | 1 | 2026-09 | `2026-09.md` | 🎭 15 thầy: dấu riêng thôi làm câu mở + tin chờ trung tính "Thầy X đang nghĩ…" |
 | 1 | 2026-09 | `2026-09.md` | 💬 Rail: thêm chế độ ĐÀM ĐẠO + cấm đôn đốc lặp ("nộp hồ sơ chưa?" mọi lượt) |
 | 1 | 2026-09 | `2026-09.md` | 🔴 Hỏi hạn năm: model bỏ qua sao lưu — dời khối lên trước tổ hợp + thêm vào luật VẬN HẠN |
