@@ -675,7 +675,10 @@ function renderGrid(ls: Rec, canIdx: number): string {
     else if (hasTuan)  tt = '<span class="v2-tuan-tag">TUẦN</span>';
     else if (hasTriet) tt = '<span class="v2-triet-tag">TRIỆT</span>';
 
-    const dvTuoi = isDVCung && curDV ? `${curDV.tuoiStart}–${curDV.tuoiEnd}` : '';
+    // Khoảng tuổi đại hạn của CUNG NÀY (mọi cung, không riêng đại hạn đang đi) —
+    // góc phải trên như khuôn Thiên Lương; cung đại hạn hiện tại tô đậm.
+    const dvCell = dvs.find(d => Number(d.cungIdx) === dcIdx);
+    const dvTuoi = dvCell ? `${dvCell.tuoiStart}–${dvCell.tuoiEnd}` : '';
     const thanBadge = isThan ? ` <span class="v2-badge-than">THÂN</span>` : '';
     // Sao lưu năm xem (engine `luuStars`, cờ `xau` do engine đánh dấu) — cùng cách
     // hiện với public/laso-chart.js.
@@ -687,7 +690,7 @@ function renderGrid(ls: Rec, canIdx: number): string {
 
     return `<div class="cung-cell${isMenh?' is-menh':''}${isDVCung?' cur-van':''}">
       <div class="v2-cell-header">
-        <span class="v2-can-chi">${esc(canChiHeader).toUpperCase()}</span>
+        <div class="v2-head-row"><span class="v2-can-chi">${esc(canChiHeader).toUpperCase()}</span><span class="v2-dai-van">${esc(dvTuoi)}</span></div>
         <span class="v2-cung-name">${esc(cungName).toUpperCase()}${thanBadge}</span>
       </div>
       <div class="v2-chinh-area">${chinhH}</div>
@@ -698,9 +701,8 @@ function renderGrid(ls: Rec, canIdx: number): string {
       ${luuH ? `<div class="v2-luu-area">${luuH}</div>` : ''}
       <div class="v2-footer">
         <span class="v2-trang-sinh">${tsS ? esc(String(tsS.ten||'')).toUpperCase() : ''}</span>
-        <span class="v2-dai-van">${esc(dvTuoi)}</span>
+        ${tt}
       </div>
-      ${tt}
     </div>`;
   }
 
@@ -1564,8 +1566,15 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 .v2-luu-item.luu-xau{color:#C0392B}
 .v2-footer{position:absolute;bottom:3px;left:6px;right:6px;display:flex;justify-content:space-between;align-items:center}
 .v2-trang-sinh{font-size:9px;color:#999}
-.v2-dai-van{font-size:9px;color:#666;font-weight:700}
-.v2-tuan-tag,.v2-triet-tag{position:absolute;bottom:-1px;left:0;right:0;font-size:8px;text-align:center;padding:1px;color:#fff}
+.v2-head-row{display:flex;justify-content:space-between;align-items:baseline;width:100%}
+.v2-head-row .v2-can-chi{width:auto}
+.v2-dai-van{font-size:9px;color:#666;font-weight:700;white-space:nowrap}
+.cur-van .v2-dai-van{color:#1E6B3C}
+/* Tuần/Triệt nằm TRONG chân ô, bên phải (tuổi đại hạn đã lên góc phải trên) — trước đây là thanh
+   tuyệt đối kéo hết đáy ô, che mất Tràng Sinh + tuổi đại hạn. */
+.v2-tuan-tag,.v2-triet-tag{font-size:8px;font-weight:700;letter-spacing:1px;padding:0 5px;border-radius:2px;color:#fff;white-space:nowrap}
+.v2-footer .v2-trang-sinh{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+@media(max-width:800px){.v2-tuan-tag,.v2-triet-tag{font-size:7px;letter-spacing:0;padding:0 3px}.v2-footer .v2-trang-sinh{font-size:8px}}
 .v2-tuan-tag{background:#2c4a00}.v2-triet-tag{background:#4a0000}
 .sc-hoa{color:#E74C3C}.sc-kim{color:#7F8C8D}.sc-thuy{color:#1a1a1a}.sc-moc{color:#27AE60}.sc-tho{color:#D4A017}.sc-neutral{color:#333}
 .sc-hoa-loc{color:#D4A017;font-weight:700}.sc-hoa-quyen{color:#27AE60;font-weight:700}.sc-hoa-khoa{color:#1a1a1a;font-weight:700}.sc-hoa-ky{color:#1a1a1a;font-weight:700}
