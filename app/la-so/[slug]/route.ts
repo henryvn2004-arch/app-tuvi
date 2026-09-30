@@ -677,6 +677,13 @@ function renderGrid(ls: Rec, canIdx: number): string {
 
     const dvTuoi = isDVCung && curDV ? `${curDV.tuoiStart}–${curDV.tuoiEnd}` : '';
     const thanBadge = isThan ? ` <span class="v2-badge-than">THÂN</span>` : '';
+    // Sao lưu năm xem (engine `luuStars`, cờ `xau` do engine đánh dấu) — cùng cách
+    // hiện với public/laso-chart.js.
+    const luuH = ((p.luuStars as Rec[]) || []).map(s => {
+      const ten = String(s.ten || '');
+      const tip = `${ten}${s.sao ? ` (${String(s.sao)})` : ''} — chỉ tác dụng trong năm xem`;
+      return `<span class="v2-luu-item${s.xau ? ' luu-xau' : ''}" title="${esc(tip)}">${esc(ten.replace(/^Lưu /, 'L.')).toUpperCase()}</span>`;
+    }).join('');
 
     return `<div class="cung-cell${isMenh?' is-menh':''}${isDVCung?' cur-van':''}">
       <div class="v2-cell-header">
@@ -688,6 +695,7 @@ function renderGrid(ls: Rec, canIdx: number): string {
         <div class="v2-phu-col">${catH}</div>
         <div class="v2-phu-col v2-phu-col-right">${hungH}</div>
       </div>
+      ${luuH ? `<div class="v2-luu-area">${luuH}</div>` : ''}
       <div class="v2-footer">
         <span class="v2-trang-sinh">${tsS ? esc(String(tsS.ten||'')).toUpperCase() : ''}</span>
         <span class="v2-dai-van">${esc(dvTuoi)}</span>
@@ -1551,6 +1559,9 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 .v2-phu-col{display:flex;flex-direction:column;gap:1px}
 .v2-phu-col-right{text-align:right}
 .v2-phu-item{font-size:9.5px;line-height:1.45;font-weight:700}
+.v2-luu-area{display:flex;flex-wrap:wrap;gap:0 5px;margin-top:2px;padding-top:1px;border-top:1px dashed #ddd}
+.v2-luu-item{font-size:8.5px;line-height:1.4;font-style:italic;font-weight:600;color:#1455A4;cursor:help}
+.v2-luu-item.luu-xau{color:#C0392B}
 .v2-footer{position:absolute;bottom:3px;left:6px;right:6px;display:flex;justify-content:space-between;align-items:center}
 .v2-trang-sinh{font-size:9px;color:#999}
 .v2-dai-van{font-size:9px;color:#666;font-weight:700}

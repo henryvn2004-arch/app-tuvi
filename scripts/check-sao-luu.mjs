@@ -109,6 +109,22 @@ for (const y of [1990, 1991, 1994, 1996, 1998, 2001, 2003, 2005, 2008, 2012]) {
   );
   if (nLuu !== 9) fail(`${y}: luuStars phải có đủ 9 sao lưu, có ${nLuu}`);
   if (!ls.saoLuu || !Array.isArray(ls.saoLuu.diemNong)) fail(`${y}: thiếu ls.saoLuu.diemNong`);
+  // Cờ `xau` là nguồn DUY NHẤT cho màu đỏ ở mọi nơi vẽ (laso-chart, tuvi-grid,
+  // /la-so/<slug>, ảnh kênh chat) — thiếu cờ là cả bốn nơi tô xanh im lặng.
+  const XAU = [
+    'Lưu Tang Môn',
+    'Lưu Bạch Hổ',
+    'Lưu Thiên Khốc',
+    'Lưu Thiên Hư',
+    'Lưu Kình Dương',
+    'Lưu Đà La',
+    'Lưu Hóa Kỵ',
+  ];
+  for (const p of ls.palaces)
+    for (const x of p.luuStars || []) {
+      if (typeof x.xau !== 'boolean') fail(`${y}: ${x.ten} thiếu cờ xau`);
+      else if (x.xau !== XAU.includes(x.ten)) fail(`${y}: ${x.ten} cờ xau=${x.xau} sai`);
+    }
 }
 
 if (failed) {

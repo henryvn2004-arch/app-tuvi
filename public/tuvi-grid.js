@@ -95,6 +95,12 @@ const TuviGrid = (() => {
       catH += `<div class="v2-phu-item ${hc}" style="font-weight:700">HÓA ${s.hoa.toUpperCase()}</div>`;
     }
 
+    // Sao lưu năm xem (engine `luuStars`, cờ `xau` do engine đánh dấu) — cùng cách
+    // hiện với public/laso-chart.js. Engine cũ chưa có → rỗng.
+    const luuH = (p.luuStars || []).map(s =>
+      `<span class="v2-luu-item${s.xau ? ' luu-xau' : ''}" title="${s.ten}${s.sao ? ' (' + s.sao + ')' : ''} — chỉ tác dụng trong năm xem">${s.ten.replace(/^Lưu /, 'L.').toUpperCase()}</span>`
+    ).join('');
+
     return `<div class="cung-cell${isCurVan ? ' cur-van' : ''}">
       <div class="v2-cell-header">
         <span class="v2-can-chi">${canChi.toUpperCase()}</span>
@@ -105,6 +111,7 @@ const TuviGrid = (() => {
         <div class="v2-phu-col">${catH}</div>
         <div class="v2-phu-col v2-phu-col-right">${hungH}</div>
       </div>
+      ${luuH ? `<div class="v2-luu-area">${luuH}</div>` : ''}
       <div class="v2-footer">
         <span class="v2-trang-sinh">${tsS ? tsS.ten.toUpperCase() : ''}</span>
         <span class="v2-dai-van">${dvTuoi ?? ''}</span>
@@ -358,6 +365,9 @@ const TuviGrid = (() => {
       ".v2-phu-col{display:flex;flex-direction:column;gap:1px}",
       ".v2-phu-col-right{text-align:right}",
       ".v2-phu-item{font-size:9.5px;line-height:1.45;font-weight:700}",
+      ".v2-luu-area{display:flex;flex-wrap:wrap;gap:0 5px;margin-top:2px;padding-top:1px;border-top:1px dashed #ddd}",
+      ".v2-luu-item{font-size:8.5px;line-height:1.4;font-style:italic;font-weight:600;color:#1455A4;cursor:help}",
+      ".v2-luu-item.luu-xau{color:#C0392B}",
       ".v2-footer{display:flex;justify-content:space-between;align-items:flex-end;position:absolute;bottom:3px;left:7px;right:7px;border-top:1px solid #ddd;padding-top:2px}",
       ".v2-trang-sinh{font-size:9px;color:#666;font-weight:500;text-transform:uppercase;letter-spacing:.5px}",
       ".v2-dai-van{font-size:10px;color:#333;font-weight:700}",
