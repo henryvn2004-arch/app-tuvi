@@ -101,9 +101,11 @@ const TuviGrid = (() => {
       `<span class="v2-luu-item${s.xau ? ' luu-xau' : ''}" title="${s.ten}${s.sao ? ' (' + s.sao + ')' : ''} — chỉ tác dụng trong năm xem">${s.ten.replace(/^Lưu /, 'L.').toUpperCase()}</span>`
     ).join('');
 
-    return `<div class="cung-cell${isCurVan ? ' cur-van' : ''}">
+    // Tuổi đại hạn góc phải hàng can chi; Tuần/Triệt là viên giữa đáy ô (`has-tt` nhích
+    // chân ô lên) — cùng khuôn với public/laso-chart.js và /la-so/<slug>.
+    return `<div class="cung-cell${isCurVan ? ' cur-van' : ''}${tt ? ' has-tt' : ''}">
       <div class="v2-cell-header">
-        <span class="v2-can-chi">${canChi.toUpperCase()}</span>
+        <div class="v2-head-row"><span class="v2-can-chi">${canChi.toUpperCase()}</span><span class="v2-dai-van">${dvTuoi ?? ''}</span></div>
         <span class="v2-cung-name">${p.cungName.toUpperCase()}${thanBadge}</span>
       </div>
       <div class="v2-chinh-area">${chinhH}</div>
@@ -114,7 +116,6 @@ const TuviGrid = (() => {
       ${luuH ? `<div class="v2-luu-area">${luuH}</div>` : ''}
       <div class="v2-footer">
         <span class="v2-trang-sinh">${tsS ? tsS.ten.toUpperCase() : ''}</span>
-        <span class="v2-dai-van">${dvTuoi ?? ''}</span>
       </div>
       ${tt}
     </div>`;
@@ -138,7 +139,7 @@ const TuviGrid = (() => {
         if (!p) { cells += '<div class="cung-cell"></div>'; continue; }
         const isCurVan = dvHT?.cungIdx === _CHI.indexOf(p.diaChi) || dvHT?.cungIdx === p.idx;
         const dv = ls.daiVans.find(d => d.cungIdx === (p.idx ?? _CHI.indexOf(p.diaChi)));
-        cells += renderCell(p, dv?.tuoiStart, canNamIdx, isCurVan);
+        cells += renderCell(p, dv ? `${dv.tuoiStart}–${dv.tuoiEnd}` : undefined, canNamIdx, isCurVan);
       }
     }
     return cells;
@@ -370,8 +371,13 @@ const TuviGrid = (() => {
       ".v2-luu-item.luu-xau{color:#C0392B}",
       ".v2-footer{display:flex;justify-content:space-between;align-items:flex-end;position:absolute;bottom:3px;left:7px;right:7px;border-top:1px solid #ddd;padding-top:2px}",
       ".v2-trang-sinh{font-size:9px;color:#666;font-weight:500;text-transform:uppercase;letter-spacing:.5px}",
-      ".v2-dai-van{font-size:10px;color:#333;font-weight:700}",
-      ".v2-tuan-tag,.v2-triet-tag{display:inline-block;padding:0 5px;font-size:8px;font-weight:700;letter-spacing:1px;border-radius:2px;text-transform:uppercase;position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);z-index:5}",
+      ".v2-head-row{display:flex;justify-content:space-between;align-items:baseline;width:100%}",
+      ".v2-head-row .v2-can-chi{width:auto}",
+      ".v2-dai-van{font-size:9px;color:#666;font-weight:700;white-space:nowrap}",
+      ".cur-van .v2-dai-van{color:#1E6B3C}",
+      ".cung-cell.has-tt{padding-bottom:34px}",
+      ".cung-cell.has-tt .v2-footer{bottom:17px}",
+      ".v2-tuan-tag,.v2-triet-tag{display:inline-block;padding:0 5px;font-size:8px;font-weight:700;letter-spacing:1px;border-radius:2px;text-transform:uppercase;position:absolute;bottom:3px;left:50%;transform:translateX(-50%);z-index:5;line-height:1.4;white-space:nowrap}",
       ".v2-tuan-tag{background:#2c4a00;color:#fff}",
       ".v2-triet-tag{background:#4a0000;color:#fff}",
       // Star colors
@@ -387,7 +393,7 @@ const TuviGrid = (() => {
       ".center-divider{width:80%;border:none;border-top:1px solid #ccc;margin:4px 0}",
       // Responsive
       "@media(max-width:700px){.cung-cell{min-height:80px;padding:2px 3px}.v2-chinh-item{font-size:10px}.v2-phu-item{font-size:8px}.cung-center{padding:6px}.center-title{font-size:10px}.center-row{font-size:9px}}",
-      "@media(max-width:480px){.v2-phu-area{grid-template-columns:1fr}.cung-cell{min-height:90px;padding:4px 4px 18px}}",
+      "@media(max-width:480px){.v2-phu-area{grid-template-columns:1fr}.cung-cell{min-height:90px;padding:4px 4px 18px}.cung-cell.has-tt{padding-bottom:30px}.cung-cell.has-tt .v2-footer{bottom:14px}.v2-tuan-tag,.v2-triet-tag{font-size:7px;letter-spacing:0;padding:0 3px}}",
     ].join('\n');
     document.head.appendChild(s);
   }

@@ -688,7 +688,7 @@ function renderGrid(ls: Rec, canIdx: number): string {
       return `<span class="v2-luu-item${s.xau ? ' luu-xau' : ''}" title="${esc(tip)}">${esc(ten.replace(/^Lưu /, 'L.')).toUpperCase()}</span>`;
     }).join('');
 
-    return `<div class="cung-cell${isMenh?' is-menh':''}${isDVCung?' cur-van':''}">
+    return `<div class="cung-cell${isMenh?' is-menh':''}${isDVCung?' cur-van':''}${tt?' has-tt':''}">
       <div class="v2-cell-header">
         <div class="v2-head-row"><span class="v2-can-chi">${esc(canChiHeader).toUpperCase()}</span><span class="v2-dai-van">${esc(dvTuoi)}</span></div>
         <span class="v2-cung-name">${esc(cungName).toUpperCase()}${thanBadge}</span>
@@ -701,8 +701,8 @@ function renderGrid(ls: Rec, canIdx: number): string {
       ${luuH ? `<div class="v2-luu-area">${luuH}</div>` : ''}
       <div class="v2-footer">
         <span class="v2-trang-sinh">${tsS ? esc(String(tsS.ten||'')).toUpperCase() : ''}</span>
-        ${tt}
       </div>
+      ${tt}
     </div>`;
   }
 
@@ -1570,11 +1570,13 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 .v2-head-row .v2-can-chi{width:auto}
 .v2-dai-van{font-size:9px;color:#666;font-weight:700;white-space:nowrap}
 .cur-van .v2-dai-van{color:#1E6B3C}
-/* Tuần/Triệt nằm TRONG chân ô, bên phải (tuổi đại hạn đã lên góc phải trên) — trước đây là thanh
-   tuyệt đối kéo hết đáy ô, che mất Tràng Sinh + tuổi đại hạn. */
-.v2-tuan-tag,.v2-triet-tag{font-size:8px;font-weight:700;letter-spacing:1px;padding:0 5px;border-radius:2px;color:#fff;white-space:nowrap}
+/* Tuần/Triệt: viên giữa đáy ô; ô có viên (has-tt) nhích chân ô lên một nấc — trước đây là thanh
+   tuyệt đối kéo hết đáy ô, che mất Tràng Sinh + tuổi đại hạn. Cùng khuôn với laso-chart.css/tuvi-grid.js. */
+.v2-tuan-tag,.v2-triet-tag{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);font-size:8px;line-height:1.4;font-weight:700;letter-spacing:1px;padding:0 5px;border-radius:2px;color:#fff;white-space:nowrap}
+.cung-cell.has-tt{padding-bottom:34px}
+.cung-cell.has-tt .v2-footer{bottom:17px}
 .v2-footer .v2-trang-sinh{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-@media(max-width:800px){.v2-tuan-tag,.v2-triet-tag{font-size:7px;letter-spacing:0;padding:0 3px}.v2-footer .v2-trang-sinh{font-size:8px}}
+@media(max-width:800px){.v2-tuan-tag,.v2-triet-tag{font-size:7px;letter-spacing:0;padding:0 3px}.cung-cell.has-tt{padding-bottom:28px}.cung-cell.has-tt .v2-footer{bottom:14px}}
 .v2-tuan-tag{background:#2c4a00}.v2-triet-tag{background:#4a0000}
 .sc-hoa{color:#E74C3C}.sc-kim{color:#7F8C8D}.sc-thuy{color:#1a1a1a}.sc-moc{color:#27AE60}.sc-tho{color:#D4A017}.sc-neutral{color:#333}
 .sc-hoa-loc{color:#D4A017;font-weight:700}.sc-hoa-quyen{color:#27AE60;font-weight:700}.sc-hoa-khoa{color:#1a1a1a;font-weight:700}.sc-hoa-ky{color:#1a1a1a;font-weight:700}

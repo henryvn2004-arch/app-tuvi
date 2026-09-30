@@ -33,8 +33,13 @@
 .v2-luu-item.luu-xau{color:#C0392B}
 .v2-footer{display:flex;justify-content:space-between;align-items:flex-end;position:absolute;bottom:3px;left:7px;right:7px;border-top:1px solid #ddd;padding-top:2px}
 .v2-trang-sinh{font-size:9px;color:#777;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
-.v2-dai-van{font-size:10px;color:#333;font-weight:700}
-.v2-tuan-tag,.v2-triet-tag{display:inline-block;padding:0 5px;font-size:8px;font-weight:700;letter-spacing:1px;border-radius:2px;text-transform:uppercase;position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);z-index:5}
+.v2-head-row{display:flex;justify-content:space-between;align-items:baseline;width:100%}
+.v2-head-row .v2-can-chi{width:auto}
+.v2-dai-van{font-size:9px;color:#666;font-weight:700;white-space:nowrap}
+.cur-van .v2-dai-van{color:#1E6B3C}
+.v2-tuan-tag,.v2-triet-tag{display:inline-block;padding:0 5px;font-size:8px;line-height:1.4;font-weight:700;letter-spacing:1px;border-radius:2px;text-transform:uppercase;position:absolute;bottom:3px;left:50%;transform:translateX(-50%);z-index:5;white-space:nowrap}
+.cung-cell.has-tt{padding-bottom:34px}
+.cung-cell.has-tt .v2-footer{bottom:17px}
 .v2-tuan-tag{background:#2c4a00;color:#fff}
 .v2-triet-tag{background:#4a0000;color:#fff}
 
@@ -74,6 +79,9 @@
   .laso-wrap,.chart-wrap,.laso-one{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .laso-grid{min-width:480px;font-size:10px}
   .cung-cell{min-height:100px;padding:4px 4px 20px}
+  .cung-cell.has-tt{padding-bottom:32px}
+  .cung-cell.has-tt .v2-footer{bottom:15px}
+  .v2-tuan-tag,.v2-triet-tag{font-size:7px;letter-spacing:0;padding:0 3px}
   /* Tên phụ tinh 2 chữ (VD "HỎA TINH", "ĐỊA KIẾP") xuống hàng ở cột hẹp trên
      mobile — thu nhỏ font riêng cho phụ tinh (chính tinh giữ nguyên) VÀ gộp
      2 cột cát/hung thành 1 cột full-width (đúng cách app/la-so/[slug]/route.ts

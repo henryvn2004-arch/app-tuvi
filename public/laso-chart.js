@@ -72,12 +72,15 @@ function renderCungCell(p, dvTuoi, canNamIdx, isCurVan) {
     const tip = s.sao ? `${s.ten} (${s.sao}) — chỉ tác dụng trong năm xem` : `${s.ten} — chỉ tác dụng trong năm xem`;
     return `<span class="v2-luu-item${xau ? ' luu-xau' : ''}" title="${esc(tip)}">${esc(s.ten.replace(/^Lưu /, 'L.').toUpperCase())}</span>`;
   }).join('');
-  return `<div class="cung-cell${isCurVan ? ' cur-van' : ''}">
-    <div class="v2-cell-header"><span class="v2-can-chi">${esc(canChi.toUpperCase())}</span><span class="v2-cung-name">${esc(p.cungName.toUpperCase())}${thanBadge}</span></div>
+  // Tuổi đại hạn (vd "43–52") ở góc phải hàng can chi — cùng khuôn với /la-so/<slug>,
+  // tuvi-grid.js và ảnh kênh chat. Tuần/Triệt là viên giữa đáy ô; ô có viên thì
+  // chân ô (`has-tt`) nhích lên để hai thứ không chồng nhau ở cột hẹp.
+  return `<div class="cung-cell${isCurVan ? ' cur-van' : ''}${tt ? ' has-tt' : ''}">
+    <div class="v2-cell-header"><div class="v2-head-row"><span class="v2-can-chi">${esc(canChi.toUpperCase())}</span><span class="v2-dai-van">${dvTuoi == null ? '' : esc(dvTuoi)}</span></div><span class="v2-cung-name">${esc(p.cungName.toUpperCase())}${thanBadge}</span></div>
     <div class="v2-chinh-area">${chinhH}</div>
     <div class="v2-phu-area"><div class="v2-phu-col">${catH}</div><div class="v2-phu-col v2-phu-col-right">${hungH}</div></div>
     ${luuH ? `<div class="v2-luu-area">${luuH}</div>` : ''}
-    <div class="v2-footer"><span class="v2-trang-sinh">${tsS ? esc(tsS.ten.toUpperCase()) : ''}</span><span class="v2-dai-van">${dvTuoi == null ? '' : dvTuoi}</span></div>
+    <div class="v2-footer"><span class="v2-trang-sinh">${tsS ? esc(tsS.ten.toUpperCase()) : ''}</span></div>
     ${tt}
   </div>`;
 }
@@ -132,7 +135,7 @@ function renderGrid(ls, fd) {
     if (!p) { html += '<div class="cung-cell"></div>'; continue; }
     const isCurVan = (dvHT && (dvHT.cungIdx === CHI.indexOf(p.diaChi) || dvHT.cungIdx === p.idx));
     const dv = ls.daiVans.find(d => d.cungIdx === p.idx);
-    html += renderCungCell(p, dv ? dv.tuoiStart : undefined, canNamIdx, isCurVan);
+    html += renderCungCell(p, dv ? `${dv.tuoiStart}–${dv.tuoiEnd}` : undefined, canNamIdx, isCurVan);
   }
   return html + '</div>';
 }

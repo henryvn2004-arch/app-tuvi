@@ -1,6 +1,6 @@
 // app/api/og/la-so-anh/route.tsx
 // ẢNH LÁ SỐ 12 CUNG cho kênh chat (Zalo/Messenger/WhatsApp/Telegram) — app chat
-// không có lưới lá số như web, nên gửi hẳn một tấm ảnh (1080×1350, chữ to cho
+// không có lưới lá số như web, nên gửi hẳn một tấm ảnh (1080×1500, chữ to cho
 // điện thoại).
 //
 // Bố cục theo khuôn lá số của phần mềm "An Sao — Tử Vi Thiên Lương" (bản tham
@@ -38,13 +38,14 @@ type Palace = {
 type Item = { text: string; color: string; bold?: boolean };
 
 const W = 1080;
-const H = 1350;
+const H = 1500; // cao hơn 4:5 của lib/og/brand — tên cung có hàng riêng, ô đông sao cần chỗ
 const PAD = 16;
 const HEAD = 64;
 const CW = (W - PAD * 2) / 4;
 const CH = (H - HEAD - FOOT - PAD) / 4;
 // Chiều cao dành cho hai cột phụ tinh + hàng sao lưu trong một ô (đo trên ảnh thật).
-const COL_H = 150;
+const COL_H = 190; // trừ hàng tên cung (tuổi đại hạn lên góc phải hàng can chi)
+const TT_ROW_H = 18; // hàng viên Tuần/Triệt
 const FS_MIN = 11;
 const LUU_ROW_H = 17;
 const LUU_PER_ROW = 3;
@@ -100,7 +101,7 @@ function Col({ items, align, fs }: { items: Item[]; align: 'flex-start' | 'flex-
   );
 }
 
-function Cell({ p, canNam, dvTuoi, cur }: { p?: Palace; canNam: string; dvTuoi?: number; cur: boolean }) {
+function Cell({ p, canNam, dvTuoi, cur }: { p?: Palace; canNam: string; dvTuoi?: string; cur: boolean }) {
   if (!p) return <div style={{ display: 'flex', width: CW, height: CH }} />;
   const stars = p.stars || [];
   const chinh = p.majorStars || [];
@@ -122,13 +123,14 @@ function Cell({ p, canNam, dvTuoi, cur }: { p?: Palace; canNam: string; dvTuoi?:
   const tuan = stars.some((s) => s.ten === 'Tuần' || s.ten === 'Tuần+Triệt');
   const triet = stars.some((s) => s.ten === 'Triệt' || s.ten === 'Tuần+Triệt');
   const tt = tuan && triet ? 'TUẦN · TRIỆT' : tuan ? 'TUẦN' : triet ? 'TRIỆT' : '';
+  const ttBg = triet ? '#4a0000' : '#2c4a00'; // cùng màu viên Tuần/Triệt của laso-chart.css
   const can = canCung(canNam, p.diaChi);
   const luu = p.luuStars || [];
   // Chữ phụ tinh co lại khi ô đông (thêm hàng sao lưu càng dễ tràn) — tràn thì
   // chân ô (Tràng Sinh · tuổi đại hạn) bị đẩy ra ngoài, đè lên ô dưới.
   const luuH = luu.length ? Math.ceil(luu.length / LUU_PER_ROW) * LUU_ROW_H + 4 : 0;
   const rows = Math.max(left.length, right.length, 1);
-  const fs = Math.max(FS_MIN, Math.min(16, Math.floor((COL_H - luuH) / (1.32 * rows))));
+  const fs = Math.max(FS_MIN, Math.min(16, Math.floor((COL_H - luuH - (tt ? TT_ROW_H : 0)) / (1.32 * rows))));
   return (
     <div
       style={{
@@ -142,14 +144,16 @@ function Cell({ p, canNam, dvTuoi, cur }: { p?: Palace; canNam: string; dvTuoi?:
         ...(p.isMenh ? { border: `3px solid ${C.red}` } : {}),
       }}
     >
+      {/* Hàng 1: can chi trái · tuổi đại hạn phải (cùng khuôn web/an-sao/SEO); hàng 2: tên cung giữa. */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
         <div style={{ display: 'flex', fontSize: 15, color: C.mute }}>{`${can} ${p.diaChi}`.trim().toUpperCase()}</div>
-        <div style={{ display: 'flex', fontSize: 19, fontWeight: 700, color: p.isMenh ? C.red : C.ink }}>
-          {p.cungName.toUpperCase()}
-          {p.isThan ? ' (THÂN)' : ''}
-        </div>
+        <div style={{ display: 'flex', fontSize: 16, fontWeight: 700, color: cur ? C.red : C.gold }}>{dvTuoi || ''}</div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 6, minHeight: 56 }}>
+      <div style={{ display: 'flex', justifyContent: 'center', fontSize: 19, fontWeight: 700, color: p.isMenh ? C.red : C.ink }}>
+        {p.cungName.toUpperCase()}
+        {p.isThan ? ' (THÂN)' : ''}
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 2, minHeight: 56 }}>
         {chinh.length ? (
           chinh.map((s) => (
             <div key={s.ten} style={{ display: 'flex', alignItems: 'baseline', fontSize: 23, fontWeight: 700, color: elColor(s.ten) }}>
@@ -188,13 +192,17 @@ function Cell({ p, canNam, dvTuoi, cur }: { p?: Palace; canNam: string; dvTuoi?:
           ))}
         </div>
       ) : null}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+      <div style={{ display: 'flex' }}>
         <div style={{ display: 'flex', fontSize: 14, color: elColor(ts?.ten) }}>{ts?.ten || ''}</div>
-        {tt ? <div style={{ display: 'flex', fontSize: 13, fontWeight: 700, color: C.ink }}>{tt}</div> : null}
-        <div style={{ display: 'flex', fontSize: 17, fontWeight: 700, color: cur ? C.red : C.gold }}>
-          {dvTuoi != null ? dvTuoi : ''}
-        </div>
       </div>
+      {/* Tuần/Triệt: viên giữa đáy ô, hàng riêng dưới Tràng Sinh — không bao giờ chồng chữ. */}
+      {tt ? (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+          <div style={{ display: 'flex', fontSize: 12, fontWeight: 700, letterSpacing: 1, color: '#fff', background: ttBg, padding: '0 8px', borderRadius: 3 }}>
+            {tt}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -230,7 +238,7 @@ export async function GET(req: NextRequest) {
     const p = byChi[chi];
     const dv = p ? daiVans.find((d) => d.cungIdx === p.idx) : undefined;
     const cur = !!(p && dvHT && dvHT.cungIdx === p.idx);
-    return <Cell key={chi} p={p} canNam={canNam} dvTuoi={dv?.tuoiStart} cur={cur} />;
+    return <Cell key={chi} p={p} canNam={canNam} dvTuoi={dv ? `${dv.tuoiStart}–${dv.tuoiEnd}` : undefined} cur={cur} />;
   };
 
   // ── Trung cung ──
@@ -354,7 +362,7 @@ export async function GET(req: NextRequest) {
         </div>
         <BrandFooter
           origin={req.nextUrl.origin}
-          note="Viền đỏ: cung Mệnh · Nền vàng: đại hạn đang đi · Số góc phải: tuổi vào đại hạn"
+          note="Viền đỏ: cung Mệnh · Nền vàng: đại hạn đang đi · Số góc phải trên: tuổi đại hạn"
         />
       </div>
     ),
