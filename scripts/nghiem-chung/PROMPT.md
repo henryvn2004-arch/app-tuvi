@@ -51,7 +51,8 @@ cho trang `tuviminhbao.com/nghiem-chung/<slug>`. Mẫu đã duyệt: `lib/nghiem
 - `khop`: hướng chính của câu lá số đúng với đời thật.
 - `mot-phan`: đúng hướng nhưng sai/thiếu chi tiết, hoặc đúng một giai đoạn mà không đúng giai đoạn khác.
 - `truot`: trái ngược rõ với đời thật.
-- `chua-kiem-chung` (chỉ bản mệnh): bài viết không nói gì về chuyện đó — **không cố gán**.
+- `chua-kiem-chung`: bài viết không nói gì về chuyện đó / thập niên đó không có sự kiện — **không cố gán**,
+  đừng chấm `mot-phan` cho một đại vận trống (dòng chưa kiểm chứng không tính vào tỷ lệ).
 - `dang-dien-ra` (chỉ đại vận hiện tại của người còn sống).
 - Đại vận: so `hang`/`diem` với cường độ thập niên đó trong đời (đỉnh cao/thành tựu → tot; lẫn lộn → vua; sa sút/biến cố → xau).
   `vua` (trung bình) được coi là khớp, trừ khi thập niên đó rõ ràng là đỉnh cao nhất hoặc tệ nhất đời.

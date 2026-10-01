@@ -133,10 +133,63 @@ async function sitelinks(qids: string[]): Promise<Record<string, Record<string, 
   return out;
 }
 
-async function extract(lang: string, title: string): Promise<string> {
-  const u = `https://${lang}.wikipedia.org/w/api.php?action=query&prop=extracts&explaintext=1&redirects=1&format=json&formatversion=2&titles=${encodeURIComponent(title)}`;
-  const j = (await getJson(u)) as { query?: { pages?: { extract?: string }[] } };
-  return j.query?.pages?.[0]?.extract || '';
+/**
+ * Lấy mã wiki qua `index.php?action=raw` (đi đường cache trang) rồi tự bóc thành
+ * chữ thường. KHÔNG dùng `api.php?prop=extracts`: đường đó bị Wikimedia trả 429
+ * (`x-envoy-ratelimited`) ngay từ vài chục request đầu qua proxy container.
+ * Agent chép `trich` từ chính chữ đã bóc này, nên bộ kiểm tra vẫn dò khớp được.
+ */
+async function extract(lang: string, title: string, depth = 0): Promise<string> {
+  for (let i = 0; i < 6; i++) {
+    const r = await fetch(
+      `https://${lang}.wikipedia.org/w/index.php?title=${encodeURIComponent(title.replace(/ /g, '_'))}&action=raw`,
+      { headers: { 'User-Agent': UA } },
+    );
+    if (r.status === 429 || r.status >= 500) {
+      await sleep(Math.min(60, Number(r.headers.get('retry-after')) || 2 ** i) * 1000);
+      continue;
+    }
+    if (!r.ok) return '';
+    const raw = await r.text();
+    const redirect = raw.match(/^#[A-ZÀ-Ỹ]+\s*:?\s*\[\[([^\]|#]+)/i);
+    if (redirect && depth < 2) return extract(lang, redirect[1], depth + 1);
+    return boc(raw);
+  }
+  return '';
+}
+
+/** Bóc mã wiki → chữ thường (đủ cho đọc hiểu + dò trích dẫn, không cần hoàn hảo). */
+function boc(w: string): string {
+  let s = w
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/<ref[^>/]*\/>/gi, '')
+    .replace(/<ref[^>]*>[\s\S]*?<\/ref>/gi, '')
+    .replace(/<(gallery|timeline|math|score|syntaxhighlight)[^>]*>[\s\S]*?<\/\1>/gi, '');
+  // Bỏ template lồng nhau {{…}} và bảng {|…|} từ trong ra ngoài.
+  for (let i = 0; i < 10; i++) {
+    const t = s.replace(/\{\{[^{}]*\}\}/g, '').replace(/\{\|[^{}]*?\|\}/g, '');
+    if (t === s) break;
+    s = t;
+  }
+  s = s
+    .replace(
+      /\[\[(?:File|Image|Fichier|Datei|Immagine|Archivo|Imagem|Tập tin|Hình|Bestand|Fil|Plik|Category|Catégorie|Kategorie|Categoria|Categoría|Kategori|Thể loại)\s*:[^\[\]]*(?:\[\[[^\]]*\]\][^\[\]]*)*\]\]/gi,
+      '',
+    )
+    .replace(/\[\[([^\]|]*)\|([^\]]*)\]\]/g, '$2')
+    .replace(/\[\[([^\]]*)\]\]/g, '$1')
+    .replace(/\[https?:[^\s\]]+ ([^\]]*)\]/g, '$1')
+    .replace(/\[https?:[^\]]*\]/g, '')
+    .replace(/'{2,}/g, '')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/^[*#:;]+\s*/gm, '')
+    .replace(/^(=+)\s*(.*?)\s*\1\s*$/gm, '\n$1 $2 $1')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n{3,}/g, '\n\n');
+  return s.trim();
 }
 
 /** Cắt phần đuôi vô ích (tham khảo, liên kết ngoài, danh mục phim…) rồi giới hạn độ dài. */

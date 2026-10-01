@@ -138,7 +138,7 @@ async function kiem(slug: string): Promise<string[]> {
     const dv = ls.daiVan.find((x) => x.thuTu === r.thuTu);
     if (!dv) return loi.push(`${t}.thuTu ${r.thuTu} không có`);
     if (dv.namTu > cuoi) loi.push(`${t}: đại vận ${r.thuTu} bắt đầu ${dv.namTu}, sau năm ${namMat ? 'mất' : 'nay'}`);
-    if (!KL.includes(r.ketLuan) || r.ketLuan === 'chua-kiem-chung') loi.push(`${t}.ketLuan không hợp lệ`);
+    if (!KL.includes(r.ketLuan)) loi.push(`${t}.ketLuan không hợp lệ`);
     if (r.ketLuan === 'dang-dien-ra' && !(dv.namDen >= NAM_NAY && !namMat)) loi.push(`${t}: "dang-dien-ra" chỉ dùng cho đại vận hiện tại của người còn sống`);
     str(r.doiThat, `${t}.doiThat`, 15, 500);
     str(r.vi, `${t}.vi`, 10, 250);
