@@ -10,7 +10,7 @@ import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { authUserFromRequest } from '@/lib/api/tool-helpers';
 import { classifyLuanGiaiSlug } from '@/lib/pdf/luan-giai-slug';
-import { sanitizeBlocks, subjectKey, legacyLuanBlocks, LEGACY_TOOL } from '@/lib/reports/snapshots';
+import { snapshotRow, saveSnapshot, legacyLuanBlocks, LEGACY_TOOL } from '@/lib/reports/snapshots';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -25,39 +25,11 @@ export async function POST(request: NextRequest) {
   if ('error' in auth) return err(auth.error, auth.status);
   const b = await parseBody(request);
 
-  const toolId = String(b.toolId || '').trim().slice(0, 40);
-  if (!/^[a-z0-9-]+$/.test(toolId)) return err('toolId không hợp lệ', 400);
-  const title = String(b.title || '').trim().slice(0, 160) || 'Báo cáo';
-  const blocks = sanitizeBlocks(b.blocks);
-  if (!blocks.some((x) => x.text || x.image)) return err('Chưa có nội dung', 400);
-  const imageRaw = b.imageUrl ? String(b.imageUrl).slice(0, 500) : '';
-
-  const row = {
-    user_id: auth.user.id,
-    tool_id: toolId,
-    subject_key: subjectKey(toolId, b.subject, title),
-    tool_label: b.toolLabel ? String(b.toolLabel).trim().slice(0, 80) : null,
-    title,
-    subtitle: b.subtitle ? String(b.subtitle).trim().slice(0, 160) : null,
-    image_url: /^https:\/\//.test(imageRaw) ? imageRaw : null,
-    blocks,
-    updated_at: new Date().toISOString(),
-  };
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/report_snapshots?on_conflict=user_id,tool_id,subject_key`, {
-      method: 'POST',
-      headers: { ...SB_HEADERS, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' },
-      body: JSON.stringify(row),
-    });
-    if (!res.ok) {
-      console.error('[reports/snapshot] upsert', res.status, (await res.text()).slice(0, 300));
-      return err('Không lưu được báo cáo', 502);
-    }
-    return ok({ saved: true });
-  } catch (e: unknown) {
-    console.error('[reports/snapshot] upsert', e);
-    return err((e as Error).message);
-  }
+  const row = snapshotRow(auth.user.id, b);
+  if (typeof row === 'string') return err(row, 400);
+  const id = await saveSnapshot(row);
+  if (!id) return err('Không lưu được báo cáo', 502);
+  return ok({ saved: true, id });
 }
 
 export async function GET(request: NextRequest) {
