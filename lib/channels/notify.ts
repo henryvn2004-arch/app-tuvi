@@ -3,10 +3,12 @@
 // vd "đã nhận tiền" ngay sau khi chuyển khoản. Best-effort: kênh chưa cấu
 // hình / ngoài khung tin (Zalo 48h, Messenger & WhatsApp 24h) thì nền tảng từ
 // chối, ta chỉ log — KHÔNG được làm hỏng luồng gọi (webhook thanh toán).
-import { zaloSendText, zaloSendFile, ZALO_PLATFORM } from './zalo';
-import { msgrSendText, msgrSendFile } from './messenger';
-import { waSendText, waSendFile } from './whatsapp';
-import { tgSendMessage, tgSendFile } from './telegram';
+import { zaloSendText, zaloSendFile, zaloSendImage, ZALO_PLATFORM } from './zalo';
+import { msgrSendText, msgrSendFile, msgrSendImage } from './messenger';
+import { waSendText, waSendFile, waSendImage } from './whatsapp';
+import { tgSendMessage, tgSendFile, tgSendImage } from './telegram';
+import { topupCaption, vietQrImageUrl } from './topup';
+import type { PayOSOrder } from '@/lib/billing/payos-order';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -39,6 +41,47 @@ export async function notifyUserOnChat(userId: string, text: string): Promise<nu
   } catch (e) {
     console.error('[notify] tra chat_links lỗi', e);
     return 0;
+  }
+}
+
+const IMAGE_SENDERS: Record<string, (id: string, url: string, caption?: string) => Promise<void>> = {
+  [ZALO_PLATFORM]: zaloSendImage,
+  messenger: msgrSendImage,
+  whatsapp: waSendImage,
+  telegram: tgSendImage,
+};
+
+/**
+ * Gửi QR của MỘT đơn payOS vừa tạo trên web vào (các) kênh chat của khách —
+ * khách đọc bản xem trước trong trình duyệt của app chat, bấm mở khoá: QR hiện
+ * tại chỗ VÀ nằm lại trong cuộc trò chuyện, lỡ đóng trang vẫn trả được. Ảnh
+ * QR + một tin kèm link trang thanh toán payOS (trên điện thoại, trang đó mở
+ * thẳng app ngân hàng). Best-effort như `notifyUserOnChat`.
+ */
+export async function sendPayQrToUserChats(userId: string, order: PayOSOrder): Promise<void> {
+  if (!SUPABASE_URL || !SUPABASE_KEY || !userId) return;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/chat_links?user_id=eq.${encodeURIComponent(userId)}&select=platform,external_id`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }, cache: 'no-store' },
+    );
+    if (!res.ok) return;
+    const rows = (await res.json()) as { platform: string; external_id: string }[];
+    const img = vietQrImageUrl(order);
+    const text = `${topupCaption(order)}\n\nHoặc mở trang thanh toán: ${order.checkoutUrl}`;
+    for (const r of rows) {
+      const sendImg = IMAGE_SENDERS[r.platform];
+      const sendText = SENDERS[r.platform];
+      if (!sendText) continue;
+      try {
+        if (img && sendImg) await sendImg(r.external_id, img);
+        await sendText(r.external_id, text);
+      } catch (e) {
+        console.error(`[notify] gửi QR ${r.platform} lỗi`, e);
+      }
+    }
+  } catch (e) {
+    console.error('[notify] tra chat_links lỗi', e);
   }
 }
 
