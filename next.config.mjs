@@ -39,6 +39,8 @@ const nextConfig = {
       { source: '/app/bao-cao',         destination: '/app-bao-cao.html'     },
       { source: '/app/la-so',           destination: '/app-luan-giai.html'   },
       { source: '/app/luan-giai',       destination: '/app-luan-giai.html'   },
+      // Trang đích quảng cáo (Google Search) — nhận ngày sinh rồi chuyển sang /app/luan-giai.
+      { source: '/xem/luan-giai',       destination: '/xem-luan-giai.html'   },
       { source: '/app/chu-trinh-cuoc-doi', destination: '/app-chu-trinh-cuoc-doi.html' },
       { source: '/app/van-han-nam',     destination: '/app-van-han-nam.html' },
       { source: '/app/bat-tu',          destination: '/app-bat-tu.html'      },
