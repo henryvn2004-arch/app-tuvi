@@ -65,8 +65,9 @@ export interface NguCanhTinhNang {
   daMoi: boolean;
   /** Nút tính năng lượt trước (`GoiYState.tn`). */
   truoc?: string;
-  /** Nút biểu đồ hợp câu này (router có bảng biểu đồ) — đường lùi cuối. */
-  bieuDo: { nut: string };
+  /** Nút biểu đồ hợp câu này (router có bảng biểu đồ) — đường lùi cuối. `null` = lượt
+   *  này đã tự gửi ảnh biểu đồ rồi. */
+  bieuDo: { nut: string } | null;
 }
 
 /** Các ứng viên theo THỨ TỰ ưu tiên; lấy cái đầu tiên khác nút lượt trước. */
@@ -81,7 +82,7 @@ export function chonTinhNang(c: NguCanhTinhNang): TinhNang | null {
     const g = pickGuests(c.cauHoi, c.thayId, c.birth, 1)[0];
     if (g) ds.push({ id: `moi:${g.id}`, nut: { title: nhanMon(g), reply: moiCau(g) } });
   }
-  if (c.birth) ds.push({ id: `bieu-do:${c.bieuDo.nut}`, nut: { title: c.bieuDo.nut, reply: c.bieuDo.nut } });
+  if (c.birth && c.bieuDo) ds.push({ id: `bieu-do:${c.bieuDo.nut}`, nut: { title: c.bieuDo.nut, reply: c.bieuDo.nut } });
   return ds.find((x) => x.id !== c.truoc) ?? ds[0] ?? null;
 }
 
