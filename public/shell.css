@@ -123,6 +123,18 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .sbn-recent .sbn-item{padding:7px 10px;font-size:13.5px}
 .sbn-empty{padding:4px 10px;font-size:12.5px;color:var(--sb-fg-dim);line-height:1.5}
 .sbn-foot{flex:0 0 auto;padding:8px;border-top:1px solid var(--line);position:relative}
+/* Thẻ QR Zalo tĩnh ở đáy sidebar (shell.js `#sbZalo`) — lời mời luôn-hiện trên máy tính
+   mà không đè lên nội dung. Chỉ con trỏ chuột (điện thoại không tự quét được màn hình
+   mình) và màn đủ cao để danh mục phía trên còn chỗ cuộn. */
+.sbn-zalo{display:none;flex:0 0 auto;position:relative;margin:0 8px 8px;padding:10px 10px 8px;border:1px solid #CFE0FF;border-radius:12px;background:#F3F8FF;text-align:center}
+@media(hover:hover) and (pointer:fine) and (min-height:760px){.sbn-zalo{display:block}}
+html.sb-mini .sbn-zalo{display:none}
+.sbn-zalo b{display:block;font-size:13px;color:#0050C8;padding:0 16px}
+.sbn-zalo small{display:block;font-size:11px;line-height:1.35;color:var(--text-mid);margin:2px 0 6px}
+.sbn-zalo img{display:block;width:132px;height:132px;margin:0 auto;padding:4px;border:2px solid #0068FF;border-radius:8px;background:#fff;box-sizing:border-box}
+.sbn-zalo .zl-x{top:4px;right:4px}
+:root[data-theme="dark"] .sbn-zalo{background:#142744;border-color:#23406b}
+:root[data-theme="dark"] .sbn-zalo b{color:#8DB8FF}
 .sbn-me .ava{width:30px;height:30px;border-radius:50%;background:var(--navy);color:#F9F4EB;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;flex:0 0 auto}
 .sbn-me .sbn-tx b{display:block;font-weight:500;overflow:hidden;text-overflow:ellipsis}
 .sbn-me .sbn-tx span{display:block;font-size:12px;color:var(--sb-fg-dim);overflow:hidden;text-overflow:ellipsis}
@@ -199,8 +211,8 @@ html.sb-mini .sbn-menu{right:auto;width:240px}
    thì cụm nút mới hạ cánh sát mép phải WORKSPACE. Ở ≤900px rail là drawer
    NẰM NGOÀI luồng (không chiếm cột) nên khối responsive bên dưới ghi đè lại
    `right:14px` — không trừ `--rail-w` nữa. */
-.ws-fab{position:fixed;right:calc(var(--rail-w) + 16px);bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px;min-height:200px;pointer-events:none}
-/* GIỮ CHỖ 200px = 4 nút 44px + 3 khe 8px, tức khối tối đa (Hỏi · Chia sẻ ·
+.ws-fab{position:fixed;right:calc(var(--rail-w) + 16px);bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px;min-height:252px;pointer-events:none}
+/* GIỮ CHỖ 252px = 5 nút 44px + 4 khe 8px, tức khối tối đa (Hỏi · Zalo · Chia sẻ ·
    Facebook · PDF). Khối neo theo `bottom`, nên KHÔNG giữ chỗ thì mỗi lần có
    thêm nút, mép TRÊN dâng lên và `#wsFab` đổi rect ⇒ đo được 0,0049 CLS trên
    prod (/app/luan-giai): top 722→566, cao 44→200.
@@ -216,6 +228,22 @@ html.sb-mini .sbn-menu{right:auto;width:240px}
 .ws-fab .btn svg{width:19px;height:19px;flex:0 0 auto}
 .ws-fab .fbtn-fb{background:#1877F2;border-color:#1877F2;color:#fff}
 @media(hover:hover){.ws-fab .fbtn-fb:hover{background:#1466d6;border-color:#1466d6;color:#fff}}
+/* Zalo OA — nút đáy cụm + thẻ QR (chỉ máy tính). Xem khối ZALO OA trong shell.js.
+   Thẻ đứng NGAY TRÁI cụm nút (trừ thêm 44px nút + 12px khe), đáy thẳng hàng. */
+.ws-fab .fbtn-zl{background:#0068FF;border-color:#0068FF;color:#fff;font:700 11.5px/1 var(--sans);letter-spacing:-.2px;text-decoration:none}
+@media(hover:hover){.ws-fab .fbtn-zl:hover{background:#0057d6;border-color:#0057d6;color:#fff}}
+.zl-card{position:fixed;right:calc(var(--rail-w) + 72px);bottom:calc(16px + env(safe-area-inset-bottom));z-index:41;width:212px;padding:14px 14px 12px;background:var(--white);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-lg);display:none;text-align:center}
+.zl-card.on{display:block}
+body.chat-first-live .zl-card{right:72px}
+.zl-x{position:absolute;top:6px;right:6px;width:26px;height:26px;border:0;border-radius:50%;background:transparent;color:var(--text-lt);font-size:13px;line-height:1;cursor:pointer}
+@media(hover:hover){.zl-x:hover{background:var(--paper-2);color:var(--text)}}
+.zl-h{display:flex;gap:9px;align-items:center;text-align:left;padding-right:18px}
+.zl-badge{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:#0068FF;color:#fff;font:700 10px/34px var(--sans);text-align:center}
+.zl-h b{display:block;font-size:13.5px;color:var(--heading)}
+.zl-h small{display:block;font-size:11.5px;line-height:1.35;color:var(--text-mid);margin-top:2px}
+.zl-qr{display:block;width:168px;height:168px;margin:12px auto 10px;padding:6px;border:2px solid #0068FF;border-radius:10px;background:#fff;box-sizing:border-box}
+.zl-go{display:block;padding:9px 0;border-radius:999px;background:#0068FF;color:#fff;font-weight:700;font-size:13.5px;text-decoration:none}
+@media(hover:hover){.zl-go:hover{background:#0057d6}}
 /* Tooltip DÙNG CHUNG cho mọi `[data-tip]` trong shell — MỘT node `.tip` gắn
    ở <body>, `shell.js` định vị bằng `getBoundingClientRect()` rồi set left/
    top trực tiếp (không dùng `::after` + `position:absolute` như bản cũ, vì
@@ -341,6 +369,14 @@ body.chat-home .rail-report,body.chat-first-live.art-closed .rail-report{margin-
 @media(hover:hover){.rail-attach:hover:not(:disabled){background:var(--paper-2);color:var(--gold-soft)}}
 .rail-attach:disabled{opacity:.4;cursor:not-allowed}
 .rail-thumbs{display:flex;flex-wrap:wrap;gap:6px;padding:8px 13px 0}
+.rail-zalo{display:flex;align-items:center;gap:8px;margin:6px 13px 8px;padding:7px 12px;border-radius:999px;background:#EAF2FF;color:#0050C8;font-size:12.5px;text-decoration:none;align-self:flex-start}
+.rail-zalo .zl-badge{width:24px;height:24px;font-size:7.5px;line-height:24px}
+@media(hover:hover) and (pointer:fine){.rail-zalo{display:none}body.chat-home .rail-zalo{display:flex}}
+body.chat-home .rail-zalo{margin-left:var(--col-pad)}
+:root[data-theme="dark"] .rail-zalo{background:#142744;color:#8DB8FF}
+/* Khách đã nhắn câu đầu (gõ, bấm gợi ý, hay khôi phục phiên — mọi đường đều thả `.msg.u` vào `#chat`)
+   thì thôi mời sang Zalo, trả lại ~40px cho khung chat. */
+.rail:has(#chat .msg.u) .rail-zalo{display:none}
 .rail-thumbs .thumb{position:relative;width:52px;height:52px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
 .rail-thumbs .thumb img{width:100%;height:100%;object-fit:cover;display:block}
 .rail-thumbs .thumb button{position:absolute;top:1px;right:1px;width:16px;height:16px;border:none;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:12px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
@@ -792,6 +828,8 @@ body.chat-first-live.art-closed .ctx{margin-left:var(--col-pad);margin-right:var
   .shell .ws-body{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
   .ws-fab{bottom:calc(16px + env(safe-area-inset-bottom));right:14px}
   body.drawer-open .ws-fab{display:none}
+  .zl-card{right:70px}
+  body.drawer-open .zl-card{display:none}
   /* Sheet trên điện thoại: full-screen trượt từ DƯỚI lên (was panel phải
      desktop) — cùng khuôn 92vh + bo góc trên với các sheet/modal khác trong
      repo (xem .rail/.sb ở trên: 100vw). Tay cầm (.tv-sheet-grab) chỉ hiện ở

@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-529 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+530 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Năm file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-10.md` | 4 | 13,868 B |
+| `2026-10.md` | 5 | 16,782 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
@@ -27,6 +27,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-10 | `2026-10.md` | 🎯 Purchase của khách Messenger vào dataset của Page, không vào pixel website |
+| 1 | 2026-10 | `2026-10.md` | 💬 Nút + thẻ QR "Hỏi thầy qua Zalo" trên mọi trang `/app/*` |
 | 1 | 2026-10 | `2026-10.md` | 🖼️ Ảnh kênh chat cho 3 biểu đồ vận mới: Mười năm tới · Biến động 12 tháng · Bốn chuyện lớn |
 | 1 | 2026-10 | `2026-10.md` | 📈 Bốn biểu đồ vận mới trong bản luận: 10 năm · 12 tháng · 4 chủ đề · ngũ hành Tứ Trụ |
 | 1 | 2026-10 | `2026-10.md` | 💳 Ads Click-to-Messenger: QR tại chỗ cho khách đã đăng nhập + Purchase dạng business_messaging |
