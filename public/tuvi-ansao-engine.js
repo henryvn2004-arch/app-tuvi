@@ -2620,11 +2620,30 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     dv.yNghia = matchVanHanData(dvP, { napAmHanh, menhPalace: _menhP }, gioitinh);
   });
 
+  const _bienDongGoc = tinhBienDongGoc(palaces);
   const _tieuVanScores = tinhTieuVanScores(
-    { palaces, daiVans: daiVansScored },
+    { palaces, daiVans: daiVansScored, bienDongGoc: _bienDongGoc },
     gioitinh, amDuong, chiNam, namSinhDL
   );
   const _nguyetVanScores = tinhNguyetVanScores(_tieuVanScores, palaces, thangAL, gioIdx);
+
+  const _cungScores = tinhCungScores(
+    {
+      palaces,
+      cachCuc: (() => {
+        const _ls = { palaces, menhDC, thanDC, amDuong, napAmHanh, chiNam,
+          daiVans: daiVansScored,
+          daiVanHienTai: daiVansScored.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd),
+        };
+        return phanTichCachCuc(_ls, gioitinh);
+      })(),
+      cachCucTungCung: phanTichCungYNghia(
+        { palaces, menhDC, thanDC, amDuong, napAmHanh, chiNam },
+        gioitinh, gioIdx, canNam, chiNam, tuoiXem
+      ),
+    },
+    napAmHanh, tuoiXem, chiNam
+  );
 
   return {
     canChiNam, napAm, amDuong, cuc, canMenh,
@@ -2654,24 +2673,10 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
       { palaces, menhDC, thanDC, amDuong, napAmHanh, chiNam },
       gioitinh, gioIdx, canNam, chiNam, tuoiXem
     ),
-    cungScores: tinhCungScores(
-      {
-        palaces,
-        cachCuc: (() => {
-          const _ls = { palaces, menhDC, thanDC, amDuong, napAmHanh, chiNam,
-            daiVans: daiVansScored,
-            daiVanHienTai: daiVansScored.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd),
-          };
-          return phanTichCachCuc(_ls, gioitinh);
-        })(),
-        cachCucTungCung: phanTichCungYNghia(
-          { palaces, menhDC, thanDC, amDuong, napAmHanh, chiNam },
-          gioitinh, gioIdx, canNam, chiNam, tuoiXem
-        ),
-      },
-      napAmHanh, tuoiXem, chiNam
-    ),
+    cungScores: _cungScores,
+    chuDeDaiVan: tinhChuDeDaiVan(daiVansScored, palaces, _cungScores, amDuong, gioitinh),
     saoLuu,
+    bienDongGoc: _bienDongGoc,
     tieuVanScores: _tieuVanScores,
     nguyetVanScores: _nguyetVanScores,
   };
@@ -4743,6 +4748,179 @@ function phanTichDaiVanRules(dvPalace, menhPalace, ls) {
 
 
 // ================================================================
+// NỘI SUY ĐIỂM VẬN (Catmull-Rom) — allPts: [{tuoi, score}] đã sort theo tuoi.
+// Dùng cho điểm NĂM (mốc = điểm đại vận) và điểm THÁNG (mốc = điểm năm).
+// ================================================================
+function noiSuyDiemVan(allPts, tuoi) {
+  if (allPts.length === 0) return 5;
+  if (tuoi <= allPts[0].tuoi) return allPts[0].score;
+  if (tuoi >= allPts[allPts.length-1].tuoi) return allPts[allPts.length-1].score;
+
+  // Find surrounding points
+  let i = 0;
+  while (i < allPts.length - 1 && allPts[i+1].tuoi < tuoi) i++;
+  const p0 = allPts[Math.max(0, i-1)];
+  const p1 = allPts[i];
+  const p2 = allPts[i+1];
+  const p3 = allPts[Math.min(allPts.length-1, i+2)];
+
+  // Catmull-Rom spline
+  const t = (tuoi - p1.tuoi) / (p2.tuoi - p1.tuoi);
+  const t2 = t*t, t3 = t2*t;
+  const score =
+    0.5 * ((2*p1.score) +
+    (-p0.score + p2.score) * t +
+    (2*p0.score - 5*p1.score + 4*p2.score - p3.score) * t2 +
+    (-p0.score + 3*p1.score - 3*p2.score + p3.score) * t3);
+
+  return Math.max(0, Math.min(10, score));
+}
+
+// ================================================================
+// BIÊN DAO ĐỘNG NĂM / THÁNG — Henry chốt 2026-10-01.
+// Điểm năm/tháng giữ nguyên (nội suy). Biên = điểm × (1 ± pct), với
+//   pct = Σ trọng số SAO ĐỘNG ÷ Σ trọng số MỌI sao
+// trong tam phương tứ chính (cung hạn + 2 cung tam hợp + cung xung chiếu)
+// của cung tiểu hạn (năm) hoặc cung nguyệt hạn (tháng).
+// Trọng số theo hạng sao: chính tinh 3 · phụ tinh 2 · bàng tinh 1; riêng
+// Địa Không, Địa Kiếp, Thiên Mã 3 (động mạnh, ngang chính tinh). Mỗi Tứ Hóa
+// tính thêm một sao phụ tinh (2); Hóa Kỵ là sao động. Sao lưu động duy nhất:
+// Lưu Thiên Mã (3, theo Thiên Mã) và Lưu Hóa Kỵ can năm (2, theo Hóa Kỵ).
+// Tuần/Triệt không tính. Sao lưu KHÔNG vào điểm — chỉ vào biên.
+// ================================================================
+const _BD_PHU_TINH = new Set(['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp',
+  'Tả Phụ','Hữu Bật','Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt','Lộc Tồn','Thiên Mã']);
+const _BD_SAO_DONG = {
+  'Thất Sát': 3, 'Phá Quân': 3, 'Tham Lang': 3, 'Liêm Trinh': 3, 'Thiên Cơ': 3,
+  'Địa Không': 3, 'Địa Kiếp': 3, 'Thiên Mã': 3,
+  'Hỏa Tinh': 2, 'Linh Tinh': 2, 'Kình Dương': 2,
+  'Đại Hao': 1, 'Tiểu Hao': 1, 'Phi Liêm': 1, 'Phá Toái': 1, 'Tuế Phá': 1, 'Thiên Không': 1, 'Mộc Dục': 1,
+};
+const _BD_W_HOA = 2;
+function _bdTrongSo(s) {
+  if (_BD_SAO_DONG[s.ten] != null) return _BD_SAO_DONG[s.ten];
+  return s.nhom === 'chinh' ? 3 : _BD_PHU_TINH.has(s.ten) ? 2 : 1;
+}
+// Vị trí Lưu Thiên Mã + cung chứa sao Lưu Hóa Kỵ của năm `nam` — tính MỘT lần
+// mỗi năm (12 tháng cùng năm dùng chung).
+function _bdSaoLuu(palaces, nam) {
+  const L = anSaoLuuNam(nam);
+  const kySao = L.tuHoa && L.tuHoa['Kỵ'];
+  const kyP = kySao ? palaces.find(p => (p.stars || []).some(s => s.ten === kySao)) : null;
+  return { maIdx: L.sao['Lưu Thiên Mã'], kySao, kyIdx: kyP ? kyP.idx : -1 };
+}
+// Phần sao GỐC của 12 bộ tam phương tứ chính — không đổi theo năm/tháng nên
+// tính một lần cho mỗi lá số (`ls.bienDongGoc[cungIdx]`).
+// → [{ tp: [4 idx], cungs: [4 tên], wTong, wDong, ds: [{ten, cung, w}] }] × 12
+function tinhBienDongGoc(palaces) {
+  const m12 = (n) => ((n % 12) + 12) % 12;
+  const byIdx = (i) => palaces.find(p => p.idx === i);
+  const out = [];
+  for (let c = 0; c < 12; c++) {
+    const tp = [c, m12(c + 4), m12(c + 8), m12(c + 6)];
+    let wTong = 0, wDong = 0;
+    const ds = [];
+    for (const i of tp) {
+      const p = byIdx(i);
+      if (!p) continue;
+      for (const s of (p.stars || [])) {
+        if (s.nhom === 'tuan_triet') continue;
+        const w = _bdTrongSo(s);
+        wTong += w;
+        if (_BD_SAO_DONG[s.ten] != null) { wDong += w; ds.push({ ten: s.ten, cung: p.cungName, w }); }
+        if (s.hoa) {
+          wTong += _BD_W_HOA;
+          if (s.hoa === 'Kỵ') { wDong += _BD_W_HOA; ds.push({ ten: 'Hóa Kỵ (' + s.ten + ')', cung: p.cungName, w: _BD_W_HOA }); }
+        }
+      }
+    }
+    out.push({ tp, cungs: tp.map(i => byIdx(i)?.cungName || ''), wTong, wDong, ds });
+  }
+  return out;
+}
+// Biên của một điểm, khi cung hạn có bộ sao gốc `goc` và năm có sao lưu `luu`.
+// → { pct, hi, lo, luu: [{ten, cung, w}] }  (sao động gốc: xem `goc.ds`)
+function _bdBien(palaces, diem, goc, luu) {
+  let wTong = goc.wTong, wDong = goc.wDong;
+  const hit = [];
+  const tenCung = (i) => palaces.find(p => p.idx === i)?.cungName || '';
+  if (luu) {
+    if (goc.tp.includes(luu.maIdx)) {
+      const w = _BD_SAO_DONG['Thiên Mã'];
+      wTong += w; wDong += w;
+      hit.push({ ten: 'Lưu Thiên Mã', cung: tenCung(luu.maIdx), w });
+    }
+    if (luu.kyIdx >= 0 && goc.tp.includes(luu.kyIdx)) {
+      wTong += _BD_W_HOA; wDong += _BD_W_HOA;
+      hit.push({ ten: 'Lưu Hóa Kỵ (' + luu.kySao + ')', cung: tenCung(luu.kyIdx), w: _BD_W_HOA });
+    }
+  }
+  const pct = wTong ? Math.round(wDong / wTong * 1000) / 1000 : 0;
+  return {
+    pct,
+    hi: Math.min(10, Math.round(diem * (1 + pct) * 10) / 10),
+    lo: Math.max(0, Math.round(diem * (1 - pct) * 10) / 10),
+    luu: hit,
+  };
+}
+// 12 tháng âm lịch của năm `nam`: điểm nội suy từ điểm NĂM (mốc giữa năm =
+// tuoi) bằng cùng Catmull-Rom của điểm năm, kèm biên. Tính khi cần — KHÔNG
+// nhồi vào lá số (1.080 tháng × biên làm lá số phình ~8 lần).
+// → [{ thang, cungIdx, diem, pct, hi, lo, luu }] × 12, hoặc [] nếu thiếu dữ liệu.
+function tinhVanThang(ls, nam) {
+  const tvs = ls && ls.tieuVanScores;
+  const nv = ls && (ls.nguyetVanScores || []).find(x => x.nam === nam);
+  if (!tvs || !tvs.length || !nv || !ls.palaces) return [];
+  const moc = tvs.map(t => ({ tuoi: t.tuoi, score: t.mainScore }));
+  const goc = ls.bienDongGoc || tinhBienDongGoc(ls.palaces);
+  const luu = _bdSaoLuu(ls.palaces, nam);
+  return nv.months.map((cungIdx, m) => {
+    const diem = Math.round(noiSuyDiemVan(moc, nv.tuoi - 0.5 + (m + 0.5) / 12) * 10) / 10;
+    return Object.assign({ thang: m + 1, cungIdx, diem }, _bdBien(ls.palaces, diem, goc[cungIdx], luu));
+  });
+}
+
+// ================================================================
+// BỐN CHỦ ĐỀ QUA 9 ĐẠI VẬN — Henry chốt 2026-10-01.
+// Cung đại vận làm Mệnh TẠM; 11 cung còn lại dời theo, đi thuận (dương nam,
+// âm nữ) hoặc nghịch (âm nam, dương nữ). Cung tạm mượn sao của cung nó dời
+// tới. Điểm chủ đề = 0,6 × điểm cung GỐC + 0,4 × điểm cung TẠM
+// (`cungScores[...].tong`) — cung tạm là phụ, cung gốc là chính.
+// ================================================================
+const CHU_DE_DAI_VAN = [
+  { key: 'su_nghiep', ten: 'Sự nghiệp', cung: 'Quan Lộc' },
+  { key: 'tai_loc', ten: 'Tài lộc', cung: 'Tài Bạch' },
+  { key: 'tinh_duyen', ten: 'Tình duyên', cung: 'Phu Thê' },
+  { key: 'suc_khoe', ten: 'Sức khỏe', cung: 'Tật Ách' },
+];
+function tinhChuDeDaiVan(daiVans, palaces, cungScores, amDuong, gioitinh) {
+  if (!daiVans || !palaces || !cungScores) return [];
+  const m12 = (n) => ((n % 12) + 12) % 12;
+  const menh = palaces.find(p => p.isMenh);
+  if (!menh) return [];
+  const thuan = (amDuong === 'dương' && gioitinh === 'nam') || (amDuong === 'âm' && gioitinh === 'nu');
+  const dir = thuan ? 1 : -1;
+  const diemCung = (ten) => (cungScores[ten] && typeof cungScores[ten].tong === 'number') ? cungScores[ten].tong : null;
+  return daiVans.slice(0, 9).map(dv => {
+    const chuDe = {};
+    for (const cd of CHU_DE_DAI_VAN) {
+      const goc = palaces.find(p => p.cungName === cd.cung);
+      if (!goc) continue;
+      const tamIdx = m12(dv.cungIdx + dir * m12(goc.idx - menh.idx));
+      const tam = palaces.find(p => p.idx === tamIdx);
+      const dGoc = diemCung(cd.cung), dTam = tam ? diemCung(tam.cungName) : null;
+      if (dGoc == null || dTam == null) continue;
+      chuDe[cd.key] = {
+        ten: cd.ten, cungGoc: cd.cung, diemGoc: dGoc,
+        tamIdx, tamDiaChi: tam.diaChi, tamCung: tam.cungName, diemTam: dTam,
+        diem: Math.round((0.6 * dGoc + 0.4 * dTam) * 10) / 10,
+      };
+    }
+    return { tuoiStart: dv.tuoiStart, tuoiEnd: dv.tuoiEnd, cungIdx: dv.cungIdx, diaChi: dv.diaChi, chuDe };
+  });
+}
+
+// ================================================================
 // TÍNH TIỂU VẬN SCORE — candlestick data cho từng năm
 // Output: ls.tieuVanScores = array of {
 //   nam, tuoi, diaChi, dvIdx,
@@ -4793,30 +4971,9 @@ function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL) {
     return allPts;
   }
 
-  function interpolate(allPts, tuoi) {
-    if (allPts.length === 0) return 5;
-    if (tuoi <= allPts[0].tuoi) return allPts[0].score;
-    if (tuoi >= allPts[allPts.length-1].tuoi) return allPts[allPts.length-1].score;
-
-    // Find surrounding points
-    let i = 0;
-    while (i < allPts.length - 1 && allPts[i+1].tuoi < tuoi) i++;
-    const p0 = allPts[Math.max(0, i-1)];
-    const p1 = allPts[i];
-    const p2 = allPts[i+1];
-    const p3 = allPts[Math.min(allPts.length-1, i+2)];
-
-    // Catmull-Rom spline
-    const t = (tuoi - p1.tuoi) / (p2.tuoi - p1.tuoi);
-    const t2 = t*t, t3 = t2*t;
-    const score =
-      0.5 * ((2*p1.score) +
-      (-p0.score + p2.score) * t +
-      (2*p0.score - 5*p1.score + 4*p2.score - p3.score) * t2 +
-      (-p0.score + 3*p1.score - 3*p2.score + p3.score) * t3);
-
-    return Math.max(0, Math.min(10, score));
-  }
+  // Nội suy Catmull-Rom — thân hàm ở module scope (`noiSuyDiemVan`) để điểm
+  // THÁNG nội suy từ điểm năm bằng ĐÚNG công thức điểm năm nội suy từ đại vận.
+  const interpolate = noiSuyDiemVan;
 
   // ── Lưu niên đại hạn cung index per year ─────────────────────
   function getLuuNienCungIdx(dvCungIdx, ageIndex) {
@@ -4844,6 +5001,7 @@ function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL) {
 
   // ── Build spline ──────────────────────────────────────────────
   const dvs = daiVans.slice(0, 9);
+  const _bdG = ls.bienDongGoc || tinhBienDongGoc(palaces);
   const splinePts = buildSplinePoints(dvs);
 
   // ── Build tiểu vận scores ─────────────────────────────────────
@@ -4906,6 +5064,7 @@ function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL) {
         catCount, satCount,
         tieuHanCung: tieuHanP?.cungName || '',
         luuNienCung: luuNienP?.cungName || '',
+        bienDong: _bdBien(palaces, mainScore, _bdG[tieuHanIdx], _bdSaoLuu(palaces, nam)),
       });
     }
   });
@@ -4937,4 +5096,4 @@ function tinhNguyetVanScores(tieuVanScores, palaces, thangSinhAL, gioSinhIdx) {
 }
 
 
-if (typeof module !== 'undefined') module.exports = { anSaoLaSo, convertDuongToAm, solarToLunar, isLunarSupported, LUNAR_MIN_YMD, LUNAR_MAX_YMD, STAR_DATA, getStarData, getStarBrightness };
+if (typeof module !== 'undefined') module.exports = { anSaoLaSo, tinhVanThang, convertDuongToAm, solarToLunar, isLunarSupported, LUNAR_MIN_YMD, LUNAR_MAX_YMD, STAR_DATA, getStarData, getStarBrightness };

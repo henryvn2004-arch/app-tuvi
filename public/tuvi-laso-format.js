@@ -2,6 +2,8 @@
 // formatLaSoV2 dùng chung — tách verbatim từ luan-giai.html để Tử Vi Chat
 // nạp NGUYÊN lá-số-text (12 cung + cách cục + điểm 6 chiều + 9 đại vận) giống luận giải.
 // Phụ thuộc: STAR_DATA (global từ tuvi-ansao-engine.js).
+// Tuỳ có: tinhBatTu (tubinh-ansao-engine.js) — thiếu thì bỏ dòng ngũ hành.
+/* global tinhBatTu */
 (function () {
   "use strict";
 
@@ -119,6 +121,17 @@
       const nh = sc.nhanHoa?.score ?? sc.nhanHoa;
       out.push(`  Scoring: TT=${tt} ĐL=${dl} NH=${nh} Tổng=${sc.tong} ${sc.flag||''}`.trimEnd());
       if (sc.nhanHoa?.boMenh) out.push(`  Bộ Mệnh: ${sc.nhanHoa.boMenh} → Bộ ĐV: ${sc.nhanHoa.boVan}`);
+    }
+
+    // 4 CHỦ ĐỀ của đại vận (engine `ls.chuDeDaiVan`, cùng số với biểu đồ phần
+    // 14): cung đại vận làm Mệnh tạm, điểm = 0,6×cung gốc + 0,4×cung tạm. Điểm
+    // này suy từ điểm CUNG (không phải công thức chấm đại vận) ⇒ Henry chốt: model
+    // chỉ dùng để so mạnh/yếu, KHÔNG đọc số ra cho người đọc.
+    // Bản `compact` (rail) bỏ; engine cũ thiếu trường thì bỏ dòng.
+    const _cd = !opts.compact && ls.chuDeDaiVan && ls.chuDeDaiVan[i] && ls.chuDeDaiVan[i].chuDe;
+    if (_cd && Object.keys(_cd).length) {
+      out.push(`  [4 CHỦ ĐỀ · Mệnh tạm tại ${dv.diaChi} · chỉ để so mạnh/yếu, KHÔNG đọc số ra]: ` +
+        Object.keys(_cd).map(k => `${_cd[k].ten} ${_cd[k].diem} (${_cd[k].cungGoc} tạm ở ${_cd[k].tamDiaChi})`).join(' · '));
     }
 
     // [3 QUÃNG TRONG ĐẠI VẬN] — MỘT đại vận 10 năm KHÔNG đổi tốt/xấu đồng loạt
@@ -239,6 +252,36 @@
     return out;
   }
 
+  // ── Số liệu biểu đồ cho model (2026-10-01) ──
+  // CỐ Ý KHÔNG đưa điểm năm/tháng (tiểu vận, nguyệt vận) cho model — Henry chốt:
+  // các điểm đó chỉ để vẽ biểu đồ; đưa vào là model luận theo điểm và năm/tháng
+  // nào cũng giống nhau (đã cắn trước đây). Chỉ đại vận có điểm cho model đọc.
+  // Ngũ hành Tứ Trụ — cần `tinhBatTu` (tubinh-ansao-engine.js) + ngày DƯƠNG
+  // (`ls._duong`, trang gắn lúc lập lá số). Server không nạp Tử Bình ⇒ bỏ dòng.
+  function _nguHanhTuTru(ls) {
+    const du = ls && ls._duong;
+    if (!du || typeof tinhBatTu !== 'function') return [];
+    let bt;
+    try {
+      const GIO = [23, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
+      const gio = (typeof du.h === 'number' && !isNaN(du.h)) ? du.h : GIO[(ls._conv && ls._conv.gioIdx) || 0];
+      bt = tinhBatTu({ ngayDL: du.d, thangDL: du.m, namDL: du.y, gio, gioitinh: du.gt === 'nu' ? 'nu' : 'nam' });
+    } catch (e) {
+      if (typeof console !== 'undefined') console.error('[tuvi-laso-format] tinhBatTu', e);
+      return [];
+    }
+    const W = bt && bt.nguHanh && bt.nguHanh.weighted;
+    if (!W || !bt.tuTru) return [];
+    const tot = Object.keys(W).reduce((a, k) => a + (W[k] || 0), 0);
+    if (!tot) return [];
+    const hanh = Object.keys(W).sort((a, b) => W[b] - W[a]).map(k => `${k} ${W[k]} (${Math.round(W[k] / tot * 100)}%)`).join(' · ');
+    const cn = bt.cuongNhuoc, dt = bt.dungThan;
+    return [
+      `[NGŨ HÀNH TỨ TRỤ · engine Tử Bình, bổ trợ — KHÔNG thay dữ liệu Tử Vi] ${bt.tuTru.map(t => t.can + ' ' + t.chi).join(' · ')}: ${hanh}` +
+        (cn && cn.label ? ` · nhật chủ ${bt.nhatCan}, thân ${String(cn.label).toLowerCase()}` : '') +
+        (dt && dt.primary ? ` · dụng thần ${dt.primary}${dt.secondary ? ', hỷ thần ' + dt.secondary : ''}` : ''),
+    ];
+  }
   // Khối SAO LƯU của MỘT năm (kết quả `danhGiaSaoLuu` của engine) → các dòng text
   // cho model. MỘT nguồn: formatLaSoV2 (năm xem của lá số) và tool tra_tieu_van
   // của rail (năm bất kỳ, qua lib/engine/laso.ts) cùng gọi hàm này.
@@ -284,6 +327,7 @@
     // lá số nên mọi phần (kể cả phần 1-13 đã bỏ chi tiết đại vận) đều thấy.
     // Engine cũ trong cache trình duyệt chưa có `saoLuu` ⇒ bỏ qua, không vỡ.
     if (ls.saoLuu && ls.saoLuu.sao) formatSaoLuu(ls.saoLuu, ls.palaces).forEach(l => lines.push(l));
+    _nguHanhTuTru(ls).forEach(l => lines.push(l));
     lines.push('');
 
     // (Đã bỏ khối "ĐIỂM ĐÁNH GIÁ" 6 chiều/cung — cơ chế tính điểm từng cung

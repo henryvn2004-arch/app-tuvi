@@ -299,7 +299,11 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/laso-chart.js?v=9"></script>
 <script src="/tools-shared/pchip.js?v=1"></script>
 <script src="/tools-shared/daivan-chart.js?v=1"></script>
-<script src="/luan-giai-core.js?v=7"></script>
+<script src="/luan-giai-core.js?v=8"></script>
+<!-- Engine Tử Bình cho khối "Ngũ hành theo Tứ Trụ" (phần 1). PHẢI là thẻ tĩnh,
+     đúng URL `?v=5` như app-bat-tu.html: soft-nav chỉ khử trùng theo URL đã thấy
+     trong DOM — chèn bằng JS thì sang trang Bát Tự sẽ nạp lại, trùng `const`. -->
+<script src="/tubinh-ansao-engine.js?v=5" defer></script>
 <!-- `defer` ở đây là VỆ SINH TỐC ĐỘ, KHÔNG phải bản vá CLS. Không có nó, thẻ này
      chặn parse ngay trước `tuvi-form.js`, tức thêm hẳn một chặng mạng tới bên thứ
      ba vào đường tới hạn của form. Nhưng cú nhảy `.frow` thì nó KHÔNG chữa: prod
@@ -312,7 +316,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
      người dùng bấm luận — rất lâu sau `DOMContentLoaded`, mốc mà script `defer`
      chắc chắn đã chạy xong (đã đo: `Chart` là `function` tại DOMContentLoaded). -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
-<script src="/tuvi-laso-format.js?v=4"></script>
+<script src="/tuvi-laso-format.js?v=5"></script>
 <!-- Thư viện hình minh hoạ (đại vận — mỗi phần một bức, nhân vật già dần theo
      tuổi giữa đại vận, sắc thái đọc thẳng flag 🟢/🟡/🔴 đã tính sẵn). -->
 <script src="/tools-shared/illus-nguong.js?v=1"></script>
@@ -446,6 +450,8 @@ async function doLuan(){
     var fd={name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,gioChi:gioChi,amLich:conv.amLich,amDuongNam:conv.amDuongNam};
     // ── Globals cho khối "Luận giải chuyên sâu AI" (gate+RAG+stream+PDF, port từ app-luan-giai.html) ──
     ls._conv=conv; ls._hoTen=name;
+    // Ngày DƯƠNG + giờ cho khối ngũ hành Tứ Trụ (LuanGiaiCore.buildNguHanhHtml → tinhBatTu).
+    ls._duong={d:+dd,m:+mm,y:+yyyy,h:(hh==null||hh==='')?null:+hh,gt:gioitinh};
     _astrolabe=ls; _hoTen=name; _ngay=dd; _thang=mm; _nam=yyyy; _gioitinh=gioitinh; _namXem=namxem;
     _laSoText=formatLaSoV2(ls,conv); ls._laSoText=_laSoText;
     renderLuan(ls,fd,namxem);
