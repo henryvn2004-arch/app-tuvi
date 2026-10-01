@@ -10,7 +10,7 @@
    renderInlineDaiVanLineChart(ls): vẽ canvas #chart-daivan-overview (phần 14,
    cần Chart.js; tự thoát nếu thiếu Chart) — đúng khuôn
    BatTuCore.renderInlineDaiVanLineChart của bat-tu-core.js.
-   Public API: window.LuanGiaiCore = { TONG_PHAN, PHAN_LABELS_BASE, phanLabels, buildPreGenHtml, renderInlineDaiVanLineChart }. */
+   Public API: window.LuanGiaiCore = { TONG_PHAN, PHAN_LABELS_BASE, phanLabels, buildPreGenHtml, buildCalcSectionHtml, renderInlineDaiVanLineChart }. */
 /* global Chart */
 (function (root) {
   var TONG_PHAN = 24;
@@ -178,9 +178,14 @@
 
   // Khối deterministic 1 phần — PORT NGUYÊN từ luan-giai.html:buildPreGenHtml (3388–3516),
   // chỉ đổi `_astrolabe` → `ls`. Trả HTML string ('' nếu phần không có khối, vd phần 14).
-  function buildPreGenHtml(phan, ls) {
-    if (!ls) return '';
+  // Tách HAI phần (Henry 2026-10-01): CHART (radar 12 cung, thanh 6 chiều,
+  // đường 9 đại vận, thanh chấm điểm đại vận) đứng NGOÀI khối gập "Xem cơ sở
+  // tính toán" để khách thấy ngay; phần chữ (cách cục/sao/quy tắc) vẫn trong
+  // khối gập. `buildPreGenHtml` giữ nguyên chữ ký, trả cả hai nối lại.
+  function buildPreGenParts(phan, ls) {
+    if (!ls) return { charts: '', calc: '' };
     var _astrolabe = ls;
+    let chartHtml = '';
     const PHAN_TO_CUNG_MAP = {
       1: null,
       2:'Mệnh',3:'Phụ Mẫu',4:'Phúc Đức',5:'Điền Trạch',
@@ -201,7 +206,7 @@
         const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
         const top3 = Object.entries(_astrolabe.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>b[1]-a[1]).slice(0,3);
         const bot3 = Object.entries(_astrolabe.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>a[1]-b[1]).slice(0,3);
-        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> Điểm mạnh / yếu nổi bật</div>`;
+        chartHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> Điểm mạnh / yếu nổi bật</div>`;
         // Vành 12 cung — CÙNG con số mà hai dòng "Mạnh nhất / Yếu nhất" ngay
         // dưới đang đọc (`cungScores[cung].tong`), chỉ đổi cách đọc: hai dòng
         // chữ nêu được 6/12 cung, hình nêu cả 12 và cho thấy KHOẢNG CÁCH giữa
@@ -213,12 +218,12 @@
         // thứ hai nói ngược lại chính bài luận bên dưới nó. Hình chỉ nói TƯƠNG
         // QUAN — cung nào dày, cung nào mỏng — đúng vai của một cái radar.
         // Giữ hai dòng chữ: chúng GỌI TÊN cung, hình thì không.
-        preGenHtml += buildCungRadarHtml(_astrolabe);
-        preGenHtml += `<div class="pregen-row"><span class="pregen-good">Mạnh nhất: ${top3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
-        preGenHtml += `<div class="pregen-row"><span class="pregen-bad">Yếu nhất: ${bot3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
-        preGenHtml += `</div>`;
+        chartHtml += buildCungRadarHtml(_astrolabe);
+        chartHtml += `<div class="pregen-row"><span class="pregen-good">Mạnh nhất: ${top3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
+        chartHtml += `<div class="pregen-row"><span class="pregen-bad">Yếu nhất: ${bot3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
+        chartHtml += `</div>`;
       }
-      preGenHtml += buildNguHanhHtml(_astrolabe);
+      chartHtml += buildNguHanhHtml(_astrolabe);
     } else if (cungForPhan) {
       // FIX shell: KHÔNG gate cả khối cung theo cachCucTungCung — cung nào cũng
       // render điểm 6 chiều (cungScores) + cách cục; standalone che được vì có
@@ -251,13 +256,13 @@
       if (sc) {
         const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
         const MV = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
-        preGenHtml += `<div class="pregen-block pregen-scores"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📈</span> Đánh giá 6 chiều</div><div class="score-bars">`;
+        chartHtml += `<div class="pregen-block pregen-scores"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📈</span> Đánh giá 6 chiều</div><div class="score-bars">`;
         METRICS.forEach((m,i) => {
           const v=sc[m]; const pct=v*10;
           const col=v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C0392B';
-          preGenHtml += `<div class="score-bar-row"><span class="score-label">${MV[i]}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${col}"></div></div><span class="score-val">${v}</span></div>`;
+          chartHtml += `<div class="score-bar-row"><span class="score-label">${MV[i]}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${col}"></div></div><span class="score-val">${v}</span></div>`;
         });
-        preGenHtml += `</div></div>`;
+        chartHtml += `</div></div>`;
       }
     } else if (phan === 14) {
       // Tổng quan đại vận: SPLINE CHART thật (Chart.js tension:.35, đúng khuôn
@@ -276,19 +281,19 @@
         const curIdx = dvs.findIndex(d => cur && d.cungIdx === cur.cungIdx);
         const diff = dvs.length > 1 ? (((dvs[1].cungIdx - dvs[0].cungIdx) % 12) + 12) % 12 : 1;
         const thuan = diff === 1;
-        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📈</span> 9 đại vận — biểu đồ điểm số</div>`;
-        preGenHtml += `<div style="position:relative;height:240px;margin-top:8px"><canvas id="chart-daivan-overview"></canvas></div>`;
-        preGenHtml += `<div style="font-size:11px;color:#666;margin-top:12px;line-height:1.5">`;
-        preGenHtml += `· Khởi vận: ${dvs[0].tuoiStart} tuổi · Hướng: ${thuan ? 'thuận' : 'nghịch'}<br>`;
+        chartHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📈</span> 9 đại vận — biểu đồ điểm số</div>`;
+        chartHtml += `<div style="position:relative;height:240px;margin-top:8px"><canvas id="chart-daivan-overview"></canvas></div>`;
+        chartHtml += `<div style="font-size:11px;color:#666;margin-top:12px;line-height:1.5">`;
+        chartHtml += `· Khởi vận: ${dvs[0].tuoiStart} tuổi · Hướng: ${thuan ? 'thuận' : 'nghịch'}<br>`;
         if (curIdx >= 0) {
           const c = dvs[curIdx];
-          preGenHtml += `· Hiện tại: ĐV${curIdx + 1} (${canChiDaiVan(_astrolabe, c)}, ${c.tuoiStart}-${c.tuoiEnd}t)${c.scoring ? ' · ' + c.scoring.tong + '/10' : ''}`;
+          chartHtml += `· Hiện tại: ĐV${curIdx + 1} (${canChiDaiVan(_astrolabe, c)}, ${c.tuoiStart}-${c.tuoiEnd}t)${c.scoring ? ' · ' + c.scoring.tong + '/10' : ''}`;
         }
-        preGenHtml += `</div></div>`;
-        preGenHtml += buildChuDeDaiVanHtml(_astrolabe);
+        chartHtml += `</div></div>`;
+        chartHtml += buildChuDeDaiVanHtml(_astrolabe);
       }
     } else if ((phan >= 15 && phan <= 23) || phan === 24) {
-      if (phan === 24) preGenHtml += buildVanNamHtml(_astrolabe) + buildVanThangHtml(_astrolabe);
+      if (phan === 24) chartHtml += buildVanNamHtml(_astrolabe) + buildVanThangHtml(_astrolabe);
       const dvNum = phan === 24 ? null : phan - 14;
       const dv = dvNum ? _astrolabe.daiVans?.[dvNum-1] : _astrolabe.daiVanHienTai;
       if (dv && _astrolabe.palaces) {
@@ -301,7 +306,7 @@
             const ttScore=sc.thienThoi?.score??sc.thienThoi, dlScore=sc.diaLoi?.score??sc.diaLoi, nhScore=sc.nhanHoa?.score??sc.nhanHoa;
             const ttBar=(ttScore/5*100).toFixed(0), dlBar=(dlScore/1*100).toFixed(0), nhBar=(nhScore/4*100).toFixed(0), totBar=(sc.tong/10*100).toFixed(0);
             const totCol=sc.tong>=7?'#4ade80':sc.tong>=4?'#60a5fa':'#f87171';
-            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> Chấm điểm đại vận — Cung ${dvCungName} (${dvDC})</div><div class="score-bars">
+            chartHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> Chấm điểm đại vận — Cung ${dvCungName} (${dvDC})</div><div class="score-bars">
               <div class="score-bar-row"><span class="score-label">Thiên Thời</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${ttBar}%;background:#c9a84c"></div></div><span class="score-val">${ttScore}/5</span></div>
               <div class="score-bar-row"><span class="score-label">Địa Lợi</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${dlBar}%;background:#0E7490"></div></div><span class="score-val">${dlScore}/1</span></div>
               <div class="score-bar-row"><span class="score-label">Nhân Hòa</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${nhBar}%;background:#7B2FBE"></div></div><span class="score-val">${nhScore}/4</span></div>
@@ -356,7 +361,22 @@
         }
       }
     }
-    return preGenHtml;
+    return { charts: chartHtml, calc: preGenHtml };
+  }
+
+  function buildPreGenHtml(phan, ls) {
+    var p = buildPreGenParts(phan, ls);
+    return p.charts + p.calc;
+  }
+
+  // Thân một phần ĐÃ MỞ của Luận Giải / Chu Trình Cuộc Đời / Vận Hạn 12 Tháng —
+  // MỘT nguồn cho cả ba trang: chart đứng ngoài, phần chữ trong khối GẬP sẵn
+  // (Henry 2026-10-01 — chart đã ra ngoài nên chữ gập lại, ai muốn xem thì
+  // bấm mở; đảo lại quyết định "bung sẵn" của Pha 4, 2026-09-17). PDF/in vẫn
+  // mở hết nhờ `beforeprint` của shell.js. Không có gì để hiện → `''`.
+  function buildCalcSectionHtml(phan, ls) {
+    var p = buildPreGenParts(phan, ls);
+    return p.charts + (p.calc ? '<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>' + p.calc + '</details>' : '');
   }
 
   // Vẽ canvas #chart-daivan-overview mà buildPreGenHtml(14, ls) đã dựng HTML —
@@ -604,7 +624,7 @@
       '<div style="font-size:11px;color:#666;margin-top:6px">Tính bằng engine Tử Bình: can lộ mỗi can 1, tàng can trong chi theo trọng số tàng can.</div>';
   }
 
-  var API = { TONG_PHAN: TONG_PHAN, buildVanNamHtml: buildVanNamHtml, buildVanThangHtml: buildVanThangHtml, buildChuDeDaiVanHtml: buildChuDeDaiVanHtml, buildNguHanhHtml: buildNguHanhHtml, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, buildPreGenHtml: buildPreGenHtml, buildCungStarHtml: buildCungStarHtml, buildTuHoaPhiTinhHtml: buildTuHoaPhiTinhHtml, renderInlineDaiVanLineChart: renderInlineDaiVanLineChart };
+  var API = { TONG_PHAN: TONG_PHAN, buildVanNamHtml: buildVanNamHtml, buildVanThangHtml: buildVanThangHtml, buildChuDeDaiVanHtml: buildChuDeDaiVanHtml, buildNguHanhHtml: buildNguHanhHtml, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, buildPreGenHtml: buildPreGenHtml, buildCalcSectionHtml: buildCalcSectionHtml, buildCungStarHtml: buildCungStarHtml, buildTuHoaPhiTinhHtml: buildTuHoaPhiTinhHtml, renderInlineDaiVanLineChart: renderInlineDaiVanLineChart };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.LuanGiaiCore = API;
 })(typeof window !== 'undefined' ? window : globalThis);

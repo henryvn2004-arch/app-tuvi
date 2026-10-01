@@ -29,6 +29,33 @@ const PAGE_TOKEN = process.env.MESSENGER_PAGE_ACCESS_TOKEN || '';
 const MSG_LIMIT = 2000; // giới hạn 1 tin Messenger (~2000 ký tự)
 const MAX_IMAGES = 3; // khớp MAX_IMAGES_PER_MSG trong runAgent
 
+// ── Tên khách (User Profile API) ────────────────────────────
+// Chỉ gọi khi phiên CHƯA có lá số (core.ts) — vài lượt đầu mỗi khách. Cache
+// trong bộ nhớ instance (kể cả kết quả null) để không gọi lại mỗi tin.
+const _nameCache = new Map<string, string | null>();
+export async function msgrDisplayName(psid: string): Promise<string | null> {
+  if (_nameCache.has(psid)) return _nameCache.get(psid) ?? null;
+  if (!PAGE_TOKEN || !psid) return null;
+  let name: string | null = null;
+  try {
+    const res = await fetch(
+      `${GRAPH_BASE}/${encodeURIComponent(psid)}?fields=name&access_token=${encodeURIComponent(PAGE_TOKEN)}`,
+      { cache: 'no-store' },
+    );
+    if (res.ok) {
+      const j = (await res.json()) as { name?: string };
+      name = typeof j.name === 'string' && j.name.trim() ? j.name.trim() : null;
+    } else {
+      console.error('[messenger] lấy tên khách lỗi', res.status, await res.text().catch(() => ''));
+    }
+  } catch (e) {
+    console.error('[messenger] lấy tên khách lỗi mạng', e);
+  }
+  if (_nameCache.size > 5000) _nameCache.clear();
+  _nameCache.set(psid, name);
+  return name;
+}
+
 // ── Send API ────────────────────────────────────────────────
 /** Gửi 1 tin văn bản (tự cắt nếu > giới hạn). messaging_type RESPONSE = trả
  *  lời trong cửa sổ 24h, không cần xin quyền message tag. Trả `true` chỉ khi
@@ -175,6 +202,7 @@ export const messengerIO: ChannelIO = {
   sendImage: (chatId, url, caption) => msgrSendImage(String(chatId), url, caption),
   sendFile: (chatId, data, filename, caption) => msgrSendFile(String(chatId), data, filename, caption),
   format: (t) => markdownToChat(t), // Messenger không hiểu markdown
+  displayName: (chatId) => msgrDisplayName(String(chatId)),
 };
 
 // ── SessionStore (generic, platform='messenger') ────────────
