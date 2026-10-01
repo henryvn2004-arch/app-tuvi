@@ -2483,9 +2483,43 @@
   }
   // {open(): Promise<{ok,url?,error?}>, toChat?(): Promise<{ok,error?}>, chatName?} | null
   var serverPdf = null;
+  // Tài khoản tạo từ kênh chat (email bóng `<kênh>.<id>@chat.tuviminhbao.com`,
+  // lib/channels/shadow-email.ts) ⇒ tên kênh để gửi PDF vào đó; còn lại null.
+  function chatAccountName() {
+    try {
+      var u = window.Auth && Auth.getUser && Auth.getUser();
+      var m = String((u && u.email) || '').toLowerCase().match(/^([a-z]+)[a-z0-9_-]*\.[^@]*@chat\.tuviminhbao\.com$/);
+      return m ? ({ zalo: 'Zalo', messenger: 'Messenger', whatsapp: 'WhatsApp', telegram: 'Telegram' })[m[1]] || 'Zalo' : null;
+    } catch (e) { return null; }
+  }
+  // Nguồn MẶC ĐỊNH cho mọi công cụ không tự khai `setServerPdf`: dựng PDF từ
+  // bản chụp báo cáo (`reportSnapshot()`, cùng dữ liệu trang Báo cáo) qua
+  // /api/reports/pdf. Cần phiên đăng nhập (kể cả phiên khách) — không có thì null.
+  function snapshotPdfSource() {
+    if (!getToken()) return null;
+    var call = function (to) {
+      var p = null;
+      try { p = reportSnapshot(); } catch (e) { console.error('[reportSnapshot]', e); }
+      if (!p) return Promise.resolve({ ok: false, error: 'Kết quả này chưa có nội dung để lưu PDF.' });
+      p.to = to;
+      return freshToken().then(function (tok) {
+        return fetch('/api/reports/pdf', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
+          body: JSON.stringify(p),
+        }).then(function (res) {
+          return res.json().catch(function () { return {}; }).then(function (d) {
+            return { ok: res.ok && d.ok !== false, url: d.url, error: d.error };
+          });
+        });
+      });
+    };
+    var chat = chatAccountName();
+    return { open: function () { return call('open'); }, toChat: chat ? function () { return call('chat'); } : null, chatName: chat };
+  }
   function inAppPdf() {
     try { track('pdf_download', { tool_id: ACTIVE, meta: { inapp: 1 } }); } catch (e) { /* ignore */ }
-    var src = serverPdf;
+    var src = serverPdf || snapshotPdfSource();
     var wrap = document.createElement('div');
     wrap.className = 'sh-share-modal';
     wrap.innerHTML =
@@ -5299,6 +5333,9 @@
     // Bản PDF dựng ở SERVER cho trình duyệt nhúng trong app (xem inAppPdf) —
     // report-delivery.js khai khi trang biết slug bản đã mua; null để gỡ.
     setServerPdf: function (o) { serverPdf = o || null; },
+    // Nguồn PDF từ bản chụp báo cáo của trang hiện tại (null khi chưa đăng nhập)
+    // — report-delivery.js dùng cho nút "Gửi PDF vào Zalo" của tool không có slug.
+    reportPdf: function () { return snapshotPdfSource(); },
     /**
      * Khung giữa ĐANG có một kết quả thật hay chưa — CÙNG ngưỡng mà nút Chia
      * sẻ / Lưu PDF / dòng ghi nguồn đã dùng (`currentShare()`).

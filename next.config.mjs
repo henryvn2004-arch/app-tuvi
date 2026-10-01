@@ -21,6 +21,9 @@ const nextConfig = {
     // từ web và từ webhook 4 kênh) — lib/pdf/paid-reports.ts.
     '/api/luan-giai/resend-pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
     '/api/channels/send-pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
+    // Tải PDF cho trình duyệt nhúng trong app (Zalo/FB) — PDF đã mua + PDF từ bản chụp báo cáo.
+    '/api/luan-giai/pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
+    '/api/reports/pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
     '/api/channels/zalo': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
     '/api/channels/telegram': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
     '/api/channels/messenger': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
