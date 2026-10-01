@@ -529,7 +529,7 @@
     var KEYS = ['su_nghiep', 'tai_loc', 'tinh_duyen', 'suc_khoe'];
     if (!cd.every(function (d) { return KEYS.every(function (k) { return d.chuDe && d.chuDe[k]; }); })) return '';
     var cur = ls.daiVanHienTai, ci = cd.findIndex(function (d) { return cur && d.tuoiStart === cur.tuoiStart; });
-    var W = 640, H = 240, L = 30, R = 632, T = 22, B = 196;
+    var W = 640, H = 240, L = 36, R = 632, T = 22, B = 196;
     var sy = function (v) { return B - (Math.max(0, Math.min(10, v)) / 10) * (B - T); };
     var cw = (R - L) / cd.length, sx = function (i) { return L + (i + 0.5) * cw; };
     var h = '<div class="pregen-block"><div class="pregen-title">Bốn chuyện lớn qua 9 đại vận</div>';
@@ -541,7 +541,13 @@
       h += '<rect x="' + (sx(ci) - cw / 2).toFixed(1) + '" y="' + (T - 18) + '" width="' + cw.toFixed(1) + '" height="' + (B - T + 18) + '" rx="4" style="fill:' + BD.cur + '"/>';
       h += bdText(sx(ci), T - 6, 'Đang ở đây', { anchor: 'middle', size: 9.5, bold: true, color: BD.red });
     }
-    h += bdAxes(L, R, T, B);
+    // Trục KHÔNG in số (Henry chốt: điểm chủ đề suy từ điểm cung, không đưa
+    // ra cho người xem — chỉ điểm đại vận mới được hiện số). Chỉ ghi mạnh/yếu.
+    for (var gv = 0; gv <= 10; gv += 2) {
+      var gy = B - (gv / 10) * (B - T);
+      h += '<line x1="' + L + '" x2="' + R + '" y1="' + gy.toFixed(1) + '" y2="' + gy.toFixed(1) + '" style="stroke:' + BD.grid + '" stroke-width="1"/>';
+    }
+    h += bdText(L - 4, T + 4, 'mạnh', { anchor: 'end', size: 10, color: BD.mute }) + bdText(L - 4, B, 'yếu', { anchor: 'end', size: 10, color: BD.mute });
     KEYS.forEach(function (k) {
       var pts = cd.map(function (d, i) { return [sx(i), sy(d.chuDe[k].diem)]; });
       h += '<path d="M' + pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' L') + '" fill="none" style="stroke:' + CHU_DE_MAU[k] + '" stroke-width="2.5" stroke-linejoin="round"/>';
@@ -556,7 +562,7 @@
       var c = cd[ci];
       var xs = KEYS.map(function (k) { return c.chuDe[k]; }).sort(function (a, b) { return b.diem - a.diem; });
       h += '<div style="font-size:13px;line-height:1.55;margin-top:8px;color:#1a1a1a">Đang đi đại vận ' + c.tuoiStart + '–' + c.tuoiEnd + ' (Mệnh tạm ở ' + bdEsc(c.diaChi) + '): ' +
-        xs.map(function (x) { return x.ten + ' <b>' + bdF(x.diem) + '</b> <span style="color:#666">(' + bdEsc(x.cungGoc) + ' tạm ở ' + bdEsc(x.tamDiaChi) + ')</span>'; }).join(' · ') + '.</div>';
+        'mạnh nhất <b>' + bdEsc(xs[0].ten.toLowerCase()) + '</b>, yếu nhất <b>' + bdEsc(xs[xs.length - 1].ten.toLowerCase()) + '</b>.</div>';
     }
     h += '<div style="font-size:11px;color:#666;margin-top:6px">Cung đại vận làm Mệnh tạm, các cung khác dời theo và mượn sao của cung dời tới. Điểm chủ đề = 0,6 × cung gốc + 0,4 × cung tạm.</div></div>';
     return h;

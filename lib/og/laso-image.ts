@@ -11,6 +11,9 @@
 //   cung         — MỘT cung: sơ đồ tam phương + Tứ Hóa Phi Tinh, điểm 6 chiều (khoá `c`)
 //   dai-van      — bảng 9 đại vận: Thiên Thời · Địa Lợi · Nhân Hòa · Tổng
 //   van-ngay     — vận MỘT ngày theo lá số (ngày xem ở khoá `td`) + dải 7 ngày tới
+//   van-10-nam   — 10 năm kể từ năm xem: điểm năm + biên dao động (sao động)
+//   bien-dong-thang — 12 tháng âm năm xem: điểm tháng + biên dao động
+//   chu-de-dai-van  — 4 chủ đề (sự nghiệp/tài lộc/tình duyên/sức khỏe) qua 9 đại vận
 //   ngay-tot     — lịch ngày tốt một tháng cho một việc (khoá `mo` + `hd`, ngày sinh chỉ để in tên)
 //   ca-nha       — cả nhà × 12 tháng âm tới (khoá `p` = danh sách người, `td` = hôm nay)
 //   tet          — Tết tới: tuổi xông đất + xuất hành mùng 1–3 (khoá `p`, người đầu là chủ nhà; `td`)
@@ -36,7 +39,10 @@ export type ChartKind =
   | 'bat-trach'
   | 'cung'
   | 'dai-van'
-  | 'van-ngay';
+  | 'van-ngay'
+  | 'van-10-nam'
+  | 'bien-dong-thang'
+  | 'chu-de-dai-van';
 /** Ảnh theo THỜI ĐIỂM hỏi (không cần ngày sinh) — cùng khoá ký, khác tham số. */
 export type TimeChartKind = 'luc-nham' | 'ky-mon';
 /** Ảnh mang tham số riêng (không phải một lá số) — ngày sinh người hỏi, nếu có, chỉ để in lên ảnh. */
