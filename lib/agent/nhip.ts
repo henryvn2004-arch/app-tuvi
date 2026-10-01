@@ -58,6 +58,17 @@ const XA_GIAO = cum([
   'cảm ơn', 'cám ơn', 'thanks', 'ok', 'oke', 'vâng', 'dạ', 'ừ', 'thật à', 'thật không', 'vậy à', 'thế à',
   'hay quá', 'đúng rồi', 'chuẩn', 'haha', 'hihi',
 ]);
+// Lời CHÀO trần (Henry 2026-10-01: "chào thầy" làm thầy tuôn cả bài luận lá số đã
+// nhớ). Chỉ khớp khi CẢ TIN là lời chào (bỏ dấu câu, đuôi "ạ/ơi/nhé") — "chào thầy,
+// năm nay tôi thế nào" vẫn là câu đời sống.
+const CHAO = cum([
+  'chào', 'xin chào', 'chào thầy', 'xin chào thầy', 'chào bạn', 'hello', 'hi', 'hey', 'alo', 'thầy ơi',
+  'hello thầy', 'hi thầy', 'thầy',
+]);
+const laLoiChao = (q: string) => {
+  const t = q.replace(/[.,!?…~:;)(]+/g, ' ').replace(/\s+(ạ|ơi|nhé|nha|à)$/u, '').replace(/\s+/g, ' ').trim();
+  return CHAO.includes(t);
+};
 // Hỏi về chính cuộc trò chuyện — không phải câu xin luận. Không bắt thì rơi vào
 // 'doi-song' ⇒ 80–260 từ + dấu riêng cho câu "đang xem lá số của ai đó?"
 // (Henry 2026-09-29: thầy trả lời bằng một đoạn bóc tính cách).
@@ -126,6 +137,7 @@ export function loaiCau(question: string): LoaiCau {
   const soTu = q.split(/\s+/).filter(Boolean).length;
   if (BE_TAC.some((c) => q.includes(c))) return 'be-tac';
   if (GIAI_THICH.some((c) => q.includes(c))) return 'giai-thich';
+  if (laLoiChao(q)) return 'xa-giao';
   // Xã giao = câu RẤT ngắn chứa cụm xã giao; "ok vậy tháng 7 có nên ký không" không phải xã giao,
   // "thầy nói không đúng rồi" cũng không (chứa "đúng rồi" nhưng là cãi lại — cần chiêu kiểm giờ sinh).
   if (soTu <= 5 && !KHONG_KHOP.some((c) => q.includes(c)) && XA_GIAO.some((c) => q === c || q.startsWith(c + ' ') || q.endsWith(' ' + c) || q.startsWith(c + ',')))

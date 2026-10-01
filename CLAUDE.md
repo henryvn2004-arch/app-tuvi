@@ -363,7 +363,8 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   đi qua trạm VPS VN (`scripts/zalo-relay-setup.sh`, FastByte 59k/tháng — **gia hạn hằng tháng**, hết hạn là đăng nhập chết). Vỏ `zalo-mini/` + route đăng nhập đã có — việc tay ở `zalo-mini/README.md`. `docs/nhat-ky/2026-09.md` "Kênh chat thành app".
 - **Telegram channel**: thêm bot làm admin + đặt `TELEGRAM_CHANNEL_ID` rồi mới
   thêm `"telegram"` vào `social.channels`.
-- **Messenger** im lặng từ 27/06 — kiểm Page đã publish + có username chưa.
+- **Messenger CHỈ trả lời người có vai trò trong app** — app `4355400224733286` đang Development, `pages_messaging`
+  mới Standard access. Chạy ads Click-to-Messenger TRƯỚC khi App Review xong + chuyển Live là khách nhắn vào không ai đáp.
 - **Meta Ads token thiếu quyền `ads_read` thật** — `/insights` trả `400 #100
   "Tried accessing nonexisting field"` dù `currency` đọc được (token/account
   ID đúng dạng). Business Settings → System Users: GÁN ad account cho System
