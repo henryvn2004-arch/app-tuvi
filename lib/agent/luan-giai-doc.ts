@@ -44,9 +44,7 @@ CỤ THỂ HÓA — TUYỆT ĐỐI (đọc xong phải nhớ được MỘT VI�
 
 PHÁN QUYẾT BẮT BUỘC — NEO VÀO DỮ LIỆU ENGINE, NÓI RA BẰNG ĐỜI THƯỜNG:
 - ⚠️ Lá số KHÔNG có "điểm/10" cho từng CUNG. TUYỆT ĐỐI KHÔNG bịa ra con số kiểu "cung này 6.4/10".
-  Điểm/10 engine chấm THẬT là ĐẠI VẬN (dòng "Scoring: … Tổng=X" trong === 9 ĐẠI VẬN ===). Số khác đều SUY ra,
-  đọc đúng nhãn khối của nó: "nền" năm/tháng = điểm đại vận nội suy (KHÔNG phải tốt/xấu riêng của năm/tháng),
-  "±%" = mức biến động, [4 CHỦ ĐỀ] = điểm chủ đề của đại vận. Được trích các số đó; CẤM tự chế số khác.
+  Tầng DUY NHẤT có điểm/10 thật là ĐẠI VẬN (dòng "Scoring: … Tổng=X" trong === 9 ĐẠI VẬN ===).
 - Với CUNG: CĂN CỨ để phán (nội bộ, không phải ngôn từ bắt buộc phải xuất hiện) là nhãn
   "Luận sao: <Tốt rõ|Khá|Trung bình|Yếu|Xấu rõ>" của chính dòng [Tên cung], cộng loại cách cục
   ([CÁCH CỤC · QUY_CUC/PHU_CUC/HUNG_CUC…]) và độ sáng chính tinh (Miếu/Vượng/Đắc/Bình hòa/Hãm).
@@ -319,10 +317,7 @@ MẠCH TRUYỆN XUYÊN SUỐT: ${dvNum < 9
 PHẦN 24 — TIỂU VẬN & NĂM XEM (550-700 từ)
 Quan sát 3 lớp hạn cùng lúc (căn cứ nội bộ, không phải thứ phải liệt kê tên cho
 người đọc): gốc đại vận (10 năm) + tiểu hạn năm đó + lưu niên đại vận. Dữ liệu có
-sẵn: Tiểu hạn (cung + sao), Lưu đại hạn (cung + sao), Đại vận hiện tại, và hai khối
-[VẬN 10 NĂM TỚI] · [VẬN 12 THÁNG ÂM LỊCH] (CÙNG số với biểu đồ người đọc đang thấy): "±%" cao
-= năm/tháng nhiều biến động — tháng ±% cao nhất nêu ở ②, năm ±% cao nhất nêu ở ④.
-"Nền" chỉ là mạch đại vận, đừng dùng nó phán năm/tháng tốt hay xấu.
+sẵn: Tiểu hạn (cung + sao), Lưu đại hạn (cung + sao), Đại vận hiện tại.
 
 MỞ ĐẦU bằng câu phán quyết NGẮN, in đậm, đứng riêng một dòng: năm xem này thuận
 hay nghịch, nên tiến hay nên thủ — kết luận dứt khoát bằng nghĩa đời thường, không
@@ -344,7 +339,7 @@ trọng tâm năm; ca [SAO LƯU · XẤU NẶNG] phải nêu trước tiên (ố
 ương ở đúng lĩnh vực cung đó); Lưu Thiên Mã là chỗ có di chuyển/thay đổi.
 ③ CƠ HỘI: 1-2 cơ hội CỤ THỂ (đề bạt, khách/hợp đồng, lộc nhà đất, tiền bất ngờ,
 duyên) — ở lĩnh vực nào, nắm bằng cách nào.
-④ Một câu chốt: năm này tiến việc gì, thủ việc gì — và trong [VẬN 10 NĂM TỚI] năm nào ±% cao nhất (gọi tên năm, sao động).
+④ Một câu chốt: năm này tiến việc gì, thủ việc gì.
 
 Không bọc đường, không lật rủi ro thành lời an ủi, không doạ quá dữ kiện; không
 có căn cứ thì không bịa. Không giải thích lý thuyết.

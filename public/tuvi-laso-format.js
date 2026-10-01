@@ -2,8 +2,8 @@
 // formatLaSoV2 dùng chung — tách verbatim từ luan-giai.html để Tử Vi Chat
 // nạp NGUYÊN lá-số-text (12 cung + cách cục + điểm 6 chiều + 9 đại vận) giống luận giải.
 // Phụ thuộc: STAR_DATA (global từ tuvi-ansao-engine.js).
-// Tuỳ có: tinhVanThang (tuvi-ansao-engine.js), tinhBatTu (tubinh-ansao-engine.js) — thiếu thì bỏ khối.
-/* global tinhVanThang, tinhBatTu */
+// Tuỳ có: tinhBatTu (tubinh-ansao-engine.js) — thiếu thì bỏ dòng ngũ hành.
+/* global tinhBatTu */
 (function () {
   "use strict";
 
@@ -165,15 +165,10 @@
         var _xs = _allPts.map(function (p) { return p.x; });
         var _ys = _allPts.map(function (p) { return p.y; });
         var _ms = Pchip.slopes(_xs, _ys);
-        // Có điểm năm của engine (`tieuVanScores.mainScore`) thì đọc thẳng nó —
-        // CÙNG nguồn với khối [VẬN 10 NĂM TỚI] bên dưới; hai cách nội suy lệch
-        // nhau tới ~0,5 ở cùng một tuổi, để hai số là model đọc hai đáp án.
-        var _tvByTuoi = {};
-        (ls.tieuVanScores || []).forEach(function (t) { if (typeof t.mainScore === 'number') _tvByTuoi[t.tuoi] = t.mainScore; });
         var _phaseStr = _bounds.map(function (b) {
           var a = b[0], z = b[1], ys = [];
           for (var y = a; y <= z; y++) {
-            var v = _tvByTuoi[y] != null ? _tvByTuoi[y] : Pchip.evalAt(_xs, _ys, _ms, y);
+            var v = Pchip.evalAt(_xs, _ys, _ms, y);
             if (v != null) ys.push(Math.round(v * 10) / 10);
           }
           return (a === z ? a + 't' : a + '-' + z + 't') + ':' + ys.join('→');
@@ -255,17 +250,10 @@
     return out;
   }
 
-  // ── Số liệu biểu đồ vận (engine, Henry chốt 2026-10-01) → chữ cho model ──
-  // Cùng số với các biểu đồ ở luan-giai-core.js. Engine/Tử Bình cũ hoặc thiếu
-  // dữ liệu thì trả [] — không dựng số sai.
-  function _canChiNamOf(nam) {
-    return THIEN_CAN[((nam - 4) % 10 + 10) % 10] + ' ' + DIA_CHI[((nam - 4) % 12 + 12) % 12];
-  }
-  function _tenSaoDong(list) {
-    const seen = {}, out = [];
-    (list || []).forEach(d => { if (!seen[d.ten]) { seen[d.ten] = 1; out.push(d.ten); } });
-    return out.length ? out.join(', ') : 'không có';
-  }
+  // ── Số liệu biểu đồ cho model (2026-10-01) ──
+  // CỐ Ý KHÔNG đưa điểm năm/tháng (tiểu vận, nguyệt vận) cho model — Henry chốt:
+  // các điểm đó chỉ để vẽ biểu đồ; đưa vào là model luận theo điểm và năm/tháng
+  // nào cũng giống nhau (đã cắn trước đây). Chỉ đại vận có điểm cho model đọc.
   // Ngũ hành Tứ Trụ — cần `tinhBatTu` (tubinh-ansao-engine.js) + ngày DƯƠNG
   // (`ls._duong`, trang gắn lúc lập lá số). Server không nạp Tử Bình ⇒ bỏ dòng.
   function _nguHanhTuTru(ls) {
@@ -288,38 +276,10 @@
     const cn = bt.cuongNhuoc, dt = bt.dungThan;
     return [
       `[NGŨ HÀNH TỨ TRỤ · engine Tử Bình, bổ trợ — KHÔNG thay dữ liệu Tử Vi] ${bt.tuTru.map(t => t.can + ' ' + t.chi).join(' · ')}: ${hanh}` +
-        (cn && cn.label ? ` · nhật chủ ${bt.nhatCan}, thân ${String(cn.label).toLowerCase()}${typeof cn.score === 'number' ? ' ' + cn.score + '/10' : ''}` : '') +
+        (cn && cn.label ? ` · nhật chủ ${bt.nhatCan}, thân ${String(cn.label).toLowerCase()}` : '') +
         (dt && dt.primary ? ` · dụng thần ${dt.primary}${dt.secondary ? ', hỷ thần ' + dt.secondary : ''}` : ''),
     ];
   }
-  // 10 năm kể từ năm xem + 12 tháng âm lịch năm xem.
-  function _vanNamThang(ls) {
-    const tvs = ls && ls.tieuVanScores;
-    if (!tvs || !tvs.length || !tvs[0].bienDong || !ls.bienDongGoc || ls.tuoiXem == null) return [];
-    const i0 = tvs.findIndex(t => t.tuoi === ls.tuoiXem);
-    if (i0 < 0) return [];
-    const cungIdx = ten => { const p = (ls.palaces || []).find(x => x.cungName === ten); return p ? p.idx : -1; };
-    const out = ['', '[VẬN 10 NĂM TỚI — "nền" = điểm đại vận nội suy theo năm (KHÔNG phải tốt/xấu riêng của năm, tốt/xấu vẫn luận theo sao cung hạn); "±%" = mức BIẾN ĐỘNG do sao động (Sát Phá Liêm Tham, Không Kiếp, Mã, Hóa Kỵ, Song Hao…) trong tam phương tứ chính cung tiểu hạn]'];
-    tvs.slice(i0, i0 + 10).forEach(t => {
-      const c = cungIdx(t.tieuHanCung), b = t.bienDong;
-      const ds = ((c >= 0 && ls.bienDongGoc[c]) ? ls.bienDongGoc[c].ds : []).concat(b.luu || []);
-      out.push(`${t.nam} ${_canChiNamOf(t.nam)} (${t.tuoi}t) · tiểu hạn ${t.tieuHanCung}: nền ${t.mainScore} · dao động ${b.lo}–${b.hi} (±${Math.round(b.pct * 100)}%) · sao động: ${_tenSaoDong(ds)}`);
-    });
-    if (typeof tinhVanThang === 'function') {
-      const nam = tvs[i0].nam, ms = tinhVanThang(ls, nam);
-      if (ms && ms.length === 12) {
-        const canG = ((((nam - 4) % 10 + 10) % 10) % 5) * 2 + 2;
-        out.push(`[VẬN 12 THÁNG ÂM LỊCH NĂM ${nam} — "nền" = điểm năm nội suy theo tháng; "±%" = mức BIẾN ĐỘNG do sao động trong tam phương tứ chính cung nguyệt hạn]`);
-        ms.forEach((m, k) => {
-          const p = (ls.palaces || []).find(x => x.idx === m.cungIdx);
-          const ds = ((ls.bienDongGoc[m.cungIdx] || {}).ds || []).concat(m.luu || []);
-          out.push(`Tháng ${m.thang} ${THIEN_CAN[(canG + k) % 10]} ${DIA_CHI[(2 + k) % 12]} · nguyệt hạn ${p ? p.cungName : '?'}: nền ${m.diem} · dao động ${m.lo}–${m.hi} (±${Math.round(m.pct * 100)}%) · sao động: ${_tenSaoDong(ds)}`);
-        });
-      }
-    }
-    return out;
-  }
-
   // Khối SAO LƯU của MỘT năm (kết quả `danhGiaSaoLuu` của engine) → các dòng text
   // cho model. MỘT nguồn: formatLaSoV2 (năm xem của lá số) và tool tra_tieu_van
   // của rail (năm bất kỳ, qua lib/engine/laso.ts) cùng gọi hàm này.
@@ -466,7 +426,6 @@
     for (let i = 0; i < dvCount; i++) {
       buildDaiVanLines(ls, i, fmtOpts).forEach(l => lines.push(l));
     }
-    if (!(fmtOpts && fmtOpts.compact)) _vanNamThang(ls).forEach(l => lines.push(l));
 
     // Cách cục phân tích
     if (ls.cachCuc && ls.cachCuc.length > 0) {
