@@ -5,38 +5,26 @@
 // lặng: bấm nút "Lưu PDF" không ra gì (Henry báo 2026-09-30, mở từ Zalo).
 // Trình duyệt thường vẫn đi `window.print()` (bìa sách + ảnh, shell.js).
 //
-// Hai bước, vì trình duyệt nhúng chỉ mở được file bằng ĐIỀU HƯỚNG (không gắn
-// được header Authorization, blob URL thì webview Android không tải được):
+// Hai bước (link ký — lib/pdf/signed-link.ts):
 //   1. POST {slug} + Bearer → kiểm ĐÃ TRẢ TIỀN (lib/pdf/paid-reports.ts, cùng
-//      cổng với "Gửi về Zalo") → trả link GET ký HMAC, sống PDF_LINK_TTL_SEC.
-//   2. GET ?s&u&e&k → kiểm chữ ký + hạn → dựng PDF, trả `inline` để webview
-//      iOS hiện thẳng file (từ đó khách chia sẻ/lưu bằng menu của app).
+//      cổng với "Gửi về Zalo") → trả link GET ký HMAC.
+//   2. GET ?s&u&e&k → kiểm chữ ký + hạn → dựng PDF `inline`.
 // Nội dung đọc `laso_public.luan_giai` — KHÔNG gọi lại LLM/engine.
+// Công cụ khác (Vận Hạn 12 Tháng, …) đi /api/reports/pdf (bản chụp báo cáo).
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server';
-import { createHmac, timingSafeEqual } from 'crypto';
 import { getUserFromSupabaseToken } from '@/lib/admin/auth';
 import { listPaidReports, paidReportPdf } from '@/lib/pdf/paid-reports';
+import { pdfLinkReady, signPdfQuery, verifyPdfQuery, pdfResponse, textResponse } from '@/lib/pdf/signed-link';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
-const PDF_LINK_TTL_SEC = 15 * 60;
-const KEY = process.env.SUPABASE_SERVICE_KEY || '';
-
-function sign(slug: string, uid: string, exp: number): string {
-  return createHmac('sha256', KEY).update(`luan-giai-pdf|${slug}|${uid}|${exp}`).digest('base64url');
-}
-
-function sigOk(slug: string, uid: string, exp: number, sig: string): boolean {
-  const want = Buffer.from(sign(slug, uid, exp));
-  const got = Buffer.from(sig);
-  return want.length === got.length && timingSafeEqual(want, got);
-}
+const SCOPE = 'luan-giai-pdf';
 
 export async function POST(req: NextRequest) {
-  if (!KEY) return NextResponse.json({ error: 'Chưa cấu hình' }, { status: 500 });
+  if (!pdfLinkReady()) return NextResponse.json({ error: 'Chưa cấu hình' }, { status: 500 });
   const token = (req.headers.get('authorization') || '').replace('Bearer ', '').trim();
   const user = await getUserFromSupabaseToken(token);
   if (!user?.id) return NextResponse.json({ error: 'Bạn cần đăng nhập' }, { status: 401 });
@@ -53,39 +41,21 @@ export async function POST(req: NextRequest) {
   if (!report) {
     return NextResponse.json({ error: 'Bản này chưa lưu xong hoặc chưa được mua trên tài khoản của bạn', code: 'not_ready' }, { status: 404 });
   }
-
-  const exp = Math.floor(Date.now() / 1000) + PDF_LINK_TTL_SEC;
-  const q = new URLSearchParams({ s: slug, u: user.id, e: String(exp), k: sign(slug, user.id, exp) });
-  return NextResponse.json({ ok: true, url: `/api/luan-giai/pdf?${q.toString()}` });
+  return NextResponse.json({ ok: true, url: `/api/luan-giai/pdf?${signPdfQuery(SCOPE, slug, user.id)}` });
 }
 
 export async function GET(req: NextRequest) {
-  const p = req.nextUrl.searchParams;
-  const slug = p.get('s') || '';
-  const uid = p.get('u') || '';
-  const exp = Number(p.get('e') || 0);
-  const sig = p.get('k') || '';
-  const text = (msg: string, status: number) =>
-    new Response(msg, { status, headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store' } });
+  const v = verifyPdfQuery(SCOPE, req.nextUrl.searchParams);
+  if ('error' in v) return textResponse(v.error, v.status);
 
-  if (!KEY || !slug || !uid || !exp || !sig || !sigOk(slug, uid, exp, sig)) return text('Link không hợp lệ.', 403);
-  if (exp < Date.now() / 1000) return text('Link đã hết hạn — quay lại trang luận giải và bấm Lưu PDF lần nữa.', 410);
-
-  const report = (await listPaidReports(uid)).find((r) => r.slug === slug);
-  if (!report) return text('Không tìm thấy bản luận giải.', 404);
+  const report = (await listPaidReports(v.uid)).find((r) => r.slug === v.ref);
+  if (!report) return textResponse('Không tìm thấy bản luận giải.', 404);
 
   try {
     const pdf = await paidReportPdf(report);
-    return new Response(new Uint8Array(pdf.data), {
-      headers: {
-        'content-type': 'application/pdf',
-        'content-disposition': `inline; filename="${pdf.filename}"`,
-        'cache-control': 'private, no-store',
-        'x-robots-tag': 'noindex, nofollow',
-      },
-    });
+    return pdfResponse(pdf.data, pdf.filename);
   } catch (e) {
     console.error('[luan-giai/pdf] lỗi dựng PDF', e);
-    return text('Không tạo được PDF, thử lại sau ít phút.', 500);
+    return textResponse('Không tạo được PDF, thử lại sau ít phút.', 500);
   }
 }

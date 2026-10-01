@@ -181,3 +181,48 @@ function LuanGiaiDoc({ input }: { input: LuanGiaiPdfInput }) {
 export async function renderLuanGiaiPdf(input: LuanGiaiPdfInput): Promise<Buffer> {
   return renderToBuffer(<LuanGiaiDoc input={input} />);
 }
+
+// ── BẢN CHỤP BÁO CÁO của MỌI công cụ → PDF (app/api/reports/pdf) ──
+// Nguồn là `report_snapshots` (shell.js chụp đúng thứ đang hiện, lib/reports/
+// snapshots.ts) — không có bìa danh ngôn theo tool như hai bản luận giải ở trên,
+// chỉ bìa tên công cụ + chủ thể, rồi các khối nối tiếp nhau trong MỘT trang
+// tự ngắt (công cụ ngắn không đẻ ra chục trang trắng một khối). Ảnh bỏ qua:
+// react-pdf không đọc webp, mà ảnh công cụ phần lớn là webp.
+export interface ReportPdfInput {
+  title: string;
+  subtitle: string;
+  sections: { header: string | null; text: string }[];
+}
+
+const stripMd = (t: string) => t.replace(/\*\*([^*]+)\*\*/g, '$1').replace(/^#{1,6}\s+/gm, '');
+
+function ReportDoc({ input }: { input: ReportPdfInput }) {
+  return (
+    <Document>
+      <Page size="A4" style={styles.coverPage}>
+        <View style={styles.coverTop}>
+          <Text style={styles.brandRow}>TỬ VI MINH BẢO</Text>
+          <Text style={styles.coverTitle}>{input.title}</Text>
+          {input.subtitle ? <Text style={styles.coverName}>{input.subtitle}</Text> : null}
+          <Text style={styles.coverMetaRow}>Xuất bản: {todayVi()}</Text>
+        </View>
+        <Text style={styles.coverFoot}>tuviminhbao.com</Text>
+      </Page>
+      <Page size="A4" style={styles.page} wrap>
+        {input.sections.map((s, i) => (
+          <View key={i} style={{ marginBottom: 10 }}>
+            {s.header ? <Text style={[styles.sectionTitle, { marginBottom: 8 }]}>{s.header}</Text> : null}
+            {stripMd(s.text).split(/\n{2,}/).map((para, j) => (
+              <Text key={j} style={styles.para}>{para.trim()}</Text>
+            ))}
+          </View>
+        ))}
+        <Text style={styles.footer} fixed>tuviminhbao.com</Text>
+      </Page>
+    </Document>
+  );
+}
+
+export async function renderReportPdf(input: ReportPdfInput): Promise<Buffer> {
+  return renderToBuffer(<ReportDoc input={input} />);
+}

@@ -126,7 +126,7 @@
       if (pdfIcon) pdfIcon.innerHTML = DOWNLOAD_ICON;
       if (pdfLabel) pdfLabel.textContent = t('report.pdfLabel', null, 'Tải PDF');
       if (mailBtn && !sent) mailBtn.disabled = false;
-      if (mailBtn && !sent && account().kind === 'chat') {
+      if (mailBtn && !sent && account().kind === 'chat' && chatSender()) {
         mailLabel.textContent = t('report.chatLabel', { chat: account().chatName }, 'Gửi PDF vào ' + account().chatName);
       }
       trackReady();
@@ -281,11 +281,19 @@
     //                           cáo" — claimAccount xong mới gửi, vì gửi cần
     //                           MỘT email thật để nhận, phiên ẩn danh không có
     //   đã có tài khoản thật  → gửi thẳng
+    // Gửi PDF vào kênh chat: bản đã mua (Luận Giải/Chu Trình, có `getSlug`) hoặc
+    // bản chụp báo cáo (mọi tool khác — Shell.reportPdf, /api/reports/pdf).
+    function chatSender() {
+      if (opts.getSlug) return serverToChat;
+      var src = window.Shell && window.Shell.reportPdf && window.Shell.reportPdf();
+      return (src && src.toChat) || null;
+    }
+
     function runChatSend() {
       var origLabel = mailLabel.textContent;
       mailBtn.disabled = true;
       mailLabel.textContent = t('report.sending', null, 'Đang gửi...');
-      serverToChat().then(function (r) {
+      chatSender()().then(function (r) {
         if (r.ok) {
           sent = true;
           mailBtn.classList.add('sent');
@@ -306,7 +314,7 @@
       if (sent) return;
       // Tài khoản từ kênh chat chỉ có email BÓNG (send.ts chặn gửi) — gửi
       // thẳng bản PDF vào Zalo/Messenger của họ thay vì hỏi email.
-      if (opts.getSlug && account().kind === 'chat') { runChatSend(); return; }
+      if (account().kind === 'chat' && chatSender()) { runChatSend(); return; }
       var isLoggedIn = !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn());
       var isAnon = isLoggedIn && window.Auth.isAnonymous && window.Auth.isAnonymous();
       if (!isLoggedIn) {
