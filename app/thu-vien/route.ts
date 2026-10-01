@@ -257,7 +257,7 @@ export async function GET(): Promise<Response> {
     url: `${BASE}${s.href}`,
   })),
 })}</script>
-<link rel="stylesheet" href="/shell.css?v=76">
+<link rel="stylesheet" href="/shell.css?v=77">
 <style>
 /* Nằm TRONG khung app (sidebar chung của shell.js) — bấm "Thư viện" ở sidebar
    không còn rơi ra trang có menu ☰ riêng của nav.js. Màu dùng biến của

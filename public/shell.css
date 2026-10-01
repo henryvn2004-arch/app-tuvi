@@ -362,6 +362,9 @@ body.chat-home .rail-report,body.chat-first-live.art-closed .rail-report{margin-
 @media(hover:hover) and (pointer:fine){.rail-zalo{display:none}body.chat-home .rail-zalo{display:flex}}
 body.chat-home .rail-zalo{margin-left:var(--col-pad)}
 :root[data-theme="dark"] .rail-zalo{background:#142744;color:#8DB8FF}
+/* Khách đã nhắn câu đầu (gõ, bấm gợi ý, hay khôi phục phiên — mọi đường đều thả `.msg.u` vào `#chat`)
+   thì thôi mời sang Zalo, trả lại ~40px cho khung chat. */
+.rail:has(#chat .msg.u) .rail-zalo{display:none}
 .rail-thumbs .thumb{position:relative;width:52px;height:52px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
 .rail-thumbs .thumb img{width:100%;height:100%;object-fit:cover;display:block}
 .rail-thumbs .thumb button{position:absolute;top:1px;right:1px;width:16px;height:16px;border:none;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:12px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
