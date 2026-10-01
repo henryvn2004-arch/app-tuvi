@@ -20,6 +20,8 @@
 
 import { createHash } from 'crypto';
 import { waitUntil } from '@vercel/functions';
+import { PAGE_ID as MESSENGER_PAGE_ID } from '@/lib/channels/messengerLink';
+import { isShadowEmail } from '@/lib/channels/shadow-email';
 
 const GA4_MEASUREMENT_ID = 'G-F4XNRS2XT0';
 const GA4_MP_API_SECRET = process.env.GA4_MP_API_SECRET || '';
@@ -78,14 +80,41 @@ async function sendGA4Purchase(userId: string, transactionId: string, valueVnd: 
   }
 }
 
+/** PSID Messenger của tài khoản (nếu tài khoản sinh ra / gắn với Messenger). */
+async function lookupMessengerPsid(userId: string): Promise<string | null> {
+  try {
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/chat_links?user_id=eq.${encodeURIComponent(userId)}&platform=eq.messenger&select=external_id&limit=1`,
+      { cache: 'no-store', headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } },
+    );
+    if (!r.ok) return null;
+    const rows = (await r.json()) as { external_id?: string }[];
+    return rows[0]?.external_id || null;
+  } catch {
+    return null;
+  }
+}
+
 async function sendMetaPurchase(userId: string, transactionId: string, valueVnd: number): Promise<void> {
   if (!META_CAPI_ACCESS_TOKEN) {
     console.error('[server-conversions] thiếu META_CAPI_ACCESS_TOKEN, bỏ qua Meta Purchase');
     return;
   }
-  const email = await lookupEmail(userId);
+  const [email, psid] = await Promise.all([lookupEmail(userId), lookupMessengerPsid(userId)]);
   const userData: Record<string, unknown> = { external_id: sha256(userId) };
-  if (email) userData.em = sha256(email);
+  // Email `@chat.tuviminhbao.com` là email tổng hợp, không có thật — băm gửi
+  // đi chỉ là nhiễu cho khớp người dùng của Meta.
+  if (email && !isShadowEmail(email)) userData.em = sha256(email);
+  // Khách đến từ quảng cáo Click-to-Messenger: Meta chỉ quy được đơn về đúng
+  // quảng cáo khi event mang `business_messaging` + PSID + Page ID (Conversions
+  // API for Business Messaging). Gửi dạng `website` thì đơn vẫn đếm nhưng Meta
+  // không nối được với lượt bấm vào chat — lại "tối ưu mù".
+  // ⚠️ Cần làm tay một lần: Events Manager → nối dataset (pixel) với Page.
+  const viaMessenger = !!(psid && MESSENGER_PAGE_ID);
+  if (viaMessenger) {
+    userData.page_id = MESSENGER_PAGE_ID;
+    userData.page_scoped_user_id = psid;
+  }
   const url = `https://graph.facebook.com/v21.0/${META_PIXEL_ID}/events?access_token=${encodeURIComponent(META_CAPI_ACCESS_TOKEN)}`;
   const res = await fetch(url, {
     method: 'POST',
@@ -96,7 +125,9 @@ async function sendMetaPurchase(userId: string, transactionId: string, valueVnd:
           event_name: 'Purchase',
           event_time: Math.floor(Date.now() / 1000),
           event_id: transactionId,
-          action_source: 'website',
+          ...(viaMessenger
+            ? { action_source: 'business_messaging', messaging_channel: 'messenger' }
+            : { action_source: 'website' }),
           user_data: userData,
           custom_data: { currency: 'VND', value: valueVnd },
         },

@@ -254,7 +254,32 @@ export interface ChatRequestV1 {
    * cùng xem MỘT việc trong MỘT lượt. Chỉ có tác dụng ở luồng LÁ SỐ.
    */
   hoiChan?: boolean;
+  /**
+   * Tên hiển thị của người đang nhắn trên nền tảng chat (additive, 2026-10-01 —
+   * Messenger lấy qua Graph API). Chỉ gửi khi phiên CHƯA có lá số. Server chèn
+   * một gợi ý NGẮN vào cuối tin user (không vào system) để model truyền `ten`
+   * vào `lap_la_so` khi lá số là của CHÍNH người này — lá số hỏi hộ người khác
+   * thì không dùng. Đây là chữ người dùng tự đặt ⇒ server LUÔN qua
+   * `cleanPersonName` (chỉ giữ chữ cái/khoảng trắng, ≤40 ký tự) trước khi dùng.
+   */
+  viewerName?: string;
   client: ClientInfo;
+}
+
+/** Làm sạch một tên người do người dùng tự đặt (tên Facebook, `ten` của
+ *  `lap_la_so`) trước khi đưa vào prompt/lá số: chỉ giữ chữ cái (mọi ngôn ngữ,
+ *  kể cả dấu tổ hợp), khoảng trắng, `.`, `'`, `-`; gộp khoảng trắng; ≤40 ký tự.
+ *  Rỗng sau khi lọc → null. */
+export function cleanPersonName(v: unknown): string | null {
+  if (typeof v !== 'string') return null;
+  const s = v
+    .normalize('NFC')
+    .replace(/[^\p{L}\p{M}\s.'-]/gu, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 40)
+    .trim();
+  return s || null;
 }
 
 // ── SSE EVENTS (server → client) ────────────────────────────
@@ -439,6 +464,10 @@ export function validateChatRequest(body: unknown):
 
   if (b.addressMember != null && !(Number.isInteger(b.addressMember) && (b.addressMember as number) > 0)) {
     return { ok: false, error: 'addressMember không hợp lệ' };
+  }
+
+  if (b.viewerName != null && typeof b.viewerName !== 'string') {
+    return { ok: false, error: 'viewerName không hợp lệ' };
   }
 
   if (b.scenario != null) {
