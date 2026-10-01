@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic';
 
 import { BASE_URL, urlEntry, xmlUrlset, xmlResponse } from '@/lib/seo/sitemap-source';
 import { KHAO_LUAN_CATEGORY_IDS } from '@/lib/content/khao-luan-categories';
+import { HO_SO } from '@/lib/nghiem-chung';
 
 // CỐ Ý KHÔNG có lastmod: mình không theo dõi ngày sửa của mấy trang này ở bất
 // cứ đâu, mà bịa một ngày còn tệ hơn bỏ trống — xem lib/seo/lastmod.ts.
@@ -21,6 +22,7 @@ const STATIC_PAGES = [
     '/thu-vien/nap-am',       // hub nạp âm
     '/thu-vien/nguoi-cung-ngay-sinh', // hub lịch 366 ngày dương — xem NGAY_SINH_PAGES bên dưới
     '/thu-vien/nguoi-cung-ngay-sinh-am-lich', // hub lịch 360 ngày âm — xem NGAY_SINH_AM_PAGES bên dưới
+    '/nghiem-chung',          // hub lá số người nổi tiếng ↔ đời thật — xem NGHIEM_CHUNG_PAGES
     '/about.html',
     '/phuong-phap',           // Tử Vi Nghiệm Chứng — quy trình 5 bước, trang DNA thương hiệu
     '/nguon-du-lieu.html', // ghi công nguồn dữ liệu (bắt buộc theo giấy phép CC BY)
@@ -143,7 +145,10 @@ const NGAY_SINH_AM_PAGES: string[] = (() => {
 // mảng này tự theo, không cần sửa ở đây.
 const VAN_DAP_CAT_PAGES = KHAO_LUAN_CATEGORY_IDS.map((id) => `/van-dap/${id}`);
 
+// Hồ sơ Nghiệm Chứng — nguồn DUY NHẤT là HO_SO (lib/nghiem-chung).
+const NGHIEM_CHUNG_PAGES = HO_SO.map((h) => `/nghiem-chung/${h.slug}`);
+
 export async function GET() {
-  const all = [...STATIC_PAGES, ...VAN_DAP_CAT_PAGES, ...NGAY_SINH_PAGES, ...NGAY_SINH_AM_PAGES];
+  const all = [...STATIC_PAGES, ...VAN_DAP_CAT_PAGES, ...NGAY_SINH_PAGES, ...NGAY_SINH_AM_PAGES, ...NGHIEM_CHUNG_PAGES];
   return xmlResponse(xmlUrlset(all.map((p) => urlEntry(BASE_URL + p))));
 }
