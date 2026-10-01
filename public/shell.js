@@ -734,12 +734,16 @@
       '<div class="fam-strip" id="famStrip" style="display:none"></div>' +
       '<div class="rail-sugg" id="railSugg" style="display:none"></div>' +
       '<div class="rail-thumbs" id="railThumbs" style="display:none"></div>' +
+      // Lối sang Zalo cho CẢM ỨNG: trên điện thoại rail phủ kín màn hình, che
+      // mất nút Zalo của cụm FAB (xem khối ZALO OA). Máy tính ẩn bằng CSS.
+      '<a class="rail-zalo" id="railZalo" href="' + ZALO_OA_URL + '" target="_blank" rel="noopener"><span class="zl-badge" aria-hidden="true">Zalo</span><span>Hoặc nhắn thầy ngay trong <b>Zalo</b> <span aria-hidden="true">→</span></span></a>' +
       '<div class="rail-in">' +
         '<button class="rail-attach" id="railAttach" data-act="attach" data-tip="Lập lá số trước đã" aria-label="Gửi ảnh" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg></button>' +
         '<input type="file" id="railFile" accept="image/*" multiple hidden>' +
         '<textarea id="railInput" rows="1" placeholder="Lập lá số để bắt đầu hỏi…" disabled></textarea>' +
         '<button class="send" id="railSend" disabled data-act="send" data-tip="Gửi" aria-label="Gửi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>';
     host.querySelector('[data-act="send"]').addEventListener('click', sendMsg);
+    host.querySelector('#railZalo').addEventListener('click', function () { zlTrack('rail'); });
     host.querySelector('[data-act="newchat"]').addEventListener('click', newChat);
     var _hb = host.querySelector('[data-act="history"]'); if (_hb) _hb.addEventListener('click', toggleHistPanel);
     var _shb = host.querySelector('[data-act="share"]'); if (_shb) _shb.addEventListener('click', shareSession);
@@ -2419,8 +2423,81 @@
   // Đây cũng là bố cục đúng hơn: thứ LUÔN có mặt thì ghim ở điểm neo cố định.
   function fabAdd(host, btn) {
     var ask = askBtnEl();
-    if (ask && ask.parentNode === host) host.insertBefore(btn, ask);
-    else host.appendChild(btn); // trang không có nút Hỏi — giữ nguyên nếp cũ
+    // Trang không có nút Hỏi thì neo theo nút Zalo (cũng có mặt từ lúc boot,
+    // nằm đáy cụm) — `appendChild` sẽ đặt nút mới DƯỚI nó và đẩy nó lên.
+    var anchor = ask && ask.parentNode === host ? ask : document.getElementById('wsZaloBtn');
+    if (anchor && anchor.parentNode === host) host.insertBefore(btn, anchor);
+    else host.appendChild(btn);
+  }
+
+  // ── ZALO OA — "Hỏi thầy qua Zalo" ở góc phải dưới, MỌI trang shell ──────
+  // Đo 7 ngày đến 2026-10-01: 85% người thật đáp vào `/app/*`, nơi chưa có
+  // lối nào sang Zalo (QR chỉ nằm ở ô cuối trang SEO, `lib/seo/ask-box.ts`).
+  // 83% dùng điện thoại — KHÔNG tự quét được màn hình mình ⇒ trên cảm ứng nút
+  // là link mở thẳng app Zalo; chỉ máy tính (con trỏ chuột) mới có thẻ QR.
+  // Nút đứng ĐÁY cụm, có mặt từ lúc boot ⇒ là điểm neo đứng yên (xem fabAdd).
+  // Đổi OA thì thay CẢ `ZALO_OA_URL` ở `lib/seo/ask-box.ts` + `zalo-oa-qr.png`.
+  var ZALO_OA_URL = 'https://zalo.me/4164696755090443744';
+  var ZL_CLOSED_KEY = 'tvmb_zalo_card_closed';
+  var ZL_SNOOZE_MS = 7 * 864e5;
+  function zlDesktop() {
+    return !!(window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches);
+  }
+  function zlTrack(act) {
+    try { track('cta_click', { tool_id: ACTIVE, slug: 'zalo_fab', meta: { act: act, desktop: zlDesktop(), in_zalo: /Zalo/i.test(navigator.userAgent || '') } }); } catch (e) { /* ignore */ }
+  }
+  function zaloCard(open) {
+    var card = document.getElementById('wsZaloCard');
+    if (!open) { if (card) card.classList.remove('on'); return; }
+    if (!card) {
+      // Dựng lười: ảnh QR chỉ tải khi thẻ thật sự mở.
+      card = document.createElement('div');
+      card.className = 'zl-card'; card.id = 'wsZaloCard';
+      card.setAttribute('data-print-skip', '');
+      card.setAttribute('role', 'dialog'); card.setAttribute('aria-label', 'Hỏi thầy qua Zalo');
+      card.innerHTML =
+        '<button type="button" class="zl-x" aria-label="Đóng">✕</button>' +
+        '<div class="zl-h"><span class="zl-badge" aria-hidden="true">Zalo</span>' +
+        '<div><b>Hỏi thầy qua Zalo</b><small>Quét mã bằng Zalo, nhắn câu hỏi — thầy trả lời ngay</small></div></div>' +
+        '<img class="zl-qr" src="/zalo-oa-qr.png" width="168" height="168" alt="Mã QR Zalo OA Tử Vi Minh Bảo">' +
+        '<a class="zl-go" href="' + ZALO_OA_URL + '" target="_blank" rel="noopener">Mở Zalo <b aria-hidden="true">→</b></a>';
+      card.querySelector('.zl-x').addEventListener('click', function () {
+        zaloCard(false);
+        try { localStorage.setItem(ZL_CLOSED_KEY, String(Date.now())); } catch (e) { /* ignore */ }
+        zlTrack('close');
+      });
+      card.querySelector('.zl-go').addEventListener('click', function () { zlTrack('go'); });
+      document.body.appendChild(card);
+    }
+    card.classList.add('on');
+  }
+  function renderZaloBtn() {
+    // `/app` (chat-home): khung giữa trống, thẻ/nút nổi đè lên ô gõ + gợi ý —
+    // ở đó chỉ dùng dòng `#railZalo` ngay trên ô gõ (renderRail).
+    if (CHAT_HOME || document.getElementById('wsZaloBtn')) return;
+    var host = fabHost();
+    var a = document.createElement('a');
+    a.className = 'btn fbtn-zl'; a.id = 'wsZaloBtn';
+    a.href = ZALO_OA_URL; a.target = '_blank'; a.rel = 'noopener';
+    a.setAttribute('data-tip', 'Hỏi thầy qua Zalo'); a.setAttribute('aria-label', 'Hỏi thầy qua Zalo');
+    a.innerHTML = '<span aria-hidden="true">Zalo</span>';
+    a.addEventListener('click', function (ev) {
+      if (!zlDesktop()) { zlTrack('open'); return; } // cảm ứng: để link mở app Zalo
+      ev.preventDefault();
+      var card = document.getElementById('wsZaloCard');
+      var opening = !(card && card.classList.contains('on'));
+      zaloCard(opening);
+      zlTrack(opening ? 'qr' : 'close');
+    });
+    host.appendChild(a);
+    // Máy tính màn rộng: mở sẵn thẻ QR một lần, đóng thì im 7 ngày. Màn hẹp
+    // hơn 1200px thì `.ws` còn quá chật để thẻ 212px nằm đè — chỉ mở khi bấm.
+    var closedAt = 0;
+    try { closedAt = +localStorage.getItem(ZL_CLOSED_KEY) || 0; } catch (e) { /* ignore */ }
+    if (zlDesktop() && matchMedia('(min-width:1200px)').matches && Date.now() - closedAt > ZL_SNOOZE_MS) {
+      zaloCard(true);
+      zlTrack('shown');
+    }
   }
 
   // ── LƯU PDF — cùng vòng đời với nút Chia sẻ ──────────────────────────
@@ -6502,6 +6579,7 @@
     // trong HTML từng trang) vào đó TRƯỚC — để nó đứng trên cùng trong cụm.
     // Chia sẻ/PDF/Facebook tự nối vào bên dưới khi có kết quả (xem dưới).
     moveAskToFab();
+    renderZaloBtn(); // đáy cụm, dưới nút Hỏi — xem khối ZALO OA
     // Nút Chia sẻ của khung giữa: shell tự theo dõi vùng kết quả, tool không
     // phải khai báo gì. Xem khối "CHIA SẺ WORKSPACE" ở trên.
     watchWsResult();
