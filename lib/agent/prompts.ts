@@ -1424,13 +1424,13 @@ ${MAU_ARC}
 const FOCUS_TOPICS: Record<string, string[]> = {
   // 'tiền' đứng riêng CỐ Ý bỏ (F1, Henry 2026-09-25): khớp oan "tiền kiếp", "tiền
   // đồ", "tiền bối". 'kinh doanh|làm ăn|buôn bán' Henry chốt thuộc TÀI CHÍNH.
-  'tài chính|tài lộc|tiền bạc|tiền của|tiền nong|kiếm tiền|giữ tiền|giữ được tiền|vay tiền|mượn tiền|thu nhập|làm giàu|giàu có|tôi giàu|sẽ giàu|giàu lên|phát tài|đầu tư|chứng khoán|cổ phiếu|tiền ảo|vay nợ|nợ nần|cho vay|mất tiền|hao tài|phá sản|bị lừa|thua lỗ|kinh doanh|làm ăn|buôn bán|tài bạch': ['Tài Bạch', 'Phúc Đức'],
+  'tài chính|tài lộc|tiền bạc|tiền của|tiền nong|kiếm tiền|giữ tiền|giữ được tiền|vay tiền|mượn tiền|thu nhập|làm giàu|giàu có|tôi giàu|sẽ giàu|giàu lên|phát tài|đầu tư|chứng khoán|cổ phiếu|tiền ảo|vay nợ|nợ nần|cho vay|mất tiền|hao tài|phá sản|bị lừa|thua lỗ|kinh doanh|làm ăn|buôn bán|tài bạch|có giàu|giàu không|có tiền|nhiều tiền|ra tiền|dư dả|khá giả|túng thiếu|thiếu tiền|hết tiền|nghèo khó|trúng số|xổ số|trúng thưởng|tiền lương|lương bổng|lương tôi': ['Tài Bạch', 'Phúc Đức'],
   'sự nghiệp|công việc|việc làm|nghề|quan lộc|thăng tiến|thăng chức|lên chức|tăng lương|chuyển việc|nhảy việc|đổi việc|nghỉ việc|xin việc|thất nghiệp|công ty|khởi nghiệp|làm riêng|công chức': ['Quan Lộc', 'Mệnh'],
   'cấp trên|sếp tôi|lãnh đạo':                           ['Quan Lộc', 'Phụ Mẫu'],
   'đồng nghiệp|cấp dưới':                                ['Quan Lộc', 'Nô Bộc'],
   // 'tình cảm' đứng một mình CỐ Ý bỏ (T1, Henry 2026-09-25): mơ hồ, có thể là tình
   // cảm gia đình. 'quay lại' cũng không ở đây — dễ là "quay lại công ty cũ".
-  'tình duyên|tình yêu|người yêu|bạn đời|vợ tôi|chồng tôi|vợ tương lai|chồng tương lai|vợ sau này|chồng sau này|bồ bịch|có bồ|hẹn hò|kết hôn|cưới vợ|cưới chồng|cưới được|cưới xin|sẽ cưới|nên cưới|lấy vợ|lấy chồng|hôn nhân|vợ chồng|ly hôn|ly thân|chia tay|ngoại tình|lăng nhăng|người thứ ba|tái hôn|độc thân|đào hoa|phu thê': ['Phu Thê', 'Mệnh'],
+  'tình duyên|tình yêu|người yêu|bạn đời|vợ tôi|chồng tôi|vợ tương lai|chồng tương lai|vợ sau này|chồng sau này|bồ bịch|có bồ|hẹn hò|kết hôn|cưới vợ|cưới chồng|cưới được|cưới xin|sẽ cưới|nên cưới|lấy vợ|lấy chồng|lấy được vợ|lấy được chồng|hôn nhân|vợ chồng|ly hôn|ly thân|chia tay|ngoại tình|lăng nhăng|người thứ ba|tái hôn|độc thân|đào hoa|phu thê': ['Phu Thê', 'Mệnh'],
   'con cái|con cháu|tử tức|sinh con|sinh thêm|hiếm muộn|muộn con|mang thai|có bầu|đứa con|con trai tôi|con gái tôi|con tôi|mấy con|bao nhiêu con|có con không|có con chưa|tôi có con|sẽ có con|có em bé|con có hiếu|nhờ được con': ['Tử Tức'],
   'sức khỏe|bệnh|thân thể|tật ách|ốm đau|tai nạn|phẫu thuật|tuổi thọ|sống thọ|đoản thọ': ['Tật Ách'],
   'nhà đất|bất động sản|điền trạch|nhà cửa|mua nhà|mua được nhà|tậu nhà|nhà riêng|bán nhà|xây nhà|sửa nhà|chuyển nhà|nhà mới|mua đất|bán đất|mảnh đất|động thổ|nhập trạch|thừa kế': ['Điền Trạch'],

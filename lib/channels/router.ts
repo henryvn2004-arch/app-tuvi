@@ -37,7 +37,8 @@ import { GOP_CMD, isShadowUser, maskEmail, parseEmail, startEmailLink, verifyEma
 import { TOPUP_CMD, createChatTopup, parseTopup, topupCaption, topupChoices, vietQrImageUrl } from './topup';
 import { GUESTS, detectMention, guestById, guestFromMoi, moiCau, type GuestId } from './guests';
 import { KHOANG_GOI_Y, LOI_LA_SO, SAN_PHAM_MON, chonTinhNang, dangDau, loiMon, nhanLuanGiai, nhanMon } from './goi-y';
-import { cacChuDe, cungChuDe } from '@/lib/agent/luan-chu-de';
+import { cungChuDe } from '@/lib/agent/luan-chu-de';
+import { BD_GIAN, BIEU_DO, THIEU_TEN, bieuDoTuGui, chuDeCua, veDuoc } from './bieu-do';
 import { THAY_LIST, anhThay, chonThay, gioiThieuThay, thayCuaChat, timThay, type Thay } from './author';
 import { getRailPrice } from '@/lib/billing/pricing';
 import { paywallDisabled, getBalance, deductCredits, logTransaction } from '@/lib/billing/credits';
@@ -755,6 +756,27 @@ async function sendFollowUps(
   const con = dem ? loiConCau(dem) : '';
   const denLuot = n - (gy.g || 0) >= KHOANG_GOI_Y;
 
+  // Câu hỏi khớp RÕ một biểu đồ → gửi luôn ẢNH đó sau câu trả lời (Henry 2026-10-01),
+  // thay vì chờ tới lượt mời nút. Lượt vừa an lá số (đã có ảnh lá số) / lượt thầy
+  // khách (đã gửi ảnh môn mình) / khách đang đau (gửi biểu đồ lúc người ta khóc là vô duyên)
+  // thì thôi. Cùng một ảnh không gửi lại trong `BD_GIAN` lượt (lib/channels/bieu-do.ts).
+  const bdDaGui = { ...(gy.bd || {}) };
+  let bdVuaGui: string | null = null;
+  const bd = outcome.birth && !outcome.lasoShown && !luot.daMoi && !dangDau(luot.cauHoi) && kit.io.sendImage ? bieuDoTuGui(luot.cauHoi, outcome.birth) : null;
+  if (bd && n - (bdDaGui[bd.key] ?? -BD_GIAN) >= BD_GIAN) {
+    const url = chartImageUrl(bd.kind, outcome.birth!, currentNamXem(), bd.kind === 'van-12-thang' || bd.kind === 'van-ngay' ? todayVN() : undefined, bd.cung);
+    if (url) {
+      try {
+        await kit.io.sendImage!(ev.chatId, url, bd.loi);
+        bdDaGui[bd.key] = n;
+        bdVuaGui = bd.nut;
+        void chatLogEvent(kit.platform, ev.chatId, 'chat_goi_y', { action: 'auto_chart', kind: bd.key });
+      } catch (e) {
+        console.error('[channel-router] tự gửi ảnh biểu đồ lỗi', kit.platform, bd.key, e);
+      }
+    }
+  }
+
   // Sản phẩm — CHỈ lượt vừa an xong / mở lại lá số, hoặc lượt khách vừa chọn kiểm chứng
   // bằng môn khác (goi-y.ts). Link web có lá số điền sẵn, bất kể `NUT_WEB`.
   let sanPham: ChatButton | null = null;
@@ -802,7 +824,7 @@ async function sendFollowUps(
         birth: outcome.birth,
         daMoi: luot.daMoi,
         truoc: gy.tn,
-        bieuDo: bieuDoHop(luot.cauHoi, outcome.lasoShown),
+        bieuDo: bdVuaGui ? null : bieuDoHop(luot.cauHoi, outcome.lasoShown),
       });
       if (tn && 'path' in tn.nut) {
         if (NUT_WEB) {
@@ -827,7 +849,7 @@ async function sendFollowUps(
   // lặp), và nút TRẢ LỜI vừa gửi (nút link không gửi chữ về nên không đếm được bấm).
   const nut = tinhNang && 'reply' in tinhNang ? [{ t: norm(tinhNang.reply), k: `tinh-nang:${tnId}` }] : [];
   void chatPatchMeta(kit.platform, ev.chatId, {
-    goi_y: { n, g: nutMoi ? n : gy.g, sp: sanPham ? n : gy.sp, tn: tnId ?? gy.tn, nut },
+    goi_y: { n, g: nutMoi ? n : gy.g, sp: sanPham ? n : gy.sp, tn: tnId ?? gy.tn, nut, bd: bdDaGui },
   });
   if (nutMoi)
     void chatLogEvent(kit.platform, ev.chatId, 'chat_goi_y', {
@@ -835,16 +857,6 @@ async function sendFollowUps(
       tinh_nang: tnId || null,
       san_pham: spId,
     });
-}
-
-/** Chủ đề của một câu hỏi — lỗi thì coi như không rõ chủ đề (không chặn lượt trả lời). */
-function chuDeCua(q: string): string[] {
-  try {
-    return cacChuDe(q);
-  } catch (e) {
-    console.error('[channel-router] cacChuDe lỗi', e);
-    return [];
-  }
 }
 
 /** Tin vừa tới là BẤM một nút gợi ý lượt trước? → ghi lượt bấm theo tầng. Và
@@ -920,84 +932,6 @@ async function handlePdf(kit: ChannelKit, ev: ChannelEvent, userId: string | nul
     ]);
   }
 }
-
-// ── Ảnh biểu đồ (lib/og/laso-image.ts + app/api/og/<kind>) ──────────────
-// Tên nút = câu khách gửi đi (không lộ "/"); nhận cả vài cách gõ tay thường gặp.
-const BIEU_DO: { kind: ChartKind; nut: string; cau: string[]; loi: string; thay?: GuestId }[] = [
-  {
-    kind: 'duong-doi',
-    nut: 'Xem đường đời',
-    cau: ['xem đường đời', 'đường đời', 'biểu đồ đường đời'],
-    loi: 'Đường đời qua 9 đại vận của bạn — chấm là điểm từng đại vận, dải vàng là đại vận đang đi. Muốn thầy luận giai đoạn nào, cứ hỏi.',
-  },
-  {
-    kind: 'radar-cung',
-    nut: 'Điểm mạnh yếu',
-    cau: ['điểm mạnh yếu', 'điểm mạnh yếu 12 cung', 'mạnh yếu 12 cung'],
-    loi: 'Điểm mạnh yếu của 12 cung trong lá số — trục nào càng xa tâm, cung đó càng vượng. Hỏi thầy về cung nào cũng được.',
-  },
-  {
-    kind: 'van-12-thang',
-    nut: 'Vận 12 tháng',
-    cau: ['vận 12 tháng', 'vận 12 tháng tới', 'xem vận 12 tháng'],
-    loi: '12 tháng âm tới của bạn — mỗi dòng là cung nguyệt hạn cùng sao cát, sao sát của tháng đó. Nhờ thầy luận tháng nào thì nhắn tháng đó.',
-  },
-  {
-    kind: 'van-ngay',
-    nut: 'Vận hôm nay',
-    cau: ['vận hôm nay', 'vận ngày', 'xem vận hôm nay', 'hôm nay thế nào'],
-    loi: 'Vận hôm nay theo lá số của bạn — tính chất ngày, cung nhật hạn, giờ hoàng đạo, và 7 ngày tới (viền đỏ là ngày xung tuổi).',
-  },
-  {
-    kind: 'dai-van',
-    nut: 'Chi tiết đại vận',
-    cau: ['chi tiết đại vận', 'điểm đại vận', 'chấm điểm đại vận', 'bảng đại vận'],
-    loi: 'Chín đại vận của bạn — mỗi vận 10 năm chấm theo Thiên Thời, Địa Lợi, Nhân Hòa; nền vàng là vận đang đi. Muốn thầy luận vận nào, cứ nhắn tuổi đó.',
-  },
-  {
-    kind: 'van-10-nam',
-    nut: 'Mười năm tới',
-    cau: ['mười năm tới', '10 năm tới', 'xem 10 năm tới', 'biến động 10 năm'],
-    loi: 'Mười năm tới của bạn — chấm là điểm từng năm, thanh vàng càng dài thì năm đó càng nhiều biến động (Sát Phá Tham, Không Kiếp, Thiên Mã… trong tam phương tiểu hạn). Hỏi thầy về năm nào cũng được.',
-  },
-  {
-    kind: 'bien-dong-thang',
-    nut: 'Biến động 12 tháng',
-    cau: ['biến động 12 tháng', 'biến động tháng', 'tháng nào biến động'],
-    loi: '12 tháng âm năm nay của bạn — thanh vàng càng dài thì tháng đó càng nhiều biến động. Nhờ thầy luận tháng nào thì nhắn tháng đó.',
-  },
-  {
-    kind: 'chu-de-dai-van',
-    nut: 'Bốn chuyện lớn',
-    cau: ['bốn chuyện lớn', '4 chuyện lớn', 'sự nghiệp tài lộc tình duyên sức khỏe', 'bốn chủ đề'],
-    loi: 'Sự nghiệp, tài lộc, tình duyên, sức khỏe qua 9 đại vận — đường nào lên cao là chuyện đó thuận ở giai đoạn ấy. Muốn thầy luận kỹ chuyện nào, cứ hỏi.',
-  },
-  {
-    kind: 'tu-tru',
-    nut: 'Lá số Bát Tự',
-    cau: ['lá số bát tự', 'bát tự', 'tứ trụ', 'xem tứ trụ', 'lá số tứ trụ'],
-    loi: 'Tứ trụ Bát Tự của bạn — can chi năm, tháng, ngày, giờ; cột Ngày là Nhật chủ.',
-    thay: 'tam-kinh',
-  },
-  {
-    kind: 'bat-trach',
-    nut: 'Hướng hợp tuổi',
-    cau: ['hướng hợp tuổi', 'hướng nhà hợp tuổi', 'bát trạch', 'xem hướng nhà'],
-    loi: 'Tám hướng theo cung mệnh của bạn — ô xanh là hướng tốt nên đặt cửa, giường, bàn làm việc; ô đỏ là hướng nên tránh.',
-    thay: 'huyen-khong',
-  },
-  {
-    kind: 'than-so',
-    nut: 'Thần số học',
-    cau: ['thần số học', 'xem thần số học', 'số chủ đạo', 'con số chủ đạo'],
-    loi: 'Thần số học theo họ tên và ngày sinh của bạn — vòng tròn lớn là bốn con số lõi, lưới bên dưới là biểu đồ ngày sinh.',
-    thay: 'thanh-hu',
-  },
-];
-
-/** Thần số học cần họ tên (ngày âm đã tự đổi sang dương) — thiếu thì ẩn nút, bấm tay thì nhắc bổ sung. */
-const veDuoc = (kind: ChartKind, birth: BirthParams) => kind !== 'than-so' || !!String(birth.name || '').trim();
-const THIEU_TEN = 'Thần số học tính từ HỌ TÊN khai sinh. Nhắn thầy họ tên đầy đủ nhé, rồi bấm lại "Thần số học".';
 
 /** Biểu đồ hợp câu vừa hỏi: vừa lập lá số → đường đời; hướng nhà → Bát Trạch;
  *  Bát Tự → tứ trụ; đúng một chủ đề → ảnh cung đó; hỏi về tháng/năm → 12 tháng;

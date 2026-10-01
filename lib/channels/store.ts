@@ -105,6 +105,8 @@ export interface GoiYState {
   /** Câu khách hỏi lúc QUAY LẠI sau lâu vắng — giữ lại trong lúc thầy hỏi "câu này cho ai?"
    *  (router `hoiLaiKhiQuayLai`), trả lời ngay khi khách chọn xong. */
   cho?: string;
+  /** Ảnh biểu đồ đã TỰ gửi: khoá (`kind` hoặc `cung:<tên>`) → `n` của lượt gửi (router `BD_GIAN`). */
+  bd?: Record<string, number>;
 }
 export interface ChatMeta {
   goiY: GoiYState | null;
