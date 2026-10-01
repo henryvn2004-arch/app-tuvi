@@ -97,6 +97,8 @@ const saoTxt = (ss: Sao[]) =>
   ss.length ? ss.map((s) => `${s.ten}${s.sang ? ` (${s.sang.toLowerCase()})` : ''}${s.hoa ? ` hóa ${s.hoa}` : ''}`).join(', ') : 'vô chính diệu';
 const diemTxt = (d: number | null) => (d == null ? '—' : String(d).replace('.', ','));
 
+const pctTxt = (n: number | null) => (n == null ? '—' : `${n}%`);
+
 function ngayVN(iso: string): string {
   const [y, m, d] = iso.split('-');
   return `${d}/${m}/${y}`;
@@ -124,7 +126,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   const url = `${BASE}/nghiem-chung/${h.slug}`;
   const hubUrl = `${BASE}/nghiem-chung`;
   const title = `Lá Số Tử Vi ${h.ten}: Đối Chiếu Với Cuộc Đời Thật | Tử Vi Minh Bảo`;
-  const desc = `Lá số Tử Vi của ${h.ten} (sinh ${ngayVN(h.sinh.ngay)}, giờ ${gioChi}) đối chiếu từng mục với cuộc đời thật: ${dBM.khop}/${dBM.kiemChung} nhận định về con người khớp, ${dDV.khop}/${dDV.kiemChung} đại vận khớp. Có nguồn, ghi rõ chỗ trượt.`;
+  const desc = `Lá số Tử Vi của ${h.ten} (sinh ${ngayVN(h.sinh.ngay)}, giờ ${gioChi}) đối chiếu từng mục với cuộc đời thật: ${pctTxt(dBM.tyLe)} nhận định về con người khớp, ${pctTxt(dDV.tyLe)} đại vận khớp. Có nguồn, ghi rõ chỗ trượt.`;
 
   const { commonsThumb, commonsFilePage } = celebPhoto();
   const anh = h.anhCommons ? commonsThumb(h.anhCommons, 360) : null;
@@ -331,10 +333,11 @@ h1{font-family:var(--serif);font-size:32px;line-height:1.25;color:var(--navy);fo
 .answer p{font-size:15.5px;line-height:1.7;color:#E9EEF3}
 .score{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
 .sc{background:rgba(255,255,255,.08);border:1px solid rgba(200,169,106,.45);border-radius:12px;padding:12px 14px}
-.sc-n{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--gold-b);line-height:1.1}
+.sc-n{font-family:var(--serif);font-size:34px;font-weight:600;color:var(--gold-b);line-height:1.1}
 .sc-n small{font-size:15px;color:#cfd8e0;font-weight:400}
 .sc-l{font-size:12.5px;color:#cfd8e0;margin-top:4px}
 .sc-d{font-size:11.5px;color:#aebccb;margin-top:2px}
+.sc-note{font-size:12px!important;color:#aebccb!important;margin-top:12px}.sc-note a{color:var(--gold-b)}
 .sec{margin-top:44px}
 .sec h2{font-family:var(--serif);font-size:23px;color:var(--navy);font-weight:600;line-height:1.35;margin-bottom:10px}
 .sec>p{color:var(--mid);margin-bottom:14px}
@@ -353,6 +356,7 @@ h1{font-family:var(--serif);font-size:32px;line-height:1.25;color:var(--navy);fo
 .tbl .vi{display:block;font-size:12.5px;color:var(--lt);margin-top:6px;font-style:italic}
 .tbl td:first-child{width:150px}.tbl td:last-child{width:150px}
 .tbl-gio td:last-child{width:auto}
+.tbl-gio td:nth-child(2),.tbl-gio td:nth-child(3){width:180px}
 .r-chua-kiem-chung td,.r-dang-dien-ra td{background:#FCFBF8}
 .kl{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;white-space:nowrap}
 .kl-khop{color:var(--ok);background:var(--ok-bg)}
@@ -429,10 +433,11 @@ ${ask.css}
     <h2 id="tl">Lá số của ${esc(h.ten)} đoán đúng đến đâu?</h2>
     <p>${esc(h.traLoiNgan)}</p>
     <div class="score">
-      <div class="sc"><div class="sc-n">${dBM.khop}<small>/${dBM.kiemChung}</small></div><div class="sc-l">nhận định về con người khớp</div><div class="sc-d">${dBM.motPhan} khớp một phần · ${dBM.truot} trượt · ${dBM.chuaKiemChung} chưa kiểm chứng</div></div>
-      <div class="sc"><div class="sc-n">${dDV.khop}<small>/${dDV.kiemChung}</small></div><div class="sc-l">đại vận 10 năm khớp</div><div class="sc-d">${dDV.motPhan} khớp một phần · ${dDV.truot} trượt${dDV.dangDienRa ? ` · ${dDV.dangDienRa} đang diễn ra` : ''}</div></div>
-      <div class="sc"><div class="sc-n">${dNam.khop}<small>/${dNam.kiemChung}</small></div><div class="sc-l">năm bước ngoặt khớp</div><div class="sc-d">${dNam.motPhan} khớp một phần · ${dNam.truot} trượt</div></div>
+      <div class="sc"><div class="sc-n">${pctTxt(dBM.tyLe)}</div><div class="sc-l">nhận định về con người khớp</div><div class="sc-d">${dBM.khop} khớp · ${dBM.motPhan} khớp một phần · ${dBM.truot} trượt</div></div>
+      <div class="sc"><div class="sc-n">${pctTxt(dDV.tyLe)}</div><div class="sc-l">đại vận 10 năm khớp</div><div class="sc-d">${dDV.khop} khớp · ${dDV.motPhan} khớp một phần · ${dDV.truot} trượt</div></div>
+      <div class="sc"><div class="sc-n">${pctTxt(dNam.tyLe)}</div><div class="sc-l">năm bước ngoặt khớp</div><div class="sc-d">${dNam.khop} khớp · ${dNam.motPhan} khớp một phần · ${dNam.truot} trượt</div></div>
     </div>
+    <p class="sc-note">Tỷ lệ = mục khớp hoặc khớp một phần trên số mục kiểm chứng được; mục chưa có nguồn không tính. <a href="#phuong-phap">Cách chấm</a></p>
   </section>
 
   <section class="sec" id="tieu-su">
@@ -475,7 +480,7 @@ ${ask.css}
 
   <section class="sec" id="nam-buoc-ngoat">
     <h2>Những năm bước ngoặt: lá số có "bắt" được không?</h2>
-    <p>Xét vận từng năm (lưu niên) ở đúng những năm đời ông rẽ hướng.</p>
+    <p>Xét vận từng năm (lưu niên) ở đúng những năm đời ${h.gioiTinh === 'nam' ? 'ông' : 'bà'} rẽ hướng.</p>
     <div class="nam-grid">${cardsNam}</div>
   </section>
 
@@ -496,7 +501,8 @@ ${ask.css}
       <li><b>Giờ sinh có kiểm chứng:</b> chỉ chọn người có giờ sinh xếp hạng Rodden AA hoặc A trên Astro-Databank.</li>
       <li><b>Lá số chấm trước, đời thật đặt sau:</b> cung, sao, điểm và đại vận do hệ thống an sao tính theo cổ pháp; không chỉnh lá số cho vừa đời thật.</li>
       <li><b>Mỗi sự thật một nguồn:</b> chỉ dùng sự kiện công khai, có trích dẫn. Không suy đoán về sức khỏe, hôn nhân hay đời tư người đang sống.</li>
-      <li><b>Ghi cả chỗ trượt:</b> bảng tổng được đếm thẳng từ từng dòng, kể cả những dòng lá số đoán sai.</li>
+      <li><b>Cách tính tỷ lệ khớp:</b> mỗi dòng được chấm khớp, khớp một phần hoặc trượt. Tỷ lệ = (khớp + khớp một phần) / số dòng đã chấm — vì Tử Vi luận theo khuynh hướng, một nhận định đúng về hướng dù chưa đúng mọi chi tiết vẫn được tính là khớp. Mục chưa có nguồn và giai đoạn đang diễn ra không tính.</li>
+      <li><b>Ghi cả chỗ trượt:</b> tỷ lệ được đếm thẳng từ từng dòng, kể cả những dòng lá số đoán sai.</li>
     </ul>
   </section>
 

@@ -53,8 +53,8 @@ export const trinhXuanThuan: HoSoNghiemChung = {
     {
       cung: 'Mệnh',
       laSoNoi: 'Thiên Đồng hãm địa — vất vả, hay thay đổi, dễ vướng thị phi.',
-      doiThat: 'Gắn bó với một trường đại học suốt từ năm 1976, sự nghiệp liền mạch, không có thị phi đáng kể.',
-      ketLuan: 'truot',
+      doiThat: 'Tuổi trẻ đổi chỗ liên tục (Hà Nội, Đà Lạt, Sài Gòn, Thụy Sĩ, Mỹ trước tuổi 22); nhưng từ 1976 gắn bó một trường đại học, không có thị phi đáng kể.',
+      ketLuan: 'mot-phan',
       nguon: [VI_WIKI],
     },
     {

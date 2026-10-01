@@ -34,7 +34,7 @@ export async function GET(): Promise<Response> {
   <div>
     <div class="nm">Lá số Tử Vi ${esc(h.ten)}</div>
     <div class="mt">${esc(h.ngheNghiep)} · sinh ${esc(h.sinh.ngay.slice(0, 4))}</div>
-    <div class="st"><span>${bm.khop}/${bm.kiemChung} nhận định khớp</span><span>${dv.khop}/${dv.kiemChung} đại vận khớp</span></div>
+    <div class="st"><span>Con người: khớp ${bm.tyLe == null ? '—' : bm.tyLe + '%'}</span><span>Đại vận: khớp ${dv.tyLe == null ? '—' : dv.tyLe + '%'}</span></div>
   </div>
 </a>`;
   }).join('');
