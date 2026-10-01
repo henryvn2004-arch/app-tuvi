@@ -97,51 +97,80 @@ export const veDuoc = (kind: ChartKind, birth: BirthParams) => kind !== 'than-so
 export const THIEU_TEN = 'Thần số học tính từ HỌ TÊN khai sinh. Nhắn thầy họ tên đầy đủ nhé, rồi bấm lại "Thần số học".';
 
 /** Biểu đồ TỰ gửi kèm câu trả lời — chỉ khi câu hỏi khớp RÕ (cụm đủ nghĩa, không
- *  có đường lùi như `bieuDoHop`): khớp lơ mơ thì thà không gửi còn hơn gửi ảnh lạc đề. */
+ *  có đường lùi như `bieuDoHop`): khớp lơ mơ thì thà không gửi còn hơn gửi ảnh lạc đề.
+ *  Mẫu viết theo LỜI KHÁCH, không theo thuật ngữ (Henry 2026-10-01: khách không nói
+ *  "đại vận", "nguyệt hạn", "cung Phụ Mẫu" — họ nói "mấy năm nữa", "dạo này", "bố mẹ tôi").
+ *  Chủ đề (tiền, vợ chồng, bố mẹ…) do `cacChuDe` nhận — cùng bảng `FOCUS_TOPICS` Thầy dùng. */
 export const BD_GIAN = 8;
-const BD_CUM: [ChartKind, string[]][] = [
-  ['bat-trach', ['hướng nhà', 'hướng cửa', 'hướng bếp', 'hướng giường', 'hướng bàn làm việc', 'bát trạch', 'hướng hợp tuổi']],
+const BD_MON: [ChartKind, string[]][] = [
+  ['bat-trach', ['hướng nhà', 'hướng cửa', 'hướng bếp', 'hướng giường', 'hướng bàn làm việc', 'bát trạch', 'hướng hợp tuổi', 'hướng nào hợp']],
   ['tu-tru', ['bát tự', 'tứ trụ', 'tử bình', 'nhật chủ', 'dụng thần']],
   ['than-so', ['thần số học', 'số chủ đạo', 'con số chủ đạo']],
-  ['van-ngay', ['hôm nay', 'ngày mai', 'tuần này']],
-  ['bien-dong-thang', ['tháng nào', 'tháng tới', 'sắp tới', 'thời gian tới', 'tháng này', 'tháng sau', 'các tháng', 'từng tháng', '12 tháng', 'mười hai tháng', 'biến động']],
-  ['van-10-nam', ['10 năm tới', 'mười năm tới', 'vài năm tới', 'mấy năm tới', 'những năm tới', 'năm nay', 'năm tới', 'năm sau', 'sang năm']],
 ];
-// Một trong bốn chuyện lớn + hỏi THEO THỜI GIAN đời người → "Bốn chuyện lớn qua 9 đại vận".
+// Mốc thời gian GẦN → xa. Đứng TRƯỚC ảnh chủ đề: "mấy tháng tới công việc" hỏi về tháng.
+const BD_GAN: [ChartKind, string[]][] = [
+  ['van-ngay', ['hôm nay', 'ngày mai', 'sáng mai', 'chiều mai', 'tối mai', 'mai tôi', 'tuần này', 'tuần sau', 'tuần tới', 'cuối tuần']],
+  [
+    'bien-dong-thang',
+    ['tháng nào', 'tháng tới', 'tháng này', 'tháng sau', 'mấy tháng', 'vài tháng', 'các tháng', 'từng tháng', '12 tháng', 'mười hai tháng',
+      'sắp tới', 'thời gian tới', 'thời gian này', 'dạo này', 'gần đây', 'cuối năm', 'đầu năm sau', 'tết này', 'tết năm nay', 'biến động'],
+  ],
+  [
+    'van-10-nam',
+    ['10 năm tới', 'mười năm tới', '5 năm tới', 'năm năm tới', 'vài năm tới', 'mấy năm tới', 'những năm tới', 'vài năm nữa', 'mấy năm nữa',
+      'năm năm nữa', 'năm nay', 'năm tới', 'năm sau', 'sang năm'],
+  ],
+];
+// Một trong bốn chuyện lớn + hỏi THEO ĐỜI NGƯỜI ("khi nào lấy vợ", "lấy chồng muộn không",
+// "tầm 40 tuổi có giàu không") → "Bốn chuyện lớn qua 9 đại vận".
 const BD_CHU_DE_CUNG = ['Quan Lộc', 'Tài Bạch', 'Phu Thê', 'Tật Ách'];
-const BD_THOI_DOI = ['giai đoạn', 'tuổi nào', 'lúc nào', 'khi nào', 'bao giờ', 'thời kỳ', 'đại vận', 'cả đời', 'tương lai', 'sau này', 'về già', 'đỉnh cao', 'thăng hoa'];
-const BD_DAI_VAN = ['đại vận', 'giai đoạn', 'vận 10 năm', 'chặng đời'];
-const BD_DUONG_DOI = ['cuộc đời', 'đường đời', 'tương lai', 'sau này', 'về già', 'tuổi già', 'cả đời'];
-const BD_MANH_YEU = ['điểm mạnh', 'điểm yếu', 'mạnh yếu', 'ưu điểm', 'nhược điểm', 'tổng quan lá số', 'tổng quan về lá số'];
+const BD_THOI_DOI = ['giai đoạn', 'tuổi nào', 'mấy tuổi', 'bao nhiêu tuổi', 'lúc nào', 'khi nào', 'bao giờ', 'thời kỳ', 'đại vận', 'cả đời', 'tương lai',
+  'sau này', 'về sau', 'về già', 'lúc già', 'tuổi già', 'trung niên', 'đỉnh cao', 'thăng hoa', 'muộn không', 'sớm không', 'có muộn', 'có sớm'];
+// Mẫu có dấu thanh phải qua `chuanHoaDauThanh` như câu khách ("tuổi" bị dời dấu).
+// Hỏi theo MỐC TUỔI ("tầm 40 tuổi", "từ 35 đến 45 tuổi") — "tôi 30 tuổi" (tự giới thiệu) KHÔNG tính.
+const MOC_TUOI = new RegExp(chuanHoaDauThanh('(tầm|khoảng|đến|tới|trước|sau|ngoài|ở tuổi|lúc|từ) \\d{2}( đến \\d{2})? tuổi'));
+const BD_CHANG_NAY = ['mười năm nay', '10 năm nay', 'mấy năm nay', 'mấy năm gần đây'];
+const BD_DAI_VAN = ['đại vận', 'giai đoạn này', 'giai đoạn tới', 'giai đoạn nào', 'chặng đời'];
+const BD_DUONG_DOI = ['cuộc đời', 'đường đời', 'đời tôi', 'cả đời', 'tương lai', 'sau này', 'về sau', 'về già', 'lúc già', 'tuổi già', 'trung niên',
+  'số phận', 'số tôi có', 'số khổ', 'số vất vả', 'số sướng', 'hết khổ', 'khổ đến bao giờ', 'thay đổi lớn'];
+const BD_MANH_YEU = ['điểm mạnh', 'điểm yếu', 'mạnh yếu', 'ưu điểm', 'nhược điểm', 'thế mạnh', 'giỏi cái gì', 'giỏi gì', 'có tài gì', 'năng khiếu',
+  'tổng quan lá số', 'tổng quan về lá số', 'lá số tôi có tốt', 'lá số có tốt', 'lá số tôi thế nào', 'lá số của tôi thế nào'];
+// Tính cách là chuyện cung Mệnh — bảng chủ đề không có mục riêng cho nó.
+const BD_TINH_CACH = ['tính cách', 'tính tình', 'bản tính', 'con người tôi', 'tôi là người thế nào', 'tôi là người như thế nào', 'tôi là người ra sao'];
 const coCum = (t: string, ds: string[]) => ds.some((p) => t.includes(chuanHoaDauThanh(p)));
 
-export function bieuDoTuGui(q: string, birth: BirthParams): { key: string; kind: ChartKind; nut: string; loi: string; cung?: string } | null {
+type BieuDoGui = { key: string; kind: ChartKind; nut: string; loi: string; cung?: string };
+const anhCung = (cung: string): BieuDoGui => ({
+  key: `cung:${cung}`,
+  kind: 'cung',
+  nut: `Xem cung ${cung}`,
+  cung,
+  loi: `Cung ${cung} của bạn — ô đỏ là cung này, ô vàng là tam phương tứ chính, mũi tên là Tứ Hóa Phi Tinh bay đi.`,
+});
+
+export function bieuDoTuGui(q: string, birth: BirthParams): BieuDoGui | null {
   const t = chuanHoaDauThanh(norm(q));
   // Câu chứa NGÀY SINH ("sinh 3 tháng 5 năm 1990") — chữ "tháng"/"năm" là ngày, không phải hỏi vận.
   if (/\d+\s*(tháng|\/)\s*\d+/.test(t)) return null;
-  const by = (k: ChartKind) => {
+  const by = (k: ChartKind): BieuDoGui | null => {
     const b = BIEU_DO.find((x) => x.kind === k)!;
     return veDuoc(k, birth) ? { key: k, kind: k, nut: b.nut, loi: b.loi } : null;
   };
   const cung = cungChuDe(chuDeCua(q)[0] || null);
-  for (const [k, ds] of BD_CUM.slice(0, 3)) if (coCum(t, ds)) return by(k);
-  if (cung && BD_CHU_DE_CUNG.includes(cung) && coCum(t, BD_THOI_DOI)) return by('chu-de-dai-van');
+  for (const [k, ds] of BD_MON) if (coCum(t, ds)) return by(k);
+  if (cung && BD_CHU_DE_CUNG.includes(cung) && (coCum(t, BD_THOI_DOI) || MOC_TUOI.test(t))) return by('chu-de-dai-van');
   // "tháng 7", "năm 2027" — hỏi đích danh một tháng/năm (ngày sinh đã loại ở trên).
   if (/tháng \d{1,2}\b/.test(t)) return by('bien-dong-thang');
   if (/năm 20\d\d\b/.test(t)) return by('van-10-nam');
-  for (const [k, ds] of BD_CUM.slice(3)) if (coCum(t, ds)) return by(k);
+  // "mười năm nay" là chặng đang đi (nhìn lại) — đừng để chữ "năm nay" kéo sang mười năm TỚI.
+  if (coCum(t, BD_CHANG_NAY)) return by('dai-van');
+  for (const [k, ds] of BD_GAN) if (coCum(t, ds)) return by(k);
   // Đúng một chủ đề mà không hỏi theo thời gian → ảnh chính cung đó (trước các ảnh "cả đời"
   // chung chung: "con cái tôi sau này" là chuyện Tử Tức, không phải đường đời).
-  if (cung)
-    return {
-      key: `cung:${cung}`,
-      kind: 'cung',
-      nut: `Xem cung ${cung}`,
-      cung,
-      loi: `Cung ${cung} của bạn — ô đỏ là cung này, ô vàng là tam phương tứ chính, mũi tên là Tứ Hóa Phi Tinh bay đi.`,
-    };
+  if (cung) return anhCung(cung);
+  if (coCum(t, BD_TINH_CACH)) return anhCung('Mệnh');
   if (coCum(t, BD_DAI_VAN)) return by('dai-van');
-  if (coCum(t, BD_DUONG_DOI)) return by('duong-doi');
+  if (coCum(t, BD_DUONG_DOI) || MOC_TUOI.test(t)) return by('duong-doi');
   if (coCum(t, BD_MANH_YEU)) return by('radar-cung');
   return null;
 }
