@@ -403,7 +403,7 @@ window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=9"></script>
-<script src="/luan-giai-core.js?v=5"></script>
+<script src="/luan-giai-core.js?v=6"></script>
 <!-- Chart.js ĐÃ GỠ: canvas #chart-daivan-overview là của phần 14, mà tool này
      dừng ở phần 13 (phần 14 dời sang app-chu-trinh-cuoc-doi.html) — xem chú
      thích ở renderLuanGiai. Chuỗi "Chart" không còn xuất hiện ở đâu trong
@@ -984,13 +984,12 @@ function buildPhanSection(phan,label,ls,locked){
     bodyHtml=buildLockedPlaceholderHtml(phan);
     tag=TuviPaywall.lockBadge('Khoá');
   }else{
-    var pre=LuanGiaiCore.buildPreGenHtml(phan,ls);
-    var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để Thầy luận sâu.</div>';
     // Khối TÍNH TOÁN (cách cục/điểm số/quy tắc) — Pha 4 (2026-09-17): ĐẢO NGƯỢC
     // quyết định thu gọn cũ (Henry lúc đó lo user đọc nhầm khối này thành luận
     // giải AI). Henry chốt lại: bung sẵn luôn, vẫn giữ `<details>` để ai muốn
-    // vẫn gập lại được — chỉ đổi trạng thái MẶC ĐỊNH.
-    bodyHtml=pre?('<details class="lg-calc" open><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
+    // vẫn gập lại được — chỉ đổi trạng thái MẶC ĐỊNH. 2026-10-01: CHART đứng
+    // NGOÀI khối gập (gập lại vẫn thấy chart) — `buildCalcSectionHtml`.
+    bodyHtml=LuanGiaiCore.buildCalcSectionHtml(phan,ls)||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để Thầy luận sâu.</div>';
     tag='';
   }
   // CTA lặp lại (ẨN mặc định, bật bởi `_paintSecLocks` khi `_renderUnlockBlock`
