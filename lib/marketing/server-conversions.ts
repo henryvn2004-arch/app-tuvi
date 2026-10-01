@@ -30,10 +30,10 @@ const META_PIXEL_ID = '1747342186469684';
 const META_CAPI_ACCESS_TOKEN = process.env.META_CAPI_ACCESS_TOKEN || '';
 // Đơn của khách Messenger đi vào DATASET CỦA PAGE, không vào pixel website: Meta
 // chỉ nhận `business_messaging` trên dataset gắn với Page (tạo bằng POST
-// `/{page_id}/dataset`, 2026-10-01 Page chưa có — GET trả rỗng). Giao diện
-// Business Settings KHÔNG cho nối Page vào pixel website. Gửi bằng token của
-// Page. Thiếu một trong hai ⇒ gửi như đơn website vào pixel (vẫn đếm được).
-const META_MESSAGING_DATASET_ID = (process.env.META_MESSAGING_DATASET_ID || '').replace(/\D/g, '');
+// `/{page_id}/dataset`, 2026-10-01 Page chưa có — GET trả rỗng; POST tạo ra
+// `1613166566936684`). Giao diện Business Settings KHÔNG cho nối Page vào pixel
+// website. Gửi bằng token của Page. Thiếu token ⇒ gửi như đơn website vào pixel.
+const META_MESSAGING_DATASET_ID = (process.env.META_MESSAGING_DATASET_ID || '1613166566936684').replace(/\D/g, '');
 const META_MESSAGING_TOKEN = process.env.META_MESSAGING_CAPI_TOKEN || process.env.MESSENGER_PAGE_ACCESS_TOKEN || '';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
