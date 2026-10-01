@@ -27,6 +27,10 @@ export interface DongBanMenh {
   ketLuan: KetLuan;
   /** Chỉ số (0-based) vào `nguon`. */
   nguon?: number[];
+  /** Mã câu engine (lib/nghiem-chung/engine-ref.ts) — BẮT BUỘC với hồ sơ sinh hàng loạt. */
+  laSoRef?: string[];
+  /** Đoạn trích NGUYÊN VĂN (ngôn ngữ gốc) từ bài Wikipedia làm chứng cho `doiThat`. */
+  trich?: string;
 }
 
 export interface DongDaiVan {
@@ -37,6 +41,8 @@ export interface DongDaiVan {
   /** Ghi chú ngắn vì sao kết luận như vậy. */
   vi: string;
   nguon?: number[];
+  laSoRef?: string[];
+  trich?: string;
 }
 
 export interface NamMoc {
@@ -46,6 +52,8 @@ export interface NamMoc {
   laSoNoi: string;
   ketLuan: KetLuan;
   nguon?: number[];
+  laSoRef?: string[];
+  trich?: string;
 }
 
 export interface GioRanhGioi {
@@ -99,4 +107,10 @@ export interface HoSoNghiemChung {
   nguon: Nguon[];
   ngayDang: string;
   ngayCapNhat: string;
+  /** Năm mất (nếu đã mất) — đại vận sau năm này không chấm; người còn sống chịu luật nội dung nhạy cảm. */
+  namMat?: number;
+  /** Bài Wikipedia làm nguồn chính (hồ sơ sinh hàng loạt). */
+  wiki?: { lang: string; title: string; url: string };
+  /** Hồ sơ sinh hàng loạt: chỉ hồ sơ `indexed` mới vào sitemap và không mang noindex. */
+  indexed?: boolean;
 }

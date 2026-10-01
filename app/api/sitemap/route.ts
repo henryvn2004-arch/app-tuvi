@@ -26,6 +26,7 @@ import { BASE_URL, xmlSitemapIndex, xmlResponse } from '@/lib/seo/sitemap-source
 const CHILDREN = [
   '/sitemap-trang.xml',
   '/sitemap-noi-dung.xml',
+  '/sitemap-nghiem-chung.xml',
   '/sitemap-seo.xml',
   '/sitemap-van-han.xml',
   '/sitemap-la-so.xml',

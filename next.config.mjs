@@ -16,6 +16,10 @@ const nextConfig = {
   // hàm chạy). Thiếu font ⇒ rơi về Helvetica ⇒ mất dấu tiếng Việt HOÀN TOÀN,
   // đúng lỗi đã cắn (xem docs/nhat-ky/2026-09.md, "PDF câm dấu").
   outputFileTracingIncludes: {
+    // Hồ sơ Nghiệm Chứng (gz) + manifest đọc bằng fs lúc chạy — lib/nghiem-chung/store.ts.
+    '/nghiem-chung': ['./data/nghiem-chung/manifest.json'],
+    '/nghiem-chung/[slug]': ['./data/nghiem-chung/**'],
+    '/sitemap-nghiem-chung': ['./data/nghiem-chung/manifest.json'],
     '/api/luan-giai/email-pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
     // Cùng lý do: các route dưới cũng dựng PDF (resend-pdf · gửi PDF vào kênh chat
     // từ web và từ webhook 4 kênh) — lib/pdf/paid-reports.ts.
@@ -125,6 +129,7 @@ const nextConfig = {
       { source: '/sitemap.xml',         destination: '/api/sitemap'          },
       { source: '/sitemap-trang.xml',   destination: '/sitemap-trang'        },
       { source: '/sitemap-noi-dung.xml', destination: '/sitemap-noi-dung'    },
+      { source: '/sitemap-nghiem-chung.xml', destination: '/sitemap-nghiem-chung' },
       { source: '/sitemap-seo.xml',     destination: '/sitemap-seo'          },
       { source: '/sitemap-van-han.xml', destination: '/sitemap-van-han'      },
       { source: '/sitemap-la-so.xml',   destination: '/sitemap-la-so'        },

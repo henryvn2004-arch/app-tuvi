@@ -3,10 +3,12 @@
 // số khớp/trượt đếm bằng `dem()` — cùng hàm trang chi tiết dùng.
 export const revalidate = 86400;
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { ORG_ID } from '@/lib/seo/entity';
 import { celebPhoto } from '@/lib/celeb/photo';
-import { HO_SO, dem } from '@/lib/nghiem-chung';
+import { danhMuc } from '@/lib/nghiem-chung/store';
+
+const MOI_TRANG = 48;
 
 const BASE = 'https://www.tuviminhbao.com';
 
@@ -18,23 +20,26 @@ function esc(s: unknown): string {
     .replace(/"/g, '&quot;');
 }
 
-export async function GET(): Promise<Response> {
-  const url = `${BASE}/nghiem-chung`;
+export async function GET(req: NextRequest): Promise<Response> {
+  const dm = danhMuc();
+  const soTrang = Math.max(1, Math.ceil(dm.length / MOI_TRANG));
+  const trang = Math.min(soTrang, Math.max(1, Number(req.nextUrl.searchParams.get('trang')) || 1));
+  const items = dm.slice((trang - 1) * MOI_TRANG, trang * MOI_TRANG);
+  const hubUrl = `${BASE}/nghiem-chung`;
+  const url = trang > 1 ? `${hubUrl}?trang=${trang}` : hubUrl;
   const title = 'Nghiệm Chứng: Lá Số Tử Vi Người Nổi Tiếng Đối Chiếu Đời Thật | Tử Vi Minh Bảo';
   const desc =
     'Lá số Tử Vi của người nổi tiếng có giờ sinh kiểm chứng, đặt cạnh cuộc đời thật của họ — từng mục khớp, khớp một phần và trượt đều được ghi rõ, có nguồn.';
   const { commonsThumb } = celebPhoto();
 
-  const cards = HO_SO.map((h) => {
-    const bm = dem(h.banMenh);
-    const dv = dem(h.daiVan);
+  const cards = items.map((h) => {
     const anh = h.anhCommons ? commonsThumb(h.anhCommons, 240) : null;
     return `<a class="card" href="/nghiem-chung/${esc(h.slug)}">
-  ${anh ? `<img src="${esc(anh)}" alt="${esc(h.ten)}" width="72" height="72" loading="lazy">` : `<div class="ph">${esc(h.ten.slice(0, 1))}</div>`}
+  ${anh ? `<img src="${esc(anh)}" alt="${esc(h.ten)}" width="72" height="72" loading="lazy" referrerpolicy="no-referrer">` : `<div class="ph">${esc(h.ten.slice(0, 1))}</div>`}
   <div>
     <div class="nm">Lá số Tử Vi ${esc(h.ten)}</div>
-    <div class="mt">${esc(h.ngheNghiep)} · sinh ${esc(h.sinh.ngay.slice(0, 4))}</div>
-    <div class="st"><span>Con người: khớp ${bm.tyLe == null ? '—' : bm.tyLe + '%'}</span><span>Đại vận: khớp ${dv.tyLe == null ? '—' : dv.tyLe + '%'}</span></div>
+    <div class="mt">${esc(h.ngheNghiep)} · sinh ${h.namSinh}</div>
+    <div class="st"><span>Con người: khớp ${h.tyLeBM == null ? '—' : h.tyLeBM + '%'}</span><span>Đại vận: khớp ${h.tyLeDV == null ? '—' : h.tyLeDV + '%'}</span></div>
   </div>
 </a>`;
   }).join('');
@@ -50,11 +55,11 @@ export async function GET(): Promise<Response> {
       publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE },
       mainEntity: {
         '@type': 'ItemList',
-        numberOfItems: HO_SO.length,
-        itemListElement: HO_SO.map((h, i) => ({
+        numberOfItems: dm.length,
+        itemListElement: items.map((h, i) => ({
           '@type': 'ListItem',
-          position: i + 1,
-          url: `${url}/${h.slug}`,
+          position: (trang - 1) * MOI_TRANG + i + 1,
+          url: `${hubUrl}/${h.slug}`,
           name: `Lá số Tử Vi ${h.ten}`,
         })),
       },
@@ -64,14 +69,14 @@ export async function GET(): Promise<Response> {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Trang Chủ', item: `${BASE}/` },
-        { '@type': 'ListItem', position: 2, name: 'Nghiệm Chứng', item: url },
+        { '@type': 'ListItem', position: 2, name: 'Nghiệm Chứng', item: hubUrl },
       ],
     },
   ]).replace(/</g, '\\u003c');
 
   const html = `<!DOCTYPE html><html lang="vi"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>${esc(title)}</title>
+<title>${esc(trang > 1 ? title.replace(' | ', ` — trang ${trang} | `) : title)}</title>
 <meta name="description" content="${esc(desc)}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
@@ -104,6 +109,7 @@ h1{font-family:var(--serif);font-size:32px;color:var(--navy);font-weight:600;lin
 .mt{font-size:12.5px;color:var(--lt);margin-top:2px}
 .st{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .st span{font-size:11.5px;background:var(--soft);border-radius:999px;padding:2px 9px;color:var(--mid)}
+.pg{display:flex;justify-content:space-between;align-items:center;margin-top:24px;font-size:14px;color:var(--lt)}.pg a{color:var(--navy);font-weight:600;text-decoration:none}
 .how{margin-top:40px;background:var(--soft);border-left:3px solid var(--gold-b);padding:16px 20px;font-size:14.5px;color:var(--mid)}
 .how a{color:var(--navy);font-weight:600}
 @media(max-width:700px){.bc,.wrap{padding-left:16px;padding-right:16px}h1{font-size:25px}.grid{grid-template-columns:1fr}}
@@ -117,7 +123,13 @@ h1{font-family:var(--serif);font-size:32px;color:var(--navy);font-weight:600;lin
   <div class="eyebrow">Nghiệm Chứng</div>
   <h1>Lá số Tử Vi người nổi tiếng, đặt cạnh cuộc đời thật</h1>
   <p class="lede">Mỗi hồ sơ lấy một người có giờ sinh đã kiểm chứng, lập lá số theo cổ pháp rồi đối chiếu từng nhận định với những gì thực sự xảy ra trong đời họ. Chỗ khớp và chỗ trượt đều được ghi rõ, kèm nguồn.</p>
+  <p class="lede" style="margin-top:-14px">${dm.length.toLocaleString('vi-VN')} hồ sơ${soTrang > 1 ? ` · trang ${trang}/${soTrang}` : ''}</p>
   <div class="grid">${cards}</div>
+  ${
+    soTrang > 1
+      ? `<nav class="pg" aria-label="Phân trang">${trang > 1 ? `<a href="/nghiem-chung${trang > 2 ? `?trang=${trang - 1}` : ''}">← Trang trước</a>` : '<span></span>'}<span>${trang}/${soTrang}</span>${trang < soTrang ? `<a href="/nghiem-chung?trang=${trang + 1}">Trang sau →</a>` : '<span></span>'}</nav>`
+      : ''
+  }
   <div class="how">Lá số được chấm trước, đời thật đặt sau — không chỉnh lá số cho vừa sự kiện. <a href="/phuong-phap">Xem phương pháp</a>.</div>
 </main>
 </body></html>`;

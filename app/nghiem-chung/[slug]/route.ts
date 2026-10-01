@@ -10,7 +10,9 @@
 // Vì sao dựng một trang riêng cho từng người mà KHÔNG phạm luật thin content
 // (xem app/thu-vien/nguoi-cung-ngay-sinh/[ngay]/route.ts): mỗi hồ sơ là một
 // bài đối chiếu viết tay có nguồn, không phải template rải theo 272k dòng.
-// Chỉ người có hồ sơ trong HO_SO mới có trang; còn lại 404.
+// Chỉ người có hồ sơ (HO_SO viết tay hoặc data/nghiem-chung/ho-so/*.json.gz đã
+// qua scripts/nghiem-chung/validate.ts) mới có trang; còn lại 404. Hồ sơ sinh
+// hàng loạt chưa mở index mang `noindex` (mở theo đợt, data/nghiem-chung/indexed.txt).
 // ============================================================
 export const revalidate = 604800;
 
@@ -21,7 +23,9 @@ import { celebPhoto } from '@/lib/celeb/photo';
 import { luanGiaiTool } from '@/lib/mcp/tools/luan-giai';
 import { vanHanTool } from '@/lib/mcp/tools/van-han';
 import { CHI_NAMES, parseGioSinh } from '@/lib/mcp/tools/_shared';
-import { HO_SO, hoSoTheoSlug, dem, type HoSoNghiemChung, type KetLuan } from '@/lib/nghiem-chung';
+import { dem, type HoSoNghiemChung, type KetLuan } from '@/lib/nghiem-chung';
+import { taiHoSo, danhMuc } from '@/lib/nghiem-chung/store';
+import { banKeLaSo, banKeNam, bangTra } from '@/lib/nghiem-chung/engine-ref';
 
 const BASE = 'https://www.tuviminhbao.com';
 
@@ -106,7 +110,7 @@ function ngayVN(iso: string): string {
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ slug: string }> }): Promise<Response> {
   const { slug } = await params;
-  const h = hoSoTheoSlug(slug);
+  const h = taiHoSo(slug);
   if (!h) return new NextResponse('Không tìm thấy hồ sơ', { status: 404 });
 
   const ls = await laSo(h, h.sinh.gioEngine);
@@ -133,6 +137,17 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   const trangAnh = h.anhCommons ? commonsFilePage(h.anhCommons) : null;
   const ogImg = `${BASE}/api/og?${new URLSearchParams({ title: `Lá số ${h.ten}`, sub: 'Tử vi đối chiếu cuộc đời thật' }).toString()}`;
 
+  // Nguyên văn câu engine cho các dòng trỏ `laSoRef` (hồ sơ sinh hàng loạt).
+  const coRef = [...h.banMenh, ...h.namMoc, ...h.daiVan].some((r) => r.laSoRef?.length);
+  const ke = coRef ? await banKeLaSo(h.sinh.ngay, h.sinh.gioEngine, h.gioiTinh) : null;
+  const tra = ke
+    ? bangTra(ke, await Promise.all(h.namMoc.map((n) => banKeNam(h.sinh.ngay, h.sinh.gioEngine, h.gioiTinh, n.nam))))
+    : new Map<string, string>();
+  const goc = (refs?: string[]) => {
+    const t = (refs || []).map((r) => tra.get(r)).filter(Boolean);
+    return t.length ? `<span class="goc">Lá số gốc: ${t.map((x) => esc(x)).join(' · ')}</span>` : '';
+  };
+
   const iADB = h.nguon.findIndex((n) => /astro-databank/i.test(n.url));
   const sup = (ids?: number[]) =>
     ids && ids.length ? ids.map((i) => `<a class="ref" href="#nguon-${i + 1}">[${i + 1}]</a>`).join('') : '';
@@ -142,7 +157,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
     .map(
       (r) => `<tr class="r-${r.ketLuan}">
   <td data-l="Cung"><b>${esc(r.cung)}</b><span class="sub">điểm ${diemTxt(diemCung(r.cung))}/10</span></td>
-  <td data-l="Lá số nói">${esc(r.laSoNoi)}</td>
+  <td data-l="Lá số nói">${esc(r.laSoNoi)}${goc(r.laSoRef)}</td>
   <td data-l="Đời thật">${esc(r.doiThat)}${sup(r.nguon)}</td>
   <td data-l="Kết luận">${badge(r.ketLuan)}</td>
 </tr>`,
@@ -178,7 +193,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   <div class="nam-h"><span class="nam-y">${n.nam}</span>${badge(n.ketLuan)}</div>
   ${v ? `<div class="nam-meta">Năm ${esc(v.can_chi_nam_xem)} · ${v.tuoi_mu} tuổi mụ · Thái Tuế ở ${esc(v.luu_thai_tue?.cung || '—')} · tiểu hạn ở ${esc(v.tieu_han?.cung || '—')}</div>` : ''}
   <p class="nam-su"><b>Đời thật:</b> ${esc(n.suKien)}${sup(n.nguon)}</p>
-  <p class="nam-ls"><b>Lá số năm đó:</b> ${esc(n.laSoNoi)}</p>
+  <p class="nam-ls"><b>Lá số năm đó:</b> ${esc(n.laSoNoi)}${goc(n.laSoRef)}</p>
   ${tuHoa ? `<div class="nam-th">Lưu tứ hóa: ${tuHoa}</div>` : ''}
 </div>`;
     })
@@ -285,7 +300,13 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
     prefix: `Đọc hồ sơ ${h.ten}`,
   });
 
-  const khac = HO_SO.filter((x) => x.slug !== h.slug).slice(0, 6);
+  // Liên kết chéo: 6 hồ sơ kề bên trong danh mục (ổn định giữa các lần dựng).
+  const dm = danhMuc();
+  const viTri = Math.max(0, dm.findIndex((x) => x.slug === h.slug));
+  const khac = [1, 2, 3, -1, -2, -3]
+    .map((k) => dm[(viTri + k + dm.length) % dm.length])
+    .filter((x, i, a) => x && x.slug !== h.slug && a.findIndex((y) => y?.slug === x.slug) === i)
+    .slice(0, 6);
 
   const html = `<!DOCTYPE html><html lang="vi"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -302,7 +323,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(desc)}">
 <meta name="twitter:image" content="${esc(ogImg)}">
-<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="robots" content="${h.indexed === false ? 'noindex, follow' : 'index, follow, max-image-preview:large'}">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -377,6 +398,7 @@ h1{font-family:var(--serif);font-size:32px;line-height:1.25;color:var(--navy);fo
 .nam p{font-size:14px;color:var(--mid);margin-bottom:6px}
 .nam p b{color:var(--navy)}
 .nam-th{font-size:12px;color:var(--gold);margin-top:6px}
+.goc{display:block;font-size:12px;color:var(--lt);margin-top:6px;font-style:italic}
 .note{background:var(--soft);border-left:3px solid var(--gold-b);padding:14px 18px;margin-top:14px;font-size:14.5px;color:var(--mid)}
 .prose p{color:var(--mid);margin-bottom:12px}
 .method{font-size:14px;color:var(--mid)}
@@ -424,7 +446,7 @@ ${ask.css}
       <div class="facts">
         <span class="fact">Sinh <b>${ngayHT}</b> · ${esc(h.sinh.gio)} · ${esc(h.sinh.noi)}</span>
         <span class="fact">Giờ <b>${esc(gioChi)}</b> · tuổi <b>${esc(ls.tong_quan.can_chi_nam)}</b></span>
-        <span class="fact">Dữ liệu giờ sinh: <b>Rodden ${h.sinh.rodden}</b>${sup(iADB >= 0 ? [iADB] : [])}</span>
+        <span class="fact">Dữ liệu giờ sinh: <b>Rodden ${h.sinh.rodden}</b>${sup(iADB >= 0 ? [iADB] : [])}</span>${h.namMat ? `<span class="fact">Mất năm <b>${h.namMat}</b></span>` : ''}
       </div>
     </div>
   </header>
@@ -520,7 +542,7 @@ ${ask.css}
 
   ${ask.end}
 
-  <p class="disc">Cập nhật ${ngayVN(h.ngayCapNhat)}. Tử Vi là một hệ thống luận đoán cổ truyền; trang này đối chiếu nó với dữ kiện công khai để người đọc tự đánh giá, không nhằm phán xét hay dự đoán về đời tư của người được nhắc tới.</p>
+  <p class="disc">Cập nhật ${ngayVN(h.ngayCapNhat)}.${h.wiki ? ` Phần đời thật được tóm lược và dịch từ <a href="${esc(h.wiki.url)}" rel="noopener nofollow" target="_blank">Wikipedia (${esc(h.wiki.lang)})</a>, giấy phép CC BY-SA.` : ''} Tử Vi là một hệ thống luận đoán cổ truyền; trang này đối chiếu nó với dữ kiện công khai để người đọc tự đánh giá, không nhằm phán xét hay dự đoán về đời tư của người được nhắc tới.</p>
 </article>
 ${ask.tail}
 </body></html>`;
