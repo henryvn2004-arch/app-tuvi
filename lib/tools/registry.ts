@@ -27,7 +27,7 @@ import { lanKinhNam, lanKinhThang, lanKinhNgay } from '@/lib/agent/luan-chu-de';
 import { personaKhach } from '@/lib/agent/personas';
 import { lapKhoa, railData as railDataLucNham } from '@/lib/liuren/ke';
 import { dungBan, railData as railDataKyMon } from '@/lib/qimen/board';
-import type { BirthParams } from '@/lib/contract/v1';
+import { cleanPersonName, type BirthParams } from '@/lib/contract/v1';
 import type { ChartKind, TimeChartKind } from '@/lib/og/laso-image';
 import { findMember, type FamilyMember } from '@/lib/charts/family';
 import type { ThangKhung } from '@/lib/engine/van-han-12';
@@ -358,6 +358,10 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false, hasFamily 
               'CHỈ dùng khi người dùng cho GIỜ ĐỊA CHI/ÂM trực tiếp (vd "giờ Tỵ"): 0=Tý 1=Sửu 2=Dần 3=Mão 4=Thìn 5=Tỵ 6=Ngọ 7=Mùi 8=Thân 9=Dậu 10=Tuất 11=Hợi. Nếu đã truyền "hour" thì BỎ field này.',
           },
           gender: { type: 'string', enum: ['nam', 'nu'], description: 'Giới tính' },
+          ten: {
+            type: 'string',
+            description: 'Tên người được lập lá số, nếu biết (vd tên người dùng tự nói, hoặc tên tài khoản chat khi lá số là của CHÍNH người đang nhắn). Lá số hỏi hộ người khác mà chưa biết tên thì BỎ field này — không đoán.',
+          },
         },
         required: ['day', 'month', 'year', 'gender'],
       },
@@ -586,6 +590,7 @@ export function buildBirthFromInput(input: Rec): BirthParams | null {
   const month = Math.floor(Number(input.month));
   if (!Number.isFinite(year) || !Number.isFinite(day) || !Number.isFinite(month)) return null;
   const isLunar = isLunarInput(input);
+  const name = cleanPersonName(input.ten);
   return {
     day,
     month,
@@ -594,6 +599,7 @@ export function buildBirthFromInput(input: Rec): BirthParams | null {
     gender: normGender(input.gender),
     isLunar,
     ...(isLunar && input.leap_month === true ? { isLeapMonth: true } : {}),
+    ...(name ? { name } : {}),
   };
 }
 
