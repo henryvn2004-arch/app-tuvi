@@ -163,7 +163,7 @@ h1{font-family:var(--serif);color:var(--navy);font-size:26px;line-height:1.3;mar
     if(ten) fd.hoten=ten;
     // Handoff y hệt form trang chủ: /app/luan-giai đọc `app_pending_birth`,
     // tự điền và tự chạy doLuan() — bản xem trước miễn phí.
-    try{ sessionStorage.setItem('app_pending_birth', JSON.stringify({fd:fd})); }
+    try{ sessionStorage.setItem('app_pending_birth', JSON.stringify({fd:fd, open:'result'})); }
     catch(e){ console.error('[xem-luan-giai] sessionStorage', e); }
     track('cta_click',{lp:'xem-luan-giai', step:'submit', has_name:!!ten});
     document.getElementById('go').disabled=true;
