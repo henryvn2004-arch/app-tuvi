@@ -104,9 +104,21 @@ const banXu = (country: string | null) => BAN_XU.find(([re]) => re.test(country 
 
 // ── HTTP có lùi lại ─────────────────────────────────────────
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+/** fetch có thử lại cả lỗi MẠNG (ConnectTimeout qua proxy) — không chỉ 429/5xx. */
+async function layLai(url: string, init: RequestInit): Promise<Response> {
+  for (let i = 0; ; i++) {
+    try {
+      return await fetch(url, { ...init, signal: AbortSignal.timeout(60000) });
+    } catch (e) {
+      if (i >= 5) throw e;
+      await sleep(2 ** i * 2000);
+    }
+  }
+}
+
 async function getJson(url: string): Promise<unknown> {
   for (let i = 0; i < 6; i++) {
-    const r = await fetch(url, { headers: { 'User-Agent': UA, 'Api-User-Agent': UA } });
+    const r = await layLai(url, { headers: { 'User-Agent': UA, 'Api-User-Agent': UA } });
     if (r.status === 429 || r.status >= 500) {
       const ra = Number(r.headers.get('retry-after')) || 2 ** i;
       await sleep(Math.min(60, ra) * 1000);
@@ -141,7 +153,7 @@ async function sitelinks(qids: string[]): Promise<Record<string, Record<string, 
  */
 async function extract(lang: string, title: string, depth = 0): Promise<string> {
   for (let i = 0; i < 6; i++) {
-    const r = await fetch(
+    const r = await layLai(
       `https://${lang}.wikipedia.org/w/index.php?title=${encodeURIComponent(title.replace(/ /g, '_'))}&action=raw`,
       { headers: { 'User-Agent': UA } },
     );
@@ -236,7 +248,14 @@ async function main() {
   let fail = 0;
   for (let i = 0; i < pick.length; i += 200) {
     const chunk = pick.slice(i, i + 200);
-    const sl = await sitelinks(chunk.map((c) => c.qid));
+    let sl: Record<string, Record<string, string>>;
+    try {
+      sl = await sitelinks(chunk.map((c) => c.qid));
+    } catch (e) {
+      console.error(`✗ lô ${i}: sitelinks hỏng (${(e as Error).message}) — bỏ qua, chạy lại sẽ bù`);
+      fail += chunk.length;
+      continue;
+    }
     await pool(chunk, 4, async (c) => {
       try {
         const links = sl[c.qid] || {};
