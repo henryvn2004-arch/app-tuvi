@@ -571,7 +571,7 @@
       if (xs.length >= 2) h += '<div style="font-size:13px;line-height:1.55;margin-top:8px;color:#1a1a1a">Đang đi đại vận ' + c.tuoiStart + '–' + c.tuoiEnd + ' (Mệnh tạm ở ' + bdEsc(c.diaChi) + '): ' +
         'mạnh nhất <b>' + bdEsc(xs[0].ten.toLowerCase()) + '</b>, yếu nhất <b>' + bdEsc(xs[xs.length - 1].ten.toLowerCase()) + '</b>.</div>';
     }
-    h += '<div style="font-size:11px;color:#666;margin-top:6px">Cung đại vận làm Mệnh tạm, các cung khác dời theo và mượn sao của cung dời tới. Mỗi chủ đề chỉ vẽ trong độ tuổi có nghĩa: sự nghiệp, tài lộc 18–65 · tình duyên 16–60 · sức khỏe cả đời.</div></div>';
+    h += '<div style="font-size:11px;color:#666;margin-top:6px">Cung đại vận làm Mệnh tạm, các cung khác dời theo và mượn sao của cung dời tới. Sự nghiệp vẽ đến 65 tuổi; tài lộc, tình duyên vẽ từ tuổi trưởng thành.</div></div>';
     return h;
   }
 

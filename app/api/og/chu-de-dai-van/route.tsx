@@ -151,7 +151,7 @@ export async function GET(req: NextRequest) {
         <Highlights items={items} />
         <BrandFooter
           origin={req.nextUrl.origin}
-          note="Mỗi chủ đề chỉ vẽ trong độ tuổi có nghĩa: sự nghiệp, tài lộc 18–65 · tình duyên 16–60 · sức khỏe cả đời"
+          note="Sự nghiệp vẽ đến 65 tuổi; tài lộc, tình duyên vẽ từ tuổi trưởng thành"
         />
       </div>
     ),
