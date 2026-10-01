@@ -95,3 +95,67 @@ export function legacyLuanBlocks(luanGiai: unknown): ReportBlock[] {
     text: cleanLuanText(p.text).slice(0, MAX_BLOCK_TEXT),
   }));
 }
+
+// ── Dựng + ghi MỘT dòng `report_snapshots` — dùng chung cho /api/reports/snapshot
+// (shell chụp ngầm) và /api/reports/pdf (chụp ngay rồi dựng PDF, cần `id`). ──
+const SB_URL = process.env.SUPABASE_URL;
+const SB_KEY = process.env.SUPABASE_SERVICE_KEY;
+
+export interface SnapshotRow {
+  user_id: string;
+  tool_id: string;
+  subject_key: string;
+  tool_label: string | null;
+  title: string;
+  subtitle: string | null;
+  image_url: string | null;
+  blocks: ReportBlock[];
+  updated_at: string;
+}
+
+/** Body client (payload `reportSnapshot()` của shell.js) → dòng; chuỗi = lỗi 400. */
+export function snapshotRow(userId: string, b: Record<string, unknown>): SnapshotRow | string {
+  const toolId = String(b.toolId || '').trim().slice(0, 40);
+  if (!/^[a-z0-9-]+$/.test(toolId)) return 'toolId không hợp lệ';
+  const title = String(b.title || '').trim().slice(0, 160) || 'Báo cáo';
+  const blocks = sanitizeBlocks(b.blocks);
+  if (!blocks.some((x) => x.text || x.image)) return 'Chưa có nội dung';
+  const imageRaw = b.imageUrl ? String(b.imageUrl).slice(0, 500) : '';
+  return {
+    user_id: userId,
+    tool_id: toolId,
+    subject_key: subjectKey(toolId, b.subject, title),
+    tool_label: b.toolLabel ? String(b.toolLabel).trim().slice(0, 80) : null,
+    title,
+    subtitle: b.subtitle ? String(b.subtitle).trim().slice(0, 160) : null,
+    image_url: /^https:\/\//.test(imageRaw) ? imageRaw : null,
+    blocks,
+    updated_at: new Date().toISOString(),
+  };
+}
+
+/** Upsert theo (user, công cụ, chủ thể). Trả `id` dòng; null khi lỗi (đã log). */
+export async function saveSnapshot(row: SnapshotRow): Promise<string | null> {
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/report_snapshots?on_conflict=user_id,tool_id,subject_key&select=id`, {
+      method: 'POST',
+      headers: {
+        apikey: SB_KEY || '',
+        Authorization: `Bearer ${SB_KEY || ''}`,
+        'Content-Type': 'application/json',
+        Prefer: 'resolution=merge-duplicates,return=representation',
+      },
+      body: JSON.stringify(row),
+      cache: 'no-store',
+    });
+    if (!res.ok) {
+      console.error('[reports/snapshot] upsert', res.status, (await res.text()).slice(0, 300));
+      return null;
+    }
+    const rows = (await res.json()) as { id?: string }[];
+    return rows[0]?.id || null;
+  } catch (e) {
+    console.error('[reports/snapshot] upsert', e);
+    return null;
+  }
+}
