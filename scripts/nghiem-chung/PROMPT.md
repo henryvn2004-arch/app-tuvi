@@ -1,8 +1,8 @@
 # Viết hồ sơ Nghiệm Chứng (cho agent)
 
 Bạn viết hồ sơ đối chiếu **lá số Tử Vi ↔ cuộc đời thật** của người nổi tiếng, bằng tiếng Việt,
-cho trang `tuviminhbao.com/nghiem-chung/<slug>`. Mẫu đã duyệt: `lib/nghiem-chung/ho-so/cung-le.ts`
-(đọc một lần để nắm giọng văn và độ dài).
+cho trang `tuviminhbao.com/nghiem-chung/<slug>`. Làm gọn: đọc gói → chạy nam.ts → ghi nháp → validate
+(ít lượt công cụ nhất có thể; KHÔNG đọc thêm file nào khác trong repo).
 
 ## Với MỖI slug được giao
 
@@ -47,19 +47,27 @@ cho trang `tuviminhbao.com/nghiem-chung/<slug>`. Mẫu đã duyệt: `lib/nghiem
 }
 ```
 
-## Luật chấm (công khai trên trang — phải nhất quán)
-- `khop`: hướng chính của câu lá số đúng với đời thật.
-- `mot-phan`: đúng hướng nhưng sai/thiếu chi tiết, hoặc đúng một giai đoạn mà không đúng giai đoạn khác.
-- `truot`: trái ngược rõ với đời thật.
-- `chua-kiem-chung`: bài viết không nói gì về chuyện đó / thập niên đó không có sự kiện — **không cố gán**,
-  đừng chấm `mot-phan` cho một đại vận trống (dòng chưa kiểm chứng không tính vào tỷ lệ).
-- `dang-dien-ra` (chỉ đại vận hiện tại của người còn sống).
-- Đại vận: so `hang`/`diem` với cường độ thập niên đó trong đời (đỉnh cao/thành tựu → tot; lẫn lộn → vua; sa sút/biến cố → xau).
-  `vua` (trung bình) được coi là khớp, trừ khi thập niên đó rõ ràng là đỉnh cao nhất hoặc tệ nhất đời.
-- **Không chọn lọc cho đẹp**: chọn câu lá số vì nó KIỂM CHỨNG ĐƯỢC, rồi chấm thật. Có trượt thì ghi trượt.
+## Luật chấm (công khai trên trang — phải nhất quán, chấm NGHIÊM)
+Mục tiêu: tỷ lệ khớp phản ánh thật. Một hồ sơ toàn 100% là dấu hiệu chấm rộng tay — người đọc sẽ không tin.
+- `khop`: câu lá số nói ĐÚNG điều bài viết ghi nhận, cả hướng lẫn nội dung chính. Câu chung chung kiểu
+  "thông minh", "có tài", "gặp quý nhân" chỉ được `khop` khi bài có bằng chứng CỤ THỂ, nổi bật cho đúng điều đó.
+- `mot-phan`: một vế đúng, một vế sai/không có. `doiThat` PHẢI nói rõ vế nào đúng, vế nào không
+  (vd "… đúng phần X; phần Y thì bài không ghi / ngược lại"). Không có vế sai thì không phải `mot-phan`.
+- `truot`: đời thật trái với câu lá số (lá số nói nghèo mà giàu, nói trắc trở mà suôn sẻ…). Gặp là ghi, không né.
+- `chua-kiem-chung`: bài không nói gì về chuyện đó / thập niên đó trống — **không cố gán**,
+  đừng chấm `mot-phan` cho chỗ không có dữ liệu (dòng chưa kiểm chứng không tính vào tỷ lệ).
+- `dang-dien-ra`: chỉ đại vận hiện tại của người còn sống.
+- Đại vận — so `hang` với thập niên đó TRONG CHÍNH ĐỜI NGƯỜI ẤY (không so với người khác):
+  · `tot` khớp khi thập niên có thành tựu/bước tiến rõ; trượt khi đó là quãng sa sút, biến cố.
+  · `xau` khớp khi thập niên có sa sút/biến cố/khó khăn rõ; trượt khi đó là quãng thăng hoa.
+  · `vua` khớp khi thập niên lẫn lộn hoặc bình lặng; `mot-phan` nếu nghiêng hẳn một phía;
+    trượt khi đó rõ ràng là đỉnh cao nhất hoặc đáy sâu nhất đời.
+- **Không chọn lọc cho đẹp**: chọn câu lá số vì nó KIỂM CHỨNG ĐƯỢC (kể cả câu nguy cơ trượt), rồi chấm thật.
+  Mỗi hồ sơ nên có cả câu "dễ trúng" lẫn câu cụ thể, dễ sai (tiền bạc, nhà cửa, cha mẹ, anh em, con cái…).
 - Bản mệnh 8–12 dòng, rải nhiều cung (Mệnh, Quan Lộc, Tài Bạch, Thiên Di, Phúc Đức, Phụ Mẫu, Phu Thê, Tử Tức…).
   Bỏ qua câu engine không kiểm chứng được (nhà có ao giếng, chó đá, mồ mả…).
 - Đại vận: MỌI đại vận đã bắt đầu (namTu ≤ năm nay/năm mất) phải có một dòng.
+- Năm mốc: chọn năm theo ĐỜI THẬT (bước ngoặt lớn, cả tốt lẫn xấu) TRƯỚC, rồi mới xem lá số năm đó nói gì.
 
 ## Luật nội dung
 - **Sự thật chỉ từ `wiki.text`.** Không thêm điều bạn "biết" mà bài không viết. `trich` chép đúng từng chữ

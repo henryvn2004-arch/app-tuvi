@@ -8,7 +8,8 @@
 //   npx tsx scripts/nghiem-chung/pack.ts --qids Q1,Q2      # vài người
 //   npx tsx scripts/nghiem-chung/pack.ts --from 0 --to 500 # theo thứ tự ưu tiên
 //
-// Đầu vào: work/nghiem-chung/celebs.jsonl (xuất từ celeb_births).
+// Đầu vào: data/nghiem-chung/celebs.jsonl (xuất từ celeb_births, chỉ cột công khai).
+//   --shard k/n : chỉ đóng gói phần k (0-based) của n — chia theo thứ tự ưu tiên, xen kẽ.
 // Gói đã có thì bỏ qua (chạy lại an toàn). Wikimedia: UA đàng hoàng, ≤4 luồng,
 // lùi lại khi 429 — đã bị chặn một lần khi gọi trần.
 // ============================================================
@@ -60,7 +61,7 @@ export function slugify(s: string): string {
 
 /** Thứ tự ưu tiên: có bài tiếng Việt → nhiều sitelinks → fame. Slug trùng thì gắn qid. */
 export function danhSach(): (Celeb & { slug: string })[] {
-  const rows: Celeb[] = readFileSync(join(WORK, 'celebs.jsonl'), 'utf8')
+  const rows: Celeb[] = readFileSync(join(ROOT, 'data', 'nghiem-chung', 'celebs.jsonl'), 'utf8')
     .split('\n')
     .filter(Boolean)
     .map((l) => JSON.parse(l));
@@ -239,9 +240,17 @@ async function main() {
   } else if (opt('slugs')) {
     const set = new Set(opt('slugs')!.split(','));
     pick = all.filter((c) => set.has(c.slug));
+  } else if (opt('shard')) {
+    const [k, n] = opt('shard')!.split('/').map(Number);
+    pick = all.filter((_, i) => i % n === k);
   } else {
     pick = all.slice(Number(opt('from') || 0), Number(opt('to') || all.length));
   }
+  // Đã có hồ sơ hoặc đã bị loại trừ thì khỏi đóng gói lại.
+  const daXong = (slug: string) =>
+    existsSync(join(ROOT, 'data', 'nghiem-chung', 'ho-so', `${slug}.json.gz`)) ||
+    existsSync(join(ROOT, 'data', 'nghiem-chung', 'loai-tru', `${slug}.txt`));
+  pick = pick.filter((c) => !daXong(c.slug));
   pick = pick.filter((c) => !existsSync(join(PACK, `${c.slug}.json`)));
   console.log(`Cần đóng gói: ${pick.length}`);
   let done = 0;

@@ -16,7 +16,7 @@
 //   · Các trường định danh (qid, ngày giờ, ảnh, sameAs, wiki) LẤY TỪ GÓI,
 //     không tin bản agent chép lại.
 // ============================================================
-import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { banKeNam, bangTra, type BanKeLaSo } from '@/lib/nghiem-chung/engine-ref';
@@ -62,7 +62,9 @@ async function kiem(slug: string): Promise<string[]> {
   }
 
   if (d.loaiTru) {
-    appendFileSync(join(WORK, 'excluded.jsonl'), JSON.stringify({ slug, qid: pack.qid, ly_do: d.loaiTru }) + '\n');
+    // Mỗi slug một file — nhiều phiên chạy song song trên nhánh riêng gộp lại không xung đột.
+    mkdirSync(join(ROOT, 'data', 'nghiem-chung', 'loai-tru'), { recursive: true });
+    writeFileSync(join(ROOT, 'data', 'nghiem-chung', 'loai-tru', `${slug}.txt`), `${pack.qid}\t${d.loaiTru}\n`);
     console.log(`⊘ ${slug}: loại trừ (${d.loaiTru})`);
     return [];
   }
