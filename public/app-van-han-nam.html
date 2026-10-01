@@ -258,7 +258,7 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/laso-chart.js?v=9"></script>
 <script src="/tools-shared/pchip.js?v=1"></script>
 <script src="/tools-shared/daivan-chart.js?v=1"></script>
-<script src="/luan-giai-core.js?v=6"></script>
+<script src="/luan-giai-core.js?v=7"></script>
 <!-- `defer` ở đây là VỆ SINH TỐC ĐỘ, KHÔNG phải bản vá CLS. Không có nó, thẻ này
      chặn parse ngay trước `tuvi-form.js`, tức thêm hẳn một chặng mạng tới bên thứ
      ba vào đường tới hạn của form. Nhưng cú nhảy `.frow` thì nó KHÔNG chữa: prod
@@ -545,8 +545,8 @@ function render(ls){
   for(var p=1;p<=_tongPhan;p++){
     var body;
     if(p<=4){
-      // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc) — Pha 4
-      // (2026-09-17): bung sẵn mặc định; chart đứng NGOÀI khối gập (2026-10-01).
+      // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc).
+      // 2026-10-01: chart đứng NGOÀI, khối chữ GẬP sẵn.
       // Xem app-luan-giai.html (buildPhanSection).
       body=LuanGiaiCore.buildCalcSectionHtml(PRE[p],ls)||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để Thầy luận sâu.</div>';
     }else{

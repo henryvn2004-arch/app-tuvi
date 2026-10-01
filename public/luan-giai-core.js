@@ -367,11 +367,13 @@
   }
 
   // Thân một phần ĐÃ MỞ của Luận Giải / Chu Trình Cuộc Đời / Vận Hạn 12 Tháng —
-  // MỘT nguồn cho cả ba trang: chart đứng ngoài, phần chữ trong khối gập (bung
-  // sẵn mặc định — Pha 4, 2026-09-17). Không có gì để hiện → `''`.
+  // MỘT nguồn cho cả ba trang: chart đứng ngoài, phần chữ trong khối GẬP sẵn
+  // (Henry 2026-10-01 — chart đã ra ngoài nên chữ gập lại, ai muốn xem thì
+  // bấm mở; đảo lại quyết định "bung sẵn" của Pha 4, 2026-09-17). PDF/in vẫn
+  // mở hết nhờ `beforeprint` của shell.js. Không có gì để hiện → `''`.
   function buildCalcSectionHtml(phan, ls) {
     var p = buildPreGenParts(phan, ls);
-    return p.charts + (p.calc ? '<details class="lg-calc" open><summary>Xem cơ sở tính toán</summary>' + p.calc + '</details>' : '');
+    return p.charts + (p.calc ? '<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>' + p.calc + '</details>' : '');
   }
 
   // Vẽ canvas #chart-daivan-overview mà buildPreGenHtml(14, ls) đã dựng HTML —
