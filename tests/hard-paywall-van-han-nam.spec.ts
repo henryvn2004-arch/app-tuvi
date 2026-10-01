@@ -78,6 +78,11 @@ async function stubApis(page: Page, bal: Balance) {
       bal.value -= COST;
       return r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, balance: bal.value }) });
     }
+    // Thiếu Lượng ⇒ QR nạp tại chỗ (cả khách đã đăng nhập, 2026-10-01) — đơn giả,
+    // `check-bank` rơi xuống '{}' (chưa trả) nên modal đứng chờ.
+    if (action === 'create-bank') return r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
+      orderCode: 1, amountVND: 52000, credits: 91, bin: '970422', accountNumber: '0001', accountName: 'TEST',
+      description: 'TVMB1', checkoutUrl: 'https://pay.payos.vn/web/test' }) });
     return r.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
   });
 
@@ -162,14 +167,19 @@ test('khách vô danh: bấm mở khoá kích hoạt guest checkout (signInAnony
   await page.waitForFunction(() => (window as unknown as { __signInAnonCalls: number }).__signInAnonCalls >= 1, { timeout: 5000 });
 });
 
-test('đã đăng nhập, KHÔNG đủ Lượng: hiện tường thiếu Lượng, KHÔNG trừ tiền', async ({ page }) => {
+test('đã đăng nhập, KHÔNG đủ Lượng: hiện QR nạp tại chỗ (không sang /topup.html), KHÔNG trừ tiền', async ({ page }) => {
   await pinAuth(page, 'loggedIn');
   await stubApis(page, { value: 0 });
   await fillAndRun(page);
 
   await expect(page.locator('#vhUnlock #btnUnlock')).toBeVisible();
+  const bankReq = page.waitForRequest((r) => r.url().includes('action=create-bank'));
   await page.locator('#vhUnlock #btnUnlock').click();
-  await expect(page.locator('.tpw-lock-t, .tpw-hd-t')).toContainText(/thiếu|Không đủ/);
+  // Khách đã đăng nhập thiếu Lượng: QR tại chỗ thay tường dẫn sang /topup.html
+  // (2026-10-01 — khách đến từ Messenger/Zalo qua handoff là tài khoản thật).
+  await expect(page.locator('.tpw-qr-backdrop.show')).toBeVisible();
+  // Server gửi kèm QR vào kênh chat của tài khoản (nếu có).
+  expect((await bankReq).postDataJSON().notifyChat).toBe(true);
   expect(phanCalls(page)).toHaveLength(0);
 });
 
@@ -195,8 +205,13 @@ test('quay lại sau khi nạp Lượng (?tpwResume=1): tự khôi phục form +
   // này) tự ghi `tpw_pending_unlock`; `doXem()` (CÓ đổi) đã tự ghi
   // `vh_pending_resume` NGAY lúc tính khung xong, trước khi biết có thiếu
   // Lượng hay không.
+  const bankReq = page.waitForRequest((r) => r.url().includes('action=create-bank'));
   await page.locator('#vhUnlock #btnUnlock').click();
-  await expect(page.locator('.tpw-lock-t, .tpw-hd-t')).toContainText(/thiếu|Không đủ/);
+  // Khách đã đăng nhập thiếu Lượng: QR tại chỗ thay tường dẫn sang /topup.html
+  // (2026-10-01 — khách đến từ Messenger/Zalo qua handoff là tài khoản thật).
+  await expect(page.locator('.tpw-qr-backdrop.show')).toBeVisible();
+  // Server gửi kèm QR vào kênh chat của tài khoản (nếu có).
+  expect((await bankReq).postDataJSON().notifyChat).toBe(true);
   const pendingRaw = await page.evaluate(() => sessionStorage.getItem('tpw_pending_unlock'));
   expect(pendingRaw).toBeTruthy();
   expect(JSON.parse(pendingRaw as string).product).toBe('van-han-nam');
