@@ -277,10 +277,10 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 .tpw-seclock-t{flex:1;min-width:0}
 .tpw-seclock-p{flex:0 0 auto;font-weight:700;color:#C9A84C;white-space:nowrap}
 @media(max-width:480px){.tpw-seclock{flex-wrap:wrap}.tpw-seclock-p{width:100%;text-align:right}}
-/* ── QR chuyển khoản TẠI CHỖ cho khách vô danh (2026-09-07) — thay vì điều
-   hướng sang /topup.html, bấm "Mở khoá" khi hết Lượng hiện thẳng modal QR
-   ngay trên trang tool; quét xong tự chạy tiếp, không rời trang. Khách ĐÃ
-   đăng nhập không đụng gì (vẫn tường cũ dẫn sang /topup.html). Cùng bố cục
+/* ── QR chuyển khoản TẠI CHỖ (2026-09-07, mở cho cả khách đã đăng nhập
+   2026-10-01) — thay vì điều hướng sang /topup.html, bấm "Mở khoá" khi hết
+   Lượng hiện thẳng modal QR ngay trên trang tool; quét xong tự chạy tiếp,
+   không rời trang. Cùng bố cục
    với modal chuyển khoản của topup.html (bankModal/.bm-*) — đổi tên lớp để
    không đụng CSS cục bộ của trang đó khi cả hai cùng nạp (không xảy ra trong
    thực tế, nhưng rẻ để tránh trùng tên). */
@@ -718,8 +718,14 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
           : '') + ' · bấm mở là trả tiền và đọc ngay, ' +
         'không cần đăng ký trước. <a onclick="TuviPaywall._login()">Đã có tài khoản? Đăng nhập</a>';
     } else if (balance < cost) {
+      // Bấm mở khoá giờ hiện QR tại chỗ cho phần THIẾU (`_insufficient`) —
+      // nói đúng số tiền QR sẽ đòi, cùng lý do nhánh vô danh ở trên.
+      const thieuQr = _qrAmountFor(cost - balance);
       money = 'Bạn còn <b>' + balance + '</b> · cần ' + _vndFirst(cost, vndLbl) + ' — thiếu ' + (cost - balance) +
-        ', <a href="/topup.html" onclick="' + _topupClick('preview', cost - balance) + '">nạp thêm →</a>';
+        (thieuQr != null
+          ? ' <span class="tpw-sub">(chuyển khoản ' + thieuQr.toLocaleString('vi-VN') + 'đ, bấm mở là hiện mã QR)</span>'
+          : '') +
+        ', <a href="/topup.html" onclick="' + _topupClick('preview', cost - balance) + '">hoặc mua gói →</a>';
     } else {
       money = 'Bạn còn <b>' + balance + ' Lượng</b> · mở đầy đủ tốn ' + _vndFirst(cost, vndLbl);
     }
@@ -1218,7 +1224,10 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     try {
       const r = await fetch('/api/payment?action=create-bank', {
         method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (await _freshToken()) },
-        body: JSON.stringify({ packageId: 'custom', userId, customAmountVnd: amountVnd }),
+        // `notifyChat`: server gửi kèm QR này vào Messenger/Zalo nếu tài khoản
+        // gắn kênh chat (khách đến từ chat đọc trang trong trình duyệt của app
+        // chat — lỡ đóng trang vẫn còn QR trong cuộc trò chuyện).
+        body: JSON.stringify({ packageId: 'custom', userId, customAmountVnd: amountVnd, notifyChat: true }),
       });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || 'Lỗi tạo đơn');
@@ -1340,12 +1349,14 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         ts: Date.now(),
       }));
     } catch (e) { /* sessionStorage đầy/bị chặn — vẫn hiện tường như cũ, chỉ mất phần tự-quay-lại */ }
-    // Khách vô danh (`callback` luôn có mặt — `requireCredits` là nơi DUY
-    // NHẤT gọi hàm này kèm callback) → QR tại chỗ thay hẳn tường cũ, không
-    // rời trang. `_qrAmountFor` trả `null` khi chưa đọc được giá quy đổi hoặc
+    // Có `callback` (`requireCredits` là nơi DUY NHẤT gọi hàm này kèm
+    // callback) → QR tại chỗ thay hẳn tường cũ, không rời trang. Trước
+    // 2026-10-01 chỉ khách vô danh; khách đã đăng nhập (gồm mọi khách đến từ
+    // Messenger/Zalo qua link handoff — tài khoản thật) bị đẩy sang
+    // /topup.html, nạp xong mới quay về. `_qrAmountFor` trả `null` khi chưa đọc được giá quy đổi hoặc
     // số tiền ngoài tầm nạp tuỳ chọn (50k–5tr) — ca đó rơi tiếp xuống tường
     // `/topup.html` như cũ, không bịa số.
-    if (callback && _isAnonymous()) {
+    if (callback) {
       const amountVnd = _qrAmountFor(need);
       if (amountVnd != null) { _qrNeed = need; _openBankQr(amountVnd, slug, callback); return; }
     }

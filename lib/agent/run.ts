@@ -13,6 +13,7 @@
 
 import {
   sse,
+  cleanPersonName,
   type ChatRequestV1,
   type ChatMessage,
   type ScenarioInput,
@@ -604,6 +605,26 @@ async function runAgentInner(
         const tb = last.content.find((b: any) => b.type === 'text');
         if (tb) tb.text += '\n\n' + focusHintText;
         else last.content.push({ type: 'text', text: focusHintText });
+      }
+    }
+  }
+
+  // Tên tài khoản chat (Messenger, 2026-10-01) — chỉ khi CHƯA có lá số: để
+  // model ghi `ten` vào `lap_la_so` khi lá số là của CHÍNH người đang nhắn
+  // (luật xưng hô sẵn có đọc `birth.name` ở các lượt sau). Đã làm sạch bằng
+  // `cleanPersonName`; cùng kỹ thuật focusHintText — cuối tin user, không system.
+  const viewerName = !req.birth ? cleanPersonName(req.viewerName) : null;
+  if (viewerName && convo.length) {
+    const hint = `[Tên tài khoản chat của người đang nhắn: "${viewerName}". Lập lá số cho CHÍNH người này thì truyền ten="${viewerName}" vào lap_la_so; lá số hỏi hộ người khác thì KHÔNG dùng tên này.]`;
+    const last = convo[convo.length - 1];
+    if (last?.role === 'user') {
+      if (typeof last.content === 'string') {
+        last.content = last.content + '\n\n' + hint;
+      } else if (Array.isArray(last.content)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const tb = last.content.find((b: any) => b.type === 'text');
+        if (tb) tb.text += '\n\n' + hint;
+        else last.content.push({ type: 'text', text: hint });
       }
     }
   }

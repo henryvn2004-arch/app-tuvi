@@ -63,6 +63,8 @@ export interface ChannelIO {
   sendFile?(chatId: number | string, data: Buffer, filename: string, caption?: string): Promise<void>;
   /** Đổi markdown của LLM sang kiểu chữ nền tảng hiểu (tùy chọn). */
   format?(text: string): string;
+  /** Tên hiển thị của người đang nhắn (tùy chọn — Messenger). null = không lấy được. */
+  displayName?(chatId: number | string): Promise<string | null>;
 }
 
 /** Kết quả một lượt thành công — nơi gọi dùng để gửi nút gợi ý tiếp theo. */
@@ -248,6 +250,8 @@ export async function runConversation(
     }
   };
 
+  // Lấy tên chỉ khi cần (chưa có lá số); hỏng thì thôi — không chặn lượt trả lời.
+  const viewerName = !carryBirth && io.displayName ? await io.displayName(chatId).catch(() => null) : null;
   try {
     const req: ChatRequestV1 = {
       session_id: `${io.platform}-${chatId}`,
@@ -256,6 +260,8 @@ export async function runConversation(
       // Đã có lá số từ phiên trước (và tin này KHÔNG kèm ngày sinh mới) → truyền
       // thẳng, không hỏi lại ngày sinh. Tin có ngày sinh mới → carryBirth=null.
       ...(carryBirth ? { birth: carryBirth } : {}),
+      // Chưa có lá số → gửi kèm tên tài khoản chat để lá số của CHÍNH khách mang tên.
+      ...(!carryBirth && viewerName ? { viewerName } : {}),
       ...(incoming.authorId ? { authorId: incoming.authorId } : {}),
       ...(incoming.addressMaster ? { addressMaster: incoming.addressMaster } : {}),
       ...(incoming.hoiChan ? { hoiChan: true } : {}),

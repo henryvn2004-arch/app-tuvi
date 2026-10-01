@@ -2575,9 +2575,43 @@
   }
   // {open(): Promise<{ok,url?,error?}>, toChat?(): Promise<{ok,error?}>, chatName?} | null
   var serverPdf = null;
+  // Tài khoản tạo từ kênh chat (email bóng `<kênh>.<id>@chat.tuviminhbao.com`,
+  // lib/channels/shadow-email.ts) ⇒ tên kênh để gửi PDF vào đó; còn lại null.
+  function chatAccountName() {
+    try {
+      var u = window.Auth && Auth.getUser && Auth.getUser();
+      var m = String((u && u.email) || '').toLowerCase().match(/^([a-z]+)[a-z0-9_-]*\.[^@]*@chat\.tuviminhbao\.com$/);
+      return m ? ({ zalo: 'Zalo', messenger: 'Messenger', whatsapp: 'WhatsApp', telegram: 'Telegram' })[m[1]] || 'Zalo' : null;
+    } catch (e) { return null; }
+  }
+  // Nguồn MẶC ĐỊNH cho mọi công cụ không tự khai `setServerPdf`: dựng PDF từ
+  // bản chụp báo cáo (`reportSnapshot()`, cùng dữ liệu trang Báo cáo) qua
+  // /api/reports/pdf. Cần phiên đăng nhập (kể cả phiên khách) — không có thì null.
+  function snapshotPdfSource() {
+    if (!getToken()) return null;
+    var call = function (to) {
+      var p = null;
+      try { p = reportSnapshot(); } catch (e) { console.error('[reportSnapshot]', e); }
+      if (!p) return Promise.resolve({ ok: false, error: 'Kết quả này chưa có nội dung để lưu PDF.' });
+      p.to = to;
+      return freshToken().then(function (tok) {
+        return fetch('/api/reports/pdf', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
+          body: JSON.stringify(p),
+        }).then(function (res) {
+          return res.json().catch(function () { return {}; }).then(function (d) {
+            return { ok: res.ok && d.ok !== false, url: d.url, error: d.error };
+          });
+        });
+      });
+    };
+    var chat = chatAccountName();
+    return { open: function () { return call('open'); }, toChat: chat ? function () { return call('chat'); } : null, chatName: chat };
+  }
   function inAppPdf() {
     try { track('pdf_download', { tool_id: ACTIVE, meta: { inapp: 1 } }); } catch (e) { /* ignore */ }
-    var src = serverPdf;
+    var src = serverPdf || snapshotPdfSource();
     var wrap = document.createElement('div');
     wrap.className = 'sh-share-modal';
     wrap.innerHTML =
@@ -4461,7 +4495,7 @@
   // lúc mở (y hệt cả 4 trang thật — không trang nào gọi lại setContext() sau
   // khi có kết quả), streamed text ở lại trong lịch sử chat làm "kết quả".
   function runTuongMatSSE(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=40'], function (err) {
+    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=41'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', '', 'Phân tích →', function (photo, bubbleEl, showErr) {
@@ -4534,7 +4568,7 @@
   // /api/tuong-mat, kết quả JSON. Trang thật gọi LẠI Shell.setContext() sau
   // khi có kết quả (label/greeting/chips theo đúng response) — replay y hệt.
   function runTuongMatJSON(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=40'], function (err) {
+    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=41'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', opts.extraFieldsHtml || '', 'Phân tích →', function (photo, bubbleEl, showErr) {
@@ -4655,7 +4689,7 @@
   // 'bat-trach' (bước 17), không chép công thức lần hai.
   var DOOR_DIR_OPTS = [['S', 'Nam'], ['N', 'Bắc'], ['E', 'Đông'], ['W', 'Tây'], ['SE', 'Đông Nam'], ['SW', 'Tây Nam'], ['NE', 'Đông Bắc'], ['NW', 'Tây Bắc']];
   function runPhongThuyPhoto(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=40', '/tools-shared/bat-trach.js?v=2'], function (err) {
+    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=41', '/tools-shared/bat-trach.js?v=2'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var extraOpts = opts.extraOptions.map(function (o) { return '<option value="' + esc(o[0]) + '">' + esc(o[1]) + '</option>'; }).join('');
@@ -4766,7 +4800,7 @@
   // được 3/6 trục Cốt/Nhục/Thế — không phải suy diễn, chính trang thật cũng
   // chỉ đo được ngần đó khi người dùng chọn nhánh ảnh thay vì ký sống).
   function runButTuong(chat, toolId) {
-    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=40', '/tools-shared/but-tuong.js'], function (err) {
+    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=41', '/tools-shared/but-tuong.js'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BuTuongTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Bút Tướng', placeholder: 'Hỏi thầy về bút tướng…',
@@ -4815,7 +4849,7 @@
   // ── Trả phí KHÔNG cần ảnh (mau-sac-hop-menh/trang-phuc-theo-ngay) — vẫn
   // qua requireCredits(), chỉ khác chỗ input là field chứ không phải ảnh.
   function runMauSacHopMenh(chat, toolId) {
-    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=40', '/tools-shared/bat-trach.js?v=2'], function (err) {
+    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=41', '/tools-shared/bat-trach.js?v=2'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Màu Sắc Hợp Mệnh', placeholder: 'Hỏi thầy về màu sắc hợp mệnh…',
@@ -4881,7 +4915,7 @@
     return { text: 'Mệnh khắc Ngày — ngày trung bình, cẩn thận' };
   }
   function runTrangPhucTheoNgay(chat, toolId) {
-    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=40'], function (err) {
+    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=41'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Trang Phục Theo Ngày', placeholder: 'Hỏi thầy về trang phục theo ngày…',
@@ -5391,6 +5425,9 @@
     // Bản PDF dựng ở SERVER cho trình duyệt nhúng trong app (xem inAppPdf) —
     // report-delivery.js khai khi trang biết slug bản đã mua; null để gỡ.
     setServerPdf: function (o) { serverPdf = o || null; },
+    // Nguồn PDF từ bản chụp báo cáo của trang hiện tại (null khi chưa đăng nhập)
+    // — report-delivery.js dùng cho nút "Gửi PDF vào Zalo" của tool không có slug.
+    reportPdf: function () { return snapshotPdfSource(); },
     /**
      * Khung giữa ĐANG có một kết quả thật hay chưa — CÙNG ngưỡng mà nút Chia
      * sẻ / Lưu PDF / dòng ghi nguồn đã dùng (`currentShare()`).

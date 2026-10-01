@@ -955,6 +955,24 @@ const BIEU_DO: { kind: ChartKind; nut: string; cau: string[]; loi: string; thay?
     loi: 'Chín đại vận của bạn — mỗi vận 10 năm chấm theo Thiên Thời, Địa Lợi, Nhân Hòa; nền vàng là vận đang đi. Muốn thầy luận vận nào, cứ nhắn tuổi đó.',
   },
   {
+    kind: 'van-10-nam',
+    nut: 'Mười năm tới',
+    cau: ['mười năm tới', '10 năm tới', 'xem 10 năm tới', 'biến động 10 năm'],
+    loi: 'Mười năm tới của bạn — chấm là điểm từng năm, thanh vàng càng dài thì năm đó càng nhiều biến động (Sát Phá Tham, Không Kiếp, Thiên Mã… trong tam phương tiểu hạn). Hỏi thầy về năm nào cũng được.',
+  },
+  {
+    kind: 'bien-dong-thang',
+    nut: 'Biến động 12 tháng',
+    cau: ['biến động 12 tháng', 'biến động tháng', 'tháng nào biến động'],
+    loi: '12 tháng âm năm nay của bạn — thanh vàng càng dài thì tháng đó càng nhiều biến động. Nhờ thầy luận tháng nào thì nhắn tháng đó.',
+  },
+  {
+    kind: 'chu-de-dai-van',
+    nut: 'Bốn chuyện lớn',
+    cau: ['bốn chuyện lớn', '4 chuyện lớn', 'sự nghiệp tài lộc tình duyên sức khỏe', 'bốn chủ đề'],
+    loi: 'Sự nghiệp, tài lộc, tình duyên, sức khỏe qua 9 đại vận — đường nào lên cao là chuyện đó thuận ở giai đoạn ấy. Muốn thầy luận kỹ chuyện nào, cứ hỏi.',
+  },
+  {
     kind: 'tu-tru',
     nut: 'Lá số Bát Tự',
     cau: ['lá số bát tự', 'bát tự', 'tứ trụ', 'xem tứ trụ', 'lá số tứ trụ'],
@@ -996,6 +1014,7 @@ function bieuDoHop(q: string, lasoShown: boolean): { nut: string } {
   const cung = cungChuDe(chuDeCua(q)[0] || null);
   if (cung) return { nut: `Xem cung ${cung}` };
   if (/(hôm nay|ngày mai|tuần này)/.test(t)) return by('van-ngay');
+  if (/(10 năm tới|mười năm tới)/.test(t)) return by('van-10-nam');
   if (/(tháng|năm nay|năm sau|năm tới|sắp tới|khi nào|bao giờ)/.test(t)) return by('van-12-thang');
   if (/(đại vận|giai đoạn|vận 10 năm|mười năm)/.test(t)) return by('dai-van');
   if (/(cuộc đời|tương lai|sau này|về già|tuổi già)/.test(t)) return by('duong-doi');

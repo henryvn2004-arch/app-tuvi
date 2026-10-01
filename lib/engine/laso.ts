@@ -98,6 +98,7 @@ let engineCache: {
   Pchip: { pchipSeries: (pts: { x: number; y: number }[], opts?: { step?: number }) => { x: number; y: number }[] } | undefined;
   danhGiaSaoLuu: (palaces: unknown[], namXem: number) => unknown;
   formatSaoLuu: (saoLuu: unknown, palaces: unknown[]) => string[];
+  tinhVanThang: ((ls: unknown, nam: number) => unknown) | undefined;
 } | null = null;
 
 function loadEngine() {
@@ -118,7 +119,7 @@ function loadEngine() {
     'window',
     'globalThis',
     pchipCode + '\n' + code + '\n' + formatCode +
-      '\nreturn{convertDuongToAm,solarToLunar,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines,canCungOf:window.canCungOf,STAR_DATA,TU_HOA,Pchip:window.Pchip,danhGiaSaoLuu,formatSaoLuu:window.formatSaoLuu};',
+      '\nreturn{convertDuongToAm,solarToLunar,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines,canCungOf:window.canCungOf,STAR_DATA,TU_HOA,Pchip:window.Pchip,danhGiaSaoLuu,formatSaoLuu:window.formatSaoLuu,tinhVanThang:typeof tinhVanThang===\'function\'?tinhVanThang:undefined};',
   ))(g, g) as typeof engineCache;
   return engineCache!;
 }
@@ -170,6 +171,16 @@ export function tuHoaPhiTinh(
 export function pchipSeries(pts: { x: number; y: number }[], step = 1): { x: number; y: number }[] {
   const P = loadEngine().Pchip;
   return P ? P.pchipSeries(pts, { step }) : pts;
+}
+
+/** 12 tháng âm của năm `nam`: điểm (nội suy từ điểm năm) + biên dao động —
+ *  engine `tinhVanThang`. CHỈ để VẼ biểu đồ, không đưa cho model (Henry chốt:
+ *  điểm tiểu/nguyệt/nhật vận không vào luận giải). [] khi engine thiếu dữ liệu. */
+export type VanThang = { thang: number; cungIdx: number; diem: number; pct: number; hi: number; lo: number; luu: { ten: string; cung: string; w: number }[] };
+export function vanThang(ls: Laso, nam: number): VanThang[] {
+  const fn = loadEngine().tinhVanThang;
+  const out = fn ? fn(ls, nam) : [];
+  return Array.isArray(out) ? (out as VanThang[]) : [];
 }
 
 /** Ngũ hành + loại sao (STAR_DATA của engine). null khi engine không biết sao đó. */

@@ -7,6 +7,7 @@
 export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
+import { waitUntil } from '@vercel/functions';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { createPayOSOrder } from '@/lib/billing/payos-order';
 import { signMomoCreate, MOMO_CREATE_ENDPOINT } from '@/lib/billing/momo';
@@ -36,6 +37,7 @@ import { checkEnv } from '@/lib/ops/preflight';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
 import { zaloConfigured } from '@/lib/channels/zalo';
+import { sendPayQrToUserChats } from '@/lib/channels/notify';
 import { parseFirebaseServiceAccount, sendFcmPush } from '@/lib/channels/push';
 import { getGa4Breakdown } from '@/lib/analytics/ga4';
 import { getAdminUser } from '@/lib/admin/auth';
@@ -844,6 +846,11 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
   try {
     // Tạo đơn + ghi bank_orders: nguồn chung với kênh chat (lib/billing/payos-order).
     const o = await createPayOSOrder({ userId, packageId, amountVND, credits, label });
+    // Hộp QR tại chỗ của trang tool (`tuvi-paywall.js`) xin gửi kèm QR vào
+    // chat — khách đến từ Messenger/Zalo đọc bản xem trước trong trình duyệt
+    // của app chat, lỡ đóng trang thì đơn vẫn nằm trong cuộc trò chuyện.
+    // Không có `chat_links` thì hàm tự thôi. Trang /topup.html không gửi cờ này.
+    if (body.notifyChat === true) waitUntil(sendPayQrToUserChats(userId, o));
     const bin = o.bin;
     const bankName = BANK_BY_BIN[bin] || null;
     const bankCode = BANK_CODE_BY_BIN[bin] || null;

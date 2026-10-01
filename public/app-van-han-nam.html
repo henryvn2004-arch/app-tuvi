@@ -258,7 +258,11 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/laso-chart.js?v=9"></script>
 <script src="/tools-shared/pchip.js?v=1"></script>
 <script src="/tools-shared/daivan-chart.js?v=1"></script>
-<script src="/luan-giai-core.js?v=5"></script>
+<script src="/luan-giai-core.js?v=9"></script>
+<!-- Engine Tử Bình cho khối "Ngũ hành theo Tứ Trụ" (phần 1). PHẢI là thẻ tĩnh,
+     đúng URL `?v=5` như app-bat-tu.html: soft-nav chỉ khử trùng theo URL đã thấy
+     trong DOM — chèn bằng JS thì sang trang Bát Tự sẽ nạp lại, trùng `const`. -->
+<script src="/tubinh-ansao-engine.js?v=5" defer></script>
 <!-- `defer` ở đây là VỆ SINH TỐC ĐỘ, KHÔNG phải bản vá CLS. Không có nó, thẻ này
      chặn parse ngay trước `tuvi-form.js`, tức thêm hẳn một chặng mạng tới bên thứ
      ba vào đường tới hạn của form. Nhưng cú nhảy `.frow` thì nó KHÔNG chữa: prod
@@ -271,24 +275,24 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
      người dùng bấm luận — rất lâu sau `DOMContentLoaded`, mốc mà script `defer`
      chắc chắn đã chạy xong (đã đo: `Chart` là `function` tại DOMContentLoaded). -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
-<script src="/tuvi-laso-format.js?v=4"></script>
+<script src="/tuvi-laso-format.js?v=6"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=14"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=6"></script>
-<script src="/tuvi-paywall.js?v=40"></script>
+<script src="/tuvi-paywall.js?v=41"></script>
 <script src="/tools-shared/hook-charts.js?v=3"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
 <script src="/nav.js?v=45" data-icons-only></script>
-<script src="/shell.js?v=135"></script>
+<script src="/shell.js?v=136"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=45"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script src="/tools-shared/i18n.js?v=1"></script>
-<script src="/tools-shared/report-delivery.js?v=3"></script>
+<script src="/tools-shared/report-delivery.js?v=4"></script>
 <script>
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 TuviPaywall.init({product:'van-han-nam'});
@@ -416,6 +420,8 @@ async function doXem(){
     // thời điểm mở tool (server dùng CÙNG một mốc, xem /api/van-han-nam).
     var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:gioitinh,namXem:TU_NAM});
     ls._conv=conv; ls._hoTen=name;
+    // Ngày DƯƠNG + giờ cho khối ngũ hành Tứ Trụ (LuanGiaiCore.buildNguHanhHtml → tinhBatTu).
+    ls._duong={d:+dd,m:+mm,y:+yyyy,h:(hh==null||hh==='')?null:+hh,gt:gioitinh};
     _astrolabe=ls;_hoTen=name;_ngay=dd;_thang=mm;_nam=yyyy;_gioitinh=gioitinh;
     _laSoText=formatLaSoV2(ls,conv); ls._laSoText=_laSoText;
 
@@ -545,12 +551,10 @@ function render(ls){
   for(var p=1;p<=_tongPhan;p++){
     var body;
     if(p<=4){
-      // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc) — Pha 4
-      // (2026-09-17): bung sẵn mặc định, xem lý do đảo ngược ở app-luan-giai.html
-      // (buildPhanSection).
-      var pre=LuanGiaiCore.buildPreGenHtml(PRE[p],ls);
-      var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để Thầy luận sâu.</div>';
-      body=pre?('<details class="lg-calc" open><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
+      // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc).
+      // 2026-10-01: chart đứng NGOÀI, khối chữ GẬP sẵn.
+      // Xem app-luan-giai.html (buildPhanSection).
+      body=LuanGiaiCore.buildCalcSectionHtml(PRE[p],ls)||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để Thầy luận sâu.</div>';
     }else{
       var t=_khung.thangs[p-5];
       body=illusBannerHtml(t,ls)+renderThang(t);

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * BỘ DÒ: mục lục `docs/nhat-ky/README.md` phải khai ĐỦ số mục có thật trong
- * `2026-08.md` · `2026-07.md` · `track-cu.md`.
+ * `2026-10.md` · `2026-09.md` · `2026-08.md` · `2026-07.md` · `track-cu.md`.
  *
  * VÌ SAO CẦN MÁY CANH: luật ghi chép trong `CLAUDE.md` bảo "chèn mục vào
  * `<tháng>.md` RỒI thêm một dòng vào bảng README". Bước hai là bước người ta
