@@ -44,7 +44,9 @@ CỤ THỂ HÓA — TUYỆT ĐỐI (đọc xong phải nhớ được MỘT VI�
 
 PHÁN QUYẾT BẮT BUỘC — NEO VÀO DỮ LIỆU ENGINE, NÓI RA BẰNG ĐỜI THƯỜNG:
 - ⚠️ Lá số KHÔNG có "điểm/10" cho từng CUNG. TUYỆT ĐỐI KHÔNG bịa ra con số kiểu "cung này 6.4/10".
-  Tầng DUY NHẤT có điểm/10 thật là ĐẠI VẬN (dòng "Scoring: … Tổng=X" trong === 9 ĐẠI VẬN ===).
+  Điểm/10 engine chấm THẬT là ĐẠI VẬN (dòng "Scoring: … Tổng=X" trong === 9 ĐẠI VẬN ===). Số khác đều SUY ra,
+  đọc đúng nhãn khối của nó: "nền" năm/tháng = điểm đại vận nội suy (KHÔNG phải tốt/xấu riêng của năm/tháng),
+  "±%" = mức biến động, [4 CHỦ ĐỀ] = điểm chủ đề của đại vận. Được trích các số đó; CẤM tự chế số khác.
 - Với CUNG: CĂN CỨ để phán (nội bộ, không phải ngôn từ bắt buộc phải xuất hiện) là nhãn
   "Luận sao: <Tốt rõ|Khá|Trung bình|Yếu|Xấu rõ>" của chính dòng [Tên cung], cộng loại cách cục
   ([CÁCH CỤC · QUY_CUC/PHU_CUC/HUNG_CUC…]) và độ sáng chính tinh (Miếu/Vượng/Đắc/Bình hòa/Hãm).
@@ -252,7 +254,7 @@ do engine tính — CHÉP ĐÚNG con số đó, TUYỆT ĐỐI KHÔNG tự tính
 Bảng tổng hợp ĐV1 đến ĐV9:
 | ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |
 
-Nhận xét tổng (180-220 từ), viết bằng ngôn ngữ đời thường, đọc là hiểu ngay: giai đoạn nào dễ thở nhất, giai đoạn nào chật vật nhất, xu hướng chung của cuộc đời theo thời gian. Nếu người đang trong đại vận nào thì nhận xét thêm về giai đoạn hiện tại. Không cần liệt kê lại số liệu đã có trong bảng.
+Nhận xét tổng (180-220 từ), viết bằng ngôn ngữ đời thường, đọc là hiểu ngay: giai đoạn nào dễ thở nhất, giai đoạn nào chật vật nhất, xu hướng chung của cuộc đời theo thời gian. Nếu người đang trong đại vận nào thì nhận xét thêm về giai đoạn hiện tại, BẮT BUỘC theo dòng [4 CHỦ ĐỀ] của đại vận đó (cùng số với biểu đồ người đọc đang thấy): chuyện nào mạnh nhất, chuyện nào yếu nhất, chép đúng số. Không cần liệt kê lại số liệu đã có trong bảng.
 
 MẠCH TRUYỆN XUYÊN SUỐT: đây là ĐIỂM BẢN LỀ — câu chuyện chuyển từ BỨC CHÂN DUNG TĨNH (12 cung vừa kể) sang DÒNG THỜI GIAN (9 đại vận sắp kể). Câu hook kết đoạn phải đánh dấu rõ bước ngoặt này, hướng thẳng sang đại vận đầu tiên của cuộc đời.`;
 
@@ -317,7 +319,10 @@ MẠCH TRUYỆN XUYÊN SUỐT: ${dvNum < 9
 PHẦN 24 — TIỂU VẬN & NĂM XEM (550-700 từ)
 Quan sát 3 lớp hạn cùng lúc (căn cứ nội bộ, không phải thứ phải liệt kê tên cho
 người đọc): gốc đại vận (10 năm) + tiểu hạn năm đó + lưu niên đại vận. Dữ liệu có
-sẵn: Tiểu hạn (cung + sao), Lưu đại hạn (cung + sao), Đại vận hiện tại.
+sẵn: Tiểu hạn (cung + sao), Lưu đại hạn (cung + sao), Đại vận hiện tại, và hai khối
+[VẬN 10 NĂM TỚI] · [VẬN 12 THÁNG ÂM LỊCH] (CÙNG số với biểu đồ người đọc đang thấy): "±%" cao
+= năm/tháng nhiều biến động — tháng ±% cao nhất nêu ở ②, năm ±% cao nhất nêu ở ④.
+"Nền" chỉ là mạch đại vận, đừng dùng nó phán năm/tháng tốt hay xấu.
 
 MỞ ĐẦU bằng câu phán quyết NGẮN, in đậm, đứng riêng một dòng: năm xem này thuận
 hay nghịch, nên tiến hay nên thủ — kết luận dứt khoát bằng nghĩa đời thường, không
@@ -339,7 +344,7 @@ trọng tâm năm; ca [SAO LƯU · XẤU NẶNG] phải nêu trước tiên (ố
 ương ở đúng lĩnh vực cung đó); Lưu Thiên Mã là chỗ có di chuyển/thay đổi.
 ③ CƠ HỘI: 1-2 cơ hội CỤ THỂ (đề bạt, khách/hợp đồng, lộc nhà đất, tiền bất ngờ,
 duyên) — ở lĩnh vực nào, nắm bằng cách nào.
-④ Một câu chốt: năm này tiến việc gì, thủ việc gì.
+④ Một câu chốt: năm này tiến việc gì, thủ việc gì — và trong [VẬN 10 NĂM TỚI] năm nào ±% cao nhất (gọi tên năm, sao động).
 
 Không bọc đường, không lật rủi ro thành lời an ủi, không doạ quá dữ kiện; không
 có căn cứ thì không bịa. Không giải thích lý thuyết.
