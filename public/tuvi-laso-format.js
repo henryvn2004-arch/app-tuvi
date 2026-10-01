@@ -128,10 +128,13 @@
     // này suy từ điểm CUNG (không phải công thức chấm đại vận) ⇒ Henry chốt: model
     // chỉ dùng để so mạnh/yếu, KHÔNG đọc số ra cho người đọc.
     // Bản `compact` (rail) bỏ; engine cũ thiếu trường thì bỏ dòng.
+    // Chỉ chủ đề trong độ tuổi CÓ NGHĨA (`trongTuoi`) — 83-92 tuổi không còn
+    // "sự nghiệp" để luận (Henry 2026-10-01).
     const _cd = !opts.compact && ls.chuDeDaiVan && ls.chuDeDaiVan[i] && ls.chuDeDaiVan[i].chuDe;
-    if (_cd && Object.keys(_cd).length) {
+    const _cdKeys = _cd ? Object.keys(_cd).filter(k => _cd[k].trongTuoi !== false) : [];
+    if (_cdKeys.length) {
       out.push(`  [4 CHỦ ĐỀ · Mệnh tạm tại ${dv.diaChi} · chỉ để so mạnh/yếu, KHÔNG đọc số ra]: ` +
-        Object.keys(_cd).map(k => `${_cd[k].ten} ${_cd[k].diem} (${_cd[k].cungGoc} tạm ở ${_cd[k].tamDiaChi})`).join(' · '));
+        _cdKeys.map(k => `${_cd[k].ten} ${_cd[k].diem} (${_cd[k].cungGoc} tạm ở ${_cd[k].tamDiaChi})`).join(' · '));
     }
 
     // [3 QUÃNG TRONG ĐẠI VẬN] — MỘT đại vận 10 năm KHÔNG đổi tốt/xấu đồng loạt

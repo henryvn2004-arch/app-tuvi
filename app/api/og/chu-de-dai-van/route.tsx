@@ -6,6 +6,7 @@
 // ⚠️ KHÔNG in số: điểm chủ đề suy từ điểm CUNG, không phải công thức chấm đại
 // vận — Henry chốt chỉ điểm đại vận mới đưa ra cho người xem. Trục chỉ ghi
 // "mạnh"/"yếu", chữ dưới ảnh nói bằng tên chủ đề và tuổi.
+// Mỗi chủ đề chỉ vẽ trong độ tuổi có nghĩa (`trongTuoi` của engine).
 // Link do server ký (lib/og/laso-image.ts, loại `chu-de-dai-van`); sai chữ ký → 403.
 export const runtime = 'nodejs';
 
@@ -17,7 +18,7 @@ import { BrandFooter, BrandHeader, C, H, W, birthLine } from '@/lib/og/brand';
 import { Highlights } from '@/lib/og/band-chart';
 import { computeLaso } from '@/lib/engine/laso';
 
-type CD = { ten: string; diem: number };
+type CD = { ten: string; diem: number; trongTuoi?: boolean };
 type DV = { tuoiStart: number; tuoiEnd: number; diaChi: string; chuDe: Record<string, CD> };
 
 const KEYS = ['su_nghiep', 'tai_loc', 'tinh_duyen', 'suc_khoe'] as const;
@@ -47,14 +48,27 @@ export async function GET(req: NextRequest) {
   const sx = (i: number) => (i + 0.5) * cw;
   const sy = (v: number) => PH - (Math.max(0, Math.min(10, v)) / 10) * PH;
   const tuoi = (d: DV) => `${d.tuoiStart}–${d.tuoiEnd} tuổi`;
+  // Chỉ đại vận trong độ tuổi CÓ NGHĨA của chủ đề (engine `trongTuoi`; engine cũ thiếu cờ ⇒ coi là có).
+  const co = (d: DV, k: (typeof KEYS)[number]) => d.chuDe[k].trongTuoi !== false;
+  // Đường đứt ở chỗ ra/vào độ tuổi: mỗi đoạn liền mạch bắt đầu bằng M.
+  const duong = (k: (typeof KEYS)[number]) =>
+    cd
+      .map((d, i) => (co(d, k) ? `${i > 0 && co(cd[i - 1], k) ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(d.chuDe[k].diem).toFixed(1)}` : ''))
+      .filter(Boolean)
+      .join(' ');
 
   const items: [string, string, string][] = [];
   if (ci >= 0) {
-    const xs = KEYS.map((k) => cd[ci].chuDe[k]).sort((a, b) => b.diem - a.diem);
-    items.push(['Đang đi', `${tuoi(cd[ci])} · mạnh nhất ${xs[0].ten.toLowerCase()}, yếu nhất ${xs[3].ten.toLowerCase()}`, C.gold]);
+    const xs = KEYS.filter((k) => co(cd[ci], k))
+      .map((k) => cd[ci].chuDe[k])
+      .sort((a, b) => b.diem - a.diem);
+    if (xs.length >= 2)
+      items.push(['Đang đi', `${tuoi(cd[ci])} · mạnh nhất ${xs[0].ten.toLowerCase()}, yếu nhất ${xs[xs.length - 1].ten.toLowerCase()}`, C.gold]);
   }
   for (const k of KEYS) {
-    const best = cd.reduce((a, b) => (b.chuDe[k].diem > a.chuDe[k].diem ? b : a));
+    const trong = cd.filter((d) => co(d, k));
+    if (!trong.length) continue;
+    const best = trong.reduce((a, b) => (b.chuDe[k].diem > a.chuDe[k].diem ? b : a));
     items.push([`${cd[0].chuDe[k].ten} cao nhất`, tuoi(best), MAU[k]]);
   }
 
@@ -80,7 +94,7 @@ export async function GET(req: NextRequest) {
               {KEYS.map((k) => (
                 <path
                   key={k}
-                  d={cd.map((d, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(d.chuDe[k].diem).toFixed(1)}`).join(' ')}
+                  d={duong(k)}
                   fill="none"
                   stroke={MAU[k]}
                   strokeWidth={4}
@@ -88,7 +102,9 @@ export async function GET(req: NextRequest) {
                 />
               ))}
               {KEYS.map((k) =>
-                cd.map((d, i) => <circle key={`${k}${i}`} cx={sx(i)} cy={sy(d.chuDe[k].diem)} r={6} fill={MAU[k]} stroke="#FFFFFF" strokeWidth={2} />),
+                cd.map((d, i) =>
+                  co(d, k) ? <circle key={`${k}${i}`} cx={sx(i)} cy={sy(d.chuDe[k].diem)} r={6} fill={MAU[k]} stroke="#FFFFFF" strokeWidth={2} /> : null,
+                ),
               )}
             </g>
           </svg>
@@ -135,7 +151,7 @@ export async function GET(req: NextRequest) {
         <Highlights items={items} />
         <BrandFooter
           origin={req.nextUrl.origin}
-          note="Mỗi đại vận lấy cung đại vận làm Mệnh tạm, các cung khác dời theo; chủ đề cân giữa cung gốc và cung tạm"
+          note="Mỗi chủ đề chỉ vẽ trong độ tuổi có nghĩa: sự nghiệp, tài lộc 18–65 · tình duyên 16–60 · sức khỏe cả đời"
         />
       </div>
     ),
