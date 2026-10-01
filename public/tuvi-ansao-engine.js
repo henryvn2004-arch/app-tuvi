@@ -4887,11 +4887,15 @@ function tinhVanThang(ls, nam) {
 // tới. Điểm chủ đề = 0,6 × điểm cung GỐC + 0,4 × điểm cung TẠM
 // (`cungScores[...].tong`) — cung tạm là phụ, cung gốc là chính.
 // ================================================================
+// `tuoiTu`–`tuoiDen`: độ tuổi chủ đề CÓ NGHĨA (Henry 2026-10-01: "83-92 tuổi
+// còn làm gì mà sự nghiệp"). Đại vận chạm khoảng này mới `trongTuoi` — ngoài
+// khoảng thì biểu đồ không vẽ, không chọn làm "cao nhất", model không đọc.
+// Tài lộc, tình duyên KHÔNG có trần trên (Henry: cắt ở 60 đọc thành "hết vợ chồng").
 const CHU_DE_DAI_VAN = [
-  { key: 'su_nghiep', ten: 'Sự nghiệp', cung: 'Quan Lộc' },
-  { key: 'tai_loc', ten: 'Tài lộc', cung: 'Tài Bạch' },
-  { key: 'tinh_duyen', ten: 'Tình duyên', cung: 'Phu Thê' },
-  { key: 'suc_khoe', ten: 'Sức khỏe', cung: 'Tật Ách' },
+  { key: 'su_nghiep', ten: 'Sự nghiệp', cung: 'Quan Lộc', tuoiTu: 18, tuoiDen: 65 },
+  { key: 'tai_loc', ten: 'Tài lộc', cung: 'Tài Bạch', tuoiTu: 18, tuoiDen: 200 },
+  { key: 'tinh_duyen', ten: 'Tình duyên', cung: 'Phu Thê', tuoiTu: 16, tuoiDen: 200 },
+  { key: 'suc_khoe', ten: 'Sức khỏe', cung: 'Tật Ách', tuoiTu: 0, tuoiDen: 200 },
 ];
 function tinhChuDeDaiVan(daiVans, palaces, cungScores, amDuong, gioitinh) {
   if (!daiVans || !palaces || !cungScores) return [];
@@ -4914,6 +4918,7 @@ function tinhChuDeDaiVan(daiVans, palaces, cungScores, amDuong, gioitinh) {
         ten: cd.ten, cungGoc: cd.cung, diemGoc: dGoc,
         tamIdx, tamDiaChi: tam.diaChi, tamCung: tam.cungName, diemTam: dTam,
         diem: Math.round((0.6 * dGoc + 0.4 * dTam) * 10) / 10,
+        trongTuoi: dv.tuoiEnd >= cd.tuoiTu && dv.tuoiStart <= cd.tuoiDen,
       };
     }
     return { tuoiStart: dv.tuoiStart, tuoiEnd: dv.tuoiEnd, cungIdx: dv.cungIdx, diaChi: dv.diaChi, chuDe };
