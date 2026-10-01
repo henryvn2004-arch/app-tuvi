@@ -218,6 +218,7 @@
         preGenHtml += `<div class="pregen-row"><span class="pregen-bad">Yếu nhất: ${bot3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
         preGenHtml += `</div>`;
       }
+      preGenHtml += buildNguHanhHtml(_astrolabe);
     } else if (cungForPhan) {
       // FIX shell: KHÔNG gate cả khối cung theo cachCucTungCung — cung nào cũng
       // render điểm 6 chiều (cungScores) + cách cục; standalone che được vì có
@@ -284,8 +285,10 @@
           preGenHtml += `· Hiện tại: ĐV${curIdx + 1} (${canChiDaiVan(_astrolabe, c)}, ${c.tuoiStart}-${c.tuoiEnd}t)${c.scoring ? ' · ' + c.scoring.tong + '/10' : ''}`;
         }
         preGenHtml += `</div></div>`;
+        preGenHtml += buildChuDeDaiVanHtml(_astrolabe);
       }
     } else if ((phan >= 15 && phan <= 23) || phan === 24) {
+      if (phan === 24) preGenHtml += buildVanNamHtml(_astrolabe) + buildVanThangHtml(_astrolabe);
       const dvNum = phan === 24 ? null : phan - 14;
       const dv = dvNum ? _astrolabe.daiVans?.[dvNum-1] : _astrolabe.daiVanHienTai;
       if (dv && _astrolabe.palaces) {
@@ -386,7 +389,222 @@
     root._lgDaiVanChart = new Chart(canvas.getContext('2d'), config);
   }
 
-  var API = { TONG_PHAN: TONG_PHAN, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, buildPreGenHtml: buildPreGenHtml, buildCungStarHtml: buildCungStarHtml, buildTuHoaPhiTinhHtml: buildTuHoaPhiTinhHtml, renderInlineDaiVanLineChart: renderInlineDaiVanLineChart };
+  // ── Biểu đồ vận (Henry chốt 2026-10-01) ─────────────────────────────────
+  // Số lấy NGUYÊN từ engine, ở đây chỉ vẽ: `tieuVanScores[].bienDong` +
+  // `bienDongGoc` (biên năm), `tinhVanThang()` (12 tháng), `chuDeDaiVan`
+  // (4 chủ đề qua 9 đại vận), `tinhBatTu().nguHanh` (ngũ hành Tứ Trụ). Công
+  // thức nằm ở engine (tuvi-ansao-engine.js — khối "BIÊN DAO ĐỘNG" và "BỐN
+  // CHỦ ĐỀ"). `tuvi-ansao-engine.js` không có `?v=` (nhật ký Đợt 8) nên trình
+  // duyệt có thể còn bản cũ thiếu các trường này → mỗi hàm tự trả '' khi thiếu.
+  // Màu CỐ ĐỊNH, không theo biến theme: `.pregen-block` ở cả 3 trang có nền
+  // sáng cứng (#F5F5F5) ở MỌI chế độ — theo biến thì chế độ tối ra chữ sáng
+  // trên nền sáng. Cùng quy ước với các khối pregen khác (màu viết thẳng).
+  var BD = { ink: '#1a1a1a', mute: '#666', grid: '#e0e0e0', band: '#C8A96A', bandDark: '#7C6942', cur: '#FFF1D6', red: '#C0392B' };
+  var CHU_DE_MAU = { su_nghiep: '#1455A4', tai_loc: '#2E7D5B', tinh_duyen: '#C0392B', suc_khoe: '#A8843A' };
+  function bdF(n) { return (Math.round(n * 10) / 10).toFixed(1).replace('.', ','); }
+  function bdPct(p) { return Math.round(p * 100) + '%'; }
+  function bdEsc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function bdCanChiNam(nam) { return CAN10[((nam - 4) % 10 + 10) % 10] + ' ' + CHI12[((nam - 4) % 12 + 12) % 12]; }
+  function bdText(x, y, t, a) {
+    a = a || {};
+    return '<text x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" font-size="' + (a.size || 11) + '"' +
+      (a.anchor ? ' text-anchor="' + a.anchor + '"' : '') + (a.bold ? ' font-weight="700"' : '') +
+      ' style="fill:' + (a.color || BD.ink) + '">' + bdEsc(t) + '</text>';
+  }
+  // Khung trục 0–10 dùng chung.
+  function bdAxes(L, R, T, B) {
+    var h = '';
+    for (var v = 0; v <= 10; v += 2) {
+      var y = B - (v / 10) * (B - T);
+      h += '<line x1="' + L + '" x2="' + R + '" y1="' + y.toFixed(1) + '" y2="' + y.toFixed(1) + '" style="stroke:' + BD.grid + '" stroke-width="1"/>';
+      h += bdText(L - 6, y + 4, String(v), { anchor: 'end', size: 10, color: BD.mute });
+    }
+    return h;
+  }
+  // Nến biên: chấm = điểm, thanh dọc = [lo, hi], nhãn ±% trên đầu thanh.
+  // rows: [{ diem, lo, hi, pct, l1, l2, cur }]
+  function bdBandSvg(rows, aria) {
+    var W = 640, H = 236, L = 30, R = 632, T = 22, B = 190;
+    var sy = function (v) { return B - (Math.max(0, Math.min(10, v)) / 10) * (B - T); };
+    var bw = (R - L) / rows.length, cw = Math.min(16, bw * 0.42);
+    var h = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + bdEsc(aria) + '" style="width:100%;height:auto;display:block">';
+    rows.forEach(function (r, i) {
+      if (r.cur) h += '<rect x="' + (L + i * bw).toFixed(1) + '" y="' + (T - 18) + '" width="' + bw.toFixed(1) + '" height="' + (B - T + 18) + '" rx="4" style="fill:' + BD.cur + '"/>';
+    });
+    h += bdAxes(L, R, T, B);
+    var pts = rows.map(function (r, i) { return [L + i * bw + bw / 2, sy(r.diem)]; });
+    h += '<path d="M' + pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' L') + '" fill="none" style="stroke:' + BD.mute + '" stroke-width="1.5" stroke-opacity=".7"/>';
+    rows.forEach(function (r, i) {
+      var cx = pts[i][0];
+      h += '<rect x="' + (cx - cw / 2).toFixed(1) + '" y="' + sy(r.hi).toFixed(1) + '" width="' + cw.toFixed(1) + '" height="' + Math.max(1, sy(r.lo) - sy(r.hi)).toFixed(1) + '" rx="3" style="fill:' + BD.band + '" fill-opacity=".35"/>';
+      h += '<line x1="' + (cx - cw / 2).toFixed(1) + '" x2="' + (cx + cw / 2).toFixed(1) + '" y1="' + sy(r.hi).toFixed(1) + '" y2="' + sy(r.hi).toFixed(1) + '" style="stroke:' + BD.band + '" stroke-width="2"/>';
+      h += '<line x1="' + (cx - cw / 2).toFixed(1) + '" x2="' + (cx + cw / 2).toFixed(1) + '" y1="' + sy(r.lo).toFixed(1) + '" y2="' + sy(r.lo).toFixed(1) + '" style="stroke:' + BD.band + '" stroke-width="2"/>';
+      h += '<circle cx="' + cx.toFixed(1) + '" cy="' + pts[i][1].toFixed(1) + '" r="4.5" style="fill:' + BD.ink + '"/>';
+      h += bdText(cx, sy(r.hi) - 5, '±' + bdPct(r.pct), { anchor: 'middle', size: 10, bold: true, color: BD.bandDark });
+      h += bdText(cx, B + 16, r.l1, { anchor: 'middle', size: 11, bold: !!r.cur, color: r.cur ? BD.red : BD.ink });
+      h += bdText(cx, B + 30, r.l2, { anchor: 'middle', size: 9.5, color: BD.mute });
+    });
+    return h + '</svg>';
+  }
+  function bdSaoDong(list) {
+    var seen = {}, out = [];
+    list.forEach(function (d) { if (!seen[d.ten]) { seen[d.ten] = 1; out.push(d.ten); } });
+    return out.length ? out.join(', ') : 'không có sao động';
+  }
+  function bdTieuVanNamXem(ls) {
+    var tvs = ls && ls.tieuVanScores;
+    if (!tvs || !tvs.length || !tvs[0].bienDong || !ls.bienDongGoc || ls.tuoiXem == null) return -1;
+    return tvs.findIndex(function (t) { return t.tuoi === ls.tuoiXem; });
+  }
+  function bdCungIdx(ls, ten) {
+    var p = (ls.palaces || []).find(function (x) { return x.cungName === ten; });
+    return p ? p.idx : -1;
+  }
+  var BD_GHI_CHU = 'Chấm là điểm, thanh vàng là khoảng dao động. Biên = điểm × (1 ± tỉ lệ sao động trong tam phương tứ chính của cung hạn), sao động có trọng số theo hạng sao.';
+
+  /** Phần 24 — 10 năm kể từ năm xem: điểm năm (nội suy từ đại vận) + biên. */
+  function buildVanNamHtml(ls) {
+    var i0 = bdTieuVanNamXem(ls);
+    if (i0 < 0) return '';
+    var tvs = ls.tieuVanScores.slice(i0, i0 + 10);
+    var dsOf = function (t) { var c = bdCungIdx(ls, t.tieuHanCung); return ((c >= 0 && ls.bienDongGoc[c]) ? ls.bienDongGoc[c].ds : []).concat(t.bienDong.luu || []); };
+    var rows = tvs.map(function (t, i) {
+      return { diem: t.mainScore, lo: t.bienDong.lo, hi: t.bienDong.hi, pct: t.bienDong.pct, l1: String(t.nam), l2: t.tieuHanCung, cur: i === 0 };
+    });
+    var x = tvs[0], dong = tvs.reduce(function (a, b) { return b.bienDong.pct > a.bienDong.pct ? b : a; });
+    var h = '<div class="pregen-block"><div class="pregen-title">Mười năm tới — điểm năm và biên dao động</div>';
+    h += bdBandSvg(rows, 'Điểm và biên dao động ' + tvs[0].nam + ' đến ' + tvs[tvs.length - 1].nam);
+    h += '<div style="font-size:13px;line-height:1.55;margin-top:8px;color:#1a1a1a">';
+    h += '<div>Năm <b>' + x.nam + '</b> (' + bdCanChiNam(x.nam) + ', tiểu hạn ' + bdEsc(x.tieuHanCung) + '): điểm <b>' + bdF(x.mainScore) + '</b>, dao động ' + bdF(x.bienDong.lo) + '–' + bdF(x.bienDong.hi) + ' (±' + bdPct(x.bienDong.pct) + '). Sao động: ' + bdEsc(bdSaoDong(dsOf(x))) + '.</div>';
+    if (dong !== x) h += '<div>Động nhất: <b>' + dong.nam + '</b> (±' + bdPct(dong.bienDong.pct) + ', tiểu hạn ' + bdEsc(dong.tieuHanCung) + ') — ' + bdEsc(bdSaoDong(dsOf(dong))) + '.</div>';
+    h += '</div><div style="font-size:11px;color:#666;margin-top:6px">' + BD_GHI_CHU + '</div></div>';
+    return h;
+  }
+
+  /** Phần 24 — 12 tháng âm lịch của năm xem (engine `tinhVanThang`). */
+  function buildVanThangHtml(ls) {
+    var i0 = bdTieuVanNamXem(ls);
+    if (i0 < 0 || typeof root.tinhVanThang !== 'function') return '';
+    var nam = ls.tieuVanScores[i0].nam;
+    var ms = root.tinhVanThang(ls, nam);
+    if (!ms || ms.length !== 12) return '';
+    var ten = function (m) { var p = (ls.palaces || []).find(function (x) { return x.idx === m.cungIdx; }); return p ? p.cungName : ''; };
+    var rows = ms.map(function (m) { return { diem: m.diem, lo: m.lo, hi: m.hi, pct: m.pct, l1: 'Th ' + m.thang, l2: ten(m) }; });
+    var dong = ms.reduce(function (a, b) { return b.pct > a.pct ? b : a; });
+    var yen = ms.reduce(function (a, b) { return b.pct < a.pct ? b : a; });
+    var dsOf = function (m) { return ((ls.bienDongGoc && ls.bienDongGoc[m.cungIdx]) ? ls.bienDongGoc[m.cungIdx].ds : []).concat(m.luu || []); };
+    var h = '<div class="pregen-block"><div class="pregen-title">Mười hai tháng âm lịch năm ' + bdEsc(bdCanChiNam(nam)) + ' ' + nam + '</div>';
+    h += bdBandSvg(rows, 'Điểm và biên dao động 12 tháng âm lịch năm ' + nam);
+    h += '<div style="font-size:13px;line-height:1.55;margin-top:8px;color:#1a1a1a">';
+    h += '<div>Động nhất: <b>tháng ' + dong.thang + '</b> (nguyệt hạn ' + bdEsc(ten(dong)) + ', ±' + bdPct(dong.pct) + ') — ' + bdEsc(bdSaoDong(dsOf(dong))) + '.</div>';
+    h += '<div>Yên nhất: <b>tháng ' + yen.thang + '</b> (nguyệt hạn ' + bdEsc(ten(yen)) + ', ±' + bdPct(yen.pct) + ').</div>';
+    h += '</div><div style="font-size:11px;color:#666;margin-top:6px">Điểm tháng nội suy từ điểm các năm. ' + BD_GHI_CHU + '</div></div>';
+    return h;
+  }
+
+  /** Phần 14 — 4 chủ đề qua 9 đại vận (engine `chuDeDaiVan`). */
+  function buildChuDeDaiVanHtml(ls) {
+    var cd = ls && ls.chuDeDaiVan;
+    if (!cd || cd.length < 2) return '';
+    var KEYS = ['su_nghiep', 'tai_loc', 'tinh_duyen', 'suc_khoe'];
+    if (!cd.every(function (d) { return KEYS.every(function (k) { return d.chuDe && d.chuDe[k]; }); })) return '';
+    var cur = ls.daiVanHienTai, ci = cd.findIndex(function (d) { return cur && d.tuoiStart === cur.tuoiStart; });
+    var W = 640, H = 240, L = 30, R = 632, T = 22, B = 196;
+    var sy = function (v) { return B - (Math.max(0, Math.min(10, v)) / 10) * (B - T); };
+    var cw = (R - L) / cd.length, sx = function (i) { return L + (i + 0.5) * cw; };
+    var h = '<div class="pregen-block"><div class="pregen-title">Bốn chuyện lớn qua 9 đại vận</div>';
+    h += '<div style="display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;margin-bottom:4px;color:#1a1a1a">' + KEYS.map(function (k) {
+      return '<span><i style="display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px;background:' + CHU_DE_MAU[k] + '"></i>' + bdEsc(cd[0].chuDe[k].ten) + '</span>';
+    }).join('') + '</div>';
+    h += '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Bốn đường chủ đề qua 9 đại vận" style="width:100%;height:auto;display:block">';
+    if (ci >= 0) {
+      h += '<rect x="' + (sx(ci) - cw / 2).toFixed(1) + '" y="' + (T - 18) + '" width="' + cw.toFixed(1) + '" height="' + (B - T + 18) + '" rx="4" style="fill:' + BD.cur + '"/>';
+      h += bdText(sx(ci), T - 6, 'Đang ở đây', { anchor: 'middle', size: 9.5, bold: true, color: BD.red });
+    }
+    h += bdAxes(L, R, T, B);
+    KEYS.forEach(function (k) {
+      var pts = cd.map(function (d, i) { return [sx(i), sy(d.chuDe[k].diem)]; });
+      h += '<path d="M' + pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' L') + '" fill="none" style="stroke:' + CHU_DE_MAU[k] + '" stroke-width="2.5" stroke-linejoin="round"/>';
+      pts.forEach(function (p) { h += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="3.5" style="fill:' + CHU_DE_MAU[k] + '"/>'; });
+    });
+    cd.forEach(function (d, i) {
+      h += bdText(sx(i), B + 16, d.tuoiStart + '–' + d.tuoiEnd, { anchor: 'middle', size: 11, bold: i === ci, color: i === ci ? BD.red : BD.ink });
+      h += bdText(sx(i), B + 30, 'Mệnh ở ' + d.diaChi, { anchor: 'middle', size: 9.5, color: BD.mute });
+    });
+    h += '</svg>';
+    if (ci >= 0) {
+      var c = cd[ci];
+      var xs = KEYS.map(function (k) { return c.chuDe[k]; }).sort(function (a, b) { return b.diem - a.diem; });
+      h += '<div style="font-size:13px;line-height:1.55;margin-top:8px;color:#1a1a1a">Đang đi đại vận ' + c.tuoiStart + '–' + c.tuoiEnd + ' (Mệnh tạm ở ' + bdEsc(c.diaChi) + '): ' +
+        xs.map(function (x) { return x.ten + ' <b>' + bdF(x.diem) + '</b> <span style="color:#666">(' + bdEsc(x.cungGoc) + ' tạm ở ' + bdEsc(x.tamDiaChi) + ')</span>'; }).join(' · ') + '.</div>';
+    }
+    h += '<div style="font-size:11px;color:#666;margin-top:6px">Cung đại vận làm Mệnh tạm, các cung khác dời theo và mượn sao của cung dời tới. Điểm chủ đề = 0,6 × cung gốc + 0,4 × cung tạm.</div></div>';
+    return h;
+  }
+
+  /** Phần 1 — ngũ hành Tứ Trụ. Cần `tinhBatTu` (tubinh-ansao-engine.js, nạp
+   *  `defer` ở trang) và ngày DƯƠNG + giờ (`ls._duong`, trang gắn lúc lập lá số).
+   *  Dựng chỗ trống trước, vẽ sau khi HTML đã vào DOM; không vẽ được thì gỡ khối. */
+  var _nhSeq = 0;
+  var GIO_HOURS = [23, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
+  function buildNguHanhHtml(ls) {
+    var du = ls && ls._duong;
+    if (!du || !du.d || !du.m || !du.y || typeof document === 'undefined') return '';
+    var id = 'lg-nguhanh-' + (++_nhSeq);
+    setTimeout(function () { mountNguHanh(id, ls, 0); }, 0);
+    return '<div class="pregen-block" id="' + id + '"><div class="pregen-title">Ngũ hành theo Tứ Trụ</div><div data-nh-body style="min-height:180px"></div></div>';
+  }
+  function mountNguHanh(id, ls, tries) {
+    var host = document.getElementById(id);
+    if (!host) return;
+    if (typeof root.tinhBatTu !== 'function') {
+      if (tries < 20) { setTimeout(function () { mountNguHanh(id, ls, tries + 1); }, 250); return; }
+      host.parentNode.removeChild(host);
+      return;
+    }
+    var du = ls._duong, bt;
+    var gio = (typeof du.h === 'number' && !isNaN(du.h)) ? du.h : GIO_HOURS[(ls._conv && ls._conv.gioIdx) || 0];
+    try {
+      bt = root.tinhBatTu({ ngayDL: du.d, thangDL: du.m, namDL: du.y, gio: gio, gioitinh: du.gt === 'nu' ? 'nu' : 'nam' });
+    } catch (e) {
+      if (root.console) console.error('[luan-giai-core] tinhBatTu', e);
+    }
+    var nh = bt && bt.nguHanh, W = nh && nh.weighted;
+    if (!W || !bt.tuTru) { host.parentNode.removeChild(host); return; }
+    var N = [['Mộc', '#2E7D5B'], ['Hỏa', '#C0392B'], ['Thổ', '#A8843A'], ['Kim', '#8C8C8C'], ['Thủy', '#1455A4']];
+    var tot = N.reduce(function (a, x) { return a + (W[x[0]] || 0); }, 0);
+    if (!tot) { host.parentNode.removeChild(host); return; }
+    var a0 = -Math.PI / 2, svg = '<svg viewBox="-110 -110 220 220" role="img" aria-label="Tỉ lệ ngũ hành Tứ Trụ" style="width:100%;max-width:190px;height:auto;display:block;margin:0 auto">';
+    var P = function (r, a) { return (r * Math.cos(a)).toFixed(2) + ',' + (r * Math.sin(a)).toFixed(2); };
+    N.forEach(function (x) {
+      var v = W[x[0]] || 0;
+      if (!v) return;
+      var a1 = a0 + v / tot * 2 * Math.PI, lg = a1 - a0 > Math.PI ? 1 : 0;
+      svg += '<path d="M' + P(100, a0) + ' A100,100 0 ' + lg + ' 1 ' + P(100, a1) + ' L' + P(62, a1) + ' A62,62 0 ' + lg + ' 0 ' + P(62, a0) + 'Z" style="fill:' + x[1] + ';stroke:#F5F5F5" stroke-width="2"/>';
+      if (a1 - a0 > 0.35) { var am = (a0 + a1) / 2; svg += bdText(81 * Math.cos(am), 81 * Math.sin(am) + 4, x[0], { anchor: 'middle', size: 11, bold: true, color: '#fff' }); }
+      a0 = a1;
+    });
+    svg += bdText(0, -2, bt.nhatCan || '', { anchor: 'middle', size: 22, bold: true }) + bdText(0, 18, 'nhật chủ', { anchor: 'middle', size: 11, color: BD.mute }) + '</svg>';
+    var sorted = N.slice().sort(function (a, b) { return (W[b[0]] || 0) - (W[a[0]] || 0); });
+    var mx = W[sorted[0][0]] || 1;
+    var tru = bt.tuTru.map(function (t, i) { return '<div style="border:1px solid #e0e0e0;border-radius:6px;background:#fff;padding:4px 10px;text-align:center"><div style="font-size:10px;color:#666">' + ['Năm', 'Tháng', 'Ngày', 'Giờ'][i] + '</div><b>' + bdEsc(t.can + ' ' + t.chi) + '</b></div>'; }).join('');
+    var bars = sorted.map(function (x) {
+      var v = W[x[0]] || 0;
+      return '<div style="display:grid;grid-template-columns:42px 1fr 74px;gap:8px;align-items:center;font-size:12.5px"><b>' + x[0] + '</b><span style="display:block;height:10px;border-radius:2px;width:' + (v / mx * 100).toFixed(0) + '%;background:' + x[1] + '"></span><span>' + bdF(v) + ' · ' + Math.round(v / tot * 100) + '%</span></div>';
+    }).join('');
+    var cn = bt.cuongNhuoc, dt = bt.dungThan;
+    var ket = 'Vượng nhất <b>' + bdEsc(nh.dominant) + '</b>, thiếu nhất <b>' + bdEsc(nh.deficient) + '</b>.' +
+      (cn && cn.label ? ' Nhật chủ ' + bdEsc(bt.nhatCan) + ', thân ' + bdEsc(String(cn.label).toLowerCase()) + (typeof cn.score === 'number' ? ' (' + bdF(cn.score) + '/10)' : '') + '.' : '') +
+      (dt && dt.primary ? ' Dụng thần <b>' + bdEsc(dt.primary) + '</b>' + (dt.secondary ? ', hỷ thần ' + bdEsc(dt.secondary) : '') + '.' : '');
+    var body = host.querySelector('[data-nh-body]');
+    body.style.minHeight = '';
+    body.innerHTML = '<div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;color:#1a1a1a"><div style="flex:0 1 190px;min-width:150px">' + svg + '</div>' +
+      '<div style="flex:1 1 240px;min-width:0;display:flex;flex-direction:column;gap:8px"><div style="display:flex;flex-wrap:wrap;gap:6px">' + tru + '</div>' + bars +
+      '<div style="font-size:13px;line-height:1.5">' + ket + '</div></div></div>' +
+      '<div style="font-size:11px;color:#666;margin-top:6px">Tính bằng engine Tử Bình: can lộ mỗi can 1, tàng can trong chi theo trọng số tàng can.</div>';
+  }
+
+  var API = { TONG_PHAN: TONG_PHAN, buildVanNamHtml: buildVanNamHtml, buildVanThangHtml: buildVanThangHtml, buildChuDeDaiVanHtml: buildChuDeDaiVanHtml, buildNguHanhHtml: buildNguHanhHtml, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, buildPreGenHtml: buildPreGenHtml, buildCungStarHtml: buildCungStarHtml, buildTuHoaPhiTinhHtml: buildTuHoaPhiTinhHtml, renderInlineDaiVanLineChart: renderInlineDaiVanLineChart };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.LuanGiaiCore = API;
 })(typeof window !== 'undefined' ? window : globalThis);

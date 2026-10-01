@@ -1,7 +1,7 @@
 # Nhật ký phát triển — mục lục
 
-523 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
-**Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
+525 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+**Năm file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
 grep -n 'từ khoá' docs/nhat-ky/*.md          # tìm mục
@@ -11,7 +11,8 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 358 | 1,238,159 B |
+| `2026-10.md` | 1 | 4,581 B |
+| `2026-09.md` | 359 | 1,239,977 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +26,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-10 | `2026-10.md` | 📈 Bốn biểu đồ vận mới trong bản luận: 10 năm · 12 tháng · 4 chủ đề · ngũ hành Tứ Trụ |
 | 1 | 2026-09 | `2026-09.md` | 🔁 Gợi ý Vận Hạn 12 Tháng thì mời KÈM Chu Trình Cuộc Đời · vá thẻ gợi ý mất khung |
 | 1 | 2026-09 | `2026-09.md` | 🎙️ Zalo OA nghe được tin nhắn THOẠI |
 | 1 | 2026-09 | `2026-09.md` | 📄 Nút Lưu PDF chết trong trình duyệt Zalo/FB + popup "luận giải xong" |

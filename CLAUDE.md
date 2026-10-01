@@ -14,7 +14,7 @@
 | Cần gì | Tra ở |
 |---|---|
 | Chi tiết một LUẬT | `docs/luat/README.md` → `tien` · `llm-prompt` · `engine-cophap` · `postgres` · `bay` |
-| Diễn biến từng PR (117+ mục) | `docs/nhat-ky/README.md` → `2026-09` · `2026-08` · `2026-07` · `track-cu` |
+| Diễn biến từng PR (117+ mục) | `docs/nhat-ky/README.md` → `2026-10` · `2026-09` · `2026-08` · `2026-07` · `track-cu` |
 | Luật icon đầy đủ | `docs/ICONS.md` |
 | Cấu hình QC · giới hạn đã biết · dựng máy mới | `docs/QC.md` |
 

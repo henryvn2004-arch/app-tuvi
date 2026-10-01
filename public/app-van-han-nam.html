@@ -258,7 +258,11 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/laso-chart.js?v=9"></script>
 <script src="/tools-shared/pchip.js?v=1"></script>
 <script src="/tools-shared/daivan-chart.js?v=1"></script>
-<script src="/luan-giai-core.js?v=5"></script>
+<script src="/luan-giai-core.js?v=6"></script>
+<!-- Engine Tử Bình cho khối "Ngũ hành theo Tứ Trụ" (phần 1). PHẢI là thẻ tĩnh,
+     đúng URL `?v=5` như app-bat-tu.html: soft-nav chỉ khử trùng theo URL đã thấy
+     trong DOM — chèn bằng JS thì sang trang Bát Tự sẽ nạp lại, trùng `const`. -->
+<script src="/tubinh-ansao-engine.js?v=5" defer></script>
 <!-- `defer` ở đây là VỆ SINH TỐC ĐỘ, KHÔNG phải bản vá CLS. Không có nó, thẻ này
      chặn parse ngay trước `tuvi-form.js`, tức thêm hẳn một chặng mạng tới bên thứ
      ba vào đường tới hạn của form. Nhưng cú nhảy `.frow` thì nó KHÔNG chữa: prod
@@ -416,6 +420,8 @@ async function doXem(){
     // thời điểm mở tool (server dùng CÙNG một mốc, xem /api/van-han-nam).
     var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:gioitinh,namXem:TU_NAM});
     ls._conv=conv; ls._hoTen=name;
+    // Ngày DƯƠNG + giờ cho khối ngũ hành Tứ Trụ (LuanGiaiCore.buildNguHanhHtml → tinhBatTu).
+    ls._duong={d:+dd,m:+mm,y:+yyyy,h:(hh==null||hh==='')?null:+hh,gt:gioitinh};
     _astrolabe=ls;_hoTen=name;_ngay=dd;_thang=mm;_nam=yyyy;_gioitinh=gioitinh;
     _laSoText=formatLaSoV2(ls,conv); ls._laSoText=_laSoText;
 
