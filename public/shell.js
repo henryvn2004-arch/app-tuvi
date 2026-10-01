@@ -197,6 +197,16 @@
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
   var ACTIVE = window.SHELL_ACTIVE || '';
+  // Zalo OA (xem khối ZALO OA) — khai ở đây vì sidebar dựng TRƯỚC khi chạy tới khối đó.
+  // Đổi OA thì thay CẢ `ZALO_OA_URL` ở `lib/seo/ask-box.ts` + `zalo-oa-qr.png`.
+  var ZALO_OA_URL = 'https://zalo.me/4164696755090443744';
+  var ZL_CLOSED_KEY = 'tvmb_zalo_card_closed';
+  var ZL_SNOOZE_MS = 7 * 864e5;
+  function zlSnoozed() {
+    var t = 0;
+    try { t = +localStorage.getItem(ZL_CLOSED_KEY) || 0; } catch (e) { /* ignore */ }
+    return Date.now() - t < ZL_SNOOZE_MS;
+  }
   // Sidebar thu gọn (desktop) — gắn class lên <html> NGAY lúc file này chạy,
   // trước lần vẽ đầu, để cột không giật 260px → 60px sau khi trang đã hiện.
   try { if (localStorage.getItem('sb_mini_v1') === '1') document.documentElement.classList.add('sb-mini'); } catch (e) { /* ignore */ }
@@ -497,6 +507,14 @@
       '<div class="sbn-sec"><span>Gần đây</span><a href="/app/tro-chuyen">Xem tất cả</a></div>' +
       '<div class="sbn-recent" id="sbRecent"></div>' +
       '</nav>' +
+      // Thẻ QR Zalo tĩnh — chỉ máy tính (CSS ẩn trên cảm ứng/màn thấp/sb-mini).
+      // `loading=lazy`: ảnh trong khối display:none không bị tải.
+      (zlSnoozed() ? '' :
+        '<div class="sbn-zalo" id="sbZalo">' +
+          '<button type="button" class="zl-x" aria-label="Ẩn">✕</button>' +
+          '<b>Hỏi thầy qua Zalo</b><small>Quét mã bằng Zalo, nhắn câu hỏi — thầy trả lời ngay</small>' +
+          '<img src="/zalo-oa-qr.png" width="132" height="132" loading="lazy" alt="Mã QR Zalo OA Tử Vi Minh Bảo">' +
+        '</div>') +
       '<div class="sbn-foot">' +
         '<div class="sbn-menu" id="sbMenu" hidden>' +
           '<div class="sbn-mail" id="sbMail"></div>' +
@@ -517,6 +535,15 @@
     host.innerHTML = h;
     mountToolIcon();
     wireSidebar(host);
+    var zl = host.querySelector('#sbZalo');
+    if (zl) {
+      zl.querySelector('.zl-x').addEventListener('click', function () {
+        zl.remove();
+        try { localStorage.setItem(ZL_CLOSED_KEY, String(Date.now())); } catch (e) { /* ignore */ }
+        zlTrack('sb_close');
+      });
+      if (getComputedStyle(zl).display !== 'none') zlTrack('sb_shown');
+    }
     paintAuth();
     renderSidebarRecent();
   }
@@ -2436,10 +2463,10 @@
   // 83% dùng điện thoại — KHÔNG tự quét được màn hình mình ⇒ trên cảm ứng nút
   // là link mở thẳng app Zalo; chỉ máy tính (con trỏ chuột) mới có thẻ QR.
   // Nút đứng ĐÁY cụm, có mặt từ lúc boot ⇒ là điểm neo đứng yên (xem fabAdd).
-  // Đổi OA thì thay CẢ `ZALO_OA_URL` ở `lib/seo/ask-box.ts` + `zalo-oa-qr.png`.
-  var ZALO_OA_URL = 'https://zalo.me/4164696755090443744';
-  var ZL_CLOSED_KEY = 'tvmb_zalo_card_closed';
-  var ZL_SNOOZE_MS = 7 * 864e5;
+  // 🪤 Thẻ nổi KHÔNG tự mở: bản đầu tự mở lúc tải trang và đè lên `#btnGo` của
+  // form Xem Tuổi (Playwright đỏ 5 bài) — mà tự mở ở bất cứ lúc nào cũng đè được
+  // nút Mở khoá của paywall trong vùng kết quả. Lời mời luôn-hiện trên máy tính
+  // là thẻ tĩnh ở đáy sidebar (`#sbZalo`, renderSidebar), không đè lên gì cả.
   function zlDesktop() {
     return !!(window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches);
   }
@@ -2461,11 +2488,7 @@
         '<div><b>Hỏi thầy qua Zalo</b><small>Quét mã bằng Zalo, nhắn câu hỏi — thầy trả lời ngay</small></div></div>' +
         '<img class="zl-qr" src="/zalo-oa-qr.png" width="168" height="168" alt="Mã QR Zalo OA Tử Vi Minh Bảo">' +
         '<a class="zl-go" href="' + ZALO_OA_URL + '" target="_blank" rel="noopener">Mở Zalo <b aria-hidden="true">→</b></a>';
-      card.querySelector('.zl-x').addEventListener('click', function () {
-        zaloCard(false);
-        try { localStorage.setItem(ZL_CLOSED_KEY, String(Date.now())); } catch (e) { /* ignore */ }
-        zlTrack('close');
-      });
+      card.querySelector('.zl-x').addEventListener('click', function () { zaloCard(false); zlTrack('close'); });
       card.querySelector('.zl-go').addEventListener('click', function () { zlTrack('go'); });
       document.body.appendChild(card);
     }
@@ -2490,14 +2513,6 @@
       zlTrack(opening ? 'qr' : 'close');
     });
     host.appendChild(a);
-    // Máy tính màn rộng: mở sẵn thẻ QR một lần, đóng thì im 7 ngày. Màn hẹp
-    // hơn 1200px thì `.ws` còn quá chật để thẻ 212px nằm đè — chỉ mở khi bấm.
-    var closedAt = 0;
-    try { closedAt = +localStorage.getItem(ZL_CLOSED_KEY) || 0; } catch (e) { /* ignore */ }
-    if (zlDesktop() && matchMedia('(min-width:1200px)').matches && Date.now() - closedAt > ZL_SNOOZE_MS) {
-      zaloCard(true);
-      zlTrack('shown');
-    }
   }
 
   // ── LƯU PDF — cùng vòng đời với nút Chia sẻ ──────────────────────────
