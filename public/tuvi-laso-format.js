@@ -124,11 +124,13 @@
     }
 
     // 4 CHỦ ĐỀ của đại vận (engine `ls.chuDeDaiVan`, cùng số với biểu đồ phần
-    // 14): cung đại vận làm Mệnh tạm, điểm = 0,6×cung gốc + 0,4×cung tạm.
+    // 14): cung đại vận làm Mệnh tạm, điểm = 0,6×cung gốc + 0,4×cung tạm. Điểm
+    // này suy từ điểm CUNG (không phải công thức chấm đại vận) ⇒ Henry chốt: model
+    // chỉ dùng để so mạnh/yếu, KHÔNG đọc số ra cho người đọc.
     // Bản `compact` (rail) bỏ; engine cũ thiếu trường thì bỏ dòng.
     const _cd = !opts.compact && ls.chuDeDaiVan && ls.chuDeDaiVan[i] && ls.chuDeDaiVan[i].chuDe;
     if (_cd && Object.keys(_cd).length) {
-      out.push(`  [4 CHỦ ĐỀ · Mệnh tạm tại ${dv.diaChi}, điểm = 0,6×cung gốc + 0,4×cung tạm]: ` +
+      out.push(`  [4 CHỦ ĐỀ · Mệnh tạm tại ${dv.diaChi} · chỉ để so mạnh/yếu, KHÔNG đọc số ra]: ` +
         Object.keys(_cd).map(k => `${_cd[k].ten} ${_cd[k].diem} (${_cd[k].cungGoc} tạm ở ${_cd[k].tamDiaChi})`).join(' · '));
     }
 

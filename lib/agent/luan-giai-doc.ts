@@ -252,7 +252,7 @@ do engine tính — CHÉP ĐÚNG con số đó, TUYỆT ĐỐI KHÔNG tự tính
 Bảng tổng hợp ĐV1 đến ĐV9:
 | ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |
 
-Nhận xét tổng (180-220 từ), viết bằng ngôn ngữ đời thường, đọc là hiểu ngay: giai đoạn nào dễ thở nhất, giai đoạn nào chật vật nhất, xu hướng chung của cuộc đời theo thời gian. Nếu người đang trong đại vận nào thì nhận xét thêm về giai đoạn hiện tại, BẮT BUỘC theo dòng [4 CHỦ ĐỀ] của đại vận đó (cùng số với biểu đồ người đọc đang thấy): chuyện nào mạnh nhất, chuyện nào yếu nhất, chép đúng số. Không cần liệt kê lại số liệu đã có trong bảng.
+Nhận xét tổng (180-220 từ), viết bằng ngôn ngữ đời thường, đọc là hiểu ngay: giai đoạn nào dễ thở nhất, giai đoạn nào chật vật nhất, xu hướng chung của cuộc đời theo thời gian. Nếu người đang trong đại vận nào thì nhận xét thêm về giai đoạn hiện tại, BẮT BUỘC theo dòng [4 CHỦ ĐỀ] của đại vận đó: chuyện nào mạnh nhất, chuyện nào yếu nhất — KHÔNG đọc số của dòng này ra cho người đọc. Không cần liệt kê lại số liệu đã có trong bảng.
 
 MẠCH TRUYỆN XUYÊN SUỐT: đây là ĐIỂM BẢN LỀ — câu chuyện chuyển từ BỨC CHÂN DUNG TĨNH (12 cung vừa kể) sang DÒNG THỜI GIAN (9 đại vận sắp kể). Câu hook kết đoạn phải đánh dấu rõ bước ngoặt này, hướng thẳng sang đại vận đầu tiên của cuộc đời.`;
 
