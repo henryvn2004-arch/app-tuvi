@@ -28,6 +28,13 @@ const GA4_MP_API_SECRET = process.env.GA4_MP_API_SECRET || '';
 
 const META_PIXEL_ID = '1747342186469684';
 const META_CAPI_ACCESS_TOKEN = process.env.META_CAPI_ACCESS_TOKEN || '';
+// Đơn của khách Messenger đi vào DATASET CỦA PAGE, không vào pixel website: Meta
+// chỉ nhận `business_messaging` trên dataset gắn với Page (tạo bằng POST
+// `/{page_id}/dataset`, 2026-10-01 Page chưa có — GET trả rỗng; POST tạo ra
+// `1613166566936684`). Giao diện Business Settings KHÔNG cho nối Page vào pixel
+// website. Gửi bằng token của Page. Thiếu token ⇒ gửi như đơn website vào pixel.
+const META_MESSAGING_DATASET_ID = (process.env.META_MESSAGING_DATASET_ID || '1613166566936684').replace(/\D/g, '');
+const META_MESSAGING_TOKEN = process.env.META_MESSAGING_CAPI_TOKEN || process.env.MESSENGER_PAGE_ACCESS_TOKEN || '';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -95,48 +102,49 @@ async function lookupMessengerPsid(userId: string): Promise<string | null> {
   }
 }
 
-async function sendMetaPurchase(userId: string, transactionId: string, valueVnd: number): Promise<void> {
-  if (!META_CAPI_ACCESS_TOKEN) {
-    console.error('[server-conversions] thiếu META_CAPI_ACCESS_TOKEN, bỏ qua Meta Purchase');
-    return;
+async function postMetaEvent(datasetId: string, token: string, event: Record<string, unknown>): Promise<boolean> {
+  const url = `https://graph.facebook.com/v21.0/${datasetId}/events?access_token=${encodeURIComponent(token)}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ data: [event] }),
+  });
+  if (!res.ok) {
+    console.error('[server-conversions] Meta CAPI lỗi', datasetId, res.status, await res.text().catch(() => ''));
   }
+  return res.ok;
+}
+
+async function sendMetaPurchase(userId: string, transactionId: string, valueVnd: number): Promise<void> {
   const [email, psid] = await Promise.all([lookupEmail(userId), lookupMessengerPsid(userId)]);
   const userData: Record<string, unknown> = { external_id: sha256(userId) };
   // Email `@chat.tuviminhbao.com` là email tổng hợp, không có thật — băm gửi
   // đi chỉ là nhiễu cho khớp người dùng của Meta.
   if (email && !isShadowEmail(email)) userData.em = sha256(email);
+  const base = {
+    event_name: 'Purchase',
+    event_time: Math.floor(Date.now() / 1000),
+    event_id: transactionId,
+    custom_data: { currency: 'VND', value: valueVnd },
+  };
   // Khách đến từ quảng cáo Click-to-Messenger: Meta chỉ quy được đơn về đúng
-  // quảng cáo khi event mang `business_messaging` + PSID + Page ID (Conversions
-  // API for Business Messaging). Gửi dạng `website` thì đơn vẫn đếm nhưng Meta
-  // không nối được với lượt bấm vào chat — lại "tối ưu mù".
-  // ⚠️ Cần làm tay một lần: Events Manager → nối dataset (pixel) với Page.
-  const viaMessenger = !!(psid && MESSENGER_PAGE_ID);
-  if (viaMessenger) {
-    userData.page_id = MESSENGER_PAGE_ID;
-    userData.page_scoped_user_id = psid;
+  // quảng cáo khi event mang `business_messaging` + PSID + Page ID, gửi vào
+  // dataset của Page (Conversions API for Business Messaging).
+  if (psid && MESSENGER_PAGE_ID && META_MESSAGING_DATASET_ID && META_MESSAGING_TOKEN) {
+    const ok = await postMetaEvent(META_MESSAGING_DATASET_ID, META_MESSAGING_TOKEN, {
+      ...base,
+      action_source: 'business_messaging',
+      messaging_channel: 'messenger',
+      user_data: { ...userData, page_id: MESSENGER_PAGE_ID, page_scoped_user_id: psid },
+    });
+    if (ok) return;
+    // Hỏng (token/dataset sai) ⇒ vẫn gửi như đơn website bên dưới, đừng để mất đơn.
   }
-  const url = `https://graph.facebook.com/v21.0/${META_PIXEL_ID}/events?access_token=${encodeURIComponent(META_CAPI_ACCESS_TOKEN)}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      data: [
-        {
-          event_name: 'Purchase',
-          event_time: Math.floor(Date.now() / 1000),
-          event_id: transactionId,
-          ...(viaMessenger
-            ? { action_source: 'business_messaging', messaging_channel: 'messenger' }
-            : { action_source: 'website' }),
-          user_data: userData,
-          custom_data: { currency: 'VND', value: valueVnd },
-        },
-      ],
-    }),
-  });
-  if (!res.ok) {
-    console.error('[server-conversions] Meta CAPI lỗi', res.status, await res.text().catch(() => ''));
+  if (!META_CAPI_ACCESS_TOKEN) {
+    console.error('[server-conversions] thiếu META_CAPI_ACCESS_TOKEN, bỏ qua Meta Purchase');
+    return;
   }
+  await postMetaEvent(META_PIXEL_ID, META_CAPI_ACCESS_TOKEN, { ...base, action_source: 'website', user_data: userData });
 }
 
 /**
