@@ -37,7 +37,7 @@ const MUC: MucDai[] = ['mot-cau', 'ngan', 'vua', 'dai'];
 
 const LOI_MUC: Record<MucDai, string> = {
   'mot-cau': 'đúng MỘT câu, không thêm gì',
-  ngan: '2–4 câu, dưới ~70 từ — lớp ① và ⑤, thêm ③ nếu dữ liệu có rủi ro/cơ hội thật',
+  ngan: '2–4 câu, dưới ~70 từ — lớp ①, thêm ③ nếu dữ liệu có rủi ro/cơ hội thật, thêm ⑤ chỉ khi có điều MỚI để khuyên',
   vua: 'khoảng 100–180 từ',
   dai: 'khoảng 220–350 từ, được đi đủ 5 lớp',
 };
@@ -197,7 +197,9 @@ function boc(pb: Partial<Record<MucDai, number>>, r: number, tru?: MucDai): MucD
 
 function lech(m: MucDai, l: number | undefined, loai: LoaiCau): MucDai {
   if (!l || loai === 'xa-giao' || loai === 'hoi-thuong') return m;
-  if (l === -2) return MUC.indexOf(m) > MUC.indexOf('ngan') ? 'ngan' : m;
+  // Khách hỏi "vì sao/giải thích" là XIN nói kỹ — thầy "luôn ngắn" vẫn phải đủ chỗ giải
+  // (Henry 2026-10-02: hỏi vì sao vào vận Tuế Hổ Phù chật vật, Tử Nguyên đáp 3 câu).
+  if (l === -2) return loai === 'giai-thich' ? 'vua' : MUC.indexOf(m) > MUC.indexOf('ngan') ? 'ngan' : m;
   const i = Math.min(MUC.length - 1, Math.max(0, MUC.indexOf(m) + l));
   // Lệch lên không được biến câu hỏi vặt thành bài dài, lệch xuống không được
   // biến câu đời sống thành một câu cụt.
@@ -272,7 +274,9 @@ export function tinhNhip(
     if (coThay && loai !== 'xa-giao' && loai !== 'hoi-thuong') {
       const choPhep =
         loai === 'be-tac' ? CHIEU_KHI_BE_TAC : nc === 'an-ui' || nc === 'phe-minh' || nc === 'cong-nhan' ? CHIEU_KHI_DAU : null;
-      const hop = CHIEU.filter((c) => !ganDay.has(c.id) && (!choPhep || choPhep.includes(c.id)) && c.khi(ctx));
+      // "Hữu duyên nói kỹ" mà lượt chỉ được 2–4 câu là hứa một đằng làm một nẻo.
+      const nganQua = muc === 'mot-cau' || muc === 'ngan';
+      const hop = CHIEU.filter((c) => !ganDay.has(c.id) && (!choPhep || choPhep.includes(c.id)) && !(nganQua && c.id === 'huu-duyen') && c.khi(ctx));
       const manh = hop.filter((c) => c.manh?.(ctx));
       const bat = manh.length > 0 || (hop.length > 0 && !truoc?.chieu && bam(`chieu|${authorId}|${khoa}`) < XAC_SUAT_CHIEU);
       if (bat) {
@@ -306,9 +310,9 @@ export function nhipHint(n: NhipLuot, authorId?: string | null): string {
     authorId && PERSONAS[authorId]?.xung === 'co-cau' ? '; gọi người xem là "cậu" (nam) / "cô" (nữ), KHÔNG gọi anh/chị' : '';
   const ds = (n.chieu || []).map((id) => CHIEU.find((c) => c.id === id)).filter((c): c is Chieu => !!c);
   const chieu = ds.length
-    ? `\n[CHIÊU lượt này (máy lọc theo ngữ cảnh — chọn MỘT cái hợp nhất với đoạn đang chat, không hợp thì bỏ; lồng vào lời thầy, không gọi tên chiêu): ${ds.map((c, i) => `(${i + 1}) ${c.ten}: ${c.cach}`).join(' ')}]`
+    ? `\n[CHIÊU lượt này (máy lọc theo ngữ cảnh — chọn MỘT cái hợp nhất với đoạn đang chat, không hợp thì bỏ; lồng vào GIỮA lời thầy, không làm câu mở, không gọi tên chiêu): ${ds.map((c, i) => `(${i + 1}) ${c.ten}: ${c.cach}`).join(' ')}]`
     : '';
-  const nhip = `[NHỊP LƯỢT NÀY: ${doDai}${ghiChuBeTac}${ghiChuThuong}; ${dinh}${xung}. Không lặp lại phần đã nói ở lượt trước.]${chieu}`;
+  const nhip = `[NHỊP LƯỢT NÀY: ${doDai}${ghiChuBeTac}${ghiChuThuong}; ${dinh}${xung}. Không lặp lại phần đã nói ở lượt trước — kể cả LỜI KHUYÊN: việc đã khuyên ở lượt trước thì không khuyên lại. Khuyên thì nói như gợi ý của người từng trải, không ra lệnh ("…ngay đi", "lo … đi").]${chieu}`;
   return n.nhuCau === 'giai-dap'
     ? nhip
     : `${nhip}\n[NHU CẦU ẨN (máy đoán — tự kiểm lại theo câu chữ, không khớp thì bỏ qua): ${LOI_NHU_CAU[n.nhuCau]}. Lượt này giữ giọng thầy ở cách dùng chữ, nhưng KHÔNG bóc, vặn, trêu hay chê người xem, và bỏ câu mở cửa miệng kiểu bác bỏ/bóc mẽ ("Sai câu hỏi rồi", "Nói thật nhé").]`;
