@@ -120,7 +120,9 @@ async function main() {
           !existsSync(join(ROOT, 'data', 'nghiem-chung', 'loai-tru', `${s}.txt`)),
       );
   }
+  // Không có gói (đóng gói lỗi) thì bỏ qua — lô sau con-lai sẽ đưa lại.
+  slugs = slugs.filter((s) => existsSync(join(WORK, 'pack', `${s}.json`)));
   for (const s of slugs) await mot(s);
-  console.log(`brief: ${slugs.length}`);
+  console.log(JSON.stringify(slugs));
 }
 main();

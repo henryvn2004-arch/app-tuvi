@@ -1,6 +1,7 @@
 // scripts/nghiem-chung/con-lai.ts — in danh sách slug CÒN PHẢI VIẾT của một phần (shard):
 // đã có gói, chưa có hồ sơ, chưa bị loại trừ. Theo thứ tự ưu tiên của pack.ts.
 //   npx tsx scripts/nghiem-chung/con-lai.ts --shard 2/6 [--limit 150] [--json]
+//   --ca-chua-goi: tính cả người CHƯA có gói (lịch chạy đêm tự đóng gói lô của nó — container có thể đã bị dọn).
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { danhSach } from './pack';
@@ -14,9 +15,10 @@ const ROOT = process.cwd();
 const [k, n] = (opt('shard') || '0/1').split('/').map(Number);
 const limit = Number(opt('limit') || 1e9);
 const all = danhSach().filter((_, i) => i % n === k);
+const caChuaGoi = argv.includes('--ca-chua-goi');
 const cho = all.filter(
   (c) =>
-    existsSync(join(ROOT, 'work', 'nghiem-chung', 'pack', `${c.slug}.json`)) &&
+    (caChuaGoi || existsSync(join(ROOT, 'work', 'nghiem-chung', 'pack', `${c.slug}.json`))) &&
     !existsSync(join(ROOT, 'data', 'nghiem-chung', 'ho-so', `${c.slug}.json.gz`)) &&
     !existsSync(join(ROOT, 'data', 'nghiem-chung', 'loai-tru', `${c.slug}.txt`)),
 );

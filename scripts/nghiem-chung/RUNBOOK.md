@@ -44,3 +44,16 @@ VÀ `work/pack.log` đã in xong (gói hết).
 
 ## 4. Báo cáo
 Câu trả lời cuối của phiên: số hồ sơ đã đẩy, số loại trừ, slug lỗi (nếu có), nhánh đã push.
+
+## 4. Lịch chạy đêm (Routine, 01:07 giờ VN, 100 hồ sơ/đêm — Henry duyệt 2026-10-02)
+Mỗi lượt, từ gốc repo, trên nhánh `claude/zen-cerf-yi0gni`:
+```bash
+git fetch origin claude/zen-cerf-yi0gni && git checkout claude/zen-cerf-yi0gni && git pull --ff-only
+S=$(npx tsx scripts/nghiem-chung/con-lai.ts --limit 100 --ca-chua-goi --json)
+NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt NODE_NO_WARNINGS=1 \
+  npx tsx scripts/nghiem-chung/pack.ts --slugs "$(echo "$S" | node -pe 'JSON.parse(require("fs").readFileSync(0)).join(",")')"
+npx tsx scripts/nghiem-chung/brief.ts $(echo "$S" | node -pe 'JSON.parse(require("fs").readFileSync(0)).join(" ")')  # in ra mảng slug có brief
+```
+Rồi Workflow `scriptPath: scripts/nghiem-chung/workflow.js`, `args: {"slugs": <mảng brief in ra>, "effort": "low"}`.
+Xong: `manifest.ts` → `git add -f data/nghiem-chung/ho-so data/nghiem-chung/loai-tru data/nghiem-chung/manifest.json` → commit → push.
+Chạm trần sử dụng giữa chừng thì commit phần đã xong rồi dừng — đêm sau `con-lai` tự nhặt tiếp.
