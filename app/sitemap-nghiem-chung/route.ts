@@ -8,7 +8,7 @@ import { danhMuc } from '@/lib/nghiem-chung/store';
 
 export async function GET() {
   const urls = danhMuc()
-    .filter((x) => x.indexed)
+    .filter((x) => x.indexed && !x.gioDoan)
     .map((x) => urlEntry(`${BASE_URL}/nghiem-chung/${x.slug}`));
   return xmlResponse(xmlUrlset(urls));
 }
