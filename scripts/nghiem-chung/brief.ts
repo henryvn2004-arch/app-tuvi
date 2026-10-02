@@ -8,6 +8,7 @@
 //
 //   npx tsx scripts/nghiem-chung/brief.ts <slug> [<slug>…]
 //   npx tsx scripts/nghiem-chung/brief.ts --shard 0/6     # mọi slug có gói, chưa có hồ sơ
+//   … --gon   bản CẮT GỌN: wiki 10k ký tự, 5 năm ứng viên, bản mệnh đúng 8 dòng
 //
 // Năm ứng viên: các năm (trong đời người) được bài nhắc nhiều nhất — agent chọn
 // 3–4 trong số này; mã N<năm>.* khớp đúng thứ validate.ts tự tính lại.
@@ -22,11 +23,13 @@ const WORK = join(ROOT, 'work', 'nghiem-chung');
 const OUT = join(WORK, 'brief');
 mkdirSync(OUT, { recursive: true });
 const NAM_NAY = 2026;
-const SO_NAM = 8;
-const WIKI_MAX = 18000;
+const GON = process.argv.includes('--gon');
+const SO_NAM = GON ? 5 : 8;
+const WIKI_MAX = GON ? 10000 : 18000;
 
 const PROMPT_MD = readFileSync(join(ROOT, 'scripts', 'nghiem-chung', 'PROMPT.md'), 'utf8');
-const LUAT = PROMPT_MD.slice(PROMPT_MD.indexOf('## Khi nào LOẠI TRỪ'), PROMPT_MD.indexOf('## Trả về')).trim();
+const LUAT_DU = PROMPT_MD.slice(PROMPT_MD.indexOf('## Khi nào LOẠI TRỪ'), PROMPT_MD.indexOf('## Trả về')).trim();
+const LUAT = GON ? LUAT_DU.replace('Bản mệnh 8–12 dòng', 'Bản mệnh ĐÚNG 8 dòng') : LUAT_DU;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Any = any;
