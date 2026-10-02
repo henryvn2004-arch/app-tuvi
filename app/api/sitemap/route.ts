@@ -27,7 +27,7 @@ const CHILDREN = [
   '/sitemap-trang.xml',
   '/sitemap-noi-dung.xml',
   '/sitemap-nghiem-chung.xml',
-  '/sitemap-doan-gio-sinh.xml',
+  '/sitemap-xac-dinh-gio-sinh.xml',
   '/sitemap-seo.xml',
   '/sitemap-van-han.xml',
   '/sitemap-la-so.xml',

@@ -20,9 +20,9 @@ const nextConfig = {
     '/nghiem-chung': ['./data/nghiem-chung/manifest.json'],
     '/nghiem-chung/[slug]': ['./data/nghiem-chung/**', './public/laso-chart.js'],
     '/sitemap-nghiem-chung': ['./data/nghiem-chung/manifest.json'],
-    '/doan-gio-sinh': ['./data/nghiem-chung/manifest.json'],
-    '/doan-gio-sinh/[slug]': ['./data/nghiem-chung/**', './public/laso-chart.js'],
-    '/sitemap-doan-gio-sinh': ['./data/nghiem-chung/manifest.json'],
+    '/xac-dinh-gio-sinh': ['./data/nghiem-chung/manifest.json'],
+    '/xac-dinh-gio-sinh/[slug]': ['./data/nghiem-chung/**', './public/laso-chart.js'],
+    '/sitemap-xac-dinh-gio-sinh': ['./data/nghiem-chung/manifest.json'],
     '/api/luan-giai/email-pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
     // Cùng lý do: các route dưới cũng dựng PDF (resend-pdf · gửi PDF vào kênh chat
     // từ web và từ webhook 4 kênh) — lib/pdf/paid-reports.ts.
@@ -135,7 +135,7 @@ const nextConfig = {
       { source: '/sitemap-trang.xml',   destination: '/sitemap-trang'        },
       { source: '/sitemap-noi-dung.xml', destination: '/sitemap-noi-dung'    },
       { source: '/sitemap-nghiem-chung.xml', destination: '/sitemap-nghiem-chung' },
-      { source: '/sitemap-doan-gio-sinh.xml', destination: '/sitemap-doan-gio-sinh' },
+      { source: '/sitemap-xac-dinh-gio-sinh.xml', destination: '/sitemap-xac-dinh-gio-sinh' },
       { source: '/sitemap-seo.xml',     destination: '/sitemap-seo'          },
       { source: '/sitemap-van-han.xml', destination: '/sitemap-van-han'      },
       { source: '/sitemap-la-so.xml',   destination: '/sitemap-la-so'        },

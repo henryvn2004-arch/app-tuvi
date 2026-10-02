@@ -45,7 +45,7 @@ Người này KHÔNG có giờ sinh công khai. Với MỖI giờ dưới đây,
 - Chấm phân hoá thật: giờ khớp nhất và kém nhất phải chênh rõ; nếu nhiều giờ ngang nhau thì doTinCay = "thap".
 JSON: {"bang":[{"gio":"Tý","diem":0-100,"lyDo":"1–2 câu cụ thể, 30–300 ký tự"} … đủ 12 giờ Tý→Hợi],
  "chon":"<giờ điểm cao nhất>","doTinCay":"cao|vua|thap",
- "giaiThich":"2–4 câu (100–700 ký tự): vì sao giờ này khớp nhất, giờ nào bám sát thứ hai, và nhắc đây là suy đoán"}
+ "giaiThich":"2–4 câu (100–700 ký tự): vì sao giờ này khớp nhất, giờ nào bám sát thứ hai, và nhắc đây là giờ xác định qua đối chiếu với đời thật, không phải giờ khai sinh — KHÔNG dùng chữ \"đoán\""}
 Rồi chạy: npx tsx scripts/nghiem-chung/doan-gio.ts chot <slug>  → nó in đường dẫn brief THƯỜNG của giờ đã chọn.
 ## Bước 2 — đọc brief thường đó, viết hồ sơ như mọi hồ sơ Nghiệm Chứng (nháp + validate.ts), chấm NGHIÊM như luật trong brief.`;
 
@@ -168,7 +168,7 @@ function chot(slug: string) {
   const i = CHI.indexOf(doan.chon);
   if (i < 0) throw new Error(`"chon" phải là một trong ${CHI.join(', ')}`);
   const u = p.ung[i];
-  p.sinh.gio = `giờ ${CHI[i]} (suy đoán)`;
+  p.sinh.gio = `giờ ${CHI[i]} (xác định)`;
   p.sinh.gioEngine = gioDaiDien(i);
   p.laSo = u.laSo;
   writeFileSync(pPath, JSON.stringify(p));

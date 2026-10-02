@@ -1,5 +1,5 @@
 // app/nghiem-chung/[slug]/route.ts — hồ sơ giờ sinh KIỂM CHỨNG. Khuôn trang ở
-// lib/nghiem-chung/trang-ho-so.ts (dùng chung với /doan-gio-sinh/[slug]).
+// lib/nghiem-chung/trang-ho-so.ts (dùng chung với /xac-dinh-gio-sinh/[slug]).
 export const revalidate = 604800;
 
 import { NextRequest } from 'next/server';

@@ -268,7 +268,7 @@ ${ASK_CSS}
   </div>
 </div>
 ${ask.bar}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=46" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
 ${ASK_SCRIPT}
 </body></html>`;
 }
@@ -319,7 +319,7 @@ ${commonHead}
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 ${bcHTML}
 ${row.rendered_html}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=46" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
 </body></html>`;
   }
   const luanGiai: Record<string,string> = (row.luan_giai as Record<string,string>) || {};
@@ -335,7 +335,7 @@ ${commonHead}
 ${bcHTML}
 <h1>${title}</h1>
 <div>${bodyHTML}</div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=46" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
 </body></html>`;
 }
 
@@ -1678,7 +1678,7 @@ ${relatedArticles.length ? `<div style="background:#F9F4EB;border-top:2px solid 
 </div>` : ''}
 ${relatedHTML}
 ${ask.bar}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=46" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
 ${ASK_SCRIPT}
 <script src="/share.js" defer></script>
 <script src="/pwa-push.js?v=2" defer></script>

@@ -1,4 +1,4 @@
-// lib/nghiem-chung/trang-hub.ts — hub cho CẢ HAI mục (/nghiem-chung, /doan-gio-sinh); trước là hub mục Nghiệm Chứng: danh sách hồ sơ lá số
+// lib/nghiem-chung/trang-hub.ts — hub cho CẢ HAI mục (/nghiem-chung, /xac-dinh-gio-sinh); trước là hub mục Nghiệm Chứng: danh sách hồ sơ lá số
 // người nổi tiếng đối chiếu với đời thật. Đọc thẳng HO_SO (lib/nghiem-chung),
 // số khớp/trượt đếm bằng `dem()` — cùng hàm trang chi tiết dùng.
 import { NextRequest, NextResponse } from 'next/server';
@@ -27,22 +27,22 @@ const CHU = {
     h1: 'Lá số Tử Vi người nổi tiếng, đặt cạnh cuộc đời thật',
     lede: 'Mỗi hồ sơ lấy một người có giờ sinh đã kiểm chứng, lập lá số theo cổ pháp rồi đối chiếu từng nhận định với những gì thực sự xảy ra trong đời họ. Chỗ khớp và chỗ trượt đều được ghi rõ, kèm nguồn.',
     the: 'Lá số Tử Vi',
-    how: 'Lá số được chấm trước, đời thật đặt sau — không chỉnh lá số cho vừa sự kiện. <a href="/phuong-phap">Xem phương pháp</a>. Người chưa công bố giờ sinh: <a href="/doan-gio-sinh">Đoán giờ sinh qua 12 lá số</a>.',
+    how: 'Lá số được chấm trước, đời thật đặt sau — không chỉnh lá số cho vừa sự kiện. <a href="/phuong-phap">Xem phương pháp</a>. Người chưa công bố giờ sinh: <a href="/xac-dinh-gio-sinh">Xác định giờ sinh qua 12 lá số</a>.',
   },
-  'doan-gio-sinh': {
-    ten: 'Đoán Giờ Sinh',
-    title: 'Đoán Giờ Sinh Người Nổi Tiếng Theo Tử Vi: 12 Lá Số, Giờ Nào Khớp Đời Nhất | Tử Vi Minh Bảo',
-    desc: 'Người nổi tiếng chưa công bố giờ sinh: lập đủ 12 lá số theo 12 canh giờ, đối chiếu với cuộc đời thật để tìm giờ khớp nhất. Ghi rõ là suy đoán, kèm điểm từng giờ và nguồn.',
-    h1: 'Người nổi tiếng sinh giờ nào? Tử Vi đoán qua 12 lá số',
-    lede: 'Với người chưa công bố giờ sinh, hệ thống lập đủ 12 lá số theo 12 canh giờ rồi chấm xem lá số giờ nào khớp cuộc đời thật nhất — nặng nhất là các đại vận có rơi đúng giai đoạn thăng trầm hay không. Kết quả là giờ SUY ĐOÁN, ghi rõ độ tin cậy.',
+  'xac-dinh-gio-sinh': {
+    ten: 'Xác Định Giờ Sinh',
+    title: 'Xác Định Giờ Sinh Người Nổi Tiếng Theo Tử Vi: 12 Lá Số, Giờ Nào Khớp Đời Nhất | Tử Vi Minh Bảo',
+    desc: 'Người nổi tiếng chưa công bố giờ sinh: lập đủ 12 lá số theo 12 canh giờ, đối chiếu với cuộc đời thật để tìm giờ khớp nhất. Ghi rõ đây là giờ xác định, không phải giờ khai sinh, kèm điểm từng giờ và nguồn.',
+    h1: 'Người nổi tiếng sinh giờ nào? Tử Vi xác định qua 12 lá số',
+    lede: 'Với người chưa công bố giờ sinh, hệ thống lập đủ 12 lá số theo 12 canh giờ rồi chấm xem lá số giờ nào khớp cuộc đời thật nhất — nặng nhất là các đại vận có rơi đúng giai đoạn thăng trầm hay không. Kết quả là giờ do hệ thống xác định (không phải giờ khai sinh), ghi rõ độ tin cậy.',
     the: 'Giờ sinh',
-    how: 'Giờ được chọn theo chính đời thật nên đây là suy đoán, không phải phép thử độc lập. Muốn xem lá số người có giờ sinh kiểm chứng đặt cạnh đời thật: <a href="/nghiem-chung">Nghiệm Chứng</a>.',
+    how: 'Giờ được xác định bằng cách đối chiếu với chính đời thật, nên đây không phải phép thử độc lập. Muốn xem lá số người có giờ sinh kiểm chứng đặt cạnh đời thật: <a href="/nghiem-chung">Nghiệm Chứng</a>.',
   },
 };
 
 export async function trangHub(req: NextRequest, muc: Muc): Promise<Response> {
   const C = CHU[muc];
-  const dm = danhMuc().filter((x) => !!x.gioDoan === (muc === 'doan-gio-sinh'));
+  const dm = danhMuc().filter((x) => !!x.gioDoan === (muc === 'xac-dinh-gio-sinh'));
   const soTrang = Math.max(1, Math.ceil(dm.length / MOI_TRANG));
   const trang = Math.min(soTrang, Math.max(1, Number(req.nextUrl.searchParams.get('trang')) || 1));
   const items = dm.slice((trang - 1) * MOI_TRANG, trang * MOI_TRANG);
@@ -58,7 +58,7 @@ export async function trangHub(req: NextRequest, muc: Muc): Promise<Response> {
   <div>
     <div class="nm">${C.the} ${esc(h.ten)}</div>
     <div class="mt">${esc(h.ngheNghiep)} · sinh ${h.namSinh}</div>
-    <div class="st">${h.gioDoan ? `<span>Đoán giờ sinh: giờ ${esc(h.gioDoan)}</span>` : `<span>Con người: khớp ${h.tyLeBM == null ? '—' : h.tyLeBM + '%'}</span><span>Đại vận: khớp ${h.tyLeDV == null ? '—' : h.tyLeDV + '%'}</span>`}</div>
+    <div class="st">${h.gioDoan ? `<span>Xác định giờ sinh: giờ ${esc(h.gioDoan)}</span>` : `<span>Con người: khớp ${h.tyLeBM == null ? '—' : h.tyLeBM + '%'}</span><span>Đại vận: khớp ${h.tyLeDV == null ? '—' : h.tyLeDV + '%'}</span>`}</div>
   </div>
 </a>`;
   }).join('');
@@ -136,7 +136,7 @@ h1{font-family:var(--serif);font-size:32px;color:var(--navy);font-weight:600;lin
 <script src="/auth.js?v=6"></script>
 </head><body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=46" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
 <nav class="bc" aria-label="Breadcrumb"><a href="/">Trang Chủ</a><span>›</span><span>${C.ten}</span></nav>
 <main class="wrap">
   <div class="eyebrow">${C.ten}</div>

@@ -202,7 +202,7 @@ export async function kiem(slug: string): Promise<string[]> {
       const max = Math.max(...bang.map((b: Any) => b.diem));
       const chon = bang.find((b: Any) => b.gio === g.chon);
       if (!chon || chon.diem !== max) loi.push('doan.chon phải là giờ có điểm cao nhất');
-      if (`giờ ${g.chon} (suy đoán)` !== pack.sinh.gio) loi.push('doan.chon khác giờ đã chốt — chạy lại doan-gio.ts chot');
+      if (`giờ ${g.chon} (xác định)` !== pack.sinh.gio) loi.push('doan.chon khác giờ đã chốt — chạy lại doan-gio.ts chot');
       if (!['cao', 'vua', 'thap'].includes(g.doTinCay)) loi.push('doan.doTinCay: cao|vua|thap');
       str(g.giaiThich, 'doan.giaiThich', 100, 700);
       kiemNhayCam(g.giaiThich || '', 'doan.giaiThich');
