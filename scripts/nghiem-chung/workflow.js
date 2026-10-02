@@ -7,6 +7,13 @@ export const meta = {
 // effort 'low' = ít token suy nghĩ (đo 2026-10-02: suy nghĩ chiếm ~một nửa token ra ở mức mặc định).
 const slugs = (args && args.slugs) || [];
 const effort = (args && args.effort) || undefined;
+// args.doan: người KHÔNG có giờ sinh — bước 1 chấm 12 giờ (brief-doan), chốt giờ, rồi viết như thường.
+const doan = !!(args && args.doan);
+const buoc1 = (s) =>
+  doan
+    ? `0) Đọc TOÀN BỘ work/nghiem-chung/brief-doan/${s}.md, làm đúng "Bước 1" trong đó: ghi work/nghiem-chung/doan/${s}.json ` +
+      `rồi chạy npx tsx scripts/nghiem-chung/doan-gio.ts chot ${s} (một lệnh Bash: mkdir -p work/nghiem-chung/doan && cat > … <<'DOAN' … DOAN && npx tsx …).\n`
+    : '';
 log(`${slugs.length} slug`);
 phase('Viết hồ sơ');
 const kq = await parallel(
@@ -14,8 +21,9 @@ const kq = await parallel(
     (s) => () =>
       agent(
         `Viết hồ sơ Nghiệm Chứng cho slug ${s}. Thư mục làm việc là gốc repo.\n` +
+          buoc1(s) +
           `1) Đọc TOÀN BỘ work/nghiem-chung/brief/${s}.md (luật + lá số + vận các năm ứng viên + bài Wikipedia). ` +
-          `Nếu công cụ Read cắt giữa chừng thì đọc tiếp bằng offset. KHÔNG đọc file nào khác.\n` +
+          `Nếu công cụ Read cắt giữa chừng thì đọc tiếp bằng offset. KHÔNG đọc file nào khác${doan ? ' (ngoài brief-doan ở bước 0)' : ''}.\n` +
           `2) Bằng MỘT lệnh Bash, ghi nháp rồi kiểm tra ngay: ` +
           `mkdir -p work/nghiem-chung/draft && cat > work/nghiem-chung/draft/${s}.json <<'NHAP'\n{…json…}\nNHAP\n` +
           `npx tsx scripts/nghiem-chung/validate.ts ${s}\n` +

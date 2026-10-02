@@ -180,12 +180,49 @@ export async function kiem(slug: string): Promise<string[]> {
   if (!Array.isArray(d.faq) || d.faq.length < 1 || d.faq.length > 4) loi.push('faq: 1–4 câu');
   else d.faq.forEach((f: Any, i: number) => (str(f.q, `faq[${i}].q`, 10, 200), str(f.a, `faq[${i}].a`, 40, 700), kiemNhayCam(`${f.q} ${f.a}`, `faq[${i}]`)));
 
+  // ── Đoán giờ sinh (gói `doan`): bảng chấm 12 giờ ở work/nghiem-chung/doan/<slug>.json ──
+  let gioDoan: Any;
+  if (pack.doan) {
+    const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
+    const gp = join(WORK, 'doan', `${slug}.json`);
+    const g = existsSync(gp) ? JSON.parse(readFileSync(gp, 'utf8')) : null;
+    if (!g) loi.push(`thiếu ${gp} (bước 1 đoán giờ)`);
+    else if (pack.sinh.gioEngine < 0) loi.push('chưa chạy doan-gio.ts chot');
+    else {
+      const bang = Array.isArray(g.bang) ? g.bang : [];
+      if (bang.length !== 12 || bang.some((b: Any, i: number) => b.gio !== CHI[i])) loi.push('doan.bang: đủ 12 giờ theo thứ tự Tý→Hợi');
+      bang.forEach((b: Any, i: number) => {
+        if (!Number.isInteger(b.diem) || b.diem < 0 || b.diem > 100) loi.push(`doan.bang[${i}].diem: số nguyên 0–100`);
+        str(b.lyDo, `doan.bang[${i}].lyDo`, 30, 300);
+        kiemNhayCam(b.lyDo || '', `doan.bang[${i}]`);
+      });
+      const max = Math.max(...bang.map((b: Any) => b.diem));
+      const chon = bang.find((b: Any) => b.gio === g.chon);
+      if (!chon || chon.diem !== max) loi.push('doan.chon phải là giờ có điểm cao nhất');
+      if (`giờ ${g.chon} (suy đoán)` !== pack.sinh.gio) loi.push('doan.chon khác giờ đã chốt — chạy lại doan-gio.ts chot');
+      if (!['cao', 'vua', 'thap'].includes(g.doTinCay)) loi.push('doan.doTinCay: cao|vua|thap');
+      str(g.giaiThich, 'doan.giaiThich', 100, 700);
+      kiemNhayCam(g.giaiThich || '', 'doan.giaiThich');
+      gioDoan = {
+        chon: g.chon,
+        doTinCay: g.doTinCay,
+        giaiThich: g.giaiThich,
+        bang: bang.map((b: Any, i: number) => {
+          const u = pack.ung[i]?.laSo;
+          return { gio: b.gio, diem: b.diem, lyDo: b.lyDo, menh: u ? `Mệnh ${u.menh.diaChi}: ${u.menh.sao}` : '' };
+        }),
+      };
+    }
+  }
+
   if (loi.length) return loi;
 
   // ── Ghi bản chính: định danh lấy từ GÓI ─────────────────
   const nguon = [
     { ten: `Wikipedia (${pack.wiki.lang}) — ${pack.wiki.title}`, url: pack.wiki.url },
-    { ten: `Astro-Databank — dữ liệu giờ sinh (Rodden ${pack.sinh.rodden})`, url: `https://www.astro.com/astro-databank/` },
+    pack.doan
+      ? { ten: 'Wikidata — ngày sinh (giờ sinh không công bố; giờ trong bài là suy đoán)', url: `https://www.wikidata.org/wiki/${pack.qid}` }
+      : { ten: `Astro-Databank — dữ liệu giờ sinh (Rodden ${pack.sinh.rodden})`, url: `https://www.astro.com/astro-databank/` },
   ];
   const gan0 = (r: Any) => ({ ...r, nguon: CO_KL(r.ketLuan) ? [0] : undefined });
   const hoSo = {
@@ -206,6 +243,7 @@ export async function kiem(slug: string): Promise<string[]> {
     gioRanhGioi: d.gioRanhGioi
       ? { ...d.gioRanhGioi, tenGioThay: ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'][Math.floor(((pack.gioCanh.gio + 1) % 24) / 2)] }
       : undefined,
+    gioDoan,
     ketLuanBienTap: d.ketLuanBienTap,
     faq: d.faq,
     nguon,

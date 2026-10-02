@@ -101,7 +101,7 @@ const BAN_XU: [RegExp, string][] = [
   [/Séc|Tiệp/, 'cs'],
   [/Hungary/, 'hu'],
 ];
-const banXu = (country: string | null) => BAN_XU.find(([re]) => re.test(country || ''))?.[1] || null;
+export const banXu = (country: string | null) => BAN_XU.find(([re]) => re.test(country || ''))?.[1] || null;
 
 // ── HTTP có lùi lại ─────────────────────────────────────────
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -131,7 +131,7 @@ async function getJson(url: string): Promise<unknown> {
   throw new Error(`429/5xx lặp lại: ${url}`);
 }
 
-async function sitelinks(qids: string[]): Promise<Record<string, Record<string, string>>> {
+export async function sitelinks(qids: string[]): Promise<Record<string, Record<string, string>>> {
   const out: Record<string, Record<string, string>> = {};
   for (let i = 0; i < qids.length; i += 50) {
     const ids = qids.slice(i, i + 50).join('|');
@@ -152,7 +152,7 @@ async function sitelinks(qids: string[]): Promise<Record<string, Record<string, 
  * (`x-envoy-ratelimited`) ngay từ vài chục request đầu qua proxy container.
  * Agent chép `trich` từ chính chữ đã bóc này, nên bộ kiểm tra vẫn dò khớp được.
  */
-async function extract(lang: string, title: string, depth = 0): Promise<string> {
+export async function extract(lang: string, title: string, depth = 0): Promise<string> {
   for (let i = 0; i < 6; i++) {
     const r = await layLai(
       `https://${lang}.wikipedia.org/w/index.php?title=${encodeURIComponent(title.replace(/ /g, '_'))}&action=raw`,
@@ -206,7 +206,7 @@ function boc(w: string): string {
 }
 
 /** Cắt phần đuôi vô ích (tham khảo, liên kết ngoài, danh mục phim…) rồi giới hạn độ dài. */
-function gon(text: string): string {
+export function gon(text: string): string {
   const cut = text.search(
     /\n==+ *(References|Notes|External links|See also|Bibliography|Further reading|Références|Notes et références|Liens externes|Voir aussi|Note|Bibliografia|Collegamenti esterni|Voci correlate|Einzelnachweise|Weblinks|Literatur|Referencias|Enlaces externos|Véase también|Referências|Ligações externas|Tham khảo|Liên kết ngoài|Chú thích) *==+/,
   );

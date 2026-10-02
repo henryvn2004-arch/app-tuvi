@@ -72,6 +72,13 @@ export interface Nguon {
   url: string;
 }
 
+export interface GioDoan {
+  chon: string;
+  doTinCay: 'cao' | 'vua' | 'thap';
+  giaiThich: string;
+  bang: { gio: string; diem: number; lyDo: string; menh: string }[];
+}
+
 export interface HoSoNghiemChung {
   slug: string;
   ten: string;
@@ -89,8 +96,8 @@ export interface HoSoNghiemChung {
     /** Giờ (0–23) đưa vào engine — theo quy ước giờ đồng hồ của `TuviForm`. */
     gioEngine: number;
     noi: string;
-    /** Xếp hạng Rodden của Astro-Databank (AA = có giấy khai sinh). */
-    rodden: 'AA' | 'A';
+    /** Xếp hạng Rodden của Astro-Databank (AA = có giấy khai sinh); 'doan' = giờ SUY ĐOÁN (xem `gioDoan`). */
+    rodden: 'AA' | 'A' | 'doan';
   };
   /** Tên file trên Wikimedia Commons (cột `image_file`). */
   anhCommons?: string;
@@ -102,6 +109,8 @@ export interface HoSoNghiemChung {
   daiVan: DongDaiVan[];
   namMoc: NamMoc[];
   gioRanhGioi?: GioRanhGioi;
+  /** Người KHÔNG có giờ sinh công khai: bảng chấm 12 giờ, giờ chọn = giờ điểm cao nhất. */
+  gioDoan?: GioDoan;
   ketLuanBienTap: string[];
   faq: { q: string; a: string }[];
   nguon: Nguon[];

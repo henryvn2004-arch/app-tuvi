@@ -136,16 +136,25 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   const dBM = dem(h.banMenh);
   const dDV = dem(h.daiVan);
   const dNam = dem(h.namMoc);
+  // Giờ SUY ĐOÁN (người không có giờ sinh công khai): giờ được chọn THEO đời thật, nên trang không
+  // khoe tỷ lệ khớp như phép thử độc lập — thay bằng bảng 12 giờ.
+  const gd = h.gioDoan;
+  const gdTin = gd ? { cao: 'cao', vua: 'vừa', thap: 'thấp' }[gd.doTinCay] : '';
 
   const url = `${BASE}/nghiem-chung/${h.slug}`;
   const hubUrl = `${BASE}/nghiem-chung`;
-  const title = `Lá Số Tử Vi ${h.ten}: Đối Chiếu Với Cuộc Đời Thật | Tử Vi Minh Bảo`;
-  const desc = `Lá số Tử Vi của ${h.ten} (sinh ${ngayVN(h.sinh.ngay)}, giờ ${gioChi}) đối chiếu từng mục với cuộc đời thật: ${pctTxt(dBM.tyLe)} nhận định về con người khớp, ${pctTxt(dDV.tyLe)} đại vận khớp. Có nguồn, ghi rõ chỗ trượt.`;
+  const h1 = gd ? `Đoán giờ sinh ${h.ten} theo Tử Vi: 12 giờ, giờ nào khớp đời nhất?` : `Lá số Tử Vi ${h.ten}: đối chiếu với cuộc đời thật`;
+  const title = gd
+    ? `Đoán Giờ Sinh ${h.ten} Theo Tử Vi: 12 Giờ, Giờ Nào Khớp Đời Nhất | Tử Vi Minh Bảo`
+    : `Lá Số Tử Vi ${h.ten}: Đối Chiếu Với Cuộc Đời Thật | Tử Vi Minh Bảo`;
+  const desc = gd
+    ? `${h.ten} (sinh ${ngayVN(h.sinh.ngay)}) chưa công bố giờ sinh. Lập đủ 12 lá số theo 12 canh giờ và đối chiếu với cuộc đời thật: giờ ${gd.chon} khớp nhất (độ tin cậy ${gdTin}). Đây là suy đoán, có ghi rõ cách chấm.`
+    : `Lá số Tử Vi của ${h.ten} (sinh ${ngayVN(h.sinh.ngay)}, giờ ${gioChi}) đối chiếu từng mục với cuộc đời thật: ${pctTxt(dBM.tyLe)} nhận định về con người khớp, ${pctTxt(dDV.tyLe)} đại vận khớp. Có nguồn, ghi rõ chỗ trượt.`;
 
   const { commonsThumb, commonsFilePage } = celebPhoto();
   const anh = h.anhCommons ? commonsThumb(h.anhCommons, 360) : null;
   const trangAnh = h.anhCommons ? commonsFilePage(h.anhCommons) : null;
-  const ogImg = `${BASE}/api/og?${new URLSearchParams({ title: `Lá số ${h.ten}`, sub: 'Tử vi đối chiếu cuộc đời thật' }).toString()}`;
+  const ogImg = `${BASE}/api/og?${new URLSearchParams({ title: gd ? `Đoán giờ sinh ${h.ten}` : `Lá số ${h.ten}`, sub: gd ? '12 lá số, giờ nào khớp đời nhất' : 'Tử vi đối chiếu cuộc đời thật' }).toString()}`;
 
   // Nguyên văn câu engine cho các dòng trỏ `laSoRef` (hồ sơ sinh hàng loạt).
   const coRef = [...h.banMenh, ...h.namMoc, ...h.daiVan].some((r) => r.laSoRef?.length);
@@ -246,7 +255,9 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   const faqs = [
     {
       q: `${h.ten} sinh năm nào, giờ nào, tuổi con gì?`,
-      a: `${h.ten} sinh ngày ${ngayVN(h.sinh.ngay)} lúc ${h.sinh.gio} tại ${h.sinh.noi} (Astro-Databank xếp hạng ${h.sinh.rodden}). Năm sinh âm lịch là ${ls.tong_quan.can_chi_nam} — tuổi ${tuoiCon}; giờ sinh theo đồng hồ thuộc giờ ${gioChi}.`,
+      a: gd
+        ? `${h.ten} sinh ngày ${ngayVN(h.sinh.ngay)} tại ${h.sinh.noi}, năm âm lịch ${ls.tong_quan.can_chi_nam} — tuổi ${tuoiCon}. Giờ sinh chưa được công bố; đối chiếu 12 lá số với cuộc đời thật thì giờ ${gd.chon} khớp nhất, nhưng đây chỉ là suy đoán.`
+        : `${h.ten} sinh ngày ${ngayVN(h.sinh.ngay)} lúc ${h.sinh.gio} tại ${h.sinh.noi} (Astro-Databank xếp hạng ${h.sinh.rodden}). Năm sinh âm lịch là ${ls.tong_quan.can_chi_nam} — tuổi ${tuoiCon}; giờ sinh theo đồng hồ thuộc giờ ${gioChi}.`,
     },
     {
       q: `Lá số tử vi của ${h.ten} mệnh gì?`,
@@ -260,7 +271,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
     {
       '@context': 'https://schema.org',
       '@type': 'Article',
-      headline: `Lá số Tử Vi ${h.ten}: đối chiếu với cuộc đời thật`,
+      headline: h1,
       description: desc,
       url,
       mainEntityOfPage: url,
@@ -369,6 +380,7 @@ h1{font-family:var(--serif);font-size:32px;line-height:1.25;color:var(--navy);fo
 .sc-n small{font-size:15px;color:#cfd8e0;font-weight:400}
 .sc-l{font-size:12.5px;color:#cfd8e0;margin-top:4px}
 .sc-d{font-size:11.5px;color:#aebccb;margin-top:2px}
+.tbl-doan .bar{height:8px;background:var(--blt);border-radius:4px;overflow:hidden;min-width:80px}.tbl-doan .bar i{display:block;height:100%;background:var(--gold-b)}.tbl-doan tr.r-chon td{background:var(--soft)}
 .sc-note{font-size:12px!important;color:#aebccb!important;margin-top:12px}.sc-note a{color:var(--gold-b)}
 .sec{margin-top:44px}
 .sec h2{font-family:var(--serif);font-size:23px;color:var(--navy);font-weight:600;line-height:1.35;margin-bottom:10px}
@@ -452,18 +464,45 @@ ${ask.css}
       ${trangAnh ? `<div class="hero-cap">Ảnh: <a href="${esc(trangAnh)}" rel="noopener nofollow" target="_blank">Wikimedia Commons</a> — tác giả &amp; giấy phép tại trang gốc</div>` : ''}
     </div>
     <div>
-      <div class="eyebrow">Nghiệm Chứng · Lá số người nổi tiếng</div>
-      <h1>Lá số Tử Vi ${esc(h.ten)}: đối chiếu với cuộc đời thật</h1>
+      <div class="eyebrow">Nghiệm Chứng · ${gd ? 'Đoán giờ sinh' : 'Lá số người nổi tiếng'}</div>
+      <h1>${esc(h1)}</h1>
       <p class="lede">${esc(h.moTaNgan)}.</p>
       <div class="facts">
-        <span class="fact">Sinh <b>${ngayHT}</b> · ${esc(h.sinh.gio)} · ${esc(h.sinh.noi)}</span>
-        <span class="fact">Giờ <b>${esc(gioChi)}</b> · tuổi <b>${esc(ls.tong_quan.can_chi_nam)}</b></span>
-        <span class="fact">Dữ liệu giờ sinh: <b>Rodden ${h.sinh.rodden}</b>${sup(iADB >= 0 ? [iADB] : [])}</span>${h.namMat ? `<span class="fact">Mất năm <b>${h.namMat}</b></span>` : ''}
+        <span class="fact">Sinh <b>${ngayHT}</b>${gd ? '' : ` · ${esc(h.sinh.gio)}`} · ${esc(h.sinh.noi)}</span>
+        <span class="fact">${gd ? 'Giờ đoán' : 'Giờ'} <b>${esc(gioChi)}</b> · tuổi <b>${esc(ls.tong_quan.can_chi_nam)}</b></span>
+        ${gd ? `<span class="fact">Giờ sinh: <b>chưa công bố — giờ trên là SUY ĐOÁN</b> (độ tin cậy ${gdTin})</span>` : `<span class="fact">Dữ liệu giờ sinh: <b>Rodden ${h.sinh.rodden}</b>${sup(iADB >= 0 ? [iADB] : [])}</span>`}${h.namMat ? `<span class="fact">Mất năm <b>${h.namMat}</b></span>` : ''}
       </div>
     </div>
   </header>
 
-  <section class="answer" aria-labelledby="tl">
+  ${
+    gd
+      ? `<section class="answer" aria-labelledby="tl">
+    <h2 id="tl">${esc(h.ten)} sinh giờ nào? Tử Vi đoán ra sao</h2>
+    <p>${esc(h.traLoiNgan)}</p>
+    <div class="score">
+      ${[...gd.bang]
+        .sort((a, b) => b.diem - a.diem)
+        .slice(0, 3)
+        .map((b, i) => `<div class="sc"><div class="sc-n">Giờ ${esc(b.gio)}</div><div class="sc-l">${['khớp nhất', 'khớp thứ hai', 'khớp thứ ba'][i]} · ${b.diem}/100</div><div class="sc-d">${esc(b.menh)}</div></div>`)
+        .join('')}
+    </div>
+    <p class="sc-note">Điểm 0–100 = mức lá số giờ đó khớp đời thật. Giờ được chọn THEO đời thật nên đây là suy đoán, không phải phép thử độc lập như hồ sơ có giờ sinh kiểm chứng. <a href="#phuong-phap">Cách chấm</a></p>
+  </section>
+
+  <section class="sec" id="doan-gio">
+    <h2>12 lá số của ${esc(h.ten)}: giờ nào khớp đời nhất?</h2>
+    <p>${esc(gd.giaiThich)}</p>
+    <div class="tbl-wrap"><table class="tbl tbl-doan">
+      <thead><tr><th>Giờ</th><th>Cung Mệnh</th><th>Điểm khớp</th><th>Vì sao</th></tr></thead>
+      <tbody>${gd.bang
+        .map(
+          (b) => `<tr class="${b.gio === gd.chon ? 'r-chon' : ''}"><td data-l="Giờ"><b>${esc(b.gio)}</b>${b.gio === gd.chon ? '<span class="sub">giờ đoán</span>' : ''}</td><td data-l="Cung Mệnh">${esc(b.menh)}</td><td data-l="Điểm khớp"><div class="bar"><i style="width:${b.diem}%"></i></div><span class="sub">${b.diem}/100</span></td><td data-l="Vì sao">${esc(b.lyDo)}</td></tr>`,
+        )
+        .join('')}</tbody>
+    </table></div>
+  </section>`
+      : `  <section class="answer" aria-labelledby="tl">
     <h2 id="tl">Lá số của ${esc(h.ten)} đoán đúng đến đâu?</h2>
     <p>${esc(h.traLoiNgan)}</p>
     <div class="score">
@@ -472,7 +511,8 @@ ${ask.css}
       <div class="sc"><div class="sc-n">${pctTxt(dNam.tyLe)}</div><div class="sc-l">năm bước ngoặt khớp</div><div class="sc-d">${dNam.khop} khớp · ${dNam.motPhan} khớp một phần · ${dNam.truot} trượt</div></div>
     </div>
     <p class="sc-note">Tỷ lệ = mục khớp hoặc khớp một phần trên số mục kiểm chứng được; mục chưa có nguồn không tính. <a href="#phuong-phap">Cách chấm</a></p>
-  </section>
+  </section>`
+  }
 
   <section class="sec" id="tieu-su">
     <h2>${esc(h.ten)} là ai?</h2>
@@ -481,7 +521,7 @@ ${ask.css}
 
   <section class="sec" id="la-so">
     <h2>Lá số Tử Vi của ${esc(h.ten)} tóm tắt</h2>
-    <p>Lập theo ngày ${ngayHT}, giờ ${esc(gioChi)} (${esc(h.sinh.gio)} giờ đồng hồ), ${h.gioiTinh === 'nam' ? 'nam' : 'nữ'} mệnh.</p>
+    <p>Lập theo ngày ${ngayHT}, ${gd ? `giờ ${esc(gioChi)} — giờ ĐOÁN khớp nhất ở trên, không phải giờ khai sinh` : `giờ ${esc(gioChi)} (${esc(h.sinh.gio)} giờ đồng hồ)`}, ${h.gioiTinh === 'nam' ? 'nam' : 'nữ'} mệnh.</p>
     ${gridHTML ? `<div class="laso-wrap">${gridHTML}</div>` : ''}
     <div class="ls-grid">
       <div class="ls-i"><div class="ls-k">Năm sinh</div><div class="ls-v">${esc(ls.tong_quan.can_chi_nam)}</div></div>
@@ -533,7 +573,11 @@ ${ask.css}
   <section class="sec" id="phuong-phap">
     <h2>Cách chúng tôi đối chiếu</h2>
     <ul class="method">
-      <li><b>Giờ sinh có kiểm chứng:</b> chỉ chọn người có giờ sinh xếp hạng Rodden AA hoặc A trên Astro-Databank.</li>
+      ${
+        gd
+          ? '<li><b>Giờ sinh suy đoán:</b> người này chưa công bố giờ sinh. Hệ thống lập đủ 12 lá số theo 12 canh giờ; mỗi giờ được chấm 0–100 theo mức khớp với sự kiện công khai, nặng nhất là đại vận có khớp với các giai đoạn thăng trầm hay không. Giờ điểm cao nhất được chọn để viết các bảng dưới — vì chọn theo đời thật nên các bảng là minh họa, không phải phép thử độc lập.</li>'
+          : '<li><b>Giờ sinh có kiểm chứng:</b> chỉ chọn người có giờ sinh xếp hạng Rodden AA hoặc A trên Astro-Databank.</li>'
+      }
       <li><b>Lá số chấm trước, đời thật đặt sau:</b> cung, sao, điểm và đại vận do hệ thống an sao tính theo cổ pháp; không chỉnh lá số cho vừa đời thật.</li>
       <li><b>Mỗi sự thật một nguồn:</b> chỉ dùng sự kiện công khai, có trích dẫn. Không suy đoán về sức khỏe, hôn nhân hay đời tư người đang sống.</li>
       <li><b>Cách tính tỷ lệ khớp:</b> mỗi dòng được chấm khớp, khớp một phần hoặc trượt. Tỷ lệ = (khớp + khớp một phần) / số dòng đã chấm — vì Tử Vi luận theo khuynh hướng, một nhận định đúng về hướng dù chưa đúng mọi chi tiết vẫn được tính là khớp. Mục chưa có nguồn và giai đoạn đang diễn ra không tính.</li>

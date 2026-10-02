@@ -29,6 +29,7 @@ const out = readdirSync(join(DIR, 'ho-so'))
       ...(h.anhCommons ? { anhCommons: h.anhCommons } : {}),
       tyLeBM: dem(h.banMenh).tyLe,
       tyLeDV: dem(h.daiVan).tyLe,
+      ...(h.gioDoan ? { gioDoan: h.gioDoan.chon } : {}),
       indexed: indexed.has(h.slug),
     };
   })

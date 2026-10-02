@@ -23,6 +23,8 @@ export interface MucManifest {
   anhCommons?: string;
   tyLeBM: number | null;
   tyLeDV: number | null;
+  /** Giờ sinh SUY ĐOÁN (giờ đoán) — thẻ hub không khoe tỷ lệ khớp. */
+  gioDoan?: string;
   indexed: boolean;
 }
 

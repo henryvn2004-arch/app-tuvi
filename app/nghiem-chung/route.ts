@@ -39,7 +39,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   <div>
     <div class="nm">Lá số Tử Vi ${esc(h.ten)}</div>
     <div class="mt">${esc(h.ngheNghiep)} · sinh ${h.namSinh}</div>
-    <div class="st"><span>Con người: khớp ${h.tyLeBM == null ? '—' : h.tyLeBM + '%'}</span><span>Đại vận: khớp ${h.tyLeDV == null ? '—' : h.tyLeDV + '%'}</span></div>
+    <div class="st">${h.gioDoan ? `<span>Đoán giờ sinh: giờ ${esc(h.gioDoan)}</span>` : `<span>Con người: khớp ${h.tyLeBM == null ? '—' : h.tyLeBM + '%'}</span><span>Đại vận: khớp ${h.tyLeDV == null ? '—' : h.tyLeDV + '%'}</span>`}</div>
   </div>
 </a>`;
   }).join('');
