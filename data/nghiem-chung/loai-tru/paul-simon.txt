@@ -1,0 +1,1 @@
+Q4028	thieu-nguon: gói không có wiki.text (wiki = null), không có nguồn sự thật để đối chiếu
