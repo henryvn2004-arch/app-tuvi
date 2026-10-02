@@ -40,14 +40,59 @@ const CHU = {
   },
 };
 
+// Tìm kiếm + lọc chữ cái chạy phía SERVER (?q= · ?chu=) — không cần JS, chạy được với hàng nghìn hồ sơ,
+// và trang chữ cái là URL thật cho máy tìm kiếm đọc. So khớp bỏ dấu (đ → d).
+const khongDau = (s: string) =>
+  s
+    .replace(/[đĐ]/g, 'd')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+const CHU_CAI = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const chuDau = (ten: string) => {
+  const c = khongDau(ten).trim().charAt(0).toUpperCase();
+  return CHU_CAI.includes(c) ? c : '#';
+};
+
 export async function trangHub(req: NextRequest, muc: Muc): Promise<Response> {
   const C = CHU[muc];
-  const dm = danhMuc().filter((x) => !!x.gioDoan === (muc === 'xac-dinh-gio-sinh'));
+  const sp = req.nextUrl.searchParams;
+  const q = (sp.get('q') || '').trim().slice(0, 60);
+  const chuRaw = (sp.get('chu') || '').toUpperCase();
+  const chu = CHU_CAI.includes(chuRaw) || chuRaw === '#' ? chuRaw : '';
+  const tatCa = danhMuc()
+    .filter((x) => !!x.gioDoan === (muc === 'xac-dinh-gio-sinh'))
+    .sort((a, b) => khongDau(a.ten).localeCompare(khongDau(b.ten)));
+  const soTheoChu = new Map<string, number>();
+  for (const x of tatCa) soTheoChu.set(chuDau(x.ten), (soTheoChu.get(chuDau(x.ten)) || 0) + 1);
+  let dm = chu ? tatCa.filter((x) => chuDau(x.ten) === chu) : tatCa;
+  if (q) {
+    const k = khongDau(q);
+    dm = dm.filter((x) => khongDau(`${x.ten} ${x.ngheNghiep}`).includes(k));
+  }
   const soTrang = Math.max(1, Math.ceil(dm.length / MOI_TRANG));
-  const trang = Math.min(soTrang, Math.max(1, Number(req.nextUrl.searchParams.get('trang')) || 1));
+  const trang = Math.min(soTrang, Math.max(1, Number(sp.get('trang')) || 1));
   const items = dm.slice((trang - 1) * MOI_TRANG, trang * MOI_TRANG);
   const hubUrl = `${BASE}/${muc}`;
-  const url = trang > 1 ? `${hubUrl}?trang=${trang}` : hubUrl;
+  /** Link giữ nguyên bộ lọc đang chọn; `undefined` = giữ, `''` = bỏ. */
+  const lien = (o: { q?: string; chu?: string; trang?: number }) => {
+    const u = new URLSearchParams();
+    const qq = o.q ?? q;
+    const cc = o.chu ?? chu;
+    if (qq) u.set('q', qq);
+    if (cc) u.set('chu', cc);
+    if (o.trang && o.trang > 1) u.set('trang', String(o.trang));
+    const t = u.toString();
+    return `/${muc}${t ? `?${t}` : ''}`;
+  };
+  const url = `${BASE}${lien({ q: '', trang })}`;
+  // Số trang: 1 … (trang-2..trang+2) … cuối — đủ gọn khi kho lên hàng nghìn hồ sơ.
+  const soHien = [...new Set([1, trang - 2, trang - 1, trang, trang + 1, trang + 2, soTrang])]
+    .filter((n) => n >= 1 && n <= soTrang)
+    .sort((x, y) => x - y);
+  const pager = `<nav class="pg" aria-label="Phân trang">${trang > 1 ? `<a href="${esc(lien({ trang: trang - 1 }))}" rel="prev">← Trước</a>` : '<span></span>'}<span class="so">${soHien
+    .map((n, i) => `${i && n - soHien[i - 1] > 1 ? '<span class="gap">…</span>' : ''}${n === trang ? `<b>${n}</b>` : `<a href="${esc(lien({ trang: n }))}">${n}</a>`}`)
+    .join('')}</span>${trang < soTrang ? `<a href="${esc(lien({ trang: trang + 1 }))}" rel="next">Sau →</a>` : '<span></span>'}</nav>`;
   const { title, desc } = C;
   const { commonsThumb } = celebPhoto();
 
@@ -101,7 +146,7 @@ export async function trangHub(req: NextRequest, muc: Muc): Promise<Response> {
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${url}">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="${q ? 'noindex, follow' : 'index, follow'}">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -128,6 +173,10 @@ h1{font-family:var(--serif);font-size:32px;color:var(--navy);font-weight:600;lin
 .mt{font-size:12.5px;color:var(--lt);margin-top:2px}
 .st{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .st span{font-size:11.5px;background:var(--soft);border-radius:999px;padding:2px 9px;color:var(--mid)}
+.tim{display:flex;gap:8px;margin:0 0 14px}.tim input{flex:1;min-width:0;font:inherit;font-size:15px;padding:11px 14px;border:1px solid var(--border);border-radius:10px;background:#fff;color:inherit}.tim input:focus{outline:2px solid var(--gold-b);outline-offset:1px}.tim button{font:inherit;font-weight:600;font-size:14px;padding:0 18px;border:0;border-radius:10px;background:var(--navy);color:#fff;cursor:pointer}
+.az{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 22px}.az a,.az span{min-width:32px;height:32px;padding:0 6px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none}.az a{color:var(--navy);background:var(--soft);border:1px solid var(--blt)}.az a:hover{border-color:var(--gold-b)}.az a.on{background:var(--navy);color:#fff;border-color:var(--navy)}.az span{color:#c4beb2;border:1px dashed var(--blt)}
+.rong{padding:28px;text-align:center;color:var(--lt);background:var(--soft);border-radius:14px}.rong a{color:var(--navy);font-weight:600}
+.pg .so{display:flex;gap:4px;align-items:center;flex-wrap:wrap;justify-content:center}.pg .so a,.pg .so b{min-width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px}.pg .so a{background:var(--soft);border:1px solid var(--blt)}.pg .so b{background:var(--navy);color:#fff}.pg .gap{color:var(--lt);padding:0 2px}
 .pg{display:flex;justify-content:space-between;align-items:center;margin-top:24px;font-size:14px;color:var(--lt)}.pg a{color:var(--navy);font-weight:600;text-decoration:none}
 .how{margin-top:40px;background:var(--soft);border-left:3px solid var(--gold-b);padding:16px 20px;font-size:14.5px;color:var(--mid)}
 .how a{color:var(--navy);font-weight:600}
@@ -142,11 +191,20 @@ h1{font-family:var(--serif);font-size:32px;color:var(--navy);font-weight:600;lin
   <div class="eyebrow">${C.ten}</div>
   <h1>${C.h1}</h1>
   <p class="lede">${C.lede}</p>
-  <p class="lede" style="margin-top:-14px">${dm.length.toLocaleString('vi-VN')} hồ sơ${soTrang > 1 ? ` · trang ${trang}/${soTrang}` : ''}</p>
-  <div class="grid">${cards}</div>
+  <form class="tim" action="/${muc}" method="get" role="search">
+    <input type="search" name="q" value="${esc(q)}" placeholder="Tìm theo tên hoặc nghề nghiệp…" aria-label="Tìm người nổi tiếng" autocomplete="off">
+    ${chu ? `<input type="hidden" name="chu" value="${esc(chu)}">` : ''}
+    <button type="submit">Tìm</button>
+  </form>
+  <nav class="az" aria-label="Lọc theo chữ cái đầu">
+    <a href="${lien({ chu: '', trang: 1 })}"${chu ? '' : ' class="on"'}>Tất cả</a>
+    ${[...CHU_CAI, '#'].map((c) => (soTheoChu.get(c) ? `<a href="${esc(lien({ chu: c, trang: 1 }))}"${c === chu ? ' class="on"' : ''}>${c}</a>` : `<span aria-hidden="true">${c}</span>`)).join('')}
+  </nav>
+  <p class="lede" style="margin:-8px 0 18px">${q || chu ? `${dm.length.toLocaleString('vi-VN')} / ${tatCa.length.toLocaleString('vi-VN')} hồ sơ${q ? ` khớp “${esc(q)}”` : ''}${chu ? ` · chữ ${esc(chu)}` : ''}` : `${tatCa.length.toLocaleString('vi-VN')} hồ sơ, xếp theo tên A–Z`}${soTrang > 1 ? ` · trang ${trang}/${soTrang}` : ''}</p>
+  ${items.length ? `<div class="grid">${cards}</div>` : `<div class="rong">Chưa có hồ sơ nào khớp. <a href="/${muc}">Xem tất cả</a></div>`}
   ${
     soTrang > 1
-      ? `<nav class="pg" aria-label="Phân trang">${trang > 1 ? `<a href="/${muc}${trang > 2 ? `?trang=${trang - 1}` : ''}">← Trang trước</a>` : '<span></span>'}<span>${trang}/${soTrang}</span>${trang < soTrang ? `<a href="/${muc}?trang=${trang + 1}">Trang sau →</a>` : '<span></span>'}</nav>`
+      ? pager
       : ''
   }
   <div class="how">${C.how}</div>
