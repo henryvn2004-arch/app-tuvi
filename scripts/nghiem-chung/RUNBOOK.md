@@ -45,7 +45,7 @@ VÀ `work/pack.log` đã in xong (gói hết).
 ## 4. Báo cáo
 Câu trả lời cuối của phiên: số hồ sơ đã đẩy, số loại trừ, slug lỗi (nếu có), nhánh đã push.
 
-## 4. Lịch chạy đêm (Routine, 01:07 giờ VN, 100 hồ sơ/đêm — Henry duyệt 2026-10-02)
+## 5. Lịch chạy đêm (Routine, 01:07 giờ VN, 100 hồ sơ/đêm — Henry duyệt 2026-10-02)
 Mỗi lượt, từ gốc repo, trên nhánh `claude/zen-cerf-yi0gni`:
 ```bash
 git fetch origin claude/zen-cerf-yi0gni && git checkout claude/zen-cerf-yi0gni && git pull --ff-only
