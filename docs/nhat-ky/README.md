@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-10.md` | 7 | 23,310 B |
+| `2026-10.md` | 8 | 25,106 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
@@ -27,6 +27,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-10 | `2026-10.md` | 🔭 Mục "Nghiệm Chứng": lá số người nổi tiếng đối chiếu đời thật — trang thử Trịnh Xuân Thuận + Cung Lê |
+| 1 | 2026-10 | `2026-10.md` | 👋 "chào thầy" không còn kích hoạt cả bài luận lá số |
 | 1 | 2026-10 | `2026-10.md` | 📨 Kênh chat TỰ gửi ảnh biểu đồ khi câu hỏi khớp |
 | 1 | 2026-10 | `2026-10.md` | 🎯 Purchase của khách Messenger vào dataset của Page, không vào pixel website |
 | 1 | 2026-10 | `2026-10.md` | 💬 Nút + thẻ QR "Hỏi thầy qua Zalo" trên mọi trang `/app/*` |

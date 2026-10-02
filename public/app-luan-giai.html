@@ -471,6 +471,11 @@ function startIntake(){
   // qua URL, hoặc lá số đã nhớ): _pageInit tự điền + doLuan() — hiện thêm form
   // "Cho thầy xin họ tên" trống là bắt khách tưởng phải nhập lại.
   if(window.Shell&&Shell.autoRun&&Shell.autoRun()&&(Shell._birthFromQuery()||Shell.getRememberedBirth()))return;
+  // Đến qua handoff `app_pending_birth` (form trang chủ, trang đích quảng cáo
+  // /xem-luan-giai.html): IIFE bên dưới đã tự điền + doLuan() — hỏi "Cho thầy
+  // xin họ tên" lúc lá số đang chạy là bắt khách tưởng phải nhập lại.
+  // Chạy được vì startIntake hoãn tới DOMContentLoaded, sau khi IIFE đặt cờ.
+  if(window.__tvmbAutoLuanDone)return;
   TuviForm.renderChat({ onDone:showNamxemStep });
 }
 function showNamxemStep(){
@@ -539,7 +544,20 @@ TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'la
   // boot() luôn chạy trước, không cần đợi thêm. Gọi thẳng (không qua
   // setTimeout) nếu trang đã tải xong (readyState khác 'loading') — lúc đó
   // shell.js cũng đã boot() ngay rồi, chờ thêm chỉ trễ vô ích.
-  var runAutoLuan = function(){ if(typeof doLuan==='function') doLuan(); };
+  // `open:'result'` — chỉ trang đích quảng cáo (/xem-luan-giai.html) gửi cờ
+  // này: trên điện thoại khách tới để XEM lá số, nên tự lật lớp chat xuống
+  // bằng đúng đường của thẻ "Kết quả · Bấm để mở" (shell.js `appendArtCard`
+  // → `openArtPanel`). Form trang chủ không gửi cờ ⇒ hành vi cũ giữ nguyên.
+  var runAutoLuan = function(){
+    if(typeof doLuan!=='function') return;
+    var r=doLuan();
+    if(pending.open!=='result') return;
+    Promise.resolve(r).then(function(){
+      if(!window.matchMedia('(max-width:900px)').matches) return;
+      var card=document.querySelector('#chat .art-card');
+      if(card) card.click();
+    });
+  };
   window.__tvmbAutoLuanDone=true;
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', runAutoLuan);
   else runAutoLuan();
