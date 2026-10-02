@@ -59,7 +59,13 @@ export function slugify(s: string): string {
     .slice(0, 70);
 }
 
-/** Thứ tự ưu tiên: có bài tiếng Việt → nhiều sitelinks → fame. Slug trùng thì gắn qid. */
+/** Bậc quốc gia (Henry chốt 2026-10-02): Việt Nam → Đông Á + Đông Nam Á → phần còn lại của châu Á → còn lại. */
+const DONG_A = /^(Trung Quốc|Cộng hòa Nhân dân Trung Hoa|Trung Hoa Dân Quốc|Đài Loan|Hồng Kông|Hồng Kông thuộc Anh|Ma Cao|Hàn Quốc|Triều Tiên|Nhật Bản|Mông Cổ|Singapore|Thái Lan|Malaysia|Indonesia|Philippines|Campuchia|Lào|Myanmar|Brunei|Đông Timor)$/;
+const CHAU_A = /^(Ấn Độ|Lãnh thổ tự trị Ấn Độ|Pakistan|Bangladesh|Sri Lanka|Nepal|Bhutan|Maldives|Iran|Iraq|Israel|Liban|Syria|Jordan|Ả Rập Xê Út|Thổ Nhĩ Kỳ|Kazakhstan|Uzbekistan|Afghanistan)$/;
+export const bacQuocGia = (country: string | null) =>
+  country === 'Việt Nam' ? 0 : DONG_A.test(country || '') ? 1 : CHAU_A.test(country || '') ? 2 : 3;
+
+/** Thứ tự ưu tiên: bậc quốc gia → có bài tiếng Việt → nhiều sitelinks → fame. Slug trùng thì gắn qid. */
 export function danhSach(): (Celeb & { slug: string })[] {
   const rows: Celeb[] = readFileSync(join(ROOT, 'data', 'nghiem-chung', 'celebs.jsonl'), 'utf8')
     .split('\n')
@@ -67,6 +73,7 @@ export function danhSach(): (Celeb & { slug: string })[] {
     .map((l) => JSON.parse(l));
   rows.sort(
     (a, b) =>
+      bacQuocGia(a.country) - bacQuocGia(b.country) ||
       Number(/vi\.wikipedia/.test(b.wiki_url || '')) - Number(/vi\.wikipedia/.test(a.wiki_url || '')) ||
       (b.sitelinks || 0) - (a.sitelinks || 0) ||
       (b.fame_score || 0) - (a.fame_score || 0) ||

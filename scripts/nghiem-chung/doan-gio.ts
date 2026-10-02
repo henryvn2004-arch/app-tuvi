@@ -8,16 +8,19 @@
 // trang phải ghi rõ đây là giờ SUY ĐOÁN, không hiện tỷ lệ khớp như phép thử độc lập.
 //
 //   npx tsx scripts/nghiem-chung/doan-gio.ts goi [<qid>…]   # đóng gói + brief 12 giờ
+//   npx tsx scripts/nghiem-chung/doan-gio.ts lo --limit 40  # lô kế tiếp theo thứ tự file: đóng gói,
+//                                                          # in mảng slug có brief (cho Workflow doan)
 //   npx tsx scripts/nghiem-chung/doan-gio.ts chot <slug>    # đọc work/nghiem-chung/doan/<slug>.json,
 //                                                          # chốt giờ vào gói, in brief thường
 //
-// Đầu vào: data/nghiem-chung/doan-gio.jsonl (cột công khai của celeb_births).
+// Đầu vào: data/nghiem-chung/doan-gio.jsonl (cột công khai của celeb_births), XẾP SẴN theo bậc:
+// Việt Nam → Đông Á + Đông Nam Á → phần còn lại châu Á (sitelinks ≥ 40) — thứ tự file là thứ tự chạy.
 // ============================================================
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { banKeLaSo } from '@/lib/nghiem-chung/engine-ref';
-import { slugify, sitelinks, extract, gon, banXu } from './pack';
+import { slugify, sitelinks, extract, gon, banXu, danhSach } from './pack';
 
 const ROOT = process.cwd();
 const WORK = join(ROOT, 'work', 'nghiem-chung');
@@ -46,15 +49,40 @@ JSON: {"bang":[{"gio":"Tý","diem":0-100,"lyDo":"1–2 câu cụ thể, 30–300
 Rồi chạy: npx tsx scripts/nghiem-chung/doan-gio.ts chot <slug>  → nó in đường dẫn brief THƯỜNG của giờ đã chọn.
 ## Bước 2 — đọc brief thường đó, viết hồ sơ như mọi hồ sơ Nghiệm Chứng (nháp + validate.ts), chấm NGHIÊM như luật trong brief.`;
 
-async function goi(qids: string[]) {
+/** Hàng đợi: tên bỏ phần chú thích "(cầu thủ…)"; slug trùng (trong file hoặc với kho có giờ) thì gắn năm sinh. */
+function hangDoi(): Any[] {
   const rows = readFileSync(join(ROOT, 'data', 'nghiem-chung', 'doan-gio.jsonl'), 'utf8')
     .split('\n')
     .filter(Boolean)
-    .map((l) => JSON.parse(l) as Any)
-    .filter((r) => !qids.length || qids.includes(r.qid));
+    .map((l) => JSON.parse(l) as Any);
+  const daCo = new Set(danhSach().map((c) => c.slug));
+  const dem = new Map<string, number>();
+  for (const r of rows) {
+    r.ten = String(r.name).replace(/\s*\(.*\)$/, '');
+    const s0 = slugify(r.ten) || r.qid.toLowerCase();
+    dem.set(s0, (dem.get(s0) || 0) + 1);
+    r.slug = s0;
+  }
+  for (const r of rows) if ((dem.get(r.slug) || 0) > 1 || daCo.has(r.slug)) r.slug = `${r.slug}-${r.birth_date.slice(0, 4)}`;
+  return rows;
+}
+const daXong = (slug: string) =>
+  existsSync(join(ROOT, 'data', 'nghiem-chung', 'ho-so', `${slug}.json.gz`)) ||
+  existsSync(join(ROOT, 'data', 'nghiem-chung', 'loai-tru', `${slug}.txt`));
+
+async function lo(limit: number) {
+  const rows = hangDoi()
+    .filter((r) => !daXong(r.slug))
+    .slice(0, limit);
+  await goi(rows.filter((r) => !existsSync(join(BRIEF, `${r.slug}.md`))));
+  console.log(JSON.stringify(rows.map((r) => r.slug).filter((s) => existsSync(join(BRIEF, `${s}.md`)))));
+}
+
+async function goi(rows: Any[]) {
+  if (!rows.length) return;
   const sl = await sitelinks(rows.map((r) => r.qid));
   for (const c of rows) {
-    const slug = slugify(c.name);
+    const slug = c.slug;
     const links = sl[c.qid] || {};
     const cands: { lang: string; title: string }[] = [];
     if (links.viwiki) cands.push({ lang: 'vi', title: links.viwiki });
@@ -62,9 +90,14 @@ async function goi(qids: string[]) {
     const bx = banXu(c.country);
     if (bx && bx !== 'vi' && links[`${bx}wiki`]) cands.push({ lang: bx, title: links[`${bx}wiki`] });
     let best = { lang: '', title: '', text: '' };
-    for (const k of cands) {
-      const t = await extract(k.lang, k.title);
-      if (t.length > best.text.length) best = { ...k, text: t };
+    try {
+      for (const k of cands) {
+        const t = await extract(k.lang, k.title);
+        if (t.length > best.text.length) best = { ...k, text: t };
+      }
+    } catch (e) {
+      console.error(`✗ ${slug}: ${(e as Error).message}`);
+      continue;
     }
     if (!best.text) {
       console.error(`✗ ${slug}: không tải được bài Wikipedia`);
@@ -76,7 +109,7 @@ async function goi(qids: string[]) {
     const pack = {
       slug,
       qid: c.qid,
-      ten: c.name,
+      ten: c.ten,
       ngheNghiep: c.occupation,
       quocGia: c.country,
       gioiTinh: gender,
@@ -101,7 +134,7 @@ async function goi(qids: string[]) {
     };
     writeFileSync(join(PACK, `${slug}.json`), JSON.stringify(pack));
     writeFileSync(join(BRIEF, `${slug}.md`), briefDoan(pack));
-    console.log(`✓ ${slug}: ${best.lang} "${best.title}" ${best.text.length} ký tự`);
+    console.error(`✓ ${slug}: ${best.lang} "${best.title}" ${best.text.length} ký tự`);
   }
 }
 
@@ -146,7 +179,8 @@ function chot(slug: string) {
 
 async function main() {
   const [cmd, ...rest] = process.argv.slice(2);
-  if (cmd === 'goi') await goi(rest);
+  if (cmd === 'goi') await goi(hangDoi().filter((r) => !rest.length || rest.includes(r.qid)));
+  else if (cmd === 'lo') await lo(Number(rest[rest.indexOf('--limit') + 1]) || 40);
   else if (cmd === 'chot') chot(rest[0]);
   else console.error('dùng: goi [<qid>…] | chot <slug>');
 }

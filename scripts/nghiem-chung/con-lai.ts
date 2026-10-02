@@ -5,6 +5,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { danhSach } from './pack';
+import { HO_SO } from '@/lib/nghiem-chung';
 
 const argv = process.argv.slice(2);
 const opt = (k: string) => {
@@ -14,7 +15,9 @@ const opt = (k: string) => {
 const ROOT = process.cwd();
 const [k, n] = (opt('shard') || '0/1').split('/').map(Number);
 const limit = Number(opt('limit') || 1e9);
-const all = danhSach().filter((_, i) => i % n === k);
+// Hồ sơ viết tay (lib/nghiem-chung/ho-so/*.ts) đã có trang — không viết lại.
+const tay = new Set(HO_SO.map((h) => h.slug));
+const all = danhSach().filter((c, i) => i % n === k && !tay.has(c.slug));
 const caChuaGoi = argv.includes('--ca-chua-goi');
 const cho = all.filter(
   (c) =>

@@ -57,3 +57,15 @@ npx tsx scripts/nghiem-chung/brief.ts $(echo "$S" | node -pe 'JSON.parse(require
 Rồi Workflow `scriptPath: scripts/nghiem-chung/workflow.js`, `args: {"slugs": <mảng brief in ra>, "effort": "low"}`.
 Xong: `manifest.ts` → `git add -f data/nghiem-chung/ho-so data/nghiem-chung/loai-tru data/nghiem-chung/manifest.json` → commit → push.
 Chạm trần sử dụng giữa chừng thì commit phần đã xong rồi dừng — đêm sau `con-lai` tự nhặt tiếp.
+
+## 6. Lịch chạy đêm ĐOÁN GIỜ (Routine riêng, 03:07 giờ VN, 40 hồ sơ/đêm ≈ 10% hạn mức ngày — Henry duyệt 2026-10-02)
+Người KHÔNG có giờ sinh; hàng đợi `data/nghiem-chung/doan-gio.jsonl` xếp sẵn: Việt Nam → Đông/Đông Nam Á → còn lại châu Á.
+Người Việt: KHÔNG chính trị, tôn giáo, Phạm Nhật Vượng (đã lọc sẵn trong file — thêm người Việt mới phải lọc tay).
+```bash
+git fetch origin claude/zen-cerf-yi0gni && git checkout claude/zen-cerf-yi0gni && git pull --ff-only
+NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt NODE_NO_WARNINGS=1 \
+  npx tsx scripts/nghiem-chung/doan-gio.ts lo --limit 40      # stdout = mảng slug có brief-doan
+```
+Rồi Workflow `scriptPath: scripts/nghiem-chung/workflow.js`, `args: {"slugs": <mảng đó>, "effort": "low", "doan": true}`.
+Xong: như mục 5 (manifest → git add -f ho-so/loai-tru/manifest → commit → push).
+Hàng đợi còn < 80 người thì báo Henry để xuất thêm bậc sau (phần còn lại thế giới, sitelinks ≥ 40).
