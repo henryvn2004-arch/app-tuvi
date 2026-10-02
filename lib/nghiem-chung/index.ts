@@ -46,3 +46,11 @@ export function dem(rows: { ketLuan: KetLuan }[]): BangDem {
     tyLe: khop + motPhan + truot ? Math.round(((khop + motPhan) * 100) / (khop + motPhan + truot)) : null,
   };
 }
+
+/** Ngưỡng MỞ INDEX (Henry duyệt 2026-10-02): đủ dày để không thành trang mỏng — bản mệnh ≥8 dòng
+ *  đã chấm, ≥3 năm mốc, ≥3 đại vận (sinh 1990+ hoặc giờ do hệ thống xác định: ≥2). Chưa đạt thì
+ *  trang vẫn có nhưng `noindex`. Dùng ở scripts/nghiem-chung/manifest.ts. */
+export function datNguongIndex(h: HoSoNghiemChung): boolean {
+  const tre = Number(h.sinh.ngay.slice(0, 4)) >= 1990 || !!h.gioDoan;
+  return dem(h.banMenh).kiemChung >= 8 && dem(h.namMoc).kiemChung >= 3 && dem(h.daiVan).kiemChung >= (tre ? 2 : 3);
+}

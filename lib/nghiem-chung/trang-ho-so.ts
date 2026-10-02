@@ -118,6 +118,8 @@ export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
   const mucDung: Muc = h.gioDoan ? 'xac-dinh-gio-sinh' : 'nghiem-chung';
   if (muc !== mucDung) return new NextResponse(null, { status: 308, headers: { Location: `/${mucDung}/${h.slug}` } });
   const tenMuc = h.gioDoan ? 'Xác Định Giờ Sinh' : 'Nghiệm Chứng';
+  // Cờ index lấy từ MANIFEST (ngưỡng + indexed.txt), không từ file hồ sơ — validate.ts luôn ghi `indexed:false`.
+  const moIndex = h.indexed !== false || !!danhMuc().find((x) => x.slug === h.slug)?.indexed;
 
   const ls = await laSo(h, h.sinh.gioEngine);
   if (!ls) return new NextResponse('Không lập được lá số', { status: 500 });
@@ -349,7 +351,7 @@ export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(desc)}">
 <meta name="twitter:image" content="${esc(ogImg)}">
-<meta name="robots" content="${h.indexed === false ? 'noindex, follow' : 'index, follow, max-image-preview:large'}">
+<meta name="robots" content="${moIndex ? 'index, follow, max-image-preview:large' : 'noindex, follow'}">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>

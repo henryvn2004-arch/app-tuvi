@@ -1,11 +1,11 @@
 // scripts/nghiem-chung/manifest.ts — dựng data/nghiem-chung/manifest.json từ
 // các hồ sơ đã qua kiểm tra. Cờ `indexed` lấy từ data/nghiem-chung/indexed.txt
-// (mỗi dòng một slug) — đợt mở index do người quyết, không do script.
+// (mỗi dòng một slug, mở tay) HOẶC tự mở khi hồ sơ đạt `datNguongIndex` (lib/nghiem-chung).
 //   npx tsx scripts/nghiem-chung/manifest.ts
 import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { gunzipSync } from 'node:zlib';
-import { dem, type HoSoNghiemChung } from '@/lib/nghiem-chung';
+import { dem, datNguongIndex, type HoSoNghiemChung } from '@/lib/nghiem-chung';
 
 const DIR = join(process.cwd(), 'data', 'nghiem-chung');
 const idxPath = join(DIR, 'indexed.txt');
@@ -30,7 +30,7 @@ const out = readdirSync(join(DIR, 'ho-so'))
       tyLeBM: dem(h.banMenh).tyLe,
       tyLeDV: dem(h.daiVan).tyLe,
       ...(h.gioDoan ? { gioDoan: h.gioDoan.chon } : {}),
-      indexed: indexed.has(h.slug),
+      indexed: indexed.has(h.slug) || datNguongIndex(h),
     };
   })
   .sort((a, b) => a.slug.localeCompare(b.slug));
