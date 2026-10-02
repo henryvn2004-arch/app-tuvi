@@ -26,6 +26,8 @@ import { CHI_NAMES, parseGioSinh } from '@/lib/mcp/tools/_shared';
 import { dem, type HoSoNghiemChung, type KetLuan } from '@/lib/nghiem-chung';
 import { taiHoSo, danhMuc } from '@/lib/nghiem-chung/store';
 import { banKeLaSo, banKeNam, bangTra } from '@/lib/nghiem-chung/engine-ref';
+import { computeLaso } from '@/lib/engine/laso';
+import { renderGrid, GRID_CSS, G_CAN } from '@/lib/laso/grid';
 
 const BASE = 'https://www.tuviminhbao.com';
 
@@ -117,6 +119,30 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   if (!ls) return new NextResponse('Không lập được lá số', { status: 500 });
 
   const namSinh = Number(h.sinh.ngay.slice(0, 4));
+
+  // Lưới lá số 12 cung — CÙNG hàm vẽ với /la-so (lib/laso/grid.ts). Bỏ sao lưu và ô
+  // "đại vận đang chạy" của năm hiện tại: trang này nói về CẢ ĐỜI một người
+  // (nhiều người đã mất), không phải vận năm nay.
+  const [yy, mm, dd] = h.sinh.ngay.split('-').map(Number);
+  const raw = computeLaso({
+    day: dd,
+    month: mm,
+    year: yy,
+    hourBranch: parseGioSinh(h.sinh.gioEngine),
+    gender: h.gioiTinh,
+    isLunar: false,
+  });
+  const gridHTML =
+    raw.ok && raw.ls
+      ? renderGrid(
+          {
+            ...(raw.ls as Record<string, unknown>),
+            tuoiXem: undefined,
+            palaces: ((raw.ls as { palaces?: Record<string, unknown>[] }).palaces || []).map((pl) => ({ ...pl, luuStars: [] })),
+          },
+          G_CAN.indexOf(ls.tong_quan.can_chi_nam.split(' ')[0]),
+        )
+      : '';
   const gioChi = CHI_NAMES[parseGioSinh(h.sinh.gioEngine)];
   const tuoiCon = ls.tong_quan.can_chi_nam.split(' ').pop() || '';
   const cungThan = ls.cung.find((c) => c.is_than);
@@ -422,6 +448,9 @@ h1{font-size:24px}.score{grid-template-columns:1fr}.ls-grid{grid-template-column
 .tbl td{border:0;padding:6px 14px}
 .tbl td::before{content:attr(data-l);display:block;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--lt);margin-bottom:2px}
 }
+${GRID_CSS}
+.laso-wrap{margin:6px 0 16px}
+@media(max-width:760px){.laso-grid{font-size:9px}.cung-cell{min-height:90px;padding:7px 4px 24px}.v2-chinh-item{font-size:10px}.v2-phu-item{font-size:8px}.v2-phu-area{grid-template-columns:1fr}}
 ${ask.css}
 </style>
 <script src="/auth.js?v=6"></script>
@@ -470,6 +499,7 @@ ${ask.css}
   <section class="sec" id="la-so">
     <h2>Lá số Tử Vi của ${esc(h.ten)} tóm tắt</h2>
     <p>Lập theo ngày ${ngayHT}, giờ ${esc(gioChi)} (${esc(h.sinh.gio)} giờ đồng hồ), ${h.gioiTinh === 'nam' ? 'nam' : 'nữ'} mệnh.</p>
+    ${gridHTML ? `<div class="laso-wrap">${gridHTML}</div>` : ''}
     <div class="ls-grid">
       <div class="ls-i"><div class="ls-k">Năm sinh</div><div class="ls-v">${esc(ls.tong_quan.can_chi_nam)}</div></div>
       <div class="ls-i"><div class="ls-k">Cục</div><div class="ls-v">${esc(ls.tong_quan.cuc)}</div></div>
