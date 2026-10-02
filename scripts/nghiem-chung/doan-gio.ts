@@ -1,7 +1,8 @@
 // scripts/nghiem-chung/doan-gio.ts
 // ============================================================
 // "Đoán giờ sinh" — nhánh RIÊNG của Nghiệm Chứng cho người nổi tiếng KHÔNG có
-// giờ sinh công khai (Henry duyệt 2026-10-02; bỏ hẳn chính trị + tôn giáo).
+// giờ sinh công khai (Henry duyệt 2026-10-02). Người VIỆT: bỏ hẳn chính trị, tôn giáo
+// và Phạm Nhật Vượng (luật VN riêng) — người nước ngoài không áp luật này.
 // Engine lập đủ 12 lá số (12 canh giờ), agent chấm giờ nào khớp đời thật nhất,
 // rồi viết hồ sơ như thường cho giờ đã chọn. Vì giờ được chọn THEO đời thật nên
 // trang phải ghi rõ đây là giờ SUY ĐOÁN, không hiện tỷ lệ khớp như phép thử độc lập.
