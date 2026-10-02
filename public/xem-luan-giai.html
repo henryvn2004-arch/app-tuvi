@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luận giải lá số Tử Vi theo ngày giờ sinh — Minh Bảo</title>
+<meta name="description" content="Nhập ngày giờ sinh, xem trước lá số Tử Vi 12 cung và phần tổng quan miễn phí. Chỉ trả khi mở bản luận giải đầy đủ 13 phần.">
+<!-- Trang đích cho quảng cáo Google Search (SAMPLE, 2026-10). Lý do tồn tại:
+     khách từ Search vào thẳng /app/luan-giai gặp khung chat hỏi họ tên trước —
+     trung vị ở lại 5 giây, 3/746 người gõ vào chat. Trang này chỉ làm MỘT việc:
+     nhận ngày giờ sinh rồi chuyển sang /app/luan-giai bằng đúng handoff
+     `app_pending_birth` mà trang đó đã đọc sẵn (tự chạy bản xem trước miễn phí).
+     Không chép engine, không chép giá: giá đọc từ tool-prices.js. -->
+<meta name="robots" content="noindex">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
+<link rel="stylesheet" href="/theme.css?v=2">
+<style>
+:root{
+  --navy:#0F2A3D; --gold:#C8A96A; --gold-soft:#7C6942;
+  --text-mid:#4a4a4a; --line:#E6E3DC;
+  --paper:#FBFAF7; --white:#fff;
+  --serif:'Noto Serif',Georgia,serif; --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--text);font-family:var(--sans);line-height:1.55}
+.wrap{max-width:560px;margin:0 auto;padding:16px 16px 40px}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.top img{width:30px;height:30px;border-radius:6px}
+.top b{font-family:var(--serif);color:var(--navy);font-size:16px}
+h1{font-family:var(--serif);color:var(--navy);font-size:26px;line-height:1.3;margin:0 0 10px}
+.lead{color:var(--text-mid);font-size:15px;margin:0 0 16px}
+.gets{list-style:none;padding:0;margin:0 0 18px;display:grid;gap:8px}
+.gets li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px}
+.gets .ic{width:18px;height:18px;flex:0 0 auto;color:var(--gold-soft);margin-top:2px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 1px 2px rgba(15,42,61,.04),0 4px 16px rgba(15,42,61,.06)}
+.row{display:flex;gap:8px;margin-bottom:12px}
+.f{flex:1;min-width:0}
+.f label{display:block;font-size:12px;font-weight:600;color:var(--text-lt);text-transform:uppercase;letter-spacing:.03em;margin-bottom:4px}
+.f select,.f input{width:100%;font:inherit;font-size:16px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--text)}
+.f .opt{font-weight:400;text-transform:none;letter-spacing:0}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{flex:1;font:inherit;font-size:15px;padding:10px;border:0;background:var(--paper);color:var(--text-mid);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.hint{font-size:12.5px;color:var(--text-lt);margin:-6px 0 12px}
+.go{width:100%;font:inherit;font-family:var(--serif);font-weight:700;font-size:17px;padding:14px;border:0;border-radius:12px;cursor:pointer;color:var(--navy);background:linear-gradient(180deg,#d6bb83,#b39058)}
+.go:disabled{opacity:.6}
+.price{font-size:13.5px;color:var(--text-mid);text-align:center;margin:10px 0 0}
+.price b{color:var(--navy)}
+.err{color:#B4483A;font-size:13.5px;margin:0 0 10px;display:none}
+.more{margin-top:22px;display:grid;gap:12px}
+.mini{display:flex;gap:12px;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:inherit;text-decoration:none}
+.mini .ic{width:20px;height:20px;color:var(--gold-soft);flex:0 0 auto}
+.mini span{font-size:13.5px;color:var(--text-mid)}
+.mini b{display:block;font-size:14.5px;color:var(--navy)}
+.foot{margin-top:24px;font-size:12.5px;color:var(--text-lt);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><img src="/tool-avatars/laso.webp" alt="" onerror="this.remove()"><b>Minh Bảo</b></div>
+
+  <h1>Luận giải lá số Tử Vi theo ngày giờ sinh</h1>
+  <p class="lead">Nhập ngày giờ sinh, hệ thống an sao lập lá số 12 cung và luận theo cổ pháp. Xem trước ngay, không cần đăng ký.</p>
+
+  <ul class="gets">
+    <li><span class="ic" data-icon="bar-chart-3"></span><span><b>Lá số 12 cung</b> đầy đủ chính tinh, phụ tinh, tứ hoá</span></li>
+    <li><span class="ic" data-icon="file-text"></span><span><b>Tổng quan cuộc đời</b>: tính cách, sự nghiệp, tình duyên, tiền bạc</span></li>
+    <li><span class="ic" data-icon="star"></span><span><b>Luận riêng từng cung</b>, điểm mạnh yếu và gợi ý năm nay</span></li>
+  </ul>
+
+  <form class="card" id="lp" novalidate>
+    <div class="row">
+      <div class="f"><label for="ngay">Ngày</label><select id="ngay" required></select></div>
+      <div class="f"><label for="thang">Tháng</label><select id="thang" required></select></div>
+      <div class="f" style="flex:1.3"><label for="nam">Năm sinh</label><select id="nam" required></select></div>
+    </div>
+    <div class="row">
+      <div class="f"><label for="gio">Giờ sinh (dương lịch)</label><select id="gio" required></select></div>
+    </div>
+    <p class="hint">Không nhớ chính xác? Chọn giờ gần đúng nhất, sau này sửa lại được.</p>
+    <div class="row">
+      <div class="f"><label>Giới tính</label>
+        <div class="seg" role="group" aria-label="Giới tính">
+          <button type="button" data-g="nam" aria-pressed="true">Nam</button>
+          <button type="button" data-g="nu" aria-pressed="false">Nữ</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="f"><label for="ten">Họ tên <span class="opt">(không bắt buộc)</span></label><input id="ten" type="text" maxlength="60" autocomplete="name" placeholder="Nguyễn Văn A"></div>
+    </div>
+    <p class="err" id="err">Vui lòng chọn đủ ngày, tháng, năm và giờ sinh.</p>
+    <button class="go" id="go" type="submit">Xem lá số miễn phí →</button>
+    <p class="price">Xem trước <b>miễn phí</b>. Mở bản đầy đủ 13 phần: <b><span data-lp-vnd>…</span></b></p>
+  </form>
+
+  <div class="more">
+    <a class="mini" href="/tai-mau/mau-luan-giai-la-so.pdf" target="_blank" rel="noopener">
+      <span class="ic" data-icon="file-text"></span>
+      <span><b>Xem bản luận giải mẫu (PDF)</b>Nội dung thật của một lá số mẫu, đọc trước khi quyết định</span>
+    </a>
+    <a class="mini" href="/app/thay">
+      <span class="ic" data-icon="book-open"></span>
+      <span><b>Nhóm 15 thầy Minh Bảo</b>Luận theo Tử Vi Đẩu Số Tân Biên và các bản cổ pháp</span>
+    </a>
+  </div>
+
+  <p class="foot">Thanh toán bằng chuyển khoản QR hoặc PayPal / thẻ quốc tế.</p>
+</div>
+
+<script src="/tools-shared/vn-timezone.js?v=1"></script>
+<script src="/tool-prices.js?v=10"></script>
+<script src="/nav.js?v=45" data-icons-only></script>
+<script src="/track.js?v=8" async></script>
+<script>
+(function(){
+  'use strict';
+  var CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+  function opt(sel,v,l){ var o=document.createElement('option'); o.value=v; o.textContent=l; sel.appendChild(o); }
+  var ngay=document.getElementById('ngay'), thang=document.getElementById('thang'),
+      nam=document.getElementById('nam'), gio=document.getElementById('gio');
+  opt(ngay,'','Ngày'); for(var d=1;d<=31;d++) opt(ngay,d,d);
+  opt(thang,'','Tháng'); for(var m=1;m<=12;m++) opt(thang,m,'Tháng '+m);
+  opt(nam,'','Năm'); var y=new Date().getFullYear(); for(var n=y;n>=1930;n--) opt(nam,n,n);
+  opt(gio,'','Chọn giờ');
+  for(var h=0;h<24;h++){
+    // Nhãn canh giờ lấy từ nguồn chung `VnTimezone.hourMinToGioIdx`, không chép công thức.
+    var idx=window.VnTimezone?VnTimezone.hourMinToGioIdx(h,0):null;
+    opt(gio,h,h+' giờ'+(idx!=null?' (giờ '+CHI[idx]+')':''));
+  }
+
+  var g='nam';
+  document.querySelectorAll('.seg button').forEach(function(b){
+    b.addEventListener('click',function(){
+      g=b.getAttribute('data-g');
+      document.querySelectorAll('.seg button').forEach(function(x){ x.setAttribute('aria-pressed', x===b?'true':'false'); });
+    });
+  });
+
+  // Giá: đọc từ tool-prices.js (nguồn duy nhất). Hụt thì để "…", không đoán số.
+  if(window.ToolPrices){
+    ToolPrices.load().then(function(){
+      var c=ToolPrices.get('laso'), lbl=c!=null?ToolPrices.vndLabel(c):'';
+      if(lbl) document.querySelectorAll('[data-lp-vnd]').forEach(function(el){ el.textContent=lbl; });
+    }).catch(function(e){ console.error('[xem-luan-giai] giá', e); });
+  }
+
+  // Lượt xem do track.js tự bắn (page_view, kèm path). Lượt bấm dùng loại sẵn có
+  // `cta_click` + meta.lp — /api/track gom loại lạ về 'other'.
+  function track(name, meta){ try{ if(window.Track&&Track.event) Track.event(name, meta||{}); }catch(e){ console.error('[xem-luan-giai] track', e); } }
+
+  document.getElementById('lp').addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var fd={ ngay:+ngay.value, thang:+thang.value, nam:+nam.value, gioitinh:g };
+    var err=document.getElementById('err');
+    if(!fd.ngay||!fd.thang||!fd.nam||gio.value===''){ err.style.display='block'; return; }
+    err.style.display='none';
+    fd.gioHour=+gio.value; fd.gioPhut=0;
+    var ten=document.getElementById('ten').value.trim();
+    if(ten) fd.hoten=ten;
+    // Handoff y hệt form trang chủ: /app/luan-giai đọc `app_pending_birth`,
+    // tự điền và tự chạy doLuan() — bản xem trước miễn phí.
+    try{ sessionStorage.setItem('app_pending_birth', JSON.stringify({fd:fd, open:'result'})); }
+    catch(e){ console.error('[xem-luan-giai] sessionStorage', e); }
+    track('cta_click',{lp:'xem-luan-giai', step:'submit', has_name:!!ten});
+    document.getElementById('go').disabled=true;
+    // Giữ nguyên query (utm/gclid) để track.js ở trang sau vẫn quy được nguồn.
+    location.href='/app/luan-giai'+location.search;
+  });
+})();
+</script>
+</body>
+</html>
