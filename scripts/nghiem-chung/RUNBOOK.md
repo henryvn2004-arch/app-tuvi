@@ -24,8 +24,9 @@ Không cần chờ xong mới viết — gói nào có rồi là viết được
 ## 2. Vòng lặp viết hồ sơ (lặp đến khi hết)
 ```bash
 npx tsx scripts/nghiem-chung/con-lai.ts --shard K/6 --limit 120 --json   # → mảng slug
+npx tsx scripts/nghiem-chung/brief.ts <các slug trên>                      # agent CHỈ đọc brief
 ```
-Chạy Workflow với `scriptPath: scripts/nghiem-chung/workflow.js` và `args: {"slugs": [...]}` (mảng JSON
+Chạy Workflow với `scriptPath: scripts/nghiem-chung/workflow.js` và `args: {"slugs": [...], "effort": "low"}` (mảng JSON
 thật, không phải chuỗi). Có thể chạy **2 workflow cùng lúc** trên hai lô KHÁC NHAU (lấy `--limit 240`
 rồi chia đôi) để tận dụng song song. Mỗi lô xong:
 ```bash
