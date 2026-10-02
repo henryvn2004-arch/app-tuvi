@@ -47,7 +47,7 @@ const norm = (s: string) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Any = any;
 
-async function kiem(slug: string): Promise<string[]> {
+export async function kiem(slug: string): Promise<string[]> {
   const loi: string[] = [];
   const pPath = join(WORK, 'pack', `${slug}.json`);
   const dPath = join(WORK, 'draft', `${slug}.json`);
@@ -231,4 +231,4 @@ async function main() {
   }
   process.exit(bad ? 1 : 0);
 }
-main();
+if (process.argv[1]?.endsWith('validate.ts')) main();
