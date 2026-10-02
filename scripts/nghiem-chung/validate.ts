@@ -148,8 +148,9 @@ export async function kiem(slug: string): Promise<string[]> {
     kiemRef(r.laSoRef, t, new RegExp(`^DV${r.thuTu}\\.`));
     kiemTrich(r, t);
   });
-  // Đoán giờ: phần chính là bảng 12 giờ, người trẻ (sinh 1990+) mới qua 2 đại vận ⇒ ngưỡng 2 (Henry duyệt 2026-10-02).
-  const nguongDV = pack.doan ? 2 : 3;
+  // Người sinh 1990+ mới qua 2 đại vận (idol, vận động viên trẻ — nhóm được tìm nhiều nhất) và hồ sơ
+  // đoán giờ (phần chính là bảng 12 giờ) ⇒ ngưỡng 2; còn lại 3 (Henry duyệt 2026-10-02).
+  const nguongDV = pack.doan || namSinh >= 1990 ? 2 : 3;
   if (dem(dvs).kiemChung < Math.min(nguongDV, canCo.length)) loi.push(`daiVan: cần ≥${nguongDV} đại vận đã chấm`);
 
   // Năm mốc
