@@ -278,6 +278,9 @@ async function main() {
           const t = await extract(k.lang, k.title);
           if (t.length > best.text.length) best = { ...k, text: t };
         }
+        // Có bài mà tải về rỗng = lỗi tạm thời (429/mạng) → KHÔNG ghi gói, lần chạy sau thử lại.
+        // Ghi gói `wiki: null` thì agent loại người đó vì "thiếu nguồn" — oan (Brad Pitt, Gerald Ford…).
+        if (cands.length && !best.text) throw new Error('có bài Wikipedia nhưng tải về rỗng — thử lại sau');
         const hour = Number(c.birth_time.slice(0, 2));
         const gender = c.gender === 'nu' ? 'nu' : 'nam';
         const laSo = await banKeLaSo(c.birth_date, hour, gender);
