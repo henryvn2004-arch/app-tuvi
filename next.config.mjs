@@ -18,7 +18,7 @@ const nextConfig = {
   outputFileTracingIncludes: {
     // Hồ sơ Nghiệm Chứng (gz) + manifest đọc bằng fs lúc chạy — lib/nghiem-chung/store.ts.
     '/nghiem-chung': ['./data/nghiem-chung/manifest.json'],
-    '/nghiem-chung/[slug]': ['./data/nghiem-chung/**'],
+    '/nghiem-chung/[slug]': ['./data/nghiem-chung/**', './public/laso-chart.js'],
     '/sitemap-nghiem-chung': ['./data/nghiem-chung/manifest.json'],
     '/api/luan-giai/email-pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
     // Cùng lý do: các route dưới cũng dựng PDF (resend-pdf · gửi PDF vào kênh chat

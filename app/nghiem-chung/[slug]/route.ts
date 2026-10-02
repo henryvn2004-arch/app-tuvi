@@ -26,8 +26,7 @@ import { CHI_NAMES, parseGioSinh } from '@/lib/mcp/tools/_shared';
 import { dem, type HoSoNghiemChung, type KetLuan } from '@/lib/nghiem-chung';
 import { taiHoSo, danhMuc } from '@/lib/nghiem-chung/store';
 import { banKeLaSo, banKeNam, bangTra } from '@/lib/nghiem-chung/engine-ref';
-import { computeLaso } from '@/lib/engine/laso';
-import { renderGrid, GRID_CSS, G_CAN } from '@/lib/laso/grid';
+import { lasoChartHtml } from '@/lib/engine/laso';
 
 const BASE = 'https://www.tuviminhbao.com';
 
@@ -120,29 +119,14 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
 
   const namSinh = Number(h.sinh.ngay.slice(0, 4));
 
-  // Lưới lá số 12 cung — CÙNG hàm vẽ với /la-so (lib/laso/grid.ts). Bỏ sao lưu và ô
-  // "đại vận đang chạy" của năm hiện tại: trang này nói về CẢ ĐỜI một người
-  // (nhiều người đã mất), không phải vận năm nay.
+  // Lưới lá số — CHÍNH renderer của tool Luận Giải (public/laso-chart.js), một khuôn cho mọi trang.
+  // Người đã mất: năm xem = năm mất (ô giữa không hiện "97 tuổi" cho người mất năm 24 tuổi).
   const [yy, mm, dd] = h.sinh.ngay.split('-').map(Number);
-  const raw = computeLaso({
-    day: dd,
-    month: mm,
-    year: yy,
-    hourBranch: parseGioSinh(h.sinh.gioEngine),
-    gender: h.gioiTinh,
-    isLunar: false,
-  });
-  const gridHTML =
-    raw.ok && raw.ls
-      ? renderGrid(
-          {
-            ...(raw.ls as Record<string, unknown>),
-            tuoiXem: undefined,
-            palaces: ((raw.ls as { palaces?: Record<string, unknown>[] }).palaces || []).map((pl) => ({ ...pl, luuStars: [] })),
-          },
-          G_CAN.indexOf(ls.tong_quan.can_chi_nam.split(' ')[0]),
-        )
-      : '';
+  const gridHTML = lasoChartHtml(
+    { day: dd, month: mm, year: yy, hourBranch: parseGioSinh(h.sinh.gioEngine), gender: h.gioiTinh, isLunar: false },
+    h.ten,
+    h.namMat || undefined,
+  );
   const gioChi = CHI_NAMES[parseGioSinh(h.sinh.gioEngine)];
   const tuoiCon = ls.tong_quan.can_chi_nam.split(' ').pop() || '';
   const cungThan = ls.cung.find((c) => c.is_than);
@@ -356,6 +340,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
+<link rel="stylesheet" href="/laso-chart.css?v=7">
 <script type="application/ld+json">${schema}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -448,9 +433,7 @@ h1{font-size:24px}.score{grid-template-columns:1fr}.ls-grid{grid-template-column
 .tbl td{border:0;padding:6px 14px}
 .tbl td::before{content:attr(data-l);display:block;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--lt);margin-bottom:2px}
 }
-${GRID_CSS}
-.laso-wrap{margin:6px 0 16px}
-@media(max-width:760px){.laso-grid{font-size:9px}.cung-cell{min-height:90px;padding:7px 4px 24px}.v2-chinh-item{font-size:10px}.v2-phu-item{font-size:8px}.v2-phu-area{grid-template-columns:1fr}}
+.laso-wrap{margin:6px 0 16px;--navy:#0F2A3D;--gold:#C8A96A;--blue:#1455A4;--text-lt:#666666}
 ${ask.css}
 </style>
 <script src="/auth.js?v=6"></script>
