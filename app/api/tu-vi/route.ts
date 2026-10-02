@@ -202,7 +202,7 @@ ${ASK_CSS}
   ${relatedHtml}
 </article>
 ${askBarHTML(thay, thay.name ? `Hỏi thầy ${thay.name} về bài này` : 'Hỏi thầy về bài này', fam)}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
 ${ASK_SCRIPT}
 </body></html>`;
 }
@@ -217,7 +217,7 @@ function buildNotFound() {
 <h1 style="color:#0F2A3D;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy trang</h1>
 <p style="color:#777;margin-bottom:24px">Trang tử vi này không tồn tại hoặc đã được cập nhật.</p>
 <a href="/" style="color:#1455A4">← Về Trang Chủ</a>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
 </body></html>`;
 }
 

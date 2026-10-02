@@ -258,7 +258,7 @@
   var NGAY_PATHS   = ['/ngay-tot','/tools/hoang-dao.html','/tools/ngay-tot.html','/tools/luc-nham.html','/tools/han-nam.html','/tools/chon-ngay-tot.html'];
   var TENCHU_PATHS  = ['/tools/dat-ten-con.html','/tools/dat-ten-doanh-nghiep.html'];
   var BAIVIET_PATHS = ['/van-dap','/nghien-cuu','/tac-gia','/phuong-phap'];
-  var KP_PATHS = ['/cong-cu','/menh-kho','/ngay-tot','/thu-vien'].concat(TUONG_PATHS, PHONG_PATHS, NGAY_PATHS, TENCHU_PATHS, LAM_DEP_PATHS);
+  var KP_PATHS = ['/cong-cu','/menh-kho','/ngay-tot','/thu-vien','/nghiem-chung','/xac-dinh-gio-sinh'].concat(TUONG_PATHS, PHONG_PATHS, NGAY_PATHS, TENCHU_PATHS, LAM_DEP_PATHS);
 
   function anyActive(arr) { return arr.some(function(p){ return path === p || path.startsWith(p + '/') || path.startsWith(p); }); }
 
@@ -440,7 +440,7 @@
   // Thay vì đẻ bảng icon thứ hai trong shell.js (28 icon, tên khác hẳn, thiếu
   // 11/15 icon cần dùng — đúng cái "hai bảng trôi khỏi nhau" đã cảnh báo),
   // mấy trang đó nạp CHÍNH file này kèm `data-icons-only`:
-  //     <script src="/nav.js?v=45" data-icons-only></script>
+  //     <script src="/nav.js?v=47" data-icons-only></script>
   // Lúc đó nav.js CHỈ cấp ICONS/iconHtml/mountIcons/EMOJI_TO_ICON + CSS icon,
   // rồi dừng — KHÔNG dựng thanh nav, KHÔNG chèn GA4, KHÔNG chèn conversion.js,
   // KHÔNG chèn auth.js. Một nguồn icon duy nhất cho cả site.
@@ -576,6 +576,9 @@
     // `/ket-qua`, tức chỉ ai đã mở một link chia sẻ mới thấy — gần như không ai
     // tìm ra. Đặt ở nav là bề mặt duy nhất phủ được toàn site.
     + ddItem('/thu-vien',      'image',         'Thư Viện — bản luận đã chia sẻ')
+    + ddSection('Người nổi tiếng')
+    + ddItem('/nghiem-chung',  'shield-check',  'Nghiệm Chứng — lá số đối chiếu đời thật')
+    + ddItem('/xac-dinh-gio-sinh', 'clock',         'Xác Định Giờ Sinh — 12 lá số, giờ nào khớp')
     + '</div></div>';
 
   // Cẩm nang — nghiên cứu, tác giả, khảo luận
@@ -689,6 +692,8 @@
       + ftItem('/menh-kho.html', 'gem', 'Mệnh Khố')
       + ftItem('/ngay-tot', 'calendar-days', 'Ngày Tốt')
       + ftItem('/thu-vien', 'image', 'Thư Viện')
+      + ftItem('/nghiem-chung', 'shield-check', 'Nghiệm Chứng')
+      + ftItem('/xac-dinh-gio-sinh', 'clock', 'Xác Định Giờ Sinh')
       + '</div>'
       + '<div class="ft-col"><div class="ft-col-title">Về Chúng Tôi<i></i></div>'
       + ftItem('/about.html', 'info', 'Giới Thiệu')

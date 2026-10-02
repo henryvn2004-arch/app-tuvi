@@ -191,7 +191,7 @@ ${ask.css}
   <p class="note">* Lá số hiển thị vận hạn năm ${NAM_XEM}. Để xem năm khác, dùng công cụ luận giải trực tiếp.</p>
 </div>
 ${ask.tail}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
 </body></html>`;
 
   return new NextResponse(html, {

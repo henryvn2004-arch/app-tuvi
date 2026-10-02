@@ -67,3 +67,8 @@ chunks_all.json
 
 # Misc
 seal.*
+
+# Dữ liệu Nghiệm Chứng do script sinh ra (manifest một dòng, hồ sơ .gz) — không định dạng tay.
+data/nghiem-chung/
+# Đầu ra tạm của pipeline (đã git-exclude cục bộ).
+work/

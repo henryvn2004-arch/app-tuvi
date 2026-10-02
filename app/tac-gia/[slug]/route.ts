@@ -193,7 +193,7 @@ ${ask.css}
   </aside>
 </div>
 ${ask.tail}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
 </body></html>`;
 }
 
@@ -205,7 +205,7 @@ function buildNotFound() {
 </head><body style="font-family:sans-serif;text-align:center;padding:80px">
 <h1 style="color:#0F2A3D;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy tác giả</h1>
 <a href="/tac-gia" style="color:#1455A4">← Về danh sách tác giả</a>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
 </body></html>`;
 }
 

@@ -297,7 +297,8 @@ button { font: inherit; cursor: pointer; }
 .explore-card.dark { background: var(--navy); color: #fff; }
 .explore-card.dark p { color: #c7d3da; }
 
-@media (max-width: 820px) { .explore-grid { grid-template-columns: 1fr; } }
+.explore-grid.two { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 820px) { .explore-grid, .explore-grid.two { grid-template-columns: 1fr; } }
 
 /* ── Footer quote + stats ───────────────────────────────────── */
 .footer-quote-sec { text-align: center; padding: 30px 0 6px; }
@@ -442,6 +443,29 @@ button { font: inherit; cursor: pointer; }
   </div>
 </section>
 
+<!-- ═══════════════ NGƯỜI NỔI TIẾNG: NGHIỆM CHỨNG + ĐOÁN GIỜ SINH ═══════════════ -->
+<section class="explore-sec">
+  <div class="wrap">
+    <div class="sec-head"><span class="ic" data-icon="star"></span><h2>Lá số người nổi tiếng</h2></div>
+    <div class="explore-grid two">
+      <a class="explore-card" href="/nghiem-chung">
+        <div class="explore-body">
+          <h3>Nghiệm Chứng — lá số đối chiếu đời thật</h3>
+          <p>Người có giờ sinh kiểm chứng: lá số nói gì, đời thật ra sao. Chỗ khớp và chỗ trượt đều ghi rõ, kèm nguồn.</p>
+          <span class="explore-cta gold">Xem hồ sơ →</span>
+        </div>
+      </a>
+      <a class="explore-card dark" href="/xac-dinh-gio-sinh">
+        <div class="explore-body">
+          <h3>Người nổi tiếng sinh giờ nào?</h3>
+          <p>Sơn Tùng, Mỹ Tâm, Công Phượng… chưa công bố giờ sinh. Lập đủ 12 lá số, xem giờ nào khớp đời nhất.</p>
+          <span class="explore-cta light">Xác định giờ sinh →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════ CÔNG CỤ CHÍNH ═══════════════ -->
 <section class="tools-sec">
   <div class="wrap">
@@ -545,7 +569,7 @@ button { font: inherit; cursor: pointer; }
   </div>
 </div>
 
-<script src="/nav.js?v=45"></script>
+<script src="/nav.js?v=47"></script>
 <script>window.TestimonialsNoAutoRun = true;</script>
 <script src="/testimonials.js?v=1"></script>
 <script>

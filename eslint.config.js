@@ -120,6 +120,9 @@ export default [
       'payos-v2/',
       'run_embed.py',
       'setup_playwright.sh',
+      // Script của công cụ Workflow (Claude Code): thân hàm async có `return`/`await` ở cấp
+      // ngoài cùng, không phải module JS hợp lệ để ESLint parse.
+      'scripts/nghiem-chung/workflow.js',
       // Mã CỦA NGƯỜI KHÁC (xem scripts/oracle/vendor/README.md) — bản gốc,
       // không sửa, không lint theo luật của repo mình. Cùng lý do với
       // `tuvi-engine/`/`remotion/`.

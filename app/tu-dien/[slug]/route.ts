@@ -226,7 +226,7 @@ ${ask.css}
   ${relatedHTML}
 </article>
 ${ask.tail}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
 </body></html>`;
 
   return new NextResponse(html, {

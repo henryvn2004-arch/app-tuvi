@@ -21,6 +21,8 @@ const STATIC_PAGES = [
     '/thu-vien/nap-am',       // hub nạp âm
     '/thu-vien/nguoi-cung-ngay-sinh', // hub lịch 366 ngày dương — xem NGAY_SINH_PAGES bên dưới
     '/thu-vien/nguoi-cung-ngay-sinh-am-lich', // hub lịch 360 ngày âm — xem NGAY_SINH_AM_PAGES bên dưới
+    '/nghiem-chung',          // hub lá số người nổi tiếng ↔ đời thật — từng hồ sơ ở /sitemap-nghiem-chung.xml
+    '/xac-dinh-gio-sinh',         // hub đoán giờ sinh người nổi tiếng (12 lá số) — từng hồ sơ ở /sitemap-xac-dinh-gio-sinh.xml
     '/about.html',
     '/phuong-phap',           // Tử Vi Nghiệm Chứng — quy trình 5 bước, trang DNA thương hiệu
     '/nguon-du-lieu.html', // ghi công nguồn dữ liệu (bắt buộc theo giấy phép CC BY)

@@ -207,7 +207,7 @@ window._articleData = { category: ${JSON.stringify(article.category||'')}, tags:
 <script src="/related-tools.js"></script>
 <script src="/testimonials.js"></script>
 ${ask.tail}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
 </body></html>`;
 }
 
@@ -221,7 +221,7 @@ function buildNotFound() {
 <h1 style="color:#0F2A3D;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy bài viết</h1>
 <p style="color:#777;margin-bottom:24px">Bài viết không tồn tại hoặc đã bị xóa.</p>
 <a href="/van-dap" style="color:#1455A4">← Về Vấn Đáp</a>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
 </body></html>`;
 }
 

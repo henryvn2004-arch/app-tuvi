@@ -381,6 +381,27 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
   }
 }
 
+// ── Lưới lá số dựng ở SERVER bằng CHÍNH renderer của tool Luận Giải ──
+// Nạp public/laso-chart.js (renderGrid của /app/luan-giai) qua new Function —
+// không chép khuôn sang TS, để mọi trang hiện lá số ĐÚNG MỘT khuôn. STAR_DATA
+// truyền vào như biến tự do mà file đó đọc. Trang chèn kết quả phải nạp kèm
+// /laso-chart.css, khai --navy/--gold/--blue/--text-lt, và nav.js (icon ô giữa).
+let chartRender: ((ls: unknown, fd: unknown) => string) | null = null;
+export function lasoChartHtml(birth: BirthParams, name: string, namXem?: number): string {
+  const { day, month, year, hourBranch, gender, isLunar } = birth;
+  if (isLunar || hourBranch == null) return '';
+  const r = computeLaso(birth, namXem);
+  if (!r.ok || !r.ls) return '';
+  const E = loadEngine();
+  if (!chartRender) {
+    const code = readFileSync(join(process.cwd(), 'public', 'laso-chart.js'), 'utf-8');
+    chartRender = new Function('window', 'STAR_DATA', code + '\nreturn renderGrid;')(globalThis, E.STAR_DATA);
+  }
+  const conv = E.convertDuongToAm(day, month, year, GIO_HOURS[hourBranch]) as Rec;
+  const fd = { name, gioitinh: gender, dd: day, mm: month, yyyy: year, gioChi: CHI_NAMES[hourBranch], amLich: conv.amLich, amDuongNam: conv.amDuongNam };
+  return chartRender!(r.ls, fd);
+}
+
 /**
  * Text đầy đủ "=== LÁ SỐ TỬ VI ===...=== 12 CUNG ===...=== 9 ĐẠI VẬN ===
  * ...=== CÁCH CỤC & NHẬN ĐỊNH ===" — ĐÚNG format `formatLaSoV2()` mà
