@@ -305,7 +305,7 @@ export async function GET(): Promise<Response> {
   </main>
 </div>
 <script src="/track.js?v=4" defer></script>
-<script src="/nav.js?v=45" data-icons-only></script>
+<script src="/nav.js?v=46" data-icons-only></script>
 <script src="/auth.js?v=6"></script>
 <script>window.SHELL_ACTIVE='thu-vien';</script>
 <script src="/shell.js?v=136"></script>

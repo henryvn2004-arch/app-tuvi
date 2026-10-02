@@ -456,7 +456,7 @@ ${ask.css}
 <script src="/auth.js?v=6"></script>
 </head><body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=45" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=46" defer></script>
 <nav class="bc" aria-label="Breadcrumb">
   <a href="/">Trang Chủ</a><span>›</span>
   <a href="${hubUrl}">${tenMuc}</a><span>›</span>
