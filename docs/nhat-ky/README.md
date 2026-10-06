@@ -26,6 +26,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-10 | `2026-10.md` | ⏱️ cmo-digest chết 4 ngày vì `marketing_funnel` timeout (bot flood 30/09) |
 | 1 | 2026-10 | `2026-10.md` | 🔁 Thầy thôi lải nhải "nộp hồ sơ đi" + câu "vì sao" được nói kỹ |
 | 1 | 2026-10 | `2026-10.md` | 🔭 Mục "Nghiệm Chứng": lá số người nổi tiếng đối chiếu đời thật — trang thử Trịnh Xuân Thuận + Cung Lê |
 | 1 | 2026-10 | `2026-10.md` | 👋 "chào thầy" không còn kích hoạt cả bài luận lá số |
