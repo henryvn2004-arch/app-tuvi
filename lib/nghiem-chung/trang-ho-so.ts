@@ -112,14 +112,14 @@ function ngayVN(iso: string): string {
 export type Muc = 'nghiem-chung' | 'xac-dinh-gio-sinh';
 
 export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
-  const h = taiHoSo(slug);
+  const h = await taiHoSo(slug);
   if (!h) return new NextResponse('Không tìm thấy hồ sơ', { status: 404 });
   // Mỗi hồ sơ thuộc ĐÚNG một mục: giờ do hệ thống xác định ở /xac-dinh-gio-sinh, giờ kiểm chứng ở /nghiem-chung.
   const mucDung: Muc = h.gioDoan ? 'xac-dinh-gio-sinh' : 'nghiem-chung';
   if (muc !== mucDung) return new NextResponse(null, { status: 308, headers: { Location: `/${mucDung}/${h.slug}` } });
   const tenMuc = h.gioDoan ? 'Xác Định Giờ Sinh' : 'Nghiệm Chứng';
   // Cờ index lấy từ MANIFEST (ngưỡng + indexed.txt), không từ file hồ sơ — validate.ts luôn ghi `indexed:false`.
-  const moIndex = h.indexed !== false || !!danhMuc().find((x) => x.slug === h.slug)?.indexed;
+  const moIndex = h.indexed !== false || !!(await danhMuc()).find((x) => x.slug === h.slug)?.indexed;
 
   const ls = await laSo(h, h.sinh.gioEngine);
   if (!ls) return new NextResponse('Không lập được lá số', { status: 500 });
@@ -329,7 +329,7 @@ export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
   });
 
   // Liên kết chéo: 6 hồ sơ kề bên trong danh mục (ổn định giữa các lần dựng).
-  const dm = danhMuc().filter((x) => !!x.gioDoan === !!gd);
+  const dm = (await danhMuc()).filter((x) => !!x.gioDoan === !!gd);
   const viTri = Math.max(0, dm.findIndex((x) => x.slug === h.slug));
   const khac = [1, 2, 3, -1, -2, -3]
     .map((k) => dm[(viTri + k + dm.length) % dm.length])

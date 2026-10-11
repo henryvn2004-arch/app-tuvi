@@ -1,7 +1,8 @@
 // lib/nghiem-chung/store.ts — đọc hồ sơ Nghiệm Chứng (chỉ phía server).
 //
-// Hai nguồn, MỘT cửa:
+// Ba nguồn, MỘT cửa:
 //   · HO_SO (TS, viết tay) — ưu tiên.
+//   · bảng nc_ho_so (Supabase) — hồ sơ do cron Vercel sinh (lib/nghiem-chung/db.ts); đọc SAU file.
 //   · data/nghiem-chung/ho-so/<slug>.json.gz — sinh hàng loạt qua
 //     scripts/nghiem-chung/validate.ts (đã kiểm mã engine + trích dẫn).
 //   · data/nghiem-chung/manifest.json — danh mục gọn cho hub + sitemap, sinh
@@ -12,6 +13,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { gunzipSync } from 'node:zlib';
 import { HO_SO, dem, type HoSoNghiemChung } from './index';
+import { dbTaiHoSo, dbDanhMuc } from './db';
 
 const DIR = join(process.cwd(), 'data', 'nghiem-chung');
 
@@ -28,12 +30,12 @@ export interface MucManifest {
   indexed: boolean;
 }
 
-export function taiHoSo(slug: string): HoSoNghiemChung | null {
+export async function taiHoSo(slug: string): Promise<HoSoNghiemChung | null> {
   const tay = HO_SO.find((h) => h.slug === slug);
   if (tay) return tay;
   if (!/^[a-z0-9-]{1,90}$/.test(slug)) return null;
   const p = join(DIR, 'ho-so', `${slug}.json.gz`);
-  if (!existsSync(p)) return null;
+  if (!existsSync(p)) return dbTaiHoSo(slug);
   try {
     return JSON.parse(gunzipSync(readFileSync(p)).toString('utf8')) as HoSoNghiemChung;
   } catch (e) {
@@ -42,11 +44,13 @@ export function taiHoSo(slug: string): HoSoNghiemChung | null {
   }
 }
 
-let cache: MucManifest[] | null = null;
+let cache: { at: number; ds: MucManifest[] } | null = null;
+// Phần từ DB đổi mỗi đêm; 10 phút là đủ tươi mà không đọc DB mỗi lượt dựng trang.
+const TTL_MS = 10 * 60 * 1000;
 
-/** Hồ sơ viết tay (luôn index) + manifest hồ sơ sinh hàng loạt. */
-export function danhMuc(): MucManifest[] {
-  if (cache) return cache;
+/** Hồ sơ viết tay (luôn index) + manifest hồ sơ sinh hàng loạt + hồ sơ do cron sinh (DB). */
+export async function danhMuc(): Promise<MucManifest[]> {
+  if (cache && Date.now() - cache.at < TTL_MS) return cache.ds;
   const tay: MucManifest[] = HO_SO.map((h) => ({
     slug: h.slug,
     ten: h.ten,
@@ -66,7 +70,9 @@ export function danhMuc(): MucManifest[] {
       console.error('[nghiem-chung] hỏng manifest:', (e as Error).message);
     }
   }
-  const coTay = new Set(tay.map((x) => x.slug));
-  cache = [...tay, ...sinh.filter((x) => !coTay.has(x.slug))];
-  return cache;
+  const coFile = new Set([...tay, ...sinh].map((x) => x.slug));
+  const moi = (await dbDanhMuc()).filter((x) => !coFile.has(x.slug));
+  const ds = [...tay, ...sinh.filter((x) => !tay.some((t) => t.slug === x.slug)), ...moi];
+  cache = { at: Date.now(), ds };
+  return ds;
 }
