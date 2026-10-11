@@ -134,6 +134,11 @@ export async function buildToolUsageDigest(): Promise<ToolUsageDigest> {
 
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/events?event_type=in.(tool_run,page_dwell)&ts=gt.${encodeURIComponent(cursor)}` +
+      // Bot tự khai UA (`is_bot`, app/api/track) không phải người dùng — botnet HeadlessChrome
+      // từng chiếm 64/65 dòng "khách ẩn danh ~0 phút" của digest. `not.is.true` giữ cả dòng
+      // `is_bot` null (event cũ trước khi có cột). Cursor dời theo dòng CUỐI SAU LỌC: bot
+      // ở đuôi lô chỉ bị đọc lại rồi lọc lại ở lượt sau, không làm mất người thật.
+      `&is_bot=not.is.true` +
       `&select=ts,event_type,tool_id,user_id,anon_id,meta&order=ts.asc&limit=${FETCH_LIMIT}`,
     { headers: SB_HEADERS, cache: 'no-store' },
   );
