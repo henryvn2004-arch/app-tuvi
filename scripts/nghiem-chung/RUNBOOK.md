@@ -77,4 +77,9 @@ Hàng đợi còn < 80 người thì báo Henry để xuất thêm bậc sau (ph
 ## 7. Cron Vercel (thay Routine mục 5 — Henry chọn 2026-10-11)
 `app/api/cron/nghiem-chung` gọi Claude API, ghi thẳng Supabase (`nc_ho_so`/`nc_loai_tru`), 5 người/lượt, trần `nghiem_chung.daily_cap`=100/ngày.
 Dùng chung luật (PROMPT.md) và bộ kiểm (`lib/nghiem-chung/sinh/kiem.ts`) với pipeline agent. **Đừng chạy song song với Routine mục 5** (cùng hàng đợi `celebs.jsonl`) —
-bật cron thì tắt Routine NC. Doan (mục 6) chưa chuyển. Hồ sơ trong DB không có file trong repo; muốn đưa về file thì xuất từ `nc_ho_so.data`.
+bật cron thì tắt Routine NC. Hồ sơ trong DB không có file trong repo; muốn đưa về file thì xuất từ `nc_ho_so.data`.
+
+## 8. Cron Vercel ĐOÁN GIỜ (thay Routine mục 6 — Henry chọn 2026-10-11)
+`app/api/cron/xac-dinh-gio-sinh`: 5 người/lượt, `*/15 23,0 * * *` UTC, trần `nghiem_chung.doan_daily_cap`=40/ngày. Bước 0 chấm 12 giờ → chốt giờ → viết như NC.
+Hàng đợi vẫn là `data/nghiem-chung/doan-gio.jsonl` (cron chỉ ĐỌC; xuất thêm bậc sau thì commit file mới). Tắt Routine mục 6 khi cron chạy.
+Tắt khẩn cấp: `app_config['nghiem_chung.enabled']=false` (cả NC lẫn doan).

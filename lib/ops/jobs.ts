@@ -285,6 +285,10 @@ export const JOBS: JobSpec[] = [
   { key: 'nghiem-chung', label: 'Sinh hồ sơ Nghiệm Chứng (Claude API)', source: 'vercel', everyMinutes: D,
     schedule: '01:00–05:45 VN, mỗi 15 phút', sink: 'nc_ho_so · nc_loai_tru', path: '/api/cron/nghiem-chung',
     since: '2026-10-11' },
+  // Sinh hồ sơ Xác Định Giờ Sinh bằng Claude API (5 người/lượt, 40/ngày) → nc_ho_so. `since` = ngày merge.
+  { key: 'xac-dinh-gio-sinh', label: 'Sinh hồ sơ Xác Định Giờ Sinh (Claude API)', source: 'vercel', everyMinutes: D,
+    schedule: '06:00–07:45 VN, mỗi 15 phút', sink: 'nc_ho_so · nc_loai_tru', path: '/api/cron/xac-dinh-gio-sinh',
+    since: '2026-10-11' },
   // Reminder/cross-sell qua EMAIL — MẶC ĐỊNH TẮT (budget=0 trong app_config),
   // xem lib/marketing/email-reminder.ts / email-cross-sell.ts. `since` = ngày
   // merge: job chưa từng chạy nên cron_runs trống, thiếu mốc này bộ dò kêu

@@ -32,8 +32,11 @@ CREATE TABLE IF NOT EXISTS nc_loai_tru (
   slug       TEXT PRIMARY KEY,
   qid        TEXT NOT NULL,
   ly_do      TEXT NOT NULL,
+  muc        TEXT NOT NULL DEFAULT 'nghiem-chung',
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+-- Bảng đã tạo từ bản đầu (chưa có cột muc): bổ sung — cron tính trần ngày theo từng mục.
+ALTER TABLE nc_loai_tru ADD COLUMN IF NOT EXISTS muc TEXT NOT NULL DEFAULT 'nghiem-chung';
 ALTER TABLE nc_loai_tru ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON nc_loai_tru FROM public, anon, authenticated;
 
