@@ -6,7 +6,7 @@ import { BASE_URL, urlEntry, xmlUrlset, xmlResponse } from '@/lib/seo/sitemap-so
 import { danhMuc } from '@/lib/nghiem-chung/store';
 
 export async function GET() {
-  const urls = danhMuc()
+  const urls = (await danhMuc())
     .filter((x) => x.indexed && x.gioDoan)
     .map((x) => urlEntry(`${BASE_URL}/xac-dinh-gio-sinh/${x.slug}`));
   return xmlResponse(xmlUrlset(urls));

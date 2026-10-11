@@ -43,6 +43,7 @@
     { "path": "/api/cron/backlink-broken-links", "schedule": "45 1 * * 4" },
     { "path": "/api/cron/growth-accounts", "schedule": "15 1 * * 6" },
     { "path": "/api/cron/viral-seo-pages", "schedule": "30 4 * * *" },
+    { "path": "/api/cron/nghiem-chung", "schedule": "*/15 18-22 * * *" },
     { "path": "/api/cron/email-reminder-idle", "schedule": "0 1 * * 2" },
     { "path": "/api/cron/email-cross-sell", "schedule": "0 1 * * 0,5" },
     { "path": "/api/cron/email-broadcast-drain", "schedule": "*/15 * * * *" },

@@ -73,3 +73,8 @@ NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt NODE_NO_WARNIN
 Rồi Workflow `scriptPath: scripts/nghiem-chung/workflow.js`, `args: {"slugs": <mảng đó>, "effort": "low", "doan": true}`.
 Xong: như mục 5 (manifest → git add -f ho-so/loai-tru/manifest → commit → push).
 Hàng đợi còn < 80 người thì báo Henry để xuất thêm bậc sau (phần còn lại thế giới, sitelinks ≥ 40).
+
+## 7. Cron Vercel (thay Routine mục 5 — Henry chọn 2026-10-11)
+`app/api/cron/nghiem-chung` gọi Claude API, ghi thẳng Supabase (`nc_ho_so`/`nc_loai_tru`), 5 người/lượt, trần `nghiem_chung.daily_cap`=100/ngày.
+Dùng chung luật (PROMPT.md) và bộ kiểm (`lib/nghiem-chung/sinh/kiem.ts`) với pipeline agent. **Đừng chạy song song với Routine mục 5** (cùng hàng đợi `celebs.jsonl`) —
+bật cron thì tắt Routine NC. Doan (mục 6) chưa chuyển. Hồ sơ trong DB không có file trong repo; muốn đưa về file thì xuất từ `nc_ho_so.data`.

@@ -23,6 +23,13 @@ const nextConfig = {
     '/xac-dinh-gio-sinh': ['./data/nghiem-chung/manifest.json'],
     '/xac-dinh-gio-sinh/[slug]': ['./data/nghiem-chung/**', './public/laso-chart.js'],
     '/sitemap-xac-dinh-gio-sinh': ['./data/nghiem-chung/manifest.json'],
+    // Cron sinh hồ sơ: hàng đợi (celebs.jsonl), danh sách đã xong (manifest + loai-tru) và luật viết (PROMPT.md).
+    '/api/cron/nghiem-chung': [
+      './data/nghiem-chung/celebs.jsonl',
+      './data/nghiem-chung/manifest.json',
+      './data/nghiem-chung/loai-tru/**',
+      './scripts/nghiem-chung/PROMPT.md',
+    ],
     '/api/luan-giai/email-pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
     // Cùng lý do: các route dưới cũng dựng PDF (resend-pdf · gửi PDF vào kênh chat
     // từ web và từ webhook 4 kênh) — lib/pdf/paid-reports.ts.

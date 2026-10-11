@@ -60,7 +60,7 @@ export async function trangHub(req: NextRequest, muc: Muc): Promise<Response> {
   const q = (sp.get('q') || '').trim().slice(0, 60);
   const chuRaw = (sp.get('chu') || '').toUpperCase();
   const chu = CHU_CAI.includes(chuRaw) || chuRaw === '#' ? chuRaw : '';
-  const tatCa = danhMuc()
+  const tatCa = (await danhMuc())
     .filter((x) => !!x.gioDoan === (muc === 'xac-dinh-gio-sinh'))
     .sort((a, b) => khongDau(a.ten).localeCompare(khongDau(b.ten)));
   const soTheoChu = new Map<string, number>();
