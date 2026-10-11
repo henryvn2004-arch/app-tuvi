@@ -23,6 +23,7 @@
 // ============================================================
 
 import { createHash } from 'crypto';
+import { looksLikeBot } from '@/lib/bot-ua';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -73,9 +74,16 @@ export async function previewGate(
   key: string,
   ipHash: string | null,
   toolId: string,
+  ua?: string | null,
 ): Promise<PreviewGateResult> {
   const FAIL_CLOSED: PreviewGateResult = { allowed: false, reason: 'error', left: 0 };
   if (!key || key.length < 6) return { allowed: false, reason: 'disabled', left: 0 };
+  // Botnet HeadlessChrome (đo 2026-10: 12 → 29 → 144 lượt/ngày, 83 IP, mỗi lượt
+  // một anon_id mới) né được trần theo key lẫn theo IP và đang ăn dần trần TOÀN
+  // HỆ THỐNG — hết trần đó là khách thật nhận tường trả phí ngay lượt đầu. Chặn
+  // TRƯỚC RPC để bot không tiêu suất nào. 'disabled' (không phải 'global_cap'):
+  // client im lặng với lý do này, không dựng popup mời trả phí cho bot.
+  if (ua && looksLikeBot(ua)) return { allowed: false, reason: 'disabled', left: 0 };
   if (!SUPABASE_URL || !SUPABASE_KEY) return FAIL_CLOSED;
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/anon_preview_consume`, {
