@@ -1,0 +1,13 @@
+-- migration-service-role-statement-timeout.sql  (2026-10-11)
+--
+-- VÌ SAO: cron `cmo-digest` vẫn chết mỗi ngày (07→11/10) dù đã sửa
+-- `bot_anon_ids`/`marketing_funnel` (migration-bot-anon-ids-fast.sql). Cron chạy
+-- 1 lần/ngày lúc cache nguội: `bot_anon_ids` 7 ngày mất ~23 s nguội vs ~3 s nóng,
+-- và digest gọi 16 RPC song song (nhiều cái dùng lại bot_anon_ids) nên đụng trần 8 s.
+-- Trần 8 s KHÔNG nằm ở hàm: role `authenticator` có statement_timeout=8s và
+-- `service_role` (rolconfig NULL) kế thừa qua PostgREST.
+--
+-- SỬA: cho riêng `service_role` (khoá phía server: cron/RPC nặng) trần 60 s.
+-- `anon` (3 s) và `authenticated` (8 s) GIỮ NGUYÊN — đường người dùng vẫn bị chặn sớm.
+-- Hoàn tác: `alter role service_role reset statement_timeout;`
+alter role service_role set statement_timeout = '60s';

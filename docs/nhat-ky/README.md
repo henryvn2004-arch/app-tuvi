@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-538 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+539 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Năm file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-10.md` | 13 | 35,537 B |
+| `2026-10.md` | 14 | 36,957 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
@@ -29,6 +29,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 1 | 2026-10 | `2026-10.md` | 🌗 Xác Định Giờ Sinh chuyển sang cron Vercel + Claude API |
 | 1 | 2026-10 | `2026-10.md` | 🌙 Cron Vercel sinh hồ sơ Nghiệm Chứng bằng Claude API → Supabase |
 | 1 | 2026-10 | `2026-10.md` | 🤖 Botnet HeadlessChrome ăn ngân sách xem trước — chặn theo UA trước cầu dao |
+| 1 | 2026-10 | `2026-10.md` | ⏱️ cmo-digest vẫn chết sau bản sửa — trần 8 s nằm ở role, không ở hàm |
 | 1 | 2026-10 | `2026-10.md` | ⏱️ cmo-digest chết 4 ngày vì `marketing_funnel` timeout (bot flood 30/09) |
 | 1 | 2026-10 | `2026-10.md` | 🔁 Thầy thôi lải nhải "nộp hồ sơ đi" + câu "vì sao" được nói kỹ |
 | 1 | 2026-10 | `2026-10.md` | 🔭 Mục "Nghiệm Chứng": lá số người nổi tiếng đối chiếu đời thật — trang thử Trịnh Xuân Thuận + Cung Lê |
