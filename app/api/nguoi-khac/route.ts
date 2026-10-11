@@ -350,7 +350,7 @@ async function runPreview(request: NextRequest) {
   // user mới đăng ký đã có `signup_bonus` ngay từ đầu — xem `hasToppedUp`
   // (lib/billing/credits.ts).
   const toppedUp = 'error' in auth ? false : await hasToppedUp(auth.user.id);
-  const gate = toppedUp ? { allowed: true as const, reason: 'ok' as const } : await previewGate(pKey, previewIpHash(request), TOOL_ID);
+  const gate = toppedUp ? { allowed: true as const, reason: 'ok' as const } : await previewGate(pKey, previewIpHash(request), TOOL_ID, request.headers.get('user-agent'));
   if (!gate.allowed) {
     console.error(`[nguoi-khac] xem trước bị chặn (${gate.reason})`);
     return ok(khung);
