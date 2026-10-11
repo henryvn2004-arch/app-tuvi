@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-535 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+536 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Năm file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-10.md` | 10 | 30,100 B |
+| `2026-10.md` | 11 | 31,820 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
@@ -27,6 +27,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-10 | `2026-10.md` | 🤖 Botnet HeadlessChrome ăn ngân sách xem trước — chặn theo UA trước cầu dao |
+| 1 | 2026-10 | `2026-10.md` | ⏱️ cmo-digest chết 4 ngày vì `marketing_funnel` timeout (bot flood 30/09) |
 | 1 | 2026-10 | `2026-10.md` | 🔁 Thầy thôi lải nhải "nộp hồ sơ đi" + câu "vì sao" được nói kỹ |
 | 1 | 2026-10 | `2026-10.md` | 🔭 Mục "Nghiệm Chứng": lá số người nổi tiếng đối chiếu đời thật — trang thử Trịnh Xuân Thuận + Cung Lê |
 | 1 | 2026-10 | `2026-10.md` | 👋 "chào thầy" không còn kích hoạt cả bài luận lá số |
