@@ -163,7 +163,7 @@ export async function POST(request: NextRequest) {
   // không riêng khách đã trả tiền thật. Xem `hasToppedUp` (lib/billing/credits.ts).
   const toppedUp = 'error' in auth ? false : await hasToppedUp(auth.user.id);
   if (!toppedUp) {
-    const gate = await previewGate(pKey, previewIpHash(request), toolId);
+    const gate = await previewGate(pKey, previewIpHash(request), toolId, request.headers.get('user-agent'));
     if (!gate.allowed) return ok({ allowed: false, reason: gate.reason });
   }
 
