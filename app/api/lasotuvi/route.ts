@@ -383,7 +383,7 @@ async function runPost(request: NextRequest) {
     // vì mọi user mới đăng ký đã có `signup_bonus` ngay từ đầu — xem
     // `hasToppedUp` (lib/billing/credits.ts).
     const toppedUp = 'error' in auth ? false : await hasToppedUp(auth.user.id);
-    const gate = toppedUp ? { allowed: true as const, reason: 'ok' as const } : await previewGate(pKey, previewIpHash(request), previewToolId);
+    const gate = toppedUp ? { allowed: true as const, reason: 'ok' as const } : await previewGate(pKey, previewIpHash(request), previewToolId, request.headers.get('user-agent'));
     if (!gate.allowed) {
       // 402 chứ không 429: với client đây KHÔNG phải "thử lại sau" mà là "hết
       // phần miễn phí, tới lúc trả tiền" — và trang phải dựng đúng tấm tường đó
