@@ -13,6 +13,7 @@ import { banKeNam } from '@/lib/nghiem-chung/engine-ref';
 import { llmTextFull } from '@/lib/llm/complete';
 import { parseLlmJson } from '@/lib/llm/json';
 import type { Goi } from './goi';
+import { briefDoan, chotGio } from './doan';
 
 const WIKI_MAX = 16000;
 const NAM_XEM = 2026;
@@ -77,41 +78,85 @@ async function goi(system: string, prompt: string, dung: DungToken, maxTokens: n
 
 export type KetQuaViet =
   | { kq: 'loai'; nhap: { loaiTru: string }; dung: DungToken }
-  | { kq: 'xong'; nhap: Any; dung: DungToken }
+  | { kq: 'xong'; nhap: Any; doan?: Any; dung: DungToken }
   | { kq: 'khong-dat'; nhap: Any; loi: string[]; dung: DungToken };
 
-/** `kiem(nhap)` trả danh sách lỗi (rỗng = đạt). */
-export async function vietHoSo(pack: Goi, kiem: (nhap: Any) => Promise<string[]>): Promise<KetQuaViet> {
+/** Brief chấm 12 giờ, bỏ các dòng chỉ dẫn dành cho agent chạy lệnh (cron không có shell). */
+function promptDoan(pack: Goi): string {
+  const brief = briefDoan(pack)
+    .split('\n')
+    .filter((l) => !l.startsWith('Rồi chạy:') && !l.startsWith('## Bước 2'))
+    .join('\n');
+  return `${brief}\n\n---\nChỉ làm Bước 1: trả về DUY NHẤT JSON bảng chấm 12 giờ.`;
+}
+
+/**
+ * `kiem(nhap, doanG)` trả danh sách lỗi (rỗng = đạt). `opts.doan`: người chưa có giờ sinh — thêm bước 0
+ * (chấm 12 giờ, chốt giờ vào gói) và lỗi mang tiền tố "doan." sẽ gửi lại để sửa BẢNG CHẤM, không phải nháp.
+ */
+export async function vietHoSo(
+  pack: Goi,
+  kiem: (nhap: Any, doanG: Any) => Promise<string[]>,
+  opts: { doan?: boolean } = {},
+): Promise<KetQuaViet> {
   const dung: DungToken = { vao: 0, ra: 0, luot: 0, model: '' };
   const SYS = `Bạn là biên tập viên viết hồ sơ "Nghiệm Chứng" cho tuviminhbao.com: đối chiếu lá số Tử Vi (do engine tính sẵn) với cuộc đời thật của người nổi tiếng, viết tiếng Việt tự nhiên. Chỉ trả về JSON.\n\n${layLuat()}`;
-  const ctx = ngCanh(pack);
 
-  // (A) chọn năm bước ngoặt / loại trừ
-  const a = await goi(
-    SYS,
-    `${ctx}\n\n---\nBước 1. Đọc wiki.text. Nếu người này thuộc diện LOẠI TRỪ, trả {"loaiTru":"<mã>: <lý do ngắn>"}. Nếu không, chọn 3–4 năm bước ngoặt (năm có sự kiện lớn, cả tốt lẫn xấu, nằm trong đời người, có trong bài) và trả {"nams":[năm,…]}.`,
-    dung,
-    2000,
-  );
-  if (a?.loaiTru) return { kq: 'loai', nhap: { loaiTru: String(a.loaiTru) }, dung };
-  const nams: number[] = (Array.isArray(a?.nams) ? a.nams : []).map(Number).filter(Number.isInteger).slice(0, 5);
-  const kes = await Promise.all(nams.map((y) => banKeNam(pack.sinh.ngay, pack.sinh.gioEngine, pack.gioiTinh, y)));
-  const keTxt = kes
-    .filter(Boolean)
-    .map((k) => [`## Năm ${k!.nam} (${k!.canChi}, ${k!.tuoiMu} tuổi mụ)`, ...k!.cau.map((x) => `${x.id} | ${x.text}`)].join('\n'))
-    .join('\n');
+  // (0) chỉ người chưa có giờ: chấm 12 giờ → chốt giờ vào gói
+  let doanG: Any = null;
+  const p0 = opts.doan ? promptDoan(pack) : '';
+  if (opts.doan) {
+    doanG = await goi(SYS, p0, dung, 8000);
+    chotGio(pack, String(doanG?.chon));
+  }
 
-  // (B) viết nháp
-  const yeuCau = `${ctx}\n\n# Vận các năm bước ngoặt (mã N<năm>.*)\n${keTxt}\n\n---\nBước 2. Viết nháp hồ sơ đúng "Định dạng nháp" (JSON, không chú thích). Dùng các năm: ${nams.join(', ')}. Mọi "trich" phải chép NGUYÊN VĂN từ wiki.text. Mọi "laSoRef" phải là mã có thật ở trên.`;
-  let nhap = await goi(SYS, yeuCau, dung, 16000);
-  for (let lan = 0; ; lan++) {
-    const loi = await kiem(nhap);
-    if (!loi.length) return { kq: 'xong', nhap, dung };
-    if (lan === 2) return { kq: 'khong-dat', nhap, loi, dung };
-    // (C) sửa theo danh sách lỗi
-    nhap = await goi(
+  // (A) chọn năm bước ngoặt / loại trừ  +  (B) viết nháp — dựng lại từ đầu nếu giờ đổi
+  async function lapNhap(): Promise<{ loaiTru?: string; yeuCau?: string; nhap?: Any }> {
+    const ctx = ngCanh(pack);
+    const a = await goi(
       SYS,
-      `${yeuCau}\n\n# Nháp trước của bạn\n${JSON.stringify(nhap)}\n\n# Bộ kiểm tra báo lỗi — sửa HẾT rồi trả lại TOÀN BỘ nháp\n- ${loi.join('\n- ')}`,
+      `${ctx}\n\n---\nBước 1. Đọc wiki.text. Nếu người này thuộc diện LOẠI TRỪ, trả {"loaiTru":"<mã>: <lý do ngắn>"}. Nếu không, chọn 3–4 năm bước ngoặt (năm có sự kiện lớn, cả tốt lẫn xấu, nằm trong đời người, có trong bài) và trả {"nams":[năm,…]}.`,
+      dung,
+      2000,
+    );
+    if (a?.loaiTru) return { loaiTru: String(a.loaiTru) };
+    const nams: number[] = (Array.isArray(a?.nams) ? a.nams : []).map(Number).filter(Number.isInteger).slice(0, 5);
+    const kes = await Promise.all(nams.map((y) => banKeNam(pack.sinh.ngay, pack.sinh.gioEngine, pack.gioiTinh, y)));
+    const keTxt = kes
+      .filter(Boolean)
+      .map((k) => [`## Năm ${k!.nam} (${k!.canChi}, ${k!.tuoiMu} tuổi mụ)`, ...k!.cau.map((x) => `${x.id} | ${x.text}`)].join('\n'))
+      .join('\n');
+    const yeuCau = `${ctx}\n\n# Vận các năm bước ngoặt (mã N<năm>.*)\n${keTxt}\n\n---\nBước 2. Viết nháp hồ sơ đúng "Định dạng nháp" (JSON, không chú thích). Dùng các năm: ${nams.join(', ')}. Mọi "trich" phải chép NGUYÊN VĂN từ wiki.text. Mọi "laSoRef" phải là mã có thật ở trên.`;
+    return { yeuCau, nhap: await goi(SYS, yeuCau, dung, 16000) };
+  }
+
+  let cur = await lapNhap();
+  if (cur.loaiTru) return { kq: 'loai', nhap: { loaiTru: cur.loaiTru }, dung };
+  for (let lan = 0; ; lan++) {
+    const loi = await kiem(cur.nhap, doanG);
+    if (!loi.length) return { kq: 'xong', nhap: cur.nhap, ...(doanG ? { doan: doanG } : {}), dung };
+    if (lan === 2) return { kq: 'khong-dat', nhap: cur.nhap, loi, dung };
+    const loiDoan = loi.filter((l) => l.startsWith('doan.'));
+    if (opts.doan && loiDoan.length) {
+      // (0') sửa bảng chấm; giờ đổi thì lá số đổi ⇒ nháp cũ vô nghĩa, viết lại từ bước A.
+      const gioCu = pack.sinh.gio;
+      doanG = await goi(
+        SYS,
+        `${p0}\n\n# Bảng chấm trước của bạn\n${JSON.stringify(doanG)}\n\n# Bộ kiểm tra báo lỗi — sửa HẾT rồi trả lại TOÀN BỘ bảng\n- ${loiDoan.join('\n- ')}`,
+        dung,
+        8000,
+      );
+      chotGio(pack, String(doanG?.chon));
+      if (pack.sinh.gio !== gioCu) {
+        cur = await lapNhap();
+        if (cur.loaiTru) return { kq: 'loai', nhap: { loaiTru: cur.loaiTru }, dung };
+        continue;
+      }
+    }
+    // (C) sửa nháp theo danh sách lỗi
+    cur.nhap = await goi(
+      SYS,
+      `${cur.yeuCau}\n\n# Nháp trước của bạn\n${JSON.stringify(cur.nhap)}\n\n# Bộ kiểm tra báo lỗi — sửa HẾT rồi trả lại TOÀN BỘ nháp\n- ${loi.filter((l) => !l.startsWith('doan.')).join('\n- ') || loi.join('\n- ')}`,
       dung,
       16000,
     );

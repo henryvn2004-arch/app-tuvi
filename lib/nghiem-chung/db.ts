@@ -140,11 +140,11 @@ export async function dbLuuHoSo(h: HoSoNghiemChung, qid: string): Promise<void> 
   if (!r.ok) throw new Error(`ghi nc_ho_so ${h.slug}: ${r.status} ${JSON.stringify(r.body).slice(0, 200)}`);
 }
 
-export async function dbLuuLoaiTru(slug: string, qid: string, lyDo: string): Promise<void> {
+export async function dbLuuLoaiTru(slug: string, qid: string, lyDo: string, muc: 'nghiem-chung' | 'xac-dinh-gio-sinh'): Promise<void> {
   const r = await sb('/nc_loai_tru?on_conflict=slug', {
     method: 'POST',
     headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
-    body: JSON.stringify({ slug, qid, ly_do: lyDo }),
+    body: JSON.stringify({ slug, qid, ly_do: lyDo, muc }),
   });
   if (!r.ok) throw new Error(`ghi nc_loai_tru ${slug}: ${r.status} ${JSON.stringify(r.body).slice(0, 200)}`);
 }

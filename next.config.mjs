@@ -30,6 +30,13 @@ const nextConfig = {
       './data/nghiem-chung/loai-tru/**',
       './scripts/nghiem-chung/PROMPT.md',
     ],
+    '/api/cron/xac-dinh-gio-sinh': [
+      './data/nghiem-chung/celebs.jsonl',
+      './data/nghiem-chung/doan-gio.jsonl',
+      './data/nghiem-chung/manifest.json',
+      './data/nghiem-chung/loai-tru/**',
+      './scripts/nghiem-chung/PROMPT.md',
+    ],
     '/api/luan-giai/email-pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
     // Cùng lý do: các route dưới cũng dựng PDF (resend-pdf · gửi PDF vào kênh chat
     // từ web và từ webhook 4 kênh) — lib/pdf/paid-reports.ts.
