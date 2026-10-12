@@ -26,6 +26,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-10 | `2026-10.md` | 🔤 Cron loại oan 28/40 người doan vì "bám sát" dính "ám sát" |
 | 1 | 2026-10 | `2026-10.md` | 🌗 Xác Định Giờ Sinh chuyển sang cron Vercel + Claude API |
 | 1 | 2026-10 | `2026-10.md` | 🌙 Cron Vercel sinh hồ sơ Nghiệm Chứng bằng Claude API → Supabase |
 | 1 | 2026-10 | `2026-10.md` | 🤖 Botnet HeadlessChrome ăn ngân sách xem trước — chặn theo UA trước cầu dao |
