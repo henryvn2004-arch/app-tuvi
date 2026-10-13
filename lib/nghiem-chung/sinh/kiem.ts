@@ -20,7 +20,10 @@ const NAM_NAY = 2026;
 const CUNG = ['Mệnh', 'Phụ Mẫu', 'Phúc Đức', 'Điền Trạch', 'Quan Lộc', 'Nô Bộc', 'Thiên Di', 'Tật Ách', 'Tài Bạch', 'Tử Tức', 'Phu Thê', 'Huynh Đệ'];
 const KL: KetLuan[] = ['khop', 'mot-phan', 'truot', 'chua-kiem-chung', 'dang-dien-ra'];
 const CO_KL = (k: KetLuan) => k === 'khop' || k === 'mot-phan' || k === 'truot';
-const NHAY_CAM = /tự tử|treo cổ|nhảy sông|yểu|giảm thọ|ám sát|sát nhân|giết người|ngoại tình|dâm|ăn trộm|tù tội|ngồi tù|chết|ung thư|trăng gió|lẽ mọn|vợ lẽ|sát vợ|khắc chồng/i;
+// Biên từ bằng \p{L}: khớp CHUỖI CON làm "bám sát"/"giám sát" dính "ám sát" ⇒ cron loại oan 28/40 người doan
+// (2026-10-12) vì lời giải thích viết "giờ nào bám sát thứ hai" — đúng câu mẫu trong luật chấm.
+const NHAY_CAM =
+  /(?<!\p{L})(?:tự tử|treo cổ|nhảy sông|yểu|giảm thọ|ám sát|sát nhân|giết người|ngoại tình|dâm|ăn trộm|tù tội|ngồi tù|chết|ung thư|trăng gió|lẽ mọn|vợ lẽ|sát vợ|khắc chồng)(?!\p{L})/iu;
 
 const norm = (s: string) =>
   s
