@@ -50,11 +50,18 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
 const CACHE_URL = 'https://generativelanguage.googleapis.com/v1beta/cachedContents';
-// Khớp `ttl:'1h'` bên Anthropic (run.ts:981). MỘT nguồn — `createCache` lẫn
-// `logGeminiCacheStorage` (ước lượng cost lưu trữ) đều đọc từ đây, không gõ
-// tay '3600s'/3600 hai chỗ khác nhau (đúng bẫy CLAUDE.md cảnh báo — hai số
-// phải đồng bộ tay mà không ai nhắc thì trôi).
-const CACHE_TTL_SECONDS = 3600;
+// MỘT nguồn — `createCache` lẫn `logGeminiCacheStorage` (ước lượng cost lưu
+// trữ) đều đọc từ đây, không gõ tay hai chỗ khác nhau.
+// 🔴 2026-11-04: 3600 → 300. Google tính phí lưu trữ theo TRỌN TTL, mà system
+// chứa lá số riêng từng người ⇒ mỗi cuộc chat một cache (30 ngày: 2.321 cache
+// = 2.321 hash, KHÔNG cache nào dùng chung). 1h thì phí lưu (~1,23tr) VƯỢT phần
+// tiết kiệm nhờ cache-hit (~0,89tr). Lượt chat trong một cuộc cách nhau vài
+// phút, 5' vẫn giữ được phần lớn hit mà phí lưu giảm 12×. Đừng nâng lại 1h.
+const CACHE_TTL_SECONDS = 300;
+// Cache còn sống dưới mốc này coi như đã chết: TTL ngắn thì xác suất tra trúng
+// cache sắp hết hạn tăng theo — tra thì còn, gửi tới Google thì đã hết ⇒ lượt
+// lỗi. 60s phủ một lượt `laso` nhiều vòng tool (mỗi vòng tra lại).
+const CACHE_MIN_REMAINING_MS = 60_000;
 
 const SB_HEADERS = {
   'Content-Type': 'application/json',
@@ -99,7 +106,7 @@ async function lookupCache(hash: string, model: string): Promise<string | null> 
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/gemini_cache_registry` +
         `?system_hash=eq.${hash}&model=eq.${encodeURIComponent(model)}` +
-        `&expires_at=gt.${encodeURIComponent(new Date().toISOString())}` +
+        `&expires_at=gt.${encodeURIComponent(new Date(Date.now() + CACHE_MIN_REMAINING_MS).toISOString())}` +
         '&select=cache_name,expires_at&limit=1',
       { headers: SB_HEADERS, cache: 'no-store' },
     );
