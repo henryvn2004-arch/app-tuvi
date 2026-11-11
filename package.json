@@ -94,7 +94,8 @@
     "check:glossary": "node scripts/check-glossary.mjs",
     "check:tokushoho": "node scripts/check-tokushoho.mjs",
     "check:emaili18n": "node scripts/check-email-i18n.mjs",
-    "check:i18nlong": "node scripts/check-i18nlong.mjs"
+    "check:i18nlong": "node scripts/check-i18nlong.mjs",
+    "check:masters": "node scripts/check-masters-i18n.mjs"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.9.0",

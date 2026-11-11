@@ -140,5 +140,43 @@
     return e && e.t ? e.t : vi;
   }
 
-  window.I18n = { locale: LOCALE, t: t, tv: tv, href: href, defineLong: defineLong, loadLong: loadLong, long: long };
+  // ── Tên 15 thầy theo id (W19) — CHỈ để HIỂN THỊ ─────────────────────────────
+  // ja/zh: chữ Hán của tên (ja dùng tân tự thể: 霊 隠 虚…, zh-cn giản thể); ko: âm Hán-Hàn;
+  // en: tên Việt BỎ dấu ("Co Nguyet") — người đọc Latin không gõ được dấu, khớp bản `home.thay-*`
+  // đã có. Hán tự là SUY RA từ âm Hán-Việt (chưa có nguồn gốc từ Henry) — xem nhật ký W19 "cần người
+  // duyệt". Khoá tra bảng/prompt/`authorName` gửi server GIỮ tên Việt: đừng đưa kết quả vào đó.
+  var MASTERS = {
+    'co-nguyet':   { en: 'Co Nguyet',   ja: '古月', ko: '고월', 'zh-tw': '古月', 'zh-cn': '古月' },
+    'tu-nguyen':   { en: 'Tu Nguyen',   ja: '紫元', ko: '자원', 'zh-tw': '紫元', 'zh-cn': '紫元' },
+    'nhat-nguyen': { en: 'Nhat Nguyen', ja: '日元', ko: '일원', 'zh-tw': '日元', 'zh-cn': '日元' },
+    'dau-nam':     { en: 'Dau Nam',     ja: '斗南', ko: '두남', 'zh-tw': '斗南', 'zh-cn': '斗南' },
+    'ngoc-tinh':   { en: 'Ngoc Tinh',   ja: '玉星', ko: '옥성', 'zh-tw': '玉星', 'zh-cn': '玉星' },
+    'dieu-khong':  { en: 'Dieu Khong',  ja: '妙空', ko: '묘공', 'zh-tw': '妙空', 'zh-cn': '妙空' },
+    'tam-kinh':    { en: 'Tam Kinh',    ja: '心鏡', ko: '심경', 'zh-tw': '心鏡', 'zh-cn': '心镜' },
+    'huyen-khong': { en: 'Huyen Khong', ja: '玄空', ko: '현공', 'zh-tw': '玄空', 'zh-cn': '玄空' },
+    'bac-minh':    { en: 'Bac Minh',    ja: '北冥', ko: '북명', 'zh-tw': '北冥', 'zh-cn': '北冥' },
+    'linh-son':    { en: 'Linh Son',    ja: '霊山', ko: '영산', 'zh-tw': '靈山', 'zh-cn': '灵山' },
+    'thien-an':    { en: 'Thien An',    ja: '天隠', ko: '천은', 'zh-tw': '天隱', 'zh-cn': '天隐' },
+    'linh-co':     { en: 'Linh Co',     ja: '霊機', ko: '영기', 'zh-tw': '靈機', 'zh-cn': '灵机' },
+    'thanh-hu':    { en: 'Thanh Hu',    ja: '清虚', ko: '청허', 'zh-tw': '清虛', 'zh-cn': '清虚' },
+    'thai-hu':     { en: 'Thai Hu',     ja: '太虚', ko: '태허', 'zh-tw': '太虛', 'zh-cn': '太虚' },
+    'tinh-quang':  { en: 'Tinh Quang',  ja: '星光', ko: '성광', 'zh-tw': '星光', 'zh-cn': '星光' },
+  };
+  /** I18n.master('co-nguyet', 'Cổ Nguyệt') — tên thầy theo ngôn ngữ trang (vi / id lạ ⇒ chữ Việt truyền vào). */
+  function master(id, vi) {
+    var m = LOCALE === 'vi' ? null : MASTERS[id];
+    return (m && m[LOCALE]) || vi;
+  }
+  /** I18n.masterTitle('co-nguyet', 'Cổ Nguyệt') — có danh hiệu: 古月先生 · 고월 선생님 · 古月老師 · Master Co Nguyet · Thầy Cổ Nguyệt. */
+  function masterTitle(id, vi) {
+    var n = master(id, vi);
+    if (LOCALE === 'ja') return n + '先生';
+    if (LOCALE === 'ko') return n + ' 선생님';
+    if (LOCALE === 'zh-tw') return n + '老師';
+    if (LOCALE === 'zh-cn') return n + '老师';
+    if (LOCALE === 'en') return 'Master ' + n;
+    return 'Thầy ' + n;
+  }
+
+  window.I18n = { locale: LOCALE, t: t, tv: tv, href: href, defineLong: defineLong, loadLong: loadLong, long: long, master: master, masterTitle: masterTitle };
 })();

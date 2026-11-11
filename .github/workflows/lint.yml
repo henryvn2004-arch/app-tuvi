@@ -476,3 +476,7 @@ jobs:
       # Hash khớp nguồn, không mục mồ côi, locale trong LONG_COMPLETE đủ 100%, zh-cn khớp OpenCC(zh-tw).
       - name: Văn dài đa ngôn ngữ — hash khớp nguồn, đủ mục, không mồ côi
         run: npm run check:i18nlong
+
+      # Tên 15 thầy bản ngữ (W19): bảng MASTERS trong tools-shared/i18n.js phủ đúng AUTHOR_ROSTER × 5 ngôn ngữ.
+      - name: Tên thầy đa ngôn ngữ — đủ 15 id × 5 locale
+        run: npm run check:masters
