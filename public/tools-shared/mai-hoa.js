@@ -32,6 +32,20 @@
     var g = root.TuviGlossary;
     return g && v ? g.t(kind, v) : v;
   }
+  // Nhãn câu chữ (khoá js.shellui.mn-*): bản dịch nếu trang /<locale>/ có nhúng từ điển, không thì chữ Việt.
+  function _tv(key, vi) {
+    var I = root.I18n;
+    return I && I.tv ? I.tv(key, vi) : vi;
+  }
+  // Nhãn mức cát/hung của quan hệ Thể–Dụng (MUC_NHAN[muc].nhan) — chỉ chỗ vẽ.
+  function _nhan(muc) {
+    if (muc === 'daicat') return _tv('js.shellui.mn-dai-cat', 'Đại cát');
+    if (muc === 'cat') return _tv('js.shellui.mn-cat', 'Cát');
+    if (muc === 'tieucat') return _tv('js.shellui.mn-tieu-cat', 'Tiểu cát');
+    if (muc === 'tieuhung') return _tv('js.shellui.mn-tieu-hung', 'Tiểu hung');
+    if (muc === 'daihung') return _tv('js.shellui.mn-dai-hung', 'Đại hung');
+    return MUC_NHAN[muc].nhan;
+  }
   'use strict';
 
   // ── Bát quái, theo SỐ TIÊN THIÊN (Phục Hy): Càn1 Đoài2 Ly3 Chấn4 Tốn5 Khảm6
@@ -344,8 +358,8 @@
       '</div>' +
       '<div class="mh-giua">' +
       '<div class="mh-mui" style="color:' + mn.mau + '">' + (qh.ma === 'tihoa' ? '⟺' : qh.ma.indexOf('the-') === 0 ? '⟶' : '⟵') + '</div>' +
-      '<div class="mh-qh">' + _esc(qh.ten) + '</div>' +
-      '<div class="mh-muc" style="background:' + mn.mau + '">' + _esc(mn.nhan) + '</div>' +
+      '<div class="mh-qh">' + _esc(_g('maihoa', qh.ten)) + '</div>' +
+      '<div class="mh-muc" style="background:' + mn.mau + '">' + _esc(_nhan(qh.muc)) + '</div>' +
       '</div>' +
       '<div class="mh-quai mh-dung">' +
       '<div class="mh-vai">Dụng · việc</div>' +
@@ -371,7 +385,7 @@
           '<div class="mh-chang-nhan">' + _esc(c.nhan) + '</div>' +
           '<div class="mh-chang-que">' + _esc(ten) + '</div>' +
           '<div class="mh-chang-y">' + _esc(c.y) + '</div>' +
-          '<div class="mh-chang-qh"><span style="background:' + mn.mau + '">' + _esc(mn.nhan) + '</span> ' + _esc(c.qh.ten) + '</div>' +
+          '<div class="mh-chang-qh"><span style="background:' + mn.mau + '">' + _esc(_nhan(c.qh.muc)) + '</span> ' + _esc(_g('maihoa', c.qh.ten)) + '</div>' +
           '<div class="mh-chang-td">Thể ' + _esc(_g('quai', c.the.n)) + ' (' + _esc(_g('hanh', c.the.hanh)) + ') · Dụng ' + _esc(_g('quai', c.dung.n)) + ' (' + _esc(_g('hanh', c.dung.hanh)) + ')</div>' +
           '</div>'
         );
@@ -494,7 +508,7 @@
 
       // Nhãn phán quyết: nền bo tròn cho nổi khỏi tranh.
       ctx.font = '700 34px ' + SANS;
-      var label = mn.nhan.toUpperCase();
+      var label = _nhan(qh.muc).toUpperCase();
       var tw = ctx.measureText(label).width;
       var pw = tw + 56,
         ph = 56,
@@ -511,7 +525,7 @@
 
       ctx.fillStyle = 'rgba(255,255,255,0.72)';
       ctx.font = '400 28px ' + SANS;
-      ctx.fillText(qh.ten, cx, cy + 128);
+      ctx.fillText(_g('maihoa', qh.ten), cx, cy + 128);
 
       ctx.textAlign = 'left';
     };
@@ -524,7 +538,7 @@
     return {
       draw: null, // trang tự gắn sau khi loadAnh xong
       title: 'Quẻ ' + ten + (tenBien && tenBien !== ten ? ' → ' + tenBien : ''),
-      subtitle: 'Thể ' + _g('quai', r.the.n) + ' ' + _g('hanh', r.the.hanh) + ' · Dụng ' + _g('quai', r.dung.n) + ' ' + _g('hanh', r.dung.hanh) + ' — ' + r.ketLuan.ten,
+      subtitle: 'Thể ' + _g('quai', r.the.n) + ' ' + _g('hanh', r.the.hanh) + ' · Dụng ' + _g('quai', r.dung.n) + ' ' + _g('hanh', r.dung.hanh) + ' — ' + _g('maihoa', r.ketLuan.ten),
       quote: (r.haoTu && r.haoTu.viet) || r.ketLuan.luan,
       cauHoi: cauHoi || '',
       // Cỡ chữ riêng của bàn quẻ — không nạp sẵn thì canvas rơi về font hệ thống.

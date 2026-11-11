@@ -17,6 +17,13 @@
 
   var MUC_MAU = { cat: '#2F7D52', hung: '#A33B2A', binh: '#8A8F98' };
   var MUC_NHAN = { cat: 'Cát', hung: 'Tránh', binh: 'Bình' };
+  // Nhãn hiển thị (khoá js.shellui.mn-*); MUC_NHAN giữ chữ Việt gốc.
+  function _nhan(muc) {
+    var I = root.I18n, tv = I && I.tv ? I.tv.bind(I) : function (k, v) { return v; };
+    if (muc === 'cat') return tv('js.shellui.mn-cat', 'Cát');
+    if (muc === 'hung') return tv('js.shellui.mn-tranh', 'Tránh');
+    return tv('js.shellui.mn-binh', 'Bình');
+  }
   var HANH_MAU = { Kim: '#C9A84C', Mộc: '#4E9A6A', Thủy: '#3E7CB1', Hỏa: '#C0553F', Thổ: '#A98352' };
 
   // Tên engine trả (cửa/sao/thần/tiết khí/nguyên/quẻ/hành) qua glossary CHỈ ở chỗ vẽ (W15c) — vi hoặc chưa nạp
@@ -28,7 +35,19 @@
   var _QUAI = ['Càn', 'Đoài', 'Ly', 'Chấn', 'Tốn', 'Khảm', 'Cấn', 'Khôn'];
   function _cungTen(s) { // "Khảm 1" → tên quẻ qua glossary + số; "Trung 5" giữ nguyên
     var m = /^(\S+) (\d)$/.exec(s || '');
-    return m && _QUAI.indexOf(m[1]) >= 0 ? _g('quai', m[1]) + ' ' + m[2] : s;
+    if (!m) return s;
+    if (_QUAI.indexOf(m[1]) >= 0) return _g('quai', m[1]) + ' ' + m[2];
+    return m[1] === 'Trung' ? _g('kymon', 'Trung') + ' ' + m[2] : s;
+  }
+  // Lý do (`lyDo[].ten`) của một cung: cách cục · cửa/sao/thần · "Tuần Không" · "Trực <thần>" (khoá js.shellui.km-truc).
+  // ⚠️ "Trực Cách Hoa Cái" (直格華蓋) là TÊN CÁCH CỤC bắt đầu bằng "Trực " — chỉ coi là "Trực <thần>" khi phần sau đúng là một trong 8 thần.
+  var _THAN = ['Trực Phù', 'Đằng Xà', 'Thái Âm', 'Lục Hợp', 'Bạch Hổ', 'Huyền Vũ', 'Cửu Địa', 'Cửu Thiên'];
+  function _ly(ten) {
+    var m = /^Trực (.+)$/.exec(ten || '');
+    var I = root.I18n;
+    if (m && _THAN.indexOf(m[1]) >= 0)
+      return I && I.tv ? I.tv('js.shellui.km-truc', 'Trực {than}', { than: _g('kymon', m[1]) }) : ten;
+    return _g(['cachcuc', 'kymon', 'khai'], ten);
   }
   function _cuc(s) { // "Dương độn cục 5" → khuôn theo ngôn ngữ (khoá js.shellui.km-cuc)
     var m = /^(Dương độn|Âm độn) cục (.+)$/.exec(s || '');
@@ -62,7 +81,7 @@
       return (
         '<div class="km-o km-' + c.muc + (giua ? ' km-giua' : '') + '" style="--km-mau:' + mau + '">' +
         '<div class="km-o-top">' +
-        '<span class="km-huong">' + _esc(c.huong) + '</span>' +
+        '<span class="km-huong">' + _esc(_g('huong', c.huong)) + '</span>' +
         (giua ? '' : '<span class="km-hang">#' + c.hang + '</span>') +
         '</div>' +
         (c.cua
@@ -75,7 +94,7 @@
         '<div class="km-can">' +
         (c.canThien ? '<b>' + _esc(c.canThien) + '</b>' : '') +
         (c.canDia ? '<i>' + _esc(c.canDia) + '</i>' : '') +
-        (c.tamKy ? '<span class="km-ky">' + _esc(c.tamKy) + '</span>' : '') +
+        (c.tamKy ? '<span class="km-ky">' + _esc(_g('kymon', c.tamKy)) + '</span>' : '') +
         '</div>' +
         '<div class="km-cung">' + _esc(_cungTen(c.ten)) + ' · ' + _esc(_g('hanh', c.hanh)) + '</div>' +
         '</div>'
@@ -98,13 +117,13 @@
       return (
         '<tr class="km-r-' + c.muc + '">' +
         '<td class="km-t-hang">' + c.hang + '</td>' +
-        '<td><b>' + _esc(c.huong) + '</b><span class="km-t-cung">' + _esc(_cungTen(c.ten)) + '</span></td>' +
+        '<td><b>' + _esc(_g('huong', c.huong)) + '</b><span class="km-t-cung">' + _esc(_cungTen(c.ten)) + '</span></td>' +
         '<td>' + (c.cua ? _esc(_g('kymon', c.cua.ten)) : '—') + '</td>' +
         '<td class="km-t-diem">' + (c.diem > 0 ? '+' : '') + c.diem + '</td>' +
-        '<td><span class="km-pill" style="background:' + MUC_MAU[c.muc] + '">' + MUC_NHAN[c.muc] + '</span></td>' +
+        '<td><span class="km-pill" style="background:' + MUC_MAU[c.muc] + '">' + _nhan(c.muc) + '</span></td>' +
         '<td class="km-t-ly">' + (c.viec ? _esc(c.viec) + '. ' : '') +
         (c.lyDo || []).map(function (l) {
-          return '<span class="km-ly" style="border-color:' + MUC_MAU[l.muc] + ';color:' + MUC_MAU[l.muc] + '">' + _esc(l.ten) + '</span>';
+          return '<span class="km-ly" style="border-color:' + MUC_MAU[l.muc] + ';color:' + MUC_MAU[l.muc] + '">' + _esc(_ly(l.ten)) + '</span>';
         }).join('') + '</td>' +
         '</tr>'
       );
@@ -169,12 +188,12 @@
 
         ctx.fillStyle = 'rgba(255,255,255,0.56)';
         ctx.font = '600 23px ' + SANS;
-        ctx.fillText(c.huong, mid, cy + 46);
+        ctx.fillText(_g('huong', c.huong), mid, cy + 46);
 
         if (giua) {
           ctx.fillStyle = 'rgba(255,255,255,0.34)';
           ctx.font = '400 25px ' + SANS;
-          ctx.fillText('Trung cung', mid, cy + cell / 2 + 12);
+          ctx.fillText(_g('huong', 'Trung cung'), mid, cy + cell / 2 + 12);
           return;
         }
 
@@ -189,7 +208,7 @@
         ctx.fillStyle = c.tamKy ? GOLD : 'rgba(255,255,255,0.45)';
         ctx.font = (c.tamKy ? '700 ' : '400 ') + '24px ' + SANS;
         ctx.fillText(
-          (c.canThien || '') + (c.canDia ? '/' + c.canDia : '') + (c.tamKy ? ' ' + c.tamKy : ''),
+          (c.canThien || '') + (c.canDia ? '/' + c.canDia : '') + (c.tamKy ? ' ' + _g('kymon', c.tamKy) : ''),
           mid, cy + 174
         );
       });
@@ -203,7 +222,7 @@
       title: 'Kỳ Môn — ' + _cuc(b.cuc),
       subtitle: _g('lich', b.tietKhi) + ' ' + _g('kymon', b.nguyen) + ' · giờ ' + b.canChi.gio + ' ngày ' + b.canChi.ngay,
       quote: doNhat
-        ? 'Hướng đỡ nhất canh giờ này: ' + doNhat.huong + ' — cửa ' + (doNhat.cua ? _g('kymon', doNhat.cua.ten) : '—') +
+        ? 'Hướng đỡ nhất canh giờ này: ' + _g('huong', doNhat.huong) + ' — cửa ' + (doNhat.cua ? _g('kymon', doNhat.cua.ten) : '—') +
           (doNhat.cua ? ', ' + doNhat.cua.nghia.toLowerCase() : '') + '.'
         : '',
       fonts: ['700 40px ' + (T.SERIF || 'serif'), '600 23px ' + (T.SANS || 'sans-serif')],
@@ -215,6 +234,7 @@
     cuc: _cuc,
     tietKhi: function (v) { return _g('lich', v); },
     kymon: function (v) { return _g('kymon', v); },
+    huong: function (v) { return _g('huong', v); },
   };
   var API = { fmt: fmt, boardHTML: boardHTML, chiTietHTML: chiTietHTML, posterDraw: posterDraw, posterOpts: posterOpts, MUC_MAU: MUC_MAU, HANH_MAU: HANH_MAU };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;

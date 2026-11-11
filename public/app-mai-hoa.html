@@ -180,11 +180,11 @@ window.SHELL_INTRO={key:'mai-hoa'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/kinh-dich-hao.js?v=1"></script>
 <script src="/tools-shared/kinh-dich.js?v=6"></script>
-<script src="/tools-shared/mai-hoa.js?v=2"></script>
+<script src="/tools-shared/mai-hoa.js?v=3"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=147"></script>
+<script src="/shell.js?v=148"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/mai-hoa.js với trang standalone
@@ -251,12 +251,12 @@ function showResult() {
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
 
   const d = MaiHoaTool.railData(r, cHoi);
-  const tenChinh = r.chinh.que ? r.chinh.que.q.n : '';
+  const tenChinh = r.chinh.que ? _tvmbG('que', r.chinh.que.q.n) : '';
   Shell.setContext({
     scenario: { type: 'mai-hoa', data: d },
     restore: { gieo: r.gieo, cauHoi: cHoi, mode: _mode },
-    label: 'Mai Hoa · ' + tenChinh + ' — ' + r.ketLuan.ten,
-    greeting: 'Quẻ đã lập — Thể **' + r.the.n + '** (' + r.the.hanh + '), Dụng **' + r.dung.n + '** (' + r.dung.hanh + '), tức **' + r.ketLuan.ten + '**. Tôi sẽ luận theo câu hỏi của bạn.',
+    label: 'Mai Hoa · ' + tenChinh + ' — ' + _tvmbG('maihoa', r.ketLuan.ten),
+    greeting: 'Quẻ đã lập — Thể **' + _tvmbG('quai', r.the.n) + '** (' + _tvmbG('hanh', r.the.hanh) + '), Dụng **' + _tvmbG('quai', r.dung.n) + '** (' + _tvmbG('hanh', r.dung.hanh) + '), tức **' + _tvmbG('maihoa', r.ketLuan.ten) + '**. Tôi sẽ luận theo câu hỏi của bạn.',
     chips: ['Luận quẻ này cho câu hỏi của tôi', 'Thể bị Dụng khắc thì nên làm gì?', 'Hỗ quái cho thấy khúc giữa ra sao?', 'Biến quái nói kết cục thế nào?']
   });
 
