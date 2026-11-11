@@ -107,6 +107,142 @@
   "t": "Tell your story and Minh Bao will bring in the right Master from our team of 15: Zi Wei Dou Shu chart, BaZi (Four Pillars of Destiny), marriage compatibility, naming, date selection.",
   "h": "0f564294"
  },
+ "chutrinh.9-dai-van-tron-doi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>9 major luck cycles<br>of a lifetime</span>",
+  "h": "5ab04ae7"
+ },
+ "chutrinh.9-dai-van-tron-doi-khong": {
+  "t": "Your 9 major luck cycles aren't a straight line — some stretches are for moving forward, others just for holding steady. Read from your chart to see where you are and what to do next.",
+  "h": "47da40fe"
+ },
+ "chutrinh.ban-chu-trinh-cuoc-doi-mau": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>Sample Life Cycles report</b><span>Download the full PDF reading of a sample chart to preview the real content.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chu-trinh-cuoc-doi.pdf\" target=\"_blank\" rel=\"noopener\">Download PDF →</a>",
+  "h": "69bf92cc"
+ },
+ "chutrinh.chang-thuan-chang-can-trong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>Smooth stretches,<br>cautious stretches</span>",
+  "h": "268f5efd"
+ },
+ "chutrinh.chu-trinh-cuoc-doi": {
+  "t": "Life Cycles",
+  "h": "38c0c6ce"
+ },
+ "chutrinh.chu-trinh-cuoc-doi-9-dai": {
+  "t": "<b>Life Cycles</b><span>9 major luck cycles and this year's annual luck, by classical scoring</span>",
+  "h": "9799aabe"
+ },
+ "chutrinh.chu-trinh-cuoc-doi-tu-vi": {
+  "t": "Life Cycles — Minh Bao Zi Wei Dou Shu",
+  "h": "90ddc2f5"
+ },
+ "chutrinh.la-so": {
+  "t": "Chart →",
+  "h": "2d56714d"
+ },
+ "chutrinh.luan-giai-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hourglass\"></span><b id=\"btnGoLabel\">Read →</b></span> <small>Free</small>",
+  "h": "e4e89914"
+ },
+ "chutrinh.nhap-ngay-sinh-va-nam-muon": {
+  "t": "Enter your birth date and the year you want read. The system works out your 9 major luck cycles and that year's annual luck, then reads each stretch.",
+  "h": "b0296247"
+ },
+ "chutrinh.nhap-thong-tin-de-lap-la": {
+  "t": "Enter your details to cast a chart &amp; read your life cycles",
+  "h": "513b4cd4"
+ },
+ "chutrinh.soi-9-dai-van-tron-doi": {
+  "t": "Read your 9 major luck cycles and this year's annual luck by classical scoring: timing, place and people for each stretch — and ask the Master to go deeper on the period you care about.",
+  "h": "7db3757c"
+ },
+ "chutrinh.tieu-van-nam-xem": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>Annual luck<br>for the year</span>",
+  "h": "d0e7d2f5"
+ },
+ "congcu.3-ngay-toi": {
+  "t": "Next 3 days",
+  "h": "a9fe9d66"
+ },
+ "congcu.chia-se": {
+  "t": "Share",
+  "h": "1cb95080"
+ },
+ "congcu.cong-cu-tu-vi-minh-bao": {
+  "t": "Tools — Minh Bao Zi Wei Dou Shu",
+  "h": "6f708e6c"
+ },
+ "congcu.cong-cu-van-hom-nay-va": {
+  "t": "<b>Tools</b><span>Today's outlook and every classical tool</span>",
+  "h": "33619403"
+ },
+ "congcu.cot-loi-cua-tu-vi-minh": {
+  "t": "The core of Minh Bao",
+  "h": "4d2f9387"
+ },
+ "congcu.dang-tai-goi-y": {
+  "t": "Loading suggestions",
+  "h": "c5a27e63"
+ },
+ "congcu.du-lieu-that-270-000-ho": {
+  "t": "<span class=\"ic\" data-icon=\"globe\"></span><b>Real data</b><span>270,000+ records</span>",
+  "h": "eb3da539"
+ },
+ "congcu.hoi-thay": {
+  "t": "Ask the Master",
+  "h": "c9ffbbaf"
+ },
+ "congcu.hoi-thay-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span>Ask the Master now →",
+  "h": "e0b92ed5"
+ },
+ "congcu.hoi-thay-ve-van-menh-la": {
+  "t": "Ask the Master about your destiny, Zi Wei chart, BaZi, compatibility, naming and date selection, all in one conversation.",
+  "h": "14b92d4e"
+ },
+ "congcu.hon-270-000-la-so-nguoi": {
+  "t": "More than 270,000 real-life charts, verified and analyzed with modern reading methods combined with the best of classical learning, to give predictions that are reliable and useful in daily life.",
+  "h": "4fd47b6e"
+ },
+ "congcu.khoa-hoc-tu-du-lieu-that": {
+  "t": "Science from real data, for real life",
+  "h": "9288a0c9"
+ },
+ "congcu.moi-ngay-mot-chi-dan-song": {
+  "t": "<span>One piece of guidance a day, to live more proactively</span>",
+  "h": "8b3a21d1"
+ },
+ "congcu.phuong-phap-chuan-co-hoc-hien": {
+  "t": "<span class=\"ic\" data-icon=\"shield-check\"></span><b>Sound method</b><span>Classical × Modern</span>",
+  "h": "3a6260d0"
+ },
+ "congcu.so-lieu-ngay-do-co-phap": {
+  "t": "Daily figures are calculated precisely by classical methods — ask the Master to read your own outlook.",
+  "h": "0445852a"
+ },
+ "congcu.tai-anh-9-16": {
+  "t": "Download 9:16 image",
+  "h": "aad434c7"
+ },
+ "congcu.tim-cong-cu-la-so-bat": {
+  "t": "Search tools — Chart, BaZi, compatibility…",
+  "h": "d1a666e1"
+ },
+ "congcu.ung-dung-thuc-tien-vi-cuoc": {
+  "t": "<span class=\"ic\" data-icon=\"users\"></span><b>Practical use</b><span>For a better life</span>",
+  "h": "082de4b1"
+ },
+ "congcu.van-hom-nay": {
+  "t": "Today's outlook",
+  "h": "386c4c24"
+ },
+ "congcu.van-hom-nay-la-so-hay": {
+  "t": "Today's outlook, your chart, or anything you're stuck on…",
+  "h": "0b093636"
+ },
+ "congcu.ve-hom-nay": {
+  "t": "← Back to today",
+  "h": "24faf89e"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. For reference only",
   "h": "99856a52"
@@ -731,6 +867,346 @@
   "t": "Physiognomy",
   "h": "ae8ee50b"
  },
+ "js.auth.bam-vao-link-trong-email-de": {
+  "t": "— tap the link in the email to finish; this page will return here automatically.",
+  "h": "8493b548"
+ },
+ "js.auth.ban-chua-luu-tai-khoan-dang": {
+  "t": "You haven't saved your account — signing out will LOSE all your credits and history. Sign out anyway?",
+  "h": "e5c0eb4f"
+ },
+ "js.auth.ban-dang-dung-phien-tam-luong": {
+  "t": "You're on a temporary session — the credits and history kept here will be LOST if you clear your browser or switch devices. Add an email and password to keep them; nothing you have is lost.",
+  "h": "41a9e315"
+ },
+ "js.auth.ban-dang-mo-trong-ung-dung": {
+  "t": "You've opened this inside the Facebook/Instagram app, so Google/Facebook sign-in doesn't work here — use email below, it takes under a minute.",
+  "h": "e9829563"
+ },
+ "js.auth.bang-cach-dang-ky-ban-dong": {
+  "t": "By signing up, you agree to the terms of use of Minh Bao Zi Wei Dou Shu.",
+  "h": "a349cfa3"
+ },
+ "js.auth.chao-mung-ban-da-nhan-luong": {
+  "t": "Welcome! You've received <strong>credits</strong> — tap Ask the Master to try it out",
+  "h": "3ebea363"
+ },
+ "js.auth.chua-luu-tai-khoan": {
+  "t": "Account not saved",
+  "h": "84b20565"
+ },
+ "js.auth.da-chat-voi-thay-qua-zalo": {
+  "t": "Already chatted with the Master on Zalo or Messenger? Sign in with a message →",
+  "h": "4a00d63e"
+ },
+ "js.auth.da-gui-email-xac-nhan-toi": {
+  "t": "Confirmation email sent to",
+  "h": "213802a7"
+ },
+ "js.auth.da-luu-kiem-tra-email-de": {
+  "t": "✓ Saved — check your email to confirm if asked",
+  "h": "feed02da"
+ },
+ "js.auth.dang-ky": {
+  "t": "Sign up",
+  "h": "d07fbd12"
+ },
+ "js.auth.dang-ky-that-bai": {
+  "t": "Sign-up failed",
+  "h": "e7ab9de2"
+ },
+ "js.auth.dang-nhap": {
+  "t": "Sign in",
+  "h": "1d5caf09"
+ },
+ "js.auth.dang-nhap-that-bai": {
+  "t": "Sign-in failed",
+  "h": "fb63ae22"
+ },
+ "js.auth.email-nay-da-co-tai-khoan": {
+  "t": "This email already has an account — enter your password to sign in.",
+  "h": "d81bc47f"
+ },
+ "js.auth.ho-so-cua-toi": {
+  "t": "My profile",
+  "h": "fc70cfcb"
+ },
+ "js.auth.hoac": {
+  "t": "or",
+  "h": "2797f4b3"
+ },
+ "js.auth.khong-luu-duoc-tai-khoan": {
+  "t": "Couldn't save your account.",
+  "h": "066c8d0d"
+ },
+ "js.auth.khong-luu-duoc-vui-long-thu": {
+  "t": "Couldn't save. Please try again.",
+  "h": "5b07f73c"
+ },
+ "js.auth.luong": {
+  "t": "… credits",
+  "h": "cbf99bc6"
+ },
+ "js.auth.luong-xu": {
+  "t": "Credits",
+  "h": "e4e551dd"
+ },
+ "js.auth.luu-tai-khoan": {
+  "t": "Save account",
+  "h": "8d7fe16a"
+ },
+ "js.auth.luu-tai-khoan-tranh-mat-luong": {
+  "t": "⚠ Save your account — don't lose your credits",
+  "h": "82a1d916"
+ },
+ "js.auth.ma-hop-le-tang-luong": {
+  "t": "✓ Valid code — {credits} credits as a gift when you create your account.",
+  "h": "9849e4dd"
+ },
+ "js.auth.ma-khuyen-mai-neu-co": {
+  "t": "Promo code (if you have one)",
+  "h": "db43ff7b"
+ },
+ "js.auth.ma-nay-da-het-han-hoac": {
+  "t": "This code has expired or been used up.",
+  "h": "608f19cd"
+ },
+ "js.auth.mat-khau-it-nhat-6-ky": {
+  "t": "Password must be at least 6 characters.",
+  "h": "5593257f"
+ },
+ "js.auth.mat-khau-it-nhat-6-ky-p3y1": {
+  "t": "Password (at least 6 characters)",
+  "h": "8c43eb34"
+ },
+ "js.auth.nap": {
+  "t": "+ Top up",
+  "h": "e9ce1f06"
+ },
+ "js.auth.nhanh-nhat": {
+  "t": "FASTEST",
+  "h": "b4ba025d"
+ },
+ "js.auth.phien-da-het-han-vui-long": {
+  "t": "Your session has expired. Please try again.",
+  "h": "34b61273"
+ },
+ "js.auth.tang-luong": {
+  "t": "free credits",
+  "h": "fdf6261f"
+ },
+ "js.auth.tao-tai-khoan": {
+  "t": "Create account",
+  "h": "98f4b91a"
+ },
+ "js.auth.tiep-tuc-voi-facebook": {
+  "t": "Continue with Facebook",
+  "h": "5e982ec8"
+ },
+ "js.auth.tiep-tuc-voi-google": {
+  "t": "Continue with Google",
+  "h": "62ea2d29"
+ },
+ "js.auth.vui-long-dien-email-va-mat": {
+  "t": "Please enter your email and password.",
+  "h": "d84b9abd"
+ },
+ "js.battu.ban-muon-thay-dao-sau-dieu": {
+  "t": "What would you like the Master to dig into first?",
+  "h": "08cdf1d4"
+ },
+ "js.battu.da-an-tu-tru": {
+  "t": "✓ Four Pillars cast",
+  "h": "845d9f25"
+ },
+ "js.battu.dang-an-tu-tru": {
+  "t": "Casting your Four Pillars…",
+  "h": "3a079d88"
+ },
+ "js.battu.dang-luan-giai": {
+  "t": "Reading…",
+  "h": "aa035f2b"
+ },
+ "js.battu.dang-luan-giai-phan": {
+  "t": "Reading part",
+  "h": "5b228988"
+ },
+ "js.battu.lap-bat-tu": {
+  "t": "Cast BaZi →",
+  "h": "6ba95ed1"
+ },
+ "js.battu.loi-khi-luan-giai-phan": {
+  "t": "Error while reading part",
+  "h": "46fa5128"
+ },
+ "js.battu.loi-khi-tinh-bat-tu": {
+  "t": "Error while calculating BaZi:",
+  "h": "0f394070"
+ },
+ "js.battu.luan-giai-hoan-tat": {
+  "t": "✓ Reading complete",
+  "h": "8e9c2ae8"
+ },
+ "js.battu.thu-lai": {
+  "t": "↻ Try again",
+  "h": "30508ad3"
+ },
+ "js.chat.ke-vai-dong-thoi-minh-bao": {
+  "t": "Just a few lines is enough. Minh Bao will bring in the right Master from our team of 15 to look at it for you.",
+  "h": "e43855cc"
+ },
+ "js.chutrinh.chin-chang-dai-van-cot-cao": {
+  "t": "Nine major luck cycles, bar height by engine score, one keyword per cycle",
+  "h": "6b87e20d"
+ },
+ "js.chutrinh.luan-giai": {
+  "t": "Read →",
+  "h": "a03abb8e"
+ },
+ "js.chutrinh.luan-giai-chuyen-sau": {
+  "t": "<b>In-depth reading →</b>",
+  "h": "df2ecf55"
+ },
+ "js.home.dang-lap": {
+  "t": "Casting…",
+  "h": "b47d9598"
+ },
+ "js.home.hanh": {
+  "t": "Element",
+  "h": "dc0810d8"
+ },
+ "js.home.khong-lap-duoc-thu-lai-sau": {
+  "t": "Couldn't cast it. Please try again later.",
+  "h": "7855b0ef"
+ },
+ "js.home.ngay": {
+  "t": "Day",
+  "h": "e196e19b"
+ },
+ "js.home.ngay-binh": {
+  "t": "Neutral day",
+  "h": "3e47de71"
+ },
+ "js.home.ngay-sinh-chua-hop-le": {
+  "t": "That birth date isn't valid.",
+  "h": "feec7b22"
+ },
+ "js.home.ngay-tot": {
+  "t": "Auspicious day",
+  "h": "cefb3c77"
+ },
+ "js.home.ngay-xau": {
+  "t": "Inauspicious day",
+  "h": "3fe05eab"
+ },
+ "js.home.so-lieu-rut-gon-thu-tai": {
+  "t": "— abbreviated figures; try reloading later.",
+  "h": "84e3f4e7"
+ },
+ "js.home.thieu-ngay-thang-nam-sinh": {
+  "t": "Birth day, month or year is missing.",
+  "h": "1ce95cff"
+ },
+ "js.home.van-hom-nay": {
+  "t": "Today's outlook",
+  "h": "386c4c24"
+ },
+ "js.home.van-ngay": {
+  "t": "Daily outlook",
+  "h": "c082a900"
+ },
+ "js.home.xem-van-rieng-cua-toi": {
+  "t": "See my own outlook →",
+  "h": "a669ddd6"
+ },
+ "js.laso.dang-an-sao": {
+  "t": "Placing stars...",
+  "h": "06275197"
+ },
+ "js.laso.dang-xuat": {
+  "t": "Exporting...",
+  "h": "92b2d242"
+ },
+ "js.laso.gio-am": {
+  "t": "Lunar hour:",
+  "h": "58bc0ba0"
+ },
+ "js.laso.lay-la-so": {
+  "t": "Get Chart",
+  "h": "f7781d94"
+ },
+ "js.laso.tai-png": {
+  "t": "⬇ Download PNG",
+  "h": "a5b32ccb"
+ },
+ "js.laso.vui-long-nhap-day-du-ngay": {
+  "t": "Please enter your full birth date.",
+  "h": "2545b4dd"
+ },
+ "js.luangiai.an-la-so": {
+  "t": "▾ Hide chart",
+  "h": "9f28e998"
+ },
+ "js.luangiai.bat-thong-bao-de-nhan-van": {
+  "t": "Turn on notifications to get your daily outlook →",
+  "h": "ace576c9"
+ },
+ "js.luangiai.da-lap-la-so": {
+  "t": "✓ Chart cast",
+  "h": "0b838efd"
+ },
+ "js.luangiai.da-luu-la-so-nay-vao": {
+  "t": "✓ This chart is saved to your account.",
+  "h": "5a2ac1c6"
+ },
+ "js.luangiai.dang-lap-la-so": {
+  "t": "Casting your chart…",
+  "h": "fba688db"
+ },
+ "js.luangiai.dang-luan": {
+  "t": "Reading…",
+  "h": "d68f76a3"
+ },
+ "js.luangiai.dang-luan-giai-phan-1": {
+  "t": "Reading part 1 /",
+  "h": "559646ca"
+ },
+ "js.luangiai.lap-la-so-luan-giai-ngay": {
+  "t": "Cast Chart & Read Now →",
+  "h": "edbdb6fc"
+ },
+ "js.luangiai.loi-khi-luan-giai": {
+  "t": "Error while reading:",
+  "h": "b251ca2c"
+ },
+ "js.luangiai.loi-phan": {
+  "t": "Error in part",
+  "h": "9380a2a1"
+ },
+ "js.luangiai.luan-giai-chuyen-sau": {
+  "t": "✦ In-depth reading —",
+  "h": "887e02c9"
+ },
+ "js.luangiai.luan-giai-tu-vi": {
+  "t": "Zi Wei Reading",
+  "h": "ab5a4607"
+ },
+ "js.luangiai.luong": {
+  "t": "credits →",
+  "h": "36d6704d"
+ },
+ "js.luangiai.luu-la-so-nay-de-xem": {
+  "t": "✦ <b>Save this chart</b> to revisit any time — free, nothing to pay.",
+  "h": "1d1bbc24"
+ },
+ "js.luangiai.phan": {
+  "t": "Part",
+  "h": "a74e8ed7"
+ },
+ "js.luangiai.xem-la-so-day-du": {
+  "t": "▸ View full chart",
+  "h": "fee98465"
+ },
  "js.nav.brand": {
   "t": "Minh Bao Zi Wei Dou Shu",
   "h": "33336b26"
@@ -915,6 +1391,582 @@
   "t": "Face reading from photos",
   "h": "24c4d64e"
  },
+ "js.paywall.bam-mo-la-tra-tien-va": {
+  "t": "· tap to open — you pay and read right away,",
+  "h": "9a6023cd"
+ },
+ "js.paywall.ban-ay-dang-ky-la-ban": {
+  "t": "when they <b>sign up</b>, you get <b>+",
+  "h": "afb5cbf7"
+ },
+ "js.paywall.ban-co-the-thu-lai-sau": {
+  "t": "— you can try again later.</p>",
+  "h": "d45f37cf"
+ },
+ "js.paywall.ban-con": {
+  "t": "You have <b>",
+  "h": "418bc463"
+ },
+ "js.paywall.ban-da-dung-het-so-luot": {
+  "t": "You've used all the free previews for this chart. Open the full reading to read it all, with unlimited re-reads.",
+  "h": "af2b5217"
+ },
+ "js.paywall.ban-da-tao-ket-qua-cho": {
+  "t": "✓ You've already generated this result for this chart — open it again, no credits deducted",
+  "h": "d59efda4"
+ },
+ "js.paywall.ban-da-tao-ket-qua-cho-uv5g": {
+  "t": "✓ You've already generated this result for this pair of charts — open it again, no credits deducted",
+  "h": "7d7d74a8"
+ },
+ "js.paywall.ban-luan-day-du": {
+  "t": "Full reading",
+  "h": "8bbc9dde"
+ },
+ "js.paywall.can": {
+  "t": "</b> · need",
+  "h": "7e7713c7"
+ },
+ "js.paywall.can-them": {
+  "t": "Need",
+  "h": "a2dc705b"
+ },
+ "js.paywall.chan-dung-tien-kiep": {
+  "t": "Past-Life Portrait",
+  "h": "e7d0f866"
+ },
+ "js.paywall.chan-dung-vo-chong": {
+  "t": "Spouse Portrait",
+  "h": "ed0abbb5"
+ },
+ "js.paywall.chep-link-moi-555v": {
+  "t": "Copy invite link",
+  "h": "fa5ddbad"
+ },
+ "js.paywall.chep-so-tien": {
+  "t": "Copy amount",
+  "h": "88eb1716"
+ },
+ "js.paywall.chep-so-tk": {
+  "t": "Copy account no.",
+  "h": "bc4e6db0"
+ },
+ "js.paywall.chon-ngay-tot": {
+  "t": "Auspicious Date Picker",
+  "h": "e4844e35"
+ },
+ "js.paywall.chu-tk": {
+  "t": "<b>Account holder:</b>",
+  "h": "73fb1282"
+ },
+ "js.paywall.chu-trinh-cuoc-doi": {
+  "t": "Life Cycles",
+  "h": "38c0c6ce"
+ },
+ "js.paywall.chua-doc-duoc-bang-gia": {
+  "t": "⊙ Couldn't load prices",
+  "h": "4ec2e38a"
+ },
+ "js.paywall.chua-ghi-nhan-cho-them-vai": {
+  "t": "Not received yet. Please wait a few more seconds…",
+  "h": "cd70b377"
+ },
+ "js.paywall.chua-muon-nap-moi": {
+  "t": "Not ready to top up? <b>Invite",
+  "h": "f63eee19"
+ },
+ "js.paywall.chua-tru-luong-nao-cua-ban": {
+  "t": "<br>No credits were deducted.</div>",
+  "h": "62bb53db"
+ },
+ "js.paywall.chua-tru-luong-nao-cua-ban-ls92": {
+  "t": "No credits were deducted",
+  "h": "34fe94f4"
+ },
+ "js.paywall.chuyen-dung-so-tien-o-tren": {
+  "t": "⚠ Transfer EXACTLY the amount above (no more, no less) to the exact account number — the transfer note can say anything; the system matches by account number",
+  "h": "9954fd84"
+ },
+ "js.paywall.chuyen-khoan": {
+  "t": "(bank transfer",
+  "h": "c135026b"
+ },
+ "js.paywall.chuyen-khoan-ngan-hang": {
+  "t": "Bank Transfer",
+  "h": "d35c8163"
+ },
+ "js.paywall.chuyen-xong-quay-lai-tab-nay": {
+  "t": "Once you've transferred, come back to this tab — the system recognizes it and continues within seconds, no further tapping needed.</div>",
+  "h": "1126353e"
+ },
+ "js.paywall.co-app-momo-hoac-the-da": {
+  "t": "Have the MoMo app or a linked card? Open the app with the amount pre-filled and just confirm.",
+  "h": "c037691b"
+ },
+ "js.paywall.con-thieu": {
+  "t": "⊙ Short by",
+  "h": "09093766"
+ },
+ "js.paywall.d": {
+  "t": "₫)</span>",
+  "h": "a62f69a1"
+ },
+ "js.paywall.d-bam-mo-la-hien-ma": {
+  "t": "₫, tap to show the QR code)</span>",
+  "h": "74afc758"
+ },
+ "js.paywall.da-co-tai-khoan-dang-nhap": {
+  "t": "Already have an account? Sign in",
+  "h": "af8e782a"
+ },
+ "js.paywall.da-dung-het-luot-xem-truoc": {
+  "t": "⊙ Free previews used up",
+  "h": "154c17e6"
+ },
+ "js.paywall.da-hieu": {
+  "t": "Got it",
+  "h": "f46981ba"
+ },
+ "js.paywall.da-lieu-toan-dien": {
+  "t": "Complete Skin Reading",
+  "h": "91cdb627"
+ },
+ "js.paywall.da-tru": {
+  "t": "✓ Deducted",
+  "h": "0d13abf9"
+ },
+ "js.paywall.dang-cho-thanh-toan": {
+  "t": "Waiting for payment…",
+  "h": "ab8523a1"
+ },
+ "js.paywall.dang-ky-de-giu-luong": {
+  "t": "Sign up to keep your credits",
+  "h": "4eac8986"
+ },
+ "js.paywall.dang-mo-momo": {
+  "t": "Opening MoMo…",
+  "h": "49eec7ec"
+ },
+ "js.paywall.dang-nhap": {
+  "t": "sign in",
+  "h": "1afd3f6b"
+ },
+ "js.paywall.dang-tai-qr": {
+  "t": "Loading QR…",
+  "h": "f81c94ee"
+ },
+ "js.paywall.dang-tao-ma-qr": {
+  "t": "Creating QR code…",
+  "h": "e18ed9a9"
+ },
+ "js.paywall.dang-xu-ly": {
+  "t": "Processing…",
+  "h": "a2e96c58"
+ },
+ "js.paywall.dat-ten-con": {
+  "t": "Child Naming",
+  "h": "c79dbebf"
+ },
+ "js.paywall.dat-ten-doanh-nghiep": {
+  "t": "Business Naming",
+  "h": "56f1bfbe"
+ },
+ "js.paywall.day-con-theo-la-so": {
+  "t": "Parenting by Chart",
+  "h": "2013a771"
+ },
+ "js.paywall.de-mai": {
+  "t": "Tomorrow",
+  "h": "e094cff0"
+ },
+ "js.paywall.de-xem-so-du": {
+  "t": "to see your balance",
+  "h": "62048ea1"
+ },
+ "js.paywall.dien-tuong": {
+  "t": "Face Reading",
+  "h": "1e5e41e3"
+ },
+ "js.paywall.du": {
+  "t": ",",
+  "h": "63a0e7a7"
+ },
+ "js.paywall.duyen-no-tien-kiep": {
+  "t": "Past-Life Karmic Bonds",
+  "h": "c6b0ccb5"
+ },
+ "js.paywall.giu-trong-vi": {
+  "t": "kept in your wallet",
+  "h": "fa87cbb0"
+ },
+ "js.paywall.het-luot-tang-hom-nay": {
+  "t": "⊙ No free uses left today",
+  "h": "c9551c56"
+ },
+ "js.paywall.hoac-mua-goi": {
+  "t": "or buy a package →",
+  "h": "062471b0"
+ },
+ "js.paywall.hom-nay-so-luot-dung-thu": {
+  "t": "Today's free trial uses are used up. Come back tomorrow.",
+  "h": "631a725f"
+ },
+ "js.paywall.huong-nghiep-som-cho-con": {
+  "t": "Early Career Guidance for Your Child",
+  "h": "2735212c"
+ },
+ "js.paywall.ket-noi-toi-may-chu-gia": {
+  "t": "We're having trouble reaching the pricing server. Please try again in a moment — we won't run a tool until we can show the exact price.",
+  "h": "a3919658"
+ },
+ "js.paywall.khi-sac-van-khi": {
+  "t": "Complexion — Short-term Outlook",
+  "h": "07c6eb16"
+ },
+ "js.paywall.khoa": {
+  "t": "Lock",
+  "h": "393cb36a"
+ },
+ "js.paywall.khong-can-dang-ky-truoc": {
+  "t": "no sign-up needed first.",
+  "h": "f5217505"
+ },
+ "js.paywall.khong-du-luong": {
+  "t": "⊙ Not enough credits",
+  "h": "957efb30"
+ },
+ "js.paywall.khong-mo-duoc-momo-thu-lai": {
+  "t": "Couldn't open MoMo — try again or use an option below.",
+  "h": "17415e69"
+ },
+ "js.paywall.khong-tao-duoc-don-momo": {
+  "t": "Couldn't create the MoMo order",
+  "h": "b5941e00"
+ },
+ "js.paywall.la-so-nguoi-khac": {
+  "t": "Someone Else's Chart",
+  "h": "e454923c"
+ },
+ "js.paywall.loi": {
+  "t": "Error:",
+  "h": "471c0087"
+ },
+ "js.paywall.loi-ket-noi": {
+  "t": "Connection error:",
+  "h": "46e34d76"
+ },
+ "js.paywall.loi-kiem-tra-thu-lai": {
+  "t": "Check failed. Please try again.",
+  "h": "8be05ffb"
+ },
+ "js.paywall.loi-tao-don": {
+  "t": "Couldn't create the order",
+  "h": "2ef88936"
+ },
+ "js.paywall.luan-giai-la-so": {
+  "t": "Chart Reading",
+  "h": "72f1fa6d"
+ },
+ "js.paywall.luan-sau-phan-nay": {
+  "t": "Read this part in depth",
+  "h": "8b0080c6"
+ },
+ "js.paywall.luong": {
+  "t": "credits</b>,",
+  "h": "9a10e8c4"
+ },
+ "js.paywall.luong-4tai": {
+  "t": "credits",
+  "h": "6614284e"
+ },
+ "js.paywall.luong-can": {
+  "t": "credits</strong> · Need:",
+  "h": "17b0aa0f"
+ },
+ "js.paywall.luong-con-lai": {
+  "t": "credits · Remaining",
+  "h": "c99e3599"
+ },
+ "js.paywall.luong-ln0i": {
+  "t": "credits)</span>",
+  "h": "49ad8e12"
+ },
+ "js.paywall.luong-luot-nay-dung": {
+  "t": "credits · this use costs",
+  "h": "e61f5fd5"
+ },
+ "js.paywall.luong-m6fn": {
+  "t": "credits",
+  "h": "74224e60"
+ },
+ "js.paywall.luong-mo-day-du-ton": {
+  "t": "credits</b> · full unlock costs",
+  "h": "81466f88"
+ },
+ "js.paywall.luong-thao-tac-nay-ton": {
+  "t": "credits</b> · this action costs <b>",
+  "h": "e1bdd8d4"
+ },
+ "js.paywall.luong-uzlk": {
+  "t": "credits</b>",
+  "h": "6820cc0e"
+ },
+ "js.paywall.luong-vao-vi-cua-ban": {
+  "t": "credits</b> to your wallet",
+  "h": "0aa5bc03"
+ },
+ "js.paywall.luot-nay-chua-xu-ly-xong": {
+  "t": "This one couldn't be completed. We've refunded <b>",
+  "h": "6e07bffd"
+ },
+ "js.paywall.ma-da-het-han-bam-nut": {
+  "t": "<b>The code has expired</b> — tap the button below to create a new one.",
+  "h": "7b97f29d"
+ },
+ "js.paywall.ma-het-han-sau": {
+  "t": "Code expires in",
+  "h": "d64d146a"
+ },
+ "js.paywall.ma-qr-chuyen-khoan": {
+  "t": "Bank transfer QR code",
+  "h": "c67a939b"
+ },
+ "js.paywall.mau-sac-hop-menh": {
+  "t": "Colors That Suit Your Chart",
+  "h": "64b3b887"
+ },
+ "js.paywall.mo-app-ngan-hang-quet-qr": {
+  "t": "Open your banking app → scan the QR or transfer manually<br>",
+  "h": "00a7e55b"
+ },
+ "js.paywall.mo-ban-day-du": {
+  "t": "Open full version",
+  "h": "84fe9699"
+ },
+ "js.paywall.mo-day-du-ton": {
+  "t": "Full unlock costs",
+  "h": "3d05df05"
+ },
+ "js.paywall.mo-trang-thanh-toan": {
+  "t": "Open payment page →",
+  "h": "71859417"
+ },
+ "js.paywall.mua-goi": {
+  "t": "buy a package",
+  "h": "6baca719"
+ },
+ "js.paywall.nap-le-tinh-theo-don-gia": {
+  "t": "<br><small>Single top-ups are charged at the single-top-up rate —",
+  "h": "e6adc76c"
+ },
+ "js.paywall.nap-luong": {
+  "t": "Top up credits →",
+  "h": "96c6fb5d"
+ },
+ "js.paywall.nap-thanh-cong": {
+  "t": "✓ Top-up successful",
+  "h": "104f438d"
+ },
+ "js.paywall.nap-them": {
+  "t": "top up →",
+  "h": "e4f720af"
+ },
+ "js.paywall.nap-them-la-mo-ra-ngay": {
+  "t": "<br>Top up and it opens right away.</div>",
+  "h": "363e04b9"
+ },
+ "js.paywall.nap-them-luong-de-tiep-tuc": {
+  "t": "Top up credits to continue.",
+  "h": "1f82488c"
+ },
+ "js.paywall.ngan-hang": {
+  "t": "<b>Bank:</b>",
+  "h": "2aa52434"
+ },
+ "js.paywall.nguoi": {
+  "t": "people</b> —",
+  "h": "6134285c"
+ },
+ "js.paywall.nhan-tuong": {
+  "t": "Eye Reading",
+  "h": "1bc89b2e"
+ },
+ "js.paywall.noi-dung-ck": {
+  "t": "<b>Transfer note:</b>",
+  "h": "f880969e"
+ },
+ "js.paywall.phan-tich-kieu-toc": {
+  "t": "Hairstyle Analysis",
+  "h": "016c2401"
+ },
+ "js.paywall.phan-tich-trang-diem": {
+  "t": "Makeup Analysis",
+  "h": "d3643889"
+ },
+ "js.paywall.phien-dang-nhap-het-han-vui": {
+  "t": "Your session has expired. Please sign in again.",
+  "h": "abf575ee"
+ },
+ "js.paywall.phong-thuy-ban-lam-viec": {
+  "t": "Desk Feng Shui",
+  "h": "2f08993f"
+ },
+ "js.paywall.phong-thuy-cua-hang-vp": {
+  "t": "Shop & Office Feng Shui",
+  "h": "b64cd170"
+ },
+ "js.paywall.phong-thuy-noi-that": {
+  "t": "Interior Feng Shui",
+  "h": "3f80b53f"
+ },
+ "js.paywall.render-phong-phong-thuy": {
+  "t": "Feng Shui Room Render",
+  "h": "0806581b"
+ },
+ "js.paywall.so-du": {
+  "t": "Balance: <strong>",
+  "h": "e2c28dce"
+ },
+ "js.paywall.so-nhan-mach": {
+  "t": "Network Ledger",
+  "h": "17e83429"
+ },
+ "js.paywall.so-tk": {
+  "t": "<b>Account no.:</b>",
+  "h": "d2e75eae"
+ },
+ "js.paywall.tam-thoi": {
+  "t": "temporary",
+  "h": "3794c4c7"
+ },
+ "js.paywall.tao-ma-moi": {
+  "t": "Create new code →",
+  "h": "b4caca90"
+ },
+ "js.paywall.thanh-toan-nhanh-qua-momo": {
+  "t": "Pay quickly with MoMo →",
+  "h": "98a66572"
+ },
+ "js.paywall.thanh-toan-thanh-cong-dang-tiep": {
+  "t": "Payment successful! Continuing…",
+  "h": "fe44c04f"
+ },
+ "js.paywall.thanh-tuong": {
+  "t": "Voice Reading",
+  "h": "d47f6d49"
+ },
+ "js.paywall.thanh-tuong-pro": {
+  "t": "Voice Reading Pro",
+  "h": "b2e5a151"
+ },
+ "js.paywall.thao-tac-nay-ton": {
+  "t": "This action costs",
+  "h": "834c67c7"
+ },
+ "js.paywall.thao-tac-nay-ton-1zm6": {
+  "t": "</b> · this action costs <b>",
+  "h": "c5248947"
+ },
+ "js.paywall.thi-moi-luong-re-hon": {
+  "t": "the cheaper each credit gets.</small>",
+  "h": "96be8028"
+ },
+ "js.paywall.thieu": {
+  "t": "</b> — short by",
+  "h": "03703206"
+ },
+ "js.paywall.thieu-8362": {
+  "t": "— short by",
+  "h": "6f4749c9"
+ },
+ "js.paywall.thu-kieu-toc": {
+  "t": "Try Hairstyles",
+  "h": "100a239f"
+ },
+ "js.paywall.thu-trang-diem": {
+  "t": "Try Makeup",
+  "h": "17d7b8c0"
+ },
+ "js.paywall.thu-trang-phuc": {
+  "t": "Try Outfits",
+  "h": "5d690ccc"
+ },
+ "js.paywall.thu-tuong": {
+  "t": "Palm Reading",
+  "h": "869631da"
+ },
+ "js.paywall.toi-da-chuyen-khoan-3482": {
+  "t": "I've transferred",
+  "h": "b0a880c8"
+ },
+ "js.paywall.trang-phuc-theo-ngay": {
+  "t": "Daily Outfit",
+  "h": "6cfe1c1e"
+ },
+ "js.paywall.tu-binh-bat-tu": {
+  "t": "Zi Ping BaZi",
+  "h": "6ade52e9"
+ },
+ "js.paywall.tu-vi-chat": {
+  "t": "Zi Wei Chat",
+  "h": "31c2fcda"
+ },
+ "js.paywall.van-han-12-thang-toi": {
+  "t": "Next 12 Months",
+  "h": "f265e49d"
+ },
+ "js.paywall.vi-hien-tai-la-vi-tam": {
+  "t": "Your current wallet is TEMPORARY — the credits just refunded will be LOST if you clear your browser or switch devices. Sign up for an account to keep them safe.",
+  "h": "e0401dc5"
+ },
+ "js.paywall.vua-du-mo-dung-ban-nay": {
+  "t": "just enough to unlock exactly this version.</div>",
+  "h": "6e2dce75"
+ },
+ "js.paywall.vui-long-dang-nhap-de-tiep": {
+  "t": "Please sign in to continue.",
+  "h": "dcefbef2"
+ },
+ "js.paywall.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
+ "js.paywall.xem-cach-mo-khoa": {
+  "t": "See how to unlock →",
+  "h": "ad0da851"
+ },
+ "js.paywall.xem-tuoi-lam-an": {
+  "t": "Business Compatibility",
+  "h": "5f5ba4e2"
+ },
+ "js.paywall.xem-tuoi-vo-chong": {
+  "t": "Marriage Compatibility",
+  "h": "f3e7b1ed"
+ },
+ "js.paywall.xin-loi-da-co-loi-xay": {
+  "t": "Sorry, something went wrong",
+  "h": "4195c600"
+ },
+ "js.prices.luong-moi-luot": {
+  "t": "{credits} credits per use",
+  "h": "d8f9af98"
+ },
+ "js.prices.luong-moi-luot-sale": {
+  "t": "{sale} credits per use (down from {credits})",
+  "h": "0c35b4ef"
+ },
+ "js.prices.mien-phi": {
+  "t": "Free",
+  "h": "a999e722"
+ },
+ "js.prices.money-moi-luot": {
+  "t": "{money} per use ({credits} credits)",
+  "h": "61295b73"
+ },
+ "js.prices.money-moi-luot-sale": {
+  "t": "{money} per use ({sale} credits, down from {credits})",
+  "h": "7aabe37f"
+ },
  "js.shell.an": {
   "t": "Hide",
   "h": "f4ea7c30"
@@ -1038,6 +2090,966 @@
  "js.shell.xem-tat-ca": {
   "t": "See all",
   "h": "7e040254"
+ },
+ "js.shellui.ai-co-link-deu-doc-duoc": {
+  "t": "Anyone with the link can read the chart and the whole Q&A in this session.",
+  "h": "39f8a716"
+ },
+ "js.shellui.ai-co-link-deu-xem-duoc": {
+  "t": "Anyone with the link can view this.",
+  "h": "dde2d427"
+ },
+ "js.shellui.ai-co-link-deu-xem-duoc-ybjz": {
+  "t": "Anyone with the link can view this result.",
+  "h": "010150dd"
+ },
+ "js.shellui.an-di": {
+  "t": "Hide",
+  "h": "3be211c7"
+ },
+ "js.shellui.ban": {
+  "t": "You",
+  "h": "40ffd8d0"
+ },
+ "js.shellui.ban-lap-la-so-o-khung": {
+  "t": "<p>Cast your chart in the middle panel and the Master answers right away —<br>career, love, this year, next month, ask anything.</p></div>",
+  "h": "66d2cd29"
+ },
+ "js.shellui.ban-luan-giai-soi-tron": {
+  "t": ". The <b>Reading</b> covers the full <b>",
+  "h": "b009e78c"
+ },
+ "js.shellui.bao-cao-da-san-sang": {
+  "t": "<b>Your report is ready</b>",
+  "h": "ab59122b"
+ },
+ "js.shellui.bat-dau-hoi-thoai-moi-ban": {
+  "t": "New conversation started. What would you like to ask about this chart?",
+  "h": "9d7d64ad"
+ },
+ "js.shellui.cau": {
+  "t": "</b> questions",
+  "h": "c4946182"
+ },
+ "js.shellui.cau-hoi-48ar": {
+  "t": "</b> questions",
+  "h": "65c94d43"
+ },
+ "js.shellui.cau-mien-phi": {
+  "t": "free questions</b>",
+  "h": "8ddf771c"
+ },
+ "js.shellui.cau-vua-roi-duoc-tra-loi": {
+  "t": "— your last question was answered right away",
+  "h": "70029ef5"
+ },
+ "js.shellui.chay-lai-cong-cu-de-hoi": {
+  "t": "Run the tool again to keep asking about this session.",
+  "h": "e4e4c8f5"
+ },
+ "js.shellui.chia-se": {
+  "t": "Share",
+  "h": "1cb95080"
+ },
+ "js.shellui.chia-se-phien": {
+  "t": "Share session",
+  "h": "8adfa925"
+ },
+ "js.shellui.chia-se-phien-hoi-thay": {
+  "t": "Share Ask the Master session",
+  "h": "94185440"
+ },
+ "js.shellui.chia-se-w5yz": {
+  "t": "Share",
+  "h": "f575b7df"
+ },
+ "js.shellui.chon-mot-cach-duoi-day": {
+  "t": "— choose one of the options below.",
+  "h": "8b0c906e"
+ },
+ "js.shellui.chon-thay-luan-giai": {
+  "t": "Choose your Master",
+  "h": "f717eb08"
+ },
+ "js.shellui.chua-co-la-so-nao": {
+  "t": "<b>No charts yet</b>",
+  "h": "51d392d1"
+ },
+ "js.shellui.chua-co-noi-dung-de-chia": {
+  "t": "Nothing to share yet — ask the Master a few questions first.",
+  "h": "19461a95"
+ },
+ "js.shellui.chua-co-phien-nao-duoc-luu": {
+  "t": "No saved sessions yet.",
+  "h": "f0665eb8"
+ },
+ "js.shellui.chua-mo": {
+  "t": "· not opened</span></span>",
+  "h": "72204e26"
+ },
+ "js.shellui.chua-tao-duoc-pdf-thu-lai": {
+  "t": "Couldn't create the PDF. Please try again in a few minutes.",
+  "h": "549a59fa"
+ },
+ "js.shellui.con": {
+  "t": "<b>",
+  "h": "21dc996b"
+ },
+ "js.shellui.con-nhieu-dieu-muon-noi-ve": {
+  "t": "has more to say about this chart. Sign up free to:",
+  "h": "b5e24689"
+ },
+ "js.shellui.con-nhieu-dieu-muon-to-tuong": {
+  "t": "has more to explain",
+  "h": "2a2c8332"
+ },
+ "js.shellui.da-an-khoi-thu-vien-chung": {
+  "t": "<span>✓ Removed from the shared Library. The link still works as usual.</span>",
+  "h": "e12e84c8"
+ },
+ "js.shellui.da-chep": {
+  "t": "Copied ✓",
+  "h": "846252e0"
+ },
+ "js.shellui.da-dung-het-luot-hoi": {
+  "t": "No questions left",
+  "h": "3ef9beae"
+ },
+ "js.shellui.da-gui-mo": {
+  "t": "✓ Sent — open",
+  "h": "12288a32"
+ },
+ "js.shellui.da-het-cau-dung-thu": {
+  "t": "Free trial questions used up",
+  "h": "f3c713d8"
+ },
+ "js.shellui.da-tao-link-ban-nay-cung": {
+  "t": "<span>Link created · this one also appears in",
+  "h": "11df14f6"
+ },
+ "js.shellui.dang-an": {
+  "t": "Hiding…",
+  "h": "06dcaa3f"
+ },
+ "js.shellui.dang-dung-pdf": {
+  "t": "Building PDF…",
+  "h": "819544ad"
+ },
+ "js.shellui.dang-facebook": {
+  "t": "Post to Facebook",
+  "h": "af09f25c"
+ },
+ "js.shellui.dang-gan": {
+  "t": "Attached: <b>",
+  "h": "d599e8bc"
+ },
+ "js.shellui.dang-gui": {
+  "t": "Sending…",
+  "h": "f04c8be3"
+ },
+ "js.shellui.dang-ky-mien-phi": {
+  "t": "Sign up free →",
+  "h": "89d5985d"
+ },
+ "js.shellui.dang-ky-nhan-them": {
+  "t": "Sign up for more",
+  "h": "8bb9cbc2"
+ },
+ "js.shellui.dang-tiep-chuyen": {
+  "t": "Now speaking",
+  "h": "37509a1d"
+ },
+ "js.shellui.dang-viet-bao-cao": {
+  "t": "<b>Writing your report…</b>",
+  "h": "2d9fa930"
+ },
+ "js.shellui.de-he-thong-chon-ngau-nhien": {
+  "t": "🎲 Pick one for me",
+  "h": "aee4de0f"
+ },
+ "js.shellui.de-sau": {
+  "t": "Later",
+  "h": "fe71eacd"
+ },
+ "js.shellui.de-xem": {
+  "t": "to view",
+  "h": "f6dcc1ba"
+ },
+ "js.shellui.doi-nen-sang-toi": {
+  "t": "Switch light / dark theme",
+  "h": "4379a733"
+ },
+ "js.shellui.doi-thay-luan-giai": {
+  "t": "Change Master",
+  "h": "6b6fc7cb"
+ },
+ "js.shellui.dong": {
+  "t": "Close",
+  "h": "d2b73ab2"
+ },
+ "js.shellui.dong-xem-ket-qua": {
+  "t": "Close and view result",
+  "h": "fba3c1e0"
+ },
+ "js.shellui.dung-ten": {
+  "t": "</b> put their name to",
+  "h": "70d07a35"
+ },
+ "js.shellui.dung-thu-con": {
+  "t": "Free trial: <b>",
+  "h": "c0746c99"
+ },
+ "js.shellui.duoc-tang-luot-hoi-thay-mien": {
+  "t": "Get free Ask the Master questions",
+  "h": "f9bce370"
+ },
+ "js.shellui.esc": {
+  "t": "Esc",
+  "h": "1f7a4f9e"
+ },
+ "js.shellui.gio-truoc": {
+  "t": "h ago",
+  "h": "ce828227"
+ },
+ "js.shellui.gui": {
+  "t": "Send",
+  "h": "bbc4e7f5"
+ },
+ "js.shellui.gui-anh": {
+  "t": "Send image",
+  "h": "f7dc07df"
+ },
+ "js.shellui.gui-pdf-vao": {
+  "t": "Send PDF to",
+  "h": "6e198ee6"
+ },
+ "js.shellui.hanh-dong": {
+  "t": "Actions",
+  "h": "8e9fdd28"
+ },
+ "js.shellui.het-phan-dung-thu-roi": {
+  "t": "Free trial is over…",
+  "h": "277af632"
+ },
+ "js.shellui.hieu-dung-la-so-dang-mo": {
+  "t": "Reads the open chart correctly",
+  "h": "b500bc82"
+ },
+ "js.shellui.hoac-nap-luong-de-hoi-tiep": {
+  "t": "Or top up credits to keep asking, one question at a time →",
+  "h": "e5064786"
+ },
+ "js.shellui.hoac-nhan-thay-ngay-trong-zalo": {
+  "t": "Or message the Master right in <b>Zalo</b>",
+  "h": "e80f12e2"
+ },
+ "js.shellui.hoi": {
+  "t": "Ask",
+  "h": "48fdacc9"
+ },
+ "js.shellui.hoi-bat-cu-dieu-gi-ve": {
+  "t": "Ask anything about this chart…",
+  "h": "67b4e55f"
+ },
+ "js.shellui.hoi-thay-qua-zalo-quet-ma": {
+  "t": "<div><b>Ask the Master on Zalo</b><small>Scan with Zalo, send your question — the Master replies right away</small></div></div>",
+  "h": "28466f2c"
+ },
+ "js.shellui.hoi-thay-them": {
+  "t": "Ask the Master <b>",
+  "h": "04044619"
+ },
+ "js.shellui.hoi-thoai-moi": {
+  "t": "New conversation",
+  "h": "bba6fb9b"
+ },
+ "js.shellui.ket-qua": {
+  "t": "Result",
+  "h": "c9f95514"
+ },
+ "js.shellui.ket-qua-bam-de-mo": {
+  "t": "</b><span>Result · Tap to open</span></span>",
+  "h": "50bffb45"
+ },
+ "js.shellui.ket-qua-nay-chua-co-noi": {
+  "t": "This result has no content to save as a PDF yet.",
+  "h": "d8ae6583"
+ },
+ "js.shellui.khac": {
+  "t": "Other",
+  "h": "5b8a28ab"
+ },
+ "js.shellui.khong-in-luu-pdf-truc-tiep": {
+  "t": "can't print or save PDFs directly",
+  "h": "27aa3510"
+ },
+ "js.shellui.khong-tao-duoc-link-chia-se": {
+  "t": "Couldn't create a share link. Please try again later.",
+  "h": "77872d72"
+ },
+ "js.shellui.khong-tim-thay": {
+  "t": "Nothing found.",
+  "h": "cb892c67"
+ },
+ "js.shellui.la-so-con-vua-xem-la": {
+  "t": "<b>The chart you just viewed belongs to the person who shared the link — not yours.</b>",
+  "h": "138c9f16"
+ },
+ "js.shellui.la-so-da-san-sang-ban": {
+  "t": "Your chart is ready. What would you like me to look at first?",
+  "h": "0d8b388a"
+ },
+ "js.shellui.lap-la-so-cua-ban-de": {
+  "t": "Cast your own chart so the Master can read more closely →",
+  "h": "6a209505"
+ },
+ "js.shellui.lap-la-so-de-bat-dau": {
+  "t": "Cast a chart to start asking…",
+  "h": "0a0f5f98"
+ },
+ "js.shellui.lap-la-so-truoc-da": {
+  "t": "Cast a chart first",
+  "h": "1b48590d"
+ },
+ "js.shellui.lich-su": {
+  "t": "History ·",
+  "h": "309a950b"
+ },
+ "js.shellui.lich-su-hoi-thoai": {
+  "t": "Conversation history",
+  "h": "0fd2afce"
+ },
+ "js.shellui.loi-mang-khi-tao-link-chia": {
+  "t": "Network error while creating the share link.",
+  "h": "7de46633"
+ },
+ "js.shellui.loi-mang-thu-lai-sau-it": {
+  "t": "Network error. Please try again in a few minutes.",
+  "h": "4f6c5f14"
+ },
+ "js.shellui.luan-giai": {
+  "t": "<b>Reading",
+  "h": "489f2d1f"
+ },
+ "js.shellui.luong": {
+  "t": "credits)",
+  "h": "c25e2d61"
+ },
+ "js.shellui.luong-mo12": {
+  "t": "credits",
+  "h": "77701acc"
+ },
+ "js.shellui.luong-n119": {
+  "t": "credits (",
+  "h": "e002ee80"
+ },
+ "js.shellui.luong-piya": {
+  "t": "</b> credits",
+  "h": "7ddc7cbc"
+ },
+ "js.shellui.luot-hoi-hom-nay": {
+  "t": "…</b> questions today",
+  "h": "eb701f53"
+ },
+ "js.shellui.luot-tang": {
+  "t": "bonus)</span>",
+  "h": "428cbe75"
+ },
+ "js.shellui.luu-ban-pdf": {
+  "t": "Save as PDF",
+  "h": "384327e1"
+ },
+ "js.shellui.luu-la-so-va-cuoc-tro": {
+  "t": "Save your chart and conversation — still there when you switch devices",
+  "h": "3cf815c8"
+ },
+ "js.shellui.luu-pdf": {
+  "t": "Save PDF",
+  "h": "c815d87c"
+ },
+ "js.shellui.mo": {
+  "t": "Open ↗",
+  "h": "275cceff"
+ },
+ "js.shellui.mo-file-pdf": {
+  "t": "Open PDF",
+  "h": "8ac92ea1"
+ },
+ "js.shellui.mo-rong": {
+  "t": "Expand",
+  "h": "d91c6264"
+ },
+ "js.shellui.mo-thanh-ben": {
+  "t": "Open sidebar",
+  "h": "b1f48b75"
+ },
+ "js.shellui.mo-zalo": {
+  "t": "Open Zalo",
+  "h": "d52365fa"
+ },
+ "js.shellui.moi-sang-nhan-van-ngay-rieng": {
+  "t": "Get your own daily outlook for your chart every morning",
+  "h": "6f9ffa30"
+ },
+ "js.shellui.moi-thay-mot-van-phong-rieng": {
+  "t": "Each Master has a voice of their own. Pick the one you like, or let us choose at random.",
+  "h": "9f6ba6f2"
+ },
+ "js.shellui.muc": {
+  "t": "sections —",
+  "h": "186bea21"
+ },
+ "js.shellui.muc-cho-la-so-nay": {
+  "t": "sections for this chart</b><span>",
+  "h": "c78646f2"
+ },
+ "js.shellui.muc-cua-chinh-la-so-nay": {
+  "t": "sections</b> of this very chart —",
+  "h": "8e5f0ada"
+ },
+ "js.shellui.muon-thay-luan-cho-chinh-con": {
+  "t": "If you'd like the Master to read for you, share your birth date and time — the Master will open a separate new session just for you.</p></div>",
+  "h": "3ab45347"
+ },
+ "js.shellui.nap-luong-de-hoi-tiep": {
+  "t": "Top up credits to keep asking →",
+  "h": "6bd23774"
+ },
+ "js.shellui.nap-them": {
+  "t": "Top up",
+  "h": "f3cb9ffa"
+ },
+ "js.shellui.ngay-truoc": {
+  "t": "d ago",
+  "h": "92423d27"
+ },
+ "js.shellui.nguoi-dan-duong": {
+  "t": "Your guide",
+  "h": "f38c3a9c"
+ },
+ "js.shellui.nguoi-dang-xem": {
+  "t": "…</b> people viewing",
+  "h": "440579d4"
+ },
+ "js.shellui.nhung-phan-luong-trong-vi-da": {
+  "t": ", but your wallet is out of credits. Top up so the Master can pick up where they left off.</div>",
+  "h": "8962fab5"
+ },
+ "js.shellui.nu": {
+  "t": "Female",
+  "h": "feb92ccd"
+ },
+ "js.shellui.phan": {
+  "t": "parts",
+  "h": "d2cd4ec7"
+ },
+ "js.shellui.phan-da-xong": {
+  "t": "parts done</span></span>",
+  "h": "f8ba3adb"
+ },
+ "js.shellui.phien": {
+  "t": "Session",
+  "h": "1d7b419f"
+ },
+ "js.shellui.phien-da-luu": {
+  "t": "Saved sessions",
+  "h": "5b37ec1e"
+ },
+ "js.shellui.phien-gan-day": {
+  "t": "Recent sessions",
+  "h": "edade345"
+ },
+ "js.shellui.phien-meij": {
+  "t": "sessions",
+  "h": "3ee6a226"
+ },
+ "js.shellui.phut-truoc": {
+  "t": "min ago",
+  "h": "b1017a2c"
+ },
+ "js.shellui.que-con-do-xin-phep-dung": {
+  "t": "The reading is unfinished — I'll stop here…",
+  "h": "bab685a0"
+ },
+ "js.shellui.sao-chep-link": {
+  "t": "Copy link",
+  "h": "899e8987"
+ },
+ "js.shellui.sao-chep-link-mo-bang-safari": {
+  "t": ". Copy the link, open it in Safari or Chrome, then tap Save PDF.",
+  "h": "f8145d14"
+ },
+ "js.shellui.sao-chep-xpx5": {
+  "t": "Copy",
+  "h": "09a1db3e"
+ },
+ "js.shellui.so-la-so": {
+  "t": "Chart book",
+  "h": "0e67ec9d"
+ },
+ "js.shellui.tai-khoan": {
+  "t": "Account",
+  "h": "4a60abe5"
+ },
+ "js.shellui.tat-ca": {
+  "t": "All (",
+  "h": "55873035"
+ },
+ "js.shellui.thang-truoc": {
+  "t": "mo ago",
+  "h": "e1d0b08b"
+ },
+ "js.shellui.thay": {
+  "t": "Master",
+  "h": "90b92a70"
+ },
+ "js.shellui.thay-7g4t": {
+  "t": "<span>Master <b>",
+  "h": "a8757512"
+ },
+ "js.shellui.thay-vi-hoi-le-tung-cau": {
+  "t": "… — instead of asking one question at a time.</div>",
+  "h": "8836644b"
+ },
+ "js.shellui.thu-gon": {
+  "t": "Collapse",
+  "h": "b1233168"
+ },
+ "js.shellui.thu-gon-ket-qua": {
+  "t": "Collapse result",
+  "h": "45ef96ba"
+ },
+ "js.shellui.thu-hep": {
+  "t": "Narrow",
+  "h": "3a848e39"
+ },
+ "js.shellui.thu-lai": {
+  "t": "Try again",
+  "h": "e353f2f3"
+ },
+ "js.shellui.thu-vien-chung": {
+  "t": "Shared Library",
+  "h": "404f456c"
+ },
+ "js.shellui.tim-cong-cu-lenh": {
+  "t": "Search tools, commands…",
+  "h": "990f08e2"
+ },
+ "js.shellui.trinh-duyet-ben-trong": {
+  "t": "In-app browser",
+  "h": "28553859"
+ },
+ "js.shellui.tu-vi-minh-bao": {
+  "t": "— Minh Bao Zi Wei Dou Shu",
+  "h": "ef7f10f4"
+ },
+ "js.shellui.ung-dung-nay": {
+  "t": "this app",
+  "h": "cba1a9e4"
+ },
+ "js.shellui.vua-xong": {
+  "t": "just now",
+  "h": "d1a7c7fa"
+ },
+ "js.shellui.xem": {
+  "t": "View →",
+  "h": "1e272706"
+ },
+ "js.shellui.xem-ket-qua": {
+  "t": "View result",
+  "h": "9ab7d355"
+ },
+ "js.shellui.xem-ket-qua-nay-tren-tu": {
+  "t": "See this result on Minh Bao Zi Wei Dou Shu:",
+  "h": "b03d8f15"
+ },
+ "js.shellui.xem-phan-luan-giai-cua-thay": {
+  "t": "See the Master's reading for this chart:",
+  "h": "8b9556e2"
+ },
+ "js.shellui.xem-phan-luan-giai-cua-thay-6as2": {
+  "t": "See the Master's reading for this chart:",
+  "h": "6b8b5dbb"
+ },
+ "js.shellui.xem-tron": {
+  "t": "Read in full",
+  "h": "18cdbfde"
+ },
+ "js.shellui.xoa-phien": {
+  "t": "Delete session",
+  "h": "72d604e7"
+ },
+ "js.shellui.zalo": {
+  "t": "Zalo",
+  "h": "53b71aec"
+ },
+ "js.topup.aria-label-thanh-toan": {
+  "t": "aria-label=\"Pay",
+  "h": "3d7d89ae"
+ },
+ "js.topup.bac": {
+  "t": "(tier",
+  "h": "d620a26c"
+ },
+ "js.topup.ban-chua-nhap-ma": {
+  "t": "You haven't entered a code.",
+  "h": "e3627774"
+ },
+ "js.topup.ban-dang-mo-khoa": {
+  "t": "<span>You're unlocking <b>",
+  "h": "a5f495af"
+ },
+ "js.topup.ban-dang-mo-khoa-v2tc": {
+  "t": "You're unlocking",
+  "h": "f9f2ebb7"
+ },
+ "js.topup.can-them": {
+  "t": "Need <b>",
+  "h": "235b3b03"
+ },
+ "js.topup.cap-nhat-tu-dong-khi-co": {
+  "t": "Updated automatically when new tools are added. Amounts are converted using the package",
+  "h": "b44fa7dd"
+ },
+ "js.topup.cap-nhat-tu-dong-khi-co-u8hf": {
+  "t": "Updated automatically when new tools are added.",
+  "h": "6d165b81"
+ },
+ "js.topup.chi-cac-cong-cu-luan-giai": {
+  "t": "Only the in-depth reading tools are charged.",
+  "h": "9cf1c314"
+ },
+ "js.topup.chi-tu": {
+  "t": "from just",
+  "h": "64117bb9"
+ },
+ "js.topup.chia-se-moi-ban": {
+  "t": "I'm using Minh Bao Zi Wei Dou Shu — chart readings by the classical method. Sign up through this link and we both get credits: {link}",
+  "h": "91b14709"
+ },
+ "js.topup.chuyen-khoan": {
+  "t": "Bank transfer",
+  "h": "983bba81"
+ },
+ "js.topup.con-thieu": {
+  "t": "</b> — short by <b>",
+  "h": "e337446d"
+ },
+ "js.topup.cong-cu-ban-vua-xem": {
+  "t": "the tool you just viewed",
+  "h": "d666e2b0"
+ },
+ "js.topup.cong-cu-tra-cuu-co-phap": {
+  "t": "classical lookup tools cost no credits</strong> (star placement, Na Yin, auspicious hours, I Ching, tarot…).",
+  "h": "13649dd5"
+ },
+ "js.topup.d": {
+  "t": "₫",
+  "h": "c5f95801"
+ },
+ "js.topup.da-sao-chep": {
+  "t": "Copied",
+  "h": "40e825db"
+ },
+ "js.topup.dang-ket-noi": {
+  "t": "Connecting…",
+  "h": "dd0e25a1"
+ },
+ "js.topup.dang-ky": {
+  "t": "Sign Up →",
+  "h": "ef4ca9d9"
+ },
+ "js.topup.dang-tai-bang-gia": {
+  "t": "Loading prices",
+  "h": "0f8effca"
+ },
+ "js.topup.dang-tai-bang-gia-x0u0": {
+  "t": "Loading prices…",
+  "h": "40e009ff"
+ },
+ "js.topup.dang-tai-thu-lai-sau-mot": {
+  "t": "Still loading — try again in a second.",
+  "h": "1baf8990"
+ },
+ "js.topup.den": {
+  "t": "to",
+  "h": "addd467a"
+ },
+ "js.topup.don-gia-theo-bac-goi-cang": {
+  "t": "· per-credit price follows the package tier — the more you top up, the cheaper it gets",
+  "h": "563ecc73"
+ },
+ "js.topup.du-cho-luot-nay": {
+  "t": "Enough for this use",
+  "h": "2b427e2f"
+ },
+ "js.topup.du-de-dung-thu-cong-cu": {
+  "t": "Enough to try an in-depth reading tool. No card, no commitment.",
+  "h": "2bba34ab"
+ },
+ "js.topup.goi": {
+  "t": "package",
+  "h": "ab6724d3"
+ },
+ "js.topup.goi-duoc-danh-dau-ben-duoi": {
+  "t": "The package marked below is just enough for this use.",
+  "h": "12d86ea6"
+ },
+ "js.topup.het-gio-cho": {
+  "t": "Timed out.",
+  "h": "ffa75c30"
+ },
+ "js.topup.khong-co-du-lieu": {
+  "t": "No data.",
+  "h": "01d461ee"
+ },
+ "js.topup.khong-doi-duoc-ma": {
+  "t": "Couldn't redeem the code.",
+  "h": "795cb46c"
+ },
+ "js.topup.khong-het-han": {
+  "t": "Never expires",
+  "h": "b4fef21a"
+ },
+ "js.topup.khong-tai-duoc-vui-long-thu": {
+  "t": "Couldn't load. Please try again.",
+  "h": "cfce40b3"
+ },
+ "js.topup.khong-tao-duoc-don-paypal": {
+  "t": "Couldn't create the PayPal order",
+  "h": "5ae11efc"
+ },
+ "js.topup.la-du": {
+  "t": "</b> is enough,",
+  "h": "ff3301f5"
+ },
+ "js.topup.loi-ket-noi-momo": {
+  "t": "MoMo connection error:",
+  "h": "ab653854"
+ },
+ "js.topup.loi-ket-noi-paypal": {
+  "t": "PayPal connection error:",
+  "h": "b24c6f67"
+ },
+ "js.topup.luong": {
+  "t": "credits</div>",
+  "h": "81dc9146"
+ },
+ "js.topup.luong-10zo": {
+  "t": "/ credit",
+  "h": "849064c1"
+ },
+ "js.topup.luong-8gog": {
+  "t": "<span>credits</span></div>",
+  "h": "ea893023"
+ },
+ "js.topup.luong-cho-thanh-vien-moi": {
+  "t": "credits for new members",
+  "h": "f9ec8743"
+ },
+ "js.topup.luong-de-dung-tiep-nap": {
+  "t": "credits</b> to keep going — top up <b>",
+  "h": "cffae6dc"
+ },
+ "js.topup.luong-dung-duoc-cho-cac-cong": {
+  "t": "credits, usable for the in-depth reading tools and Ask the Master.",
+  "h": "220dda0b"
+ },
+ "js.topup.luong-goi-lon-hon-thi-re": {
+  "t": "/credit) — larger packages are cheaper still.",
+  "h": "7bdee349"
+ },
+ "js.topup.luong-ictb": {
+  "t": "credits</b>.",
+  "h": "1d59cb4e"
+ },
+ "js.topup.luong-ngay-khi-ho-tao-tai": {
+  "t": "credits</strong> as soon as they create an account",
+  "h": "efc01ca5"
+ },
+ "js.topup.luot-moi-duoc-thuong-30-ngay": {
+  "t": "rewarded invites / 30 days)",
+  "h": "d879cb28"
+ },
+ "js.topup.mo-ra-ngay-sau-khi-thanh": {
+  "t": "unlocks right after payment completes.",
+  "h": "9db1b114"
+ },
+ "js.topup.mo-trang-payos": {
+  "t": "Open payOS page →",
+  "h": "c70cfbf8"
+ },
+ "js.topup.moi-nguoi-dang-ky-qua-link": {
+  "t": "Each person who signs up through your link: <strong>+",
+  "h": "af336cce"
+ },
+ "js.topup.muc-phi-cua-tung-cong-cu": {
+  "t": "Each tool's price is shown right on that tool's page.",
+  "h": "4d90e17f"
+ },
+ "js.topup.nap-thanh-cong-luong": {
+  "t": "Top-up successful: {credits} credits!",
+  "h": "1ca6d695"
+ },
+ "js.topup.o-nap-so-tien-tu-chon": {
+  "t": "The <b>custom top-up</b> box is pre-filled with <b>",
+  "h": "ca263938"
+ },
+ "js.topup.pho-bien-nhat": {
+  "t": "Most popular",
+  "h": "a0f0bedc"
+ },
+ "js.topup.re-hon": {
+  "t": "cheaper",
+  "h": "00731702"
+ },
+ "js.topup.so-du-hien-tai": {
+  "t": "Current balance",
+  "h": "0f33e086"
+ },
+ "js.topup.so-tien-muon-nap": {
+  "t": "Amount to top up (",
+  "h": "3a034d1c"
+ },
+ "js.topup.tang": {
+  "t": "Bonus",
+  "h": "ae208fd1"
+ },
+ "js.topup.tang-luong-mien-phi-cho-thanh": {
+  "t": "Free credits for new members",
+  "h": "0ac0e4a1"
+ },
+ "js.topup.thanh-toan-da-bi-huy-ban": {
+  "t": "Payment was canceled. You can try again any time.",
+  "h": "4336002a"
+ },
+ "js.topup.thanh-toan-thanh-cong-dang-cap": {
+  "t": "Payment successful! Updating…",
+  "h": "9e4d16f3"
+ },
+ "js.topup.thanh-toan-the": {
+  "t": "Card payment",
+  "h": "6eccec15"
+ },
+ "js.topup.toi-da": {
+  "t": "(max",
+  "h": "383d76a3"
+ },
+ "js.topup.toi-thieu": {
+  "t": "Minimum",
+  "h": "134e562d"
+ },
+ "js.topup.vnd": {
+  "t": "VND",
+  "h": "3537de8e"
+ },
+ "js.topup.vua-du-khong-phai-mua-ca": {
+  "t": "</b> — just enough, no need to buy a whole package.",
+  "h": "4ac59782"
+ },
+ "js.topup.vui-long-nhap-so-tien-tu": {
+  "t": "Please enter an amount from",
+  "h": "c3305e5b"
+ },
+ "js.topup.xem-lich-su": {
+  "t": "View history",
+  "h": "21a19fb0"
+ },
+ "js.vanhannam.ban-do": {
+  "t": "Map",
+  "h": "393d2725"
+ },
+ "js.vanhannam.dang-luan-phan-1": {
+  "t": "Reading part 1 /",
+  "h": "9020516d"
+ },
+ "js.vanhannam.dang-tinh": {
+  "t": "Calculating…",
+  "h": "76a9d5f0"
+ },
+ "js.vanhannam.loi-khi-luan-phan": {
+  "t": "Error while reading part",
+  "h": "1ea71e16"
+ },
+ "js.vanhannam.loi-khi-tinh-van-han": {
+  "t": "Error while calculating your luck:",
+  "h": "831b40e0"
+ },
+ "js.vanhannam.luan-van-han-12-thang": {
+  "t": "<b>Read next 12 months →</b>",
+  "h": "c228dfa7"
+ },
+ "js.vanhannam.luan-van-han-hoan-tat": {
+  "t": "✓ Luck reading complete",
+  "h": "e52ae239"
+ },
+ "js.vanhannam.luong": {
+  "t": "credits)",
+  "h": "c99d25aa"
+ },
+ "js.vanhannam.thang-am-toi-moi-o-mot": {
+  "t": "lunar months ahead, one keyword per cell",
+  "h": "33508d52"
+ },
+ "js.vanhannam.ton": {
+  "t": "<small>Costs",
+  "h": "ca8d4e90"
+ },
+ "js.vanhannam.van-han-12-thang": {
+  "t": "Next 12 Months",
+  "h": "0bef064e"
+ },
+ "js.vanhannam.xem-van-han": {
+  "t": "See outlook →",
+  "h": "0f4545c1"
+ },
+ "js.xemtuoi.cham-8-yeu-to-hop-tac": {
+  "t": "Score 8 partnership factors between you and a prospective business partner — an objective view before you sign.",
+  "h": "fdda207e"
+ },
+ "js.xemtuoi.cham-8-yeu-to-tuong-hop": {
+  "t": "Score 8 compatibility factors between two charts — use it when you're thinking about marriage and want a clear answer.",
+  "h": "db3006a1"
+ },
+ "js.xemtuoi.chieu-tuong-hop": {
+  "t": "compatibility dimensions",
+  "h": "2d818e3c"
+ },
+ "js.xemtuoi.dang-dung-anh": {
+  "t": "Building image…",
+  "h": "7bce9760"
+ },
+ "js.xemtuoi.loi-khi-so-tuoi": {
+  "t": "Error while comparing:",
+  "h": "4f62428a"
+ },
+ "js.xemtuoi.tra-loi-thay-o-khung-chat": {
+  "t": "Reply to the Master in the chat to enter the birth date of",
+  "h": "ec2999fc"
+ },
+ "js.xemtuoi.tuong-hop-tuoi-tu-vi-minh": {
+  "t": "Compatibility — Minh Bao Zi Wei Dou Shu",
+  "h": "b35bc9d1"
+ },
+ "js.xemtuoi.va": {
+  "t": "and",
+  "h": "a72340e8"
+ },
+ "js.xemtuoi.vanh": {
+  "t": "Ring",
+  "h": "f78055f5"
+ },
+ "js.xemtuoi.xem-tuoi-lam-an-tu-vi": {
+  "t": "Business Compatibility — Minh Bao Zi Wei Dou Shu",
+  "h": "6a071dab"
+ },
+ "js.xemtuoi.xem-tuoi-vo-chong-tu-vi": {
+  "t": "Marriage Compatibility — Minh Bao Zi Wei Dou Shu",
+  "h": "4fd9f105"
+ },
+ "js.xemtuoi.xet-nhanh-hai-tuoi-co-hop": {
+  "t": "Quickly check whether two ages are compatible — just birth years, an instant answer, no deep reading yet.",
+  "h": "ee011392"
  },
  "laso.2026-tuviminhbao-com-all-rights-reserved": {
   "t": "© 2026 tuviminhbao.com — All rights reserved",
@@ -1258,6 +3270,74 @@
  "luangiai.tu-vi-khong-du-doan-tuong": {
   "t": "Zi Wei doesn't predict the future. It helps you understand yourself so you can choose better.",
   "h": "ae92de9d"
+ },
+ "napam.1-nhap-nam-sinh": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Enter birth year</span>",
+  "h": "ecce406c"
+ },
+ "napam.2-xem-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">View result</span>",
+  "h": "70d46dd0"
+ },
+ "napam.hoi-thay-luan-sau-nap-am": {
+  "t": "✦ Ask the Master to read your Na Yin in depth",
+  "h": "349e0cc6"
+ },
+ "napam.mau-huong-hop": {
+  "t": "<span class=\"hp-ic\" data-icon=\"palette\"></span><span>Matching colors,<br>directions</span>",
+  "h": "a297cc08"
+ },
+ "napam.moi-nam-sinh-mang-mot-menh": {
+  "t": "Every birth year carries its own Na Yin element — which decides the colors and directions that suit you, though few people notice. Enter your birth year and get the full element name, its element, and your matching colors and directions, free.",
+  "h": "b260ec1c"
+ },
+ "napam.nam-sinh": {
+  "t": "Birth year",
+  "h": "75a6785f"
+ },
+ "napam.nam-sinh-duong-lich": {
+  "t": "Birth year (solar calendar)",
+  "h": "1fb839b6"
+ },
+ "napam.nap-am-la-phep-phoi-hanh": {
+  "t": "Na Yin (Sound of the Five Elements) assigns a Five Element to each stem-branch pair in the Sexagenary cycle (60 years), giving every birth year an element with its own name, such as Metal in the Sea or Earth by the Roadside. It is one branch of the applied Five Elements system in classical Chinese numerology.",
+  "h": "0b4fcbe2"
+ },
+ "napam.nap-am-ngu-hanh": {
+  "t": "Na Yin Five Elements",
+  "h": "0de9a4ee"
+ },
+ "napam.nap-am-ngu-hanh-hanh-ban": {
+  "t": "<b>Na Yin Five Elements</b><span>Your life element by birth year</span>",
+  "h": "2e26bd13"
+ },
+ "napam.nap-am-ngu-hanh-tu-vi": {
+  "t": "Na Yin Five Elements — Minh Bao Zi Wei Dou Shu",
+  "h": "b9503f87"
+ },
+ "napam.nhap-nam-sinh-cua-ban-nhan": {
+  "t": "Enter your birth year. Get your full element name along with matching colors, directions and compatible and clashing zodiac years.",
+  "h": "3acbe82d"
+ },
+ "napam.sua": {
+  "t": "Edit",
+  "h": "0963749f"
+ },
+ "napam.ten-menh-nap-am": {
+  "t": "<span class=\"hp-ic\" data-icon=\"tornado\"></span><span>Na Yin<br>element name</span>",
+  "h": "3077c3ba"
+ },
+ "napam.tra-nap-am-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"tornado\"></span><b>Look up Na Yin →</b></span> <small>Free</small>",
+  "h": "e2a87df0"
+ },
+ "napam.tra-nap-am-ngu-hanh-theo": {
+  "t": "Look up your Na Yin Five Element by birth year (Metal in the Sea, Fire in the Furnace…) — Heavenly Stem, Earthly Branch, life element. Ask the Master to read matching colors, directions and zodiac years.",
+  "h": "b7a210ed"
+ },
+ "napam.tuoi-hop-ky": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>Compatible<br>and clashing years</span>",
+  "h": "9a664cc3"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. Information we collect",
@@ -1626,5 +3706,329 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "For credits you have topped up but not yet used, you may submit a request and we will review it case by case",
   "h": "f410ec3e"
+ },
+ "topup.ban-dang-mo-khoa": {
+  "t": "You're unlocking…",
+  "h": "a288081b"
+ },
+ "topup.bang-gia-nap-luong-tu-vi": {
+  "t": "Pricing & Credit Top-up — Minh Bao Zi Wei Dou Shu",
+  "h": "09810031"
+ },
+ "topup.cap-nhat-tu-dong-khi-co": {
+  "t": "Updated automatically when new tools are added.",
+  "h": "6d165b81"
+ },
+ "topup.cau-hoi-thuong-gap": {
+  "t": "FAQ",
+  "h": "0abbca1b"
+ },
+ "topup.chi-phi-cac-cong-cu": {
+  "t": "Tool Pricing",
+  "h": "5afccf48"
+ },
+ "topup.chon-phuong-thuc-thanh-toan": {
+  "t": "Choose a payment method",
+  "h": "43066cc7"
+ },
+ "topup.chuyen-du-so-tien-vao-dung": {
+  "t": "Transfer the full amount to the account number above — the transfer note can say anything; the system matches by account number",
+  "h": "7626831b"
+ },
+ "topup.chuyen-khoan-ngan-hang": {
+  "t": "Bank Transfer",
+  "h": "d35c8163"
+ },
+ "topup.chuyen-khoan-qr": {
+  "t": "QR bank transfer",
+  "h": "31fdb4fb"
+ },
+ "topup.co-ma-tu-clip-hoac-chuong": {
+  "t": "Got a code from a video or promotion? Enter it here to add credits right away.",
+  "h": "3b61f23b"
+ },
+ "topup.da-moi": {
+  "t": "Invited:",
+  "h": "38658fa9"
+ },
+ "topup.da-nap-lan-dau": {
+  "t": "First top-up done:",
+  "h": "c9f0cd6b"
+ },
+ "topup.da-nhan-luong": {
+  "t": "Received:",
+  "h": "7c97410c"
+ },
+ "topup.dang-tai": {
+  "t": "Loading…",
+  "h": "577a1d59"
+ },
+ "topup.dang-tai-bang-gia": {
+  "t": "Loading prices",
+  "h": "0f8effca"
+ },
+ "topup.dang-tai-g1gj": {
+  "t": "Loading",
+  "h": "f774f216"
+ },
+ "topup.de-sau-tu-chon-goi-ben": {
+  "t": "Later — choose a package below",
+  "h": "3dc12218"
+ },
+ "topup.doi-ma": {
+  "t": "<span>Redeem</span>",
+  "h": "50a9ba25"
+ },
+ "topup.dong": {
+  "t": "Close",
+  "h": "d2b73ab2"
+ },
+ "topup.dong-gop-duy-tri": {
+  "t": "Support the Project",
+  "h": "c80888bc"
+ },
+ "topup.dung-duoc-cho-cac-cong-cu": {
+  "t": "Usable for the in-depth reading tools and Ask the Master. Each tool's price is shown right on that tool's page.",
+  "h": "9f2a96d9"
+ },
+ "topup.goi-cang-lon-cang-re": {
+  "t": "the bigger the package, the cheaper",
+  "h": "33962657"
+ },
+ "topup.khong-bao-gio-luong-duoc-luu": {
+  "t": "Never. Credits are kept in your account permanently.",
+  "h": "ffe348cc"
+ },
+ "topup.khong-moi-la-so-ket-qua": {
+  "t": "No. Each chart / result deducts credits only once. After that you can view it again for free, as often as you like.",
+  "h": "c396c59c"
+ },
+ "topup.link-moi": {
+  "t": "Invite link:",
+  "h": "4e609ece"
+ },
+ "topup.luong-co-dung-chung-tai-khoan": {
+  "t": "Can credits be shared across accounts?",
+  "h": "1becf98e"
+ },
+ "topup.luong-co-het-han-khong": {
+  "t": "Do credits expire?",
+  "h": "eb07c396"
+ },
+ "topup.luong-don-vi": {
+  "t": "Credits",
+  "h": "6614284e"
+ },
+ "topup.luong-gan-voi-mot-tai-khoan": {
+  "t": "Credits belong to one account. If you want to use them for the whole family, you can choose a larger tier (Premium / VIP) and share a single account.",
+  "h": "056bcb24"
+ },
+ "topup.luong-la-don-vi-dung-cho": {
+  "t": "Credits are the unit used for the in-depth reading tools. Bought in packages, they <strong>never expire</strong>,",
+  "h": "56f0d587"
+ },
+ "topup.ma-gioi-thieu-cua-ban": {
+  "t": "Your referral code:",
+  "h": "d217efa0"
+ },
+ "topup.mo-app-ngan-hang-quet-qr": {
+  "t": "Open your banking app → scan the QR or transfer manually",
+  "h": "3b3fbc1c"
+ },
+ "topup.moi-ban-cung-nhan-luong": {
+  "t": "Invite Friends — Earn Credits Together",
+  "h": "9c581c98"
+ },
+ "topup.moi-ban-dang-ky-ban-nhan": {
+  "t": "Invite a friend to sign up → you get credits as soon as they create an account.",
+  "h": "db75ad54"
+ },
+ "topup.moi-luan-giai-chuyen-sau-goi": {
+  "t": "Each in-depth reading calls a large language model API (Claude/GPT) and costs roughly 0.05–0.10 USD per use, plus storage and hosting. Credits are how the project sustains itself so every classical lookup tool stays free for everyone.",
+  "h": "f9c1cb68"
+ },
+ "topup.moi-tai-khoan-dung-duoc-mot": {
+  "t": "Each account can use one code.",
+  "h": "03a3bf30"
+ },
+ "topup.muc-dong-gop": {
+  "t": "Contribution Tiers",
+  "h": "995e94f7"
+ },
+ "topup.nap-luong-de-su-dung-cac": {
+  "t": "Top up credits to use Minh Bao's tools. Sign up for free credits. They never expire.",
+  "h": "9b06e362"
+ },
+ "topup.nap-luong-de-tra-cuu-menh": {
+  "t": "Top Up Credits for Destiny Readings",
+  "h": "9e20fbe1"
+ },
+ "topup.nhap-ma-khuyen-mai": {
+  "t": "Enter a Promo Code",
+  "h": "e9e5205f"
+ },
+ "topup.paypal-the": {
+  "t": "PayPal / Card",
+  "h": "57ed0fb5"
+ },
+ "topup.qua-luong-chao-mung-khi-dang": {
+  "t": "What can the welcome credits be used for?",
+  "h": "9eadf304"
+ },
+ "topup.sao-chep": {
+  "t": "Copy",
+  "h": "09a1db3e"
+ },
+ "topup.sao-chep-link": {
+  "t": "Copy link",
+  "h": "899e8987"
+ },
+ "topup.so-tien-khac": {
+  "t": "Other amount",
+  "h": "adbf09d4"
+ },
+ "topup.so-tien-muon-nap-usd": {
+  "t": "Amount to top up (USD)",
+  "h": "8929ebe7"
+ },
+ "topup.thanh-toan-bang-usd-qua-paypal": {
+  "t": "Pay in <strong>USD</strong> through PayPal: use your PayPal account, or choose <strong>Visa / Mastercard</strong> to enter a card directly — no PayPal account needed. Credits reach your account automatically right after payment.",
+  "h": "87906448"
+ },
+ "topup.the-visa-mastercard": {
+  "t": "Visa / Mastercard",
+  "h": "10db7446"
+ },
+ "topup.toi-co-the-thanh-toan-bang": {
+  "t": "How can I pay?",
+  "h": "2b5b80d1"
+ },
+ "topup.toi-da-chuyen-khoan": {
+  "t": "I've transferred",
+  "h": "b0a880c8"
+ },
+ "topup.vd-tuviminhbao": {
+  "t": "e.g. MINHBAO",
+  "h": "f161ad1c"
+ },
+ "topup.vi-sao-co-thanh-toan-ma": {
+  "t": "Why is there a charge — why isn't it completely free?",
+  "h": "f2bd2a70"
+ },
+ "topup.xem-lai-ket-qua-co-bi": {
+  "t": "Am I charged again for viewing a result a second time?",
+  "h": "64b49a22"
+ },
+ "tuonghop.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>Sample reading</b><span>Download the full Marriage Compatibility PDF of a sample chart to preview the real content.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-xem-tuoi.pdf\" target=\"_blank\" rel=\"noopener\">Download PDF →</a>",
+  "h": "17b7eecd"
+ },
+ "tuonghop.cham-8-yeu-to-tuong-hop": {
+  "t": "Score 8 compatibility factors between your two charts. Both families have opinions about your ages. Use this when you're thinking about marriage and want a clear answer.",
+  "h": "e3005a0a"
+ },
+ "tuonghop.luan-giai-chuyen-sau-luong": {
+  "t": "✦ In-depth reading — <span class=\"vnd\" data-tvp-price-vnd=\"xem-tuoi\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"xem-tuoi\">…</span> credits)</span> →",
+  "h": "10ed4fe8"
+ },
+ "tuonghop.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"xem-tuoi\"></span> per use <span class=\"cb-sub\">(<span data-tvp-price=\"xem-tuoi\">…</span> credits)</span>",
+  "h": "552e83b3"
+ },
+ "tuonghop.nguoi-thu-hai": {
+  "t": "<span class=\"dotB\"></span> Second person",
+  "h": "204354fd"
+ },
+ "tuonghop.nguoi-thu-nhat": {
+  "t": "<span class=\"dotA\"></span> First person",
+  "h": "14919cba"
+ },
+ "tuonghop.nhap-ngay-sinh-hai-nguoi-duong": {
+  "t": "Enter both birth dates (solar calendar)",
+  "h": "0a8681af"
+ },
+ "tuonghop.so-tuoi-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"heart-handshake\"></span><b id=\"btnGoLabel\">Compare →</b></span> <small id=\"btnGoSub\">Costs <span class=\"vnd\" data-tvp-price-vnd=\"xem-tuoi\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"xem-tuoi\">…</span> credits)</span></small>",
+  "h": "b8b279bf"
+ },
+ "tuonghop.so-tuoi-vo-chong-theo-la": {
+  "t": "Marriage compatibility from your Zi Wei charts: an 8-dimension harmony score (age, five elements, outlook, relationships, children, finances) — and ask the Master to go deeper.",
+  "h": "8c8efe63"
+ },
+ "tuonghop.tra-loi-thay-o-khung-chat": {
+  "t": "Reply to the Master in the chat to enter both birth dates.",
+  "h": "d670d014"
+ },
+ "tuonghop.viet-rieng-cho-hai-nguoi-nay": {
+  "t": "Written specifically for these two people by the classical method — an overview and each dimension of harmony.",
+  "h": "7ce3e9e1"
+ },
+ "tuonghop.xem-tuoi-vo-chong-so-hoa": {
+  "t": "<b id=\"wsTitle\">Marriage Compatibility</b><span id=\"wsSub\">Compare two charts' harmony by the classical method</span>",
+  "h": "dec7e95a"
+ },
+ "tuonghop.xem-tuoi-vo-chong-tu-vi": {
+  "t": "Marriage Compatibility — Minh Bao Zi Wei Dou Shu",
+  "h": "4fd9f105"
+ },
+ "vanhan.12-thang-am-lich-toi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>Next 12<br>lunar months</span>",
+  "h": "3a53657a"
+ },
+ "vanhan.ban-van-han-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>Sample Luck Outlook</b><span>Download the full PDF reading of a sample chart to preview the real content.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-van-han-nam.pdf\" target=\"_blank\" rel=\"noopener\">Download PDF →</a>",
+  "h": "1e9bfd0f"
+ },
+ "vanhan.dang-dung": {
+  "t": "<span class=\"ic\" id=\"vhBtnPdfIcon\"><span class=\"rr-spin\"></span></span> <span id=\"vhBtnPdfLabel\">Building…</span>",
+  "h": "2acb933e"
+ },
+ "vanhan.luan-giai-day-du": {
+  "t": "Full reading →",
+  "h": "a2830f82"
+ },
+ "vanhan.mot-nam-12-thang-khong-thang": {
+  "t": "No two of the 12 months in a year are alike — some months are good for moving forward, others are for holding steady and waiting. Read each month's outlook from your chart so you can act ahead instead of just reacting.",
+  "h": "cc7a0558"
+ },
+ "vanhan.nhap-ngay-gio-sinh-he-thong": {
+  "t": "Enter your birth date and time. The system reads your luck month by lunar month — your current major cycle, this year's annual luck, and a separate reading for all 12 months.",
+  "h": "843980b9"
+ },
+ "vanhan.nhap-ngay-sinh-de-xem-van": {
+  "t": "Enter your birth date to see your next 12 months",
+  "h": "6d4946bd"
+ },
+ "vanhan.tai-anh-chia-se-9-16": {
+  "t": "⬇ Download share image (9:16)",
+  "h": "9e425572"
+ },
+ "vanhan.tai-chinh-tung-thang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"dollar-sign\"></span><span>Finances<br>month by month</span>",
+  "h": "be559339"
+ },
+ "vanhan.tinh-duyen-tung-thang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>Love<br>month by month</span>",
+  "h": "74f37a3c"
+ },
+ "vanhan.van-han-12-thang-toi": {
+  "t": "Next 12 Months",
+  "h": "f265e49d"
+ },
+ "vanhan.van-han-12-thang-toi-tieu": {
+  "t": "<b>Next 12 Months</b><span>Annual luck and each month's luck, counted from today</span>",
+  "h": "ee5bb33f"
+ },
+ "vanhan.van-han-12-thang-toi-tu": {
+  "t": "Next 12 Months — Minh Bao Zi Wei Dou Shu",
+  "h": "8209452b"
+ },
+ "vanhan.xem-van-han-12-thang-toi": {
+  "t": "See your next 12 months counted from today: annual luck and each month's luck by luck palace, stars and luck structure — a separate classical reading for every month.",
+  "h": "b5015abf"
+ },
+ "vanhan.xem-van-han-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"calendar\"></span><b id=\"btnGoLabel\">See your outlook →</b></span> <small>Free</small>",
+  "h": "3895d3c5"
  }
 }
