@@ -273,7 +273,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
   <div class="page-header">
     <div data-i18n="topup.dong-gop-duy-tri" class="eyebrow">Đóng Góp Duy Trì</div>
     <h1 data-i18n="topup.nap-luong-de-tra-cuu-menh">Nạp Lượng để Tra Cứu Mệnh Lý</h1>
-    <p data-i18n="topup.luong-la-don-vi-dung-cho">Lượng là đơn vị dùng cho các công cụ luận giải chuyên sâu. Mua theo gói, <strong>không hết hạn</strong>, <span id="hdrRate">gói càng lớn càng rẻ</span>.</p>
+    <p><span data-i18n="topup.luong-la-don-vi-dung-cho">Lượng là đơn vị dùng cho các công cụ luận giải chuyên sâu. Mua theo gói, <strong>không hết hạn</strong>,</span> <span id="hdrRate" data-i18n="topup.goi-cang-lon-cang-re">gói càng lớn càng rẻ</span>.</p>
   </div>
 
   <!-- Số dư (đã đăng nhập) HOẶC quà chào mừng (chưa đăng nhập) — cùng MỘT chỗ,
@@ -328,13 +328,13 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         <button type="button" class="pay-method" id="mPaypal" aria-pressed="true" onclick="setMethod('paypal')">
           <span data-icon="wallet"></span> PayPal
         </button>
-        <button data-i18n="topup.the-visa-mastercard" type="button" class="pay-method" id="mCard" aria-pressed="false" onclick="setMethod('card')">
-          <span data-icon="credit-card"></span> Thẻ Visa / Mastercard
+        <button type="button" class="pay-method" id="mCard" aria-pressed="false" onclick="setMethod('card')">
+          <span data-icon="credit-card"></span> <span data-i18n="topup.the-visa-mastercard">Thẻ Visa / Mastercard</span>
         </button>
         <!-- W5: rail VNĐ ẩn mặc định — chỉ hiện khi `/api/payment?action=pay-methods`
              trả `bank:true` (cờ `app_config['billing.vnd_rails_enabled']`). -->
-        <button data-i18n="topup.chuyen-khoan-qr" type="button" class="pay-method" id="mBank" aria-pressed="false" onclick="setMethod('bank')" hidden>
-          <span data-icon="landmark"></span> Chuyển khoản QR
+        <button type="button" class="pay-method" id="mBank" aria-pressed="false" onclick="setMethod('bank')" hidden>
+          <span data-icon="landmark"></span> <span data-i18n="topup.chuyen-khoan-qr">Chuyển khoản QR</span>
         </button>
         <!-- Ẩn mặc định — chỉ hiện khi `/api/payment?action=momo-status` xác
              nhận CÓ cấu hình (Henry đăng ký merchant xong), xem `checkMomoAvailable()`.
@@ -360,8 +360,8 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
     </div>
 
     <div class="custom-card">
-      <div data-i18n="topup.so-tien-khac" class="custom-label">
-        <strong>Số tiền khác</strong>
+      <div class="custom-label">
+        <strong data-i18n="topup.so-tien-khac">Số tiền khác</strong>
         <span id="customRateNote">…</span>
       </div>
       <div class="custom-field">
@@ -375,9 +375,9 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
   <!-- ── CHI PHÍ CÔNG CỤ ── -->
   <section class="panel">
-    <h2 data-i18n="topup.chi-phi-cac-cong-cu"><span data-icon="wallet"></span> Chi Phí Các Công Cụ</h2>
+    <h2><span data-icon="wallet"></span> <span data-i18n="topup.chi-phi-cac-cong-cu">Chi Phí Các Công Cụ</span></h2>
     <p data-i18n="topup.cap-nhat-tu-dong-khi-co" class="panel-sub" id="costsSubtitle">Cập nhật tự động khi có công cụ mới.</p>
-    <div id="costsContent"><div data-i18n="topup.dang-tai" class="state-msg"><span data-icon="rotate-cw" class="spin"></span> Đang tải…</div></div>
+    <div id="costsContent"><div class="state-msg"><span data-icon="rotate-cw" class="spin"></span> <span data-i18n="topup.dang-tai">Đang tải…</span></div></div>
     <div class="free-note" id="freeNote" style="display:none">
       <span data-icon="check-circle"></span>
       <div id="freeNoteText"></div>
@@ -390,7 +390,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
        khối này thì mã in trên clip chỉ dùng được đúng một lần trong đời mỗi
        người, ngay lúc đăng ký — và ai lỡ tay là mất hẳn đường. -->
   <section class="panel" id="promoSection" style="display:none">
-    <h2 data-i18n="topup.nhap-ma-khuyen-mai"><span data-icon="wallet-cards"></span> Nhập Mã Khuyến Mãi</h2>
+    <h2><span data-icon="wallet-cards"></span> <span data-i18n="topup.nhap-ma-khuyen-mai">Nhập Mã Khuyến Mãi</span></h2>
     <p data-i18n="topup.co-ma-tu-clip-hoac-chuong" class="panel-sub">Có mã từ clip hoặc chương trình khuyến mãi? Nhập vào đây để cộng Lượng ngay.</p>
     <div class="ref-box">
       <div class="ref-line">
@@ -406,18 +406,18 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
   <!-- ── MỜI BẠN ── -->
   <section class="panel" id="referralSection" style="display:none">
-    <h2 data-i18n="topup.moi-ban-cung-nhan-luong"><span data-icon="gift"></span> Mời Bạn — Cùng Nhận Lượng</h2>
+    <h2><span data-icon="gift"></span> <span data-i18n="topup.moi-ban-cung-nhan-luong">Mời Bạn — Cùng Nhận Lượng</span></h2>
     <p data-i18n="topup.moi-ban-dang-ky-ban-nhan" class="panel-sub" id="refPitchTopup">Mời bạn đăng ký → bạn nhận Lượng ngay khi họ tạo tài khoản.</p>
     <div class="ref-box">
       <div class="ref-line">
         <div data-i18n="topup.ma-gioi-thieu-cua-ban" class="ref-line-label">Mã giới thiệu của bạn:</div>
         <div class="ref-code" id="refCode">—</div>
-        <button data-i18n="topup.sao-chep" class="btn-copy" id="btnCopyRef" style="margin-left:auto" onclick="copyRefCode()"><span data-icon="clipboard"></span> <span>Sao chép</span></button>
+        <button class="btn-copy" id="btnCopyRef" style="margin-left:auto" onclick="copyRefCode()"><span data-icon="clipboard"></span> <span data-i18n="topup.sao-chep">Sao chép</span></button>
       </div>
       <div class="ref-line">
         <div data-i18n="topup.link-moi" class="ref-line-label">Link mời:</div>
         <code class="ref-link" id="refLink">—</code>
-        <button data-i18n="topup.sao-chep-link" class="btn-copy ghost" id="btnCopyLink" onclick="copyRefLink()"><span data-icon="link"></span> <span>Sao chép link</span></button>
+        <button class="btn-copy ghost" id="btnCopyLink" onclick="copyRefLink()"><span data-icon="link"></span> <span data-i18n="topup.sao-chep-link">Sao chép link</span></button>
       </div>
       <div class="ref-share">
         <button class="btn-share" style="background:#0068ff" onclick="shareRef('zalo')">Zalo</button>
@@ -426,16 +426,16 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         <button class="btn-share" style="background:#25d366" onclick="shareRef('whatsapp')">WhatsApp</button>
       </div>
       <div class="ref-stats">
-        <div data-i18n="topup.da-moi">Đã mời: <strong id="refTotal" style="color:var(--navy)">—</strong></div>
-        <div data-i18n="topup.da-nap-lan-dau">Đã nạp lần đầu: <strong id="refQualified" style="color:var(--green)">—</strong></div>
-        <div data-i18n="topup.da-nhan-luong">Đã nhận: <strong id="refEarned" style="color:var(--gold)">—</strong> Lượng</div>
+        <div><span data-i18n="topup.da-moi">Đã mời:</span> <strong id="refTotal" style="color:var(--navy)">—</strong></div>
+        <div><span data-i18n="topup.da-nap-lan-dau">Đã nạp lần đầu:</span> <strong id="refQualified" style="color:var(--green)">—</strong></div>
+        <div><span data-i18n="topup.da-nhan-luong">Đã nhận:</span> <strong id="refEarned" style="color:var(--gold)">—</strong> <span data-i18n="topup.luong-don-vi">Lượng</span></div>
       </div>
     </div>
   </section>
 
   <!-- ── FAQ ── -->
   <section class="panel">
-    <h2 data-i18n="topup.cau-hoi-thuong-gap"><span data-icon="message-circle"></span> Câu Hỏi Thường Gặp</h2>
+    <h2><span data-icon="message-circle"></span> <span data-i18n="topup.cau-hoi-thuong-gap">Câu Hỏi Thường Gặp</span></h2>
     <div class="faq-item">
       <div data-i18n="topup.luong-co-het-han-khong" class="faq-q">Lượng có hết hạn không?</div>
       <div data-i18n="topup.khong-bao-gio-luong-duoc-luu" class="faq-a">Không bao giờ. Lượng được lưu vĩnh viễn trong tài khoản.</div>
@@ -464,6 +464,18 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 </main>
 
 <script>
+// i18n: _tvmbT/_tvmbHref là hàm toàn cục của auth.js. Trang này phải chạy được cả khi auth.js
+// lỗi tải (mọi chỗ khác dùng `window.Auth?.`) ⇒ bản dự phòng tối thiểu, cùng hành vi; auth.js
+// có mặt thì giữ bản của nó.
+if (typeof window._tvmbT !== 'function') window._tvmbT = function (k, d, v) {
+  var I = window.I18n;
+  if (I && I.tv) return I.tv(k, d, v);
+  return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
+};
+if (typeof window._tvmbHref !== 'function') window._tvmbHref = function (p) {
+  var I = window.I18n;
+  return I && I.href ? I.href(p) : p;
+};
 const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
@@ -655,8 +667,8 @@ function renderPackages() {
       + '<div class="pkg-price">' + money(priceOf(p)) + '</div>'
       + '<div class="pkg-credits">' + p.credits + _tvmbT('js.topup.luong', ' Lượng</div>')
       + '<div class="pkg-rate">' + moneyRate(rate) + _tvmbT('js.topup.luong-10zo', ' / Lượng')
-      + (save >= 5 ? _tvmbT('js.topup.re-hon', '<span class="pkg-save">rẻ hơn ') + save + '%</span>' : '') + '</div>'
-      + _tvmbT('js.topup.khong-het-han', '<div class="pkg-note">Không hết hạn</div>')
+      + (save >= 5 ? ('<span class="pkg-save">' + _tvmbT('js.topup.re-hon', 'rẻ hơn') + ' ') + save + '%</span>' : '') + '</div>'
+      + ('<div class="pkg-note">' + _tvmbT('js.topup.khong-het-han', 'Không hết hạn') + '</div>')
       // Giá đã to đùng ngay trên nút → nhắc lại trong nút là thừa. Giữ ngữ cảnh
       // cho trình đọc màn hình bằng aria-label vì 4 nút giờ đọc giống hệt nhau.
       + '<button class="btn-pkg" id="btn-' + esc(p.package_id) + '" onclick="payPackage(\'' + esc(p.package_id) + '\')"'
@@ -736,9 +748,9 @@ async function loadStatus() {
       + '<div class="welcome-ic">' + ic('gift') + '</div>'
       + '<div class="welcome-body">'
       + '<div class="welcome-title">' + (bonus ? _tvmbT('js.topup.tang', 'Tặng ') + bonus + _tvmbT('js.topup.luong-cho-thanh-vien-moi', ' Lượng cho thành viên mới') : _tvmbT('js.topup.tang-luong-mien-phi-cho-thanh', 'Tặng Lượng miễn phí cho thành viên mới')) + '</div>'
-      + _tvmbT('js.topup.du-de-dung-thu-cong-cu', '<div class="welcome-sub">Đủ để dùng thử công cụ luận giải chuyên sâu. Không cần thẻ, không cam kết.</div>')
+      + ('<div class="welcome-sub">' + _tvmbT('js.topup.du-de-dung-thu-cong-cu', 'Đủ để dùng thử công cụ luận giải chuyên sâu. Không cần thẻ, không cam kết.') + '</div>')
       + '</div>'
-      + _tvmbT('js.topup.dang-ky', '<button class="btn-free" onclick="handleFreeSignup()">Đăng Ký →</button>')
+      + ('<button class="btn-free" onclick="handleFreeSignup()">' + _tvmbT('js.topup.dang-ky', 'Đăng Ký →') + '</button>')
       + '</div>';
     ssDone(slot);
     mount(slot);
@@ -755,10 +767,10 @@ async function loadStatus() {
   try {
     const data = await (await fetch(`/api/payment?action=balance&userId=${encodeURIComponent(userId)}`, { headers: await _authHdr() })).json();
     slot.innerHTML = '<div class="balance-bar"><div>'
-      + _tvmbT('js.topup.so-du-hien-tai', '<div class="balance-label">Số dư hiện tại</div>')
+      + ('<div class="balance-label">' + _tvmbT('js.topup.so-du-hien-tai', 'Số dư hiện tại') + '</div>')
       + '<div class="balance-value">' + (data.balance ?? 0) + _tvmbT('js.topup.luong-8gog', ' <span>Lượng</span></div>')
       + '</div>'
-      + _tvmbT('js.topup.xem-lich-su', '<a class="balance-link" href="/app/ho-so">Xem lịch sử ') + ic('chevron-down') + '</a></div>';
+      + ('<a class="balance-link" href="/app/ho-so">' + _tvmbT('js.topup.xem-lich-su', 'Xem lịch sử') + ' ') + ic('chevron-down') + '</a></div>';
     ssDone(slot);
     mount(slot);
   } catch (e) {
@@ -949,7 +961,7 @@ async function loadToolPricing() {
   try {
     if (window.ToolPrices) await window.ToolPrices.load();
     const tools = window.ToolPrices ? window.ToolPrices.rows() : [];
-    if (!tools?.length) { box.innerHTML = _tvmbT('js.topup.khong-co-du-lieu', '<div class="state-msg">Không có dữ liệu.</div>'); return; }
+    if (!tools?.length) { box.innerHTML = ('<div class="state-msg">' + _tvmbT('js.topup.khong-co-du-lieu', 'Không có dữ liệu.') + '</div>'); return; }
 
     const groups = {};
     tools.forEach(t => { (groups[t.category] = groups[t.category] || []).push(t); });
@@ -999,7 +1011,7 @@ async function loadToolPricing() {
       });
     });
 
-    box.innerHTML = html || _tvmbT('js.topup.khong-co-du-lieu', '<div class="state-msg">Không có dữ liệu.</div>');
+    box.innerHTML = html || ('<div class="state-msg">' + _tvmbT('js.topup.khong-co-du-lieu', 'Không có dữ liệu.') + '</div>');
     mount(box);
 
     document.getElementById('costsSubtitle').textContent = perCredit
@@ -1019,7 +1031,7 @@ async function loadToolPricing() {
       mount(fn);
     }
   } catch (e) {
-    box.innerHTML = _tvmbT('js.topup.khong-tai-duoc-vui-long-thu', '<div class="state-msg">Không tải được. Vui lòng thử lại.</div>');
+    box.innerHTML = ('<div class="state-msg">' + _tvmbT('js.topup.khong-tai-duoc-vui-long-thu', 'Không tải được. Vui lòng thử lại.') + '</div>');
   }
 }
 
@@ -1296,8 +1308,8 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
     <div data-i18n="topup.ban-dang-mo-khoa" class="modal-title" id="pmTitle">Bạn đang mở khoá…</div>
     <div class="pm-need" id="pmNeed"></div>
     <div class="pm-actions">
-      <button data-i18n="topup.chuyen-khoan-qr" type="button" class="btn-pkg" id="pmBank" hidden><span data-icon="landmark"></span> Chuyển khoản QR</button>
-      <button data-i18n="topup.paypal-the" type="button" class="btn-pkg" id="pmPaypal"><span data-icon="credit-card"></span> PayPal / Thẻ</button>
+      <button type="button" class="btn-pkg" id="pmBank" hidden><span data-icon="landmark"></span> <span data-i18n="topup.chuyen-khoan-qr">Chuyển khoản QR</span></button>
+      <button type="button" class="btn-pkg" id="pmPaypal"><span data-icon="credit-card"></span> <span data-i18n="topup.paypal-the">PayPal / Thẻ</span></button>
     </div>
     <button data-i18n="topup.de-sau-tu-chon-goi-ben" type="button" class="pm-skip" onclick="closePendingModal()">Để sau, tự chọn gói bên dưới</button>
   </div>
@@ -1313,9 +1325,9 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
     <div class="bm-qr" id="bm-qr"></div>
     <div id="bm-apps" hidden></div>
     <div class="bm-info" id="bm-info"></div>
-    <div data-i18n="topup.mo-app-ngan-hang-quet-qr" class="bm-hint">
-      Mở app ngân hàng → Quét QR hoặc chuyển khoản thủ công<br>
-      <span class="bm-warn"><span data-icon="alert-triangle"></span> Chuyển đủ số tiền vào đúng số TK ở trên — nội dung CK ghi gì cũng được, hệ thống tự nhận theo số TK</span>
+    <div class="bm-hint">
+      <span data-i18n="topup.mo-app-ngan-hang-quet-qr">Mở app ngân hàng → Quét QR hoặc chuyển khoản thủ công</span><br>
+      <span class="bm-warn"><span data-icon="alert-triangle"></span> <span data-i18n="topup.chuyen-du-so-tien-vao-dung">Chuyển đủ số tiền vào đúng số TK ở trên — nội dung CK ghi gì cũng được, hệ thống tự nhận theo số TK</span></span>
     </div>
     <div class="bm-status" id="bm-status"></div>
     <button data-i18n="topup.toi-da-chuyen-khoan" class="btn-modal" onclick="checkBankPoll(true)">Tôi đã chuyển khoản</button>
@@ -1403,7 +1415,7 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
       img.alt = _tvmbT('js.paywall.ma-qr-chuyen-khoan', 'Mã QR chuyển khoản');
       img.onerror = function () {
         qrBox.innerHTML = '<a href="' + esc(d.checkoutUrl || '#') + '" target="_blank" rel="noopener" '
-          + _tvmbT('js.topup.style-font-size-8rem-color-var', 'style="font-size:.8rem;color:var(--blue)">Mở trang payOS →</a>');
+          + ('style="font-size:.8rem;color:var(--blue)">' + _tvmbT('js.topup.mo-trang-payos', 'Mở trang payOS →') + '</a>');
       };
       img.src = qrUrl;
       qrBox.appendChild(img);
@@ -1417,7 +1429,7 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
         _tvmbT('js.paywall.ngan-hang', '<b>Ngân hàng:</b> ') + esc(d.bankName || (d.bin ? 'BIN ' + d.bin : '—')) + '<br>'
         + _tvmbT('js.paywall.so-tk', '<b>Số TK:</b> ') + esc(d.accountNumber || '—') + '<br>'
         + _tvmbT('js.paywall.chu-tk', '<b>Chủ TK:</b> ') + esc(d.accountName || '—') + '<br>'
-        + _tvmbT('js.topup.noi-dung-ck', '<b>Nội dung CK:</b> <span style="font-weight:700;color:var(--navy)">') + esc(memo) + '</span>';
+        + (_tvmbT('js.paywall.noi-dung-ck', '<b>Nội dung CK:</b>') + ' <span style="font-weight:700;color:var(--navy)">') + esc(memo) + '</span>';
 
       status('clock', _tvmbT('js.paywall.dang-cho-thanh-toan', 'Đang chờ thanh toán…'));
       clearInterval(_timer);

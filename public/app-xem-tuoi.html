@@ -410,7 +410,7 @@ function doCompat(){
     initXemTuoiGate(r,nameA,nameB);
     mountHook(r,nameA,nameB);
   }catch(e){
-    document.getElementById('xtBody').innerHTML=_tvmbT('js.xemtuoi.loi-khi-so-tuoi', '<div class="laso-error">Lỗi khi so tuổi: ')+esc(e.message)+'</div>';
+    document.getElementById('xtBody').innerHTML=('<div class="laso-error">' + _tvmbT('js.xemtuoi.loi-khi-so-tuoi', 'Lỗi khi so tuổi:') + ' ')+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('xtPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
@@ -895,7 +895,7 @@ async function _loadNextPhanAI(){
   var w=null;
   if(box){
     box.style.display='block';
-    box.innerHTML=_tvmbT('js.battu.dang-luan-giai', '<div class="phan-empty">Đang luận giải…</div>');
+    box.innerHTML=('<div class="phan-empty">' + _tvmbT('js.battu.dang-luan-giai', 'Đang luận giải…') + '</div>');
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
       w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+(idx+1)+'…',
         expectSec:(_xtPace&&_xtPace.perPartSec())||0,expectText:(_xtPace&&_xtPace.perPartText())||'',center:true});
@@ -923,7 +923,7 @@ async function _loadNextPhanAI(){
     if(box)box.innerHTML=renderLuanGiaiParas(text,illusFigFor(box));
   }catch(e){
     doneWait();
-    if(box)box.innerHTML=_tvmbT('js.battu.loi-khi-luan-giai-phan', '<div class="laso-error">Lỗi khi luận giải phần ')+(idx+1)+': '+esc(e.message)+_tvmbT('js.xemtuoi.thu-lai', ' <button class="btn" onclick="window._xtRetryPhan()">↻ Thử lại</button></div>');
+    if(box)box.innerHTML=('<div class="laso-error">' + _tvmbT('js.battu.loi-khi-luan-giai-phan', 'Lỗi khi luận giải phần') + ' ')+(idx+1)+': '+esc(e.message)+(' <button class="btn" onclick="window._xtRetryPhan()">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
     return;
   }
   await _loadNextPhanAI();

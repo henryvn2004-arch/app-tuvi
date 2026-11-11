@@ -42,6 +42,27 @@ const fail = (m) => errors.push(m);
 const vi = loadVi();
 const dicts = loadAllDicts();
 
+// ── 0. tự kiểm: validateTranslation PHẢI bắt bản dịch làm rơi/sửa thuộc tính máy ──
+// (bộ dò "xanh oan" nguy hơn đỏ oan — mỗi ca đột biến dưới đây phải bị từ chối).
+{
+  const vi0 = 'Đã mời: <strong id="refTotal" data-k="a" onclick="go(1)">—</strong>';
+  const ok0 = 'Invited: <strong id="refTotal" data-k="a" onclick="go(1)">—</strong>';
+  const mutants = [
+    'Invited: <strong data-k="a" onclick="go(1)">—</strong>', // rơi id
+    'Invited: <strong id="refTotl" data-k="a" onclick="go(1)">—</strong>', // sửa giá trị id
+    'Invited: <strong id="refTotal" onclick="go(1)">—</strong>', // rơi data-*
+    'Invited: <strong id="refTotal" data-k="a" onclick="go(2)">—</strong>', // sửa handler
+  ];
+  if (validateTranslation(vi0, ok0, 'en'))
+    fail('core.mjs tagSignature: bản dịch GIỮ ĐỦ thuộc tính máy lại bị từ chối');
+  if (validateTranslation('<span title="Mở">Mở</span>', '<span title="Open">Open</span>', 'en'))
+    fail('core.mjs tagSignature: thuộc tính CHỮ (title) phải được dịch tự do');
+  mutants.forEach((m, i) => {
+    if (!validateTranslation(vi0, m, 'en'))
+      fail(`core.mjs tagSignature: đột biến #${i + 1} (rơi/sửa id·data-*·on*) KHÔNG bị bắt`);
+  });
+}
+
 // ── 1. khoá phải có trong vi.json ───────────────────────────────────────────
 const htmlFiles = fs.readdirSync(PUBLIC).filter((f) => f.endsWith('.html'));
 for (const f of htmlFiles) {

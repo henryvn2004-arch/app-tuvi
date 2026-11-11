@@ -673,7 +673,7 @@ function appendHookHighlightCard(){
     if(ab) ab.click();
   });
   var follow=document.createElement('div'); follow.className='msg a';
-  follow.innerHTML='<img class="msg-ava" src="'+av+_tvmbT('js.battu.alt-ban-muon-thay-dao-sau', '" alt=""><div class="msg-body"><p>Bạn muốn thầy đào sâu điều nào trước?</p></div>');
+  follow.innerHTML='<img class="msg-ava" src="'+av+('" alt=""><div class="msg-body"><p>' + _tvmbT('js.battu.ban-muon-thay-dao-sau-dieu', 'Bạn muốn thầy đào sâu điều nào trước?') + '</p></div>');
   chat.appendChild(follow);
   chat.scrollTop=chat.scrollHeight;
 }
@@ -759,7 +759,7 @@ async function doLuan(){
     if(window.CungNgaySinh)CungNgaySinh.mount('cnsHost',{ngay:dd,thang:mm,nam:yyyy,gioIdx:gioAmIdx,gioitinh:gioitinh});
     if(window.NguoiThan)NguoiThan.mount('ntHost',{toolId:'luan-giai',onPick:nguoiThanPick});
   }catch(e){
-    document.getElementById('lgBody').innerHTML=_tvmbT('js.luangiai.loi-khi-luan-giai', '<div class="laso-error">Lỗi khi luận giải: ')+esc(e.message)+'</div>';
+    document.getElementById('lgBody').innerHTML=('<div class="laso-error">' + _tvmbT('js.luangiai.loi-khi-luan-giai', 'Lỗi khi luận giải:') + ' ')+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('lgPanel').style.display='block';
     _hideIntakeSideBoxes();
@@ -1455,7 +1455,7 @@ function _renderSavePrompt(){
   if(_lgLoggedIn()){ host.style.display='none'; host.innerHTML=''; return; }
   host.className='lg-save-prompt';
   host.style.display='flex';
-  host.innerHTML=_tvmbT('js.luangiai.luu-la-so-nay-de-xem', '<div class="lsp-txt">✦ <b>Lưu lá số này</b> để xem lại bất cứ lúc nào — miễn phí, không cần trả gì.</div>')+
+  host.innerHTML=('<div class="lsp-txt">' + _tvmbT('js.luangiai.luu-la-so-nay-de-xem', '✦ <b>Lưu lá số này</b> để xem lại bất cứ lúc nào — miễn phí, không cần trả gì.') + '</div>')+
     '<button type="button" id="lgSaveBtn">Đăng ký lưu →</button>';
   document.getElementById('lgSaveBtn').addEventListener('click', function(){
     if(window.showAuthModal){
@@ -1467,7 +1467,7 @@ function _renderSavePrompt(){
         // tự bật push ở đây, chỉ dẫn sang /app nơi nhiệm vụ "Bật thông báo"
         // (Khởi Hành, +10 Lượng, app-home.html) đã xử lý toàn bộ luồng xin
         // quyền. Đây là chỗ NỐI, không phải xây lại.
-        host.innerHTML=_tvmbT('js.luangiai.da-luu-la-so-nay-vao', '<div class="lsp-txt">✓ Đã lưu lá số này vào tài khoản của bạn. <a href="/app" style="color:var(--navy);font-weight:600">Bật thông báo để nhận vận mỗi ngày →</a></div>');
+        host.innerHTML=('<div class="lsp-txt">' + _tvmbT('js.luangiai.da-luu-la-so-nay-vao', '✓ Đã lưu lá số này vào tài khoản của bạn.') + ' <a href="/app" style="color:var(--navy);font-weight:600">' + _tvmbT('js.luangiai.bat-thong-bao-de-nhan-van', 'Bật thông báo để nhận vận mỗi ngày →') + '</a></div>');
         window.refreshNavCredits&&window.refreshNavCredits();
       });
     }
@@ -1594,7 +1594,7 @@ function _renderUnlockBlock(){
   // DOM) cũng bật khoá-mini của chính nó, để cuộn qua khỏi banner vẫn còn chỗ mở.
   _paintSecLocks(true);
   if(_lgLoggedIn()){
-    host.innerHTML=_tvmbT('js.luangiai.luan-giai-chuyen-sau-luong', '<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau(\'wall\')">✦ Luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button>')+
+    host.innerHTML=('<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau(\'wall\')">' + _tvmbT('js.luangiai.luan-giai-chuyen-sau', '✦ Luận giải chuyên sâu —') + ' <span data-tvp-price="laso">…</span> ' + _tvmbT('js.luangiai.luong', 'Lượng →') + '</button>')+
       '<p>Bạn vừa đọc 1 phần đầu miễn phí. 12 phần còn lại — mỗi cung một phần luận riêng theo cổ pháp — nằm trong bản đầy đủ, kèm bản PDF tải về hoặc gửi qua email.</p>';
     TuviPaywall.fillPriceSlots(host);
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
@@ -1821,7 +1821,7 @@ async function _runPhanLuanGiai(p,preview){
   var w=null;
   if(box){
     box.style.display='block';
-    box.innerHTML=_tvmbT('js.battu.dang-luan-giai', '<div class="phan-empty">Đang luận giải…</div>');
+    box.innerHTML=('<div class="phan-empty">' + _tvmbT('js.battu.dang-luan-giai', 'Đang luận giải…') + '</div>');
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
       // `center`/`orbSize`/`fast` — cùng chỉnh với app-chu-trinh-cuoc-doi.html
       // (Henry: "canh vòng tròn ngay giữa khung, to hơn, glow nhanh hơn để
@@ -1853,7 +1853,7 @@ async function _runPhanLuanGiai(p,preview){
       doneWait();
       _lgLastPreviewDenyReason=data.reason||null;
       if(window.TuviPaywall&&TuviPaywall.showRefundNotice)TuviPaywall.showRefundNotice(data);
-      if(box)box.innerHTML=preview?'':_tvmbT('js.battu.loi-khi-luan-giai-phan', '<div class="laso-error">Lỗi khi luận giải phần ')+p+'. <button class="btn" onclick="window._lgRetryPhan('+p+_tvmbT('js.luangiai.thu-lai', ')">↻ Thử lại</button></div>');
+      if(box)box.innerHTML=preview?'':('<div class="laso-error">' + _tvmbT('js.battu.loi-khi-luan-giai-phan', 'Lỗi khi luận giải phần') + ' ')+p+'. <button class="btn" onclick="window._lgRetryPhan('+p+(')">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
       return false;
     }
     // GIỮ NGUYÊN bản ĐẦY ĐỦ trong _luanGiaiStore — đây là thứ `_startLuanGiaiAI`
@@ -1877,7 +1877,7 @@ async function _runPhanLuanGiai(p,preview){
     return true;
   }catch(e){
     doneWait();
-    if(box)box.innerHTML=preview?'':_tvmbT('js.luangiai.loi-phan', '<div class="laso-error">Lỗi phần ')+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan('+p+_tvmbT('js.luangiai.thu-lai', ')">↻ Thử lại</button></div>');
+    if(box)box.innerHTML=preview?'':('<div class="laso-error">' + _tvmbT('js.luangiai.loi-phan', 'Lỗi phần') + ' ')+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan('+p+(')">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
     return false;
   }
 }

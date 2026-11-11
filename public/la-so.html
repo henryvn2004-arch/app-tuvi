@@ -378,7 +378,7 @@ function doAnSao(){
     const hh=parseInt(document.getElementById('inp-hh').value)||0;
     const pp=parseInt(document.getElementById('inp-pp').value)||0;
     if(!dd||!mm||!yyyy){
-      document.getElementById('laso-grid-container').innerHTML=_tvmbT('js.laso.vui-long-nhap-day-du-ngay', '<div class="error-msg">Vui lòng nhập đầy đủ ngày tháng năm sinh.</div>');
+      document.getElementById('laso-grid-container').innerHTML=('<div class="error-msg">' + _tvmbT('js.laso.vui-long-nhap-day-du-ngay', 'Vui lòng nhập đầy đủ ngày tháng năm sinh.') + '</div>');
       document.getElementById('grid-wrap').style.display='block';
       return;
     }

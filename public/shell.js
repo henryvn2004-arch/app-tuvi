@@ -711,8 +711,8 @@
     var box = document.createElement('div');
     box.className = 'ws-art-ctl';
     box.innerHTML =
-      T('js.shellui.text', '<button type="button" class="ws-art-btn" data-art="wide" data-tip="Mở rộng" aria-label="Mở rộng">') + svg('maximize') + '</button>' +
-      T('js.shellui.text-cvvj', '<button type="button" class="ws-art-btn" data-art="close" data-tip="Đóng" aria-label="Đóng">') + svg('x') + '</button>';
+      ('<button type="button" class="ws-art-btn" data-art="wide" data-tip="' + T('js.shellui.mo-rong', 'Mở rộng') + '" aria-label="' + T('js.shellui.mo-rong', 'Mở rộng') + '">') + svg('maximize') + '</button>' +
+      ('<button type="button" class="ws-art-btn" data-art="close" data-tip="' + T('js.shellui.dong', 'Đóng') + '" aria-label="' + T('js.shellui.dong', 'Đóng') + '">') + svg('x') + '</button>';
     top.appendChild(box);
     box.addEventListener('click', function (e) {
       var b = e.target.closest('[data-art]'); if (!b) return;
@@ -744,8 +744,8 @@
       // ☰ mở sidebar trên điện thoại — từ 2026-09-26 không còn tabbar dưới
       // đáy, khung chat phủ toàn màn phải tự có lối vào điều hướng. Màn chat
       // trang chủ: đầu khung là MINH BẢO (ấn) cho tới khi một thầy được mời vào.
-      T('js.shellui.text-1csk', '<button class="rh-btn rh-menu mobile-only" type="button" data-act="sb-open" data-tip="Mở thanh bên" aria-label="Mở thanh bên">') + svg('menu') + '</button>' +
-      '<img class="rail-ava" src="' + (CHAT_HOME && !_navDone ? '/seal-128.webp' : authorAva()) + T('js.shellui.alt-hoi-thay-data-tip-doi', '" alt="Hỏi Thầy" data-tip="Đổi thầy luận giải">') +
+      ('<button class="rh-btn rh-menu mobile-only" type="button" data-act="sb-open" data-tip="' + T('js.shellui.mo-thanh-ben', 'Mở thanh bên') + '" aria-label="' + T('js.shellui.mo-thanh-ben', 'Mở thanh bên') + '">') + svg('menu') + '</button>' +
+      '<img class="rail-ava" src="' + (CHAT_HOME && !_navDone ? '/seal-128.webp' : authorAva()) + ('" alt="' + T('js.nav.hoi-thay', 'Hỏi Thầy') + '" data-tip="' + T('js.shellui.doi-thay-luan-giai', 'Đổi thầy luận giải') + '">') +
       // id="railHTitle": Henry 2026-09-23 — bấm gợi ý chuyển tool NGAY TRONG
       // rail (startInlineTool, không điều hướng trang) thì tiêu đề đổi sang
       // TÊN TOOL thay vì tên chung "Trợ lý Luận Đường", cho biết đang ở luồng
@@ -763,18 +763,18 @@
         (CHAT_HOME
           ? ''
           : CHATFIRST
-          ? T('js.shellui.text-x08w', '<button class="rh-btn mobile-only rh-back" data-tip="Đóng, xem kết quả" aria-label="Đóng, xem kết quả" data-act="rail-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M15 5 8 12l7 7"/></svg></button>') +
-            T('js.shellui.ket-qua-uud5', '<button class="rh-btn rh-art" data-tip="Xem kết quả" aria-label="Xem kết quả" data-act="artifact">Kết quả</button>')
-          : T('js.shellui.text-2pfn', '<button class="rh-btn mobile-only" data-tip="Đóng" aria-label="Đóng" data-act="rail-close">✕</button>')) +
-        (HIST_ON && !CHAT_HOME ? T('js.shellui.text-rp08', '<button class="rh-btn" data-tip="Lịch sử hội thoại" aria-label="Lịch sử hội thoại" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></button>') : '') +
-        T('js.shellui.text-ewin', '<button class="rh-btn" data-tip="Chia sẻ phiên" aria-label="Chia sẻ phiên" data-act="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>') +
-        T('js.shellui.text-g12p', '<button class="rh-btn" data-tip="Hội thoại mới" aria-label="Hội thoại mới" data-act="newchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg></button>') +
+          ? ('<button class="rh-btn mobile-only rh-back" data-tip="' + T('js.shellui.dong-xem-ket-qua', 'Đóng, xem kết quả') + '" aria-label="' + T('js.shellui.dong-xem-ket-qua', 'Đóng, xem kết quả') + '" data-act="rail-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M15 5 8 12l7 7"/></svg></button>') +
+            ('<button class="rh-btn rh-art" data-tip="' + T('js.shellui.xem-ket-qua', 'Xem kết quả') + '" aria-label="' + T('js.shellui.xem-ket-qua', 'Xem kết quả') + '" data-act="artifact">' + T('js.shellui.ket-qua', 'Kết quả') + '</button>')
+          : ('<button class="rh-btn mobile-only" data-tip="' + T('js.shellui.dong', 'Đóng') + '" aria-label="' + T('js.shellui.dong', 'Đóng') + '" data-act="rail-close">✕</button>')) +
+        (HIST_ON && !CHAT_HOME ? ('<button class="rh-btn" data-tip="' + T('js.shellui.lich-su-hoi-thoai', 'Lịch sử hội thoại') + '" aria-label="' + T('js.shellui.lich-su-hoi-thoai', 'Lịch sử hội thoại') + '" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></button>') : '') +
+        ('<button class="rh-btn" data-tip="' + T('js.shellui.chia-se-phien', 'Chia sẻ phiên') + '" aria-label="' + T('js.shellui.chia-se-phien', 'Chia sẻ phiên') + '" data-act="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>') +
+        ('<button class="rh-btn" data-tip="' + T('js.shellui.hoi-thoai-moi', 'Hội thoại mới') + '" aria-label="' + T('js.shellui.hoi-thoai-moi', 'Hội thoại mới') + '" data-act="newchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg></button>') +
       '</div></header>' +
       (HIST_ON ? '<div class="rail-hist" id="railHist" style="display:none"></div>' : '') +
       '<div class="ctx" id="railCtx" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:13px;height:13px;flex:0 0 auto"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg> <span id="railCtxTxt"></span></div>' +
       '<button type="button" class="rail-report" id="railReport" style="display:none"></button>' +
       '<div class="chat" id="chat">' +
-        '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="' + authorAva() + T('js.shellui.alt-chua-co-la-so-nao', '" alt=""></div><b>Chưa có lá số nào</b>') +
+        '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="' + authorAva() + ('" alt=""></div>' + T('js.shellui.chua-co-la-so-nao', '<b>Chưa có lá số nào</b>')) +
         T('js.shellui.ban-lap-la-so-o-khung', '<p>Bạn lập lá số ở khung giữa xong, thầy trả lời liền —<br>chuyện sự nghiệp, tình duyên, năm nay, tháng tới, hỏi gì cũng được.</p></div>') +
       '</div>' +
       '<div class="rail-meter" id="railMeter" style="display:none"></div>' +
@@ -783,12 +783,12 @@
       '<div class="rail-thumbs" id="railThumbs" style="display:none"></div>' +
       // Lối sang Zalo cho CẢM ỨNG: trên điện thoại rail phủ kín màn hình, che
       // mất nút Zalo của cụm FAB (xem khối ZALO OA). Máy tính ẩn bằng CSS.
-      '<a class="rail-zalo" id="railZalo" href="' + ZALO_OA_URL + T('js.shellui.target-blank-rel-noopener-zalo-hoac', '" target="_blank" rel="noopener"><span class="zl-badge" aria-hidden="true">Zalo</span><span>Hoặc nhắn thầy ngay trong <b>Zalo</b> <span aria-hidden="true">→</span></span></a>') +
+      '<a class="rail-zalo" id="railZalo" href="' + ZALO_OA_URL + ('" target="_blank" rel="noopener"><span class="zl-badge" aria-hidden="true">' + T('js.shellui.zalo', 'Zalo') + '</span><span>' + T('js.shellui.hoac-nhan-thay-ngay-trong-zalo', 'Hoặc nhắn thầy ngay trong <b>Zalo</b>') + ' <span aria-hidden="true">→</span></span></a>') +
       '<div class="rail-in">' +
-        T('js.shellui.text-hzpo', '<button class="rail-attach" id="railAttach" data-act="attach" data-tip="Lập lá số trước đã" aria-label="Gửi ảnh" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg></button>') +
+        ('<button class="rail-attach" id="railAttach" data-act="attach" data-tip="' + T('js.shellui.lap-la-so-truoc-da', 'Lập lá số trước đã') + '" aria-label="' + T('js.shellui.gui-anh', 'Gửi ảnh') + '" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg></button>') +
         '<input type="file" id="railFile" accept="image/*" multiple hidden>' +
-        T('js.shellui.text-6ojr', '<textarea id="railInput" rows="1" placeholder="Lập lá số để bắt đầu hỏi…" disabled></textarea>') +
-        T('js.shellui.text-vvf8', '<button class="send" id="railSend" disabled data-act="send" data-tip="Gửi" aria-label="Gửi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>');
+        ('<textarea id="railInput" rows="1" placeholder="' + T('js.shellui.lap-la-so-de-bat-dau', 'Lập lá số để bắt đầu hỏi…') + '" disabled></textarea>') +
+        ('<button class="send" id="railSend" disabled data-act="send" data-tip="' + T('js.shellui.gui', 'Gửi') + '" aria-label="' + T('js.shellui.gui', 'Gửi') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>');
     host.querySelector('[data-act="send"]').addEventListener('click', sendMsg);
     host.querySelector('#railZalo').addEventListener('click', function () { zlTrack('rail'); });
     host.querySelector('[data-act="newchat"]').addEventListener('click', newChat);
@@ -1608,17 +1608,17 @@
   }
   // ── UI: panel lịch sử trong rail ──
   function histPanelHTML(list) {
-    if (!list.length) return T('js.shellui.chua-co-phien-nao-duoc-luu', '<div class="rh-empty">Chưa có phiên nào được lưu.</div>');
+    if (!list.length) return ('<div class="rh-empty">' + T('js.shellui.chua-co-phien-nao-duoc-luu', 'Chưa có phiên nào được lưu.') + '</div>');
     return list.map(function (s) {
       return '<div class="rh-item" data-id="' + esc(s.id) + '">' +
         '<div class="rh-main"><div class="rh-t">' + esc(s.title || T('js.shellui.phien', 'Phiên')) + '</div>' +
         '<div class="rh-sub">' + esc(relTime(s.updatedAt)) + (s.lastMsg ? ' · ' + esc(s.lastMsg.slice(0, 44)) : '') + '</div></div>' +
-        '<button class="rh-del" data-del="' + esc(s.id) + T('js.shellui.data-tip-xoa-phien-aria-label', '" data-tip="Xoá phiên" aria-label="Xoá phiên">×</button></div>');
+        '<button class="rh-del" data-del="' + esc(s.id) + ('" data-tip="' + T('js.shellui.xoa-phien', 'Xoá phiên') + '" aria-label="' + T('js.shellui.xoa-phien', 'Xoá phiên') + '">×</button></div>');
     }).join('');
   }
   function renderHistInto(el) {
     histListAll(ACTIVE, function (list) {
-      el.innerHTML = T('js.shellui.lich-su', '<div class="rh-head"><span>Lịch sử · ') + esc(toolLabel(ACTIVE)) + T('js.shellui.text-pdfk', '</span><button class="rh-x" data-act="hist-close" aria-label="Đóng">×</button></div>') +
+      el.innerHTML = ('<div class="rh-head"><span>' + T('js.shellui.lich-su', 'Lịch sử ·') + ' ') + esc(toolLabel(ACTIVE)) + ('</span><button class="rh-x" data-act="hist-close" aria-label="' + T('js.shellui.dong', 'Đóng') + '">×</button></div>') +
         '<div class="rh-list">' + histPanelHTML(list) + '</div>';
       wireHist(el);
     });
@@ -1684,8 +1684,8 @@
       // Đếm số phiên theo LÁ SỐ để nói "· 3 phiên" thay vì bày 3 dòng trông y hệt.
       var cnt = {};
       list.forEach(function (s) { var k = sessBirthKey(s); if (k) cnt[k] = (cnt[k] || 0) + 1; });
-      el.innerHTML = T('js.shellui.phien-gan-day', '<div class="recent-h"><span>Phiên gần đây</span>') +
-        (list.length > RECENT_SHOW ? T('js.shellui.tat-ca', '<button type="button" class="recent-all" data-act="recent-all">Tất cả (') + list.length + ') ›</button>' : '') +
+      el.innerHTML = ('<div class="recent-h"><span>' + T('js.shellui.phien-gan-day', 'Phiên gần đây') + '</span>') +
+        (list.length > RECENT_SHOW ? ('<button type="button" class="recent-all" data-act="recent-all">' + T('js.shellui.tat-ca', 'Tất cả (')) + list.length + ') ›</button>' : '') +
         '</div><div class="recent-list">' +
         list.slice(0, RECENT_SHOW).map(function (s) {
           var k = sessBirthKey(s), sub = sessSubject(s);
@@ -1863,10 +1863,10 @@
     wrap.className = 'sh-share-modal';
     wrap.innerHTML =
       '<div class="sam-card">' +
-        T('js.shellui.text-7ef5', '<button class="ssm-x" aria-label="Đóng">✕</button>') +
-        T('js.shellui.chon-thay-luan-giai', '<div class="ssm-t">Chọn thầy luận giải</div>') +
-        T('js.shellui.moi-thay-mot-van-phong-rieng', '<div class="ssm-d">Mỗi thầy một văn phong riêng. Chọn thầy hợp gu, hoặc để hệ thống chọn ngẫu nhiên.</div>') +
-        T('js.shellui.de-he-thong-chon-ngau-nhien', '<button class="sam-rand">🎲 Để hệ thống chọn ngẫu nhiên</button>') +
+        ('<button class="ssm-x" aria-label="' + T('js.shellui.dong', 'Đóng') + '">✕</button>') +
+        ('<div class="ssm-t">' + T('js.shellui.chon-thay-luan-giai', 'Chọn thầy luận giải') + '</div>') +
+        ('<div class="ssm-d">' + T('js.shellui.moi-thay-mot-van-phong-rieng', 'Mỗi thầy một văn phong riêng. Chọn thầy hợp gu, hoặc để hệ thống chọn ngẫu nhiên.') + '</div>') +
+        ('<button class="sam-rand">' + T('js.shellui.de-he-thong-chon-ngau-nhien', '🎲 Để hệ thống chọn ngẫu nhiên') + '</button>') +
         '<div class="sam-list">' + rows + '</div>' +
       '</div>';
     document.body.appendChild(wrap);
@@ -1984,15 +1984,15 @@
     wrap.className = 'sh-share-modal';
     wrap.innerHTML =
       '<div class="ssm-card">' +
-        T('js.shellui.text-7ef5', '<button class="ssm-x" aria-label="Đóng">✕</button>') +
+        ('<button class="ssm-x" aria-label="' + T('js.shellui.dong', 'Đóng') + '">✕</button>') +
         '<div class="ssm-t">' + esc(mTitle) + '</div>' +
         '<div class="ssm-d">' + esc(mDesc) + '</div>' +
-        '<div class="ssm-row"><input class="ssm-in" readonly value="' + esc(url) + T('js.shellui.sao-chep', '"><button class="ssm-copy">Sao chép</button></div>') +
+        '<div class="ssm-row"><input class="ssm-in" readonly value="' + esc(url) + ('"><button class="ssm-copy">' + T('js.shellui.sao-chep-xpx5', 'Sao chép') + '</button></div>') +
         '<div class="ssm-share">' +
           '<a class="ssm-b fb" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=' + enc + '">Facebook</a>' +
           '<a class="ssm-b zl" target="_blank" rel="noopener" href="https://zalo.me/share/link?u=' + enc + '">Zalo</a>' +
           '<a class="ssm-b wa" target="_blank" rel="noopener" href="https://api.whatsapp.com/send?text=' + encodeURIComponent(shareText + url) + '">WhatsApp</a>' +
-          '<a class="ssm-b" target="_blank" rel="noopener" href="' + esc(url) + T('js.shellui.mo', '">Mở ↗</a>') +
+          '<a class="ssm-b" target="_blank" rel="noopener" href="' + esc(url) + ('">' + T('js.shellui.mo', 'Mở ↗') + '</a>') +
         '</div>' +
       '</div>';
     document.body.appendChild(wrap);
@@ -2513,11 +2513,11 @@
       card.setAttribute('data-print-skip', '');
       card.setAttribute('role', 'dialog'); card.setAttribute('aria-label', T('js.shell.hoi-thay-qua-zalo', 'Hỏi thầy qua Zalo'));
       card.innerHTML =
-        T('js.shellui.text-mio8', '<button type="button" class="zl-x" aria-label="Đóng">✕</button>') +
+        ('<button type="button" class="zl-x" aria-label="' + T('js.shellui.dong', 'Đóng') + '">✕</button>') +
         '<div class="zl-h"><span class="zl-badge" aria-hidden="true">Zalo</span>' +
         T('js.shellui.hoi-thay-qua-zalo-quet-ma', '<div><b>Hỏi thầy qua Zalo</b><small>Quét mã bằng Zalo, nhắn câu hỏi — thầy trả lời ngay</small></div></div>') +
-        T('js.shellui.text-6c8i', '<img class="zl-qr" src="/zalo-oa-qr.png" width="168" height="168" alt="Mã QR Zalo OA Tử Vi Minh Bảo">') +
-        '<a class="zl-go" href="' + ZALO_OA_URL + T('js.shellui.target-blank-rel-noopener-mo-zalo', '" target="_blank" rel="noopener">Mở Zalo <b aria-hidden="true">→</b></a>');
+        ('<img class="zl-qr" src="/zalo-oa-qr.png" width="168" height="168" alt="' + T('js.shell.ma-qr-zalo-oa-tu-vi', 'Mã QR Zalo OA Tử Vi Minh Bảo') + '">') +
+        '<a class="zl-go" href="' + ZALO_OA_URL + ('" target="_blank" rel="noopener">' + T('js.shellui.mo-zalo', 'Mở Zalo') + ' <b aria-hidden="true">→</b></a>');
       card.querySelector('.zl-x').addEventListener('click', function () { zaloCard(false); zlTrack('close'); });
       card.querySelector('.zl-go').addEventListener('click', function () { zlTrack('go'); });
       document.body.appendChild(card);
@@ -2646,16 +2646,16 @@
     wrap.className = 'sh-share-modal';
     wrap.innerHTML =
       '<div class="ssm-card">' +
-        T('js.shellui.text-7ef5', '<button class="ssm-x" aria-label="Đóng">✕</button>') +
-        T('js.shellui.luu-ban-pdf', '<div class="ssm-t">Lưu bản PDF</div>') +
-        T('js.shellui.trinh-duyet-ben-trong', '<div class="ssm-d">Trình duyệt bên trong ') + esc(inAppName()) + T('js.shellui.khong-in-luu-pdf-truc-tiep', ' không in/lưu PDF trực tiếp được') +
+        ('<button class="ssm-x" aria-label="' + T('js.shellui.dong', 'Đóng') + '">✕</button>') +
+        ('<div class="ssm-t">' + T('js.shellui.luu-ban-pdf', 'Lưu bản PDF') + '</div>') +
+        ('<div class="ssm-d">' + T('js.shellui.trinh-duyet-ben-trong', 'Trình duyệt bên trong') + ' ') + esc(inAppName()) + T('js.shellui.khong-in-luu-pdf-truc-tiep', ' không in/lưu PDF trực tiếp được') +
           (src ? T('js.shellui.chon-mot-cach-duoi-day', ' — chọn một cách dưới đây.') : T('js.shellui.sao-chep-link-mo-bang-safari', '. Sao chép link, mở bằng Safari hoặc Chrome rồi bấm Lưu PDF.')) + '</div>' +
         (src ? '<div class="ssm-acts">' +
-          T('js.shellui.mo-file-pdf', '<button type="button" class="ssm-act pri" data-a="open">Mở file PDF</button>') +
-          (src.toChat ? T('js.shellui.gui-pdf-vao', '<button type="button" class="ssm-act" data-a="chat">Gửi PDF vào ') + esc(src.chatName || 'Zalo') + '</button>' : '') +
+          ('<button type="button" class="ssm-act pri" data-a="open">' + T('js.shellui.mo-file-pdf', 'Mở file PDF') + '</button>') +
+          (src.toChat ? ('<button type="button" class="ssm-act" data-a="chat">' + T('js.shellui.gui-pdf-vao', 'Gửi PDF vào') + ' ') + esc(src.chatName || 'Zalo') + '</button>' : '') +
         '</div>' : '') +
         '<div class="ssm-note" hidden></div>' +
-        '<div class="ssm-row"><input class="ssm-in" readonly value="' + esc(location.href) + T('js.shellui.sao-chep-link', '"><button class="ssm-copy">Sao chép link</button></div>') +
+        '<div class="ssm-row"><input class="ssm-in" readonly value="' + esc(location.href) + ('"><button class="ssm-copy">' + T('js.shellui.sao-chep-link', 'Sao chép link') + '</button></div>') +
       '</div>';
     document.body.appendChild(wrap);
     var close = _escCloses(function () { wrap.remove(); });
@@ -3077,8 +3077,8 @@
       box.id = 'shGalNote';
       box.className = 'sh-gal-note';
       box.innerHTML = T('js.shellui.da-tao-link-ban-nay-cung', '<span>Đã tạo link · bản này cũng hiện trong ') +
-        T('js.shellui.thu-vien-chung', '<a href="/thu-vien" target="_blank" rel="noopener">Thư viện chung</a></span>') +
-        T('js.shellui.an-di', '<button type="button">Ẩn đi</button>');
+        ('<a href="/thu-vien" target="_blank" rel="noopener">' + T('js.shellui.thu-vien-chung', 'Thư viện chung') + '</a></span>') +
+        ('<button type="button">' + T('js.shellui.an-di', 'Ẩn đi') + '</button>');
       host.parentNode.insertBefore(box, host.nextSibling);
       var btn = box.querySelector('button');
       btn.addEventListener('click', function () {
@@ -3370,16 +3370,16 @@
       // ĐĂNG KÝ (kèm con số cụ thể) chứ không phải nạp tiền — người chưa từng
       // dùng thì mời nạp tiền là mời quá sớm.
       txt = n === 0 ? T('js.shellui.da-het-cau-dung-thu', 'Đã hết câu dùng thử') : T('js.shellui.dung-thu-con', 'Dùng thử: còn <b>') + n + T('js.shellui.cau', '</b> câu');
-      act = T('js.shellui.dang-ky-nhan-them', '<a class="rm-a" href="#" data-act="anon-signup">Đăng ký nhận thêm</a>');
+      act = ('<a class="rm-a" href="#" data-act="anon-signup">' + T('js.shellui.dang-ky-nhan-them', 'Đăng ký nhận thêm') + '</a>');
     } else if (n === 0) {
       txt = T('js.shellui.da-dung-het-luot-hoi', 'Đã dùng hết lượt hỏi');
-      act = T('js.shellui.nap-them', '<a class="rm-a" href="/topup.html">Nạp thêm</a>');
+      act = ('<a class="rm-a" href="/topup.html">' + T('js.shellui.nap-them', 'Nạp thêm') + '</a>');
     } else if (_rc.freeTurns > 0) {
-      txt = T('js.shellui.con', 'Còn <b>') + n + T('js.shellui.cau-hoi', '</b> câu hỏi <span class="rm-sub">(') + _rc.freeTurns + T('js.shellui.luot-tang', ' lượt tặng)</span>');
-      if (n <= 3) act = T('js.shellui.nap-them', '<a class="rm-a" href="/topup.html">Nạp thêm</a>');
+      txt = T('js.shellui.con', 'Còn <b>') + n + (T('js.shellui.cau-hoi-48ar', '</b> câu hỏi') + ' <span class="rm-sub">(') + _rc.freeTurns + T('js.shellui.luot-tang', ' lượt tặng)</span>');
+      if (n <= 3) act = ('<a class="rm-a" href="/topup.html">' + T('js.shellui.nap-them', 'Nạp thêm') + '</a>');
     } else {
       txt = T('js.shellui.con', 'Còn <b>') + n + T('js.shellui.cau-hoi-48ar', '</b> câu hỏi');
-      if (n <= 3) act = T('js.shellui.nap-them', '<a class="rm-a" href="/topup.html">Nạp thêm</a>');
+      if (n <= 3) act = ('<a class="rm-a" href="/topup.html">' + T('js.shellui.nap-them', 'Nạp thêm') + '</a>');
     }
     el.className = 'rail-meter' + cls;
     el.innerHTML = '<span class="rm-t">' + txt + '</span>' + act;
@@ -3411,15 +3411,15 @@
     if (!el) return;
     var html = '', go = null;
     if (_rep && _rep.state === 'building') {
-      html = T('js.shellui.dang-viet-bao-cao', '<span class="rr-ic rr-spin"></span><span class="rr-t"><b>Đang viết báo cáo…</b><span>') +
+      html = ('<span class="rr-ic rr-spin"></span><span class="rr-t">' + T('js.shellui.dang-viet-bao-cao', '<b>Đang viết báo cáo…</b>') + '<span>') +
         _rep.done + ' / ' + _rep.total + T('js.shellui.phan-da-xong', ' phần đã xong</span></span>');
       go = openArtPanel;
     } else if (_rep && _rep.state === 'ready') {
-      html = '<span class="rr-ic rr-ok">' + svg('check') + T('js.shellui.bao-cao-da-san-sang', '</span><span class="rr-t"><b>Báo cáo đã sẵn sàng</b><span>') +
-        esc(wsTitleText()) + ' · ' + _rep.total + T('js.shellui.phan-xem', ' phần</span></span><span class="rr-go">Xem →</span>');
+      html = '<span class="rr-ic rr-ok">' + svg('check') + ('</span><span class="rr-t">' + T('js.shellui.bao-cao-da-san-sang', '<b>Báo cáo đã sẵn sàng</b>') + '<span>') +
+        esc(wsTitleText()) + ' · ' + _rep.total + (' ' + T('js.shellui.phan', 'phần') + '</span></span><span class="rr-go">' + T('js.shellui.xem', 'Xem →') + '</span>');
       go = openArtPanel;
     } else if (ctx && ctx.birth && !REPORT_PAGES[ACTIVE] && _rc.lasoPrice != null) {
-      html = '<span class="rr-ic">' + svg('lock') + T('js.shellui.luan-giai', '</span><span class="rr-t"><b>Luận Giải ') + LG_PHAN.length +
+      html = '<span class="rr-ic">' + svg('lock') + ('</span><span class="rr-t">' + T('js.shellui.luan-giai', '<b>Luận Giải') + ' ') + LG_PHAN.length +
         T('js.shellui.muc-cho-la-so-nay', ' mục cho lá số này</b><span>') + creditUsd(_rc.lasoPrice) + ' (' + _rc.lasoPrice + T('js.shellui.luong', ' Lượng)') + T('js.shellui.chua-mo', ' · chưa mở</span></span>') +
         '<span class="rr-go">Xem →</span>';
       go = function () {
@@ -3476,9 +3476,9 @@
       wrap.className = 'sh-topup-modal';
       wrap.innerHTML =
         '<div class="stm-card">' +
-          T('js.shellui.text-9k4p', '<button class="stm-x" aria-label="Đóng">✕</button>') +
+          ('<button class="stm-x" aria-label="' + T('js.shellui.dong', 'Đóng') + '">✕</button>') +
           '<img class="stm-ava" src="' + authorAva() + '" alt="">' +
-          T('js.shellui.het-phan-dung-thu-roi', '<div class="stm-t">Hết phần dùng thử rồi…</div>') +
+          ('<div class="stm-t">' + T('js.shellui.het-phan-dung-thu-roi', 'Hết phần dùng thử rồi…') + '</div>') +
           '<div class="stm-d">' + esc(thay) + T('js.shellui.con-nhieu-dieu-muon-noi-ve', ' còn nhiều điều muốn nói về lá số này. Đăng ký miễn phí để:') +
             '<ul class="stm-ul">' +
               li(câu ? T('js.shellui.hoi-thay-them', 'Hỏi Thầy thêm <b>') + câu + T('js.shellui.cau-mien-phi', ' câu</b> miễn phí') + (pendingQ ? T('js.shellui.cau-vua-roi-duoc-tra-loi', ' — câu vừa rồi được trả lời ngay') : '')
@@ -3486,8 +3486,8 @@
               li(T('js.shellui.luu-la-so-va-cuoc-tro', 'Lưu lá số và cuộc trò chuyện — đổi máy vẫn còn')) +
               li(T('js.shellui.moi-sang-nhan-van-ngay-rieng', 'Mỗi sáng nhận vận ngày riêng cho lá số của bạn')) +
             '</ul></div>' +
-          T('js.shellui.dang-ky-mien-phi', '<button class="stm-btn" type="button" data-act="do-signup">Đăng ký miễn phí →</button>') +
-          T('js.shellui.de-sau', '<button class="stm-later" type="button">Để sau</button>') +
+          ('<button class="stm-btn" type="button" data-act="do-signup">' + T('js.shellui.dang-ky-mien-phi', 'Đăng ký miễn phí →') + '</button>') +
+          ('<button class="stm-later" type="button">' + T('js.shellui.de-sau', 'Để sau') + '</button>') +
         '</div>';
       document.body.appendChild(wrap);
       var close = _escCloses(function () { wrap.remove(); });
@@ -3558,19 +3558,19 @@
     wrap.className = 'sh-topup-modal';
     wrap.innerHTML =
       '<div class="stm-card">' +
-        T('js.shellui.text-9k4p', '<button class="stm-x" aria-label="Đóng">✕</button>') +
+        ('<button class="stm-x" aria-label="' + T('js.shellui.dong', 'Đóng') + '">✕</button>') +
         '<img class="stm-ava" src="' + authorAva() + '" alt="">' +
-        T('js.shellui.que-con-do-xin-phep-dung', '<div class="stm-t">Quẻ còn dở, xin phép dừng ở đây…</div>') +
+        ('<div class="stm-t">' + T('js.shellui.que-con-do-xin-phep-dung', 'Quẻ còn dở, xin phép dừng ở đây…') + '</div>') +
         (hasLaso
           ? '<div class="stm-d">' + esc(thay) + T('js.shellui.con-nhieu-dieu-muon-to-tuong', ' còn nhiều điều muốn tỏ tường') + (nm ? ' cho ' + esc(nm) : '') +
               T('js.shellui.ban-luan-giai-soi-tron', '. Bản <b>Luận Giải</b> soi trọn <b>') + LG_PHAN.length + T('js.shellui.muc-cua-chinh-la-so-nay', ' mục</b> của chính lá số này — ') +
               esc(preview) + T('js.shellui.thay-vi-hoi-le-tung-cau', '… — thay vì hỏi lẻ từng câu.</div>') +
-            '<a class="stm-btn" href="' + esc(luanGiaiHref()) + T('js.shellui.xem-tron', '">Xem trọn ') + LG_PHAN.length + T('js.shellui.muc', ' mục — ') + _rc.lasoPrice + T('js.shellui.luong-n119', ' Lượng (') + creditUsd(_rc.lasoPrice) + ')</a>' +
-            T('js.shellui.hoac-nap-luong-de-hoi-tiep', '<a class="stm-alt" href="/topup.html">Hoặc nạp Lượng để hỏi tiếp từng câu →</a>')
+            '<a class="stm-btn" href="' + esc(luanGiaiHref()) + ('">' + T('js.shellui.xem-tron', 'Xem trọn') + ' ') + LG_PHAN.length + T('js.shellui.muc', ' mục — ') + _rc.lasoPrice + T('js.shellui.luong-n119', ' Lượng (') + creditUsd(_rc.lasoPrice) + ')</a>' +
+            ('<a class="stm-alt" href="/topup.html">' + T('js.shellui.hoac-nap-luong-de-hoi-tiep', 'Hoặc nạp Lượng để hỏi tiếp từng câu →') + '</a>')
           : '<div class="stm-d">' + esc(thay) + T('js.shellui.con-nhieu-dieu-muon-to-tuong', ' còn nhiều điều muốn tỏ tường') + (nm ? ' cho ' + esc(nm) : '') +
               T('js.shellui.nhung-phan-luong-trong-vi-da', ', nhưng phần Lượng trong ví đã cạn. Nạp thêm để thầy luận tiếp mạch còn dang dở nhé.</div>') +
-            T('js.shellui.nap-luong-de-hoi-tiep', '<a class="stm-btn" href="/topup.html">Nạp Lượng để hỏi tiếp →</a>')) +
-        T('js.shellui.de-sau', '<button class="stm-later" type="button">Để sau</button>') +
+            ('<a class="stm-btn" href="/topup.html">' + T('js.shellui.nap-luong-de-hoi-tiep', 'Nạp Lượng để hỏi tiếp →') + '</a>')) +
+        ('<button class="stm-later" type="button">' + T('js.shellui.de-sau', 'Để sau') + '</button>') +
       '</div>';
     document.body.appendChild(wrap);
     try { track('cta_click', { tool_id: ACTIVE, meta: { from: hasLaso ? 'rail_wall_laso' : 'rail_wall_topup' } }); } catch (e) { /* ignore */ }
@@ -5018,8 +5018,8 @@
       chat.innerHTML = '<div class="home-hero"><img src="/seal-128.webp" alt="" width="64" height="64"><h1>' + esc(o.hero) + '</h1>' +
         (o.heroSub ? '<p>' + esc(o.heroSub) + '</p>' : '') +
         // Chưa có lá số: mời lập ngay tại đây (thầy xin ngày sinh trong chat).
-        (!(ctx && ctx.birth) ? T('js.shellui.lap-la-so-cua-ban-de', '<button type="button" class="home-birth">Lập lá số của bạn để thầy xem sát hơn →</button>') : '') +
-        T('js.shellui.nguoi-dang-xem-luot-hoi-hom', '<p class="home-pulse"><span class="sbp-dot"></span><b id="hpOnline">…</b> người đang xem<span aria-hidden="true">·</span><b id="hpPrompts">…</b> lượt hỏi hôm nay</p></div>');
+        (!(ctx && ctx.birth) ? ('<button type="button" class="home-birth">' + T('js.shellui.lap-la-so-cua-ban-de', 'Lập lá số của bạn để thầy xem sát hơn →') + '</button>') : '') +
+        ('<p class="home-pulse"><span class="sbp-dot"></span><b id="hpOnline">' + T('js.shellui.nguoi-dang-xem', '…</b> người đang xem') + '<span aria-hidden="true">·</span><b id="hpPrompts">' + T('js.shellui.luot-hoi-hom-nay', '…</b> lượt hỏi hôm nay') + '</p></div>');
       var hb = chat.querySelector('.home-birth');
       if (hb) hb.addEventListener('click', function () { askBirthHome(null); });
       startPulse();
@@ -6190,7 +6190,7 @@
   function cmdIcon(n) { return '<svg class="ri" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + iconInner(n, ICONS.grid) + '</svg>'; }
   function cRender() {
     var el = document.getElementById('cmdkList'); if (!el) return;
-    if (!cShown.length) { el.innerHTML = T('js.shellui.khong-tim-thay', '<div class="cmdk-empty">Không tìm thấy.</div>'); return; }
+    if (!cShown.length) { el.innerHTML = ('<div class="cmdk-empty">' + T('js.shellui.khong-tim-thay', 'Không tìm thấy.') + '</div>'); return; }
     var h = '', lastG = '';
     cShown.forEach(function (c, idx) {
       if (c.g !== lastG) { h += '<div class="cmdk-grp">' + c.g + '</div>'; lastG = c.g; }
@@ -6218,7 +6218,7 @@
     d.className = 'cmdk-wrap'; d.id = 'cmdk';
     d.innerHTML = '<div class="cmdk"><div class="cmdk-in">' +
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>' +
-      T('js.shellui.esc', '<input id="cmdkInput" placeholder="Tìm công cụ, lệnh…"><span class="esc">Esc</span></div>') +
+      ('<input id="cmdkInput" placeholder="' + T('js.shellui.tim-cong-cu-lenh', 'Tìm công cụ, lệnh…') + '"><span class="esc">' + T('js.shellui.esc', 'Esc') + '</span></div>') +
       '<div class="cmdk-list" id="cmdkList"></div></div>';
     document.body.appendChild(d);
     d.addEventListener('click', function (e) { if (e.target === d) closeCmd(); });
@@ -6318,7 +6318,7 @@
       '<div class="tv-sheet-panel" role="dialog" aria-modal="true">' +
         '<div class="tv-sheet-grab"></div>' +
         '<div class="tv-sheet-head"><b class="tv-sheet-title"></b>' +
-          T('js.shellui.text-t29m', '<button class="tv-sheet-close" type="button" aria-label="Đóng" data-tip="Đóng">✕</button></div>') +
+          ('<button class="tv-sheet-close" type="button" aria-label="' + T('js.shellui.dong', 'Đóng') + '" data-tip="' + T('js.shellui.dong', 'Đóng') + '">✕</button></div>') +
         '<div class="tv-sheet-body"></div>' +
       '</div>';
     document.body.appendChild(d);

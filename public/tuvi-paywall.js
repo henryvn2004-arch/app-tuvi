@@ -19,45 +19,47 @@ const TuviPaywall = (() => {
   // DUY NHẤT, admin sửa không cần deploy. Map này từng mang thêm `cost` làm
   // "bản dự phòng", và chính nó trôi khỏi DB rồi báo sai giá cho người dùng.
   // Không đọc được giá thì HỎI LẠI, đừng đoán — xem _price().
+  // `title` = tên tiếng Việt GỐC (ghi vào sổ credit_transactions.description — sổ chỉ một
+  // ngôn ngữ); `k` = khoá dịch để HIỂN THỊ (_ptitle). Đừng gửi bản dịch vào /api/payment.
   const PRODUCTS = {
-    'tuvi-chat':           { title: T('js.paywall.tu-vi-chat', 'Tử Vi Chat') },
-    'laso':                { title: T('js.paywall.luan-giai-la-so', 'Luận Giải Lá Số') },
-    'tu-binh':             { title: T('js.paywall.tu-binh-bat-tu', 'Tử Bình Bát Tự') },
-    'xem-tuoi':            { title: T('js.paywall.xem-tuoi-vo-chong', 'Xem Tuổi Vợ Chồng') },
-    'xem-lam-an':          { title: T('js.paywall.xem-tuoi-lam-an', 'Xem Tuổi Làm Ăn') },
-    'dien-tuong':          { title: T('js.paywall.dien-tuong', 'Diện Tướng') },
-    'nhan-tuong':          { title: T('js.paywall.nhan-tuong', 'Nhãn Tướng') },
-    'thu-tuong':           { title: T('js.paywall.thu-tuong', 'Thủ Tướng') },
-    'thanh-tuong':         { title: T('js.paywall.thanh-tuong', 'Thanh Tướng') },
-    'thanh-tuong-pro':     { title: T('js.paywall.thanh-tuong-pro', 'Thanh Tướng Pro') },
-    'khi-sac':             { title: T('js.paywall.khi-sac-van-khi', 'Khí Sắc — Vận Khí') },
-    'phong-thuy':          { title: T('js.paywall.phong-thuy-noi-that', 'Phong Thủy Nội Thất') },
-    'ban-lam-viec':        { title: T('js.paywall.phong-thuy-ban-lam-viec', 'Phong Thủy Bàn Làm Việc') },
-    'cua-hang-phong-thuy': { title: T('js.paywall.phong-thuy-cua-hang-vp', 'Phong Thủy Cửa Hàng & VP') },
-    'mau-sac-hop-menh':    { title: T('js.paywall.mau-sac-hop-menh', 'Màu Sắc Hợp Mệnh') },
-    'kieu-toc-phan-tich':  { title: T('js.paywall.phan-tich-kieu-toc', 'Phân Tích Kiểu Tóc') },
-    'kieu-toc-tryon':      { title: T('js.paywall.thu-kieu-toc', 'Thử Kiểu Tóc') },
-    'trang-phuc-tryon':    { title: T('js.paywall.thu-trang-phuc', 'Thử Trang Phục') },
-    'phong-thuy-render':   { title: T('js.paywall.render-phong-phong-thuy', 'Render Phòng Phong Thủy') },
-    'trang-diem-phan-tich':{ title: T('js.paywall.phan-tich-trang-diem', 'Phân Tích Trang Điểm') },
-    'trang-diem-tryon':    { title: T('js.paywall.thu-trang-diem', 'Thử Trang Điểm') },
-    'trang-phuc-theo-ngay':{ title: T('js.paywall.trang-phuc-theo-ngay', 'Trang Phục Theo Ngày') },
-    'da-lieu-ai':          { title: T('js.paywall.da-lieu-toan-dien', 'Da Liệu Toàn Diện') },
+    'tuvi-chat':           { title: 'Tử Vi Chat', k: 'js.paywall.tu-vi-chat' },
+    'laso':                { title: 'Luận Giải Lá Số', k: 'js.paywall.luan-giai-la-so' },
+    'tu-binh':             { title: 'Tử Bình Bát Tự', k: 'js.paywall.tu-binh-bat-tu' },
+    'xem-tuoi':            { title: 'Xem Tuổi Vợ Chồng', k: 'js.paywall.xem-tuoi-vo-chong' },
+    'xem-lam-an':          { title: 'Xem Tuổi Làm Ăn', k: 'js.paywall.xem-tuoi-lam-an' },
+    'dien-tuong':          { title: 'Diện Tướng', k: 'js.paywall.dien-tuong' },
+    'nhan-tuong':          { title: 'Nhãn Tướng', k: 'js.paywall.nhan-tuong' },
+    'thu-tuong':           { title: 'Thủ Tướng', k: 'js.paywall.thu-tuong' },
+    'thanh-tuong':         { title: 'Thanh Tướng', k: 'js.paywall.thanh-tuong' },
+    'thanh-tuong-pro':     { title: 'Thanh Tướng Pro', k: 'js.paywall.thanh-tuong-pro' },
+    'khi-sac':             { title: 'Khí Sắc — Vận Khí', k: 'js.paywall.khi-sac-van-khi' },
+    'phong-thuy':          { title: 'Phong Thủy Nội Thất', k: 'js.paywall.phong-thuy-noi-that' },
+    'ban-lam-viec':        { title: 'Phong Thủy Bàn Làm Việc', k: 'js.paywall.phong-thuy-ban-lam-viec' },
+    'cua-hang-phong-thuy': { title: 'Phong Thủy Cửa Hàng & VP', k: 'js.paywall.phong-thuy-cua-hang-vp' },
+    'mau-sac-hop-menh':    { title: 'Màu Sắc Hợp Mệnh', k: 'js.paywall.mau-sac-hop-menh' },
+    'kieu-toc-phan-tich':  { title: 'Phân Tích Kiểu Tóc', k: 'js.paywall.phan-tich-kieu-toc' },
+    'kieu-toc-tryon':      { title: 'Thử Kiểu Tóc', k: 'js.paywall.thu-kieu-toc' },
+    'trang-phuc-tryon':    { title: 'Thử Trang Phục', k: 'js.paywall.thu-trang-phuc' },
+    'phong-thuy-render':   { title: 'Render Phòng Phong Thủy', k: 'js.paywall.render-phong-phong-thuy' },
+    'trang-diem-phan-tich':{ title: 'Phân Tích Trang Điểm', k: 'js.paywall.phan-tich-trang-diem' },
+    'trang-diem-tryon':    { title: 'Thử Trang Điểm', k: 'js.paywall.thu-trang-diem' },
+    'trang-phuc-theo-ngay':{ title: 'Trang Phục Theo Ngày', k: 'js.paywall.trang-phuc-theo-ngay' },
+    'da-lieu-ai':          { title: 'Da Liệu Toàn Diện', k: 'js.paywall.da-lieu-toan-dien' },
     'personal-color':      { title: 'Personal Color' },
     'personal-color-tryon':{ title: 'Personal Color Try-on' },
-    'dat-ten-con':         { title: T('js.paywall.dat-ten-con', 'Đặt Tên Con') },
-    'dat-ten-dn':          { title: T('js.paywall.dat-ten-doanh-nghiep', 'Đặt Tên Doanh Nghiệp') },
-    'chon-ngay-tot':       { title: T('js.paywall.chon-ngay-tot', 'Chọn Ngày Tốt') },
-    'chan-dung-vo-chong':  { title: T('js.paywall.chan-dung-vo-chong', 'Chân Dung Vợ Chồng') },
-    'chan-dung-tien-kiep': { title: T('js.paywall.chan-dung-tien-kiep', 'Chân Dung Tiền Kiếp') },
-    'duyen-no-tien-kiep': { title: T('js.paywall.duyen-no-tien-kiep', 'Duyên Nợ Tiền Kiếp') },
-    'nguoi-khac': { title: T('js.paywall.la-so-nguoi-khac', 'Lá Số Người Khác') },
-    'day-con': { title: T('js.paywall.day-con-theo-la-so', 'Dạy Con Theo Lá Số') },
-    'huong-nghiep-tre': { title: T('js.paywall.huong-nghiep-som-cho-con', 'Hướng Nghiệp Sớm Cho Con') },
-    'gio-sinh': { title: T('js.nav.xac-dinh-gio-sinh', 'Xác Định Giờ Sinh') },
-    'nhan-mach': { title: T('js.paywall.so-nhan-mach', 'Sổ Nhân Mạch') },
-    'van-han-nam': { title: T('js.paywall.van-han-12-thang-toi', 'Vận Hạn 12 Tháng Tới') },
-    'chu-trinh-cuoc-doi': { title: T('js.paywall.chu-trinh-cuoc-doi', 'Chu Trình Cuộc Đời') },
+    'dat-ten-con':         { title: 'Đặt Tên Con', k: 'js.paywall.dat-ten-con' },
+    'dat-ten-dn':          { title: 'Đặt Tên Doanh Nghiệp', k: 'js.paywall.dat-ten-doanh-nghiep' },
+    'chon-ngay-tot':       { title: 'Chọn Ngày Tốt', k: 'js.paywall.chon-ngay-tot' },
+    'chan-dung-vo-chong':  { title: 'Chân Dung Vợ Chồng', k: 'js.paywall.chan-dung-vo-chong' },
+    'chan-dung-tien-kiep': { title: 'Chân Dung Tiền Kiếp', k: 'js.paywall.chan-dung-tien-kiep' },
+    'duyen-no-tien-kiep': { title: 'Duyên Nợ Tiền Kiếp', k: 'js.paywall.duyen-no-tien-kiep' },
+    'nguoi-khac': { title: 'Lá Số Người Khác', k: 'js.paywall.la-so-nguoi-khac' },
+    'day-con': { title: 'Dạy Con Theo Lá Số', k: 'js.paywall.day-con-theo-la-so' },
+    'huong-nghiep-tre': { title: 'Hướng Nghiệp Sớm Cho Con', k: 'js.paywall.huong-nghiep-som-cho-con' },
+    'gio-sinh': { title: 'Xác Định Giờ Sinh', k: 'js.nav.xac-dinh-gio-sinh' },
+    'nhan-mach': { title: 'Sổ Nhân Mạch', k: 'js.paywall.so-nhan-mach' },
+    'van-han-nam': { title: 'Vận Hạn 12 Tháng Tới', k: 'js.paywall.van-han-12-thang-toi' },
+    'chu-trinh-cuoc-doi': { title: 'Chu Trình Cuộc Đời', k: 'js.paywall.chu-trinh-cuoc-doi' },
   };
 
   const TOOL_TYPE = {
@@ -331,14 +333,17 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // gọi phải dừng lại và nói thật, tuyệt đối không thay bằng số phỏng đoán.
   // Bản cũ rơi về `PRODUCTS['dien-tuong']` khi product lạ, nên một id gõ sai là
   // âm thầm tính tiền theo giá tool khác.
+  const _ptitle = (p) => (PRODUCTS[p] ? T(PRODUCTS[p].k, PRODUCTS[p].title) : null);
   async function _price() {
     const p = _cfg?.product;
-    const title = _cfg?.title || PRODUCTS[p]?.title || p || T('js.shell.cong-cu', 'Công cụ');
-    if (_cfg?.cost) return { cost: _cfg.cost, title };
+    const title = _cfg?.title || _ptitle(p) || p || T('js.shell.cong-cu', 'Công cụ');
+    // Bản tiếng Việt cho sổ giao dịch (như trước W13) — không đi qua từ điển.
+    const titleVi = _cfg?.title || PRODUCTS[p]?.title || p || 'Công cụ';
+    if (_cfg?.cost) return { cost: _cfg.cost, title, titleVi };
     await _ensurePrices();
     if (window.ToolPrices) await window.ToolPrices.load();
     const cost = window.ToolPrices ? window.ToolPrices.get(p) : null;
-    return { cost, title };
+    return { cost, title, titleVi };
   }
 
   // Điền giá vào [data-tvp-price] — uỷ quyền cho ToolPrices (nguồn duy nhất).
@@ -377,9 +382,9 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // thà bảo người ta thử lại còn hơn trừ Lượng ở mức họ chưa từng thấy.
   function _priceUnknown() {
     _open(
-      T('js.paywall.chua-doc-duoc-bang-gia-chua', '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Chưa đọc được bảng giá</div><div class="tpw-hd-s">Chưa trừ Lượng nào của bạn</div></div>') +
-      T('js.paywall.ket-noi-toi-may-chu-gia', '<div class="tpw-center"><div class="tpw-msg">Kết nối tới máy chủ giá đang trục trặc. Bạn thử lại sau giây lát nhé — chúng tôi không chạy công cụ khi chưa hiện được giá chính xác.</div></div>') +
-      T('js.paywall.dong', '<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">Đóng</button></div>')
+      ('<div class="tpw-hd"><div class="tpw-hd-t">' + T('js.paywall.chua-doc-duoc-bang-gia', '⊙ Chưa đọc được bảng giá') + '</div><div class="tpw-hd-s">' + T('js.paywall.chua-tru-luong-nao-cua-ban-ls92', 'Chưa trừ Lượng nào của bạn') + '</div></div>') +
+      ('<div class="tpw-center"><div class="tpw-msg">' + T('js.paywall.ket-noi-toi-may-chu-gia', 'Kết nối tới máy chủ giá đang trục trặc. Bạn thử lại sau giây lát nhé — chúng tôi không chạy công cụ khi chưa hiện được giá chính xác.') + '</div></div>') +
+      ('<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">' + T('js.shellui.dong', 'Đóng') + '</button></div>')
     );
   }
 
@@ -400,10 +405,10 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     opts = opts || {};
     const scrollTo = opts.scrollTo || 'lgUnlock';
     _open(
-      T('js.paywall.da-dung-het-luot-xem-truoc', '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Đã dùng hết lượt xem trước miễn phí</div></div>') +
-      T('js.paywall.ban-da-dung-het-so-luot', '<div class="tpw-center"><div class="tpw-msg">Bạn đã dùng hết số lượt xem trước miễn phí cho lá số này. Mở bản luận đầy đủ để đọc trọn, không giới hạn số lần xem lại.</div></div>') +
-      T('js.paywall.de-sau', '<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">Để sau</button>') +
-      '<button class="tpw-btn ok" onclick="TuviPaywall._previewCapCta(\'' + scrollTo + T('js.paywall.xem-cach-mo-khoa', '\')">Xem cách mở khoá →</button></div>')
+      ('<div class="tpw-hd"><div class="tpw-hd-t">' + T('js.paywall.da-dung-het-luot-xem-truoc', '⊙ Đã dùng hết lượt xem trước miễn phí') + '</div></div>') +
+      ('<div class="tpw-center"><div class="tpw-msg">' + T('js.paywall.ban-da-dung-het-so-luot', 'Bạn đã dùng hết số lượt xem trước miễn phí cho lá số này. Mở bản luận đầy đủ để đọc trọn, không giới hạn số lần xem lại.') + '</div></div>') +
+      ('<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">' + T('js.shellui.de-sau', 'Để sau') + '</button>') +
+      '<button class="tpw-btn ok" onclick="TuviPaywall._previewCapCta(\'' + scrollTo + ('\')">' + T('js.paywall.xem-cach-mo-khoa', 'Xem cách mở khoá →') + '</button></div>')
     );
   }
 
@@ -483,12 +488,12 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         hint.className = 'tpw-hint';
         // Tiền là giá CHÍNH với khách (Henry 2026-09-20; USD từ W5) — cùng `_vndFirst` của lockPreview.
         hint.innerHTML = T('js.paywall.thao-tac-nay-ton', 'Thao tác này tốn ') + _vndFirst(cost, _money(cost)) + ' · ' +
-          T('js.paywall.dang-nhap-de-xem-so-du', '<a onclick="TuviPaywall._login()">đăng nhập</a> để xem số dư');
+          ('<a onclick="TuviPaywall._login()">' + T('js.paywall.dang-nhap', 'đăng nhập') + '</a> ' + T('js.paywall.de-xem-so-du', 'để xem số dư'));
       } else if (balance < cost) {
         hint.className = 'tpw-hint low';
         hint.innerHTML = T('js.paywall.ban-con', 'Bạn còn <b>') + balance + T('js.paywall.luong-thao-tac-nay-ton', ' Lượng</b> · thao tác này tốn <b>') + cost +
           T('js.paywall.thieu', '</b> — thiếu ') + (cost - balance) + ', ' +
-          '<a href="' + H('/topup.html') + '" onclick="' + _topupClick('hint', cost - balance) + T('js.paywall.nap-them', '">nạp thêm →</a>');
+          '<a href="' + H('/topup.html') + '" onclick="' + _topupClick('hint', cost - balance) + ('">' + T('js.paywall.nap-them', 'nạp thêm →') + '</a>');
       } else {
         hint.className = 'tpw-hint';
         hint.innerHTML = T('js.paywall.ban-con', 'Bạn còn <b>') + balance + T('js.paywall.luong-thao-tac-nay-ton', ' Lượng</b> · thao tác này tốn <b>') + cost + '</b>';
@@ -645,12 +650,12 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       const box = document.createElement('div');
       box.className = 'tpw-inv';
       box.innerHTML =
-        T('js.paywall.chua-muon-nap-moi', '<div class="tpw-inv-d">Chưa muốn nạp? <b>Mời ') + invites + T('js.paywall.nguoi', ' người</b> — ') +
+        ('<div class="tpw-inv-d">' + T('js.paywall.chua-muon-nap-moi', 'Chưa muốn nạp? <b>Mời') + ' ') + invites + T('js.paywall.nguoi', ' người</b> — ') +
           T('js.paywall.ban-ay-dang-ky-la-ban', 'bạn ấy <b>đăng ký</b> là bạn được <b>+') + invites * reward + T('js.paywall.luong', ' Lượng</b>, ') +
           T('js.paywall.vua-du-mo-dung-ban-nay', 'vừa đủ mở đúng bản này.</div>') +
         '<div class="tpw-inv-row">' +
           '<input class="tpw-inv-in" readonly value="' + _esc(url) + '">' +
-          T('js.paywall.chep-link-moi', '<button class="tpw-inv-b" type="button">Chép link mời</button>') +
+          ('<button class="tpw-inv-b" type="button">' + T('js.paywall.chep-link-moi-555v', 'Chép link mời') + '</button>') +
         '</div>';
       veil.appendChild(box);
 
@@ -723,18 +728,18 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       // ≥ giá gói và không phải con số khách cần nhớ khi so giá.
       money = T('js.paywall.mo-day-du-ton', 'Mở đầy đủ tốn ') + _vndFirst(cost, vndLbl) +
         (qrVnd != null
-          ? T('js.paywall.chuyen-khoan', ' <span class="tpw-sub">(chuyển khoản ') + qrVnd.toLocaleString('vi-VN') + T('js.paywall.d', 'đ)</span>')
+          ? (' <span class="tpw-sub">' + T('js.paywall.chuyen-khoan', '(chuyển khoản') + ' ') + qrVnd.toLocaleString('vi-VN') + T('js.paywall.d', 'đ)</span>')
           : '') + T('js.paywall.bam-mo-la-tra-tien-va', ' · bấm mở là trả tiền và đọc ngay, ') +
-        T('js.paywall.khong-can-dang-ky-truoc-da', 'không cần đăng ký trước. <a onclick="TuviPaywall._login()">Đã có tài khoản? Đăng nhập</a>');
+        (T('js.paywall.khong-can-dang-ky-truoc', 'không cần đăng ký trước.') + ' <a onclick="TuviPaywall._login()">' + T('js.paywall.da-co-tai-khoan-dang-nhap', 'Đã có tài khoản? Đăng nhập') + '</a>');
     } else if (balance < cost) {
       // Bấm mở khoá giờ hiện QR tại chỗ cho phần THIẾU (`_insufficient`) —
       // nói đúng số tiền QR sẽ đòi, cùng lý do nhánh vô danh ở trên.
       const thieuQr = _qrAmountFor(cost - balance);
       money = T('js.paywall.ban-con', 'Bạn còn <b>') + balance + T('js.paywall.can', '</b> · cần ') + _vndFirst(cost, vndLbl) + T('js.paywall.thieu-8362', ' — thiếu ') + (cost - balance) +
         (thieuQr != null
-          ? T('js.paywall.chuyen-khoan', ' <span class="tpw-sub">(chuyển khoản ') + thieuQr.toLocaleString('vi-VN') + T('js.paywall.d-bam-mo-la-hien-ma', 'đ, bấm mở là hiện mã QR)</span>')
+          ? (' <span class="tpw-sub">' + T('js.paywall.chuyen-khoan', '(chuyển khoản') + ' ') + thieuQr.toLocaleString('vi-VN') + T('js.paywall.d-bam-mo-la-hien-ma', 'đ, bấm mở là hiện mã QR)</span>')
           : '') +
-        ', <a href="' + H('/topup.html') + '" onclick="' + _topupClick('preview', cost - balance) + T('js.paywall.hoac-mua-goi', '">hoặc mua gói →</a>');
+        ', <a href="' + H('/topup.html') + '" onclick="' + _topupClick('preview', cost - balance) + ('">' + T('js.paywall.hoac-mua-goi', 'hoặc mua gói →') + '</a>');
     } else {
       money = T('js.paywall.ban-con', 'Bạn còn <b>') + balance + T('js.paywall.luong-mo-day-du-ton', ' Lượng</b> · mở đầy đủ tốn ') + _vndFirst(cost, vndLbl);
     }
@@ -822,7 +827,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       '<span class="tpw-seclock-i" aria-hidden="true">✦</span>' +
       '<span class="tpw-seclock-t">' + _esc(label) + '</span>' +
       '<span class="tpw-seclock-p">' + _esc(cta) +
-        (product ? ' · <span ' + priceAttr + '="' + product + T('js.paywall.luong-80xc', '">…</span> Lượng') : '') + ' →</span>' +
+        (product ? ' · <span ' + priceAttr + '="' + product + ('">…</span> ' + T('js.paywall.luong-4tai', 'Lượng')) : '') + ' →</span>' +
     '</div>';
   }
 
@@ -937,8 +942,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     // (`isLikelyPhone()`=false) nên thứ tự DOM không đổi gì hiển thị.
     el.innerHTML =
       '<div class="tpw-qr-modal">' +
-        T('js.paywall.text', '<button class="tpw-qr-close" type="button" aria-label="Đóng">✕</button>') +
-        T('js.paywall.chuyen-khoan-ngan-hang', '<div class="tpw-qr-title">Chuyển Khoản Ngân Hàng</div>') +
+        ('<button class="tpw-qr-close" type="button" aria-label="' + T('js.shellui.dong', 'Đóng') + '">✕</button>') +
+        ('<div class="tpw-qr-title">' + T('js.paywall.chuyen-khoan-ngan-hang', 'Chuyển Khoản Ngân Hàng') + '</div>') +
         '<div class="tpw-qr-credits" id="tpw-qr-credits"></div>' +
         '<div class="tpw-qr-amount" id="tpw-qr-amount"></div>' +
         '<div id="tpw-momo" hidden></div>' +
@@ -946,12 +951,12 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         '<div class="tpw-qr-box" id="tpw-qr-box"></div>' +
         '<div class="tpw-qr-info" id="tpw-qr-info"></div>' +
         '<div class="tpw-qr-copyrow" id="tpw-qr-copyrow"></div>' +
-        T('js.paywall.mo-app-ngan-hang-quet-qr', '<div class="tpw-qr-hint">Mở app ngân hàng → Quét QR hoặc chuyển khoản thủ công<br>') +
-          T('js.paywall.chuyen-dung-so-tien-o-tren', '<span class="tpw-qr-warn">⚠ Chuyển ĐÚNG số tiền ở trên (không hơn, không kém) vào đúng số TK — nội dung CK ghi gì cũng được, hệ thống tự nhận theo số TK</span><br>') +
+        ('<div class="tpw-qr-hint">' + T('js.paywall.mo-app-ngan-hang-quet-qr', 'Mở app ngân hàng → Quét QR hoặc chuyển khoản thủ công<br>')) +
+          ('<span class="tpw-qr-warn">' + T('js.paywall.chuyen-dung-so-tien-o-tren', '⚠ Chuyển ĐÚNG số tiền ở trên (không hơn, không kém) vào đúng số TK — nội dung CK ghi gì cũng được, hệ thống tự nhận theo số TK') + '</span><br>') +
           T('js.paywall.chuyen-xong-quay-lai-tab-nay', 'Chuyển xong, quay lại tab này — hệ thống tự nhận diện và chạy tiếp trong vài giây, không cần bấm gì thêm.</div>') +
         '<div class="tpw-qr-countdown" id="tpw-qr-countdown"></div>' +
         '<div class="tpw-qr-status" id="tpw-qr-status"></div>' +
-        T('js.paywall.toi-da-chuyen-khoan', '<button class="tpw-qr-btn" type="button" id="tpw-qr-manual">Tôi đã chuyển khoản</button>') +
+        ('<button class="tpw-qr-btn" type="button" id="tpw-qr-manual">' + T('js.paywall.toi-da-chuyen-khoan-3482', 'Tôi đã chuyển khoản') + '</button>') +
       '</div>';
     document.body.appendChild(el);
     el.querySelector('.tpw-qr-close').addEventListener('click', _closeQr);
@@ -1049,8 +1054,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     const host = document.getElementById('tpw-qr-copyrow');
     if (!host) return;
     host.innerHTML =
-      '<button class="tpw-qr-copybtn" type="button" data-copy="' + _esc(accountNumber) + T('js.paywall.data-label-chep-so-tk-data', '" data-label="Chép số TK" data-field="account">Chép số TK</button>') +
-      '<button class="tpw-qr-copybtn" type="button" data-copy="' + _esc(String(amountVND)) + T('js.paywall.data-label-chep-so-tien-data', '" data-label="Chép số tiền" data-field="amount">Chép số tiền</button>');
+      '<button class="tpw-qr-copybtn" type="button" data-copy="' + _esc(accountNumber) + ('" data-label="' + T('js.paywall.chep-so-tk', 'Chép số TK') + '" data-field="account">' + T('js.paywall.chep-so-tk', 'Chép số TK') + '</button>') +
+      '<button class="tpw-qr-copybtn" type="button" data-copy="' + _esc(String(amountVND)) + ('" data-label="' + T('js.paywall.chep-so-tien', 'Chép số tiền') + '" data-field="amount">' + T('js.paywall.chep-so-tien', 'Chép số tiền') + '</button>');
     host.querySelectorAll('.tpw-qr-copybtn').forEach((btn) => {
       btn.addEventListener('click', () => {
         const text = btn.getAttribute('data-copy'), label = btn.getAttribute('data-label'), field = btn.getAttribute('data-field');
@@ -1263,7 +1268,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       if (_qrNeed != null && d.credits >= _qrNeed) {
         const du = d.credits - _qrNeed;
         creditsEl.innerHTML = d.credits + T('js.paywall.luong-luot-nay-dung', ' Lượng · lượt này dùng ') + _qrNeed + (du > 0 ? T('js.paywall.du', ', dư ') + du + T('js.paywall.giu-trong-vi', ' giữ trong ví') : '') +
-          T('js.paywall.nap-le-tinh-theo-don-gia', '<br><small>Nạp lẻ tính theo đơn giá lẻ — <a href="/topup.html">mua gói</a> thì mỗi Lượng rẻ hơn.</small>');
+          (T('js.paywall.nap-le-tinh-theo-don-gia', '<br><small>Nạp lẻ tính theo đơn giá lẻ —') + ' <a href="/topup.html">' + T('js.paywall.mua-goi', 'mua gói') + '</a> ' + T('js.paywall.thi-moi-luong-re-hon', 'thì mỗi Lượng rẻ hơn.</small>'));
       } else {
         creditsEl.textContent = d.credits + T('js.shellui.luong-mo12', ' Lượng');
       }
@@ -1285,8 +1290,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         if (!avail) { momoEl.hidden = true; momoEl.innerHTML = ''; return; }
         momoEl.hidden = false;
         momoEl.innerHTML =
-          T('js.paywall.thanh-toan-nhanh-qua-momo-xhea', '<button type="button" class="tpw-momo-btn" id="tpw-momo-btn">Thanh toán nhanh qua MoMo →</button>') +
-          T('js.paywall.co-app-momo-hoac-the-da', '<div class="tpw-momo-hint">Có app MoMo hoặc thẻ đã liên kết: mở app tự điền sẵn số tiền, chỉ cần xác nhận.</div>');
+          ('<button type="button" class="tpw-momo-btn" id="tpw-momo-btn">' + T('js.paywall.thanh-toan-nhanh-qua-momo', 'Thanh toán nhanh qua MoMo →') + '</button>') +
+          ('<div class="tpw-momo-hint">' + T('js.paywall.co-app-momo-hoac-the-da', 'Có app MoMo hoặc thẻ đã liên kết: mở app tự điền sẵn số tiền, chỉ cần xác nhận.') + '</div>');
         document.getElementById('tpw-momo-btn').addEventListener('click', () => _payWithMomo(amountVnd));
       });
 
@@ -1300,7 +1305,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       const img = new Image();
       img.alt = T('js.paywall.ma-qr-chuyen-khoan', 'Mã QR chuyển khoản');
       img.onerror = () => {
-        qrBox.innerHTML = '<a href="' + _esc(d.checkoutUrl || '#') + T('js.paywall.target-blank-rel-noopener-style-font', '" target="_blank" rel="noopener" style="font-size:.8rem;color:#1455A4">Mở trang thanh toán →</a>');
+        qrBox.innerHTML = '<a href="' + _esc(d.checkoutUrl || '#') + ('" target="_blank" rel="noopener" style="font-size:.8rem;color:#1455A4">' + T('js.paywall.mo-trang-thanh-toan', 'Mở trang thanh toán →') + '</a>');
       };
       img.src = qrUrl;
       qrBox.appendChild(img);
@@ -1328,7 +1333,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         T('js.paywall.ngan-hang', '<b>Ngân hàng:</b> ') + _esc(d.bankName || (d.bin ? 'BIN ' + d.bin : '—')) + '<br>' +
         T('js.paywall.so-tk', '<b>Số TK:</b> ') + _esc(d.accountNumber || '—') + '<br>' +
         T('js.paywall.chu-tk', '<b>Chủ TK:</b> ') + _esc(d.accountName || '—') + '<br>' +
-        T('js.paywall.noi-dung-ck', '<b>Nội dung CK:</b> <span style="font-weight:700;color:#061A2E">') + _esc(memo) + '</span>';
+        (T('js.paywall.noi-dung-ck', '<b>Nội dung CK:</b>') + ' <span style="font-weight:700;color:#061A2E">') + _esc(memo) + '</span>';
       _wireQrCopyButtons(d.accountNumber || '', d.amountVND);
 
       _qrStatus(T('js.paywall.dang-cho-thanh-toan', 'Đang chờ thanh toán…'), false);
@@ -1394,11 +1399,11 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     const costVndLbl = _money(cost);
     const shown =
       _softLock(
-        T('js.paywall.con-thieu', '<div class="tpw-lock-t">⊙ Còn thiếu ') + _vndFirst(need, needVndLbl) + '</div>' +
-        T('js.paywall.ban-con-qp1z', '<div class="tpw-lock-s">Bạn còn <b>') + balance + T('js.paywall.thao-tac-nay-ton-1zm6', '</b> · thao tác này tốn <b>') + cost + '</b>' +
+        ('<div class="tpw-lock-t">' + T('js.paywall.con-thieu', '⊙ Còn thiếu') + ' ') + _vndFirst(need, needVndLbl) + '</div>' +
+        ('<div class="tpw-lock-s">' + T('js.paywall.ban-con', 'Bạn còn <b>')) + balance + T('js.paywall.thao-tac-nay-ton-1zm6', '</b> · thao tác này tốn <b>') + cost + '</b>' +
         T('js.paywall.nap-them-la-mo-ra-ngay', '<br>Nạp thêm là mở ra ngay.</div>') +
-        '<a class="tpw-btn topup" href="' + H('/topup.html') + '" onclick="' + _topupClick('paywall', need) + T('js.paywall.nap-luong', '">Nạp Lượng →</a>') +
-        T('js.paywall.de-sau-r2e0', '<button class="tpw-lock-x" onclick="TuviPaywall._closeLock()">Để sau</button>')
+        '<a class="tpw-btn topup" href="' + H('/topup.html') + '" onclick="' + _topupClick('paywall', need) + ('">' + T('js.paywall.nap-luong', 'Nạp Lượng →') + '</a>') +
+        ('<button class="tpw-lock-x" onclick="TuviPaywall._closeLock()">' + T('js.shellui.de-sau', 'Để sau') + '</button>')
       );
     if (shown) {
       refreshCostHints().catch(() => {});
@@ -1423,13 +1428,13 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       return;
     }
     _open(
-      T('js.paywall.khong-du-luong-can-them', '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Không đủ Lượng</div><div class="tpw-hd-s">Cần thêm ') + _vndFirst(need, needVndLbl) + '</div></div>' +
+      ('<div class="tpw-hd"><div class="tpw-hd-t">' + T('js.paywall.khong-du-luong', '⊙ Không đủ Lượng') + '</div><div class="tpw-hd-s">' + T('js.paywall.can-them', 'Cần thêm') + ' ') + _vndFirst(need, needVndLbl) + '</div></div>' +
       '<div class="tpw-center">' +
-        T('js.paywall.so-du', '<div class="tpw-msg">Số dư: <strong>') + balance + T('js.paywall.luong-can', ' lượng</strong> · Cần: ') + _vndFirst(cost, costVndLbl) + '<br>' +
-        T('js.paywall.nap-them-luong-de-tiep-tuc', '<span style="font-size:12px;color:#999">Nạp thêm Lượng để tiếp tục.</span></div>') +
-        '<a class="tpw-btn topup" href="' + H('/topup.html') + '" onclick="' + _topupClick('paywall', need) + T('js.paywall.nap-luong', '">Nạp Lượng →</a>') +
+        ('<div class="tpw-msg">' + T('js.paywall.so-du', 'Số dư: <strong>')) + balance + T('js.paywall.luong-can', ' lượng</strong> · Cần: ') + _vndFirst(cost, costVndLbl) + '<br>' +
+        ('<span style="font-size:12px;color:#999">' + T('js.paywall.nap-them-luong-de-tiep-tuc', 'Nạp thêm Lượng để tiếp tục.') + '</span></div>') +
+        '<a class="tpw-btn topup" href="' + H('/topup.html') + '" onclick="' + _topupClick('paywall', need) + ('">' + T('js.paywall.nap-luong', 'Nạp Lượng →') + '</a>') +
       '</div>' +
-      T('js.paywall.dong', '<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">Đóng</button></div>')
+      ('<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">' + T('js.shellui.dong', 'Đóng') + '</button></div>')
     );
   }
 
@@ -1461,7 +1466,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       if (_busyEl) return;
       _busyEl = document.createElement('div');
       _busyEl.className = 'tpw-busy';
-      _busyEl.innerHTML = T('js.paywall.dang-xu-ly', '<span class="tpw-spin" aria-hidden="true"></span><span>Đang xử lý…</span>');
+      _busyEl.innerHTML = ('<span class="tpw-spin" aria-hidden="true"></span><span>' + T('js.paywall.dang-xu-ly', 'Đang xử lý…') + '</span>');
       document.body.appendChild(_busyEl);
     } else if (_busyEl) {
       _busyEl.remove();
@@ -1497,13 +1502,13 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     modal.innerHTML =
       '<div style="background:#fff;border-radius:14px;padding:28px;width:100%;max-width:380px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.3)">' +
         '<button onclick="document.getElementById(\'tpw-refund-modal\').remove()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#aaa;line-height:1">×</button>' +
-        T('js.paywall.xin-loi-da-co-loi-xay', '<div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#061A2E;margin-bottom:8px">Xin lỗi, đã có lỗi xảy ra</div>') +
-        T('js.paywall.luot-nay-chua-xu-ly-xong', '<p style="font-size:13px;color:#4a4a4a;line-height:1.6;margin-bottom:14px">Lượt này chưa xử lý xong được. Chúng tôi đã hoàn <b>') + credits + T('js.paywall.luong-vao-vi-cua-ban', ' Lượng</b> vào ví của bạn') + (isAnon ? T('js.paywall.tam-thoi', ' tạm thời') : '') + T('js.paywall.ban-co-the-thu-lai-sau', ' — bạn có thể thử lại sau.</p>') +
+        ('<div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#061A2E;margin-bottom:8px">' + T('js.paywall.xin-loi-da-co-loi-xay', 'Xin lỗi, đã có lỗi xảy ra') + '</div>') +
+        ('<p style="font-size:13px;color:#4a4a4a;line-height:1.6;margin-bottom:14px">' + T('js.paywall.luot-nay-chua-xu-ly-xong', 'Lượt này chưa xử lý xong được. Chúng tôi đã hoàn <b>')) + credits + T('js.paywall.luong-vao-vi-cua-ban', ' Lượng</b> vào ví của bạn') + (isAnon ? T('js.paywall.tam-thoi', ' tạm thời') : '') + T('js.paywall.ban-co-the-thu-lai-sau', ' — bạn có thể thử lại sau.</p>') +
         (isAnon
-          ? T('js.paywall.vi-hien-tai-la-vi-tam', '<p style="font-size:12.5px;color:#7a705f;background:#FBF8F1;border:1px solid #EADFC8;border-radius:8px;padding:10px 12px;line-height:1.6;margin-bottom:14px">Ví hiện tại là ví TẠM — Lượng vừa hoàn sẽ MẤT nếu bạn xoá trình duyệt hoặc đổi máy. Đăng ký tài khoản để giữ lại an toàn.</p>') +
-            T('js.paywall.dang-ky-de-giu-luong', '<button onclick="document.getElementById(\'tpw-refund-modal\').remove();window.showClaimModal&&showClaimModal()" style="width:100%;padding:11px;background:#061A2E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:8px">Đăng ký để giữ Lượng</button>') +
-            T('js.paywall.de-sau-tsbu', '<button onclick="document.getElementById(\'tpw-refund-modal\').remove()" style="width:100%;padding:10px;background:none;color:#888;border:none;font-size:13px;cursor:pointer;font-family:inherit">Để sau</button>')
-          : T('js.paywall.da-hieu', '<button onclick="document.getElementById(\'tpw-refund-modal\').remove()" style="width:100%;padding:11px;background:#061A2E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Đã hiểu</button>')) +
+          ? ('<p style="font-size:12.5px;color:#7a705f;background:#FBF8F1;border:1px solid #EADFC8;border-radius:8px;padding:10px 12px;line-height:1.6;margin-bottom:14px">' + T('js.paywall.vi-hien-tai-la-vi-tam', 'Ví hiện tại là ví TẠM — Lượng vừa hoàn sẽ MẤT nếu bạn xoá trình duyệt hoặc đổi máy. Đăng ký tài khoản để giữ lại an toàn.') + '</p>') +
+            ('<button onclick="document.getElementById(\'tpw-refund-modal\').remove();window.showClaimModal&&showClaimModal()" style="width:100%;padding:11px;background:#061A2E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:8px">' + T('js.paywall.dang-ky-de-giu-luong', 'Đăng ký để giữ Lượng') + '</button>') +
+            ('<button onclick="document.getElementById(\'tpw-refund-modal\').remove()" style="width:100%;padding:10px;background:none;color:#888;border:none;font-size:13px;cursor:pointer;font-family:inherit">' + T('js.shellui.de-sau', 'Để sau') + '</button>')
+          : ('<button onclick="document.getElementById(\'tpw-refund-modal\').remove()" style="width:100%;padding:11px;background:#061A2E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">' + T('js.paywall.da-hieu', 'Đã hiểu') + '</button>')) +
       '</div>';
     document.body.appendChild(modal);
     modal.addEventListener('click', function (e) { if (e.target === modal) modal.remove(); });
@@ -1558,7 +1563,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       // 2. Giá — chưa biết thì DỪNG. Bỏ hộp thoại xác nhận rồi nên con số trên
       // nút là thứ cuối cùng người dùng đọc; chạy tiếp bằng một giá đoán là trừ
       // Lượng cho một mức họ chưa từng nhìn thấy.
-      const { cost, title } = await _price();
+      const { cost, titleVi } = await _price();
       if (cost == null) { _priceUnknown(); return; }
 
       // 3. Re-access check (same slug = already paid)
@@ -1596,7 +1601,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
             product: _cfg?.product || '',
             toolType: TOOL_TYPE[_cfg?.product] || ('use_' + (_cfg?.product || 'unknown')),
             slug: slug || '',
-            description: title,
+            description: titleVi,
           }),
         });
         const data = await res.json();
@@ -1728,19 +1733,19 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // đẻ thêm bộ class/CSS riêng cho một thông báo.
   function _capReached(msg) {
     const text = msg || T('js.paywall.hom-nay-so-luot-dung-thu', 'Hôm nay số lượt dùng thử miễn phí đã hết. Bạn quay lại vào ngày mai nhé.');
-    const topup = '<a class="tpw-btn topup" href="' + H('/topup.html') + '" onclick="' + _topupClick('free_cap') + T('js.paywall.nap-luong', '">Nạp Lượng →</a>');
+    const topup = '<a class="tpw-btn topup" href="' + H('/topup.html') + '" onclick="' + _topupClick('free_cap') + ('">' + T('js.paywall.nap-luong', 'Nạp Lượng →') + '</a>');
     if (_softLock(
-      T('js.paywall.het-luot-tang-hom-nay', '<div class="tpw-lock-t">⊙ Hết lượt tặng hôm nay</div>') +
+      ('<div class="tpw-lock-t">' + T('js.paywall.het-luot-tang-hom-nay', '⊙ Hết lượt tặng hôm nay') + '</div>') +
       '<div class="tpw-lock-s">' + _esc(text) + T('js.paywall.chua-tru-luong-nao-cua-ban', '<br>Chưa trừ Lượng nào của bạn.</div>') +
       topup +
-      T('js.paywall.de-mai', '<button class="tpw-lock-x" onclick="TuviPaywall._closeLock()">Để mai</button>')
+      ('<button class="tpw-lock-x" onclick="TuviPaywall._closeLock()">' + T('js.paywall.de-mai', 'Để mai') + '</button>')
     )) return;
     _open(
-      T('js.paywall.het-luot-tang-hom-nay-chua', '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Hết lượt tặng hôm nay</div><div class="tpw-hd-s">Chưa trừ Lượng nào của bạn</div></div>') +
+      ('<div class="tpw-hd"><div class="tpw-hd-t">' + T('js.paywall.het-luot-tang-hom-nay', '⊙ Hết lượt tặng hôm nay') + '</div><div class="tpw-hd-s">' + T('js.paywall.chua-tru-luong-nao-cua-ban-ls92', 'Chưa trừ Lượng nào của bạn') + '</div></div>') +
       '<div class="tpw-center">' +
         '<div class="tpw-msg">' + _esc(text) + '</div>' + topup +
       '</div>' +
-      T('js.paywall.de-mai-k5v3', '<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">Để mai</button></div>')
+      ('<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">' + T('js.paywall.de-mai', 'Để mai') + '</button></div>')
     );
   }
 
@@ -1816,7 +1821,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
           product: product || '',
           toolType: TOOL_TYPE[product] || ('use_' + (product || 'unknown')),
           slug: '',  // rỗng = luôn trừ (mỗi câu một lần)
-          description: PRODUCTS[product]?.title || product || T('js.paywall.tu-vi-chat', 'Tử Vi Chat'),
+          description: PRODUCTS[product]?.title || product || 'Tử Vi Chat', // tiếng Việt gốc cho sổ
         }),
       });
       const data = await res.json();

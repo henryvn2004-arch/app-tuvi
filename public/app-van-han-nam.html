@@ -482,7 +482,7 @@ async function doXem(){
     Shell.setShareable({kind:'text',toolId:'van-han-nam',title:'Vận hạn 12 tháng của '+(name||'tôi'),text:shareLines()});
     initGate();
   }catch(e){
-    document.getElementById('vhBody').innerHTML=_tvmbT('js.vanhannam.loi-khi-tinh-van-han', '<div class="laso-error">Lỗi khi tính vận hạn: ')+esc(e.message)+'</div>';
+    document.getElementById('vhBody').innerHTML=('<div class="laso-error">' + _tvmbT('js.vanhannam.loi-khi-tinh-van-han', 'Lỗi khi tính vận hạn:') + ' ')+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('vhPanel').style.display='block';
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('vhPanel');
@@ -756,7 +756,7 @@ function _renderUnlockBlock(){
   wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   _paintSecLocks(true);
   if(_loggedIn()){
-    host.innerHTML=_tvmbT('js.vanhannam.luan-van-han-12-thang-ton', '<button class="btn-go" id="btnUnlock" onclick="initiateAI()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span><b>Luận vận hạn 12 tháng →</b></span><small>Tốn <span class="vnd" data-tvp-price-vnd="van-han-nam"></span> <span class="cb-sub">(<span data-tvp-price="van-han-nam">…</span> Lượng)</span></small></button>')+
+    host.innerHTML=('<button class="btn-go" id="btnUnlock" onclick="initiateAI()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span>' + _tvmbT('js.vanhannam.luan-van-han-12-thang', '<b>Luận vận hạn 12 tháng →</b>') + '</span>' + _tvmbT('js.vanhannam.ton', '<small>Tốn') + ' <span class="vnd" data-tvp-price-vnd="van-han-nam"></span> <span class="cb-sub">(<span data-tvp-price="van-han-nam">…</span> ' + _tvmbT('js.vanhannam.luong', 'Lượng)') + '</span></small></button>')+
       '<p>Viết riêng cho lá số này: tổng quan, hành trình đại vận, đại vận và tiểu vận hiện tại, rồi từng tháng một trong 12 tháng tới.</p>';
     TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,'van-han-nam'); });
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
@@ -953,7 +953,7 @@ async function _runPhanVanHan(p){
     // đợi có kết quả: giữ mờ trong lúc "Đang luận…" là còn hiện văn mẫu PHÍA
     // DƯỚI orb chờ, gây rối (cùng mẫu app-chu-trinh-cuoc-doi.html).
     box.classList.remove('tpw-real-lock');
-    box.innerHTML=_tvmbT('js.vanhannam.dang-luan', '<div class="phan-empty">Đang luận…</div>');
+    box.innerHTML=('<div class="phan-empty">' + _tvmbT('js.luangiai.dang-luan', 'Đang luận…') + '</div>');
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
       w=AiLoadingSteps.mountWait(box,{label:'Đang luận '+(_labels[p]||('phần '+p))+'…',
         expectSec:(_pace&&_pace.perPartSec())||0,expectText:(_pace&&_pace.perPartText())||'',center:true});
@@ -980,7 +980,7 @@ async function _runPhanVanHan(p){
     var data=await resp.json();
     if(data.error||!data.luanGiai){
       doneWait();
-      if(box)box.innerHTML=_tvmbT('js.vanhannam.loi-khi-luan-phan', '<div class="laso-error">Lỗi khi luận phần ')+p+'. <button class="btn" onclick="window._vhRetry('+p+_tvmbT('js.luangiai.thu-lai', ')">↻ Thử lại</button></div>');
+      if(box)box.innerHTML=('<div class="laso-error">' + _tvmbT('js.vanhannam.loi-khi-luan-phan', 'Lỗi khi luận phần') + ' ')+p+'. <button class="btn" onclick="window._vhRetry('+p+(')">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
       return false;
     }
     _store[p]=data.luanGiai;
@@ -990,7 +990,7 @@ async function _runPhanVanHan(p){
     return true;
   }catch(e){
     doneWait();
-    if(box)box.innerHTML=_tvmbT('js.luangiai.loi-phan', '<div class="laso-error">Lỗi phần ')+p+': '+esc(e.message)+' <button class="btn" onclick="window._vhRetry('+p+_tvmbT('js.luangiai.thu-lai', ')">↻ Thử lại</button></div>');
+    if(box)box.innerHTML=('<div class="laso-error">' + _tvmbT('js.luangiai.loi-phan', 'Lỗi phần') + ' ')+p+': '+esc(e.message)+' <button class="btn" onclick="window._vhRetry('+p+(')">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
     return false;
   }
 }
