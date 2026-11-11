@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Công cụ — Tử Vi Minh Bảo</title>
-<meta name="description" content="Hỏi Thầy về vận mệnh, lá số Tử Vi, Bát Tự, xem tuổi, đặt tên, chọn ngày, ngay trong một cuộc trò chuyện.">
+<title data-i18n="congcu.cong-cu-tu-vi-minh-bao">Công cụ — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:congcu.hoi-thay-ve-van-menh-la" name="description" content="Hỏi Thầy về vận mệnh, lá số Tử Vi, Bát Tự, xem tuổi, đặt tên, chọn ngày, ngay trong một cuộc trò chuyện.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <!-- 🔴 BẮT BUỘC cho đường bật thông báo trên iPhone, không phải tag trang trí.
      Apple chỉ mở Web Push cho trang đã "Thêm vào Màn hình chính" và chạy ở chế
@@ -434,7 +434,7 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Công cụ</b><span>Vận hôm nay và toàn bộ công cụ theo cổ pháp</span></div>
+      <div data-i18n="congcu.cong-cu-van-hom-nay-va" class="ws-title"><b>Công cụ</b><span>Vận hôm nay và toàn bộ công cụ theo cổ pháp</span></div>
     </div>
     <div class="ws-body">
       <div class="home-body">
@@ -445,11 +445,11 @@
              lời câu hỏi thay người dùng (cùng nguyên tắc `todayAsk` bên dưới:
              CHỈ mở rail, không tự gửi gì). Giữ nguyên lưới công cụ phía dưới —
              đổi trọng tâm trang, không bỏ danh sách. -->
-        <button class="hero-ask" type="button" id="heroAsk" aria-label="Hỏi Thầy">
+        <button data-i18n-attr="aria-label:congcu.hoi-thay" class="hero-ask" type="button" id="heroAsk" aria-label="Hỏi Thầy">
           <span class="hero-ask-ic" data-icon="sparkles"></span>
           <span class="hero-ask-tx">
-            <b>Hỏi Thầy</b>
-            <span id="heroAskSub">Vận hôm nay, lá số, hay bất cứ điều gì bạn đang vướng…</span>
+            <b data-i18n="congcu.hoi-thay">Hỏi Thầy</b>
+            <span data-i18n="congcu.van-hom-nay-la-so-hay" id="heroAskSub">Vận hôm nay, lá số, hay bất cứ điều gì bạn đang vướng…</span>
           </span>
           <span class="hero-ask-go" aria-hidden="true">→</span>
         </button>
@@ -463,7 +463,7 @@
         <div class="hb-header">
           <button class="hb-search" type="button" id="hbSearchBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
-            <span>Tìm công cụ — Lá Số, Bát Tự, xem tuổi…</span>
+            <span data-i18n="congcu.tim-cong-cu-la-so-bat">Tìm công cụ — Lá Số, Bát Tự, xem tuổi…</span>
           </button>
         </div>
         <!-- Banner trượt ngang — xem chú thích `.banner-row` trong <style> và
@@ -471,7 +471,7 @@
         <div class="banner-row" id="homeBanners" hidden></div>
         <!-- Khung chờ: `pickNext()` trả ĐÚNG 1 mục nên số ô là cố định, chỉ
              độ dài chữ mới đổi. Xem chú thích .nx-skel trong <style>. -->
-        <div id="nextCard" class="nx-skel" aria-busy="true" aria-label="Đang tải gợi ý">
+        <div data-i18n-attr="aria-label:congcu.dang-tai-goi-y" id="nextCard" class="nx-skel" aria-busy="true" aria-label="Đang tải gợi ý">
           <div class="next-wrap">
             <div class="grp-title"><span class="sk">&nbsp;</span></div>
             <a class="nx-main"><div class="ic"></div>
@@ -494,26 +494,26 @@
           <div class="today-art" id="todayArt" aria-hidden="true"></div>
           <div class="today-seal" id="todaySeal" aria-hidden="true"></div>
           <div class="today-head">
-            <button class="today-back" id="todayBack" type="button">← Về hôm nay</button>
-            <div class="today-eyebrow" id="todayEyebrow">Vận hôm nay</div>
+            <button data-i18n="congcu.ve-hom-nay" class="today-back" id="todayBack" type="button">← Về hôm nay</button>
+            <div data-i18n="congcu.van-hom-nay" class="today-eyebrow" id="todayEyebrow">Vận hôm nay</div>
             <div class="today-date" id="todayDate">—</div>
             <div class="today-badgerow">
               <span class="today-hanh" id="todayHanh"></span>
               <span class="today-dot-sep"></span>
-              <span class="today-sub" id="todaySub">Số liệu ngày do cổ pháp tính chính xác — hỏi thầy để luận vận riêng cho bạn.</span>
+              <span data-i18n="congcu.so-lieu-ngay-do-co-phap" class="today-sub" id="todaySub">Số liệu ngày do cổ pháp tính chính xác — hỏi thầy để luận vận riêng cho bạn.</span>
             </div>
           </div>
           <div class="today-grid" id="todayGrid" style="display:none"></div>
           <div id="todayMe"></div>
-          <div class="today-next-h" id="todayNextH" style="display:none">3 ngày tới</div>
+          <div data-i18n="congcu.3-ngay-toi" class="today-next-h" id="todayNextH" style="display:none">3 ngày tới</div>
           <div class="today-next" id="todayNext" style="display:none"></div>
           <div class="today-week" id="todayWeek" hidden></div>
           <div class="today-cta">
-            <button class="today-ask" id="todayAsk" type="button"><span class="ic" data-icon="sparkles"></span>Hỏi Thầy ngay →</button>
-            <button class="today-icbtn" id="todayShare" type="button" title="Chia sẻ" aria-label="Chia sẻ"><span data-icon="share-2"></span></button>
-            <button class="today-icbtn" id="todayPoster" type="button" title="Tải ảnh 9:16" aria-label="Tải ảnh 9:16"><span data-icon="image"></span></button>
+            <button data-i18n="congcu.hoi-thay-ngay" class="today-ask" id="todayAsk" type="button"><span class="ic" data-icon="sparkles"></span>Hỏi Thầy ngay →</button>
+            <button data-i18n-attr="title:congcu.chia-se;aria-label:congcu.chia-se" class="today-icbtn" id="todayShare" type="button" title="Chia sẻ" aria-label="Chia sẻ"><span data-icon="share-2"></span></button>
+            <button data-i18n-attr="title:congcu.tai-anh-9-16;aria-label:congcu.tai-anh-9-16" class="today-icbtn" id="todayPoster" type="button" title="Tải ảnh 9:16" aria-label="Tải ảnh 9:16"><span data-icon="image"></span></button>
           </div>
-          <div class="today-foot"><span>Mỗi ngày một chỉ dẫn, sống chủ động hơn</span></div>
+          <div data-i18n="congcu.moi-ngay-mot-chi-dan-song" class="today-foot"><span>Mỗi ngày một chỉ dẫn, sống chủ động hơn</span></div>
         </div>
         <!-- hellobot-ui-redesign Đợt 2: dời XUỐNG CUỐI trang (trước đây đứng
              ngay dưới ô tìm, chiếm chỗ đầu trang cho một thẻ giới thiệu —
@@ -523,15 +523,15 @@
           <div class="core-main">
             <div class="core-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9 9 9 0 0 1 0-18z"/><circle cx="12" cy="7.5" r="1"/><circle cx="12" cy="16.5" r="1"/></svg></div>
             <div class="core-tx">
-              <div class="core-eyebrow">Cốt lõi của Tử Vi Minh Bảo</div>
-              <b>Khoa học từ dữ liệu thật, phục vụ cuộc sống thật</b>
-              <p>Hơn 270.000+ lá số người thật, được kiểm chứng và phân tích bằng phương pháp luận giải hiện đại, kết hợp tinh hoa cổ học, nhằm mang đến những dự đoán đáng tin cậy và hữu ích cho cuộc sống.</p>
+              <div data-i18n="congcu.cot-loi-cua-tu-vi-minh" class="core-eyebrow">Cốt lõi của Tử Vi Minh Bảo</div>
+              <b data-i18n="congcu.khoa-hoc-tu-du-lieu-that">Khoa học từ dữ liệu thật, phục vụ cuộc sống thật</b>
+              <p data-i18n="congcu.hon-270-000-la-so-nguoi">Hơn 270.000+ lá số người thật, được kiểm chứng và phân tích bằng phương pháp luận giải hiện đại, kết hợp tinh hoa cổ học, nhằm mang đến những dự đoán đáng tin cậy và hữu ích cho cuộc sống.</p>
             </div>
           </div>
           <div class="core-stats">
-            <div class="core-stat"><span class="ic" data-icon="globe"></span><b>Dữ liệu thật</b><span>270.000+ hồ sơ</span></div>
-            <div class="core-stat"><span class="ic" data-icon="shield-check"></span><b>Phương pháp chuẩn</b><span>Cổ học × Hiện đại</span></div>
-            <div class="core-stat"><span class="ic" data-icon="users"></span><b>Ứng dụng thực tiễn</b><span>Vì cuộc sống tốt hơn</span></div>
+            <div data-i18n="congcu.du-lieu-that-270-000-ho" class="core-stat"><span class="ic" data-icon="globe"></span><b>Dữ liệu thật</b><span>270.000+ hồ sơ</span></div>
+            <div data-i18n="congcu.phuong-phap-chuan-co-hoc-hien" class="core-stat"><span class="ic" data-icon="shield-check"></span><b>Phương pháp chuẩn</b><span>Cổ học × Hiện đại</span></div>
+            <div data-i18n="congcu.ung-dung-thuc-tien-vi-cuoc" class="core-stat"><span class="ic" data-icon="users"></span><b>Ứng dụng thực tiễn</b><span>Vì cuộc sống tốt hơn</span></div>
           </div>
           <div class="core-go" aria-hidden="true">›</div>
         </a>

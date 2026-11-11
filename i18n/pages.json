@@ -191,6 +191,73 @@
    "shell"
   ]
  },
+ "/app/chu-trinh-cuoc-doi": {
+  "file": "app-chu-trinh-cuoc-doi.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.2-xem-truoc-la-so",
+   "battu.3-thanh-toan",
+   "battu.4-nhan-ket-qua",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "battu.mien-phi",
+   "battu.nam-luan",
+   "battu.sua-thong-tin",
+   "chutrinh.9-dai-van-tron-doi",
+   "chutrinh.9-dai-van-tron-doi-khong",
+   "chutrinh.ban-chu-trinh-cuoc-doi-mau",
+   "chutrinh.chang-thuan-chang-can-trong",
+   "chutrinh.chu-trinh-cuoc-doi",
+   "chutrinh.chu-trinh-cuoc-doi-9-dai",
+   "chutrinh.chu-trinh-cuoc-doi-tu-vi",
+   "chutrinh.la-so",
+   "chutrinh.luan-giai-mien-phi",
+   "chutrinh.nhap-ngay-sinh-va-nam-muon",
+   "chutrinh.nhap-thong-tin-de-lap-la",
+   "chutrinh.soi-9-dai-van-tron-doi",
+   "chutrinh.tieu-van-nam-xem",
+   "luangiai.an-la-so",
+   "luangiai.bao-cao-cua-ban",
+   "luangiai.dang-dong-ban-bao-cao",
+   "luangiai.dang-dung",
+   "luangiai.gui-vao-email",
+   "luangiai.tu-vi-dau-so-la-mot",
+   "vanhan.tai-anh-chia-se-9-16"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
+ "/app/cong-cu": {
+  "file": "app-home.html",
+  "keys": [
+   "congcu.3-ngay-toi",
+   "congcu.chia-se",
+   "congcu.cong-cu-tu-vi-minh-bao",
+   "congcu.cong-cu-van-hom-nay-va",
+   "congcu.cot-loi-cua-tu-vi-minh",
+   "congcu.dang-tai-goi-y",
+   "congcu.du-lieu-that-270-000-ho",
+   "congcu.hoi-thay",
+   "congcu.hoi-thay-ngay",
+   "congcu.hoi-thay-ve-van-menh-la",
+   "congcu.hon-270-000-la-so-nguoi",
+   "congcu.khoa-hoc-tu-du-lieu-that",
+   "congcu.moi-ngay-mot-chi-dan-song",
+   "congcu.phuong-phap-chuan-co-hoc-hien",
+   "congcu.so-lieu-ngay-do-co-phap",
+   "congcu.tai-anh-9-16",
+   "congcu.tim-cong-cu-la-so-bat",
+   "congcu.ung-dung-thuc-tien-vi-cuoc",
+   "congcu.van-hom-nay",
+   "congcu.van-hom-nay-la-so-hay",
+   "congcu.ve-hom-nay"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/luan-giai": {
   "file": "app-luan-giai.html",
   "keys": [
@@ -227,6 +294,97 @@
    "luangiai.tra-loi-thay-o-khung-chat",
    "luangiai.tu-vi-dau-so-la-mot",
    "luangiai.tu-vi-khong-du-doan-tuong"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
+ "/app/nap-am": {
+  "file": "app-nap-am.html",
+  "keys": [
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "napam.1-nhap-nam-sinh",
+   "napam.2-xem-ket-qua",
+   "napam.hoi-thay-luan-sau-nap-am",
+   "napam.mau-huong-hop",
+   "napam.moi-nam-sinh-mang-mot-menh",
+   "napam.nam-sinh",
+   "napam.nam-sinh-duong-lich",
+   "napam.nap-am-la-phep-phoi-hanh",
+   "napam.nap-am-ngu-hanh",
+   "napam.nap-am-ngu-hanh-hanh-ban",
+   "napam.nap-am-ngu-hanh-tu-vi",
+   "napam.nhap-nam-sinh-cua-ban-nhan",
+   "napam.sua",
+   "napam.ten-menh-nap-am",
+   "napam.tra-nap-am-mien-phi",
+   "napam.tra-nap-am-ngu-hanh-theo",
+   "napam.tuoi-hop-ky"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
+ "/app/van-han-nam": {
+  "file": "app-van-han-nam.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.2-xem-truoc-la-so",
+   "battu.3-thanh-toan",
+   "battu.4-nhan-ket-qua",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "battu.mien-phi",
+   "battu.sua-thong-tin",
+   "luangiai.an-la-so",
+   "luangiai.bao-cao-cua-ban",
+   "luangiai.dang-dong-ban-bao-cao",
+   "luangiai.gui-vao-email",
+   "luangiai.tu-vi-dau-so-la-mot",
+   "vanhan.12-thang-am-lich-toi",
+   "vanhan.ban-van-han-mau-tai-pdf",
+   "vanhan.dang-dung",
+   "vanhan.luan-giai-day-du",
+   "vanhan.mot-nam-12-thang-khong-thang",
+   "vanhan.nhap-ngay-gio-sinh-he-thong",
+   "vanhan.nhap-ngay-sinh-de-xem-van",
+   "vanhan.tai-anh-chia-se-9-16",
+   "vanhan.tai-chinh-tung-thang",
+   "vanhan.tinh-duyen-tung-thang",
+   "vanhan.van-han-12-thang-toi",
+   "vanhan.van-han-12-thang-toi-tieu",
+   "vanhan.van-han-12-thang-toi-tu",
+   "vanhan.xem-van-han-12-thang-toi",
+   "vanhan.xem-van-han-mien-phi"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
+ "/app/xem-tuoi": {
+  "file": "app-xem-tuoi.html",
+  "keys": [
+   "battu.chi-phi-su-dung",
+   "battu.hoi",
+   "battu.sua-thong-tin",
+   "luangiai.chuyen-khoan-qua-qr-ngan-hang",
+   "luangiai.mua-goi-de-nhan-nhieu-uu",
+   "tuonghop.ban-luan-giai-mau-tai-pdf",
+   "tuonghop.cham-8-yeu-to-tuong-hop",
+   "tuonghop.luan-giai-chuyen-sau-luong",
+   "tuonghop.moi-luot-luong",
+   "tuonghop.nguoi-thu-hai",
+   "tuonghop.nguoi-thu-nhat",
+   "tuonghop.nhap-ngay-sinh-hai-nguoi-duong",
+   "tuonghop.so-tuoi-ton-luong",
+   "tuonghop.so-tuoi-vo-chong-theo-la",
+   "tuonghop.tra-loi-thay-o-khung-chat",
+   "tuonghop.viet-rieng-cho-hai-nguoi-nay",
+   "tuonghop.xem-tuoi-vo-chong-so-hoa",
+   "tuonghop.xem-tuoi-vo-chong-tu-vi"
   ],
   "js": [
    "shell"
