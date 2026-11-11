@@ -7043,6 +7043,146 @@
   "t": "只需出生年，快速判斷兩人的生肖是否相合——立即得到答案，不必深入解讀。",
   "h": "ee011392"
  },
+ "kinhdich.1-gieo-que": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">起卦</span>",
+  "h": "bf868703"
+ },
+ "kinhdich.bam-de-bat-dau-gieo-que": {
+  "t": "按下開始起卦——共擲 6 次，每次決定一個爻",
+  "h": "5f61aa02"
+ },
+ "kinhdich.gieo-du-6-lan-bang-dong": {
+  "t": "以銅錢擲滿 6 次，系統自動判定動爻，並從 64 卦中查出對應的卦——提供本卦、變卦與卦辭供論斷。",
+  "h": "16e0aad0"
+ },
+ "kinhdich.gieo-que-kinh-dich-64-que": {
+  "t": "以三枚銅錢起 64 卦易經卦——含本卦、動爻、變卦與卦辭。請老師依你的問題論斷。",
+  "h": "0f696c0b"
+ },
+ "kinhdich.hao-dong-ro-rang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"zap\"></span><span>動爻<br>清楚</span>",
+  "h": "36347db6"
+ },
+ "kinhdich.kinh-dich-chu-dich-la-mot": {
+  "t": "易經（周易）是中國最經典的古籍之一，以陰陽爻組合而成的 64 卦來論斷事情的變化。以三枚銅錢起卦，是選出對應所問之卦最常見的方法之一。",
+  "h": "1e3cfe6a"
+ },
+ "kinhdich.kinh-dich-gieo-que": {
+  "t": "易經——起卦",
+  "h": "665be6f0"
+ },
+ "kinhdich.kinh-dich-gieo-que-chu-dich": {
+  "t": "<b>易經——起卦</b><span>周易 64 卦 · 三枚銅錢</span>",
+  "h": "7a49085a"
+ },
+ "kinhdich.kinh-dich-gieo-que-tu-vi": {
+  "t": "易經——起卦——明寶紫微斗數",
+  "h": "be561984"
+ },
+ "kinhdich.loi-que-hao-tu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>卦辭、<br>爻辭</span>",
+  "h": "49312043"
+ },
+ "kinhdich.que-chinh-que-bien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"aperture\"></span><span>本卦<br>與變卦</span>",
+  "h": "cbebb740"
+ },
+ "kinhdich.que-dang-hinh-thanh-tu-duoi": {
+  "t": "卦正在成形（由下而上）",
+  "h": "e51d5547"
+ },
+ "kinhdich.tap-trung-gieo-hao-dau-tien": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"aperture\"></span><b id=\"tossBtnLabel\">專注心神，擲第一爻</b></span>",
+  "h": "29a2de26"
+ },
+ "kinhdich.truoc-mot-quyet-dinh-kho-nguoi": {
+  "t": "面對艱難的決定，古人不憑空臆測，而是起卦問天意。專注於你正在猶豫的事，擲三枚銅錢，獲得切合當下處境的古老忠告。",
+  "h": "5a1d9ee8"
+ },
+ "kinhdich.vd-cong-viec-sap-toi-cua": {
+  "t": "例如：我接下來的工作會如何？",
+  "h": "75b989e2"
+ },
+ "kymon.1-lap-ban": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">排盤</span>",
+  "h": "77b8dfda"
+ },
+ "kymon.ban-9-cung-day-du": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>完整的<br>九宮盤</span>",
+  "h": "5e9e1cc7"
+ },
+ "kymon.de-trong-thoi-diem-la-lay": {
+  "t": "時間留空即取現在時刻。系統排出九宮盤，並提供局數、值符與值使，以及各宮的詳細內容。",
+  "h": "75433dd8"
+ },
+ "kymon.gio-tot-cho-viec": {
+  "t": "<span class=\"hp-ic\" data-icon=\"clock\"></span><span>適合行事的<br>吉時</span>",
+  "h": "9361b67c"
+ },
+ "kymon.hoi-thay-luan-ban-theo-viec": {
+  "t": "✦ 請老師依我的事論盤",
+  "h": "8e8842e4"
+ },
+ "kymon.huong-nen-di-huong-nen-tranh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>宜行的方位、<br>宜避的方位</span>",
+  "h": "92fd7884"
+ },
+ "kymon.ky-mon-don-giap": {
+  "t": "奇門遁甲",
+  "h": "857ee290"
+ },
+ "kymon.ky-mon-don-giap-ban-9": {
+  "t": "奇門遁甲——九宮盤——明寶紫微斗數",
+  "h": "804e2f7a"
+ },
+ "kymon.ky-mon-don-giap-ban-9-hlor": {
+  "t": "<b>奇門遁甲</b><span>九宮盤 · 八門 · 九星 · 八神</span>",
+  "h": "8bd844e9"
+ },
+ "kymon.ky-mon-don-giap-khong-tra": {
+  "t": "奇門遁甲不是泛泛查詢，而是依當下時刻排出準確的九宮盤，直接指出眼前這件事該往哪個方位。立刻排盤，掌握你需要時的吉時與有利方位。",
+  "h": "44004989"
+ },
+ "kymon.ky-mon-don-giap-la-mot": {
+  "t": "奇門遁甲與太乙、六壬並稱中國古代術數的「三式」。奇門盤依當下時辰的干支排出，配合九宮、八門與九星，指出適合某件具體事務的時機與方位。",
+  "h": "a538cb61"
+ },
+ "kymon.lap-ban-cho-mot-thoi-diem": {
+  "t": "為某個時刻排盤",
+  "h": "56ac40df"
+ },
+ "kymon.lap-ban-khac": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"rotate-cw\"></span><b>重新排盤</b></span>",
+  "h": "19849756"
+ },
+ "kymon.lap-ban-ky-mon": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"layout-grid\"></span><b>排奇門盤</b></span>",
+  "h": "2697f4a9"
+ },
+ "kymon.lap-ban-ky-mon-don-giap": {
+  "t": "依時辰排奇門遁甲盤——八門、九星、八神、三奇佈於九宮。哪個方位宜行、哪個宜避。請老師依你的事論斷。",
+  "h": "ee8b191e"
+ },
+ "kymon.lap-lai": {
+  "t": "重新排盤",
+  "h": "5370aded"
+ },
+ "kymon.tai-anh-chia-se-9-16": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"save\"></span><b id=\"taiBtnLabel\">下載分享圖（9:16）</b></span>",
+  "h": "5f3a9343"
+ },
+ "kymon.thoi-diem-de-trong-bay-gio": {
+  "t": "時間（留空＝現在）",
+  "h": "b29345d0"
+ },
+ "kymon.vd-chieu-nay-di-gap-doi": {
+  "t": "例如：今天下午要去見合作夥伴，該往哪個方位？",
+  "h": "644a87b7"
+ },
+ "kymon.viec-muon-hoi-tuy-chon": {
+  "t": "想問的事（選填）",
+  "h": "680649e1"
+ },
  "laso.2026-tuviminhbao-com-all-rights-reserved": {
   "t": "© 2026 tuviminhbao.com — 版權所有",
   "h": "5772fefb"
@@ -7262,6 +7402,94 @@
  "luangiai.tu-vi-khong-du-doan-tuong": {
   "t": "紫微不是用來預測未來，而是幫助您了解自己，做出更好的選擇。",
   "h": "ae92de9d"
+ },
+ "maihoa.1-lap-que": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">起卦</span>",
+  "h": "b51a3df6"
+ },
+ "maihoa.ba-chang-chinh-ho-bien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>三個階段<br>本卦–互卦–變卦</span>",
+  "h": "0ccec2d4"
+ },
+ "maihoa.cau-hoi-tuy-chon": {
+  "t": "問題（選填）",
+  "h": "645f5819"
+ },
+ "maihoa.con-so-nay-ra-trong-dau": {
+  "t": "腦中忽然浮現的數字",
+  "h": "e65a46a7"
+ },
+ "maihoa.gieo-bang-mot-con-so": {
+  "t": "以數字起卦",
+  "h": "9e53c84b"
+ },
+ "maihoa.gieo-lai": {
+  "t": "重新起卦",
+  "h": "6c124c14"
+ },
+ "maihoa.gieo-que-khac": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"rotate-cw\"></span><b>重新起卦</b></span>",
+  "h": "1eed908e"
+ },
+ "maihoa.gieo-que-mai-hoa-dich-so": {
+  "t": "以數字或時刻起梅花易數卦——體卦、用卦與五行生剋，經本卦、互卦、變卦三個階段呈現。請老師依問題論斷。",
+  "h": "81547445"
+ },
+ "maihoa.gieo-theo-gio-hien-tai-hoac": {
+  "t": "依現在時辰或一個數字起卦——系統排出體、用二卦，判定動爻，並提供爻辭供論斷。",
+  "h": "0b36b3f2"
+ },
+ "maihoa.gieo-theo-thoi-diem-nay": {
+  "t": "以此刻起卦",
+  "h": "00972cbe"
+ },
+ "maihoa.hao-tu-loi-luan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>爻辭與<br>論斷</span>",
+  "h": "959217eb"
+ },
+ "maihoa.hoi-thay-luan-que-theo-cau": {
+  "t": "✦ 請老師依問題論卦",
+  "h": "f13e6c1b"
+ },
+ "maihoa.lap-que": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"flower\"></span><b>起卦</b></span>",
+  "h": "dedaeff1"
+ },
+ "maihoa.mai-hoa-dich-so": {
+  "t": "梅花易數",
+  "h": "9093e560"
+ },
+ "maihoa.mai-hoa-dich-so-gieo-que": {
+  "t": "梅花易數——起卦——明寶紫微斗數",
+  "h": "7780e00b"
+ },
+ "maihoa.mai-hoa-dich-so-la-phuong": {
+  "t": "梅花易數相傳由宋代邵康節奠基，以易經為本，但可從任意數字、時刻或事件快速起卦。卦分為體與用，用以論斷事情的演變。",
+  "h": "35d69496"
+ },
+ "maihoa.mai-hoa-dich-so-the-dung": {
+  "t": "<b>梅花易數</b><span>體 · 用 · 三階段 本卦–互卦–變卦</span>",
+  "h": "39147698"
+ },
+ "maihoa.mot-con-so-bat-chot-nghi": {
+  "t": "忽然想到的一個數字，也可以是一個易卦的開端。輸入該數字，或交由系統取現在時辰，即可得到體、用二卦，以及針對你所問之事的論斷。",
+  "h": "201f081c"
+ },
+ "maihoa.que-the-dung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"flower\"></span><span>體卦<br>與用卦</span>",
+  "h": "d2a7a4e8"
+ },
+ "maihoa.thanh-tam-nghi-ve-viec-muon": {
+  "t": "誠心思考你想問的事",
+  "h": "17259cfa"
+ },
+ "maihoa.vd-27": {
+  "t": "例如：27",
+  "h": "4afd7b36"
+ },
+ "maihoa.vd-viec-chuyen-cho-lam-nay": {
+  "t": "例如：這次換工作好嗎？",
+  "h": "ec1b3e52"
  },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">輸入出生年</span>",

@@ -7043,6 +7043,146 @@
   "t": "두 띠가 맞는지 빠르게 확인해요. 출생 연도만 있으면 바로 답이 나와요 — 깊이 보기 전의 간단한 확인이에요.",
   "h": "ee011392"
  },
+ "kinhdich.1-gieo-que": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">괘 뽑기</span>",
+  "h": "bf868703"
+ },
+ "kinhdich.bam-de-bat-dau-gieo-que": {
+  "t": "눌러서 괘 뽑기를 시작하세요 — 6번 던지며, 한 번에 효 하나가 정해집니다",
+  "h": "5f61aa02"
+ },
+ "kinhdich.gieo-du-6-lan-bang-dong": {
+  "t": "동전으로 6번 던지면 변효를 자동으로 정하고 64괘에서 해당 괘를 찾아 줍니다 — 본괘, 변괘, 괘사를 제시해 풀이에 씁니다.",
+  "h": "16e0aad0"
+ },
+ "kinhdich.gieo-que-kinh-dich-64-que": {
+  "t": "동전 3개로 주역 64괘를 뽑습니다 — 본괘, 변효, 변괘와 괘사까지. 질문에 맞춰 선생님이 풀이해 드립니다.",
+  "h": "0f696c0b"
+ },
+ "kinhdich.hao-dong-ro-rang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"zap\"></span><span>변효<br>명확</span>",
+  "h": "36347db6"
+ },
+ "kinhdich.kinh-dich-chu-dich-la-mot": {
+  "t": "주역(周易)은 중국에서 가장 고전적인 경전 중 하나로, 음과 양의 효를 조합한 64괘로 일의 변화를 풀이합니다. 동전 세 개로 괘를 뽑는 것은 질문에 맞는 괘를 고르는 가장 널리 쓰이는 방법 중 하나입니다.",
+  "h": "1e3cfe6a"
+ },
+ "kinhdich.kinh-dich-gieo-que": {
+  "t": "주역 — 괘 뽑기",
+  "h": "665be6f0"
+ },
+ "kinhdich.kinh-dich-gieo-que-chu-dich": {
+  "t": "<b>주역 — 괘 뽑기</b><span>주역 64괘 · 동전 3개</span>",
+  "h": "7a49085a"
+ },
+ "kinhdich.kinh-dich-gieo-que-tu-vi": {
+  "t": "주역 — 괘 뽑기 — 명보 자미두수",
+  "h": "be561984"
+ },
+ "kinhdich.loi-que-hao-tu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>괘사,<br>효사</span>",
+  "h": "49312043"
+ },
+ "kinhdich.que-chinh-que-bien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"aperture\"></span><span>본괘와<br>변괘</span>",
+  "h": "cbebb740"
+ },
+ "kinhdich.que-dang-hinh-thanh-tu-duoi": {
+  "t": "괘가 만들어지는 중입니다 (아래에서 위로)",
+  "h": "e51d5547"
+ },
+ "kinhdich.tap-trung-gieo-hao-dau-tien": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"aperture\"></span><b id=\"tossBtnLabel\">집중하고 첫 효 던지기</b></span>",
+  "h": "29a2de26"
+ },
+ "kinhdich.truoc-mot-quyet-dinh-kho-nguoi": {
+  "t": "어려운 결정 앞에서 옛사람은 어림짐작하지 않고 괘를 뽑아 하늘의 뜻을 물었습니다. 망설이는 일에 집중하고 동전 3개를 던져, 지금 상황에 맞는 옛 조언을 받아 보세요.",
+  "h": "5a1d9ee8"
+ },
+ "kinhdich.vd-cong-viec-sap-toi-cua": {
+  "t": "예: 앞으로 제 일은 어떻게 될까요?",
+  "h": "75b989e2"
+ },
+ "kymon.1-lap-ban": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">반 세우기</span>",
+  "h": "77b8dfda"
+ },
+ "kymon.ban-9-cung-day-du": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>9궁 반<br>전체 표시</span>",
+  "h": "5e9e1cc7"
+ },
+ "kymon.de-trong-thoi-diem-la-lay": {
+  "t": "시점을 비워 두면 현재 시각으로 세웁니다. 시스템이 9궁 반을 세우고 국, 치부·치사, 각 궁의 상세를 돌려줍니다.",
+  "h": "75433dd8"
+ },
+ "kymon.gio-tot-cho-viec": {
+  "t": "<span class=\"hp-ic\" data-icon=\"clock\"></span><span>일에 맞는<br>좋은 시각</span>",
+  "h": "9361b67c"
+ },
+ "kymon.hoi-thay-luan-ban-theo-viec": {
+  "t": "✦ 제 일에 맞춰 선생님께 반 풀이 묻기",
+  "h": "8e8842e4"
+ },
+ "kymon.huong-nen-di-huong-nen-tranh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>가야 할 방향,<br>피할 방향</span>",
+  "h": "92fd7884"
+ },
+ "kymon.ky-mon-don-giap": {
+  "t": "기문둔갑",
+  "h": "857ee290"
+ },
+ "kymon.ky-mon-don-giap-ban-9": {
+  "t": "기문둔갑 — 9궁 반 — 명보 자미두수",
+  "h": "804e2f7a"
+ },
+ "kymon.ky-mon-don-giap-ban-9-hlor": {
+  "t": "<b>기문둔갑</b><span>9궁 반 · 팔문 · 구성 · 팔신</span>",
+  "h": "8bd844e9"
+ },
+ "kymon.ky-mon-don-giap-khong-tra": {
+  "t": "기문둔갑은 두루뭉술하게 찾아보는 것이 아니라, 현재 시각에 맞춰 9궁 반을 정확히 세우고 눈앞의 일에 가야 할 방향을 곧바로 짚어 줍니다. 지금 반을 세워 필요한 때의 좋은 시각과 이로운 방향을 확인하세요.",
+  "h": "44004989"
+ },
+ "kymon.ky-mon-don-giap-la-mot": {
+  "t": "기문둔갑은 태을, 육임과 함께 중국 고대 술수의 삼식(三式) 중 하나입니다. 기문 반은 현재 시각의 간지에 따라 구궁, 팔문, 구성을 배합해 구체적인 일에 알맞은 시기와 방향을 알려 줍니다.",
+  "h": "a538cb61"
+ },
+ "kymon.lap-ban-cho-mot-thoi-diem": {
+  "t": "한 시점의 반 세우기",
+  "h": "56ac40df"
+ },
+ "kymon.lap-ban-khac": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"rotate-cw\"></span><b>다른 반 세우기</b></span>",
+  "h": "19849756"
+ },
+ "kymon.lap-ban-ky-mon": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"layout-grid\"></span><b>기문 반 세우기</b></span>",
+  "h": "2697f4a9"
+ },
+ "kymon.lap-ban-ky-mon-don-giap": {
+  "t": "시각에 맞춰 기문둔갑 반을 세웁니다 — 팔문, 구성, 팔신, 삼기를 9궁에 배치. 가야 할 방향과 피해야 할 방향을 알려 드리며, 선생님이 용건에 맞춰 풀이해 드립니다.",
+  "h": "ee8b191e"
+ },
+ "kymon.lap-lai": {
+  "t": "다시 세우기",
+  "h": "5370aded"
+ },
+ "kymon.tai-anh-chia-se-9-16": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"save\"></span><b id=\"taiBtnLabel\">공유 이미지 저장 (9:16)</b></span>",
+  "h": "5f3a9343"
+ },
+ "kymon.thoi-diem-de-trong-bay-gio": {
+  "t": "시점 (비워 두면 지금)",
+  "h": "b29345d0"
+ },
+ "kymon.vd-chieu-nay-di-gap-doi": {
+  "t": "예: 오늘 오후 거래처를 만나러 가는데 어느 방향이 좋을까요?",
+  "h": "644a87b7"
+ },
+ "kymon.viec-muon-hoi-tuy-chon": {
+  "t": "묻고 싶은 일 (선택)",
+  "h": "680649e1"
+ },
  "laso.2026-tuviminhbao-com-all-rights-reserved": {
   "t": "© 2026 tuviminhbao.com — All rights reserved",
   "h": "5772fefb"
@@ -7262,6 +7402,94 @@
  "luangiai.tu-vi-khong-du-doan-tuong": {
   "t": "자미두수는 미래를 맞히는 것이 아니라, 나를 이해하고 더 나은 선택을 하도록 돕습니다.",
   "h": "ae92de9d"
+ },
+ "maihoa.1-lap-que": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">괘 세우기</span>",
+  "h": "b51a3df6"
+ },
+ "maihoa.ba-chang-chinh-ho-bien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>세 단계<br>본괘–호괘–변괘</span>",
+  "h": "0ccec2d4"
+ },
+ "maihoa.cau-hoi-tuy-chon": {
+  "t": "질문 (선택)",
+  "h": "645f5819"
+ },
+ "maihoa.con-so-nay-ra-trong-dau": {
+  "t": "문득 떠오른 숫자",
+  "h": "e65a46a7"
+ },
+ "maihoa.gieo-bang-mot-con-so": {
+  "t": "숫자로 괘 세우기",
+  "h": "9e53c84b"
+ },
+ "maihoa.gieo-lai": {
+  "t": "다시 세우기",
+  "h": "6c124c14"
+ },
+ "maihoa.gieo-que-khac": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"rotate-cw\"></span><b>다른 괘 세우기</b></span>",
+  "h": "1eed908e"
+ },
+ "maihoa.gieo-que-mai-hoa-dich-so": {
+  "t": "숫자 또는 시점으로 매화역수 괘를 세웁니다 — 체괘·용괘와 오행의 상생상극을 본괘, 호괘, 변괘 세 단계로 보여 줍니다. 질문에 맞춰 선생님이 풀이해 드립니다.",
+  "h": "81547445"
+ },
+ "maihoa.gieo-theo-gio-hien-tai-hoac": {
+  "t": "현재 시각 또는 숫자로 괘를 세웁니다 — 시스템이 체·용 괘를 세우고 동효를 정하며 효사를 돌려줘 풀이에 씁니다.",
+  "h": "0b36b3f2"
+ },
+ "maihoa.gieo-theo-thoi-diem-nay": {
+  "t": "이 시점으로 괘 세우기",
+  "h": "00972cbe"
+ },
+ "maihoa.hao-tu-loi-luan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>효사와<br>풀이</span>",
+  "h": "959217eb"
+ },
+ "maihoa.hoi-thay-luan-que-theo-cau": {
+  "t": "✦ 질문에 맞춰 선생님께 괘 풀이 묻기",
+  "h": "f13e6c1b"
+ },
+ "maihoa.lap-que": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"flower\"></span><b>괘 세우기</b></span>",
+  "h": "dedaeff1"
+ },
+ "maihoa.mai-hoa-dich-so": {
+  "t": "매화역수",
+  "h": "9093e560"
+ },
+ "maihoa.mai-hoa-dich-so-gieo-que": {
+  "t": "매화역수 — 괘 세우기 — 명보 자미두수",
+  "h": "7780e00b"
+ },
+ "maihoa.mai-hoa-dich-so-la-phuong": {
+  "t": "매화역수는 송나라 소강절이 기초를 닦았다고 전해지는 점법으로, 주역에 바탕을 두되 임의의 숫자, 시점, 일에서 빠르게 괘를 세웁니다. 괘를 체와 용으로 나누어 일의 흐름을 풀이합니다.",
+  "h": "35d69496"
+ },
+ "maihoa.mai-hoa-dich-so-the-dung": {
+  "t": "<b>매화역수</b><span>체 · 용 · 세 단계 본괘–호괘–변괘</span>",
+  "h": "39147698"
+ },
+ "maihoa.mot-con-so-bat-chot-nghi": {
+  "t": "문득 떠오른 숫자도 하나의 역괘의 시작이 될 수 있습니다. 그 숫자를 입력하거나 현재 시각에 맡기면, 체·용 두 괘와 묻는 일에 대한 풀이를 받을 수 있습니다.",
+  "h": "201f081c"
+ },
+ "maihoa.que-the-dung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"flower\"></span><span>체괘와<br>용괘</span>",
+  "h": "d2a7a4e8"
+ },
+ "maihoa.thanh-tam-nghi-ve-viec-muon": {
+  "t": "묻고 싶은 일을 정성껏 떠올리세요",
+  "h": "17259cfa"
+ },
+ "maihoa.vd-27": {
+  "t": "예: 27",
+  "h": "4afd7b36"
+ },
+ "maihoa.vd-viec-chuyen-cho-lam-nay": {
+  "t": "예: 이번 이직을 해도 될까요?",
+  "h": "ec1b3e52"
  },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">출생 연도 입력</span>",

@@ -258,6 +258,70 @@
    "shell"
   ]
  },
+ "/app/kinh-dich": {
+  "file": "app-kinh-dich.html",
+  "keys": [
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "kinhdich.1-gieo-que",
+   "kinhdich.bam-de-bat-dau-gieo-que",
+   "kinhdich.gieo-du-6-lan-bang-dong",
+   "kinhdich.gieo-que-kinh-dich-64-que",
+   "kinhdich.hao-dong-ro-rang",
+   "kinhdich.kinh-dich-chu-dich-la-mot",
+   "kinhdich.kinh-dich-gieo-que",
+   "kinhdich.kinh-dich-gieo-que-chu-dich",
+   "kinhdich.kinh-dich-gieo-que-tu-vi",
+   "kinhdich.loi-que-hao-tu",
+   "kinhdich.que-chinh-que-bien",
+   "kinhdich.que-dang-hinh-thanh-tu-duoi",
+   "kinhdich.tap-trung-gieo-hao-dau-tien",
+   "kinhdich.truoc-mot-quyet-dinh-kho-nguoi",
+   "kinhdich.vd-cong-viec-sap-toi-cua",
+   "maihoa.cau-hoi-tuy-chon",
+   "maihoa.gieo-lai",
+   "maihoa.gieo-que-khac",
+   "maihoa.hoi-thay-luan-que-theo-cau",
+   "maihoa.thanh-tam-nghi-ve-viec-muon",
+   "napam.2-xem-ket-qua"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
+ "/app/ky-mon": {
+  "file": "app-ky-mon.html",
+  "keys": [
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "kymon.1-lap-ban",
+   "kymon.ban-9-cung-day-du",
+   "kymon.de-trong-thoi-diem-la-lay",
+   "kymon.gio-tot-cho-viec",
+   "kymon.hoi-thay-luan-ban-theo-viec",
+   "kymon.huong-nen-di-huong-nen-tranh",
+   "kymon.ky-mon-don-giap",
+   "kymon.ky-mon-don-giap-ban-9",
+   "kymon.ky-mon-don-giap-ban-9-hlor",
+   "kymon.ky-mon-don-giap-khong-tra",
+   "kymon.ky-mon-don-giap-la-mot",
+   "kymon.lap-ban-cho-mot-thoi-diem",
+   "kymon.lap-ban-khac",
+   "kymon.lap-ban-ky-mon",
+   "kymon.lap-ban-ky-mon-don-giap",
+   "kymon.lap-lai",
+   "kymon.tai-anh-chia-se-9-16",
+   "kymon.thoi-diem-de-trong-bay-gio",
+   "kymon.vd-chieu-nay-di-gap-doi",
+   "kymon.viec-muon-hoi-tuy-chon",
+   "napam.2-xem-ket-qua"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/luan-giai": {
   "file": "app-luan-giai.html",
   "keys": [
@@ -294,6 +358,41 @@
    "luangiai.tra-loi-thay-o-khung-chat",
    "luangiai.tu-vi-dau-so-la-mot",
    "luangiai.tu-vi-khong-du-doan-tuong"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
+ "/app/mai-hoa": {
+  "file": "app-mai-hoa.html",
+  "keys": [
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "kymon.tai-anh-chia-se-9-16",
+   "maihoa.1-lap-que",
+   "maihoa.ba-chang-chinh-ho-bien",
+   "maihoa.cau-hoi-tuy-chon",
+   "maihoa.con-so-nay-ra-trong-dau",
+   "maihoa.gieo-bang-mot-con-so",
+   "maihoa.gieo-lai",
+   "maihoa.gieo-que-khac",
+   "maihoa.gieo-que-mai-hoa-dich-so",
+   "maihoa.gieo-theo-gio-hien-tai-hoac",
+   "maihoa.gieo-theo-thoi-diem-nay",
+   "maihoa.hao-tu-loi-luan",
+   "maihoa.hoi-thay-luan-que-theo-cau",
+   "maihoa.lap-que",
+   "maihoa.mai-hoa-dich-so",
+   "maihoa.mai-hoa-dich-so-gieo-que",
+   "maihoa.mai-hoa-dich-so-la-phuong",
+   "maihoa.mai-hoa-dich-so-the-dung",
+   "maihoa.mot-con-so-bat-chot-nghi",
+   "maihoa.que-the-dung",
+   "maihoa.thanh-tam-nghi-ve-viec-muon",
+   "maihoa.vd-27",
+   "maihoa.vd-viec-chuyen-cho-lam-nay",
+   "napam.2-xem-ket-qua"
   ],
   "js": [
    "shell"

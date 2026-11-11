@@ -7043,6 +7043,146 @@
   "t": "生まれ年だけで、お二人の年の相性をさっと確認できます。すぐに答えが出ます（詳しい鑑定ではありません）。",
   "h": "ee011392"
  },
+ "kinhdich.1-gieo-que": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">卦を立てる</span>",
+  "h": "bf868703"
+ },
+ "kinhdich.bam-de-bat-dau-gieo-que": {
+  "t": "押すと卦立てを開始します——6回投げ、1回につき1つの爻が決まります",
+  "h": "5f61aa02"
+ },
+ "kinhdich.gieo-du-6-lan-bang-dong": {
+  "t": "コイン6回で卦を立てると、変爻を自動判定し、64卦から該当する卦を引きます——本卦・変卦・卦辞を示して解釈に使います。",
+  "h": "16e0aad0"
+ },
+ "kinhdich.gieo-que-kinh-dich-64-que": {
+  "t": "3枚のコインで64卦の易経占いを行います——本卦、変爻、変卦と卦辞つき。あなたの質問に合わせて先生が解釈します。",
+  "h": "0f696c0b"
+ },
+ "kinhdich.hao-dong-ro-rang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"zap\"></span><span>変爻が<br>明確</span>",
+  "h": "36347db6"
+ },
+ "kinhdich.kinh-dich-chu-dich-la-mot": {
+  "t": "易経（周易）は中国で最も古典的な書の一つで、陰と陽の爻の組み合わせからなる64卦を用いて、物事の変化を読み解きます。3枚のコインで卦を立てる方法は、問いに応じた卦を選ぶ最も一般的な方法の一つです。",
+  "h": "1e3cfe6a"
+ },
+ "kinhdich.kinh-dich-gieo-que": {
+  "t": "易経——卦を立てる",
+  "h": "665be6f0"
+ },
+ "kinhdich.kinh-dich-gieo-que-chu-dich": {
+  "t": "<b>易経——卦を立てる</b><span>周易64卦 · コイン3枚</span>",
+  "h": "7a49085a"
+ },
+ "kinhdich.kinh-dich-gieo-que-tu-vi": {
+  "t": "易経——卦を立てる — 明宝紫微斗数",
+  "h": "be561984"
+ },
+ "kinhdich.loi-que-hao-tu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>卦辞、<br>爻辞</span>",
+  "h": "49312043"
+ },
+ "kinhdich.que-chinh-que-bien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"aperture\"></span><span>本卦と<br>変卦</span>",
+  "h": "cbebb740"
+ },
+ "kinhdich.que-dang-hinh-thanh-tu-duoi": {
+  "t": "卦が形づくられています（下から上へ）",
+  "h": "e51d5547"
+ },
+ "kinhdich.tap-trung-gieo-hao-dau-tien": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"aperture\"></span><b id=\"tossBtnLabel\">心を集中して初爻を投げる</b></span>",
+  "h": "29a2de26"
+ },
+ "kinhdich.truoc-mot-quyet-dinh-kho-nguoi": {
+  "t": "難しい決断を前にしたとき、昔の人は当て推量をせず、卦を立てて天の意を問いました。迷っていることに心を集中し、コインを3枚投げて、いまの状況にふさわしい古の助言を受け取りましょう。",
+  "h": "5a1d9ee8"
+ },
+ "kinhdich.vd-cong-viec-sap-toi-cua": {
+  "t": "例：これからの私の仕事はどうなりますか？",
+  "h": "75b989e2"
+ },
+ "kymon.1-lap-ban": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">盤を立てる</span>",
+  "h": "77b8dfda"
+ },
+ "kymon.ban-9-cung-day-du": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>九宮の盤を<br>完全表示</span>",
+  "h": "5e9e1cc7"
+ },
+ "kymon.de-trong-thoi-diem-la-lay": {
+  "t": "時刻を空欄にすると現在の時刻で立てます。システムが九宮の盤を組み、局、値符・値使、各宮の詳細を返します。",
+  "h": "75433dd8"
+ },
+ "kymon.gio-tot-cho-viec": {
+  "t": "<span class=\"hp-ic\" data-icon=\"clock\"></span><span>用事に<br>よい時刻</span>",
+  "h": "9361b67c"
+ },
+ "kymon.hoi-thay-luan-ban-theo-viec": {
+  "t": "✦ 私の用件に合わせて先生に盤を読んでもらう",
+  "h": "8e8842e4"
+ },
+ "kymon.huong-nen-di-huong-nen-tranh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>行くべき方位、<br>避ける方位</span>",
+  "h": "92fd7884"
+ },
+ "kymon.ky-mon-don-giap": {
+  "t": "奇門遁甲",
+  "h": "857ee290"
+ },
+ "kymon.ky-mon-don-giap-ban-9": {
+  "t": "奇門遁甲——九宮の盤 — 明宝紫微斗数",
+  "h": "804e2f7a"
+ },
+ "kymon.ky-mon-don-giap-ban-9-hlor": {
+  "t": "<b>奇門遁甲</b><span>九宮盤 · 八門 · 九星 · 八神</span>",
+  "h": "8bd844e9"
+ },
+ "kymon.ky-mon-don-giap-khong-tra": {
+  "t": "奇門遁甲は一般論を調べるのではなく、現在の時刻に合わせた九宮の盤を正確に組み、目の前の用件に向かうべき方位をまっすぐ示します。今すぐ盤を立てて、必要なときの吉時と利のある方位を知りましょう。",
+  "h": "44004989"
+ },
+ "kymon.ky-mon-don-giap-la-mot": {
+  "t": "奇門遁甲は、太乙・六壬とともに中国古来の術数「三式」の一つです。奇門の盤は現在の時刻の干支に基づき、九宮・八門・九星を組み合わせて、具体的な用件に適した時期と方位を示します。",
+  "h": "a538cb61"
+ },
+ "kymon.lap-ban-cho-mot-thoi-diem": {
+  "t": "ある時刻の盤を立てる",
+  "h": "56ac40df"
+ },
+ "kymon.lap-ban-khac": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"rotate-cw\"></span><b>別の盤を立てる</b></span>",
+  "h": "19849756"
+ },
+ "kymon.lap-ban-ky-mon": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"layout-grid\"></span><b>奇門盤を立てる</b></span>",
+  "h": "2697f4a9"
+ },
+ "kymon.lap-ban-ky-mon-don-giap": {
+  "t": "時刻に合わせて奇門遁甲の盤を立てます——八門、九星、八神、三奇を九宮に配置。行くべき方位、避けるべき方位がわかります。あなたの用件に合わせて先生が解釈します。",
+  "h": "ee8b191e"
+ },
+ "kymon.lap-lai": {
+  "t": "立て直す",
+  "h": "5370aded"
+ },
+ "kymon.tai-anh-chia-se-9-16": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"save\"></span><b id=\"taiBtnLabel\">シェア画像を保存（9:16）</b></span>",
+  "h": "5f3a9343"
+ },
+ "kymon.thoi-diem-de-trong-bay-gio": {
+  "t": "時刻（空欄＝今）",
+  "h": "b29345d0"
+ },
+ "kymon.vd-chieu-nay-di-gap-doi": {
+  "t": "例：今日の午後、取引先に会いに行くなら、どの方位がよいですか？",
+  "h": "644a87b7"
+ },
+ "kymon.viec-muon-hoi-tuy-chon": {
+  "t": "尋ねたい用件（任意）",
+  "h": "680649e1"
+ },
  "laso.2026-tuviminhbao-com-all-rights-reserved": {
   "t": "© 2026 tuviminhbao.com — All rights reserved",
   "h": "5772fefb"
@@ -7262,6 +7402,94 @@
  "luangiai.tu-vi-khong-du-doan-tuong": {
   "t": "紫微斗数は未来を言い当てるものではなく、自分を知って、よりよい選択をするための手がかりです。",
   "h": "ae92de9d"
+ },
+ "maihoa.1-lap-que": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">卦を立てる</span>",
+  "h": "b51a3df6"
+ },
+ "maihoa.ba-chang-chinh-ho-bien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>三段階<br>本卦・互卦・変卦</span>",
+  "h": "0ccec2d4"
+ },
+ "maihoa.cau-hoi-tuy-chon": {
+  "t": "質問（任意）",
+  "h": "645f5819"
+ },
+ "maihoa.con-so-nay-ra-trong-dau": {
+  "t": "ふと頭に浮かんだ数字",
+  "h": "e65a46a7"
+ },
+ "maihoa.gieo-bang-mot-con-so": {
+  "t": "数字で卦を立てる",
+  "h": "9e53c84b"
+ },
+ "maihoa.gieo-lai": {
+  "t": "やり直す",
+  "h": "6c124c14"
+ },
+ "maihoa.gieo-que-khac": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"rotate-cw\"></span><b>別の卦を立てる</b></span>",
+  "h": "1eed908e"
+ },
+ "maihoa.gieo-que-mai-hoa-dich-so": {
+  "t": "数字または時刻で梅花易数の卦を立てます——体卦・用卦と五行の生剋を、本卦・互卦・変卦の三段階で示します。質問に合わせて先生が解釈します。",
+  "h": "81547445"
+ },
+ "maihoa.gieo-theo-gio-hien-tai-hoac": {
+  "t": "現在の時刻または数字で卦を立てます——システムが体用の卦を立て、動爻を定め、爻辞を返して解釈に使います。",
+  "h": "0b36b3f2"
+ },
+ "maihoa.gieo-theo-thoi-diem-nay": {
+  "t": "この時刻で卦を立てる",
+  "h": "00972cbe"
+ },
+ "maihoa.hao-tu-loi-luan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>爻辞と<br>解釈</span>",
+  "h": "959217eb"
+ },
+ "maihoa.hoi-thay-luan-que-theo-cau": {
+  "t": "✦ 質問に合わせて先生に卦を読んでもらう",
+  "h": "f13e6c1b"
+ },
+ "maihoa.lap-que": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"flower\"></span><b>卦を立てる</b></span>",
+  "h": "dedaeff1"
+ },
+ "maihoa.mai-hoa-dich-so": {
+  "t": "梅花易数",
+  "h": "9093e560"
+ },
+ "maihoa.mai-hoa-dich-so-gieo-que": {
+  "t": "梅花易数——卦を立てる — 明宝紫微斗数",
+  "h": "7780e00b"
+ },
+ "maihoa.mai-hoa-dich-so-la-phuong": {
+  "t": "梅花易数は、宋代の邵康節が基礎を築いたと伝えられる占法で、易経に基づきながら、任意の数字・時刻・出来事からすばやく卦を立てます。卦を体と用に分けて、物事の推移を読み解きます。",
+  "h": "35d69496"
+ },
+ "maihoa.mai-hoa-dich-so-the-dung": {
+  "t": "<b>梅花易数</b><span>体 · 用 · 三段階 本卦–互卦–変卦</span>",
+  "h": "39147698"
+ },
+ "maihoa.mot-con-so-bat-chot-nghi": {
+  "t": "ふと思いついた数字も、一つの易卦の始まりになり得ます。その数字を入力するか、現在の時刻に任せると、体と用の二つの卦と、尋ねている用件への解釈が得られます。",
+  "h": "201f081c"
+ },
+ "maihoa.que-the-dung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"flower\"></span><span>体卦と<br>用卦</span>",
+  "h": "d2a7a4e8"
+ },
+ "maihoa.thanh-tam-nghi-ve-viec-muon": {
+  "t": "尋ねたい用件を、心をこめて思い浮かべる",
+  "h": "17259cfa"
+ },
+ "maihoa.vd-27": {
+  "t": "例：27",
+  "h": "4afd7b36"
+ },
+ "maihoa.vd-viec-chuyen-cho-lam-nay": {
+  "t": "例：この転職はしてもよいでしょうか？",
+  "h": "ec1b3e52"
  },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">生まれ年を入力</span>",
