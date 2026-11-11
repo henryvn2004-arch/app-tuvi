@@ -289,7 +289,7 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
 <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=144"></script>
+<script src="/shell.js?v=145"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
@@ -642,7 +642,7 @@ function renderThang(t){
   if(t.satTinh.length) st.push(('<span class="sat">' + _tvmbT('js.vanhannam.sat-tinh', 'Sát tinh:') + ' ')+esc(t.satTinh.join(', '))+'</span>');
   if(t.baiTinh.length) st.push(('<span class="bai">' + _tvmbT('js.vanhannam.bai-tinh', 'Bại tinh:') + ' ')+esc(t.baiTinh.join(', '))+'</span>');
   h+='<div class="vh-stars">'+st.join('<br>')+'</div>';
-  h+=('<div class="vh-nen">' + _tvmbT('js.vanhannam.nen-nam-al', 'Nền năm ÂL') + ' ')+t.namAL+(t.tuoi?_tvmbT('js.vanhannam.tuoi', ' (tuổi ')+t.tuoi+')':'')+_tvmbT('js.vanhannam.tieu-han-cung', ': tiểu hạn cung ')+esc(t.cungTieuHan)+_tvmbT('js.vanhannam.luu-nien-dai-han-cung', ' · lưu niên đại hạn cung ')+esc(t.cungLuuNien)+'</div>';
+  h+=('<div class="vh-nen">' + _tvmbT('js.vanhannam.nen-nam-al', 'Nền năm ÂL') + ' ')+t.namAL+(t.tuoi?_tvmbT('js.vanhannam.tuoi', ' (tuổi ')+t.tuoi+_tvmbT('js.vanhannam.p-dong-ngoac', ')'):'')+_tvmbT('js.vanhannam.tieu-han-cung', ': tiểu hạn cung ')+esc(t.cungTieuHan)+_tvmbT('js.vanhannam.luu-nien-dai-han-cung', ' · lưu niên đại hạn cung ')+esc(t.cungLuuNien)+'</div>';
   h+='</div>';
   if(t.toHop&&t.toHop.length){
     h+='<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔮</span> Tổ hợp sao trong các cung hạn</div>';
@@ -864,7 +864,7 @@ async function _startAI(){
   // TRƯỚC KHI bể mở cho phần 2-16 — không cần sửa gì thêm ở đây khi phần
   // tháng bắt đầu ăn chung cache, cơ chế mồi vốn đã bảo vệ đúng mọi phần sau
   // phần 1, bất kể phần đó có cache hay không.
-  document.getElementById('vhProgress').textContent=_tvmbT('js.vanhannam.dang-luan-phan-1', 'Đang luận phần 1 / ')+_tongPhan+'...';
+  document.getElementById('vhProgress').textContent=_tvmbT('js.vanhannam.dang-luan-phan-1', 'Đang luận phần 1 / ')+_tongPhan+_tvmbT('js.vanhannam.p-ba-cham', '...');
   var primeOk=await _runPhanVanHan(1);
   var result=await PhanPool.run({
     total:_tongPhan,
@@ -991,7 +991,7 @@ async function _runPhanVanHan(p){
     return true;
   }catch(e){
     doneWait();
-    if(box)box.innerHTML=('<div class="laso-error">' + _tvmbT('js.luangiai.loi-phan', 'Lỗi phần') + ' ')+p+': '+esc(e.message)+' <button class="btn" onclick="window._vhRetry('+p+(')">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
+    if(box)box.innerHTML=('<div class="laso-error">' + _tvmbT('js.luangiai.loi-phan', 'Lỗi phần') + ' ')+p+_tvmbT('js.luangiai.p-hai-cham', ': ')+esc(e.message)+' <button class="btn" onclick="window._vhRetry('+p+(')">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
     return false;
   }
 }

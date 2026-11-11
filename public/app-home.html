@@ -552,7 +552,7 @@
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
-<script src="/shell.js?v=144"></script>
+<script src="/shell.js?v=145"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -1166,9 +1166,9 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
               'khac':_tvmbT('js.home.ban-menh-khac-hanh-ngay-chu', 'bản mệnh khắc hành ngày — chủ động được, hơi tốn công')};
       // Ngày kỵ thì gắn rõ QH chỉ nói về việc thường ngày, không phải cổ vũ
       // khởi sự lớn.
-      if(c.quanHeHanh&&QH[c.quanHeHanh]) plain.push((isKy&&!c.bixung?_tvmbT('js.home.rieng-viec-thuong-ngay', 'Riêng việc thường ngày, '):'')+QH[c.quanHeHanh]+'.');
+      if(c.quanHeHanh&&QH[c.quanHeHanh]) plain.push((isKy&&!c.bixung?_tvmbT('js.home.rieng-viec-thuong-ngay', 'Riêng việc thường ngày, '):'')+QH[c.quanHeHanh]+_tvmbT('js.home.p-cham', '.'));
       var mau=(c.mauCaNhan||[]).slice(0,2);
-      if(mau.length) plain.push(_tvmbT('js.home.mau-hop-ban-menh', 'Màu hợp bản mệnh: ')+mau.join(', ')+'.');
+      if(mau.length) plain.push(_tvmbT('js.home.mau-hop-ban-menh', 'Màu hợp bản mệnh: ')+mau.join(', ')+_tvmbT('js.home.p-cham', '.'));
       // Bản CHỮ THUẦN cho poster — poster vẽ trên canvas nên không dùng lại
       // được chuỗi có thẻ; dựng song song ngay tại đây để hai bên không bao
       // giờ nói khác nhau.
@@ -1382,7 +1382,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     var xung=nm?(', '+nm):'';
     var sao=(cn.chinhTinh||[]).slice(0,2).map(function(s){return _tvmbG(['chinh','sao'],s);}).join(', ');
     return _tvmbT('js.home.van-hom-nay-ca-nhan', 'Con lại ghé rồi{comma_name}. Hôm nay ngày **{cc}**, nhật hạn của con đang ở cung **{cung}**', {comma_name:xung, cc:_tvmbG('canchi', cc), cung:_tvmbG('cung', cn.cungNhatHan)})
-      + (cn.linhVuc?_tvmbT('js.home.linh-vuc', ' ({linh_vuc})', {linh_vuc:cn.linhVuc}):'') + (sao?_tvmbT('js.home.co-sao', ' — có {sao}', {sao:sao}):'') + '.'
+      + (cn.linhVuc?_tvmbT('js.home.linh-vuc', ' ({linh_vuc})', {linh_vuc:cn.linhVuc}):'') + (sao?_tvmbT('js.home.co-sao', ' — có {sao}', {sao:sao}):'') + _tvmbT('js.home.p-cham', '.')
       + (cn.bixung?_tvmbT('js.home.ngay-xung-tuoi-can-than', ' Ngày xung tuổi, con cẩn thận việc lớn nhé.'):'') + _tvmbT('js.home.con-muon-hoi-them', ' Con muốn hỏi thêm gì không?');
   }
 
@@ -1533,7 +1533,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     shareBtn.onclick=function(){
       var url='https://tuviminhbao.com/app';
       var hlist=hours.map(function(h){return h.chi+(h.range?' ('+h.range+')':'');}).join(', ');
-      var txt=_tvmbT('js.home.van-ngay', 'Vận ngày ')+td.d+'/'+td.mo+_tvmbT('js.home.ngay-cwjn', ' — Ngày ')+_tvmbG('canchi', cc)+_tvmbT('js.home.hanh-i81a', ' (hành ')+_tvmbG('hanh', v.ngay.canHanh)+')'
+      var txt=_tvmbT('js.home.van-ngay', 'Vận ngày ')+td.d+'/'+td.mo+_tvmbT('js.home.ngay-cwjn', ' — Ngày ')+_tvmbG('canchi', cc)+_tvmbT('js.home.hanh-i81a', ' (hành ')+_tvmbG('hanh', v.ngay.canHanh)+_tvmbT('js.home.p-dong-ngoac', ')')
         +(v.danhGia?', '+v.danhGia.tinhChat:'')+_tvmbT('js.home.gio-hoang-dao', '. Giờ hoàng đạo: ')+hlist+_tvmbT('js.home.hoi-thay-ve-van-cua-ban', '. Hỏi Thầy về vận của bạn tại:');
       if(navigator.share){ navigator.share({title:'Vận hôm nay — Tử Vi Minh Bảo',text:txt,url:url}).catch(function(){}); return; }
       var full=txt+' '+url, done=function(){ flashIcon(shareBtn,'check',1800); };
@@ -1563,7 +1563,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       var warn=[];
       if(v.xung&&v.xung.chi){
         var yrs=(v.xung.namSinh||[]).slice(-4).join(', ');
-        warn.push(_tvmbT('js.home.xung-tuoi-29rp', 'Xung tuổi ')+_tvmbG('chi', v.xung.chi)+(yrs?' (sinh '+yrs+')':''));
+        warn.push(_tvmbT('js.home.xung-tuoi-29rp', 'Xung tuổi ')+_tvmbG('chi', v.xung.chi)+(yrs?_tvmbT('js.home.sinh-nam-xung', ' (sinh ')+yrs+_tvmbT('js.home.p-dong-ngoac', ')'):''));
       }
       if(v.ngayKy&&v.ngayKy.length) warn.push(_tvmbT('js.home.trung', 'Trùng ')+v.ngayKy.join(' + ')+_tvmbT('js.home.co-phap-kieng-khoi-su-cqsv', ' — cổ pháp kiêng khởi sự'));
       // Dòng tra cứu ĐỦ như thẻ: thêm tú, màu hợp, tài thần (bản cũ bỏ cả ba).
@@ -1780,7 +1780,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     h+='</div>';
 
     var guestTxt=allDone
-      ? _tvmbT('js.home.ban-da-xong-ca-3-buoc', 'Bạn đã xong <b>cả 3 bước</b> — tạo tài khoản để nhận ngay <b>+')+_khGuestCredits+_tvmbT('js.paywall.luong-uzlk', ' Lượng</b>')+(_signupBonusTxt?(' + '+esc(_signupBonusTxt)):'')+'.'
+      ? _tvmbT('js.home.ban-da-xong-ca-3-buoc', 'Bạn đã xong <b>cả 3 bước</b> — tạo tài khoản để nhận ngay <b>+')+_khGuestCredits+_tvmbT('js.paywall.luong-uzlk', ' Lượng</b>')+(_signupBonusTxt?(' + '+esc(_signupBonusTxt)):'')+_tvmbT('js.home.p-cham', '.')
       : _tvmbT('js.home.da-xong', 'Đã xong <b>')+done+'/'+_khGuestDefs.length+_tvmbT('js.home.buoc-tao-tai-khoan-de-giu', '</b> bước. Tạo tài khoản để giữ tiến độ này và nhận Lượng khi làm xong.');
     h+='<div class="kh-guest"><div class="kh-guest-txt">'+guestTxt+'</div>'
       +('<button class="kh-guest-btn" type="button" id="khGuestSignup">' + _tvmbT('js.auth.tao-tai-khoan', 'Tạo tài khoản') + '</button></div></div>');

@@ -74,6 +74,10 @@ const SERVER_BOUND = {
   'app-xem-tuoi.html': ['QUERIES', 'buildPhanPrompt'],
   'app-bat-tu.html': ['buildGroupQuery', 'formatBatTuToText', 'buildPregenContextForPhan'],
   'app-van-han-nam.html': ['ragQuery'],
+  // AUTHOR_ROSTER → authorName/authorStyle gửi /api/v1/chat; INVITE_MASTER_NAMES/TOPIC_CUNG khớp chữ người gõ
+  // + so cung; TP_SINH/TP_KHAC so `===` với hành của engine (W13e: từng bọc T() ⇒ /ja sai quan hệ).
+  // GUEST_MASTERS KHÔNG vào đây: `mon` là nhãn hiển thị (bọc đúng), chỉ `kw`/`cung` là dữ liệu.
+  'shell.js': ['AUTHOR_ROSTER', 'INVITE_MASTER_NAMES', 'TOPIC_CUNG', 'TP_SINH', 'TP_KHAC'],
 };
 function bodyOf(src, name) {
   const m = new RegExp(
