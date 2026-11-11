@@ -20,6 +20,9 @@
     return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
   };
   var H = function (p) { var I = window.I18n; return I && I.href ? I.href(p) : p; };
+  // Tên sao/cung/can chi của ENGINE khi chèn vào câu HIỂN THỊ: qua TuviGlossary (W15). Chỉ dùng ở chỗ vẽ —
+  // giá trị gốc vẫn là khoá tính toán/gửi server (luật W13c).
+  var G = function (kind, v) { var g = window.TuviGlossary; return g && v ? g.t(kind, v) : v; };
   if (!window.TVMB_I18N && !document.querySelector('script[src^="/i18n.js"]')) {
     var i18nS = document.createElement('script');
     i18nS.src = '/i18n.js?v=3';
@@ -84,7 +87,7 @@
   // (`SB_NAV`/`SB_MORE` ở renderSidebar), KHÔNG còn vẽ từ nhóm này — nhóm chỉ
   // còn để Cmd+K/mountToolIcon() tìm ra nhãn+icon+href của các trang khung.
   // Giữ nguyên id 'home'/'ho-so' để không phá mountToolIcon()/Cmd+K.
-  var FIXED_TOP = { group: T('js.nav.brand', 'Tử Vi Minh Bảo'), open: true, items: [
+  var FIXED_TOP = { group: T('js.shellui.brand', 'Tử Vi Minh Bảo'), open: true, items: [
     { id: 'home', label: T('js.shell.hoi-thay-moi', 'Hỏi Thầy mới'), href: '/app', icon: 'pen-line' },
     { id: 'thay', label: T('js.shell.cac-thay', 'Các Thầy'), href: '/app/thay', icon: 'users' },
     { id: 'cong-cu', label: T('js.shell.cong-cu', 'Công cụ'), href: '/app/cong-cu', icon: 'layout-grid' },
@@ -654,7 +657,7 @@
     var cur = sessionId;
     el.innerHTML = arr.slice(0, SB_RECENT_MAX).map(function (s) {
       var t = findToolItem(s.tool);
-      var name = s.q || s.title || (t && t.label) || T('js.nav.hoi-thay', 'Hỏi Thầy');
+      var name = s.q || s.title || (t && t.label) || T('js.shellui.hoi-thay', 'Hỏi Thầy');
       return '<a class="sbn-item' + (s.id === cur ? ' active' : '') + '" href="' + sbRecentHref(s) + '"><span class="sbn-tx">' + esc(name) + '</span></a>';
     }).join('');
   }
@@ -745,12 +748,12 @@
       // đáy, khung chat phủ toàn màn phải tự có lối vào điều hướng. Màn chat
       // trang chủ: đầu khung là MINH BẢO (ấn) cho tới khi một thầy được mời vào.
       ('<button class="rh-btn rh-menu mobile-only" type="button" data-act="sb-open" data-tip="' + T('js.shellui.mo-thanh-ben', 'Mở thanh bên') + '" aria-label="' + T('js.shellui.mo-thanh-ben', 'Mở thanh bên') + '">') + svg('menu') + '</button>' +
-      '<img class="rail-ava" src="' + (CHAT_HOME && !_navDone ? '/seal-128.webp' : authorAva()) + ('" alt="' + T('js.nav.hoi-thay', 'Hỏi Thầy') + '" data-tip="' + T('js.shellui.doi-thay-luan-giai', 'Đổi thầy luận giải') + '">') +
+      '<img class="rail-ava" src="' + (CHAT_HOME && !_navDone ? '/seal-128.webp' : authorAva()) + ('" alt="' + T('js.shellui.hoi-thay', 'Hỏi Thầy') + '" data-tip="' + T('js.shellui.doi-thay-luan-giai', 'Đổi thầy luận giải') + '">') +
       // id="railHTitle": Henry 2026-09-23 — bấm gợi ý chuyển tool NGAY TRONG
       // rail (startInlineTool, không điều hướng trang) thì tiêu đề đổi sang
       // TÊN TOOL thay vì tên chung "Trợ lý Luận Đường", cho biết đang ở luồng
       // nào. Xem setHeaderTitle().
-      '<div><b id="railHTitle">' + (CHAT_HOME ? (_navDone ? esc(authorLabel()) : T('js.shell.minh-bao', 'Minh Bảo')) : T('js.nav.hoi-thay', 'Hỏi Thầy')) + '</b><span>' + (CHAT_HOME ? (_navDone ? T('js.shellui.dang-tiep-chuyen', 'Đang tiếp chuyện') : T('js.shellui.nguoi-dan-duong', 'Người dẫn đường')) : esc(authorLabel())) + '</span></div>' +
+      '<div><b id="railHTitle">' + (CHAT_HOME ? (_navDone ? esc(authorLabel()) : T('js.shell.minh-bao', 'Minh Bảo')) : T('js.shellui.hoi-thay', 'Hỏi Thầy')) + '</b><span>' + (CHAT_HOME ? (_navDone ? T('js.shellui.dang-tiep-chuyen', 'Đang tiếp chuyện') : T('js.shellui.nguoi-dan-duong', 'Người dẫn đường')) : esc(authorLabel())) + '</span></div>' +
       '<div class="tools">' +
         // Đợt 0 (2026-09-24, đóng vai khách chụp màn hình thật): chat-first
         // trên mobile KHÔNG có đường lui rõ ràng — "Kết quả" đọc như một
@@ -912,7 +915,7 @@
         var d = document.createElement('div');
         d.className = 'tt-kenh';
         d.innerHTML = T('js.shellui.den-ngay', '<span>Đến ngày ') + esc(ngayVN(ngay)) + T('js.shellui.con-muon-thay-nhan-qua-dau', ' con muốn thầy nhắn qua đâu?</span>') +
-          '<div class="tt-act"><button type="button" data-k="tg">Telegram</button><button type="button" data-k="app">Chỉ khi con mở app</button></div>';
+          ('<div class="tt-act"><button type="button" data-k="tg">' + T('js.shellui.telegram', 'Telegram') + '</button><button type="button" data-k="app">' + T('js.shellui.chi-khi-con-mo-app', 'Chỉ khi con mở app') + '</button></div>');
         chat.appendChild(d); chat.scrollTop = chat.scrollHeight;
         d.addEventListener('click', function (e) {
           var b = e.target.closest('button'); if (!b) return;
@@ -926,7 +929,7 @@
             .then(function (res) {
               if (res && res.url) { if (w) w.location.href = res.url; else location.href = res.url; }
               else if (w) w.close();
-              d.innerHTML = '<span>' + (res && res.url ? 'Con bấm Start trong Telegram là xong — tới ngày thầy nhắn.' : 'Chưa mở được Telegram, con thử lại ở trang Hồ sơ nhé.') + '</span>';
+              d.innerHTML = '<span>' + (res && res.url ? T('js.shellui.con-bam-start-trong-telegram-la', 'Con bấm Start trong Telegram là xong — tới ngày thầy nhắn.') : T('js.shellui.chua-mo-duoc-telegram-con-thu', 'Chưa mở được Telegram, con thử lại ở trang Hồ sơ nhé.')) + '</span>';
             })
             .catch(function () { if (w) w.close(); d.remove(); });
         });
@@ -951,7 +954,7 @@
         row.innerHTML = '<img class="msg-ava" src="' + (a ? '/authors/' + a.id + '.jpg' : authorAva()) + '" alt=""><div class="msg-body">' +
           T('js.shellui.hom', '<p>Hôm ') + esc(ngayVN(String(it.created_at || '').slice(0, 10))) + T('js.shellui.thay-3v67', ' thầy') + (a ? ' ' + esc(a.name) : '') + T('js.shellui.co-noi', ' có nói: <i>“') + esc(it.noi_dung) + '”</i></p>' +
           T('js.shellui.chuyen-do-the-nao-roi-con', '<p>Chuyện đó thế nào rồi con?</p>') +
-          '<div class="tt-act"><button type="button" data-k="dung">Đúng rồi thầy</button><button type="button" data-k="chua">Chưa thấy gì</button><button type="button" data-k="de_sau">Để sau</button></div></div>';
+          ('<div class="tt-act"><button type="button" data-k="dung">' + T('js.shellui.dung-roi-thay', 'Đúng rồi thầy') + '</button><button type="button" data-k="chua">' + T('js.shellui.chua-thay-gi', 'Chưa thấy gì') + '</button><button type="button" data-k="de_sau">' + T('js.shellui.de-sau', 'Để sau') + '</button></div></div>');
         chat.appendChild(row); chat.scrollTop = chat.scrollHeight;
         try { track('cta_click', { tool_id: ACTIVE, slug: 'tien_tri_hoi_lai' }); } catch (e) { /* ignore */ }
         row.querySelector('.tt-act').addEventListener('click', function (e) {
@@ -966,8 +969,8 @@
           try { track('cta_click', { tool_id: ACTIVE, slug: 'tien_tri_tra_loi', meta: { kq: k } }); } catch (e2) { /* ignore */ }
           if (k === 'de_sau') { row.remove(); return; }
           thayBubble(k === 'dung'
-            ? '<p>Thầy ghi lại rồi. Có gì con cứ kể tiếp, thầy xem tiếp cho.</p>'
-            : '<p>Thầy ghi lại. Lá số chỉ nói chiều hướng, không phải chuyện chắc chắn xảy ra — chưa thấy gì cũng là điều tốt.</p>');
+            ? T('js.shellui.thay-ghi-lai-roi-co-gi', '<p>Thầy ghi lại rồi. Có gì con cứ kể tiếp, thầy xem tiếp cho.</p>')
+            : T('js.shellui.thay-ghi-lai-la-so-chi', '<p>Thầy ghi lại. Lá số chỉ nói chiều hướng, không phải chuyện chắc chắn xảy ra — chưa thấy gì cũng là điều tốt.</p>'));
         });
       })
       .catch(function () { /* im lặng — sổ hỏng thì màn chat vẫn như cũ */ });
@@ -1014,7 +1017,7 @@
     var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
     document.body.classList.remove('chat-empty');
     thayBubble(T('js.shellui.con-muon-thay-dua-ngay-tot', '<p>Con muốn thầy đưa ngày tốt, ngày xung tuổi của riêng con vào lịch điện thoại không? Mỗi sáng mở lịch là thấy.</p>') +
-      '<div class="tt-act lich-act"><button type="button" data-k="ical">iPhone / Mac</button><button type="button" data-k="google">Google Lịch</button><button type="button" data-k="de_sau">Để sau</button></div>');
+      ('<div class="tt-act lich-act"><button type="button" data-k="ical">' + T('js.shellui.iphone-mac', 'iPhone / Mac') + '</button><button type="button" data-k="google">' + T('js.shellui.google-lich', 'Google Lịch') + '</button><button type="button" data-k="de_sau">' + T('js.shellui.de-sau', 'Để sau') + '</button></div>'));
     try { track('cta_click', { tool_id: ACTIVE, slug: 'lich_rieng_moi' }); } catch (e) { /* ignore */ }
     var rows = chat.querySelectorAll('.msg.a'), act = rows.length ? rows[rows.length - 1].querySelector('.lich-act') : null;
     if (act) act.addEventListener('click', function (e) {
@@ -1027,8 +1030,8 @@
       try { localStorage.setItem('tvmb_lich_done', '1'); } catch (e2) { /* ignore */ }
       act.remove();
       moLichRieng(k).then(function (okk) {
-        thayBubble(okk ? '<p>Xong rồi. Lịch tự cập nhật mỗi ngày, con không phải làm gì thêm.</p>'
-          : '<p>Chưa thêm được lịch, con thử lại ở trang Cả nhà mình nhé.</p>');
+        thayBubble(okk ? T('js.shellui.xong-roi-lich-tu-cap-nhat', '<p>Xong rồi. Lịch tự cập nhật mỗi ngày, con không phải làm gì thêm.</p>')
+          : T('js.shellui.chua-them-duoc-lich-con-thu', '<p>Chưa thêm được lịch, con thử lại ở trang Cả nhà mình nhé.</p>'));
       });
     });
     return true;
@@ -1050,7 +1053,7 @@
         var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
         document.body.classList.remove('chat-empty');
         thayBubble(T('js.shellui.con-25rm', '<p>Còn ') + t.conNgay + T('js.shellui.ngay-nua-la-tet-thay-xem', ' ngày nữa là Tết. Thầy xem tuổi xông đất hợp nhà con và giờ, hướng xuất hành mùng 1–3 cho cả nhà nhé?</p>') +
-          '<div class="tt-act tet-act"><button type="button" data-k="nha">Xem cho cả nhà</button><button type="button" data-k="minh">Chỉ mình con</button><button type="button" data-k="de_sau">Để sau</button></div>');
+          ('<div class="tt-act tet-act"><button type="button" data-k="nha">' + T('js.shellui.xem-cho-ca-nha', 'Xem cho cả nhà') + '</button><button type="button" data-k="minh">' + T('js.shellui.chi-minh-con', 'Chỉ mình con') + '</button><button type="button" data-k="de_sau">' + T('js.shellui.de-sau', 'Để sau') + '</button></div>'));
         try { track('cta_click', { tool_id: ACTIVE, slug: 'tet_moi', meta: { con_ngay: t.conNgay } }); } catch (e) { /* ignore */ }
         var rows = chat.querySelectorAll('.msg.a'), act = rows.length ? rows[rows.length - 1].querySelector('.tet-act') : null;
         if (!act) return;
@@ -1062,8 +1065,8 @@
           if (k === 'de_sau') { try { localStorage.setItem('tvmb_tet_snooze', String(Date.now() + 14 * 864e5)); } catch (e2) { /* ignore */ } return; }
           try { localStorage.setItem(key, '1'); } catch (e2) { /* ignore */ }
           var input = document.getElementById('railInput'); if (!input) return;
-          input.value = k === 'nha' ? 'Thầy xem giúp con tuổi xông đất và giờ, hướng xuất hành Tết năm nay cho cả nhà con.'
-            : 'Thầy xem giúp con tuổi xông đất và giờ, hướng xuất hành Tết năm nay cho con.';
+          input.value = k === 'nha' ? T('js.shellui.thay-xem-giup-con-tuoi-xong', 'Thầy xem giúp con tuổi xông đất và giờ, hướng xuất hành Tết năm nay cho cả nhà con.')
+            : T('js.shellui.thay-xem-giup-con-tuoi-xong-jdse', 'Thầy xem giúp con tuổi xông đất và giờ, hướng xuất hành Tết năm nay cho con.');
           sendMsg();
         });
       })
@@ -1099,7 +1102,7 @@
       T('js.shellui.thay-doc-thang-la-so', ', thầy đọc thẳng lá số ') + v.goi + '.</div>' +
       ('<div class="fi-d">' + T('js.shellui.luu-vao-so-la-so-mien', 'Lưu vào Sổ lá số, miễn phí. Lần sau gõ @ là gọi được.') + '</div>') +
       ('<div class="fi-act"><button type="button" class="fi-go">' + T('js.shellui.them-la-so', 'Thêm lá số') + ' ') + v.cua.replace(/ con$/, '') + '</button>' +
-      '<button type="button" class="fi-skip">Để sau</button></div>';
+      ('<button type="button" class="fi-skip">' + T('js.shellui.de-sau', 'Để sau') + '</button></div>');
     chat.appendChild(d);
     chat.scrollTop = chat.scrollHeight;
     try { track('cta_click', { tool_id: ACTIVE, slug: 'family_invite_shown', meta: { vai: inv.vaiTro } }); } catch (e) { /* ignore */ }
@@ -1120,7 +1123,7 @@
     ensureScripts(['/tools-shared/vn-timezone.js?v=1', '/tools-shared/noi-sinh.js?v=1'], function (e1) {
       ensureScripts(['/tuvi-form.js?v=15'], function (e2) {
         if (e1 || e2 || typeof TuviForm === 'undefined') {
-          inlineErrorBubble(chat, 'chưa mở được form ngày sinh.', '/app/so-la-so');
+          inlineErrorBubble(chat, T('js.shellui.chua-mo-duoc-form-ngay-sinh', 'chưa mở được form ngày sinh.'), '/app/so-la-so');
           return;
         }
         TuviForm.renderChat({
@@ -1130,7 +1133,7 @@
           q1: T('js.shellui.con-goi-la-gi', 'Con gọi {goi} là gì (vd "{vd}"), giới tính gì?', { goi: v.goi, vd: vai === 'chong' ? T('js.shellui.anh-tuan', 'Anh Tuấn') : vai === 'con' ? T('js.shellui.be-an', 'Bé An') : v.nhan }),
           q2: T('js.shellui.ngay-sinh-duong-lich-cua', 'Ngày sinh dương lịch của ') + v.goi + '?',
           q3: T('js.shellui.gio-sinh-cua', 'Giờ sinh của ') + v.goi + T('js.shellui.la-may-gio', ' là mấy giờ?'),
-          submitLabel: 'Lập lá số →',
+          submitLabel: T('js.shellui.lap-la-so', 'Lập lá số →'),
           onDone: function (b) { saveFamilyChart(vai, v, b, q); },
         });
       });
@@ -1187,8 +1190,8 @@
   }
   function mentionCandidates() {
     var out = [];
-    (_family || []).forEach(function (m) { out.push({ a: m, sub: 'Người nhà', member: true }); });
-    if (_author) out.push({ a: _author, sub: 'Đang tiếp chuyện' });
+    (_family || []).forEach(function (m) { out.push({ a: m, sub: T('js.shellui.nguoi-nha-rxn6', 'Người nhà'), member: true }); });
+    if (_author) out.push({ a: _author, sub: T('js.shellui.dang-tiep-chuyen', 'Đang tiếp chuyện') });
     GUEST_MASTERS.forEach(function (g) {
       var a = authorById(g.id);
       if (a && (!_author || a.id !== _author.id) && guestDu(g)) out.push({ a: a, sub: g.mon });
@@ -1401,7 +1404,7 @@
   function stripImages(msgs) {
     var out = [];
     (msgs || []).forEach(function (m) {
-      var c = m.content || (m.images && m.images.length ? '[đã gửi ảnh]' : '');
+      var c = m.content || (m.images && m.images.length ? T('js.shellui.da-gui-anh', '[đã gửi ảnh]') : '');
       if (c) out.push({ role: m.role, content: c });
     });
     return out;
@@ -1905,7 +1908,7 @@
     var btn = document.querySelector('[data-act="share"]'); if (btn) btn.disabled = true;
     var payload = {
       toolId: ACTIVE || 'laso',
-      title: (curMeta && curMeta.title) || T('js.nav.hoi-thay', 'Hỏi Thầy'),
+      title: (curMeta && curMeta.title) || T('js.shellui.hoi-thay', 'Hỏi Thầy'),
       ctxLabel: _birthLabel(),
       thay: _author ? { id: _author.id, name: _author.name } : null,
       // restore: khung giữa (lá số/kịch bản) để người nhận NỐI PHIÊN hỏi tiếp.
@@ -1925,7 +1928,7 @@
         // Điện thoại (iOS/Android): mở SHARE SHEET native của hệ điều hành —
         // đủ WhatsApp, Messages, AirDrop, Zalo… đúng trải nghiệm quen thuộc.
         // Người dùng bấm ✕ (AbortError) thì thôi; lỗi khác → rơi về modal tự dựng.
-        var titleTxt = (curMeta && curMeta.title) || T('js.nav.hoi-thay', 'Hỏi Thầy');
+        var titleTxt = (curMeta && curMeta.title) || T('js.shellui.hoi-thay', 'Hỏi Thầy');
         var modalOpts = { title: T('js.shellui.chia-se-phien-hoi-thay', 'Chia sẻ phiên Hỏi Thầy'), desc: T('js.shellui.ai-co-link-deu-doc-duoc', 'Ai có link đều đọc được lá số và toàn bộ hỏi đáp trong phiên này.'), shareText: T('js.shellui.xem-phan-luan-giai-cua-thay', 'Xem phần luận giải của thầy cho lá số này: ') };
         shareLink(url, { title: titleTxt + T('js.shellui.tu-vi-minh-bao', ' — Tử Vi Minh Bảo'), text: T('js.shellui.xem-phan-luan-giai-cua-thay-6as2', 'Xem phần luận giải của thầy cho lá số này:'), url: url }, modalOpts, onMedium);
       })
@@ -2050,7 +2053,7 @@
     var lunar = b.isLunar === true || b.amlich === true || b.duongLich === false;
     parts.push(('0' + d).slice(-2) + '/' + ('0' + m).slice(-2) + '/' + y + (lunar ? T('js.shellui.am-lich', ' (âm lịch)') : T('js.shellui.duong-lich', ' (dương lịch)')));
     var hi = Number(pick2(b, 'hourBranch', 'gioIdx', 'gio'));
-    if (hi >= 0 && hi < 12) parts.push(T('js.shellui.gio-chi', 'giờ {chi} ({khung})', { chi: SHARE_CHI[hi], khung: SHARE_GIO[hi] }));
+    if (hi >= 0 && hi < 12) parts.push(T('js.shellui.gio-chi', 'giờ {chi} ({khung})', { chi: G('chi', SHARE_CHI[hi]), khung: SHARE_GIO[hi] }));
     return parts.join(' · ');
   }
 
@@ -2263,7 +2266,7 @@
   function wsTitleText() {
     var b = document.querySelector('.ws-title b');
     var t = b ? String(b.textContent || '').trim() : '';
-    return t || 'Kết quả luận giải';
+    return t || T('js.shellui.ket-qua-luan-giai', 'Kết quả luận giải');
   }
 
   // Chuẩn hoá payload — MỘT phép duy nhất cho cả hai đường (tool đưa / shell
@@ -2277,15 +2280,15 @@
     // còn sót từ tool khác sẽ gắn nhầm chủ nhân cho bản chia sẻ.
     var bLine = shareBirthLines(o);
     if (bLine) {
-      if (blocks) blocks.unshift({ header: 'Lá số dùng để luận', text: bLine });
+      if (blocks) blocks.unshift({ header: T('js.shellui.la-so-dung-de-luan', 'Lá số dùng để luận'), text: bLine });
       else if (kind === 'text') text = bLine + '\n\n' + (text || '');
-      else blocks = [{ header: 'Lá số dùng để luận', text: bLine },
+      else blocks = [{ header: T('js.shellui.la-so-dung-de-luan', 'Lá số dùng để luận'), text: bLine },
         { header: null, image: o.imageUrl || null, text: text }];
     }
     return {
       kind: kind,
       toolId: o.toolId || ACTIVE || 'app',
-      title: String(o.title || 'Kết quả luận giải').slice(0, 160),
+      title: String(o.title || T('js.shellui.ket-qua-luan-giai', 'Kết quả luận giải')).slice(0, 160),
       imageUrl: o.imageUrl || null,
       text: text,
       blocks: blocks,
@@ -2349,7 +2352,7 @@
     else if (host && s.kind === 'text') {
       blocks = domShareBlocks(host, SNAP_TEXT_CAP, SNAP_BLOCK_CAP);
       var bl = shareBirthLines({});
-      if (bl) blocks.unshift({ header: 'Lá số dùng để luận', text: bl });
+      if (bl) blocks.unshift({ header: T('js.shellui.la-so-dung-de-luan', 'Lá số dùng để luận'), text: bl });
     } else blocks = [{ header: null, image: s.imageUrl || null, text: s.text || null }];
     blocks = blocks.map(function (b) { return { header: b.header || null, image: b.image || null, text: b.text || null }; })
       .filter(function (b) { return b.text || b.image; });
@@ -2770,12 +2773,12 @@
   // ~30 tool còn lại. Quote lấy từ chính văn cổ (Luận Ngữ/Mạnh Tử/Đạo Đức
   // Kinh/Tôn Tử Binh Pháp), không bịa.
   var BOOK_QUOTES = {
-    'luan-giai': { vi: 'Tận kỳ tâm giả, tri kỳ tính dã; tri kỳ tính, tắc tri thiên hĩ.', viet: 'Người thấu tận lòng mình thì biết được tính mình; biết tính mình thì biết được lẽ trời.', src: 'Mạnh Tử · Tận Tâm thượng' },
-    'chu-trinh-cuoc-doi': { vi: 'Tam thập nhi lập, tứ thập nhi bất hoặc, ngũ thập nhi tri thiên mệnh.', viet: 'Ba mươi tuổi lập thân, bốn mươi tuổi hết nghi hoặc, năm mươi tuổi biết mệnh trời.', src: 'Khổng Tử · Luận Ngữ, Vi Chính' },
-    'van-han-nam': { vi: 'Hoạ hề, phúc chi sở ỷ; phúc hề, hoạ chi sở phục.', viet: 'Trong hoạ có mầm phúc, trong phúc có mầm hoạ.', src: 'Lão Tử · Đạo Đức Kinh' },
-    'cong-so': { vi: 'Tri kỷ tri bỉ, bách chiến bất đãi.', viet: 'Biết mình biết người, trăm trận không nguy.', src: 'Tôn Tử · Binh Pháp' },
-    'day-con': { vi: 'Tính tương cận dã, tập tương viễn dã.', viet: 'Tính người vốn gần nhau, do tập nhiễm mà xa nhau.', src: 'Khổng Tử · Luận Ngữ, Dương Hoá' },
-    'huong-nghiep-tre': { vi: 'Tri chi giả bất như hiếu chi giả; hiếu chi giả bất như lạc chi giả.', viet: 'Biết mà làm không bằng thích mà làm; thích mà làm không bằng say mê mà làm.', src: 'Khổng Tử · Luận Ngữ, Ung Dã' }
+    'luan-giai': { vi: T('js.shellui.tan-ky-tam-gia-tri-ky', 'Tận kỳ tâm giả, tri kỳ tính dã; tri kỳ tính, tắc tri thiên hĩ.'), viet: T('js.shellui.nguoi-thau-tan-long-minh-thi', 'Người thấu tận lòng mình thì biết được tính mình; biết tính mình thì biết được lẽ trời.'), src: T('js.shellui.manh-tu-tan-tam-thuong', 'Mạnh Tử · Tận Tâm thượng') },
+    'chu-trinh-cuoc-doi': { vi: T('js.shellui.tam-thap-nhi-lap-tu-thap', 'Tam thập nhi lập, tứ thập nhi bất hoặc, ngũ thập nhi tri thiên mệnh.'), viet: T('js.shellui.ba-muoi-tuoi-lap-than-bon', 'Ba mươi tuổi lập thân, bốn mươi tuổi hết nghi hoặc, năm mươi tuổi biết mệnh trời.'), src: T('js.shellui.khong-tu-luan-ngu-vi-chinh', 'Khổng Tử · Luận Ngữ, Vi Chính') },
+    'van-han-nam': { vi: T('js.shellui.hoa-he-phuc-chi-so-y', 'Hoạ hề, phúc chi sở ỷ; phúc hề, hoạ chi sở phục.'), viet: T('js.shellui.trong-hoa-co-mam-phuc-trong', 'Trong hoạ có mầm phúc, trong phúc có mầm hoạ.'), src: T('js.shellui.lao-tu-dao-duc-kinh', 'Lão Tử · Đạo Đức Kinh') },
+    'cong-so': { vi: T('js.shellui.tri-ky-tri-bi-bach-chien', 'Tri kỷ tri bỉ, bách chiến bất đãi.'), viet: T('js.shellui.biet-minh-biet-nguoi-tram-tran', 'Biết mình biết người, trăm trận không nguy.'), src: T('js.shellui.ton-tu-binh-phap', 'Tôn Tử · Binh Pháp') },
+    'day-con': { vi: T('js.shellui.tinh-tuong-can-da-tap-tuong', 'Tính tương cận dã, tập tương viễn dã.'), viet: T('js.shellui.tinh-nguoi-von-gan-nhau-do', 'Tính người vốn gần nhau, do tập nhiễm mà xa nhau.'), src: T('js.shellui.khong-tu-luan-ngu-duong-hoa', 'Khổng Tử · Luận Ngữ, Dương Hoá') },
+    'huong-nghiep-tre': { vi: T('js.shellui.tri-chi-gia-bat-nhu-hieu', 'Tri chi giả bất như hiếu chi giả; hiếu chi giả bất như lạc chi giả.'), viet: T('js.shellui.biet-ma-lam-khong-bang-thich', 'Biết mà làm không bằng thích mà làm; thích mà làm không bằng say mê mà làm.'), src: T('js.shellui.khong-tu-luan-ngu-ung-da', 'Khổng Tử · Luận Ngữ, Ung Dã') }
   };
   function toRomanUpper(n) {
     var map = [[1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
@@ -3270,18 +3273,18 @@
   // nhờ LLM phân loại: thêm một lượt model cho mỗi câu hỏi là chi phí thật, mà
   // thứ cần chỉ là gọi đúng tên một cung.
   var TOPIC_CUNG = [
-    { cung: 'Cung Tài Bạch', kw: ['tiền', 'tài chính', 'giàu', 'lương', 'thu nhập', 'đầu tư', 'nợ', 'lỗ', 'lãi', 'buôn', 'kinh doanh'] },
-    { cung: 'Cung Quan Lộc', kw: ['công việc', 'sự nghiệp', 'nghề', 'thăng tiến', 'chức', 'công danh', 'thi', 'việc làm', 'sếp', 'nghỉ việc'] },
-    { cung: 'Cung Phu Thê', kw: ['vợ', 'chồng', 'hôn nhân', 'kết hôn', 'cưới', 'yêu', 'người ấy', 'tình duyên', 'ly hôn', 'bạn gái', 'bạn trai'] },
-    { cung: 'Cung Tử Tức', kw: ['con', 'con cái', 'sinh con', 'thai', 'hiếm muộn'] },
-    { cung: 'Cung Tật Ách', kw: ['bệnh', 'sức khỏe', 'tai nạn', 'mổ', 'ốm', 'thương tích'] },
-    { cung: 'Cung Phụ Mẫu', kw: ['cha', 'mẹ', 'bố', 'ba mẹ', 'phụ mẫu', 'song thân'] },
-    { cung: 'Cung Điền Trạch', kw: ['nhà', 'đất', 'bất động sản', 'mua nhà', 'xây nhà', 'chung cư'] },
-    { cung: 'Cung Thiên Di', kw: ['nước ngoài', 'xuất ngoại', 'đi xa', 'di cư', 'chuyển chỗ', 'du học', 'định cư'] },
-    { cung: 'Cung Nô Bộc', kw: ['bạn bè', 'đồng nghiệp', 'cấp dưới', 'nhân viên', 'đối tác'] },
-    { cung: 'Cung Huynh Đệ', kw: ['anh', 'chị', 'em ruột', 'huynh đệ', 'anh em'] },
-    { cung: 'Cung Phúc Đức', kw: ['phúc', 'tâm linh', 'bình an', 'tổ tiên', 'nghiệp'] },
-    { cung: 'Cung Mệnh', kw: ['tính cách', 'bản thân', 'con người tôi', 'mệnh của tôi', 'tôi là người'] },
+    { cung: T('js.shellui.cung-tai-bach', 'Cung Tài Bạch'), kw: ['tiền', 'tài chính', 'giàu', 'lương', 'thu nhập', 'đầu tư', 'nợ', 'lỗ', 'lãi', 'buôn', 'kinh doanh'] },
+    { cung: T('js.shellui.cung-quan-loc', 'Cung Quan Lộc'), kw: ['công việc', 'sự nghiệp', 'nghề', 'thăng tiến', 'chức', 'công danh', 'thi', 'việc làm', 'sếp', 'nghỉ việc'] },
+    { cung: T('js.shellui.cung-phu-the', 'Cung Phu Thê'), kw: ['vợ', 'chồng', 'hôn nhân', 'kết hôn', 'cưới', 'yêu', 'người ấy', 'tình duyên', 'ly hôn', 'bạn gái', 'bạn trai'] },
+    { cung: T('js.shellui.cung-tu-tuc', 'Cung Tử Tức'), kw: ['con', 'con cái', 'sinh con', 'thai', 'hiếm muộn'] },
+    { cung: T('js.shellui.cung-tat-ach', 'Cung Tật Ách'), kw: ['bệnh', 'sức khỏe', 'tai nạn', 'mổ', 'ốm', 'thương tích'] },
+    { cung: T('js.shellui.cung-phu-mau', 'Cung Phụ Mẫu'), kw: ['cha', 'mẹ', 'bố', 'ba mẹ', 'phụ mẫu', 'song thân'] },
+    { cung: T('js.shellui.cung-dien-trach', 'Cung Điền Trạch'), kw: ['nhà', 'đất', 'bất động sản', 'mua nhà', 'xây nhà', 'chung cư'] },
+    { cung: T('js.shellui.cung-thien-di', 'Cung Thiên Di'), kw: ['nước ngoài', 'xuất ngoại', 'đi xa', 'di cư', 'chuyển chỗ', 'du học', 'định cư'] },
+    { cung: T('js.shellui.cung-no-boc', 'Cung Nô Bộc'), kw: ['bạn bè', 'đồng nghiệp', 'cấp dưới', 'nhân viên', 'đối tác'] },
+    { cung: T('js.shellui.cung-huynh-de', 'Cung Huynh Đệ'), kw: ['anh', 'chị', 'em ruột', 'huynh đệ', 'anh em'] },
+    { cung: T('js.shellui.cung-phuc-duc', 'Cung Phúc Đức'), kw: ['phúc', 'tâm linh', 'bình an', 'tổ tiên', 'nghiệp'] },
+    { cung: T('js.shellui.cung-menh', 'Cung Mệnh'), kw: ['tính cách', 'bản thân', 'con người tôi', 'mệnh của tôi', 'tôi là người'] },
   ];
   function detectCung(txt) {
     var s = String(txt || '').toLowerCase();
@@ -3707,8 +3710,8 @@
       // trang Bát Tự) để cá nhân hoá câu hỏi theo cách cục thật. Đơn giản hoá
       // CỐ Ý: rail vẫn đúng bộ não (`scenario.type:'tu-binh'`), chỉ gợi ý
       // chung chung thay vì theo đúng lá số — model vẫn tự tính đúng khi hỏi.
-      greeting: function (b) { return 'Tứ trụ của **' + esc(b.name || 'bạn') + '** đã sẵn sàng. Hỏi tôi về nhật can, dụng thần, cách cục hay đại vận nhé.'; },
-      chips: ['Nhật can của tôi mạnh hay yếu?', 'Dụng thần là gì, hành nào?', 'Cách cục Bát Tự của tôi là gì?', 'Đại vận hiện tại thế nào?'],
+      greeting: function (b) { return T('js.shellui.tu-tru-cua', 'Tứ trụ của **') + esc(b.name || T('js.shellui.banx', 'bạn')) + T('js.shellui.da-san-sang-hoi-toi-ve', '** đã sẵn sàng. Hỏi tôi về nhật can, dụng thần, cách cục hay đại vận nhé.'); },
+      chips: [T('js.shellui.nhat-can-cua-toi-manh-hay', 'Nhật can của tôi mạnh hay yếu?'), T('js.shellui.dung-than-la-gi-hanh-nao', 'Dụng thần là gì, hành nào?'), T('js.shellui.cach-cuc-bat-tu-cua-toi', 'Cách cục Bát Tự của tôi là gì?'), T('js.shellui.dai-van-hien-tai-the-nao', 'Đại vận hiện tại thế nào?')],
     },
     'xem-tuoi': { kind: 'birth2' },
     'xem-lam-an': { kind: 'birth2' },
@@ -3780,7 +3783,7 @@
   };
   function setHeaderTitle(title) {
     var el = document.getElementById('railHTitle');
-    if (el) el.textContent = title || 'Hỏi Thầy';
+    if (el) el.textContent = title || T('js.shellui.hoi-thay', 'Hỏi Thầy');
   }
   function inlineBirth(d) {
     var gioIdx = window.VnTimezone ? window.VnTimezone.hourMinToGioIdx(d.gioHour, d.gioPhut) : 0;
@@ -3793,8 +3796,8 @@
   function inlineErrorBubble(chat, msg, fallbackPath) {
     var el = document.createElement('div');
     el.className = 'msg a';
-    el.innerHTML = '<img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body"><p>Xin lỗi, ' + esc(msg) + '</p>' +
-      (fallbackPath ? '<p><a href="' + esc(fallbackPath) + '">Mở trang công cụ →</a></p>' : '') + '</div>';
+    el.innerHTML = '<img class="msg-ava" src="' + authorAva() + ('" alt=""><div class="msg-body"><p>' + T('js.shellui.xin-loi-edlu', 'Xin lỗi,') + ' ') + esc(msg) + '</p>' +
+      (fallbackPath ? '<p><a href="' + esc(fallbackPath) + ('">' + T('js.shellui.mo-trang-cong-cu', 'Mở trang công cụ →') + '</a></p>') : '') + '</div>';
     chat.appendChild(el);
     chat.scrollTop = chat.scrollHeight;
   }
@@ -3809,7 +3812,7 @@
     streaming = false;
     chat.innerHTML = '';
     var ta = document.getElementById('railInput'), send = document.getElementById('railSend');
-    if (ta) { ta.disabled = true; ta.placeholder = 'Trả lời câu hỏi ở trên…'; }
+    if (ta) { ta.disabled = true; ta.placeholder = T('js.shellui.tra-loi-cau-hoi-o-tren', 'Trả lời câu hỏi ở trên…'); }
     if (send) send.disabled = true;
     var sugg = document.getElementById('railSugg'); if (sugg) { sugg.innerHTML = ''; sugg.style.display = 'none'; }
     var rc = document.getElementById('railCtx'); if (rc) rc.style.display = 'none'; // ẩn banner "Đang gắn:" cũ trong lúc nhập — setContext() cuối luồng tự hiện lại đúng label mới
@@ -3826,19 +3829,19 @@
       // setData() không tìm thấy gì mà ghi, đúng đường an toàn đã thiết kế.
       TuviForm.renderChat({
         prefix: 'inla', gioitinh: 'nam',
-        q1: 'Cho thầy xin thông tin người thứ nhất nhé.',
+        q1: T('js.shellui.cho-thay-xin-thong-tin-nguoi', 'Cho thầy xin thông tin người thứ nhất nhé.'),
         onDone: function (a) {
           TuviForm.renderChat({
             prefix: 'inlb', gioitinh: 'nu',
-            q1: 'Giờ đến người thứ hai.',
+            q1: T('js.shellui.gio-den-nguoi-thu-hai', 'Giờ đến người thứ hai.'),
             onDone: function (b) {
               var birthA = inlineBirth(a), birthB = inlineBirth(b);
-              birthA.name = birthA.name || 'Người A'; birthB.name = birthB.name || 'Người B';
+              birthA.name = birthA.name || 'Người A'; birthB.name = birthB.name || 'Người B'; // vào scenario gửi /api/v1/chat — chữ gốc
               Shell.setContext({
                 toolId: toolId,
                 scenario: { type: toolId, data: { birthA: birthA, birthB: birthB, nameA: birthA.name, nameB: birthB.name } },
                 label: label,
-                greeting: 'Đã có đủ thông tin **' + esc(birthA.name) + '** và **' + esc(birthB.name) + '**. Hỏi tôi để luận nhé.',
+                greeting: T('js.shellui.da-co-du-thong-tin', 'Đã có đủ thông tin **') + esc(birthA.name) + T('js.shellui.va', '** và **') + esc(birthB.name) + T('js.shellui.hoi-toi-de-luan-nhe', '**. Hỏi tôi để luận nhé.'),
               });
             },
           });
@@ -3857,7 +3860,7 @@
         if (!spec.api) {
           var ctx0 = {
             toolId: toolId, birth: birth, label: label,
-            greeting: spec.greeting ? spec.greeting(birth) : 'Lá số **' + esc(birth.name || 'bạn') + '** đã sẵn sàng. Hỏi tôi bất cứ điều gì.',
+            greeting: spec.greeting ? spec.greeting(birth) : T('js.shellui.la-so', 'Lá số **') + esc(birth.name || T('js.shellui.banx', 'bạn')) + T('js.shellui.da-san-sang-hoi-toi-bat', '** đã sẵn sàng. Hỏi tôi bất cứ điều gì.'),
           };
           if (spec.scenarioType) ctx0.scenario = { type: spec.scenarioType, data: spec.scenarioData || {} };
           if (spec.chips) ctx0.chips = spec.chips;
@@ -3868,13 +3871,13 @@
         fetch(spec.api + '?' + qs, { cache: 'no-store' })
           .then(function (r) { return r.json(); })
           .then(function (j) {
-            if (!j || !j.ok) throw new Error(j && j.error || 'không dựng được hồ sơ.');
+            if (!j || !j.ok) throw new Error(j && j.error || T('js.shellui.khong-dung-duoc-ho-so', 'không dựng được hồ sơ.'));
             Shell.setContext({
               toolId: toolId, birth: birth, scenario: { type: toolId, data: j.rail }, label: label,
-              greeting: 'Hồ sơ **' + esc(birth.name || 'bạn') + '** đã sẵn sàng. Hỏi tôi bất cứ điều gì.',
+              greeting: T('js.shellui.ho-so', 'Hồ sơ **') + esc(birth.name || T('js.shellui.banx', 'bạn')) + T('js.shellui.da-san-sang-hoi-toi-bat', '** đã sẵn sàng. Hỏi tôi bất cứ điều gì.'),
             });
           })
-          .catch(function (e) { inlineErrorBubble(chat, e.message + ' Thử lại giúp con nhé.', path); });
+          .catch(function (e) { inlineErrorBubble(chat, e.message + T('js.shellui.thu-lai-giup-con-nhe', ' Thử lại giúp con nhé.'), path); });
       },
     });
     return true;
@@ -3892,7 +3895,7 @@
       var el = document.createElement('script');
       el.src = s;
       el.onload = function () { if (--left <= 0) cb(failed); };
-      el.onerror = function () { failed = failed || new Error('Không nạp được ' + s); if (--left <= 0) cb(failed); };
+      el.onerror = function () { failed = failed || new Error(T('js.shellui.khong-nap-duoc', 'Không nạp được ') + s); if (--left <= 0) cb(failed); };
       document.head.appendChild(el);
     });
   }
@@ -3922,7 +3925,7 @@
       var showErr = function (msg) {
         busy = false;
         var e = document.getElementById(id + '-err');
-        if (e) { e.textContent = msg || 'Có lỗi, thử lại giúp con nhé.'; e.style.display = 'block'; }
+        if (e) { e.textContent = msg || T('js.shellui.co-loi-thu-lai-giup-con', 'Có lỗi, thử lại giúp con nhé.'); e.style.display = 'block'; }
       };
       try { onGo(el, showErr); } catch (e) { showErr(e && e.message); }
     });
@@ -3932,35 +3935,35 @@
   // ── kind:'fields' — nhập tay vài trường rồi tính, KHÔNG cần ngày sinh ──
   function runKimLau(chat, toolId) {
     ensureScripts(['/tools-shared/kim-lau.js?v=2'], function (err) {
-      if (err || typeof KimLauTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Kim Lâu.'); return; }
+      if (err || typeof KimLauTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-kim', 'không nạp được công cụ Kim Lâu.')); return; }
       inlStep(chat,
-        '<p>Cho thầy xin năm sinh dương lịch của con nhé.</p>' +
-        '<div class="frow"><div class="fg" style="width:110px"><label>Năm sinh</label><input type="number" id="inlKlYear" min="1900" max="2010" placeholder="1998"></div></div>',
-        'Xem Kim Lâu →', function (el, showErr) {
+        T('js.shellui.cho-thay-xin-nam-sinh-duong', '<p>Cho thầy xin năm sinh dương lịch của con nhé.</p>') +
+        ('<div class="frow"><div class="fg" style="width:110px"><label>' + T('js.shellui.nam-sinh', 'Năm sinh') + '</label><input type="number" id="inlKlYear" min="1900" max="2010" placeholder="1998"></div></div>'),
+        T('js.shellui.xem-kim-lau', 'Xem Kim Lâu →'), function (el, showErr) {
           var y = parseInt(document.getElementById('inlKlYear').value);
           var r = KimLauTool.compute(y);
           if (!r.ok) { showErr(r.error); return; }
-          inlCollapse(el, '<p>Năm sinh: <b>' + y + '</b> ✓</p>');
+          inlCollapse(el, T('js.shellui.nam-sinh-8ql1', '<p>Năm sinh: <b>') + y + '</b> ✓</p>');
           Shell.setContext({
             toolId: toolId, scenario: { type: 'kim-lau', data: r.data },
-            label: 'Kim Lâu · tuổi ' + r.data.canChi,
-            greeting: 'Đã tra Kim Lâu · Tam Tai · Hoang Ốc cho tuổi **' + esc(r.data.canChi) + '** (20 năm tới). Bạn muốn hỏi gì?',
-            chips: ['Năm nào đẹp nhất để làm nhà?', 'Năm nào cưới hỏi được?', 'Phạm Kim Lâu thì hóa giải sao?', 'Tam Tai kiêng những gì?'],
+            label: T('js.shellui.kim-lau-tuoi', 'Kim Lâu · tuổi ') + G('canchi', r.data.canChi),
+            greeting: T('js.shellui.da-tra-kim-lau-tam-tai', 'Đã tra Kim Lâu · Tam Tai · Hoang Ốc cho tuổi **') + esc(r.data.canChi) + T('js.shellui.20-nam-toi-ban-muon-hoi', '** (20 năm tới). Bạn muốn hỏi gì?'),
+            chips: [T('js.shellui.nam-nao-dep-nhat-de-lam', 'Năm nào đẹp nhất để làm nhà?'), T('js.shellui.nam-nao-cuoi-hoi-duoc', 'Năm nào cưới hỏi được?'), T('js.shellui.pham-kim-lau-thi-hoa-giai', 'Phạm Kim Lâu thì hóa giải sao?'), T('js.shellui.tam-tai-kieng-nhung-gi', 'Tam Tai kiêng những gì?')],
           });
         });
     });
   }
   function runNapAm(chat, toolId) {
     ensureScripts(['/tools-shared/nap-am.js?v=3'], function (err) {
-      if (err || typeof NapAmTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Nạp Âm.'); return; }
+      if (err || typeof NapAmTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-nap', 'không nạp được công cụ Nạp Âm.')); return; }
       inlStep(chat,
-        '<p>Cho thầy xin năm sinh dương lịch của con nhé.</p>' +
-        '<div class="frow"><div class="fg" style="width:110px"><label>Năm sinh</label><input type="number" id="inlNaYear" min="1900" max="2100" placeholder="1998"></div></div>',
-        'Xem Nạp Âm →', function (el, showErr) {
+        T('js.shellui.cho-thay-xin-nam-sinh-duong', '<p>Cho thầy xin năm sinh dương lịch của con nhé.</p>') +
+        ('<div class="frow"><div class="fg" style="width:110px"><label>' + T('js.shellui.nam-sinh', 'Năm sinh') + '</label><input type="number" id="inlNaYear" min="1900" max="2100" placeholder="1998"></div></div>'),
+        T('js.shellui.xem-nap-am', 'Xem Nạp Âm →'), function (el, showErr) {
           var y = parseInt(document.getElementById('inlNaYear').value);
           var r = NapAmTool.compute(y);
           if (!r.ok) { showErr(r.error); return; }
-          inlCollapse(el, '<p>Năm sinh: <b>' + y + '</b> ✓</p>');
+          inlCollapse(el, T('js.shellui.nam-sinh-8ql1', '<p>Năm sinh: <b>') + y + '</b> ✓</p>');
           // Rail nhận tầng ứng dụng phẳng, giống trang thật (`_ctx` gộp
           // r.data + NapAmTool.ungDung(hanh)) — `extractGenericContext` bỏ
           // im lặng mọi giá trị object nên KHÔNG lồng `ungDung` làm khoá con.
@@ -3970,54 +3973,54 @@
           ctx.tuoiHop = u.hanhHop; ctx.tuoiKy = u.hanhKy; ctx.soHop = u.so; ctx.chatLieu = u.chatLieu;
           Shell.setContext({
             toolId: toolId, scenario: { type: 'nap-am', data: ctx },
-            label: 'Nạp âm ' + r.data.canChi + ' · ' + r.data.napAm,
-            greeting: 'Năm **' + r.data.nam + '** — bản mệnh **' + esc(r.data.napAm) + '** (hành ' + esc(r.data.hanh) + '). Bạn muốn tôi luận điều gì?',
-            chips: ['Hợp màu gì, kỵ màu gì?', 'Hướng nhà/bàn làm việc nào hợp?', 'Tuổi nào hợp, tuổi nào khắc?', 'Vật phẩm phong thủy nào nên đeo?'],
+            label: T('js.shellui.nap-am', 'Nạp âm ') + G('canchi', r.data.canChi) + ' · ' + r.data.napAm,
+            greeting: T('js.shellui.nam-1mfe', 'Năm **') + r.data.nam + T('js.shellui.ban-menh', '** — bản mệnh **') + esc(r.data.napAm) + T('js.shellui.hanh-3if6', '** (hành ') + esc(r.data.hanh) + (')' + T('js.shellui.ban-muon-toi-luan-dieu-gi-8en2', '. Bạn muốn tôi luận điều gì?')),
+            chips: [T('js.shellui.hop-mau-gi-ky-mau-gi', 'Hợp màu gì, kỵ màu gì?'), T('js.shellui.huong-nha-ban-lam-viec-nao', 'Hướng nhà/bàn làm việc nào hợp?'), T('js.shellui.tuoi-nao-hop-tuoi-nao-khac', 'Tuổi nào hợp, tuổi nào khắc?'), T('js.shellui.vat-pham-phong-thuy-nao-nen', 'Vật phẩm phong thủy nào nên đeo?')],
           });
         });
     });
   }
   function runBatTrach(chat, toolId) {
     ensureScripts(['/tools-shared/bat-trach.js?v=2'], function (err) {
-      if (err || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Bát Trạch.'); return; }
+      if (err || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-bat', 'không nạp được công cụ Bát Trạch.')); return; }
       inlStep(chat,
-        '<p>Cho thầy xin năm sinh và giới tính của con nhé.</p>' +
+        T('js.shellui.cho-thay-xin-nam-sinh-va', '<p>Cho thầy xin năm sinh và giới tính của con nhé.</p>') +
         '<div class="frow">' +
-          '<div class="fg" style="width:110px"><label>Năm sinh</label><input type="number" id="inlBtYear" min="1900" max="2100" placeholder="1990"></div>' +
-          '<div class="fg" style="width:100px"><label>Giới tính</label><select id="inlBtGender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>' +
+          ('<div class="fg" style="width:110px"><label>' + T('js.shellui.nam-sinh', 'Năm sinh') + '</label><input type="number" id="inlBtYear" min="1900" max="2100" placeholder="1990"></div>') +
+          ('<div class="fg" style="width:100px"><label>' + T('js.shellui.gioi-tinh', 'Giới tính') + '</label><select id="inlBtGender"><option value="nam">' + T('js.shellui.nam', 'Nam') + '</option><option value="nu">' + T('js.shellui.nu', 'Nữ') + '</option></select></div>') +
         '</div>',
-        'Xem Bát Trạch →', function (el, showErr) {
+        T('js.shellui.xem-bat-trach', 'Xem Bát Trạch →'), function (el, showErr) {
           var y = parseInt(document.getElementById('inlBtYear').value);
           var g = document.getElementById('inlBtGender').value;
           var r = BatTrachTool.compute(y, g);
           if (!r.ok) { showErr(r.error); return; }
-          inlCollapse(el, '<p>Năm sinh: <b>' + y + '</b> · ' + (g === 'nam' ? 'Nam' : 'Nữ') + ' ✓</p>');
+          inlCollapse(el, T('js.shellui.nam-sinh-8ql1', '<p>Năm sinh: <b>') + y + '</b> · ' + (g === 'nam' ? 'Nam' : T('js.shellui.nu', 'Nữ')) + ' ✓</p>');
           Shell.setContext({
             toolId: toolId, scenario: { type: 'bat-trach', data: r.data },
-            label: 'Bát Trạch · ' + r.data.menhQuai + ' · ' + r.data.nhom,
-            greeting: 'Cung mệnh của bạn là **' + esc(r.data.menhQuai) + '** (' + esc(r.data.nhom) + '). Bạn muốn hỏi hướng cho việc gì?',
-            chips: ['Hướng nhà nào hợp nhất?', 'Bếp nên đặt hướng nào?', 'Giường ngủ quay hướng nào?', 'Buộc ở hướng xấu thì hóa giải sao?'],
+            label: T('js.shellui.bat-trach', 'Bát Trạch · ') + r.data.menhQuai + ' · ' + r.data.nhom,
+            greeting: T('js.shellui.cung-menh-cua-ban-la', 'Cung mệnh của bạn là **') + esc(r.data.menhQuai) + '** (' + esc(r.data.nhom) + (')' + T('js.shellui.ban-muon-hoi-huong-cho-viec', '. Bạn muốn hỏi hướng cho việc gì?')),
+            chips: [T('js.shellui.huong-nha-nao-hop-nhat', 'Hướng nhà nào hợp nhất?'), T('js.shellui.bep-nen-dat-huong-nao', 'Bếp nên đặt hướng nào?'), T('js.shellui.giuong-ngu-quay-huong-nao', 'Giường ngủ quay hướng nào?'), T('js.shellui.buoc-o-huong-xau-thi-hoa', 'Buộc ở hướng xấu thì hóa giải sao?')],
           });
         });
     });
   }
   function runSoDep(chat, toolId) {
     ensureScripts(['/tools-shared/bat-trach.js?v=2', '/tools-shared/mai-hoa.js?v=1', '/tools-shared/kinh-dich.js?v=5', '/tools-shared/kinh-dich-hao.js?v=1', '/tools-shared/kinh-dich-doc.js?v=1', '/tools-shared/nap-am.js?v=3', '/tools-shared/so-dep.js?v=2'], function (err) {
-      if (err || typeof SoDepTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Số Đẹp.'); return; }
+      if (err || typeof SoDepTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-so', 'không nạp được công cụ Số Đẹp.')); return; }
       inlStep(chat,
-        '<p>Cho thầy dãy số con muốn chấm điểm nhé (số điện thoại, biển số…).</p>' +
+        T('js.shellui.cho-thay-day-so-con-muon', '<p>Cho thầy dãy số con muốn chấm điểm nhé (số điện thoại, biển số…).</p>') +
         '<div class="frow">' +
-          '<div class="fg" style="flex:1;min-width:140px"><label>Dãy số</label><input type="text" id="inlSdSo" placeholder="09xxxxxxxx" inputmode="numeric"></div>' +
-          '<div class="fg" style="width:100px"><label>Năm sinh (tuỳ chọn)</label><input type="number" id="inlSdNam" min="1900" max="2100"></div>' +
-          '<div class="fg" style="width:90px"><label>Giới tính</label><select id="inlSdGt"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>' +
+          ('<div class="fg" style="flex:1;min-width:140px"><label>' + T('js.shellui.day-so', 'Dãy số') + '</label><input type="text" id="inlSdSo" placeholder="' + T('js.shellui.09xxxxxxxx', '09xxxxxxxx') + '" inputmode="numeric"></div>') +
+          ('<div class="fg" style="width:100px"><label>' + T('js.shellui.nam-sinh-tuy-chon', 'Năm sinh (tuỳ chọn)') + '</label><input type="number" id="inlSdNam" min="1900" max="2100"></div>') +
+          ('<div class="fg" style="width:90px"><label>' + T('js.shellui.gioi-tinh', 'Giới tính') + '</label><select id="inlSdGt"><option value="nam">' + T('js.shellui.nam', 'Nam') + '</option><option value="nu">' + T('js.shellui.nu', 'Nữ') + '</option></select></div>') +
         '</div>',
-        'Chấm điểm →', function (el, showErr) {
+        T('js.shellui.cham-diem', 'Chấm điểm →'), function (el, showErr) {
           var so = document.getElementById('inlSdSo').value;
           var namSinh = parseInt(document.getElementById('inlSdNam').value) || undefined;
           var gioiTinh = document.getElementById('inlSdGt').value;
           var r = SoDepTool.danhGia(so, { namSinh: namSinh, gioiTinh: gioiTinh });
           if (!r.ok) { showErr(r.error); return; }
-          inlCollapse(el, '<p>Dãy số: <b>' + esc(so) + '</b> ✓</p>');
+          inlCollapse(el, T('js.shellui.day-so-dzep', '<p>Dãy số: <b>') + esc(so) + '</b> ✓</p>');
           var d = r.data, dt = d.dongThuan;
           var ctx = {
             soSach: d.soSach, doDai: d.doDai,
@@ -4029,60 +4032,60 @@
           };
           Shell.setContext({
             toolId: toolId, scenario: { type: 'so-dep', data: ctx },
-            label: 'Số đẹp ' + d.soSach,
-            greeting: 'Dãy số **' + d.soSach + '** — ' + (dt.tongPhieu ? dt.tot + '/' + dt.tongPhieu + ' trường phái nói tốt' : 'quá ngắn để tính đồng thuận') + '. Bạn muốn tôi luận điều gì?',
-            chips: ['Dãy số này có nên dùng không?', 'Sao Bát Tinh nổi bật nghĩa là gì?', 'Quẻ Dịch lập được nói lên điều gì?', 'Nên đổi số nào để tốt hơn?'],
+            label: T('js.shellui.so-dep', 'Số đẹp ') + d.soSach,
+            greeting: T('js.shellui.day-so-xgu3', 'Dãy số **') + d.soSach + '** — ' + (dt.tongPhieu ? dt.tot + '/' + dt.tongPhieu + T('js.shellui.truong-phai-noi-tot', ' trường phái nói tốt') : T('js.shellui.qua-ngan-de-tinh-dong-thuan', 'quá ngắn để tính đồng thuận')) + T('js.shellui.ban-muon-toi-luan-dieu-gi-8en2', '. Bạn muốn tôi luận điều gì?'),
+            chips: [T('js.shellui.day-so-nay-co-nen-dung', 'Dãy số này có nên dùng không?'), T('js.shellui.sao-bat-tinh-noi-bat-nghia', 'Sao Bát Tinh nổi bật nghĩa là gì?'), T('js.shellui.que-dich-lap-duoc-noi-len', 'Quẻ Dịch lập được nói lên điều gì?'), T('js.shellui.nen-doi-so-nao-de-tot', 'Nên đổi số nào để tốt hơn?')],
           });
         });
     });
   }
   function runSinhCon(chat, toolId) {
     ensureScripts(['/tools-shared/xem-tuoi-sinh-con.js?v=1'], function (err) {
-      if (err || typeof XemTuoiSinhConTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Xem Tuổi Sinh Con.'); return; }
+      if (err || typeof XemTuoiSinhConTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-xem', 'không nạp được công cụ Xem Tuổi Sinh Con.')); return; }
       inlStep(chat,
-        '<p>Cho thầy xin năm sinh dương lịch của bố và mẹ nhé.</p>' +
+        T('js.shellui.cho-thay-xin-nam-sinh-duong-453j', '<p>Cho thầy xin năm sinh dương lịch của bố và mẹ nhé.</p>') +
         '<div class="frow">' +
-          '<div class="fg" style="width:110px"><label>Năm sinh bố</label><input type="number" id="inlScBo" min="1900" max="2100" placeholder="1990"></div>' +
-          '<div class="fg" style="width:110px"><label>Năm sinh mẹ</label><input type="number" id="inlScMe" min="1900" max="2100" placeholder="1992"></div>' +
+          ('<div class="fg" style="width:110px"><label>' + T('js.shellui.nam-sinh-bo', 'Năm sinh bố') + '</label><input type="number" id="inlScBo" min="1900" max="2100" placeholder="1990"></div>') +
+          ('<div class="fg" style="width:110px"><label>' + T('js.shellui.nam-sinh-me', 'Năm sinh mẹ') + '</label><input type="number" id="inlScMe" min="1900" max="2100" placeholder="1992"></div>') +
         '</div>',
-        'Xem năm sinh con →', function (el, showErr) {
+        T('js.shellui.xem-nam-sinh-con', 'Xem năm sinh con →'), function (el, showErr) {
           var namBo = parseInt(document.getElementById('inlScBo').value);
           var namMe = parseInt(document.getElementById('inlScMe').value);
-          if (!namBo || !namMe) { showErr('Vui lòng nhập đủ năm sinh của bố và mẹ.'); return; }
+          if (!namBo || !namMe) { showErr(T('js.shellui.vui-long-nhap-du-nam-sinh', 'Vui lòng nhập đủ năm sinh của bố và mẹ.')); return; }
           var r = XemTuoiSinhConTool.compute(namBo, namMe);
           if (!r.ok) { showErr(r.error); return; }
           var iBo = r.previewBo, iMe = r.previewMe;
-          inlCollapse(el, '<p>Bố <b>' + namBo + '</b> · Mẹ <b>' + namMe + '</b> ✓</p>');
+          inlCollapse(el, T('js.shellui.bo-ceul', '<p>Bố <b>') + namBo + T('js.shellui.me-ifej', '</b> · Mẹ <b>') + namMe + '</b> ✓</p>');
           Shell.setContext({
             toolId: toolId, scenario: { type: 'xem-tuoi-sinh-con', data: { namBo: namBo, namMe: namMe } },
-            label: 'Sinh con · bố ' + iBo.canChi + ' × mẹ ' + iMe.canChi,
-            greeting: 'Đã chấm hợp/xung địa chi 15 năm tới (bố **' + esc(iBo.canChi) + '** · mẹ **' + esc(iMe.canChi) + '**). Năm thuận nhất: **' + esc(r.data.namTot) + '**. Bạn muốn tôi tư vấn gì trước?',
-            chips: ['Năm nào tốt nhất để sinh con?', 'Vì sao năm đó hợp cả bố lẫn mẹ?', 'Năm nào nên tránh sinh con?', 'Con tuổi gì hợp với bố mẹ nhất?'],
+            label: T('js.shellui.sinh-con-bo', 'Sinh con · bố ') + G('canchi', iBo.canChi) + T('js.shellui.me-kv0j', ' × mẹ ') + G('canchi', iMe.canChi),
+            greeting: T('js.shellui.da-cham-hop-xung-dia-chi', 'Đã chấm hợp/xung địa chi 15 năm tới (bố **') + esc(iBo.canChi) + T('js.shellui.me-uug4', '** · mẹ **') + esc(iMe.canChi) + T('js.shellui.nam-thuan-nhat', '**). Năm thuận nhất: **') + esc(r.data.namTot) + T('js.shellui.ban-muon-toi-tu-van-gi', '**. Bạn muốn tôi tư vấn gì trước?'),
+            chips: [T('js.shellui.nam-nao-tot-nhat-de-sinh', 'Năm nào tốt nhất để sinh con?'), T('js.shellui.vi-sao-nam-do-hop-ca', 'Vì sao năm đó hợp cả bố lẫn mẹ?'), T('js.shellui.nam-nao-nen-tranh-sinh-con', 'Năm nào nên tránh sinh con?'), T('js.shellui.con-tuoi-gi-hop-voi-bo', 'Con tuổi gì hợp với bố mẹ nhất?')],
           });
         });
     });
   }
   function runHoangDao(chat, toolId) {
     ensureScripts(['/tools-shared/hoang-dao.js?v=3', '/tools-shared/hoang-lich.js?v=1'], function (err) {
-      if (err || typeof HoangDaoTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Giờ Hoàng Đạo.'); return; }
+      if (err || typeof HoangDaoTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-gio', 'không nạp được công cụ Giờ Hoàng Đạo.')); return; }
       var t = new Date();
       inlStep(chat,
-        '<p>Con muốn xem giờ Hoàng Đạo ngày nào?</p>' +
+        T('js.shellui.con-muon-xem-gio-hoang-dao', '<p>Con muốn xem giờ Hoàng Đạo ngày nào?</p>') +
         '<div class="frow">' +
-          '<div class="fg" style="width:74px"><label>Ngày</label><input type="number" id="inlHdD" min="1" max="31" value="' + t.getDate() + '"></div>' +
-          '<div class="fg" style="width:82px"><label>Tháng</label><input type="number" id="inlHdM" min="1" max="12" value="' + (t.getMonth() + 1) + '"></div>' +
-          '<div class="fg" style="width:90px"><label>Năm</label><input type="number" id="inlHdY" min="1900" max="2100" value="' + t.getFullYear() + '"></div>' +
+          ('<div class="fg" style="width:74px"><label>' + T('js.shellui.ngay-5amy', 'Ngày') + '</label><input type="number" id="inlHdD" min="1" max="31" value="') + t.getDate() + '"></div>' +
+          ('<div class="fg" style="width:82px"><label>' + T('js.shellui.thang-4nh6', 'Tháng') + '</label><input type="number" id="inlHdM" min="1" max="12" value="') + (t.getMonth() + 1) + '"></div>' +
+          ('<div class="fg" style="width:90px"><label>' + T('js.shellui.nam-690x', 'Năm') + '</label><input type="number" id="inlHdY" min="1900" max="2100" value="') + t.getFullYear() + '"></div>' +
         '</div>',
-        'Xem giờ Hoàng Đạo →', function (el, showErr) {
+        T('js.shellui.xem-gio-hoang-dao', 'Xem giờ Hoàng Đạo →'), function (el, showErr) {
           var d = document.getElementById('inlHdD').value, m = document.getElementById('inlHdM').value, y = document.getElementById('inlHdY').value;
           var r = HoangDaoTool.compute(d, m, y);
           if (!r.ok) { showErr(r.error); return; }
-          inlCollapse(el, '<p>Ngày <b>' + d + '/' + m + '/' + y + '</b> ✓</p>');
+          inlCollapse(el, T('js.shellui.ngay', '<p>Ngày <b>') + d + '/' + m + '/' + y + '</b> ✓</p>');
           Shell.setContext({
             toolId: toolId, scenario: { type: 'hoang-dao', data: r.data },
-            label: 'Giờ Hoàng Đạo · ' + r.data.ngayDL,
-            greeting: 'Ngày **' + r.data.ngayDL + '** (' + r.data.canChiNgay + '). Đã tra giờ Hoàng Đạo / Hắc Đạo. Bạn định làm việc gì, để tôi chọn giờ đẹp?',
-            chips: ['Giờ nào tốt để khai trương?', 'Xuất hành nên đi giờ nào?', 'Ký hợp đồng giờ nào hợp?', 'Giờ nào cần tránh tuyệt đối?'],
+            label: T('js.shellui.gio-hoang-dao', 'Giờ Hoàng Đạo · ') + r.data.ngayDL,
+            greeting: T('js.shellui.ngay-lqyo', 'Ngày **') + r.data.ngayDL + '** (' + r.data.canChiNgay + (')' + T('js.shellui.da-tra-gio-hoang-dao-hac', '. Đã tra giờ Hoàng Đạo / Hắc Đạo. Bạn định làm việc gì, để tôi chọn giờ đẹp?')),
+            chips: [T('js.shellui.gio-nao-tot-de-khai-truong', 'Giờ nào tốt để khai trương?'), T('js.shellui.xuat-hanh-nen-di-gio-nao', 'Xuất hành nên đi giờ nào?'), T('js.shellui.ky-hop-dong-gio-nao-hop', 'Ký hợp đồng giờ nào hợp?'), T('js.shellui.gio-nao-can-tranh-tuyet-doi', 'Giờ nào cần tránh tuyệt đối?')],
           });
           // Nâng cấp không đồng bộ giống trang thật (`HoangLich.gan`) — cố ý
           // KHÔNG chặn context đầu (rail phải dùng được ngay cả khi chậm/chết).
@@ -4091,9 +4094,9 @@
               var extra = HoangLich.railData(hl); if (!extra) return;
               Shell.setContext({
                 toolId: toolId, scenario: { type: 'hoang-dao', data: Object.assign({}, r.data, extra) },
-                label: 'Giờ Hoàng Đạo · ' + r.data.ngayDL,
-                greeting: 'Ngày **' + r.data.ngayDL + '** (' + r.data.canChiNgay + ') — trực **' + extra.truc + '**, sao **' + extra.nhiThapBatTu + '**. Đã có đủ giờ hoàng đạo, việc nên/kiêng và thần sát. Bạn định làm việc gì?',
-                chips: ['Giờ nào tốt để khai trương?', 'Hôm nay nên làm gì, kiêng gì?', 'Ký hợp đồng giờ nào hợp?', 'Tuổi tôi có bị xung ngày này không?'],
+                label: T('js.shellui.gio-hoang-dao', 'Giờ Hoàng Đạo · ') + r.data.ngayDL,
+                greeting: T('js.shellui.ngay-lqyo', 'Ngày **') + r.data.ngayDL + '** (' + r.data.canChiNgay + (') ' + T('js.shellui.truc', '— trực **')) + extra.truc + '**, sao **' + extra.nhiThapBatTu + T('js.shellui.da-co-du-gio-hoang-dao', '**. Đã có đủ giờ hoàng đạo, việc nên/kiêng và thần sát. Bạn định làm việc gì?'),
+                chips: [T('js.shellui.gio-nao-tot-de-khai-truong', 'Giờ nào tốt để khai trương?'), T('js.shellui.hom-nay-nen-lam-gi-kieng', 'Hôm nay nên làm gì, kiêng gì?'), T('js.shellui.ky-hop-dong-gio-nao-hop', 'Ký hợp đồng giờ nào hợp?'), T('js.shellui.tuoi-toi-co-bi-xung-ngay', 'Tuổi tôi có bị xung ngày này không?')],
               });
             });
           }
@@ -4102,24 +4105,24 @@
   }
   function runNgayTot(chat, toolId) {
     ensureScripts(['/tools-shared/ngay-tot.js?v=3'], function (err) {
-      if (err || typeof NgayTotTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Ngày Tốt.'); return; }
+      if (err || typeof NgayTotTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-ngay', 'không nạp được công cụ Ngày Tốt.')); return; }
       var t = new Date();
       inlStep(chat,
-        '<p>Con muốn xem lịch ngày tốt tháng nào?</p>' +
+        T('js.shellui.con-muon-xem-lich-ngay-tot', '<p>Con muốn xem lịch ngày tốt tháng nào?</p>') +
         '<div class="frow">' +
-          '<div class="fg" style="width:82px"><label>Tháng</label><input type="number" id="inlNtM" min="1" max="12" value="' + (t.getMonth() + 1) + '"></div>' +
-          '<div class="fg" style="width:90px"><label>Năm</label><input type="number" id="inlNtY" min="2020" max="2030" value="' + t.getFullYear() + '"></div>' +
+          ('<div class="fg" style="width:82px"><label>' + T('js.shellui.thang-4nh6', 'Tháng') + '</label><input type="number" id="inlNtM" min="1" max="12" value="') + (t.getMonth() + 1) + '"></div>' +
+          ('<div class="fg" style="width:90px"><label>' + T('js.shellui.nam-690x', 'Năm') + '</label><input type="number" id="inlNtY" min="2020" max="2030" value="') + t.getFullYear() + '"></div>' +
         '</div>',
-        'Xem ngày tốt →', function (el, showErr) {
+        T('js.shellui.xem-ngay-tot', 'Xem ngày tốt →'), function (el, showErr) {
           var m = document.getElementById('inlNtM').value, y = document.getElementById('inlNtY').value;
           var r = NgayTotTool.compute(m, y);
           if (!r.ok) { showErr(r.error); return; }
-          inlCollapse(el, '<p>Tháng <b>' + m + '/' + y + '</b> ✓</p>');
+          inlCollapse(el, T('js.shellui.thang', '<p>Tháng <b>') + m + '/' + y + '</b> ✓</p>');
           Shell.setContext({
             toolId: toolId, scenario: { type: 'ngay-tot', data: r.data },
-            label: 'Ngày tốt · tháng ' + r.data.thang + '/' + r.data.nam,
-            greeting: 'Đã xem lịch **tháng ' + r.data.thang + '/' + r.data.nam + '**. Bạn định làm việc gì để tôi chọn ngày đẹp nhất?',
-            chips: ['Ngày nào đẹp để cưới hỏi?', 'Ngày nào tốt để khởi công/nhập trạch?', 'Vì sao tránh ngày kị?', 'Khai trương nên chọn ngày nào?'],
+            label: T('js.shellui.ngay-tot-thang', 'Ngày tốt · tháng ') + r.data.thang + '/' + r.data.nam,
+            greeting: T('js.shellui.da-xem-lich-thang', 'Đã xem lịch **tháng ') + r.data.thang + '/' + r.data.nam + T('js.shellui.ban-dinh-lam-viec-gi-de', '**. Bạn định làm việc gì để tôi chọn ngày đẹp nhất?'),
+            chips: [T('js.shellui.ngay-nao-dep-de-cuoi-hoi', 'Ngày nào đẹp để cưới hỏi?'), T('js.shellui.ngay-nao-tot-de-khoi-cong', 'Ngày nào tốt để khởi công/nhập trạch?'), T('js.shellui.vi-sao-tranh-ngay-ki', 'Vì sao tránh ngày kị?'), T('js.shellui.khai-truong-nen-chon-ngay-nao', 'Khai trương nên chọn ngày nào?')],
           });
         });
     });
@@ -4129,66 +4132,66 @@
   var CHON_NGAY_SU_KIEN = ['Cưới hỏi', 'Ăn hỏi / dạm ngõ', 'Khai trương', 'Nhập trạch (về nhà mới)', 'Động thổ / khởi công', 'Ký kết hợp đồng', 'Xuất hành', 'Mua xe'];
   function runDatTen(chat, toolId) {
     ensureScripts(['/can-chi.js?v=1'], function (err) {
-      if (err || typeof CanChi === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Đặt Tên.'); return; }
+      if (err || typeof CanChi === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-dat', 'không nạp được công cụ Đặt Tên.')); return; }
       inlStep(chat,
-        '<p>Cho thầy xin họ của bé và năm sinh của bé, bố, mẹ nhé.</p>' +
+        T('js.shellui.cho-thay-xin-ho-cua-be', '<p>Cho thầy xin họ của bé và năm sinh của bé, bố, mẹ nhé.</p>') +
         '<div class="frow">' +
-          '<div class="fg" style="flex:1;min-width:100px"><label>Họ</label><input type="text" id="inlDtHo" placeholder="Nguyễn"></div>' +
-          '<div class="fg" style="width:100px"><label>Giới tính con</label><select id="inlDtGt"><option value="nam">Bé trai</option><option value="nu">Bé gái</option></select></div>' +
+          ('<div class="fg" style="flex:1;min-width:100px"><label>' + T('js.shellui.ho', 'Họ') + '</label><input type="text" id="inlDtHo" placeholder="' + T('js.shellui.nguyen', 'Nguyễn') + '"></div>') +
+          ('<div class="fg" style="width:100px"><label>' + T('js.shellui.gioi-tinh-con', 'Giới tính con') + '</label><select id="inlDtGt"><option value="nam">' + T('js.shellui.be-trai', 'Bé trai') + '</option><option value="nu">' + T('js.shellui.be-gai', 'Bé gái') + '</option></select></div>') +
         '</div>' +
         '<div class="frow">' +
-          '<div class="fg" style="width:110px"><label>Năm sinh con</label><input type="number" id="inlDtNamCon" min="1900" max="2100" value="' + new Date().getFullYear() + '"></div>' +
-          '<div class="fg" style="width:110px"><label>Năm sinh bố</label><input type="number" id="inlDtNamBo" min="1900" max="2100"></div>' +
-          '<div class="fg" style="width:110px"><label>Năm sinh mẹ</label><input type="number" id="inlDtNamMe" min="1900" max="2100"></div>' +
+          ('<div class="fg" style="width:110px"><label>' + T('js.shellui.nam-sinh-con', 'Năm sinh con') + '</label><input type="number" id="inlDtNamCon" min="1900" max="2100" value="') + new Date().getFullYear() + '"></div>' +
+          ('<div class="fg" style="width:110px"><label>' + T('js.shellui.nam-sinh-bo', 'Năm sinh bố') + '</label><input type="number" id="inlDtNamBo" min="1900" max="2100"></div>') +
+          ('<div class="fg" style="width:110px"><label>' + T('js.shellui.nam-sinh-me', 'Năm sinh mẹ') + '</label><input type="number" id="inlDtNamMe" min="1900" max="2100"></div>') +
         '</div>',
-        'Xem nền mệnh →', function (el, showErr) {
+        T('js.shellui.xem-nen-menh', 'Xem nền mệnh →'), function (el, showErr) {
           var ho = document.getElementById('inlDtHo').value.trim();
           var gt = document.getElementById('inlDtGt').value;
           var namCon = parseInt(document.getElementById('inlDtNamCon').value);
           var namBo = parseInt(document.getElementById('inlDtNamBo').value);
           var namMe = parseInt(document.getElementById('inlDtNamMe').value);
-          if (!ho || !namCon || !namBo || !namMe) { showErr('Vui lòng nhập đủ họ và năm sinh của con, bố, mẹ.'); return; }
+          if (!ho || !namCon || !namBo || !namMe) { showErr(T('js.shellui.vui-long-nhap-du-ho-va', 'Vui lòng nhập đủ họ và năm sinh của con, bố, mẹ.')); return; }
           var iCon = CanChi.ccInfo(namCon);
-          var gtLabel = gt === 'nu' ? 'Bé gái' : 'Bé trai';
-          inlCollapse(el, '<p>' + esc(ho) + ' · ' + gtLabel + ' · con ' + namCon + ' · bố ' + namBo + ' · mẹ ' + namMe + ' ✓</p>');
+          var gtLabel = gt === 'nu' ? T('js.shellui.be-gai', 'Bé gái') : T('js.shellui.be-trai', 'Bé trai');
+          inlCollapse(el, '<p>' + esc(ho) + ' · ' + gtLabel + ' · con ' + namCon + T('js.shellui.bo-lcm6', ' · bố ') + namBo + T('js.shellui.me-lcly', ' · mẹ ') + namMe + ' ✓</p>');
           Shell.setContext({
             toolId: toolId, scenario: { type: 'dat-ten-con', data: { ho: ho, gioiTinh: gt, namCon: namCon, namBo: namBo, namMe: namMe } },
-            label: 'Đặt tên ' + gtLabel + ' họ ' + ho + ' · ' + iCon.canChi,
-            greeting: 'Nền mệnh của bé đã sẵn sàng (con **' + esc(iCon.canChi) + '** · ' + esc(iCon.hanh) + '). Bạn muốn tôi gợi ý tên theo hướng nào?',
-            chips: ['Gợi ý 12 tên hợp mệnh kèm ý nghĩa', 'Tên đệm nào hợp cho bé?', 'Con cần bổ ngũ hành gì?', 'Tên hợp cả tuổi bố và mẹ?'],
+            label: T('js.shellui.dat-ten', 'Đặt tên ') + gtLabel + T('js.shellui.ho-4mdh', ' họ ') + ho + ' · ' + iCon.canChi,
+            greeting: T('js.shellui.nen-menh-cua-be-da-san', 'Nền mệnh của bé đã sẵn sàng (con **') + esc(iCon.canChi) + '** · ' + esc(iCon.hanh) + (')' + T('js.shellui.ban-muon-toi-goi-y-ten', '. Bạn muốn tôi gợi ý tên theo hướng nào?')),
+            chips: [T('js.shellui.goi-y-12-ten-hop-menh', 'Gợi ý 12 tên hợp mệnh kèm ý nghĩa'), T('js.shellui.ten-dem-nao-hop-cho-be', 'Tên đệm nào hợp cho bé?'), T('js.shellui.con-can-bo-ngu-hanh-gi', 'Con cần bổ ngũ hành gì?'), T('js.shellui.ten-hop-ca-tuoi-bo-va', 'Tên hợp cả tuổi bố và mẹ?')],
           });
         });
     });
   }
   function runDatTenDn(chat, toolId) {
     ensureScripts(['/can-chi.js?v=1'], function (err) {
-      if (err || typeof CanChi === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Đặt Tên Doanh Nghiệp.'); return; }
+      if (err || typeof CanChi === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-dat-o35j', 'không nạp được công cụ Đặt Tên Doanh Nghiệp.')); return; }
       var nganhOpts = DAT_TEN_DN_NGANH.map(function (n) { return '<option value="' + esc(n) + '">' + esc(n) + '</option>'; }).join('');
-      var loaiOpts = DAT_TEN_DN_LOAI.map(function (n) { return '<option value="' + esc(n) + '">' + (n ? esc(n) : '— Không chọn —') + '</option>'; }).join('');
+      var loaiOpts = DAT_TEN_DN_LOAI.map(function (n) { return '<option value="' + esc(n) + '">' + (n ? esc(n) : T('js.shellui.khong-chon', '— Không chọn —')) + '</option>'; }).join('');
       inlStep(chat,
-        '<p>Cho thầy xin năm sinh chủ và ngành nghề của doanh nghiệp nhé.</p>' +
+        T('js.shellui.cho-thay-xin-nam-sinh-chu', '<p>Cho thầy xin năm sinh chủ và ngành nghề của doanh nghiệp nhé.</p>') +
         '<div class="frow">' +
-          '<div class="fg" style="width:110px"><label>Năm sinh chủ</label><input type="number" id="inlDdNam" min="1900" max="2100"></div>' +
-          '<div class="fg" style="flex:1;min-width:160px"><label>Ngành nghề</label><select id="inlDdNganh">' + nganhOpts + '</select></div>' +
+          ('<div class="fg" style="width:110px"><label>' + T('js.shellui.nam-sinh-chu', 'Năm sinh chủ') + '</label><input type="number" id="inlDdNam" min="1900" max="2100"></div>') +
+          ('<div class="fg" style="flex:1;min-width:160px"><label>' + T('js.shellui.nganh-nghe', 'Ngành nghề') + '</label><select id="inlDdNganh">') + nganhOpts + '</select></div>' +
         '</div>' +
         '<div class="frow">' +
-          '<div class="fg" style="flex:1;min-width:120px"><label>Tên người chủ (tuỳ chọn)</label><input type="text" id="inlDdTenChu"></div>' +
-          '<div class="fg" style="width:150px"><label>Loại hình (tuỳ chọn)</label><select id="inlDdLoai">' + loaiOpts + '</select></div>' +
+          ('<div class="fg" style="flex:1;min-width:120px"><label>' + T('js.shellui.ten-nguoi-chu-tuy-chon', 'Tên người chủ (tuỳ chọn)') + '</label><input type="text" id="inlDdTenChu"></div>') +
+          ('<div class="fg" style="width:150px"><label>' + T('js.shellui.loai-hinh-tuy-chon', 'Loại hình (tuỳ chọn)') + '</label><select id="inlDdLoai">') + loaiOpts + '</select></div>' +
         '</div>' +
-        '<div class="frow"><div class="fg" style="flex:1;min-width:140px"><label>Tên đang cân nhắc (tuỳ chọn)</label><input type="text" id="inlDdTenGoiY"></div></div>',
-        'Xem nền mệnh chủ →', function (el, showErr) {
+        ('<div class="frow"><div class="fg" style="flex:1;min-width:140px"><label>' + T('js.shellui.ten-dang-can-nhac-tuy-chon', 'Tên đang cân nhắc (tuỳ chọn)') + '</label><input type="text" id="inlDdTenGoiY"></div></div>'),
+        T('js.shellui.xem-nen-menh-chu', 'Xem nền mệnh chủ →'), function (el, showErr) {
           var tenChu = document.getElementById('inlDdTenChu').value.trim();
           var namChu = parseInt(document.getElementById('inlDdNam').value);
           var nganh = document.getElementById('inlDdNganh').value;
           var loaiHinh = document.getElementById('inlDdLoai').value;
           var tenGoiY = document.getElementById('inlDdTenGoiY').value.trim();
-          if (!namChu || !nganh) { showErr('Vui lòng nhập năm sinh người chủ và chọn ngành nghề.'); return; }
+          if (!namChu || !nganh) { showErr(T('js.shellui.vui-long-nhap-nam-sinh-nguoi', 'Vui lòng nhập năm sinh người chủ và chọn ngành nghề.')); return; }
           var iChu = CanChi.ccInfo(namChu);
-          inlCollapse(el, '<p>' + esc(nganh) + ' · chủ ' + namChu + ' ✓</p>');
+          inlCollapse(el, '<p>' + esc(nganh) + T('js.shellui.chu', ' · chủ ') + namChu + ' ✓</p>');
           Shell.setContext({
             toolId: toolId, scenario: { type: 'dat-ten-dn', data: { tenChu: tenChu, namChu: namChu, nganh: nganh, loaiHinh: loaiHinh, tenGoiY: tenGoiY } },
-            label: 'Đặt tên DN · ' + nganh + ' · chủ ' + iChu.canChi,
-            greeting: 'Nền mệnh chủ đã sẵn sàng (chủ **' + esc(iChu.canChi) + '** · ' + esc(iChu.hanh) + ', ngành ' + esc(nganh.toLowerCase()) + '). ' + (tenGoiY ? 'Bạn muốn tôi chấm tên **' + esc(tenGoiY) + '** hay gợi ý tên mới?' : 'Bạn muốn tôi gợi ý tên theo hướng nào?'),
+            label: T('js.shellui.dat-ten-dn', 'Đặt tên DN · ') + nganh + T('js.shellui.chu', ' · chủ ') + G('canchi', iChu.canChi),
+            greeting: T('js.shellui.nen-menh-chu-da-san-sang', 'Nền mệnh chủ đã sẵn sàng (chủ **') + esc(iChu.canChi) + '** · ' + esc(iChu.hanh) + T('js.shellui.nganh', ', ngành ') + esc(nganh.toLowerCase()) + '). ' + (tenGoiY ? T('js.shellui.ban-muon-toi-cham-ten', 'Bạn muốn tôi chấm tên **') + esc(tenGoiY) + T('js.shellui.hay-goi-y-ten-moi', '** hay gợi ý tên mới?') : T('js.shellui.ban-muon-toi-goi-y-ten-l4lz', 'Bạn muốn tôi gợi ý tên theo hướng nào?')),
             chips: tenGoiY
               ? ['Chấm tên "' + tenGoiY + '" hợp mệnh chủ và ngành không?', 'Gợi ý 5 tên khác hợp hơn', 'Tên nên bổ ngũ hành gì?', 'Slogan nào hợp với tên này?']
               : ['Gợi ý 5 tên hợp mệnh kèm ý nghĩa', 'Tên nên bổ ngũ hành gì cho chủ?', 'Tên nào hợp khí chất ngành này?', 'Tránh chữ/âm nào khi đặt tên?'],
@@ -4198,35 +4201,35 @@
   }
   function runChonNgay(chat, toolId) {
     ensureScripts(['/can-chi.js?v=1'], function (err) {
-      if (err || typeof CanChi === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Chọn Ngày Tốt.'); return; }
+      if (err || typeof CanChi === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-chon', 'không nạp được công cụ Chọn Ngày Tốt.')); return; }
       var t = new Date();
       var suKienOpts = CHON_NGAY_SU_KIEN.map(function (s) { return '<option value="' + esc(s) + '">' + esc(s) + '</option>'; }).join('');
-      var thangOpts = ''; for (var i = 1; i <= 12; i++) thangOpts += '<option value="' + i + '"' + (i === t.getMonth() + 1 ? ' selected' : '') + '>Tháng ' + i + '</option>';
+      var thangOpts = ''; for (var i = 1; i <= 12; i++) thangOpts += '<option value="' + i + '"' + (i === t.getMonth() + 1 ? ' selected' : '') + ('>' + T('js.shellui.thang-4nh6', 'Tháng') + ' ') + i + '</option>';
       inlStep(chat,
-        '<p>Con định làm việc gì, cho ai, và tháng nào nhé.</p>' +
-        '<div class="frow"><div class="fg" style="flex:1;min-width:150px"><label>Việc cần chọn ngày</label><select id="inlCnSk">' + suKienOpts + '</select></div></div>' +
+        T('js.shellui.con-dinh-lam-viec-gi-cho', '<p>Con định làm việc gì, cho ai, và tháng nào nhé.</p>') +
+        ('<div class="frow"><div class="fg" style="flex:1;min-width:150px"><label>' + T('js.shellui.viec-can-chon-ngay', 'Việc cần chọn ngày') + '</label><select id="inlCnSk">') + suKienOpts + '</select></div></div>' +
         '<div class="frow">' +
-          '<div class="fg" style="flex:1;min-width:120px"><label>Họ tên chủ sự</label><input type="text" id="inlCnHt"></div>' +
-          '<div class="fg" style="width:100px"><label>Năm sinh</label><input type="number" id="inlCnNs" min="1900" max="2100"></div>' +
+          ('<div class="fg" style="flex:1;min-width:120px"><label>' + T('js.shellui.ho-ten-chu-su', 'Họ tên chủ sự') + '</label><input type="text" id="inlCnHt"></div>') +
+          ('<div class="fg" style="width:100px"><label>' + T('js.shellui.nam-sinh', 'Năm sinh') + '</label><input type="number" id="inlCnNs" min="1900" max="2100"></div>') +
         '</div>' +
         '<div class="frow">' +
-          '<div class="fg" style="width:110px"><label>Tháng dự định</label><select id="inlCnThang">' + thangOpts + '</select></div>' +
-          '<div class="fg" style="width:90px"><label>Năm</label><input type="number" id="inlCnNam" min="1900" max="2100" value="' + t.getFullYear() + '"></div>' +
+          ('<div class="fg" style="width:110px"><label>' + T('js.shellui.thang-du-dinh', 'Tháng dự định') + '</label><select id="inlCnThang">') + thangOpts + '</select></div>' +
+          ('<div class="fg" style="width:90px"><label>' + T('js.shellui.nam-690x', 'Năm') + '</label><input type="number" id="inlCnNam" min="1900" max="2100" value="') + t.getFullYear() + '"></div>' +
         '</div>',
-        'Xem nền can chi →', function (el, showErr) {
+        T('js.shellui.xem-nen-can-chi', 'Xem nền can chi →'), function (el, showErr) {
           var suKien = document.getElementById('inlCnSk').value;
           var hoTen = document.getElementById('inlCnHt').value.trim();
           var namSinh = parseInt(document.getElementById('inlCnNs').value);
           var thangNum = parseInt(document.getElementById('inlCnThang').value);
           var namNum = parseInt(document.getElementById('inlCnNam').value);
-          if (!hoTen || !namSinh || !thangNum || !namNum) { showErr('Vui lòng nhập họ tên, năm sinh, tháng và năm dự định.'); return; }
+          if (!hoTen || !namSinh || !thangNum || !namNum) { showErr(T('js.shellui.vui-long-nhap-ho-ten-nam', 'Vui lòng nhập họ tên, năm sinh, tháng và năm dự định.')); return; }
           var info = CanChi.ccInfo(namSinh);
           inlCollapse(el, '<p>' + esc(suKien) + ' · ' + esc(hoTen) + ' · T' + thangNum + '/' + namNum + ' ✓</p>');
           Shell.setContext({
             toolId: toolId, scenario: { type: 'chon-ngay-tot', data: { suKien: suKien, hoTen: hoTen, namSinh: namSinh, thangNum: thangNum, namNum: namNum } },
-            label: 'Chọn ngày ' + suKien + ' · ' + hoTen + ' · T' + thangNum + '/' + namNum,
-            greeting: 'Đã lập nền cho việc **' + esc(suKien) + '** (chủ sự tuổi **' + esc(info.canChi) + '**). Bạn muốn tôi tư vấn gì trước?',
-            chips: ['Ngày nào đẹp nhất trong tháng này?', 'Giờ hoàng đạo cho việc này?', 'Ngày nào cần tuyệt đối tránh?', 'Hướng xuất hành tốt trong ngày đó?'],
+            label: T('js.shellui.chon-ngay', 'Chọn ngày ') + suKien + ' · ' + hoTen + ' · T' + thangNum + '/' + namNum,
+            greeting: T('js.shellui.da-lap-nen-cho-viec', 'Đã lập nền cho việc **') + esc(suKien) + T('js.shellui.chu-su-tuoi', '** (chủ sự tuổi **') + esc(info.canChi) + T('js.shellui.ban-muon-toi-tu-van-gi-p0lg', '**). Bạn muốn tôi tư vấn gì trước?'),
+            chips: [T('js.shellui.ngay-nao-dep-nhat-trong-thang', 'Ngày nào đẹp nhất trong tháng này?'), T('js.shellui.gio-hoang-dao-cho-viec-nay', 'Giờ hoàng đạo cho việc này?'), T('js.shellui.ngay-nao-can-tuyet-doi-tranh', 'Ngày nào cần tuyệt đối tránh?'), T('js.shellui.huong-xuat-hanh-tot-trong-ngay', 'Hướng xuất hành tốt trong ngày đó?')],
           });
         });
     });
@@ -4235,32 +4238,32 @@
   // ── kind:'draw' — rút quẻ/gieo quẻ, không cần ngày sinh ────────────────
   function runTarot(chat, toolId) {
     Shell.setContext({
-      toolId: toolId, label: 'Tarot 78 Lá', placeholder: 'Hỏi thầy về lá bài vừa rút…',
-      greeting: 'Chào bạn. Hỏi tôi về một câu hỏi hay tình huống bạn đang gặp, tôi sẽ rút bài và luận giúp bạn — hoặc mở trang Tarot nếu muốn tự tay rút.',
-      chips: ['Major Arcana khác Minor Arcana thế nào?', 'Lá bài ngược nghĩa là gì?', 'Nên hỏi Tarot câu hỏi kiểu gì?'],
+      toolId: toolId, label: T('js.shellui.tarot-78-la', 'Tarot 78 Lá'), placeholder: T('js.shellui.hoi-thay-ve-la-bai-vua', 'Hỏi thầy về lá bài vừa rút…'),
+      greeting: T('js.shellui.chao-ban-hoi-toi-ve-mot', 'Chào bạn. Hỏi tôi về một câu hỏi hay tình huống bạn đang gặp, tôi sẽ rút bài và luận giúp bạn — hoặc mở trang Tarot nếu muốn tự tay rút.'),
+      chips: [T('js.shellui.major-arcana-khac-minor-arcana-the', 'Major Arcana khác Minor Arcana thế nào?'), T('js.shellui.la-bai-nguoc-nghia-la-gi', 'Lá bài ngược nghĩa là gì?'), T('js.shellui.nen-hoi-tarot-cau-hoi-kieu', 'Nên hỏi Tarot câu hỏi kiểu gì?')],
     });
   }
   function runOracle(chat, toolId) {
     Shell.setContext({
-      toolId: toolId, label: 'Oracle Phương Đông', placeholder: 'Hỏi thầy về thẻ vừa rút…',
-      greeting: 'Chào bạn. Định tâm rồi hỏi tôi điều bạn đang trăn trở, tôi sẽ rút thẻ Oracle và luận giúp bạn — hoặc mở trang Oracle nếu muốn tự tay rút.',
-      chips: ['Oracle khác Tarot ở điểm nào?', 'Nên hỏi Oracle câu hỏi kiểu gì?', 'Ngũ Hành trong Oracle nghĩa là gì?'],
+      toolId: toolId, label: T('js.shellui.oracle-phuong-dong', 'Oracle Phương Đông'), placeholder: T('js.shellui.hoi-thay-ve-the-vua-rut', 'Hỏi thầy về thẻ vừa rút…'),
+      greeting: T('js.shellui.chao-ban-dinh-tam-roi-hoi', 'Chào bạn. Định tâm rồi hỏi tôi điều bạn đang trăn trở, tôi sẽ rút thẻ Oracle và luận giúp bạn — hoặc mở trang Oracle nếu muốn tự tay rút.'),
+      chips: [T('js.shellui.oracle-khac-tarot-o-diem-nao', 'Oracle khác Tarot ở điểm nào?'), T('js.shellui.nen-hoi-oracle-cau-hoi-kieu', 'Nên hỏi Oracle câu hỏi kiểu gì?'), T('js.shellui.ngu-hanh-trong-oracle-nghia-la', 'Ngũ Hành trong Oracle nghĩa là gì?')],
     });
   }
   function runBoiBaiTay(chat, toolId) {
     Shell.setContext({
-      toolId: toolId, label: 'Bói Bài Tây', placeholder: 'Hỏi thầy về lá bài vừa rút…',
-      greeting: 'Chào bạn. Hỏi tôi về một câu hỏi hay tình huống bạn đang gặp, tôi sẽ rút bài Tây và luận giúp bạn — hoặc mở trang Bói Bài Tây nếu muốn tự tay rút.',
-      chips: ['4 chất bài nghĩa là gì?', 'Bói bài Tây khác Tarot ra sao?', 'Nên hỏi câu hỏi kiểu gì khi rút bài?'],
+      toolId: toolId, label: T('js.shellui.boi-bai-tay', 'Bói Bài Tây'), placeholder: T('js.shellui.hoi-thay-ve-la-bai-vua', 'Hỏi thầy về lá bài vừa rút…'),
+      greeting: T('js.shellui.chao-ban-hoi-toi-ve-mot-rpj1', 'Chào bạn. Hỏi tôi về một câu hỏi hay tình huống bạn đang gặp, tôi sẽ rút bài Tây và luận giúp bạn — hoặc mở trang Bói Bài Tây nếu muốn tự tay rút.'),
+      chips: [T('js.shellui.4-chat-bai-nghia-la-gi', '4 chất bài nghĩa là gì?'), T('js.shellui.boi-bai-tay-khac-tarot-ra', 'Bói bài Tây khác Tarot ra sao?'), T('js.shellui.nen-hoi-cau-hoi-kieu-gi', 'Nên hỏi câu hỏi kiểu gì khi rút bài?')],
     });
   }
   function runKinhDich(chat, toolId) {
     ensureScripts(['/tools-shared/kinh-dich.js?v=5', '/tools-shared/kinh-dich-hao.js?v=1', '/tools-shared/kinh-dich-doc.js?v=1'], function (err) {
-      if (err || typeof KinhDichTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Kinh Dịch.'); return; }
+      if (err || typeof KinhDichTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-kinh', 'không nạp được công cụ Kinh Dịch.')); return; }
       inlStep(chat,
-        '<p>Con muốn hỏi việc gì (tuỳ chọn), rồi thầy gieo quẻ cho con — 6 hào một lượt.</p>' +
-        '<div class="frow"><div class="fg" style="flex:1;min-width:160px"><label>Câu hỏi (tuỳ chọn)</label><input type="text" id="inlKdCauHoi" maxlength="100" placeholder="VD: Việc này nên tiến hay lui?"></div></div>',
-        'Gieo quẻ (6 hào) →', function (el, showErr) {
+        T('js.shellui.con-muon-hoi-viec-gi-tuy', '<p>Con muốn hỏi việc gì (tuỳ chọn), rồi thầy gieo quẻ cho con — 6 hào một lượt.</p>') +
+        ('<div class="frow"><div class="fg" style="flex:1;min-width:160px"><label>' + T('js.shellui.cau-hoi-tuy-chon', 'Câu hỏi (tuỳ chọn)') + '</label><input type="text" id="inlKdCauHoi" maxlength="100" placeholder="' + T('js.shellui.vd-viec-nay-nen-tien-hay', 'VD: Việc này nên tiến hay lui?') + '"></div></div>'),
+        T('js.shellui.gieo-que-6-hao', 'Gieo quẻ (6 hào) →'), function (el, showErr) {
           var cHoi = document.getElementById('inlKdCauHoi').value.trim();
           // Cùng công thức gieo 3 đồng xu/hào của toss() trang thật (app-kinh-
           // dich.html) — chỉ bỏ hoạt cảnh lật xu từng hào, gieo đủ 6 hào một
@@ -4271,42 +4274,42 @@
             lines.push({ val: val, yang: val === 7 || val === 9, changing: val === 6 || val === 9 });
           }
           var r = KinhDichTool.resolve(lines);
-          inlCollapse(el, '<p>Đã gieo đủ 6 hào ✓</p>');
+          inlCollapse(el, T('js.shellui.da-gieo-du-6-hao', '<p>Đã gieo đủ 6 hào ✓</p>'));
           var d = KinhDichTool.railData(r, cHoi, lines);
           Shell.setContext({
             toolId: toolId, scenario: { type: 'kinh-dich', data: d },
-            label: 'Gieo quẻ · ' + r.que.n + (r.cQue ? ' → ' + r.cQue.n : ''),
-            greeting: 'Quẻ đã lập — quẻ chính **' + r.que.n + '** (' + r.que.zh + ')' + (r.cQue ? ', quẻ biến **' + r.cQue.n + '**' : ' (không hào động)') + '. Tôi sẽ luận theo câu hỏi của bạn.',
-            chips: ['Luận quẻ này cho câu hỏi của tôi', 'Hào động nói lên điều gì?', 'Quẻ biến cho thấy xu hướng nào?', 'Nên hành động thế nào lúc này?'],
+            label: T('js.shellui.gieo-que', 'Gieo quẻ · ') + r.que.n + (r.cQue ? ' → ' + r.cQue.n : ''),
+            greeting: T('js.shellui.que-da-lap-que-chinh', 'Quẻ đã lập — quẻ chính **') + r.que.n + '** (' + r.que.zh + ')' + (r.cQue ? T('js.shellui.que-bien', ', quẻ biến **') + r.cQue.n + '**' : T('js.shellui.khong-hao-dong', ' (không hào động)')) + T('js.shellui.toi-se-luan-theo-cau-hoi', '. Tôi sẽ luận theo câu hỏi của bạn.'),
+            chips: [T('js.shellui.luan-que-nay-cho-cau-hoi', 'Luận quẻ này cho câu hỏi của tôi'), T('js.shellui.hao-dong-noi-len-dieu-gi', 'Hào động nói lên điều gì?'), T('js.shellui.que-bien-cho-thay-xu-huong', 'Quẻ biến cho thấy xu hướng nào?'), T('js.shellui.nen-hanh-dong-the-nao-luc', 'Nên hành động thế nào lúc này?')],
           });
         });
     });
   }
   function runMaiHoa(chat, toolId) {
     ensureScripts(['/tools-shared/mai-hoa.js?v=1', '/tools-shared/kinh-dich.js?v=5', '/tools-shared/kinh-dich-hao.js?v=1'], function (err) {
-      if (err || typeof MaiHoaTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Mai Hoa.'); return; }
+      if (err || typeof MaiHoaTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-mai', 'không nạp được công cụ Mai Hoa.')); return; }
       inlStep(chat,
-        '<p>Thầy lập quẻ theo giờ hiện tại, hoặc con nghĩ một con số bất kỳ cho thầy gieo theo số đó — con muốn cách nào?</p>' +
+        T('js.shellui.thay-lap-que-theo-gio-hien', '<p>Thầy lập quẻ theo giờ hiện tại, hoặc con nghĩ một con số bất kỳ cho thầy gieo theo số đó — con muốn cách nào?</p>') +
         '<div class="frow">' +
-          '<div class="fg" style="width:160px"><label>Cách gieo</label><select id="inlMhMode"><option value="gio">Theo giờ hiện tại</option><option value="so">Theo một con số</option></select></div>' +
-          '<div class="fg" style="width:120px"><label>Con số</label><input type="number" id="inlMhSo" min="1" step="1" placeholder="VD: 27" disabled></div>' +
+          ('<div class="fg" style="width:160px"><label>' + T('js.shellui.cach-gieo', 'Cách gieo') + '</label><select id="inlMhMode"><option value="gio">' + T('js.shellui.theo-gio-hien-tai', 'Theo giờ hiện tại') + '</option><option value="so">' + T('js.shellui.theo-mot-con-so', 'Theo một con số') + '</option></select></div>') +
+          ('<div class="fg" style="width:120px"><label>' + T('js.shellui.con-so', 'Con số') + '</label><input type="number" id="inlMhSo" min="1" step="1" placeholder="' + T('js.shellui.vd-27', 'VD: 27') + '" disabled></div>') +
         '</div>' +
-        '<div class="frow"><div class="fg" style="flex:1;min-width:160px"><label>Câu hỏi (tuỳ chọn)</label><input type="text" id="inlMhCauHoi" maxlength="100"></div></div>',
-        'Lập quẻ →', function (el, showErr) {
+        ('<div class="frow"><div class="fg" style="flex:1;min-width:160px"><label>' + T('js.shellui.cau-hoi-tuy-chon', 'Câu hỏi (tuỳ chọn)') + '</label><input type="text" id="inlMhCauHoi" maxlength="100"></div></div>'),
+        T('js.shellui.lap-que', 'Lập quẻ →'), function (el, showErr) {
           var mode = document.getElementById('inlMhMode').value;
           var cHoi = document.getElementById('inlMhCauHoi').value.trim();
           var g = mode === 'so' ? MaiHoaTool.gieoTheoSo(document.getElementById('inlMhSo').value) : MaiHoaTool.gieoTheoGio();
           if (!g.ok) { showErr(g.error); return; }
           var r = MaiHoaTool.resolve(g);
-          if (!r.ok) { showErr(r.error || 'Không lập được quẻ.'); return; }
-          inlCollapse(el, '<p>Đã lập quẻ ✓</p>');
+          if (!r.ok) { showErr(r.error || T('js.shellui.khong-lap-duoc-que', 'Không lập được quẻ.')); return; }
+          inlCollapse(el, T('js.shellui.da-lap-que', '<p>Đã lập quẻ ✓</p>'));
           var d = MaiHoaTool.railData(r, cHoi);
           var tenChinh = r.chinh.que ? r.chinh.que.q.n : '';
           Shell.setContext({
             toolId: toolId, scenario: { type: 'mai-hoa', data: d },
             label: 'Mai Hoa · ' + tenChinh + ' — ' + r.ketLuan.ten,
-            greeting: 'Quẻ đã lập — Thể **' + r.the.n + '** (' + r.the.hanh + '), Dụng **' + r.dung.n + '** (' + r.dung.hanh + '), tức **' + r.ketLuan.ten + '**. Tôi sẽ luận theo câu hỏi của bạn.',
-            chips: ['Luận quẻ này cho câu hỏi của tôi', 'Thể bị Dụng khắc thì nên làm gì?', 'Hỗ quái cho thấy khúc giữa ra sao?', 'Biến quái nói kết cục thế nào?'],
+            greeting: T('js.shellui.que-da-lap-the', 'Quẻ đã lập — Thể **') + r.the.n + '** (' + r.the.hanh + (')' + T('js.shellui.dung', ', Dụng **')) + r.dung.n + '** (' + r.dung.hanh + (')' + T('js.shellui.tuc', ', tức **')) + r.ketLuan.ten + T('js.shellui.toi-se-luan-theo-cau-hoi-n3t1', '**. Tôi sẽ luận theo câu hỏi của bạn.'),
+            chips: [T('js.shellui.luan-que-nay-cho-cau-hoi', 'Luận quẻ này cho câu hỏi của tôi'), T('js.shellui.the-bi-dung-khac-thi-nen', 'Thể bị Dụng khắc thì nên làm gì?'), T('js.shellui.ho-quai-cho-thay-khuc-giua', 'Hỗ quái cho thấy khúc giữa ra sao?'), T('js.shellui.bien-quai-noi-ket-cuc-the', 'Biến quái nói kết cục thế nào?')],
           });
         });
       var modeSel = document.getElementById('inlMhMode');
@@ -4318,68 +4321,68 @@
   }
   function runKyMon(chat, toolId) {
     ensureScripts(['/tools-shared/ky-mon.js?v=1'], function (err) {
-      if (err || typeof KyMonTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Kỳ Môn.'); return; }
+      if (err || typeof KyMonTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-ky', 'không nạp được công cụ Kỳ Môn.')); return; }
       inlStep(chat,
-        '<p>Để trống là thầy lập bàn theo giờ hiện tại — hoặc con chọn giờ khác và câu hỏi (tuỳ chọn).</p>' +
-        '<div class="frow"><div class="fg" style="width:190px"><label>Thời điểm (tuỳ chọn)</label><input type="datetime-local" id="inlKmT"></div></div>' +
-        '<div class="frow"><div class="fg" style="flex:1;min-width:160px"><label>Câu hỏi (tuỳ chọn)</label><input type="text" id="inlKmCauHoi" maxlength="100"></div></div>',
-        'Lập bàn Kỳ Môn →', function (el, showErr) {
+        T('js.shellui.de-trong-la-thay-lap-ban', '<p>Để trống là thầy lập bàn theo giờ hiện tại — hoặc con chọn giờ khác và câu hỏi (tuỳ chọn).</p>') +
+        ('<div class="frow"><div class="fg" style="width:190px"><label>' + T('js.shellui.thoi-diem-tuy-chon', 'Thời điểm (tuỳ chọn)') + '</label><input type="datetime-local" id="inlKmT"></div></div>') +
+        ('<div class="frow"><div class="fg" style="flex:1;min-width:160px"><label>' + T('js.shellui.cau-hoi-tuy-chon', 'Câu hỏi (tuỳ chọn)') + '</label><input type="text" id="inlKmCauHoi" maxlength="100"></div></div>'),
+        T('js.shellui.lap-ban-ky-mon', 'Lập bàn Kỳ Môn →'), function (el, showErr) {
           var raw = document.getElementById('inlKmT').value;
           var cHoi = document.getElementById('inlKmCauHoi').value.trim();
           var q = raw ? '?t=' + encodeURIComponent(new Date(raw).toISOString()) : '';
           fetch('/api/qimen' + q, { headers: { accept: 'application/json' } })
             .then(function (r) { return r.json(); })
             .then(function (b) {
-              if (!b || !b.ok) throw new Error((b && b.error) || 'Không dựng được bàn.');
-              inlCollapse(el, '<p>Đã lập bàn ✓</p>');
+              if (!b || !b.ok) throw new Error((b && b.error) || T('js.shellui.khong-dung-duoc-ban', 'Không dựng được bàn.'));
+              inlCollapse(el, T('js.shellui.da-lap-ban', '<p>Đã lập bàn ✓</p>'));
               var d = Object.assign({}, b.rail, { cauHoi: cHoi });
               var doNhat = b.cungs.filter(function (c) { return c.hang === 1; })[0];
               Shell.setContext({
                 toolId: toolId, scenario: { type: 'ky-mon', data: d },
-                label: 'Kỳ Môn · ' + b.cuc + ' · giờ ' + b.canChi.gio,
-                greeting: 'Bàn đã lập — **' + b.cuc + '**, tiết ' + b.tietKhi + ' ' + b.nguyen + ', trực phù **' + b.trucPhu + '**, trực sử **' + b.trucSu + '**.' + (doNhat ? ' Hướng xếp hạng cao nhất là **' + doNhat.huong + '**.' : '') + ' Tôi sẽ luận theo việc bạn hỏi.',
-                chips: ['Việc của tôi nên đi hướng nào?', 'Giờ này hợp làm việc gì nhất?', 'Hướng nào phải tránh và vì sao?', 'Trực phù trực sử nói lên điều gì?'],
+                label: T('js.shellui.ky-mon', 'Kỳ Môn · ') + b.cuc + T('js.shellui.giox', ' · giờ ') + G('canchi', b.canChi.gio),
+                greeting: T('js.shellui.ban-da-lap', 'Bàn đã lập — **') + b.cuc + T('js.shellui.tiet', '**, tiết ') + b.tietKhi + ' ' + b.nguyen + T('js.shellui.truc-phu', ', trực phù **') + b.trucPhu + T('js.shellui.truc-su', '**, trực sử **') + b.trucSu + '**.' + (doNhat ? T('js.shellui.huong-xep-hang-cao-nhat-la', ' Hướng xếp hạng cao nhất là **') + doNhat.huong + '**.' : '') + T('js.shellui.toi-se-luan-theo-viec-ban', ' Tôi sẽ luận theo việc bạn hỏi.'),
+                chips: [T('js.shellui.viec-cua-toi-nen-di-huong', 'Việc của tôi nên đi hướng nào?'), T('js.shellui.gio-nay-hop-lam-viec-gi', 'Giờ này hợp làm việc gì nhất?'), T('js.shellui.huong-nao-phai-tranh-va-vi', 'Hướng nào phải tránh và vì sao?'), T('js.shellui.truc-phu-truc-su-noi-len', 'Trực phù trực sử nói lên điều gì?')],
               });
             })
-            .catch(function (e) { showErr(e.message || 'Không dựng được bàn Kỳ Môn.'); });
+            .catch(function (e) { showErr(e.message || T('js.shellui.khong-dung-duoc-ban-ky-mon', 'Không dựng được bàn Kỳ Môn.')); });
         });
     });
   }
   function runLucNham(chat, toolId) {
     ensureScripts(['/tools-shared/luc-nham.js?v=4', '/tools-shared/dai-luc-nham.js?v=1'], function (err) {
-      if (err || typeof LucNhamTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được công cụ Lục Nhâm.'); return; }
+      if (err || typeof LucNhamTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-luc', 'không nạp được công cụ Lục Nhâm.')); return; }
       var t = new Date();
       var curGio = Math.floor(((t.getHours() * 60 + 60) % (24 * 60)) / 120) % 12;
       var gioNames = ['Tý (23–01h)', 'Sửu (01–03h)', 'Dần (03–05h)', 'Mão (05–07h)', 'Thìn (07–09h)', 'Tỵ (09–11h)', 'Ngọ (11–13h)', 'Mùi (13–15h)', 'Thân (15–17h)', 'Dậu (17–19h)', 'Tuất (19–21h)', 'Hợi (21–23h)'];
-      var gioOpts = gioNames.map(function (n, i) { return '<option value="' + i + '"' + (i === curGio ? ' selected' : '') + '>Giờ ' + n + '</option>'; }).join('');
+      var gioOpts = gioNames.map(function (n, i) { return '<option value="' + i + '"' + (i === curGio ? ' selected' : '') + ('>' + T('js.shellui.gio', 'Giờ') + ' ') + n + '</option>'; }).join('');
       inlStep(chat,
-        '<p>Con muốn lập khóa Lục Nhâm cho ngày giờ nào?</p>' +
+        T('js.shellui.con-muon-lap-khoa-luc-nham', '<p>Con muốn lập khóa Lục Nhâm cho ngày giờ nào?</p>') +
         '<div class="frow">' +
-          '<div class="fg" style="width:74px"><label>Ngày</label><input type="number" id="inlLnD" min="1" max="31" value="' + t.getDate() + '"></div>' +
-          '<div class="fg" style="width:82px"><label>Tháng</label><input type="number" id="inlLnM" min="1" max="12" value="' + (t.getMonth() + 1) + '"></div>' +
-          '<div class="fg" style="width:90px"><label>Năm</label><input type="number" id="inlLnY" min="1900" max="2100" value="' + t.getFullYear() + '"></div>' +
+          ('<div class="fg" style="width:74px"><label>' + T('js.shellui.ngay-5amy', 'Ngày') + '</label><input type="number" id="inlLnD" min="1" max="31" value="') + t.getDate() + '"></div>' +
+          ('<div class="fg" style="width:82px"><label>' + T('js.shellui.thang-4nh6', 'Tháng') + '</label><input type="number" id="inlLnM" min="1" max="12" value="') + (t.getMonth() + 1) + '"></div>' +
+          ('<div class="fg" style="width:90px"><label>' + T('js.shellui.nam-690x', 'Năm') + '</label><input type="number" id="inlLnY" min="1900" max="2100" value="') + t.getFullYear() + '"></div>' +
         '</div>' +
-        '<div class="frow"><div class="fg" style="flex:1;min-width:170px"><label>Giờ cần xem</label><select id="inlLnGio">' + gioOpts + '</select></div></div>',
-        'Lập khóa Lục Nhâm →', function (el, showErr) {
+        ('<div class="frow"><div class="fg" style="flex:1;min-width:170px"><label>' + T('js.shellui.gio-can-xem', 'Giờ cần xem') + '</label><select id="inlLnGio">') + gioOpts + '</select></div></div>',
+        T('js.shellui.lap-khoa-luc-nham', 'Lập khóa Lục Nhâm →'), function (el, showErr) {
           var _d = document.getElementById('inlLnD').value, _m = document.getElementById('inlLnM').value, _y = document.getElementById('inlLnY').value;
           var _g = +document.getElementById('inlLnGio').value || 0;
           var r = LucNhamTool.compute(_d, _m, _y, _g);
           if (!r.ok) { showErr(r.error); return; }
-          if (typeof DaiLucNham === 'undefined' || !DaiLucNham.ve) { showErr('Không dựng được khóa Lục Nhâm.'); return; }
-          inlCollapse(el, '<p>Đang lập khóa…</p>');
+          if (typeof DaiLucNham === 'undefined' || !DaiLucNham.ve) { showErr(T('js.shellui.khong-dung-duoc-khoa-luc-nham', 'Không dựng được khóa Lục Nhâm.')); return; }
+          inlCollapse(el, T('js.shellui.dang-lap-khoa', '<p>Đang lập khóa…</p>'));
           var hh = (_g * 2) % 24;
           var khiTu = new Date(Date.UTC(+_y, +_m - 1, +_d, hh - 7, 0, 0));
           DaiLucNham.ve(document.createElement('div'), khiTu).then(function (j) {
-            if (!j) { showErr('Không dựng được khóa Lục Nhâm — số liệu chưa verify được lúc này.'); return; }
+            if (!j) { showErr(T('js.shellui.khong-dung-duoc-khoa-luc-nham-ddel', 'Không dựng được khóa Lục Nhâm — số liệu chưa verify được lúc này.')); return; }
             var k = j.khoa, so = k.tamTruyen[0];
-            inlCollapse(el, '<p>Ngày <b>' + _d + '/' + _m + '/' + _y + '</b> · giờ <b>' + k.canChi.gio + '</b> ✓</p>');
+            inlCollapse(el, T('js.shellui.ngay', '<p>Ngày <b>') + _d + '/' + _m + '/' + _y + T('js.shellui.gio-r1j8', '</b> · giờ <b>') + G('canchi', k.canChi.gio) + '</b> ✓</p>');
             Shell.setContext({
               toolId: toolId, scenario: { type: 'luc-nham', data: Object.assign({ ngayDL: r.data.ngayDL, gio: r.data.gio }, j.rail) },
-              label: 'Lục Nhâm · ' + k.canChi.ngay + ' giờ ' + k.canChi.gio,
-              greeting: 'Đã lập khóa **Đại Lục Nhâm** — ngày ' + k.canChi.ngay + ', giờ ' + k.canChi.gio + ', ' + k.truDem + '. Thủ truyền theo phép **' + k.phap.ten + '**, sơ truyền **' + so.chi + ' · ' + so.tuong + '**. Bạn muốn hỏi việc gì?',
-              chips: ['Việc này thành hay bại?', 'Bao giờ có kết quả?', 'Nên tiến hay nên lui?', 'Tam truyền nói gì về diễn tiến?'],
+              label: T('js.shellui.luc-nham', 'Lục Nhâm · ') + G('canchi', k.canChi.ngay) + T('js.shellui.gio-3uxy', ' giờ ') + G('canchi', k.canChi.gio),
+              greeting: T('js.shellui.da-lap-khoa-dai-luc-nham', 'Đã lập khóa **Đại Lục Nhâm** — ngày ') + G('canchi', k.canChi.ngay) + T('js.shellui.gio-hxu5', ', giờ ') + G('canchi', k.canChi.gio) + ', ' + k.truDem + T('js.shellui.thu-truyen-theo-phep', '. Thủ truyền theo phép **') + k.phap.ten + T('js.shellui.so-truyen', '**, sơ truyền **') + so.chi + ' · ' + so.tuong + T('js.shellui.ban-muon-hoi-viec-gi', '**. Bạn muốn hỏi việc gì?'),
+              chips: [T('js.shellui.viec-nay-thanh-hay-bai', 'Việc này thành hay bại?'), T('js.shellui.bao-gio-co-ket-qua', 'Bao giờ có kết quả?'), T('js.shellui.nen-tien-hay-nen-lui', 'Nên tiến hay nên lui?'), T('js.shellui.tam-truyen-noi-gi-ve-dien', 'Tam truyền nói gì về diễn tiến?')],
             });
-          }).catch(function () { showErr('Không dựng được khóa Lục Nhâm. Thử lại giúp con nhé.'); });
+          }).catch(function () { showErr(T('js.shellui.khong-dung-duoc-khoa-luc-nham-s764', 'Không dựng được khóa Lục Nhâm. Thử lại giúp con nhé.')); });
         });
     });
   }
@@ -4430,7 +4433,7 @@
   // `d.error` trong body JSON trước khi rơi về mã trạng thái — SSE chỉ mở
   // sau khi qua được cửa này.
   function resErrMsg(res) {
-    return res.json().catch(function () { return {}; }).then(function (d) { return d.error || 'Lỗi ' + res.status; });
+    return res.json().catch(function () { return {}; }).then(function (d) { return d.error || T('js.shellui.loi', 'Lỗi ') + res.status; });
   }
   function sseStream(res, onToken) {
     var reader = res.body.getReader(), dec = new TextDecoder();
@@ -4463,7 +4466,7 @@
   // khác, cố ý đơn giản hoá về văn bản thuần).
   function inlStreamBubble(chat) {
     var id = 'inlS' + (++_inlSeq);
-    var el = inlBubble(chat, id, '<p><i>Đang phân tích…</i></p>');
+    var el = inlBubble(chat, id, T('js.shellui.dang-phan-tich', '<p><i>Đang phân tích…</i></p>'));
     return {
       update: function (text) { inlCollapse(el, mdLite(text)); chat.scrollTop = chat.scrollHeight; },
       el: el,
@@ -4503,7 +4506,7 @@
       var showErr = function (msg) {
         busy = false; if (goEl) goEl.disabled = false;
         var e = document.getElementById(id + '-err');
-        if (e) { e.textContent = msg || 'Có lỗi, thử lại giúp con nhé.'; e.style.display = 'block'; }
+        if (e) { e.textContent = msg || T('js.shellui.co-loi-thu-lai-giup-con', 'Có lỗi, thử lại giúp con nhé.'); e.style.display = 'block'; }
       };
       try { onSubmit(photo, el, showErr); } catch (e) { showErr(e && e.message); }
     });
@@ -4522,7 +4525,7 @@
         var btn = bubbleEl.querySelector('.btn-go');
         if (!btn) return;
         var vnd = window.ToolPrices.vndLabel(cost);
-        btn.textContent = baseLabel + ' — ' + cost + ' Lượng' + (vnd ? ' (' + vnd + ')' : '');
+        btn.textContent = baseLabel + ' — ' + cost + T('js.shellui.luong-mo12', ' Lượng') + (vnd ? ' (' + vnd + ')' : '');
       }, function () {});
     });
   }
@@ -4532,11 +4535,11 @@
   // lúc mở (y hệt cả 4 trang thật — không trang nào gọi lại setContext() sau
   // khi có kết quả), streamed text ở lại trong lịch sử chat làm "kết quả".
   function runTuongMatSSE(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=8', '/tuvi-paywall.js?v=43'], function (err) {
-      if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
+    ensureScripts(['/auth.js?v=9', '/tuvi-paywall.js?v=44'], function (err) {
+      if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-thanh-toan', 'không nạp được cổng thanh toán.')); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
-      var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', '', 'Phân tích →', function (photo, bubbleEl, showErr) {
-        inlCollapse(bubbleEl, '<p>Ảnh đã gửi ✓</p>');
+      var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', '', T('js.shellui.phan-tich', 'Phân tích →'), function (photo, bubbleEl, showErr) {
+        inlCollapse(bubbleEl, T('js.shellui.anh-da-gui', '<p>Ảnh đã gửi ✓</p>'));
         paidToolInit(toolId);
         var slug = TuviPaywall.generateToolSlug(opts.product);
         TuviPaywall.requireCredits(slug, function () {
@@ -4549,55 +4552,55 @@
               return sseStream(res, function (partial) { stream.update(partial); });
             })
             .then(function (full) {
-              if (!full) throw new Error('Không có kết quả.');
+              if (!full) throw new Error(T('js.shellui.khong-co-ket-qua', 'Không có kết quả.'));
               stream.update(full);
               if (window.Shell && Shell.setShareable) Shell.setShareable({ kind: 'text', toolId: toolId, title: opts.shareTitle, text: full });
             })
-            .catch(function (e) { stream.update('Xin lỗi, ' + esc((e && e.message) || 'không phân tích được, thử lại giúp con nhé.')); })
+            .catch(function (e) { stream.update(T('js.shellui.xin-loi', 'Xin lỗi, ') + esc((e && e.message) || T('js.shellui.khong-phan-tich-duoc-thu-lai', 'không phân tích được, thử lại giúp con nhé.'))); })
             .then(function () { restorePaywallCfg(); });
         });
       });
-      paidBtnPrice(opts.product, bubble, 'Phân tích');
+      paidBtnPrice(opts.product, bubble, T('js.shellui.phan-tich-ogw9', 'Phân tích'));
     });
   }
   function runDienTuong(chat, toolId) {
     runTuongMatSSE(chat, toolId, {
       product: 'dien-tuong', action: 'dien-tuong', bodyExtra: { irisNote: null, geoNote: null },
-      label: 'Diện Tướng', placeholder: 'Hỏi thầy về tướng mặt…',
-      greeting: 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ phân tích theo nhân tướng học cổ pháp. Sau khi có kết quả, cứ hỏi tôi thêm bất cứ điều gì.',
-      chips: ['Tam Đình là gì?', 'Ngũ Quan gồm những gì?', 'Tướng mặt có thay đổi được không?'],
-      uploadHint: 'Gửi ảnh khuôn mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
-      shareTitle: 'Diện Tướng của tôi',
+      label: T('js.paywall.dien-tuong', 'Diện Tướng'), placeholder: T('js.shellui.hoi-thay-ve-tuong-mat', 'Hỏi thầy về tướng mặt…'),
+      greeting: T('js.shellui.chao-ban-gui-anh-khuon-mat', 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ phân tích theo nhân tướng học cổ pháp. Sau khi có kết quả, cứ hỏi tôi thêm bất cứ điều gì.'),
+      chips: [T('js.shellui.tam-dinh-la-gi', 'Tam Đình là gì?'), T('js.shellui.ngu-quan-gom-nhung-gi', 'Ngũ Quan gồm những gì?'), T('js.shellui.tuong-mat-co-thay-doi-duoc', 'Tướng mặt có thay đổi được không?')],
+      uploadHint: T('js.shellui.gui-anh-khuon-mat-cua-con', 'Gửi ảnh khuôn mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).'),
+      shareTitle: T('js.shellui.dien-tuong-cua-toi', 'Diện Tướng của tôi'),
     });
   }
   function runKhiSac(chat, toolId) {
     runTuongMatSSE(chat, toolId, {
       product: 'khi-sac', action: 'khi-sac', bodyExtra: {},
-      label: 'Khí Sắc', placeholder: 'Hỏi thầy về khí sắc…',
-      greeting: 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ luận khí sắc theo Ma Y Thần Tướng. Sau khi có kết quả, cứ hỏi tôi thêm bất cứ điều gì.',
-      chips: ['Ấn Đường là gì?', '5 sắc Ngũ Hành nghĩa là gì?', 'Khí sắc khác Diện Tướng thế nào?'],
-      uploadHint: 'Gửi ảnh khuôn mặt gần đây (không trang điểm đậm) của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
-      shareTitle: 'Khí Sắc của tôi',
+      label: T('js.shellui.khi-sac', 'Khí Sắc'), placeholder: T('js.shellui.hoi-thay-ve-khi-sac', 'Hỏi thầy về khí sắc…'),
+      greeting: T('js.shellui.chao-ban-gui-anh-khuon-mat-4w3x', 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ luận khí sắc theo Ma Y Thần Tướng. Sau khi có kết quả, cứ hỏi tôi thêm bất cứ điều gì.'),
+      chips: [T('js.shellui.an-duong-la-gi', 'Ấn Đường là gì?'), T('js.shellui.5-sac-ngu-hanh-nghia-la', '5 sắc Ngũ Hành nghĩa là gì?'), T('js.shellui.khi-sac-khac-dien-tuong-the', 'Khí sắc khác Diện Tướng thế nào?')],
+      uploadHint: T('js.shellui.gui-anh-khuon-mat-gan-day', 'Gửi ảnh khuôn mặt gần đây (không trang điểm đậm) của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).'),
+      shareTitle: T('js.shellui.khi-sac-cua-toi', 'Khí Sắc của tôi'),
     });
   }
   function runNhanTuong(chat, toolId) {
     runTuongMatSSE(chat, toolId, {
       product: 'nhan-tuong', action: 'nhan-tuong', bodyExtra: { irisNote: null },
-      label: 'Nhãn Tướng', placeholder: 'Hỏi thầy về nhãn tướng…',
-      greeting: 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ zoom vào đôi mắt và phân tích theo Nhãn Pháp cổ truyền. Sau khi có kết quả, cứ hỏi tôi thêm.',
-      chips: ['Phượng nhãn là gì?', 'Tam Bạch Nhãn có ý nghĩa gì?', 'Ánh mắt nói lên điều gì?'],
-      uploadHint: 'Gửi ảnh cận vùng mắt (nhìn thẳng, đủ sáng) của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
-      shareTitle: 'Nhãn Tướng của tôi',
+      label: T('js.paywall.nhan-tuong', 'Nhãn Tướng'), placeholder: T('js.shellui.hoi-thay-ve-nhan-tuong', 'Hỏi thầy về nhãn tướng…'),
+      greeting: T('js.shellui.chao-ban-gui-anh-khuon-mat-ixs1', 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ zoom vào đôi mắt và phân tích theo Nhãn Pháp cổ truyền. Sau khi có kết quả, cứ hỏi tôi thêm.'),
+      chips: [T('js.shellui.phuong-nhan-la-gi', 'Phượng nhãn là gì?'), T('js.shellui.tam-bach-nhan-co-y-nghia', 'Tam Bạch Nhãn có ý nghĩa gì?'), T('js.shellui.anh-mat-noi-len-dieu-gi', 'Ánh mắt nói lên điều gì?')],
+      uploadHint: T('js.shellui.gui-anh-can-vung-mat-nhin', 'Gửi ảnh cận vùng mắt (nhìn thẳng, đủ sáng) của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).'),
+      shareTitle: T('js.shellui.nhan-tuong-cua-toi', 'Nhãn Tướng của tôi'),
     });
   }
   function runThuTuong(chat, toolId) {
     runTuongMatSSE(chat, toolId, {
       product: 'thu-tuong', action: 'thu-tuong', bodyExtra: { geoNote: null },
-      label: 'Thủ Tướng', placeholder: 'Hỏi thầy về thủ tướng…',
-      greeting: 'Chào bạn. Gửi ảnh lòng bàn tay ngay trong chat (xòe phẳng, hướng lên), tôi sẽ phân tích theo thủ tướng học cổ pháp. Sau khi có kết quả, cứ hỏi tôi thêm.',
-      chips: ['Tam Đại Chỉ là gì?', 'Đường vận mệnh nói lên điều gì?', 'Tay thuận và tay không thuận khác nhau thế nào?'],
-      uploadHint: 'Gửi ảnh lòng bàn tay (xòe phẳng, hướng lên) của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
-      shareTitle: 'Thủ Tướng của tôi',
+      label: T('js.paywall.thu-tuong', 'Thủ Tướng'), placeholder: T('js.shellui.hoi-thay-ve-thu-tuong', 'Hỏi thầy về thủ tướng…'),
+      greeting: T('js.shellui.chao-ban-gui-anh-long-ban', 'Chào bạn. Gửi ảnh lòng bàn tay ngay trong chat (xòe phẳng, hướng lên), tôi sẽ phân tích theo thủ tướng học cổ pháp. Sau khi có kết quả, cứ hỏi tôi thêm.'),
+      chips: [T('js.shellui.tam-dai-chi-la-gi', 'Tam Đại Chỉ là gì?'), T('js.shellui.duong-van-menh-noi-len-dieu', 'Đường vận mệnh nói lên điều gì?'), T('js.shellui.tay-thuan-va-tay-khong-thuan', 'Tay thuận và tay không thuận khác nhau thế nào?')],
+      uploadHint: T('js.shellui.gui-anh-long-ban-tay-xoe', 'Gửi ảnh lòng bàn tay (xòe phẳng, hướng lên) của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).'),
+      shareTitle: T('js.shellui.thu-tuong-cua-toi', 'Thủ Tướng của tôi'),
     });
   }
 
@@ -4605,17 +4608,17 @@
   // /api/tuong-mat, kết quả JSON. Trang thật gọi LẠI Shell.setContext() sau
   // khi có kết quả (label/greeting/chips theo đúng response) — replay y hệt.
   function runTuongMatJSON(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=8', '/tuvi-paywall.js?v=43'], function (err) {
-      if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
+    ensureScripts(['/auth.js?v=9', '/tuvi-paywall.js?v=44'], function (err) {
+      if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-thanh-toan', 'không nạp được cổng thanh toán.')); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
-      var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', opts.extraFieldsHtml || '', 'Phân tích →', function (photo, bubbleEl, showErr) {
+      var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', opts.extraFieldsHtml || '', T('js.shellui.phan-tich', 'Phân tích →'), function (photo, bubbleEl, showErr) {
         var fields = opts.readExtra ? opts.readExtra() : {};
         if (opts.validate && !opts.validate(fields)) { showErr(opts.validateMsg); return; }
-        inlCollapse(bubbleEl, '<p>Ảnh đã gửi ✓</p>');
+        inlCollapse(bubbleEl, T('js.shellui.anh-da-gui', '<p>Ảnh đã gửi ✓</p>'));
         paidToolInit(toolId);
         var slug = TuviPaywall.generateToolSlug(opts.product);
         TuviPaywall.requireCredits(slug, function () {
-          var pending = inlBubble(chat, 'inlJ' + (++_inlSeq), '<p><i>Đang phân tích…</i></p>');
+          var pending = inlBubble(chat, 'inlJ' + (++_inlSeq), T('js.shellui.dang-phan-tich', '<p><i>Đang phân tích…</i></p>'));
           var body = { action: opts.action, image: photo.base64, mediaType: photo.mediaType };
           var extra = opts.bodyExtra ? opts.bodyExtra(fields) : {};
           for (var k in extra) body[k] = extra[k];
@@ -4624,25 +4627,25 @@
           return fetch('/api/tuong-mat', { method: 'POST', headers: headers, body: JSON.stringify(body) })
             .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
             .then(function (r) {
-              if (!r.ok || r.data.error) throw new Error(r.data.error || 'Lỗi phân tích.');
+              if (!r.ok || r.data.error) throw new Error(r.data.error || T('js.shellui.loi-phan-tich', 'Lỗi phân tích.'));
               var ctx = opts.buildContext(r.data);
               Shell.setContext({ toolId: toolId, label: ctx.label, greeting: ctx.greeting, chips: ctx.chips });
             })
-            .catch(function (e) { inlCollapse(pending, '<p>Xin lỗi, ' + esc((e && e.message) || 'không phân tích được, thử lại giúp con nhé.') + '</p>'); })
+            .catch(function (e) { inlCollapse(pending, T('js.shellui.xin-loi-fxsy', '<p>Xin lỗi, ') + esc((e && e.message) || T('js.shellui.khong-phan-tich-duoc-thu-lai', 'không phân tích được, thử lại giúp con nhé.')) + '</p>'); })
             .then(function () { restorePaywallCfg(); });
         });
       });
-      paidBtnPrice(opts.product, bubble, 'Phân tích');
+      paidBtnPrice(opts.product, bubble, T('js.shellui.phan-tich-ogw9', 'Phân tích'));
     });
   }
   function runPersonalColor(chat, toolId) {
     runTuongMatJSON(chat, toolId, {
       product: 'personal-color', action: 'personal-color',
-      label: 'Personal Color', placeholder: 'Hỏi thầy về tông màu cá nhân…',
-      greeting: 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ phân tích undertone và season màu phù hợp. Sau khi có kết quả, cứ hỏi tôi thêm.',
-      chips: ['Tôi thuộc season nào?', 'Vì sao nên tránh màu này?', 'Nên phối đồ thế nào theo season?'],
-      uploadHint: 'Gửi ảnh khuôn mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng). Năm sinh không bắt buộc.',
-      extraFieldsHtml: '<div class="frow"><div class="fg" style="width:110px"><label>Năm sinh (tuỳ chọn)</label><input type="number" id="inlPcYear" min="1920" max="2010"></div></div>',
+      label: 'Personal Color', placeholder: T('js.shellui.hoi-thay-ve-tong-mau-ca', 'Hỏi thầy về tông màu cá nhân…'),
+      greeting: T('js.shellui.chao-ban-gui-anh-khuon-mat-25m4', 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ phân tích undertone và season màu phù hợp. Sau khi có kết quả, cứ hỏi tôi thêm.'),
+      chips: [T('js.shellui.toi-thuoc-season-nao', 'Tôi thuộc season nào?'), T('js.shellui.vi-sao-nen-tranh-mau-nay', 'Vì sao nên tránh màu này?'), T('js.shellui.nen-phoi-do-the-nao-theo', 'Nên phối đồ thế nào theo season?')],
+      uploadHint: T('js.shellui.gui-anh-khuon-mat-cua-con-x2xw', 'Gửi ảnh khuôn mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng). Năm sinh không bắt buộc.'),
+      extraFieldsHtml: ('<div class="frow"><div class="fg" style="width:110px"><label>' + T('js.shellui.nam-sinh-tuy-chon', 'Năm sinh (tuỳ chọn)') + '</label><input type="number" id="inlPcYear" min="1920" max="2010"></div></div>'),
       readExtra: function () { return { namSinh: parseInt(document.getElementById('inlPcYear').value) || null }; },
       auth: true,
       bodyExtra: function (f) { return { namSinh: f.namSinh }; },
@@ -4650,8 +4653,8 @@
         var season = d.season_vn || d.season || '';
         return {
           label: 'Personal Color — ' + season,
-          greeting: 'Bạn thuộc season **' + season + '**, undertone ' + (d.undertone || '') + '. Bạn muốn hỏi thêm về màu sắc hay outfit?',
-          chips: ['Vì sao tôi thuộc season này?', 'Nên tránh màu nào?', 'Nên phối đồ thế nào theo season?'],
+          greeting: T('js.shellui.ban-thuoc-season', 'Bạn thuộc season **') + season + '**, undertone ' + (d.undertone || '') + T('js.shellui.ban-muon-hoi-them-ve-mau', '. Bạn muốn hỏi thêm về màu sắc hay outfit?'),
+          chips: [T('js.shellui.vi-sao-toi-thuoc-season-nay', 'Vì sao tôi thuộc season này?'), T('js.shellui.nen-tranh-mau-nao', 'Nên tránh màu nào?'), T('js.shellui.nen-phoi-do-the-nao-theo', 'Nên phối đồ thế nào theo season?')],
         };
       },
     });
@@ -4659,21 +4662,21 @@
   function runDaLieuAi(chat, toolId) {
     runTuongMatJSON(chat, toolId, {
       product: 'da-lieu-ai', action: 'da-lieu-ai',
-      label: 'Da Liệu Toàn Diện', placeholder: 'Hỏi thầy về da liễu…',
-      greeting: 'Chào bạn. Gửi ảnh da mặt ngay trong chat, tôi sẽ phân tích kết hợp Đông Tây y và bản mệnh ngũ hành. Sau khi có kết quả, cứ hỏi tôi thêm.',
-      chips: ['Da tôi hợp mệnh gì?', 'Thành phần mỹ phẩm nên tránh?', 'Cách chăm da theo Đông y?'],
-      uploadHint: 'Gửi ảnh da mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng). Năm sinh không bắt buộc.',
-      extraFieldsHtml: '<div class="frow"><div class="fg" style="width:110px"><label>Năm sinh (tuỳ chọn)</label><input type="number" id="inlDlYear" min="1920" max="2010"></div></div>',
+      label: T('js.paywall.da-lieu-toan-dien', 'Da Liệu Toàn Diện'), placeholder: T('js.shellui.hoi-thay-ve-da-lieu', 'Hỏi thầy về da liễu…'),
+      greeting: T('js.shellui.chao-ban-gui-anh-da-mat', 'Chào bạn. Gửi ảnh da mặt ngay trong chat, tôi sẽ phân tích kết hợp Đông Tây y và bản mệnh ngũ hành. Sau khi có kết quả, cứ hỏi tôi thêm.'),
+      chips: [T('js.shellui.da-toi-hop-menh-gi', 'Da tôi hợp mệnh gì?'), T('js.shellui.thanh-phan-my-pham-nen-tranh', 'Thành phần mỹ phẩm nên tránh?'), T('js.shellui.cach-cham-da-theo-dong-y', 'Cách chăm da theo Đông y?')],
+      uploadHint: T('js.shellui.gui-anh-da-mat-cua-con', 'Gửi ảnh da mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng). Năm sinh không bắt buộc.'),
+      extraFieldsHtml: ('<div class="frow"><div class="fg" style="width:110px"><label>' + T('js.shellui.nam-sinh-tuy-chon', 'Năm sinh (tuỳ chọn)') + '</label><input type="number" id="inlDlYear" min="1920" max="2010"></div></div>'),
       readExtra: function () { return { namSinh: parseInt(document.getElementById('inlDlYear').value) || null }; },
       auth: true,
       bodyExtra: function (f) { return { namSinh: f.namSinh }; },
       buildContext: function (d) {
         var pd = d.phan_tich_da || {};
-        var loaiDa = pd.loai_da || 'da thường';
+        var loaiDa = pd.loai_da || T('js.shellui.da-thuong', 'da thường');
         return {
-          label: 'Da Liệu — ' + loaiDa,
-          greeting: 'Kết quả phân tích da: **' + loaiDa + '**' + (pd.muc_do ? ' — ' + pd.muc_do : '') + '. Bạn muốn hỏi thêm về Đông y, ăn uống hay mỹ phẩm?',
-          chips: ['Vì sao da tôi thuộc loại này?', 'Nên dùng sản phẩm nào trước?', 'Cách cải thiện theo Đông y?'],
+          label: T('js.shellui.da-lieu', 'Da Liệu — ') + loaiDa,
+          greeting: T('js.shellui.ket-qua-phan-tich-da', 'Kết quả phân tích da: **') + loaiDa + '**' + (pd.muc_do ? ' — ' + pd.muc_do : '') + T('js.shellui.ban-muon-hoi-them-ve-dong', '. Bạn muốn hỏi thêm về Đông y, ăn uống hay mỹ phẩm?'),
+          chips: [T('js.shellui.vi-sao-da-toi-thuoc-loai', 'Vì sao da tôi thuộc loại này?'), T('js.shellui.nen-dung-san-pham-nao-truoc', 'Nên dùng sản phẩm nào trước?'), T('js.shellui.cach-cai-thien-theo-dong-y', 'Cách cải thiện theo Đông y?')],
         };
       },
     });
@@ -4681,11 +4684,11 @@
   function runTrangDiem(chat, toolId) {
     runTuongMatJSON(chat, toolId, {
       product: 'trang-diem-phan-tich', action: 'trang-diem-phan-tich',
-      label: 'Trang Điểm', placeholder: 'Hỏi thầy về trang điểm hợp tướng…',
-      greeting: 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ gợi ý phong cách makeup hợp tướng và bản mệnh. Sau khi có kết quả, cứ hỏi tôi thêm.',
-      chips: ['Vì sao phong cách này hợp tôi?', 'Màu son nào hợp tông da tôi?', 'Trang điểm ảnh hưởng vận khí thế nào?'],
-      uploadHint: 'Gửi ảnh khuôn mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng). Năm sinh không bắt buộc.',
-      extraFieldsHtml: '<div class="frow"><div class="fg" style="width:110px"><label>Năm sinh (tuỳ chọn)</label><input type="number" id="inlTdYear" min="1920" max="2010"></div></div>',
+      label: T('js.shellui.trang-diem', 'Trang Điểm'), placeholder: T('js.shellui.hoi-thay-ve-trang-diem-hop', 'Hỏi thầy về trang điểm hợp tướng…'),
+      greeting: T('js.shellui.chao-ban-gui-anh-khuon-mat-z4ez', 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ gợi ý phong cách makeup hợp tướng và bản mệnh. Sau khi có kết quả, cứ hỏi tôi thêm.'),
+      chips: [T('js.shellui.vi-sao-phong-cach-nay-hop', 'Vì sao phong cách này hợp tôi?'), T('js.shellui.mau-son-nao-hop-tong-da', 'Màu son nào hợp tông da tôi?'), T('js.shellui.trang-diem-anh-huong-van-khi', 'Trang điểm ảnh hưởng vận khí thế nào?')],
+      uploadHint: T('js.shellui.gui-anh-khuon-mat-cua-con-x2xw', 'Gửi ảnh khuôn mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng). Năm sinh không bắt buộc.'),
+      extraFieldsHtml: ('<div class="frow"><div class="fg" style="width:110px"><label>' + T('js.shellui.nam-sinh-tuy-chon', 'Năm sinh (tuỳ chọn)') + '</label><input type="number" id="inlTdYear" min="1920" max="2010"></div></div>'),
       readExtra: function () { return { namSinh: parseInt(document.getElementById('inlTdYear').value) || null }; },
       auth: true,
       // `faceMeasurements` (MediaPipe FaceMesh) CỐ Ý null — xem chú thích đầu
@@ -4693,9 +4696,9 @@
       bodyExtra: function (f) { return { namSinh: f.namSinh, faceMeasurements: null }; },
       buildContext: function (d) {
         return {
-          label: 'Trang Điểm — ' + (d.faceShapeVN || ''),
-          greeting: 'Khuôn mặt của bạn: **' + (d.faceShapeVN || '') + '**' + (d.napAmHanh ? ', mệnh ' + d.napAmHanh : '') + '. Bạn muốn hỏi thêm về phong cách trang điểm nào?',
-          chips: ['Vì sao phong cách này hợp tôi?', 'Màu son nào hợp tông da tôi?', 'Trang điểm ảnh hưởng vận khí thế nào?'],
+          label: T('js.shellui.trang-diem-yk4l', 'Trang Điểm — ') + (d.faceShapeVN || ''),
+          greeting: T('js.shellui.khuon-mat-cua-ban', 'Khuôn mặt của bạn: **') + (d.faceShapeVN || '') + '**' + (d.napAmHanh ? T('js.shellui.menh', ', mệnh ') + d.napAmHanh : '') + T('js.shellui.ban-muon-hoi-them-ve-phong', '. Bạn muốn hỏi thêm về phong cách trang điểm nào?'),
+          chips: [T('js.shellui.vi-sao-phong-cach-nay-hop', 'Vì sao phong cách này hợp tôi?'), T('js.shellui.mau-son-nao-hop-tong-da', 'Màu son nào hợp tông da tôi?'), T('js.shellui.trang-diem-anh-huong-van-khi', 'Trang điểm ảnh hưởng vận khí thế nào?')],
         };
       },
     });
@@ -4703,19 +4706,19 @@
   function runKieuToc(chat, toolId) {
     runTuongMatJSON(chat, toolId, {
       product: 'kieu-toc-phan-tich', action: 'kieu-toc-phan-tich',
-      label: 'Kiểu Tóc & Kính Mắt Hợp Tướng Mặt', placeholder: 'Hỏi thầy về kiểu tóc hợp tướng…',
-      greeting: 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ gợi ý kiểu tóc và kính mắt hợp tướng. Sau khi có kết quả, cứ hỏi tôi thêm.',
-      chips: ['Mặt tôi hợp kiểu tóc nào?', 'Vì sao nên tránh kiểu này?', 'Kính mắt nào hợp tướng mặt tôi?'],
-      uploadHint: 'Gửi ảnh khuôn mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
-      extraFieldsHtml: '<div class="frow"><div class="fg" style="width:100px"><label>Giới tính</label><select id="inlKtGt"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div></div>',
+      label: T('js.shellui.kieu-toc-kinh-mat-hop-tuong', 'Kiểu Tóc & Kính Mắt Hợp Tướng Mặt'), placeholder: T('js.shellui.hoi-thay-ve-kieu-toc-hop', 'Hỏi thầy về kiểu tóc hợp tướng…'),
+      greeting: T('js.shellui.chao-ban-gui-anh-khuon-mat-jcki', 'Chào bạn. Gửi ảnh khuôn mặt ngay trong chat, tôi sẽ gợi ý kiểu tóc và kính mắt hợp tướng. Sau khi có kết quả, cứ hỏi tôi thêm.'),
+      chips: [T('js.shellui.mat-toi-hop-kieu-toc-nao', 'Mặt tôi hợp kiểu tóc nào?'), T('js.shellui.vi-sao-nen-tranh-kieu-nay', 'Vì sao nên tránh kiểu này?'), T('js.shellui.kinh-mat-nao-hop-tuong-mat', 'Kính mắt nào hợp tướng mặt tôi?')],
+      uploadHint: T('js.shellui.gui-anh-khuon-mat-cua-con', 'Gửi ảnh khuôn mặt của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).'),
+      extraFieldsHtml: ('<div class="frow"><div class="fg" style="width:100px"><label>' + T('js.shellui.gioi-tinh', 'Giới tính') + '</label><select id="inlKtGt"><option value="nam">' + T('js.shellui.nam', 'Nam') + '</option><option value="nu">' + T('js.shellui.nu', 'Nữ') + '</option></select></div></div>'),
       readExtra: function () { return { gender: document.getElementById('inlKtGt').value }; },
       auth: false, // trang thật KHÔNG gửi Authorization cho tool này — đọc code, không đoán.
       bodyExtra: function (f) { return { gender: f.gender, faceMeasurements: null }; },
       buildContext: function (d) {
         return {
-          label: 'Kiểu Tóc — ' + (d.faceShapeVN || ''),
-          greeting: 'Khuôn mặt của bạn thuộc dạng **' + (d.faceShapeVN || '') + '**. Bạn muốn hỏi thêm về kiểu tóc hay kính mắt hợp tướng?',
-          chips: ['Vì sao kiểu này hợp mặt tôi?', 'Nên tránh kiểu tóc nào?', 'Kính mắt nào hợp tướng mặt tôi?'],
+          label: T('js.shellui.kieu-toc', 'Kiểu Tóc — ') + (d.faceShapeVN || ''),
+          greeting: T('js.shellui.khuon-mat-cua-ban-thuoc-dang', 'Khuôn mặt của bạn thuộc dạng **') + (d.faceShapeVN || '') + T('js.shellui.ban-muon-hoi-them-ve-kieu', '**. Bạn muốn hỏi thêm về kiểu tóc hay kính mắt hợp tướng?'),
+          chips: [T('js.shellui.vi-sao-kieu-nay-hop-mat', 'Vì sao kiểu này hợp mặt tôi?'), T('js.shellui.nen-tranh-kieu-toc-nao', 'Nên tránh kiểu tóc nào?'), T('js.shellui.kinh-mat-nao-hop-tuong-mat', 'Kính mắt nào hợp tướng mặt tôi?')],
         };
       },
     });
@@ -4726,32 +4729,32 @@
   // 'bat-trach' (bước 17), không chép công thức lần hai.
   var DOOR_DIR_OPTS = [['S', 'Nam'], ['N', 'Bắc'], ['E', 'Đông'], ['W', 'Tây'], ['SE', 'Đông Nam'], ['SW', 'Tây Nam'], ['NE', 'Đông Bắc'], ['NW', 'Tây Bắc']];
   function runPhongThuyPhoto(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=8', '/tuvi-paywall.js?v=43', '/tools-shared/bat-trach.js?v=2'], function (err) {
-      if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
+    ensureScripts(['/auth.js?v=9', '/tuvi-paywall.js?v=44', '/tools-shared/bat-trach.js?v=2'], function (err) {
+      if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-thanh-toan', 'không nạp được cổng thanh toán.')); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var extraOpts = opts.extraOptions.map(function (o) { return '<option value="' + esc(o[0]) + '">' + esc(o[1]) + '</option>'; }).join('');
       var doorOpts = DOOR_DIR_OPTS.map(function (o) { return '<option value="' + o[0] + '">' + o[1] + '</option>'; }).join('');
       var fieldsHtml =
         '<div class="frow" style="margin-top:6px">' +
-          '<div class="fg" style="width:100px"><label>Năm sinh</label><input type="number" id="inlPtYear" min="1900" max="2100"></div>' +
-          '<div class="fg" style="width:90px"><label>Giới tính</label><select id="inlPtGt"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>' +
+          ('<div class="fg" style="width:100px"><label>' + T('js.shellui.nam-sinh', 'Năm sinh') + '</label><input type="number" id="inlPtYear" min="1900" max="2100"></div>') +
+          ('<div class="fg" style="width:90px"><label>' + T('js.shellui.gioi-tinh', 'Giới tính') + '</label><select id="inlPtGt"><option value="nam">' + T('js.shellui.nam', 'Nam') + '</option><option value="nu">' + T('js.shellui.nu', 'Nữ') + '</option></select></div>') +
         '</div>' +
         '<div class="frow">' +
           '<div class="fg" style="flex:1;min-width:140px"><label>' + esc(opts.extraFieldLabel) + '</label><select id="inlPtExtra">' + extraOpts + '</select></div>' +
-          '<div class="fg" style="width:110px"><label>Hướng cửa</label><select id="inlPtDoor">' + doorOpts + '</select></div>' +
+          ('<div class="fg" style="width:110px"><label>' + T('js.shellui.huong-cua', 'Hướng cửa') + '</label><select id="inlPtDoor">') + doorOpts + '</select></div>' +
         '</div>';
-      var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', fieldsHtml, 'Phân tích →', function (photo, bubbleEl, showErr) {
+      var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', fieldsHtml, T('js.shellui.phan-tich', 'Phân tích →'), function (photo, bubbleEl, showErr) {
         var y = parseInt(document.getElementById('inlPtYear').value);
         var g = document.getElementById('inlPtGt').value;
         var extraV = document.getElementById('inlPtExtra').value;
         var door = document.getElementById('inlPtDoor').value;
-        if (!y) { showErr('Vui lòng nhập năm sinh.'); return; }
+        if (!y) { showErr(T('js.shellui.vui-long-nhap-nam-sinh', 'Vui lòng nhập năm sinh.')); return; }
         var gua = BatTrachTool.getCungMenh(y, g);
-        inlCollapse(bubbleEl, '<p>Ảnh đã gửi ✓</p>');
+        inlCollapse(bubbleEl, T('js.shellui.anh-da-gui', '<p>Ảnh đã gửi ✓</p>'));
         paidToolInit(toolId);
         var slug = TuviPaywall.generateToolSlug(opts.product);
         TuviPaywall.requireCredits(slug, function () {
-          var pending = inlBubble(chat, 'inlPt' + (++_inlSeq), '<p><i>Đang chấm điểm phong thủy…</i></p>');
+          var pending = inlBubble(chat, 'inlPt' + (++_inlSeq), T('js.shellui.dang-cham-diem-phong-thuy', '<p><i>Đang chấm điểm phong thủy…</i></p>'));
           var body = { imageBase64: photo.base64, imageType: photo.mediaType, doorDir: door, guaNumber: gua, namSinh: y, gioiTinh: g };
           body[opts.bodyExtraKey] = extraV;
           var tok = getToken();
@@ -4760,34 +4763,34 @@
           return fetch('/api/phong-thuy?action=' + opts.apiAction, { method: 'POST', headers: headers, body: JSON.stringify(body) })
             .then(function (res) { return res.json(); })
             .then(function (data) {
-              if (!data.success) throw new Error(data.error || 'Phân tích thất bại.');
+              if (!data.success) throw new Error(data.error || T('js.shellui.phan-tich-that-bai', 'Phân tích thất bại.'));
               var before = (data.analysis && data.analysis.beforeScore) || 0;
               var after = (data.analysis && data.analysis.afterScore) || 0;
               var ctx = opts.buildContext(before, after);
               Shell.setContext({ toolId: toolId, label: ctx.label, greeting: ctx.greeting, chips: ctx.chips });
             })
-            .catch(function (e) { inlCollapse(pending, '<p>Xin lỗi, ' + esc((e && e.message) || 'không chấm điểm được, thử lại giúp con nhé.') + '</p>'); })
+            .catch(function (e) { inlCollapse(pending, T('js.shellui.xin-loi-fxsy', '<p>Xin lỗi, ') + esc((e && e.message) || T('js.shellui.khong-cham-diem-duoc-thu-lai', 'không chấm điểm được, thử lại giúp con nhé.')) + '</p>'); })
             .then(function () { restorePaywallCfg(); });
         });
       });
-      paidBtnPrice(opts.product, bubble, 'Phân tích');
+      paidBtnPrice(opts.product, bubble, T('js.shellui.phan-tich-ogw9', 'Phân tích'));
     });
   }
   function runBanLamViec(chat, toolId) {
     runPhongThuyPhoto(chat, toolId, {
       product: 'ban-lam-viec', apiAction: 'ban-lam-viec',
-      label: 'Phong Thủy Bàn Làm Việc', placeholder: 'Hỏi thầy về phong thủy bàn làm việc…',
-      greeting: 'Chào bạn. Điền năm sinh và gửi ảnh góc làm việc ngay trong chat, tôi sẽ chấm điểm phong thủy theo Bát Trạch. Sau khi có kết quả, cứ hỏi tôi thêm.',
-      chips: ['Hướng ngồi Sinh Khí là gì?', 'Cách tăng vận trí tuệ?', 'Không nên đặt gì trên bàn?'],
-      uploadHint: 'Gửi ảnh góc làm việc của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
-      extraFieldLabel: 'Công việc chính',
+      label: T('js.paywall.phong-thuy-ban-lam-viec', 'Phong Thủy Bàn Làm Việc'), placeholder: T('js.shellui.hoi-thay-ve-phong-thuy-ban', 'Hỏi thầy về phong thủy bàn làm việc…'),
+      greeting: T('js.shellui.chao-ban-dien-nam-sinh-va', 'Chào bạn. Điền năm sinh và gửi ảnh góc làm việc ngay trong chat, tôi sẽ chấm điểm phong thủy theo Bát Trạch. Sau khi có kết quả, cứ hỏi tôi thêm.'),
+      chips: [T('js.shellui.huong-ngoi-sinh-khi-la-gi', 'Hướng ngồi Sinh Khí là gì?'), T('js.shellui.cach-tang-van-tri-tue', 'Cách tăng vận trí tuệ?'), T('js.shellui.khong-nen-dat-gi-tren-ban', 'Không nên đặt gì trên bàn?')],
+      uploadHint: T('js.shellui.gui-anh-goc-lam-viec-cua', 'Gửi ảnh góc làm việc của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).'),
+      extraFieldLabel: T('js.shellui.cong-viec-chinh', 'Công việc chính'),
       extraOptions: [['office', 'Làm việc văn phòng'], ['study', 'Học tập / Ôn thi'], ['creative', 'Sáng tạo / Thiết kế']],
       bodyExtraKey: 'workType',
       buildContext: function (before, after) {
         return {
-          label: 'Bàn Làm Việc — điểm ' + before + '→' + after,
-          greeting: 'Điểm phong thủy bàn làm việc hiện tại: **' + before + '/100**, sau điều chỉnh có thể lên **' + after + '/100**. Bạn muốn hỏi thêm về đề xuất nào?',
-          chips: ['Vì sao điểm hiện tại thấp?', 'Ưu tiên làm gì trước?', 'Vật phẩm nào nên mua trước?'],
+          label: T('js.shellui.ban-lam-viec-diem', 'Bàn Làm Việc — điểm ') + before + '→' + after,
+          greeting: T('js.shellui.diem-phong-thuy-ban-lam-viec', 'Điểm phong thủy bàn làm việc hiện tại: **') + before + T('js.shellui.100-sau-dieu-chinh-co-the', '/100**, sau điều chỉnh có thể lên **') + after + T('js.shellui.100-ban-muon-hoi-them-ve', '/100**. Bạn muốn hỏi thêm về đề xuất nào?'),
+          chips: [T('js.shellui.vi-sao-diem-hien-tai-thap', 'Vì sao điểm hiện tại thấp?'), T('js.shellui.uu-tien-lam-gi-truoc', 'Ưu tiên làm gì trước?'), T('js.shellui.vat-pham-nao-nen-mua-truoc', 'Vật phẩm nào nên mua trước?')],
         };
       },
     });
@@ -4795,18 +4798,18 @@
   function runCuaHangPhongThuy(chat, toolId) {
     runPhongThuyPhoto(chat, toolId, {
       product: 'cua-hang-phong-thuy', apiAction: 'cua-hang',
-      label: 'Phong Thủy Cửa Hàng & Văn Phòng', placeholder: 'Hỏi thầy về phong thủy cửa hàng…',
-      greeting: 'Chào bạn. Điền năm sinh và gửi ảnh cửa hàng/văn phòng ngay trong chat, tôi sẽ chấm điểm bố trí thu ngân, cửa chính theo Bát Trạch. Sau khi có kết quả, cứ hỏi tôi thêm.',
-      chips: ['Vị trí thu ngân nên đặt đâu?', 'Cách kích hoạt tài vị?', 'Két sắt nên quay hướng nào?'],
-      uploadHint: 'Gửi ảnh cửa hàng/văn phòng của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
-      extraFieldLabel: 'Loại không gian',
+      label: T('js.shellui.phong-thuy-cua-hang-van-phong', 'Phong Thủy Cửa Hàng & Văn Phòng'), placeholder: T('js.shellui.hoi-thay-ve-phong-thuy-cua', 'Hỏi thầy về phong thủy cửa hàng…'),
+      greeting: T('js.shellui.chao-ban-dien-nam-sinh-va-3mcz', 'Chào bạn. Điền năm sinh và gửi ảnh cửa hàng/văn phòng ngay trong chat, tôi sẽ chấm điểm bố trí thu ngân, cửa chính theo Bát Trạch. Sau khi có kết quả, cứ hỏi tôi thêm.'),
+      chips: [T('js.shellui.vi-tri-thu-ngan-nen-dat', 'Vị trí thu ngân nên đặt đâu?'), T('js.shellui.cach-kich-hoat-tai-vi', 'Cách kích hoạt tài vị?'), T('js.shellui.ket-sat-nen-quay-huong-nao', 'Két sắt nên quay hướng nào?')],
+      uploadHint: T('js.shellui.gui-anh-cua-hang-van-phong', 'Gửi ảnh cửa hàng/văn phòng của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).'),
+      extraFieldLabel: T('js.shellui.loai-khong-gian', 'Loại không gian'),
       extraOptions: [['store', 'Cửa hàng kinh doanh'], ['office', 'Văn phòng công ty'], ['restaurant', 'Nhà hàng / Quán ăn']],
       bodyExtraKey: 'spaceType',
       buildContext: function (before, after) {
         return {
-          label: 'Cửa Hàng & Văn Phòng — điểm ' + before + '→' + after,
-          greeting: 'Điểm phong thủy cửa hàng/văn phòng hiện tại: **' + before + '/100**, sau điều chỉnh có thể lên **' + after + '/100**. Bạn muốn hỏi thêm về đề xuất nào?',
-          chips: ['Vì sao điểm hiện tại thấp?', 'Ưu tiên làm gì trước?', 'Vật phẩm nào nên mua trước?'],
+          label: T('js.shellui.cua-hang-van-phong-diem', 'Cửa Hàng & Văn Phòng — điểm ') + before + '→' + after,
+          greeting: T('js.shellui.diem-phong-thuy-cua-hang-van', 'Điểm phong thủy cửa hàng/văn phòng hiện tại: **') + before + T('js.shellui.100-sau-dieu-chinh-co-the', '/100**, sau điều chỉnh có thể lên **') + after + T('js.shellui.100-ban-muon-hoi-them-ve', '/100**. Bạn muốn hỏi thêm về đề xuất nào?'),
+          chips: [T('js.shellui.vi-sao-diem-hien-tai-thap', 'Vì sao điểm hiện tại thấp?'), T('js.shellui.uu-tien-lam-gi-truoc', 'Ưu tiên làm gì trước?'), T('js.shellui.vat-pham-nao-nen-mua-truoc', 'Vật phẩm nào nên mua trước?')],
         };
       },
     });
@@ -4814,18 +4817,18 @@
   function runPhongThuy(chat, toolId) {
     runPhongThuyPhoto(chat, toolId, {
       product: 'phong-thuy', apiAction: 'analyze',
-      label: 'Phong Thủy Nội Thất', placeholder: 'Hỏi thầy về phong thủy…',
-      greeting: 'Chào bạn. Điền năm sinh và gửi ảnh phòng ngay trong chat, tôi sẽ chấm điểm phong thủy theo Bát Trạch. Sau khi có kết quả, cứ hỏi tôi thêm.',
-      chips: ['Bát Trạch Minh Cảnh là gì?', 'Cách hóa giải hướng xấu?', 'Phòng ngủ nên tránh gì?'],
-      uploadHint: 'Gửi ảnh căn phòng của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).',
-      extraFieldLabel: 'Loại phòng',
+      label: T('js.paywall.phong-thuy-noi-that', 'Phong Thủy Nội Thất'), placeholder: T('js.shellui.hoi-thay-ve-phong-thuy', 'Hỏi thầy về phong thủy…'),
+      greeting: T('js.shellui.chao-ban-dien-nam-sinh-va-anel', 'Chào bạn. Điền năm sinh và gửi ảnh phòng ngay trong chat, tôi sẽ chấm điểm phong thủy theo Bát Trạch. Sau khi có kết quả, cứ hỏi tôi thêm.'),
+      chips: [T('js.shellui.bat-trach-minh-canh-la-gi', 'Bát Trạch Minh Cảnh là gì?'), T('js.shellui.cach-hoa-giai-huong-xau', 'Cách hóa giải hướng xấu?'), T('js.shellui.phong-ngu-nen-tranh-gi', 'Phòng ngủ nên tránh gì?')],
+      uploadHint: T('js.shellui.gui-anh-can-phong-cua-con', 'Gửi ảnh căn phòng của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).'),
+      extraFieldLabel: T('js.shellui.loai-phong', 'Loại phòng'),
       extraOptions: [['bedroom', 'Phòng ngủ'], ['living', 'Phòng khách'], ['workspace', 'Phòng làm việc']],
       bodyExtraKey: 'roomType',
       buildContext: function (before, after) {
         return {
-          label: 'Phong Thủy — điểm ' + before + '→' + after,
-          greeting: 'Điểm phong thủy hiện tại: **' + before + '/100**, sau điều chỉnh có thể lên **' + after + '/100**. Bạn muốn hỏi thêm về đề xuất nào?',
-          chips: ['Vì sao điểm hiện tại thấp?', 'Ưu tiên làm gì trước?', 'Vật phẩm nào nên mua trước?'],
+          label: T('js.shellui.phong-thuy-diem', 'Phong Thủy — điểm ') + before + '→' + after,
+          greeting: T('js.shellui.diem-phong-thuy-hien-tai', 'Điểm phong thủy hiện tại: **') + before + T('js.shellui.100-sau-dieu-chinh-co-the', '/100**, sau điều chỉnh có thể lên **') + after + T('js.shellui.100-ban-muon-hoi-them-ve', '/100**. Bạn muốn hỏi thêm về đề xuất nào?'),
+          chips: [T('js.shellui.vi-sao-diem-hien-tai-thap', 'Vì sao điểm hiện tại thấp?'), T('js.shellui.uu-tien-lam-gi-truoc', 'Ưu tiên làm gì trước?'), T('js.shellui.vat-pham-nao-nen-mua-truoc', 'Vật phẩm nào nên mua trước?')],
         };
       },
     });
@@ -4837,16 +4840,16 @@
   // được 3/6 trục Cốt/Nhục/Thế — không phải suy diễn, chính trang thật cũng
   // chỉ đo được ngần đó khi người dùng chọn nhánh ảnh thay vì ký sống).
   function runButTuong(chat, toolId) {
-    ensureScripts(['/auth.js?v=8', '/tuvi-paywall.js?v=43', '/tools-shared/but-tuong.js'], function (err) {
-      if (err || typeof TuviPaywall === 'undefined' || typeof BuTuongTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
+    ensureScripts(['/auth.js?v=9', '/tuvi-paywall.js?v=44', '/tools-shared/but-tuong.js'], function (err) {
+      if (err || typeof TuviPaywall === 'undefined' || typeof BuTuongTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-thanh-toan', 'không nạp được cổng thanh toán.')); return; }
       Shell.setContext({
-        toolId: toolId, label: 'Bút Tướng', placeholder: 'Hỏi thầy về bút tướng…',
-        greeting: 'Chào bạn. Gửi ảnh chữ ký ngay trong chat (chụp/scan rõ nét trên nền sáng), tôi sẽ đo các trục cổ pháp và luận giúp bạn. Sau khi có kết quả, cứ hỏi tôi thêm.',
-        chips: ['Trục Thần là gì?', 'Cốt và Nhục khác nhau thế nào?', 'Ngũ hành nét liên quan gì tới dụng thần?'],
+        toolId: toolId, label: T('js.shellui.but-tuong', 'Bút Tướng'), placeholder: T('js.shellui.hoi-thay-ve-but-tuong', 'Hỏi thầy về bút tướng…'),
+        greeting: T('js.shellui.chao-ban-gui-anh-chu-ky', 'Chào bạn. Gửi ảnh chữ ký ngay trong chat (chụp/scan rõ nét trên nền sáng), tôi sẽ đo các trục cổ pháp và luận giúp bạn. Sau khi có kết quả, cứ hỏi tôi thêm.'),
+        chips: [T('js.shellui.truc-than-la-gi', 'Trục Thần là gì?'), T('js.shellui.cot-va-nhuc-khac-nhau-the', 'Cốt và Nhục khác nhau thế nào?'), T('js.shellui.ngu-hanh-net-lien-quan-gi', 'Ngũ hành nét liên quan gì tới dụng thần?')],
       });
       var bubble = inlPhotoBubble(chat,
-        '<p>Gửi ảnh chữ ký của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng). Đo được 3/6 trục từ ảnh tĩnh (Cốt/Nhục/Thế) — muốn đo đủ 6 trục thì ký trực tiếp trên trang <a href="/app/but-tuong" target="_blank">Bút Tướng</a>.</p>',
-        '', 'Phân tích →', function (photo, bubbleEl, showErr) {
+        ('<p>' + T('js.shellui.gui-anh-chu-ky-cua-con', 'Gửi ảnh chữ ký của con vào đây nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng). Đo được 3/6 trục từ ảnh tĩnh (Cốt/Nhục/Thế) — muốn đo đủ 6 trục thì ký trực tiếp trên trang') + ' <a href="/app/but-tuong" target="_blank">' + T('js.shellui.but-tuong', 'Bút Tướng') + '</a>.</p>'),
+        '', T('js.shellui.phan-tich', 'Phân tích →'), function (photo, bubbleEl, showErr) {
           var img = new Image();
           img.onload = function () {
             var MAX = 500, w = img.naturalWidth, h = img.naturalHeight;
@@ -4856,8 +4859,8 @@
             cv.getContext('2d').drawImage(img, 0, 0, w, h);
             var imageData = cv.getContext('2d').getImageData(0, 0, w, h);
             var metrics = BuTuongTool.analyzeImageData(imageData);
-            if (!metrics) { showErr('Không đọc được nét mực từ ảnh này.'); return; }
-            inlCollapse(bubbleEl, '<p>Ảnh đã gửi ✓</p>');
+            if (!metrics) { showErr(T('js.shellui.khong-doc-duoc-net-muc-tu', 'Không đọc được nét mực từ ảnh này.')); return; }
+            inlCollapse(bubbleEl, T('js.shellui.anh-da-gui', '<p>Ảnh đã gửi ✓</p>'));
             paidToolInit(toolId);
             var slug = TuviPaywall.generateToolSlug('but-tuong');
             TuviPaywall.requireCredits(slug, function () {
@@ -4868,47 +4871,47 @@
                   return sseStream(res, function (partial) { stream.update(partial); });
                 })
                 .then(function (full) {
-                  if (!full) throw new Error('Không có kết quả.');
+                  if (!full) throw new Error(T('js.shellui.khong-co-ket-qua', 'Không có kết quả.'));
                   stream.update(full);
-                  if (window.Shell && Shell.setShareable) Shell.setShareable({ kind: 'text', toolId: toolId, title: 'Bút Tướng của tôi', text: full });
+                  if (window.Shell && Shell.setShareable) Shell.setShareable({ kind: 'text', toolId: toolId, title: T('js.shellui.but-tuong-cua-toi', 'Bút Tướng của tôi'), text: full });
                 })
-                .catch(function (e) { stream.update('Xin lỗi, ' + esc((e && e.message) || 'không phân tích được, thử lại giúp con nhé.')); })
+                .catch(function (e) { stream.update(T('js.shellui.xin-loi', 'Xin lỗi, ') + esc((e && e.message) || T('js.shellui.khong-phan-tich-duoc-thu-lai', 'không phân tích được, thử lại giúp con nhé.'))); })
                 .then(function () { restorePaywallCfg(); });
             });
           };
-          img.onerror = function () { showErr('Không đọc được ảnh này.'); };
+          img.onerror = function () { showErr(T('js.shellui.khong-doc-duoc-anh-nay', 'Không đọc được ảnh này.')); };
           img.src = photo.dataUrl;
         });
-      paidBtnPrice('but-tuong', bubble, 'Phân tích');
+      paidBtnPrice('but-tuong', bubble, T('js.shellui.phan-tich-ogw9', 'Phân tích'));
     });
   }
 
   // ── Trả phí KHÔNG cần ảnh (mau-sac-hop-menh/trang-phuc-theo-ngay) — vẫn
   // qua requireCredits(), chỉ khác chỗ input là field chứ không phải ảnh.
   function runMauSacHopMenh(chat, toolId) {
-    ensureScripts(['/auth.js?v=8', '/tuvi-paywall.js?v=43', '/tools-shared/bat-trach.js?v=2'], function (err) {
-      if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
+    ensureScripts(['/auth.js?v=9', '/tuvi-paywall.js?v=44', '/tools-shared/bat-trach.js?v=2'], function (err) {
+      if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-thanh-toan', 'không nạp được cổng thanh toán.')); return; }
       Shell.setContext({
-        toolId: toolId, label: 'Màu Sắc Hợp Mệnh', placeholder: 'Hỏi thầy về màu sắc hợp mệnh…',
-        greeting: 'Chào bạn. Cho thầy xin năm sinh và giới tính ngay trong chat, tôi sẽ tư vấn màu sắc trang phục theo Ngũ Hành Nạp Âm. Sau khi có kết quả, cứ hỏi tôi thêm.',
-        chips: ['Vì sao mệnh tôi hợp màu này?', 'Màu nào nên tránh khi phỏng vấn?', 'Cách phối đồ theo màu mệnh?'],
+        toolId: toolId, label: T('js.paywall.mau-sac-hop-menh', 'Màu Sắc Hợp Mệnh'), placeholder: T('js.shellui.hoi-thay-ve-mau-sac-hop', 'Hỏi thầy về màu sắc hợp mệnh…'),
+        greeting: T('js.shellui.chao-ban-cho-thay-xin-nam', 'Chào bạn. Cho thầy xin năm sinh và giới tính ngay trong chat, tôi sẽ tư vấn màu sắc trang phục theo Ngũ Hành Nạp Âm. Sau khi có kết quả, cứ hỏi tôi thêm.'),
+        chips: [T('js.shellui.vi-sao-menh-toi-hop-mau', 'Vì sao mệnh tôi hợp màu này?'), T('js.shellui.mau-nao-nen-tranh-khi-phong', 'Màu nào nên tránh khi phỏng vấn?'), T('js.shellui.cach-phoi-do-theo-mau-menh', 'Cách phối đồ theo màu mệnh?')],
       });
       var bubble = inlStep(chat,
-        '<p>Cho thầy xin năm sinh và giới tính của con nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).</p>' +
+        T('js.shellui.cho-thay-xin-nam-sinh-va-sz0q', '<p>Cho thầy xin năm sinh và giới tính của con nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).</p>') +
         '<div class="frow">' +
-          '<div class="fg" style="width:110px"><label>Năm sinh</label><input type="number" id="inlMsYear" min="1900" max="2025"></div>' +
-          '<div class="fg" style="width:100px"><label>Giới tính</label><select id="inlMsGt"><option value="male">Nam</option><option value="female">Nữ</option></select></div>' +
+          ('<div class="fg" style="width:110px"><label>' + T('js.shellui.nam-sinh', 'Năm sinh') + '</label><input type="number" id="inlMsYear" min="1900" max="2025"></div>') +
+          ('<div class="fg" style="width:100px"><label>' + T('js.shellui.gioi-tinh', 'Giới tính') + '</label><select id="inlMsGt"><option value="male">' + T('js.shellui.nam', 'Nam') + '</option><option value="female">' + T('js.shellui.nu', 'Nữ') + '</option></select></div>') +
         '</div>',
-        'Xem màu hợp mệnh →', function (el, showErr) {
+        T('js.shellui.xem-mau-hop-menh', 'Xem màu hợp mệnh →'), function (el, showErr) {
           var y = parseInt(document.getElementById('inlMsYear').value);
           var g = document.getElementById('inlMsGt').value;
-          if (!y) { showErr('Vui lòng nhập năm sinh.'); return; }
+          if (!y) { showErr(T('js.shellui.vui-long-nhap-nam-sinh', 'Vui lòng nhập năm sinh.')); return; }
           var gua = BatTrachTool.getCungMenh(y, g === 'male' ? 'nam' : 'nu');
-          inlCollapse(el, '<p>Năm sinh <b>' + y + '</b> · ' + (g === 'male' ? 'Nam' : 'Nữ') + ' ✓</p>');
+          inlCollapse(el, T('js.shellui.nam-sinh-wcj0', '<p>Năm sinh <b>') + y + '</b> · ' + (g === 'male' ? 'Nam' : T('js.shellui.nu', 'Nữ')) + ' ✓</p>');
           paidToolInit(toolId);
           var slug = TuviPaywall.generateToolSlug('mau-sac-hop-menh');
           TuviPaywall.requireCredits(slug, function () {
-            var pending = inlBubble(chat, 'inlMs' + (++_inlSeq), '<p><i>Đang tra màu hợp mệnh…</i></p>');
+            var pending = inlBubble(chat, 'inlMs' + (++_inlSeq), T('js.shellui.dang-tra-mau-hop-menh', '<p><i>Đang tra màu hợp mệnh…</i></p>'));
             var tok = getToken();
             var headers = { 'Content-Type': 'application/json' };
             if (tok) headers['Authorization'] = 'Bearer ' + tok;
@@ -4919,16 +4922,16 @@
                 var napAmHanh = data.napAmHanh || '';
                 var primary = (data.colorData && data.colorData.primary) || [];
                 Shell.setContext({
-                  toolId: toolId, label: 'Màu Sắc Hợp Mệnh — Mệnh ' + napAmHanh,
-                  greeting: 'Bạn thuộc **mệnh ' + napAmHanh + '**. Màu chủ đạo: ' + primary.slice(0, 3).join(', ') + '. Bạn muốn hỏi thêm về màu sắc hay phối đồ?',
-                  chips: ['Vì sao mệnh tôi hợp màu này?', 'Màu nào nên tránh khi phỏng vấn?', 'Cách phối đồ theo màu mệnh?'],
+                  toolId: toolId, label: T('js.shellui.mau-sac-hop-menh-menh', 'Màu Sắc Hợp Mệnh — Mệnh ') + G('hanh', napAmHanh),
+                  greeting: T('js.shellui.ban-thuoc-menh', 'Bạn thuộc **mệnh ') + G('hanh', napAmHanh) + T('js.shellui.mau-chu-dao', '**. Màu chủ đạo: ') + primary.slice(0, 3).join(', ') + T('js.shellui.ban-muon-hoi-them-ve-mau-lphd', '. Bạn muốn hỏi thêm về màu sắc hay phối đồ?'),
+                  chips: [T('js.shellui.vi-sao-menh-toi-hop-mau', 'Vì sao mệnh tôi hợp màu này?'), T('js.shellui.mau-nao-nen-tranh-khi-phong', 'Màu nào nên tránh khi phỏng vấn?'), T('js.shellui.cach-phoi-do-theo-mau-menh', 'Cách phối đồ theo màu mệnh?')],
                 });
               })
-              .catch(function (e) { inlCollapse(pending, '<p>Xin lỗi, ' + esc((e && e.message) || 'không tra được, thử lại giúp con nhé.') + '</p>'); })
+              .catch(function (e) { inlCollapse(pending, T('js.shellui.xin-loi-fxsy', '<p>Xin lỗi, ') + esc((e && e.message) || T('js.shellui.khong-tra-duoc-thu-lai-giup', 'không tra được, thử lại giúp con nhé.')) + '</p>'); })
               .then(function () { restorePaywallCfg(); });
           });
         });
-      paidBtnPrice('mau-sac-hop-menh', bubble, 'Xem màu hợp mệnh');
+      paidBtnPrice('mau-sac-hop-menh', bubble, T('js.shellui.xem-mau-hop-menh-gw03', 'Xem màu hợp mệnh'));
     });
   }
   var TRANG_PHUC_MUC_DICH = [
@@ -4942,47 +4945,47 @@
   // Tương sinh/tương khắc Ngũ Hành — chép nguyên `_SINH`/`_KHAC` +
   // `getRelation()` của app-trang-phuc-theo-ngay.html (không tự suy công
   // thức cổ pháp, dù là bảng ai cũng biết).
-  var TP_SINH = { Kim: 'Thủy', Thủy: 'Mộc', Mộc: 'Hỏa', Hỏa: 'Thổ', Thổ: 'Kim' };
-  var TP_KHAC = { Kim: 'Mộc', Mộc: 'Thổ', Thổ: 'Thủy', Thủy: 'Hỏa', Hỏa: 'Kim' };
+  var TP_SINH = { Kim: T('js.shellui.thuy', 'Thủy'), Thủy: T('js.shellui.moc', 'Mộc'), Mộc: T('js.shellui.hoa', 'Hỏa'), Hỏa: T('js.shellui.tho', 'Thổ'), Thổ: 'Kim' };
+  var TP_KHAC = { Kim: T('js.shellui.moc', 'Mộc'), Mộc: T('js.shellui.tho', 'Thổ'), Thổ: T('js.shellui.thuy', 'Thủy'), Thủy: T('js.shellui.hoa', 'Hỏa'), Hỏa: 'Kim' };
   function tpGetRelation(menh, ngay) {
-    if (menh === ngay) return { text: 'Ngày đồng hành — bình ổn, thuận lợi' };
-    if (TP_SINH[ngay] === menh) return { text: 'Ngày sinh Mệnh ✦ Cực kỳ thuận lợi' };
-    if (TP_SINH[menh] === ngay) return { text: 'Mệnh sinh Ngày — hao tổn chút ít, vẫn tốt' };
-    if (TP_KHAC[ngay] === menh) return { text: 'Ngày khắc Mệnh ✦ Cần hóa giải bằng màu' };
-    return { text: 'Mệnh khắc Ngày — ngày trung bình, cẩn thận' };
+    if (menh === ngay) return { text: T('js.shellui.ngay-dong-hanh-binh-on-thuan', 'Ngày đồng hành — bình ổn, thuận lợi') };
+    if (TP_SINH[ngay] === menh) return { text: T('js.shellui.ngay-sinh-menh-cuc-ky-thuan', 'Ngày sinh Mệnh ✦ Cực kỳ thuận lợi') };
+    if (TP_SINH[menh] === ngay) return { text: T('js.shellui.menh-sinh-ngay-hao-ton-chut', 'Mệnh sinh Ngày — hao tổn chút ít, vẫn tốt') };
+    if (TP_KHAC[ngay] === menh) return { text: T('js.shellui.ngay-khac-menh-can-hoa-giai', 'Ngày khắc Mệnh ✦ Cần hóa giải bằng màu') };
+    return { text: T('js.shellui.menh-khac-ngay-ngay-trung-binh', 'Mệnh khắc Ngày — ngày trung bình, cẩn thận') };
   }
   function runTrangPhucTheoNgay(chat, toolId) {
-    ensureScripts(['/auth.js?v=8', '/tuvi-paywall.js?v=43'], function (err) {
-      if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
+    ensureScripts(['/auth.js?v=9', '/tuvi-paywall.js?v=44'], function (err) {
+      if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-thanh-toan', 'không nạp được cổng thanh toán.')); return; }
       Shell.setContext({
-        toolId: toolId, label: 'Trang Phục Theo Ngày', placeholder: 'Hỏi thầy về trang phục theo ngày…',
-        greeting: 'Chào bạn. Điền năm sinh, ngày đi và mục đích ngay trong chat, tôi sẽ tư vấn màu và phong cách hợp ngày. Sau khi có kết quả, cứ hỏi tôi thêm.',
-        chips: ['Vì sao ngày này khắc mệnh tôi?', 'Nên hóa giải thế nào?', 'Màu điểm nhấn nào tốt nhất?'],
+        toolId: toolId, label: T('js.paywall.trang-phuc-theo-ngay', 'Trang Phục Theo Ngày'), placeholder: T('js.shellui.hoi-thay-ve-trang-phuc-theo', 'Hỏi thầy về trang phục theo ngày…'),
+        greeting: T('js.shellui.chao-ban-dien-nam-sinh-ngay', 'Chào bạn. Điền năm sinh, ngày đi và mục đích ngay trong chat, tôi sẽ tư vấn màu và phong cách hợp ngày. Sau khi có kết quả, cứ hỏi tôi thêm.'),
+        chips: [T('js.shellui.vi-sao-ngay-nay-khac-menh', 'Vì sao ngày này khắc mệnh tôi?'), T('js.shellui.nen-hoa-giai-the-nao', 'Nên hóa giải thế nào?'), T('js.shellui.mau-diem-nhan-nao-tot-nhat', 'Màu điểm nhấn nào tốt nhất?')],
       });
       var t = new Date();
       var todayStr = t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
       var mucDichOpts = TRANG_PHUC_MUC_DICH.map(function (m) { return '<option value="' + esc(m[0]) + '">' + esc(m[1]) + '</option>'; }).join('');
       var bubble = inlStep(chat,
-        '<p>Cho thầy xin năm sinh, giới tính, ngày định đi và mục đích nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).</p>' +
+        T('js.shellui.cho-thay-xin-nam-sinh-gioi', '<p>Cho thầy xin năm sinh, giới tính, ngày định đi và mục đích nhé (tool trả phí, giá hiện trên nút trước khi trừ Lượng).</p>') +
         '<div class="frow">' +
-          '<div class="fg" style="width:110px"><label>Năm sinh</label><input type="number" id="inlTpYear" min="1920" max="2010"></div>' +
-          '<div class="fg" style="width:90px"><label>Giới tính</label><select id="inlTpGt"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>' +
-          '<div class="fg" style="width:150px"><label>Ngày đi</label><input type="date" id="inlTpNgay" value="' + todayStr + '"></div>' +
+          ('<div class="fg" style="width:110px"><label>' + T('js.shellui.nam-sinh', 'Năm sinh') + '</label><input type="number" id="inlTpYear" min="1920" max="2010"></div>') +
+          ('<div class="fg" style="width:90px"><label>' + T('js.shellui.gioi-tinh', 'Giới tính') + '</label><select id="inlTpGt"><option value="nam">' + T('js.shellui.nam', 'Nam') + '</option><option value="nu">' + T('js.shellui.nu', 'Nữ') + '</option></select></div>') +
+          ('<div class="fg" style="width:150px"><label>' + T('js.shellui.ngay-di', 'Ngày đi') + '</label><input type="date" id="inlTpNgay" value="') + todayStr + '"></div>' +
         '</div>' +
-        '<div class="frow"><div class="fg" style="flex:1;min-width:150px"><label>Mục đích</label><select id="inlTpMd">' + mucDichOpts + '</select></div></div>',
-        'Xem trang phục →', function (el, showErr) {
+        ('<div class="frow"><div class="fg" style="flex:1;min-width:150px"><label>' + T('js.shellui.muc-dich', 'Mục đích') + '</label><select id="inlTpMd">') + mucDichOpts + '</select></div></div>',
+        T('js.shellui.xem-trang-phuc', 'Xem trang phục →'), function (el, showErr) {
           var y = parseInt(document.getElementById('inlTpYear').value);
           var g = document.getElementById('inlTpGt').value;
           var ngayDi = document.getElementById('inlTpNgay').value;
           var mucDich = document.getElementById('inlTpMd').value;
-          if (!y || !ngayDi) { showErr('Vui lòng nhập năm sinh và ngày định đi.'); return; }
+          if (!y || !ngayDi) { showErr(T('js.shellui.vui-long-nhap-nam-sinh-va', 'Vui lòng nhập năm sinh và ngày định đi.')); return; }
           var parts = ngayDi.split('-');
           var dd = +parts[2], mm = +parts[1], yy = +parts[0];
-          inlCollapse(el, '<p>Năm sinh <b>' + y + '</b> · ' + ngayDi + ' ✓</p>');
+          inlCollapse(el, T('js.shellui.nam-sinh-wcj0', '<p>Năm sinh <b>') + y + '</b> · ' + ngayDi + ' ✓</p>');
           paidToolInit(toolId);
           var slug = TuviPaywall.generateToolSlug('trang-phuc-theo-ngay');
           TuviPaywall.requireCredits(slug, function () {
-            var pending = inlBubble(chat, 'inlTp' + (++_inlSeq), '<p><i>Đang xem trang phục hợp ngày…</i></p>');
+            var pending = inlBubble(chat, 'inlTp' + (++_inlSeq), T('js.shellui.dang-xem-trang-phuc-hop-ngay', '<p><i>Đang xem trang phục hợp ngày…</i></p>'));
             var tok = getToken();
             var headers = { 'Content-Type': 'application/json' };
             if (tok) headers['Authorization'] = 'Bearer ' + tok;
@@ -4993,20 +4996,20 @@
               .then(function (res) { return res.json(); })
               .then(function (data) {
                 if (data.error) throw new Error(data.error);
-                var menhHanh = data.menhHanh || 'Thổ';
-                var ngayHanh = data.ngayHanh || 'Thổ';
+                var menhHanh = data.menhHanh || T('js.shellui.tho', 'Thổ');
+                var ngayHanh = data.ngayHanh || T('js.shellui.tho', 'Thổ');
                 var rel = tpGetRelation(menhHanh, ngayHanh);
                 Shell.setContext({
-                  toolId: toolId, label: 'Trang Phục Theo Ngày — ' + rel.text,
-                  greeting: 'Mệnh **' + menhHanh + '**, ngày **' + ngayHanh + '** — ' + rel.text + '. Bạn muốn hỏi thêm về màu sắc hay phong cách?',
-                  chips: ['Vì sao ngày này khắc mệnh tôi?', 'Nên hóa giải thế nào?', 'Màu điểm nhấn nào tốt nhất?'],
+                  toolId: toolId, label: T('js.shellui.trang-phuc-theo-ngay', 'Trang Phục Theo Ngày — ') + rel.text,
+                  greeting: T('js.shellui.menh-kz9z', 'Mệnh **') + menhHanh + T('js.shellui.ngay-ot9a', '**, ngày **') + ngayHanh + '** — ' + rel.text + T('js.shellui.ban-muon-hoi-them-ve-mau-7ruw', '. Bạn muốn hỏi thêm về màu sắc hay phong cách?'),
+                  chips: [T('js.shellui.vi-sao-ngay-nay-khac-menh', 'Vì sao ngày này khắc mệnh tôi?'), T('js.shellui.nen-hoa-giai-the-nao', 'Nên hóa giải thế nào?'), T('js.shellui.mau-diem-nhan-nao-tot-nhat', 'Màu điểm nhấn nào tốt nhất?')],
                 });
               })
-              .catch(function (e) { inlCollapse(pending, '<p>Xin lỗi, ' + esc((e && e.message) || 'không tra được, thử lại giúp con nhé.') + '</p>'); })
+              .catch(function (e) { inlCollapse(pending, T('js.shellui.xin-loi-fxsy', '<p>Xin lỗi, ') + esc((e && e.message) || T('js.shellui.khong-tra-duoc-thu-lai-giup', 'không tra được, thử lại giúp con nhé.')) + '</p>'); })
               .then(function () { restorePaywallCfg(); });
           });
         });
-      paidBtnPrice('trang-phuc-theo-ngay', bubble, 'Xem trang phục');
+      paidBtnPrice('trang-phuc-theo-ngay', bubble, T('js.shellui.xem-trang-phuc-t5sj', 'Xem trang phục'));
     });
   }
 
@@ -5521,8 +5524,8 @@
   function paintHomeHeader() {
     var host = document.getElementById('shell-rail'); if (!host) return;
     var ava = host.querySelector('.rail-ava'); if (ava) ava.src = _navDone ? authorAva() : '/seal-128.webp';
-    var t = document.getElementById('railHTitle'); if (t) t.textContent = _navDone ? authorLabel() : 'Minh Bảo';
-    var sp = host.querySelector('.rail-h span'); if (sp) sp.textContent = _navDone ? 'Đang tiếp chuyện' : 'Người dẫn đường';
+    var t = document.getElementById('railHTitle'); if (t) t.textContent = _navDone ? authorLabel() : T('js.shell.minh-bao', 'Minh Bảo');
+    var sp = host.querySelector('.rail-h span'); if (sp) sp.textContent = _navDone ? T('js.shellui.dang-tiep-chuyen', 'Đang tiếp chuyện') : T('js.shellui.nguoi-dan-duong', 'Người dẫn đường');
   }
   function navBubble(html) {
     var chat = document.getElementById('chat');
@@ -5597,7 +5600,7 @@
     document.body.classList.remove('chat-empty');
     var input = document.getElementById('railInput');
     var ph = input ? input.placeholder : '';
-    if (input) { input.disabled = true; input.placeholder = 'Trả lời câu hỏi ở trên…'; }
+    if (input) { input.disabled = true; input.placeholder = T('js.shellui.tra-loi-cau-hoi-o-tren', 'Trả lời câu hỏi ở trên…'); }
     setSend(false); streaming = true; renderSuggs();
     var release = function () {
       streaming = false;
@@ -5608,13 +5611,13 @@
       ensureScripts(['/tuvi-form.js?v=15'], function (e2) {
         if (e1 || e2 || typeof TuviForm === 'undefined') {
           release();
-          inlineErrorBubble(chat, 'chưa mở được form ngày sinh.', '/app/la-so');
+          inlineErrorBubble(chat, T('js.shellui.chua-mo-duoc-form-ngay-sinh', 'chưa mở được form ngày sinh.'), '/app/la-so');
           return;
         }
         TuviForm.renderChat({
           prefix: 'home',
-          q1: q1 || (cb ? 'Chuyện này thầy phải xem lá số của con mới nói cho sát. Cho thầy xin họ tên và giới tính nhé.'
-                 : 'Cho mình xin họ tên và giới tính của bạn nhé.'),
+          q1: q1 || (cb ? T('js.shellui.chuyen-nay-thay-phai-xem-la', 'Chuyện này thầy phải xem lá số của con mới nói cho sát. Cho thầy xin họ tên và giới tính nhé.')
+                 : T('js.shellui.cho-minh-xin-ho-ten-va', 'Cho mình xin họ tên và giới tính của bạn nhé.')),
           onDone: function (d) {
             try { Shell.rememberBirth(d); } catch (e) { /* ignore */ }
             var b = inlineBirth(d);
@@ -5625,7 +5628,7 @@
             paintHomeCtx();
             if (cb) { cb(); return; }
             if (_navDone) thayBubble(T('js.shellui.thay-da-lap-la-so-cua', '<p>Thầy đã lập lá số của <b>') + esc(b.name || 'con') + T('js.shellui.con-hoi-tiep-di', '</b>. Con hỏi tiếp đi.</p>'));
-            else navBubble(T('js.shellui.da-co-la-so-cua', '<p>Đã có lá số của <b>') + esc(b.name || T('js.battu.ban', 'bạn')) + T('js.shellui.gio-ke-chuyen-cua-ban-di', '</b>. Giờ kể chuyện của bạn đi, mình mời đúng thầy vào xem.</p>'));
+            else navBubble(T('js.shellui.da-co-la-so-cua', '<p>Đã có lá số của <b>') + esc(b.name || T('js.shellui.banx', 'bạn')) + T('js.shellui.gio-ke-chuyen-cua-ban-di', '</b>. Giờ kể chuyện của bạn đi, mình mời đúng thầy vào xem.</p>'));
             if (input) input.focus();
           },
         });
@@ -5642,9 +5645,9 @@
     if (!b || !b.day || !b.month || !b.year) { c.style.display = 'none'; return; }
     c.style.display = '';
     t.innerHTML = T('js.shellui.dang-xem-la-so', 'Đang xem lá số: <b>') + esc((b.name ? b.name + ' · ' : '') + b.day + '/' + b.month + '/' + b.year) + '</b>' +
-      '<button type="button" class="ctx-chg">Đổi</button>';
+      ('<button type="button" class="ctx-chg">' + T('js.shellui.doi', 'Đổi') + '</button>');
     t.querySelector('.ctx-chg').addEventListener('click', function () {
-      askBirthHome(null, _navDone ? 'Con muốn thầy xem lá số của ai? Cho thầy xin họ tên và giới tính nhé.' : null);
+      askBirthHome(null, _navDone ? T('js.shellui.con-muon-thay-xem-la-so', 'Con muốn thầy xem lá số của ai? Cho thầy xin họ tên và giới tính nhé.') : null);
     });
   }
   var _navNeedBirth = false;
@@ -5727,12 +5730,12 @@
       thayBubble('<p>' + esc((m && m.greeting) || (T('js.shellui.thay', 'Thầy ') + a.name + T('js.shellui.day', ' đây.'))) + '</p>' +
         (m && m.discipline ? T('js.shellui.thay-chuyen-xem', '<p>Thầy chuyên xem <b>') + esc(m.discipline) + '</b>.</p>' : '') +
         // Đến từ link chia sẻ: joinThay() đã dọn #chat nên câu báo phải đi cùng lời chào.
-        (_fromshareId ? '<p>' + FROMSHARE_NOTE + (ctx && ctx.birth ? ' Thầy xem cho con trên lá số của chính con.' : '') + '</p>' : ''));
+        (_fromshareId ? '<p>' + FROMSHARE_NOTE + (ctx && ctx.birth ? T('js.shellui.thay-xem-cho-con-tren-la', ' Thầy xem cho con trên lá số của chính con.') : '') + '</p>' : ''));
       if (NO_BIRTH_THAY[id] || !ctx || ctx.birth) { if (input) input.focus(); return; }
       askBirthHome(function () {
         thayBubble(T('js.shellui.thay-da-lap-la-so-cua', '<p>Thầy đã lập lá số của <b>') + esc((ctx.birth && ctx.birth.name) || 'con') + T('js.shellui.con-muon-thay-xem-chuyen-gi', '</b>. Con muốn thầy xem chuyện gì trước?</p>'));
         if (input) input.focus();
-      }, 'Để thầy xem cho sát, cho thầy xin họ tên và giới tính của con trước nhé.');
+      }, T('js.shellui.de-thay-xem-cho-sat-cho', 'Để thầy xem cho sát, cho thầy xin họ tên và giới tính của con trước nhé.'));
     };
     setTimeout(function () { say(null); }, 3000); // mạng chậm thì vẫn chào
     ensureToolPrices().then(function () {
@@ -5858,7 +5861,7 @@
             var _ts = location.search;
             localStorage.setItem('auth_return_to', location.pathname + (/[?&]auto=1\b/.test(_ts) ? _ts : (_ts ? _ts + '&auto=1' : '?auto=1')));
           } catch (e) { /* ignore */ }
-          typing.innerHTML = '<p>Hết phần dùng thử. <a href="#" id="railSignupLink" style="color:var(--blue);font-weight:600">Đăng ký miễn phí</a> để hỏi tiếp — câu vừa rồi sẽ được trả lời ngay sau khi đăng ký.</p>';
+          typing.innerHTML = ('<p>' + T('js.shellui.het-phan-dung-thu', 'Hết phần dùng thử.') + ' <a href="#" id="railSignupLink" style="color:var(--blue);font-weight:600">' + T('js.shellui.dang-ky-mien-phi-t076', 'Đăng ký miễn phí') + '</a> ' + T('js.shellui.de-hoi-tiep-cau-vua-roi', 'để hỏi tiếp — câu vừa rồi sẽ được trả lời ngay sau khi đăng ký.') + '</p>');
           var _sl = document.getElementById('railSignupLink');
           if (_sl) _sl.addEventListener('click', function (ev) { ev.preventDefault(); openAnonSignupModal(_tq); });
           openAnonSignupModal(_tq);
@@ -5875,7 +5878,7 @@
           var _back = location.pathname + (/[?&]auto=1\b/.test(_s) ? _s : (_s ? _s + '&auto=1' : '?auto=1'));
           localStorage.setItem('auth_return_to', _back);
         } catch (e) { /* ignore */ }
-        typing.innerHTML = '<p>Cần <a href="#" id="railLoginLink" style="color:var(--blue);font-weight:600">đăng nhập</a> để hỏi Thầy — xong sẽ tự quay lại luận tiếp. Lá số vẫn xem miễn phí.</p>';
+        typing.innerHTML = ('<p>' + T('js.shellui.can', 'Cần') + ' <a href="#" id="railLoginLink" style="color:var(--blue);font-weight:600">' + T('js.shellui.dang-nhap', 'đăng nhập') + '</a> ' + T('js.shellui.de-hoi-thay-xong-se-tu', 'để hỏi Thầy — xong sẽ tự quay lại luận tiếp. Lá số vẫn xem miễn phí.') + '</p>');
         var _openLogin = function () {
           if (window.Auth && Auth.require) {
             Auth.require(function () {
@@ -5920,7 +5923,7 @@
         for (var i = 0; i < parts.length; i++) {
           var ev = parseSSE(parts[i]); if (!ev) continue;
           if (ev.name === 'text' && ev.data.delta) { if (_ttft === null) _ttft = Date.now() - _t0; acc += ev.data.delta; typing.innerHTML = mdLite(acc); chat.scrollTop = chat.scrollHeight; }
-          else if (ev.name === 'status' && !acc) { typing.innerHTML = '<span class="typing" style="gap:6px">' + esc(ev.data.text || 'Đang xem…') + ' <i></i><i></i><i></i></span>'; }
+          else if (ev.name === 'status' && !acc) { typing.innerHTML = '<span class="typing" style="gap:6px">' + esc(ev.data.text || T('js.shellui.dang-xem', 'Đang xem…')) + ' <i></i><i></i><i></i></span>'; }
           else if (ev.name === 'tool_call' && ev.data && MOI_THAY_TOOLS[ev.data.name]) {
             // Đo "mời thầy khác" (P4 2026-09-26) — bắn NGAY khi tool chạy, không
             // đợi câu trả lời xong (đo đúng lúc thầy khác THẬT SỰ được gọi, không
@@ -5951,7 +5954,7 @@
           }
         }
       }
-      if (!acc) acc = '(không có nội dung)';
+      if (!acc) acc = T('js.shellui.khong-co-noi-dung', '(không có nội dung)');
       // Một thầy khác vừa được mời vào (P3 "mời thầy khác") → tách thành
       // NHIỀU bong bóng, mỗi thầy avatar/tên riêng, thay vì một bong bóng
       // chung của thầy chính. Không đổi `acc`/lịch sử — chỉ đổi RENDER.
@@ -5991,7 +5994,7 @@
       // Đến từ link chia sẻ + đã hỏi thật lần đầu → ghi nhận 1 lượt chuyển đổi.
       if (_fromshareId && !_convFired) { _convFired = true; trackConvert(_fromshareId); }
     } catch (e) {
-      typing.innerHTML = '<p>Xin lỗi, kết nối trục trặc. Thử lại giúp tôi nhé.</p>';
+      typing.innerHTML = T('js.shellui.xin-loi-ket-noi-truc-trac', '<p>Xin lỗi, kết nối trục trặc. Thử lại giúp tôi nhé.</p>');
       messages.pop();
       try { track('chat_error', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { kind: 'network', message: String((e && e.message) || e || '').slice(0, 200), after_ms: Date.now() - _t0 } }); } catch (e2) { /* ignore */ }
       if (window.console) console.error('[shell.rail]', e);
@@ -6015,19 +6018,19 @@
   // `cung` là cung `detectCung` suy ra. `can` = thầy đó cần dữ kiện gì mới xem
   // được (server `THAY_KHACH[id].duLieu` trả null khi thiếu).
   var GUEST_MASTERS = [
-    { id: 'dieu-khong', mon: 'Sự nghiệp, tiền bạc', cung: ['Cung Tài Bạch', 'Cung Quan Lộc'],
+    { id: 'dieu-khong', mon: T('js.shellui.su-nghiep-tien-bac', 'Sự nghiệp, tiền bạc'), cung: ['Cung Tài Bạch', 'Cung Quan Lộc'],
       kw: ['tiền bạc', 'kiếm tiền', 'dòng tiền', 'ra tiền', 'tiền vào', 'giữ tiền', 'tiền nong', 'tài chính', 'làm ăn', 'kinh doanh', 'buôn bán', 'đầu tư', 'tiền lương', 'tăng lương', 'thu nhập', 'công việc', 'sự nghiệp', 'thăng tiến', 'nghỉ việc', 'chuyển việc', 'đổi việc', 'khoản nợ', 'vay tiền', 'chi tiêu', 'thu hồi'] },
-    { id: 'nhat-nguyen', mon: 'Vận tháng, chọn ngày',
+    { id: 'nhat-nguyen', mon: T('js.shellui.van-thang-chon-ngay', 'Vận tháng, chọn ngày'),
       kw: ['tháng nào', 'tháng này', 'tháng sau', 'tháng tới', 'khi nào', 'lúc nào', 'bao giờ', 'thời điểm', 'chọn ngày', 'ngày nào', 'cuối năm', 'đầu năm', 'tuần này', 'tuần sau', 'sắp tới', 'âm lịch'] },
-    { id: 'huyen-khong', mon: 'Phong thủy, hướng nhà', cung: ['Cung Điền Trạch'],
+    { id: 'huyen-khong', mon: T('js.shellui.phong-thuy-huong-nha', 'Phong thủy, hướng nhà'), cung: ['Cung Điền Trạch'],
       kw: ['phong thủy', 'hướng nhà', 'hướng cửa', 'hướng bếp', 'hướng giường', 'bàn làm việc', 'phòng ngủ', 'chuyển nhà', 'mua nhà', 'xây nhà', 'sửa nhà', 'mua đất', 'hướng nào'],
       can: function () { return ctx.birth.gender === 'nam' || ctx.birth.gender === 'nu'; } },
-    { id: 'thanh-hu', mon: 'Thần số học',
+    { id: 'thanh-hu', mon: T('js.shellui.than-so-hoc', 'Thần số học'),
       kw: ['con số', 'số điện thoại', 'biển số', 'số nhà', 'số may mắn', 'thần số', 'năm cá nhân', 'số đẹp'],
       can: function () { return !!String(ctx.birth.name || '').trim() && !ctx.birth.isLunar; } },
-    { id: 'tam-kinh', mon: 'Bát Tự, Kỳ Môn', macDinh: true,
+    { id: 'tam-kinh', mon: T('js.shellui.bat-tu-ky-mon', 'Bát Tự, Kỳ Môn'), macDinh: true,
       kw: ['năm nay', 'năm sau', 'năm tới', 'vận năm', 'xuất hành', 'giờ nào', 'bát tự', 'tứ trụ'] },
-    { id: 'linh-co', mon: 'Lục Nhâm', macDinh: true,
+    { id: 'linh-co', mon: T('js.shellui.luc-nham-9v1c', 'Lục Nhâm'), macDinh: true,
       kw: ['có nên', 'có thành', 'được không', 'thành không', 'hay không', 'nên hay', 'gieo quẻ'] },
   ];
   function guestDu(g) {
@@ -6093,7 +6096,7 @@
     }).join('') + (hc
       ? ('<button type="button" class="m2-a m2-hc" aria-label="' + T('js.shellui.moi-nhom-hoi-chan-3-thay', 'Mời nhóm hội chẩn, 3 thầy cùng xem') + '">') +
         '<span class="m2-stack"><img src="' + authorAva() + '" alt=""><img src="/authors/tam-kinh.jpg" alt=""><img src="/authors/linh-co.jpg" alt=""></span>' +
-        '<span>Mời nhóm hội chẩn <em>· 3 thầy</em></span></button>'
+        T('js.shellui.moi-nhom-hoi-chan-3-thay-8dti', '<span>Mời nhóm hội chẩn <em>· 3 thầy</em></span></button>')
       : '');
     chat.appendChild(bar);
     chat.scrollTop = chat.scrollHeight;
@@ -6156,7 +6159,7 @@
       // thẻ, không phải thẻ thứ hai (luật một thẻ mỗi cuộc trò chuyện giữ nguyên).
       (kem ? ('<button class="ts-kem" type="button">' + T('js.shellui.xem-kem', 'Xem kèm:') + ' ') + esc(kem.label) + ' →</button>' : '') +
       '</div>' +
-      '<button class="ts-go" type="button">Mở</button>';
+      ('<button class="ts-go" type="button">' + T('js.shellui.mo-d4p', 'Mở') + '</button>');
     chat.appendChild(d);
     chat.scrollTop = chat.scrollHeight;
     try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_shown', meta: { kind: s.kind || 'tool' } }); } catch (e) { /* ignore */ }

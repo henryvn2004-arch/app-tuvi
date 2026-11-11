@@ -183,13 +183,20 @@ body.chat-first-live .laso-one{flex:none}
 </div>
 
 <script>
+// i18n: script này chạy TRƯỚC auth.js (nơi khai _tvmbT/_tvmbG toàn cục) — bản dự phòng tối thiểu, cùng
+// hành vi; auth.js nạp sau sẽ khai lại bằng đúng hàm đó.
+if (typeof window._tvmbT !== 'function') window._tvmbT = function (k, d, v) {
+  var I = window.I18n;
+  if (I && I.tv) return I.tv(k, d, v);
+  return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
+};
 (function(){
   var p=location.pathname;
   var key=p.indexOf('lam-an')>=0?'xem-lam-an':(p.indexOf('tuong-hop')>=0?'tuong-hop':'xem-tuoi');
   var INTRO={
-    'xem-lam-an':{key:'xem-lam-an',title:'Xem tuổi làm ăn',desc:'Chấm 8 yếu tố hợp tác giữa bạn và người sắp làm ăn chung — góc nhìn khách quan trước khi ký kết.'},
-    'tuong-hop':{key:'tuong-hop',title:'Tương hợp tuổi',desc:'Xét nhanh hai tuổi có hợp nhau hay không, chỉ cần năm sinh — câu trả lời tức thì, chưa cần xem sâu.'},
-    'xem-tuoi':{key:'xem-tuoi',title:'Xem tuổi vợ chồng',desc:'Chấm 8 yếu tố tương hợp giữa hai lá số — dùng khi đang tính chuyện cưới xin, cần một câu trả lời rõ.'}
+    'xem-lam-an':{key:'xem-lam-an',title:_tvmbT('js.xemtuoi.xem-tuoi-lam-an', 'Xem tuổi làm ăn'),desc:_tvmbT('js.xemtuoi.cham-8-yeu-to-hop-tac', 'Chấm 8 yếu tố hợp tác giữa bạn và người sắp làm ăn chung — góc nhìn khách quan trước khi ký kết.')},
+    'tuong-hop':{key:'tuong-hop',title:_tvmbT('js.xemtuoi.tuong-hop-tuoi', 'Tương hợp tuổi'),desc:_tvmbT('js.xemtuoi.xet-nhanh-hai-tuoi-co-hop', 'Xét nhanh hai tuổi có hợp nhau hay không, chỉ cần năm sinh — câu trả lời tức thì, chưa cần xem sâu.')},
+    'xem-tuoi':{key:'xem-tuoi',title:_tvmbT('js.xemtuoi.xem-tuoi-vo-chong', 'Xem tuổi vợ chồng'),desc:_tvmbT('js.xemtuoi.cham-8-yeu-to-tuong-hop', 'Chấm 8 yếu tố tương hợp giữa hai lá số — dùng khi đang tính chuyện cưới xin, cần một câu trả lời rõ.')}
   };
   window.SHELL_ACTIVE=key;
   window.SHELL_HISTORY=true;
@@ -222,9 +229,9 @@ body.chat-first-live .laso-one{flex:none}
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tools-shared/noi-sinh.js?v=1"></script>
 <script src="/tuvi-form.js?v=15"></script>
-<script src="/auth.js?v=8"></script>
-<script src="/tuvi-paywall.js?v=43"></script>
-  <script src="/nav.js?v=49" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=143"></script>
+<script src="/auth.js?v=9"></script>
+<script src="/tuvi-paywall.js?v=44"></script>
+  <script src="/nav.js?v=49" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=144"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
@@ -235,39 +242,39 @@ var MODE_KEY=location.pathname.indexOf('lam-an')>=0?'xem-lam-an':(location.pathn
 var MODES={
 'xem-lam-an':{
   active:'xem-lam-an', scenarioType:'xem-lam-an',
-  title:'Xem tuổi làm ăn', sub:'So hợp hai người khi bắt tay hợp tác',
+  title:_tvmbT('js.xemtuoi.xem-tuoi-lam-an', 'Xem tuổi làm ăn'), sub:_tvmbT('js.xemtuoi.so-hop-hai-nguoi-khi-bat', 'So hợp hai người khi bắt tay hợp tác'),
   docTitle:_tvmbT('js.xemtuoi.xem-tuoi-lam-an-tu-vi', 'Xem tuổi làm ăn — Tử Vi Minh Bảo'),
-  h2:'Nhập ngày sinh hai đối tác (dương lịch)',
+  h2:_tvmbT('js.xemtuoi.nhap-ngay-sinh-hai-doi-tac', 'Nhập ngày sinh hai đối tác (dương lịch)'),
   formSub:_tvmbT('js.xemtuoi.cham-8-yeu-to-hop-tac', 'Chấm 8 yếu tố hợp tác giữa bạn và người sắp làm ăn chung — góc nhìn khách quan trước khi ký kết.'),
   pA:_tvmbT('js.xemtuoi.doi-tac-thu-nhat', 'Đối tác thứ nhất'), pB:_tvmbT('js.xemtuoi.doi-tac-thu-hai', 'Đối tác thứ hai'), phA:_tvmbT('js.xemtuoi.doi-tac-a', 'Đối tác A'), phB:_tvmbT('js.xemtuoi.doi-tac-b', 'Đối tác B'),
-  btn:'Xem hợp tác →', btnBusy:'Đang xét hợp tác…', verb:'Xét hợp tác',
-  chips:['Hai người hợp làm ăn chung không?','Ai nên nắm tài chính?','Chiều nào dễ xung đột khi hợp tác?','Nên góp vốn hay chia việc?'],
-  greetVerb:'Đã xét hợp tác',
-  pills:[{ic:'bar-chart-3',lb:'8 chiều<br>hợp tác'},{ic:'wallet',lb:'Ai nên<br>nắm tài chính'},{ic:'scale',lb:'Điểm dễ<br>xung đột'}]
+  btn:_tvmbT('js.xemtuoi.xem-hop-tac', 'Xem hợp tác →'), btnBusy:_tvmbT('js.xemtuoi.dang-xet-hop-tac', 'Đang xét hợp tác…'), verb:_tvmbT('js.xemtuoi.xet-hop-tac', 'Xét hợp tác'),
+  chips:[_tvmbT('js.xemtuoi.hai-nguoi-hop-lam-an-chung', 'Hai người hợp làm ăn chung không?'),_tvmbT('js.xemtuoi.ai-nen-nam-tai-chinh', 'Ai nên nắm tài chính?'),_tvmbT('js.xemtuoi.chieu-nao-de-xung-dot-khi', 'Chiều nào dễ xung đột khi hợp tác?'),_tvmbT('js.xemtuoi.nen-gop-von-hay-chia-viec', 'Nên góp vốn hay chia việc?')],
+  greetVerb:_tvmbT('js.xemtuoi.da-xet-hop-tac', 'Đã xét hợp tác'),
+  pills:[{ic:'bar-chart-3',lb:_tvmbT('js.xemtuoi.8-chieu-hop-tac', '8 chiều<br>hợp tác')},{ic:'wallet',lb:_tvmbT('js.xemtuoi.ai-nen-nam-tai-chinh-45g2', 'Ai nên<br>nắm tài chính')},{ic:'scale',lb:_tvmbT('js.xemtuoi.diem-de-xung-dot', 'Điểm dễ<br>xung đột')}]
 },
 'tuong-hop':{
   active:'tuong-hop', scenarioType:'tuong-hop',
-  title:'Tương hợp tuổi', sub:'So hợp hai người bất kỳ theo cổ pháp',
+  title:_tvmbT('js.xemtuoi.tuong-hop-tuoi', 'Tương hợp tuổi'), sub:_tvmbT('js.xemtuoi.so-hop-hai-nguoi-bat-ky', 'So hợp hai người bất kỳ theo cổ pháp'),
   docTitle:_tvmbT('js.xemtuoi.tuong-hop-tuoi-tu-vi-minh', 'Tương hợp tuổi — Tử Vi Minh Bảo'),
-  h2:'Nhập ngày sinh hai người (dương lịch)',
+  h2:_tvmbT('js.xemtuoi.nhap-ngay-sinh-hai-nguoi-duong', 'Nhập ngày sinh hai người (dương lịch)'),
   formSub:_tvmbT('js.xemtuoi.xet-nhanh-hai-tuoi-co-hop', 'Xét nhanh hai tuổi có hợp nhau hay không, chỉ cần năm sinh — câu trả lời tức thì, chưa cần xem sâu.'),
   pA:_tvmbT('js.xemtuoi.nguoi-thu-nhat', 'Người thứ nhất'), pB:_tvmbT('js.xemtuoi.nguoi-thu-hai', 'Người thứ hai'), phA:_tvmbT('js.xemtuoi.nguoi-a', 'Người A'), phB:_tvmbT('js.xemtuoi.nguoi-b', 'Người B'),
-  btn:'So tương hợp →', btnBusy:'Đang so tương hợp…', verb:'So tương hợp',
-  chips:['Hai người này có hợp nhau không?','Hợp nhau ở mặt nào?','Dễ va chạm ở đâu?','Nên giữ khoảng cách hay gắn bó?'],
-  greetVerb:'Đã so tương hợp',
-  pills:[{ic:'calendar',lb:'Chỉ cần<br>năm sinh'},{ic:'zap',lb:'Kết quả<br>tức thì'},{ic:'gift',lb:'Miễn phí<br>hoàn toàn'}]
+  btn:_tvmbT('js.xemtuoi.so-tuong-hop', 'So tương hợp →'), btnBusy:_tvmbT('js.xemtuoi.dang-so-tuong-hop', 'Đang so tương hợp…'), verb:_tvmbT('js.xemtuoi.so-tuong-hop-yeo0', 'So tương hợp'),
+  chips:[_tvmbT('js.xemtuoi.hai-nguoi-nay-co-hop-nhau', 'Hai người này có hợp nhau không?'),_tvmbT('js.xemtuoi.hop-nhau-o-mat-nao', 'Hợp nhau ở mặt nào?'),_tvmbT('js.xemtuoi.de-va-cham-o-dau', 'Dễ va chạm ở đâu?'),_tvmbT('js.xemtuoi.nen-giu-khoang-cach-hay-gan', 'Nên giữ khoảng cách hay gắn bó?')],
+  greetVerb:_tvmbT('js.xemtuoi.da-so-tuong-hop', 'Đã so tương hợp'),
+  pills:[{ic:'calendar',lb:_tvmbT('js.xemtuoi.chi-can-nam-sinh', 'Chỉ cần<br>năm sinh')},{ic:'zap',lb:_tvmbT('js.xemtuoi.ket-qua-tuc-thi', 'Kết quả<br>tức thì')},{ic:'gift',lb:_tvmbT('js.xemtuoi.mien-phi-hoan-toan', 'Miễn phí<br>hoàn toàn')}]
 },
 'xem-tuoi':{
   active:'xem-tuoi', scenarioType:'xem-tuoi',
-  title:'Xem tuổi vợ chồng', sub:'So hòa hợp hai lá số theo cổ pháp',
+  title:_tvmbT('js.xemtuoi.xem-tuoi-vo-chong', 'Xem tuổi vợ chồng'), sub:_tvmbT('js.xemtuoi.so-hoa-hop-hai-la-so', 'So hòa hợp hai lá số theo cổ pháp'),
   docTitle:_tvmbT('js.xemtuoi.xem-tuoi-vo-chong-tu-vi', 'Xem tuổi vợ chồng — Tử Vi Minh Bảo'),
-  h2:'Nhập ngày sinh hai người (dương lịch)',
+  h2:_tvmbT('js.xemtuoi.nhap-ngay-sinh-hai-nguoi-duong', 'Nhập ngày sinh hai người (dương lịch)'),
   formSub:_tvmbT('js.xemtuoi.cham-8-yeu-to-tuong-hop', 'Chấm 8 yếu tố tương hợp giữa hai lá số — dùng khi đang tính chuyện cưới xin, cần một câu trả lời rõ.'),
   pA:_tvmbT('js.xemtuoi.nguoi-thu-nhat', 'Người thứ nhất'), pB:_tvmbT('js.xemtuoi.nguoi-thu-hai', 'Người thứ hai'), phA:_tvmbT('js.xemtuoi.chong-nguoi-a', 'Chồng / Người A'), phB:_tvmbT('js.xemtuoi.vo-nguoi-b', 'Vợ / Người B'),
-  btn:'So tuổi →', btnBusy:'Đang so tuổi…', verb:'So tuổi',
-  chips:['Hai người có hợp làm vợ chồng không?','Chiều nào đáng lo nhất?','Cách hóa giải điểm khắc?','Đường con cái của hai người thế nào?'],
-  greetVerb:'Đã so tuổi',
-  pills:[{ic:'bar-chart-3',lb:'8 chiều<br>hòa hợp'},{ic:'baby',lb:'Ngũ hành,<br>con cái'},{ic:'shield-check',lb:'Cách hoá<br>giải khắc'}]
+  btn:_tvmbT('js.xemtuoi.so-tuoi', 'So tuổi →'), btnBusy:_tvmbT('js.xemtuoi.dang-so-tuoi', 'Đang so tuổi…'), verb:_tvmbT('js.xemtuoi.so-tuoi-ij72', 'So tuổi'),
+  chips:[_tvmbT('js.xemtuoi.hai-nguoi-co-hop-lam-vo', 'Hai người có hợp làm vợ chồng không?'),_tvmbT('js.xemtuoi.chieu-nao-dang-lo-nhat', 'Chiều nào đáng lo nhất?'),_tvmbT('js.xemtuoi.cach-hoa-giai-diem-khac', 'Cách hóa giải điểm khắc?'),_tvmbT('js.xemtuoi.duong-con-cai-cua-hai-nguoi', 'Đường con cái của hai người thế nào?')],
+  greetVerb:_tvmbT('js.xemtuoi.da-so-tuoi', 'Đã so tuổi'),
+  pills:[{ic:'bar-chart-3',lb:_tvmbT('js.xemtuoi.8-chieu-hoa-hop', '8 chiều<br>hòa hợp')},{ic:'baby',lb:_tvmbT('js.xemtuoi.ngu-hanh-con-cai', 'Ngũ hành,<br>con cái')},{ic:'shield-check',lb:_tvmbT('js.xemtuoi.cach-hoa-giai-khac', 'Cách hoá<br>giải khắc')}]
 }
 };
 var MODE=MODES[MODE_KEY];
@@ -338,7 +345,7 @@ var XT_RESUME_KEY='xt_pending_resume';
 
 function meterColor(s){ return s>=75?'var(--green)':s>=55?'var(--blue)':s>=35?'var(--gold-soft)':'var(--red)'; }
 function facColor(s){ return s>=8?'var(--green)':s>=6?'var(--blue)':s>=4?'var(--gold-soft)':'var(--red)'; }
-function verdictLabel(s){ return s>=75?'Rất hợp':s>=55?'Khá hợp':s>=35?'Bình hòa':'Cần lưu ý'; }
+function verdictLabel(s){ return s>=75?_tvmbT('js.xemtuoi.rat-hop', 'Rất hợp'):s>=55?_tvmbT('js.xemtuoi.kha-hop', 'Khá hợp'):s>=35?_tvmbT('js.xemtuoi.binh-hoa', 'Bình hòa'):_tvmbT('js.xemtuoi.can-luu-y', 'Cần lưu ý'); }
 // Chip gợi ý bám DỮ LIỆU THẬT: chiều hoà hợp thấp/cao nhất + tổng điểm + 1 chip theo mode.
 function buildCompatChips(r,MODE){
   var items=(r.items||[]).filter(function(m){return typeof m.score==='number';}).slice().sort(function(a,b){return a.score-b.score;});
@@ -366,7 +373,7 @@ function computeLs(pr,namxem){
 function doCompat(){
   var btn=document.getElementById('btnGo');
   var A=readPerson('a'),B=readPerson('b');
-  if(!A.ngay||!A.thang||!A.nam||!B.ngay||!B.thang||!B.nam){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh cho cả hai người.'); return; }
+  if(!A.ngay||!A.thang||!A.nam||!B.ngay||!B.thang||!B.nam){ alert(_tvmbT('js.xemtuoi.vui-long-nhap-day-du-ngay', 'Vui lòng nhập đầy đủ ngày, tháng, năm sinh cho cả hai người.')); return; }
   // Lưu lại NGAY để `?tpwResume=1` (quay về sau khi nạp Lượng, xem IIFE
   // `XT_RESUME_KEY` ở trên) khôi phục được đúng hai form này mà không cần gõ
   // lại — ghi mỗi lượt so tuổi thành công, không riêng lượt sắp hết Lượng, vì
@@ -488,11 +495,11 @@ function taiAnhVanh(){
     // mà vành thì cho thấy dáng chứ không gọi tên trục.
     quote:cao&&thap?(_tvmbT('js.xemtuoi.manh-nhat', 'Mạnh nhất: ')+cao.label+' ('+cao.score+_tvmbT('js.xemtuoi.10-yeu-nhat', '/10) · Yếu nhất: ')+thap.label+' ('+thap.score+'/10)'):'',
     qrUrl:Poster.qrLink(MODE.active,'/app/'+MODE.active),
-    qrCaption:'Quét mã — so tuổi của bạn',
+    qrCaption:_tvmbT('js.xemtuoi.quet-ma-so-tuoi-cua-ban', 'Quét mã — so tuổi của bạn'),
     fonts:['700 40px '+(T.SERIF||'serif'),'600 23px '+(T.SANS||'sans-serif')]
   },MODE.active+'-tuviminhbao.png')
    .then(function(){ if(window.Track)Track.event('poster_download',{tool_id:MODE.active}); })
-   .catch(function(){ alert('Chưa dựng được ảnh. Thử lại sau ít giây.'); })
+   .catch(function(){ alert(_tvmbT('js.xemtuoi.chua-dung-duoc-anh-thu-lai', 'Chưa dựng được ảnh. Thử lại sau ít giây.')); })
    .then(function(){ btn.disabled=false; btn.textContent=old; });
 }
 
@@ -510,7 +517,7 @@ function compatRadarHtml(r){
     '<div class="cr-cap">'+dims.length+_tvmbT('js.xemtuoi.chieu-cung-thang-0-10-trong', ' chiều cùng thang 0–10. Trọng số góp vào tổng ')+
     r.total+_tvmbT('js.xemtuoi.100-nam-o-tung-thanh-ben', '/100 nằm ở từng thanh bên dưới.</div>')+
     '<div class="cr-tai"><button type="button" class="btn" id="crTaiBtn" ' +
-    'onclick="taiAnhVanh()">⬇ Tải ảnh chia sẻ (9:16)</button></div></div>';
+    ('onclick="taiAnhVanh()">' + _tvmbT('js.xemtuoi.tai-anh-chia-se-9-16', '⬇ Tải ảnh chia sẻ (9:16)') + '</button></div></div>');
 }
 
 function renderCompat(r,nameA,nameB,fdA,fdB){

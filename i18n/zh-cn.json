@@ -868,7 +868,7 @@
   "h": "ae8ee50b"
  },
  "js.auth.bam-vao-link-trong-email-de": {
-  "t": "— 点击信中的链接即可完成，页面会自动回到这里。",
+  "t": " — 点击信中的链接即可完成，页面会自动回到这里。",
   "h": "8493b548"
  },
  "js.auth.ban-chua-luu-tai-khoan-dang": {
@@ -887,6 +887,10 @@
   "t": "注册即表示您同意明宝紫微斗数的服务条款。",
   "h": "a349cfa3"
  },
+ "js.auth.brand": {
+  "t": "明宝紫微斗数",
+  "h": "33336b26"
+ },
  "js.auth.chao-mung-ban-da-nhan-luong": {
   "t": "欢迎！您已获得<strong>两</strong>——点「问老师」即可试用",
   "h": "3ebea363"
@@ -900,7 +904,7 @@
   "h": "4a00d63e"
  },
  "js.auth.da-gui-email-xac-nhan-toi": {
-  "t": "已寄出确认信至",
+  "t": "已寄出确认信至 ",
   "h": "213802a7"
  },
  "js.auth.da-luu-kiem-tra-email-de": {
@@ -923,6 +927,10 @@
   "t": "登录失败",
   "h": "fb63ae22"
  },
+ "js.auth.dang-xuat": {
+  "t": "注销",
+  "h": "d513aac0"
+ },
  "js.auth.email-nay-da-co-tai-khoan": {
   "t": "此电子邮件已有帐号——请输入密码登录。",
   "h": "d81bc47f"
@@ -934,6 +942,10 @@
  "js.auth.hoac": {
   "t": "或",
   "h": "2797f4b3"
+ },
+ "js.auth.khach": {
+  "t": "访客",
+  "h": "8c19417f"
  },
  "js.auth.khong-luu-duoc-tai-khoan": {
   "t": "无法保存帐号。",
@@ -991,6 +1003,10 @@
   "t": "工作阶段已逾时，请再试一次。",
   "h": "34b61273"
  },
+ "js.auth.slogan": {
+  "t": "知命理，顺势而行",
+  "h": "ca64e3dc"
+ },
  "js.auth.tang-luong": {
   "t": "赠送两",
   "h": "fdf6261f"
@@ -1028,7 +1044,7 @@
   "h": "aa035f2b"
  },
  "js.battu.dang-luan-giai-phan": {
-  "t": "正在解读第",
+  "t": "正在解读第 ",
   "h": "5b228988"
  },
  "js.battu.lap-bat-tu": {
@@ -1072,15 +1088,19 @@
   "h": "b47d9598"
  },
  "js.home.hanh": {
-  "t": "五行：",
+  "t": "五行： ",
   "h": "dc0810d8"
+ },
+ "js.home.hoi-thay": {
+  "t": "问老师",
+  "h": "c9ffbbaf"
  },
  "js.home.khong-lap-duoc-thu-lai-sau": {
   "t": "无法排盘，请稍后再试。",
   "h": "7855b0ef"
  },
  "js.home.ngay": {
-  "t": "日：",
+  "t": "日： ",
   "h": "e196e19b"
  },
  "js.home.ngay-binh": {
@@ -1100,7 +1120,7 @@
   "h": "3fe05eab"
  },
  "js.home.so-lieu-rut-gon-thu-tai": {
-  "t": "— 数据为精简版，请稍后重新加载。",
+  "t": " — 数据为精简版，请稍后重新加载。",
   "h": "84e3f4e7"
  },
  "js.home.thieu-ngay-thang-nam-sinh": {
@@ -1112,7 +1132,7 @@
   "h": "386c4c24"
  },
  "js.home.van-ngay": {
-  "t": "日运",
+  "t": "日运 ",
   "h": "c082a900"
  },
  "js.home.xem-van-rieng-cua-toi": {
@@ -1124,11 +1144,11 @@
   "h": "06275197"
  },
  "js.laso.dang-xuat": {
-  "t": "导出中...",
+  "t": " 导出中...",
   "h": "92b2d242"
  },
  "js.laso.gio-am": {
-  "t": "农历时辰：",
+  "t": "农历时辰： ",
   "h": "58bc0ba0"
  },
  "js.laso.lay-la-so": {
@@ -1168,7 +1188,7 @@
   "h": "d68f76a3"
  },
  "js.luangiai.dang-luan-giai-phan-1": {
-  "t": "正在解读第 1 部分 /",
+  "t": "正在解读第 1 部分 / ",
   "h": "559646ca"
  },
  "js.luangiai.lap-la-so-luan-giai-ngay": {
@@ -1200,7 +1220,7 @@
   "h": "1d1bbc24"
  },
  "js.luangiai.phan": {
-  "t": "部分",
+  "t": "部分 ",
   "h": "a74e8ed7"
  },
  "js.luangiai.xem-la-so-day-du": {
@@ -1392,7 +1412,7 @@
   "h": "24c4d64e"
  },
  "js.paywall.bam-mo-la-tra-tien-va": {
-  "t": "· 点开即付款并立即阅读，",
+  "t": " · 点开即付款并立即阅读， ",
   "h": "9a6023cd"
  },
  "js.paywall.ban-ay-dang-ky-la-ban": {
@@ -1400,7 +1420,7 @@
   "h": "afb5cbf7"
  },
  "js.paywall.ban-co-the-thu-lai-sau": {
-  "t": "— 您可以稍后再试。</p>",
+  "t": " — 您可以稍后再试。</p>",
   "h": "d45f37cf"
  },
  "js.paywall.ban-con": {
@@ -1424,7 +1444,7 @@
   "h": "8bbc9dde"
  },
  "js.paywall.can": {
-  "t": "</b> · 需要",
+  "t": "</b> · 需要 ",
   "h": "7e7713c7"
  },
  "js.paywall.can-them": {
@@ -1456,7 +1476,7 @@
   "h": "e4844e35"
  },
  "js.paywall.chu-tk": {
-  "t": "<b>户名：</b>",
+  "t": "<b>户名：</b> ",
   "h": "73fb1282"
  },
  "js.paywall.chu-trinh-cuoc-doi": {
@@ -1507,6 +1527,10 @@
   "t": "⊙ 还差一些",
   "h": "09093766"
  },
+ "js.paywall.cong-cu": {
+  "t": "工具",
+  "h": "6029ffef"
+ },
  "js.paywall.d": {
   "t": "đ)</span>",
   "h": "a62f69a1"
@@ -1532,7 +1556,7 @@
   "h": "91cdb627"
  },
  "js.paywall.da-tru": {
-  "t": "✓ 已扣除",
+  "t": "✓ 已扣除 ",
   "h": "0d13abf9"
  },
  "js.paywall.dang-cho-thanh-toan": {
@@ -1588,7 +1612,7 @@
   "h": "1e5e41e3"
  },
  "js.paywall.du": {
-  "t": "，多出",
+  "t": "，多出 ",
   "h": "63a0e7a7"
  },
  "js.paywall.duyen-no-tien-kiep": {
@@ -1596,7 +1620,7 @@
   "h": "c6b0ccb5"
  },
  "js.paywall.giu-trong-vi": {
-  "t": "存放在钱包",
+  "t": " 存放在钱包",
   "h": "fa87cbb0"
  },
  "js.paywall.het-luot-tang-hom-nay": {
@@ -1648,11 +1672,11 @@
   "h": "e454923c"
  },
  "js.paywall.loi": {
-  "t": "错误：",
+  "t": "错误： ",
   "h": "471c0087"
  },
  "js.paywall.loi-ket-noi": {
-  "t": "连接错误：",
+  "t": "连接错误： ",
   "h": "46e34d76"
  },
  "js.paywall.loi-kiem-tra-thu-lai": {
@@ -1672,7 +1696,7 @@
   "h": "8b0080c6"
  },
  "js.paywall.luong": {
-  "t": "两</b>，",
+  "t": " 两</b>， ",
   "h": "9a10e8c4"
  },
  "js.paywall.luong-4tai": {
@@ -1680,39 +1704,39 @@
   "h": "6614284e"
  },
  "js.paywall.luong-can": {
-  "t": "两</strong> · 需要：",
+  "t": " 两</strong> · 需要： ",
   "h": "17b0aa0f"
  },
  "js.paywall.luong-con-lai": {
-  "t": "两 · 剩余",
+  "t": " 两 · 剩余 ",
   "h": "c99e3599"
  },
  "js.paywall.luong-ln0i": {
-  "t": "两)</span>",
+  "t": " 两)</span>",
   "h": "49ad8e12"
  },
  "js.paywall.luong-luot-nay-dung": {
-  "t": "两 · 本次使用",
+  "t": " 两 · 本次使用 ",
   "h": "e61f5fd5"
  },
  "js.paywall.luong-m6fn": {
-  "t": "两",
+  "t": " 两",
   "h": "74224e60"
  },
  "js.paywall.luong-mo-day-du-ton": {
-  "t": "两</b> · 打开完整内容需",
+  "t": " 两</b> · 打开完整内容需 ",
   "h": "81466f88"
  },
  "js.paywall.luong-thao-tac-nay-ton": {
-  "t": "两</b> · 这项操作需 <b>",
+  "t": " 两</b> · 这项操作需 <b>",
   "h": "e1bdd8d4"
  },
  "js.paywall.luong-uzlk": {
-  "t": "两</b>",
+  "t": " 两</b>",
   "h": "6820cc0e"
  },
  "js.paywall.luong-vao-vi-cua-ban": {
-  "t": "两</b>已退回您的钱包",
+  "t": " 两</b>已退回您的钱包",
   "h": "0aa5bc03"
  },
  "js.paywall.luot-nay-chua-xu-ly-xong": {
@@ -1724,7 +1748,7 @@
   "h": "7b97f29d"
  },
  "js.paywall.ma-het-han-sau": {
-  "t": "QR 码将于",
+  "t": "QR 码将于 ",
   "h": "d64d146a"
  },
  "js.paywall.ma-qr-chuyen-khoan": {
@@ -1744,7 +1768,7 @@
   "h": "84fe9699"
  },
  "js.paywall.mo-day-du-ton": {
-  "t": "打开完整内容需",
+  "t": "打开完整内容需 ",
   "h": "3d05df05"
  },
  "js.paywall.mo-trang-thanh-toan": {
@@ -1764,7 +1788,7 @@
   "h": "96c6fb5d"
  },
  "js.paywall.nap-thanh-cong": {
-  "t": "✓ 储值成功",
+  "t": "✓ 储值成功 ",
   "h": "104f438d"
  },
  "js.paywall.nap-them": {
@@ -1780,11 +1804,11 @@
   "h": "1f82488c"
  },
  "js.paywall.ngan-hang": {
-  "t": "<b>银行：</b>",
+  "t": "<b>银行：</b> ",
   "h": "2aa52434"
  },
  "js.paywall.nguoi": {
-  "t": "位朋友</b> —",
+  "t": " 位朋友</b> — ",
   "h": "6134285c"
  },
  "js.paywall.nhan-tuong": {
@@ -1832,11 +1856,11 @@
   "h": "17e83429"
  },
  "js.paywall.so-tk": {
-  "t": "<b>帐号：</b>",
+  "t": "<b>帐号：</b> ",
   "h": "d2e75eae"
  },
  "js.paywall.tam-thoi": {
-  "t": "（暂时）",
+  "t": " （暂时）",
   "h": "3794c4c7"
  },
  "js.paywall.tao-ma-moi": {
@@ -1860,7 +1884,7 @@
   "h": "b2e5a151"
  },
  "js.paywall.thao-tac-nay-ton": {
-  "t": "这项操作需",
+  "t": "这项操作需 ",
   "h": "834c67c7"
  },
  "js.paywall.thao-tac-nay-ton-1zm6": {
@@ -1872,11 +1896,11 @@
   "h": "96be8028"
  },
  "js.paywall.thieu": {
-  "t": "</b> — 还差",
+  "t": "</b> — 还差 ",
   "h": "03703206"
  },
  "js.paywall.thieu-8362": {
-  "t": "— 还差",
+  "t": " — 还差 ",
   "h": "6f4749c9"
  },
  "js.paywall.thu-kieu-toc": {
@@ -2127,6 +2151,10 @@
   "t": "已开始新的对话。关于这张命盘，您想问什么？",
   "h": "9d7d64ad"
  },
+ "js.shellui.brand": {
+  "t": "明宝紫微斗数",
+  "h": "33336b26"
+ },
  "js.shellui.cau": {
   "t": "</b> 则",
   "h": "c4946182"
@@ -2136,11 +2164,11 @@
   "h": "65c94d43"
  },
  "js.shellui.cau-mien-phi": {
-  "t": "个</b>免费问题",
+  "t": " 个</b>免费问题",
   "h": "8ddf771c"
  },
  "js.shellui.cau-vua-roi-duoc-tra-loi": {
-  "t": "— 刚才的问题已立即回复",
+  "t": " — 刚才的问题已立即回复",
   "h": "70029ef5"
  },
  "js.shellui.chay-lai-cong-cu-de-hoi": {
@@ -2160,11 +2188,11 @@
   "h": "94185440"
  },
  "js.shellui.chia-se-w5yz": {
-  "t": "分享",
+  "t": "分享 ",
   "h": "f575b7df"
  },
  "js.shellui.chon-mot-cach-duoi-day": {
-  "t": "— 请选择下方一种方式。",
+  "t": " — 请选择下方一种方式。",
   "h": "8b0c906e"
  },
  "js.shellui.chon-thay-luan-giai": {
@@ -2184,7 +2212,7 @@
   "h": "f0665eb8"
  },
  "js.shellui.chua-mo": {
-  "t": "· 尚未打开</span></span>",
+  "t": " · 尚未打开</span></span>",
   "h": "72204e26"
  },
  "js.shellui.chua-tao-duoc-pdf-thu-lai": {
@@ -2196,11 +2224,11 @@
   "h": "21dc996b"
  },
  "js.shellui.con-nhieu-dieu-muon-noi-ve": {
-  "t": "对这张命盘还有很多话想说。免费注册即可：",
+  "t": " 对这张命盘还有很多话想说。免费注册即可：",
   "h": "b5e24689"
  },
  "js.shellui.con-nhieu-dieu-muon-to-tuong": {
-  "t": "还有许多地方想为您说清楚",
+  "t": " 还有许多地方想为您说清楚",
   "h": "2a2c8332"
  },
  "js.shellui.da-an-khoi-thu-vien-chung": {
@@ -2216,7 +2244,7 @@
   "h": "3ef9beae"
  },
  "js.shellui.da-gui-mo": {
-  "t": "✓ 已发送 — 请打开",
+  "t": "✓ 已发送 — 请打开 ",
   "h": "12288a32"
  },
  "js.shellui.da-het-cau-dung-thu": {
@@ -2224,7 +2252,7 @@
   "h": "f3c713d8"
  },
  "js.shellui.da-tao-link-ban-nay-cung": {
-  "t": "<span>已创建链接 · 此版本也会显示在",
+  "t": "<span>已创建链接 · 此版本也会显示在 ",
   "h": "11df14f6"
  },
  "js.shellui.dang-an": {
@@ -2272,7 +2300,7 @@
   "h": "fe71eacd"
  },
  "js.shellui.de-xem": {
-  "t": "查看",
+  "t": " 查看",
   "h": "f6dcc1ba"
  },
  "js.shellui.doi-nen-sang-toi": {
@@ -2308,7 +2336,7 @@
   "h": "1f7a4f9e"
  },
  "js.shellui.gio-truoc": {
-  "t": "小时前",
+  "t": " 小时前",
   "h": "ce828227"
  },
  "js.shellui.gui": {
@@ -2351,6 +2379,10 @@
   "t": "关于这张命盘，想问什么都可以…",
   "h": "67b4e55f"
  },
+ "js.shellui.hoi-thay": {
+  "t": "问老师",
+  "h": "c9ffbbaf"
+ },
  "js.shellui.hoi-thay-qua-zalo-quet-ma": {
   "t": "<div><b>透过 Zalo 请教老师</b><small>用 Zalo 扫码并发送问题，老师立即回复</small></div></div>",
   "h": "28466f2c"
@@ -2380,7 +2412,7 @@
   "h": "5b8a28ab"
  },
  "js.shellui.khong-in-luu-pdf-truc-tiep": {
-  "t": "无法直接打印／保存 PDF",
+  "t": " 无法直接打印／保存 PDF",
   "h": "27aa3510"
  },
  "js.shellui.khong-tao-duoc-link-chia-se": {
@@ -2432,15 +2464,15 @@
   "h": "489f2d1f"
  },
  "js.shellui.luong": {
-  "t": "两)",
+  "t": " 两)",
   "h": "c25e2d61"
  },
  "js.shellui.luong-mo12": {
-  "t": "两",
+  "t": " 两",
   "h": "77701acc"
  },
  "js.shellui.luong-n119": {
-  "t": "两 (",
+  "t": " 两 (",
   "h": "e002ee80"
  },
  "js.shellui.luong-piya": {
@@ -2452,7 +2484,7 @@
   "h": "eb701f53"
  },
  "js.shellui.luot-tang": {
-  "t": "次赠送)</span>",
+  "t": " 次赠送)</span>",
   "h": "428cbe75"
  },
  "js.shellui.luu-ban-pdf": {
@@ -2496,15 +2528,15 @@
   "h": "9f6ba6f2"
  },
  "js.shellui.muc": {
-  "t": "项 —",
+  "t": " 项 — ",
   "h": "186bea21"
  },
  "js.shellui.muc-cho-la-so-nay": {
-  "t": "项（针对这张命盘）</b><span>",
+  "t": " 项（针对这张命盘）</b><span>",
   "h": "c78646f2"
  },
  "js.shellui.muc-cua-chinh-la-so-nay": {
-  "t": "项</b>专属于这张命盘的内容 —",
+  "t": " 项</b>专属于这张命盘的内容 — ",
   "h": "8e5f0ada"
  },
  "js.shellui.muon-thay-luan-cho-chinh-con": {
@@ -2520,7 +2552,7 @@
   "h": "f3cb9ffa"
  },
  "js.shellui.ngay-truoc": {
-  "t": "天前",
+  "t": " 天前",
   "h": "92423d27"
  },
  "js.shellui.nguoi-dan-duong": {
@@ -2544,7 +2576,7 @@
   "h": "d2cd4ec7"
  },
  "js.shellui.phan-da-xong": {
-  "t": "个部分已完成</span></span>",
+  "t": " 个部分已完成</span></span>",
   "h": "f8ba3adb"
  },
  "js.shellui.phien": {
@@ -2560,11 +2592,11 @@
   "h": "edade345"
  },
  "js.shellui.phien-meij": {
-  "t": "则对话",
+  "t": " 则对话",
   "h": "3ee6a226"
  },
  "js.shellui.phut-truoc": {
-  "t": "分钟前",
+  "t": " 分钟前",
   "h": "b1017a2c"
  },
  "js.shellui.que-con-do-xin-phep-dung": {
@@ -2596,11 +2628,11 @@
   "h": "55873035"
  },
  "js.shellui.thang-truoc": {
-  "t": "个月前",
+  "t": " 个月前",
   "h": "e1d0b08b"
  },
  "js.shellui.thay": {
-  "t": "老师",
+  "t": "老师 ",
   "h": "90b92a70"
  },
  "js.shellui.thay-7g4t": {
@@ -2640,12 +2672,16 @@
   "h": "28553859"
  },
  "js.shellui.tu-vi-minh-bao": {
-  "t": "— 明宝紫微斗数",
+  "t": " — 明宝紫微斗数",
   "h": "ef7f10f4"
  },
  "js.shellui.ung-dung-nay": {
   "t": "此应用程序",
   "h": "cba1a9e4"
+ },
+ "js.shellui.va": {
+  "t": "与",
+  "h": "a72340e8"
  },
  "js.shellui.vua-xong": {
   "t": "刚刚",
@@ -2664,7 +2700,7 @@
   "h": "b03d8f15"
  },
  "js.shellui.xem-phan-luan-giai-cua-thay": {
-  "t": "看看老师为这张命盘写的解读：",
+  "t": "看看老师为这张命盘写的解读： ",
   "h": "8b9556e2"
  },
  "js.shellui.xem-phan-luan-giai-cua-thay-6as2": {
@@ -2684,11 +2720,11 @@
   "h": "53b71aec"
  },
  "js.topup.aria-label-thanh-toan": {
-  "t": "aria-label=\"付款",
+  "t": " aria-label=\"付款 ",
   "h": "3d7d89ae"
  },
  "js.topup.bac": {
-  "t": "(第",
+  "t": " (第 ",
   "h": "d620a26c"
  },
  "js.topup.ban-chua-nhap-ma": {
@@ -2700,7 +2736,7 @@
   "h": "a5f495af"
  },
  "js.topup.ban-dang-mo-khoa-v2tc": {
-  "t": "您正在解锁",
+  "t": "您正在解锁 ",
   "h": "f9f2ebb7"
  },
  "js.topup.can-them": {
@@ -2708,7 +2744,7 @@
   "h": "235b3b03"
  },
  "js.topup.cap-nhat-tu-dong-khi-co": {
-  "t": "有新工具时会自动更新。金额依下列方案换算：",
+  "t": "有新工具时会自动更新。金额依下列方案换算： ",
   "h": "b44fa7dd"
  },
  "js.topup.cap-nhat-tu-dong-khi-co-u8hf": {
@@ -2720,7 +2756,7 @@
   "h": "9cf1c314"
  },
  "js.topup.chi-tu": {
-  "t": "仅需",
+  "t": "仅需 ",
   "h": "64117bb9"
  },
  "js.topup.chia-se-moi-ban": {
@@ -2740,7 +2776,7 @@
   "h": "d666e2b0"
  },
  "js.topup.cong-cu-tra-cuu-co-phap": {
-  "t": "种古法查找工具不需要两</strong>（安星、纳音、黄道、易经、塔罗…）。",
+  "t": " 种古法查找工具不需要两</strong>（安星、纳音、黄道、易经、塔罗…）。 ",
   "h": "13649dd5"
  },
  "js.topup.d": {
@@ -2772,11 +2808,11 @@
   "h": "1baf8990"
  },
  "js.topup.den": {
-  "t": "至",
+  "t": " 至 ",
   "h": "addd467a"
  },
  "js.topup.don-gia-theo-bac-goi-cang": {
-  "t": "· 单价依方案级距，储值越多越划算",
+  "t": " · 单价依方案级距，储值越多越划算",
   "h": "563ecc73"
  },
  "js.topup.du-cho-luot-nay": {
@@ -2788,7 +2824,7 @@
   "h": "2bba34ab"
  },
  "js.topup.goi": {
-  "t": "方案",
+  "t": " 方案 ",
   "h": "ab6724d3"
  },
  "js.topup.goi-duoc-danh-dau-ben-duoi": {
@@ -2820,39 +2856,39 @@
   "h": "5ae11efc"
  },
  "js.topup.la-du": {
-  "t": "</b> 就够了，",
+  "t": "</b> 就够了， ",
   "h": "ff3301f5"
  },
  "js.topup.loi-ket-noi-momo": {
-  "t": "MoMo 连接错误：",
+  "t": "MoMo 连接错误： ",
   "h": "ab653854"
  },
  "js.topup.loi-ket-noi-paypal": {
-  "t": "PayPal 连接错误：",
+  "t": "PayPal 连接错误： ",
   "h": "b24c6f67"
  },
  "js.topup.luong": {
-  "t": "两</div>",
+  "t": " 两</div>",
   "h": "81dc9146"
  },
  "js.topup.luong-10zo": {
-  "t": "／两",
+  "t": " ／两",
   "h": "849064c1"
  },
  "js.topup.luong-8gog": {
-  "t": "<span>两</span></div>",
+  "t": " <span>两</span></div>",
   "h": "ea893023"
  },
  "js.topup.luong-cho-thanh-vien-moi": {
-  "t": "两赠送给新会员",
+  "t": " 两赠送给新会员",
   "h": "f9ec8743"
  },
  "js.topup.luong-de-dung-tiep-nap": {
-  "t": "两</b> 才能继续使用——请储值 <b>",
+  "t": " 两</b> 才能继续使用——请储值 <b>",
   "h": "cffae6dc"
  },
  "js.topup.luong-dung-duoc-cho-cac-cong": {
-  "t": "两，可用于深入解读工具与「问老师」。",
+  "t": " 两，可用于深入解读工具与「问老师」。 ",
   "h": "220dda0b"
  },
  "js.topup.luong-goi-lon-hon-thi-re": {
@@ -2860,15 +2896,15 @@
   "h": "7bdee349"
  },
  "js.topup.luong-ictb": {
-  "t": "两</b>。",
+  "t": " 两</b>。 ",
   "h": "1d59cb4e"
  },
  "js.topup.luong-ngay-khi-ho-tao-tai": {
-  "t": "两</strong>，在对方创建帐号时即刻入帐",
+  "t": " 两</strong>，在对方创建帐号时即刻入帐",
   "h": "efc01ca5"
  },
  "js.topup.luot-moi-duoc-thuong-30-ngay": {
-  "t": "次邀请可获奖励／30 天)",
+  "t": " 次邀请可获奖励／30 天)",
   "h": "d879cb28"
  },
  "js.topup.mo-ra-ngay-sau-khi-thanh": {
@@ -2912,7 +2948,7 @@
   "h": "3a034d1c"
  },
  "js.topup.tang": {
-  "t": "赠送",
+  "t": "赠送 ",
   "h": "ae208fd1"
  },
  "js.topup.tang-luong-mien-phi-cho-thanh": {
@@ -2932,11 +2968,11 @@
   "h": "6eccec15"
  },
  "js.topup.toi-da": {
-  "t": "(上限",
+  "t": " (上限 ",
   "h": "383d76a3"
  },
  "js.topup.toi-thieu": {
-  "t": "最低",
+  "t": "最低 ",
   "h": "134e562d"
  },
  "js.topup.vnd": {
@@ -2948,7 +2984,7 @@
   "h": "4ac59782"
  },
  "js.topup.vui-long-nhap-so-tien-tu": {
-  "t": "请输入金额，范围从",
+  "t": "请输入金额，范围从 ",
   "h": "c3305e5b"
  },
  "js.topup.xem-lich-su": {
@@ -2956,11 +2992,11 @@
   "h": "21a19fb0"
  },
  "js.vanhannam.ban-do": {
-  "t": "地图",
+  "t": "地图 ",
   "h": "393d2725"
  },
  "js.vanhannam.dang-luan-phan-1": {
-  "t": "正在解读第 1 部分 /",
+  "t": "正在解读第 1 部分 / ",
   "h": "9020516d"
  },
  "js.vanhannam.dang-tinh": {
@@ -2988,7 +3024,7 @@
   "h": "c99d25aa"
  },
  "js.vanhannam.thang-am-toi-moi-o-mot": {
-  "t": "个农历月，每格一个关键词",
+  "t": " 个农历月，每格一个关键词",
   "h": "33508d52"
  },
  "js.vanhannam.ton": {
@@ -3012,7 +3048,7 @@
   "h": "db3006a1"
  },
  "js.xemtuoi.chieu-tuong-hop": {
-  "t": "项契合要素",
+  "t": " 项契合要素",
   "h": "2d818e3c"
  },
  "js.xemtuoi.dang-dung-anh": {
@@ -3036,7 +3072,7 @@
   "h": "a72340e8"
  },
  "js.xemtuoi.vanh": {
-  "t": "雷达图",
+  "t": "雷达图 ",
   "h": "f78055f5"
  },
  "js.xemtuoi.xem-tuoi-lam-an-tu-vi": {

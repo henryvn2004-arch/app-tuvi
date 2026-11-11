@@ -868,7 +868,7 @@
   "h": "ae8ee50b"
  },
  "js.auth.bam-vao-link-trong-email-de": {
-  "t": "— 이메일의 링크를 눌러 완료하면 이 페이지로 자동으로 돌아와요.",
+  "t": " — 이메일의 링크를 눌러 완료하면 이 페이지로 자동으로 돌아와요.",
   "h": "8493b548"
  },
  "js.auth.ban-chua-luu-tai-khoan-dang": {
@@ -887,6 +887,10 @@
   "t": "가입하면 명보 자미두수 이용약관에 동의한 것으로 간주돼요.",
   "h": "a349cfa3"
  },
+ "js.auth.brand": {
+  "t": "명보 자미두수",
+  "h": "33336b26"
+ },
  "js.auth.chao-mung-ban-da-nhan-luong": {
   "t": "환영해요! <strong>냥</strong>을 받았어요 — 선생님께 묻기를 눌러 체험해 보세요",
   "h": "3ebea363"
@@ -900,7 +904,7 @@
   "h": "4a00d63e"
  },
  "js.auth.da-gui-email-xac-nhan-toi": {
-  "t": "인증 이메일을 보냈어요:",
+  "t": "인증 이메일을 보냈어요: ",
   "h": "213802a7"
  },
  "js.auth.da-luu-kiem-tra-email-de": {
@@ -923,6 +927,10 @@
   "t": "로그인에 실패했어요",
   "h": "fb63ae22"
  },
+ "js.auth.dang-xuat": {
+  "t": "로그아웃",
+  "h": "d513aac0"
+ },
  "js.auth.email-nay-da-co-tai-khoan": {
   "t": "이미 가입된 이메일이에요 — 비밀번호를 입력해 로그인하세요.",
   "h": "d81bc47f"
@@ -934,6 +942,10 @@
  "js.auth.hoac": {
   "t": "또는",
   "h": "2797f4b3"
+ },
+ "js.auth.khach": {
+  "t": "게스트",
+  "h": "8c19417f"
  },
  "js.auth.khong-luu-duoc-tai-khoan": {
   "t": "계정을 저장하지 못했어요.",
@@ -991,6 +1003,10 @@
   "t": "세션이 만료됐어요. 다시 시도해 주세요.",
   "h": "34b61273"
  },
+ "js.auth.slogan": {
+  "t": "명리를 알고 때에 순응하며 나아가다",
+  "h": "ca64e3dc"
+ },
  "js.auth.tang-luong": {
   "t": "냥 증정",
   "h": "fdf6261f"
@@ -1028,7 +1044,7 @@
   "h": "aa035f2b"
  },
  "js.battu.dang-luan-giai-phan": {
-  "t": "풀이 중 · 항목",
+  "t": "풀이 중 · 항목 ",
   "h": "5b228988"
  },
  "js.battu.lap-bat-tu": {
@@ -1072,15 +1088,19 @@
   "h": "b47d9598"
  },
  "js.home.hanh": {
-  "t": "오행",
+  "t": "오행 ",
   "h": "dc0810d8"
+ },
+ "js.home.hoi-thay": {
+  "t": "선생님께 묻기",
+  "h": "c9ffbbaf"
  },
  "js.home.khong-lap-duoc-thu-lai-sau": {
   "t": "만들지 못했어요. 잠시 후 다시 시도해 주세요.",
   "h": "7855b0ef"
  },
  "js.home.ngay": {
-  "t": "일진",
+  "t": "일진 ",
   "h": "e196e19b"
  },
  "js.home.ngay-binh": {
@@ -1100,7 +1120,7 @@
   "h": "3fe05eab"
  },
  "js.home.so-lieu-rut-gon-thu-tai": {
-  "t": "— 간략 데이터예요. 잠시 후 다시 불러와 주세요.",
+  "t": " — 간략 데이터예요. 잠시 후 다시 불러와 주세요.",
   "h": "84e3f4e7"
  },
  "js.home.thieu-ngay-thang-nam-sinh": {
@@ -1112,7 +1132,7 @@
   "h": "386c4c24"
  },
  "js.home.van-ngay": {
-  "t": "운세",
+  "t": "운세 ",
   "h": "c082a900"
  },
  "js.home.xem-van-rieng-cua-toi": {
@@ -1124,11 +1144,11 @@
   "h": "06275197"
  },
  "js.laso.dang-xuat": {
-  "t": "내보내는 중...",
+  "t": " 내보내는 중...",
   "h": "92b2d242"
  },
  "js.laso.gio-am": {
-  "t": "음력 시:",
+  "t": "음력 시: ",
   "h": "58bc0ba0"
  },
  "js.laso.lay-la-so": {
@@ -1168,7 +1188,7 @@
   "h": "d68f76a3"
  },
  "js.luangiai.dang-luan-giai-phan-1": {
-  "t": "풀이 중 · 항목 1 /",
+  "t": "풀이 중 · 항목 1 / ",
   "h": "559646ca"
  },
  "js.luangiai.lap-la-so-luan-giai-ngay": {
@@ -1200,7 +1220,7 @@
   "h": "1d1bbc24"
  },
  "js.luangiai.phan": {
-  "t": "항목",
+  "t": "항목 ",
   "h": "a74e8ed7"
  },
  "js.luangiai.xem-la-so-day-du": {
@@ -1392,7 +1412,7 @@
   "h": "24c4d64e"
  },
  "js.paywall.bam-mo-la-tra-tien-va": {
-  "t": "· 열면 바로 결제되고 곧바로 읽을 수 있어요,",
+  "t": " · 열면 바로 결제되고 곧바로 읽을 수 있어요, ",
   "h": "9a6023cd"
  },
  "js.paywall.ban-ay-dang-ky-la-ban": {
@@ -1400,7 +1420,7 @@
   "h": "afb5cbf7"
  },
  "js.paywall.ban-co-the-thu-lai-sau": {
-  "t": "— 나중에 다시 시도해 주세요.</p>",
+  "t": " — 나중에 다시 시도해 주세요.</p>",
   "h": "d45f37cf"
  },
  "js.paywall.ban-con": {
@@ -1424,7 +1444,7 @@
   "h": "8bbc9dde"
  },
  "js.paywall.can": {
-  "t": "</b> · 필요",
+  "t": "</b> · 필요 ",
   "h": "7e7713c7"
  },
  "js.paywall.can-them": {
@@ -1456,7 +1476,7 @@
   "h": "e4844e35"
  },
  "js.paywall.chu-tk": {
-  "t": "<b>예금주:</b>",
+  "t": "<b>예금주:</b> ",
   "h": "73fb1282"
  },
  "js.paywall.chu-trinh-cuoc-doi": {
@@ -1507,6 +1527,10 @@
   "t": "⊙ 부족",
   "h": "09093766"
  },
+ "js.paywall.cong-cu": {
+  "t": "도구",
+  "h": "6029ffef"
+ },
  "js.paywall.d": {
   "t": "동)</span>",
   "h": "a62f69a1"
@@ -1532,7 +1556,7 @@
   "h": "91cdb627"
  },
  "js.paywall.da-tru": {
-  "t": "✓ 차감:",
+  "t": "✓ 차감: ",
   "h": "0d13abf9"
  },
  "js.paywall.dang-cho-thanh-toan": {
@@ -1588,7 +1612,7 @@
   "h": "1e5e41e3"
  },
  "js.paywall.du": {
-  "t": ", 잔여",
+  "t": ", 잔여 ",
   "h": "63a0e7a7"
  },
  "js.paywall.duyen-no-tien-kiep": {
@@ -1596,7 +1620,7 @@
   "h": "c6b0ccb5"
  },
  "js.paywall.giu-trong-vi": {
-  "t": "지갑에 보관",
+  "t": " 지갑에 보관",
   "h": "fa87cbb0"
  },
  "js.paywall.het-luot-tang-hom-nay": {
@@ -1648,11 +1672,11 @@
   "h": "e454923c"
  },
  "js.paywall.loi": {
-  "t": "오류:",
+  "t": "오류: ",
   "h": "471c0087"
  },
  "js.paywall.loi-ket-noi": {
-  "t": "연결 오류:",
+  "t": "연결 오류: ",
   "h": "46e34d76"
  },
  "js.paywall.loi-kiem-tra-thu-lai": {
@@ -1672,7 +1696,7 @@
   "h": "8b0080c6"
  },
  "js.paywall.luong": {
-  "t": "냥</b>,",
+  "t": " 냥</b>, ",
   "h": "9a10e8c4"
  },
  "js.paywall.luong-4tai": {
@@ -1680,39 +1704,39 @@
   "h": "6614284e"
  },
  "js.paywall.luong-can": {
-  "t": "냥</strong> · 필요:",
+  "t": " 냥</strong> · 필요: ",
   "h": "17b0aa0f"
  },
  "js.paywall.luong-con-lai": {
-  "t": "냥 · 잔액",
+  "t": " 냥 · 잔액 ",
   "h": "c99e3599"
  },
  "js.paywall.luong-ln0i": {
-  "t": "냥)</span>",
+  "t": " 냥)</span>",
   "h": "49ad8e12"
  },
  "js.paywall.luong-luot-nay-dung": {
-  "t": "냥 · 이번 사용",
+  "t": " 냥 · 이번 사용 ",
   "h": "e61f5fd5"
  },
  "js.paywall.luong-m6fn": {
-  "t": "냥",
+  "t": " 냥",
   "h": "74224e60"
  },
  "js.paywall.luong-mo-day-du-ton": {
-  "t": "냥</b> · 전체 열람 비용",
+  "t": " 냥</b> · 전체 열람 비용 ",
   "h": "81466f88"
  },
  "js.paywall.luong-thao-tac-nay-ton": {
-  "t": "냥</b> · 이 작업 비용 <b>",
+  "t": " 냥</b> · 이 작업 비용 <b>",
   "h": "e1bdd8d4"
  },
  "js.paywall.luong-uzlk": {
-  "t": "냥</b>",
+  "t": " 냥</b>",
   "h": "6820cc0e"
  },
  "js.paywall.luong-vao-vi-cua-ban": {
-  "t": "냥</b>을 지갑에 환불했어요",
+  "t": " 냥</b>을 지갑에 환불했어요",
   "h": "0aa5bc03"
  },
  "js.paywall.luot-nay-chua-xu-ly-xong": {
@@ -1724,7 +1748,7 @@
   "h": "7b97f29d"
  },
  "js.paywall.ma-het-han-sau": {
-  "t": "코드 만료까지",
+  "t": "코드 만료까지 ",
   "h": "d64d146a"
  },
  "js.paywall.ma-qr-chuyen-khoan": {
@@ -1744,7 +1768,7 @@
   "h": "84fe9699"
  },
  "js.paywall.mo-day-du-ton": {
-  "t": "전체 열람 비용",
+  "t": "전체 열람 비용 ",
   "h": "3d05df05"
  },
  "js.paywall.mo-trang-thanh-toan": {
@@ -1764,7 +1788,7 @@
   "h": "96c6fb5d"
  },
  "js.paywall.nap-thanh-cong": {
-  "t": "✓ 충전 완료",
+  "t": "✓ 충전 완료 ",
   "h": "104f438d"
  },
  "js.paywall.nap-them": {
@@ -1780,11 +1804,11 @@
   "h": "1f82488c"
  },
  "js.paywall.ngan-hang": {
-  "t": "<b>은행:</b>",
+  "t": "<b>은행:</b> ",
   "h": "2aa52434"
  },
  "js.paywall.nguoi": {
-  "t": "명 초대</b> —",
+  "t": " 명 초대</b> — ",
   "h": "6134285c"
  },
  "js.paywall.nhan-tuong": {
@@ -1832,11 +1856,11 @@
   "h": "17e83429"
  },
  "js.paywall.so-tk": {
-  "t": "<b>계좌번호:</b>",
+  "t": "<b>계좌번호:</b> ",
   "h": "d2e75eae"
  },
  "js.paywall.tam-thoi": {
-  "t": "(임시)",
+  "t": " (임시)",
   "h": "3794c4c7"
  },
  "js.paywall.tao-ma-moi": {
@@ -1860,7 +1884,7 @@
   "h": "b2e5a151"
  },
  "js.paywall.thao-tac-nay-ton": {
-  "t": "이 작업 비용",
+  "t": "이 작업 비용 ",
   "h": "834c67c7"
  },
  "js.paywall.thao-tac-nay-ton-1zm6": {
@@ -1872,11 +1896,11 @@
   "h": "96be8028"
  },
  "js.paywall.thieu": {
-  "t": "</b> — 부족",
+  "t": "</b> — 부족 ",
   "h": "03703206"
  },
  "js.paywall.thieu-8362": {
-  "t": "— 부족",
+  "t": " — 부족 ",
   "h": "6f4749c9"
  },
  "js.paywall.thu-kieu-toc": {
@@ -2127,6 +2151,10 @@
   "t": "새 대화를 시작해요. 이 명반에 대해 무엇이 궁금하세요?",
   "h": "9d7d64ad"
  },
+ "js.shellui.brand": {
+  "t": "명보 자미두수",
+  "h": "33336b26"
+ },
  "js.shellui.cau": {
   "t": "</b>회",
   "h": "c4946182"
@@ -2136,11 +2164,11 @@
   "h": "65c94d43"
  },
  "js.shellui.cau-mien-phi": {
-  "t": "회</b> 더 무료로 묻기",
+  "t": " 회</b> 더 무료로 묻기",
   "h": "8ddf771c"
  },
  "js.shellui.cau-vua-roi-duoc-tra-loi": {
-  "t": "— 방금 질문에 바로 답해 드려요",
+  "t": " — 방금 질문에 바로 답해 드려요",
   "h": "70029ef5"
  },
  "js.shellui.chay-lai-cong-cu-de-hoi": {
@@ -2160,11 +2188,11 @@
   "h": "94185440"
  },
  "js.shellui.chia-se-w5yz": {
-  "t": "공유:",
+  "t": "공유: ",
   "h": "f575b7df"
  },
  "js.shellui.chon-mot-cach-duoi-day": {
-  "t": "— 아래 방법 중 하나를 선택하세요.",
+  "t": " — 아래 방법 중 하나를 선택하세요.",
   "h": "8b0c906e"
  },
  "js.shellui.chon-thay-luan-giai": {
@@ -2184,7 +2212,7 @@
   "h": "f0665eb8"
  },
  "js.shellui.chua-mo": {
-  "t": "· 미열람</span></span>",
+  "t": " · 미열람</span></span>",
   "h": "72204e26"
  },
  "js.shellui.chua-tao-duoc-pdf-thu-lai": {
@@ -2196,11 +2224,11 @@
   "h": "21dc996b"
  },
  "js.shellui.con-nhieu-dieu-muon-noi-ve": {
-  "t": "께서 이 명반에 대해 하실 말씀이 아직 많아요. 무료로 가입하면:",
+  "t": " 께서 이 명반에 대해 하실 말씀이 아직 많아요. 무료로 가입하면:",
   "h": "b5e24689"
  },
  "js.shellui.con-nhieu-dieu-muon-to-tuong": {
-  "t": "께서 아직 풀어 드릴 이야기가 많이 남았어요",
+  "t": " 께서 아직 풀어 드릴 이야기가 많이 남았어요",
   "h": "2a2c8332"
  },
  "js.shellui.da-an-khoi-thu-vien-chung": {
@@ -2216,7 +2244,7 @@
   "h": "3ef9beae"
  },
  "js.shellui.da-gui-mo": {
-  "t": "✓ 전송 완료 —",
+  "t": "✓ 전송 완료 — ",
   "h": "12288a32"
  },
  "js.shellui.da-het-cau-dung-thu": {
@@ -2224,7 +2252,7 @@
   "h": "f3c713d8"
  },
  "js.shellui.da-tao-link-ban-nay-cung": {
-  "t": "<span>링크 생성 완료 · 이 결과가 함께 게시되는 곳:",
+  "t": "<span>링크 생성 완료 · 이 결과가 함께 게시되는 곳: ",
   "h": "11df14f6"
  },
  "js.shellui.dang-an": {
@@ -2272,7 +2300,7 @@
   "h": "fe71eacd"
  },
  "js.shellui.de-xem": {
-  "t": "앱에서 확인하세요",
+  "t": " 앱에서 확인하세요",
   "h": "f6dcc1ba"
  },
  "js.shellui.doi-nen-sang-toi": {
@@ -2308,7 +2336,7 @@
   "h": "1f7a4f9e"
  },
  "js.shellui.gio-truoc": {
-  "t": "시간 전",
+  "t": " 시간 전",
   "h": "ce828227"
  },
  "js.shellui.gui": {
@@ -2351,6 +2379,10 @@
   "t": "이 명반에 대해 무엇이든 물어보세요…",
   "h": "67b4e55f"
  },
+ "js.shellui.hoi-thay": {
+  "t": "선생님께 묻기",
+  "h": "c9ffbbaf"
+ },
  "js.shellui.hoi-thay-qua-zalo-quet-ma": {
   "t": "<div><b>Zalo로 선생님께 묻기</b><small>Zalo로 QR 코드를 스캔하고 질문을 보내면 선생님이 바로 답해 드려요</small></div></div>",
   "h": "28466f2c"
@@ -2380,7 +2412,7 @@
   "h": "5b8a28ab"
  },
  "js.shellui.khong-in-luu-pdf-truc-tiep": {
-  "t": "안에서는 PDF를 바로 인쇄하거나 저장할 수 없어요",
+  "t": " 안에서는 PDF를 바로 인쇄하거나 저장할 수 없어요",
   "h": "27aa3510"
  },
  "js.shellui.khong-tao-duoc-link-chia-se": {
@@ -2432,15 +2464,15 @@
   "h": "489f2d1f"
  },
  "js.shellui.luong": {
-  "t": "냥)",
+  "t": " 냥)",
   "h": "c25e2d61"
  },
  "js.shellui.luong-mo12": {
-  "t": "냥",
+  "t": " 냥",
   "h": "77701acc"
  },
  "js.shellui.luong-n119": {
-  "t": "냥 (",
+  "t": " 냥 (",
   "h": "e002ee80"
  },
  "js.shellui.luong-piya": {
@@ -2452,7 +2484,7 @@
   "h": "eb701f53"
  },
  "js.shellui.luot-tang": {
-  "t": "회 증정)</span>",
+  "t": " 회 증정)</span>",
   "h": "428cbe75"
  },
  "js.shellui.luu-ban-pdf": {
@@ -2496,15 +2528,15 @@
   "h": "9f6ba6f2"
  },
  "js.shellui.muc": {
-  "t": "개 항목 —",
+  "t": " 개 항목 — ",
   "h": "186bea21"
  },
  "js.shellui.muc-cho-la-so-nay": {
-  "t": "개 항목 · 이 명반 전용</b><span>",
+  "t": " 개 항목 · 이 명반 전용</b><span>",
   "h": "c78646f2"
  },
  "js.shellui.muc-cua-chinh-la-so-nay": {
-  "t": "개 항목</b>으로 이 명반을 빠짐없이 짚어 드려요 —",
+  "t": " 개 항목</b>으로 이 명반을 빠짐없이 짚어 드려요 — ",
   "h": "8e5f0ada"
  },
  "js.shellui.muon-thay-luan-cho-chinh-con": {
@@ -2520,7 +2552,7 @@
   "h": "f3cb9ffa"
  },
  "js.shellui.ngay-truoc": {
-  "t": "일 전",
+  "t": " 일 전",
   "h": "92423d27"
  },
  "js.shellui.nguoi-dan-duong": {
@@ -2544,7 +2576,7 @@
   "h": "d2cd4ec7"
  },
  "js.shellui.phan-da-xong": {
-  "t": "개 완료</span></span>",
+  "t": " 개 완료</span></span>",
   "h": "f8ba3adb"
  },
  "js.shellui.phien": {
@@ -2560,11 +2592,11 @@
   "h": "edade345"
  },
  "js.shellui.phien-meij": {
-  "t": "개 세션",
+  "t": " 개 세션",
   "h": "3ee6a226"
  },
  "js.shellui.phut-truoc": {
-  "t": "분 전",
+  "t": " 분 전",
   "h": "b1017a2c"
  },
  "js.shellui.que-con-do-xin-phep-dung": {
@@ -2596,11 +2628,11 @@
   "h": "55873035"
  },
  "js.shellui.thang-truoc": {
-  "t": "개월 전",
+  "t": " 개월 전",
   "h": "e1d0b08b"
  },
  "js.shellui.thay": {
-  "t": "선생님",
+  "t": "선생님 ",
   "h": "90b92a70"
  },
  "js.shellui.thay-7g4t": {
@@ -2640,12 +2672,16 @@
   "h": "28553859"
  },
  "js.shellui.tu-vi-minh-bao": {
-  "t": "— 명보 자미두수",
+  "t": " — 명보 자미두수",
   "h": "ef7f10f4"
  },
  "js.shellui.ung-dung-nay": {
   "t": "이 앱",
   "h": "cba1a9e4"
+ },
+ "js.shellui.va": {
+  "t": "및",
+  "h": "a72340e8"
  },
  "js.shellui.vua-xong": {
   "t": "방금",
@@ -2664,7 +2700,7 @@
   "h": "b03d8f15"
  },
  "js.shellui.xem-phan-luan-giai-cua-thay": {
-  "t": "이 명반에 대한 선생님의 풀이 보기:",
+  "t": "이 명반에 대한 선생님의 풀이 보기: ",
   "h": "8b9556e2"
  },
  "js.shellui.xem-phan-luan-giai-cua-thay-6as2": {
@@ -2684,11 +2720,11 @@
   "h": "53b71aec"
  },
  "js.topup.aria-label-thanh-toan": {
-  "t": "aria-label=\"결제",
+  "t": " aria-label=\"결제 ",
   "h": "3d7d89ae"
  },
  "js.topup.bac": {
-  "t": "(등급",
+  "t": " (등급 ",
   "h": "d620a26c"
  },
  "js.topup.ban-chua-nhap-ma": {
@@ -2700,7 +2736,7 @@
   "h": "a5f495af"
  },
  "js.topup.ban-dang-mo-khoa-v2tc": {
-  "t": "잠금 해제 중:",
+  "t": "잠금 해제 중: ",
   "h": "f9f2ebb7"
  },
  "js.topup.can-them": {
@@ -2708,7 +2744,7 @@
   "h": "235b3b03"
  },
  "js.topup.cap-nhat-tu-dong-khi-co": {
-  "t": "새 도구가 생기면 자동으로 업데이트돼요. 금액은 다음 패키지 기준으로 환산돼요:",
+  "t": "새 도구가 생기면 자동으로 업데이트돼요. 금액은 다음 패키지 기준으로 환산돼요: ",
   "h": "b44fa7dd"
  },
  "js.topup.cap-nhat-tu-dong-khi-co-u8hf": {
@@ -2720,7 +2756,7 @@
   "h": "9cf1c314"
  },
  "js.topup.chi-tu": {
-  "t": "최저",
+  "t": "최저 ",
   "h": "64117bb9"
  },
  "js.topup.chia-se-moi-ban": {
@@ -2740,7 +2776,7 @@
   "h": "d666e2b0"
  },
  "js.topup.cong-cu-tra-cuu-co-phap": {
-  "t": "개의 전통 조회 도구는 냥이 들지 않아요</strong> (별 배치, 납음, 황도, 주역, 타로…).",
+  "t": " 개의 전통 조회 도구는 냥이 들지 않아요</strong> (별 배치, 납음, 황도, 주역, 타로…). ",
   "h": "13649dd5"
  },
  "js.topup.d": {
@@ -2772,11 +2808,11 @@
   "h": "1baf8990"
  },
  "js.topup.den": {
-  "t": "~",
+  "t": " ~ ",
   "h": "addd467a"
  },
  "js.topup.don-gia-theo-bac-goi-cang": {
-  "t": "· 패키지 등급별 단가, 많이 충전할수록 저렴해요",
+  "t": " · 패키지 등급별 단가, 많이 충전할수록 저렴해요",
   "h": "563ecc73"
  },
  "js.topup.du-cho-luot-nay": {
@@ -2788,7 +2824,7 @@
   "h": "2bba34ab"
  },
  "js.topup.goi": {
-  "t": "· 패키지",
+  "t": " · 패키지 ",
   "h": "ab6724d3"
  },
  "js.topup.goi-duoc-danh-dau-ben-duoi": {
@@ -2820,39 +2856,39 @@
   "h": "5ae11efc"
  },
  "js.topup.la-du": {
-  "t": "</b> 충전하면 충분해요,",
+  "t": "</b> 충전하면 충분해요, ",
   "h": "ff3301f5"
  },
  "js.topup.loi-ket-noi-momo": {
-  "t": "MoMo 연결 오류:",
+  "t": "MoMo 연결 오류: ",
   "h": "ab653854"
  },
  "js.topup.loi-ket-noi-paypal": {
-  "t": "PayPal 연결 오류:",
+  "t": "PayPal 연결 오류: ",
   "h": "b24c6f67"
  },
  "js.topup.luong": {
-  "t": "냥</div>",
+  "t": " 냥</div>",
   "h": "81dc9146"
  },
  "js.topup.luong-10zo": {
-  "t": "/ 냥",
+  "t": " / 냥",
   "h": "849064c1"
  },
  "js.topup.luong-8gog": {
-  "t": "<span>냥</span></div>",
+  "t": " <span>냥</span></div>",
   "h": "ea893023"
  },
  "js.topup.luong-cho-thanh-vien-moi": {
-  "t": "냥 증정",
+  "t": " 냥 증정",
   "h": "f9ec8743"
  },
  "js.topup.luong-de-dung-tiep-nap": {
-  "t": "냥</b> · 이어서 쓰려면 <b>",
+  "t": " 냥</b> · 이어서 쓰려면 <b>",
   "h": "cffae6dc"
  },
  "js.topup.luong-dung-duoc-cho-cac-cong": {
-  "t": "냥 — 심층 풀이 도구와 선생님께 묻기에 사용할 수 있어요.",
+  "t": " 냥 — 심층 풀이 도구와 선생님께 묻기에 사용할 수 있어요. ",
   "h": "220dda0b"
  },
  "js.topup.luong-goi-lon-hon-thi-re": {
@@ -2860,15 +2896,15 @@
   "h": "7bdee349"
  },
  "js.topup.luong-ictb": {
-  "t": "냥</b>.",
+  "t": " 냥</b>. ",
   "h": "1d59cb4e"
  },
  "js.topup.luong-ngay-khi-ho-tao-tai": {
-  "t": "냥</strong> — 상대가 계정을 만드는 즉시",
+  "t": " 냥</strong> — 상대가 계정을 만드는 즉시",
   "h": "efc01ca5"
  },
  "js.topup.luot-moi-duoc-thuong-30-ngay": {
-  "t": "회 초대 보상 / 30일)",
+  "t": " 회 초대 보상 / 30일)",
   "h": "d879cb28"
  },
  "js.topup.mo-ra-ngay-sau-khi-thanh": {
@@ -2912,7 +2948,7 @@
   "h": "3a034d1c"
  },
  "js.topup.tang": {
-  "t": "신규 회원 혜택:",
+  "t": "신규 회원 혜택: ",
   "h": "ae208fd1"
  },
  "js.topup.tang-luong-mien-phi-cho-thanh": {
@@ -2932,11 +2968,11 @@
   "h": "6eccec15"
  },
  "js.topup.toi-da": {
-  "t": "(최대",
+  "t": " (최대 ",
   "h": "383d76a3"
  },
  "js.topup.toi-thieu": {
-  "t": "최소",
+  "t": "최소 ",
   "h": "134e562d"
  },
  "js.topup.vnd": {
@@ -2948,7 +2984,7 @@
   "h": "4ac59782"
  },
  "js.topup.vui-long-nhap-so-tien-tu": {
-  "t": "입력 가능한 금액:",
+  "t": "입력 가능한 금액: ",
   "h": "c3305e5b"
  },
  "js.topup.xem-lich-su": {
@@ -2956,11 +2992,11 @@
   "h": "21a19fb0"
  },
  "js.vanhannam.ban-do": {
-  "t": "운세 지도 · 앞으로",
+  "t": "운세 지도 · 앞으로 ",
   "h": "393d2725"
  },
  "js.vanhannam.dang-luan-phan-1": {
-  "t": "풀이 중 · 항목 1 /",
+  "t": "풀이 중 · 항목 1 / ",
   "h": "9020516d"
  },
  "js.vanhannam.dang-tinh": {
@@ -2988,7 +3024,7 @@
   "h": "c99d25aa"
  },
  "js.vanhannam.thang-am-toi-moi-o-mot": {
-  "t": "개월(음력), 칸마다 하나의 키워드",
+  "t": " 개월(음력), 칸마다 하나의 키워드",
   "h": "33508d52"
  },
  "js.vanhannam.ton": {
@@ -3012,7 +3048,7 @@
   "h": "db3006a1"
  },
  "js.xemtuoi.chieu-tuong-hop": {
-  "t": "개 차원 궁합",
+  "t": " 개 차원 궁합",
   "h": "2d818e3c"
  },
  "js.xemtuoi.dang-dung-anh": {
@@ -3036,7 +3072,7 @@
   "h": "a72340e8"
  },
  "js.xemtuoi.vanh": {
-  "t": "레이더 차트:",
+  "t": "레이더 차트: ",
   "h": "f78055f5"
  },
  "js.xemtuoi.xem-tuoi-lam-an-tu-vi": {

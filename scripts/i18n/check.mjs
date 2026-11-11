@@ -22,7 +22,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, PUBLIC, buildPages } from './_common.mjs';
 import { collectKeys, validateTranslation } from '../../lib/i18n/core.mjs';
-import { renderLocalized, ASSET_V, CLIENT_V } from '../../lib/i18n/render.mjs';
+import { renderLocalized, ASSET_V, CLIENT_V, GLOSSARY_V } from '../../lib/i18n/render.mjs';
 import { HREFLANG as LINK_HREFLANG, urlFor } from '../../lib/i18n/links.mjs';
 import {
   loadVi,
@@ -120,6 +120,35 @@ for (const f of fs.readdirSync(PUBLIC).filter((x) => /\.(js|html)$/.test(x))) {
     });
 }
 
+// ── 0c. khoá được gọi phải nằm trong namespace server NHÚNG vào trang đó (W13c) ──
+// File JS dùng chung gọi khoá namespace khác (shell.js → js.nav.*) ⇒ ở trang không nhúng namespace
+// đó chữ đứng tiếng Việt IM LẶNG. Sửa: npm run i18n:fix-ns.
+{
+  const { unembedded } = await import('./ns-refs.mjs');
+  const seen = new Set();
+  for (const { file, key, from } of unembedded(PUBLIC)) {
+    if (seen.has(from + key)) continue;
+    seen.add(from + key);
+    fail(
+      `public/${from}: gọi ${key} nhưng ${file} không nhúng namespace đó — chạy npm run i18n:fix-ns`
+    );
+  }
+}
+
+// ── 0d. _tvmbT/_tvmbG/_tvmbHref là hàm TOÀN CỤC của auth.js: trang dùng chúng TRƯỚC thẻ auth.js (hoặc
+// không nạp auth.js) phải tự khai bản dự phòng trước lần dùng đầu — không thì ReferenceError, vỡ cả bản vi.
+for (const f of fs.readdirSync(PUBLIC).filter((x) => x.endsWith('.html'))) {
+  const src = fs.readFileSync(path.join(PUBLIC, f), 'utf8');
+  for (const fn of ['_tvmbT', '_tvmbG', '_tvmbHref']) {
+    const use = src.search(new RegExp(`\\b${fn}\\(`));
+    if (use < 0) continue;
+    const auth = src.search(/<script[^>]+src=["']\/auth\.js/);
+    const own = src.search(new RegExp(`window\\.${fn}\\s*=|function\\s+${fn}\\s*\\(`));
+    const ok = (auth >= 0 && auth < use) || (own >= 0 && own < use);
+    if (!ok) fail(`public/${f}: gọi ${fn}() trước khi auth.js nạp mà không tự khai bản dự phòng`);
+  }
+}
+
 // ── 1. khoá phải có trong vi.json ───────────────────────────────────────────
 const htmlFiles = fs.readdirSync(PUBLIC).filter((f) => f.endsWith('.html'));
 for (const f of htmlFiles) {
@@ -141,6 +170,11 @@ for (const f of jsFiles) {
 // không thì hai bản khác nhau chạy trên cùng trang.
 for (const f of htmlFiles) {
   const src = fs.readFileSync(path.join(PUBLIC, f), 'utf8');
+  for (const m of src.matchAll(/src=["']\/tools-shared\/glossary\.js(?:\?v=(\w+))?/g))
+    if (m[1] !== GLOSSARY_V)
+      fail(
+        `public/${f}: /tools-shared/glossary.js?v=${m[1]} ≠ GLOSSARY_V=${GLOSSARY_V} (lib/i18n/render.mjs)`
+      );
   for (const m of src.matchAll(/\/tools-shared\/i18n\.js(?:\?v=(\w+))?/g))
     if (m[1] !== CLIENT_V)
       fail(
