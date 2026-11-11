@@ -129,6 +129,8 @@ interface CmoSnapshot {
    * `ext-metrics` hôm nay chưa chạy/lỗi.
    */
   clarity: ClaritySnapshotForDigest | null;
+  /** Tên các RPC lỗi lượt này (khối tương ứng = null). Rỗng = đủ dữ liệu. */
+  rpcErrors: string[];
 }
 
 // Snapshot 7 ngày gần nhất SO VỚI 7 ngày trước đó (WoW) — đủ để LLM thấy xu
@@ -138,6 +140,18 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
   const now = new Date();
   const d = (days: number) => new Date(now.getTime() - days * 864e5).toISOString();
 
+  // Một RPC hỏng KHÔNG được kéo sập cả digest: trước đây Promise.all ném ngay khi
+  // `dashboard_engagement` dính 57014 nên 26/30 lượt không gửi được dòng nào, dù
+  // 15 khối còn lại đều đọc được. Hỏng → null + ghi tên vào `rpcErrors` để LLM nói
+  // thẳng "thiếu khối X" thay vì im lặng; lỗi vẫn ra log.
+  const rpcErrors: string[] = [];
+  const rpc = <T>(fn: string, params: Record<string, unknown>): Promise<T | null> =>
+    callRpc<T>(fn, params).catch((e: unknown) => {
+      console.error(`[cmo-digest] RPC ${fn} lỗi:`, (e as Error).message);
+      rpcErrors.push(fn);
+      return null;
+    });
+
   const day = (days: number) => d(days).slice(0, 10); // GA4 Data API nhận YYYY-MM-DD
 
   const [
@@ -146,20 +160,20 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     signupTruthThisWeek, signupTruthPrevWeek, trafficQuality, ga4, gsc,
     growthFindings, clarity,
   ] = await Promise.all([
-    callRpc('marketing_funnel', { p_from: d(7), p_to: d(0) }),
-    callRpc('marketing_funnel', { p_from: d(14), p_to: d(7) }),
-    callRpc('marketing_sources', { p_from: d(7), p_to: d(0) }),
-    callRpc('dashboard_engagement', { p_days: 14 }),
-    callRpc('marketing_revenue', { p_from: d(7), p_to: d(0) }),
-    callRpc('marketing_revenue', { p_from: d(14), p_to: d(7) }),
-    callRpc('dashboard_margin', { p_from: d(7), p_to: d(0) }),
-    callRpc('channel_error_rate', { p_hours: 24 }),
-    callRpc<unknown[]>('dashboard_at_risk', { p_idle_days: 14, p_min_events: 3, p_limit: 50 }),
+    rpc('marketing_funnel', { p_from: d(7), p_to: d(0) }),
+    rpc('marketing_funnel', { p_from: d(14), p_to: d(7) }),
+    rpc('marketing_sources', { p_from: d(7), p_to: d(0) }),
+    rpc('dashboard_engagement', { p_days: 14 }),
+    rpc('marketing_revenue', { p_from: d(7), p_to: d(0) }),
+    rpc('marketing_revenue', { p_from: d(14), p_to: d(7) }),
+    rpc('dashboard_margin', { p_from: d(7), p_to: d(0) }),
+    rpc('channel_error_rate', { p_hours: 24 }),
+    rpc<unknown[]>('dashboard_at_risk', { p_idle_days: 14, p_min_events: 3, p_limit: 50 }),
     // Số đăng ký THẬT + mốc bật tracking. Xem chú thích ở CmoSnapshot.
-    callRpc('marketing_signup_truth', { p_from: d(7), p_to: d(0) }),
-    callRpc('marketing_signup_truth', { p_from: d(14), p_to: d(7) }),
+    rpc('marketing_signup_truth', { p_from: d(7), p_to: d(0) }),
+    rpc('marketing_signup_truth', { p_from: d(14), p_to: d(7) }),
     // Bao nhiêu trong số "khách" là người thật. Xem chú thích ở CmoSnapshot.
-    callRpc('traffic_quality', { p_from: d(7), p_to: d(0) }),
+    rpc('traffic_quality', { p_from: d(7), p_to: d(0) }),
     // GA4 là nguồn DUY NHẤT thấy được organic/ads/social; thiếu nó thì digest chỉ
     // nhìn được phần traffic đã chạm track.js và dễ kết luận sai về kênh.
     // Best-effort: hỏng → null, không kéo sập cả digest.
@@ -193,6 +207,7 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     gsc,
     growthFindings,
     clarity,
+    rpcErrors,
   };
 }
 
@@ -247,6 +262,9 @@ VỀ KHỐI "trafficQuality" — ĐỌC KHỐI NÀY TRƯỚC MỌI KHỐI KHÁC,
   dựng ra một kết luận xấu về sản phẩm bằng một phép chia sai.
 - ua_coverage.with_ua = 0 nghĩa là CHƯA thu được User-Agent nào trong khoảng này. Khi đó fleet_bot và
   known_bot = 0 là "chưa đo được", KHÔNG phải "không có bot" — cấm đọc thành tin tốt.
+
+rpcErrors khác rỗng nghĩa là các khối tên đó ĐỌC HỤT (giá trị null) — nói thẳng "thiếu khối X lượt này"
+một câu, TUYỆT ĐỐI không suy số của khối đó.
 
 VỀ SỐ KHÁCH VÀ NGƯỜI DÙNG HOẠT ĐỘNG — chỗ này ĐÃ báo động giả một lần, đọc kỹ:
 - funnel*.visitors là số THÔ (gồm máy). Số phải dùng là funnel*.visitors_human; funnel*.visitors_bot
