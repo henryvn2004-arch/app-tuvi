@@ -1151,6 +1151,14 @@
   "t": " は何を表していますか？",
   "h": "04cb815a"
  },
+ "js.battu.p-ba-cham": {
+  "t": "…",
+  "h": "6eae3a5b"
+ },
+ "js.battu.p-hai-cham": {
+  "t": "： ",
+  "h": "ceca32e9"
+ },
  "js.battu.thu-lai": {
   "t": "↻ 再試行",
   "h": "30508ad3"
@@ -1607,9 +1615,21 @@
   "t": "生年月日を一度入力すると、今日があなただけのどの宮に入るかが分かります。",
   "h": "45d9335c"
  },
+ "js.home.p-cham": {
+  "t": "。",
+  "h": "3a52ce78"
+ },
+ "js.home.p-dong-ngoac": {
+  "t": "）",
+  "h": "e7064f0b"
+ },
  "js.home.rieng-viec-thuong-ngay": {
   "t": "日常のことに限れば、 ",
   "h": "e7d64dd0"
+ },
+ "js.home.sinh-nam-xung": {
+  "t": " （生年 ",
+  "h": "dc7c4691"
  },
  "js.home.so-lieu-rut-gon-thu-tai": {
   "t": " — 簡易データです。しばらくしてから再読み込みしてください。",
@@ -1926,6 +1946,14 @@
  "js.luangiai.noi-vi-sao-no-bung-ra": {
   "t": " では、その理由・表に出る時期・対処法を説明します。",
   "h": "2b510636"
+ },
+ "js.luangiai.p-ba-cham": {
+  "t": "…",
+  "h": "6eae3a5b"
+ },
+ "js.luangiai.p-hai-cham": {
+  "t": "： ",
+  "h": "ceca32e9"
  },
  "js.luangiai.phan": {
   "t": "セクション ",
@@ -3183,6 +3211,10 @@
   "t": "採点する →",
   "h": "a4d402f6"
  },
+ "js.shellui.cham-ten-hop-menh-chu-va-nganh": {
+  "t": "「{ten}」という名前は、ご本人の命と業種に合っていますか？",
+  "h": "1039c58a"
+ },
  "js.shellui.chao-ban-cho-thay-xin-nam": {
   "t": "こんにちは。チャットで生まれ年と性別を教えてください。納音五行にもとづいて、服装の色をご提案します。結果が出たら、続けて何でもご質問ください。",
   "h": "eabb393e"
@@ -3446,6 +3478,10 @@
  "js.shellui.con-hoi-tiep-di": {
   "t": "</b>の命盤を作成しました。続けてご質問くださいね。</p>",
   "h": "0de4fe93"
+ },
+ "js.shellui.con-lcm6": {
+  "t": " · 子 ",
+  "h": "fe1507c5"
  },
  "js.shellui.con-muon-hoi-viec-gi-tuy": {
   "t": "<p>知りたいこと（任意）を入力してください。先生が卦を立てます — 6爻をひと息に。</p>",
@@ -3975,6 +4011,14 @@
   "t": "本命に合う名前を、意味つきで12個提案",
   "h": "61954ded"
  },
+ "js.shellui.goi-y-5-ten-hop-menh-kem-y-nghia": {
+  "t": "命に合う名前を、意味つきで5つ提案して",
+  "h": "4ab7930a"
+ },
+ "js.shellui.goi-y-5-ten-khac-hop-hon": {
+  "t": "もっと合う名前を、別に5つ提案して",
+  "h": "f3587ad3"
+ },
  "js.shellui.google-lich": {
   "t": "Googleカレンダー",
   "h": "8cdb619a"
@@ -4046,6 +4090,26 @@
  "js.shellui.hay-goi-y-ten-moi": {
   "t": "**。それとも、新しい名前を提案しましょうか？",
   "h": "d922a861"
+ },
+ "js.shellui.hd-can-hanh": {
+  "t": "、干の五行： ",
+  "h": "96563d79"
+ },
+ "js.shellui.hd-gio-can-tranh-hac-dao": {
+  "t": "避けたい時刻（黒道）： ",
+  "h": "1974f9e6"
+ },
+ "js.shellui.hd-gio-hoang-dao-ngay": {
+  "t": "黄道吉時 · 日付： ",
+  "h": "b8825163"
+ },
+ "js.shellui.hd-gio-hoang-dao-ngay-2": {
+  "t": "黄道吉時 — 日付： ",
+  "h": "413ea385"
+ },
+ "js.shellui.hd-gio-tot-hoang-dao": {
+  "t": "吉時（黄道）： ",
+  "h": "100b31dc"
  },
  "js.shellui.het-phan-dung-thu": {
   "t": "お試しはここまでです。",
@@ -4199,9 +4263,29 @@
   "t": "合う色と避ける色は？",
   "h": "3af5cdfc"
  },
+ "js.shellui.huong-bac": {
+  "t": "北",
+  "h": "130d45d1"
+ },
  "js.shellui.huong-cua": {
   "t": "ドアの向き",
   "h": "65a7e53d"
+ },
+ "js.shellui.huong-dong": {
+  "t": "東",
+  "h": "6bd70b62"
+ },
+ "js.shellui.huong-dong-bac": {
+  "t": "北東",
+  "h": "9690921a"
+ },
+ "js.shellui.huong-dong-nam": {
+  "t": "南東",
+  "h": "dd71e07a"
+ },
+ "js.shellui.huong-nam": {
+  "t": "南",
+  "h": "b580ba1b"
  },
  "js.shellui.huong-nao-phai-tranh-va-vi": {
   "t": "避けるべき方位とその理由は？",
@@ -4218,6 +4302,18 @@
  "js.shellui.huong-nha-nao-hop-nhat": {
   "t": "家はどの向きが最も合いますか？",
   "h": "cc262fd1"
+ },
+ "js.shellui.huong-tay": {
+  "t": "西",
+  "h": "74b26936"
+ },
+ "js.shellui.huong-tay-bac": {
+  "t": "北西",
+  "h": "0b1f47fd"
+ },
+ "js.shellui.huong-tay-nam": {
+  "t": "南西",
+  "h": "c0484c26"
  },
  "js.shellui.huong-xep-hang-cao-nhat-la": {
   "t": " 最も評価の高い方位は**",
@@ -4535,9 +4631,21 @@
   "t": "会話履歴",
   "h": "0fd2afce"
  },
+ "js.shellui.loai-cong-ty": {
+  "t": "会社",
+  "h": "65bf381e"
+ },
+ "js.shellui.loai-cua-hang": {
+  "t": "店舗",
+  "h": "050a31c8"
+ },
  "js.shellui.loai-hinh-tuy-chon": {
   "t": "種類（任意）",
   "h": "c4eab07e"
+ },
+ "js.shellui.loai-ho-kinh-doanh": {
+  "t": "個人事業",
+  "h": "f886c8d3"
  },
  "js.shellui.loai-khong-gian": {
   "t": "スペースの種類",
@@ -4546,6 +4654,10 @@
  "js.shellui.loai-phong": {
   "t": "部屋の種類",
   "h": "19905334"
+ },
+ "js.shellui.loai-thuong-hieu-shop": {
+  "t": "ブランド / ショップ",
+  "h": "aa184029"
  },
  "js.shellui.loi": {
   "t": "エラー： ",
@@ -4631,9 +4743,29 @@
   "t": "孟子『尽心』上",
   "h": "819ec1b8"
  },
+ "js.shellui.mat-bau-duc": {
+  "t": "卵型",
+  "h": "2a8c2282"
+ },
+ "js.shellui.mat-dai": {
+  "t": "面長",
+  "h": "4f9b7efd"
+ },
  "js.shellui.mat-toi-hop-kieu-toc-nao": {
   "t": "私の顔に合う髪型は？",
   "h": "bfa362fc"
+ },
+ "js.shellui.mat-trai-tim": {
+  "t": "ハート型",
+  "h": "a987fcb0"
+ },
+ "js.shellui.mat-tron": {
+  "t": "丸顔",
+  "h": "201284fe"
+ },
+ "js.shellui.mat-vuong": {
+  "t": "四角顔",
+  "h": "8a2c40fb"
  },
  "js.shellui.mau-chu-dao": {
   "t": "**。メインカラー： ",
@@ -4654,6 +4786,30 @@
  "js.shellui.mau-son-nao-hop-tong-da": {
   "t": "私の肌のトーンに合う口紅の色は？",
   "h": "f013cf8c"
+ },
+ "js.shellui.md-du-lich": {
+  "t": "旅行",
+  "h": "2a3d7fdd"
+ },
+ "js.shellui.md-hen-ho": {
+  "t": "デート",
+  "h": "4e1f8833"
+ },
+ "js.shellui.md-kinh-doanh": {
+  "t": "ビジネス",
+  "h": "b7429b9f"
+ },
+ "js.shellui.md-phong-van": {
+  "t": "面接",
+  "h": "17cacae4"
+ },
+ "js.shellui.md-su-kien": {
+  "t": "イベント",
+  "h": "c368db64"
+ },
+ "js.shellui.md-thuong-ngay": {
+  "t": "普段使い",
+  "h": "6d11feda"
  },
  "js.shellui.me": {
   "t": "母",
@@ -4923,9 +5079,49 @@
   "t": "、業種： ",
   "h": "60b25e34"
  },
+ "js.shellui.nganh-an-uong-fnb-nha-hang": {
+  "t": "飲食 / F&B / レストラン",
+  "h": "124865d2"
+ },
+ "js.shellui.nganh-bat-dong-san-xay-dung": {
+  "t": "不動産 / 建設",
+  "h": "6b5154b8"
+ },
+ "js.shellui.nganh-cong-nghe-phan-mem": {
+  "t": "テクノロジー / ソフトウェア",
+  "h": "2665d28f"
+ },
+ "js.shellui.nganh-du-lich-khach-san": {
+  "t": "旅行 / ホテル",
+  "h": "5369cdde"
+ },
+ "js.shellui.nganh-giao-duc-dao-tao": {
+  "t": "教育 / 研修",
+  "h": "f1adba55"
+ },
  "js.shellui.nganh-nghe": {
   "t": "業種",
   "h": "63d9f4dd"
+ },
+ "js.shellui.nganh-san-xuat-cong-nghiep": {
+  "t": "製造 / 工業",
+  "h": "f4a5458e"
+ },
+ "js.shellui.nganh-tai-chinh-dich-vu": {
+  "t": "金融 / サービス",
+  "h": "67bbe42d"
+ },
+ "js.shellui.nganh-thoi-trang-lam-dep": {
+  "t": "ファッション / 美容",
+  "h": "72a2b0cf"
+ },
+ "js.shellui.nganh-thuong-mai-ban-le": {
+  "t": "商業 / 小売",
+  "h": "991ccb29"
+ },
+ "js.shellui.nganh-y-te-suc-khoe": {
+  "t": "医療 / 健康",
+  "h": "13ca73cd"
  },
  "js.shellui.ngay": {
   "t": "<p>日付：<b>",
@@ -5071,6 +5267,26 @@
   "t": "東洋オラクル",
   "h": "1146fb81"
  },
+ "js.shellui.p-cham": {
+  "t": "。",
+  "h": "3a52ce78"
+ },
+ "js.shellui.p-cham-dam": {
+  "t": "**。",
+  "h": "de9eb0ac"
+ },
+ "js.shellui.p-dong-ngoac-cham": {
+  "t": "）。 ",
+  "h": "449a6a79"
+ },
+ "js.shellui.p-hoi": {
+  "t": "？",
+  "h": "5bab61eb"
+ },
+ "js.shellui.p-phay": {
+  "t": "、 ",
+  "h": "d3bc9a37"
+ },
  "js.shellui.pham-kim-lau-thi-hoa-giai": {
   "t": "金楼に当たったら、どう化解しますか？",
   "h": "f9c9cb33"
@@ -5135,6 +5351,42 @@
   "t": " 分前",
   "h": "b1017a2c"
  },
+ "js.shellui.pt-cua-hang-kinh-doanh": {
+  "t": "商売の店舗",
+  "h": "c7a324c6"
+ },
+ "js.shellui.pt-hoc-tap-on-thi": {
+  "t": "勉強 / 受験",
+  "h": "5fc56198"
+ },
+ "js.shellui.pt-lam-viec-van-phong": {
+  "t": "オフィスワーク",
+  "h": "65734b65"
+ },
+ "js.shellui.pt-nha-hang-quan-an": {
+  "t": "レストラン / 飲食店",
+  "h": "d0defd73"
+ },
+ "js.shellui.pt-phong-khach": {
+  "t": "リビング",
+  "h": "17fb3f11"
+ },
+ "js.shellui.pt-phong-lam-viec": {
+  "t": "書斎・仕事部屋",
+  "h": "956c0ca5"
+ },
+ "js.shellui.pt-phong-ngu": {
+  "t": "寝室",
+  "h": "d9ac5522"
+ },
+ "js.shellui.pt-sang-tao-thiet-ke": {
+  "t": "クリエイティブ / デザイン",
+  "h": "9fd559b0"
+ },
+ "js.shellui.pt-van-phong-cong-ty": {
+  "t": "会社のオフィス",
+  "h": "d678c2d6"
+ },
  "js.shellui.qua-la-so-cua-con-thoi": {
   "t": " のことは、あなたの命盤越しに見ただけです。次の方の生年月日を教えてください： ",
   "h": "c45acf9b"
@@ -5187,9 +5439,49 @@
   "t": "コピー",
   "h": "09a1db3e"
  },
+ "js.shellui.sao-dam": {
+  "t": "**、二十八宿：**",
+  "h": "fc0c8af6"
+ },
  "js.shellui.sinh-con-bo": {
   "t": "出産 · 父 ",
   "h": "6b581c06"
+ },
+ "js.shellui.sk-an-hoi-dam-ngo": {
+  "t": "結納 / 顔合わせ",
+  "h": "4b11a176"
+ },
+ "js.shellui.sk-cuoi-hoi": {
+  "t": "婚礼",
+  "h": "04a2caa4"
+ },
+ "js.shellui.sk-dong-tho-khoi-cong": {
+  "t": "地鎮祭 / 着工",
+  "h": "10468f91"
+ },
+ "js.shellui.sk-khai-truong": {
+  "t": "開業",
+  "h": "c86ca256"
+ },
+ "js.shellui.sk-ky-ket-hop-dong": {
+  "t": "契約の締結",
+  "h": "90e0fb9b"
+ },
+ "js.shellui.sk-mua-xe": {
+  "t": "車の購入",
+  "h": "52d4aa77"
+ },
+ "js.shellui.sk-nhap-trach": {
+  "t": "入居（新居への引っ越し）",
+  "h": "fcda52e1"
+ },
+ "js.shellui.sk-xuat-hanh": {
+  "t": "出発",
+  "h": "424fcbb2"
+ },
+ "js.shellui.slogan-nao-hop-voi-ten-nay": {
+  "t": "この名前に合うスローガンは？",
+  "h": "8ab01273"
  },
  "js.shellui.so-dep": {
   "t": "吉数： ",
@@ -5266,6 +5558,18 @@
  "js.shellui.ten-hop-ca-tuoi-bo-va": {
   "t": "父母どちらの干支にも合う名前は？",
   "h": "ab665896"
+ },
+ "js.shellui.ten-nao-hop-khi-chat-nganh-nay": {
+  "t": "この業種の気質に合う名前は？",
+  "h": "c012da1f"
+ },
+ "js.shellui.ten-nen-bo-ngu-hanh-gi": {
+  "t": "名前でどの五行を補うとよいですか？",
+  "h": "f5cf0ccb"
+ },
+ "js.shellui.ten-nen-bo-ngu-hanh-gi-cho-chu": {
+  "t": "名前でオーナーのどの五行を補うとよいですか？",
+  "h": "6a1e73a2"
  },
  "js.shellui.ten-nguoi-chu-tuy-chon": {
   "t": "オーナーの名前（任意）",
@@ -5487,6 +5791,10 @@
   "t": "日ごとの服装 — ",
   "h": "7fd98ca1"
  },
+ "js.shellui.tranh-chu-am-nao-khi-dat-ten": {
+  "t": "名付けで避けるべき字や音は？",
+  "h": "0493dad1"
+ },
  "js.shellui.tri-chi-gia-bat-nhu-hieu": {
   "t": "之を知る者は之を好む者に如かず、之を好む者は之を楽しむ者に如かず。",
   "h": "91dea6b3"
@@ -5520,7 +5828,7 @@
   "h": "fae13856"
  },
  "js.shellui.truc-than-la-gi": {
-  "t": "十二直とは何ですか？",
+  "t": "「神」の軸とは何ですか？",
   "h": "47cc8c8c"
  },
  "js.shellui.truong-phai-noi-tot": {
@@ -6027,6 +6335,14 @@
   "t": "<b>任意金額のチャージ</b>欄に、<b>",
   "h": "ca263938"
  },
+ "js.topup.p-cham": {
+  "t": "。",
+  "h": "3a52ce78"
+ },
+ "js.topup.p-dong-ngoac": {
+  "t": "）",
+  "h": "e7064f0b"
+ },
  "js.topup.pho-bien-nhat": {
   "t": "一番人気",
   "h": "a0f0bedc"
@@ -6194,6 +6510,14 @@
  "js.vanhannam.nguyet-han-cung-556b": {
   "t": "月限の宮：",
   "h": "13dbb374"
+ },
+ "js.vanhannam.p-ba-cham": {
+  "t": "…",
+  "h": "6eae3a5b"
+ },
+ "js.vanhannam.p-dong-ngoac": {
+  "t": "）",
+  "h": "e7064f0b"
  },
  "js.vanhannam.phan": {
   "t": "セクション ",
@@ -6920,7 +7244,7 @@
   "h": "1fb839b6"
  },
  "napam.nap-am-la-phep-phoi-hanh": {
-  "t": "納音とは、六十花甲子（60年周期）の干支の組み合わせごとに五行を割り当てる方法で、生まれ年ごとに「海中金」「路傍土」といった固有の名前を持つ命を与えます。古代中国の術数における、五行の応用体系のひとつです。",
+  "t": "納音とは、六十花甲子（60年周期）の干支の組み合わせごとに五行を割り当てる方法で、生まれ年ごとに「海中金」「路旁土」といった固有の名前を持つ命を与えます。古代中国の術数における、五行の応用体系のひとつです。",
   "h": "0b4fcbe2"
  },
  "napam.nap-am-ngu-hanh": {
@@ -6952,7 +7276,7 @@
   "h": "e2a87df0"
  },
  "napam.tra-nap-am-ngu-hanh-theo": {
-  "t": "生まれ年から納音五行（海中金、爐中火など）を調べます。天干、地支、本命の五行がわかります。色・方角・相性の良い年は、先生に聞いてみてください。",
+  "t": "生まれ年から納音五行（海中金、炉中火など）を調べます。天干、地支、本命の五行がわかります。色・方角・相性の良い年は、先生に聞いてみてください。",
   "h": "b7a210ed"
  },
  "napam.tuoi-hop-ky": {
