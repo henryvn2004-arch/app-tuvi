@@ -1287,6 +1287,18 @@
   "t": "7. 聯絡方式",
   "h": "3a96153f"
  },
+ "privacy.7-luu-tru-va-chuyen-du": {
+  "t": "7. 資料儲存與跨境傳輸",
+  "h": "ecbb0247"
+ },
+ "privacy.8-email-va-cach-huy-nhan": {
+  "t": "8. 電子郵件與取消訂閱方式",
+  "h": "2cab3661"
+ },
+ "privacy.9-lien-he": {
+  "t": "9. 聯絡方式",
+  "h": "3cab76d9"
+ },
  "privacy.an-sao-va-tao-la-so": {
   "t": "安星並建立紫微斗數命盤",
   "h": "88fe3cad"
@@ -1294,6 +1306,10 @@
  "privacy.ban-co-quyen-yeu-cau-xem": {
   "t": "您有權要求查閱、修改或刪除個人資料，包括透過 Facebook Messenger 或 Zalo 收到的資料。請透過<a href=\"/contact.html\" style=\"color:#1455A4\">聯絡我們</a>頁面提出申請（若您使用聊天管道，請附上 Facebook／Zalo 帳號名稱）。我們會刪除與您相關的帳號、命盤、對話紀錄及聊天帳號識別碼，完成後會通知您。",
   "h": "584c6ef3"
+ },
+ "privacy.ban-co-quyen-yeu-cau-xem-x6p7": {
+  "t": "您有權要求查閱、修改或刪除個人資料，包括透過 Facebook Messenger 或 Zalo 收到的資料，以及您居住地資料保護法規所賦予的其他權利。請透過<a href=\"/contact.html\" style=\"color:#1455A4\">聯絡我們</a>頁面提出申請（若您使用聊天管道，請附上 Facebook／Zalo 帳號名稱）。我們會刪除與您相關的帳號、命盤、對話紀錄及聊天帳號識別碼，完成後會通知您。",
+  "h": "28b6e63c"
  },
  "privacy.cai-thien-chat-luong-dich-vu": {
   "t": "提升服務品質",
@@ -1319,9 +1335,17 @@
   "t": "我們不會出售、出租或與第三方分享您的個人資料，但營運服務所必需的技術基礎設施供應商除外——這些供應商各自依其隱私權政策處理：",
   "h": "e7ba913a"
  },
+ "privacy.chung-toi-la-doanh-nghiep-tai": {
+  "t": "我們是設立於越南的企業，服務來自多個國家的使用者。當您使用本服務時，您的資料會儲存於位在新加坡的伺服器，並可能在我們的服務供應商營運所在的國家進行處理（例如美國，用於網站發布、電子郵件寄送及解讀內容處理）。我們僅傳輸各項作業所必需的資料，且不會將資料出售予第三方。使用本服務即表示您同意此儲存與處理方式；若不同意，請勿輸入出生日期時辰或電子郵件，或依第 5 條要求刪除資料。",
+  "h": "ac02659d"
+ },
  "privacy.cong-thanh-toan-chuyen-khoan-ngan": {
   "t": "支付閘道（銀行轉帳、PayPal）——處理交易",
   "h": "862873b7"
+ },
+ "privacy.cong-thanh-toan-paypal-xu-ly": {
+  "t": "PayPal 支付閘道——處理交易，包括您未持有 PayPal 帳號、直接以信用卡付款的情況",
+  "h": "936408b9"
  },
  "privacy.dia-chi-email-neu-co-dung": {
   "t": "電子郵件地址（如有）——用於寄送結果或聯絡",
@@ -1331,9 +1355,17 @@
   "t": "命盤資料儲存於加密的雲端基礎設施，安全無虞。付款資訊完全透過第三方支付閘道處理——我們不儲存卡號或敏感的財務資料。",
   "h": "f5eb2733"
  },
+ "privacy.du-lieu-la-so-duoc-luu-l7iz": {
+  "t": "命盤資料儲存於位在新加坡的加密雲端基礎設施。付款資訊完全透過 PayPal 處理——我們不儲存卡號或敏感的財務資料。",
+  "h": "2fec9912"
+ },
  "privacy.du-lieu-truy-cap-ky-thuat": {
   "t": "技術性存取資料（IP 位址、瀏覽器、存取時間），透過匿名流量分析工具取得",
   "h": "f1aa200a"
+ },
+ "privacy.email-giao-dich-ma-xac-thuc": {
+  "t": "交易類電子郵件（註冊驗證碼、收據、您要求的報告）會以您目前使用的語言寄出，且無法關閉。建議或優惠類電子郵件僅寄給擁有帳號的使用者，信末一律附有「取消訂閱此類郵件」連結；點擊後即刻停止接收，無須登入。我們會保留已取消訂閱的電子郵件地址，以避免再次寄送。",
+  "h": "daea9441"
  },
  "privacy.khi-ban-nhan-tin-qua-facebook": {
   "t": "當您透過 Facebook Messenger 或 Zalo 傳訊息時：平台為我們粉絲專頁核發的聊天帳號識別碼、帳號公開顯示的名稱，以及您傳送的訊息內容——用於回覆、在您本人的命盤上署名，並與 tuviminhbao.com 上的帳號串接",
@@ -1355,9 +1387,21 @@
   "t": "如對隱私權政策有任何疑問，請透過<a href=\"/contact.html\" style=\"color:#1455A4\">聯絡我們</a>頁面與我們聯繫。",
   "h": "868d3ffe"
  },
+ "privacy.moi-thac-mac-ve-chinh-sach-lldp": {
+  "t": "如對隱私權政策有任何疑問，請透過<a href=\"/contact.html\" style=\"color:#1455A4\">聯絡我們</a>頁面或電子郵件 contact@tuviminhbao.com 與我們聯繫。",
+  "h": "2bf61971"
+ },
  "privacy.ngay-thang-nam-sinh-va-gio": {
   "t": "出生年月日與時辰（國曆）——用於排命盤安星",
   "h": "313ab68a"
+ },
+ "privacy.ngon-ngu-ban-dang-dung-luu-cyr1": {
+  "t": "您目前使用的語言（儲存於瀏覽器的 tvmb_locale Cookie，並在您購買或要求寄送報告時與帳號綁定）——用於以您的語言寄送電子郵件",
+  "h": "52674e14"
+ },
+ "privacy.nha-cung-cap-dich-vu-gui": {
+  "t": "電子郵件寄送服務供應商（Resend）——寄送驗證碼、收據及您同意接收的郵件",
+  "h": "1cc2d629"
  },
  "privacy.nha-cung-cap-dich-vu-tri": {
   "t": "人工智慧服務供應商——處理解讀內容",
@@ -1366,6 +1410,10 @@
  "privacy.nha-cung-cap-ha-tang-luu": {
   "t": "雲端資料儲存基礎設施供應商——儲存帳號與命盤",
   "h": "48f8c99c"
+ },
+ "privacy.nha-cung-cap-ha-tang-luu-y2t3": {
+  "t": "雲端資料儲存基礎設施供應商（Supabase，伺服器位於新加坡）——儲存帳號與命盤",
+  "h": "fb7fd70a"
  },
  "privacy.phap-ly": {
   "t": "法律資訊",
@@ -1383,6 +1431,10 @@
   "t": "付款交易資訊（訂單編號、付款狀態）——不儲存卡號或銀行帳戶資料",
   "h": "9a6e6249"
  },
+ "privacy.thong-tin-giao-dich-thanh-toan-2k6c": {
+  "t": "付款交易資訊（訂單編號、美元金額、付款狀態）——卡號與銀行帳戶資料由 PayPal 處理，我們不會取得，也不會儲存",
+  "h": "e2dca8b5"
+ },
  "privacy.trang-web-su-dung-localstorage-de": {
   "t": "本網站使用 localStorage 在使用期間暫存命盤狀態。我們也使用 Cookie 與 Google Analytics、Google Ads、Meta（Facebook）Pixel 及 Microsoft Clarity 的追蹤碼，以統計造訪次數、衡量廣告成效並改善介面。您可以在瀏覽器設定中封鎖或刪除 Cookie；安星與解讀工具仍可正常使用。",
   "h": "ad439412"
@@ -1394,6 +1446,10 @@
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. 服務性質",
   "h": "7fb94895"
+ },
+ "terms.10-lien-he": {
+  "t": "10. 聯絡方式",
+  "h": "bc0e3a4f"
  },
  "terms.2-gioi-han-trach-nhiem": {
   "t": "2. 責任限制",
@@ -1415,9 +1471,25 @@
   "t": "6. 條款變更",
   "h": "b77fb69c"
  },
+ "terms.7-thong-tin-nguoi-ban": {
+  "t": "7. 販售者資訊",
+  "h": "07671d2f"
+ },
+ "terms.8-khach-hang-ngoai-viet-nam": {
+  "t": "8. 越南境外客戶",
+  "h": "6b59d329"
+ },
+ "terms.9-email-tu-chung-toi": {
+  "t": "9. 我們寄出的電子郵件",
+  "h": "3936c156"
+ },
  "terms.bang-viec-su-dung-dich-vu": {
   "t": "使用 tuviminhbao.com 的服務，即表示您同意以下條款。使用前請詳細閱讀。",
   "h": "84c3073e"
+ },
+ "terms.cap-nhat-lan-cuoi-thang-11": {
+  "t": "最後更新：2026 年 11 月",
+  "h": "6c35671e"
  },
  "terms.cap-nhat-lan-cuoi-thang-9": {
   "t": "最後更新：2026 年 9 月",
@@ -1430,6 +1502,22 @@
  "terms.co-tinh-cung-cap-thong-tin": {
   "t": "故意提供不實資訊以詐欺服務",
   "h": "05f1e2a5"
+ },
+ "terms.de-yeu-cau-hoan-tien-gui": {
+  "t": "如需申請退款，請寄電子郵件至 contact@tuviminhbao.com，並附上購買時使用的電子郵件及訂單編號（見收據）。我們將以電子郵件回覆",
+  "h": "f2caebca"
+ },
+ "terms.dia-chi-toa-nha-master-building": {
+  "t": "地址：Master Building，Trần Cao Vân 街 41-43 號，Xuân Hòa 坊（第 3 郡），胡志明市，越南",
+  "h": "a078320d"
+ },
+ "terms.dich-vu-co-ban-tieng-anh": {
+  "t": "本服務提供英文、日文、韓文及中文版本。各語言版本如有差異，以越南文版本為準",
+  "h": "af95c2df"
+ },
+ "terms.dich-vu-tai-tuviminhbao-com-do": {
+  "t": "tuviminhbao.com 的服務由 <strong>Kira Tech 有限公司</strong>（Kira Tech Company Limited）營運。",
+  "h": "57d6bc28"
  },
  "terms.dieu-khoan-dich-vu": {
   "t": "服務條款",
@@ -1447,17 +1535,57 @@
   "t": "由於服務屬於數位性質，結果一經顯示，我們<strong>不予退款</strong>",
   "h": "cc224df0"
  },
+ "terms.du-lieu-tai-khoan-va-la": {
+  "t": "帳號與命盤資料儲存於位在新加坡的雲端基礎設施，並可能在其他國家處理。詳情請見<a href=\"/chinh-sach-bao-mat.html\" style=\"color:#1455A4\">隱私權政策</a>",
+  "h": "92f030f7"
+ },
+ "terms.email-contact-tuviminhbao-com-dien-thoai": {
+  "t": "電子郵件：contact@tuviminhbao.com · 電話：0343.848.795",
+  "h": "e8669045"
+ },
+ "terms.email-giao-dich-ma-xac-thuc": {
+  "t": "交易類電子郵件（註冊驗證碼、收據、您要求的 PDF 報告）會以您目前使用的語言寄出，且無法關閉，因為這是您所要求服務的一部分",
+  "h": "c835e202"
+ },
+ "terms.email-goi-y-hoac-thong-bao": {
+  "t": "建議或優惠通知類電子郵件僅在您擁有帳號時寄出，信末一律附有<strong>「取消訂閱此類郵件」</strong>連結。點擊後即刻停止接收，無須登入",
+  "h": "d2095e6b"
+ },
+ "terms.gia-duoc-niem-yet-va-thanh": {
+  "t": "價格以<strong>美元（USD）</strong>標示並結算。每項工具會顯示美元價格，並註明將扣除的兩（本服務使用的點數單位）數量",
+  "h": "1143c756"
+ },
+ "terms.gia-niem-yet-la-gia-ban": {
+  "t": "標示價格即為您實際支付的金額；除標示價格外，我們不另外收費。依您居住地的規定，銀行、PayPal 或當地稅務機關可能另行收取稅款或費用",
+  "h": "b7082d26"
+ },
  "terms.ket-qua-luan-giai-do-ai": {
   "t": "解讀結果由 AI 依據傳統紫微斗數體系產生。我們不保證解讀內容絕對準確。使用者須自行為依據解讀內容所做的個人決定負責。",
   "h": "dbc3d39d"
+ },
+ "terms.khong-phai-tu-van-tai-chinh": {
+  "t": "不構成財務、醫療或法律建議",
+  "h": "7688b89e"
  },
  "terms.moi-thac-mac-ve-dieu-khoan": {
   "t": "如對條款有任何疑問，請透過<a href=\"/contact.html\" style=\"color:#1455A4\">聯絡我們</a>頁面與我們聯繫。",
   "h": "2a193121"
  },
+ "terms.moi-thac-mac-ve-dieu-khoan-7652": {
+  "t": "如對條款有任何疑問，請透過<a href=\"/contact.html\" style=\"color:#1455A4\">聯絡我們</a>頁面或電子郵件 contact@tuviminhbao.com 與我們聯繫。",
+  "h": "821dafd1"
+ },
  "terms.neu-co-loi-ky-thuat-khien": {
   "t": "若因技術問題導致您付款後未收到結果，請與我們聯絡以取得協助",
   "h": "06df4e64"
+ },
+ "terms.neu-co-loi-ky-thuat-khien-a1eh": {
+  "t": "若因技術問題導致您未收到結果，或同一筆訂單被重複扣款，我們將以補回兩的方式，或透過 PayPal 退款至原付款方式",
+  "h": "4b48a4be"
+ },
+ "terms.ngan-hang-hoac-paypal-co-the": {
+  "t": "銀行或 PayPal 可能依其自訂匯率與手續費，將美元換算為您的當地貨幣；此差額並非由我們收取",
+  "h": "67774951"
  },
  "terms.phi-dich-vu-duoc-thanh-toan": {
   "t": "服務費用一次付清，可透過越南盾（VND）銀行轉帳（掃描 QR 碼）或 PayPal（國際 Visa／Mastercard 信用卡）支付",
@@ -1467,13 +1595,25 @@
   "t": "對安星系統進行逆向工程或複製",
   "h": "57bda3e3"
  },
+ "terms.san-pham-dich-vu-so-ket": {
+  "t": "商品：數位服務（解讀結果、PDF 報告），於線上提供，無實體配送",
+  "h": "f934d6a7"
+ },
  "terms.sau-khi-thanh-toan-thanh-cong": {
   "t": "付款成功後，解讀結果會立即解鎖",
   "h": "b895e2c9"
  },
+ "terms.sau-khi-thanh-toan-thanh-cong-qni3": {
+  "t": "付款成功後，兩會立即加入您的帳號，解讀結果隨即解鎖。收據將以電子郵件寄送",
+  "h": "3fdbd7fe"
+ },
  "terms.su-dung-bot-hoac-phuong-tien": {
   "t": "使用機器人或自動化工具大量存取",
   "h": "49c0c0e8"
+ },
+ "terms.thanh-toan-qua-paypal-ban-co": {
+  "t": "透過 <strong>PayPal</strong> 付款。您可直接在 PayPal 頁面以 Visa／Mastercard 信用卡或簽帳金融卡付款，<strong>無須擁有 PayPal 帳號</strong>。我們不會取得，也不會儲存您的卡號",
+  "h": "4e07ad30"
  },
  "terms.toan-bo-noi-dung-tren-tuviminhbao": {
   "t": "tuviminhbao.com 上的全部內容（安星系統、介面、研究論述）均屬明寶紫微斗數所有。未經許可，嚴禁複製、散布或作商業用途。",
@@ -1482,5 +1622,9 @@
  "terms.tu-vi-minh-bao-cung-cap": {
   "t": "明寶紫微斗數依使用者提供的出生日期時辰，提供紫微斗數安星服務，並以人工智慧（AI）進行解讀。本服務僅供文化與學術參考，<strong>不構成財務、醫療或法律建議</strong>。",
   "h": "40549518"
+ },
+ "terms.voi-luong-da-nap-nhung-chua": {
+  "t": "對於已儲值但尚未使用的兩，您可提出申請，由我們依個案審酌",
+  "h": "f410ec3e"
  }
 }

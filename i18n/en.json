@@ -1287,6 +1287,18 @@
   "t": "7. Contact",
   "h": "3a96153f"
  },
+ "privacy.7-luu-tru-va-chuyen-du": {
+  "t": "7. Data storage and cross-border transfers",
+  "h": "ecbb0247"
+ },
+ "privacy.8-email-va-cach-huy-nhan": {
+  "t": "8. Email and how to unsubscribe",
+  "h": "2cab3661"
+ },
+ "privacy.9-lien-he": {
+  "t": "9. Contact",
+  "h": "3cab76d9"
+ },
  "privacy.an-sao-va-tao-la-so": {
   "t": "Placing stars and creating your Zi Wei Dou Shu chart",
   "h": "88fe3cad"
@@ -1294,6 +1306,10 @@
  "privacy.ban-co-quyen-yeu-cau-xem": {
   "t": "You have the right to ask to view, correct or delete your personal data, including data received through Facebook Messenger or Zalo. Send a request through the <a href=\"/contact.html\" style=\"color:#1455A4\">Contact</a> page (include your Facebook/Zalo account name if you use a chat channel). We delete the account, charts, conversation history and chat-account identifier linked to you, then let you know when it's done.",
   "h": "584c6ef3"
+ },
+ "privacy.ban-co-quyen-yeu-cau-xem-x6p7": {
+  "t": "You have the right to ask to view, correct or delete your personal data, including data received through Facebook Messenger or Zalo, as well as any other rights under the data-protection laws where you live. Send a request through the <a href=\"/contact.html\" style=\"color:#1455A4\">Contact</a> page (include your Facebook/Zalo account name if you use a chat channel). We delete the account, charts, conversation history and chat-account identifier linked to you, then let you know when it's done.",
+  "h": "28b6e63c"
  },
  "privacy.cai-thien-chat-luong-dich-vu": {
   "t": "Improving service quality",
@@ -1319,9 +1335,17 @@
   "t": "We do not sell, rent or share your personal information with third parties, except for the technical infrastructure providers needed to run the service — each under its own privacy policy:",
   "h": "e7ba913a"
  },
+ "privacy.chung-toi-la-doanh-nghiep-tai": {
+  "t": "We are a business based in Vietnam serving users in many countries. When you use the service, your data is stored on servers located in Singapore and may be processed in the countries where our service providers operate (for example, the United States for website delivery, email sending and processing of reading content). We transfer only the data each task requires, and we do not sell data to third parties. By using the service, you agree to this storage and processing; if you do not agree, please do not enter your birth date and time or email, or request deletion of your data under section 5.",
+  "h": "ac02659d"
+ },
  "privacy.cong-thanh-toan-chuyen-khoan-ngan": {
   "t": "Payment gateways (bank transfer, PayPal) — processing transactions",
   "h": "862873b7"
+ },
+ "privacy.cong-thanh-toan-paypal-xu-ly": {
+  "t": "PayPal payment gateway — processing transactions, including when you pay by card without a PayPal account",
+  "h": "936408b9"
  },
  "privacy.dia-chi-email-neu-co-dung": {
   "t": "Email address (if provided) — used to send results or get in touch",
@@ -1331,9 +1355,17 @@
   "t": "Chart data is stored securely on encrypted cloud infrastructure. Payment information is handled entirely by third-party payment gateways — we do not store card numbers or sensitive financial details.",
   "h": "f5eb2733"
  },
+ "privacy.du-lieu-la-so-duoc-luu-l7iz": {
+  "t": "Chart data is stored on encrypted cloud infrastructure located in Singapore. Payment information is handled entirely by PayPal — we do not store card numbers or sensitive financial details.",
+  "h": "2fec9912"
+ },
  "privacy.du-lieu-truy-cap-ky-thuat": {
   "t": "Technical access data (IP address, browser, access time) through an anonymous traffic analytics tool",
   "h": "f1aa200a"
+ },
+ "privacy.email-giao-dich-ma-xac-thuc": {
+  "t": "Transactional emails (sign-up verification codes, receipts, reports you request) are sent in the language you are using and cannot be turned off. Suggestion or offer emails are sent only to people with an account and always carry an \"Unsubscribe from these emails\" link at the bottom; clicking it stops them immediately, with no sign-in required. We keep the unsubscribed address so we don't email it again.",
+  "h": "daea9441"
  },
  "privacy.khi-ban-nhan-tin-qua-facebook": {
   "t": "When you message us through Facebook Messenger or Zalo: the chat-account identifier the platform issues to our page, the account's public display name, and the content of the messages you send — used to reply, to put your name on your own chart, and to link to your account on tuviminhbao.com",
@@ -1355,9 +1387,21 @@
   "t": "For any questions about this privacy policy, please reach us through the <a href=\"/contact.html\" style=\"color:#1455A4\">Contact</a> page.",
   "h": "868d3ffe"
  },
+ "privacy.moi-thac-mac-ve-chinh-sach-lldp": {
+  "t": "For any questions about this privacy policy, please reach us through the <a href=\"/contact.html\" style=\"color:#1455A4\">Contact</a> page or at contact@tuviminhbao.com.",
+  "h": "2bf61971"
+ },
  "privacy.ngay-thang-nam-sinh-va-gio": {
   "t": "Birth day, month, year and hour (solar calendar) — used to place the stars on your chart",
   "h": "313ab68a"
+ },
+ "privacy.ngon-ngu-ban-dang-dung-luu-cyr1": {
+  "t": "The language you are using (stored in the tvmb_locale cookie in your browser, and tied to your account when you buy or request a report) — used to send email in your language",
+  "h": "52674e14"
+ },
+ "privacy.nha-cung-cap-dich-vu-gui": {
+  "t": "Email delivery provider (Resend) — sends verification codes, receipts and messages you agreed to receive",
+  "h": "1cc2d629"
  },
  "privacy.nha-cung-cap-dich-vu-tri": {
   "t": "Artificial intelligence service provider — processes reading content",
@@ -1366,6 +1410,10 @@
  "privacy.nha-cung-cap-ha-tang-luu": {
   "t": "Cloud data-storage infrastructure provider — stores accounts and charts",
   "h": "48f8c99c"
+ },
+ "privacy.nha-cung-cap-ha-tang-luu-y2t3": {
+  "t": "Cloud data-storage infrastructure provider (Supabase, servers located in Singapore) — stores accounts and charts",
+  "h": "fb7fd70a"
  },
  "privacy.phap-ly": {
   "t": "Legal",
@@ -1383,6 +1431,10 @@
   "t": "Payment transaction information (order number, payment status) — we do not store card numbers or bank account details",
   "h": "9a6e6249"
  },
+ "privacy.thong-tin-giao-dich-thanh-toan-2k6c": {
+  "t": "Payment transaction information (order number, amount in USD, payment status) — card numbers and bank account details are handled by PayPal; we do not receive or store them",
+  "h": "e2dca8b5"
+ },
  "privacy.trang-web-su-dung-localstorage-de": {
   "t": "The site uses localStorage to hold chart state temporarily during your session. We also use cookies and measurement tags from Google Analytics, Google Ads, the Meta (Facebook) Pixel and Microsoft Clarity to count visits, measure ad performance and improve the interface. You can block or delete cookies in your browser settings; the star-placement and reading tools keep working normally.",
   "h": "ad439412"
@@ -1394,6 +1446,10 @@
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. Nature of the service",
   "h": "7fb94895"
+ },
+ "terms.10-lien-he": {
+  "t": "10. Contact",
+  "h": "bc0e3a4f"
  },
  "terms.2-gioi-han-trach-nhiem": {
   "t": "2. Limitation of liability",
@@ -1415,9 +1471,25 @@
   "t": "6. Changes to these terms",
   "h": "b77fb69c"
  },
+ "terms.7-thong-tin-nguoi-ban": {
+  "t": "7. Seller information",
+  "h": "07671d2f"
+ },
+ "terms.8-khach-hang-ngoai-viet-nam": {
+  "t": "8. Customers outside Vietnam",
+  "h": "6b59d329"
+ },
+ "terms.9-email-tu-chung-toi": {
+  "t": "9. Email from us",
+  "h": "3936c156"
+ },
  "terms.bang-viec-su-dung-dich-vu": {
   "t": "By using the services at tuviminhbao.com, you agree to the terms below. Please read them carefully before use.",
   "h": "84c3073e"
+ },
+ "terms.cap-nhat-lan-cuoi-thang-11": {
+  "t": "Last updated: November 2026",
+  "h": "6c35671e"
  },
  "terms.cap-nhat-lan-cuoi-thang-9": {
   "t": "Last updated: September 2026",
@@ -1430,6 +1502,22 @@
  "terms.co-tinh-cung-cap-thong-tin": {
   "t": "Knowingly providing false information to defraud the service",
   "h": "05f1e2a5"
+ },
+ "terms.de-yeu-cau-hoan-tien-gui": {
+  "t": "To request a refund, email contact@tuviminhbao.com with the email address you used to buy and your order number (shown on your receipt). We reply by email",
+  "h": "f2caebca"
+ },
+ "terms.dia-chi-toa-nha-master-building": {
+  "t": "Address: Master Building, 41-43 Tran Cao Van Street, Xuan Hoa Ward (District 3), Ho Chi Minh City, Vietnam",
+  "h": "a078320d"
+ },
+ "terms.dich-vu-co-ban-tieng-anh": {
+  "t": "The service is available in English, Japanese, Korean and Chinese. Where the translations differ, the Vietnamese version is the original",
+  "h": "af95c2df"
+ },
+ "terms.dich-vu-tai-tuviminhbao-com-do": {
+  "t": "The service at tuviminhbao.com is operated by <strong>Kira Tech Company Limited</strong> (Công ty TNHH Kira Tech).",
+  "h": "57d6bc28"
  },
  "terms.dieu-khoan-dich-vu": {
   "t": "Terms of Service",
@@ -1447,17 +1535,57 @@
   "t": "Because the service is digital, we <strong>do not refund</strong> once the result has been displayed",
   "h": "cc224df0"
  },
+ "terms.du-lieu-tai-khoan-va-la": {
+  "t": "Account and chart data is stored on cloud infrastructure located in Singapore and may be processed in other countries. Details are in the <a href=\"/chinh-sach-bao-mat.html\" style=\"color:#1455A4\">Privacy Policy</a>",
+  "h": "92f030f7"
+ },
+ "terms.email-contact-tuviminhbao-com-dien-thoai": {
+  "t": "Email: contact@tuviminhbao.com · Phone: 0343.848.795",
+  "h": "e8669045"
+ },
+ "terms.email-giao-dich-ma-xac-thuc": {
+  "t": "Transactional emails (sign-up verification codes, receipts, PDF reports you request) are sent in the language you are using and cannot be turned off, because they are part of the service you asked for",
+  "h": "c835e202"
+ },
+ "terms.email-goi-y-hoac-thong-bao": {
+  "t": "Suggestion or offer emails are sent only when you have an account and always carry an <strong>\"Unsubscribe from these emails\"</strong> link at the bottom. Clicking it stops them immediately, with no sign-in required",
+  "h": "d2095e6b"
+ },
+ "terms.gia-duoc-niem-yet-va-thanh": {
+  "t": "Prices are listed and charged in <strong>US dollars (USD)</strong>. Each tool shows its price in USD, along with the number of credits (the unit used within the service) that will be deducted",
+  "h": "1143c756"
+ },
+ "terms.gia-niem-yet-la-gia-ban": {
+  "t": "The listed price is the price you pay; we charge nothing beyond it. Depending on the rules where you live, taxes or fees may be applied separately by your bank, PayPal or the local tax authority",
+  "h": "b7082d26"
+ },
  "terms.ket-qua-luan-giai-do-ai": {
   "t": "Readings are generated by AI based on the classical Zi Wei Dou Shu system. We do not guarantee that a reading is absolutely accurate. Users are solely responsible for personal decisions made based on the content of a reading.",
   "h": "dbc3d39d"
+ },
+ "terms.khong-phai-tu-van-tai-chinh": {
+  "t": "not financial, medical or legal advice",
+  "h": "7688b89e"
  },
  "terms.moi-thac-mac-ve-dieu-khoan": {
   "t": "For any questions about these terms, please reach us through the <a href=\"/contact.html\" style=\"color:#1455A4\">Contact</a> page.",
   "h": "2a193121"
  },
+ "terms.moi-thac-mac-ve-dieu-khoan-7652": {
+  "t": "For any questions about these terms, please reach us through the <a href=\"/contact.html\" style=\"color:#1455A4\">Contact</a> page or at contact@tuviminhbao.com.",
+  "h": "821dafd1"
+ },
  "terms.neu-co-loi-ky-thuat-khien": {
   "t": "If a technical error means you don't receive your result after paying, please contact us for support",
   "h": "06df4e64"
+ },
+ "terms.neu-co-loi-ky-thuat-khien-a1eh": {
+  "t": "If a technical error means you don't receive your result, or you are charged twice for one order, we will make it right by adding the credits back or refunding the original payment method through PayPal",
+  "h": "4b48a4be"
+ },
+ "terms.ngan-hang-hoac-paypal-co-the": {
+  "t": "Your bank or PayPal may convert USD into your local currency at their own exchange rate and fees; we do not collect that difference",
+  "h": "67774951"
  },
  "terms.phi-dich-vu-duoc-thanh-toan": {
   "t": "The service fee is paid once, by Vietnamese đồng (VND) bank transfer (scan the QR code) or PayPal (international Visa/Mastercard)",
@@ -1467,13 +1595,25 @@
   "t": "Reverse engineering or copying the star-placement system",
   "h": "57bda3e3"
  },
+ "terms.san-pham-dich-vu-so-ket": {
+  "t": "Product: digital service (reading results, PDF reports), delivered online, with no physical shipment",
+  "h": "f934d6a7"
+ },
  "terms.sau-khi-thanh-toan-thanh-cong": {
   "t": "After a successful payment, your reading is unlocked immediately",
   "h": "b895e2c9"
  },
+ "terms.sau-khi-thanh-toan-thanh-cong-qni3": {
+  "t": "After a successful payment, credits are added to your account and your reading is unlocked immediately. A receipt is sent by email",
+  "h": "3fdbd7fe"
+ },
  "terms.su-dung-bot-hoac-phuong-tien": {
   "t": "Using bots or automated means to access the service in bulk",
   "h": "49c0c0e8"
+ },
+ "terms.thanh-toan-qua-paypal-ban-co": {
+  "t": "Payment is made through <strong>PayPal</strong>. You can pay by Visa/Mastercard credit or debit card right on the PayPal page <strong>without a PayPal account</strong>. We do not receive or store your card number",
+  "h": "4e07ad30"
  },
  "terms.toan-bo-noi-dung-tren-tuviminhbao": {
   "t": "All content on tuviminhbao.com (the star-placement system, interface and research writing) is the property of Minh Bao Zi Wei Dou Shu. Copying, distributing or commercial use without permission is strictly prohibited.",
@@ -1482,5 +1622,9 @@
  "terms.tu-vi-minh-bao-cung-cap": {
   "t": "Minh Bao Zi Wei Dou Shu provides Zi Wei Dou Shu star placement and readings using artificial intelligence (AI), based on the birth date and time provided by the user. The service is a cultural and scholarly reference and is <strong>not financial, medical or legal advice</strong>.",
   "h": "40549518"
+ },
+ "terms.voi-luong-da-nap-nhung-chua": {
+  "t": "For credits you have topped up but not yet used, you may submit a request and we will review it case by case",
+  "h": "f410ec3e"
  }
 }
