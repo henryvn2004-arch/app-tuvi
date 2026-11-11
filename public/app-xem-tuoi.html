@@ -218,7 +218,8 @@ body.chat-first-live .laso-one{flex:none}
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=14"></script>
+<script src="/tools-shared/noi-sinh.js?v=1"></script>
+<script src="/tuvi-form.js?v=15"></script>
 <script src="/auth.js?v=6"></script>
 <script src="/tuvi-paywall.js?v=41"></script>
   <script src="/nav.js?v=47" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=136"></script>
@@ -352,7 +353,7 @@ function readPerson(k){
 }
 function computeLs(pr,namxem){
   var gioAmIdx=pr.gioIdx;
-  var conv=convertDuongToAm(pr.ngay,pr.thang,pr.nam,pr.gioHour);
+  var conv=convertDuongToAm(pr.ngay,pr.thang,pr.nam,pr.gioHour,pr.lich);
   var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:pr.gioitinh,namXem:namxem});
   ls.chiNam=conv.chiNam; // anSaoLaSo không re-expose chiNam ở top-level → gắn lại (như xem-tuoi.html)
   // fd cho renderGrid (laso-chart.js) — vẽ lá số đầy đủ 12 cung như trang standalone.
@@ -381,8 +382,8 @@ function doCompat(){
     document.getElementById('xtPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     // Rail: gửi scenario xem-tuoi (server tự lập 2 lá số từ birthA/birthB).
-    var birthA={day:A.ngay,month:A.thang,year:A.nam,hourBranch:ca.hourBranch,gender:A.gioitinh,name:nameA};
-    var birthB={day:B.ngay,month:B.thang,year:B.nam,hourBranch:cb.hourBranch,gender:B.gioitinh,name:nameB};
+    var birthA={day:A.ngay,month:A.thang,year:A.nam,hourBranch:ca.hourBranch,gender:A.gioitinh,name:nameA,lich:A.lich,noiSinh:A.noiSinh};
+    var birthB={day:B.ngay,month:B.thang,year:B.nam,hourBranch:cb.hourBranch,gender:B.gioitinh,name:nameB,lich:B.lich,noiSinh:B.noiSinh};
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       scenario:{type:MODE.scenarioType,data:{birthA:birthA,birthB:birthB,nameA:nameA,nameB:nameB}},

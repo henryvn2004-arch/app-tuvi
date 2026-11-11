@@ -76,6 +76,10 @@ export function lasoKey(birth: BirthParams, extra?: string): string {
     `h${num(birth.hourBranch, -1)}`,
     birth.gender === 'nu' ? 'nu' : 'nam',
     extra || '',
+    // Lịch âm theo nơi sinh (i18n W3): CÙNG ngày giờ nhưng lịch Trung/Hàn/Nhật ra
+    // lá số KHÁC lịch VN ⇒ phải khác khoá. CHỈ thêm khi khác 'vn' — khoá của mọi
+    // lá số VN giữ nguyên từng byte (đổi khoá là mồ côi cache + quyền sở hữu).
+    ...(birth.lich && birth.lich !== 'vn' ? [`lich:${birth.lich}`] : []),
   ].join('|');
   return createHash('sha256').update(canonical).digest('hex').slice(0, 32);
 }
@@ -96,6 +100,7 @@ export function birthFromQuery(sp: URLSearchParams): BirthParams {
     hourBranch: sp.get('h') === null ? -1 : n('h'),
     gender: sp.get('g') === 'nu' ? 'nu' : 'nam',
     isLunar: sp.get('lunar') === '1',
+    ...(sp.get('lc') ? { lich: sp.get('lc') as BirthParams['lich'] } : {}),
   };
 }
 

@@ -361,7 +361,8 @@ window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'nguoi-khac'};</script>
 <script src="/laso-chart.js?v=9"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=14"></script>
+<script src="/tools-shared/noi-sinh.js?v=1"></script>
+<script src="/tuvi-form.js?v=15"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=41"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
@@ -602,7 +603,7 @@ function _birthOf(prefix) {
   if (!f.ngay || !f.thang || !f.nam) return null;
   return {
     day: f.ngay, month: f.thang, year: f.nam,
-    hourBranch: f.gioIdx, gender: f.gioitinh, isLunar: false,
+    hourBranch: f.gioIdx, gender: f.gioitinh, isLunar: false, lich: f.lich, noiSinh: f.noiSinh,
     name: (f.hoten || '').trim() || undefined,
   };
 }

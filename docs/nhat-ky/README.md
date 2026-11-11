@@ -11,6 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
+| `2026-11.md` | 1 | ~2,9 KB |
 | `2026-10.md` | 15 | 38,638 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -26,6 +27,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🌏 Lịch âm theo nơi sinh — bảng Trung/Hàn/Nhật + ô "Nơi sinh" (i18n W3) |
 | 1 | 2026-10 | `2026-10.md` | 🔤 Cron loại oan 28/40 người doan vì "bám sát" dính "ám sát" |
 | 1 | 2026-10 | `2026-10.md` | 🌗 Xác Định Giờ Sinh chuyển sang cron Vercel + Claude API |
 | 1 | 2026-10 | `2026-10.md` | 🌙 Cron Vercel sinh hồ sơ Nghiệm Chứng bằng Claude API → Supabase |
