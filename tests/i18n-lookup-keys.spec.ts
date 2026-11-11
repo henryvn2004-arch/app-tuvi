@@ -1,6 +1,8 @@
 import { test, expect, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
+// @ts-expect-error — .mjs không có kiểu; nguồn DUY NHẤT của luật khoảng trắng biên (padEdges/validateTranslation dùng chung)
+import { edgeOk } from '../lib/i18n/core.mjs';
 
 // W13c — giá trị ĐÃ DỊCH không được làm KHOÁ TRA CỨU hay DỮ LIỆU GỬI SERVER.
 //
@@ -98,20 +100,9 @@ test('/app/bat-tu: văn bản tứ trụ, truy vấn RAG và ngữ cảnh gửi 
 });
 
 test('bản dịch giữ khoảng trắng đầu/cuối của câu gốc (mảnh ghép không dính chữ)', () => {
-  const edge = (s: string) => [/^\s*/.exec(s)![0], /\s*$/.exec(s)![0]].join('|');
-  // Ngoại lệ khớp lib/i18n/core.mjs (padEdges): bản dịch bắt đầu/kết thúc bằng dấu câu toàn khổ CJK thì phía đó
-  // không đệm dấu cách/tab (dạng cũ đệm đủ vẫn được chấp nhận). Xuống dòng ở biên vẫn phải giữ.
-  const CJK = /[\u3001-\u303F\u2026\uFF01-\uFF0F\uFF1A-\uFF20\uFF3B-\uFF40\uFF5B-\uFF65]/;
-  const h = (e: string) => e.replace(/[ \t\u00a0]+/g, '');
-  const ok = (v: string, t: string) => {
-    const [a, b] = [/^\s*/.exec(v)![0], /\s*$/.exec(v)![0]];
-    const c = t.trim();
-    const want = [CJK.test(c[0]) ? h(a) : a, CJK.test(c[c.length - 1]) ? h(b) : b].join('|');
-    return edge(t) === edge(v) || edge(t) === want;
-  };
   for (const l of ['en', 'ja', 'ko', 'zh-tw', 'zh-cn']) {
     const d: Record<string, { t: string }> = JSON.parse(fs.readFileSync(path.join(I18N, `${l}.json`), 'utf8'));
-    const bad = Object.keys(d).filter((k) => k in vi && !ok(vi[k], d[k].t));
+    const bad = Object.keys(d).filter((k) => k in vi && !edgeOk(vi[k], d[k].t));
     expect(bad, `${l}: khoảng trắng biên lệch`).toEqual([]);
   }
 });
