@@ -6,6 +6,7 @@ export const maxDuration = 300;
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
+import { requestLocale, withLang, type LangLocale } from '@/lib/llm/locale';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { chuanHoaDauThanh } from '@/lib/vn-text';
 import { LUAN_ARC_CHUNG, MAU_ARC_CHUNG, DOC_ARC_TUBINH } from '@/lib/agent/prompts';
@@ -262,16 +263,15 @@ function extractTuBinhContext(batTuData: any, question: string): string {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function handleChat(body: any): Promise<Response> {
+async function handleChat(body: any, locale: LangLocale): Promise<Response> {
   const { messages, batTuData, lasoData } = body;
   const data = batTuData || lasoData;
   if (!messages?.length) return err('Missing messages', 400);
 
   const lastQ = messages[messages.length - 1]?.content || '';
   const hasBatTu = !!(data?.tuTru?.length);
-  const systemPrompt = hasBatTu
-    ? CHAT_SYSTEM_TUBINH(extractTuBinhContext(data, lastQ))
-    : CHAT_SYSTEM_GENERAL;
+  const ctxText = hasBatTu ? extractTuBinhContext(data, lastQ) : '';
+  const systemPrompt = hasBatTu ? CHAT_SYSTEM_TUBINH(ctxText) : CHAT_SYSTEM_GENERAL;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const trimmed = messages.slice(-10)
@@ -285,6 +285,11 @@ async function handleChat(body: any): Promise<Response> {
     .filter((m: any) => m.content.trim().length > 0);
 
   if (!trimmed.length) return err('Empty messages after filter', 400);
+  // Ngôn ngữ trả lời (i18n W8) — nối vào CUỐI tin user mới nhất; `vi` → không đổi.
+  const lastMsg = trimmed[trimmed.length - 1];
+  if (lastMsg?.role === 'user') {
+    lastMsg.content = withLang(lastMsg.content, locale, [ctxText]);
+  }
 
   try {
     // 🔴 VÁ Henry 2026-08-24: handleChat là hỏi-đáp LẶP LẠI nhiều lượt/phiên —
@@ -661,7 +666,9 @@ async function runPost(request: NextRequest) {
   const action = searchParams.get('action');
   const body = await parseBody(request);
 
-  if (action === 'chat') return handleChat(body);
+  // Ngôn ngữ bản luận/trả lời (i18n W8) — theo trang khách đang đứng.
+  const locale = requestLocale(request);
+  if (action === 'chat') return handleChat(body, locale);
   if (action === 'search') return handleSearch(body);
 
   // Default: luận giải 1 phần
@@ -683,9 +690,11 @@ async function runPost(request: NextRequest) {
   // GIỮ NGUYÊN, chỉ bỏ các cache_control (tối ưu riêng của Anthropic; Gemini tự
   // cache ngầm). Frontend tu-binh.html parse content_block_delta/text_delta →
   // dùng format 'anthropic' để giữ đúng byte-shape.
-  const userPrompt = [parts.batTuBlock, parts.docsBlock, parts.pregenBlock, parts.instrBlock]
-    .filter(Boolean)
-    .join('\n\n');
+  const userPrompt = withLang(
+    [parts.batTuBlock, parts.docsBlock, parts.pregenBlock, parts.instrBlock].filter(Boolean).join('\n\n'),
+    locale,
+    [batTuText],
+  );
 
   try {
     // 🔻 GỠ ép `provider:'anthropic'` (chốt Henry 2026-09-03) — Gemini 3.8

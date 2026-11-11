@@ -99,6 +99,16 @@ con cái, cha mẹ, anh em, họ hàng, sức khỏe, nhà đất, bạn bè/qu�
 - Sửa khuôn chung (`lanKinh`, `nhanNen`, `quetNam`) phải kiểm **parity Sự nghiệp từng
   byte** + bộ nhận diện câu hỏi (56 câu) trước khi đẩy.
 
+## Ngôn ngữ đầu ra — `lib/llm/locale.ts` (W8)
+
+- **Câu chỉ định ngôn ngữ vào USER message, không vào system** — cùng lý do khối chủ đề: system giữ nguyên byte
+  để prompt cache hit. Khách `vi` ⇒ `langBlock('vi')` = '' ⇒ không đổi một byte.
+- **Khối ngôn ngữ THAY luật tiếng Việt, không cộng thêm** (luật xưng hô/khẩu ngữ/Hán-Việt trong system viết cho
+  tiếng Việt; khối nói rõ "ngôn ngữ này thay bằng mẫu dưới đây") và dạy giọng bằng MỘT ví dụ ngắn mỗi ngôn ngữ.
+- **Mọi khoá cache của route có luận phải mang `localeKeySuffix`** (`vi` → '' để khoá cũ nguyên byte). Kho chung
+  khoá theo slug (`laso_public.luan_giai`) KHÔNG có cột ngôn ngữ nên chỉ `vi` được ghi vào đó.
+- Ngôn ngữ request lấy bằng `requestLocale` (header → `Referer`), không đọc cookie. Xem `docs/i18n/QUY-UOC.md`.
+
 ## Nợ đã ghi nhận
 
 - `trimLaSo` / `buildPrompt` (bản không cache) là **code chết** — 0 route gọi.
