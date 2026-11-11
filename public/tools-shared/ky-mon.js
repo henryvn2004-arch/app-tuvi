@@ -122,8 +122,8 @@
         (c.than ? '<span class="km-than">' + _esc(_g('kymon', c.than.ten)) + '</span>' : '') +
         '</div>' +
         '<div class="km-can">' +
-        (c.canThien ? '<b>' + _esc(c.canThien) + '</b>' : '') +
-        (c.canDia ? '<i>' + _esc(c.canDia) + '</i>' : '') +
+        (c.canThien ? '<b>' + _esc(_g('can', c.canThien)) + '</b>' : '') +
+        (c.canDia ? '<i>' + _esc(_g('can', c.canDia)) + '</i>' : '') +
         (c.tamKy ? '<span class="km-ky">' + _esc(_g('kymon', c.tamKy)) + '</span>' : '') +
         '</div>' +
         '<div class="km-cung">' + _esc(_cungTen(c.ten)) + ' · ' + _esc(_g('hanh', c.hanh)) + '</div>' +
@@ -233,7 +233,7 @@
         ctx.fillStyle = c.tamKy ? GOLD : 'rgba(255,255,255,0.45)';
         ctx.font = (c.tamKy ? '700 ' : '400 ') + '24px ' + SANS;
         ctx.fillText(
-          (c.canThien || '') + (c.canDia ? '/' + c.canDia : '') + (c.tamKy ? ' ' + _g('kymon', c.tamKy) : ''),
+          (c.canThien ? _g('can', c.canThien) : '') + (c.canDia ? '/' + _g('can', c.canDia) : '') + (c.tamKy ? ' ' + _g('kymon', c.tamKy) : ''),
           mid, cy + 174
         );
       });
@@ -246,7 +246,7 @@
     return {
       title: _tv('js.shellui.kmx-ps-title', 'Kỳ Môn — {cuc}', { cuc: _cuc(b.cuc) }),
       subtitle: _tv('js.shellui.kmx-ps-sub', '{tiet} {nguyen} · giờ {gio} ngày {ngay}', {
-        tiet: _g('lich', b.tietKhi), nguyen: _g('kymon', b.nguyen), gio: b.canChi.gio, ngay: b.canChi.ngay,
+        tiet: _g('lich', b.tietKhi), nguyen: _g('kymon', b.nguyen), gio: _g('canchi', b.canChi.gio), ngay: _g('canchi', b.canChi.ngay),
       }),
       quote: doNhat
         ? doNhat.cua

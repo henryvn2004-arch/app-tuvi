@@ -4623,6 +4623,14 @@
   "t": "読み取り中",
   "h": "8932239a"
  },
+ "js.shellui.kdx-dung-cuu": {
+  "t": "用九",
+  "h": "8634105f"
+ },
+ "js.shellui.kdx-dung-luc": {
+  "t": "用六",
+  "h": "193bcf88"
+ },
  "js.shellui.kdx-fb-canh": {
   "t": "⚠ 要注意",
   "h": "250c4761"
@@ -4646,6 +4654,10 @@
  "js.shellui.kdx-lam-chu": {
   "t": " · 主",
   "h": "5f3d7276"
+ },
+ "js.shellui.kdx-loi-que": {
+  "t": "卦辞",
+  "h": "5e731083"
  },
  "js.shellui.kdx-luat-0": {
   "t": "動爻なし——本卦の卦辞のみを読みます。",

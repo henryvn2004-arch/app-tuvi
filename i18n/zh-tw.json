@@ -4623,6 +4623,14 @@
   "t": "解讀中",
   "h": "8932239a"
  },
+ "js.shellui.kdx-dung-cuu": {
+  "t": "用九",
+  "h": "8634105f"
+ },
+ "js.shellui.kdx-dung-luc": {
+  "t": "用六",
+  "h": "193bcf88"
+ },
  "js.shellui.kdx-fb-canh": {
   "t": "⚠ 宜謹慎",
   "h": "250c4761"
@@ -4646,6 +4654,10 @@
  "js.shellui.kdx-lam-chu": {
   "t": " · 為主",
   "h": "5f3d7276"
+ },
+ "js.shellui.kdx-loi-que": {
+  "t": "卦辭",
+  "h": "5e731083"
  },
  "js.shellui.kdx-luat-0": {
   "t": "無動爻——只讀本卦的卦辭。",

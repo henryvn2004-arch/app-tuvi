@@ -20,6 +20,12 @@
   function _nhanQue(vi) {
     if (vi === 'Quẻ Chính') return _tv('js.shellui.kdx-que-chinh', vi);
     if (vi === 'Quẻ Biến') return _tv('js.shellui.kdx-que-bien', vi);
+    // Nhãn mục do kinh-dich-hao.js trả (`nhan`): "Lời quẻ" · "Dụng Cửu" · "Dụng Lục" · "Hào N" — chỉ NHÃN, không phải văn hào từ.
+    if (vi === 'Lời quẻ') return _tv('js.shellui.kdx-loi-que', vi);
+    if (vi === 'Dụng Cửu') return _tv('js.shellui.kdx-dung-cuu', vi);
+    if (vi === 'Dụng Lục') return _tv('js.shellui.kdx-dung-luc', vi);
+    var h = /^Hào (\d)$/.exec(vi || '');
+    if (h) return _tv('js.shellui.kdx-hao-n', 'Hào {n}', { n: h[1] });
     return vi;
   }
 // ── 64 quẻ Kinh Dịch — King Wen sequence ──

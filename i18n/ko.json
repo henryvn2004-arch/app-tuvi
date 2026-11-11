@@ -4623,6 +4623,14 @@
   "t": "읽는 중",
   "h": "8932239a"
  },
+ "js.shellui.kdx-dung-cuu": {
+  "t": "용구",
+  "h": "8634105f"
+ },
+ "js.shellui.kdx-dung-luc": {
+  "t": "용육",
+  "h": "193bcf88"
+ },
  "js.shellui.kdx-fb-canh": {
   "t": "⚠ 조심",
   "h": "250c4761"
@@ -4646,6 +4654,10 @@
  "js.shellui.kdx-lam-chu": {
   "t": " · 주도",
   "h": "5f3d7276"
+ },
+ "js.shellui.kdx-loi-que": {
+  "t": "괘사",
+  "h": "5e731083"
  },
  "js.shellui.kdx-luat-0": {
   "t": "변효 없음 — 본괘의 괘사만 읽습니다.",

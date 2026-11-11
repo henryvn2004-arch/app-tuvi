@@ -4623,6 +4623,14 @@
   "t": "reading",
   "h": "8932239a"
  },
+ "js.shellui.kdx-dung-cuu": {
+  "t": "Yong Jiu",
+  "h": "8634105f"
+ },
+ "js.shellui.kdx-dung-luc": {
+  "t": "Yong Liu",
+  "h": "193bcf88"
+ },
  "js.shellui.kdx-fb-canh": {
   "t": "⚠ Caution",
   "h": "250c4761"
@@ -4646,6 +4654,10 @@
  "js.shellui.kdx-lam-chu": {
   "t": " · governing",
   "h": "5f3d7276"
+ },
+ "js.shellui.kdx-loi-que": {
+  "t": "Judgment",
+  "h": "5e731083"
  },
  "js.shellui.kdx-luat-0": {
   "t": "No moving lines — read only the judgment of the primary hexagram.",
