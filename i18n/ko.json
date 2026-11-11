@@ -1287,6 +1287,18 @@
   "t": "7. 문의",
   "h": "3a96153f"
  },
+ "privacy.7-luu-tru-va-chuyen-du": {
+  "t": "7. 데이터 보관 및 국외 이전",
+  "h": "ecbb0247"
+ },
+ "privacy.8-email-va-cach-huy-nhan": {
+  "t": "8. 이메일 및 수신 거부 방법",
+  "h": "2cab3661"
+ },
+ "privacy.9-lien-he": {
+  "t": "9. 문의",
+  "h": "3cab76d9"
+ },
  "privacy.an-sao-va-tao-la-so": {
   "t": "자미두수 별 배치 및 명반 생성",
   "h": "88fe3cad"
@@ -1294,6 +1306,10 @@
  "privacy.ban-co-quyen-yeu-cau-xem": {
   "t": "이용자는 Facebook Messenger나 Zalo로 받은 데이터를 포함하여 본인의 개인정보에 대해 열람, 정정 또는 삭제를 요청할 권리가 있습니다. <a href=\"/contact.html\" style=\"color:#1455A4\">문의</a> 페이지를 통해 요청해 주십시오(채팅 채널을 이용하신 경우 Facebook/Zalo 계정 이름을 함께 적어 주십시오). 당사는 이용자와 연결된 계정, 명반, 대화 기록, 채팅 계정 식별자를 삭제한 후 완료 사실을 안내해 드립니다.",
   "h": "584c6ef3"
+ },
+ "privacy.ban-co-quyen-yeu-cau-xem-x6p7": {
+  "t": "이용자는 Facebook Messenger나 Zalo로 받은 데이터를 포함하여 본인의 개인정보에 대해 열람, 정정 또는 삭제를 요청할 수 있으며, 거주 지역의 개인정보 보호법에 따른 그 밖의 권리도 가집니다. <a href=\"/contact.html\" style=\"color:#1455A4\">문의</a> 페이지를 통해 요청해 주십시오(채팅 채널을 이용하신 경우 Facebook/Zalo 계정 이름을 함께 적어 주십시오). 당사는 이용자와 연결된 계정, 명반, 대화 기록, 채팅 계정 식별자를 삭제한 후 완료 사실을 안내해 드립니다.",
+  "h": "28b6e63c"
  },
  "privacy.cai-thien-chat-luong-dich-vu": {
   "t": "서비스 품질 개선",
@@ -1319,9 +1335,17 @@
   "t": "당사는 이용자의 개인정보를 제3자에게 판매, 대여 또는 공유하지 않습니다. 다만 서비스 운영에 필요한 기술 인프라 제공업체는 예외이며, 이들은 각 업체의 개인정보 정책에 따라 정보를 처리합니다:",
   "h": "e7ba913a"
  },
+ "privacy.chung-toi-la-doanh-nghiep-tai": {
+  "t": "당사는 베트남에 소재한 사업자이며 여러 나라의 이용자에게 서비스를 제공합니다. 서비스를 이용하시면 이용자의 데이터는 싱가포르에 있는 서버에 보관되며, 당사의 서비스 제공업체가 운영되는 국가(예: 웹사이트 전송, 이메일 발송, 풀이문 생성 처리의 경우 미국)에서 처리될 수 있습니다. 당사는 각 업무에 필요한 데이터만 이전하며, 데이터를 제3자에게 판매하지 않습니다. 서비스를 이용하시면 이러한 보관 및 처리에 동의하신 것으로 봅니다. 동의하지 않으시는 경우 생년월일·출생 시각이나 이메일을 입력하지 마시거나, 제5항에 따라 데이터 삭제를 요청해 주십시오.",
+  "h": "ac02659d"
+ },
  "privacy.cong-thanh-toan-chuyen-khoan-ngan": {
   "t": "결제 서비스(계좌 이체, PayPal) — 거래 처리",
   "h": "862873b7"
+ },
+ "privacy.cong-thanh-toan-paypal-xu-ly": {
+  "t": "결제 서비스 PayPal — 거래 처리(PayPal 계정 없이 카드로 결제하신 경우 포함)",
+  "h": "936408b9"
  },
  "privacy.dia-chi-email-neu-co-dung": {
   "t": "이메일 주소(입력한 경우) — 결과 전달 또는 연락에 사용",
@@ -1331,9 +1355,17 @@
   "t": "명반 데이터는 암호화된 클라우드 인프라에 안전하게 보관됩니다. 결제 정보는 제3자 결제 서비스에서 전적으로 처리되며, 당사는 카드 번호나 민감한 금융 정보를 저장하지 않습니다.",
   "h": "f5eb2733"
  },
+ "privacy.du-lieu-la-so-duoc-luu-l7iz": {
+  "t": "명반 데이터는 싱가포르에 있는 암호화된 클라우드 인프라에 보관됩니다. 결제 정보는 전적으로 PayPal을 통해 처리되며, 당사는 카드 번호나 민감한 금융 정보를 저장하지 않습니다.",
+  "h": "2fec9912"
+ },
  "privacy.du-lieu-truy-cap-ky-thuat": {
   "t": "기술적 접속 데이터(IP 주소, 브라우저, 접속 시간) — 익명 트래픽 분석 도구를 통해 수집",
   "h": "f1aa200a"
+ },
+ "privacy.email-giao-dich-ma-xac-thuc": {
+  "t": "거래 관련 이메일(가입 인증 코드, 영수증, 요청하신 리포트)은 이용 중인 언어로 발송되며 끌 수 없습니다. 추천이나 혜택 안내 이메일은 계정이 있는 분께만 발송하며, 메일 하단에 항상 \"수신 거부\" 링크가 있습니다. 누르면 즉시 수신이 중단되며 로그인은 필요 없습니다. 수신을 거부한 이메일 주소는 다시 발송하지 않도록 보관합니다.",
+  "h": "daea9441"
  },
  "privacy.khi-ban-nhan-tin-qua-facebook": {
   "t": "Facebook Messenger 또는 Zalo로 메시지를 보내실 때: 각 플랫폼이 당사 페이지에 발급한 채팅 계정 식별자, 계정의 공개 표시 이름, 보내신 메시지 내용. 답변, 이용자 본인 명반에 이름 표기, tuviminhbao.com 계정과의 연결에 사용합니다",
@@ -1355,9 +1387,21 @@
   "t": "개인정보처리방침에 관한 문의는 <a href=\"/contact.html\" style=\"color:#1455A4\">문의</a> 페이지로 연락해 주십시오.",
   "h": "868d3ffe"
  },
+ "privacy.moi-thac-mac-ve-chinh-sach-lldp": {
+  "t": "개인정보처리방침에 관한 문의는 <a href=\"/contact.html\" style=\"color:#1455A4\">문의</a> 페이지 또는 이메일 contact@tuviminhbao.com 으로 연락해 주십시오.",
+  "h": "2bf61971"
+ },
  "privacy.ngay-thang-nam-sinh-va-gio": {
   "t": "생년월일 및 출생 시각(양력) — 명반의 별 배치에 사용",
   "h": "313ab68a"
+ },
+ "privacy.ngon-ngu-ban-dang-dung-luu-cyr1": {
+  "t": "이용 중인 언어(브라우저의 쿠키 \"tvmb_locale\"에 저장되며, 구매하거나 리포트를 요청할 때 계정과 연결됨) — 이용자의 언어로 이메일을 보내기 위해 사용",
+  "h": "52674e14"
+ },
+ "privacy.nha-cung-cap-dich-vu-gui": {
+  "t": "이메일 발송 서비스 제공업체(Resend) — 인증 코드, 영수증, 수신에 동의하신 메일 발송",
+  "h": "1cc2d629"
  },
  "privacy.nha-cung-cap-dich-vu-tri": {
   "t": "인공지능 서비스 제공업체 — 풀이문 생성 처리",
@@ -1366,6 +1410,10 @@
  "privacy.nha-cung-cap-ha-tang-luu": {
   "t": "클라우드 데이터 저장 인프라 제공업체 — 계정 및 명반 저장",
   "h": "48f8c99c"
+ },
+ "privacy.nha-cung-cap-ha-tang-luu-y2t3": {
+  "t": "클라우드 데이터 저장 인프라 제공업체(Supabase, 서버는 싱가포르) — 계정 및 명반 저장",
+  "h": "fb7fd70a"
  },
  "privacy.phap-ly": {
   "t": "법적 고지",
@@ -1383,6 +1431,10 @@
   "t": "결제 거래 정보(주문 번호, 결제 상태) — 카드 번호나 은행 계좌 정보는 저장하지 않습니다",
   "h": "9a6e6249"
  },
+ "privacy.thong-tin-giao-dich-thanh-toan-2k6c": {
+  "t": "결제 거래 정보(주문 번호, USD 금액, 결제 상태) — 카드 번호와 은행 계좌 정보는 PayPal이 처리하며, 당사는 받지도 저장하지도 않습니다",
+  "h": "e2dca8b5"
+ },
  "privacy.trang-web-su-dung-localstorage-de": {
   "t": "본 사이트는 세션 중 명반 상태를 임시로 저장하기 위해 localStorage를 사용합니다. 또한 방문 통계, 광고 효과 측정, 화면 개선을 위해 Google Analytics, Google Ads, Meta(Facebook) Pixel, Microsoft Clarity의 쿠키와 측정 코드를 사용합니다. 브라우저 설정에서 쿠키를 차단하거나 삭제할 수 있으며, 그 경우에도 별 배치와 풀이 도구는 정상적으로 이용하실 수 있습니다.",
   "h": "ad439412"
@@ -1394,6 +1446,10 @@
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. 서비스의 성격",
   "h": "7fb94895"
+ },
+ "terms.10-lien-he": {
+  "t": "10. 문의",
+  "h": "bc0e3a4f"
  },
  "terms.2-gioi-han-trach-nhiem": {
   "t": "2. 책임의 제한",
@@ -1415,9 +1471,25 @@
   "t": "6. 약관의 변경",
   "h": "b77fb69c"
  },
+ "terms.7-thong-tin-nguoi-ban": {
+  "t": "7. 판매자 정보",
+  "h": "07671d2f"
+ },
+ "terms.8-khach-hang-ngoai-viet-nam": {
+  "t": "8. 베트남 국외 이용자",
+  "h": "6b59d329"
+ },
+ "terms.9-email-tu-chung-toi": {
+  "t": "9. 당사가 보내는 이메일",
+  "h": "3936c156"
+ },
  "terms.bang-viec-su-dung-dich-vu": {
   "t": "tuviminhbao.com의 서비스를 이용하시면 아래 약관에 동의하신 것으로 봅니다. 이용 전에 꼼꼼히 읽어 주십시오.",
   "h": "84c3073e"
+ },
+ "terms.cap-nhat-lan-cuoi-thang-11": {
+  "t": "최종 업데이트: 2026년 11월",
+  "h": "6c35671e"
  },
  "terms.cap-nhat-lan-cuoi-thang-9": {
   "t": "최종 업데이트: 2026년 9월",
@@ -1430,6 +1502,22 @@
  "terms.co-tinh-cung-cap-thong-tin": {
   "t": "서비스를 부정하게 이용할 목적으로 고의로 허위 정보를 제공하는 행위",
   "h": "05f1e2a5"
+ },
+ "terms.de-yeu-cau-hoan-tien-gui": {
+  "t": "환불을 요청하시려면 contact@tuviminhbao.com 으로 구매 시 사용한 이메일과 주문 번호(영수증에 기재)를 보내 주십시오. 답변은 이메일로 드립니다",
+  "h": "f2caebca"
+ },
+ "terms.dia-chi-toa-nha-master-building": {
+  "t": "주소: Master Building (41-43 Tran Cao Van), 호찌민시 3군 쑤언호아 동, 베트남",
+  "h": "a078320d"
+ },
+ "terms.dich-vu-co-ban-tieng-anh": {
+  "t": "본 서비스는 영어, 일본어, 한국어, 중국어로 제공됩니다. 번역본 간에 차이가 있는 경우 베트남어본이 원본입니다",
+  "h": "af95c2df"
+ },
+ "terms.dich-vu-tai-tuviminhbao-com-do": {
+  "t": "tuviminhbao.com의 서비스는 <strong>Kira Tech 유한회사</strong>(Kira Tech Company Limited)가 운영합니다.",
+  "h": "57d6bc28"
  },
  "terms.dieu-khoan-dich-vu": {
   "t": "이용약관",
@@ -1447,17 +1535,57 @@
   "t": "디지털 서비스의 특성상, 결과가 표시된 후에는 <strong>환불되지 않습니다</strong>",
   "h": "cc224df0"
  },
+ "terms.du-lieu-tai-khoan-va-la": {
+  "t": "계정 및 명반 데이터는 싱가포르에 있는 클라우드 인프라에 보관되며 다른 나라에서 처리될 수 있습니다. 자세한 내용은 <a href=\"/chinh-sach-bao-mat.html\" style=\"color:#1455A4\">개인정보처리방침</a>을 참고해 주십시오",
+  "h": "92f030f7"
+ },
+ "terms.email-contact-tuviminhbao-com-dien-thoai": {
+  "t": "이메일: contact@tuviminhbao.com · 전화: 0343.848.795",
+  "h": "e8669045"
+ },
+ "terms.email-giao-dich-ma-xac-thuc": {
+  "t": "거래 관련 이메일(가입 인증 코드, 영수증, 요청하신 PDF 리포트)은 이용 중인 언어로 발송되며 끌 수 없습니다. 요청하신 서비스의 일부이기 때문입니다",
+  "h": "c835e202"
+ },
+ "terms.email-goi-y-hoac-thong-bao": {
+  "t": "추천이나 혜택 안내 이메일은 계정이 있는 경우에만 발송하며, 메일 하단에 항상 <strong>\"수신 거부\"</strong> 링크가 있습니다. 누르면 즉시 수신이 중단되며 로그인은 필요 없습니다",
+  "h": "d2095e6b"
+ },
+ "terms.gia-duoc-niem-yet-va-thanh": {
+  "t": "가격은 <strong>미국 달러(USD)</strong>로 표시하고 결제도 미국 달러로 이루어집니다. 각 도구에는 USD 가격과 함께 차감되는 냥 수(서비스에서 사용하는 단위)가 표시됩니다",
+  "h": "1143c756"
+ },
+ "terms.gia-niem-yet-la-gia-ban": {
+  "t": "표시 가격이 이용자가 결제하는 금액이며, 당사는 표시 가격 외의 비용을 추가로 청구하지 않습니다. 거주 지역의 규정에 따라 세금이나 수수료가 은행, PayPal 또는 현지 세무 당국에 의해 별도로 부과될 수 있습니다",
+  "h": "b7082d26"
+ },
  "terms.ket-qua-luan-giai-do-ai": {
   "t": "풀이 결과는 고전 자미두수 체계를 바탕으로 AI가 생성한 것입니다. 당사는 풀이의 절대적인 정확성을 보증하지 않습니다. 풀이 내용에 근거한 개인적 결정에 대한 책임은 이용자 본인에게 있습니다.",
   "h": "dbc3d39d"
+ },
+ "terms.khong-phai-tu-van-tai-chinh": {
+  "t": "금융, 의료, 법률 상담이 아닙니다",
+  "h": "7688b89e"
  },
  "terms.moi-thac-mac-ve-dieu-khoan": {
   "t": "약관에 관한 문의는 <a href=\"/contact.html\" style=\"color:#1455A4\">문의</a> 페이지로 연락해 주십시오.",
   "h": "2a193121"
  },
+ "terms.moi-thac-mac-ve-dieu-khoan-7652": {
+  "t": "약관에 관한 문의는 <a href=\"/contact.html\" style=\"color:#1455A4\">문의</a> 페이지 또는 이메일 contact@tuviminhbao.com 으로 연락해 주십시오.",
+  "h": "821dafd1"
+ },
  "terms.neu-co-loi-ky-thuat-khien": {
   "t": "기술적 오류로 결제 후 결과를 받지 못하신 경우, 지원을 위해 문의해 주십시오",
   "h": "06df4e64"
+ },
+ "terms.neu-co-loi-ky-thuat-khien-a1eh": {
+  "t": "기술적 오류로 결과를 받지 못하셨거나 한 주문에 대해 이중으로 결제되신 경우, 냥을 다시 지급하거나 PayPal을 통해 원래 결제 수단으로 환불해 드립니다",
+  "h": "4b48a4be"
+ },
+ "terms.ngan-hang-hoac-paypal-co-the": {
+  "t": "은행이나 PayPal이 자체 환율과 수수료로 USD를 이용자의 현지 통화로 환산할 수 있습니다. 이 차액은 당사가 받는 것이 아닙니다",
+  "h": "67774951"
  },
  "terms.phi-dich-vu-duoc-thanh-toan": {
   "t": "서비스 요금은 베트남 동(VND) 계좌 이체(QR 코드 스캔) 또는 PayPal(Visa/Mastercard 해외 카드)로 1회 결제합니다",
@@ -1467,13 +1595,25 @@
   "t": "별 배치 시스템을 역설계하거나 복제하는 행위",
   "h": "57bda3e3"
  },
+ "terms.san-pham-dich-vu-so-ket": {
+  "t": "상품: 디지털 서비스(풀이 결과, PDF 리포트). 온라인으로 제공되며 실물 배송은 없습니다",
+  "h": "f934d6a7"
+ },
  "terms.sau-khi-thanh-toan-thanh-cong": {
   "t": "결제가 완료되면 풀이 결과가 즉시 열립니다",
   "h": "b895e2c9"
  },
+ "terms.sau-khi-thanh-toan-thanh-cong-qni3": {
+  "t": "결제가 완료되면 냥이 계정에 적립되고 풀이 결과가 즉시 열립니다. 영수증은 이메일로 발송됩니다",
+  "h": "3fdbd7fe"
+ },
  "terms.su-dung-bot-hoac-phuong-tien": {
   "t": "봇 또는 자동화된 수단을 이용한 대량 접속",
   "h": "49c0c0e8"
+ },
+ "terms.thanh-toan-qua-paypal-ban-co": {
+  "t": "결제는 <strong>PayPal</strong>로 이루어집니다. <strong>PayPal 계정이 없어도</strong> PayPal 페이지에서 Visa/Mastercard 신용카드 또는 체크카드로 결제하실 수 있습니다. 당사는 카드 번호를 받지도 저장하지도 않습니다",
+  "h": "4e07ad30"
  },
  "terms.toan-bo-noi-dung-tren-tuviminhbao": {
   "t": "tuviminhbao.com의 모든 콘텐츠(별 배치 시스템, 화면 디자인, 고찰 글)는 명보 자미두수에 귀속됩니다. 허락 없는 복제, 배포, 상업적 이용을 엄격히 금지합니다.",
@@ -1482,5 +1622,9 @@
  "terms.tu-vi-minh-bao-cung-cap": {
   "t": "명보 자미두수는 이용자가 입력한 생년월일·출생 시각을 바탕으로 자미두수 별 배치와 인공지능(AI) 풀이 서비스를 제공합니다. 본 서비스는 문화적·학술적 참고 자료이며, <strong>금융, 의료, 법률 상담이 아닙니다</strong>.",
   "h": "40549518"
+ },
+ "terms.voi-luong-da-nap-nhung-chua": {
+  "t": "충전했지만 사용하지 않은 냥은 요청해 주시면 사례별로 검토해 드립니다",
+  "h": "f410ec3e"
  }
 }
