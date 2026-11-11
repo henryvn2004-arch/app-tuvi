@@ -15,8 +15,12 @@
 --              vì `best_position` của hai nguồn không so được với nhau.
 alter table public.keyword_ideas add column if not exists lang text not null default 'vi';
 
--- Ràng buộc cũ UNIQUE(keyword) do `create table … keyword text not null unique` sinh ra.
+-- UNIQUE(keyword) cũ do `create table … keyword text not null unique` sinh ra. Trên prod nó là
+-- UNIQUE INDEX tên `keyword_ideas_keyword_key` (không có dòng nào trong pg_constraint) nên PHẢI
+-- `drop index`; `drop constraint` giữ lại cho môi trường mà nó là constraint. Còn sót unique
+-- (keyword) thì upsert cùng keyword ở ngôn ngữ khác lỗi 23505.
 alter table public.keyword_ideas drop constraint if exists keyword_ideas_keyword_key;
+drop index if exists public.keyword_ideas_keyword_key;
 
 create unique index if not exists keyword_ideas_keyword_lang_source_uidx
   on public.keyword_ideas (keyword, lang, source);
@@ -34,3 +38,15 @@ create table if not exists public.indexnow_sent (
 create index if not exists indexnow_sent_at_idx on public.indexnow_sent (sent_at desc);
 alter table public.indexnow_sent enable row level security;
 revoke all on public.indexnow_sent from public, anon, authenticated;
+
+-- 3) KIỂM — phải ra đúng: unique_keyword_only = 0 · unique_keyword_lang_source = 1 · indexnow_sent = 1.
+select
+  (select count(*) from pg_indexes
+     where schemaname = 'public' and tablename = 'keyword_ideas'
+       and indexdef ilike '%unique%' and indexdef ~* '\(keyword\)')                       as unique_keyword_only,
+  (select count(*) from pg_indexes
+     where schemaname = 'public' and indexname = 'keyword_ideas_keyword_lang_source_uidx') as unique_keyword_lang_source,
+  (select count(*) from pg_constraint
+     where conrelid = 'public.keyword_ideas'::regclass and contype = 'u')                  as unique_constraints_left,
+  (select count(*) from information_schema.tables
+     where table_schema = 'public' and table_name = 'indexnow_sent')                       as indexnow_sent;

@@ -165,7 +165,7 @@ async function upsertVolumes(
     let existing: Record<string, { times_seen: number; best_position: number | null; volume: number | null }> = {};
     try {
       const res = await fetch(
-        `${SB_URL}/rest/v1/keyword_ideas?keyword=in.(${encodeURIComponent(q)})&select=keyword,times_seen,best_position,volume`,
+        `${SB_URL}/rest/v1/keyword_ideas?keyword=in.(${encodeURIComponent(q)})&lang=eq.vi&source=eq.${encodeURIComponent(source)}&select=keyword,times_seen,best_position,volume`,
         { headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }, cache: 'no-store' },
       );
       if (res.ok) {
@@ -184,6 +184,8 @@ async function upsertVolumes(
       return {
         keyword: row.keyword,
         seed: null,
+        // Khoá duy nhất nay là (keyword, lang, source) — CSV Ads nhập là tiếng Việt (_patches/migration-i18n-seo.sql).
+        lang: 'vi',
         source,
         best_position: prev?.best_position ?? null,
         volume,
@@ -194,7 +196,7 @@ async function upsertVolumes(
     });
 
     try {
-      await fetch(`${SB_URL}/rest/v1/keyword_ideas?on_conflict=keyword`, {
+      await fetch(`${SB_URL}/rest/v1/keyword_ideas?on_conflict=keyword,lang,source`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
