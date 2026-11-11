@@ -160,7 +160,7 @@
   "h": "a3adcb6e"
  },
  "disclaimer.trong-pham-vi-phap-luat-cho": {
-  "t": "法令で認められる範囲において、明宝紫微斗数およびKira Tech有限会社は、当サイトで提供される内容の利用、解釈、またはそれに依拠したことから生じる直接的・間接的な損害について、一切の責任を負いません。",
+  "t": "法令で認められる範囲において、明宝紫微斗数およびKira Tech有限責任会社は、当サイトで提供される内容の利用、解釈、またはそれに依拠したことから生じる直接的・間接的な損害について、一切の責任を負いません。",
   "h": "7addf2c3"
  },
  "disclaimer.tu-vi-minh-bao-cung-cap": {
@@ -1287,6 +1287,18 @@
   "t": "7. お問い合わせ",
   "h": "3a96153f"
  },
+ "privacy.7-luu-tru-va-chuyen-du": {
+  "t": "7. データの保管と国外への移転",
+  "h": "ecbb0247"
+ },
+ "privacy.8-email-va-cach-huy-nhan": {
+  "t": "8. メールと配信停止の方法",
+  "h": "2cab3661"
+ },
+ "privacy.9-lien-he": {
+  "t": "9. お問い合わせ",
+  "h": "3cab76d9"
+ },
  "privacy.an-sao-va-tao-la-so": {
   "t": "紫微斗数の星の配置と命盤の作成",
   "h": "88fe3cad"
@@ -1294,6 +1306,10 @@
  "privacy.ban-co-quyen-yeu-cau-xem": {
   "t": "お客様は、Facebook MessengerやZalo経由で受け取ったデータを含め、ご自身の個人データの閲覧、訂正、削除を請求する権利があります。<a href=\"/contact.html\" style=\"color:#1455A4\">お問い合わせ</a>ページからご請求ください（チャットチャネルをご利用の場合は、FacebookまたはZaloのアカウント名も併せてご記入ください）。お客様に紐づくアカウント、命盤、チャット履歴、チャットアカウントの識別子を削除し、完了後にご連絡します。",
   "h": "584c6ef3"
+ },
+ "privacy.ban-co-quyen-yeu-cau-xem-x6p7": {
+  "t": "お客様は、Facebook MessengerやZalo経由で受け取ったデータを含め、ご自身の個人データの閲覧、訂正、削除を請求できるほか、お住まいの国・地域のデータ保護法にもとづくその他の権利を有します。<a href=\"/contact.html\" style=\"color:#1455A4\">お問い合わせ</a>ページからご請求ください（チャットチャネルをご利用の場合は、FacebookまたはZaloのアカウント名も併せてご記入ください）。お客様に紐づくアカウント、命盤、チャット履歴、チャットアカウントの識別子を削除し、完了後にご連絡します。",
+  "h": "28b6e63c"
  },
  "privacy.cai-thien-chat-luong-dich-vu": {
   "t": "サービス品質の向上",
@@ -1319,9 +1335,17 @@
   "t": "当社は、お客様の個人情報を第三者に販売、貸与、共有することはありません。ただし、サービスの運営に必要な技術インフラの提供事業者には、各事業者それぞれのプライバシーポリシーに従って情報が取り扱われます：",
   "h": "e7ba913a"
  },
+ "privacy.chung-toi-la-doanh-nghiep-tai": {
+  "t": "当社はベトナムに所在する事業者で、複数の国のお客様にサービスを提供しています。サービスをご利用になると、お客様のデータはシンガポールにあるサーバーに保管され、当社のサービス提供事業者が事業を行う国（たとえば、サイト配信、メール送信、鑑定文の生成処理については米国）で処理されることがあります。移転するのは各業務に必要な範囲のデータのみで、データを第三者に販売することはありません。本サービスのご利用により、この保管と処理に同意いただいたものとみなします。同意されない場合は、生年月日・出生時刻やメールアドレスを入力しないでください。または、第5項にもとづきデータの削除をご請求ください。",
+  "h": "ac02659d"
+ },
  "privacy.cong-thanh-toan-chuyen-khoan-ngan": {
   "t": "決済サービス（銀行振込、PayPal）— 取引の処理",
   "h": "862873b7"
+ },
+ "privacy.cong-thanh-toan-paypal-xu-ly": {
+  "t": "決済サービスPayPal — 取引の処理（PayPalアカウントなしでカード決済をされた場合を含む）",
+  "h": "936408b9"
  },
  "privacy.dia-chi-email-neu-co-dung": {
   "t": "メールアドレス（ご入力の場合）— 結果のお届けやご連絡に使用",
@@ -1331,9 +1355,17 @@
   "t": "命盤のデータは、暗号化されたクラウドインフラ上に安全に保管されます。決済情報は第三者の決済サービスで完全に処理され、当社がカード番号などの機微な金融情報を保存することはありません。",
   "h": "f5eb2733"
  },
+ "privacy.du-lieu-la-so-duoc-luu-l7iz": {
+  "t": "命盤のデータは、シンガポールにある暗号化されたクラウドインフラに保管されます。決済情報はPayPalで完全に処理され、当社がカード番号などの機微な金融情報を保存することはありません。",
+  "h": "2fec9912"
+ },
  "privacy.du-lieu-truy-cap-ky-thuat": {
   "t": "技術的なアクセスデータ（IPアドレス、ブラウザ、アクセス日時）— 匿名のアクセス解析ツールを通じて取得",
   "h": "f1aa200a"
+ },
+ "privacy.email-giao-dich-ma-xac-thuc": {
+  "t": "取引に関するメール（登録の認証コード、領収書、ご請求いただいたレポート）は、ご利用中の言語で送信され、停止することはできません。おすすめやお得な情報のメールは、アカウントをお持ちの方にのみ送信し、メール末尾に必ず「配信を停止する」リンクを設けています。クリックすればただちに配信が止まり、ログインは不要です。配信を停止されたメールアドレスは、再送を防ぐために保管します。",
+  "h": "daea9441"
  },
  "privacy.khi-ban-nhan-tin-qua-facebook": {
   "t": "Facebook MessengerまたはZaloでメッセージを送られた場合：各プラットフォームが当社ページに対して発行するチャットアカウントの識別子、アカウントの公開表示名、お送りいただいたメッセージの内容。返信、ご自身の命盤への名前の記載、tuviminhbao.comのアカウントとの連携に使用します",
@@ -1355,9 +1387,21 @@
   "t": "プライバシーポリシーに関するご質問は、<a href=\"/contact.html\" style=\"color:#1455A4\">お問い合わせ</a>ページからご連絡ください。",
   "h": "868d3ffe"
  },
+ "privacy.moi-thac-mac-ve-chinh-sach-lldp": {
+  "t": "プライバシーポリシーに関するご質問は、<a href=\"/contact.html\" style=\"color:#1455A4\">お問い合わせ</a>ページ、またはメール contact@tuviminhbao.com までご連絡ください。",
+  "h": "2bf61971"
+ },
  "privacy.ngay-thang-nam-sinh-va-gio": {
   "t": "生年月日と出生時刻（西暦）— 命盤の星の配置に使用",
   "h": "313ab68a"
+ },
+ "privacy.ngon-ngu-ban-dang-dung-luu-cyr1": {
+  "t": "ご利用中の言語（ブラウザのcookie「tvmb_locale」に保存され、ご購入やレポートのご請求の際にアカウントと紐づけられます）— お客様の言語でメールをお送りするために使用",
+  "h": "52674e14"
+ },
+ "privacy.nha-cung-cap-dich-vu-gui": {
+  "t": "メール送信サービスの提供事業者（Resend）— 認証コード、領収書、配信に同意いただいたメールの送信",
+  "h": "1cc2d629"
  },
  "privacy.nha-cung-cap-dich-vu-tri": {
   "t": "人工知能サービスの提供事業者 — 鑑定文の生成処理",
@@ -1366,6 +1410,10 @@
  "privacy.nha-cung-cap-ha-tang-luu": {
   "t": "クラウドデータ保管インフラの提供事業者 — アカウントと命盤の保管",
   "h": "48f8c99c"
+ },
+ "privacy.nha-cung-cap-ha-tang-luu-y2t3": {
+  "t": "クラウドデータ保管インフラの提供事業者（Supabase、サーバーはシンガポール）— アカウントと命盤の保管",
+  "h": "fb7fd70a"
  },
  "privacy.phap-ly": {
   "t": "法務",
@@ -1383,6 +1431,10 @@
   "t": "決済取引情報（注文番号、決済状況）— カード番号や銀行口座の情報は保存しません",
   "h": "9a6e6249"
  },
+ "privacy.thong-tin-giao-dich-thanh-toan-2k6c": {
+  "t": "決済取引情報（注文番号、米ドルでの金額、決済状況）— カード番号や銀行口座の情報はPayPalが処理し、当社は受け取らず、保存もしません",
+  "h": "e2dca8b5"
+ },
  "privacy.trang-web-su-dung-localstorage-de": {
   "t": "当サイトは、セッション中の命盤の状態を一時的に保存するためにlocalStorageを使用します。また、アクセス数の集計、広告効果の測定、画面の改善のため、Google Analytics、Google Ads、Meta（Facebook）Pixel、Microsoft Clarityのcookieと計測タグを使用します。cookieはブラウザの設定でブロックまたは削除できます。その場合でも、星の配置や鑑定のツールは通常どおりご利用いただけます。",
   "h": "ad439412"
@@ -1394,6 +1446,10 @@
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. サービスの性質",
   "h": "7fb94895"
+ },
+ "terms.10-lien-he": {
+  "t": "10. お問い合わせ",
+  "h": "bc0e3a4f"
  },
  "terms.2-gioi-han-trach-nhiem": {
   "t": "2. 責任の制限",
@@ -1415,9 +1471,25 @@
   "t": "6. 規約の変更",
   "h": "b77fb69c"
  },
+ "terms.7-thong-tin-nguoi-ban": {
+  "t": "7. 販売者情報",
+  "h": "07671d2f"
+ },
+ "terms.8-khach-hang-ngoai-viet-nam": {
+  "t": "8. ベトナム国外のお客様",
+  "h": "6b59d329"
+ },
+ "terms.9-email-tu-chung-toi": {
+  "t": "9. 当社からのメール",
+  "h": "3936c156"
+ },
  "terms.bang-viec-su-dung-dich-vu": {
   "t": "tuviminhbao.comのサービスをご利用になることで、以下の規約に同意したものとみなします。ご利用の前によくお読みください。",
   "h": "84c3073e"
+ },
+ "terms.cap-nhat-lan-cuoi-thang-11": {
+  "t": "最終更新：2026年11月",
+  "h": "6c35671e"
  },
  "terms.cap-nhat-lan-cuoi-thang-9": {
   "t": "最終更新：2026年9月",
@@ -1430,6 +1502,22 @@
  "terms.co-tinh-cung-cap-thong-tin": {
   "t": "サービスを不正に利用する目的で、故意に虚偽の情報を提供すること",
   "h": "05f1e2a5"
+ },
+ "terms.de-yeu-cau-hoan-tien-gui": {
+  "t": "返金をご希望の場合は、contact@tuviminhbao.com 宛に、ご購入時にお使いのメールアドレスと注文番号（領収書に記載）をお送りください。回答はメールでお送りします",
+  "h": "f2caebca"
+ },
+ "terms.dia-chi-toa-nha-master-building": {
+  "t": "所在地：Master Building（41-43 Tran Cao Van）、ホーチミン市3区スアンホア坊、ベトナム",
+  "h": "a078320d"
+ },
+ "terms.dich-vu-co-ban-tieng-anh": {
+  "t": "本サービスは、英語、日本語、韓国語、中国語でご利用いただけます。各言語版の間に相違がある場合は、ベトナム語版が原本となります",
+  "h": "af95c2df"
+ },
+ "terms.dich-vu-tai-tuviminhbao-com-do": {
+  "t": "tuviminhbao.comのサービスは、<strong>Kira Tech有限責任会社</strong>（Kira Tech Company Limited）が運営しています。",
+  "h": "57d6bc28"
  },
  "terms.dieu-khoan-dich-vu": {
   "t": "利用規約",
@@ -1447,17 +1535,57 @@
   "t": "デジタルサービスという性質上、結果が表示された後の<strong>返金はいたしません</strong>",
   "h": "cc224df0"
  },
+ "terms.du-lieu-tai-khoan-va-la": {
+  "t": "アカウントと命盤のデータは、シンガポールにあるクラウドインフラに保管され、他の国で処理されることがあります。詳しくは<a href=\"/chinh-sach-bao-mat.html\" style=\"color:#1455A4\">プライバシーポリシー</a>をご覧ください",
+  "h": "92f030f7"
+ },
+ "terms.email-contact-tuviminhbao-com-dien-thoai": {
+  "t": "メール：contact@tuviminhbao.com ・ 電話：0343.848.795",
+  "h": "e8669045"
+ },
+ "terms.email-giao-dich-ma-xac-thuc": {
+  "t": "取引に関するメール（登録の認証コード、領収書、ご請求いただいたPDFレポート）は、ご利用中の言語で送信され、停止することはできません。ご依頼いただいたサービスの一部であるためです",
+  "h": "c835e202"
+ },
+ "terms.email-goi-y-hoac-thong-bao": {
+  "t": "おすすめやお得な情報のメールは、アカウントをお持ちの場合にのみ送信し、メール末尾に必ず<strong>「配信を停止する」</strong>リンクを設けています。クリックすればただちに配信が止まり、ログインは不要です",
+  "h": "d2095e6b"
+ },
+ "terms.gia-duoc-niem-yet-va-thanh": {
+  "t": "価格は<strong>米ドル（USD）</strong>で表示し、お支払いも米ドルで行います。各ツールにはUSDでの価格とあわせて、差し引かれる両数（本サービスで使う単位）が表示されます",
+  "h": "1143c756"
+ },
+ "terms.gia-niem-yet-la-gia-ban": {
+  "t": "表示価格がお支払いいただく金額であり、表示価格以外の費用を当社が追加で請求することはありません。お住まいの国・地域の規定により、税金や手数料が銀行、PayPal、または現地の税務当局から別途課される場合があります",
+  "h": "b7082d26"
+ },
  "terms.ket-qua-luan-giai-do-ai": {
   "t": "鑑定結果は、古典的な紫微斗数の体系にもとづきAIが生成したものです。鑑定の絶対的な正確性を保証するものではありません。鑑定内容にもとづくご自身の判断については、ご利用者ご自身が責任を負うものとします。",
   "h": "dbc3d39d"
+ },
+ "terms.khong-phai-tu-van-tai-chinh": {
+  "t": "金融、医療、法律に関する助言ではありません",
+  "h": "7688b89e"
  },
  "terms.moi-thac-mac-ve-dieu-khoan": {
   "t": "規約に関するご質問は、<a href=\"/contact.html\" style=\"color:#1455A4\">お問い合わせ</a>ページからご連絡ください。",
   "h": "2a193121"
  },
+ "terms.moi-thac-mac-ve-dieu-khoan-7652": {
+  "t": "規約に関するご質問は、<a href=\"/contact.html\" style=\"color:#1455A4\">お問い合わせ</a>ページ、またはメール contact@tuviminhbao.com までご連絡ください。",
+  "h": "821dafd1"
+ },
  "terms.neu-co-loi-ky-thuat-khien": {
   "t": "技術的な不具合により、お支払い後に結果をお受け取りいただけなかった場合は、サポートまでご連絡ください",
   "h": "06df4e64"
+ },
+ "terms.neu-co-loi-ky-thuat-khien-a1eh": {
+  "t": "技術的な不具合により結果をお受け取りいただけなかった場合、または同一の注文で二重に請求された場合は、両数の再付与、またはPayPalを通じた元のお支払い方法への返金により対応いたします",
+  "h": "4b48a4be"
+ },
+ "terms.ngan-hang-hoac-paypal-co-the": {
+  "t": "銀行またはPayPalが、独自のレートと手数料で米ドルをお客様の現地通貨に換算することがあります。この差額は当社が受け取るものではありません",
+  "h": "67774951"
  },
  "terms.phi-dich-vu-duoc-thanh-toan": {
   "t": "サービス料金は、ベトナムドンでの銀行振込（QRコード）またはPayPal（Visa/Mastercardの国際カード）による一括払いです",
@@ -1467,13 +1595,25 @@
   "t": "星の配置システムのリバースエンジニアリング、または複製",
   "h": "57bda3e3"
  },
+ "terms.san-pham-dich-vu-so-ket": {
+  "t": "商品：デジタルサービス（鑑定結果、PDFレポート）。オンラインで提供し、物品の配送はありません",
+  "h": "f934d6a7"
+ },
  "terms.sau-khi-thanh-toan-thanh-cong": {
   "t": "お支払いが完了すると、鑑定結果はすぐにご覧いただけます",
   "h": "b895e2c9"
  },
+ "terms.sau-khi-thanh-toan-thanh-cong-qni3": {
+  "t": "お支払いが完了すると、両数がアカウントに加算され、鑑定結果はすぐにご覧いただけます。領収書はメールでお送りします",
+  "h": "3fdbd7fe"
+ },
  "terms.su-dung-bot-hoac-phuong-tien": {
   "t": "ボットや自動化された手段による大量アクセス",
   "h": "49c0c0e8"
+ },
+ "terms.thanh-toan-qua-paypal-ban-co": {
+  "t": "お支払いは<strong>PayPal</strong>で行います。<strong>PayPalアカウントがなくても</strong>、PayPalのページ上でVisa/Mastercardのクレジットカードまたはデビットカードでお支払いいただけます。当社がカード番号を受け取ったり保存したりすることはありません",
+  "h": "4e07ad30"
  },
  "terms.toan-bo-noi-dung-tren-tuviminhbao": {
   "t": "tuviminhbao.comのすべてのコンテンツ（星の配置システム、画面デザイン、考察記事）は、明宝紫微斗数に帰属します。許可なく複製、配布、商用利用することを固く禁じます。",
@@ -1482,5 +1622,9 @@
  "terms.tu-vi-minh-bao-cung-cap": {
   "t": "明宝紫微斗数は、ご利用者が入力した生年月日・出生時刻にもとづき、紫微斗数の星の配置と、人工知能（AI）による鑑定を提供します。本サービスは文化的・学術的な参考情報であり、<strong>金融、医療、法律に関する助言ではありません</strong>。",
   "h": "40549518"
+ },
+ "terms.voi-luong-da-nap-nhung-chua": {
+  "t": "チャージ済みで未使用の両数については、ご請求をいただければ、個別に検討いたします",
+  "h": "f410ec3e"
  }
 }
