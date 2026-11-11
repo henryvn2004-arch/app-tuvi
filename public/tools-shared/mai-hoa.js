@@ -26,6 +26,12 @@
    }
    ============================================================ */
 (function (root) {
+  // Tên quẻ/hành engine trả qua glossary CHỈ ở chỗ vẽ (W15c); vi/chưa nạp glossary ⇒ nguyên chuỗi.
+  // railData (gửi server) KHÔNG qua đây.
+  function _g(kind, v) {
+    var g = root.TuviGlossary;
+    return g && v ? g.t(kind, v) : v;
+  }
   'use strict';
 
   // ── Bát quái, theo SỐ TIÊN THIÊN (Phục Hy): Càn1 Đoài2 Ly3 Chấn4 Tốn5 Khảm6
@@ -333,8 +339,8 @@
       '<div class="mh-quai mh-the">' +
       '<div class="mh-vai">Thể · mình</div>' +
       _haoSVG(r.the.li, theMau) +
-      '<div class="mh-ten">' + _esc(r.the.n) + '</div>' +
-      '<div class="mh-phu">' + _esc(r.the.zh) + ' · ' + _esc(r.the.tuong) + ' · <b style="color:' + theMau + '">' + _esc(r.the.hanh) + '</b></div>' +
+      '<div class="mh-ten">' + _esc(_g('quai', r.the.n)) + '</div>' +
+      '<div class="mh-phu">' + _esc(r.the.zh) + ' · ' + _esc(_g('tuongquai', r.the.tuong)) + ' · <b style="color:' + theMau + '">' + _esc(_g('hanh', r.the.hanh)) + '</b></div>' +
       '</div>' +
       '<div class="mh-giua">' +
       '<div class="mh-mui" style="color:' + mn.mau + '">' + (qh.ma === 'tihoa' ? '⟺' : qh.ma.indexOf('the-') === 0 ? '⟶' : '⟵') + '</div>' +
@@ -344,8 +350,8 @@
       '<div class="mh-quai mh-dung">' +
       '<div class="mh-vai">Dụng · việc</div>' +
       _haoSVG(r.dung.li, dungMau) +
-      '<div class="mh-ten">' + _esc(r.dung.n) + '</div>' +
-      '<div class="mh-phu">' + _esc(r.dung.zh) + ' · ' + _esc(r.dung.tuong) + ' · <b style="color:' + dungMau + '">' + _esc(r.dung.hanh) + '</b></div>' +
+      '<div class="mh-ten">' + _esc(_g('quai', r.dung.n)) + '</div>' +
+      '<div class="mh-phu">' + _esc(r.dung.zh) + ' · ' + _esc(_g('tuongquai', r.dung.tuong)) + ' · <b style="color:' + dungMau + '">' + _esc(_g('hanh', r.dung.hanh)) + '</b></div>' +
       '</div>' +
       '</div>' +
       '<div class="mh-luan">' + _esc(qh.luan) + '</div>' +
@@ -359,14 +365,14 @@
     var cells = [r.chinh, r.ho, r.bien]
       .map(function (c) {
         var mn = MUC_NHAN[c.qh.muc];
-        var ten = c.que ? c.que.q.n + ' ' + c.que.q.zh : '—';
+        var ten = c.que ? _g('que', c.que.q.n) + ' ' + c.que.q.zh : '—';
         return (
           '<div class="mh-chang">' +
           '<div class="mh-chang-nhan">' + _esc(c.nhan) + '</div>' +
           '<div class="mh-chang-que">' + _esc(ten) + '</div>' +
           '<div class="mh-chang-y">' + _esc(c.y) + '</div>' +
           '<div class="mh-chang-qh"><span style="background:' + mn.mau + '">' + _esc(mn.nhan) + '</span> ' + _esc(c.qh.ten) + '</div>' +
-          '<div class="mh-chang-td">Thể ' + _esc(c.the.n) + ' (' + _esc(c.the.hanh) + ') · Dụng ' + _esc(c.dung.n) + ' (' + _esc(c.dung.hanh) + ')</div>' +
+          '<div class="mh-chang-td">Thể ' + _esc(_g('quai', c.the.n)) + ' (' + _esc(_g('hanh', c.the.hanh)) + ') · Dụng ' + _esc(_g('quai', c.dung.n)) + ' (' + _esc(_g('hanh', c.dung.hanh)) + ')</div>' +
           '</div>'
         );
       })
@@ -468,10 +474,10 @@
         }
         ctx.fillStyle = '#FFFFFF';
         ctx.font = '700 46px ' + SERIF;
-        ctx.fillText(q.n, ox, cy + 46);
+        ctx.fillText(_g('quai', q.n), ox, cy + 46);
         ctx.fillStyle = 'rgba(255,255,255,0.62)';
         ctx.font = '400 27px ' + SANS;
-        ctx.fillText(q.hanh, ox, cy + 84);
+        ctx.fillText(_g('hanh', q.hanh), ox, cy + 84);
       }
 
       quai(r.the, box.x + box.w * 0.2, HANH_MAU[r.the.hanh]);
@@ -513,12 +519,12 @@
 
   /** Nhan đề / dòng phụ / câu trích cho poster. */
   function posterOpts(r, cauHoi) {
-    var ten = r.chinh.que ? r.chinh.que.q.n : '';
-    var tenBien = r.bien.que ? r.bien.que.q.n : '';
+    var ten = r.chinh.que ? _g('que', r.chinh.que.q.n) : '';
+    var tenBien = r.bien.que ? _g('que', r.bien.que.q.n) : '';
     return {
       draw: null, // trang tự gắn sau khi loadAnh xong
       title: 'Quẻ ' + ten + (tenBien && tenBien !== ten ? ' → ' + tenBien : ''),
-      subtitle: 'Thể ' + r.the.n + ' ' + r.the.hanh + ' · Dụng ' + r.dung.n + ' ' + r.dung.hanh + ' — ' + r.ketLuan.ten,
+      subtitle: 'Thể ' + _g('quai', r.the.n) + ' ' + _g('hanh', r.the.hanh) + ' · Dụng ' + _g('quai', r.dung.n) + ' ' + _g('hanh', r.dung.hanh) + ' — ' + r.ketLuan.ten,
       quote: (r.haoTu && r.haoTu.viet) || r.ketLuan.luan,
       cauHoi: cauHoi || '',
       // Cỡ chữ riêng của bàn quẻ — không nạp sẵn thì canvas rơi về font hệ thống.

@@ -4,6 +4,12 @@
    bản inline cũ — không đổi hành vi. Gieo/animation vẫn ở trang (DOM-specific).
    window.KinhDichTool = { QUE, findHexagram, resolve, gridHTML, railData } */
 (function (root) {
+  // Tên quẻ/hành engine trả qua glossary CHỈ ở chỗ vẽ (W15c); vi/chưa nạp glossary ⇒ nguyên chuỗi.
+  // railData (gửi server) KHÔNG qua đây.
+  function _g(kind, v) {
+    var g = root.TuviGlossary;
+    return g && v ? g.t(kind, v) : v;
+  }
 // ── 64 quẻ Kinh Dịch — King Wen sequence ──
 // lines: 6 chars từ hào 1 (dưới) → hào 6 (trên), 1=dương 0=âm
 // Unicode symbol: U+4DC0 + (index)
@@ -130,7 +136,7 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
     let html = `<div class="que-card primary">
     <div class="que-eyebrow">Quẻ Chính</div>
     <div class="que-symbol">${String.fromCodePoint(0x4dc0 + pIdx)}</div>
-    <div class="que-name">${que.n}</div>
+    <div class="que-name">${_g('que', que.n)}</div>
     <div class="que-zh">${que.zh} · ${que.li
       .split('')
       .map((b) => (b === '1' ? '⚊' : '⚋'))
@@ -144,7 +150,7 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
       html += `<div class="que-card">
       <div class="que-eyebrow">Quẻ Biến (xu hướng)</div>
       <div class="que-symbol" style="opacity:0.7">${String.fromCodePoint(0x4dc0 + cIdx)}</div>
-      <div class="que-name">${cQue.n}</div>
+      <div class="que-name">${_g('que', cQue.n)}</div>
       <div class="que-zh">${cQue.zh} · ${cQue.li
         .split('')
         .map((b) => (b === '1' ? '⚊' : '⚋'))
@@ -203,7 +209,7 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
     const rows = d.muc
       .map(
         (m) => `<div class="kd-loi${m.chinh ? ' kd-chu' : ''}">
-      <div class="kd-loi-nhan">${_esc(m.nhan)} · ${_esc(m.queTen)}${m.nguon === 'bien' ? ' (quẻ biến)' : ''}${m.chinh && d.muc.length > 1 ? ' · làm chủ' : ''}</div>
+      <div class="kd-loi-nhan">${_esc(m.nhan)} · ${_esc(_g('que', m.queTen))}${m.nguon === 'bien' ? ' (quẻ biến)' : ''}${m.chinh && d.muc.length > 1 ? ' · làm chủ' : ''}</div>
       <div class="kd-loi-han">${_esc(m.han)}</div>
       <div class="kd-loi-viet">${_esc(m.viet)}</div>
     </div>`
@@ -302,7 +308,7 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
              loading="lazy" decoding="async" width="1024" height="1536">
       </div>
       <figcaption>
-        <b>${_esc(v.nhan)} · ${_esc(v.que.n)} ${_esc(v.que.zh)}</b>${
+        <b>${_esc(v.nhan)} · ${_esc(_g('que', v.que.n))} ${_esc(v.que.zh)}</b>${
           loi && loi.qv ? `<span class="kd-anh-que">${_esc(loi.qv)}</span>` : ''
         }
       </figcaption>

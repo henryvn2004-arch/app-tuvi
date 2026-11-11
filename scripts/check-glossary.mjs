@@ -48,6 +48,10 @@ const NGOAI_LE = {
     sai: '相→Tương≠Tướng',
     vi: '相 đa âm: Tương / Tướng (quan tướng) — 天相 đọc Thiên Tướng',
   },
+  'que|Vị Tế': {
+    sai: '未→Mùi≠Vị',
+    vi: '未 đa âm: Mùi (địa chi) / Vị (chưa) — 未濟 đọc Vị Tế (quẻ 64)',
+  },
   'sao|Cô Thần': {
     sai: '辰→Thìn≠Thần',
     vi: '辰 đa âm: Thìn / Thần (tinh thần) — 孤辰 đọc Cô Thần',

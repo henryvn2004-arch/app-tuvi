@@ -19,6 +19,25 @@
   var MUC_NHAN = { cat: 'Cát', hung: 'Tránh', binh: 'Bình' };
   var HANH_MAU = { Kim: '#C9A84C', Mộc: '#4E9A6A', Thủy: '#3E7CB1', Hỏa: '#C0553F', Thổ: '#A98352' };
 
+  // Tên engine trả (cửa/sao/thần/tiết khí/nguyên/quẻ/hành) qua glossary CHỈ ở chỗ vẽ (W15c) — vi hoặc chưa nạp
+  // glossary thì trả nguyên chuỗi. Bàn `b` (và railData) vẫn giữ chữ Việt gốc.
+  function _g(kind, v) {
+    var g = root.TuviGlossary;
+    return g && v ? g.t(kind, v) : v;
+  }
+  var _QUAI = ['Càn', 'Đoài', 'Ly', 'Chấn', 'Tốn', 'Khảm', 'Cấn', 'Khôn'];
+  function _cungTen(s) { // "Khảm 1" → tên quẻ qua glossary + số; "Trung 5" giữ nguyên
+    var m = /^(\S+) (\d)$/.exec(s || '');
+    return m && _QUAI.indexOf(m[1]) >= 0 ? _g('quai', m[1]) + ' ' + m[2] : s;
+  }
+  function _cuc(s) { // "Dương độn cục 5" → khuôn theo ngôn ngữ (khoá js.shellui.km-cuc)
+    var m = /^(Dương độn|Âm độn) cục (.+)$/.exec(s || '');
+    if (!m) return s;
+    var d = { dun: _g('kymon', m[1]), n: m[2] }, vi = '{dun} cục {n}';
+    var I = root.I18n;
+    return I && I.tv ? I.tv('js.shellui.km-cuc', vi, d) : vi.replace('{dun}', m[1]).replace('{n}', m[2]);
+  }
+
   function _esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -47,18 +66,18 @@
         (giua ? '' : '<span class="km-hang">#' + c.hang + '</span>') +
         '</div>' +
         (c.cua
-          ? '<div class="km-cua" style="color:' + MUC_MAU[c.cua.muc] + '">' + _esc(c.cua.ten) + '</div>'
+          ? '<div class="km-cua" style="color:' + MUC_MAU[c.cua.muc] + '">' + _esc(_g('kymon', c.cua.ten)) + '</div>'
           : '<div class="km-cua km-khong">không cửa</div>') +
         '<div class="km-dong">' +
-        (c.sao ? '<span class="km-sao">' + _esc(c.sao.ten) + '</span>' : '') +
-        (c.than ? '<span class="km-than">' + _esc(c.than.ten) + '</span>' : '') +
+        (c.sao ? '<span class="km-sao">' + _esc(_g('kymon', c.sao.ten)) + '</span>' : '') +
+        (c.than ? '<span class="km-than">' + _esc(_g('kymon', c.than.ten)) + '</span>' : '') +
         '</div>' +
         '<div class="km-can">' +
         (c.canThien ? '<b>' + _esc(c.canThien) + '</b>' : '') +
         (c.canDia ? '<i>' + _esc(c.canDia) + '</i>' : '') +
         (c.tamKy ? '<span class="km-ky">' + _esc(c.tamKy) + '</span>' : '') +
         '</div>' +
-        '<div class="km-cung">' + _esc(c.ten) + ' · ' + _esc(c.hanh) + '</div>' +
+        '<div class="km-cung">' + _esc(_cungTen(c.ten)) + ' · ' + _esc(_g('hanh', c.hanh)) + '</div>' +
         '</div>'
       );
     });
@@ -79,8 +98,8 @@
       return (
         '<tr class="km-r-' + c.muc + '">' +
         '<td class="km-t-hang">' + c.hang + '</td>' +
-        '<td><b>' + _esc(c.huong) + '</b><span class="km-t-cung">' + _esc(c.ten) + '</span></td>' +
-        '<td>' + (c.cua ? _esc(c.cua.ten) : '—') + '</td>' +
+        '<td><b>' + _esc(c.huong) + '</b><span class="km-t-cung">' + _esc(_cungTen(c.ten)) + '</span></td>' +
+        '<td>' + (c.cua ? _esc(_g('kymon', c.cua.ten)) : '—') + '</td>' +
         '<td class="km-t-diem">' + (c.diem > 0 ? '+' : '') + c.diem + '</td>' +
         '<td><span class="km-pill" style="background:' + MUC_MAU[c.muc] + '">' + MUC_NHAN[c.muc] + '</span></td>' +
         '<td class="km-t-ly">' + (c.viec ? _esc(c.viec) + '. ' : '') +
@@ -161,11 +180,11 @@
 
         ctx.fillStyle = c.cua ? MUC_MAU[c.cua.muc] : 'rgba(255,255,255,0.4)';
         ctx.font = '700 40px ' + SERIF;
-        ctx.fillText(c.cua ? c.cua.ten : '—', mid, cy + 100);
+        ctx.fillText(c.cua ? _g('kymon', c.cua.ten) : '—', mid, cy + 100);
 
         ctx.fillStyle = 'rgba(255,255,255,0.72)';
         ctx.font = '400 24px ' + SANS;
-        ctx.fillText((c.sao ? c.sao.ten : '') + (c.than ? ' · ' + c.than.ten : ''), mid, cy + 138);
+        ctx.fillText((c.sao ? _g('kymon', c.sao.ten) : '') + (c.than ? ' · ' + _g('kymon', c.than.ten) : ''), mid, cy + 138);
 
         ctx.fillStyle = c.tamKy ? GOLD : 'rgba(255,255,255,0.45)';
         ctx.font = (c.tamKy ? '700 ' : '400 ') + '24px ' + SANS;
@@ -181,17 +200,23 @@
     var doNhat = (b.cungs || []).filter(function (c) { return c.hang === 1; })[0];
     var T = (root.Poster && root.Poster.THEME) || {};
     return {
-      title: 'Kỳ Môn — ' + b.cuc,
-      subtitle: b.tietKhi + ' ' + b.nguyen + ' · giờ ' + b.canChi.gio + ' ngày ' + b.canChi.ngay,
+      title: 'Kỳ Môn — ' + _cuc(b.cuc),
+      subtitle: _g('lich', b.tietKhi) + ' ' + _g('kymon', b.nguyen) + ' · giờ ' + b.canChi.gio + ' ngày ' + b.canChi.ngay,
       quote: doNhat
-        ? 'Hướng đỡ nhất canh giờ này: ' + doNhat.huong + ' — cửa ' + (doNhat.cua ? doNhat.cua.ten : '—') +
+        ? 'Hướng đỡ nhất canh giờ này: ' + doNhat.huong + ' — cửa ' + (doNhat.cua ? _g('kymon', doNhat.cua.ten) : '—') +
           (doNhat.cua ? ', ' + doNhat.cua.nghia.toLowerCase() : '') + '.'
         : '',
       fonts: ['700 40px ' + (T.SERIF || 'serif'), '600 23px ' + (T.SANS || 'sans-serif')],
     };
   }
 
-  var API = { boardHTML: boardHTML, chiTietHTML: chiTietHTML, posterDraw: posterDraw, posterOpts: posterOpts, MUC_MAU: MUC_MAU, HANH_MAU: HANH_MAU };
+  // fmt: cho trang/shell vẽ giá trị engine của bàn qua glossary (chỉ hiển thị; dữ liệu gửi server giữ chữ Việt).
+  var fmt = {
+    cuc: _cuc,
+    tietKhi: function (v) { return _g('lich', v); },
+    kymon: function (v) { return _g('kymon', v); },
+  };
+  var API = { fmt: fmt, boardHTML: boardHTML, chiTietHTML: chiTietHTML, posterDraw: posterDraw, posterOpts: posterOpts, MUC_MAU: MUC_MAU, HANH_MAU: HANH_MAU };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.KyMonTool = API;
 })(typeof window !== 'undefined' ? window : globalThis);
