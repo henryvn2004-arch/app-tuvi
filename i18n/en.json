@@ -1263,9 +1263,33 @@
   "t": ". What are you planning to do, so I can pick a good hour? Cast your chart and I'll read your own fortune.",
   "h": "71046a30"
  },
+ "js.home.ban-menh-khac-hanh-ngay-chu": {
+  "t": "your natal element controls the day's element — you can take the lead, with some effort",
+  "h": "85ec87ed"
+ },
+ "js.home.ban-menh-sinh-cho-hanh-ngay": {
+  "t": "your natal element generates the day's element — draining, so conserve your energy",
+  "h": "a3adeebe"
+ },
+ "js.home.binh": {
+  "t": "Neutral",
+  "h": "33e3bf5e"
+ },
+ "js.home.binh-on": {
+  "t": "steady",
+  "h": "a2f7dd20"
+ },
  "js.home.buoc-tao-tai-khoan-de-giu": {
   "t": "</b> steps. Create an account to keep this progress and receive credits when you finish.",
   "h": "e4db2a46"
+ },
+ "js.home.can-than-trong": {
+  "t": "proceed with caution",
+  "h": "0d1ada49"
+ },
+ "js.home.can-tranh": {
+  "t": "Avoid",
+  "h": "84eadc4e"
  },
  "js.home.chao-con": {
   "t": "Hello{comma_name}. The Master is here — you can tell me anything: work, family, or just feeling tired today. And if you'd like to see the fortune for today's **{cc}** day, I'll look at it right away.",
@@ -1274,6 +1298,18 @@
  "js.home.chinh-tinh": {
   "t": " — major stars ",
   "h": "595c5e1b"
+ },
+ "js.home.chu-dong-ton-cong": {
+  "t": "proactive, takes effort",
+  "h": "5615bf97"
+ },
+ "js.home.co-con-nho-doc-la-so": {
+  "t": "Have a young child? Read your child's chart for temperament and which parenting approaches will land.",
+  "h": "0c465eff"
+ },
+ "js.home.co-nguoi-giup": {
+  "t": "helped by others",
+  "h": "5a7129b9"
  },
  "js.home.co-phap-kieng-khoi-su": {
   "t": " — classical rules advise against starting new ventures.",
@@ -1291,6 +1327,10 @@
   "t": " — has {sao}",
   "h": "f6d4710a"
  },
+ "js.home.con-dang-be-tac-chuyen-cong": {
+  "t": "I'm stuck with my work",
+  "h": "05beea63"
+ },
  "js.home.con-lai-ghe-roi": {
   "t": "You're back{comma_name}. How is today — anything on your heart?",
   "h": "46c1f303"
@@ -1302,6 +1342,26 @@
  "js.home.cong-cu-chinh": {
   "t": "Main tools",
   "h": "fac531f0"
+ },
+ "js.home.cung-la-so-do-doc-theo": {
+  "t": "The same chart, read through a career lens: which working style suits you and how to build a team.",
+  "h": "1b974894"
+ },
+ "js.home.cung-ngay-sinh-doc-bang-mot": {
+  "t": "The same birth date, read with a different discipline (Zi Ping) to compare whether the two say the same thing.",
+  "h": "c23f5428"
+ },
+ "js.home.cung-phu-the-ta-nguoi-ban": {
+  "t": "The Spouse Palace describes your life partner — this tool turns that description into a portrait.",
+  "h": "80f61f5c"
+ },
+ "js.home.da-doc-la-so-tong-quan": {
+  "t": "Once you've read your chart overview, the next step is the coming 12 months, month by month.",
+  "h": "51de0f1f"
+ },
+ "js.home.da-doc-tinh-khi-cua-be": {
+  "t": "You've read your child's temperament — see what kinds of activities suit them as a start.",
+  "h": "ef15f560"
  },
  "js.home.da-luu-tren-may-nay": {
   "t": "saved on this device",
@@ -1315,9 +1375,29 @@
   "t": "Casting…",
   "h": "b47d9598"
  },
+ "js.home.dao-nay-con-thay-met-moi": {
+  "t": "I've been feeling really tired lately",
+  "h": "5244e4d3"
+ },
+ "js.home.de-vuong-lam-cham": {
+  "t": "easily snagged, slowed down",
+  "h": "41d076df"
+ },
+ "js.home.doc-ca-doi-2-8-nguoi": {
+  "t": "Read a whole team of 2–8 people at once: who steps on whose toes, and what kind of person the team is missing.",
+  "h": "7fac2a52"
+ },
  "js.home.doi-la-so": {
   "t": "Switch chart",
   "h": "2daddd37"
+ },
+ "js.home.gap-go": {
+  "t": "Meetings",
+  "h": "65b5fcbf"
+ },
+ "js.home.gia-dao": {
+  "t": "Family life",
+  "h": "5644f850"
  },
  "js.home.gio-dep": {
   "t": "Good hours",
@@ -1343,6 +1423,26 @@
   "t": " (element ",
   "h": "b9ab7b34"
  },
+ "js.home.hanh-ngay-cung-hanh-ban-menh": {
+  "t": "the day's element matches your natal element — harmonious, you stay in control",
+  "h": "80b2d011"
+ },
+ "js.home.hanh-ngay-khac-ban-menh-de": {
+  "t": "the day's element controls your natal element — easily snagged, slow down",
+  "h": "e8142422"
+ },
+ "js.home.hanh-ngay-sinh-cho-ban-menh": {
+  "t": "the day's element generates your natal element — smooth, easy to get help",
+  "h": "a2a28344"
+ },
+ "js.home.hanh-thong": {
+  "t": "Smooth sailing",
+  "h": "e379e3a6"
+ },
+ "js.home.hao-luc-giu-suc": {
+  "t": "draining, conserve your energy",
+  "h": "d9ff8d7c"
+ },
  "js.home.hoi-thay": {
   "t": "Ask the Master",
   "h": "c9ffbbaf"
@@ -1351,17 +1451,37 @@
   "t": ". Ask the Master about your fortune at:",
   "h": "abbb0b48"
  },
+ "js.home.hom-nay-khong-viec-lon-nao": {
+  "t": "No major matter scores high today — save it for another day.",
+  "h": "4503ec5f"
+ },
  "js.home.hom-nay-la-ngay": {
   "t": "Today is the **",
   "h": "01973599"
+ },
+ "js.home.hom-nay-la-ngay-ky-khoi": {
+  "t": "Today is an inauspicious day to begin things — postpone big matters; everyday tasks are fine as usual.",
+  "h": "926f129b"
  },
  "js.home.huy": {
   "t": "Cancel",
   "h": "34ca764c"
  },
+ "js.home.khong-chac-gio-sinh-sai-gio": {
+  "t": "Not sure of your birth hour? A wrong hour shifts almost the whole chart — cross-check it once for peace of mind.",
+  "h": "124df32a"
+ },
  "js.home.khong-lap-duoc-thu-lai-sau": {
   "t": "Couldn't cast it. Please try again later.",
   "h": "7855b0ef"
+ },
+ "js.home.khong-lay-duoc-gio-hoang-dao": {
+  "t": "Couldn't get the auspicious hours.",
+  "h": "315b1b59"
+ },
+ "js.home.la-so-cua-ban-dat-vao": {
+  "t": "Your chart set in an ancient scene — a portrait and a story to read.",
+  "h": "1d0ad04a"
  },
  "js.home.lam-xong-ca-ba-mo-khoa": {
   "t": "Complete all three to unlock <b>+",
@@ -1370,6 +1490,10 @@
  "js.home.lam-xong-ca-ba-nhan-thang": {
   "t": "Complete all three to receive <b>+",
   "h": "e79679d7"
+ },
+ "js.home.lap-la-so-mot-lan-24": {
+  "t": "Cast your chart once — 24 reading sections, and nearly every other tool reads from it.",
+  "h": "ea1ef982"
  },
  "js.home.lau-roi-con-chua-ghe": {
   "t": "It's been a while{comma_name}. Are you doing well? Is there anything you'd like to tell the Master?",
@@ -1411,6 +1535,14 @@
   "t": "How have you been these past few days{comma_name}? Last time you mentioned **{worry}** — how is that going?",
   "h": "d73269fa"
  },
+ "js.home.mien-phi-thu-ngay-khong-ton": {
+  "t": "Free — try it now, no credits needed.",
+  "h": "c2130339"
+ },
+ "js.home.nen-lam": {
+  "t": "Do",
+  "h": "f6e516a6"
+ },
  "js.home.ngay": {
   "t": "Day ",
   "h": "e196e19b"
@@ -1435,6 +1567,18 @@
   "t": " · inauspicious day",
   "h": "83e5d5b7"
  },
+ "js.home.ngay-ky-hoan-viec-lon": {
+  "t": "inauspicious day, postpone big matters",
+  "h": "cc9d129a"
+ },
+ "js.home.ngay-ky-lqyh": {
+  "t": "Inauspicious day",
+  "h": "21a3019b"
+ },
+ "js.home.ngay-nay-khong-co-gio-hoang": {
+  "t": "This day has no auspicious hours.",
+  "h": "7f175ac3"
+ },
  "js.home.ngay-sinh-chua-hop-le": {
   "t": "That birth date isn't valid.",
   "h": "feec7b22"
@@ -1446,6 +1590,10 @@
  "js.home.ngay-xau": {
   "t": "Inauspicious day",
   "h": "3fe05eab"
+ },
+ "js.home.ngay-xung-chinh-tuoi-ban-nen": {
+  "t": "A day that clashes with your own sign — keep your rhythm and avoid big decisions.",
+  "h": "f8a03446"
  },
  "js.home.ngay-xung-tuoi-can-than": {
   "t": " Today clashes with your zodiac sign, so take care with big matters.",
@@ -1459,6 +1607,10 @@
   "t": "Enter your birth date once to see which of your own palaces today falls in.",
   "h": "45d9335c"
  },
+ "js.home.rieng-viec-thuong-ngay": {
+  "t": "As for everyday tasks, ",
+  "h": "e7d64dd0"
+ },
  "js.home.so-lieu-rut-gon-thu-tai": {
   "t": " — abbreviated figures; try reloading later.",
   "h": "84e3f4e7"
@@ -1471,13 +1623,37 @@
   "t": "The Master is here{comma_name}. Is there anything else you'd like to ask, or something on your mind?",
   "h": "b606961a"
  },
+ "js.home.them-la-so-nguoi-thu-hai": {
+  "t": "Add a second person's chart: what the two of you were to each other in a past life.",
+  "h": "221d1e53"
+ },
  "js.home.theo-la-so": {
   "t": "By your chart: <b>",
   "h": "7d39229e"
  },
+ "js.home.thi-cu": {
+  "t": "Exams",
+  "h": "e6c5b5dd"
+ },
  "js.home.thieu-ngay-thang-nam-sinh": {
   "t": "Birth day, month or year is missing.",
   "h": "1ce95cff"
+ },
+ "js.home.thoi-gian-toi-co-gi-dang": {
+  "t": "Is there anything worth noting in the coming period?",
+  "h": "384b8bca"
+ },
+ "js.home.thuan-loi": {
+  "t": "favorable",
+  "h": "db3f793d"
+ },
+ "js.home.tien-bac": {
+  "t": "Money",
+  "h": "ae20605a"
+ },
+ "js.home.tot": {
+  "t": "Good",
+  "h": "f716d517"
  },
  "js.home.tranh-viec-lon-hom-nay": {
   "t": " — avoid major undertakings today.",
@@ -1495,6 +1671,14 @@
   "t": "Coincides with ",
   "h": "f007dc98"
  },
+ "js.home.tu-chu-duoc": {
+  "t": "in your control",
+  "h": "462a5b16"
+ },
+ "js.home.tu-vi-minh-bao": {
+  "t": "Minh Bao Zi Wei Dou Shu",
+  "h": "33336b26"
+ },
  "js.home.van-hom-nay": {
   "t": "Today's outlook",
   "h": "386c4c24"
@@ -1502,6 +1686,10 @@
  "js.home.van-hom-nay-ca-nhan": {
   "t": "You're back{comma_name}. Today is the **{cc}** day, and your daily limit sits in the **{cung}** palace",
   "h": "1e60cafb"
+ },
+ "js.home.van-hom-nay-cua-con-the": {
+  "t": "How is my fortune today?",
+  "h": "ef5998e3"
  },
  "js.home.van-ngay": {
   "t": "Daily outlook ",
@@ -1515,9 +1703,17 @@
   "t": " — no major star",
   "h": "44a2723b"
  },
+ "js.home.vo-chinh-dieu-pwt9": {
+  "t": "no major star",
+  "h": "bd07d7a9"
+ },
  "js.home.vua-cong": {
   "t": "✓ Just added <b>+",
   "h": "716106fa"
+ },
+ "js.home.xau": {
+  "t": "Poor",
+  "h": "5a8d08f3"
  },
  "js.home.xem-ca-7-ngay": {
   "t": "<b>See all</b><small>7 days</small>",
@@ -1526,6 +1722,14 @@
  "js.home.xem-van-rieng-cua-toi": {
   "t": "See my own outlook →",
   "h": "a669ddd6"
+ },
+ "js.home.xuat-hanh": {
+  "t": "Setting out",
+  "h": "424fcbb2"
+ },
+ "js.home.xung-chinh-tuoi-ban": {
+  "t": "clashes with your own sign",
+  "h": "7fec1ccf"
  },
  "js.home.xung-tuoi": {
   "t": "Zodiac clash",
@@ -2643,6 +2847,30 @@
   "t": "See all",
   "h": "7e040254"
  },
+ "js.shellui.09xxxxxxxx": {
+  "t": "09xxxxxxxx",
+  "h": "dcb79fbf"
+ },
+ "js.shellui.100-ban-muon-hoi-them-ve": {
+  "t": "/100**. Which suggestion would you like to ask more about?",
+  "h": "26d9a4c7"
+ },
+ "js.shellui.100-sau-dieu-chinh-co-the": {
+  "t": "/100**, and with adjustments it could rise to **",
+  "h": "a4c14f33"
+ },
+ "js.shellui.20-nam-toi-ban-muon-hoi": {
+  "t": "** (the next 20 years). What would you like to ask?",
+  "h": "871e191d"
+ },
+ "js.shellui.4-chat-bai-nghia-la-gi": {
+  "t": "What do the four suits mean?",
+  "h": "793f6bd3"
+ },
+ "js.shellui.5-sac-ngu-hanh-nghia-la": {
+  "t": "What do the five Five-Element colors mean?",
+  "h": "98715ca7"
+ },
  "js.shellui.ai-co-link-deu-doc-duoc": {
   "t": "Anyone with the link can read the chart and the whole Q&A in this session.",
   "h": "39f8a716"
@@ -2663,9 +2891,21 @@
   "t": "Hide",
   "h": "3be211c7"
  },
+ "js.shellui.an-duong-la-gi": {
+  "t": "What is the Yin Tang (the spot between the eyebrows)?",
+  "h": "e1de6d6d"
+ },
  "js.shellui.anh-ay": {
   "t": "your husband",
   "h": "b69e360e"
+ },
+ "js.shellui.anh-da-gui": {
+  "t": "<p>Photo sent ✓</p>",
+  "h": "a3d92bd3"
+ },
+ "js.shellui.anh-mat-noi-len-dieu-gi": {
+  "t": "What does the gaze reveal?",
+  "h": "dca0ccee"
  },
  "js.shellui.anh-tuan": {
   "t": "Tom",
@@ -2675,9 +2915,25 @@
   "t": "your mother",
   "h": "f1d8177e"
  },
+ "js.shellui.ba-muoi-tuoi-lap-than-bon": {
+  "t": "At thirty, I stood firm; at forty, I had no doubts; at fifty, I knew the will of Heaven.",
+  "h": "fb2fcd49"
+ },
  "js.shellui.ban": {
   "t": "You",
   "h": "40ffd8d0"
+ },
+ "js.shellui.ban-da-lap": {
+  "t": "Chart cast — **",
+  "h": "16637971"
+ },
+ "js.shellui.ban-dinh-lam-viec-gi-de": {
+  "t": "**. What are you planning to do, so I can pick the best date?",
+  "h": "28900fc7"
+ },
+ "js.shellui.ban-lam-viec-diem": {
+  "t": "Desk — score ",
+  "h": "1bfcfce8"
  },
  "js.shellui.ban-lap-la-so-o-khung": {
   "t": "<p>Cast your chart in the middle panel and the Master answers right away —<br>career, love, this year, next month, ask anything.</p></div>",
@@ -2691,6 +2947,74 @@
   "t": "the full Reading of",
   "h": "9008184e"
  },
+ "js.shellui.ban-menh": {
+  "t": "** — natal element **",
+  "h": "c3f2a79e"
+ },
+ "js.shellui.ban-muon-hoi-huong-cho-viec": {
+  "t": ". What would you like to ask about directions for?",
+  "h": "50a5e3e2"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-dong": {
+  "t": ". Would you like to ask more about traditional Chinese medicine, diet or skincare products?",
+  "h": "2319a0e4"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-kieu": {
+  "t": "**. Would you like to ask more about hairstyles or glasses that suit your face?",
+  "h": "c09516c7"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-mau": {
+  "t": ". Would you like to ask more about colors or outfits?",
+  "h": "db0a07ec"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-mau-7ruw": {
+  "t": ". Would you like to ask more about colors or style?",
+  "h": "fcca72b4"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-mau-lphd": {
+  "t": ". Would you like to ask more about colors or putting outfits together?",
+  "h": "f9f43e47"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-phong": {
+  "t": ". Which makeup style would you like to ask more about?",
+  "h": "26be2c4a"
+ },
+ "js.shellui.ban-muon-hoi-viec-gi": {
+  "t": "**. What would you like to ask about?",
+  "h": "b20cbcea"
+ },
+ "js.shellui.ban-muon-toi-cham-ten": {
+  "t": "Would you like me to score the name **",
+  "h": "391dd027"
+ },
+ "js.shellui.ban-muon-toi-goi-y-ten": {
+  "t": ". Which direction would you like my name suggestions to take?",
+  "h": "5de05973"
+ },
+ "js.shellui.ban-muon-toi-goi-y-ten-l4lz": {
+  "t": "Which direction would you like my name suggestions to take?",
+  "h": "3ccf4b50"
+ },
+ "js.shellui.ban-muon-toi-luan-dieu-gi-8en2": {
+  "t": ". What would you like me to read for you?",
+  "h": "56e379d0"
+ },
+ "js.shellui.ban-muon-toi-tu-van-gi": {
+  "t": "**. What would you like me to advise on first?",
+  "h": "32485c20"
+ },
+ "js.shellui.ban-muon-toi-tu-van-gi-p0lg": {
+  "t": "**). What would you like me to advise on first?",
+  "h": "e0e4e985"
+ },
+ "js.shellui.ban-thuoc-menh": {
+  "t": "Your natal element is ** ",
+  "h": "79bf73a7"
+ },
+ "js.shellui.ban-thuoc-season": {
+  "t": "Your color season is **",
+  "h": "0f6f3bdb"
+ },
  "js.shellui.banx": {
   "t": "you",
   "h": "e8f04322"
@@ -2699,13 +3023,53 @@
   "t": "<b>Your report is ready</b>",
   "h": "ab59122b"
  },
+ "js.shellui.bao-gio-co-ket-qua": {
+  "t": "When will the result be ready?",
+  "h": "698cf33d"
+ },
  "js.shellui.bat-dau-hoi-thoai-moi-ban": {
   "t": "New conversation started. What would you like to ask about this chart?",
   "h": "9d7d64ad"
  },
+ "js.shellui.bat-trach": {
+  "t": "Eight Mansions · ",
+  "h": "ca2b345f"
+ },
+ "js.shellui.bat-trach-minh-canh-la-gi": {
+  "t": "What is the Eight Mansions Bright Mirror?",
+  "h": "a919defa"
+ },
+ "js.shellui.bat-tu-ky-mon": {
+  "t": "BaZi, Qi Men",
+  "h": "eac6b8dd"
+ },
  "js.shellui.be-an": {
   "t": "Annie",
   "h": "4010ce22"
+ },
+ "js.shellui.be-gai": {
+  "t": "Girl",
+  "h": "af93dba0"
+ },
+ "js.shellui.be-trai": {
+  "t": "Boy",
+  "h": "274225bc"
+ },
+ "js.shellui.bep-nen-dat-huong-nao": {
+  "t": "Which direction should the kitchen face?",
+  "h": "3eafdc4a"
+ },
+ "js.shellui.bien-quai-noi-ket-cuc-the": {
+  "t": "What does the changed hexagram say about the outcome?",
+  "h": "3c27069a"
+ },
+ "js.shellui.biet-ma-lam-khong-bang-thich": {
+  "t": "Those who know it are not equal to those who love it; those who love it are not equal to those who delight in it.",
+  "h": "88e7bdea"
+ },
+ "js.shellui.biet-minh-biet-nguoi-tram-tran": {
+  "t": "Know yourself and know your enemy, and you need not fear a hundred battles.",
+  "h": "1bc616cf"
  },
  "js.shellui.bo": {
   "t": "Father",
@@ -2715,17 +3079,81 @@
   "t": "Remove image",
   "h": "1ba6fb87"
  },
+ "js.shellui.bo-ceul": {
+  "t": "<p>Father <b>",
+  "h": "a9fbc79b"
+ },
  "js.shellui.bo-con": {
   "t": "your father",
   "h": "9a106c99"
+ },
+ "js.shellui.bo-lcm6": {
+  "t": " · father ",
+  "h": "1bb60db3"
+ },
+ "js.shellui.boi-bai-tay": {
+  "t": "Playing-Card Reading",
+  "h": "4a54dbba"
+ },
+ "js.shellui.boi-bai-tay-khac-tarot-ra": {
+  "t": "How is a playing-card reading different from Tarot?",
+  "h": "199a6ae6"
  },
  "js.shellui.brand": {
   "t": "Minh Bao Zi Wei Dou Shu",
   "h": "33336b26"
  },
+ "js.shellui.buoc-o-huong-xau-thi-hoa": {
+  "t": "If it is tied in an unfavorable direction, how can that be remedied?",
+  "h": "8900960b"
+ },
+ "js.shellui.but-tuong": {
+  "t": "Handwriting Reading",
+  "h": "6eab7d7c"
+ },
+ "js.shellui.but-tuong-cua-toi": {
+  "t": "My handwriting reading",
+  "h": "71e77c95"
+ },
  "js.shellui.ca-nha": {
   "t": "The whole family",
   "h": "158695a7"
+ },
+ "js.shellui.cach-cai-thien-theo-dong-y": {
+  "t": "How can I improve it according to traditional Chinese medicine?",
+  "h": "e84646cb"
+ },
+ "js.shellui.cach-cham-da-theo-dong-y": {
+  "t": "How should I care for my skin according to traditional Chinese medicine?",
+  "h": "2992210c"
+ },
+ "js.shellui.cach-cuc-bat-tu-cua-toi": {
+  "t": "What is the structure of my BaZi chart?",
+  "h": "66f87290"
+ },
+ "js.shellui.cach-gieo": {
+  "t": "How to cast",
+  "h": "ff8e39bb"
+ },
+ "js.shellui.cach-hoa-giai-huong-xau": {
+  "t": "How can an unfavorable direction be remedied?",
+  "h": "c0c1db64"
+ },
+ "js.shellui.cach-kich-hoat-tai-vi": {
+  "t": "How do I activate the wealth position?",
+  "h": "69f99fe5"
+ },
+ "js.shellui.cach-phoi-do-theo-mau-menh": {
+  "t": "How do I coordinate outfits by my element colors?",
+  "h": "3d2ef763"
+ },
+ "js.shellui.cach-tang-van-tri-tue": {
+  "t": "How can I strengthen my wisdom luck?",
+  "h": "538015b7"
+ },
+ "js.shellui.can": {
+  "t": "Needs",
+  "h": "393b0153"
  },
  "js.shellui.cau": {
   "t": "</b> questions left",
@@ -2734,6 +3162,10 @@
  "js.shellui.cau-hoi-48ar": {
   "t": "</b> questions left",
   "h": "65c94d43"
+ },
+ "js.shellui.cau-hoi-tuy-chon": {
+  "t": "Question (optional)",
+  "h": "645f5819"
  },
  "js.shellui.cau-mien-phi": {
   "t": " free questions</b>",
@@ -2747,6 +3179,78 @@
   "t": " — your last question was answered right away",
   "h": "70029ef5"
  },
+ "js.shellui.cham-diem": {
+  "t": "Score →",
+  "h": "a4d402f6"
+ },
+ "js.shellui.chao-ban-cho-thay-xin-nam": {
+  "t": "Hello. Tell the Master your birth year and gender right here in the chat, and I'll advise on clothing colors by the Five Elements and Na Yin. Once you have the result, just ask me more.",
+  "h": "eabb393e"
+ },
+ "js.shellui.chao-ban-dien-nam-sinh-ngay": {
+  "t": "Hello. Enter your birth year, the date and the purpose right here in the chat, and I'll advise on colors and style that suit the day. Once you have the result, just ask me more.",
+  "h": "31f4cde1"
+ },
+ "js.shellui.chao-ban-dien-nam-sinh-va": {
+  "t": "Hello. Enter your birth year and send a photo of your workspace right here in the chat, and I'll score its feng shui by the Eight Mansions. Once you have the result, just ask me more.",
+  "h": "e2f81b3b"
+ },
+ "js.shellui.chao-ban-dien-nam-sinh-va-3mcz": {
+  "t": "Hello. Enter your birth year and send a photo of your shop or office right here in the chat, and I'll score the cashier layout and main door by the Eight Mansions. Once you have the result, just ask me more.",
+  "h": "513bc0ef"
+ },
+ "js.shellui.chao-ban-dien-nam-sinh-va-anel": {
+  "t": "Hello. Enter your birth year and send a photo of your room right here in the chat, and I'll score its feng shui by the Eight Mansions. Once you have the result, just ask me more.",
+  "h": "dfc7c600"
+ },
+ "js.shellui.chao-ban-dinh-tam-roi-hoi": {
+  "t": "Hello. Settle your mind, then ask me what's weighing on you. I'll draw an Oracle card and read it for you — or open the Oracle page if you'd like to draw it yourself.",
+  "h": "22f5ec78"
+ },
+ "js.shellui.chao-ban-gui-anh-chu-ky": {
+  "t": "Hello. Send a photo of your signature right here in the chat (a clear photo or scan on a light background), and I'll measure the classical axes and read it for you. Once you have the result, just ask me more.",
+  "h": "6c75b8c4"
+ },
+ "js.shellui.chao-ban-gui-anh-da-mat": {
+  "t": "Hello. Send a photo of your facial skin right here in the chat, and I'll analyze it by combining Eastern and Western medicine with your natal Five Element. Once you have the result, just ask me more.",
+  "h": "b75472f5"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat": {
+  "t": "Hello. Send a photo of your face right here in the chat, and I'll analyze it by classical physiognomy. Once you have the result, feel free to ask me anything more.",
+  "h": "e7cd82e9"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-25m4": {
+  "t": "Hello. Send a photo of your face right here in the chat, and I'll analyze your undertone and the color season that suits you. Once you have the result, just ask me more.",
+  "h": "9d4d0810"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-4w3x": {
+  "t": "Hello. Send a photo of your face right here in the chat, and I'll read your complexion by the Ma Yi Shen Xiang. Once you have the result, feel free to ask me anything more.",
+  "h": "005d8998"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-ixs1": {
+  "t": "Hello. Send a photo of your face right here in the chat, and I'll zoom in on your eyes and analyze them by the traditional method of eye reading. Once you have the result, just ask me more.",
+  "h": "19ac08fd"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-jcki": {
+  "t": "Hello. Send a photo of your face right here in the chat, and I'll suggest hairstyles and glasses that suit your features. Once you have the result, just ask me more.",
+  "h": "e6cde46a"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-z4ez": {
+  "t": "Hello. Send a photo of your face right here in the chat, and I'll suggest a makeup style that suits your features and natal element. Once you have the result, just ask me more.",
+  "h": "0cdc1f94"
+ },
+ "js.shellui.chao-ban-gui-anh-long-ban": {
+  "t": "Hello. Send a photo of your palm right here in the chat (open flat, facing up), and I'll analyze it by classical palmistry. Once you have the result, just ask me more.",
+  "h": "4ec607ce"
+ },
+ "js.shellui.chao-ban-hoi-toi-ve-mot": {
+  "t": "Hello. Ask me about a question or situation you're facing, and I'll draw cards and read them for you — or open the Tarot page if you'd like to draw them yourself.",
+  "h": "dafd1fb0"
+ },
+ "js.shellui.chao-ban-hoi-toi-ve-mot-rpj1": {
+  "t": "Hello. Ask me about a question or situation you're facing, and I'll draw playing cards and read them for you — or open the Playing-Card Reading page if you'd like to draw them yourself.",
+  "h": "931febfd"
+ },
  "js.shellui.chau": {
   "t": "your child",
   "h": "a3d50d2f"
@@ -2758,6 +3262,14 @@
  "js.shellui.chi-ay": {
   "t": "your wife",
   "h": "2e7bb192"
+ },
+ "js.shellui.chi-khi-con-mo-app": {
+  "t": "Only when you open the app",
+  "h": "0838cde0"
+ },
+ "js.shellui.chi-minh-con": {
+  "t": "Just you",
+  "h": "75f0d516"
  },
  "js.shellui.chia-se": {
   "t": "Share",
@@ -2775,13 +3287,57 @@
   "t": "Share ",
   "h": "f575b7df"
  },
+ "js.shellui.cho-minh-xin-ho-ten-va": {
+  "t": "Please tell me your full name and gender.",
+  "h": "a53c7ac5"
+ },
  "js.shellui.cho-ten": {
   "t": " for {name}",
   "h": "bc9cbc22"
  },
+ "js.shellui.cho-thay-day-so-con-muon": {
+  "t": "<p>Give the Master the number you'd like scored (phone number, license plate…).</p>",
+  "h": "c393c3e5"
+ },
+ "js.shellui.cho-thay-xin-ho-cua-be": {
+  "t": "<p>Please give the Master the child's family name, and the birth years of the child, father and mother.</p>",
+  "h": "bb587f9a"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-chu": {
+  "t": "<p>Please give the Master the owner's birth year and the business's line of work.</p>",
+  "h": "c3d9712d"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-duong": {
+  "t": "<p>Please give the Master your birth year (solar calendar).</p>",
+  "h": "ce0be17e"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-duong-453j": {
+  "t": "<p>Please give the Master the birth years (solar calendar) of the father and mother.</p>",
+  "h": "d56f99b1"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-gioi": {
+  "t": "<p>Please give the Master your birth year, gender, planned date and purpose (a paid tool — the price shows on the button before any credits are deducted).</p>",
+  "h": "bc67e762"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-va": {
+  "t": "<p>Please give the Master your birth year and gender.</p>",
+  "h": "24d73bdb"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-va-sz0q": {
+  "t": "<p>Please give the Master your birth year and gender (a paid tool — the price shows on the button before any credits are deducted).</p>",
+  "h": "2a284e19"
+ },
+ "js.shellui.cho-thay-xin-thong-tin-nguoi": {
+  "t": "Please give the Master the first person's details.",
+  "h": "20efc20c"
+ },
  "js.shellui.chon-mot-cach-duoi-day": {
   "t": " — choose one of the options below.",
   "h": "8b0c906e"
+ },
+ "js.shellui.chon-ngay": {
+  "t": "Date selection ",
+  "h": "7e322b37"
  },
  "js.shellui.chon-thay-luan-giai": {
   "t": "Choose your Master",
@@ -2794,6 +3350,14 @@
  "js.shellui.chong-con": {
   "t": "your husband",
   "h": "6ed699ab"
+ },
+ "js.shellui.chu": {
+  "t": " · owner ",
+  "h": "d9836ef1"
+ },
+ "js.shellui.chu-su-tuoi": {
+  "t": "** (principal's zodiac year **",
+  "h": "8aafb6ee"
  },
  "js.shellui.chua-co-la-so-nao": {
   "t": "<b>No charts yet</b>",
@@ -2815,9 +3379,25 @@
   "t": " · not opened</span></span>",
   "h": "72204e26"
  },
+ "js.shellui.chua-mo-duoc-form-ngay-sinh": {
+  "t": "couldn't open the birth-date form.",
+  "h": "9ae703ba"
+ },
+ "js.shellui.chua-mo-duoc-telegram-con-thu": {
+  "t": "Couldn't open Telegram — please try again from the Profile page.",
+  "h": "3d5bcea0"
+ },
  "js.shellui.chua-tao-duoc-pdf-thu-lai": {
   "t": "Couldn't create the PDF. Please try again in a few minutes.",
   "h": "549a59fa"
+ },
+ "js.shellui.chua-thay-gi": {
+  "t": "Nothing yet",
+  "h": "d0b4990a"
+ },
+ "js.shellui.chua-them-duoc-lich-con-thu": {
+  "t": "<p>Couldn't add the calendar — please try again from the Family page.</p>",
+  "h": "2e6ef436"
  },
  "js.shellui.chuyen": {
   "t": "As for ",
@@ -2826,6 +3406,14 @@
  "js.shellui.chuyen-do-the-nao-roi-con": {
   "t": "<p>How did that turn out?</p>",
   "h": "9e184650"
+ },
+ "js.shellui.chuyen-nay-thay-phai-xem-la": {
+  "t": "For this, the Master needs to look at your chart to answer accurately. Please give your full name and gender.",
+  "h": "58f00a90"
+ },
+ "js.shellui.co-loi-thu-lai-giup-con": {
+  "t": "Something went wrong — please try again.",
+  "h": "320cbdc2"
  },
  "js.shellui.co-noi": {
   "t": " said: <i>“",
@@ -2839,6 +3427,18 @@
   "t": "<p>There are ",
   "h": "b84493f3"
  },
+ "js.shellui.con-bam-start-trong-telegram-la": {
+  "t": "Tap Start in Telegram and you're done — the Master will message you on the day.",
+  "h": "3b43eb01"
+ },
+ "js.shellui.con-can-bo-ngu-hanh-gi": {
+  "t": "Which Five Element do I need to supplement?",
+  "h": "2906ae80"
+ },
+ "js.shellui.con-dinh-lam-viec-gi-cho": {
+  "t": "<p>What are you planning to do, for whom, and in which month?</p>",
+  "h": "1cb3abf3"
+ },
  "js.shellui.con-goi-la-gi": {
   "t": "What is {goi}'s name (e.g. \"{vd}\") and gender?",
   "h": "70920c56"
@@ -2846,6 +3446,14 @@
  "js.shellui.con-hoi-tiep-di": {
   "t": "</b>. Go ahead and keep asking.</p>",
   "h": "0de4fe93"
+ },
+ "js.shellui.con-muon-hoi-viec-gi-tuy": {
+  "t": "<p>What would you like to ask about (optional)? Then the Master will cast a hexagram for you — six lines in one go.</p>",
+  "h": "175bcf5b"
+ },
+ "js.shellui.con-muon-lap-khoa-luc-nham": {
+  "t": "<p>For which date and hour would you like a Liu Ren chart cast?</p>",
+  "h": "812185b8"
  },
  "js.shellui.con-muon-thay-dua-ngay-tot": {
   "t": "<p>Would you like the Master to add your own auspicious days and clashing days to your phone calendar? You'll see them every morning when you open it.</p>",
@@ -2859,6 +3467,18 @@
   "t": "</b>. What would you like the Master to look at first?</p>",
   "h": "c643b581"
  },
+ "js.shellui.con-muon-thay-xem-la-so": {
+  "t": "Whose chart would you like the Master to read? Please give the full name and gender.",
+  "h": "599ae642"
+ },
+ "js.shellui.con-muon-xem-gio-hoang-dao": {
+  "t": "<p>For which date would you like the auspicious (Huang Dao) hours?</p>",
+  "h": "618550f6"
+ },
+ "js.shellui.con-muon-xem-lich-ngay-tot": {
+  "t": "<p>For which month would you like the auspicious-days calendar?</p>",
+  "h": "5fa29f8b"
+ },
  "js.shellui.con-nhieu-dieu-muon-noi-ve": {
   "t": " has more to say about this chart. Sign up free to:",
   "h": "b5e24689"
@@ -2867,17 +3487,101 @@
   "t": " has more to explain",
   "h": "2a2c8332"
  },
+ "js.shellui.con-so": {
+  "t": "Number",
+  "h": "ffeaf4b4"
+ },
  "js.shellui.con-thu-lai-o-so-la": {
   "t": ". Please try again from your Chart Book.",
   "h": "e3bb1032"
+ },
+ "js.shellui.con-tuoi-gi-hop-voi-bo": {
+  "t": "Which zodiac sign suits the parents best for a child?",
+  "h": "702bccb6"
+ },
+ "js.shellui.cong-viec-chinh": {
+  "t": "Main job",
+  "h": "ff60cd13"
+ },
+ "js.shellui.cot-va-nhuc-khac-nhau-the": {
+  "t": "How do Bone and Flesh differ?",
+  "h": "79e5d699"
+ },
+ "js.shellui.cua-hang-van-phong-diem": {
+  "t": "Shop & Office — score ",
+  "h": "70910085"
+ },
+ "js.shellui.cung-dien-trach": {
+  "t": "Property Palace",
+  "h": "9e958678"
+ },
+ "js.shellui.cung-huynh-de": {
+  "t": "Siblings Palace",
+  "h": "3b9eb4f5"
+ },
+ "js.shellui.cung-menh": {
+  "t": "Life Palace",
+  "h": "3dc5da1d"
+ },
+ "js.shellui.cung-menh-cua-ban-la": {
+  "t": "Your Life Palace is **",
+  "h": "e7419937"
+ },
+ "js.shellui.cung-no-boc": {
+  "t": "Friends Palace",
+  "h": "d3845b4b"
+ },
+ "js.shellui.cung-phu-mau": {
+  "t": "Parents Palace",
+  "h": "80b1dad9"
+ },
+ "js.shellui.cung-phu-the": {
+  "t": "Spouse Palace",
+  "h": "5b9ae45f"
+ },
+ "js.shellui.cung-phuc-duc": {
+  "t": "Fortune Palace",
+  "h": "4a4ce3c4"
+ },
+ "js.shellui.cung-quan-loc": {
+  "t": "Career Palace",
+  "h": "44e094ad"
+ },
+ "js.shellui.cung-tai-bach": {
+  "t": "Wealth Palace",
+  "h": "06ea5e9f"
+ },
+ "js.shellui.cung-tat-ach": {
+  "t": "Health Palace",
+  "h": "2287ab9c"
+ },
+ "js.shellui.cung-thien-di": {
+  "t": "Travel Palace",
+  "h": "c0dff8fc"
+ },
+ "js.shellui.cung-tu-tuc": {
+  "t": "Children Palace",
+  "h": "0aee19db"
  },
  "js.shellui.da-an-khoi-thu-vien-chung": {
   "t": "<span>✓ Removed from the shared Library. The link still works as usual.</span>",
   "h": "e12e84c8"
  },
+ "js.shellui.da-cham-hop-xung-dia-chi": {
+  "t": "Earthly Branch harmonies and clashes scored for the next 15 years (father **",
+  "h": "0596e359"
+ },
  "js.shellui.da-chep": {
   "t": "Copied ✓",
   "h": "846252e0"
+ },
+ "js.shellui.da-co-du-gio-hoang-dao": {
+  "t": "**. The auspicious hours, dos and don'ts, and spirit stars are all ready. What are you planning to do?",
+  "h": "f216588e"
+ },
+ "js.shellui.da-co-du-thong-tin": {
+  "t": "All the details are in **",
+  "h": "638b1732"
  },
  "js.shellui.da-co-la-so-cua": {
   "t": "<p>The chart of <b>",
@@ -2886,6 +3590,14 @@
  "js.shellui.da-dung-het-luot-hoi": {
   "t": "No questions left",
   "h": "3ef9beae"
+ },
+ "js.shellui.da-gieo-du-6-hao": {
+  "t": "<p>All six lines cast ✓</p>",
+  "h": "a8830b8b"
+ },
+ "js.shellui.da-gui-anh": {
+  "t": "[photo sent]",
+  "h": "8b8a14fd"
  },
  "js.shellui.da-gui-mo": {
   "t": "✓ Sent — open ",
@@ -2899,6 +3611,30 @@
   "t": "Out of questions. Charts are still free to view — you can see",
   "h": "f2acf059"
  },
+ "js.shellui.da-lap-ban": {
+  "t": "<p>Chart cast ✓</p>",
+  "h": "c18977ee"
+ },
+ "js.shellui.da-lap-khoa-dai-luc-nham": {
+  "t": "Cast a **Da Liu Ren** chart — date ",
+  "h": "b7172965"
+ },
+ "js.shellui.da-lap-nen-cho-viec": {
+  "t": "Groundwork laid for **",
+  "h": "768286ec"
+ },
+ "js.shellui.da-lap-que": {
+  "t": "<p>Hexagram cast ✓</p>",
+  "h": "f4a3d08e"
+ },
+ "js.shellui.da-lieu": {
+  "t": "Skin — ",
+  "h": "5d98e4a3"
+ },
+ "js.shellui.da-san-sang-hoi-toi-bat": {
+  "t": "** is ready. Ask me anything.",
+  "h": "13652508"
+ },
  "js.shellui.da-san-sang-hoi-toi-ve": {
   "t": "** is ready. Ask me about the Day Master, useful god, structure or luck cycles.",
   "h": "7bde27db"
@@ -2907,13 +3643,41 @@
   "t": "<span>Link created · this one also appears in ",
   "h": "11df14f6"
  },
+ "js.shellui.da-thuong": {
+  "t": "normal skin",
+  "h": "830c17ab"
+ },
+ "js.shellui.da-toi-hop-menh-gi": {
+  "t": "Which element suits my skin?",
+  "h": "94a6ea06"
+ },
+ "js.shellui.da-tra-gio-hoang-dao-hac": {
+  "t": ". I've looked up the Huang Dao / Hei Dao hours. What are you planning to do, so I can pick a good hour?",
+  "h": "c943d929"
+ },
+ "js.shellui.da-tra-kim-lau-tam-tai": {
+  "t": "Checked Jin Lou · Three Calamities · Huang Wu for zodiac year **",
+  "h": "2c862356"
+ },
  "js.shellui.da-vao-tiep-chuyen": {
   "t": " has joined the conversation",
   "h": "31cef520"
  },
+ "js.shellui.da-xem-lich-thang": {
+  "t": "Viewed the calendar for **month ",
+  "h": "bd12b12f"
+ },
+ "js.shellui.dai-van-hien-tai-the-nao": {
+  "t": "What is my current Luck Cycle like?",
+  "h": "3b3146dd"
+ },
  "js.shellui.dang-an": {
   "t": "Hiding…",
   "h": "06dcaa3f"
+ },
+ "js.shellui.dang-cham-diem-phong-thuy": {
+  "t": "<p><i>Scoring the feng shui…</i></p>",
+  "h": "21564735"
  },
  "js.shellui.dang-dung-pdf": {
   "t": "Building PDF…",
@@ -2935,25 +3699,77 @@
   "t": "Sign up free →",
   "h": "89d5985d"
  },
+ "js.shellui.dang-ky-mien-phi-t076": {
+  "t": "Sign up free",
+  "h": "71ddeeae"
+ },
  "js.shellui.dang-ky-nhan-them": {
   "t": "Sign up for more",
   "h": "8bb9cbc2"
+ },
+ "js.shellui.dang-lap-khoa": {
+  "t": "<p>Casting the chart…</p>",
+  "h": "d4e32377"
+ },
+ "js.shellui.dang-nhap": {
+  "t": "sign in",
+  "h": "1afd3f6b"
+ },
+ "js.shellui.dang-phan-tich": {
+  "t": "<p><i>Analyzing…</i></p>",
+  "h": "eac72554"
  },
  "js.shellui.dang-tiep-chuyen": {
   "t": "Now speaking",
   "h": "37509a1d"
  },
+ "js.shellui.dang-tra-mau-hop-menh": {
+  "t": "<p><i>Looking up your element colors…</i></p>",
+  "h": "3f5c2690"
+ },
  "js.shellui.dang-viet-bao-cao": {
   "t": "<b>Writing your report…</b>",
   "h": "2d9fa930"
+ },
+ "js.shellui.dang-xem": {
+  "t": "Looking…",
+  "h": "a5c04b3d"
  },
  "js.shellui.dang-xem-la-so": {
   "t": "Viewing chart: <b>",
   "h": "f6efbc2c"
  },
+ "js.shellui.dang-xem-trang-phuc-hop-ngay": {
+  "t": "<p><i>Looking up outfits that suit the day…</i></p>",
+  "h": "471afd48"
+ },
+ "js.shellui.dat-ten": {
+  "t": "Naming ",
+  "h": "d20b3ff3"
+ },
+ "js.shellui.dat-ten-dn": {
+  "t": "Business naming · ",
+  "h": "e07d8451"
+ },
  "js.shellui.day": {
   "t": " .",
   "h": "7cac21ab"
+ },
+ "js.shellui.day-so": {
+  "t": "Number",
+  "h": "f3ccd2df"
+ },
+ "js.shellui.day-so-dzep": {
+  "t": "<p>Number: <b>",
+  "h": "537e1cab"
+ },
+ "js.shellui.day-so-nay-co-nen-dung": {
+  "t": "Is this number a good one to use?",
+  "h": "8981877c"
+ },
+ "js.shellui.day-so-xgu3": {
+  "t": "Number **",
+  "h": "01b9b7d5"
  },
  "js.shellui.de-bat-dau": {
   "t": "to get started",
@@ -2963,9 +3779,17 @@
   "t": "🎲 Pick one for me",
   "h": "aee4de0f"
  },
+ "js.shellui.de-hoi-thay-xong-se-tu": {
+  "t": "to ask the Master — you'll come straight back afterwards and the reading will continue. Your chart is still free to view.",
+  "h": "d47c354b"
+ },
  "js.shellui.de-hoi-tiep": {
   "t": "to keep asking.",
   "h": "2739fdb7"
+ },
+ "js.shellui.de-hoi-tiep-cau-vua-roi": {
+  "t": "to keep asking — your last question will be answered right after you sign up.",
+  "h": "68cc8b7d"
  },
  "js.shellui.de-sau": {
   "t": "Later",
@@ -2975,6 +3799,14 @@
   "t": " so the Master can read your actual chart — asking only general questions is no different from asking an ordinary chatbot.</p>",
   "h": "ec798250"
  },
+ "js.shellui.de-thay-xem-cho-sat-cho": {
+  "t": "So the Master can read more closely, please give your full name and gender first.",
+  "h": "67e7511a"
+ },
+ "js.shellui.de-trong-la-thay-lap-ban": {
+  "t": "<p>Leave it blank and the Master will cast the chart for the current time — or pick another time and a question (optional).</p>",
+  "h": "68dda2bd"
+ },
  "js.shellui.de-xem": {
   "t": " to view",
   "h": "f6dcc1ba"
@@ -2982,6 +3814,26 @@
  "js.shellui.den-ngay": {
   "t": "<span>On ",
   "h": "d4e0e872"
+ },
+ "js.shellui.diem-phong-thuy-ban-lam-viec": {
+  "t": "Current desk feng shui score: **",
+  "h": "b68f30c6"
+ },
+ "js.shellui.diem-phong-thuy-cua-hang-van": {
+  "t": "Current shop/office feng shui score: **",
+  "h": "abf14d8f"
+ },
+ "js.shellui.diem-phong-thuy-hien-tai": {
+  "t": "Current feng shui score: **",
+  "h": "91e0a1f2"
+ },
+ "js.shellui.dien-tuong-cua-toi": {
+  "t": "My face reading",
+  "h": "d5784500"
+ },
+ "js.shellui.doi": {
+  "t": "Change",
+  "h": "c291a425"
  },
  "js.shellui.doi-nen-sang-toi": {
   "t": "Switch light / dark theme",
@@ -2999,9 +3851,21 @@
   "t": "Close and view result",
   "h": "fba3c1e0"
  },
+ "js.shellui.dung": {
+  "t": ", Useful God **",
+  "h": "847dd55f"
+ },
+ "js.shellui.dung-roi-thay": {
+  "t": "That's right, Master",
+  "h": "393b0d29"
+ },
  "js.shellui.dung-ten": {
   "t": "</b> put their name to",
   "h": "70d07a35"
+ },
+ "js.shellui.dung-than-la-gi-hanh-nao": {
+  "t": "What is the Useful God, and which element is it?",
+  "h": "5236e12f"
  },
  "js.shellui.dung-thu-con": {
   "t": "Free trial: <b>",
@@ -3015,17 +3879,73 @@
   "t": " (solar)",
   "h": "4471b62b"
  },
+ "js.shellui.duong-van-menh-noi-len-dieu": {
+  "t": "What does the fate line say?",
+  "h": "04b0d761"
+ },
  "js.shellui.esc": {
   "t": "Esc",
   "h": "1f7a4f9e"
+ },
+ "js.shellui.gieo-que": {
+  "t": "Cast a hexagram · ",
+  "h": "b41eb665"
+ },
+ "js.shellui.gieo-que-6-hao": {
+  "t": "Cast a hexagram (6 lines) →",
+  "h": "5c3eaa5e"
+ },
+ "js.shellui.gio": {
+  "t": "Hour",
+  "h": "75f92388"
+ },
+ "js.shellui.gio-3uxy": {
+  "t": " hour ",
+  "h": "d50a9e73"
+ },
+ "js.shellui.gio-can-xem": {
+  "t": "Hour to check",
+  "h": "84e96644"
  },
  "js.shellui.gio-chi": {
   "t": "{chi} hour ({khung})",
   "h": "681b8452"
  },
+ "js.shellui.gio-den-nguoi-thu-hai": {
+  "t": "Now for the second person.",
+  "h": "63d5af59"
+ },
+ "js.shellui.gio-hoang-dao": {
+  "t": "Auspicious Hours · ",
+  "h": "ecf3c685"
+ },
+ "js.shellui.gio-hoang-dao-cho-viec-nay": {
+  "t": "What are the auspicious hours for this?",
+  "h": "005ba6f0"
+ },
+ "js.shellui.gio-hxu5": {
+  "t": ", hour ",
+  "h": "15247793"
+ },
  "js.shellui.gio-ke-chuyen-cua-ban-di": {
   "t": "</b> is ready. Now tell your story, and I'll bring in the right Master.</p>",
   "h": "cfc0e866"
+ },
+ "js.shellui.gio-nao-can-tranh-tuyet-doi": {
+  "t": "Which hours must be avoided completely?",
+  "h": "3aff98fe"
+ },
+ "js.shellui.gio-nao-tot-de-khai-truong": {
+  "t": "Which hour is good for an opening?",
+  "h": "f771c439"
+ },
+ "js.shellui.gio-nay-hop-lam-viec-gi": {
+  "t": "What is this hour best suited for?",
+  "h": "74b7e572"
+ },
+ "js.shellui.gio-r1j8": {
+  "t": "</b> · hour <b>",
+  "h": "910eff27"
  },
  "js.shellui.gio-sinh-cua": {
   "t": "What time was ",
@@ -3035,9 +3955,29 @@
   "t": " h ago",
   "h": "ce828227"
  },
+ "js.shellui.gioi-tinh": {
+  "t": "Gender",
+  "h": "80bbce55"
+ },
+ "js.shellui.gioi-tinh-con": {
+  "t": "Child's gender",
+  "h": "39dacada"
+ },
  "js.shellui.giox": {
   "t": " · hour ",
   "h": "9d8fa6cf"
+ },
+ "js.shellui.giuong-ngu-quay-huong-nao": {
+  "t": "Which direction should the bed face?",
+  "h": "08ee9028"
+ },
+ "js.shellui.goi-y-12-ten-hop-menh": {
+  "t": "Suggest 12 names that suit your element, with meanings",
+  "h": "61954ded"
+ },
+ "js.shellui.google-lich": {
+  "t": "Google Calendar",
+  "h": "8cdb619a"
  },
  "js.shellui.gui": {
   "t": "Send",
@@ -3046,6 +3986,46 @@
  "js.shellui.gui-anh": {
   "t": "Send image",
   "h": "f7dc07df"
+ },
+ "js.shellui.gui-anh-can-phong-cua-con": {
+  "t": "Send a photo of your room here (a paid tool — the price shows on the button before any credits are deducted).",
+  "h": "2fb86d98"
+ },
+ "js.shellui.gui-anh-can-vung-mat-nhin": {
+  "t": "Send a close-up photo of your eye area here (looking straight ahead, well lit) (a paid tool — the price shows on the button before any credits are deducted).",
+  "h": "201e34e3"
+ },
+ "js.shellui.gui-anh-chu-ky-cua-con": {
+  "t": "Send a photo of your signature here (a paid tool — the price shows on the button before any credits are deducted). A still photo can measure 3 of the 6 axes (Bone/Flesh/Momentum) — to measure all 6, sign directly on the page",
+  "h": "e616ecbd"
+ },
+ "js.shellui.gui-anh-cua-hang-van-phong": {
+  "t": "Send a photo of your shop or office here (a paid tool — the price shows on the button before any credits are deducted).",
+  "h": "fca7be14"
+ },
+ "js.shellui.gui-anh-da-mat-cua-con": {
+  "t": "Send a photo of your facial skin here (a paid tool — the price shows on the button before any credits are deducted). Birth year is optional.",
+  "h": "dda9340e"
+ },
+ "js.shellui.gui-anh-goc-lam-viec-cua": {
+  "t": "Send a photo of your workspace here (a paid tool — the price shows on the button before any credits are deducted).",
+  "h": "229ffe71"
+ },
+ "js.shellui.gui-anh-khuon-mat-cua-con": {
+  "t": "Send a photo of your face here (a paid tool — the price shows on the button before any credits are deducted).",
+  "h": "034b6960"
+ },
+ "js.shellui.gui-anh-khuon-mat-cua-con-x2xw": {
+  "t": "Send a photo of your face here (a paid tool — the price shows on the button before any credits are deducted). Birth year is optional.",
+  "h": "15dcb8ec"
+ },
+ "js.shellui.gui-anh-khuon-mat-gan-day": {
+  "t": "Send a recent photo of your face (without heavy makeup) here (a paid tool — the price shows on the button before any credits are deducted).",
+  "h": "6d5eec5f"
+ },
+ "js.shellui.gui-anh-long-ban-tay-xoe": {
+  "t": "Send a photo of your palm (open flat, facing up) here (a paid tool — the price shows on the button before any credits are deducted).",
+  "h": "4cefab7b"
  },
  "js.shellui.gui-pdf-vao": {
   "t": "Send PDF to",
@@ -3059,6 +4039,18 @@
   "t": "Actions",
   "h": "8e9fdd28"
  },
+ "js.shellui.hao-dong-noi-len-dieu-gi": {
+  "t": "What does the changing line say?",
+  "h": "4e9d2215"
+ },
+ "js.shellui.hay-goi-y-ten-moi": {
+  "t": "** or suggest new names?",
+  "h": "d922a861"
+ },
+ "js.shellui.het-phan-dung-thu": {
+  "t": "The free trial is used up.",
+  "h": "49a17e2d"
+ },
  "js.shellui.het-phan-dung-thu-roi": {
   "t": "Free trial is over…",
   "h": "277af632"
@@ -3066,6 +4058,34 @@
  "js.shellui.hieu-dung-la-so-dang-mo": {
   "t": "Reads the open chart correctly",
   "h": "b500bc82"
+ },
+ "js.shellui.ho": {
+  "t": "Family name",
+  "h": "a9a24039"
+ },
+ "js.shellui.ho-4mdh": {
+  "t": " family name ",
+  "h": "c4ce89b4"
+ },
+ "js.shellui.ho-quai-cho-thay-khuc-giua": {
+  "t": "What does the nuclear hexagram show about the middle stretch?",
+  "h": "640af3c9"
+ },
+ "js.shellui.ho-so": {
+  "t": "Profile **",
+  "h": "23a92be3"
+ },
+ "js.shellui.ho-ten-chu-su": {
+  "t": "Principal's full name",
+  "h": "b65bd926"
+ },
+ "js.shellui.hoa": {
+  "t": "Fire",
+  "h": "be792fa1"
+ },
+ "js.shellui.hoa-he-phuc-chi-so-y": {
+  "t": "Misfortune is what fortune leans upon; fortune is where misfortune lies hidden.",
+  "h": "0faeddcf"
  },
  "js.shellui.hoac-nap-luong-de-hoi-tiep": {
   "t": "Or top up credits to keep asking, one question at a time →",
@@ -3095,17 +4115,125 @@
   "t": "Ask the Master <b>",
   "h": "04044619"
  },
+ "js.shellui.hoi-thay-ve-but-tuong": {
+  "t": "Ask the Master about handwriting…",
+  "h": "abf79403"
+ },
+ "js.shellui.hoi-thay-ve-da-lieu": {
+  "t": "Ask the Master about skin…",
+  "h": "0ba0e8f2"
+ },
+ "js.shellui.hoi-thay-ve-khi-sac": {
+  "t": "Ask the Master about complexion…",
+  "h": "af4fcb79"
+ },
+ "js.shellui.hoi-thay-ve-kieu-toc-hop": {
+  "t": "Ask the Master about hairstyles that suit your face…",
+  "h": "33ac1d0b"
+ },
+ "js.shellui.hoi-thay-ve-la-bai-vua": {
+  "t": "Ask the Master about the card you just drew…",
+  "h": "a92ebf3e"
+ },
+ "js.shellui.hoi-thay-ve-mau-sac-hop": {
+  "t": "Ask the Master about colors that suit your element…",
+  "h": "98bdd51a"
+ },
+ "js.shellui.hoi-thay-ve-nhan-tuong": {
+  "t": "Ask the Master about eye reading…",
+  "h": "908e08ff"
+ },
+ "js.shellui.hoi-thay-ve-phong-thuy": {
+  "t": "Ask the Master about feng shui…",
+  "h": "0e6c95d3"
+ },
+ "js.shellui.hoi-thay-ve-phong-thuy-ban": {
+  "t": "Ask the Master about desk feng shui…",
+  "h": "e3a88042"
+ },
+ "js.shellui.hoi-thay-ve-phong-thuy-cua": {
+  "t": "Ask the Master about shop feng shui…",
+  "h": "5ccebcd2"
+ },
+ "js.shellui.hoi-thay-ve-the-vua-rut": {
+  "t": "Ask the Master about the card you just drew…",
+  "h": "3a54f9a1"
+ },
+ "js.shellui.hoi-thay-ve-thu-tuong": {
+  "t": "Ask the Master about palmistry…",
+  "h": "ede75605"
+ },
+ "js.shellui.hoi-thay-ve-tong-mau-ca": {
+  "t": "Ask the Master about your personal color palette…",
+  "h": "1f9cd726"
+ },
+ "js.shellui.hoi-thay-ve-trang-diem-hop": {
+  "t": "Ask the Master about makeup that suits your face…",
+  "h": "57e99c47"
+ },
+ "js.shellui.hoi-thay-ve-trang-phuc-theo": {
+  "t": "Ask the Master about outfits by day…",
+  "h": "71f5f95c"
+ },
+ "js.shellui.hoi-thay-ve-tuong-mat": {
+  "t": "Ask the Master about face reading…",
+  "h": "bd5fbccb"
+ },
  "js.shellui.hoi-thoai-moi": {
   "t": "New conversation",
   "h": "bba6fb9b"
+ },
+ "js.shellui.hoi-toi-de-luan-nhe": {
+  "t": "**. Ask me and I'll read it for you.",
+  "h": "da298819"
  },
  "js.shellui.hom": {
   "t": "<p>On ",
   "h": "5bfbea9a"
  },
+ "js.shellui.hom-nay-nen-lam-gi-kieng": {
+  "t": "What should I do and avoid today?",
+  "h": "1e8037df"
+ },
+ "js.shellui.hop-mau-gi-ky-mau-gi": {
+  "t": "Which colors suit me, and which should I avoid?",
+  "h": "3af5cdfc"
+ },
+ "js.shellui.huong-cua": {
+  "t": "Door direction",
+  "h": "65a7e53d"
+ },
+ "js.shellui.huong-nao-phai-tranh-va-vi": {
+  "t": "Which directions should I avoid, and why?",
+  "h": "ac2dbbcc"
+ },
+ "js.shellui.huong-ngoi-sinh-khi-la-gi": {
+  "t": "What is the Sheng Qi (Life-Energy) seating direction?",
+  "h": "698ffaac"
+ },
+ "js.shellui.huong-nha-ban-lam-viec-nao": {
+  "t": "Which house or desk direction suits me?",
+  "h": "e1e3d123"
+ },
+ "js.shellui.huong-nha-nao-hop-nhat": {
+  "t": "Which house direction suits me best?",
+  "h": "cc262fd1"
+ },
+ "js.shellui.huong-xep-hang-cao-nhat-la": {
+  "t": " The highest-ranked direction is **",
+  "h": "abc77c37"
+ },
+ "js.shellui.huong-xuat-hanh-tot-trong-ngay": {
+  "t": "Which direction is good for setting out that day?",
+  "h": "0ef8b5dc"
+ },
  "js.shellui.in-ngay": {
   "t": "<span>Printed on ",
   "h": "acf30636"
+ },
+ "js.shellui.iphone-mac": {
+  "t": "iPhone / Mac",
+  "h": "9a2b7d51"
  },
  "js.shellui.ket-qua": {
   "t": "Result",
@@ -3115,17 +4243,173 @@
   "t": "</b><span>Result · Tap to open</span></span>",
   "h": "50bffb45"
  },
+ "js.shellui.ket-qua-luan-giai": {
+  "t": "Reading result",
+  "h": "68ae23e5"
+ },
  "js.shellui.ket-qua-nay-chua-co-noi": {
   "t": "This result has no content to save as a PDF yet.",
   "h": "d8ae6583"
+ },
+ "js.shellui.ket-qua-phan-tich-da": {
+  "t": "Skin analysis result: **",
+  "h": "bf903ee5"
+ },
+ "js.shellui.ket-sat-nen-quay-huong-nao": {
+  "t": "Which direction should the safe face?",
+  "h": "f74aaf2a"
  },
  "js.shellui.khac": {
   "t": "Other",
   "h": "5b8a28ab"
  },
+ "js.shellui.khai-truong-nen-chon-ngay-nao": {
+  "t": "Which day should I pick for an opening?",
+  "h": "b44fce94"
+ },
+ "js.shellui.khi-sac": {
+  "t": "Complexion",
+  "h": "e1205bcd"
+ },
+ "js.shellui.khi-sac-cua-toi": {
+  "t": "My complexion reading",
+  "h": "f4b00328"
+ },
+ "js.shellui.khi-sac-khac-dien-tuong-the": {
+  "t": "How is complexion reading different from face reading?",
+  "h": "d826036b"
+ },
+ "js.shellui.khong-cham-diem-duoc-thu-lai": {
+  "t": "couldn't score it — please try again.",
+  "h": "eb17c20d"
+ },
+ "js.shellui.khong-chon": {
+  "t": "— None —",
+  "h": "80c4ffb0"
+ },
+ "js.shellui.khong-co-ket-qua": {
+  "t": "No results.",
+  "h": "97fa6f91"
+ },
+ "js.shellui.khong-co-noi-dung": {
+  "t": "(no content)",
+  "h": "7d1286dc"
+ },
+ "js.shellui.khong-doc-duoc-anh-nay": {
+  "t": "Couldn't read this photo.",
+  "h": "89d3f00f"
+ },
+ "js.shellui.khong-doc-duoc-net-muc-tu": {
+  "t": "Couldn't read the ink strokes from this photo.",
+  "h": "7c89a420"
+ },
+ "js.shellui.khong-dung-duoc-ban": {
+  "t": "Couldn't build the chart.",
+  "h": "925f4f75"
+ },
+ "js.shellui.khong-dung-duoc-ban-ky-mon": {
+  "t": "Couldn't build the Qi Men chart.",
+  "h": "c30586ea"
+ },
+ "js.shellui.khong-dung-duoc-ho-so": {
+  "t": "couldn't build the profile.",
+  "h": "b3112509"
+ },
+ "js.shellui.khong-dung-duoc-khoa-luc-nham": {
+  "t": "Couldn't cast the Liu Ren chart.",
+  "h": "8e7a9dcc"
+ },
+ "js.shellui.khong-dung-duoc-khoa-luc-nham-ddel": {
+  "t": "Couldn't cast the Liu Ren chart — the data can't be verified right now.",
+  "h": "0b13b5b7"
+ },
+ "js.shellui.khong-dung-duoc-khoa-luc-nham-s764": {
+  "t": "Couldn't cast the Liu Ren chart. Please try again.",
+  "h": "9162a489"
+ },
+ "js.shellui.khong-hao-dong": {
+  "t": " (no changing lines)",
+  "h": "b0233d0c"
+ },
  "js.shellui.khong-in-luu-pdf-truc-tiep": {
   "t": " can't print or save PDFs directly",
   "h": "27aa3510"
+ },
+ "js.shellui.khong-lap-duoc-que": {
+  "t": "Couldn't cast the hexagram.",
+  "h": "7181f9c7"
+ },
+ "js.shellui.khong-nap-duoc": {
+  "t": "Couldn't load ",
+  "h": "7c1577a1"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-bat": {
+  "t": "couldn't load the Eight Mansions tool.",
+  "h": "5dc3cbaa"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-chon": {
+  "t": "couldn't load the Auspicious Days tool.",
+  "h": "304c67a6"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-dat": {
+  "t": "couldn't load the Naming tool.",
+  "h": "558419b0"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-dat-o35j": {
+  "t": "couldn't load the Business Naming tool.",
+  "h": "af21f073"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-gio": {
+  "t": "couldn't load the Auspicious Hours tool.",
+  "h": "6df69f74"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-kim": {
+  "t": "couldn't load the Jin Lou tool.",
+  "h": "a1a5cb9e"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-kinh": {
+  "t": "couldn't load the I Ching tool.",
+  "h": "f4cedb61"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-ky": {
+  "t": "couldn't load the Qi Men tool.",
+  "h": "30038a86"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-luc": {
+  "t": "couldn't load the Liu Ren tool.",
+  "h": "fd967141"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-mai": {
+  "t": "couldn't load the Plum Blossom tool.",
+  "h": "431cf8b1"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-nap": {
+  "t": "couldn't load the Na Yin tool.",
+  "h": "3bc9a24e"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-ngay": {
+  "t": "couldn't load the Auspicious Days tool.",
+  "h": "28181959"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-so": {
+  "t": "couldn't load the Lucky Numbers tool.",
+  "h": "d3960453"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-xem": {
+  "t": "couldn't load the Child-Birth Timing tool.",
+  "h": "76551019"
+ },
+ "js.shellui.khong-nap-duoc-cong-thanh-toan": {
+  "t": "couldn't load the payment gateway.",
+  "h": "4e145f27"
+ },
+ "js.shellui.khong-nen-dat-gi-tren-ban": {
+  "t": "What should I not put on the desk?",
+  "h": "77ca1a05"
+ },
+ "js.shellui.khong-phan-tich-duoc-thu-lai": {
+  "t": "couldn't analyze it — please try again.",
+  "h": "7f4dd4c6"
  },
  "js.shellui.khong-tao-duoc-link-chia-se": {
   "t": "Couldn't create a share link. Please try again later.",
@@ -3135,9 +4419,65 @@
   "t": "Nothing found.",
   "h": "cb892c67"
  },
+ "js.shellui.khong-tra-duoc-thu-lai-giup": {
+  "t": "couldn't look it up — please try again.",
+  "h": "9baf8962"
+ },
+ "js.shellui.khong-tu-luan-ngu-duong-hoa": {
+  "t": "Confucius · Analects, Yang Huo",
+  "h": "cbcf6d69"
+ },
+ "js.shellui.khong-tu-luan-ngu-ung-da": {
+  "t": "Confucius · Analects, Yong Ye",
+  "h": "67297c6c"
+ },
+ "js.shellui.khong-tu-luan-ngu-vi-chinh": {
+  "t": "Confucius · Analects, Wei Zheng",
+  "h": "bad5b3f1"
+ },
+ "js.shellui.khuon-mat-cua-ban": {
+  "t": "Your face: **",
+  "h": "4af23efa"
+ },
+ "js.shellui.khuon-mat-cua-ban-thuoc-dang": {
+  "t": "Your face shape is **",
+  "h": "85935119"
+ },
+ "js.shellui.kieu-toc": {
+  "t": "Hairstyle — ",
+  "h": "37e30bf4"
+ },
+ "js.shellui.kieu-toc-kinh-mat-hop-tuong": {
+  "t": "Hairstyles & Glasses for Your Face",
+  "h": "114eae4b"
+ },
+ "js.shellui.kim-lau-tuoi": {
+  "t": "Jin Lou · age ",
+  "h": "b4bb42fe"
+ },
+ "js.shellui.kinh-mat-nao-hop-tuong-mat": {
+  "t": "Which glasses suit my face?",
+  "h": "e2a2a092"
+ },
+ "js.shellui.ky-hop-dong-gio-nao-hop": {
+  "t": "Which hour is good for signing a contract?",
+  "h": "01e5265d"
+ },
+ "js.shellui.ky-mon": {
+  "t": "Qi Men · ",
+  "h": "d3a48969"
+ },
+ "js.shellui.la-bai-nguoc-nghia-la-gi": {
+  "t": "What does a reversed card mean?",
+  "h": "4f75a731"
+ },
  "js.shellui.la-may-gio": {
   "t": " born?",
   "h": "1ea2e9f1"
+ },
+ "js.shellui.la-so": {
+  "t": "Chart **",
+  "h": "e53a7c90"
  },
  "js.shellui.la-so-con-vua-xem-la": {
   "t": "<b>The chart you just viewed belongs to the person who shared the link — not yours.</b>",
@@ -3147,9 +4487,29 @@
   "t": "Your chart is ready. What would you like me to look at first?",
   "h": "0d8b388a"
  },
+ "js.shellui.la-so-dung-de-luan": {
+  "t": "Chart used for the reading",
+  "h": "688ae631"
+ },
  "js.shellui.la-so-tron-doi": {
   "t": "<b>FULL LIFETIME CHART</b>",
   "h": "068a1d6c"
+ },
+ "js.shellui.lao-tu-dao-duc-kinh": {
+  "t": "Laozi · Dao De Jing",
+  "h": "7eb946dd"
+ },
+ "js.shellui.lap-ban-ky-mon": {
+  "t": "Cast a Qi Men chart →",
+  "h": "33f758e0"
+ },
+ "js.shellui.lap-khoa-luc-nham": {
+  "t": "Cast a Liu Ren chart →",
+  "h": "8df44794"
+ },
+ "js.shellui.lap-la-so": {
+  "t": "Create chart →",
+  "h": "88a696a9"
  },
  "js.shellui.lap-la-so-cua-ban-de": {
   "t": "Cast your own chart so the Master can read more closely →",
@@ -3163,6 +4523,10 @@
   "t": "Cast a chart first",
   "h": "1b48590d"
  },
+ "js.shellui.lap-que": {
+  "t": "Cast hexagram →",
+  "h": "95db5d4a"
+ },
  "js.shellui.lich-su": {
   "t": "History ·",
   "h": "309a950b"
@@ -3170,6 +4534,22 @@
  "js.shellui.lich-su-hoi-thoai": {
   "t": "Conversation history",
   "h": "0fd2afce"
+ },
+ "js.shellui.loai-hinh-tuy-chon": {
+  "t": "Type (optional)",
+  "h": "c4eab07e"
+ },
+ "js.shellui.loai-khong-gian": {
+  "t": "Type of space",
+  "h": "b0b069bf"
+ },
+ "js.shellui.loai-phong": {
+  "t": "Type of room",
+  "h": "19905334"
+ },
+ "js.shellui.loi": {
+  "t": "Error ",
+  "h": "1b80116b"
  },
  "js.shellui.loi-mang-khi-tao-link-chia": {
   "t": "Network error while creating the share link.",
@@ -3179,9 +4559,25 @@
   "t": "Network error. Please try again in a few minutes.",
   "h": "4f6c5f14"
  },
+ "js.shellui.loi-phan-tich": {
+  "t": "Analysis error.",
+  "h": "ff75bed2"
+ },
  "js.shellui.luan-giai": {
   "t": "<b>Reading",
   "h": "489f2d1f"
+ },
+ "js.shellui.luan-que-nay-cho-cau-hoi": {
+  "t": "Read this hexagram for my question",
+  "h": "327aeb50"
+ },
+ "js.shellui.luc-nham": {
+  "t": "Liu Ren · ",
+  "h": "dd89dab4"
+ },
+ "js.shellui.luc-nham-9v1c": {
+  "t": "Liu Ren",
+  "h": "99909aea"
  },
  "js.shellui.luong": {
   "t": " credits)",
@@ -3223,9 +4619,41 @@
   "t": "Saved to your Chart Book, free. Next time, type @ to call it up.",
   "h": "08f063e7"
  },
+ "js.shellui.major-arcana-khac-minor-arcana-the": {
+  "t": "How do the Major Arcana differ from the Minor Arcana?",
+  "h": "de30c37d"
+ },
  "js.shellui.mang-chap-chon-chua-luu-duoc": {
   "t": "network hiccup, could not save the chart for ",
   "h": "8f2cc0fe"
+ },
+ "js.shellui.manh-tu-tan-tam-thuong": {
+  "t": "Mencius · Jin Xin I",
+  "h": "819ec1b8"
+ },
+ "js.shellui.mat-toi-hop-kieu-toc-nao": {
+  "t": "Which hairstyle suits my face?",
+  "h": "bfa362fc"
+ },
+ "js.shellui.mau-chu-dao": {
+  "t": "**. Main color: ",
+  "h": "37202018"
+ },
+ "js.shellui.mau-diem-nhan-nao-tot-nhat": {
+  "t": "Which accent color works best?",
+  "h": "6d38e6a5"
+ },
+ "js.shellui.mau-nao-nen-tranh-khi-phong": {
+  "t": "Which colors should I avoid for an interview?",
+  "h": "61460b1c"
+ },
+ "js.shellui.mau-sac-hop-menh-menh": {
+  "t": "Colors for Your Element — Element ",
+  "h": "f73273a4"
+ },
+ "js.shellui.mau-son-nao-hop-tong-da": {
+  "t": "Which lipstick shade suits my skin tone?",
+  "h": "f013cf8c"
  },
  "js.shellui.me": {
   "t": "Mother",
@@ -3234,6 +4662,38 @@
  "js.shellui.me-con": {
   "t": "your mother",
   "h": "224ac2ac"
+ },
+ "js.shellui.me-ifej": {
+  "t": "</b> · Mother <b>",
+  "h": "a8f51442"
+ },
+ "js.shellui.me-kv0j": {
+  "t": " × mother ",
+  "h": "b9764667"
+ },
+ "js.shellui.me-lcly": {
+  "t": " · mother ",
+  "h": "f67770ae"
+ },
+ "js.shellui.me-uug4": {
+  "t": "** · mother **",
+  "h": "aa1059f0"
+ },
+ "js.shellui.menh": {
+  "t": ", element ",
+  "h": "59e4d307"
+ },
+ "js.shellui.menh-khac-ngay-ngay-trung-binh": {
+  "t": "Your element controls the day — an average day, take care",
+  "h": "256fb5ff"
+ },
+ "js.shellui.menh-kz9z": {
+  "t": "Element **",
+  "h": "002acae0"
+ },
+ "js.shellui.menh-sinh-ngay-hao-ton-chut": {
+  "t": "Your element generates the day — a slight drain, still good",
+  "h": "995978d5"
  },
  "js.shellui.minh-bao-nguoi-dan-duong": {
   "t": "Minh Bao · your guide",
@@ -3247,6 +4707,10 @@
   "t": "Open ↗",
   "h": "275cceff"
  },
+ "js.shellui.mo-d4p": {
+  "t": "Open",
+  "h": "1acfbe82"
+ },
  "js.shellui.mo-file-pdf": {
   "t": "Open PDF",
   "h": "8ac92ea1"
@@ -3259,13 +4723,25 @@
   "t": "Open sidebar",
   "h": "b1f48b75"
  },
+ "js.shellui.mo-trang-cong-cu": {
+  "t": "Open the tool page →",
+  "h": "0b442693"
+ },
  "js.shellui.mo-zalo": {
   "t": "Open Zalo",
   "h": "d52365fa"
  },
+ "js.shellui.moc": {
+  "t": "Wood",
+  "h": "4bd601ae"
+ },
  "js.shellui.moi-nhom-hoi-chan-3-thay": {
   "t": "Invite the consultation team — 3 Masters look together",
   "h": "d2433b80"
+ },
+ "js.shellui.moi-nhom-hoi-chan-3-thay-8dti": {
+  "t": "<span>Invite the consultation team <em>· 3 Masters</em></span></button>",
+  "h": "b0fedb20"
  },
  "js.shellui.moi-sang-nhan-van-ngay-rieng": {
   "t": "Get your own daily outlook for your chart every morning",
@@ -3295,6 +4771,10 @@
   "t": " sections</b> of this very chart — ",
   "h": "8e5f0ada"
  },
+ "js.shellui.muc-dich": {
+  "t": "Purpose",
+  "h": "d71ffc6e"
+ },
  "js.shellui.muc-luc": {
   "t": "<b>CONTENTS</b>",
   "h": "14f7b262"
@@ -3307,9 +4787,73 @@
   "t": "Male",
   "h": "b580ba1b"
  },
+ "js.shellui.nam-1mfe": {
+  "t": "Year **",
+  "h": "b9886d97"
+ },
+ "js.shellui.nam-690x": {
+  "t": "Year",
+  "h": "98926c7e"
+ },
+ "js.shellui.nam-nao-cuoi-hoi-duoc": {
+  "t": "Which year is good for marrying?",
+  "h": "5de89c72"
+ },
+ "js.shellui.nam-nao-dep-nhat-de-lam": {
+  "t": "Which year is best for building a house?",
+  "h": "992ff775"
+ },
+ "js.shellui.nam-nao-nen-tranh-sinh-con": {
+  "t": "Which years should be avoided for having a child?",
+  "h": "45ae05ad"
+ },
+ "js.shellui.nam-nao-tot-nhat-de-sinh": {
+  "t": "Which year is best for having a child?",
+  "h": "345bd2a8"
+ },
  "js.shellui.nam-nay": {
   "t": "How will this year go for ",
   "h": "9f78db0d"
+ },
+ "js.shellui.nam-sinh": {
+  "t": "Birth year",
+  "h": "75a6785f"
+ },
+ "js.shellui.nam-sinh-8ql1": {
+  "t": "<p>Birth year: <b>",
+  "h": "0ff1d138"
+ },
+ "js.shellui.nam-sinh-bo": {
+  "t": "Father's birth year",
+  "h": "a1009c64"
+ },
+ "js.shellui.nam-sinh-chu": {
+  "t": "Owner's birth year",
+  "h": "124634b4"
+ },
+ "js.shellui.nam-sinh-con": {
+  "t": "Child's birth year",
+  "h": "724a46be"
+ },
+ "js.shellui.nam-sinh-me": {
+  "t": "Mother's birth year",
+  "h": "bef8fb8f"
+ },
+ "js.shellui.nam-sinh-tuy-chon": {
+  "t": "Birth year (optional)",
+  "h": "114b3918"
+ },
+ "js.shellui.nam-sinh-wcj0": {
+  "t": "<p>Birth year <b>",
+  "h": "047b47a2"
+ },
+ "js.shellui.nam-thuan-nhat": {
+  "t": "**). Most favorable year: **",
+  "h": "cb3b51e0"
+ },
+ "js.shellui.nap-am": {
+  "t": "Na Yin ",
+  "h": "b49a2f37"
  },
  "js.shellui.nap-luong-de-hoi-tiep": {
   "t": "Top up credits to keep asking →",
@@ -3323,13 +4867,125 @@
   "t": "top up",
   "h": "c20441d9"
  },
+ "js.shellui.nen-doi-so-nao-de-tot": {
+  "t": "Which number should I change to for better luck?",
+  "h": "06cc25be"
+ },
+ "js.shellui.nen-dung-san-pham-nao-truoc": {
+  "t": "Which products should I use first?",
+  "h": "c4d20f9a"
+ },
+ "js.shellui.nen-hanh-dong-the-nao-luc": {
+  "t": "How should I act right now?",
+  "h": "b1dd8b79"
+ },
+ "js.shellui.nen-hoa-giai-the-nao": {
+  "t": "How should it be remedied?",
+  "h": "1dee5079"
+ },
+ "js.shellui.nen-hoi-cau-hoi-kieu-gi": {
+  "t": "What kind of question should I ask when drawing cards?",
+  "h": "f6e87d8f"
+ },
+ "js.shellui.nen-hoi-oracle-cau-hoi-kieu": {
+  "t": "What kind of question should I ask the Oracle?",
+  "h": "8a001fd9"
+ },
+ "js.shellui.nen-hoi-tarot-cau-hoi-kieu": {
+  "t": "What kind of question should I ask the Tarot?",
+  "h": "a40f1c85"
+ },
+ "js.shellui.nen-menh-chu-da-san-sang": {
+  "t": "The owner's natal foundation is ready (owner **",
+  "h": "3ef59397"
+ },
+ "js.shellui.nen-menh-cua-be-da-san": {
+  "t": "The child's natal foundation is ready (child **",
+  "h": "5444816b"
+ },
+ "js.shellui.nen-phoi-do-the-nao-theo": {
+  "t": "How should I put outfits together for my season?",
+  "h": "3a3ed4e0"
+ },
+ "js.shellui.nen-tien-hay-nen-lui": {
+  "t": "Should I advance or hold back?",
+  "h": "0735035e"
+ },
+ "js.shellui.nen-tranh-kieu-toc-nao": {
+  "t": "Which hairstyles should I avoid?",
+  "h": "71021350"
+ },
+ "js.shellui.nen-tranh-mau-nao": {
+  "t": "Which colors should I avoid?",
+  "h": "19ab5099"
+ },
+ "js.shellui.nganh": {
+  "t": ", field ",
+  "h": "60b25e34"
+ },
+ "js.shellui.nganh-nghe": {
+  "t": "Line of work",
+  "h": "63d9f4dd"
+ },
+ "js.shellui.ngay": {
+  "t": "<p>Date <b>",
+  "h": "f286f870"
+ },
+ "js.shellui.ngay-5amy": {
+  "t": "Date",
+  "h": "368c4575"
+ },
+ "js.shellui.ngay-di": {
+  "t": "Travel date",
+  "h": "ff25ff3f"
+ },
+ "js.shellui.ngay-dong-hanh-binh-on-thuan": {
+  "t": "A harmonious day — steady and favorable",
+  "h": "d1971f40"
+ },
+ "js.shellui.ngay-khac-menh-can-hoa-giai": {
+  "t": "The day clashes with your element ✦ Remedy with color",
+  "h": "f331fca5"
+ },
+ "js.shellui.ngay-lqyo": {
+  "t": "Date **",
+  "h": "aae5837d"
+ },
+ "js.shellui.ngay-nao-can-tuyet-doi-tranh": {
+  "t": "Which days must be avoided completely?",
+  "h": "36a0360f"
+ },
+ "js.shellui.ngay-nao-dep-de-cuoi-hoi": {
+  "t": "Which day is good for a wedding?",
+  "h": "409c6fd4"
+ },
+ "js.shellui.ngay-nao-dep-nhat-trong-thang": {
+  "t": "Which is the best day this month?",
+  "h": "1d6514df"
+ },
+ "js.shellui.ngay-nao-tot-de-khoi-cong": {
+  "t": "Which day is good for breaking ground or moving in?",
+  "h": "26db2036"
+ },
  "js.shellui.ngay-nua-la-tet-thay-xem": {
   "t": " days until Tet. Shall the Master check the first-visitor zodiac that suits your home, plus the hours and directions for leaving the house on days 1–3, for the whole family?</p>",
   "h": "bab22689"
  },
+ "js.shellui.ngay-ot9a": {
+  "t": "**, date **",
+  "h": "794d0952"
+ },
  "js.shellui.ngay-sinh-duong-lich-cua": {
   "t": "Solar birth date of ",
   "h": "4f13847a"
+ },
+ "js.shellui.ngay-sinh-menh-cuc-ky-thuan": {
+  "t": "The day generates your element ✦ Extremely favorable",
+  "h": "81b455cf"
+ },
+ "js.shellui.ngay-tot-thang": {
+  "t": "Auspicious days · month ",
+  "h": "22d98f26"
  },
  "js.shellui.ngay-truoc": {
   "t": " d ago",
@@ -3338,6 +4994,18 @@
  "js.shellui.nghe-them-mon-khac": {
   "t": "Hear another field</span>",
   "h": "abd835bb"
+ },
+ "js.shellui.ngu-hanh-net-lien-quan-gi": {
+  "t": "How does the stroke's Five Element relate to the Useful God?",
+  "h": "a163e0cf"
+ },
+ "js.shellui.ngu-hanh-trong-oracle-nghia-la": {
+  "t": "What do the Five Elements mean in the Oracle?",
+  "h": "c3180463"
+ },
+ "js.shellui.ngu-quan-gom-nhung-gi": {
+  "t": "What do the Five Features include?",
+  "h": "e8847ad0"
  },
  "js.shellui.nguoi-dan-duong": {
   "t": "Your guide",
@@ -3351,13 +5019,33 @@
   "t": "Family member ",
   "h": "514d0e31"
  },
+ "js.shellui.nguoi-nha-rxn6": {
+  "t": "Family member",
+  "h": "447d96d6"
+ },
+ "js.shellui.nguoi-thau-tan-long-minh-thi": {
+  "t": "One who has fully understood their own heart knows their nature; knowing their nature, they know Heaven.",
+  "h": "ee637ff3"
+ },
  "js.shellui.nguoi-xem-ky-nhat-la-thay": {
   "t": " the one who knows this best is <b>Master ",
   "h": "d5168fd0"
  },
+ "js.shellui.nguyen": {
+  "t": "Nguyen",
+  "h": "e79eb3d7"
+ },
+ "js.shellui.nhan-tuong-cua-toi": {
+  "t": "My eye reading",
+  "h": "1943cfc5"
+ },
  "js.shellui.nhap-ngay-sinh": {
   "t": "<p>Enter your birth date ",
   "h": "96b95ba3"
+ },
+ "js.shellui.nhat-can-cua-toi-manh-hay": {
+  "t": "Is my Day Master strong or weak?",
+  "h": "7d0db3d4"
  },
  "js.shellui.nhung-phan-luong-trong-vi-da": {
   "t": ", but your wallet is out of credits. Top up so the Master can pick up where they left off.</div>",
@@ -3375,6 +5063,18 @@
   "t": "your father",
   "h": "d933443d"
  },
+ "js.shellui.oracle-khac-tarot-o-diem-nao": {
+  "t": "How is the Oracle different from the Tarot?",
+  "h": "6de59274"
+ },
+ "js.shellui.oracle-phuong-dong": {
+  "t": "Eastern Oracle",
+  "h": "1146fb81"
+ },
+ "js.shellui.pham-kim-lau-thi-hoa-giai": {
+  "t": "If I fall under Jin Lou, how can it be remedied?",
+  "h": "f9c9cb33"
+ },
  "js.shellui.phan": {
   "t": "parts",
   "h": "d2cd4ec7"
@@ -3382,6 +5082,18 @@
  "js.shellui.phan-da-xong": {
   "t": " parts done</span></span>",
   "h": "f8ba3adb"
+ },
+ "js.shellui.phan-tich": {
+  "t": "Analyze →",
+  "h": "e57345ec"
+ },
+ "js.shellui.phan-tich-ogw9": {
+  "t": "Analyze",
+  "h": "aad0782d"
+ },
+ "js.shellui.phan-tich-that-bai": {
+  "t": "Analysis failed.",
+  "h": "be032d5a"
  },
  "js.shellui.phien": {
   "t": "Session",
@@ -3399,6 +5111,26 @@
   "t": " sessions",
   "h": "3ee6a226"
  },
+ "js.shellui.phong-ngu-nen-tranh-gi": {
+  "t": "What should I avoid in the bedroom?",
+  "h": "da7e689d"
+ },
+ "js.shellui.phong-thuy-cua-hang-van-phong": {
+  "t": "Shop & Office Feng Shui",
+  "h": "fc68fd54"
+ },
+ "js.shellui.phong-thuy-diem": {
+  "t": "Feng Shui — score ",
+  "h": "4c90b82a"
+ },
+ "js.shellui.phong-thuy-huong-nha": {
+  "t": "Feng shui, house direction",
+  "h": "4018bb17"
+ },
+ "js.shellui.phuong-nhan-la-gi": {
+  "t": "What are phoenix eyes?",
+  "h": "9ea5dc8a"
+ },
  "js.shellui.phut-truoc": {
   "t": " min ago",
   "h": "b1017a2c"
@@ -3407,13 +5139,41 @@
   "t": " , just from your chart. Please give the Master the birth date of ",
   "h": "c45acf9b"
  },
+ "js.shellui.qua-ngan-de-tinh-dong-thuan": {
+  "t": "too short to compute agreement",
+  "h": "361ce7b5"
+ },
+ "js.shellui.que-bien": {
+  "t": ", changed hexagram **",
+  "h": "b2123833"
+ },
+ "js.shellui.que-bien-cho-thay-xu-huong": {
+  "t": "What trend does the changed hexagram show?",
+  "h": "c06bb666"
+ },
  "js.shellui.que-con-do-xin-phep-dung": {
   "t": "The reading is unfinished — I'll stop here…",
   "h": "bab685a0"
  },
+ "js.shellui.que-da-lap-que-chinh": {
+  "t": "Hexagram cast — primary hexagram **",
+  "h": "79f6b4e8"
+ },
+ "js.shellui.que-da-lap-the": {
+  "t": "Hexagram cast — Ti (Body) **",
+  "h": "92a897ba"
+ },
+ "js.shellui.que-dich-lap-duoc-noi-len": {
+  "t": "What does the I Ching hexagram say?",
+  "h": "c921b99a"
+ },
  "js.shellui.quet-ma-de-quay-lai": {
   "t": "Scan the code to come back",
   "h": "04d8976e"
+ },
+ "js.shellui.sao-bat-tinh-noi-bat-nghia": {
+  "t": "What does the prominent Eight Stars star mean?",
+  "h": "cf4b5467"
  },
  "js.shellui.sao-chep-link": {
   "t": "Copy link",
@@ -3427,21 +5187,113 @@
   "t": "Copy",
   "h": "09a1db3e"
  },
+ "js.shellui.sinh-con-bo": {
+  "t": "Having a child · father ",
+  "h": "6b581c06"
+ },
+ "js.shellui.so-dep": {
+  "t": "Lucky number ",
+  "h": "1ac75c4e"
+ },
  "js.shellui.so-la-so": {
   "t": "Chart book",
   "h": "0e67ec9d"
+ },
+ "js.shellui.so-truyen": {
+  "t": "**, first transmission **",
+  "h": "3dc1c742"
+ },
+ "js.shellui.su-nghiep-tien-bac": {
+  "t": "Career, money",
+  "h": "e1b5eac7"
  },
  "js.shellui.tai-khoan": {
   "t": "Account",
   "h": "4a60abe5"
  },
+ "js.shellui.tam-bach-nhan-co-y-nghia": {
+  "t": "What does three-white eyes mean?",
+  "h": "913d8ad7"
+ },
+ "js.shellui.tam-dai-chi-la-gi": {
+  "t": "What are the Three Great Fingers?",
+  "h": "baef21dd"
+ },
+ "js.shellui.tam-dinh-la-gi": {
+  "t": "What are the Three Divisions of the face?",
+  "h": "25930850"
+ },
+ "js.shellui.tam-tai-kieng-nhung-gi": {
+  "t": "What should be avoided during Three Calamities?",
+  "h": "27ba3819"
+ },
+ "js.shellui.tam-thap-nhi-lap-tu-thap": {
+  "t": "At thirty, I stood firm; at forty, I had no doubts; at fifty, I knew the will of Heaven.",
+  "h": "70407892"
+ },
+ "js.shellui.tam-truyen-noi-gi-ve-dien": {
+  "t": "What does the third transmission say about how it unfolds?",
+  "h": "43368fd7"
+ },
+ "js.shellui.tan-ky-tam-gia-tri-ky": {
+  "t": "One who has fully understood their own heart knows their nature; knowing their nature, they know Heaven.",
+  "h": "d54978d2"
+ },
+ "js.shellui.tarot-78-la": {
+  "t": "Tarot 78 Cards",
+  "h": "0454df6e"
+ },
  "js.shellui.tat-ca": {
   "t": "All (",
   "h": "55873035"
  },
+ "js.shellui.tay-thuan-va-tay-khong-thuan": {
+  "t": "How do the dominant and non-dominant hands differ?",
+  "h": "10468033"
+ },
+ "js.shellui.telegram": {
+  "t": "Telegram",
+  "h": "edbea9ff"
+ },
+ "js.shellui.ten-dang-can-nhac-tuy-chon": {
+  "t": "Name under consideration (optional)",
+  "h": "9e834e48"
+ },
+ "js.shellui.ten-dem-nao-hop-cho-be": {
+  "t": "Which middle name suits the baby?",
+  "h": "d59d5d7a"
+ },
+ "js.shellui.ten-hop-ca-tuoi-bo-va": {
+  "t": "Names that suit both the father's and mother's signs?",
+  "h": "ab665896"
+ },
+ "js.shellui.ten-nguoi-chu-tuy-chon": {
+  "t": "Owner's name (optional)",
+  "h": "c57ee47b"
+ },
+ "js.shellui.than-so-hoc": {
+  "t": "Numerology",
+  "h": "686db34b"
+ },
+ "js.shellui.thang": {
+  "t": "<p>Month <b>",
+  "h": "b8d6e6bd"
+ },
+ "js.shellui.thang-4nh6": {
+  "t": "Month",
+  "h": "0e2b3099"
+ },
+ "js.shellui.thang-du-dinh": {
+  "t": "Planned month",
+  "h": "db3fd9d6"
+ },
  "js.shellui.thang-truoc": {
   "t": " mo ago",
   "h": "e1d0b08b"
+ },
+ "js.shellui.thanh-phan-my-pham-nen-tranh": {
+  "t": "Which cosmetic ingredients should I avoid?",
+  "h": "fdf4a070"
  },
  "js.shellui.thay": {
   "t": "Master ",
@@ -3475,9 +5327,21 @@
   "t": ", the Master reads the chart of ",
   "h": "8dd5e740"
  },
+ "js.shellui.thay-ghi-lai-la-so-chi": {
+  "t": "<p>The Master has noted it. A chart only shows tendencies, not things certain to happen — seeing nothing is a good thing too.</p>",
+  "h": "4d9f34f8"
+ },
+ "js.shellui.thay-ghi-lai-roi-co-gi": {
+  "t": "<p>The Master has noted it. Tell me more whenever you like and I'll keep looking.</p>",
+  "h": "c3dc3800"
+ },
  "js.shellui.thay-ghi-vao-so-tien-tri": {
   "t": "The Master records this in the Prophecy Ledger · will check back with you on ",
   "h": "81f09315"
+ },
+ "js.shellui.thay-lap-que-theo-gio-hien": {
+  "t": "<p>The Master can cast the hexagram by the current time, or you can think of any number and the Master will cast by that number — which would you like?</p>",
+  "h": "dc5b731c"
  },
  "js.shellui.thay-moi-nhin": {
   "t": "The Master takes a first look at",
@@ -3487,6 +5351,22 @@
   "t": "… — instead of asking one question at a time.</div>",
   "h": "8836644b"
  },
+ "js.shellui.thay-xem-cho-con-tren-la": {
+  "t": " The Master reads this on your own chart.",
+  "h": "3962ceb8"
+ },
+ "js.shellui.thay-xem-giup-con-tuoi-xong": {
+  "t": "Please have the Master look at the first-visitor zodiac sign, and the hours and directions for setting out at this year's Tet, for your whole family.",
+  "h": "aa40f1e4"
+ },
+ "js.shellui.thay-xem-giup-con-tuoi-xong-jdse": {
+  "t": "Please have the Master look at the first-visitor zodiac sign, and the hours and directions for setting out at this year's Tet, for you.",
+  "h": "91001fe7"
+ },
+ "js.shellui.the-bi-dung-khac-thi-nen": {
+  "t": "If Ti (Body) is overcome by Yong (Use), what should I do?",
+  "h": "197d34a9"
+ },
  "js.shellui.the-nao-thay": {
   "t": " , Master?",
   "h": "b144d974"
@@ -3495,9 +5375,25 @@
   "t": "Add chart",
   "h": "77e87b1d"
  },
+ "js.shellui.theo-gio-hien-tai": {
+  "t": "By the current time",
+  "h": "ebb251cc"
+ },
+ "js.shellui.theo-mot-con-so": {
+  "t": "By a number",
+  "h": "6f19ed96"
+ },
  "js.shellui.thi": {
   "t": " ,",
   "h": "084e1779"
+ },
+ "js.shellui.tho": {
+  "t": "Earth",
+  "h": "9a0da463"
+ },
+ "js.shellui.thoi-diem-tuy-chon": {
+  "t": "Timing (optional)",
+  "h": "9ed07939"
  },
  "js.shellui.thu-gon": {
   "t": "Collapse",
@@ -3515,17 +5411,121 @@
   "t": "Try again",
   "h": "e353f2f3"
  },
+ "js.shellui.thu-lai-giup-con-nhe": {
+  "t": " Please try again.",
+  "h": "96832959"
+ },
+ "js.shellui.thu-truyen-theo-phep": {
+  "t": ". Hand transmission by the **",
+  "h": "9ee2f319"
+ },
+ "js.shellui.thu-tuong-cua-toi": {
+  "t": "My palm reading",
+  "h": "0af7a78d"
+ },
  "js.shellui.thu-vien-chung": {
   "t": "Shared Library",
   "h": "404f456c"
+ },
+ "js.shellui.thuy": {
+  "t": "Water",
+  "h": "f354741d"
+ },
+ "js.shellui.tiet": {
+  "t": "**, solar term ",
+  "h": "6b1922aa"
  },
  "js.shellui.tim-cong-cu-lenh": {
   "t": "Search tools, commands…",
   "h": "990f08e2"
  },
+ "js.shellui.tinh-nguoi-von-gan-nhau-do": {
+  "t": "By nature, people are close to one another; through habit, they grow far apart.",
+  "h": "e7a0b30c"
+ },
+ "js.shellui.tinh-tuong-can-da-tap-tuong": {
+  "t": "By nature, people are close to one another; through habit, they grow far apart.",
+  "h": "424fc2a7"
+ },
+ "js.shellui.toi-se-luan-theo-cau-hoi": {
+  "t": ". I'll read according to your question.",
+  "h": "e0c8f943"
+ },
+ "js.shellui.toi-se-luan-theo-cau-hoi-n3t1": {
+  "t": "**. I'll read according to your question.",
+  "h": "f2bafbac"
+ },
+ "js.shellui.toi-se-luan-theo-viec-ban": {
+  "t": " I'll read according to what you ask.",
+  "h": "58e203d6"
+ },
+ "js.shellui.toi-thuoc-season-nao": {
+  "t": "Which color season am I?",
+  "h": "b46bd5f3"
+ },
+ "js.shellui.ton-tu-binh-phap": {
+  "t": "Sun Tzu · The Art of War",
+  "h": "87b28278"
+ },
+ "js.shellui.tra-loi-cau-hoi-o-tren": {
+  "t": "Answer the question above…",
+  "h": "6bc13f17"
+ },
+ "js.shellui.trang-diem": {
+  "t": "Makeup",
+  "h": "b67e6b3f"
+ },
+ "js.shellui.trang-diem-anh-huong-van-khi": {
+  "t": "How does makeup affect your fortune?",
+  "h": "a175f487"
+ },
+ "js.shellui.trang-diem-yk4l": {
+  "t": "Makeup — ",
+  "h": "eda12e71"
+ },
+ "js.shellui.trang-phuc-theo-ngay": {
+  "t": "Outfit by Day — ",
+  "h": "7fd98ca1"
+ },
+ "js.shellui.tri-chi-gia-bat-nhu-hieu": {
+  "t": "Those who know it are not equal to those who love it; those who love it are not equal to those who delight in it.",
+  "h": "91dea6b3"
+ },
+ "js.shellui.tri-ky-tri-bi-bach-chien": {
+  "t": "Know yourself and know your enemy, and you need not fear a hundred battles.",
+  "h": "a85650be"
+ },
  "js.shellui.trinh-duyet-ben-trong": {
   "t": "In-app browser",
   "h": "28553859"
+ },
+ "js.shellui.trong-hoa-co-mam-phuc-trong": {
+  "t": "Within misfortune lies the seed of fortune; within fortune lies the seed of misfortune.",
+  "h": "fa956882"
+ },
+ "js.shellui.truc": {
+  "t": "— Duty **",
+  "h": "6f3f9038"
+ },
+ "js.shellui.truc-phu": {
+  "t": ", Zhi Fu **",
+  "h": "16c60f0e"
+ },
+ "js.shellui.truc-phu-truc-su-noi-len": {
+  "t": "What do Zhi Fu and Zhi Shi say?",
+  "h": "c69b295c"
+ },
+ "js.shellui.truc-su": {
+  "t": "**, Zhi Shi **",
+  "h": "fae13856"
+ },
+ "js.shellui.truc-than-la-gi": {
+  "t": "What is the Duty Spirit?",
+  "h": "47cc8c8c"
+ },
+ "js.shellui.truong-phai-noi-tot": {
+  "t": " school says it is favorable",
+  "h": "ba324e22"
  },
  "js.shellui.tu-tru-cua": {
   "t": "Four Pillars of **",
@@ -3543,6 +5543,22 @@
   "t": "<div><b>Minh Bao Zi Wei Dou Shu</b><span>紫微明寶 · tuviminhbao.com</span>",
   "h": "0326cda1"
  },
+ "js.shellui.tuc": {
+  "t": ", that is **",
+  "h": "2b564351"
+ },
+ "js.shellui.tuoi-nao-hop-tuoi-nao-khac": {
+  "t": "Which signs are compatible, and which clash?",
+  "h": "06343f22"
+ },
+ "js.shellui.tuoi-toi-co-bi-xung-ngay": {
+  "t": "Does my sign clash with this day?",
+  "h": "e7d32d0b"
+ },
+ "js.shellui.tuong-mat-co-thay-doi-duoc": {
+  "t": "Can a face reading change?",
+  "h": "602a11f2"
+ },
  "js.shellui.tuviminhbao-com": {
   "t": "tuviminhbao.com",
   "h": "c8dbdef2"
@@ -3551,9 +5567,93 @@
   "t": "this app",
   "h": "cba1a9e4"
  },
+ "js.shellui.uu-tien-lam-gi-truoc": {
+  "t": "What should I prioritize first?",
+  "h": "f3cab683"
+ },
  "js.shellui.va": {
   "t": "** and **",
   "h": "4f833f73"
+ },
+ "js.shellui.van-thang-chon-ngay": {
+  "t": "Monthly outlook, date selection",
+  "h": "78fbc71e"
+ },
+ "js.shellui.vat-pham-nao-nen-mua-truoc": {
+  "t": "Which items should I buy first?",
+  "h": "85fe11d3"
+ },
+ "js.shellui.vat-pham-phong-thuy-nao-nen": {
+  "t": "Which feng shui item should I wear?",
+  "h": "024bffb6"
+ },
+ "js.shellui.vd-27": {
+  "t": "e.g. 27",
+  "h": "4afd7b36"
+ },
+ "js.shellui.vd-viec-nay-nen-tien-hay": {
+  "t": "e.g. Should I advance or hold back on this?",
+  "h": "28527203"
+ },
+ "js.shellui.vi-sao-da-toi-thuoc-loai": {
+  "t": "Why is my skin this type?",
+  "h": "92ad930f"
+ },
+ "js.shellui.vi-sao-diem-hien-tai-thap": {
+  "t": "Why is the current score low?",
+  "h": "6c51a2da"
+ },
+ "js.shellui.vi-sao-kieu-nay-hop-mat": {
+  "t": "Why does this style suit my face?",
+  "h": "e507a96f"
+ },
+ "js.shellui.vi-sao-menh-toi-hop-mau": {
+  "t": "Why does my element suit this color?",
+  "h": "7ef6e8bc"
+ },
+ "js.shellui.vi-sao-nam-do-hop-ca": {
+  "t": "Why does that year suit both father and mother?",
+  "h": "bc9256b2"
+ },
+ "js.shellui.vi-sao-nen-tranh-kieu-nay": {
+  "t": "Why should I avoid this style?",
+  "h": "c8ccd29d"
+ },
+ "js.shellui.vi-sao-nen-tranh-mau-nay": {
+  "t": "Why should I avoid this color?",
+  "h": "8162b54f"
+ },
+ "js.shellui.vi-sao-ngay-nay-khac-menh": {
+  "t": "Why does this day clash with my element?",
+  "h": "a98c2e50"
+ },
+ "js.shellui.vi-sao-phong-cach-nay-hop": {
+  "t": "Why does this style suit me?",
+  "h": "7ed2d820"
+ },
+ "js.shellui.vi-sao-toi-thuoc-season-nay": {
+  "t": "Why am I in this color season?",
+  "h": "fd530a4e"
+ },
+ "js.shellui.vi-sao-tranh-ngay-ki": {
+  "t": "Why avoid an inauspicious day?",
+  "h": "2cc8c854"
+ },
+ "js.shellui.vi-tri-thu-ngan-nen-dat": {
+  "t": "Where should the cashier position go?",
+  "h": "3e0eb3b7"
+ },
+ "js.shellui.viec-can-chon-ngay": {
+  "t": "What you need a date for",
+  "h": "e84816a6"
+ },
+ "js.shellui.viec-cua-toi-nen-di-huong": {
+  "t": "Which direction should I go for my matter?",
+  "h": "72ff459d"
+ },
+ "js.shellui.viec-nay-thanh-hay-bai": {
+  "t": "Will this succeed or fail?",
+  "h": "fa905597"
  },
  "js.shellui.vo": {
   "t": "Wife",
@@ -3567,6 +5667,30 @@
   "t": "just now",
   "h": "d1a7c7fa"
  },
+ "js.shellui.vui-long-nhap-du-ho-va": {
+  "t": "Please enter the family name and the birth years of the child, father and mother.",
+  "h": "a40f12bf"
+ },
+ "js.shellui.vui-long-nhap-du-nam-sinh": {
+  "t": "Please enter the birth years of the father and mother.",
+  "h": "76f77027"
+ },
+ "js.shellui.vui-long-nhap-ho-ten-nam": {
+  "t": "Please enter the full name, birth year, and the planned month and year.",
+  "h": "d60f4f07"
+ },
+ "js.shellui.vui-long-nhap-nam-sinh": {
+  "t": "Please enter a birth year.",
+  "h": "a44b0170"
+ },
+ "js.shellui.vui-long-nhap-nam-sinh-nguoi": {
+  "t": "Please enter the owner's birth year and choose a line of work.",
+  "h": "20fcc631"
+ },
+ "js.shellui.vui-long-nhap-nam-sinh-va": {
+  "t": "Please enter your birth year and the planned date.",
+  "h": "57ef031d"
+ },
  "js.shellui.xem": {
   "t": "View →",
   "h": "1e272706"
@@ -3574,6 +5698,18 @@
  "js.shellui.xem-bang": {
   "t": " via ",
   "h": "b50dfad0"
+ },
+ "js.shellui.xem-bat-trach": {
+  "t": "View Eight Mansions →",
+  "h": "ed0e7729"
+ },
+ "js.shellui.xem-cho-ca-nha": {
+  "t": "View for the whole family",
+  "h": "b1dd36ab"
+ },
+ "js.shellui.xem-gio-hoang-dao": {
+  "t": "View auspicious hours →",
+  "h": "c5fbd65a"
  },
  "js.shellui.xem-kem": {
   "t": "Also see:",
@@ -3587,6 +5723,42 @@
   "t": "See this result on Minh Bao Zi Wei Dou Shu:",
   "h": "b03d8f15"
  },
+ "js.shellui.xem-kim-lau": {
+  "t": "View Jin Lou →",
+  "h": "0b820f74"
+ },
+ "js.shellui.xem-mau-hop-menh": {
+  "t": "View colors for your element →",
+  "h": "14856f69"
+ },
+ "js.shellui.xem-mau-hop-menh-gw03": {
+  "t": "View colors for your element",
+  "h": "88f7c677"
+ },
+ "js.shellui.xem-nam-sinh-con": {
+  "t": "View the child's birth year →",
+  "h": "a1c0ecd3"
+ },
+ "js.shellui.xem-nap-am": {
+  "t": "View Na Yin →",
+  "h": "cfa1071d"
+ },
+ "js.shellui.xem-nen-can-chi": {
+  "t": "View the Stems & Branches foundation →",
+  "h": "b2fd43ff"
+ },
+ "js.shellui.xem-nen-menh": {
+  "t": "View the natal foundation →",
+  "h": "17fdf9e1"
+ },
+ "js.shellui.xem-nen-menh-chu": {
+  "t": "View the owner's natal foundation →",
+  "h": "c399d0a8"
+ },
+ "js.shellui.xem-ngay-tot": {
+  "t": "View auspicious days →",
+  "h": "178eb8fe"
+ },
  "js.shellui.xem-phan-luan-giai-cua-thay": {
   "t": "See the Master's reading for this chart: ",
   "h": "8b9556e2"
@@ -3595,17 +5767,49 @@
   "t": "See the Master's reading for this chart:",
   "h": "6b8b5dbb"
  },
+ "js.shellui.xem-trang-phuc": {
+  "t": "View outfits →",
+  "h": "0c807b67"
+ },
+ "js.shellui.xem-trang-phuc-t5sj": {
+  "t": "View outfits",
+  "h": "0e97c9c6"
+ },
  "js.shellui.xem-tron": {
   "t": "Read in full",
   "h": "18cdbfde"
+ },
+ "js.shellui.xin-loi": {
+  "t": "Sorry, ",
+  "h": "2a951ed5"
+ },
+ "js.shellui.xin-loi-edlu": {
+  "t": "Sorry,",
+  "h": "f08350a2"
+ },
+ "js.shellui.xin-loi-fxsy": {
+  "t": "<p>Sorry, ",
+  "h": "6a7e27cd"
  },
  "js.shellui.xin-loi-gap-truc-trac": {
   "t": "Sorry, something went wrong: ",
   "h": "7b2227c3"
  },
+ "js.shellui.xin-loi-ket-noi-truc-trac": {
+  "t": "<p>Sorry, the connection had a problem. Please try again.</p>",
+  "h": "f7335158"
+ },
  "js.shellui.xoa-phien": {
   "t": "Delete session",
   "h": "72d604e7"
+ },
+ "js.shellui.xong-roi-lich-tu-cap-nhat": {
+  "t": "<p>All done. The calendar updates itself every day — there's nothing more for you to do.</p>",
+  "h": "9363d86a"
+ },
+ "js.shellui.xuat-hanh-nen-di-gio-nao": {
+  "t": "Which hour is best for setting out?",
+  "h": "d74e4f3f"
  },
  "js.shellui.zalo": {
   "t": "Zalo",
@@ -4075,6 +6279,26 @@
   "t": "/100 — how should I read it?",
   "h": "956024e9"
  },
+ "js.xemtuoi.8-chieu-hoa-hop": {
+  "t": "8 dimensions<br>of harmony",
+  "h": "247f6597"
+ },
+ "js.xemtuoi.8-chieu-hop-tac": {
+  "t": "8 dimensions<br>of partnership",
+  "h": "078d4280"
+ },
+ "js.xemtuoi.ai-nen-nam-tai-chinh": {
+  "t": "Who should manage the finances?",
+  "h": "d217723d"
+ },
+ "js.xemtuoi.ai-nen-nam-tai-chinh-45g2": {
+  "t": "Who should<br>manage the finances",
+  "h": "8fb8be89"
+ },
+ "js.xemtuoi.binh-hoa": {
+  "t": "Balanced",
+  "h": "e53232c5"
+ },
  "js.xemtuoi.ca": {
   "t": " Both ",
   "h": "7eff84cf"
@@ -4083,6 +6307,18 @@
   "t": " Specific ways to resolve it are in the in-depth reading.",
   "h": "bb461286"
  },
+ "js.xemtuoi.cach-hoa-giai-diem-khac": {
+  "t": "How can the points of friction be remedied?",
+  "h": "eb83ed13"
+ },
+ "js.xemtuoi.cach-hoa-giai-khac": {
+  "t": "How to remedy<br>clashes",
+  "h": "9b942e43"
+ },
+ "js.xemtuoi.can-luu-y": {
+  "t": "Needs attention",
+  "h": "e177cd38"
+ },
  "js.xemtuoi.cham-8-yeu-to-hop-tac": {
   "t": "Score 8 partnership factors between you and a prospective business partner — an objective view before you sign.",
   "h": "fdda207e"
@@ -4090,6 +6326,10 @@
  "js.xemtuoi.cham-8-yeu-to-tuong-hop": {
   "t": "Score 8 compatibility factors between two charts — use it when you're thinking about marriage and want a clear answer.",
   "h": "db3006a1"
+ },
+ "js.xemtuoi.chi-can-nam-sinh": {
+  "t": "Birth year<br>is all you need",
+  "h": "9f727504"
  },
  "js.xemtuoi.chieu": {
   "t": "Dimension \"",
@@ -4111,6 +6351,14 @@
   "t": "Most compatible dimension: ",
   "h": "3b6f195e"
  },
+ "js.xemtuoi.chieu-nao-dang-lo-nhat": {
+  "t": "Which dimension is most concerning?",
+  "h": "fa07e9c6"
+ },
+ "js.xemtuoi.chieu-nao-de-xung-dot-khi": {
+  "t": "Which dimension is most prone to conflict in a partnership?",
+  "h": "58449b93"
+ },
  "js.xemtuoi.chieu-thap-vi-sao": {
   "t": "Dimension \"{label}\" is low ({score}/10) — why, and how can it be resolved?",
   "h": "3ab2ac81"
@@ -4123,6 +6371,10 @@
   "t": "Husband / Person A",
   "h": "3fd2edae"
  },
+ "js.xemtuoi.chua-dung-duoc-anh-thu-lai": {
+  "t": "Couldn't build the image. Please try again in a few seconds.",
+  "h": "f8055429"
+ },
  "js.xemtuoi.cung-menh": {
   "t": " · Life Palace ",
   "h": "ae7269b2"
@@ -4131,9 +6383,41 @@
   "t": "<br>Life Palace ",
   "h": "2c272c79"
  },
+ "js.xemtuoi.da-so-tuoi": {
+  "t": "Signs compared",
+  "h": "ab3ff10b"
+ },
+ "js.xemtuoi.da-so-tuong-hop": {
+  "t": "Compatibility compared",
+  "h": "0d44035d"
+ },
+ "js.xemtuoi.da-xet-hop-tac": {
+  "t": "Partnership assessed",
+  "h": "5662d902"
+ },
  "js.xemtuoi.dang-dung-anh": {
   "t": "Building image…",
   "h": "7bce9760"
+ },
+ "js.xemtuoi.dang-so-tuoi": {
+  "t": "Comparing signs…",
+  "h": "5d169757"
+ },
+ "js.xemtuoi.dang-so-tuong-hop": {
+  "t": "Comparing compatibility…",
+  "h": "72bc4cb1"
+ },
+ "js.xemtuoi.dang-xet-hop-tac": {
+  "t": "Assessing the partnership…",
+  "h": "e614a918"
+ },
+ "js.xemtuoi.de-va-cham-o-dau": {
+  "t": "Where are you likely to clash?",
+  "h": "40fb0c76"
+ },
+ "js.xemtuoi.diem-de-xung-dot": {
+  "t": "Likely points<br>of conflict",
+  "h": "5f85b2fd"
  },
  "js.xemtuoi.doi-tac-a": {
   "t": "Partner A",
@@ -4151,6 +6435,10 @@
   "t": "First partner",
   "h": "6efa76df"
  },
+ "js.xemtuoi.duong-con-cai-cua-hai-nguoi": {
+  "t": "What does the path to children look like for the two of you?",
+  "h": "bde6a4ed"
+ },
  "js.xemtuoi.gui-ket-qua-nay-cho": {
   "t": "Send this result to <b>",
   "h": "016401eb"
@@ -4159,13 +6447,37 @@
   "t": "Two charts",
   "h": "36cfb3c6"
  },
+ "js.xemtuoi.hai-nguoi-co-hop-lam-vo": {
+  "t": "Are the two of you compatible as husband and wife?",
+  "h": "652abed1"
+ },
  "js.xemtuoi.hai-nguoi-hoa-hop": {
   "t": "Compatibility of the two ",
   "h": "1ddd5d3b"
  },
+ "js.xemtuoi.hai-nguoi-hop-lam-an-chung": {
+  "t": "Are the two of you compatible for doing business together?",
+  "h": "e895dc5e"
+ },
+ "js.xemtuoi.hai-nguoi-nay-co-hop-nhau": {
+  "t": "Are these two people compatible?",
+  "h": "6ed6138f"
+ },
  "js.xemtuoi.hoa-hop": {
   "t": "** — compatibility **",
   "h": "b8c22dab"
+ },
+ "js.xemtuoi.hop-nhau-o-mat-nao": {
+  "t": "In which areas are you compatible?",
+  "h": "d4b3d2f5"
+ },
+ "js.xemtuoi.ket-qua-tuc-thi": {
+  "t": "Instant<br>results",
+  "h": "50a61566"
+ },
+ "js.xemtuoi.kha-hop": {
+  "t": "Fairly compatible",
+  "h": "feeb19b6"
  },
  "js.xemtuoi.loi-khi-so-tuoi": {
   "t": "Error while comparing:",
@@ -4183,6 +6495,10 @@
   "t": "Strongest: ",
   "h": "b67b37ca"
  },
+ "js.xemtuoi.mien-phi-hoan-toan": {
+  "t": "Completely<br>free",
+  "h": "a0a85cd4"
+ },
  "js.xemtuoi.nap-am": {
   "t": " · Na Yin ",
   "h": "c754b896"
@@ -4190,6 +6506,18 @@
  "js.xemtuoi.nap-am-jzle": {
   "t": "</b> · Na Yin ",
   "h": "24107e5c"
+ },
+ "js.xemtuoi.nen-giu-khoang-cach-hay-gan": {
+  "t": "Should you keep your distance or stay close?",
+  "h": "dc5da82d"
+ },
+ "js.xemtuoi.nen-gop-von-hay-chia-viec": {
+  "t": "Should you pool capital or divide the work?",
+  "h": "2f1d5a81"
+ },
+ "js.xemtuoi.ngu-hanh-con-cai": {
+  "t": "Five Elements,<br>children",
+  "h": "93e92978"
  },
  "js.xemtuoi.nguoi-a": {
   "t": "Person A",
@@ -4207,6 +6535,14 @@
   "t": "First person",
   "h": "955e7151"
  },
+ "js.xemtuoi.nhap-ngay-sinh-hai-doi-tac": {
+  "t": "Enter both partners' birth dates (solar calendar)",
+  "h": "6e657e16"
+ },
+ "js.xemtuoi.nhap-ngay-sinh-hai-nguoi-duong": {
+  "t": "Enter both people's birth dates (solar calendar)",
+  "h": "0a8681af"
+ },
  "js.xemtuoi.q1-a": {
   "t": "Please give the Master the details of {p} ({ph}).",
   "h": "12a20cf0"
@@ -4223,9 +6559,49 @@
   "t": "What time was {ph} born?",
   "h": "b2facf82"
  },
+ "js.xemtuoi.quet-ma-so-tuoi-cua-ban": {
+  "t": "Scan the code — compare your signs",
+  "h": "9731d82c"
+ },
+ "js.xemtuoi.rat-hop": {
+  "t": "Highly compatible",
+  "h": "36d3f434"
+ },
  "js.xemtuoi.ru": {
   "t": "Invite",
   "h": "797be799"
+ },
+ "js.xemtuoi.so-hoa-hop-hai-la-so": {
+  "t": "Compare the harmony of two charts by the classical method",
+  "h": "d715ccd1"
+ },
+ "js.xemtuoi.so-hop-hai-nguoi-bat-ky": {
+  "t": "Compare any two people by the classical method",
+  "h": "aee0cb90"
+ },
+ "js.xemtuoi.so-hop-hai-nguoi-khi-bat": {
+  "t": "Compare two people before shaking hands on a partnership",
+  "h": "7c99a229"
+ },
+ "js.xemtuoi.so-tuoi": {
+  "t": "Compare signs →",
+  "h": "99f5e0bd"
+ },
+ "js.xemtuoi.so-tuoi-ij72": {
+  "t": "Compare signs",
+  "h": "602b2d86"
+ },
+ "js.xemtuoi.so-tuong-hop": {
+  "t": "Compare compatibility →",
+  "h": "8d280558"
+ },
+ "js.xemtuoi.so-tuong-hop-yeo0": {
+  "t": "Compare compatibility",
+  "h": "a24be386"
+ },
+ "js.xemtuoi.tai-anh-chia-se-9-16": {
+  "t": "⬇ Download share image (9:16)",
+  "h": "9e425572"
  },
  "js.xemtuoi.tong-diem": {
   "t": "\nTotal score ",
@@ -4234,6 +6610,10 @@
  "js.xemtuoi.tra-loi-thay-nhap-ngay-sinh": {
   "t": "Reply to the Master in the chat to enter the birth dates of {a} and {b}.",
   "h": "f2617440"
+ },
+ "js.xemtuoi.tuong-hop-tuoi": {
+  "t": "Sign compatibility",
+  "h": "e9fd3f4c"
  },
  "js.xemtuoi.tuong-hop-tuoi-tu-vi-minh": {
   "t": "Compatibility — Minh Bao Zi Wei Dou Shu",
@@ -4255,17 +6635,37 @@
   "t": "Wife / Person B",
   "h": "714d3fc9"
  },
+ "js.xemtuoi.vui-long-nhap-day-du-ngay": {
+  "t": "Please enter the full birth date (day, month and year) for both people.",
+  "h": "804aebb6"
+ },
  "js.xemtuoi.xem-ho-to-mo-la-muon": {
   "t": "</b> viewed it — they're curious and want to look up their own chart too.</div>",
   "h": "86627163"
+ },
+ "js.xemtuoi.xem-hop-tac": {
+  "t": "View partnership →",
+  "h": "5a2bb9e9"
+ },
+ "js.xemtuoi.xem-tuoi-lam-an": {
+  "t": "Business Partner Compatibility",
+  "h": "791a32dc"
  },
  "js.xemtuoi.xem-tuoi-lam-an-tu-vi": {
   "t": "Business Compatibility — Minh Bao Zi Wei Dou Shu",
   "h": "6a071dab"
  },
+ "js.xemtuoi.xem-tuoi-vo-chong": {
+  "t": "Marriage Compatibility",
+  "h": "d6d67d5c"
+ },
  "js.xemtuoi.xem-tuoi-vo-chong-tu-vi": {
   "t": "Marriage Compatibility — Minh Bao Zi Wei Dou Shu",
   "h": "4fd9f105"
+ },
+ "js.xemtuoi.xet-hop-tac": {
+  "t": "Assess partnership",
+  "h": "d3041c86"
  },
  "js.xemtuoi.xet-nhanh-hai-tuoi-co-hop": {
   "t": "Quickly check whether two ages are compatible — just birth years, an instant answer, no deep reading yet.",
