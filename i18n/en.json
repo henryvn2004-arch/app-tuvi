@@ -4123,6 +4123,18 @@
   "t": "Reads the open chart correctly",
   "h": "b500bc82"
  },
+ "js.shellui.hl-binh": {
+  "t": "neutral",
+  "h": "3318401b"
+ },
+ "js.shellui.hl-cat": {
+  "t": "auspicious",
+  "h": "70e9b769"
+ },
+ "js.shellui.hl-hung": {
+  "t": "inauspicious",
+  "h": "3baaa792"
+ },
  "js.shellui.ho": {
   "t": "Family name",
   "h": "a9a24039"
