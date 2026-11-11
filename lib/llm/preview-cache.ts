@@ -20,6 +20,8 @@
 // ============================================================
 
 import { createHash } from 'crypto';
+import type { Locale } from '@/lib/i18n/locales';
+import { localeKeySuffix } from '@/lib/llm/locale';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -40,7 +42,7 @@ const SB_HEADERS = {
  *
  * `namXem` vào khoá vì phần tổng quan có nhắc đại vận/tiểu hạn của năm đang
  * xem; `hoTen`/`gioiTinh` vào khoá vì prompt xưng hô theo chúng (xem chú thích
- * bảng trong migration).
+ * bảng trong migration). `locale` vào khoá CHỈ khi khác `vi` — bản Nhật không bao giờ trả cho khách Việt.
  */
 export function previewKey(p: {
   laSoText: string;
@@ -48,6 +50,8 @@ export function previewKey(p: {
   namXem?: number | string;
   hoTen?: string;
   gioiTinh?: string;
+  /** Ngôn ngữ bản luận (i18n W8). `vi`/vắng → khoá cũ GIỮ NGUYÊN từng byte; ngôn ngữ khác thêm hậu tố. */
+  locale?: Locale;
 }): string {
   const raw = [
     p.laSoText || '',
@@ -55,7 +59,7 @@ export function previewKey(p: {
     String(p.namXem ?? ''),
     (p.hoTen || '').trim().toLowerCase(),
     p.gioiTinh === 'nu' ? 'nu' : 'nam',
-  ].join(' ');
+  ].join(' ') + localeKeySuffix(p.locale ?? 'vi');
   return createHash('sha256').update(raw).digest('hex');
 }
 

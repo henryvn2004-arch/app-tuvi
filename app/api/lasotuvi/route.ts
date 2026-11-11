@@ -20,6 +20,7 @@ import { buildPromptCached } from '@/lib/agent/luan-giai-doc';
 // vòng lặp tool bên dưới; llmTextFull cho luận 24 phần (phan) — bản `Full` để
 // lấy được usage + thời lượng, xem chú thích tại chỗ gọi.
 import { llmTextFull, callLLMTools } from '@/lib/llm/complete';
+import { requestLocale, withLang } from '@/lib/llm/locale';
 import { logLlmUsage } from '@/lib/agent/usage';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { refundIfSystemFailure } from '@/lib/ops/refund';
@@ -255,6 +256,8 @@ async function runPost(request: NextRequest) {
   };
   if (!laSoText || !phan) return err('Thiếu dữ liệu', 400);
   const phanNum = Number(phan);
+  // Ngôn ngữ bản luận (i18n W8) — theo trang khách đang đứng; vào khoá cache xem trước VÀ câu chỉ định ở tin user.
+  const locale = requestLocale(request);
 
   // Chốt chặn thanh toán PHÍA SERVER — thiếu bước này thì gọi thẳng endpoint
   // (biết laSoText, tự sinh miễn phí từ an sao) là dựng bản luận 13/11 phần
@@ -370,7 +373,7 @@ async function runPost(request: NextRequest) {
   // là thứ chặn người cố tình. Xem _patches/migration-anon-preview.sql.
   let previewCacheKey = '';
   if (isPreview && !paywallDisabled()) {
-    previewCacheKey = previewKey({ laSoText, phan: phanNum, namXem, hoTen, gioiTinh });
+    previewCacheKey = previewKey({ laSoText, phan: phanNum, namXem, hoTen, gioiTinh, locale });
     const hit = await previewCacheGet(previewCacheKey);
     if (hit) return ok({ luanGiai: hit, phan, cached: true });
 
@@ -407,7 +410,8 @@ async function runPost(request: NextRequest) {
     const nx = nguoiXemLine(hoTen, gioiTinh);
     const cached = buildPromptCached(Number(phan), laSoText, docs);
     systemForLLM = cached.system;
-    prompt = (nx ? nx + '\n' : '') + cached.prompt;
+    // Câu chỉ định ngôn ngữ nối vào USER message — `cached.system` (cachedSystemFor) giữ nguyên byte. `vi` → không đổi.
+    prompt = withLang((nx ? nx + '\n' : '') + cached.prompt, locale, [laSoText]);
   }
   catch (e: unknown) { return paidErr('buildPrompt error: ' + (e as Error).message); }
 

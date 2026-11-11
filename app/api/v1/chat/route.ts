@@ -25,6 +25,7 @@ import {
 } from '@/lib/contract/v1';
 import { buildToolDefs } from '@/lib/tools/registry';
 import { runAgent } from '@/lib/agent/run';
+import { requestLocale } from '@/lib/llm/locale';
 import { getChatConfig, getConfigValue } from '@/lib/config/appConfig';
 import { getRailPrice } from '@/lib/billing/pricing';
 import { chatLogOutcome, chatLoadSession, chatSaveSession } from '@/lib/channels/store';
@@ -88,7 +89,8 @@ export async function POST(request: NextRequest) {
   if (!parsed.ok) return jsonError('bad_request', parsed.error, 400);
   if (!ANTHROPIC_API_KEY) return jsonError('internal', 'Thiếu cấu hình ANTHROPIC_API_KEY', 500);
 
-  const rawReq: ChatRequestV1 = parsed.value;
+  // Ngôn ngữ do SERVER quyết (header proxy → Referer của trang), đè mọi giá trị client gửi — i18n W8.
+  const rawReq: ChatRequestV1 = { ...parsed.value, locale: requestLocale(request) };
   const cfg = await getChatConfig();
 
   // ── Đọc từ session (2026-09-22, bước 2 hướng tới session thật) ─────────
