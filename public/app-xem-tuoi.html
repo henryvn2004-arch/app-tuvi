@@ -683,15 +683,15 @@ function _tpStars(ls,cungName){
   return stars.join(' ');
 }
 var QUERIES=[
-  function(r){ return _tvmbT('js.xemtuoi.tuong-hop-la-so', 'tương hợp lá số ')+(r.lsA.canChiNam||'')+' '+(r.lsB.canChiNam||'')+' '+_tpStars(r.lsA,_tvmbT('js.luangiai.menh', 'Mệnh'))+' '+_tpStars(r.lsB,_tvmbT('js.luangiai.menh', 'Mệnh'))+_tvmbT('js.xemtuoi.vo-chong-hon-nhan', ' vợ chồng hôn nhân'); },
-  function(r){ return _tvmbT('js.xemtuoi.dia-chi-nam-sinh-luc-hop', 'địa chi năm sinh lục hợp tứ xung xét tuổi ')+(r.lsA.canChiNam||'')+' '+(r.lsB.canChiNam||''); },
-  function(r){ return _tvmbT('js.xemtuoi.nap-am-9v70', 'nạp âm ')+(r.naA||'')+' '+(r.naB||'')+_tvmbT('js.xemtuoi.ngu-hanh-sinh-khac-tuong-hop', ' ngũ hành sinh khắc tương hợp'); },
-  function(r){ return _tvmbT('js.luangiai.cung-menh', 'cung mệnh ')+_tpStars(r.lsA,_tvmbT('js.luangiai.menh', 'Mệnh'))+' '+_tpStars(r.lsB,_tvmbT('js.luangiai.menh', 'Mệnh'))+_tvmbT('js.xemtuoi.cach-cuc-tu-tuong', ' cách cục tư tưởng'); },
-  function(r){ return _tvmbT('js.xemtuoi.nhom-thai-tue-chinh-tinh', 'nhóm thái tuế chính tinh ')+_tpStars(r.lsA,_tvmbT('js.luangiai.menh', 'Mệnh'))+' '+_tpStars(r.lsB,_tvmbT('js.luangiai.menh', 'Mệnh'))+_tvmbT('js.xemtuoi.tinh-cach', ' tính cách'); },
-  function(r){ return _tvmbT('js.luangiai.cung-phu-the', 'cung phu thê ')+_tpStars(r.lsA,_tvmbT('js.luangiai.phu-the', 'Phu Thê'))+' '+_tpStars(r.lsB,_tvmbT('js.luangiai.phu-the', 'Phu Thê'))+_tvmbT('js.xemtuoi.hon-nhan-tuong-hop-vo-chong', ' hôn nhân tương hợp vợ chồng'); },
-  function(r){ return _tvmbT('js.luangiai.cung-tu-tuc', 'cung tử tức ')+_tpStars(r.lsA,_tvmbT('js.luangiai.tu-tuc', 'Tử Tức'))+' '+_tpStars(r.lsB,_tvmbT('js.luangiai.tu-tuc', 'Tử Tức'))+_tvmbT('js.luangiai.con-cai', ' con cái'); },
-  function(r){ return _tvmbT('js.luangiai.cung-tai-bach', 'cung tài bạch ')+_tpStars(r.lsA,_tvmbT('js.luangiai.tai-bach', 'Tài Bạch'))+' '+_tpStars(r.lsB,_tvmbT('js.luangiai.tai-bach', 'Tài Bạch'))+_tvmbT('js.xemtuoi.tai-chinh-tien-bac', ' tài chính tiền bạc'); },
-  function(r){ return _tvmbT('js.xemtuoi.dai-van', 'đại vận ')+((r.lsA.daiVanHienTai&&r.lsA.daiVanHienTai.diaChi)||'')+' '+((r.lsB.daiVanHienTai&&r.lsB.daiVanHienTai.diaChi)||'')+_tvmbT('js.xemtuoi.van-han-hien-tai', ' vận hạn hiện tại'); },
+  function(r){ return 'tương hợp lá số '+(r.lsA.canChiNam||'')+' '+(r.lsB.canChiNam||'')+' '+_tpStars(r.lsA,'Mệnh')+' '+_tpStars(r.lsB,'Mệnh')+' vợ chồng hôn nhân'; },
+  function(r){ return 'địa chi năm sinh lục hợp tứ xung xét tuổi '+(r.lsA.canChiNam||'')+' '+(r.lsB.canChiNam||''); },
+  function(r){ return 'nạp âm '+(r.naA||'')+' '+(r.naB||'')+' ngũ hành sinh khắc tương hợp'; },
+  function(r){ return 'cung mệnh '+_tpStars(r.lsA,'Mệnh')+' '+_tpStars(r.lsB,'Mệnh')+' cách cục tư tưởng'; },
+  function(r){ return 'nhóm thái tuế chính tinh '+_tpStars(r.lsA,'Mệnh')+' '+_tpStars(r.lsB,'Mệnh')+' tính cách'; },
+  function(r){ return 'cung phu thê '+_tpStars(r.lsA,'Phu Thê')+' '+_tpStars(r.lsB,'Phu Thê')+' hôn nhân tương hợp vợ chồng'; },
+  function(r){ return 'cung tử tức '+_tpStars(r.lsA,'Tử Tức')+' '+_tpStars(r.lsB,'Tử Tức')+' con cái'; },
+  function(r){ return 'cung tài bạch '+_tpStars(r.lsA,'Tài Bạch')+' '+_tpStars(r.lsB,'Tài Bạch')+' tài chính tiền bạc'; },
+  function(r){ return 'đại vận '+((r.lsA.daiVanHienTai&&r.lsA.daiVanHienTai.diaChi)||'')+' '+((r.lsB.daiVanHienTai&&r.lsB.daiVanHienTai.diaChi)||'')+' vận hạn hiện tại'; },
 ];
 
 // Trang này phục vụ 2 mode (xem-tuoi / xem-lam-an) nên ô giá phải trỏ đúng

@@ -481,7 +481,7 @@ async function doLuan(){
     // → xem chú thích ở `currentShare()` trong shell.js). `text` dưới đây chỉ
     // là tiêu đề mở đầu cố định; khoá-mini chưa mở đã bị shell tự loại khỏi
     // bản đọc DOM nên phần CHƯA trả tiền không lọt ra.
-    var _shareHead=(name||_tvmbT('js.shell.la-so', 'Lá số'))+' · '+dd+'/'+mm+'/'+yyyy+' · '+(gioitinh==='nam'?'Nam':_tvmbT('js.shellui.nu', 'Nữ'))+_tvmbT('js.luangiai.cuc', ' · Cục: ')+(ls.cuc||'—')+_tvmbT('js.luangiai.nap-am', ' · Nạp âm: ')+(ls.napAm||'—');
+    var _shareHead=(name||_tvmbT('js.shell.la-so', 'Lá số'))+' · '+dd+'/'+mm+'/'+yyyy+' · '+(gioitinh==='nam'?_tvmbT('js.shellui.nam', 'Nam'):_tvmbT('js.shellui.nu', 'Nữ'))+_tvmbT('js.luangiai.cuc', ' · Cục: ')+(ls.cuc||'—')+_tvmbT('js.luangiai.nap-am', ' · Nạp âm: ')+(ls.napAm||'—');
     Shell.setShareable({
       kind:'text',
       toolId:'chu-trinh-cuoc-doi',
@@ -849,17 +849,17 @@ function _getDvInfo(dvNum){
 // QUERIES khoá theo ENGINE PHAN (14-24), không phải local p — cùng lý do
 // `_luanGiaiStore` phải khoá theo ep, xem chú thích ở đầu renderLuan().
 var QUERIES={
-  14: function(){ return _tvmbT('js.chutrinh.dai-van-thien-thoi-dia-loi', 'đại vận thiên thời địa lợi nhân hòa scoring ')+(_astrolabe&&_astrolabe.daiVanHienTai&&_astrolabe.daiVanHienTai.diaChi||''); },
-  15: function(){ return _tvmbT('js.xemtuoi.dai-van', 'đại vận ')+_getDvInfo(1)+_tvmbT('js.vanhannam.van-han-y-nghia', ' vận hạn ý nghĩa'); },
-  16: function(){ return _tvmbT('js.xemtuoi.dai-van', 'đại vận ')+_getDvInfo(2)+_tvmbT('js.vanhannam.van-han-y-nghia', ' vận hạn ý nghĩa'); },
-  17: function(){ return _tvmbT('js.xemtuoi.dai-van', 'đại vận ')+_getDvInfo(3)+_tvmbT('js.vanhannam.van-han-y-nghia', ' vận hạn ý nghĩa'); },
-  18: function(){ return _tvmbT('js.xemtuoi.dai-van', 'đại vận ')+_getDvInfo(4)+_tvmbT('js.vanhannam.van-han-y-nghia', ' vận hạn ý nghĩa'); },
-  19: function(){ return _tvmbT('js.xemtuoi.dai-van', 'đại vận ')+_getDvInfo(5)+_tvmbT('js.vanhannam.van-han-y-nghia', ' vận hạn ý nghĩa'); },
-  20: function(){ return _tvmbT('js.xemtuoi.dai-van', 'đại vận ')+_getDvInfo(6)+_tvmbT('js.vanhannam.van-han-y-nghia', ' vận hạn ý nghĩa'); },
-  21: function(){ return _tvmbT('js.xemtuoi.dai-van', 'đại vận ')+_getDvInfo(7)+_tvmbT('js.vanhannam.van-han-y-nghia', ' vận hạn ý nghĩa'); },
-  22: function(){ return _tvmbT('js.xemtuoi.dai-van', 'đại vận ')+_getDvInfo(8)+_tvmbT('js.vanhannam.van-han-y-nghia', ' vận hạn ý nghĩa'); },
-  23: function(){ return _tvmbT('js.xemtuoi.dai-van', 'đại vận ')+_getDvInfo(9)+_tvmbT('js.vanhannam.van-han-y-nghia', ' vận hạn ý nghĩa'); },
-  24: function(){ return _tvmbT('js.vanhannam.tieu-han-luu-nien', 'tiểu hạn lưu niên ')+(_astrolabe&&_astrolabe.chiNamXem||'')+' '+(_astrolabe&&_astrolabe.palaces[_astrolabe.tieuHanIdx]&&_astrolabe.palaces[_astrolabe.tieuHanIdx].cungName||'')+_tvmbT('js.chutrinh.van-hien-tai', ' vận hiện tại'); },
+  14: function(){ return 'đại vận thiên thời địa lợi nhân hòa scoring '+(_astrolabe&&_astrolabe.daiVanHienTai&&_astrolabe.daiVanHienTai.diaChi||''); },
+  15: function(){ return 'đại vận '+_getDvInfo(1)+' vận hạn ý nghĩa'; },
+  16: function(){ return 'đại vận '+_getDvInfo(2)+' vận hạn ý nghĩa'; },
+  17: function(){ return 'đại vận '+_getDvInfo(3)+' vận hạn ý nghĩa'; },
+  18: function(){ return 'đại vận '+_getDvInfo(4)+' vận hạn ý nghĩa'; },
+  19: function(){ return 'đại vận '+_getDvInfo(5)+' vận hạn ý nghĩa'; },
+  20: function(){ return 'đại vận '+_getDvInfo(6)+' vận hạn ý nghĩa'; },
+  21: function(){ return 'đại vận '+_getDvInfo(7)+' vận hạn ý nghĩa'; },
+  22: function(){ return 'đại vận '+_getDvInfo(8)+' vận hạn ý nghĩa'; },
+  23: function(){ return 'đại vận '+_getDvInfo(9)+' vận hạn ý nghĩa'; },
+  24: function(){ return 'tiểu hạn lưu niên '+(_astrolabe&&_astrolabe.chiNamXem||'')+' '+(_astrolabe&&_astrolabe.palaces[_astrolabe.tieuHanIdx]&&_astrolabe.palaces[_astrolabe.tieuHanIdx].cungName||'')+' vận hiện tại'; },
 };
 
 // Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
@@ -1160,12 +1160,12 @@ async function _unlockOnePart(p){
   if(!gate.ok) return; // ensureCredits đã tự hiện UI thiếu Lượng/giá chưa đọc được
 
   var token=window.Auth.getSession&&window.Auth.getSession()&&window.Auth.getSession().access_token;
-  var labelForDesc=(LuanGiaiCore.phanLabels(_astrolabe)||{})[ep]||(_tvmbT('js.luangiai.phan', 'Phần ')+p);
+  var labelForDesc=(LuanGiaiCore.phanLabels(_astrolabe)||{})[ep]||('Phần '+p);
   try{
     var res=await fetch('/api/payment?action=deduct',{method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||'')},
       body:JSON.stringify({toolType:'use_chu_trinh_cuoc_doi', product:'chu-trinh-cuoc-doi', part:p, amount:partPrice,
-        slug:slug, description:_tvmbT('js.chutrinh.chu-trinh-cuoc-doi-5vo8', 'Chu Trình Cuộc Đời — ')+labelForDesc})});
+        slug:slug, description:'Chu Trình Cuộc Đời — '+labelForDesc})});
     var data=await res.json();
     if(!data.success){
       alert(data.insufficientBalance?'Không đủ Lượng — vui lòng nạp thêm.':'Có lỗi khi mở phần này, thử lại.');

@@ -743,7 +743,7 @@ async function doLuan(){
     // chỉ là tiêu đề mở đầu cố định, KHÔNG phải toàn bộ nội dung chia sẻ.
     // Khoá-mini (.tpw-real-lock/phần chưa mở, .tpw-seclock/nút mời mua) đã bị
     // shell tự loại khỏi bản đọc DOM, nên phần CHƯA trả tiền không lọt ra.
-    var _shareHead=(name||_tvmbT('js.shell.la-so', 'Lá số'))+' · '+dd+'/'+mm+'/'+yyyy+' · '+(gioitinh==='nam'?'Nam':_tvmbT('js.shellui.nu', 'Nữ'))+_tvmbT('js.luangiai.cuc', ' · Cục: ')+(ls.cuc||'—')+_tvmbT('js.luangiai.nap-am', ' · Nạp âm: ')+(ls.napAm||'—');
+    var _shareHead=(name||_tvmbT('js.shell.la-so', 'Lá số'))+' · '+dd+'/'+mm+'/'+yyyy+' · '+(gioitinh==='nam'?_tvmbT('js.shellui.nam', 'Nam'):_tvmbT('js.shellui.nu', 'Nữ'))+_tvmbT('js.luangiai.cuc', ' · Cục: ')+(ls.cuc||'—')+_tvmbT('js.luangiai.nap-am', ' · Nạp âm: ')+(ls.napAm||'—');
     Shell.setShareable({
       kind:'text',
       toolId:'luan-giai',
@@ -1323,19 +1323,19 @@ function _getTamPhuongStars(cungName){
 // tiểu vận) VÀ helper _getDvInfo() riêng của chúng đã dời sang
 // app-chu-trinh-cuoc-doi.html, không dùng ở đây nữa.
 var QUERIES={
-  1: function(){ return _tvmbT('js.luangiai.tong-quan-la-so', 'tổng quan lá số ')+(_astrolabe&&_astrolabe.napAm||'')+_tvmbT('js.luangiai.cuc-3z6y', ' cục ')+(_astrolabe&&_astrolabe.cuc||'')+' '+_getTamPhuongStars(_tvmbT('js.luangiai.menh', 'Mệnh'))+_tvmbT('js.luangiai.khi-chat-ban-menh', ' khí chất bản mệnh'); },
-  2: function(){ return _tvmbT('js.luangiai.cung-menh', 'cung mệnh ')+_getTamPhuongStars(_tvmbT('js.luangiai.menh', 'Mệnh'))+_tvmbT('js.luangiai.cach-cuc-y-nghia-chinh-tinh', ' cách cục ý nghĩa chính tinh'); },
-  3: function(){ return _tvmbT('js.luangiai.cung-phu-mau', 'cung phụ mẫu ')+_getTamPhuongStars(_tvmbT('js.luangiai.phu-mau', 'Phụ Mẫu'))+_tvmbT('js.luangiai.cha-me-y-nghia', ' cha mẹ ý nghĩa'); },
-  4: function(){ return _tvmbT('js.luangiai.cung-phuc-duc', 'cung phúc đức ')+_getTamPhuongStars(_tvmbT('js.luangiai.phuc-duc', 'Phúc Đức'))+_tvmbT('js.luangiai.phuc-khi-to-tien', ' phúc khí tổ tiên'); },
-  5: function(){ return _tvmbT('js.luangiai.cung-dien-trach', 'cung điền trạch ')+_getTamPhuongStars(_tvmbT('js.luangiai.dien-trach', 'Điền Trạch'))+_tvmbT('js.luangiai.nha-dat-bat-dong-san', ' nhà đất bất động sản'); },
-  6: function(){ return _tvmbT('js.luangiai.cung-quan-loc', 'cung quan lộc ')+_getTamPhuongStars(_tvmbT('js.luangiai.quan-loc', 'Quan Lộc'))+_tvmbT('js.luangiai.su-nghiep-cong-danh', ' sự nghiệp công danh'); },
-  7: function(){ return _tvmbT('js.luangiai.cung-no-boc', 'cung nô bộc ')+_getTamPhuongStars(_tvmbT('js.luangiai.no-boc', 'Nô Bộc'))+_tvmbT('js.luangiai.ban-be-cong-su', ' bạn bè cộng sự'); },
-  8: function(){ return _tvmbT('js.luangiai.cung-thien-di', 'cung thiên di ')+_getTamPhuongStars(_tvmbT('js.luangiai.thien-di', 'Thiên Di'))+_tvmbT('js.luangiai.xuat-ngoai-giao-thiep', ' xuất ngoại giao thiệp'); },
-  9: function(){ return _tvmbT('js.luangiai.cung-tat-ach', 'cung tật ách ')+_getTamPhuongStars(_tvmbT('js.luangiai.tat-ach', 'Tật Ách'))+_tvmbT('js.luangiai.suc-khoe-benh-tat', ' sức khỏe bệnh tật'); },
-  10: function(){ return _tvmbT('js.luangiai.cung-tai-bach', 'cung tài bạch ')+_getTamPhuongStars(_tvmbT('js.luangiai.tai-bach', 'Tài Bạch'))+_tvmbT('js.luangiai.tien-bac-tai-chinh', ' tiền bạc tài chính'); },
-  11: function(){ return _tvmbT('js.luangiai.cung-tu-tuc', 'cung tử tức ')+_getTamPhuongStars(_tvmbT('js.luangiai.tu-tuc', 'Tử Tức'))+_tvmbT('js.luangiai.con-cai', ' con cái'); },
-  12: function(){ return _tvmbT('js.luangiai.cung-phu-the', 'cung phu thê ')+_getTamPhuongStars(_tvmbT('js.luangiai.phu-the', 'Phu Thê'))+_tvmbT('js.luangiai.hon-nhan-vo-chong', ' hôn nhân vợ chồng'); },
-  13: function(){ return _tvmbT('js.luangiai.cung-huynh-de', 'cung huynh đệ ')+_getTamPhuongStars(_tvmbT('js.luangiai.huynh-de', 'Huynh Đệ'))+_tvmbT('js.luangiai.anh-chi-em', ' anh chị em'); },
+  1: function(){ return 'tổng quan lá số '+(_astrolabe&&_astrolabe.napAm||'')+' cục '+(_astrolabe&&_astrolabe.cuc||'')+' '+_getTamPhuongStars('Mệnh')+' khí chất bản mệnh'; },
+  2: function(){ return 'cung mệnh '+_getTamPhuongStars('Mệnh')+' cách cục ý nghĩa chính tinh'; },
+  3: function(){ return 'cung phụ mẫu '+_getTamPhuongStars('Phụ Mẫu')+' cha mẹ ý nghĩa'; },
+  4: function(){ return 'cung phúc đức '+_getTamPhuongStars('Phúc Đức')+' phúc khí tổ tiên'; },
+  5: function(){ return 'cung điền trạch '+_getTamPhuongStars('Điền Trạch')+' nhà đất bất động sản'; },
+  6: function(){ return 'cung quan lộc '+_getTamPhuongStars('Quan Lộc')+' sự nghiệp công danh'; },
+  7: function(){ return 'cung nô bộc '+_getTamPhuongStars('Nô Bộc')+' bạn bè cộng sự'; },
+  8: function(){ return 'cung thiên di '+_getTamPhuongStars('Thiên Di')+' xuất ngoại giao thiệp'; },
+  9: function(){ return 'cung tật ách '+_getTamPhuongStars('Tật Ách')+' sức khỏe bệnh tật'; },
+  10: function(){ return 'cung tài bạch '+_getTamPhuongStars('Tài Bạch')+' tiền bạc tài chính'; },
+  11: function(){ return 'cung tử tức '+_getTamPhuongStars('Tử Tức')+' con cái'; },
+  12: function(){ return 'cung phu thê '+_getTamPhuongStars('Phu Thê')+' hôn nhân vợ chồng'; },
+  13: function(){ return 'cung huynh đệ '+_getTamPhuongStars('Huynh Đệ')+' anh chị em'; },
 };
 
 // Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (PARAGRAPH_HOOK_RULE,
@@ -1691,12 +1691,12 @@ async function _unlockOnePart(phan){
   if(!gate.ok) return; // ensureCredits đã tự hiện UI đăng nhập/thiếu Lượng/giá chưa đọc được
 
   var token=window.Auth.getSession&&window.Auth.getSession()&&window.Auth.getSession().access_token;
-  var labelForDesc=(LuanGiaiCore.phanLabels(_astrolabe)||{})[phan]||(_tvmbT('js.luangiai.phan', 'Phần ')+phan);
+  var labelForDesc=(LuanGiaiCore.phanLabels(_astrolabe)||{})[phan]||('Phần '+phan);
   try{
     var res=await fetch('/api/payment?action=deduct',{method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||'')},
       body:JSON.stringify({toolType:'use_laso', product:'laso', part:phan, amount:partPrice,
-        slug:_partSlug(phan), description:_tvmbT('js.luangiai.luan-giai-la-so', 'Luận Giải Lá Số — ')+labelForDesc})});
+        slug:_partSlug(phan), description:'Luận Giải Lá Số — '+labelForDesc})});
     var data=await res.json();
     if(!data.success){
       alert(data.insufficientBalance?'Không đủ Lượng — vui lòng nạp thêm.':'Có lỗi khi mở phần này, thử lại.');

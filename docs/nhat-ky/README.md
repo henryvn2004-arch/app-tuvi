@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-552 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+553 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 11 | 31,451 B |
+| `2026-11.md` | 12 | 33,404 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🔑 W13c — Giá trị đã dịch bị dùng làm khoá tra cứu / dữ liệu gửi server |
 | 1 | 2026-11 | `2026-11.md` | 🧹 W13b — Chữ Việt cứng còn lọt ở /ja, /ko: chuỗi ghép với biến |
 
 | 1 | 2026-11 | `2026-11.md` | 🀄 W15 — Bảng lá số theo ngôn ngữ: tên sao/cung/can chi qua glossary |
