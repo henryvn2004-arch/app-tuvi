@@ -19,7 +19,7 @@ import type { BirthParams } from '@/lib/contract/v1';
 import { chuanHoaDauThanh } from '@/lib/vn-text';
 import { loaiCau, nhuCau } from '@/lib/agent/nhip';
 import { getToolPrice } from '@/lib/billing/pricing';
-import { vndPerCredit } from '@/lib/billing/packages';
+import { usdLabel, usdPerCredit } from '@/lib/billing/packages';
 import { hoiChanDuoc, moiCau, pickGuests, type GuestId } from './guests';
 
 /** Số LƯỢT hỏi (không phải số tin) tối thiểu giữa hai lần mời tính năng. */
@@ -117,9 +117,10 @@ export const LOI_LA_SO =
   'Muốn đọc trọn cả lá số (12 cung, các đại vận) thì mở bản luận giải đầy đủ ở nút dưới — hoặc cứ hỏi thầy ngay tại đây.';
 export const loiMon = (mon: string) => `Muốn xem trọn phần ${mon} thì mở ở nút dưới — hoặc cứ hỏi tiếp thầy ngay tại đây.`;
 
-/** Nhãn nút bản luận giải — giá VNĐ là chính (luật "VNĐ là giá CHÍNH"), đọc từ
+/** Nhãn nút bản luận giải — giá USD là chính (luật "USD là giá CHÍNH", W5), đọc từ
  *  `tool_pricing['laso']`; đọc hụt thì không ghi giá (không chép số). */
 export async function nhanLuanGiai(): Promise<string> {
-  const [credits, rate] = await Promise.all([getToolPrice('laso'), vndPerCredit()]);
-  return credits && credits > 0 ? `Luận giải ${Math.round(credits * rate).toLocaleString('vi-VN')}đ` : 'Luận giải đầy đủ';
+  const [credits, rate] = await Promise.all([getToolPrice('laso'), usdPerCredit()]);
+  const tien = credits && credits > 0 ? usdLabel(credits, rate) : '';
+  return tien ? `Luận giải ${tien}` : 'Luận giải đầy đủ';
 }

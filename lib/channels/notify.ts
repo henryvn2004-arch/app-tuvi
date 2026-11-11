@@ -7,7 +7,7 @@ import { zaloSendText, zaloSendFile, zaloSendImage, ZALO_PLATFORM } from './zalo
 import { msgrSendText, msgrSendFile, msgrSendImage } from './messenger';
 import { waSendText, waSendFile, waSendImage } from './whatsapp';
 import { tgSendMessage, tgSendFile, tgSendImage } from './telegram';
-import { topupCaption, vietQrImageUrl } from './topup';
+import { topupCaption, vietQrImageUrl, vndRailsEnabled } from './topup';
 import type { PayOSOrder } from '@/lib/billing/payos-order';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -57,9 +57,13 @@ const IMAGE_SENDERS: Record<string, (id: string, url: string, caption?: string) 
  * tại chỗ VÀ nằm lại trong cuộc trò chuyện, lỡ đóng trang vẫn trả được. Ảnh
  * QR + một tin kèm link trang thanh toán payOS (trên điện thoại, trang đó mở
  * thẳng app ngân hàng). Best-effort như `notifyUserOnChat`.
+ *
+ * Rail VNĐ tắt (`billing.vnd_rails_enabled`, W5/W12) ⇒ không đưa QR vào kênh —
+ * chỉ client web cũ còn gọi được `create-bank` lúc này, QR vẫn hiện trên web.
  */
 export async function sendPayQrToUserChats(userId: string, order: PayOSOrder): Promise<void> {
   if (!SUPABASE_URL || !SUPABASE_KEY || !userId) return;
+  if (!(await vndRailsEnabled())) return;
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/chat_links?user_id=eq.${encodeURIComponent(userId)}&select=platform,external_id`,

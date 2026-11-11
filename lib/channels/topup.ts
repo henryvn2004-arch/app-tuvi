@@ -7,11 +7,19 @@
 // Đơn tạo qua CÙNG cửa với trang nạp web (lib/billing/payos-order) ⇒ một
 // đường chốt đơn duy nhất (`bank_settle_topup`). Giá đọc từ `credit_packages`
 // (nguồn thật, Admin sửa không cần deploy) — không chép số nào ở đây.
+//
+// W12 (2026-11, Henry chốt bỏ VNĐ): đường QR ở trên là rail VNĐ ⇒ chỉ chạy khi
+// `app_config['billing.vnd_rails_enabled']` BẬT — cùng cờ với web (W5). Cờ tắt
+// (mặc định, thiếu khoá = tắt) thì kênh báo bảng giá USD và đưa link handoff
+// (`/c/<token>`, đã đăng nhập ĐÚNG tài khoản chat này) sang trang nạp web để trả
+// bằng PayPal/thẻ ⇒ Lượng vào đúng ví đang chat. Code QR giữ nguyên để bật lại.
 // ============================================================
 
 import { getPackages, getPackage, quoteCustomVnd, type CreditPackage } from '@/lib/billing/packages';
 import { createPayOSOrder, type PayOSOrder } from '@/lib/billing/payos-order';
+import { getConfigValue } from '@/lib/config/appConfig';
 import type { ChatButton } from './core';
+import { SITE, createHandoffUrl } from './handoff';
 
 export const TOPUP_CMD = '/nap';
 /** Mức nạp lẻ nhỏ nhất (khớp trần dưới của trang nạp web). */
@@ -19,6 +27,49 @@ const CUSTOM_MIN_VND = 50_000;
 const CUSTOM_MAX_VND = 5_000_000;
 
 const vnd = (n: number) => `${n.toLocaleString('vi-VN')}đ`;
+
+/** Trang nạp web (PayPal USD) — cùng trang "Nạp thêm" của rail web. */
+const TOPUP_PATH = '/topup.html';
+
+/**
+ * Rail VNĐ (QR payOS/VietQR · MoMo) có mở cho kênh chat không — CÙNG cờ với web
+ * (`app/api/payment` `vndRailsEnabled`). Thiếu khoá / đọc hụt ⇒ false (ẩn):
+ * đường USD qua web luôn còn nên ẩn nhầm không chặn ai trả tiền, còn hiện nhầm
+ * là đưa mã VietQR với giá VNĐ chưa định giá lại (`amount_vnd` cũ, WORKPLAN).
+ */
+export async function vndRailsEnabled(): Promise<boolean> {
+  return (await getConfigValue<boolean>('billing.vnd_rails_enabled', false)) === true;
+}
+
+/** "19.00" → "$19" · "7.50" → "$7.50" — chuỗi `amountUsd` từ `credit_packages`. */
+const usd = (amountUsd: string) => {
+  const n = Number(amountUsd);
+  return `$${Number.isInteger(n) ? n : n.toFixed(2)}`;
+};
+
+/** Bảng giá gói bằng USD, đọc từ `credit_packages` (không chép số). Rỗng nếu không có gói. */
+export async function usdPriceList(): Promise<string> {
+  const pkgs = Object.values(await getPackages())
+    .filter((p) => p.credits > 0 && Number(p.amountUsd) > 0)
+    .sort((a, b) => Number(a.amountUsd) - Number(b.amountUsd));
+  return pkgs.map((p) => `• ${p.label}: ${p.credits.toLocaleString('vi-VN')} Lượng — ${usd(p.amountUsd)}`).join('\n');
+}
+
+/**
+ * Lời mời nạp bằng USD qua web (rail VNĐ đang tắt) + nút sang trang nạp, ĐÃ đăng
+ * nhập đúng tài khoản chat (`userId`) qua handoff — PayPal chốt đơn theo phiên đó
+ * (`settlePayPalTopup`) nên Lượng vào đúng ví đang chat. Không tạo được token
+ * (hoặc chưa có tài khoản) ⇒ link trần, và chữ KHÔNG hứa "đã đăng nhập sẵn".
+ */
+export async function webTopupOffer(userId: string | null): Promise<{ text: string; button: ChatButton }> {
+  const [list, url] = await Promise.all([usdPriceList(), userId ? createHandoffUrl(userId, TOPUP_PATH) : null]);
+  const text =
+    (list ? `Bảng giá gói Lượng:\n${list}\n\n` : '') +
+    'Bấm nút dưới để nạp trên web bằng PayPal hoặc thẻ' +
+    (url ? ' — đã đăng nhập sẵn đúng tài khoản này. ' : '. ') +
+    'Nạp xong quay lại đây hỏi tiếp.';
+  return { text, button: { title: 'Nạp Lượng trên web', url: url || `${SITE}${TOPUP_PATH}` } };
+}
 
 /** Các lựa chọn nạp: một mức lẻ nhỏ + các gói (rẻ → đắt). */
 export async function topupChoices(): Promise<ChatButton[]> {
