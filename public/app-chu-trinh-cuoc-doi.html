@@ -335,7 +335,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=144"></script>
+<script src="/shell.js?v=145"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
@@ -1231,7 +1231,7 @@ async function _startLuanGiaiAI(){
   // chặn, hoặc người đã mua quay lại chưa từng xem qua bản xem trước).
   var primeOk=true;
   if(!_luanGiaiStore[14]){
-    document.getElementById('lgProgress').textContent=_tvmbT('js.luangiai.dang-luan-giai-phan-1', 'Đang luận giải phần 1 / ')+TONG_PHAN+'...';
+    document.getElementById('lgProgress').textContent=_tvmbT('js.luangiai.dang-luan-giai-phan-1', 'Đang luận giải phần 1 / ')+TONG_PHAN+_tvmbT('js.luangiai.p-ba-cham', '...');
     primeOk=await _runPhanLuanGiai(14);
   }
   var result=await PhanPool.run({
@@ -1324,7 +1324,7 @@ async function _runPhanLuanGiai(ep,preview){
     return true;
   }catch(e){
     doneWait();
-    if(box)box.innerHTML=preview?'':('<div class="laso-error">' + _tvmbT('js.luangiai.loi-phan', 'Lỗi phần') + ' ')+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan('+ep+(')">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
+    if(box)box.innerHTML=preview?'':('<div class="laso-error">' + _tvmbT('js.luangiai.loi-phan', 'Lỗi phần') + ' ')+p+_tvmbT('js.luangiai.p-hai-cham', ': ')+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan('+ep+(')">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
     return false;
   }
 }

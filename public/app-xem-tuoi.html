@@ -231,7 +231,7 @@ if (typeof window._tvmbT !== 'function') window._tvmbT = function (k, d, v) {
 <script src="/tuvi-form.js?v=15"></script>
 <script src="/auth.js?v=9"></script>
 <script src="/tuvi-paywall.js?v=44"></script>
-  <script src="/nav.js?v=49" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=144"></script>
+  <script src="/nav.js?v=49" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=145"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
@@ -932,7 +932,7 @@ async function _loadNextPhanAI(){
     if(box)box.innerHTML=renderLuanGiaiParas(text,illusFigFor(box));
   }catch(e){
     doneWait();
-    if(box)box.innerHTML=('<div class="laso-error">' + _tvmbT('js.battu.loi-khi-luan-giai-phan', 'Lỗi khi luận giải phần') + ' ')+(idx+1)+': '+esc(e.message)+(' <button class="btn" onclick="window._xtRetryPhan()">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
+    if(box)box.innerHTML=('<div class="laso-error">' + _tvmbT('js.battu.loi-khi-luan-giai-phan', 'Lỗi khi luận giải phần') + ' ')+(idx+1)+_tvmbT('js.battu.p-hai-cham', ': ')+esc(e.message)+(' <button class="btn" onclick="window._xtRetryPhan()">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
     return;
   }
   await _loadNextPhanAI();
