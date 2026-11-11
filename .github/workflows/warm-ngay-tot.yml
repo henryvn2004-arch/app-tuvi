@@ -1,9 +1,8 @@
-name: Warm Ngày Tốt ISR — nightly
+name: Warm Ngày Tốt ISR — manual
 
+# ⏸ ĐÃ GỠ LỊCH ĐÊM (2026-11-11, docs/nhat-ky/2026-11.md). Chỉ chạy tay.
+# Để bật lại: thêm khối `schedule` cron '30 2 * * *' (xoay 17 năm qua 17 đêm).
 on:
-  schedule:
-    # 2:30am UTC every night — rotate through 17 năm over 17 đêm
-    - cron: '30 2 * * *'
   workflow_dispatch:
     inputs:
       year:
