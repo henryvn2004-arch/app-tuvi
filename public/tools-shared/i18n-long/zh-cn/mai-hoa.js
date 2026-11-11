@@ -1,0 +1,21 @@
+// SINH bởi npm run i18n:long (docs/i18n/QUY-UOC.md "Văn dài") — KHÔNG sửa tay. ns=mai-hoa locale=zh-cn
+window.I18n&&window.I18n.defineLong("mai-hoa",{
+"quai.1.nghia":{"t":"刚健、主动、长上","h":"41505160"},
+"quai.2.nghia":{"t":"喜悦、言语、少女","h":"a5bb3053"},
+"quai.3.nghia":{"t":"明亮、显露、文书","h":"e262def3"},
+"quai.4.nghia":{"t":"震动、起事、长子","h":"f5f66a46"},
+"quai.5.nghia":{"t":"顺从、渗入、往来","h":"096f2cb0"},
+"quai.6.nghia":{"t":"险阻、漂浮、忧虑","h":"20d8ec9a"},
+"quai.7.nghia":{"t":"止住、阻挡、房屋","h":"224e349b"},
+"quai.8.nghia":{"t":"柔顺、承载、众人","h":"0f8abda3"},
+"qh.dung-khac-the.tomTat":{"t":"外境压制自身——最凶的卦。","h":"cc98fcbc"},
+"qh.dung-khac-the.luan":{"t":"那件事此刻比你强：硬推就会受损。退一步、换个方法，或借助他人之手——不要正面对抗。","h":"324568f7"},
+"qh.dung-sinh-the.tomTat":{"t":"外境滋养自身——最吉的卦。","h":"09d93462"},
+"qh.dung-sinh-the.luan":{"t":"你所问的事正为你带来益处：有人相助、有资源到来，不必去争夺。只管接受并前进。","h":"a5792048"},
+"qh.the-khac-dung.tomTat":{"t":"自身能制住事情——得胜但费力。","h":"e29fd60d"},
+"qh.the-khac-dung.luan":{"t":"你压得住环境，事情终究会顺着你的意思。但「克」就是要用力——胜了也累，而且胜得慢。","h":"759aeb17"},
+"qh.the-sinh-dung.tomTat":{"t":"自身滋养外境——耗损。","h":"9c46d814"},
+"qh.the-sinh-dung.luan":{"t":"你的力量向外流失：为那件事付出心力、钱财与精神，而得到的回报微薄。做得成，但要清楚自己在付出什么代价。","h":"d9c45bcc"},
+"qh.tihoa.tomTat":{"t":"体与用同属一行——同心、顺畅。","h":"823f1530"},
+"qh.tihoa.luan":{"t":"你与环境同属一气：事情合力就顺，谁也不阻碍谁。没有强大的推力，但也没有阻力。","h":"685ea519"}
+});
