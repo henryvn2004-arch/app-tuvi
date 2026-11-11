@@ -1,6 +1,9 @@
 import { test, expect, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
+// Nguồn DUY NHẤT của luật khoảng trắng biên (padEdges/validateTranslation dùng chung). allowJs ⇒ có kiểu suy ra, KHÔNG cần ts-expect-error
+// (thêm vào là TS2578 và `next build` đỏ — đã vấp ở c496f18).
+import { edgeOk } from '../lib/i18n/core.mjs';
 
 // W13c — giá trị ĐÃ DỊCH không được làm KHOÁ TRA CỨU hay DỮ LIỆU GỬI SERVER.
 //
@@ -98,10 +101,9 @@ test('/app/bat-tu: văn bản tứ trụ, truy vấn RAG và ngữ cảnh gửi 
 });
 
 test('bản dịch giữ khoảng trắng đầu/cuối của câu gốc (mảnh ghép không dính chữ)', () => {
-  const edge = (s: string) => [/^\s*/.exec(s)![0], /\s*$/.exec(s)![0]].join('|');
   for (const l of ['en', 'ja', 'ko', 'zh-tw', 'zh-cn']) {
     const d: Record<string, { t: string }> = JSON.parse(fs.readFileSync(path.join(I18N, `${l}.json`), 'utf8'));
-    const bad = Object.keys(d).filter((k) => k in vi && edge(vi[k]) !== edge(d[k].t));
+    const bad = Object.keys(d).filter((k) => k in vi && !edgeOk(vi[k], d[k].t));
     expect(bad, `${l}: khoảng trắng biên lệch`).toEqual([]);
   }
 });

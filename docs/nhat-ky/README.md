@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-557 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+558 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 16 | 43,723 B |
+| `2026-11.md` | 17 | 46972 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -29,6 +29,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-11 | `2026-11.md` | 🈂️ W7a6 — Dịch 81 khoá W13e (ja+ko) + sửa bản dịch lệch glossary W15b |
+| 1 | 2026-11 | `2026-11.md` | 🈶 W7b6 — Dịch zh-tw + en cho 81 khoá W13e, sửa thuật ngữ lệch glossary |
 | 1 | 2026-11 | `2026-11.md` | 📚 W15b — Glossary mở rộng: sao Lưu, 30 nạp âm, Kỳ Môn · Lục Nhâm · Hoàng Lịch · Bát Trạch · tướng pháp · Mai Hoa |
 | 1 | 2026-11 | `2026-11.md` | 🧽 W13e — Dọn chữ cứng còn sót, dấu câu nối cứng, hai bảng tra bị dịch |
 | 1 | 2026-11 | `2026-11.md` | 🧩 W13d — Mảnh ghép giữ khoảng trắng, khoá đúng namespace, chữ cứng còn sót, thuật ngữ qua glossary |

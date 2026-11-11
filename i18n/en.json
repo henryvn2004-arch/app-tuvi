@@ -1151,6 +1151,14 @@
   "t": " — what does it say?",
   "h": "04cb815a"
  },
+ "js.battu.p-ba-cham": {
+  "t": "...",
+  "h": "6eae3a5b"
+ },
+ "js.battu.p-hai-cham": {
+  "t": ": ",
+  "h": "ceca32e9"
+ },
  "js.battu.thu-lai": {
   "t": "↻ Try again",
   "h": "30508ad3"
@@ -1607,9 +1615,21 @@
   "t": "Enter your birth date once to see which of your own palaces today falls in.",
   "h": "45d9335c"
  },
+ "js.home.p-cham": {
+  "t": ".",
+  "h": "3a52ce78"
+ },
+ "js.home.p-dong-ngoac": {
+  "t": ")",
+  "h": "e7064f0b"
+ },
  "js.home.rieng-viec-thuong-ngay": {
   "t": "As for everyday tasks, ",
   "h": "e7d64dd0"
+ },
+ "js.home.sinh-nam-xung": {
+  "t": " (born ",
+  "h": "dc7c4691"
  },
  "js.home.so-lieu-rut-gon-thu-tai": {
   "t": " — abbreviated figures; try reloading later.",
@@ -1926,6 +1946,14 @@
  "js.luangiai.noi-vi-sao-no-bung-ra": {
   "t": " explains why, which stage it breaks out in, and how to resolve it.",
   "h": "2b510636"
+ },
+ "js.luangiai.p-ba-cham": {
+  "t": "...",
+  "h": "6eae3a5b"
+ },
+ "js.luangiai.p-hai-cham": {
+  "t": ": ",
+  "h": "ceca32e9"
  },
  "js.luangiai.phan": {
   "t": "Part ",
@@ -3183,6 +3211,10 @@
   "t": "Score →",
   "h": "a4d402f6"
  },
+ "js.shellui.cham-ten-hop-menh-chu-va-nganh": {
+  "t": "Does the name \"{ten}\" suit the owner's destiny and the industry?",
+  "h": "1039c58a"
+ },
  "js.shellui.chao-ban-cho-thay-xin-nam": {
   "t": "Hello. Tell the Master your birth year and gender right here in the chat, and I'll advise on clothing colors by the Five Elements and Na Yin. Once you have the result, just ask me more.",
   "h": "eabb393e"
@@ -3446,6 +3478,10 @@
  "js.shellui.con-hoi-tiep-di": {
   "t": "</b>. Go ahead and keep asking.</p>",
   "h": "0de4fe93"
+ },
+ "js.shellui.con-lcm6": {
+  "t": " · child ",
+  "h": "fe1507c5"
  },
  "js.shellui.con-muon-hoi-viec-gi-tuy": {
   "t": "<p>What would you like to ask about (optional)? Then the Master will cast a hexagram for you — six lines in one go.</p>",
@@ -3975,6 +4011,14 @@
   "t": "Suggest 12 names that suit your element, with meanings",
   "h": "61954ded"
  },
+ "js.shellui.goi-y-5-ten-hop-menh-kem-y-nghia": {
+  "t": "Suggest 5 names that suit the destiny, with their meanings",
+  "h": "4ab7930a"
+ },
+ "js.shellui.goi-y-5-ten-khac-hop-hon": {
+  "t": "Suggest 5 other names that suit better",
+  "h": "f3587ad3"
+ },
  "js.shellui.google-lich": {
   "t": "Google Calendar",
   "h": "8cdb619a"
@@ -4046,6 +4090,26 @@
  "js.shellui.hay-goi-y-ten-moi": {
   "t": "** or suggest new names?",
   "h": "d922a861"
+ },
+ "js.shellui.hd-can-hanh": {
+  "t": ", Heavenly Stem element ",
+  "h": "96563d79"
+ },
+ "js.shellui.hd-gio-can-tranh-hac-dao": {
+  "t": "Hours to avoid (Hei Dao): ",
+  "h": "1974f9e6"
+ },
+ "js.shellui.hd-gio-hoang-dao-ngay": {
+  "t": "Auspicious hours (Huang Dao) for ",
+  "h": "b8825163"
+ },
+ "js.shellui.hd-gio-hoang-dao-ngay-2": {
+  "t": "Auspicious hours (Huang Dao) — ",
+  "h": "413ea385"
+ },
+ "js.shellui.hd-gio-tot-hoang-dao": {
+  "t": "Good hours (Huang Dao): ",
+  "h": "100b31dc"
  },
  "js.shellui.het-phan-dung-thu": {
   "t": "The free trial is used up.",
@@ -4199,9 +4263,29 @@
   "t": "Which colors suit me, and which should I avoid?",
   "h": "3af5cdfc"
  },
+ "js.shellui.huong-bac": {
+  "t": "North",
+  "h": "130d45d1"
+ },
  "js.shellui.huong-cua": {
   "t": "Door direction",
   "h": "65a7e53d"
+ },
+ "js.shellui.huong-dong": {
+  "t": "East",
+  "h": "6bd70b62"
+ },
+ "js.shellui.huong-dong-bac": {
+  "t": "Northeast",
+  "h": "9690921a"
+ },
+ "js.shellui.huong-dong-nam": {
+  "t": "Southeast",
+  "h": "dd71e07a"
+ },
+ "js.shellui.huong-nam": {
+  "t": "South",
+  "h": "b580ba1b"
  },
  "js.shellui.huong-nao-phai-tranh-va-vi": {
   "t": "Which directions should I avoid, and why?",
@@ -4218,6 +4302,18 @@
  "js.shellui.huong-nha-nao-hop-nhat": {
   "t": "Which house direction suits me best?",
   "h": "cc262fd1"
+ },
+ "js.shellui.huong-tay": {
+  "t": "West",
+  "h": "74b26936"
+ },
+ "js.shellui.huong-tay-bac": {
+  "t": "Northwest",
+  "h": "0b1f47fd"
+ },
+ "js.shellui.huong-tay-nam": {
+  "t": "Southwest",
+  "h": "c0484c26"
  },
  "js.shellui.huong-xep-hang-cao-nhat-la": {
   "t": " The highest-ranked direction is **",
@@ -4535,9 +4631,21 @@
   "t": "Conversation history",
   "h": "0fd2afce"
  },
+ "js.shellui.loai-cong-ty": {
+  "t": "Company",
+  "h": "65bf381e"
+ },
+ "js.shellui.loai-cua-hang": {
+  "t": "Store",
+  "h": "050a31c8"
+ },
  "js.shellui.loai-hinh-tuy-chon": {
   "t": "Type (optional)",
   "h": "c4eab07e"
+ },
+ "js.shellui.loai-ho-kinh-doanh": {
+  "t": "Sole proprietorship",
+  "h": "f886c8d3"
  },
  "js.shellui.loai-khong-gian": {
   "t": "Type of space",
@@ -4546,6 +4654,10 @@
  "js.shellui.loai-phong": {
   "t": "Type of room",
   "h": "19905334"
+ },
+ "js.shellui.loai-thuong-hieu-shop": {
+  "t": "Brand / shop",
+  "h": "aa184029"
  },
  "js.shellui.loi": {
   "t": "Error ",
@@ -4631,9 +4743,29 @@
   "t": "Mencius · Jin Xin I",
   "h": "819ec1b8"
  },
+ "js.shellui.mat-bau-duc": {
+  "t": "Oval",
+  "h": "2a8c2282"
+ },
+ "js.shellui.mat-dai": {
+  "t": "Long",
+  "h": "4f9b7efd"
+ },
  "js.shellui.mat-toi-hop-kieu-toc-nao": {
   "t": "Which hairstyle suits my face?",
   "h": "bfa362fc"
+ },
+ "js.shellui.mat-trai-tim": {
+  "t": "Heart-shaped",
+  "h": "a987fcb0"
+ },
+ "js.shellui.mat-tron": {
+  "t": "Round",
+  "h": "201284fe"
+ },
+ "js.shellui.mat-vuong": {
+  "t": "Square",
+  "h": "8a2c40fb"
  },
  "js.shellui.mau-chu-dao": {
   "t": "**. Main color: ",
@@ -4654,6 +4786,30 @@
  "js.shellui.mau-son-nao-hop-tong-da": {
   "t": "Which lipstick shade suits my skin tone?",
   "h": "f013cf8c"
+ },
+ "js.shellui.md-du-lich": {
+  "t": "Travel",
+  "h": "2a3d7fdd"
+ },
+ "js.shellui.md-hen-ho": {
+  "t": "Dating",
+  "h": "4e1f8833"
+ },
+ "js.shellui.md-kinh-doanh": {
+  "t": "Business",
+  "h": "b7429b9f"
+ },
+ "js.shellui.md-phong-van": {
+  "t": "Interview",
+  "h": "17cacae4"
+ },
+ "js.shellui.md-su-kien": {
+  "t": "Event",
+  "h": "c368db64"
+ },
+ "js.shellui.md-thuong-ngay": {
+  "t": "Everyday",
+  "h": "6d11feda"
  },
  "js.shellui.me": {
   "t": "Mother",
@@ -4923,9 +5079,49 @@
   "t": ", field ",
   "h": "60b25e34"
  },
+ "js.shellui.nganh-an-uong-fnb-nha-hang": {
+  "t": "Food / F&B / restaurants",
+  "h": "124865d2"
+ },
+ "js.shellui.nganh-bat-dong-san-xay-dung": {
+  "t": "Real estate / construction",
+  "h": "6b5154b8"
+ },
+ "js.shellui.nganh-cong-nghe-phan-mem": {
+  "t": "Technology / software",
+  "h": "2665d28f"
+ },
+ "js.shellui.nganh-du-lich-khach-san": {
+  "t": "Travel / hotels",
+  "h": "5369cdde"
+ },
+ "js.shellui.nganh-giao-duc-dao-tao": {
+  "t": "Education / training",
+  "h": "f1adba55"
+ },
  "js.shellui.nganh-nghe": {
   "t": "Line of work",
   "h": "63d9f4dd"
+ },
+ "js.shellui.nganh-san-xuat-cong-nghiep": {
+  "t": "Manufacturing / industry",
+  "h": "f4a5458e"
+ },
+ "js.shellui.nganh-tai-chinh-dich-vu": {
+  "t": "Finance / services",
+  "h": "67bbe42d"
+ },
+ "js.shellui.nganh-thoi-trang-lam-dep": {
+  "t": "Fashion / beauty",
+  "h": "72a2b0cf"
+ },
+ "js.shellui.nganh-thuong-mai-ban-le": {
+  "t": "Trade / retail",
+  "h": "991ccb29"
+ },
+ "js.shellui.nganh-y-te-suc-khoe": {
+  "t": "Medical / health",
+  "h": "13ca73cd"
  },
  "js.shellui.ngay": {
   "t": "<p>Date <b>",
@@ -5071,6 +5267,26 @@
   "t": "Eastern Oracle",
   "h": "1146fb81"
  },
+ "js.shellui.p-cham": {
+  "t": ".",
+  "h": "3a52ce78"
+ },
+ "js.shellui.p-cham-dam": {
+  "t": "**.",
+  "h": "de9eb0ac"
+ },
+ "js.shellui.p-dong-ngoac-cham": {
+  "t": "). ",
+  "h": "449a6a79"
+ },
+ "js.shellui.p-hoi": {
+  "t": "?",
+  "h": "5bab61eb"
+ },
+ "js.shellui.p-phay": {
+  "t": ", ",
+  "h": "d3bc9a37"
+ },
  "js.shellui.pham-kim-lau-thi-hoa-giai": {
   "t": "If I fall under Jin Lou, how can it be remedied?",
   "h": "f9c9cb33"
@@ -5135,6 +5351,42 @@
   "t": " min ago",
   "h": "b1017a2c"
  },
+ "js.shellui.pt-cua-hang-kinh-doanh": {
+  "t": "Retail store",
+  "h": "c7a324c6"
+ },
+ "js.shellui.pt-hoc-tap-on-thi": {
+  "t": "Study / exam prep",
+  "h": "5fc56198"
+ },
+ "js.shellui.pt-lam-viec-van-phong": {
+  "t": "Office work",
+  "h": "65734b65"
+ },
+ "js.shellui.pt-nha-hang-quan-an": {
+  "t": "Restaurant / eatery",
+  "h": "d0defd73"
+ },
+ "js.shellui.pt-phong-khach": {
+  "t": "Living room",
+  "h": "17fb3f11"
+ },
+ "js.shellui.pt-phong-lam-viec": {
+  "t": "Study",
+  "h": "956c0ca5"
+ },
+ "js.shellui.pt-phong-ngu": {
+  "t": "Bedroom",
+  "h": "d9ac5522"
+ },
+ "js.shellui.pt-sang-tao-thiet-ke": {
+  "t": "Creative / design",
+  "h": "9fd559b0"
+ },
+ "js.shellui.pt-van-phong-cong-ty": {
+  "t": "Company office",
+  "h": "d678c2d6"
+ },
  "js.shellui.qua-la-so-cua-con-thoi": {
   "t": " , just from your chart. Please give the Master the birth date of ",
   "h": "c45acf9b"
@@ -5187,9 +5439,49 @@
   "t": "Copy",
   "h": "09a1db3e"
  },
+ "js.shellui.sao-dam": {
+  "t": "**, lunar mansion **",
+  "h": "fc0c8af6"
+ },
  "js.shellui.sinh-con-bo": {
   "t": "Having a child · father ",
   "h": "6b581c06"
+ },
+ "js.shellui.sk-an-hoi-dam-ngo": {
+  "t": "Engagement / betrothal",
+  "h": "4b11a176"
+ },
+ "js.shellui.sk-cuoi-hoi": {
+  "t": "Wedding",
+  "h": "04a2caa4"
+ },
+ "js.shellui.sk-dong-tho-khoi-cong": {
+  "t": "Groundbreaking / construction start",
+  "h": "10468f91"
+ },
+ "js.shellui.sk-khai-truong": {
+  "t": "Grand opening",
+  "h": "c86ca256"
+ },
+ "js.shellui.sk-ky-ket-hop-dong": {
+  "t": "Signing a contract",
+  "h": "90e0fb9b"
+ },
+ "js.shellui.sk-mua-xe": {
+  "t": "Buying a car",
+  "h": "52d4aa77"
+ },
+ "js.shellui.sk-nhap-trach": {
+  "t": "Moving in (new home)",
+  "h": "fcda52e1"
+ },
+ "js.shellui.sk-xuat-hanh": {
+  "t": "Setting out on a trip",
+  "h": "424fcbb2"
+ },
+ "js.shellui.slogan-nao-hop-voi-ten-nay": {
+  "t": "Which slogan suits this name?",
+  "h": "8ab01273"
  },
  "js.shellui.so-dep": {
   "t": "Lucky number ",
@@ -5200,7 +5492,7 @@
   "h": "0e67ec9d"
  },
  "js.shellui.so-truyen": {
-  "t": "**, first transmission **",
+  "t": "**, Initial Transmission **",
   "h": "3dc1c742"
  },
  "js.shellui.su-nghiep-tien-bac": {
@@ -5232,7 +5524,7 @@
   "h": "70407892"
  },
  "js.shellui.tam-truyen-noi-gi-ve-dien": {
-  "t": "What does the third transmission say about how it unfolds?",
+  "t": "What do the Three Transmissions say about how it unfolds?",
   "h": "43368fd7"
  },
  "js.shellui.tan-ky-tam-gia-tri-ky": {
@@ -5266,6 +5558,18 @@
  "js.shellui.ten-hop-ca-tuoi-bo-va": {
   "t": "Names that suit both the father's and mother's signs?",
   "h": "ab665896"
+ },
+ "js.shellui.ten-nao-hop-khi-chat-nganh-nay": {
+  "t": "Which names suit the character of this industry?",
+  "h": "c012da1f"
+ },
+ "js.shellui.ten-nen-bo-ngu-hanh-gi": {
+  "t": "Which Five Element should the name supplement?",
+  "h": "f5cf0ccb"
+ },
+ "js.shellui.ten-nen-bo-ngu-hanh-gi-cho-chu": {
+  "t": "Which Five Element should the name supplement for the owner?",
+  "h": "6a1e73a2"
  },
  "js.shellui.ten-nguoi-chu-tuy-chon": {
   "t": "Owner's name (optional)",
@@ -5416,7 +5720,7 @@
   "h": "96832959"
  },
  "js.shellui.thu-truyen-theo-phep": {
-  "t": ". Hand transmission by the **",
+  "t": ". Transmission selection by the **",
   "h": "9ee2f319"
  },
  "js.shellui.thu-tuong-cua-toi": {
@@ -5487,6 +5791,10 @@
   "t": "Outfit by Day — ",
   "h": "7fd98ca1"
  },
+ "js.shellui.tranh-chu-am-nao-khi-dat-ten": {
+  "t": "Which characters or sounds should I avoid when naming?",
+  "h": "0493dad1"
+ },
  "js.shellui.tri-chi-gia-bat-nhu-hieu": {
   "t": "Those who know it are not equal to those who love it; those who love it are not equal to those who delight in it.",
   "h": "91dea6b3"
@@ -5504,7 +5812,7 @@
   "h": "fa956882"
  },
  "js.shellui.truc": {
-  "t": "— Duty **",
+  "t": "— Day Officer **",
   "h": "6f3f9038"
  },
  "js.shellui.truc-phu": {
@@ -5520,7 +5828,7 @@
   "h": "fae13856"
  },
  "js.shellui.truc-than-la-gi": {
-  "t": "What is the Duty Spirit?",
+  "t": "What is the Spirit (Shen) axis?",
   "h": "47cc8c8c"
  },
  "js.shellui.truong-phai-noi-tot": {
@@ -6027,6 +6335,14 @@
   "t": "The <b>custom top-up</b> box is pre-filled with <b>",
   "h": "ca263938"
  },
+ "js.topup.p-cham": {
+  "t": ".",
+  "h": "3a52ce78"
+ },
+ "js.topup.p-dong-ngoac": {
+  "t": ")",
+  "h": "e7064f0b"
+ },
  "js.topup.pho-bien-nhat": {
   "t": "Most popular",
   "h": "a0f0bedc"
@@ -6194,6 +6510,14 @@
  "js.vanhannam.nguyet-han-cung-556b": {
   "t": "Monthly limit: palace",
   "h": "13dbb374"
+ },
+ "js.vanhannam.p-ba-cham": {
+  "t": "...",
+  "h": "6eae3a5b"
+ },
+ "js.vanhannam.p-dong-ngoac": {
+  "t": ")",
+  "h": "e7064f0b"
  },
  "js.vanhannam.phan": {
   "t": "part ",

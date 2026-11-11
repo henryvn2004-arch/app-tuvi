@@ -1172,7 +1172,7 @@
   "h": "49bba271"
  },
  "js.battu.tu-tru-bat-tu-cua": {
-  "t": "사주팔자｜ ",
+  "t": "사주팔자｜",
   "h": "1e073395"
  },
  "js.battu.tu-tru-cua": {
@@ -1216,11 +1216,11 @@
   "h": "6b87e20d"
  },
  "js.chutrinh.chu-trinh-cuoc-doi": {
-  "t": "인생 사이클｜ ",
+  "t": "인생 사이클｜",
   "h": "c3a39296"
  },
  "js.chutrinh.chu-trinh-cuoc-doi-cua": {
-  "t": "인생 사이클｜ ",
+  "t": "인생 사이클｜",
   "h": "1737f0ac"
  },
  "js.chutrinh.co-y-nghia-gi": {
@@ -1228,7 +1228,7 @@
   "h": "c6c2da71"
  },
  "js.chutrinh.cua": {
-  "t": " ｜**",
+  "t": "｜**",
   "h": "9c850ffa"
  },
  "js.chutrinh.da-san-sang-hoi-toi-de": {
@@ -1320,19 +1320,19 @@
   "h": "5a7129b9"
  },
  "js.home.co-phap-kieng-khoi-su": {
-  "t": " ｜고법상 새 일 시작을 삼가는 날이에요.",
+  "t": "｜고법상 새 일 시작을 삼가는 날이에요.",
   "h": "d050eff2"
  },
  "js.home.co-phap-kieng-khoi-su-cqsv": {
-  "t": " ｜고법상 새 일 시작을 삼가는 날이에요",
+  "t": "｜고법상 새 일 시작을 삼가는 날이에요",
   "h": "0e5dc069"
  },
  "js.home.co-phap-kieng-khoi-su-viec": {
-  "t": " ｜고법상 새 일 시작을 삼가는 날이에요. 평소 일상은 그대로 하셔도 돼요.",
+  "t": "｜고법상 새 일 시작을 삼가는 날이에요. 평소 일상은 그대로 하셔도 돼요.",
   "h": "07d4835f"
  },
  "js.home.co-sao": {
-  "t": " ｜{sao} 포함",
+  "t": "｜{sao} 포함",
   "h": "f6d4710a"
  },
  "js.home.con-dang-be-tac-chuyen-cong": {
@@ -1564,7 +1564,7 @@
   "h": "3e47de71"
  },
  "js.home.ngay-cwjn": {
-  "t": " ｜일진: ",
+  "t": "｜일진: ",
   "h": "5ecc6134"
  },
  "js.home.ngay-hom-nay-roi-vao-cung": {
@@ -1676,7 +1676,7 @@
   "h": "f716d517"
  },
  "js.home.tranh-viec-lon-hom-nay": {
-  "t": " ｜오늘은 큰일을 피하세요.",
+  "t": "｜오늘은 큰일을 피하세요.",
   "h": "586bcbb3"
  },
  "js.home.tranh-viec-lon-trong-hom-nay": {
@@ -1880,7 +1880,7 @@
   "h": "c63aa847"
  },
  "js.luangiai.la-so-cua": {
-  "t": "명반｜ ",
+  "t": "명반｜",
   "h": "505f9cf1"
  },
  "js.luangiai.lap-la-so-luan-giai-ngay": {
@@ -1896,7 +1896,7 @@
   "h": "9380a2a1"
  },
  "js.luangiai.luan-giai": {
-  "t": "풀이｜ ",
+  "t": "풀이｜",
   "h": "71d78039"
  },
  "js.luangiai.luan-giai-chuyen-sau": {
@@ -6564,7 +6564,7 @@
   "h": "0bef064e"
  },
  "js.vanhannam.van-han-12-thang-2jdf": {
-  "t": "12개월 운세｜ ",
+  "t": "12개월 운세｜",
   "h": "d11e8de4"
  },
  "js.vanhannam.van-han-12-thang-am": {
@@ -6572,7 +6572,7 @@
   "h": "81377d1f"
  },
  "js.vanhannam.van-han-12-thang-cua": {
-  "t": "12개월 운세｜ ",
+  "t": "12개월 운세｜",
   "h": "afa6d79f"
  },
  "js.vanhannam.vo-chinh-dieu-muon-cung-xung": {
@@ -6812,7 +6812,7 @@
   "h": "317107b2"
  },
  "js.xemtuoi.luan-tong-quan-muc-do-hoa": {
-  "t": "궁합 개요 풀이｜ ",
+  "t": "궁합 개요 풀이｜",
   "h": "53f19565"
  },
  "js.xemtuoi.manh-nhat": {
