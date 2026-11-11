@@ -19,7 +19,7 @@
 --   · `ts >= current_date - N` ⇔ `day >= current_date - N` (cùng múi giờ phiên).
 --   · "người thật" = có ÍT NHẤT MỘT event không-máy trong khoảng ⇔ `bool_or(not
 --     is_machine)` theo ngày, rồi `count(distinct who) filter (where human)`.
--- Chữ ký, kiểu trả về (json), SECURITY DEFINER, search_path, quyền: GIỮ NGUYÊN.
+-- Chữ ký (kể cả `default 30` — bỏ default là Postgres từ chối 42P13), kiểu trả về (json), SECURITY DEFINER, search_path, quyền: GIỮ NGUYÊN.
 -- Bộ lọc bot vẫn là `bot_anon_ids()` — KHÔNG đổi định nghĩa "máy" (xem
 -- migration-bot-phantom-detection.sql), nên con số ra giống hệt bản cũ.
 --
@@ -29,7 +29,7 @@
 -- ⚠️ Đối chiếu SAU KHI ÁP: so JSON với bản cũ trên cùng một thời điểm (xem mục
 -- "Kiểm" cuối file) — phải trùng từng trường.
 
-create or replace function public.dashboard_engagement(p_days integer)
+create or replace function public.dashboard_engagement(p_days integer default 30)
 returns json
 language sql
 stable
