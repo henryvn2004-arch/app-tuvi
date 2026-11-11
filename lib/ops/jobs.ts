@@ -180,9 +180,17 @@ export const JOBS: JobSpec[] = [
   { key: 'email-broadcast-drain', label: 'Email — rút hàng đợi broadcast', source: 'vercel',
     everyMinutes: 15, schedule: 'mỗi 15 phút', sink: 'email_broadcast_queue', path: '/api/cron/email-broadcast-drain',
     since: '2026-09-14' },
+  // W10 (SEO/GEO quốc tế, 2026-11-11). keyword-suggest được ĐƯA LẠI nhưng quét theo NGÔN NGỮ
+  // (ja/ko/zh-tw/en + Naver ko), không còn quét tiếng Việt — `lib/analytics/keyword-suggest-i18n.ts`.
+  { key: 'keyword-suggest', label: 'Quét từ khoá theo ngôn ngữ (Google Suggest + Naver)', source: 'vercel',
+    everyMinutes: 7 * D, schedule: 'T3 hằng tuần, 10:20 VN', sink: 'keyword_ideas',
+    path: '/api/cron/keyword-suggest', since: '2026-11-11' },
+  { key: 'indexnow', label: 'IndexNow (Bing + Naver): URL đã dịch mới/đổi', source: 'vercel',
+    everyMinutes: D, schedule: 'Hằng ngày, 10:40 VN', sink: 'indexnow_sent',
+    path: '/api/cron/indexnow', since: '2026-11-11' },
   // ⏸ ĐÃ GỠ LỊCH 2026-11-11 (docs/nhat-ky/2026-11.md): cron-khao-luan, cron-master-write,
   // cron-daily-push, cron-khao-luan-tamly, thu-vien-build, tu-dien-sao-moi, topic-topup,
-  // keyword-suggest, backlink-* (4), growth-accounts, growth-insights, autopilot-* (3),
+  // backlink-* (4), growth-accounts, growth-insights, autopilot-* (3),
   // media-build, seeding-build, content-pack, yt-drain, content-metrics, viral-seo-pages,
   // email-reminder-idle, email-abandoned-checkout; pg_cron auto-pipeline; Actions video-build.
   // Route vẫn nằm ở app/ — KHÔNG có trong sổ nên không bị báo "quá hạn". Để bật lại: đưa

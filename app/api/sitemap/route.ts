@@ -23,6 +23,9 @@ export const dynamic = 'force-dynamic';
 
 import { BASE_URL, xmlSitemapIndex, xmlResponse } from '@/lib/seo/sitemap-source';
 import availability from '@/i18n/availability.json';
+import { danhMuc } from '@/lib/nghiem-chung/store';
+import { dbDanhMucDich } from '@/lib/nghiem-chung/i18n/db';
+import type { NcLocale } from '@/lib/nghiem-chung/i18n/prose';
 
 const CHILDREN = [
   '/sitemap-trang.xml',
@@ -38,8 +41,29 @@ const CHILDREN = [
 // Sitemap theo ngôn ngữ (đa ngôn ngữ): chỉ liệt kê ngôn ngữ ĐÃ có ít nhất một trang dịch đủ.
 const I18N_LOCALES = ['en', 'ja', 'ko', 'zh-tw', 'zh-cn'];
 
+/**
+ * Sitemap hồ sơ theo ngôn ngữ (W6 lọc theo `?lang=`): chỉ khai ngôn ngữ ĐÃ có ít nhất một hồ sơ dịch
+ * + đã mở index ở bản gốc, tách Nghiệm Chứng / Xác Định Giờ Sinh như hai file vi. Lỗi DB ⇒ bỏ qua
+ * (index vẫn trả về được, chỉ thiếu các dòng này lượt đó).
+ */
+async function ncLocaleSitemaps(): Promise<string[]> {
+  try {
+    const goc = new Map((await danhMuc()).filter((x) => x.indexed).map((x) => [x.slug, !!x.gioDoan]));
+    const out: string[] = [];
+    for (const l of I18N_LOCALES) {
+      const has = (await dbDanhMucDich(l as NcLocale)).map((x) => goc.get(x.slug)).filter((g) => g !== undefined);
+      if (has.some((g) => g === false)) out.push(`/sitemap-nghiem-chung.xml?lang=${l}`);
+      if (has.some((g) => g === true)) out.push(`/sitemap-xac-dinh-gio-sinh.xml?lang=${l}`);
+    }
+    return out;
+  } catch (e) {
+    console.error('[sitemap] ncLocaleSitemaps:', (e as Error).message);
+    return [];
+  }
+}
+
 export async function GET() {
   const translated = new Set(Object.values(availability as Record<string, string[]>).flat());
   const i18n = I18N_LOCALES.filter((l) => translated.has(l)).map((l) => `/sitemap-i18n-${l}.xml`);
-  return xmlResponse(xmlSitemapIndex([...CHILDREN, ...i18n].map((p) => BASE_URL + p)));
+  return xmlResponse(xmlSitemapIndex([...CHILDREN, ...i18n, ...(await ncLocaleSitemaps())].map((p) => BASE_URL + p)));
 }

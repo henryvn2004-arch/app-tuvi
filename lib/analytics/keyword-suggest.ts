@@ -163,7 +163,7 @@ export interface SuggestRunResult {
  * CỐ Ý GIỮ NGUYÊN DẤU tiếng Việt: "tử vi" và "tu vi" là hai cách gõ khác nhau
  * của người dùng thật, bỏ dấu để gộp lại là xoá mất chính thông tin cần đo.
  */
-function normalize(s: string): string {
+export function normalize(s: string): string {
   return String(s || '')
     .toLowerCase()
     .replace(/\s+/g, ' ')
@@ -171,8 +171,8 @@ function normalize(s: string): string {
 }
 
 /** Loại rác rõ ràng: quá ngắn, quá dài, hoặc lọt URL/ký tự lạ. */
-function isUsable(kw: string): boolean {
-  if (kw.length < 3 || kw.length > 120) return false;
+export function isUsable(kw: string, minLen = 3): boolean {
+  if (kw.length < minLen || kw.length > 120) return false;
   if (/https?:|www\.|@/.test(kw)) return false;
   return true;
 }
@@ -184,7 +184,7 @@ function isUsable(kw: string): boolean {
  * (vị trí 0 = gợi ý đầu tiên = phổ biến nhất theo Google).
  * KHÔNG BAO GIỜ throw — hỏng thì trả rỗng để vòng lặp đi tiếp.
  */
-async function fetchSuggest(term: string, hl: string, gl: string): Promise<string[]> {
+export async function fetchSuggest(term: string, hl: string, gl: string): Promise<string[]> {
   // 🔑 `oe=utf-8` BẮT BUỘC: thiếu nó, Google trả Content-Type khai
   // charset=ISO-8859-1 trong khi thân vẫn là byte UTF-8 — `res.text()` giải mã
   // theo charset khai báo (đúng chuẩn Fetch) nên tiếng Việt vỡ thành `l� g�`.
@@ -212,7 +212,7 @@ async function fetchSuggest(term: string, hl: string, gl: string): Promise<strin
   }
 }
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 // ── Thu thập ───────────────────────────────────────────────────────────────────
 
@@ -267,7 +267,11 @@ export async function collectSuggestions(cfg: KeywordSuggestConfig): Promise<{
  * biết cụm này mới nổi hay đã bền), và KHÔNG đụng `volume` (cột dành cho Ads
  * API, ghi đè bằng null là xoá mất dữ liệu của nguồn khác).
  */
-async function upsertKeywords(hits: KeywordHit[]): Promise<{ inserted: number; updated: number }> {
+export async function upsertKeywords(
+  hits: KeywordHit[],
+  lang = 'vi',
+  source = 'suggest',
+): Promise<{ inserted: number; updated: number }> {
   if (!SUPABASE_URL || !SUPABASE_KEY || !hits.length) return { inserted: 0, updated: 0 };
 
   const nowIso = new Date().toISOString();
@@ -286,7 +290,7 @@ async function upsertKeywords(hits: KeywordHit[]): Promise<{ inserted: number; u
     let existing: Record<string, { times_seen: number; best_position: number | null }> = {};
     try {
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/keyword_ideas?keyword=in.(${encodeURIComponent(q)})&select=keyword,times_seen,best_position`,
+        `${SUPABASE_URL}/rest/v1/keyword_ideas?keyword=in.(${encodeURIComponent(q)})&lang=eq.${lang}&source=eq.${source}&select=keyword,times_seen,best_position`,
         {
           headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
           cache: 'no-store',
@@ -307,7 +311,8 @@ async function upsertKeywords(hits: KeywordHit[]): Promise<{ inserted: number; u
       return {
         keyword: h.keyword,
         seed: h.seed,
-        source: 'suggest',
+        lang,
+        source,
         best_position:
           prev?.best_position == null ? h.position : Math.min(prev.best_position, h.position),
         times_seen: (prev?.times_seen ?? 0) + 1,
@@ -316,7 +321,7 @@ async function upsertKeywords(hits: KeywordHit[]): Promise<{ inserted: number; u
     });
 
     try {
-      await fetch(`${SUPABASE_URL}/rest/v1/keyword_ideas?on_conflict=keyword`, {
+      const wr = await fetch(`${SUPABASE_URL}/rest/v1/keyword_ideas?on_conflict=keyword,lang,source`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -328,6 +333,8 @@ async function upsertKeywords(hits: KeywordHit[]): Promise<{ inserted: number; u
         },
         body: JSON.stringify(body),
       });
+      // Thiếu cột `lang`/ràng buộc mới (chưa chạy _patches/migration-i18n-seo.sql) trả 4xx — phải kêu, đừng nuốt.
+      if (!wr.ok) console.error(`[keyword-suggest] ghi lô ${wr.status}: ${(await wr.text()).slice(0, 160)}`);
     } catch (e) {
       console.warn('[keyword-suggest] ghi lô hỏng:', (e as Error)?.message?.slice(0, 120));
     }

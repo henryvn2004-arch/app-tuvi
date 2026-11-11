@@ -16,7 +16,9 @@
     { "path": "/api/cron/nghiem-chung", "schedule": "*/15 18-22 * * *" },
     { "path": "/api/cron/xac-dinh-gio-sinh", "schedule": "*/15 23,0 * * *" },
     { "path": "/api/cron/email-cross-sell", "schedule": "0 1 * * 0,5" },
-    { "path": "/api/cron/email-broadcast-drain", "schedule": "*/15 * * * *" }
+    { "path": "/api/cron/email-broadcast-drain", "schedule": "*/15 * * * *" },
+    { "path": "/api/cron/keyword-suggest", "schedule": "20 3 * * 2" },
+    { "path": "/api/cron/indexnow", "schedule": "40 3 * * *" }
   ],
   "headers": [
     {

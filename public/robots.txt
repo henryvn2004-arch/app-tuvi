@@ -40,6 +40,11 @@ Allow: /
 # Nên nay các họ trang mỏng bị đánh `noindex` THẲNG TRÊN TRANG và CỐ Ý giữ lại
 # trong sitemap cho tới khi Google bò lại và đọc được thẻ đó.
 # Chi tiết + cách lật lại: lib/seo/index-policy.ts.
+# Đa ngôn ngữ (W10): `sitemap.xml` (index động) đã chứa `sitemap-i18n-<locale>.xml` cho từng ngôn ngữ ĐÃ có
+# trang dịch và `sitemap-nghiem-chung.xml?lang=<locale>` / `sitemap-xac-dinh-gio-sinh.xml?lang=<locale>`
+# cho ngôn ngữ đã có hồ sơ dịch. Cố ý KHÔNG khai từng file ở đây: ngôn ngữ chưa dịch sẽ thành sitemap rỗng,
+# và robots.txt tĩnh không biết ngôn ngữ nào đã đủ. llms theo ngôn ngữ: /llms-<locale>.txt, /llms-full-<locale>.txt.
+# IndexNow (Bing/Naver): khoá ở /6d87e02a5a507ff35b37cb74c1178b2f.txt (công khai theo giao thức).
 Sitemap: https://www.tuviminhbao.com/sitemap.xml
 Sitemap: https://www.tuviminhbao.com/sitemap-hubs.xml
 Sitemap: https://www.tuviminhbao.com/sitemap-ngay-tot.xml
