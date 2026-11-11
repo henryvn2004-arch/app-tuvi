@@ -31,7 +31,7 @@
     var I = root.I18n;
     return I && I.long ? I.long(ns, key, vi) : vi;
   }
-  /** Nghĩa của `c.sao` / `c.than` (đối tượng {ten, nghia}) ĐỂ HIỂN THỊ; chưa có ô nào vẽ nghĩa — sẵn cho giao diện sau. */
+  /** Nghĩa của `c.sao` / `c.than` (đối tượng {ten, nghia}) ĐỂ HIỂN THỊ — vẽ ở khối chú giải dưới bảng (`chuGiaiHTML`). */
   function nghiaSao(x) {
     return x ? _long('ky-mon', 'sao.' + x.ten, x.nghia) : '';
   }
@@ -150,6 +150,23 @@
     );
   }
 
+  /** Chú giải sao + thần CÓ MẶT trên bàn này (mỗi tên một dòng, theo thứ tự lưới). Dựng cùng lượt với bảng — không chèn muộn. */
+  function chuGiaiHTML(b) {
+    var seen = {}, sao = [], than = [];
+    (b.cungs || []).forEach(function (c) {
+      if (c.sao && !seen['s' + c.sao.ten]) { seen['s' + c.sao.ten] = 1; sao.push(c.sao); }
+      if (c.than && !seen['t' + c.than.ten]) { seen['t' + c.than.ten] = 1; than.push(c.than); }
+    });
+    function row(x, fn) {
+      return '<li><b style="color:' + MUC_MAU[x.muc] + '">' + _esc(_g('kymon', x.ten)) + '</b> — ' + _esc(fn(x)) + '</li>';
+    }
+    if (!sao.length && !than.length) return '';
+    return (
+      '<div class="km-giai"><div class="km-giai-t">' + _tv('js.shellui.kmx-chu-giai', 'Chú giải sao và thần trên bàn này') + '</div>' +
+      '<ul>' + sao.map(function (x) { return row(x, nghiaSao); }).join('') + than.map(function (x) { return row(x, nghiaThan); }).join('') + '</ul></div>'
+    );
+  }
+
   /** Bảng xếp hạng + lý do, đặt dưới bàn. */
   function chiTietHTML(b) {
     if (!b || !b.ok) return '';
@@ -174,7 +191,8 @@
       '<div class="km-bang-wrap"><table class="km-bang">' +
       '<thead><tr><th>#</th><th>' + _tv('js.shellui.kmx-th-huong', 'Hướng') + '</th><th>' + _tv('js.shellui.kmx-th-cua', 'Cửa') + '</th><th>' + _tv('js.shellui.kmx-th-diem', 'Điểm') + '</th><th>Engine</th><th>' + _tv('js.shellui.kmx-th-visao', 'Vì sao') + '</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div>' +
-      '<div class="km-chu">' + _tv('js.shellui.kmx-chu-bang', 'Cột <b>Engine</b> là phán quyết cát/hung của thuật toán cổ pháp. Cột <b>Điểm</b> là xếp hạng tương đối do trang tính, để luôn chỉ ra được hướng đỡ nhất — công thức: cửa cát +3 / hung −3, sao và thần ±2, Tam Kỳ +2, mỗi cát cách +1 và mỗi hung cách −1. Đo trên 366 bàn cả năm thì chỉ 26,5% số bàn có cung được engine chấm cát, nên nếu chỉ đọc cột Engine thì phần lớn thời gian bàn nói "đi đâu cũng xấu".') + '</div>'
+      '<div class="km-chu">' + _tv('js.shellui.kmx-chu-bang', 'Cột <b>Engine</b> là phán quyết cát/hung của thuật toán cổ pháp. Cột <b>Điểm</b> là xếp hạng tương đối do trang tính, để luôn chỉ ra được hướng đỡ nhất — công thức: cửa cát +3 / hung −3, sao và thần ±2, Tam Kỳ +2, mỗi cát cách +1 và mỗi hung cách −1. Đo trên 366 bàn cả năm thì chỉ 26,5% số bàn có cung được engine chấm cát, nên nếu chỉ đọc cột Engine thì phần lớn thời gian bàn nói "đi đâu cũng xấu".') + '</div>' +
+      chuGiaiHTML(b)
     );
   }
 

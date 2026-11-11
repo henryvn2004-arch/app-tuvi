@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-566 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+567 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🪟 W20 — Hiển thị nghĩa quẻ đơn · tóm tắt Thể–Dụng (Mai Hoa) + chú giải sao/thần (Kỳ Môn), vi + 5 locale |
 | 1 | 2026-11 | `2026-11.md` | 📜 W16b — Dịch ko 613 chuỗi văn dài (thêm `ko` vào `LONG_COMPLETE`), vẽ thử 24k ô 0 chữ Việt |
 | 1 | 2026-11 | `2026-11.md` | 🀄 W16c — Dịch văn dài zh-tw (+ zh-cn OpenCC) 613 chuỗi: hào từ · lời khuyên quẻ · Thể–Dụng · nghĩa sao/thần |
 | 1 | 2026-11 | `2026-11.md` | 📜 W16d — Văn dài en: 613/613 chuỗi (hào từ · lời khuyên quẻ · Thể–Dụng · nghĩa sao/thần), `en` vào `LONG_COMPLETE` |
