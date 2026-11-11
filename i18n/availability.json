@@ -1,42 +1,57 @@
 {
  "/": [
   "en",
+  "ja",
+  "ko",
   "zh-tw",
   "zh-cn"
  ],
  "/app": [
   "en",
   "ja",
+  "ko",
   "zh-tw",
   "zh-cn"
  ],
  "/app/bat-tu": [
   "en",
+  "ja",
+  "ko",
   "zh-tw",
   "zh-cn"
  ],
  "/app/luan-giai": [
   "en",
+  "ja",
+  "ko",
   "zh-tw",
   "zh-cn"
  ],
  "/chinh-sach-bao-mat.html": [
   "en",
+  "ja",
+  "ko",
   "zh-tw",
   "zh-cn"
  ],
  "/dieu-khoan-dich-vu.html": [
   "en",
+  "ja",
+  "ko",
   "zh-tw",
   "zh-cn"
  ],
  "/la-so": [
   "en",
+  "ja",
+  "ko",
   "zh-tw",
   "zh-cn"
  ],
  "/mien-tru-trach-nhiem.html": [
   "en",
+  "ja",
+  "ko",
   "zh-tw",
   "zh-cn"
  ]
