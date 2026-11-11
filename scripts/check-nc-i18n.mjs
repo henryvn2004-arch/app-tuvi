@@ -78,7 +78,7 @@ for (const t of G) {
 // ja/zh-cn khớp OpenCC của zh-tw (ngoại lệ có chủ đích: 'Âm Lịch', 'Dương Lịch')
 const NGOAI_LE = new Set(['khai|Âm Lịch', 'khai|Dương Lịch']);
 for (const t of G) {
-  if (NGOAI_LE.has(`${t.k}|${t.vi}`)) continue;
+  if (NGOAI_LE.has(`${t.k}|${t.vi}`) || t.k === 'gio') continue; // 'gio': ja = 子の刻 (kiểm ở check:glossary)
   if (t['zh-cn'] !== toCn(t['zh-tw']))
     bad(`glossary ${t.k}|${t.vi}: zh-cn "${t['zh-cn']}" ≠ OpenCC(zh-tw) "${toCn(t['zh-tw'])}"`);
   if (t.ja !== toJp(t['zh-tw']))

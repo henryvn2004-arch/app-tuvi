@@ -18,6 +18,7 @@
 //
 // Cờ (cột 5): 'x' = KHÔNG dò trong văn xuôi (đơn âm tiết mơ hồ: "Tử", "Mộ", "Bệnh"…),
 //             'c' = chỉ dò khi có tiền tố "cung " ("cung Mệnh" chứ không phải "mệnh" thường),
+//             'a' = đơn từ chỉ dò trong văn khi có NGỮ CẢNH (Tuần/Triệt: "Tuần/Triệt án ngữ"…; xem CONTEXT trong index.ts),
 //             'n' = cho phép số chữ Hán ≠ số âm tiết (Tuần → 旬空),
 //             'o' = sao/khái niệm RIÊNG của trường phái Việt (vnOnly): giữ chữ, người dịch phải GIẢI THÍCH, không tìm tương đương,
 //             'v' = tên Việt KHÔNG phải phiên Hán-Việt của chữ Hán (Lá Số ↔ 命盤…) — bộ dò check:glossary bỏ qua và liệt kê.
@@ -148,8 +149,8 @@ export const TERMS: readonly TermRow[] = [
   ['sao', 'Lưu Niên Văn Tinh', '流年文星', '', 'o'],
   ['sao', 'Thai Phụ', '台輔'],
   ['sao', 'Phong Cáo', '封誥'],
-  ['sao', 'Tuần', '旬空', 'Xun Kong', 'xn'],
-  ['sao', 'Triệt', '截空', 'Jie Kong', 'xn'],
+  ['sao', 'Tuần', '旬空', 'Xun Kong', 'na'],
+  ['sao', 'Triệt', '截空', 'Jie Kong', 'na'],
 
   // ── vòng Tràng Sinh (engine `TRANG_SINH_SEQ`) ────────────────────────────
   ['sao', 'Tràng Sinh', '長生', 'Chang Sheng'],
@@ -212,6 +213,22 @@ export const TERMS: readonly TermRow[] = [
   ['khai', 'Sao Tử Vi', '紫微星', 'Zi Wei star', 'v'],
   ['khai', 'Vô Chính Diệu', '無正曜', 'no major star'],
   ['khai', 'Đại Hạn', '大限', 'Major Limit (Da Xian)'],
+  // ── Tên gọi chung theo cặp/bộ (W6b — W9-pilot thấy mỗi phiên dịch tự chọn một kiểu) ─────────────
+  ['khai', 'Tuần Không', '旬空', 'Xun Kong'],
+  ['khai', 'Triệt Không', '截空', 'Jie Kong'],
+  ['khai', 'Triệt Lộ Không Vong', '截路空亡', 'Jie Lu Kong Wang'],
+  ['khai', 'Tả Hữu', '左右', 'Zuo You'],
+  ['khai', 'Xương Khúc', '昌曲', 'Chang Qu'],
+  ['khai', 'Không Kiếp', '空劫', 'Kong Jie'],
+  ['khai', 'Tử Phủ', '紫府', 'Zi Fu'],
+  ['khai', 'Hổ Long Phượng', '虎龍鳳', 'Hu Long Feng'],
+  ['khai', 'Nhật Nguyệt', '日月', 'Ri Yue'],
+  ['khai', 'Tham Vũ', '貪武', 'Tan Wu'],
+  ['khai', 'Phủ Tướng triều viên', '府相朝垣', 'Fu Xiang Chao Yuan'],
+  // Thứ tự chữ đảo so với dạng chuẩn 府相朝垣 nhưng tên Việt viết cả hai kiểu — cùng một chữ Hán.
+  ['khai', 'Tướng Phủ triều viên', '府相朝垣', 'Fu Xiang Chao Yuan'],
+  ['khai', 'Cự Cơ Mão Dậu', '巨機卯酉', 'Ju Ji Mao You'],
+  ['khai', 'Lưu Thái Tuế', '流太歲', 'Liu Tai Sui'],
 ];
 
 /** Địa chi: tiếng Việt → [con giáp en]. Chữ Hán lấy đảo từ `lib/hanviet.ts` CHI_HAN. */
