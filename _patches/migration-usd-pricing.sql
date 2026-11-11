@@ -1,39 +1,46 @@
 -- ============================================================
 -- W5 — BÁN BẰNG USD QUA PAYPAL, BỎ VNĐ Ở MỌI CHỖ KHÁCH THẤY (2026-11)
 -- ============================================================
--- ⛔ CHỜ HENRY DUYỆT BẢNG GIÁ — KHÔNG CHẠY trước khi Henry chốt số.
+-- ✅ BẢNG GIÁ HENRY ĐÃ CHỐT (2026-11-11, qua session chỉ huy i18n).
 --
 -- "Lượng" vẫn là đơn vị nội bộ: `tool_pricing` (giá theo Lượng) và số dư của
 -- người dùng KHÔNG đổi ⇒ không ai mất tiền, sổ không phải viết lại. Thứ đổi là
--- GIÁ BÁN của gói: từ nay PayPal thu `credit_packages.amount_usd`.
+-- GIÁ BÁN của gói (`amount_usd`, PayPal thu cột này) và số Lượng của hai gói lớn.
 --
--- Giá USD đề xuất = quy đổi giá VNĐ đang chạy ở ~26.300đ/USD rồi làm tròn .99:
+--   gói         Lượng (cũ → mới)   USD (cũ → mới)    $/Lượng
+--   Khởi Đầu      350              8.00 →  19.00    0.054286
+--   Phổ Thông     800             16.00 →  39.00    0.048750  ← bậc hai
+--   Cao Cấp      1600 → 1750      28.00 →  79.00    0.045143
+--   VIP          2700 → 3800      40.00 → 159.00    0.041842
 --
---   gói         Lượng   VNĐ hiện tại   ÷26.300   USD cũ   → USD mới   $/Lượng
---   Khởi Đầu      350      199.000       7,57      8.00   →    7.99    0,02283
---   Phổ Thông     800      400.000      15,21     16.00   →   14.99    0,01874  ← bậc hai
---   Cao Cấp      1600      699.000      26,58     28.00   →   26.99    0,01687
---   VIP          2700      999.000      37,98     40.00   →   37.99    0,01407
---
--- Thang "mua nhiều rẻ hơn" vẫn đơn điệu giảm (0,02283 > 0,01874 > 0,01687 >
--- 0,01407). `credit_usd()` (bậc hai) = 14.99/800 = $0,018738 ⇒ Luận Giải
--- 150 Lượng ≈ $2.82 trên nhãn giá.
---
+-- Thang "mua nhiều rẻ hơn" vẫn đơn điệu giảm. `credit_usd()` (bậc hai) =
+-- 39/800 = $0.04875 ⇒ Luận Giải 150 Lượng = $7.3125 → nhãn "~$7.32" (làm tròn
+-- LÊN cent). `credit_vnd()` không đổi (bậc hai vẫn 400.000/800).
+-- Số dư cũ giữ nguyên; webhook/lượt chốt PayPal cấp Lượng theo gói đọc từ DB
+-- (`getPackage`) ⇒ sau file này đơn Cao Cấp/VIP cấp 1750/3800.
+
 -- 🔴 THỨ TỰ TRIỂN KHAI — DỮ LIỆU ĐI SAU GIAO DIỆN:
---   1. Merge + deploy code W5. Ngay lúc đó web đã hiện USD (đọc `amount_usd`
---      đang có: 8/16/28/40) và ẨN rail VNĐ (khoá cờ chưa có ⇒ đọc ra `false`).
---      PayPal đang chạy live sẵn nên không có khoảng hở thanh toán.
---   2. Henry duyệt bảng giá ở trên → chạy file này.
+--   1. Merge + deploy code W5, đợi prod phục vụ bản mới.
+--   2. Chạy file này NGAY SAU đó (đừng để khoảng giữa kéo dài).
 --   3. Đọc ngược lại (khối KIỂM cuối file) rồi mới báo xong.
--- Vì sao code TRƯỚC: `FALLBACK` (lib/billing/packages.ts) đã mang giá MỚI. Code
--- trước data ⇒ khoảng giữa, DB đọc hụt thì FALLBACK thu RẺ hơn vài cent cho
--- cùng số Lượng (lệch về phía khách, chịu được). Data trước code ⇒ không lệch
--- gì về tiền, nhưng trang cũ còn hiện VNĐ ⇒ cũng không hại; thứ tự này chỉ để
--- giữ đúng luật "dữ liệu đi sau giao diện".
 --
--- ⚠️ Muốn GIỮ rail VNĐ (QR payOS/MoMo) cho khách Việt trong lúc chuyển: chạy
--- riêng câu `update app_config … true` ở khối (3) TRƯỚC khi deploy — câu đó
--- chỉ HIỆN lại rail đã có sẵn, an toàn chạy trước.
+-- KHOẢNG GIỮA bước 1 và 2: DB vẫn là giá CŨ ⇒ web hiện và PayPal thu
+-- 8/16/28/40 USD, cấp 350/800/1600/2700 Lượng — tự nhất quán (hiện gì thu nấy,
+-- thu gì cấp nấy). Lệch CHỈ khi DB đọc hụt và rơi về `FALLBACK` (đã mang giá
+-- MỚI): tạo đơn theo FALLBACK ($79) mà lượt chốt đọc lại được DB (1600 Lượng)
+-- là khách trả giá mới nhận Lượng cũ. Hiếm (cần DB chớp đúng lúc tạo đơn) nhưng
+-- có thật ⇒ lý do bước 2 phải theo sát bước 1.
+--
+-- Vì sao KHÔNG chạy data TRƯỚC code: code cũ đang chạy hiện giá VNĐ
+-- (`amount_vnd` 699.000đ) trong khi PayPal thu `amount_usd` — chạy file này
+-- trước là MỌI khách PayPal trong khoảng giữa thấy 699.000đ mà bị thu $79
+-- (~2 triệu đồng). Lệch có hệ thống, tệ hơn hẳn rủi ro FALLBACK ở trên.
+--
+-- ⚠️ Rail VNĐ (QR payOS/MoMo) đọc `amount_vnd` — file này KHÔNG đổi cột đó,
+-- nhưng tăng Lượng của Cao Cấp/VIP ⇒ 699.000đ mua 1750 Lượng, 999.000đ mua
+-- 3800 (~3 lần rẻ hơn giá USD mới). Đang ẩn nên vô hại; muốn BẬT lại cờ ở khối
+-- (3) thì phải định giá lại `amount_vnd` trước, nếu không khách Việt mua rẻ
+-- hơn hẳn khách quốc tế cho cùng gói.
 --
 -- BA nơi cài cùng quy tắc "đơn giá = gói bậc hai", sửa kèm nhau:
 --   1. SQL `credit_usd()`                       ← file này (mới)
@@ -45,14 +52,14 @@
 
 begin;
 
--- (1) Giá bán USD.
-update public.credit_packages set amount_usd =  7.99, updated_at = now() where package_id = '50';
-update public.credit_packages set amount_usd = 14.99, updated_at = now() where package_id = '120';
-update public.credit_packages set amount_usd = 26.99, updated_at = now() where package_id = '350';
-update public.credit_packages set amount_usd = 37.99, updated_at = now() where package_id = '800';
+-- (1) Giá bán USD + số Lượng (Cao Cấp, VIP tăng Lượng).
+update public.credit_packages set credits =  350, amount_usd =  19.00, updated_at = now() where package_id = '50';
+update public.credit_packages set credits =  800, amount_usd =  39.00, updated_at = now() where package_id = '120';
+update public.credit_packages set credits = 1750, amount_usd =  79.00, updated_at = now() where package_id = '350';
+update public.credit_packages set credits = 3800, amount_usd = 159.00, updated_at = now() where package_id = '800';
 
 -- (2) Đơn giá 1 Lượng theo USD — bản USD của `credit_vnd()`, cùng quy tắc bậc
--- hai theo `sort_order`. Nhánh cuối 0.0187 = 14.99/800 làm tròn (bảng gói rỗng
+-- hai theo `sort_order`. Nhánh cuối 0.04875 = 39/800 (bảng gói rỗng
 -- hoàn toàn — gần như không xảy ra; vẫn phải bám thang đang chạy).
 create or replace function public.credit_usd()
 returns numeric
@@ -72,7 +79,7 @@ as $function$
       where enabled = true and credits > 0 and amount_usd > 0
       order by sort_order
       limit 1),
-    0.0187
+    0.04875
   );
 $function$;
 
@@ -95,7 +102,8 @@ commit;
 -- select package_id, label, credits, amount_usd,
 --        round(amount_usd::numeric / credits, 5) as usd_per_luong
 --   from credit_packages where enabled order by sort_order;
---   -- kỳ vọng 7.99 / 14.99 / 26.99 / 37.99, cột cuối giảm dần
--- select public.credit_usd();     -- kỳ vọng 0.018738
+--   -- kỳ vọng credits 350/800/1750/3800 · usd 19/39/79/159, cột cuối giảm dần
+-- select public.credit_usd();     -- kỳ vọng 0.048750
+-- select public.credit_vnd();     -- kỳ vọng 500 (không đổi)
 -- select value from app_config where key = 'billing.vnd_rails_enabled';  -- false
 -- select has_function_privilege('anon', 'public.credit_usd()', 'execute');  -- false

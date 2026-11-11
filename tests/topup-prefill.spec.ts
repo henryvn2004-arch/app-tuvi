@@ -6,11 +6,11 @@
 // thứ đáng 75k là dựng thêm một quyết định ở đúng bậc cuối phễu.
 import { test, expect, type Page } from '@playwright/test';
 
-// W5 (2026-11): PayPal thu USD. Bậc vào cửa 7.99/350 ≈ $0.02283/Lượng.
+// W5 (2026-11): PayPal thu USD. Bậc vào cửa 19/350 ≈ $0.05429/Lượng.
 // `amount_vnd` giữ trong stub vì cột vẫn còn (rail VNĐ ẩn sau cờ).
 const PKGS = [
-  { package_id: '50', credits: 350, amount_vnd: 199000, amount_usd: 7.99, label: 'Khởi Đầu', enabled: true, sort_order: 1 },
-  { package_id: '120', credits: 800, amount_vnd: 400000, amount_usd: 14.99, label: 'Phổ Thông', enabled: true, sort_order: 2 },
+  { package_id: '50', credits: 350, amount_vnd: 199000, amount_usd: 19, label: 'Khởi Đầu', enabled: true, sort_order: 1 },
+  { package_id: '120', credits: 800, amount_vnd: 400000, amount_usd: 39, label: 'Phổ Thông', enabled: true, sort_order: 2 },
 ];
 
 async function stub(page: Page, pkgs = PKGS, vndRails = false) {
@@ -40,12 +40,12 @@ test('tới từ tường: ô nạp lẻ điền sẵn ĐỦ số tiền còn th
   await expect(page.locator('#pendingBanner')).toBeVisible({ timeout: 15000 });
   const val = Number(await page.locator('#customInput').inputValue());
 
-  // Bậc vào cửa 7.99/350 ⇒ 150 Lượng = $3.4243 → làm tròn LÊN cent = $3.43.
+  // Bậc vào cửa 19/350 ⇒ 150 Lượng = $8.1429 → làm tròn LÊN cent = $8.15.
   // Làm tròn XUỐNG là thiếu 1 Lượng, khách trả tiền xong vẫn ăn tường.
-  expect(val).toBe(3.43);
-  expect(Math.floor(val / (7.99 / 350))).toBeGreaterThanOrEqual(150);
+  expect(val).toBe(8.15);
+  expect(Math.floor(val / (19 / 350))).toBeGreaterThanOrEqual(150);
   await expect(page.locator('#customPreview')).toContainText('Lượng');
-  await expect(page.locator('#pendingBanner')).toContainText('$3.43');
+  await expect(page.locator('#pendingBanner')).toContainText('$8.15');
   await expect(page.locator('#pendingBanner')).not.toContainText(/\dđ/);
 });
 
@@ -63,7 +63,7 @@ test('rail VNĐ: ẩn mặc định, chỉ hiện khi cờ bật', async ({ page
   await expect(page.locator('.pkg-card:not(.pkg-skel)').first()).toBeVisible({ timeout: 15000 });
   await expect(page.locator('#mBank')).toBeHidden();
   await expect(page.locator('#packages')).not.toContainText(/\dđ/);
-  await expect(page.locator('#packages')).toContainText('$7.99');
+  await expect(page.locator('#packages')).toContainText('$19.00');
 
   const p2 = await page.context().newPage();
   await stub(p2, PKGS, true);

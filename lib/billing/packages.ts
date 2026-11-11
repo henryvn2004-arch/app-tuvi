@@ -34,16 +34,16 @@ export interface CreditPackage {
 // vì đổi Lượng để giữ 800 tròn — hai gói còn lại (Khởi Đầu/Cao Cấp/VIP) CỐ Ý
 // không đổi, thang chiết khấu theo bậc vẫn đơn điệu giảm.
 //
-// 🔴 2026-11 (W5 — PayPal USD, bỏ VND): giá USD là giá BÁN. `amountUsd` dưới
-// đây phải khớp `_patches/migration-usd-pricing.sql`. Code lên TRƯỚC, data SAU:
-// trong khoảng giữa, đọc hụt DB thì FALLBACK thu RẺ hơn vài cent cho cùng số
-// Lượng — lệch về phía khách, chịu được (ngược lại là cấp hụt cho người đã trả).
+// 🔴 2026-11 (W5 — PayPal USD, bỏ VND, Henry CHỐT bảng giá): giá USD là giá
+// BÁN; Cao Cấp 1600→1750 Lượng, VIP 2700→3800. `credits` + `amountUsd` dưới
+// đây phải khớp `_patches/migration-usd-pricing.sql`. Code lên TRƯỚC, data
+// chạy NGAY SAU (xem file migration): khoảng giữa chỉ lệch khi DB đọc hụt.
 // `amountVnd` giữ nguyên: chỉ còn dùng cho rail VND (đang ẩn) + báo cáo.
 const FALLBACK: Record<string, CreditPackage> = {
-  '50':  { packageId: '50',  credits: 350,  amountVnd: 199_000, amountUsd: '7.99',  label: 'Khởi Đầu' },
-  '120': { packageId: '120', credits: 800,  amountVnd: 400_000, amountUsd: '14.99', label: 'Phổ Thông' },
-  '350': { packageId: '350', credits: 1600, amountVnd: 699_000, amountUsd: '26.99', label: 'Cao Cấp' },
-  '800': { packageId: '800', credits: 2700, amountVnd: 999_000, amountUsd: '37.99', label: 'VIP' },
+  '50':  { packageId: '50',  credits: 350,  amountVnd: 199_000, amountUsd: '19.00',  label: 'Khởi Đầu' },
+  '120': { packageId: '120', credits: 800,  amountVnd: 400_000, amountUsd: '39.00',  label: 'Phổ Thông' },
+  '350': { packageId: '350', credits: 1750, amountVnd: 699_000, amountUsd: '79.00',  label: 'Cao Cấp' },
+  '800': { packageId: '800', credits: 3800, amountVnd: 999_000, amountUsd: '159.00', label: 'VIP' },
 };
 
 const TTL_MS = 60_000;

@@ -85,6 +85,10 @@ một tiền tệ cho mọi nước là **USD** (chưa chắc PayPal nhận KRW)
   ĐÚNG tiền của rail đang chọn (QR/MoMo = VNĐ, PayPal/Thẻ = USD) — không trộn hai
   tiền trên một thẻ. CHỈ ẩn UI web: `create-bank`/`create-momo` và nạp VietQR trong
   kênh chat (`lib/channels/topup.ts`) không bị chặn.
+- **Bảng giá Henry chốt 2026-11-11:** 350 L $19 · 800 L $39 · 1750 L $79 · 3800 L $159
+  (`_patches/migration-usd-pricing.sql`). Migration chạy NGAY SAU deploy, không trước:
+  code cũ hiện `amount_vnd` (699.000đ) trong khi PayPal thu `amount_usd` ($79).
+  ⚠️ `amount_vnd` CHƯA định giá lại (699.000đ giờ mua 1750 L) — sửa trước khi bật rail VNĐ.
 - 🪤 `.pay-method{display:inline-flex}` đè thuộc tính `hidden` — nút MoMo "ẩn" thật
   ra vẫn hiện từ trước. Đã thêm `.pay-method[hidden]{display:none}`.
 - `npm run check:prices` thêm luật `gia-usd-cung` ("$7.99" viết cứng) và cấm
