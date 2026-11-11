@@ -1,11 +1,30 @@
 {
+ "/": [
+  "ja"
+ ],
  "/app": [
   "en",
   "ja",
   "zh-tw",
   "zh-cn"
  ],
+ "/app/bat-tu": [
+  "ja"
+ ],
+ "/app/luan-giai": [
+  "ja"
+ ],
+ "/chinh-sach-bao-mat.html": [
+  "ja"
+ ],
+ "/dieu-khoan-dich-vu.html": [
+  "ja"
+ ],
+ "/la-so": [
+  "ja"
+ ],
  "/mien-tru-trach-nhiem.html": [
-  "en"
+  "en",
+  "ja"
  ]
 }

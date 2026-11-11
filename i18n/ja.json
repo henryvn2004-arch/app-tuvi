@@ -1,7 +1,919 @@
 {
+ "battu.1-nhap-thong-tin": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">情報を入力</span>",
+  "h": "487c9507"
+ },
+ "battu.2-xem-truoc-la-so": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">命盤をプレビュー</span>",
+  "h": "3c9201cd"
+ },
+ "battu.3-thanh-toan": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">お支払い</span>",
+  "h": "a8d2d60c"
+ },
+ "battu.4-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">4</span><span class=\"wss-l\">結果を受け取る</span>",
+  "h": "35c4242b"
+ },
+ "battu.cach-cuc-thap-than": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>格局、<br>十神</span>",
+  "h": "e78c79e5"
+ },
+ "battu.chi-phi-su-dung": {
+  "t": "ご利用料金",
+  "h": "c2d36be8"
+ },
+ "battu.dai-van-luu-nien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>大運、<br>流年</span>",
+  "h": "7676d5b2"
+ },
+ "battu.gioi-thieu": {
+  "t": "<span class=\"wsp-ic\" data-icon=\"book-open\"></span><span>紹介</span>",
+  "h": "935666a1"
+ },
+ "battu.hoi": {
+  "t": "✦ 質問",
+  "h": "cbb5079f"
+ },
+ "battu.la-so-bat-tu-tu-tru": {
+  "t": "<b>四柱推命の命式</b><span>子平の四柱 — 干支、用神、大運</span>",
+  "h": "98cba503"
+ },
+ "battu.la-so-bat-tu-tu-tru-2852": {
+  "t": "四柱推命の命式（四柱）",
+  "h": "67dd1d43"
+ },
+ "battu.la-so-bat-tu-tu-vi": {
+  "t": "四柱推命の命式 — 明宝紫微斗数",
+  "h": "f0404e36"
+ },
+ "battu.lap-bat-tu-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"scroll-text\"></span><b id=\"btnGoLabel\">四柱推命を作る →</b></span> <small>無料</small>",
+  "h": "b4a4835f"
+ },
+ "battu.lap-tu-tru-bat-tu-theo": {
+  "t": "子平の古法にもとづき四柱を立てます：日干、強弱、用神、格局、大運、流年。気になる部分は先生に深く聞くこともできます。",
+  "h": "315e8a7f"
+ },
+ "battu.luan-giai-chuyen-sau-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b>詳しい鑑定 →</b></span> <small>必要クレジット <span class=\"vnd\" data-tvp-price-vnd=\"tu-binh\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"tu-binh\">…</span> 両)</span></small>",
+  "h": "cd1895af"
+ },
+ "battu.luan-giai-tu-vi": {
+  "t": "紫微斗数の鑑定 →",
+  "h": "1c914a22"
+ },
+ "battu.mien-phi": {
+  "t": "無料",
+  "h": "a999e722"
+ },
+ "battu.nam-luan": {
+  "t": "鑑定する年",
+  "h": "75752d13"
+ },
+ "battu.nhap-ngay-gio-sinh-va-nam": {
+  "t": "生年月日・出生時刻と、鑑定したい年を入力してください。システムが四柱を立て、子平の古法で鑑定します。全16項目：格局、十神、恋愛、健康、大運、流年。",
+  "h": "cd9d101a"
+ },
+ "battu.nhap-thong-tin-ngay-sinh-duong": {
+  "t": "生年月日（西暦）を入力",
+  "h": "095c3547"
+ },
+ "battu.nhat-can-dung-than": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>日干、<br>用神</span>",
+  "h": "1d502c53"
+ },
+ "battu.sua-thong-tin": {
+  "t": "情報を修正",
+  "h": "f761d488"
+ },
+ "battu.tra-loi-thay-o-khung-chat": {
+  "t": "チャット欄で先生に答えて四柱を立てましょう。生年月日・出生時刻と、鑑定したい年をお知らせください。",
+  "h": "1587b6ef"
+ },
+ "battu.tu-binh-con-goi-bat-tu": {
+  "t": "子平（四柱推命）は、生まれた年・月・日・時の四つの柱の干支をもとに運命を読む術で、宋代に形づくられました。日干を拠りどころに他の柱と照らし合わせ、用神と格局を導き出して、一生の運勢を読み解きます。",
+  "h": "f6e8617c"
+ },
+ "battu.tu-tru-khong-doan-may-rui": {
+  "t": "四柱推命は吉凶を言い当てるものではありません。あなたの命式に不足している五行を、はっきりと示すものです。順調な時期もあれば、流れに逆らうように感じる時期もある。その理由を決めているのがそれです。命式を作って、足りないものを確かめましょう。",
+  "h": "b1c6d09f"
+ },
+ "battu.viet-rieng-cho-tu-tru-nay": {
+  "t": "この四柱のために、子平の古法で一から書き下ろします。全16項目：格局、十神、大運、流年。",
+  "h": "f54c0d01"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
-  "t": "お話を聞かせてください。ミンバオが15人の師の中から最適な師をご案内します：紫微斗数の命盤、八字、相性、命名、吉日選び。",
+  "t": "お話を聞かせてください。明宝が15人の先生の中から最適な先生をご案内します：紫微斗数の命盤、四柱推命、相性、命名、吉日選び。",
   "h": "0f564294"
+ },
+ "disclaimer.1-tinh-chat-tham-khao": {
+  "t": "1. 参考情報としての性質",
+  "h": "99856a52"
+ },
+ "disclaimer.2-ve-cong-nghe-ai-su": {
+  "t": "2. 使用しているAI技術について",
+  "h": "389e2fbe"
+ },
+ "disclaimer.3-trach-nhiem-cua-nguoi-dung": {
+  "t": "3. ご利用者の責任",
+  "h": "95dd376e"
+ },
+ "disclaimer.4-gioi-han-trach-nhiem": {
+  "t": "4. 責任の制限",
+  "h": "29f8c4dc"
+ },
+ "disclaimer.5-lien-quan": {
+  "t": "5. 関連情報",
+  "h": "70a59e97"
+ },
+ "disclaimer.6-lien-he": {
+  "t": "6. お問い合わせ",
+  "h": "b428f4a9"
+ },
+ "disclaimer.ban-tu-chiu-trach-nhiem-ve": {
+  "t": "鑑定内容にもとづく個人的な判断（金銭、結婚、キャリア、健康、法律など）は、すべてご自身の責任で行ってください。専門的な助言が本当に必要な場面（医療上の緊急事態、法的な紛争、大きな金銭の決断など）では、当サイトの結果だけに頼らず、適切な資格を持つ専門家にご相談ください。",
+  "h": "9792a37e"
+ },
+ "disclaimer.luan-giai-duoc-tao-bang-tri": {
+  "t": "鑑定は人工知能（AI）により、古典的な紫微斗数の規則体系にもとづいて生成されます。紫微斗数は流派によって、同じ命盤でも解釈が異なることがあります。結果の絶対的な正確性や、唯一の正解であることは保証いたしません。",
+  "h": "cf677c1e"
+ },
+ "disclaimer.mien-tru-trach-nhiem": {
+  "t": "免責事項",
+  "h": "9f4943b3"
+ },
+ "disclaimer.mien-tru-trach-nhiem-tu-vi": {
+  "t": "免責事項 — 明宝紫微斗数",
+  "h": "33a75925"
+ },
+ "disclaimer.neu-co-cau-hoi-ve-noi": {
+  "t": "この免責事項の内容についてご質問がある場合は、<a href=\"/contact.html\">お問い合わせ</a>ページからご連絡ください。",
+  "h": "06ba42cc"
+ },
+ "disclaimer.noi-dung-luan-giai-tai-tu": {
+  "t": "明宝紫微斗数の鑑定内容は、文化的・学術的な参考情報であり、金融、医療、法律に関する助言ではありません。",
+  "h": "f06e6f7c"
+ },
+ "disclaimer.toan-bo-noi-dung-tren-tuviminhbao": {
+  "t": "tuviminhbao.comのすべてのコンテンツは<strong>文化的・学術的な参考情報</strong>であり、金融、投資、医療、心理、法律に関する助言では<strong>決してありません</strong>。",
+  "h": "a3adcb6e"
+ },
+ "disclaimer.trong-pham-vi-phap-luat-cho": {
+  "t": "法令で認められる範囲において、明宝紫微斗数およびKira Tech有限会社は、当サイトで提供される内容の利用、解釈、またはそれに依拠したことから生じる直接的・間接的な損害について、一切の責任を負いません。",
+  "h": "7addf2c3"
+ },
+ "disclaimer.tu-vi-minh-bao-cung-cap": {
+  "t": "明宝紫微斗数は、紫微斗数、子平の四柱推命、風水、人相学の星の配置と鑑定を古法にもとづいて提供するサービスです。文化への理解と個人的な参考を目的としています。内容は、資格を持つ金融専門家、医師、弁護士、心理の専門家による助言の<strong>代わりにはなりません</strong>。",
+  "h": "b2e135de"
+ },
+ "disclaimer.xem-them-dieu-khoan-day-du": {
+  "t": "利用規約の全文は<a href=\"/dieu-khoan-dich-vu.html\">利用規約</a>（第2項 — 責任の制限）に、サービスの説明は<a href=\"/san-pham-dich-vu.html\">商品・サービス</a>ページに掲載しています。",
+  "h": "dc202339"
+ },
+ "home.270-000-da-quoc-gia-da": {
+  "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>多国籍</span> <span><span class=\"ic\" data-icon=\"check\"></span>検証済み</span>",
+  "h": "4d77621e"
+ },
+ "home.270-000-ho-so-nguoi-that": {
+  "t": "実在の人物270,000件以上の記録",
+  "h": "95fd04d7"
+ },
+ "home.272-783-nguoi-noi-tieng-tra": {
+  "t": "著名人272,783人。西暦または旧暦で、あなたと同じ日に生まれた人を調べられます。",
+  "h": "cc63016c"
+ },
+ "home.50-cong-cu-tu-vi-tu": {
+  "t": "紫微斗数・四柱推命・相術・風水など、古法にもとづく50のツール。",
+  "h": "a05551fa"
+ },
+ "home.bac-minh": {
+  "t": "Bắc Minh",
+  "h": "85833b15"
+ },
+ "home.bai-viet-kien-thuc": {
+  "t": "記事・基礎知識",
+  "h": "0080f09e"
+ },
+ "home.ban-dang-ban-khoan-dieu-gi": {
+  "t": "今、何が気になっていますか？",
+  "h": "a58b1a75"
+ },
+ "home.bat-tu-ky-mon": {
+  "t": "四柱推命・奇門遁甲",
+  "h": "926e6ab4"
+ },
+ "home.cac-thay": {
+  "t": "先生の一覧",
+  "h": "edb6a720"
+ },
+ "home.cau-hoi-cua-ban": {
+  "t": "あなたの質問",
+  "h": "7027fb1f"
+ },
+ "home.chiem-tinh-tay": {
+  "t": "西洋占星術",
+  "h": "d690a059"
+ },
+ "home.chu-trinh-cuoc-doi": {
+  "t": "人生の<br>サイクル",
+  "h": "fb7add62"
+ },
+ "home.chuan-hoa-da-truong-phai": {
+  "t": "<span><span class=\"ic\" data-icon=\"settings\"></span>標準化</span> <span><span class=\"ic\" data-icon=\"compass\"></span>多流派</span>",
+  "h": "272f53ac"
+ },
+ "home.chuyen-gia-tham-dinh-doi-chieu": {
+  "t": "専門家が一つひとつの鑑定を照らし合わせて、強みと改善点を見つけ、鑑定の精度を高めていきます。",
+  "h": "e78d5a83"
+ },
+ "home.co-nguyet": {
+  "t": "Cổ Nguyệt",
+  "h": "c58a8850"
+ },
+ "home.co-so-du-lieu-la-so": {
+  "t": "信頼できる複数の情報源から集めた、検証済みの命盤と人物伝のデータベース。国・職業・時代も幅広くそろえています。",
+  "h": "bbd6f69e"
+ },
+ "home.con-nguoi-that": {
+  "t": "実在の人々",
+  "h": "aff2ca01"
+ },
+ "home.cong-cu-chinh": {
+  "t": "主なツール",
+  "h": "fac531f0"
+ },
+ "home.cong-tu-vi-tu-binh-tuong": {
+  "t": "紫微斗数・四柱推命・相術・風水を古法で読み解くポータル。50のツールで、命盤の鑑定、人相、風水、命名、吉日選び、カード占いまで。命を知り、時勢に順って歩む。",
+  "h": "82308774"
+ },
+ "home.dai-van-chu-trinh-cuoc-doi": {
+  "t": "大運と人生のサイクル",
+  "h": "ecf72ecb"
+ },
+ "home.dang-hoat-dong": {
+  "t": "稼働中",
+  "h": "9a616fcd"
+ },
+ "home.dat-ten-day-con": {
+  "t": "命名・子育て",
+  "h": "6cd11a12"
+ },
+ "home.dau-nam": {
+  "t": "Đẩu Nam",
+  "h": "ecb2ae80"
+ },
+ "home.dien-giai": {
+  "t": "解釈",
+  "h": "3b2f4ff5"
+ },
+ "home.dien-giai-ban-luan-giai-hoan": {
+  "t": "完成した鑑定書を読み解く",
+  "h": "7e131aa8"
+ },
+ "home.dien-tuong-xem-tuong-mat": {
+  "t": "面相<br>顔相を見る",
+  "h": "e690108d"
+ },
+ "home.dieu-khong": {
+  "t": "Diệu Không",
+  "h": "3bfd70d7"
+ },
+ "home.doc-ngay": {
+  "t": "今すぐ読む →",
+  "h": "1b834375"
+ },
+ "home.doi-chieu": {
+  "t": "照合",
+  "h": "33052de8"
+ },
+ "home.doi-chieu-thuc-nghiem": {
+  "t": "実例との照合",
+  "h": "7e7c45fd"
+ },
+ "home.doi-chieu-voi-cuoc-doi-thuc": {
+  "t": "実際の人生と照らし合わせる",
+  "h": "4e7d2108"
+ },
+ "home.du-lieu": {
+  "t": "データ",
+  "h": "3460deae"
+ },
+ "home.du-lieu-ho-so-nguoi-that": {
+  "t": "データ — 実在の人物の記録",
+  "h": "30a23f99"
+ },
+ "home.du-lieu-la-so": {
+  "t": "命盤データ",
+  "h": "78d0ef41"
+ },
+ "home.du-lieu-that": {
+  "t": "本物のデータ",
+  "h": "c395689f"
+ },
+ "home.du-lieu-that-con-nguoi-that": {
+  "t": "<span><span class=\"ic\" data-icon=\"shield-check\"></span>本物のデータ</span> <span><span class=\"ic\" data-icon=\"users\"></span>実在の人々</span> <span><span class=\"ic\" data-icon=\"bar-chart-3\"></span>本物の価値</span>",
+  "h": "f0a66482"
+ },
+ "home.gia-tri-that": {
+  "t": "本物の価値",
+  "h": "03db0277"
+ },
+ "home.gui-cau-hoi": {
+  "t": "質問を送る",
+  "h": "c70bc83d"
+ },
+ "home.he-thong-duoc-xay-dung-tu": {
+  "t": "実際のデータと、幾重にも検証を重ねた鑑定プロセスをもとに作られたシステムです。",
+  "h": "c74f7c82"
+ },
+ "home.hoac-mo-thang-la-so-tu": {
+  "t": "または直接開く：<a href=\"/app-luan-giai.html\">紫微斗数の命盤</a><a href=\"/app-bat-tu.html\">四柱推命</a><a href=\"/app-xem-tuoi.html\">夫婦の相性</a><a href=\"/app-ngay-tot.html\">吉日</a><a href=\"/cong-cu\">すべてのツール</a>",
+  "h": "b074e900"
+ },
+ "home.hoc-de-hieu-minh-hieu-nguoi": {
+  "t": "学ぶことで、自分を知り、人を知り、世を知る。",
+  "h": "c0f3d234"
+ },
+ "home.hoi-nhanh-phan-bien": {
+  "t": "気軽に質問、率直に問い返す",
+  "h": "2b657843"
+ },
+ "home.hoi-thu-mien-phi-khong-can": {
+  "t": "ログイン不要、無料でお試し質問",
+  "h": "30b1a80d"
+ },
+ "home.hop-tac-lam-an": {
+  "t": "ビジネス<br>パートナー",
+  "h": "f45234a9"
+ },
+ "home.huan-luyen-va-hieu-chinh-lien": {
+  "t": "継続的な学習と調整",
+  "h": "462ae593"
+ },
+ "home.huyen-khong": {
+  "t": "Huyền Không",
+  "h": "664fa5b2"
+ },
+ "home.ke-cho-thay-nghe-cau-hoi": {
+  "t": "先生にお話しください。ご質問は、15人の先生の中から担当の先生へ届きます。先生ごとに専門が異なり、あなただけの命盤にもとづいて鑑定します。",
+  "h": "3fc18d48"
+ },
+ "home.kham-pha-ngay": {
+  "t": "今すぐ探す →",
+  "h": "5153c059"
+ },
+ "home.kham-pha-them": {
+  "t": "さらに探す",
+  "h": "06716651"
+ },
+ "home.khi-sac-van-khi-ngan-han": {
+  "t": "気色<br>短期の運気",
+  "h": "6a8e3830"
+ },
+ "home.khoa-hoc-co-hoc-thuc-tien": {
+  "t": "科学 × 古法 × 実践",
+  "h": "6c92d2a4"
+ },
+ "home.khoi-tao-mo-hinh": {
+  "t": "モデルの初期化",
+  "h": "aea081f5"
+ },
+ "home.kinh-dich-mai-hoa": {
+  "t": "易経・梅花易数",
+  "h": "2da7c604"
+ },
+ "home.la-so": {
+  "t": "命盤",
+  "h": "685adfe6"
+ },
+ "home.la-so-da-doi-chieu": {
+  "t": "照合済みの命盤",
+  "h": "019936ff"
+ },
+ "home.la-so-nguoi-noi-tieng": {
+  "t": "著名人の命盤",
+  "h": "4f1a9c05"
+ },
+ "home.la-so-tinh-san-theo-ngay": {
+  "t": "生年月日ごとにあらかじめ計算した命盤。1960〜2026年を網羅しています。",
+  "h": "31d823a9"
+ },
+ "home.la-so-tu-vi-theo-co": {
+  "t": "古法による紫微斗数の命盤",
+  "h": "3afb6ceb"
+ },
+ "home.lap-la-so-theo-cac-phuong": {
+  "t": "正統的な手法で命盤を作成し、データ処理と情報の標準化を経て、鑑定のたたき台まで作ります。",
+  "h": "51e2862c"
+ },
+ "home.lap-la-so-theo-co-phap": {
+  "t": "古法で命盤を作る",
+  "h": "cef5dbf2"
+ },
+ "home.linh-co": {
+  "t": "Linh Cơ",
+  "h": "530b426b"
+ },
+ "home.linh-son": {
+  "t": "Linh Sơn",
+  "h": "2a6f2364"
+ },
+ "home.luan-giai-la-so": {
+  "t": "命盤<br>鑑定",
+  "h": "a7be39ef"
+ },
+ "home.luot-hoi-hom-nay": {
+  "t": "今日の質問数",
+  "h": "565415a7"
+ },
+ "home.moi-thay-phu-trach-mot-mon": {
+  "t": "先生は一人ひとり専門分野を受け持ち、その分野のツールを監修しています。ご質問には、その分野の担当の先生がお答えします。",
+  "h": "843f67a7"
+ },
+ "home.nam-sau-toi-cuoi-duoc-khong": {
+  "t": "<a class=\"ask-chip\" href=\"/app?q=N%C4%83m%20sau%20t%C3%B4i%20c%C6%B0%E1%BB%9Bi%20%C4%91%C6%B0%E1%BB%A3c%20kh%C3%B4ng%3F&amp;thay=dau-nam&amp;laso=1#chat\">来年、結婚できるでしょうか？</a> <a class=\"ask-chip\" href=\"/app?q=Ti%E1%BB%81n%20b%E1%BA%A1c%20n%C4%83m%20t%E1%BB%9Bi%20c%E1%BB%A7a%20t%C3%B4i%20ra%20sao%3F&amp;thay=dieu-khong&amp;laso=1#chat\">来年の金運はどうなりますか？</a> <a class=\"ask-chip\" href=\"/app?q=Th%C3%A1ng%20n%C3%A0o%20t%E1%BB%91t%20%C4%91%E1%BB%83%20chuy%E1%BB%83n%20nh%C3%A0%3F&amp;thay=nhat-nguyen#chat\">引っ越しにいい月はいつですか？</a> <a class=\"ask-chip\" href=\"/app?q=%C4%90%E1%BA%B7t%20t%C3%AAn%20con%20th%E1%BA%BF%20n%C3%A0o%20cho%20h%E1%BB%A3p%20m%E1%BB%87nh%3F&amp;thay=thien-an#chat\">子どもの名前は、どうつければ命に合いますか？</a>",
+  "h": "aa3a5362"
+ },
+ "home.nghiem-chung-la-so-doi-chieu": {
+  "t": "検証 — 命盤と実人生の照合",
+  "h": "bef98605"
+ },
+ "home.ngoc-tinh": {
+  "t": "Ngọc Tinh",
+  "h": "448babdb"
+ },
+ "home.nguoi-co-gio-sinh-kiem-chung": {
+  "t": "出生時刻が確認できている人物について、命盤が語ること、実人生で起きたこと。合った点も外れた点も、出典付きで包み隠さず記しています。",
+  "h": "899c57e7"
+ },
+ "home.nguoi-noi-tieng-sinh-gio-nao": {
+  "t": "著名人は何時に生まれた？",
+  "h": "58f8e876"
+ },
+ "home.nhan-tuong-xem-tuong-mat": {
+  "t": "眼相<br>目を見る",
+  "h": "3e8f9b9f"
+ },
+ "home.nhat-nguyen": {
+  "t": "Nhật Nguyên",
+  "h": "d1c0b144"
+ },
+ "home.nhom-chuyen-gia-cap-nhat-lien": {
+  "t": "<span><span class=\"ic\" data-icon=\"users\"></span>専門家チーム</span> <span><span class=\"ic\" data-icon=\"rotate-cw\"></span>継続的に更新</span>",
+  "h": "e1f4697b"
+ },
+ "home.nhom-minh-bao": {
+  "t": "<b>— 明宝チーム</b>",
+  "h": "b95ce2c2"
+ },
+ "home.phan-tich-thong-ke-do-muc": {
+  "t": "<span><span class=\"ic\" data-icon=\"bar-chart-3\"></span>統計分析</span> <span><span class=\"ic\" data-icon=\"clock\"></span>的中度の測定</span>",
+  "h": "e70f45f5"
+ },
+ "home.phong-thuy": {
+  "t": "風水",
+  "h": "181a3d4e"
+ },
+ "home.phong-thuy-ung-dung": {
+  "t": "実践<br>風水",
+  "h": "9f229fe2"
+ },
+ "home.phuong-phap-luan-giai": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span>鑑定の手法",
+  "h": "a5d37a27"
+ },
+ "home.quy-trinh-xu-ly-du-lieu": {
+  "t": "<span class=\"dna-process-label\"><span class=\"ic\" data-icon=\"circle-dot\"></span>データ処理のプロセス</span> <span class=\"dna-process-label muted\">実際のデータから、活かせる知恵へ</span>",
+  "h": "106123c0"
+ },
+ "home.so-khop-voi-cuoc-doi-thuc": {
+  "t": "実際の人生との突き合わせ",
+  "h": "c9f085e1"
+ },
+ "home.so-sanh-doi-chieu-giua-du": {
+  "t": "予測と実際の人生の展開を比べ、ルールごと・生活分野ごとに的中度を測ります。",
+  "h": "ea41eb69"
+ },
+ "home.son-tung-my-tam-cong-phuong": {
+  "t": "出生時刻が公表されていない著名人でも、12通りの命盤をすべて作成。どの時刻が人生といちばん合うかを確かめられます。",
+  "h": "b43e058e"
+ },
+ "home.su-nghiep-canh-tranh-nhan-mach": {
+  "t": "競争とキャリア・人脈",
+  "h": "7d7b2cf0"
+ },
+ "home.su-nghiep-tien-bac": {
+  "t": "仕事・お金",
+  "h": "5bdd0199"
+ },
+ "home.tam-kinh": {
+  "t": "Tâm Kính",
+  "h": "8c71a393"
+ },
+ "home.tarot-than-so": {
+  "t": "タロット・数秘術",
+  "h": "8cd4677e"
+ },
+ "home.thai-hu": {
+  "t": "Thái Hư",
+  "h": "8164408e"
+ },
+ "home.tham-dinh": {
+  "t": "精査",
+  "h": "556780a9"
+ },
+ "home.tham-dinh-do-phu-hop": {
+  "t": "的中度の精査",
+  "h": "3d08fd55"
+ },
+ "home.tham-dinh-toi-uu": {
+  "t": "精査と最適化",
+  "h": "edd901ea"
+ },
+ "home.than-so-hoc": {
+  "t": "数秘<br>術",
+  "h": "fbfd5ac0"
+ },
+ "home.thanh-hu": {
+  "t": "Thanh Hư",
+  "h": "0fae72f2"
+ },
+ "home.thanh-tuong-xem-giong-noi": {
+  "t": "声相<br>声を見る",
+  "h": "9b94abc0"
+ },
+ "home.thay-bac-minh": {
+  "t": "Bắc Minh 先生",
+  "h": "8765f978"
+ },
+ "home.thay-co-nguyet": {
+  "t": "Cổ Nguyệt 先生",
+  "h": "5c3beeeb"
+ },
+ "home.thay-dau-nam": {
+  "t": "Đẩu Nam 先生",
+  "h": "0e892f56"
+ },
+ "home.thay-dieu-khong": {
+  "t": "Diệu Không 先生",
+  "h": "f334056f"
+ },
+ "home.thay-huyen-khong": {
+  "t": "Huyền Không 先生",
+  "h": "ebc2e8ff"
+ },
+ "home.thay-linh-co": {
+  "t": "Linh Cơ 先生",
+  "h": "78e55359"
+ },
+ "home.thay-linh-son": {
+  "t": "Linh Sơn 先生",
+  "h": "490f9de0"
+ },
+ "home.thay-ngoc-tinh": {
+  "t": "Ngọc Tinh 先生",
+  "h": "7a5e8a22"
+ },
+ "home.thay-nhat-nguyen": {
+  "t": "Nhật Nguyên 先生",
+  "h": "0f6eeeb3"
+ },
+ "home.thay-tam-kinh": {
+  "t": "Tâm Kính 先生",
+  "h": "e5eb3f74"
+ },
+ "home.thay-thai-hu": {
+  "t": "Thái Hư 先生",
+  "h": "dd91916e"
+ },
+ "home.thay-thai-hu-tiep-chuyen-nhom": {
+  "t": "<b>Thái Hư 先生</b>がお相手します · 明宝チーム",
+  "h": "3e53d65c"
+ },
+ "home.thay-thanh-hu": {
+  "t": "Thanh Hư 先生",
+  "h": "adc0bcd0"
+ },
+ "home.thay-thien-an": {
+  "t": "Thiên Ẩn 先生",
+  "h": "92670874"
+ },
+ "home.thay-tinh-quang": {
+  "t": "Tinh Quang 先生",
+  "h": "3ccb5f21"
+ },
+ "home.thay-tu-nguyen": {
+  "t": "Tử Nguyên 先生",
+  "h": "a3df444c"
+ },
+ "home.thien-an": {
+  "t": "Thiên Ẩn",
+  "h": "cdd32e9c"
+ },
+ "home.thu-tuong-xem-chi-tay": {
+  "t": "手相<br>手相を見る",
+  "h": "7abfb95d"
+ },
+ "home.thu-vien-100-000-la-so": {
+  "t": "命盤ライブラリ 100,000件以上",
+  "h": "65b5c446"
+ },
+ "home.tinh-duyen-hon-nhan": {
+  "t": "恋愛・結婚",
+  "h": "d5d3d4ea"
+ },
+ "home.tinh-quang": {
+  "t": "Tinh Quang",
+  "h": "738207ad"
+ },
+ "home.toi-uu": {
+  "t": "最適化",
+  "h": "323d961e"
+ },
+ "home.toi-uu-mo-hinh-luan-giai": {
+  "t": "鑑定モデルの最適化",
+  "h": "dbeada75"
+ },
+ "home.tra-cuu-ngay": {
+  "t": "今すぐ調べる →",
+  "h": "8651db0c"
+ },
+ "home.tu-binh-bat-tu": {
+  "t": "子平<br>四柱推命",
+  "h": "4d842bd3"
+ },
+ "home.tu-lieu-co-hoc": {
+  "t": "古典資料",
+  "h": "020c441d"
+ },
+ "home.tu-nguyen": {
+  "t": "Tử Nguyên",
+  "h": "e02fc21d"
+ },
+ "home.tu-vi-cong-so-hn": {
+  "t": "紫微斗数<br>職場・結婚",
+  "h": "b9a4d1f6"
+ },
+ "home.tu-vi-goc-luan-giai": {
+  "t": "紫微斗数の基本と鑑定",
+  "h": "1598de62"
+ },
+ "home.tu-vi-la-ngon-den-nho": {
+  "t": "「紫微斗数は小さな灯火。耳を傾ける人の足もとを照らします。」",
+  "h": "9c806662"
+ },
+ "home.tu-vi-minh-bao-cong-menh": {
+  "t": "明宝紫微斗数 — 命理ポータル・古法ツール50種",
+  "h": "4e8e12be"
+ },
+ "home.tu-vi-minh-bao-cong-menh-b1dq": {
+  "t": "明宝紫微斗数 — 命理ポータル",
+  "h": "a9683d2d"
+ },
+ "home.tu-vi-nghiem-chung": {
+  "t": "紫微斗数 検証",
+  "h": "be800e66"
+ },
+ "home.tu-vi-tu-binh-tuong-so": {
+  "t": "紫微斗数・四柱推命・相術・風水を古法で。あなたのための鑑定。",
+  "h": "23ad0d51"
+ },
+ "home.tuong-hop-duyen-no": {
+  "t": "相性・縁",
+  "h": "31909263"
+ },
+ "home.van-han-12-thang-toi": {
+  "t": "運勢<br>今後12か月",
+  "h": "4940088c"
+ },
+ "home.van-ngan-han-chon-ngay": {
+  "t": "短期の運勢・日選び",
+  "h": "8b090af4"
+ },
+ "home.vi-du-nam-toi-toi-co": {
+  "t": "例：来年、会社を辞めて独立したほうがいいでしょうか？",
+  "h": "36855997"
+ },
+ "home.xac-dinh-gio-sinh": {
+  "t": "出生時刻を特定する →",
+  "h": "5122b0fd"
+ },
+ "home.xac-dinh-gio-sinh-632h": {
+  "t": "出生時刻<br>の特定",
+  "h": "0a488c7a"
+ },
+ "home.xem-cac-thay": {
+  "t": "先生方を見る →",
+  "h": "5b56e454"
+ },
+ "home.xem-cach-he-thong-hoat-dong": {
+  "t": "仕組みを見る →",
+  "h": "4d01e2f2"
+ },
+ "home.xem-ho-so": {
+  "t": "記録を見る →",
+  "h": "0739b410"
+ },
+ "home.xem-ngay-tot-xau": {
+  "t": "吉凶日<br>を見る",
+  "h": "7e13c320"
+ },
+ "home.xem-tat-ca": {
+  "t": "すべて見る →",
+  "h": "cc902292"
+ },
+ "home.xem-tuoi-vo-chong": {
+  "t": "夫婦の<br>相性を見る",
+  "h": "af82fa59"
+ },
+ "home.xem-tuong": {
+  "t": "相術",
+  "h": "ae8ee50b"
+ },
+ "js.nav.brand": {
+  "t": "明宝紫微斗数",
+  "h": "33336b26"
+ },
+ "js.nav.cam-nang": {
+  "t": "ガイド",
+  "h": "399e7591"
+ },
+ "js.nav.cau-hoi-thuong-gap": {
+  "t": "よくある質問",
+  "h": "0abbca1b"
+ },
+ "js.nav.cong-cu": {
+  "t": "ツール",
+  "h": "6029ffef"
+ },
+ "js.nav.cong-cu-col": {
+  "t": "ツール",
+  "h": "a601efbf"
+ },
+ "js.nav.cong-ty-tnhh-kira-tech-kira": {
+  "t": "<strong>Công ty TNHH Kira Tech</strong><br><span class=\"dim\">(Kira Tech Company Limited)</span>",
+  "h": "40cbf05c"
+ },
+ "js.nav.contact-tuviminhbao-com-0343-848-795": {
+  "t": "contact@tuviminhbao.com &nbsp;·&nbsp; 0343.848.795",
+  "h": "87ddf85d"
+ },
+ "js.nav.cta-title": {
+  "t": "命盤を作って先生に聞く — ここからツールをお使いください",
+  "h": "14f228d5"
+ },
+ "js.nav.disclaimer": {
+  "t": "鑑定の内容は参考情報であり、専門家による助言に代わるものではありません。",
+  "h": "00521049"
+ },
+ "js.nav.foot-disclaimer": {
+  "t": "免責事項",
+  "h": "9f4943b3"
+ },
+ "js.nav.foot-payment": {
+  "t": "お支払い",
+  "h": "e3dc7276"
+ },
+ "js.nav.foot-privacy": {
+  "t": "プライバシー",
+  "h": "7c3bbe11"
+ },
+ "js.nav.foot-products": {
+  "t": "商品・サービス",
+  "h": "5af2d451"
+ },
+ "js.nav.foot-terms": {
+  "t": "利用規約",
+  "h": "f906694f"
+ },
+ "js.nav.footer-tagline": {
+  "t": "古法にもとづく紫微斗数、じっくり読み解く鑑定。",
+  "h": "c1e39fad"
+ },
+ "js.nav.gioi-thieu": {
+  "t": "紹介",
+  "h": "20855749"
+ },
+ "js.nav.hoi-thay": {
+  "t": "先生に聞く",
+  "h": "c9ffbbaf"
+ },
+ "js.nav.kham-pha": {
+  "t": "探す",
+  "h": "2dcfd93c"
+ },
+ "js.nav.lap-la-so": {
+  "t": "命盤を作る",
+  "h": "3501b515"
+ },
+ "js.nav.lien-he": {
+  "t": "お問い合わせ",
+  "h": "4df839b4"
+ },
+ "js.nav.menh-kho": {
+  "t": "命庫",
+  "h": "2de2772c"
+ },
+ "js.nav.menh-kho-438k-la-so": {
+  "t": "命庫 — 命盤43万8千件",
+  "h": "dbdd9b4f"
+ },
+ "js.nav.ngay-tot": {
+  "t": "吉日",
+  "h": "97ad8226"
+ },
+ "js.nav.ngay-tot-lich-van-nien": {
+  "t": "吉日 — 万年暦",
+  "h": "273eb4fa"
+ },
+ "js.nav.nghiem-chung": {
+  "t": "検証",
+  "h": "e1110fe5"
+ },
+ "js.nav.nghiem-chung-la-so-doi-chieu": {
+  "t": "検証 — 命盤と実人生の照合",
+  "h": "bef98605"
+ },
+ "js.nav.nghien-cuu-tu-vi": {
+  "t": "紫微斗数の研究",
+  "h": "800f1679"
+ },
+ "js.nav.nguoi-noi-tieng": {
+  "t": "著名人",
+  "h": "b79cf3ad"
+ },
+ "js.nav.phong-thuy-qua-anh": {
+  "t": "写真で風水",
+  "h": "366d93c7"
+ },
+ "js.nav.phuong-phap-do-tin-cay": {
+  "t": "手法と信頼性",
+  "h": "c16eaaee"
+ },
+ "js.nav.see-detail": {
+  "t": "詳細を見る",
+  "h": "e30c9371"
+ },
+ "js.nav.sign": {
+  "t": "命を知りて行う — 憂いなく惑いなし",
+  "h": "7dc956c7"
+ },
+ "js.nav.slogan": {
+  "t": "命理を知り、時勢に順って歩む",
+  "h": "ca64e3dc"
+ },
+ "js.nav.tac-gia": {
+  "t": "監修者",
+  "h": "7aa04605"
+ },
+ "js.nav.tat-ca-cong-cu": {
+  "t": "すべてのツール",
+  "h": "ad4553ea"
+ },
+ "js.nav.tat-ca-cong-cu-t5z9": {
+  "t": "すべてのツール",
+  "h": "7ec66d57"
+ },
+ "js.nav.thu-vien": {
+  "t": "ライブラリ",
+  "h": "4d885bf7"
+ },
+ "js.nav.thu-vien-ban-luan-da-chia": {
+  "t": "ライブラリ — 共有された鑑定書",
+  "h": "017d8d21"
+ },
+ "js.nav.toa-nha-master-building-41-43": {
+  "t": "Master Building（41-43 Tran Cao Van）、<br>ホーチミン市 3区 スアンホア坊",
+  "h": "249c141e"
+ },
+ "js.nav.tra-cuu": {
+  "t": "調べる",
+  "h": "735aa839"
+ },
+ "js.nav.tra-cuu-col": {
+  "t": "調べる",
+  "h": "5fce202a"
+ },
+ "js.nav.van-dap": {
+  "t": "Q&A",
+  "h": "eb135e84"
+ },
+ "js.nav.ve-chung-toi": {
+  "t": "私たちについて",
+  "h": "63a47694"
+ },
+ "js.nav.xac-dinh-gio-sinh": {
+  "t": "出生時刻の特定",
+  "h": "2b570401"
+ },
+ "js.nav.xac-dinh-gio-sinh-12-la": {
+  "t": "出生時刻の特定 — 12通りの命盤、どの時刻が合う？",
+  "h": "bbc3388e"
+ },
+ "js.nav.xem-tuong-qua-anh": {
+  "t": "写真で相を見る",
+  "h": "24c4d64e"
  },
  "js.shell.an": {
   "t": "非表示",
@@ -12,11 +924,11 @@
   "h": "7013ca8b"
  },
  "js.shell.cac-luot-hoi-thay-cua-ban": {
-  "t": "師への相談履歴がここに表示されます。",
+  "t": "先生への相談履歴がここに表示されます。",
   "h": "e2617653"
  },
  "js.shell.cac-thay": {
-  "t": "師の一覧",
+  "t": "先生の一覧",
   "h": "edb6a720"
  },
  "js.shell.cong-cu": {
@@ -60,7 +972,7 @@
   "h": "b4d2c650"
  },
  "js.shell.hoi-thay-qua-zalo": {
-  "t": "Zaloで師に相談",
+  "t": "Zaloで先生に相談",
   "h": "b0e9649b"
  },
  "js.shell.hom-nay": {
@@ -76,11 +988,11 @@
   "h": "685adfe6"
  },
  "js.shell.ma-qr-zalo-oa-tu-vi": {
-  "t": "Tử Vi Minh Bảo の Zalo OA QRコード",
+  "t": "明宝紫微斗数の Zalo OA QRコード",
   "h": "99554c71"
  },
  "js.shell.minh-bao": {
-  "t": "Minh Bảo",
+  "t": "明宝",
   "h": "e4158660"
  },
  "js.shell.moi-ban-be": {
@@ -96,7 +1008,7 @@
   "h": "fba04eb9"
  },
  "js.shell.quet-ma-bang-zalo-nhan-cau": {
-  "t": "Zaloでスキャンして質問を送ると、師がすぐに回答します",
+  "t": "Zaloでスキャンして質問を送ると、先生がすぐに回答します",
   "h": "559a993e"
  },
  "js.shell.tat-ca-luot-hoi-thay": {
@@ -127,8 +1039,448 @@
   "t": "すべて見る",
   "h": "7e040254"
  },
+ "laso.2026-tuviminhbao-com-all-rights-reserved": {
+  "t": "© 2026 tuviminhbao.com — All rights reserved",
+  "h": "5772fefb"
+ },
+ "laso.an-sao-la-so-tu-vi": {
+  "t": "紫微斗数の命盤を作る",
+  "h": "05d6f12f"
+ },
+ "laso.an-sao-la-so-tu-vi-98bu": {
+  "t": "紫微斗数の命盤を作成 — 個人の命盤、五行、命宮、大運をご覧いただけます。",
+  "h": "25221382"
+ },
+ "laso.dang-tai-la-so": {
+  "t": "命盤を読み込み中...",
+  "h": "5f237a0e"
+ },
+ "laso.gio": {
+  "t": "時",
+  "h": "75f92388"
+ },
+ "laso.gio-am": {
+  "t": "旧暦の時刻：—",
+  "h": "81d3ed39"
+ },
+ "laso.gioi-thieu": {
+  "t": "紹介",
+  "h": "20855749"
+ },
+ "laso.gioi-tinh": {
+  "t": "性別",
+  "h": "899b020f"
+ },
+ "laso.ho-va-ten": {
+  "t": "お名前",
+  "h": "18d1abe3"
+ },
+ "laso.in-la-so": {
+  "t": "命盤を印刷",
+  "h": "a5ecd89f"
+ },
+ "laso.khao-luan": {
+  "t": "考察",
+  "h": "e8cfaf3b"
+ },
+ "laso.la-so-tu-vi-tu-vi": {
+  "t": "紫微斗数の命盤 — 明宝紫微斗数",
+  "h": "2d400887"
+ },
+ "laso.lay-la-so": {
+  "t": "命盤を出す",
+  "h": "f7781d94"
+ },
+ "laso.lien-he": {
+  "t": "お問い合わせ",
+  "h": "4df839b4"
+ },
+ "laso.luan-giai": {
+  "t": "鑑定 ▾",
+  "h": "423cf9d0"
+ },
+ "laso.luan-giai-la-so-xem-tuoi": {
+  "t": "<a class=\"nav-dropdown-item\" href=\"/app/luan-giai\">命盤の鑑定</a> <a class=\"nav-dropdown-item\" href=\"/app/xem-tuoi\">夫婦の相性</a> <a class=\"nav-dropdown-item\" href=\"/app/xem-lam-an\">ビジネスの相性</a>",
+  "h": "7e6e23ac"
+ },
+ "laso.menh-kho": {
+  "t": "命庫",
+  "h": "2de2772c"
+ },
+ "laso.nam-dl": {
+  "t": "年（西暦）",
+  "h": "4e86c4a2"
+ },
+ "laso.nam-xem": {
+  "t": "鑑定年",
+  "h": "ccc5edbb"
+ },
+ "laso.ngay-dl": {
+  "t": "日（西暦）",
+  "h": "1840a967"
+ },
+ "laso.ngu-hanh-hoa-moc-thuy-kim": {
+  "t": "<strong style=\"color:#555\">五行：</strong> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#E01010\"></span><span class=\"sc-hoa\">火</span></span> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#1a7a1a\"></span><span class=\"sc-moc\">木</span></span> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#111111\"></span><span class=\"sc-thuy\">水</span></span> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#808080\"></span><span class=\"sc-kim\">金</span></span> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#9A7B00\"></span><span class=\"sc-tho\">土</span></span> &nbsp;&nbsp;<strong style=\"color:#555\">輝度：</strong> <span>(M)廟 &nbsp;(V)旺 &nbsp;(Đ)得 &nbsp;(B)平 &nbsp;(H)陥</span>",
+  "h": "98c156e6"
+ },
+ "laso.nguyen-van-a": {
+  "t": "山田 太郎",
+  "h": "7388465b"
+ },
+ "laso.nhap-thong-tin-de-xem-la": {
+  "t": "情報を入力すると命盤が表示されます。個人用リンクからアクセスした場合は、自動的に表示されます。",
+  "h": "3e8b6970"
+ },
+ "laso.nu": {
+  "t": "女性",
+  "h": "feb92ccd"
+ },
+ "laso.phut": {
+  "t": "分",
+  "h": "34ca51a4"
+ },
+ "laso.tai-lieu": {
+  "t": "資料",
+  "h": "475007a2"
+ },
+ "laso.tai-png": {
+  "t": "⬇ PNGで保存",
+  "h": "a5b32ccb"
+ },
+ "laso.thang-dl": {
+  "t": "月（西暦）",
+  "h": "fec10b0f"
+ },
+ "laso.trang-chu": {
+  "t": "ホーム",
+  "h": "fca04858"
+ },
  "laso.tu-vi-minh-bao": {
-  "t": "Tử Vi Minh Bảo",
+  "t": "明宝紫微斗数",
   "h": "33336b26"
+ },
+ "luangiai.an-la-so": {
+  "t": "▾ 命盤を隠す",
+  "h": "9f28e998"
+ },
+ "luangiai.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>鑑定書サンプル</b><span>サンプル命盤の鑑定書（完全版）をPDFでダウンロードして、実際の内容をご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-luan-giai-la-so.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "11d61c50"
+ },
+ "luangiai.bao-cao-cua-ban": {
+  "t": "明宝紫微斗数 · あなたのレポート",
+  "h": "d770e087"
+ },
+ "luangiai.bat-tu": {
+  "t": "四柱推命 →",
+  "h": "f4ece70d"
+ },
+ "luangiai.chuyen-khoan-qua-qr-ngan-hang": {
+  "t": "<span><span class=\"ic\" data-icon=\"qr-code\"></span> 銀行振込（QRコード）</span> <span><span class=\"ic\" data-icon=\"credit-card\"></span> PayPal / 国際カード</span>",
+  "h": "9cf268c0"
+ },
+ "luangiai.cong-viec-bap-benh-tinh-duyen": {
+  "t": "仕事は不安定、恋愛はうまくいかず、お金は出ていくばかり。その根っこは、あなたの命盤のどこにあるのでしょうか？",
+  "h": "68aea2a1"
+ },
+ "luangiai.dang-dong-ban-bao-cao": {
+  "t": "レポートをまとめています…",
+  "h": "d75bc7a8"
+ },
+ "luangiai.dang-dung": {
+  "t": "<span class=\"ic\" id=\"lgBtnPdfIcon\"><span class=\"rr-spin\"></span></span> <span id=\"lgBtnPdfLabel\">作成中…</span>",
+  "h": "f974f165"
+ },
+ "luangiai.diem-manh-yeu-goi-y": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>強みと弱み、<br>アドバイス</span>",
+  "h": "4fcae149"
+ },
+ "luangiai.gui-vao-email": {
+  "t": "メールで送る",
+  "h": "557a13dc"
+ },
+ "luangiai.lap-la-so-luan-giai-ngay": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">命盤を作って今すぐ鑑定 →</b></span> <small>必要クレジット <span class=\"vnd\" data-tvp-price-vnd=\"laso\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"laso\">…</span> 両)</span></small>",
+  "h": "a32c708b"
+ },
+ "luangiai.lap-la-so-tu-vi-12": {
+  "t": "紫微斗数の十二宮の命盤を作り、古法の点数にもとづいて詳しく鑑定します。主星、格局、各宮の四化まで。気になる部分は先生に深く聞くこともできます。",
+  "h": "c423cebd"
+ },
+ "luangiai.luan-giai-tu-vi": {
+  "t": "紫微斗数の鑑定",
+  "h": "19e52bc9"
+ },
+ "luangiai.luan-giai-tu-vi-lap-la": {
+  "t": "<b>紫微斗数の鑑定</b><span>十二宮の命盤を作り、古法の点数で詳しく読み解く</span>",
+  "h": "425b9435"
+ },
+ "luangiai.luan-giai-tu-vi-tu-vi": {
+  "t": "紫微斗数の鑑定 — 明宝紫微斗数",
+  "h": "8fabed33"
+ },
+ "luangiai.luan-rieng-12-cung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>十二宮<br>の個別鑑定</span>",
+  "h": "3b1b8770"
+ },
+ "luangiai.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"laso\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"laso\">…</span> 両)</span>",
+  "h": "633c5ba1"
+ },
+ "luangiai.mua-goi-de-nhan-nhieu-uu": {
+  "t": "パックを購入すると、さらにお得です。<br><a href=\"/topup.html\">パックを見る →</a>",
+  "h": "074cd07f"
+ },
+ "luangiai.nam-muon-luan": {
+  "t": "鑑定したい年",
+  "h": "d0b9d752"
+ },
+ "luangiai.nhap-ho-ten-gioi-tinh-ngay": {
+  "t": "お名前、性別、生年月日・出生時刻と、鑑定したい年を入力してください。システムが自動で星を配置して命盤を作り、項目ごとに鑑定します。全13項目の鑑定書をお届けします：総合運と十二宮それぞれの個別鑑定。",
+  "h": "32be95f6"
+ },
+ "luangiai.nhap-thong-tin-de-lap-la": {
+  "t": "情報を入力して命盤を作成・鑑定",
+  "h": "f0b42f7c"
+ },
+ "luangiai.tong-quan-cuoc-doi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>人生の<br>総合運</span>",
+  "h": "dd3effb3"
+ },
+ "luangiai.tra-loi-thay-o-khung-chat": {
+  "t": "チャット欄で先生に答えて命盤を作成・鑑定しましょう。お名前、生年月日・出生時刻、鑑定したい年をお知らせください。",
+  "h": "14557bde"
+ },
+ "luangiai.tu-vi-dau-so-la-mot": {
+  "t": "紫微斗数は、中国に古くから伝わる命理学の一つです。旧暦の出生時刻をもとに十二宮の命盤を立て、命に作用する主星・副星の体系で読み解きます。何世代にもわたって体系化され、ベトナムでは Vân Đằng Thái Thứ Lang 訳の<i>『紫微斗数新編』</i>を通じて広まりました。",
+  "h": "81546c5f"
+ },
+ "luangiai.tu-vi-khong-du-doan-tuong": {
+  "t": "紫微斗数は未来を言い当てるものではなく、自分を知って、よりよい選択をするための手がかりです。",
+  "h": "ae92de9d"
+ },
+ "privacy.1-thong-tin-chung-toi-thu": {
+  "t": "1. 収集する情報",
+  "h": "5354d2ca"
+ },
+ "privacy.2-muc-dich-su-dung-thong": {
+  "t": "2. 情報の利用目的",
+  "h": "ffc0ab3d"
+ },
+ "privacy.3-chia-se-thong-tin": {
+  "t": "3. 情報の共有",
+  "h": "d7212459"
+ },
+ "privacy.4-bao-mat-du-lieu": {
+  "t": "4. データの保護",
+  "h": "ecf83407"
+ },
+ "privacy.5-quyen-cua-ban-xem-sua": {
+  "t": "5. お客様の権利 — データの閲覧・訂正・削除",
+  "h": "e5778544"
+ },
+ "privacy.6-cookie": {
+  "t": "6. Cookie",
+  "h": "b0874718"
+ },
+ "privacy.7-lien-he": {
+  "t": "7. お問い合わせ",
+  "h": "3a96153f"
+ },
+ "privacy.an-sao-va-tao-la-so": {
+  "t": "紫微斗数の星の配置と命盤の作成",
+  "h": "88fe3cad"
+ },
+ "privacy.ban-co-quyen-yeu-cau-xem": {
+  "t": "お客様は、Facebook MessengerやZalo経由で受け取ったデータを含め、ご自身の個人データの閲覧、訂正、削除を請求する権利があります。<a href=\"/contact.html\" style=\"color:#1455A4\">お問い合わせ</a>ページからご請求ください（チャットチャネルをご利用の場合は、FacebookまたはZaloのアカウント名も併せてご記入ください）。お客様に紐づくアカウント、命盤、チャット履歴、チャットアカウントの識別子を削除し、完了後にご連絡します。",
+  "h": "584c6ef3"
+ },
+ "privacy.cai-thien-chat-luong-dich-vu": {
+  "t": "サービス品質の向上",
+  "h": "9e0df8b2"
+ },
+ "privacy.cap-nhat-lan-cuoi-thang-10": {
+  "t": "最終更新：2026年10月",
+  "h": "d49afd39"
+ },
+ "privacy.chinh-sach-bao-mat": {
+  "t": "プライバシーポリシー",
+  "h": "863b2217"
+ },
+ "privacy.chinh-sach-bao-mat-cua-tu": {
+  "t": "明宝紫微斗数のプライバシーポリシー — 個人情報の収集、利用、保護の方法について。",
+  "h": "8e83535e"
+ },
+ "privacy.chinh-sach-bao-mat-tu-vi": {
+  "t": "プライバシーポリシー — 明宝紫微斗数",
+  "h": "12c793c2"
+ },
+ "privacy.chung-toi-khong-ban-cho-thue": {
+  "t": "当社は、お客様の個人情報を第三者に販売、貸与、共有することはありません。ただし、サービスの運営に必要な技術インフラの提供事業者には、各事業者それぞれのプライバシーポリシーに従って情報が取り扱われます：",
+  "h": "e7ba913a"
+ },
+ "privacy.cong-thanh-toan-chuyen-khoan-ngan": {
+  "t": "決済サービス（銀行振込、PayPal）— 取引の処理",
+  "h": "862873b7"
+ },
+ "privacy.dia-chi-email-neu-co-dung": {
+  "t": "メールアドレス（ご入力の場合）— 結果のお届けやご連絡に使用",
+  "h": "e64d230a"
+ },
+ "privacy.du-lieu-la-so-duoc-luu": {
+  "t": "命盤のデータは、暗号化されたクラウドインフラ上に安全に保管されます。決済情報は第三者の決済サービスで完全に処理され、当社がカード番号などの機微な金融情報を保存することはありません。",
+  "h": "f5eb2733"
+ },
+ "privacy.du-lieu-truy-cap-ky-thuat": {
+  "t": "技術的なアクセスデータ（IPアドレス、ブラウザ、アクセス日時）— 匿名のアクセス解析ツールを通じて取得",
+  "h": "f1aa200a"
+ },
+ "privacy.khi-ban-nhan-tin-qua-facebook": {
+  "t": "Facebook MessengerまたはZaloでメッセージを送られた場合：各プラットフォームが当社ページに対して発行するチャットアカウントの識別子、アカウントの公開表示名、お送りいただいたメッセージの内容。返信、ご自身の命盤への名前の記載、tuviminhbao.comのアカウントとの連携に使用します",
+  "h": "f83117af"
+ },
+ "privacy.khi-ban-su-dung-dich-vu": {
+  "t": "tuviminhbao.comで紫微斗数の星の配置や鑑定をご利用の際、以下の情報を収集することがあります：",
+  "h": "360aa217"
+ },
+ "privacy.khi-co-yeu-cau-phap-ly": {
+  "t": "権限のある機関から法的な要請があった場合",
+  "h": "46937409"
+ },
+ "privacy.meta-facebook-khi-ban-den-tu": {
+  "t": "Meta（Facebook）— Messenger経由でご来訪のうえサービスをご購入いただいた場合、広告効果の測定のため、購入イベント（注文金額とチャットアカウントの識別子）をMetaに通知します。メッセージの内容や生年月日・出生時刻は送信しません",
+  "h": "808834a4"
+ },
+ "privacy.moi-thac-mac-ve-chinh-sach": {
+  "t": "プライバシーポリシーに関するご質問は、<a href=\"/contact.html\" style=\"color:#1455A4\">お問い合わせ</a>ページからご連絡ください。",
+  "h": "868d3ffe"
+ },
+ "privacy.ngay-thang-nam-sinh-va-gio": {
+  "t": "生年月日と出生時刻（西暦）— 命盤の星の配置に使用",
+  "h": "313ab68a"
+ },
+ "privacy.nha-cung-cap-dich-vu-tri": {
+  "t": "人工知能サービスの提供事業者 — 鑑定文の生成処理",
+  "h": "8b6ed45d"
+ },
+ "privacy.nha-cung-cap-ha-tang-luu": {
+  "t": "クラウドデータ保管インフラの提供事業者 — アカウントと命盤の保管",
+  "h": "48f8c99c"
+ },
+ "privacy.phap-ly": {
+  "t": "法務",
+  "h": "1780af9e"
+ },
+ "privacy.tao-luan-giai-bang-tri-tue": {
+  "t": "人工知能による鑑定文の生成とPDFの書き出し",
+  "h": "4dbbe1ba"
+ },
+ "privacy.thong-tin-ban-cung-cap-duoc": {
+  "t": "ご提供いただいた情報は、次の目的で利用します：",
+  "h": "7658d5a9"
+ },
+ "privacy.thong-tin-giao-dich-thanh-toan": {
+  "t": "決済取引情報（注文番号、決済状況）— カード番号や銀行口座の情報は保存しません",
+  "h": "9a6e6249"
+ },
+ "privacy.trang-web-su-dung-localstorage-de": {
+  "t": "当サイトは、セッション中の命盤の状態を一時的に保存するためにlocalStorageを使用します。また、アクセス数の集計、広告効果の測定、画面の改善のため、Google Analytics、Google Ads、Meta（Facebook）Pixel、Microsoft Clarityのcookieと計測タグを使用します。cookieはブラウザの設定でブロックまたは削除できます。その場合でも、星の配置や鑑定のツールは通常どおりご利用いただけます。",
+  "h": "ad439412"
+ },
+ "privacy.xac-minh-trang-thai-thanh-toan": {
+  "t": "決済状況の確認と結果のご提供",
+  "h": "84a1b3b2"
+ },
+ "terms.1-tinh-chat-dich-vu": {
+  "t": "1. サービスの性質",
+  "h": "7fb94895"
+ },
+ "terms.2-gioi-han-trach-nhiem": {
+  "t": "2. 責任の制限",
+  "h": "9a8d7f3a"
+ },
+ "terms.3-thanh-toan-va-hoan-tien": {
+  "t": "3. お支払いと返金",
+  "h": "8ec2a944"
+ },
+ "terms.4-quyen-so-huu-tri-tue": {
+  "t": "4. 知的財産権",
+  "h": "4c72783a"
+ },
+ "terms.5-hanh-vi-bi-cam": {
+  "t": "5. 禁止事項",
+  "h": "c088ae99"
+ },
+ "terms.6-thay-doi-dieu-khoan": {
+  "t": "6. 規約の変更",
+  "h": "b77fb69c"
+ },
+ "terms.bang-viec-su-dung-dich-vu": {
+  "t": "tuviminhbao.comのサービスをご利用になることで、以下の規約に同意したものとみなします。ご利用の前によくお読みください。",
+  "h": "84c3073e"
+ },
+ "terms.cap-nhat-lan-cuoi-thang-9": {
+  "t": "最終更新：2026年9月",
+  "h": "8f1c24b0"
+ },
+ "terms.chung-toi-co-quyen-cap-nhat": {
+  "t": "当社は、本規約をいつでも更新することがあります。最新版は常に本ページに掲載します。更新後もサービスを引き続きご利用の場合、新しい規約に同意したものとみなします。",
+  "h": "a7a3e1fa"
+ },
+ "terms.co-tinh-cung-cap-thong-tin": {
+  "t": "サービスを不正に利用する目的で、故意に虚偽の情報を提供すること",
+  "h": "05f1e2a5"
+ },
+ "terms.dieu-khoan-dich-vu": {
+  "t": "利用規約",
+  "h": "c021f7f4"
+ },
+ "terms.dieu-khoan-dich-vu-tu-vi": {
+  "t": "利用規約 — 明宝紫微斗数",
+  "h": "b2e2011a"
+ },
+ "terms.dieu-khoan-su-dung-dich-vu": {
+  "t": "明宝紫微斗数のサービス利用規約 — 紫微斗数の星の配置・鑑定サービスをご利用いただく際の権利、義務、各種規定。",
+  "h": "eab80530"
+ },
+ "terms.do-tinh-chat-so-cua-dich": {
+  "t": "デジタルサービスという性質上、結果が表示された後の<strong>返金はいたしません</strong>",
+  "h": "cc224df0"
+ },
+ "terms.ket-qua-luan-giai-do-ai": {
+  "t": "鑑定結果は、古典的な紫微斗数の体系にもとづきAIが生成したものです。鑑定の絶対的な正確性を保証するものではありません。鑑定内容にもとづくご自身の判断については、ご利用者ご自身が責任を負うものとします。",
+  "h": "dbc3d39d"
+ },
+ "terms.moi-thac-mac-ve-dieu-khoan": {
+  "t": "規約に関するご質問は、<a href=\"/contact.html\" style=\"color:#1455A4\">お問い合わせ</a>ページからご連絡ください。",
+  "h": "2a193121"
+ },
+ "terms.neu-co-loi-ky-thuat-khien": {
+  "t": "技術的な不具合により、お支払い後に結果をお受け取りいただけなかった場合は、サポートまでご連絡ください",
+  "h": "06df4e64"
+ },
+ "terms.phi-dich-vu-duoc-thanh-toan": {
+  "t": "サービス料金は、ベトナムドンでの銀行振込（QRコード）またはPayPal（Visa/Mastercardの国際カード）による一括払いです",
+  "h": "c2988cbb"
+ },
+ "terms.reverse-engineer-hoac-sao-chep-he": {
+  "t": "星の配置システムのリバースエンジニアリング、または複製",
+  "h": "57bda3e3"
+ },
+ "terms.sau-khi-thanh-toan-thanh-cong": {
+  "t": "お支払いが完了すると、鑑定結果はすぐにご覧いただけます",
+  "h": "b895e2c9"
+ },
+ "terms.su-dung-bot-hoac-phuong-tien": {
+  "t": "ボットや自動化された手段による大量アクセス",
+  "h": "49c0c0e8"
+ },
+ "terms.toan-bo-noi-dung-tren-tuviminhbao": {
+  "t": "tuviminhbao.comのすべてのコンテンツ（星の配置システム、画面デザイン、考察記事）は、明宝紫微斗数に帰属します。許可なく複製、配布、商用利用することを固く禁じます。",
+  "h": "9ea6e6d2"
+ },
+ "terms.tu-vi-minh-bao-cung-cap": {
+  "t": "明宝紫微斗数は、ご利用者が入力した生年月日・出生時刻にもとづき、紫微斗数の星の配置と、人工知能（AI）による鑑定を提供します。本サービスは文化的・学術的な参考情報であり、<strong>金融、医療、法律に関する助言ではありません</strong>。",
+  "h": "40549518"
  }
 }
