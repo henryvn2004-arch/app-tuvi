@@ -219,8 +219,17 @@ const conViet = (t) =>
 // Số: bỏ dấu phân nghìn (450.000 / 450,000 → 450000), dấu thập phân phẩy → chấm, và bản dịch được viết 万/억 thì cũng tính số khai triển (45万 = 450000).
 const chuan = (x) => x.replace(/(\d)[.,](?=\d{3}(?!\d))/g, '$1').replace(/(\d),(\d)/g, '$1.$2');
 const nums = (s) => chuan(s).match(/\d+(?:\.\d+)?/g) || [];
+// Bản en viết tháng bằng chữ ("June 14, 2022"): tên tháng tiếng Anh tính là số tháng, kẻo "tháng 6" bị báo mất số 6.
+const THANG_EN =
+  'january february march april may june july august september october november december'.split(
+    ' '
+  );
 const numsDich = (t) => {
   const out = nums(t);
+  for (const w of t.toLowerCase().match(/[a-z]+/g) || []) {
+    const i = THANG_EN.indexOf(w);
+    if (i >= 0) out.push(String(i + 1));
+  }
   for (const m of chuan(t).matchAll(/(\d+(?:\.\d+)?)\s*(万|萬|만|億|亿|억)/gu))
     out.push(String(Number(m[1]) * (/[万萬만]/u.test(m[2]) ? 1e4 : 1e8)));
   return out;
