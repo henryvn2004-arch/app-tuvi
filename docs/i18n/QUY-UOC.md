@@ -32,6 +32,12 @@ npm run i18n:save -- --locale ja --file lo.json      # {"khoá":"bản dịch"} 
 ## Route tự dịch từ DB (tự quản SEO)
 Route tự render đúng ngôn ngữ và tự xuất robots/canonical/hreflang theo từng bản ghi (hiện: `/nghiem-chung`, `/xac-dinh-gio-sinh`) đăng ký ở **`lib/i18n/self-managed.mjs`** (`SELF_MANAGED_PREFIXES`, một chỗ duy nhất). Với `/<locale>/<prefix>…` proxy bóc tiền tố + gắn `x-tvmb-locale` rồi rewrite THẲNG tới route, KHÔNG qua `i18n-render`, KHÔNG noindex tự động; route đọc `localeFromHeaders()` và tự quyết (bản chưa dịch → 404). Các prefix này không nằm trong `availability.json`; `check:i18n` cấm đăng ký chồng.
 
+## Trang chỉ MỘT ngôn ngữ
+Trang không có bản dịch và không có bản vi (vd `public/tokushoho.html`, tiếng Nhật) đăng ký ở `lib/i18n/single-locale.mjs` (`SINGLE_LOCALE_PAGES`) **và** tự khai `<meta name="tvmb-single-locale" content="ja">`. Proxy: `/ja/<path>` phục vụ nguyên file (trang tự lo canonical/robots; không chèn hreflang), `/en/<path>` → 404, `/<path>` không tiền tố → 308 về `/ja/<path>`. Không vào `availability.json` ⇒ không hreflang chéo, không lên sitemap ngôn ngữ khác. Link nội bộ từ trang đã dịch trỏ thẳng bản có tiền tố. `check:i18n` soi hai chiều (meta ↔ danh sách) và cấm trang này có `data-i18n`.
+
+## Ngôn ngữ lúc đăng ký
+`public/auth.js` gắn ngôn ngữ hiện tại (tiền tố URL, rồi cookie `tvmb_locale`) vào **`user_metadata.locale`** (`data.locale` của body `POST /auth/v1/signup` và `PUT /auth/v1/user` của `claimAccount`) để email/hoá đơn đúng ngôn ngữ. Không biết ngôn ngữ ⇒ không gửi trường (như cũ). Đăng nhập Google/Facebook và phiên ẩn danh KHÔNG mang trường này (OAuth không cho truyền metadata) — bên gửi email nên rơi về bảng `user_locale` của W11 rồi mới về tiếng Việt. Bump `auth.js?v=` khi đổi.
+
 ## Dành cho W6 / W8
 - Route SSR/handler đọc ngôn ngữ qua `localeFromHeaders(req.headers)` — proxy đã gắn header, nhưng trang SSR (không phải HTML tĩnh) hiện chỉ được phục vụ dưới `/<locale>/…` ở dạng `noindex` (không có khoá data-i18n) cho tới khi tự chịu trách nhiệm bản dịch. Muốn index: render sẵn chữ đúng ngôn ngữ trong route VÀ đăng ký trang (đưa vào `availability`) — trao đổi với W4.
 - Prompt LLM: câu chỉ định ngôn ngữ đặt ở USER message (giữ cache `cachedSystemFor`).
