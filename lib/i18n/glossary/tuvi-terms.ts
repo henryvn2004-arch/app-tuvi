@@ -26,7 +26,9 @@
 export type TermKind =
   | 'cung' | 'chinh' | 'sao' | 'tuhoa' | 'sang' | 'cuc' | 'hanh' | 'khai'
   // W15b — ngoài Tử Vi: nạp âm 30 cặp, Kỳ Môn, Lục Nhâm, Hoàng Lịch (Kim Lâu…), Bát Trạch, tướng pháp, Mai Hoa.
-  | 'napam' | 'kymon' | 'lucnham' | 'lich' | 'battrach' | 'tuong' | 'maihoa';
+  | 'napam' | 'kymon' | 'lucnham' | 'lich' | 'battrach' | 'tuong' | 'maihoa'
+  // 28 tú (`NHI_THAP_BAT_TU`) và 12 trực (`TRUC_LIST`) của tuvi-engine/src/ngay-tot/constants.ts.
+  | 'tu' | 'truc';
 
 /** Ngoại lệ THEO NGÔN NGỮ khi cách dùng thật khác chữ Hán gốc (ghi nguyên chuỗi kết quả). */
 export type TermOverride = Partial<Record<'ja' | 'ko' | 'zh-cn', string>>;
@@ -335,6 +337,51 @@ export const TERMS: readonly TermRow[] = [
   ['maihoa', 'Biến quái', '變卦', 'changed hexagram'],
   ['maihoa', 'Hỗ quái', '互卦', 'nuclear hexagram'],
   ['maihoa', 'Động hào', '動爻', 'moving line'],
+
+  // ── 28 tú (W15b) — tên đúng như engine `NHI_THAP_BAT_TU` (tuvi-engine/src/ngay-tot/constants.ts), đúng thứ tự.
+  //    Đơn âm tiết, nhiều chữ trùng tên khác (Mão, Nguy, Tinh…) ⇒ cờ 'x': chỉ tra theo loại 'tu'.
+  ['lich', 'Nhị Thập Bát Tú', '二十八宿', '28 Lunar Mansions'],
+  ['tu', 'Giác', '角', '', 'x'],
+  ['tu', 'Cang', '亢', '', 'x'],
+  ['tu', 'Đê', '氐', '', 'x'],
+  ['tu', 'Phòng', '房', '', 'x'],
+  ['tu', 'Tâm', '心', '', 'x'],
+  ['tu', 'Vĩ', '尾', '', 'x'],
+  ['tu', 'Cơ', '箕', '', 'x'],
+  ['tu', 'Đẩu', '斗', '', 'x'],
+  ['tu', 'Ngưu', '牛', '', 'x'],
+  ['tu', 'Nữ', '女', '', 'x'],
+  ['tu', 'Hư', '虛', '', 'x'],
+  ['tu', 'Nguy', '危', '', 'x'],
+  ['tu', 'Thất', '室', '', 'x'],
+  ['tu', 'Bích', '壁', '', 'x'],
+  ['tu', 'Khuê', '奎', '', 'x'],
+  ['tu', 'Lâu', '婁', '', 'x'],
+  ['tu', 'Vị', '胃', '', 'x'],
+  ['tu', 'Mão', '昴', '', 'x'],
+  ['tu', 'Tất', '畢', '', 'x'],
+  ['tu', 'Chủy', '觜', '', 'x'],
+  ['tu', 'Sâm', '參', '', 'x'],
+  ['tu', 'Tỉnh', '井', '', 'x'],
+  ['tu', 'Quỷ', '鬼', '', 'x'],
+  ['tu', 'Liễu', '柳', '', 'x'],
+  ['tu', 'Tinh', '星', '', 'x'],
+  ['tu', 'Trương', '張', '', 'x'],
+  ['tu', 'Dực', '翼', '', 'x'],
+  ['tu', 'Chẩn', '軫', '', 'x'],
+  // ── 12 trực (W15b) — tên đúng như engine `TRUC_LIST`, đúng thứ tự Kiến…Bế. Đơn âm tiết ⇒ cờ 'x'.
+  ['truc', 'Kiến', '建', '', 'x'],
+  ['truc', 'Trừ', '除', '', 'x'],
+  ['truc', 'Mãn', '滿', '', 'x'],
+  ['truc', 'Bình', '平', '', 'x'],
+  ['truc', 'Định', '定', '', 'x'],
+  ['truc', 'Chấp', '執', '', 'x'],
+  ['truc', 'Phá', '破', '', 'x'],
+  ['truc', 'Nguy', '危', '', 'x'],
+  ['truc', 'Thành', '成', '', 'x'],
+  ['truc', 'Thu', '收', '', 'x'],
+  ['truc', 'Khai', '開', '', 'x'],
+  ['truc', 'Bế', '閉', '', 'x'],
 ];
 
 /** Địa chi: tiếng Việt → [con giáp en]. Chữ Hán lấy đảo từ `lib/hanviet.ts` CHI_HAN. */
