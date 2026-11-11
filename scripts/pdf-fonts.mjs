@@ -20,10 +20,26 @@ const OUT = path.join(ROOT, 'data/pdf-fonts');
 const VER = '0.4.4';
 /** file đích → [gói, đường dẫn trong gói, sha256] */
 export const PDF_FONTS = {
-  'NotoSansJP-Regular.ttf': ['noto-sans-jp', '400Regular/NotoSansJP_400Regular.ttf', '6255ea4692e97ef27330304fb96fd650f9111f868cd585fcf2802d42823930e5'],
-  'NotoSansKR-Regular.ttf': ['noto-sans-kr', '400Regular/NotoSansKR_400Regular.ttf', 'b4a747e78805bc25b610dcfc3003cb5fb2e2ec034763774b24216ed15889eef4'],
-  'NotoSansTC-Regular.ttf': ['noto-sans-tc', '400Regular/NotoSansTC_400Regular.ttf', 'add35d53f70727657b4509531677c4e3712b67df3d54661efdee5d3a0c16d954'],
-  'NotoSansSC-Regular.ttf': ['noto-sans-sc', '400Regular/NotoSansSC_400Regular.ttf', 'd45f67f0a7c0ca3f256950777ce6a61cc7ce5f9696d02900cbbaac25f8aa7d16'],
+  'NotoSansJP-Regular.ttf': [
+    'noto-sans-jp',
+    '400Regular/NotoSansJP_400Regular.ttf',
+    '6255ea4692e97ef27330304fb96fd650f9111f868cd585fcf2802d42823930e5',
+  ],
+  'NotoSansKR-Regular.ttf': [
+    'noto-sans-kr',
+    '400Regular/NotoSansKR_400Regular.ttf',
+    'b4a747e78805bc25b610dcfc3003cb5fb2e2ec034763774b24216ed15889eef4',
+  ],
+  'NotoSansTC-Regular.ttf': [
+    'noto-sans-tc',
+    '400Regular/NotoSansTC_400Regular.ttf',
+    'add35d53f70727657b4509531677c4e3712b67df3d54661efdee5d3a0c16d954',
+  ],
+  'NotoSansSC-Regular.ttf': [
+    'noto-sans-sc',
+    '400Regular/NotoSansSC_400Regular.ttf',
+    'd45f67f0a7c0ca3f256950777ce6a61cc7ce5f9696d02900cbbaac25f8aa7d16',
+  ],
 };
 
 const sha = (buf) => createHash('sha256').update(buf).digest('hex');
@@ -52,7 +68,9 @@ for (const [file, [pkg, rel, want]] of Object.entries(PDF_FONTS)) {
   if (!ok) bad++;
 }
 if (bad) {
-  console.error(`❌ pdf:fonts: thiếu ${bad} font — PDF tiếng Nhật/Hàn/Trung sẽ mất glyph. (Máy sau proxy: NODE_USE_ENV_PROXY=1)`);
+  console.error(
+    `❌ pdf:fonts: thiếu ${bad} font — PDF tiếng Nhật/Hàn/Trung sẽ mất glyph. (Máy sau proxy: NODE_USE_ENV_PROXY=1)`
+  );
   process.exit(1);
 }
 console.log(`pdf:fonts: ${Object.keys(PDF_FONTS).length} font CJK tĩnh → data/pdf-fonts/`);
