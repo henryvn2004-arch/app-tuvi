@@ -199,7 +199,7 @@ window.SHELL_INTRO={key:'kinh-dich'};</script>
 <script src="/tools-shared/kinh-dich.js?v=6"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=147"></script>
+<script src="/shell.js?v=148"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/kinh-dich.js (bảng 64 quẻ + tra quẻ) với
@@ -307,8 +307,8 @@ function showResult() {
   Shell.setContext({
     scenario: { type: 'kinh-dich', data: d },
     restore: { lines: currentLines },
-    label: 'Gieo quẻ · ' + r.que.n + (r.cQue ? ' → ' + r.cQue.n : ''),
-    greeting: 'Quẻ đã lập — quẻ chính **' + r.que.n + '** (' + r.que.zh + ')' + (r.cQue ? ', quẻ biến **' + r.cQue.n + '**' : ' (không hào động)') + '. Tôi sẽ luận theo câu hỏi của bạn.',
+    label: 'Gieo quẻ · ' + _tvmbG('que', r.que.n) + (r.cQue ? ' → ' + _tvmbG('que', r.cQue.n) : ''),
+    greeting: 'Quẻ đã lập — quẻ chính **' + _tvmbG('que', r.que.n) + '** (' + r.que.zh + ')' + (r.cQue ? ', quẻ biến **' + _tvmbG('que', r.cQue.n) + '**' : ' (không hào động)') + '. Tôi sẽ luận theo câu hỏi của bạn.',
     chips: ['Luận quẻ này cho câu hỏi của tôi', 'Hào động nói lên điều gì?', 'Quẻ biến cho thấy xu hướng nào?', 'Nên hành động thế nào lúc này?']
   });
   var _kdLines = [];

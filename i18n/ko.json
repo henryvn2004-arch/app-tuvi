@@ -4571,6 +4571,10 @@
   "t": "{dun} {n}국",
   "h": "0819a44e"
  },
+ "js.shellui.km-truc": {
+  "t": "치{than}",
+  "h": "cd8af7d6"
+ },
  "js.shellui.ky-hop-dong-gio-nao-hop": {
   "t": "계약은 몇 시에 하는 게 좋아요?",
   "h": "01e5265d"
@@ -4874,6 +4878,34 @@
  "js.shellui.minh-moi-thay-vao-ngay": {
   "t": "</b>이에요. 바로 모실게요.</p>",
   "h": "7d9c9c4b"
+ },
+ "js.shellui.mn-binh": {
+  "t": "평",
+  "h": "33e3bf5e"
+ },
+ "js.shellui.mn-cat": {
+  "t": "길",
+  "h": "a484b1c2"
+ },
+ "js.shellui.mn-dai-cat": {
+  "t": "대길",
+  "h": "1eb27223"
+ },
+ "js.shellui.mn-dai-hung": {
+  "t": "대흉",
+  "h": "8baf52d5"
+ },
+ "js.shellui.mn-tieu-cat": {
+  "t": "소길",
+  "h": "c501e008"
+ },
+ "js.shellui.mn-tieu-hung": {
+  "t": "소흉",
+  "h": "e5ac6bf1"
+ },
+ "js.shellui.mn-tranh": {
+  "t": "피함",
+  "h": "718a6b75"
  },
  "js.shellui.mo": {
   "t": "열기 ↗",

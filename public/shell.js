@@ -4018,7 +4018,7 @@
     });
   }
   function runSoDep(chat, toolId) {
-    ensureScripts(['/tools-shared/bat-trach.js?v=2', '/tools-shared/mai-hoa.js?v=2', '/tools-shared/kinh-dich.js?v=6', '/tools-shared/kinh-dich-hao.js?v=1', '/tools-shared/kinh-dich-doc.js?v=1', '/tools-shared/nap-am.js?v=3', '/tools-shared/so-dep.js?v=2'], function (err) {
+    ensureScripts(['/tools-shared/bat-trach.js?v=2', '/tools-shared/mai-hoa.js?v=3', '/tools-shared/kinh-dich.js?v=6', '/tools-shared/kinh-dich-hao.js?v=1', '/tools-shared/kinh-dich-doc.js?v=1', '/tools-shared/nap-am.js?v=3', '/tools-shared/so-dep.js?v=2'], function (err) {
       if (err || typeof SoDepTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-so', 'không nạp được công cụ Số Đẹp.')); return; }
       inlStep(chat,
         T('js.shellui.cho-thay-day-so-con-muon', '<p>Cho thầy dãy số con muốn chấm điểm nhé (số điện thoại, biển số…).</p>') +
@@ -4335,7 +4335,7 @@
     });
   }
   function runMaiHoa(chat, toolId) {
-    ensureScripts(['/tools-shared/mai-hoa.js?v=2', '/tools-shared/kinh-dich.js?v=6', '/tools-shared/kinh-dich-hao.js?v=1'], function (err) {
+    ensureScripts(['/tools-shared/mai-hoa.js?v=3', '/tools-shared/kinh-dich.js?v=6', '/tools-shared/kinh-dich-hao.js?v=1'], function (err) {
       if (err || typeof MaiHoaTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-mai', 'không nạp được công cụ Mai Hoa.')); return; }
       inlStep(chat,
         T('js.shellui.thay-lap-que-theo-gio-hien', '<p>Thầy lập quẻ theo giờ hiện tại, hoặc con nghĩ một con số bất kỳ cho thầy gieo theo số đó — con muốn cách nào?</p>') +
@@ -4356,8 +4356,8 @@
           var tenChinh = r.chinh.que ? G('que', r.chinh.que.q.n) : '';
           Shell.setContext({
             toolId: toolId, scenario: { type: 'mai-hoa', data: d },
-            label: 'Mai Hoa · ' + tenChinh + ' — ' + r.ketLuan.ten,
-            greeting: T('js.shellui.que-da-lap-the', 'Quẻ đã lập — Thể **') + G('quai', r.the.n) + '** (' + G('hanh', r.the.hanh) + (')' + T('js.shellui.dung', ', Dụng **')) + G('quai', r.dung.n) + '** (' + G('hanh', r.dung.hanh) + (')' + T('js.shellui.tuc', ', tức **')) + r.ketLuan.ten + T('js.shellui.toi-se-luan-theo-cau-hoi-n3t1', '**. Tôi sẽ luận theo câu hỏi của bạn.'),
+            label: 'Mai Hoa · ' + tenChinh + ' — ' + G('maihoa', r.ketLuan.ten),
+            greeting: T('js.shellui.que-da-lap-the', 'Quẻ đã lập — Thể **') + G('quai', r.the.n) + '** (' + G('hanh', r.the.hanh) + (')' + T('js.shellui.dung', ', Dụng **')) + G('quai', r.dung.n) + '** (' + G('hanh', r.dung.hanh) + (')' + T('js.shellui.tuc', ', tức **')) + G('maihoa', r.ketLuan.ten) + T('js.shellui.toi-se-luan-theo-cau-hoi-n3t1', '**. Tôi sẽ luận theo câu hỏi của bạn.'),
             chips: [T('js.shellui.luan-que-nay-cho-cau-hoi', 'Luận quẻ này cho câu hỏi của tôi'), T('js.shellui.the-bi-dung-khac-thi-nen', 'Thể bị Dụng khắc thì nên làm gì?'), T('js.shellui.ho-quai-cho-thay-khuc-giua', 'Hỗ quái cho thấy khúc giữa ra sao?'), T('js.shellui.bien-quai-noi-ket-cuc-the', 'Biến quái nói kết cục thế nào?')],
           });
         });
@@ -4369,7 +4369,7 @@
     });
   }
   function runKyMon(chat, toolId) {
-    ensureScripts(['/tools-shared/ky-mon.js?v=2'], function (err) {
+    ensureScripts(['/tools-shared/ky-mon.js?v=3'], function (err) {
       if (err || typeof KyMonTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-ky', 'không nạp được công cụ Kỳ Môn.')); return; }
       inlStep(chat,
         T('js.shellui.de-trong-la-thay-lap-ban', '<p>Để trống là thầy lập bàn theo giờ hiện tại — hoặc con chọn giờ khác và câu hỏi (tuỳ chọn).</p>') +
@@ -4389,7 +4389,7 @@
               Shell.setContext({
                 toolId: toolId, scenario: { type: 'ky-mon', data: d },
                 label: T('js.shellui.ky-mon', 'Kỳ Môn · ') + KMC(b.cuc) + T('js.shellui.giox', ' · giờ ') + G('canchi', b.canChi.gio),
-                greeting: T('js.shellui.ban-da-lap', 'Bàn đã lập — **') + KMC(b.cuc) + T('js.shellui.tiet', '**, tiết ') + G('lich', b.tietKhi) + ' ' + G('kymon', b.nguyen) + T('js.shellui.truc-phu', ', trực phù **') + G('kymon', b.trucPhu) + T('js.shellui.truc-su', '**, trực sử **') + G('kymon', b.trucSu) + T('js.shellui.p-cham-dam', '**.') + (doNhat ? T('js.shellui.huong-xep-hang-cao-nhat-la', ' Hướng xếp hạng cao nhất là **') + doNhat.huong + T('js.shellui.p-cham-dam', '**.') : '') + T('js.shellui.toi-se-luan-theo-viec-ban', ' Tôi sẽ luận theo việc bạn hỏi.'),
+                greeting: T('js.shellui.ban-da-lap', 'Bàn đã lập — **') + KMC(b.cuc) + T('js.shellui.tiet', '**, tiết ') + G('lich', b.tietKhi) + ' ' + G('kymon', b.nguyen) + T('js.shellui.truc-phu', ', trực phù **') + G('kymon', b.trucPhu) + T('js.shellui.truc-su', '**, trực sử **') + G('kymon', b.trucSu) + T('js.shellui.p-cham-dam', '**.') + (doNhat ? T('js.shellui.huong-xep-hang-cao-nhat-la', ' Hướng xếp hạng cao nhất là **') + G('huong', doNhat.huong) + T('js.shellui.p-cham-dam', '**.') : '') + T('js.shellui.toi-se-luan-theo-viec-ban', ' Tôi sẽ luận theo việc bạn hỏi.'),
                 chips: [T('js.shellui.viec-cua-toi-nen-di-huong', 'Việc của tôi nên đi hướng nào?'), T('js.shellui.gio-nay-hop-lam-viec-gi', 'Giờ này hợp làm việc gì nhất?'), T('js.shellui.huong-nao-phai-tranh-va-vi', 'Hướng nào phải tránh và vì sao?'), T('js.shellui.truc-phu-truc-su-noi-len', 'Trực phù trực sử nói lên điều gì?')],
               });
             })

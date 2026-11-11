@@ -4571,6 +4571,10 @@
   "t": "{dun}, Ju {n}",
   "h": "0819a44e"
  },
+ "js.shellui.km-truc": {
+  "t": "Zhi {than}",
+  "h": "cd8af7d6"
+ },
  "js.shellui.ky-hop-dong-gio-nao-hop": {
   "t": "Which hour is good for signing a contract?",
   "h": "01e5265d"
@@ -4874,6 +4878,34 @@
  "js.shellui.minh-moi-thay-vao-ngay": {
   "t": "</b>. Let me bring the Master in right now.</p>",
   "h": "7d9c9c4b"
+ },
+ "js.shellui.mn-binh": {
+  "t": "Neutral",
+  "h": "33e3bf5e"
+ },
+ "js.shellui.mn-cat": {
+  "t": "Auspicious",
+  "h": "a484b1c2"
+ },
+ "js.shellui.mn-dai-cat": {
+  "t": "Very auspicious",
+  "h": "1eb27223"
+ },
+ "js.shellui.mn-dai-hung": {
+  "t": "Very inauspicious",
+  "h": "8baf52d5"
+ },
+ "js.shellui.mn-tieu-cat": {
+  "t": "Mildly auspicious",
+  "h": "c501e008"
+ },
+ "js.shellui.mn-tieu-hung": {
+  "t": "Mildly inauspicious",
+  "h": "e5ac6bf1"
+ },
+ "js.shellui.mn-tranh": {
+  "t": "Avoid",
+  "h": "718a6b75"
  },
  "js.shellui.mo": {
   "t": "Open ↗",
