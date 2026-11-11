@@ -6,6 +6,12 @@ import { ORG_ID } from '@/lib/seo/entity';
 import { celebPhoto } from '@/lib/celeb/photo';
 import { danhMuc } from '@/lib/nghiem-chung/store';
 import type { Muc } from '@/lib/nghiem-chung/trang-ho-so';
+import { CJK_CSS } from '@/lib/nghiem-chung/trang-ho-so';
+import { DEFAULT_LOCALE, HREFLANG, LOCALES, localePrefix, type Locale } from '@/lib/i18n/locales';
+import { term, type GlossaryLocale } from '@/lib/i18n/glossary';
+import { chuoi, fmt } from '@/lib/nghiem-chung/chuoi';
+import { dbDanhMucDich } from '@/lib/nghiem-chung/i18n/db';
+import type { NcLocale } from '@/lib/nghiem-chung/i18n/prose';
 
 const MOI_TRANG = 48;
 
@@ -18,27 +24,6 @@ function esc(s: unknown): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
-
-const CHU = {
-  'nghiem-chung': {
-    ten: 'Nghiệm Chứng',
-    title: 'Nghiệm Chứng: Lá Số Tử Vi Người Nổi Tiếng Đối Chiếu Đời Thật | Tử Vi Minh Bảo',
-    desc: 'Lá số Tử Vi của người nổi tiếng có giờ sinh kiểm chứng, đặt cạnh cuộc đời thật của họ — từng mục khớp, khớp một phần và trượt đều được ghi rõ, có nguồn.',
-    h1: 'Lá số Tử Vi người nổi tiếng, đặt cạnh cuộc đời thật',
-    lede: 'Mỗi hồ sơ lấy một người có giờ sinh đã kiểm chứng, lập lá số theo cổ pháp rồi đối chiếu từng nhận định với những gì thực sự xảy ra trong đời họ. Chỗ khớp và chỗ trượt đều được ghi rõ, kèm nguồn.',
-    the: 'Lá số Tử Vi',
-    how: 'Lá số được chấm trước, đời thật đặt sau — không chỉnh lá số cho vừa sự kiện. <a href="/phuong-phap">Xem phương pháp</a>. Người chưa công bố giờ sinh: <a href="/xac-dinh-gio-sinh">Xác định giờ sinh qua 12 lá số</a>.',
-  },
-  'xac-dinh-gio-sinh': {
-    ten: 'Xác Định Giờ Sinh',
-    title: 'Xác Định Giờ Sinh Người Nổi Tiếng Theo Tử Vi: 12 Lá Số, Giờ Nào Khớp Đời Nhất | Tử Vi Minh Bảo',
-    desc: 'Người nổi tiếng chưa công bố giờ sinh: lập đủ 12 lá số theo 12 canh giờ, đối chiếu với cuộc đời thật để tìm giờ khớp nhất. Ghi rõ đây là giờ xác định, không phải giờ khai sinh, kèm điểm từng giờ và nguồn.',
-    h1: 'Người nổi tiếng sinh giờ nào? Tử Vi xác định qua 12 lá số',
-    lede: 'Với người chưa công bố giờ sinh, hệ thống lập đủ 12 lá số theo 12 canh giờ rồi chấm xem lá số giờ nào khớp cuộc đời thật nhất — nặng nhất là các đại vận có rơi đúng giai đoạn thăng trầm hay không. Kết quả là giờ do hệ thống xác định (không phải giờ khai sinh), ghi rõ độ tin cậy.',
-    the: 'Giờ sinh',
-    how: 'Giờ được xác định bằng cách đối chiếu với chính đời thật, nên đây không phải phép thử độc lập. Muốn xem lá số người có giờ sinh kiểm chứng đặt cạnh đời thật: <a href="/nghiem-chung">Nghiệm Chứng</a>.',
-  },
-};
 
 // Tìm kiếm + lọc chữ cái chạy phía SERVER (?q= · ?chu=) — không cần JS, chạy được với hàng nghìn hồ sơ,
 // và trang chữ cái là URL thật cho máy tìm kiếm đọc. So khớp bỏ dấu (đ → d).
@@ -54,15 +39,33 @@ const chuDau = (ten: string) => {
   return CHU_CAI.includes(c) ? c : '#';
 };
 
-export async function trangHub(req: NextRequest, muc: Muc): Promise<Response> {
-  const C = CHU[muc];
+export async function trangHub(req: NextRequest, muc: Muc, locale: Locale = DEFAULT_LOCALE): Promise<Response> {
+  const L = chuoi(locale);
+  const pre = localePrefix(locale);
+  const g = locale === 'vi' ? null : (locale as GlossaryLocale);
+  const k = muc === 'nghiem-chung' ? 'Nc' : 'Gd';
+  const C = {
+    ten: muc === 'nghiem-chung' ? L.mucNc : L.mucGd,
+    title: `${L[`hub${k}Title` as 'hubNcTitle']} | ${L.brand}`,
+    desc: L[`hub${k}Desc` as 'hubNcDesc'],
+    h1: L[`hub${k}H1` as 'hubNcH1'],
+    lede: L[`hub${k}Lede` as 'hubNcLede'],
+    the: L[`hub${k}The` as 'hubNcThe'],
+    how: fmt(L[`hub${k}How` as 'hubNcHow'], { pp: `${pre}/phuong-phap`, gd: `${pre}/xac-dinh-gio-sinh`, nc: `${pre}/nghiem-chung` }),
+  };
   const sp = req.nextUrl.searchParams;
   const q = (sp.get('q') || '').trim().slice(0, 60);
   const chuRaw = (sp.get('chu') || '').toUpperCase();
   const chu = CHU_CAI.includes(chuRaw) || chuRaw === '#' ? chuRaw : '';
-  const tatCa = (await danhMuc())
-    .filter((x) => !!x.gioDoan === (muc === 'xac-dinh-gio-sinh'))
-    .sort((a, b) => khongDau(a.ten).localeCompare(khongDau(b.ten)));
+  const goc = (await danhMuc()).filter((x) => !!x.gioDoan === (muc === 'xac-dinh-gio-sinh'));
+  // Ngôn ngữ ngoài `vi`: chỉ liệt kê hồ sơ ĐÃ CÓ bản dịch duyệt, tên/nghề lấy từ bản dịch.
+  const dich = locale === 'vi' ? null : new Map((await dbDanhMucDich(locale as NcLocale)).map((x) => [x.slug, x]));
+  const tatCa = (dich ? goc.filter((x) => dich.has(x.slug)).map((x) => ({ ...x, ten: dich.get(x.slug)!.ten, ngheNghiep: dich.get(x.slug)!.ngheNghiep })) : goc).sort((a, b) =>
+    locale === 'vi' ? khongDau(a.ten).localeCompare(khongDau(b.ten)) : a.ten.localeCompare(b.ten, HREFLANG[locale]),
+  );
+  if (dich && !tatCa.length) return new NextResponse(L.notFound, { status: 404, headers: { 'X-Robots-Tag': 'noindex' } });
+  // Bộ lọc chữ cái A–Z chỉ có nghĩa với chữ Latin (vi, en); ja/ko/zh dùng ô tìm kiếm.
+  const coAz = locale === 'vi' || locale === 'en';
   const soTheoChu = new Map<string, number>();
   for (const x of tatCa) soTheoChu.set(chuDau(x.ten), (soTheoChu.get(chuDau(x.ten)) || 0) + 1);
   let dm = chu ? tatCa.filter((x) => chuDau(x.ten) === chu) : tatCa;
@@ -73,7 +76,7 @@ export async function trangHub(req: NextRequest, muc: Muc): Promise<Response> {
   const soTrang = Math.max(1, Math.ceil(dm.length / MOI_TRANG));
   const trang = Math.min(soTrang, Math.max(1, Number(sp.get('trang')) || 1));
   const items = dm.slice((trang - 1) * MOI_TRANG, trang * MOI_TRANG);
-  const hubUrl = `${BASE}/${muc}`;
+  const hubUrl = `${BASE}${pre}/${muc}`;
   /** Link giữ nguyên bộ lọc đang chọn; `undefined` = giữ, `''` = bỏ. */
   const lien = (o: { q?: string; chu?: string; trang?: number }) => {
     const u = new URLSearchParams();
@@ -83,27 +86,42 @@ export async function trangHub(req: NextRequest, muc: Muc): Promise<Response> {
     if (cc) u.set('chu', cc);
     if (o.trang && o.trang > 1) u.set('trang', String(o.trang));
     const t = u.toString();
-    return `/${muc}${t ? `?${t}` : ''}`;
+    return `${pre}/${muc}${t ? `?${t}` : ''}`;
   };
   const url = `${BASE}${lien({ q: '', trang })}`;
+  // hreflang cho hub: chỉ các ngôn ngữ ĐANG có ít nhất một hồ sơ dịch; x-default → vi.
+  const coNgonNgu: Locale[] = ['vi'];
+  for (const l of LOCALES) {
+    if (l === 'vi') continue;
+    const m = new Map(
+      (await dbDanhMucDich(l as NcLocale)).map((x) => [x.slug, x]),
+    );
+    if (goc.some((x) => m.has(x.slug))) coNgonNgu.push(l);
+  }
+  const hreflang =
+    coNgonNgu.length > 1
+      ? coNgonNgu.map((l) => `<link rel="alternate" hreflang="${HREFLANG[l]}" href="${BASE}${localePrefix(l)}/${muc}">`).join('\n') +
+        `\n<link rel="alternate" hreflang="x-default" href="${BASE}/${muc}">\n`
+      : '';
   // Số trang: 1 … (trang-2..trang+2) … cuối — đủ gọn khi kho lên hàng nghìn hồ sơ.
   const soHien = [...new Set([1, trang - 2, trang - 1, trang, trang + 1, trang + 2, soTrang])]
     .filter((n) => n >= 1 && n <= soTrang)
     .sort((x, y) => x - y);
-  const pager = `<nav class="pg" aria-label="Phân trang">${trang > 1 ? `<a href="${esc(lien({ trang: trang - 1 }))}" rel="prev">← Trước</a>` : '<span></span>'}<span class="so">${soHien
+  const pager = `<nav class="pg" aria-label="${esc(L.hubPagerAria)}">${trang > 1 ? `<a href="${esc(lien({ trang: trang - 1 }))}" rel="prev">${L.hubPrev}</a>` : '<span></span>'}<span class="so">${soHien
     .map((n, i) => `${i && n - soHien[i - 1] > 1 ? '<span class="gap">…</span>' : ''}${n === trang ? `<b>${n}</b>` : `<a href="${esc(lien({ trang: n }))}">${n}</a>`}`)
-    .join('')}</span>${trang < soTrang ? `<a href="${esc(lien({ trang: trang + 1 }))}" rel="next">Sau →</a>` : '<span></span>'}</nav>`;
+    .join('')}</span>${trang < soTrang ? `<a href="${esc(lien({ trang: trang + 1 }))}" rel="next">${L.hubNext}</a>` : '<span></span>'}</nav>`;
   const { title, desc } = C;
+  const ngayLoc = (n: number) => n.toLocaleString(locale === 'vi' ? 'vi-VN' : HREFLANG[locale]);
   const { commonsThumb } = celebPhoto();
 
   const cards = items.map((h) => {
     const anh = h.anhCommons ? commonsThumb(h.anhCommons, 240) : null;
-    return `<a class="card" href="/${muc}/${esc(h.slug)}">
+    return `<a class="card" href="${pre}/${muc}/${esc(h.slug)}">
   ${anh ? `<img src="${esc(anh)}" alt="${esc(h.ten)}" width="72" height="72" loading="lazy" referrerpolicy="no-referrer">` : `<div class="ph">${esc(h.ten.slice(0, 1))}</div>`}
   <div>
-    <div class="nm">${C.the} ${esc(h.ten)}</div>
-    <div class="mt">${esc(h.ngheNghiep)} · sinh ${h.namSinh}</div>
-    <div class="st">${h.gioDoan ? `<span>Xác định giờ sinh: giờ ${esc(h.gioDoan)}</span>` : `<span>Con người: khớp ${h.tyLeBM == null ? '—' : h.tyLeBM + '%'}</span><span>Đại vận: khớp ${h.tyLeDV == null ? '—' : h.tyLeDV + '%'}</span>`}</div>
+    <div class="nm">${esc(fmt(L.hubItem, { the: C.the, ten: h.ten }))}</div>
+    <div class="mt">${esc(fmt(L.hubMeta, { nghe: h.ngheNghiep, nam: h.namSinh }))}</div>
+    <div class="st">${h.gioDoan ? `<span>${esc(fmt(L.hubStGd, { chi: g ? term(g, 'chi', h.gioDoan) : h.gioDoan }))}</span>` : `<span>${esc(fmt(L.hubStBM, { p: h.tyLeBM == null ? '—' : h.tyLeBM + '%' }))}</span><span>${esc(fmt(L.hubStDV, { p: h.tyLeDV == null ? '—' : h.tyLeDV + '%' }))}</span>`}</div>
   </div>
 </a>`;
   }).join('');
@@ -115,8 +133,8 @@ export async function trangHub(req: NextRequest, muc: Muc): Promise<Response> {
       name: C.title.split(' | ')[0],
       description: desc,
       url,
-      inLanguage: 'vi',
-      publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE },
+      inLanguage: HREFLANG[locale],
+      publisher: { '@type': 'Organization', '@id': ORG_ID, name: L.brand, url: BASE },
       mainEntity: {
         '@type': 'ItemList',
         numberOfItems: dm.length,
@@ -124,7 +142,7 @@ export async function trangHub(req: NextRequest, muc: Muc): Promise<Response> {
           '@type': 'ListItem',
           position: (trang - 1) * MOI_TRANG + i + 1,
           url: `${hubUrl}/${h.slug}`,
-          name: `${C.the} ${h.ten}`,
+          name: fmt(L.hubItem, { the: C.the, ten: h.ten }),
         })),
       },
     },
@@ -132,15 +150,15 @@ export async function trangHub(req: NextRequest, muc: Muc): Promise<Response> {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Trang Chủ', item: `${BASE}/` },
+        { '@type': 'ListItem', position: 1, name: L.home, item: `${BASE}${pre}/` },
         { '@type': 'ListItem', position: 2, name: C.ten, item: hubUrl },
       ],
     },
   ]).replace(/</g, '\\u003c');
 
-  const html = `<!DOCTYPE html><html lang="vi"><head>
+  const html = `<!DOCTYPE html><html lang="${HREFLANG[locale]}"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>${esc(trang > 1 ? title.replace(' | ', ` — trang ${trang} | `) : title)}</title>
+<title>${esc(trang > 1 ? title.replace(' | ', `${fmt(L.hubTrang, { p: trang })} | `) : title)}</title>
 <meta name="description" content="${esc(desc)}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
@@ -148,10 +166,9 @@ export async function trangHub(req: NextRequest, muc: Muc): Promise<Response> {
 <meta property="og:url" content="${url}">
 <meta name="robots" content="${q ? 'noindex, follow' : 'index, follow'}">
 <link rel="canonical" href="${url}">
-<link rel="icon" type="image/webp" href="/seal.webp">
+${hreflang}<link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+${locale === 'vi' ? '<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>\n' : ''}<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <script type="application/ld+json">${schema}</script>
 <style>
@@ -181,27 +198,31 @@ h1{font-family:var(--serif);font-size:32px;color:var(--navy);font-weight:600;lin
 .how{margin-top:40px;background:var(--soft);border-left:3px solid var(--gold-b);padding:16px 20px;font-size:14.5px;color:var(--mid)}
 .how a{color:var(--navy);font-weight:600}
 @media(max-width:700px){.bc,.wrap{padding-left:16px;padding-right:16px}h1{font-size:25px}.grid{grid-template-columns:1fr}}
-</style>
+${CJK_CSS[locale]}</style>
 <script src="/auth.js?v=6"></script>
 </head><body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
-<nav class="bc" aria-label="Breadcrumb"><a href="/">Trang Chủ</a><span>›</span><span>${C.ten}</span></nav>
+<nav class="bc" aria-label="Breadcrumb"><a href="${pre}/">${L.home}</a><span>›</span><span>${C.ten}</span></nav>
 <main class="wrap">
   <div class="eyebrow">${C.ten}</div>
   <h1>${C.h1}</h1>
   <p class="lede">${C.lede}</p>
-  <form class="tim" action="/${muc}" method="get" role="search">
-    <input type="search" name="q" value="${esc(q)}" placeholder="Tìm theo tên hoặc nghề nghiệp…" aria-label="Tìm người nổi tiếng" autocomplete="off">
+  <form class="tim" action="${pre}/${muc}" method="get" role="search">
+    <input type="search" name="q" value="${esc(q)}" placeholder="${esc(L.hubSearchPh)}" aria-label="${esc(L.hubSearchAria)}" autocomplete="off">
     ${chu ? `<input type="hidden" name="chu" value="${esc(chu)}">` : ''}
-    <button type="submit">Tìm</button>
+    <button type="submit">${L.hubSearchBtn}</button>
   </form>
-  <nav class="az" aria-label="Lọc theo chữ cái đầu">
-    <a href="${lien({ chu: '', trang: 1 })}"${chu ? '' : ' class="on"'}>Tất cả</a>
+  ${
+    coAz
+      ? `<nav class="az" aria-label="${esc(L.hubAzAria)}">
+    <a href="${lien({ chu: '', trang: 1 })}"${chu ? '' : ' class="on"'}>${L.hubAll}</a>
     ${[...CHU_CAI, '#'].map((c) => (soTheoChu.get(c) ? `<a href="${esc(lien({ chu: c, trang: 1 }))}"${c === chu ? ' class="on"' : ''}>${c}</a>` : `<span aria-hidden="true">${c}</span>`)).join('')}
-  </nav>
-  <p class="lede" style="margin:-8px 0 18px">${q || chu ? `${dm.length.toLocaleString('vi-VN')} / ${tatCa.length.toLocaleString('vi-VN')} hồ sơ${q ? ` khớp “${esc(q)}”` : ''}${chu ? ` · chữ ${esc(chu)}` : ''}` : `${tatCa.length.toLocaleString('vi-VN')} hồ sơ, xếp theo tên A–Z`}${soTrang > 1 ? ` · trang ${trang}/${soTrang}` : ''}</p>
-  ${items.length ? `<div class="grid">${cards}</div>` : `<div class="rong">Chưa có hồ sơ nào khớp. <a href="/${muc}">Xem tất cả</a></div>`}
+  </nav>`
+      : ''
+  }
+  <p class="lede" style="margin:-8px 0 18px">${q || chu ? fmt(L.hubCount, { n: ngayLoc(dm.length), m: ngayLoc(tatCa.length), q: q ? fmt(L.hubCountQ, { q: esc(q) }) : '', c: chu ? fmt(L.hubCountC, { c: esc(chu) }) : '' }) : fmt(L.hubCountAll, { m: ngayLoc(tatCa.length) })}${soTrang > 1 ? fmt(L.hubPage, { p: trang, n: soTrang }) : ''}</p>
+  ${items.length ? `<div class="grid">${cards}</div>` : `<div class="rong">${fmt(L.hubEmpty, { url: `${pre}/${muc}` })}</div>`}
   ${
     soTrang > 1
       ? pager

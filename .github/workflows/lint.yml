@@ -415,6 +415,12 @@ jobs:
       - name: Gemini đẩy usage đúng 1 lần mỗi lời gọi API
         run: npm run check:geminiusage
 
+      # Nghiệm Chứng đa ngôn ngữ (W6): chữ khung 6 ngôn ngữ đủ khoá + cùng chỗ thế {…}, zh-cn không lỗi thời so zh-tw,
+      # và bảng thuật ngữ PHỦ mọi sao/cung/cục engine định nghĩa — engine thêm sao mới mà quên bảng này thì trang Nhật/Hàn/Trung
+      # in chữ Việt IM LẶNG (hàm term() chỉ console.warn). Có bước đột biến tự bẻ bản sao để chứng minh bộ dò đỏ được.
+      - name: Nghiệm Chứng đa ngôn ngữ — chữ khung + thuật ngữ phủ engine
+        run: npm run check:nci18n
+
   typecheck:
     runs-on: ubuntu-latest
     # Cùng lý do với job `lint` ở trên — xem chú thích tại đó.

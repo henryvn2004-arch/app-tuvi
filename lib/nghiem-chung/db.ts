@@ -18,7 +18,7 @@ export interface MucDb {
   indexed: boolean;
 }
 
-async function sb(path: string, init: RequestInit = {}): Promise<{ ok: boolean; status: number; body: unknown }> {
+export async function sb(path: string, init: RequestInit = {}): Promise<{ ok: boolean; status: number; body: unknown }> {
   const res = await fetch(`${URL_()}/rest/v1${path}`, {
     cache: 'no-store',
     ...init,
@@ -40,7 +40,7 @@ async function sb(path: string, init: RequestInit = {}): Promise<{ ok: boolean; 
   return { ok: res.ok, status: res.status, body };
 }
 
-const coDb = () => !!URL_() && !!KEY();
+export const coDb = () => !!URL_() && !!KEY();
 
 /** Hồ sơ MỚI (do cron sinh). Lỗi DB → null + console.error, để trang rơi về 404 thay vì 500. */
 export async function dbTaiHoSo(slug: string): Promise<HoSoNghiemChung | null> {

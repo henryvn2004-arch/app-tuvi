@@ -27,6 +27,11 @@ import { dem, type HoSoNghiemChung, type KetLuan } from '@/lib/nghiem-chung';
 import { taiHoSo, danhMuc } from '@/lib/nghiem-chung/store';
 import { banKeLaSo, banKeNam, bangTra } from '@/lib/nghiem-chung/engine-ref';
 import { lasoChartHtml } from '@/lib/engine/laso';
+import { DEFAULT_LOCALE, HREFLANG, LOCALES, localePrefix, type Locale } from '@/lib/i18n/locales';
+import { term, termAny, localizeText, type GlossaryLocale } from '@/lib/i18n/glossary';
+import { chuoi, fmt, type Chuoi } from './chuoi';
+import { applyProse, extractProse, hashProse, thieuKhoa, type NcLocale } from './i18n/prose';
+import { dbTaiBanDich, dbNgonNguCuaSlug, dbDanhMucDich } from './i18n/db';
 
 const BASE = 'https://www.tuviminhbao.com';
 
@@ -79,15 +84,14 @@ async function vanNam(h: HoSoNghiemChung, nam: number): Promise<VanHanOut | null
   return r && !r.error ? r : null;
 }
 
-const KL_NHAN: Record<KetLuan, string> = {
-  khop: 'Khớp',
-  'mot-phan': 'Khớp một phần',
-  truot: 'Trượt',
-  'chua-kiem-chung': 'Chưa kiểm chứng',
-  'dang-dien-ra': 'Đang diễn ra',
-};
 const KL_KY: Record<KetLuan, string> = { khop: '✓', 'mot-phan': '◐', truot: '✗', 'chua-kiem-chung': '?', 'dang-dien-ra': '…' };
-const badge = (k: KetLuan) => `<span class="kl kl-${k}"><span aria-hidden="true">${KL_KY[k]}</span> ${KL_NHAN[k]}</span>`;
+const klNhan = (L: Chuoi): Record<KetLuan, string> => ({
+  khop: L.klKhop,
+  'mot-phan': L.klMotPhan,
+  truot: L.klTruot,
+  'chua-kiem-chung': L.klChua,
+  'dang-dien-ra': L.klDang,
+});
 
 /** Cờ điểm của engine là emoji màu — trang hiển thị bằng chấm CSS (luật icon). */
 function hang(flag: string | null, diem: number | null): 'tot' | 'vua' | 'xau' | 'na' {
@@ -96,49 +100,132 @@ function hang(flag: string | null, diem: number | null): 'tot' | 'vua' | 'xau' |
   if (flag === '🔴') return 'xau';
   return diem == null ? 'na' : 'vua';
 }
-const HANG_NHAN = { tot: 'Thuận', vua: 'Trung bình', xau: 'Kém', na: '—' };
-
-const saoTxt = (ss: Sao[]) =>
-  ss.length ? ss.map((s) => `${s.ten}${s.sang ? ` (${s.sang.toLowerCase()})` : ''}${s.hoa ? ` hóa ${s.hoa}` : ''}`).join(', ') : 'vô chính diệu';
-const diemTxt = (d: number | null) => (d == null ? '—' : String(d).replace('.', ','));
 
 const pctTxt = (n: number | null) => (n == null ? '—' : `${n}%`);
 
-function ngayVN(iso: string): string {
-  const [y, m, d] = iso.split('-');
-  return `${d}/${m}/${y}`;
+/** Tên cung/sao/can chi do ENGINE trả (tiếng Việt) → ngôn ngữ trang. `vi` giữ nguyên chữ engine. */
+function dichEngine(locale: Locale) {
+  const g = locale === 'vi' ? null : (locale as GlossaryLocale);
+  const L = chuoi(locale);
+  const T = (kind: string, vi: string) => (g ? term(g, kind, vi) : vi);
+  const saoTxt = (ss: Sao[]) =>
+    ss.length
+      ? ss
+          .map(
+            (s) =>
+              `${g ? termAny(g, s.ten, ['chinh', 'sao']) : s.ten}${
+                s.sang ? ` (${g ? term(g, 'sang', s.sang) : s.sang.toLowerCase()})` : ''
+              }${s.hoa ? fmt(L.hoaSuf, { hoa: T('tuhoa', s.hoa) }) : ''}`,
+          )
+          .join(', ')
+      : L.voChinh;
+  /**
+   * Cột "Cung Mệnh" của bảng 12 giờ do MÁY sinh, dạng cố định: `Mệnh <chi>: <sao> (<độ sáng>)[, …] [hóa <Tứ hóa>]` hoặc
+   * `Mệnh <chi>: vô chính diệu`. Phân tích đúng khuôn rồi đổi từng mảnh qua bảng thuật ngữ; lệch khuôn thì lùi về dò thuật ngữ.
+   */
+  const chuoiMay = (x: string) => {
+    if (!g) return x;
+    const m = x.match(/^Mệnh (\S+):\s*(.*)$/);
+    if (!m) return localizeText(g, x);
+    const dau = `${term(g, 'cung', 'Mệnh')} ${T('chi', m[1])}`;
+    const mon = m[2].split(/,\s*/).map((p) => {
+      if (/^vô chính diệu$/i.test(p.trim())) return L.voChinh;
+      const q = p.match(/^([^()]+?)\s*(?:\(([^)]+)\))?\s*(?:hóa\s+(\S+))?$/);
+      if (!q) return localizeText(g, p);
+      const sang = q[2] ? ` (${term(g, 'sang', q[2][0].toUpperCase() + q[2].slice(1))})` : '';
+      const hoa = q[3] ? fmt(L.hoaSuf, { hoa: T('tuhoa', q[3]) }) : '';
+      return `${termAny(g, q[1].trim(), ['chinh', 'sao'])}${sang}${hoa}`;
+    });
+    return `${dau}: ${mon.join(', ')}`;
+  };
+  const diemTxt = (d: number | null) => (d == null ? '—' : locale === 'vi' ? String(d).replace('.', ',') : String(d));
+  return { T, saoTxt, chuoiMay, diemTxt };
 }
+
+/** Mẫu tên nguồn cố định của generator ('… — dữ liệu giờ sinh (…)', '… — ngày sinh (giờ sinh không công bố; …)') → ngôn ngữ trang. Tên bài Wikipedia giữ nguyên. */
+function nguonTen(ten: string, L: Chuoi): string {
+  return ten
+    .replace('ngày sinh (giờ sinh không công bố; giờ trong bài là giờ do hệ thống xác định)', L.nguonNgayXacDinh)
+    .replace('ngày sinh (giờ sinh không công bố; giờ trong bài là suy đoán)', L.nguonNgaySuyDoan)
+    .replace('dữ liệu giờ sinh', L.nguonGio);
+}
+
+function ngayHienThi(iso: string, L: Chuoi): string {
+  const [y, m, d] = iso.split('-');
+  return fmt(L.ngay, { y, m, d, mn: Number(m), dn: Number(d) });
+}
+
+/** Chồng font hệ thống cho CJK (không tải webfont — font CJK đầy đủ là việc khung W4). vi/en: rỗng ⇒ trang tiếng Việt không đổi byte nào. */
+const cjk = (sans: string, serif: string) => `body{font-family:Arial,${sans},sans-serif}:root{--serif:'Noto Serif',${serif},serif}\n`;
+export const CJK_CSS: Record<Locale, string> = {
+  vi: '',
+  en: '',
+  ja: cjk('"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Meiryo"', '"Hiragino Mincho ProN","Yu Mincho"'),
+  ko: cjk('"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR"', '"Noto Serif KR","Batang"'),
+  'zh-tw': cjk('"PingFang TC","Microsoft JhengHei","Noto Sans TC"', '"Songti TC","PMingLiU"'),
+  'zh-cn': cjk('"PingFang SC","Microsoft YaHei","Noto Sans SC"', '"Songti SC","SimSun"'),
+};
 
 export type Muc = 'nghiem-chung' | 'xac-dinh-gio-sinh';
 
-export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
-  const h = await taiHoSo(slug);
-  if (!h) return new NextResponse('Không tìm thấy hồ sơ', { status: 404 });
+export async function trangHoSo(slug: string, muc: Muc, locale: Locale = DEFAULT_LOCALE): Promise<Response> {
+  const L = chuoi(locale);
+  const pre = localePrefix(locale);
+  const hGoc = await taiHoSo(slug);
+  // Ngôn ngữ ngoài `vi`: CHỈ render khi có bản dịch ĐÃ DUYỆT, đủ khoá và còn khớp văn xuôi gốc (source_hash);
+  // không thì 404 — tuyệt đối không lùi về chữ Việt (hợp đồng W6, và để hreflang không trỏ vào trang rỗng).
+  let h = hGoc;
+  if (hGoc && locale !== 'vi') {
+    const nc = locale as NcLocale;
+    const tr = await dbTaiBanDich(slug, nc);
+    const src = extractProse(hGoc);
+    h = tr && tr.sourceHash === hashProse(src) && thieuKhoa(src, tr).length === 0 ? applyProse(hGoc, tr) : null;
+    // Tên nguồn do hệ thống đặt theo mẫu cố định ("… — dữ liệu giờ sinh (Rodden A)") ⇒ đổi bằng chữ khung, không bắt người dịch dịch lại.
+    if (h) h.nguon = h.nguon.map((n) => ({ ...n, ten: nguonTen(n.ten, L) }));
+  }
+  if (!h) {
+    return new NextResponse(L.notFound, { status: 404, headers: locale === 'vi' ? {} : { 'X-Robots-Tag': 'noindex' } });
+  }
+  const dich = dichEngine(locale);
+  const { T, saoTxt, chuoiMay, diemTxt } = dich;
+  const nhan = klNhan(L);
+  const badge = (k: KetLuan) => `<span class="kl kl-${k}"><span aria-hidden="true">${KL_KY[k]}</span> ${nhan[k]}</span>`;
+  const HANG_NHAN = { tot: L.hangTot, vua: L.hangVua, xau: L.hangXau, na: '—' };
   // Mỗi hồ sơ thuộc ĐÚNG một mục: giờ do hệ thống xác định ở /xac-dinh-gio-sinh, giờ kiểm chứng ở /nghiem-chung.
   const mucDung: Muc = h.gioDoan ? 'xac-dinh-gio-sinh' : 'nghiem-chung';
-  if (muc !== mucDung) return new NextResponse(null, { status: 308, headers: { Location: `/${mucDung}/${h.slug}` } });
-  const tenMuc = h.gioDoan ? 'Xác Định Giờ Sinh' : 'Nghiệm Chứng';
+  if (muc !== mucDung) return new NextResponse(null, { status: 308, headers: { Location: `${pre}/${mucDung}/${h.slug}` } });
+  const tenMuc = h.gioDoan ? L.mucGd : L.mucNc;
+  // Ngôn ngữ đã có bản dịch của hồ sơ này → hreflang (chỉ bản ĐANG CÓ; x-default → vi).
+  const coDich = await dbNgonNguCuaSlug(h.slug);
   // Cờ index lấy từ MANIFEST (ngưỡng + indexed.txt), không từ file hồ sơ — validate.ts luôn ghi `indexed:false`.
   const moIndex = h.indexed !== false || !!(await danhMuc()).find((x) => x.slug === h.slug)?.indexed;
 
   const ls = await laSo(h, h.sinh.gioEngine);
-  if (!ls) return new NextResponse('Không lập được lá số', { status: 500 });
+  if (!ls) return new NextResponse(L.noChart, { status: 500 });
 
   const namSinh = Number(h.sinh.ngay.slice(0, 4));
 
   // Lưới lá số — CHÍNH renderer của tool Luận Giải (public/laso-chart.js), một khuôn cho mọi trang.
   // Người đã mất: năm xem = năm mất (ô giữa không hiện "97 tuổi" cho người mất năm 24 tuổi).
   const [yy, mm, dd] = h.sinh.ngay.split('-').map(Number);
-  const gridHTML = lasoChartHtml(
-    { day: dd, month: mm, year: yy, hourBranch: parseGioSinh(h.sinh.gioEngine), gender: h.gioiTinh, isLunar: false },
-    h.ten,
-    h.namMat || undefined,
-  );
-  const gioChi = CHI_NAMES[parseGioSinh(h.sinh.gioEngine)];
-  const tuoiCon = ls.tong_quan.can_chi_nam.split(' ').pop() || '';
+  // Lưới lá số là renderer chung của tool Luận Giải, chữ Việt — chưa có bản đa ngôn ngữ (engine thuộc W3) nên
+  // trang ngôn ngữ khác BỎ lưới thay vì phát một khối chữ Việt giữa trang Nhật/Hàn/Trung.
+  const gridHTML =
+    locale === 'vi'
+      ? lasoChartHtml(
+          { day: dd, month: mm, year: yy, hourBranch: parseGioSinh(h.sinh.gioEngine), gender: h.gioiTinh, isLunar: false },
+          h.ten,
+          h.namMat || undefined,
+        )
+      : '';
+  const gioChiVi = CHI_NAMES[parseGioSinh(h.sinh.gioEngine)];
+  const gioChi = T('chi', gioChiVi);
+  const canChiNam = T('canchi', ls.tong_quan.can_chi_nam);
+  const tuoiCon = T('chi', ls.tong_quan.can_chi_nam.split(' ').pop() || '');
   const cungThan = ls.cung.find((c) => c.is_than);
   const menhSao = saoTxt(ls.tong_quan.menh.chinh_tinh);
   const diemCung = (ten: string) => ls.cung.find((c) => c.ten === ten)?.diem ?? null;
+  const ngayHT = ngayHienThi(h.sinh.ngay, L);
 
   const dBM = dem(h.banMenh);
   const dDV = dem(h.daiVan);
@@ -146,32 +233,38 @@ export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
   // Giờ do hệ thống XÁC ĐỊNH (người không có giờ sinh công khai): giờ được chọn THEO đời thật, nên trang không
   // khoe tỷ lệ khớp như phép thử độc lập — thay bằng bảng 12 giờ.
   const gd = h.gioDoan;
-  const gdTin = gd ? { cao: 'cao', vua: 'vừa', thap: 'thấp' }[gd.doTinCay] : '';
+  const gdTin = gd ? { cao: L.tinCao, vua: L.tinVua, thap: L.tinThap }[gd.doTinCay] : '';
+  const gdChon = gd ? T('chi', gd.chon) : '';
 
-  const url = `${BASE}/${muc}/${h.slug}`;
-  const hubUrl = `${BASE}/${muc}`;
-  const h1 = gd ? `Xác định giờ sinh ${h.ten} theo Tử Vi: 12 giờ, giờ nào khớp đời nhất?` : `Lá số Tử Vi ${h.ten}: đối chiếu với cuộc đời thật`;
-  const title = gd
-    ? `Xác Định Giờ Sinh ${h.ten} Theo Tử Vi: 12 Giờ, Giờ Nào Khớp Đời Nhất | Tử Vi Minh Bảo`
-    : `Lá Số Tử Vi ${h.ten}: Đối Chiếu Với Cuộc Đời Thật | Tử Vi Minh Bảo`;
+  const url = `${BASE}${pre}/${muc}/${h.slug}`;
+  const hubUrl = `${BASE}${pre}/${muc}`;
+  const h1 = fmt(gd ? L.h1Gd : L.h1Nc, { ten: h.ten });
+  const title = `${fmt(gd ? L.titleGd : L.titleNc, { ten: h.ten })} | ${L.brand}`;
   const desc = gd
-    ? `${h.ten} (sinh ${ngayVN(h.sinh.ngay)}) chưa công bố giờ sinh. Lập đủ 12 lá số theo 12 canh giờ và đối chiếu với cuộc đời thật: giờ ${gd.chon} khớp nhất (độ tin cậy ${gdTin}). Có ghi rõ cách chấm.`
-    : `Lá số Tử Vi của ${h.ten} (sinh ${ngayVN(h.sinh.ngay)}, giờ ${gioChi}) đối chiếu từng mục với cuộc đời thật: ${pctTxt(dBM.tyLe)} nhận định về con người khớp, ${pctTxt(dDV.tyLe)} đại vận khớp. Có nguồn, ghi rõ chỗ trượt.`;
+    ? fmt(L.descGd, { ten: h.ten, ngay: ngayHT, chon: gdChon, tin: gdTin })
+    : fmt(L.descNc, { ten: h.ten, ngay: ngayHT, chi: gioChi, pBM: pctTxt(dBM.tyLe), pDV: pctTxt(dDV.tyLe) });
+  const alt = [...new Set<Locale>(['vi', ...coDich])]
+    .filter((l): l is Locale => (LOCALES as readonly string[]).includes(l))
+    .sort((x, y) => LOCALES.indexOf(x) - LOCALES.indexOf(y));
+  const hreflang = coDich.length
+    ? alt.map((l) => `<link rel="alternate" hreflang="${HREFLANG[l]}" href="${BASE}${localePrefix(l)}/${muc}/${h.slug}">`).join('\n') +
+      `\n<link rel="alternate" hreflang="x-default" href="${BASE}/${muc}/${h.slug}">\n`
+    : '';
 
   const { commonsThumb, commonsFilePage } = celebPhoto();
   const anh = h.anhCommons ? commonsThumb(h.anhCommons, 360) : null;
   const trangAnh = h.anhCommons ? commonsFilePage(h.anhCommons) : null;
-  const ogImg = `${BASE}/api/og?${new URLSearchParams({ title: gd ? `Xác định giờ sinh ${h.ten}` : `Lá số ${h.ten}`, sub: gd ? '12 lá số, giờ nào khớp đời nhất' : 'Tử vi đối chiếu cuộc đời thật' }).toString()}`;
+  const ogImg = `${BASE}/api/og?${new URLSearchParams({ title: fmt(gd ? L.ogTitleGd : L.ogTitleNc, { ten: h.ten }), sub: gd ? L.ogSubGd : L.ogSubNc }).toString()}`;
 
   // Nguyên văn câu engine cho các dòng trỏ `laSoRef` (hồ sơ sinh hàng loạt).
-  const coRef = [...h.banMenh, ...h.namMoc, ...h.daiVan].some((r) => r.laSoRef?.length);
+  const coRef = locale === 'vi' && [...h.banMenh, ...h.namMoc, ...h.daiVan].some((r) => r.laSoRef?.length);
   const ke = coRef ? await banKeLaSo(h.sinh.ngay, h.sinh.gioEngine, h.gioiTinh) : null;
   const tra = ke
     ? bangTra(ke, await Promise.all(h.namMoc.map((n) => banKeNam(h.sinh.ngay, h.sinh.gioEngine, h.gioiTinh, n.nam))))
     : new Map<string, string>();
   const goc = (refs?: string[]) => {
     const t = (refs || []).map((r) => tra.get(r)).filter(Boolean);
-    return t.length ? `<span class="goc">Lá số gốc: ${t.map((x) => esc(x)).join(' · ')}</span>` : '';
+    return t.length ? `<span class="goc">${fmt(L.gocLabel, { x: t.map((x) => esc(x)).join(' · ') })}</span>` : '';
   };
 
   const iADB = h.nguon.findIndex((n) => /astro-databank/i.test(n.url));
@@ -182,10 +275,10 @@ export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
   const rowsBM = h.banMenh
     .map(
       (r) => `<tr class="r-${r.ketLuan}">
-  <td data-l="Cung"><b>${esc(r.cung)}</b><span class="sub">điểm ${diemTxt(diemCung(r.cung))}/10</span></td>
-  <td data-l="Lá số nói">${esc(r.laSoNoi)}${goc(r.laSoRef)}</td>
-  <td data-l="Đời thật">${esc(r.doiThat)}${sup(r.nguon)}</td>
-  <td data-l="Kết luận">${badge(r.ketLuan)}</td>
+  <td data-l="${esc(L.thCung)}"><b>${esc(T('cung', r.cung))}</b><span class="sub">${fmt(L.diemCung, { d: diemTxt(diemCung(r.cung)) })}</span></td>
+  <td data-l="${esc(L.thLaSo)}">${esc(r.laSoNoi)}${goc(r.laSoRef)}</td>
+  <td data-l="${esc(L.thDoiThat)}">${esc(r.doiThat)}${sup(r.nguon)}</td>
+  <td data-l="${esc(L.thKetLuan)}">${badge(r.ketLuan)}</td>
 </tr>`,
     )
     .join('');
@@ -198,11 +291,11 @@ export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
       const hg = hang(dv.flag, dv.diem);
       const pct = dv.diem == null ? 0 : Math.max(4, Math.min(100, dv.diem * 10));
       return `<tr class="r-${r.ketLuan}">
-  <td data-l="Giai đoạn"><b>${dv.tuoi_tu}–${dv.tuoi_den} tuổi</b><span class="sub">${namSinh + dv.tuoi_tu - 1}–${namSinh + dv.tuoi_den - 1}</span></td>
-  <td data-l="Đại vận"><b>${esc(dv.cung)}</b> <span class="sub-i">(${esc(dv.dia_chi)})</span><span class="sub">${esc(saoTxt(dv.chinh_tinh))}</span>
-    <span class="bar bar-${hg}" role="img" aria-label="Điểm ${diemTxt(dv.diem)} trên 10, ${HANG_NHAN[hg]}"><i style="width:${pct}%"></i></span><span class="sub">${diemTxt(dv.diem)}/10 · ${HANG_NHAN[hg]}</span></td>
-  <td data-l="Đời thật">${esc(r.doiThat)}${sup(r.nguon)}<span class="vi">${esc(r.vi)}</span></td>
-  <td data-l="Kết luận">${badge(r.ketLuan)}</td>
+  <td data-l="${esc(L.thGiaiDoan)}"><b>${fmt(L.tuoiTu, { a: dv.tuoi_tu, b: dv.tuoi_den })}</b><span class="sub">${namSinh + dv.tuoi_tu - 1}–${namSinh + dv.tuoi_den - 1}</span></td>
+  <td data-l="${esc(L.thDaiVanL)}"><b>${esc(T('cung', dv.cung))}</b> <span class="sub-i">(${esc(T('chi', dv.dia_chi))})</span><span class="sub">${esc(saoTxt(dv.chinh_tinh))}</span>
+    <span class="bar bar-${hg}" role="img" aria-label="${esc(fmt(L.diemAria, { d: diemTxt(dv.diem), h: HANG_NHAN[hg] }))}"><i style="width:${pct}%"></i></span><span class="sub">${fmt(L.diemHang, { d: diemTxt(dv.diem), h: HANG_NHAN[hg] })}</span></td>
+  <td data-l="${esc(L.thDoiThat)}">${esc(r.doiThat)}${sup(r.nguon)}<span class="vi">${esc(r.vi)}</span></td>
+  <td data-l="${esc(L.thKetLuan)}">${badge(r.ketLuan)}</td>
 </tr>`;
     })
     .join('');
@@ -213,14 +306,14 @@ export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
     .map((n, i) => {
       const v = vans[i];
       const tuHoa = v?.luu_tu_hoa?.length
-        ? v.luu_tu_hoa.map((t) => `Hóa ${esc(t.hoa)} → ${esc(t.cung)}`).join(' · ')
+        ? v.luu_tu_hoa.map((t) => fmt(L.hoaTo, { hoa: esc(T('tuhoa', t.hoa)), cung: esc(T('cung', t.cung)) })).join(' · ')
         : '';
       return `<div class="nam r-${n.ketLuan}">
   <div class="nam-h"><span class="nam-y">${n.nam}</span>${badge(n.ketLuan)}</div>
-  ${v ? `<div class="nam-meta">Năm ${esc(v.can_chi_nam_xem)} · ${v.tuoi_mu} tuổi mụ · Thái Tuế ở ${esc(v.luu_thai_tue?.cung || '—')} · tiểu hạn ở ${esc(v.tieu_han?.cung || '—')}</div>` : ''}
-  <p class="nam-su"><b>Đời thật:</b> ${esc(n.suKien)}${sup(n.nguon)}</p>
-  <p class="nam-ls"><b>Lá số năm đó:</b> ${esc(n.laSoNoi)}${goc(n.laSoRef)}</p>
-  ${tuHoa ? `<div class="nam-th">Lưu tứ hóa: ${tuHoa}</div>` : ''}
+  ${v ? `<div class="nam-meta">${fmt(L.namMeta, { cc: esc(T('canchi', v.can_chi_nam_xem)), tuoi: v.tuoi_mu, tt: esc(v.luu_thai_tue ? T('cung', v.luu_thai_tue.cung) : '—'), th: esc(v.tieu_han ? T('cung', v.tieu_han.cung) : '—') })}</div>` : ''}
+  <p class="nam-su">${fmt(L.namSu, { x: `${esc(n.suKien)}${sup(n.nguon)}` })}</p>
+  <p class="nam-ls">${fmt(L.namLs, { x: `${esc(n.laSoNoi)}${goc(n.laSoRef)}` })}</p>
+  ${tuHoa ? `<div class="nam-th">${fmt(L.namTh, { x: tuHoa })}</div>` : ''}
 </div>`;
     })
     .join('');
@@ -231,6 +324,7 @@ export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
     const g = h.gioRanhGioi;
     const lsB = await laSo(h, g.gioThay);
     if (lsB) {
+      const gioThay = T('chi', g.tenGioThay);
       const dvRow = (thu: number) => {
         const a = ls.dai_van.find((d) => d.thu_tu === thu);
         const b = lsB.dai_van.find((d) => d.thu_tu === thu);
@@ -238,18 +332,18 @@ export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
         if (!a || !b) return '';
         const ha = hang(a.flag, a.diem);
         const hb = hang(b.flag, b.diem);
-        return `<tr><td data-l="Giai đoạn"><b>${a.tuoi_tu}–${a.tuoi_den} tuổi</b><span class="sub">${namSinh + a.tuoi_tu - 1}–${namSinh + a.tuoi_den - 1}</span></td>
-<td data-l="Giờ ${esc(gioChi)}"><span class="dot dot-${ha}"></span>${diemTxt(a.diem)} · ${esc(a.cung)}</td>
-<td data-l="Giờ ${esc(g.tenGioThay)}"><span class="dot dot-${hb}"></span>${diemTxt(b.diem)} · ${esc(b.cung)}</td>
-<td data-l="Đời thật">${esc(life?.doiThat || '')}</td></tr>`;
+        return `<tr><td data-l="${esc(L.thGiaiDoan)}"><b>${fmt(L.tuoiTu, { a: a.tuoi_tu, b: a.tuoi_den })}</b><span class="sub">${namSinh + a.tuoi_tu - 1}–${namSinh + a.tuoi_den - 1}</span></td>
+<td data-l="${esc(fmt(L.gio, { g: gioChi }))}"><span class="dot dot-${ha}"></span>${diemTxt(a.diem)} · ${esc(T('cung', a.cung))}</td>
+<td data-l="${esc(fmt(L.gio, { g: gioThay }))}"><span class="dot dot-${hb}"></span>${diemTxt(b.diem)} · ${esc(T('cung', b.cung))}</td>
+<td data-l="${esc(L.thDoiThat)}">${esc(life?.doiThat || '')}</td></tr>`;
       };
       gioHtml = `<section class="sec" id="gio-sinh">
-  <h2>Giờ sinh nằm sát ranh giới: giờ ${esc(gioChi)} hay giờ ${esc(g.tenGioThay)}?</h2>
+  <h2>${fmt(L.gioRgH, { a: esc(gioChi), b: esc(gioThay) })}</h2>
   <p>${esc(g.lyDo)}</p>
   <div class="tbl-wrap"><table class="tbl tbl-gio">
-    <thead><tr><th>Giai đoạn</th><th>Giờ ${esc(gioChi)}</th><th>Giờ ${esc(g.tenGioThay)}</th><th>Đời thật</th></tr></thead>
+    <thead><tr><th>${L.thGiaiDoan}</th><th>${fmt(L.gio, { g: esc(gioChi) })}</th><th>${fmt(L.gio, { g: esc(gioThay) })}</th><th>${L.thDoiThat}</th></tr></thead>
     <tbody>
-      <tr><td data-l="Giai đoạn"><b>Cung Mệnh</b></td><td data-l="Giờ ${esc(gioChi)}">${esc(ls.tong_quan.menh.dia_chi)} · ${esc(menhSao)}</td><td data-l="Giờ ${esc(g.tenGioThay)}">${esc(lsB.tong_quan.menh.dia_chi)} · ${esc(saoTxt(lsB.tong_quan.menh.chinh_tinh))}</td><td data-l="Đời thật">—</td></tr>
+      <tr><td data-l="${esc(L.thGiaiDoan)}"><b>${esc(L.lsMenh)}</b></td><td data-l="${esc(fmt(L.gio, { g: gioChi }))}">${esc(T('chi', ls.tong_quan.menh.dia_chi))} · ${esc(menhSao)}</td><td data-l="${esc(fmt(L.gio, { g: gioThay }))}">${esc(T('chi', lsB.tong_quan.menh.dia_chi))} · ${esc(saoTxt(lsB.tong_quan.menh.chinh_tinh))}</td><td data-l="${esc(L.thDoiThat)}">—</td></tr>
       ${g.soDaiVan.map(dvRow).join('')}
     </tbody>
   </table></div>
@@ -261,19 +355,25 @@ export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
   // ── FAQ: câu dữ kiện SINH TỪ ENGINE + câu biên tập ───────
   const faqs = [
     {
-      q: `${h.ten} sinh năm nào, giờ nào, tuổi con gì?`,
+      q: fmt(L.faq1Q, { ten: h.ten }),
       a: gd
-        ? `${h.ten} sinh ngày ${ngayVN(h.sinh.ngay)} tại ${h.sinh.noi}, năm âm lịch ${ls.tong_quan.can_chi_nam} — tuổi ${tuoiCon}. Giờ sinh chưa được công bố; đối chiếu 12 lá số với cuộc đời thật thì giờ ${gd.chon} khớp nhất, nhưng đây là giờ do hệ thống xác định, không phải giờ khai sinh.`
-        : `${h.ten} sinh ngày ${ngayVN(h.sinh.ngay)} lúc ${h.sinh.gio} tại ${h.sinh.noi} (Astro-Databank xếp hạng ${h.sinh.rodden}). Năm sinh âm lịch là ${ls.tong_quan.can_chi_nam} — tuổi ${tuoiCon}; giờ sinh theo đồng hồ thuộc giờ ${gioChi}.`,
+        ? fmt(L.faq1AGd, { ten: h.ten, ngay: ngayHT, noi: h.sinh.noi, cc: canChiNam, tuoi: tuoiCon, chon: gdChon })
+        : fmt(L.faq1ANc, { ten: h.ten, ngay: ngayHT, gio: h.sinh.gio, noi: h.sinh.noi, r: h.sinh.rodden, cc: canChiNam, tuoi: tuoiCon, chi: gioChi }),
     },
     {
-      q: `Lá số tử vi của ${h.ten} mệnh gì?`,
-      a: `Cung Mệnh an tại ${ls.tong_quan.menh.dia_chi} với chính tinh ${menhSao}; cung Thân cư ${cungThan ? `${cungThan.ten} (${cungThan.dia_chi})` : '—'}; ${ls.tong_quan.cuc}. Cung mạnh nhất là ${ls.diem_manh[0]?.ten}, yếu nhất là ${ls.diem_yeu[0]?.ten}.`,
+      q: fmt(L.faq2Q, { ten: h.ten }),
+      a: fmt(L.faq2A, {
+        dc: T('chi', ls.tong_quan.menh.dia_chi),
+        sao: menhSao,
+        than: cungThan ? `${T('cung', cungThan.ten)} (${T('chi', cungThan.dia_chi)})` : '—',
+        cuc: T('cuc', ls.tong_quan.cuc),
+        manh: T('cung', ls.diem_manh[0]?.ten),
+        yeu: T('cung', ls.diem_yeu[0]?.ten),
+      }),
     },
     ...h.faq,
   ];
 
-  const ngayHT = ngayVN(h.sinh.ngay);
   const schema = JSON.stringify([
     {
       '@context': 'https://schema.org',
@@ -283,14 +383,15 @@ export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
       url,
       mainEntityOfPage: url,
       image: anh || ogImg,
-      inLanguage: 'vi',
+      inLanguage: HREFLANG[locale],
       datePublished: h.ngayDang,
       dateModified: h.ngayCapNhat,
-      author: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE },
-      publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE },
+      author: { '@type': 'Organization', '@id': ORG_ID, name: L.brand, url: BASE },
+      publisher: { '@type': 'Organization', '@id': ORG_ID, name: L.brand, url: BASE },
       about: {
         '@type': 'Person',
         name: h.ten,
+        ...(hGoc && hGoc.ten !== h.ten ? { alternateName: hGoc.ten } : {}),
         birthDate: h.sinh.ngay,
         birthPlace: { '@type': 'Place', name: h.sinh.noi },
         jobTitle: h.ngheNghiep,
@@ -308,35 +409,43 @@ export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Trang Chủ', item: `${BASE}/` },
+        { '@type': 'ListItem', position: 1, name: L.home, item: `${BASE}${pre}/` },
         { '@type': 'ListItem', position: 2, name: tenMuc, item: hubUrl },
         { '@type': 'ListItem', position: 3, name: h.ten, item: url },
       ],
     },
   ]).replace(/</g, '\\u003c');
 
-  const ask = seoAsk({
-    fam: 'nghiem-chung',
-    thay: await fetchThayCard('co-nguyet'),
-    title: '',
-    endTitle: `Lá số của bạn sẽ khớp đến đâu? Hỏi thầy ngay`,
-    chips: [
-      { q: 'Thầy xem lá số giúp tôi: tôi hợp nghề gì?', laso: true },
-      { q: 'Đại vận hiện tại của tôi thuận hay nghịch?', laso: true },
-      { q: 'Năm nay của tôi nên chú ý điều gì?', laso: true },
-    ],
-    prefix: `Đọc hồ sơ ${h.ten}`,
-  });
+  // Ô "Hỏi Thầy" là rail tiếng Việt — ngôn ngữ khác chờ W8 (đầu ra LLM theo ngôn ngữ), nên chưa gắn.
+  const ask =
+    locale === 'vi'
+      ? seoAsk({
+          fam: 'nghiem-chung',
+          thay: await fetchThayCard('co-nguyet'),
+          title: '',
+          endTitle: `Lá số của bạn sẽ khớp đến đâu? Hỏi thầy ngay`,
+          chips: [
+            { q: 'Thầy xem lá số giúp tôi: tôi hợp nghề gì?', laso: true },
+            { q: 'Đại vận hiện tại của tôi thuận hay nghịch?', laso: true },
+            { q: 'Năm nay của tôi nên chú ý điều gì?', laso: true },
+          ],
+          prefix: `Đọc hồ sơ ${h.ten}`,
+        })
+      : { css: '', end: '', tail: '' };
 
   // Liên kết chéo: 6 hồ sơ kề bên trong danh mục (ổn định giữa các lần dựng).
-  const dm = (await danhMuc()).filter((x) => !!x.gioDoan === !!gd);
+  const dmGoc = await danhMuc();
+  const dm: { slug: string; ten: string }[] =
+    locale === 'vi'
+      ? dmGoc.filter((x) => !!x.gioDoan === !!gd)
+      : (await dbDanhMucDich(locale as NcLocale)).filter((x) => !!dmGoc.find((g0) => g0.slug === x.slug)?.gioDoan === !!gd);
   const viTri = Math.max(0, dm.findIndex((x) => x.slug === h.slug));
   const khac = [1, 2, 3, -1, -2, -3]
     .map((k) => dm[(viTri + k + dm.length) % dm.length])
     .filter((x, i, a) => x && x.slug !== h.slug && a.findIndex((y) => y?.slug === x.slug) === i)
     .slice(0, 6);
 
-  const html = `<!DOCTYPE html><html lang="vi"><head>
+  const html = `<!DOCTYPE html><html lang="${HREFLANG[locale]}"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
@@ -353,10 +462,9 @@ export async function trangHoSo(slug: string, muc: Muc): Promise<Response> {
 <meta name="twitter:image" content="${esc(ogImg)}">
 <meta name="robots" content="${moIndex ? 'index, follow, max-image-preview:large' : 'noindex, follow'}">
 <link rel="canonical" href="${url}">
-<link rel="icon" type="image/webp" href="/seal.webp">
+${hreflang}<link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
+${locale === 'vi' ? '<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>\n' : ''}<link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
 <link rel="stylesheet" href="/laso-chart.css?v=7">
 <script type="application/ld+json">${schema}</script>
@@ -453,31 +561,31 @@ h1{font-size:24px}.score{grid-template-columns:1fr}.ls-grid{grid-template-column
 .tbl td::before{content:attr(data-l);display:block;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--lt);margin-bottom:2px}
 }
 .laso-wrap{margin:6px 0 16px;--navy:#0F2A3D;--gold:#C8A96A;--blue:#1455A4;--text-lt:#666666}
-${ask.css}
+${CJK_CSS[locale]}${ask.css}
 </style>
 <script src="/auth.js?v=6"></script>
 </head><body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
 <nav class="bc" aria-label="Breadcrumb">
-  <a href="/">Trang Chủ</a><span>›</span>
+  <a href="${pre}/">${L.home}</a><span>›</span>
   <a href="${hubUrl}">${tenMuc}</a><span>›</span>
   <span>${esc(h.ten)}</span>
 </nav>
 <article class="wrap">
   <header class="hero">
     <div>
-      ${anh ? `<img class="hero-img" src="${esc(anh)}" alt="Chân dung ${esc(h.ten)}" width="150" height="150">` : `<div class="hero-img hero-ph">${esc(h.ten.slice(0, 1))}</div>`}
-      ${trangAnh ? `<div class="hero-cap">Ảnh: <a href="${esc(trangAnh)}" rel="noopener nofollow" target="_blank">Wikimedia Commons</a> — tác giả &amp; giấy phép tại trang gốc</div>` : ''}
+      ${anh ? `<img class="hero-img" src="${esc(anh)}" alt="${esc(fmt(L.anhAlt, { ten: h.ten }))}" width="150" height="150">` : `<div class="hero-img hero-ph">${esc(h.ten.slice(0, 1))}</div>`}
+      ${trangAnh ? `<div class="hero-cap">${fmt(L.anhCap, { url: esc(trangAnh) })}</div>` : ''}
     </div>
     <div>
-      <div class="eyebrow">${gd ? 'Xác Định Giờ Sinh · 12 lá số' : 'Nghiệm Chứng · Lá số người nổi tiếng'}</div>
+      <div class="eyebrow">${gd ? L.eyebrowGd : L.eyebrowNc}</div>
       <h1>${esc(h1)}</h1>
-      <p class="lede">${esc(h.moTaNgan)}.</p>
+      <p class="lede">${esc(h.moTaNgan)}${L.dot}</p>
       <div class="facts">
-        <span class="fact">Sinh <b>${ngayHT}</b>${gd ? '' : ` · ${esc(h.sinh.gio)}`} · ${esc(h.sinh.noi)}</span>
-        <span class="fact">${gd ? 'Giờ xác định' : 'Giờ'} <b>${esc(gioChi)}</b> · tuổi <b>${esc(ls.tong_quan.can_chi_nam)}</b></span>
-        ${gd ? `<span class="fact">Giờ sinh: <b>chưa công bố — giờ trên do hệ thống xác định</b> (độ tin cậy ${gdTin})</span>` : `<span class="fact">Dữ liệu giờ sinh: <b>Rodden ${h.sinh.rodden}</b>${sup(iADB >= 0 ? [iADB] : [])}</span>`}${h.namMat ? `<span class="fact">Mất năm <b>${h.namMat}</b></span>` : ''}
+        <span class="fact">${gd ? fmt(L.factSinhGd, { ngay: ngayHT, noi: esc(h.sinh.noi) }) : fmt(L.factSinhNc, { ngay: ngayHT, gio: esc(h.sinh.gio), noi: esc(h.sinh.noi) })}</span>
+        <span class="fact">${fmt(gd ? L.factGioGd : L.factGioNc, { chi: esc(gioChi), cc: esc(canChiNam) })}</span>
+        ${gd ? `<span class="fact">${fmt(L.factGdTin, { tin: gdTin })}</span>` : `<span class="fact">${fmt(L.factRodden, { r: h.sinh.rodden, ref: sup(iADB >= 0 ? [iADB] : []) })}</span>`}${h.namMat ? `<span class="fact">${fmt(L.factMat, { nam: h.namMat })}</span>` : ''}
       </div>
     </div>
   </header>
@@ -485,129 +593,125 @@ ${ask.css}
   ${
     gd
       ? `<section class="answer" aria-labelledby="tl">
-    <h2 id="tl">${esc(h.ten)} sinh giờ nào? Tử Vi xác định ra sao</h2>
+    <h2 id="tl">${esc(fmt(L.ansGdH, { ten: h.ten }))}</h2>
     <p>${esc(h.traLoiNgan)}</p>
     <div class="score">
       ${[...gd.bang]
         .sort((a, b) => b.diem - a.diem)
         .slice(0, 3)
-        .map((b, i) => `<div class="sc"><div class="sc-n">Giờ ${esc(b.gio)}</div><div class="sc-l">${['khớp nhất', 'khớp thứ hai', 'khớp thứ ba'][i]} · ${b.diem}/100</div><div class="sc-d">${esc(b.menh)}</div></div>`)
+        .map((b, i) => `<div class="sc"><div class="sc-n">${fmt(L.gio, { g: esc(T('chi', b.gio)) })}</div><div class="sc-l">${[L.hang1, L.hang2, L.hang3][i]} · ${b.diem}/100</div><div class="sc-d">${esc(chuoiMay(b.menh))}</div></div>`)
         .join('')}
     </div>
-    <p class="sc-note">Điểm 0–100 = mức lá số giờ đó khớp đời thật. Giờ được xác định BẰNG cách đối chiếu với đời thật, nên đây không phải phép thử độc lập như hồ sơ có giờ sinh khai sinh. <a href="#phuong-phap">Cách chấm</a></p>
+    <p class="sc-note">${L.ansGdNote}</p>
   </section>
 
   <section class="sec" id="doan-gio">
-    <h2>12 lá số của ${esc(h.ten)}: giờ nào khớp đời nhất?</h2>
+    <h2>${esc(fmt(L.doanH, { ten: h.ten }))}</h2>
     <p>${esc(gd.giaiThich)}</p>
     <div class="tbl-wrap"><table class="tbl tbl-doan">
-      <thead><tr><th>Giờ</th><th>Cung Mệnh</th><th>Điểm khớp</th><th>Vì sao</th></tr></thead>
+      <thead><tr><th>${L.doanTh1}</th><th>${L.doanTh2}</th><th>${L.doanTh3}</th><th>${L.doanTh4}</th></tr></thead>
       <tbody>${gd.bang
         .map(
-          (b) => `<tr class="${b.gio === gd.chon ? 'r-chon' : ''}"><td data-l="Giờ"><b>${esc(b.gio)}</b>${b.gio === gd.chon ? '<span class="sub">giờ xác định</span>' : ''}</td><td data-l="Cung Mệnh">${esc(b.menh)}</td><td data-l="Điểm khớp"><div class="bar"><i style="width:${b.diem}%"></i></div><span class="sub">${b.diem}/100</span></td><td data-l="Vì sao">${esc(b.lyDo)}</td></tr>`,
+          (b) => `<tr class="${b.gio === gd.chon ? 'r-chon' : ''}"><td data-l="${esc(L.doanTh1)}"><b>${esc(T('chi', b.gio))}</b>${b.gio === gd.chon ? `<span class="sub">${L.gioXacDinh}</span>` : ''}</td><td data-l="${esc(L.doanTh2)}">${esc(chuoiMay(b.menh))}</td><td data-l="${esc(L.doanTh3)}"><div class="bar"><i style="width:${b.diem}%"></i></div><span class="sub">${b.diem}/100</span></td><td data-l="${esc(L.doanTh4)}">${esc(b.lyDo)}</td></tr>`,
         )
         .join('')}</tbody>
     </table></div>
   </section>`
       : `  <section class="answer" aria-labelledby="tl">
-    <h2 id="tl">Lá số của ${esc(h.ten)} đoán đúng đến đâu?</h2>
+    <h2 id="tl">${esc(fmt(L.ansNcH, { ten: h.ten }))}</h2>
     <p>${esc(h.traLoiNgan)}</p>
     <div class="score">
-      <div class="sc"><div class="sc-n">${pctTxt(dBM.tyLe)}</div><div class="sc-l">nhận định về con người khớp</div><div class="sc-d">${dBM.khop} khớp · ${dBM.motPhan} khớp một phần · ${dBM.truot} trượt</div></div>
-      <div class="sc"><div class="sc-n">${pctTxt(dDV.tyLe)}</div><div class="sc-l">đại vận 10 năm khớp</div><div class="sc-d">${dDV.khop} khớp · ${dDV.motPhan} khớp một phần · ${dDV.truot} trượt</div></div>
-      <div class="sc"><div class="sc-n">${pctTxt(dNam.tyLe)}</div><div class="sc-l">năm bước ngoặt khớp</div><div class="sc-d">${dNam.khop} khớp · ${dNam.motPhan} khớp một phần · ${dNam.truot} trượt</div></div>
+      <div class="sc"><div class="sc-n">${pctTxt(dBM.tyLe)}</div><div class="sc-l">${L.scBM}</div><div class="sc-d">${fmt(L.scDetail, { k: dBM.khop, m: dBM.motPhan, t: dBM.truot })}</div></div>
+      <div class="sc"><div class="sc-n">${pctTxt(dDV.tyLe)}</div><div class="sc-l">${L.scDV}</div><div class="sc-d">${fmt(L.scDetail, { k: dDV.khop, m: dDV.motPhan, t: dDV.truot })}</div></div>
+      <div class="sc"><div class="sc-n">${pctTxt(dNam.tyLe)}</div><div class="sc-l">${L.scNam}</div><div class="sc-d">${fmt(L.scDetail, { k: dNam.khop, m: dNam.motPhan, t: dNam.truot })}</div></div>
     </div>
-    <p class="sc-note">Tỷ lệ = mục khớp hoặc khớp một phần trên số mục kiểm chứng được; mục chưa có nguồn không tính. <a href="#phuong-phap">Cách chấm</a></p>
+    <p class="sc-note">${L.ansNcNote}</p>
   </section>`
   }
 
   <section class="sec" id="tieu-su">
-    <h2>${esc(h.ten)} là ai?</h2>
+    <h2>${esc(fmt(L.tieuSuH, { ten: h.ten }))}</h2>
     <div class="prose">${h.tieuSu.map((p) => `<p>${esc(p)}</p>`).join('')}</div>
   </section>
 
   <section class="sec" id="la-so">
-    <h2>Lá số Tử Vi của ${esc(h.ten)} tóm tắt</h2>
-    <p>Lập theo ngày ${ngayHT}, ${gd ? `giờ ${esc(gioChi)} — giờ khớp nhất do hệ thống xác định ở trên, không phải giờ khai sinh` : `giờ ${esc(gioChi)} (${esc(h.sinh.gio)} giờ đồng hồ)`}, ${h.gioiTinh === 'nam' ? 'nam' : 'nữ'} mệnh.</p>
+    <h2>${esc(fmt(L.laSoH, { ten: h.ten }))}</h2>
+    <p>${fmt(gd ? L.laSoGd : L.laSoNc, { ngay: ngayHT, chi: esc(gioChi), gio: esc(h.sinh.gio), gt: h.gioiTinh === 'nam' ? L.nam : L.nu })}</p>
     ${gridHTML ? `<div class="laso-wrap">${gridHTML}</div>` : ''}
     <div class="ls-grid">
-      <div class="ls-i"><div class="ls-k">Năm sinh</div><div class="ls-v">${esc(ls.tong_quan.can_chi_nam)}</div></div>
-      <div class="ls-i"><div class="ls-k">Cục</div><div class="ls-v">${esc(ls.tong_quan.cuc)}</div></div>
-      <div class="ls-i"><div class="ls-k">Cung Mệnh</div><div class="ls-v">${esc(ls.tong_quan.menh.dia_chi)} · ${esc(menhSao)}</div></div>
-      <div class="ls-i"><div class="ls-k">Cung Thân</div><div class="ls-v">${cungThan ? `${esc(cungThan.dia_chi)} · cư ${esc(cungThan.ten)}` : '—'}</div></div>
-      <div class="ls-i"><div class="ls-k">Cung mạnh nhất</div><div class="ls-v">${esc(ls.diem_manh[0]?.ten)} (${diemTxt(ls.diem_manh[0]?.diem ?? null)})</div></div>
-      <div class="ls-i"><div class="ls-k">Cung mạnh nhì</div><div class="ls-v">${esc(ls.diem_manh[1]?.ten)} (${diemTxt(ls.diem_manh[1]?.diem ?? null)})</div></div>
-      <div class="ls-i"><div class="ls-k">Cung yếu nhất</div><div class="ls-v">${esc(ls.diem_yeu[0]?.ten)} (${diemTxt(ls.diem_yeu[0]?.diem ?? null)})</div></div>
-      <div class="ls-i"><div class="ls-k">Mệnh nạp âm</div><div class="ls-v">${esc(ls.tong_quan.nap_am.split(' (')[0])}</div></div>
+      <div class="ls-i"><div class="ls-k">${L.lsNamSinh}</div><div class="ls-v">${esc(canChiNam)}</div></div>
+      <div class="ls-i"><div class="ls-k">${L.lsCuc}</div><div class="ls-v">${esc(T('cuc', ls.tong_quan.cuc))}</div></div>
+      <div class="ls-i"><div class="ls-k">${L.lsMenh}</div><div class="ls-v">${esc(T('chi', ls.tong_quan.menh.dia_chi))} · ${esc(menhSao)}</div></div>
+      <div class="ls-i"><div class="ls-k">${L.lsThan}</div><div class="ls-v">${cungThan ? esc(fmt(L.thanCu, { dc: T('chi', cungThan.dia_chi), cung: T('cung', cungThan.ten) })) : '—'}</div></div>
+      <div class="ls-i"><div class="ls-k">${L.lsManh1}</div><div class="ls-v">${esc(T('cung', ls.diem_manh[0]?.ten ?? ''))} (${diemTxt(ls.diem_manh[0]?.diem ?? null)})</div></div>
+      <div class="ls-i"><div class="ls-k">${L.lsManh2}</div><div class="ls-v">${esc(T('cung', ls.diem_manh[1]?.ten ?? ''))} (${diemTxt(ls.diem_manh[1]?.diem ?? null)})</div></div>
+      <div class="ls-i"><div class="ls-k">${L.lsYeu1}</div><div class="ls-v">${esc(T('cung', ls.diem_yeu[0]?.ten ?? ''))} (${diemTxt(ls.diem_yeu[0]?.diem ?? null)})</div></div>
+      <div class="ls-i"><div class="ls-k">${L.lsNapAm}</div><div class="ls-v">${esc(T('hanh', ls.tong_quan.nap_am.split(' (')[0]))}</div></div>
     </div>
   </section>
 
   <section class="sec" id="con-nguoi">
-    <h2>Bảng 1 — Lá số nói gì về con người, đời thật ra sao</h2>
-    <p>Mỗi dòng là một nhận định của lá số, đặt cạnh sự thật có nguồn. Mục nào không có nguồn công khai, chúng tôi ghi "chưa kiểm chứng" thay vì cố gán.</p>
+    <h2>${L.bm1H}</h2>
+    <p>${L.bm1P}</p>
     <div class="tbl-wrap"><table class="tbl">
-      <thead><tr><th>Cung</th><th>Lá số nói</th><th>Đời thật</th><th>Kết luận</th></tr></thead>
+      <thead><tr><th>${L.thCung}</th><th>${L.thLaSo}</th><th>${L.thDoiThat}</th><th>${L.thKetLuan}</th></tr></thead>
       <tbody>${rowsBM}</tbody>
     </table></div>
   </section>
 
   <section class="sec" id="dai-van">
-    <h2>Bảng 2 — Chu trình cuộc đời: mười năm một đại vận</h2>
-    <p>Điểm đại vận (thang 10) do hệ thống chấm theo cổ pháp, trước khi nhìn vào đời thật. Một đại vận "khớp" khi điểm cao rơi vào giai đoạn thuận và điểm thấp rơi vào giai đoạn khó.</p>
+    <h2>${L.bm2H}</h2>
+    <p>${L.bm2P}</p>
     <div class="tbl-wrap"><table class="tbl">
-      <thead><tr><th>Giai đoạn</th><th>Đại vận &amp; điểm</th><th>Đời thật</th><th>Kết luận</th></tr></thead>
+      <thead><tr><th>${L.thGiaiDoan}</th><th>${L.thDaiVan}</th><th>${L.thDoiThat}</th><th>${L.thKetLuan}</th></tr></thead>
       <tbody>${rowsDV}</tbody>
     </table></div>
   </section>
 
   <section class="sec" id="nam-buoc-ngoat">
-    <h2>Những năm bước ngoặt: lá số có "bắt" được không?</h2>
-    <p>Xét vận từng năm (lưu niên) ở đúng những năm đời ${h.gioiTinh === 'nam' ? 'ông' : 'bà'} rẽ hướng.</p>
+    <h2>${L.namH}</h2>
+    <p>${fmt(L.namP, { ong: h.gioiTinh === 'nam' ? L.ong : L.ba })}</p>
     <div class="nam-grid">${cardsNam}</div>
   </section>
 
   ${gioHtml}
 
   <section class="sec" id="ket-luan">
-    <h2>Nhận xét của ban biên tập</h2>
+    <h2>${L.ketLuanH}</h2>
     <div class="prose">${h.ketLuanBienTap.map((p) => `<p>${esc(p)}</p>`).join('')}</div>
     <div class="cta">
-      <a class="btn btn-p" href="/app/luan-giai">Lập lá số của bạn</a>
-      <a class="btn btn-s" href="/phuong-phap">Xem phương pháp Nghiệm Chứng</a>
+      <a class="btn btn-p" href="${pre}/app/luan-giai">${L.ctaLap}</a>
+      <a class="btn btn-s" href="${pre}/phuong-phap">${L.ctaPp}</a>
     </div>
   </section>
 
   <section class="sec" id="phuong-phap">
-    <h2>Cách chúng tôi đối chiếu</h2>
+    <h2>${L.ppH}</h2>
     <ul class="method">
-      ${
-        gd
-          ? '<li><b>Giờ sinh do hệ thống xác định:</b> người này chưa công bố giờ sinh. Hệ thống lập đủ 12 lá số theo 12 canh giờ; mỗi giờ được chấm 0–100 theo mức khớp với sự kiện công khai, nặng nhất là đại vận có khớp với các giai đoạn thăng trầm hay không. Giờ điểm cao nhất được chọn để viết các bảng dưới — vì giờ được xác định từ chính đời thật nên các bảng là minh họa, không phải phép thử độc lập.</li>'
-          : '<li><b>Giờ sinh có kiểm chứng:</b> chỉ chọn người có giờ sinh xếp hạng Rodden AA hoặc A trên Astro-Databank.</li>'
-      }
-      <li><b>Lá số chấm trước, đời thật đặt sau:</b> cung, sao, điểm và đại vận do hệ thống an sao tính theo cổ pháp; không chỉnh lá số cho vừa đời thật.</li>
-      <li><b>Mỗi sự thật một nguồn:</b> chỉ dùng sự kiện công khai, có trích dẫn. Không suy đoán về sức khỏe, hôn nhân hay đời tư người đang sống.</li>
-      <li><b>Cách tính tỷ lệ khớp:</b> mỗi dòng được chấm khớp, khớp một phần hoặc trượt. Tỷ lệ = (khớp + khớp một phần) / số dòng đã chấm — vì Tử Vi luận theo khuynh hướng, một nhận định đúng về hướng dù chưa đúng mọi chi tiết vẫn được tính là khớp. Mục chưa có nguồn và giai đoạn đang diễn ra không tính.</li>
-      <li><b>Ghi cả chỗ trượt:</b> tỷ lệ được đếm thẳng từ từng dòng, kể cả những dòng lá số đoán sai.</li>
+      ${gd ? L.ppGd : L.ppNc}
+      ${L.pp2}
+      ${L.pp3}
+      ${L.pp4}
+      ${L.pp5}
     </ul>
   </section>
 
   <section class="sec" id="faq">
-    <h2>Câu hỏi thường gặp</h2>
+    <h2>${L.faqH}</h2>
     ${faqs.map((f) => `<div class="faq-i"><div class="faq-q">${esc(f.q)}</div><div class="faq-a">${esc(f.a)}</div></div>`).join('')}
   </section>
 
   <section class="sec" id="nguon">
-    <h2>Nguồn</h2>
+    <h2>${L.nguonH}</h2>
     <ol class="src">${h.nguon.map((n, i) => `<li id="nguon-${i + 1}"><a href="${esc(n.url)}" rel="noopener nofollow" target="_blank">${esc(n.ten)}</a></li>`).join('')}</ol>
   </section>
 
-  ${khac.length ? `<section class="sec"><h2>${gd ? 'Xác định giờ sinh người nổi tiếng khác' : 'Hồ sơ nghiệm chứng khác'}</h2><ul class="src">${khac.map((x) => `<li><a href="/${muc}/${esc(x.slug)}">${gd ? 'Giờ sinh' : 'Lá số Tử Vi'} ${esc(x.ten)}</a></li>`).join('')}</ul></section>` : ''}
-  <p class="disc">${gd ? 'Muốn xem lá số người có giờ sinh <b>kiểm chứng</b> đặt cạnh đời thật: <a href="/nghiem-chung">Nghiệm Chứng</a>.' : 'Người chưa công bố giờ sinh: <a href="/xac-dinh-gio-sinh">Xác định giờ sinh qua 12 lá số</a>.'}</p>
+  ${khac.length ? `<section class="sec"><h2>${gd ? L.khacHGd : L.khacHNc}</h2><ul class="src">${khac.map((x) => `<li><a href="${pre}/${muc}/${esc(x.slug)}">${fmt(gd ? L.khacLinkGd : L.khacLinkNc, { ten: esc(x.ten) })}</a></li>`).join('')}</ul></section>` : ''}
+  <p class="disc">${gd ? fmt(L.discGd, { url: `${pre}/nghiem-chung` }) : fmt(L.discNc, { url: `${pre}/xac-dinh-gio-sinh` })}</p>
 
   ${ask.end}
 
-  <p class="disc">Cập nhật ${ngayVN(h.ngayCapNhat)}.${h.wiki ? ` Phần đời thật được tóm lược và dịch từ <a href="${esc(h.wiki.url)}" rel="noopener nofollow" target="_blank">Wikipedia (${esc(h.wiki.lang)})</a>, giấy phép CC BY-SA.` : ''} Tử Vi là một hệ thống luận đoán cổ truyền; trang này đối chiếu nó với dữ kiện công khai để người đọc tự đánh giá, không nhằm phán xét hay dự đoán về đời tư của người được nhắc tới.</p>
+  <p class="disc">${fmt(L.capNhat, { ngay: ngayHienThi(h.ngayCapNhat, L) })}${h.wiki ? fmt(L.wikiDich, { url: esc(h.wiki.url), lang: esc(h.wiki.lang) }) : ''}${L.discCuoi}</p>
 </article>
 ${ask.tail}
 </body></html>`;
