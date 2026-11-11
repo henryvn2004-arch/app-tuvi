@@ -20,12 +20,36 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/chu-trinh-cuoc-doi": [
+  "ja",
+  "ko"
+ ],
+ "/app/cong-cu": [
+  "ja",
+  "ko"
+ ],
  "/app/luan-giai": [
   "en",
   "ja",
   "ko",
   "zh-tw",
   "zh-cn"
+ ],
+ "/app/nap-am": [
+  "ja",
+  "ko"
+ ],
+ "/app/nap-luong": [
+  "ja",
+  "ko"
+ ],
+ "/app/van-han-nam": [
+  "ja",
+  "ko"
+ ],
+ "/app/xem-tuoi": [
+  "ja",
+  "ko"
  ],
  "/chinh-sach-bao-mat.html": [
   "en",
