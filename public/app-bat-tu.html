@@ -768,7 +768,7 @@ function buildPregenContextForPhan(phan,bt){
   var warnings=matches.filter(function(m){return !m.hopLe;});
   function fmtCach(m,prefix){
     var reasons=(m.lyDo||[]).join('; ');
-    return prefix+' '+m.ten+' ['+m.nhomCach+(']\n  ' + 'Mô tả:' + ' ')+m.description+'\n  Lý do trigger: '+reasons+'\n  Nguồn: '+m.source;
+    return prefix+' '+m.ten+' ['+m.nhomCach+']\n  Mô tả: '+m.description+'\n  Lý do trigger: '+reasons+'\n  Nguồn: '+m.source;
   }
   function fmtDomain(label,key){
     if(!ds||!ds[key])return '';
