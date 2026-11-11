@@ -13,7 +13,7 @@ import { join } from 'path';
 import { NOINDEX_FOLLOW } from '@/lib/seo/index-policy';
 import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 import { ORG_ID } from '@/lib/seo/entity';
-import { vndPerCredit } from '@/lib/billing/packages';
+import { usdLabel, usdPerCredit } from '@/lib/billing/packages';
 import { ASK_CSS, ASK_SCRIPT, askBarHTML, askBoxHTML, fetchThayCard, type AskChip, type ThayCard } from '@/lib/seo/ask-box';
 
 // ⚠️ Module-level: must run before any request so that if loadEngine() sets
@@ -1415,7 +1415,7 @@ async function fetchNextStepTool(toolId: string): Promise<NextStepTool> {
   return { toolId, label: String(row.label || toolId), appPath: row.app_path, credits: Number(row.credits) || 0 };
 }
 
-function buildNextStepHTML(tool: NextStepTool, params: IsrParams, vndRate: number | null): string {
+function buildNextStepHTML(tool: NextStepTool, params: IsrParams, usdRate: number | null): string {
   const chatCard = `<a class="ns-card" href="${appChatHref(params)}">
     <div class="ns-card-eyebrow">Hỏi Thầy</div>
     <div class="ns-card-t">Hỏi thêm về lá số này</div>
@@ -1424,8 +1424,10 @@ function buildNextStepHTML(tool: NextStepTool, params: IsrParams, vndRate: numbe
   if (!tool) {
     return `<div class="next-step"><div class="ns-title">Bước Tiếp Theo</div><div class="ns-grid ns-grid-1">${chatCard}</div></div>`;
   }
-  const vnd = vndRate ? Math.ceil((tool.credits * vndRate) / 1000) * 1000 : null;
-  const priceLabel = vnd ? `~${vnd.toLocaleString('vi-VN')}đ (${tool.credits} Lượng)` : `${tool.credits} Lượng`;
+  // W5: tiền nói với khách là USD (cùng `usdLabel` của tool-prices.js). Đọc hụt
+  // đơn giá ⇒ chỉ nói Lượng, không đoán số tiền.
+  const money = usdLabel(tool.credits, usdRate);
+  const priceLabel = money ? `${money} (${tool.credits} Lượng)` : `${tool.credits} Lượng`;
   const reportCard = `<a class="ns-card ns-card-report" href="${appToolHref(tool.appPath, params)}">
     <div class="ns-card-eyebrow">Báo cáo liên quan</div>
     <div class="ns-card-t">${esc(tool.label)}</div>
@@ -1440,7 +1442,7 @@ function buildNextStepHTML(tool: NextStepTool, params: IsrParams, vndRate: numbe
 // ────────────────────────────────────────────────────────────────────────────
 // ISR: full HTML builder
 // ────────────────────────────────────────────────────────────────────────────
-function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles: ArticleStub[], nextStepTool: NextStepTool, vndRate: number | null, thay: ThayCard): string {
+function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles: ArticleStub[], nextStepTool: NextStepTool, usdRate: number | null, thay: ThayCard): string {
   const palaces    = (ls.palaces as Rec[]) || [];
   const menhP      = palaces.find(p => p.isMenh) as Rec|undefined;
   const cungMenh   = String(menhP?.cungName || '');
@@ -1503,7 +1505,7 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles:
   const textHTML       = renderTextBlocks(ls);
   const sections24HTML = render24Sections(ls, params);
   const relatedHTML    = buildRelatedLinks(params);
-  const nextStepHTML   = buildNextStepHTML(nextStepTool, params, vndRate);
+  const nextStepHTML   = buildNextStepHTML(nextStepTool, params, usdRate);
   const ask            = lasoAsk(params, thay);
 
   return `<!DOCTYPE html>
@@ -1784,13 +1786,15 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
           const nextStepTool = sbAlive
             ? await withTimeout(fetchNextStepTool('chu-trinh-cuoc-doi'), SB_TIMEOUT_MS, null)
             : null;
-          const vndRate = sbAlive ? await withTimeout(vndPerCredit(), SB_TIMEOUT_MS, 500) : 500;
+          // Hụt giờ / Supabase chết ⇒ `null` ⇒ thẻ chỉ nói Lượng. Trước đây rơi về
+          // hằng số 500 — một đơn giá ĐOÁN in vào trang ISR giữ cả năm.
+          const usdRate = sbAlive ? await withTimeout<number | null>(usdPerCredit(), SB_TIMEOUT_MS, null) : null;
           // Thẻ thầy chỉ là trang trí cho ô Hỏi Thầy — Supabase chết thì ô vẫn
           // dựng (thiếu tên), không hỏi thêm.
           const thay = sbAlive
             ? await fetchThayCard(THAY_LA_SO)
             : { id: THAY_LA_SO, name: null, mon: null, greeting: null };
-          const html = buildIsrHTML(ls, isrParams, slug, relatedArticles, nextStepTool, vndRate, thay);
+          const html = buildIsrHTML(ls, isrParams, slug, relatedArticles, nextStepTool, usdRate, thay);
           return new NextResponse(html, { headers: {
             'Content-Type': 'text/html; charset=utf-8',
             'Cache-Control': publicKnown

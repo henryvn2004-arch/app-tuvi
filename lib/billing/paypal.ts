@@ -10,7 +10,7 @@
 // ============================================================
 
 import { waitUntil } from '@vercel/functions';
-import { getPackage, quoteCustomVnd } from './packages';
+import { getPackage, quoteCustomUsd, quoteCustomVnd } from './packages';
 import { fireServerPurchase } from '../marketing/server-conversions';
 import { alertNewPayment } from '../admin/alert';
 import { sendInvoiceEmail } from '../email/invoice';
@@ -27,8 +27,15 @@ export const PAYPAL_BASE = PAYPAL_MODE === 'live'
 
 export const PAYPAL_CURRENCY = 'USD';
 /** Tỷ giá quy đổi VND → USD cho PayPal. Dùng CHUNG cho lượt tạo đơn và lượt
- *  chốt đơn — hai nơi lệch nhau là số Lượng cộng không khớp số tiền đã thu. */
+ *  chốt đơn — hai nơi lệch nhau là số Lượng cộng không khớp số tiền đã thu.
+ *  Từ W5 (bán bằng USD) hằng số này CHỈ còn hai việc: (1) chốt các đơn nạp lẻ
+ *  kiểu CŨ `topup-custom-<N>k` còn treo lúc deploy, (2) quy USD đã thu ra VNĐ
+ *  cho sổ/báo cáo nội bộ (`amount_vnd`). KHÔNG còn quyết số Lượng của đơn mới. */
 export const VND_PER_USD = 25_000;
+
+/** Khoảng nạp lẻ bằng USD (PayPal). Một nguồn cho route tạo đơn + client hiện lại. */
+export const CUSTOM_USD_MIN = 2;
+export const CUSTOM_USD_MAX = 200;
 
 const CLIENT_ID     = process.env.PAYPAL_CLIENT_ID!;
 const CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET!;
@@ -76,18 +83,18 @@ const PAYPAL_ISSUE_MESSAGES: Record<string, string> = {
   // Nhóm dưới là hỏng ở PHÍA MÌNH — khách có làm gì cũng không xong, nên đừng
   // bảo họ thử lại, mà nhận lỗi và chỉ họ sang kênh khác.
   PAYEE_ACCOUNT_RESTRICTED:
-    'Cổng thanh toán của chúng tôi đang gặp sự cố, không phải lỗi từ phía bạn. Bạn dùng cách chuyển khoản ngân hàng, hoặc liên hệ hỗ trợ để được xử lý.',
+    'Cổng thanh toán của chúng tôi đang gặp sự cố, không phải lỗi từ phía bạn. Bạn thử lại sau ít phút, hoặc liên hệ hỗ trợ để được xử lý.',
   PAYEE_ACCOUNT_INVALID:
-    'Cổng thanh toán của chúng tôi đang gặp sự cố, không phải lỗi từ phía bạn. Bạn dùng cách chuyển khoản ngân hàng, hoặc liên hệ hỗ trợ để được xử lý.',
+    'Cổng thanh toán của chúng tôi đang gặp sự cố, không phải lỗi từ phía bạn. Bạn thử lại sau ít phút, hoặc liên hệ hỗ trợ để được xử lý.',
   CURRENCY_NOT_SUPPORTED:
-    'Cổng thanh toán của chúng tôi đang gặp sự cố, không phải lỗi từ phía bạn. Bạn dùng cách chuyển khoản ngân hàng, hoặc liên hệ hỗ trợ để được xử lý.',
+    'Cổng thanh toán của chúng tôi đang gặp sự cố, không phải lỗi từ phía bạn. Bạn thử lại sau ít phút, hoặc liên hệ hỗ trợ để được xử lý.',
 };
 
 /** Câu cho khách đọc. Không kèm mã lỗi — mã đã nằm trong log của server. */
 export function humanIssueMessage(issue: string): string {
   return (
     PAYPAL_ISSUE_MESSAGES[issue] ||
-    'Thanh toán chưa hoàn tất. Bạn thử lại bằng nguồn tiền khác, hoặc dùng cách chuyển khoản ngân hàng. Nếu vẫn không được, liên hệ hỗ trợ giúp chúng tôi.'
+    'Thanh toán chưa hoàn tất. Bạn thử lại bằng thẻ hoặc nguồn tiền khác. Nếu vẫn không được, liên hệ hỗ trợ giúp chúng tôi.'
   );
 }
 
@@ -132,25 +139,41 @@ export async function settlePayPalTopup(
   if (!slug.startsWith('topup-')) return { ok: false, status: 400, error: 'Only topup orders handled here' };
   if (!userId) return { ok: false, status: 400, error: 'Cannot determine userId' };
 
-  // ⚠️ Nạp TUỲ CHỌN không có dòng nào trong `credit_packages` — slug của nó là
-  // `topup-custom-<N>k`, nên `getPackage()` luôn trả null. Số Lượng phải suy lại
-  // từ SỐ TIỀN THẬT trên đơn, không từ slug: slug đã làm tròn về đơn vị nghìn.
-  // USD hai chữ số thập phân ↔ VND ở rate 25.000 round-trip khớp đúng với mọi
-  // số tiền là bội của 250đ (ô nhập bước 1.000đ). Đơn giá vẫn do `quoteCustomVnd`
-  // suy từ bảng gói — một nguồn.
+  // ⚠️ Nạp TUỲ CHỌN không có dòng nào trong `credit_packages` — số Lượng phải
+  // suy lại từ SỐ TIỀN THẬT trên đơn, không từ slug.
+  //   • `topup-custom-usd-<cent>` (W5, đơn mới): USD trên đơn → `quoteCustomUsd`.
+  //   • `topup-custom-<N>k` (kiểu CŨ, nhập VNĐ): USD ↔ VND ở rate 25.000 round-trip
+  //     khớp đúng với mọi số tiền là bội của 250đ. Giữ lại để chốt các đơn đã tạo
+  //     trước lúc deploy mà khách mới trả xong — bỏ nhánh này là họ trả tiền mà
+  //     nhận lỗi "Invalid package".
+  // Đơn giá vẫn do bảng gói quyết — một nguồn.
+  //
+  // `amountVnd` ghi vào sổ = USD THẬT đã thu × VND_PER_USD (cả gói lẫn nạp lẻ).
+  // Trước W5 gói ghi `credit_packages.amount_vnd` — khớp chỉ vì `amount_usd` từng
+  // được đặt bằng đúng amount_vnd/25.000; giá USD .99 phá thế khớp đó, ghi tiếp
+  // amount_vnd là thổi doanh thu lên ~7%.
   const packageId = slug.replace('topup-', '');
+  const paidUsd = Number(unit.amount?.value || 0);
+  const paidVnd = Math.round(paidUsd * VND_PER_USD);
   let pkg: { credits: number; label: string; amountVnd: number };
-  if (packageId.startsWith('custom-')) {
-    const usd = Number(unit.amount?.value || 0);
-    const vnd = Math.round(usd * VND_PER_USD);
-    if (!(vnd > 0)) return { ok: false, status: 400, error: 'Không đọc được số tiền của đơn PayPal' };
-    const { credits } = await quoteCustomVnd(vnd);
+  if (packageId.startsWith('custom-usd-')) {
+    if (!(paidUsd > 0)) return { ok: false, status: 400, error: 'Không đọc được số tiền của đơn PayPal' };
+    const { credits } = await quoteCustomUsd(paidUsd);
     if (credits <= 0) return { ok: false, status: 500, error: 'Không quy đổi được số Lượng cho đơn này' };
-    pkg = { credits, label: `Nap Tuy Chinh – ${credits} Luong`, amountVnd: vnd };
+    pkg = { credits, label: `Nap Tuy Chinh – ${credits} Luong`, amountVnd: paidVnd };
+  } else if (packageId.startsWith('custom-')) {
+    if (!(paidVnd > 0)) return { ok: false, status: 400, error: 'Không đọc được số tiền của đơn PayPal' };
+    const { credits } = await quoteCustomVnd(paidVnd);
+    if (credits <= 0) return { ok: false, status: 500, error: 'Không quy đổi được số Lượng cho đơn này' };
+    pkg = { credits, label: `Nap Tuy Chinh – ${credits} Luong`, amountVnd: paidVnd };
   } else {
     const found = await getPackage(packageId);
     if (!found) return { ok: false, status: 400, error: 'Invalid package in slug' };
-    pkg = { credits: found.credits, label: `${found.label} – ${found.credits} Luong`, amountVnd: found.amountVnd };
+    pkg = {
+      credits: found.credits,
+      label: `${found.label} – ${found.credits} Luong`,
+      amountVnd: paidVnd > 0 ? paidVnd : found.amountVnd,
+    };
   }
 
   if (order.status === 'APPROVED') {

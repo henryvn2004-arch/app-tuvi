@@ -44,7 +44,7 @@ window.ToolPrices = (function () {
   // Đợt 2) — banner trượt ngang trên Trang chủ, xem `banners()`.
   // · v8: thêm `_data.masters` (bảng `master_profiles`, Đợt 3) — 15 thầy +
   // `tool_ids` (công cụ thầy đó đứng tên), xem `masters()`/`masterForTool()`.)
-  var CACHE_KEY = 'tvmb_prices_v8';
+  var CACHE_KEY = 'tvmb_prices_v9';
   var TTL_MS = 120000; // 2 phút — đủ để đi hết một phiên duyệt, đủ ngắn để admin đổi giá thấy ngay
 
   // Bản đọc được LẦN GẦN NHẤT, sống qua phiên (localStorage, khác cache 2 phút
@@ -133,7 +133,7 @@ window.ToolPrices = (function () {
       _get(
         'tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description,need_tags,question,app_path,page_path,parts,credits_per_part,home_rank,sale_credits,sale_starts_at,sale_ends_at&order=sort_order.asc'
       ),
-      _get('credit_packages?enabled=eq.true&select=package_id,credits,amount_vnd,label&order=sort_order.asc'),
+      _get('credit_packages?enabled=eq.true&select=package_id,credits,amount_vnd,amount_usd,label&order=sort_order.asc'),
       _get('tool_groups?enabled=eq.true&select=key,title,subtitle,icon,sort_order,default_categories&order=sort_order.asc'),
       // hellobot-ui-redesign Đợt 2: banner trượt ngang Trang chủ. `enabled`
       // lọc ở SERVER; cửa sổ `starts_at`/`ends_at` lọc ở CLIENT trong
@@ -171,11 +171,13 @@ window.ToolPrices = (function () {
                   package_id: String(p.package_id),
                   credits: Number(p.credits),
                   amount_vnd: Number(p.amount_vnd),
+                  // W5: USD là tiền BÁN (PayPal). VNĐ giữ cho rail VNĐ đang ẩn.
+                  amount_usd: Number(p.amount_usd),
                   label: p.label || '',
                 };
               })
               .filter(function (p) {
-                return p.credits > 0 && p.amount_vnd > 0;
+                return p.credits > 0 && (p.amount_usd > 0 || p.amount_vnd > 0);
               })
           : [];
         _data = { tools: tools, rows: toolRows, packages: packages, groups: groupRows, banners: bannerRows, masters: masterRows };
@@ -227,18 +229,18 @@ window.ToolPrices = (function () {
     if (row.is_free) return 'Miễn phí';
     var v = Number(row.credits);
     if (!isFinite(v) || v <= 0) return null;
-    // Henry (2026-09-20): VNĐ lên làm giá CHÍNH, Lượng lùi thành ngoặc phụ —
-    // đảo ngược "N Lượng mỗi lượt" cũ. `vndLabel` rỗng khi chưa đọc được
-    // `credit_packages` → rơi về câu Lượng-only cũ, KHÔNG bịa số VNĐ.
+    // Tiền là giá CHÍNH, Lượng lùi thành ngoặc phụ (Henry 2026-09-20). Từ W5
+    // (2026-11) tiền đó là USD, không còn VNĐ. `usdLabel` rỗng khi chưa đọc
+    // được `credit_packages` → rơi về câu Lượng-only cũ, KHÔNG bịa số tiền.
     if (_saleActive(row)) {
       var sale = Number(row.sale_credits);
-      var saleVnd = vndLabel(sale);
-      return saleVnd
-        ? saleVnd + ' mỗi lượt (' + sale + ' Lượng, giảm từ ' + v + ')'
+      var saleMoney = usdLabel(sale);
+      return saleMoney
+        ? saleMoney + ' mỗi lượt (' + sale + ' Lượng, giảm từ ' + v + ')'
         : sale + ' Lượng mỗi lượt (giảm từ ' + v + ')';
     }
-    var vnd = vndLabel(v);
-    return vnd ? vnd + ' mỗi lượt (' + v + ' Lượng)' : v + ' Lượng mỗi lượt';
+    var money = usdLabel(v);
+    return money ? money + ' mỗi lượt (' + v + ' Lượng)' : v + ' Lượng mỗi lượt';
   }
 
   /**
@@ -281,19 +283,35 @@ window.ToolPrices = (function () {
    * ở file này.
    */
   function vndPerCredit() {
-    var pkgs = packages();
+    var pkgs = packages().filter(function (p) { return p.amount_vnd > 0; });
     if (!pkgs.length) return null;
     var byPrice = pkgs.slice().sort(function (a, b) { return a.amount_vnd - b.amount_vnd; });
     var tier = byPrice[1] || byPrice[0];
     return tier.credits > 0 ? Math.round(tier.amount_vnd / tier.credits) : null;
   }
 
-  /** "X Lượng" → chuỗi "~Y đ" làm tròn lên nghìn gần nhất, hoặc '' nếu chưa biết giá. */
-  function vndLabel(credits) {
-    var rate = vndPerCredit();
+  /**
+   * Đơn giá 1 Lượng ≈ USD — CÙNG QUY TẮC `usdPerCredit()` phía server
+   * (lib/billing/packages.ts) và SQL `credit_usd()`: gói bậc hai theo giá tăng
+   * dần, chỉ đổi cột tiền sang `amount_usd`. `null` khi chưa đọc được gói.
+   */
+  function usdPerCredit() {
+    var pkgs = packages().filter(function (p) { return p.amount_usd > 0; });
+    if (!pkgs.length) return null;
+    var byPrice = pkgs.slice().sort(function (a, b) { return a.amount_usd - b.amount_usd; });
+    var tier = byPrice[1] || byPrice[0];
+    return tier.credits > 0 ? Math.round((tier.amount_usd / tier.credits) * 1e6) / 1e6 : null;
+  }
+
+  /**
+   * "X Lượng" → "~$Y.YY" làm tròn LÊN cent, hoặc '' nếu chưa biết giá. Đây là
+   * nhãn tiền DUY NHẤT nói với khách từ W5 — `vndLabel` (tên cũ, ~30 trang
+   * đang gọi) nay trỏ vào chính hàm này. Cùng quy tắc `usdLabel()` phía server.
+   */
+  function usdLabel(credits) {
+    var rate = usdPerCredit();
     if (rate == null || !isFinite(credits) || credits <= 0) return '';
-    var vnd = Math.ceil((credits * rate) / 1000) * 1000;
-    return '~' + vnd.toLocaleString('vi-VN') + 'đ';
+    return '~$' + (Math.ceil(credits * rate * 100 - 1e-9) / 100).toFixed(2);
   }
 
   /**
@@ -313,7 +331,7 @@ window.ToolPrices = (function () {
    * này, không suy ngược từ `vndPerCredit()`.
    */
   function quoteCustomVnd(amountVnd) {
-    var pkgs = packages();
+    var pkgs = packages().filter(function (p) { return p.amount_vnd > 0; });
     if (!pkgs.length) return null;
     var rate = function (p) { return p.amount_vnd / p.credits; };
     var affordable = pkgs.filter(function (p) { return p.amount_vnd <= amountVnd; });
@@ -322,6 +340,23 @@ window.ToolPrices = (function () {
       return (affordable.length ? rate(p) < rate(best) : rate(p) > rate(best)) ? p : best;
     });
     return Math.floor(amountVnd / rate(tier));
+  }
+
+  /**
+   * Bản USD của `quoteCustomVnd` — CÙNG CÔNG THỨC `quoteCustomUsd()` phía
+   * server (đường nạp lẻ PayPal, cả lúc tạo đơn lẫn lúc chốt đơn). Trả về
+   * `{ credits, usdPerCredit, tierLabel }` hoặc `null` khi chưa đọc được gói.
+   */
+  function quoteCustomUsd(amountUsd) {
+    var pkgs = packages().filter(function (p) { return p.amount_usd > 0; });
+    if (!pkgs.length) return null;
+    var rate = function (p) { return p.amount_usd / p.credits; };
+    var affordable = pkgs.filter(function (p) { return p.amount_usd <= amountUsd; });
+    var pool = affordable.length ? affordable : pkgs;
+    var tier = pool.reduce(function (best, p) {
+      return (affordable.length ? rate(p) < rate(best) : rate(p) > rate(best)) ? p : best;
+    });
+    return { credits: Math.floor(amountUsd / rate(tier)), usdPerCredit: rate(tier), tierLabel: tier.label };
   }
 
   // ── Nhóm công cụ ──────────────────────────────────────────────────────────
@@ -553,8 +588,12 @@ window.ToolPrices = (function () {
     partPrice: partPrice,
     saleInfo: saleInfo,
     vndPerCredit: vndPerCredit,
-    vndLabel: vndLabel,
+    // W5: tên cũ giữ lại cho ~30 trang đang gọi — nay ra USD (xem `usdLabel`).
+    vndLabel: usdLabel,
+    usdPerCredit: usdPerCredit,
+    usdLabel: usdLabel,
     quoteCustomVnd: quoteCustomVnd,
+    quoteCustomUsd: quoteCustomUsd,
     groups: groups,
     groupsOf: groupsOf,
     activeBanners: activeBanners,

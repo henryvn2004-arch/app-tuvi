@@ -80,6 +80,9 @@ async function stubApis(page: Page, bal: Balance) {
     }
     // Thiếu Lượng ⇒ QR nạp tại chỗ (cả khách đã đăng nhập, 2026-10-01) — đơn giả,
     // `check-bank` rơi xuống '{}' (chưa trả) nên modal đứng chờ.
+    // W5: QR là rail VNĐ, chỉ hiện khi cờ `billing.vnd_rails_enabled` BẬT —
+    // bài này phủ đúng đường đó nên giả cờ bật (mặc định tắt ⇒ rơi về /topup.html).
+    if (action === 'pay-methods') return r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ bank: true }) });
     if (action === 'create-bank') return r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
       orderCode: 1, amountVND: 52000, credits: 91, bin: '970422', accountNumber: '0001', accountName: 'TEST',
       description: 'TVMB1', checkoutUrl: 'https://pay.payos.vn/web/test' }) });
