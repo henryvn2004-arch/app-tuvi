@@ -21,12 +21,18 @@
   "zh-cn"
  ],
  "/app/chu-trinh-cuoc-doi": [
+  "en",
   "ja",
-  "ko"
+  "ko",
+  "zh-tw",
+  "zh-cn"
  ],
  "/app/cong-cu": [
+  "en",
   "ja",
-  "ko"
+  "ko",
+  "zh-tw",
+  "zh-cn"
  ],
  "/app/luan-giai": [
   "en",
@@ -36,20 +42,32 @@
   "zh-cn"
  ],
  "/app/nap-am": [
+  "en",
   "ja",
-  "ko"
+  "ko",
+  "zh-tw",
+  "zh-cn"
  ],
  "/app/nap-luong": [
+  "en",
   "ja",
-  "ko"
+  "ko",
+  "zh-tw",
+  "zh-cn"
  ],
  "/app/van-han-nam": [
+  "en",
   "ja",
-  "ko"
+  "ko",
+  "zh-tw",
+  "zh-cn"
  ],
  "/app/xem-tuoi": [
+  "en",
   "ja",
-  "ko"
+  "ko",
+  "zh-tw",
+  "zh-cn"
  ],
  "/chinh-sach-bao-mat.html": [
   "en",
