@@ -1151,6 +1151,14 @@
   "t": " ’은 무엇을 말하나요?",
   "h": "04cb815a"
  },
+ "js.battu.p-ba-cham": {
+  "t": "...",
+  "h": "6eae3a5b"
+ },
+ "js.battu.p-hai-cham": {
+  "t": ": ",
+  "h": "ceca32e9"
+ },
  "js.battu.thu-lai": {
   "t": "↻ 다시 시도",
   "h": "30508ad3"
@@ -1164,7 +1172,7 @@
   "h": "49bba271"
  },
  "js.battu.tu-tru-bat-tu-cua": {
-  "t": "사주팔자｜ ",
+  "t": "사주팔자｜",
   "h": "1e073395"
  },
  "js.battu.tu-tru-cua": {
@@ -1208,11 +1216,11 @@
   "h": "6b87e20d"
  },
  "js.chutrinh.chu-trinh-cuoc-doi": {
-  "t": "인생 사이클｜ ",
+  "t": "인생 사이클｜",
   "h": "c3a39296"
  },
  "js.chutrinh.chu-trinh-cuoc-doi-cua": {
-  "t": "인생 사이클｜ ",
+  "t": "인생 사이클｜",
   "h": "1737f0ac"
  },
  "js.chutrinh.co-y-nghia-gi": {
@@ -1220,7 +1228,7 @@
   "h": "c6c2da71"
  },
  "js.chutrinh.cua": {
-  "t": " ｜**",
+  "t": "｜**",
   "h": "9c850ffa"
  },
  "js.chutrinh.da-san-sang-hoi-toi-de": {
@@ -1312,19 +1320,19 @@
   "h": "5a7129b9"
  },
  "js.home.co-phap-kieng-khoi-su": {
-  "t": " ｜고법상 새 일 시작을 삼가는 날이에요.",
+  "t": "｜고법상 새 일 시작을 삼가는 날이에요.",
   "h": "d050eff2"
  },
  "js.home.co-phap-kieng-khoi-su-cqsv": {
-  "t": " ｜고법상 새 일 시작을 삼가는 날이에요",
+  "t": "｜고법상 새 일 시작을 삼가는 날이에요",
   "h": "0e5dc069"
  },
  "js.home.co-phap-kieng-khoi-su-viec": {
-  "t": " ｜고법상 새 일 시작을 삼가는 날이에요. 평소 일상은 그대로 하셔도 돼요.",
+  "t": "｜고법상 새 일 시작을 삼가는 날이에요. 평소 일상은 그대로 하셔도 돼요.",
   "h": "07d4835f"
  },
  "js.home.co-sao": {
-  "t": " ｜{sao} 포함",
+  "t": "｜{sao} 포함",
   "h": "f6d4710a"
  },
  "js.home.con-dang-be-tac-chuyen-cong": {
@@ -1556,7 +1564,7 @@
   "h": "3e47de71"
  },
  "js.home.ngay-cwjn": {
-  "t": " ｜일진: ",
+  "t": "｜일진: ",
   "h": "5ecc6134"
  },
  "js.home.ngay-hom-nay-roi-vao-cung": {
@@ -1607,9 +1615,21 @@
   "t": "생년월일을 한 번만 입력하면 오늘이 내 명반의 어느 궁에 해당하는지 볼 수 있어요.",
   "h": "45d9335c"
  },
+ "js.home.p-cham": {
+  "t": ".",
+  "h": "3a52ce78"
+ },
+ "js.home.p-dong-ngoac": {
+  "t": ")",
+  "h": "e7064f0b"
+ },
  "js.home.rieng-viec-thuong-ngay": {
   "t": "일상적인 일만 놓고 보면, ",
   "h": "e7d64dd0"
+ },
+ "js.home.sinh-nam-xung": {
+  "t": " (출생 ",
+  "h": "dc7c4691"
  },
  "js.home.so-lieu-rut-gon-thu-tai": {
   "t": " — 간략 데이터예요. 잠시 후 다시 불러와 주세요.",
@@ -1656,7 +1676,7 @@
   "h": "f716d517"
  },
  "js.home.tranh-viec-lon-hom-nay": {
-  "t": " ｜오늘은 큰일을 피하세요.",
+  "t": "｜오늘은 큰일을 피하세요.",
   "h": "586bcbb3"
  },
  "js.home.tranh-viec-lon-trong-hom-nay": {
@@ -1860,7 +1880,7 @@
   "h": "c63aa847"
  },
  "js.luangiai.la-so-cua": {
-  "t": "명반｜ ",
+  "t": "명반｜",
   "h": "505f9cf1"
  },
  "js.luangiai.lap-la-so-luan-giai-ngay": {
@@ -1876,7 +1896,7 @@
   "h": "9380a2a1"
  },
  "js.luangiai.luan-giai": {
-  "t": "풀이｜ ",
+  "t": "풀이｜",
   "h": "71d78039"
  },
  "js.luangiai.luan-giai-chuyen-sau": {
@@ -1926,6 +1946,14 @@
  "js.luangiai.noi-vi-sao-no-bung-ra": {
   "t": " 항목에서 그 이유와 언제 드러나는지, 어떻게 풀어 갈지 짚어 드려요.",
   "h": "2b510636"
+ },
+ "js.luangiai.p-ba-cham": {
+  "t": "...",
+  "h": "6eae3a5b"
+ },
+ "js.luangiai.p-hai-cham": {
+  "t": ": ",
+  "h": "ceca32e9"
  },
  "js.luangiai.phan": {
   "t": "항목 ",
@@ -3183,6 +3211,10 @@
   "t": "점수 보기 →",
   "h": "a4d402f6"
  },
+ "js.shellui.cham-ten-hop-menh-chu-va-nganh": {
+  "t": "\"{ten}\" 이름은 명주(命主)와 업종에 잘 맞나요?",
+  "h": "1039c58a"
+ },
  "js.shellui.chao-ban-cho-thay-xin-nam": {
   "t": "안녕하세요. 태어난 해와 성별을 채팅창에 바로 입력해 주시면, 납음오행에 맞는 옷 색상을 알려 드릴게요. 결과가 나온 뒤에도 편하게 더 물어보세요.",
   "h": "eabb393e"
@@ -3446,6 +3478,10 @@
  "js.shellui.con-hoi-tiep-di": {
   "t": "</b>. 이어서 질문해 주세요.</p>",
   "h": "0de4fe93"
+ },
+ "js.shellui.con-lcm6": {
+  "t": " · 자녀 ",
+  "h": "fe1507c5"
  },
  "js.shellui.con-muon-hoi-viec-gi-tuy": {
   "t": "<p>궁금한 일을 적어 주세요(선택). 그러면 선생님이 괘를 뽑아 드려요 — 6효를 한 번에 봐요.</p>",
@@ -3975,6 +4011,14 @@
   "t": "본명에 맞는 이름 12개를 뜻과 함께 추천해 줘요",
   "h": "61954ded"
  },
+ "js.shellui.goi-y-5-ten-hop-menh-kem-y-nghia": {
+  "t": "명에 맞는 이름 5개를 뜻과 함께 추천해 주세요",
+  "h": "4ab7930a"
+ },
+ "js.shellui.goi-y-5-ten-khac-hop-hon": {
+  "t": "더 잘 맞는 다른 이름 5개를 추천해 주세요",
+  "h": "f3587ad3"
+ },
  "js.shellui.google-lich": {
   "t": "Google 캘린더",
   "h": "8cdb619a"
@@ -4046,6 +4090,26 @@
  "js.shellui.hay-goi-y-ten-moi": {
   "t": "**의 점수 평가인가요, 새 이름 추천인가요?",
   "h": "d922a861"
+ },
+ "js.shellui.hd-can-hanh": {
+  "t": ", 천간 오행 ",
+  "h": "96563d79"
+ },
+ "js.shellui.hd-gio-can-tranh-hac-dao": {
+  "t": "피해야 할 시진(흑도): ",
+  "h": "1974f9e6"
+ },
+ "js.shellui.hd-gio-hoang-dao-ngay": {
+  "t": "황도 시진 · 날짜 ",
+  "h": "b8825163"
+ },
+ "js.shellui.hd-gio-hoang-dao-ngay-2": {
+  "t": "황도 시진 — 날짜 ",
+  "h": "413ea385"
+ },
+ "js.shellui.hd-gio-tot-hoang-dao": {
+  "t": "좋은 시진(황도): ",
+  "h": "100b31dc"
  },
  "js.shellui.het-phan-dung-thu": {
   "t": "체험 분량을 모두 사용했어요.",
@@ -4199,9 +4263,29 @@
   "t": "어울리는 색과 피해야 할 색은요?",
   "h": "3af5cdfc"
  },
+ "js.shellui.huong-bac": {
+  "t": "북",
+  "h": "130d45d1"
+ },
  "js.shellui.huong-cua": {
   "t": "문 방향",
   "h": "65a7e53d"
+ },
+ "js.shellui.huong-dong": {
+  "t": "동",
+  "h": "6bd70b62"
+ },
+ "js.shellui.huong-dong-bac": {
+  "t": "북동",
+  "h": "9690921a"
+ },
+ "js.shellui.huong-dong-nam": {
+  "t": "남동",
+  "h": "dd71e07a"
+ },
+ "js.shellui.huong-nam": {
+  "t": "남",
+  "h": "b580ba1b"
  },
  "js.shellui.huong-nao-phai-tranh-va-vi": {
   "t": "어떤 방향을 피해야 하고, 그 이유는 무엇인가요?",
@@ -4218,6 +4302,18 @@
  "js.shellui.huong-nha-nao-hop-nhat": {
   "t": "어떤 집 방향이 가장 잘 맞나요?",
   "h": "cc262fd1"
+ },
+ "js.shellui.huong-tay": {
+  "t": "서",
+  "h": "74b26936"
+ },
+ "js.shellui.huong-tay-bac": {
+  "t": "북서",
+  "h": "0b1f47fd"
+ },
+ "js.shellui.huong-tay-nam": {
+  "t": "남서",
+  "h": "c0484c26"
  },
  "js.shellui.huong-xep-hang-cao-nhat-la": {
   "t": " 최고 순위 방향: **",
@@ -4535,9 +4631,21 @@
   "t": "대화 기록",
   "h": "0fd2afce"
  },
+ "js.shellui.loai-cong-ty": {
+  "t": "회사",
+  "h": "65bf381e"
+ },
+ "js.shellui.loai-cua-hang": {
+  "t": "매장",
+  "h": "050a31c8"
+ },
  "js.shellui.loai-hinh-tuy-chon": {
   "t": "유형 (선택)",
   "h": "c4eab07e"
+ },
+ "js.shellui.loai-ho-kinh-doanh": {
+  "t": "개인사업자",
+  "h": "f886c8d3"
  },
  "js.shellui.loai-khong-gian": {
   "t": "공간 유형",
@@ -4546,6 +4654,10 @@
  "js.shellui.loai-phong": {
   "t": "방 유형",
   "h": "19905334"
+ },
+ "js.shellui.loai-thuong-hieu-shop": {
+  "t": "브랜드 / 숍",
+  "h": "aa184029"
  },
  "js.shellui.loi": {
   "t": "오류 ",
@@ -4631,9 +4743,29 @@
   "t": "맹자 · 진심 상",
   "h": "819ec1b8"
  },
+ "js.shellui.mat-bau-duc": {
+  "t": "계란형",
+  "h": "2a8c2282"
+ },
+ "js.shellui.mat-dai": {
+  "t": "긴 얼굴형",
+  "h": "4f9b7efd"
+ },
  "js.shellui.mat-toi-hop-kieu-toc-nao": {
   "t": "내 얼굴에는 어떤 헤어스타일이 어울려요?",
   "h": "bfa362fc"
+ },
+ "js.shellui.mat-trai-tim": {
+  "t": "하트형",
+  "h": "a987fcb0"
+ },
+ "js.shellui.mat-tron": {
+  "t": "둥근형",
+  "h": "201284fe"
+ },
+ "js.shellui.mat-vuong": {
+  "t": "각진형",
+  "h": "8a2c40fb"
  },
  "js.shellui.mau-chu-dao": {
   "t": "**. 주조색: ",
@@ -4654,6 +4786,30 @@
  "js.shellui.mau-son-nao-hop-tong-da": {
   "t": "내 피부 톤에는 어떤 립 컬러가 어울려요?",
   "h": "f013cf8c"
+ },
+ "js.shellui.md-du-lich": {
+  "t": "여행",
+  "h": "2a3d7fdd"
+ },
+ "js.shellui.md-hen-ho": {
+  "t": "데이트",
+  "h": "4e1f8833"
+ },
+ "js.shellui.md-kinh-doanh": {
+  "t": "비즈니스",
+  "h": "b7429b9f"
+ },
+ "js.shellui.md-phong-van": {
+  "t": "면접",
+  "h": "17cacae4"
+ },
+ "js.shellui.md-su-kien": {
+  "t": "행사",
+  "h": "c368db64"
+ },
+ "js.shellui.md-thuong-ngay": {
+  "t": "일상",
+  "h": "6d11feda"
  },
  "js.shellui.me": {
   "t": "어머니",
@@ -4923,9 +5079,49 @@
   "t": ", 업종 ",
   "h": "60b25e34"
  },
+ "js.shellui.nganh-an-uong-fnb-nha-hang": {
+  "t": "외식 / F&B / 레스토랑",
+  "h": "124865d2"
+ },
+ "js.shellui.nganh-bat-dong-san-xay-dung": {
+  "t": "부동산 / 건설",
+  "h": "6b5154b8"
+ },
+ "js.shellui.nganh-cong-nghe-phan-mem": {
+  "t": "기술 / 소프트웨어",
+  "h": "2665d28f"
+ },
+ "js.shellui.nganh-du-lich-khach-san": {
+  "t": "여행 / 호텔",
+  "h": "5369cdde"
+ },
+ "js.shellui.nganh-giao-duc-dao-tao": {
+  "t": "교육 / 연수",
+  "h": "f1adba55"
+ },
  "js.shellui.nganh-nghe": {
   "t": "업종",
   "h": "63d9f4dd"
+ },
+ "js.shellui.nganh-san-xuat-cong-nghiep": {
+  "t": "제조 / 산업",
+  "h": "f4a5458e"
+ },
+ "js.shellui.nganh-tai-chinh-dich-vu": {
+  "t": "금융 / 서비스",
+  "h": "67bbe42d"
+ },
+ "js.shellui.nganh-thoi-trang-lam-dep": {
+  "t": "패션 / 뷰티",
+  "h": "72a2b0cf"
+ },
+ "js.shellui.nganh-thuong-mai-ban-le": {
+  "t": "상업 / 소매",
+  "h": "991ccb29"
+ },
+ "js.shellui.nganh-y-te-suc-khoe": {
+  "t": "의료 / 건강",
+  "h": "13ca73cd"
  },
  "js.shellui.ngay": {
   "t": "<p>날짜 <b>",
@@ -5071,6 +5267,26 @@
   "t": "동양 오라클",
   "h": "1146fb81"
  },
+ "js.shellui.p-cham": {
+  "t": ".",
+  "h": "3a52ce78"
+ },
+ "js.shellui.p-cham-dam": {
+  "t": "**.",
+  "h": "de9eb0ac"
+ },
+ "js.shellui.p-dong-ngoac-cham": {
+  "t": "). ",
+  "h": "449a6a79"
+ },
+ "js.shellui.p-hoi": {
+  "t": "?",
+  "h": "5bab61eb"
+ },
+ "js.shellui.p-phay": {
+  "t": ", ",
+  "h": "d3bc9a37"
+ },
  "js.shellui.pham-kim-lau-thi-hoa-giai": {
   "t": "금루에 해당하면 어떻게 풀어야 하나요?",
   "h": "f9c9cb33"
@@ -5135,6 +5351,42 @@
   "t": " 분 전",
   "h": "b1017a2c"
  },
+ "js.shellui.pt-cua-hang-kinh-doanh": {
+  "t": "영업 매장",
+  "h": "c7a324c6"
+ },
+ "js.shellui.pt-hoc-tap-on-thi": {
+  "t": "학습 / 시험 준비",
+  "h": "5fc56198"
+ },
+ "js.shellui.pt-lam-viec-van-phong": {
+  "t": "사무 업무",
+  "h": "65734b65"
+ },
+ "js.shellui.pt-nha-hang-quan-an": {
+  "t": "레스토랑 / 식당",
+  "h": "d0defd73"
+ },
+ "js.shellui.pt-phong-khach": {
+  "t": "거실",
+  "h": "17fb3f11"
+ },
+ "js.shellui.pt-phong-lam-viec": {
+  "t": "서재 / 작업실",
+  "h": "956c0ca5"
+ },
+ "js.shellui.pt-phong-ngu": {
+  "t": "침실",
+  "h": "d9ac5522"
+ },
+ "js.shellui.pt-sang-tao-thiet-ke": {
+  "t": "창작 / 디자인",
+  "h": "9fd559b0"
+ },
+ "js.shellui.pt-van-phong-cong-ty": {
+  "t": "회사 사무실",
+  "h": "d678c2d6"
+ },
  "js.shellui.qua-la-so-cua-con-thoi": {
   "t": " 쪽은 회원님의 명반으로만 봤어요. 이제&nbsp; ",
   "h": "c45acf9b"
@@ -5187,9 +5439,49 @@
   "t": "복사",
   "h": "09a1db3e"
  },
+ "js.shellui.sao-dam": {
+  "t": "**, 이십팔수 **",
+  "h": "fc0c8af6"
+ },
  "js.shellui.sinh-con-bo": {
   "t": "출산 · 아버지 ",
   "h": "6b581c06"
+ },
+ "js.shellui.sk-an-hoi-dam-ngo": {
+  "t": "약혼 / 상견례",
+  "h": "4b11a176"
+ },
+ "js.shellui.sk-cuoi-hoi": {
+  "t": "결혼",
+  "h": "04a2caa4"
+ },
+ "js.shellui.sk-dong-tho-khoi-cong": {
+  "t": "기공 / 착공",
+  "h": "10468f91"
+ },
+ "js.shellui.sk-khai-truong": {
+  "t": "개업",
+  "h": "c86ca256"
+ },
+ "js.shellui.sk-ky-ket-hop-dong": {
+  "t": "계약 체결",
+  "h": "90e0fb9b"
+ },
+ "js.shellui.sk-mua-xe": {
+  "t": "차량 구매",
+  "h": "52d4aa77"
+ },
+ "js.shellui.sk-nhap-trach": {
+  "t": "입주(새집으로 이사)",
+  "h": "fcda52e1"
+ },
+ "js.shellui.sk-xuat-hanh": {
+  "t": "출행",
+  "h": "424fcbb2"
+ },
+ "js.shellui.slogan-nao-hop-voi-ten-nay": {
+  "t": "이 이름에 어울리는 슬로건은요?",
+  "h": "8ab01273"
  },
  "js.shellui.so-dep": {
   "t": "좋은 번호 ",
@@ -5266,6 +5558,18 @@
  "js.shellui.ten-hop-ca-tuoi-bo-va": {
   "t": "아버지와 어머니 띠 모두에 맞는 이름은요?",
   "h": "ab665896"
+ },
+ "js.shellui.ten-nao-hop-khi-chat-nganh-nay": {
+  "t": "이 업종의 기질에 어울리는 이름은요?",
+  "h": "c012da1f"
+ },
+ "js.shellui.ten-nen-bo-ngu-hanh-gi": {
+  "t": "이름으로 어떤 오행을 보충하면 좋나요?",
+  "h": "f5cf0ccb"
+ },
+ "js.shellui.ten-nen-bo-ngu-hanh-gi-cho-chu": {
+  "t": "이름으로 대표의 어떤 오행을 보충하면 좋나요?",
+  "h": "6a1e73a2"
  },
  "js.shellui.ten-nguoi-chu-tuy-chon": {
   "t": "사업주 이름 (선택)",
@@ -5416,7 +5720,7 @@
   "h": "96832959"
  },
  "js.shellui.thu-truyen-theo-phep": {
-  "t": ". 과법 **",
+  "t": ". 취전(取傳) 법 **",
   "h": "9ee2f319"
  },
  "js.shellui.thu-tuong-cua-toi": {
@@ -5487,6 +5791,10 @@
   "t": "날짜별 옷차림 — ",
   "h": "7fd98ca1"
  },
+ "js.shellui.tranh-chu-am-nao-khi-dat-ten": {
+  "t": "이름 지을 때 피해야 할 글자나 소리는요?",
+  "h": "0493dad1"
+ },
  "js.shellui.tri-chi-gia-bat-nhu-hieu": {
   "t": "지지자불여호지자, 호지자불여락지자.",
   "h": "91dea6b3"
@@ -5508,19 +5816,19 @@
   "h": "6f3f9038"
  },
  "js.shellui.truc-phu": {
-  "t": ", 직부 **",
+  "t": ", 치부 **",
   "h": "16c60f0e"
  },
  "js.shellui.truc-phu-truc-su-noi-len": {
-  "t": "직부와 직사는 무엇을 말해 주나요?",
+  "t": "치부와 치사는 무엇을 말해 주나요?",
   "h": "c69b295c"
  },
  "js.shellui.truc-su": {
-  "t": "**, 직사 **",
+  "t": "**, 치사 **",
   "h": "fae13856"
  },
  "js.shellui.truc-than-la-gi": {
-  "t": "축신(軸神)이란 무엇인가요?",
+  "t": "'신(神)' 축이란 무엇인가요?",
   "h": "47cc8c8c"
  },
  "js.shellui.truong-phai-noi-tot": {
@@ -6027,6 +6335,14 @@
   "t": "<b>직접 금액 입력</b> 칸에 이미 <b>",
   "h": "ca263938"
  },
+ "js.topup.p-cham": {
+  "t": ".",
+  "h": "3a52ce78"
+ },
+ "js.topup.p-dong-ngoac": {
+  "t": ")",
+  "h": "e7064f0b"
+ },
  "js.topup.pho-bien-nhat": {
   "t": "가장 인기",
   "h": "a0f0bedc"
@@ -6195,6 +6511,14 @@
   "t": "월한 궁:",
   "h": "13dbb374"
  },
+ "js.vanhannam.p-ba-cham": {
+  "t": "...",
+  "h": "6eae3a5b"
+ },
+ "js.vanhannam.p-dong-ngoac": {
+  "t": ")",
+  "h": "e7064f0b"
+ },
  "js.vanhannam.phan": {
   "t": "항목 ",
   "h": "291674f4"
@@ -6240,7 +6564,7 @@
   "h": "0bef064e"
  },
  "js.vanhannam.van-han-12-thang-2jdf": {
-  "t": "12개월 운세｜ ",
+  "t": "12개월 운세｜",
   "h": "d11e8de4"
  },
  "js.vanhannam.van-han-12-thang-am": {
@@ -6248,7 +6572,7 @@
   "h": "81377d1f"
  },
  "js.vanhannam.van-han-12-thang-cua": {
-  "t": "12개월 운세｜ ",
+  "t": "12개월 운세｜",
   "h": "afa6d79f"
  },
  "js.vanhannam.vo-chinh-dieu-muon-cung-xung": {
@@ -6488,7 +6812,7 @@
   "h": "317107b2"
  },
  "js.xemtuoi.luan-tong-quan-muc-do-hoa": {
-  "t": "궁합 개요 풀이｜ ",
+  "t": "궁합 개요 풀이｜",
   "h": "53f19565"
  },
  "js.xemtuoi.manh-nhat": {
@@ -6920,7 +7244,7 @@
   "h": "1fb839b6"
  },
  "napam.nap-am-la-phep-phoi-hanh": {
-  "t": "납음은 육십갑자(60년 주기)의 간지 한 쌍마다 오행을 배당하는 방법으로, 태어난 해마다 해중금(海中金)이나 노방토(路傍土)처럼 고유한 이름의 명(命)을 부여해요. 중국 고대 술수의 응용 오행 체계에 속하는 한 갈래예요.",
+  "t": "납음은 육십갑자(60년 주기)의 간지 한 쌍마다 오행을 배당하는 방법으로, 태어난 해마다 해중금(海中金)이나 노방토(路旁土)처럼 고유한 이름의 명(命)을 부여해요. 중국 고대 술수의 응용 오행 체계에 속하는 한 갈래예요.",
   "h": "0b4fcbe2"
  },
  "napam.nap-am-ngu-hanh": {
