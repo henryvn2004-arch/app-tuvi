@@ -327,15 +327,15 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/tuvi-form.js?v=15"></script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/auth.js?v=8"></script>
-<script src="/tuvi-paywall.js?v=43"></script>
+<script src="/auth.js?v=9"></script>
+<script src="/tuvi-paywall.js?v=44"></script>
 <script src="/tools-shared/hook-charts.js?v=3"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=143"></script>
+<script src="/shell.js?v=144"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
@@ -764,9 +764,9 @@ function ask(t){ return '<div class="ask" data-ask="'+esc(t)+('">' + _tvmbT('js.
 function buildChuTrinhChips(ls,namxem){
   var chips=[];
   var dv=ls.daiVanHienTai;
-  if(dv) chips.push(_tvmbT('js.luangiai.dai-van-hien-tai-jt5g', 'Đại vận hiện tại ')+dv.diaChi+' ('+dv.tuoiStart+'–'+dv.tuoiEnd+'t'+(dv.scoring&&dv.scoring.tong!=null?', '+dv.scoring.tong+'/10':'')+(') ' + _tvmbT('js.luangiai.nen-lam-gi', 'nên làm gì?')));
+  if(dv) chips.push(_tvmbT('js.luangiai.dai-van-hien-tai-jt5g', 'Đại vận hiện tại ')+_tvmbG('chi', dv.diaChi)+' ('+dv.tuoiStart+'–'+dv.tuoiEnd+'t'+(dv.scoring&&dv.scoring.tong!=null?', '+dv.scoring.tong+'/10':'')+(') ' + _tvmbT('js.luangiai.nen-lam-gi', 'nên làm gì?')));
   var tvCung=ls.palaces&&ls.palaces[ls.tieuHanIdx];
-  if(tvCung) chips.push(_tvmbT('js.chutrinh.tieu-van-nam', 'Tiểu vận năm ')+namxem+_tvmbT('js.chutrinh.roi-vao-cung', ' rơi vào cung ')+tvCung.cungName+_tvmbT('js.chutrinh.co-y-nghia-gi', ' — có ý nghĩa gì?'));
+  if(tvCung) chips.push(_tvmbT('js.chutrinh.tieu-van-nam', 'Tiểu vận năm ')+namxem+_tvmbT('js.chutrinh.roi-vao-cung', ' rơi vào cung ')+_tvmbG('cung', tvCung.cungName)+_tvmbT('js.chutrinh.co-y-nghia-gi', ' — có ý nghĩa gì?'));
   var arr=(ls.daiVans||[]).map(function(d,i){return {i:i,d:d,t:d.scoring&&d.scoring.tong};}).filter(function(x){return typeof x.t==='number';});
   if(arr.length){
     arr.sort(function(a,b){return a.t-b.t;});

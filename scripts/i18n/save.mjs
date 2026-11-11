@@ -12,7 +12,7 @@ import {
   TRANSLATED,
   GENERATED,
 } from '../../lib/i18n/dict.mjs';
-import { hashVi, validateTranslation } from '../../lib/i18n/core.mjs';
+import { hashVi, validateTranslation, padEdges } from '../../lib/i18n/core.mjs';
 import { generateZhCn } from './zhcn.mjs';
 import { regen } from './pages.mjs';
 
@@ -53,17 +53,18 @@ const vi = loadVi();
 const dict = loadLocale(locale);
 let saved = 0;
 const rejects = [];
-for (const [k, t] of pairs) {
+for (const [k, t0] of pairs) {
   if (!(k in vi)) {
     rejects.push(`${k}: khoá không có trong vi.json`);
     continue;
   }
+  const t = padEdges(vi[k], t0); // giữ khoảng trắng biên của câu gốc (mảnh ghép)
   const err = validateTranslation(vi[k], t, locale, { same: sameKeys.has(k) });
   if (err) {
     rejects.push(`${k}: ${err}`);
     continue;
   }
-  dict[k] = { t: t.trim(), h: hashVi(vi[k]) };
+  dict[k] = { t, h: hashVi(vi[k]) };
   saved++;
 }
 writeJson(`${locale}.json`, sortObj(dict));

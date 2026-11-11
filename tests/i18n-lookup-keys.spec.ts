@@ -2,31 +2,31 @@ import { test, expect, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
 
-// W13c — giá trị ĐÃ DỊCH không được làm KHOÁ TRA CỨU.
+// W13c — giá trị ĐÃ DỊCH không được làm KHOÁ TRA CỨU hay DỮ LIỆU GỬI SERVER.
 //
-// #1233 từng bọc T() quanh 12 tên cung trong QUERIES của /app/luan-giai; chính chuỗi đó được
-// so với `palace.cungName` (tiếng Việt của engine) trong _getTamPhuongStars() ⇒ khi locale có
-// bản dịch, tra cứu hụt và câu truy vấn /api/search mất toàn bộ sao tam phương — IM LẶNG.
-// Ca kiểm: nhúng một từ điển giả dịch HẾT mọi khoá `js.*` (đúng cơ chế server chèn ở trang
-// /<locale>/, lib/i18n/render.mjs), an sao thật bằng engine, rồi so câu truy vấn từng phần với
-// bản tiếng Việt: phải GIỐNG HỆT, và phải có sao. Không cần đăng nhập, không gọi mạng nào.
+// #1233 từng bọc T() quanh 12 tên cung trong QUERIES của /app/luan-giai; chính chuỗi đó được so với
+// `palace.cungName` (tiếng Việt của engine) trong _getTamPhuongStars() ⇒ khi locale có bản dịch, tra cứu
+// hụt và câu truy vấn /api/search mất toàn bộ sao tam phương — IM LẶNG. Cùng lượt đó văn bản tứ trụ /
+// truy vấn RAG gửi /api/tubinh của /app/bat-tu cũng bị dịch.
+// Ca kiểm: nhúng một từ điển giả dịch HẾT mọi khoá `js.*` (đúng cơ chế server chèn ở trang /<locale>/,
+// lib/i18n/render.mjs), chạy engine THẬT, rồi so dữ liệu gửi đi với bản tiếng Việt: phải GIỐNG HỆT và
+// không chứa dấu của từ điển giả. Không cần đăng nhập, không gọi mạng nào.
 
-const vi: Record<string, string> = JSON.parse(
-  fs.readFileSync(path.join(__dirname, '..', 'i18n', 'vi.json'), 'utf8')
-);
+const I18N = path.join(__dirname, '..', 'i18n');
+const vi: Record<string, string> = JSON.parse(fs.readFileSync(path.join(I18N, 'vi.json'), 'utf8'));
 const FAKE = Object.fromEntries(
   Object.keys(vi)
     .filter((k) => k.startsWith('js.'))
     .map((k) => [k, `〔${k}〕`])
 );
+const MARK = '〔js.';
 
-async function queriesFor(page: Page, fakeLocale: boolean) {
+async function open(page: Page, url: string, fakeLocale: boolean) {
   if (fakeLocale) {
-    await page.route('**/app/luan-giai', async (route) => {
+    await page.route('**' + url, async (route) => {
       const res = await route.fetch();
-      let html = await res.text();
       const dict = JSON.stringify({ locale: 'ja', dict: FAKE, alts: {} }).replace(/</g, '\\u003c');
-      html = html
+      const html = (await res.text())
         .replace(/<html\b([^>]*)\blang="vi"/i, '<html$1lang="ja"')
         .replace(
           /<head\b[^>]*>/i,
@@ -36,13 +36,14 @@ async function queriesFor(page: Page, fakeLocale: boolean) {
       await route.fulfill({ response: res, body: html });
     });
   }
-  await page.goto('/app/luan-giai');
-  await page.waitForFunction(
-    () => typeof (window as any).anSaoLaSo === 'function' && typeof (window as any).QUERIES === 'object'
-  );
+  await page.goto(url);
+}
+
+async function luanGiaiQueries(page: Page, fake: boolean) {
+  await open(page, '/app/luan-giai', fake);
+  await page.waitForFunction(() => typeof (window as any).anSaoLaSo === 'function' && typeof (window as any).QUERIES === 'object');
   return page.evaluate(() => {
     const w = window as any;
-    // Lá số cố định — an sao THẬT bằng engine của trang (không mock).
     const conv = w.convertDuongToAm(15, 6, 1990, 8, 'vn');
     w._astrolabe = w.anSaoLaSo({
       ngayAL: conv.amLich.day,
@@ -60,18 +61,47 @@ async function queriesFor(page: Page, fakeLocale: boolean) {
   });
 }
 
-test('QUERIES của /app/luan-giai không đổi theo ngôn ngữ (sao tam phương vẫn ra)', async ({ browser }) => {
-  const viPage = await browser.newPage();
-  const base = await queriesFor(viPage, false);
-  const jaPage = await browser.newPage();
-  const ja = await queriesFor(jaPage, true);
+async function batTuPayloads(page: Page, fake: boolean) {
+  await open(page, '/app/bat-tu', fake);
+  await page.waitForFunction(() => typeof (window as any).tinhBatTu === 'function' && typeof (window as any).formatBatTuToText === 'function');
+  return page.evaluate(() => {
+    const w = window as any;
+    const bt = w.tinhBatTu({ ngayDL: 15, thangDL: 6, namDL: 1990, gio: 8, gioitinh: 'nam', namXem: 2026, lich: 'vn', gioLich: 8, phutLich: 0 });
+    w._batTu = bt;
+    const out: Record<string, string> = { batTuText: w.formatBatTuToText(bt) };
+    for (const g of ['overview', 'thapthan', 'tinhduyen', 'suckhoe', 'hopxung', 'daivan', 'x'])
+      out['query:' + g] = w.buildGroupQuery(g, bt);
+    for (let p = 1; p <= 12; p++) out['pregen:' + p] = String(w.buildPregenContextForPhan(p, bt) || '');
+    return { locale: w.I18n ? w.I18n.locale : 'vi', out };
+  });
+}
 
+test('QUERIES của /app/luan-giai không đổi theo ngôn ngữ (sao tam phương vẫn ra)', async ({ browser }) => {
+  const base = await luanGiaiQueries(await browser.newPage(), false);
+  const ja = await luanGiaiQueries(await browser.newPage(), true);
   expect(ja.locale).toBe('ja'); // từ điển giả đã thực sự vào trang
   expect(Object.keys(base.out).length).toBeGreaterThanOrEqual(13);
   // Phần cung (2..13): câu truy vấn phải chứa sao — rỗng = tra cứu hụt.
-  for (const k of Object.keys(base.out).filter((x) => +x >= 2)) {
+  for (const k of Object.keys(base.out).filter((x) => +x >= 2))
     expect(base.out[k].split(' ').length, `QUERIES[${k}] vi thiếu sao`).toBeGreaterThan(4);
-  }
   expect(ja.out).toEqual(base.out);
-  for (const v of Object.values(ja.out)) expect(v).not.toContain('〔js.');
+  for (const v of Object.values(ja.out)) expect(v).not.toContain(MARK);
+});
+
+test('/app/bat-tu: văn bản tứ trụ, truy vấn RAG và ngữ cảnh gửi /api/tubinh không đổi theo ngôn ngữ', async ({ browser }) => {
+  const base = await batTuPayloads(await browser.newPage(), false);
+  const ja = await batTuPayloads(await browser.newPage(), true);
+  expect(ja.locale).toBe('ja');
+  expect(base.out.batTuText.length).toBeGreaterThan(200);
+  expect(ja.out).toEqual(base.out);
+  for (const v of Object.values(ja.out)) expect(v).not.toContain(MARK);
+});
+
+test('bản dịch giữ khoảng trắng đầu/cuối của câu gốc (mảnh ghép không dính chữ)', () => {
+  const edge = (s: string) => [/^\s*/.exec(s)![0], /\s*$/.exec(s)![0]].join('|');
+  for (const l of ['en', 'ja', 'ko', 'zh-tw', 'zh-cn']) {
+    const d: Record<string, { t: string }> = JSON.parse(fs.readFileSync(path.join(I18N, `${l}.json`), 'utf8'));
+    const bad = Object.keys(d).filter((k) => k in vi && edge(vi[k]) !== edge(d[k].t));
+    expect(bad, `${l}: khoảng trắng biên lệch`).toEqual([]);
+  }
 });

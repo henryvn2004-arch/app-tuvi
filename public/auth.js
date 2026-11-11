@@ -14,6 +14,11 @@ function _tvmbT(k, d, v) {
   if (I && I.tv) return I.tv(k, d, v);
   return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
 }
+function _tvmbG(kind, v) {
+  // Tên sao/cung/can chi của engine ở chỗ HIỂN THỊ → TuviGlossary (W15); giá trị gốc giữ cho tính toán.
+  var g = window.TuviGlossary;
+  return g && v ? g.t(kind, v) : v;
+}
 function _tvmbHref(p) {
   var I = window.I18n;
   return I && I.href ? I.href(p) : p;
@@ -545,7 +550,7 @@ function updateNavUI() {
   if (_session && _user) {
     const isAnon = !!_user.is_anonymous;
     const email = _user.email || '';
-    const name  = isAnon ? _tvmbT('js.shell.khach', 'Khách') : (_user.user_metadata?.full_name || _user.user_metadata?.name || '');
+    const name  = isAnon ? _tvmbT('js.auth.khach', 'Khách') : (_user.user_metadata?.full_name || _user.user_metadata?.name || '');
     const avatar= _user.user_metadata?.avatar_url || _user.user_metadata?.picture || '';
     const initial = (name || email).charAt(0).toUpperCase();
     navEl.innerHTML = `
@@ -577,7 +582,7 @@ function updateNavUI() {
           ${isAnon ? `<button onclick="window.showClaimModal&&showClaimModal();document.getElementById('nav-profile-menu').style.display='none'" style="display:flex;align-items:center;gap:6px;width:100%;padding:9px 16px;font-size:13px;font-weight:700;color:#9A7B3A;background:#FBF8F1;border:none;border-bottom:1px solid #f0f0f0;text-align:left;cursor:pointer;font-family:inherit">${_tvmbT('js.auth.luu-tai-khoan-tranh-mat-luong', '⚠ Lưu tài khoản — tránh mất Lượng')}</button>` : ''}
           <a href="${_tvmbHref('/app/ho-so')}" style="display:block;padding:9px 16px;font-size:13px;color:#333;text-decoration:none" onmouseover="this.style.background='#f8f8f8'" onmouseout="this.style.background=''">${_tvmbT('js.auth.ho-so-cua-toi', 'Hồ sơ của tôi')}</a>
           <div style="border-top:1px solid #f0f0f0;margin-top:4px"></div>
-          <button onclick="Auth.signOut()" style="display:block;width:100%;padding:9px 16px;font-size:13px;color:#C0392B;background:none;border:none;text-align:left;cursor:pointer;font-family:inherit" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background=''">${_tvmbT('js.shell.dang-xuat', 'Đăng xuất')}</button>
+          <button onclick="Auth.signOut()" style="display:block;width:100%;padding:9px 16px;font-size:13px;color:#C0392B;background:none;border:none;text-align:left;cursor:pointer;font-family:inherit" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background=''">${_tvmbT('js.auth.dang-xuat', 'Đăng xuất')}</button>
         </div>
       </div>`;
     // Load credit balance async
@@ -628,7 +633,7 @@ function showAuthModal(callback, tab) {
       <!-- Logo -->
       <div style="text-align:center;margin-bottom:20px">
         <img src="/seal.webp" style="width:48px;height:48px;border-radius:6px;margin-bottom:8px">
-        <div style="font-family:'Noto Serif',Georgia,serif;font-size:16px;font-weight:700;color:#CC2200">${_tvmbT('js.nav.brand', 'Tử Vi Minh Bảo')}</div><div style="font-size:11px;color:#999;margin-top:2px;font-style:italic">${_tvmbT('js.nav.slogan', 'Tri mệnh lý – Thuận thế hành')}</div>
+        <div style="font-family:'Noto Serif',Georgia,serif;font-size:16px;font-weight:700;color:#CC2200">${_tvmbT('js.auth.brand', 'Tử Vi Minh Bảo')}</div><div style="font-size:11px;color:#999;margin-top:2px;font-style:italic">${_tvmbT('js.auth.slogan', 'Tri mệnh lý – Thuận thế hành')}</div>
       </div>
 
       <!-- Google/Facebook OAuth — ẨN khi mở trong webview nhúng của FB/IG, xem

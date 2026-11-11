@@ -868,7 +868,7 @@
   "h": "ae8ee50b"
  },
  "js.auth.bam-vao-link-trong-email-de": {
-  "t": "— 點擊信中的連結即可完成，頁面會自動回到這裡。",
+  "t": " — 點擊信中的連結即可完成，頁面會自動回到這裡。",
   "h": "8493b548"
  },
  "js.auth.ban-chua-luu-tai-khoan-dang": {
@@ -887,6 +887,10 @@
   "t": "註冊即表示您同意明寶紫微斗數的服務條款。",
   "h": "a349cfa3"
  },
+ "js.auth.brand": {
+  "t": "明寶紫微斗數",
+  "h": "33336b26"
+ },
  "js.auth.chao-mung-ban-da-nhan-luong": {
   "t": "歡迎！您已獲得<strong>兩</strong>——點「問老師」即可試用",
   "h": "3ebea363"
@@ -900,7 +904,7 @@
   "h": "4a00d63e"
  },
  "js.auth.da-gui-email-xac-nhan-toi": {
-  "t": "已寄出確認信至",
+  "t": "已寄出確認信至 ",
   "h": "213802a7"
  },
  "js.auth.da-luu-kiem-tra-email-de": {
@@ -923,6 +927,10 @@
   "t": "登入失敗",
   "h": "fb63ae22"
  },
+ "js.auth.dang-xuat": {
+  "t": "登出",
+  "h": "d513aac0"
+ },
  "js.auth.email-nay-da-co-tai-khoan": {
   "t": "此電子郵件已有帳號——請輸入密碼登入。",
   "h": "d81bc47f"
@@ -934,6 +942,10 @@
  "js.auth.hoac": {
   "t": "或",
   "h": "2797f4b3"
+ },
+ "js.auth.khach": {
+  "t": "訪客",
+  "h": "8c19417f"
  },
  "js.auth.khong-luu-duoc-tai-khoan": {
   "t": "無法儲存帳號。",
@@ -991,6 +1003,10 @@
   "t": "工作階段已逾時，請再試一次。",
   "h": "34b61273"
  },
+ "js.auth.slogan": {
+  "t": "知命理，順勢而行",
+  "h": "ca64e3dc"
+ },
  "js.auth.tang-luong": {
   "t": "贈送兩",
   "h": "fdf6261f"
@@ -1016,7 +1032,7 @@
   "h": "2c91b690"
  },
  "js.battu.anh-huong-gi-hoa-giai-sao": {
-  "t": "有什麼影響，該如何化解？",
+  "t": " 有什麼影響，該如何化解？",
   "h": "93497101"
  },
  "js.battu.ban": {
@@ -1028,19 +1044,19 @@
   "h": "08cdf1d4"
  },
  "js.battu.bat-tu": {
-  "t": "八字",
+  "t": "八字 ",
   "h": "4f6d5ba9"
  },
  "js.battu.bo-hanh-the-nao": {
-  "t": "— 該如何補五行？",
+  "t": " — 該如何補五行？",
   "h": "54468a9f"
  },
  "js.battu.cach-cuc": {
-  "t": "格局",
+  "t": "格局 ",
   "h": "450e9cba"
  },
  "js.battu.cach-cuc-j8la": {
-  "t": "格局：",
+  "t": "格局： ",
   "h": "441c7a62"
  },
  "js.battu.con-muon-luan-van-nam-nao": {
@@ -1056,7 +1072,7 @@
   "h": "7bde27db"
  },
  "js.battu.dai-van-hien-tai": {
-  "t": "目前大運：",
+  "t": "目前大運： ",
   "h": "4f329997"
  },
  "js.battu.dang-an-tu-tru": {
@@ -1068,19 +1084,19 @@
   "h": "aa035f2b"
  },
  "js.battu.dang-luan-giai-phan": {
-  "t": "正在解讀第",
+  "t": "正在解讀第 ",
   "h": "5b228988"
  },
  "js.battu.dieu-quan-trong-nhat": {
-  "t": "最重要的事</div>",
+  "t": " 最重要的事</div>",
   "h": "f749707d"
  },
  "js.battu.dung-than": {
-  "t": "用神",
+  "t": "用神 ",
   "h": "22c1c170"
  },
  "js.battu.gio": {
-  "t": "· 時",
+  "t": " · 時 ",
   "h": "9d8fa6cf"
  },
  "js.battu.hoi-thay": {
@@ -1104,11 +1120,11 @@
   "h": "8e9c2ae8"
  },
  "js.battu.luan-sau-phan": {
-  "t": "深入解讀部分：",
+  "t": "深入解讀部分： ",
   "h": "edb82980"
  },
  "js.battu.nam": {
-  "t": "· 年",
+  "t": " · 年 ",
   "h": "2deeb120"
  },
  "js.battu.nam-luan": {
@@ -1120,19 +1136,19 @@
   "h": "75a6785f"
  },
  "js.battu.ngu-hanh-thieu": {
-  "t": "五行缺",
+  "t": "五行缺 ",
   "h": "64dfabdc"
  },
  "js.battu.nhat-can": {
-  "t": "· 日干：",
+  "t": " · 日干： ",
   "h": "bf2114dc"
  },
  "js.battu.nhat-can-uv6w": {
-  "t": "日干",
+  "t": "日干 ",
   "h": "d395f25c"
  },
  "js.battu.noi-len-dieu-gi": {
-  "t": "說明了什麼？",
+  "t": " 說明了什麼？",
   "h": "04cb815a"
  },
  "js.battu.thu-lai": {
@@ -1148,7 +1164,7 @@
   "h": "49bba271"
  },
  "js.battu.tu-tru-bat-tu-cua": {
-  "t": "四柱八字：",
+  "t": "四柱八字： ",
   "h": "1e073395"
  },
  "js.battu.tu-tru-cua": {
@@ -1156,11 +1172,11 @@
   "h": "d753a866"
  },
  "js.battu.tuoi": {
-  "t": "歲",
+  "t": " 歲",
   "h": "2e261bf5"
  },
  "js.chat.chao": {
-  "t": "您好",
+  "t": "您好 ",
   "h": "35004652"
  },
  "js.chat.hom-nay-ban-co-chuyen-gi": {
@@ -1184,7 +1200,7 @@
   "h": "b56b50ea"
  },
  "js.chutrinh.9-dai-van-va-tieu-van": {
-  "t": "九大運與小運 年",
+  "t": "九大運與小運 年 ",
   "h": "0606eeb8"
  },
  "js.chutrinh.chin-chang-dai-van-cot-cao": {
@@ -1192,19 +1208,19 @@
   "h": "6b87e20d"
  },
  "js.chutrinh.chu-trinh-cuoc-doi": {
-  "t": "人生週期",
+  "t": "人生週期 ",
   "h": "c3a39296"
  },
  "js.chutrinh.chu-trinh-cuoc-doi-cua": {
-  "t": "人生週期：",
+  "t": "人生週期： ",
   "h": "1737f0ac"
  },
  "js.chutrinh.co-y-nghia-gi": {
-  "t": "— 有什麼意義？",
+  "t": " — 有什麼意義？",
   "h": "c6c2da71"
  },
  "js.chutrinh.cua": {
-  "t": "：**",
+  "t": " ：**",
   "h": "9c850ffa"
  },
  "js.chutrinh.da-san-sang-hoi-toi-de": {
@@ -1212,7 +1228,7 @@
   "h": "90f26e16"
  },
  "js.chutrinh.dang-o-chang": {
-  "t": "· 目前處於階段",
+  "t": " · 目前處於階段 ",
   "h": "3d0545d0"
  },
  "js.chutrinh.luan-giai": {
@@ -1228,11 +1244,11 @@
   "h": "438bc666"
  },
  "js.chutrinh.roi-vao-cung": {
-  "t": "落在宮位",
+  "t": " 落在宮位 ",
   "h": "d242aa04"
  },
  "js.chutrinh.tieu-van-nam": {
-  "t": "流年小運",
+  "t": "流年小運 ",
   "h": "1979c56a"
  },
  "js.home.3-buoc-dau-tien": {
@@ -1256,23 +1272,23 @@
   "h": "07132e46"
  },
  "js.home.chinh-tinh": {
-  "t": "— 主星",
+  "t": " — 主星 ",
   "h": "595c5e1b"
  },
  "js.home.co-phap-kieng-khoi-su": {
-  "t": "— 依古法忌動工。",
+  "t": " — 依古法忌動工。",
   "h": "d050eff2"
  },
  "js.home.co-phap-kieng-khoi-su-cqsv": {
-  "t": "— 依古法忌動工",
+  "t": " — 依古法忌動工",
   "h": "0e5dc069"
  },
  "js.home.co-phap-kieng-khoi-su-viec": {
-  "t": "— 依古法忌動工。日常事務照常進行即可。",
+  "t": " — 依古法忌動工。日常事務照常進行即可。",
   "h": "07d4835f"
  },
  "js.home.co-sao": {
-  "t": "— 有{sao}",
+  "t": " — 有{sao}",
   "h": "f6d4710a"
  },
  "js.home.con-lai-ghe-roi": {
@@ -1280,7 +1296,7 @@
   "h": "46c1f303"
  },
  "js.home.con-muon-hoi-them": {
-  "t": "還想多問些什麼嗎？",
+  "t": " 還想多問些什麼嗎？",
   "h": "f2144ad1"
  },
  "js.home.cong-cu-chinh": {
@@ -1308,7 +1324,7 @@
   "h": "2d2a47e5"
  },
  "js.home.gio-hoang-dao": {
-  "t": "。黃道吉時：",
+  "t": "。黃道吉時： ",
   "h": "af40692d"
  },
  "js.home.goi-y-cho-ban": {
@@ -1316,16 +1332,20 @@
   "h": "96e81b4f"
  },
  "js.home.hanh": {
-  "t": "五行：",
+  "t": "五行： ",
   "h": "dc0810d8"
  },
  "js.home.hanh-3if6": {
-  "t": "** (五行",
+  "t": "** (五行 ",
   "h": "6979c33f"
  },
  "js.home.hanh-i81a": {
-  "t": "(五行",
+  "t": " (五行 ",
   "h": "b9ab7b34"
+ },
+ "js.home.hoi-thay": {
+  "t": "問老師",
+  "h": "c9ffbbaf"
  },
  "js.home.hoi-thay-ve-van-cua-ban": {
   "t": "。請在這裡問老師您的運勢：",
@@ -1356,23 +1376,23 @@
   "h": "fd32b768"
  },
  "js.home.linh-vuc": {
-  "t": "({linh_vuc})",
+  "t": " ({linh_vuc})",
   "h": "5b141416"
  },
  "js.home.luong-chao-mung": {
-  "t": "兩歡迎禮",
+  "t": " 兩歡迎禮",
   "h": "8b6fe1a2"
  },
  "js.home.luong-nhan-duoc-ngay-khi-ban": {
-  "t": "兩</b>——建立帳號後立即入帳。</div>",
+  "t": " 兩</b>——建立帳號後立即入帳。</div>",
   "h": "3a693ec4"
  },
  "js.home.luong-vao-vi-ban": {
-  "t": "兩</b>已加入您的錢包。</div>",
+  "t": " 兩</b>已加入您的錢包。</div>",
   "h": "cb7a01b0"
  },
  "js.home.luong-vao-vi-du-cho-mot": {
-  "t": "兩</b>已加入錢包——足夠再進行一次解讀。</div>",
+  "t": " 兩</b>已加入錢包——足夠再進行一次解讀。</div>",
   "h": "ee62ec18"
  },
  "js.home.mau-hop": {
@@ -1380,11 +1400,11 @@
   "h": "54187ad4"
  },
  "js.home.mau-hop-ban-menh": {
-  "t": "合本命的顏色：",
+  "t": "合本命的顏色： ",
   "h": "820910fb"
  },
  "js.home.mau-hop-plgt": {
-  "t": "合適的顏色",
+  "t": "合適的顏色 ",
   "h": "ca937061"
  },
  "js.home.may-hom-nay-con-the-nao": {
@@ -1392,11 +1412,11 @@
   "h": "d73269fa"
  },
  "js.home.ngay": {
-  "t": "日：",
+  "t": "日： ",
   "h": "e196e19b"
  },
  "js.home.ngay-6ia2": {
-  "t": "· 日",
+  "t": " · 日 ",
   "h": "cedf3c29"
  },
  "js.home.ngay-binh": {
@@ -1404,15 +1424,15 @@
   "h": "3e47de71"
  },
  "js.home.ngay-cwjn": {
-  "t": "— 日",
+  "t": " — 日 ",
   "h": "5ecc6134"
  },
  "js.home.ngay-hom-nay-roi-vao-cung": {
-  "t": "今天落在宮位：",
+  "t": "今天落在宮位： ",
   "h": "567ca88d"
  },
  "js.home.ngay-ky": {
-  "t": "· 忌日",
+  "t": " · 忌日",
   "h": "83e5d5b7"
  },
  "js.home.ngay-sinh-chua-hop-le": {
@@ -1428,7 +1448,7 @@
   "h": "3fe05eab"
  },
  "js.home.ngay-xung-tuoi-can-than": {
-  "t": "今天沖你的生肖，重大的事要多加小心。",
+  "t": " 今天沖你的生肖，重大的事要多加小心。",
   "h": "d05ce49d"
  },
  "js.home.nhap-la-so-cua-ban": {
@@ -1440,11 +1460,11 @@
   "h": "45d9335c"
  },
  "js.home.so-lieu-rut-gon-thu-tai": {
-  "t": "— 數據為精簡版，請稍後重新載入。",
+  "t": " — 數據為精簡版，請稍後重新載入。",
   "h": "84e3f4e7"
  },
  "js.home.tai-than": {
-  "t": "財神",
+  "t": "財神 ",
   "h": "e5ed4f68"
  },
  "js.home.thay-day": {
@@ -1460,7 +1480,7 @@
   "h": "1ce95cff"
  },
  "js.home.tranh-viec-lon-hom-nay": {
-  "t": "— 今日避免重大事項。",
+  "t": " — 今日避免重大事項。",
   "h": "586bcbb3"
  },
  "js.home.tranh-viec-lon-trong-hom-nay": {
@@ -1472,7 +1492,7 @@
   "h": "a18884d5"
  },
  "js.home.trung": {
-  "t": "撞",
+  "t": "撞 ",
   "h": "f007dc98"
  },
  "js.home.van-hom-nay": {
@@ -1484,7 +1504,7 @@
   "h": "1e60cafb"
  },
  "js.home.van-ngay": {
-  "t": "日運",
+  "t": "日運 ",
   "h": "c082a900"
  },
  "js.home.van-rieng-cua-ban": {
@@ -1492,7 +1512,7 @@
   "h": "378b38f4"
  },
  "js.home.vo-chinh-dieu": {
-  "t": "— 無正曜",
+  "t": " — 無正曜",
   "h": "44a2723b"
  },
  "js.home.vua-cong": {
@@ -1512,7 +1532,7 @@
   "h": "8e87f4e5"
  },
  "js.home.xung-tuoi-29rp": {
-  "t": "沖生肖",
+  "t": "沖生肖 ",
   "h": "e92ab4fa"
  },
  "js.laso.dang-an-sao": {
@@ -1520,11 +1540,11 @@
   "h": "06275197"
  },
  "js.laso.dang-xuat": {
-  "t": "匯出中...",
+  "t": " 匯出中...",
   "h": "92b2d242"
  },
  "js.laso.gio-am": {
-  "t": "農曆時辰：",
+  "t": "農曆時辰： ",
   "h": "58bc0ba0"
  },
  "js.laso.lay-la-so": {
@@ -1540,7 +1560,7 @@
   "h": "2545b4dd"
  },
  "js.laso.xuat-that-bai": {
-  "t": "匯出失敗：",
+  "t": "匯出失敗： ",
   "h": "b105cd2a"
  },
  "js.luangiai.10-8-dai-van-con-lai": {
@@ -1552,7 +1572,7 @@
   "h": "ad86144d"
  },
  "js.luangiai.10-thap-nhat-phan": {
-  "t": "/10</b> — 最低。部分",
+  "t": "/10</b> — 最低。部分 ",
   "h": "4860ad16"
  },
  "js.luangiai.10-yeu-nhat": {
@@ -1592,11 +1612,11 @@
   "h": "f72b38a8"
  },
  "js.luangiai.cuc": {
-  "t": "· 局：",
+  "t": " · 局： ",
   "h": "6c9661b0"
  },
  "js.luangiai.cung-manh-nhat": {
-  "t": "最強的宮位",
+  "t": "最強的宮位 ",
   "h": "bb00924b"
  },
  "js.luangiai.da-lap-la-so": {
@@ -1616,7 +1636,7 @@
   "h": "8b3ef94b"
  },
  "js.luangiai.dai-van-hien-tai-jt5g": {
-  "t": "目前大運",
+  "t": "目前大運 ",
   "h": "7cf01e2f"
  },
  "js.luangiai.dang-lap-la-so": {
@@ -1628,7 +1648,7 @@
   "h": "d68f76a3"
  },
  "js.luangiai.dang-luan-giai-phan-1": {
-  "t": "正在解讀第 1 部分 /",
+  "t": "正在解讀第 1 部分 / ",
   "h": "559646ca"
  },
  "js.luangiai.la-so": {
@@ -1636,7 +1656,7 @@
   "h": "c63aa847"
  },
  "js.luangiai.la-so-cua": {
-  "t": "命盤：",
+  "t": "命盤： ",
   "h": "505f9cf1"
  },
  "js.luangiai.lap-la-so-luan-giai-ngay": {
@@ -1652,7 +1672,7 @@
   "h": "9380a2a1"
  },
  "js.luangiai.luan-giai": {
-  "t": "解讀",
+  "t": "解讀 ",
   "h": "71d78039"
  },
  "js.luangiai.luan-giai-chuyen-sau": {
@@ -1672,7 +1692,7 @@
   "h": "1d1bbc24"
  },
  "js.luangiai.mien-phi": {
-  "t": "(免費)…",
+  "t": " (免費)…",
   "h": "d0dbdd09"
  },
  "js.luangiai.mien-phi-xem-tong-quan-1": {
@@ -1688,11 +1708,11 @@
   "h": "d6632d90"
  },
  "js.luangiai.nam": {
-  "t": "年",
+  "t": "年 ",
   "h": "85e39643"
  },
  "js.luangiai.nap-am": {
-  "t": "· 納音：",
+  "t": " · 納音： ",
   "h": "44e73d9c"
  },
  "js.luangiai.nen-lam-gi": {
@@ -1700,11 +1720,11 @@
   "h": "feedfe50"
  },
  "js.luangiai.noi-vi-sao-no-bung-ra": {
-  "t": "說明原因、在哪個階段爆發，以及如何化解。",
+  "t": " 說明原因、在哪個階段爆發，以及如何化解。",
   "h": "2b510636"
  },
  "js.luangiai.phan": {
-  "t": "部分",
+  "t": "部分 ",
   "h": "a74e8ed7"
  },
  "js.luangiai.phan-5h00": {
@@ -1712,23 +1732,23 @@
   "h": "817301ad"
  },
  "js.luangiai.phan-loi-phan": {
-  "t": "個部分出錯（部分",
+  "t": " 個部分出錯（部分 ",
   "h": "3d3d4b5b"
  },
  "js.luangiai.trong-12-cung-cua-la-so": {
-  "t": "在這張命盤的 12 宮中，<b>",
+  "t": "在這張命盤的 12 宮中，<b> ",
   "h": "c69f5267"
  },
  "js.luangiai.trong-tam-vao-viec-gi": {
-  "t": "應以什麼為重點？",
+  "t": " 應以什麼為重點？",
   "h": "dbecde19"
  },
  "js.luangiai.tuoi-cham": {
-  "t": "歲) 得分",
+  "t": " 歲) 得分 ",
   "h": "73442218"
  },
  "js.luangiai.vi-sao-cung": {
-  "t": "為什麼",
+  "t": "為什麼 ",
   "h": "32e135e7"
  },
  "js.luangiai.xem-la-so-day-du": {
@@ -1920,7 +1940,7 @@
   "h": "24c4d64e"
  },
  "js.paywall.bam-mo-la-tra-tien-va": {
-  "t": "· 點開即付款並立即閱讀，",
+  "t": " · 點開即付款並立即閱讀， ",
   "h": "9a6023cd"
  },
  "js.paywall.ban-ay-dang-ky-la-ban": {
@@ -1928,7 +1948,7 @@
   "h": "afb5cbf7"
  },
  "js.paywall.ban-co-the-thu-lai-sau": {
-  "t": "— 您可以稍後再試。</p>",
+  "t": " — 您可以稍後再試。</p>",
   "h": "d45f37cf"
  },
  "js.paywall.ban-con": {
@@ -1952,7 +1972,7 @@
   "h": "8bbc9dde"
  },
  "js.paywall.can": {
-  "t": "</b> · 需要",
+  "t": "</b> · 需要 ",
   "h": "7e7713c7"
  },
  "js.paywall.can-them": {
@@ -1984,7 +2004,7 @@
   "h": "e4844e35"
  },
  "js.paywall.chu-tk": {
-  "t": "<b>戶名：</b>",
+  "t": "<b>戶名：</b> ",
   "h": "73fb1282"
  },
  "js.paywall.chu-trinh-cuoc-doi": {
@@ -2035,6 +2055,10 @@
   "t": "⊙ 還差一些",
   "h": "09093766"
  },
+ "js.paywall.cong-cu": {
+  "t": "工具",
+  "h": "6029ffef"
+ },
  "js.paywall.d": {
   "t": "đ)</span>",
   "h": "a62f69a1"
@@ -2060,7 +2084,7 @@
   "h": "91cdb627"
  },
  "js.paywall.da-tru": {
-  "t": "✓ 已扣除",
+  "t": "✓ 已扣除 ",
   "h": "0d13abf9"
  },
  "js.paywall.dang-cho-thanh-toan": {
@@ -2116,7 +2140,7 @@
   "h": "1e5e41e3"
  },
  "js.paywall.du": {
-  "t": "，多出",
+  "t": "，多出 ",
   "h": "63a0e7a7"
  },
  "js.paywall.duyen-no-tien-kiep": {
@@ -2124,7 +2148,7 @@
   "h": "c6b0ccb5"
  },
  "js.paywall.giu-trong-vi": {
-  "t": "存放在錢包",
+  "t": " 存放在錢包",
   "h": "fa87cbb0"
  },
  "js.paywall.het-luot-tang-hom-nay": {
@@ -2176,11 +2200,11 @@
   "h": "e454923c"
  },
  "js.paywall.loi": {
-  "t": "錯誤：",
+  "t": "錯誤： ",
   "h": "471c0087"
  },
  "js.paywall.loi-ket-noi": {
-  "t": "連線錯誤：",
+  "t": "連線錯誤： ",
   "h": "46e34d76"
  },
  "js.paywall.loi-kiem-tra-thu-lai": {
@@ -2200,7 +2224,7 @@
   "h": "8b0080c6"
  },
  "js.paywall.luong": {
-  "t": "兩</b>，",
+  "t": " 兩</b>， ",
   "h": "9a10e8c4"
  },
  "js.paywall.luong-4tai": {
@@ -2208,39 +2232,39 @@
   "h": "6614284e"
  },
  "js.paywall.luong-can": {
-  "t": "兩</strong> · 需要：",
+  "t": " 兩</strong> · 需要： ",
   "h": "17b0aa0f"
  },
  "js.paywall.luong-con-lai": {
-  "t": "兩 · 剩餘",
+  "t": " 兩 · 剩餘 ",
   "h": "c99e3599"
  },
  "js.paywall.luong-ln0i": {
-  "t": "兩)</span>",
+  "t": " 兩)</span>",
   "h": "49ad8e12"
  },
  "js.paywall.luong-luot-nay-dung": {
-  "t": "兩 · 本次使用",
+  "t": " 兩 · 本次使用 ",
   "h": "e61f5fd5"
  },
  "js.paywall.luong-m6fn": {
-  "t": "兩",
+  "t": " 兩",
   "h": "74224e60"
  },
  "js.paywall.luong-mo-day-du-ton": {
-  "t": "兩</b> · 開啟完整內容需",
+  "t": " 兩</b> · 開啟完整內容需 ",
   "h": "81466f88"
  },
  "js.paywall.luong-thao-tac-nay-ton": {
-  "t": "兩</b> · 這項操作需 <b>",
+  "t": " 兩</b> · 這項操作需 <b>",
   "h": "e1bdd8d4"
  },
  "js.paywall.luong-uzlk": {
-  "t": "兩</b>",
+  "t": " 兩</b>",
   "h": "6820cc0e"
  },
  "js.paywall.luong-vao-vi-cua-ban": {
-  "t": "兩</b>已退回您的錢包",
+  "t": " 兩</b>已退回您的錢包",
   "h": "0aa5bc03"
  },
  "js.paywall.luot-nay-chua-xu-ly-xong": {
@@ -2252,7 +2276,7 @@
   "h": "7b97f29d"
  },
  "js.paywall.ma-het-han-sau": {
-  "t": "QR 碼將於",
+  "t": "QR 碼將於 ",
   "h": "d64d146a"
  },
  "js.paywall.ma-qr-chuyen-khoan": {
@@ -2272,7 +2296,7 @@
   "h": "84fe9699"
  },
  "js.paywall.mo-day-du-ton": {
-  "t": "開啟完整內容需",
+  "t": "開啟完整內容需 ",
   "h": "3d05df05"
  },
  "js.paywall.mo-trang-thanh-toan": {
@@ -2292,7 +2316,7 @@
   "h": "96c6fb5d"
  },
  "js.paywall.nap-thanh-cong": {
-  "t": "✓ 儲值成功",
+  "t": "✓ 儲值成功 ",
   "h": "104f438d"
  },
  "js.paywall.nap-them": {
@@ -2308,11 +2332,11 @@
   "h": "1f82488c"
  },
  "js.paywall.ngan-hang": {
-  "t": "<b>銀行：</b>",
+  "t": "<b>銀行：</b> ",
   "h": "2aa52434"
  },
  "js.paywall.nguoi": {
-  "t": "位朋友</b> —",
+  "t": " 位朋友</b> — ",
   "h": "6134285c"
  },
  "js.paywall.nhan-tuong": {
@@ -2360,11 +2384,11 @@
   "h": "17e83429"
  },
  "js.paywall.so-tk": {
-  "t": "<b>帳號：</b>",
+  "t": "<b>帳號：</b> ",
   "h": "d2e75eae"
  },
  "js.paywall.tam-thoi": {
-  "t": "（暫時）",
+  "t": " （暫時）",
   "h": "3794c4c7"
  },
  "js.paywall.tao-ma-moi": {
@@ -2388,7 +2412,7 @@
   "h": "b2e5a151"
  },
  "js.paywall.thao-tac-nay-ton": {
-  "t": "這項操作需",
+  "t": "這項操作需 ",
   "h": "834c67c7"
  },
  "js.paywall.thao-tac-nay-ton-1zm6": {
@@ -2400,11 +2424,11 @@
   "h": "96be8028"
  },
  "js.paywall.thieu": {
-  "t": "</b> — 還差",
+  "t": "</b> — 還差 ",
   "h": "03703206"
  },
  "js.paywall.thieu-8362": {
-  "t": "— 還差",
+  "t": " — 還差 ",
   "h": "6f4749c9"
  },
  "js.paywall.thu-kieu-toc": {
@@ -2632,7 +2656,7 @@
   "h": "010150dd"
  },
  "js.shellui.am-lich": {
-  "t": "(農曆)",
+  "t": " (農曆)",
   "h": "ebf71daf"
  },
  "js.shellui.an-di": {
@@ -2667,6 +2691,10 @@
   "t": "完整的解讀",
   "h": "9008184e"
  },
+ "js.shellui.banx": {
+  "t": "您",
+  "h": "e8f04322"
+ },
  "js.shellui.bao-cao-da-san-sang": {
   "t": "<b>報告已準備好</b>",
   "h": "ab59122b"
@@ -2691,6 +2719,10 @@
   "t": "你的爸爸",
   "h": "9a106c99"
  },
+ "js.shellui.brand": {
+  "t": "明寶紫微斗數",
+  "h": "33336b26"
+ },
  "js.shellui.ca-nha": {
   "t": "全家",
   "h": "158695a7"
@@ -2704,7 +2736,7 @@
   "h": "65c94d43"
  },
  "js.shellui.cau-mien-phi": {
-  "t": "個</b>免費問題",
+  "t": " 個</b>免費問題",
   "h": "8ddf771c"
  },
  "js.shellui.cau-nay-thi": {
@@ -2712,7 +2744,7 @@
   "h": "084951c0"
  },
  "js.shellui.cau-vua-roi-duoc-tra-loi": {
-  "t": "— 剛才的問題已立即回覆",
+  "t": " — 剛才的問題已立即回覆",
   "h": "70029ef5"
  },
  "js.shellui.chau": {
@@ -2740,15 +2772,15 @@
   "h": "94185440"
  },
  "js.shellui.chia-se-w5yz": {
-  "t": "分享",
+  "t": "分享 ",
   "h": "f575b7df"
  },
  "js.shellui.cho-ten": {
-  "t": "給 {name}",
+  "t": " 給 {name}",
   "h": "bc9cbc22"
  },
  "js.shellui.chon-mot-cach-duoi-day": {
-  "t": "— 請選擇下方一種方式。",
+  "t": " — 請選擇下方一種方式。",
   "h": "8b0c906e"
  },
  "js.shellui.chon-thay-luan-giai": {
@@ -2776,11 +2808,11 @@
   "h": "f0665eb8"
  },
  "js.shellui.chua-luu-duoc-la-so": {
-  "t": "無法儲存命盤：",
+  "t": "無法儲存命盤： ",
   "h": "424c73b0"
  },
  "js.shellui.chua-mo": {
-  "t": "· 尚未開啟</span></span>",
+  "t": " · 尚未開啟</span></span>",
   "h": "72204e26"
  },
  "js.shellui.chua-tao-duoc-pdf-thu-lai": {
@@ -2788,7 +2820,7 @@
   "h": "549a59fa"
  },
  "js.shellui.chuyen": {
-  "t": "關於",
+  "t": "關於 ",
   "h": "2844303d"
  },
  "js.shellui.chuyen-do-the-nao-roi-con": {
@@ -2796,7 +2828,7 @@
   "h": "9e184650"
  },
  "js.shellui.co-noi": {
-  "t": "說過：<i>「",
+  "t": " 說過：<i>「",
   "h": "7960bcfb"
  },
  "js.shellui.con": {
@@ -2804,7 +2836,7 @@
   "h": "21dc996b"
  },
  "js.shellui.con-25rm": {
-  "t": "<p>再過",
+  "t": "<p>再過 ",
   "h": "b84493f3"
  },
  "js.shellui.con-goi-la-gi": {
@@ -2820,7 +2852,7 @@
   "h": "be3b5cf7"
  },
  "js.shellui.con-muon-thay-nhan-qua-dau": {
-  "t": "你希望老師透過哪裡傳訊息給你？</span>",
+  "t": " 你希望老師透過哪裡傳訊息給你？</span>",
   "h": "959d0885"
  },
  "js.shellui.con-muon-thay-xem-chuyen-gi": {
@@ -2828,11 +2860,11 @@
   "h": "c643b581"
  },
  "js.shellui.con-nhieu-dieu-muon-noi-ve": {
-  "t": "對這張命盤還有很多話想說。免費註冊即可：",
+  "t": " 對這張命盤還有很多話想說。免費註冊即可：",
   "h": "b5e24689"
  },
  "js.shellui.con-nhieu-dieu-muon-to-tuong": {
-  "t": "還有許多地方想為您說清楚",
+  "t": " 還有許多地方想為您說清楚",
   "h": "2a2c8332"
  },
  "js.shellui.con-thu-lai-o-so-la": {
@@ -2856,7 +2888,7 @@
   "h": "3ef9beae"
  },
  "js.shellui.da-gui-mo": {
-  "t": "✓ 已傳送 — 請開啟",
+  "t": "✓ 已傳送 — 請開啟 ",
   "h": "12288a32"
  },
  "js.shellui.da-het-cau-dung-thu": {
@@ -2867,12 +2899,16 @@
   "t": "提問次數已用完。命盤仍可免費查看——您可以查看",
   "h": "f2acf059"
  },
+ "js.shellui.da-san-sang-hoi-toi-ve": {
+  "t": "** 已準備好。可以問我日干、用神、格局或大運。",
+  "h": "7bde27db"
+ },
  "js.shellui.da-tao-link-ban-nay-cung": {
-  "t": "<span>已建立連結 · 此版本也會顯示在",
+  "t": "<span>已建立連結 · 此版本也會顯示在 ",
   "h": "11df14f6"
  },
  "js.shellui.da-vao-tiep-chuyen": {
-  "t": "已加入對話",
+  "t": " 已加入對話",
   "h": "31cef520"
  },
  "js.shellui.dang-an": {
@@ -2916,7 +2952,7 @@
   "h": "f6efbc2c"
  },
  "js.shellui.day": {
-  "t": "。",
+  "t": " 。",
   "h": "7cac21ab"
  },
  "js.shellui.de-bat-dau": {
@@ -2936,15 +2972,15 @@
   "h": "fe71eacd"
  },
  "js.shellui.de-thay-luan-dung-tren-la": {
-  "t": "，老師才能依您的命盤準確解讀——一直問籠統的問題，就跟問一般聊天機器人沒什麼兩樣。</p>",
+  "t": " ，老師才能依您的命盤準確解讀——一直問籠統的問題，就跟問一般聊天機器人沒什麼兩樣。</p>",
   "h": "ec798250"
  },
  "js.shellui.de-xem": {
-  "t": "查看",
+  "t": " 查看",
   "h": "f6dcc1ba"
  },
  "js.shellui.den-ngay": {
-  "t": "<span>到了",
+  "t": "<span>到了 ",
   "h": "d4e0e872"
  },
  "js.shellui.doi-nen-sang-toi": {
@@ -2976,7 +3012,7 @@
   "h": "f9bce370"
  },
  "js.shellui.duong-lich": {
-  "t": "(國曆)",
+  "t": " (國曆)",
   "h": "4471b62b"
  },
  "js.shellui.esc": {
@@ -2992,12 +3028,16 @@
   "h": "cfc0e866"
  },
  "js.shellui.gio-sinh-cua": {
-  "t": "請問",
+  "t": "請問 ",
   "h": "813a22c1"
  },
  "js.shellui.gio-truoc": {
-  "t": "小時前",
+  "t": " 小時前",
   "h": "ce828227"
+ },
+ "js.shellui.giox": {
+  "t": " · 時 ",
+  "h": "9d8fa6cf"
  },
  "js.shellui.gui": {
   "t": "送出",
@@ -3010,6 +3050,10 @@
  "js.shellui.gui-pdf-vao": {
   "t": "將 PDF 傳送到",
   "h": "6e198ee6"
+ },
+ "js.shellui.hanh-3if6": {
+  "t": "** (五行 ",
+  "h": "6979c33f"
  },
  "js.shellui.hanh-dong": {
   "t": "操作",
@@ -3039,6 +3083,10 @@
   "t": "關於這張命盤，想問什麼都可以…",
   "h": "67b4e55f"
  },
+ "js.shellui.hoi-thay": {
+  "t": "問老師",
+  "h": "c9ffbbaf"
+ },
  "js.shellui.hoi-thay-qua-zalo-quet-ma": {
   "t": "<div><b>透過 Zalo 請教老師</b><small>用 Zalo 掃碼並傳送問題，老師立即回覆</small></div></div>",
   "h": "28466f2c"
@@ -3052,11 +3100,11 @@
   "h": "bba6fb9b"
  },
  "js.shellui.hom": {
-  "t": "<p>",
+  "t": "<p> ",
   "h": "5bfbea9a"
  },
  "js.shellui.in-ngay": {
-  "t": "<span>列印日期",
+  "t": "<span>列印日期 ",
   "h": "acf30636"
  },
  "js.shellui.ket-qua": {
@@ -3076,7 +3124,7 @@
   "h": "5b8a28ab"
  },
  "js.shellui.khong-in-luu-pdf-truc-tiep": {
-  "t": "無法直接列印／儲存 PDF",
+  "t": " 無法直接列印／儲存 PDF",
   "h": "27aa3510"
  },
  "js.shellui.khong-tao-duoc-link-chia-se": {
@@ -3088,7 +3136,7 @@
   "h": "cb892c67"
  },
  "js.shellui.la-may-gio": {
-  "t": "是幾點出生的？",
+  "t": " 是幾點出生的？",
   "h": "1ea2e9f1"
  },
  "js.shellui.la-so-con-vua-xem-la": {
@@ -3136,15 +3184,15 @@
   "h": "489f2d1f"
  },
  "js.shellui.luong": {
-  "t": "兩)",
+  "t": " 兩)",
   "h": "c25e2d61"
  },
  "js.shellui.luong-mo12": {
-  "t": "兩",
+  "t": " 兩",
   "h": "77701acc"
  },
  "js.shellui.luong-n119": {
-  "t": "兩 (",
+  "t": " 兩 (",
   "h": "e002ee80"
  },
  "js.shellui.luong-piya": {
@@ -3156,7 +3204,7 @@
   "h": "eb701f53"
  },
  "js.shellui.luot-tang": {
-  "t": "次贈送)</span>",
+  "t": " 次贈送)</span>",
   "h": "428cbe75"
  },
  "js.shellui.luu-ban-pdf": {
@@ -3176,7 +3224,7 @@
   "h": "08f063e7"
  },
  "js.shellui.mang-chap-chon-chua-luu-duoc": {
-  "t": "網路不穩，無法儲存命盤：",
+  "t": "網路不穩，無法儲存命盤： ",
   "h": "8f2cc0fe"
  },
  "js.shellui.me": {
@@ -3232,7 +3280,7 @@
   "h": "9f6ba6f2"
  },
  "js.shellui.muc": {
-  "t": "項 —",
+  "t": " 項 — ",
   "h": "186bea21"
  },
  "js.shellui.muc-byzo": {
@@ -3240,11 +3288,11 @@
   "h": "d5ce48a8"
  },
  "js.shellui.muc-cho-la-so-nay": {
-  "t": "項（針對這張命盤）</b><span>",
+  "t": " 項（針對這張命盤）</b><span>",
   "h": "c78646f2"
  },
  "js.shellui.muc-cua-chinh-la-so-nay": {
-  "t": "項</b>專屬於這張命盤的內容 —",
+  "t": " 項</b>專屬於這張命盤的內容 — ",
   "h": "8e5f0ada"
  },
  "js.shellui.muc-luc": {
@@ -3260,7 +3308,7 @@
   "h": "b580ba1b"
  },
  "js.shellui.nam-nay": {
-  "t": "今年",
+  "t": "今年 ",
   "h": "9f78db0d"
  },
  "js.shellui.nap-luong-de-hoi-tiep": {
@@ -3276,15 +3324,15 @@
   "h": "c20441d9"
  },
  "js.shellui.ngay-nua-la-tet-thay-xem": {
-  "t": "天就是春節。老師為你們全家看看適合的開年第一位訪客生肖，以及初一到初三的出行時辰與方位好嗎？</p>",
+  "t": " 天就是春節。老師為你們全家看看適合的開年第一位訪客生肖，以及初一到初三的出行時辰與方位好嗎？</p>",
   "h": "bab22689"
  },
  "js.shellui.ngay-sinh-duong-lich-cua": {
-  "t": "請問國曆出生日期：",
+  "t": "請問國曆出生日期： ",
   "h": "4f13847a"
  },
  "js.shellui.ngay-truoc": {
-  "t": "天前",
+  "t": " 天前",
   "h": "92423d27"
  },
  "js.shellui.nghe-them-mon-khac": {
@@ -3300,15 +3348,15 @@
   "h": "440579d4"
  },
  "js.shellui.nguoi-nha": {
-  "t": "家人",
+  "t": "家人 ",
   "h": "514d0e31"
  },
  "js.shellui.nguoi-xem-ky-nhat-la-thay": {
-  "t": "最擅長看這方面的是 <b>",
+  "t": " 最擅長看這方面的是 <b> ",
   "h": "d5168fd0"
  },
  "js.shellui.nhap-ngay-sinh": {
-  "t": "<p>請輸入出生日期",
+  "t": "<p>請輸入出生日期 ",
   "h": "96b95ba3"
  },
  "js.shellui.nhung-phan-luong-trong-vi-da": {
@@ -3332,7 +3380,7 @@
   "h": "d2cd4ec7"
  },
  "js.shellui.phan-da-xong": {
-  "t": "個部分已完成</span></span>",
+  "t": " 個部分已完成</span></span>",
   "h": "f8ba3adb"
  },
  "js.shellui.phien": {
@@ -3348,15 +3396,15 @@
   "h": "edade345"
  },
  "js.shellui.phien-meij": {
-  "t": "則對話",
+  "t": " 則對話",
   "h": "3ee6a226"
  },
  "js.shellui.phut-truoc": {
-  "t": "分鐘前",
+  "t": " 分鐘前",
   "h": "b1017a2c"
  },
  "js.shellui.qua-la-so-cua-con-thoi": {
-  "t": "，這只是從你的命盤來看。請告訴老師",
+  "t": " ，這只是從你的命盤來看。請告訴老師 ",
   "h": "c45acf9b"
  },
  "js.shellui.que-con-do-xin-phep-dung": {
@@ -3392,15 +3440,15 @@
   "h": "55873035"
  },
  "js.shellui.thang-truoc": {
-  "t": "個月前",
+  "t": " 個月前",
   "h": "e1d0b08b"
  },
  "js.shellui.thay": {
-  "t": "老師",
+  "t": "老師 ",
   "h": "90b92a70"
  },
  "js.shellui.thay-3v67": {
-  "t": "老師",
+  "t": " 老師",
   "h": "e443187d"
  },
  "js.shellui.thay-5jjy": {
@@ -3424,11 +3472,11 @@
   "h": "1edf14ca"
  },
  "js.shellui.thay-doc-thang-la-so": {
-  "t": "，老師直接解讀命盤",
+  "t": "，老師直接解讀命盤 ",
   "h": "8dd5e740"
  },
  "js.shellui.thay-ghi-vao-so-tien-tri": {
-  "t": "老師已記入「預言簿」· 將在這天回頭問你",
+  "t": "老師已記入「預言簿」· 將在這天回頭問你 ",
   "h": "81f09315"
  },
  "js.shellui.thay-moi-nhin": {
@@ -3440,7 +3488,7 @@
   "h": "8836644b"
  },
  "js.shellui.the-nao-thay": {
-  "t": "運勢如何，老師？",
+  "t": " 運勢如何，老師？",
   "h": "b144d974"
  },
  "js.shellui.them-la-so": {
@@ -3448,7 +3496,7 @@
   "h": "77e87b1d"
  },
  "js.shellui.thi": {
-  "t": "，",
+  "t": " ，",
   "h": "084e1779"
  },
  "js.shellui.thu-gon": {
@@ -3479,8 +3527,12 @@
   "t": "內建瀏覽器",
   "h": "28553859"
  },
+ "js.shellui.tu-tru-cua": {
+  "t": "四柱：**",
+  "h": "d753a866"
+ },
  "js.shellui.tu-vi-minh-bao": {
-  "t": "— 明寶紫微斗數",
+  "t": " — 明寶紫微斗數",
   "h": "ef7f10f4"
  },
  "js.shellui.tu-vi-minh-bao-lbff": {
@@ -3499,6 +3551,10 @@
   "t": "此應用程式",
   "h": "cba1a9e4"
  },
+ "js.shellui.va": {
+  "t": "** 與 **",
+  "h": "4f833f73"
+ },
  "js.shellui.vo": {
   "t": "妻子",
   "h": "98c0d1da"
@@ -3516,7 +3572,7 @@
   "h": "1e272706"
  },
  "js.shellui.xem-bang": {
-  "t": "以",
+  "t": " 以 ",
   "h": "b50dfad0"
  },
  "js.shellui.xem-kem": {
@@ -3532,7 +3588,7 @@
   "h": "b03d8f15"
  },
  "js.shellui.xem-phan-luan-giai-cua-thay": {
-  "t": "看看老師為這張命盤寫的解讀：",
+  "t": "看看老師為這張命盤寫的解讀： ",
   "h": "8b9556e2"
  },
  "js.shellui.xem-phan-luan-giai-cua-thay-6as2": {
@@ -3544,7 +3600,7 @@
   "h": "18cdbfde"
  },
  "js.shellui.xin-loi-gap-truc-trac": {
-  "t": "抱歉，發生問題：",
+  "t": "抱歉，發生問題： ",
   "h": "7b2227c3"
  },
  "js.shellui.xoa-phien": {
@@ -3556,11 +3612,11 @@
   "h": "53b71aec"
  },
  "js.topup.aria-label-thanh-toan": {
-  "t": "aria-label=\"付款",
+  "t": " aria-label=\"付款 ",
   "h": "3d7d89ae"
  },
  "js.topup.bac": {
-  "t": "(第",
+  "t": " (第 ",
   "h": "d620a26c"
  },
  "js.topup.ban-chua-nhap-ma": {
@@ -3572,7 +3628,7 @@
   "h": "a5f495af"
  },
  "js.topup.ban-dang-mo-khoa-v2tc": {
-  "t": "您正在解鎖",
+  "t": "您正在解鎖 ",
   "h": "f9f2ebb7"
  },
  "js.topup.can-them": {
@@ -3580,7 +3636,7 @@
   "h": "235b3b03"
  },
  "js.topup.cap-nhat-tu-dong-khi-co": {
-  "t": "有新工具時會自動更新。金額依下列方案換算：",
+  "t": "有新工具時會自動更新。金額依下列方案換算： ",
   "h": "b44fa7dd"
  },
  "js.topup.cap-nhat-tu-dong-khi-co-u8hf": {
@@ -3592,7 +3648,7 @@
   "h": "9cf1c314"
  },
  "js.topup.chi-tu": {
-  "t": "僅需",
+  "t": "僅需 ",
   "h": "64117bb9"
  },
  "js.topup.chia-se-moi-ban": {
@@ -3612,7 +3668,7 @@
   "h": "d666e2b0"
  },
  "js.topup.cong-cu-tra-cuu-co-phap": {
-  "t": "種古法查詢工具不需要兩</strong>（安星、納音、黃道、易經、塔羅…）。",
+  "t": " 種古法查詢工具不需要兩</strong>（安星、納音、黃道、易經、塔羅…）。 ",
   "h": "13649dd5"
  },
  "js.topup.d": {
@@ -3644,11 +3700,11 @@
   "h": "1baf8990"
  },
  "js.topup.den": {
-  "t": "至",
+  "t": " 至 ",
   "h": "addd467a"
  },
  "js.topup.don-gia-theo-bac-goi-cang": {
-  "t": "· 單價依方案級距，儲值越多越划算",
+  "t": " · 單價依方案級距，儲值越多越划算",
   "h": "563ecc73"
  },
  "js.topup.du-cho-luot-nay": {
@@ -3660,7 +3716,7 @@
   "h": "2bba34ab"
  },
  "js.topup.goi": {
-  "t": "方案",
+  "t": " 方案 ",
   "h": "ab6724d3"
  },
  "js.topup.goi-duoc-danh-dau-ben-duoi": {
@@ -3692,39 +3748,39 @@
   "h": "5ae11efc"
  },
  "js.topup.la-du": {
-  "t": "</b> 就夠了，",
+  "t": "</b> 就夠了， ",
   "h": "ff3301f5"
  },
  "js.topup.loi-ket-noi-momo": {
-  "t": "MoMo 連線錯誤：",
+  "t": "MoMo 連線錯誤： ",
   "h": "ab653854"
  },
  "js.topup.loi-ket-noi-paypal": {
-  "t": "PayPal 連線錯誤：",
+  "t": "PayPal 連線錯誤： ",
   "h": "b24c6f67"
  },
  "js.topup.luong": {
-  "t": "兩</div>",
+  "t": " 兩</div>",
   "h": "81dc9146"
  },
  "js.topup.luong-10zo": {
-  "t": "／兩",
+  "t": " ／兩",
   "h": "849064c1"
  },
  "js.topup.luong-8gog": {
-  "t": "<span>兩</span></div>",
+  "t": " <span>兩</span></div>",
   "h": "ea893023"
  },
  "js.topup.luong-cho-thanh-vien-moi": {
-  "t": "兩贈送給新會員",
+  "t": " 兩贈送給新會員",
   "h": "f9ec8743"
  },
  "js.topup.luong-de-dung-tiep-nap": {
-  "t": "兩</b> 才能繼續使用——請儲值 <b>",
+  "t": " 兩</b> 才能繼續使用——請儲值 <b>",
   "h": "cffae6dc"
  },
  "js.topup.luong-dung-duoc-cho-cac-cong": {
-  "t": "兩，可用於深入解讀工具與「問老師」。",
+  "t": " 兩，可用於深入解讀工具與「問老師」。 ",
   "h": "220dda0b"
  },
  "js.topup.luong-goi-lon-hon-thi-re": {
@@ -3732,15 +3788,15 @@
   "h": "7bdee349"
  },
  "js.topup.luong-ictb": {
-  "t": "兩</b>。",
+  "t": " 兩</b>。 ",
   "h": "1d59cb4e"
  },
  "js.topup.luong-ngay-khi-ho-tao-tai": {
-  "t": "兩</strong>，在對方建立帳號時即刻入帳",
+  "t": " 兩</strong>，在對方建立帳號時即刻入帳",
   "h": "efc01ca5"
  },
  "js.topup.luot-moi-duoc-thuong-30-ngay": {
-  "t": "次邀請可獲獎勵／30 天)",
+  "t": " 次邀請可獲獎勵／30 天)",
   "h": "d879cb28"
  },
  "js.topup.mo-ra-ngay-sau-khi-thanh": {
@@ -3784,7 +3840,7 @@
   "h": "3a034d1c"
  },
  "js.topup.tang": {
-  "t": "贈送",
+  "t": "贈送 ",
   "h": "ae208fd1"
  },
  "js.topup.tang-luong-mien-phi-cho-thanh": {
@@ -3804,11 +3860,11 @@
   "h": "6eccec15"
  },
  "js.topup.toi-da": {
-  "t": "(上限",
+  "t": " (上限 ",
   "h": "383d76a3"
  },
  "js.topup.toi-thieu": {
-  "t": "最低",
+  "t": "最低 ",
   "h": "134e562d"
  },
  "js.topup.vnd": {
@@ -3820,7 +3876,7 @@
   "h": "4ac59782"
  },
  "js.topup.vui-long-nhap-so-tien-tu": {
-  "t": "請輸入金額，範圍從",
+  "t": "請輸入金額，範圍從 ",
   "h": "c3305e5b"
  },
  "js.topup.xem-lich-su": {
@@ -3832,7 +3888,7 @@
   "h": "c9888559"
  },
  "js.vanhannam.ban-do": {
-  "t": "地圖",
+  "t": "地圖 ",
   "h": "393d2725"
  },
  "js.vanhannam.cat-tinh": {
@@ -3840,31 +3896,31 @@
   "h": "20f079eb"
  },
  "js.vanhannam.chinh-tinh": {
-  "t": "主星：",
+  "t": "主星： ",
   "h": "aa58ba11"
  },
  "js.vanhannam.co-gi-can-ne": {
-  "t": "有什麼需要避開的？",
+  "t": " 有什麼需要避開的？",
   "h": "c9f61757"
  },
  "js.vanhannam.cua-toi-the-nao": {
-  "t": "我的情況如何？",
+  "t": " 我的情況如何？",
   "h": "b208ddbf"
  },
  "js.vanhannam.dai-van": {
-  "t": "大運",
+  "t": "大運 ",
   "h": "50bbf17a"
  },
  "js.vanhannam.dang-dien-ra": {
-  "t": "· <b>進行中</b>",
+  "t": " · <b>進行中</b>",
   "h": "c4905324"
  },
  "js.vanhannam.dang-luan": {
-  "t": "解讀中",
+  "t": "解讀中 ",
   "h": "31f99758"
  },
  "js.vanhannam.dang-luan-phan-1": {
-  "t": "正在解讀第 1 部分 /",
+  "t": "正在解讀第 1 部分 / ",
   "h": "9020516d"
  },
  "js.vanhannam.dang-tinh": {
@@ -3872,15 +3928,15 @@
   "h": "76a9d5f0"
  },
  "js.vanhannam.duong-lich": {
-  "t": "國曆</div>",
+  "t": " 國曆</div>",
   "h": "0c972252"
  },
  "js.vanhannam.duong-lich-1y4k": {
-  "t": "</b> 國曆 ·",
+  "t": "</b> 國曆 · ",
   "h": "ed2768e2"
  },
  "js.vanhannam.duong-lich-da-san-sang-hoi": {
-  "t": "國曆) 已準備好。可以問我任何一個月。",
+  "t": " 國曆) 已準備好。可以問我任何一個月。",
   "h": "078774b9"
  },
  "js.vanhannam.khung-12-thang-am": {
@@ -3912,7 +3968,7 @@
   "h": "c99d25aa"
  },
  "js.vanhannam.luu-nien-dai-han-cung": {
-  "t": "· 流年大限宮",
+  "t": " · 流年大限宮 ",
   "h": "7439912c"
  },
  "js.vanhannam.mo-toan-bo-van-han-12": {
@@ -3924,11 +3980,11 @@
   "h": "1cfbd3f9"
  },
  "js.vanhannam.ngay": {
-  "t": "日",
+  "t": " 日",
   "h": "9f0bc739"
  },
  "js.vanhannam.nguyet-han-cung": {
-  "t": "月限宮",
+  "t": "月限宮 ",
   "h": "85d2fef1"
  },
  "js.vanhannam.nguyet-han-cung-556b": {
@@ -3936,7 +3992,7 @@
   "h": "13dbb374"
  },
  "js.vanhannam.phan": {
-  "t": "部分",
+  "t": "部分 ",
   "h": "291674f4"
  },
  "js.vanhannam.sat-tinh": {
@@ -3944,15 +4000,15 @@
   "h": "6db93931"
  },
  "js.vanhannam.thang-am-toi-moi-o-mot": {
-  "t": "個農曆月，每格一個關鍵詞",
+  "t": " 個農曆月，每格一個關鍵詞",
   "h": "33508d52"
  },
  "js.vanhannam.tieu-han-cung": {
-  "t": "：小限宮",
+  "t": "：小限宮 ",
   "h": "cb20c10d"
  },
  "js.vanhannam.toi-nen-tap-trung-viec-gi": {
-  "t": "我該專注於什麼事？",
+  "t": " 我該專注於什麼事？",
   "h": "250b85ce"
  },
  "js.vanhannam.ton": {
@@ -3964,15 +4020,15 @@
   "h": "84ed13e5"
  },
  "js.vanhannam.tu": {
-  "t": "· 自",
+  "t": " · 自 ",
   "h": "7c8dc911"
  },
  "js.vanhannam.tuc": {
-  "t": "，即",
+  "t": "，即 ",
   "h": "50c068ad"
  },
  "js.vanhannam.tuoi": {
-  "t": "(歲",
+  "t": " (歲 ",
   "h": "1e57c98c"
  },
  "js.vanhannam.van-han-12-thang": {
@@ -3980,15 +4036,15 @@
   "h": "0bef064e"
  },
  "js.vanhannam.van-han-12-thang-2jdf": {
-  "t": "12 個月運勢 ·",
+  "t": "12 個月運勢 · ",
   "h": "d11e8de4"
  },
  "js.vanhannam.van-han-12-thang-am": {
-  "t": "農曆 12 個月運勢：",
+  "t": "農曆 12 個月運勢： ",
   "h": "81377d1f"
  },
  "js.vanhannam.van-han-12-thang-cua": {
-  "t": "12 個月運勢：",
+  "t": "12 個月運勢： ",
   "h": "afa6d79f"
  },
  "js.vanhannam.vo-chinh-dieu-muon-cung-xung": {
@@ -4004,7 +4060,7 @@
   "h": "ca46f58e"
  },
  "js.xemtuoi.10-yeu-nhat": {
-  "t": "/10) · 最弱：",
+  "t": "/10) · 最弱： ",
   "h": "98581c70"
  },
  "js.xemtuoi.100-hoi-toi-de-luan-sau": {
@@ -4020,11 +4076,11 @@
   "h": "956024e9"
  },
  "js.xemtuoi.ca": {
-  "t": "雙方",
+  "t": " 雙方 ",
   "h": "7eff84cf"
  },
  "js.xemtuoi.cach-hoa-giai-cu-the-nam": {
-  "t": "具體的化解方法在深入解讀中。",
+  "t": " 具體的化解方法在深入解讀中。",
   "h": "bb461286"
  },
  "js.xemtuoi.cham-8-yeu-to-hop-tac": {
@@ -4040,19 +4096,19 @@
   "h": "0360bcec"
  },
  "js.xemtuoi.chieu-can-luu-y-nhat": {
-  "t": "最需留意的面向：",
+  "t": "最需留意的面向： ",
   "h": "24acf607"
  },
  "js.xemtuoi.chieu-cung-thang-0-10-trong": {
-  "t": "個面向，皆為 0–10 分。權重計入總分",
+  "t": " 個面向，皆為 0–10 分。權重計入總分 ",
   "h": "05ea0cdb"
  },
  "js.xemtuoi.chieu-diem-chi-tiet-theo-tung": {
-  "t": "個面向、各人的細項分數，以及化解方法，都在深入解讀中。",
+  "t": " 個面向、各人的細項分數，以及化解方法，都在深入解讀中。",
   "h": "e8450aef"
  },
  "js.xemtuoi.chieu-hop-nhat": {
-  "t": "最契合的面向：",
+  "t": "最契合的面向： ",
   "h": "3b6f195e"
  },
  "js.xemtuoi.chieu-thap-vi-sao": {
@@ -4060,7 +4116,7 @@
   "h": "3ab2ac81"
  },
  "js.xemtuoi.chieu-tuong-hop": {
-  "t": "項契合要素",
+  "t": " 項契合要素",
   "h": "2d818e3c"
  },
  "js.xemtuoi.chong-nguoi-a": {
@@ -4068,11 +4124,11 @@
   "h": "3fd2edae"
  },
  "js.xemtuoi.cung-menh": {
-  "t": "· 命宮",
+  "t": " · 命宮 ",
   "h": "ae7269b2"
  },
  "js.xemtuoi.cung-menh-67cx": {
-  "t": "<br>命宮",
+  "t": "<br>命宮 ",
   "h": "2c272c79"
  },
  "js.xemtuoi.dang-dung-anh": {
@@ -4104,7 +4160,7 @@
   "h": "36cfb3c6"
  },
  "js.xemtuoi.hai-nguoi-hoa-hop": {
-  "t": "兩人契合度",
+  "t": "兩人契合度 ",
   "h": "1ddd5d3b"
  },
  "js.xemtuoi.hoa-hop": {
@@ -4120,19 +4176,19 @@
   "h": "317107b2"
  },
  "js.xemtuoi.luan-tong-quan-muc-do-hoa": {
-  "t": "總論契合程度：",
+  "t": "總論契合程度： ",
   "h": "53f19565"
  },
  "js.xemtuoi.manh-nhat": {
-  "t": "最強：",
+  "t": "最強： ",
   "h": "b67b37ca"
  },
  "js.xemtuoi.nap-am": {
-  "t": "· 納音",
+  "t": " · 納音 ",
   "h": "c754b896"
  },
  "js.xemtuoi.nap-am-jzle": {
-  "t": "</b> · 納音",
+  "t": "</b> · 納音 ",
   "h": "24107e5c"
  },
  "js.xemtuoi.nguoi-a": {
@@ -4172,7 +4228,7 @@
   "h": "797be799"
  },
  "js.xemtuoi.tong-diem": {
-  "t": "總分",
+  "t": "\n總分 ",
   "h": "e73bc240"
  },
  "js.xemtuoi.tra-loi-thay-nhap-ngay-sinh": {
@@ -4188,11 +4244,11 @@
   "h": "4f833f73"
  },
  "js.xemtuoi.va-4hkm": {
-  "t": "與",
+  "t": " 與 ",
   "h": "a72340e8"
  },
  "js.xemtuoi.vanh": {
-  "t": "雷達圖",
+  "t": "雷達圖 ",
   "h": "f78055f5"
  },
  "js.xemtuoi.vo-nguoi-b": {

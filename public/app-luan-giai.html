@@ -427,14 +427,14 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tools-shared/nguoi-than.js?v=1"></script>
-<script src="/auth.js?v=8"></script>
-<script src="/tuvi-paywall.js?v=43"></script>
+<script src="/auth.js?v=9"></script>
+<script src="/tuvi-paywall.js?v=44"></script>
 <script src="/tools-shared/hook-charts.js?v=3"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=143"></script>
+<script src="/shell.js?v=144"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
@@ -1193,7 +1193,7 @@ function buildLuanChips(ls,namxem){
   arr.sort(function(a,b){return a.t-b.t;});
   var weak=arr[0], strong=arr[arr.length-1], dv=ls.daiVanHienTai, chips=[];
   if(weak) chips.push(_tvmbT('js.luangiai.vi-sao-cung', 'Vì sao cung ')+weak.cn+' ('+weak.t+_tvmbT('js.luangiai.10-yeu-nhat', '/10) yếu nhất?'));
-  if(dv) chips.push(_tvmbT('js.luangiai.dai-van-hien-tai-jt5g', 'Đại vận hiện tại ')+dv.diaChi+' ('+dv.tuoiStart+'–'+dv.tuoiEnd+'t'+(dv.scoring&&dv.scoring.tong!=null?', '+dv.scoring.tong+'/10':'')+(') ' + _tvmbT('js.luangiai.nen-lam-gi', 'nên làm gì?')));
+  if(dv) chips.push(_tvmbT('js.luangiai.dai-van-hien-tai-jt5g', 'Đại vận hiện tại ')+_tvmbG('chi', dv.diaChi)+' ('+dv.tuoiStart+'–'+dv.tuoiEnd+'t'+(dv.scoring&&dv.scoring.tong!=null?', '+dv.scoring.tong+'/10':'')+(') ' + _tvmbT('js.luangiai.nen-lam-gi', 'nên làm gì?')));
   if(strong&&strong!==weak) chips.push(_tvmbT('js.luangiai.cung-manh-nhat', 'Cung mạnh nhất ')+strong.cn+' ('+strong.t+_tvmbT('js.luangiai.10-tan-dung-sao', '/10) — tận dụng sao?'));
   chips.push(_tvmbT('js.luangiai.nam', 'Năm ')+namxem+_tvmbT('js.luangiai.trong-tam-vao-viec-gi', ' trọng tâm vào việc gì?'));
   return chips;

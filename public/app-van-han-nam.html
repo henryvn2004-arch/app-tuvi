@@ -281,15 +281,15 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tools-shared/noi-sinh.js?v=1"></script>
 <script src="/tuvi-form.js?v=15"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/auth.js?v=8"></script>
-<script src="/tuvi-paywall.js?v=43"></script>
+<script src="/auth.js?v=9"></script>
+<script src="/tuvi-paywall.js?v=44"></script>
 <script src="/tools-shared/hook-charts.js?v=3"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
 <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=143"></script>
+<script src="/shell.js?v=144"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
@@ -502,10 +502,10 @@ function shareLines(){
   var L=[(_hoTen||_tvmbT('js.shell.la-so', 'Lá số'))+' · '+_ngay+'/'+_thang+'/'+_nam+' · '+(_gioitinh==='nam'?_tvmbT('js.shellui.nam', 'Nam'):_tvmbT('js.shellui.nu', 'Nữ'))];
   L.push(_tvmbT('js.vanhannam.van-han-12-thang-am', 'Vận hạn 12 tháng âm: ')+_khung.tuNhan+' → '+_khung.denNhan+' ('+_khung.duongTu+' – '+_khung.duongDen+')');
   var dv=_astrolabe.daiVanHienTai;
-  if(dv) L.push(_tvmbT('js.battu.dai-van-hien-tai', 'Đại vận hiện tại: ')+dv.diaChi+' ('+dv.tuoiStart+'–'+dv.tuoiEnd+'t)'+(dv.scoring&&dv.scoring.tong!=null?' · '+dv.scoring.tong+'/10':''));
+  if(dv) L.push(_tvmbT('js.battu.dai-van-hien-tai', 'Đại vận hiện tại: ')+_tvmbG('chi', dv.diaChi)+' ('+dv.tuoiStart+'–'+dv.tuoiEnd+'t)'+(dv.scoring&&dv.scoring.tong!=null?' · '+dv.scoring.tong+'/10':''));
   L.push('');
   _khung.thangs.forEach(function(t){
-    L.push(t.nhanDay+': '+(t.loi?t.loi:(_tvmbT('js.vanhannam.nguyet-han-cung', 'nguyệt hạn cung ')+t.cungNguyetHan)));
+    L.push(t.nhanDay+': '+(t.loi?t.loi:(_tvmbT('js.vanhannam.nguyet-han-cung', 'nguyệt hạn cung ')+_tvmbG('cung', t.cungNguyetHan))));
   });
   return L.join('\n');
 }

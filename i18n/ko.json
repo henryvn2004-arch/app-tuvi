@@ -868,7 +868,7 @@
   "h": "ae8ee50b"
  },
  "js.auth.bam-vao-link-trong-email-de": {
-  "t": "— 이메일의 링크를 눌러 완료하면 이 페이지로 자동으로 돌아와요.",
+  "t": " — 이메일의 링크를 눌러 완료하면 이 페이지로 자동으로 돌아와요.",
   "h": "8493b548"
  },
  "js.auth.ban-chua-luu-tai-khoan-dang": {
@@ -887,6 +887,10 @@
   "t": "가입하면 명보 자미두수 이용약관에 동의한 것으로 간주돼요.",
   "h": "a349cfa3"
  },
+ "js.auth.brand": {
+  "t": "명보 자미두수",
+  "h": "33336b26"
+ },
  "js.auth.chao-mung-ban-da-nhan-luong": {
   "t": "환영해요! <strong>냥</strong>을 받았어요 — 선생님께 묻기를 눌러 체험해 보세요",
   "h": "3ebea363"
@@ -900,7 +904,7 @@
   "h": "4a00d63e"
  },
  "js.auth.da-gui-email-xac-nhan-toi": {
-  "t": "인증 이메일을 보냈어요:",
+  "t": "인증 이메일을 보냈어요: ",
   "h": "213802a7"
  },
  "js.auth.da-luu-kiem-tra-email-de": {
@@ -923,6 +927,10 @@
   "t": "로그인에 실패했어요",
   "h": "fb63ae22"
  },
+ "js.auth.dang-xuat": {
+  "t": "로그아웃",
+  "h": "d513aac0"
+ },
  "js.auth.email-nay-da-co-tai-khoan": {
   "t": "이미 가입된 이메일이에요 — 비밀번호를 입력해 로그인하세요.",
   "h": "d81bc47f"
@@ -934,6 +942,10 @@
  "js.auth.hoac": {
   "t": "또는",
   "h": "2797f4b3"
+ },
+ "js.auth.khach": {
+  "t": "게스트",
+  "h": "8c19417f"
  },
  "js.auth.khong-luu-duoc-tai-khoan": {
   "t": "계정을 저장하지 못했어요.",
@@ -991,6 +1003,10 @@
   "t": "세션이 만료됐어요. 다시 시도해 주세요.",
   "h": "34b61273"
  },
+ "js.auth.slogan": {
+  "t": "명리를 알고 때에 순응하며 나아가다",
+  "h": "ca64e3dc"
+ },
  "js.auth.tang-luong": {
   "t": "냥 증정",
   "h": "fdf6261f"
@@ -1016,7 +1032,7 @@
   "h": "2c91b690"
  },
  "js.battu.anh-huong-gi-hoa-giai-sao": {
-  "t": "’의 영향과 보완법은 무엇인가요?",
+  "t": " ’의 영향과 보완법은 무엇인가요?",
   "h": "93497101"
  },
  "js.battu.ban": {
@@ -1028,19 +1044,19 @@
   "h": "08cdf1d4"
  },
  "js.battu.bat-tu": {
-  "t": "사주:",
+  "t": "사주: ",
   "h": "4f6d5ba9"
  },
  "js.battu.bo-hanh-the-nao": {
-  "t": "’ — 오행을 어떻게 보강하나요?",
+  "t": " ’ — 오행을 어떻게 보강하나요?",
   "h": "54468a9f"
  },
  "js.battu.cach-cuc": {
-  "t": "격국 ‘",
+  "t": "격국 ‘ ",
   "h": "450e9cba"
  },
  "js.battu.cach-cuc-j8la": {
-  "t": "격국:",
+  "t": "격국: ",
   "h": "441c7a62"
  },
  "js.battu.con-muon-luan-van-nam-nao": {
@@ -1056,7 +1072,7 @@
   "h": "7bde27db"
  },
  "js.battu.dai-van-hien-tai": {
-  "t": "현재 대운:",
+  "t": "현재 대운: ",
   "h": "4f329997"
  },
  "js.battu.dang-an-tu-tru": {
@@ -1068,19 +1084,19 @@
   "h": "aa035f2b"
  },
  "js.battu.dang-luan-giai-phan": {
-  "t": "풀이 중 · 항목",
+  "t": "풀이 중 · 항목 ",
   "h": "5b228988"
  },
  "js.battu.dieu-quan-trong-nhat": {
-  "t": "가지 핵심 포인트</div>",
+  "t": " 가지 핵심 포인트</div>",
   "h": "f749707d"
  },
  "js.battu.dung-than": {
-  "t": "용신 ‘",
+  "t": "용신 ‘ ",
   "h": "22c1c170"
  },
  "js.battu.gio": {
-  "t": "・시:",
+  "t": " ・시: ",
   "h": "9d8fa6cf"
  },
  "js.battu.hoi-thay": {
@@ -1104,11 +1120,11 @@
   "h": "8e9c2ae8"
  },
  "js.battu.luan-sau-phan": {
-  "t": "심층 풀이:",
+  "t": "심층 풀이: ",
   "h": "edb82980"
  },
  "js.battu.nam": {
-  "t": "・기준 연도:",
+  "t": " ・기준 연도: ",
   "h": "2deeb120"
  },
  "js.battu.nam-luan": {
@@ -1120,19 +1136,19 @@
   "h": "75a6785f"
  },
  "js.battu.ngu-hanh-thieu": {
-  "t": "부족한 오행 ‘",
+  "t": "부족한 오행 ‘ ",
   "h": "64dfabdc"
  },
  "js.battu.nhat-can": {
-  "t": "・일간:",
+  "t": " ・일간: ",
   "h": "bf2114dc"
  },
  "js.battu.nhat-can-uv6w": {
-  "t": "일간 ‘",
+  "t": "일간 ‘ ",
   "h": "d395f25c"
  },
  "js.battu.noi-len-dieu-gi": {
-  "t": "’은 무엇을 말하나요?",
+  "t": " ’은 무엇을 말하나요?",
   "h": "04cb815a"
  },
  "js.battu.thu-lai": {
@@ -1148,7 +1164,7 @@
   "h": "49bba271"
  },
  "js.battu.tu-tru-bat-tu-cua": {
-  "t": "사주팔자｜",
+  "t": "사주팔자｜ ",
   "h": "1e073395"
  },
  "js.battu.tu-tru-cua": {
@@ -1156,11 +1172,11 @@
   "h": "d753a866"
  },
  "js.battu.tuoi": {
-  "t": "세",
+  "t": " 세",
   "h": "2e261bf5"
  },
  "js.chat.chao": {
-  "t": "안녕하세요—",
+  "t": "안녕하세요— ",
   "h": "35004652"
  },
  "js.chat.hom-nay-ban-co-chuyen-gi": {
@@ -1184,7 +1200,7 @@
   "h": "b56b50ea"
  },
  "js.chutrinh.9-dai-van-va-tieu-van": {
-  "t": "인생 사이클 · 기준 연도:",
+  "t": "인생 사이클 · 기준 연도: ",
   "h": "0606eeb8"
  },
  "js.chutrinh.chin-chang-dai-van-cot-cao": {
@@ -1192,19 +1208,19 @@
   "h": "6b87e20d"
  },
  "js.chutrinh.chu-trinh-cuoc-doi": {
-  "t": "인생 사이클｜",
+  "t": "인생 사이클｜ ",
   "h": "c3a39296"
  },
  "js.chutrinh.chu-trinh-cuoc-doi-cua": {
-  "t": "인생 사이클｜",
+  "t": "인생 사이클｜ ",
   "h": "1737f0ac"
  },
  "js.chutrinh.co-y-nghia-gi": {
-  "t": "’궁에 들어요 — 어떤 의미인가요?",
+  "t": " ’궁에 들어요 — 어떤 의미인가요?",
   "h": "c6c2da71"
  },
  "js.chutrinh.cua": {
-  "t": "｜**",
+  "t": " ｜**",
   "h": "9c850ffa"
  },
  "js.chutrinh.da-san-sang-hoi-toi-de": {
@@ -1212,7 +1228,7 @@
   "h": "90f26e16"
  },
  "js.chutrinh.dang-o-chang": {
-  "t": "・현재 구간:",
+  "t": " ・현재 구간: ",
   "h": "3d0545d0"
  },
  "js.chutrinh.luan-giai": {
@@ -1228,11 +1244,11 @@
   "h": "438bc666"
  },
  "js.chutrinh.roi-vao-cung": {
-  "t": "’년은 ‘",
+  "t": " ’년은 ‘ ",
   "h": "d242aa04"
  },
  "js.chutrinh.tieu-van-nam": {
-  "t": "소한 ‘",
+  "t": "소한 ‘ ",
   "h": "1979c56a"
  },
  "js.home.3-buoc-dau-tien": {
@@ -1256,23 +1272,23 @@
   "h": "07132e46"
  },
  "js.home.chinh-tinh": {
-  "t": "・주성:",
+  "t": " ・주성: ",
   "h": "595c5e1b"
  },
  "js.home.co-phap-kieng-khoi-su": {
-  "t": "｜고법상 새 일 시작을 삼가는 날이에요.",
+  "t": " ｜고법상 새 일 시작을 삼가는 날이에요.",
   "h": "d050eff2"
  },
  "js.home.co-phap-kieng-khoi-su-cqsv": {
-  "t": "｜고법상 새 일 시작을 삼가는 날이에요",
+  "t": " ｜고법상 새 일 시작을 삼가는 날이에요",
   "h": "0e5dc069"
  },
  "js.home.co-phap-kieng-khoi-su-viec": {
-  "t": "｜고법상 새 일 시작을 삼가는 날이에요. 평소 일상은 그대로 하셔도 돼요.",
+  "t": " ｜고법상 새 일 시작을 삼가는 날이에요. 평소 일상은 그대로 하셔도 돼요.",
   "h": "07d4835f"
  },
  "js.home.co-sao": {
-  "t": "｜{sao} 포함",
+  "t": " ｜{sao} 포함",
   "h": "f6d4710a"
  },
  "js.home.con-lai-ghe-roi": {
@@ -1280,7 +1296,7 @@
   "h": "46c1f303"
  },
  "js.home.con-muon-hoi-them": {
-  "t": "✦ 더 궁금한 게 있으세요?",
+  "t": " ✦ 더 궁금한 게 있으세요?",
   "h": "f2144ad1"
  },
  "js.home.cong-cu-chinh": {
@@ -1308,7 +1324,7 @@
   "h": "2d2a47e5"
  },
  "js.home.gio-hoang-dao": {
-  "t": ". 황도 길시:",
+  "t": ". 황도 길시: ",
   "h": "af40692d"
  },
  "js.home.goi-y-cho-ban": {
@@ -1316,16 +1332,20 @@
   "h": "96e81b4f"
  },
  "js.home.hanh": {
-  "t": "오행",
+  "t": "오행 ",
   "h": "dc0810d8"
  },
  "js.home.hanh-3if6": {
-  "t": "** (오행:",
+  "t": "** (오행: ",
   "h": "6979c33f"
  },
  "js.home.hanh-i81a": {
-  "t": "(오행:",
+  "t": " (오행: ",
   "h": "b9ab7b34"
+ },
+ "js.home.hoi-thay": {
+  "t": "선생님께 묻기",
+  "h": "c9ffbbaf"
  },
  "js.home.hoi-thay-ve-van-cua-ban": {
   "t": ". 선생님께 내 운세 묻기:",
@@ -1356,23 +1376,23 @@
   "h": "fd32b768"
  },
  "js.home.linh-vuc": {
-  "t": "({linh_vuc})",
+  "t": " ({linh_vuc})",
   "h": "5b141416"
  },
  "js.home.luong-chao-mung": {
-  "t": "냥 환영 선물",
+  "t": " 냥 환영 선물",
   "h": "8b6fe1a2"
  },
  "js.home.luong-nhan-duoc-ngay-khi-ban": {
-  "t": "냥</b>이 열려요 — 계정을 만들면 바로 받을 수 있어요.</div>",
+  "t": " 냥</b>이 열려요 — 계정을 만들면 바로 받을 수 있어요.</div>",
   "h": "3a693ec4"
  },
  "js.home.luong-vao-vi-ban": {
-  "t": "냥</b>이 지갑에 들어왔어요.</div>",
+  "t": " 냥</b>이 지갑에 들어왔어요.</div>",
   "h": "cb7a01b0"
  },
  "js.home.luong-vao-vi-du-cho-mot": {
-  "t": "냥</b>이 지갑에 들어와요 — 다음 풀이 한 번에 충분한 양이에요.</div>",
+  "t": " 냥</b>이 지갑에 들어와요 — 다음 풀이 한 번에 충분한 양이에요.</div>",
   "h": "ee62ec18"
  },
  "js.home.mau-hop": {
@@ -1380,11 +1400,11 @@
   "h": "54187ad4"
  },
  "js.home.mau-hop-ban-menh": {
-  "t": "본명에 어울리는 색:",
+  "t": "본명에 어울리는 색: ",
   "h": "820910fb"
  },
  "js.home.mau-hop-plgt": {
-  "t": "어울리는 색:",
+  "t": "어울리는 색: ",
   "h": "ca937061"
  },
  "js.home.may-hom-nay-con-the-nao": {
@@ -1392,11 +1412,11 @@
   "h": "d73269fa"
  },
  "js.home.ngay": {
-  "t": "일진",
+  "t": "일진 ",
   "h": "e196e19b"
  },
  "js.home.ngay-6ia2": {
-  "t": "・날:",
+  "t": " ・날: ",
   "h": "cedf3c29"
  },
  "js.home.ngay-binh": {
@@ -1404,15 +1424,15 @@
   "h": "3e47de71"
  },
  "js.home.ngay-cwjn": {
-  "t": "｜일진:",
+  "t": " ｜일진: ",
   "h": "5ecc6134"
  },
  "js.home.ngay-hom-nay-roi-vao-cung": {
-  "t": "오늘 일진이 들어가는 궁:",
+  "t": "오늘 일진이 들어가는 궁: ",
   "h": "567ca88d"
  },
  "js.home.ngay-ky": {
-  "t": "・기일",
+  "t": " ・기일",
   "h": "83e5d5b7"
  },
  "js.home.ngay-sinh-chua-hop-le": {
@@ -1428,7 +1448,7 @@
   "h": "3fe05eab"
  },
  "js.home.ngay-xung-tuoi-can-than": {
-  "t": "✦ 내 띠와 충하는 날이에요. 큰일은 조심하세요.",
+  "t": " ✦ 내 띠와 충하는 날이에요. 큰일은 조심하세요.",
   "h": "d05ce49d"
  },
  "js.home.nhap-la-so-cua-ban": {
@@ -1440,11 +1460,11 @@
   "h": "45d9335c"
  },
  "js.home.so-lieu-rut-gon-thu-tai": {
-  "t": "— 간략 데이터예요. 잠시 후 다시 불러와 주세요.",
+  "t": " — 간략 데이터예요. 잠시 후 다시 불러와 주세요.",
   "h": "84e3f4e7"
  },
  "js.home.tai-than": {
-  "t": "재신:",
+  "t": "재신: ",
   "h": "e5ed4f68"
  },
  "js.home.thay-day": {
@@ -1460,7 +1480,7 @@
   "h": "1ce95cff"
  },
  "js.home.tranh-viec-lon-hom-nay": {
-  "t": "｜오늘은 큰일을 피하세요.",
+  "t": " ｜오늘은 큰일을 피하세요.",
   "h": "586bcbb3"
  },
  "js.home.tranh-viec-lon-trong-hom-nay": {
@@ -1472,7 +1492,7 @@
   "h": "a18884d5"
  },
  "js.home.trung": {
-  "t": "겹침:",
+  "t": "겹침: ",
   "h": "f007dc98"
  },
  "js.home.van-hom-nay": {
@@ -1484,7 +1504,7 @@
   "h": "1e60cafb"
  },
  "js.home.van-ngay": {
-  "t": "운세",
+  "t": "운세 ",
   "h": "c082a900"
  },
  "js.home.van-rieng-cua-ban": {
@@ -1492,7 +1512,7 @@
   "h": "378b38f4"
  },
  "js.home.vo-chinh-dieu": {
-  "t": "・무정요",
+  "t": " ・무정요",
   "h": "44a2723b"
  },
  "js.home.vua-cong": {
@@ -1512,7 +1532,7 @@
   "h": "8e87f4e5"
  },
  "js.home.xung-tuoi-29rp": {
-  "t": "충하는 띠:",
+  "t": "충하는 띠: ",
   "h": "e92ab4fa"
  },
  "js.laso.dang-an-sao": {
@@ -1520,11 +1540,11 @@
   "h": "06275197"
  },
  "js.laso.dang-xuat": {
-  "t": "내보내는 중...",
+  "t": " 내보내는 중...",
   "h": "92b2d242"
  },
  "js.laso.gio-am": {
-  "t": "음력 시:",
+  "t": "음력 시: ",
   "h": "58bc0ba0"
  },
  "js.laso.lay-la-so": {
@@ -1540,7 +1560,7 @@
   "h": "2545b4dd"
  },
  "js.laso.xuat-that-bai": {
-  "t": "내보내기 실패:",
+  "t": "내보내기 실패: ",
   "h": "b105cd2a"
  },
  "js.luangiai.10-8-dai-van-con-lai": {
@@ -1552,7 +1572,7 @@
   "h": "ad86144d"
  },
  "js.luangiai.10-thap-nhat-phan": {
-  "t": "/10</b>으로 가장 낮아요. 제",
+  "t": "/10</b>으로 가장 낮아요. 제 ",
   "h": "4860ad16"
  },
  "js.luangiai.10-yeu-nhat": {
@@ -1592,11 +1612,11 @@
   "h": "f72b38a8"
  },
  "js.luangiai.cuc": {
-  "t": "・오행국:",
+  "t": " ・오행국: ",
   "h": "6c9661b0"
  },
  "js.luangiai.cung-manh-nhat": {
-  "t": "가장 강한 궁 ‘",
+  "t": "가장 강한 궁 ‘ ",
   "h": "bb00924b"
  },
  "js.luangiai.da-lap-la-so": {
@@ -1616,7 +1636,7 @@
   "h": "8b3ef94b"
  },
  "js.luangiai.dai-van-hien-tai-jt5g": {
-  "t": "현재 대운:",
+  "t": "현재 대운: ",
   "h": "7cf01e2f"
  },
  "js.luangiai.dang-lap-la-so": {
@@ -1628,7 +1648,7 @@
   "h": "d68f76a3"
  },
  "js.luangiai.dang-luan-giai-phan-1": {
-  "t": "풀이 중 · 항목 1 /",
+  "t": "풀이 중 · 항목 1 / ",
   "h": "559646ca"
  },
  "js.luangiai.la-so": {
@@ -1636,7 +1656,7 @@
   "h": "c63aa847"
  },
  "js.luangiai.la-so-cua": {
-  "t": "명반｜",
+  "t": "명반｜ ",
   "h": "505f9cf1"
  },
  "js.luangiai.lap-la-so-luan-giai-ngay": {
@@ -1652,7 +1672,7 @@
   "h": "9380a2a1"
  },
  "js.luangiai.luan-giai": {
-  "t": "풀이｜",
+  "t": "풀이｜ ",
   "h": "71d78039"
  },
  "js.luangiai.luan-giai-chuyen-sau": {
@@ -1672,7 +1692,7 @@
   "h": "1d1bbc24"
  },
  "js.luangiai.mien-phi": {
-  "t": "(무료)…",
+  "t": " (무료)…",
   "h": "d0dbdd09"
  },
  "js.luangiai.mien-phi-xem-tong-quan-1": {
@@ -1688,11 +1708,11 @@
   "h": "d6632d90"
  },
  "js.luangiai.nam": {
-  "t": "‘",
+  "t": "‘ ",
   "h": "85e39643"
  },
  "js.luangiai.nap-am": {
-  "t": "・납음:",
+  "t": " ・납음: ",
   "h": "44e73d9c"
  },
  "js.luangiai.nen-lam-gi": {
@@ -1700,11 +1720,11 @@
   "h": "feedfe50"
  },
  "js.luangiai.noi-vi-sao-no-bung-ra": {
-  "t": "항목에서 그 이유와 언제 드러나는지, 어떻게 풀어 갈지 짚어 드려요.",
+  "t": " 항목에서 그 이유와 언제 드러나는지, 어떻게 풀어 갈지 짚어 드려요.",
   "h": "2b510636"
  },
  "js.luangiai.phan": {
-  "t": "항목",
+  "t": "항목 ",
   "h": "a74e8ed7"
  },
  "js.luangiai.phan-5h00": {
@@ -1712,23 +1732,23 @@
   "h": "817301ad"
  },
  "js.luangiai.phan-loi-phan": {
-  "t": "개 항목 오류 (번호:",
+  "t": " 개 항목 오류 (번호: ",
   "h": "3d3d4b5b"
  },
  "js.luangiai.trong-12-cung-cua-la-so": {
-  "t": "이 명반의 12궁 중 <b>",
+  "t": "이 명반의 12궁 중 <b> ",
   "h": "c69f5267"
  },
  "js.luangiai.trong-tam-vao-viec-gi": {
-  "t": "’년에는 무엇에 집중해야 하나요?",
+  "t": " ’년에는 무엇에 집중해야 하나요?",
   "h": "dbecde19"
  },
  "js.luangiai.tuoi-cham": {
-  "t": "세) 점수:",
+  "t": " 세) 점수: ",
   "h": "73442218"
  },
  "js.luangiai.vi-sao-cung": {
-  "t": "가장 약한 궁 ‘",
+  "t": "가장 약한 궁 ‘ ",
   "h": "32e135e7"
  },
  "js.luangiai.xem-la-so-day-du": {
@@ -1920,7 +1940,7 @@
   "h": "24c4d64e"
  },
  "js.paywall.bam-mo-la-tra-tien-va": {
-  "t": "· 열면 바로 결제되고 곧바로 읽을 수 있어요,",
+  "t": " · 열면 바로 결제되고 곧바로 읽을 수 있어요, ",
   "h": "9a6023cd"
  },
  "js.paywall.ban-ay-dang-ky-la-ban": {
@@ -1928,7 +1948,7 @@
   "h": "afb5cbf7"
  },
  "js.paywall.ban-co-the-thu-lai-sau": {
-  "t": "— 나중에 다시 시도해 주세요.</p>",
+  "t": " — 나중에 다시 시도해 주세요.</p>",
   "h": "d45f37cf"
  },
  "js.paywall.ban-con": {
@@ -1952,7 +1972,7 @@
   "h": "8bbc9dde"
  },
  "js.paywall.can": {
-  "t": "</b> · 필요",
+  "t": "</b> · 필요 ",
   "h": "7e7713c7"
  },
  "js.paywall.can-them": {
@@ -1984,7 +2004,7 @@
   "h": "e4844e35"
  },
  "js.paywall.chu-tk": {
-  "t": "<b>예금주:</b>",
+  "t": "<b>예금주:</b> ",
   "h": "73fb1282"
  },
  "js.paywall.chu-trinh-cuoc-doi": {
@@ -2035,6 +2055,10 @@
   "t": "⊙ 부족",
   "h": "09093766"
  },
+ "js.paywall.cong-cu": {
+  "t": "도구",
+  "h": "6029ffef"
+ },
  "js.paywall.d": {
   "t": "동)</span>",
   "h": "a62f69a1"
@@ -2060,7 +2084,7 @@
   "h": "91cdb627"
  },
  "js.paywall.da-tru": {
-  "t": "✓ 차감:",
+  "t": "✓ 차감: ",
   "h": "0d13abf9"
  },
  "js.paywall.dang-cho-thanh-toan": {
@@ -2116,7 +2140,7 @@
   "h": "1e5e41e3"
  },
  "js.paywall.du": {
-  "t": ", 잔여",
+  "t": ", 잔여 ",
   "h": "63a0e7a7"
  },
  "js.paywall.duyen-no-tien-kiep": {
@@ -2124,7 +2148,7 @@
   "h": "c6b0ccb5"
  },
  "js.paywall.giu-trong-vi": {
-  "t": "지갑에 보관",
+  "t": " 지갑에 보관",
   "h": "fa87cbb0"
  },
  "js.paywall.het-luot-tang-hom-nay": {
@@ -2176,11 +2200,11 @@
   "h": "e454923c"
  },
  "js.paywall.loi": {
-  "t": "오류:",
+  "t": "오류: ",
   "h": "471c0087"
  },
  "js.paywall.loi-ket-noi": {
-  "t": "연결 오류:",
+  "t": "연결 오류: ",
   "h": "46e34d76"
  },
  "js.paywall.loi-kiem-tra-thu-lai": {
@@ -2200,7 +2224,7 @@
   "h": "8b0080c6"
  },
  "js.paywall.luong": {
-  "t": "냥</b>,",
+  "t": " 냥</b>, ",
   "h": "9a10e8c4"
  },
  "js.paywall.luong-4tai": {
@@ -2208,39 +2232,39 @@
   "h": "6614284e"
  },
  "js.paywall.luong-can": {
-  "t": "냥</strong> · 필요:",
+  "t": " 냥</strong> · 필요: ",
   "h": "17b0aa0f"
  },
  "js.paywall.luong-con-lai": {
-  "t": "냥 · 잔액",
+  "t": " 냥 · 잔액 ",
   "h": "c99e3599"
  },
  "js.paywall.luong-ln0i": {
-  "t": "냥)</span>",
+  "t": " 냥)</span>",
   "h": "49ad8e12"
  },
  "js.paywall.luong-luot-nay-dung": {
-  "t": "냥 · 이번 사용",
+  "t": " 냥 · 이번 사용 ",
   "h": "e61f5fd5"
  },
  "js.paywall.luong-m6fn": {
-  "t": "냥",
+  "t": " 냥",
   "h": "74224e60"
  },
  "js.paywall.luong-mo-day-du-ton": {
-  "t": "냥</b> · 전체 열람 비용",
+  "t": " 냥</b> · 전체 열람 비용 ",
   "h": "81466f88"
  },
  "js.paywall.luong-thao-tac-nay-ton": {
-  "t": "냥</b> · 이 작업 비용 <b>",
+  "t": " 냥</b> · 이 작업 비용 <b>",
   "h": "e1bdd8d4"
  },
  "js.paywall.luong-uzlk": {
-  "t": "냥</b>",
+  "t": " 냥</b>",
   "h": "6820cc0e"
  },
  "js.paywall.luong-vao-vi-cua-ban": {
-  "t": "냥</b>을 지갑에 환불했어요",
+  "t": " 냥</b>을 지갑에 환불했어요",
   "h": "0aa5bc03"
  },
  "js.paywall.luot-nay-chua-xu-ly-xong": {
@@ -2252,7 +2276,7 @@
   "h": "7b97f29d"
  },
  "js.paywall.ma-het-han-sau": {
-  "t": "코드 만료까지",
+  "t": "코드 만료까지 ",
   "h": "d64d146a"
  },
  "js.paywall.ma-qr-chuyen-khoan": {
@@ -2272,7 +2296,7 @@
   "h": "84fe9699"
  },
  "js.paywall.mo-day-du-ton": {
-  "t": "전체 열람 비용",
+  "t": "전체 열람 비용 ",
   "h": "3d05df05"
  },
  "js.paywall.mo-trang-thanh-toan": {
@@ -2292,7 +2316,7 @@
   "h": "96c6fb5d"
  },
  "js.paywall.nap-thanh-cong": {
-  "t": "✓ 충전 완료",
+  "t": "✓ 충전 완료 ",
   "h": "104f438d"
  },
  "js.paywall.nap-them": {
@@ -2308,11 +2332,11 @@
   "h": "1f82488c"
  },
  "js.paywall.ngan-hang": {
-  "t": "<b>은행:</b>",
+  "t": "<b>은행:</b> ",
   "h": "2aa52434"
  },
  "js.paywall.nguoi": {
-  "t": "명 초대</b> —",
+  "t": " 명 초대</b> — ",
   "h": "6134285c"
  },
  "js.paywall.nhan-tuong": {
@@ -2360,11 +2384,11 @@
   "h": "17e83429"
  },
  "js.paywall.so-tk": {
-  "t": "<b>계좌번호:</b>",
+  "t": "<b>계좌번호:</b> ",
   "h": "d2e75eae"
  },
  "js.paywall.tam-thoi": {
-  "t": "(임시)",
+  "t": " (임시)",
   "h": "3794c4c7"
  },
  "js.paywall.tao-ma-moi": {
@@ -2388,7 +2412,7 @@
   "h": "b2e5a151"
  },
  "js.paywall.thao-tac-nay-ton": {
-  "t": "이 작업 비용",
+  "t": "이 작업 비용 ",
   "h": "834c67c7"
  },
  "js.paywall.thao-tac-nay-ton-1zm6": {
@@ -2400,11 +2424,11 @@
   "h": "96be8028"
  },
  "js.paywall.thieu": {
-  "t": "</b> — 부족",
+  "t": "</b> — 부족 ",
   "h": "03703206"
  },
  "js.paywall.thieu-8362": {
-  "t": "— 부족",
+  "t": " — 부족 ",
   "h": "6f4749c9"
  },
  "js.paywall.thu-kieu-toc": {
@@ -2632,7 +2656,7 @@
   "h": "010150dd"
  },
  "js.shellui.am-lich": {
-  "t": "(음력)",
+  "t": " (음력)",
   "h": "ebf71daf"
  },
  "js.shellui.an-di": {
@@ -2667,6 +2691,10 @@
   "t": "전체 풀이",
   "h": "9008184e"
  },
+ "js.shellui.banx": {
+  "t": "회원님",
+  "h": "e8f04322"
+ },
  "js.shellui.bao-cao-da-san-sang": {
   "t": "<b>리포트 준비 완료</b>",
   "h": "ab59122b"
@@ -2691,6 +2719,10 @@
   "t": "아버지",
   "h": "9a106c99"
  },
+ "js.shellui.brand": {
+  "t": "명보 자미두수",
+  "h": "33336b26"
+ },
  "js.shellui.ca-nha": {
   "t": "온 가족",
   "h": "158695a7"
@@ -2704,7 +2736,7 @@
   "h": "65c94d43"
  },
  "js.shellui.cau-mien-phi": {
-  "t": "회</b> 더 무료로 묻기",
+  "t": " 회</b> 더 무료로 묻기",
   "h": "8ddf771c"
  },
  "js.shellui.cau-nay-thi": {
@@ -2712,7 +2744,7 @@
   "h": "084951c0"
  },
  "js.shellui.cau-vua-roi-duoc-tra-loi": {
-  "t": "— 방금 질문에 바로 답해 드려요",
+  "t": " — 방금 질문에 바로 답해 드려요",
   "h": "70029ef5"
  },
  "js.shellui.chau": {
@@ -2740,15 +2772,15 @@
   "h": "94185440"
  },
  "js.shellui.chia-se-w5yz": {
-  "t": "공유:",
+  "t": "공유: ",
   "h": "f575b7df"
  },
  "js.shellui.cho-ten": {
-  "t": "({name}님을 위해)",
+  "t": " ({name}님을 위해)",
   "h": "bc9cbc22"
  },
  "js.shellui.chon-mot-cach-duoi-day": {
-  "t": "— 아래 방법 중 하나를 선택하세요.",
+  "t": " — 아래 방법 중 하나를 선택하세요.",
   "h": "8b0c906e"
  },
  "js.shellui.chon-thay-luan-giai": {
@@ -2776,11 +2808,11 @@
   "h": "f0665eb8"
  },
  "js.shellui.chua-luu-duoc-la-so": {
-  "t": "명반을 저장하지 못했어요:",
+  "t": "명반을 저장하지 못했어요: ",
   "h": "424c73b0"
  },
  "js.shellui.chua-mo": {
-  "t": "· 미열람</span></span>",
+  "t": " · 미열람</span></span>",
   "h": "72204e26"
  },
  "js.shellui.chua-tao-duoc-pdf-thu-lai": {
@@ -2788,7 +2820,7 @@
   "h": "549a59fa"
  },
  "js.shellui.chuyen": {
-  "t": "“",
+  "t": "“ ",
   "h": "2844303d"
  },
  "js.shellui.chuyen-do-the-nao-roi-con": {
@@ -2796,7 +2828,7 @@
   "h": "9e184650"
  },
  "js.shellui.co-noi": {
-  "t": "의 말씀: <i>“",
+  "t": " 의 말씀: <i>“",
   "h": "7960bcfb"
  },
  "js.shellui.con": {
@@ -2804,7 +2836,7 @@
   "h": "21dc996b"
  },
  "js.shellui.con-25rm": {
-  "t": "<p>뗏 D-",
+  "t": "<p>뗏 D- ",
   "h": "b84493f3"
  },
  "js.shellui.con-goi-la-gi": {
@@ -2820,7 +2852,7 @@
   "h": "be3b5cf7"
  },
  "js.shellui.con-muon-thay-nhan-qua-dau": {
-  "t": "에 선생님이 어디로 알려 드릴까요?</span>",
+  "t": " 에 선생님이 어디로 알려 드릴까요?</span>",
   "h": "959d0885"
  },
  "js.shellui.con-muon-thay-xem-chuyen-gi": {
@@ -2828,11 +2860,11 @@
   "h": "c643b581"
  },
  "js.shellui.con-nhieu-dieu-muon-noi-ve": {
-  "t": "께서 이 명반에 대해 하실 말씀이 아직 많아요. 무료로 가입하면:",
+  "t": " 께서 이 명반에 대해 하실 말씀이 아직 많아요. 무료로 가입하면:",
   "h": "b5e24689"
  },
  "js.shellui.con-nhieu-dieu-muon-to-tuong": {
-  "t": "께서 아직 풀어 드릴 이야기가 많이 남았어요",
+  "t": " 께서 아직 풀어 드릴 이야기가 많이 남았어요",
   "h": "2a2c8332"
  },
  "js.shellui.con-thu-lai-o-so-la": {
@@ -2856,7 +2888,7 @@
   "h": "3ef9beae"
  },
  "js.shellui.da-gui-mo": {
-  "t": "✓ 전송 완료 —",
+  "t": "✓ 전송 완료 — ",
   "h": "12288a32"
  },
  "js.shellui.da-het-cau-dung-thu": {
@@ -2867,12 +2899,16 @@
   "t": "질문 횟수를 모두 썼어요. 명반은 계속 무료로 볼 수 있어요 —",
   "h": "f2acf059"
  },
+ "js.shellui.da-san-sang-hoi-toi-ve": {
+  "t": "**의 사주 준비가 끝났어요. 일간·용신·격국·대운 등 무엇이든 물어보세요.",
+  "h": "7bde27db"
+ },
  "js.shellui.da-tao-link-ban-nay-cung": {
-  "t": "<span>링크 생성 완료 · 이 결과가 함께 게시되는 곳:",
+  "t": "<span>링크 생성 완료 · 이 결과가 함께 게시되는 곳: ",
   "h": "11df14f6"
  },
  "js.shellui.da-vao-tiep-chuyen": {
-  "t": ": 대화에 합류했어요",
+  "t": " : 대화에 합류했어요",
   "h": "31cef520"
  },
  "js.shellui.dang-an": {
@@ -2916,7 +2952,7 @@
   "h": "f6efbc2c"
  },
  "js.shellui.day": {
-  "t": "이에요.",
+  "t": " 이에요.",
   "h": "7cac21ab"
  },
  "js.shellui.de-bat-dau": {
@@ -2936,15 +2972,15 @@
   "h": "fe71eacd"
  },
  "js.shellui.de-thay-luan-dung-tren-la": {
-  "t": "&nbsp;생년월일을 입력해 주세요. 그래야 선생님이 내 명반을 정확히 풀이할 수 있어요 — 두루뭉술하게 묻기만 하면 평범한 챗봇에게 묻는 것과 다를 바 없어요.</p>",
+  "t": " &nbsp;생년월일을 입력해 주세요. 그래야 선생님이 내 명반을 정확히 풀이할 수 있어요 — 두루뭉술하게 묻기만 하면 평범한 챗봇에게 묻는 것과 다를 바 없어요.</p>",
   "h": "ec798250"
  },
  "js.shellui.de-xem": {
-  "t": "앱에서 확인하세요",
+  "t": " 앱에서 확인하세요",
   "h": "f6dcc1ba"
  },
  "js.shellui.den-ngay": {
-  "t": "<span>",
+  "t": "<span> ",
   "h": "d4e0e872"
  },
  "js.shellui.doi-nen-sang-toi": {
@@ -2976,7 +3012,7 @@
   "h": "f9bce370"
  },
  "js.shellui.duong-lich": {
-  "t": "(양력)",
+  "t": " (양력)",
   "h": "4471b62b"
  },
  "js.shellui.esc": {
@@ -2992,12 +3028,16 @@
   "h": "cfc0e866"
  },
  "js.shellui.gio-sinh-cua": {
-  "t": "‘",
+  "t": "‘ ",
   "h": "813a22c1"
  },
  "js.shellui.gio-truoc": {
-  "t": "시간 전",
+  "t": " 시간 전",
   "h": "ce828227"
+ },
+ "js.shellui.giox": {
+  "t": " ・시: ",
+  "h": "9d8fa6cf"
  },
  "js.shellui.gui": {
   "t": "보내기",
@@ -3010,6 +3050,10 @@
  "js.shellui.gui-pdf-vao": {
   "t": "PDF 보내기:",
   "h": "6e198ee6"
+ },
+ "js.shellui.hanh-3if6": {
+  "t": "** (오행: ",
+  "h": "6979c33f"
  },
  "js.shellui.hanh-dong": {
   "t": "동작",
@@ -3039,6 +3083,10 @@
   "t": "이 명반에 대해 무엇이든 물어보세요…",
   "h": "67b4e55f"
  },
+ "js.shellui.hoi-thay": {
+  "t": "선생님께 묻기",
+  "h": "c9ffbbaf"
+ },
  "js.shellui.hoi-thay-qua-zalo-quet-ma": {
   "t": "<div><b>Zalo로 선생님께 묻기</b><small>Zalo로 QR 코드를 스캔하고 질문을 보내면 선생님이 바로 답해 드려요</small></div></div>",
   "h": "28466f2c"
@@ -3052,11 +3100,11 @@
   "h": "bba6fb9b"
  },
  "js.shellui.hom": {
-  "t": "<p>[",
+  "t": "<p>[ ",
   "h": "5bfbea9a"
  },
  "js.shellui.in-ngay": {
-  "t": "<span>인쇄일:&nbsp;",
+  "t": "<span>인쇄일:&nbsp; ",
   "h": "acf30636"
  },
  "js.shellui.ket-qua": {
@@ -3076,7 +3124,7 @@
   "h": "5b8a28ab"
  },
  "js.shellui.khong-in-luu-pdf-truc-tiep": {
-  "t": "안에서는 PDF를 바로 인쇄하거나 저장할 수 없어요",
+  "t": " 안에서는 PDF를 바로 인쇄하거나 저장할 수 없어요",
   "h": "27aa3510"
  },
  "js.shellui.khong-tao-duoc-link-chia-se": {
@@ -3088,7 +3136,7 @@
   "h": "cb892c67"
  },
  "js.shellui.la-may-gio": {
-  "t": "’의 태어난 시간은 몇 시인가요?",
+  "t": " ’의 태어난 시간은 몇 시인가요?",
   "h": "1ea2e9f1"
  },
  "js.shellui.la-so-con-vua-xem-la": {
@@ -3136,15 +3184,15 @@
   "h": "489f2d1f"
  },
  "js.shellui.luong": {
-  "t": "냥)",
+  "t": " 냥)",
   "h": "c25e2d61"
  },
  "js.shellui.luong-mo12": {
-  "t": "냥",
+  "t": " 냥",
   "h": "77701acc"
  },
  "js.shellui.luong-n119": {
-  "t": "냥 (",
+  "t": " 냥 (",
   "h": "e002ee80"
  },
  "js.shellui.luong-piya": {
@@ -3156,7 +3204,7 @@
   "h": "eb701f53"
  },
  "js.shellui.luot-tang": {
-  "t": "회 증정)</span>",
+  "t": " 회 증정)</span>",
   "h": "428cbe75"
  },
  "js.shellui.luu-ban-pdf": {
@@ -3176,7 +3224,7 @@
   "h": "08f063e7"
  },
  "js.shellui.mang-chap-chon-chua-luu-duoc": {
-  "t": "네트워크가 불안정해서 명반을 저장하지 못했어요:",
+  "t": "네트워크가 불안정해서 명반을 저장하지 못했어요: ",
   "h": "8f2cc0fe"
  },
  "js.shellui.me": {
@@ -3232,7 +3280,7 @@
   "h": "9f6ba6f2"
  },
  "js.shellui.muc": {
-  "t": "개 항목 —",
+  "t": " 개 항목 — ",
   "h": "186bea21"
  },
  "js.shellui.muc-byzo": {
@@ -3240,11 +3288,11 @@
   "h": "d5ce48a8"
  },
  "js.shellui.muc-cho-la-so-nay": {
-  "t": "개 항목 · 이 명반 전용</b><span>",
+  "t": " 개 항목 · 이 명반 전용</b><span>",
   "h": "c78646f2"
  },
  "js.shellui.muc-cua-chinh-la-so-nay": {
-  "t": "개 항목</b>으로 이 명반을 빠짐없이 짚어 드려요 —",
+  "t": " 개 항목</b>으로 이 명반을 빠짐없이 짚어 드려요 — ",
   "h": "8e5f0ada"
  },
  "js.shellui.muc-luc": {
@@ -3260,7 +3308,7 @@
   "h": "b580ba1b"
  },
  "js.shellui.nam-nay": {
-  "t": "[올해]",
+  "t": "[올해] ",
   "h": "9f78db0d"
  },
  "js.shellui.nap-luong-de-hoi-tiep": {
@@ -3276,15 +3324,15 @@
   "h": "c20441d9"
  },
  "js.shellui.ngay-nua-la-tet-thay-xem": {
-  "t": "일이에요. 선생님이 올해 첫 손님(쑹닷)으로 우리 집에 맞는 띠와 초하루~사흘 출발 시간·방향을 가족 모두 봐 드릴까요?</p>",
+  "t": " 일이에요. 선생님이 올해 첫 손님(쑹닷)으로 우리 집에 맞는 띠와 초하루~사흘 출발 시간·방향을 가족 모두 봐 드릴까요?</p>",
   "h": "bab22689"
  },
  "js.shellui.ngay-sinh-duong-lich-cua": {
-  "t": "양력 생년월일은&nbsp;",
+  "t": "양력 생년월일은&nbsp; ",
   "h": "4f13847a"
  },
  "js.shellui.ngay-truoc": {
-  "t": "일 전",
+  "t": " 일 전",
   "h": "92423d27"
  },
  "js.shellui.nghe-them-mon-khac": {
@@ -3300,15 +3348,15 @@
   "h": "440579d4"
  },
  "js.shellui.nguoi-nha": {
-  "t": "가족#",
+  "t": "가족# ",
   "h": "514d0e31"
  },
  "js.shellui.nguoi-xem-ky-nhat-la-thay": {
-  "t": "&nbsp;가장 잘 봐 주시는 분은 <b>선생님&nbsp;",
+  "t": " &nbsp;가장 잘 봐 주시는 분은 <b>선생님&nbsp; ",
   "h": "d5168fd0"
  },
  "js.shellui.nhap-ngay-sinh": {
-  "t": "<p>",
+  "t": "<p> ",
   "h": "96b95ba3"
  },
  "js.shellui.nhung-phan-luong-trong-vi-da": {
@@ -3332,7 +3380,7 @@
   "h": "d2cd4ec7"
  },
  "js.shellui.phan-da-xong": {
-  "t": "개 완료</span></span>",
+  "t": " 개 완료</span></span>",
   "h": "f8ba3adb"
  },
  "js.shellui.phien": {
@@ -3348,15 +3396,15 @@
   "h": "edade345"
  },
  "js.shellui.phien-meij": {
-  "t": "개 세션",
+  "t": " 개 세션",
   "h": "3ee6a226"
  },
  "js.shellui.phut-truoc": {
-  "t": "분 전",
+  "t": " 분 전",
   "h": "b1017a2c"
  },
  "js.shellui.qua-la-so-cua-con-thoi": {
-  "t": "쪽은 회원님의 명반으로만 봤어요. 이제&nbsp;",
+  "t": " 쪽은 회원님의 명반으로만 봤어요. 이제&nbsp; ",
   "h": "c45acf9b"
  },
  "js.shellui.que-con-do-xin-phep-dung": {
@@ -3392,15 +3440,15 @@
   "h": "55873035"
  },
  "js.shellui.thang-truoc": {
-  "t": "개월 전",
+  "t": " 개월 전",
   "h": "e1d0b08b"
  },
  "js.shellui.thay": {
-  "t": "선생님",
+  "t": "선생님 ",
   "h": "90b92a70"
  },
  "js.shellui.thay-3v67": {
-  "t": "] 선생님",
+  "t": " ] 선생님",
   "h": "e443187d"
  },
  "js.shellui.thay-5jjy": {
@@ -3424,11 +3472,11 @@
   "h": "1edf14ca"
  },
  "js.shellui.thay-doc-thang-la-so": {
-  "t": "의 생년월일을 알려 주시면 선생님이 명반을 바로 읽어 드려요 ▸&nbsp;",
+  "t": "의 생년월일을 알려 주시면 선생님이 명반을 바로 읽어 드려요 ▸&nbsp; ",
   "h": "8dd5e740"
  },
  "js.shellui.thay-ghi-vao-so-tien-tri": {
-  "t": "선생님이 예언 노트에 기록했어요 · 다시 물어볼 날짜:",
+  "t": "선생님이 예언 노트에 기록했어요 · 다시 물어볼 날짜: ",
   "h": "81f09315"
  },
  "js.shellui.thay-moi-nhin": {
@@ -3440,7 +3488,7 @@
   "h": "8836644b"
  },
  "js.shellui.the-nao-thay": {
-  "t": "은 어떤가요, 선생님?",
+  "t": " 은 어떤가요, 선생님?",
   "h": "b144d974"
  },
  "js.shellui.them-la-so": {
@@ -3448,7 +3496,7 @@
   "h": "77e87b1d"
  },
  "js.shellui.thi": {
-  "t": "” 이야기라면",
+  "t": " ” 이야기라면",
   "h": "084e1779"
  },
  "js.shellui.thu-gon": {
@@ -3479,8 +3527,12 @@
   "t": "인앱 브라우저",
   "h": "28553859"
  },
+ "js.shellui.tu-tru-cua": {
+  "t": "**",
+  "h": "d753a866"
+ },
  "js.shellui.tu-vi-minh-bao": {
-  "t": "— 명보 자미두수",
+  "t": " — 명보 자미두수",
   "h": "ef7f10f4"
  },
  "js.shellui.tu-vi-minh-bao-lbff": {
@@ -3499,6 +3551,10 @@
   "t": "이 앱",
   "h": "cba1a9e4"
  },
+ "js.shellui.va": {
+  "t": "** · **",
+  "h": "4f833f73"
+ },
  "js.shellui.vo": {
   "t": "아내",
   "h": "98c0d1da"
@@ -3516,7 +3572,7 @@
   "h": "1e272706"
  },
  "js.shellui.xem-bang": {
-  "t": "· 분야:",
+  "t": " · 분야: ",
   "h": "b50dfad0"
  },
  "js.shellui.xem-kem": {
@@ -3532,7 +3588,7 @@
   "h": "b03d8f15"
  },
  "js.shellui.xem-phan-luan-giai-cua-thay": {
-  "t": "이 명반에 대한 선생님의 풀이 보기:",
+  "t": "이 명반에 대한 선생님의 풀이 보기: ",
   "h": "8b9556e2"
  },
  "js.shellui.xem-phan-luan-giai-cua-thay-6as2": {
@@ -3544,7 +3600,7 @@
   "h": "18cdbfde"
  },
  "js.shellui.xin-loi-gap-truc-trac": {
-  "t": "죄송해요, 문제가 생겼어요:",
+  "t": "죄송해요, 문제가 생겼어요: ",
   "h": "7b2227c3"
  },
  "js.shellui.xoa-phien": {
@@ -3556,11 +3612,11 @@
   "h": "53b71aec"
  },
  "js.topup.aria-label-thanh-toan": {
-  "t": "aria-label=\"결제",
+  "t": " aria-label=\"결제 ",
   "h": "3d7d89ae"
  },
  "js.topup.bac": {
-  "t": "(등급",
+  "t": " (등급 ",
   "h": "d620a26c"
  },
  "js.topup.ban-chua-nhap-ma": {
@@ -3572,7 +3628,7 @@
   "h": "a5f495af"
  },
  "js.topup.ban-dang-mo-khoa-v2tc": {
-  "t": "잠금 해제 중:",
+  "t": "잠금 해제 중: ",
   "h": "f9f2ebb7"
  },
  "js.topup.can-them": {
@@ -3580,7 +3636,7 @@
   "h": "235b3b03"
  },
  "js.topup.cap-nhat-tu-dong-khi-co": {
-  "t": "새 도구가 생기면 자동으로 업데이트돼요. 금액은 다음 패키지 기준으로 환산돼요:",
+  "t": "새 도구가 생기면 자동으로 업데이트돼요. 금액은 다음 패키지 기준으로 환산돼요: ",
   "h": "b44fa7dd"
  },
  "js.topup.cap-nhat-tu-dong-khi-co-u8hf": {
@@ -3592,7 +3648,7 @@
   "h": "9cf1c314"
  },
  "js.topup.chi-tu": {
-  "t": "최저",
+  "t": "최저 ",
   "h": "64117bb9"
  },
  "js.topup.chia-se-moi-ban": {
@@ -3612,7 +3668,7 @@
   "h": "d666e2b0"
  },
  "js.topup.cong-cu-tra-cuu-co-phap": {
-  "t": "개의 전통 조회 도구는 냥이 들지 않아요</strong> (별 배치, 납음, 황도, 주역, 타로…).",
+  "t": " 개의 전통 조회 도구는 냥이 들지 않아요</strong> (별 배치, 납음, 황도, 주역, 타로…). ",
   "h": "13649dd5"
  },
  "js.topup.d": {
@@ -3644,11 +3700,11 @@
   "h": "1baf8990"
  },
  "js.topup.den": {
-  "t": "~",
+  "t": " ~ ",
   "h": "addd467a"
  },
  "js.topup.don-gia-theo-bac-goi-cang": {
-  "t": "· 패키지 등급별 단가, 많이 충전할수록 저렴해요",
+  "t": " · 패키지 등급별 단가, 많이 충전할수록 저렴해요",
   "h": "563ecc73"
  },
  "js.topup.du-cho-luot-nay": {
@@ -3660,7 +3716,7 @@
   "h": "2bba34ab"
  },
  "js.topup.goi": {
-  "t": "· 패키지",
+  "t": " · 패키지 ",
   "h": "ab6724d3"
  },
  "js.topup.goi-duoc-danh-dau-ben-duoi": {
@@ -3692,39 +3748,39 @@
   "h": "5ae11efc"
  },
  "js.topup.la-du": {
-  "t": "</b> 충전하면 충분해요,",
+  "t": "</b> 충전하면 충분해요, ",
   "h": "ff3301f5"
  },
  "js.topup.loi-ket-noi-momo": {
-  "t": "MoMo 연결 오류:",
+  "t": "MoMo 연결 오류: ",
   "h": "ab653854"
  },
  "js.topup.loi-ket-noi-paypal": {
-  "t": "PayPal 연결 오류:",
+  "t": "PayPal 연결 오류: ",
   "h": "b24c6f67"
  },
  "js.topup.luong": {
-  "t": "냥</div>",
+  "t": " 냥</div>",
   "h": "81dc9146"
  },
  "js.topup.luong-10zo": {
-  "t": "/ 냥",
+  "t": " / 냥",
   "h": "849064c1"
  },
  "js.topup.luong-8gog": {
-  "t": "<span>냥</span></div>",
+  "t": " <span>냥</span></div>",
   "h": "ea893023"
  },
  "js.topup.luong-cho-thanh-vien-moi": {
-  "t": "냥 증정",
+  "t": " 냥 증정",
   "h": "f9ec8743"
  },
  "js.topup.luong-de-dung-tiep-nap": {
-  "t": "냥</b> · 이어서 쓰려면 <b>",
+  "t": " 냥</b> · 이어서 쓰려면 <b>",
   "h": "cffae6dc"
  },
  "js.topup.luong-dung-duoc-cho-cac-cong": {
-  "t": "냥 — 심층 풀이 도구와 선생님께 묻기에 사용할 수 있어요.",
+  "t": " 냥 — 심층 풀이 도구와 선생님께 묻기에 사용할 수 있어요. ",
   "h": "220dda0b"
  },
  "js.topup.luong-goi-lon-hon-thi-re": {
@@ -3732,15 +3788,15 @@
   "h": "7bdee349"
  },
  "js.topup.luong-ictb": {
-  "t": "냥</b>.",
+  "t": " 냥</b>. ",
   "h": "1d59cb4e"
  },
  "js.topup.luong-ngay-khi-ho-tao-tai": {
-  "t": "냥</strong> — 상대가 계정을 만드는 즉시",
+  "t": " 냥</strong> — 상대가 계정을 만드는 즉시",
   "h": "efc01ca5"
  },
  "js.topup.luot-moi-duoc-thuong-30-ngay": {
-  "t": "회 초대 보상 / 30일)",
+  "t": " 회 초대 보상 / 30일)",
   "h": "d879cb28"
  },
  "js.topup.mo-ra-ngay-sau-khi-thanh": {
@@ -3784,7 +3840,7 @@
   "h": "3a034d1c"
  },
  "js.topup.tang": {
-  "t": "신규 회원 혜택:",
+  "t": "신규 회원 혜택: ",
   "h": "ae208fd1"
  },
  "js.topup.tang-luong-mien-phi-cho-thanh": {
@@ -3804,11 +3860,11 @@
   "h": "6eccec15"
  },
  "js.topup.toi-da": {
-  "t": "(최대",
+  "t": " (최대 ",
   "h": "383d76a3"
  },
  "js.topup.toi-thieu": {
-  "t": "최소",
+  "t": "최소 ",
   "h": "134e562d"
  },
  "js.topup.vnd": {
@@ -3820,7 +3876,7 @@
   "h": "4ac59782"
  },
  "js.topup.vui-long-nhap-so-tien-tu": {
-  "t": "입력 가능한 금액:",
+  "t": "입력 가능한 금액: ",
   "h": "c3305e5b"
  },
  "js.topup.xem-lich-su": {
@@ -3832,7 +3888,7 @@
   "h": "c9888559"
  },
  "js.vanhannam.ban-do": {
-  "t": "운세 지도 · 앞으로",
+  "t": "운세 지도 · 앞으로 ",
   "h": "393d2725"
  },
  "js.vanhannam.cat-tinh": {
@@ -3840,31 +3896,31 @@
   "h": "20f079eb"
  },
  "js.vanhannam.chinh-tinh": {
-  "t": "주성:",
+  "t": "주성: ",
   "h": "aa58ba11"
  },
  "js.vanhannam.co-gi-can-ne": {
-  "t": "에 피할 점은 무엇인가요?",
+  "t": " 에 피할 점은 무엇인가요?",
   "h": "c9f61757"
  },
  "js.vanhannam.cua-toi-the-nao": {
-  "t": "의 내 운세는 어떤가요?",
+  "t": " 의 내 운세는 어떤가요?",
   "h": "b208ddbf"
  },
  "js.vanhannam.dai-van": {
-  "t": "대운",
+  "t": "대운 ",
   "h": "50bbf17a"
  },
  "js.vanhannam.dang-dien-ra": {
-  "t": "・<b>진행 중</b>",
+  "t": " ・<b>진행 중</b>",
   "h": "c4905324"
  },
  "js.vanhannam.dang-luan": {
-  "t": "풀이 중:",
+  "t": "풀이 중: ",
   "h": "31f99758"
  },
  "js.vanhannam.dang-luan-phan-1": {
-  "t": "풀이 중 · 항목 1 /",
+  "t": "풀이 중 · 항목 1 / ",
   "h": "9020516d"
  },
  "js.vanhannam.dang-tinh": {
@@ -3872,15 +3928,15 @@
   "h": "76a9d5f0"
  },
  "js.vanhannam.duong-lich": {
-  "t": "(양력)</div>",
+  "t": " (양력)</div>",
   "h": "0c972252"
  },
  "js.vanhannam.duong-lich-1y4k": {
-  "t": "</b>(양력)・",
+  "t": "</b>(양력)・ ",
   "h": "ed2768e2"
  },
  "js.vanhannam.duong-lich-da-san-sang-hoi": {
-  "t": ") 준비가 끝났어요. 어느 달이든 물어보세요.",
+  "t": " ) 준비가 끝났어요. 어느 달이든 물어보세요.",
   "h": "078774b9"
  },
  "js.vanhannam.khung-12-thang-am": {
@@ -3912,7 +3968,7 @@
   "h": "c99d25aa"
  },
  "js.vanhannam.luu-nien-dai-han-cung": {
-  "t": "・유년 대한궁:",
+  "t": " ・유년 대한궁: ",
   "h": "7439912c"
  },
  "js.vanhannam.mo-toan-bo-van-han-12": {
@@ -3924,11 +3980,11 @@
   "h": "1cfbd3f9"
  },
  "js.vanhannam.ngay": {
-  "t": "일",
+  "t": " 일",
   "h": "9f0bc739"
  },
  "js.vanhannam.nguyet-han-cung": {
-  "t": "월한궁:",
+  "t": "월한궁: ",
   "h": "85d2fef1"
  },
  "js.vanhannam.nguyet-han-cung-556b": {
@@ -3936,7 +3992,7 @@
   "h": "13dbb374"
  },
  "js.vanhannam.phan": {
-  "t": "항목",
+  "t": "항목 ",
   "h": "291674f4"
  },
  "js.vanhannam.sat-tinh": {
@@ -3944,15 +4000,15 @@
   "h": "6db93931"
  },
  "js.vanhannam.thang-am-toi-moi-o-mot": {
-  "t": "개월(음력), 칸마다 하나의 키워드",
+  "t": " 개월(음력), 칸마다 하나의 키워드",
   "h": "33508d52"
  },
  "js.vanhannam.tieu-han-cung": {
-  "t": "｜소한궁:",
+  "t": "｜소한궁: ",
   "h": "cb20c10d"
  },
  "js.vanhannam.toi-nen-tap-trung-viec-gi": {
-  "t": "에는 무엇에 집중해야 하나요?",
+  "t": " 에는 무엇에 집중해야 하나요?",
   "h": "250b85ce"
  },
  "js.vanhannam.ton": {
@@ -3964,15 +4020,15 @@
   "h": "84ed13e5"
  },
  "js.vanhannam.tu": {
-  "t": "・시작:",
+  "t": " ・시작: ",
   "h": "7c8dc911"
  },
  "js.vanhannam.tuc": {
-  "t": ", 양력:",
+  "t": ", 양력: ",
   "h": "50c068ad"
  },
  "js.vanhannam.tuoi": {
-  "t": "(나이:",
+  "t": " (나이: ",
   "h": "1e57c98c"
  },
  "js.vanhannam.van-han-12-thang": {
@@ -3980,15 +4036,15 @@
   "h": "0bef064e"
  },
  "js.vanhannam.van-han-12-thang-2jdf": {
-  "t": "12개월 운세｜",
+  "t": "12개월 운세｜ ",
   "h": "d11e8de4"
  },
  "js.vanhannam.van-han-12-thang-am": {
-  "t": "12개월 운세(음력):",
+  "t": "12개월 운세(음력): ",
   "h": "81377d1f"
  },
  "js.vanhannam.van-han-12-thang-cua": {
-  "t": "12개월 운세｜",
+  "t": "12개월 운세｜ ",
   "h": "afa6d79f"
  },
  "js.vanhannam.vo-chinh-dieu-muon-cung-xung": {
@@ -4004,7 +4060,7 @@
   "h": "ca46f58e"
  },
  "js.xemtuoi.10-yeu-nhat": {
-  "t": "/10) ・ 가장 약함:",
+  "t": "/10) ・ 가장 약함: ",
   "h": "98581c70"
  },
  "js.xemtuoi.100-hoi-toi-de-luan-sau": {
@@ -4020,11 +4076,11 @@
   "h": "956024e9"
  },
  "js.xemtuoi.ca": {
-  "t": "✦ 총 항목 수:",
+  "t": " ✦ 총 항목 수: ",
   "h": "7eff84cf"
  },
  "js.xemtuoi.cach-hoa-giai-cu-the-nam": {
-  "t": "✦ 구체적인 보완법은 심층 풀이에 담겨 있어요.",
+  "t": " ✦ 구체적인 보완법은 심층 풀이에 담겨 있어요.",
   "h": "bb461286"
  },
  "js.xemtuoi.cham-8-yeu-to-hop-tac": {
@@ -4040,19 +4096,19 @@
   "h": "0360bcec"
  },
  "js.xemtuoi.chieu-can-luu-y-nhat": {
-  "t": "가장 주의할 항목:",
+  "t": "가장 주의할 항목: ",
   "h": "24acf607"
  },
  "js.xemtuoi.chieu-cung-thang-0-10-trong": {
-  "t": "개 항목을 같은 0–10 척도로 봤어요. 총점(",
+  "t": " 개 항목을 같은 0–10 척도로 봤어요. 총점( ",
   "h": "05ea0cdb"
  },
  "js.xemtuoi.chieu-diem-chi-tiet-theo-tung": {
-  "t": "개 — 사람별 세부 점수와 보완법은 심층 풀이에 담겨 있어요.",
+  "t": " 개 — 사람별 세부 점수와 보완법은 심층 풀이에 담겨 있어요.",
   "h": "e8450aef"
  },
  "js.xemtuoi.chieu-hop-nhat": {
-  "t": "가장 잘 맞는 항목:",
+  "t": "가장 잘 맞는 항목: ",
   "h": "3b6f195e"
  },
  "js.xemtuoi.chieu-thap-vi-sao": {
@@ -4060,7 +4116,7 @@
   "h": "3ab2ac81"
  },
  "js.xemtuoi.chieu-tuong-hop": {
-  "t": "개 차원 궁합",
+  "t": " 개 차원 궁합",
   "h": "2d818e3c"
  },
  "js.xemtuoi.chong-nguoi-a": {
@@ -4068,11 +4124,11 @@
   "h": "3fd2edae"
  },
  "js.xemtuoi.cung-menh": {
-  "t": "・명궁:",
+  "t": " ・명궁: ",
   "h": "ae7269b2"
  },
  "js.xemtuoi.cung-menh-67cx": {
-  "t": "<br>명궁:",
+  "t": "<br>명궁: ",
   "h": "2c272c79"
  },
  "js.xemtuoi.dang-dung-anh": {
@@ -4104,7 +4160,7 @@
   "h": "36cfb3c6"
  },
  "js.xemtuoi.hai-nguoi-hoa-hop": {
-  "t": "두 사람의 궁합 ‘",
+  "t": "두 사람의 궁합 ‘ ",
   "h": "1ddd5d3b"
  },
  "js.xemtuoi.hoa-hop": {
@@ -4120,19 +4176,19 @@
   "h": "317107b2"
  },
  "js.xemtuoi.luan-tong-quan-muc-do-hoa": {
-  "t": "궁합 개요 풀이｜",
+  "t": "궁합 개요 풀이｜ ",
   "h": "53f19565"
  },
  "js.xemtuoi.manh-nhat": {
-  "t": "가장 강함:",
+  "t": "가장 강함: ",
   "h": "b67b37ca"
  },
  "js.xemtuoi.nap-am": {
-  "t": "・납음:",
+  "t": " ・납음: ",
   "h": "c754b896"
  },
  "js.xemtuoi.nap-am-jzle": {
-  "t": "</b>・납음:",
+  "t": "</b>・납음: ",
   "h": "24107e5c"
  },
  "js.xemtuoi.nguoi-a": {
@@ -4172,7 +4228,7 @@
   "h": "797be799"
  },
  "js.xemtuoi.tong-diem": {
-  "t": "｜총점:",
+  "t": "\n｜총점: ",
   "h": "e73bc240"
  },
  "js.xemtuoi.tra-loi-thay-nhap-ngay-sinh": {
@@ -4188,11 +4244,11 @@
   "h": "4f833f73"
  },
  "js.xemtuoi.va-4hkm": {
-  "t": "・",
+  "t": " ・ ",
   "h": "a72340e8"
  },
  "js.xemtuoi.vanh": {
-  "t": "레이더 차트:",
+  "t": "레이더 차트: ",
   "h": "f78055f5"
  },
  "js.xemtuoi.vo-nguoi-b": {
