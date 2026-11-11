@@ -1,7 +1,919 @@
 {
+ "battu.1-nhap-thong-tin": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">输入数据</span>",
+  "h": "487c9507"
+ },
+ "battu.2-xem-truoc-la-so": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览命盘</span>",
+  "h": "3c9201cd"
+ },
+ "battu.3-thanh-toan": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">付款</span>",
+  "h": "a8d2d60c"
+ },
+ "battu.4-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">4</span><span class=\"wss-l\">取得结果</span>",
+  "h": "35c4242b"
+ },
+ "battu.cach-cuc-thap-than": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>格局、<br>十神</span>",
+  "h": "e78c79e5"
+ },
+ "battu.chi-phi-su-dung": {
+  "t": "使用费用",
+  "h": "c2d36be8"
+ },
+ "battu.dai-van-luu-nien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>大运、<br>流年</span>",
+  "h": "7676d5b2"
+ },
+ "battu.gioi-thieu": {
+  "t": "<span class=\"wsp-ic\" data-icon=\"book-open\"></span><span>简介</span>",
+  "h": "935666a1"
+ },
+ "battu.hoi": {
+  "t": "✦ 提问",
+  "h": "cbb5079f"
+ },
+ "battu.la-so-bat-tu-tu-tru": {
+  "t": "<b>八字命盘</b><span>子平四柱——干支、用神、大运</span>",
+  "h": "98cba503"
+ },
+ "battu.la-so-bat-tu-tu-tru-2852": {
+  "t": "八字命盘（四柱）",
+  "h": "67dd1d43"
+ },
+ "battu.la-so-bat-tu-tu-vi": {
+  "t": "八字命盘——明宝紫微斗数",
+  "h": "f0404e36"
+ },
+ "battu.lap-bat-tu-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"scroll-text\"></span><b id=\"btnGoLabel\">排八字 →</b></span> <small>免费</small>",
+  "h": "b4a4835f"
+ },
+ "battu.lap-tu-tru-bat-tu-theo": {
+  "t": "依子平古法排出八字四柱：日干、强弱、用神、格局、大运、流年——并可请老师逐项深入说明。",
+  "h": "315e8a7f"
+ },
+ "battu.luan-giai-chuyen-sau-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b>深入解读 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"tu-binh\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"tu-binh\">…</span> 两)</span></small>",
+  "h": "cd1895af"
+ },
+ "battu.luan-giai-tu-vi": {
+  "t": "紫微斗数解读 →",
+  "h": "1c914a22"
+ },
+ "battu.mien-phi": {
+  "t": "免费",
+  "h": "a999e722"
+ },
+ "battu.nam-luan": {
+  "t": "论断年份",
+  "h": "75752d13"
+ },
+ "battu.nhap-ngay-gio-sinh-va-nam": {
+  "t": "输入出生日期与时辰，以及想论断的年份。系统会排出四柱，依子平古法解读，共 16 个部分：格局、十神、感情、健康、大运与流年。",
+  "h": "cd9d101a"
+ },
+ "battu.nhap-thong-tin-ngay-sinh-duong": {
+  "t": "输入出生数据（国历）",
+  "h": "095c3547"
+ },
+ "battu.nhat-can-dung-than": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>日干、<br>用神</span>",
+  "h": "1d502c53"
+ },
+ "battu.sua-thong-tin": {
+  "t": "修改数据",
+  "h": "f761d488"
+ },
+ "battu.tra-loi-thay-o-khung-chat": {
+  "t": "请在聊天窗口回复老师来排四柱——出生日期时辰，以及想论断的年份。",
+  "h": "1587b6ef"
+ },
+ "battu.tu-binh-con-goi-bat-tu": {
+  "t": "子平（又称八字）是以出生年、月、日、时四柱的天干地支为依据的论命方法，形成于宋代。以日干为基准，与其余各柱对照，推得用神与格局，进而论断一生运势。",
+  "h": "f6e8617c"
+ },
+ "battu.tu-tru-khong-doan-may-rui": {
+  "t": "四柱不是用来猜吉凶，而是直指您命中缺少哪一种五行——这正是为什么人生有顺风的阶段，也有一路逆流的阶段。排出命盘，就能知道自己缺的是什么。",
+  "h": "b1c6d09f"
+ },
+ "battu.viet-rieng-cho-tu-tru-nay": {
+  "t": "依子平古法为这组四柱量身撰写——共 16 个部分：格局、十神、大运、流年。",
+  "h": "f54c0d01"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
-  "t": "说说您的故事，Minh Bảo 会从 15 位老师中请出最合适的一位为您解读：紫微斗数命盘、八字、合婚、取名、择日。",
+  "t": "说说您的故事，明宝团队会从 15 位老师中请出最合适的一位为您解读：紫微斗数命盘、八字、合婚、取名、择日。",
   "h": "0f564294"
+ },
+ "disclaimer.1-tinh-chat-tham-khao": {
+  "t": "1. 仅供参考",
+  "h": "99856a52"
+ },
+ "disclaimer.2-ve-cong-nghe-ai-su": {
+  "t": "2. 关于使用的 AI 技术",
+  "h": "389e2fbe"
+ },
+ "disclaimer.3-trach-nhiem-cua-nguoi-dung": {
+  "t": "3. 用户责任",
+  "h": "95dd376e"
+ },
+ "disclaimer.4-gioi-han-trach-nhiem": {
+  "t": "4. 责任限制",
+  "h": "29f8c4dc"
+ },
+ "disclaimer.5-lien-quan": {
+  "t": "5. 相关链接",
+  "h": "70a59e97"
+ },
+ "disclaimer.6-lien-he": {
+  "t": "6. 联系方式",
+  "h": "b428f4a9"
+ },
+ "disclaimer.ban-tu-chiu-trach-nhiem-ve": {
+  "t": "您须自行为依据解读内容所做的一切个人决定负责——包括财务、婚姻、事业、健康或法律方面。若遇到确实需要专业咨询的情况（医疗紧急状况、法律纠纷、重大财务决策），请寻求具备适当资格的专业人士，而不要只依赖本站的结果。",
+  "h": "9792a37e"
+ },
+ "disclaimer.luan-giai-duoc-tao-bang-tri": {
+  "t": "解读内容由人工智能（AI）依据传统紫微斗数规则体系产生。不同紫微流派对同一张命盘可能有不同的诠释；我们不保证结果绝对准确，也不保证结果是唯一正确的诠释。",
+  "h": "cf677c1e"
+ },
+ "disclaimer.mien-tru-trach-nhiem": {
+  "t": "免责声明",
+  "h": "9f4943b3"
+ },
+ "disclaimer.mien-tru-trach-nhiem-tu-vi": {
+  "t": "免责声明——明宝紫微斗数",
+  "h": "33a75925"
+ },
+ "disclaimer.neu-co-cau-hoi-ve-noi": {
+  "t": "如对本免责声明的内容有任何疑问，请透过<a href=\"/contact.html\">联系我们</a>页面与我们联系。",
+  "h": "06ba42cc"
+ },
+ "disclaimer.noi-dung-luan-giai-tai-tu": {
+  "t": "明宝紫微斗数的解读内容属于文化与学术参考，不构成财务、医疗或法律建议。",
+  "h": "f06e6f7c"
+ },
+ "disclaimer.toan-bo-noi-dung-tren-tuviminhbao": {
+  "t": "tuviminhbao.com 上的全部内容皆属<strong>文化与学术参考</strong>，绝对<strong>不构成</strong>财务、投资、医疗、心理或法律建议。",
+  "h": "a3adcb6e"
+ },
+ "disclaimer.trong-pham-vi-phap-luat-cho": {
+  "t": "在法律允许的范围内，明宝紫微斗数与 Kira Tech 有限公司对因使用、诠释或依赖本网站所提供内容而产生的任何直接或间接损害，概不负责。",
+  "h": "7addf2c3"
+ },
+ "disclaimer.tu-vi-minh-bao-cung-cap": {
+  "t": "明宝紫微斗数依古法提供紫微斗数、子平八字、风水与相学的安星及解读服务，目的在于认识文化与个人参考。内容<strong>不能</strong>取代财务专家、医师、律师或持牌心理专业人员的建议。",
+  "h": "b2e135de"
+ },
+ "disclaimer.xem-them-dieu-khoan-day-du": {
+  "t": "完整条款请见<a href=\"/dieu-khoan-dich-vu.html\">服务条款</a>（第 2 节——责任限制），服务说明请见<a href=\"/san-pham-dich-vu.html\">产品与服务</a>页面。",
+  "h": "dc202339"
+ },
+ "home.270-000-da-quoc-gia-da": {
+  "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>跨国数据</span> <span><span class=\"ic\" data-icon=\"check\"></span>已经查证</span>",
+  "h": "4d77621e"
+ },
+ "home.270-000-ho-so-nguoi-that": {
+  "t": "270,000+ 份真人文件",
+  "h": "95fd04d7"
+ },
+ "home.272-783-nguoi-noi-tieng-tra": {
+  "t": "272,783 位名人——查查谁和您同一天出生，可依国历或农历查找。",
+  "h": "cc63016c"
+ },
+ "home.50-cong-cu-tu-vi-tu": {
+  "t": "50 种工具：紫微斗数、八字、相术、风水，皆依古法而成。",
+  "h": "a05551fa"
+ },
+ "home.bac-minh": {
+  "t": "Bắc Minh",
+  "h": "85833b15"
+ },
+ "home.bai-viet-kien-thuc": {
+  "t": "文章与知识",
+  "h": "0080f09e"
+ },
+ "home.ban-dang-ban-khoan-dieu-gi": {
+  "t": "您心里在烦恼什么？",
+  "h": "a58b1a75"
+ },
+ "home.bat-tu-ky-mon": {
+  "t": "八字与奇门",
+  "h": "926e6ab4"
+ },
+ "home.cac-thay": {
+  "t": "老师们",
+  "h": "edb6a720"
+ },
+ "home.cau-hoi-cua-ban": {
+  "t": "您的问题",
+  "h": "7027fb1f"
+ },
+ "home.chiem-tinh-tay": {
+  "t": "西洋占星",
+  "h": "d690a059"
+ },
+ "home.chu-trinh-cuoc-doi": {
+  "t": "人生<br>周期",
+  "h": "fb7add62"
+ },
+ "home.chuan-hoa-da-truong-phai": {
+  "t": "<span><span class=\"ic\" data-icon=\"settings\"></span>统一整理</span> <span><span class=\"ic\" data-icon=\"compass\"></span>多派并参</span>",
+  "h": "272f53ac"
+ },
+ "home.chuyen-gia-tham-dinh-doi-chieu": {
+  "t": "专家逐篇审阅、对照每一份解读，找出优点与待改进之处，借此持续调校解读模型。",
+  "h": "e78d5a83"
+ },
+ "home.co-nguyet": {
+  "t": "Cổ Nguyệt",
+  "h": "c58a8850"
+ },
+ "home.co-so-du-lieu-la-so": {
+  "t": "经过查证的命盘与传记数据库，汇整自多个可靠来源，涵盖不同国家、职业与时代。",
+  "h": "bbd6f69e"
+ },
+ "home.con-nguoi-that": {
+  "t": "真实的人",
+  "h": "aff2ca01"
+ },
+ "home.cong-cu-chinh": {
+  "t": "主要工具",
+  "h": "fac531f0"
+ },
+ "home.cong-tu-vi-tu-binh-tuong": {
+  "t": "紫微斗数、八字、相术、风水的入口，皆依古法。50 种工具：命盘解读、面相、风水、取名、择日、塔罗。知命理，顺势而行。",
+  "h": "82308774"
+ },
+ "home.dai-van-chu-trinh-cuoc-doi": {
+  "t": "大运与人生周期",
+  "h": "ecf72ecb"
+ },
+ "home.dang-hoat-dong": {
+  "t": "进行中",
+  "h": "9a616fcd"
+ },
+ "home.dat-ten-day-con": {
+  "t": "取名与教养孩子",
+  "h": "6cd11a12"
+ },
+ "home.dau-nam": {
+  "t": "Đẩu Nam",
+  "h": "ecb2ae80"
+ },
+ "home.dien-giai": {
+  "t": "解读",
+  "h": "3b2f4ff5"
+ },
+ "home.dien-giai-ban-luan-giai-hoan": {
+  "t": "解读完整的命盘论述",
+  "h": "7e131aa8"
+ },
+ "home.dien-tuong-xem-tuong-mat": {
+  "t": "面相<br>看脸",
+  "h": "e690108d"
+ },
+ "home.dieu-khong": {
+  "t": "Diệu Không",
+  "h": "3bfd70d7"
+ },
+ "home.doc-ngay": {
+  "t": "立即阅读 →",
+  "h": "1b834375"
+ },
+ "home.doi-chieu": {
+  "t": "对照",
+  "h": "33052de8"
+ },
+ "home.doi-chieu-thuc-nghiem": {
+  "t": "实证对照",
+  "h": "7e7c45fd"
+ },
+ "home.doi-chieu-voi-cuoc-doi-thuc": {
+  "t": "与真实人生对照",
+  "h": "4e7d2108"
+ },
+ "home.du-lieu": {
+  "t": "数据",
+  "h": "3460deae"
+ },
+ "home.du-lieu-ho-so-nguoi-that": {
+  "t": "数据——真人文件",
+  "h": "30a23f99"
+ },
+ "home.du-lieu-la-so": {
+  "t": "命盘数据",
+  "h": "78d0ef41"
+ },
+ "home.du-lieu-that": {
+  "t": "真实数据",
+  "h": "c395689f"
+ },
+ "home.du-lieu-that-con-nguoi-that": {
+  "t": "<span><span class=\"ic\" data-icon=\"shield-check\"></span>真实数据</span> <span><span class=\"ic\" data-icon=\"users\"></span>真实的人</span> <span><span class=\"ic\" data-icon=\"bar-chart-3\"></span>真实价值</span>",
+  "h": "f0a66482"
+ },
+ "home.gia-tri-that": {
+  "t": "真实价值",
+  "h": "03db0277"
+ },
+ "home.gui-cau-hoi": {
+  "t": "送出问题",
+  "h": "c70bc83d"
+ },
+ "home.he-thong-duoc-xay-dung-tu": {
+  "t": "系统创建在真实数据之上，并经过多层查证的解读流程。",
+  "h": "c74f7c82"
+ },
+ "home.hoac-mo-thang-la-so-tu": {
+  "t": "或直接打开：<a href=\"/app-luan-giai.html\">紫微命盘</a><a href=\"/app-bat-tu.html\">八字</a><a href=\"/app-xem-tuoi.html\">夫妻合婚</a><a href=\"/app-ngay-tot.html\">择日</a><a href=\"/cong-cu\">所有工具</a>",
+  "h": "b074e900"
+ },
+ "home.hoc-de-hieu-minh-hieu-nguoi": {
+  "t": "学习，是为了了解自己、了解他人、了解人生。",
+  "h": "c0f3d234"
+ },
+ "home.hoi-nhanh-phan-bien": {
+  "t": "快问快答、提出质疑",
+  "h": "2b657843"
+ },
+ "home.hoi-thu-mien-phi-khong-can": {
+  "t": "免费试问，无须登录",
+  "h": "30b1a80d"
+ },
+ "home.hop-tac-lam-an": {
+  "t": "合伙<br>做生意",
+  "h": "f45234a9"
+ },
+ "home.huan-luyen-va-hieu-chinh-lien": {
+  "t": "持续训练与校正",
+  "h": "462ae593"
+ },
+ "home.huyen-khong": {
+  "t": "Huyền Không",
+  "h": "664fa5b2"
+ },
+ "home.ke-cho-thay-nghe-cau-hoi": {
+  "t": "说给老师听吧。您的问题会交给团队 15 位老师中负责该领域的那一位，每位老师各专一门，依您自己的命盘来解读。",
+  "h": "3fc18d48"
+ },
+ "home.kham-pha-ngay": {
+  "t": "立即探索 →",
+  "h": "5153c059"
+ },
+ "home.kham-pha-them": {
+  "t": "更多探索",
+  "h": "06716651"
+ },
+ "home.khi-sac-van-khi-ngan-han": {
+  "t": "气色<br>近期运势",
+  "h": "6a8e3830"
+ },
+ "home.khoa-hoc-co-hoc-thuc-tien": {
+  "t": "科学 × 古学 × 实践",
+  "h": "6c92d2a4"
+ },
+ "home.khoi-tao-mo-hinh": {
+  "t": "创建模型",
+  "h": "aea081f5"
+ },
+ "home.kinh-dich-mai-hoa": {
+  "t": "易经与梅花易数",
+  "h": "2da7c604"
+ },
+ "home.la-so": {
+  "t": "命盘",
+  "h": "685adfe6"
+ },
+ "home.la-so-da-doi-chieu": {
+  "t": "已对照的命盘",
+  "h": "019936ff"
+ },
+ "home.la-so-nguoi-noi-tieng": {
+  "t": "名人命盘",
+  "h": "4f1a9c05"
+ },
+ "home.la-so-tinh-san-theo-ngay": {
+  "t": "依出生日期预先排好的命盘，涵盖 1960–2026 年。",
+  "h": "31d823a9"
+ },
+ "home.la-so-tu-vi-theo-co": {
+  "t": "依古法排的紫微命盘",
+  "h": "3afb6ceb"
+ },
+ "home.lap-la-so-theo-cac-phuong": {
+  "t": "依正统方法排出命盘，结合数据处理、信息标准化，并产生初步解读。",
+  "h": "51e2862c"
+ },
+ "home.lap-la-so-theo-co-phap": {
+  "t": "依古法排命盘",
+  "h": "cef5dbf2"
+ },
+ "home.linh-co": {
+  "t": "Linh Cơ",
+  "h": "530b426b"
+ },
+ "home.linh-son": {
+  "t": "Linh Sơn",
+  "h": "2a6f2364"
+ },
+ "home.luan-giai-la-so": {
+  "t": "命盘<br>解读",
+  "h": "a7be39ef"
+ },
+ "home.luot-hoi-hom-nay": {
+  "t": "今日提问次数",
+  "h": "565415a7"
+ },
+ "home.moi-thay-phu-trach-mot-mon": {
+  "t": "每位老师各专一门，并为该门的工具署名。您问什么，就由负责那件事的老师回答。",
+  "h": "843f67a7"
+ },
+ "home.nam-sau-toi-cuoi-duoc-khong": {
+  "t": "<a class=\"ask-chip\" href=\"/app?q=N%C4%83m%20sau%20t%C3%B4i%20c%C6%B0%E1%BB%9Bi%20%C4%91%C6%B0%E1%BB%A3c%20kh%C3%B4ng%3F&amp;thay=dau-nam&amp;laso=1#chat\">明年我能结婚吗？</a> <a class=\"ask-chip\" href=\"/app?q=Ti%E1%BB%81n%20b%E1%BA%A1c%20n%C4%83m%20t%E1%BB%9Bi%20c%E1%BB%A7a%20t%C3%B4i%20ra%20sao%3F&amp;thay=dieu-khong&amp;laso=1#chat\">我明年的财运如何？</a> <a class=\"ask-chip\" href=\"/app?q=Th%C3%A1ng%20n%C3%A0o%20t%E1%BB%91t%20%C4%91%E1%BB%83%20chuy%E1%BB%83n%20nh%C3%A0%3F&amp;thay=nhat-nguyen#chat\">几月适合搬家？</a> <a class=\"ask-chip\" href=\"/app?q=%C4%90%E1%BA%B7t%20t%C3%AAn%20con%20th%E1%BA%BF%20n%C3%A0o%20cho%20h%E1%BB%A3p%20m%E1%BB%87nh%3F&amp;thay=thien-an#chat\">孩子的名字怎么取才合命？</a>",
+  "h": "aa3a5362"
+ },
+ "home.nghiem-chung-la-so-doi-chieu": {
+  "t": "验证——命盘对照真实人生",
+  "h": "bef98605"
+ },
+ "home.ngoc-tinh": {
+  "t": "Ngọc Tinh",
+  "h": "448babdb"
+ },
+ "home.nguoi-co-gio-sinh-kiem-chung": {
+  "t": "出生时辰经过查证的人：命盘怎么说，真实人生又是如何。吻合之处与落差之处都会清楚标示，并附上来源。",
+  "h": "899c57e7"
+ },
+ "home.nguoi-noi-tieng-sinh-gio-nao": {
+  "t": "名人是几点出生的？",
+  "h": "58f8e876"
+ },
+ "home.nhan-tuong-xem-tuong-mat": {
+  "t": "眼相<br>看眼睛",
+  "h": "3e8f9b9f"
+ },
+ "home.nhat-nguyen": {
+  "t": "Nhật Nguyên",
+  "h": "d1c0b144"
+ },
+ "home.nhom-chuyen-gia-cap-nhat-lien": {
+  "t": "<span><span class=\"ic\" data-icon=\"users\"></span>专家团队</span> <span><span class=\"ic\" data-icon=\"rotate-cw\"></span>持续更新</span>",
+  "h": "e1f4697b"
+ },
+ "home.nhom-minh-bao": {
+  "t": "<b>——明宝团队</b>",
+  "h": "b95ce2c2"
+ },
+ "home.phan-tich-thong-ke-do-muc": {
+  "t": "<span><span class=\"ic\" data-icon=\"bar-chart-3\"></span>统计分析</span> <span><span class=\"ic\" data-icon=\"clock\"></span>衡量吻合程度</span>",
+  "h": "e70f45f5"
+ },
+ "home.phong-thuy": {
+  "t": "风水",
+  "h": "181a3d4e"
+ },
+ "home.phong-thuy-ung-dung": {
+  "t": "风水<br>应用",
+  "h": "9f229fe2"
+ },
+ "home.phuong-phap-luan-giai": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span>解读方法",
+  "h": "a5d37a27"
+ },
+ "home.quy-trinh-xu-ly-du-lieu": {
+  "t": "<span class=\"dna-process-label\"><span class=\"ic\" data-icon=\"circle-dot\"></span>数据处理流程</span> <span class=\"dna-process-label muted\">从真实数据 → 到可应用的知识</span>",
+  "h": "106123c0"
+ },
+ "home.so-khop-voi-cuoc-doi-thuc": {
+  "t": "与真实人生比对",
+  "h": "c9f085e1"
+ },
+ "home.so-sanh-doi-chieu-giua-du": {
+  "t": "将预测与真实人生的发展相互比对，依每条规则与各生活领域衡量吻合程度。",
+  "h": "ea41eb69"
+ },
+ "home.son-tung-my-tam-cong-phuong": {
+  "t": "许多越南名人（歌手、足球员）都没有公开出生时辰。排满 12 张命盘，看哪个时辰最贴近他们的人生。",
+  "h": "b43e058e"
+ },
+ "home.su-nghiep-canh-tranh-nhan-mach": {
+  "t": "事业竞争与人脉",
+  "h": "7d7b2cf0"
+ },
+ "home.su-nghiep-tien-bac": {
+  "t": "事业与财运",
+  "h": "5bdd0199"
+ },
+ "home.tam-kinh": {
+  "t": "Tâm Kính",
+  "h": "8c71a393"
+ },
+ "home.tarot-than-so": {
+  "t": "塔罗与生命灵数",
+  "h": "8cd4677e"
+ },
+ "home.thai-hu": {
+  "t": "Thái Hư",
+  "h": "8164408e"
+ },
+ "home.tham-dinh": {
+  "t": "审阅",
+  "h": "556780a9"
+ },
+ "home.tham-dinh-do-phu-hop": {
+  "t": "审阅吻合程度",
+  "h": "3d08fd55"
+ },
+ "home.tham-dinh-toi-uu": {
+  "t": "审阅与优化",
+  "h": "edd901ea"
+ },
+ "home.than-so-hoc": {
+  "t": "生命灵数<br>学",
+  "h": "fbfd5ac0"
+ },
+ "home.thanh-hu": {
+  "t": "Thanh Hư",
+  "h": "0fae72f2"
+ },
+ "home.thanh-tuong-xem-giong-noi": {
+  "t": "声相<br>听声音",
+  "h": "9b94abc0"
+ },
+ "home.thay-bac-minh": {
+  "t": "Bắc Minh 老师",
+  "h": "8765f978"
+ },
+ "home.thay-co-nguyet": {
+  "t": "Cổ Nguyệt 老师",
+  "h": "5c3beeeb"
+ },
+ "home.thay-dau-nam": {
+  "t": "Đẩu Nam 老师",
+  "h": "0e892f56"
+ },
+ "home.thay-dieu-khong": {
+  "t": "Diệu Không 老师",
+  "h": "f334056f"
+ },
+ "home.thay-huyen-khong": {
+  "t": "Huyền Không 老师",
+  "h": "ebc2e8ff"
+ },
+ "home.thay-linh-co": {
+  "t": "Linh Cơ 老师",
+  "h": "78e55359"
+ },
+ "home.thay-linh-son": {
+  "t": "Linh Sơn 老师",
+  "h": "490f9de0"
+ },
+ "home.thay-ngoc-tinh": {
+  "t": "Ngọc Tinh 老师",
+  "h": "7a5e8a22"
+ },
+ "home.thay-nhat-nguyen": {
+  "t": "Nhật Nguyên 老师",
+  "h": "0f6eeeb3"
+ },
+ "home.thay-tam-kinh": {
+  "t": "Tâm Kính 老师",
+  "h": "e5eb3f74"
+ },
+ "home.thay-thai-hu": {
+  "t": "Thái Hư 老师",
+  "h": "dd91916e"
+ },
+ "home.thay-thai-hu-tiep-chuyen-nhom": {
+  "t": "<b>Thái Hư 老师</b>与您交谈 · 明宝团队",
+  "h": "3e53d65c"
+ },
+ "home.thay-thanh-hu": {
+  "t": "Thanh Hư 老师",
+  "h": "adc0bcd0"
+ },
+ "home.thay-thien-an": {
+  "t": "Thiên Ẩn 老师",
+  "h": "92670874"
+ },
+ "home.thay-tinh-quang": {
+  "t": "Tinh Quang 老师",
+  "h": "3ccb5f21"
+ },
+ "home.thay-tu-nguyen": {
+  "t": "Tử Nguyên 老师",
+  "h": "a3df444c"
+ },
+ "home.thien-an": {
+  "t": "Thiên Ẩn",
+  "h": "cdd32e9c"
+ },
+ "home.thu-tuong-xem-chi-tay": {
+  "t": "手相<br>看掌纹",
+  "h": "7abfb95d"
+ },
+ "home.thu-vien-100-000-la-so": {
+  "t": "100,000+ 张命盘数据库",
+  "h": "65b5c446"
+ },
+ "home.tinh-duyen-hon-nhan": {
+  "t": "感情与婚姻",
+  "h": "d5d3d4ea"
+ },
+ "home.tinh-quang": {
+  "t": "Tinh Quang",
+  "h": "738207ad"
+ },
+ "home.toi-uu": {
+  "t": "优化",
+  "h": "323d961e"
+ },
+ "home.toi-uu-mo-hinh-luan-giai": {
+  "t": "优化解读模型",
+  "h": "dbeada75"
+ },
+ "home.tra-cuu-ngay": {
+  "t": "立即查找 →",
+  "h": "8651db0c"
+ },
+ "home.tu-binh-bat-tu": {
+  "t": "子平<br>八字",
+  "h": "4d842bd3"
+ },
+ "home.tu-lieu-co-hoc": {
+  "t": "古学文献",
+  "h": "020c441d"
+ },
+ "home.tu-nguyen": {
+  "t": "Tử Nguyên",
+  "h": "e02fc21d"
+ },
+ "home.tu-vi-cong-so-hn": {
+  "t": "紫微<br>职场与合伙",
+  "h": "b9a4d1f6"
+ },
+ "home.tu-vi-goc-luan-giai": {
+  "t": "紫微本命与解读",
+  "h": "1598de62"
+ },
+ "home.tu-vi-la-ngon-den-nho": {
+  "t": "「紫微是一盏小灯，为懂得倾听的人照亮前路。」",
+  "h": "9c806662"
+ },
+ "home.tu-vi-minh-bao-cong-menh": {
+  "t": "明宝紫微斗数——命理入口 · 50 种古法工具",
+  "h": "4e8e12be"
+ },
+ "home.tu-vi-minh-bao-cong-menh-b1dq": {
+  "t": "明宝紫微斗数——命理入口",
+  "h": "a9683d2d"
+ },
+ "home.tu-vi-nghiem-chung": {
+  "t": "紫微验证",
+  "h": "be800e66"
+ },
+ "home.tu-vi-tu-binh-tuong-so": {
+  "t": "紫微斗数、子平八字、相术、风水，皆依古法，提供个人化解读。",
+  "h": "23ad0d51"
+ },
+ "home.tuong-hop-duyen-no": {
+  "t": "合盘与缘分",
+  "h": "31909263"
+ },
+ "home.van-han-12-thang-toi": {
+  "t": "未来<br>12 个月运势",
+  "h": "4940088c"
+ },
+ "home.van-ngan-han-chon-ngay": {
+  "t": "近期运势与择日",
+  "h": "8b090af4"
+ },
+ "home.vi-du-nam-toi-toi-co": {
+  "t": "例如：明年我该离职自己创业吗？",
+  "h": "36855997"
+ },
+ "home.xac-dinh-gio-sinh": {
+  "t": "确认出生时辰 →",
+  "h": "5122b0fd"
+ },
+ "home.xac-dinh-gio-sinh-632h": {
+  "t": "确认<br>出生时辰",
+  "h": "0a488c7a"
+ },
+ "home.xem-cac-thay": {
+  "t": "认识老师们 →",
+  "h": "5b56e454"
+ },
+ "home.xem-cach-he-thong-hoat-dong": {
+  "t": "了解系统如何运作 →",
+  "h": "4d01e2f2"
+ },
+ "home.xem-ho-so": {
+  "t": "查看文件 →",
+  "h": "0739b410"
+ },
+ "home.xem-ngay-tot-xau": {
+  "t": "择日<br>吉凶",
+  "h": "7e13c320"
+ },
+ "home.xem-tat-ca": {
+  "t": "查看全部 →",
+  "h": "cc902292"
+ },
+ "home.xem-tuoi-vo-chong": {
+  "t": "夫妻<br>合婚",
+  "h": "af82fa59"
+ },
+ "home.xem-tuong": {
+  "t": "相术",
+  "h": "ae8ee50b"
+ },
+ "js.nav.brand": {
+  "t": "明宝紫微斗数",
+  "h": "33336b26"
+ },
+ "js.nav.cam-nang": {
+  "t": "指南",
+  "h": "399e7591"
+ },
+ "js.nav.cau-hoi-thuong-gap": {
+  "t": "常见问题",
+  "h": "0abbca1b"
+ },
+ "js.nav.cong-cu": {
+  "t": "工具",
+  "h": "6029ffef"
+ },
+ "js.nav.cong-cu-col": {
+  "t": "工具",
+  "h": "a601efbf"
+ },
+ "js.nav.cong-ty-tnhh-kira-tech-kira": {
+  "t": "<strong>Kira Tech 有限公司</strong><br><span class=\"dim\">(Kira Tech Company Limited)</span>",
+  "h": "40cbf05c"
+ },
+ "js.nav.contact-tuviminhbao-com-0343-848-795": {
+  "t": "contact@tuviminhbao.com &nbsp;·&nbsp; 0343.848.795",
+  "h": "87ddf85d"
+ },
+ "js.nav.cta-title": {
+  "t": "排好命盘、问问老师——从这里开始使用工具",
+  "h": "14f228d5"
+ },
+ "js.nav.disclaimer": {
+  "t": "解读内容仅供参考，不能取代专业建议。",
+  "h": "00521049"
+ },
+ "js.nav.foot-disclaimer": {
+  "t": "免责声明",
+  "h": "9f4943b3"
+ },
+ "js.nav.foot-payment": {
+  "t": "付款",
+  "h": "e3dc7276"
+ },
+ "js.nav.foot-privacy": {
+  "t": "隐私权政策",
+  "h": "7c3bbe11"
+ },
+ "js.nav.foot-products": {
+  "t": "产品与服务",
+  "h": "5af2d451"
+ },
+ "js.nav.foot-terms": {
+  "t": "服务条款",
+  "h": "f906694f"
+ },
+ "js.nav.footer-tagline": {
+  "t": "依古法排紫微斗数，深入解读。",
+  "h": "c1e39fad"
+ },
+ "js.nav.gioi-thieu": {
+  "t": "关于",
+  "h": "20855749"
+ },
+ "js.nav.hoi-thay": {
+  "t": "问老师",
+  "h": "c9ffbbaf"
+ },
+ "js.nav.kham-pha": {
+  "t": "探索",
+  "h": "2dcfd93c"
+ },
+ "js.nav.lap-la-so": {
+  "t": "排命盘",
+  "h": "3501b515"
+ },
+ "js.nav.lien-he": {
+  "t": "联系我们",
+  "h": "4df839b4"
+ },
+ "js.nav.menh-kho": {
+  "t": "命库",
+  "h": "2de2772c"
+ },
+ "js.nav.menh-kho-438k-la-so": {
+  "t": "命库——43.8 万张命盘",
+  "h": "dbdd9b4f"
+ },
+ "js.nav.ngay-tot": {
+  "t": "择日",
+  "h": "97ad8226"
+ },
+ "js.nav.ngay-tot-lich-van-nien": {
+  "t": "择日——万年历",
+  "h": "273eb4fa"
+ },
+ "js.nav.nghiem-chung": {
+  "t": "验证",
+  "h": "e1110fe5"
+ },
+ "js.nav.nghiem-chung-la-so-doi-chieu": {
+  "t": "验证——命盘对照真实人生",
+  "h": "bef98605"
+ },
+ "js.nav.nghien-cuu-tu-vi": {
+  "t": "紫微研究",
+  "h": "800f1679"
+ },
+ "js.nav.nguoi-noi-tieng": {
+  "t": "名人",
+  "h": "b79cf3ad"
+ },
+ "js.nav.phong-thuy-qua-anh": {
+  "t": "照片看风水",
+  "h": "366d93c7"
+ },
+ "js.nav.phuong-phap-do-tin-cay": {
+  "t": "方法与可信度",
+  "h": "c16eaaee"
+ },
+ "js.nav.see-detail": {
+  "t": "查看详情",
+  "h": "e30c9371"
+ },
+ "js.nav.sign": {
+  "t": "知命而行——无忧无惑",
+  "h": "7dc956c7"
+ },
+ "js.nav.slogan": {
+  "t": "知命理，顺势而行",
+  "h": "ca64e3dc"
+ },
+ "js.nav.tac-gia": {
+  "t": "作者",
+  "h": "7aa04605"
+ },
+ "js.nav.tat-ca-cong-cu": {
+  "t": "所有工具",
+  "h": "ad4553ea"
+ },
+ "js.nav.tat-ca-cong-cu-t5z9": {
+  "t": "所有工具",
+  "h": "7ec66d57"
+ },
+ "js.nav.thu-vien": {
+  "t": "数据库",
+  "h": "4d885bf7"
+ },
+ "js.nav.thu-vien-ban-luan-da-chia": {
+  "t": "数据库——已分享的解读",
+  "h": "017d8d21"
+ },
+ "js.nav.toa-nha-master-building-41-43": {
+  "t": "Master Building，Trần Cao Vân 街 41-43 号，<br>Xuân Hòa 坊（第 3 郡），胡志明市",
+  "h": "249c141e"
+ },
+ "js.nav.tra-cuu": {
+  "t": "查找",
+  "h": "735aa839"
+ },
+ "js.nav.tra-cuu-col": {
+  "t": "查找",
+  "h": "5fce202a"
+ },
+ "js.nav.van-dap": {
+  "t": "问答",
+  "h": "eb135e84"
+ },
+ "js.nav.ve-chung-toi": {
+  "t": "关于我们",
+  "h": "63a47694"
+ },
+ "js.nav.xac-dinh-gio-sinh": {
+  "t": "确认出生时辰",
+  "h": "2b570401"
+ },
+ "js.nav.xac-dinh-gio-sinh-12-la": {
+  "t": "确认出生时辰——12 张命盘，哪个时辰吻合",
+  "h": "bbc3388e"
+ },
+ "js.nav.xem-tuong-qua-anh": {
+  "t": "照片看面相",
+  "h": "24c4d64e"
  },
  "js.shell.an": {
   "t": "隐藏",
@@ -76,11 +988,11 @@
   "h": "685adfe6"
  },
  "js.shell.ma-qr-zalo-oa-tu-vi": {
-  "t": "Tử Vi Minh Bảo 的 Zalo OA QR 码",
+  "t": "明宝紫微斗数的 Zalo OA QR 码",
   "h": "99554c71"
  },
  "js.shell.minh-bao": {
-  "t": "Minh Bảo",
+  "t": "明宝",
   "h": "e4158660"
  },
  "js.shell.moi-ban-be": {
@@ -127,8 +1039,448 @@
   "t": "查看全部",
   "h": "7e040254"
  },
+ "laso.2026-tuviminhbao-com-all-rights-reserved": {
+  "t": "© 2026 tuviminhbao.com — 版权所有",
+  "h": "5772fefb"
+ },
+ "laso.an-sao-la-so-tu-vi": {
+  "t": "紫微命盘安星",
+  "h": "05d6f12f"
+ },
+ "laso.an-sao-la-so-tu-vi-98bu": {
+  "t": "紫微斗数命盘安星——查看个人命盘、五行、命宫、大运。",
+  "h": "25221382"
+ },
+ "laso.dang-tai-la-so": {
+  "t": "命盘加载中…",
+  "h": "5f237a0e"
+ },
+ "laso.gio": {
+  "t": "时",
+  "h": "75f92388"
+ },
+ "laso.gio-am": {
+  "t": "农历时辰：—",
+  "h": "81d3ed39"
+ },
+ "laso.gioi-thieu": {
+  "t": "关于",
+  "h": "20855749"
+ },
+ "laso.gioi-tinh": {
+  "t": "性别",
+  "h": "899b020f"
+ },
+ "laso.ho-va-ten": {
+  "t": "姓名",
+  "h": "18d1abe3"
+ },
+ "laso.in-la-so": {
+  "t": "打印命盘",
+  "h": "a5ecd89f"
+ },
+ "laso.khao-luan": {
+  "t": "考论",
+  "h": "e8cfaf3b"
+ },
+ "laso.la-so-tu-vi-tu-vi": {
+  "t": "紫微命盘——明宝紫微斗数",
+  "h": "2d400887"
+ },
+ "laso.lay-la-so": {
+  "t": "取得命盘",
+  "h": "f7781d94"
+ },
+ "laso.lien-he": {
+  "t": "联系我们",
+  "h": "4df839b4"
+ },
+ "laso.luan-giai": {
+  "t": "解读 ▾",
+  "h": "423cf9d0"
+ },
+ "laso.luan-giai-la-so-xem-tuoi": {
+  "t": "<a class=\"nav-dropdown-item\" href=\"/app/luan-giai\">命盘解读</a> <a class=\"nav-dropdown-item\" href=\"/app/xem-tuoi\">夫妻合婚</a> <a class=\"nav-dropdown-item\" href=\"/app/xem-lam-an\">合伙合盘</a>",
+  "h": "7e6e23ac"
+ },
+ "laso.menh-kho": {
+  "t": "命库",
+  "h": "2de2772c"
+ },
+ "laso.nam-dl": {
+  "t": "年（国历）",
+  "h": "4e86c4a2"
+ },
+ "laso.nam-xem": {
+  "t": "流年",
+  "h": "ccc5edbb"
+ },
+ "laso.ngay-dl": {
+  "t": "日（国历）",
+  "h": "1840a967"
+ },
+ "laso.ngu-hanh-hoa-moc-thuy-kim": {
+  "t": "<strong style=\"color:#555\">五行：</strong> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#E01010\"></span><span class=\"sc-hoa\">火</span></span> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#1a7a1a\"></span><span class=\"sc-moc\">木</span></span> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#111111\"></span><span class=\"sc-thuy\">水</span></span> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#808080\"></span><span class=\"sc-kim\">金</span></span> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#9A7B00\"></span><span class=\"sc-tho\">土</span></span> &nbsp;&nbsp;<strong style=\"color:#555\">庙旺：</strong> <span>庙 &nbsp;旺 &nbsp;得 &nbsp;平 &nbsp;陷</span>",
+  "h": "98c156e6"
+ },
+ "laso.nguyen-van-a": {
+  "t": "王小明",
+  "h": "7388465b"
+ },
+ "laso.nhap-thong-tin-de-xem-la": {
+  "t": "输入数据即可查看命盘——若是透过专属链接进入，命盘会自动显示。",
+  "h": "3e8b6970"
+ },
+ "laso.nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "laso.phut": {
+  "t": "分",
+  "h": "34ca51a4"
+ },
+ "laso.tai-lieu": {
+  "t": "数据",
+  "h": "475007a2"
+ },
+ "laso.tai-png": {
+  "t": "⬇ 下载 PNG",
+  "h": "a5b32ccb"
+ },
+ "laso.thang-dl": {
+  "t": "月（国历）",
+  "h": "fec10b0f"
+ },
+ "laso.trang-chu": {
+  "t": "首页",
+  "h": "fca04858"
+ },
  "laso.tu-vi-minh-bao": {
-  "t": "Tử Vi Minh Bảo",
+  "t": "明宝紫微斗数",
   "h": "33336b26"
+ },
+ "luangiai.an-la-so": {
+  "t": "▾ 收起命盘",
+  "h": "9f28e998"
+ },
+ "luangiai.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>解读范本</b><span>下载范例命盘的完整解读 PDF，先看看实际内容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-luan-giai-la-so.pdf\" target=\"_blank\" rel=\"noopener\">下载 PDF →</a>",
+  "h": "11d61c50"
+ },
+ "luangiai.bao-cao-cua-ban": {
+  "t": "明宝紫微斗数 · 您的报告",
+  "h": "d770e087"
+ },
+ "luangiai.bat-tu": {
+  "t": "八字 →",
+  "h": "f4ece70d"
+ },
+ "luangiai.chuyen-khoan-qua-qr-ngan-hang": {
+  "t": "<span><span class=\"ic\" data-icon=\"qr-code\"></span> 银行转帐（扫描 QR 码）</span> <span><span class=\"ic\" data-icon=\"credit-card\"></span> PayPal／国际信用卡</span>",
+  "h": "9cf268c0"
+ },
+ "luangiai.cong-viec-bap-benh-tinh-duyen": {
+  "t": "工作不稳、感情坎坷、钱财流失——根源究竟在您命盘的哪里？",
+  "h": "68aea2a1"
+ },
+ "luangiai.dang-dong-ban-bao-cao": {
+  "t": "正在整理报告…",
+  "h": "d75bc7a8"
+ },
+ "luangiai.dang-dung": {
+  "t": "<span class=\"ic\" id=\"lgBtnPdfIcon\"><span class=\"rr-spin\"></span></span> <span id=\"lgBtnPdfLabel\">制作中…</span>",
+  "h": "f974f165"
+ },
+ "luangiai.diem-manh-yeu-goi-y": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>优势劣势、<br>建议</span>",
+  "h": "4fcae149"
+ },
+ "luangiai.gui-vao-email": {
+  "t": "寄到电子信箱",
+  "h": "557a13dc"
+ },
+ "luangiai.lap-la-so-luan-giai-ngay": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">立即排命盘并解读 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"laso\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"laso\">…</span> 两)</span></small>",
+  "h": "a32c708b"
+ },
+ "luangiai.lap-la-so-tu-vi-12": {
+  "t": "排出紫微斗数十二宫命盘，再依古法评分深入解读：主星、格局、各宫四化——并可请老师逐项深入说明。",
+  "h": "c423cebd"
+ },
+ "luangiai.luan-giai-tu-vi": {
+  "t": "紫微斗数解读",
+  "h": "19e52bc9"
+ },
+ "luangiai.luan-giai-tu-vi-lap-la": {
+  "t": "<b>紫微斗数解读</b><span>排出十二宫命盘，再依古法评分深入解读</span>",
+  "h": "425b9435"
+ },
+ "luangiai.luan-giai-tu-vi-tu-vi": {
+  "t": "紫微斗数解读——明宝紫微斗数",
+  "h": "8fabed33"
+ },
+ "luangiai.luan-rieng-12-cung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>十二宫<br>逐宫解读</span>",
+  "h": "3b1b8770"
+ },
+ "luangiai.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"laso\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"laso\">…</span> 两)</span>",
+  "h": "633c5ba1"
+ },
+ "luangiai.mua-goi-de-nhan-nhieu-uu": {
+  "t": "购买方案可享更多优惠。<br><a href=\"/topup.html\">立即查看方案 →</a>",
+  "h": "074cd07f"
+ },
+ "luangiai.nam-muon-luan": {
+  "t": "想论断的年份",
+  "h": "d0b9d752"
+ },
+ "luangiai.nhap-ho-ten-gioi-tinh-ngay": {
+  "t": "输入姓名、性别、出生日期时辰，以及想论断的年份。系统会自动安星、排出命盘，再逐部分解读。您将收到完整的 13 部分解读：总论与十二宫逐宫分析。",
+  "h": "32be95f6"
+ },
+ "luangiai.nhap-thong-tin-de-lap-la": {
+  "t": "输入数据，排命盘并解读",
+  "h": "f0b42f7c"
+ },
+ "luangiai.tong-quan-cuoc-doi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>人生<br>总览</span>",
+  "h": "dd3effb3"
+ },
+ "luangiai.tra-loi-thay-o-khung-chat": {
+  "t": "请在聊天窗口回复老师来排命盘并解读——姓名、出生日期时辰，以及想论断的年份。",
+  "h": "14557bde"
+ },
+ "luangiai.tu-vi-dau-so-la-mot": {
+  "t": "紫微斗数是源自中国的传统命理学，依农历出生时辰排出十二宫命盘，并以主星、辅星系统推断命运。这门学问历经多代整理，在越南主要透过云腾太次郎（Vân Đằng Thái Thứ Lang）所着<i>《紫微斗数新编》</i>的译本流传，发展出自成一格的越南派。",
+  "h": "81546c5f"
+ },
+ "luangiai.tu-vi-khong-du-doan-tuong": {
+  "t": "紫微不是用来预测未来，而是帮助您了解自己，做出更好的选择。",
+  "h": "ae92de9d"
+ },
+ "privacy.1-thong-tin-chung-toi-thu": {
+  "t": "1. 我们搜集的数据",
+  "h": "5354d2ca"
+ },
+ "privacy.2-muc-dich-su-dung-thong": {
+  "t": "2. 数据的使用目的",
+  "h": "ffc0ab3d"
+ },
+ "privacy.3-chia-se-thong-tin": {
+  "t": "3. 数据分享",
+  "h": "d7212459"
+ },
+ "privacy.4-bao-mat-du-lieu": {
+  "t": "4. 数据安全",
+  "h": "ecf83407"
+ },
+ "privacy.5-quyen-cua-ban-xem-sua": {
+  "t": "5. 您的权利——查阅、修改、删除数据",
+  "h": "e5778544"
+ },
+ "privacy.6-cookie": {
+  "t": "6. Cookie",
+  "h": "b0874718"
+ },
+ "privacy.7-lien-he": {
+  "t": "7. 联系方式",
+  "h": "3a96153f"
+ },
+ "privacy.an-sao-va-tao-la-so": {
+  "t": "安星并创建紫微斗数命盘",
+  "h": "88fe3cad"
+ },
+ "privacy.ban-co-quyen-yeu-cau-xem": {
+  "t": "您有权要求查阅、修改或删除个人数据，包括透过 Facebook Messenger 或 Zalo 收到的数据。请透过<a href=\"/contact.html\" style=\"color:#1455A4\">联系我们</a>页面提出申请（若您使用聊天管道，请附上 Facebook／Zalo 帐号名称）。我们会删除与您相关的帐号、命盘、对话纪录及聊天帐号识别码，完成后会通知您。",
+  "h": "584c6ef3"
+ },
+ "privacy.cai-thien-chat-luong-dich-vu": {
+  "t": "提升服务品质",
+  "h": "9e0df8b2"
+ },
+ "privacy.cap-nhat-lan-cuoi-thang-10": {
+  "t": "最后更新：2026 年 10 月",
+  "h": "d49afd39"
+ },
+ "privacy.chinh-sach-bao-mat": {
+  "t": "隐私权政策",
+  "h": "863b2217"
+ },
+ "privacy.chinh-sach-bao-mat-cua-tu": {
+  "t": "明宝紫微斗数的隐私权政策——我们如何搜集、使用并保护您的个人数据。",
+  "h": "8e83535e"
+ },
+ "privacy.chinh-sach-bao-mat-tu-vi": {
+  "t": "隐私权政策——明宝紫微斗数",
+  "h": "12c793c2"
+ },
+ "privacy.chung-toi-khong-ban-cho-thue": {
+  "t": "我们不会出售、出租或与第三方分享您的个人数据，但营运服务所必需的技术基础设施供应商除外——这些供应商各自依其隐私权政策处理：",
+  "h": "e7ba913a"
+ },
+ "privacy.cong-thanh-toan-chuyen-khoan-ngan": {
+  "t": "支付闸道（银行转帐、PayPal）——处理交易",
+  "h": "862873b7"
+ },
+ "privacy.dia-chi-email-neu-co-dung": {
+  "t": "电子邮件地址（如有）——用于寄送结果或联系",
+  "h": "e64d230a"
+ },
+ "privacy.du-lieu-la-so-duoc-luu": {
+  "t": "命盘数据保存于加密的云端基础设施，安全无虞。付款信息完全透过第三方支付闸道处理——我们不保存卡号或敏感的财务数据。",
+  "h": "f5eb2733"
+ },
+ "privacy.du-lieu-truy-cap-ky-thuat": {
+  "t": "技术性访问数据（IP 地址、浏览器、访问时间），透过匿名流量分析工具取得",
+  "h": "f1aa200a"
+ },
+ "privacy.khi-ban-nhan-tin-qua-facebook": {
+  "t": "当您透过 Facebook Messenger 或 Zalo 传消息时：平台为我们粉丝专页核发的聊天帐号识别码、帐号公开显示的名称，以及您发送的消息内容——用于回复、在您本人的命盘上署名，并与 tuviminhbao.com 上的帐号串接",
+  "h": "f83117af"
+ },
+ "privacy.khi-ban-su-dung-dich-vu": {
+  "t": "当您在 tuviminhbao.com 使用安星与紫微斗数解读服务时，我们可能搜集：",
+  "h": "360aa217"
+ },
+ "privacy.khi-co-yeu-cau-phap-ly": {
+  "t": "当有权机关提出法律要求时",
+  "h": "46937409"
+ },
+ "privacy.meta-facebook-khi-ban-den-tu": {
+  "t": "Meta（Facebook）——当您从 Messenger 前来并购买服务时，我们会向 Meta 回报购买事件（订单金额与聊天帐号识别码），以衡量广告成效；不会发送消息内容或出生日期时辰",
+  "h": "808834a4"
+ },
+ "privacy.moi-thac-mac-ve-chinh-sach": {
+  "t": "如对隐私权政策有任何疑问，请透过<a href=\"/contact.html\" style=\"color:#1455A4\">联系我们</a>页面与我们联系。",
+  "h": "868d3ffe"
+ },
+ "privacy.ngay-thang-nam-sinh-va-gio": {
+  "t": "出生年月日与时辰（国历）——用于排命盘安星",
+  "h": "313ab68a"
+ },
+ "privacy.nha-cung-cap-dich-vu-tri": {
+  "t": "人工智能服务供应商——处理解读内容",
+  "h": "8b6ed45d"
+ },
+ "privacy.nha-cung-cap-ha-tang-luu": {
+  "t": "云端数据保存基础设施供应商——保存帐号与命盘",
+  "h": "48f8c99c"
+ },
+ "privacy.phap-ly": {
+  "t": "法律信息",
+  "h": "1780af9e"
+ },
+ "privacy.tao-luan-giai-bang-tri-tue": {
+  "t": "以人工智能产生解读并导出 PDF",
+  "h": "4dbbe1ba"
+ },
+ "privacy.thong-tin-ban-cung-cap-duoc": {
+  "t": "您提供的数据将用于：",
+  "h": "7658d5a9"
+ },
+ "privacy.thong-tin-giao-dich-thanh-toan": {
+  "t": "付款交易信息（订单编号、付款状态）——不保存卡号或银行帐户数据",
+  "h": "9a6e6249"
+ },
+ "privacy.trang-web-su-dung-localstorage-de": {
+  "t": "本网站使用 localStorage 在使用期间暂存命盘状态。我们也使用 Cookie 与 Google Analytics、Google Ads、Meta（Facebook）Pixel 及 Microsoft Clarity 的追踪码，以统计造访次数、衡量广告成效并改善界面。您可以在浏览器设置中封锁或删除 Cookie；安星与解读工具仍可正常使用。",
+  "h": "ad439412"
+ },
+ "privacy.xac-minh-trang-thai-thanh-toan": {
+  "t": "确认付款状态并提供结果",
+  "h": "84a1b3b2"
+ },
+ "terms.1-tinh-chat-dich-vu": {
+  "t": "1. 服务性质",
+  "h": "7fb94895"
+ },
+ "terms.2-gioi-han-trach-nhiem": {
+  "t": "2. 责任限制",
+  "h": "9a8d7f3a"
+ },
+ "terms.3-thanh-toan-va-hoan-tien": {
+  "t": "3. 付款与退款",
+  "h": "8ec2a944"
+ },
+ "terms.4-quyen-so-huu-tri-tue": {
+  "t": "4. 知识产权",
+  "h": "4c72783a"
+ },
+ "terms.5-hanh-vi-bi-cam": {
+  "t": "5. 禁止行为",
+  "h": "c088ae99"
+ },
+ "terms.6-thay-doi-dieu-khoan": {
+  "t": "6. 条款变更",
+  "h": "b77fb69c"
+ },
+ "terms.bang-viec-su-dung-dich-vu": {
+  "t": "使用 tuviminhbao.com 的服务，即表示您同意以下条款。使用前请详细阅读。",
+  "h": "84c3073e"
+ },
+ "terms.cap-nhat-lan-cuoi-thang-9": {
+  "t": "最后更新：2026 年 9 月",
+  "h": "8f1c24b0"
+ },
+ "terms.chung-toi-co-quyen-cap-nhat": {
+  "t": "我们有权随时更新本条款，最新版本一律公布于本页。更新后您若继续使用服务，即视为接受新条款。",
+  "h": "a7a3e1fa"
+ },
+ "terms.co-tinh-cung-cap-thong-tin": {
+  "t": "故意提供不实信息以诈欺服务",
+  "h": "05f1e2a5"
+ },
+ "terms.dieu-khoan-dich-vu": {
+  "t": "服务条款",
+  "h": "c021f7f4"
+ },
+ "terms.dieu-khoan-dich-vu-tu-vi": {
+  "t": "服务条款——明宝紫微斗数",
+  "h": "b2e2011a"
+ },
+ "terms.dieu-khoan-su-dung-dich-vu": {
+  "t": "明宝紫微斗数服务使用条款——使用安星与紫微斗数解读服务时的权利、义务与规定。",
+  "h": "eab80530"
+ },
+ "terms.do-tinh-chat-so-cua-dich": {
+  "t": "由于服务属于数字性质，结果一经显示，我们<strong>不予退款</strong>",
+  "h": "cc224df0"
+ },
+ "terms.ket-qua-luan-giai-do-ai": {
+  "t": "解读结果由 AI 依据传统紫微斗数体系产生。我们不保证解读内容绝对准确。用户须自行为依据解读内容所做的个人决定负责。",
+  "h": "dbc3d39d"
+ },
+ "terms.moi-thac-mac-ve-dieu-khoan": {
+  "t": "如对条款有任何疑问，请透过<a href=\"/contact.html\" style=\"color:#1455A4\">联系我们</a>页面与我们联系。",
+  "h": "2a193121"
+ },
+ "terms.neu-co-loi-ky-thuat-khien": {
+  "t": "若因技术问题导致您付款后未收到结果，请与我们联系以取得协助",
+  "h": "06df4e64"
+ },
+ "terms.phi-dich-vu-duoc-thanh-toan": {
+  "t": "服务费用一次付清，可透过越南盾（VND）银行转帐（扫描 QR 码）或 PayPal（国际 Visa／Mastercard 信用卡）支付",
+  "h": "c2988cbb"
+ },
+ "terms.reverse-engineer-hoac-sao-chep-he": {
+  "t": "对安星系统进行逆向工程或拷贝",
+  "h": "57bda3e3"
+ },
+ "terms.sau-khi-thanh-toan-thanh-cong": {
+  "t": "付款成功后，解读结果会立即解锁",
+  "h": "b895e2c9"
+ },
+ "terms.su-dung-bot-hoac-phuong-tien": {
+  "t": "使用机器人或自动化工具大量访问",
+  "h": "49c0c0e8"
+ },
+ "terms.toan-bo-noi-dung-tren-tuviminhbao": {
+  "t": "tuviminhbao.com 上的全部内容（安星系统、界面、研究论述）均属明宝紫微斗数所有。未经许可，严禁拷贝、散布或作商业用途。",
+  "h": "9ea6e6d2"
+ },
+ "terms.tu-vi-minh-bao-cung-cap": {
+  "t": "明宝紫微斗数依用户提供的出生日期时辰，提供紫微斗数安星服务，并以人工智能（AI）进行解读。本服务仅供文化与学术参考，<strong>不构成财务、医疗或法律建议</strong>。",
+  "h": "40549518"
  }
 }

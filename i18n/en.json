@@ -1,6 +1,110 @@
 {
+ "battu.1-nhap-thong-tin": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Enter details</span>",
+  "h": "487c9507"
+ },
+ "battu.2-xem-truoc-la-so": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview chart</span>",
+  "h": "3c9201cd"
+ },
+ "battu.3-thanh-toan": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">Payment</span>",
+  "h": "a8d2d60c"
+ },
+ "battu.4-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">4</span><span class=\"wss-l\">Get your reading</span>",
+  "h": "35c4242b"
+ },
+ "battu.cach-cuc-thap-than": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>Structure,<br>Ten Gods</span>",
+  "h": "e78c79e5"
+ },
+ "battu.chi-phi-su-dung": {
+  "t": "Cost",
+  "h": "c2d36be8"
+ },
+ "battu.dai-van-luu-nien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>Luck Cycles,<br>Annual Pillars</span>",
+  "h": "7676d5b2"
+ },
+ "battu.gioi-thieu": {
+  "t": "<span class=\"wsp-ic\" data-icon=\"book-open\"></span><span>Introduction</span>",
+  "h": "935666a1"
+ },
+ "battu.hoi": {
+  "t": "✦ Ask",
+  "h": "cbb5079f"
+ },
+ "battu.la-so-bat-tu-tu-tru": {
+  "t": "<b>BaZi chart</b><span>Zi Ping Four Pillars — stems and branches, useful god, luck cycles</span>",
+  "h": "98cba503"
+ },
+ "battu.la-so-bat-tu-tu-tru-2852": {
+  "t": "BaZi chart (Four Pillars)",
+  "h": "67dd1d43"
+ },
+ "battu.la-so-bat-tu-tu-vi": {
+  "t": "BaZi chart — Minh Bao Zi Wei Dou Shu",
+  "h": "f0404e36"
+ },
+ "battu.lap-bat-tu-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"scroll-text\"></span><b id=\"btnGoLabel\">Cast BaZi →</b></span> <small>Free</small>",
+  "h": "b4a4835f"
+ },
+ "battu.lap-tu-tru-bat-tu-theo": {
+  "t": "Cast your BaZi Four Pillars by the classical Zi Ping method: Day Master, strength, useful god, structure, luck cycles, annual pillars — and ask the Master to go deeper on any part.",
+  "h": "315e8a7f"
+ },
+ "battu.luan-giai-chuyen-sau-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b>In-depth reading →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"tu-binh\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"tu-binh\">…</span> credits)</span></small>",
+  "h": "cd1895af"
+ },
+ "battu.luan-giai-tu-vi": {
+  "t": "Zi Wei reading →",
+  "h": "1c914a22"
+ },
+ "battu.mien-phi": {
+  "t": "Free",
+  "h": "a999e722"
+ },
+ "battu.nam-luan": {
+  "t": "Year to read",
+  "h": "75752d13"
+ },
+ "battu.nhap-ngay-gio-sinh-va-nam": {
+  "t": "Enter your birth date and time, and the year you want read. The system casts your Four Pillars and reads them by the classical Zi Ping method — 16 parts: structure, Ten Gods, love, health, luck cycles and annual pillars.",
+  "h": "cd9d101a"
+ },
+ "battu.nhap-thong-tin-ngay-sinh-duong": {
+  "t": "Enter your birth details (solar calendar)",
+  "h": "095c3547"
+ },
+ "battu.nhat-can-dung-than": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>Day Master,<br>Useful God</span>",
+  "h": "1d502c53"
+ },
+ "battu.sua-thong-tin": {
+  "t": "Edit details",
+  "h": "f761d488"
+ },
+ "battu.tra-loi-thay-o-khung-chat": {
+  "t": "Reply to the Master in the chat to cast your Four Pillars — birth date and time, and the year you want read.",
+  "h": "1587b6ef"
+ },
+ "battu.tu-binh-con-goi-bat-tu": {
+  "t": "Zi Ping (also called BaZi) is a method of reading destiny from the four pillars — the stems and branches of your birth year, month, day and hour — and took shape in the Song dynasty. With the Day Master as the reference point, it compares the other pillars to find the useful god and the chart structure, and reads a whole life from there.",
+  "h": "f6e8617c"
+ },
+ "battu.tu-tru-khong-doan-may-rui": {
+  "t": "The Four Pillars don't guess at luck. They point straight at which of the five elements your chart lacks — the reason some stretches of life go smoothly while others feel like swimming upstream. Cast your chart to see what you're missing.",
+  "h": "b1c6d09f"
+ },
+ "battu.viet-rieng-cho-tu-tru-nay": {
+  "t": "Written specifically for these Four Pillars by the classical Zi Ping method — 16 parts: structure, Ten Gods, luck cycles, annual pillars.",
+  "h": "f54c0d01"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
-  "t": "Tell your story and Minh Bảo will bring in the right Master from our group of 15: Tử Vi chart, Bát Tự (Four Pillars), age compatibility, naming, date selection.",
+  "t": "Tell your story and Minh Bao will bring in the right Master from our team of 15: Zi Wei Dou Shu chart, BaZi (Four Pillars of Destiny), marriage compatibility, naming, date selection.",
   "h": "0f564294"
  },
  "disclaimer.1-tinh-chat-tham-khao": {
@@ -32,7 +136,7 @@
   "h": "9792a37e"
  },
  "disclaimer.luan-giai-duoc-tao-bang-tri": {
-  "t": "Readings are generated with artificial intelligence (AI) on top of the classical Tử Vi Đẩu Số (Purple Star Astrology) rule system. Different schools of Tử Vi may interpret the same chart differently; we do not guarantee absolute accuracy or that any single result is the only correct one.",
+  "t": "Readings are generated with artificial intelligence (AI) on top of the classical Zi Wei Dou Shu (Purple Star Astrology) rule system. Different schools of Zi Wei may interpret the same chart differently; we do not guarantee absolute accuracy or that any single result is the only correct one.",
   "h": "cf677c1e"
  },
  "disclaimer.mien-tru-trach-nhiem": {
@@ -40,7 +144,7 @@
   "h": "9f4943b3"
  },
  "disclaimer.mien-tru-trach-nhiem-tu-vi": {
-  "t": "Disclaimer — Tử Vi Minh Bảo",
+  "t": "Disclaimer — Minh Bao Zi Wei Dou Shu",
   "h": "33a75925"
  },
  "disclaimer.neu-co-cau-hoi-ve-noi": {
@@ -48,7 +152,7 @@
   "h": "06ba42cc"
  },
  "disclaimer.noi-dung-luan-giai-tai-tu": {
-  "t": "Readings at Tử Vi Minh Bảo are cultural and scholarly references — they are not financial, medical or legal advice.",
+  "t": "Readings at Minh Bao Zi Wei Dou Shu are cultural and scholarly references — they are not financial, medical or legal advice.",
   "h": "f06e6f7c"
  },
  "disclaimer.toan-bo-noi-dung-tren-tuviminhbao": {
@@ -56,19 +160,579 @@
   "h": "a3adcb6e"
  },
  "disclaimer.trong-pham-vi-phap-luat-cho": {
-  "t": "To the extent permitted by law, Tử Vi Minh Bảo and Kira Tech Company Limited accept no liability for any direct or indirect loss arising from the use, interpretation or reliance on content provided on this website.",
+  "t": "To the extent permitted by law, Minh Bao Zi Wei Dou Shu and Kira Tech Company Limited accept no liability for any direct or indirect loss arising from the use, interpretation or reliance on content provided on this website.",
   "h": "7addf2c3"
  },
  "disclaimer.tu-vi-minh-bao-cung-cap": {
-  "t": "Tử Vi Minh Bảo provides star placement and readings for Tử Vi Đẩu Số, Tử Bình Bát Tự (Four Pillars), feng shui and physiognomy according to classical methods — for cultural study and personal reference. The content does <strong>not</strong> replace the advice of a licensed financial advisor, physician, lawyer or psychologist.",
+  "t": "Minh Bao Zi Wei Dou Shu provides star placement and readings for Zi Wei Dou Shu, Zi Ping BaZi (Four Pillars), feng shui and physiognomy according to classical methods — for cultural study and personal reference. The content does <strong>not</strong> replace the advice of a licensed financial advisor, physician, lawyer or psychologist.",
   "h": "b2e135de"
  },
  "disclaimer.xem-them-dieu-khoan-day-du": {
   "t": "See the full terms in the <a href=\"/dieu-khoan-dich-vu.html\">Terms of Service</a> (section 2 — Limitation of liability) and the service description on the <a href=\"/san-pham-dich-vu.html\">Products &amp; Services</a> page.",
   "h": "dc202339"
  },
+ "home.270-000-da-quoc-gia-da": {
+  "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>Worldwide</span> <span><span class=\"ic\" data-icon=\"check\"></span>Verified</span>",
+  "h": "4d77621e"
+ },
+ "home.270-000-ho-so-nguoi-that": {
+  "t": "270,000+ real-life records",
+  "h": "95fd04d7"
+ },
+ "home.272-783-nguoi-noi-tieng-tra": {
+  "t": "272,783 famous people — find out who shares your birthday, by solar or lunar calendar.",
+  "h": "cc63016c"
+ },
+ "home.50-cong-cu-tu-vi-tu": {
+  "t": "50 tools for Zi Wei Dou Shu, BaZi, physiognomy and feng shui, all by classical method.",
+  "h": "a05551fa"
+ },
+ "home.bac-minh": {
+  "t": "Bac Minh",
+  "h": "85833b15"
+ },
+ "home.bai-viet-kien-thuc": {
+  "t": "Articles &amp; Knowledge",
+  "h": "0080f09e"
+ },
+ "home.ban-dang-ban-khoan-dieu-gi": {
+  "t": "What's on your mind?",
+  "h": "a58b1a75"
+ },
+ "home.bat-tu-ky-mon": {
+  "t": "BaZi &amp; Qi Men",
+  "h": "926e6ab4"
+ },
+ "home.cac-thay": {
+  "t": "The Masters",
+  "h": "edb6a720"
+ },
+ "home.cau-hoi-cua-ban": {
+  "t": "Your question",
+  "h": "7027fb1f"
+ },
+ "home.chiem-tinh-tay": {
+  "t": "Western astrology",
+  "h": "d690a059"
+ },
+ "home.chu-trinh-cuoc-doi": {
+  "t": "Life<br>Cycles",
+  "h": "fb7add62"
+ },
+ "home.chuan-hoa-da-truong-phai": {
+  "t": "<span><span class=\"ic\" data-icon=\"settings\"></span>Standardized</span> <span><span class=\"ic\" data-icon=\"compass\"></span>Multi-school</span>",
+  "h": "272f53ac"
+ },
+ "home.chuyen-gia-tham-dinh-doi-chieu": {
+  "t": "Experts review each reading side by side to spot strengths and areas to improve, then use what they find to refine the interpretation model.",
+  "h": "e78d5a83"
+ },
+ "home.co-nguyet": {
+  "t": "Co Nguyet",
+  "h": "c58a8850"
+ },
+ "home.co-so-du-lieu-la-so": {
+  "t": "A database of verified charts and biographies, compiled from many reliable sources across countries, professions and eras.",
+  "h": "bbd6f69e"
+ },
+ "home.con-nguoi-that": {
+  "t": "Real people",
+  "h": "aff2ca01"
+ },
+ "home.cong-cu-chinh": {
+  "t": "Main tools",
+  "h": "fac531f0"
+ },
+ "home.cong-tu-vi-tu-binh-tuong": {
+  "t": "Your gateway to Zi Wei Dou Shu, BaZi, physiognomy and feng shui, all by classical method. 50 tools — chart readings, face reading, feng shui, naming, auspicious dates, tarot. Know your destiny, follow the flow.",
+  "h": "82308774"
+ },
+ "home.dai-van-chu-trinh-cuoc-doi": {
+  "t": "Major cycles &amp; life cycles",
+  "h": "ecf72ecb"
+ },
+ "home.dang-hoat-dong": {
+  "t": "Active",
+  "h": "9a616fcd"
+ },
+ "home.dat-ten-day-con": {
+  "t": "Naming &amp; Parenting",
+  "h": "6cd11a12"
+ },
+ "home.dau-nam": {
+  "t": "Dau Nam",
+  "h": "ecb2ae80"
+ },
+ "home.dien-giai": {
+  "t": "Interpretation",
+  "h": "3b2f4ff5"
+ },
+ "home.dien-giai-ban-luan-giai-hoan": {
+  "t": "Interpreting the full chart reading",
+  "h": "7e131aa8"
+ },
+ "home.dien-tuong-xem-tuong-mat": {
+  "t": "Face Reading<br>Read the Face",
+  "h": "e690108d"
+ },
+ "home.dieu-khong": {
+  "t": "Dieu Khong",
+  "h": "3bfd70d7"
+ },
+ "home.doc-ngay": {
+  "t": "Read now →",
+  "h": "1b834375"
+ },
+ "home.doi-chieu": {
+  "t": "Comparison",
+  "h": "33052de8"
+ },
+ "home.doi-chieu-thuc-nghiem": {
+  "t": "Empirical comparison",
+  "h": "7e7c45fd"
+ },
+ "home.doi-chieu-voi-cuoc-doi-thuc": {
+  "t": "Compared with real lives",
+  "h": "4e7d2108"
+ },
+ "home.du-lieu": {
+  "t": "Data",
+  "h": "3460deae"
+ },
+ "home.du-lieu-ho-so-nguoi-that": {
+  "t": "Data — real-life records",
+  "h": "30a23f99"
+ },
+ "home.du-lieu-la-so": {
+  "t": "Chart data",
+  "h": "78d0ef41"
+ },
+ "home.du-lieu-that": {
+  "t": "Real data",
+  "h": "c395689f"
+ },
+ "home.du-lieu-that-con-nguoi-that": {
+  "t": "<span><span class=\"ic\" data-icon=\"shield-check\"></span>Real data</span> <span><span class=\"ic\" data-icon=\"users\"></span>Real people</span> <span><span class=\"ic\" data-icon=\"bar-chart-3\"></span>Real value</span>",
+  "h": "f0a66482"
+ },
+ "home.gia-tri-that": {
+  "t": "Real value",
+  "h": "03db0277"
+ },
+ "home.gui-cau-hoi": {
+  "t": "Send question",
+  "h": "c70bc83d"
+ },
+ "home.he-thong-duoc-xay-dung-tu": {
+  "t": "The system is built on real-world data and a multi-layered, verified reading process.",
+  "h": "c74f7c82"
+ },
+ "home.hoac-mo-thang-la-so-tu": {
+  "t": "Or open directly:<a href=\"/app-luan-giai.html\">Zi Wei chart</a><a href=\"/app-bat-tu.html\">BaZi</a><a href=\"/app-xem-tuoi.html\">Marriage compatibility</a><a href=\"/app-ngay-tot.html\">Auspicious days</a><a href=\"/cong-cu\">All tools</a>",
+  "h": "b074e900"
+ },
+ "home.hoc-de-hieu-minh-hieu-nguoi": {
+  "t": "Learn to understand yourself, others, and life.",
+  "h": "c0f3d234"
+ },
+ "home.hoi-nhanh-phan-bien": {
+  "t": "Ask quickly, push back",
+  "h": "2b657843"
+ },
+ "home.hoi-thu-mien-phi-khong-can": {
+  "t": "Try asking for free, no sign-in needed",
+  "h": "30b1a80d"
+ },
+ "home.hop-tac-lam-an": {
+  "t": "Business<br>Partnerships",
+  "h": "f45234a9"
+ },
+ "home.huan-luyen-va-hieu-chinh-lien": {
+  "t": "Continuous training and calibration",
+  "h": "462ae593"
+ },
+ "home.huyen-khong": {
+  "t": "Huyen Khong",
+  "h": "664fa5b2"
+ },
+ "home.ke-cho-thay-nghe-cau-hoi": {
+  "t": "Tell the Master. Your question goes to the right Master in our team of 15 — each one has their own field — and is answered from your own chart.",
+  "h": "3fc18d48"
+ },
+ "home.kham-pha-ngay": {
+  "t": "Explore now →",
+  "h": "5153c059"
+ },
+ "home.kham-pha-them": {
+  "t": "Explore more",
+  "h": "06716651"
+ },
+ "home.khi-sac-van-khi-ngan-han": {
+  "t": "Complexion<br>Short-term Outlook",
+  "h": "6a8e3830"
+ },
+ "home.khoa-hoc-co-hoc-thuc-tien": {
+  "t": "Science × Classical learning × Practice",
+  "h": "6c92d2a4"
+ },
+ "home.khoi-tao-mo-hinh": {
+  "t": "Building the model",
+  "h": "aea081f5"
+ },
+ "home.kinh-dich-mai-hoa": {
+  "t": "I Ching &amp; Plum Blossom",
+  "h": "2da7c604"
+ },
+ "home.la-so": {
+  "t": "Chart",
+  "h": "685adfe6"
+ },
+ "home.la-so-da-doi-chieu": {
+  "t": "Cross-checked charts",
+  "h": "019936ff"
+ },
+ "home.la-so-nguoi-noi-tieng": {
+  "t": "Famous people's charts",
+  "h": "4f1a9c05"
+ },
+ "home.la-so-tinh-san-theo-ngay": {
+  "t": "Charts pre-computed by birth date, complete for the years 1960–2026.",
+  "h": "31d823a9"
+ },
+ "home.la-so-tu-vi-theo-co": {
+  "t": "Zi Wei chart by classical method",
+  "h": "3afb6ceb"
+ },
+ "home.lap-la-so-theo-cac-phuong": {
+  "t": "Charts are cast by the established methods, combined with data processing, normalization and a first-pass interpretation.",
+  "h": "51e2862c"
+ },
+ "home.lap-la-so-theo-co-phap": {
+  "t": "Casting charts by classical method",
+  "h": "cef5dbf2"
+ },
+ "home.linh-co": {
+  "t": "Linh Co",
+  "h": "530b426b"
+ },
+ "home.linh-son": {
+  "t": "Linh Son",
+  "h": "2a6f2364"
+ },
+ "home.luan-giai-la-so": {
+  "t": "Chart<br>Reading",
+  "h": "a7be39ef"
+ },
+ "home.luot-hoi-hom-nay": {
+  "t": "Questions today",
+  "h": "565415a7"
+ },
+ "home.moi-thay-phu-trach-mot-mon": {
+  "t": "Each Master covers one field and puts their name to the tools in it. Whatever you ask, the Master responsible for it answers.",
+  "h": "843f67a7"
+ },
+ "home.nam-sau-toi-cuoi-duoc-khong": {
+  "t": "<a class=\"ask-chip\" href=\"/app?q=N%C4%83m%20sau%20t%C3%B4i%20c%C6%B0%E1%BB%9Bi%20%C4%91%C6%B0%E1%BB%A3c%20kh%C3%B4ng%3F&amp;thay=dau-nam&amp;laso=1#chat\">Can I get married next year?</a> <a class=\"ask-chip\" href=\"/app?q=Ti%E1%BB%81n%20b%E1%BA%A1c%20n%C4%83m%20t%E1%BB%9Bi%20c%E1%BB%A7a%20t%C3%B4i%20ra%20sao%3F&amp;thay=dieu-khong&amp;laso=1#chat\">How will my finances look next year?</a> <a class=\"ask-chip\" href=\"/app?q=Th%C3%A1ng%20n%C3%A0o%20t%E1%BB%91t%20%C4%91%E1%BB%83%20chuy%E1%BB%83n%20nh%C3%A0%3F&amp;thay=nhat-nguyen#chat\">Which month is good for moving house?</a> <a class=\"ask-chip\" href=\"/app?q=%C4%90%E1%BA%B7t%20t%C3%AAn%20con%20th%E1%BA%BF%20n%C3%A0o%20cho%20h%E1%BB%A3p%20m%E1%BB%87nh%3F&amp;thay=thien-an#chat\">How do I pick a name that suits my child's chart?</a>",
+  "h": "aa3a5362"
+ },
+ "home.nghiem-chung-la-so-doi-chieu": {
+  "t": "Verification — charts checked against real lives",
+  "h": "bef98605"
+ },
+ "home.ngoc-tinh": {
+  "t": "Ngoc Tinh",
+  "h": "448babdb"
+ },
+ "home.nguoi-co-gio-sinh-kiem-chung": {
+  "t": "People with a verified birth time: what the chart says, and what life actually looked like. Hits and misses are both recorded, with sources.",
+  "h": "899c57e7"
+ },
+ "home.nguoi-noi-tieng-sinh-gio-nao": {
+  "t": "What time were famous people born?",
+  "h": "58f8e876"
+ },
+ "home.nhan-tuong-xem-tuong-mat": {
+  "t": "Eye Reading<br>Read the Eyes",
+  "h": "3e8f9b9f"
+ },
+ "home.nhat-nguyen": {
+  "t": "Nhat Nguyen",
+  "h": "d1c0b144"
+ },
+ "home.nhom-chuyen-gia-cap-nhat-lien": {
+  "t": "<span><span class=\"ic\" data-icon=\"users\"></span>Expert team</span> <span><span class=\"ic\" data-icon=\"rotate-cw\"></span>Continuously updated</span>",
+  "h": "e1f4697b"
+ },
+ "home.nhom-minh-bao": {
+  "t": "<b>— The Minh Bao team</b>",
+  "h": "b95ce2c2"
+ },
+ "home.phan-tich-thong-ke-do-muc": {
+  "t": "<span><span class=\"ic\" data-icon=\"bar-chart-3\"></span>Statistical analysis</span> <span><span class=\"ic\" data-icon=\"clock\"></span>Measuring fit</span>",
+  "h": "e70f45f5"
+ },
+ "home.phong-thuy": {
+  "t": "Feng Shui",
+  "h": "181a3d4e"
+ },
+ "home.phong-thuy-ung-dung": {
+  "t": "Applied<br>Feng Shui",
+  "h": "9f229fe2"
+ },
+ "home.phuong-phap-luan-giai": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span>Reading method",
+  "h": "a5d37a27"
+ },
+ "home.quy-trinh-xu-ly-du-lieu": {
+  "t": "<span class=\"dna-process-label\"><span class=\"ic\" data-icon=\"circle-dot\"></span>Data processing</span> <span class=\"dna-process-label muted\">From real-world data → to applied knowledge</span>",
+  "h": "106123c0"
+ },
+ "home.so-khop-voi-cuoc-doi-thuc": {
+  "t": "Matching real lives",
+  "h": "c9f085e1"
+ },
+ "home.so-sanh-doi-chieu-giua-du": {
+  "t": "Compare predictions with how real lives unfolded, and measure the fit for each rule and each area of life.",
+  "h": "ea41eb69"
+ },
+ "home.son-tung-my-tam-cong-phuong": {
+  "t": "Many Vietnamese public figures — singers, footballers — have never published their birth time. Cast all 12 charts and see which hour fits their life best.",
+  "h": "b43e058e"
+ },
+ "home.su-nghiep-canh-tranh-nhan-mach": {
+  "t": "Competitive career &amp; Networking",
+  "h": "7d7b2cf0"
+ },
+ "home.su-nghiep-tien-bac": {
+  "t": "Career &amp; Money",
+  "h": "5bdd0199"
+ },
+ "home.tam-kinh": {
+  "t": "Tam Kinh",
+  "h": "8c71a393"
+ },
+ "home.tarot-than-so": {
+  "t": "Tarot &amp; Numerology",
+  "h": "8cd4677e"
+ },
+ "home.thai-hu": {
+  "t": "Thai Hu",
+  "h": "8164408e"
+ },
+ "home.tham-dinh": {
+  "t": "Review",
+  "h": "556780a9"
+ },
+ "home.tham-dinh-do-phu-hop": {
+  "t": "Reviewing the fit",
+  "h": "3d08fd55"
+ },
+ "home.tham-dinh-toi-uu": {
+  "t": "Review &amp; refine",
+  "h": "edd901ea"
+ },
+ "home.than-so-hoc": {
+  "t": "Numerology<br>Reading",
+  "h": "fbfd5ac0"
+ },
+ "home.thanh-hu": {
+  "t": "Thanh Hu",
+  "h": "0fae72f2"
+ },
+ "home.thanh-tuong-xem-giong-noi": {
+  "t": "Voice Reading<br>Read the Voice",
+  "h": "9b94abc0"
+ },
+ "home.thay-bac-minh": {
+  "t": "Master Bac Minh",
+  "h": "8765f978"
+ },
+ "home.thay-co-nguyet": {
+  "t": "Master Co Nguyet",
+  "h": "5c3beeeb"
+ },
+ "home.thay-dau-nam": {
+  "t": "Master Dau Nam",
+  "h": "0e892f56"
+ },
+ "home.thay-dieu-khong": {
+  "t": "Master Dieu Khong",
+  "h": "f334056f"
+ },
+ "home.thay-huyen-khong": {
+  "t": "Master Huyen Khong",
+  "h": "ebc2e8ff"
+ },
+ "home.thay-linh-co": {
+  "t": "Master Linh Co",
+  "h": "78e55359"
+ },
+ "home.thay-linh-son": {
+  "t": "Master Linh Son",
+  "h": "490f9de0"
+ },
+ "home.thay-ngoc-tinh": {
+  "t": "Master Ngoc Tinh",
+  "h": "7a5e8a22"
+ },
+ "home.thay-nhat-nguyen": {
+  "t": "Master Nhat Nguyen",
+  "h": "0f6eeeb3"
+ },
+ "home.thay-tam-kinh": {
+  "t": "Master Tam Kinh",
+  "h": "e5eb3f74"
+ },
+ "home.thay-thai-hu": {
+  "t": "Master Thai Hu",
+  "h": "dd91916e"
+ },
+ "home.thay-thai-hu-tiep-chuyen-nhom": {
+  "t": "<b>Master Thai Hu</b> is talking with you · Minh Bao team",
+  "h": "3e53d65c"
+ },
+ "home.thay-thanh-hu": {
+  "t": "Master Thanh Hu",
+  "h": "adc0bcd0"
+ },
+ "home.thay-thien-an": {
+  "t": "Master Thien An",
+  "h": "92670874"
+ },
+ "home.thay-tinh-quang": {
+  "t": "Master Tinh Quang",
+  "h": "3ccb5f21"
+ },
+ "home.thay-tu-nguyen": {
+  "t": "Master Tu Nguyen",
+  "h": "a3df444c"
+ },
+ "home.thien-an": {
+  "t": "Thien An",
+  "h": "cdd32e9c"
+ },
+ "home.thu-tuong-xem-chi-tay": {
+  "t": "Palm Reading<br>Read the Hands",
+  "h": "7abfb95d"
+ },
+ "home.thu-vien-100-000-la-so": {
+  "t": "Library of 100,000+ charts",
+  "h": "65b5c446"
+ },
+ "home.tinh-duyen-hon-nhan": {
+  "t": "Love &amp; Marriage",
+  "h": "d5d3d4ea"
+ },
+ "home.tinh-quang": {
+  "t": "Tinh Quang",
+  "h": "738207ad"
+ },
+ "home.toi-uu": {
+  "t": "Refine",
+  "h": "323d961e"
+ },
+ "home.toi-uu-mo-hinh-luan-giai": {
+  "t": "Refining the interpretation model",
+  "h": "dbeada75"
+ },
+ "home.tra-cuu-ngay": {
+  "t": "Look up now →",
+  "h": "8651db0c"
+ },
+ "home.tu-binh-bat-tu": {
+  "t": "Zi Ping<br>BaZi",
+  "h": "4d842bd3"
+ },
+ "home.tu-lieu-co-hoc": {
+  "t": "Classical sources",
+  "h": "020c441d"
+ },
+ "home.tu-nguyen": {
+  "t": "Tu Nguyen",
+  "h": "e02fc21d"
+ },
+ "home.tu-vi-cong-so-hn": {
+  "t": "Zi Wei<br>Workplace &amp; Partners",
+  "h": "b9a4d1f6"
+ },
+ "home.tu-vi-goc-luan-giai": {
+  "t": "Zi Wei chart &amp; Reading",
+  "h": "1598de62"
+ },
+ "home.tu-vi-la-ngon-den-nho": {
+  "t": "\"Zi Wei is a small lamp, lighting the way for those who know how to listen.\"",
+  "h": "9c806662"
+ },
+ "home.tu-vi-minh-bao-cong-menh": {
+  "t": "Minh Bao Zi Wei Dou Shu — Destiny Portal · 50 Classical Tools",
+  "h": "4e8e12be"
+ },
+ "home.tu-vi-minh-bao-cong-menh-b1dq": {
+  "t": "Minh Bao Zi Wei Dou Shu — Destiny Portal",
+  "h": "a9683d2d"
+ },
+ "home.tu-vi-nghiem-chung": {
+  "t": "Zi Wei Verification",
+  "h": "be800e66"
+ },
+ "home.tu-vi-tu-binh-tuong-so": {
+  "t": "Zi Wei Dou Shu, Zi Ping BaZi, physiognomy and feng shui by classical method. Personalized readings.",
+  "h": "23ad0d51"
+ },
+ "home.tuong-hop-duyen-no": {
+  "t": "Compatibility &amp; Karmic Bonds",
+  "h": "31909263"
+ },
+ "home.van-han-12-thang-toi": {
+  "t": "Next<br>12 Months",
+  "h": "4940088c"
+ },
+ "home.van-ngan-han-chon-ngay": {
+  "t": "Short-term outlook &amp; Date selection",
+  "h": "8b090af4"
+ },
+ "home.vi-du-nam-toi-toi-co": {
+  "t": "For example: Should I quit my job and go independent next year?",
+  "h": "36855997"
+ },
+ "home.xac-dinh-gio-sinh": {
+  "t": "Find your birth hour →",
+  "h": "5122b0fd"
+ },
+ "home.xac-dinh-gio-sinh-632h": {
+  "t": "Birth Hour<br>Finder",
+  "h": "0a488c7a"
+ },
+ "home.xem-cac-thay": {
+  "t": "Meet the Masters →",
+  "h": "5b56e454"
+ },
+ "home.xem-cach-he-thong-hoat-dong": {
+  "t": "See how the system works →",
+  "h": "4d01e2f2"
+ },
+ "home.xem-ho-so": {
+  "t": "View record →",
+  "h": "0739b410"
+ },
+ "home.xem-ngay-tot-xau": {
+  "t": "Auspicious<br>Days",
+  "h": "7e13c320"
+ },
+ "home.xem-tat-ca": {
+  "t": "See all →",
+  "h": "cc902292"
+ },
+ "home.xem-tuoi-vo-chong": {
+  "t": "Marriage<br>Compatibility",
+  "h": "af82fa59"
+ },
+ "home.xem-tuong": {
+  "t": "Physiognomy",
+  "h": "ae8ee50b"
+ },
  "js.nav.brand": {
-  "t": "Tử Vi Minh Bảo",
+  "t": "Minh Bao Zi Wei Dou Shu",
   "h": "33336b26"
  },
  "js.nav.cam-nang": {
@@ -172,7 +836,7 @@
   "h": "bef98605"
  },
  "js.nav.nghien-cuu-tu-vi": {
-  "t": "Tử Vi Research",
+  "t": "Zi Wei Research",
   "h": "800f1679"
  },
  "js.nav.nguoi-noi-tieng": {
@@ -324,11 +988,11 @@
   "h": "685adfe6"
  },
  "js.shell.ma-qr-zalo-oa-tu-vi": {
-  "t": "Zalo OA QR code for Tử Vi Minh Bảo",
+  "t": "Zalo OA QR code for Minh Bao Zi Wei Dou Shu",
   "h": "99554c71"
  },
  "js.shell.minh-bao": {
-  "t": "Minh Bảo",
+  "t": "Minh Bao",
   "h": "e4158660"
  },
  "js.shell.moi-ban-be": {
@@ -375,16 +1039,448 @@
   "t": "See all",
   "h": "7e040254"
  },
+ "laso.2026-tuviminhbao-com-all-rights-reserved": {
+  "t": "© 2026 tuviminhbao.com — All rights reserved",
+  "h": "5772fefb"
+ },
+ "laso.an-sao-la-so-tu-vi": {
+  "t": "Zi Wei Chart Star Placement",
+  "h": "05d6f12f"
+ },
+ "laso.an-sao-la-so-tu-vi-98bu": {
+  "t": "Zi Wei Dou Shu star placement — view your personal chart, five elements, Life Palace and luck cycles.",
+  "h": "25221382"
+ },
+ "laso.dang-tai-la-so": {
+  "t": "Loading chart...",
+  "h": "5f237a0e"
+ },
+ "laso.gio": {
+  "t": "Hour",
+  "h": "75f92388"
+ },
+ "laso.gio-am": {
+  "t": "Lunar hour: —",
+  "h": "81d3ed39"
+ },
+ "laso.gioi-thieu": {
+  "t": "About",
+  "h": "20855749"
+ },
+ "laso.gioi-tinh": {
+  "t": "Gender",
+  "h": "899b020f"
+ },
+ "laso.ho-va-ten": {
+  "t": "Full name",
+  "h": "18d1abe3"
+ },
+ "laso.in-la-so": {
+  "t": "Print chart",
+  "h": "a5ecd89f"
+ },
+ "laso.khao-luan": {
+  "t": "Studies",
+  "h": "e8cfaf3b"
+ },
+ "laso.la-so-tu-vi-tu-vi": {
+  "t": "Zi Wei Chart — Minh Bao Zi Wei Dou Shu",
+  "h": "2d400887"
+ },
+ "laso.lay-la-so": {
+  "t": "Get chart",
+  "h": "f7781d94"
+ },
+ "laso.lien-he": {
+  "t": "Contact",
+  "h": "4df839b4"
+ },
+ "laso.luan-giai": {
+  "t": "Reading ▾",
+  "h": "423cf9d0"
+ },
+ "laso.luan-giai-la-so-xem-tuoi": {
+  "t": "<a class=\"nav-dropdown-item\" href=\"/app/luan-giai\">Chart Reading</a> <a class=\"nav-dropdown-item\" href=\"/app/xem-tuoi\">Marriage Compatibility</a> <a class=\"nav-dropdown-item\" href=\"/app/xem-lam-an\">Business Partner Compatibility</a>",
+  "h": "7e6e23ac"
+ },
+ "laso.menh-kho": {
+  "t": "Mệnh Khố",
+  "h": "2de2772c"
+ },
+ "laso.nam-dl": {
+  "t": "Year (solar)",
+  "h": "4e86c4a2"
+ },
+ "laso.nam-xem": {
+  "t": "Year to read",
+  "h": "ccc5edbb"
+ },
+ "laso.ngay-dl": {
+  "t": "Day (solar)",
+  "h": "1840a967"
+ },
+ "laso.ngu-hanh-hoa-moc-thuy-kim": {
+  "t": "<strong style=\"color:#555\">Five Elements:</strong> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#E01010\"></span><span class=\"sc-hoa\">Fire</span></span> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#1a7a1a\"></span><span class=\"sc-moc\">Wood</span></span> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#111111\"></span><span class=\"sc-thuy\">Water</span></span> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#808080\"></span><span class=\"sc-kim\">Metal</span></span> <span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:#9A7B00\"></span><span class=\"sc-tho\">Earth</span></span> &nbsp;&nbsp;<strong style=\"color:#555\">Brightness:</strong> <span>(M)Temple &nbsp;(V)Prosperous &nbsp;(Đ)Gained &nbsp;(B)Neutral &nbsp;(H)Fallen</span>",
+  "h": "98c156e6"
+ },
+ "laso.nguyen-van-a": {
+  "t": "John Smith",
+  "h": "7388465b"
+ },
+ "laso.nhap-thong-tin-de-xem-la": {
+  "t": "Enter your details to view your chart — or it will show automatically if you arrive through a personal link.",
+  "h": "3e8b6970"
+ },
+ "laso.nu": {
+  "t": "Female",
+  "h": "feb92ccd"
+ },
+ "laso.phut": {
+  "t": "Minute",
+  "h": "34ca51a4"
+ },
+ "laso.tai-lieu": {
+  "t": "Resources",
+  "h": "475007a2"
+ },
+ "laso.tai-png": {
+  "t": "⬇ Download PNG",
+  "h": "a5b32ccb"
+ },
+ "laso.thang-dl": {
+  "t": "Month (solar)",
+  "h": "fec10b0f"
+ },
+ "laso.trang-chu": {
+  "t": "Home",
+  "h": "fca04858"
+ },
  "laso.tu-vi-minh-bao": {
-  "t": "Tử Vi Minh Bảo",
+  "t": "Minh Bao Zi Wei Dou Shu",
   "h": "33336b26"
+ },
+ "luangiai.an-la-so": {
+  "t": "▾ Hide chart",
+  "h": "9f28e998"
+ },
+ "luangiai.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>Sample reading</b><span>Download the full PDF reading of a sample chart to preview the real content.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-luan-giai-la-so.pdf\" target=\"_blank\" rel=\"noopener\">Download PDF →</a>",
+  "h": "11d61c50"
+ },
+ "luangiai.bao-cao-cua-ban": {
+  "t": "Minh Bao Zi Wei Dou Shu · Your report",
+  "h": "d770e087"
+ },
+ "luangiai.bat-tu": {
+  "t": "BaZi →",
+  "h": "f4ece70d"
+ },
+ "luangiai.chuyen-khoan-qua-qr-ngan-hang": {
+  "t": "<span><span class=\"ic\" data-icon=\"qr-code\"></span> Bank transfer (via bank QR)</span> <span><span class=\"ic\" data-icon=\"credit-card\"></span> PayPal / International card</span>",
+  "h": "9cf268c0"
+ },
+ "luangiai.cong-viec-bap-benh-tinh-duyen": {
+  "t": "Shaky work, rocky love, money slipping away — where does the root cause sit in your chart?",
+  "h": "68aea2a1"
+ },
+ "luangiai.dang-dong-ban-bao-cao": {
+  "t": "Putting your report together…",
+  "h": "d75bc7a8"
+ },
+ "luangiai.dang-dung": {
+  "t": "<span class=\"ic\" id=\"lgBtnPdfIcon\"><span class=\"rr-spin\"></span></span> <span id=\"lgBtnPdfLabel\">Building…</span>",
+  "h": "f974f165"
+ },
+ "luangiai.diem-manh-yeu-goi-y": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>Strengths, weaknesses,<br>suggestions</span>",
+  "h": "4fcae149"
+ },
+ "luangiai.gui-vao-email": {
+  "t": "Send to email",
+  "h": "557a13dc"
+ },
+ "luangiai.lap-la-so-luan-giai-ngay": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">Cast chart &amp; read now →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"laso\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"laso\">…</span> credits)</span></small>",
+  "h": "a32c708b"
+ },
+ "luangiai.lap-la-so-tu-vi-12": {
+  "t": "Cast your 12-palace Zi Wei chart, then get an in-depth reading scored by the classical method: major stars, structures, the Four Transformations in each palace — and ask the Master to go deeper on any part.",
+  "h": "c423cebd"
+ },
+ "luangiai.luan-giai-tu-vi": {
+  "t": "Zi Wei reading",
+  "h": "19e52bc9"
+ },
+ "luangiai.luan-giai-tu-vi-lap-la": {
+  "t": "<b>Zi Wei reading</b><span>Cast a 12-palace chart, then read it in depth by classical scoring</span>",
+  "h": "425b9435"
+ },
+ "luangiai.luan-giai-tu-vi-tu-vi": {
+  "t": "Zi Wei reading — Minh Bao Zi Wei Dou Shu",
+  "h": "8fabed33"
+ },
+ "luangiai.luan-rieng-12-cung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>Palace-by-palace<br>12 palaces</span>",
+  "h": "3b1b8770"
+ },
+ "luangiai.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"laso\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"laso\">…</span> credits)</span>",
+  "h": "633c5ba1"
+ },
+ "luangiai.mua-goi-de-nhan-nhieu-uu": {
+  "t": "Buy a package for better value.<br><a href=\"/topup.html\">See packages →</a>",
+  "h": "074cd07f"
+ },
+ "luangiai.nam-muon-luan": {
+  "t": "Year to read",
+  "h": "d0b9d752"
+ },
+ "luangiai.nhap-ho-ten-gioi-tinh-ngay": {
+  "t": "Enter your name, gender, birth date and time, and the year you want read. The system places the stars, casts your chart and reads it part by part. You receive a full 13-part reading: an overview plus a reading for each of the 12 palaces.",
+  "h": "32be95f6"
+ },
+ "luangiai.nhap-thong-tin-de-lap-la": {
+  "t": "Enter your details to cast a chart &amp; get a reading",
+  "h": "f0b42f7c"
+ },
+ "luangiai.tong-quan-cuoc-doi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>Life<br>overview</span>",
+  "h": "dd3effb3"
+ },
+ "luangiai.tra-loi-thay-o-khung-chat": {
+  "t": "Reply to the Master in the chat to cast your chart &amp; get a reading — your name, birth date and time, and the year you want read.",
+  "h": "14557bde"
+ },
+ "luangiai.tu-vi-dau-so-la-mot": {
+  "t": "Zi Wei Dou Shu (Purple Star Astrology) is a traditional system of Chinese destiny reading. It casts a chart from the lunar birth hour, with 12 palaces and a system of major and minor stars. Refined over many generations, it became popular in Vietnam through the translation of <i>Zi Wei Dou Shu Xin Bian</i> (Tử Vi Đẩu Số Tân Biên) by Vân Đằng Thái Thứ Lang, and grew into a distinct Vietnamese school.",
+  "h": "81546c5f"
+ },
+ "luangiai.tu-vi-khong-du-doan-tuong": {
+  "t": "Zi Wei doesn't predict the future. It helps you understand yourself so you can choose better.",
+  "h": "ae92de9d"
+ },
+ "privacy.1-thong-tin-chung-toi-thu": {
+  "t": "1. Information we collect",
+  "h": "5354d2ca"
+ },
+ "privacy.2-muc-dich-su-dung-thong": {
+  "t": "2. How we use information",
+  "h": "ffc0ab3d"
+ },
+ "privacy.3-chia-se-thong-tin": {
+  "t": "3. Sharing information",
+  "h": "d7212459"
+ },
+ "privacy.4-bao-mat-du-lieu": {
+  "t": "4. Data security",
+  "h": "ecf83407"
+ },
+ "privacy.5-quyen-cua-ban-xem-sua": {
+  "t": "5. Your rights — view, edit and delete your data",
+  "h": "e5778544"
+ },
+ "privacy.6-cookie": {
+  "t": "6. Cookies",
+  "h": "b0874718"
+ },
+ "privacy.7-lien-he": {
+  "t": "7. Contact",
+  "h": "3a96153f"
+ },
+ "privacy.an-sao-va-tao-la-so": {
+  "t": "Placing stars and creating your Zi Wei Dou Shu chart",
+  "h": "88fe3cad"
+ },
+ "privacy.ban-co-quyen-yeu-cau-xem": {
+  "t": "You have the right to ask to view, correct or delete your personal data, including data received through Facebook Messenger or Zalo. Send a request through the <a href=\"/contact.html\" style=\"color:#1455A4\">Contact</a> page (include your Facebook/Zalo account name if you use a chat channel). We delete the account, charts, conversation history and chat-account identifier linked to you, then let you know when it's done.",
+  "h": "584c6ef3"
+ },
+ "privacy.cai-thien-chat-luong-dich-vu": {
+  "t": "Improving service quality",
+  "h": "9e0df8b2"
+ },
+ "privacy.cap-nhat-lan-cuoi-thang-10": {
+  "t": "Last updated: October 2026",
+  "h": "d49afd39"
+ },
+ "privacy.chinh-sach-bao-mat": {
+  "t": "Privacy Policy",
+  "h": "863b2217"
+ },
+ "privacy.chinh-sach-bao-mat-cua-tu": {
+  "t": "Minh Bao Zi Wei Dou Shu's privacy policy — how we collect, use and protect your personal information.",
+  "h": "8e83535e"
+ },
+ "privacy.chinh-sach-bao-mat-tu-vi": {
+  "t": "Privacy Policy — Minh Bao Zi Wei Dou Shu",
+  "h": "12c793c2"
+ },
+ "privacy.chung-toi-khong-ban-cho-thue": {
+  "t": "We do not sell, rent or share your personal information with third parties, except for the technical infrastructure providers needed to run the service — each under its own privacy policy:",
+  "h": "e7ba913a"
+ },
+ "privacy.cong-thanh-toan-chuyen-khoan-ngan": {
+  "t": "Payment gateways (bank transfer, PayPal) — processing transactions",
+  "h": "862873b7"
+ },
+ "privacy.dia-chi-email-neu-co-dung": {
+  "t": "Email address (if provided) — used to send results or get in touch",
+  "h": "e64d230a"
+ },
+ "privacy.du-lieu-la-so-duoc-luu": {
+  "t": "Chart data is stored securely on encrypted cloud infrastructure. Payment information is handled entirely by third-party payment gateways — we do not store card numbers or sensitive financial details.",
+  "h": "f5eb2733"
+ },
+ "privacy.du-lieu-truy-cap-ky-thuat": {
+  "t": "Technical access data (IP address, browser, access time) through an anonymous traffic analytics tool",
+  "h": "f1aa200a"
+ },
+ "privacy.khi-ban-nhan-tin-qua-facebook": {
+  "t": "When you message us through Facebook Messenger or Zalo: the chat-account identifier the platform issues to our page, the account's public display name, and the content of the messages you send — used to reply, to put your name on your own chart, and to link to your account on tuviminhbao.com",
+  "h": "f83117af"
+ },
+ "privacy.khi-ban-su-dung-dich-vu": {
+  "t": "When you use the star-placement and Zi Wei reading service at tuviminhbao.com, we may collect:",
+  "h": "360aa217"
+ },
+ "privacy.khi-co-yeu-cau-phap-ly": {
+  "t": "When a competent authority makes a legal request",
+  "h": "46937409"
+ },
+ "privacy.meta-facebook-khi-ban-den-tu": {
+  "t": "Meta (Facebook) — when you come from Messenger and buy a service, we report the purchase event (order value and chat-account identifier) to Meta to measure ad performance; message content and birth date and time are not sent",
+  "h": "808834a4"
+ },
+ "privacy.moi-thac-mac-ve-chinh-sach": {
+  "t": "For any questions about this privacy policy, please reach us through the <a href=\"/contact.html\" style=\"color:#1455A4\">Contact</a> page.",
+  "h": "868d3ffe"
+ },
+ "privacy.ngay-thang-nam-sinh-va-gio": {
+  "t": "Birth day, month, year and hour (solar calendar) — used to place the stars on your chart",
+  "h": "313ab68a"
+ },
+ "privacy.nha-cung-cap-dich-vu-tri": {
+  "t": "Artificial intelligence service provider — processes reading content",
+  "h": "8b6ed45d"
+ },
+ "privacy.nha-cung-cap-ha-tang-luu": {
+  "t": "Cloud data-storage infrastructure provider — stores accounts and charts",
+  "h": "48f8c99c"
  },
  "privacy.phap-ly": {
   "t": "Legal",
   "h": "1780af9e"
  },
+ "privacy.tao-luan-giai-bang-tri-tue": {
+  "t": "Generating readings with artificial intelligence and exporting PDFs",
+  "h": "4dbbe1ba"
+ },
+ "privacy.thong-tin-ban-cung-cap-duoc": {
+  "t": "The information you provide is used to:",
+  "h": "7658d5a9"
+ },
+ "privacy.thong-tin-giao-dich-thanh-toan": {
+  "t": "Payment transaction information (order number, payment status) — we do not store card numbers or bank account details",
+  "h": "9a6e6249"
+ },
+ "privacy.trang-web-su-dung-localstorage-de": {
+  "t": "The site uses localStorage to hold chart state temporarily during your session. We also use cookies and measurement tags from Google Analytics, Google Ads, the Meta (Facebook) Pixel and Microsoft Clarity to count visits, measure ad performance and improve the interface. You can block or delete cookies in your browser settings; the star-placement and reading tools keep working normally.",
+  "h": "ad439412"
+ },
+ "privacy.xac-minh-trang-thai-thanh-toan": {
+  "t": "Verifying payment status and delivering results",
+  "h": "84a1b3b2"
+ },
+ "terms.1-tinh-chat-dich-vu": {
+  "t": "1. Nature of the service",
+  "h": "7fb94895"
+ },
+ "terms.2-gioi-han-trach-nhiem": {
+  "t": "2. Limitation of liability",
+  "h": "9a8d7f3a"
+ },
+ "terms.3-thanh-toan-va-hoan-tien": {
+  "t": "3. Payment and refunds",
+  "h": "8ec2a944"
+ },
+ "terms.4-quyen-so-huu-tri-tue": {
+  "t": "4. Intellectual property",
+  "h": "4c72783a"
+ },
+ "terms.5-hanh-vi-bi-cam": {
+  "t": "5. Prohibited conduct",
+  "h": "c088ae99"
+ },
+ "terms.6-thay-doi-dieu-khoan": {
+  "t": "6. Changes to these terms",
+  "h": "b77fb69c"
+ },
+ "terms.bang-viec-su-dung-dich-vu": {
+  "t": "By using the services at tuviminhbao.com, you agree to the terms below. Please read them carefully before use.",
+  "h": "84c3073e"
+ },
  "terms.cap-nhat-lan-cuoi-thang-9": {
   "t": "Last updated: September 2026",
   "h": "8f1c24b0"
+ },
+ "terms.chung-toi-co-quyen-cap-nhat": {
+  "t": "We may update these terms at any time. The latest version is always posted on this page. Continuing to use the service after an update means you accept the new terms.",
+  "h": "a7a3e1fa"
+ },
+ "terms.co-tinh-cung-cap-thong-tin": {
+  "t": "Knowingly providing false information to defraud the service",
+  "h": "05f1e2a5"
+ },
+ "terms.dieu-khoan-dich-vu": {
+  "t": "Terms of Service",
+  "h": "c021f7f4"
+ },
+ "terms.dieu-khoan-dich-vu-tu-vi": {
+  "t": "Terms of Service — Minh Bao Zi Wei Dou Shu",
+  "h": "b2e2011a"
+ },
+ "terms.dieu-khoan-su-dung-dich-vu": {
+  "t": "Terms of use for Minh Bao Zi Wei Dou Shu — rights, obligations and rules for using the star-placement and Zi Wei reading service.",
+  "h": "eab80530"
+ },
+ "terms.do-tinh-chat-so-cua-dich": {
+  "t": "Because the service is digital, we <strong>do not refund</strong> once the result has been displayed",
+  "h": "cc224df0"
+ },
+ "terms.ket-qua-luan-giai-do-ai": {
+  "t": "Readings are generated by AI based on the classical Zi Wei Dou Shu system. We do not guarantee that a reading is absolutely accurate. Users are solely responsible for personal decisions made based on the content of a reading.",
+  "h": "dbc3d39d"
+ },
+ "terms.moi-thac-mac-ve-dieu-khoan": {
+  "t": "For any questions about these terms, please reach us through the <a href=\"/contact.html\" style=\"color:#1455A4\">Contact</a> page.",
+  "h": "2a193121"
+ },
+ "terms.neu-co-loi-ky-thuat-khien": {
+  "t": "If a technical error means you don't receive your result after paying, please contact us for support",
+  "h": "06df4e64"
+ },
+ "terms.phi-dich-vu-duoc-thanh-toan": {
+  "t": "The service fee is paid once, by Vietnamese đồng (VND) bank transfer (scan the QR code) or PayPal (international Visa/Mastercard)",
+  "h": "c2988cbb"
+ },
+ "terms.reverse-engineer-hoac-sao-chep-he": {
+  "t": "Reverse engineering or copying the star-placement system",
+  "h": "57bda3e3"
+ },
+ "terms.sau-khi-thanh-toan-thanh-cong": {
+  "t": "After a successful payment, your reading is unlocked immediately",
+  "h": "b895e2c9"
+ },
+ "terms.su-dung-bot-hoac-phuong-tien": {
+  "t": "Using bots or automated means to access the service in bulk",
+  "h": "49c0c0e8"
+ },
+ "terms.toan-bo-noi-dung-tren-tuviminhbao": {
+  "t": "All content on tuviminhbao.com (the star-placement system, interface and research writing) is the property of Minh Bao Zi Wei Dou Shu. Copying, distributing or commercial use without permission is strictly prohibited.",
+  "h": "9ea6e6d2"
+ },
+ "terms.tu-vi-minh-bao-cung-cap": {
+  "t": "Minh Bao Zi Wei Dou Shu provides Zi Wei Dou Shu star placement and readings using artificial intelligence (AI), based on the birth date and time provided by the user. The service is a cultural and scholarly reference and is <strong>not financial, medical or legal advice</strong>.",
+  "h": "40549518"
  }
 }
