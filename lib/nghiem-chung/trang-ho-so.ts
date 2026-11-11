@@ -566,7 +566,7 @@ ${CJK_CSS[locale]}${ask.css}
 <script src="/auth.js?v=6"></script>
 </head><body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=47" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=48" defer></script>
 <nav class="bc" aria-label="Breadcrumb">
   <a href="${pre}/">${L.home}</a><span>›</span>
   <a href="${hubUrl}">${tenMuc}</a><span>›</span>
