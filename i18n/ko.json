@@ -56,7 +56,7 @@
   "h": "315e8a7f"
  },
  "battu.luan-giai-chuyen-sau-ton-luong": {
-  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b>심층 풀이 →</b></span> <small>필요 크레딧 <span class=\"vnd\" data-tvp-price-vnd=\"tu-binh\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"tu-binh\">…</span> 냥)</span></small>",
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b>심층 풀이 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"tu-binh\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"tu-binh\">…</span> 냥)</span></small>",
   "h": "cd1895af"
  },
  "battu.luan-giai-tu-vi": {
@@ -106,6 +106,142 @@
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "이야기를 들려주세요. 명보가 15분의 선생님 중 알맞은 분을 안내해 드려요: 자미두수 명반, 사주, 궁합, 작명, 길일 택일.",
   "h": "0f564294"
+ },
+ "chutrinh.9-dai-van-tron-doi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>평생<br>9개 대운</span>",
+  "h": "5ab04ae7"
+ },
+ "chutrinh.9-dai-van-tron-doi-khong": {
+  "t": "평생 9개 대운은 일직선이 아니에요 — 나아갈 시기가 있고, 몸을 낮추고 지켜야 할 시기가 있어요. 내 명반으로 지금 어느 구간인지, 다음에 무엇을 해야 할지 살펴보세요.",
+  "h": "47da40fe"
+ },
+ "chutrinh.ban-chu-trinh-cuoc-doi-mau": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>인생 사이클 샘플</b><span>샘플 명반의 전체 풀이 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chu-trinh-cuoc-doi.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "69bf92cc"
+ },
+ "chutrinh.chang-thuan-chang-can-trong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>순탄한 구간,<br>조심할 구간</span>",
+  "h": "268f5efd"
+ },
+ "chutrinh.chu-trinh-cuoc-doi": {
+  "t": "인생 사이클",
+  "h": "38c0c6ce"
+ },
+ "chutrinh.chu-trinh-cuoc-doi-9-dai": {
+  "t": "<b>인생 사이클</b><span>9개 대운과 올해의 소운, 고법 점수 기준</span>",
+  "h": "9799aabe"
+ },
+ "chutrinh.chu-trinh-cuoc-doi-tu-vi": {
+  "t": "인생 사이클 — 명보 자미두수",
+  "h": "90ddc2f5"
+ },
+ "chutrinh.la-so": {
+  "t": "명반 →",
+  "h": "2d56714d"
+ },
+ "chutrinh.luan-giai-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hourglass\"></span><b id=\"btnGoLabel\">풀이 →</b></span> <small>무료</small>",
+  "h": "e4e89914"
+ },
+ "chutrinh.nhap-ngay-sinh-va-nam-muon": {
+  "t": "생년월일과 보고 싶은 연도를 입력하세요. 시스템이 그해의 9개 대운과 소운을 계산해 구간별로 풀이해요.",
+  "h": "b0296247"
+ },
+ "chutrinh.nhap-thong-tin-de-lap-la": {
+  "t": "정보를 입력하고 명반 &amp; 인생 사이클 풀이 받기",
+  "h": "513b4cd4"
+ },
+ "chutrinh.soi-9-dai-van-tron-doi": {
+  "t": "평생 9개 대운과 올해의 소운을 고법 점수로 살펴보세요: 구간마다 천시·지리·인화 — 그리고 궁금한 시기는 선생님께 더 깊이 물어보세요.",
+  "h": "7db3757c"
+ },
+ "chutrinh.tieu-van-nam-xem": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>조회 연도<br>소운</span>",
+  "h": "d0e7d2f5"
+ },
+ "congcu.3-ngay-toi": {
+  "t": "앞으로 3일",
+  "h": "a9fe9d66"
+ },
+ "congcu.chia-se": {
+  "t": "공유",
+  "h": "1cb95080"
+ },
+ "congcu.cong-cu-tu-vi-minh-bao": {
+  "t": "도구 — 명보 자미두수",
+  "h": "6f708e6c"
+ },
+ "congcu.cong-cu-van-hom-nay-va": {
+  "t": "<b>도구</b><span>오늘의 운세와 고법에 따른 모든 도구</span>",
+  "h": "33619403"
+ },
+ "congcu.cot-loi-cua-tu-vi-minh": {
+  "t": "명보 자미두수의 핵심",
+  "h": "4d2f9387"
+ },
+ "congcu.dang-tai-goi-y": {
+  "t": "추천 불러오는 중",
+  "h": "c5a27e63"
+ },
+ "congcu.du-lieu-that-270-000-ho": {
+  "t": "<span class=\"ic\" data-icon=\"globe\"></span><b>실제 데이터</b><span>270,000+ 건의 기록</span>",
+  "h": "eb3da539"
+ },
+ "congcu.hoi-thay": {
+  "t": "선생님께 묻기",
+  "h": "c9ffbbaf"
+ },
+ "congcu.hoi-thay-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span>지금 선생님께 묻기 →",
+  "h": "e0b92ed5"
+ },
+ "congcu.hoi-thay-ve-van-menh-la": {
+  "t": "운명, 자미두수 명반, 사주팔자, 궁합, 작명, 택일까지 — 하나의 대화로 선생님께 물어보세요.",
+  "h": "14b92d4e"
+ },
+ "congcu.hon-270-000-la-so-nguoi": {
+  "t": "270,000+건이 넘는 실제 사람들의 명반을 검증하고, 현대적인 풀이 방법과 고학의 정수를 결합해 분석했어요. 삶에 믿을 만하고 도움이 되는 예측을 전해 드려요.",
+  "h": "4fd47b6e"
+ },
+ "congcu.khoa-hoc-tu-du-lieu-that": {
+  "t": "실제 데이터에서 나온 과학, 실제 삶을 위해",
+  "h": "9288a0c9"
+ },
+ "congcu.moi-ngay-mot-chi-dan-song": {
+  "t": "<span>하루 한 가지 안내로, 더 주도적으로 살아요</span>",
+  "h": "8b3a21d1"
+ },
+ "congcu.phuong-phap-chuan-co-hoc-hien": {
+  "t": "<span class=\"ic\" data-icon=\"shield-check\"></span><b>검증된 방법</b><span>고학 × 현대</span>",
+  "h": "3a6260d0"
+ },
+ "congcu.so-lieu-ngay-do-co-phap": {
+  "t": "날짜별 수치는 고법으로 정확히 계산돼요 — 선생님께 물어 나만의 운세를 풀이받으세요.",
+  "h": "0445852a"
+ },
+ "congcu.tai-anh-9-16": {
+  "t": "9:16 이미지 받기",
+  "h": "aad434c7"
+ },
+ "congcu.tim-cong-cu-la-so-bat": {
+  "t": "도구 검색 — 명반, 사주, 궁합…",
+  "h": "d1a666e1"
+ },
+ "congcu.ung-dung-thuc-tien-vi-cuoc": {
+  "t": "<span class=\"ic\" data-icon=\"users\"></span><b>실생활 활용</b><span>더 나은 삶을 위해</span>",
+  "h": "082de4b1"
+ },
+ "congcu.van-hom-nay": {
+  "t": "오늘의 운세",
+  "h": "386c4c24"
+ },
+ "congcu.van-hom-nay-la-so-hay": {
+  "t": "오늘의 운세, 명반, 또는 지금 고민되는 무엇이든…",
+  "h": "0b093636"
+ },
+ "congcu.ve-hom-nay": {
+  "t": "← 오늘로 돌아가기",
+  "h": "24faf89e"
  },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 참고용이라는 성격",
@@ -731,6 +867,346 @@
   "t": "관상",
   "h": "ae8ee50b"
  },
+ "js.auth.bam-vao-link-trong-email-de": {
+  "t": "— 이메일의 링크를 눌러 완료하면 이 페이지로 자동으로 돌아와요.",
+  "h": "8493b548"
+ },
+ "js.auth.ban-chua-luu-tai-khoan-dang": {
+  "t": "계정을 저장하지 않았어요 — 로그아웃하면 냥과 기록이 모두 사라져요. 그래도 로그아웃할까요?",
+  "h": "e5c0eb4f"
+ },
+ "js.auth.ban-dang-dung-phien-tam-luong": {
+  "t": "임시 세션을 사용 중이에요 — 브라우저 데이터를 지우거나 기기를 바꾸면 여기에 있는 냥과 기록이 사라져요. 이메일과 비밀번호를 추가하면 지금 가진 것을 하나도 잃지 않고 보관할 수 있어요.",
+  "h": "41a9e315"
+ },
+ "js.auth.ban-dang-mo-trong-ung-dung": {
+  "t": "Facebook/Instagram 앱 안에서 열어서 여기서는 Google/Facebook 로그인을 쓸 수 없어요 — 아래 이메일을 이용해 주세요. 1분도 걸리지 않아요.",
+  "h": "e9829563"
+ },
+ "js.auth.bang-cach-dang-ky-ban-dong": {
+  "t": "가입하면 명보 자미두수 이용약관에 동의한 것으로 간주돼요.",
+  "h": "a349cfa3"
+ },
+ "js.auth.chao-mung-ban-da-nhan-luong": {
+  "t": "환영해요! <strong>냥</strong>을 받았어요 — 선생님께 묻기를 눌러 체험해 보세요",
+  "h": "3ebea363"
+ },
+ "js.auth.chua-luu-tai-khoan": {
+  "t": "계정 미저장",
+  "h": "84b20565"
+ },
+ "js.auth.da-chat-voi-thay-qua-zalo": {
+  "t": "Zalo, Messenger로 선생님과 대화한 적이 있나요? 메시지로 로그인하기 →",
+  "h": "4a00d63e"
+ },
+ "js.auth.da-gui-email-xac-nhan-toi": {
+  "t": "인증 이메일을 보냈어요:",
+  "h": "213802a7"
+ },
+ "js.auth.da-luu-kiem-tra-email-de": {
+  "t": "✓ 저장했어요 — 필요하면 이메일을 확인해 인증해 주세요",
+  "h": "feed02da"
+ },
+ "js.auth.dang-ky": {
+  "t": "가입",
+  "h": "d07fbd12"
+ },
+ "js.auth.dang-ky-that-bai": {
+  "t": "가입에 실패했어요",
+  "h": "e7ab9de2"
+ },
+ "js.auth.dang-nhap": {
+  "t": "로그인",
+  "h": "1d5caf09"
+ },
+ "js.auth.dang-nhap-that-bai": {
+  "t": "로그인에 실패했어요",
+  "h": "fb63ae22"
+ },
+ "js.auth.email-nay-da-co-tai-khoan": {
+  "t": "이미 가입된 이메일이에요 — 비밀번호를 입력해 로그인하세요.",
+  "h": "d81bc47f"
+ },
+ "js.auth.ho-so-cua-toi": {
+  "t": "내 프로필",
+  "h": "fc70cfcb"
+ },
+ "js.auth.hoac": {
+  "t": "또는",
+  "h": "2797f4b3"
+ },
+ "js.auth.khong-luu-duoc-tai-khoan": {
+  "t": "계정을 저장하지 못했어요.",
+  "h": "066c8d0d"
+ },
+ "js.auth.khong-luu-duoc-vui-long-thu": {
+  "t": "저장하지 못했어요. 다시 시도해 주세요.",
+  "h": "5b07f73c"
+ },
+ "js.auth.luong": {
+  "t": "… 냥",
+  "h": "cbf99bc6"
+ },
+ "js.auth.luong-xu": {
+  "t": "냥 · 코인",
+  "h": "e4e551dd"
+ },
+ "js.auth.luu-tai-khoan": {
+  "t": "계정 저장",
+  "h": "8d7fe16a"
+ },
+ "js.auth.luu-tai-khoan-tranh-mat-luong": {
+  "t": "⚠ 계정 저장 — 냥 분실 방지",
+  "h": "82a1d916"
+ },
+ "js.auth.ma-hop-le-tang-luong": {
+  "t": "✓ 유효한 코드예요 — 계정을 만들면 {credits}냥을 드려요.",
+  "h": "9849e4dd"
+ },
+ "js.auth.ma-khuyen-mai-neu-co": {
+  "t": "프로모션 코드 (선택)",
+  "h": "db43ff7b"
+ },
+ "js.auth.ma-nay-da-het-han-hoac": {
+  "t": "만료되었거나 사용 횟수가 소진된 코드예요.",
+  "h": "608f19cd"
+ },
+ "js.auth.mat-khau-it-nhat-6-ky": {
+  "t": "비밀번호는 6자 이상이어야 해요.",
+  "h": "5593257f"
+ },
+ "js.auth.mat-khau-it-nhat-6-ky-p3y1": {
+  "t": "비밀번호 (6자 이상)",
+  "h": "8c43eb34"
+ },
+ "js.auth.nap": {
+  "t": "+ 충전",
+  "h": "e9ce1f06"
+ },
+ "js.auth.nhanh-nhat": {
+  "t": "가장 빠름",
+  "h": "b4ba025d"
+ },
+ "js.auth.phien-da-het-han-vui-long": {
+  "t": "세션이 만료됐어요. 다시 시도해 주세요.",
+  "h": "34b61273"
+ },
+ "js.auth.tang-luong": {
+  "t": "냥 증정",
+  "h": "fdf6261f"
+ },
+ "js.auth.tao-tai-khoan": {
+  "t": "계정 만들기",
+  "h": "98f4b91a"
+ },
+ "js.auth.tiep-tuc-voi-facebook": {
+  "t": "Facebook으로 계속하기",
+  "h": "5e982ec8"
+ },
+ "js.auth.tiep-tuc-voi-google": {
+  "t": "Google로 계속하기",
+  "h": "62ea2d29"
+ },
+ "js.auth.vui-long-dien-email-va-mat": {
+  "t": "이메일과 비밀번호를 입력해 주세요.",
+  "h": "d84b9abd"
+ },
+ "js.battu.ban-muon-thay-dao-sau-dieu": {
+  "t": "선생님이 어떤 부분을 먼저 깊이 풀이해 드릴까요?",
+  "h": "08cdf1d4"
+ },
+ "js.battu.da-an-tu-tru": {
+  "t": "✓ 사주 세우기 완료",
+  "h": "845d9f25"
+ },
+ "js.battu.dang-an-tu-tru": {
+  "t": "사주를 세우는 중…",
+  "h": "3a079d88"
+ },
+ "js.battu.dang-luan-giai": {
+  "t": "풀이 중…",
+  "h": "aa035f2b"
+ },
+ "js.battu.dang-luan-giai-phan": {
+  "t": "풀이 중 · 항목",
+  "h": "5b228988"
+ },
+ "js.battu.lap-bat-tu": {
+  "t": "사주 세우기 →",
+  "h": "6ba95ed1"
+ },
+ "js.battu.loi-khi-luan-giai-phan": {
+  "t": "항목 풀이 중 오류",
+  "h": "46fa5128"
+ },
+ "js.battu.loi-khi-tinh-bat-tu": {
+  "t": "사주 계산 중 오류:",
+  "h": "0f394070"
+ },
+ "js.battu.luan-giai-hoan-tat": {
+  "t": "✓ 풀이 완료",
+  "h": "8e9c2ae8"
+ },
+ "js.battu.thu-lai": {
+  "t": "↻ 다시 시도",
+  "h": "30508ad3"
+ },
+ "js.chat.ke-vai-dong-thoi-minh-bao": {
+  "t": "몇 줄만 적어 주세요. 명보가 15명의 선생님 팀에서 알맞은 분을 모셔 와 봐 드려요.",
+  "h": "e43855cc"
+ },
+ "js.chutrinh.chin-chang-dai-van-cot-cao": {
+  "t": "아홉 구간의 대운, 엔진 점수에 따른 높은 막대, 구간마다 하나의 키워드",
+  "h": "6b87e20d"
+ },
+ "js.chutrinh.luan-giai": {
+  "t": "풀이 →",
+  "h": "a03abb8e"
+ },
+ "js.chutrinh.luan-giai-chuyen-sau": {
+  "t": "<b>심층 풀이 →</b>",
+  "h": "df2ecf55"
+ },
+ "js.home.dang-lap": {
+  "t": "만드는 중…",
+  "h": "b47d9598"
+ },
+ "js.home.hanh": {
+  "t": "오행",
+  "h": "dc0810d8"
+ },
+ "js.home.khong-lap-duoc-thu-lai-sau": {
+  "t": "만들지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "h": "7855b0ef"
+ },
+ "js.home.ngay": {
+  "t": "일진",
+  "h": "e196e19b"
+ },
+ "js.home.ngay-binh": {
+  "t": "보통인 날",
+  "h": "3e47de71"
+ },
+ "js.home.ngay-sinh-chua-hop-le": {
+  "t": "생년월일이 올바르지 않아요.",
+  "h": "feec7b22"
+ },
+ "js.home.ngay-tot": {
+  "t": "좋은 날",
+  "h": "cefb3c77"
+ },
+ "js.home.ngay-xau": {
+  "t": "나쁜 날",
+  "h": "3fe05eab"
+ },
+ "js.home.so-lieu-rut-gon-thu-tai": {
+  "t": "— 간략 데이터예요. 잠시 후 다시 불러와 주세요.",
+  "h": "84e3f4e7"
+ },
+ "js.home.thieu-ngay-thang-nam-sinh": {
+  "t": "생년월일이 빠져 있어요.",
+  "h": "1ce95cff"
+ },
+ "js.home.van-hom-nay": {
+  "t": "오늘의 운세",
+  "h": "386c4c24"
+ },
+ "js.home.van-ngay": {
+  "t": "운세",
+  "h": "c082a900"
+ },
+ "js.home.xem-van-rieng-cua-toi": {
+  "t": "내 운세 보기 →",
+  "h": "a669ddd6"
+ },
+ "js.laso.dang-an-sao": {
+  "t": "별 배치 중...",
+  "h": "06275197"
+ },
+ "js.laso.dang-xuat": {
+  "t": "내보내는 중...",
+  "h": "92b2d242"
+ },
+ "js.laso.gio-am": {
+  "t": "음력 시:",
+  "h": "58bc0ba0"
+ },
+ "js.laso.lay-la-so": {
+  "t": "명반 받기",
+  "h": "f7781d94"
+ },
+ "js.laso.tai-png": {
+  "t": "⬇ PNG 받기",
+  "h": "a5b32ccb"
+ },
+ "js.laso.vui-long-nhap-day-du-ngay": {
+  "t": "생년월일을 모두 입력해 주세요.",
+  "h": "2545b4dd"
+ },
+ "js.luangiai.an-la-so": {
+  "t": "▾ 명반 숨기기",
+  "h": "9f28e998"
+ },
+ "js.luangiai.bat-thong-bao-de-nhan-van": {
+  "t": "알림을 켜고 매일 운세 받기 →",
+  "h": "ace576c9"
+ },
+ "js.luangiai.da-lap-la-so": {
+  "t": "✓ 명반 생성 완료",
+  "h": "0b838efd"
+ },
+ "js.luangiai.da-luu-la-so-nay-vao": {
+  "t": "✓ 이 명반을 내 계정에 저장했어요.",
+  "h": "5a2ac1c6"
+ },
+ "js.luangiai.dang-lap-la-so": {
+  "t": "명반 만드는 중…",
+  "h": "fba688db"
+ },
+ "js.luangiai.dang-luan": {
+  "t": "풀이 중…",
+  "h": "d68f76a3"
+ },
+ "js.luangiai.dang-luan-giai-phan-1": {
+  "t": "풀이 중 · 항목 1 /",
+  "h": "559646ca"
+ },
+ "js.luangiai.lap-la-so-luan-giai-ngay": {
+  "t": "명반 만들고 바로 풀이 →",
+  "h": "edbdb6fc"
+ },
+ "js.luangiai.loi-khi-luan-giai": {
+  "t": "풀이 중 오류:",
+  "h": "b251ca2c"
+ },
+ "js.luangiai.loi-phan": {
+  "t": "항목 오류",
+  "h": "9380a2a1"
+ },
+ "js.luangiai.luan-giai-chuyen-sau": {
+  "t": "✦ 심층 풀이 —",
+  "h": "887e02c9"
+ },
+ "js.luangiai.luan-giai-tu-vi": {
+  "t": "자미두수 풀이",
+  "h": "ab5a4607"
+ },
+ "js.luangiai.luong": {
+  "t": "냥 →",
+  "h": "36d6704d"
+ },
+ "js.luangiai.luu-la-so-nay-de-xem": {
+  "t": "✦ <b>이 명반을 저장</b>해 두면 언제든 다시 볼 수 있어요 — 무료, 비용 없어요.",
+  "h": "1d1bbc24"
+ },
+ "js.luangiai.phan": {
+  "t": "항목",
+  "h": "a74e8ed7"
+ },
+ "js.luangiai.xem-la-so-day-du": {
+  "t": "▸ 전체 명반 보기",
+  "h": "fee98465"
+ },
  "js.nav.brand": {
   "t": "명보 자미두수",
   "h": "33336b26"
@@ -915,6 +1391,582 @@
   "t": "사진으로 관상 보기",
   "h": "24c4d64e"
  },
+ "js.paywall.bam-mo-la-tra-tien-va": {
+  "t": "· 열면 바로 결제되고 곧바로 읽을 수 있어요,",
+  "h": "9a6023cd"
+ },
+ "js.paywall.ban-ay-dang-ky-la-ban": {
+  "t": "친구가 <b>가입</b>하면 <b>+",
+  "h": "afb5cbf7"
+ },
+ "js.paywall.ban-co-the-thu-lai-sau": {
+  "t": "— 나중에 다시 시도해 주세요.</p>",
+  "h": "d45f37cf"
+ },
+ "js.paywall.ban-con": {
+  "t": "보유 <b>",
+  "h": "418bc463"
+ },
+ "js.paywall.ban-da-dung-het-so-luot": {
+  "t": "이 명반의 무료 미리보기를 모두 사용했어요. 전체 풀이를 열면 횟수 제한 없이 끝까지 읽고 다시 볼 수 있어요.",
+  "h": "af2b5217"
+ },
+ "js.paywall.ban-da-tao-ket-qua-cho": {
+  "t": "✓ 이 명반의 결과를 이미 만들었어요 — 다시 열어도 냥이 차감되지 않아요",
+  "h": "d59efda4"
+ },
+ "js.paywall.ban-da-tao-ket-qua-cho-uv5g": {
+  "t": "✓ 이 두 명반 조합의 결과를 이미 만들었어요 — 다시 열어도 냥이 차감되지 않아요",
+  "h": "7d7d74a8"
+ },
+ "js.paywall.ban-luan-day-du": {
+  "t": "전체 풀이",
+  "h": "8bbc9dde"
+ },
+ "js.paywall.can": {
+  "t": "</b> · 필요",
+  "h": "7e7713c7"
+ },
+ "js.paywall.can-them": {
+  "t": "추가 필요",
+  "h": "a2dc705b"
+ },
+ "js.paywall.chan-dung-tien-kiep": {
+  "t": "전생 초상",
+  "h": "e7d0f866"
+ },
+ "js.paywall.chan-dung-vo-chong": {
+  "t": "부부 초상",
+  "h": "ed0abbb5"
+ },
+ "js.paywall.chep-link-moi-555v": {
+  "t": "초대 링크 복사",
+  "h": "fa5ddbad"
+ },
+ "js.paywall.chep-so-tien": {
+  "t": "금액 복사",
+  "h": "88eb1716"
+ },
+ "js.paywall.chep-so-tk": {
+  "t": "계좌번호 복사",
+  "h": "bc4e6db0"
+ },
+ "js.paywall.chon-ngay-tot": {
+  "t": "길일 선택",
+  "h": "e4844e35"
+ },
+ "js.paywall.chu-tk": {
+  "t": "<b>예금주:</b>",
+  "h": "73fb1282"
+ },
+ "js.paywall.chu-trinh-cuoc-doi": {
+  "t": "인생 사이클",
+  "h": "38c0c6ce"
+ },
+ "js.paywall.chua-doc-duoc-bang-gia": {
+  "t": "⊙ 가격표를 불러오지 못했어요",
+  "h": "4ec2e38a"
+ },
+ "js.paywall.chua-ghi-nhan-cho-them-vai": {
+  "t": "아직 확인되지 않았어요. 몇 초만 더 기다려 주세요…",
+  "h": "cd70b377"
+ },
+ "js.paywall.chua-muon-nap-moi": {
+  "t": "충전하기 싫으신가요? <b>친구",
+  "h": "f63eee19"
+ },
+ "js.paywall.chua-tru-luong-nao-cua-ban": {
+  "t": "<br>회원님의 냥은 차감되지 않았어요.</div>",
+  "h": "62bb53db"
+ },
+ "js.paywall.chua-tru-luong-nao-cua-ban-ls92": {
+  "t": "회원님의 냥은 차감되지 않았어요",
+  "h": "34fe94f4"
+ },
+ "js.paywall.chuyen-dung-so-tien-o-tren": {
+  "t": "⚠ 위 금액을 정확히(더도 덜도 말고) 해당 계좌번호로 이체해 주세요 — 이체 메모는 자유롭게 써도 되고, 시스템이 계좌번호로 자동 인식해요",
+  "h": "9954fd84"
+ },
+ "js.paywall.chuyen-khoan": {
+  "t": "(계좌이체",
+  "h": "c135026b"
+ },
+ "js.paywall.chuyen-khoan-ngan-hang": {
+  "t": "은행 계좌이체",
+  "h": "d35c8163"
+ },
+ "js.paywall.chuyen-xong-quay-lai-tab-nay": {
+  "t": "이체를 마친 뒤 이 탭으로 돌아오면 시스템이 몇 초 안에 자동으로 인식하고 이어서 실행해요. 따로 누르실 필요 없어요.</div>",
+  "h": "1126353e"
+ },
+ "js.paywall.co-app-momo-hoac-the-da": {
+  "t": "MoMo 앱이나 연동된 카드가 있다면: 앱이 금액을 자동으로 채워 주니 확인만 누르세요.",
+  "h": "c037691b"
+ },
+ "js.paywall.con-thieu": {
+  "t": "⊙ 부족",
+  "h": "09093766"
+ },
+ "js.paywall.d": {
+  "t": "동)</span>",
+  "h": "a62f69a1"
+ },
+ "js.paywall.d-bam-mo-la-hien-ma": {
+  "t": "동, 열면 QR 코드가 표시돼요)</span>",
+  "h": "74afc758"
+ },
+ "js.paywall.da-co-tai-khoan-dang-nhap": {
+  "t": "계정이 있나요? 로그인",
+  "h": "af8e782a"
+ },
+ "js.paywall.da-dung-het-luot-xem-truoc": {
+  "t": "⊙ 무료 미리보기를 모두 사용했어요",
+  "h": "154c17e6"
+ },
+ "js.paywall.da-hieu": {
+  "t": "확인했어요",
+  "h": "f46981ba"
+ },
+ "js.paywall.da-lieu-toan-dien": {
+  "t": "종합 피부 분석",
+  "h": "91cdb627"
+ },
+ "js.paywall.da-tru": {
+  "t": "✓ 차감:",
+  "h": "0d13abf9"
+ },
+ "js.paywall.dang-cho-thanh-toan": {
+  "t": "결제 대기 중…",
+  "h": "ab8523a1"
+ },
+ "js.paywall.dang-ky-de-giu-luong": {
+  "t": "가입하고 냥 보관하기",
+  "h": "4eac8986"
+ },
+ "js.paywall.dang-mo-momo": {
+  "t": "MoMo 여는 중…",
+  "h": "49eec7ec"
+ },
+ "js.paywall.dang-nhap": {
+  "t": "로그인",
+  "h": "1afd3f6b"
+ },
+ "js.paywall.dang-tai-qr": {
+  "t": "QR 불러오는 중…",
+  "h": "f81c94ee"
+ },
+ "js.paywall.dang-tao-ma-qr": {
+  "t": "QR 코드 만드는 중…",
+  "h": "e18ed9a9"
+ },
+ "js.paywall.dang-xu-ly": {
+  "t": "처리 중…",
+  "h": "a2e96c58"
+ },
+ "js.paywall.dat-ten-con": {
+  "t": "자녀 작명",
+  "h": "c79dbebf"
+ },
+ "js.paywall.dat-ten-doanh-nghiep": {
+  "t": "사업체 작명",
+  "h": "56f1bfbe"
+ },
+ "js.paywall.day-con-theo-la-so": {
+  "t": "명반 맞춤 자녀 교육",
+  "h": "2013a771"
+ },
+ "js.paywall.de-mai": {
+  "t": "내일",
+  "h": "e094cff0"
+ },
+ "js.paywall.de-xem-so-du": {
+  "t": "후 잔액 확인",
+  "h": "62048ea1"
+ },
+ "js.paywall.dien-tuong": {
+  "t": "면상",
+  "h": "1e5e41e3"
+ },
+ "js.paywall.du": {
+  "t": ", 잔여",
+  "h": "63a0e7a7"
+ },
+ "js.paywall.duyen-no-tien-kiep": {
+  "t": "전생 인연",
+  "h": "c6b0ccb5"
+ },
+ "js.paywall.giu-trong-vi": {
+  "t": "지갑에 보관",
+  "h": "fa87cbb0"
+ },
+ "js.paywall.het-luot-tang-hom-nay": {
+  "t": "⊙ 오늘 무료 횟수를 모두 사용했어요",
+  "h": "c9551c56"
+ },
+ "js.paywall.hoac-mua-goi": {
+  "t": "또는 패키지 구매 →",
+  "h": "062471b0"
+ },
+ "js.paywall.hom-nay-so-luot-dung-thu": {
+  "t": "오늘 무료 체험 횟수를 모두 사용했어요. 내일 다시 오세요.",
+  "h": "631a725f"
+ },
+ "js.paywall.huong-nghiep-som-cho-con": {
+  "t": "자녀 조기 진로",
+  "h": "2735212c"
+ },
+ "js.paywall.ket-noi-toi-may-chu-gia": {
+  "t": "가격 서버 연결에 문제가 있어요. 잠시 후 다시 시도해 주세요 — 정확한 가격을 표시할 수 없을 때는 도구를 실행하지 않아요.",
+  "h": "a3919658"
+ },
+ "js.paywall.khi-sac-van-khi": {
+  "t": "기색 — 운기",
+  "h": "07c6eb16"
+ },
+ "js.paywall.khoa": {
+  "t": "잠금",
+  "h": "393cb36a"
+ },
+ "js.paywall.khong-can-dang-ky-truoc": {
+  "t": "사전 가입은 필요 없어요.",
+  "h": "f5217505"
+ },
+ "js.paywall.khong-du-luong": {
+  "t": "⊙ 냥이 부족해요",
+  "h": "957efb30"
+ },
+ "js.paywall.khong-mo-duoc-momo-thu-lai": {
+  "t": "MoMo를 열지 못했어요 — 다시 시도하거나 아래 방법을 이용해 주세요.",
+  "h": "17415e69"
+ },
+ "js.paywall.khong-tao-duoc-don-momo": {
+  "t": "MoMo 주문을 만들지 못했어요",
+  "h": "b5941e00"
+ },
+ "js.paywall.la-so-nguoi-khac": {
+  "t": "타인 명반",
+  "h": "e454923c"
+ },
+ "js.paywall.loi": {
+  "t": "오류:",
+  "h": "471c0087"
+ },
+ "js.paywall.loi-ket-noi": {
+  "t": "연결 오류:",
+  "h": "46e34d76"
+ },
+ "js.paywall.loi-kiem-tra-thu-lai": {
+  "t": "확인 중 오류가 발생했어요. 다시 시도해 주세요.",
+  "h": "8be05ffb"
+ },
+ "js.paywall.loi-tao-don": {
+  "t": "주문 생성 오류",
+  "h": "2ef88936"
+ },
+ "js.paywall.luan-giai-la-so": {
+  "t": "명반 풀이",
+  "h": "72f1fa6d"
+ },
+ "js.paywall.luan-sau-phan-nay": {
+  "t": "이 부분 심층 풀이",
+  "h": "8b0080c6"
+ },
+ "js.paywall.luong": {
+  "t": "냥</b>,",
+  "h": "9a10e8c4"
+ },
+ "js.paywall.luong-4tai": {
+  "t": "냥",
+  "h": "6614284e"
+ },
+ "js.paywall.luong-can": {
+  "t": "냥</strong> · 필요:",
+  "h": "17b0aa0f"
+ },
+ "js.paywall.luong-con-lai": {
+  "t": "냥 · 잔액",
+  "h": "c99e3599"
+ },
+ "js.paywall.luong-ln0i": {
+  "t": "냥)</span>",
+  "h": "49ad8e12"
+ },
+ "js.paywall.luong-luot-nay-dung": {
+  "t": "냥 · 이번 사용",
+  "h": "e61f5fd5"
+ },
+ "js.paywall.luong-m6fn": {
+  "t": "냥",
+  "h": "74224e60"
+ },
+ "js.paywall.luong-mo-day-du-ton": {
+  "t": "냥</b> · 전체 열람 비용",
+  "h": "81466f88"
+ },
+ "js.paywall.luong-thao-tac-nay-ton": {
+  "t": "냥</b> · 이 작업 비용 <b>",
+  "h": "e1bdd8d4"
+ },
+ "js.paywall.luong-uzlk": {
+  "t": "냥</b>",
+  "h": "6820cc0e"
+ },
+ "js.paywall.luong-vao-vi-cua-ban": {
+  "t": "냥</b>을 지갑에 환불했어요",
+  "h": "0aa5bc03"
+ },
+ "js.paywall.luot-nay-chua-xu-ly-xong": {
+  "t": "이번 요청을 끝까지 처리하지 못해 <b>",
+  "h": "6e07bffd"
+ },
+ "js.paywall.ma-da-het-han-bam-nut": {
+  "t": "<b>코드가 만료됐어요</b> — 아래 버튼을 눌러 새 코드를 만드세요.",
+  "h": "7b97f29d"
+ },
+ "js.paywall.ma-het-han-sau": {
+  "t": "코드 만료까지",
+  "h": "d64d146a"
+ },
+ "js.paywall.ma-qr-chuyen-khoan": {
+  "t": "계좌이체 QR 코드",
+  "h": "c67a939b"
+ },
+ "js.paywall.mau-sac-hop-menh": {
+  "t": "명에 맞는 색상",
+  "h": "64b3b887"
+ },
+ "js.paywall.mo-app-ngan-hang-quet-qr": {
+  "t": "은행 앱 열기 → QR 스캔 또는 직접 이체<br>",
+  "h": "00a7e55b"
+ },
+ "js.paywall.mo-ban-day-du": {
+  "t": "전체 풀이 열기",
+  "h": "84fe9699"
+ },
+ "js.paywall.mo-day-du-ton": {
+  "t": "전체 열람 비용",
+  "h": "3d05df05"
+ },
+ "js.paywall.mo-trang-thanh-toan": {
+  "t": "결제 페이지 열기 →",
+  "h": "71859417"
+ },
+ "js.paywall.mua-goi": {
+  "t": "패키지 구매",
+  "h": "6baca719"
+ },
+ "js.paywall.nap-le-tinh-theo-don-gia": {
+  "t": "<br><small>낱개 충전은 개별 단가로 계산돼요 —",
+  "h": "e6adc76c"
+ },
+ "js.paywall.nap-luong": {
+  "t": "냥 충전 →",
+  "h": "96c6fb5d"
+ },
+ "js.paywall.nap-thanh-cong": {
+  "t": "✓ 충전 완료",
+  "h": "104f438d"
+ },
+ "js.paywall.nap-them": {
+  "t": "추가 충전 →",
+  "h": "e4f720af"
+ },
+ "js.paywall.nap-them-la-mo-ra-ngay": {
+  "t": "<br>충전하면 바로 열려요.</div>",
+  "h": "363e04b9"
+ },
+ "js.paywall.nap-them-luong-de-tiep-tuc": {
+  "t": "냥을 충전하고 계속하세요.",
+  "h": "1f82488c"
+ },
+ "js.paywall.ngan-hang": {
+  "t": "<b>은행:</b>",
+  "h": "2aa52434"
+ },
+ "js.paywall.nguoi": {
+  "t": "명 초대</b> —",
+  "h": "6134285c"
+ },
+ "js.paywall.nhan-tuong": {
+  "t": "안상",
+  "h": "1bc89b2e"
+ },
+ "js.paywall.noi-dung-ck": {
+  "t": "<b>입금 메모:</b>",
+  "h": "f880969e"
+ },
+ "js.paywall.phan-tich-kieu-toc": {
+  "t": "헤어스타일 분석",
+  "h": "016c2401"
+ },
+ "js.paywall.phan-tich-trang-diem": {
+  "t": "메이크업 분석",
+  "h": "d3643889"
+ },
+ "js.paywall.phien-dang-nhap-het-han-vui": {
+  "t": "로그인 세션이 만료됐어요. 다시 로그인해 주세요.",
+  "h": "abf575ee"
+ },
+ "js.paywall.phong-thuy-ban-lam-viec": {
+  "t": "책상 풍수",
+  "h": "2f08993f"
+ },
+ "js.paywall.phong-thuy-cua-hang-vp": {
+  "t": "매장·사무실 풍수",
+  "h": "b64cd170"
+ },
+ "js.paywall.phong-thuy-noi-that": {
+  "t": "인테리어 풍수",
+  "h": "3f80b53f"
+ },
+ "js.paywall.render-phong-phong-thuy": {
+  "t": "풍수 룸 렌더링",
+  "h": "0806581b"
+ },
+ "js.paywall.so-du": {
+  "t": "잔액: <strong>",
+  "h": "e2c28dce"
+ },
+ "js.paywall.so-nhan-mach": {
+  "t": "인맥 노트",
+  "h": "17e83429"
+ },
+ "js.paywall.so-tk": {
+  "t": "<b>계좌번호:</b>",
+  "h": "d2e75eae"
+ },
+ "js.paywall.tam-thoi": {
+  "t": "(임시)",
+  "h": "3794c4c7"
+ },
+ "js.paywall.tao-ma-moi": {
+  "t": "새 코드 만들기 →",
+  "h": "b4caca90"
+ },
+ "js.paywall.thanh-toan-nhanh-qua-momo": {
+  "t": "MoMo로 빠르게 결제 →",
+  "h": "98a66572"
+ },
+ "js.paywall.thanh-toan-thanh-cong-dang-tiep": {
+  "t": "결제 완료! 이어서 진행하는 중…",
+  "h": "fe44c04f"
+ },
+ "js.paywall.thanh-tuong": {
+  "t": "성상",
+  "h": "d47f6d49"
+ },
+ "js.paywall.thanh-tuong-pro": {
+  "t": "성상 Pro",
+  "h": "b2e5a151"
+ },
+ "js.paywall.thao-tac-nay-ton": {
+  "t": "이 작업 비용",
+  "h": "834c67c7"
+ },
+ "js.paywall.thao-tac-nay-ton-1zm6": {
+  "t": "</b> · 이 작업 비용 <b>",
+  "h": "c5248947"
+ },
+ "js.paywall.thi-moi-luong-re-hon": {
+  "t": "시 냥당 단가가 더 저렴해요.</small>",
+  "h": "96be8028"
+ },
+ "js.paywall.thieu": {
+  "t": "</b> — 부족",
+  "h": "03703206"
+ },
+ "js.paywall.thieu-8362": {
+  "t": "— 부족",
+  "h": "6f4749c9"
+ },
+ "js.paywall.thu-kieu-toc": {
+  "t": "헤어스타일 체험",
+  "h": "100a239f"
+ },
+ "js.paywall.thu-trang-diem": {
+  "t": "메이크업 체험",
+  "h": "17d7b8c0"
+ },
+ "js.paywall.thu-trang-phuc": {
+  "t": "의상 체험",
+  "h": "5d690ccc"
+ },
+ "js.paywall.thu-tuong": {
+  "t": "수상",
+  "h": "869631da"
+ },
+ "js.paywall.toi-da-chuyen-khoan-3482": {
+  "t": "이체했어요",
+  "h": "b0a880c8"
+ },
+ "js.paywall.trang-phuc-theo-ngay": {
+  "t": "오늘의 의상",
+  "h": "6cfe1c1e"
+ },
+ "js.paywall.tu-binh-bat-tu": {
+  "t": "자평 사주팔자",
+  "h": "6ade52e9"
+ },
+ "js.paywall.tu-vi-chat": {
+  "t": "자미두수 채팅",
+  "h": "31c2fcda"
+ },
+ "js.paywall.van-han-12-thang-toi": {
+  "t": "앞으로 12개월 운세",
+  "h": "f265e49d"
+ },
+ "js.paywall.vi-hien-tai-la-vi-tam": {
+  "t": "현재 지갑은 임시 지갑이에요 — 브라우저 데이터를 지우거나 기기를 바꾸면 방금 환불된 냥이 사라져요. 계정을 등록해 안전하게 보관하세요.",
+  "h": "e0401dc5"
+ },
+ "js.paywall.vua-du-mo-dung-ban-nay": {
+  "t": "이 풀이를 열기에 딱 맞아요.</div>",
+  "h": "6e2dce75"
+ },
+ "js.paywall.vui-long-dang-nhap-de-tiep": {
+  "t": "계속하려면 로그인해 주세요.",
+  "h": "dcefbef2"
+ },
+ "js.paywall.vui-long-thu-lai": {
+  "t": "다시 시도해 주세요.",
+  "h": "2f1d18ee"
+ },
+ "js.paywall.xem-cach-mo-khoa": {
+  "t": "잠금 해제 방법 보기 →",
+  "h": "ad0da851"
+ },
+ "js.paywall.xem-tuoi-lam-an": {
+  "t": "사업 궁합 보기",
+  "h": "5f5ba4e2"
+ },
+ "js.paywall.xem-tuoi-vo-chong": {
+  "t": "부부 궁합 보기",
+  "h": "f3e7b1ed"
+ },
+ "js.paywall.xin-loi-da-co-loi-xay": {
+  "t": "죄송해요, 오류가 발생했어요",
+  "h": "4195c600"
+ },
+ "js.prices.luong-moi-luot": {
+  "t": "1회당 {credits}냥",
+  "h": "d8f9af98"
+ },
+ "js.prices.luong-moi-luot-sale": {
+  "t": "1회당 {sale}냥 ({credits}냥에서 할인)",
+  "h": "0c35b4ef"
+ },
+ "js.prices.mien-phi": {
+  "t": "무료",
+  "h": "a999e722"
+ },
+ "js.prices.money-moi-luot": {
+  "t": "1회당 {money} ({credits}냥)",
+  "h": "61295b73"
+ },
+ "js.prices.money-moi-luot-sale": {
+  "t": "1회당 {money} ({sale}냥, {credits}냥에서 할인)",
+  "h": "7aabe37f"
+ },
  "js.shell.an": {
   "t": "숨기기",
   "h": "f4ea7c30"
@@ -1000,11 +2052,11 @@
   "h": "6f8f4379"
  },
  "js.shell.nap-luong": {
-  "t": "크레딧 충전",
+  "t": "냥 충전",
   "h": "b70a5d1d"
  },
  "js.shell.nhiem-vu-nhan-luong": {
-  "t": "미션으로 크레딧 받기",
+  "t": "미션으로 냥 받기",
   "h": "fba04eb9"
  },
  "js.shell.quet-ma-bang-zalo-nhan-cau": {
@@ -1038,6 +2090,966 @@
  "js.shell.xem-tat-ca": {
   "t": "모두 보기",
   "h": "7e040254"
+ },
+ "js.shellui.ai-co-link-deu-doc-duoc": {
+  "t": "링크가 있는 사람은 누구나 이 세션의 명반과 모든 문답을 볼 수 있어요.",
+  "h": "39f8a716"
+ },
+ "js.shellui.ai-co-link-deu-xem-duoc": {
+  "t": "링크가 있는 사람은 누구나 이 내용을 볼 수 있어요.",
+  "h": "dde2d427"
+ },
+ "js.shellui.ai-co-link-deu-xem-duoc-ybjz": {
+  "t": "링크가 있는 사람은 누구나 이 결과를 볼 수 있어요.",
+  "h": "010150dd"
+ },
+ "js.shellui.an-di": {
+  "t": "숨기기",
+  "h": "3be211c7"
+ },
+ "js.shellui.ban": {
+  "t": "나",
+  "h": "40ffd8d0"
+ },
+ "js.shellui.ban-lap-la-so-o-khung": {
+  "t": "<p>가운데 칸에서 명반을 만들면 선생님이 바로 답해 드려요 —<br>직업, 연애, 올해, 다음 달, 무엇이든 물어보세요.</p></div>",
+  "h": "66d2cd29"
+ },
+ "js.shellui.ban-luan-giai-soi-tron": {
+  "t": ". <b>풀이</b>에서는 <b>",
+  "h": "b009e78c"
+ },
+ "js.shellui.bao-cao-da-san-sang": {
+  "t": "<b>리포트 준비 완료</b>",
+  "h": "ab59122b"
+ },
+ "js.shellui.bat-dau-hoi-thoai-moi-ban": {
+  "t": "새 대화를 시작해요. 이 명반에 대해 무엇이 궁금하세요?",
+  "h": "9d7d64ad"
+ },
+ "js.shellui.cau": {
+  "t": "</b>회",
+  "h": "c4946182"
+ },
+ "js.shellui.cau-hoi-48ar": {
+  "t": "</b>회",
+  "h": "65c94d43"
+ },
+ "js.shellui.cau-mien-phi": {
+  "t": "회</b> 더 무료로 묻기",
+  "h": "8ddf771c"
+ },
+ "js.shellui.cau-vua-roi-duoc-tra-loi": {
+  "t": "— 방금 질문에 바로 답해 드려요",
+  "h": "70029ef5"
+ },
+ "js.shellui.chay-lai-cong-cu-de-hoi": {
+  "t": "도구를 다시 실행하면 이 세션에 대해 이어서 물어볼 수 있어요.",
+  "h": "e4e4c8f5"
+ },
+ "js.shellui.chia-se": {
+  "t": "공유",
+  "h": "1cb95080"
+ },
+ "js.shellui.chia-se-phien": {
+  "t": "세션 공유",
+  "h": "8adfa925"
+ },
+ "js.shellui.chia-se-phien-hoi-thay": {
+  "t": "선생님께 묻기 세션 공유",
+  "h": "94185440"
+ },
+ "js.shellui.chia-se-w5yz": {
+  "t": "공유:",
+  "h": "f575b7df"
+ },
+ "js.shellui.chon-mot-cach-duoi-day": {
+  "t": "— 아래 방법 중 하나를 선택하세요.",
+  "h": "8b0c906e"
+ },
+ "js.shellui.chon-thay-luan-giai": {
+  "t": "풀이 선생님 선택",
+  "h": "f717eb08"
+ },
+ "js.shellui.chua-co-la-so-nao": {
+  "t": "<b>아직 명반이 없어요</b>",
+  "h": "51d392d1"
+ },
+ "js.shellui.chua-co-noi-dung-de-chia": {
+  "t": "공유할 내용이 아직 없어요 — 먼저 선생님께 몇 가지 물어보세요.",
+  "h": "19461a95"
+ },
+ "js.shellui.chua-co-phien-nao-duoc-luu": {
+  "t": "저장된 세션이 없어요.",
+  "h": "f0665eb8"
+ },
+ "js.shellui.chua-mo": {
+  "t": "· 미열람</span></span>",
+  "h": "72204e26"
+ },
+ "js.shellui.chua-tao-duoc-pdf-thu-lai": {
+  "t": "PDF를 만들지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "h": "549a59fa"
+ },
+ "js.shellui.con": {
+  "t": "남은 질문 <b>",
+  "h": "21dc996b"
+ },
+ "js.shellui.con-nhieu-dieu-muon-noi-ve": {
+  "t": "께서 이 명반에 대해 하실 말씀이 아직 많아요. 무료로 가입하면:",
+  "h": "b5e24689"
+ },
+ "js.shellui.con-nhieu-dieu-muon-to-tuong": {
+  "t": "께서 아직 풀어 드릴 이야기가 많이 남았어요",
+  "h": "2a2c8332"
+ },
+ "js.shellui.da-an-khoi-thu-vien-chung": {
+  "t": "<span>✓ 공유 라이브러리에서 숨겼어요. 링크는 그대로 사용할 수 있어요.</span>",
+  "h": "e12e84c8"
+ },
+ "js.shellui.da-chep": {
+  "t": "복사했어요 ✓",
+  "h": "846252e0"
+ },
+ "js.shellui.da-dung-het-luot-hoi": {
+  "t": "질문 횟수를 모두 사용했어요",
+  "h": "3ef9beae"
+ },
+ "js.shellui.da-gui-mo": {
+  "t": "✓ 전송 완료 —",
+  "h": "12288a32"
+ },
+ "js.shellui.da-het-cau-dung-thu": {
+  "t": "체험 질문을 모두 사용했어요",
+  "h": "f3c713d8"
+ },
+ "js.shellui.da-tao-link-ban-nay-cung": {
+  "t": "<span>링크 생성 완료 · 이 결과가 함께 게시되는 곳:",
+  "h": "11df14f6"
+ },
+ "js.shellui.dang-an": {
+  "t": "숨기는 중…",
+  "h": "06dcaa3f"
+ },
+ "js.shellui.dang-dung-pdf": {
+  "t": "PDF 만드는 중…",
+  "h": "819544ad"
+ },
+ "js.shellui.dang-facebook": {
+  "t": "Facebook 게시",
+  "h": "af09f25c"
+ },
+ "js.shellui.dang-gan": {
+  "t": "연결됨: <b>",
+  "h": "d599e8bc"
+ },
+ "js.shellui.dang-gui": {
+  "t": "전송 중…",
+  "h": "f04c8be3"
+ },
+ "js.shellui.dang-ky-mien-phi": {
+  "t": "무료로 가입하기 →",
+  "h": "89d5985d"
+ },
+ "js.shellui.dang-ky-nhan-them": {
+  "t": "가입하고 더 받기",
+  "h": "8bb9cbc2"
+ },
+ "js.shellui.dang-tiep-chuyen": {
+  "t": "대화 중",
+  "h": "37509a1d"
+ },
+ "js.shellui.dang-viet-bao-cao": {
+  "t": "<b>리포트 작성 중…</b>",
+  "h": "2d9fa930"
+ },
+ "js.shellui.de-he-thong-chon-ngau-nhien": {
+  "t": "🎲 시스템이 무작위로 선택",
+  "h": "aee4de0f"
+ },
+ "js.shellui.de-sau": {
+  "t": "나중에",
+  "h": "fe71eacd"
+ },
+ "js.shellui.de-xem": {
+  "t": "앱에서 확인하세요",
+  "h": "f6dcc1ba"
+ },
+ "js.shellui.doi-nen-sang-toi": {
+  "t": "라이트/다크 모드 전환",
+  "h": "4379a733"
+ },
+ "js.shellui.doi-thay-luan-giai": {
+  "t": "풀이 선생님 변경",
+  "h": "6b6fc7cb"
+ },
+ "js.shellui.dong": {
+  "t": "닫기",
+  "h": "d2b73ab2"
+ },
+ "js.shellui.dong-xem-ket-qua": {
+  "t": "닫고 결과 보기",
+  "h": "fba3c1e0"
+ },
+ "js.shellui.dung-ten": {
+  "t": "</b> 선생님",
+  "h": "70d07a35"
+ },
+ "js.shellui.dung-thu-con": {
+  "t": "체험 남은 질문 <b>",
+  "h": "c0746c99"
+ },
+ "js.shellui.duoc-tang-luot-hoi-thay-mien": {
+  "t": "선생님께 묻기 무료 횟수 증정",
+  "h": "f9bce370"
+ },
+ "js.shellui.esc": {
+  "t": "Esc",
+  "h": "1f7a4f9e"
+ },
+ "js.shellui.gio-truoc": {
+  "t": "시간 전",
+  "h": "ce828227"
+ },
+ "js.shellui.gui": {
+  "t": "보내기",
+  "h": "bbc4e7f5"
+ },
+ "js.shellui.gui-anh": {
+  "t": "이미지 보내기",
+  "h": "f7dc07df"
+ },
+ "js.shellui.gui-pdf-vao": {
+  "t": "PDF 보내기:",
+  "h": "6e198ee6"
+ },
+ "js.shellui.hanh-dong": {
+  "t": "동작",
+  "h": "8e9fdd28"
+ },
+ "js.shellui.het-phan-dung-thu-roi": {
+  "t": "체험 구간이 끝났어요…",
+  "h": "277af632"
+ },
+ "js.shellui.hieu-dung-la-so-dang-mo": {
+  "t": "열려 있는 명반을 정확히 이해하기",
+  "h": "b500bc82"
+ },
+ "js.shellui.hoac-nap-luong-de-hoi-tiep": {
+  "t": "또는 냥을 충전해 한 문장씩 이어서 묻기 →",
+  "h": "e5064786"
+ },
+ "js.shellui.hoac-nhan-thay-ngay-trong-zalo": {
+  "t": "또는 <b>Zalo</b>에서 바로 선생님께 메시지 보내기",
+  "h": "e80f12e2"
+ },
+ "js.shellui.hoi": {
+  "t": "질문",
+  "h": "48fdacc9"
+ },
+ "js.shellui.hoi-bat-cu-dieu-gi-ve": {
+  "t": "이 명반에 대해 무엇이든 물어보세요…",
+  "h": "67b4e55f"
+ },
+ "js.shellui.hoi-thay-qua-zalo-quet-ma": {
+  "t": "<div><b>Zalo로 선생님께 묻기</b><small>Zalo로 QR 코드를 스캔하고 질문을 보내면 선생님이 바로 답해 드려요</small></div></div>",
+  "h": "28466f2c"
+ },
+ "js.shellui.hoi-thay-them": {
+  "t": "선생님께 <b>",
+  "h": "04044619"
+ },
+ "js.shellui.hoi-thoai-moi": {
+  "t": "새 대화",
+  "h": "bba6fb9b"
+ },
+ "js.shellui.ket-qua": {
+  "t": "결과",
+  "h": "c9f95514"
+ },
+ "js.shellui.ket-qua-bam-de-mo": {
+  "t": "</b><span>결과 · 눌러서 열기</span></span>",
+  "h": "50bffb45"
+ },
+ "js.shellui.ket-qua-nay-chua-co-noi": {
+  "t": "이 결과에는 PDF로 저장할 내용이 아직 없어요.",
+  "h": "d8ae6583"
+ },
+ "js.shellui.khac": {
+  "t": "기타",
+  "h": "5b8a28ab"
+ },
+ "js.shellui.khong-in-luu-pdf-truc-tiep": {
+  "t": "안에서는 PDF를 바로 인쇄하거나 저장할 수 없어요",
+  "h": "27aa3510"
+ },
+ "js.shellui.khong-tao-duoc-link-chia-se": {
+  "t": "공유 링크를 만들지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "h": "77872d72"
+ },
+ "js.shellui.khong-tim-thay": {
+  "t": "찾을 수 없어요.",
+  "h": "cb892c67"
+ },
+ "js.shellui.la-so-con-vua-xem-la": {
+  "t": "<b>방금 본 명반은 링크를 공유한 분의 것이고, 회원님의 명반이 아니에요.</b>",
+  "h": "138c9f16"
+ },
+ "js.shellui.la-so-da-san-sang-ban": {
+  "t": "명반이 준비됐어요. 먼저 무엇을 살펴볼까요?",
+  "h": "0d8b388a"
+ },
+ "js.shellui.lap-la-so-cua-ban-de": {
+  "t": "내 명반을 만들면 선생님이 더 정확히 봐 드려요 →",
+  "h": "6a209505"
+ },
+ "js.shellui.lap-la-so-de-bat-dau": {
+  "t": "명반을 만들고 질문을 시작하세요…",
+  "h": "0a0f5f98"
+ },
+ "js.shellui.lap-la-so-truoc-da": {
+  "t": "먼저 명반을 만들어 주세요",
+  "h": "1b48590d"
+ },
+ "js.shellui.lich-su": {
+  "t": "기록 ·",
+  "h": "309a950b"
+ },
+ "js.shellui.lich-su-hoi-thoai": {
+  "t": "대화 기록",
+  "h": "0fd2afce"
+ },
+ "js.shellui.loi-mang-khi-tao-link-chia": {
+  "t": "공유 링크를 만드는 중 네트워크 오류가 발생했어요.",
+  "h": "7de46633"
+ },
+ "js.shellui.loi-mang-thu-lai-sau-it": {
+  "t": "네트워크 오류예요. 잠시 후 다시 시도해 주세요.",
+  "h": "4f6c5f14"
+ },
+ "js.shellui.luan-giai": {
+  "t": "<b>풀이",
+  "h": "489f2d1f"
+ },
+ "js.shellui.luong": {
+  "t": "냥)",
+  "h": "c25e2d61"
+ },
+ "js.shellui.luong-mo12": {
+  "t": "냥",
+  "h": "77701acc"
+ },
+ "js.shellui.luong-n119": {
+  "t": "냥 (",
+  "h": "e002ee80"
+ },
+ "js.shellui.luong-piya": {
+  "t": "</b>냥",
+  "h": "7ddc7cbc"
+ },
+ "js.shellui.luot-hoi-hom-nay": {
+  "t": "…</b>건 오늘 질문",
+  "h": "eb701f53"
+ },
+ "js.shellui.luot-tang": {
+  "t": "회 증정)</span>",
+  "h": "428cbe75"
+ },
+ "js.shellui.luu-ban-pdf": {
+  "t": "PDF 저장",
+  "h": "384327e1"
+ },
+ "js.shellui.luu-la-so-va-cuoc-tro": {
+  "t": "명반과 대화를 저장해요 — 기기를 바꿔도 그대로 있어요",
+  "h": "3cf815c8"
+ },
+ "js.shellui.luu-pdf": {
+  "t": "PDF 저장",
+  "h": "c815d87c"
+ },
+ "js.shellui.mo": {
+  "t": "열기 ↗",
+  "h": "275cceff"
+ },
+ "js.shellui.mo-file-pdf": {
+  "t": "PDF 파일 열기",
+  "h": "8ac92ea1"
+ },
+ "js.shellui.mo-rong": {
+  "t": "확대",
+  "h": "d91c6264"
+ },
+ "js.shellui.mo-thanh-ben": {
+  "t": "사이드바 열기",
+  "h": "b1f48b75"
+ },
+ "js.shellui.mo-zalo": {
+  "t": "Zalo 열기",
+  "h": "d52365fa"
+ },
+ "js.shellui.moi-sang-nhan-van-ngay-rieng": {
+  "t": "매일 아침 내 명반에 맞춘 오늘의 운세 받기",
+  "h": "6f9ffa30"
+ },
+ "js.shellui.moi-thay-mot-van-phong-rieng": {
+  "t": "선생님마다 문체가 달라요. 취향에 맞는 선생님을 고르거나 시스템이 무작위로 정하게 하세요.",
+  "h": "9f6ba6f2"
+ },
+ "js.shellui.muc": {
+  "t": "개 항목 —",
+  "h": "186bea21"
+ },
+ "js.shellui.muc-cho-la-so-nay": {
+  "t": "개 항목 · 이 명반 전용</b><span>",
+  "h": "c78646f2"
+ },
+ "js.shellui.muc-cua-chinh-la-so-nay": {
+  "t": "개 항목</b>으로 이 명반을 빠짐없이 짚어 드려요 —",
+  "h": "8e5f0ada"
+ },
+ "js.shellui.muon-thay-luan-cho-chinh-con": {
+  "t": "회원님 본인의 명반을 풀이받고 싶으시면 생년월일시를 알려 주세요 — 선생님이 회원님만을 위한 새 세션을 열어 드려요.</p></div>",
+  "h": "3ab45347"
+ },
+ "js.shellui.nap-luong-de-hoi-tiep": {
+  "t": "냥 충전하고 계속 묻기 →",
+  "h": "6bd23774"
+ },
+ "js.shellui.nap-them": {
+  "t": "충전",
+  "h": "f3cb9ffa"
+ },
+ "js.shellui.ngay-truoc": {
+  "t": "일 전",
+  "h": "92423d27"
+ },
+ "js.shellui.nguoi-dan-duong": {
+  "t": "길잡이",
+  "h": "f38c3a9c"
+ },
+ "js.shellui.nguoi-dang-xem": {
+  "t": "…</b>명이 보는 중",
+  "h": "440579d4"
+ },
+ "js.shellui.nhung-phan-luong-trong-vi-da": {
+  "t": ", 하지만 지갑에 남은 냥이 바닥났어요. 충전하시면 선생님이 풀이를 이어서 해 드려요.</div>",
+  "h": "8962fab5"
+ },
+ "js.shellui.nu": {
+  "t": "여",
+  "h": "feb92ccd"
+ },
+ "js.shellui.phan": {
+  "t": "항목",
+  "h": "d2cd4ec7"
+ },
+ "js.shellui.phan-da-xong": {
+  "t": "개 완료</span></span>",
+  "h": "f8ba3adb"
+ },
+ "js.shellui.phien": {
+  "t": "세션",
+  "h": "1d7b419f"
+ },
+ "js.shellui.phien-da-luu": {
+  "t": "저장된 세션",
+  "h": "5b37ec1e"
+ },
+ "js.shellui.phien-gan-day": {
+  "t": "최근 세션",
+  "h": "edade345"
+ },
+ "js.shellui.phien-meij": {
+  "t": "개 세션",
+  "h": "3ee6a226"
+ },
+ "js.shellui.phut-truoc": {
+  "t": "분 전",
+  "h": "b1017a2c"
+ },
+ "js.shellui.que-con-do-xin-phep-dung": {
+  "t": "풀이가 아직 끝나지 않았지만 여기서 잠시 멈출게요…",
+  "h": "bab685a0"
+ },
+ "js.shellui.sao-chep-link": {
+  "t": "링크 복사",
+  "h": "899e8987"
+ },
+ "js.shellui.sao-chep-link-mo-bang-safari": {
+  "t": ". 링크를 복사해 Safari나 Chrome에서 연 뒤 PDF 저장을 눌러 주세요.",
+  "h": "f8145d14"
+ },
+ "js.shellui.sao-chep-xpx5": {
+  "t": "복사",
+  "h": "09a1db3e"
+ },
+ "js.shellui.so-la-so": {
+  "t": "명반 보관함",
+  "h": "0e67ec9d"
+ },
+ "js.shellui.tai-khoan": {
+  "t": "계정",
+  "h": "4a60abe5"
+ },
+ "js.shellui.tat-ca": {
+  "t": "전체 (",
+  "h": "55873035"
+ },
+ "js.shellui.thang-truoc": {
+  "t": "개월 전",
+  "h": "e1d0b08b"
+ },
+ "js.shellui.thay": {
+  "t": "선생님",
+  "h": "90b92a70"
+ },
+ "js.shellui.thay-7g4t": {
+  "t": "<span>담당 <b>",
+  "h": "a8757512"
+ },
+ "js.shellui.thay-vi-hoi-le-tung-cau": {
+  "t": "… — 질문을 하나씩 나눠 묻는 대신 한 번에 볼 수 있어요.</div>",
+  "h": "8836644b"
+ },
+ "js.shellui.thu-gon": {
+  "t": "접기",
+  "h": "b1233168"
+ },
+ "js.shellui.thu-gon-ket-qua": {
+  "t": "결과 접기",
+  "h": "45ef96ba"
+ },
+ "js.shellui.thu-hep": {
+  "t": "축소",
+  "h": "3a848e39"
+ },
+ "js.shellui.thu-lai": {
+  "t": "다시 시도",
+  "h": "e353f2f3"
+ },
+ "js.shellui.thu-vien-chung": {
+  "t": "공유 라이브러리",
+  "h": "404f456c"
+ },
+ "js.shellui.tim-cong-cu-lenh": {
+  "t": "도구, 명령 검색…",
+  "h": "990f08e2"
+ },
+ "js.shellui.trinh-duyet-ben-trong": {
+  "t": "인앱 브라우저",
+  "h": "28553859"
+ },
+ "js.shellui.tu-vi-minh-bao": {
+  "t": "— 명보 자미두수",
+  "h": "ef7f10f4"
+ },
+ "js.shellui.ung-dung-nay": {
+  "t": "이 앱",
+  "h": "cba1a9e4"
+ },
+ "js.shellui.vua-xong": {
+  "t": "방금",
+  "h": "d1a7c7fa"
+ },
+ "js.shellui.xem": {
+  "t": "보기 →",
+  "h": "1e272706"
+ },
+ "js.shellui.xem-ket-qua": {
+  "t": "결과 보기",
+  "h": "9ab7d355"
+ },
+ "js.shellui.xem-ket-qua-nay-tren-tu": {
+  "t": "명보 자미두수에서 이 결과 보기:",
+  "h": "b03d8f15"
+ },
+ "js.shellui.xem-phan-luan-giai-cua-thay": {
+  "t": "이 명반에 대한 선생님의 풀이 보기:",
+  "h": "8b9556e2"
+ },
+ "js.shellui.xem-phan-luan-giai-cua-thay-6as2": {
+  "t": "이 명반에 대한 선생님의 풀이 보기:",
+  "h": "6b8b5dbb"
+ },
+ "js.shellui.xem-tron": {
+  "t": "전체 보기",
+  "h": "18cdbfde"
+ },
+ "js.shellui.xoa-phien": {
+  "t": "세션 삭제",
+  "h": "72d604e7"
+ },
+ "js.shellui.zalo": {
+  "t": "Zalo",
+  "h": "53b71aec"
+ },
+ "js.topup.aria-label-thanh-toan": {
+  "t": "aria-label=\"결제",
+  "h": "3d7d89ae"
+ },
+ "js.topup.bac": {
+  "t": "(등급",
+  "h": "d620a26c"
+ },
+ "js.topup.ban-chua-nhap-ma": {
+  "t": "코드를 입력하지 않았어요.",
+  "h": "e3627774"
+ },
+ "js.topup.ban-dang-mo-khoa": {
+  "t": "<span>잠금 해제 중: <b>",
+  "h": "a5f495af"
+ },
+ "js.topup.ban-dang-mo-khoa-v2tc": {
+  "t": "잠금 해제 중:",
+  "h": "f9f2ebb7"
+ },
+ "js.topup.can-them": {
+  "t": "추가 필요: <b>",
+  "h": "235b3b03"
+ },
+ "js.topup.cap-nhat-tu-dong-khi-co": {
+  "t": "새 도구가 생기면 자동으로 업데이트돼요. 금액은 다음 패키지 기준으로 환산돼요:",
+  "h": "b44fa7dd"
+ },
+ "js.topup.cap-nhat-tu-dong-khi-co-u8hf": {
+  "t": "새 도구가 생기면 자동으로 업데이트돼요.",
+  "h": "6d165b81"
+ },
+ "js.topup.chi-cac-cong-cu-luan-giai": {
+  "t": "심층 풀이 도구만 요금이 있어요.",
+  "h": "9cf1c314"
+ },
+ "js.topup.chi-tu": {
+  "t": "최저",
+  "h": "64117bb9"
+ },
+ "js.topup.chia-se-moi-ban": {
+  "t": "전통 방식으로 명반을 풀이해 주는 명보 자미두수를 쓰고 있어요. 이 링크로 가입하면 우리 둘 다 냥을 받아요: {link}",
+  "h": "91b14709"
+ },
+ "js.topup.chuyen-khoan": {
+  "t": "계좌이체",
+  "h": "983bba81"
+ },
+ "js.topup.con-thieu": {
+  "t": "</b> — 부족: <b>",
+  "h": "e337446d"
+ },
+ "js.topup.cong-cu-ban-vua-xem": {
+  "t": "방금 본 도구",
+  "h": "d666e2b0"
+ },
+ "js.topup.cong-cu-tra-cuu-co-phap": {
+  "t": "개의 전통 조회 도구는 냥이 들지 않아요</strong> (별 배치, 납음, 황도, 주역, 타로…).",
+  "h": "13649dd5"
+ },
+ "js.topup.d": {
+  "t": "동",
+  "h": "c5f95801"
+ },
+ "js.topup.da-sao-chep": {
+  "t": "복사했어요",
+  "h": "40e825db"
+ },
+ "js.topup.dang-ket-noi": {
+  "t": "연결 중…",
+  "h": "dd0e25a1"
+ },
+ "js.topup.dang-ky": {
+  "t": "가입하기 →",
+  "h": "ef4ca9d9"
+ },
+ "js.topup.dang-tai-bang-gia": {
+  "t": "가격표 불러오는 중",
+  "h": "0f8effca"
+ },
+ "js.topup.dang-tai-bang-gia-x0u0": {
+  "t": "가격표 불러오는 중…",
+  "h": "40e009ff"
+ },
+ "js.topup.dang-tai-thu-lai-sau-mot": {
+  "t": "불러오는 중이에요. 잠시 후 다시 시도해 주세요.",
+  "h": "1baf8990"
+ },
+ "js.topup.den": {
+  "t": "~",
+  "h": "addd467a"
+ },
+ "js.topup.don-gia-theo-bac-goi-cang": {
+  "t": "· 패키지 등급별 단가, 많이 충전할수록 저렴해요",
+  "h": "563ecc73"
+ },
+ "js.topup.du-cho-luot-nay": {
+  "t": "이번 이용에 충분해요",
+  "h": "2b427e2f"
+ },
+ "js.topup.du-de-dung-thu-cong-cu": {
+  "t": "심층 풀이 도구를 체험해 보기에 충분해요. 카드도 약정도 필요 없어요.",
+  "h": "2bba34ab"
+ },
+ "js.topup.goi": {
+  "t": "· 패키지",
+  "h": "ab6724d3"
+ },
+ "js.topup.goi-duoc-danh-dau-ben-duoi": {
+  "t": "아래 표시된 패키지가 이번 이용에 딱 맞아요.",
+  "h": "12d86ea6"
+ },
+ "js.topup.het-gio-cho": {
+  "t": "대기 시간이 초과됐어요.",
+  "h": "ffa75c30"
+ },
+ "js.topup.khong-co-du-lieu": {
+  "t": "데이터가 없어요.",
+  "h": "01d461ee"
+ },
+ "js.topup.khong-doi-duoc-ma": {
+  "t": "코드를 적용하지 못했어요.",
+  "h": "795cb46c"
+ },
+ "js.topup.khong-het-han": {
+  "t": "만료 없음",
+  "h": "b4fef21a"
+ },
+ "js.topup.khong-tai-duoc-vui-long-thu": {
+  "t": "불러오지 못했어요. 다시 시도해 주세요.",
+  "h": "cfce40b3"
+ },
+ "js.topup.khong-tao-duoc-don-paypal": {
+  "t": "PayPal 주문을 만들지 못했어요",
+  "h": "5ae11efc"
+ },
+ "js.topup.la-du": {
+  "t": "</b> 충전하면 충분해요,",
+  "h": "ff3301f5"
+ },
+ "js.topup.loi-ket-noi-momo": {
+  "t": "MoMo 연결 오류:",
+  "h": "ab653854"
+ },
+ "js.topup.loi-ket-noi-paypal": {
+  "t": "PayPal 연결 오류:",
+  "h": "b24c6f67"
+ },
+ "js.topup.luong": {
+  "t": "냥</div>",
+  "h": "81dc9146"
+ },
+ "js.topup.luong-10zo": {
+  "t": "/ 냥",
+  "h": "849064c1"
+ },
+ "js.topup.luong-8gog": {
+  "t": "<span>냥</span></div>",
+  "h": "ea893023"
+ },
+ "js.topup.luong-cho-thanh-vien-moi": {
+  "t": "냥 증정",
+  "h": "f9ec8743"
+ },
+ "js.topup.luong-de-dung-tiep-nap": {
+  "t": "냥</b> · 이어서 쓰려면 <b>",
+  "h": "cffae6dc"
+ },
+ "js.topup.luong-dung-duoc-cho-cac-cong": {
+  "t": "냥 — 심층 풀이 도구와 선생님께 묻기에 사용할 수 있어요.",
+  "h": "220dda0b"
+ },
+ "js.topup.luong-goi-lon-hon-thi-re": {
+  "t": "/냥) — 큰 패키지일수록 더 저렴해요.",
+  "h": "7bdee349"
+ },
+ "js.topup.luong-ictb": {
+  "t": "냥</b>.",
+  "h": "1d59cb4e"
+ },
+ "js.topup.luong-ngay-khi-ho-tao-tai": {
+  "t": "냥</strong> — 상대가 계정을 만드는 즉시",
+  "h": "efc01ca5"
+ },
+ "js.topup.luot-moi-duoc-thuong-30-ngay": {
+  "t": "회 초대 보상 / 30일)",
+  "h": "d879cb28"
+ },
+ "js.topup.mo-ra-ngay-sau-khi-thanh": {
+  "t": "결제가 끝나면 바로 열려요.",
+  "h": "9db1b114"
+ },
+ "js.topup.mo-trang-payos": {
+  "t": "payOS 페이지 열기 →",
+  "h": "c70cfbf8"
+ },
+ "js.topup.moi-nguoi-dang-ky-qua-link": {
+  "t": "링크로 가입한 친구 1명당: <strong>+",
+  "h": "af336cce"
+ },
+ "js.topup.muc-phi-cua-tung-cong-cu": {
+  "t": "각 도구의 요금은 해당 도구 페이지에 바로 표시돼요.",
+  "h": "4d90e17f"
+ },
+ "js.topup.nap-thanh-cong-luong": {
+  "t": "{credits}냥 충전 완료!",
+  "h": "1ca6d695"
+ },
+ "js.topup.o-nap-so-tien-tu-chon": {
+  "t": "<b>직접 금액 입력</b> 칸에 이미 <b>",
+  "h": "ca263938"
+ },
+ "js.topup.pho-bien-nhat": {
+  "t": "가장 인기",
+  "h": "a0f0bedc"
+ },
+ "js.topup.re-hon": {
+  "t": "할인",
+  "h": "00731702"
+ },
+ "js.topup.so-du-hien-tai": {
+  "t": "현재 잔액",
+  "h": "0f33e086"
+ },
+ "js.topup.so-tien-muon-nap": {
+  "t": "충전할 금액 (",
+  "h": "3a034d1c"
+ },
+ "js.topup.tang": {
+  "t": "신규 회원 혜택:",
+  "h": "ae208fd1"
+ },
+ "js.topup.tang-luong-mien-phi-cho-thanh": {
+  "t": "신규 회원에게 냥 무료 증정",
+  "h": "0ac0e4a1"
+ },
+ "js.topup.thanh-toan-da-bi-huy-ban": {
+  "t": "결제가 취소됐어요. 언제든 다시 시도할 수 있어요.",
+  "h": "4336002a"
+ },
+ "js.topup.thanh-toan-thanh-cong-dang-cap": {
+  "t": "결제 완료! 업데이트 중…",
+  "h": "9e4d16f3"
+ },
+ "js.topup.thanh-toan-the": {
+  "t": "카드 결제",
+  "h": "6eccec15"
+ },
+ "js.topup.toi-da": {
+  "t": "(최대",
+  "h": "383d76a3"
+ },
+ "js.topup.toi-thieu": {
+  "t": "최소",
+  "h": "134e562d"
+ },
+ "js.topup.vnd": {
+  "t": "VND",
+  "h": "3537de8e"
+ },
+ "js.topup.vua-du-khong-phai-mua-ca": {
+  "t": "</b> 입력됨 — 딱 필요한 만큼만, 패키지를 통째로 살 필요 없어요.",
+  "h": "4ac59782"
+ },
+ "js.topup.vui-long-nhap-so-tien-tu": {
+  "t": "입력 가능한 금액:",
+  "h": "c3305e5b"
+ },
+ "js.topup.xem-lich-su": {
+  "t": "기록 보기",
+  "h": "21a19fb0"
+ },
+ "js.vanhannam.ban-do": {
+  "t": "운세 지도 · 앞으로",
+  "h": "393d2725"
+ },
+ "js.vanhannam.dang-luan-phan-1": {
+  "t": "풀이 중 · 항목 1 /",
+  "h": "9020516d"
+ },
+ "js.vanhannam.dang-tinh": {
+  "t": "계산 중…",
+  "h": "76a9d5f0"
+ },
+ "js.vanhannam.loi-khi-luan-phan": {
+  "t": "항목 풀이 중 오류",
+  "h": "1ea71e16"
+ },
+ "js.vanhannam.loi-khi-tinh-van-han": {
+  "t": "운세 계산 중 오류:",
+  "h": "831b40e0"
+ },
+ "js.vanhannam.luan-van-han-12-thang": {
+  "t": "<b>12개월 운세 풀이 →</b>",
+  "h": "c228dfa7"
+ },
+ "js.vanhannam.luan-van-han-hoan-tat": {
+  "t": "✓ 운세 풀이 완료",
+  "h": "e52ae239"
+ },
+ "js.vanhannam.luong": {
+  "t": "냥)",
+  "h": "c99d25aa"
+ },
+ "js.vanhannam.thang-am-toi-moi-o-mot": {
+  "t": "개월(음력), 칸마다 하나의 키워드",
+  "h": "33508d52"
+ },
+ "js.vanhannam.ton": {
+  "t": "<small>비용",
+  "h": "ca8d4e90"
+ },
+ "js.vanhannam.van-han-12-thang": {
+  "t": "12개월 운세",
+  "h": "0bef064e"
+ },
+ "js.vanhannam.xem-van-han": {
+  "t": "운세 보기 →",
+  "h": "0f4545c1"
+ },
+ "js.xemtuoi.cham-8-yeu-to-hop-tac": {
+  "t": "당신과 곧 함께 사업할 사람 사이의 8가지 협력 요소를 채점해요 — 계약 전 객관적인 시각이에요.",
+  "h": "fdda207e"
+ },
+ "js.xemtuoi.cham-8-yeu-to-tuong-hop": {
+  "t": "두 명반 사이의 8가지 궁합 요소를 채점해요 — 결혼을 고민하며 분명한 답이 필요할 때 사용하세요.",
+  "h": "db3006a1"
+ },
+ "js.xemtuoi.chieu-tuong-hop": {
+  "t": "개 차원 궁합",
+  "h": "2d818e3c"
+ },
+ "js.xemtuoi.dang-dung-anh": {
+  "t": "이미지 만드는 중…",
+  "h": "7bce9760"
+ },
+ "js.xemtuoi.loi-khi-so-tuoi": {
+  "t": "궁합 비교 중 오류:",
+  "h": "4f62428a"
+ },
+ "js.xemtuoi.tra-loi-thay-o-khung-chat": {
+  "t": "채팅창에서 선생님께 답해 생년월일을 입력하세요:",
+  "h": "ec2999fc"
+ },
+ "js.xemtuoi.tuong-hop-tuoi-tu-vi-minh": {
+  "t": "띠 궁합 — 명보 자미두수",
+  "h": "b35bc9d1"
+ },
+ "js.xemtuoi.va": {
+  "t": "및",
+  "h": "a72340e8"
+ },
+ "js.xemtuoi.vanh": {
+  "t": "레이더 차트:",
+  "h": "f78055f5"
+ },
+ "js.xemtuoi.xem-tuoi-lam-an-tu-vi": {
+  "t": "사업 궁합 — 명보 자미두수",
+  "h": "6a071dab"
+ },
+ "js.xemtuoi.xem-tuoi-vo-chong-tu-vi": {
+  "t": "부부 궁합 — 명보 자미두수",
+  "h": "4fd9f105"
+ },
+ "js.xemtuoi.xet-nhanh-hai-tuoi-co-hop": {
+  "t": "두 띠가 맞는지 빠르게 확인해요. 출생 연도만 있으면 바로 답이 나와요 — 깊이 보기 전의 간단한 확인이에요.",
+  "h": "ee011392"
  },
  "laso.2026-tuviminhbao-com-all-rights-reserved": {
   "t": "© 2026 tuviminhbao.com — All rights reserved",
@@ -1200,7 +3212,7 @@
   "h": "557a13dc"
  },
  "luangiai.lap-la-so-luan-giai-ngay": {
-  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">명반 세우고 바로 풀이 →</b></span> <small>필요 크레딧 <span class=\"vnd\" data-tvp-price-vnd=\"laso\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"laso\">…</span> 냥)</span></small>",
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">명반 세우고 바로 풀이 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"laso\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"laso\">…</span> 냥)</span></small>",
   "h": "a32c708b"
  },
  "luangiai.lap-la-so-tu-vi-12": {
@@ -1258,6 +3270,74 @@
  "luangiai.tu-vi-khong-du-doan-tuong": {
   "t": "자미두수는 미래를 맞히는 것이 아니라, 나를 이해하고 더 나은 선택을 하도록 돕습니다.",
   "h": "ae92de9d"
+ },
+ "napam.1-nhap-nam-sinh": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">출생 연도 입력</span>",
+  "h": "ecce406c"
+ },
+ "napam.2-xem-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">결과 보기</span>",
+  "h": "70d46dd0"
+ },
+ "napam.hoi-thay-luan-sau-nap-am": {
+  "t": "✦ 선생님께 납음 깊이 풀이받기",
+  "h": "349e0cc6"
+ },
+ "napam.mau-huong-hop": {
+  "t": "<span class=\"hp-ic\" data-icon=\"palette\"></span><span>맞는 색,<br>방향</span>",
+  "h": "a297cc08"
+ },
+ "napam.moi-nam-sinh-mang-mot-menh": {
+  "t": "태어난 해마다 고유한 납음 명(命)이 있어요 — 나에게 맞는 색과 방향을 정하지만 잘 알려지지 않았죠. 출생 연도를 입력하면 명 이름, 오행, 어울리는 색과 방향을 무료로 받아볼 수 있어요.",
+  "h": "b260ec1c"
+ },
+ "napam.nam-sinh": {
+  "t": "출생 연도",
+  "h": "75a6785f"
+ },
+ "napam.nam-sinh-duong-lich": {
+  "t": "출생 연도 (양력)",
+  "h": "1fb839b6"
+ },
+ "napam.nap-am-la-phep-phoi-hanh": {
+  "t": "납음은 육십갑자(60년 주기)의 간지 한 쌍마다 오행을 배당하는 방법으로, 태어난 해마다 해중금(海中金)이나 노방토(路傍土)처럼 고유한 이름의 명(命)을 부여해요. 중국 고대 술수의 응용 오행 체계에 속하는 한 갈래예요.",
+  "h": "0b4fcbe2"
+ },
+ "napam.nap-am-ngu-hanh": {
+  "t": "납음 오행",
+  "h": "0de9a4ee"
+ },
+ "napam.nap-am-ngu-hanh-hanh-ban": {
+  "t": "<b>납음 오행</b><span>출생 연도로 보는 본명 오행</span>",
+  "h": "2e26bd13"
+ },
+ "napam.nap-am-ngu-hanh-tu-vi": {
+  "t": "납음 오행 — 명보 자미두수",
+  "h": "b9503f87"
+ },
+ "napam.nhap-nam-sinh-cua-ban-nhan": {
+  "t": "출생 연도를 입력하세요. 명 이름 전체와 함께 어울리는 색, 방위, 맞는 띠와 꺼리는 띠를 알려 드려요.",
+  "h": "3acbe82d"
+ },
+ "napam.sua": {
+  "t": "수정",
+  "h": "0963749f"
+ },
+ "napam.ten-menh-nap-am": {
+  "t": "<span class=\"hp-ic\" data-icon=\"tornado\"></span><span>납음<br>명 이름</span>",
+  "h": "3077c3ba"
+ },
+ "napam.tra-nap-am-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"tornado\"></span><b>납음 조회 →</b></span> <small>무료</small>",
+  "h": "e2a87df0"
+ },
+ "napam.tra-nap-am-ngu-hanh-theo": {
+  "t": "출생 연도로 납음 오행 조회 (해중금, 노중화…) — 천간, 지지, 본명 오행. 선생님께 어울리는 색, 방향, 띠를 풀이받으세요.",
+  "h": "b7a210ed"
+ },
+ "napam.tuoi-hop-ky": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>맞는 띠<br>꺼리는 띠</span>",
+  "h": "9a664cc3"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 수집하는 정보",
@@ -1626,5 +3706,329 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "충전했지만 사용하지 않은 냥은 요청해 주시면 사례별로 검토해 드립니다",
   "h": "f410ec3e"
+ },
+ "topup.ban-dang-mo-khoa": {
+  "t": "잠금 해제 중…",
+  "h": "a288081b"
+ },
+ "topup.bang-gia-nap-luong-tu-vi": {
+  "t": "가격표 및 냥 충전 — 명보 자미두수",
+  "h": "09810031"
+ },
+ "topup.cap-nhat-tu-dong-khi-co": {
+  "t": "새 도구가 생기면 자동으로 업데이트돼요.",
+  "h": "6d165b81"
+ },
+ "topup.cau-hoi-thuong-gap": {
+  "t": "자주 묻는 질문",
+  "h": "0abbca1b"
+ },
+ "topup.chi-phi-cac-cong-cu": {
+  "t": "도구별 비용",
+  "h": "5afccf48"
+ },
+ "topup.chon-phuong-thuc-thanh-toan": {
+  "t": "결제 방법 선택",
+  "h": "43066cc7"
+ },
+ "topup.chuyen-du-so-tien-vao-dung": {
+  "t": "위 계좌번호로 금액 전액을 이체해 주세요 — 이체 메모는 자유롭게 써도 되고, 시스템이 계좌번호로 자동 인식해요",
+  "h": "7626831b"
+ },
+ "topup.chuyen-khoan-ngan-hang": {
+  "t": "은행 계좌이체",
+  "h": "d35c8163"
+ },
+ "topup.chuyen-khoan-qr": {
+  "t": "QR 계좌이체",
+  "h": "31fdb4fb"
+ },
+ "topup.co-ma-tu-clip-hoac-chuong": {
+  "t": "영상이나 프로모션에서 받은 코드가 있나요? 여기에 입력하면 바로 냥이 적립돼요.",
+  "h": "3b61f23b"
+ },
+ "topup.da-moi": {
+  "t": "초대한 사람:",
+  "h": "38658fa9"
+ },
+ "topup.da-nap-lan-dau": {
+  "t": "첫 충전한 사람:",
+  "h": "c9f0cd6b"
+ },
+ "topup.da-nhan-luong": {
+  "t": "받은 냥:",
+  "h": "7c97410c"
+ },
+ "topup.dang-tai": {
+  "t": "불러오는 중…",
+  "h": "577a1d59"
+ },
+ "topup.dang-tai-bang-gia": {
+  "t": "가격표 불러오는 중",
+  "h": "0f8effca"
+ },
+ "topup.dang-tai-g1gj": {
+  "t": "불러오는 중",
+  "h": "f774f216"
+ },
+ "topup.de-sau-tu-chon-goi-ben": {
+  "t": "나중에, 아래에서 직접 패키지 선택",
+  "h": "3dc12218"
+ },
+ "topup.doi-ma": {
+  "t": "<span>코드 교환</span>",
+  "h": "50a9ba25"
+ },
+ "topup.dong": {
+  "t": "닫기",
+  "h": "d2b73ab2"
+ },
+ "topup.dong-gop-duy-tri": {
+  "t": "운영 후원",
+  "h": "c80888bc"
+ },
+ "topup.dung-duoc-cho-cac-cong-cu": {
+  "t": "심층 풀이 도구와 선생님께 묻기에 쓸 수 있어요. 각 도구의 요금은 해당 도구 페이지에 바로 표시돼요.",
+  "h": "9f2a96d9"
+ },
+ "topup.goi-cang-lon-cang-re": {
+  "t": "패키지가 클수록 저렴해요",
+  "h": "33962657"
+ },
+ "topup.khong-bao-gio-luong-duoc-luu": {
+  "t": "절대 아니에요. 냥은 계정에 영구 보관돼요.",
+  "h": "ffe348cc"
+ },
+ "topup.khong-moi-la-so-ket-qua": {
+  "t": "아니요. 명반/결과 하나당 냥은 한 번만 차감돼요. 이후에는 마음껏 무료로 다시 볼 수 있어요.",
+  "h": "c396c59c"
+ },
+ "topup.link-moi": {
+  "t": "초대 링크:",
+  "h": "4e609ece"
+ },
+ "topup.luong-co-dung-chung-tai-khoan": {
+  "t": "냥을 계정끼리 공유할 수 있나요?",
+  "h": "1becf98e"
+ },
+ "topup.luong-co-het-han-khong": {
+  "t": "냥에 유효기간이 있나요?",
+  "h": "eb07c396"
+ },
+ "topup.luong-don-vi": {
+  "t": "냥",
+  "h": "6614284e"
+ },
+ "topup.luong-gan-voi-mot-tai-khoan": {
+  "t": "냥은 하나의 계정에 연결돼요. 온 가족이 쓰고 싶다면 더 큰 후원 단계(프리미엄 / VIP)를 선택해 하나의 계정을 함께 쓰면 돼요.",
+  "h": "056bcb24"
+ },
+ "topup.luong-la-don-vi-dung-cho": {
+  "t": "냥은 심층 풀이 도구에 쓰이는 단위예요. 패키지로 구매하고, <strong>만료되지 않아요</strong>,",
+  "h": "56f0d587"
+ },
+ "topup.ma-gioi-thieu-cua-ban": {
+  "t": "내 추천 코드:",
+  "h": "d217efa0"
+ },
+ "topup.mo-app-ngan-hang-quet-qr": {
+  "t": "은행 앱 열기 → QR 스캔 또는 직접 이체",
+  "h": "3b3fbc1c"
+ },
+ "topup.moi-ban-cung-nhan-luong": {
+  "t": "친구 초대 — 함께 냥 받기",
+  "h": "9c581c98"
+ },
+ "topup.moi-ban-dang-ky-ban-nhan": {
+  "t": "친구를 초대하면 → 친구가 계정을 만드는 즉시 냥을 받아요.",
+  "h": "db75ad54"
+ },
+ "topup.moi-luan-giai-chuyen-sau-goi": {
+  "t": "심층 풀이 한 번마다 대규모 언어 모델 API(Claude/GPT)를 호출하며, 호출당 약 0.05–0.10 USD가 들고 저장·호스팅 비용이 더해져요. 냥은 프로젝트가 스스로 유지되어 모든 고법 조회 도구를 모두에게 무료로 제공하게 해 주는 방법이에요.",
+  "h": "f9c1cb68"
+ },
+ "topup.moi-tai-khoan-dung-duoc-mot": {
+  "t": "계정당 코드 하나만 사용할 수 있어요.",
+  "h": "03a3bf30"
+ },
+ "topup.muc-dong-gop": {
+  "t": "후원 단계",
+  "h": "995e94f7"
+ },
+ "topup.nap-luong-de-su-dung-cac": {
+  "t": "냥을 충전해 명보 자미두수의 도구를 이용하세요. 가입하면 냥을 무료로 드려요. 만료 없음.",
+  "h": "9b06e362"
+ },
+ "topup.nap-luong-de-tra-cuu-menh": {
+  "t": "냥을 충전하고 명리 조회하기",
+  "h": "9e20fbe1"
+ },
+ "topup.nhap-ma-khuyen-mai": {
+  "t": "프로모션 코드 입력",
+  "h": "e9e5205f"
+ },
+ "topup.paypal-the": {
+  "t": "PayPal / 카드",
+  "h": "57ed0fb5"
+ },
+ "topup.qua-luong-chao-mung-khi-dang": {
+  "t": "가입 환영 냥은 어디에 쓸 수 있나요?",
+  "h": "9eadf304"
+ },
+ "topup.sao-chep": {
+  "t": "복사",
+  "h": "09a1db3e"
+ },
+ "topup.sao-chep-link": {
+  "t": "링크 복사",
+  "h": "899e8987"
+ },
+ "topup.so-tien-khac": {
+  "t": "다른 금액",
+  "h": "adbf09d4"
+ },
+ "topup.so-tien-muon-nap-usd": {
+  "t": "충전할 금액 (USD)",
+  "h": "8929ebe7"
+ },
+ "topup.thanh-toan-bang-usd-qua-paypal": {
+  "t": "PayPal을 통해 <strong>USD</strong>로 결제해요: PayPal 계정으로 결제하거나, <strong>Visa / Mastercard 카드</strong>를 선택해 카드 정보를 직접 입력하세요 — PayPal 계정이 없어도 돼요. 결제 직후 냥이 계정에 자동으로 들어와요.",
+  "h": "87906448"
+ },
+ "topup.the-visa-mastercard": {
+  "t": "Visa / Mastercard 카드",
+  "h": "10db7446"
+ },
+ "topup.toi-co-the-thanh-toan-bang": {
+  "t": "어떤 방법으로 결제할 수 있나요?",
+  "h": "2b5b80d1"
+ },
+ "topup.toi-da-chuyen-khoan": {
+  "t": "이체했어요",
+  "h": "b0a880c8"
+ },
+ "topup.vd-tuviminhbao": {
+  "t": "예: TUVIMINHBAO",
+  "h": "f161ad1c"
+ },
+ "topup.vi-sao-co-thanh-toan-ma": {
+  "t": "결제가 있는데 왜 완전 무료가 아닌가요?",
+  "h": "f2bd2a70"
+ },
+ "topup.xem-lai-ket-qua-co-bi": {
+  "t": "결과를 다시 볼 때 냥이 또 차감되나요?",
+  "h": "64b49a22"
+ },
+ "tuonghop.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>풀이 샘플</b><span>샘플 명반의 부부 궁합 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-xem-tuoi.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "17b7eecd"
+ },
+ "tuonghop.cham-8-yeu-to-tuong-hop": {
+  "t": "두 사람의 명반 사이 8가지 궁합 요소를 채점해요. 나이와 띠를 두고 양가에서 이러쿵저러쿵 말이 나오죠. 결혼을 고민하며 분명한 답이 필요할 때 사용하세요.",
+  "h": "e3005a0a"
+ },
+ "tuonghop.luan-giai-chuyen-sau-luong": {
+  "t": "✦ 심층 풀이 — <span class=\"vnd\" data-tvp-price-vnd=\"xem-tuoi\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"xem-tuoi\">…</span> 냥)</span> →",
+  "h": "10ed4fe8"
+ },
+ "tuonghop.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"xem-tuoi\"></span> / 회 <span class=\"cb-sub\">(<span data-tvp-price=\"xem-tuoi\">…</span> 냥)</span>",
+  "h": "552e83b3"
+ },
+ "tuonghop.nguoi-thu-hai": {
+  "t": "<span class=\"dotB\"></span> 두 번째 사람",
+  "h": "204354fd"
+ },
+ "tuonghop.nguoi-thu-nhat": {
+  "t": "<span class=\"dotA\"></span> 첫 번째 사람",
+  "h": "14919cba"
+ },
+ "tuonghop.nhap-ngay-sinh-hai-nguoi-duong": {
+  "t": "두 사람의 생년월일 입력 (양력)",
+  "h": "0a8681af"
+ },
+ "tuonghop.so-tuoi-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"heart-handshake\"></span><b id=\"btnGoLabel\">궁합 보기 →</b></span> <small id=\"btnGoSub\">비용 <span class=\"vnd\" data-tvp-price-vnd=\"xem-tuoi\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"xem-tuoi\">…</span> 냥)</span></small>",
+  "h": "b8b279bf"
+ },
+ "tuonghop.so-tuoi-vo-chong-theo-la": {
+  "t": "자미두수 명반으로 보는 부부 궁합: 8가지 차원의 조화 점수 (나이, 오행, 사상, 관계, 자녀, 재물) — 그리고 선생님께 깊이 풀이받아 보세요.",
+  "h": "8c8efe63"
+ },
+ "tuonghop.tra-loi-thay-o-khung-chat": {
+  "t": "채팅창에서 선생님께 답해 두 사람의 생년월일을 입력하세요.",
+  "h": "d670d014"
+ },
+ "tuonghop.viet-rieng-cho-hai-nguoi-nay": {
+  "t": "고법에 따라 이 두 사람만을 위해 따로 써요 — 전체 개요와 차원별 조화까지.",
+  "h": "7ce3e9e1"
+ },
+ "tuonghop.xem-tuoi-vo-chong-so-hoa": {
+  "t": "<b id=\"wsTitle\">부부 궁합 보기</b><span id=\"wsSub\">고법으로 두 명반의 조화 비교</span>",
+  "h": "dec7e95a"
+ },
+ "tuonghop.xem-tuoi-vo-chong-tu-vi": {
+  "t": "부부 궁합 — 명보 자미두수",
+  "h": "4fd9f105"
+ },
+ "vanhan.12-thang-am-lich-toi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>앞으로 12개월<br>음력</span>",
+  "h": "3a53657a"
+ },
+ "vanhan.ban-van-han-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>운세 리포트 샘플</b><span>샘플 명반의 전체 풀이 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-van-han-nam.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "1e9bfd0f"
+ },
+ "vanhan.dang-dung": {
+  "t": "<span class=\"ic\" id=\"vhBtnPdfIcon\"><span class=\"rr-spin\"></span></span> <span id=\"vhBtnPdfLabel\">만드는 중…</span>",
+  "h": "2acb933e"
+ },
+ "vanhan.luan-giai-day-du": {
+  "t": "전체 풀이 →",
+  "h": "a2830f82"
+ },
+ "vanhan.mot-nam-12-thang-khong-thang": {
+  "t": "1년 12개월, 같은 달은 하나도 없어요 — 나아가기 좋은 달이 있고, 몸을 낮추고 때를 기다릴 달이 있어요. 내 명반으로 매달의 운세 흐름을 미리 살펴, 수동적으로 맞이하는 대신 먼저 움직이세요.",
+  "h": "cc7a0558"
+ },
+ "vanhan.nhap-ngay-gio-sinh-he-thong": {
+  "t": "생년월일시를 입력하세요. 시스템이 음력 월별로 운세를 풀이해요 — 현재 대운, 올해 소운, 그리고 12개월 전체의 개별 풀이까지.",
+  "h": "843980b9"
+ },
+ "vanhan.nhap-ngay-sinh-de-xem-van": {
+  "t": "생년월일을 입력하고 앞으로 12개월 운세 보기",
+  "h": "6d4946bd"
+ },
+ "vanhan.tai-anh-chia-se-9-16": {
+  "t": "⬇ 공유용 이미지 받기 (9:16)",
+  "h": "9e425572"
+ },
+ "vanhan.tai-chinh-tung-thang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"dollar-sign\"></span><span>월별<br>재물</span>",
+  "h": "be559339"
+ },
+ "vanhan.tinh-duyen-tung-thang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>월별<br>연애</span>",
+  "h": "74f37a3c"
+ },
+ "vanhan.van-han-12-thang-toi": {
+  "t": "앞으로 12개월 운세",
+  "h": "f265e49d"
+ },
+ "vanhan.van-han-12-thang-toi-tieu": {
+  "t": "<b>앞으로 12개월 운세</b><span>올해 소운과 월운, 오늘부터 계산</span>",
+  "h": "ee5bb33f"
+ },
+ "vanhan.van-han-12-thang-toi-tu": {
+  "t": "앞으로 12개월 운세 — 명보 자미두수",
+  "h": "8209452b"
+ },
+ "vanhan.xem-van-han-12-thang-toi": {
+  "t": "오늘부터 계산한 앞으로 12개월 운세 보기: 올해 소운과 월별 월운을 한도궁, 별, 운의 격국에 따라 — 고법에 따라 매달 따로 풀이해요.",
+  "h": "b5015abf"
+ },
+ "vanhan.xem-van-han-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"calendar\"></span><b id=\"btnGoLabel\">운세 보기 →</b></span> <small>무료</small>",
+  "h": "3895d3c5"
  }
 }

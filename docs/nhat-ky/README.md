@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-551 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+552 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 10 | 28,535 B |
+| `2026-11.md` | 11 | 31,451 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -29,6 +29,9 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-11 | `2026-11.md` | 🧹 W13b — Chữ Việt cứng còn lọt ở /ja, /ko: chuỗi ghép với biến |
+
+| 1 | 2026-11 | `2026-11.md` | 🀄 W15 — Bảng lá số theo ngôn ngữ: tên sao/cung/can chi qua glossary |
+
 | 1 | 2026-11 | `2026-11.md` | 🛒 W13 — Chữ do JS client dựng theo ngôn ngữ: khung app, tường trả phí, đăng nhập, trang nạp |
 | 1 | 2026-11 | `2026-11.md` | 🌐 W14 — Đợt 3: 5 trang công cụ vào từ điển server |
 | 1 | 2026-11 | `2026-11.md` | 🔎 W10 — SEO/GEO quốc tế: keyword theo ngôn ngữ + Naver, IndexNow, llms theo ngôn ngữ |
