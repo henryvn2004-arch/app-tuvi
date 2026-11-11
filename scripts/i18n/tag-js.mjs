@@ -177,6 +177,7 @@ function tagLiterals() {
         else if (src[i] === ']') cls = false;
         else if (src[i] === '/' && !cls) break;
       }
+      if (src[i] === '\n') i--; // không phải regex (phép chia): trả lại dấu xuống dòng cho bộ đếm dòng
       lastSig = 'r';
       continue;
     }

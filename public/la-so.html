@@ -196,6 +196,12 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
+// i18n: trang này không nạp auth.js (nơi định nghĩa _tvmbT toàn cục) — bản tối thiểu, cùng hành vi.
+if (typeof window._tvmbT !== 'function') window._tvmbT = function (k, d, v) {
+  var I = window.I18n;
+  if (I && I.tv) return I.tv(k, d, v);
+  return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
+};
 // ── SUPABASE ──
 const _SB_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const _SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
@@ -355,13 +361,13 @@ function buildDropdowns(){
 function updateGioAm(){
   const h=parseInt(document.getElementById('inp-hh').value)||0;
   const p=parseInt(document.getElementById('inp-pp').value)||0;
-  document.getElementById('gio-chi-display').textContent='Giờ âm: '+CHI[hourMinToGioAm(h,p)];
+  document.getElementById('gio-chi-display').textContent=_tvmbT('js.laso.gio-am', 'Giờ âm: ')+CHI[hourMinToGioAm(h,p)];
 }
 
 // ── AN SAO & RENDER ──
 function doAnSao(){
   const btn=document.getElementById('btn-anlaso');
-  btn.disabled=true;btn.textContent='Đang an sao...';
+  btn.disabled=true;btn.textContent=_tvmbT('js.laso.dang-an-sao', 'Đang an sao...');
   try{
     const name=document.getElementById('inp-name').value.trim();
     const gioitinh=document.getElementById('inp-gender').value;
@@ -372,7 +378,7 @@ function doAnSao(){
     const hh=parseInt(document.getElementById('inp-hh').value)||0;
     const pp=parseInt(document.getElementById('inp-pp').value)||0;
     if(!dd||!mm||!yyyy){
-      document.getElementById('laso-grid-container').innerHTML='<div class="error-msg">Vui lòng nhập đầy đủ ngày tháng năm sinh.</div>';
+      document.getElementById('laso-grid-container').innerHTML=_tvmbT('js.laso.vui-long-nhap-day-du-ngay', '<div class="error-msg">Vui lòng nhập đầy đủ ngày tháng năm sinh.</div>');
       document.getElementById('grid-wrap').style.display='block';
       return;
     }
@@ -392,7 +398,7 @@ function doAnSao(){
     document.getElementById('grid-wrap').style.display='block';
     console.error(e);
   }finally{
-    btn.disabled=false;btn.textContent='Lấy Lá Số';
+    btn.disabled=false;btn.textContent=_tvmbT('js.laso.lay-la-so', 'Lấy Lá Số');
   }
 }
 
@@ -449,14 +455,14 @@ async function exportPNG(){
   const btn=document.getElementById('btn-export');
   const grid=document.querySelector('#laso-grid-container .laso-grid');
   if(!grid)return;
-  btn.disabled=true;btn.innerHTML=(window.iconHtml?window.iconHtml('hourglass'):'')+' Đang xuất...';
+  btn.disabled=true;btn.innerHTML=(window.iconHtml?window.iconHtml('hourglass'):'')+_tvmbT('js.laso.dang-xuat', ' Đang xuất...');
   try{
     const canvas=await html2canvas(grid,{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false});
     const link=document.createElement('a');
     const title=document.getElementById('grid-title').textContent.replace(/[^a-zA-Z0-9À-ỹ\s]/g,'').trim().replace(/\s+/g,'-')||'la-so-tu-vi';
     link.download=title+'.png';link.href=canvas.toDataURL('image/png');link.click();
   }catch(e){alert('Xuất thất bại: '+e.message);}
-  btn.disabled=false;btn.innerHTML='⬇ Tải PNG';
+  btn.disabled=false;btn.innerHTML=_tvmbT('js.laso.tai-png', '⬇ Tải PNG');
 }
 
 // ── NAV DROPDOWN ──

@@ -1048,7 +1048,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     _viewing=v;
     var key=anhCho(v);
     var isToday=!_today||(td.d===_today.d&&td.mo===_today.mo&&td.y===_today.y);
-    el('todayEyebrow').textContent=isToday?'Vận hôm nay':'Vận ngày '+td.d+'/'+td.mo;
+    el('todayEyebrow').textContent=isToday?_tvmbT('js.home.van-hom-nay', 'Vận hôm nay'):_tvmbT('js.home.van-ngay', 'Vận ngày ')+td.d+'/'+td.mo;
     // 🐞 PHẢI đặt 'block', không phải '': luật CSS của .today-back là
     // `display:none`, nên gán '' chỉ xoá inline style rồi rơi về đúng luật đó —
     // nút không bao giờ hiện.
@@ -1267,7 +1267,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       el('tmeCancel').onclick=function(){ host.innerHTML=''; btn.style.display=''; };
       el('tmeSave').onclick=function(){
         var fd=null; try{ fd=TuviForm.getData(); }catch(e){}
-        if(!fd||!fd.ngay||!fd.thang||!fd.nam){ el('tmeErr').textContent='Thiếu ngày/tháng/năm sinh.'; return; }
+        if(!fd||!fd.ngay||!fd.thang||!fd.nam){ el('tmeErr').textContent=_tvmbT('js.home.thieu-ngay-thang-nam-sinh', 'Thiếu ngày/tháng/năm sinh.'); return; }
         // Lưới đỡ: ô tên có sẵn (setData đã điền từ prev) nên bình thường fd.hoten
         // đã đúng; giữ fallback này chỉ để phòng ô bị bỏ trống ngoài ý muốn —
         // ghi đè trắng thì rail mất cách xưng hô đúng tên.
@@ -1275,8 +1275,8 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
         try{ Shell.rememberBirth(fd); }catch(e){}
         try{ _birth=Shell.birthToApi(fd); }catch(e){ _birth=null; }
         _hasBirth=!!(_birth&&_birth.day&&_birth.month&&_birth.year);
-        if(!_hasBirth){ el('tmeErr').textContent='Ngày sinh chưa hợp lệ.'; return; }
-        el('tmeSave').disabled=true; el('tmeSave').textContent='Đang lập…';
+        if(!_hasBirth){ el('tmeErr').textContent=_tvmbT('js.home.ngay-sinh-chua-hop-le', 'Ngày sinh chưa hợp lệ.'); return; }
+        el('tmeSave').disabled=true; el('tmeSave').textContent=_tvmbT('js.home.dang-lap', 'Đang lập…');
         // Xin lại CẢ dải 7 ngày: `bixung` của từng ô phụ thuộc tuổi người xem,
         // giữ dải cũ là để lại 7 ô tính cho "người chưa có lá số".
         fetchDay(_today,true).then(function(v){
@@ -1288,8 +1288,8 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
           // không thì server hỏi `user_charts` trước khi dòng kịp vào.
           setTimeout(function(){ _khLast=0; khSync(); },1800);
         }).catch(function(){
-          el('tmeSave').disabled=false; el('tmeSave').textContent='Xem vận riêng của tôi →';
-          el('tmeErr').textContent='Không lập được, thử lại sau.';
+          el('tmeSave').disabled=false; el('tmeSave').textContent=_tvmbT('js.home.xem-van-rieng-cua-toi', 'Xem vận riêng của tôi →');
+          el('tmeErr').textContent=_tvmbT('js.home.khong-lap-duoc-thu-lai-sau', 'Không lập được, thử lại sau.');
         });
       };
     };
@@ -1311,8 +1311,8 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     el('todaySeal').textContent=TRIEN.binh;
     el('todayDate').textContent=wd+' · '+td.d+'/'+td.mo;
     var badge=el('todayHanh');
-    badge.textContent='Ngày '+r.data.canChiNgay; badge.className='today-hanh';
-    el('todaySub').textContent='Hành '+r.data.canHanh+' — số liệu rút gọn, thử tải lại sau.';
+    badge.textContent=_tvmbT('js.home.ngay', 'Ngày ')+r.data.canChiNgay; badge.className='today-hanh';
+    el('todaySub').textContent=_tvmbT('js.home.hanh', 'Hành ')+r.data.canHanh+_tvmbT('js.home.so-lieu-rut-gon-thu-tai', ' — số liệu rút gọn, thử tải lại sau.');
     var grid=el('todayGrid');
     grid.innerHTML='<div class="tbox hour" style="grid-column:1/-1">'
       +'<div class="tbox-h"><span class="ic" data-icon="clock"></span>Giờ đẹp</div>'
@@ -1574,7 +1574,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       if(v.huong&&v.huong.taiThan) sub.push('tài thần '+v.huong.taiThan);
       Poster.downloadDay({
         verdict:v.danhGia.tinhChat,
-        verdictLabel:(v.danhGia.tinhChat==='tốt'?'Ngày tốt':v.danhGia.tinhChat==='xấu'?'Ngày xấu':'Ngày bình'),
+        verdictLabel:(v.danhGia.tinhChat==='tốt'?_tvmbT('js.home.ngay-tot', 'Ngày tốt'):v.danhGia.tinhChat==='xấu'?_tvmbT('js.home.ngay-xau', 'Ngày xấu'):_tvmbT('js.home.ngay-binh', 'Ngày bình')),
         title:v.ngay.thu+' · '+td.d+'/'+td.mo+' — Ngày '+v.ngay.canChi,
         subtitle:sub.join(' · '),
         quote:v.danhGia.nhan,

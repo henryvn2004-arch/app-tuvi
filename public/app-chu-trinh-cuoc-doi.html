@@ -429,7 +429,7 @@ function appendHookHighlightCard(){
     if(ab) ab.click();
   });
   var follow=document.createElement('div'); follow.className='msg a';
-  follow.innerHTML='<img class="msg-ava" src="'+av+'" alt=""><div class="msg-body"><p>Bạn muốn thầy đào sâu điều nào trước?</p></div>';
+  follow.innerHTML='<img class="msg-ava" src="'+av+_tvmbT('js.battu.alt-ban-muon-thay-dao-sau', '" alt=""><div class="msg-body"><p>Bạn muốn thầy đào sâu điều nào trước?</p></div>');
   chat.appendChild(follow);
   chat.scrollTop=chat.scrollHeight;
 }
@@ -439,7 +439,7 @@ async function doLuan(){
   var fdIn=TuviForm.getData();
   var name=fdIn.hoten, gioitinh=fdIn.gioitinh, dd=fdIn.ngay, mm=fdIn.thang, yyyy=fdIn.nam, hh=fdIn.gioHour, pp=fdIn.gioPhut, gioAmIdx=fdIn.gioIdx;
   if(!dd||!mm||!yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
-  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang luận…';
+  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent=_tvmbT('js.luangiai.dang-luan', 'Đang luận…');
   _ctcdDummy=await _ctcdDummyPromise();
   // Lưu lại NGAY để `?tpwResume=1` (quay về sau khi nạp Lượng, xem
   // `LG_RESUME_KEY` ở đầu file) khôi phục được đúng form này không cần gõ lại.
@@ -490,13 +490,13 @@ async function doLuan(){
     });
     initLuanGiaiGate(ls);
   }catch(e){
-    document.getElementById('lgBody').innerHTML='<div class="laso-error">Lỗi khi luận giải: '+esc(e.message)+'</div>';
+    document.getElementById('lgBody').innerHTML=_tvmbT('js.luangiai.loi-khi-luan-giai', '<div class="laso-error">Lỗi khi luận giải: ')+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('lgPanel').style.display='block';
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('lgPanel');
     if(window.console)console.error(e);
   }finally{
-    btn.disabled=false; var _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent='Luận giải →';
+    btn.disabled=false; var _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent=_tvmbT('js.chutrinh.luan-giai', 'Luận giải →');
   }
 }
 
@@ -534,7 +534,7 @@ function _renderArc(){
       current:!!(cur&&d.cungIdx===cur.cungIdx&&d.tuoiStart===cur.tuoiStart)};
   });
   host.innerHTML=HookCharts.stageTimeline({segments:segs,
-    ariaLabel:'Chín chặng đại vận, cột cao theo điểm engine, mỗi chặng một từ khoá'});
+    ariaLabel:_tvmbT('js.chutrinh.chin-chang-dai-van-cot-cao', 'Chín chặng đại vận, cột cao theo điểm engine, mỗi chặng một từ khoá')});
   // Chỉ mời tải ảnh khi đã có ít nhất một chặng mang từ khoá — xem lý do ở
   // app-van-han-nam.html (poster của khối toàn "chưa luận" là ảnh rỗng).
   var tai=document.getElementById('lgTai');
@@ -544,7 +544,7 @@ function _renderArc(){
 function taiAnhArc(){
   var host=document.getElementById('lgMap'), btn=document.getElementById('lgTaiBtn');
   if(!host||!host.innerHTML||!window.Poster)return;
-  var old=btn.textContent; btn.disabled=true; btn.textContent='Đang dựng ảnh…';
+  var old=btn.textContent; btn.disabled=true; btn.textContent=_tvmbT('js.xemtuoi.dang-dung-anh', 'Đang dựng ảnh…');
   var T=(Poster.THEME)||{};
   var dv=_astrolabe&&_astrolabe.daiVanHienTai;
   Poster.download({
@@ -792,7 +792,7 @@ function toggleMini(){
   var m=document.getElementById('miniChart'),f=document.getElementById('lgFold');
   var shown=getComputedStyle(m).display!=='none';
   m.style.display=shown?'none':'block';
-  f.textContent=shown?'▸ Xem lá số đầy đủ':'▾ Ẩn lá số';
+  f.textContent=shown?_tvmbT('js.luangiai.xem-la-so-day-du', '▸ Xem lá số đầy đủ'):_tvmbT('js.luangiai.an-la-so', '▾ Ẩn lá số');
 }
 
 // ══════════════════════════════════════════════════════════════════════
@@ -1052,7 +1052,7 @@ function mountHook(ls){
     // ngay trên: "KHÔNG đoán"). `upgrade()`/`_narrativeHtml` tự bỏ qua khi thiếu.
     // Đợt 2 phần 5 (2026-09-25): echo NGAY narrative này vào chat — xem
     // appendHookHighlightCard(). Chỉ bắn khi allowed:true (xem chú thích ở đó).
-    var spec={tool:'chu-trinh-cuoc-doi',toolLabel:'Chu Trình Cuộc Đời',charts:[],facts:facts,onNarrative:appendHookHighlightCard};
+    var spec={tool:'chu-trinh-cuoc-doi',toolLabel:_tvmbT('js.paywall.chu-trinh-cuoc-doi', 'Chu Trình Cuộc Đời'),charts:[],facts:facts,onNarrative:appendHookHighlightCard};
     window.HookLayer.run(host, spec);
   });
 }
@@ -1085,7 +1085,7 @@ function _renderUnlockBlock(){
   _paintSecLocks(true);
   mountHook(_astrolabe);
   if(_lgLoggedIn()){
-    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span><b>Luận giải chuyên sâu →</b></span><small>Tốn <span class="vnd" data-tvp-price-vnd="chu-trinh-cuoc-doi"></span> <span class="cb-sub">(<span data-tvp-price="chu-trinh-cuoc-doi">…</span> Lượng)</span></small></button>'+
+    host.innerHTML=_tvmbT('js.chutrinh.luan-giai-chuyen-sau-ton-luong', '<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span><b>Luận giải chuyên sâu →</b></span><small>Tốn <span class="vnd" data-tvp-price-vnd="chu-trinh-cuoc-doi"></span> <span class="cb-sub">(<span data-tvp-price="chu-trinh-cuoc-doi">…</span> Lượng)</span></small></button>')+
       '<p>Viết riêng cho lá số này theo cổ pháp — 11 phần: tổng quan đại vận, luận riêng từng đại vận trong 9 đại vận, và tiểu vận năm xem. Kèm bản PDF tải về hoặc gửi qua email.</p>';
     TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,'chu-trinh-cuoc-doi'); });
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
@@ -1230,7 +1230,7 @@ async function _startLuanGiaiAI(){
   // chặn, hoặc người đã mua quay lại chưa từng xem qua bản xem trước).
   var primeOk=true;
   if(!_luanGiaiStore[14]){
-    document.getElementById('lgProgress').textContent='Đang luận giải phần 1 / '+TONG_PHAN+'...';
+    document.getElementById('lgProgress').textContent=_tvmbT('js.luangiai.dang-luan-giai-phan-1', 'Đang luận giải phần 1 / ')+TONG_PHAN+'...';
     primeOk=await _runPhanLuanGiai(14);
   }
   var result=await PhanPool.run({
@@ -1252,7 +1252,7 @@ async function _startLuanGiaiAI(){
     },
   });
   if(result.ok){
-    document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
+    document.getElementById('lgProgress').textContent=_tvmbT('js.battu.luan-giai-hoan-tat', '✓ Luận giải hoàn tất');
     _reportHandle&&_reportHandle.ready(TONG_PHAN,{announce:true});
     _saveLuanGiaiResult();
   }else{
@@ -1280,7 +1280,7 @@ async function _runPhanLuanGiai(ep,preview){
     // đợi tới khi có kết quả: giữ mờ trong lúc "Đang luận giải…" là còn hiện
     // văn mẫu PHÍA DƯỚI orb chờ, gây rối.
     box.classList.remove('tpw-real-lock');
-    box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
+    box.innerHTML=_tvmbT('js.battu.dang-luan-giai', '<div class="phan-empty">Đang luận giải…</div>');
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
       // Henry: canh vòng tròn ngay giữa khung, to hơn, glow nhanh hơn để thấy
       // rõ đang chạy — `center`/`orbSize`/`fast` là modifier RIÊNG (mặc định
@@ -1313,7 +1313,7 @@ async function _runPhanLuanGiai(ep,preview){
     if(data.error||!data.luanGiai){
       doneWait();
       if(window.TuviPaywall&&TuviPaywall.showRefundNotice)TuviPaywall.showRefundNotice(data);
-      if(box)box.innerHTML=preview?'':'<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan('+ep+')">↻ Thử lại</button></div>';
+      if(box)box.innerHTML=preview?'':_tvmbT('js.battu.loi-khi-luan-giai-phan', '<div class="laso-error">Lỗi khi luận giải phần ')+p+'. <button class="btn" onclick="window._lgRetryPhan('+ep+_tvmbT('js.luangiai.thu-lai', ')">↻ Thử lại</button></div>');
       return false;
     }
     _luanGiaiStore[ep]=data.luanGiai;
@@ -1323,7 +1323,7 @@ async function _runPhanLuanGiai(ep,preview){
     return true;
   }catch(e){
     doneWait();
-    if(box)box.innerHTML=preview?'':'<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan('+ep+')">↻ Thử lại</button></div>';
+    if(box)box.innerHTML=preview?'':_tvmbT('js.luangiai.loi-phan', '<div class="laso-error">Lỗi phần ')+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan('+ep+_tvmbT('js.luangiai.thu-lai', ')">↻ Thử lại</button></div>');
     return false;
   }
 }
@@ -1334,7 +1334,7 @@ window._lgRetryPhan=function(ep){
       // là phần LỖI CUỐI CÙNG còn thiếu để hoàn tất cả lượt.
       var n=0; for(var p=1;p<=TONG_PHAN;p++)if(_luanGiaiStore[13+p])n++;
       if(n>=TONG_PHAN){
-        document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
+        document.getElementById('lgProgress').textContent=_tvmbT('js.battu.luan-giai-hoan-tat', '✓ Luận giải hoàn tất');
         _reportHandle&&_reportHandle.ready(TONG_PHAN,{announce:true});
         _saveLuanGiaiResult();
       }
@@ -1388,7 +1388,7 @@ function _pageInit(){
       // `p` là LOCAL (1-11) — DOM/label đều khoá theo ENGINE phan (13+p),
       // cùng trục app-luan-giai.html dùng đã trực tiếp là local p.
       getBoxId:function(p){ return 'claude-content-'+(13+p); },
-      getLabel:function(p){ return (LuanGiaiCore.phanLabels(_astrolabe)||{})[13+p]||('Phần '+p); },
+      getLabel:function(p){ return (LuanGiaiCore.phanLabels(_astrolabe)||{})[13+p]||(_tvmbT('js.luangiai.phan', 'Phần ')+p); },
       getSlug:function(){ return _pendingSlug; },
       saved:function(){ return _savePromise; },
       getMeta:function(){ return {

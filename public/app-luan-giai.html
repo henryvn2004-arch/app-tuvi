@@ -504,7 +504,7 @@ function showNamxemStep(){
   document.getElementById('namxemNext').addEventListener('click',function(){
     var btn=this;
     if(btn.disabled)return;
-    btn.disabled=true; btn.textContent='Đang lập lá số…';
+    btn.disabled=true; btn.textContent=_tvmbT('js.luangiai.dang-lap-la-so', 'Đang lập lá số…');
     document.getElementById('inpNamxem').value=document.getElementById('cInpNamxem').value;
     doLuan();
   });
@@ -673,7 +673,7 @@ function appendHookHighlightCard(){
     if(ab) ab.click();
   });
   var follow=document.createElement('div'); follow.className='msg a';
-  follow.innerHTML='<img class="msg-ava" src="'+av+'" alt=""><div class="msg-body"><p>Bạn muốn thầy đào sâu điều nào trước?</p></div>';
+  follow.innerHTML='<img class="msg-ava" src="'+av+_tvmbT('js.battu.alt-ban-muon-thay-dao-sau', '" alt=""><div class="msg-body"><p>Bạn muốn thầy đào sâu điều nào trước?</p></div>');
   chat.appendChild(follow);
   chat.scrollTop=chat.scrollHeight;
 }
@@ -685,7 +685,7 @@ async function doLuan(){
   if(!dd||!mm||!yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
   // Khoá nút NGAY (trước await) — chặn double-submit trong lúc chờ văn mẫu
   // (thường đã có sẵn trong cache, xem `_lasoDummyPromise()` mồi ở trên).
-  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang luận…';
+  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent=_tvmbT('js.luangiai.dang-luan', 'Đang luận…');
   _laSoDummy=await _lasoDummyPromise();
   // Lưu lại NGAY để `?tpwResume=1` (quay về sau khi nạp Lượng, xem IIFE
   // `LG_RESUME_KEY` ở đầu file) khôi phục được đúng form này mà không cần bấm
@@ -759,21 +759,21 @@ async function doLuan(){
     if(window.CungNgaySinh)CungNgaySinh.mount('cnsHost',{ngay:dd,thang:mm,nam:yyyy,gioIdx:gioAmIdx,gioitinh:gioitinh});
     if(window.NguoiThan)NguoiThan.mount('ntHost',{toolId:'luan-giai',onPick:nguoiThanPick});
   }catch(e){
-    document.getElementById('lgBody').innerHTML='<div class="laso-error">Lỗi khi luận giải: '+esc(e.message)+'</div>';
+    document.getElementById('lgBody').innerHTML=_tvmbT('js.luangiai.loi-khi-luan-giai', '<div class="laso-error">Lỗi khi luận giải: ')+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('lgPanel').style.display='block';
     _hideIntakeSideBoxes();
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('lgPanel');
     if(window.console)console.error(e);
   }finally{
-    btn.disabled=false; var _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent='Lập lá số & Luận giải ngay →';
+    btn.disabled=false; var _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent=_tvmbT('js.luangiai.lap-la-so-luan-giai-ngay', 'Lập lá số & Luận giải ngay →');
     // Nút chat `#namxemNext` (xem `startIntake` phía trên) đặt text "Đang lập
     // lá số…" NGAY lúc bấm rồi khoá vĩnh viễn — cố ý, chống double-submit đẻ
     // ra nhiều dòng "đã sẵn sàng" trùng nhau. Nhưng text đó đứng nguyên MÃI
     // MÃI trong lịch sử hội thoại kể cả sau khi việc đã xong, đọc như bị kẹt.
     // Đổi sang trạng thái XONG ở đây — chạy trong CẢ nhánh lỗi (catch ở trên
     // không return sớm) lẫn thành công, nên luôn khớp thực tế.
-    var _nxt=document.getElementById('namxemNext'); if(_nxt) _nxt.textContent='✓ Đã lập lá số';
+    var _nxt=document.getElementById('namxemNext'); if(_nxt) _nxt.textContent=_tvmbT('js.luangiai.da-lap-la-so', '✓ Đã lập lá số');
   }
 }
 
@@ -863,7 +863,7 @@ function mountHook(ls){
     var illus=(window.IllusMatch&&window.IllusMatch.illusUrlForPhan)?window.IllusMatch.illusUrlForPhan(ls,1,_gioitinh):null;
     var spec={
       tool:'laso',
-      toolLabel:'Luận Giải Tử Vi',
+      toolLabel:_tvmbT('js.luangiai.luan-giai-tu-vi', 'Luận Giải Tử Vi'),
       illus:illus,
       charts:[
         hexDims?{type:'hexRadar',data:{dims:hexDims},title:'Lục Giác cung Mệnh'}:null
@@ -1213,7 +1213,7 @@ function toggleMini(){
   var m=document.getElementById('miniChart'),f=document.getElementById('lgFold');
   var shown=getComputedStyle(m).display!=='none';
   m.style.display=shown?'none':'block';
-  f.textContent=shown?'▸ Xem lá số đầy đủ':'▾ Ẩn lá số';
+  f.textContent=shown?_tvmbT('js.luangiai.xem-la-so-day-du', '▸ Xem lá số đầy đủ'):_tvmbT('js.luangiai.an-la-so', '▾ Ẩn lá số');
 }
 
 // ══════════════════════════════════════════════════════════════════════
@@ -1455,7 +1455,7 @@ function _renderSavePrompt(){
   if(_lgLoggedIn()){ host.style.display='none'; host.innerHTML=''; return; }
   host.className='lg-save-prompt';
   host.style.display='flex';
-  host.innerHTML='<div class="lsp-txt">✦ <b>Lưu lá số này</b> để xem lại bất cứ lúc nào — miễn phí, không cần trả gì.</div>'+
+  host.innerHTML=_tvmbT('js.luangiai.luu-la-so-nay-de-xem', '<div class="lsp-txt">✦ <b>Lưu lá số này</b> để xem lại bất cứ lúc nào — miễn phí, không cần trả gì.</div>')+
     '<button type="button" id="lgSaveBtn">Đăng ký lưu →</button>';
   document.getElementById('lgSaveBtn').addEventListener('click', function(){
     if(window.showAuthModal){
@@ -1467,7 +1467,7 @@ function _renderSavePrompt(){
         // tự bật push ở đây, chỉ dẫn sang /app nơi nhiệm vụ "Bật thông báo"
         // (Khởi Hành, +10 Lượng, app-home.html) đã xử lý toàn bộ luồng xin
         // quyền. Đây là chỗ NỐI, không phải xây lại.
-        host.innerHTML='<div class="lsp-txt">✓ Đã lưu lá số này vào tài khoản của bạn. <a href="/app" style="color:var(--navy);font-weight:600">Bật thông báo để nhận vận mỗi ngày →</a></div>';
+        host.innerHTML=_tvmbT('js.luangiai.da-luu-la-so-nay-vao', '<div class="lsp-txt">✓ Đã lưu lá số này vào tài khoản của bạn. <a href="/app" style="color:var(--navy);font-weight:600">Bật thông báo để nhận vận mỗi ngày →</a></div>');
         window.refreshNavCredits&&window.refreshNavCredits();
       });
     }
@@ -1594,7 +1594,7 @@ function _renderUnlockBlock(){
   // DOM) cũng bật khoá-mini của chính nó, để cuộn qua khỏi banner vẫn còn chỗ mở.
   _paintSecLocks(true);
   if(_lgLoggedIn()){
-    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau(\'wall\')">✦ Luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button>'+
+    host.innerHTML=_tvmbT('js.luangiai.luan-giai-chuyen-sau-luong', '<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau(\'wall\')">✦ Luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button>')+
       '<p>Bạn vừa đọc 1 phần đầu miễn phí. 12 phần còn lại — mỗi cung một phần luận riêng theo cổ pháp — nằm trong bản đầy đủ, kèm bản PDF tải về hoặc gửi qua email.</p>';
     TuviPaywall.fillPriceSlots(host);
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
@@ -1774,7 +1774,7 @@ async function _startLuanGiaiAI(){
   // trước quay lại, hoặc bản xem trước bị cầu dao chặn.
   var primeOk=true;
   if(!_luanGiaiStore[1]){
-    document.getElementById('lgProgress').textContent='Đang luận giải phần 1 / '+TONG_PHAN+'...';
+    document.getElementById('lgProgress').textContent=_tvmbT('js.luangiai.dang-luan-giai-phan-1', 'Đang luận giải phần 1 / ')+TONG_PHAN+'...';
     primeOk=await _runPhanLuanGiai(1);
   }
   var result=await PhanPool.run({
@@ -1795,7 +1795,7 @@ async function _startLuanGiaiAI(){
     },
   });
   if(result.ok){
-    document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
+    document.getElementById('lgProgress').textContent=_tvmbT('js.battu.luan-giai-hoan-tat', '✓ Luận giải hoàn tất');
     _reportHandle&&_reportHandle.ready(TONG_PHAN,{announce:true});
     _saveLuanGiaiResult();
   }else{
@@ -1821,7 +1821,7 @@ async function _runPhanLuanGiai(p,preview){
   var w=null;
   if(box){
     box.style.display='block';
-    box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
+    box.innerHTML=_tvmbT('js.battu.dang-luan-giai', '<div class="phan-empty">Đang luận giải…</div>');
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
       // `center`/`orbSize`/`fast` — cùng chỉnh với app-chu-trinh-cuoc-doi.html
       // (Henry: "canh vòng tròn ngay giữa khung, to hơn, glow nhanh hơn để
@@ -1853,7 +1853,7 @@ async function _runPhanLuanGiai(p,preview){
       doneWait();
       _lgLastPreviewDenyReason=data.reason||null;
       if(window.TuviPaywall&&TuviPaywall.showRefundNotice)TuviPaywall.showRefundNotice(data);
-      if(box)box.innerHTML=preview?'':'<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan('+p+')">↻ Thử lại</button></div>';
+      if(box)box.innerHTML=preview?'':_tvmbT('js.battu.loi-khi-luan-giai-phan', '<div class="laso-error">Lỗi khi luận giải phần ')+p+'. <button class="btn" onclick="window._lgRetryPhan('+p+_tvmbT('js.luangiai.thu-lai', ')">↻ Thử lại</button></div>');
       return false;
     }
     // GIỮ NGUYÊN bản ĐẦY ĐỦ trong _luanGiaiStore — đây là thứ `_startLuanGiaiAI`
@@ -1877,7 +1877,7 @@ async function _runPhanLuanGiai(p,preview){
     return true;
   }catch(e){
     doneWait();
-    if(box)box.innerHTML=preview?'':'<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan('+p+')">↻ Thử lại</button></div>';
+    if(box)box.innerHTML=preview?'':_tvmbT('js.luangiai.loi-phan', '<div class="laso-error">Lỗi phần ')+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan('+p+_tvmbT('js.luangiai.thu-lai', ')">↻ Thử lại</button></div>');
     return false;
   }
 }
@@ -1888,7 +1888,7 @@ window._lgRetryPhan=function(p){
       // là phần LỖI CUỐI CÙNG còn thiếu để hoàn tất cả lượt.
       var n=0; for(var k=1;k<=TONG_PHAN;k++)if(_luanGiaiStore[k])n++;
       if(n>=TONG_PHAN){
-        document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
+        document.getElementById('lgProgress').textContent=_tvmbT('js.battu.luan-giai-hoan-tat', '✓ Luận giải hoàn tất');
         _reportHandle&&_reportHandle.ready(TONG_PHAN,{announce:true});
         _saveLuanGiaiResult();
       }
@@ -1950,7 +1950,7 @@ function _pageInit(){
       mailBtnId:'lgBtnEmail', mailLabelId:'lgBtnEmailLabel',
       tool:'laso', total:TONG_PHAN,
       getBoxId:function(p){ return 'claude-content-'+p; },
-      getLabel:function(p){ return (LuanGiaiCore.phanLabels(_astrolabe)||{})[p]||('Phần '+p); },
+      getLabel:function(p){ return (LuanGiaiCore.phanLabels(_astrolabe)||{})[p]||(_tvmbT('js.luangiai.phan', 'Phần ')+p); },
       getSlug:function(){ return _pendingSlug; },
       saved:function(){ return _savePromise; },
       getMeta:function(){ return {
