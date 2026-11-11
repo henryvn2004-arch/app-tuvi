@@ -152,3 +152,46 @@ describe('convertDuongToAm', () => {
     expect(r.canNam).toBe('Ất');
   });
 });
+
+// ── Lịch âm theo NƠI SINH (i18n W3) — bảng cn/kr/jp ─────────────────────────
+// Đối chiếu vét cạn với HKO/KASI nằm ở `npm run oracle:lunar` (gốc repo); ở đây
+// chỉ ghim mốc đã biết để bản TS không trôi khỏi bản vanilla.
+describe('solarToLunar theo lịch nơi sinh', () => {
+  it('Tết Ất Sửu 1985: VN 21/1, Trung/Hàn/Nhật 20/2', () => {
+    expect(solarToLunar(21, 1, 1985)).toMatchObject({ day: 1, month: 1, year: 1985 });
+    expect(solarToLunar(21, 1, 1985, 'cn')).toMatchObject({ day: 1, month: 12, year: 1984 });
+    for (const l of ['cn', 'kr', 'jp'] as const) {
+      expect(solarToLunar(20, 2, 1985, l)).toMatchObject({ day: 1, month: 1, year: 1985 });
+    }
+  });
+  it('Seollal 1997 (KASI) trễ Xuân Tiết (HKO) một ngày', () => {
+    expect(solarToLunar(7, 2, 1997, 'cn')).toMatchObject({ day: 1, month: 1 });
+    expect(solarToLunar(8, 2, 1997, 'kr')).toMatchObject({ day: 1, month: 1 });
+  });
+  it('2017: Hàn/Nhật nhuận tháng 5, Trung nhuận tháng 6', () => {
+    expect(solarToLunar(24, 6, 2017, 'kr')).toEqual({ day: 1, month: 5, year: 2017, isLeap: true });
+    expect(solarToLunar(24, 6, 2017, 'jp')).toEqual({ day: 1, month: 5, year: 2017, isLeap: true });
+    expect(solarToLunar(23, 7, 2017, 'cn')).toEqual({ day: 1, month: 6, year: 2017, isLeap: true });
+  });
+  it("'vn' tường minh = mặc định", () => {
+    expect(solarToLunar(15, 6, 1990, 'vn')).toEqual(solarToLunar(15, 6, 1990));
+  });
+  it('cùng biên 1900-01-01 → 2100-12-31 cho mọi lịch, ngoài biên ném RangeError', () => {
+    for (const l of ['vn', 'cn', 'kr', 'jp'] as const) {
+      expect(isLunarSupported(1, 1, 1900, l)).toBe(true);
+      expect(isLunarSupported(31, 12, 2100, l)).toBe(true);
+      expect(() => solarToLunar(31, 12, 1899, l)).toThrow(RangeError);
+      expect(() => solarToLunar(1, 1, 2101, l)).toThrow(RangeError);
+    }
+  });
+  it('lịch lạ ném RangeError, không rơi về bảng nào', () => {
+    // @ts-expect-error — cố ý truyền giá trị ngoài kiểu
+    expect(() => solarToLunar(15, 6, 1990, 'xx')).toThrow(RangeError);
+    // @ts-expect-error — khoá kế thừa của Object không phải lịch
+    expect(() => solarToLunar(15, 6, 1990, 'constructor')).toThrow(RangeError);
+  });
+  it('convertDuongToAm nhận lich', () => {
+    expect(convertDuongToAm(20, 2, 1985, 9, 'cn').amLich).toMatchObject({ ngayAL: 1, thangAL: 1, namAL: 1985 });
+    expect(convertDuongToAm(20, 2, 1985, 9).amLich).toMatchObject({ ngayAL: 1, thangAL: 2, namAL: 1985 });
+  });
+});

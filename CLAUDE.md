@@ -14,7 +14,7 @@
 | Cần gì | Tra ở |
 |---|---|
 | Chi tiết một LUẬT | `docs/luat/README.md` → `tien` · `llm-prompt` · `engine-cophap` · `postgres` · `bay` |
-| Diễn biến từng PR (117+ mục) | `docs/nhat-ky/README.md` → `2026-10` · `2026-09` · `2026-08` · `2026-07` · `track-cu` |
+| Diễn biến từng PR (117+ mục) | `docs/nhat-ky/README.md` → `2026-11` · `2026-10` · `2026-09` · `2026-08` · `2026-07` · `track-cu` |
 | Luật icon đầy đủ | `docs/ICONS.md` |
 | Cấu hình QC · giới hạn đã biết · dựng máy mới | `docs/QC.md` |
 
@@ -232,8 +232,8 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 - **Bảng âm lịch chỉ phủ `1900-01-01 → 2100-12-31`** — ngoài tầm: vanilla trả
   `null`, bản TS ném `RangeError`. **Mọi lượt import ngày sinh từ nguồn NGOÀI phải
   gọi `isLunarSupported()` trước.** `npm run check:lunar`.
-- **`_LUNAR_TABLE` SINH bằng `scripts/gen-lunar-table.mjs`**, không gõ tay/chép
-  thư viện ngoài; `npm run oracle:lunar` gate CI vét cạn 1900-2100.
+- **Bảng âm lịch (vn + cn/kr/jp theo NƠI SINH) SINH bằng `gen-lunar-table.mjs [--lich]`**,
+  `oracle:lunar` vét cạn + HKO/KASI. **`lich` phải theo lá số tới mọi chỗ tính/khoá** (thiếu = lịch VN, im lặng).
   **Bản vanilla BỎ cờ `isLeap`** — nợ CỐ Ý, đừng sửa mò.
 - **Khoá "cùng lá số" là ÂM LỊCH + giới tính, không phải ngày dương** (lá số lặp
   chu kỳ **60 năm**). ⚠️ `lasoKey()` băm ngày DƯƠNG — không tái dùng để gom lá số.

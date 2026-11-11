@@ -254,7 +254,8 @@ window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'chan-dung-vo-chong'};</script>
 <script src="/laso-chart.js?v=9"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=14"></script>
+<script src="/tools-shared/noi-sinh.js?v=1"></script>
+<script src="/tuvi-form.js?v=15"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=41"></script>
 <script src="/tools-shared/hook-charts.js?v=3"></script>
@@ -267,7 +268,7 @@ window.SHELL_INTRO={key:'chan-dung-vo-chong'};</script>
 <script src="/shell.js?v=136"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=47"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
-<script src="/tools-shared/portrait-recover.js?v=2"></script>
+<script src="/tools-shared/portrait-recover.js?v=3"></script>
 <script>
 var _currentSlug = '';
 var _resultImgUrl = '';
@@ -399,7 +400,7 @@ async function analyze() {
   // phục được form này không cần gõ lại.
   try { sessionStorage.setItem(CDVC_RESUME_KEY, JSON.stringify(fdIn)); } catch (e) { /* ignore */ }
 
-  _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false };
+  _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false, lich: fdIn.lich, noiSinh: fdIn.noiSinh };
   _currentSlug = TuviPaywall.generateToolSlug('chan-dung-vo-chong-' + dd + '-' + mm + '-' + yyyy);
 
   if (!_cdvcLoggedIn()) { return _runAnonPreview(); }

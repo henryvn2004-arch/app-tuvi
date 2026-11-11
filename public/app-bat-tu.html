@@ -272,7 +272,8 @@ window.SHELL_INTRO={key:'bat-tu'};</script>
      chắc chắn đã chạy xong (đã đo: `Chart` là `function` tại DOMContentLoaded). -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=14"></script>
+<script src="/tools-shared/noi-sinh.js?v=1"></script>
+<script src="/tuvi-form.js?v=15"></script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
@@ -427,7 +428,7 @@ function doBatTu(){
     // Rail: gửi CẢ birth (server lập bát tự) + scenario tu-binh (chọn đúng bộ não).
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
-      birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
+      birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined,lich:fdIn.lich,noiSinh:fdIn.noiSinh},
       scenario:{type:'tu-binh',data:{}},
       label:'Bát Tự '+(name||'')+' · '+dd+'/'+mm+'/'+yyyy+' · năm '+namxem,
       greeting:'Tứ trụ của **'+(name||'bạn')+'** đã sẵn sàng. Hỏi tôi về nhật can, dụng thần, cách cục hay đại vận nhé.',

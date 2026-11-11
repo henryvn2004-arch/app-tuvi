@@ -93,7 +93,8 @@ window.SHELL_INTRO={key:'la-so',title:'Lá số Tử Vi Đẩu Số',desc:'Nhậ
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=9"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=14"></script>
+<script src="/tools-shared/noi-sinh.js?v=1"></script>
+<script src="/tuvi-form.js?v=15"></script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=6"></script>
@@ -115,7 +116,7 @@ function doAnSao(){
   btn.disabled=true;btn.textContent='Đang an sao…';
   try{
     var gioChi=CHI[gioIdx];
-    var conv=convertDuongToAm(ngay,thang,nam,gioHour);conv.gioIdx=gioIdx;
+    var conv=convertDuongToAm(ngay,thang,nam,gioHour,fdIn.lich);conv.gioIdx=gioIdx;
     var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioIdx,gioitinh:gioitinh,namXem:namxem});
     var fd={name:name,gioitinh:gioitinh,dd:ngay,mm:thang,yyyy:nam,hh:gioHour,pp:gioPhut,gioChi:gioChi,amLich:conv.amLich,amDuongNam:conv.amDuongNam};
     document.getElementById('lasoContainer').innerHTML=renderGrid(ls,fd);
@@ -139,7 +140,7 @@ function doAnSao(){
     // gắn context để bật rail
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
-      birth:{day:ngay,month:thang,year:nam,hourBranch:gioIdx,gender:gioitinh,name:name||undefined},
+      birth:{day:ngay,month:thang,year:nam,hourBranch:gioIdx,gender:gioitinh,name:name||undefined,lich:fdIn.lich,noiSinh:fdIn.noiSinh},
       label:(name||'Lá số')+' · '+ngay+'/'+thang+'/'+nam+' · năm '+namxem,
       greeting:'Lá số của **'+(name||'bạn')+'** đã sẵn sàng. Bạn muốn tôi soi điều gì trước?',
       chips:buildLasoChips(ls,namxem)

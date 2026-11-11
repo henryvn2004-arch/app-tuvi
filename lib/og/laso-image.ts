@@ -89,6 +89,8 @@ function birthQuery(b: BirthParams | null | undefined, namXem: number): URLSearc
     td: '',
   });
   if (b.isLunar && b.isLeapMonth) q.set('ln', '1');
+  // Lịch âm theo nơi sinh (i18n W3) — chỉ gắn khi khác VN để link cũ giữ nguyên chữ ký.
+  if (b.lich && b.lich !== 'vn') q.set('lc', b.lich);
   return q;
 }
 
@@ -131,6 +133,7 @@ function birthFrom(q: URLSearchParams): BirthParams | null {
     isLunar: q.get('l') === '1',
     ...(q.get('l') === '1' && q.get('ln') === '1' ? { isLeapMonth: true } : {}),
     ...(q.get('n') ? { name: q.get('n') as string } : {}),
+    ...(q.get('lc') ? { lich: q.get('lc') as BirthParams['lich'] } : {}),
   };
 }
 
@@ -201,6 +204,8 @@ export function encodePeople(people: { ten: string; birth: BirthParams }[]): str
     x.birth.gender === 'nu' ? 'nu' : 'nam',
     x.birth.isLunar ? 1 : 0,
     x.birth.isLunar && x.birth.isLeapMonth ? 1 : 0,
+    // Cột 9 (i18n W3): lịch âm nơi sinh — chỉ khi khác VN, chuỗi cũ không đổi.
+    ...(x.birth.lich && x.birth.lich !== 'vn' ? [x.birth.lich] : []),
   ]);
   return Buffer.from(JSON.stringify(rows)).toString('base64url');
 }
@@ -217,6 +222,7 @@ export function decodePeople(p: string): { ten: string; birth: BirthParams }[] {
         gender: r[5] === 'nu' ? 'nu' : 'nam',
         isLunar: r[6] === 1,
         ...(r[6] === 1 && r[7] === 1 ? { isLeapMonth: true } : {}),
+        ...(typeof r[8] === 'string' ? { lich: r[8] as BirthParams['lich'] } : {}),
       },
     }));
   } catch {

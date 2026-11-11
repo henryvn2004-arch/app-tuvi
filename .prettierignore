@@ -77,3 +77,6 @@ work/
 lib/i18n/glossary/terms.generated.mjs
 lib/nghiem-chung/chuoi.zh-cn.generated.mjs
 lib/i18n/glossary/han-viet-check.json
+
+# Bảng đối chứng lịch âm HKO/KASI — SINH bởi scripts/oracle/fetch-lunar-refs.mjs, không format tay
+scripts/fixtures/lunar-ref-*.json
