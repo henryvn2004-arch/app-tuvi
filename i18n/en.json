@@ -1011,13 +1011,53 @@
   "t": "Please enter your email and password.",
   "h": "d84b9abd"
  },
+ "js.battu.10-luan-ky-giup-toi": {
+  "t": "/10) — please read this in detail for me",
+  "h": "2c91b690"
+ },
+ "js.battu.anh-huong-gi-hoa-giai-sao": {
+  "t": "— what effect does it have, and how can it be resolved?",
+  "h": "93497101"
+ },
+ "js.battu.ban": {
+  "t": "you",
+  "h": "e8f04322"
+ },
  "js.battu.ban-muon-thay-dao-sau-dieu": {
   "t": "What would you like the Master to dig into first?",
   "h": "08cdf1d4"
  },
+ "js.battu.bat-tu": {
+  "t": "BaZi",
+  "h": "4f6d5ba9"
+ },
+ "js.battu.bo-hanh-the-nao": {
+  "t": "— how can I supplement the element?",
+  "h": "54468a9f"
+ },
+ "js.battu.cach-cuc": {
+  "t": "Structure",
+  "h": "450e9cba"
+ },
+ "js.battu.cach-cuc-j8la": {
+  "t": "Structure:",
+  "h": "441c7a62"
+ },
+ "js.battu.con-muon-luan-van-nam-nao": {
+  "t": "Which year would you like read?",
+  "h": "22eeb4d6"
+ },
  "js.battu.da-an-tu-tru": {
   "t": "✓ Four Pillars cast",
   "h": "845d9f25"
+ },
+ "js.battu.da-san-sang-hoi-toi-ve": {
+  "t": "** is ready. Ask me about the Day Master, useful god, structure or luck cycles.",
+  "h": "7bde27db"
+ },
+ "js.battu.dai-van-hien-tai": {
+  "t": "Current luck cycle:",
+  "h": "4f329997"
  },
  "js.battu.dang-an-tu-tru": {
   "t": "Casting your Four Pillars…",
@@ -1030,6 +1070,22 @@
  "js.battu.dang-luan-giai-phan": {
   "t": "Reading part",
   "h": "5b228988"
+ },
+ "js.battu.dieu-quan-trong-nhat": {
+  "t": "most important thing</div>",
+  "h": "f749707d"
+ },
+ "js.battu.dung-than": {
+  "t": "Useful God",
+  "h": "22c1c170"
+ },
+ "js.battu.gio": {
+  "t": "· hour",
+  "h": "9d8fa6cf"
+ },
+ "js.battu.hoi-thay": {
+  "t": "✦ Ask the Master: \"",
+  "h": "739874cd"
  },
  "js.battu.lap-bat-tu": {
   "t": "Cast BaZi →",
@@ -1047,17 +1103,117 @@
   "t": "✓ Reading complete",
   "h": "8e9c2ae8"
  },
+ "js.battu.luan-sau-phan": {
+  "t": "Detailed reading of part:",
+  "h": "edb82980"
+ },
+ "js.battu.nam": {
+  "t": "· year",
+  "h": "2deeb120"
+ },
+ "js.battu.nam-luan": {
+  "t": "Year read",
+  "h": "75752d13"
+ },
+ "js.battu.nam-sinh": {
+  "t": "Birth year",
+  "h": "75a6785f"
+ },
+ "js.battu.ngu-hanh-thieu": {
+  "t": "Missing element",
+  "h": "64dfabdc"
+ },
+ "js.battu.nhat-can": {
+  "t": "· Day Master:",
+  "h": "bf2114dc"
+ },
+ "js.battu.nhat-can-uv6w": {
+  "t": "Day Master",
+  "h": "d395f25c"
+ },
+ "js.battu.noi-len-dieu-gi": {
+  "t": "— what does it say?",
+  "h": "04cb815a"
+ },
  "js.battu.thu-lai": {
   "t": "↻ Try again",
   "h": "30508ad3"
+ },
+ "js.battu.toi": {
+  "t": "me",
+  "h": "0bf5ca9f"
+ },
+ "js.battu.tu-tru": {
+  "t": "Four Pillars",
+  "h": "49bba271"
+ },
+ "js.battu.tu-tru-bat-tu-cua": {
+  "t": "BaZi Four Pillars of",
+  "h": "1e073395"
+ },
+ "js.battu.tu-tru-cua": {
+  "t": "Four Pillars of **",
+  "h": "d753a866"
+ },
+ "js.battu.tuoi": {
+  "t": "years old",
+  "h": "2e261bf5"
+ },
+ "js.chat.chao": {
+  "t": "Hello",
+  "h": "35004652"
+ },
+ "js.chat.hom-nay-ban-co-chuyen-gi": {
+  "t": "What's on your mind today?",
+  "h": "769148cd"
+ },
+ "js.chat.hom-nay-co-chuyen-gi": {
+  "t": ", what's on your mind today?",
+  "h": "7674f1e6"
  },
  "js.chat.ke-vai-dong-thoi-minh-bao": {
   "t": "Just a few lines is enough. Minh Bao will bring in the right Master from our team of 15 to look at it for you.",
   "h": "e43855cc"
  },
+ "js.chutrinh.10-can-can-trong-dieu-gi": {
+  "t": "/10) what should I watch out for?",
+  "h": "9fd4a120"
+ },
+ "js.chutrinh.10-nen-tan-dung-ra-sao": {
+  "t": "/10) how should I make the most of it?",
+  "h": "b56b50ea"
+ },
+ "js.chutrinh.9-dai-van-va-tieu-van": {
+  "t": "9 luck cycles and the annual cycle for the year",
+  "h": "0606eeb8"
+ },
  "js.chutrinh.chin-chang-dai-van-cot-cao": {
   "t": "Nine major luck cycles, bar height by engine score, one keyword per cycle",
   "h": "6b87e20d"
+ },
+ "js.chutrinh.chu-trinh-cuoc-doi": {
+  "t": "Life Cycles",
+  "h": "c3a39296"
+ },
+ "js.chutrinh.chu-trinh-cuoc-doi-cua": {
+  "t": "Life Cycles of",
+  "h": "1737f0ac"
+ },
+ "js.chutrinh.co-y-nghia-gi": {
+  "t": "— what does it mean?",
+  "h": "c6c2da71"
+ },
+ "js.chutrinh.cua": {
+  "t": "of **",
+  "h": "9c850ffa"
+ },
+ "js.chutrinh.da-san-sang-hoi-toi-de": {
+  "t": "** is ready. Ask me to dig deeper into any stage of your life you care about.",
+  "h": "90f26e16"
+ },
+ "js.chutrinh.dang-o-chang": {
+  "t": "· currently in stage",
+  "h": "3d0545d0"
  },
  "js.chutrinh.luan-giai": {
   "t": "Read →",
@@ -1067,25 +1223,197 @@
   "t": "<b>In-depth reading →</b>",
   "h": "df2ecf55"
  },
+ "js.chutrinh.mo-toan-bo-ban-luan": {
+  "t": "✦ Unlock the full reading —",
+  "h": "438bc666"
+ },
+ "js.chutrinh.roi-vao-cung": {
+  "t": "falls in the palace",
+  "h": "d242aa04"
+ },
+ "js.chutrinh.tieu-van-nam": {
+  "t": "Annual cycle for",
+  "h": "1979c56a"
+ },
+ "js.home.3-buoc-dau-tien": {
+  "t": "First 3 steps",
+  "h": "cd4d028c"
+ },
+ "js.home.ban-da-xong-ca-3-buoc": {
+  "t": "You've finished <b>all 3 steps</b> — create an account to get <b>+",
+  "h": "de6f41ea"
+ },
+ "js.home.ban-dinh-lam-viec-gi-de": {
+  "t": ". What are you planning to do, so I can pick a good hour? Cast your chart and I'll read your own fortune.",
+  "h": "71046a30"
+ },
+ "js.home.buoc-tao-tai-khoan-de-giu": {
+  "t": "</b> steps. Create an account to keep this progress and receive credits when you finish.",
+  "h": "e4db2a46"
+ },
+ "js.home.chao-con": {
+  "t": "Hello{comma_name}. The Master is here — you can tell me anything: work, family, or just feeling tired today. And if you'd like to see the fortune for today's **{cc}** day, I'll look at it right away.",
+  "h": "07132e46"
+ },
+ "js.home.chinh-tinh": {
+  "t": "— major stars",
+  "h": "595c5e1b"
+ },
+ "js.home.co-phap-kieng-khoi-su": {
+  "t": "— classical rules advise against starting new ventures.",
+  "h": "d050eff2"
+ },
+ "js.home.co-phap-kieng-khoi-su-cqsv": {
+  "t": "— classical rules advise against starting new ventures",
+  "h": "0e5dc069"
+ },
+ "js.home.co-phap-kieng-khoi-su-viec": {
+  "t": "— classical rules advise against starting new ventures. Everyday tasks are fine as usual.",
+  "h": "07d4835f"
+ },
+ "js.home.co-sao": {
+  "t": "— has {sao}",
+  "h": "f6d4710a"
+ },
+ "js.home.con-lai-ghe-roi": {
+  "t": "You're back{comma_name}. How is today — anything on your heart?",
+  "h": "46c1f303"
+ },
+ "js.home.con-muon-hoi-them": {
+  "t": "Is there anything else you'd like to ask?",
+  "h": "f2144ad1"
+ },
+ "js.home.cong-cu-chinh": {
+  "t": "Main tools",
+  "h": "fac531f0"
+ },
+ "js.home.da-luu-tren-may-nay": {
+  "t": "saved on this device",
+  "h": "1f7ba10f"
+ },
+ "js.home.da-xong": {
+  "t": "Completed <b>",
+  "h": "9a9e3926"
+ },
  "js.home.dang-lap": {
   "t": "Casting…",
   "h": "b47d9598"
+ },
+ "js.home.doi-la-so": {
+  "t": "Switch chart",
+  "h": "2daddd37"
+ },
+ "js.home.gio-dep": {
+  "t": "Good hours",
+  "h": "2d2a47e5"
+ },
+ "js.home.gio-hoang-dao": {
+  "t": ". Auspicious hours:",
+  "h": "af40692d"
+ },
+ "js.home.goi-y-cho-ban": {
+  "t": "✦ Suggested for you",
+  "h": "96e81b4f"
  },
  "js.home.hanh": {
   "t": "Element",
   "h": "dc0810d8"
  },
+ "js.home.hanh-3if6": {
+  "t": "** (element",
+  "h": "6979c33f"
+ },
+ "js.home.hanh-i81a": {
+  "t": "(element",
+  "h": "b9ab7b34"
+ },
+ "js.home.hoi-thay-ve-van-cua-ban": {
+  "t": ". Ask the Master about your fortune at:",
+  "h": "abbb0b48"
+ },
+ "js.home.hom-nay-la-ngay": {
+  "t": "Today is the **",
+  "h": "01973599"
+ },
+ "js.home.huy": {
+  "t": "Cancel",
+  "h": "34ca764c"
+ },
  "js.home.khong-lap-duoc-thu-lai-sau": {
   "t": "Couldn't cast it. Please try again later.",
   "h": "7855b0ef"
+ },
+ "js.home.lam-xong-ca-ba-mo-khoa": {
+  "t": "Complete all three to unlock <b>+",
+  "h": "eae48914"
+ },
+ "js.home.lam-xong-ca-ba-nhan-thang": {
+  "t": "Complete all three to receive <b>+",
+  "h": "e79679d7"
+ },
+ "js.home.lau-roi-con-chua-ghe": {
+  "t": "It's been a while{comma_name}. Are you doing well? Is there anything you'd like to tell the Master?",
+  "h": "fd32b768"
+ },
+ "js.home.linh-vuc": {
+  "t": "({linh_vuc})",
+  "h": "5b141416"
+ },
+ "js.home.luong-chao-mung": {
+  "t": "welcome credits",
+  "h": "8b6fe1a2"
+ },
+ "js.home.luong-nhan-duoc-ngay-khi-ban": {
+  "t": "credits</b> — yours as soon as you create an account.</div>",
+  "h": "3a693ec4"
+ },
+ "js.home.luong-vao-vi-ban": {
+  "t": "credits</b> added to your wallet.</div>",
+  "h": "cb7a01b0"
+ },
+ "js.home.luong-vao-vi-du-cho-mot": {
+  "t": "credits</b> added to your wallet — enough for one more reading.</div>",
+  "h": "ee62ec18"
+ },
+ "js.home.mau-hop": {
+  "t": "Lucky colors:",
+  "h": "54187ad4"
+ },
+ "js.home.mau-hop-ban-menh": {
+  "t": "Colors that suit your chart:",
+  "h": "820910fb"
+ },
+ "js.home.mau-hop-plgt": {
+  "t": "lucky colors",
+  "h": "ca937061"
+ },
+ "js.home.may-hom-nay-con-the-nao": {
+  "t": "How have you been these past few days{comma_name}? Last time you mentioned **{worry}** — how is that going?",
+  "h": "d73269fa"
  },
  "js.home.ngay": {
   "t": "Day",
   "h": "e196e19b"
  },
+ "js.home.ngay-6ia2": {
+  "t": "· day",
+  "h": "cedf3c29"
+ },
  "js.home.ngay-binh": {
   "t": "Neutral day",
   "h": "3e47de71"
+ },
+ "js.home.ngay-cwjn": {
+  "t": "— Day",
+  "h": "5ecc6134"
+ },
+ "js.home.ngay-hom-nay-roi-vao-cung": {
+  "t": "Today falls in the palace:",
+  "h": "567ca88d"
+ },
+ "js.home.ngay-ky": {
+  "t": "· inauspicious day",
+  "h": "83e5d5b7"
  },
  "js.home.ngay-sinh-chua-hop-le": {
   "t": "That birth date isn't valid.",
@@ -1099,25 +1427,93 @@
   "t": "Inauspicious day",
   "h": "3fe05eab"
  },
+ "js.home.ngay-xung-tuoi-can-than": {
+  "t": "Today clashes with your zodiac sign, so take care with big matters.",
+  "h": "d05ce49d"
+ },
+ "js.home.nhap-la-so-cua-ban": {
+  "t": "Enter your chart →",
+  "h": "337e5bfc"
+ },
+ "js.home.nhap-ngay-sinh-mot-lan-de": {
+  "t": "Enter your birth date once to see which of your own palaces today falls in.",
+  "h": "45d9335c"
+ },
  "js.home.so-lieu-rut-gon-thu-tai": {
   "t": "— abbreviated figures; try reloading later.",
   "h": "84e3f4e7"
+ },
+ "js.home.tai-than": {
+  "t": "wealth god",
+  "h": "e5ed4f68"
+ },
+ "js.home.thay-day": {
+  "t": "The Master is here{comma_name}. Is there anything else you'd like to ask, or something on your mind?",
+  "h": "b606961a"
+ },
+ "js.home.theo-la-so": {
+  "t": "By your chart: <b>",
+  "h": "7d39229e"
  },
  "js.home.thieu-ngay-thang-nam-sinh": {
   "t": "Birth day, month or year is missing.",
   "h": "1ce95cff"
  },
+ "js.home.tranh-viec-lon-hom-nay": {
+  "t": "— avoid major undertakings today.",
+  "h": "586bcbb3"
+ },
+ "js.home.tranh-viec-lon-trong-hom-nay": {
+  "t": "Avoid major undertakings today.",
+  "h": "1ab1828a"
+ },
+ "js.home.tren-day-la-van-chung-cua": {
+  "t": "The above is the day's GENERAL fortune — the same for everyone.",
+  "h": "a18884d5"
+ },
+ "js.home.trung": {
+  "t": "Coincides with",
+  "h": "f007dc98"
+ },
  "js.home.van-hom-nay": {
   "t": "Today's outlook",
   "h": "386c4c24"
+ },
+ "js.home.van-hom-nay-ca-nhan": {
+  "t": "You're back{comma_name}. Today is the **{cc}** day, and your daily limit sits in the **{cung}** palace",
+  "h": "1e60cafb"
  },
  "js.home.van-ngay": {
   "t": "Daily outlook",
   "h": "c082a900"
  },
+ "js.home.van-rieng-cua-ban": {
+  "t": "Your personal fortune",
+  "h": "378b38f4"
+ },
+ "js.home.vo-chinh-dieu": {
+  "t": "— no major star",
+  "h": "44a2723b"
+ },
+ "js.home.vua-cong": {
+  "t": "✓ Just added <b>+",
+  "h": "716106fa"
+ },
+ "js.home.xem-ca-7-ngay": {
+  "t": "<b>See all</b><small>7 days</small>",
+  "h": "6b689d8c"
+ },
  "js.home.xem-van-rieng-cua-toi": {
   "t": "See my own outlook →",
   "h": "a669ddd6"
+ },
+ "js.home.xung-tuoi": {
+  "t": "Zodiac clash",
+  "h": "8e87f4e5"
+ },
+ "js.home.xung-tuoi-29rp": {
+  "t": "Zodiac clash",
+  "h": "e92ab4fa"
  },
  "js.laso.dang-an-sao": {
   "t": "Placing stars...",
@@ -1143,13 +1539,65 @@
   "t": "Please enter your full birth date.",
   "h": "2545b4dd"
  },
+ "js.laso.xuat-that-bai": {
+  "t": "Export failed:",
+  "h": "b105cd2a"
+ },
+ "js.luangiai.10-8-dai-van-con-lai": {
+  "t": "/10. The other 8 luck cycles plus the yearly cycles are in Life Cycles.",
+  "h": "d4c7373d"
+ },
+ "js.luangiai.10-tan-dung-sao": {
+  "t": "/10) — how can I make the most of the stars?",
+  "h": "ad86144d"
+ },
+ "js.luangiai.10-thap-nhat-phan": {
+  "t": "/10</b> — the lowest. Part",
+  "h": "4860ad16"
+ },
+ "js.luangiai.10-yeu-nhat": {
+  "t": "/10) the weakest?",
+  "h": "561e82e8"
+ },
  "js.luangiai.an-la-so": {
   "t": "▾ Hide chart",
   "h": "9f28e998"
  },
+ "js.luangiai.bam-thu-lai-o-tung-phan": {
+  "t": "— press ↻ Retry on each part, then reload the page.",
+  "h": "e7534682"
+ },
+ "js.luangiai.ban-vua-doc-1-phan-dau": {
+  "t": "You have just read the first free part. The other 12 parts — one reading per palace by the classical method — are in the full version, with a downloadable PDF or one sent by email.",
+  "h": "a83e4f9a"
+ },
+ "js.luangiai.ban-xem-truoc-cua": {
+  "t": "Preview of **",
+  "h": "3d7c640b"
+ },
  "js.luangiai.bat-thong-bao-de-nhan-van": {
   "t": "Turn on notifications to get your daily outlook →",
   "h": "ace576c9"
+ },
+ "js.luangiai.cham": {
+  "t": "</b> scores <b>",
+  "h": "13786498"
+ },
+ "js.luangiai.chi-phi-su-dung": {
+  "t": "Cost",
+  "h": "c2d36be8"
+ },
+ "js.luangiai.con-tiep-mo-khoa-de-doc": {
+  "t": "to be continued — unlock to read in full",
+  "h": "f72b38a8"
+ },
+ "js.luangiai.cuc": {
+  "t": "· Bureau:",
+  "h": "6c9661b0"
+ },
+ "js.luangiai.cung-manh-nhat": {
+  "t": "Strongest palace",
+  "h": "bb00924b"
  },
  "js.luangiai.da-lap-la-so": {
   "t": "✓ Chart cast",
@@ -1158,6 +1606,18 @@
  "js.luangiai.da-luu-la-so-nay-vao": {
   "t": "✓ This chart is saved to your account.",
   "h": "5a2ac1c6"
+ },
+ "js.luangiai.da-xong-phan-tong-quan-hoi": {
+  "t": "** overview is done. Ask me to dig deeper, or open the full version to read all 12 palaces, structures and Si Hua.",
+  "h": "9b9d2b92"
+ },
+ "js.luangiai.dai-van-hien-tai": {
+  "t": "Current luck cycle (",
+  "h": "8b3ef94b"
+ },
+ "js.luangiai.dai-van-hien-tai-jt5g": {
+  "t": "Current luck cycle",
+  "h": "7cf01e2f"
  },
  "js.luangiai.dang-lap-la-so": {
   "t": "Casting your chart…",
@@ -1171,6 +1631,14 @@
   "t": "Reading part 1 /",
   "h": "559646ca"
  },
+ "js.luangiai.la-so": {
+  "t": "chart",
+  "h": "c63aa847"
+ },
+ "js.luangiai.la-so-cua": {
+  "t": "Chart of",
+  "h": "505f9cf1"
+ },
  "js.luangiai.lap-la-so-luan-giai-ngay": {
   "t": "Cast Chart & Read Now →",
   "h": "edbdb6fc"
@@ -1182,6 +1650,10 @@
  "js.luangiai.loi-phan": {
   "t": "Error in part",
   "h": "9380a2a1"
+ },
+ "js.luangiai.luan-giai": {
+  "t": "Reading",
+  "h": "71d78039"
  },
  "js.luangiai.luan-giai-chuyen-sau": {
   "t": "✦ In-depth reading —",
@@ -1199,9 +1671,65 @@
   "t": "✦ <b>Save this chart</b> to revisit any time — free, nothing to pay.",
   "h": "1d1bbc24"
  },
+ "js.luangiai.mien-phi": {
+  "t": "(free)…",
+  "h": "d0dbdd09"
+ },
+ "js.luangiai.mien-phi-xem-tong-quan-1": {
+  "t": "Free — view the overview &amp; 1 part first, pay when you open the full version",
+  "h": "584bd85b"
+ },
+ "js.luangiai.minh-hoa": {
+  "t": "Illustration",
+  "h": "abc3ae9b"
+ },
+ "js.luangiai.mo-luan-giai-chuyen-sau": {
+  "t": "✦ Unlock in-depth reading —",
+  "h": "d6632d90"
+ },
+ "js.luangiai.nam": {
+  "t": "Year",
+  "h": "85e39643"
+ },
+ "js.luangiai.nap-am": {
+  "t": "· Na Yin:",
+  "h": "44e73d9c"
+ },
+ "js.luangiai.nen-lam-gi": {
+  "t": "what should I do?",
+  "h": "feedfe50"
+ },
+ "js.luangiai.noi-vi-sao-no-bung-ra": {
+  "t": "explains why, which stage it breaks out in, and how to resolve it.",
+  "h": "2b510636"
+ },
  "js.luangiai.phan": {
   "t": "Part",
   "h": "a74e8ed7"
+ },
+ "js.luangiai.phan-5h00": {
+  "t": "Part",
+  "h": "817301ad"
+ },
+ "js.luangiai.phan-loi-phan": {
+  "t": "parts failed (part",
+  "h": "3d3d4b5b"
+ },
+ "js.luangiai.trong-12-cung-cua-la-so": {
+  "t": "Among the 12 palaces of this chart, <b>the palace of",
+  "h": "c69f5267"
+ },
+ "js.luangiai.trong-tam-vao-viec-gi": {
+  "t": "what should I focus on?",
+  "h": "dbecde19"
+ },
+ "js.luangiai.tuoi-cham": {
+  "t": "years old) scores",
+  "h": "73442218"
+ },
+ "js.luangiai.vi-sao-cung": {
+  "t": "Why is the palace of",
+  "h": "32e135e7"
  },
  "js.luangiai.xem-la-so-day-du": {
   "t": "▸ View full chart",
@@ -2103,9 +2631,25 @@
   "t": "Anyone with the link can view this result.",
   "h": "010150dd"
  },
+ "js.shellui.am-lich": {
+  "t": "(lunar)",
+  "h": "ebf71daf"
+ },
  "js.shellui.an-di": {
   "t": "Hide",
   "h": "3be211c7"
+ },
+ "js.shellui.anh-ay": {
+  "t": "your husband",
+  "h": "b69e360e"
+ },
+ "js.shellui.anh-tuan": {
+  "t": "Tom",
+  "h": "30acaacf"
+ },
+ "js.shellui.ba": {
+  "t": "your mother",
+  "h": "f1d8177e"
  },
  "js.shellui.ban": {
   "t": "You",
@@ -2119,6 +2663,10 @@
   "t": ". The <b>Reading</b> covers the full <b>",
   "h": "b009e78c"
  },
+ "js.shellui.ban-luan-giai-tron": {
+  "t": "the full Reading of",
+  "h": "9008184e"
+ },
  "js.shellui.bao-cao-da-san-sang": {
   "t": "<b>Your report is ready</b>",
   "h": "ab59122b"
@@ -2126,6 +2674,26 @@
  "js.shellui.bat-dau-hoi-thoai-moi-ban": {
   "t": "New conversation started. What would you like to ask about this chart?",
   "h": "9d7d64ad"
+ },
+ "js.shellui.be-an": {
+  "t": "Annie",
+  "h": "4010ce22"
+ },
+ "js.shellui.bo": {
+  "t": "Father",
+  "h": "dbbdf270"
+ },
+ "js.shellui.bo-anh": {
+  "t": "Remove image",
+  "h": "1ba6fb87"
+ },
+ "js.shellui.bo-con": {
+  "t": "your father",
+  "h": "9a106c99"
+ },
+ "js.shellui.ca-nha": {
+  "t": "The whole family",
+  "h": "158695a7"
  },
  "js.shellui.cau": {
   "t": "</b> questions left",
@@ -2139,13 +2707,25 @@
   "t": "free questions</b>",
   "h": "8ddf771c"
  },
+ "js.shellui.cau-nay-thi": {
+  "t": "For this question,",
+  "h": "084951c0"
+ },
  "js.shellui.cau-vua-roi-duoc-tra-loi": {
   "t": "— your last question was answered right away",
   "h": "70029ef5"
  },
+ "js.shellui.chau": {
+  "t": "your child",
+  "h": "a3d50d2f"
+ },
  "js.shellui.chay-lai-cong-cu-de-hoi": {
   "t": "Run the tool again to keep asking about this session.",
   "h": "e4e4c8f5"
+ },
+ "js.shellui.chi-ay": {
+  "t": "your wife",
+  "h": "2e7bb192"
  },
  "js.shellui.chia-se": {
   "t": "Share",
@@ -2163,6 +2743,10 @@
   "t": "Share",
   "h": "f575b7df"
  },
+ "js.shellui.cho-ten": {
+  "t": "for {name}",
+  "h": "bc9cbc22"
+ },
  "js.shellui.chon-mot-cach-duoi-day": {
   "t": "— choose one of the options below.",
   "h": "8b0c906e"
@@ -2170,6 +2754,14 @@
  "js.shellui.chon-thay-luan-giai": {
   "t": "Choose your Master",
   "h": "f717eb08"
+ },
+ "js.shellui.chong": {
+  "t": "Husband",
+  "h": "92a6f17f"
+ },
+ "js.shellui.chong-con": {
+  "t": "your husband",
+  "h": "6ed699ab"
  },
  "js.shellui.chua-co-la-so-nao": {
   "t": "<b>No charts yet</b>",
@@ -2183,6 +2775,10 @@
   "t": "No saved sessions yet.",
   "h": "f0665eb8"
  },
+ "js.shellui.chua-luu-duoc-la-so": {
+  "t": "could not save the chart for",
+  "h": "424c73b0"
+ },
  "js.shellui.chua-mo": {
   "t": "· not opened</span></span>",
   "h": "72204e26"
@@ -2191,9 +2787,45 @@
   "t": "Couldn't create the PDF. Please try again in a few minutes.",
   "h": "549a59fa"
  },
+ "js.shellui.chuyen": {
+  "t": "As for",
+  "h": "2844303d"
+ },
+ "js.shellui.chuyen-do-the-nao-roi-con": {
+  "t": "<p>How did that turn out?</p>",
+  "h": "9e184650"
+ },
+ "js.shellui.co-noi": {
+  "t": "said: <i>“",
+  "h": "7960bcfb"
+ },
  "js.shellui.con": {
   "t": "<b>",
   "h": "21dc996b"
+ },
+ "js.shellui.con-25rm": {
+  "t": "<p>There are",
+  "h": "b84493f3"
+ },
+ "js.shellui.con-goi-la-gi": {
+  "t": "What is {goi}'s name (e.g. \"{vd}\") and gender?",
+  "h": "70920c56"
+ },
+ "js.shellui.con-hoi-tiep-di": {
+  "t": "</b>. Go ahead and keep asking.</p>",
+  "h": "0de4fe93"
+ },
+ "js.shellui.con-muon-thay-dua-ngay-tot": {
+  "t": "<p>Would you like the Master to add your own auspicious days and clashing days to your phone calendar? You'll see them every morning when you open it.</p>",
+  "h": "be3b5cf7"
+ },
+ "js.shellui.con-muon-thay-nhan-qua-dau": {
+  "t": ", where would you like the Master to message you?</span>",
+  "h": "959d0885"
+ },
+ "js.shellui.con-muon-thay-xem-chuyen-gi": {
+  "t": "</b>. What would you like the Master to look at first?</p>",
+  "h": "c643b581"
  },
  "js.shellui.con-nhieu-dieu-muon-noi-ve": {
   "t": "has more to say about this chart. Sign up free to:",
@@ -2203,6 +2835,10 @@
   "t": "has more to explain",
   "h": "2a2c8332"
  },
+ "js.shellui.con-thu-lai-o-so-la": {
+  "t": ". Please try again from your Chart Book.",
+  "h": "e3bb1032"
+ },
  "js.shellui.da-an-khoi-thu-vien-chung": {
   "t": "<span>✓ Removed from the shared Library. The link still works as usual.</span>",
   "h": "e12e84c8"
@@ -2210,6 +2846,10 @@
  "js.shellui.da-chep": {
   "t": "Copied ✓",
   "h": "846252e0"
+ },
+ "js.shellui.da-co-la-so-cua": {
+  "t": "<p>The chart of <b>",
+  "h": "3b6d378f"
  },
  "js.shellui.da-dung-het-luot-hoi": {
   "t": "No questions left",
@@ -2223,9 +2863,17 @@
   "t": "Free trial questions used up",
   "h": "f3c713d8"
  },
+ "js.shellui.da-het-luot-hoi-la-so": {
+  "t": "Out of questions. Charts are still free to view — you can see",
+  "h": "f2acf059"
+ },
  "js.shellui.da-tao-link-ban-nay-cung": {
   "t": "<span>Link created · this one also appears in",
   "h": "11df14f6"
+ },
+ "js.shellui.da-vao-tiep-chuyen": {
+  "t": "has joined the conversation",
+  "h": "31cef520"
  },
  "js.shellui.dang-an": {
   "t": "Hiding…",
@@ -2263,17 +2911,41 @@
   "t": "<b>Writing your report…</b>",
   "h": "2d9fa930"
  },
+ "js.shellui.dang-xem-la-so": {
+  "t": "Viewing chart: <b>",
+  "h": "f6efbc2c"
+ },
+ "js.shellui.day": {
+  "t": ".",
+  "h": "7cac21ab"
+ },
+ "js.shellui.de-bat-dau": {
+  "t": "to get started",
+  "h": "9aebdded"
+ },
  "js.shellui.de-he-thong-chon-ngau-nhien": {
   "t": "🎲 Pick one for me",
   "h": "aee4de0f"
+ },
+ "js.shellui.de-hoi-tiep": {
+  "t": "to keep asking.",
+  "h": "2739fdb7"
  },
  "js.shellui.de-sau": {
   "t": "Later",
   "h": "fe71eacd"
  },
+ "js.shellui.de-thay-luan-dung-tren-la": {
+  "t": "so the Master can read your actual chart — asking only general questions is no different from asking an ordinary chatbot.</p>",
+  "h": "ec798250"
+ },
  "js.shellui.de-xem": {
   "t": "to view",
   "h": "f6dcc1ba"
+ },
+ "js.shellui.den-ngay": {
+  "t": "<span>On",
+  "h": "d4e0e872"
  },
  "js.shellui.doi-nen-sang-toi": {
   "t": "Switch light / dark theme",
@@ -2303,9 +2975,25 @@
   "t": "Get free Ask the Master questions",
   "h": "f9bce370"
  },
+ "js.shellui.duong-lich": {
+  "t": "(solar)",
+  "h": "4471b62b"
+ },
  "js.shellui.esc": {
   "t": "Esc",
   "h": "1f7a4f9e"
+ },
+ "js.shellui.gio-chi": {
+  "t": "{chi} hour ({khung})",
+  "h": "681b8452"
+ },
+ "js.shellui.gio-ke-chuyen-cua-ban-di": {
+  "t": "</b> is ready. Now tell your story, and I'll bring in the right Master.</p>",
+  "h": "cfc0e866"
+ },
+ "js.shellui.gio-sinh-cua": {
+  "t": "What time was",
+  "h": "813a22c1"
  },
  "js.shellui.gio-truoc": {
   "t": "h ago",
@@ -2363,6 +3051,14 @@
   "t": "New conversation",
   "h": "bba6fb9b"
  },
+ "js.shellui.hom": {
+  "t": "<p>On",
+  "h": "5bfbea9a"
+ },
+ "js.shellui.in-ngay": {
+  "t": "<span>Printed on",
+  "h": "acf30636"
+ },
  "js.shellui.ket-qua": {
   "t": "Result",
   "h": "c9f95514"
@@ -2391,6 +3087,10 @@
   "t": "Nothing found.",
   "h": "cb892c67"
  },
+ "js.shellui.la-may-gio": {
+  "t": "born?",
+  "h": "1ea2e9f1"
+ },
  "js.shellui.la-so-con-vua-xem-la": {
   "t": "<b>The chart you just viewed belongs to the person who shared the link — not yours.</b>",
   "h": "138c9f16"
@@ -2398,6 +3098,10 @@
  "js.shellui.la-so-da-san-sang-ban": {
   "t": "Your chart is ready. What would you like me to look at first?",
   "h": "0d8b388a"
+ },
+ "js.shellui.la-so-tron-doi": {
+  "t": "<b>FULL LIFETIME CHART</b>",
+  "h": "068a1d6c"
  },
  "js.shellui.lap-la-so-cua-ban-de": {
   "t": "Cast your own chart so the Master can read more closely →",
@@ -2467,6 +3171,30 @@
   "t": "Save PDF",
   "h": "c815d87c"
  },
+ "js.shellui.luu-vao-so-la-so-mien": {
+  "t": "Saved to your Chart Book, free. Next time, type @ to call it up.",
+  "h": "08f063e7"
+ },
+ "js.shellui.mang-chap-chon-chua-luu-duoc": {
+  "t": "network hiccup, could not save the chart for",
+  "h": "8f2cc0fe"
+ },
+ "js.shellui.me": {
+  "t": "Mother",
+  "h": "dfc6f90b"
+ },
+ "js.shellui.me-con": {
+  "t": "your mother",
+  "h": "224ac2ac"
+ },
+ "js.shellui.minh-bao-nguoi-dan-duong": {
+  "t": "Minh Bao · your guide",
+  "h": "225df799"
+ },
+ "js.shellui.minh-moi-thay-vao-ngay": {
+  "t": "</b>. Let me bring the Master in right now.</p>",
+  "h": "7d9c9c4b"
+ },
  "js.shellui.mo": {
   "t": "Open ↗",
   "h": "275cceff"
@@ -2487,9 +3215,17 @@
   "t": "Open Zalo",
   "h": "d52365fa"
  },
+ "js.shellui.moi-nhom-hoi-chan-3-thay": {
+  "t": "Invite the consultation team — 3 Masters look together",
+  "h": "d2433b80"
+ },
  "js.shellui.moi-sang-nhan-van-ngay-rieng": {
   "t": "Get your own daily outlook for your chart every morning",
   "h": "6f9ffa30"
+ },
+ "js.shellui.moi-thay": {
+  "t": "Invite Master",
+  "h": "077afd49"
  },
  "js.shellui.moi-thay-mot-van-phong-rieng": {
   "t": "Each Master has a voice of their own. Pick the one you like, or let us choose at random.",
@@ -2499,6 +3235,10 @@
   "t": "sections —",
   "h": "186bea21"
  },
+ "js.shellui.muc-byzo": {
+  "t": "sections",
+  "h": "d5ce48a8"
+ },
  "js.shellui.muc-cho-la-so-nay": {
   "t": "sections for this chart</b><span>",
   "h": "c78646f2"
@@ -2507,9 +3247,21 @@
   "t": "sections</b> of this very chart —",
   "h": "8e5f0ada"
  },
+ "js.shellui.muc-luc": {
+  "t": "<b>CONTENTS</b>",
+  "h": "14f7b262"
+ },
  "js.shellui.muon-thay-luan-cho-chinh-con": {
   "t": "If you'd like the Master to read for you, share your birth date and time — the Master will open a separate new session just for you.</p></div>",
   "h": "3ab45347"
+ },
+ "js.shellui.nam": {
+  "t": "Male",
+  "h": "b580ba1b"
+ },
+ "js.shellui.nam-nay": {
+  "t": "How will this year go for",
+  "h": "9f78db0d"
  },
  "js.shellui.nap-luong-de-hoi-tiep": {
   "t": "Top up credits to keep asking →",
@@ -2519,9 +3271,25 @@
   "t": "Top up",
   "h": "f3cb9ffa"
  },
+ "js.shellui.nap-them-lsj6": {
+  "t": "top up",
+  "h": "c20441d9"
+ },
+ "js.shellui.ngay-nua-la-tet-thay-xem": {
+  "t": "days until Tet. Shall the Master check the first-visitor zodiac that suits your home, plus the hours and directions for leaving the house on days 1–3, for the whole family?</p>",
+  "h": "bab22689"
+ },
+ "js.shellui.ngay-sinh-duong-lich-cua": {
+  "t": "Solar birth date of",
+  "h": "4f13847a"
+ },
  "js.shellui.ngay-truoc": {
   "t": "d ago",
   "h": "92423d27"
+ },
+ "js.shellui.nghe-them-mon-khac": {
+  "t": "Hear another field</span>",
+  "h": "abd835bb"
  },
  "js.shellui.nguoi-dan-duong": {
   "t": "Your guide",
@@ -2531,6 +3299,18 @@
   "t": "…</b> people viewing",
   "h": "440579d4"
  },
+ "js.shellui.nguoi-nha": {
+  "t": "Family member",
+  "h": "514d0e31"
+ },
+ "js.shellui.nguoi-xem-ky-nhat-la-thay": {
+  "t": "the one who knows this best is <b>Master",
+  "h": "d5168fd0"
+ },
+ "js.shellui.nhap-ngay-sinh": {
+  "t": "<p>Enter your birth date",
+  "h": "96b95ba3"
+ },
  "js.shellui.nhung-phan-luong-trong-vi-da": {
   "t": ", but your wallet is out of credits. Top up so the Master can pick up where they left off.</div>",
   "h": "8962fab5"
@@ -2538,6 +3318,14 @@
  "js.shellui.nu": {
   "t": "Female",
   "h": "feb92ccd"
+ },
+ "js.shellui.o-form-phia-tren": {
+  "t": "in the form above",
+  "h": "48fa2db1"
+ },
+ "js.shellui.ong": {
+  "t": "your father",
+  "h": "d933443d"
  },
  "js.shellui.phan": {
   "t": "parts",
@@ -2567,9 +3355,17 @@
   "t": "min ago",
   "h": "b1017a2c"
  },
+ "js.shellui.qua-la-so-cua-con-thoi": {
+  "t": ", just from your chart. Please give the Master the birth date of",
+  "h": "c45acf9b"
+ },
  "js.shellui.que-con-do-xin-phep-dung": {
   "t": "The reading is unfinished — I'll stop here…",
   "h": "bab685a0"
+ },
+ "js.shellui.quet-ma-de-quay-lai": {
+  "t": "Scan the code to come back",
+  "h": "04d8976e"
  },
  "js.shellui.sao-chep-link": {
   "t": "Copy link",
@@ -2603,13 +3399,57 @@
   "t": "Master",
   "h": "90b92a70"
  },
+ "js.shellui.thay-3v67": {
+  "t": "Master",
+  "h": "e443187d"
+ },
+ "js.shellui.thay-5jjy": {
+  "t": "Master",
+  "h": "f0644739"
+ },
+ "js.shellui.thay-6ofb": {
+  "t": "<b>Master",
+  "h": "c643e073"
+ },
  "js.shellui.thay-7g4t": {
   "t": "<span>Master <b>",
   "h": "a8757512"
  },
+ "js.shellui.thay-chuyen-xem": {
+  "t": "<p>The Master specializes in <b>",
+  "h": "ace3cd01"
+ },
+ "js.shellui.thay-da-lap-la-so-cua": {
+  "t": "<p>The Master has cast the chart of <b>",
+  "h": "1edf14ca"
+ },
+ "js.shellui.thay-doc-thang-la-so": {
+  "t": ", the Master reads the chart of",
+  "h": "8dd5e740"
+ },
+ "js.shellui.thay-ghi-vao-so-tien-tri": {
+  "t": "The Master records this in the Prophecy Ledger · will check back with you on",
+  "h": "81f09315"
+ },
+ "js.shellui.thay-moi-nhin": {
+  "t": "The Master takes a first look at",
+  "h": "e695ea5f"
+ },
  "js.shellui.thay-vi-hoi-le-tung-cau": {
   "t": "… — instead of asking one question at a time.</div>",
   "h": "8836644b"
+ },
+ "js.shellui.the-nao-thay": {
+  "t": ", Master?",
+  "h": "b144d974"
+ },
+ "js.shellui.them-la-so": {
+  "t": "Add chart",
+  "h": "77e87b1d"
+ },
+ "js.shellui.thi": {
+  "t": ",",
+  "h": "084e1779"
  },
  "js.shellui.thu-gon": {
   "t": "Collapse",
@@ -2643,9 +3483,29 @@
   "t": "— Minh Bao Zi Wei Dou Shu",
   "h": "ef7f10f4"
  },
+ "js.shellui.tu-vi-minh-bao-lbff": {
+  "t": "<b>MINH BAO ZI WEI DOU SHU</b>",
+  "h": "a55a7bdb"
+ },
+ "js.shellui.tu-vi-minh-bao-tuviminhbao-com-k389": {
+  "t": "<div><b>Minh Bao Zi Wei Dou Shu</b><span>紫微明寶 · tuviminhbao.com</span>",
+  "h": "0326cda1"
+ },
+ "js.shellui.tuviminhbao-com": {
+  "t": "tuviminhbao.com",
+  "h": "c8dbdef2"
+ },
  "js.shellui.ung-dung-nay": {
   "t": "this app",
   "h": "cba1a9e4"
+ },
+ "js.shellui.vo": {
+  "t": "Wife",
+  "h": "98c0d1da"
+ },
+ "js.shellui.vo-con": {
+  "t": "your wife",
+  "h": "3876bfc6"
  },
  "js.shellui.vua-xong": {
   "t": "just now",
@@ -2654,6 +3514,14 @@
  "js.shellui.xem": {
   "t": "View →",
   "h": "1e272706"
+ },
+ "js.shellui.xem-bang": {
+  "t": "via",
+  "h": "b50dfad0"
+ },
+ "js.shellui.xem-kem": {
+  "t": "Also see:",
+  "h": "2964ce06"
  },
  "js.shellui.xem-ket-qua": {
   "t": "View result",
@@ -2674,6 +3542,10 @@
  "js.shellui.xem-tron": {
   "t": "Read in full",
   "h": "18cdbfde"
+ },
+ "js.shellui.xin-loi-gap-truc-trac": {
+  "t": "Sorry, something went wrong:",
+  "h": "7b2227c3"
  },
  "js.shellui.xoa-phien": {
   "t": "Delete session",
@@ -2955,9 +3827,41 @@
   "t": "View history",
   "h": "21a19fb0"
  },
+ "js.vanhannam.bai-tinh": {
+  "t": "Destructive stars:",
+  "h": "c9888559"
+ },
  "js.vanhannam.ban-do": {
   "t": "Map",
   "h": "393d2725"
+ },
+ "js.vanhannam.cat-tinh": {
+  "t": "Benefic stars:",
+  "h": "20f079eb"
+ },
+ "js.vanhannam.chinh-tinh": {
+  "t": "Major stars:",
+  "h": "aa58ba11"
+ },
+ "js.vanhannam.co-gi-can-ne": {
+  "t": "what should I avoid?",
+  "h": "c9f61757"
+ },
+ "js.vanhannam.cua-toi-the-nao": {
+  "t": "how does mine look?",
+  "h": "b208ddbf"
+ },
+ "js.vanhannam.dai-van": {
+  "t": "Luck cycle",
+  "h": "50bbf17a"
+ },
+ "js.vanhannam.dang-dien-ra": {
+  "t": "· <b>in progress</b>",
+  "h": "c4905324"
+ },
+ "js.vanhannam.dang-luan": {
+  "t": "Reading",
+  "h": "31f99758"
  },
  "js.vanhannam.dang-luan-phan-1": {
   "t": "Reading part 1 /",
@@ -2966,6 +3870,26 @@
  "js.vanhannam.dang-tinh": {
   "t": "Calculating…",
   "h": "76a9d5f0"
+ },
+ "js.vanhannam.duong-lich": {
+  "t": "solar</div>",
+  "h": "0c972252"
+ },
+ "js.vanhannam.duong-lich-1y4k": {
+  "t": "</b> solar ·",
+  "h": "ed2768e2"
+ },
+ "js.vanhannam.duong-lich-da-san-sang-hoi": {
+  "t": "solar) is ready. Ask me about any month.",
+  "h": "078774b9"
+ },
+ "js.vanhannam.khung-12-thang-am": {
+  "t": "Framework of 12 lunar months",
+  "h": "761916e9"
+ },
+ "js.vanhannam.khung-12-thang-am-lich-toi": {
+  "t": "Framework of the **next 12 lunar months** (",
+  "h": "5f685658"
  },
  "js.vanhannam.loi-khi-luan-phan": {
   "t": "Error while reading part",
@@ -2987,21 +3911,121 @@
   "t": "credits)",
   "h": "c99d25aa"
  },
+ "js.vanhannam.luu-nien-dai-han-cung": {
+  "t": "· annual flow major limit palace",
+  "h": "7439912c"
+ },
+ "js.vanhannam.mo-toan-bo-van-han-12": {
+  "t": "✦ Unlock the full 12-month outlook —",
+  "h": "7a0e202f"
+ },
+ "js.vanhannam.nen-nam-al": {
+  "t": "Lunar-year baseline",
+  "h": "1cfbd3f9"
+ },
+ "js.vanhannam.ngay": {
+  "t": "days",
+  "h": "9f0bc739"
+ },
+ "js.vanhannam.nguyet-han-cung": {
+  "t": "monthly limit palace",
+  "h": "85d2fef1"
+ },
+ "js.vanhannam.nguyet-han-cung-556b": {
+  "t": "Monthly limit: palace",
+  "h": "13dbb374"
+ },
+ "js.vanhannam.phan": {
+  "t": "part",
+  "h": "291674f4"
+ },
+ "js.vanhannam.sat-tinh": {
+  "t": "Malefic stars:",
+  "h": "6db93931"
+ },
  "js.vanhannam.thang-am-toi-moi-o-mot": {
   "t": "lunar months ahead, one keyword per cell",
   "h": "33508d52"
+ },
+ "js.vanhannam.tieu-han-cung": {
+  "t": ": annual limit palace",
+  "h": "cb20c10d"
+ },
+ "js.vanhannam.toi-nen-tap-trung-viec-gi": {
+  "t": "what should I focus on?",
+  "h": "250b85ce"
  },
  "js.vanhannam.ton": {
   "t": "<small>Costs",
   "h": "ca8d4e90"
  },
+ "js.vanhannam.tong-quan-la-so": {
+  "t": "Chart overview",
+  "h": "84ed13e5"
+ },
+ "js.vanhannam.tu": {
+  "t": "· from",
+  "h": "7c8dc911"
+ },
+ "js.vanhannam.tuc": {
+  "t": ", i.e.",
+  "h": "50c068ad"
+ },
+ "js.vanhannam.tuoi": {
+  "t": "(age",
+  "h": "1e57c98c"
+ },
  "js.vanhannam.van-han-12-thang": {
   "t": "Next 12 Months",
   "h": "0bef064e"
  },
+ "js.vanhannam.van-han-12-thang-2jdf": {
+  "t": "12-month outlook ·",
+  "h": "d11e8de4"
+ },
+ "js.vanhannam.van-han-12-thang-am": {
+  "t": "12 lunar-month outlook:",
+  "h": "81377d1f"
+ },
+ "js.vanhannam.van-han-12-thang-cua": {
+  "t": "12-month outlook of",
+  "h": "afa6d79f"
+ },
+ "js.vanhannam.vo-chinh-dieu-muon-cung-xung": {
+  "t": "no major star (borrowing the opposite palace)",
+  "h": "40e96109"
+ },
  "js.vanhannam.xem-van-han": {
   "t": "See outlook →",
   "h": "0f4545c1"
+ },
+ "js.xemtuoi.10-phat-huy-the-nao": {
+  "t": "/10) — how can I make the most of it?",
+  "h": "ca46f58e"
+ },
+ "js.xemtuoi.10-yeu-nhat": {
+  "t": "/10) · Weakest:",
+  "h": "98581c70"
+ },
+ "js.xemtuoi.100-hoi-toi-de-luan-sau": {
+  "t": "/100**. Ask me to go deeper into any dimension.",
+  "h": "54ae659b"
+ },
+ "js.xemtuoi.100-nam-o-tung-thanh-ben": {
+  "t": "/100 is broken down in the bars below.</div>",
+  "h": "62d7a10b"
+ },
+ "js.xemtuoi.100-nen-hieu-the-nao": {
+  "t": "/100 — how should I read it?",
+  "h": "956024e9"
+ },
+ "js.xemtuoi.ca": {
+  "t": "Both",
+  "h": "7eff84cf"
+ },
+ "js.xemtuoi.cach-hoa-giai-cu-the-nam": {
+  "t": "Specific ways to resolve it are in the in-depth reading.",
+  "h": "bb461286"
  },
  "js.xemtuoi.cham-8-yeu-to-hop-tac": {
   "t": "Score 8 partnership factors between you and a prospective business partner — an objective view before you sign.",
@@ -3011,33 +4035,173 @@
   "t": "Score 8 compatibility factors between two charts — use it when you're thinking about marriage and want a clear answer.",
   "h": "db3006a1"
  },
+ "js.xemtuoi.chieu": {
+  "t": "Dimension \"",
+  "h": "0360bcec"
+ },
+ "js.xemtuoi.chieu-can-luu-y-nhat": {
+  "t": "Dimension needing the most attention:",
+  "h": "24acf607"
+ },
+ "js.xemtuoi.chieu-cung-thang-0-10-trong": {
+  "t": "dimensions on the same 0–10 scale. Weights contribute to the total",
+  "h": "05ea0cdb"
+ },
+ "js.xemtuoi.chieu-diem-chi-tiet-theo-tung": {
+  "t": "dimensions, each person's detailed scores, and ways to resolve them are in the in-depth reading.",
+  "h": "e8450aef"
+ },
+ "js.xemtuoi.chieu-hop-nhat": {
+  "t": "Most compatible dimension:",
+  "h": "3b6f195e"
+ },
+ "js.xemtuoi.chieu-thap-vi-sao": {
+  "t": "Dimension \"{label}\" is low ({score}/10) — why, and how can it be resolved?",
+  "h": "3ab2ac81"
+ },
  "js.xemtuoi.chieu-tuong-hop": {
   "t": "compatibility dimensions",
   "h": "2d818e3c"
+ },
+ "js.xemtuoi.chong-nguoi-a": {
+  "t": "Husband / Person A",
+  "h": "3fd2edae"
+ },
+ "js.xemtuoi.cung-menh": {
+  "t": "· Life Palace",
+  "h": "ae7269b2"
+ },
+ "js.xemtuoi.cung-menh-67cx": {
+  "t": "<br>Life Palace",
+  "h": "2c272c79"
  },
  "js.xemtuoi.dang-dung-anh": {
   "t": "Building image…",
   "h": "7bce9760"
  },
+ "js.xemtuoi.doi-tac-a": {
+  "t": "Partner A",
+  "h": "579093dd"
+ },
+ "js.xemtuoi.doi-tac-b": {
+  "t": "Partner B",
+  "h": "38907936"
+ },
+ "js.xemtuoi.doi-tac-thu-hai": {
+  "t": "Second partner",
+  "h": "3ac926bd"
+ },
+ "js.xemtuoi.doi-tac-thu-nhat": {
+  "t": "First partner",
+  "h": "6efa76df"
+ },
+ "js.xemtuoi.gui-ket-qua-nay-cho": {
+  "t": "Send this result to <b>",
+  "h": "016401eb"
+ },
+ "js.xemtuoi.hai-la-so": {
+  "t": "Two charts",
+  "h": "36cfb3c6"
+ },
+ "js.xemtuoi.hai-nguoi-hoa-hop": {
+  "t": "Compatibility of the two",
+  "h": "1ddd5d3b"
+ },
+ "js.xemtuoi.hoa-hop": {
+  "t": "** — compatibility **",
+  "h": "b8c22dab"
+ },
  "js.xemtuoi.loi-khi-so-tuoi": {
   "t": "Error while comparing:",
   "h": "4f62428a"
  },
- "js.xemtuoi.tra-loi-thay-o-khung-chat": {
-  "t": "Reply to the Master in the chat to enter the birth date of",
-  "h": "ec2999fc"
+ "js.xemtuoi.luan-sau-chieu-giua": {
+  "t": "Read the \"{label}\" dimension between {a} and {b} in depth",
+  "h": "317107b2"
+ },
+ "js.xemtuoi.luan-tong-quan-muc-do-hoa": {
+  "t": "Overview of the compatibility of",
+  "h": "53f19565"
+ },
+ "js.xemtuoi.manh-nhat": {
+  "t": "Strongest:",
+  "h": "b67b37ca"
+ },
+ "js.xemtuoi.nap-am": {
+  "t": "· Na Yin",
+  "h": "c754b896"
+ },
+ "js.xemtuoi.nap-am-jzle": {
+  "t": "</b> · Na Yin",
+  "h": "24107e5c"
+ },
+ "js.xemtuoi.nguoi-a": {
+  "t": "Person A",
+  "h": "bea29e83"
+ },
+ "js.xemtuoi.nguoi-b": {
+  "t": "Person B",
+  "h": "35688cfb"
+ },
+ "js.xemtuoi.nguoi-thu-hai": {
+  "t": "Second person",
+  "h": "b330c7a6"
+ },
+ "js.xemtuoi.nguoi-thu-nhat": {
+  "t": "First person",
+  "h": "955e7151"
+ },
+ "js.xemtuoi.q1-a": {
+  "t": "Please give the Master the details of {p} ({ph}).",
+  "h": "12a20cf0"
+ },
+ "js.xemtuoi.q1-b": {
+  "t": "Now it's {p}'s turn ({ph}).",
+  "h": "5b79d894"
+ },
+ "js.xemtuoi.q2": {
+  "t": "What is the solar birth date of {ph}?",
+  "h": "d063b2b4"
+ },
+ "js.xemtuoi.q3": {
+  "t": "What time was {ph} born?",
+  "h": "b2facf82"
+ },
+ "js.xemtuoi.ru": {
+  "t": "Invite",
+  "h": "797be799"
+ },
+ "js.xemtuoi.tong-diem": {
+  "t": "Total score",
+  "h": "e73bc240"
+ },
+ "js.xemtuoi.tra-loi-thay-nhap-ngay-sinh": {
+  "t": "Reply to the Master in the chat to enter the birth dates of {a} and {b}.",
+  "h": "f2617440"
  },
  "js.xemtuoi.tuong-hop-tuoi-tu-vi-minh": {
   "t": "Compatibility — Minh Bao Zi Wei Dou Shu",
   "h": "b35bc9d1"
  },
  "js.xemtuoi.va": {
+  "t": "** and **",
+  "h": "4f833f73"
+ },
+ "js.xemtuoi.va-4hkm": {
   "t": "and",
   "h": "a72340e8"
  },
  "js.xemtuoi.vanh": {
   "t": "Ring",
   "h": "f78055f5"
+ },
+ "js.xemtuoi.vo-nguoi-b": {
+  "t": "Wife / Person B",
+  "h": "714d3fc9"
+ },
+ "js.xemtuoi.xem-ho-to-mo-la-muon": {
+  "t": "</b> viewed it — they're curious and want to look up their own chart too.</div>",
+  "h": "86627163"
  },
  "js.xemtuoi.xem-tuoi-lam-an-tu-vi": {
   "t": "Business Compatibility — Minh Bao Zi Wei Dou Shu",
