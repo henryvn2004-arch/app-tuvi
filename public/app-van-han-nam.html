@@ -499,7 +499,7 @@ function _birthPayload(){
 }
 
 function shareLines(){
-  var L=[(_hoTen||_tvmbT('js.shell.la-so', 'Lá số'))+' · '+_ngay+'/'+_thang+'/'+_nam+' · '+(_gioitinh==='nam'?'Nam':_tvmbT('js.shellui.nu', 'Nữ'))];
+  var L=[(_hoTen||_tvmbT('js.shell.la-so', 'Lá số'))+' · '+_ngay+'/'+_thang+'/'+_nam+' · '+(_gioitinh==='nam'?_tvmbT('js.shellui.nam', 'Nam'):_tvmbT('js.shellui.nu', 'Nữ'))];
   L.push(_tvmbT('js.vanhannam.van-han-12-thang-am', 'Vận hạn 12 tháng âm: ')+_khung.tuNhan+' → '+_khung.denNhan+' ('+_khung.duongTu+' – '+_khung.duongDen+')');
   var dv=_astrolabe.daiVanHienTai;
   if(dv) L.push(_tvmbT('js.battu.dai-van-hien-tai', 'Đại vận hiện tại: ')+dv.diaChi+' ('+dv.tuoiStart+'–'+dv.tuoiEnd+'t)'+(dv.scoring&&dv.scoring.tong!=null?' · '+dv.scoring.tong+'/10':''));
@@ -816,12 +816,12 @@ async function _unlockOnePart(p){
   if(!gate.ok) return; // ensureCredits đã tự hiện UI thiếu Lượng/giá chưa đọc được
 
   var token=window.Auth.getSession&&window.Auth.getSession()&&window.Auth.getSession().access_token;
-  var labelForDesc=(_labels&&_labels[p])||(_tvmbT('js.luangiai.phan', 'Phần ')+p);
+  var labelForDesc=(_labels&&_labels[p])||('Phần '+p);
   try{
     var res=await fetch('/api/payment?action=deduct',{method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||'')},
       body:JSON.stringify({toolType:'use_van_han_nam', product:'van-han-nam', part:p, amount:partPrice,
-        slug:slug, description:_tvmbT('js.vanhannam.van-han-12-thang-toi', 'Vận Hạn 12 Tháng Tới — ')+labelForDesc})});
+        slug:slug, description:'Vận Hạn 12 Tháng Tới — '+labelForDesc})});
     var data=await res.json();
     if(!data.success){
       alert(data.insufficientBalance?'Không đủ Lượng — vui lòng nạp thêm.':'Có lỗi khi mở phần này, thử lại.');
@@ -889,13 +889,13 @@ async function _startAI(){
 // Truy vấn RAG theo từng phần — phần tháng bám cung nguyệt hạn + sao của đúng
 // tháng đó (không phải một truy vấn chung cho cả 12 tháng).
 function ragQuery(p){
-  if(p===1) return _tvmbT('js.luangiai.tong-quan-la-so', 'tổng quan lá số ')+(_astrolabe.napAm||'')+_tvmbT('js.luangiai.cuc-3z6y', ' cục ')+(_astrolabe.cuc||'')+_tvmbT('js.luangiai.khi-chat-ban-menh', ' khí chất bản mệnh');
+  if(p===1) return 'tổng quan lá số '+(_astrolabe.napAm||'')+' cục '+(_astrolabe.cuc||'')+' khí chất bản mệnh';
   if(p===2) return 'đại vận thiên thời địa lợi nhân hòa vận trình cuộc đời';
-  if(p===3){ var dv=_astrolabe.daiVanHienTai; return _tvmbT('js.xemtuoi.dai-van', 'đại vận ')+((dv&&dv.diaChi)||'')+_tvmbT('js.vanhannam.van-han-y-nghia', ' vận hạn ý nghĩa'); }
-  if(p===4) return _tvmbT('js.vanhannam.tieu-han-luu-nien', 'tiểu hạn lưu niên ')+(_astrolabe.chiNamXem||'')+_tvmbT('js.vanhannam.van-nam-hien-tai', ' vận năm hiện tại');
+  if(p===3){ var dv=_astrolabe.daiVanHienTai; return 'đại vận '+((dv&&dv.diaChi)||'')+' vận hạn ý nghĩa'; }
+  if(p===4) return 'tiểu hạn lưu niên '+(_astrolabe.chiNamXem||'')+' vận năm hiện tại';
   var t=_khung.thangs[p-5];
   if(!t||t.loi) return 'lưu nguyệt hạn vận tháng';
-  return _tvmbT('js.vanhannam.luu-nguyet-han-cung', 'lưu nguyệt hạn cung ')+t.cungNguyetHan+' '+t.chinhTinh.join(' ')+_tvmbT('js.vanhannam.van-thang', ' vận tháng');
+  return 'lưu nguyệt hạn cung '+t.cungNguyetHan+' '+t.chinhTinh.join(' ')+' vận tháng';
 }
 // Bóc nhãn `[TỐT|TỪ KHOÁ]` model gắn ở đầu câu phán quyết. CHỈ lấy nhãn ĐẦU
 // TIÊN của phần: mỗi phần có nhiều đoạn, mỗi đoạn một nhãn, nhưng câu phán
