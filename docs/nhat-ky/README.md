@@ -29,22 +29,16 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-11 | `2026-11.md` | 📚 W15b — Glossary mở rộng: sao Lưu, 30 nạp âm, Kỳ Môn · Lục Nhâm · Hoàng Lịch · Bát Trạch · tướng pháp · Mai Hoa |
-
 | 1 | 2026-11 | `2026-11.md` | 🧽 W13e — Dọn chữ cứng còn sót, dấu câu nối cứng, hai bảng tra bị dịch |
 | 1 | 2026-11 | `2026-11.md` | 🧩 W13d — Mảnh ghép giữ khoảng trắng, khoá đúng namespace, chữ cứng còn sót, thuật ngữ qua glossary |
 | 1 | 2026-11 | `2026-11.md` | 🔑 W13c — Giá trị đã dịch bị dùng làm khoá tra cứu / dữ liệu gửi server |
 | 1 | 2026-11 | `2026-11.md` | 🧹 W13b — Chữ Việt cứng còn lọt ở /ja, /ko: chuỗi ghép với biến |
-
 | 1 | 2026-11 | `2026-11.md` | 🀄 W15 — Bảng lá số theo ngôn ngữ: tên sao/cung/can chi qua glossary |
-
 | 1 | 2026-11 | `2026-11.md` | 🛒 W13 — Chữ do JS client dựng theo ngôn ngữ: khung app, tường trả phí, đăng nhập, trang nạp |
 | 1 | 2026-11 | `2026-11.md` | 🌐 W14 — Đợt 3: 5 trang công cụ vào từ điển server |
 | 1 | 2026-11 | `2026-11.md` | 🔎 W10 — SEO/GEO quốc tế: keyword theo ngôn ngữ + Naver, IndexNow, llms theo ngôn ngữ |
-
 | 1 | 2026-11 | `2026-11.md` | ⚖️ W11 — Trang pháp lý theo nước (特商法) + 6 loại email đa ngôn ngữ |
-
 | 1 | 2026-11 | `2026-11.md` | 🌗 W3b — Bát Tự cn/kr/jp: trụ tháng/năm theo THỜI ĐIỂM vào tiết |
-
 | 1 | 2026-11 | `2026-11.md` | 🗣️ W8 — LLM sinh THẲNG bằng ngôn ngữ của trang (`lib/llm/locale.ts`) |
 | 1 | 2026-11 | `2026-11.md` | 💵 W5 — PayPal USD, bỏ VNĐ ở mọi chỗ khách thấy |
 | 1 | 2026-11 | `2026-11.md` | 🌏 Lịch âm theo nơi sinh — bảng Trung/Hàn/Nhật + ô "Nơi sinh" (i18n W3) |
