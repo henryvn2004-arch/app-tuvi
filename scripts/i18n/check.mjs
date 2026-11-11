@@ -63,6 +63,63 @@ const dicts = loadAllDicts();
   });
 }
 
+// ── 0b. dữ liệu GỬI ĐI / KHOÁ TRA CỨU không được đi qua từ điển (W13c) ─────────
+// Bản dịch là chữ HIỂN THỊ. Hàm dưới đây dựng câu truy vấn /api/search (kho tiếng Việt),
+// văn bản lá số / ngữ cảnh / prompt gửi LLM, hoặc tra bảng theo tên cung của engine — bọc T()
+// ở đây là ở /ja tra cứu hụt IM LẶNG (đã cắn: 12 tên cung trong QUERIES ⇒ mất sao tam phương).
+// Thêm hàm dựng dữ liệu gửi server mới ⇒ ghi tên vào đây. Ca chạy thật: tests/i18n-lookup-keys.spec.ts.
+const SERVER_BOUND = {
+  'app-luan-giai.html': ['QUERIES', '_getTamPhuongStars'],
+  'app-chu-trinh-cuoc-doi.html': ['QUERIES'],
+  'app-xem-tuoi.html': ['QUERIES', 'buildPhanPrompt'],
+  'app-bat-tu.html': ['buildGroupQuery', 'formatBatTuToText', 'buildPregenContextForPhan'],
+  'app-van-han-nam.html': ['ragQuery'],
+};
+function bodyOf(src, name) {
+  const m = new RegExp(
+    `(?:function\\s+${name}\\s*\\([^)]*\\)\\s*|var\\s+${name}\\s*=\\s*)([\\[{])`
+  ).exec(src);
+  if (!m) return null;
+  const open = m.index + m[0].length - 1;
+  const close = m[1] === '{' ? '}' : ']';
+  let depth = 0;
+  let q = null;
+  for (let i = open; i < src.length; i++) {
+    const c = src[i];
+    if (q) {
+      if (c === '\\') i++;
+      else if (c === q) q = null;
+      continue;
+    }
+    if (c === "'" || c === '"' || c === '`') q = c;
+    else if (c === m[1]) depth++;
+    else if (c === close && --depth === 0) return src.slice(open, i + 1);
+  }
+  return null;
+}
+const T_CALL = /\b(?:T|_tvmbT)\(\s*'js\./;
+for (const [f, names] of Object.entries(SERVER_BOUND)) {
+  const src = fs.readFileSync(path.join(PUBLIC, f), 'utf8');
+  for (const n of names) {
+    const b = bodyOf(src, n);
+    if (b === null)
+      fail(`public/${f}: không tìm thấy ${n} (đổi tên thì sửa SERVER_BOUND trong check.mjs)`);
+    else if (T_CALL.test(b))
+      fail(
+        `public/${f}: ${n} gửi server / tra bảng mà có T()/_tvmbT() — giữ chữ Việt gốc, dịch ở chỗ HIỂN THỊ`
+      );
+  }
+}
+// `description` gửi /api/payment?action=deduct = sổ credit_transactions (một ngôn ngữ).
+for (const f of fs.readdirSync(PUBLIC).filter((x) => /\.(js|html)$/.test(x))) {
+  fs.readFileSync(path.join(PUBLIC, f), 'utf8')
+    .split('\n')
+    .forEach((l, i) => {
+      if (/\bdescription\s*:/.test(l) && T_CALL.test(l))
+        fail(`public/${f}:${i + 1}: description (sổ giao dịch) đi qua T() — gửi chữ Việt gốc`);
+    });
+}
+
 // ── 1. khoá phải có trong vi.json ───────────────────────────────────────────
 const htmlFiles = fs.readdirSync(PUBLIC).filter((f) => f.endsWith('.html'));
 for (const f of htmlFiles) {
