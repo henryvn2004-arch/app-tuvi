@@ -1,7 +1,8 @@
 import { test, expect, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
-// @ts-expect-error — .mjs không có kiểu; nguồn DUY NHẤT của luật khoảng trắng biên (padEdges/validateTranslation dùng chung)
+// Nguồn DUY NHẤT của luật khoảng trắng biên (padEdges/validateTranslation dùng chung). allowJs ⇒ có kiểu suy ra, KHÔNG cần ts-expect-error
+// (thêm vào là TS2578 và `next build` đỏ — đã vấp ở c496f18).
 import { edgeOk } from '../lib/i18n/core.mjs';
 
 // W13c — giá trị ĐÃ DỊCH không được làm KHOÁ TRA CỨU hay DỮ LIỆU GỬI SERVER.
