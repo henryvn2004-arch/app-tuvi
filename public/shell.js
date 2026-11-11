@@ -3277,7 +3277,7 @@
   // Trạng thái ví cho rail. `price` để null nghĩa là CHƯA BIẾT giá → đồng hồ im
   // lặng thay vì đoán. Đoán giá rồi hiện sai số câu là nói sai với người dùng
   // ngay trên thứ họ dùng để quyết định.
-  var _rc = { balance: null, price: null, freeTurns: 0, lasoPrice: null, vndPerCredit: 500, loaded: false,
+  var _rc = { balance: null, price: null, freeTurns: 0, lasoPrice: null, usdPerCredit: null, loaded: false,
               anon: false, anonLeft: null, anonCap: 0 };
 
   // anon_id do track.js sinh (localStorage 'tvmb_anon'). Chỉ để đếm lượt DÙNG
@@ -3319,7 +3319,7 @@
           _rc.anonLeft = typeof d.anonTrialLeft === 'number' ? d.anonTrialLeft : null;
           _rc.anonCap = d.anonTrialCap || 0;
           _rc.lasoPrice = typeof d.lasoPrice === 'number' ? d.lasoPrice : null;
-          _rc.vndPerCredit = d.vndPerCredit || 500;
+          _rc.usdPerCredit = typeof d.usdPerCredit === 'number' && d.usdPerCredit > 0 ? d.usdPerCredit : null;
           _rc.loaded = true;
           renderRailMeter();
           return;
@@ -3329,7 +3329,7 @@
         _rc.price = typeof d.railPrice === 'number' ? d.railPrice : null;
         _rc.lasoPrice = typeof d.lasoPrice === 'number' ? d.lasoPrice : null;
         _rc.freeTurns = d.freeTurns || 0;
-        _rc.vndPerCredit = d.vndPerCredit || 500;
+        _rc.usdPerCredit = typeof d.usdPerCredit === 'number' && d.usdPerCredit > 0 ? d.usdPerCredit : null;
         _rc.loaded = true;
         renderRailMeter();
         paintSidebarBalance();
@@ -3402,7 +3402,7 @@
       go = openArtPanel;
     } else if (ctx && ctx.birth && !REPORT_PAGES[ACTIVE] && _rc.lasoPrice != null) {
       html = '<span class="rr-ic">' + svg('lock') + '</span><span class="rr-t"><b>Luận Giải ' + LG_PHAN.length +
-        ' mục cho lá số này</b><span>' + creditVnd(_rc.lasoPrice) + ' (' + _rc.lasoPrice + ' Lượng) · chưa mở</span></span>' +
+        ' mục cho lá số này</b><span>' + (creditUsd(_rc.lasoPrice) ? creditUsd(_rc.lasoPrice) + ' (' + _rc.lasoPrice + ' Lượng)' : _rc.lasoPrice + ' Lượng') + ' · chưa mở</span></span>' +
         '<span class="rr-go">Xem →</span>';
       go = function () {
         try { track('cta_click', { tool_id: 'laso', meta: { from: 'rail_report_bar' } }); } catch (e) { /* ignore */ }
@@ -3514,9 +3514,12 @@
     paintSidebarBalance();
   }
 
-  function creditVnd(c) {
-    var v = Math.ceil((c * (_rc.vndPerCredit || 500)) / 1000) * 1000;
-    return v.toLocaleString('vi-VN') + 'đ';
+  // Giá nói với khách là USD (W5). Làm tròn LÊN cent, cùng cách `usdLabel` ở lib/billing/packages.ts.
+  // Chưa có tỉ giá (API chưa trả) ⇒ '' — đừng đoán số.
+  function creditUsd(c) {
+    var r = _rc.usdPerCredit;
+    if (!r || !isFinite(c) || c <= 0) return '';
+    return '~$' + (Math.ceil(c * r * 100 - 1e-9) / 100).toFixed(2);
   }
 
   // ── Modal HẾT LƯỢNG (giọng thầy) — bật khi rail nhận 402 ──
@@ -3544,7 +3547,7 @@
           ? '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
               '. Bản <b>Luận Giải</b> soi trọn <b>' + LG_PHAN.length + ' mục</b> của chính lá số này — ' +
               esc(preview) + '… — thay vì hỏi lẻ từng câu.</div>' +
-            '<a class="stm-btn" href="' + esc(luanGiaiHref()) + '">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng (≈ ' + creditVnd(_rc.lasoPrice) + ')</a>' +
+            '<a class="stm-btn" href="' + esc(luanGiaiHref()) + '">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng' + (creditUsd(_rc.lasoPrice) ? ' (' + creditUsd(_rc.lasoPrice) + ')' : '') + '</a>' +
             '<a class="stm-alt" href="/topup.html">Hoặc nạp Lượng để hỏi tiếp từng câu →</a>'
           : '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
               ', nhưng phần Lượng trong ví đã cạn. Nạp thêm để thầy luận tiếp mạch còn dang dở nhé.</div>' +
