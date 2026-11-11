@@ -19,7 +19,8 @@ const byText = new Map(
 );
 const fold = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase();
 function keyFor(prefix, text) {
-  if (byText.has(text)) return byText.get(text);
+  // Chỉ dùng lại khoá CÙNG namespace (xem ns-refs.mjs).
+  if (byText.has(text) && byText.get(text).startsWith(prefix + '.')) return byText.get(text);
   const slug =
     fold(text.replace(/<[^>]*>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' '))
       .replace(/[^a-z0-9]+/g, '-')

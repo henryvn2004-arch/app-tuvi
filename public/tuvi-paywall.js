@@ -336,7 +336,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   const _ptitle = (p) => (PRODUCTS[p] ? T(PRODUCTS[p].k, PRODUCTS[p].title) : null);
   async function _price() {
     const p = _cfg?.product;
-    const title = _cfg?.title || _ptitle(p) || p || T('js.shell.cong-cu', 'Công cụ');
+    const title = _cfg?.title || _ptitle(p) || p || T('js.paywall.cong-cu', 'Công cụ');
     // Bản tiếng Việt cho sổ giao dịch (như trước W13) — không đi qua từ điển.
     const titleVi = _cfg?.title || PRODUCTS[p]?.title || p || 'Công cụ';
     if (_cfg?.cost) return { cost: _cfg.cost, title, titleVi };

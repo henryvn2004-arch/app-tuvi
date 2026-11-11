@@ -9,6 +9,7 @@
 //   so sánh (=== / case), khoá object, phần tử mảng/chỉ số, đối số của
 //   indexOf/includes/test/match/split/replace/RegExp/getItem/track…, và chuỗi đã bọc.
 //   Template literal `…` và chuỗi bị bỏ qua được LIỆT KÊ để làm tay. Đọc diff trước khi commit.
+//   --arrays: bọc cả phần tử mảng (CHỈ dùng cho dòng mảng chữ hiển thị, vd `chips: [...]`).
 import fs from 'node:fs';
 import { arg } from './_common.mjs';
 import { loadVi, writeJson, sortObj } from '../../lib/i18n/dict.mjs';
@@ -40,7 +41,8 @@ const byText = new Map(
 );
 const fold = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase();
 function keyFor(text) {
-  if (byText.has(text)) return byText.get(text);
+  // Chỉ dùng lại khoá CÙNG namespace: server nhúng theo namespace, khoá ns khác có thể không có mặt ở trang.
+  if (byText.has(text) && byText.get(text).startsWith(prefix + '.')) return byText.get(text);
   const slug =
     fold(text.replace(/<[^>]*>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' '))
       .replace(/[^a-z0-9]+/g, '-')
@@ -203,7 +205,7 @@ function tagLiterals() {
               ? 'so sánh'
               : after[0] === ':' && /[{,]$/.test(before)
                 ? 'khoá object'
-                : top && top.ch === '['
+                : top && top.ch === '[' && !arg('arrays', false)
                   ? 'mảng/chỉ số'
                   : stack.some((s) => s.ch === '(' && DATA_CALL.test(s.call))
                     ? 'đối số dữ liệu'

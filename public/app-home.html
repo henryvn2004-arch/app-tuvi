@@ -549,10 +549,10 @@
 <script src="/tuvi-form.js?v=15"></script>
 <script src="/poster.js?v=5" defer></script>
 <script src="/tool-prices.js?v=12"></script>
-<script src="/auth.js?v=8"></script>
+<script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
-<script src="/shell.js?v=143"></script>
+<script src="/shell.js?v=144"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -567,7 +567,7 @@ function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'
    bằng MutationObserver để tự vá lại mỗi lần `.ws-avatar` bị dựng mới — không
    đụng shell.js dùng chung cho 52 trang còn lại. */
 (function(){
-  var SEAL='<img src="/seal.webp" alt="Tử Vi Minh Bảo" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block">';
+  var SEAL=('<img src="/seal.webp" alt="' + _tvmbT('js.home.tu-vi-minh-bao', 'Tử Vi Minh Bảo') + '" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block">');
   function patchWsAvatar(){
     var av=document.querySelector('.ws-top .ws-avatar');
     if(av && av.firstElementChild && av.firstElementChild.tagName!=='IMG') av.innerHTML=SEAL;
@@ -607,21 +607,21 @@ function shellKeyOf(row) {
    `after` = chỉ gợi khi đã dùng tool đó; thiếu `after` = gợi được bất cứ lúc nào.
    Mục nào trỏ tới công cụ đang TẮT sẽ tự rơi ra khi đối chiếu danh mục. */
 var FLOW = [
-  { key: 'luan-giai', why: 'Lập lá số một lần — 24 phần luận giải, và gần như mọi công cụ khác đều đọc từ đây.' },
-  { key: 'van-han-nam', after: 'luan-giai', why: 'Đã đọc lá số tổng quan rồi thì bước tiếp là 12 tháng sắp tới, từng tháng một.' },
-  { key: 'cong-so', after: 'luan-giai', why: 'Cùng lá số đó, đọc theo hướng nghề nghiệp: hợp kiểu làm việc nào, ghép đội ra sao.' },
-  { key: 'gio-sinh', after: 'luan-giai', why: 'Không chắc giờ sinh? Sai giờ là lệch gần hết lá số — đối chiếu lại một lượt cho yên tâm.' },
-  { key: 'chan-dung-vo-chong', after: 'luan-giai', why: 'Cung Phu Thê tả người bạn đời — công cụ này dựng hẳn chân dung đó thành tranh.' },
-  { key: 'bat-tu', after: 'luan-giai', why: 'Cùng ngày sinh, đọc bằng một bộ môn khác (Tử Bình) để đối chiếu hai bên có nói giống nhau không.' },
-  { key: 'chan-dung-tien-kiep', why: 'Lá số của bạn đặt vào một bối cảnh xưa — một bức chân dung và một câu chuyện để đọc.' },
-  { key: 'duyen-no-tien-kiep', after: 'chan-dung-tien-kiep', why: 'Thêm lá số người thứ hai: kiếp trước hai người từng là gì của nhau.' },
-  { key: 'day-con', why: 'Có con nhỏ? Đọc lá số của bé theo hướng tính khí và cách dạy nào vào được.' },
-  { key: 'huong-nghiep-tre', after: 'day-con', why: 'Đã đọc tính khí của bé — xem bé hợp làm quen với loại việc gì.' },
-  { key: 'nhan-mach', after: 'cong-so', why: 'Đọc cả đội 2–8 người một lượt: ai giẫm chân ai, đội đang thiếu kiểu người nào.' }
+  { key: 'luan-giai', why: _tvmbT('js.home.lap-la-so-mot-lan-24', 'Lập lá số một lần — 24 phần luận giải, và gần như mọi công cụ khác đều đọc từ đây.') },
+  { key: 'van-han-nam', after: 'luan-giai', why: _tvmbT('js.home.da-doc-la-so-tong-quan', 'Đã đọc lá số tổng quan rồi thì bước tiếp là 12 tháng sắp tới, từng tháng một.') },
+  { key: 'cong-so', after: 'luan-giai', why: _tvmbT('js.home.cung-la-so-do-doc-theo', 'Cùng lá số đó, đọc theo hướng nghề nghiệp: hợp kiểu làm việc nào, ghép đội ra sao.') },
+  { key: 'gio-sinh', after: 'luan-giai', why: _tvmbT('js.home.khong-chac-gio-sinh-sai-gio', 'Không chắc giờ sinh? Sai giờ là lệch gần hết lá số — đối chiếu lại một lượt cho yên tâm.') },
+  { key: 'chan-dung-vo-chong', after: 'luan-giai', why: _tvmbT('js.home.cung-phu-the-ta-nguoi-ban', 'Cung Phu Thê tả người bạn đời — công cụ này dựng hẳn chân dung đó thành tranh.') },
+  { key: 'bat-tu', after: 'luan-giai', why: _tvmbT('js.home.cung-ngay-sinh-doc-bang-mot', 'Cùng ngày sinh, đọc bằng một bộ môn khác (Tử Bình) để đối chiếu hai bên có nói giống nhau không.') },
+  { key: 'chan-dung-tien-kiep', why: _tvmbT('js.home.la-so-cua-ban-dat-vao', 'Lá số của bạn đặt vào một bối cảnh xưa — một bức chân dung và một câu chuyện để đọc.') },
+  { key: 'duyen-no-tien-kiep', after: 'chan-dung-tien-kiep', why: _tvmbT('js.home.them-la-so-nguoi-thu-hai', 'Thêm lá số người thứ hai: kiếp trước hai người từng là gì của nhau.') },
+  { key: 'day-con', why: _tvmbT('js.home.co-con-nho-doc-la-so', 'Có con nhỏ? Đọc lá số của bé theo hướng tính khí và cách dạy nào vào được.') },
+  { key: 'huong-nghiep-tre', after: 'day-con', why: _tvmbT('js.home.da-doc-tinh-khi-cua-be', 'Đã đọc tính khí của bé — xem bé hợp làm quen với loại việc gì.') },
+  { key: 'nhan-mach', after: 'cong-so', why: _tvmbT('js.home.doc-ca-doi-2-8-nguoi', 'Đọc cả đội 2–8 người một lượt: ai giẫm chân ai, đội đang thiếu kiểu người nào.') }
 ];
 /* Đệm khi hết mục trong FLOW — toàn công cụ MIỄN PHÍ, dùng thử không tốn Lượng. */
 var FREE_PICKS = ['than-so-hoc', 'tuong-hop', 'nap-am', 'kinh-dich', 'ngu-hanh-ten', 'ban-do-sao'];
-var FREE_WHY = 'Miễn phí — thử ngay, không tốn Lượng nào.';
+var FREE_WHY = _tvmbT('js.home.mien-phi-thu-ngay-khong-ton', 'Miễn phí — thử ngay, không tốn Lượng nào.');
 
 function hasBirthLocal() {
   try {
@@ -896,8 +896,8 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     var host=el('todayNext'), head=el('todayNextH'), wk=el('todayWeek');
     if(!_week||!_week.length){ host.style.display='none'; head.style.display='none'; wk.hidden=true; return; }
     function cls(x){ return x.tinhChat==='tốt'?'v-tot':x.tinhChat==='xấu'?'v-xau':'v-binh'; }
-    function nhan(x){ return x.bixung?'Xung':x.ngayKy?'Ngày kỵ'
-      :x.tinhChat==='tốt'?'Tốt':x.tinhChat==='xấu'?'Xấu':'Bình'; }
+    function nhan(x){ return x.bixung?'Xung':x.ngayKy?_tvmbT('js.home.ngay-ky-lqyh', 'Ngày kỵ')
+      :x.tinhChat==='tốt'?_tvmbT('js.home.tot', 'Tốt'):x.tinhChat==='xấu'?_tvmbT('js.home.xau', 'Xấu'):_tvmbT('js.home.binh', 'Bình'); }
     function on(x){ return x.d===cur.d&&x.m===cur.mo&&x.y===cur.y; }
     host.innerHTML=_week.slice(0,3).map(function(x){
       return '<button type="button" class="tday '+cls(x)+(on(x)?' on':'')+'" data-iso="'+esc(x.iso)+'"'
@@ -977,11 +977,11 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
      Công tính theo NGÀY ÂM LỊCH) — hai hệ cổ pháp riêng, không sai. Nhưng nhãn
      KHÔNG được trùng đúng chữ mà ô "Cần tránh" đang cấm ("việc lớn", "khởi
      sự"), không thì đọc như hai ô chọi nhau ngay trên cùng một thẻ.*/
-  var GIO_NHAN={'Thanh Long':'Hanh thông','Minh Đường':'Gặp gỡ','Kim Quỹ':'Tiền bạc',
-    'Thiên Đức':'Gia đạo','Ngọc Đường':'Thi cử','Tư Mệnh':'Xuất hành'};
+  var GIO_NHAN={'Thanh Long':_tvmbT('js.home.hanh-thong', 'Hanh thông'),'Minh Đường':_tvmbT('js.home.gap-go', 'Gặp gỡ'),'Kim Quỹ':_tvmbT('js.home.tien-bac', 'Tiền bạc'),
+    'Thiên Đức':_tvmbT('js.home.gia-dao', 'Gia đạo'),'Ngọc Đường':_tvmbT('js.home.thi-cu', 'Thi cử'),'Tư Mệnh':_tvmbT('js.home.xuat-hanh', 'Xuất hành')};
   /* Vế đuôi ngắn của "Vận riêng" — rút từ bảng QH đầy đủ bên dưới. */
-  var QH_NGAN={'duoc-sinh':'có người giúp','hoa':'tự chủ được','sinh':'hao lực, giữ sức',
-    'bi-khac':'dễ vướng, làm chậm','khac':'chủ động, tốn công'};
+  var QH_NGAN={'duoc-sinh':_tvmbT('js.home.co-nguoi-giup', 'có người giúp'),'hoa':_tvmbT('js.home.tu-chu-duoc', 'tự chủ được'),'sinh':_tvmbT('js.home.hao-luc-giu-suc', 'hao lực, giữ sức'),
+    'bi-khac':_tvmbT('js.home.de-vuong-lam-cham', 'dễ vướng, làm chậm'),'khac':_tvmbT('js.home.chu-dong-ton-cong', 'chủ động, tốn công')};
   /* Tên cung → slug ảnh minh hoạ (public/img/van-rieng/<slug>-<sac-thai>.webp).
      12 cung CỐ ĐỊNH theo TEN_CUNG (tuvi-engine/src/constants.ts) — khớp đúng
      key của CUNG_LINH_VUC trong lib/engine/van-ngay.ts, không phải bảng riêng. */
@@ -1069,7 +1069,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     var yrs=(v.xung&&v.xung.namSinh||[]).slice(-3).join(', ');
     var badNote=yrs?'Sinh '+yrs+_tvmbT('js.home.tranh-viec-lon-hom-nay', ' — tránh việc lớn hôm nay.'):_tvmbT('js.home.tranh-viec-lon-trong-hom-nay', 'Tránh việc lớn trong hôm nay.');
     var badKy=(v.ngayKy&&v.ngayKy.length)?_tvmbT('js.home.trung', 'Trùng ')+v.ngayKy.join(' + ')+_tvmbT('js.home.co-phap-kieng-khoi-su', ' — cổ pháp kiêng khởi sự.'):'';
-    var boxBad='<div class="tbox bad"><div class="tbox-h"><span class="ic" data-icon="alert-triangle"></span>Cần tránh</div>'
+    var boxBad=('<div class="tbox bad"><div class="tbox-h"><span class="ic" data-icon="alert-triangle"></span>' + _tvmbT('js.home.can-tranh', 'Cần tránh') + '</div>')
       +('<div class="tbad-main">' + _tvmbT('js.home.xung-tuoi', 'Xung tuổi') + ' ')+esc(v.xung?v.xung.chi:'—')+'</div>'
       +'<div class="tbad-note">'+esc(badNote)+(badKy?'<br>'+esc(badKy):'')+'</div></div>';
 
@@ -1086,7 +1086,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
        nên liệt kê việc là cãi thẳng một luật cứng; còn ngày xấu chỉ là ngày
        yếu — một việc 7/10 ở đó vẫn là thông tin thật, và điểm hiện ngay bên
        cạnh đã đủ để người đọc tự cân. */
-    var boxGood='<div class="tbox good"><div class="tbox-h"><span class="ic" data-icon="check-circle"></span>Nên làm</div>'
+    var boxGood=('<div class="tbox good"><div class="tbox-h"><span class="ic" data-icon="check-circle"></span>' + _tvmbT('js.home.nen-lam', 'Nên làm') + '</div>')
       +(key==='ky'
         ? '<div class="tbox-empty">'+esc(_tvmbT('js.home.ngay', 'Ngày ')+(v.ngayKy||[]).join(' + ')+_tvmbT('js.home.co-phap-kieng-khoi-su-viec', ' — cổ pháp kiêng khởi sự. Việc thường ngày vẫn làm bình thường.'))+'</div>'
         :(v.nen&&v.nen.length)
@@ -1099,17 +1099,17 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
             return '<div class="tdo-row"><span class="ic" data-icon="'+(VIEC_ICON[x.ten]||'check-circle')
               +'"></span><span class="tdo-ten">'+esc(x.ten)+'</span>'
               +(x.diem?'<b class="tdo-diem">'+x.diem+'</b>':'')+'</div>'; }).join('')+'</div>'
-        : '<div class="tbox-empty">Hôm nay không việc lớn nào được điểm cao — để dành sang ngày khác.</div>')
+        : ('<div class="tbox-empty">' + _tvmbT('js.home.hom-nay-khong-viec-lon-nao', 'Hôm nay không việc lớn nào được điểm cao — để dành sang ngày khác.') + '</div>'))
       +'</div>';
 
     /* ── Ô GIỜ ĐẸP — giờ tốt mà không nói để làm gì thì không dùng được ── */
     var hours=(v.gioTot||[]).slice(0,3);
-    var boxHour='<div class="tbox hour"><div class="tbox-h"><span class="ic" data-icon="clock"></span>Giờ đẹp</div>'
+    var boxHour=('<div class="tbox hour"><div class="tbox-h"><span class="ic" data-icon="clock"></span>' + _tvmbT('js.home.gio-dep', 'Giờ đẹp') + '</div>')
       +(hours.length
         ? '<div class="thr">'+hours.map(function(h){
             return '<div class="thr-row"><span class="thr-t">'+esc(String(h.range).replace('-',' – '))
               +'</span><span class="thr-v">'+esc(GIO_NHAN[h.sao]||h.sao||'')+'</span></div>'; }).join('')+'</div>'
-        : '<div class="tbox-empty">Ngày này không có giờ hoàng đạo.</div>')
+        : ('<div class="tbox-empty">' + _tvmbT('js.home.ngay-nay-khong-co-gio-hoang', 'Ngày này không có giờ hoàng đạo.') + '</div>'))
       +'</div>';
     var grid=el('todayGrid');
     grid.innerHTML=boxBad+boxGood+boxHour;
@@ -1121,7 +1121,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     _meText='';
     if(v.caNhan){
       var c=v.caNhan, plain=[];
-      var star=(c.chinhTinh&&c.chinhTinh.length)?c.chinhTinh.join(', '):'vô chính diệu';
+      var star=(c.chinhTinh&&c.chinhTinh.length)?c.chinhTinh.join(', '):_tvmbT('js.home.vo-chinh-dieu-pwt9', 'vô chính diệu');
       // Ngày Kỵ (key==='ky') là luật CẤM khởi sự, đứng trên quan hệ ngũ hành
       // ngày↔bản mệnh — không thì tail có thể đọc "chủ động, tốn công" ngay
       // cạnh ô Cần tránh đang ghi "cổ pháp kiêng khởi sự".
@@ -1130,9 +1130,9 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       // sao Hán Việt, văn cách cục cổ). `loai` cách cục (tốt/xấu/trung) dịch
       // thẳng sang kết luận ngắn, mạnh, khẳng định; ưu tiên trên ngũ hành vì
       // cách cục đọc đúng cung đang được chiếu, ngũ hành chỉ là suy diễn chung.
-      var LOAI_CAU={'tốt':'thuận lợi','xấu':'cần thận trọng','trung':'bình ổn'};
-      var tail=c.bixung?'xung chính tuổi bạn':(isKy?'ngày kỵ, hoãn việc lớn'
-        :c.cachCuc?(LOAI_CAU[c.cachCuc.loai]||'bình ổn'):(QH_NGAN[c.quanHeHanh]||''));
+      var LOAI_CAU={'tốt':_tvmbT('js.home.thuan-loi', 'thuận lợi'),'xấu':_tvmbT('js.home.can-than-trong', 'cần thận trọng'),'trung':_tvmbT('js.home.binh-on', 'bình ổn')};
+      var tail=c.bixung?_tvmbT('js.home.xung-chinh-tuoi-ban', 'xung chính tuổi bạn'):(isKy?_tvmbT('js.home.ngay-ky-hoan-viec-lon', 'ngày kỵ, hoãn việc lớn')
+        :c.cachCuc?(LOAI_CAU[c.cachCuc.loai]||_tvmbT('js.home.binh-on', 'bình ổn')):(QH_NGAN[c.quanHeHanh]||''));
       // Sắc thái tranh minh hoạ (tot/binh-thuong/xau) — CÙNG một thứ tự ưu tiên
       // với `tail` phía trên, để tranh không bao giờ "nói khác" chữ hiển thị.
       var LOAI_SAC={'tốt':'tot','xấu':'xau','trung':'binh-thuong'};
@@ -1149,24 +1149,24 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       // `linhVuc` dịch tên cung sang mảng đời sống người thường đọc được (vd
       // Tài Bạch → "tiền bạc, tài chính") — KHÔNG đổi ý nghĩa cổ pháp của cung,
       // chỉ thêm chữ. Nguồn: `CUNG_LINH_VUC` trong lib/engine/van-ngay.ts.
-      plain.push(_tvmbT('js.home.ngay-hom-nay-roi-vao-cung', 'Ngày hôm nay rơi vào cung ')+c.cungNhatHan+(c.linhVuc?' ('+c.linhVuc+')':'')
+      plain.push(_tvmbT('js.home.ngay-hom-nay-roi-vao-cung', 'Ngày hôm nay rơi vào cung ')+_tvmbG('cung', c.cungNhatHan)+(c.linhVuc?' ('+c.linhVuc+')':'')
         +(c.diaChiNhatHan?' ('+c.diaChiNhatHan+')':'')
-        +(c.chinhTinh&&c.chinhTinh.length?_tvmbT('js.home.chinh-tinh', ' — chính tinh ')+c.chinhTinh.join(', '):_tvmbT('js.home.vo-chinh-dieu', ' — vô chính diệu')));
-      if(c.bixung) plain.push('Ngày xung chính tuổi bạn — nên giữ nhịp, tránh quyết định lớn.');
-      else if(isKy) plain.push('Hôm nay là ngày kỵ khởi sự — hoãn việc lớn, việc thường ngày vẫn làm bình thường.');
+        +(c.chinhTinh&&c.chinhTinh.length?_tvmbT('js.home.chinh-tinh', ' — chính tinh ')+c.chinhTinh.map(function(s){return _tvmbG(['chinh','sao'],s);}).join(', '):_tvmbT('js.home.vo-chinh-dieu', ' — vô chính diệu')));
+      if(c.bixung) plain.push(_tvmbT('js.home.ngay-xung-chinh-tuoi-ban-nen', 'Ngày xung chính tuổi bạn — nên giữ nhịp, tránh quyết định lớn.'));
+      else if(isKy) plain.push(_tvmbT('js.home.hom-nay-la-ngay-ky-khoi', 'Hôm nay là ngày kỵ khởi sự — hoãn việc lớn, việc thường ngày vẫn làm bình thường.'));
       // Cách cục tại đúng cung Nhật Hạn hôm nay (đồng cung / tam hợp / xung
       // chiếu, engine đã tính sẵn — xem `cachCucChoCung` trong van-ngay.ts) —
       // lớp chi tiết SÂU hơn hẳn câu ngũ hành chung bên dưới, vì đọc thẳng cách
       // cục thật của đúng cung đang được chiếu, không phải suy diễn ngũ hành.
       if(c.cachCuc&&c.cachCuc.tomTat) plain.push(_tvmbT('js.battu.cach-cuc-j8la', 'Cách cục: ')+c.cachCuc.tomTat);
-      var QH={'duoc-sinh':'hành ngày sinh cho bản mệnh — thuận, dễ được giúp',
-              'hoa':'hành ngày cùng hành bản mệnh — hòa, tự chủ được',
-              'sinh':'bản mệnh sinh cho hành ngày — hao lực, nên giữ sức',
-              'bi-khac':'hành ngày khắc bản mệnh — dễ vướng, làm chậm lại',
-              'khac':'bản mệnh khắc hành ngày — chủ động được, hơi tốn công'};
+      var QH={'duoc-sinh':_tvmbT('js.home.hanh-ngay-sinh-cho-ban-menh', 'hành ngày sinh cho bản mệnh — thuận, dễ được giúp'),
+              'hoa':_tvmbT('js.home.hanh-ngay-cung-hanh-ban-menh', 'hành ngày cùng hành bản mệnh — hòa, tự chủ được'),
+              'sinh':_tvmbT('js.home.ban-menh-sinh-cho-hanh-ngay', 'bản mệnh sinh cho hành ngày — hao lực, nên giữ sức'),
+              'bi-khac':_tvmbT('js.home.hanh-ngay-khac-ban-menh-de', 'hành ngày khắc bản mệnh — dễ vướng, làm chậm lại'),
+              'khac':_tvmbT('js.home.ban-menh-khac-hanh-ngay-chu', 'bản mệnh khắc hành ngày — chủ động được, hơi tốn công')};
       // Ngày kỵ thì gắn rõ QH chỉ nói về việc thường ngày, không phải cổ vũ
       // khởi sự lớn.
-      if(c.quanHeHanh&&QH[c.quanHeHanh]) plain.push((isKy&&!c.bixung?'Riêng việc thường ngày, ':'')+QH[c.quanHeHanh]+'.');
+      if(c.quanHeHanh&&QH[c.quanHeHanh]) plain.push((isKy&&!c.bixung?_tvmbT('js.home.rieng-viec-thuong-ngay', 'Riêng việc thường ngày, '):'')+QH[c.quanHeHanh]+'.');
       var mau=(c.mauCaNhan||[]).slice(0,2);
       if(mau.length) plain.push(_tvmbT('js.home.mau-hop-ban-menh', 'Màu hợp bản mệnh: ')+mau.join(', ')+'.');
       // Bản CHỮ THUẦN cho poster — poster vẽ trên canvas nên không dùng lại
@@ -1311,15 +1311,15 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     el('todaySeal').textContent=TRIEN.binh;
     el('todayDate').textContent=wd+' · '+td.d+'/'+td.mo;
     var badge=el('todayHanh');
-    badge.textContent=_tvmbT('js.home.ngay', 'Ngày ')+r.data.canChiNgay; badge.className='today-hanh';
-    el('todaySub').textContent=_tvmbT('js.home.hanh', 'Hành ')+r.data.canHanh+_tvmbT('js.home.so-lieu-rut-gon-thu-tai', ' — số liệu rút gọn, thử tải lại sau.');
+    badge.textContent=_tvmbT('js.home.ngay', 'Ngày ')+_tvmbG('canchi', r.data.canChiNgay); badge.className='today-hanh';
+    el('todaySub').textContent=_tvmbT('js.home.hanh', 'Hành ')+_tvmbG('hanh', r.data.canHanh)+_tvmbT('js.home.so-lieu-rut-gon-thu-tai', ' — số liệu rút gọn, thử tải lại sau.');
     var grid=el('todayGrid');
     grid.innerHTML='<div class="tbox hour" style="grid-column:1/-1">'
       +('<div class="tbox-h"><span class="ic" data-icon="clock"></span>' + _tvmbT('js.home.gio-dep', 'Giờ đẹp') + '</div>')
       +(hours.length?'<div class="thr">'+hours.map(function(h){
           return '<div class="thr-row"><span class="thr-t">'+esc(h.chi)+'</span>'
             +'<span class="thr-v">'+esc(h.range)+'</span></div>'; }).join('')+'</div>'
-        :'<div class="tbox-empty">Không lấy được giờ hoàng đạo.</div>')+'</div>';
+        :('<div class="tbox-empty">' + _tvmbT('js.home.khong-lay-duoc-gio-hoang-dao', 'Không lấy được giờ hoàng đạo.') + '</div>'))+'</div>';
     grid.style.display='';
     if(window.mountIcons) window.mountIcons(el('todayCard'));
     wire({ngay:{canChi:r.data.canChiNgay,canHanh:r.data.canHanh},_flat:r.data},td,birth,hasBirth,hours);
@@ -1367,7 +1367,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
   // API lỗi) → rơi về câu chào chung như trước, không hỏi lại đã hỏi rồi.
   function greetingFor(cc,nm,away,worry,vanHomNay){
     var xung=nm?(', '+nm):'';
-    if(away<0) return _tvmbT('js.home.chao-con', 'Chào con{comma_name}. Thầy ở đây — con muốn kể gì cũng được: chuyện đi làm, chuyện trong nhà, hay chỉ là hôm nay thấy mệt. Mà nếu muốn xem vận ngày **{cc}** hôm nay thì thầy soi luôn.', {comma_name:xung, cc:cc});
+    if(away<0) return _tvmbT('js.home.chao-con', 'Chào con{comma_name}. Thầy ở đây — con muốn kể gì cũng được: chuyện đi làm, chuyện trong nhà, hay chỉ là hôm nay thấy mệt. Mà nếu muốn xem vận ngày **{cc}** hôm nay thì thầy soi luôn.', {comma_name:xung, cc:_tvmbG('canchi', cc)});
     if(away===0&&vanHomNay) return vanHomNay;
     if(away>=1&&worry) return _tvmbT('js.home.may-hom-nay-con-the-nao', 'Mấy hôm nay con thế nào{comma_name}? Lần trước con có nhắc chuyện **{worry}** — chuyện đó tới đâu rồi con?', {comma_name:xung, worry:worry});
     if(away>=3) return _tvmbT('js.home.lau-roi-con-chua-ghe', 'Lâu rồi con chưa ghé{comma_name}. Dạo này ổn cả chứ? Có gì muốn kể với thầy không?', {comma_name:xung});
@@ -1380,8 +1380,8 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
   function vanHomNayText(cc,v,nm){
     var cn=v&&v.caNhan; if(!cn||!cn.cungNhatHan) return null;
     var xung=nm?(', '+nm):'';
-    var sao=(cn.chinhTinh||[]).slice(0,2).join(', ');
-    return _tvmbT('js.home.van-hom-nay-ca-nhan', 'Con lại ghé rồi{comma_name}. Hôm nay ngày **{cc}**, nhật hạn của con đang ở cung **{cung}**', {comma_name:xung, cc:cc, cung:cn.cungNhatHan})
+    var sao=(cn.chinhTinh||[]).slice(0,2).map(function(s){return _tvmbG(['chinh','sao'],s);}).join(', ');
+    return _tvmbT('js.home.van-hom-nay-ca-nhan', 'Con lại ghé rồi{comma_name}. Hôm nay ngày **{cc}**, nhật hạn của con đang ở cung **{cung}**', {comma_name:xung, cc:_tvmbG('canchi', cc), cung:_tvmbG('cung', cn.cungNhatHan)})
       + (cn.linhVuc?_tvmbT('js.home.linh-vuc', ' ({linh_vuc})', {linh_vuc:cn.linhVuc}):'') + (sao?_tvmbT('js.home.co-sao', ' — có {sao}', {sao:sao}):'') + '.'
       + (cn.bixung?_tvmbT('js.home.ngay-xung-tuoi-can-than', ' Ngày xung tuổi, con cẩn thận việc lớn nhé.'):'') + _tvmbT('js.home.con-muon-hoi-them', ' Con muốn hỏi thêm gì không?');
   }
@@ -1389,8 +1389,8 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
   // Chips = câu người dùng BẤM ĐỂ GỬI. Trộn hai đường: mở lòng và tra cứu.
   // Trước đây cả 4 đều là câu tra vận, nên khung chat chỉ đọc thành một cái
   // máy bói — người đang muốn nói chuyện không thấy chỗ nào để bắt đầu.
-  var CHIPS_TAM_SU=['Dạo này con thấy mệt mỏi quá','Con đang bế tắc chuyện công việc',
-                    'Vận hôm nay của con thế nào?','Thời gian tới có gì đáng lưu ý không?'];
+  var CHIPS_TAM_SU=[_tvmbT('js.home.dao-nay-con-thay-met-moi', 'Dạo này con thấy mệt mỏi quá'),_tvmbT('js.home.con-dang-be-tac-chuyen-cong', 'Con đang bế tắc chuyện công việc'),
+                    _tvmbT('js.home.van-hom-nay-cua-con-the', 'Vận hôm nay của con thế nào?'),_tvmbT('js.home.thoi-gian-toi-co-gi-dang', 'Thời gian tới có gì đáng lưu ý không?')];
 
   // Lớp 1 concierge (2026-09-23, tiếp bước 14 — Lớp 2 dùng model qua
   // goi_y_cong_cu ở kịch bản hoang-dao): chip ĐIỀU HƯỚNG THẲNG cho người
@@ -1444,7 +1444,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
         var prime=function(worry){
           Shell.setContext({
             birth:birth,
-            label:_tvmbT('js.nav.hoi-thay', 'Hỏi Thầy')+(nm?' · '+nm:''),
+            label:_tvmbT('js.home.hoi-thay', 'Hỏi Thầy')+(nm?' · '+nm:''),
             placeholder:'Kể cho thầy nghe…',
             greeting:greetingFor(cc,nm,away,worry,vanHomNay),
             chips:CHIPS_TAM_SU,
@@ -1474,7 +1474,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
         Shell.setContext({
           scenario:{type:'hoang-dao',data:flat},
           label:_tvmbT('js.home.van-ngay', 'Vận ngày ')+td.d+'/'+td.mo,
-          greeting:_tvmbT('js.home.hom-nay-la-ngay', 'Hôm nay là ngày **')+cc+_tvmbT('js.home.hanh-3if6', '** (hành ')+v.ngay.canHanh+(')' + _tvmbT('js.home.ban-dinh-lam-viec-gi-de', '. Bạn định làm việc gì để tôi chọn giờ đẹp? Lập lá số để tôi luận vận riêng cho bạn.')),
+          greeting:_tvmbT('js.home.hom-nay-la-ngay', 'Hôm nay là ngày **')+_tvmbG('canchi', cc)+_tvmbT('js.home.hanh-3if6', '** (hành ')+_tvmbG('hanh', v.ngay.canHanh)+(')' + _tvmbT('js.home.ban-dinh-lam-viec-gi-de', '. Bạn định làm việc gì để tôi chọn giờ đẹp? Lập lá số để tôi luận vận riêng cho bạn.')),
           chips:CHIPS_CONCIERGE,
           passive:true
         });
@@ -1533,7 +1533,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     shareBtn.onclick=function(){
       var url='https://tuviminhbao.com/app';
       var hlist=hours.map(function(h){return h.chi+(h.range?' ('+h.range+')':'');}).join(', ');
-      var txt=_tvmbT('js.home.van-ngay', 'Vận ngày ')+td.d+'/'+td.mo+_tvmbT('js.home.ngay-cwjn', ' — Ngày ')+cc+_tvmbT('js.home.hanh-i81a', ' (hành ')+v.ngay.canHanh+')'
+      var txt=_tvmbT('js.home.van-ngay', 'Vận ngày ')+td.d+'/'+td.mo+_tvmbT('js.home.ngay-cwjn', ' — Ngày ')+_tvmbG('canchi', cc)+_tvmbT('js.home.hanh-i81a', ' (hành ')+_tvmbG('hanh', v.ngay.canHanh)+')'
         +(v.danhGia?', '+v.danhGia.tinhChat:'')+_tvmbT('js.home.gio-hoang-dao', '. Giờ hoàng đạo: ')+hlist+_tvmbT('js.home.hoi-thay-ve-van-cua-ban', '. Hỏi Thầy về vận của bạn tại:');
       if(navigator.share){ navigator.share({title:'Vận hôm nay — Tử Vi Minh Bảo',text:txt,url:url}).catch(function(){}); return; }
       var full=txt+' '+url, done=function(){ flashIcon(shareBtn,'check',1800); };
@@ -1563,7 +1563,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       var warn=[];
       if(v.xung&&v.xung.chi){
         var yrs=(v.xung.namSinh||[]).slice(-4).join(', ');
-        warn.push(_tvmbT('js.home.xung-tuoi-29rp', 'Xung tuổi ')+v.xung.chi+(yrs?' (sinh '+yrs+')':''));
+        warn.push(_tvmbT('js.home.xung-tuoi-29rp', 'Xung tuổi ')+_tvmbG('chi', v.xung.chi)+(yrs?' (sinh '+yrs+')':''));
       }
       if(v.ngayKy&&v.ngayKy.length) warn.push(_tvmbT('js.home.trung', 'Trùng ')+v.ngayKy.join(' + ')+_tvmbT('js.home.co-phap-kieng-khoi-su-cqsv', ' — cổ pháp kiêng khởi sự'));
       // Dòng tra cứu ĐỦ như thẻ: thêm tú, màu hợp, tài thần (bản cũ bỏ cả ba).
@@ -1573,7 +1573,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       Poster.downloadDay({
         verdict:v.danhGia.tinhChat,
         verdictLabel:(v.danhGia.tinhChat==='tốt'?_tvmbT('js.home.ngay-tot', 'Ngày tốt'):v.danhGia.tinhChat==='xấu'?_tvmbT('js.home.ngay-xau', 'Ngày xấu'):_tvmbT('js.home.ngay-binh', 'Ngày bình')),
-        title:v.ngay.thu+' · '+td.d+'/'+td.mo+_tvmbT('js.home.ngay-cwjn', ' — Ngày ')+v.ngay.canChi,
+        title:v.ngay.thu+' · '+td.d+'/'+td.mo+_tvmbT('js.home.ngay-cwjn', ' — Ngày ')+_tvmbG('canchi', v.ngay.canChi),
         subtitle:sub.join(' · '),
         quote:v.danhGia.nhan,
         warn:warn,
