@@ -56,8 +56,16 @@ Quy tắc chung:
 `⚠` là cảnh báo (vẫn ghi). Trang chỉ hiện bản dịch có `status=ok` VÀ còn khớp `source_hash` của văn xuôi gốc; thiếu → 404
 (không bao giờ lùi về chữ Việt).
 
-## Số liệu nhịp dịch (đo trên 3 hồ sơ ja — xem PR)
+## Số liệu nhịp dịch (W9-pilot, đo thật 2026-11-11, chế độ file, 4 hồ sơ/lô)
 
-Mỗi hồ sơ ≈ 8.400 ký tự Việt vào, ≈ 4.900 ký tự ja ra (JSON), 48–63 khoá. Phần thuật ngữ chung ≈ 1.000 ký tự/lô.
-Ước lượng ≈ **7.000–7.500 token mỗi hồ sơ mỗi ngôn ngữ** (vào + ra) — đây là ước lượng theo ký tự, không phải đo bằng tokenizer;
-W9 nên đối chiếu một lô thật với `/cost`.
+Cùng 4 hồ sơ (a-b-yehoshua · a-p-j-abdul-kalam · a-r-rahman · aamir-khan, 235 khoá), mỗi lô ≈ 31.500 ký tự vào (đã gồm glossary
+~1.000 ký tự). Ký tự ra: ja 18.395 · ko 20.704 · zh-tw 14.910 · en 36.022. Thời gian thật từ lúc bắt đầu viết bản dịch tới khi
+`save` xong: ja 116 s · ko ≈ 100 s · zh-tw ≈ 99 s · en ≈ 100 s (đã gồm lượt sửa lỗi `save`). Số token/chi phí phiên: KHÔNG xem
+được từ trong phiên (không có lệnh `/cost` cho agent) — muốn con số phải lấy ở phía người dùng. Ước lượng ≈ 7.000–7.500
+token/hồ sơ/ngôn ngữ ở trên vẫn chỉ là ước lượng theo ký tự.
+
+Bẫy khi dịch (đều do `save` bắt):
+- **Viết số bằng chữ số Ả Rập**, kể cả khi tiếng đích quen viết chữ (`30`, không `三十`; `100`, không `百`) — `save` đối chiếu từng con số.
+- Ngày ở bản `en` viết tên tháng được (`June 14, 2022`): `save` tính tên tháng tiếng Anh là số tháng.
+- Một khoá bị từ chối chỉ cần sửa đúng khoá đó rồi `save` lại cả file (hồ sơ đạt được ghi đè an toàn).
+- Không có Wikidata thì `next` cho cùng một lô 4 hồ sơ ở mọi ngôn ngữ — nạp Wikidata trước để thứ tự ưu tiên có nghĩa.
