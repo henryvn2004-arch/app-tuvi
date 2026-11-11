@@ -57,8 +57,42 @@ const NGOAI_LE = {
   },
 };
 
+// ĐÃ DUYỆT TAY — chỉ huy 2026-11-11: các mục mà cả hanviet.ts lẫn Unihan đều không xác nhận được (hoặc chỉ ghi âm khác/thuần Việt)
+// nhưng đã được soát bằng tay. Miễn ĐÚNG cặp (tên Việt, chữ Hán): ai sửa chữ Hán của mục nào thì mục đó rơi lại vào THIẾU.
+const DA_DUYET = {
+  'cung|Phụ Mẫu': '父母宮',
+  'cung|Nô Bộc': '僕役宮',
+  'cung|Thiên Di': '遷移宮',
+  'cung|Tài Bạch': '財帛宮',
+  'chinh|Tử Vi': '紫微',
+  'chinh|Cự Môn': '巨門',
+  'sao|Kình Dương': '擎羊',
+  'sao|Đà La': '陀羅',
+  'sao|Linh Tinh': '鈴星',
+  'sao|Thiên Riêu': '天姚',
+  'sao|Tả Phụ': '左輔',
+  'sao|Hữu Bật': '右弼',
+  'sao|Bát Tọa': '八座',
+  'sao|Thiếu Dương': '少陽',
+  'sao|Thiếu Âm': '少陰',
+  'sao|Đẩu Quân': '斗君',
+  'sao|Thai Phụ': '台輔',
+  'sao|Phong Cáo': '封誥',
+  'sao|Lưu Niên Văn Tinh': '流年文星',
+  'sao|Tràng Sinh': '長生',
+  'sao|Mộc Dục': '沐浴',
+  'sao|Quan Đới': '冠帶',
+  'sao|Đế Vượng': '帝旺',
+  'cuc|Thủy Nhị Cục': '水二局',
+  'khai|Tử Vi Đẩu Số': '紫微斗數',
+  'khai|Lưu Niên': '流年',
+  'khai|Lưu Niên Tứ Hóa': '流年四化',
+  'khai|Phụ Tinh': '輔星',
+  'khai|Vô Chính Diệu': '無正曜',
+};
+
 function soat(terms) {
-  const r = { dat: 0, datPhu: [], lech: [], thieu: [], boQua: [], ngoaiLe: [] };
+  const r = { dat: 0, datPhu: [], daDuyet: [], lech: [], thieu: [], boQua: [], ngoaiLe: [] };
   const chuThieu = new Set();
   for (const t of terms) {
     const id = `${t.k}|${t.vi}`;
@@ -101,7 +135,9 @@ function soat(terms) {
         !doc[i] ||
         (doc[i].nguon === 'phu' && !doc[i].am.some((x) => chuanPhu(x) === chuanPhu(am[i])))
     );
-    if (chua.length) {
+    if (chua.length && DA_DUYET[id] === t['zh-tw']) {
+      r.daDuyet.push(id);
+    } else if (chua.length) {
       chua.forEach((c) => chuThieu.add(c));
       r.thieu.push(id);
     } else if (doc.some((d) => d.nguon === 'phu')) r.datPhu.push(id);
@@ -113,7 +149,7 @@ function soat(terms) {
 
 const r = soat(G);
 console.log(
-  `check:glossary — ${G.length} mục: ĐẠT ${r.dat + r.datPhu.length} (hanviet.ts ${r.dat} · nhờ bảng phụ Unihan ${r.datPhu.length}) · LỆCH ${r.lech.length} · THIẾU ${r.thieu.length} (${r.chuThieu.length} chữ) · ngoại lệ ${r.ngoaiLe.length} · bỏ qua ${r.boQua.length}`
+  `check:glossary — ${G.length} mục: ĐẠT ${r.dat + r.datPhu.length} (hanviet.ts ${r.dat} · nhờ bảng phụ Unihan ${r.datPhu.length}) · ĐÃ DUYỆT TAY ${r.daDuyet.length} · LỆCH ${r.lech.length} · THIẾU ${r.thieu.length} (${r.chuThieu.length} chữ) · ngoại lệ ${r.ngoaiLe.length} · bỏ qua ${r.boQua.length}`
 );
 if (r.ngoaiLe.length) console.log('  ngoại lệ có chủ đích:\n    ' + r.ngoaiLe.join('\n    '));
 if (r.boQua.length) console.log(`  bỏ qua (cờ v/n): ${r.boQua.join(' · ')}`);
@@ -151,6 +187,16 @@ arrP[j] = thay;
 const mutP = soat([{ ...tPhu, 'zh-tw': arrP.join(''), 'zh-cn': arrP.join('') }]);
 if (mutP.dat + mutP.datPhu.length !== 0) {
   console.error(`✗ ĐỘT BIẾN 2: đổi chữ phụ trong ${tPhu.vi} mà bộ dò vẫn tính đạt`);
+  process.exit(1);
+}
+
+// ── đột biến 3: sửa chữ Hán của một mục ĐÃ DUYỆT TAY ⇒ phải rơi lại vào THIẾU (không còn được miễn) ──
+const tDuyet = G.find((t) => r.daDuyet.includes(`${t.k}|${t.vi}`));
+const arrD = [...tDuyet['zh-tw']];
+arrD[0] = '玥';
+const mutD = soat([{ ...tDuyet, 'zh-tw': arrD.join(''), 'zh-cn': arrD.join('') }]);
+if (mutD.daDuyet.length || mutD.dat + mutD.datPhu.length) {
+  console.error(`✗ ĐỘT BIẾN 3: sửa chữ Hán của ${tDuyet.vi} mà vẫn được miễn/đạt`);
   process.exit(1);
 }
 

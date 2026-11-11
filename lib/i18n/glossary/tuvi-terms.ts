@@ -19,6 +19,7 @@
 // Cờ (cột 5): 'x' = KHÔNG dò trong văn xuôi (đơn âm tiết mơ hồ: "Tử", "Mộ", "Bệnh"…),
 //             'c' = chỉ dò khi có tiền tố "cung " ("cung Mệnh" chứ không phải "mệnh" thường),
 //             'n' = cho phép số chữ Hán ≠ số âm tiết (Tuần → 旬空),
+//             'o' = sao/khái niệm RIÊNG của trường phái Việt (vnOnly): giữ chữ, người dịch phải GIẢI THÍCH, không tìm tương đương,
 //             'v' = tên Việt KHÔNG phải phiên Hán-Việt của chữ Hán (Lá Số ↔ 命盤…) — bộ dò check:glossary bỏ qua và liệt kê.
 
 export type TermKind = 'cung' | 'chinh' | 'sao' | 'tuhoa' | 'sang' | 'cuc' | 'hanh' | 'khai';
@@ -129,7 +130,8 @@ export const TERMS: readonly TermRow[] = [
   ['sao', 'Tiểu Hao', '小耗'],
   ['sao', 'Tướng Quân', '將軍'],
   ['sao', 'Tấu Thư', '奏書'],
-  ['sao', 'Phi Liêm', '蜚廉'],
+  // 飛廉 (không phải dị thể 蜚廉): trong vòng 博士十二神 sách và app Đài phần lớn dùng 飛廉 (chỉ huy duyệt 2026-11-11).
+  ['sao', 'Phi Liêm', '飛廉'],
   ['sao', 'Hỷ Thần', '喜神'],
   ['sao', 'Đại Hao', '大耗'],
   ['sao', 'Địa Không', '地空'],
@@ -142,7 +144,8 @@ export const TERMS: readonly TermRow[] = [
   ['sao', 'Thiên Quan', '天官'],
   ['sao', 'Thiên Phúc', '天福'],
   ['sao', 'Quan Phủ', '官府'],
-  ['sao', 'Lưu Niên Văn Tinh', '流年文星'],
+  // Sao RIÊNG của trường phái Việt, không có tương đương chuẩn bên Trung — cờ 'o': người dịch giải thích, đừng tìm từ tương đương.
+  ['sao', 'Lưu Niên Văn Tinh', '流年文星', '', 'o'],
   ['sao', 'Thai Phụ', '台輔'],
   ['sao', 'Phong Cáo', '封誥'],
   ['sao', 'Tuần', '旬空', 'Xun Kong', 'xn'],

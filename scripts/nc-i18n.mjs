@@ -167,6 +167,15 @@ async function next() {
       t[LOCALE],
     ])
   );
+  // Thuật ngữ RIÊNG của trường phái Việt (cờ 'o'): không có tương đương chuẩn — dặn người dịch giải thích thay vì tìm từ.
+  const ghiChu = Object.fromEntries(
+    termsInText(texts)
+      .filter((t) => t.f?.includes('o'))
+      .map((t) => [
+        t.vi,
+        'riêng trường phái Việt, không có tương đương chuẩn: giữ chữ glossary và giải thích ngắn lần đầu',
+      ])
+  );
   const items = lo.map((c) => ({
     slug: c.s.slug,
     ten: c.p.ten,
@@ -184,6 +193,7 @@ async function next() {
       locale: LOCALE,
       quy_tac: `${QUY_TAC.chung} ${QUY_TAC[LOCALE]}`,
       glossary,
+      ...(Object.keys(ghiChu).length ? { ghi_chu_thuat_ngu: ghiChu } : {}),
       items,
     })
   );
