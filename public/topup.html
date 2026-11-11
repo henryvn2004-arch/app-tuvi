@@ -585,7 +585,7 @@ function setMethod(m) {
     inp.min = String(customMin()); inp.max = String(customMax());
     inp.step = isVnd() ? '1000' : '0.01';
     inp.placeholder = isVnd() ? '100000' : '10';
-    inp.setAttribute('aria-label', _tvmbT('js.topup.so-tien-muon-nap', 'Số tiền muốn nạp (') + (isVnd() ? _tvmbT('js.topup.vnd', 'VNĐ') : 'USD') + ')');
+    inp.setAttribute('aria-label', _tvmbT('js.topup.so-tien-muon-nap', 'Số tiền muốn nạp (') + (isVnd() ? _tvmbT('js.topup.vnd', 'VNĐ') : 'USD') + _tvmbT('js.topup.p-dong-ngoac', ')'));
     document.getElementById('customSuffix').textContent = isVnd() ? _tvmbT('js.topup.d', 'đ') : 'USD';
   }
   renderPackages();
@@ -1065,7 +1065,7 @@ function onCustomInput() {
   // nói vậy bây giờ là sai. Hiện đúng bậc mà số tiền này đang hưởng.
   note.textContent = val >= customMin()
     ? minTxt + ' · ' + moneyRate(q.perCredit) + _tvmbT('js.topup.luong-10zo', ' / Lượng')
-      + (q.tierLabel ? _tvmbT('js.topup.bac', ' (bậc ') + q.tierLabel + ')' : '')
+      + (q.tierLabel ? _tvmbT('js.topup.bac', ' (bậc ') + q.tierLabel + _tvmbT('js.topup.p-dong-ngoac', ')') : '')
     : minTxt + _tvmbT('js.topup.don-gia-theo-bac-goi-cang', ' · đơn giá theo bậc gói, càng nạp nhiều càng rẻ');
 }
 
@@ -1075,7 +1075,7 @@ function readCustom() {
   const raw = parseFloat(document.getElementById('customInput').value) || 0;
   const v = isVnd() ? raw : Math.round(raw * 100) / 100;
   if (v < customMin() || v > customMax()) {
-    showAlert('error', _tvmbT('js.topup.vui-long-nhap-so-tien-tu', 'Vui lòng nhập số tiền từ ') + money(customMin()) + _tvmbT('js.topup.den', ' đến ') + money(customMax()) + '.');
+    showAlert('error', _tvmbT('js.topup.vui-long-nhap-so-tien-tu', 'Vui lòng nhập số tiền từ ') + money(customMin()) + _tvmbT('js.topup.den', ' đến ') + money(customMax()) + _tvmbT('js.topup.p-cham', '.'));
     return null;
   }
   return v;
@@ -1242,7 +1242,7 @@ async function loadReferralInfo() {
     if (d.rewardPerInvite) {
       document.getElementById('refPitchTopup').innerHTML =
         _tvmbT('js.topup.moi-nguoi-dang-ky-qua-link', 'Mỗi người đăng ký qua link của bạn: <strong>+') + Number(d.rewardPerInvite) + _tvmbT('js.topup.luong-ngay-khi-ho-tao-tai', ' Lượng</strong> ngay khi họ tạo tài khoản')
-        + (d.cap ? _tvmbT('js.topup.toi-da', ' (tối đa ') + Number(d.cap) + _tvmbT('js.topup.luot-moi-duoc-thuong-30-ngay', ' lượt mời được thưởng / 30 ngày)') : '') + '.';
+        + (d.cap ? _tvmbT('js.topup.toi-da', ' (tối đa ') + Number(d.cap) + _tvmbT('js.topup.luot-moi-duoc-thuong-30-ngay', ' lượt mời được thưởng / 30 ngày)') : '') + _tvmbT('js.topup.p-cham', '.');
     }
     document.getElementById('refTotal').textContent     = Number(d.invited || 0);
     document.getElementById('refQualified').textContent = Number(d.rewarded || 0);
