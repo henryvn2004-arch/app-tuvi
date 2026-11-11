@@ -34,6 +34,7 @@ import {
   TRANSLATED,
 } from '../../lib/i18n/dict.mjs';
 import { buildZhCn } from './zhcn.mjs';
+import { SINGLE_LOCALE_PAGES } from '../../lib/i18n/single-locale.mjs';
 import { SELF_MANAGED_PREFIXES, isSelfManaged } from '../../lib/i18n/self-managed.mjs';
 
 const errors = [];
@@ -132,6 +133,35 @@ for (const [p, page] of Object.entries(pages)) {
   }
 }
 
+// ── 8. trang CHỈ MỘT ngôn ngữ (lib/i18n/single-locale.mjs) ───────────────────
+{
+  const metaOf = (html) =>
+    /<meta\s+name=["']tvmb-single-locale["']\s+content=["']([^"']+)["']/i.exec(html)?.[1] || null;
+  const urlByFile = await (await import('./_common.mjs')).urlToFile();
+  const fileOf = new Map([...urlByFile].map(([u, f]) => [f, u]));
+  for (const [u, l] of Object.entries(SINGLE_LOCALE_PAGES)) {
+    if (!TRANSLATED.includes(l)) fail(`single-locale: ${u} khai ngôn ngữ "${l}" không hợp lệ`);
+    const f = path.join(PUBLIC, u.replace(/^\//, ''));
+    if (!fs.existsSync(f)) continue; // file có thể đến từ PR khác (W11) — chưa có thì bỏ qua, có rồi sẽ bị soi
+    const m = metaOf(fs.readFileSync(f, 'utf8'));
+    if (m !== l)
+      fail(
+        `public/${path.basename(f)}: thiếu/lệch <meta name="tvmb-single-locale" content="${l}"> (đang: ${m})`
+      );
+    if (pages[u] || avail[u])
+      fail(
+        `${u}: trang một ngôn ngữ không được có data-i18n/đăng ký trong pages.json/availability.json`
+      );
+  }
+  for (const f of htmlFiles) {
+    const m = metaOf(fs.readFileSync(path.join(PUBLIC, f), 'utf8'));
+    if (m && SINGLE_LOCALE_PAGES[fileOf.get(f)] !== m)
+      fail(
+        `public/${f}: có meta tvmb-single-locale="${m}" nhưng không (hoặc lệch) trong lib/i18n/single-locale.mjs — proxy sẽ vẫn phục vụ nó dưới mọi ngôn ngữ`
+      );
+  }
+}
+
 // ── 5. hreflang tĩnh trong public/*.html ────────────────────────────────────
 for (const f of htmlFiles) {
   const html = fs.readFileSync(path.join(PUBLIC, f), 'utf8');
@@ -172,6 +202,12 @@ for (const name of ['LOCALES', 'HREFLANG']) {
   const L = pick(tsLoc, 'LOCALES');
   if (strip(L.filter((x) => x !== 'vi')) !== strip(TRANSLATED))
     fail('lib/i18n/dict.mjs: TRANSLATED lệch LOCALES (trừ vi)');
+}
+{
+  const authSrc = fs.readFileSync(path.join(PUBLIC, 'auth.js'), 'utf8');
+  const m = /var _TVMB_LOCALES = (\[[^\]]*\])/.exec(authSrc);
+  if (!m || strip(new Function('return ' + m[1])()) !== strip(pick(tsLoc, 'LOCALES')))
+    fail('public/auth.js: _TVMB_LOCALES lệch LOCALES trong lib/i18n/locales.ts');
 }
 for (const [f, src] of [
   ['public/nav.js', fs.readFileSync(path.join(PUBLIC, 'nav.js'), 'utf8')],
