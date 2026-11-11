@@ -54,12 +54,31 @@ const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 interface Matcher {
   t: Term;
   re: RegExp;
+  /** Khớp theo NGỮ CẢNH (cờ 'a'): dò trên văn bản gốc, không nuốt vùng khớp (Tuần/Triệt hay đi thành cặp). */
+  ctx?: boolean;
 }
+
+// Đơn từ mơ hồ ("Tuần" = tuần lễ, "Triệt"…) chỉ tính là sao khi đi cùng ngữ cảnh: "Tuần/Triệt", "Tuần và Triệt", "… án ngữ".
+const CONTEXT: Record<string, string> = {
+  Tuần: String.raw`Tuần(?=\s*[/,]\s*Triệt|\s+(?:và\s+)?Triệt|\s+án\s+ngữ)`,
+  Triệt: String.raw`(?:(?<=Tuần\s*[/,]\s*|Tuần\s+(?:và\s+)?)Triệt|Triệt(?=\s+án\s+ngữ))`,
+};
 let matchers: Matcher[] | null = null;
 function build(): Matcher[] {
   const out: Matcher[] = [];
   for (const t of GLOSSARY) {
     if (t.f?.includes('x')) continue; // đơn âm tiết mơ hồ: chỉ tra cứu chính xác, không dò trong văn
+    if (t.f?.includes('a')) {
+      const c = CONTEXT[t.vi];
+      if (!c) throw new Error(`glossary: ${t.vi} có cờ 'a' nhưng thiếu CONTEXT`);
+      out.push({ t, re: new RegExp(`(?<!${L})${c}(?!${L})`, 'gu'), ctx: true });
+      continue;
+    }
+    if (t.k === 'gio') {
+      // "giờ Tý" / "Giờ Tý": khớp chữ g hoa lẫn thường; chữ chi viết hoa như engine.
+      out.push({ t, re: new RegExp(`(?<!${L})[Gg]iờ\\s+${esc(t.vi.replace(/^Giờ /, ''))}(?!${L})`, 'gu') });
+      continue;
+    }
     const needCung = t.k === 'cung' && !!t.f?.includes('c');
     const optCung = t.k === 'cung' && !needCung;
     const body = esc(t.vi).replace(/\s+/g, String.raw`\s+`);
@@ -76,12 +95,12 @@ export function termsInText(texts: string[]): Term[] {
   const found = new Set<Term>();
   for (const raw of texts) {
     let s = raw;
-    for (const { t, re } of matchers) {
+    for (const { t, re, ctx } of matchers) {
       re.lastIndex = 0;
-      if (re.test(s)) {
+      if (re.test(ctx ? raw : s)) {
         found.add(t);
         re.lastIndex = 0;
-        s = s.replace(re, (m) => ' '.repeat(m.length));
+        if (!ctx) s = s.replace(re, (m) => ' '.repeat(m.length));
       }
     }
   }

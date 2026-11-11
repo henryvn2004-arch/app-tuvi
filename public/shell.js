@@ -1363,9 +1363,19 @@
     if (!n || !n.ngay || !n.thang || !n.nam) return null;
     var idx = n.gioIdx;
     if (idx == null && n.gioHour != null) idx = Math.floor(((+n.gioHour + 1) % 24) / 2);
-    return { day: +n.ngay, month: +n.thang, year: +n.nam,
+    var out = { day: +n.ngay, month: +n.thang, year: +n.nam,
       hourBranch: (idx == null ? -1 : +idx), gender: n.gioitinh === 'nu' ? 'nu' : 'nam',
       name: n.hoten || undefined };
+    // Nơi sinh ngoài VN (i18n W3/W3b): lịch âm + giờ:phút chính xác (giờ CỦA LỊCH) đi
+    // theo, không thì phiên khôi phục lặng lẽ tính theo lịch VN / tiết theo ngày.
+    // Lá số VN: y như cũ.
+    if (n.lich && n.lich !== 'vn') {
+      out.lich = n.lich;
+      if (n.noiSinh) out.noiSinh = n.noiSinh;
+      var h = n.hour != null ? n.hour : n.gioHour, m = n.minute != null ? n.minute : n.gioPhut;
+      if (h != null && h !== '' && !isNaN(+h)) { out.hour = +h; out.minute = (m == null || m === '' || isNaN(+m)) ? 0 : +m; }
+    }
+    return out;
   }
   function birthSnapshot() { try { return normBirth(JSON.parse(localStorage.getItem('app_birth') || 'null')); } catch (e) { return null; } }
   // Chụp toàn bộ input/select/textarea (trừ rail + command palette) để khôi phục

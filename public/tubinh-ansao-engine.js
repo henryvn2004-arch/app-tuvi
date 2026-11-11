@@ -1,4 +1,5 @@
 // ============================================================
+/* global NoiSinh */
 // TỬ BÌNH BÁT TỰ — AN SAO ENGINE v1.0
 // Mirror style của tuvi-ansao-engine.js
 // Source rules: Tử Bình Chân Thuyên (Thẩm Hiếu Chiêm) +
@@ -78,6 +79,86 @@ function _findTietKhiJDN(yy, targetDeg) {
     }
   }
   return null;
+}
+
+// ─── TIẾT KHÍ THEO THỜI ĐIỂM — CHỈ lịch cn/kr/jp (i18n W3b, 2026-11) ─────────
+// Lịch vn ở trên xét tiết theo NGÀY (kinh độ lúc 12:00 UT) — nợ cũ, giữ nguyên
+// để tứ trụ người VN không đổi (docs/luat/engine-cophap.md). Nơi sinh Trung/Đài/
+// HK/Hàn/Nhật thì trụ tháng (và trụ năm qua Lập Xuân) quyết bằng THỜI ĐIỂM vào
+// tiết so với THỜI ĐIỂM sinh tuyệt đối, như lịch vạn niên bản địa.
+// Bảng: phút UTC kể từ 1900-01-01 của 12 tiết, mốc i = kinh độ (255+30·i) mod 360.
+// <TIET_KHI_TABLE> — SINH bằng scripts/gen-tiet-khi-table.mjs --write, KHÔNG sửa tay.
+const _TIET_KHI_GOC = '-rg7,5a4,121s,1z4m,2wpt,3uvv,4tjr,5sha,6rdf,7pxh,8nyd,9leg';
+const _TIET_KHI_DELTA =
+  'ljijlprrpnnortsqnje9679eimnmjhhkoprponnmmmoqqqomlkmoqqmifeeffhilnpqpooprsrplifeefgijkkigfegjllig' +
+  'ffgikopqqomllmopmhc7458bcddddccehlonlhecdgjmnnmmlkjiihgc9669cfghgghijlmnqrrnidbbdfghhiiiigefhhhe' +
+  'cceimrsrppoppppqpmic758cfggeeegjlnnnmkhggjosutqnnnooonkigdcbbdgijjjknqstsromiffgilpqpmkihigghjii' +
+  'ihhhjmpqpoprtwvuqkgb768chkmkifcehjkjhgghiknoqrpnllnprrnic877abceghiiijlnnmkgddegiijkkkihgfgghgda' +
+  '98adfhjmnonmmooomjea99cfffgedbbbeikkjfa9aeinprssrrrpponid98aehjkhfefhiloqrqmjgehkopoppqrrpnkjhfe' +
+  'bbdhloppopqrstttsrnjecehlmljighhijiigedcdgmrvutqpqrsssplgda9abeggfdegjmnmkhecbdfkorsqolkjjihfecc' +
+  'cbbbdfhjjjlnqssqmiebaabehlmmjebbdefdcaaacfilnqqpnmnqssqke989beffggfeefhklkhdaadhloopppponmmmlhea' +
+  '9acfhijklnooooopnlhffhjmoonmljihhjlkieb9aeinqrtuuuutttsojeceimoomjgefhijkllifcchlqrrrqrtttsoligd' +
+  'aabfjlkjihjlmmmkjjigffgknonljhggggeca86557djmnomllmoppnkhebbcfhhgea9adghgea7547agmqssqonmnnmjfed' +
+  'eeefgffeeefimoqolieeegilnrttrnliiihfcaacehjmnpqppopquwvrmigikmnonnljhhhijifc98ciorttssrrrrttrnjf' +
+  'degikljijkkklkkjifddfjnqqqpnlljiiijjgc978adgikmnoonnmmmkgdcejnqpmieccccdefec8458djnnlllnqrqomifd' +
+  'dcehkmkgdccfghhfdcbbbdhknppomlmnmkhecb99acehllkjiijlmnnmkkjjkloppnkihikkjgc8657bhmrutspooqttrpml' +
+  'mnooonmjhggilnpnjeabehlortuvusqpoonjgedehjjjjjjkjjjlnpqnjhhjmnponnljhfffgfc9525afjllklkkkmopqnig' +
+  'eehjlligddedeeedb7548djnonlkkkklklkjhfcbbdfffefhijkjiihhfedfkpssqnliihhhhgfec97afjmmkjjlortsqpnl' +
+  'kkloqsrokhhikkkhebabdfjnpqponnprttpmkjihikkmllkjhhikkjjhhhjkmnppqomllmnnmkfc8778chknolkhiknonlkk' +
+  'loprqpnlifefhkmkf94359ehjllmnnmmopnkhefgjlmkhfeeeedfhhhfbabeikmmlmmmmkjjihea766adghgfffgghlnpoli' +
+  'hhkmpqomkjkkjjhgc8436chmomliijmoqrsrpnkjjlmmkihiknnnlifedcehlpttsponnoonnmlkigedfjkkjhijmoqqpmlk' +
+  'klmpsvusokjkmnljfb878behikkihhkorspmjghijlnnmkigfffhhgca9aceghihiiiikmopnkgda8abcehijifddeghhgff' +
+  'hkmooonnljijlnpnib5259cefghhiiikmopnkhhjmqsrnkjjjkijjjgc978dhjlkjjlnoqpooomjgefhkkkjhghhijjlllki' +
+  'hikorssrrqqqrqomjea67cgklkjgfgimoprrqollmprspmkkmoqpmie9877aeilnmkjjlopomlkjihghhijigfefhkkjhede' +
+  'efghlnqpnmllnnnkfb7679bdefedcbdhlmmjheefhlnponljijjkjgc6568bdeffeeegilprqnjfedfhijkmnmlkiiihgecc' +
+  'fjmnpooppoopqtuupkebbehijjkkllllmoonkhgjotwwurpppqqqpolgb89afhihgfhknpppnmkhggimpqonljjkjjihgfdb' +
+  'acdfikklmorrrqomida88bfjligdbbbcfghihhfeginoomllnqssokd843359cghgdbceikljigghijkmlmlljijkmmida89' +
+  '9befiklnnnnoqrqojgeeffhijjjihfgikmkhfddfjnqsuutrpqrrrokfaacfhihhgfffjmqsrnjfegkoqrrrstsqoomkhdbb' +
+  'dgkmmkjllnopqrsrojfdfhklllklkkjhghgfdbabglopponoopppomjf9668cfgfdaabefhggdba8bejoqonkkllmmlieb97' +
+  '78';
+// </TIET_KHI_TABLE>
+const _TK_EPOCH_MS = Date.UTC(1900, 0, 1);
+const _TK_LICH = { cn: 1, kr: 1, jp: 1 };
+let _tkMoc = null;
+function _tietKhiMoc() {
+  if (_tkMoc) return _tkMoc;
+  const a = _TIET_KHI_GOC.split(',').map((s) => parseInt(s, 36));
+  for (let i = 0; i < _TIET_KHI_DELTA.length; i++) a.push(a[i] + 525930 + parseInt(_TIET_KHI_DELTA[i], 36));
+  return (_tkMoc = a);
+}
+
+// Giờ dân sự CỦA LỊCH (ngày/giờ/phút form đã quy đổi qua NoiSinh.quyDoi) → phút
+// UTC kể từ 1900. Múi của lịch đọc từ NGUỒN DUY NHẤT `NoiSinh.GIO_LICH`
+// (public/tools-shared/noi-sinh.js — trang nạp sẵn; server truyền vào khi nạp
+// engine, lib/engine/tubinh.ts). Thiếu ⇒ null (người gọi lùi về đường theo ngày).
+function _phutUtcCuaLich(dd, mm, yy, hour, phut, lich) {
+  const NS = (typeof NoiSinh !== 'undefined' && NoiSinh) || null;
+  const gl = NS && NS.GIO_LICH && NS.GIO_LICH[lich];
+  if (typeof gl !== 'function') return null;
+  const off = gl(yy * 10000 + mm * 100 + dd);
+  return (Date.UTC(yy, mm - 1, dd, hour, phut || 0) - _TK_EPOCH_MS) / 60000 - off;
+}
+
+// Chỉ số mốc tiết cuối cùng ≤ thời điểm (phút UTC kể từ 1900); ngoài bảng ⇒ -1.
+function _tietKhiTruoc(phutUtc) {
+  const a = _tietKhiMoc();
+  if (!(phutUtc >= a[0]) || phutUtc >= a[a.length - 1]) return -1;
+  let lo = 0, hi = a.length - 1;
+  while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (a[mid] <= phutUtc) lo = mid; else hi = mid; }
+  return lo;
+}
+
+// Mốc tiết của một thời điểm sinh (giờ của lịch) — cho khoá cache lá số
+// (lib/portraits/cache.ts `lasoKey`): { i: chỉ số mốc tiết cuối ≤ thời điểm sinh,
+// gan: thời điểm sinh cách mốc trước hoặc mốc sau < 1 ngày }. lich vn / thiếu
+// NoiSinh / ngoài bảng ⇒ null.
+function tietKhiCuaThoiDiem(dd, mm, yy, gio, phut, lich) {
+  if (!_TK_LICH[lich]) return null;
+  const p = _phutUtcCuaLich(dd, mm, yy, gio, phut, lich);
+  const i = p == null ? -1 : _tietKhiTruoc(p);
+  if (i < 0) return null;
+  const a = _tietKhiMoc();
+  return { i, gan: p - a[i] < 1440 || a[i + 1] - p < 1440 };
 }
 
 // ============================================================
@@ -329,27 +410,42 @@ function _monthChiBySunLongitude(L) {
 // MAIN ENTRY 1: convertDuongToBatTu
 // ============================================================
 // Input: dd, mm, yy (dương lịch), hour (0-23, default 12)
+//   opts (tuỳ chọn) = { lich, gioLich, phutLich }: lich ∈ cn|kr|jp ⇒ trụ tháng/năm
+//   theo THỜI ĐIỂM vào tiết; gioLich:phutLich = giờ sinh chính xác (giờ của lịch,
+//   thiếu ⇒ hour:00). Không có opts / lich 'vn' ⇒ y nguyên đường theo NGÀY.
 // Output: { tuTru[4], canChiNamSinh, gioChi, jdn, lapXuanJDN }
-function convertDuongToBatTu(dd, mm, yy, hour = 12) {
+function convertDuongToBatTu(dd, mm, yy, hour = 12, opts) {
   const jdnRaw = _jdFromDate_TB(dd, mm, yy);
 
   // Day boundary: hour 23-23:59 thuộc giờ Tý ngày sau
   // → ngày trụ dùng jdn+1 nếu hour >= 23
   const jdnDay = (hour >= 23) ? jdnRaw + 1 : jdnRaw;
 
+  // ─── cn/kr/jp: mốc tiết cuối cùng trước thời điểm sinh (null ⇒ đường theo ngày)
+  let tk = null;
+  if (opts && _TK_LICH[opts.lich]) {
+    const p = _phutUtcCuaLich(dd, mm, yy, opts.gioLich != null ? opts.gioLich : hour, opts.phutLich, opts.lich);
+    const i = p == null ? -1 : _tietKhiTruoc(p);
+    if (i >= 0) tk = { i, phutUtc: p };
+    else if (typeof console !== 'undefined') console.error('[tubinh] lịch ' + opts.lich + ': không định được thời điểm sinh (thiếu NoiSinh hoặc ngoài bảng tiết khí) — lùi về tiết theo ngày');
+  }
+
   // ─── Năm trụ: Lập Xuân của yy
   const lapXuanJDN = _findTietKhiJDN(yy, 315);
   let solarYear = yy;
-  if (lapXuanJDN && jdnRaw < lapXuanJDN) {
+  if (tk) {
+    // Mốc i là tiết thứ (i-2) kể từ Lập Xuân 1900 ⇒ năm tiết khí = 1900 + ⌊(i-2)/12⌋
+    solarYear = 1900 + Math.floor((tk.i - 2) / 12);
+  } else if (lapXuanJDN && jdnRaw < lapXuanJDN) {
     // Sinh trước Lập Xuân → năm trụ thuộc năm trước
     solarYear = yy - 1;
   }
   const yearP = _yearPillarBySolarYear(solarYear);
   yearP.napAm = _napAm(yearP.can, yearP.chi);
 
-  // ─── Tháng trụ: dựa vào sun longitude tại jdnRaw
+  // ─── Tháng trụ: dựa vào sun longitude tại jdnRaw (cn/kr/jp: kinh độ của mốc tiết)
   const L = _sunLongitudeDeg(jdnRaw);
-  const monthChi = _monthChiBySunLongitude(L);
+  const monthChi = _monthChiBySunLongitude(tk ? (255 + 30 * tk.i) % 360 : L);
   const monthP = _monthPillarByYearCanAndMonthChi(yearP.can, monthChi);
   monthP.napAm = _napAm(monthP.can, monthP.chi);
 
@@ -381,6 +477,7 @@ function convertDuongToBatTu(dd, mm, yy, hour = 12) {
     lapXuanJDN,
     sunLongitudeDeg: L,
     solarYearAdjusted: (solarYear !== yy),
+    ...(tk ? { tietKhiPhutUtc: tk.phutUtc } : {}),
   };
 }
 
@@ -718,7 +815,7 @@ function _xacDinhCachCuc(tuTru, nhatCan, dungThan) {
 // ============================================================
 // ĐẠI VẬN
 // ============================================================
-function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL, cuongNhuoc, cachCuc) {
+function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL, cuongNhuoc, cachCuc, tietKhiPhutUtc) {
   const yearCan = tuTru[0].can;
   const monthCan = tuTru[1].can;
   const monthChi = tuTru[1].chi;
@@ -745,6 +842,12 @@ function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL, cuon
   let daysDiff;
   if (isThuan) daysDiff = nearestForward ? (nearestForward - jdnRaw) : 5;
   else         daysDiff = nearestBackward ? (jdnRaw - nearestBackward) : 5;
+  // cn/kr/jp: đếm theo THỜI ĐIỂM sinh → thời điểm vào tiết (cùng bảng định trụ tháng).
+  const _tki = tietKhiPhutUtc != null ? _tietKhiTruoc(tietKhiPhutUtc) : -1;
+  if (_tki >= 0) {
+    const a = _tietKhiMoc();
+    daysDiff = (isThuan ? a[_tki + 1] - tietKhiPhutUtc : tietKhiPhutUtc - a[_tki]) / 1440;
+  }
   const tuoiKhoiVan = Math.max(1, Math.round(daysDiff / 3));
 
   // Thập thần Tỷ Kiếp / Ấn vs Quan Sát / Thực Thương / Tài
@@ -1615,11 +1718,12 @@ function _tinhThanSat(tuTru, nhatCan) {
 // ============================================================
 // Input: { ngayDL, thangDL, namDL, gio (0-23), gioitinh ('nam'|'nu'), namXem }
 // Output: full Tử Bình analysis object
-function tinhBatTu({ ngayDL, thangDL, namDL, gio = 12, gioitinh = 'nam', namXem }) {
+// lich/gioLich/phutLich (tuỳ chọn): xem convertDuongToBatTu — chỉ cn/kr/jp đổi kết quả.
+function tinhBatTu({ ngayDL, thangDL, namDL, gio = 12, gioitinh = 'nam', namXem, lich, gioLich, phutLich }) {
   const namXemFinal = namXem || new Date().getFullYear();
 
   // Step 1: Convert sang Bát Tự
-  const conv = convertDuongToBatTu(ngayDL, thangDL, namDL, gio);
+  const conv = convertDuongToBatTu(ngayDL, thangDL, namDL, gio, _TK_LICH[lich] ? { lich, gioLich, phutLich } : undefined);
   const tuTru = conv.tuTru;
   const nhatCan = tuTru[2].can;
   const nhatChi = tuTru[2].chi;
@@ -1652,7 +1756,7 @@ function tinhBatTu({ ngayDL, thangDL, namDL, gio = 12, gioitinh = 'nam', namXem 
   const cachCuc = _xacDinhCachCuc(tuTru, nhatCan, dungThan);
 
   // Step 7: Đại vận (cần cuongNhuoc + cachCuc cho asymmetric reading + interaction)
-  const dvData = _tinhDaiVan(tuTru, nhatCan, gioitinh, conv.jdn, dungThan, namDL, cuongNhuoc, cachCuc);
+  const dvData = _tinhDaiVan(tuTru, nhatCan, gioitinh, conv.jdn, dungThan, namDL, cuongNhuoc, cachCuc, conv.tietKhiPhutUtc);
 
   // Step 8: Đại vận hiện tại + kế tiếp
   const tuoiXem = namXemFinal - namDL + 1; // Vietnamese age (tuổi mụ)
@@ -1836,6 +1940,7 @@ if (typeof module !== 'undefined') {
   module.exports = {
     convertDuongToBatTu,
     tinhBatTu,
+    tietKhiCuaThoiDiem,
     tinhBatTuFromTuTru,
     thapThan,
     nhomThapThan,

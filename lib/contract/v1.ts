@@ -62,6 +62,13 @@ export interface BirthParams {
   year?: number;
   /** Giờ sinh: 0..11 theo địa chi Tý..Hợi, hoặc -1 nếu không rõ */
   hourBranch?: number;
+  /**
+   * Giờ:phút sinh chính xác (0..23, 0..59), CÙNG hệ giờ với day/month/year (thêm
+   * 2026-11, i18n W3b). Chỉ Bát Tự lịch cn/kr/jp đọc — trụ tháng/năm quyết bằng
+   * thời điểm vào tiết khí. Thiếu/lệch canh với hourBranch ⇒ đầu canh giờ.
+   */
+  hour?: number;
+  minute?: number;
   /** 'nam' | 'nu' */
   gender?: 'nam' | 'nu';
   /** true nếu day/month/year đã là ÂM lịch (mặc định false = dương) */

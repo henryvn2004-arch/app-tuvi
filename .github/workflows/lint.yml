@@ -299,6 +299,13 @@ jobs:
       - name: Biên âm lịch — ngoài tầm phải trả null/ném, không bịa lá số
         run: npm run check:lunar
 
+      # Bát Tự lịch cn/kr/jp (nơi sinh Trung/Đài/HK/Hàn/Nhật) đổi trụ tháng/năm
+      # theo THỜI ĐIỂM vào tiết — bảng sinh bằng astronomy-engine, đối chứng NAOJ
+      # (giờ:phút) + HKO (ngày) 1901–2100, ca vàng ±1′/±1h ở Seoul/Đài Bắc/Tokyo.
+      # Lịch vn PHẢI y nguyên: hash toàn bộ kết quả mẫu quét khớp engine trước W3b.
+      - name: Tiết khí theo thời điểm (cn/kr/jp) + lịch vn không đổi
+        run: npm run check:tietkhi
+
       # Âm → dương (public/tools-shared/am-duong.js). Bát Tự cần ngày DƯƠNG; người
       # nhập âm lịch trong chat từng bị đưa thẳng ngày âm vào tinhBatTu ⇒ tứ trụ sai.
       - name: Âm → dương — cặp đã biết + vét cạn 1900–2100 + nơi gọi còn đổi

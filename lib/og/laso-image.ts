@@ -26,6 +26,7 @@
 // Khoá: MEDIA_SIGN_SECRET, chưa đặt thì dùng SUPABASE_SERVICE_KEY (cả hai chỉ
 // có ở server). Không có khoá nào ⇒ không tạo link / route từ chối (fail-closed).
 
+import { hourMinuteFromQuery } from '@/lib/portraits/cache';
 import { createHmac, timingSafeEqual } from 'crypto';
 import type { BirthParams } from '@/lib/contract/v1';
 
@@ -91,6 +92,8 @@ function birthQuery(b: BirthParams | null | undefined, namXem: number): URLSearc
   if (b.isLunar && b.isLeapMonth) q.set('ln', '1');
   // Lịch âm theo nơi sinh (i18n W3) — chỉ gắn khi khác VN để link cũ giữ nguyên chữ ký.
   if (b.lich && b.lich !== 'vn') q.set('lc', b.lich);
+  // Giờ:phút chính xác (i18n W3b) — Bát Tự cn/kr/jp đổi trụ tháng theo phút; vn bỏ trống.
+  if (b.lich && b.lich !== 'vn' && Number.isInteger(b.hour)) q.set('hm', String(b.hour! * 60 + (b.minute ?? 0)));
   return q;
 }
 
@@ -134,6 +137,7 @@ function birthFrom(q: URLSearchParams): BirthParams | null {
     ...(q.get('l') === '1' && q.get('ln') === '1' ? { isLeapMonth: true } : {}),
     ...(q.get('n') ? { name: q.get('n') as string } : {}),
     ...(q.get('lc') ? { lich: q.get('lc') as BirthParams['lich'] } : {}),
+    ...hourMinuteFromQuery(q.get('hm')),
   };
 }
 
