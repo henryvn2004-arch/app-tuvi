@@ -44,7 +44,12 @@ const FMT = /^<\/?(b|i|strong|em|small|u)>$|^<br\s*\/?>$/i;
 const TEXTY = /[A-Za-zÀ-ỹ]{2}/;
 const TEXT_ATTR = /(\s(?:data-tip|aria-label|title|placeholder|alt|data-label)=")([^"]*)"/g;
 /** Câu gốc có cần tách không: có thẻ mang thuộc tính, hoặc mở/đóng giữa chừng một thẻ. */
+// Mảnh ĐẦU câu là máy móc chứ không phải chữ: dấu đóng của biểu thức/thuộc tính trước đó (`) …`,
+// `" …`) hoặc đuôi thẻ mở dở đang vào một thuộc tính (`" alt="Minh hoạ `).
+const LEAD_ATTR = /^"\s+[\w-]+="/;
+const LEAD_PUNCT = /^[)"\]]+\s*/;
 export function needsSplit(s) {
+  if (LEAD_ATTR.test(s) || /^[)\]]/.test(s)) return true;
   if (/<[a-z][\w-]*\s[^>]*>/i.test(s)) return true; // thẻ có thuộc tính
   const lt = s.indexOf('<');
   const gt = s.indexOf('>');
@@ -74,6 +79,11 @@ function segments(s) {
     out.push({ raw: r.slice(last) });
   };
   let rest = s;
+  const la = LEAD_ATTR.exec(rest) || (/^[)\]]/.test(rest) ? LEAD_PUNCT.exec(rest) : null);
+  if (la && rest.indexOf('>') < 0) {
+    out.push({ raw: la[0] });
+    rest = rest.slice(la[0].length);
+  }
   // tiền tố nằm giữa một thẻ đang mở dở (… alt="x">)
   const lt = rest.indexOf('<');
   const gt = rest.indexOf('>');

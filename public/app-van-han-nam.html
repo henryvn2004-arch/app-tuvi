@@ -288,7 +288,7 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
 <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=142"></script>
+<script src="/shell.js?v=143"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
@@ -475,11 +475,11 @@ async function doXem(){
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,hour:hh,minute:pp,gender:gioitinh,name:name||undefined,lich:fdIn.lich,noiSinh:fdIn.noiSinh},
-      label:'Vận hạn 12 tháng · '+(name||'lá số')+' · từ '+_khung.tuNhan,
-      greeting:'Khung **12 tháng âm lịch tới** ('+_khung.tuNhan+' → '+_khung.denNhan+', tức '+_khung.duongTu+' – '+_khung.duongDen+' dương lịch) đã sẵn sàng. Hỏi tôi về bất kỳ tháng nào.',
+      label:_tvmbT('js.vanhannam.van-han-12-thang-2jdf', 'Vận hạn 12 tháng · ')+(name||_tvmbT('js.luangiai.la-so', 'lá số'))+_tvmbT('js.vanhannam.tu', ' · từ ')+_khung.tuNhan,
+      greeting:_tvmbT('js.vanhannam.khung-12-thang-am-lich-toi', 'Khung **12 tháng âm lịch tới** (')+_khung.tuNhan+' → '+_khung.denNhan+_tvmbT('js.vanhannam.tuc', ', tức ')+_khung.duongTu+' – '+_khung.duongDen+_tvmbT('js.vanhannam.duong-lich-da-san-sang-hoi', ' dương lịch) đã sẵn sàng. Hỏi tôi về bất kỳ tháng nào.'),
       chips:buildChips()
     });
-    Shell.setShareable({kind:'text',toolId:'van-han-nam',title:'Vận hạn 12 tháng của '+(name||'tôi'),text:shareLines()});
+    Shell.setShareable({kind:'text',toolId:'van-han-nam',title:_tvmbT('js.vanhannam.van-han-12-thang-cua', 'Vận hạn 12 tháng của ')+(name||_tvmbT('js.battu.toi', 'tôi')),text:shareLines()});
     initGate();
   }catch(e){
     document.getElementById('vhBody').innerHTML=('<div class="laso-error">' + _tvmbT('js.vanhannam.loi-khi-tinh-van-han', 'Lỗi khi tính vận hạn:') + ' ')+esc(e.message)+'</div>';
@@ -498,13 +498,13 @@ function _birthPayload(){
 }
 
 function shareLines(){
-  var L=[(_hoTen||'Lá số')+' · '+_ngay+'/'+_thang+'/'+_nam+' · '+(_gioitinh==='nam'?'Nam':'Nữ')];
-  L.push('Vận hạn 12 tháng âm: '+_khung.tuNhan+' → '+_khung.denNhan+' ('+_khung.duongTu+' – '+_khung.duongDen+')');
+  var L=[(_hoTen||_tvmbT('js.shell.la-so', 'Lá số'))+' · '+_ngay+'/'+_thang+'/'+_nam+' · '+(_gioitinh==='nam'?'Nam':_tvmbT('js.shellui.nu', 'Nữ'))];
+  L.push(_tvmbT('js.vanhannam.van-han-12-thang-am', 'Vận hạn 12 tháng âm: ')+_khung.tuNhan+' → '+_khung.denNhan+' ('+_khung.duongTu+' – '+_khung.duongDen+')');
   var dv=_astrolabe.daiVanHienTai;
-  if(dv) L.push('Đại vận hiện tại: '+dv.diaChi+' ('+dv.tuoiStart+'–'+dv.tuoiEnd+'t)'+(dv.scoring&&dv.scoring.tong!=null?' · '+dv.scoring.tong+'/10':''));
+  if(dv) L.push(_tvmbT('js.battu.dai-van-hien-tai', 'Đại vận hiện tại: ')+dv.diaChi+' ('+dv.tuoiStart+'–'+dv.tuoiEnd+'t)'+(dv.scoring&&dv.scoring.tong!=null?' · '+dv.scoring.tong+'/10':''));
   L.push('');
   _khung.thangs.forEach(function(t){
-    L.push(t.nhanDay+': '+(t.loi?t.loi:('nguyệt hạn cung '+t.cungNguyetHan)));
+    L.push(t.nhanDay+': '+(t.loi?t.loi:(_tvmbT('js.vanhannam.nguyet-han-cung', 'nguyệt hạn cung ')+t.cungNguyetHan)));
   });
   return L.join('\n');
 }
@@ -513,8 +513,8 @@ function shareLines(){
 // mỗi "tháng 7 ÂL" là nó tra nhầm sang tháng 7 dương lịch.
 function buildChips(){
   var c=[], t0=_khung.thangs[0], t1=_khung.thangs[1];
-  if(t0&&!t0.loi) c.push(t0.nhanDay+' tôi nên tập trung việc gì?');
-  if(t1&&!t1.loi) c.push(t1.nhanDay+' có gì cần né?');
+  if(t0&&!t0.loi) c.push(t0.nhanDay+_tvmbT('js.vanhannam.toi-nen-tap-trung-viec-gi', ' tôi nên tập trung việc gì?'));
+  if(t1&&!t1.loi) c.push(t1.nhanDay+_tvmbT('js.vanhannam.co-gi-can-ne', ' có gì cần né?'));
   c.push('Trong 12 tháng tới, tháng nào thuận nhất?');
   c.push('Tiểu vận năm nay nói lên điều gì?');
   return c;
@@ -528,7 +528,7 @@ function illusBannerHtml(t,ls){
   if(!window.IllusMatch||!t||typeof t.thangAL!=='number') return '';
   var r=IllusMatch.illusUrlForThang(ls,t.thangAL,_gioitinh);
   if(!r) return '';
-  return '<figure class="lg-illus"><img src="'+r.url+'" data-print-src="'+r.printUrl+'" alt="Minh hoạ '+esc(t.nhan||'')+'" loading="lazy"'+
+  return '<figure class="lg-illus"><img src="'+r.url+'" data-print-src="'+r.printUrl+('" alt="' + _tvmbT('js.luangiai.minh-hoa', 'Minh hoạ') + ' ')+esc(t.nhan||'')+'" loading="lazy"'+
     ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
 }
 
@@ -541,9 +541,9 @@ function render(ls){
   var overall=totals.length?Math.round(totals.reduce(function(a,b){return a+b},0)/totals.length*10)/10:null;
   function card(lb,t){ var col=t!=null?scoreColor(t):'var(--text-lt)'; return '<div class="sc"><div class="lb">'+esc(lb)+'</div><div class="vl" style="color:'+col+'">'+(t!=null?t:'—')+'<small>/10</small></div><div class="pbar"><i style="width:'+(t!=null?t*10:0)+'%;background:'+col+'"></i></div></div>'; }
   document.getElementById('vhScores').innerHTML=
-    card('Tổng quan lá số',overall) + card('Đại vận '+(dvHT?dvHT.tuoiStart+'–'+dvHT.tuoiEnd+'t':''),dvTong) +
-    '<div class="sc"><div class="lb">Khung 12 tháng âm</div><div class="vl" style="font-size:15px;color:var(--heading)">'+esc(_khung.tuNhan)+' → '+esc(_khung.denNhan)+'</div>'+
-    '<div style="font-size:11px;color:var(--text-lt);margin-top:3px">'+esc(_khung.duongTu)+' – '+esc(_khung.duongDen)+' dương lịch</div>'+
+    card(_tvmbT('js.vanhannam.tong-quan-la-so', 'Tổng quan lá số'),overall) + card(_tvmbT('js.vanhannam.dai-van', 'Đại vận ')+(dvHT?dvHT.tuoiStart+'–'+dvHT.tuoiEnd+'t':''),dvTong) +
+    ('<div class="sc"><div class="lb">' + _tvmbT('js.vanhannam.khung-12-thang-am', 'Khung 12 tháng âm') + '</div><div class="vl" style="font-size:15px;color:var(--heading)">')+esc(_khung.tuNhan)+' → '+esc(_khung.denNhan)+'</div>'+
+    '<div style="font-size:11px;color:var(--text-lt);margin-top:3px">'+esc(_khung.duongTu)+' – '+esc(_khung.duongDen)+_tvmbT('js.vanhannam.duong-lich', ' dương lịch</div>')+
     '<div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>';
 
   var dvSo=_dvHienTaiSo(ls);
@@ -574,11 +574,11 @@ function render(ls){
     // trang này không khoá nội dung deterministic theo đăng nhập nên không
     // phải render lại DOM sau khi đăng ký/đăng nhập xong).
     var ctaRepeat=dummy
-      ? '<div class="lg-cta-repeat" id="vh-cta-'+p+'"><button class="btn-go" type="button" onclick="initiateAI()">✦ Mở toàn bộ vận hạn 12 tháng — <span data-tvp-price="van-han-nam">…</span> Lượng →</button></div>'
+      ? '<div class="lg-cta-repeat" id="vh-cta-'+p+('"><button class="btn-go" type="button" onclick="initiateAI()">' + _tvmbT('js.vanhannam.mo-toan-bo-van-han-12', '✦ Mở toàn bộ vận hạn 12 tháng —') + ' <span data-tvp-price="van-han-nam">…</span> ' + _tvmbT('js.luangiai.luong', 'Lượng →') + '</button></div>')
       : '';
-    S.push('<section class="sec" id="sec-'+p+'"><div class="sec-h"><div class="sec-n">'+p+'</div><h3>'+esc(_labels[p]||('Phần '+p))+'</h3></div>'+
+    S.push('<section class="sec" id="sec-'+p+'"><div class="sec-h"><div class="sec-n">'+p+'</div><h3>'+esc(_labels[p]||(_tvmbT('js.luangiai.phan', 'Phần ')+p))+'</h3></div>'+
       '<div class="card">'+body+claudeBox+ctaRepeat+
-      ask(p<=4?('Luận sâu phần: '+_labels[p]):(_khung.thangs[p-5].nhanDay+' của tôi thế nào?'))+'</div></section>');
+      ask(p<=4?(_tvmbT('js.battu.luan-sau-phan', 'Luận sâu phần: ')+_labels[p]):(_khung.thangs[p-5].nhanDay+_tvmbT('js.vanhannam.cua-toi-the-nao', ' của tôi thế nào?')))+'</div></section>');
   }
   document.getElementById('vhBody').innerHTML=S.join('');
   _renderMap();
@@ -633,15 +633,15 @@ function renderThang(t){
   if(!t) return '<div class="phan-empty">Không có dữ liệu tháng này.</div>';
   if(t.loi) return '<div class="phan-empty">'+esc(t.loi)+'</div>';
   var h='<div class="vh-doan">';
-  h+='<div class="vh-doan-hd"><b>'+esc(t.duongTu)+' – '+esc(t.duongDen)+'</b> dương lịch · '+t.soNgay+' ngày'+(t.dangDienRa?' · <b>đang diễn ra</b>':'')+'</div>';
-  h+='<div class="vh-cung">Nguyệt hạn: cung '+esc(t.cungNguyetHan)+'</div>';
+  h+='<div class="vh-doan-hd"><b>'+esc(t.duongTu)+' – '+esc(t.duongDen)+_tvmbT('js.vanhannam.duong-lich-1y4k', '</b> dương lịch · ')+t.soNgay+_tvmbT('js.vanhannam.ngay', ' ngày')+(t.dangDienRa?_tvmbT('js.vanhannam.dang-dien-ra', ' · <b>đang diễn ra</b>'):'')+'</div>';
+  h+=('<div class="vh-cung">' + _tvmbT('js.vanhannam.nguyet-han-cung-556b', 'Nguyệt hạn: cung') + ' ')+esc(t.cungNguyetHan)+'</div>';
   var st=[];
-  st.push('Chính tinh: '+(t.chinhTinh.length?esc(t.chinhTinh.join(', ')):'vô chính diệu (mượn cung xung chiếu)'));
-  if(t.catTinh.length) st.push('<span class="cat">Cát tinh: '+esc(t.catTinh.join(', '))+'</span>');
-  if(t.satTinh.length) st.push('<span class="sat">Sát tinh: '+esc(t.satTinh.join(', '))+'</span>');
-  if(t.baiTinh.length) st.push('<span class="bai">Bại tinh: '+esc(t.baiTinh.join(', '))+'</span>');
+  st.push(_tvmbT('js.vanhannam.chinh-tinh', 'Chính tinh: ')+(t.chinhTinh.length?esc(t.chinhTinh.join(', ')):_tvmbT('js.vanhannam.vo-chinh-dieu-muon-cung-xung', 'vô chính diệu (mượn cung xung chiếu)')));
+  if(t.catTinh.length) st.push(('<span class="cat">' + _tvmbT('js.vanhannam.cat-tinh', 'Cát tinh:') + ' ')+esc(t.catTinh.join(', '))+'</span>');
+  if(t.satTinh.length) st.push(('<span class="sat">' + _tvmbT('js.vanhannam.sat-tinh', 'Sát tinh:') + ' ')+esc(t.satTinh.join(', '))+'</span>');
+  if(t.baiTinh.length) st.push(('<span class="bai">' + _tvmbT('js.vanhannam.bai-tinh', 'Bại tinh:') + ' ')+esc(t.baiTinh.join(', '))+'</span>');
   h+='<div class="vh-stars">'+st.join('<br>')+'</div>';
-  h+='<div class="vh-nen">Nền năm ÂL '+t.namAL+(t.tuoi?' (tuổi '+t.tuoi+')':'')+': tiểu hạn cung '+esc(t.cungTieuHan)+' · lưu niên đại hạn cung '+esc(t.cungLuuNien)+'</div>';
+  h+=('<div class="vh-nen">' + _tvmbT('js.vanhannam.nen-nam-al', 'Nền năm ÂL') + ' ')+t.namAL+(t.tuoi?_tvmbT('js.vanhannam.tuoi', ' (tuổi ')+t.tuoi+')':'')+_tvmbT('js.vanhannam.tieu-han-cung', ': tiểu hạn cung ')+esc(t.cungTieuHan)+_tvmbT('js.vanhannam.luu-nien-dai-han-cung', ' · lưu niên đại hạn cung ')+esc(t.cungLuuNien)+'</div>';
   h+='</div>';
   if(t.toHop&&t.toHop.length){
     h+='<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔮</span> Tổ hợp sao trong các cung hạn</div>';
@@ -656,7 +656,7 @@ function renderThang(t){
   return h;
 }
 
-function ask(t){ return '<div class="ask" data-ask="'+esc(t)+'">✦ Hỏi Thầy: "'+esc(t)+'"</div>'; }
+function ask(t){ return '<div class="ask" data-ask="'+esc(t)+('">' + _tvmbT('js.battu.hoi-thay', '✦ Hỏi Thầy: "'))+esc(t)+'"</div>'; }
 function wireAsk(root){
   root.querySelectorAll('[data-ask]').forEach(function(el){
     if(el._vhWired)return; el._vhWired=true;
@@ -666,7 +666,7 @@ function wireAsk(root){
 function renderJump(){
   var h='';
   for(var i=1;i<=_tongPhan;i++){
-    var lb = i>=5 && _khung.thangs[i-5] ? _khung.thangs[i-5].nhan : (_labels[i]||('Phần '+i));
+    var lb = i>=5 && _khung.thangs[i-5] ? _khung.thangs[i-5].nhan : (_labels[i]||(_tvmbT('js.luangiai.phan', 'Phần ')+i));
     h+='<a data-i="'+i+'"'+(i===1?' class="on"':'')+'>'+esc(lb)+'</a>';
   }
   document.getElementById('vhJump').innerHTML=h;
@@ -815,12 +815,12 @@ async function _unlockOnePart(p){
   if(!gate.ok) return; // ensureCredits đã tự hiện UI thiếu Lượng/giá chưa đọc được
 
   var token=window.Auth.getSession&&window.Auth.getSession()&&window.Auth.getSession().access_token;
-  var labelForDesc=(_labels&&_labels[p])||('Phần '+p);
+  var labelForDesc=(_labels&&_labels[p])||(_tvmbT('js.luangiai.phan', 'Phần ')+p);
   try{
     var res=await fetch('/api/payment?action=deduct',{method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||'')},
       body:JSON.stringify({toolType:'use_van_han_nam', product:'van-han-nam', part:p, amount:partPrice,
-        slug:slug, description:'Vận Hạn 12 Tháng Tới — '+labelForDesc})});
+        slug:slug, description:_tvmbT('js.vanhannam.van-han-12-thang-toi', 'Vận Hạn 12 Tháng Tới — ')+labelForDesc})});
     var data=await res.json();
     if(!data.success){
       alert(data.insufficientBalance?'Không đủ Lượng — vui lòng nạp thêm.':'Có lỗi khi mở phần này, thử lại.');
@@ -882,19 +882,19 @@ async function _startAI(){
     _saveResult();
   }else{
     document.getElementById('vhProgress').textContent=
-      '⚠ '+result.failed.length+' phần lỗi (phần '+result.failed.join(', ')+') — bấm ↻ Thử lại ở từng phần rồi tải lại trang.';
+      '⚠ '+result.failed.length+_tvmbT('js.luangiai.phan-loi-phan', ' phần lỗi (phần ')+result.failed.join(', ')+(') ' + _tvmbT('js.luangiai.bam-thu-lai-o-tung-phan', '— bấm ↻ Thử lại ở từng phần rồi tải lại trang.'));
   }
 }
 // Truy vấn RAG theo từng phần — phần tháng bám cung nguyệt hạn + sao của đúng
 // tháng đó (không phải một truy vấn chung cho cả 12 tháng).
 function ragQuery(p){
-  if(p===1) return 'tổng quan lá số '+(_astrolabe.napAm||'')+' cục '+(_astrolabe.cuc||'')+' khí chất bản mệnh';
+  if(p===1) return _tvmbT('js.luangiai.tong-quan-la-so', 'tổng quan lá số ')+(_astrolabe.napAm||'')+_tvmbT('js.luangiai.cuc-3z6y', ' cục ')+(_astrolabe.cuc||'')+_tvmbT('js.luangiai.khi-chat-ban-menh', ' khí chất bản mệnh');
   if(p===2) return 'đại vận thiên thời địa lợi nhân hòa vận trình cuộc đời';
-  if(p===3){ var dv=_astrolabe.daiVanHienTai; return 'đại vận '+((dv&&dv.diaChi)||'')+' vận hạn ý nghĩa'; }
-  if(p===4) return 'tiểu hạn lưu niên '+(_astrolabe.chiNamXem||'')+' vận năm hiện tại';
+  if(p===3){ var dv=_astrolabe.daiVanHienTai; return _tvmbT('js.xemtuoi.dai-van', 'đại vận ')+((dv&&dv.diaChi)||'')+_tvmbT('js.vanhannam.van-han-y-nghia', ' vận hạn ý nghĩa'); }
+  if(p===4) return _tvmbT('js.vanhannam.tieu-han-luu-nien', 'tiểu hạn lưu niên ')+(_astrolabe.chiNamXem||'')+_tvmbT('js.vanhannam.van-nam-hien-tai', ' vận năm hiện tại');
   var t=_khung.thangs[p-5];
   if(!t||t.loi) return 'lưu nguyệt hạn vận tháng';
-  return 'lưu nguyệt hạn cung '+t.cungNguyetHan+' '+t.chinhTinh.join(' ')+' vận tháng';
+  return _tvmbT('js.vanhannam.luu-nguyet-han-cung', 'lưu nguyệt hạn cung ')+t.cungNguyetHan+' '+t.chinhTinh.join(' ')+_tvmbT('js.vanhannam.van-thang', ' vận tháng');
 }
 // Bóc nhãn `[TỐT|TỪ KHOÁ]` model gắn ở đầu câu phán quyết. CHỈ lấy nhãn ĐẦU
 // TIÊN của phần: mỗi phần có nhiều đoạn, mỗi đoạn một nhãn, nhưng câu phán
@@ -932,7 +932,7 @@ function taiAnhMap(){
   Poster.download({
     svg:host.innerHTML,
     title:'Vận hạn 12 tháng',
-    subtitle:(_hoTen||'Lá số')+' · '+_khung.tuNhan+' → '+_khung.denNhan+' ('+_khung.duongTu+' – '+_khung.duongDen+')',
+    subtitle:(_hoTen||_tvmbT('js.shell.la-so', 'Lá số'))+' · '+_khung.tuNhan+' → '+_khung.denNhan+' ('+_khung.duongTu+' – '+_khung.duongDen+')',
     quote:'Mỗi ô là một tháng ÂM LỊCH — quãng ngày dương ghi trong bản luận.',
     qrUrl:Poster.qrLink('van-han-nam','/app/van-han-nam'),
     qrCaption:'Quét mã — xem 12 tháng của bạn',
@@ -955,7 +955,7 @@ async function _runPhanVanHan(p){
     box.classList.remove('tpw-real-lock');
     box.innerHTML=('<div class="phan-empty">' + _tvmbT('js.luangiai.dang-luan', 'Đang luận…') + '</div>');
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
-      w=AiLoadingSteps.mountWait(box,{label:'Đang luận '+(_labels[p]||('phần '+p))+'…',
+      w=AiLoadingSteps.mountWait(box,{label:_tvmbT('js.vanhannam.dang-luan', 'Đang luận ')+(_labels[p]||(_tvmbT('js.vanhannam.phan', 'phần ')+p))+'…',
         expectSec:(_pace&&_pace.perPartSec())||0,expectText:(_pace&&_pace.perPartText())||'',center:true});
       w.start();
     }

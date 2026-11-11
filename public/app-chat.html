@@ -34,7 +34,7 @@
 <script>window.SHELL_ACTIVE='home';window.SHELL_CHAT_HOME=true;window.SHELL_HISTORY=true;</script>
 <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/auth.js?v=8"></script>
-<script src="/shell.js?v=142"></script>
+<script src="/shell.js?v=143"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 (function(){
@@ -77,7 +77,7 @@
   var base={
     label:'Hỏi Thầy',
     placeholder:'Kể chuyện của bạn…',
-    hero:nm?('Chào '+nm+', hôm nay có chuyện gì?'):'Hôm nay bạn có chuyện gì?',
+    hero:nm?(_tvmbT('js.chat.chao', 'Chào ')+nm+_tvmbT('js.chat.hom-nay-co-chuyen-gi', ', hôm nay có chuyện gì?')):_tvmbT('js.chat.hom-nay-ban-co-chuyen-gi', 'Hôm nay bạn có chuyện gì?'),
     heroSub:_tvmbT('js.chat.ke-vai-dong-thoi-minh-bao', 'Kể vài dòng thôi. Minh Bảo sẽ mời đúng thầy trong nhóm 15 thầy vào xem cho bạn.'),
     chips:CHIPS,
     passive:true
