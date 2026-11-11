@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-564 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+565 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 23 | 76,224 B |
+| `2026-11.md` | 24 | 78,597 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -29,6 +29,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-11 | `2026-11.md` | 🀄 W16c — Dịch văn dài zh-tw (+ zh-cn OpenCC) 613 chuỗi: hào từ · lời khuyên quẻ · Thể–Dụng · nghĩa sao/thần |
+| 1 | 2026-11 | `2026-11.md` | 📜 W16d — Văn dài en: 613/613 chuỗi (hào từ · lời khuyên quẻ · Thể–Dụng · nghĩa sao/thần), `en` vào `LONG_COMPLETE` |
 | 1 | 2026-11 | `2026-11.md` | 📜 W16a — Hạ tầng văn dài theo chỉ số (`i18n-long/`) + dịch ja 613 chuỗi: hào từ · lời khuyên quẻ · Thể–Dụng · nghĩa sao/thần |
 | 1 | 2026-11 | `2026-11.md` | 🏷️ W15e — Nhãn khung tĩnh + chữ trong trang Kỳ Môn · Mai Hoa · Kinh Dịch, câu viec, luật đọc quẻ |
 | 1 | 2026-11 | `2026-11.md` | 🧭 W15d — Hướng · Tam Kỳ · cách cục Kỳ Môn · nhãn Cát/Tránh/Bình · quan hệ Thể–Dụng Mai Hoa |
