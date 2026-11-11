@@ -965,7 +965,7 @@
         var a = (it.author_id && authorById(it.author_id)) || _author;
         var row = document.createElement('div'); row.className = 'msg a';
         row.innerHTML = '<img class="msg-ava" src="' + (a ? '/authors/' + a.id + '.jpg' : authorAva()) + '" alt=""><div class="msg-body">' +
-          T('js.shellui.hom', '<p>Hôm ') + esc(ngayVN(String(it.created_at || '').slice(0, 10))) + T('js.shellui.thay-3v67', ' thầy') + (a ? ' ' + esc(a.name) : '') + T('js.shellui.co-noi', ' có nói: <i>“') + esc(it.noi_dung) + '”</i></p>' +
+          T('js.shellui.hom', '<p>Hôm ') + esc(ngayVN(String(it.created_at || '').slice(0, 10))) + T('js.shellui.thay-3v67', ' thầy') + (a ? ' ' + esc(mn(a)) : '') + T('js.shellui.co-noi', ' có nói: <i>“') + esc(it.noi_dung) + '”</i></p>' +
           T('js.shellui.chuyen-do-the-nao-roi-con', '<p>Chuyện đó thế nào rồi con?</p>') +
           ('<div class="tt-act"><button type="button" data-k="dung">' + T('js.shellui.dung-roi-thay', 'Đúng rồi thầy') + '</button><button type="button" data-k="chua">' + T('js.shellui.chua-thay-gi', 'Chưa thấy gì') + '</button><button type="button" data-k="de_sau">' + T('js.shellui.de-sau', 'Để sau') + '</button></div></div>');
         chat.appendChild(row); chat.scrollTop = chat.scrollHeight;
@@ -1222,7 +1222,7 @@
       pop.innerHTML = items.map(function (x, i) {
         return '<div class="mp-it' + (i === sel ? ' on' : '') + '" role="option" aria-selected="' + (i === sel) + '" data-i="' + i + '">' +
           (x.member ? '<i class="mp-ini" aria-hidden="true">' + esc(x.a.name.replace(/^(anh|chị|em|bé|con|cô|chú|bác|ông|bà)\s+/i, '').charAt(0).toUpperCase()) + '</i>'
-            : '<img src="/authors/' + x.a.id + '.jpg" alt="">') + '<span><b>' + esc(x.a.name) + '</b><em>' + esc(x.sub) + '</em></span></div>';
+            : '<img src="/authors/' + x.a.id + '.jpg" alt="">') + '<span><b>' + esc(x.member ? x.a.name : mn(x.a)) + '</b><em>' + esc(x.sub) + '</em></span></div>';
       }).join('');
     }
     function update() {
@@ -1760,6 +1760,10 @@
     { id: 'tinh-quang',  name: 'Tinh Quang',  style: 'Nhìn lá số như một chỉnh thể toàn diện, thích liên kết mọi thứ. Nói như vừa khám phá ra "bí mật lớn nhất" của cả lá số, giọng có phần long trọng, kịch tính.' },
     { id: 'tu-nguyen',   name: 'Tử Nguyên',   style: 'Súc tích, thực tế, chuyên về đại vận và tiểu vận, ưa hành động hơn lý thuyết. Chốt bằng 1 câu duy nhất như bản án, không giải thích thêm — ngắn, chắc, cực kỳ dễ trích dẫn.' },
   ];
+  // Tên thầy HIỂN THỊ theo ngôn ngữ trang (W19, `I18n.master` — bảng ở tools-shared/i18n.js; vi/thiếu ⇒ tên Việt).
+  // CHỈ ở chỗ vẽ: `a.name` vẫn là tên Việt cho authorName/@mention/splitBySpeaker/so khớp.
+  function mn(a) { return (window.I18n && window.I18n.master) ? window.I18n.master(a.id, a.name) : a.name; }
+  function mnById(id, vi) { return (window.I18n && window.I18n.master) ? window.I18n.master(id, vi) : vi; }
   // "Mời thầy khác" — CHỈ những thầy ĐÃ có tool mời thật phía server
   // (lib/tools/registry.ts: moi_thay_bat_tu/ky_mon = Tâm Kính, moi_thay_luc_nham
   // = Linh Cơ, 4 thầy còn lại qua `moi_thay_chuyen_mon` / `THAY_KHACH`). Thêm
@@ -1834,7 +1838,7 @@
     var f = AUTHOR_ROSTER.filter(function (a) { return a.name === name; })[0];
     return f ? '/authors/' + f.id + '.jpg' : authorAva();
   }
-  function authorLabel() { return _author ? T('js.shellui.thay', 'Thầy ') + _author.name : T('js.shellui.hieu-dung-la-so-dang-mo', 'Hiểu đúng lá số đang mở'); }
+  function authorLabel() { return _author ? ((window.I18n && window.I18n.masterTitle) ? window.I18n.masterTitle(_author.id, _author.name) : T('js.shellui.thay', 'Thầy ') + _author.name) : T('js.shellui.hieu-dung-la-so-dang-mo', 'Hiểu đúng lá số đang mở'); }
   function setAuthor(id) {
     var f = AUTHOR_ROSTER.filter(function (a) { return a.id === id; })[0];
     if (!f) return;
@@ -1852,7 +1856,7 @@
     var el = document.getElementById('introSrc');
     if (!el || !m) return;
     el.innerHTML = '<div class="intro-thay"><img src="/authors/' + esc(m.id) + '.jpg" alt="" onerror="this.remove()">' +
-      T('js.shellui.thay-7g4t', '<span>Thầy <b>') + esc(m.display_name || '') + T('js.shellui.dung-ten', '</b> đứng tên') + (m.discipline ? ' · ' + esc(m.discipline) : '') + '</span></div>';
+      T('js.shellui.thay-7g4t', '<span>Thầy <b>') + esc(mnById(m.id, m.display_name || '')) + T('js.shellui.dung-ten', '</b> đứng tên') + (m.discipline ? ' · ' + esc(m.discipline) : '') + '</span></div>';
   }
   // Đóng overlay tự dựng bằng Esc — đường thoát KHÔNG PHỤ THUỘC vị trí, độc
   // lập với nút ✕/click-ra-ngoài đã có ở từng modal (CLAUDE.md: "mọi overlay
@@ -1871,7 +1875,7 @@
       var tagline = a.style.split(/\.\s/)[0] + '.';
       return '<button class="sam-row' + (sel ? ' sel' : '') + '" data-id="' + a.id + '">' +
         '<img class="sam-ava" src="/authors/' + a.id + '.jpg" alt="">' +
-        '<div class="sam-info"><b>' + esc(a.name) + '</b><span>' + esc(tagline) + '</span></div>' +
+        '<div class="sam-info"><b>' + esc(mn(a)) + '</b><span>' + esc(tagline) + '</span></div>' +
         (sel ? '<svg class="sam-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" style="width:16px;height:16px"><path d="M20 6 9 17l-5-5"/></svg>' : '') +
       '</button>';
     }).join('');
@@ -5720,8 +5724,8 @@
       var nghia = r && r.nghia;
       var mon = r && r.mon;
       _navNeedBirth = !!(r && r.chuDe); // chủ đề cung (tình duyên, công việc…) cần lá số
-      navBubble('<p>' + (nghia ? T('js.shellui.chuyen', 'Chuyện ') + esc(nghia) + T('js.shellui.thi', ' thì') : T('js.shellui.cau-nay-thi', 'Câu này thì')) + T('js.shellui.nguoi-xem-ky-nhat-la-thay', ' người xem kỹ nhất là <b>Thầy ') + esc(a.name) + T('js.shellui.minh-moi-thay-vao-ngay', '</b>. Mình mời thầy vào ngay.</p>') +
-        '<div class="nav-card"><img src="/authors/' + a.id + ('.jpg" alt="" width="48" height="48" loading="lazy"><div>' + T('js.shellui.thay-6ofb', '<b>Thầy') + ' ') + esc(a.name) + '</b>' + (mon ? '<span>' + esc(mon) + '</span>' : '') + '</div></div>');
+      navBubble('<p>' + (nghia ? T('js.shellui.chuyen', 'Chuyện ') + esc(nghia) + T('js.shellui.thi', ' thì') : T('js.shellui.cau-nay-thi', 'Câu này thì')) + T('js.shellui.nguoi-xem-ky-nhat-la-thay', ' người xem kỹ nhất là <b>Thầy ') + esc(mn(a)) + T('js.shellui.minh-moi-thay-vao-ngay', '</b>. Mình mời thầy vào ngay.</p>') +
+        '<div class="nav-card"><img src="/authors/' + a.id + ('.jpg" alt="" width="48" height="48" loading="lazy"><div>' + T('js.shellui.thay-6ofb', '<b>Thầy') + ' ') + esc(mn(a)) + '</b>' + (mon ? '<span>' + esc(mon) + '</span>' : '') + '</div></div>');
       // Henry 2026-09-27: mời thầy vào LUÔN, không bắt khách bấm "Mời thầy vào"
       // — chờ một nhịp ngắn cho kịp đọc thẻ thầy rồi mới vào.
       setTimeout(function () { joinThay(a.id); }, 700);
@@ -5743,7 +5747,7 @@
     var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
     document.body.classList.remove('chat-empty');
     var sys = document.createElement('div'); sys.className = 'nav-sys';
-    sys.innerHTML = '<img src="/authors/' + a.id + ('.jpg" alt="" width="18" height="18">' + T('js.shellui.thay-5jjy', 'Thầy') + ' ') + esc(a.name) + T('js.shellui.da-vao-tiep-chuyen', ' đã vào tiếp chuyện');
+    sys.innerHTML = '<img src="/authors/' + a.id + ('.jpg" alt="" width="18" height="18">' + T('js.shellui.thay-5jjy', 'Thầy') + ' ') + esc(mn(a)) + T('js.shellui.da-vao-tiep-chuyen', ' đã vào tiếp chuyện');
     chat.appendChild(sys);
     try { track('nav_join', { tool_id: ACTIVE || 'home', meta: { thay: id } }); } catch (e) { /* ignore */ }
     if (!_navQ || !ctx) return;
@@ -5775,7 +5779,7 @@
     var say = function (m) {
       if (done) return; done = true;
       var input = document.getElementById('railInput');
-      thayBubble('<p>' + esc((m && m.greeting) || (T('js.shellui.thay', 'Thầy ') + a.name + T('js.shellui.day', ' đây.'))) + '</p>' +
+      thayBubble('<p>' + esc((m && m.greeting) || (T('js.shellui.thay', 'Thầy ') + mn(a) + T('js.shellui.day', ' đây.'))) + '</p>' +
         (m && m.discipline ? T('js.shellui.thay-chuyen-xem', '<p>Thầy chuyên xem <b>') + esc(m.discipline) + '</b>.</p>' : '') +
         // Đến từ link chia sẻ: joinThay() đã dọn #chat nên câu báo phải đi cùng lời chào.
         (_fromshareId ? '<p>' + FROMSHARE_NOTE + (ctx && ctx.birth ? T('js.shellui.thay-xem-cho-con-tren-la', ' Thầy xem cho con trên lá số của chính con.') : '') + '</p>' : ''));
@@ -6018,7 +6022,7 @@
           var _grow = document.createElement('div'); _grow.className = 'msg a msg-guest';
           var _gav = document.createElement('img'); _gav.className = 'msg-ava'; _gav.src = _seg.host ? authorAva() : avaForSpeaker(_seg.name); _gav.alt = '';
           var _gbody = document.createElement('div'); _gbody.className = 'msg-body';
-          var _gname = _seg.host ? (_author ? _author.name : '') : _seg.name;
+          var _gname = _seg.host ? (_author ? mn(_author) : '') : (function () { var _f = AUTHOR_ROSTER.filter(function (r) { return r.name === _seg.name; })[0]; return _f ? mn(_f) : _seg.name; })();
           _gbody.innerHTML = (_gname ? '<div class="msg-speaker">' + esc(_gname) + '</div>' : '') + mdLite(_seg.text);
           _grow.appendChild(_gav); _grow.appendChild(_gbody);
           chat.appendChild(_grow);
@@ -6139,8 +6143,8 @@
     var bar = document.createElement('div');
     bar.className = 'msg-2nd';
     bar.innerHTML = '<span class="m2-l">' + svg('users') + T('js.shellui.nghe-them-mon-khac', 'Nghe thêm môn khác</span>') + picks.map(function (x) {
-      return '<button type="button" class="m2-a" data-id="' + x.a.id + ('" aria-label="' + T('js.shellui.moi-thay', 'Mời Thầy') + ' ') + esc(x.a.name) + T('js.shellui.xem-bang', ' xem bằng ') + esc(x.mon) + '">' +
-        '<img src="/authors/' + x.a.id + '.jpg" alt=""><span>' + esc(x.a.name) + ' <em>· ' + esc(x.mon) + '</em></span></button>';
+      return '<button type="button" class="m2-a" data-id="' + x.a.id + ('" aria-label="' + T('js.shellui.moi-thay', 'Mời Thầy') + ' ') + esc(mn(x.a)) + T('js.shellui.xem-bang', ' xem bằng ') + esc(x.mon) + '">' +
+        '<img src="/authors/' + x.a.id + '.jpg" alt=""><span>' + esc(mn(x.a)) + ' <em>· ' + esc(x.mon) + '</em></span></button>';
     }).join('') + (hc
       ? ('<button type="button" class="m2-a m2-hc" aria-label="' + T('js.shellui.moi-nhom-hoi-chan-3-thay', 'Mời nhóm hội chẩn, 3 thầy cùng xem') + '">') +
         '<span class="m2-stack"><img src="' + authorAva() + '" alt=""><img src="/authors/tam-kinh.jpg" alt=""><img src="/authors/linh-co.jpg" alt=""></span>' +

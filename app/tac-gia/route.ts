@@ -45,7 +45,7 @@ function buildHTML(masters: any[]) {
       onerror="this.closest('.author-avatar').innerHTML=this.closest('.author-avatar').dataset.init">
   </div>
   <div class="author-body">
-    <div class="author-name">${esc(m.display_name)}</div>
+    <div class="author-name" data-master="${esc(m.id)}">${esc(m.display_name)}</div>
     ${m.bio ? `<div class="author-bio">${esc(m.bio)}</div>` : ''}
     <div class="author-footer">
       <span class="author-count">${m.article_count || 0} bài</span>
@@ -110,6 +110,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   <div class="grid">${cards}</div>
 </main>
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=49" defer></script>
+<script>(function(){var I=window.I18n;if(!I||!I.master)return;document.querySelectorAll('[data-master]').forEach(function(e){var id=e.getAttribute('data-master');e.textContent=I.master(id,e.textContent);});})();</script>
 </body></html>`;
 }
 

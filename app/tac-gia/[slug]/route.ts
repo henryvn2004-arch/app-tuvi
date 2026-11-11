@@ -156,7 +156,7 @@ ${ask.css}
 </head>
 <body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<div class="breadcrumb"><a href="/">Trang Chủ</a><span>›</span><a href="/tac-gia">Tác Giả</a><span>›</span><span>${esc(name)}</span></div>
+<div class="breadcrumb"><a href="/">Trang Chủ</a><span>›</span><a href="/tac-gia">Tác Giả</a><span>›</span><span data-master="${esc(masterId)}">${esc(name)}</span></div>
 <div class="profile-header">
   <div class="profile-inner">
     <div class="profile-avatar" data-init="${esc(name[0] || '?')}">
@@ -164,7 +164,7 @@ ${ask.css}
         onerror="this.closest('.profile-avatar').innerHTML=this.closest('.profile-avatar').dataset.init">
     </div>
     <div class="profile-details">
-      <div class="profile-name">${esc(name)}</div>
+      <div class="profile-name" data-master="${esc(masterId)}">${esc(name)}</div>
       <div class="profile-title">Nhà Nghiên Cứu Tử Vi Đẩu Số</div>
       ${bio ? `<div class="profile-bio">${esc(bio)}</div>` : ''}
       <div class="profile-stats">
@@ -194,6 +194,7 @@ ${ask.css}
 </div>
 ${ask.tail}
 <script src="/track.js?v=4" defer></script><script src="/nav.js?v=49" defer></script>
+<script>(function(){var I=window.I18n;if(!I||!I.master)return;document.querySelectorAll('[data-master]').forEach(function(e){var id=e.getAttribute('data-master');e.textContent=I.master(id,e.textContent);});})();</script>
 </body></html>`;
 }
 
