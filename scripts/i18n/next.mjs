@@ -14,6 +14,7 @@ import {
   TRANSLATED,
   GENERATED,
 } from '../../lib/i18n/dict.mjs';
+import { SOFT_NS } from '../../lib/i18n/render.mjs';
 
 const locale = arg('locale', '');
 if (!TRANSLATED.includes(locale)) {
@@ -52,6 +53,12 @@ if (onlyPage) {
   Object.keys(vi)
     .filter((k) => k.startsWith('js.shell.'))
     .forEach(push);
+  // Chữ JS đường MUA (W13): khung app, tường trả phí, đăng nhập, nhãn giá, trang nạp —
+  // không chặn độ đủ của trang (SOFT_NS) nên không lọt vào pageKeys bên dưới.
+  for (const ns of [...SOFT_NS, 'topup'])
+    Object.keys(vi)
+      .filter((k) => k.startsWith(`js.${ns}.`))
+      .forEach(push);
   const rest = Object.keys(pages).filter((p) => !prio.includes(p));
   for (const p of [...prio.filter((x) => pages[x]), ...rest]) pageKeys(pages[p], vi).forEach(push);
   Object.keys(vi).forEach(push);

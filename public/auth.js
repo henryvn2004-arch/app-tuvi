@@ -6,6 +6,19 @@
 const SUPA_URL = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
+// i18n (docs/i18n/QUY-UOC.md): chữ do JS dựng đi qua window.I18n (tools-shared/i18n.js) —
+// trang /<locale>/… được server nhúng từ điển TRƯỚC file này; trang vi ⇒ chữ Việt mặc định.
+// Tên `_tvmbT` (không phải `T`): file này chạy ở phạm vi toàn cục, trang có `var T` riêng.
+function _tvmbT(k, d, v) {
+  var I = window.I18n;
+  if (I && I.tv) return I.tv(k, d, v);
+  return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
+}
+function _tvmbHref(p) {
+  var I = window.I18n;
+  return I && I.href ? I.href(p) : p;
+}
+
 // ── Session storage keys ──
 const SESSION_KEY = 'tuvi_session';
 const USER_KEY    = 'tuvi_user';
@@ -216,7 +229,7 @@ async function _loadNavCredits() {
     const badge = document.getElementById('nav-credit-badge');
     const menuVal = document.getElementById('nav-credit-menu-val');
     if (badge) badge.innerHTML = '<svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:3px"><ellipse cx="7" cy="8.5" rx="6.2" ry="2" fill="#C8A96A" opacity=".35"/><path d="M1.2 7C1.2 7 0.8 5.5 2 4.2C3 3.2 4.5 2.8 7 2.8C9.5 2.8 11 3.2 12 4.2C13.2 5.5 12.8 7 12.8 7C12.1 8.2 9.8 9 7 9C4.2 9 1.9 8.2 1.2 7Z" fill="#C8A96A"/><path d="M2.5 4.5C3.3 3.5 5 3 7 3C9 3 10.7 3.5 11.5 4.5" stroke="#E0CBA0" stroke-width=".7" stroke-linecap="round"/><ellipse cx="7" cy="3" rx="3.5" ry="1.2" fill="#D9C08F"/><path d="M5.5 3C5.5 3 6 1.5 7 1.2C8 1.5 8.5 3 8.5 3" stroke="#E0CBA0" stroke-width=".6" fill="none"/></svg>' + bal.toLocaleString();
-    if (menuVal) menuVal.textContent = bal.toLocaleString() + ' lượng';
+    if (menuVal) menuVal.textContent = bal.toLocaleString() + _tvmbT('js.paywall.luong-m6fn', ' lượng');
   } catch(e) {}
 }
 
@@ -258,7 +271,7 @@ window.Auth = {
     // để đăng nhập lại đúng phiên đó) — khác đăng xuất tài khoản thường (đăng
     // nhập lại được). Hỏi lại một câu, đừng để mất Lượng trong một cú bấm nhầm.
     if (_user && _user.is_anonymous) {
-      var okToLeave = window.confirm('Bạn chưa lưu tài khoản — đăng xuất sẽ MẤT toàn bộ Lượng và lịch sử. Vẫn đăng xuất?');
+      var okToLeave = window.confirm(_tvmbT('js.auth.ban-chua-luu-tai-khoan-dang', 'Bạn chưa lưu tài khoản — đăng xuất sẽ MẤT toàn bộ Lượng và lịch sử. Vẫn đăng xuất?'));
       if (!okToLeave) return;
     }
     if (_session) {
@@ -285,7 +298,7 @@ async function signInEmail(email, password) {
     body: JSON.stringify({ email, password }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error_description || data.msg || 'Đăng nhập thất bại');
+  if (!res.ok) throw new Error(data.error_description || data.msg || _tvmbT('js.auth.dang-nhap-that-bai', 'Đăng nhập thất bại'));
   saveSession(data);
   return data;
 }
@@ -325,7 +338,7 @@ async function signUpEmail(email, password) {
     body: JSON.stringify(_currentLocale() ? { email, password, data: { locale: _currentLocale() } } : { email, password }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error_description || data.msg || 'Đăng ký thất bại');
+  if (!res.ok) throw new Error(data.error_description || data.msg || _tvmbT('js.auth.dang-ky-that-bai', 'Đăng ký thất bại'));
   // Auto sign in after signup
   if (data.access_token) {
     saveSession(data);
@@ -380,14 +393,14 @@ async function signInAnonymously() {
 // nhận trong email — không coi im lặng đây là "đã xác nhận".
 async function claimAccount(email, password) {
   var token = await _ensureFreshToken();
-  if (!token) throw new Error('Phiên đã hết hạn. Vui lòng thử lại.');
+  if (!token) throw new Error(_tvmbT('js.auth.phien-da-het-han-vui-long', 'Phiên đã hết hạn. Vui lòng thử lại.'));
   var res = await fetch(`${SUPA_URL}/auth/v1/user`, {
     method: 'PUT',
     headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
     body: JSON.stringify(_currentLocale() ? { email: email, password: password, data: { locale: _currentLocale() } } : { email: email, password: password }),
   });
   var data = await res.json();
-  if (!res.ok) throw new Error(data.error_description || data.msg || 'Không lưu được tài khoản.');
+  if (!res.ok) throw new Error(data.error_description || data.msg || _tvmbT('js.auth.khong-luu-duoc-tai-khoan', 'Không lưu được tài khoản.'));
   // Cập nhật `_user` tại chỗ (email mới) — session token KHÔNG đổi, chỉ user đổi.
   _user = data;
   try { localStorage.setItem(USER_KEY, JSON.stringify(_user)); } catch (e) { /* ignore */ }
@@ -532,7 +545,7 @@ function updateNavUI() {
   if (_session && _user) {
     const isAnon = !!_user.is_anonymous;
     const email = _user.email || '';
-    const name  = isAnon ? 'Khách' : (_user.user_metadata?.full_name || _user.user_metadata?.name || '');
+    const name  = isAnon ? _tvmbT('js.shell.khach', 'Khách') : (_user.user_metadata?.full_name || _user.user_metadata?.name || '');
     const avatar= _user.user_metadata?.avatar_url || _user.user_metadata?.picture || '';
     const initial = (name || email).charAt(0).toUpperCase();
     navEl.innerHTML = `
@@ -551,20 +564,20 @@ function updateNavUI() {
         </div>
         <div id="nav-profile-menu" style="display:none;position:absolute;right:0;top:44px;background:#fff;border:1px solid #ddd;border-radius:10px;padding:8px 0;min-width:200px;box-shadow:0 8px 28px rgba(0,0,0,.14);z-index:1000">
           <div style="padding:11px 16px;border-bottom:1px solid #f0f0f0">
-            <div style="font-size:12px;font-weight:700;color:#333">${name || 'Tài khoản'}</div>
-            <div style="font-size:11px;color:#999;margin-top:2px">${isAnon ? 'Chưa lưu tài khoản' : email}</div>
+            <div style="font-size:12px;font-weight:700;color:#333">${name || _tvmbT('js.shellui.tai-khoan', 'Tài khoản')}</div>
+            <div style="font-size:11px;color:#999;margin-top:2px">${isAnon ? _tvmbT('js.auth.chua-luu-tai-khoan', 'Chưa lưu tài khoản') : email}</div>
           </div>
           <div style="padding:10px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
             <div>
-              <div style="font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Lượng · Xu</div>
-              <div id="nav-credit-menu-val" style="font-size:16px;font-weight:700;color:#061A2E;font-family:'Noto Serif',Georgia,serif">… lượng</div>
+              <div style="font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">${_tvmbT('js.auth.luong-xu', 'Lượng · Xu')}</div>
+              <div id="nav-credit-menu-val" style="font-size:16px;font-weight:700;color:#061A2E;font-family:'Noto Serif',Georgia,serif">${_tvmbT('js.auth.luong', '… lượng')}</div>
             </div>
-            <a href="/topup.html" style="background:#C8A96A;color:#061A2E;font-size:11px;font-weight:700;padding:5px 10px;border-radius:5px;text-decoration:none" onmouseover="this.style.background='#E0CBA0'" onmouseout="this.style.background='#C8A96A'">+ Nạp</a>
+            <a href="${_tvmbHref('/topup.html')}" style="background:#C8A96A;color:#061A2E;font-size:11px;font-weight:700;padding:5px 10px;border-radius:5px;text-decoration:none" onmouseover="this.style.background='#E0CBA0'" onmouseout="this.style.background='#C8A96A'">${_tvmbT('js.auth.nap', '+ Nạp')}</a>
           </div>
-          ${isAnon ? `<button onclick="window.showClaimModal&&showClaimModal();document.getElementById('nav-profile-menu').style.display='none'" style="display:flex;align-items:center;gap:6px;width:100%;padding:9px 16px;font-size:13px;font-weight:700;color:#9A7B3A;background:#FBF8F1;border:none;border-bottom:1px solid #f0f0f0;text-align:left;cursor:pointer;font-family:inherit">⚠ Lưu tài khoản — tránh mất Lượng</button>` : ''}
-          <a href="/app/ho-so" style="display:block;padding:9px 16px;font-size:13px;color:#333;text-decoration:none" onmouseover="this.style.background='#f8f8f8'" onmouseout="this.style.background=''">Hồ sơ của tôi</a>
+          ${isAnon ? `<button onclick="window.showClaimModal&&showClaimModal();document.getElementById('nav-profile-menu').style.display='none'" style="display:flex;align-items:center;gap:6px;width:100%;padding:9px 16px;font-size:13px;font-weight:700;color:#9A7B3A;background:#FBF8F1;border:none;border-bottom:1px solid #f0f0f0;text-align:left;cursor:pointer;font-family:inherit">${_tvmbT('js.auth.luu-tai-khoan-tranh-mat-luong', '⚠ Lưu tài khoản — tránh mất Lượng')}</button>` : ''}
+          <a href="${_tvmbHref('/app/ho-so')}" style="display:block;padding:9px 16px;font-size:13px;color:#333;text-decoration:none" onmouseover="this.style.background='#f8f8f8'" onmouseout="this.style.background=''">${_tvmbT('js.auth.ho-so-cua-toi', 'Hồ sơ của tôi')}</a>
           <div style="border-top:1px solid #f0f0f0;margin-top:4px"></div>
-          <button onclick="Auth.signOut()" style="display:block;width:100%;padding:9px 16px;font-size:13px;color:#C0392B;background:none;border:none;text-align:left;cursor:pointer;font-family:inherit" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background=''">Đăng xuất</button>
+          <button onclick="Auth.signOut()" style="display:block;width:100%;padding:9px 16px;font-size:13px;color:#C0392B;background:none;border:none;text-align:left;cursor:pointer;font-family:inherit" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background=''">${_tvmbT('js.shell.dang-xuat', 'Đăng xuất')}</button>
         </div>
       </div>`;
     // Load credit balance async
@@ -582,7 +595,7 @@ function updateNavUI() {
     }, 100);
   } else {
     navEl.innerHTML = `
-      <button onclick="showAuthModal(null)" style="padding:6px 14px;background:transparent;color:#C8A96A;border:1px solid #C8A96A;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.15s" onmouseover="this.style.background='rgba(200,169,106,0.1)'" onmouseout="this.style.background='transparent'">Đăng nhập</button>`;
+      <button onclick="showAuthModal(null)" style="padding:6px 14px;background:transparent;color:#C8A96A;border:1px solid #C8A96A;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.15s" onmouseover="this.style.background='rgba(200,169,106,0.1)'" onmouseout="this.style.background='transparent'">${_tvmbT('js.auth.dang-nhap', 'Đăng nhập')}</button>`;
   }
 }
 
@@ -608,14 +621,14 @@ function showAuthModal(callback, tab) {
 
       <!-- Tabs -->
       <div style="display:flex;gap:0;margin-bottom:28px;border-bottom:2px solid #eee">
-        <button id="tab-signin" onclick="switchTab('signin')" style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:600;color:#061A2E;border-bottom:2px solid #061A2E;margin-bottom:-2px;cursor:pointer;font-family:inherit">Đăng nhập</button>
-        <button id="tab-signup" onclick="switchTab('signup')" style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:500;color:#aaa;cursor:pointer;font-family:inherit">Đăng ký <span style="font-size:11px;color:#1E6B3C;font-weight:700">tặng Lượng</span></button>
+        <button id="tab-signin" onclick="switchTab('signin')" style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:600;color:#061A2E;border-bottom:2px solid #061A2E;margin-bottom:-2px;cursor:pointer;font-family:inherit">${_tvmbT('js.auth.dang-nhap', 'Đăng nhập')}</button>
+        <button id="tab-signup" onclick="switchTab('signup')" style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:500;color:#aaa;cursor:pointer;font-family:inherit">${_tvmbT('js.auth.dang-ky', 'Đăng ký')} <span style="font-size:11px;color:#1E6B3C;font-weight:700">${_tvmbT('js.auth.tang-luong', 'tặng Lượng')}</span></button>
       </div>
 
       <!-- Logo -->
       <div style="text-align:center;margin-bottom:20px">
         <img src="/seal.webp" style="width:48px;height:48px;border-radius:6px;margin-bottom:8px">
-        <div style="font-family:'Noto Serif',Georgia,serif;font-size:16px;font-weight:700;color:#CC2200">Tử Vi Minh Bảo</div><div style="font-size:11px;color:#999;margin-top:2px;font-style:italic">Tri mệnh lý – Thuận thế hành</div>
+        <div style="font-family:'Noto Serif',Georgia,serif;font-size:16px;font-weight:700;color:#CC2200">${_tvmbT('js.nav.brand', 'Tử Vi Minh Bảo')}</div><div style="font-size:11px;color:#999;margin-top:2px;font-style:italic">${_tvmbT('js.nav.slogan', 'Tri mệnh lý – Thuận thế hành')}</div>
       </div>
 
       <!-- Google/Facebook OAuth — ẨN khi mở trong webview nhúng của FB/IG, xem
@@ -629,43 +642,43 @@ function showAuthModal(callback, tab) {
         <button onclick="signInGoogle()" style="width:100%;padding:11px 14px;border:1.5px solid #A8C7FA;border-radius:8px;background:#F4F8FF;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:600;color:#1a1a2e;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:border-color 0.15s,background-color 0.15s" onmouseover="this.style.borderColor='#4285f4';this.style.background='#EAF1FF'" onmouseout="this.style.borderColor='#A8C7FA';this.style.background='#F4F8FF'">
           <span style="display:flex;align-items:center;gap:10px">
             <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
-            Tiếp tục với Google
+            ${_tvmbT('js.auth.tiep-tuc-voi-google', 'Tiếp tục với Google')}
           </span>
-          <span style="font-size:10.5px;font-weight:700;color:#4285f4;letter-spacing:.02em">NHANH NHẤT</span>
+          <span style="font-size:10.5px;font-weight:700;color:#4285f4;letter-spacing:.02em">${_tvmbT('js.auth.nhanh-nhat', 'NHANH NHẤT')}</span>
         </button>
         <button onclick="signInFacebook()" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:16px;transition:border-color 0.15s" onmouseover="this.style.borderColor='#1877F2'" onmouseout="this.style.borderColor='#ddd'">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-          Tiếp tục với Facebook
+          ${_tvmbT('js.auth.tiep-tuc-voi-facebook', 'Tiếp tục với Facebook')}
         </button>
 
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
           <div style="flex:1;height:1px;background:#eee"></div>
-          <span style="font-size:12px;color:#aaa">hoặc</span>
+          <span style="font-size:12px;color:#aaa">${_tvmbT('js.auth.hoac', 'hoặc')}</span>
           <div style="flex:1;height:1px;background:#eee"></div>
         </div>
       </div>
-      <p id="auth-webview-note" style="display:none;font-size:12px;color:#7A5F26;background:#FBF8F1;border:1px solid #EADFC8;border-radius:8px;padding:9px 12px;margin-bottom:14px;line-height:1.6">Bạn đang mở trong ứng dụng Facebook/Instagram nên đăng nhập Google/Facebook không dùng được ở đây — dùng email bên dưới, chỉ mất chưa tới 1 phút.</p>
+      <p id="auth-webview-note" style="display:none;font-size:12px;color:#7A5F26;background:#FBF8F1;border:1px solid #EADFC8;border-radius:8px;padding:9px 12px;margin-bottom:14px;line-height:1.6">${_tvmbT('js.auth.ban-dang-mo-trong-ung-dung', 'Bạn đang mở trong ứng dụng Facebook/Instagram nên đăng nhập Google/Facebook không dùng được ở đây — dùng email bên dưới, chỉ mất chưa tới 1 phút.')}</p>
       <!-- Người đã trò chuyện với thầy qua Zalo/Messenger/WhatsApp/Telegram đã có
            sẵn tài khoản (tạo lúc nhắn tin đầu tiên) — vào bằng mã nhắn qua chat,
            không cần email. Chạy được cả trong webview FB/IG nên đặt NGOÀI khối
            OAuth. Trang: app/dang-nhap-chat/route.ts. -->
-      <a id="auth-chat-login" href="/dang-nhap-chat" onclick="this.href='/dang-nhap-chat?next='+encodeURIComponent(location.pathname+location.search)" style="display:block;text-align:center;padding:10px;border:1.5px solid #CFE3D6;border-radius:8px;background:#F3FAF5;font-size:13px;font-weight:600;color:#1E6B3C;text-decoration:none;margin-bottom:14px">Đã chat với thầy qua Zalo, Messenger? Đăng nhập bằng tin nhắn →</a>
+      <a id="auth-chat-login" href="${_tvmbHref('/dang-nhap-chat')}" onclick="this.href=_tvmbHref('/dang-nhap-chat')+'?next='+encodeURIComponent(location.pathname+location.search)" style="display:block;text-align:center;padding:10px;border:1.5px solid #CFE3D6;border-radius:8px;background:#F3FAF5;font-size:13px;font-weight:600;color:#1E6B3C;text-decoration:none;margin-bottom:14px">${_tvmbT('js.auth.da-chat-voi-thay-qua-zalo', 'Đã chat với thầy qua Zalo, Messenger? Đăng nhập bằng tin nhắn →')}</a>
 
       <!-- Email form -->
       <div id="auth-form">
         <input id="auth-email" type="email" placeholder="Email" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none;transition:border-color 0.15s" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'">
-        <input id="auth-password" type="password" placeholder="Mật khẩu (ít nhất 6 ký tự)" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none;transition:border-color 0.15s" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'" onkeydown="if(event.key==='Enter')submitAuth()">
+        <input id="auth-password" type="password" placeholder="${_tvmbT('js.auth.mat-khau-it-nhat-6-ky-p3y1', 'Mật khẩu (ít nhất 6 ký tự)')}" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none;transition:border-color 0.15s" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'" onkeydown="if(event.key==='Enter')submitAuth()">
         <!-- Ô mã khuyến mãi: CHỈ hiện ở tab Đăng ký (switchTab bật/tắt).
              Ở tab Đăng nhập nó vô nghĩa và chỉ làm form dài thêm. -->
         <div id="auth-promo-wrap" style="display:none;margin-bottom:10px">
-          <input id="auth-promo" type="text" placeholder="Mã khuyến mãi (nếu có)" autocapitalize="characters" autocomplete="off" spellcheck="false" style="width:100%;padding:10px 14px;border:1.5px dashed #c9a84c;border-radius:8px;font-size:14px;font-family:inherit;outline:none;text-transform:uppercase;transition:border-color 0.15s" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#c9a84c'" oninput="_promoPeek()" onkeydown="if(event.key==='Enter')submitAuth()">
+          <input id="auth-promo" type="text" placeholder="${_tvmbT('js.auth.ma-khuyen-mai-neu-co', 'Mã khuyến mãi (nếu có)')}" autocapitalize="characters" autocomplete="off" spellcheck="false" style="width:100%;padding:10px 14px;border:1.5px dashed #c9a84c;border-radius:8px;font-size:14px;font-family:inherit;outline:none;text-transform:uppercase;transition:border-color 0.15s" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#c9a84c'" oninput="_promoPeek()" onkeydown="if(event.key==='Enter')submitAuth()">
           <div id="auth-promo-hint" style="font-size:11.5px;color:#1E6B3C;margin-top:5px;display:none"></div>
         </div>
         <div id="auth-error" style="color:#C0392B;font-size:12px;margin-bottom:8px;display:none"></div>
-        <button id="auth-submit" onclick="submitAuth()" style="width:100%;padding:11px;background:#061A2E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.15s" onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='#061A2E'">Đăng nhập</button>
+        <button id="auth-submit" onclick="submitAuth()" style="width:100%;padding:11px;background:#061A2E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.15s" onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='#061A2E'">${_tvmbT('js.auth.dang-nhap', 'Đăng nhập')}</button>
       </div>
 
-      <p style="text-align:center;font-size:11px;color:#aaa;margin-top:16px;line-height:1.6">Bằng cách đăng ký, bạn đồng ý với điều khoản sử dụng của Tử Vi Minh Bảo.</p>
+      <p style="text-align:center;font-size:11px;color:#aaa;margin-top:16px;line-height:1.6">${_tvmbT('js.auth.bang-cach-dang-ky-ban-dong', 'Bằng cách đăng ký, bạn đồng ý với điều khoản sử dụng của Tử Vi Minh Bảo.')}</p>
     </div>`;
 
   document.body.appendChild(modal);
@@ -727,9 +740,9 @@ function closeAuthModal() {
 //     gốc (banner "✓ Đã lưu").
 function showClaimModal(opts) {
   opts = opts || {};
-  var title = opts.title || 'Lưu tài khoản';
-  var desc = opts.desc || 'Bạn đang dùng phiên tạm — Lượng và lịch sử đang giữ ở đây sẽ MẤT nếu xoá trình duyệt hoặc đổi máy. Thêm email + mật khẩu để giữ lại, không mất gì đang có.';
-  var submitLabel = opts.submitLabel || 'Lưu tài khoản';
+  var title = opts.title || _tvmbT('js.auth.luu-tai-khoan', 'Lưu tài khoản');
+  var desc = opts.desc || _tvmbT('js.auth.ban-dang-dung-phien-tam-luong', 'Bạn đang dùng phiên tạm — Lượng và lịch sử đang giữ ở đây sẽ MẤT nếu xoá trình duyệt hoặc đổi máy. Thêm email + mật khẩu để giữ lại, không mất gì đang có.');
+  var submitLabel = opts.submitLabel || _tvmbT('js.auth.luu-tai-khoan', 'Lưu tài khoản');
   _pendingClaimCallback = typeof opts.callback === 'function' ? opts.callback : null;
 
   var modal = document.getElementById('claim-modal');
@@ -749,7 +762,7 @@ function showClaimModal(opts) {
       <div style="font-family:'Noto Serif',Georgia,serif;font-size:17px;font-weight:700;color:#061A2E;margin-bottom:6px">${_escHtml(title)}</div>
       <p style="font-size:12.5px;color:#7a705f;line-height:1.6;margin-bottom:18px">${_escHtml(desc)}</p>
       <input id="claim-email" type="email" placeholder="Email" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'">
-      <input id="claim-password" type="password" placeholder="Mật khẩu (ít nhất 6 ký tự)" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'" onkeydown="if(event.key==='Enter')submitClaim()">
+      <input id="claim-password" type="password" placeholder="${_tvmbT('js.auth.mat-khau-it-nhat-6-ky-p3y1', 'Mật khẩu (ít nhất 6 ký tự)')}" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'" onkeydown="if(event.key==='Enter')submitClaim()">
       <div id="claim-error" style="color:#C0392B;font-size:12px;margin-bottom:8px;display:none"></div>
       <button id="claim-submit" onclick="submitClaim()" style="width:100%;padding:11px;background:#061A2E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">${_escHtml(submitLabel)}</button>
     </div>`;
@@ -774,8 +787,8 @@ async function submitClaim() {
   const errEl = document.getElementById('claim-error');
   const btn   = document.getElementById('claim-submit');
   const submitLabelBefore = btn.textContent;
-  if (!email || !pass) { errEl.textContent = 'Vui lòng điền email và mật khẩu.'; errEl.style.display = 'block'; return; }
-  if (pass.length < 6) { errEl.textContent = 'Mật khẩu ít nhất 6 ký tự.'; errEl.style.display = 'block'; return; }
+  if (!email || !pass) { errEl.textContent = _tvmbT('js.auth.vui-long-dien-email-va-mat', 'Vui lòng điền email và mật khẩu.'); errEl.style.display = 'block'; return; }
+  if (pass.length < 6) { errEl.textContent = _tvmbT('js.auth.mat-khau-it-nhat-6-ky', 'Mật khẩu ít nhất 6 ký tự.'); errEl.style.display = 'block'; return; }
   errEl.style.display = 'none';
   btn.textContent = '...'; btn.disabled = true;
   try {
@@ -787,12 +800,12 @@ async function submitClaim() {
     if (cb) {
       cb();
     } else {
-      const msg = '✓ Đã lưu — kiểm tra email để xác nhận nếu được yêu cầu';
+      const msg = _tvmbT('js.auth.da-luu-kiem-tra-email-de', '✓ Đã lưu — kiểm tra email để xác nhận nếu được yêu cầu');
       if (window.TuviPaywall && window.TuviPaywall._banner) window.TuviPaywall._banner(msg);
       else alert(msg);
     }
   } catch (e) {
-    errEl.textContent = e.message || 'Không lưu được. Vui lòng thử lại.';
+    errEl.textContent = e.message || _tvmbT('js.auth.khong-luu-duoc-vui-long-thu', 'Không lưu được. Vui lòng thử lại.');
     errEl.style.display = 'block';
   } finally {
     btn.textContent = submitLabelBefore; btn.disabled = false;
@@ -811,11 +824,11 @@ function switchTab(tab) {
   if (tab === 'signin') {
     si.style.cssText += ';color:#061A2E;border-bottom:2px solid #061A2E;margin-bottom:-2px;font-weight:600';
     su.style.cssText += ';color:#aaa;border-bottom:none';
-    btn.textContent = 'Đăng nhập';
+    btn.textContent = _tvmbT('js.auth.dang-nhap', 'Đăng nhập');
   } else {
     su.style.cssText += ';color:#061A2E;border-bottom:2px solid #061A2E;margin-bottom:-2px;font-weight:600';
     si.style.cssText += ';color:#aaa;border-bottom:none';
-    btn.textContent = 'Tạo tài khoản';
+    btn.textContent = _tvmbT('js.auth.tao-tai-khoan', 'Tạo tài khoản');
   }
   const pw = document.getElementById('auth-promo-wrap');
   if (pw) pw.style.display = tab === 'signup' ? 'block' : 'none';
@@ -839,10 +852,10 @@ function _promoPeek() {
     window.Promo.info(code).then((d) => {
       // Số Lượng lấy TỪ SERVER, không viết cứng ở đây. Xem `promo.js#info`.
       if (d && d.found && d.live) {
-        hint.textContent = `✓ Mã hợp lệ — tặng ${d.credits} Lượng khi tạo tài khoản.`;
+        hint.textContent = _tvmbT('js.auth.ma-hop-le-tang-luong', '✓ Mã hợp lệ — tặng {credits} Lượng khi tạo tài khoản.', { credits: d.credits });
         hint.style.color = '#1E6B3C';
       } else if (d && d.found) {
-        hint.textContent = 'Mã này đã hết hạn hoặc hết lượt.';
+        hint.textContent = _tvmbT('js.auth.ma-nay-da-het-han-hoac', 'Mã này đã hết hạn hoặc hết lượt.');
         hint.style.color = '#C0392B';
       } else {
         hint.style.display = 'none';
@@ -859,8 +872,8 @@ async function submitAuth() {
   const errEl = document.getElementById('auth-error');
   const btn   = document.getElementById('auth-submit');
 
-  if (!email || !pass) { showAuthError('Vui lòng điền email và mật khẩu.'); return; }
-  if (pass.length < 6)  { showAuthError('Mật khẩu ít nhất 6 ký tự.'); return; }
+  if (!email || !pass) { showAuthError(_tvmbT('js.auth.vui-long-dien-email-va-mat', 'Vui lòng điền email và mật khẩu.')); return; }
+  if (pass.length < 6)  { showAuthError(_tvmbT('js.auth.mat-khau-it-nhat-6-ky', 'Mật khẩu ít nhất 6 ký tự.')); return; }
 
   btn.textContent = '...'; btn.disabled = true;
   errEl.style.display = 'none';
@@ -889,15 +902,15 @@ async function submitAuth() {
         if (Array.isArray(d.identities) && d.identities.length === 0) {
           switchTab('signin');
           document.getElementById('auth-email').value = email;
-          showAuthError('Email này đã có tài khoản — nhập mật khẩu để đăng nhập.');
+          showAuthError(_tvmbT('js.auth.email-nay-da-co-tai-khoan', 'Email này đã có tài khoản — nhập mật khẩu để đăng nhập.'));
         } else {
           // Trung tính, KHÔNG phải lỗi — tài khoản đã tạo, email đã gửi thật.
           // Chữ đỏ (showAuthError) khiến người mới đọc thành "đăng ký hỏng" rồi
           // bỏ đi, dù việc còn lại chỉ là bấm link trong email (đúng chỗ 31%
           // người đăng ký email không bao giờ quay lại — xem docs/nhat-ky).
-          showAuthNotice('Đã gửi email xác nhận tới ' + email + ' — bấm vào link trong email để hoàn tất, trang sẽ tự quay lại đây.');
+          showAuthNotice(_tvmbT('js.auth.da-gui-email-xac-nhan-toi', 'Đã gửi email xác nhận tới ') + email + _tvmbT('js.auth.bam-vao-link-trong-email-de', ' — bấm vào link trong email để hoàn tất, trang sẽ tự quay lại đây.'));
         }
-        btn.textContent = _currentTab === 'signin' ? 'Đăng nhập' : 'Tạo tài khoản';
+        btn.textContent = _currentTab === 'signin' ? _tvmbT('js.auth.dang-nhap', 'Đăng nhập') : _tvmbT('js.auth.tao-tai-khoan', 'Tạo tài khoản');
         btn.disabled = false;
         return;
       }
@@ -919,7 +932,7 @@ async function submitAuth() {
   } catch(e) {
     showAuthError(e.message);
   }
-  btn.textContent = _currentTab === 'signin' ? 'Đăng nhập' : 'Tạo tài khoản';
+  btn.textContent = _currentTab === 'signin' ? _tvmbT('js.auth.dang-nhap', 'Đăng nhập') : _tvmbT('js.auth.tao-tai-khoan', 'Tạo tài khoản');
   btn.disabled = false;
 }
 
@@ -965,7 +978,7 @@ function _showFreeCreditsWelcome() {
   // `dien-tuong`), và giá thật của nó là 8 chứ không phải 5. Đây là banner ĐẦU
   // TIÊN người vừa đăng ký nhìn thấy, nên nói sai giá ở đây là mất tin ngay lượt
   // đầu. Giá chỉ được nêu ở trang tool / tool trong shell (nơi đọc `tool_pricing`).
-  b.innerHTML = '<span class="ic-inline" data-icon="gift" data-icon-emoji="🎉" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎉</span> Chào mừng! Bạn đã nhận <strong>Lượng</strong> — bấm Hỏi Thầy để dùng thử';
+  b.innerHTML = ('<span class="ic-inline" data-icon="gift" data-icon-emoji="🎉" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎉</span> ' + _tvmbT('js.auth.chao-mung-ban-da-nhan-luong', 'Chào mừng! Bạn đã nhận <strong>Lượng</strong> — bấm Hỏi Thầy để dùng thử'));
   if (window.mountIcons) window.mountIcons(b);
   document.body.appendChild(b);
   setTimeout(() => { b.style.transition = 'opacity .6s'; b.style.opacity = '0'; }, 5000);

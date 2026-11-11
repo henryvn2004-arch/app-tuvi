@@ -29,6 +29,12 @@
  * phải mỗi lần chuyển trang.
  */
 window.ToolPrices = (function () {
+  // i18n: chỉ CÂU CHỮ quanh giá đi qua window.I18n (tools-shared/i18n.js); số vẫn tính ở đây.
+  var T = function (k, d, v) {
+    var I = window.I18n;
+    if (I && I.tv) return I.tv(k, d, v);
+    return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
+  };
   var SB_URL = 'https://dciwkfdqhhddeymlisey.supabase.co';
   var SB_ANON =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
@@ -226,21 +232,24 @@ window.ToolPrices = (function () {
   function priceLabel(toolId) {
     var row = _rowFor(toolId);
     if (!row) return null;
-    if (row.is_free) return 'Miễn phí';
+    if (row.is_free) return T('js.prices.mien-phi', 'Miễn phí');
     var v = Number(row.credits);
     if (!isFinite(v) || v <= 0) return null;
     // Tiền là giá CHÍNH, Lượng lùi thành ngoặc phụ (Henry 2026-09-20). Từ W5
     // (2026-11) tiền đó là USD, không còn VNĐ. `usdLabel` rỗng khi chưa đọc
     // được `credit_packages` → rơi về câu Lượng-only cũ, KHÔNG bịa số tiền.
+    // Chỉ CÂU CHỮ đi qua từ điển (T); mọi con số vẫn tính ở đây, chèn qua {biến}.
     if (_saleActive(row)) {
       var sale = Number(row.sale_credits);
       var saleMoney = usdLabel(sale);
       return saleMoney
-        ? saleMoney + ' mỗi lượt (' + sale + ' Lượng, giảm từ ' + v + ')'
-        : sale + ' Lượng mỗi lượt (giảm từ ' + v + ')';
+        ? T('js.prices.money-moi-luot-sale', '{money} mỗi lượt ({sale} Lượng, giảm từ {credits})', { money: saleMoney, sale: sale, credits: v })
+        : T('js.prices.luong-moi-luot-sale', '{sale} Lượng mỗi lượt (giảm từ {credits})', { sale: sale, credits: v });
     }
     var money = usdLabel(v);
-    return money ? money + ' mỗi lượt (' + v + ' Lượng)' : v + ' Lượng mỗi lượt';
+    return money
+      ? T('js.prices.money-moi-luot', '{money} mỗi lượt ({credits} Lượng)', { money: money, credits: v })
+      : T('js.prices.luong-moi-luot', '{credits} Lượng mỗi lượt', { credits: v });
   }
 
   /**

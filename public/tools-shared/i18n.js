@@ -9,6 +9,8 @@
 // ============================================================
 (function () {
   'use strict';
+  // Trang /<locale>/ được server chèn file này vào <head>; trang tự nạp thêm lần nữa thì giữ bản đầu.
+  if (window.I18n && window.I18n.tv) return;
 
   // Ngôn ngữ trang: server (lib/i18n/render.mjs) ghi <html lang> theo HREFLANG của
   // lib/i18n/locales.ts. Đọc NGƯỢC từ đó — client KHÔNG tự đoán từ URL/cookie, để
@@ -62,8 +64,50 @@
 
   /** Đường dẫn cùng ngôn ngữ: I18n.href('/topup.html') → '/ja/topup.html' (vi giữ nguyên). */
   function href(path) {
-    return LOCALE === 'vi' ? path : '/' + LOCALE + path;
+    if (LOCALE === 'vi' || typeof path !== 'string' || path.charAt(0) !== '/' || path.charAt(1) === '/')
+      return path; // vi · link ngoài · //host
+    if (/^\/(en|ja|ko|zh-tw|zh-cn)(\/|$|\?|#)/.test(path)) return path; // đã có tiền tố
+    return '/' + LOCALE + (path === '/' ? '' : path);
   }
 
-  window.I18n = { locale: LOCALE, t: t, href: href };
+  // ── Chữ do JS dựng (W13): khoá `js.*` của i18n/<locale>.json ────────────────
+  // Server (lib/i18n/render.mjs) nhúng bản dịch các khoá trang cần vào
+  // <script id="tvmb-i18n"> trong <head> — CÙNG từ điển với chữ HTML, không có dict
+  // thứ hai ở client. Trang vi không có node đó ⇒ 0 byte, trả chữ Việt mặc định.
+  var SERVER = null;
+  function serverDict() {
+    if (SERVER) return SERVER;
+    SERVER = {};
+    try {
+      var node = document.getElementById('tvmb-i18n');
+      if (node) SERVER = JSON.parse(node.textContent).dict || {};
+    } catch (e) {
+      SERVER = {};
+    }
+    return SERVER;
+  }
+  function fill(s, vars) {
+    if (!vars) return s;
+    return String(s).replace(/\{(\w+)\}/g, function (x, k) {
+      return vars[k] !== undefined && vars[k] !== null ? vars[k] : x;
+    });
+  }
+  /**
+   * I18n.tv('js.paywall.nap-luong', 'Nạp Lượng →', {n: 3}) — bản dịch nếu có, không thì chữ
+   * Việt truyền vào (locale chưa dịch rơi về vi, không vỡ). Link nội bộ `href="/…"` trong
+   * mảnh HTML được đưa về cùng ngôn ngữ.
+   */
+  function tv(key, vi, vars) {
+    var d = LOCALE === 'vi' ? null : serverDict();
+    var s = d && Object.prototype.hasOwnProperty.call(d, key) ? d[key] : vi;
+    if (s == null) s = key;
+    s = fill(s, vars);
+    if (LOCALE !== 'vi' && s.indexOf('href="/') >= 0)
+      s = s.replace(/(\shref=")(\/[^"]*)"/g, function (m, a, p) {
+        return a + href(p) + '"';
+      });
+    return s;
+  }
+
+  window.I18n = { locale: LOCALE, t: t, tv: tv, href: href };
 })();

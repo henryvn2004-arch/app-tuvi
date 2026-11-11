@@ -280,19 +280,19 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tools-shared/noi-sinh.js?v=1"></script>
 <script src="/tuvi-form.js?v=15"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/auth.js?v=7"></script>
-<script src="/tuvi-paywall.js?v=42"></script>
+<script src="/auth.js?v=8"></script>
+<script src="/tuvi-paywall.js?v=43"></script>
 <script src="/tools-shared/hook-charts.js?v=3"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
 <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=141"></script>
+<script src="/shell.js?v=142"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
-<script src="/tools-shared/i18n.js?v=2"></script>
+<script src="/tools-shared/i18n.js?v=3"></script>
 <script src="/tools-shared/report-delivery.js?v=4"></script>
 <script>
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
@@ -414,7 +414,7 @@ async function doXem(){
   // "Xem vận hạn" lần hai — ghi mỗi lượt tính khung thành công, không riêng
   // lượt sắp hết Lượng, vì lúc gõ form ta chưa biết trước lượt nào sẽ hết Lượng.
   try{ sessionStorage.setItem(VH_RESUME_KEY, JSON.stringify({fd:fdIn})); }catch(e){ /* ignore */ }
-  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang tính…';
+  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent=_tvmbT('js.vanhannam.dang-tinh', 'Đang tính…');
   try{
     var conv=convertDuongToAm(dd,mm,yyyy,hh,fdIn.lich);conv.gioIdx=gioAmIdx;
     // namXem = năm của THÁNG ĐANG XEM → đại vận/tiểu hạn "hiện tại" khớp đúng
@@ -447,7 +447,7 @@ async function doXem(){
         mailBtnId:'vhBtnEmail', mailLabelId:'vhBtnEmailLabel',
         tool:'van-han-nam', total:_tongPhan,
         getBoxId:function(p){ return 'claude-content-'+p; },
-        getLabel:function(p){ return (_labels&&_labels[p])||('Phần '+p); },
+        getLabel:function(p){ return (_labels&&_labels[p])||(_tvmbT('js.luangiai.phan', 'Phần ')+p); },
         getMeta:function(){ return {
           hoTen:_hoTen||'',
           ngaySinh:[_ngay,_thang,_nam].filter(Boolean).join('/'),
@@ -482,13 +482,13 @@ async function doXem(){
     Shell.setShareable({kind:'text',toolId:'van-han-nam',title:'Vận hạn 12 tháng của '+(name||'tôi'),text:shareLines()});
     initGate();
   }catch(e){
-    document.getElementById('vhBody').innerHTML='<div class="laso-error">Lỗi khi tính vận hạn: '+esc(e.message)+'</div>';
+    document.getElementById('vhBody').innerHTML=('<div class="laso-error">' + _tvmbT('js.vanhannam.loi-khi-tinh-van-han', 'Lỗi khi tính vận hạn:') + ' ')+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('vhPanel').style.display='block';
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('vhPanel');
     if(window.console)console.error(e);
   }finally{
-    btn.disabled=false; var _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent='Xem vận hạn →';
+    btn.disabled=false; var _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent=_tvmbT('js.vanhannam.xem-van-han', 'Xem vận hạn →');
   }
 }
 
@@ -611,7 +611,7 @@ function mountHook(ls){
     // xuôi tả lại ĐÚNG đỉnh/đáy đó thay — cùng đánh đổi đã chấp nhận ở Luận
     // Giải Tử Vi, không phải hồi quy mới.
     var spec={
-      tool:'van-han-nam',toolLabel:'Vận Hạn 12 Tháng',
+      tool:'van-han-nam',toolLabel:_tvmbT('js.vanhannam.van-han-12-thang', 'Vận Hạn 12 Tháng'),
       charts:[{type:'lifeArc',data:{segments:HF.daiVanSegments(ls)},title:'Đường Đời Qua Các Đại Vận'}],
       facts:facts
     };
@@ -684,7 +684,7 @@ function toggleMini(){
   var m=document.getElementById('miniChart'),f=document.getElementById('vhFold');
   var shown=getComputedStyle(m).display!=='none';
   m.style.display=shown?'none':'block';
-  f.textContent=shown?'▸ Xem lá số đầy đủ':'▾ Ẩn lá số';
+  f.textContent=shown?_tvmbT('js.luangiai.xem-la-so-day-du', '▸ Xem lá số đầy đủ'):_tvmbT('js.luangiai.an-la-so', '▾ Ẩn lá số');
 }
 
 // ── Cổng Lượng + sinh AI (khuôn app-luan-giai.html) ──────────────────────
@@ -756,7 +756,7 @@ function _renderUnlockBlock(){
   wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   _paintSecLocks(true);
   if(_loggedIn()){
-    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateAI()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span><b>Luận vận hạn 12 tháng →</b></span><small>Tốn <span class="vnd" data-tvp-price-vnd="van-han-nam"></span> <span class="cb-sub">(<span data-tvp-price="van-han-nam">…</span> Lượng)</span></small></button>'+
+    host.innerHTML=('<button class="btn-go" id="btnUnlock" onclick="initiateAI()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span>' + _tvmbT('js.vanhannam.luan-van-han-12-thang', '<b>Luận vận hạn 12 tháng →</b>') + '</span>' + _tvmbT('js.vanhannam.ton', '<small>Tốn') + ' <span class="vnd" data-tvp-price-vnd="van-han-nam"></span> <span class="cb-sub">(<span data-tvp-price="van-han-nam">…</span> ' + _tvmbT('js.vanhannam.luong', 'Lượng)') + '</span></small></button>')+
       '<p>Viết riêng cho lá số này: tổng quan, hành trình đại vận, đại vận và tiểu vận hiện tại, rồi từng tháng một trong 12 tháng tới.</p>';
     TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,'van-han-nam'); });
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
@@ -863,7 +863,7 @@ async function _startAI(){
   // TRƯỚC KHI bể mở cho phần 2-16 — không cần sửa gì thêm ở đây khi phần
   // tháng bắt đầu ăn chung cache, cơ chế mồi vốn đã bảo vệ đúng mọi phần sau
   // phần 1, bất kể phần đó có cache hay không.
-  document.getElementById('vhProgress').textContent='Đang luận phần 1 / '+_tongPhan+'...';
+  document.getElementById('vhProgress').textContent=_tvmbT('js.vanhannam.dang-luan-phan-1', 'Đang luận phần 1 / ')+_tongPhan+'...';
   var primeOk=await _runPhanVanHan(1);
   var result=await PhanPool.run({
     total:_tongPhan,
@@ -877,7 +877,7 @@ async function _startAI(){
     runPart:function(p){ return p===1?Promise.resolve(primeOk):_runPhanVanHan(p); },
   });
   if(result.ok){
-    document.getElementById('vhProgress').textContent='✓ Luận vận hạn hoàn tất';
+    document.getElementById('vhProgress').textContent=_tvmbT('js.vanhannam.luan-van-han-hoan-tat', '✓ Luận vận hạn hoàn tất');
     _reportHandle&&_reportHandle.ready(_tongPhan,{announce:true});
     _saveResult();
   }else{
@@ -915,7 +915,7 @@ function _renderMap(){
     return {nhan:t.nhan,kw:h?h.kw:'',muc:h?h.muc:null,now:t.dangDienRa};
   });
   host.innerHTML=HookCharts.monthGrid({items:items,cols:4,
-    ariaLabel:'Bản đồ '+items.length+' tháng âm tới, mỗi ô một từ khoá'});
+    ariaLabel:_tvmbT('js.vanhannam.ban-do', 'Bản đồ ')+items.length+_tvmbT('js.vanhannam.thang-am-toi-moi-o-mot', ' tháng âm tới, mỗi ô một từ khoá')});
   // Nút tải ảnh chỉ hiện khi ĐÃ có ít nhất một ô mang từ khoá — poster của
   // một lưới toàn ô "chưa luận" là tấm ảnh rỗng, chia sẻ ra chỉ hại thương hiệu.
   var tai=document.getElementById('vhTai');
@@ -927,7 +927,7 @@ function _renderMap(){
 function taiAnhMap(){
   var host=document.getElementById('vhMap'), btn=document.getElementById('vhTaiBtn');
   if(!host||!host.innerHTML||!window.Poster)return;
-  var old=btn.textContent; btn.disabled=true; btn.textContent='Đang dựng ảnh…';
+  var old=btn.textContent; btn.disabled=true; btn.textContent=_tvmbT('js.xemtuoi.dang-dung-anh', 'Đang dựng ảnh…');
   var T=(Poster.THEME)||{};
   Poster.download({
     svg:host.innerHTML,
@@ -953,7 +953,7 @@ async function _runPhanVanHan(p){
     // đợi có kết quả: giữ mờ trong lúc "Đang luận…" là còn hiện văn mẫu PHÍA
     // DƯỚI orb chờ, gây rối (cùng mẫu app-chu-trinh-cuoc-doi.html).
     box.classList.remove('tpw-real-lock');
-    box.innerHTML='<div class="phan-empty">Đang luận…</div>';
+    box.innerHTML=('<div class="phan-empty">' + _tvmbT('js.luangiai.dang-luan', 'Đang luận…') + '</div>');
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
       w=AiLoadingSteps.mountWait(box,{label:'Đang luận '+(_labels[p]||('phần '+p))+'…',
         expectSec:(_pace&&_pace.perPartSec())||0,expectText:(_pace&&_pace.perPartText())||'',center:true});
@@ -980,7 +980,7 @@ async function _runPhanVanHan(p){
     var data=await resp.json();
     if(data.error||!data.luanGiai){
       doneWait();
-      if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận phần '+p+'. <button class="btn" onclick="window._vhRetry('+p+')">↻ Thử lại</button></div>';
+      if(box)box.innerHTML=('<div class="laso-error">' + _tvmbT('js.vanhannam.loi-khi-luan-phan', 'Lỗi khi luận phần') + ' ')+p+'. <button class="btn" onclick="window._vhRetry('+p+(')">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
       return false;
     }
     _store[p]=data.luanGiai;
@@ -990,7 +990,7 @@ async function _runPhanVanHan(p){
     return true;
   }catch(e){
     doneWait();
-    if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._vhRetry('+p+')">↻ Thử lại</button></div>';
+    if(box)box.innerHTML=('<div class="laso-error">' + _tvmbT('js.luangiai.loi-phan', 'Lỗi phần') + ' ')+p+': '+esc(e.message)+' <button class="btn" onclick="window._vhRetry('+p+(')">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
     return false;
   }
 }
@@ -999,7 +999,7 @@ window._vhRetry=function(p){
     if(ok){
       var n=0; for(var k=1;k<=_tongPhan;k++)if(_store[k])n++;
       if(n>=_tongPhan){
-        document.getElementById('vhProgress').textContent='✓ Luận vận hạn hoàn tất';
+        document.getElementById('vhProgress').textContent=_tvmbT('js.vanhannam.luan-van-han-hoan-tat', '✓ Luận vận hạn hoàn tất');
         _reportHandle&&_reportHandle.ready(_tongPhan,{announce:true});
         _saveResult();
       }

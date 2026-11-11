@@ -22,7 +22,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, PUBLIC, buildPages } from './_common.mjs';
 import { collectKeys, validateTranslation } from '../../lib/i18n/core.mjs';
-import { renderLocalized, ASSET_V } from '../../lib/i18n/render.mjs';
+import { renderLocalized, ASSET_V, CLIENT_V } from '../../lib/i18n/render.mjs';
 import { HREFLANG as LINK_HREFLANG, urlFor } from '../../lib/i18n/links.mjs';
 import {
   loadVi,
@@ -42,6 +42,27 @@ const fail = (m) => errors.push(m);
 const vi = loadVi();
 const dicts = loadAllDicts();
 
+// ── 0. tự kiểm: validateTranslation PHẢI bắt bản dịch làm rơi/sửa thuộc tính máy ──
+// (bộ dò "xanh oan" nguy hơn đỏ oan — mỗi ca đột biến dưới đây phải bị từ chối).
+{
+  const vi0 = 'Đã mời: <strong id="refTotal" data-k="a" onclick="go(1)">—</strong>';
+  const ok0 = 'Invited: <strong id="refTotal" data-k="a" onclick="go(1)">—</strong>';
+  const mutants = [
+    'Invited: <strong data-k="a" onclick="go(1)">—</strong>', // rơi id
+    'Invited: <strong id="refTotl" data-k="a" onclick="go(1)">—</strong>', // sửa giá trị id
+    'Invited: <strong id="refTotal" onclick="go(1)">—</strong>', // rơi data-*
+    'Invited: <strong id="refTotal" data-k="a" onclick="go(2)">—</strong>', // sửa handler
+  ];
+  if (validateTranslation(vi0, ok0, 'en'))
+    fail('core.mjs tagSignature: bản dịch GIỮ ĐỦ thuộc tính máy lại bị từ chối');
+  if (validateTranslation('<span title="Mở">Mở</span>', '<span title="Open">Open</span>', 'en'))
+    fail('core.mjs tagSignature: thuộc tính CHỮ (title) phải được dịch tự do');
+  mutants.forEach((m, i) => {
+    if (!validateTranslation(vi0, m, 'en'))
+      fail(`core.mjs tagSignature: đột biến #${i + 1} (rơi/sửa id·data-*·on*) KHÔNG bị bắt`);
+  });
+}
+
 // ── 1. khoá phải có trong vi.json ───────────────────────────────────────────
 const htmlFiles = fs.readdirSync(PUBLIC).filter((f) => f.endsWith('.html'));
 for (const f of htmlFiles) {
@@ -49,14 +70,25 @@ for (const f of htmlFiles) {
   for (const k of collectKeys(html))
     if (!(k in vi)) fail(`public/${f}: khoá "${k}" không có trong i18n/vi.json`);
 }
-const jsFiles = fs.readdirSync(PUBLIC).filter((f) => f.endsWith('.js'));
+// .js + <script> nội tuyến trong .html (vd topup.html). `_tvmbT` = bản toàn cục của auth.js.
+const jsFiles = fs.readdirSync(PUBLIC).filter((f) => f.endsWith('.js') || f.endsWith('.html'));
 let jsRefs = 0;
 for (const f of jsFiles) {
   const src = fs.readFileSync(path.join(PUBLIC, f), 'utf8');
-  for (const m of src.matchAll(/\bT\(\s*'(js\.[\w.-]+)'/g)) {
+  for (const m of src.matchAll(/\b(?:T|_tvmbT)\(\s*'(js\.[\w.-]+)'/g)) {
     jsRefs++;
     if (!(m[1] in vi)) fail(`public/${f}: T('${m[1]}') — khoá không có trong i18n/vi.json`);
   }
+}
+// window.I18n được server chèn vào trang /<locale>/ với ?v=CLIENT_V; trang tự nạp thì phải cùng số,
+// không thì hai bản khác nhau chạy trên cùng trang.
+for (const f of htmlFiles) {
+  const src = fs.readFileSync(path.join(PUBLIC, f), 'utf8');
+  for (const m of src.matchAll(/\/tools-shared\/i18n\.js(?:\?v=(\w+))?/g))
+    if (m[1] !== CLIENT_V)
+      fail(
+        `public/${f}: /tools-shared/i18n.js?v=${m[1]} ≠ CLIENT_V=${CLIENT_V} (lib/i18n/render.mjs)`
+      );
 }
 for (const [k, v] of Object.entries(vi))
   if (typeof v !== 'string' || !v.trim()) fail(`vi.json: khoá "${k}" rỗng`);
