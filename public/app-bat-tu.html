@@ -253,7 +253,7 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'bat-tu'};</script>
 <script src="/tools-shared/glossary.js?v=1"></script>
-<script src="/tools-shared/i18n.js?v=2"></script>
+<script src="/tools-shared/i18n.js?v=3"></script>
 <script src="/laso-chart.js?v=10"></script>
 <script src="/tubinh-ansao-engine.js?v=6"></script>
 <script src="/tubinh-domain-scores.js?v=2"></script>
@@ -281,9 +281,9 @@ window.SHELL_INTRO={key:'bat-tu'};</script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
-<script src="/auth.js?v=7"></script>
-<script src="/tuvi-paywall.js?v=42"></script>
-  <script src="/nav.js?v=49" data-icons-only></script><script src="/shell.js?v=140"></script>
+<script src="/auth.js?v=8"></script>
+<script src="/tuvi-paywall.js?v=43"></script>
+  <script src="/nav.js?v=49" data-icons-only></script><script src="/shell.js?v=142"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 // Bát Tự dùng ĐÚNG giờ đại diện của địa chi giờ (23,1,3,…) để tứ trụ trên
@@ -324,7 +324,7 @@ function showNamxemStep(){
   document.getElementById('namxemNext').addEventListener('click',function(){
     var btn=this;
     if(btn.disabled)return;
-    btn.disabled=true; btn.textContent='Đang an tứ trụ…';
+    btn.disabled=true; btn.textContent=_tvmbT('js.battu.dang-an-tu-tru', 'Đang an tứ trụ…');
     document.getElementById('inpNamxem').value=document.getElementById('cInpNamxem').value;
     doBatTu();
   });
@@ -390,7 +390,7 @@ function appendHookHighlightCard(){
     if(ab) ab.click();
   });
   var follow=document.createElement('div'); follow.className='msg a';
-  follow.innerHTML='<img class="msg-ava" src="'+av+'" alt=""><div class="msg-body"><p>Bạn muốn thầy đào sâu điều nào trước?</p></div>';
+  follow.innerHTML='<img class="msg-ava" src="'+av+('" alt=""><div class="msg-body"><p>' + _tvmbT('js.battu.ban-muon-thay-dao-sau-dieu', 'Bạn muốn thầy đào sâu điều nào trước?') + '</p></div>');
   chat.appendChild(follow);
   chat.scrollTop=chat.scrollHeight;
 }
@@ -401,7 +401,7 @@ function doBatTu(){
   var fdIn=TuviForm.getData();
   var name=fdIn.hoten, gioitinh=fdIn.gioitinh, dd=fdIn.ngay, mm=fdIn.thang, yyyy=fdIn.nam, hh=fdIn.gioHour, pp=fdIn.gioPhut, gioAmIdx=fdIn.gioIdx;
   if(!dd||!mm||!yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
-  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang an tứ trụ…';
+  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent=_tvmbT('js.battu.dang-an-tu-tru', 'Đang an tứ trụ…');
   try{
     var gioChi=CHI[gioAmIdx];
     var bt=window.tinhBatTu({ngayDL:dd,thangDL:mm,namDL:yyyy,gio:GIO_REP[gioAmIdx],gioitinh:gioitinh,namXem:namxem,lich:fdIn.lich,gioLich:hh,phutLich:pp});
@@ -450,17 +450,17 @@ function doBatTu(){
     });
     initBatTuGate(bt);
   }catch(e){
-    document.getElementById('btBody').innerHTML='<div class="laso-error">Lỗi khi tính Bát Tự: '+esc(e.message)+'</div>';
+    document.getElementById('btBody').innerHTML=('<div class="laso-error">' + _tvmbT('js.battu.loi-khi-tinh-bat-tu', 'Lỗi khi tính Bát Tự:') + ' ')+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('btPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     if(window.console)console.error(e);
   }finally{
-    btn.disabled=false; var _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent='Lập Bát Tự →';
+    btn.disabled=false; var _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent=_tvmbT('js.battu.lap-bat-tu', 'Lập Bát Tự →');
     // Cùng vá với app-luan-giai.html: `#namxemNext` khoá vĩnh viễn ở text
     // "Đang an tứ trụ…" ngay lúc bấm (chống double-submit) nhưng KHÔNG tự
     // đổi lại khi xong — đứng nguyên như đang treo dù việc đã hoàn tất.
-    var _nxt=document.getElementById('namxemNext'); if(_nxt) _nxt.textContent='✓ Đã an tứ trụ';
+    var _nxt=document.getElementById('namxemNext'); if(_nxt) _nxt.textContent=_tvmbT('js.battu.da-an-tu-tru', '✓ Đã an tứ trụ');
   }
 }
 function reBatTu(){ var y=parseInt(document.getElementById('barNamxem').value); if(y)document.getElementById('inpNamxem').value=y; doBatTu(); }
@@ -477,7 +477,7 @@ function mountHook(bt){
   if(facts.length<2){ host.innerHTML=''; return; }
   // Đợt 2 phần 5 (2026-09-25): echo NGAY narrative này vào chat — xem
   // appendHookHighlightCard(). Chỉ bắn khi allowed:true (xem chú thích ở đó).
-  var spec={tool:'tu-binh',toolLabel:'Tử Bình Bát Tự',charts:[],facts:facts,onNarrative:appendHookHighlightCard};
+  var spec={tool:'tu-binh',toolLabel:_tvmbT('js.paywall.tu-binh-bat-tu', 'Tử Bình Bát Tự'),charts:[],facts:facts,onNarrative:appendHookHighlightCard};
   window.HookLayer.run(host, spec);
 }
 
@@ -1008,15 +1008,15 @@ async function _startBatTuAI(){
 }
 async function _loadNextPhanAI(){
   if(_currentPhan>=BatTuCore.TONG_PHAN){
-    document.getElementById('btProgress').textContent='✓ Luận giải hoàn tất';
+    document.getElementById('btProgress').textContent=_tvmbT('js.battu.luan-giai-hoan-tat', '✓ Luận giải hoàn tất');
     _saveBatTuResult();
     return;
   }
   _currentPhan++;
   var p=_currentPhan;
-  document.getElementById('btProgress').textContent='Đang luận giải phần '+p+' / '+BatTuCore.TONG_PHAN+'...';
+  document.getElementById('btProgress').textContent=_tvmbT('js.battu.dang-luan-giai-phan', 'Đang luận giải phần ')+p+' / '+BatTuCore.TONG_PHAN+'...';
   var box=document.getElementById('claude-content-'+p);
-  if(box){ box.style.display='block'; box.innerHTML='<div class="phan-empty">Đang luận giải…</div>'; }
+  if(box){ box.style.display='block'; box.innerHTML=('<div class="phan-empty">' + _tvmbT('js.battu.dang-luan-giai', 'Đang luận giải…') + '</div>'); }
   // Cuộn tới đúng phần đang stream (đã học từ luận giải Tử Vi — không cuộn thì
   // user tưởng trang đứng im). .sec có scroll-margin-top neo theo --ws-top-h, bù header + .jump sticky.
   var secEl=document.getElementById('sec-'+p);
@@ -1027,7 +1027,7 @@ async function _loadNextPhanAI(){
     var finalText=await streamLuanGiai(p,_batTuText,docs,box);
     _luanGiaiStore[p]=finalText;
   }catch(e){
-    if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._btRetryPhan()">↻ Thử lại</button></div>';
+    if(box)box.innerHTML=('<div class="laso-error">' + _tvmbT('js.battu.loi-khi-luan-giai-phan', 'Lỗi khi luận giải phần') + ' ')+p+': '+esc(e.message)+(' <button class="btn" onclick="window._btRetryPhan()">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
     return;
   }
   await _loadNextPhanAI();

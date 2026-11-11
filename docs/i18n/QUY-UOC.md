@@ -12,6 +12,7 @@ Hợp đồng ngôn ngữ ở `lib/i18n/locales.ts` · kế hoạch ở `WORKPLA
 ## Đánh dấu chữ
 - HTML tĩnh: `data-i18n="khoá"` (thay innerHTML) · `data-i18n-attr="placeholder:khoá;title:khoá2"` · `<title data-i18n>` · meta `content:khoá`. Chữ Việt giữ trong HTML làm fallback.
 - Chữ do JS dựng: `T('js.<ns>.<khoá>', 'chữ Việt')` (`var T = …TVMB_I18N.t` ở đầu file). Khoá `js.*` được server nhúng vào trang. Namespace tự nhận: `shell` (trang nạp `shell.js`), `nav` (`nav.js` bản đầy đủ).
+- **W13:** `window.I18n.tv(khoá, chữViệt, {biến})` (`tools-shared/i18n.js`, server chèn vào `<head>` trang `/<locale>/`) đọc CÙNG từ điển nhúng; `I18n.href('/x')` cho link do JS dựng (`href="/…"` trong mảnh đã dịch được tự đổi). `auth.js`/`topup.html` gọi qua `_tvmbT`/`_tvmbHref` toàn cục. Namespace MỀM (`SOFT_NS` trong `render.mjs`: `shellui` `paywall` `auth` `prices`, + `js.<ns>` nội tuyến của trang) được nhúng nhưng KHÔNG chặn độ đủ/hreflang của trang. Bọc theo vùng dòng: `npm run i18n:tag-js -- public/x.js --prefix js.ns --lines 100-200,…`.
 - Rút tự động: `npm run i18n:tag -- public/x.html --prefix tiền-tố` · `npm run i18n:tag-js -- public/x.js --prefix js.ns --calls hàm:thứTự`. **Đọc diff** trước khi commit. Câu Y HỆT dùng lại khoá (HTML chỉ dùng lại khoá không phải `js.*`).
 - Trang HTML mới có chữ cần dịch: tag xong chạy `npm run i18n:pages`.
 

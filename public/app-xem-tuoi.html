@@ -209,7 +209,7 @@ body.chat-first-live .laso-one{flex:none}
 })();
 </script>
 <script src="/tools-shared/glossary.js?v=1"></script>
-<script src="/tools-shared/i18n.js?v=2"></script>
+<script src="/tools-shared/i18n.js?v=3"></script>
 <script src="/laso-chart.js?v=10"></script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuong-hop.js?v=3"></script>
@@ -222,9 +222,9 @@ body.chat-first-live .laso-one{flex:none}
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tools-shared/noi-sinh.js?v=1"></script>
 <script src="/tuvi-form.js?v=15"></script>
-<script src="/auth.js?v=7"></script>
-<script src="/tuvi-paywall.js?v=42"></script>
-  <script src="/nav.js?v=49" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=140"></script>
+<script src="/auth.js?v=8"></script>
+<script src="/tuvi-paywall.js?v=43"></script>
+  <script src="/nav.js?v=49" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=142"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
@@ -236,9 +236,9 @@ var MODES={
 'xem-lam-an':{
   active:'xem-lam-an', scenarioType:'xem-lam-an',
   title:'Xem tuổi làm ăn', sub:'So hợp hai người khi bắt tay hợp tác',
-  docTitle:'Xem tuổi làm ăn — Tử Vi Minh Bảo',
+  docTitle:_tvmbT('js.xemtuoi.xem-tuoi-lam-an-tu-vi', 'Xem tuổi làm ăn — Tử Vi Minh Bảo'),
   h2:'Nhập ngày sinh hai đối tác (dương lịch)',
-  formSub:'Chấm 8 yếu tố hợp tác giữa bạn và người sắp làm ăn chung — góc nhìn khách quan trước khi ký kết.',
+  formSub:_tvmbT('js.xemtuoi.cham-8-yeu-to-hop-tac', 'Chấm 8 yếu tố hợp tác giữa bạn và người sắp làm ăn chung — góc nhìn khách quan trước khi ký kết.'),
   pA:'Đối tác thứ nhất', pB:'Đối tác thứ hai', phA:'Đối tác A', phB:'Đối tác B',
   btn:'Xem hợp tác →', btnBusy:'Đang xét hợp tác…', verb:'Xét hợp tác',
   chips:['Hai người hợp làm ăn chung không?','Ai nên nắm tài chính?','Chiều nào dễ xung đột khi hợp tác?','Nên góp vốn hay chia việc?'],
@@ -248,9 +248,9 @@ var MODES={
 'tuong-hop':{
   active:'tuong-hop', scenarioType:'tuong-hop',
   title:'Tương hợp tuổi', sub:'So hợp hai người bất kỳ theo cổ pháp',
-  docTitle:'Tương hợp tuổi — Tử Vi Minh Bảo',
+  docTitle:_tvmbT('js.xemtuoi.tuong-hop-tuoi-tu-vi-minh', 'Tương hợp tuổi — Tử Vi Minh Bảo'),
   h2:'Nhập ngày sinh hai người (dương lịch)',
-  formSub:'Xét nhanh hai tuổi có hợp nhau hay không, chỉ cần năm sinh — câu trả lời tức thì, chưa cần xem sâu.',
+  formSub:_tvmbT('js.xemtuoi.xet-nhanh-hai-tuoi-co-hop', 'Xét nhanh hai tuổi có hợp nhau hay không, chỉ cần năm sinh — câu trả lời tức thì, chưa cần xem sâu.'),
   pA:'Người thứ nhất', pB:'Người thứ hai', phA:'Người A', phB:'Người B',
   btn:'So tương hợp →', btnBusy:'Đang so tương hợp…', verb:'So tương hợp',
   chips:['Hai người này có hợp nhau không?','Hợp nhau ở mặt nào?','Dễ va chạm ở đâu?','Nên giữ khoảng cách hay gắn bó?'],
@@ -260,9 +260,9 @@ var MODES={
 'xem-tuoi':{
   active:'xem-tuoi', scenarioType:'xem-tuoi',
   title:'Xem tuổi vợ chồng', sub:'So hòa hợp hai lá số theo cổ pháp',
-  docTitle:'Xem tuổi vợ chồng — Tử Vi Minh Bảo',
+  docTitle:_tvmbT('js.xemtuoi.xem-tuoi-vo-chong-tu-vi', 'Xem tuổi vợ chồng — Tử Vi Minh Bảo'),
   h2:'Nhập ngày sinh hai người (dương lịch)',
-  formSub:'Chấm 8 yếu tố tương hợp giữa hai lá số — dùng khi đang tính chuyện cưới xin, cần một câu trả lời rõ.',
+  formSub:_tvmbT('js.xemtuoi.cham-8-yeu-to-tuong-hop', 'Chấm 8 yếu tố tương hợp giữa hai lá số — dùng khi đang tính chuyện cưới xin, cần một câu trả lời rõ.'),
   pA:'Người thứ nhất', pB:'Người thứ hai', phA:'Chồng / Người A', phB:'Vợ / Người B',
   btn:'So tuổi →', btnBusy:'Đang so tuổi…', verb:'So tuổi',
   chips:['Hai người có hợp làm vợ chồng không?','Chiều nào đáng lo nhất?','Cách hóa giải điểm khắc?','Đường con cái của hai người thế nào?'],
@@ -281,7 +281,7 @@ TuviForm.render('b-fields', {prefix:'b', mode:'compact', gioitinh:'nu'});
 // renderChat() lo người A rồi ghi vào field thật 'a-*' (ẩn trong #birthPanel)
 // qua setData(), onDone gọi lại renderChat() cho người B, onDone cuối gọi
 // doCompat() y hệt nút "So tuổi →" cũ — không đổi gì ở đường tính toán.
-document.getElementById('wsIntakeHintTxt').textContent = 'Trả lời thầy ở khung chat để nhập ngày sinh của ' + MODE.pA.toLowerCase() + ' và ' + MODE.pB.toLowerCase() + '.';
+document.getElementById('wsIntakeHintTxt').textContent = _tvmbT('js.xemtuoi.tra-loi-thay-o-khung-chat', 'Trả lời thầy ở khung chat để nhập ngày sinh của ') + MODE.pA.toLowerCase() + _tvmbT('js.xemtuoi.va', ' và ') + MODE.pB.toLowerCase() + '.';
 function _tpwResuming(){ try{ return new URL(location.href).searchParams.get('tpwResume')==='1'; }catch(e){ return false; } }
 function startIntake(){
   // Quay về sau nạp Lượng: XT_RESUME_KEY IIFE bên dưới tự điền form + gọi
@@ -412,7 +412,7 @@ function doCompat(){
     initXemTuoiGate(r,nameA,nameB);
     mountHook(r,nameA,nameB);
   }catch(e){
-    document.getElementById('xtBody').innerHTML='<div class="laso-error">Lỗi khi so tuổi: '+esc(e.message)+'</div>';
+    document.getElementById('xtBody').innerHTML=('<div class="laso-error">' + _tvmbT('js.xemtuoi.loi-khi-so-tuoi', 'Lỗi khi so tuổi:') + ' ')+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('xtPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
@@ -475,7 +475,7 @@ function taiAnhVanh(){
   var host=document.getElementById('compatVanh'), btn=document.getElementById('crTaiBtn');
   if(!host||!host.innerHTML||!window.Poster||!_vanhInfo)return;
   var r=_vanhInfo;
-  var old=btn.textContent; btn.disabled=true; btn.textContent='Đang dựng ảnh…';
+  var old=btn.textContent; btn.disabled=true; btn.textContent=_tvmbT('js.xemtuoi.dang-dung-anh', 'Đang dựng ảnh…');
   var T=(Poster.THEME)||{};
   var items=(r.items||[]).filter(function(m){return typeof m.score==='number';});
   var cao=items.slice().sort(function(a,b){return b.score-a.score;})[0];
@@ -503,7 +503,7 @@ function compatRadarHtml(r){
   var dims=r.items.filter(function(m){return typeof m.score==='number';})
     .map(function(m){return {label:m.label,value:m.score};});
   if(dims.length<3) return '';
-  var svg=HookCharts.hexRadar({dims:dims,max:10,size:280,ariaLabel:'Vành '+dims.length+' chiều tương hợp'});
+  var svg=HookCharts.hexRadar({dims:dims,max:10,size:280,ariaLabel:_tvmbT('js.xemtuoi.vanh', 'Vành ')+dims.length+_tvmbT('js.xemtuoi.chieu-tuong-hop', ' chiều tương hợp')});
   if(!svg) return '';
   _vanhInfo=r;
   return '<div class="compat-radar"><div id="compatVanh">'+svg+'</div>'+
@@ -879,7 +879,7 @@ async function _startXemTuoiAI(){
 }
 async function _loadNextPhanAI(){
   if(_currentPhan>=8){
-    document.getElementById('xtProgress').textContent='✓ Luận giải hoàn tất';
+    document.getElementById('xtProgress').textContent=_tvmbT('js.battu.luan-giai-hoan-tat', '✓ Luận giải hoàn tất');
     _saveXemTuoiResult();
     return;
   }
@@ -897,7 +897,7 @@ async function _loadNextPhanAI(){
   var w=null;
   if(box){
     box.style.display='block';
-    box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
+    box.innerHTML=('<div class="phan-empty">' + _tvmbT('js.battu.dang-luan-giai', 'Đang luận giải…') + '</div>');
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
       w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+(idx+1)+'…',
         expectSec:(_xtPace&&_xtPace.perPartSec())||0,expectText:(_xtPace&&_xtPace.perPartText())||'',center:true});
@@ -925,7 +925,7 @@ async function _loadNextPhanAI(){
     if(box)box.innerHTML=renderLuanGiaiParas(text,illusFigFor(box));
   }catch(e){
     doneWait();
-    if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+(idx+1)+': '+esc(e.message)+' <button class="btn" onclick="window._xtRetryPhan()">↻ Thử lại</button></div>';
+    if(box)box.innerHTML=('<div class="laso-error">' + _tvmbT('js.battu.loi-khi-luan-giai-phan', 'Lỗi khi luận giải phần') + ' ')+(idx+1)+': '+esc(e.message)+(' <button class="btn" onclick="window._xtRetryPhan()">' + _tvmbT('js.battu.thu-lai', '↻ Thử lại') + '</button></div>');
     return;
   }
   await _loadNextPhanAI();

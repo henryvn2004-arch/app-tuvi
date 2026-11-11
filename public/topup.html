@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <script src="https://js.sentry-cdn.com/f884fb7e9d257df10ecb6dbe562141cb.min.js" crossorigin="anonymous" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bảng Giá & Nạp Lượng — Tử Vi Minh Bảo</title>
-<meta name="description" content="Nạp lượng để sử dụng các công cụ Tử Vi Minh Bảo. Đăng ký nhận Lượng miễn phí. Không hết hạn.">
+<title data-i18n="topup.bang-gia-nap-luong-tu-vi">Bảng Giá & Nạp Lượng — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:topup.nap-luong-de-su-dung-cac" name="description" content="Nạp lượng để sử dụng các công cụ Tử Vi Minh Bảo. Đăng ký nhận Lượng miễn phí. Không hết hạn.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -260,8 +260,8 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 </style>
 <script src="/track.js?v=8"></script>
 <script>try{window.Track&&window.Track.event&&window.Track.event('topup_start',{meta:{from:'topup_page'}})}catch(e){}</script>
-<script src="/tool-prices.js?v=11"></script>
-<script src="/auth.js?v=7"></script>
+<script src="/tool-prices.js?v=12"></script>
+<script src="/auth.js?v=8"></script>
 <script src="/promo.js?v=1"></script>
 </head>
 <body>
@@ -271,14 +271,14 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
 <main class="wrap">
   <div class="page-header">
-    <div class="eyebrow">Đóng Góp Duy Trì</div>
-    <h1>Nạp Lượng để Tra Cứu Mệnh Lý</h1>
-    <p>Lượng là đơn vị dùng cho các công cụ luận giải chuyên sâu. Mua theo gói, <strong>không hết hạn</strong>, <span id="hdrRate">gói càng lớn càng rẻ</span>.</p>
+    <div data-i18n="topup.dong-gop-duy-tri" class="eyebrow">Đóng Góp Duy Trì</div>
+    <h1 data-i18n="topup.nap-luong-de-tra-cuu-menh">Nạp Lượng để Tra Cứu Mệnh Lý</h1>
+    <p><span data-i18n="topup.luong-la-don-vi-dung-cho">Lượng là đơn vị dùng cho các công cụ luận giải chuyên sâu. Mua theo gói, <strong>không hết hạn</strong>,</span> <span id="hdrRate" data-i18n="topup.goi-cang-lon-cang-re">gói càng lớn càng rẻ</span>.</p>
   </div>
 
   <!-- Số dư (đã đăng nhập) HOẶC quà chào mừng (chưa đăng nhập) — cùng MỘT chỗ,
        thay vì hai khối mà ẩn bớt một cái rồi để lại khoảng trống. -->
-  <div class="status-slot" id="statusSlot" aria-busy="true" aria-label="Đang tải">
+  <div data-i18n-attr="aria-label:topup.dang-tai-g1gj" class="status-slot" id="statusSlot" aria-busy="true" aria-label="Đang tải">
     <!-- HAI khung chờ vì ô này đổ MỘT trong hai thẻ khác hẳn chiều cao: quà chào
          mừng (216,4px, khách vô danh) hay số dư (90,2px, đã đăng nhập). Mặc định
          hiện bản khách — 86/95 người chạy tool là khách vô danh. -->
@@ -323,18 +323,18 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
   <!-- ── GÓI NẠP ── -->
   <section>
     <div class="section-head">
-      <div class="section-label">Mức Đóng Góp</div>
-      <div class="pay-methods" role="group" aria-label="Chọn phương thức thanh toán">
+      <div data-i18n="topup.muc-dong-gop" class="section-label">Mức Đóng Góp</div>
+      <div data-i18n-attr="aria-label:topup.chon-phuong-thuc-thanh-toan" class="pay-methods" role="group" aria-label="Chọn phương thức thanh toán">
         <button type="button" class="pay-method" id="mPaypal" aria-pressed="true" onclick="setMethod('paypal')">
           <span data-icon="wallet"></span> PayPal
         </button>
         <button type="button" class="pay-method" id="mCard" aria-pressed="false" onclick="setMethod('card')">
-          <span data-icon="credit-card"></span> Thẻ Visa / Mastercard
+          <span data-icon="credit-card"></span> <span data-i18n="topup.the-visa-mastercard">Thẻ Visa / Mastercard</span>
         </button>
         <!-- W5: rail VNĐ ẩn mặc định — chỉ hiện khi `/api/payment?action=pay-methods`
              trả `bank:true` (cờ `app_config['billing.vnd_rails_enabled']`). -->
         <button type="button" class="pay-method" id="mBank" aria-pressed="false" onclick="setMethod('bank')" hidden>
-          <span data-icon="landmark"></span> Chuyển khoản QR
+          <span data-icon="landmark"></span> <span data-i18n="topup.chuyen-khoan-qr">Chuyển khoản QR</span>
         </button>
         <!-- Ẩn mặc định — chỉ hiện khi `/api/payment?action=momo-status` xác
              nhận CÓ cấu hình (Henry đăng ký merchant xong), xem `checkMomoAvailable()`.
@@ -352,7 +352,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
          này rỗng thì lần vẽ đầu cao 0px, và mọi thứ bên dưới bị đẩy khi dữ
          liệu về. `renderPackages()` đọc lại nguyên khối này làm bản gốc để
          khôi phục khi đọc hụt bảng giá — một nguồn duy nhất, không chép đôi. -->
-    <div class="packages" id="packages" aria-busy="true" aria-label="Đang tải bảng giá">
+    <div data-i18n-attr="aria-label:topup.dang-tai-bang-gia" class="packages" id="packages" aria-busy="true" aria-label="Đang tải bảng giá">
       <div class="pkg-card pkg-skel"><div class="pkg-icon"><span class="sk sk-ic"></span></div><div class="pkg-name"><span class="sk">&nbsp;</span></div><div class="pkg-price"><span class="sk">&nbsp;</span></div><div class="pkg-credits"><span class="sk">&nbsp;</span></div><div class="pkg-rate"><span class="sk">&nbsp;</span></div><div class="pkg-note"><span class="sk">&nbsp;</span></div><div class="btn-pkg sk-btn">&nbsp;</div></div>
       <div class="pkg-card pkg-skel"><div class="pkg-icon"><span class="sk sk-ic"></span></div><div class="pkg-name"><span class="sk">&nbsp;</span></div><div class="pkg-price"><span class="sk">&nbsp;</span></div><div class="pkg-credits"><span class="sk">&nbsp;</span></div><div class="pkg-rate"><span class="sk">&nbsp;</span></div><div class="pkg-note"><span class="sk">&nbsp;</span></div><div class="btn-pkg sk-btn">&nbsp;</div></div>
       <div class="pkg-card pkg-skel"><div class="pkg-icon"><span class="sk sk-ic"></span></div><div class="pkg-name"><span class="sk">&nbsp;</span></div><div class="pkg-price"><span class="sk">&nbsp;</span></div><div class="pkg-credits"><span class="sk">&nbsp;</span></div><div class="pkg-rate"><span class="sk">&nbsp;</span></div><div class="pkg-note"><span class="sk">&nbsp;</span></div><div class="btn-pkg sk-btn">&nbsp;</div></div>
@@ -361,11 +361,11 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
     <div class="custom-card">
       <div class="custom-label">
-        <strong>Số tiền khác</strong>
+        <strong data-i18n="topup.so-tien-khac">Số tiền khác</strong>
         <span id="customRateNote">…</span>
       </div>
       <div class="custom-field">
-        <input type="number" class="custom-input" id="customInput" min="2" max="200" step="0.01" placeholder="10" aria-label="Số tiền muốn nạp (USD)" oninput="onCustomInput()">
+        <input data-i18n-attr="aria-label:topup.so-tien-muon-nap-usd" type="number" class="custom-input" id="customInput" min="2" max="200" step="0.01" placeholder="10" aria-label="Số tiền muốn nạp (USD)" oninput="onCustomInput()">
         <span class="custom-suffix" id="customSuffix">USD</span>
       </div>
       <span class="custom-preview" id="customPreview">…</span>
@@ -375,9 +375,9 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
   <!-- ── CHI PHÍ CÔNG CỤ ── -->
   <section class="panel">
-    <h2><span data-icon="wallet"></span> Chi Phí Các Công Cụ</h2>
-    <p class="panel-sub" id="costsSubtitle">Cập nhật tự động khi có công cụ mới.</p>
-    <div id="costsContent"><div class="state-msg"><span data-icon="rotate-cw" class="spin"></span> Đang tải…</div></div>
+    <h2><span data-icon="wallet"></span> <span data-i18n="topup.chi-phi-cac-cong-cu">Chi Phí Các Công Cụ</span></h2>
+    <p data-i18n="topup.cap-nhat-tu-dong-khi-co" class="panel-sub" id="costsSubtitle">Cập nhật tự động khi có công cụ mới.</p>
+    <div id="costsContent"><div class="state-msg"><span data-icon="rotate-cw" class="spin"></span> <span data-i18n="topup.dang-tai">Đang tải…</span></div></div>
     <div class="free-note" id="freeNote" style="display:none">
       <span data-icon="check-circle"></span>
       <div id="freeNoteText"></div>
@@ -390,34 +390,34 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
        khối này thì mã in trên clip chỉ dùng được đúng một lần trong đời mỗi
        người, ngay lúc đăng ký — và ai lỡ tay là mất hẳn đường. -->
   <section class="panel" id="promoSection" style="display:none">
-    <h2><span data-icon="wallet-cards"></span> Nhập Mã Khuyến Mãi</h2>
-    <p class="panel-sub">Có mã từ clip hoặc chương trình khuyến mãi? Nhập vào đây để cộng Lượng ngay.</p>
+    <h2><span data-icon="wallet-cards"></span> <span data-i18n="topup.nhap-ma-khuyen-mai">Nhập Mã Khuyến Mãi</span></h2>
+    <p data-i18n="topup.co-ma-tu-clip-hoac-chuong" class="panel-sub">Có mã từ clip hoặc chương trình khuyến mãi? Nhập vào đây để cộng Lượng ngay.</p>
     <div class="ref-box">
       <div class="ref-line">
-        <input id="promoInput" type="text" placeholder="VD: TUVIMINHBAO" autocapitalize="characters" autocomplete="off" spellcheck="false"
+        <input data-i18n-attr="placeholder:topup.vd-tuviminhbao" id="promoInput" type="text" placeholder="VD: TUVIMINHBAO" autocapitalize="characters" autocomplete="off" spellcheck="false"
                style="flex:1;min-width:0;padding:10px 14px;border:1.5px dashed var(--gold);border-radius:8px;font-size:15px;font-family:inherit;text-transform:uppercase;outline:none"
                onkeydown="if(event.key==='Enter')redeemPromo()">
-        <button class="btn-copy" id="btnPromo" onclick="redeemPromo()"><span>Đổi mã</span></button>
+        <button data-i18n="topup.doi-ma" class="btn-copy" id="btnPromo" onclick="redeemPromo()"><span>Đổi mã</span></button>
       </div>
       <div id="promoMsg" style="font-size:13px;margin-top:10px;display:none"></div>
-      <div style="font-size:12px;color:var(--text-lt);margin-top:8px">Mỗi tài khoản dùng được một mã.</div>
+      <div data-i18n="topup.moi-tai-khoan-dung-duoc-mot" style="font-size:12px;color:var(--text-lt);margin-top:8px">Mỗi tài khoản dùng được một mã.</div>
     </div>
   </section>
 
   <!-- ── MỜI BẠN ── -->
   <section class="panel" id="referralSection" style="display:none">
-    <h2><span data-icon="gift"></span> Mời Bạn — Cùng Nhận Lượng</h2>
-    <p class="panel-sub" id="refPitchTopup">Mời bạn đăng ký → bạn nhận Lượng ngay khi họ tạo tài khoản.</p>
+    <h2><span data-icon="gift"></span> <span data-i18n="topup.moi-ban-cung-nhan-luong">Mời Bạn — Cùng Nhận Lượng</span></h2>
+    <p data-i18n="topup.moi-ban-dang-ky-ban-nhan" class="panel-sub" id="refPitchTopup">Mời bạn đăng ký → bạn nhận Lượng ngay khi họ tạo tài khoản.</p>
     <div class="ref-box">
       <div class="ref-line">
-        <div class="ref-line-label">Mã giới thiệu của bạn:</div>
+        <div data-i18n="topup.ma-gioi-thieu-cua-ban" class="ref-line-label">Mã giới thiệu của bạn:</div>
         <div class="ref-code" id="refCode">—</div>
-        <button class="btn-copy" id="btnCopyRef" style="margin-left:auto" onclick="copyRefCode()"><span data-icon="clipboard"></span> <span>Sao chép</span></button>
+        <button class="btn-copy" id="btnCopyRef" style="margin-left:auto" onclick="copyRefCode()"><span data-icon="clipboard"></span> <span data-i18n="topup.sao-chep">Sao chép</span></button>
       </div>
       <div class="ref-line">
-        <div class="ref-line-label">Link mời:</div>
+        <div data-i18n="topup.link-moi" class="ref-line-label">Link mời:</div>
         <code class="ref-link" id="refLink">—</code>
-        <button class="btn-copy ghost" id="btnCopyLink" onclick="copyRefLink()"><span data-icon="link"></span> <span>Sao chép link</span></button>
+        <button class="btn-copy ghost" id="btnCopyLink" onclick="copyRefLink()"><span data-icon="link"></span> <span data-i18n="topup.sao-chep-link">Sao chép link</span></button>
       </div>
       <div class="ref-share">
         <button class="btn-share" style="background:#0068ff" onclick="shareRef('zalo')">Zalo</button>
@@ -426,44 +426,56 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         <button class="btn-share" style="background:#25d366" onclick="shareRef('whatsapp')">WhatsApp</button>
       </div>
       <div class="ref-stats">
-        <div>Đã mời: <strong id="refTotal" style="color:var(--navy)">—</strong></div>
-        <div>Đã nạp lần đầu: <strong id="refQualified" style="color:var(--green)">—</strong></div>
-        <div>Đã nhận: <strong id="refEarned" style="color:var(--gold)">—</strong> Lượng</div>
+        <div><span data-i18n="topup.da-moi">Đã mời:</span> <strong id="refTotal" style="color:var(--navy)">—</strong></div>
+        <div><span data-i18n="topup.da-nap-lan-dau">Đã nạp lần đầu:</span> <strong id="refQualified" style="color:var(--green)">—</strong></div>
+        <div><span data-i18n="topup.da-nhan-luong">Đã nhận:</span> <strong id="refEarned" style="color:var(--gold)">—</strong> <span data-i18n="topup.luong-don-vi">Lượng</span></div>
       </div>
     </div>
   </section>
 
   <!-- ── FAQ ── -->
   <section class="panel">
-    <h2><span data-icon="message-circle"></span> Câu Hỏi Thường Gặp</h2>
+    <h2><span data-icon="message-circle"></span> <span data-i18n="topup.cau-hoi-thuong-gap">Câu Hỏi Thường Gặp</span></h2>
     <div class="faq-item">
-      <div class="faq-q">Lượng có hết hạn không?</div>
-      <div class="faq-a">Không bao giờ. Lượng được lưu vĩnh viễn trong tài khoản.</div>
+      <div data-i18n="topup.luong-co-het-han-khong" class="faq-q">Lượng có hết hạn không?</div>
+      <div data-i18n="topup.khong-bao-gio-luong-duoc-luu" class="faq-a">Không bao giờ. Lượng được lưu vĩnh viễn trong tài khoản.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Xem lại kết quả có bị trừ Lượng tiếp không?</div>
-      <div class="faq-a">Không. Mỗi lá số / kết quả chỉ trừ Lượng một lần. Sau đó xem lại tùy ý miễn phí.</div>
+      <div data-i18n="topup.xem-lai-ket-qua-co-bi" class="faq-q">Xem lại kết quả có bị trừ Lượng tiếp không?</div>
+      <div data-i18n="topup.khong-moi-la-so-ket-qua" class="faq-a">Không. Mỗi lá số / kết quả chỉ trừ Lượng một lần. Sau đó xem lại tùy ý miễn phí.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Tôi có thể thanh toán bằng cách nào?</div>
-      <div class="faq-a">Thanh toán bằng <strong>USD</strong> qua PayPal: trả bằng tài khoản PayPal, hoặc chọn <strong>Thẻ Visa / Mastercard</strong> để nhập thẻ trực tiếp — không cần có sẵn tài khoản PayPal. Lượng vào tài khoản tự động ngay sau khi thanh toán.</div>
+      <div data-i18n="topup.toi-co-the-thanh-toan-bang" class="faq-q">Tôi có thể thanh toán bằng cách nào?</div>
+      <div data-i18n="topup.thanh-toan-bang-usd-qua-paypal" class="faq-a">Thanh toán bằng <strong>USD</strong> qua PayPal: trả bằng tài khoản PayPal, hoặc chọn <strong>Thẻ Visa / Mastercard</strong> để nhập thẻ trực tiếp — không cần có sẵn tài khoản PayPal. Lượng vào tài khoản tự động ngay sau khi thanh toán.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Quà Lượng chào mừng khi đăng ký dùng được gì?</div>
-      <div class="faq-a" id="faqWelcome">Dùng được cho các công cụ luận giải chuyên sâu và hỏi Thầy. Mức phí của từng công cụ hiển thị ngay trên trang công cụ đó.</div>
+      <div data-i18n="topup.qua-luong-chao-mung-khi-dang" class="faq-q">Quà Lượng chào mừng khi đăng ký dùng được gì?</div>
+      <div data-i18n="topup.dung-duoc-cho-cac-cong-cu" class="faq-a" id="faqWelcome">Dùng được cho các công cụ luận giải chuyên sâu và hỏi Thầy. Mức phí của từng công cụ hiển thị ngay trên trang công cụ đó.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Lượng có dùng chung tài khoản được không?</div>
-      <div class="faq-a">Lượng gắn với một tài khoản. Nếu muốn dùng cho cả nhà, có thể chọn mức đóng góp lớn hơn (Cao Cấp / VIP) và dùng chung một tài khoản.</div>
+      <div data-i18n="topup.luong-co-dung-chung-tai-khoan" class="faq-q">Lượng có dùng chung tài khoản được không?</div>
+      <div data-i18n="topup.luong-gan-voi-mot-tai-khoan" class="faq-a">Lượng gắn với một tài khoản. Nếu muốn dùng cho cả nhà, có thể chọn mức đóng góp lớn hơn (Cao Cấp / VIP) và dùng chung một tài khoản.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Vì sao có thanh toán mà không hoàn toàn miễn phí?</div>
-      <div class="faq-a">Mỗi luận giải chuyên sâu gọi API mô hình ngôn ngữ lớn (Claude/GPT), tốn khoảng 0.05–0.10 USD mỗi lượt, cộng thêm chi phí lưu trữ và hosting. Lượng là cách giúp dự án tự duy trì để giữ toàn bộ công cụ tra cứu cổ pháp miễn phí cho mọi người.</div>
+      <div data-i18n="topup.vi-sao-co-thanh-toan-ma" class="faq-q">Vì sao có thanh toán mà không hoàn toàn miễn phí?</div>
+      <div data-i18n="topup.moi-luan-giai-chuyen-sau-goi" class="faq-a">Mỗi luận giải chuyên sâu gọi API mô hình ngôn ngữ lớn (Claude/GPT), tốn khoảng 0.05–0.10 USD mỗi lượt, cộng thêm chi phí lưu trữ và hosting. Lượng là cách giúp dự án tự duy trì để giữ toàn bộ công cụ tra cứu cổ pháp miễn phí cho mọi người.</div>
     </div>
   </section>
 </main>
 
 <script>
+// i18n: _tvmbT/_tvmbHref là hàm toàn cục của auth.js. Trang này phải chạy được cả khi auth.js
+// lỗi tải (mọi chỗ khác dùng `window.Auth?.`) ⇒ bản dự phòng tối thiểu, cùng hành vi; auth.js
+// có mặt thì giữ bản của nó.
+if (typeof window._tvmbT !== 'function') window._tvmbT = function (k, d, v) {
+  var I = window.I18n;
+  if (I && I.tv) return I.tv(k, d, v);
+  return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
+};
+if (typeof window._tvmbHref !== 'function') window._tvmbHref = function (p) {
+  var I = window.I18n;
+  return I && I.href ? I.href(p) : p;
+};
 const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
@@ -490,7 +502,7 @@ function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 }
-function vnd(n) { return Number(n).toLocaleString('vi-VN') + 'đ'; }
+function vnd(n) { return Number(n).toLocaleString('vi-VN') + _tvmbT('js.topup.d', 'đ'); }
 function usd(n) { return '$' + Number(n).toFixed(2); }
 
 // ── Tiền tệ ĐI THEO phương thức (W5) ─────────────────────────
@@ -553,8 +565,8 @@ function showAlert(type, msg) {
 // nhập thẻ (`landing:'card'` → PayPal `landing_page: BILLING`).
 const METHOD_META = {
   paypal: { icon: 'wallet',      label: 'PayPal' },
-  card:   { icon: 'credit-card', label: 'Thanh toán thẻ' },
-  bank:   { icon: 'landmark',    label: 'Chuyển khoản' },
+  card:   { icon: 'credit-card', label: _tvmbT('js.topup.thanh-toan-the', 'Thanh toán thẻ') },
+  bank:   { icon: 'landmark',    label: _tvmbT('js.topup.chuyen-khoan', 'Chuyển khoản') },
   momo:   { icon: 'wallet',      label: 'MoMo' },
 };
 function setMethod(m) {
@@ -573,8 +585,8 @@ function setMethod(m) {
     inp.min = String(customMin()); inp.max = String(customMax());
     inp.step = isVnd() ? '1000' : '0.01';
     inp.placeholder = isVnd() ? '100000' : '10';
-    inp.setAttribute('aria-label', 'Số tiền muốn nạp (' + (isVnd() ? 'VNĐ' : 'USD') + ')');
-    document.getElementById('customSuffix').textContent = isVnd() ? 'đ' : 'USD';
+    inp.setAttribute('aria-label', _tvmbT('js.topup.so-tien-muon-nap', 'Số tiền muốn nạp (') + (isVnd() ? _tvmbT('js.topup.vnd', 'VNĐ') : 'USD') + ')');
+    document.getElementById('customSuffix').textContent = isVnd() ? _tvmbT('js.topup.d', 'đ') : 'USD';
   }
   renderPackages();
   renderHeaderRate();
@@ -626,7 +638,7 @@ function renderPackages() {
     // không bỏ được. Khung chờ cao đúng bằng thẻ thật thì không có gì để nhảy.
     const el = document.getElementById('packages');
     el.setAttribute('aria-busy', 'true');
-    el.setAttribute('aria-label', 'Đang tải bảng giá');
+    el.setAttribute('aria-label', _tvmbT('js.topup.dang-tai-bang-gia', 'Đang tải bảng giá'));
     if (!el.querySelector('.pkg-skel')) el.innerHTML = PKG_SKEL_HTML;
     return;
   }
@@ -647,20 +659,20 @@ function renderPackages() {
     const rate = rates[i];
     const save = worst > 0 ? Math.round((1 - rate / worst) * 100) : 0;
     const featured = suggestedIdx >= 0 ? i === suggestedIdx : i === FEATURED_INDEX;
-    const badge = suggestedIdx >= 0 ? 'Đủ cho lượt này' : 'Phổ biến nhất';
+    const badge = suggestedIdx >= 0 ? _tvmbT('js.topup.du-cho-luot-nay', 'Đủ cho lượt này') : _tvmbT('js.topup.pho-bien-nhat', 'Phổ biến nhất');
     return '<div class="pkg-card' + (featured ? ' featured' : '') + '">'
       + (featured ? '<div class="pkg-badge">' + badge + '</div>' : '')
       + '<div class="pkg-icon">' + ic(PKG_ICONS[i] || 'sparkles') + '</div>'
       + '<div class="pkg-name">' + esc(p.label) + '</div>'
       + '<div class="pkg-price">' + money(priceOf(p)) + '</div>'
-      + '<div class="pkg-credits">' + p.credits + ' Lượng</div>'
-      + '<div class="pkg-rate">' + moneyRate(rate) + ' / Lượng'
-      + (save >= 5 ? '<span class="pkg-save">rẻ hơn ' + save + '%</span>' : '') + '</div>'
-      + '<div class="pkg-note">Không hết hạn</div>'
+      + '<div class="pkg-credits">' + p.credits + _tvmbT('js.topup.luong', ' Lượng</div>')
+      + '<div class="pkg-rate">' + moneyRate(rate) + _tvmbT('js.topup.luong-10zo', ' / Lượng')
+      + (save >= 5 ? ('<span class="pkg-save">' + _tvmbT('js.topup.re-hon', 'rẻ hơn') + ' ') + save + '%</span>' : '') + '</div>'
+      + ('<div class="pkg-note">' + _tvmbT('js.topup.khong-het-han', 'Không hết hạn') + '</div>')
       // Giá đã to đùng ngay trên nút → nhắc lại trong nút là thừa. Giữ ngữ cảnh
       // cho trình đọc màn hình bằng aria-label vì 4 nút giờ đọc giống hệt nhau.
       + '<button class="btn-pkg" id="btn-' + esc(p.package_id) + '" onclick="payPackage(\'' + esc(p.package_id) + '\')"'
-      + ' aria-label="Thanh toán ' + btnLabel + ' gói ' + esc(p.label) + ' — ' + money(priceOf(p)) + '">'
+      + _tvmbT('js.topup.aria-label-thanh-toan', ' aria-label="Thanh toán ') + btnLabel + _tvmbT('js.topup.goi', ' gói ') + esc(p.label) + ' — ' + money(priceOf(p)) + '">'
       + ic(btnIcon)
       + '<span>' + btnLabel + '</span></button>'
       + '</div>';
@@ -703,7 +715,7 @@ function renderHeaderRate() {
   const list = pkgList();
   if (!list.length) return;
   const best = Math.min.apply(null, list.map(p => priceOf(p) / p.credits));
-  document.getElementById('hdrRate').textContent = 'chỉ từ ' + moneyRate(best) + ' / Lượng';
+  document.getElementById('hdrRate').textContent = _tvmbT('js.topup.chi-tu', 'chỉ từ ') + moneyRate(best) + _tvmbT('js.topup.luong-10zo', ' / Lượng');
 }
 
 // Bearer cho số dư / tạo đơn — server chỉ phục vụ CHÍNH chủ userId.
@@ -735,10 +747,10 @@ async function loadStatus() {
     slot.innerHTML = '<div class="welcome-card">'
       + '<div class="welcome-ic">' + ic('gift') + '</div>'
       + '<div class="welcome-body">'
-      + '<div class="welcome-title">' + (bonus ? 'Tặng ' + bonus + ' Lượng cho thành viên mới' : 'Tặng Lượng miễn phí cho thành viên mới') + '</div>'
-      + '<div class="welcome-sub">Đủ để dùng thử công cụ luận giải chuyên sâu. Không cần thẻ, không cam kết.</div>'
+      + '<div class="welcome-title">' + (bonus ? _tvmbT('js.topup.tang', 'Tặng ') + bonus + _tvmbT('js.topup.luong-cho-thanh-vien-moi', ' Lượng cho thành viên mới') : _tvmbT('js.topup.tang-luong-mien-phi-cho-thanh', 'Tặng Lượng miễn phí cho thành viên mới')) + '</div>'
+      + ('<div class="welcome-sub">' + _tvmbT('js.topup.du-de-dung-thu-cong-cu', 'Đủ để dùng thử công cụ luận giải chuyên sâu. Không cần thẻ, không cam kết.') + '</div>')
       + '</div>'
-      + '<button class="btn-free" onclick="handleFreeSignup()">Đăng Ký →</button>'
+      + ('<button class="btn-free" onclick="handleFreeSignup()">' + _tvmbT('js.topup.dang-ky', 'Đăng Ký →') + '</button>')
       + '</div>';
     ssDone(slot);
     mount(slot);
@@ -746,8 +758,8 @@ async function loadStatus() {
       // Không hứa cứng "tra cứu miễn phí hoàn toàn" ở đây — giá từng công cụ đọc
       // từ `tool_pricing` và chỉ nêu ở trang công cụ, nên đổi giá là tự đúng.
       document.getElementById('faqWelcome').textContent = bonus
-        + ' Lượng, dùng được cho các công cụ luận giải chuyên sâu và hỏi Thầy. '
-        + 'Mức phí của từng công cụ hiển thị ngay trên trang công cụ đó.';
+        + _tvmbT('js.topup.luong-dung-duoc-cho-cac-cong', ' Lượng, dùng được cho các công cụ luận giải chuyên sâu và hỏi Thầy. ')
+        + _tvmbT('js.topup.muc-phi-cua-tung-cong-cu', 'Mức phí của từng công cụ hiển thị ngay trên trang công cụ đó.');
     }
     return;
   }
@@ -755,10 +767,10 @@ async function loadStatus() {
   try {
     const data = await (await fetch(`/api/payment?action=balance&userId=${encodeURIComponent(userId)}`, { headers: await _authHdr() })).json();
     slot.innerHTML = '<div class="balance-bar"><div>'
-      + '<div class="balance-label">Số dư hiện tại</div>'
-      + '<div class="balance-value">' + (data.balance ?? 0) + ' <span>Lượng</span></div>'
+      + ('<div class="balance-label">' + _tvmbT('js.topup.so-du-hien-tai', 'Số dư hiện tại') + '</div>')
+      + '<div class="balance-value">' + (data.balance ?? 0) + _tvmbT('js.topup.luong-8gog', ' <span>Lượng</span></div>')
       + '</div>'
-      + '<a class="balance-link" href="/app/ho-so">Xem lịch sử ' + ic('chevron-down') + '</a></div>';
+      + ('<a class="balance-link" href="/app/ho-so">' + _tvmbT('js.topup.xem-lich-su', 'Xem lịch sử') + ' ') + ic('chevron-down') + '</a></div>';
     ssDone(slot);
     mount(slot);
   } catch (e) {
@@ -794,7 +806,7 @@ async function renderPendingBanner() {
   const pending = pendingUnlock();
   const host = document.getElementById('pendingBanner');
   if (!pending || !host) return;
-  let label = 'công cụ bạn vừa xem';
+  let label = _tvmbT('js.topup.cong-cu-ban-vua-xem', 'công cụ bạn vừa xem');
   try {
     if (window.ToolPrices) {
       await window.ToolPrices.load();
@@ -804,10 +816,10 @@ async function renderPendingBanner() {
   } catch (e) { /* giữ nhãn chung chung */ }
   const exact = prefillCustomFor(pending.need);
   host.innerHTML = ic('lock', 'ic') +
-    '<span>Bạn đang mở khoá <b>' + esc(label) + '</b> — còn thiếu <b>' + pending.need + ' Lượng</b>. '
+    _tvmbT('js.topup.ban-dang-mo-khoa', '<span>Bạn đang mở khoá <b>') + esc(label) + _tvmbT('js.topup.con-thieu', '</b> — còn thiếu <b>') + pending.need + _tvmbT('js.topup.luong-ictb', ' Lượng</b>. ')
     + (exact
-        ? 'Ô <b>nạp số tiền tự chọn</b> đã điền sẵn <b>' + money(exact) + '</b> — vừa đủ, không phải mua cả gói.'
-        : 'Gói được đánh dấu bên dưới vừa đủ cho lượt này.')
+        ? _tvmbT('js.topup.o-nap-so-tien-tu-chon', 'Ô <b>nạp số tiền tự chọn</b> đã điền sẵn <b>') + money(exact) + _tvmbT('js.topup.vua-du-khong-phai-mua-ca', '</b> — vừa đủ, không phải mua cả gói.')
+        : _tvmbT('js.topup.goi-duoc-danh-dau-ben-duoi', 'Gói được đánh dấu bên dưới vừa đủ cho lượt này.'))
     + '</span>';
   host.className = 'pending-banner';
   host.style.display = 'flex';
@@ -838,10 +850,10 @@ function showPendingModal(pending, label, exact) {
   // banner tĩnh phía trên vẫn còn đó làm đường lùi.
   if (amount == null || !pkgId) return;
 
-  document.getElementById('pmTitle').textContent = 'Bạn đang mở khoá ' + label;
+  document.getElementById('pmTitle').textContent = _tvmbT('js.topup.ban-dang-mo-khoa-v2tc', 'Bạn đang mở khoá ') + label;
   document.getElementById('pmNeed').innerHTML =
-    'Cần thêm <b>' + pending.need + ' Lượng</b> để dùng tiếp — nạp <b>' + money(amount) + '</b> là đủ, '
-    + 'mở ra ngay sau khi thanh toán xong.';
+    _tvmbT('js.topup.can-them', 'Cần thêm <b>') + pending.need + _tvmbT('js.topup.luong-de-dung-tiep-nap', ' Lượng</b> để dùng tiếp — nạp <b>') + money(amount) + _tvmbT('js.topup.la-du', '</b> là đủ, ')
+    + _tvmbT('js.topup.mo-ra-ngay-sau-khi-thanh', 'mở ra ngay sau khi thanh toán xong.');
   // Số tiền ở trên tính theo tiền của phương thức ĐANG chọn — bấm nút nào thì
   // giữ đúng tiền đó: nút PayPal/Thẻ chỉ đổi giữa hai cách trả USD; nút QR chỉ
   // hiện khi đang ở rail VNĐ. Đổi chéo tiền tệ ở đây là trả sai số vừa hứa.
@@ -903,21 +915,21 @@ function prefillCustomFor(need) {
 function checkCancelledPayment() {
   const p = new URLSearchParams(window.location.search);
   if (p.get('payment') === 'cancelled') {
-    showAlert('error', 'Thanh toán đã bị hủy. Bạn có thể thử lại bất kỳ lúc nào.');
-    window.history.replaceState({}, '', '/topup.html');
+    showAlert('error', _tvmbT('js.topup.thanh-toan-da-bi-huy-ban', 'Thanh toán đã bị hủy. Bạn có thể thử lại bất kỳ lúc nào.'));
+    window.history.replaceState({}, '', _tvmbHref('/topup.html'));
     return;
   }
   // Đường dự phòng khi ảnh QR lỗi mở thẳng trang payOS — payOS trả khách về
   // ĐÂY (qua `returnUrl` server khai) thay vì đường polling trong modal. Xác
   // nhận lại rồi resume giống hệt đường QR, không phải khách tự bấm lại.
   if (p.get('payment') === 'success' && p.get('method') === 'bank' && p.get('orderCode')) {
-    window.history.replaceState({}, '', '/topup.html');
+    window.history.replaceState({}, '', _tvmbHref('/topup.html'));
     fetch('/api/payment?action=check-bank&orderCode=' + encodeURIComponent(p.get('orderCode')))
       .then(r => r.json())
       .then(d => {
         if (!d.paid) return;
         loadStatus();
-        showAlert('success', `Nạp thành công ${d.credits} Lượng!`);
+        showAlert('success', _tvmbT('js.topup.nap-thanh-cong-luong', 'Nạp thành công {credits} Lượng!', { credits: d.credits }));
         // Purchase KHÔNG bắn ở đây nữa — server bắn thay tại bank-webhook, đúng
         // MỘT lần, ngay khi cộng tiền thật. Bắn thêm ở đây là tính trùng doanh
         // thu (đo thật: 2 event cho 1 giao dịch trước khi gỡ dòng này).
@@ -930,13 +942,13 @@ function checkCancelledPayment() {
   // đơn (IPN mới là cửa cộng Lượng thật), chỉ đọc `check-momo` để hiện đúng
   // trạng thái ngay khi khách quay lại, cùng khuôn với đường payOS ở trên.
   if (p.get('payment') === 'success' && p.get('method') === 'momo' && p.get('orderId')) {
-    window.history.replaceState({}, '', '/topup.html');
+    window.history.replaceState({}, '', _tvmbHref('/topup.html'));
     fetch('/api/payment?action=check-momo&orderId=' + encodeURIComponent(p.get('orderId')))
       .then(r => r.json())
       .then(d => {
         if (!d.paid) return;
         loadStatus();
-        showAlert('success', `Nạp thành công ${d.credits} Lượng!`);
+        showAlert('success', _tvmbT('js.topup.nap-thanh-cong-luong', 'Nạp thành công {credits} Lượng!', { credits: d.credits }));
         resumeToTool();
       })
       .catch(() => {});
@@ -949,7 +961,7 @@ async function loadToolPricing() {
   try {
     if (window.ToolPrices) await window.ToolPrices.load();
     const tools = window.ToolPrices ? window.ToolPrices.rows() : [];
-    if (!tools?.length) { box.innerHTML = '<div class="state-msg">Không có dữ liệu.</div>'; return; }
+    if (!tools?.length) { box.innerHTML = ('<div class="state-msg">' + _tvmbT('js.topup.khong-co-du-lieu', 'Không có dữ liệu.') + '</div>'); return; }
 
     const groups = {};
     tools.forEach(t => { (groups[t.category] = groups[t.category] || []).push(t); });
@@ -993,33 +1005,33 @@ async function loadToolPricing() {
           + '<div><div class="cost-name">' + esc(t.label) + '</div>'
           + (t.description ? '<div class="cost-desc">' + esc(t.description) + '</div>' : '')
           + '</div></div>'
-          + '<div class="cost-right"><div class="cost-credits">' + Number(t.credits) + ' Lượng</div>'
+          + '<div class="cost-right"><div class="cost-credits">' + Number(t.credits) + _tvmbT('js.topup.luong', ' Lượng</div>')
           + (moneyLbl ? '<div class="cost-vnd">' + moneyLbl + '</div>' : '') + '</div>'
           + '</div>';
       });
     });
 
-    box.innerHTML = html || '<div class="state-msg">Không có dữ liệu.</div>';
+    box.innerHTML = html || ('<div class="state-msg">' + _tvmbT('js.topup.khong-co-du-lieu', 'Không có dữ liệu.') + '</div>');
     mount(box);
 
     document.getElementById('costsSubtitle').textContent = perCredit
-      ? 'Cập nhật tự động khi có công cụ mới. Số tiền quy đổi theo gói ' + State.rateLabel
-        + ' ($' + Number(perCredit).toFixed(3) + '/Lượng) — gói lớn hơn thì rẻ hơn nữa.'
-      : 'Cập nhật tự động khi có công cụ mới.';
+      ? _tvmbT('js.topup.cap-nhat-tu-dong-khi-co', 'Cập nhật tự động khi có công cụ mới. Số tiền quy đổi theo gói ') + State.rateLabel
+        + ' ($' + Number(perCredit).toFixed(3) + _tvmbT('js.topup.luong-goi-lon-hon-thi-re', '/Lượng) — gói lớn hơn thì rẻ hơn nữa.')
+      : _tvmbT('js.topup.cap-nhat-tu-dong-khi-co-u8hf', 'Cập nhật tự động khi có công cụ mới.');
 
     if (freeCount > 0) {
       document.getElementById('freeNoteText').innerHTML =
         // `freeCount` đọc từ `tool_pricing` nên số tự đúng. Danh sách ví dụ thì
         // chép tay ⇒ chỉ nêu tool CHẮC CHẮN còn bật (bản cũ nhắc "tứ trụ" — tool
         // đó đã `enabled=false` từ đợt dọn tool trùng lặp).
-        '<strong>' + freeCount + ' công cụ tra cứu cổ pháp không tốn Lượng</strong> (an sao, nạp âm, hoàng đạo, kinh dịch, tarot…). '
-        + 'Chỉ các công cụ luận giải chuyên sâu mới tính phí.';
+        '<strong>' + freeCount + _tvmbT('js.topup.cong-cu-tra-cuu-co-phap', ' công cụ tra cứu cổ pháp không tốn Lượng</strong> (an sao, nạp âm, hoàng đạo, kinh dịch, tarot…). ')
+        + _tvmbT('js.topup.chi-cac-cong-cu-luan-giai', 'Chỉ các công cụ luận giải chuyên sâu mới tính phí.');
       const fn = document.getElementById('freeNote');
       fn.style.display = 'flex';
       mount(fn);
     }
   } catch (e) {
-    box.innerHTML = '<div class="state-msg">Không tải được. Vui lòng thử lại.</div>';
+    box.innerHTML = ('<div class="state-msg">' + _tvmbT('js.topup.khong-tai-duoc-vui-long-thu', 'Không tải được. Vui lòng thử lại.') + '</div>');
   }
 }
 
@@ -1043,18 +1055,18 @@ function quoteCustom(amount) {
 function onCustomInput() {
   const val = parseFloat(document.getElementById('customInput').value) || 0;
   const q = quoteCustom(val);
-  const minTxt = 'Tối thiểu ' + money(customMin());
+  const minTxt = _tvmbT('js.topup.toi-thieu', 'Tối thiểu ') + money(customMin());
   document.getElementById('customPreview').textContent =
-    !q ? '…' : val >= customMin() ? '= ' + q.credits + ' Lượng' : minTxt;
+    !q ? '…' : val >= customMin() ? '= ' + q.credits + _tvmbT('js.shellui.luong-mo12', ' Lượng') : minTxt;
   const note = document.getElementById('customRateNote');
   if (!note) return;
-  if (!q) { note.textContent = 'Đang tải bảng giá…'; return; }
+  if (!q) { note.textContent = _tvmbT('js.topup.dang-tai-bang-gia-x0u0', 'Đang tải bảng giá…'); return; }
   // Đơn giá nạp lẻ nay BÁM theo bậc gói, nên không còn câu "các gói rẻ hơn" —
   // nói vậy bây giờ là sai. Hiện đúng bậc mà số tiền này đang hưởng.
   note.textContent = val >= customMin()
-    ? minTxt + ' · ' + moneyRate(q.perCredit) + ' / Lượng'
-      + (q.tierLabel ? ' (bậc ' + q.tierLabel + ')' : '')
-    : minTxt + ' · đơn giá theo bậc gói, càng nạp nhiều càng rẻ';
+    ? minTxt + ' · ' + moneyRate(q.perCredit) + _tvmbT('js.topup.luong-10zo', ' / Lượng')
+      + (q.tierLabel ? _tvmbT('js.topup.bac', ' (bậc ') + q.tierLabel + ')' : '')
+    : minTxt + _tvmbT('js.topup.don-gia-theo-bac-goi-cang', ' · đơn giá theo bậc gói, càng nạp nhiều càng rẻ');
 }
 
 /** Đọc ô số tiền tự chọn, kiểm theo ĐÚNG ngưỡng mà server đang chốt (theo tiền
@@ -1063,7 +1075,7 @@ function readCustom() {
   const raw = parseFloat(document.getElementById('customInput').value) || 0;
   const v = isVnd() ? raw : Math.round(raw * 100) / 100;
   if (v < customMin() || v > customMax()) {
-    showAlert('error', 'Vui lòng nhập số tiền từ ' + money(customMin()) + ' đến ' + money(customMax()) + '.');
+    showAlert('error', _tvmbT('js.topup.vui-long-nhap-so-tien-tu', 'Vui lòng nhập số tiền từ ') + money(customMin()) + _tvmbT('js.topup.den', ' đến ') + money(customMax()) + '.');
     return null;
   }
   return v;
@@ -1087,7 +1099,7 @@ function busyBtn(packageId, busy) {
   if (!btn) return;
   btn.disabled = busy;
   const span = btn.querySelector('span:not([data-icon])');
-  if (span) span.textContent = busy ? 'Đang kết nối…' : btnLabelFor();
+  if (span) span.textContent = busy ? _tvmbT('js.topup.dang-ket-noi', 'Đang kết nối…') : btnLabelFor();
 }
 
 async function initiateTopup(packageId) {
@@ -1113,10 +1125,10 @@ async function initiateTopup(packageId) {
       body: JSON.stringify(body),
     })).json();
     if (data.approvalUrl) { window.location.href = data.approvalUrl; return; }
-    throw new Error(data.error || 'Không tạo được đơn PayPal');
+    throw new Error(data.error || _tvmbT('js.topup.khong-tao-duoc-don-paypal', 'Không tạo được đơn PayPal'));
   } catch (e) {
     busyBtn(packageId, false);
-    showAlert('error', 'Lỗi kết nối PayPal: ' + (e.message || 'Vui lòng thử lại.'));
+    showAlert('error', _tvmbT('js.topup.loi-ket-noi-paypal', 'Lỗi kết nối PayPal: ') + (e.message || _tvmbT('js.paywall.vui-long-thu-lai', 'Vui lòng thử lại.')));
   }
 }
 
@@ -1142,10 +1154,10 @@ async function initiateMomoTopup(packageId) {
       body: JSON.stringify(body),
     })).json();
     if (data.payUrl) { window.location.href = data.payUrl; return; }
-    throw new Error(data.error || 'Không tạo được đơn MoMo');
+    throw new Error(data.error || _tvmbT('js.paywall.khong-tao-duoc-don-momo', 'Không tạo được đơn MoMo'));
   } catch (e) {
     busyBtn(packageId, false);
-    showAlert('error', 'Lỗi kết nối MoMo: ' + (e.message || 'Vui lòng thử lại.'));
+    showAlert('error', _tvmbT('js.topup.loi-ket-noi-momo', 'Lỗi kết nối MoMo: ') + (e.message || _tvmbT('js.paywall.vui-long-thu-lai', 'Vui lòng thử lại.')));
   }
 }
 
@@ -1186,8 +1198,8 @@ async function redeemPromo() {
   const el = document.getElementById('promoInput');
   const btn = document.getElementById('btnPromo');
   const code = (el?.value || '').toUpperCase().trim();
-  if (!code) { promoMsg('Bạn chưa nhập mã.', false); return; }
-  if (!window.Promo) { promoMsg('Đang tải, thử lại sau một giây.', false); return; }
+  if (!code) { promoMsg(_tvmbT('js.topup.ban-chua-nhap-ma', 'Bạn chưa nhập mã.'), false); return; }
+  if (!window.Promo) { promoMsg(_tvmbT('js.topup.dang-tai-thu-lai-sau-mot', 'Đang tải, thử lại sau một giây.'), false); return; }
 
   btn.disabled = true;
   const span = btn.querySelector('span');
@@ -1195,7 +1207,7 @@ async function redeemPromo() {
   if (span) span.textContent = '...';
 
   const d = await window.Promo.redeem(code);
-  promoMsg(d?.message || 'Không đổi được mã.', !!d?.success);
+  promoMsg(d?.message || _tvmbT('js.topup.khong-doi-duoc-ma', 'Không đổi được mã.'), !!d?.success);
   if (d?.success) {
     el.value = '';
     // Cập nhật lại số dư đang hiện trên chính trang này — đổi mã xong mà con số
@@ -1229,8 +1241,8 @@ async function loadReferralInfo() {
 
     if (d.rewardPerInvite) {
       document.getElementById('refPitchTopup').innerHTML =
-        'Mỗi người đăng ký qua link của bạn: <strong>+' + Number(d.rewardPerInvite) + ' Lượng</strong> ngay khi họ tạo tài khoản'
-        + (d.cap ? ' (tối đa ' + Number(d.cap) + ' lượt mời được thưởng / 30 ngày)' : '') + '.';
+        _tvmbT('js.topup.moi-nguoi-dang-ky-qua-link', 'Mỗi người đăng ký qua link của bạn: <strong>+') + Number(d.rewardPerInvite) + _tvmbT('js.topup.luong-ngay-khi-ho-tao-tai', ' Lượng</strong> ngay khi họ tạo tài khoản')
+        + (d.cap ? _tvmbT('js.topup.toi-da', ' (tối đa ') + Number(d.cap) + _tvmbT('js.topup.luot-moi-duoc-thuong-30-ngay', ' lượt mời được thưởng / 30 ngày)') : '') + '.';
     }
     document.getElementById('refTotal').textContent     = Number(d.invited || 0);
     document.getElementById('refQualified').textContent = Number(d.rewarded || 0);
@@ -1243,7 +1255,7 @@ function flashCopied(btn) {
   const span = btn.querySelector('span:not([data-icon])');
   if (!span) return;
   const old = span.textContent;
-  span.textContent = 'Đã sao chép';
+  span.textContent = _tvmbT('js.topup.da-sao-chep', 'Đã sao chép');
   setTimeout(() => { span.textContent = old; }, 1500);
 }
 function copyRefCode() {
@@ -1258,7 +1270,7 @@ function copyRefLink() {
 function shareRef(channel) {
   const el = document.getElementById('refLink');
   const link = el.dataset.url || el.textContent;
-  const msg = `Mình đang dùng Tử Vi Minh Bảo — luận giải lá số theo cổ pháp. Đăng ký qua link này để cùng nhận Lượng: ${link}`;
+  const msg = _tvmbT('js.topup.chia-se-moi-ban', 'Mình đang dùng Tử Vi Minh Bảo — luận giải lá số theo cổ pháp. Đăng ký qua link này để cùng nhận Lượng: {link}', { link: link });
   const urls = {
     zalo:      `https://zalo.me/share/url?url=${encodeURIComponent(link)}`,
     messenger: `fb-messenger://share?link=${encodeURIComponent(link)}`,
@@ -1292,33 +1304,33 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
 <!-- ── Ý định mở khoá (khách hết Lượng ngay lúc bấm mở, quăng sang đây) ──── -->
 <div id="pendingModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
   <div class="modal">
-    <button class="modal-close" onclick="closePendingModal()" aria-label="Đóng"><span data-icon="x"></span></button>
-    <div class="modal-title" id="pmTitle">Bạn đang mở khoá…</div>
+    <button data-i18n-attr="aria-label:topup.dong" class="modal-close" onclick="closePendingModal()" aria-label="Đóng"><span data-icon="x"></span></button>
+    <div data-i18n="topup.ban-dang-mo-khoa" class="modal-title" id="pmTitle">Bạn đang mở khoá…</div>
     <div class="pm-need" id="pmNeed"></div>
     <div class="pm-actions">
-      <button type="button" class="btn-pkg" id="pmBank" hidden><span data-icon="landmark"></span> Chuyển khoản QR</button>
-      <button type="button" class="btn-pkg" id="pmPaypal"><span data-icon="credit-card"></span> PayPal / Thẻ</button>
+      <button type="button" class="btn-pkg" id="pmBank" hidden><span data-icon="landmark"></span> <span data-i18n="topup.chuyen-khoan-qr">Chuyển khoản QR</span></button>
+      <button type="button" class="btn-pkg" id="pmPaypal"><span data-icon="credit-card"></span> <span data-i18n="topup.paypal-the">PayPal / Thẻ</span></button>
     </div>
-    <button type="button" class="pm-skip" onclick="closePendingModal()">Để sau, tự chọn gói bên dưới</button>
+    <button data-i18n="topup.de-sau-tu-chon-goi-ben" type="button" class="pm-skip" onclick="closePendingModal()">Để sau, tự chọn gói bên dưới</button>
   </div>
 </div>
 
 <!-- ── payOS Bank Transfer Modal ─────────────────────────── -->
 <div id="bankModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="bmTitle">
   <div class="modal">
-    <button class="modal-close" onclick="closeBankModal()" aria-label="Đóng"><span data-icon="x"></span></button>
-    <div class="modal-title" id="bmTitle">Chuyển Khoản Ngân Hàng</div>
+    <button data-i18n-attr="aria-label:topup.dong" class="modal-close" onclick="closeBankModal()" aria-label="Đóng"><span data-icon="x"></span></button>
+    <div data-i18n="topup.chuyen-khoan-ngan-hang" class="modal-title" id="bmTitle">Chuyển Khoản Ngân Hàng</div>
     <div class="bm-credits" id="bm-credits"></div>
     <div class="bm-amount" id="bm-amount"></div>
     <div class="bm-qr" id="bm-qr"></div>
     <div id="bm-apps" hidden></div>
     <div class="bm-info" id="bm-info"></div>
     <div class="bm-hint">
-      Mở app ngân hàng → Quét QR hoặc chuyển khoản thủ công<br>
-      <span class="bm-warn"><span data-icon="alert-triangle"></span> Chuyển đủ số tiền vào đúng số TK ở trên — nội dung CK ghi gì cũng được, hệ thống tự nhận theo số TK</span>
+      <span data-i18n="topup.mo-app-ngan-hang-quet-qr">Mở app ngân hàng → Quét QR hoặc chuyển khoản thủ công</span><br>
+      <span class="bm-warn"><span data-icon="alert-triangle"></span> <span data-i18n="topup.chuyen-du-so-tien-vao-dung">Chuyển đủ số tiền vào đúng số TK ở trên — nội dung CK ghi gì cũng được, hệ thống tự nhận theo số TK</span></span>
     </div>
     <div class="bm-status" id="bm-status"></div>
-    <button class="btn-modal" onclick="checkBankPoll(true)">Tôi đã chuyển khoản</button>
+    <button data-i18n="topup.toi-da-chuyen-khoan" class="btn-modal" onclick="checkBankPoll(true)">Tôi đã chuyển khoản</button>
   </div>
 </div>
 
@@ -1365,13 +1377,13 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
 
     _oc = null; _cnt = 0;
     _lastFocus = document.activeElement;
-    document.getElementById('bm-qr').textContent = 'Đang tải QR…';
+    document.getElementById('bm-qr').textContent = _tvmbT('js.paywall.dang-tai-qr', 'Đang tải QR…');
     document.getElementById('bm-info').innerHTML = '';
     document.getElementById('bm-amount').textContent = '';
     document.getElementById('bm-credits').textContent = '';
     document.getElementById('bm-apps').hidden = true;
     document.getElementById('bankModal').classList.add('show');
-    status('rotate-cw', 'Đang tạo mã QR…', true);
+    status('rotate-cw', _tvmbT('js.paywall.dang-tao-ma-qr', 'Đang tạo mã QR…'), true);
 
     try {
       const body = { packageId, userId };
@@ -1380,10 +1392,10 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
         method: 'POST', headers: { 'Content-Type': 'application/json', ...(await _authHdr()) }, body: JSON.stringify(body),
       });
       const d = await r.json();
-      if (!r.ok) throw new Error(d.error || 'Lỗi tạo đơn');
+      if (!r.ok) throw new Error(d.error || _tvmbT('js.paywall.loi-tao-don', 'Lỗi tạo đơn'));
       _oc = d.orderCode;
 
-      document.getElementById('bm-credits').textContent = d.credits + ' Lượng';
+      document.getElementById('bm-credits').textContent = d.credits + _tvmbT('js.shellui.luong-mo12', ' Lượng');
       document.getElementById('bm-amount').textContent =
         new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(d.amountVND);
 
@@ -1400,10 +1412,10 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
       const qrBox = document.getElementById('bm-qr');
       qrBox.textContent = '';
       const img = new Image();
-      img.alt = 'Mã QR chuyển khoản';
+      img.alt = _tvmbT('js.paywall.ma-qr-chuyen-khoan', 'Mã QR chuyển khoản');
       img.onerror = function () {
         qrBox.innerHTML = '<a href="' + esc(d.checkoutUrl || '#') + '" target="_blank" rel="noopener" '
-          + 'style="font-size:.8rem;color:var(--blue)">Mở trang payOS →</a>';
+          + ('style="font-size:.8rem;color:var(--blue)">' + _tvmbT('js.topup.mo-trang-payos', 'Mở trang payOS →') + '</a>');
       };
       img.src = qrUrl;
       qrBox.appendChild(img);
@@ -1414,20 +1426,20 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
         // bản cũ ghi thẳng "MB Bank" nên đổi tài khoản nhận sang ngân hàng khác
         // là dòng này nói dối trong khi QR + số TK vẫn đúng — sai im lặng.
         // BIN lạ ⇒ in thẳng mã BIN, KHÔNG đoán tên.
-        '<b>Ngân hàng:</b> ' + esc(d.bankName || (d.bin ? 'BIN ' + d.bin : '—')) + '<br>'
-        + '<b>Số TK:</b> ' + esc(d.accountNumber || '—') + '<br>'
-        + '<b>Chủ TK:</b> ' + esc(d.accountName || '—') + '<br>'
-        + '<b>Nội dung CK:</b> <span style="font-weight:700;color:var(--navy)">' + esc(memo) + '</span>';
+        _tvmbT('js.paywall.ngan-hang', '<b>Ngân hàng:</b> ') + esc(d.bankName || (d.bin ? 'BIN ' + d.bin : '—')) + '<br>'
+        + _tvmbT('js.paywall.so-tk', '<b>Số TK:</b> ') + esc(d.accountNumber || '—') + '<br>'
+        + _tvmbT('js.paywall.chu-tk', '<b>Chủ TK:</b> ') + esc(d.accountName || '—') + '<br>'
+        + (_tvmbT('js.paywall.noi-dung-ck', '<b>Nội dung CK:</b>') + ' <span style="font-weight:700;color:var(--navy)">') + esc(memo) + '</span>';
 
-      status('clock', 'Đang chờ thanh toán…');
+      status('clock', _tvmbT('js.paywall.dang-cho-thanh-toan', 'Đang chờ thanh toán…'));
       clearInterval(_timer);
       _timer = setInterval(() => {
         _cnt++;
-        if (_cnt > 300) { clearInterval(_timer); status('clock', 'Hết giờ chờ.'); return; }
+        if (_cnt > 300) { clearInterval(_timer); status('clock', _tvmbT('js.topup.het-gio-cho', 'Hết giờ chờ.')); return; }
         window.checkBankPoll(false);
       }, 3000);
     } catch (e) {
-      status('x-circle', e.message || 'Lỗi tạo đơn');
+      status('x-circle', e.message || _tvmbT('js.paywall.loi-tao-don', 'Lỗi tạo đơn'));
     }
   };
 
@@ -1449,14 +1461,14 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
         if (!_oc) return;
         _oc = null;
         clearInterval(_timer);
-        status('check-circle', 'Thanh toán thành công! Đang cập nhật…');
+        status('check-circle', _tvmbT('js.topup.thanh-toan-thanh-cong-dang-cap', 'Thanh toán thành công! Đang cập nhật…'));
         // Purchase KHÔNG bắn ở đây nữa — cùng lý do với checkCancelledPayment()
         // phía trên: server (bank-webhook → fireServerPurchase) đã bắn đúng
         // MỘT lần rồi, đo thật đã thấy tính trùng khi để cả hai cùng chạy.
         setTimeout(() => {
           closeBankModal();
           loadStatus();
-          showAlert('success', `Nạp thành công ${d.credits} Lượng!`);
+          showAlert('success', _tvmbT('js.topup.nap-thanh-cong-luong', 'Nạp thành công {credits} Lượng!', { credits: d.credits }));
           const resumed = resumeToTool(400);
           // Không có tool đang chờ resume (khách ghé thẳng trang này) → còn ở
           // lại đủ lâu để thấy modal. Có resume thì trang điều hướng đi ngay,
@@ -1466,9 +1478,9 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
           }
         }, 1500);
       } else if (manual) {
-        status('clock', 'Chưa ghi nhận. Chờ thêm vài giây…');
+        status('clock', _tvmbT('js.paywall.chua-ghi-nhan-cho-them-vai', 'Chưa ghi nhận. Chờ thêm vài giây…'));
       }
-    } catch (e) { if (manual) status('x-circle', 'Lỗi kiểm tra. Thử lại.'); }
+    } catch (e) { if (manual) status('x-circle', _tvmbT('js.paywall.loi-kiem-tra-thu-lai', 'Lỗi kiểm tra. Thử lại.')); }
   };
 
   window.closeBankModal = function() {
