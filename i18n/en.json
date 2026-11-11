@@ -1023,10 +1023,6 @@
   "t": "you",
   "h": "e8f04322"
  },
- "js.battu.ban-hop": {
-  "t": "(half harmony)",
-  "h": "f98545b2"
- },
  "js.battu.ban-muon-thay-dao-sau-dieu": {
   "t": "What would you like the Master to dig into first?",
   "h": "08cdf1d4"
@@ -1047,50 +1043,6 @@
   "t": "Structure:",
   "h": "441c7a62"
  },
- "js.battu.cach-cuc-srtz": {
-  "t": "structure",
-  "h": "403feb82"
- },
- "js.battu.can-hop": {
-  "t": "Stem combinations:",
-  "h": "65f9f44d"
- },
- "js.battu.can-hop-9k68": {
-  "t": "Stem combinations:",
-  "h": "160866e8"
- },
- "js.battu.can-hop-voi": {
-  "t": "Stem combines with:",
-  "h": "b121905c"
- },
- "js.battu.can-khac": {
-  "t": "Stem conflicts:",
-  "h": "7dcdab59"
- },
- "js.battu.can-khac-fvel": {
-  "t": "Stem conflicts:",
-  "h": "bacb0b55"
- },
- "js.battu.can-khac-voi": {
-  "t": "Stem conflicts with:",
-  "h": "e1f03bd7"
- },
- "js.battu.chi-hanh": {
-  "t": "(branch) | Element:",
-  "h": "becf489e"
- },
- "js.battu.chi-hanh-can": {
-  "t": "(branch) | Stem element:",
-  "h": "eab79827"
- },
- "js.battu.chi-tiet": {
-  "t": "| Details:",
-  "h": "282d949c"
- },
- "js.battu.co": {
-  "t": "YES",
-  "h": "01365add"
- },
  "js.battu.con-muon-luan-van-nam-nao": {
   "t": "Which year would you like read?",
   "h": "22eeb4d6"
@@ -1099,37 +1051,13 @@
   "t": "✓ Four Pillars cast",
   "h": "845d9f25"
  },
- "js.battu.da-dieu-chinh-theo-lap-xuan": {
-  "t": "(adjusted for Start of Spring)",
-  "h": "c35ba930"
- },
  "js.battu.da-san-sang-hoi-toi-ve": {
   "t": "** is ready. Ask me about the Day Master, useful god, structure or luck cycles.",
   "h": "7bde27db"
  },
- "js.battu.dac-dia": {
-  "t": "Well grounded:",
-  "h": "cb4763b7"
- },
- "js.battu.dac-lenh": {
-  "t": "In season:",
-  "h": "9b80fecd"
- },
- "js.battu.dac-the": {
-  "t": "Well supported:",
-  "h": "fd65f5da"
- },
  "js.battu.dai-van-hien-tai": {
   "t": "Current luck cycle:",
   "h": "4f329997"
- },
- "js.battu.dai-van-ke-tiep": {
-  "t": "Next luck cycle:",
-  "h": "eb9b4e7d"
- },
- "js.battu.dai-van-thuan-nghich-hanh-van": {
-  "t": "luck cycles forward reverse direction",
-  "h": "eccf4789"
  },
  "js.battu.dang-an-tu-tru": {
   "t": "Casting your Four Pillars…",
@@ -1143,14 +1071,6 @@
   "t": "Reading part",
   "h": "5b228988"
  },
- "js.battu.dang-xem": {
-  "t": "← VIEWING",
-  "h": "3fe33194"
- },
- "js.battu.dieu-hau": {
-  "t": "Climate adjustment:",
-  "h": "0bb1f757"
- },
  "js.battu.dieu-quan-trong-nhat": {
   "t": "most important thing</div>",
   "h": "f749707d"
@@ -1159,69 +1079,17 @@
   "t": "Useful God",
   "h": "22c1c170"
  },
- "js.battu.dung-than-3zjc": {
-  "t": "useful god",
-  "h": "4ae3b8a1"
- },
- "js.battu.dv": {
-  "t": "LC",
-  "h": "b802ae59"
- },
  "js.battu.gio": {
   "t": "· hour",
   "h": "9d8fa6cf"
- },
- "js.battu.gio-chi": {
-  "t": "| Hour branch:",
-  "h": "fe981190"
- },
- "js.battu.hai-voi": {
-  "t": "Harms with:",
-  "h": "5fff7ff6"
- },
- "js.battu.hanh-chi": {
-  "t": "| Branch element:",
-  "h": "d05f052b"
- },
- "js.battu.hi-than": {
-  "t": "favorable god",
-  "h": "bbe8d24f"
- },
- "js.battu.hi-than-2q7d": {
-  "t": "| Favorable God:",
-  "h": "d92adc2c"
- },
- "js.battu.hinh-voi": {
-  "t": "Penalty with:",
-  "h": "76437028"
  },
  "js.battu.hoi-thay": {
   "t": "✦ Ask the Master: \"",
   "h": "739874cd"
  },
- "js.battu.hop-voi": {
-  "t": "Combines with:",
-  "h": "3c73a8b6"
- },
- "js.battu.huong-van": {
-  "t": "Luck direction:",
-  "h": "bd6f362c"
- },
- "js.battu.khoi-van": {
-  "t": "| Luck starts:",
-  "h": "dd584737"
- },
- "js.battu.khong": {
-  "t": "NO",
-  "h": "fd412f45"
- },
  "js.battu.lap-bat-tu": {
   "t": "Cast BaZi →",
   "h": "6ba95ed1"
- },
- "js.battu.lenh-score": {
-  "t": "(month command score=",
-  "h": "2f8960d4"
  },
  "js.battu.loi-khi-luan-giai-phan": {
   "t": "Error while reading part",
@@ -1239,38 +1107,6 @@
   "t": "Detailed reading of part:",
   "h": "edb82980"
  },
- "js.battu.luc-hai": {
-  "t": "Six Harms:",
-  "h": "cf04722b"
- },
- "js.battu.luc-hop": {
-  "t": "Six Harmonies:",
-  "h": "92cd161c"
- },
- "js.battu.luc-xung": {
-  "t": "Six Clashes:",
-  "h": "d4a0de9a"
- },
- "js.battu.luu-nien-nam": {
-  "t": "Annual pillar",
-  "h": "09b45b14"
- },
- "js.battu.luu-nien-thai-tue-hop-xung": {
-  "t": "annual Tai Sui combinations and clashes with the Four Pillars",
-  "h": "67d90fc0"
- },
- "js.battu.ly-do": {
-  "t": "Reason:",
-  "h": "2ad4ee1b"
- },
- "js.battu.ly-do-trigger": {
-  "t": "Trigger reason:",
-  "h": "1a50947a"
- },
- "js.battu.mo-ta": {
-  "t": "Description:",
-  "h": "ae0c87e0"
- },
  "js.battu.nam": {
   "t": "· year",
   "h": "2deeb120"
@@ -1283,149 +1119,29 @@
   "t": "Birth year",
   "h": "75a6785f"
  },
- "js.battu.nam-sinh-can-chi": {
-  "t": "Birth year (stem-branch):",
-  "h": "7bec6935"
- },
- "js.battu.nghich": {
-  "t": "REVERSE",
-  "h": "4fdaaea4"
- },
- "js.battu.ngu-hanh-suc-khoe-co-quan": {
-  "t": "five elements health organs spleen stomach liver heart lungs kidneys penalties clashes",
-  "h": "ec228976"
- },
  "js.battu.ngu-hanh-thieu": {
   "t": "Missing element",
   "h": "64dfabdc"
- },
- "js.battu.nguon": {
-  "t": "Source:",
-  "h": "840ac211"
- },
- "js.battu.nguyet-lenh-thau-can-tong-quan": {
-  "t": "month command revealed stem BaZi overview",
-  "h": "b3b8b5e4"
  },
  "js.battu.nhat-can": {
   "t": "· Day Master:",
   "h": "bf2114dc"
  },
- "js.battu.nhat-can-1v9w": {
-  "t": "Day Master",
-  "h": "c569050e"
- },
- "js.battu.nhat-can-cung-phu-the-nhat": {
-  "t": "Day Master Spouse Palace Day Branch love marriage",
-  "h": "6a87256d"
- },
  "js.battu.nhat-can-uv6w": {
   "t": "Day Master",
   "h": "d395f25c"
- },
- "js.battu.nhat-can-xy2g": {
-  "t": "Day Master:",
-  "h": "6eca16b3"
  },
  "js.battu.noi-len-dieu-gi": {
   "t": "— what does it say?",
   "h": "04cb815a"
  },
- "js.battu.o": {
-  "t": "| in:",
-  "h": "58147bf9"
- },
- "js.battu.o-51i6": {
-  "t": ": in",
-  "h": "1e3bd79c"
- },
- "js.battu.phan-bo-ngu-hanh": {
-  "t": "Element distribution:",
-  "h": "7ab7f964"
- },
- "js.battu.sao-phoi-ngau-dao-hoa-hong": {
-  "t": "spouse star Peach Blossom Hong Yan",
-  "h": "15061814"
- },
- "js.battu.suc-khoe": {
-  "t": "Health",
-  "h": "77e26a9a"
- },
- "js.battu.tam-hinh": {
-  "t": "Three Penalties",
-  "h": "fff8f885"
- },
- "js.battu.tam-hop": {
-  "t": "Three Harmonies:",
-  "h": "295bbb43"
- },
- "js.battu.tam-hop-luc-hop-luc-xung": {
-  "t": "three harmonies six harmonies six clashes three penalties stem combinations",
-  "h": "f962f477"
- },
- "js.battu.tang": {
-  "t": "| Hidden:",
-  "h": "53d98351"
- },
- "js.battu.tang-2j0k": {
-  "t": "| hidden:",
-  "h": "10ed9b12"
- },
- "js.battu.than-sat-thien-at-quy-nhan": {
-  "t": "spirit stars Heavenly Noble Wen Chang Peach Blossom Travelling Horse Lonely Star Widow Star Void Goat Blade",
-  "h": "55d1625a"
- },
- "js.battu.thap-than": {
-  "t": "Ten Gods:",
-  "h": "4271216b"
- },
- "js.battu.thap-than-chinh-quan-that-sat": {
-  "t": "Ten Gods Direct Officer Seven Killings Direct Wealth Indirect Wealth Eating God Hurting Officer Direct Resource Indirect Resource Friend Rob Wealth",
-  "h": "d9fc97a1"
- },
- "js.battu.thap-than-urok": {
-  "t": "Ten Gods:",
-  "h": "6fe640ef"
- },
- "js.battu.thien-can": {
-  "t": ": heavenly stem=",
-  "h": "60257e87"
- },
- "js.battu.thieu": {
-  "t": "| Lacking:",
-  "h": "483076a6"
- },
  "js.battu.thu-lai": {
   "t": "↻ Try again",
   "h": "30508ad3"
  },
- "js.battu.thuan": {
-  "t": "FORWARD",
-  "h": "1f488026"
- },
- "js.battu.tiet-khac": {
-  "t": "Drain and control:",
-  "h": "82e09d7a"
- },
  "js.battu.toi": {
   "t": "me",
   "h": "0bf5ca9f"
- },
- "js.battu.tron-cuc": {
-  "t": "(complete formation)",
-  "h": "6fe07f20"
- },
- "js.battu.truc": {
-  "t": "Axis",
-  "h": "c1ff9904"
- },
- "js.battu.truc-suc-khoe": {
-  "t": "Health axis:",
-  "h": "b978a29a"
- },
- "js.battu.tu-hinh": {
-  "t": "Self-penalty:",
-  "h": "143c3ae1"
  },
  "js.battu.tu-tru": {
   "t": "Four Pillars",
@@ -1442,26 +1158,6 @@
  "js.battu.tuoi": {
   "t": "years old",
   "h": "2e261bf5"
- },
- "js.battu.tuoi-xem": {
-  "t": "Age read:",
-  "h": "b231c220"
- },
- "js.battu.vuong": {
-  "t": "Prosperous:",
-  "h": "94394e14"
- },
- "js.battu.xung-voi": {
-  "t": "Clashes with:",
-  "h": "2360df0c"
- },
- "js.battu.yeu-to": {
-  "t": "Factors:",
-  "h": "5746ff00"
- },
- "js.battu.yeu-to-su9v": {
-  "t": "Factors:",
-  "h": "09708200"
  },
  "js.chat.chao": {
   "t": "Hello",
@@ -1499,10 +1195,6 @@
   "t": "Life Cycles",
   "h": "c3a39296"
  },
- "js.chutrinh.chu-trinh-cuoc-doi-5vo8": {
-  "t": "Life Cycles —",
-  "h": "b3cfd39a"
- },
  "js.chutrinh.chu-trinh-cuoc-doi-cua": {
   "t": "Life Cycles of",
   "h": "1737f0ac"
@@ -1518,10 +1210,6 @@
  "js.chutrinh.da-san-sang-hoi-toi-de": {
   "t": "** is ready. Ask me to dig deeper into any stage of your life you care about.",
   "h": "90f26e16"
- },
- "js.chutrinh.dai-van-thien-thoi-dia-loi": {
-  "t": "luck cycles timing advantage location advantage human harmony scoring",
-  "h": "bf3cd1c0"
  },
  "js.chutrinh.dang-o-chang": {
   "t": "· currently in stage",
@@ -1546,10 +1234,6 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "Annual cycle for",
   "h": "1979c56a"
- },
- "js.chutrinh.van-hien-tai": {
-  "t": "current fortune",
-  "h": "c99b40fc"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "First 3 steps",
@@ -1879,17 +1563,9 @@
   "t": "▾ Hide chart",
   "h": "9f28e998"
  },
- "js.luangiai.anh-chi-em": {
-  "t": "siblings",
-  "h": "cd42ef2d"
- },
  "js.luangiai.bam-thu-lai-o-tung-phan": {
   "t": "— press ↻ Retry on each part, then reload the page.",
   "h": "e7534682"
- },
- "js.luangiai.ban-be-cong-su": {
-  "t": "friends colleagues",
-  "h": "4762668c"
  },
  "js.luangiai.ban-vua-doc-1-phan-dau": {
   "t": "You have just read the first free part. The other 12 parts — one reading per palace by the classical method — are in the full version, with a downloadable PDF or one sent by email.",
@@ -1903,14 +1579,6 @@
   "t": "Turn on notifications to get your daily outlook →",
   "h": "ace576c9"
  },
- "js.luangiai.cach-cuc-y-nghia-chinh-tinh": {
-  "t": "structure meaning of major stars",
-  "h": "d9e41702"
- },
- "js.luangiai.cha-me-y-nghia": {
-  "t": "parents meaning",
-  "h": "9486f5a8"
- },
  "js.luangiai.cham": {
   "t": "</b> scores <b>",
   "h": "13786498"
@@ -1918,10 +1586,6 @@
  "js.luangiai.chi-phi-su-dung": {
   "t": "Cost",
   "h": "c2d36be8"
- },
- "js.luangiai.con-cai": {
-  "t": "children",
-  "h": "6efcb7d1"
  },
  "js.luangiai.con-tiep-mo-khoa-de-doc": {
   "t": "to be continued — unlock to read in full",
@@ -1931,61 +1595,9 @@
   "t": "· Bureau:",
   "h": "6c9661b0"
  },
- "js.luangiai.cuc-3z6y": {
-  "t": "bureau",
-  "h": "5730751b"
- },
- "js.luangiai.cung-dien-trach": {
-  "t": "Property Palace",
-  "h": "b06518b6"
- },
- "js.luangiai.cung-huynh-de": {
-  "t": "Siblings Palace",
-  "h": "8960cfc0"
- },
  "js.luangiai.cung-manh-nhat": {
   "t": "Strongest palace",
   "h": "bb00924b"
- },
- "js.luangiai.cung-menh": {
-  "t": "Life Palace",
-  "h": "aef7f478"
- },
- "js.luangiai.cung-no-boc": {
-  "t": "Friends Palace",
-  "h": "31d0368d"
- },
- "js.luangiai.cung-phu-mau": {
-  "t": "Parents Palace",
-  "h": "bb88d622"
- },
- "js.luangiai.cung-phu-the": {
-  "t": "Spouse Palace",
-  "h": "a9c041a9"
- },
- "js.luangiai.cung-phuc-duc": {
-  "t": "Fortune Palace",
-  "h": "894ae238"
- },
- "js.luangiai.cung-quan-loc": {
-  "t": "Career Palace",
-  "h": "0841bd90"
- },
- "js.luangiai.cung-tai-bach": {
-  "t": "Wealth Palace",
-  "h": "81c7ef2d"
- },
- "js.luangiai.cung-tat-ach": {
-  "t": "Health Palace",
-  "h": "3f01e6f2"
- },
- "js.luangiai.cung-thien-di": {
-  "t": "Travel Palace",
-  "h": "10895437"
- },
- "js.luangiai.cung-tu-tuc": {
-  "t": "Children Palace",
-  "h": "ed77a7c0"
  },
  "js.luangiai.da-lap-la-so": {
   "t": "✓ Chart cast",
@@ -2019,22 +1631,6 @@
   "t": "Reading part 1 /",
   "h": "559646ca"
  },
- "js.luangiai.dien-trach": {
-  "t": "Điền Trạch",
-  "h": "31504029"
- },
- "js.luangiai.hon-nhan-vo-chong": {
-  "t": "marriage spouse",
-  "h": "d1ac4369"
- },
- "js.luangiai.huynh-de": {
-  "t": "Huynh Đệ",
-  "h": "0f700de2"
- },
- "js.luangiai.khi-chat-ban-menh": {
-  "t": "innate temperament",
-  "h": "d0c3df13"
- },
  "js.luangiai.la-so": {
   "t": "chart",
   "h": "c63aa847"
@@ -2063,10 +1659,6 @@
   "t": "✦ In-depth reading —",
   "h": "887e02c9"
  },
- "js.luangiai.luan-giai-la-so": {
-  "t": "Chart Reading —",
-  "h": "27ac57bc"
- },
  "js.luangiai.luan-giai-tu-vi": {
   "t": "Zi Wei Reading",
   "h": "ab5a4607"
@@ -2078,10 +1670,6 @@
  "js.luangiai.luu-la-so-nay-de-xem": {
   "t": "✦ <b>Save this chart</b> to revisit any time — free, nothing to pay.",
   "h": "1d1bbc24"
- },
- "js.luangiai.menh": {
-  "t": "Mệnh",
-  "h": "9ed38a7e"
  },
  "js.luangiai.mien-phi": {
   "t": "(free)…",
@@ -2111,14 +1699,6 @@
   "t": "what should I do?",
   "h": "feedfe50"
  },
- "js.luangiai.nha-dat-bat-dong-san": {
-  "t": "real estate property",
-  "h": "1b5f740c"
- },
- "js.luangiai.no-boc": {
-  "t": "Nô Bộc",
-  "h": "96d0b06c"
- },
  "js.luangiai.noi-vi-sao-no-bung-ra": {
   "t": "explains why, which stage it breaks out in, and how to resolve it.",
   "h": "2b510636"
@@ -2135,54 +1715,6 @@
   "t": "parts failed (part",
   "h": "3d3d4b5b"
  },
- "js.luangiai.phu-mau": {
-  "t": "Phụ Mẫu",
-  "h": "e33a66d0"
- },
- "js.luangiai.phu-the": {
-  "t": "Phu Thê",
-  "h": "a659aea3"
- },
- "js.luangiai.phuc-duc": {
-  "t": "Phúc Đức",
-  "h": "d4fed58e"
- },
- "js.luangiai.phuc-khi-to-tien": {
-  "t": "blessings ancestors",
-  "h": "af5be365"
- },
- "js.luangiai.quan-loc": {
-  "t": "Quan Lộc",
-  "h": "78ba763a"
- },
- "js.luangiai.su-nghiep-cong-danh": {
-  "t": "career reputation",
-  "h": "321d98b1"
- },
- "js.luangiai.suc-khoe-benh-tat": {
-  "t": "health illness",
-  "h": "f4a8d2c2"
- },
- "js.luangiai.tai-bach": {
-  "t": "Tài Bạch",
-  "h": "4cd8551d"
- },
- "js.luangiai.tat-ach": {
-  "t": "Tật Ách",
-  "h": "481302fe"
- },
- "js.luangiai.thien-di": {
-  "t": "Thiên Di",
-  "h": "ada790d6"
- },
- "js.luangiai.tien-bac-tai-chinh": {
-  "t": "money finances",
-  "h": "f74ecefd"
- },
- "js.luangiai.tong-quan-la-so": {
-  "t": "chart overview",
-  "h": "cebea9b5"
- },
  "js.luangiai.trong-12-cung-cua-la-so": {
   "t": "Among the 12 palaces of this chart, <b>the palace of",
   "h": "c69f5267"
@@ -2190,10 +1722,6 @@
  "js.luangiai.trong-tam-vao-viec-gi": {
   "t": "what should I focus on?",
   "h": "dbecde19"
- },
- "js.luangiai.tu-tuc": {
-  "t": "Tử Tức",
-  "h": "4e03787a"
  },
  "js.luangiai.tuoi-cham": {
   "t": "years old) scores",
@@ -2206,10 +1734,6 @@
  "js.luangiai.xem-la-so-day-du": {
   "t": "▸ View full chart",
   "h": "fee98465"
- },
- "js.luangiai.xuat-ngoai-giao-thiep": {
-  "t": "going abroad social life",
-  "h": "633a5a1d"
  },
  "js.nav.brand": {
   "t": "Minh Bao Zi Wei Dou Shu",
@@ -4387,10 +3911,6 @@
   "t": "credits)",
   "h": "c99d25aa"
  },
- "js.vanhannam.luu-nguyet-han-cung": {
-  "t": "monthly flow limit palace",
-  "h": "4d85508c"
- },
  "js.vanhannam.luu-nien-dai-han-cung": {
   "t": "· annual flow major limit palace",
   "h": "7439912c"
@@ -4430,10 +3950,6 @@
  "js.vanhannam.tieu-han-cung": {
   "t": ": annual limit palace",
   "h": "cb20c10d"
- },
- "js.vanhannam.tieu-han-luu-nien": {
-  "t": "annual limit annual flow",
-  "h": "c31adace"
  },
  "js.vanhannam.toi-nen-tap-trung-viec-gi": {
   "t": "what should I focus on?",
@@ -4475,22 +3991,6 @@
   "t": "12-month outlook of",
   "h": "afa6d79f"
  },
- "js.vanhannam.van-han-12-thang-toi": {
-  "t": "Next 12 Months Outlook —",
-  "h": "6db940f6"
- },
- "js.vanhannam.van-han-y-nghia": {
-  "t": "outlook meaning",
-  "h": "525ec9bb"
- },
- "js.vanhannam.van-nam-hien-tai": {
-  "t": "current year outlook",
-  "h": "8de90917"
- },
- "js.vanhannam.van-thang": {
-  "t": "monthly outlook",
-  "h": "3c51533e"
- },
  "js.vanhannam.vo-chinh-dieu-muon-cung-xung": {
   "t": "no major star (borrowing the opposite palace)",
   "h": "40e96109"
@@ -4522,10 +4022,6 @@
  "js.xemtuoi.ca": {
   "t": "Both",
   "h": "7eff84cf"
- },
- "js.xemtuoi.cach-cuc-tu-tuong": {
-  "t": "structure mindset",
-  "h": "3fe956ea"
  },
  "js.xemtuoi.cach-hoa-giai-cu-the-nam": {
   "t": "Specific ways to resolve it are in the in-depth reading.",
@@ -4579,17 +4075,9 @@
   "t": "<br>Life Palace",
   "h": "2c272c79"
  },
- "js.xemtuoi.dai-van": {
-  "t": "luck cycle",
-  "h": "f668f603"
- },
  "js.xemtuoi.dang-dung-anh": {
   "t": "Building image…",
   "h": "7bce9760"
- },
- "js.xemtuoi.dia-chi-nam-sinh-luc-hop": {
-  "t": "birth-year branch six harmonies four clashes zodiac compatibility",
-  "h": "5dc93e88"
  },
  "js.xemtuoi.doi-tac-a": {
   "t": "Partner A",
@@ -4623,10 +4111,6 @@
   "t": "** — compatibility **",
   "h": "b8c22dab"
  },
- "js.xemtuoi.hon-nhan-tuong-hop-vo-chong": {
-  "t": "marriage couple compatibility",
-  "h": "6df85b21"
- },
  "js.xemtuoi.loi-khi-so-tuoi": {
   "t": "Error while comparing:",
   "h": "4f62428a"
@@ -4647,17 +4131,9 @@
   "t": "· Na Yin",
   "h": "c754b896"
  },
- "js.xemtuoi.nap-am-9v70": {
-  "t": "Na Yin",
-  "h": "95ef4caf"
- },
  "js.xemtuoi.nap-am-jzle": {
   "t": "</b> · Na Yin",
   "h": "24107e5c"
- },
- "js.xemtuoi.ngu-hanh-sinh-khac-tuong-hop": {
-  "t": "five elements generating controlling compatibility",
-  "h": "8dc049b1"
  },
  "js.xemtuoi.nguoi-a": {
   "t": "Person A",
@@ -4674,10 +4150,6 @@
  "js.xemtuoi.nguoi-thu-nhat": {
   "t": "First person",
   "h": "955e7151"
- },
- "js.xemtuoi.nhom-thai-tue-chinh-tinh": {
-  "t": "Tai Sui group major stars",
-  "h": "bb8a1abf"
  },
  "js.xemtuoi.q1-a": {
   "t": "Please give the Master the details of {p} ({ph}).",
@@ -4699,14 +4171,6 @@
   "t": "Invite",
   "h": "797be799"
  },
- "js.xemtuoi.tai-chinh-tien-bac": {
-  "t": "finances money",
-  "h": "855ffa94"
- },
- "js.xemtuoi.tinh-cach": {
-  "t": "personality",
-  "h": "632ae625"
- },
  "js.xemtuoi.tong-diem": {
   "t": "Total score",
   "h": "e73bc240"
@@ -4714,14 +4178,6 @@
  "js.xemtuoi.tra-loi-thay-nhap-ngay-sinh": {
   "t": "Reply to the Master in the chat to enter the birth dates of {a} and {b}.",
   "h": "f2617440"
- },
- "js.xemtuoi.tra-loi-thay-o-khung-chat": {
-  "t": "Reply to the Master in the chat to enter the birth date of",
-  "h": "ec2999fc"
- },
- "js.xemtuoi.tuong-hop-la-so": {
-  "t": "chart compatibility",
-  "h": "986b3ae0"
  },
  "js.xemtuoi.tuong-hop-tuoi-tu-vi-minh": {
   "t": "Compatibility — Minh Bao Zi Wei Dou Shu",
@@ -4735,17 +4191,9 @@
   "t": "and",
   "h": "a72340e8"
  },
- "js.xemtuoi.van-han-hien-tai": {
-  "t": "current outlook",
-  "h": "678605b7"
- },
  "js.xemtuoi.vanh": {
   "t": "Ring",
   "h": "f78055f5"
- },
- "js.xemtuoi.vo-chong-hon-nhan": {
-  "t": "couple marriage",
-  "h": "d96e91f1"
  },
  "js.xemtuoi.vo-nguoi-b": {
   "t": "Wife / Person B",

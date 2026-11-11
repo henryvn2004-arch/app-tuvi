@@ -1023,10 +1023,6 @@
   "t": "您",
   "h": "e8f04322"
  },
- "js.battu.ban-hop": {
-  "t": "(半合)",
-  "h": "f98545b2"
- },
  "js.battu.ban-muon-thay-dao-sau-dieu": {
   "t": "您想请老师先深入说明哪个部分？",
   "h": "08cdf1d4"
@@ -1047,50 +1043,6 @@
   "t": "格局：",
   "h": "441c7a62"
  },
- "js.battu.cach-cuc-srtz": {
-  "t": "格局",
-  "h": "403feb82"
- },
- "js.battu.can-hop": {
-  "t": "天干合：",
-  "h": "65f9f44d"
- },
- "js.battu.can-hop-9k68": {
-  "t": "天干合：",
-  "h": "160866e8"
- },
- "js.battu.can-hop-voi": {
-  "t": "天干合：",
-  "h": "b121905c"
- },
- "js.battu.can-khac": {
-  "t": "天干克：",
-  "h": "7dcdab59"
- },
- "js.battu.can-khac-fvel": {
-  "t": "天干克：",
-  "h": "bacb0b55"
- },
- "js.battu.can-khac-voi": {
-  "t": "天干克：",
-  "h": "e1f03bd7"
- },
- "js.battu.chi-hanh": {
-  "t": "(地支) | 五行：",
-  "h": "becf489e"
- },
- "js.battu.chi-hanh-can": {
-  "t": "(地支) | 天干五行：",
-  "h": "eab79827"
- },
- "js.battu.chi-tiet": {
-  "t": "| 详情：",
-  "h": "282d949c"
- },
- "js.battu.co": {
-  "t": "有",
-  "h": "01365add"
- },
  "js.battu.con-muon-luan-van-nam-nao": {
   "t": "您想论断哪一年的运势？",
   "h": "22eeb4d6"
@@ -1099,37 +1051,13 @@
   "t": "✓ 四柱已排好",
   "h": "845d9f25"
  },
- "js.battu.da-dieu-chinh-theo-lap-xuan": {
-  "t": "(已依立春调整)",
-  "h": "c35ba930"
- },
  "js.battu.da-san-sang-hoi-toi-ve": {
   "t": "** 已准备好。可以问我日干、用神、格局或大运。",
   "h": "7bde27db"
  },
- "js.battu.dac-dia": {
-  "t": "得地：",
-  "h": "cb4763b7"
- },
- "js.battu.dac-lenh": {
-  "t": "得令：",
-  "h": "9b80fecd"
- },
- "js.battu.dac-the": {
-  "t": "得势：",
-  "h": "fd65f5da"
- },
  "js.battu.dai-van-hien-tai": {
   "t": "目前大运：",
   "h": "4f329997"
- },
- "js.battu.dai-van-ke-tiep": {
-  "t": "下一步大运：",
-  "h": "eb9b4e7d"
- },
- "js.battu.dai-van-thuan-nghich-hanh-van": {
-  "t": "大运顺行逆行 起运",
-  "h": "eccf4789"
  },
  "js.battu.dang-an-tu-tru": {
   "t": "正在排四柱…",
@@ -1143,14 +1071,6 @@
   "t": "正在解读第",
   "h": "5b228988"
  },
- "js.battu.dang-xem": {
-  "t": "← 目前查看",
-  "h": "3fe33194"
- },
- "js.battu.dieu-hau": {
-  "t": "调候：",
-  "h": "0bb1f757"
- },
  "js.battu.dieu-quan-trong-nhat": {
   "t": "最重要的事</div>",
   "h": "f749707d"
@@ -1159,69 +1079,17 @@
   "t": "用神",
   "h": "22c1c170"
  },
- "js.battu.dung-than-3zjc": {
-  "t": "用神",
-  "h": "4ae3b8a1"
- },
- "js.battu.dv": {
-  "t": "大运",
-  "h": "b802ae59"
- },
  "js.battu.gio": {
   "t": "· 时",
   "h": "9d8fa6cf"
- },
- "js.battu.gio-chi": {
-  "t": "| 时支：",
-  "h": "fe981190"
- },
- "js.battu.hai-voi": {
-  "t": "害：",
-  "h": "5fff7ff6"
- },
- "js.battu.hanh-chi": {
-  "t": "| 地支五行：",
-  "h": "d05f052b"
- },
- "js.battu.hi-than": {
-  "t": "喜神",
-  "h": "bbe8d24f"
- },
- "js.battu.hi-than-2q7d": {
-  "t": "| 喜神：",
-  "h": "d92adc2c"
- },
- "js.battu.hinh-voi": {
-  "t": "刑：",
-  "h": "76437028"
  },
  "js.battu.hoi-thay": {
   "t": "✦ 问老师：「",
   "h": "739874cd"
  },
- "js.battu.hop-voi": {
-  "t": "合：",
-  "h": "3c73a8b6"
- },
- "js.battu.huong-van": {
-  "t": "行运方向：",
-  "h": "bd6f362c"
- },
- "js.battu.khoi-van": {
-  "t": "| 起运：",
-  "h": "dd584737"
- },
- "js.battu.khong": {
-  "t": "无",
-  "h": "fd412f45"
- },
  "js.battu.lap-bat-tu": {
   "t": "排八字 →",
   "h": "6ba95ed1"
- },
- "js.battu.lenh-score": {
-  "t": "(月令 score=",
-  "h": "2f8960d4"
  },
  "js.battu.loi-khi-luan-giai-phan": {
   "t": "解读这一部分时发生错误",
@@ -1239,38 +1107,6 @@
   "t": "深入解读部分：",
   "h": "edb82980"
  },
- "js.battu.luc-hai": {
-  "t": "六害：",
-  "h": "cf04722b"
- },
- "js.battu.luc-hop": {
-  "t": "六合：",
-  "h": "92cd161c"
- },
- "js.battu.luc-xung": {
-  "t": "六冲：",
-  "h": "d4a0de9a"
- },
- "js.battu.luu-nien-nam": {
-  "t": "流年",
-  "h": "09b45b14"
- },
- "js.battu.luu-nien-thai-tue-hop-xung": {
-  "t": "流年太岁与四柱的合冲",
-  "h": "67d90fc0"
- },
- "js.battu.ly-do": {
-  "t": "原因：",
-  "h": "2ad4ee1b"
- },
- "js.battu.ly-do-trigger": {
-  "t": "触发原因：",
-  "h": "1a50947a"
- },
- "js.battu.mo-ta": {
-  "t": "说明：",
-  "h": "ae0c87e0"
- },
  "js.battu.nam": {
   "t": "· 年",
   "h": "2deeb120"
@@ -1283,149 +1119,29 @@
   "t": "出生年",
   "h": "75a6785f"
  },
- "js.battu.nam-sinh-can-chi": {
-  "t": "出生年（干支）：",
-  "h": "7bec6935"
- },
- "js.battu.nghich": {
-  "t": "逆",
-  "h": "4fdaaea4"
- },
- "js.battu.ngu-hanh-suc-khoe-co-quan": {
-  "t": "五行 健康 脏腑 脾胃 肝 心 肺 肾 刑冲",
-  "h": "ec228976"
- },
  "js.battu.ngu-hanh-thieu": {
   "t": "五行缺",
   "h": "64dfabdc"
- },
- "js.battu.nguon": {
-  "t": "来源：",
-  "h": "840ac211"
- },
- "js.battu.nguyet-lenh-thau-can-tong-quan": {
-  "t": "月令 透干 八字总论",
-  "h": "b3b8b5e4"
  },
  "js.battu.nhat-can": {
   "t": "· 日干：",
   "h": "bf2114dc"
  },
- "js.battu.nhat-can-1v9w": {
-  "t": "日干",
-  "h": "c569050e"
- },
- "js.battu.nhat-can-cung-phu-the-nhat": {
-  "t": "日干 夫妻宫 日支 感情 婚姻",
-  "h": "6a87256d"
- },
  "js.battu.nhat-can-uv6w": {
   "t": "日干",
   "h": "d395f25c"
- },
- "js.battu.nhat-can-xy2g": {
-  "t": "日干：",
-  "h": "6eca16b3"
  },
  "js.battu.noi-len-dieu-gi": {
   "t": "说明了什么？",
   "h": "04cb815a"
  },
- "js.battu.o": {
-  "t": "| 于：",
-  "h": "58147bf9"
- },
- "js.battu.o-51i6": {
-  "t": "：于",
-  "h": "1e3bd79c"
- },
- "js.battu.phan-bo-ngu-hanh": {
-  "t": "五行分布：",
-  "h": "7ab7f964"
- },
- "js.battu.sao-phoi-ngau-dao-hoa-hong": {
-  "t": "配偶星 桃花 红艳",
-  "h": "15061814"
- },
- "js.battu.suc-khoe": {
-  "t": "健康",
-  "h": "77e26a9a"
- },
- "js.battu.tam-hinh": {
-  "t": "三刑",
-  "h": "fff8f885"
- },
- "js.battu.tam-hop": {
-  "t": "三合：",
-  "h": "295bbb43"
- },
- "js.battu.tam-hop-luc-hop-luc-xung": {
-  "t": "三合 六合 六冲 三刑 天干合",
-  "h": "f962f477"
- },
- "js.battu.tang": {
-  "t": "| 藏：",
-  "h": "53d98351"
- },
- "js.battu.tang-2j0k": {
-  "t": "| 藏：",
-  "h": "10ed9b12"
- },
- "js.battu.than-sat-thien-at-quy-nhan": {
-  "t": "神煞 天乙贵人 文昌 桃花 驿马 孤辰 寡宿 空亡 羊刃",
-  "h": "55d1625a"
- },
- "js.battu.thap-than": {
-  "t": "十神：",
-  "h": "4271216b"
- },
- "js.battu.thap-than-chinh-quan-that-sat": {
-  "t": "十神 正官 七杀 正财 偏财 食神 伤官 正印 偏印 比肩 劫财",
-  "h": "d9fc97a1"
- },
- "js.battu.thap-than-urok": {
-  "t": "十神：",
-  "h": "6fe640ef"
- },
- "js.battu.thien-can": {
-  "t": "：天干=",
-  "h": "60257e87"
- },
- "js.battu.thieu": {
-  "t": "| 缺：",
-  "h": "483076a6"
- },
  "js.battu.thu-lai": {
   "t": "↻ 重试",
   "h": "30508ad3"
  },
- "js.battu.thuan": {
-  "t": "顺",
-  "h": "1f488026"
- },
- "js.battu.tiet-khac": {
-  "t": "泄克：",
-  "h": "82e09d7a"
- },
  "js.battu.toi": {
   "t": "我",
   "h": "0bf5ca9f"
- },
- "js.battu.tron-cuc": {
-  "t": "(全局)",
-  "h": "6fe07f20"
- },
- "js.battu.truc": {
-  "t": "轴",
-  "h": "c1ff9904"
- },
- "js.battu.truc-suc-khoe": {
-  "t": "健康轴：",
-  "h": "b978a29a"
- },
- "js.battu.tu-hinh": {
-  "t": "自刑：",
-  "h": "143c3ae1"
  },
  "js.battu.tu-tru": {
   "t": "四柱",
@@ -1442,26 +1158,6 @@
  "js.battu.tuoi": {
   "t": "岁",
   "h": "2e261bf5"
- },
- "js.battu.tuoi-xem": {
-  "t": "论断年龄：",
-  "h": "b231c220"
- },
- "js.battu.vuong": {
-  "t": "旺：",
-  "h": "94394e14"
- },
- "js.battu.xung-voi": {
-  "t": "冲：",
-  "h": "2360df0c"
- },
- "js.battu.yeu-to": {
-  "t": "要素：",
-  "h": "5746ff00"
- },
- "js.battu.yeu-to-su9v": {
-  "t": "要素：",
-  "h": "09708200"
  },
  "js.chat.chao": {
   "t": "您好",
@@ -1499,10 +1195,6 @@
   "t": "人生周期",
   "h": "c3a39296"
  },
- "js.chutrinh.chu-trinh-cuoc-doi-5vo8": {
-  "t": "人生周期 —",
-  "h": "b3cfd39a"
- },
  "js.chutrinh.chu-trinh-cuoc-doi-cua": {
   "t": "人生周期：",
   "h": "1737f0ac"
@@ -1518,10 +1210,6 @@
  "js.chutrinh.da-san-sang-hoi-toi-de": {
   "t": "** 已准备好。可以问我，深入了解您人生中关心的任何阶段。",
   "h": "90f26e16"
- },
- "js.chutrinh.dai-van-thien-thoi-dia-loi": {
-  "t": "大运 天时 地利 人和 评分",
-  "h": "bf3cd1c0"
  },
  "js.chutrinh.dang-o-chang": {
   "t": "· 目前处于阶段",
@@ -1546,10 +1234,6 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "流年小运",
   "h": "1979c56a"
- },
- "js.chutrinh.van-hien-tai": {
-  "t": "目前运势",
-  "h": "c99b40fc"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初的 3 步",
@@ -1879,17 +1563,9 @@
   "t": "▾ 收起命盘",
   "h": "9f28e998"
  },
- "js.luangiai.anh-chi-em": {
-  "t": "兄弟姐妹",
-  "h": "cd42ef2d"
- },
  "js.luangiai.bam-thu-lai-o-tung-phan": {
   "t": "— 请在各部分按「↻ 重试」，再重新加载页面。",
   "h": "e7534682"
- },
- "js.luangiai.ban-be-cong-su": {
-  "t": "朋友同事",
-  "h": "4762668c"
  },
  "js.luangiai.ban-vua-doc-1-phan-dau": {
   "t": "您刚读完免费的第 1 部分。其余 12 部分——每一宫依古法各有一篇专属解读——都在完整版中，并可下载 PDF 或寄到电子信箱。",
@@ -1903,14 +1579,6 @@
   "t": "打开通知，每天收到运势 →",
   "h": "ace576c9"
  },
- "js.luangiai.cach-cuc-y-nghia-chinh-tinh": {
-  "t": "格局 主星的意义",
-  "h": "d9e41702"
- },
- "js.luangiai.cha-me-y-nghia": {
-  "t": "父母 意义",
-  "h": "9486f5a8"
- },
  "js.luangiai.cham": {
   "t": "</b> 得分 <b>",
   "h": "13786498"
@@ -1918,10 +1586,6 @@
  "js.luangiai.chi-phi-su-dung": {
   "t": "使用费用",
   "h": "c2d36be8"
- },
- "js.luangiai.con-cai": {
-  "t": "子女",
-  "h": "6efcb7d1"
  },
  "js.luangiai.con-tiep-mo-khoa-de-doc": {
   "t": "未完待续——解锁以读完全文",
@@ -1931,61 +1595,9 @@
   "t": "· 局：",
   "h": "6c9661b0"
  },
- "js.luangiai.cuc-3z6y": {
-  "t": "局",
-  "h": "5730751b"
- },
- "js.luangiai.cung-dien-trach": {
-  "t": "田宅宫",
-  "h": "b06518b6"
- },
- "js.luangiai.cung-huynh-de": {
-  "t": "兄弟宫",
-  "h": "8960cfc0"
- },
  "js.luangiai.cung-manh-nhat": {
   "t": "最强的宫位",
   "h": "bb00924b"
- },
- "js.luangiai.cung-menh": {
-  "t": "命宫",
-  "h": "aef7f478"
- },
- "js.luangiai.cung-no-boc": {
-  "t": "仆役宫",
-  "h": "31d0368d"
- },
- "js.luangiai.cung-phu-mau": {
-  "t": "父母宫",
-  "h": "bb88d622"
- },
- "js.luangiai.cung-phu-the": {
-  "t": "夫妻宫",
-  "h": "a9c041a9"
- },
- "js.luangiai.cung-phuc-duc": {
-  "t": "福德宫",
-  "h": "894ae238"
- },
- "js.luangiai.cung-quan-loc": {
-  "t": "官禄宫",
-  "h": "0841bd90"
- },
- "js.luangiai.cung-tai-bach": {
-  "t": "财帛宫",
-  "h": "81c7ef2d"
- },
- "js.luangiai.cung-tat-ach": {
-  "t": "疾厄宫",
-  "h": "3f01e6f2"
- },
- "js.luangiai.cung-thien-di": {
-  "t": "迁移宫",
-  "h": "10895437"
- },
- "js.luangiai.cung-tu-tuc": {
-  "t": "子女宫",
-  "h": "ed77a7c0"
  },
  "js.luangiai.da-lap-la-so": {
   "t": "✓ 命盘已排好",
@@ -2019,22 +1631,6 @@
   "t": "正在解读第 1 部分 /",
   "h": "559646ca"
  },
- "js.luangiai.dien-trach": {
-  "t": "Điền Trạch",
-  "h": "31504029"
- },
- "js.luangiai.hon-nhan-vo-chong": {
-  "t": "婚姻 夫妻",
-  "h": "d1ac4369"
- },
- "js.luangiai.huynh-de": {
-  "t": "Huynh Đệ",
-  "h": "0f700de2"
- },
- "js.luangiai.khi-chat-ban-menh": {
-  "t": "本命气质",
-  "h": "d0c3df13"
- },
  "js.luangiai.la-so": {
   "t": "命盘",
   "h": "c63aa847"
@@ -2063,10 +1659,6 @@
   "t": "✦ 深入解读 —",
   "h": "887e02c9"
  },
- "js.luangiai.luan-giai-la-so": {
-  "t": "命盘解读 —",
-  "h": "27ac57bc"
- },
  "js.luangiai.luan-giai-tu-vi": {
   "t": "紫微斗数解读",
   "h": "ab5a4607"
@@ -2078,10 +1670,6 @@
  "js.luangiai.luu-la-so-nay-de-xem": {
   "t": "✦ <b>保存这张命盘</b>，随时都能回头查看——免费，无须付费。",
   "h": "1d1bbc24"
- },
- "js.luangiai.menh": {
-  "t": "Mệnh",
-  "h": "9ed38a7e"
  },
  "js.luangiai.mien-phi": {
   "t": "(免费)…",
@@ -2111,14 +1699,6 @@
   "t": "该怎么做？",
   "h": "feedfe50"
  },
- "js.luangiai.nha-dat-bat-dong-san": {
-  "t": "房地产",
-  "h": "1b5f740c"
- },
- "js.luangiai.no-boc": {
-  "t": "Nô Bộc",
-  "h": "96d0b06c"
- },
  "js.luangiai.noi-vi-sao-no-bung-ra": {
   "t": "说明原因、在哪个阶段爆发，以及如何化解。",
   "h": "2b510636"
@@ -2135,54 +1715,6 @@
   "t": "个部分出错（部分",
   "h": "3d3d4b5b"
  },
- "js.luangiai.phu-mau": {
-  "t": "Phụ Mẫu",
-  "h": "e33a66d0"
- },
- "js.luangiai.phu-the": {
-  "t": "Phu Thê",
-  "h": "a659aea3"
- },
- "js.luangiai.phuc-duc": {
-  "t": "Phúc Đức",
-  "h": "d4fed58e"
- },
- "js.luangiai.phuc-khi-to-tien": {
-  "t": "福气 祖先",
-  "h": "af5be365"
- },
- "js.luangiai.quan-loc": {
-  "t": "Quan Lộc",
-  "h": "78ba763a"
- },
- "js.luangiai.su-nghiep-cong-danh": {
-  "t": "事业 功名",
-  "h": "321d98b1"
- },
- "js.luangiai.suc-khoe-benh-tat": {
-  "t": "健康 疾病",
-  "h": "f4a8d2c2"
- },
- "js.luangiai.tai-bach": {
-  "t": "Tài Bạch",
-  "h": "4cd8551d"
- },
- "js.luangiai.tat-ach": {
-  "t": "Tật Ách",
-  "h": "481302fe"
- },
- "js.luangiai.thien-di": {
-  "t": "Thiên Di",
-  "h": "ada790d6"
- },
- "js.luangiai.tien-bac-tai-chinh": {
-  "t": "金钱 财务",
-  "h": "f74ecefd"
- },
- "js.luangiai.tong-quan-la-so": {
-  "t": "命盘总论",
-  "h": "cebea9b5"
- },
  "js.luangiai.trong-12-cung-cua-la-so": {
   "t": "在这张命盘的 12 宫中，<b>",
   "h": "c69f5267"
@@ -2190,10 +1722,6 @@
  "js.luangiai.trong-tam-vao-viec-gi": {
   "t": "应以什么为重点？",
   "h": "dbecde19"
- },
- "js.luangiai.tu-tuc": {
-  "t": "Tử Tức",
-  "h": "4e03787a"
  },
  "js.luangiai.tuoi-cham": {
   "t": "岁) 得分",
@@ -2206,10 +1734,6 @@
  "js.luangiai.xem-la-so-day-du": {
   "t": "▸ 查看完整命盘",
   "h": "fee98465"
- },
- "js.luangiai.xuat-ngoai-giao-thiep": {
-  "t": "出国 交际",
-  "h": "633a5a1d"
  },
  "js.nav.brand": {
   "t": "明宝紫微斗数",
@@ -4387,10 +3911,6 @@
   "t": "两)",
   "h": "c99d25aa"
  },
- "js.vanhannam.luu-nguyet-han-cung": {
-  "t": "流月限宫",
-  "h": "4d85508c"
- },
  "js.vanhannam.luu-nien-dai-han-cung": {
   "t": "· 流年大限宫",
   "h": "7439912c"
@@ -4430,10 +3950,6 @@
  "js.vanhannam.tieu-han-cung": {
   "t": "：小限宫",
   "h": "cb20c10d"
- },
- "js.vanhannam.tieu-han-luu-nien": {
-  "t": "小限 流年",
-  "h": "c31adace"
  },
  "js.vanhannam.toi-nen-tap-trung-viec-gi": {
   "t": "我该专注于什么事？",
@@ -4475,22 +3991,6 @@
   "t": "12 个月运势：",
   "h": "afa6d79f"
  },
- "js.vanhannam.van-han-12-thang-toi": {
-  "t": "未来 12 个月运势 —",
-  "h": "6db940f6"
- },
- "js.vanhannam.van-han-y-nghia": {
-  "t": "运势 意义",
-  "h": "525ec9bb"
- },
- "js.vanhannam.van-nam-hien-tai": {
-  "t": "目前流年运势",
-  "h": "8de90917"
- },
- "js.vanhannam.van-thang": {
-  "t": "月运",
-  "h": "3c51533e"
- },
  "js.vanhannam.vo-chinh-dieu-muon-cung-xung": {
   "t": "无正曜（借对宫星曜）",
   "h": "40e96109"
@@ -4522,10 +4022,6 @@
  "js.xemtuoi.ca": {
   "t": "双方",
   "h": "7eff84cf"
- },
- "js.xemtuoi.cach-cuc-tu-tuong": {
-  "t": "格局 思想",
-  "h": "3fe956ea"
  },
  "js.xemtuoi.cach-hoa-giai-cu-the-nam": {
   "t": "具体的化解方法在深入解读中。",
@@ -4579,17 +4075,9 @@
   "t": "<br>命宫",
   "h": "2c272c79"
  },
- "js.xemtuoi.dai-van": {
-  "t": "大运",
-  "h": "f668f603"
- },
  "js.xemtuoi.dang-dung-anh": {
   "t": "图片制作中…",
   "h": "7bce9760"
- },
- "js.xemtuoi.dia-chi-nam-sinh-luc-hop": {
-  "t": "出生年地支 六合 四冲 论生肖",
-  "h": "5dc93e88"
  },
  "js.xemtuoi.doi-tac-a": {
   "t": "合伙人甲",
@@ -4623,10 +4111,6 @@
   "t": "** — 契合度 **",
   "h": "b8c22dab"
  },
- "js.xemtuoi.hon-nhan-tuong-hop-vo-chong": {
-  "t": "婚姻 夫妻契合",
-  "h": "6df85b21"
- },
  "js.xemtuoi.loi-khi-so-tuoi": {
   "t": "合婚时发生错误：",
   "h": "4f62428a"
@@ -4647,17 +4131,9 @@
   "t": "· 纳音",
   "h": "c754b896"
  },
- "js.xemtuoi.nap-am-9v70": {
-  "t": "纳音",
-  "h": "95ef4caf"
- },
  "js.xemtuoi.nap-am-jzle": {
   "t": "</b> · 纳音",
   "h": "24107e5c"
- },
- "js.xemtuoi.ngu-hanh-sinh-khac-tuong-hop": {
-  "t": "五行 相生相克 契合",
-  "h": "8dc049b1"
  },
  "js.xemtuoi.nguoi-a": {
   "t": "甲方",
@@ -4674,10 +4150,6 @@
  "js.xemtuoi.nguoi-thu-nhat": {
   "t": "第一位",
   "h": "955e7151"
- },
- "js.xemtuoi.nhom-thai-tue-chinh-tinh": {
-  "t": "太岁群 主星",
-  "h": "bb8a1abf"
  },
  "js.xemtuoi.q1-a": {
   "t": "请提供{p}（{ph}）的数据。",
@@ -4699,14 +4171,6 @@
   "t": "邀请",
   "h": "797be799"
  },
- "js.xemtuoi.tai-chinh-tien-bac": {
-  "t": "财务 金钱",
-  "h": "855ffa94"
- },
- "js.xemtuoi.tinh-cach": {
-  "t": "性格",
-  "h": "632ae625"
- },
  "js.xemtuoi.tong-diem": {
   "t": "总分",
   "h": "e73bc240"
@@ -4714,14 +4178,6 @@
  "js.xemtuoi.tra-loi-thay-nhap-ngay-sinh": {
   "t": "请在聊天窗口回复老师，输入{a}与{b}的出生日期。",
   "h": "f2617440"
- },
- "js.xemtuoi.tra-loi-thay-o-khung-chat": {
-  "t": "请在聊天窗口回复老师，输入出生日期：",
-  "h": "ec2999fc"
- },
- "js.xemtuoi.tuong-hop-la-so": {
-  "t": "命盘契合",
-  "h": "986b3ae0"
  },
  "js.xemtuoi.tuong-hop-tuoi-tu-vi-minh": {
   "t": "生肖相合——明宝紫微斗数",
@@ -4735,17 +4191,9 @@
   "t": "与",
   "h": "a72340e8"
  },
- "js.xemtuoi.van-han-hien-tai": {
-  "t": "目前运势",
-  "h": "678605b7"
- },
  "js.xemtuoi.vanh": {
   "t": "雷达图",
   "h": "f78055f5"
- },
- "js.xemtuoi.vo-chong-hon-nhan": {
-  "t": "夫妻 婚姻",
-  "h": "d96e91f1"
  },
  "js.xemtuoi.vo-nguoi-b": {
   "t": "妻子／乙方",
