@@ -73,6 +73,9 @@ data/nghiem-chung/
 # Đầu ra tạm của pipeline (đã git-exclude cục bộ).
 work/
 
+# i18n: từ điển SINH/ghi bởi npm run i18n:save|tag|pages — máy ghi, không phải người format
+i18n/*.json
+
 # Sinh bằng scripts/gen-glossary.mjs / gen-nc-chuoi.mjs (so byte với bản sinh lại, không format tay)
 lib/i18n/glossary/terms.generated.mjs
 lib/nghiem-chung/chuoi.zh-cn.generated.mjs

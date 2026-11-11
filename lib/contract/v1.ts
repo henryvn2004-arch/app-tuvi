@@ -183,6 +183,14 @@ export interface ChatRequestV1 {
    * không gửi field này vẫn chạy y hệt trước.
    */
   historyMode?: 'full' | 'delta';
+  /**
+   * Ngôn ngữ trả lời (i18n W8, additive): 'vi' (mặc định) · 'en' · 'ja' · 'ko' · 'zh-tw' · 'zh-cn'.
+   * DO SERVER điền từ request (`requestLocale`, lib/llm/locale.ts: header `x-tvmb-locale` rồi `Referer`
+   * của trang) — giá trị client gửi trong body bị ghi đè. Kênh chat (Telegram/Zalo/Messenger) gọi
+   * `runAgent` trực tiếp không đặt field này ⇒ luôn tiếng Việt. Khác 'vi' thì câu chỉ định ngôn ngữ
+   * đi vào TIN USER, không vào system (giữ prompt cache).
+   */
+  locale?: 'vi' | 'en' | 'ja' | 'ko' | 'zh-tw' | 'zh-cn';
   /** true → SSE stream; false → JSON một lần. Mặc định true. */
   stream?: boolean;
   /** Tham số sinh nếu đã có (đỡ phải hỏi lại) — luồng LÁ SỐ. */

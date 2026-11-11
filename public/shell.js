@@ -9,6 +9,16 @@
 (function () {
   'use strict';
 
+  // i18n (docs/i18n/QUY-UOC.md): T(khoá, chữViệt) cho chữ do JS dựng. Trang /<locale>/…
+  // được server nhúng từ điển ⇒ có bản dịch ngay lúc dựng; trang vi ⇒ chữ Việt mặc định.
+  var T = function (k, d) { return window.TVMB_I18N ? window.TVMB_I18N.t(k, d) : d; };
+  if (!window.TVMB_I18N && !document.querySelector('script[src^="/i18n.js"]')) {
+    var i18nS = document.createElement('script');
+    i18nS.src = '/i18n.js?v=3';
+    i18nS.async = true;
+    document.head.appendChild(i18nS);
+  }
+
   // ── Google tag (GA4 + Google Ads) ─────────────────────────────────
   // Toàn bộ 35 trang /app/* nạp nav.js ở chế độ `data-icons-only`, mà chế độ
   // đó CỐ Ý bỏ qua khối gtag của nav.js (xem nav.js#298) — nhưng shell.js
@@ -67,23 +77,23 @@
   // còn để Cmd+K/mountToolIcon() tìm ra nhãn+icon+href của các trang khung.
   // Giữ nguyên id 'home'/'ho-so' để không phá mountToolIcon()/Cmd+K.
   var FIXED_TOP = { group: 'Tử Vi Minh Bảo', open: true, items: [
-    { id: 'home', label: 'Hỏi Thầy mới', href: '/app', icon: 'pen-line' },
-    { id: 'thay', label: 'Các Thầy', href: '/app/thay', icon: 'users' },
-    { id: 'cong-cu', label: 'Công cụ', href: '/app/cong-cu', icon: 'layout-grid' },
-    { id: 'bao-cao', label: 'Báo cáo', href: '/app/bao-cao', icon: 'file-text' },
-    { id: 'tro-chuyen', label: 'Tất cả lượt Hỏi Thầy', href: '/app/tro-chuyen', icon: 'message-circle' },
+    { id: 'home', label: T('js.shell.hoi-thay-moi', 'Hỏi Thầy mới'), href: '/app', icon: 'pen-line' },
+    { id: 'thay', label: T('js.shell.cac-thay', 'Các Thầy'), href: '/app/thay', icon: 'users' },
+    { id: 'cong-cu', label: T('js.shell.cong-cu', 'Công cụ'), href: '/app/cong-cu', icon: 'layout-grid' },
+    { id: 'bao-cao', label: T('js.shell.bao-cao', 'Báo cáo'), href: '/app/bao-cao', icon: 'file-text' },
+    { id: 'tro-chuyen', label: T('js.shell.tat-ca-luot-hoi-thay', 'Tất cả lượt Hỏi Thầy'), href: '/app/tro-chuyen', icon: 'message-circle' },
   ] };
   // Nhóm này KHÔNG render thành nav (renderSidebar tự vẽ tay khối "Lá số đã
   // lưu") — chỉ để mountToolIcon()/Cmd+K/buildCmds() tìm ra icon+href đúng khi
   // ACTIVE rơi vào trang này, cùng cơ chế FIXED_TOP/FIXED_BOTTOM đã dùng.
   var FIXED_META = { group: 'Sổ lá số', open: false, items: [
-    { id: 'so-la-so', label: 'Lá số', href: '/app/so-la-so', icon: 'folder' },
+    { id: 'so-la-so', label: T('js.shell.la-so', 'Lá số'), href: '/app/so-la-so', icon: 'folder' },
   ] };
   var FIXED_BOTTOM = { group: 'Tài khoản', open: true, items: [
-    { id: 'nap-luong', label: 'Nạp Lượng', href: '/app/nap-luong', icon: 'wallet', balance: true },
+    { id: 'nap-luong', label: T('js.shell.nap-luong', 'Nạp Lượng'), href: '/app/nap-luong', icon: 'wallet', balance: true },
     // Nhiệm Vụ · Kết Nối · Tài Khoản & Cài Đặt giờ là tab bên trong trang này
     // (app-tai-khoan.html) — xem ghi chú 2026-09-24 ở FIXED_TOP.
-    { id: 'ho-so',    label: 'Hồ Sơ', href: '/app/ho-so', icon: 'settings' },
+    { id: 'ho-so',    label: T('js.shell.ho-so', 'Hồ Sơ'), href: '/app/ho-so', icon: 'settings' },
   ] };
 
   // Bắt đầu bằng CHỈ các nhóm cố định. Dữ liệu về thì `applyCatalog` chèn các
@@ -471,18 +481,18 @@
   // Bỏ hẳn tabbar dưới đáy điện thoại: mọi đích của nó đều nằm ở đây.
   // `href` phải khớp đường dẫn mà `shell-soft-nav.js` dùng để tô mục đang mở.
   var SB_NAV = [
-    { id: 'thay', label: 'Các Thầy', href: '/app/thay', icon: 'users' },
-    { id: 'cong-cu', label: 'Công cụ', href: '/app/cong-cu', icon: 'layout-grid' },
-    { id: 'so-la-so', label: 'Lá số', href: '/app/so-la-so', icon: 'folder' },
-    { id: 'bao-cao', label: 'Báo cáo', href: '/app/bao-cao', icon: 'file-text' },
-    { id: 'thu-vien', label: 'Thư viện', href: '/thu-vien', icon: 'book-open' },
-    { id: 'hoang-dao', label: 'Hôm nay', href: '/app/hoang-dao', icon: 'sunrise' },
+    { id: 'thay', label: T('js.shell.cac-thay', 'Các Thầy'), href: '/app/thay', icon: 'users' },
+    { id: 'cong-cu', label: T('js.shell.cong-cu', 'Công cụ'), href: '/app/cong-cu', icon: 'layout-grid' },
+    { id: 'so-la-so', label: T('js.shell.la-so', 'Lá số'), href: '/app/so-la-so', icon: 'folder' },
+    { id: 'bao-cao', label: T('js.shell.bao-cao', 'Báo cáo'), href: '/app/bao-cao', icon: 'file-text' },
+    { id: 'thu-vien', label: T('js.shell.thu-vien', 'Thư viện'), href: '/thu-vien', icon: 'book-open' },
+    { id: 'hoang-dao', label: T('js.shell.hom-nay', 'Hôm nay'), href: '/app/hoang-dao', icon: 'sunrise' },
   ];
   var SB_MORE = [
-    { id: 'tro-chuyen', label: 'Tất cả lượt Hỏi Thầy', href: '/app/tro-chuyen', icon: 'message-circle' },
-    { id: 'nhiem-vu', label: 'Nhiệm vụ nhận Lượng', href: '/app/ho-so#nhiemvu', icon: 'check-circle' },
-    { id: 'moi-ban', label: 'Mời bạn bè', href: '/app/ho-so#moiban', icon: 'gift' },
-    { id: 'nap-luong', label: 'Nạp Lượng', href: '/app/nap-luong', icon: 'wallet' },
+    { id: 'tro-chuyen', label: T('js.shell.tat-ca-luot-hoi-thay', 'Tất cả lượt Hỏi Thầy'), href: '/app/tro-chuyen', icon: 'message-circle' },
+    { id: 'nhiem-vu', label: T('js.shell.nhiem-vu-nhan-luong', 'Nhiệm vụ nhận Lượng'), href: '/app/ho-so#nhiemvu', icon: 'check-circle' },
+    { id: 'moi-ban', label: T('js.shell.moi-ban-be', 'Mời bạn bè'), href: '/app/ho-so#moiban', icon: 'gift' },
+    { id: 'nap-luong', label: T('js.shell.nap-luong', 'Nạp Lượng'), href: '/app/nap-luong', icon: 'wallet' },
   ];
   var SB_RECENT_MAX = 20;
   var SB_MINI_KEY = 'sb_mini_v1';
@@ -494,47 +504,49 @@
     var host = document.getElementById('shell-sidebar');
     if (!host) return;
     var h = '<div class="sbn-top">' +
-      '<a class="sbn-brand" href="/app"><img src="/seal-128.webp" alt="" width="28" height="28"><b>Minh Bảo</b></a>' +
-      '<button class="sbn-ib" type="button" data-sbn="search" data-tip="Tìm kiếm (Ctrl K)" aria-label="Tìm kiếm">' + svg('search') + '</button>' +
-      '<button class="sbn-ib" type="button" data-sbn="collapse" data-tip="Thu gọn thanh bên" aria-label="Thu gọn thanh bên">' + svg('panel-left') + '</button>' +
-      '</div><nav class="sbn-scroll" aria-label="Điều hướng">' +
-      '<a class="sbn-item" href="/app" data-sbn="new" data-tip="Hỏi Thầy mới" aria-label="Hỏi Thầy mới">' + svg('pen-line') + '<span class="sbn-tx">Hỏi Thầy mới</span></a>';
+      '<a class="sbn-brand" href="/app"><img src="/seal-128.webp" alt="" width="28" height="28"><b>' + T('js.shell.minh-bao', 'Minh Bảo') + '</b></a>' +
+      '<button class="sbn-ib" type="button" data-sbn="search" data-tip="' + esc(T('js.shell.tim-kiem-ctrl-k', 'Tìm kiếm (Ctrl K)')) + '" aria-label="' + esc(T('js.shell.tim-kiem', 'Tìm kiếm')) + '">' + svg('search') + '</button>' +
+      '<button class="sbn-ib" type="button" data-sbn="collapse" data-tip="' + esc(T('js.shell.thu-gon-thanh-ben', 'Thu gọn thanh bên')) + '" aria-label="' + esc(T('js.shell.thu-gon-thanh-ben', 'Thu gọn thanh bên')) + '">' + svg('panel-left') + '</button>' +
+      '</div><nav class="sbn-scroll" aria-label="' + esc(T('js.shell.dieu-huong', 'Điều hướng')) + '">' +
+      '<a class="sbn-item" href="/app" data-sbn="new" data-tip="' + esc(T('js.shell.hoi-thay-moi', 'Hỏi Thầy mới')) + '" aria-label="' + esc(T('js.shell.hoi-thay-moi', 'Hỏi Thầy mới')) + '">' + svg('pen-line') + '<span class="sbn-tx">' + T('js.shell.hoi-thay-moi', 'Hỏi Thầy mới') + '</span></a>';
     SB_NAV.forEach(function (it) { h += sbItem(it); });
-    h += '<button class="sbn-item" type="button" data-sbn="more" aria-expanded="false">' + svg('more-horizontal') + '<span class="sbn-tx">Thêm</span></button>' +
+    h += '<button class="sbn-item" type="button" data-sbn="more" aria-expanded="false">' + svg('more-horizontal') + '<span class="sbn-tx">' + T('js.shell.them', 'Thêm') + '</span></button>' +
       '<div class="sbn-more" hidden>';
     SB_MORE.forEach(function (it) { h += sbItem(it); });
     h += '</div>' +
-      '<div class="sbn-sec"><span>Gần đây</span><a href="/app/tro-chuyen">Xem tất cả</a></div>' +
+      '<div class="sbn-sec"><span>' + T('js.shell.gan-day', 'Gần đây') + '</span><a href="/app/tro-chuyen">' + T('js.shell.xem-tat-ca', 'Xem tất cả') + '</a></div>' +
       '<div class="sbn-recent" id="sbRecent"></div>' +
       '</nav>' +
       // Thẻ QR Zalo tĩnh — chỉ máy tính (CSS ẩn trên cảm ứng/màn thấp/sb-mini).
       // `loading=lazy`: ảnh trong khối display:none không bị tải.
       (zlSnoozed() ? '' :
         '<div class="sbn-zalo" id="sbZalo">' +
-          '<button type="button" class="zl-x" aria-label="Ẩn">✕</button>' +
-          '<b>Hỏi thầy qua Zalo</b><small>Quét mã bằng Zalo, nhắn câu hỏi — thầy trả lời ngay</small>' +
-          '<img src="/zalo-oa-qr.png" width="132" height="132" loading="lazy" alt="Mã QR Zalo OA Tử Vi Minh Bảo">' +
+          '<button type="button" class="zl-x" aria-label="' + esc(T('js.shell.an', 'Ẩn')) + '">✕</button>' +
+          '<b>' + T('js.shell.hoi-thay-qua-zalo', 'Hỏi thầy qua Zalo') + '</b><small>' + T('js.shell.quet-ma-bang-zalo-nhan-cau', 'Quét mã bằng Zalo, nhắn câu hỏi — thầy trả lời ngay') + '</small>' +
+          '<img src="/zalo-oa-qr.png" width="132" height="132" loading="lazy" alt="' + esc(T('js.shell.ma-qr-zalo-oa-tu-vi', 'Mã QR Zalo OA Tử Vi Minh Bảo')) + '">' +
         '</div>') +
       '<div class="sbn-foot">' +
         '<div class="sbn-menu" id="sbMenu" hidden>' +
           '<div class="sbn-mail" id="sbMail"></div>' +
-          '<a class="sbn-item" href="/app/ho-so#account">' + svg('user') + '<span class="sbn-tx">Hồ sơ &amp; cài đặt</span></a>' +
-          '<a class="sbn-item" href="/app/nap-luong">' + svg('wallet') + '<span class="sbn-tx">Nạp Lượng</span><span class="sbn-bal" id="sbBalance"></span></a>' +
-          '<button class="sbn-item" type="button" data-act="theme">' + svg('moon') + '<span class="sbn-tx">Đổi nền sáng/tối</span></button>' +
+          '<a class="sbn-item" href="/app/ho-so#account">' + svg('user') + '<span class="sbn-tx">' + T('js.shell.ho-so-cai-dat', 'Hồ sơ &amp; cài đặt') + '</span></a>' +
+          '<a class="sbn-item" href="/app/nap-luong">' + svg('wallet') + '<span class="sbn-tx">' + T('js.shell.nap-luong', 'Nạp Lượng') + '</span><span class="sbn-bal" id="sbBalance"></span></a>' +
+          '<button class="sbn-item" type="button" data-act="theme">' + svg('moon') + '<span class="sbn-tx">' + T('js.shell.doi-nen-sang-toi', 'Đổi nền sáng/tối') + '</span></button>' +
           '<hr>' +
-          '<a class="sbn-item" href="/contact.html">' + svg('message-circle') + '<span class="sbn-tx">Hỗ trợ</span></a>' +
+          '<a class="sbn-item" href="/contact.html">' + svg('message-circle') + '<span class="sbn-tx">' + T('js.shell.ho-tro', 'Hỗ trợ') + '</span></a>' +
           // Mặc định ẨN — khách chưa đăng nhập thấy "Đăng xuất" là bịa ra một
           // hành động không có thật. `paintAuth()` tự hiện khi có session.
-          '<a class="sbn-item danger" href="#" data-act="signout" id="sbSignout" style="display:none">' + svg('door-open') + '<span class="sbn-tx">Đăng xuất</span></a>' +
+          '<a class="sbn-item danger" href="#" data-act="signout" id="sbSignout" style="display:none">' + svg('door-open') + '<span class="sbn-tx">' + T('js.shell.dang-xuat', 'Đăng xuất') + '</span></a>' +
         '</div>' +
+        '<div class="sbn-lang" data-lang-switcher data-dir="up" hidden></div>' +
         '<button class="sbn-item sbn-me" type="button" data-sbn="me" aria-haspopup="true" aria-expanded="false">' +
           '<span class="ava" id="sbAva">?</span>' +
-          '<span class="sbn-tx"><b id="sbName">Khách</b><span id="sbSub">Đăng nhập để lưu lịch sử</span></span>' +
+          '<span class="sbn-tx"><b id="sbName">' + T('js.shell.khach', 'Khách') + '</b><span id="sbSub">' + T('js.shell.dang-nhap-de-luu-lich-su', 'Đăng nhập để lưu lịch sử') + '</span></span>' +
         '</button>' +
       '</div>';
     host.innerHTML = h;
     mountToolIcon();
     wireSidebar(host);
+    if (window.TVMB_I18N) window.TVMB_I18N.mountAll();
     var zl = host.querySelector('#sbZalo');
     if (zl) {
       zl.querySelector('.zl-x').addEventListener('click', function () {
@@ -630,7 +642,7 @@
     var seen = {}, arr = [];
     list.forEach(function (s) { if (s && s.id && !seen[s.id]) { seen[s.id] = 1; arr.push(s); } });
     arr.sort(function (a, b) { return (b.updatedAt || 0) - (a.updatedAt || 0); });
-    if (!arr.length) { el.innerHTML = '<div class="sbn-empty">Các lượt Hỏi Thầy của bạn sẽ hiện ở đây.</div>'; return; }
+    if (!arr.length) { el.innerHTML = '<div class="sbn-empty">' + T('js.shell.cac-luot-hoi-thay-cua-ban', 'Các lượt Hỏi Thầy của bạn sẽ hiện ở đây.') + '</div>'; return; }
     var cur = sessionId;
     el.innerHTML = arr.slice(0, SB_RECENT_MAX).map(function (s) {
       var t = findToolItem(s.tool);
@@ -1097,8 +1109,8 @@
   }
   function startFamilyForm(vai, v, q) {
     var chat = document.getElementById('chat');
-    ensureScripts(['/tools-shared/vn-timezone.js?v=1'], function (e1) {
-      ensureScripts(['/tuvi-form.js?v=14'], function (e2) {
+    ensureScripts(['/tools-shared/vn-timezone.js?v=1', '/tools-shared/noi-sinh.js?v=1'], function (e1) {
+      ensureScripts(['/tuvi-form.js?v=15'], function (e2) {
         if (e1 || e2 || typeof TuviForm === 'undefined') {
           inlineErrorBubble(chat, 'chưa mở được form ngày sinh.', '/app/so-la-so');
           return;
@@ -3275,7 +3287,7 @@
   // Trạng thái ví cho rail. `price` để null nghĩa là CHƯA BIẾT giá → đồng hồ im
   // lặng thay vì đoán. Đoán giá rồi hiện sai số câu là nói sai với người dùng
   // ngay trên thứ họ dùng để quyết định.
-  var _rc = { balance: null, price: null, freeTurns: 0, lasoPrice: null, vndPerCredit: 500, loaded: false,
+  var _rc = { balance: null, price: null, freeTurns: 0, lasoPrice: null, usdPerCredit: null, loaded: false,
               anon: false, anonLeft: null, anonCap: 0 };
 
   // anon_id do track.js sinh (localStorage 'tvmb_anon'). Chỉ để đếm lượt DÙNG
@@ -3317,7 +3329,7 @@
           _rc.anonLeft = typeof d.anonTrialLeft === 'number' ? d.anonTrialLeft : null;
           _rc.anonCap = d.anonTrialCap || 0;
           _rc.lasoPrice = typeof d.lasoPrice === 'number' ? d.lasoPrice : null;
-          _rc.vndPerCredit = d.vndPerCredit || 500;
+          _rc.usdPerCredit = typeof d.usdPerCredit === 'number' && d.usdPerCredit > 0 ? d.usdPerCredit : null;
           _rc.loaded = true;
           renderRailMeter();
           return;
@@ -3327,7 +3339,7 @@
         _rc.price = typeof d.railPrice === 'number' ? d.railPrice : null;
         _rc.lasoPrice = typeof d.lasoPrice === 'number' ? d.lasoPrice : null;
         _rc.freeTurns = d.freeTurns || 0;
-        _rc.vndPerCredit = d.vndPerCredit || 500;
+        _rc.usdPerCredit = typeof d.usdPerCredit === 'number' && d.usdPerCredit > 0 ? d.usdPerCredit : null;
         _rc.loaded = true;
         renderRailMeter();
         paintSidebarBalance();
@@ -3400,7 +3412,7 @@
       go = openArtPanel;
     } else if (ctx && ctx.birth && !REPORT_PAGES[ACTIVE] && _rc.lasoPrice != null) {
       html = '<span class="rr-ic">' + svg('lock') + '</span><span class="rr-t"><b>Luận Giải ' + LG_PHAN.length +
-        ' mục cho lá số này</b><span>' + creditVnd(_rc.lasoPrice) + ' (' + _rc.lasoPrice + ' Lượng) · chưa mở</span></span>' +
+        ' mục cho lá số này</b><span>' + creditUsd(_rc.lasoPrice) + ' (' + _rc.lasoPrice + ' Lượng)' + ' · chưa mở</span></span>' +
         '<span class="rr-go">Xem →</span>';
       go = function () {
         try { track('cta_click', { tool_id: 'laso', meta: { from: 'rail_report_bar' } }); } catch (e) { /* ignore */ }
@@ -3512,9 +3524,12 @@
     paintSidebarBalance();
   }
 
-  function creditVnd(c) {
-    var v = Math.ceil((c * (_rc.vndPerCredit || 500)) / 1000) * 1000;
-    return v.toLocaleString('vi-VN') + 'đ';
+  // Giá nói với khách là USD (W5). Làm tròn LÊN cent, cùng cách `usdLabel` ở lib/billing/packages.ts.
+  // Chưa có tỉ giá (API chưa trả) ⇒ '…' (luật giá: đọc hụt thì không hiện số, KHÔNG lùi về VNĐ).
+  function creditUsd(c) {
+    var r = _rc.usdPerCredit;
+    if (!r || !isFinite(c) || c <= 0) return '…';
+    return '~$' + (Math.ceil(c * r * 100 - 1e-9) / 100).toFixed(2);
   }
 
   // ── Modal HẾT LƯỢNG (giọng thầy) — bật khi rail nhận 402 ──
@@ -3542,7 +3557,7 @@
           ? '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
               '. Bản <b>Luận Giải</b> soi trọn <b>' + LG_PHAN.length + ' mục</b> của chính lá số này — ' +
               esc(preview) + '… — thay vì hỏi lẻ từng câu.</div>' +
-            '<a class="stm-btn" href="' + esc(luanGiaiHref()) + '">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng (≈ ' + creditVnd(_rc.lasoPrice) + ')</a>' +
+            '<a class="stm-btn" href="' + esc(luanGiaiHref()) + '">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng (' + creditUsd(_rc.lasoPrice) + ')</a>' +
             '<a class="stm-alt" href="/topup.html">Hoặc nạp Lượng để hỏi tiếp từng câu →</a>'
           : '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
               ', nhưng phần Lượng trong ví đã cạn. Nạp thêm để thầy luận tiếp mạch còn dang dở nhé.</div>' +
@@ -3761,7 +3776,11 @@
   }
   function inlineBirth(d) {
     var gioIdx = window.VnTimezone ? window.VnTimezone.hourMinToGioIdx(d.gioHour, d.gioPhut) : 0;
-    return { day: d.ngay, month: d.thang, year: d.nam, hourBranch: gioIdx, gender: d.gioitinh, name: d.hoten || undefined };
+    var b = { day: d.ngay, month: d.thang, year: d.nam, hourBranch: gioIdx, gender: d.gioitinh, name: d.hoten || undefined };
+    // Lịch âm theo nơi sinh (W3, BirthParams.lich/noiSinh) — additive: thiếu ⇒ engine đi lịch VN như cũ.
+    if (d.lich) b.lich = d.lich;
+    if (d.noiSinh) b.noiSinh = d.noiSinh;
+    return b;
   }
   function inlineErrorBubble(chat, msg, fallbackPath) {
     var el = document.createElement('div');
@@ -5577,8 +5596,8 @@
       if (input) { input.disabled = false; input.placeholder = ph; }
       setSend(true); renderSuggs();
     };
-    ensureScripts(['/tools-shared/vn-timezone.js?v=1'], function (e1) {
-      ensureScripts(['/tuvi-form.js?v=14'], function (e2) {
+    ensureScripts(['/tools-shared/vn-timezone.js?v=1', '/tools-shared/noi-sinh.js?v=1'], function (e1) {
+      ensureScripts(['/tuvi-form.js?v=15'], function (e2) {
         if (e1 || e2 || typeof TuviForm === 'undefined') {
           release();
           inlineErrorBubble(chat, 'chưa mở được form ngày sinh.', '/app/la-so');

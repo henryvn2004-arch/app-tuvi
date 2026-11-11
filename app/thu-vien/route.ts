@@ -257,7 +257,7 @@ export async function GET(): Promise<Response> {
     url: `${BASE}${s.href}`,
   })),
 })}</script>
-<link rel="stylesheet" href="/shell.css?v=78">
+<link rel="stylesheet" href="/shell.css?v=79">
 <style>
 /* Nằm TRONG khung app (sidebar chung của shell.js) — bấm "Thư viện" ở sidebar
    không còn rơi ra trang có menu ☰ riêng của nav.js. Màu dùng biến của
@@ -305,8 +305,8 @@ export async function GET(): Promise<Response> {
   </main>
 </div>
 <script src="/track.js?v=4" defer></script>
-<script src="/nav.js?v=47" data-icons-only></script>
-<script src="/auth.js?v=6"></script>
+<script src="/nav.js?v=48" data-icons-only></script>
+<script src="/auth.js?v=7"></script>
 <script>window.SHELL_ACTIVE='thu-vien';</script>
 <script src="/shell.js?v=141"></script>
 </body></html>`;

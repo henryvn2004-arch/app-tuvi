@@ -216,6 +216,9 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   cộng dồn. Chạm trần `check:prompt` thì CẮT chỗ khác, đừng nới.
 - **Đổi công thức thì phải quét cả chỗ MÔ TẢ công thức** — prompt không được
   typecheck bắt. **Giọng dạy bằng VÍ DỤ rẻ và ăn hơn dạy bằng LUẬT.**
+- **Ngôn ngữ đầu ra LLM** (`lib/llm/locale.ts` `withLang`): câu chỉ định vào USER message, không system; mọi khoá cache
+  của route có luận phải thêm `localeKeySuffix` (`vi` → '' giữ khoá cũ); `laso_public.luan_giai` CHỈ chứa tiếng Việt
+  (không cột ngôn ngữ) — ghi bản Nhật vào là đè bản Việt người đã mua. `docs/i18n/QUY-UOC.md`.
 - **`extractGenericContext` bỏ IM LẶNG mọi giá trị là object** ⇒ payload gửi rail
   phải PHẲNG. `npm run check:railfields` / `check:railwrap`.
 - **Bản đang chạy phải khớp bản trong repo** — edge function / RPC deploy xong phải

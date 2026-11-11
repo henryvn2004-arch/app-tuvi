@@ -94,10 +94,12 @@ async function hoi(qids) {
     format: 'json',
     maxlag: '5',
   }).toString();
-  for (let t = 0; t < 4; t++) {
+  // 429 từ Wikimedia là thường khi chạy từ IP dùng chung (container): lùi theo Retry-After, tối đa ~6 phút/lô rồi mới bỏ.
+  for (let t = 0; t < 8; t++) {
     const r = await fetch(u, { headers: { 'User-Agent': UA } });
     if (r.status === 429 || r.status >= 500) {
-      await new Promise((s) => setTimeout(s, 3000 * (t + 1)));
+      const ra = Number(r.headers.get('retry-after')) || 0;
+      await new Promise((s) => setTimeout(s, Math.min(60000, Math.max(ra * 1000, 5000 * 2 ** t))));
       continue;
     }
     const j = await r.json();

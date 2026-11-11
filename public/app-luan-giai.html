@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luận giải Tử Vi — Tử Vi Minh Bảo</title>
-<meta name="description" content="Lập lá số Tử Vi 12 cung rồi luận giải chuyên sâu theo điểm số cổ pháp: chính tinh, cách cục, tứ hóa từng cung — và hỏi Thầy đào sâu từng phần.">
+<title data-i18n="luangiai.luan-giai-tu-vi-tu-vi">Luận giải Tử Vi — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:luangiai.lap-la-so-tu-vi-12" name="description" content="Lập lá số Tử Vi 12 cung rồi luận giải chuyên sâu theo điểm số cổ pháp: chính tinh, cách cục, tứ hóa từng cung — và hỏi Thầy đào sâu từng phần.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif.css?v=1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/fonts/noto-serif.css?v=1"></noscript>
-<link rel="stylesheet" href="/shell.css?v=78">
+<link rel="stylesheet" href="/shell.css?v=79">
 <link rel="preload" href="/laso-chart.css?v=7" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/laso-chart.css?v=7"></noscript>
 <style>
@@ -227,11 +227,11 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Luận giải Tử Vi</b><span>Lập lá số 12 cung rồi luận sâu theo điểm số cổ pháp</span></div>
+      <div data-i18n="luangiai.luan-giai-tu-vi-lap-la" class="ws-title"><b>Luận giải Tử Vi</b><span>Lập lá số 12 cung rồi luận sâu theo điểm số cổ pháp</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
-        <a class="btn" id="btnBatTu" href="/app/bat-tu?auto=1" style="display:none">Bát Tự →</a>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.sua-thong-tin" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <a data-i18n="luangiai.bat-tu" class="btn" id="btnBatTu" href="/app/bat-tu?auto=1" style="display:none">Bát Tự →</a>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -246,10 +246,10 @@
         <img class="intro-avatar" src="/tool-avatars/laso.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Luận giải Tử Vi</div>
+            <div data-i18n="luangiai.luan-giai-tu-vi" class="intro-t">Luận giải Tử Vi</div>
             <!-- Henry 2026-09-14: box này giờ là CÂU HOOK (1-2 câu), không phải mô
                  tả tool nữa — mô tả đầy đủ đã dời sang `.ws-promo` (cột phụ). -->
-            <div class="intro-d">Công việc bấp bênh, tình duyên trắc trở, tiền bạc hao hụt — gốc rễ nằm ở đâu trong lá số của bạn?</div>
+            <div data-i18n="luangiai.cong-viec-bap-benh-tinh-duyen" class="intro-d">Công việc bấp bênh, tình duyên trắc trở, tiền bạc hao hụt — gốc rễ nằm ở đâu trong lá số của bạn?</div>
             <!-- Dòng "Theo <cổ pháp>…" do `tool-sources.js` điền MUỘN (shell tự nạp
                  file đó bất đồng bộ). Giữ chỗ đúng 2 dòng chữ 11,5px/1.6 = 36,8px;
                  `margin-top:9px` đặt luôn ở đây để trùng với lề của khối được
@@ -261,9 +261,9 @@
         <!-- 3 pill tính năng (Henry 2026-09-09, mẫu iPhone) — chỉ trang trí,
              không mang dữ liệu động nên dựng tĩnh, không cần JS. -->
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Tổng quan<br>cuộc đời</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="heart"></span><span>Luận riêng<br>12 cung</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="star"></span><span>Điểm mạnh yếu,<br>gợi ý</span></div>
+          <div data-i18n="luangiai.tong-quan-cuoc-doi" class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Tổng quan<br>cuộc đời</span></div>
+          <div data-i18n="luangiai.luan-rieng-12-cung" class="hero-pill"><span class="hp-ic" data-icon="heart"></span><span>Luận riêng<br>12 cung</span></div>
+          <div data-i18n="luangiai.diem-manh-yeu-goi-y" class="hero-pill"><span class="hp-ic" data-icon="star"></span><span>Điểm mạnh yếu,<br>gợi ý</span></div>
         </div>
       </div></div>
       <!-- `.ws-main-col`/`.ws-side-col` — CHỈ có tác dụng khi `.ws-intake` là
@@ -275,21 +275,21 @@
            chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
            đã đổi trong code cũ (doLuan/showForm/gate/paywall/kết quả). -->
       <div class="ws-steps" id="lgSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước lá số</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="battu.2-xem-truoc-la-so" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước lá số</span></div>
+        <div data-i18n="battu.3-thanh-toan" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="battu.4-nhan-ket-qua" class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <!-- Box nhập thông tin — đứng NGAY SAU thanh tiến trình (Henry 2026-09-14:
            trước đây có samp-cta chen giữa, nay samp-cta đã dời sang cột phụ). -->
       <div class="form-card" id="birthPanel" style="display:none">
-        <div class="fc-head"><span class="fc-ic" data-icon="file-text"></span><h2>Nhập thông tin để lập lá số &amp; luận giải</h2></div>
-        <p class="sub">Nhập họ tên, giới tính, ngày giờ sinh và năm muốn luận. Hệ thống tự an sao, lập lá số rồi luận giải từng phần. Nhận về bản luận đủ 13 phần: tổng quan và luận riêng 12 cung.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="file-text"></span><h2 data-i18n="luangiai.nhap-thong-tin-de-lap-la">Nhập thông tin để lập lá số &amp; luận giải</h2></div>
+        <p data-i18n="luangiai.nhap-ho-ten-gioi-tinh-ngay" class="sub">Nhập họ tên, giới tính, ngày giờ sinh và năm muốn luận. Hệ thống tự an sao, lập lá số rồi luận giải từng phần. Nhận về bản luận đủ 13 phần: tổng quan và luận riêng 12 cung.</p>
         <div id="tuviFormHost"></div>
         <div class="tvf-pretty" style="margin-top:2px">
           <div class="tvf-row">
             <div class="tvf-col" style="flex:0 0 150px">
-              <label class="tvf-lb">Năm muốn luận</label>
+              <label data-i18n="luangiai.nam-muon-luan" class="tvf-lb">Năm muốn luận</label>
               <div class="tvf-ibox"><span class="tvf-ic" data-icon="calendar"></span><select id="inpNamxem"></select><span class="tvf-chev" data-icon="chevron-down"></span></div>
             </div>
           </div>
@@ -298,9 +298,9 @@
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="laso"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="laso">…</span> Lượng)</span></div>
-              <div class="cb-pay">
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="luangiai.moi-luot-luong" class="cb-amt"><span class="vnd" data-tvp-price-vnd="laso"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="laso">…</span> Lượng)</span></div>
+              <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
               </div>
@@ -308,17 +308,17 @@
           </div>
           <div class="cb-r">
             <span class="cb-ic" data-icon="gift"></span>
-            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
           </div>
         </div>
-        <button class="btn-go" id="btnGo" onclick="doLuan()">
+        <button data-i18n="luangiai.lap-la-so-luan-giai-ngay" class="btn-go" id="btnGo" onclick="doLuan()">
           <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnGoLabel">Lập lá số &amp; Luận giải ngay →</b></span>
           <small>Tốn <span class="vnd" data-tvp-price-vnd="laso"></span> <span class="cb-sub">(<span data-tvp-price="laso">…</span> Lượng)</span></small>
         </button>
       </div>
       <div class="ws-intake-hint" id="wsIntakeHint">
         <span class="ic" data-icon="message-circle"></span>
-        <p>Trả lời thầy ở khung chat để lập lá số &amp; luận giải — họ tên, ngày giờ sinh và năm muốn luận.</p>
+        <p data-i18n="luangiai.tra-loi-thay-o-khung-chat">Trả lời thầy ở khung chat để lập lá số &amp; luận giải — họ tên, ngày giờ sinh và năm muốn luận.</p>
       </div>
       </div>
       <div class="ws-side-col">
@@ -327,15 +327,15 @@
            `.ws-promo` trong shell.css). Dùng để MÔ TẢ TOOL (chữ dài dời từ
            box hook ở trên xuống đây) — box hook phía trên chỉ còn 1-2 câu. -->
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Luận giải Tử Vi</div>
-        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
-        <blockquote class="wsp-quote">Tử Vi không dự đoán tương lai, mà giúp bạn hiểu mình để lựa chọn tốt hơn.</blockquote>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="luangiai.luan-giai-tu-vi" class="wsp-title">Luận giải Tử Vi</div>
+        <p data-i18n="luangiai.tu-vi-dau-so-la-mot" class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+        <blockquote data-i18n="luangiai.tu-vi-khong-du-doan-tuong" class="wsp-quote">Tử Vi không dự đoán tương lai, mà giúp bạn hiểu mình để lựa chọn tốt hơn.</blockquote>
       </div>
       <!-- Tải bản luận giải MẪU (PDF) — lá số giả định, KHÔNG phải của khách;
            file tĩnh sinh sẵn bởi scripts/gen-tool-sample.mjs, lưu trong bucket
            `samples`. Đặt ngay dưới banner Giới thiệu (Henry 2026-09-14). -->
-      <div class="samp-cta">
+      <div data-i18n="luangiai.ban-luan-giai-mau-tai-pdf" class="samp-cta">
         <span class="sc-ic" data-icon="file-text"></span>
         <span class="sc-txt"><b>Bản luận giải mẫu</b><span>Tải PDF luận giải đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
         <a class="sc-btn" href="/tai-mau/mau-luan-giai-la-so.pdf" target="_blank" rel="noopener">Tải PDF →</a>
@@ -353,7 +353,7 @@
              qua appendHookHighlightCard() (xem onNarrative trong mountHook()). -->
         <div id="hookHost"></div>
         <div class="lg-save-prompt" id="lgSavePrompt" style="display:none"></div>
-        <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
+        <span data-i18n="luangiai.an-la-so" class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
         <div class="chart-wrap" id="miniChart"></div>
         <div class="jump" id="lgJump"></div>
         <div class="lg-tension" id="lgTension" style="display:none"></div>
@@ -363,17 +363,17 @@
              TĨNH, ẩn bằng [hidden] (CLS-safe) — tools-shared/report-delivery.js
              lo toàn bộ hành vi, xem _startLuanGiaiAI/_lgRetryPhan. -->
         <div class="report-ready" id="lgReportCard" hidden>
-          <div class="rr-eyebrow">紫微明寶 · Báo cáo của bạn</div>
-          <div class="rr-title" id="lgReportTitle">Đang đóng bản báo cáo…</div>
+          <div data-i18n="luangiai.bao-cao-cua-ban" class="rr-eyebrow">紫微明寶 · Báo cáo của bạn</div>
+          <div data-i18n="luangiai.dang-dong-ban-bao-cao" class="rr-title" id="lgReportTitle">Đang đóng bản báo cáo…</div>
           <div class="rr-sub" id="lgReportSub"></div>
           <div class="rr-actions">
-            <button type="button" class="rr-btn pri" id="lgBtnPdf" disabled>
+            <button data-i18n="luangiai.dang-dung" type="button" class="rr-btn pri" id="lgBtnPdf" disabled>
               <span class="ic" id="lgBtnPdfIcon"><span class="rr-spin"></span></span>
               <span id="lgBtnPdfLabel">Đang dựng…</span>
             </button>
             <button type="button" class="rr-btn" id="lgBtnEmail" disabled>
               <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg></span>
-              <span id="lgBtnEmailLabel">Gửi vào email</span>
+              <span data-i18n="luangiai.gui-vao-email" id="lgBtnEmailLabel">Gửi vào email</span>
             </button>
           </div>
         </div>
@@ -426,15 +426,15 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tools-shared/nguoi-than.js?v=1"></script>
-<script src="/auth.js?v=6"></script>
+<script src="/auth.js?v=7"></script>
 <script src="/tuvi-paywall.js?v=42"></script>
 <script src="/tools-shared/hook-charts.js?v=3"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
-  <script src="/nav.js?v=47" data-icons-only></script>
+  <script src="/nav.js?v=48" data-icons-only></script>
 <script src="/shell.js?v=141"></script>
-<script src="/tools-shared/shell-soft-nav.js?v=47"></script>
+<script src="/tools-shared/shell-soft-nav.js?v=48"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script src="/tools-shared/i18n.js?v=1"></script>
