@@ -10,6 +10,13 @@
     var g = root.TuviGlossary;
     return g && v ? g.t(kind, v) : v;
   }
+  // Văn dài (W16a): `m`/`g` của 64 quẻ + bản bạch thoại hào từ, ở /tools-shared/i18n-long/<locale>/kinh-dich.js, tra theo SỐ QUẺ.
+  // Chỉ ở chỗ vẽ — railData (gửi server) vẫn dùng `que.m` Việt.
+  if (root.I18n && root.I18n.loadLong) root.I18n.loadLong('kinh-dich');
+  function _long(ns, key, vi) {
+    var I = root.I18n;
+    return I && I.long ? I.long(ns, key, vi) : vi;
+  }
   // Nhãn câu chữ (khoá js.shellui.kdx-*) qua window.I18n; vi/chưa nhúng từ điển ⇒ chữ Việt (thế {biến}).
   function _tv(key, vi, vars) {
     var I = root.I18n;
@@ -164,8 +171,8 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
       .map((b) => (b === '1' ? '⚊' : '⚋'))
       .join(' ')}</div>
     <span class="fortune-badge ${_fbCls[que.f]}">${_fbLabel[que.f]()}</span>
-    <div class="que-meaning">${que.m}</div>
-    <div class="que-guidance">${que.g}</div>
+    <div class="que-meaning">${_long('kinh-dich', 'que.' + (pIdx + 1) + '.m', que.m)}</div>
+    <div class="que-guidance">${_long('kinh-dich', 'que.' + (pIdx + 1) + '.g', que.g)}</div>
   </div>`;
 
     if (cQue) {
@@ -178,8 +185,8 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
         .map((b) => (b === '1' ? '⚊' : '⚋'))
         .join(' ')}</div>
       <span class="fortune-badge ${_fbCls[cQue.f]}">${_fbLabel[cQue.f]()}</span>
-      <div class="que-meaning">${cQue.m}</div>
-      <div class="que-guidance" style="font-size:13px">${cQue.g}</div>
+      <div class="que-meaning">${_long('kinh-dich', 'que.' + (cIdx + 1) + '.m', cQue.m)}</div>
+      <div class="que-guidance" style="font-size:13px">${_long('kinh-dich', 'que.' + (cIdx + 1) + '.g', cQue.g)}</div>
     </div>`;
     } else {
       html += `<div class="que-card" style="display:flex;align-items:center;justify-content:center;opacity:0.5">
@@ -233,7 +240,7 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
         (m) => `<div class="kd-loi${m.chinh ? ' kd-chu' : ''}">
       <div class="kd-loi-nhan">${_esc(_nhanQue(m.nhan))} · ${_esc(_g('que', m.queTen))}${m.nguon === 'bien' ? _tv('js.shellui.kdx-que-bien-p', ' (quẻ biến)') : ''}${m.chinh && d.muc.length > 1 ? _tv('js.shellui.kdx-lam-chu', ' · làm chủ') : ''}</div>
       <div class="kd-loi-han">${_esc(m.han)}</div>
-      <div class="kd-loi-viet">${_esc(m.viet)}</div>
+      <div class="kd-loi-viet">${_esc(root.KinhDichHao.vietHienThi(m))}</div>
     </div>`
       )
       .join('');
@@ -271,8 +278,9 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
    */
   function _canhVe(viet) {
     const s = String(viet == null ? '' : viet).trim();
-    const i = s.indexOf('. ');
-    const dau = i > 0 ? s.slice(0, i + 1) : s;
+    // Câu đầu: hết ở ". " (vi/en/ko) hoặc "。" (ja/zh) — bản dịch văn dài (W16a) đi qua đây ở chỗ vẽ.
+    const m = /\. |。/.exec(s);
+    const dau = m && m.index > 0 ? s.slice(0, m.index + 1) : s;
     return dau.length > 130 ? dau.slice(0, 128).replace(/\s+\S*$/, '') + '…' : dau;
   }
 
@@ -319,7 +327,7 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
               .map((t, i) => {
                 const on = dangDoc.has(i + 1);
                 return `<li${on ? ' class="kd-hao-doc"' : ''}><b>${_tv('js.shellui.kdx-hao-n', 'Hào {n}', { n: i + 1 })}</b> ${_esc(
-                  _canhVe(t)
+                  _canhVe(Hao.vietHienThi({ key: 'hao.' + (v.idx + 1) + '.' + (i + 1), viet: t }))
                 )}${on ? `<i class="kd-hao-tag">${_tv('js.shellui.kdx-dang-doc', 'đang đọc')}</i>` : ''}</li>`;
               })
               .join('')}</ol>`
@@ -331,7 +339,7 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
       </div>
       <figcaption>
         <b>${_esc(_nhanQue(v.nhan))} · ${_esc(_g('que', v.que.n))} ${_esc(v.que.zh)}</b>${
-          loi && loi.qv ? `<span class="kd-anh-que">${_esc(loi.qv)}</span>` : ''
+          loi && loi.qv ? `<span class="kd-anh-que">${_esc(Hao.vietHienThi({ key: 'hao.' + (v.idx + 1) + '.q', viet: loi.qv }))}</span>` : ''
         }
       </figcaption>
       ${dsHao}

@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-562 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+563 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 📜 W16a — Hạ tầng văn dài theo chỉ số (`i18n-long/`) + dịch ja 613 chuỗi: hào từ · lời khuyên quẻ · Thể–Dụng · nghĩa sao/thần |
 | 1 | 2026-11 | `2026-11.md` | 🏷️ W15e — Nhãn khung tĩnh + chữ trong trang Kỳ Môn · Mai Hoa · Kinh Dịch, câu viec, luật đọc quẻ |
 | 1 | 2026-11 | `2026-11.md` | 🧭 W15d — Hướng · Tam Kỳ · cách cục Kỳ Môn · nhãn Cát/Tránh/Bình · quan hệ Thể–Dụng Mai Hoa |
 | 1 | 2026-11 | `2026-11.md` | 🀄 W15c — Glossary Kỳ Môn · 24 tiết khí · 64 quẻ · tượng quẻ, giá trị engine qua G() ở rail + 3 công cụ |

@@ -17,9 +17,17 @@
    Riêng Càn/Khôn có thêm `dung` (Dụng Cửu / Dụng Lục) — chỉ hai quẻ này mới
    dùng tới, khi cả sáu hào đều động. Xem `kinh-dich-doc.js`.
 
-   window.KinhDichHao = { HAO, layLoi }
+   window.KinhDichHao = { HAO, layLoi, vietHienThi }
 */
 (function (root) {
+  // Bản dịch văn dài (W16a) ở /tools-shared/i18n-long/<locale>/kinh-dich-hao.js, tra theo CHỈ SỐ (`hao.<quẻ>.<q|1..6|dung>`).
+  // vi/chưa nạp/thiếu mục ⇒ câu Việt gốc. Dữ liệu gửi server (`viet`) KHÔNG đổi — chỉ `vietHienThi` dùng ở chỗ vẽ.
+  if (root.I18n && root.I18n.loadLong) root.I18n.loadLong('kinh-dich-hao');
+  function _long(ns, key, vi) {
+    var I = root.I18n;
+    return I && I.long ? I.long(ns, key, vi) : vi;
+  }
+
   const HAO = [
     {
       q: '元亨利貞。',
@@ -865,17 +873,22 @@
   function layLoi(kingWen, muc) {
     const d = HAO[kingWen - 1];
     if (!d) return null;
-    if (muc.loai === 'que') return { han: d.q, viet: d.qv, nhan: 'Lời quẻ' };
+    if (muc.loai === 'que') return { han: d.q, viet: d.qv, nhan: 'Lời quẻ', key: `hao.${kingWen}.q` };
     if (muc.loai === 'dungCuu' || muc.loai === 'dungLuc') {
       if (!d.dung) return null;
-      return { han: d.dung.h, viet: d.dung.v, nhan: muc.loai === 'dungCuu' ? 'Dụng Cửu' : 'Dụng Lục' };
+      return { han: d.dung.h, viet: d.dung.v, nhan: muc.loai === 'dungCuu' ? 'Dụng Cửu' : 'Dụng Lục', key: `hao.${kingWen}.dung` };
     }
     const i = (muc.hao || 1) - 1;
     if (!d.h || !d.h[i]) return null;
-    return { han: d.h[i], viet: d.hv[i], nhan: `Hào ${i + 1}` };
+    return { han: d.h[i], viet: d.hv[i], nhan: `Hào ${i + 1}`, key: `hao.${kingWen}.${i + 1}` };
   }
 
-  const API = { HAO, layLoi };
+  /** Bản bạch thoại ĐỂ HIỂN THỊ của một mục `layLoi` trả (mục có `key`). Gửi server thì dùng `.viet`. */
+  function vietHienThi(loi) {
+    return loi ? _long('kinh-dich-hao', loi.key, loi.viet) : '';
+  }
+
+  const API = { HAO, layLoi, vietHienThi };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.KinhDichHao = API;
 })(typeof window !== 'undefined' ? window : globalThis);

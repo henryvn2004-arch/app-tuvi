@@ -109,5 +109,36 @@
     return s;
   }
 
-  window.I18n = { locale: LOCALE, t: t, tv: tv, href: href };
+  // ── Văn DÀI theo chỉ số (W16a): hào từ, lời khuyên quẻ, luận Thể–Dụng… ───────
+  // Bản dịch KHÔNG nằm trong i18n/<locale>.json mà ở file riêng theo locale
+  // /tools-shared/i18n-long/<locale>/<ns>.js (file tự gọi I18n.defineLong). Chỉ nạp file của
+  // locale đang xem, chỉ khi module cần gọi loadLong(ns). Thiếu file/mục ⇒ trả chữ Việt truyền vào.
+  var LONG = {};
+  var LONG_ASKED = {};
+  function defineLong(ns, data) {
+    LONG[ns] = data;
+  }
+  function loadLong(ns) {
+    if (LOCALE === 'vi' || LONG_ASKED[ns]) return;
+    LONG_ASKED[ns] = 1;
+    var src = '/tools-shared/i18n-long/' + LOCALE + '/' + ns + '.js';
+    try {
+      // Module đang được parser nạp ⇒ ghi thẳng để file bản dịch chạy TRƯỚC script kế tiếp (đồng bộ).
+      if (document.readyState === 'loading') document.write('<script src="' + src + '"><\/script>');
+      else {
+        var el = document.createElement('script');
+        el.src = src;
+        el.async = true;
+        document.head.appendChild(el);
+      }
+    } catch (e) {}
+  }
+  /** I18n.long('kinh-dich-hao', 'hao.1.3', 'câu Việt') — bản dịch nếu đã nạp, không thì câu Việt. */
+  function long(ns, key, vi) {
+    var d = LONG[ns];
+    var e = d && Object.prototype.hasOwnProperty.call(d, key) ? d[key] : null;
+    return e && e.t ? e.t : vi;
+  }
+
+  window.I18n = { locale: LOCALE, t: t, tv: tv, href: href, defineLong: defineLong, loadLong: loadLong, long: long };
 })();

@@ -471,3 +471,8 @@ jobs:
       # cross-sell có chữ ở mọi ngôn ngữ, không nhắc "AI". Nội dung email không đi qua check:i18n.
       - name: Email đa ngôn ngữ — đủ khoá, đủ tham số, zh-cn khớp OpenCC
         run: npm run check:emaili18n
+
+      # Văn dài theo chỉ số (W16a): hào từ/lời khuyên quẻ/luận Thể–Dụng ở public/tools-shared/i18n-long/<locale>/.
+      # Hash khớp nguồn, không mục mồ côi, locale trong LONG_COMPLETE đủ 100%, zh-cn khớp OpenCC(zh-tw).
+      - name: Văn dài đa ngôn ngữ — hash khớp nguồn, đủ mục, không mồ côi
+        run: npm run check:i18nlong

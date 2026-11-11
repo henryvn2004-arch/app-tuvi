@@ -4018,7 +4018,7 @@
     });
   }
   function runSoDep(chat, toolId) {
-    ensureScripts(['/tools-shared/bat-trach.js?v=2', '/tools-shared/mai-hoa.js?v=4', '/tools-shared/kinh-dich.js?v=7', '/tools-shared/kinh-dich-hao.js?v=1', '/tools-shared/kinh-dich-doc.js?v=2', '/tools-shared/nap-am.js?v=3', '/tools-shared/so-dep.js?v=2'], function (err) {
+    ensureScripts(['/tools-shared/bat-trach.js?v=2', '/tools-shared/mai-hoa.js?v=5', '/tools-shared/kinh-dich.js?v=8', '/tools-shared/kinh-dich-hao.js?v=2', '/tools-shared/kinh-dich-doc.js?v=2', '/tools-shared/nap-am.js?v=3', '/tools-shared/so-dep.js?v=2'], function (err) {
       if (err || typeof SoDepTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-so', 'không nạp được công cụ Số Đẹp.')); return; }
       inlStep(chat,
         T('js.shellui.cho-thay-day-so-con-muon', '<p>Cho thầy dãy số con muốn chấm điểm nhé (số điện thoại, biển số…).</p>') +
@@ -4307,7 +4307,7 @@
     });
   }
   function runKinhDich(chat, toolId) {
-    ensureScripts(['/tools-shared/kinh-dich.js?v=7', '/tools-shared/kinh-dich-hao.js?v=1', '/tools-shared/kinh-dich-doc.js?v=2'], function (err) {
+    ensureScripts(['/tools-shared/kinh-dich.js?v=8', '/tools-shared/kinh-dich-hao.js?v=2', '/tools-shared/kinh-dich-doc.js?v=2'], function (err) {
       if (err || typeof KinhDichTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-kinh', 'không nạp được công cụ Kinh Dịch.')); return; }
       inlStep(chat,
         T('js.shellui.con-muon-hoi-viec-gi-tuy', '<p>Con muốn hỏi việc gì (tuỳ chọn), rồi thầy gieo quẻ cho con — 6 hào một lượt.</p>') +
@@ -4335,7 +4335,7 @@
     });
   }
   function runMaiHoa(chat, toolId) {
-    ensureScripts(['/tools-shared/mai-hoa.js?v=4', '/tools-shared/kinh-dich.js?v=7', '/tools-shared/kinh-dich-hao.js?v=1'], function (err) {
+    ensureScripts(['/tools-shared/mai-hoa.js?v=5', '/tools-shared/kinh-dich.js?v=8', '/tools-shared/kinh-dich-hao.js?v=2'], function (err) {
       if (err || typeof MaiHoaTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-mai', 'không nạp được công cụ Mai Hoa.')); return; }
       inlStep(chat,
         T('js.shellui.thay-lap-que-theo-gio-hien', '<p>Thầy lập quẻ theo giờ hiện tại, hoặc con nghĩ một con số bất kỳ cho thầy gieo theo số đó — con muốn cách nào?</p>') +
@@ -4369,7 +4369,7 @@
     });
   }
   function runKyMon(chat, toolId) {
-    ensureScripts(['/tools-shared/ky-mon.js?v=4'], function (err) {
+    ensureScripts(['/tools-shared/ky-mon.js?v=5'], function (err) {
       if (err || typeof KyMonTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-ky', 'không nạp được công cụ Kỳ Môn.')); return; }
       inlStep(chat,
         T('js.shellui.de-trong-la-thay-lap-ban', '<p>Để trống là thầy lập bàn theo giờ hiện tại — hoặc con chọn giờ khác và câu hỏi (tuỳ chọn).</p>') +

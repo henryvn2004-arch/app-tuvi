@@ -27,6 +27,7 @@
     "i18n:save": "node scripts/i18n/save.mjs",
     "i18n:pages": "node scripts/i18n/pages.mjs",
     "i18n:zhcn": "node scripts/i18n/zhcn.mjs",
+    "i18n:long": "node scripts/i18n/long.mjs",
     "i18n:tag": "node scripts/i18n/tag.mjs",
     "i18n:tag-js": "node scripts/i18n/tag-js.mjs",
     "i18n:split-markup": "node scripts/i18n/split-markup.mjs",
@@ -92,7 +93,8 @@
     "check:nci18n": "node scripts/check-nc-i18n.mjs",
     "check:glossary": "node scripts/check-glossary.mjs",
     "check:tokushoho": "node scripts/check-tokushoho.mjs",
-    "check:emaili18n": "node scripts/check-email-i18n.mjs"
+    "check:emaili18n": "node scripts/check-email-i18n.mjs",
+    "check:i18nlong": "node scripts/check-i18nlong.mjs"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.9.0",
