@@ -86,6 +86,9 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 .dai-van-num{font-size:10px;color:#333;font-weight:700}
 .tuan-tag,.triet-tag{display:inline-block;padding:0 5px;font-size:8px;font-weight:700;letter-spacing:1px;border-radius:2px;text-transform:uppercase;position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);z-index:5}
 .tuan-tag{background:#2c4a00;color:#fff}.triet-tag{background:#4a0000;color:#fff}
+/* W15: tên Tuần/Triệt ngoài tiếng Việt (旬空 / XUN KONG) dài hơn — giữ một dòng để không đè chữ chân ô; trang vi không đổi */
+html:not([lang="vi"]) .tuan-tag,html:not([lang="vi"]) .triet-tag{white-space:nowrap;letter-spacing:0;padding:0 3px}
+@media(max-width:480px){html:not([lang="vi"]) .tuan-tag,html:not([lang="vi"]) .triet-tag{font-size:7px}}
 .cung-center{font-size:11px;line-height:1.65;color:var(--text)}
 .center-title{font-family:'Noto Serif',serif;font-size:14px;font-weight:700;color:var(--navy);text-align:center;margin-bottom:6px;letter-spacing:.5px}
 .center-divider{border:none;border-top:1px solid var(--border-lt);margin:5px 0}
@@ -363,7 +366,7 @@ function buildDropdowns(){
 function updateGioAm(){
   const h=parseInt(document.getElementById('inp-hh').value)||0;
   const p=parseInt(document.getElementById('inp-pp').value)||0;
-  document.getElementById('gio-chi-display').textContent='Giờ âm: '+CHI[hourMinToGioAm(h,p)];
+  document.getElementById('gio-chi-display').textContent='Giờ âm: '+_g('chi',CHI[hourMinToGioAm(h,p)]);
 }
 
 // ── AN SAO & RENDER ──
@@ -391,7 +394,7 @@ function doAnSao(){
     const fd={name,gioitinh,dd,mm,yyyy,hh,pp,gioChi,amLich,amDuongNam:conv.amDuongNam};
     document.getElementById('laso-grid-container').innerHTML=renderGrid(ls,fd);
     if(window.mountIcons)window.mountIcons(document.getElementById('laso-grid-container'));
-    document.getElementById('grid-title').textContent=`Lá Số: ${name||'—'} — ${dd}/${mm}/${yyyy} ${String(hh).padStart(2,'0')}:${String(pp).padStart(2,'0')} (Giờ ${gioChi})`;
+    document.getElementById('grid-title').textContent=`Lá Số: ${name||'—'} — ${dd}/${mm}/${yyyy} ${String(hh).padStart(2,'0')}:${String(pp).padStart(2,'0')} (${_g('gio','Giờ '+gioChi)})`;
     document.getElementById('grid-wrap').style.display='block';
     document.getElementById('grid-actions').classList.add('visible');
     document.getElementById('grid-wrap').scrollIntoView({behavior:'smooth',block:'start'});
