@@ -13,7 +13,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getUserFromSupabaseToken } from '@/lib/admin/auth';
 import { sendTransactionalEmail } from '@/lib/email/send';
-import { renderLuanGiaiPdf, TOOL_META } from '@/lib/pdf/luan-giai';
+import { localeFromCookieHeader, saveUserLocale, getUserLocale } from '@/lib/email/locale';
+import { renderPdfMail } from '@/lib/email/i18n';
+import { renderLuanGiaiPdf } from '@/lib/pdf/luan-giai';
 import { buildPhans } from '@/lib/pdf/phan-labels';
 import { getOrCreateReportToken } from '@/lib/pdf/report-link';
 import { classifyLuanGiaiSlug } from '@/lib/pdf/luan-giai-slug';
@@ -65,7 +67,6 @@ export async function POST(req: NextRequest) {
   const ngaySinh = [row.ngay_sinh, row.thang_sinh, row.nam_sinh].every((v) => v != null)
     ? `${row.ngay_sinh}/${row.thang_sinh}/${row.nam_sinh}${row.gio_chi ? ', giờ ' + row.gio_chi : ''}`
     : '';
-  const toolLabel = TOOL_META[toolId].title;
 
   try {
     const pdfBuffer = await renderLuanGiaiPdf({
@@ -87,24 +88,28 @@ export async function POST(req: NextRequest) {
     // effort: lỗi sinh token KHÔNG được chặn việc gửi PDF, đính kèm mới là
     // giá trị chính của email này. Thiếu token thì email vẫn gửi, chỉ thiếu
     // dòng link.
-    let viewOnlineHtml = '';
+    let viewUrl: string | undefined;
     try {
       const linkToken = await getOrCreateReportToken(slug, toolId, user.id);
-      const viewUrl = `https://tuviminhbao.com/ket-qua-laso/${linkToken}`;
-      viewOnlineHtml = `<p><a href="${viewUrl}">Xem báo cáo trực tuyến →</a> (không cần đăng nhập, mở trên bất kỳ thiết bị nào)</p>`;
+      viewUrl = `https://tuviminhbao.com/ket-qua-laso/${linkToken}`;
     } catch (e) {
       console.error('[luan-giai/resend-pdf] lỗi sinh report token', e);
     }
+
+    // Cookie = ngôn ngữ khách ĐANG dùng; có thì ghi nhớ cho các email sau.
+    const cookieLocale = localeFromCookieHeader(req.headers.get('cookie'));
+    if (cookieLocale) await saveUserLocale(user.id, cookieLocale);
+    const locale = cookieLocale ?? (await getUserLocale(user.id));
+    const mail = renderPdfMail(locale, toolId, hoTen, { resend: true, viewUrl });
 
     const result = await sendTransactionalEmail({
       dedupeKey: `resend-pdf-luan-giai-${toolId}-${user.id}-${slug}-${dayBucket}`,
       template: 'luan-giai-pdf-resend',
       to: user.email,
-      subject: `PDF ${toolLabel}${hoTen ? ' — ' + hoTen : ''} — Tử Vi Minh Bảo`,
-      html: `<p>Gửi lại bạn bản PDF ${toolLabel.toLowerCase()}${hoTen ? ' của <b>' + hoTen + '</b>' : ''} — đính kèm trong email này.</p>
-${viewOnlineHtml}
-<p style="font-size:12px;color:#888">Bạn luôn xem lại bản đầy đủ trên tài khoản tại <a href="https://tuviminhbao.com/app">tuviminhbao.com/app</a>.</p>`,
+      subject: mail.subject,
+      html: mail.html,
       userId: user.id,
+      locale,
       attachments: [{ filename: `${toolId}-tu-vi-minh-bao.pdf`, content: pdfBuffer.toString('base64') }],
     });
 

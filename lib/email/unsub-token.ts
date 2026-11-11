@@ -33,9 +33,10 @@ export function verifyUnsubToken(email: string, sig: string): boolean {
  * `null` khi thiếu `EMAIL_UNSUB_SECRET` (chưa cấu hình) — nơi gọi tự quyết
  * có chặn gửi hay không, đừng gửi thư quảng bá thiếu link huỷ ra ngoài.
  */
-export function unsubscribeUrl(email: string): string | null {
+export function unsubscribeUrl(email: string, lang?: string): string | null {
   if (!SECRET) return null;
   const clean = email.trim().toLowerCase();
   const sig = sign(clean);
-  return `${SITE_URL}/api/email/unsubscribe?email=${encodeURIComponent(clean)}&sig=${sig}`;
+  // `lang` KHÔNG vào chữ ký: nó chỉ chọn ngôn ngữ trang xác nhận, không đổi việc huỷ ai.
+  return `${SITE_URL}/api/email/unsubscribe?email=${encodeURIComponent(clean)}&sig=${sig}${lang && lang !== 'vi' ? `&lang=${encodeURIComponent(lang)}` : ''}`;
 }

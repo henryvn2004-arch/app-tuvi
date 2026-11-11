@@ -123,3 +123,36 @@ phần dở dang mà không ai chốt lại được. Route admin chỉ NẠP
 nhận được, CỐ Ý: một chiến dịch cần tập nhận cố định để đếm "đã gửi/còn lại"
 có nghĩa), cron `email-broadcast-drain` mới thật sự gửi, 200 người/lượt, mỗi
 15 phút. Xem `_patches/migration-email-broadcast-queue.sql`.
+
+## Ngôn ngữ email (W11, 2026-11) — vì sao lưu DB mà không đọc cookie lúc gửi
+
+Khách mới là người Nhật · Hàn · Đài · Trung · Anh, nên cả 6 loại email phải đi bằng ngôn ngữ họ.
+- **Chữ ở MỘT chỗ: `lib/email/i18n.ts`.** Nơi gọi chỉ truyền dữ liệu (`renderInvoice` · `renderPdfMail` ·
+  `renderReminder` · `renderAbandoned` · `renderCrossSell`), KHÔNG tự nối chuỗi. Gửi vẫn qua `send.ts`
+  (mutex `email_log`, link huỷ, fail-closed không đổi) — `send.ts` chỉ nhận thêm `locale` để đặt tên
+  người gửi (明宝/명보/明寶/Minh Bao, trừ khi env `EMAIL_FROM_*` đặt tay) và footer huỷ đăng ký.
+- **zh-cn SINH từ zh-tw bằng OpenCC**, cùng luật W4: sửa khối `'zh-tw'` rồi chạy
+  `node scripts/check-email-i18n.mjs --write`. `npm run check:emaili18n` (CI) bắt lệch, thiếu tham số
+  (`{credits}`…), thiếu chữ cho cặp cross-sell mới, và chữ "AI".
+- **Ngôn ngữ lưu ở bảng `user_locale`** (`_patches/migration-user-locale.sql`, CHƯA chạy prod), ghi bởi
+  `saveUserLocale` từ cookie `tvmb_locale` ở hai khoảnh khắc khách còn ngồi trước máy: tạo đơn nạp
+  (`app/api/payment` `topup`) và gửi PDF (`email-pdf`, `resend-pdf`). Hoá đơn đi từ WEBHOOK PayPal và
+  reminder/cross-sell/broadcast đi từ cron — không có cookie — nên PHẢI đọc từ bảng (`getUserLocale(s)`).
+  Thứ tự: bảng `user_locale` (ngôn ngữ dùng gần nhất lúc mua/gửi PDF) → `user_metadata.locale`
+  (W4b gắn lúc signUp/claimAccount trong `auth.js`) → tiếng Việt. Metadata đọc qua GoTrue admin API, chỉ cho
+  người chưa có dòng trong bảng.
+- **Hoá đơn hiện USD** khi có `amountUsd` (PayPal truyền `paidUsd`, số tiền thật PayPal đã thu); webhook
+  ngân hàng/MoMo cũ không có USD ⇒ vẫn VNĐ. Tên gói (tiếng Việt) chỉ hiện ở bản `vi`.
+- **Broadcast: nội dung do admin soạn** — tự lo ngôn ngữ (soạn riêng từng bản, gửi riêng từng danh sách);
+  `locale` chỉ đổi footer + người gửi + trang huỷ. Link huỷ mang `&lang=` (KHÔNG nằm trong chữ ký HMAC).
+- **Chưa phủ:** `lib/channels/email-link.ts` (mã gộp tài khoản — thuộc kênh chat, ngoài phạm vi W11),
+  OTP đăng ký (Supabase Auth — việc tay, xem bên dưới), và PDF đính kèm (ngôn ngữ do prompt W8 quyết).
+
+### Việc tay Henry — OTP đa ngôn ngữ (code không làm thay được)
+OTP đi qua Supabase Auth custom SMTP nên không đổi được bằng code. Dashboard → Authentication → Emails
+→ Templates: Supabase chỉ có MỘT mẫu cho mỗi loại thư (Confirm signup, Magic link, Reset password…) — không có
+mẫu theo ngôn ngữ. Hai cách: (a) viết mẫu SONG NGỮ một khối (tiếng Anh ở trên, 日本語/한국어/繁體中文 bên dưới,
+mã `{{ .Token }}` dùng chung) — làm được ngay, không đổi code; (b) truyền ngôn ngữ vào `data` lúc `signUp`
+(`options.data.locale`) rồi dùng `{{ if eq .Data.locale "ja" }}…{{ end }}` trong mẫu — cần sửa `public/auth.js`
+(vùng W4) và bump `auth.js?v=` ở mọi trang. Khuyến nghị (a) trước, (b) khi đã có khách thật đăng ký.
+Đặt tên người gửi SMTP (Sender name) là "Tử Vi Minh Bảo · 明宝 · 명보" cho hợp mọi ngôn ngữ.

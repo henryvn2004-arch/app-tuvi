@@ -6,6 +6,7 @@
 // hiệu — `sendMarketingEmail` đã tự lo unsubscribe/link huỷ.
 // ============================================================
 import { sendMarketingEmail } from '../email/send';
+import { getUserLocales } from '../email/locale';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -64,6 +65,9 @@ export async function drainEmailBroadcastQueue(): Promise<BroadcastDrainResult> 
   let sent = 0;
   let failed = 0;
 
+  // Chỉ để footer + tên người gửi + trang huỷ đúng ngôn ngữ người nhận — NỘI DUNG thư là admin soạn,
+  // tự lo ngôn ngữ (soạn riêng từng bản rồi gửi riêng từng danh sách).
+  const locales = await getUserLocales(batch.map((r) => r.user_id || ''));
   for (let i = 0; i < batch.length; i += CHUNK) {
     const chunk = batch.slice(i, i + CHUNK);
     const results = await Promise.allSettled(chunk.map((r) =>
@@ -74,6 +78,7 @@ export async function drainEmailBroadcastQueue(): Promise<BroadcastDrainResult> 
         subject: row.subject,
         html: row.html,
         userId: r.user_id,
+        locale: r.user_id ? locales.get(r.user_id) : undefined,
       }),
     ));
     for (const res of results) {
