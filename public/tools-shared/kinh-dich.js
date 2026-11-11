@@ -278,8 +278,9 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
    */
   function _canhVe(viet) {
     const s = String(viet == null ? '' : viet).trim();
-    const i = s.indexOf('. ');
-    const dau = i > 0 ? s.slice(0, i + 1) : s;
+    // Câu đầu: hết ở ". " (vi/en/ko) hoặc "。" (ja/zh) — bản dịch văn dài (W16a) đi qua đây ở chỗ vẽ.
+    const m = /\. |。/.exec(s);
+    const dau = m && m.index > 0 ? s.slice(0, m.index + 1) : s;
     return dau.length > 130 ? dau.slice(0, 128).replace(/\s+\S*$/, '') + '…' : dau;
   }
 
@@ -326,7 +327,7 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
               .map((t, i) => {
                 const on = dangDoc.has(i + 1);
                 return `<li${on ? ' class="kd-hao-doc"' : ''}><b>${_tv('js.shellui.kdx-hao-n', 'Hào {n}', { n: i + 1 })}</b> ${_esc(
-                  _canhVe(t)
+                  _canhVe(Hao.vietHienThi({ key: 'hao.' + (v.idx + 1) + '.' + (i + 1), viet: t }))
                 )}${on ? `<i class="kd-hao-tag">${_tv('js.shellui.kdx-dang-doc', 'đang đọc')}</i>` : ''}</li>`;
               })
               .join('')}</ol>`
@@ -338,7 +339,7 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
       </div>
       <figcaption>
         <b>${_esc(_nhanQue(v.nhan))} · ${_esc(_g('que', v.que.n))} ${_esc(v.que.zh)}</b>${
-          loi && loi.qv ? `<span class="kd-anh-que">${_esc(loi.qv)}</span>` : ''
+          loi && loi.qv ? `<span class="kd-anh-que">${_esc(Hao.vietHienThi({ key: 'hao.' + (v.idx + 1) + '.q', viet: loi.qv }))}</span>` : ''
         }
       </figcaption>
       ${dsHao}
