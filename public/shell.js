@@ -1109,8 +1109,8 @@
   }
   function startFamilyForm(vai, v, q) {
     var chat = document.getElementById('chat');
-    ensureScripts(['/tools-shared/vn-timezone.js?v=1'], function (e1) {
-      ensureScripts(['/tuvi-form.js?v=14'], function (e2) {
+    ensureScripts(['/tools-shared/vn-timezone.js?v=1', '/tools-shared/noi-sinh.js?v=1'], function (e1) {
+      ensureScripts(['/tuvi-form.js?v=15'], function (e2) {
         if (e1 || e2 || typeof TuviForm === 'undefined') {
           inlineErrorBubble(chat, 'chưa mở được form ngày sinh.', '/app/so-la-so');
           return;
@@ -3766,7 +3766,11 @@
   }
   function inlineBirth(d) {
     var gioIdx = window.VnTimezone ? window.VnTimezone.hourMinToGioIdx(d.gioHour, d.gioPhut) : 0;
-    return { day: d.ngay, month: d.thang, year: d.nam, hourBranch: gioIdx, gender: d.gioitinh, name: d.hoten || undefined };
+    var b = { day: d.ngay, month: d.thang, year: d.nam, hourBranch: gioIdx, gender: d.gioitinh, name: d.hoten || undefined };
+    // Lịch âm theo nơi sinh (W3, BirthParams.lich/noiSinh) — additive: thiếu ⇒ engine đi lịch VN như cũ.
+    if (d.lich) b.lich = d.lich;
+    if (d.noiSinh) b.noiSinh = d.noiSinh;
+    return b;
   }
   function inlineErrorBubble(chat, msg, fallbackPath) {
     var el = document.createElement('div');
@@ -5582,8 +5586,8 @@
       if (input) { input.disabled = false; input.placeholder = ph; }
       setSend(true); renderSuggs();
     };
-    ensureScripts(['/tools-shared/vn-timezone.js?v=1'], function (e1) {
-      ensureScripts(['/tuvi-form.js?v=14'], function (e2) {
+    ensureScripts(['/tools-shared/vn-timezone.js?v=1', '/tools-shared/noi-sinh.js?v=1'], function (e1) {
+      ensureScripts(['/tuvi-form.js?v=15'], function (e2) {
         if (e1 || e2 || typeof TuviForm === 'undefined') {
           release();
           inlineErrorBubble(chat, 'chưa mở được form ngày sinh.', '/app/la-so');
