@@ -72,3 +72,6 @@ seal.*
 data/nghiem-chung/
 # Đầu ra tạm của pipeline (đã git-exclude cục bộ).
 work/
+
+# Bảng đối chứng lịch âm HKO/KASI — SINH bởi scripts/oracle/fetch-lunar-refs.mjs, không format tay
+scripts/fixtures/lunar-ref-*.json

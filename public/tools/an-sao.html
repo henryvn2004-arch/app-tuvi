@@ -19,7 +19,8 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js"></script>
+<script src="/tools-shared/noi-sinh.js?v=1"></script>
+<script src="/tuvi-form.js?v=15"></script>
 <script src="/tuvi-grid.js?v=7"></script>
 <!-- Chart.js ĐÃ GỠ: chuỗi "Chart" không xuất hiện lần nào trong trang này,
      và không script nào nó nạp có dùng tới. Cùng bệnh với app-luan-giai. -->
@@ -288,7 +289,7 @@ select.form-input{cursor:pointer}
 <script>
 // luanGiai() is called by the submit button injected by tuvi-form.js
 function luanGiai() {
-  const { hoten, ngay, thang, nam, gioIdx, gioHour, gioitinh, namXem } = TuviForm.getData();
+  const { hoten, ngay, thang, nam, gioIdx, gioHour, gioitinh, namXem, lich } = TuviForm.getData();
   const errEl = document.getElementById('error-msg');
   errEl.classList.remove('active');
 
@@ -307,7 +308,7 @@ function luanGiai() {
   document.getElementById('result-section').classList.remove('active');
 
   try {
-    const conv = convertDuongToAm(ngay, thang, nam, gioHour);
+    const conv = convertDuongToAm(ngay, thang, nam, gioHour, lich);
     conv._dl = { day: ngay, month: thang, year: nam };
     const ls = anSaoLaSo({
       ngayAL:  conv.amLich.day,

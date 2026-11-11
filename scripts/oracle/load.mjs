@@ -152,6 +152,7 @@ export function loadOracle() {
     'STAR_ELEMENT',
     'MAJOR_META',
     'lunarDeltaTSeconds',
+    'NewMoon',
   ];
 
   const fn = new Function(

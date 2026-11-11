@@ -421,7 +421,8 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tools-shared/illus-nguong.js?v=1"></script>
 <script src="/tools-shared/illus-match.js?v=1"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=14"></script>
+<script src="/tools-shared/noi-sinh.js?v=1"></script>
+<script src="/tuvi-form.js?v=15"></script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tools-shared/nguoi-than.js?v=1"></script>
@@ -693,7 +694,7 @@ async function doLuan(){
   try{ sessionStorage.setItem(LG_RESUME_KEY, JSON.stringify({fd:fdIn, namxem:namxem, subjectLabel:_subjectLabel||null})); }catch(e){ /* ignore */ }
   try{
     var gioChi=CHI[gioAmIdx];
-    var conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
+    var conv=convertDuongToAm(dd,mm,yyyy,hh,fdIn.lich);conv.gioIdx=gioAmIdx;
     var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:gioitinh,namXem:namxem});
     var fd={name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,gioChi:gioChi,amLich:conv.amLich,amDuongNam:conv.amDuongNam};
     // ── Globals cho khối "Luận giải chuyên sâu AI" (gate+RAG+stream+PDF, port từ luan-giai.html) ──
@@ -726,7 +727,7 @@ async function doLuan(){
     }
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
-      birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
+      birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined,lich:fdIn.lich,noiSinh:fdIn.noiSinh},
       label:'Luận giải '+(name||'lá số')+' · '+dd+'/'+mm+'/'+yyyy+' · năm '+namxem,
       // Đợt 0 (2026-09-24): "đã sẵn sàng" đọc như đã có bản ĐẦY ĐỦ, trong khi
       // lúc này mới chỉ có phần 1 "Tổng Quan Lá Số" (FREE_PHAN=1) miễn phí,

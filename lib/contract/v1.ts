@@ -52,6 +52,9 @@ export interface ChatMessage {
 // ── Tham số sinh (để engine lập lá số server-side) ──────────
 // Client thu thập rồi gửi lên; server tính. Không bắt buộc —
 // agent có thể hỏi lại nếu thiếu (slot-filling).
+/** Truyền thống lịch âm — xem `BirthParams.lich`. */
+export type LichAm = 'vn' | 'cn' | 'kr' | 'jp';
+
 export interface BirthParams {
   /** Ngày sinh dương lịch */
   day?: number;
@@ -65,6 +68,16 @@ export interface BirthParams {
   isLunar?: boolean;
   /** true nếu tháng âm ở trên là tháng NHUẬN (chỉ có nghĩa khi isLunar) */
   isLeapMonth?: boolean;
+  /**
+   * Truyền thống LỊCH ÂM theo nơi sinh (i18n W3, thêm 2026-11): 'vn' (mặc định)
+   * · 'cn' (Trung/Đài/HK/Ma Cao, UTC+8) · 'kr' · 'jp'. Khác 'vn' thì
+   * day/month/year/hourBranch là giờ dân sự CỦA LỊCH ĐÓ — form đã quy đổi từ giờ
+   * nơi sinh qua `public/tools-shared/noi-sinh.js`; isLunar thì day/month/year
+   * là ngày âm theo lịch đó. Thiếu/giá trị lạ ⇒ server coi như 'vn' (y như cũ).
+   */
+  lich?: LichAm;
+  /** Mã nước nơi sinh (ISO 3166-1, vd 'TW') — chỉ để ghi nhận/hiển thị; engine đọc `lich`. */
+  noiSinh?: string;
   /** Tên hiển thị (tùy chọn) */
   name?: string;
 }
