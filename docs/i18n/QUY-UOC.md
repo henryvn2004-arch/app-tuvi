@@ -32,10 +32,24 @@ npm run i18n:save -- --locale ja --file lo.json      # {"khoá":"bản dịch"} 
 ## Route tự dịch từ DB (tự quản SEO)
 Route tự render đúng ngôn ngữ và tự xuất robots/canonical/hreflang theo từng bản ghi (hiện: `/nghiem-chung`, `/xac-dinh-gio-sinh`) đăng ký ở **`lib/i18n/self-managed.mjs`** (`SELF_MANAGED_PREFIXES`, một chỗ duy nhất). Với `/<locale>/<prefix>…` proxy bóc tiền tố + gắn `x-tvmb-locale` rồi rewrite THẲNG tới route, KHÔNG qua `i18n-render`, KHÔNG noindex tự động; route đọc `localeFromHeaders()` và tự quyết (bản chưa dịch → 404). Các prefix này không nằm trong `availability.json`; `check:i18n` cấm đăng ký chồng.
 
+## Trang chỉ MỘT ngôn ngữ
+Trang không có bản dịch và không có bản vi (vd `public/tokushoho.html`, tiếng Nhật) đăng ký ở `lib/i18n/single-locale.mjs` (`SINGLE_LOCALE_PAGES`) **và** tự khai `<meta name="tvmb-single-locale" content="ja">`. Proxy: `/ja/<path>` phục vụ nguyên file (trang tự lo canonical/robots; không chèn hreflang), `/en/<path>` → 404, `/<path>` không tiền tố → 308 về `/ja/<path>`. Không vào `availability.json` ⇒ không hreflang chéo, không lên sitemap ngôn ngữ khác. Link nội bộ từ trang đã dịch trỏ thẳng bản có tiền tố. `check:i18n` soi hai chiều (meta ↔ danh sách) và cấm trang này có `data-i18n`.
+
+## Ngôn ngữ lúc đăng ký
+`public/auth.js` gắn ngôn ngữ hiện tại (tiền tố URL, rồi cookie `tvmb_locale`) vào **`user_metadata.locale`** (`data.locale` của body `POST /auth/v1/signup` và `PUT /auth/v1/user` của `claimAccount`) để email/hoá đơn đúng ngôn ngữ. Không biết ngôn ngữ ⇒ không gửi trường (như cũ). Đăng nhập Google/Facebook và phiên ẩn danh KHÔNG mang trường này (OAuth không cho truyền metadata) — bên gửi email nên rơi về bảng `user_locale` của W11 rồi mới về tiếng Việt. Bump `auth.js?v=` khi đổi.
+
 ## Dành cho W6 / W8
 - Route SSR/handler đọc ngôn ngữ qua `localeFromHeaders(req.headers)` — proxy đã gắn header, nhưng trang SSR (không phải HTML tĩnh) hiện chỉ được phục vụ dưới `/<locale>/…` ở dạng `noindex` (không có khoá data-i18n) cho tới khi tự chịu trách nhiệm bản dịch. Muốn index: render sẵn chữ đúng ngôn ngữ trong route VÀ đăng ký trang (đưa vào `availability`) — trao đổi với W4.
-- Prompt LLM: câu chỉ định ngôn ngữ đặt ở USER message (giữ cache `cachedSystemFor`).
+- Prompt LLM: câu chỉ định ngôn ngữ đặt ở USER message (giữ cache `cachedSystemFor`). Chi tiết ở mục "Ngôn ngữ đầu ra của LLM (W8)" dưới đây.
 - `?v=` bump: đã bump `nav.js`→48, `shell.js`→140, `shell.css`→79 ở mọi nơi TRỪ `public/topup.html` (W5) và `lib/nghiem-chung/trang-hub.ts`, `trang-ho-so.ts` (W6) — **W5/W6 tự bump ba chỗ đó** (`nav.js?v=48`).
+
+## Ngôn ngữ đầu ra của LLM (W8)
+Lõi: `lib/llm/locale.ts`. Khách `vi` giữ NGUYÊN từng byte prompt và khoá cache.
+- **Lấy ngôn ngữ request bằng `requestLocale(req)`** — KHÔNG tự parse URL/cookie. Thứ tự: header `x-tvmb-locale` → `Referer` cùng nguồn có tiền tố `/<locale>/` → `vi`. Vì `fetch('/api/…')` của JS trang không đi qua proxy nên không có header; `Referer` là URL trang. Cookie `tvmb_locale` **không dùng** (chỉ nhớ lựa chọn, có thể lệch trang). App native/bên gọi khác gửi header `x-tvmb-locale`. `ChatRequestV1.locale` (contract, additive) do SERVER điền, đè giá trị client gửi; kênh chat (Telegram/Zalo/Messenger) không đặt ⇒ luôn Việt.
+- **Câu chỉ định ngôn ngữ nối vào CUỐI tin user** bằng `withLang(userText, locale, [văn bản lá số], opts)` (`opts.json` cho tool JSON, `opts.rail` cho rail có dòng `SUGGEST:`). KHÔNG bao giờ vào system (giữ cache `cachedSystemFor`). Khối chỉ chứa: chỉ định ngôn ngữ · THAY luật xưng hô/khẩu ngữ/Hán-Việt bằng MỘT mẫu giọng · tên thương hiệu/bộ môn · thuật ngữ của đúng cung/sao có trong lá số (glossary, trần 90).
+- **Khoá cache:** `vi` giữ khoá cũ; ngôn ngữ khác thêm `localeKeySuffix(locale)` (`|loc:ja`). Đã nối ở `previewKey` và khoá `hook-narrative`. Tool dùng `cacheFor`/`lasoKey` mà nhận ngôn ngữ sau này phải truyền hậu tố qua `extra` — `_shape` vẫn KHÔNG vào khoá.
+- **`laso_public.luan_giai` chỉ giữ tiếng Việt:** `save-laso` bỏ chữ luận khi ngôn ngữ ≠ `vi`; ai đọc lại luận đã lưu (`van-han-nam`, PDF, `/la-so/<slug>`) hiểu đó là tiếng Việt. Muốn lưu luận đa ngôn ngữ cần kho khoá theo `(slug, locale)` — việc kèm lúc dịch trang luận.
+- Thêm ngôn ngữ/đổi tên thương hiệu: sửa bảng `VOICE` trong `lib/llm/locale.ts` (khớp bảng W7). Thuật ngữ lấy từ `lib/i18n/glossary/`.
 
 ## Font CJK
 `@fontsource-variable/noto-sans-{jp,kr,tc,sc}` (devDependencies) → `npm run i18n:fonts` (chạy trong `prebuild`) sinh `public/fonts/cjk/*.woff2` + `public/fonts/i18n-<locale>.css` (gitignore). Chỉ trang `/<locale>` CJK được chèn `<link>`; unicode-range theo lát nên chỉ tải lát có chữ. CLS: `font-display:swap`, 'Be Vietnam Pro' đứng đầu ngăn xếp (Latin giữ nét), sau đó Noto rồi font hệ thống CJK (glyph rộng 1em nên đổi font ít xô dòng). Tiêu đề dùng lớp riêng (vd Noto Serif) giữ nguyên font — CJK trong đó rơi về font hệ thống.

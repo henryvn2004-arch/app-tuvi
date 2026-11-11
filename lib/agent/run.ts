@@ -71,6 +71,7 @@ import {
 } from '@/lib/engine/huong-nghiep-tre';
 import { huongNghiepTreRailWrapper } from '@/lib/agent/huong-nghiep-tre-prompt';
 import { resolveAvatarId } from '@/lib/media/tool-avatar-prompt';
+import { langBlock } from '@/lib/llm/locale';
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
@@ -319,6 +320,8 @@ async function runAgentInner(
   // Gợi ý trọng tâm theo câu hỏi — nhét vào TIN NHẮN (không vào system) để
   // system mang full lá số giữ byte ổn định → prompt-cache trúng qua mọi lượt.
   let focusHintText = '';
+  // Văn bản lá số (tiếng Việt) đang luận — để chọn ĐÚNG phần thuật ngữ cho khối ngôn ngữ (i18n W8).
+  let lasoTermSrc = '';
 
   const scenario = req.scenario;
   if (scenario && scenario.type) {
@@ -410,6 +413,7 @@ async function runAgentInner(
         // "Người xem: <tên> (giới tính)" lên đầu context → model xưng hô đúng
         // (luật XƯNG_HO_RULE trong CHAT_SYSTEM_LASO). birth.name/gender do client gửi.
         lasoCtx = nguoiXemLine(req.birth.name, req.birth.gender) + extractLasoContext(res.ls, '', { full: true });
+        lasoTermSrc = lasoCtx;
         // Câu hỏi trúng một chủ đề đã dựng kỹ năng (lib/agent/luan-chu-de.ts) →
         // khối chủ đề THAY focusHint; tra_tieu_van đọc ctx.chuDe để gắn lăng kính.
         ctx.chuDe = cacChuDe(lastQ);
@@ -714,6 +718,23 @@ async function runAgentInner(
         const tb = last.content.find((b: any) => b.type === 'text');
         if (tb) tb.text += '\n\n' + hint;
         else last.content.push({ type: 'text', text: hint });
+      }
+    }
+  }
+
+  // NGÔN NGỮ (i18n W8) — khách /ja /ko /zh-* /en nhận chữ sinh THẲNG bằng ngôn ngữ đó. Khối đi vào CUỐI tin
+  // user (không vào system, giữ prompt cache); 'vi'/kênh chat → '' nên không đổi một byte.
+  const langTxt = langBlock(req.locale ?? 'vi', lasoTermSrc ? [lasoTermSrc] : [], { rail: true });
+  if (langTxt && convo.length) {
+    const last = convo[convo.length - 1];
+    if (last?.role === 'user') {
+      if (typeof last.content === 'string') {
+        last.content = last.content + '\n\n' + langTxt;
+      } else if (Array.isArray(last.content)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const tb = last.content.find((b: any) => b.type === 'text');
+        if (tb) tb.text += '\n\n' + langTxt;
+        else last.content.push({ type: 'text', text: langTxt });
       }
     }
   }

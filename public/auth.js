@@ -300,12 +300,29 @@ async function signInEmail(email, password) {
 // `auth-callback.html` (nơi đã xử lý sẵn `access_token` trong hash, dùng
 // chung cho cả OAuth lẫn link xác nhận email — GoTrue verify redirect với
 // đúng hình dạng hash đó).
+// ── Ngôn ngữ hiện tại (đa ngôn ngữ, W4b) ──
+// Gắn vào user_metadata.locale lúc ĐĂNG KÝ để email/hoá đơn về sau đúng ngôn ngữ
+// (cron/webhook không có cookie). Ưu tiên tiền tố URL (/ja/…), rồi cookie `tvmb_locale`
+// (cùng tên với public/i18n.js). Không xác định ⇒ null ⇒ KHÔNG gửi trường (như cũ = vi).
+// Danh sách phải khớp lib/i18n/locales.ts (check:i18n soi).
+var _TVMB_LOCALES = ['vi', 'en', 'ja', 'ko', 'zh-tw', 'zh-cn'];
+function _currentLocale() {
+  try {
+    var m = /^\/(en|ja|ko|zh-tw|zh-cn)(?=\/|$)/.exec(window.location.pathname);
+    if (m) return m[1];
+    var c = /(?:^|;\s*)tvmb_locale=([^;]+)/.exec(document.cookie || '');
+    if (c && _TVMB_LOCALES.indexOf(c[1]) >= 0) return c[1];
+  } catch (e) { /* ignore */ }
+  return null;
+}
+
 async function signUpEmail(email, password) {
   const redirectTo = encodeURIComponent(window.location.origin + '/auth-callback.html');
   const res = await fetch(`${SUPA_URL}/auth/v1/signup?redirect_to=${redirectTo}`, {
     method: 'POST',
     headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
+    // `data` → user_metadata (GoTrue). `locale` chỉ có khi biết ngôn ngữ.
+    body: JSON.stringify(_currentLocale() ? { email, password, data: { locale: _currentLocale() } } : { email, password }),
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error_description || data.msg || 'Đăng ký thất bại');
@@ -367,7 +384,7 @@ async function claimAccount(email, password) {
   var res = await fetch(`${SUPA_URL}/auth/v1/user`, {
     method: 'PUT',
     headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-    body: JSON.stringify({ email: email, password: password }),
+    body: JSON.stringify(_currentLocale() ? { email: email, password: password, data: { locale: _currentLocale() } } : { email: email, password: password }),
   });
   var data = await res.json();
   if (!res.ok) throw new Error(data.error_description || data.msg || 'Không lưu được tài khoản.');

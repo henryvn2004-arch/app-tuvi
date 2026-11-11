@@ -31,6 +31,7 @@ import { previewCacheGet, previewCachePut } from '@/lib/llm/preview-cache';
 import { authUserFromRequest } from '@/lib/api/tool-helpers';
 import { hasToppedUp } from '@/lib/billing/credits';
 import { parseLlmJson } from '@/lib/llm/json';
+import { requestLocale, withLang, localeKeySuffix } from '@/lib/llm/locale';
 import { HOOK_NARRATIVE_SYSTEM, HOOK_NARRATIVE_SCHEMA, buildHookNarrativePrompt, type HookFactInput } from '@/lib/agent/hook-prompt';
 
 const TONES = new Set(['good', 'bad', 'neutral']);
@@ -133,8 +134,10 @@ export async function POST(request: NextRequest) {
   // laSoText/namXem/hoTen, hình dạng riêng của tool "laso"). Cùng facts luôn
   // ra cùng nội dung bất kể tool nào gửi tới, nên khoá theo đúng thứ quyết
   // định nội dung.
+  // Ngôn ngữ (i18n W8) vào khoá CHỈ khi khác `vi` ⇒ khoá cũ của khách Việt giữ nguyên, bản Nhật không trả cho khách Việt.
+  const locale = requestLocale(request);
   const cacheKey = createHash('sha256')
-    .update(`hook-narrative|${toolId}|${JSON.stringify(facts)}`)
+    .update(`hook-narrative|${toolId}|${JSON.stringify(facts)}${localeKeySuffix(locale)}`)
     .digest('hex');
 
   const hit = await previewCacheGet(cacheKey);
@@ -167,7 +170,7 @@ export async function POST(request: NextRequest) {
     if (!gate.allowed) return ok({ allowed: false, reason: gate.reason });
   }
 
-  const prompt = buildHookNarrativePrompt(toolLabel, facts);
+  const prompt = withLang(buildHookNarrativePrompt(toolLabel, facts), locale, facts.map((f) => `${f.title} ${f.body}`), { json: true });
   const ask = async (nudge: boolean) => {
     try {
       return await llmTextFull({

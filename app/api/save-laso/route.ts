@@ -4,6 +4,7 @@ import { NextRequest } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { makeLasoSlug } from '@/lib/engine/laso';
+import { requestLocale } from '@/lib/llm/locale';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 // Service key (KHÔNG phải anon key): anon key là public, và trước đây bảng
@@ -64,6 +65,16 @@ export async function POST(request: NextRequest) {
       person_name:    b.personName ? String(b.personName) : null,
     };
     if (userId) payload.user_id = userId;
+
+    // 🔴 `laso_public.luan_giai` khoá theo SLUG (không có cột ngôn ngữ) và là kho CHUNG: trang /la-so/<slug>,
+    // PDF, lịch sử, Vận Hạn 12 Tháng đều đọc nó coi như tiếng Việt. Khách ở /ja /ko /zh-* /en sinh luận bằng
+    // ngôn ngữ của họ (i18n W8) — ghi luận đó vào đây là ĐÈ bản Việt của người đã mua cùng lá số. Nên chỉ
+    // ngôn ngữ `vi` được lưu chữ luận; ngôn ngữ khác chỉ giữ dữ kiện lá số. (Muốn lưu luận đa ngôn ngữ thì
+    // cần kho khoá theo (slug, locale) — làm kèm lúc trang luận được dịch, xem PR W8.)
+    if (requestLocale(request) !== 'vi') {
+      payload.luan_giai = {}; // merge nông bên dưới ⇒ bản Việt đã lưu giữ nguyên
+      delete payload.rendered_html; // vắng khoá = không đụng cột (UPDATE) / mặc định null (INSERT)
+    }
 
     // Check slug đã tồn tại chưa
     const { data: ex } = await sb.from('laso_public')
