@@ -46,7 +46,11 @@ jobs:
       # cần cài (thư viện hệ thống từ repo Ubuntu) không hề hư.
       - run: sudo rm -f /etc/apt/sources.list.d/google-chrome.list
 
-      - run: npx playwright install chromium --with-deps
+      # Kho apt Ubuntu (security/archive.ubuntu.com) thỉnh thoảng không phân giải được
+      # trên runner (2026-11-11: >1 giờ). Thư viện hệ thống của Chromium đã có sẵn trong
+      # image; --with-deps chỉ còn kéo thêm FONT. Hỏng bước apt thì vẫn cài Chromium từ
+      # CDN của Playwright để test chạy — KHÔNG bỏ test nào, ngày thường y như cũ.
+      - run: npx playwright install chromium --with-deps || npx playwright install chromium
 
       # Production đo domain thật; mọi deploy khác (preview, kể cả nhánh `dev`)
       # đo CHÍNH bản vừa deploy. Nhờ target_url mà URL preview của `dev` không
