@@ -10,7 +10,6 @@
 import { llmText } from '@/lib/llm/complete';
 import { getGa4Breakdown, type Ga4Breakdown } from '@/lib/analytics/ga4';
 import { getSearchConsoleSnapshot, type GscSnapshot } from '@/lib/analytics/search-console';
-import { getLatestGrowthFindings, type Finding } from '@/lib/growth/findings';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -116,14 +115,6 @@ interface CmoSnapshot {
    */
   gsc: GscSnapshot | null;
   /**
-   * Bậc 6 của docs/GROWTH-DATA-PLAN.md — findings ads/campaign đã tính XONG
-   * bởi lib/growth/engine.ts + findings.ts (CAC/CPA/ROAS, cổng mẫu ≥30 đã áp
-   * SẴN trong `metrics`, xem lib/growth/engine.ts::sampleGate). Rỗng khi
-   * chưa có run nào (`app/api/cron/growth-insights` chưa chạy lần nào) hoặc
-   * run gần nhất không thấy gì đáng báo — KHÔNG phải "chưa nối ads".
-   */
-  growthFindings: Finding[];
-  /**
    * Microsoft Clarity — rage click/dead click/scroll depth, xem
    * `getLatestClarity()` ngay trên. null = chưa cấu hình hoặc cron
    * `ext-metrics` hôm nay chưa chạy/lỗi.
@@ -158,7 +149,7 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     funnelThisWeek, funnelPrevWeek, sourcesThisWeek, engagement,
     revenueThisWeek, revenuePrevWeek, margin, channelHealth, atRisk,
     signupTruthThisWeek, signupTruthPrevWeek, trafficQuality, ga4, gsc,
-    growthFindings, clarity,
+    clarity,
   ] = await Promise.all([
     rpc('marketing_funnel', { p_from: d(7), p_to: d(0) }),
     rpc('marketing_funnel', { p_from: d(14), p_to: d(7) }),
@@ -184,10 +175,6 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     // ngày vì dữ liệu GSC luôn trễ 2–3 ngày; lấy tới hôm nay là tự tạo ra một
     // cái dốc đi xuống giả ở cuối. Best-effort như GA4.
     getSearchConsoleSnapshot(day(31), day(3)).catch(() => null),
-    // Bậc 6 Growth Data Plan — findings ads/campaign ĐÃ TÍNH XONG (CAC/CPA/
-    // ROAS, cổng mẫu ≥30 đã áp). getLatestGrowthFindings() tự fail-open
-    // (lỗi/rỗng → []), .catch() ở đây chỉ phòng thêm, không kéo sập digest.
-    getLatestGrowthFindings().catch(() => []),
     getLatestClarity().catch(() => null),
   ]);
 
@@ -205,7 +192,6 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
         }
       : null,
     gsc,
-    growthFindings,
     clarity,
     rpcErrors,
   };
@@ -353,18 +339,7 @@ sổ ~24h TRƯỢT tính từ lúc cron chạy, KHÔNG phải một ngày lịch
   số đáng nêu ở "⚠️ Điểm nghẽn" khi có mặt và đáng kể, không phải count thô.
 - "avg_scroll_depth" là % cuộn trang trung bình (0-100) của TOÀN site, không
   tách theo trang — thấp không tự động là xấu (trang ngắn cuộn hết sớm là
-  bình thường), đừng kết luận UX tệ chỉ từ một con số này.
-
-VỀ KHỐI "growthFindings" (bậc 6 Growth Data Plan — findings ads/campaign):
-- Đây là mảng VIỆC đã tính XONG bởi code (CAC/CPA/ROAS, cổng mẫu ≥30 đã áp) — CHỈ đọc lại
-  "headline" và số trong "metrics", TUYỆT ĐỐI không tự tính lại hay tự suy % từ các số đó.
-- Mảng RỖNG nghĩa là "không có finding nào đủ mẫu để báo" — nói thẳng câu đó nếu được hỏi về
-  ads, KHÔNG suy diễn thành "ads đang tốt" hay "chưa nối được ads" (hai kết luận đó cần dữ liệu
-  khác, xem CmoSnapshot ở code).
-- "severity":"act" là việc CẦN LÀM NGAY (thêm hẳn vào "⚠️ Điểm nghẽn" hoặc mở gạch đầu dòng riêng
-  nếu có), "watch" là đáng để mắt nhưng chưa gấp, "info" thường bỏ qua trừ khi không còn gì khác.
-- "suggested_action" là ĐỀ XUẤT cho Henry TỰ BẤM, KHÔNG phải việc hệ thống đã/sẽ tự làm — đừng
-  viết như thể hành động đó đã xảy ra.`;
+  bình thường), đừng kết luận UX tệ chỉ từ một con số này.`;
 
 export interface CmoDigestResult {
   text: string;
