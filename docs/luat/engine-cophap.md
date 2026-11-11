@@ -126,9 +126,15 @@ năm. Với `lich` ∈ {cn, kr, jp}:
 - **Giờ chính xác phải tới engine**: client truyền `tinhBatTu({…, lich, gioLich,
   phutLich})`; server đọc `birth.hour`/`birth.minute` (contract v1, thêm). Thiếu
   phút ⇒ lấy đầu canh giờ — server và trang lệch nhau đúng ở cửa sổ quanh mốc.
-  ⚠️ `lasoKey()` chưa có phút ⇒ hai người kr cùng canh, khác phút quanh mốc dùng
-  chung cache kết quả trả phí — chưa sửa (đổi khoá = mồ côi quyền sở hữu, việc
-  của đường tiền).
+  Mọi đường dựng lại birth phải chở `lich` + `hour/minute`: `shell.js`
+  `birthToApi` (khôi phục phiên), query `hm` (= giờ·60+phút) ở `portrait-recover.js`
+  ↔ `birthFromQuery`, link ảnh ký `laso-image.ts`.
+- **Khoá cache `lasoKey()`** thêm `tk:<chỉ số mốc>` CHỈ khi lịch cn/kr/jp, có giờ:phút
+  VÀ sinh cách mốc tiết < 1 ngày (`tietKhiKhoa`, `lib/engine/tubinh.ts`). Ngoài cửa
+  sổ đó (và mọi lá số vn) khoá y như trước ⇒ chỉ mồ côi cache của khách cn/kr/jp
+  sinh sát mốc từ W3 (vài ngày) — chấp nhận để hai người hai bên mốc không dùng
+  chung kết quả trả phí. Dùng chỉ số tiết chứ không dùng phút: cùng tiết thì
+  cùng kết quả, khoá không vỡ theo từng phút.
 - **Đối chứng** (`npm run check:tietkhi`): NAOJ 暦要項 (giờ:phút JST 2005→năm sau)
   lệch ≤ 1′; HKO (NGÀY UTC+8 cả 24 tiết 1901–2100) khớp trừ đúng danh sách ghim
   `scripts/fixtures/tietkhi-hko-ghim.json` — mỗi mục phải nằm ≤ 10′ quanh nửa đêm

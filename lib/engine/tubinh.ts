@@ -32,6 +32,7 @@ let engineCache: {
   tinhBatTu: (o: object) => Rec;
   hanhCan: Record<string, string>;
   hanhChi: Record<string, string>;
+  tietKhiCuaThoiDiem: (d: number, m: number, y: number, h: number, p: number, lich: string) => { i: number; gan: boolean } | null;
 } | null = null;
 
 function loadEngine() {
@@ -54,6 +55,7 @@ function loadEngine() {
     tinhBatTu: exp.tinhBatTu as (o: object) => Rec,
     hanhCan: (exp.NGU_HANH_CAN_TB || {}) as Record<string, string>,
     hanhChi: (exp.NGU_HANH_CHI_TB || {}) as Record<string, string>,
+    tietKhiCuaThoiDiem: exp.tietKhiCuaThoiDiem as NonNullable<typeof engineCache>['tietKhiCuaThoiDiem'],
   };
   return engineCache!;
 }
@@ -73,6 +75,25 @@ function exactTime(b: BirthParams): { gioLich?: number; phutLich?: number } {
   // Lệch canh = hai trường mâu thuẫn ⇒ tin hourBranch (trụ giờ đã đi theo nó).
   if (GIO_HOURS[b.hourBranch!] !== (h! % 2 === 1 ? h! : (h! + 23) % 24)) return {};
   return { gioLich: h, phutLich: m };
+}
+
+/**
+ * Đoạn khoá cache lá số cho Bát Tự lịch cn/kr/jp (`lasoKey`, lib/portraits/cache.ts):
+ * `tk:<chỉ số mốc tiết>` CHỈ khi có giờ:phút chính xác VÀ thời điểm sinh cách mốc
+ * tiết gần nhất < 1 ngày — chỉ ở đó hai người cùng canh giờ mới ra trụ tháng khác
+ * nhau. Ngoài cửa sổ đó (và mọi lá số vn) trả null ⇒ khoá y như trước W3b, không
+ * mồ côi cache/quyền sở hữu của khách đã trả. Dùng CHỈ SỐ TIẾT chứ không dùng phút:
+ * cùng tiết thì cùng kết quả, khoá không vỡ vụn theo từng phút.
+ */
+export function tietKhiKhoa(birth: BirthParams): string | null {
+  const lich = lichOf(birth);
+  if (lich === 'vn' || birth.hourBranch == null || birth.hourBranch < 0 || birth.hourBranch > 11) return null;
+  const t = exactTime(birth);
+  if (t.gioLich == null) return null;
+  const dl = solarDateOf(birth);
+  if (!dl) return null;
+  const r = loadEngine().tietKhiCuaThoiDiem(dl.day, dl.month, dl.year, t.gioLich, t.phutLich ?? 0, lich);
+  return r && r.gan ? `tk:${r.i}` : null;
 }
 
 export interface ComputeTuBinhResult {

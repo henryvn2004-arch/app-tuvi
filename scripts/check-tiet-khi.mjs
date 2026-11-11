@@ -16,10 +16,13 @@
 //  5. Lịch vn KHÔNG đổi: băm TOÀN BỘ kết quả tinhBatTu của mẫu quét 1900–2100 phải
 //     ra đúng hash chụp từ engine TRƯỚC W3b; truyền lich:'vn'/không truyền như nhau.
 // ============================================================
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { execFileSync } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
-import { createRequire } from 'node:module';
+import { createRequire, register } from 'node:module';
 
 const ROOT = process.cwd();
 const req = createRequire(import.meta.url);
@@ -314,8 +317,134 @@ if (quetVn(E, { lich: 'vn', gioLich: 5, phutLich: 7 }) !== hVn)
     fail('thiếu NoiSinh: lịch cn phải lùi về đường theo ngày VÀ console.error');
 }
 
+// ── 6. Khoá cache lá số (`lasoKey`, lib/portraits/cache.ts) ──
+// Biên dịch cache.ts (+ closure: tubinh, laso, namxem…) bằng tsc rồi import thật,
+// như check:payossig. Hai khách kr cùng canh, khác phút, hai bên mốc ⇒ HAI khoá;
+// cùng phía ⇒ một khoá; ngoài ±1 ngày quanh mốc và mọi khách vn ⇒ khoá y như
+// TRƯỚC W3b (công thức cũ chép lại ở đây làm mốc so).
+let khoaSo = 0;
+{
+  const tmp = mkdtempSync(join(tmpdir(), 'check-tietkhi-'));
+  try {
+    writeFileSync(
+      join(tmp, 'tsconfig.json'),
+      JSON.stringify({
+        compilerOptions: {
+          module: 'esnext',
+          target: 'es2022',
+          moduleResolution: 'bundler',
+          outDir: join(tmp, 'out'),
+          rootDir: ROOT,
+          types: ['node'],
+          typeRoots: [join(ROOT, 'node_modules/@types')],
+          paths: { '@/*': [join(ROOT, '*')] },
+          skipLibCheck: true,
+          noCheck: true,
+        },
+        include: [join(ROOT, 'lib/portraits/cache.ts')],
+      })
+    );
+    execFileSync(
+      process.execPath,
+      [join(ROOT, 'node_modules/typescript/bin/tsc'), '--project', join(tmp, 'tsconfig.json')],
+      { stdio: 'inherit' }
+    );
+    writeFileSync(
+      join(tmp, 'hook.mjs'),
+      `import { existsSync } from 'node:fs';\nconst OUT = ${JSON.stringify(pathToFileURL(join(tmp, 'out')).href + '/')};\n` +
+        `export async function resolve(s, c, n) {\n` +
+        `  if (s.startsWith('@/')) return n(OUT + s.slice(2) + '.js', c);\n` +
+        `  if (/^\\.\\.?\\//.test(s) && c.parentURL && c.parentURL.startsWith(OUT) && !/\\.[cm]?js$/.test(s)) {\n` +
+        `    const u = new URL(s + '.js', c.parentURL); if (existsSync(u)) return n(u.href, c);\n  }\n  return n(s, c);\n}\n`
+    );
+    register(pathToFileURL(join(tmp, 'hook.mjs')).href);
+    const { lasoKey } = await import(pathToFileURL(join(tmp, 'out/lib/portraits/cache.js')).href);
+    // Công thức khoá TRƯỚC W3b (origin/main c5e1619) — mốc so cho mọi ca không đổi.
+    const khoaCu = (b) =>
+      createHash('sha256')
+        .update(
+          [
+            b.isLunar ? 'AL' : 'DL',
+            b.year,
+            b.month,
+            b.day,
+            `h${b.hourBranch ?? -1}`,
+            b.gender === 'nu' ? 'nu' : 'nam',
+            '',
+            ...(b.lich && b.lich !== 'vn' ? [`lich:${b.lich}`] : []),
+          ].join('|')
+        )
+        .digest('hex')
+        .slice(0, 32);
+    const chi = (h) => Math.floor(((h + 1) % 24) / 2);
+    const kr = (d, m, y, h, mi) => ({
+      day: d,
+      month: m,
+      year: y,
+      hourBranch: chi(h),
+      hour: h,
+      minute: mi,
+      gender: 'nam',
+      lich: 'kr',
+    });
+    const ky = (label, ok) => {
+      khoaSo++;
+      if (!ok) fail(`lasoKey: ${label}`);
+    };
+    // Lập Xuân 2025 = 23:10 KST 3/2 (NAOJ): 23:09 và 23:11 cùng canh Tý.
+    const a = kr(3, 2, 2025, 23, 9),
+      b = kr(3, 2, 2025, 23, 11),
+      c = kr(3, 2, 2025, 23, 50);
+    ky('kr cùng canh, hai bên Lập Xuân 2025 phải KHÁC khoá', lasoKey(a) !== lasoKey(b));
+    ky('kr cùng canh, cùng phía sau mốc phải CÙNG khoá', lasoKey(b) === lasoKey(c));
+    ky('kr sát mốc phải khác khoá cũ (có đoạn tk:)', lasoKey(a) !== khoaCu(a));
+    // Xa mốc (> 1 ngày): khoá y như trước W3b — không mồ côi cache/quyền sở hữu.
+    const xa = kr(20, 2, 2025, 23, 9);
+    ky('kr xa mốc phải GIỮ khoá cũ', lasoKey(xa) === khoaCu(xa));
+    const thieuPhut = { ...a, hour: undefined, minute: undefined };
+    ky('kr không có giờ:phút phải GIỮ khoá cũ', lasoKey(thieuPhut) === khoaCu(thieuPhut));
+    // Cùng mốc theo giờ của lịch: cn 22:10 (UTC+8), jp 23:10 (UTC+9).
+    for (const [lc, h] of [
+      ['cn', 22],
+      ['jp', 23],
+    ]) {
+      const x = { ...kr(3, 2, 2025, h, 9), lich: lc },
+        y = { ...x, minute: 11 };
+      ky(
+        `${lc} hai bên Lập Xuân 2025 (${h}:10 giờ ${lc}) phải KHÁC khoá`,
+        lasoKey(x) !== lasoKey(y)
+      );
+    }
+    // vn: khoá giống hệt main cho mọi ngày quanh mốc, có/không giờ phút.
+    for (const [d, h, mi] of [
+      [3, 23, 9],
+      [3, 23, 11],
+      [4, 5, 0],
+      [20, 13, 30],
+    ]) {
+      for (const vn of [
+        { day: d, month: 2, year: 2025, hourBranch: chi(h), gender: 'nu' },
+        { day: d, month: 2, year: 2025, hourBranch: chi(h), hour: h, minute: mi, gender: 'nam' },
+        {
+          day: d,
+          month: 2,
+          year: 2025,
+          hourBranch: chi(h),
+          hour: h,
+          minute: mi,
+          gender: 'nam',
+          lich: 'vn',
+        },
+      ])
+        ky(`vn ${JSON.stringify(vn)} phải giữ khoá main`, lasoKey(vn) === khoaCu(vn));
+    }
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+}
+
 console.log(
-  `tiết khí: ${moc.length} mốc · NAOJ ${naojSo} tiết (lệch tối đa ${naojMax}′) · HKO ${hkoSo} tiết, ${hkoLech.length} lệch ngày đã ghim · engine ${engSo} mốc × trước/sau · ${vangSo} ca vàng`
+  `tiết khí: ${moc.length} mốc · NAOJ ${naojSo} tiết (lệch tối đa ${naojMax}′) · HKO ${hkoSo} tiết, ${hkoLech.length} lệch ngày đã ghim · engine ${engSo} mốc × trước/sau · ${vangSo} ca vàng · lasoKey ${khoaSo} ca`
 );
 if (process.argv.includes('-v')) hkoLech.forEach((s) => console.log('  HKO≠', s));
 if (fails.length) {

@@ -148,6 +148,19 @@ function _tietKhiTruoc(phutUtc) {
   return lo;
 }
 
+// Mốc tiết của một thời điểm sinh (giờ của lịch) — cho khoá cache lá số
+// (lib/portraits/cache.ts `lasoKey`): { i: chỉ số mốc tiết cuối ≤ thời điểm sinh,
+// gan: thời điểm sinh cách mốc trước hoặc mốc sau < 1 ngày }. lich vn / thiếu
+// NoiSinh / ngoài bảng ⇒ null.
+function tietKhiCuaThoiDiem(dd, mm, yy, gio, phut, lich) {
+  if (!_TK_LICH[lich]) return null;
+  const p = _phutUtcCuaLich(dd, mm, yy, gio, phut, lich);
+  const i = p == null ? -1 : _tietKhiTruoc(p);
+  if (i < 0) return null;
+  const a = _tietKhiMoc();
+  return { i, gan: p - a[i] < 1440 || a[i + 1] - p < 1440 };
+}
+
 // ============================================================
 // CONSTANTS
 // ============================================================
@@ -1927,6 +1940,7 @@ if (typeof module !== 'undefined') {
   module.exports = {
     convertDuongToBatTu,
     tinhBatTu,
+    tietKhiCuaThoiDiem,
     tinhBatTuFromTuTru,
     thapThan,
     nhomThapThan,
