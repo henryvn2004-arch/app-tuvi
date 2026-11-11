@@ -103,6 +103,9 @@ const DA_DUYET = {
   'khai|Tử Vi Đẩu Số': '紫微斗數',
   'khai|Lưu Niên': '流年',
   'khai|Lưu Niên Tứ Hóa': '流年四化',
+  'khai|Tuần Không': '旬空',
+  'khai|Tử Phủ': '紫府',
+  'khai|Cự Cơ Mão Dậu': '巨機卯酉',
   'khai|Phụ Tinh': '輔星',
   'khai|Vô Chính Diệu': '無正曜',
 };
