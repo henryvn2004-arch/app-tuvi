@@ -19,7 +19,8 @@ import { nguoiXemLine } from '@/lib/agent/prompts';
 import { buildKhung12Thang, spans12, nhanThangALDay, SO_THANG } from '@/lib/engine/van-han-12';
 import type { LunarMonthSpan } from '@/lib/engine/van-ngay';
 import { llmTextFull } from '@/lib/llm/complete';
-import { requestLocale, withLang } from '@/lib/llm/locale';
+import { requestLocale, withLang, type LangLocale } from '@/lib/llm/locale';
+import { readLuanI18n } from '@/lib/laso/luan-i18n';
 import { logLlmUsage } from '@/lib/agent/usage';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { authUserFromRequest } from '@/lib/api/tool-helpers';
@@ -91,6 +92,7 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!;
  */
 async function readCachedLuanGiaiPhan(
   ls: Laso, birth: BirthParams, tuNam: number, phanLaso: number, toolType: string,
+  locale: LangLocale = 'vi',
 ): Promise<string | null> {
   try {
     const gioChi = birth.hourBranch != null ? (CHI_NAMES[birth.hourBranch] || '') : '';
@@ -100,6 +102,14 @@ async function readCachedLuanGiaiPhan(
       String(birth.day), String(birth.month), String(birth.year),
       gioChi, toolType,
     );
+    // Ngôn ngữ ≠ vi: bản luận cùng slug nằm ở `laso_public_i18n` (i18n W17) — cùng luật khớp năm xem.
+    // Bảng chưa có/hụt ⇒ null ⇒ gọi LLM như cũ. `laso_public` (bản Việt) KHÔNG bao giờ trả cho locale này.
+    if (locale !== 'vi') {
+      const row = await readLuanI18n(slug, locale);
+      if (!row || row.namXem !== tuNam) return null;
+      const t = row.luanGiai[String(phanLaso)];
+      return typeof t === 'string' && t.trim() ? t : null;
+    }
     const r = await fetch(
       `${SUPABASE_URL}/rest/v1/laso_public?slug=eq.${encodeURIComponent(slug)}` +
         '&select=nam_xem,luan_giai&limit=1',
@@ -205,10 +215,10 @@ async function runPost(request: NextRequest) {
   // readCachedLuanGiaiPhan().
   const laSoPhanMap: Record<number, number> = { 1: 1, 2: 14, 3: 14 + dvHienTaiSo(ls), 4: 24 };
   const laSoToolMap: Record<number, string> = { 1: 'laso', 2: 'chu-trinh-cuoc-doi', 3: 'chu-trinh-cuoc-doi', 4: 'chu-trinh-cuoc-doi' };
-  // `laso_public.luan_giai` chỉ giữ bản TIẾNG VIỆT (save-laso không lưu luận của ngôn ngữ khác) ⇒ khách ngôn
-  // ngữ khác KHÔNG được đọc nó, không thì nhận chữ Việt dưới giao diện Nhật/Hàn/Trung/Anh.
-  if (phan <= 4 && locale === 'vi') {
-    const cached = await readCachedLuanGiaiPhan(ls, birth, tuNam, laSoPhanMap[phan]!, laSoToolMap[phan]!);
+  // `laso_public.luan_giai` chỉ giữ bản TIẾNG VIỆT ⇒ khách ngôn ngữ khác đọc ngăn của CHÍNH ngôn ngữ đó
+  // (`laso_public_i18n`, i18n W17) — không bao giờ nhận chữ Việt dưới giao diện Nhật/Hàn/Trung/Anh.
+  if (phan <= 4) {
+    const cached = await readCachedLuanGiaiPhan(ls, birth, tuNam, laSoPhanMap[phan]!, laSoToolMap[phan]!, locale);
     if (cached) return ok({ luanGiai: cached, phan });
   }
 

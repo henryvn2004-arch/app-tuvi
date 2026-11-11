@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { makeLasoSlug } from '@/lib/engine/laso';
 import { requestLocale } from '@/lib/llm/locale';
+import { mergeLuanI18n } from '@/lib/laso/luan-i18n';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 // Service key (KHÔNG phải anon key): anon key là public, và trước đây bảng
@@ -69,9 +70,11 @@ export async function POST(request: NextRequest) {
     // 🔴 `laso_public.luan_giai` khoá theo SLUG (không có cột ngôn ngữ) và là kho CHUNG: trang /la-so/<slug>,
     // PDF, lịch sử, Vận Hạn 12 Tháng đều đọc nó coi như tiếng Việt. Khách ở /ja /ko /zh-* /en sinh luận bằng
     // ngôn ngữ của họ (i18n W8) — ghi luận đó vào đây là ĐÈ bản Việt của người đã mua cùng lá số. Nên chỉ
-    // ngôn ngữ `vi` được lưu chữ luận; ngôn ngữ khác chỉ giữ dữ kiện lá số. (Muốn lưu luận đa ngôn ngữ thì
-    // cần kho khoá theo (slug, locale) — làm kèm lúc trang luận được dịch, xem PR W8.)
-    if (requestLocale(request) !== 'vi') {
+    // ngôn ngữ `vi` được lưu chữ luận ở đây; ngôn ngữ khác chỉ giữ dữ kiện lá số, chữ luận đi sang
+    // `laso_public_i18n` (khoá `(slug, locale)`, i18n W17) SAU khi dòng laso_public đã ghi xong.
+    const locale = requestLocale(request);
+    const luanNgoaiNgu = locale !== 'vi' ? b.luanGiai : null;
+    if (locale !== 'vi') {
       payload.luan_giai = {}; // merge nông bên dưới ⇒ bản Việt đã lưu giữ nguyên
       delete payload.rendered_html; // vắng khoá = không đụng cột (UPDATE) / mặc định null (INSERT)
     }
@@ -101,6 +104,10 @@ export async function POST(request: NextRequest) {
       // cũ vẫn giữ được index signature — quirk chỉ lộ ra khi thêm property.
       const updatePayload: Record<string, unknown> = { ...payload, luan_giai: { ...existingLuanGiai, ...incomingLuanGiai } };
       if (ex.user_id) delete updatePayload.user_id; // giữ owner cũ nếu đã có
+      // `nam_xem` mô tả năm của các phần phụ thuộc năm TRONG `luan_giai` (bản Việt) — `van-han-nam` đọc lại
+      // phần 24 chỉ khi `nam_xem` khớp. Lượt lưu ngôn ngữ khác không đụng bản Việt nên không được dời mốc
+      // năm của nó (năm của bản ngoại ngữ nằm ở `laso_public_i18n.nam_xem`).
+      if (locale !== 'vi') delete updatePayload.nam_xem;
       const { error } = await sb.from('laso_public').update(updatePayload).eq('slug', slug);
       if (error) throw error;
       finalSlug = slug;
@@ -109,6 +116,14 @@ export async function POST(request: NextRequest) {
       const { data, error } = await sb.from('laso_public').insert(payload).select('slug').single();
       if (error) throw error;
       finalSlug = data.slug;
+    }
+
+    // Best-effort: kho ngoại ngữ hỏng (migration chưa chạy…) chỉ mất bản lưu — lượt sau sinh lại qua
+    // đúng cổng thanh toán cũ — không được làm hỏng lượt lưu dữ kiện lá số vừa xong. `mergeLuanI18n` tự
+    // console.error, và trả ngay cho `vi` (không bao giờ tới đây với vi vì `luanNgoaiNgu` = null).
+    if (luanNgoaiNgu) {
+      const nx = payload.nam_xem as number | null;
+      await mergeLuanI18n(finalSlug, locale, luanNgoaiNgu, Number.isFinite(nx) ? nx : null);
     }
 
     return ok({ slug: finalSlug, url: `/la-so.html?slug=${finalSlug}` });

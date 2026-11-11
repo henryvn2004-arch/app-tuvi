@@ -937,6 +937,13 @@ function illusFigFor(box){
 // hàm thuần của ngày sinh + toolType, không gắn với người dùng nào.
 async function _fetchCachedLuanGiai(slug){
   try{
+    // i18n W17: trang /<locale>/ ≠ vi đọc ngăn của CHÍNH ngôn ngữ đó (`laso_public_i18n`, qua server —
+    // bảng khoá RLS). `laso_public.luan_giai` chỉ là bản VIỆT; hụt ⇒ null ⇒ sinh như cũ. vi giữ nguyên.
+    if(((window.I18n&&window.I18n.locale)||'vi')!=='vi'){
+      var ri=await fetch('/api/laso-luan?slug='+encodeURIComponent(slug),{cache:'no-store'});
+      var di=ri.ok?await ri.json():null;
+      return (di&&di.luanGiai&&Object.keys(di.luanGiai).length>0)?di.luanGiai:null;
+    }
     var r=await fetch(SB_URL_LG+'/rest/v1/laso_public?slug=eq.'+encodeURIComponent(slug)+'&select=slug,luan_giai&limit=1',{headers:{apikey:SB_ANON_LG}});
     var rows=await r.json();
     if(rows&&rows[0]&&rows[0].luan_giai&&Object.keys(rows[0].luan_giai).length>0)return rows[0].luan_giai;
