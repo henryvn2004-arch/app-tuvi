@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server';
 import { CORS_HEADERS, options } from '@/lib/cors';
 import { toolCatalog } from '@/lib/channels/catalog';
 import { getToolPrice } from '@/lib/billing/pricing';
-import { vndPerCredit } from '@/lib/billing/packages';
+import { usdPerCredit, vndPerCredit } from '@/lib/billing/packages';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -18,7 +18,7 @@ export async function OPTIONS() {
 }
 
 export async function GET() {
-  const [groups, rate] = await Promise.all([toolCatalog(), vndPerCredit()]);
+  const [groups, rate, usdRate] = await Promise.all([toolCatalog(), vndPerCredit(), usdPerCredit()]);
   const out = await Promise.all(
     groups.map(async (g) => ({
       key: g.key,
@@ -32,11 +32,17 @@ export async function GET() {
             path: t.path,
             description: t.description,
             free: t.isFree,
-            // Làm tròn LÊN nghìn — cùng quy tắc `vndLabel()` của tool-prices.js.
+            // `vnd` làm tròn LÊN nghìn (giữ cho hợp đồng v1 — additive-only).
+            // `usd` (W5, tiền bán): làm tròn LÊN cent — cùng `usdLabel()` của
+            // tool-prices.js. Client hiện giá cho khách đọc `usd`.
             price:
               t.isFree || credits == null || credits <= 0
                 ? null
-                : { credits, vnd: Math.ceil((credits * rate) / 1000) * 1000 },
+                : {
+                    credits,
+                    vnd: Math.ceil((credits * rate) / 1000) * 1000,
+                    usd: Math.ceil(credits * usdRate * 100 - 1e-9) / 100,
+                  },
           };
         }),
       ),

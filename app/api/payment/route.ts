@@ -11,10 +11,10 @@ import { waitUntil } from '@vercel/functions';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { createPayOSOrder } from '@/lib/billing/payos-order';
 import { signMomoCreate, MOMO_CREATE_ENDPOINT } from '@/lib/billing/momo';
-import { getPackages, quoteCustomVnd, vndPerCredit } from '@/lib/billing/packages';
+import { getPackages, quoteCustomUsd, quoteCustomVnd, usdPerCredit, vndPerCredit } from '@/lib/billing/packages';
 // Mọi thứ chạm PayPal ở MỘT chỗ (lib/billing/paypal) — webhook dùng chung bản
 // đó, nên không có hai đường tiền song song để mà trôi lệch.
-import { PAYPAL_BASE, PAYPAL_CURRENCY, VND_PER_USD, getPayPalToken, humanIssueMessage, settlePayPalTopup } from '@/lib/billing/paypal';
+import { CUSTOM_USD_MIN, CUSTOM_USD_MAX, PAYPAL_BASE, PAYPAL_CURRENCY, VND_PER_USD, getPayPalToken, humanIssueMessage, settlePayPalTopup } from '@/lib/billing/paypal';
 import { getToolPrice, getToolParts } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { recordUserReport } from '@/lib/reports/userReports';
@@ -312,14 +312,33 @@ async function handleCheck(sp: URLSearchParams): Promise<Response> {
 async function handleTopup(body: Record<string, unknown>): Promise<Response> {
   const packageId        = String(body.packageId        || '');
   const userId           = String(body.userId           || '');
-  // Frontend gửi VND-native cho cả PayPal và bank — convert sang USD ở đây
+  // W5: nạp lẻ PayPal gửi `customAmountUsd` (USD là tiền bán). `customAmountVnd`
+  // còn nhận để trang topup.html CŨ đang mở trong trình duyệt khách không gãy
+  // giữa lúc deploy — đơn kiểu đó vẫn chốt được (nhánh `custom-` ở paypal.ts).
+  const customAmountUsd  = parseFloat(String(body.customAmountUsd || '0'));
   const customAmountVnd  = parseFloat(String(body.customAmountVnd || body.customAmount || '0'));
+  // `landing: 'card'` = khách chọn "Thẻ" ⇒ PayPal mở THẲNG form nhập thẻ (khách
+  // không cần tài khoản PayPal). Cần "PayPal Account Optional" BẬT trong tài
+  // khoản business (mặc định bật) — tắt thì PayPal lặng lẽ rơi về trang đăng nhập.
+  const landingPage      = body.landing === 'card' ? 'BILLING' : 'NO_PREFERENCE';
 
   // Resolve package
   let pkg: { amount: string; credits: number; label: string };
   let slug: string;
 
-  if (packageId === 'custom') {
+  if (packageId === 'custom' && customAmountUsd) {
+    if (!(customAmountUsd >= CUSTOM_USD_MIN && customAmountUsd <= CUSTOM_USD_MAX))
+      return err(`Số tiền tùy chỉnh phải từ $${CUSTOM_USD_MIN} đến $${CUSTOM_USD_MAX}`, 400);
+    const cents = Math.round(customAmountUsd * 100);
+    // Đơn giá suy từ bậc gói USD (xem quoteCustomUsd) — CÙNG hàm lượt chốt đơn
+    // dùng lại trên số tiền THẬT của đơn, nên số Lượng hứa = số Lượng cộng.
+    const { credits } = await quoteCustomUsd(cents / 100);
+    if (credits <= 0) return err('Không quy đổi được số Lượng cho số tiền này', 500);
+    pkg  = { amount: (cents / 100).toFixed(2), credits, label: `Nap Tuy Chinh – ${credits} Luong` };
+    // Slug vẫn bắt đầu bằng `topup-` (luật slug thanh toán); `custom-usd-` tách
+    // khỏi kiểu cũ `custom-<N>k` để lượt chốt biết quy đổi theo tiền nào.
+    slug = `topup-custom-usd-${cents}`;
+  } else if (packageId === 'custom') {
     if (!customAmountVnd || customAmountVnd < 50_000 || customAmountVnd > 5_000_000)
       return err('Số tiền tùy chỉnh phải từ 50.000đ đến 5.000.000đ', 400);
     // Đơn giá suy từ bậc gói (xem quoteCustomVnd) — KHÔNG chia cứng nữa.
@@ -355,8 +374,9 @@ async function handleTopup(body: Record<string, unknown>): Promise<Response> {
         }],
         application_context: {
           brand_name:   'Tu Vi Minh Bao',
-          locale:       'vi-VN',
-          landing_page: 'NO_PREFERENCE',
+          // KHÔNG ép `locale` nữa (từng là 'vi-VN'): khách Nhật/Hàn/Đài nhận
+          // trang PayPal theo ngôn ngữ trình duyệt của chính họ.
+          landing_page: landingPage,
           user_action:  'PAY_NOW',
           return_url: `${SITE_URL}/payment-success.html?slug=${encodeURIComponent(slug)}&userId=${encodeURIComponent(userId)}`,
           cancel_url:  `${SITE_URL}/topup.html?payment=cancelled`,
@@ -957,9 +977,30 @@ async function handleCreateMomo(body: Record<string, unknown>): Promise<Response
 // merchant) mà vẫn hiện nút cho khách thật bấm thì ra lỗi "chưa cấu hình"
 // giữa lúc khách đang cố trả tiền — tệ hơn không có nút. Chỉ trả CÓ/KHÔNG,
 // đúng luật `lib/ops/preflight.ts`: không rò giá trị biến môi trường.
-function handleMomoStatus(): Response {
-  const available = !!(process.env.MOMO_PARTNER_CODE && process.env.MOMO_ACCESS_KEY && process.env.MOMO_SECRET_KEY);
-  return ok({ available });
+async function handleMomoStatus(): Promise<Response> {
+  const configured = !!(process.env.MOMO_PARTNER_CODE && process.env.MOMO_ACCESS_KEY && process.env.MOMO_SECRET_KEY);
+  // W5: MoMo là rail VNĐ — ẩn theo cùng cờ với chuyển khoản QR (xem handlePayMethods).
+  return ok({ available: configured && (await vndRailsEnabled()) });
+}
+
+// ── GET: pay-methods ─────────────────────────────────────────
+// W5 (Henry chốt: thu bằng PayPal USD, bỏ VNĐ ở mọi chỗ khách thấy): các rail
+// VNĐ (chuyển khoản QR payOS/VietQR · MoMo) ẨN khỏi giao diện bằng cờ
+// `app_config['billing.vnd_rails_enabled']` — code giữ nguyên, bật lại bằng
+// SQL không cần deploy. Thiếu khoá / đọc hụt ⇒ `false` (ẩn): PayPal luôn còn
+// nên ẩn nhầm không chặn ai trả tiền, còn hiện nhầm là lộ giá VNĐ cho khách
+// nước ngoài. CHỈ ẩn UI web — route `create-bank`/`create-momo` và kênh chat
+// (VietQR trong Zalo/Messenger) không bị chặn ở đây.
+async function vndRailsEnabled(): Promise<boolean> {
+  return (await getConfigValue<boolean>('billing.vnd_rails_enabled', false)) === true;
+}
+async function handlePayMethods(): Promise<Response> {
+  const bank = await vndRailsEnabled();
+  const res = ok({ paypal: true, card: true, bank, customUsdMin: CUSTOM_USD_MIN, customUsdMax: CUSTOM_USD_MAX });
+  // Paywall hỏi câu này ở MỌI trang tool lúc nạp — CDN giữ 60s để không biến
+  // mỗi lượt xem trang thành một lượt đọc Supabase. Lật cờ thì chậm ≤ 1 phút.
+  res.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  return res;
 }
 
 // ── GET: check-momo ────────────────────────────────────────────
@@ -1763,6 +1804,7 @@ export async function GET(request: NextRequest) {
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   if (action === 'check-momo')  return handleCheckMomo(searchParams);
   if (action === 'momo-status') return handleMomoStatus();
+  if (action === 'pay-methods') return handlePayMethods();
   return err('Invalid action.', 400);
 }
 
@@ -3054,6 +3096,8 @@ async function handleRailStatus(request: NextRequest, sp: URLSearchParams): Prom
       railPrice: await getToolPrice('rail-message'),
       lasoPrice: await getToolPrice('laso'),
       vndPerCredit: await vndPerCredit(),
+      // W5: để shell.js (vùng W4) chuyển đồng hồ rail sang USD — additive.
+      usdPerCredit: await usdPerCredit(),
     });
   }
   try {
@@ -3061,12 +3105,13 @@ async function handleRailStatus(request: NextRequest, sp: URLSearchParams): Prom
     if (!user) return err('Invalid token', 401);
     // KHÔNG đặt tên biến trùng `vndPerCredit`: const trong cùng scope che luôn
     // hàm import, nên chính lượt gọi ở dòng dưới rơi vào TDZ.
-    const [balance, railPrice, lasoPrice, freeTurns, vndRate] = await Promise.all([
+    const [balance, railPrice, lasoPrice, freeTurns, vndRate, usdRate] = await Promise.all([
       getBalance(user.id),
       getToolPrice('rail-message'),
       getToolPrice('laso'),
       railFreeRemaining(user.id),
       vndPerCredit(),
+      usdPerCredit(),
     ]);
     // Phiên ẩn danh (guest checkout) mà ví chưa đủ một câu ⇒ vẫn là khách dùng
     // thử — cùng luật `/api/v1/chat`. Trước đây bấm nút trả phí một tool là mở
@@ -3080,6 +3125,7 @@ async function handleRailStatus(request: NextRequest, sp: URLSearchParams): Prom
         railPrice,
         lasoPrice,
         vndPerCredit: vndRate,
+        usdPerCredit: usdRate,
       });
     }
     return ok({
@@ -3088,6 +3134,7 @@ async function handleRailStatus(request: NextRequest, sp: URLSearchParams): Prom
       lasoPrice: lasoPrice != null ? lasoPrice : null,
       freeTurns,
       vndPerCredit: vndRate,
+      usdPerCredit: usdRate,
     });
   } catch (e) {
     return err(e instanceof Error ? e.message : 'rail-status failed', 500);

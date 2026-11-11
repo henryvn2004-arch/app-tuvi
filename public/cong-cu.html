@@ -568,8 +568,8 @@ a { color: var(--blue); text-decoration: none; }
 
 <!-- ─── SCRIPTS ──────────────────────────────────────────── -->
 <script src="/auth.js?v=6"></script>
-<script src="/tool-prices.js?v=10"></script>
-<script src="/tuvi-paywall.js?v=41"></script>
+<script src="/tool-prices.js?v=11"></script>
+<script src="/tuvi-paywall.js?v=42"></script>
 <script src="/nav.js?v=47"></script><script src="/referral.js?v=1"></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
 
@@ -640,18 +640,17 @@ let _tools = null;
 // người mới không biết mình cần bộ môn nào — đó chính là chỗ tắc của một trang
 // có 50 công cụ. Lối bộ môn giữ nguyên cho người đã học tử vi.
 let _view = 'nhu-cau';
-// đ cho 1 Lượng khi hiện giá công cụ — suy từ gói phổ biến (gói thứ hai theo
-// sort_order). `null` = chưa biết → GIẤU cột quy đổi thay vì nhân với một hằng
-// số: bản trước để 2.500đ (đơn giá bảng giá cũ) nên báo đắt gấp gần 3 lần.
-let _vndPerCredit = null;
+// Nhãn tiền cho giá công cụ — W5: USD qua `ToolPrices.usdLabel` (một nguồn với
+// mọi trang tool, không tự suy đơn giá ở đây nữa). `null` = chưa đọc được gói →
+// GIẤU số tiền thay vì nhân với một hằng số: bản trước để 2.500đ (đơn giá bảng
+// giá cũ) nên báo đắt gấp gần 3 lần.
+let _moneyLabel = null;
 
 async function loadPackageRate() {
   if (!window.ToolPrices) return;
   await window.ToolPrices.load();
-  const pkgs = window.ToolPrices.packages();
-  if (pkgs.length) {
-    const ref = pkgs[1] || pkgs[0];
-    _vndPerCredit = ref.amount_vnd / ref.credits;
+  if (window.ToolPrices.usdLabel && window.ToolPrices.usdPerCredit && window.ToolPrices.usdPerCredit() != null) {
+    _moneyLabel = window.ToolPrices.usdLabel;
   }
 }
 
@@ -798,13 +797,12 @@ function toolCardHtml(t, byNeed) {
   const featured = FEATURED.has(t.tool_id) ? ' featured' : '';
   const priceHtml = t.is_free
     ? '<span class="tool-price-free">Miễn Phí</span>'
-    // VNĐ là giá CHÍNH với khách (luật CLAUDE.md, chốt Henry 2026-09-20) —
-    // cùng thứ tự/trọng lượng thị giác với `_vndFirst()` của tuvi-paywall.js.
-    // Đọc hụt `_vndPerCredit` (chưa nạp `credit_packages`) thì lùi về CHỈ hiện
-    // Lượng — không bao giờ hiện Lượng làm dòng chính.
+    // Tiền là giá CHÍNH với khách (luật CLAUDE.md; USD từ W5) — cùng thứ
+    // tự/trọng lượng thị giác với `_vndFirst()` của tuvi-paywall.js. Đọc hụt
+    // gói thì lùi về CHỈ hiện Lượng.
     : '<div class="tool-price">' +
-        (_vndPerCredit
-          ? '<div class="tool-price-vnd">' + formatVnd(Math.ceil((t.credits * _vndPerCredit) / 1000) * 1000) + '</div>' +
+        (_moneyLabel
+          ? '<div class="tool-price-vnd">' + _moneyLabel(t.credits) + '</div>' +
             '<div class="tool-price-credits">(' + t.credits + ' Lượng)</div>'
           : '<div class="tool-price-vnd">' + t.credits + ' Lượng</div>') +
       '</div>';
@@ -837,11 +835,6 @@ function esc(s) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
-function formatVnd(vnd) {
-  // Round up to nearest 1,000đ
-  const rounded = Math.ceil(vnd / 1000) * 1000;
-  return rounded.toLocaleString('vi-VN') + 'đ';
-}
 
 // ─────────────────────────────────────────────────────────────
 // Tab switching

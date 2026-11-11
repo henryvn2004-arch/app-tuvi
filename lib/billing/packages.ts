@@ -33,11 +33,17 @@ export interface CreditPackage {
 // (không đụng Lượng) 399.000→400.000 ⇒ 400.000/800 = 500đ đúng. Đổi giá thay
 // vì đổi Lượng để giữ 800 tròn — hai gói còn lại (Khởi Đầu/Cao Cấp/VIP) CỐ Ý
 // không đổi, thang chiết khấu theo bậc vẫn đơn điệu giảm.
+//
+// 🔴 2026-11 (W5 — PayPal USD, bỏ VND): giá USD là giá BÁN. `amountUsd` dưới
+// đây phải khớp `_patches/migration-usd-pricing.sql`. Code lên TRƯỚC, data SAU:
+// trong khoảng giữa, đọc hụt DB thì FALLBACK thu RẺ hơn vài cent cho cùng số
+// Lượng — lệch về phía khách, chịu được (ngược lại là cấp hụt cho người đã trả).
+// `amountVnd` giữ nguyên: chỉ còn dùng cho rail VND (đang ẩn) + báo cáo.
 const FALLBACK: Record<string, CreditPackage> = {
-  '50':  { packageId: '50',  credits: 350,  amountVnd: 199_000, amountUsd: '8.00',  label: 'Khởi Đầu' },
-  '120': { packageId: '120', credits: 800,  amountVnd: 400_000, amountUsd: '16.00', label: 'Phổ Thông' },
-  '350': { packageId: '350', credits: 1600, amountVnd: 699_000, amountUsd: '28.00', label: 'Cao Cấp' },
-  '800': { packageId: '800', credits: 2700, amountVnd: 999_000, amountUsd: '40.00', label: 'VIP' },
+  '50':  { packageId: '50',  credits: 350,  amountVnd: 199_000, amountUsd: '7.99',  label: 'Khởi Đầu' },
+  '120': { packageId: '120', credits: 800,  amountVnd: 400_000, amountUsd: '14.99', label: 'Phổ Thông' },
+  '350': { packageId: '350', credits: 1600, amountVnd: 699_000, amountUsd: '26.99', label: 'Cao Cấp' },
+  '800': { packageId: '800', credits: 2700, amountVnd: 999_000, amountUsd: '37.99', label: 'VIP' },
 };
 
 const TTL_MS = 60_000;
@@ -114,21 +120,48 @@ export interface CustomQuote {
  * vẫn đúng kể cả khi admin khai một bậc gói không đơn điệu.
  */
 export async function quoteCustomVnd(amountVnd: number): Promise<CustomQuote> {
-  const pkgs = Object.values(await getPackages())
-    .filter((p) => p.credits > 0 && p.amountVnd > 0);
-  if (!pkgs.length) return { credits: 0, vndPerCredit: 0, tierLabel: '' };
+  const q = quoteCustom(Object.values(await getPackages()), (p) => p.amountVnd, amountVnd);
+  return { credits: q.credits, vndPerCredit: q.perCredit, tierLabel: q.tierLabel };
+}
 
-  const rate = (p: CreditPackage) => p.amountVnd / p.credits;
-  const affordable = pkgs.filter((p) => p.amountVnd <= amountVnd);
+export interface CustomQuoteUsd {
+  credits: number;
+  /** USD cho 1 Lượng đã áp cho lượt nạp này. */
+  usdPerCredit: number;
+  tierLabel: string;
+}
+
+/**
+ * Bản USD của `quoteCustomVnd` — CÙNG quy tắc bậc gói, chỉ đổi cột tiền sang
+ * `amountUsd`. Đây là đường nạp lẻ của PayPal (USD là tiền bán từ W5). Client
+ * có bản sao ở `ToolPrices.quoteCustomUsd` (public/tool-prices.js) — sửa một
+ * bên thì sửa cả hai.
+ */
+export async function quoteCustomUsd(amountUsd: number): Promise<CustomQuoteUsd> {
+  const q = quoteCustom(Object.values(await getPackages()), (p) => Number(p.amountUsd), amountUsd);
+  return { credits: q.credits, usdPerCredit: q.perCredit, tierLabel: q.tierLabel };
+}
+
+/** Lõi chung của hai hàm trên — MỘT công thức cho mọi tiền tệ, hết đường trôi lệch. */
+function quoteCustom(
+  all: CreditPackage[],
+  price: (p: CreditPackage) => number,
+  amount: number,
+): { credits: number; perCredit: number; tierLabel: string } {
+  const pkgs = all.filter((p) => p.credits > 0 && price(p) > 0);
+  if (!pkgs.length) return { credits: 0, perCredit: 0, tierLabel: '' };
+
+  const rate = (p: CreditPackage) => price(p) / p.credits;
+  const affordable = pkgs.filter((p) => price(p) <= amount);
   // Với tới bậc nào thì hưởng bậc đó; chưa với tới gói nhỏ nhất → bậc vào cửa
   // (đơn giá CAO nhất), tức không được ưu đãi mà cũng không bị phạt thêm.
   const tier = (affordable.length ? affordable : pkgs).reduce((best, p) =>
     (affordable.length ? rate(p) < rate(best) : rate(p) > rate(best)) ? p : best,
   );
-  const vndPerCredit = rate(tier);
+  const perCredit = rate(tier);
   return {
-    credits: Math.floor(amountVnd / vndPerCredit),
-    vndPerCredit,
+    credits: Math.floor(amount / perCredit),
+    perCredit,
     tierLabel: tier.label,
   };
 }
@@ -166,4 +199,28 @@ export async function vndPerCredit(): Promise<number> {
   const byPrice = [...pkgs].sort((a, b) => a.amountVnd - b.amountVnd);
   const tier = byPrice[1] || byPrice[0];
   return Math.round(tier.amountVnd / tier.credits);
+}
+
+/**
+ * Đơn giá quy đổi 1 Lượng ≈ USD — CÙNG quy tắc `vndPerCredit()`/`credit_vnd()`
+ * (gói bậc hai theo giá tăng dần), chỉ đổi cột tiền. Ba nơi cài cùng quy tắc,
+ * sửa kèm nhau: hàm này · SQL `credit_usd()` · `ToolPrices.usdPerCredit()`.
+ *
+ * Không làm tròn về số nguyên như bản VNĐ (1 Lượng ≈ $0,019) — giữ 6 chữ số,
+ * nơi HIỂN THỊ tự làm tròn LÊN cent (`usdLabel`).
+ */
+export async function usdPerCredit(): Promise<number> {
+  const pkgs = Object.values(await getPackages()).filter((p) => p.credits > 0 && Number(p.amountUsd) > 0);
+  // Rỗng hoàn toàn (cả DB lẫn FALLBACK) gần như không xảy ra — vẫn suy từ
+  // FALLBACK bậc hai chứ KHÔNG gõ một hằng số riêng (hằng số riêng là thứ trôi).
+  const list = pkgs.length ? pkgs : Object.values(FALLBACK);
+  const byPrice = [...list].sort((a, b) => Number(a.amountUsd) - Number(b.amountUsd));
+  const tier = byPrice[1] || byPrice[0];
+  return Math.round((Number(tier.amountUsd) / tier.credits) * 1e6) / 1e6;
+}
+
+/** "N Lượng" → "~$X.XX" làm tròn LÊN cent. Cùng quy tắc `ToolPrices.vndLabel()` (nay ra USD). */
+export function usdLabel(credits: number, rate: number | null): string {
+  if (!rate || !isFinite(credits) || credits <= 0) return '';
+  return '~$' + (Math.ceil(credits * rate * 100 - 1e-9) / 100).toFixed(2);
 }

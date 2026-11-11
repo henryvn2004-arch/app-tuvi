@@ -51,7 +51,50 @@ yết — giữ neo giá, tạo urgency, tự chỉnh trong Admin. Ba cột mớ
 - `CACHE_KEY` ở `tool-prices.js` đã bump `v5→v6` (thêm 3 cột) — quên bump khi
   đổi tập cột là bản cache cũ trong sessionStorage thiếu cột mới tối đa 2 phút.
 
+## 💵 Bán bằng USD qua PayPal, bỏ VNĐ ở chỗ khách thấy (W5, 2026-11)
+
+Henry chốt: khách quốc tế (Nhật · Hàn · Đài · Trung · Anh) trả bằng **PayPal**,
+một tiền tệ cho mọi nước là **USD** (chưa chắc PayPal nhận KRW).
+
+- **"Lượng" vẫn là đơn vị nội bộ.** `tool_pricing` (giá theo Lượng) và số dư
+  giữ nguyên ⇒ không ai mất tiền, không viết lại sổ. Thứ đổi là GIÁ BÁN của gói:
+  `credit_packages.amount_usd` (cột đã có từ đầu, nay là giá chính).
+- **Một nhãn tiền cho khách:** `ToolPrices.usdLabel(credits)` = "~$X.XX" làm tròn
+  LÊN cent theo đơn giá bậc hai (`usdPerCredit`). `vndLabel` giữ TÊN (hơn 30 trang
+  đang gọi) nhưng trỏ vào `usdLabel`. Paywall gọi qua `_money()` — gọi thẳng
+  `usdLabel`, KHÔNG qua tên cũ: trình duyệt còn giữ `tool-prices.js` bản cũ thì
+  `vndLabel` ra VNĐ, thà không hiện số tiền còn hơn lộ VNĐ.
+- **Server cùng quy tắc:** `usdPerCredit()` / `usdLabel()` (`lib/billing/packages.ts`)
+  cho `/la-so/<slug>` và `/api/v1/catalog` (thêm `price.usd`, giữ `price.vnd` —
+  hợp đồng additive-only). `rail-status` thêm `usdPerCredit` cho đồng hồ rail.
+- **Nạp lẻ PayPal bằng USD:** `customAmountUsd` ($2–$200, `CUSTOM_USD_MIN/MAX`
+  ở `paypal.ts`), slug `topup-custom-usd-<cent>`; lượt chốt đọc USD THẬT trên đơn
+  → `quoteCustomUsd()` — cùng hàm lúc tạo đơn ⇒ số Lượng hứa = số Lượng cộng.
+  Nhánh slug cũ `topup-custom-<N>k` (nhập VNĐ, quy 25.000đ/USD) GIỮ để chốt đơn
+  tạo trước lúc deploy mà khách trả sau.
+- **`amount_vnd` ghi vào sổ = USD thật đã thu × `VND_PER_USD`** cho MỌI đơn PayPal.
+  Trước W5 gói ghi `credit_packages.amount_vnd` — khớp chỉ vì `amount_usd` từng đặt
+  bằng đúng amount_vnd/25.000; giá .99 phá thế khớp, ghi tiếp là thổi doanh thu ~7%.
+- **Thẻ không cần tài khoản PayPal:** nút "Thẻ Visa / Mastercard" gửi `landing:'card'`
+  ⇒ đơn tạo với `landing_page: 'BILLING'` (PayPal mở thẳng form thẻ). Cần cài đặt
+  "PayPal Account Optional" BẬT trong tài khoản business — tắt thì PayPal lặng lẽ
+  rơi về trang đăng nhập. Đã bỏ `locale:'vi-VN'` để trang PayPal theo ngôn ngữ khách.
+- **Rail VNĐ ẩn bằng cờ, không gỡ code:** `app_config['billing.vnd_rails_enabled']`
+  (GET `pay-methods`, CDN 60s). Thiếu khoá/đọc hụt ⇒ `false` (ẩn) — ẩn nhầm vẫn còn
+  PayPal, hiện nhầm là đòi khách ngoại VNĐ. Bật lại thì trang nạp hiện gói theo
+  ĐÚNG tiền của rail đang chọn (QR/MoMo = VNĐ, PayPal/Thẻ = USD) — không trộn hai
+  tiền trên một thẻ. CHỈ ẩn UI web: `create-bank`/`create-momo` và nạp VietQR trong
+  kênh chat (`lib/channels/topup.ts`) không bị chặn.
+- 🪤 `.pay-method{display:inline-flex}` đè thuộc tính `hidden` — nút MoMo "ẩn" thật
+  ra vẫn hiện từ trước. Đã thêm `.pay-method[hidden]{display:none}`.
+- `npm run check:prices` thêm luật `gia-usd-cung` ("$7.99" viết cứng) và cấm
+  `VND_PER_USD`/`USD_PER_CREDIT` ở client.
+
 ## Giá trị 1 Lượng: SUY TỪ BẢNG GÓI, không còn hằng số neo
+
+> Từ W5 đơn giá **bán** là bản USD (`credit_usd()` · `usdPerCredit()` ·
+> `ToolPrices.usdPerCredit()` — cùng quy tắc bậc hai). Phần dưới (VNĐ) còn hiệu
+> lực cho báo cáo nội bộ (`cost_vnd`, `credit_vnd()`) và rail VNĐ khi bật lại.
 
 **⚠️ `app_config['credits.vnd_per_credit']` ĐÃ BỊ GỠ** — đừng viết code đọc lại
 khoá đó. Nguồn thật giờ là bảng `credit_packages`: đơn giá = **gói bậc hai**

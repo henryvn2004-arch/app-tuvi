@@ -349,7 +349,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       if (!el) {
         el = document.createElement('script');
         el.id = '_tvmb_prices_js';
-        el.src = '/tool-prices.js?v=10';
+        el.src = '/tool-prices.js?v=11';
         document.head.appendChild(el);
       }
       el.addEventListener('load', () => resolve());
@@ -472,8 +472,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       hint.style.display = '';
       if (balance == null) {
         hint.className = 'tpw-hint';
-        // VNĐ là giá CHÍNH với khách (Henry, 2026-09-20) — cùng `_vndFirst` của lockPreview.
-        hint.innerHTML = 'Thao tác này tốn ' + _vndFirst(cost, window.ToolPrices ? window.ToolPrices.vndLabel(cost) : '') + ' · ' +
+        // Tiền là giá CHÍNH với khách (Henry 2026-09-20; USD từ W5) — cùng `_vndFirst` của lockPreview.
+        hint.innerHTML = 'Thao tác này tốn ' + _vndFirst(cost, _money(cost)) + ' · ' +
           '<a onclick="TuviPaywall._login()">đăng nhập</a> để xem số dư';
       } else if (balance < cost) {
         hint.className = 'tpw-hint low';
@@ -688,7 +688,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     // VNĐ lên làm giá CHÍNH (Henry, 2026-09-20), Lượng lùi thành chú thích
     // phụ trong ngoặc — xem `_vndFirst`. `vndLabel` tự trả '' khi chưa đọc
     // được `credit_packages` — khi đó rơi về "N Lượng" một mình, không bịa số.
-    const vndLbl = window.ToolPrices ? window.ToolPrices.vndLabel(cost) : '';
+    const vndLbl = _money(cost);
 
     let money;
     if (balance == null) {
@@ -1122,6 +1122,11 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
    * `quoteCustomVnd(k)` không giảm khi `k` tăng nên dò nhị phân an toàn.
    */
   function _qrAmountFor(needCredits) {
+    // W5: QR chuyển khoản là rail VNĐ — chỉ dùng khi server xác nhận cờ
+    // `billing.vnd_rails_enabled` đang BẬT (`_vndRails === true`). Chưa biết /
+    // tắt ⇒ `null` ⇒ mọi đường rơi về tường `/topup.html` (PayPal USD). Đây là
+    // hướng an toàn: ẩn nhầm vẫn còn PayPal, hiện nhầm là đòi khách ngoại VNĐ.
+    if (_vndRails !== true) return null;
     if (!window.ToolPrices || !window.ToolPrices.quoteCustomVnd) return null;
     const creditsAt = (thousandVnd) => window.ToolPrices.quoteCustomVnd(thousandVnd * 1000);
     let loK = 50, hiK = 5000; // đơn vị nghìn đồng — khớp trần create-bank
@@ -1164,6 +1169,15 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // (Henry bật MOMO_* env giữa chừng thì khách đang mở trang phải tải lại
   // mới thấy nút — chấp nhận được, MoMo chưa phải rail duy nhất).
   let _momoAvailable = null;
+  // Cờ rail VNĐ (QR + MoMo) — hỏi `pay-methods` MỘT lần lúc nạp file, đọc đồng
+  // bộ trong `_qrAmountFor`. Hỏi hụt ⇒ giữ `null` ⇒ coi như TẮT.
+  let _vndRails = null;
+  try {
+    fetch('/api/payment?action=pay-methods', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((d) => { _vndRails = !!(d && d.bank); })
+      .catch(() => {});
+  } catch (e) { /* không có fetch — để null (tắt) */ }
   function _checkMomoAvailable() {
     if (_momoAvailable !== null) return Promise.resolve(_momoAvailable);
     return fetch('/api/payment?action=momo-status', { cache: 'no-store' })
@@ -1363,12 +1377,12 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     // VNĐ lên làm giá CHÍNH (Henry, 2026-09-20) — cùng luật với `lockPreview`,
     // xem `_vndFirst`. `vndLabel` tự trả '' khi chưa đọc được `credit_packages`,
     // khi đó rơi về "N Lượng" một mình, không bịa số.
-    const needVndLbl = window.ToolPrices ? window.ToolPrices.vndLabel(need) : '';
+    const needVndLbl = _money(need);
     // Số VNĐ của `cost` (tổng giá tool) KHÔNG PHẢI của `need` (phần còn thiếu)
     // — dùng đúng nhãn ứng với số credits đang hiện ra cạnh nó, đừng chép
     // nhầm `needVndLbl` sang chỗ hiện `cost` (hai số khác nhau khi đã có sẵn
     // ít Lượng trong ví).
-    const costVndLbl = window.ToolPrices ? window.ToolPrices.vndLabel(cost) : '';
+    const costVndLbl = _money(cost);
     const shown =
       _softLock(
         '<div class="tpw-lock-t">⊙ Còn thiếu ' + _vndFirst(need, needVndLbl) + '</div>' +
@@ -1726,14 +1740,21 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  // Henry (2026-09-20): giá VNĐ lên làm CHÍNH ở mọi câu nói giá trong paywall,
-  // Lượng chỉ còn là chú thích phụ trong ngoặc — đảo ngược "N Lượng (~Yđ)" cũ.
-  // `vndLbl` rỗng (chưa đọc được `credit_packages`) → rơi về "N Lượng" một
-  // mình, KHÔNG bịa số VNĐ.
+  // Henry (2026-09-20): giá TIỀN lên làm CHÍNH ở mọi câu nói giá trong paywall,
+  // Lượng chỉ còn là chú thích phụ trong ngoặc. Từ W5 (2026-11) tiền đó là USD
+  // (`_money`) — tên hàm giữ nguyên cho đỡ đụng chỗ gọi. `vndLbl` rỗng (chưa
+  // đọc được `credit_packages`) → rơi về "N Lượng" một mình, KHÔNG bịa số.
   function _vndFirst(credits, vndLbl) {
     return vndLbl
       ? '<b>' + vndLbl + '</b> <span class="tpw-sub">(' + credits + ' Lượng)</span>'
       : '<b>' + credits + ' Lượng</b>';
+  }
+
+  // Nhãn tiền nói với khách = USD (`ToolPrices.usdLabel`). Gọi thẳng `usdLabel`
+  // chứ không qua tên cũ `vndLabel`: trình duyệt còn giữ `tool-prices.js` bản
+  // cũ thì `vndLabel` ra VNĐ — thà không hiện số tiền còn hơn lộ VNĐ.
+  function _money(credits) {
+    return window.ToolPrices && window.ToolPrices.usdLabel ? window.ToolPrices.usdLabel(credits) : '';
   }
 
   // ── Silent flow (cho chat: trừ ngầm, KHÔNG confirm modal) ─────
