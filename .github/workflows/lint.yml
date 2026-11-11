@@ -415,6 +415,17 @@ jobs:
       - name: Gemini đẩy usage đúng 1 lần mỗi lời gọi API
         run: npm run check:geminiusage
 
+      # Nghiệm Chứng đa ngôn ngữ (W6): chữ khung 6 ngôn ngữ đủ khoá + cùng chỗ thế {…}, zh-cn không lỗi thời so zh-tw,
+      # và bảng thuật ngữ PHỦ mọi sao/cung/cục engine định nghĩa — engine thêm sao mới mà quên bảng này thì trang Nhật/Hàn/Trung
+      # in chữ Việt IM LẶNG (hàm term() chỉ console.warn). Có bước đột biến tự bẻ bản sao để chứng minh bộ dò đỏ được.
+      - name: Nghiệm Chứng đa ngôn ngữ — chữ khung + thuật ngữ phủ engine
+        run: npm run check:nci18n
+
+      # Chữ Hán của bảng thuật ngữ là GÕ TAY: tra từng chữ sang âm Hán-Việt bằng lib/hanviet.ts, ghép lại so với tên Việt
+      # (chuanHoaDauThanh). Lệch → đỏ; chữ chưa có trong hanviet.ts được liệt kê riêng, không tính là đạt.
+      - name: Thuật ngữ Hán-Việt khớp lib/hanviet.ts (bộ dò tất định)
+        run: npm run check:glossary
+
   typecheck:
     runs-on: ubuntu-latest
     # Cùng lý do với job `lint` ở trên — xem chú thích tại đó.

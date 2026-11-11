@@ -75,7 +75,9 @@
     "check:saoluu": "node scripts/check-sao-luu.mjs",
     "check:webdriver": "node scripts/check-analytics-webdriver.mjs",
     "check:payossig": "node scripts/check-payos-signature.mjs",
-    "check:geminiusage": "node scripts/check-gemini-usage-once.mjs"
+    "check:geminiusage": "node scripts/check-gemini-usage-once.mjs",
+    "check:nci18n": "node scripts/check-nc-i18n.mjs",
+    "check:glossary": "node scripts/check-glossary.mjs"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.9.0",
@@ -102,6 +104,7 @@
     "eslint": "^10.9.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.11.0",
+    "opencc-js": "^1.4.2",
     "prettier": "^3.9.6",
     "typescript": "^6.0.3"
   }
