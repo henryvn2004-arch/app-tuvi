@@ -1263,9 +1263,33 @@
   "t": "。您打算做什麼事，好讓我挑選吉時？請先排命盤，我再為您專屬論運。",
   "h": "71046a30"
  },
+ "js.home.ban-menh-khac-hanh-ngay-chu": {
+  "t": "本命剋日之五行 — 能主動掌握，但較費力",
+  "h": "85ec87ed"
+ },
+ "js.home.ban-menh-sinh-cho-hanh-ngay": {
+  "t": "本命生日之五行 — 耗力，宜保存體力",
+  "h": "a3adeebe"
+ },
+ "js.home.binh": {
+  "t": "平",
+  "h": "33e3bf5e"
+ },
+ "js.home.binh-on": {
+  "t": "平穩",
+  "h": "a2f7dd20"
+ },
  "js.home.buoc-tao-tai-khoan-de-giu": {
   "t": "</b> 個步驟。建立帳號即可保存目前進度，完成後獲得兩。",
   "h": "e4db2a46"
+ },
+ "js.home.can-than-trong": {
+  "t": "需謹慎",
+  "h": "0d1ada49"
+ },
+ "js.home.can-tranh": {
+  "t": "宜避免",
+  "h": "84eadc4e"
  },
  "js.home.chao-con": {
   "t": "你好{comma_name}。老師在這裡——想聊什麼都可以：工作上的事、家裡的事，或只是今天覺得累。如果想看今天 **{cc}** 日的運勢，老師也順便幫你看。",
@@ -1274,6 +1298,18 @@
  "js.home.chinh-tinh": {
   "t": " — 主星 ",
   "h": "595c5e1b"
+ },
+ "js.home.chu-dong-ton-cong": {
+  "t": "主動，較費力",
+  "h": "5615bf97"
+ },
+ "js.home.co-con-nho-doc-la-so": {
+  "t": "家有幼兒？從氣質與教養方式來解讀孩子的命盤。",
+  "h": "0c465eff"
+ },
+ "js.home.co-nguoi-giup": {
+  "t": "有人相助",
+  "h": "5a7129b9"
  },
  "js.home.co-phap-kieng-khoi-su": {
   "t": " — 依古法忌動工。",
@@ -1291,6 +1327,10 @@
   "t": " — 有{sao}",
   "h": "f6d4710a"
  },
+ "js.home.con-dang-be-tac-chuyen-cong": {
+  "t": "我在工作上卡住了",
+  "h": "05beea63"
+ },
  "js.home.con-lai-ghe-roi": {
   "t": "你又來了{comma_name}。今天怎麼樣——心裡有什麼事嗎？",
   "h": "46c1f303"
@@ -1302,6 +1342,26 @@
  "js.home.cong-cu-chinh": {
   "t": "主要工具",
   "h": "fac531f0"
+ },
+ "js.home.cung-la-so-do-doc-theo": {
+  "t": "同一張命盤，改從職涯角度解讀：適合哪種工作方式、如何搭配團隊。",
+  "h": "1b974894"
+ },
+ "js.home.cung-ngay-sinh-doc-bang-mot": {
+  "t": "同樣的出生日期，改用另一門學問（子平）解讀，對照兩邊說的是否一致。",
+  "h": "c23f5428"
+ },
+ "js.home.cung-phu-the-ta-nguoi-ban": {
+  "t": "夫妻宮描述您的伴侶——這個工具會把那個形象畫成一幅肖像。",
+  "h": "80f61f5c"
+ },
+ "js.home.da-doc-la-so-tong-quan": {
+  "t": "讀完命盤總論之後，下一步是未來 12 個月，逐月細看。",
+  "h": "51de0f1f"
+ },
+ "js.home.da-doc-tinh-khi-cua-be": {
+  "t": "已讀完孩子的氣質——看看孩子適合接觸哪類事物。",
+  "h": "ef15f560"
  },
  "js.home.da-luu-tren-may-nay": {
   "t": "已儲存在這台裝置",
@@ -1315,9 +1375,29 @@
   "t": "排盤中…",
   "h": "b47d9598"
  },
+ "js.home.dao-nay-con-thay-met-moi": {
+  "t": "最近我覺得好累",
+  "h": "5244e4d3"
+ },
+ "js.home.de-vuong-lam-cham": {
+  "t": "容易受阻，進度放慢",
+  "h": "41d076df"
+ },
+ "js.home.doc-ca-doi-2-8-nguoi": {
+  "t": "一次解讀 2–8 人的團隊：誰會踩到誰，團隊缺少哪一類人。",
+  "h": "7fac2a52"
+ },
  "js.home.doi-la-so": {
   "t": "更換命盤",
   "h": "2daddd37"
+ },
+ "js.home.gap-go": {
+  "t": "會面",
+  "h": "65b5fcbf"
+ },
+ "js.home.gia-dao": {
+  "t": "家庭",
+  "h": "5644f850"
  },
  "js.home.gio-dep": {
   "t": "吉時",
@@ -1343,6 +1423,26 @@
   "t": " (五行 ",
   "h": "b9ab7b34"
  },
+ "js.home.hanh-ngay-cung-hanh-ban-menh": {
+  "t": "日之五行與本命同行 — 平和，能自主",
+  "h": "80b2d011"
+ },
+ "js.home.hanh-ngay-khac-ban-menh-de": {
+  "t": "日之五行剋本命 — 容易受阻，進度放慢",
+  "h": "e8142422"
+ },
+ "js.home.hanh-ngay-sinh-cho-ban-menh": {
+  "t": "日之五行生本命 — 順遂，容易得到幫助",
+  "h": "a2a28344"
+ },
+ "js.home.hanh-thong": {
+  "t": "亨通",
+  "h": "e379e3a6"
+ },
+ "js.home.hao-luc-giu-suc": {
+  "t": "耗力，宜保存體力",
+  "h": "d9ff8d7c"
+ },
  "js.home.hoi-thay": {
   "t": "問老師",
   "h": "c9ffbbaf"
@@ -1351,17 +1451,37 @@
   "t": "。請在這裡問老師您的運勢：",
   "h": "abbb0b48"
  },
+ "js.home.hom-nay-khong-viec-lon-nao": {
+  "t": "今天沒有哪件大事得到高分——留到其他日子吧。",
+  "h": "4503ec5f"
+ },
  "js.home.hom-nay-la-ngay": {
   "t": "今天是 **",
   "h": "01973599"
+ },
+ "js.home.hom-nay-la-ngay-ky-khoi": {
+  "t": "今天是忌動工之日——重大事項請延後，日常事務照常進行即可。",
+  "h": "926f129b"
  },
  "js.home.huy": {
   "t": "取消",
   "h": "34ca764c"
  },
+ "js.home.khong-chac-gio-sinh-sai-gio": {
+  "t": "不確定出生時辰？時辰一錯，命盤幾乎全部偏離——重新核對一次比較安心。",
+  "h": "124df32a"
+ },
  "js.home.khong-lap-duoc-thu-lai-sau": {
   "t": "無法排盤，請稍後再試。",
   "h": "7855b0ef"
+ },
+ "js.home.khong-lay-duoc-gio-hoang-dao": {
+  "t": "無法取得黃道吉時。",
+  "h": "315b1b59"
+ },
+ "js.home.la-so-cua-ban-dat-vao": {
+  "t": "把您的命盤放進一個古代的情境中——一幅肖像，加上一則可以閱讀的故事。",
+  "h": "1d0ad04a"
  },
  "js.home.lam-xong-ca-ba-mo-khoa": {
   "t": "三項都完成，解鎖 <b>+",
@@ -1370,6 +1490,10 @@
  "js.home.lam-xong-ca-ba-nhan-thang": {
   "t": "三項都完成，直接獲得 <b>+",
   "h": "e79679d7"
+ },
+ "js.home.lap-la-so-mot-lan-24": {
+  "t": "排一次命盤——24 個部分的解讀，其他幾乎所有工具都從這裡讀取。",
+  "h": "ea1ef982"
  },
  "js.home.lau-roi-con-chua-ghe": {
   "t": "好一陣子沒見到你了{comma_name}。最近都好嗎？有什麼想跟老師說的嗎？",
@@ -1411,6 +1535,14 @@
   "t": "這幾天你還好嗎{comma_name}？上次你提到 **{worry}** 的事——後來怎麼樣了？",
   "h": "d73269fa"
  },
+ "js.home.mien-phi-thu-ngay-khong-ton": {
+  "t": "免費——立即試用，不花任何兩。",
+  "h": "c2130339"
+ },
+ "js.home.nen-lam": {
+  "t": "宜做",
+  "h": "f6e516a6"
+ },
  "js.home.ngay": {
   "t": "日： ",
   "h": "e196e19b"
@@ -1435,6 +1567,18 @@
   "t": " · 忌日",
   "h": "83e5d5b7"
  },
+ "js.home.ngay-ky-hoan-viec-lon": {
+  "t": "忌日，重大事項延後",
+  "h": "cc9d129a"
+ },
+ "js.home.ngay-ky-lqyh": {
+  "t": "忌日",
+  "h": "21a3019b"
+ },
+ "js.home.ngay-nay-khong-co-gio-hoang": {
+  "t": "這一天沒有黃道吉時。",
+  "h": "7f175ac3"
+ },
  "js.home.ngay-sinh-chua-hop-le": {
   "t": "出生日期無效。",
   "h": "feec7b22"
@@ -1446,6 +1590,10 @@
  "js.home.ngay-xau": {
   "t": "凶日",
   "h": "3fe05eab"
+ },
+ "js.home.ngay-xung-chinh-tuoi-ban-nen": {
+  "t": "這天沖到您的生肖——宜保持步調，避免重大決定。",
+  "h": "f8a03446"
  },
  "js.home.ngay-xung-tuoi-can-than": {
   "t": " 今天沖你的生肖，重大的事要多加小心。",
@@ -1459,6 +1607,10 @@
   "t": "輸入一次出生日期，就能看到今天落在您專屬的哪一宮。",
   "h": "45d9335c"
  },
+ "js.home.rieng-viec-thuong-ngay": {
+  "t": "至於日常事務， ",
+  "h": "e7d64dd0"
+ },
  "js.home.so-lieu-rut-gon-thu-tai": {
   "t": " — 數據為精簡版，請稍後重新載入。",
   "h": "84e3f4e7"
@@ -1471,13 +1623,37 @@
   "t": "老師在這裡{comma_name}。還有什麼想問的，或有什麼事想說嗎？",
   "h": "b606961a"
  },
+ "js.home.them-la-so-nguoi-thu-hai": {
+  "t": "加入第二個人的命盤：前世你們曾是彼此的什麼人。",
+  "h": "221d1e53"
+ },
  "js.home.theo-la-so": {
   "t": "依命盤：<b>",
   "h": "7d39229e"
  },
+ "js.home.thi-cu": {
+  "t": "考試",
+  "h": "e6c5b5dd"
+ },
  "js.home.thieu-ngay-thang-nam-sinh": {
   "t": "缺少出生年月日。",
   "h": "1ce95cff"
+ },
+ "js.home.thoi-gian-toi-co-gi-dang": {
+  "t": "接下來有什麼值得留意的嗎？",
+  "h": "384b8bca"
+ },
+ "js.home.thuan-loi": {
+  "t": "順利",
+  "h": "db3f793d"
+ },
+ "js.home.tien-bac": {
+  "t": "財運",
+  "h": "ae20605a"
+ },
+ "js.home.tot": {
+  "t": "吉",
+  "h": "f716d517"
  },
  "js.home.tranh-viec-lon-hom-nay": {
   "t": " — 今日避免重大事項。",
@@ -1495,6 +1671,14 @@
   "t": "撞 ",
   "h": "f007dc98"
  },
+ "js.home.tu-chu-duoc": {
+  "t": "能自主",
+  "h": "462a5b16"
+ },
+ "js.home.tu-vi-minh-bao": {
+  "t": "明寶紫微斗數",
+  "h": "33336b26"
+ },
  "js.home.van-hom-nay": {
   "t": "今日運勢",
   "h": "386c4c24"
@@ -1502,6 +1686,10 @@
  "js.home.van-hom-nay-ca-nhan": {
   "t": "你又來了{comma_name}。今天是 **{cc}** 日，你的日運落在 **{cung}** 宮",
   "h": "1e60cafb"
+ },
+ "js.home.van-hom-nay-cua-con-the": {
+  "t": "我今天的運勢如何？",
+  "h": "ef5998e3"
  },
  "js.home.van-ngay": {
   "t": "日運 ",
@@ -1515,9 +1703,17 @@
   "t": " — 無正曜",
   "h": "44a2723b"
  },
+ "js.home.vo-chinh-dieu-pwt9": {
+  "t": "無正曜",
+  "h": "bd07d7a9"
+ },
  "js.home.vua-cong": {
   "t": "✓ 剛加入 <b>+",
   "h": "716106fa"
+ },
+ "js.home.xau": {
+  "t": "凶",
+  "h": "5a8d08f3"
  },
  "js.home.xem-ca-7-ngay": {
   "t": "<b>查看</b><small>7 天</small>",
@@ -1526,6 +1722,14 @@
  "js.home.xem-van-rieng-cua-toi": {
   "t": "查看我的專屬運勢 →",
   "h": "a669ddd6"
+ },
+ "js.home.xuat-hanh": {
+  "t": "出行",
+  "h": "424fcbb2"
+ },
+ "js.home.xung-chinh-tuoi-ban": {
+  "t": "沖到您的生肖",
+  "h": "7fec1ccf"
  },
  "js.home.xung-tuoi": {
   "t": "沖生肖",
@@ -2643,6 +2847,30 @@
   "t": "查看全部",
   "h": "7e040254"
  },
+ "js.shellui.09xxxxxxxx": {
+  "t": "09xxxxxxxx",
+  "h": "dcb79fbf"
+ },
+ "js.shellui.100-ban-muon-hoi-them-ve": {
+  "t": "/100**。想多問哪項建議？",
+  "h": "26d9a4c7"
+ },
+ "js.shellui.100-sau-dieu-chinh-co-the": {
+  "t": "/100**，調整後可提升到 **",
+  "h": "a4c14f33"
+ },
+ "js.shellui.20-nam-toi-ban-muon-hoi": {
+  "t": "**（未來 20 年）。想問什麼？",
+  "h": "871e191d"
+ },
+ "js.shellui.4-chat-bai-nghia-la-gi": {
+  "t": "四種牌組各代表什麼？",
+  "h": "793f6bd3"
+ },
+ "js.shellui.5-sac-ngu-hanh-nghia-la": {
+  "t": "五行五色各代表什麼？",
+  "h": "98715ca7"
+ },
  "js.shellui.ai-co-link-deu-doc-duoc": {
   "t": "任何擁有連結的人都能閱讀這張命盤，以及本次對話中的所有問答。",
   "h": "39f8a716"
@@ -2663,9 +2891,21 @@
   "t": "隱藏",
   "h": "3be211c7"
  },
+ "js.shellui.an-duong-la-gi": {
+  "t": "印堂是什麼？",
+  "h": "e1de6d6d"
+ },
  "js.shellui.anh-ay": {
   "t": "他",
   "h": "b69e360e"
+ },
+ "js.shellui.anh-da-gui": {
+  "t": "<p>圖片已傳送 ✓</p>",
+  "h": "a3d92bd3"
+ },
+ "js.shellui.anh-mat-noi-len-dieu-gi": {
+  "t": "眼神透露了什麼？",
+  "h": "dca0ccee"
  },
  "js.shellui.anh-tuan": {
   "t": "阿明",
@@ -2675,9 +2915,25 @@
   "t": "媽媽",
   "h": "f1d8177e"
  },
+ "js.shellui.ba-muoi-tuoi-lap-than-bon": {
+  "t": "三十而立，四十而不惑，五十而知天命。",
+  "h": "fb2fcd49"
+ },
  "js.shellui.ban": {
   "t": "您",
   "h": "40ffd8d0"
+ },
+ "js.shellui.ban-da-lap": {
+  "t": "盤已排好 — **",
+  "h": "16637971"
+ },
+ "js.shellui.ban-dinh-lam-viec-gi-de": {
+  "t": "**。您打算做什麼事，好讓我挑選最好的日子？",
+  "h": "28900fc7"
+ },
+ "js.shellui.ban-lam-viec-diem": {
+  "t": "辦公桌 — 分數 ",
+  "h": "1bfcfce8"
  },
  "js.shellui.ban-lap-la-so-o-khung": {
   "t": "<p>在中間的欄位排好命盤，老師馬上回答——<br>事業、感情、今年、下個月，想問什麼都可以。</p></div>",
@@ -2691,6 +2947,74 @@
   "t": "完整的解讀",
   "h": "9008184e"
  },
+ "js.shellui.ban-menh": {
+  "t": "** — 本命 **",
+  "h": "c3f2a79e"
+ },
+ "js.shellui.ban-muon-hoi-huong-cho-viec": {
+  "t": "。想問哪件事的方位？",
+  "h": "50a5e3e2"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-dong": {
+  "t": "。想多問中醫、飲食還是保養品？",
+  "h": "2319a0e4"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-kieu": {
+  "t": "**。想多問適合您面相的髮型或眼鏡嗎？",
+  "h": "c09516c7"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-mau": {
+  "t": "。想多問色彩或穿搭嗎？",
+  "h": "db0a07ec"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-mau-7ruw": {
+  "t": "。想多問色彩或風格嗎？",
+  "h": "fcca72b4"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-mau-lphd": {
+  "t": "。想多問色彩或搭配嗎？",
+  "h": "f9f43e47"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-phong": {
+  "t": "。想多問哪種妝容風格？",
+  "h": "26be2c4a"
+ },
+ "js.shellui.ban-muon-hoi-viec-gi": {
+  "t": "**。想問什麼事？",
+  "h": "b20cbcea"
+ },
+ "js.shellui.ban-muon-toi-cham-ten": {
+  "t": "您想請我為這個名字評分：**",
+  "h": "391dd027"
+ },
+ "js.shellui.ban-muon-toi-goi-y-ten": {
+  "t": "。您希望我往哪個方向建議名字？",
+  "h": "5de05973"
+ },
+ "js.shellui.ban-muon-toi-goi-y-ten-l4lz": {
+  "t": "您希望我往哪個方向建議名字？",
+  "h": "3ccf4b50"
+ },
+ "js.shellui.ban-muon-toi-luan-dieu-gi-8en2": {
+  "t": "。您想請我論斷什麼？",
+  "h": "56e379d0"
+ },
+ "js.shellui.ban-muon-toi-tu-van-gi": {
+  "t": "**。您想請我先談什麼？",
+  "h": "32485c20"
+ },
+ "js.shellui.ban-muon-toi-tu-van-gi-p0lg": {
+  "t": "**）。您想請我先談什麼？",
+  "h": "e0e4e985"
+ },
+ "js.shellui.ban-thuoc-menh": {
+  "t": "您屬於 **命格 ",
+  "h": "79bf73a7"
+ },
+ "js.shellui.ban-thuoc-season": {
+  "t": "您屬於 **色彩季型",
+  "h": "0f6f3bdb"
+ },
  "js.shellui.banx": {
   "t": "您",
   "h": "e8f04322"
@@ -2699,13 +3023,53 @@
   "t": "<b>報告已準備好</b>",
   "h": "ab59122b"
  },
+ "js.shellui.bao-gio-co-ket-qua": {
+  "t": "什麼時候會有結果？",
+  "h": "698cf33d"
+ },
  "js.shellui.bat-dau-hoi-thoai-moi-ban": {
   "t": "已開始新的對話。關於這張命盤，您想問什麼？",
   "h": "9d7d64ad"
  },
+ "js.shellui.bat-trach": {
+  "t": "八宅 · ",
+  "h": "ca2b345f"
+ },
+ "js.shellui.bat-trach-minh-canh-la-gi": {
+  "t": "八宅明鏡是什麼？",
+  "h": "a919defa"
+ },
+ "js.shellui.bat-tu-ky-mon": {
+  "t": "八字、奇門",
+  "h": "eac6b8dd"
+ },
  "js.shellui.be-an": {
   "t": "小安",
   "h": "4010ce22"
+ },
+ "js.shellui.be-gai": {
+  "t": "女孩",
+  "h": "af93dba0"
+ },
+ "js.shellui.be-trai": {
+  "t": "男孩",
+  "h": "274225bc"
+ },
+ "js.shellui.bep-nen-dat-huong-nao": {
+  "t": "廚房該設在哪個方位？",
+  "h": "3eafdc4a"
+ },
+ "js.shellui.bien-quai-noi-ket-cuc-the": {
+  "t": "變卦說明了怎樣的結局？",
+  "h": "3c27069a"
+ },
+ "js.shellui.biet-ma-lam-khong-bang-thich": {
+  "t": "知之者不如好之者，好之者不如樂之者。",
+  "h": "88e7bdea"
+ },
+ "js.shellui.biet-minh-biet-nguoi-tram-tran": {
+  "t": "知己知彼，百戰不殆。",
+  "h": "1bc616cf"
  },
  "js.shellui.bo": {
   "t": "爸爸",
@@ -2715,17 +3079,81 @@
   "t": "移除圖片",
   "h": "1ba6fb87"
  },
+ "js.shellui.bo-ceul": {
+  "t": "<p>爸爸 <b>",
+  "h": "a9fbc79b"
+ },
  "js.shellui.bo-con": {
   "t": "你的爸爸",
   "h": "9a106c99"
+ },
+ "js.shellui.bo-lcm6": {
+  "t": " · 爸爸 ",
+  "h": "1bb60db3"
+ },
+ "js.shellui.boi-bai-tay": {
+  "t": "撲克牌占卜",
+  "h": "4a54dbba"
+ },
+ "js.shellui.boi-bai-tay-khac-tarot-ra": {
+  "t": "撲克牌占卜和塔羅有什麼不同？",
+  "h": "199a6ae6"
  },
  "js.shellui.brand": {
   "t": "明寶紫微斗數",
   "h": "33336b26"
  },
+ "js.shellui.buoc-o-huong-xau-thi-hoa": {
+  "t": "如果綁在不吉的方位，該如何化解？",
+  "h": "8900960b"
+ },
+ "js.shellui.but-tuong": {
+  "t": "筆相",
+  "h": "6eab7d7c"
+ },
+ "js.shellui.but-tuong-cua-toi": {
+  "t": "我的筆相",
+  "h": "71e77c95"
+ },
  "js.shellui.ca-nha": {
   "t": "全家",
   "h": "158695a7"
+ },
+ "js.shellui.cach-cai-thien-theo-dong-y": {
+  "t": "中醫上該如何改善？",
+  "h": "e84646cb"
+ },
+ "js.shellui.cach-cham-da-theo-dong-y": {
+  "t": "中醫怎麼保養皮膚？",
+  "h": "2992210c"
+ },
+ "js.shellui.cach-cuc-bat-tu-cua-toi": {
+  "t": "我的八字格局是什麼？",
+  "h": "66f87290"
+ },
+ "js.shellui.cach-gieo": {
+  "t": "起卦方式",
+  "h": "ff8e39bb"
+ },
+ "js.shellui.cach-hoa-giai-huong-xau": {
+  "t": "不吉的方位該如何化解？",
+  "h": "c0c1db64"
+ },
+ "js.shellui.cach-kich-hoat-tai-vi": {
+  "t": "如何催旺財位？",
+  "h": "69f99fe5"
+ },
+ "js.shellui.cach-phoi-do-theo-mau-menh": {
+  "t": "如何依命格色彩搭配服裝？",
+  "h": "3d2ef763"
+ },
+ "js.shellui.cach-tang-van-tri-tue": {
+  "t": "如何提升智慧運？",
+  "h": "538015b7"
+ },
+ "js.shellui.can": {
+  "t": "需要",
+  "h": "393b0153"
  },
  "js.shellui.cau": {
   "t": "</b> 則",
@@ -2734,6 +3162,10 @@
  "js.shellui.cau-hoi-48ar": {
   "t": "</b> 個問題",
   "h": "65c94d43"
+ },
+ "js.shellui.cau-hoi-tuy-chon": {
+  "t": "問題（選填）",
+  "h": "645f5819"
  },
  "js.shellui.cau-mien-phi": {
   "t": " 個</b>免費問題",
@@ -2747,6 +3179,78 @@
   "t": " — 剛才的問題已立即回覆",
   "h": "70029ef5"
  },
+ "js.shellui.cham-diem": {
+  "t": "評分 →",
+  "h": "a4d402f6"
+ },
+ "js.shellui.chao-ban-cho-thay-xin-nam": {
+  "t": "您好。請直接在聊天視窗告訴老師您的出生年與性別，我會依五行納音為您建議服裝色彩。結果出來後，隨時可以再問我。",
+  "h": "eabb393e"
+ },
+ "js.shellui.chao-ban-dien-nam-sinh-ngay": {
+  "t": "您好。請直接在聊天視窗填入出生年、預定日期與目的，我會建議適合當天的色彩與風格。結果出來後，隨時可以再問我。",
+  "h": "31f4cde1"
+ },
+ "js.shellui.chao-ban-dien-nam-sinh-va": {
+  "t": "您好。請直接在聊天視窗填入出生年並傳送工作角落的照片，我會依八宅為風水評分。結果出來後，隨時可以再問我。",
+  "h": "e2f81b3b"
+ },
+ "js.shellui.chao-ban-dien-nam-sinh-va-3mcz": {
+  "t": "您好。請直接在聊天視窗填入出生年並傳送店面／辦公室的照片，我會依八宅為收銀位置與大門評分。結果出來後，隨時可以再問我。",
+  "h": "513bc0ef"
+ },
+ "js.shellui.chao-ban-dien-nam-sinh-va-anel": {
+  "t": "您好。請直接在聊天視窗填入出生年並傳送房間照片，我會依八宅為風水評分。結果出來後，隨時可以再問我。",
+  "h": "dfc7c600"
+ },
+ "js.shellui.chao-ban-dinh-tam-roi-hoi": {
+  "t": "您好。先靜下心，再問我您正在煩惱的事，我會抽神諭卡並為您解讀——若想親手抽牌，也可以開啟神諭卡頁面。",
+  "h": "22f5ec78"
+ },
+ "js.shellui.chao-ban-gui-anh-chu-ky": {
+  "t": "您好。請直接在聊天視窗傳送簽名照片（在淺色背景上拍攝或掃描清楚），我會依古法量測各個面向並為您解讀。結果出來後，隨時可以再問我。",
+  "h": "6c75b8c4"
+ },
+ "js.shellui.chao-ban-gui-anh-da-mat": {
+  "t": "您好。請直接在聊天視窗傳送臉部皮膚照片，我會結合中西醫與本命五行進行分析。結果出來後，隨時可以再問我。",
+  "h": "b75472f5"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat": {
+  "t": "您好。請直接在聊天視窗傳送臉部照片，我會依古法面相學為您分析。結果出來後，隨時可以再問我任何問題。",
+  "h": "e7cd82e9"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-25m4": {
+  "t": "您好。請直接在聊天視窗傳送臉部照片，我會分析適合您的膚色基調與色彩季型。結果出來後，隨時可以再問我。",
+  "h": "9d4d0810"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-4w3x": {
+  "t": "您好。請直接在聊天視窗傳送臉部照片，我會依《麻衣神相》論氣色。結果出來後，隨時可以再問我任何問題。",
+  "h": "005d8998"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-ixs1": {
+  "t": "您好。請直接在聊天視窗傳送臉部照片，我會放大雙眼，依傳統眼相之法為您分析。結果出來後，隨時可以再問我。",
+  "h": "19ac08fd"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-jcki": {
+  "t": "您好。請直接在聊天視窗傳送臉部照片，我會建議適合您面相的髮型與眼鏡。結果出來後，隨時可以再問我。",
+  "h": "e6cde46a"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-z4ez": {
+  "t": "您好。請直接在聊天視窗傳送臉部照片，我會建議適合您面相與本命的妝容風格。結果出來後，隨時可以再問我。",
+  "h": "0cdc1f94"
+ },
+ "js.shellui.chao-ban-gui-anh-long-ban": {
+  "t": "您好。請直接在聊天視窗傳送手掌照片（手掌攤平、掌心向上），我會依古法手相學為您分析。結果出來後，隨時可以再問我。",
+  "h": "4ec607ce"
+ },
+ "js.shellui.chao-ban-hoi-toi-ve-mot": {
+  "t": "您好。請問我您遇到的問題或情況，我會抽牌並為您解讀——若想親手抽牌，也可以開啟塔羅頁面。",
+  "h": "dafd1fb0"
+ },
+ "js.shellui.chao-ban-hoi-toi-ve-mot-rpj1": {
+  "t": "您好。請問我您遇到的問題或情況，我會抽撲克牌並為您解讀——若想親手抽牌，也可以開啟撲克牌占卜頁面。",
+  "h": "931febfd"
+ },
  "js.shellui.chau": {
   "t": "孩子",
   "h": "a3d50d2f"
@@ -2758,6 +3262,14 @@
  "js.shellui.chi-ay": {
   "t": "她",
   "h": "2e7bb192"
+ },
+ "js.shellui.chi-khi-con-mo-app": {
+  "t": "只有在你打開應用程式時",
+  "h": "0838cde0"
+ },
+ "js.shellui.chi-minh-con": {
+  "t": "只有你自己",
+  "h": "75f0d516"
  },
  "js.shellui.chia-se": {
   "t": "分享",
@@ -2775,13 +3287,57 @@
   "t": "分享 ",
   "h": "f575b7df"
  },
+ "js.shellui.cho-minh-xin-ho-ten-va": {
+  "t": "請告訴我您的姓名與性別。",
+  "h": "a53c7ac5"
+ },
  "js.shellui.cho-ten": {
   "t": " 給 {name}",
   "h": "bc9cbc22"
  },
+ "js.shellui.cho-thay-day-so-con-muon": {
+  "t": "<p>請給老師你想評分的數字（電話號碼、車牌…）。</p>",
+  "h": "c393c3e5"
+ },
+ "js.shellui.cho-thay-xin-ho-cua-be": {
+  "t": "<p>請告訴老師孩子的姓氏，以及孩子、爸爸、媽媽的出生年。</p>",
+  "h": "bb587f9a"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-chu": {
+  "t": "<p>請告訴老師負責人的出生年與企業的行業別。</p>",
+  "h": "c3d9712d"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-duong": {
+  "t": "<p>請告訴老師你的國曆出生年。</p>",
+  "h": "ce0be17e"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-duong-453j": {
+  "t": "<p>請告訴老師爸爸和媽媽的國曆出生年。</p>",
+  "h": "d56f99b1"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-gioi": {
+  "t": "<p>請告訴老師出生年、性別、預定出行的日期與目的（付費工具，扣兩之前，價格會顯示在按鈕上）。</p>",
+  "h": "bc67e762"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-va": {
+  "t": "<p>請告訴老師你的出生年與性別。</p>",
+  "h": "24d73bdb"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-va-sz0q": {
+  "t": "<p>請告訴老師你的出生年與性別（付費工具，扣兩之前，價格會顯示在按鈕上）。</p>",
+  "h": "2a284e19"
+ },
+ "js.shellui.cho-thay-xin-thong-tin-nguoi": {
+  "t": "請告訴老師第一位的資料。",
+  "h": "20efc20c"
+ },
  "js.shellui.chon-mot-cach-duoi-day": {
   "t": " — 請選擇下方一種方式。",
   "h": "8b0c906e"
+ },
+ "js.shellui.chon-ngay": {
+  "t": "擇日 ",
+  "h": "7e322b37"
  },
  "js.shellui.chon-thay-luan-giai": {
   "t": "選擇解讀的老師",
@@ -2794,6 +3350,14 @@
  "js.shellui.chong-con": {
   "t": "你的丈夫",
   "h": "6ed699ab"
+ },
+ "js.shellui.chu": {
+  "t": " · 主 ",
+  "h": "d9836ef1"
+ },
+ "js.shellui.chu-su-tuoi": {
+  "t": "**（主事者生肖 **",
+  "h": "8aafb6ee"
  },
  "js.shellui.chua-co-la-so-nao": {
   "t": "<b>還沒有命盤</b>",
@@ -2815,9 +3379,25 @@
   "t": " · 尚未開啟</span></span>",
   "h": "72204e26"
  },
+ "js.shellui.chua-mo-duoc-form-ngay-sinh": {
+  "t": "無法開啟出生日期表單。",
+  "h": "9ae703ba"
+ },
+ "js.shellui.chua-mo-duoc-telegram-con-thu": {
+  "t": "無法開啟 Telegram，請到「個人檔案」頁面再試一次。",
+  "h": "3d5bcea0"
+ },
  "js.shellui.chua-tao-duoc-pdf-thu-lai": {
   "t": "無法產生 PDF，請稍後再試。",
   "h": "549a59fa"
+ },
+ "js.shellui.chua-thay-gi": {
+  "t": "還看不到任何東西",
+  "h": "d0b4990a"
+ },
+ "js.shellui.chua-them-duoc-lich-con-thu": {
+  "t": "<p>無法加入行事曆，請到「全家人」頁面再試一次。</p>",
+  "h": "2e6ef436"
  },
  "js.shellui.chuyen": {
   "t": "關於 ",
@@ -2826,6 +3406,14 @@
  "js.shellui.chuyen-do-the-nao-roi-con": {
   "t": "<p>那件事後來怎麼樣了？</p>",
   "h": "9e184650"
+ },
+ "js.shellui.chuyen-nay-thay-phai-xem-la": {
+  "t": "這件事，老師得看你的命盤才能說得貼切。請告訴老師你的姓名與性別。",
+  "h": "58f00a90"
+ },
+ "js.shellui.co-loi-thu-lai-giup-con": {
+  "t": "發生錯誤，請再試一次。",
+  "h": "320cbdc2"
  },
  "js.shellui.co-noi": {
   "t": " 說過：<i>「",
@@ -2839,6 +3427,18 @@
   "t": "<p>再過 ",
   "h": "b84493f3"
  },
+ "js.shellui.con-bam-start-trong-telegram-la": {
+  "t": "在 Telegram 按下 Start 就完成了——到日子老師會傳訊息給你。",
+  "h": "3b43eb01"
+ },
+ "js.shellui.con-can-bo-ngu-hanh-gi": {
+  "t": "我需要補哪種五行？",
+  "h": "2906ae80"
+ },
+ "js.shellui.con-dinh-lam-viec-gi-cho": {
+  "t": "<p>你打算做什麼事、為誰做，以及哪個月？</p>",
+  "h": "1cb3abf3"
+ },
  "js.shellui.con-goi-la-gi": {
   "t": "{goi}叫什麼名字（例如「{vd}」），性別是？",
   "h": "70920c56"
@@ -2846,6 +3446,14 @@
  "js.shellui.con-hoi-tiep-di": {
   "t": "</b>。繼續問吧。</p>",
   "h": "0de4fe93"
+ },
+ "js.shellui.con-muon-hoi-viec-gi-tuy": {
+  "t": "<p>你想問什麼事（選填），然後老師為你起卦——六爻一次完成。</p>",
+  "h": "175bcf5b"
+ },
+ "js.shellui.con-muon-lap-khoa-luc-nham": {
+  "t": "<p>你想為哪一天、哪個時辰起六壬課？</p>",
+  "h": "812185b8"
  },
  "js.shellui.con-muon-thay-dua-ngay-tot": {
   "t": "<p>要不要老師把專屬於你的吉日、沖煞日放進手機行事曆？每天早上打開行事曆就看得到。</p>",
@@ -2859,6 +3467,18 @@
   "t": "</b>。你想請老師先看哪方面的事？</p>",
   "h": "c643b581"
  },
+ "js.shellui.con-muon-thay-xem-la-so": {
+  "t": "你想請老師看誰的命盤？請告訴老師姓名與性別。",
+  "h": "599ae642"
+ },
+ "js.shellui.con-muon-xem-gio-hoang-dao": {
+  "t": "<p>你想查哪一天的黃道吉時？</p>",
+  "h": "618550f6"
+ },
+ "js.shellui.con-muon-xem-lich-ngay-tot": {
+  "t": "<p>你想查哪個月的吉日曆？</p>",
+  "h": "5fa29f8b"
+ },
  "js.shellui.con-nhieu-dieu-muon-noi-ve": {
   "t": " 對這張命盤還有很多話想說。免費註冊即可：",
   "h": "b5e24689"
@@ -2867,17 +3487,101 @@
   "t": " 還有許多地方想為您說清楚",
   "h": "2a2c8332"
  },
+ "js.shellui.con-so": {
+  "t": "數字",
+  "h": "ffeaf4b4"
+ },
  "js.shellui.con-thu-lai-o-so-la": {
   "t": "。請到「命盤簿」再試一次。",
   "h": "e3bb1032"
+ },
+ "js.shellui.con-tuoi-gi-hop-voi-bo": {
+  "t": "孩子屬什麼生肖與父母最合？",
+  "h": "702bccb6"
+ },
+ "js.shellui.cong-viec-chinh": {
+  "t": "主要工作",
+  "h": "ff60cd13"
+ },
+ "js.shellui.cot-va-nhuc-khac-nhau-the": {
+  "t": "骨與肉有什麼不同？",
+  "h": "79e5d699"
+ },
+ "js.shellui.cua-hang-van-phong-diem": {
+  "t": "店面與辦公室 — 分數 ",
+  "h": "70910085"
+ },
+ "js.shellui.cung-dien-trach": {
+  "t": "田宅宮",
+  "h": "9e958678"
+ },
+ "js.shellui.cung-huynh-de": {
+  "t": "兄弟宮",
+  "h": "3b9eb4f5"
+ },
+ "js.shellui.cung-menh": {
+  "t": "命宮",
+  "h": "3dc5da1d"
+ },
+ "js.shellui.cung-menh-cua-ban-la": {
+  "t": "您的命宮是 **",
+  "h": "e7419937"
+ },
+ "js.shellui.cung-no-boc": {
+  "t": "僕役宮",
+  "h": "d3845b4b"
+ },
+ "js.shellui.cung-phu-mau": {
+  "t": "父母宮",
+  "h": "80b1dad9"
+ },
+ "js.shellui.cung-phu-the": {
+  "t": "夫妻宮",
+  "h": "5b9ae45f"
+ },
+ "js.shellui.cung-phuc-duc": {
+  "t": "福德宮",
+  "h": "4a4ce3c4"
+ },
+ "js.shellui.cung-quan-loc": {
+  "t": "官祿宮",
+  "h": "44e094ad"
+ },
+ "js.shellui.cung-tai-bach": {
+  "t": "財帛宮",
+  "h": "06ea5e9f"
+ },
+ "js.shellui.cung-tat-ach": {
+  "t": "疾厄宮",
+  "h": "2287ab9c"
+ },
+ "js.shellui.cung-thien-di": {
+  "t": "遷移宮",
+  "h": "c0dff8fc"
+ },
+ "js.shellui.cung-tu-tuc": {
+  "t": "子女宮",
+  "h": "0aee19db"
  },
  "js.shellui.da-an-khoi-thu-vien-chung": {
   "t": "<span>✓ 已從公開資料庫隱藏。連結仍可照常使用。</span>",
   "h": "e12e84c8"
  },
+ "js.shellui.da-cham-hop-xung-dia-chi": {
+  "t": "已評估未來 15 年的地支合沖（爸爸 **",
+  "h": "0596e359"
+ },
  "js.shellui.da-chep": {
   "t": "已複製 ✓",
   "h": "846252e0"
+ },
+ "js.shellui.da-co-du-gio-hoang-dao": {
+  "t": "**。黃道吉時、宜忌與神煞都已備齊。您打算做什麼事？",
+  "h": "f216588e"
+ },
+ "js.shellui.da-co-du-thong-tin": {
+  "t": "資料已齊全 **",
+  "h": "638b1732"
  },
  "js.shellui.da-co-la-so-cua": {
   "t": "<p>已有 <b>",
@@ -2886,6 +3590,14 @@
  "js.shellui.da-dung-het-luot-hoi": {
   "t": "提問次數已用完",
   "h": "3ef9beae"
+ },
+ "js.shellui.da-gieo-du-6-hao": {
+  "t": "<p>六爻已起齊 ✓</p>",
+  "h": "a8830b8b"
+ },
+ "js.shellui.da-gui-anh": {
+  "t": "[已傳送圖片]",
+  "h": "8b8a14fd"
  },
  "js.shellui.da-gui-mo": {
   "t": "✓ 已傳送 — 請開啟 ",
@@ -2899,6 +3611,30 @@
   "t": "提問次數已用完。命盤仍可免費查看——您可以查看",
   "h": "f2acf059"
  },
+ "js.shellui.da-lap-ban": {
+  "t": "<p>盤已排好 ✓</p>",
+  "h": "c18977ee"
+ },
+ "js.shellui.da-lap-khoa-dai-luc-nham": {
+  "t": "已起 **大六壬** 課 — 日期 ",
+  "h": "b7172965"
+ },
+ "js.shellui.da-lap-nen-cho-viec": {
+  "t": "已為這件事奠定基礎 **",
+  "h": "768286ec"
+ },
+ "js.shellui.da-lap-que": {
+  "t": "<p>卦已起好 ✓</p>",
+  "h": "f4a3d08e"
+ },
+ "js.shellui.da-lieu": {
+  "t": "皮膚 — ",
+  "h": "5d98e4a3"
+ },
+ "js.shellui.da-san-sang-hoi-toi-bat": {
+  "t": "** 已準備好。想問什麼都可以。",
+  "h": "13652508"
+ },
  "js.shellui.da-san-sang-hoi-toi-ve": {
   "t": "** 已準備好。可以問我日干、用神、格局或大運。",
   "h": "7bde27db"
@@ -2907,13 +3643,41 @@
   "t": "<span>已建立連結 · 此版本也會顯示在 ",
   "h": "11df14f6"
  },
+ "js.shellui.da-thuong": {
+  "t": "一般膚質",
+  "h": "830c17ab"
+ },
+ "js.shellui.da-toi-hop-menh-gi": {
+  "t": "我的皮膚合什麼命格？",
+  "h": "94a6ea06"
+ },
+ "js.shellui.da-tra-gio-hoang-dao-hac": {
+  "t": "。已查黃道／黑道時辰。您打算做什麼事，好讓我挑選吉時？",
+  "h": "c943d929"
+ },
+ "js.shellui.da-tra-kim-lau-tam-tai": {
+  "t": "已查金樓 · 三災 · 荒屋，對象生肖 **",
+  "h": "2c862356"
+ },
  "js.shellui.da-vao-tiep-chuyen": {
   "t": " 已加入對話",
   "h": "31cef520"
  },
+ "js.shellui.da-xem-lich-thang": {
+  "t": "已查看 **月曆 ",
+  "h": "bd12b12f"
+ },
+ "js.shellui.dai-van-hien-tai-the-nao": {
+  "t": "目前的大運如何？",
+  "h": "3b3146dd"
+ },
  "js.shellui.dang-an": {
   "t": "隱藏中…",
   "h": "06dcaa3f"
+ },
+ "js.shellui.dang-cham-diem-phong-thuy": {
+  "t": "<p><i>風水評分中…</i></p>",
+  "h": "21564735"
  },
  "js.shellui.dang-dung-pdf": {
   "t": "PDF 製作中…",
@@ -2935,25 +3699,77 @@
   "t": "免費註冊 →",
   "h": "89d5985d"
  },
+ "js.shellui.dang-ky-mien-phi-t076": {
+  "t": "免費註冊",
+  "h": "71ddeeae"
+ },
  "js.shellui.dang-ky-nhan-them": {
   "t": "註冊以獲得更多",
   "h": "8bb9cbc2"
+ },
+ "js.shellui.dang-lap-khoa": {
+  "t": "<p>起課中…</p>",
+  "h": "d4e32377"
+ },
+ "js.shellui.dang-nhap": {
+  "t": "登入",
+  "h": "1afd3f6b"
+ },
+ "js.shellui.dang-phan-tich": {
+  "t": "<p><i>分析中…</i></p>",
+  "h": "eac72554"
  },
  "js.shellui.dang-tiep-chuyen": {
   "t": "正在與您交談",
   "h": "37509a1d"
  },
+ "js.shellui.dang-tra-mau-hop-menh": {
+  "t": "<p><i>查詢合命色彩中…</i></p>",
+  "h": "3f5c2690"
+ },
  "js.shellui.dang-viet-bao-cao": {
   "t": "<b>報告撰寫中…</b>",
   "h": "2d9fa930"
+ },
+ "js.shellui.dang-xem": {
+  "t": "查看中…",
+  "h": "a5c04b3d"
  },
  "js.shellui.dang-xem-la-so": {
   "t": "目前查看的命盤：<b>",
   "h": "f6efbc2c"
  },
+ "js.shellui.dang-xem-trang-phuc-hop-ngay": {
+  "t": "<p><i>查看適合當天的穿搭中…</i></p>",
+  "h": "471afd48"
+ },
+ "js.shellui.dat-ten": {
+  "t": "取名 ",
+  "h": "d20b3ff3"
+ },
+ "js.shellui.dat-ten-dn": {
+  "t": "企業取名 · ",
+  "h": "e07d8451"
+ },
  "js.shellui.day": {
   "t": " 。",
   "h": "7cac21ab"
+ },
+ "js.shellui.day-so": {
+  "t": "數字",
+  "h": "f3ccd2df"
+ },
+ "js.shellui.day-so-dzep": {
+  "t": "<p>數字：<b>",
+  "h": "537e1cab"
+ },
+ "js.shellui.day-so-nay-co-nen-dung": {
+  "t": "這組數字適合使用嗎？",
+  "h": "8981877c"
+ },
+ "js.shellui.day-so-xgu3": {
+  "t": "數字 **",
+  "h": "01b9b7d5"
  },
  "js.shellui.de-bat-dau": {
   "t": "以開始",
@@ -2963,9 +3779,17 @@
   "t": "🎲 讓系統隨機挑選",
   "h": "aee4de0f"
  },
+ "js.shellui.de-hoi-thay-xong-se-tu": {
+  "t": "來問老師——完成後會自動回來繼續解讀。命盤仍可免費查看。",
+  "h": "d47c354b"
+ },
  "js.shellui.de-hoi-tiep": {
   "t": "以繼續提問。",
   "h": "2739fdb7"
+ },
+ "js.shellui.de-hoi-tiep-cau-vua-roi": {
+  "t": "以繼續提問——註冊後，剛才的問題會立即得到回覆。",
+  "h": "68cc8b7d"
  },
  "js.shellui.de-sau": {
   "t": "稍後再說",
@@ -2975,6 +3799,14 @@
   "t": " ，老師才能依您的命盤準確解讀——一直問籠統的問題，就跟問一般聊天機器人沒什麼兩樣。</p>",
   "h": "ec798250"
  },
+ "js.shellui.de-thay-xem-cho-sat-cho": {
+  "t": "為了讓老師看得更貼切，請先告訴老師你的姓名與性別。",
+  "h": "67e7511a"
+ },
+ "js.shellui.de-trong-la-thay-lap-ban": {
+  "t": "<p>留空的話，老師會依現在的時間排盤——或者你可以選擇其他時間與問題（選填）。</p>",
+  "h": "68dda2bd"
+ },
  "js.shellui.de-xem": {
   "t": " 查看",
   "h": "f6dcc1ba"
@@ -2982,6 +3814,26 @@
  "js.shellui.den-ngay": {
   "t": "<span>到了 ",
   "h": "d4e0e872"
+ },
+ "js.shellui.diem-phong-thuy-ban-lam-viec": {
+  "t": "目前辦公桌的風水分數：**",
+  "h": "b68f30c6"
+ },
+ "js.shellui.diem-phong-thuy-cua-hang-van": {
+  "t": "目前店面／辦公室的風水分數：**",
+  "h": "abf14d8f"
+ },
+ "js.shellui.diem-phong-thuy-hien-tai": {
+  "t": "目前的風水分數：**",
+  "h": "91e0a1f2"
+ },
+ "js.shellui.dien-tuong-cua-toi": {
+  "t": "我的面相",
+  "h": "d5784500"
+ },
+ "js.shellui.doi": {
+  "t": "更換",
+  "h": "c291a425"
  },
  "js.shellui.doi-nen-sang-toi": {
   "t": "切換淺色／深色模式",
@@ -2999,9 +3851,21 @@
   "t": "關閉，查看結果",
   "h": "fba3c1e0"
  },
+ "js.shellui.dung": {
+  "t": "，用神 **",
+  "h": "847dd55f"
+ },
+ "js.shellui.dung-roi-thay": {
+  "t": "沒錯，老師",
+  "h": "393b0d29"
+ },
  "js.shellui.dung-ten": {
   "t": "</b> 老師署名",
   "h": "70d07a35"
+ },
+ "js.shellui.dung-than-la-gi-hanh-nao": {
+  "t": "用神是什麼，屬於哪一行？",
+  "h": "5236e12f"
  },
  "js.shellui.dung-thu-con": {
   "t": "試用：剩 <b>",
@@ -3015,17 +3879,73 @@
   "t": " (國曆)",
   "h": "4471b62b"
  },
+ "js.shellui.duong-van-menh-noi-len-dieu": {
+  "t": "命運線透露了什麼？",
+  "h": "04b0d761"
+ },
  "js.shellui.esc": {
   "t": "Esc",
   "h": "1f7a4f9e"
+ },
+ "js.shellui.gieo-que": {
+  "t": "起卦 · ",
+  "h": "b41eb665"
+ },
+ "js.shellui.gieo-que-6-hao": {
+  "t": "起卦（六爻）→",
+  "h": "5c3eaa5e"
+ },
+ "js.shellui.gio": {
+  "t": "時",
+  "h": "75f92388"
+ },
+ "js.shellui.gio-3uxy": {
+  "t": " 時 ",
+  "h": "d50a9e73"
+ },
+ "js.shellui.gio-can-xem": {
+  "t": "要查的時辰",
+  "h": "84e96644"
  },
  "js.shellui.gio-chi": {
   "t": "{chi}時 ({khung})",
   "h": "681b8452"
  },
+ "js.shellui.gio-den-nguoi-thu-hai": {
+  "t": "接下來輪到第二位。",
+  "h": "63d5af59"
+ },
+ "js.shellui.gio-hoang-dao": {
+  "t": "黃道吉時 · ",
+  "h": "ecf3c685"
+ },
+ "js.shellui.gio-hoang-dao-cho-viec-nay": {
+  "t": "這件事的黃道吉時？",
+  "h": "005ba6f0"
+ },
+ "js.shellui.gio-hxu5": {
+  "t": "，時 ",
+  "h": "15247793"
+ },
  "js.shellui.gio-ke-chuyen-cua-ban-di": {
   "t": "</b>。說說您的故事吧，我們會請最合適的老師為您解讀。</p>",
   "h": "cfc0e866"
+ },
+ "js.shellui.gio-nao-can-tranh-tuyet-doi": {
+  "t": "哪些時辰必須絕對避開？",
+  "h": "3aff98fe"
+ },
+ "js.shellui.gio-nao-tot-de-khai-truong": {
+  "t": "哪個時辰適合開幕？",
+  "h": "f771c439"
+ },
+ "js.shellui.gio-nay-hop-lam-viec-gi": {
+  "t": "這個時辰最適合做什麼事？",
+  "h": "74b7e572"
+ },
+ "js.shellui.gio-r1j8": {
+  "t": "</b> · 時 <b>",
+  "h": "910eff27"
  },
  "js.shellui.gio-sinh-cua": {
   "t": "請問 ",
@@ -3035,9 +3955,29 @@
   "t": " 小時前",
   "h": "ce828227"
  },
+ "js.shellui.gioi-tinh": {
+  "t": "性別",
+  "h": "80bbce55"
+ },
+ "js.shellui.gioi-tinh-con": {
+  "t": "孩子的性別",
+  "h": "39dacada"
+ },
  "js.shellui.giox": {
   "t": " · 時 ",
   "h": "9d8fa6cf"
+ },
+ "js.shellui.giuong-ngu-quay-huong-nao": {
+  "t": "床該朝向哪個方位？",
+  "h": "08ee9028"
+ },
+ "js.shellui.goi-y-12-ten-hop-menh": {
+  "t": "建議 12 個合命的名字，並附上寓意",
+  "h": "61954ded"
+ },
+ "js.shellui.google-lich": {
+  "t": "Google 日曆",
+  "h": "8cdb619a"
  },
  "js.shellui.gui": {
   "t": "送出",
@@ -3046,6 +3986,46 @@
  "js.shellui.gui-anh": {
   "t": "傳送圖片",
   "h": "f7dc07df"
+ },
+ "js.shellui.gui-anh-can-phong-cua-con": {
+  "t": "請把你房間的照片傳到這裡（付費工具，扣兩之前，價格會顯示在按鈕上）。",
+  "h": "2fb86d98"
+ },
+ "js.shellui.gui-anh-can-vung-mat-nhin": {
+  "t": "請把你眼部特寫的照片傳到這裡（正視前方、光線充足）（付費工具，扣兩之前，價格會顯示在按鈕上）。",
+  "h": "201e34e3"
+ },
+ "js.shellui.gui-anh-chu-ky-cua-con": {
+  "t": "請把你的簽名照片傳到這裡（付費工具，扣兩之前，價格會顯示在按鈕上）。靜態照片能量測 6 個面向中的 3 個（骨／肉／勢）——若想量測完整的 6 個面向，請直接在頁面上簽名",
+  "h": "e616ecbd"
+ },
+ "js.shellui.gui-anh-cua-hang-van-phong": {
+  "t": "請把你店面／辦公室的照片傳到這裡（付費工具，扣兩之前，價格會顯示在按鈕上）。",
+  "h": "fca7be14"
+ },
+ "js.shellui.gui-anh-da-mat-cua-con": {
+  "t": "請把你臉部皮膚的照片傳到這裡（付費工具，扣兩之前，價格會顯示在按鈕上）。出生年可不填。",
+  "h": "dda9340e"
+ },
+ "js.shellui.gui-anh-goc-lam-viec-cua": {
+  "t": "請把你工作角落的照片傳到這裡（付費工具，扣兩之前，價格會顯示在按鈕上）。",
+  "h": "229ffe71"
+ },
+ "js.shellui.gui-anh-khuon-mat-cua-con": {
+  "t": "請把你的臉部照片傳到這裡（付費工具，扣兩之前，價格會顯示在按鈕上）。",
+  "h": "034b6960"
+ },
+ "js.shellui.gui-anh-khuon-mat-cua-con-x2xw": {
+  "t": "請把你的臉部照片傳到這裡（付費工具，扣兩之前，價格會顯示在按鈕上）。出生年可不填。",
+  "h": "15dcb8ec"
+ },
+ "js.shellui.gui-anh-khuon-mat-gan-day": {
+  "t": "請把你近期的臉部照片（未化濃妝）傳到這裡（付費工具，扣兩之前，價格會顯示在按鈕上）。",
+  "h": "6d5eec5f"
+ },
+ "js.shellui.gui-anh-long-ban-tay-xoe": {
+  "t": "請把你的手掌照片（手掌攤平、掌心向上）傳到這裡（付費工具，扣兩之前，價格會顯示在按鈕上）。",
+  "h": "4cefab7b"
  },
  "js.shellui.gui-pdf-vao": {
   "t": "將 PDF 傳送到",
@@ -3059,6 +4039,18 @@
   "t": "操作",
   "h": "8e9fdd28"
  },
+ "js.shellui.hao-dong-noi-len-dieu-gi": {
+  "t": "動爻說明了什麼？",
+  "h": "4e9d2215"
+ },
+ "js.shellui.hay-goi-y-ten-moi": {
+  "t": "**，還是建議新的名字？",
+  "h": "d922a861"
+ },
+ "js.shellui.het-phan-dung-thu": {
+  "t": "試用內容已用完。",
+  "h": "49a17e2d"
+ },
  "js.shellui.het-phan-dung-thu-roi": {
   "t": "試用內容已用完…",
   "h": "277af632"
@@ -3066,6 +4058,34 @@
  "js.shellui.hieu-dung-la-so-dang-mo": {
   "t": "讀懂目前開啟的命盤",
   "h": "b500bc82"
+ },
+ "js.shellui.ho": {
+  "t": "姓",
+  "h": "a9a24039"
+ },
+ "js.shellui.ho-4mdh": {
+  "t": " 姓 ",
+  "h": "c4ce89b4"
+ },
+ "js.shellui.ho-quai-cho-thay-khuc-giua": {
+  "t": "互卦顯示中段的發展如何？",
+  "h": "640af3c9"
+ },
+ "js.shellui.ho-so": {
+  "t": "檔案 **",
+  "h": "23a92be3"
+ },
+ "js.shellui.ho-ten-chu-su": {
+  "t": "主事者姓名",
+  "h": "b65bd926"
+ },
+ "js.shellui.hoa": {
+  "t": "火",
+  "h": "be792fa1"
+ },
+ "js.shellui.hoa-he-phuc-chi-so-y": {
+  "t": "禍兮福之所倚，福兮禍之所伏。",
+  "h": "0faeddcf"
  },
  "js.shellui.hoac-nap-luong-de-hoi-tiep": {
   "t": "或儲值兩，逐題繼續提問 →",
@@ -3095,17 +4115,125 @@
   "t": "再問老師 <b>",
   "h": "04044619"
  },
+ "js.shellui.hoi-thay-ve-but-tuong": {
+  "t": "問老師關於筆相…",
+  "h": "abf79403"
+ },
+ "js.shellui.hoi-thay-ve-da-lieu": {
+  "t": "問老師關於皮膚…",
+  "h": "0ba0e8f2"
+ },
+ "js.shellui.hoi-thay-ve-khi-sac": {
+  "t": "問老師關於氣色…",
+  "h": "af4fcb79"
+ },
+ "js.shellui.hoi-thay-ve-kieu-toc-hop": {
+  "t": "問老師關於適合面相的髮型…",
+  "h": "33ac1d0b"
+ },
+ "js.shellui.hoi-thay-ve-la-bai-vua": {
+  "t": "問老師關於剛抽到的牌…",
+  "h": "a92ebf3e"
+ },
+ "js.shellui.hoi-thay-ve-mau-sac-hop": {
+  "t": "問老師關於合命的色彩…",
+  "h": "98bdd51a"
+ },
+ "js.shellui.hoi-thay-ve-nhan-tuong": {
+  "t": "問老師關於眼相…",
+  "h": "908e08ff"
+ },
+ "js.shellui.hoi-thay-ve-phong-thuy": {
+  "t": "問老師關於風水…",
+  "h": "0e6c95d3"
+ },
+ "js.shellui.hoi-thay-ve-phong-thuy-ban": {
+  "t": "問老師關於辦公桌風水…",
+  "h": "e3a88042"
+ },
+ "js.shellui.hoi-thay-ve-phong-thuy-cua": {
+  "t": "問老師關於店面風水…",
+  "h": "5ccebcd2"
+ },
+ "js.shellui.hoi-thay-ve-the-vua-rut": {
+  "t": "問老師關於剛抽到的卡片…",
+  "h": "3a54f9a1"
+ },
+ "js.shellui.hoi-thay-ve-thu-tuong": {
+  "t": "問老師關於手相…",
+  "h": "ede75605"
+ },
+ "js.shellui.hoi-thay-ve-tong-mau-ca": {
+  "t": "問老師關於個人色調…",
+  "h": "1f9cd726"
+ },
+ "js.shellui.hoi-thay-ve-trang-diem-hop": {
+  "t": "問老師關於適合面相的妝容…",
+  "h": "57e99c47"
+ },
+ "js.shellui.hoi-thay-ve-trang-phuc-theo": {
+  "t": "問老師關於每日穿搭…",
+  "h": "71f5f95c"
+ },
+ "js.shellui.hoi-thay-ve-tuong-mat": {
+  "t": "問老師關於面相…",
+  "h": "bd5fbccb"
+ },
  "js.shellui.hoi-thoai-moi": {
   "t": "新對話",
   "h": "bba6fb9b"
+ },
+ "js.shellui.hoi-toi-de-luan-nhe": {
+  "t": "**。問我，我來解讀。",
+  "h": "da298819"
  },
  "js.shellui.hom": {
   "t": "<p> ",
   "h": "5bfbea9a"
  },
+ "js.shellui.hom-nay-nen-lam-gi-kieng": {
+  "t": "今天宜做什麼、忌做什麼？",
+  "h": "1e8037df"
+ },
+ "js.shellui.hop-mau-gi-ky-mau-gi": {
+  "t": "適合什麼顏色，忌什麼顏色？",
+  "h": "3af5cdfc"
+ },
+ "js.shellui.huong-cua": {
+  "t": "大門方位",
+  "h": "65a7e53d"
+ },
+ "js.shellui.huong-nao-phai-tranh-va-vi": {
+  "t": "哪些方位必須避開，為什麼？",
+  "h": "ac2dbbcc"
+ },
+ "js.shellui.huong-ngoi-sinh-khi-la-gi": {
+  "t": "「生氣」坐向是什麼？",
+  "h": "698ffaac"
+ },
+ "js.shellui.huong-nha-ban-lam-viec-nao": {
+  "t": "哪個房屋／辦公桌方位適合？",
+  "h": "e1e3d123"
+ },
+ "js.shellui.huong-nha-nao-hop-nhat": {
+  "t": "哪個房屋方位最合適？",
+  "h": "cc262fd1"
+ },
+ "js.shellui.huong-xep-hang-cao-nhat-la": {
+  "t": " 排名最高的方位是 **",
+  "h": "abc77c37"
+ },
+ "js.shellui.huong-xuat-hanh-tot-trong-ngay": {
+  "t": "當天好的出行方位？",
+  "h": "0ef8b5dc"
+ },
  "js.shellui.in-ngay": {
   "t": "<span>列印日期 ",
   "h": "acf30636"
+ },
+ "js.shellui.iphone-mac": {
+  "t": "iPhone / Mac",
+  "h": "9a2b7d51"
  },
  "js.shellui.ket-qua": {
   "t": "結果",
@@ -3115,17 +4243,173 @@
   "t": "</b><span>結果 · 點擊開啟</span></span>",
   "h": "50bffb45"
  },
+ "js.shellui.ket-qua-luan-giai": {
+  "t": "解讀結果",
+  "h": "68ae23e5"
+ },
  "js.shellui.ket-qua-nay-chua-co-noi": {
   "t": "這份結果還沒有可儲存為 PDF 的內容。",
   "h": "d8ae6583"
+ },
+ "js.shellui.ket-qua-phan-tich-da": {
+  "t": "皮膚分析結果：**",
+  "h": "bf903ee5"
+ },
+ "js.shellui.ket-sat-nen-quay-huong-nao": {
+  "t": "保險箱該朝向哪個方位？",
+  "h": "f74aaf2a"
  },
  "js.shellui.khac": {
   "t": "其他",
   "h": "5b8a28ab"
  },
+ "js.shellui.khai-truong-nen-chon-ngay-nao": {
+  "t": "開幕該選哪一天？",
+  "h": "b44fce94"
+ },
+ "js.shellui.khi-sac": {
+  "t": "氣色",
+  "h": "e1205bcd"
+ },
+ "js.shellui.khi-sac-cua-toi": {
+  "t": "我的氣色",
+  "h": "f4b00328"
+ },
+ "js.shellui.khi-sac-khac-dien-tuong-the": {
+  "t": "氣色和面相有什麼不同？",
+  "h": "d826036b"
+ },
+ "js.shellui.khong-cham-diem-duoc-thu-lai": {
+  "t": "無法評分，請再試一次。",
+  "h": "eb17c20d"
+ },
+ "js.shellui.khong-chon": {
+  "t": "— 不選擇 —",
+  "h": "80c4ffb0"
+ },
+ "js.shellui.khong-co-ket-qua": {
+  "t": "沒有結果。",
+  "h": "97fa6f91"
+ },
+ "js.shellui.khong-co-noi-dung": {
+  "t": "（沒有內容）",
+  "h": "7d1286dc"
+ },
+ "js.shellui.khong-doc-duoc-anh-nay": {
+  "t": "無法讀取這張圖片。",
+  "h": "89d3f00f"
+ },
+ "js.shellui.khong-doc-duoc-net-muc-tu": {
+  "t": "無法從這張圖片讀取筆跡。",
+  "h": "7c89a420"
+ },
+ "js.shellui.khong-dung-duoc-ban": {
+  "t": "無法排盤。",
+  "h": "925f4f75"
+ },
+ "js.shellui.khong-dung-duoc-ban-ky-mon": {
+  "t": "無法排奇門盤。",
+  "h": "c30586ea"
+ },
+ "js.shellui.khong-dung-duoc-ho-so": {
+  "t": "無法建立檔案。",
+  "h": "b3112509"
+ },
+ "js.shellui.khong-dung-duoc-khoa-luc-nham": {
+  "t": "無法起六壬課。",
+  "h": "8e7a9dcc"
+ },
+ "js.shellui.khong-dung-duoc-khoa-luc-nham-ddel": {
+  "t": "無法起六壬課——目前尚無法驗證數據。",
+  "h": "0b13b5b7"
+ },
+ "js.shellui.khong-dung-duoc-khoa-luc-nham-s764": {
+  "t": "無法起六壬課。請再試一次。",
+  "h": "9162a489"
+ },
+ "js.shellui.khong-hao-dong": {
+  "t": " (無動爻)",
+  "h": "b0233d0c"
+ },
  "js.shellui.khong-in-luu-pdf-truc-tiep": {
   "t": " 無法直接列印／儲存 PDF",
   "h": "27aa3510"
+ },
+ "js.shellui.khong-lap-duoc-que": {
+  "t": "無法起卦。",
+  "h": "7181f9c7"
+ },
+ "js.shellui.khong-nap-duoc": {
+  "t": "無法載入 ",
+  "h": "7c1577a1"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-bat": {
+  "t": "無法載入八宅工具。",
+  "h": "5dc3cbaa"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-chon": {
+  "t": "無法載入擇日工具。",
+  "h": "304c67a6"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-dat": {
+  "t": "無法載入取名工具。",
+  "h": "558419b0"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-dat-o35j": {
+  "t": "無法載入企業取名工具。",
+  "h": "af21f073"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-gio": {
+  "t": "無法載入黃道吉時工具。",
+  "h": "6df69f74"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-kim": {
+  "t": "無法載入金樓工具。",
+  "h": "a1a5cb9e"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-kinh": {
+  "t": "無法載入易經工具。",
+  "h": "f4cedb61"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-ky": {
+  "t": "無法載入奇門工具。",
+  "h": "30038a86"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-luc": {
+  "t": "無法載入六壬工具。",
+  "h": "fd967141"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-mai": {
+  "t": "無法載入梅花易數工具。",
+  "h": "431cf8b1"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-nap": {
+  "t": "無法載入納音工具。",
+  "h": "3bc9a24e"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-ngay": {
+  "t": "無法載入吉日工具。",
+  "h": "28181959"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-so": {
+  "t": "無法載入吉祥數字工具。",
+  "h": "d3960453"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-xem": {
+  "t": "無法載入生育年份工具。",
+  "h": "76551019"
+ },
+ "js.shellui.khong-nap-duoc-cong-thanh-toan": {
+  "t": "無法載入支付閘道。",
+  "h": "4e145f27"
+ },
+ "js.shellui.khong-nen-dat-gi-tren-ban": {
+  "t": "桌上不宜放什麼？",
+  "h": "77ca1a05"
+ },
+ "js.shellui.khong-phan-tich-duoc-thu-lai": {
+  "t": "無法分析，請再試一次。",
+  "h": "7f4dd4c6"
  },
  "js.shellui.khong-tao-duoc-link-chia-se": {
   "t": "無法建立分享連結，請稍後再試。",
@@ -3135,9 +4419,65 @@
   "t": "找不到。",
   "h": "cb892c67"
  },
+ "js.shellui.khong-tra-duoc-thu-lai-giup": {
+  "t": "無法查詢，請再試一次。",
+  "h": "9baf8962"
+ },
+ "js.shellui.khong-tu-luan-ngu-duong-hoa": {
+  "t": "孔子《論語・陽貨》",
+  "h": "cbcf6d69"
+ },
+ "js.shellui.khong-tu-luan-ngu-ung-da": {
+  "t": "孔子《論語・雍也》",
+  "h": "67297c6c"
+ },
+ "js.shellui.khong-tu-luan-ngu-vi-chinh": {
+  "t": "孔子《論語・為政》",
+  "h": "bad5b3f1"
+ },
+ "js.shellui.khuon-mat-cua-ban": {
+  "t": "您的臉型：**",
+  "h": "4af23efa"
+ },
+ "js.shellui.khuon-mat-cua-ban-thuoc-dang": {
+  "t": "您的臉型屬於 **",
+  "h": "85935119"
+ },
+ "js.shellui.kieu-toc": {
+  "t": "髮型 — ",
+  "h": "37e30bf4"
+ },
+ "js.shellui.kieu-toc-kinh-mat-hop-tuong": {
+  "t": "適合面相的髮型與眼鏡",
+  "h": "114eae4b"
+ },
+ "js.shellui.kim-lau-tuoi": {
+  "t": "金樓 · 生肖 ",
+  "h": "b4bb42fe"
+ },
+ "js.shellui.kinh-mat-nao-hop-tuong-mat": {
+  "t": "哪種眼鏡適合我的臉型？",
+  "h": "e2a2a092"
+ },
+ "js.shellui.ky-hop-dong-gio-nao-hop": {
+  "t": "幾點簽約比較合適？",
+  "h": "01e5265d"
+ },
+ "js.shellui.ky-mon": {
+  "t": "奇門 · ",
+  "h": "d3a48969"
+ },
+ "js.shellui.la-bai-nguoc-nghia-la-gi": {
+  "t": "逆位牌是什麼意思？",
+  "h": "4f75a731"
+ },
  "js.shellui.la-may-gio": {
   "t": " 是幾點出生的？",
   "h": "1ea2e9f1"
+ },
+ "js.shellui.la-so": {
+  "t": "命盤 **",
+  "h": "e53a7c90"
  },
  "js.shellui.la-so-con-vua-xem-la": {
   "t": "<b>您剛才看到的命盤屬於分享連結的那位朋友，不是您的。</b>",
@@ -3147,9 +4487,29 @@
   "t": "命盤已準備好。您想先看哪個部分？",
   "h": "0d8b388a"
  },
+ "js.shellui.la-so-dung-de-luan": {
+  "t": "用於解讀的命盤",
+  "h": "688ae631"
+ },
  "js.shellui.la-so-tron-doi": {
   "t": "<b>完整命盤</b>",
   "h": "068a1d6c"
+ },
+ "js.shellui.lao-tu-dao-duc-kinh": {
+  "t": "老子《道德經》",
+  "h": "7eb946dd"
+ },
+ "js.shellui.lap-ban-ky-mon": {
+  "t": "排奇門盤 →",
+  "h": "33f758e0"
+ },
+ "js.shellui.lap-khoa-luc-nham": {
+  "t": "起六壬課 →",
+  "h": "8df44794"
+ },
+ "js.shellui.lap-la-so": {
+  "t": "排命盤 →",
+  "h": "88a696a9"
  },
  "js.shellui.lap-la-so-cua-ban-de": {
   "t": "排出您的命盤，讓老師看得更貼近 →",
@@ -3163,6 +4523,10 @@
   "t": "請先排命盤",
   "h": "1b48590d"
  },
+ "js.shellui.lap-que": {
+  "t": "起卦 →",
+  "h": "95db5d4a"
+ },
  "js.shellui.lich-su": {
   "t": "紀錄 ·",
   "h": "309a950b"
@@ -3170,6 +4534,22 @@
  "js.shellui.lich-su-hoi-thoai": {
   "t": "對話紀錄",
   "h": "0fd2afce"
+ },
+ "js.shellui.loai-hinh-tuy-chon": {
+  "t": "類型（選填）",
+  "h": "c4eab07e"
+ },
+ "js.shellui.loai-khong-gian": {
+  "t": "空間類型",
+  "h": "b0b069bf"
+ },
+ "js.shellui.loai-phong": {
+  "t": "房間類型",
+  "h": "19905334"
+ },
+ "js.shellui.loi": {
+  "t": "錯誤 ",
+  "h": "1b80116b"
  },
  "js.shellui.loi-mang-khi-tao-link-chia": {
   "t": "建立分享連結時發生網路錯誤。",
@@ -3179,9 +4559,25 @@
   "t": "網路錯誤，請稍後再試。",
   "h": "4f6c5f14"
  },
+ "js.shellui.loi-phan-tich": {
+  "t": "分析時發生錯誤。",
+  "h": "ff75bed2"
+ },
  "js.shellui.luan-giai": {
   "t": "<b>解讀",
   "h": "489f2d1f"
+ },
+ "js.shellui.luan-que-nay-cho-cau-hoi": {
+  "t": "為我的問題解讀這一卦",
+  "h": "327aeb50"
+ },
+ "js.shellui.luc-nham": {
+  "t": "六壬 · ",
+  "h": "dd89dab4"
+ },
+ "js.shellui.luc-nham-9v1c": {
+  "t": "六壬",
+  "h": "99909aea"
  },
  "js.shellui.luong": {
   "t": " 兩)",
@@ -3223,9 +4619,41 @@
   "t": "存入「命盤簿」，免費。下次輸入 @ 就能叫出來。",
   "h": "08f063e7"
  },
+ "js.shellui.major-arcana-khac-minor-arcana-the": {
+  "t": "大阿爾克那與小阿爾克那有什麼不同？",
+  "h": "de30c37d"
+ },
  "js.shellui.mang-chap-chon-chua-luu-duoc": {
   "t": "網路不穩，無法儲存命盤： ",
   "h": "8f2cc0fe"
+ },
+ "js.shellui.manh-tu-tan-tam-thuong": {
+  "t": "孟子《盡心上》",
+  "h": "819ec1b8"
+ },
+ "js.shellui.mat-toi-hop-kieu-toc-nao": {
+  "t": "我的臉適合什麼髮型？",
+  "h": "bfa362fc"
+ },
+ "js.shellui.mau-chu-dao": {
+  "t": "**。主色： ",
+  "h": "37202018"
+ },
+ "js.shellui.mau-diem-nhan-nao-tot-nhat": {
+  "t": "哪個點綴色最好？",
+  "h": "6d38e6a5"
+ },
+ "js.shellui.mau-nao-nen-tranh-khi-phong": {
+  "t": "面試時該避開什麼顏色？",
+  "h": "61460b1c"
+ },
+ "js.shellui.mau-sac-hop-menh-menh": {
+  "t": "合命色彩 — 命格 ",
+  "h": "f73273a4"
+ },
+ "js.shellui.mau-son-nao-hop-tong-da": {
+  "t": "哪種口紅色號適合我的膚色？",
+  "h": "f013cf8c"
  },
  "js.shellui.me": {
   "t": "媽媽",
@@ -3234,6 +4662,38 @@
  "js.shellui.me-con": {
   "t": "你的媽媽",
   "h": "224ac2ac"
+ },
+ "js.shellui.me-ifej": {
+  "t": "</b> · 媽媽 <b>",
+  "h": "a8f51442"
+ },
+ "js.shellui.me-kv0j": {
+  "t": " × 媽媽 ",
+  "h": "b9764667"
+ },
+ "js.shellui.me-lcly": {
+  "t": " · 媽媽 ",
+  "h": "f67770ae"
+ },
+ "js.shellui.me-uug4": {
+  "t": "** · 媽媽 **",
+  "h": "aa1059f0"
+ },
+ "js.shellui.menh": {
+  "t": "，命格 ",
+  "h": "59e4d307"
+ },
+ "js.shellui.menh-khac-ngay-ngay-trung-binh": {
+  "t": "命剋日 — 中等日子，需謹慎",
+  "h": "256fb5ff"
+ },
+ "js.shellui.menh-kz9z": {
+  "t": "命格 **",
+  "h": "002acae0"
+ },
+ "js.shellui.menh-sinh-ngay-hao-ton-chut": {
+  "t": "命生日 — 略有耗損，仍然吉利",
+  "h": "995978d5"
  },
  "js.shellui.minh-bao-nguoi-dan-duong": {
   "t": "明寶 · 引路人",
@@ -3247,6 +4707,10 @@
   "t": "開啟 ↗",
   "h": "275cceff"
  },
+ "js.shellui.mo-d4p": {
+  "t": "開啟",
+  "h": "1acfbe82"
+ },
  "js.shellui.mo-file-pdf": {
   "t": "開啟 PDF 檔",
   "h": "8ac92ea1"
@@ -3259,13 +4723,25 @@
   "t": "開啟側邊欄",
   "h": "b1f48b75"
  },
+ "js.shellui.mo-trang-cong-cu": {
+  "t": "前往工具頁面 →",
+  "h": "0b442693"
+ },
  "js.shellui.mo-zalo": {
   "t": "開啟 Zalo",
   "h": "d52365fa"
  },
+ "js.shellui.moc": {
+  "t": "木",
+  "h": "4bd601ae"
+ },
  "js.shellui.moi-nhom-hoi-chan-3-thay": {
   "t": "邀請會診團隊，3 位老師一起看",
   "h": "d2433b80"
+ },
+ "js.shellui.moi-nhom-hoi-chan-3-thay-8dti": {
+  "t": "<span>邀請會診團隊 <em>· 3 位老師</em></span></button>",
+  "h": "b0fedb20"
  },
  "js.shellui.moi-sang-nhan-van-ngay-rieng": {
   "t": "每天早晨收到專屬於您命盤的每日運勢",
@@ -3295,6 +4771,10 @@
   "t": " 項</b>專屬於這張命盤的內容 — ",
   "h": "8e5f0ada"
  },
+ "js.shellui.muc-dich": {
+  "t": "目的",
+  "h": "d71ffc6e"
+ },
  "js.shellui.muc-luc": {
   "t": "<b>目錄</b>",
   "h": "14f7b262"
@@ -3307,9 +4787,73 @@
   "t": "男",
   "h": "b580ba1b"
  },
+ "js.shellui.nam-1mfe": {
+  "t": "年 **",
+  "h": "b9886d97"
+ },
+ "js.shellui.nam-690x": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "js.shellui.nam-nao-cuoi-hoi-duoc": {
+  "t": "哪一年適合結婚？",
+  "h": "5de89c72"
+ },
+ "js.shellui.nam-nao-dep-nhat-de-lam": {
+  "t": "哪一年最適合動土蓋房？",
+  "h": "992ff775"
+ },
+ "js.shellui.nam-nao-nen-tranh-sinh-con": {
+  "t": "哪一年應避免生孩子？",
+  "h": "45ae05ad"
+ },
+ "js.shellui.nam-nao-tot-nhat-de-sinh": {
+  "t": "哪一年最適合生孩子？",
+  "h": "345bd2a8"
+ },
  "js.shellui.nam-nay": {
   "t": "今年 ",
   "h": "9f78db0d"
+ },
+ "js.shellui.nam-sinh": {
+  "t": "出生年",
+  "h": "75a6785f"
+ },
+ "js.shellui.nam-sinh-8ql1": {
+  "t": "<p>出生年：<b>",
+  "h": "0ff1d138"
+ },
+ "js.shellui.nam-sinh-bo": {
+  "t": "爸爸的出生年",
+  "h": "a1009c64"
+ },
+ "js.shellui.nam-sinh-chu": {
+  "t": "負責人的出生年",
+  "h": "124634b4"
+ },
+ "js.shellui.nam-sinh-con": {
+  "t": "孩子的出生年",
+  "h": "724a46be"
+ },
+ "js.shellui.nam-sinh-me": {
+  "t": "媽媽的出生年",
+  "h": "bef8fb8f"
+ },
+ "js.shellui.nam-sinh-tuy-chon": {
+  "t": "出生年（選填）",
+  "h": "114b3918"
+ },
+ "js.shellui.nam-sinh-wcj0": {
+  "t": "<p>出生年 <b>",
+  "h": "047b47a2"
+ },
+ "js.shellui.nam-thuan-nhat": {
+  "t": "**）。最順遂的年份：**",
+  "h": "cb3b51e0"
+ },
+ "js.shellui.nap-am": {
+  "t": "納音 ",
+  "h": "b49a2f37"
  },
  "js.shellui.nap-luong-de-hoi-tiep": {
   "t": "儲值兩，繼續提問 →",
@@ -3323,13 +4867,125 @@
   "t": "再儲值",
   "h": "c20441d9"
  },
+ "js.shellui.nen-doi-so-nao-de-tot": {
+  "t": "換成哪組數字會更好？",
+  "h": "06cc25be"
+ },
+ "js.shellui.nen-dung-san-pham-nao-truoc": {
+  "t": "應該先使用哪項產品？",
+  "h": "c4d20f9a"
+ },
+ "js.shellui.nen-hanh-dong-the-nao-luc": {
+  "t": "此刻該如何行動？",
+  "h": "b1dd8b79"
+ },
+ "js.shellui.nen-hoa-giai-the-nao": {
+  "t": "該如何化解？",
+  "h": "1dee5079"
+ },
+ "js.shellui.nen-hoi-cau-hoi-kieu-gi": {
+  "t": "抽牌時該問什麼樣的問題？",
+  "h": "f6e87d8f"
+ },
+ "js.shellui.nen-hoi-oracle-cau-hoi-kieu": {
+  "t": "問神諭卡該問什麼樣的問題？",
+  "h": "8a001fd9"
+ },
+ "js.shellui.nen-hoi-tarot-cau-hoi-kieu": {
+  "t": "問塔羅該問什麼樣的問題？",
+  "h": "a40f1c85"
+ },
+ "js.shellui.nen-menh-chu-da-san-sang": {
+  "t": "負責人的命格基礎已準備好 (負責人 **",
+  "h": "3ef59397"
+ },
+ "js.shellui.nen-menh-cua-be-da-san": {
+  "t": "孩子的命格基礎已準備好 (孩子 **",
+  "h": "5444816b"
+ },
+ "js.shellui.nen-phoi-do-the-nao-theo": {
+  "t": "該如何依色彩季型搭配服裝？",
+  "h": "3a3ed4e0"
+ },
+ "js.shellui.nen-tien-hay-nen-lui": {
+  "t": "該進還是該退？",
+  "h": "0735035e"
+ },
+ "js.shellui.nen-tranh-kieu-toc-nao": {
+  "t": "應避開哪種髮型？",
+  "h": "71021350"
+ },
+ "js.shellui.nen-tranh-mau-nao": {
+  "t": "應避開哪些顏色？",
+  "h": "19ab5099"
+ },
+ "js.shellui.nganh": {
+  "t": "，行業 ",
+  "h": "60b25e34"
+ },
+ "js.shellui.nganh-nghe": {
+  "t": "行業別",
+  "h": "63d9f4dd"
+ },
+ "js.shellui.ngay": {
+  "t": "<p>日期 <b>",
+  "h": "f286f870"
+ },
+ "js.shellui.ngay-5amy": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "js.shellui.ngay-di": {
+  "t": "出行日期",
+  "h": "ff25ff3f"
+ },
+ "js.shellui.ngay-dong-hanh-binh-on-thuan": {
+  "t": "同行日 — 平穩順利",
+  "h": "d1971f40"
+ },
+ "js.shellui.ngay-khac-menh-can-hoa-giai": {
+  "t": "日剋命 ✦ 需以色彩化解",
+  "h": "f331fca5"
+ },
+ "js.shellui.ngay-lqyo": {
+  "t": "日 **",
+  "h": "aae5837d"
+ },
+ "js.shellui.ngay-nao-can-tuyet-doi-tranh": {
+  "t": "哪些日子必須絕對避開？",
+  "h": "36a0360f"
+ },
+ "js.shellui.ngay-nao-dep-de-cuoi-hoi": {
+  "t": "哪天適合結婚？",
+  "h": "409c6fd4"
+ },
+ "js.shellui.ngay-nao-dep-nhat-trong-thang": {
+  "t": "這個月哪一天最好？",
+  "h": "1d6514df"
+ },
+ "js.shellui.ngay-nao-tot-de-khoi-cong": {
+  "t": "哪天適合動工／入宅？",
+  "h": "26db2036"
+ },
  "js.shellui.ngay-nua-la-tet-thay-xem": {
   "t": " 天就是春節。老師為你們全家看看適合的開年第一位訪客生肖，以及初一到初三的出行時辰與方位好嗎？</p>",
   "h": "bab22689"
  },
+ "js.shellui.ngay-ot9a": {
+  "t": "**，日 **",
+  "h": "794d0952"
+ },
  "js.shellui.ngay-sinh-duong-lich-cua": {
   "t": "請問國曆出生日期： ",
   "h": "4f13847a"
+ },
+ "js.shellui.ngay-sinh-menh-cuc-ky-thuan": {
+  "t": "日生命 ✦ 極為順利",
+  "h": "81b455cf"
+ },
+ "js.shellui.ngay-tot-thang": {
+  "t": "吉日 · 月 ",
+  "h": "22d98f26"
  },
  "js.shellui.ngay-truoc": {
   "t": " 天前",
@@ -3338,6 +4994,18 @@
  "js.shellui.nghe-them-mon-khac": {
   "t": "聽聽其他領域的意見</span>",
   "h": "abd835bb"
+ },
+ "js.shellui.ngu-hanh-net-lien-quan-gi": {
+  "t": "筆畫的五行與用神有什麼關係？",
+  "h": "a163e0cf"
+ },
+ "js.shellui.ngu-hanh-trong-oracle-nghia-la": {
+  "t": "神諭卡中的五行是什麼意思？",
+  "h": "c3180463"
+ },
+ "js.shellui.ngu-quan-gom-nhung-gi": {
+  "t": "五官包括哪些？",
+  "h": "e8847ad0"
  },
  "js.shellui.nguoi-dan-duong": {
   "t": "引路人",
@@ -3351,13 +5019,33 @@
   "t": "家人 ",
   "h": "514d0e31"
  },
+ "js.shellui.nguoi-nha-rxn6": {
+  "t": "家人",
+  "h": "447d96d6"
+ },
+ "js.shellui.nguoi-thau-tan-long-minh-thi": {
+  "t": "盡其心者，知其性也；知其性，則知天矣。",
+  "h": "ee637ff3"
+ },
  "js.shellui.nguoi-xem-ky-nhat-la-thay": {
   "t": " 最擅長看這方面的是 <b> ",
   "h": "d5168fd0"
  },
+ "js.shellui.nguyen": {
+  "t": "王",
+  "h": "e79eb3d7"
+ },
+ "js.shellui.nhan-tuong-cua-toi": {
+  "t": "我的眼相",
+  "h": "1943cfc5"
+ },
  "js.shellui.nhap-ngay-sinh": {
   "t": "<p>請輸入出生日期 ",
   "h": "96b95ba3"
+ },
+ "js.shellui.nhat-can-cua-toi-manh-hay": {
+  "t": "我的日干是強還是弱？",
+  "h": "7d0db3d4"
  },
  "js.shellui.nhung-phan-luong-trong-vi-da": {
   "t": "，但錢包裡的兩已經用完。請再儲值，老師才能接著完成尚未說完的部分。</div>",
@@ -3375,6 +5063,18 @@
   "t": "爸爸",
   "h": "d933443d"
  },
+ "js.shellui.oracle-khac-tarot-o-diem-nao": {
+  "t": "神諭卡和塔羅有什麼不同？",
+  "h": "6de59274"
+ },
+ "js.shellui.oracle-phuong-dong": {
+  "t": "東方神諭卡",
+  "h": "1146fb81"
+ },
+ "js.shellui.pham-kim-lau-thi-hoa-giai": {
+  "t": "犯了金樓該如何化解？",
+  "h": "f9c9cb33"
+ },
  "js.shellui.phan": {
   "t": "部分",
   "h": "d2cd4ec7"
@@ -3382,6 +5082,18 @@
  "js.shellui.phan-da-xong": {
   "t": " 個部分已完成</span></span>",
   "h": "f8ba3adb"
+ },
+ "js.shellui.phan-tich": {
+  "t": "分析 →",
+  "h": "e57345ec"
+ },
+ "js.shellui.phan-tich-ogw9": {
+  "t": "分析",
+  "h": "aad0782d"
+ },
+ "js.shellui.phan-tich-that-bai": {
+  "t": "分析失敗。",
+  "h": "be032d5a"
  },
  "js.shellui.phien": {
   "t": "對話",
@@ -3399,6 +5111,26 @@
   "t": " 則對話",
   "h": "3ee6a226"
  },
+ "js.shellui.phong-ngu-nen-tranh-gi": {
+  "t": "臥室應避免什麼？",
+  "h": "da7e689d"
+ },
+ "js.shellui.phong-thuy-cua-hang-van-phong": {
+  "t": "店面與辦公室風水",
+  "h": "fc68fd54"
+ },
+ "js.shellui.phong-thuy-diem": {
+  "t": "風水 — 分數 ",
+  "h": "4c90b82a"
+ },
+ "js.shellui.phong-thuy-huong-nha": {
+  "t": "風水、房屋方位",
+  "h": "4018bb17"
+ },
+ "js.shellui.phuong-nhan-la-gi": {
+  "t": "鳳眼是什麼？",
+  "h": "9ea5dc8a"
+ },
  "js.shellui.phut-truoc": {
   "t": " 分鐘前",
   "h": "b1017a2c"
@@ -3407,13 +5139,41 @@
   "t": " ，這只是從你的命盤來看。請告訴老師 ",
   "h": "c45acf9b"
  },
+ "js.shellui.qua-ngan-de-tinh-dong-thuan": {
+  "t": "太短，無法計算一致性",
+  "h": "361ce7b5"
+ },
+ "js.shellui.que-bien": {
+  "t": "，變卦 **",
+  "h": "b2123833"
+ },
+ "js.shellui.que-bien-cho-thay-xu-huong": {
+  "t": "變卦顯示什麼趨勢？",
+  "h": "c06bb666"
+ },
  "js.shellui.que-con-do-xin-phep-dung": {
   "t": "這一卦尚未說完，容我先停在這裡…",
   "h": "bab685a0"
  },
+ "js.shellui.que-da-lap-que-chinh": {
+  "t": "卦已起好 — 本卦 **",
+  "h": "79f6b4e8"
+ },
+ "js.shellui.que-da-lap-the": {
+  "t": "卦已起好 — 體 **",
+  "h": "92a897ba"
+ },
+ "js.shellui.que-dich-lap-duoc-noi-len": {
+  "t": "起出的這一卦說明了什麼？",
+  "h": "c921b99a"
+ },
  "js.shellui.quet-ma-de-quay-lai": {
   "t": "掃描 QR 碼回到這裡",
   "h": "04d8976e"
+ },
+ "js.shellui.sao-bat-tinh-noi-bat-nghia": {
+  "t": "突出的八星代表什麼？",
+  "h": "cf4b5467"
  },
  "js.shellui.sao-chep-link": {
   "t": "複製連結",
@@ -3427,21 +5187,113 @@
   "t": "複製",
   "h": "09a1db3e"
  },
+ "js.shellui.sinh-con-bo": {
+  "t": "生育 · 爸爸 ",
+  "h": "6b581c06"
+ },
+ "js.shellui.so-dep": {
+  "t": "吉祥數字 ",
+  "h": "1ac75c4e"
+ },
  "js.shellui.so-la-so": {
   "t": "命盤簿",
   "h": "0e67ec9d"
+ },
+ "js.shellui.so-truyen": {
+  "t": "**，初傳 **",
+  "h": "3dc1c742"
+ },
+ "js.shellui.su-nghiep-tien-bac": {
+  "t": "事業、財運",
+  "h": "e1b5eac7"
  },
  "js.shellui.tai-khoan": {
   "t": "帳號",
   "h": "4a60abe5"
  },
+ "js.shellui.tam-bach-nhan-co-y-nghia": {
+  "t": "三白眼有什麼意義？",
+  "h": "913d8ad7"
+ },
+ "js.shellui.tam-dai-chi-la-gi": {
+  "t": "三大指是什麼？",
+  "h": "baef21dd"
+ },
+ "js.shellui.tam-dinh-la-gi": {
+  "t": "三停是什麼？",
+  "h": "25930850"
+ },
+ "js.shellui.tam-tai-kieng-nhung-gi": {
+  "t": "三災忌諱什麼？",
+  "h": "27ba3819"
+ },
+ "js.shellui.tam-thap-nhi-lap-tu-thap": {
+  "t": "三十而立，四十而不惑，五十而知天命。",
+  "h": "70407892"
+ },
+ "js.shellui.tam-truyen-noi-gi-ve-dien": {
+  "t": "三傳說明了事情的發展如何？",
+  "h": "43368fd7"
+ },
+ "js.shellui.tan-ky-tam-gia-tri-ky": {
+  "t": "盡其心者，知其性也；知其性，則知天矣。",
+  "h": "d54978d2"
+ },
+ "js.shellui.tarot-78-la": {
+  "t": "塔羅 78 張",
+  "h": "0454df6e"
+ },
  "js.shellui.tat-ca": {
   "t": "全部 (",
   "h": "55873035"
  },
+ "js.shellui.tay-thuan-va-tay-khong-thuan": {
+  "t": "慣用手與非慣用手有什麼不同？",
+  "h": "10468033"
+ },
+ "js.shellui.telegram": {
+  "t": "Telegram",
+  "h": "edbea9ff"
+ },
+ "js.shellui.ten-dang-can-nhac-tuy-chon": {
+  "t": "正在考慮的名字（選填）",
+  "h": "9e834e48"
+ },
+ "js.shellui.ten-dem-nao-hop-cho-be": {
+  "t": "哪個中間名適合孩子？",
+  "h": "d59d5d7a"
+ },
+ "js.shellui.ten-hop-ca-tuoi-bo-va": {
+  "t": "哪些名字同時適合爸爸和媽媽的生肖？",
+  "h": "ab665896"
+ },
+ "js.shellui.ten-nguoi-chu-tuy-chon": {
+  "t": "負責人姓名（選填）",
+  "h": "c57ee47b"
+ },
+ "js.shellui.than-so-hoc": {
+  "t": "生命靈數",
+  "h": "686db34b"
+ },
+ "js.shellui.thang": {
+  "t": "<p>月份 <b>",
+  "h": "b8d6e6bd"
+ },
+ "js.shellui.thang-4nh6": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "js.shellui.thang-du-dinh": {
+  "t": "預定月份",
+  "h": "db3fd9d6"
+ },
  "js.shellui.thang-truoc": {
   "t": " 個月前",
   "h": "e1d0b08b"
+ },
+ "js.shellui.thanh-phan-my-pham-nen-tranh": {
+  "t": "保養品中應避開哪些成分？",
+  "h": "fdf4a070"
  },
  "js.shellui.thay": {
   "t": "老師 ",
@@ -3475,9 +5327,21 @@
   "t": "，老師直接解讀命盤 ",
   "h": "8dd5e740"
  },
+ "js.shellui.thay-ghi-lai-la-so-chi": {
+  "t": "<p>老師記下了。命盤只談趨勢，不是一定會發生的事——什麼都還沒看到，也是件好事。</p>",
+  "h": "4d9f34f8"
+ },
+ "js.shellui.thay-ghi-lai-roi-co-gi": {
+  "t": "<p>老師記下了。有什麼你就繼續說，老師接著看。</p>",
+  "h": "c3dc3800"
+ },
  "js.shellui.thay-ghi-vao-so-tien-tri": {
   "t": "老師已記入「預言簿」· 將在這天回頭問你 ",
   "h": "81f09315"
+ },
+ "js.shellui.thay-lap-que-theo-gio-hien": {
+  "t": "<p>老師依現在的時間起卦，或者你心裡想一個任意的數字，老師依這個數字起卦——你想用哪種方式？</p>",
+  "h": "dc5b731c"
  },
  "js.shellui.thay-moi-nhin": {
   "t": "老師先看看",
@@ -3487,6 +5351,22 @@
   "t": "… — 比逐題零散提問更划算。</div>",
   "h": "8836644b"
  },
+ "js.shellui.thay-xem-cho-con-tren-la": {
+  "t": " 老師會依你自己的命盤來看。",
+  "h": "3962ceb8"
+ },
+ "js.shellui.thay-xem-giup-con-tuoi-xong": {
+  "t": "請老師幫你們全家看今年春節適合的開年第一位訪客生肖，以及出行的時辰與方位。",
+  "h": "aa40f1e4"
+ },
+ "js.shellui.thay-xem-giup-con-tuoi-xong-jdse": {
+  "t": "請老師幫你看今年春節適合的開年第一位訪客生肖，以及出行的時辰與方位。",
+  "h": "91001fe7"
+ },
+ "js.shellui.the-bi-dung-khac-thi-nen": {
+  "t": "體被用剋時該怎麼辦？",
+  "h": "197d34a9"
+ },
  "js.shellui.the-nao-thay": {
   "t": " 運勢如何，老師？",
   "h": "b144d974"
@@ -3495,9 +5375,25 @@
   "t": "新增命盤",
   "h": "77e87b1d"
  },
+ "js.shellui.theo-gio-hien-tai": {
+  "t": "依現在的時間",
+  "h": "ebb251cc"
+ },
+ "js.shellui.theo-mot-con-so": {
+  "t": "依一個數字",
+  "h": "6f19ed96"
+ },
  "js.shellui.thi": {
   "t": " ，",
   "h": "084e1779"
+ },
+ "js.shellui.tho": {
+  "t": "土",
+  "h": "9a0da463"
+ },
+ "js.shellui.thoi-diem-tuy-chon": {
+  "t": "時間點（選填）",
+  "h": "9ed07939"
  },
  "js.shellui.thu-gon": {
   "t": "收合",
@@ -3515,17 +5411,121 @@
   "t": "重試",
   "h": "e353f2f3"
  },
+ "js.shellui.thu-lai-giup-con-nhe": {
+  "t": " 請再試一次。",
+  "h": "96832959"
+ },
+ "js.shellui.thu-truyen-theo-phep": {
+  "t": "。取傳之法：**",
+  "h": "9ee2f319"
+ },
+ "js.shellui.thu-tuong-cua-toi": {
+  "t": "我的手相",
+  "h": "0af7a78d"
+ },
  "js.shellui.thu-vien-chung": {
   "t": "公開資料庫",
   "h": "404f456c"
+ },
+ "js.shellui.thuy": {
+  "t": "水",
+  "h": "f354741d"
+ },
+ "js.shellui.tiet": {
+  "t": "**，節氣 ",
+  "h": "6b1922aa"
  },
  "js.shellui.tim-cong-cu-lenh": {
   "t": "搜尋工具、指令…",
   "h": "990f08e2"
  },
+ "js.shellui.tinh-nguoi-von-gan-nhau-do": {
+  "t": "性相近也，習相遠也。",
+  "h": "e7a0b30c"
+ },
+ "js.shellui.tinh-tuong-can-da-tap-tuong": {
+  "t": "性相近也，習相遠也。",
+  "h": "424fc2a7"
+ },
+ "js.shellui.toi-se-luan-theo-cau-hoi": {
+  "t": "。我會依您的問題來解讀。",
+  "h": "e0c8f943"
+ },
+ "js.shellui.toi-se-luan-theo-cau-hoi-n3t1": {
+  "t": "**。我會依您的問題來解讀。",
+  "h": "f2bafbac"
+ },
+ "js.shellui.toi-se-luan-theo-viec-ban": {
+  "t": " 我會依您所問的事來解讀。",
+  "h": "58e203d6"
+ },
+ "js.shellui.toi-thuoc-season-nao": {
+  "t": "我屬於哪個色彩季型？",
+  "h": "b46bd5f3"
+ },
+ "js.shellui.ton-tu-binh-phap": {
+  "t": "孫子《兵法》",
+  "h": "87b28278"
+ },
+ "js.shellui.tra-loi-cau-hoi-o-tren": {
+  "t": "回答上面的問題…",
+  "h": "6bc13f17"
+ },
+ "js.shellui.trang-diem": {
+  "t": "妝容",
+  "h": "b67e6b3f"
+ },
+ "js.shellui.trang-diem-anh-huong-van-khi": {
+  "t": "化妝會如何影響運勢？",
+  "h": "a175f487"
+ },
+ "js.shellui.trang-diem-yk4l": {
+  "t": "妝容 — ",
+  "h": "eda12e71"
+ },
+ "js.shellui.trang-phuc-theo-ngay": {
+  "t": "每日穿搭 — ",
+  "h": "7fd98ca1"
+ },
+ "js.shellui.tri-chi-gia-bat-nhu-hieu": {
+  "t": "知之者不如好之者，好之者不如樂之者。",
+  "h": "91dea6b3"
+ },
+ "js.shellui.tri-ky-tri-bi-bach-chien": {
+  "t": "知己知彼，百戰不殆。",
+  "h": "a85650be"
+ },
  "js.shellui.trinh-duyet-ben-trong": {
   "t": "內建瀏覽器",
   "h": "28553859"
+ },
+ "js.shellui.trong-hoa-co-mam-phuc-trong": {
+  "t": "禍兮福之所倚，福兮禍之所伏。",
+  "h": "fa956882"
+ },
+ "js.shellui.truc": {
+  "t": "— 值 **",
+  "h": "6f3f9038"
+ },
+ "js.shellui.truc-phu": {
+  "t": "，值符 **",
+  "h": "16c60f0e"
+ },
+ "js.shellui.truc-phu-truc-su-noi-len": {
+  "t": "值符值使說明了什麼？",
+  "h": "c69b295c"
+ },
+ "js.shellui.truc-su": {
+  "t": "**，值使 **",
+  "h": "fae13856"
+ },
+ "js.shellui.truc-than-la-gi": {
+  "t": "值神是什麼？",
+  "h": "47cc8c8c"
+ },
+ "js.shellui.truong-phai-noi-tot": {
+  "t": " 個流派說吉",
+  "h": "ba324e22"
  },
  "js.shellui.tu-tru-cua": {
   "t": "四柱：**",
@@ -3543,6 +5543,22 @@
   "t": "<div><b>明寶紫微斗數</b><span>紫微明寶 · tuviminhbao.com</span>",
   "h": "0326cda1"
  },
+ "js.shellui.tuc": {
+  "t": "，即 **",
+  "h": "2b564351"
+ },
+ "js.shellui.tuoi-nao-hop-tuoi-nao-khac": {
+  "t": "哪些生肖相合，哪些相剋？",
+  "h": "06343f22"
+ },
+ "js.shellui.tuoi-toi-co-bi-xung-ngay": {
+  "t": "我的生肖是否沖到這一天？",
+  "h": "e7d32d0b"
+ },
+ "js.shellui.tuong-mat-co-thay-doi-duoc": {
+  "t": "面相可以改變嗎？",
+  "h": "602a11f2"
+ },
  "js.shellui.tuviminhbao-com": {
   "t": "tuviminhbao.com",
   "h": "c8dbdef2"
@@ -3551,9 +5567,93 @@
   "t": "此應用程式",
   "h": "cba1a9e4"
  },
+ "js.shellui.uu-tien-lam-gi-truoc": {
+  "t": "應優先做什麼？",
+  "h": "f3cab683"
+ },
  "js.shellui.va": {
   "t": "** 與 **",
   "h": "4f833f73"
+ },
+ "js.shellui.van-thang-chon-ngay": {
+  "t": "月運、擇日",
+  "h": "78fbc71e"
+ },
+ "js.shellui.vat-pham-nao-nen-mua-truoc": {
+  "t": "應先買哪項物品？",
+  "h": "85fe11d3"
+ },
+ "js.shellui.vat-pham-phong-thuy-nao-nen": {
+  "t": "應佩戴哪些風水物品？",
+  "h": "024bffb6"
+ },
+ "js.shellui.vd-27": {
+  "t": "例如：27",
+  "h": "4afd7b36"
+ },
+ "js.shellui.vd-viec-nay-nen-tien-hay": {
+  "t": "例如：這件事該進還是該退？",
+  "h": "28527203"
+ },
+ "js.shellui.vi-sao-da-toi-thuoc-loai": {
+  "t": "為什麼我的皮膚屬於這種類型？",
+  "h": "92ad930f"
+ },
+ "js.shellui.vi-sao-diem-hien-tai-thap": {
+  "t": "為什麼目前的分數偏低？",
+  "h": "6c51a2da"
+ },
+ "js.shellui.vi-sao-kieu-nay-hop-mat": {
+  "t": "為什麼這種髮型適合我的臉？",
+  "h": "e507a96f"
+ },
+ "js.shellui.vi-sao-menh-toi-hop-mau": {
+  "t": "為什麼我的命格適合這個顏色？",
+  "h": "7ef6e8bc"
+ },
+ "js.shellui.vi-sao-nam-do-hop-ca": {
+  "t": "為什麼那一年同時適合爸爸和媽媽？",
+  "h": "bc9256b2"
+ },
+ "js.shellui.vi-sao-nen-tranh-kieu-nay": {
+  "t": "為什麼應避開這種髮型？",
+  "h": "c8ccd29d"
+ },
+ "js.shellui.vi-sao-nen-tranh-mau-nay": {
+  "t": "為什麼應避開這個顏色？",
+  "h": "8162b54f"
+ },
+ "js.shellui.vi-sao-ngay-nay-khac-menh": {
+  "t": "為什麼這一天剋我的命格？",
+  "h": "a98c2e50"
+ },
+ "js.shellui.vi-sao-phong-cach-nay-hop": {
+  "t": "為什麼這種風格適合我？",
+  "h": "7ed2d820"
+ },
+ "js.shellui.vi-sao-toi-thuoc-season-nay": {
+  "t": "為什麼我屬於這個色彩季型？",
+  "h": "fd530a4e"
+ },
+ "js.shellui.vi-sao-tranh-ngay-ki": {
+  "t": "為什麼要避開忌日？",
+  "h": "2cc8c854"
+ },
+ "js.shellui.vi-tri-thu-ngan-nen-dat": {
+  "t": "收銀位置該設在哪裡？",
+  "h": "3e0eb3b7"
+ },
+ "js.shellui.viec-can-chon-ngay": {
+  "t": "要擇日的事項",
+  "h": "e84816a6"
+ },
+ "js.shellui.viec-cua-toi-nen-di-huong": {
+  "t": "我這件事該往哪個方位走？",
+  "h": "72ff459d"
+ },
+ "js.shellui.viec-nay-thanh-hay-bai": {
+  "t": "這件事會成功還是失敗？",
+  "h": "fa905597"
  },
  "js.shellui.vo": {
   "t": "妻子",
@@ -3567,6 +5667,30 @@
   "t": "剛剛",
   "h": "d1a7c7fa"
  },
+ "js.shellui.vui-long-nhap-du-ho-va": {
+  "t": "請完整輸入孩子、爸爸、媽媽的姓氏與出生年。",
+  "h": "a40f12bf"
+ },
+ "js.shellui.vui-long-nhap-du-nam-sinh": {
+  "t": "請完整輸入爸爸與媽媽的出生年。",
+  "h": "76f77027"
+ },
+ "js.shellui.vui-long-nhap-ho-ten-nam": {
+  "t": "請輸入姓名、出生年，以及預定的月份與年份。",
+  "h": "d60f4f07"
+ },
+ "js.shellui.vui-long-nhap-nam-sinh": {
+  "t": "請輸入出生年。",
+  "h": "a44b0170"
+ },
+ "js.shellui.vui-long-nhap-nam-sinh-nguoi": {
+  "t": "請輸入負責人的出生年並選擇行業別。",
+  "h": "20fcc631"
+ },
+ "js.shellui.vui-long-nhap-nam-sinh-va": {
+  "t": "請輸入出生年與預定出行日期。",
+  "h": "57ef031d"
+ },
  "js.shellui.xem": {
   "t": "查看 →",
   "h": "1e272706"
@@ -3574,6 +5698,18 @@
  "js.shellui.xem-bang": {
   "t": " 以 ",
   "h": "b50dfad0"
+ },
+ "js.shellui.xem-bat-trach": {
+  "t": "查看八宅 →",
+  "h": "ed0e7729"
+ },
+ "js.shellui.xem-cho-ca-nha": {
+  "t": "為全家查看",
+  "h": "b1dd36ab"
+ },
+ "js.shellui.xem-gio-hoang-dao": {
+  "t": "查看黃道吉時 →",
+  "h": "c5fbd65a"
  },
  "js.shellui.xem-kem": {
   "t": "另請參閱：",
@@ -3587,6 +5723,42 @@
   "t": "在明寶紫微斗數查看這份結果：",
   "h": "b03d8f15"
  },
+ "js.shellui.xem-kim-lau": {
+  "t": "查看金樓 →",
+  "h": "0b820f74"
+ },
+ "js.shellui.xem-mau-hop-menh": {
+  "t": "查看合命色彩 →",
+  "h": "14856f69"
+ },
+ "js.shellui.xem-mau-hop-menh-gw03": {
+  "t": "查看合命色彩",
+  "h": "88f7c677"
+ },
+ "js.shellui.xem-nam-sinh-con": {
+  "t": "查看孩子的出生年 →",
+  "h": "a1c0ecd3"
+ },
+ "js.shellui.xem-nap-am": {
+  "t": "查看納音 →",
+  "h": "cfa1071d"
+ },
+ "js.shellui.xem-nen-can-chi": {
+  "t": "查看干支基礎 →",
+  "h": "b2fd43ff"
+ },
+ "js.shellui.xem-nen-menh": {
+  "t": "查看命格基礎 →",
+  "h": "17fdf9e1"
+ },
+ "js.shellui.xem-nen-menh-chu": {
+  "t": "查看負責人的命格基礎 →",
+  "h": "c399d0a8"
+ },
+ "js.shellui.xem-ngay-tot": {
+  "t": "查看吉日 →",
+  "h": "178eb8fe"
+ },
  "js.shellui.xem-phan-luan-giai-cua-thay": {
   "t": "看看老師為這張命盤寫的解讀： ",
   "h": "8b9556e2"
@@ -3595,17 +5767,49 @@
   "t": "看看老師為這張命盤寫的解讀：",
   "h": "6b8b5dbb"
  },
+ "js.shellui.xem-trang-phuc": {
+  "t": "查看穿搭 →",
+  "h": "0c807b67"
+ },
+ "js.shellui.xem-trang-phuc-t5sj": {
+  "t": "查看穿搭",
+  "h": "0e97c9c6"
+ },
  "js.shellui.xem-tron": {
   "t": "完整查看",
   "h": "18cdbfde"
+ },
+ "js.shellui.xin-loi": {
+  "t": "抱歉， ",
+  "h": "2a951ed5"
+ },
+ "js.shellui.xin-loi-edlu": {
+  "t": "抱歉，",
+  "h": "f08350a2"
+ },
+ "js.shellui.xin-loi-fxsy": {
+  "t": "<p>抱歉， ",
+  "h": "6a7e27cd"
  },
  "js.shellui.xin-loi-gap-truc-trac": {
   "t": "抱歉，發生問題： ",
   "h": "7b2227c3"
  },
+ "js.shellui.xin-loi-ket-noi-truc-trac": {
+  "t": "<p>抱歉，連線發生問題。請再試一次。</p>",
+  "h": "f7335158"
+ },
  "js.shellui.xoa-phien": {
   "t": "刪除對話",
   "h": "72d604e7"
+ },
+ "js.shellui.xong-roi-lich-tu-cap-nhat": {
+  "t": "<p>完成了。行事曆會每天自動更新，你不需要再做任何事。</p>",
+  "h": "9363d86a"
+ },
+ "js.shellui.xuat-hanh-nen-di-gio-nao": {
+  "t": "出行該選哪個時辰？",
+  "h": "d74e4f3f"
  },
  "js.shellui.zalo": {
   "t": "Zalo",
@@ -4075,6 +6279,26 @@
   "t": "/100 — 該如何理解？",
   "h": "956024e9"
  },
+ "js.xemtuoi.8-chieu-hoa-hop": {
+  "t": "8 個面向<br>契合度",
+  "h": "247f6597"
+ },
+ "js.xemtuoi.8-chieu-hop-tac": {
+  "t": "8 個面向<br>合作度",
+  "h": "078d4280"
+ },
+ "js.xemtuoi.ai-nen-nam-tai-chinh": {
+  "t": "誰該掌管財務？",
+  "h": "d217723d"
+ },
+ "js.xemtuoi.ai-nen-nam-tai-chinh-45g2": {
+  "t": "誰該<br>掌管財務",
+  "h": "8fb8be89"
+ },
+ "js.xemtuoi.binh-hoa": {
+  "t": "平和",
+  "h": "e53232c5"
+ },
  "js.xemtuoi.ca": {
   "t": " 雙方 ",
   "h": "7eff84cf"
@@ -4083,6 +6307,18 @@
   "t": " 具體的化解方法在深入解讀中。",
   "h": "bb461286"
  },
+ "js.xemtuoi.cach-hoa-giai-diem-khac": {
+  "t": "相剋之處該如何化解？",
+  "h": "eb83ed13"
+ },
+ "js.xemtuoi.cach-hoa-giai-khac": {
+  "t": "化解<br>相剋",
+  "h": "9b942e43"
+ },
+ "js.xemtuoi.can-luu-y": {
+  "t": "需留意",
+  "h": "e177cd38"
+ },
  "js.xemtuoi.cham-8-yeu-to-hop-tac": {
   "t": "評估您與未來合夥人的 8 項合作要素——簽約前的客觀視角。",
   "h": "fdda207e"
@@ -4090,6 +6326,10 @@
  "js.xemtuoi.cham-8-yeu-to-tuong-hop": {
   "t": "就兩張命盤的 8 項契合要素評分——談婚論嫁、需要明確答案時使用。",
   "h": "db3006a1"
+ },
+ "js.xemtuoi.chi-can-nam-sinh": {
+  "t": "只需<br>出生年",
+  "h": "9f727504"
  },
  "js.xemtuoi.chieu": {
   "t": "面向「",
@@ -4111,6 +6351,14 @@
   "t": "最契合的面向： ",
   "h": "3b6f195e"
  },
+ "js.xemtuoi.chieu-nao-dang-lo-nhat": {
+  "t": "哪個面向最令人擔心？",
+  "h": "fa07e9c6"
+ },
+ "js.xemtuoi.chieu-nao-de-xung-dot-khi": {
+  "t": "合作時哪個面向最容易起衝突？",
+  "h": "58449b93"
+ },
  "js.xemtuoi.chieu-thap-vi-sao": {
   "t": "面向「{label}」偏低 ({score}/10)——原因為何，該如何化解？",
   "h": "3ab2ac81"
@@ -4123,6 +6371,10 @@
   "t": "丈夫／甲方",
   "h": "3fd2edae"
  },
+ "js.xemtuoi.chua-dung-duoc-anh-thu-lai": {
+  "t": "無法產生圖片。請稍後幾秒再試。",
+  "h": "f8055429"
+ },
  "js.xemtuoi.cung-menh": {
   "t": " · 命宮 ",
   "h": "ae7269b2"
@@ -4131,9 +6383,41 @@
   "t": "<br>命宮 ",
   "h": "2c272c79"
  },
+ "js.xemtuoi.da-so-tuoi": {
+  "t": "已完成合婚",
+  "h": "ab3ff10b"
+ },
+ "js.xemtuoi.da-so-tuong-hop": {
+  "t": "已完成契合度比對",
+  "h": "0d44035d"
+ },
+ "js.xemtuoi.da-xet-hop-tac": {
+  "t": "已完成合作評估",
+  "h": "5662d902"
+ },
  "js.xemtuoi.dang-dung-anh": {
   "t": "圖片製作中…",
   "h": "7bce9760"
+ },
+ "js.xemtuoi.dang-so-tuoi": {
+  "t": "合婚中…",
+  "h": "5d169757"
+ },
+ "js.xemtuoi.dang-so-tuong-hop": {
+  "t": "契合度比對中…",
+  "h": "72bc4cb1"
+ },
+ "js.xemtuoi.dang-xet-hop-tac": {
+  "t": "合作評估中…",
+  "h": "e614a918"
+ },
+ "js.xemtuoi.de-va-cham-o-dau": {
+  "t": "容易在哪裡起摩擦？",
+  "h": "40fb0c76"
+ },
+ "js.xemtuoi.diem-de-xung-dot": {
+  "t": "容易<br>衝突之處",
+  "h": "5f85b2fd"
  },
  "js.xemtuoi.doi-tac-a": {
   "t": "合夥人甲",
@@ -4151,6 +6435,10 @@
   "t": "第一位合夥人",
   "h": "6efa76df"
  },
+ "js.xemtuoi.duong-con-cai-cua-hai-nguoi": {
+  "t": "兩人的子女緣如何？",
+  "h": "bde6a4ed"
+ },
  "js.xemtuoi.gui-ket-qua-nay-cho": {
   "t": "將這份結果傳給 <b>",
   "h": "016401eb"
@@ -4159,13 +6447,37 @@
   "t": "兩張命盤",
   "h": "36cfb3c6"
  },
+ "js.xemtuoi.hai-nguoi-co-hop-lam-vo": {
+  "t": "兩人適合結為夫妻嗎？",
+  "h": "652abed1"
+ },
  "js.xemtuoi.hai-nguoi-hoa-hop": {
   "t": "兩人契合度 ",
   "h": "1ddd5d3b"
  },
+ "js.xemtuoi.hai-nguoi-hop-lam-an-chung": {
+  "t": "兩人適合一起做生意嗎？",
+  "h": "e895dc5e"
+ },
+ "js.xemtuoi.hai-nguoi-nay-co-hop-nhau": {
+  "t": "這兩人合得來嗎？",
+  "h": "6ed6138f"
+ },
  "js.xemtuoi.hoa-hop": {
   "t": "** — 契合度 **",
   "h": "b8c22dab"
+ },
+ "js.xemtuoi.hop-nhau-o-mat-nao": {
+  "t": "在哪些方面合得來？",
+  "h": "d4b3d2f5"
+ },
+ "js.xemtuoi.ket-qua-tuc-thi": {
+  "t": "結果<br>立即呈現",
+  "h": "50a61566"
+ },
+ "js.xemtuoi.kha-hop": {
+  "t": "頗為相合",
+  "h": "feeb19b6"
  },
  "js.xemtuoi.loi-khi-so-tuoi": {
   "t": "合婚時發生錯誤：",
@@ -4183,6 +6495,10 @@
   "t": "最強： ",
   "h": "b67b37ca"
  },
+ "js.xemtuoi.mien-phi-hoan-toan": {
+  "t": "完全<br>免費",
+  "h": "a0a85cd4"
+ },
  "js.xemtuoi.nap-am": {
   "t": " · 納音 ",
   "h": "c754b896"
@@ -4190,6 +6506,18 @@
  "js.xemtuoi.nap-am-jzle": {
   "t": "</b> · 納音 ",
   "h": "24107e5c"
+ },
+ "js.xemtuoi.nen-giu-khoang-cach-hay-gan": {
+  "t": "該保持距離，還是更親近？",
+  "h": "dc5da82d"
+ },
+ "js.xemtuoi.nen-gop-von-hay-chia-viec": {
+  "t": "該合資，還是分工？",
+  "h": "2f1d5a81"
+ },
+ "js.xemtuoi.ngu-hanh-con-cai": {
+  "t": "五行、<br>子女",
+  "h": "93e92978"
  },
  "js.xemtuoi.nguoi-a": {
   "t": "甲方",
@@ -4207,6 +6535,14 @@
   "t": "第一位",
   "h": "955e7151"
  },
+ "js.xemtuoi.nhap-ngay-sinh-hai-doi-tac": {
+  "t": "輸入兩位合夥人的出生日期（國曆）",
+  "h": "6e657e16"
+ },
+ "js.xemtuoi.nhap-ngay-sinh-hai-nguoi-duong": {
+  "t": "輸入兩人的出生日期（國曆）",
+  "h": "0a8681af"
+ },
  "js.xemtuoi.q1-a": {
   "t": "請提供{p}（{ph}）的資料。",
   "h": "12a20cf0"
@@ -4223,9 +6559,49 @@
   "t": "{ph}是幾點出生的？",
   "h": "b2facf82"
  },
+ "js.xemtuoi.quet-ma-so-tuoi-cua-ban": {
+  "t": "掃描 QR 碼——為您自己合婚",
+  "h": "9731d82c"
+ },
+ "js.xemtuoi.rat-hop": {
+  "t": "非常相合",
+  "h": "36d3f434"
+ },
  "js.xemtuoi.ru": {
   "t": "邀請",
   "h": "797be799"
+ },
+ "js.xemtuoi.so-hoa-hop-hai-la-so": {
+  "t": "依古法比對兩張命盤的契合度",
+  "h": "d715ccd1"
+ },
+ "js.xemtuoi.so-hop-hai-nguoi-bat-ky": {
+  "t": "依古法比對任意兩個人",
+  "h": "aee0cb90"
+ },
+ "js.xemtuoi.so-hop-hai-nguoi-khi-bat": {
+  "t": "比對兩人攜手合作時的契合度",
+  "h": "7c99a229"
+ },
+ "js.xemtuoi.so-tuoi": {
+  "t": "開始合婚 →",
+  "h": "99f5e0bd"
+ },
+ "js.xemtuoi.so-tuoi-ij72": {
+  "t": "開始合婚",
+  "h": "602b2d86"
+ },
+ "js.xemtuoi.so-tuong-hop": {
+  "t": "比對契合度 →",
+  "h": "8d280558"
+ },
+ "js.xemtuoi.so-tuong-hop-yeo0": {
+  "t": "比對契合度",
+  "h": "a24be386"
+ },
+ "js.xemtuoi.tai-anh-chia-se-9-16": {
+  "t": "⬇ 下載分享圖片 (9:16)",
+  "h": "9e425572"
  },
  "js.xemtuoi.tong-diem": {
   "t": "\n總分 ",
@@ -4234,6 +6610,10 @@
  "js.xemtuoi.tra-loi-thay-nhap-ngay-sinh": {
   "t": "請在聊天視窗回覆老師，輸入{a}與{b}的出生日期。",
   "h": "f2617440"
+ },
+ "js.xemtuoi.tuong-hop-tuoi": {
+  "t": "生肖相合",
+  "h": "e9fd3f4c"
  },
  "js.xemtuoi.tuong-hop-tuoi-tu-vi-minh": {
   "t": "生肖相合——明寶紫微斗數",
@@ -4255,17 +6635,37 @@
   "t": "妻子／乙方",
   "h": "714d3fc9"
  },
+ "js.xemtuoi.vui-long-nhap-day-du-ngay": {
+  "t": "請完整輸入兩人的出生年月日。",
+  "h": "804aebb6"
+ },
  "js.xemtuoi.xem-ho-to-mo-la-muon": {
   "t": "</b> 看過——他們好奇，想直接自己查命盤。</div>",
   "h": "86627163"
+ },
+ "js.xemtuoi.xem-hop-tac": {
+  "t": "查看合作 →",
+  "h": "5a2bb9e9"
+ },
+ "js.xemtuoi.xem-tuoi-lam-an": {
+  "t": "合夥合盤",
+  "h": "791a32dc"
  },
  "js.xemtuoi.xem-tuoi-lam-an-tu-vi": {
   "t": "合夥合盤——明寶紫微斗數",
   "h": "6a071dab"
  },
+ "js.xemtuoi.xem-tuoi-vo-chong": {
+  "t": "夫妻合婚",
+  "h": "d6d67d5c"
+ },
  "js.xemtuoi.xem-tuoi-vo-chong-tu-vi": {
   "t": "夫妻合婚——明寶紫微斗數",
   "h": "4fd9f105"
+ },
+ "js.xemtuoi.xet-hop-tac": {
+  "t": "評估合作",
+  "h": "d3041c86"
  },
  "js.xemtuoi.xet-nhanh-hai-tuoi-co-hop": {
   "t": "只需出生年，快速判斷兩人的生肖是否相合——立即得到答案，不必深入解讀。",
