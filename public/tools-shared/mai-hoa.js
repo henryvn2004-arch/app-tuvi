@@ -38,6 +38,13 @@
     if (I && I.tv) return I.tv(key, vi, vars);
     return vars ? vi.replace(/\{(\w+)\}/g, function (x, n) { return vars[n] !== undefined ? vars[n] : x; }) : vi;
   }
+  // Văn dài (W16a): luận/tóm tắt Thể–Dụng + nghĩa bát quái ở /tools-shared/i18n-long/<locale>/mai-hoa.js, tra theo `ma` quan hệ / số quái.
+  // Chỉ ở chỗ vẽ — railData (gửi server) vẫn dùng chữ Việt. vi/chưa nạp/thiếu mục ⇒ chữ Việt.
+  if (root.I18n && root.I18n.loadLong) root.I18n.loadLong('mai-hoa');
+  function _long(ns, key, vi) {
+    var I = root.I18n;
+    return I && I.long ? I.long(ns, key, vi) : vi;
+  }
   // `nhan`/`y` của ba chặng là chữ Việt vừa hiển thị vừa gửi server (railData) ⇒ chỉ dịch ở chỗ vẽ, qua bảng câu→khoá.
   var _CHANG = {
     'Quẻ chính': 'mhx-c-chinh', 'Hỗ quái': 'mhx-c-ho', 'Biến quái': 'mhx-c-bien',
@@ -395,7 +402,7 @@
       '<div class="mh-phu">' + _esc(r.dung.zh) + ' · ' + _esc(_g('tuongquai', r.dung.tuong)) + ' · <b style="color:' + dungMau + '">' + _esc(_g('hanh', r.dung.hanh)) + '</b></div>' +
       '</div>' +
       '</div>' +
-      '<div class="mh-luan">' + _esc(qh.luan) + '</div>' +
+      '<div class="mh-luan">' + _esc(_long('mai-hoa', 'qh.' + qh.ma + '.luan', qh.luan)) + '</div>' +
       '</div>'
     );
   }
@@ -574,7 +581,7 @@
         the: _g('quai', r.the.n), theH: _g('hanh', r.the.hanh), dung: _g('quai', r.dung.n), dungH: _g('hanh', r.dung.hanh),
         kl: _g('maihoa', r.ketLuan.ten),
       }),
-      quote: (r.haoTu && r.haoTu.viet) || r.ketLuan.luan,
+      quote: r.haoTu && r.haoTu.viet ? root.KinhDichHao.vietHienThi(r.haoTu) : _long('mai-hoa', 'qh.' + r.ketLuan.ma + '.luan', r.ketLuan.luan),
       cauHoi: cauHoi || '',
       // Cỡ chữ riêng của bàn quẻ — không nạp sẵn thì canvas rơi về font hệ thống.
       fonts: ['700 46px ' + ((root.Poster && root.Poster.THEME.SERIF) || 'serif'), '700 34px ' + ((root.Poster && root.Poster.THEME.SANS) || 'sans-serif')],
@@ -603,12 +610,23 @@
     };
   }
 
+  /** Nghĩa một quẻ đơn (BAT_QUAI[i]) ĐỂ HIỂN THỊ; chưa có chỗ vẽ nào dùng — sẵn cho giao diện sau. */
+  function nghiaQuai(q) {
+    return q ? _long('mai-hoa', 'quai.' + q.so + '.nghia', q.nghia) : '';
+  }
+  /** Tóm tắt một quan hệ Thể–Dụng (quanHe(...)) ĐỂ HIỂN THỊ. */
+  function tomTatQuanHe(qh) {
+    return qh ? _long('mai-hoa', 'qh.' + qh.ma + '.tomTat', qh.tomTat) : '';
+  }
+
   var API = {
     BAT_QUAI: BAT_QUAI,
     HANH_MAU: HANH_MAU,
     MUC_NHAN: MUC_NHAN,
     moTaText: moTaText,
     quanHe: quanHe,
+    nghiaQuai: nghiaQuai,
+    tomTatQuanHe: tomTatQuanHe,
     gieoTheoGio: gieoTheoGio,
     gieoTheoSo: gieoTheoSo,
     resolve: resolve,

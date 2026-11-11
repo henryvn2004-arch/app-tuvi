@@ -10,7 +10,7 @@
    Bàn vẽ theo Lạc Thư với NAM Ở TRÊN (lối vẽ cổ), thứ tự lấy từ `luoi` do
    server trả — không viết cứng ở client để hai bên không trôi khỏi nhau.
 
-   API: window.KyMonTool = { boardHTML, chiTietHTML, posterDraw, posterOpts }
+   API: window.KyMonTool = { boardHTML, chiTietHTML, posterDraw, posterOpts, nghiaSao, nghiaThan }
    ============================================================ */
 (function (root) {
   'use strict';
@@ -23,6 +23,20 @@
     if (muc === 'cat') return tv('js.shellui.mn-cat', 'Cát');
     if (muc === 'hung') return tv('js.shellui.mn-tranh', 'Tránh');
     return tv('js.shellui.mn-binh', 'Bình');
+  }
+  // Văn dài (W16a): nghĩa 9 sao + 8 thần (`sao.nghia`/`than.nghia` do server trả bằng chữ Việt) ở
+  // /tools-shared/i18n-long/<locale>/ky-mon.js, tra theo TÊN sao/thần (`sao.Thiên Bồng`). Chỉ chỗ vẽ; chưa nạp/thiếu ⇒ chữ Việt.
+  if (root.I18n && root.I18n.loadLong) root.I18n.loadLong('ky-mon');
+  function _long(ns, key, vi) {
+    var I = root.I18n;
+    return I && I.long ? I.long(ns, key, vi) : vi;
+  }
+  /** Nghĩa của `c.sao` / `c.than` (đối tượng {ten, nghia}) ĐỂ HIỂN THỊ; chưa có ô nào vẽ nghĩa — sẵn cho giao diện sau. */
+  function nghiaSao(x) {
+    return x ? _long('ky-mon', 'sao.' + x.ten, x.nghia) : '';
+  }
+  function nghiaThan(x) {
+    return x ? _long('ky-mon', 'than.' + x.ten, x.nghia) : '';
   }
   var HANH_MAU = { Kim: '#C9A84C', Mộc: '#4E9A6A', Thủy: '#3E7CB1', Hỏa: '#C0553F', Thổ: '#A98352' };
 
@@ -266,7 +280,7 @@
     kymon: function (v) { return _g('kymon', v); },
     huong: function (v) { return _g('huong', v); },
   };
-  var API = { fmt: fmt, boardHTML: boardHTML, chiTietHTML: chiTietHTML, posterDraw: posterDraw, posterOpts: posterOpts, MUC_MAU: MUC_MAU, HANH_MAU: HANH_MAU };
+  var API = { nghiaSao: nghiaSao, nghiaThan: nghiaThan, fmt: fmt, boardHTML: boardHTML, chiTietHTML: chiTietHTML, posterDraw: posterDraw, posterOpts: posterOpts, MUC_MAU: MUC_MAU, HANH_MAU: HANH_MAU };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.KyMonTool = API;
 })(typeof window !== 'undefined' ? window : globalThis);

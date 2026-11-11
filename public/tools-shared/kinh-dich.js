@@ -10,6 +10,13 @@
     var g = root.TuviGlossary;
     return g && v ? g.t(kind, v) : v;
   }
+  // Văn dài (W16a): `m`/`g` của 64 quẻ + bản bạch thoại hào từ, ở /tools-shared/i18n-long/<locale>/kinh-dich.js, tra theo SỐ QUẺ.
+  // Chỉ ở chỗ vẽ — railData (gửi server) vẫn dùng `que.m` Việt.
+  if (root.I18n && root.I18n.loadLong) root.I18n.loadLong('kinh-dich');
+  function _long(ns, key, vi) {
+    var I = root.I18n;
+    return I && I.long ? I.long(ns, key, vi) : vi;
+  }
   // Nhãn câu chữ (khoá js.shellui.kdx-*) qua window.I18n; vi/chưa nhúng từ điển ⇒ chữ Việt (thế {biến}).
   function _tv(key, vi, vars) {
     var I = root.I18n;
@@ -164,8 +171,8 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
       .map((b) => (b === '1' ? '⚊' : '⚋'))
       .join(' ')}</div>
     <span class="fortune-badge ${_fbCls[que.f]}">${_fbLabel[que.f]()}</span>
-    <div class="que-meaning">${que.m}</div>
-    <div class="que-guidance">${que.g}</div>
+    <div class="que-meaning">${_long('kinh-dich', 'que.' + (pIdx + 1) + '.m', que.m)}</div>
+    <div class="que-guidance">${_long('kinh-dich', 'que.' + (pIdx + 1) + '.g', que.g)}</div>
   </div>`;
 
     if (cQue) {
@@ -178,8 +185,8 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
         .map((b) => (b === '1' ? '⚊' : '⚋'))
         .join(' ')}</div>
       <span class="fortune-badge ${_fbCls[cQue.f]}">${_fbLabel[cQue.f]()}</span>
-      <div class="que-meaning">${cQue.m}</div>
-      <div class="que-guidance" style="font-size:13px">${cQue.g}</div>
+      <div class="que-meaning">${_long('kinh-dich', 'que.' + (cIdx + 1) + '.m', cQue.m)}</div>
+      <div class="que-guidance" style="font-size:13px">${_long('kinh-dich', 'que.' + (cIdx + 1) + '.g', cQue.g)}</div>
     </div>`;
     } else {
       html += `<div class="que-card" style="display:flex;align-items:center;justify-content:center;opacity:0.5">
@@ -233,7 +240,7 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
         (m) => `<div class="kd-loi${m.chinh ? ' kd-chu' : ''}">
       <div class="kd-loi-nhan">${_esc(_nhanQue(m.nhan))} · ${_esc(_g('que', m.queTen))}${m.nguon === 'bien' ? _tv('js.shellui.kdx-que-bien-p', ' (quẻ biến)') : ''}${m.chinh && d.muc.length > 1 ? _tv('js.shellui.kdx-lam-chu', ' · làm chủ') : ''}</div>
       <div class="kd-loi-han">${_esc(m.han)}</div>
-      <div class="kd-loi-viet">${_esc(m.viet)}</div>
+      <div class="kd-loi-viet">${_esc(root.KinhDichHao.vietHienThi(m))}</div>
     </div>`
       )
       .join('');

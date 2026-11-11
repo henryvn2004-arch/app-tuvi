@@ -1,0 +1,127 @@
+#!/usr/bin/env node
+/**
+ * check:i18nlong — bản dịch VĂN DÀI theo chỉ số (public/tools-shared/i18n-long/<locale>/<ns>.js, W16a).
+ *
+ * Soi, với MỌI file bản dịch đang có:
+ *   1. file chạy được và gọi `I18n.defineLong('<đúng ns>', …)`;
+ *   2. KHÔNG mồ côi — mọi khoá còn có trong bảng nguồn (số quẻ/hào, `ma`, số quái, tên sao/thần);
+ *   3. hash `h` khớp câu Việt nguồn HIỆN TẠI (nguồn đổi mà bản dịch chưa dịch lại ⇒ đỏ);
+ *   4. bản dịch hợp lệ: không rỗng, không chép nguyên câu Việt, không còn dấu tiếng Việt;
+ *   5. locale trong LONG_COMPLETE (lib/i18n/long.mjs) phải có ĐỦ mọi mục của mọi ns;
+ *   6. zh-cn == OpenCC(zh-tw) mục theo mục (như check:i18n — zh-cn SINH, không sửa tay);
+ * và phía module nguồn: mỗi module có gọi `loadLong('<ns>')`, và mọi `I18n.long`/`_long` dùng đúng ns.
+ *
+ * Chạy: node scripts/check-i18nlong.mjs
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import * as OpenCC from 'opencc-js';
+import { hashVi, hasVietnamese } from '../lib/i18n/core.mjs';
+import { TRANSLATED } from '../lib/i18n/dict.mjs';
+import { LONG_NS, LONG_MODULE, LONG_COMPLETE, loadSources, readLong, longDir } from '../lib/i18n/long.mjs';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+let bad = 0;
+const fail = (m) => {
+  console.error('❌ ' + m);
+  bad++;
+};
+
+const sources = loadSources(ROOT);
+const conv = OpenCC.Converter({ from: 'twp', to: 'cn' });
+
+// Thư mục lạ trong i18n-long/ (gõ sai locale) cũng là lỗi, không im lặng bỏ qua.
+if (fs.existsSync(longDir(ROOT)))
+  for (const d of fs.readdirSync(longDir(ROOT)))
+    if (!TRANSLATED.includes(d)) fail(`i18n-long/${d}/: không phải locale (${TRANSLATED.join(' ')})`);
+
+const stat = {};
+for (const locale of TRANSLATED) {
+  const need = LONG_COMPLETE.includes(locale);
+  for (const ns of LONG_NS) {
+    const src = sources[ns];
+    const where = `${locale}/${ns}`;
+    let dict;
+    try {
+      dict = readLong(ROOT, locale, ns);
+    } catch (e) {
+      fail(`${where}: file hỏng — ${e.message}`);
+      continue;
+    }
+    if (!dict) {
+      if (need) fail(`${where}: thiếu file (locale ${locale} nằm trong LONG_COMPLETE)`);
+      continue;
+    }
+    const byKey = new Map(src.map((e) => [e.k, e]));
+    let ok = 0;
+    for (const [k, e] of Object.entries(dict)) {
+      const s = byKey.get(k);
+      if (!s) {
+        fail(`${where}: mục mồ côi "${k}" — không còn trong bảng nguồn`);
+        continue;
+      }
+      if (!e || typeof e.t !== 'string' || !e.t.trim()) {
+        fail(`${where}: "${k}" rỗng`);
+        continue;
+      }
+      if (e.h !== hashVi(s.vi)) {
+        fail(`${where}: "${k}" hash lệch nguồn (câu Việt đã đổi — dịch lại bằng npm run i18n:long -- next)`);
+        continue;
+      }
+      if (e.t.trim() === s.vi.trim()) {
+        fail(`${where}: "${k}" chép nguyên câu Việt`);
+        continue;
+      }
+      if (hasVietnamese(e.t)) {
+        fail(`${where}: "${k}" còn dấu tiếng Việt: ${e.t.slice(0, 40)}…`);
+        continue;
+      }
+      ok++;
+    }
+    if (need) {
+      const miss = src.filter((s) => !Object.prototype.hasOwnProperty.call(dict, s.k));
+      if (miss.length) fail(`${where}: thiếu ${miss.length}/${src.length} mục (vd "${miss[0].k}")`);
+    }
+    stat[locale] = (stat[locale] || 0) + ok;
+
+    if (locale === 'zh-cn') {
+      let tw = null;
+      try {
+        tw = readLong(ROOT, 'zh-tw', ns);
+      } catch {}
+      if (!tw) fail(`${where}: có zh-cn mà không có zh-tw/${ns} — zh-cn phải SINH từ zh-tw`);
+      else {
+        for (const [k, e] of Object.entries(dict)) {
+          if (!tw[k]) fail(`${where}: "${k}" không có ở zh-tw`);
+          else if (conv(tw[k].t) !== e.t) fail(`${where}: "${k}" lệch OpenCC(zh-tw) — chạy npm run i18n:long -- zhcn`);
+        }
+        for (const k of Object.keys(tw)) if (!dict[k]) fail(`${where}: thiếu "${k}" (có ở zh-tw) — chạy npm run i18n:long -- zhcn`);
+      }
+    }
+  }
+}
+if (LONG_COMPLETE.includes('zh-cn') !== LONG_COMPLETE.includes('zh-tw'))
+  fail('LONG_COMPLETE: zh-tw và zh-cn phải đi cùng nhau (zh-cn sinh từ zh-tw)');
+
+// Phía module: nạp đúng ns, tra đúng ns.
+for (const ns of LONG_NS) {
+  const f = LONG_MODULE[ns];
+  const code = fs.readFileSync(path.join(ROOT, f), 'utf8');
+  if (!code.includes(`loadLong('${ns}')`)) fail(`${f}: không gọi loadLong('${ns}') — file bản dịch sẽ không bao giờ được nạp`);
+  if (!code.includes(`'${ns}'`) || !/I18n\.long|_long\(/.test(code)) fail(`${f}: không có chỗ tra bản dịch (I18n.long/_long) cho '${ns}'`);
+}
+for (const f of new Set(Object.values(LONG_MODULE))) {
+  const code = fs.readFileSync(path.join(ROOT, f), 'utf8');
+  for (const m of code.matchAll(/(?:I18n\.long|\b_long)\(\s*'([^']+)'/g))
+    if (!LONG_NS.includes(m[1])) fail(`${f}: tra namespace lạ '${m[1]}' (LONG_NS: ${LONG_NS.join(' ')})`);
+}
+
+if (bad) {
+  console.error(`\n${bad} lỗi.`);
+  process.exit(1);
+}
+const total = LONG_NS.reduce((n, ns) => n + sources[ns].length, 0);
+console.log(
+  `✓ i18nlong: nguồn ${total} mục · ${Object.entries(stat).map(([l, n]) => `${l} ${n}`).join(' · ') || 'chưa có bản dịch'}`
+);
