@@ -598,7 +598,7 @@
     var du = ls._duong, bt;
     var gio = (typeof du.h === 'number' && !isNaN(du.h)) ? du.h : GIO_HOURS[(ls._conv && ls._conv.gioIdx) || 0];
     try {
-      bt = root.tinhBatTu({ ngayDL: du.d, thangDL: du.m, namDL: du.y, gio: gio, gioitinh: du.gt === 'nu' ? 'nu' : 'nam' });
+      bt = root.tinhBatTu({ ngayDL: du.d, thangDL: du.m, namDL: du.y, gio: gio, gioitinh: du.gt === 'nu' ? 'nu' : 'nam', lich: du.lich, gioLich: du.h, phutLich: du.p });
     } catch (e) {
       if (root.console) console.error('[luan-giai-core] tinhBatTu', e);
     }

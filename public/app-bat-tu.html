@@ -253,7 +253,7 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'bat-tu'};</script>
 <script src="/laso-chart.js?v=9"></script>
-<script src="/tubinh-ansao-engine.js?v=5"></script>
+<script src="/tubinh-ansao-engine.js?v=6"></script>
 <script src="/tubinh-domain-scores.js?v=2"></script>
 <script src="/tubinh-cach-cuc-special.js?v=2"></script>
 <script src="/tools-shared/pchip.js?v=1"></script>
@@ -402,7 +402,7 @@ function doBatTu(){
   btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang an tứ trụ…';
   try{
     var gioChi=CHI[gioAmIdx];
-    var bt=window.tinhBatTu({ngayDL:dd,thangDL:mm,namDL:yyyy,gio:GIO_REP[gioAmIdx],gioitinh:gioitinh,namXem:namxem});
+    var bt=window.tinhBatTu({ngayDL:dd,thangDL:mm,namDL:yyyy,gio:GIO_REP[gioAmIdx],gioitinh:gioitinh,namXem:namxem,lich:fdIn.lich,gioLich:hh,phutLich:pp});
     // ── Globals cho khối "Luận giải chuyên sâu AI" (gate+RAG+stream+PDF, port từ tu-binh.html) ──
     _batTu=bt; _hoTen=name; _ngay=dd; _thang=mm; _nam=yyyy; _gioitinh=gioitinh; _namXem=namxem;
     _batTuText=formatBatTuToText(bt);
@@ -428,7 +428,7 @@ function doBatTu(){
     // Rail: gửi CẢ birth (server lập bát tự) + scenario tu-binh (chọn đúng bộ não).
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
-      birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined,lich:fdIn.lich,noiSinh:fdIn.noiSinh},
+      birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,hour:hh,minute:pp,gender:gioitinh,name:name||undefined,lich:fdIn.lich,noiSinh:fdIn.noiSinh},
       scenario:{type:'tu-binh',data:{}},
       label:'Bát Tự '+(name||'')+' · '+dd+'/'+mm+'/'+yyyy+' · năm '+namxem,
       greeting:'Tứ trụ của **'+(name||'bạn')+'** đã sẵn sàng. Hỏi tôi về nhật can, dụng thần, cách cục hay đại vận nhé.',

@@ -299,11 +299,11 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/laso-chart.js?v=9"></script>
 <script src="/tools-shared/pchip.js?v=1"></script>
 <script src="/tools-shared/daivan-chart.js?v=1"></script>
-<script src="/luan-giai-core.js?v=9"></script>
+<script src="/luan-giai-core.js?v=10"></script>
 <!-- Engine Tử Bình cho khối "Ngũ hành theo Tứ Trụ" (phần 1). PHẢI là thẻ tĩnh,
      đúng URL `?v=5` như app-bat-tu.html: soft-nav chỉ khử trùng theo URL đã thấy
      trong DOM — chèn bằng JS thì sang trang Bát Tự sẽ nạp lại, trùng `const`. -->
-<script src="/tubinh-ansao-engine.js?v=5" defer></script>
+<script src="/tubinh-ansao-engine.js?v=6" defer></script>
 <!-- `defer` ở đây là VỆ SINH TỐC ĐỘ, KHÔNG phải bản vá CLS. Không có nó, thẻ này
      chặn parse ngay trước `tuvi-form.js`, tức thêm hẳn một chặng mạng tới bên thứ
      ba vào đường tới hạn của form. Nhưng cú nhảy `.frow` thì nó KHÔNG chữa: prod
@@ -316,7 +316,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
      người dùng bấm luận — rất lâu sau `DOMContentLoaded`, mốc mà script `defer`
      chắc chắn đã chạy xong (đã đo: `Chart` là `function` tại DOMContentLoaded). -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
-<script src="/tuvi-laso-format.js?v=6"></script>
+<script src="/tuvi-laso-format.js?v=7"></script>
 <!-- Thư viện hình minh hoạ (đại vận — mỗi phần một bức, nhân vật già dần theo
      tuổi giữa đại vận, sắc thái đọc thẳng flag 🟢/🟡/🔴 đã tính sẵn). -->
 <script src="/tools-shared/illus-nguong.js?v=1"></script>
@@ -452,7 +452,7 @@ async function doLuan(){
     // ── Globals cho khối "Luận giải chuyên sâu AI" (gate+RAG+stream+PDF, port từ app-luan-giai.html) ──
     ls._conv=conv; ls._hoTen=name;
     // Ngày DƯƠNG + giờ cho khối ngũ hành Tứ Trụ (LuanGiaiCore.buildNguHanhHtml → tinhBatTu).
-    ls._duong={d:+dd,m:+mm,y:+yyyy,h:(hh==null||hh==='')?null:+hh,gt:gioitinh};
+    ls._duong={d:+dd,m:+mm,y:+yyyy,h:(hh==null||hh==='')?null:+hh,p:+pp||0,lich:fdIn.lich,gt:gioitinh};
     _astrolabe=ls; _hoTen=name; _ngay=dd; _thang=mm; _nam=yyyy; _gioitinh=gioitinh; _namXem=namxem;
     _laSoText=formatLaSoV2(ls,conv); ls._laSoText=_laSoText;
     renderLuan(ls,fd,namxem);
@@ -471,7 +471,7 @@ async function doLuan(){
     if(window.CungNgaySinh)CungNgaySinh.mount('cnsHost',{ngay:dd,thang:mm,nam:yyyy,gioIdx:gioAmIdx,gioitinh:gioitinh});
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
-      birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined,lich:fdIn.lich,noiSinh:fdIn.noiSinh},
+      birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,hour:hh,minute:pp,gender:gioitinh,name:name||undefined,lich:fdIn.lich,noiSinh:fdIn.noiSinh},
       label:'Chu trình cuộc đời '+(name||'lá số')+' · '+dd+'/'+mm+'/'+yyyy+' · năm '+namxem,
       greeting:'9 đại vận và tiểu vận năm '+namxem+' của **'+(name||'bạn')+'** đã sẵn sàng. Hỏi tôi để đào sâu giai đoạn nào trong đời bạn quan tâm.',
       chips:buildChuTrinhChips(ls,namxem)
