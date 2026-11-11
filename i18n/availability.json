@@ -20,10 +20,34 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/chu-trinh-cuoc-doi": [
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/cong-cu": [
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/luan-giai": [
   "en",
   "ja",
   "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/nap-am": [
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/nap-luong": [
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/van-han-nam": [
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/xem-tuoi": [
   "zh-tw",
   "zh-cn"
  ],
