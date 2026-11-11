@@ -13,9 +13,10 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { Converter } from 'opencc-js';
 import { TERMS, CHI_EN, CAN_EN } from '../lib/i18n/glossary/tuvi-terms.ts';
-import { CAN_HAN, CHI_HAN } from '../lib/hanviet.ts';
+import { CAN_HAN, CHI_HAN, HAN_VIET } from '../lib/hanviet.ts';
 
 const OUT = new URL('../lib/i18n/glossary/terms.generated.mjs', import.meta.url);
+const OUT_HV = new URL('../lib/i18n/glossary/han-viet-check.json', import.meta.url);
 const args = process.argv.slice(2);
 const uIdx = args.indexOf('--unihan');
 const CHECK = args.includes('--check');
@@ -155,6 +156,33 @@ const json = `// SINH bằng scripts/gen-glossary.mjs (Unihan sha256:${uniSha}) 
 // .mjs thuần (không import JSON) để Next, tsc và Node ≥20 đọc chung mà không cần import attributes.
 export const GENERATED_TERMS = ${JSON.stringify(out, null, 1)};
 `;
+// ── Bảng âm đọc PHỤ cho bộ dò check:glossary ────────────────────────────────────────────────
+// Chỉ gồm chữ mà lib/hanviet.ts CHƯA có (cả bản phồn lẫn giản). Âm đọc = Unihan kVietnamese, giữ MỌI âm, không chọn tay.
+// Chữ không có kVietnamese ⇒ mảng rỗng (bộ dò để THIẾU). Hán-Việt chuẩn thường KHÔNG có ở đây khi kVietnamese chỉ ghi âm thuần Việt (紫 → tía).
+const BANG_HV = { ...HAN_VIET, ...CAN_HAN, ...CHI_HAN };
+const chars = {};
+for (const t of out) {
+  const tw = [...t['zh-tw']];
+  const cn = [...t['zh-cn']];
+  tw.forEach((ch, i) => {
+    if (BANG_HV[ch] || BANG_HV[cn[i]] || ch in chars) return;
+    chars[ch] = info(ch).viet || info(cn[i]).viet || [];
+  });
+}
+const sortedChars = Object.fromEntries(
+  Object.entries(chars).sort(([a], [b]) => a.localeCompare(b, 'zh'))
+);
+const jsonHv =
+  JSON.stringify(
+    {
+      _: `SINH bằng scripts/gen-glossary.mjs từ Unihan kVietnamese (sha256:${uniSha}) — chỉ chữ chưa có trong lib/hanviet.ts; ĐỪNG sửa tay.`,
+      unihan: uniSha,
+      chars: sortedChars,
+    },
+    null,
+    1
+  ) + '\n';
+
 if (CHECK) {
   const cur = readFileSync(OUT, 'utf8');
   console.log(
@@ -162,8 +190,11 @@ if (CHECK) {
       ? 'terms.generated.mjs khớp nguồn.'
       : 'terms.generated.mjs LỆCH nguồn — chạy lại gen-glossary.'
   );
-  process.exit(cur === json ? 0 : 1);
+  const okHv = readFileSync(OUT_HV, 'utf8') === jsonHv;
+  if (!okHv) console.log('han-viet-check.json LỆCH nguồn — chạy lại gen-glossary.');
+  process.exit(cur === json && okHv ? 0 : 1);
 }
 writeFileSync(OUT, json);
+writeFileSync(OUT_HV, jsonHv);
 console.log(`Đã ghi ${out.length} thuật ngữ. Cảnh báo kVietnamese (xem lại): ${warns.length}`);
 if (warns.length) console.log(warns.join('\n'));
