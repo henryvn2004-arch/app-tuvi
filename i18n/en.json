@@ -7464,8 +7464,8 @@
   "h": "db75ad54"
  },
  "topup.moi-luan-giai-chuyen-sau-goi": {
-  "t": "Each in-depth reading calls a large language model API (Claude/GPT) and costs roughly 0.05–0.10 USD per use, plus storage and hosting. Credits are how the project sustains itself so every classical lookup tool stays free for everyone.",
-  "h": "f9c1cb68"
+  "t": "Every in-depth reading carries real costs for computation, storage and operations. Credits are how the project sustains itself so every classical reference tool stays free for everyone.",
+  "h": "c48bb68e"
  },
  "topup.moi-tai-khoan-dung-duoc-mot": {
   "t": "Each account can use one code.",
