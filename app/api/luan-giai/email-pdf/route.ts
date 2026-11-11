@@ -19,6 +19,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createHash } from 'crypto';
 import { getUserFromSupabaseToken } from '@/lib/admin/auth';
 import { sendTransactionalEmail } from '@/lib/email/send';
+import { localeFromCookieHeader, saveUserLocale, getUserLocale } from '@/lib/email/locale';
+import { renderPdfMail } from '@/lib/email/i18n';
 import { renderLuanGiaiPdf, type LuanGiaiPhan, type LuanGiaiToolId } from '@/lib/pdf/luan-giai';
 
 export const dynamic = 'force-dynamic';
@@ -29,12 +31,6 @@ export const maxDuration = 45;
 // 24 phần luận giải thật đo được vài chục nghìn ký tự/phần, 500K là dư dả.
 const MAX_TOTAL_CHARS = 500_000;
 const MAX_PHANS = 30;
-
-// Tên hiển thị trong subject email — khớp `TOOL_META` trong lib/pdf/luan-giai.tsx.
-const TOOL_LABEL: Record<LuanGiaiToolId, string> = {
-  laso: 'Luận Giải Lá Số',
-  'chu-trinh-cuoc-doi': 'Chu Trình Cuộc Đời',
-};
 
 export async function POST(req: NextRequest) {
   const token = (req.headers.get('authorization') || '').replace('Bearer ', '').trim();
@@ -67,7 +63,6 @@ export async function POST(req: NextRequest) {
     gioiTinh: String(body.gioiTinh || '').slice(0, 20),
     phans: phans.map((p) => ({ title: String(p.title || '').slice(0, 200), text: String(p.text || '').slice(0, 50_000) })),
   };
-  const toolLabel = TOOL_LABEL[toolId];
 
   try {
     const pdfBuffer = await renderLuanGiaiPdf(input);
@@ -77,14 +72,20 @@ export async function POST(req: NextRequest) {
     // số (hoTen/ngaySinh trùng) vẫn ra 2 khoá khác nhau, không đè lẫn nhau.
     const contentHash = createHash('sha1').update(JSON.stringify(input)).digest('hex').slice(0, 16);
 
+    // Cookie nói ngôn ngữ khách ĐANG dùng; có thì ghi nhớ cho các email sau (cron không có cookie).
+    const cookieLocale = localeFromCookieHeader(req.headers.get('cookie'));
+    if (cookieLocale) await saveUserLocale(user.id, cookieLocale);
+    const locale = cookieLocale ?? (await getUserLocale(user.id));
+    const mail = renderPdfMail(locale, toolId, input.hoTen);
+
     const result = await sendTransactionalEmail({
       dedupeKey: `pdf-luan-giai-${toolId}-${user.id}-${contentHash}`,
       template: 'luan-giai-pdf',
       to: user.email,
-      subject: `PDF ${toolLabel}${input.hoTen ? ' — ' + input.hoTen : ''} — Tử Vi Minh Bảo`,
-      html: `<p>Gửi bạn bản PDF ${toolLabel.toLowerCase()}${input.hoTen ? ' của <b>' + input.hoTen + '</b>' : ''} — đính kèm trong email này.</p>
-<p style="font-size:12px;color:#888">Bạn luôn xem lại bản đầy đủ trên tài khoản tại <a href="https://tuviminhbao.com/app">tuviminhbao.com/app</a>.</p>`,
+      subject: mail.subject,
+      html: mail.html,
       userId: user.id,
+      locale,
       attachments: [{ filename: `${toolId}-tu-vi-minh-bao.pdf`, content: pdfBuffer.toString('base64') }],
     });
 

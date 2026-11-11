@@ -19,6 +19,7 @@ import { nguoiXemLine } from '@/lib/agent/prompts';
 import { buildKhung12Thang, spans12, nhanThangALDay, SO_THANG } from '@/lib/engine/van-han-12';
 import type { LunarMonthSpan } from '@/lib/engine/van-ngay';
 import { llmTextFull } from '@/lib/llm/complete';
+import { requestLocale, withLang } from '@/lib/llm/locale';
 import { logLlmUsage } from '@/lib/agent/usage';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { authUserFromRequest } from '@/lib/api/tool-helpers';
@@ -170,6 +171,8 @@ async function runPost(request: NextRequest) {
 
   const phan = Number(body.phan);
   if (!(phan >= 1 && phan <= TONG_PHAN)) return err('Phần không hợp lệ.', 400);
+  // Ngôn ngữ bản luận (i18n W8) — theo trang khách đang đứng.
+  const locale = requestLocale(request);
   const docs = body.docs ? String(body.docs) : undefined;
 
   // 🔴 CHỐT CHẶN THANH TOÁN PHÍA SERVER (2026-09-07) — route này KHÔNG có gate
@@ -202,7 +205,9 @@ async function runPost(request: NextRequest) {
   // readCachedLuanGiaiPhan().
   const laSoPhanMap: Record<number, number> = { 1: 1, 2: 14, 3: 14 + dvHienTaiSo(ls), 4: 24 };
   const laSoToolMap: Record<number, string> = { 1: 'laso', 2: 'chu-trinh-cuoc-doi', 3: 'chu-trinh-cuoc-doi', 4: 'chu-trinh-cuoc-doi' };
-  if (phan <= 4) {
+  // `laso_public.luan_giai` chỉ giữ bản TIẾNG VIỆT (save-laso không lưu luận của ngôn ngữ khác) ⇒ khách ngôn
+  // ngữ khác KHÔNG được đọc nó, không thì nhận chữ Việt dưới giao diện Nhật/Hàn/Trung/Anh.
+  if (phan <= 4 && locale === 'vi') {
     const cached = await readCachedLuanGiaiPhan(ls, birth, tuNam, laSoPhanMap[phan]!, laSoToolMap[phan]!);
     if (cached) return ok({ luanGiai: cached, phan });
   }
@@ -229,9 +234,10 @@ async function runPost(request: NextRequest) {
     if (phan <= 4) {
       // Chỉ chạm nhánh LLM này khi readCachedLuanGiaiPhan (Code #2) cache-miss
       // ở trên; đa số lượt đã được DB cache chặn từ trước, không tới đây.
-      const cached = buildPromptCached(laSoPhanMap[phan]!, formatLaSoV2(ls), docs);
+      const laSoVi = formatLaSoV2(ls);
+      const cached = buildPromptCached(laSoPhanMap[phan]!, laSoVi, docs);
       systemForLLM = cached.system;
-      prompt = (nx ? nx + '\n' : '') + cached.prompt;
+      prompt = withLang((nx ? nx + '\n' : '') + cached.prompt, locale, [laSoVi]);
     } else {
       const stt = phan - PHAN_THANG_DAU + 1;
       // Chỉ cần bảng LỊCH để biết tháng âm thứ stt — không dựng cả khung (khớp
@@ -239,7 +245,7 @@ async function runPost(request: NextRequest) {
       const span = spans12(tuNgay, tuThang, tuNam)[stt - 1]!;
       const built = buildPromptThang(ls, span, stt, docs);
       systemForLLM = built.system;
-      prompt = (nx ? nx + '\n' : '') + built.prompt;
+      prompt = withLang((nx ? nx + '\n' : '') + built.prompt, locale, [formatLaSoV2(ls)]);
     }
   } catch (e: unknown) {
     return err('buildPrompt error: ' + (e as Error).message);

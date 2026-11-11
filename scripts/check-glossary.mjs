@@ -51,6 +51,22 @@ const NGOAI_LE = {
     sai: '辰→Thìn≠Thần',
     vi: '辰 đa âm: Thìn / Thần (tinh thần) — 孤辰 đọc Cô Thần',
   },
+  'khai|Triệt Không': {
+    sai: '截→Tiệt≠Triệt',
+    vi: '截 đọc Tiệt/Triệt — Tử Vi Việt dùng "Triệt" (hanviet.ts ghi Tiệt)',
+  },
+  'khai|Triệt Lộ Không Vong': {
+    sai: '截→Tiệt≠Triệt',
+    vi: '截 đọc Tiệt/Triệt — Tử Vi Việt dùng "Triệt" (hanviet.ts ghi Tiệt)',
+  },
+  'khai|Phủ Tướng triều viên': {
+    sai: '相→Tương≠Tướng',
+    vi: '相 đa âm: Tương / Tướng (quan tướng) — 府相朝垣 đọc Phủ Tướng triều viên',
+  },
+  'khai|Tướng Phủ triều viên': {
+    sai: '府→Phủ≠Tướng, 相→Tương≠Phủ',
+    vi: 'cùng chữ 府相朝垣 nhưng tên Việt viết đảo hai chữ đầu (Tướng Phủ); dạng chuẩn ở mục "Phủ Tướng triều viên"',
+  },
   'cung|Tử Tức': {
     sai: '子→Tý≠Tử, 女→Nữ≠Tức',
     vi: 'tên Việt cổ 子息 (Tử Tức); chữ chuẩn ở zh/ja/ko là 子女宮',
@@ -87,16 +103,46 @@ const DA_DUYET = {
   'khai|Tử Vi Đẩu Số': '紫微斗數',
   'khai|Lưu Niên': '流年',
   'khai|Lưu Niên Tứ Hóa': '流年四化',
+  'khai|Tuần Không': '旬空',
+  'khai|Tử Phủ': '紫府',
+  'khai|Cự Cơ Mão Dậu': '巨機卯酉',
   'khai|Phụ Tinh': '輔星',
   'khai|Vô Chính Diệu': '無正曜',
 };
 
 function soat(terms) {
-  const r = { dat: 0, datPhu: [], daDuyet: [], lech: [], thieu: [], boQua: [], ngoaiLe: [] };
+  const r = {
+    dat: 0,
+    gio: 0,
+    bietDanh: [],
+    datPhu: [],
+    daDuyet: [],
+    lech: [],
+    thieu: [],
+    boQua: [],
+    ngoaiLe: [],
+  };
   const chuThieu = new Set();
   for (const t of terms) {
     const id = `${t.k}|${t.vi}`;
-    if (t.f?.includes('v') || t.f?.includes('n')) {
+    if (t.k === 'gio') {
+      // "Giờ Tý": Hán = chữ chi (hanviet.ts CHI_HAN) + 時, ja = chi + の刻 — tất định từ chính bảng chi.
+      const chi = t.vi.replace(/^Giờ /, '');
+      const han = Object.keys(CHI_HAN).find((h) => CHI_HAN[h] === chi);
+      if (han && t['zh-tw'] === han + '時' && t.ja === han + 'の刻') r.gio++;
+      else r.lech.push(`${id}: ${t['zh-tw']}/${t.ja} ≠ ${han}時/${han}の刻`);
+      continue;
+    }
+    if (t.f?.includes('n')) {
+      // Dạng đơn từ (Tuần → 旬空): chữ Hán phải TRÙNG một mục đầy đủ đã dò được (Tuần Không → 旬空) mới hết bị bỏ qua.
+      const bietDanh = terms.find(
+        (o) => o !== t && !o.f?.includes('n') && o['zh-tw'] === t['zh-tw']
+      );
+      if (bietDanh) r.bietDanh.push(`${id} = ${bietDanh.k}|${bietDanh.vi}`);
+      else r.lech.push(`${id}: cờ n nhưng không trùng chữ Hán với mục đầy đủ nào`);
+      continue;
+    }
+    if (t.f?.includes('v')) {
       r.boQua.push(id);
       continue;
     }
@@ -149,9 +195,11 @@ function soat(terms) {
 
 const r = soat(G);
 console.log(
-  `check:glossary — ${G.length} mục: ĐẠT ${r.dat + r.datPhu.length} (hanviet.ts ${r.dat} · nhờ bảng phụ Unihan ${r.datPhu.length}) · ĐÃ DUYỆT TAY ${r.daDuyet.length} · LỆCH ${r.lech.length} · THIẾU ${r.thieu.length} (${r.chuThieu.length} chữ) · ngoại lệ ${r.ngoaiLe.length} · bỏ qua ${r.boQua.length}`
+  `check:glossary — ${G.length} mục: ĐẠT ${r.dat + r.datPhu.length + r.gio + r.bietDanh.length} (hanviet.ts ${r.dat} · nhờ bảng phụ Unihan ${r.datPhu.length} · 12 giờ ${r.gio} · biệt danh đơn từ ${r.bietDanh.length}) · ĐÃ DUYỆT TAY ${r.daDuyet.length} · LỆCH ${r.lech.length} · THIẾU ${r.thieu.length} (${r.chuThieu.length} chữ) · ngoại lệ ${r.ngoaiLe.length} · bỏ qua ${r.boQua.length}`
 );
 if (r.ngoaiLe.length) console.log('  ngoại lệ có chủ đích:\n    ' + r.ngoaiLe.join('\n    '));
+if (r.bietDanh.length)
+  console.log(`  biệt danh đơn từ (trùng Hán với mục đầy đủ): ${r.bietDanh.join(' · ')}`);
 if (r.boQua.length) console.log(`  bỏ qua (cờ v/n): ${r.boQua.join(' · ')}`);
 if (r.datPhu.length)
   console.log(`  đạt nhờ bảng phụ Unihan (${r.datPhu.length}): ${r.datPhu.join(' · ')}`);

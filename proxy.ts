@@ -14,6 +14,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { isLocale, LOCALE_HEADER } from '@/lib/i18n/locales';
 import { linkHeaderForVi, normPath } from '@/lib/i18n/links.mjs';
 import { isSelfManaged } from '@/lib/i18n/self-managed.mjs';
+import { singleLocaleOf } from '@/lib/i18n/single-locale.mjs';
 import availability from '@/i18n/availability.json';
 
 const AVAIL = availability as Record<string, string[]>;
@@ -34,12 +35,23 @@ export function proxy(req: NextRequest) {
     }
     // `/ja/ja/...` hay `/ja/en/...` không phải URL hợp lệ.
     if (isLocale(rest.split('/')[1] || '')) return new NextResponse('Not found', { status: 404 });
+    // Trang chỉ một ngôn ngữ (lib/i18n/single-locale.mjs): sai ngôn ngữ ⇒ 404; đúng ⇒ phục vụ nguyên file.
+    const only = singleLocaleOf(normPath(rest));
+    if (only && only !== seg) return new NextResponse('Not found', { status: 404 });
     const url = req.nextUrl.clone();
     // Route tự dịch + tự quản SEO (lib/i18n/self-managed.mjs): chỉ bóc tiền tố + gắn header.
-    url.pathname = isSelfManaged(rest) ? rest : `/i18n-render/${seg}${rest === '/' ? '' : rest}`;
+    url.pathname = only || isSelfManaged(rest) ? rest : `/i18n-render/${seg}${rest === '/' ? '' : rest}`;
     const headers = new Headers(req.headers);
     headers.set(LOCALE_HEADER, seg);
     return NextResponse.rewrite(url, { request: { headers } });
+  }
+
+  // Trang chỉ một ngôn ngữ không có bản vi: về URL có tiền tố.
+  const only = singleLocaleOf(normPath(pathname));
+  if (only) {
+    const to = req.nextUrl.clone();
+    to.pathname = `/${only}${normPath(pathname)}`;
+    return NextResponse.redirect(to, 308);
   }
 
   const res = NextResponse.next();

@@ -120,14 +120,14 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 (tường trả phí) · `tool-prices.js` (giá) · `poster.js` (ảnh 9:16 + QR) ·
 `nav.js` (icon dùng chung) · `track.js` (đo) · `referral.js`.
 
-### 49 bộ dò (chạy trong CI lint) — `npm run check:*`
+### 50 bộ dò (chạy trong CI lint) — `npm run check:*`
 `prices` `nostore` `groups` `viec` `share` `history` `shellboot` `introcard` `navph`
 `formph` `formblock` `font`
 `authapi` `giosinh` `keyframes` `hoatdong` `hexagrams` `laso` `railfields`
 `railwrap` `cacheshape` `hao` `motifs` `illus` `terms` `publish` `thuvien` `jobs` `token`
 `prompt` `topics` `batrach` `sodep` `lunar` `vntz` `tooltip` `cns` `celebanh`
 `nguoithan` `nhatky` `slug` `lasogolden` `refbenchmarks` `lavong` `hooktag`
-`webdriver` `payossig` `amduong` `saoluu`.
+`webdriver` `payossig` `amduong` `saoluu` `tietkhi`.
 **Bộ dò kêu oan là bộ dò bị tắt đi** — thà thu hẹp còn hơn để nó báo bừa.
 
 ## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
@@ -216,6 +216,9 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   cộng dồn. Chạm trần `check:prompt` thì CẮT chỗ khác, đừng nới.
 - **Đổi công thức thì phải quét cả chỗ MÔ TẢ công thức** — prompt không được
   typecheck bắt. **Giọng dạy bằng VÍ DỤ rẻ và ăn hơn dạy bằng LUẬT.**
+- **Ngôn ngữ đầu ra LLM** (`lib/llm/locale.ts` `withLang`): câu chỉ định vào USER message, không system; mọi khoá cache
+  của route có luận phải thêm `localeKeySuffix` (`vi` → '' giữ khoá cũ); `laso_public.luan_giai` CHỈ chứa tiếng Việt
+  (không cột ngôn ngữ) — ghi bản Nhật vào là đè bản Việt người đã mua. `docs/i18n/QUY-UOC.md`.
 - **`extractGenericContext` bỏ IM LẶNG mọi giá trị là object** ⇒ payload gửi rail
   phải PHẲNG. `npm run check:railfields` / `check:railwrap`.
 - **Bản đang chạy phải khớp bản trong repo** — edge function / RPC deploy xong phải
@@ -234,6 +237,9 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 - **Bảng âm lịch (vn + cn/kr/jp theo NƠI SINH) SINH bằng `gen-lunar-table.mjs [--lich]`**,
   `oracle:lunar` vét cạn + HKO/KASI. **`lich` phải theo lá số tới mọi chỗ tính/khoá** (thiếu = lịch VN, im lặng).
   **Bản vanilla BỎ cờ `isLeap`** — nợ CỐ Ý, đừng sửa mò.
+- **Bát Tự lịch cn/kr/jp đổi trụ tháng/năm theo THỜI ĐIỂM vào tiết** (`<TIET_KHI_TABLE>` SINH bằng
+  `gen-tiet-khi-table.mjs`, cần `lich`+`gioLich/phutLich` — server `birth.hour/minute`); **vn vẫn theo NGÀY,
+  nợ CỐ Ý** — đổi là đổi tứ trụ người VN. `npm run check:tietkhi`.
 - **Khoá "cùng lá số" là ÂM LỊCH + giới tính, không phải ngày dương** (lá số lặp
   chu kỳ **60 năm**). ⚠️ `lasoKey()` băm ngày DƯƠNG — không tái dùng để gom lá số.
 - **Bảng ĐỐI XỨNG tự kiểm được, không cần nguồn ngoài** (A nhìn B = B nhìn A).

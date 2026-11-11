@@ -28,6 +28,9 @@
 // ============================================================
 import { callRpc, getConfig } from './autopilot';
 import { sendMarketingEmail } from '../email/send';
+import { getUserLocales } from '../email/locale';
+import { renderReminder } from '../email/i18n';
+import { DEFAULT_LOCALE } from '../i18n/locales';
 import { voucherGrant } from '../billing/vouchers';
 
 interface ReminderConfig {
@@ -61,17 +64,6 @@ interface AtRiskUser {
   event_count: number;
 }
 
-function reminderHtml(balance: number, withVoucher: boolean): string {
-  const idleDaysText = 'một thời gian';
-  const voucherBlock = withVoucher
-    ? `<p style="font-size:14px;color:#333;margin-top:14px">🎟️ Quà quay lại: giảm thêm <b>${WINBACK_PERCENT}%</b> cho lượt mua tiếp theo, có hiệu lực <b>${WINBACK_DAYS} ngày</b> — đã nằm sẵn trong tài khoản, tự động áp lúc thanh toán, không cần nhập mã.</p>`
-    : '';
-  return `<p style="font-size:15px;color:#061A2E">Tử Vi Minh Bảo nhớ bạn ghé lâu rồi chưa quay lại.</p>
-<p style="font-size:14px;color:#333">Bạn đang còn <b>${balance} Lượng</b> chưa dùng trong tài khoản — vận trình mỗi ngày một khác, ghé xem lá số/vận hạn mới nhất của ${idleDaysText} qua nhé.</p>
-${voucherBlock}
-<p style="margin-top:20px"><a href="https://tuviminhbao.com/app" style="display:inline-block;background:#061A2E;color:#C9A84C;padding:12px 28px;border-radius:4px;text-decoration:none;font-size:13px;letter-spacing:1px">Xem ngay →</a></p>`;
-}
-
 export interface EmailReminderResult {
   ran: boolean;
   sent: number;
@@ -95,17 +87,21 @@ export async function runEmailReminderIdle(): Promise<EmailReminderResult> {
   // cron chạy hằng tuần và user vẫn còn nằm trong segment tuần sau.
   const monthKey = new Date().toISOString().slice(0, 7);
 
+  const locales = await getUserLocales(segment.map((u) => u.user_id));
   for (const u of segment) {
     if (budgetLeft <= 0) break;
     if (!u.email) continue;
 
+    const locale = locales.get(u.user_id) ?? DEFAULT_LOCALE;
+    const mail = renderReminder(locale, u.balance, cfg.voucherEnabled ? { percent: WINBACK_PERCENT, days: WINBACK_DAYS } : null);
     const result = await sendMarketingEmail({
       dedupeKey: `reminder-idle-${u.user_id}-${monthKey}`,
       template: 'reminder-idle-credits',
       to: u.email,
-      subject: 'Bạn còn Lượng chưa dùng — Tử Vi Minh Bảo',
-      html: reminderHtml(u.balance, cfg.voucherEnabled),
+      subject: mail.subject,
+      html: mail.html,
       userId: u.user_id,
+      locale,
     });
     if (result.ok) {
       sent++;

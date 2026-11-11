@@ -27,6 +27,9 @@
 // ============================================================
 import { callRpc, getConfig } from './autopilot';
 import { sendMarketingEmail } from '../email/send';
+import { getUserLocales } from '../email/locale';
+import { renderAbandoned } from '../email/i18n';
+import { DEFAULT_LOCALE } from '../i18n/locales';
 import { voucherGrant } from '../billing/vouchers';
 
 interface AbandonedConfig {
@@ -58,16 +61,6 @@ interface AbandonedUser {
   tool_id: string;
   tool_label: string | null;
   last_click: string;
-}
-
-function abandonedHtml(toolLabel: string, withVoucher: boolean): string {
-  const voucherBlock = withVoucher
-    ? `<p style="font-size:14px;color:#333;margin-top:14px">🎟️ Hoàn tất trong <b>${WINBACK_HOURS} giờ</b> tới để được giảm thêm <b>${WINBACK_PERCENT}%</b> — đã nằm sẵn trong tài khoản, tự động áp lúc thanh toán, không cần nhập mã.</p>`
-    : '';
-  return `<p style="font-size:15px;color:#061A2E">Bạn vừa xem <b>${toolLabel}</b> nhưng chưa hoàn tất mở khoá.</p>
-<p style="font-size:14px;color:#333">Kết quả vẫn đang chờ — quay lại hoàn tất để đọc trọn bản luận nhé.</p>
-${voucherBlock}
-<p style="margin-top:20px"><a href="https://tuviminhbao.com/app" style="display:inline-block;background:#061A2E;color:#C9A84C;padding:12px 28px;border-radius:4px;text-decoration:none;font-size:13px;letter-spacing:1px">Quay lại →</a></p>`;
 }
 
 export interface AbandonedResult {
@@ -103,18 +96,22 @@ export async function runEmailAbandonedCheckout(): Promise<AbandonedResult> {
   let budgetLeft = cfg.enabledBudgetPerRun;
   const dayKey = new Date().toISOString().slice(0, 10);
 
+  const locales = await getUserLocales(segment.map((u) => u.user_id));
   for (const u of segment) {
     if (budgetLeft <= 0) break;
     if (!u.email) continue;
 
     const toolLabel = u.tool_label || u.tool_id;
+    const locale = locales.get(u.user_id) ?? DEFAULT_LOCALE;
+    const mail = renderAbandoned(locale, toolLabel, cfg.voucherEnabled ? { percent: WINBACK_PERCENT, hours: WINBACK_HOURS } : null);
     const result = await sendMarketingEmail({
       dedupeKey: `abandoned-${u.user_id}-${dayKey}`,
       template: 'reminder-abandoned-checkout',
       to: u.email,
-      subject: `Bạn còn dở "${toolLabel}" — Tử Vi Minh Bảo`,
-      html: abandonedHtml(toolLabel, cfg.voucherEnabled),
+      subject: mail.subject,
+      html: mail.html,
       userId: u.user_id,
+      locale,
     });
     if (result.ok) {
       sent++;

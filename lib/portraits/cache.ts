@@ -24,6 +24,7 @@
 
 import { createHash } from 'crypto';
 import type { BirthParams } from '@/lib/contract/v1';
+import { tietKhiKhoa } from '@/lib/engine/tubinh';
 import { recordUserReport } from '@/lib/reports/userReports';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -80,6 +81,10 @@ export function lasoKey(birth: BirthParams, extra?: string): string {
     // lá số KHÁC lịch VN ⇒ phải khác khoá. CHỈ thêm khi khác 'vn' — khoá của mọi
     // lá số VN giữ nguyên từng byte (đổi khoá là mồ côi cache + quyền sở hữu).
     ...(birth.lich && birth.lich !== 'vn' ? [`lich:${birth.lich}`] : []),
+    // Bát Tự cn/kr/jp đổi trụ tháng theo PHÚT vào tiết (i18n W3b): sinh trong ±1
+    // ngày quanh mốc tiết thì thêm chỉ số tiết, để hai người cùng canh nhưng ở hai
+    // bên mốc không dùng chung kết quả. Ngoài cửa sổ đó khoá y như trước.
+    ...((k) => (k ? [k] : []))(tietKhiKhoa(birth)),
   ].join('|');
   return createHash('sha256').update(canonical).digest('hex').slice(0, 32);
 }
@@ -101,7 +106,14 @@ export function birthFromQuery(sp: URLSearchParams): BirthParams {
     gender: sp.get('g') === 'nu' ? 'nu' : 'nam',
     isLunar: sp.get('lunar') === '1',
     ...(sp.get('lc') ? { lich: sp.get('lc') as BirthParams['lich'] } : {}),
+    ...hourMinuteFromQuery(sp.get('hm')),
   };
+}
+
+/** `hm` = giờ·60 + phút (giờ của lịch) — chở giờ:phút chính xác qua query cho `lasoKey`. */
+export function hourMinuteFromQuery(v: string | null): Pick<BirthParams, 'hour' | 'minute'> {
+  const n = v == null || v === '' ? NaN : Number(v);
+  return Number.isInteger(n) && n >= 0 && n < 1440 ? { hour: Math.floor(n / 60), minute: n % 60 } : {};
 }
 
 /**

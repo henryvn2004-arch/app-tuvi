@@ -247,7 +247,7 @@ export async function settlePayPalTopup(
     // response — cùng lý do fireServerPurchase tự bọc waitUntil bên trong.
     waitUntil(alertNewPayment({ provider: 'paypal', amountVnd: pkg.amountVnd, credits: pkg.credits, userId }));
     waitUntil(sendInvoiceEmail({
-      userId, orderId, provider: 'paypal', credits: pkg.credits, amountVnd: pkg.amountVnd,
+      userId, orderId, provider: 'paypal', credits: pkg.credits, amountUsd: paidUsd, amountVnd: pkg.amountVnd,
       label: pkg.label, balance: row.balance,
     }));
   }

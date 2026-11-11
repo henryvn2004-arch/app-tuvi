@@ -305,10 +305,10 @@ export async function GET(): Promise<Response> {
   </main>
 </div>
 <script src="/track.js?v=4" defer></script>
-<script src="/nav.js?v=48" data-icons-only></script>
-<script src="/auth.js?v=6"></script>
+<script src="/nav.js?v=49" data-icons-only></script>
+<script src="/auth.js?v=7"></script>
 <script>window.SHELL_ACTIVE='thu-vien';</script>
-<script src="/shell.js?v=140"></script>
+<script src="/shell.js?v=141"></script>
 </body></html>`;
 
   return new NextResponse(html, {

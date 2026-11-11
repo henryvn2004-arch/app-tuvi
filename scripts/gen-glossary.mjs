@@ -105,7 +105,7 @@ function them(k, vi, han, en, flags, nSyl, ov = {}) {
     throw new Error(`${where}: ${[...han].length} chữ Hán ≠ ${expected} âm tiết`);
   // Soát chéo với Unihan kVietnamese: chỉ CẢNH BÁO (kVietnamese hay ghi âm thuần Việt: 紫 "tía").
   const syl = vi.split(/\s+/);
-  if (!flags.includes('n') && syl.length === [...han].length) {
+  if (k !== 'gio' && !flags.includes('n') && syl.length === [...han].length) {
     [...han].forEach((ch, i) => {
       const v = info(ch).viet;
       if (v && !v.some((x) => noTone(x) === noTone(syl[i])))
@@ -148,6 +148,11 @@ for (let i = 0; i < 60; i++) {
   const z = CHI[i % 12];
   them('canchi', `${c} ${z}`, canVi[c] + chiVi[z], `${CAN_EN[c]}-${CHI_EN[z].split(' ')[0]}`, '');
 }
+// "Giờ Tý"…"Giờ Hợi" (W6b): Hán = chi + 時 (子時), ja = 子の刻, ko = Unihan (자시), en = pinyin + "hour". Sinh từ chiVi — không gõ tay.
+for (const z of CHI)
+  them('gio', `Giờ ${z}`, chiVi[z] + '時', `${CHI_EN[z].split(' ')[0]} hour`, '', undefined, {
+    ja: `${chiVi[z]}の刻`,
+  });
 
 const dup = out.map((t) => `${t.k}:${t.vi}`).filter((x, i, a) => a.indexOf(x) !== i);
 if (dup.length) throw new Error('trùng thuật ngữ: ' + [...new Set(dup)].join(', '));

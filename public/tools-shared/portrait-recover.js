@@ -32,7 +32,9 @@
       '&' + (p ? p + 'g' : 'g') + '=' + (b.gender === 'nu' ? 'nu' : 'nam') +
       '&' + (p ? p + 'l' : 'lunar') + '=' + (b.isLunar ? '1' : '0') +
       // Lịch âm theo nơi sinh — vào khoá cache (`lasoKey`) nên phải đi kèm; VN thì bỏ trống.
-      (b.lich && b.lich !== 'vn' ? '&' + p + 'lc=' + encodeURIComponent(b.lich) : '');
+      (b.lich && b.lich !== 'vn' ? '&' + p + 'lc=' + encodeURIComponent(b.lich) : '') +
+      // Giờ:phút chính xác (i18n W3b) — `lasoKey` thêm chỉ số tiết cho cn/kr/jp sinh sát mốc tiết.
+      (b.lich && b.lich !== 'vn' && b.hour != null ? '&' + p + 'hm=' + (b.hour * 60 + (b.minute || 0)) : '');
   }
 
   /**

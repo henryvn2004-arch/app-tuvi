@@ -62,6 +62,13 @@ export interface BirthParams {
   year?: number;
   /** Giờ sinh: 0..11 theo địa chi Tý..Hợi, hoặc -1 nếu không rõ */
   hourBranch?: number;
+  /**
+   * Giờ:phút sinh chính xác (0..23, 0..59), CÙNG hệ giờ với day/month/year (thêm
+   * 2026-11, i18n W3b). Chỉ Bát Tự lịch cn/kr/jp đọc — trụ tháng/năm quyết bằng
+   * thời điểm vào tiết khí. Thiếu/lệch canh với hourBranch ⇒ đầu canh giờ.
+   */
+  hour?: number;
+  minute?: number;
   /** 'nam' | 'nu' */
   gender?: 'nam' | 'nu';
   /** true nếu day/month/year đã là ÂM lịch (mặc định false = dương) */
@@ -176,6 +183,14 @@ export interface ChatRequestV1 {
    * không gửi field này vẫn chạy y hệt trước.
    */
   historyMode?: 'full' | 'delta';
+  /**
+   * Ngôn ngữ trả lời (i18n W8, additive): 'vi' (mặc định) · 'en' · 'ja' · 'ko' · 'zh-tw' · 'zh-cn'.
+   * DO SERVER điền từ request (`requestLocale`, lib/llm/locale.ts: header `x-tvmb-locale` rồi `Referer`
+   * của trang) — giá trị client gửi trong body bị ghi đè. Kênh chat (Telegram/Zalo/Messenger) gọi
+   * `runAgent` trực tiếp không đặt field này ⇒ luôn tiếng Việt. Khác 'vi' thì câu chỉ định ngôn ngữ
+   * đi vào TIN USER, không vào system (giữ prompt cache).
+   */
+  locale?: 'vi' | 'en' | 'ja' | 'ko' | 'zh-tw' | 'zh-cn';
   /** true → SSE stream; false → JSON một lần. Mặc định true. */
   stream?: boolean;
   /** Tham số sinh nếu đã có (đỡ phải hỏi lại) — luồng LÁ SỐ. */

@@ -20,14 +20,23 @@
 import { Resend } from 'resend';
 import { unsubscribeUrl } from './unsub-token';
 import { isShadowEmail } from '@/lib/channels/shadow-email';
+import { brandName, renderMarketingFooter } from './i18n';
+import type { Locale } from '@/lib/i18n/locales';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 // Hai subdomain TÁCH RIÊNG để cô lập uy tín gửi: một khiếu nại spam ở thư
 // quảng bá không kéo OTP/hoá đơn rơi vào thư rác theo (xem proposal đã chốt).
-const FROM_TRANSACTIONAL =
-  process.env.EMAIL_FROM_TRANSACTIONAL || 'Tử Vi Minh Bảo <noreply@mail.tuviminhbao.com>';
-const FROM_MARKETING =
-  process.env.EMAIL_FROM_MARKETING || 'Tử Vi Minh Bảo <tin@tin.tuviminhbao.com>';
+// Env đặt tay thì giữ nguyên MỌI ngôn ngữ (Henry quyết). Không đặt thì tên hiển thị theo
+// ngôn ngữ người nhận (明宝 / 명보 / 明寶 / Minh Bao) — chỉ đổi PHẦN TÊN, địa chỉ gửi giữ nguyên.
+const FROM_TRANSACTIONAL_ENV = process.env.EMAIL_FROM_TRANSACTIONAL;
+const FROM_MARKETING_ENV = process.env.EMAIL_FROM_MARKETING;
+
+function fromAddress(kind: 'transactional' | 'marketing', locale?: Locale): string {
+  const env = kind === 'transactional' ? FROM_TRANSACTIONAL_ENV : FROM_MARKETING_ENV;
+  if (env) return env;
+  const addr = kind === 'transactional' ? 'noreply@mail.tuviminhbao.com' : 'tin@tin.tuviminhbao.com';
+  return `${brandName(locale)} <${addr}>`;
+}
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -56,6 +65,9 @@ export interface SendEmailInput {
   subject: string;
   html: string;
   userId?: string;
+  /** Ngôn ngữ người nhận — chỉ dùng để dựng tên người gửi và footer huỷ đăng ký
+   *  (nội dung thư do nơi gọi dựng sẵn bằng lib/email/i18n.ts). Thiếu ⇒ tiếng Việt. */
+  locale?: Locale;
   /** Đính kèm (vd PDF luận giải). `content` là base64. */
   attachments?: { filename: string; content: string }[];
 }
@@ -134,7 +146,7 @@ async function dispatch(
 
   try {
     const { data, error } = await resend.emails.send({
-      from: kind === 'transactional' ? FROM_TRANSACTIONAL : FROM_MARKETING,
+      from: fromAddress(kind, input.locale),
       to: input.to,
       subject: input.subject,
       html: input.html,
@@ -164,16 +176,11 @@ export async function sendTransactionalEmail(input: SendEmailInput): Promise<Sen
  * chưa được set — vi phạm Nghị định 91/2020/NĐ-CP nếu gửi thiếu.
  */
 export async function sendMarketingEmail(input: SendEmailInput): Promise<SendEmailResult> {
-  const unsubLink = unsubscribeUrl(input.to);
+  const unsubLink = unsubscribeUrl(input.to, input.locale);
   if (!unsubLink) return { ok: false, reason: 'not_configured' };
   if (await isUnsubscribed(input.to)) return { ok: false, reason: 'unsubscribed' };
 
-  const footer = `<hr style="margin-top:32px;border:none;border-top:1px solid #e5e5e5">
-<p style="font-size:12px;color:#888">
-  Tử Vi Minh Bảo — tuviminhbao.com<br>
-  Bạn nhận được thư này vì đã đăng ký tài khoản tại tuviminhbao.com.
-  <a href="${unsubLink}">Huỷ nhận email này</a>.
-</p>`;
+  const footer = renderMarketingFooter(input.locale, unsubLink);
 
   return dispatch({ ...input, html: input.html + footer }, 'marketing');
 }

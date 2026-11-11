@@ -299,6 +299,13 @@ jobs:
       - name: Biên âm lịch — ngoài tầm phải trả null/ném, không bịa lá số
         run: npm run check:lunar
 
+      # Bát Tự lịch cn/kr/jp (nơi sinh Trung/Đài/HK/Hàn/Nhật) đổi trụ tháng/năm
+      # theo THỜI ĐIỂM vào tiết — bảng sinh bằng astronomy-engine, đối chứng NAOJ
+      # (giờ:phút) + HKO (ngày) 1901–2100, ca vàng ±1′/±1h ở Seoul/Đài Bắc/Tokyo.
+      # Lịch vn PHẢI y nguyên: hash toàn bộ kết quả mẫu quét khớp engine trước W3b.
+      - name: Tiết khí theo thời điểm (cn/kr/jp) + lịch vn không đổi
+        run: npm run check:tietkhi
+
       # Âm → dương (public/tools-shared/am-duong.js). Bát Tự cần ngày DƯƠNG; người
       # nhập âm lịch trong chat từng bị đưa thẳng ngày âm vào tinhBatTu ⇒ tứ trụ sai.
       - name: Âm → dương — cặp đã biết + vét cạn 1900–2100 + nơi gọi còn đổi
@@ -454,3 +461,13 @@ jobs:
 
       - name: Typecheck (tsc --noEmit toàn app)
         run: npm run typecheck
+
+      # Trang 特定商取引法に基づく表記 (W11): còn 【要入力】 thì BẮT BUỘC noindex; điền xong thì noindex PHẢI gỡ;
+      # đủ chín mục chuẩn. Placeholder lọt lên Google = trang pháp lý trống mang tên thương hiệu.
+      - name: Trang 特商法 — noindex đi cùng placeholder
+        run: npm run check:tokushoho
+
+      # Email 6 ngôn ngữ (W11): hàm chữ dùng đủ tham số như bản vi, zh-cn = OpenCC(zh-tw), mọi cặp
+      # cross-sell có chữ ở mọi ngôn ngữ, không nhắc "AI". Nội dung email không đi qua check:i18n.
+      - name: Email đa ngôn ngữ — đủ khoá, đủ tham số, zh-cn khớp OpenCC
+        run: npm run check:emaili18n

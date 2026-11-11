@@ -14,7 +14,7 @@
 //   2. Tài khoản: `ensureChatUser` — tin đầu tiên tạo luôn tài khoản thật,
 //      nhận quà đăng ký y như web (lib/channels/account.ts).
 //   3. Cổng tính phí GIỐNG HỆT rail web (/api/v1/chat): tiêu lượt tặng trước,
-//      rồi mới trừ Lượng; hết thì gửi QR nạp ngay trong chat.
+//      rồi mới trừ Lượng; hết thì mời nạp (link web PayPal USD, hoặc QR khi rail VNĐ bật).
 //   4. runConversation → nút gợi ý tiếp theo (câu hỏi gợi ý, mở lá số/công cụ
 //      trên web đã đăng nhập sẵn, hỏi thầy khác).
 // ============================================================
@@ -34,7 +34,7 @@ import { computeLaso } from '@/lib/engine/laso';
 import { todayVN } from '@/lib/engine/van-ngay';
 import { claimLoginCode, parseLoginCode } from './login';
 import { GOP_CMD, isShadowUser, maskEmail, parseEmail, startEmailLink, verifyEmailLink, hasPendingEmailLink } from './email-link';
-import { TOPUP_CMD, createChatTopup, parseTopup, topupCaption, topupChoices, vietQrImageUrl } from './topup';
+import { TOPUP_CMD, createChatTopup, parseTopup, topupCaption, topupChoices, vietQrImageUrl, vndRailsEnabled, webTopupOffer } from './topup';
 import { GUESTS, detectMention, guestById, guestFromMoi, moiCau, type GuestId } from './guests';
 import { KHOANG_GOI_Y, LOI_LA_SO, SAN_PHAM_MON, chonTinhNang, dangDau, loiMon, nhanLuanGiai, nhanMon } from './goi-y';
 import { cungChuDe } from '@/lib/agent/luan-chu-de';
@@ -43,7 +43,7 @@ import { THAY_LIST, anhThay, chonThay, gioiThieuThay, thayCuaChat, timThay, type
 import { getRailPrice } from '@/lib/billing/pricing';
 import { paywallDisabled, getBalance, deductCredits, logTransaction } from '@/lib/billing/credits';
 import { railFreeRemaining, railFreeConsume } from '@/lib/billing/viral-budget';
-import { vndPerCredit } from '@/lib/billing/packages';
+import { usdLabel, usdPerCredit } from '@/lib/billing/packages';
 import type { ChatConfig } from '@/lib/config/appConfig';
 
 const SITE = 'https://tuviminhbao.com';
@@ -78,7 +78,6 @@ export interface ChannelEvent {
 }
 
 const norm = (s: string) => s.trim().toLowerCase();
-const vnd = (n: number) => `${Math.round(n).toLocaleString('vi-VN')}đ`;
 
 // Lệnh = CÂU TIẾNG VIỆT mà nút gửi đi: Zalo hiện nguyên chữ `reply` thành tin
 // của khách, Telegram in nó lên bàn phím — khách không bao giờ phải gõ "/".
@@ -472,17 +471,25 @@ async function accountGate(
   if (paywallDisabled() || cost <= 0) return { allowed: true };
   const [freeLeft, balance] = await Promise.all([railFreeRemaining(userId), getBalance(userId)]);
   if (freeLeft <= 0 && balance < cost) {
-    const [rate, choices, bong] = await Promise.all([vndPerCredit(), topupChoices(), isShadowUser(userId)]);
+    const [rate, vndRails, bong] = await Promise.all([usdPerCredit(), vndRailsEnabled(), isShadowUser(userId)]);
     // Tài khoản bóng hết Lượng: rất có thể người này ĐÃ có ví trên web ⇒ mời gộp.
     const gop: ChatButton[] = bong ? [{ title: 'Gộp tài khoản web', reply: 'Gộp tài khoản web' }] : [];
-    await sendMenu(
-      kit.io,
-      ev.chatId,
-      `Mỗi câu hỏi ${vnd(cost * rate)} (${cost} Lượng) — ví của bạn còn ${balance} Lượng.\n\n` +
-        'Nạp ngay tại đây: chọn mức, thầy gửi mã QR, quét bằng app ngân hàng là xong — không phải rời cuộc trò chuyện.' +
-        (bong ? '\n\nĐã có tài khoản trên tuviminhbao.com? Bấm "Gộp tài khoản web" để dùng luôn ví đó ở đây.' : ''),
-      [...gop, ...choices.slice(0, Math.max(0, kit.maxReplyButtons - gop.length))],
-    );
+    // USD là giá CHÍNH (W5), Lượng lùi vào ngoặc; đọc hụt đơn giá ⇒ chỉ nói Lượng, không bịa số.
+    const tien = usdLabel(cost, rate);
+    const gia = `Mỗi câu hỏi ${tien ? `${tien} (${cost} Lượng)` : `${cost} Lượng`} — ví của bạn còn ${balance} Lượng.\n\n`;
+    const gopLoi = bong ? '\n\nĐã có tài khoản trên tuviminhbao.com? Bấm "Gộp tài khoản web" để dùng luôn ví đó ở đây.' : '';
+    if (vndRails) {
+      const choices = await topupChoices();
+      await sendMenu(
+        kit.io,
+        ev.chatId,
+        gia + 'Nạp ngay tại đây: chọn mức, thầy gửi mã QR, quét bằng app ngân hàng là xong — không phải rời cuộc trò chuyện.' + gopLoi,
+        [...gop, ...choices.slice(0, Math.max(0, kit.maxReplyButtons - gop.length))],
+      );
+    } else {
+      const offer = await webTopupOffer(userId);
+      await sendMenu(kit.io, ev.chatId, gia + offer.text + gopLoi, [offer.button, ...gop].slice(0, kit.maxReplyButtons));
+    }
     return { allowed: false };
   }
   return {
@@ -665,8 +672,15 @@ async function handleSoLaSo(kit: ChannelKit, ev: ChannelEvent, userId: string | 
   );
 }
 
-// ── Nạp tiền ngay trong chat ───────────────────────────────────────────
+// ── Nạp tiền ───────────────────────────────────────────────────────────
+// Rail VNĐ tắt (mặc định, W5/W12) ⇒ bảng giá USD + link handoff sang trang nạp
+// web (PayPal), xét TRƯỚC mọi bước tạo đơn payOS. Bật ⇒ QR ngay trong chat như cũ.
 async function handleTopup(kit: ChannelKit, ev: ChannelEvent, userId: string | null, arg: string): Promise<void> {
+  if (!(await vndRailsEnabled())) {
+    const offer = await webTopupOffer(userId);
+    await sendMenu(kit.io, ev.chatId, offer.text, [offer.button]);
+    return;
+  }
   if (!userId) {
     await kit.io.sendText(ev.chatId, `Bạn nạp Lượng tại ${SITE}/topup.html nhé.`);
     return;
@@ -1070,6 +1084,6 @@ async function demCau(userId: string, cost: number): Promise<{ n: number; free: 
 /** Chỉ lên tiếng khi SẮP HẾT (< 3 câu) — nhắc mỗi lượt làm tin loãng (Henry 2026-09-29). */
 function loiConCau({ n, free }: { n: number; free: number }): string {
   if (n >= 3) return '';
-  if (n <= 0) return `Bạn đã dùng hết câu hỏi — nhắn "Nạp Lượng" để nạp ngay tại đây.`;
+  if (n <= 0) return `Bạn đã dùng hết câu hỏi — nhắn "Nạp Lượng" để nạp thêm.`;
   return `Còn ${n} câu hỏi${free > 0 ? ` (${free} lượt tặng)` : ''}.`;
 }
