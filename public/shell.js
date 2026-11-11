@@ -860,7 +860,7 @@
           // Lá số đang xem (chính người hỏi) không phải "người nhà".
           return !(b && +x.ngay === +b.day && +x.thang === +b.month && +x.nam === +b.year);
         }).map(function (it) {
-          return { id: it.id, name: String(it.label || (it.birth && it.birth.hoten) || ('Người nhà ' + it.birth.nam)).trim() };
+          return { id: it.id, name: String(it.label || (it.birth && it.birth.hoten) || (T('js.shellui.nguoi-nha', 'Người nhà ') + it.birth.nam)).trim() };
         });
       })
       .catch(function () { _family = []; })
@@ -889,7 +889,7 @@
     if (!chat || !t || !t.ngay) return;
     var d = document.createElement('div');
     d.className = 'tt-note';
-    d.textContent = 'Thầy ghi vào Sổ tiên tri · hỏi lại con ngày ' + ngayVN(t.ngay);
+    d.textContent = T('js.shellui.thay-ghi-vao-so-tien-tri', 'Thầy ghi vào Sổ tiên tri · hỏi lại con ngày ') + ngayVN(t.ngay);
     chat.appendChild(d);
     chat.scrollTop = chat.scrollHeight;
     try { track('cta_click', { tool_id: ACTIVE, slug: 'tien_tri_ghi' }); } catch (e) { /* ignore */ }
@@ -911,7 +911,7 @@
         if (st.linked) return;
         var d = document.createElement('div');
         d.className = 'tt-kenh';
-        d.innerHTML = '<span>Đến ngày ' + esc(ngayVN(ngay)) + ' con muốn thầy nhắn qua đâu?</span>' +
+        d.innerHTML = T('js.shellui.den-ngay', '<span>Đến ngày ') + esc(ngayVN(ngay)) + T('js.shellui.con-muon-thay-nhan-qua-dau', ' con muốn thầy nhắn qua đâu?</span>') +
           '<div class="tt-act"><button type="button" data-k="tg">Telegram</button><button type="button" data-k="app">Chỉ khi con mở app</button></div>';
         chat.appendChild(d); chat.scrollTop = chat.scrollHeight;
         d.addEventListener('click', function (e) {
@@ -949,8 +949,8 @@
         var a = (it.author_id && authorById(it.author_id)) || _author;
         var row = document.createElement('div'); row.className = 'msg a';
         row.innerHTML = '<img class="msg-ava" src="' + (a ? '/authors/' + a.id + '.jpg' : authorAva()) + '" alt=""><div class="msg-body">' +
-          '<p>Hôm ' + esc(ngayVN(String(it.created_at || '').slice(0, 10))) + ' thầy' + (a ? ' ' + esc(a.name) : '') + ' có nói: <i>“' + esc(it.noi_dung) + '”</i></p>' +
-          '<p>Chuyện đó thế nào rồi con?</p>' +
+          T('js.shellui.hom', '<p>Hôm ') + esc(ngayVN(String(it.created_at || '').slice(0, 10))) + T('js.shellui.thay-3v67', ' thầy') + (a ? ' ' + esc(a.name) : '') + T('js.shellui.co-noi', ' có nói: <i>“') + esc(it.noi_dung) + '”</i></p>' +
+          T('js.shellui.chuyen-do-the-nao-roi-con', '<p>Chuyện đó thế nào rồi con?</p>') +
           '<div class="tt-act"><button type="button" data-k="dung">Đúng rồi thầy</button><button type="button" data-k="chua">Chưa thấy gì</button><button type="button" data-k="de_sau">Để sau</button></div></div>';
         chat.appendChild(row); chat.scrollTop = chat.scrollHeight;
         try { track('cta_click', { tool_id: ACTIVE, slug: 'tien_tri_hoi_lai' }); } catch (e) { /* ignore */ }
@@ -1013,7 +1013,7 @@
     if (days.length < 3) return false;
     var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
     document.body.classList.remove('chat-empty');
-    thayBubble('<p>Con muốn thầy đưa ngày tốt, ngày xung tuổi của riêng con vào lịch điện thoại không? Mỗi sáng mở lịch là thấy.</p>' +
+    thayBubble(T('js.shellui.con-muon-thay-dua-ngay-tot', '<p>Con muốn thầy đưa ngày tốt, ngày xung tuổi của riêng con vào lịch điện thoại không? Mỗi sáng mở lịch là thấy.</p>') +
       '<div class="tt-act lich-act"><button type="button" data-k="ical">iPhone / Mac</button><button type="button" data-k="google">Google Lịch</button><button type="button" data-k="de_sau">Để sau</button></div>');
     try { track('cta_click', { tool_id: ACTIVE, slug: 'lich_rieng_moi' }); } catch (e) { /* ignore */ }
     var rows = chat.querySelectorAll('.msg.a'), act = rows.length ? rows[rows.length - 1].querySelector('.lich-act') : null;
@@ -1049,7 +1049,7 @@
         try { if (localStorage.getItem(key)) return; } catch (e) { return; }
         var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
         document.body.classList.remove('chat-empty');
-        thayBubble('<p>Còn ' + t.conNgay + ' ngày nữa là Tết. Thầy xem tuổi xông đất hợp nhà con và giờ, hướng xuất hành mùng 1–3 cho cả nhà nhé?</p>' +
+        thayBubble(T('js.shellui.con-25rm', '<p>Còn ') + t.conNgay + T('js.shellui.ngay-nua-la-tet-thay-xem', ' ngày nữa là Tết. Thầy xem tuổi xông đất hợp nhà con và giờ, hướng xuất hành mùng 1–3 cho cả nhà nhé?</p>') +
           '<div class="tt-act tet-act"><button type="button" data-k="nha">Xem cho cả nhà</button><button type="button" data-k="minh">Chỉ mình con</button><button type="button" data-k="de_sau">Để sau</button></div>');
         try { track('cta_click', { tool_id: ACTIVE, slug: 'tet_moi', meta: { con_ngay: t.conNgay } }); } catch (e) { /* ignore */ }
         var rows = chat.querySelectorAll('.msg.a'), act = rows.length ? rows[rows.length - 1].querySelector('.tet-act') : null;
@@ -1076,11 +1076,11 @@
   // chốt của luật giới thiệu: mỗi phiên tối đa một lần, bấm "Để sau" thì im
   // 14 ngày. Form là `TuviForm.renderChat` (một nguồn với mọi form trong chat).
   var FAM_VAI = {
-    chong: { nhan: 'Chồng', cua: 'chồng con', goi: 'anh ấy', gt: 'nam' },
-    vo:    { nhan: 'Vợ',    cua: 'vợ con',    goi: 'chị ấy', gt: 'nu' },
-    con:   { nhan: 'Con',   cua: 'cháu',      goi: 'cháu',   gt: 'nam' },
-    bo:    { nhan: 'Bố',    cua: 'bố con',    goi: 'ông',    gt: 'nam' },
-    me:    { nhan: 'Mẹ',    cua: 'mẹ con',    goi: 'bà',     gt: 'nu' },
+    chong: { nhan: T('js.shellui.chong', 'Chồng'), cua: T('js.shellui.chong-con', 'chồng con'), goi: T('js.shellui.anh-ay', 'anh ấy'), gt: 'nam' },
+    vo:    { nhan: T('js.shellui.vo', 'Vợ'),    cua: T('js.shellui.vo-con', 'vợ con'),    goi: T('js.shellui.chi-ay', 'chị ấy'), gt: 'nu' },
+    con:   { nhan: 'Con',   cua: T('js.shellui.chau', 'cháu'),      goi: T('js.shellui.chau', 'cháu'),   gt: 'nam' },
+    bo:    { nhan: T('js.shellui.bo', 'Bố'),    cua: T('js.shellui.bo-con', 'bố con'),    goi: T('js.shellui.ong', 'ông'),    gt: 'nam' },
+    me:    { nhan: T('js.shellui.me', 'Mẹ'),    cua: T('js.shellui.me-con', 'mẹ con'),    goi: T('js.shellui.ba', 'bà'),     gt: 'nu' },
   };
   var FAM_SNOOZE = 'tvmb_canha_snooze', FAM_SHOWN = 'tvmb_canha_shown';
   function showFamilyInvite(inv, q) {
@@ -1095,10 +1095,10 @@
     var d = document.createElement('div');
     d.className = 'fam-inv';
     d.innerHTML =
-      '<div class="fi-t">Thầy mới nhìn ' + v.goi + ' qua lá số của con thôi. Cho thầy ngày sinh của ' + v.cua +
-      ', thầy đọc thẳng lá số ' + v.goi + '.</div>' +
-      '<div class="fi-d">Lưu vào Sổ lá số, miễn phí. Lần sau gõ @ là gọi được.</div>' +
-      '<div class="fi-act"><button type="button" class="fi-go">Thêm lá số ' + v.cua.replace(/ con$/, '') + '</button>' +
+      ('<div class="fi-t">' + T('js.shellui.thay-moi-nhin', 'Thầy mới nhìn') + ' ') + v.goi + T('js.shellui.qua-la-so-cua-con-thoi', ' qua lá số của con thôi. Cho thầy ngày sinh của ') + v.cua +
+      T('js.shellui.thay-doc-thang-la-so', ', thầy đọc thẳng lá số ') + v.goi + '.</div>' +
+      ('<div class="fi-d">' + T('js.shellui.luu-vao-so-la-so-mien', 'Lưu vào Sổ lá số, miễn phí. Lần sau gõ @ là gọi được.') + '</div>') +
+      ('<div class="fi-act"><button type="button" class="fi-go">' + T('js.shellui.them-la-so', 'Thêm lá số') + ' ') + v.cua.replace(/ con$/, '') + '</button>' +
       '<button type="button" class="fi-skip">Để sau</button></div>';
     chat.appendChild(d);
     chat.scrollTop = chat.scrollHeight;
@@ -1127,9 +1127,9 @@
           prefix: 'canha',
           gioitinh: v.gt,
           savedPicker: false,
-          q1: 'Con gọi ' + v.goi + ' là gì (vd "' + (vai === 'chong' ? 'Anh Tuấn' : vai === 'con' ? 'Bé An' : v.nhan) + '"), giới tính gì?',
-          q2: 'Ngày sinh dương lịch của ' + v.goi + '?',
-          q3: 'Giờ sinh của ' + v.goi + ' là mấy giờ?',
+          q1: T('js.shellui.con-goi-la-gi', 'Con gọi {goi} là gì (vd "{vd}"), giới tính gì?', { goi: v.goi, vd: vai === 'chong' ? T('js.shellui.anh-tuan', 'Anh Tuấn') : vai === 'con' ? T('js.shellui.be-an', 'Bé An') : v.nhan }),
+          q2: T('js.shellui.ngay-sinh-duong-lich-cua', 'Ngày sinh dương lịch của ') + v.goi + '?',
+          q3: T('js.shellui.gio-sinh-cua', 'Giờ sinh của ') + v.goi + T('js.shellui.la-may-gio', ' là mấy giờ?'),
           submitLabel: 'Lập lá số →',
           onDone: function (b) { saveFamilyChart(vai, v, b, q); },
         });
@@ -1146,7 +1146,7 @@
     })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (res) {
-        if (!res || !res.item) { inlineErrorBubble(chat, 'chưa lưu được lá số ' + ten + '. Con thử lại ở Sổ lá số nhé.', '/app/so-la-so'); return; }
+        if (!res || !res.item) { inlineErrorBubble(chat, T('js.shellui.chua-luu-duoc-la-so', 'chưa lưu được lá số ') + ten + T('js.shellui.con-thu-lai-o-so-la', '. Con thử lại ở Sổ lá số nhé.'), '/app/so-la-so'); return; }
         try { track('cta_click', { tool_id: ACTIVE, slug: 'family_invite_saved', meta: { vai: vai } }); } catch (e) { /* ignore */ }
         _family = null;
         loadFamily(function () {
@@ -1155,11 +1155,11 @@
           // đọc thẳng lá số của họ (addressMember → xem_nguoi_nha).
           var input = document.getElementById('railInput');
           if (!input || streaming) return;
-          input.value = '@' + ten + ' ' + (q || ('năm nay ' + v.goi + ' thế nào thầy?'));
+          input.value = '@' + ten + ' ' + (q || (T('js.shellui.nam-nay', 'năm nay ') + v.goi + T('js.shellui.the-nao-thay', ' thế nào thầy?')));
           sendMsg();
         });
       })
-      .catch(function () { inlineErrorBubble(chat, 'mạng chập chờn, chưa lưu được lá số ' + ten + '.', '/app/so-la-so'); });
+      .catch(function () { inlineErrorBubble(chat, T('js.shellui.mang-chap-chon-chua-luu-duoc', 'mạng chập chờn, chưa lưu được lá số ') + ten + '.', '/app/so-la-so'); });
   }
   // Thanh "Cả nhà" trên ô nhập — chỉ hiện khi sổ ĐÃ có người nhà (làm trước,
   // gọi tên sau). Bấm tên = chèn "@Tên " vào đầu ô, cùng cử chỉ với menu "@".
@@ -1171,7 +1171,7 @@
     if (!_family.length) { el.style.display = 'none'; return; }
     // Nhãn "Cả nhà" là LINK sang trang Cả nhà mình (GĐ3) — tên tính năng chỉ
     // lộ ra SAU khi khách đã thấy thầy đọc người nhà (luật "làm trước, gọi tên sau").
-    el.innerHTML = '<a class="fs-l" href="/app/ca-nha">Cả nhà</a>' + _family.map(function (m, i) {
+    el.innerHTML = ('<a class="fs-l" href="/app/ca-nha">' + T('js.shellui.ca-nha', 'Cả nhà') + '</a>') + _family.map(function (m, i) {
       return '<button type="button" class="fs-c" data-i="' + i + '">@' + esc(m.name) + '</button>';
     }).join('');
     el.style.display = '';
@@ -1274,7 +1274,7 @@
     if (!pendingImages.length) { host.style.display = 'none'; host.innerHTML = ''; return; }
     host.style.display = '';
     host.innerHTML = pendingImages.map(function (im, i) {
-      return '<div class="thumb"><img src="' + im.url + '" alt=""><button type="button" data-rm="' + i + '" aria-label="Bỏ ảnh">×</button></div>';
+      return '<div class="thumb"><img src="' + im.url + '" alt=""><button type="button" data-rm="' + i + ('" aria-label="' + T('js.shellui.bo-anh', 'Bỏ ảnh') + '">×</button></div>');
     }).join('');
     host.querySelectorAll('[data-rm]').forEach(function (b) {
       b.addEventListener('click', function () { pendingImages.splice(parseInt(b.getAttribute('data-rm')), 1); renderThumbs(); });
@@ -1893,7 +1893,7 @@
         return (r.scenario.data.nameA || 'A') + ' × ' + (r.scenario.data.nameB || 'B');
       var bd = r.birth;
       if (bd && bd.dd) {
-        var g = bd.gender === 'nu' ? T('js.shellui.nu', 'Nữ') : 'Nam';
+        var g = bd.gender === 'nu' ? T('js.shellui.nu', 'Nữ') : T('js.shellui.nam', 'Nam');
         var d = [bd.dd, bd.mm, bd.yyyy].filter(Boolean).join('/');
         return [(bd.name || '').trim(), d, g].filter(Boolean).join(' · ');
       }
@@ -2046,11 +2046,11 @@
     var parts = [];
     var nm = (b.hoten || b.name || '').trim();
     if (nm) parts.push(nm);
-    if (g) parts.push(g === 'nu' ? 'Nữ' : 'Nam');
+    if (g) parts.push(g === 'nu' ? T('js.shellui.nu', 'Nữ') : T('js.shellui.nam', 'Nam'));
     var lunar = b.isLunar === true || b.amlich === true || b.duongLich === false;
-    parts.push(('0' + d).slice(-2) + '/' + ('0' + m).slice(-2) + '/' + y + (lunar ? ' (âm lịch)' : ' (dương lịch)'));
+    parts.push(('0' + d).slice(-2) + '/' + ('0' + m).slice(-2) + '/' + y + (lunar ? T('js.shellui.am-lich', ' (âm lịch)') : T('js.shellui.duong-lich', ' (dương lịch)')));
     var hi = Number(pick2(b, 'hourBranch', 'gioIdx', 'gio'));
-    if (hi >= 0 && hi < 12) parts.push('giờ ' + SHARE_CHI[hi] + ' (' + SHARE_GIO[hi] + ')');
+    if (hi >= 0 && hi < 12) parts.push(T('js.shellui.gio-chi', 'giờ {chi} ({khung})', { chi: SHARE_CHI[hi], khung: SHARE_GIO[hi] }));
     return parts.join(' · ');
   }
 
@@ -2830,8 +2830,8 @@
           '<line x1="12" y1="738" x2="34" y2="750" stroke="#F4EFE2" stroke-width="3" stroke-linecap="round"/>' +
         '</svg></div>' +
         '<div class="wsb-label"><div class="wsb-label-in"><div class="wsb-label-t">' + esc(wsTitleText()) + '</div><img class="wsb-seal" src="/seal.webp" alt=""></div></div>' +
-        (sub ? '<div class="wsb-cover-cap"><b>LÁ SỐ TRỌN ĐỜI</b><span>' + esc(sub) + '</span></div>' : '') +
-        '<div class="wsb-cover-foot"><div class="mk">✦</div><b>TỬ VI MINH BẢO</b><span>tuviminhbao.com</span></div>' +
+        (sub ? ('<div class="wsb-cover-cap">' + T('js.shellui.la-so-tron-doi', '<b>LÁ SỐ TRỌN ĐỜI</b>') + '<span>') + esc(sub) + '</span></div>' : '') +
+        ('<div class="wsb-cover-foot"><div class="mk">✦</div>' + T('js.shellui.tu-vi-minh-bao-lbff', '<b>TỬ VI MINH BẢO</b>') + '<span>' + T('js.shellui.tuviminhbao-com', 'tuviminhbao.com') + '</span></div>') +
       '</div>' +
       '<div class="wsb-quote"><div class="wsb-quote-in">' +
         '<div class="wsb-qmark">“</div>' +
@@ -2841,7 +2841,7 @@
         '<div class="wsb-qsrc">' + esc(meta.src) + '</div>' +
       '</div></div>' +
       (items.length ? (
-        '<div class="wsb-toc"><div class="wsb-toc-h"><b>MỤC LỤC</b><h2>' + esc(wsTitleText()) + '</h2></div><div class="wsb-toc-rule"></div>' +
+        ('<div class="wsb-toc"><div class="wsb-toc-h">' + T('js.shellui.muc-luc', '<b>MỤC LỤC</b>') + '<h2>') + esc(wsTitleText()) + '</h2></div><div class="wsb-toc-rule"></div>' +
         '<ul class="wsb-toc-list">' + tocHtml + '</ul></div>'
       ) : '');
     host.insertBefore(wrap, host.firstChild);
@@ -2890,8 +2890,8 @@
     var ngay = ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear();
     foot.innerHTML =
       '<div class="ws-print-foot-l"><img src="/seal.webp" alt="" class="ws-print-seal">' +
-      '<div><b>Tử Vi Minh Bảo</b><span>紫微明寶 · tuviminhbao.com</span>' +
-      '<span>In ngày ' + esc(ngay) + '</span></div></div>' +
+      T('js.shellui.tu-vi-minh-bao-tuviminhbao-com-k389', '<div><b>Tử Vi Minh Bảo</b><span>紫微明寶 · tuviminhbao.com</span>') +
+      T('js.shellui.in-ngay', '<span>In ngày ') + esc(ngay) + '</span></div></div>' +
       '<canvas class="ws-print-qr" id="wsPrintQrCv" width="120" height="120"></canvas>';
     var cv = document.getElementById('wsPrintQrCv');
     if (cv && window.QR) {
@@ -2911,9 +2911,9 @@
       back.innerHTML =
         '<div class="wsb-back">' +
           '<img class="wsb-back-seal" src="/seal.webp" alt="">' +
-          '<div class="wsb-back-brand"><b>TỬ VI MINH BẢO</b><span>紫微明寶</span></div>' +
+          ('<div class="wsb-back-brand">' + T('js.shellui.tu-vi-minh-bao-lbff', '<b>TỬ VI MINH BẢO</b>') + '<span>紫微明寶</span></div>') +
           '<canvas class="wsb-back-qr" id="wsBookBackQrCv" width="140" height="140"></canvas>' +
-          '<div class="wsb-back-cap">Quét mã để quay lại</div>' +
+          ('<div class="wsb-back-cap">' + T('js.shellui.quet-ma-de-quay-lai', 'Quét mã để quay lại') + '</div>') +
           '<div class="wsb-back-url">tuviminhbao.com</div>' +
         '</div>';
       host.appendChild(back);
@@ -3562,12 +3562,12 @@
         '<img class="stm-ava" src="' + authorAva() + '" alt="">' +
         ('<div class="stm-t">' + T('js.shellui.que-con-do-xin-phep-dung', 'Quẻ còn dở, xin phép dừng ở đây…') + '</div>') +
         (hasLaso
-          ? '<div class="stm-d">' + esc(thay) + T('js.shellui.con-nhieu-dieu-muon-to-tuong', ' còn nhiều điều muốn tỏ tường') + (nm ? ' cho ' + esc(nm) : '') +
+          ? '<div class="stm-d">' + esc(thay) + T('js.shellui.con-nhieu-dieu-muon-to-tuong', ' còn nhiều điều muốn tỏ tường') + (nm ? T('js.shellui.cho-ten', ' cho {name}', { name: esc(nm) }) : '') +
               T('js.shellui.ban-luan-giai-soi-tron', '. Bản <b>Luận Giải</b> soi trọn <b>') + LG_PHAN.length + T('js.shellui.muc-cua-chinh-la-so-nay', ' mục</b> của chính lá số này — ') +
               esc(preview) + T('js.shellui.thay-vi-hoi-le-tung-cau', '… — thay vì hỏi lẻ từng câu.</div>') +
             '<a class="stm-btn" href="' + esc(luanGiaiHref()) + ('">' + T('js.shellui.xem-tron', 'Xem trọn') + ' ') + LG_PHAN.length + T('js.shellui.muc', ' mục — ') + _rc.lasoPrice + T('js.shellui.luong-n119', ' Lượng (') + creditUsd(_rc.lasoPrice) + ')</a>' +
             ('<a class="stm-alt" href="/topup.html">' + T('js.shellui.hoac-nap-luong-de-hoi-tiep', 'Hoặc nạp Lượng để hỏi tiếp từng câu →') + '</a>')
-          : '<div class="stm-d">' + esc(thay) + T('js.shellui.con-nhieu-dieu-muon-to-tuong', ' còn nhiều điều muốn tỏ tường') + (nm ? ' cho ' + esc(nm) : '') +
+          : '<div class="stm-d">' + esc(thay) + T('js.shellui.con-nhieu-dieu-muon-to-tuong', ' còn nhiều điều muốn tỏ tường') + (nm ? T('js.shellui.cho-ten', ' cho {name}', { name: esc(nm) }) : '') +
               T('js.shellui.nhung-phan-luong-trong-vi-da', ', nhưng phần Lượng trong ví đã cạn. Nạp thêm để thầy luận tiếp mạch còn dang dở nhé.</div>') +
             ('<a class="stm-btn" href="/topup.html">' + T('js.shellui.nap-luong-de-hoi-tiep', 'Nạp Lượng để hỏi tiếp →') + '</a>')) +
         ('<button class="stm-later" type="button">' + T('js.shellui.de-sau', 'Để sau') + '</button>') +
@@ -5527,7 +5527,7 @@
   function navBubble(html) {
     var chat = document.getElementById('chat');
     var row = document.createElement('div'); row.className = 'msg a nav';
-    row.innerHTML = '<img class="msg-ava" src="/seal-128.webp" alt=""><div class="msg-body"><div class="nav-nm">Minh Bảo · người dẫn đường</div>' + html + '</div>';
+    row.innerHTML = ('<img class="msg-ava" src="/seal-128.webp" alt=""><div class="msg-body"><div class="nav-nm">' + T('js.shellui.minh-bao-nguoi-dan-duong', 'Minh Bảo · người dẫn đường') + '</div>') + html + '</div>';
     chat.appendChild(row); chat.scrollTop = chat.scrollHeight;
     return row;
   }
@@ -5624,8 +5624,8 @@
             try { track('nav_birth', { tool_id: ACTIVE || 'home', meta: { from: cb ? 'join' : 'hero' } }); } catch (e) { /* ignore */ }
             paintHomeCtx();
             if (cb) { cb(); return; }
-            if (_navDone) thayBubble('<p>Thầy đã lập lá số của <b>' + esc(b.name || 'con') + '</b>. Con hỏi tiếp đi.</p>');
-            else navBubble('<p>Đã có lá số của <b>' + esc(b.name || 'bạn') + '</b>. Giờ kể chuyện của bạn đi, mình mời đúng thầy vào xem.</p>');
+            if (_navDone) thayBubble(T('js.shellui.thay-da-lap-la-so-cua', '<p>Thầy đã lập lá số của <b>') + esc(b.name || 'con') + T('js.shellui.con-hoi-tiep-di', '</b>. Con hỏi tiếp đi.</p>'));
+            else navBubble(T('js.shellui.da-co-la-so-cua', '<p>Đã có lá số của <b>') + esc(b.name || T('js.battu.ban', 'bạn')) + T('js.shellui.gio-ke-chuyen-cua-ban-di', '</b>. Giờ kể chuyện của bạn đi, mình mời đúng thầy vào xem.</p>'));
             if (input) input.focus();
           },
         });
@@ -5641,7 +5641,7 @@
     var b = ctx && ctx.birth;
     if (!b || !b.day || !b.month || !b.year) { c.style.display = 'none'; return; }
     c.style.display = '';
-    t.innerHTML = 'Đang xem lá số: <b>' + esc((b.name ? b.name + ' · ' : '') + b.day + '/' + b.month + '/' + b.year) + '</b>' +
+    t.innerHTML = T('js.shellui.dang-xem-la-so', 'Đang xem lá số: <b>') + esc((b.name ? b.name + ' · ' : '') + b.day + '/' + b.month + '/' + b.year) + '</b>' +
       '<button type="button" class="ctx-chg">Đổi</button>';
     t.querySelector('.ctx-chg').addEventListener('click', function () {
       askBirthHome(null, _navDone ? 'Con muốn thầy xem lá số của ai? Cho thầy xin họ tên và giới tính nhé.' : null);
@@ -5669,8 +5669,8 @@
       var nghia = r && r.nghia;
       var mon = r && r.mon;
       _navNeedBirth = !!(r && r.chuDe); // chủ đề cung (tình duyên, công việc…) cần lá số
-      navBubble('<p>' + (nghia ? 'Chuyện ' + esc(nghia) + ' thì' : 'Câu này thì') + ' người xem kỹ nhất là <b>Thầy ' + esc(a.name) + '</b>. Mình mời thầy vào ngay.</p>' +
-        '<div class="nav-card"><img src="/authors/' + a.id + '.jpg" alt="" width="48" height="48" loading="lazy"><div><b>Thầy ' + esc(a.name) + '</b>' + (mon ? '<span>' + esc(mon) + '</span>' : '') + '</div></div>');
+      navBubble('<p>' + (nghia ? T('js.shellui.chuyen', 'Chuyện ') + esc(nghia) + T('js.shellui.thi', ' thì') : T('js.shellui.cau-nay-thi', 'Câu này thì')) + T('js.shellui.nguoi-xem-ky-nhat-la-thay', ' người xem kỹ nhất là <b>Thầy ') + esc(a.name) + T('js.shellui.minh-moi-thay-vao-ngay', '</b>. Mình mời thầy vào ngay.</p>') +
+        '<div class="nav-card"><img src="/authors/' + a.id + ('.jpg" alt="" width="48" height="48" loading="lazy"><div>' + T('js.shellui.thay-6ofb', '<b>Thầy') + ' ') + esc(a.name) + '</b>' + (mon ? '<span>' + esc(mon) + '</span>' : '') + '</div></div>');
       // Henry 2026-09-27: mời thầy vào LUÔN, không bắt khách bấm "Mời thầy vào"
       // — chờ một nhịp ngắn cho kịp đọc thẻ thầy rồi mới vào.
       setTimeout(function () { joinThay(a.id); }, 700);
@@ -5692,7 +5692,7 @@
     var hero = chat.querySelector('.home-hero'); if (hero) hero.remove();
     document.body.classList.remove('chat-empty');
     var sys = document.createElement('div'); sys.className = 'nav-sys';
-    sys.innerHTML = '<img src="/authors/' + a.id + '.jpg" alt="" width="18" height="18">Thầy ' + esc(a.name) + ' đã vào tiếp chuyện';
+    sys.innerHTML = '<img src="/authors/' + a.id + ('.jpg" alt="" width="18" height="18">' + T('js.shellui.thay-5jjy', 'Thầy') + ' ') + esc(a.name) + T('js.shellui.da-vao-tiep-chuyen', ' đã vào tiếp chuyện');
     chat.appendChild(sys);
     try { track('nav_join', { tool_id: ACTIVE || 'home', meta: { thay: id } }); } catch (e) { /* ignore */ }
     if (!_navQ || !ctx) return;
@@ -5724,13 +5724,13 @@
     var say = function (m) {
       if (done) return; done = true;
       var input = document.getElementById('railInput');
-      thayBubble('<p>' + esc((m && m.greeting) || ('Thầy ' + a.name + ' đây.')) + '</p>' +
-        (m && m.discipline ? '<p>Thầy chuyên xem <b>' + esc(m.discipline) + '</b>.</p>' : '') +
+      thayBubble('<p>' + esc((m && m.greeting) || (T('js.shellui.thay', 'Thầy ') + a.name + T('js.shellui.day', ' đây.'))) + '</p>' +
+        (m && m.discipline ? T('js.shellui.thay-chuyen-xem', '<p>Thầy chuyên xem <b>') + esc(m.discipline) + '</b>.</p>' : '') +
         // Đến từ link chia sẻ: joinThay() đã dọn #chat nên câu báo phải đi cùng lời chào.
         (_fromshareId ? '<p>' + FROMSHARE_NOTE + (ctx && ctx.birth ? ' Thầy xem cho con trên lá số của chính con.' : '') + '</p>' : ''));
       if (NO_BIRTH_THAY[id] || !ctx || ctx.birth) { if (input) input.focus(); return; }
       askBirthHome(function () {
-        thayBubble('<p>Thầy đã lập lá số của <b>' + esc((ctx.birth && ctx.birth.name) || 'con') + '</b>. Con muốn thầy xem chuyện gì trước?</p>');
+        thayBubble(T('js.shellui.thay-da-lap-la-so-cua', '<p>Thầy đã lập lá số của <b>') + esc((ctx.birth && ctx.birth.name) || 'con') + T('js.shellui.con-muon-thay-xem-chuyen-gi', '</b>. Con muốn thầy xem chuyện gì trước?</p>'));
         if (input) input.focus();
       }, 'Để thầy xem cho sát, cho thầy xin họ tên và giới tính của con trước nhé.');
     };
@@ -5898,7 +5898,7 @@
           var _pd = await res.clone().json();
           if (_pd) applyPaywallInfo({ balance: _pd.balance, price: _pd.price });
         } catch (e) { /* ignore */ }
-        typing.innerHTML = '<p>Đã hết lượt hỏi. Lá số vẫn xem miễn phí — bạn có thể xem <a href="' + esc(luanGiaiHref()) + '" style="color:var(--blue);font-weight:600">bản Luận Giải trọn ' + LG_PHAN.length + ' mục</a> hoặc <a href="/topup.html" style="color:var(--blue);font-weight:600">nạp thêm</a> để hỏi tiếp.</p>';
+        typing.innerHTML = ('<p>' + T('js.shellui.da-het-luot-hoi-la-so', 'Đã hết lượt hỏi. Lá số vẫn xem miễn phí — bạn có thể xem') + ' <a href="') + esc(luanGiaiHref()) + ('" style="color:var(--blue);font-weight:600">' + T('js.shellui.ban-luan-giai-tron', 'bản Luận Giải trọn') + ' ') + LG_PHAN.length + (' ' + T('js.shellui.muc-byzo', 'mục') + '</a> ' + T('js.auth.hoac', 'hoặc') + ' <a href="/topup.html" style="color:var(--blue);font-weight:600">' + T('js.shellui.nap-them-lsj6', 'nạp thêm') + '</a> ' + T('js.shellui.de-hoi-tiep', 'để hỏi tiếp.') + '</p>');
         openTopupModal();
         streaming = false; setSend(true); messages.pop(); return;
       }
@@ -5907,7 +5907,7 @@
         // chưa có lá số/kịch bản. KHÔNG mở modal (không phải paywall, không phải
         // đăng nhập) — chỉ trỏ về form ngay trên trang, đã luôn sẵn đó.
         var _hostForm = document.getElementById('tuviFormHost');
-        typing.innerHTML = '<p>Nhập ngày sinh ' + (_hostForm ? 'ở form phía trên' : 'để bắt đầu') + ' để thầy luận đúng trên lá số của bạn nhé — hỏi chung chung hoài thì không khác gì hỏi một chatbot thường.</p>';
+        typing.innerHTML = T('js.shellui.nhap-ngay-sinh', '<p>Nhập ngày sinh ') + (_hostForm ? T('js.shellui.o-form-phia-tren', 'ở form phía trên') : T('js.shellui.de-bat-dau', 'để bắt đầu')) + T('js.shellui.de-thay-luan-dung-tren-la', ' để thầy luận đúng trên lá số của bạn nhé — hỏi chung chung hoài thì không khác gì hỏi một chatbot thường.</p>');
         if (_hostForm) { try { _hostForm.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) { /* ignore */ } }
         streaming = false; setSend(true); messages.pop(); return;
       }
@@ -5937,7 +5937,7 @@
             } catch (e) { /* ignore */ }
           }
           else if (ev.name === 'error') {
-            acc = acc || ('Xin lỗi, gặp trục trặc: ' + esc(ev.data.message || ''));
+            acc = acc || (T('js.shellui.xin-loi-gap-truc-trac', 'Xin lỗi, gặp trục trặc: ') + esc(ev.data.message || ''));
             try { track('chat_error', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { kind: 'stream', message: String(ev.data.message || '').slice(0, 200) } }); } catch (e) { /* ignore */ }
           }
           else if (ev.name === 'done' && ev.data) {
@@ -6087,11 +6087,11 @@
     if (!picks.length) return;
     var bar = document.createElement('div');
     bar.className = 'msg-2nd';
-    bar.innerHTML = '<span class="m2-l">' + svg('users') + 'Nghe thêm môn khác</span>' + picks.map(function (x) {
-      return '<button type="button" class="m2-a" data-id="' + x.a.id + '" aria-label="Mời Thầy ' + esc(x.a.name) + ' xem bằng ' + esc(x.mon) + '">' +
+    bar.innerHTML = '<span class="m2-l">' + svg('users') + T('js.shellui.nghe-them-mon-khac', 'Nghe thêm môn khác</span>') + picks.map(function (x) {
+      return '<button type="button" class="m2-a" data-id="' + x.a.id + ('" aria-label="' + T('js.shellui.moi-thay', 'Mời Thầy') + ' ') + esc(x.a.name) + T('js.shellui.xem-bang', ' xem bằng ') + esc(x.mon) + '">' +
         '<img src="/authors/' + x.a.id + '.jpg" alt=""><span>' + esc(x.a.name) + ' <em>· ' + esc(x.mon) + '</em></span></button>';
     }).join('') + (hc
-      ? '<button type="button" class="m2-a m2-hc" aria-label="Mời nhóm hội chẩn, 3 thầy cùng xem">' +
+      ? ('<button type="button" class="m2-a m2-hc" aria-label="' + T('js.shellui.moi-nhom-hoi-chan-3-thay', 'Mời nhóm hội chẩn, 3 thầy cùng xem') + '">') +
         '<span class="m2-stack"><img src="' + authorAva() + '" alt=""><img src="/authors/tam-kinh.jpg" alt=""><img src="/authors/linh-co.jpg" alt=""></span>' +
         '<span>Mời nhóm hội chẩn <em>· 3 thầy</em></span></button>'
       : '');
@@ -6154,7 +6154,7 @@
       '<div class="ts-d">' + esc(s.lyDo || '') + '</div>' +
       // Công cụ đi KÈM (lib/tools/suggest-tool.ts `KEM`) — nút phụ trên cùng
       // thẻ, không phải thẻ thứ hai (luật một thẻ mỗi cuộc trò chuyện giữ nguyên).
-      (kem ? '<button class="ts-kem" type="button">Xem kèm: ' + esc(kem.label) + ' →</button>' : '') +
+      (kem ? ('<button class="ts-kem" type="button">' + T('js.shellui.xem-kem', 'Xem kèm:') + ' ') + esc(kem.label) + ' →</button>' : '') +
       '</div>' +
       '<button class="ts-go" type="button">Mở</button>';
     chat.appendChild(d);

@@ -224,7 +224,7 @@ body.chat-first-live .laso-one{flex:none}
 <script src="/tuvi-form.js?v=15"></script>
 <script src="/auth.js?v=8"></script>
 <script src="/tuvi-paywall.js?v=43"></script>
-  <script src="/nav.js?v=49" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=142"></script>
+  <script src="/nav.js?v=49" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=143"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
@@ -239,7 +239,7 @@ var MODES={
   docTitle:_tvmbT('js.xemtuoi.xem-tuoi-lam-an-tu-vi', 'Xem tuổi làm ăn — Tử Vi Minh Bảo'),
   h2:'Nhập ngày sinh hai đối tác (dương lịch)',
   formSub:_tvmbT('js.xemtuoi.cham-8-yeu-to-hop-tac', 'Chấm 8 yếu tố hợp tác giữa bạn và người sắp làm ăn chung — góc nhìn khách quan trước khi ký kết.'),
-  pA:'Đối tác thứ nhất', pB:'Đối tác thứ hai', phA:'Đối tác A', phB:'Đối tác B',
+  pA:_tvmbT('js.xemtuoi.doi-tac-thu-nhat', 'Đối tác thứ nhất'), pB:_tvmbT('js.xemtuoi.doi-tac-thu-hai', 'Đối tác thứ hai'), phA:_tvmbT('js.xemtuoi.doi-tac-a', 'Đối tác A'), phB:_tvmbT('js.xemtuoi.doi-tac-b', 'Đối tác B'),
   btn:'Xem hợp tác →', btnBusy:'Đang xét hợp tác…', verb:'Xét hợp tác',
   chips:['Hai người hợp làm ăn chung không?','Ai nên nắm tài chính?','Chiều nào dễ xung đột khi hợp tác?','Nên góp vốn hay chia việc?'],
   greetVerb:'Đã xét hợp tác',
@@ -251,7 +251,7 @@ var MODES={
   docTitle:_tvmbT('js.xemtuoi.tuong-hop-tuoi-tu-vi-minh', 'Tương hợp tuổi — Tử Vi Minh Bảo'),
   h2:'Nhập ngày sinh hai người (dương lịch)',
   formSub:_tvmbT('js.xemtuoi.xet-nhanh-hai-tuoi-co-hop', 'Xét nhanh hai tuổi có hợp nhau hay không, chỉ cần năm sinh — câu trả lời tức thì, chưa cần xem sâu.'),
-  pA:'Người thứ nhất', pB:'Người thứ hai', phA:'Người A', phB:'Người B',
+  pA:_tvmbT('js.xemtuoi.nguoi-thu-nhat', 'Người thứ nhất'), pB:_tvmbT('js.xemtuoi.nguoi-thu-hai', 'Người thứ hai'), phA:_tvmbT('js.xemtuoi.nguoi-a', 'Người A'), phB:_tvmbT('js.xemtuoi.nguoi-b', 'Người B'),
   btn:'So tương hợp →', btnBusy:'Đang so tương hợp…', verb:'So tương hợp',
   chips:['Hai người này có hợp nhau không?','Hợp nhau ở mặt nào?','Dễ va chạm ở đâu?','Nên giữ khoảng cách hay gắn bó?'],
   greetVerb:'Đã so tương hợp',
@@ -263,7 +263,7 @@ var MODES={
   docTitle:_tvmbT('js.xemtuoi.xem-tuoi-vo-chong-tu-vi', 'Xem tuổi vợ chồng — Tử Vi Minh Bảo'),
   h2:'Nhập ngày sinh hai người (dương lịch)',
   formSub:_tvmbT('js.xemtuoi.cham-8-yeu-to-tuong-hop', 'Chấm 8 yếu tố tương hợp giữa hai lá số — dùng khi đang tính chuyện cưới xin, cần một câu trả lời rõ.'),
-  pA:'Người thứ nhất', pB:'Người thứ hai', phA:'Chồng / Người A', phB:'Vợ / Người B',
+  pA:_tvmbT('js.xemtuoi.nguoi-thu-nhat', 'Người thứ nhất'), pB:_tvmbT('js.xemtuoi.nguoi-thu-hai', 'Người thứ hai'), phA:_tvmbT('js.xemtuoi.chong-nguoi-a', 'Chồng / Người A'), phB:_tvmbT('js.xemtuoi.vo-nguoi-b', 'Vợ / Người B'),
   btn:'So tuổi →', btnBusy:'Đang so tuổi…', verb:'So tuổi',
   chips:['Hai người có hợp làm vợ chồng không?','Chiều nào đáng lo nhất?','Cách hóa giải điểm khắc?','Đường con cái của hai người thế nào?'],
   greetVerb:'Đã so tuổi',
@@ -281,7 +281,7 @@ TuviForm.render('b-fields', {prefix:'b', mode:'compact', gioitinh:'nu'});
 // renderChat() lo người A rồi ghi vào field thật 'a-*' (ẩn trong #birthPanel)
 // qua setData(), onDone gọi lại renderChat() cho người B, onDone cuối gọi
 // doCompat() y hệt nút "So tuổi →" cũ — không đổi gì ở đường tính toán.
-document.getElementById('wsIntakeHintTxt').textContent = _tvmbT('js.xemtuoi.tra-loi-thay-o-khung-chat', 'Trả lời thầy ở khung chat để nhập ngày sinh của ') + MODE.pA.toLowerCase() + _tvmbT('js.xemtuoi.va', ' và ') + MODE.pB.toLowerCase() + '.';
+document.getElementById('wsIntakeHintTxt').textContent = _tvmbT('js.xemtuoi.tra-loi-thay-nhap-ngay-sinh', 'Trả lời thầy ở khung chat để nhập ngày sinh của {a} và {b}.', {a:MODE.pA.toLowerCase(), b:MODE.pB.toLowerCase()});
 function _tpwResuming(){ try{ return new URL(location.href).searchParams.get('tpwResume')==='1'; }catch(e){ return false; } }
 function startIntake(){
   // Quay về sau nạp Lượng: XT_RESUME_KEY IIFE bên dưới tự điền form + gọi
@@ -293,15 +293,15 @@ function startIntake(){
   // chồng/đối tác làm ăn (ux-tester đợt 3, 2026-09-25).
   TuviForm.renderChat({
     prefix:'a', gioitinh:'nam',
-    q1:'Cho thầy xin thông tin của ' + MODE.pA + ' (' + MODE.phA + ') nhé.',
-    q2:'Ngày sinh dương lịch của ' + MODE.phA.toLowerCase() + ' là ngày nào?',
-    q3:'Giờ sinh của ' + MODE.phA.toLowerCase() + ' là mấy giờ?',
+    q1:_tvmbT('js.xemtuoi.q1-a', 'Cho thầy xin thông tin của {p} ({ph}) nhé.', {p:MODE.pA, ph:MODE.phA}),
+    q2:_tvmbT('js.xemtuoi.q2', 'Ngày sinh dương lịch của {ph} là ngày nào?', {ph:MODE.phA.toLowerCase()}),
+    q3:_tvmbT('js.xemtuoi.q3', 'Giờ sinh của {ph} là mấy giờ?', {ph:MODE.phA.toLowerCase()}),
     onDone:function(){
       TuviForm.renderChat({
         prefix:'b', gioitinh:'nu',
-        q1:'Giờ đến lượt ' + MODE.pB + ' (' + MODE.phB + ').',
-        q2:'Ngày sinh dương lịch của ' + MODE.phB.toLowerCase() + ' là ngày nào?',
-        q3:'Giờ sinh của ' + MODE.phB.toLowerCase() + ' là mấy giờ?',
+        q1:_tvmbT('js.xemtuoi.q1-b', 'Giờ đến lượt {p} ({ph}).', {p:MODE.pB, ph:MODE.phB}),
+        q2:_tvmbT('js.xemtuoi.q2', 'Ngày sinh dương lịch của {ph} là ngày nào?', {ph:MODE.phB.toLowerCase()}),
+        q3:_tvmbT('js.xemtuoi.q3', 'Giờ sinh của {ph} là mấy giờ?', {ph:MODE.phB.toLowerCase()}),
         onDone:doCompat
       });
     }
@@ -343,9 +343,9 @@ function verdictLabel(s){ return s>=75?'Rất hợp':s>=55?'Khá hợp':s>=35?'B
 function buildCompatChips(r,MODE){
   var items=(r.items||[]).filter(function(m){return typeof m.score==='number';}).slice().sort(function(a,b){return a.score-b.score;});
   var low=items[0], high=items[items.length-1], chips=[];
-  chips.push('Hai người hoà hợp '+r.total+'/100 — nên hiểu thế nào?');
-  if(low) chips.push('Chiều "'+low.label+'" thấp ('+low.score+'/10) — vì sao và hoá giải sao?');
-  if(high&&high!==low) chips.push('Chiều "'+high.label+'" cao ('+high.score+'/10) — phát huy thế nào?');
+  chips.push(_tvmbT('js.xemtuoi.hai-nguoi-hoa-hop', 'Hai người hoà hợp ')+r.total+_tvmbT('js.xemtuoi.100-nen-hieu-the-nao', '/100 — nên hiểu thế nào?'));
+  if(low) chips.push(_tvmbT('js.xemtuoi.chieu-thap-vi-sao', 'Chiều "{label}" thấp ({score}/10) — vì sao và hoá giải sao?', {label:low.label, score:low.score}));
+  if(high&&high!==low) chips.push(_tvmbT('js.xemtuoi.chieu', 'Chiều "')+high.label+'" cao ('+high.score+_tvmbT('js.xemtuoi.10-phat-huy-the-nao', '/10) — phát huy thế nào?'));
   if(MODE.chips&&MODE.chips.length) chips.push(MODE.chips[MODE.chips.length-1]);
   return chips;
 }
@@ -390,7 +390,7 @@ function doCompat(){
     Shell.setContext({
       scenario:{type:MODE.scenarioType,data:{birthA:birthA,birthB:birthB,nameA:nameA,nameB:nameB}},
       label:MODE.verb+' '+nameA+' × '+nameB,
-      greeting:MODE.greetVerb+' **'+esc(nameA)+'** và **'+esc(nameB)+'** — hòa hợp **'+r.total+'/100**. Hỏi tôi để luận sâu bất kỳ chiều nào nhé.',
+      greeting:MODE.greetVerb+' **'+esc(nameA)+_tvmbT('js.xemtuoi.va', '** và **')+esc(nameB)+_tvmbT('js.xemtuoi.hoa-hop', '** — hòa hợp **')+r.total+_tvmbT('js.xemtuoi.100-hoi-toi-de-luan-sau', '/100**. Hỏi tôi để luận sâu bất kỳ chiều nào nhé.'),
       chips:buildCompatChips(r,MODE)
     });
     // Chia sẻ: TOÀN BỘ nội dung đang hiển thị trên màn hình (`liveText:true`
@@ -399,9 +399,9 @@ function doCompat(){
     // đây chỉ là tiêu đề mở đầu cố định.
     var palMenhA=r.lsA.palaces&&r.lsA.palaces.find(function(p){return p.isMenh;});
     var palMenhB=r.lsB.palaces&&r.lsB.palaces.find(function(p){return p.isMenh;});
-    var _cpHead=nameA+': '+r.lsA.canChiNam+' · Nạp Âm '+r.naA+' · Cung Mệnh '+(palMenhA?palMenhA.diaChi:'?')+
-      '\n'+nameB+': '+r.lsB.canChiNam+' · Nạp Âm '+r.naB+' · Cung Mệnh '+(palMenhB?palMenhB.diaChi:'?')+
-      '\nTổng điểm '+MODE.verb.toLowerCase()+': '+r.total+'/100';
+    var _cpHead=nameA+': '+r.lsA.canChiNam+_tvmbT('js.xemtuoi.nap-am', ' · Nạp Âm ')+r.naA+_tvmbT('js.xemtuoi.cung-menh', ' · Cung Mệnh ')+(palMenhA?palMenhA.diaChi:'?')+
+      '\n'+nameB+': '+r.lsB.canChiNam+_tvmbT('js.xemtuoi.nap-am', ' · Nạp Âm ')+r.naB+_tvmbT('js.xemtuoi.cung-menh', ' · Cung Mệnh ')+(palMenhB?palMenhB.diaChi:'?')+
+      _tvmbT('js.xemtuoi.tong-diem', '\nTổng điểm ')+MODE.verb.toLowerCase()+': '+r.total+'/100';
     Shell.setShareable({
       kind:'text',
       toolId:MODE.active,
@@ -455,15 +455,15 @@ function mountHook(r,nameA,nameB){
   function withPeriod(s){ s=(s||'').trim(); if(!s)return ''; return /[.!?…]$/.test(s)?s:s+'.'; }
   var facts=[{
     tone:'good',
-    title:'Chiều hợp nhất: '+best.label+' — '+best.score+'/10',
-    body:withPeriod(best.detail)+' Cả '+scored.length+' chiều, điểm chi tiết theo từng người, và cách hoá giải nằm trong bản luận giải chuyên sâu.',
+    title:_tvmbT('js.xemtuoi.chieu-hop-nhat', 'Chiều hợp nhất: ')+best.label+' — '+best.score+'/10',
+    body:withPeriod(best.detail)+_tvmbT('js.xemtuoi.ca', ' Cả ')+scored.length+_tvmbT('js.xemtuoi.chieu-diem-chi-tiet-theo-tung', ' chiều, điểm chi tiết theo từng người, và cách hoá giải nằm trong bản luận giải chuyên sâu.'),
     source:'engine · '+(MODE_KEY==='xem-lam-an'?'TuongHopLamAn':'TuongHop')+'.calcTuongHop',
   }];
   if(worst.label!==best.label){
     facts.push({
       tone:'bad',
-      title:'Chiều cần lưu ý nhất: '+worst.label+' — '+worst.score+'/10',
-      body:withPeriod(worst.detail)+' Cách hoá giải cụ thể nằm trong bản luận giải chuyên sâu.',
+      title:_tvmbT('js.xemtuoi.chieu-can-luu-y-nhat', 'Chiều cần lưu ý nhất: ')+worst.label+' — '+worst.score+'/10',
+      body:withPeriod(worst.detail)+_tvmbT('js.xemtuoi.cach-hoa-giai-cu-the-nam', ' Cách hoá giải cụ thể nằm trong bản luận giải chuyên sâu.'),
       source:'engine · '+(MODE_KEY==='xem-lam-an'?'TuongHopLamAn':'TuongHop')+'.calcTuongHop',
     });
   }
@@ -486,7 +486,7 @@ function taiAnhVanh(){
     subtitle:(r.nameA||'A')+' × '+(r.nameB||'B')+' — '+r.total+'/100',
     // Nêu chiều CAO nhất và THẤP nhất: đó là hai thứ người xem ảnh hỏi ngay,
     // mà vành thì cho thấy dáng chứ không gọi tên trục.
-    quote:cao&&thap?('Mạnh nhất: '+cao.label+' ('+cao.score+'/10) · Yếu nhất: '+thap.label+' ('+thap.score+'/10)'):'',
+    quote:cao&&thap?(_tvmbT('js.xemtuoi.manh-nhat', 'Mạnh nhất: ')+cao.label+' ('+cao.score+_tvmbT('js.xemtuoi.10-yeu-nhat', '/10) · Yếu nhất: ')+thap.label+' ('+thap.score+'/10)'):'',
     qrUrl:Poster.qrLink(MODE.active,'/app/'+MODE.active),
     qrCaption:'Quét mã — so tuổi của bạn',
     fonts:['700 40px '+(T.SERIF||'serif'),'600 23px '+(T.SANS||'sans-serif')]
@@ -507,8 +507,8 @@ function compatRadarHtml(r){
   if(!svg) return '';
   _vanhInfo=r;
   return '<div class="compat-radar"><div id="compatVanh">'+svg+'</div>'+
-    '<div class="cr-cap">'+dims.length+' chiều cùng thang 0–10. Trọng số góp vào tổng '+
-    r.total+'/100 nằm ở từng thanh bên dưới.</div>'+
+    '<div class="cr-cap">'+dims.length+_tvmbT('js.xemtuoi.chieu-cung-thang-0-10-trong', ' chiều cùng thang 0–10. Trọng số góp vào tổng ')+
+    r.total+_tvmbT('js.xemtuoi.100-nam-o-tung-thanh-ben', '/100 nằm ở từng thanh bên dưới.</div>')+
     '<div class="cr-tai"><button type="button" class="btn" id="crTaiBtn" ' +
     'onclick="taiAnhVanh()">⬇ Tải ảnh chia sẻ (9:16)</button></div></div>';
 }
@@ -524,15 +524,15 @@ function renderCompat(r,nameA,nameB,fdA,fdB){
     // đồ). Đặt NGAY dưới điểm số, đúng lúc tò mò cao nhất — không chờ tới lúc
     // hết Lượng như invite-cta. Gọi Shell.shareNow() = CHÍNH luồng Chia sẻ
     // (native share sheet/modal), chỉ khác chỗ đặt + câu chữ đích danh.
-    '<div class="compat-invite"><div class="ci-t">Gửi kết quả này cho <b>'+esc(nameB)+'</b> xem — họ tò mò là muốn tự tra lá số của mình luôn.</div>'+
-    '<button type="button" class="btn" onclick="Shell.shareNow()">Rủ '+esc(nameB)+' xem ngay →</button></div>';
+    ('<div class="compat-invite"><div class="ci-t">' + _tvmbT('js.xemtuoi.gui-ket-qua-nay-cho', 'Gửi kết quả này cho <b>'))+esc(nameB)+_tvmbT('js.xemtuoi.xem-ho-to-mo-la-muon', '</b> xem — họ tò mò là muốn tự tra lá số của mình luôn.</div>')+
+    ('<button type="button" class="btn" onclick="Shell.shareNow()">' + _tvmbT('js.xemtuoi.ru', 'Rủ') + ' ')+esc(nameB)+' xem ngay →</button></div>';
 
   // per-person summary
   function who(ls,name,cls){
     var menh=(ls.palaces||[]).find(function(p){return p.isMenh});
     var chinh=menh&&menh.majorStars.length?menh.majorStars.map(function(s){return s.ten}).join(' · '):'VCD';
     return '<div class="who-card"><div class="nm"><span class="dot'+cls+'"></span>'+esc(name)+'</div>'+
-      '<div class="meta"><b>'+esc(ls.canChiNam||'')+'</b> · nạp âm '+esc(ls.napAm||'')+'<br>Cung Mệnh '+esc(menh?menh.diaChi:'?')+' · '+esc(chinh)+'</div></div>';
+      '<div class="meta"><b>'+esc(ls.canChiNam||'')+_tvmbT('js.xemtuoi.nap-am-jzle', '</b> · nạp âm ')+esc(ls.napAm||'')+_tvmbT('js.xemtuoi.cung-menh-67cx', '<br>Cung Mệnh ')+esc(menh?menh.diaChi:'?')+' · '+esc(chinh)+'</div></div>';
   }
   document.getElementById('xtWho').innerHTML=who(r.lsA,nameA,'A')+who(r.lsB,nameB,'B');
 
@@ -547,7 +547,7 @@ function renderCompat(r,nameA,nameB,fdA,fdB){
   var pairH='';
   if(fdA&&fdB&&typeof renderGrid==='function'){
     try{
-      pairH='<section class="sec"><div class="sec-h"><div class="sec-n">☯</div><h3>Hai lá số</h3></div>'+
+      pairH=('<section class="sec"><div class="sec-h"><div class="sec-n">☯</div><h3>' + _tvmbT('js.xemtuoi.hai-la-so', 'Hai lá số') + '</h3></div>')+
         '<div class="laso-pair">'+
         '<div class="laso-one"><div class="laso-cap"><span class="dotA"></span>'+esc(nameA)+'</div>'+renderGrid(r.lsA,fdA)+'</div>'+
         '<div class="laso-one"><div class="laso-cap"><span class="dotB"></span>'+esc(nameB)+'</div>'+renderGrid(r.lsB,fdB)+'</div>'+
@@ -559,11 +559,11 @@ function renderCompat(r,nameA,nameB,fdA,fdB){
   var S=[];
   var gioiVe=fdA&&fdA.gioitinh;
   var overviewBody=compatRadarHtml(r)+r.items.map(factorRowHtml).join('');
-  S.push(sec(0,PHAN_LABELS[0],'',illusBannerHtml(0,r,gioiVe,PHAN_LABELS[0])+'<div class="card">'+overviewBody+'</div>'+secLock(0)+'<div class="claude-content" id="claude-content-0" style="display:none"></div>'+ask('Luận tổng quan mức độ hòa hợp của '+nameA+' và '+nameB)));
+  S.push(sec(0,PHAN_LABELS[0],'',illusBannerHtml(0,r,gioiVe,PHAN_LABELS[0])+'<div class="card">'+overviewBody+'</div>'+secLock(0)+'<div class="claude-content" id="claude-content-0" style="display:none"></div>'+ask(_tvmbT('js.xemtuoi.luan-tong-quan-muc-do-hoa', 'Luận tổng quan mức độ hòa hợp của ')+nameA+_tvmbT('js.xemtuoi.va-4hkm', ' và ')+nameB)));
   r.items.forEach(function(m,i){
     var idx=i+1;
-    var lbl=PHAN_LABELS[idx]||('Phần '+idx);
-    S.push(sec(idx,lbl,'',illusBannerHtml(idx,r,gioiVe,lbl)+'<div class="card">'+factorRowHtml(m)+'</div>'+secLock(idx)+'<div class="claude-content" id="claude-content-'+idx+'" style="display:none"></div>'+ask('Luận sâu chiều "'+m.label+'" giữa '+nameA+' và '+nameB)));
+    var lbl=PHAN_LABELS[idx]||(_tvmbT('js.luangiai.phan', 'Phần ')+idx);
+    S.push(sec(idx,lbl,'',illusBannerHtml(idx,r,gioiVe,lbl)+'<div class="card">'+factorRowHtml(m)+'</div>'+secLock(idx)+'<div class="claude-content" id="claude-content-'+idx+'" style="display:none"></div>'+ask(_tvmbT('js.xemtuoi.luan-sau-chieu-giua', 'Luận sâu chiều "{label}" giữa {a} và {b}', {label:m.label, a:nameA, b:nameB}))));
   });
   document.getElementById('xtBody').innerHTML=pairH+S.join('');
   if(window.mountIcons) window.mountIcons(document.getElementById('xtBody')); // ô giữa 2 lá số mang span [data-icon]
@@ -592,11 +592,11 @@ function illusBannerHtml(idx,r,gioi,label){
   var u=IllusMatch.illusUrlForXemTuoi(idx,MODE_KEY,gioi,diem,seedStr);
   if(!u) return '';
   var lazyAttr=idx===0?'':' loading="lazy"';
-  return '<figure class="lg-illus"><img src="'+u.url+'" alt="Minh hoạ '+esc(label)+'"'+lazyAttr+
+  return '<figure class="lg-illus"><img src="'+u.url+('" alt="' + _tvmbT('js.luangiai.minh-hoa', 'Minh hoạ') + ' ')+esc(label)+'"'+lazyAttr+
     ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
 }
 function sec(n,title,tag,inner){ return '<section class="sec" id="sec-'+n+'"><div class="sec-h"><div class="sec-n">'+(n+1)+'</div><h3>'+esc(title)+'</h3>'+(tag?'<span class="tag">'+esc(tag)+'</span>':'')+'</div>'+inner+'</section>'; }
-function ask(t){ return '<div class="ask" data-ask="'+esc(t)+'">✦ Hỏi Thầy: "'+esc(t)+'"</div>'; }
+function ask(t){ return '<div class="ask" data-ask="'+esc(t)+('">' + _tvmbT('js.battu.hoi-thay', '✦ Hỏi Thầy: "'))+esc(t)+'"</div>'; }
 // Khoá-mini (ẨN mặc định, xem chú thích ở _paintSecLocksXt) — CHỈ dựng cho
 // xem-tuoi/xem-lam-an (tuong-hop hoàn toàn miễn phí, không có gì để mở khoá).
 function secLock(idx){ return PAID_MODES[MODE_KEY]?TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+idx,product:MODE_KEY}):''; }
@@ -683,15 +683,15 @@ function _tpStars(ls,cungName){
   return stars.join(' ');
 }
 var QUERIES=[
-  function(r){ return 'tương hợp lá số '+(r.lsA.canChiNam||'')+' '+(r.lsB.canChiNam||'')+' '+_tpStars(r.lsA,'Mệnh')+' '+_tpStars(r.lsB,'Mệnh')+' vợ chồng hôn nhân'; },
-  function(r){ return 'địa chi năm sinh lục hợp tứ xung xét tuổi '+(r.lsA.canChiNam||'')+' '+(r.lsB.canChiNam||''); },
-  function(r){ return 'nạp âm '+(r.naA||'')+' '+(r.naB||'')+' ngũ hành sinh khắc tương hợp'; },
-  function(r){ return 'cung mệnh '+_tpStars(r.lsA,'Mệnh')+' '+_tpStars(r.lsB,'Mệnh')+' cách cục tư tưởng'; },
-  function(r){ return 'nhóm thái tuế chính tinh '+_tpStars(r.lsA,'Mệnh')+' '+_tpStars(r.lsB,'Mệnh')+' tính cách'; },
-  function(r){ return 'cung phu thê '+_tpStars(r.lsA,'Phu Thê')+' '+_tpStars(r.lsB,'Phu Thê')+' hôn nhân tương hợp vợ chồng'; },
-  function(r){ return 'cung tử tức '+_tpStars(r.lsA,'Tử Tức')+' '+_tpStars(r.lsB,'Tử Tức')+' con cái'; },
-  function(r){ return 'cung tài bạch '+_tpStars(r.lsA,'Tài Bạch')+' '+_tpStars(r.lsB,'Tài Bạch')+' tài chính tiền bạc'; },
-  function(r){ return 'đại vận '+((r.lsA.daiVanHienTai&&r.lsA.daiVanHienTai.diaChi)||'')+' '+((r.lsB.daiVanHienTai&&r.lsB.daiVanHienTai.diaChi)||'')+' vận hạn hiện tại'; },
+  function(r){ return _tvmbT('js.xemtuoi.tuong-hop-la-so', 'tương hợp lá số ')+(r.lsA.canChiNam||'')+' '+(r.lsB.canChiNam||'')+' '+_tpStars(r.lsA,_tvmbT('js.luangiai.menh', 'Mệnh'))+' '+_tpStars(r.lsB,_tvmbT('js.luangiai.menh', 'Mệnh'))+_tvmbT('js.xemtuoi.vo-chong-hon-nhan', ' vợ chồng hôn nhân'); },
+  function(r){ return _tvmbT('js.xemtuoi.dia-chi-nam-sinh-luc-hop', 'địa chi năm sinh lục hợp tứ xung xét tuổi ')+(r.lsA.canChiNam||'')+' '+(r.lsB.canChiNam||''); },
+  function(r){ return _tvmbT('js.xemtuoi.nap-am-9v70', 'nạp âm ')+(r.naA||'')+' '+(r.naB||'')+_tvmbT('js.xemtuoi.ngu-hanh-sinh-khac-tuong-hop', ' ngũ hành sinh khắc tương hợp'); },
+  function(r){ return _tvmbT('js.luangiai.cung-menh', 'cung mệnh ')+_tpStars(r.lsA,_tvmbT('js.luangiai.menh', 'Mệnh'))+' '+_tpStars(r.lsB,_tvmbT('js.luangiai.menh', 'Mệnh'))+_tvmbT('js.xemtuoi.cach-cuc-tu-tuong', ' cách cục tư tưởng'); },
+  function(r){ return _tvmbT('js.xemtuoi.nhom-thai-tue-chinh-tinh', 'nhóm thái tuế chính tinh ')+_tpStars(r.lsA,_tvmbT('js.luangiai.menh', 'Mệnh'))+' '+_tpStars(r.lsB,_tvmbT('js.luangiai.menh', 'Mệnh'))+_tvmbT('js.xemtuoi.tinh-cach', ' tính cách'); },
+  function(r){ return _tvmbT('js.luangiai.cung-phu-the', 'cung phu thê ')+_tpStars(r.lsA,_tvmbT('js.luangiai.phu-the', 'Phu Thê'))+' '+_tpStars(r.lsB,_tvmbT('js.luangiai.phu-the', 'Phu Thê'))+_tvmbT('js.xemtuoi.hon-nhan-tuong-hop-vo-chong', ' hôn nhân tương hợp vợ chồng'); },
+  function(r){ return _tvmbT('js.luangiai.cung-tu-tuc', 'cung tử tức ')+_tpStars(r.lsA,_tvmbT('js.luangiai.tu-tuc', 'Tử Tức'))+' '+_tpStars(r.lsB,_tvmbT('js.luangiai.tu-tuc', 'Tử Tức'))+_tvmbT('js.luangiai.con-cai', ' con cái'); },
+  function(r){ return _tvmbT('js.luangiai.cung-tai-bach', 'cung tài bạch ')+_tpStars(r.lsA,_tvmbT('js.luangiai.tai-bach', 'Tài Bạch'))+' '+_tpStars(r.lsB,_tvmbT('js.luangiai.tai-bach', 'Tài Bạch'))+_tvmbT('js.xemtuoi.tai-chinh-tien-bac', ' tài chính tiền bạc'); },
+  function(r){ return _tvmbT('js.xemtuoi.dai-van', 'đại vận ')+((r.lsA.daiVanHienTai&&r.lsA.daiVanHienTai.diaChi)||'')+' '+((r.lsB.daiVanHienTai&&r.lsB.daiVanHienTai.diaChi)||'')+_tvmbT('js.xemtuoi.van-han-hien-tai', ' vận hạn hiện tại'); },
 ];
 
 // Trang này phục vụ 2 mode (xem-tuoi / xem-lam-an) nên ô giá phải trỏ đúng
@@ -889,7 +889,7 @@ async function _loadNextPhanAI(){
   // ETA tự hiệu chỉnh — đo nhịp ngay trong phiên, không hứa theo số chép cứng.
   var _eta=_xtPace?_xtPace.remainText(9-idx):'';
   document.getElementById('xtProgress').textContent=
-    'Đang luận giải phần '+(idx+1)+' / 9'+(_eta?' · '+_eta:'...');
+    _tvmbT('js.battu.dang-luan-giai-phan', 'Đang luận giải phần ')+(idx+1)+' / 9'+(_eta?' · '+_eta:'...');
   _xtPace&&_xtPace.begin();
   var box=document.getElementById('claude-content-'+idx);
   // Chờ MỘT CỤC ≥10 giây ⇒ orb (luật ở đầu ai-loading-steps.js). expectSec:0 vì
@@ -899,7 +899,7 @@ async function _loadNextPhanAI(){
     box.style.display='block';
     box.innerHTML=('<div class="phan-empty">' + _tvmbT('js.battu.dang-luan-giai', 'Đang luận giải…') + '</div>');
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
-      w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+(idx+1)+'…',
+      w=AiLoadingSteps.mountWait(box,{label:_tvmbT('js.battu.dang-luan-giai-phan', 'Đang luận giải phần ')+(idx+1)+'…',
         expectSec:(_xtPace&&_xtPace.perPartSec())||0,expectText:(_xtPace&&_xtPace.perPartText())||'',center:true});
       w.start();
     }

@@ -472,7 +472,7 @@ async function exportPNG(){
     const link=document.createElement('a');
     const title=document.getElementById('grid-title').textContent.replace(/[^a-zA-Z0-9À-ỹ\s]/g,'').trim().replace(/\s+/g,'-')||'la-so-tu-vi';
     link.download=title+'.png';link.href=canvas.toDataURL('image/png');link.click();
-  }catch(e){alert('Xuất thất bại: '+e.message);}
+  }catch(e){alert(_tvmbT('js.laso.xuat-that-bai', 'Xuất thất bại: ')+e.message);}
   btn.disabled=false;btn.innerHTML=_tvmbT('js.laso.tai-png', '⬇ Tải PNG');
 }
 
