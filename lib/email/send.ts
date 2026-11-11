@@ -21,6 +21,7 @@ import { Resend } from 'resend';
 import { unsubscribeUrl } from './unsub-token';
 import { isShadowEmail } from '@/lib/channels/shadow-email';
 import { brandName, renderMarketingFooter } from './i18n';
+import { localizeSiteLinks } from './links';
 import type { Locale } from '@/lib/i18n/locales';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
@@ -65,8 +66,9 @@ export interface SendEmailInput {
   subject: string;
   html: string;
   userId?: string;
-  /** Ngôn ngữ người nhận — chỉ dùng để dựng tên người gửi và footer huỷ đăng ký
-   *  (nội dung thư do nơi gọi dựng sẵn bằng lib/email/i18n.ts). Thiếu ⇒ tiếng Việt. */
+  /** Ngôn ngữ người nhận — dựng tên người gửi, footer huỷ đăng ký, và đưa link trang của site
+   *  về `/<locale>/…` (`localizeSiteLinks`). Nội dung thư do nơi gọi dựng sẵn bằng
+   *  lib/email/i18n.ts. Thiếu ⇒ tiếng Việt. */
   locale?: Locale;
   /** Đính kèm (vd PDF luận giải). `content` là base64. */
   attachments?: { filename: string; content: string }[];
@@ -149,7 +151,8 @@ async function dispatch(
       from: fromAddress(kind, input.locale),
       to: input.to,
       subject: input.subject,
-      html: input.html,
+      // Link trang của site → `/<locale>/…` theo người nhận (lib/email/links.ts); `vi` giữ nguyên.
+      html: localizeSiteLinks(input.html, input.locale),
       ...(input.attachments?.length ? { attachments: input.attachments } : {}),
     });
     if (error) {

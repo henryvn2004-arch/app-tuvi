@@ -49,6 +49,7 @@ import {
   insertHistoryRow,
   userOwnsLaso,
 } from '@/lib/portraits/cache';
+import { requestLocale, withLang, type LangLocale } from '@/lib/llm/locale';
 
 
 
@@ -181,6 +182,7 @@ async function buildReport(
   ten: string,
   userId: string,
   key: string,
+  locale: LangLocale,
   coLaSoBan: boolean,
   // Lá số gốc — chỉ dùng cho `previewShape` (câu trích cổ pháp). Đường trả
   // tiền truyền vào nhưng không đọc tới.
@@ -196,11 +198,15 @@ async function buildReport(
       const r = await llmTextFull({
         luanGiai: true,
         system: NGUOI_KHAC_SYSTEM_PROMPT,
-        prompt:
+        prompt: withLang(
           prompt +
-          (nudge
-            ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
-            : ''),
+            (nudge
+              ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
+              : ''),
+          locale,
+          [prompt],
+          { json: true },
+        ),
         json: true,
         jsonSchema: NGUOI_KHAC_SCHEMA,
         maxTokens: 4500, // nâng 50% cùng đợt (Henry chốt 2026-08-20)
@@ -278,7 +284,7 @@ async function buildReport(
   // Ghi cache CẢ ở lượt xem trước là CỐ Ý: `portrait_cache` không mang ngữ
   // nghĩa sở hữu, nên dòng này chỉ có tác dụng làm lượt trả tiền ngay sau đó
   // tốn 0đ model.
-  CACHE.put('main', key, { payload, row }, userId);
+  CACHE.put('main', key, { payload, row }, userId, locale);
   return preview ? ok(previewShape(payload, p, ls)) : ok(payload);
 }
 
@@ -337,9 +343,10 @@ async function runPreview(request: NextRequest) {
   };
 
   const key = lasoKey(birth, cacheExtra(quanHe, birthSelf, viec));
-  const { cached } = await CACHE.get('main', key);
+  const locale = requestLocale(request);
+  const { cached } = await CACHE.get('main', key, locale);
   if (cached) {
-    CACHE.touch('main', key);
+    CACHE.touch('main', key, locale);
     return ok(previewShape(cached.payload as Record<string, unknown>, p, r.ls));
   }
 
@@ -356,7 +363,7 @@ async function runPreview(request: NextRequest) {
     return ok(khung);
   }
 
-  return buildReport(p, ten, 'error' in auth ? '' : auth.user.id, key, Boolean(lsBan), r.ls, true);
+  return buildReport(p, ten, 'error' in auth ? '' : auth.user.id, key, locale, Boolean(lsBan), r.ls, true);
 }
 
 async function runPost(request: NextRequest) {
@@ -373,13 +380,14 @@ async function runPost(request: NextRequest) {
   const birthSelf = validBirth(body.birthSelf) ? (body.birthSelf as BirthParams) : null;
 
   const key = lasoKey(birth, cacheExtra(quanHe, birthSelf, viec));
-  const [{ cached, stale }, owns] = await Promise.all([
-    CACHE.get('main', key),
+  const locale = requestLocale(request);
+  const [{ cached, coDong }, owns] = await Promise.all([
+    CACHE.get('main', key, locale),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
   // `free` xét cả dòng CŨ: người này đã trả tiền cho đúng lá số đó rồi. Còn
   // `cached` thì `CACHE.get` đã lọc — dòng cũ không bao giờ được phục vụ.
-  const free = Boolean(cached || stale) && owns;
+  const free = coDong && owns;
 
   if (!free) {
     // Chốt chặn thanh toán PHÍA SERVER — thiếu bước này thì gọi thẳng endpoint
@@ -389,7 +397,7 @@ async function runPost(request: NextRequest) {
   }
 
   if (cached) {
-    CACHE.touch('main', key);
+    CACHE.touch('main', key, locale);
     if (!owns && cached.row) {
       insertHistoryRow(TOOL_ID, { ...cached.row, user_id: auth.user.id, laso_key: key });
       void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});
@@ -410,7 +418,7 @@ async function runPost(request: NextRequest) {
   const gender = birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
   const profile = computeNguoiKhac(r.ls, gender, quanHe, lsBan, undefined, viec);
 
-  const res = await buildReport(profile, ten, auth.user.id, key, Boolean(lsBan), r.ls);
+  const res = await buildReport(profile, ten, auth.user.id, key, locale, Boolean(lsBan), r.ls);
   return refundIfSystemFailure(res, {
     toolId: TOOL_ID,
     userId: auth.user.id,
@@ -457,11 +465,12 @@ async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
   // câu hỏi "lượt xem lại này có miễn phí không" tra nhầm dòng cache, và trang
   // mở thẳng bản của một việc KHÁC mà không trừ Lượng.
   const key = lasoKey(birth, cacheExtra(resolveQuanHe(sp.get('qh')), self, resolveViec(sp.get('viec'))));
-  const [{ cached, stale }, owns] = await Promise.all([
-    CACHE.get('main', key),
+  const locale = requestLocale(request);
+  const [{ cached, coDong }, owns] = await Promise.all([
+    CACHE.get('main', key, locale),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
-  return ok({ success: true, cached: Boolean(cached), free: Boolean(cached || stale) && owns });
+  return ok({ success: true, cached: Boolean(cached), free: coDong && owns });
 }
 
 export async function OPTIONS() {

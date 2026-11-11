@@ -65,17 +65,20 @@ export async function POST(req: NextRequest) {
   };
 
   try {
-    const pdfBuffer = await renderLuanGiaiPdf(input);
+    // Cookie nói ngôn ngữ khách ĐANG dùng; có thì ghi nhớ cho các email sau (cron không có cookie).
+    const cookieLocale = localeFromCookieHeader(req.headers.get('cookie'));
+    if (cookieLocale) await saveUserLocale(user.id, cookieLocale);
+    const locale = cookieLocale ?? (await getUserLocale(user.id));
+
+    // Khung PDF (bìa/mục lục/nhãn phần) theo ngôn ngữ người nhận — W18. `locale` KHÔNG vào `input`
+    // (khoá chống trùng băm `input`: thêm vào là đổi khoá của mọi lượt gửi tiếng Việt).
+    const pdfBuffer = await renderLuanGiaiPdf({ ...input, locale });
     // Khoá chống trùng theo NỘI DUNG — click lại đúng bản luận giải chỉ gửi
     // một lần; nội dung khác (unlock phần mới) thì hash khác, gửi được tiếp.
     // `toolId` vào cả hash lẫn key: cùng một user gửi CẢ HAI tool cho cùng lá
     // số (hoTen/ngaySinh trùng) vẫn ra 2 khoá khác nhau, không đè lẫn nhau.
     const contentHash = createHash('sha1').update(JSON.stringify(input)).digest('hex').slice(0, 16);
 
-    // Cookie nói ngôn ngữ khách ĐANG dùng; có thì ghi nhớ cho các email sau (cron không có cookie).
-    const cookieLocale = localeFromCookieHeader(req.headers.get('cookie'));
-    if (cookieLocale) await saveUserLocale(user.id, cookieLocale);
-    const locale = cookieLocale ?? (await getUserLocale(user.id));
     const mail = renderPdfMail(locale, toolId, input.hoTen);
 
     const result = await sendTransactionalEmail({

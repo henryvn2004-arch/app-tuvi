@@ -14,7 +14,8 @@ import { createClient } from '@supabase/supabase-js';
 import { getUserFromSupabaseToken } from '@/lib/admin/auth';
 import { sendTransactionalEmail } from '@/lib/email/send';
 import { localeFromCookieHeader, saveUserLocale, getUserLocale } from '@/lib/email/locale';
-import { renderPdfMail } from '@/lib/email/i18n';
+import { birthLine } from '@/lib/pdf/i18n';
+import { renderPdfMail, siteUrl } from '@/lib/email/i18n';
 import { renderLuanGiaiPdf } from '@/lib/pdf/luan-giai';
 import { buildPhans } from '@/lib/pdf/phan-labels';
 import { getOrCreateReportToken } from '@/lib/pdf/report-link';
@@ -63,13 +64,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Chưa có nội dung luận giải nào được lưu cho lá số này' }, { status: 400 });
   }
 
+  // Cookie = ngôn ngữ khách ĐANG dùng; có thì ghi nhớ cho các email sau. Tính TRƯỚC khi dựng PDF:
+  // khung PDF (bìa/mục lục/nhãn phần/giờ sinh) đi cùng ngôn ngữ thư — W18.
+  const cookieLocale = localeFromCookieHeader(req.headers.get('cookie'));
+  if (cookieLocale) await saveUserLocale(user.id, cookieLocale);
+  const locale = cookieLocale ?? (await getUserLocale(user.id));
+
   const hoTen = row.person_name ? String(row.person_name) : '';
   const ngaySinh = [row.ngay_sinh, row.thang_sinh, row.nam_sinh].every((v) => v != null)
-    ? `${row.ngay_sinh}/${row.thang_sinh}/${row.nam_sinh}${row.gio_chi ? ', giờ ' + row.gio_chi : ''}`
+    ? birthLine(locale, row.ngay_sinh, row.thang_sinh, row.nam_sinh, row.gio_chi ? String(row.gio_chi) : null)
     : '';
 
   try {
+    // ⚠️ Văn luận đọc từ `laso_public.luan_giai` — hiện CHỈ tiếng Việt (CLAUDE.md "Ngôn ngữ đầu ra
+    // LLM"); chỉ KHUNG theo `locale`. Khi kho luận theo (slug, locale) có, đọc đúng bản ở đây.
     const pdfBuffer = await renderLuanGiaiPdf({
+      locale,
       toolId, hoTen, ngaySinh,
       gioiTinh: row.gioi_tinh ? String(row.gioi_tinh) : '',
       phans,
@@ -91,15 +101,11 @@ export async function POST(req: NextRequest) {
     let viewUrl: string | undefined;
     try {
       const linkToken = await getOrCreateReportToken(slug, toolId, user.id);
-      viewUrl = `https://tuviminhbao.com/ket-qua-laso/${linkToken}`;
+      // Trang xem online theo ngôn ngữ người nhận (`/ja/ket-qua-laso/…`) — W18.
+      viewUrl = siteUrl(locale, `/ket-qua-laso/${linkToken}`);
     } catch (e) {
       console.error('[luan-giai/resend-pdf] lỗi sinh report token', e);
     }
-
-    // Cookie = ngôn ngữ khách ĐANG dùng; có thì ghi nhớ cho các email sau.
-    const cookieLocale = localeFromCookieHeader(req.headers.get('cookie'));
-    if (cookieLocale) await saveUserLocale(user.id, cookieLocale);
-    const locale = cookieLocale ?? (await getUserLocale(user.id));
     const mail = renderPdfMail(locale, toolId, hoTen, { resend: true, viewUrl });
 
     const result = await sendTransactionalEmail({
