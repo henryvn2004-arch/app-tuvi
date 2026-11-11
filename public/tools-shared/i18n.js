@@ -1,7 +1,6 @@
 // public/tools-shared/i18n.js
 // ============================================================
-// Khung i18n TỐI THIỂU — Đợt 5 hellobot-ui-redesign: chuẩn bị nền, CHƯA bật
-// chọn ngôn ngữ cho khách (site vẫn mặc định 'vi'). Nguồn DUY NHẤT tra chuỗi
+// Khung i18n phía CLIENT. Nguồn DUY NHẤT tra chuỗi
 // dùng chung khi thêm ngôn ngữ khác — không tự tạo dict thứ hai ở nơi khác.
 // Vì sao không dùng next-intl/i18next: docs/luat/i18n.md.
 //
@@ -11,7 +10,24 @@
 (function () {
   'use strict';
 
-  var LOCALE = 'vi'; // TODO đợt sau: đọc từ <html lang>/cookie/query khi có nhu cầu thật
+  // Ngôn ngữ trang: server (lib/i18n/render.mjs) ghi <html lang> theo HREFLANG của
+  // lib/i18n/locales.ts. Đọc NGƯỢC từ đó — client KHÔNG tự đoán từ URL/cookie, để
+  // một trang chỉ có một nguồn ngôn ngữ. Bảng dưới phải khớp HREFLANG.
+  var FROM_HREFLANG = {
+    vi: 'vi',
+    en: 'en',
+    ja: 'ja',
+    ko: 'ko',
+    'zh-hant-tw': 'zh-tw',
+    'zh-hans-cn': 'zh-cn',
+  };
+  var LOCALE = 'vi';
+  try {
+    var hl = String(document.documentElement.getAttribute('lang') || '').toLowerCase();
+    LOCALE = FROM_HREFLANG[hl] || 'vi';
+  } catch (e) {
+    LOCALE = 'vi';
+  }
 
   var DICT = {
     'report.building': { vi: 'Đang đóng bản báo cáo…' },
@@ -44,5 +60,10 @@
     return s;
   }
 
-  window.I18n = { locale: LOCALE, t: t };
+  /** Đường dẫn cùng ngôn ngữ: I18n.href('/topup.html') → '/ja/topup.html' (vi giữ nguyên). */
+  function href(path) {
+    return LOCALE === 'vi' ? path : '/' + LOCALE + path;
+  }
+
+  window.I18n = { locale: LOCALE, t: t, href: href };
 })();

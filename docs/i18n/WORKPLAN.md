@@ -45,7 +45,27 @@ bản địa sẽ thấy mình "sai".
 | W3b | Bát Tự: tiết khí theo thời điểm chính xác cho lịch cn/kr/jp (vn giữ nguyên) | Opus | W3 |
 | W12 | Kênh chat: bỏ VNĐ/VietQR, chuyển sang link PayPal USD | Opus | W5 |
 
-Đợt 1 (W1–W6) đã merge 2026-11-11: #1206–#1212. Đợt 2: W3b, W7–W11; W12 mở sau W11.
+Đợt 1 (W1–W6) đã merge 2026-11-11: #1206–#1212. Đợt 2 (W3b, W7–W12) đã merge: #1213–#1225.
+
+### Đợt 3 — khách nước ngoài MUA ĐƯỢC (mở 2026-11-11)
+Rà sau đợt 2: trang đã dịch nhưng khung app (`shell.js`), tường trả phí, đăng nhập, trang
+nạp PayPal (`topup.html`) và bảng lá số (tên sao/cung) vẫn tiếng Việt ⇒ người Nhật vào
+được mà không mua được.
+
+| # | Việc | Model | Phụ thuộc |
+|---|---|---|---|
+| W13 | Chuỗi trong JS client: cơ chế + trích `shell.js` · `tuvi-paywall.js` · `auth.js` · nhãn `tool-prices.js` · `topup.html` (cả HTML lẫn JS) | Opus | — |
+| W14 | Trang tĩnh qua từ điển server (`data-i18n`): `app-home.html` + các trang công cụ chính còn lại — chỉ đánh dấu + khoá `vi` | Sonnet | — |
+| W15 | Bảng lá số theo ngôn ngữ: tên sao/cung/can chi qua glossary (một nguồn sinh ra cả TS lẫn `tools-shared`) | Opus | — |
+| W7a3 / W7b3 | Dịch khoá mới của W13+W14: ja+ko / zh-tw+en | Sonnet | W13, W14 |
+
+**Hợp đồng client (đã có trên main):** `window.I18n` (`public/tools-shared/i18n.js`) là nguồn
+DUY NHẤT — `I18n.locale` đọc ngược từ `<html lang>` do server ghi; `I18n.href(path)` cho link
+cùng ngôn ngữ; `I18n.t(key, params)`. Không tạo dict/bộ đọc locale thứ hai.
+Ranh giới file: `topup.html` thuộc W13; W14 KHÔNG đụng nó. Engine (`tuvi-ansao-engine.js`)
+giữ tên tiếng Việt làm KHOÁ nội bộ — W15 chỉ đổi lớp HIỂN THỊ.
+
+Để đợt 4: `laso_public` theo (slug, locale) · chân dung/PDF/email-link · tên thầy bản ngữ.
 
 ## Quyết định đã chốt (2026-11-11)
 - **Giá gói (USD, PayPal):** Khởi Đầu 350 L $19 · Phổ Thông 800 L $39 · Cao Cấp 1.750 L $79 ·
