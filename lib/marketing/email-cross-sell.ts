@@ -19,6 +19,9 @@
 // ============================================================
 import { getConfig } from './autopilot';
 import { sendMarketingEmail } from '../email/send';
+import { getUserLocales } from '../email/locale';
+import { renderCrossSell } from '../email/i18n';
+import { DEFAULT_LOCALE } from '../i18n/locales';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -31,27 +34,17 @@ const SB_HEADERS = {
 interface CrossSellPair {
   from: string;
   to: string;
-  toLabel: string;
-  toUrl: string;
-  reason: string;
+  /** Đường dẫn đích (không tiền tố ngôn ngữ). Nhãn + lý do từng cặp nằm ở lib/email/i18n.ts
+   *  (khoá `${from}>${to}`) — thêm cặp mới phải thêm đủ 6 ngôn ngữ ở đó (`check:emaili18n`). */
+  toPath: string;
 }
 
 const PAIRS: CrossSellPair[] = [
-  { from: 'luan-giai', to: 'bat-tu', toLabel: 'Bát Tự (Tứ Trụ)',
-    toUrl: 'https://tuviminhbao.com/app/bat-tu',
-    reason: 'Bạn đã xem Tử Vi Đẩu Số — Bát Tự soi mệnh theo góc Can Chi Tứ Trụ, một lớp phân tích khác bổ trợ cho lá số vừa xem.' },
-  { from: 'bat-tu', to: 'luan-giai', toLabel: 'Tử Vi Đẩu Số — Luận Giải',
-    toUrl: 'https://tuviminhbao.com/app/luan-giai',
-    reason: 'Bạn đã xem Bát Tự — Luận Giải Tử Vi Đẩu Số cho góc nhìn 12 cung/vận hạn chi tiết theo từng năm.' },
-  { from: 'bat-trach', to: 'chon-ngay', toLabel: 'Chọn Ngày Tốt',
-    toUrl: 'https://tuviminhbao.com/app/chon-ngay',
-    reason: 'Bạn đã xem hướng nhà hợp mệnh — Chọn Ngày Tốt giúp chọn thời điểm động thổ/nhập trạch hợp mệnh luôn.' },
-  { from: 'chan-dung-tien-kiep', to: 'duyen-no-tien-kiep', toLabel: 'Duyên Nợ Tiền Kiếp',
-    toUrl: 'https://tuviminhbao.com/app/duyen-no-tien-kiep',
-    reason: 'Bạn đã xem Chân Dung Tiền Kiếp — Duyên Nợ Tiền Kiếp soi thêm về các mối duyên gắn với kiếp trước.' },
-  { from: 'day-con', to: 'huong-nghiep-tre', toLabel: 'Hướng Nghiệp Trẻ',
-    toUrl: 'https://tuviminhbao.com/app/huong-nghiep-tre',
-    reason: 'Bạn đã xem cách Dạy Con hợp mệnh — Hướng Nghiệp Trẻ gợi ý luôn định hướng ngành nghề phù hợp về sau.' },
+  { from: 'luan-giai', to: 'bat-tu', toPath: '/app/bat-tu' },
+  { from: 'bat-tu', to: 'luan-giai', toPath: '/app/luan-giai' },
+  { from: 'bat-trach', to: 'chon-ngay', toPath: '/app/chon-ngay' },
+  { from: 'chan-dung-tien-kiep', to: 'duyen-no-tien-kiep', toPath: '/app/duyen-no-tien-kiep' },
+  { from: 'day-con', to: 'huong-nghiep-tre', toPath: '/app/huong-nghiep-tre' },
 ];
 
 interface Candidate { user_id: string; email: string; from_count: number }
@@ -65,12 +58,6 @@ async function fetchCandidates(pair: CrossSellPair, limit: number): Promise<Cand
   });
   if (!res.ok) throw new Error(`cross_sell_candidates(${pair.from}->${pair.to}): ${await res.text()}`);
   return res.json();
-}
-
-function crossSellHtml(pair: CrossSellPair): string {
-  return `<p style="font-size:15px;color:#061A2E">Gợi ý dành riêng cho bạn</p>
-<p style="font-size:14px;color:#333">${pair.reason}</p>
-<p style="margin-top:20px"><a href="${pair.toUrl}" style="display:inline-block;background:#061A2E;color:#C9A84C;padding:12px 28px;border-radius:4px;text-decoration:none;font-size:13px;letter-spacing:1px">Xem ${pair.toLabel} →</a></p>`;
 }
 
 interface CrossSellConfig {
@@ -110,16 +97,20 @@ export async function runEmailCrossSell(): Promise<CrossSellResult> {
     }
     pairsReport.push({ from: pair.from, to: pair.to, candidates: candidates.length });
 
+    const locales = await getUserLocales(candidates.map((c) => c.user_id));
     for (const c of candidates) {
       if (budgetLeft <= 0) break;
       if (!c.email || sentTo.has(c.user_id)) continue;
+      const locale = locales.get(c.user_id) ?? DEFAULT_LOCALE;
+      const mail = renderCrossSell(locale, pair.from, pair.to, pair.toPath);
       const result = await sendMarketingEmail({
         dedupeKey: `crosssell-${c.user_id}-${pair.from}-${pair.to}`,
         template: 'cross-sell',
         to: c.email,
-        subject: `Gợi ý cho bạn: ${pair.toLabel} — Tử Vi Minh Bảo`,
-        html: crossSellHtml(pair),
+        subject: mail.subject,
+        html: mail.html,
         userId: c.user_id,
+        locale,
       });
       if (result.ok) {
         sentTo.add(c.user_id);

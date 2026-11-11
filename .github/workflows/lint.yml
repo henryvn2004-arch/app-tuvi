@@ -454,3 +454,13 @@ jobs:
 
       - name: Typecheck (tsc --noEmit toàn app)
         run: npm run typecheck
+
+      # Trang 特定商取引法に基づく表記 (W11): còn 【要入力】 thì BẮT BUỘC noindex; điền xong thì noindex PHẢI gỡ;
+      # đủ chín mục chuẩn. Placeholder lọt lên Google = trang pháp lý trống mang tên thương hiệu.
+      - name: Trang 特商法 — noindex đi cùng placeholder
+        run: npm run check:tokushoho
+
+      # Email 6 ngôn ngữ (W11): hàm chữ dùng đủ tham số như bản vi, zh-cn = OpenCC(zh-tw), mọi cặp
+      # cross-sell có chữ ở mọi ngôn ngữ, không nhắc "AI". Nội dung email không đi qua check:i18n.
+      - name: Email đa ngôn ngữ — đủ khoá, đủ tham số, zh-cn khớp OpenCC
+        run: npm run check:emaili18n

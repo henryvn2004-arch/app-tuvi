@@ -6,6 +6,8 @@
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyUnsubToken } from '@/lib/email/unsub-token';
+import { unsubStrings } from '@/lib/email/i18n';
+import { DEFAULT_LOCALE, HREFLANG, isLocale, type Locale } from '@/lib/i18n/locales';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,9 +18,9 @@ function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 }
 
-function page(title: string, body: string, status = 200): NextResponse {
+function page(locale: Locale, title: string, body: string, status = 200): NextResponse {
   return new NextResponse(
-    `<!doctype html><html lang="vi"><meta charset="utf-8"><title>${title}</title>
+    `<!doctype html><html lang="${HREFLANG[locale]}"><meta charset="utf-8"><title>${title}</title>
 <body style="font-family:system-ui,sans-serif;max-width:480px;margin:80px auto;padding:0 24px;text-align:center;color:#222">
 <h1 style="font-size:20px">${title}</h1><p>${body}</p></body></html>`,
     { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } },
@@ -28,9 +30,12 @@ function page(title: string, body: string, status = 200): NextResponse {
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const email = (req.nextUrl.searchParams.get('email') || '').trim().toLowerCase();
   const sig = req.nextUrl.searchParams.get('sig') || '';
+  const lang = req.nextUrl.searchParams.get('lang');
+  const locale: Locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
+  const t = unsubStrings(locale);
 
   if (!email || !verifyUnsubToken(email, sig)) {
-    return page('Liên kết không hợp lệ', 'Liên kết huỷ nhận email này đã hỏng hoặc hết hạn.', 400);
+    return page(locale, t.badTitle, t.badBody, 400);
   }
 
   if (SUPABASE_URL && SUPABASE_KEY) {
@@ -46,12 +51,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         body: JSON.stringify({ email, unsubscribed_at: new Date().toISOString() }),
       });
     } catch {
-      return page('Có lỗi xảy ra', 'Không huỷ được lúc này, thử lại sau ít phút.', 500);
+      return page(locale, t.errTitle, t.errBody, 500);
     }
   }
 
-  return page(
-    'Đã huỷ nhận email',
-    `Địa chỉ <b>${escapeHtml(email)}</b> sẽ không nhận thêm email quảng bá từ Tử Vi Minh Bảo.`,
-  );
+  return page(locale, t.okTitle, t.ok(escapeHtml(email)));
 }

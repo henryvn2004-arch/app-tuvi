@@ -7,6 +7,7 @@
 export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
+import { localeFromCookieHeader, saveUserLocale } from '@/lib/email/locale';
 import { waitUntil } from '@vercel/functions';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { createPayOSOrder } from '@/lib/billing/payos-order';
@@ -3807,7 +3808,14 @@ export async function POST(request: NextRequest) {
   const body   = await parseBody(request);
   if (action === 'promo-redeem')      return handlePromoRedeem(request, body);
   if (action === 'admin-promo-code')  return handleAdminPromoCode(request, body);
-  if (action === 'topup')             return (await denyUnlessOwner(request, String(body.userId || ''))) ?? handleTopup(body);
+  if (action === 'topup') {
+    const denied = await denyUnlessOwner(request, String(body.userId || ''));
+    if (denied) return denied;
+    // Hoá đơn sẽ gửi từ WEBHOOK PayPal (không có cookie) ⇒ ghi ngôn ngữ khách ĐANG dùng ngay lúc mua
+    // (docs/luat/email.md "Ngôn ngữ email"). Best-effort, không chặn đơn.
+    await saveUserLocale(String(body.userId || ''), localeFromCookieHeader(request.headers.get('cookie')));
+    return handleTopup(body);
+  }
   if (action === 'capture')           return handleCapture(body);
   if (action === 'deduct')            return handleDeduct(request, body);
   if (action === 'admin-grant')       return handleAdminGrant(request, body);
