@@ -76,7 +76,9 @@ for (const t of G) {
   if (!/^[가-힣]+$/u.test(t.ko)) bad(`glossary ${id}: ko không thuần Hangul: ${t.ko}`);
 }
 // ja/zh-cn khớp OpenCC của zh-tw (ngoại lệ có chủ đích: 'Âm Lịch', 'Dương Lịch')
-const NGOAI_LE = new Set(['khai|Âm Lịch', 'khai|Dương Lịch']);
+// W15c: GHI ĐÈ CỐ Ý (tuvi-terms.ts, cột 6) vì OpenCC dịch sai tên quẻ: 乾 (quẻ Càn) → 干 ở zh-cn (đúng là 乾);
+// 豫 (quẻ Dự) → 予 ở ja (đúng là 豫). Chỉ ba mục này — thêm mục khác phải kèm lý do.
+const NGOAI_LE = new Set(['khai|Âm Lịch', 'khai|Dương Lịch', 'que|Càn', 'quai|Càn', 'que|Dự']);
 for (const t of G) {
   if (NGOAI_LE.has(`${t.k}|${t.vi}`) || t.k === 'gio') continue; // 'gio': ja = 子の刻 (kiểm ở check:glossary)
   if (t['zh-cn'] !== toCn(t['zh-tw']))

@@ -4567,6 +4567,10 @@
   "t": "Which glasses suit my face?",
   "h": "e2a2a092"
  },
+ "js.shellui.km-cuc": {
+  "t": "{dun}, Ju {n}",
+  "h": "0819a44e"
+ },
  "js.shellui.ky-hop-dong-gio-nao-hop": {
   "t": "Which hour is good for signing a contract?",
   "h": "01e5265d"

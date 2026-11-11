@@ -154,11 +154,11 @@
 
 <script>window.SHELL_ACTIVE='ky-mon';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'ky-mon'};</script>
-<script src="/tools-shared/ky-mon.js?v=1"></script>
+<script src="/tools-shared/ky-mon.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=146"></script>
+<script src="/shell.js?v=147"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 // Bàn dựng ở SERVER (/api/qimen). Trang chỉ gọi + vẽ, dùng chung module
@@ -204,10 +204,10 @@ function showResult() {
   const b = _b;
   const cHoi = document.getElementById('cauHoi').value.trim();
   document.getElementById('kmMeta').innerHTML =
-    '<div><span>Cục</span><b>' + b.cuc + '</b></div>' +
-    '<div><span>Tiết khí</span><b>' + b.tietKhi + ' ' + b.nguyen + '</b></div>' +
+    '<div><span>Cục</span><b>' + KyMonTool.fmt.cuc(b.cuc) + '</b></div>' +
+    '<div><span>Tiết khí</span><b>' + KyMonTool.fmt.tietKhi(b.tietKhi) + ' ' + KyMonTool.fmt.kymon(b.nguyen) + '</b></div>' +
     '<div><span>Giờ · Ngày</span><b>' + b.canChi.gio + ' · ' + b.canChi.ngay + '</b></div>' +
-    '<div><span>Trực phù · Trực sử</span><b>' + b.trucPhu + ' · ' + b.trucSu + '</b></div>';
+    '<div><span>Trực phù · Trực sử</span><b>' + KyMonTool.fmt.kymon(b.trucPhu) + ' · ' + KyMonTool.fmt.kymon(b.trucSu) + '</b></div>';
   document.getElementById('kmBan').innerHTML = KyMonTool.boardHTML(b);
   document.getElementById('kmChiTiet').innerHTML = KyMonTool.chiTietHTML(b);
   document.getElementById('birthPanel').style.display = 'none';
@@ -224,8 +224,8 @@ function showResult() {
   Shell.setContext({
     scenario: { type: 'ky-mon', data: d },
     restore: { t: b.luc, cauHoi: cHoi },
-    label: 'Kỳ Môn · ' + b.cuc + ' · giờ ' + b.canChi.gio,
-    greeting: 'Bàn đã lập — **' + b.cuc + '**, tiết ' + b.tietKhi + ' ' + b.nguyen + ', trực phù **' + b.trucPhu + '**, trực sử **' + b.trucSu + '**.' + (doNhat ? ' Hướng xếp hạng cao nhất là **' + doNhat.huong + '**.' : '') + ' Tôi sẽ luận theo việc bạn hỏi.',
+    label: 'Kỳ Môn · ' + KyMonTool.fmt.cuc(b.cuc) + ' · giờ ' + b.canChi.gio,
+    greeting: 'Bàn đã lập — **' + KyMonTool.fmt.cuc(b.cuc) + '**, tiết ' + KyMonTool.fmt.tietKhi(b.tietKhi) + ' ' + KyMonTool.fmt.kymon(b.nguyen) + ', trực phù **' + KyMonTool.fmt.kymon(b.trucPhu) + '**, trực sử **' + KyMonTool.fmt.kymon(b.trucSu) + '**.' + (doNhat ? ' Hướng xếp hạng cao nhất là **' + doNhat.huong + '**.' : '') + ' Tôi sẽ luận theo việc bạn hỏi.',
     chips: ['Việc của tôi nên đi hướng nào?', 'Giờ này hợp làm việc gì nhất?', 'Hướng nào phải tránh và vì sao?', 'Trực phù trực sử nói lên điều gì?']
   });
 

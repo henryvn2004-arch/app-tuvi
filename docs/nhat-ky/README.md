@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-559 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+560 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 18 | 48868 B |
+| `2026-11.md` | 19 | 54021 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🀄 W15c — Glossary Kỳ Môn · 24 tiết khí · 64 quẻ · tượng quẻ, giá trị engine qua G() ở rail + 3 công cụ |
 | 1 | 2026-11 | `2026-11.md` | 🈯 W13f — Giá trị engine in thẳng chữ Việt trong lời chào rail: Trực · Tú · nạp âm · hành |
 | 1 | 2026-11 | `2026-11.md` | 🈂️ W7a6 — Dịch 81 khoá W13e (ja+ko) + sửa bản dịch lệch glossary W15b |
 | 1 | 2026-11 | `2026-11.md` | 🈶 W7b6 — Dịch zh-tw + en cho 81 khoá W13e, sửa thuật ngữ lệch glossary |
