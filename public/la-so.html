@@ -196,7 +196,7 @@ html:not([lang="vi"]) .tuan-tag,html:not([lang="vi"]) .triet-tag{white-space:now
 </footer>
 
 <script src="/tuvi-ansao-engine.js"></script>
-<script src="/tools-shared/glossary.js?v=1"></script>
+<script src="/tools-shared/glossary.js?v=2"></script>
 <script src="/tools-shared/i18n.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -325,7 +325,7 @@ function renderCenter(ls, fd) {
     <div class="center-row"><span class="ic-inline" data-icon="user" data-icon-emoji="⚧" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚧</span> Giới tính: ${fd.gioitinh==='nam'?'Nam':'Nữ'}</div>
     ${fd.amDuongNam?`<div class="center-row">${fd.amDuongNam==='dương'?'Dương':'Âm'} ${fd.gioitinh==='nam'?'Nam':'Nữ'} · Âm Dương ${(fd.amDuongNam==='dương')===(fd.gioitinh==='nam')?'Thuận Lý':'Nghịch Lý'}</div>`:''}
     <hr class="center-divider">
-    <div class="center-row">Năm: <b style="color:var(--navy)">${_g('canchi',ls.canChiNam)}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${NAP_AM_FULL[ls.canChiNam]||_g('hanh',ls.napAm||'')}</b></div>
+    <div class="center-row">Năm: <b style="color:var(--navy)">${_g('canchi',ls.canChiNam)}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${((f=>f&&!_isVi()?_g('napam',f.split(' (')[0]):f)(NAP_AM_FULL[ls.canChiNam]))||_g('hanh',ls.napAm||'')}</b></div>
     <div class="center-row">Cục: <b style="color:var(--navy)">${_g('cuc',ls.cuc||'')}</b> &nbsp;·&nbsp; Mệnh: <b>${_g('chi',ls.menhDC||'')}</b> · Thân: <b>${_g('chi',ls.thanDC||'')}</b></div>
     <hr class="center-divider">
     <div class="center-row">Năm <b style="color:var(--blue)">${_g('chi',ls.chiNamXem||'')}</b> — Tuổi ${ls.tuoiXem}</div>

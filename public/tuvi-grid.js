@@ -56,6 +56,11 @@ const TuviGrid = (() => {
   // (hoặc chưa nạp glossary.js) trả NGUYÊN chuỗi vào ⇒ HTML y hệt trước.
   const _SAO = ['chinh', 'sao'];
   function _g(kind, vi, opts) { return window.TuviGlossary ? window.TuviGlossary.t(kind, vi, opts) : vi; }
+  // Nạp âm: vi giữ NGUYÊN chuỗi NAP_AM_FULL; ngôn ngữ khác lấy tên (trước ngoặc) qua glossary 'napam'.
+  function _napAm(canChiNam) {
+    const f = NAP_AM_FULL[canChiNam];
+    return f && !_isVi() ? _g('napam', f.split(' (')[0]) : f;
+  }
   function _isVi() { return !window.TuviGlossary || window.TuviGlossary.locale() === 'vi'; }
 
   function _getElemClass(n) {
@@ -125,7 +130,7 @@ const TuviGrid = (() => {
     // Sao lưu năm xem (engine `luuStars`, cờ `xau` do engine đánh dấu) — cùng cách
     // hiện với public/laso-chart.js. Engine cũ chưa có → rỗng.
     const luuH = (p.luuStars || []).map(s =>
-      `<span class="v2-luu-item${s.xau ? ' luu-xau' : ''}" title="${s.ten}${s.sao ? ' (' + s.sao + ')' : ''} — chỉ tác dụng trong năm xem">${_g('sao', s.ten).replace(/^Lưu /, 'L.').toUpperCase()}</span>`
+      `<span class="v2-luu-item${s.xau ? ' luu-xau' : ''}" title="${s.ten}${s.sao ? ' (' + s.sao + ')' : ''} — chỉ tác dụng trong năm xem">${_g(['sao', 'khai'], s.ten).replace(/^Lưu /, 'L.').toUpperCase()}</span>`
     ).join('');
 
     // Khuôn Thiên Lương — cùng bố cục với public/laso-chart.js.
@@ -233,7 +238,7 @@ const TuviGrid = (() => {
         <div class="center-row"><span class="ic-inline" data-icon="user" data-icon-emoji="⚧" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚧</span> ${gioitinh === 'nam' ? 'Nam' : 'Nữ'}</div>
         <hr class="center-divider">
         <div class="center-row">Năm: <b style="color:var(--navy)">${_g('canchi', ls.canChiNam)}</b></div>
-        <div class="center-row">Mệnh: <b style="color:var(--navy)">${NAP_AM_FULL[ls.canChiNam] || _g('hanh', ls.napAm)}</b></div>
+        <div class="center-row">Mệnh: <b style="color:var(--navy)">${_napAm(ls.canChiNam) || _g('hanh', ls.napAm)}</b></div>
         <div class="center-row">Cục: <b style="color:var(--navy)">${_g('cuc', ls.cuc)}</b></div>
         <div class="center-row">Mệnh: <b style="color:var(--navy)">${_g('chi', ls.menhDC)}</b> · Thân: <b style="color:var(--navy)">${_g('chi', ls.thanDC)}</b></div>
         <hr class="center-divider">
@@ -293,7 +298,7 @@ const TuviGrid = (() => {
         <div class="center-row"><span class="ic-inline" data-icon="cake" data-icon-emoji="🎂" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎂</span> ${ls.tuoiXem||''} tuổi · ${ls._gioitinh==='nu'?'Nữ':'Nam'}</div>
         <hr class="center-divider">
         <div class="center-row">Năm: <b>${_g('canchi', ls.canChiNam||'')}</b></div>
-        <div class="center-row">Mệnh: <b>${NAP_AM_FULL[ls.canChiNam]||_g('hanh', ls.napAm||'')}</b></div>
+        <div class="center-row">Mệnh: <b>${_napAm(ls.canChiNam)||_g('hanh', ls.napAm||'')}</b></div>
         <div class="center-row">Cục: <b>${_g('cuc', ls.cuc||'')}</b></div>
         <div class="center-row">Mệnh: <b>${_g('chi', ls.menhDC||'')}</b> · Thân: <b>${_g('chi', ls.thanDC||'')}</b></div>
         <hr class="center-divider">
