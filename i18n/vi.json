@@ -1240,6 +1240,7 @@
  "js.shellui.km-truc": "Trực {than}",
  "js.shellui.kmx-chu-ban": "Bàn vẽ theo Lạc Thư, <b>Nam ở trên</b> — đúng lối vẽ cổ pháp, ngược với bản đồ thường. Mỗi ô: cửa (dòng lớn) · sao thiên bàn và thần · can thiên bàn (<b>đậm</b>) trên can địa bàn (<i>nghiêng</i>). <b>#n</b> là thứ hạng tương đối trong chín cung, không phải phán cát hung.",
  "js.shellui.kmx-chu-bang": "Cột <b>Engine</b> là phán quyết cát/hung của thuật toán cổ pháp. Cột <b>Điểm</b> là xếp hạng tương đối do trang tính, để luôn chỉ ra được hướng đỡ nhất — công thức: cửa cát +3 / hung −3, sao và thần ±2, Tam Kỳ +2, mỗi cát cách +1 và mỗi hung cách −1. Đo trên 366 bàn cả năm thì chỉ 26,5% số bàn có cung được engine chấm cát, nên nếu chỉ đọc cột Engine thì phần lớn thời gian bàn nói \"đi đâu cũng xấu\".",
+ "js.shellui.kmx-chu-giai": "Chú giải sao và thần trên bàn này",
  "js.shellui.kmx-khong-cua": "không cửa",
  "js.shellui.kmx-nghia-canh": "Phô bày, văn thư, thi cử, tin tức, quảng cáo",
  "js.shellui.kmx-nghia-do": "Bế tắc, che giấu, trốn tránh, hợp việc kín",

@@ -389,17 +389,20 @@
       _haoSVG(r.the.li, theMau) +
       '<div class="mh-ten">' + _esc(_g('quai', r.the.n)) + '</div>' +
       '<div class="mh-phu">' + _esc(r.the.zh) + ' · ' + _esc(_g('tuongquai', r.the.tuong)) + ' · <b style="color:' + theMau + '">' + _esc(_g('hanh', r.the.hanh)) + '</b></div>' +
+      '<div class="mh-nghia">' + _esc(nghiaQuai(r.the)) + '</div>' +
       '</div>' +
       '<div class="mh-giua">' +
       '<div class="mh-mui" style="color:' + mn.mau + '">' + (qh.ma === 'tihoa' ? '⟺' : qh.ma.indexOf('the-') === 0 ? '⟶' : '⟵') + '</div>' +
       '<div class="mh-qh">' + _esc(_g('maihoa', qh.ten)) + '</div>' +
       '<div class="mh-muc" style="background:' + mn.mau + '">' + _esc(_nhan(qh.muc)) + '</div>' +
+      '<div class="mh-tt">' + _esc(tomTatQuanHe(qh)) + '</div>' +
       '</div>' +
       '<div class="mh-quai mh-dung">' +
       '<div class="mh-vai">' + _tv('js.shellui.mhx-vai-dung', 'Dụng · việc') + '</div>' +
       _haoSVG(r.dung.li, dungMau) +
       '<div class="mh-ten">' + _esc(_g('quai', r.dung.n)) + '</div>' +
       '<div class="mh-phu">' + _esc(r.dung.zh) + ' · ' + _esc(_g('tuongquai', r.dung.tuong)) + ' · <b style="color:' + dungMau + '">' + _esc(_g('hanh', r.dung.hanh)) + '</b></div>' +
+      '<div class="mh-nghia">' + _esc(nghiaQuai(r.dung)) + '</div>' +
       '</div>' +
       '</div>' +
       '<div class="mh-luan">' + _esc(_long('mai-hoa', 'qh.' + qh.ma + '.luan', qh.luan)) + '</div>' +
@@ -610,7 +613,7 @@
     };
   }
 
-  /** Nghĩa một quẻ đơn (BAT_QUAI[i]) ĐỂ HIỂN THỊ; chưa có chỗ vẽ nào dùng — sẵn cho giao diện sau. */
+  /** Nghĩa một quẻ đơn (BAT_QUAI[i]) ĐỂ HIỂN THỊ — vẽ ở thẻ Thể/Dụng (`.mh-nghia`). */
   function nghiaQuai(q) {
     return q ? _long('mai-hoa', 'quai.' + q.so + '.nghia', q.nghia) : '';
   }
