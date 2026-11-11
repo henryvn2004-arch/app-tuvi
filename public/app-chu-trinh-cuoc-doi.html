@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chu Trình Cuộc Đời — Tử Vi Minh Bảo</title>
-<meta name="description" content="Soi 9 đại vận trọn đời và tiểu vận năm nay theo điểm số cổ pháp: thiên thời, địa lợi, nhân hòa từng chặng — và hỏi Thầy đào sâu giai đoạn nào bạn quan tâm.">
+<title data-i18n="chutrinh.chu-trinh-cuoc-doi-tu-vi">Chu Trình Cuộc Đời — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:chutrinh.soi-9-dai-van-tron-doi" name="description" content="Soi 9 đại vận trọn đời và tiểu vận năm nay theo điểm số cổ pháp: thiên thời, địa lợi, nhân hòa từng chặng — và hỏi Thầy đào sâu giai đoạn nào bạn quan tâm.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -157,11 +157,11 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Chu Trình Cuộc Đời</b><span>9 đại vận và tiểu vận năm nay, theo điểm số cổ pháp</span></div>
+      <div data-i18n="chutrinh.chu-trinh-cuoc-doi-9-dai" class="ws-title"><b>Chu Trình Cuộc Đời</b><span>9 đại vận và tiểu vận năm nay, theo điểm số cổ pháp</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
-        <a class="btn" id="btnLaSo" href="/app/luan-giai?auto=1" style="display:none">Lá Số →</a>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.sua-thong-tin" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <a data-i18n="chutrinh.la-so" class="btn" id="btnLaSo" href="/app/luan-giai?auto=1" style="display:none">Lá Số →</a>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -175,15 +175,15 @@
         <img class="intro-avatar" src="/tool-avatars/chu-trinh-cuoc-doi.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Chu Trình Cuộc Đời</div>
-            <div class="intro-d">9 đại vận trọn đời không phải một đường thẳng — có giai đoạn để tiến, có giai đoạn chỉ nên giữ mình. Soi từ lá số của bạn để biết mình đang ở khúc nào và nên làm gì tiếp theo.</div>
+            <div data-i18n="chutrinh.chu-trinh-cuoc-doi" class="intro-t">Chu Trình Cuộc Đời</div>
+            <div data-i18n="chutrinh.9-dai-van-tron-doi-khong" class="intro-d">9 đại vận trọn đời không phải một đường thẳng — có giai đoạn để tiến, có giai đoạn chỉ nên giữ mình. Soi từ lá số của bạn để biết mình đang ở khúc nào và nên làm gì tiếp theo.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>9 đại vận<br>trọn đời</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="calendar"></span><span>Tiểu vận<br>năm xem</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Chặng thuận,<br>chặng cẩn trọng</span></div>
+          <div data-i18n="chutrinh.9-dai-van-tron-doi" class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>9 đại vận<br>trọn đời</span></div>
+          <div data-i18n="chutrinh.tieu-van-nam-xem" class="hero-pill"><span class="hp-ic" data-icon="calendar"></span><span>Tiểu vận<br>năm xem</span></div>
+          <div data-i18n="chutrinh.chang-thuan-chang-can-trong" class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Chặng thuận,<br>chặng cẩn trọng</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -192,28 +192,28 @@
            đã đổi trong code cũ (doLuan/showForm/gate/paywall/kết quả) — cùng
            mẫu app-luan-giai.html (tool anh em, cùng flow 4 bước). -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước lá số</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="battu.2-xem-truoc-la-so" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước lá số</span></div>
+        <div data-i18n="battu.3-thanh-toan" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="battu.4-nhan-ket-qua" class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
-        <div class="fc-head"><span class="fc-ic" data-icon="hourglass"></span><h2>Nhập thông tin để lập lá số &amp; luận chu trình cuộc đời</h2></div>
-        <p class="sub">Nhập ngày sinh và năm muốn luận. Hệ thống tính 9 đại vận và tiểu vận năm đó rồi luận từng chặng.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="hourglass"></span><h2 data-i18n="chutrinh.nhap-thong-tin-de-lap-la">Nhập thông tin để lập lá số &amp; luận chu trình cuộc đời</h2></div>
+        <p data-i18n="chutrinh.nhap-ngay-sinh-va-nam-muon" class="sub">Nhập ngày sinh và năm muốn luận. Hệ thống tính 9 đại vận và tiểu vận năm đó rồi luận từng chặng.</p>
         <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:0">
-          <div class="fg" style="width:90px"><label>Năm luận</label><select id="inpNamxem"></select></div>
+          <div class="fg" style="width:90px"><label data-i18n="battu.nam-luan">Năm luận</label><select id="inpNamxem"></select></div>
         </div>
         <div class="cost-box">
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt">Miễn phí</div>
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="battu.mien-phi" class="cb-amt">Miễn phí</div>
             </div>
           </div>
         </div>
-        <button class="btn-go" id="btnGo" onclick="doLuan()">
+        <button data-i18n="chutrinh.luan-giai-mien-phi" class="btn-go" id="btnGo" onclick="doLuan()">
           <span class="bg-label"><span class="ic" data-icon="hourglass"></span><b id="btnGoLabel">Luận giải →</b></span>
           <small>Miễn phí</small>
         </button>
@@ -221,11 +221,11 @@
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Chu Trình Cuộc Đời</div>
-        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="chutrinh.chu-trinh-cuoc-doi" class="wsp-title">Chu Trình Cuộc Đời</div>
+        <p data-i18n="luangiai.tu-vi-dau-so-la-mot" class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
       </div>
-      <div class="samp-cta">
+      <div data-i18n="chutrinh.ban-chu-trinh-cuoc-doi-mau" class="samp-cta">
         <span class="sc-ic" data-icon="file-text"></span>
         <span class="sc-txt"><b>Bản Chu Trình Cuộc Đời mẫu</b><span>Tải PDF luận giải đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
         <a class="sc-btn" href="/tai-mau/mau-chu-trinh-cuoc-doi.pdf" target="_blank" rel="noopener">Tải PDF →</a>
@@ -235,7 +235,7 @@
       </div>
 
       <div id="lgPanel" data-ws-result>
-        <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
+        <span data-i18n="luangiai.an-la-so" class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
         <div class="chart-wrap" id="miniChart"></div>
         <div class="jump" id="lgJump"></div>
         <!-- Khối hook (fact, KHÔNG chart) — tool này đã có sẵn biểu đồ đại
@@ -252,17 +252,17 @@
              TĨNH, ẩn bằng [hidden] (CLS-safe) — tools-shared/report-delivery.js
              lo toàn bộ hành vi, xem _startLuanGiaiAI/_lgRetryPhan. -->
         <div class="report-ready" id="lgReportCard" hidden>
-          <div class="rr-eyebrow">紫微明寶 · Báo cáo của bạn</div>
-          <div class="rr-title" id="lgReportTitle">Đang đóng bản báo cáo…</div>
+          <div data-i18n="luangiai.bao-cao-cua-ban" class="rr-eyebrow">紫微明寶 · Báo cáo của bạn</div>
+          <div data-i18n="luangiai.dang-dong-ban-bao-cao" class="rr-title" id="lgReportTitle">Đang đóng bản báo cáo…</div>
           <div class="rr-sub" id="lgReportSub"></div>
           <div class="rr-actions">
-            <button type="button" class="rr-btn pri" id="lgBtnPdf" disabled>
+            <button data-i18n="luangiai.dang-dung" type="button" class="rr-btn pri" id="lgBtnPdf" disabled>
               <span class="ic" id="lgBtnPdfIcon"><span class="rr-spin"></span></span>
               <span id="lgBtnPdfLabel">Đang dựng…</span>
             </button>
             <button type="button" class="rr-btn" id="lgBtnEmail" disabled>
               <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg></span>
-              <span id="lgBtnEmailLabel">Gửi vào email</span>
+              <span data-i18n="luangiai.gui-vao-email" id="lgBtnEmailLabel">Gửi vào email</span>
             </button>
           </div>
         </div>
@@ -274,7 +274,7 @@
              hé cho người chưa trả tiền); đây là khối đọc/chia sẻ, có từ khoá. -->
         <div id="lgMap"></div>
         <div class="lg-tai" id="lgTai" style="display:none">
-          <button class="btn" id="lgTaiBtn" onclick="taiAnhArc()">⬇ Tải ảnh chia sẻ (9:16)</button>
+          <button data-i18n="vanhan.tai-anh-chia-se-9-16" class="btn" id="lgTaiBtn" onclick="taiAnhArc()">⬇ Tải ảnh chia sẻ (9:16)</button>
         </div>
         <div class="lg-body" id="lgBody"></div>
         <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
