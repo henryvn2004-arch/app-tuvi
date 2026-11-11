@@ -3402,7 +3402,7 @@
       go = openArtPanel;
     } else if (ctx && ctx.birth && !REPORT_PAGES[ACTIVE] && _rc.lasoPrice != null) {
       html = '<span class="rr-ic">' + svg('lock') + '</span><span class="rr-t"><b>Luận Giải ' + LG_PHAN.length +
-        ' mục cho lá số này</b><span>' + (creditUsd(_rc.lasoPrice) ? creditUsd(_rc.lasoPrice) + ' (' + _rc.lasoPrice + ' Lượng)' : _rc.lasoPrice + ' Lượng') + ' · chưa mở</span></span>' +
+        ' mục cho lá số này</b><span>' + creditUsd(_rc.lasoPrice) + ' (' + _rc.lasoPrice + ' Lượng)' + ' · chưa mở</span></span>' +
         '<span class="rr-go">Xem →</span>';
       go = function () {
         try { track('cta_click', { tool_id: 'laso', meta: { from: 'rail_report_bar' } }); } catch (e) { /* ignore */ }
@@ -3515,10 +3515,10 @@
   }
 
   // Giá nói với khách là USD (W5). Làm tròn LÊN cent, cùng cách `usdLabel` ở lib/billing/packages.ts.
-  // Chưa có tỉ giá (API chưa trả) ⇒ '' — đừng đoán số.
+  // Chưa có tỉ giá (API chưa trả) ⇒ '…' (luật giá: đọc hụt thì không hiện số, KHÔNG lùi về VNĐ).
   function creditUsd(c) {
     var r = _rc.usdPerCredit;
-    if (!r || !isFinite(c) || c <= 0) return '';
+    if (!r || !isFinite(c) || c <= 0) return '…';
     return '~$' + (Math.ceil(c * r * 100 - 1e-9) / 100).toFixed(2);
   }
 
@@ -3547,7 +3547,7 @@
           ? '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
               '. Bản <b>Luận Giải</b> soi trọn <b>' + LG_PHAN.length + ' mục</b> của chính lá số này — ' +
               esc(preview) + '… — thay vì hỏi lẻ từng câu.</div>' +
-            '<a class="stm-btn" href="' + esc(luanGiaiHref()) + '">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng' + (creditUsd(_rc.lasoPrice) ? ' (' + creditUsd(_rc.lasoPrice) + ')' : '') + '</a>' +
+            '<a class="stm-btn" href="' + esc(luanGiaiHref()) + '">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng (' + creditUsd(_rc.lasoPrice) + ')</a>' +
             '<a class="stm-alt" href="/topup.html">Hoặc nạp Lượng để hỏi tiếp từng câu →</a>'
           : '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
               ', nhưng phần Lượng trong ví đã cạn. Nạp thêm để thầy luận tiếp mạch còn dang dở nhé.</div>' +

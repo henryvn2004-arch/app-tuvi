@@ -32,7 +32,7 @@ npm run i18n:save -- --locale ja --file lo.json      # {"khoá":"bản dịch"} 
 ## Dành cho W6 / W8
 - Route SSR/handler đọc ngôn ngữ qua `localeFromHeaders(req.headers)` — proxy đã gắn header, nhưng trang SSR (không phải HTML tĩnh) hiện chỉ được phục vụ dưới `/<locale>/…` ở dạng `noindex` (không có khoá data-i18n) cho tới khi tự chịu trách nhiệm bản dịch. Muốn index: render sẵn chữ đúng ngôn ngữ trong route VÀ đăng ký trang (đưa vào `availability`) — trao đổi với W4.
 - Prompt LLM: câu chỉ định ngôn ngữ đặt ở USER message (giữ cache `cachedSystemFor`).
-- `?v=` bump: đã bump `nav.js`→48, `shell.js`→138, `shell.css`→79 ở mọi nơi TRỪ `public/topup.html` (W5) và `lib/nghiem-chung/trang-hub.ts`, `trang-ho-so.ts` (W6) — **W5/W6 tự bump ba chỗ đó** (`nav.js?v=48`).
+- `?v=` bump: đã bump `nav.js`→48, `shell.js`→139, `shell.css`→79 ở mọi nơi TRỪ `public/topup.html` (W5) và `lib/nghiem-chung/trang-hub.ts`, `trang-ho-so.ts` (W6) — **W5/W6 tự bump ba chỗ đó** (`nav.js?v=48`).
 
 ## Font CJK
 `@fontsource-variable/noto-sans-{jp,kr,tc,sc}` (devDependencies) → `npm run i18n:fonts` (chạy trong `prebuild`) sinh `public/fonts/cjk/*.woff2` + `public/fonts/i18n-<locale>.css` (gitignore). Chỉ trang `/<locale>` CJK được chèn `<link>`; unicode-range theo lát nên chỉ tải lát có chữ. CLS: `font-display:swap`, 'Be Vietnam Pro' đứng đầu ngăn xếp (Latin giữ nét), sau đó Noto rồi font hệ thống CJK (glyph rộng 1em nên đổi font ít xô dòng). Tiêu đề dùng lớp riêng (vd Noto Serif) giữ nguyên font — CJK trong đó rơi về font hệ thống.
