@@ -19,7 +19,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { BirthParams } from '@/lib/contract/v1';
 import { currentNamXem } from '@/lib/engine/namxem';
-import { solarDateOf } from '@/lib/engine/laso';
+import { lichOf, solarDateOf } from '@/lib/engine/laso';
 
 type Rec = Record<string, unknown>;
 
@@ -32,6 +32,7 @@ let engineCache: {
   tinhBatTu: (o: object) => Rec;
   hanhCan: Record<string, string>;
   hanhChi: Record<string, string>;
+  tietKhiCuaThoiDiem: (d: number, m: number, y: number, h: number, p: number, lich: string) => { i: number; gan: boolean } | null;
 } | null = null;
 
 function loadEngine() {
@@ -39,8 +40,13 @@ function loadEngine() {
   const code = readFileSync(join(process.cwd(), 'public', 'tubinh-ansao-engine.js'), 'utf-8');
   const g = globalThis as Rec;
   const mod = { exports: {} as Rec };
+  // Lịch cn/kr/jp: engine đọc múi của lịch từ `NoiSinh.GIO_LICH` (nguồn DUY NHẤT,
+  // public/tools-shared/noi-sinh.js) — trên trang là biến toàn cục, ở đây truyền
+  // vào như tham số cùng tên.
+  const ns = { exports: {} as Rec };
+  new Function('module', readFileSync(join(process.cwd(), 'public', 'tools-shared', 'noi-sinh.js'), 'utf-8'))(ns);
   // Engine dùng `if (typeof module !== 'undefined') module.exports = {...}`.
-  (new Function('module', 'exports', 'window', 'globalThis', code))(mod, mod.exports, g, g);
+  (new Function('module', 'exports', 'window', 'globalThis', 'NoiSinh', code))(mod, mod.exports, g, g, ns.exports);
   const exp = mod.exports as Rec;
   if (typeof exp.tinhBatTu !== 'function') {
     throw new Error('tubinh-ansao-engine: không tìm thấy tinhBatTu');
@@ -49,6 +55,7 @@ function loadEngine() {
     tinhBatTu: exp.tinhBatTu as (o: object) => Rec,
     hanhCan: (exp.NGU_HANH_CAN_TB || {}) as Record<string, string>,
     hanhChi: (exp.NGU_HANH_CHI_TB || {}) as Record<string, string>,
+    tietKhiCuaThoiDiem: exp.tietKhiCuaThoiDiem as NonNullable<typeof engineCache>['tietKhiCuaThoiDiem'],
   };
   return engineCache!;
 }
@@ -60,6 +67,34 @@ export function hanhCanChi(x: string): string {
 }
 
 export type TuBinh = Rec;
+
+/** Giờ:phút chính xác (giờ của lịch) nếu hợp lệ VÀ cùng canh với `hourBranch`. */
+function exactTime(b: BirthParams): { gioLich?: number; phutLich?: number } {
+  const h = b.hour, m = b.minute ?? 0;
+  if (!Number.isInteger(h) || h! < 0 || h! > 23 || !Number.isInteger(m) || m < 0 || m > 59) return {};
+  // Lệch canh = hai trường mâu thuẫn ⇒ tin hourBranch (trụ giờ đã đi theo nó).
+  if (GIO_HOURS[b.hourBranch!] !== (h! % 2 === 1 ? h! : (h! + 23) % 24)) return {};
+  return { gioLich: h, phutLich: m };
+}
+
+/**
+ * Đoạn khoá cache lá số cho Bát Tự lịch cn/kr/jp (`lasoKey`, lib/portraits/cache.ts):
+ * `tk:<chỉ số mốc tiết>` CHỈ khi có giờ:phút chính xác VÀ thời điểm sinh cách mốc
+ * tiết gần nhất < 1 ngày — chỉ ở đó hai người cùng canh giờ mới ra trụ tháng khác
+ * nhau. Ngoài cửa sổ đó (và mọi lá số vn) trả null ⇒ khoá y như trước W3b, không
+ * mồ côi cache/quyền sở hữu của khách đã trả. Dùng CHỈ SỐ TIẾT chứ không dùng phút:
+ * cùng tiết thì cùng kết quả, khoá không vỡ vụn theo từng phút.
+ */
+export function tietKhiKhoa(birth: BirthParams): string | null {
+  const lich = lichOf(birth);
+  if (lich === 'vn' || birth.hourBranch == null || birth.hourBranch < 0 || birth.hourBranch > 11) return null;
+  const t = exactTime(birth);
+  if (t.gioLich == null) return null;
+  const dl = solarDateOf(birth);
+  if (!dl) return null;
+  const r = loadEngine().tietKhiCuaThoiDiem(dl.day, dl.month, dl.year, t.gioLich, t.phutLich ?? 0, lich);
+  return r && r.gan ? `tk:${r.i}` : null;
+}
 
 export interface ComputeTuBinhResult {
   ok: boolean;
@@ -89,8 +124,9 @@ export function computeTuBinh(birth: BirthParams, namXem?: number): ComputeTuBin
   // `birth.lich` (nơi sinh ngoài VN): ngày/giờ ĐÃ là giờ của lịch đó (form quy
   // đổi) — tứ trụ tính từ chính ngày giờ ấy nên nhất quán với lá số Tử Vi cùng
   // người. Âm → dương thì dò bằng bảng của đúng lịch đó (`solarDateOf`).
-  // ⚠️ Engine Tử Bình xét tiết khí theo NGÀY (kinh độ Mặt Trời lúc 12:00 UT của
-  // ngày), không theo giờ hay múi giờ — nợ cũ, ghi ở docs/luat/engine-cophap.md.
+  // cn/kr/jp: trụ tháng/năm theo THỜI ĐIỂM vào tiết, so với giờ:phút sinh
+  // `birth.hour`/`birth.minute` (thiếu ⇒ đầu canh giờ, GIO_HOURS). vn: engine
+  // vẫn xét tiết theo NGÀY — nợ cũ, ghi ở docs/luat/engine-cophap.md.
   const dl = solarDateOf(birth);
   if (!dl) {
     return { ok: false, error: 'Ngày âm lịch không tồn tại hoặc ngoài tầm lịch (1900–2100).' };
@@ -100,6 +136,7 @@ export function computeTuBinh(birth: BirthParams, namXem?: number): ComputeTuBin
   try {
     const { tinhBatTu } = loadEngine();
     const hour = GIO_HOURS[hourBranch];
+    const lich = lichOf(birth);
     const bt = tinhBatTu({
       ngayDL: day,
       thangDL: month,
@@ -107,6 +144,8 @@ export function computeTuBinh(birth: BirthParams, namXem?: number): ComputeTuBin
       gio: hour,
       gioitinh: gender,
       namXem: namXem ?? currentNamXem(),
+      ...(lich !== 'vn' ? exactTime(birth) : {}),
+      ...(lich !== 'vn' ? { lich } : {}),
     });
     if (!bt || !bt.tuTru) return { ok: false, error: 'Engine không trả về tứ trụ.' };
     return { ok: true, data: bt };

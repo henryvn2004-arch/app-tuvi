@@ -268,7 +268,7 @@
     try {
       const GIO = [23, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
       const gio = (typeof du.h === 'number' && !isNaN(du.h)) ? du.h : GIO[(ls._conv && ls._conv.gioIdx) || 0];
-      bt = tinhBatTu({ ngayDL: du.d, thangDL: du.m, namDL: du.y, gio, gioitinh: du.gt === 'nu' ? 'nu' : 'nam' });
+      bt = tinhBatTu({ ngayDL: du.d, thangDL: du.m, namDL: du.y, gio, gioitinh: du.gt === 'nu' ? 'nu' : 'nam', lich: du.lich, gioLich: du.h, phutLich: du.p });
     } catch (e) {
       if (typeof console !== 'undefined') console.error('[tuvi-laso-format] tinhBatTu', e);
       return [];

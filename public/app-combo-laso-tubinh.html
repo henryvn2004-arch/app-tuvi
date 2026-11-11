@@ -70,7 +70,7 @@
 </div>
 
 <script src="/tuvi-ansao-engine.js"></script>
-<script src="/tubinh-ansao-engine.js?v=5"></script>
+<script src="/tubinh-ansao-engine.js?v=6"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tools-shared/noi-sinh.js?v=1"></script>
 <script src="/tuvi-form.js?v=15"></script>
@@ -79,7 +79,7 @@
 <script src="/tool-prices.js?v=11"></script>
 <script src="/nav.js?v=48" data-icons-only></script>
 <script>window.SHELL_ACTIVE='combo-laso-tubinh';</script>
-<script src="/shell.js?v=140"></script>
+<script src="/shell.js?v=141"></script>
 <script>
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 // Đến từ Tủ Báo Cáo (app-so-la-so.html) đã set sẵn localStorage['app_birth']
@@ -128,7 +128,7 @@ async function buyCombo(){
     // ── Slug Tử Bình — CHÉP NGUYÊN VĂN `_paymentSlug` thật ở app-bat-tu.html
     // (KHÁC `_pendingSlug` của trang đó — đây là slug dùng để TRỪ TIỀN, không
     // phải slug dùng để tra cache hiển thị).
-    var bt=window.tinhBatTu({ngayDL:fd.ngay,thangDL:fd.thang,namDL:fd.nam,gio:GIO_REP[fd.gioIdx],gioitinh:fd.gioitinh,namXem:namXem});
+    var bt=window.tinhBatTu({ngayDL:fd.ngay,thangDL:fd.thang,namDL:fd.nam,gio:GIO_REP[fd.gioIdx],gioitinh:fd.gioitinh,namXem:namXem,lich:fd.lich,gioLich:fd.gioHour,phutLich:fd.gioPhut});
     var tuBinhSlug=toSlugAscii(['tu-binh',bt.canChiNamSinh.can+bt.canChiNamSinh.chi,fd.gioitinh,fd.nam,'gio-'+(bt.gioChi||'unknown')].join('-'));
 
     var gate=await TuviPaywall.ensureCredits({product:'combo-laso-tubinh'});

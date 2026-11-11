@@ -83,3 +83,4 @@ lib/i18n/glossary/han-viet-check.json
 
 # Bảng đối chứng lịch âm HKO/KASI — SINH bởi scripts/oracle/fetch-lunar-refs.mjs, không format tay
 scripts/fixtures/lunar-ref-*.json
+scripts/fixtures/tietkhi-ref-*.json

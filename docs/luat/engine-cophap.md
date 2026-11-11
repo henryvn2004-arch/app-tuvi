@@ -19,11 +19,15 @@ Nghi sai thì GHI LẠI, không sửa. Đang treo:
   tháng mới; generator lấy luôn ngày đó làm mùng 1. 2054 là ca sát biên thật (sóc
   00:00:22 giờ VN, nằm trong sai số ΔT). CHƯA sửa: đổi là đổi lá số người sinh
   ~120 ngày đó, cần chủ sản phẩm quyết. Bảng cn/kr/jp KHÔNG dính (xem dưới).
-- **Engine Bát Tự xét tiết khí theo NGÀY, không theo giờ/múi** (`_findTietKhiJDN`,
-  `_sunLongitudeDeg(jdnRaw)` = kinh độ Mặt Trời lúc 12:00 UT của ngày sinh) ⇒ người
-  sinh đúng ngày giao tiết có thể lệch trụ tháng/năm tuỳ giờ. Áp chung mọi lịch
-  (W3 chỉ đưa vào ngày giờ ĐÃ quy về giờ của lịch nơi sinh); sửa là đổi tứ trụ
-  người VN đang có, nên chưa đụng.
+- **Engine Bát Tự lịch `vn` xét tiết khí theo NGÀY, không theo giờ/múi**
+  (`_findTietKhiJDN`, `_sunLongitudeDeg(jdnRaw)` = kinh độ Mặt Trời lúc 12:00 UT
+  của ngày sinh) ⇒ người sinh đúng ngày giao tiết có thể lệch trụ tháng/năm tuỳ
+  giờ (vd Lập Xuân 2025 = 14:10 UTC 3/2 ⇒ sinh 23:30 giờ VN 3/2 vẫn ra năm Giáp
+  Thìn). **ĐÃ SỬA cho `cn`/`kr`/`jp`** (i18n W3b, 2026-11 — khách mới, không lá
+  số cũ nào đổi; xem mục "Tiết khí theo THỜI ĐIỂM" dưới). **`vn` CÒN TREO**: sửa
+  là đổi tứ trụ người VN đang có — cần chủ sản phẩm quyết; khi quyết thì chỉ cần
+  cho `vn` đi cùng đường bảng (giờ của lịch VN lấy theo `VnTimezone`), và
+  `check:tietkhi` mục 5 (hash lịch vn) sẽ đỏ — cố ý, phải chụp lại hash.
 
 ## Một nguồn số
 
@@ -101,6 +105,42 @@ giờ đồng hồ nơi sinh → thời điểm tuyệt đối (múi + giờ mù
   chỗ đó lặng lẽ tính theo lịch VN.
 - `public/tuvi-ansao-engine.js` KHÔNG mang `?v=` (luật Đợt 8, dedup soft-nav) — đừng
   "bump" nó; `tuvi-form.js` thì có, và tự giữ instance cũ khi bị nạp lại.
+
+## Tiết khí theo THỜI ĐIỂM — Bát Tự lịch cn/kr/jp (i18n W3b, 2026-11)
+
+Ở Hàn (사주) và Trung/Đài/Nhật, lịch vạn niên tính tứ trụ tới PHÚT: trụ tháng đổi
+đúng thời điểm Mặt Trời tới kinh độ 255°+30°·k (12 TIẾT), Lập Xuân 315° đổi cả trụ
+năm. Với `lich` ∈ {cn, kr, jp}:
+
+- **Thời điểm sinh tuyệt đối** = giờ dân sự của lịch (form đã quy qua
+  `NoiSinh.quyDoi`, đủ múi + giờ mùa hè lịch sử) − `NoiSinh.GIO_LICH[lich]` — đọc
+  CHÍNH nguồn đó: trang có sẵn biến toàn cục, server (`lib/engine/tubinh.ts`) truyền
+  vào engine làm tham số `NoiSinh`. Thiếu ⇒ engine `console.error` rồi lùi về đường
+  theo ngày (không ném, không bịa).
+- **Bảng mốc tiết** = khối `<TIET_KHI_TABLE>` trong `public/tubinh-ansao-engine.js`
+  (một file cho cả client lẫn server), SINH bằng `scripts/gen-tiet-khi-table.mjs
+  --write` từ `astronomy-engine` (kinh độ biểu kiến, thời điểm UT). 2.414 mốc Đại
+  Tuyết 1899 → Tiểu Hàn 2101, phút UTC, ~2,8 KB (12 gốc + mỗi mốc sau một ký tự
+  base36 = chênh so với cùng tiết năm trước − 525.930′). Chỉ 12 tiết: 12 trung khí
+  không đổi trụ nào. Khởi vận đại vận cũng đếm theo cùng bảng.
+- **Giờ chính xác phải tới engine**: client truyền `tinhBatTu({…, lich, gioLich,
+  phutLich})`; server đọc `birth.hour`/`birth.minute` (contract v1, thêm). Thiếu
+  phút ⇒ lấy đầu canh giờ — server và trang lệch nhau đúng ở cửa sổ quanh mốc.
+  Mọi đường dựng lại birth phải chở `lich` + `hour/minute`: `shell.js`
+  `birthToApi` (khôi phục phiên), query `hm` (= giờ·60+phút) ở `portrait-recover.js`
+  ↔ `birthFromQuery`, link ảnh ký `laso-image.ts`.
+- **Khoá cache `lasoKey()`** thêm `tk:<chỉ số mốc>` CHỈ khi lịch cn/kr/jp, có giờ:phút
+  VÀ sinh cách mốc tiết < 1 ngày (`tietKhiKhoa`, `lib/engine/tubinh.ts`). Ngoài cửa
+  sổ đó (và mọi lá số vn) khoá y như trước ⇒ chỉ mồ côi cache của khách cn/kr/jp
+  sinh sát mốc từ W3 (vài ngày) — chấp nhận để hai người hai bên mốc không dùng
+  chung kết quả trả phí. Dùng chỉ số tiết chứ không dùng phút: cùng tiết thì
+  cùng kết quả, khoá không vỡ theo từng phút.
+- **Đối chứng** (`npm run check:tietkhi`): NAOJ 暦要項 (giờ:phút JST 2005→năm sau)
+  lệch ≤ 1′; HKO (NGÀY UTC+8 cả 24 tiết 1901–2100) khớp trừ đúng danh sách ghim
+  `scripts/fixtures/tietkhi-hko-ghim.json` — mỗi mục phải nằm ≤ 10′ quanh nửa đêm
+  120°E. Không có nguồn Hàn công khai không khoá (KASI 24절기 chỉ qua API
+  data.go.kr cần service key). Làm mới fixture:
+  `NODE_USE_ENV_PROXY=1 node scripts/oracle/fetch-tietkhi-refs.mjs --hko --naoj`.
 
 ## Khoá "cùng lá số" là ÂM LỊCH, không phải ngày dương
 
