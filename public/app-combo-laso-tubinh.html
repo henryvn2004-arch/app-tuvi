@@ -72,7 +72,8 @@
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tubinh-ansao-engine.js?v=5"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=14"></script>
+<script src="/tools-shared/noi-sinh.js?v=1"></script>
+<script src="/tuvi-form.js?v=15"></script>
 <script src="/auth.js?v=6"></script>
 <script src="/tuvi-paywall.js?v=42"></script>
 <script src="/tool-prices.js?v=11"></script>
@@ -118,7 +119,7 @@ async function buyCombo(){
     // trừ tiền ở app-luan-giai.html (biến `_pendingSlug`, dòng khởi tạo
     // initLuanGiaiGate). Đổi một ký tự ở đây là combo trừ tiền xong mà trang
     // Luận Giải không nhận ra "đã trả" — xem CLAUDE.md "KHÔNG sửa mò".
-    var conv=convertDuongToAm(fd.ngay,fd.thang,fd.nam,fd.gioHour);
+    var conv=convertDuongToAm(fd.ngay,fd.thang,fd.nam,fd.gioHour,fd.lich);
     if(!conv){ errEl.textContent='Ngày sinh ngoài phạm vi hỗ trợ (1900–2100).'; errEl.style.display='block'; return; }
     conv.gioIdx=fd.gioIdx;
     var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:fd.gioIdx,gioitinh:fd.gioitinh,namXem:namXem});

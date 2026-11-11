@@ -68,6 +68,12 @@ for (const f of htmlFiles(join(ROOT, 'public'))) {
   if (iTz < 0) fail(`${rel}: nạp tuvi-form.js nhưng THIẾU /tools-shared/vn-timezone.js.`);
   else if (iTz > iForm)
     fail(`${rel}: vn-timezone.js nạp SAU tuvi-form.js — form sẽ ném lỗi lúc khởi tạo.`);
+  // Nơi sinh (i18n W3): form tự chèn noi-sinh.js nếu thiếu, nhưng trong lúc chờ ô
+  // nơi sinh rỗng — trang tĩnh phải nạp sẵn để người sinh ở nước ngoài chọn được ngay.
+  const iNs = s.search(/<script src="\/tools-shared\/noi-sinh\.js/);
+  if (iNs < 0) fail(`${rel}: nạp tuvi-form.js nhưng THIẾU /tools-shared/noi-sinh.js.`);
+  else if (iNs > iForm)
+    fail(`${rel}: noi-sinh.js nạp SAU tuvi-form.js — ô "Nơi sinh" rỗng lúc vẽ.`);
 }
 if (pages === 0) fail('Không tìm thấy trang nào nạp tuvi-form.js — bộ dò đang đo nhầm chỗ.');
 

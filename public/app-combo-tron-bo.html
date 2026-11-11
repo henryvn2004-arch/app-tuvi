@@ -76,7 +76,8 @@
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tubinh-ansao-engine.js?v=5"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=14"></script>
+<script src="/tools-shared/noi-sinh.js?v=1"></script>
+<script src="/tuvi-form.js?v=15"></script>
 <script src="/auth.js?v=6"></script>
 <script src="/tuvi-paywall.js?v=42"></script>
 <script src="/tool-prices.js?v=11"></script>
@@ -131,7 +132,7 @@ async function buyCombo(){
     // ba trang gốc đều gọi ĐÚNG convertDuongToAm(dd,mm,yyyy,gioHour) +
     // anSaoLaSo(...) này (đã đối chiếu từng dòng), `namXem` không ảnh hưởng
     // `canChiNam` (chỉ phụ thuộc năm SINH) nên tính một lần dùng lại được.
-    var conv=convertDuongToAm(fd.ngay,fd.thang,fd.nam,fd.gioHour);
+    var conv=convertDuongToAm(fd.ngay,fd.thang,fd.nam,fd.gioHour,fd.lich);
     if(!conv){ errEl.textContent='Ngày sinh ngoài phạm vi hỗ trợ (1900–2100).'; errEl.style.display='block'; return; }
     conv.gioIdx=fd.gioIdx;
     var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:fd.gioIdx,gioitinh:fd.gioitinh,namXem:namXem});
@@ -157,7 +158,7 @@ async function buyCombo(){
     // /api/van-han-nam?action=khung đó, không tự tính tháng âm ở đây.
     var now=vnNow();
     var kr=await fetch('/api/van-han-nam?action=khung',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined},tuNgay:now.d,tuThang:now.m,tuNam:now.y})});
+      body:JSON.stringify({birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined,lich:fd.lich,noiSinh:fd.noiSinh},tuNgay:now.d,tuThang:now.m,tuNam:now.y})});
     var kd=await kr.json();
     if(!kd||!kd.khung){ errEl.textContent='Không dựng được khung Vận Hạn Năm, vui lòng thử lại.'; errEl.style.display='block'; return; }
     var t0=kd.khung.thangs[0];

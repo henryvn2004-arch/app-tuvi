@@ -86,6 +86,11 @@ export function computeTuBinh(birth: BirthParams, namXem?: number): ComputeTuBin
     return { ok: false, error: 'Thiếu giới tính (nam/nu).' };
   }
 
+  // `birth.lich` (nơi sinh ngoài VN): ngày/giờ ĐÃ là giờ của lịch đó (form quy
+  // đổi) — tứ trụ tính từ chính ngày giờ ấy nên nhất quán với lá số Tử Vi cùng
+  // người. Âm → dương thì dò bằng bảng của đúng lịch đó (`solarDateOf`).
+  // ⚠️ Engine Tử Bình xét tiết khí theo NGÀY (kinh độ Mặt Trời lúc 12:00 UT của
+  // ngày), không theo giờ hay múi giờ — nợ cũ, ghi ở docs/luat/engine-cophap.md.
   const dl = solarDateOf(birth);
   if (!dl) {
     return { ok: false, error: 'Ngày âm lịch không tồn tại hoặc ngoài tầm lịch (1900–2100).' };

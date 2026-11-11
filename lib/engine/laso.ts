@@ -12,7 +12,7 @@
 
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import type { BirthParams } from '@/lib/contract/v1';
+import type { BirthParams, LichAm } from '@/lib/contract/v1';
 import { currentNamXem } from '@/lib/engine/namxem';
 
 type Rec = Record<string, unknown>;
@@ -32,6 +32,13 @@ type Rec = Record<string, unknown>;
       hash: '',
     };
   }
+}
+
+/** Lịch âm của lá số — `birth.lich` hợp lệ, còn lại (thiếu/lạ) là 'vn' như cũ. */
+const LICH_HOP_LE: readonly LichAm[] = ['vn', 'cn', 'kr', 'jp'];
+export function lichOf(birth: Pick<BirthParams, 'lich'> | null | undefined): LichAm {
+  const l = birth?.lich;
+  return l && LICH_HOP_LE.includes(l) ? l : 'vn';
 }
 
 // Giờ sinh: index địa chi (0=Tý..11=Hợi) → giờ đại diện
@@ -88,7 +95,7 @@ export function clockToBranch(hour: number, minute = 0): number {
 // phải property của window/globalThis nếu load riêng qua 2 lần new Function).
 let engineCache: {
   convertDuongToAm: (...a: unknown[]) => unknown;
-  solarToLunar: (d: number, m: number, y: number) => { day: number; month: number; year: number } | null;
+  solarToLunar: (d: number, m: number, y: number, lich?: LichAm) => { day: number; month: number; year: number } | null;
   anSaoLaSo: (...a: unknown[]) => unknown;
   formatLaSoV2: (...a: unknown[]) => unknown;
   buildDaiVanLines: (...a: unknown[]) => unknown;
@@ -195,8 +202,9 @@ export function canChiNgayGio(
   month: number,
   year: number,
   hourBranch: number,
+  lich: LichAm = 'vn',
 ): { ngay: string; gio: string; amLich: { day: number; month: number; year: number } } | null {
-  const conv = loadEngine().convertDuongToAm(day, month, year, GIO_HOURS[hourBranch]) as Rec | null;
+  const conv = loadEngine().convertDuongToAm(day, month, year, GIO_HOURS[hourBranch], lich) as Rec | null;
   const cc = conv?.canChi as Rec | undefined;
   const al = conv?.amLich as { day: number; month: number; year: number } | undefined;
   if (!cc || !al) return null;
@@ -218,10 +226,11 @@ export function canChiNgayGio(
 export function lunarOf(
   day: number,
   month: number,
-  year: number
+  year: number,
+  lich: LichAm = 'vn',
 ): { canNam: string; chiNam: string; ngayAL: number; thangAL: number } | null {
   const { convertDuongToAm } = loadEngine();
-  const conv = convertDuongToAm(day, month, year, 9) as Rec | null;
+  const conv = convertDuongToAm(day, month, year, 9, lich) as Rec | null;
   const al = conv?.amLich as Rec | undefined;
   if (!al) return null; // ngoài tầm bảng — engine trả null từ PR #622
   return {
@@ -266,15 +275,19 @@ export function lunarToSolar(
   month: number,
   year: number,
   nhuan = false,
+  lich: LichAm = 'vn',
 ): { day: number; month: number; year: number } | null {
-  return loadAmDuong().lunarToSolar(Math.floor(day), Math.floor(month), Math.floor(year), loadEngine().solarToLunar, nhuan);
+  const { solarToLunar } = loadEngine();
+  // 'vn' truyền NGUYÊN hàm như cũ; lịch khác thì gói lại để am-duong.js dò đúng bảng.
+  const s2l = lich === 'vn' ? solarToLunar : (d: number, m: number, y: number) => solarToLunar(d, m, y, lich);
+  return loadAmDuong().lunarToSolar(Math.floor(day), Math.floor(month), Math.floor(year), s2l, nhuan);
 }
 
 /** Ngày sinh DƯƠNG của `birth` — đổi từ âm khi `isLunar`. `null` khi thiếu/không đổi được. */
 export function solarDateOf(birth: BirthParams): { day: number; month: number; year: number } | null {
   const { day, month, year } = birth;
   if (!day || !month || !year) return null;
-  return birth.isLunar ? lunarToSolar(day, month, year, birth.isLeapMonth === true) : { day, month, year };
+  return birth.isLunar ? lunarToSolar(day, month, year, birth.isLeapMonth === true, lichOf(birth)) : { day, month, year };
 }
 
 /** Năm âm lịch + chi năm của một ngày sinh dương. Sinh tháng 1–2 dương mà âm
@@ -285,11 +298,11 @@ export function namAm(b: BirthParams): { nam: number; chi: string } | null {
   if (b.isLunar) {
     // Ngày ÂM không được đưa thẳng vào `lunarOf` (hàm nhận ngày DƯƠNG) — đổi
     // sang dương trước, không thì sinh đầu năm âm ra chi năm của năm trước.
-    const dl = lunarToSolar(b.day, b.month, b.year, b.isLeapMonth === true);
-    const l = dl ? lunarOf(dl.day, dl.month, dl.year) : null;
+    const dl = lunarToSolar(b.day, b.month, b.year, b.isLeapMonth === true, lichOf(b));
+    const l = dl ? lunarOf(dl.day, dl.month, dl.year, lichOf(b)) : null;
     return l ? { nam: b.year, chi: l.chiNam } : null;
   }
-  const l = lunarOf(b.day, b.month, b.year);
+  const l = lunarOf(b.day, b.month, b.year, lichOf(b));
   if (!l) return null;
   return { nam: l.thangAL > b.month + 1 ? b.year - 1 : b.year, chi: l.chiNam };
 }
@@ -308,6 +321,7 @@ export interface ComputeLasoResult {
  */
 export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoResult {
   const { day, month, year, hourBranch, gender, isLunar } = birth;
+  const lich = lichOf(birth);
 
   if (!day || !month || !year) {
     return { ok: false, error: 'Thiếu ngày/tháng/năm sinh dương lịch.' };
@@ -336,7 +350,7 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
       }
       // Tháng NHUẬN: an sao theo SỐ tháng như cũ (không đổi cổ pháp), nhưng năm đó
       // phải thật sự nhuận tháng ấy — không thì từ chối, đừng lặng lẽ an tháng thường.
-      if (birth.isLeapMonth && !lunarToSolar(ngayAL, thangAL, namAL, true)) {
+      if (birth.isLeapMonth && !lunarToSolar(ngayAL, thangAL, namAL, true, lich)) {
         return { ok: false, error: `Năm ${namAL} âm lịch không có ngày ${ngayAL} tháng ${thangAL} nhuận.` };
       }
       canNam = yearCan(namAL);
@@ -345,7 +359,7 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
       // Người dùng nhập DƯƠNG → engine quy đổi sang âm. namAL = năm ÂM (al.year),
       // KHÔNG phải năm dương: người sinh tháng 1 trước Tết có năm âm = năm trước
       // → tuổi mụ (tuoiXem) + tiểu vận phụ thuộc vào đây (khớp client mọi nền tảng).
-      const conv = convertDuongToAm(day, month, year, GIO_HOURS[hourBranch]) as Rec;
+      const conv = convertDuongToAm(day, month, year, GIO_HOURS[hourBranch], lich) as Rec;
       if (!conv?.amLich) return { ok: false, error: 'Không chuyển được sang âm lịch.' };
       const al = conv.amLich as Rec;
       ngayAL = al.day as number;
@@ -397,7 +411,7 @@ export function lasoChartHtml(birth: BirthParams, name: string, namXem?: number)
     const code = readFileSync(join(process.cwd(), 'public', 'laso-chart.js'), 'utf-8');
     chartRender = new Function('window', 'STAR_DATA', code + '\nreturn renderGrid;')(globalThis, E.STAR_DATA);
   }
-  const conv = E.convertDuongToAm(day, month, year, GIO_HOURS[hourBranch]) as Rec;
+  const conv = E.convertDuongToAm(day, month, year, GIO_HOURS[hourBranch], lichOf(birth)) as Rec;
   const fd = { name, gioitinh: gender, dd: day, mm: month, yyyy: year, gioChi: CHI_NAMES[hourBranch], amLich: conv.amLich, amDuongNam: conv.amDuongNam };
   return chartRender!(r.ls, fd);
 }

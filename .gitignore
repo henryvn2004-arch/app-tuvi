@@ -88,6 +88,9 @@ cns.png
 # (P1) — dữ liệu ĐÃ nằm trong public/tuvi-ansao-engine.js + tuvi-engine/src/lunar/
 # convert.ts, commit thêm bản này là trùng nguồn. Sinh lại bằng gen-lunar-table.mjs.
 scripts/fixtures/lunar-table-new.json
+scripts/fixtures/lunar-table-cn.json
+scripts/fixtures/lunar-table-kr.json
+scripts/fixtures/lunar-table-jp.json
 
 # Ảnh minh hoạ sinh bằng scripts/gen-illus.mjs — asset nặng, không commit
 .illus/
