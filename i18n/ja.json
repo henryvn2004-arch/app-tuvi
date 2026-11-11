@@ -56,7 +56,7 @@
   "h": "315e8a7f"
  },
  "battu.luan-giai-chuyen-sau-ton-luong": {
-  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b>詳しい鑑定 →</b></span> <small>必要クレジット <span class=\"vnd\" data-tvp-price-vnd=\"tu-binh\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"tu-binh\">…</span> 両)</span></small>",
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b>詳しい鑑定 →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"tu-binh\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"tu-binh\">…</span> 両)</span></small>",
   "h": "cd1895af"
  },
  "battu.luan-giai-tu-vi": {
@@ -3212,7 +3212,7 @@
   "h": "557a13dc"
  },
  "luangiai.lap-la-so-luan-giai-ngay": {
-  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">命盤を作って今すぐ鑑定 →</b></span> <small>必要クレジット <span class=\"vnd\" data-tvp-price-vnd=\"laso\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"laso\">…</span> 両)</span></small>",
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">命盤を作って今すぐ鑑定 →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"laso\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"laso\">…</span> 両)</span></small>",
   "h": "a32c708b"
  },
  "luangiai.lap-la-so-tu-vi-12": {
