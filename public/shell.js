@@ -11,7 +11,15 @@
 
   // i18n (docs/i18n/QUY-UOC.md): T(khoá, chữViệt) cho chữ do JS dựng. Trang /<locale>/…
   // được server nhúng từ điển ⇒ có bản dịch ngay lúc dựng; trang vi ⇒ chữ Việt mặc định.
-  var T = function (k, d) { return window.TVMB_I18N ? window.TVMB_I18N.t(k, d) : d; };
+  // window.I18n (tools-shared/i18n.js) là nguồn DUY NHẤT; trang /<locale>/ được server chèn nó
+  // + từ điển vào <head> TRƯỚC shell.js ⇒ vẽ lần đầu đã đúng chữ (không nháy chữ Việt).
+  // T(khoá, chữViệt, {biến}) · H('/đường-dẫn') → link cùng ngôn ngữ (vi giữ nguyên).
+  var T = function (k, d, v) {
+    var I = window.I18n;
+    if (I && I.tv) return I.tv(k, d, v);
+    return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
+  };
+  var H = function (p) { var I = window.I18n; return I && I.href ? I.href(p) : p; };
   if (!window.TVMB_I18N && !document.querySelector('script[src^="/i18n.js"]')) {
     var i18nS = document.createElement('script');
     i18nS.src = '/i18n.js?v=3';
@@ -76,7 +84,7 @@
   // (`SB_NAV`/`SB_MORE` ở renderSidebar), KHÔNG còn vẽ từ nhóm này — nhóm chỉ
   // còn để Cmd+K/mountToolIcon() tìm ra nhãn+icon+href của các trang khung.
   // Giữ nguyên id 'home'/'ho-so' để không phá mountToolIcon()/Cmd+K.
-  var FIXED_TOP = { group: 'Tử Vi Minh Bảo', open: true, items: [
+  var FIXED_TOP = { group: T('js.nav.brand', 'Tử Vi Minh Bảo'), open: true, items: [
     { id: 'home', label: T('js.shell.hoi-thay-moi', 'Hỏi Thầy mới'), href: '/app', icon: 'pen-line' },
     { id: 'thay', label: T('js.shell.cac-thay', 'Các Thầy'), href: '/app/thay', icon: 'users' },
     { id: 'cong-cu', label: T('js.shell.cong-cu', 'Công cụ'), href: '/app/cong-cu', icon: 'layout-grid' },
@@ -86,10 +94,10 @@
   // Nhóm này KHÔNG render thành nav (renderSidebar tự vẽ tay khối "Lá số đã
   // lưu") — chỉ để mountToolIcon()/Cmd+K/buildCmds() tìm ra icon+href đúng khi
   // ACTIVE rơi vào trang này, cùng cơ chế FIXED_TOP/FIXED_BOTTOM đã dùng.
-  var FIXED_META = { group: 'Sổ lá số', open: false, items: [
+  var FIXED_META = { group: T('js.shellui.so-la-so', 'Sổ lá số'), open: false, items: [
     { id: 'so-la-so', label: T('js.shell.la-so', 'Lá số'), href: '/app/so-la-so', icon: 'folder' },
   ] };
-  var FIXED_BOTTOM = { group: 'Tài khoản', open: true, items: [
+  var FIXED_BOTTOM = { group: T('js.shellui.tai-khoan', 'Tài khoản'), open: true, items: [
     { id: 'nap-luong', label: T('js.shell.nap-luong', 'Nạp Lượng'), href: '/app/nap-luong', icon: 'wallet', balance: true },
     // Nhiệm Vụ · Kết Nối · Tài Khoản & Cài Đặt giờ là tab bên trong trang này
     // (app-tai-khoan.html) — xem ghi chú 2026-09-24 ở FIXED_TOP.
@@ -125,7 +133,7 @@
     // Công cụ không rơi vào nhóm nào vẫn phải NHÌN THẤY — tàng hình thì không
     // ai phát hiện ra là đã gán sai nhóm.
     var rest = inApp.filter(function (r) { return !seen[r.tool_id]; });
-    if (rest.length) out.push({ group: 'Khác', open: false, items: rest.map(toItem) });
+    if (rest.length) out.push({ group: T('js.shellui.khac', 'Khác'), open: false, items: rest.map(toItem) });
     out.push(FIXED_BOTTOM);
     TOOLS = out;
     return true;
@@ -423,7 +431,7 @@
       if (!el) {
         el = document.createElement('script');
         el.id = '_tvmb_prices_js';
-        el.src = '/tool-prices.js?v=11';
+        el.src = '/tool-prices.js?v=12';
         document.head.appendChild(el);
       }
       el.addEventListener('load', function () { resolve(); });
@@ -497,24 +505,24 @@
   var SB_RECENT_MAX = 20;
   var SB_MINI_KEY = 'sb_mini_v1';
   function sbItem(it, extra) {
-    return '<a class="sbn-item' + (it.id === ACTIVE ? ' active' : '') + '" href="' + it.href + '" data-tip="' + esc(it.label) + '" aria-label="' + esc(it.label) + '"' + (extra || '') + '>' +
+    return '<a class="sbn-item' + (it.id === ACTIVE ? ' active' : '') + '" href="' + H(it.href) + '" data-tip="' + esc(it.label) + '" aria-label="' + esc(it.label) + '"' + (extra || '') + '>' +
       svg(it.icon) + '<span class="sbn-tx">' + esc(it.label) + '</span></a>';
   }
   function renderSidebar() {
     var host = document.getElementById('shell-sidebar');
     if (!host) return;
     var h = '<div class="sbn-top">' +
-      '<a class="sbn-brand" href="/app"><img src="/seal-128.webp" alt="" width="28" height="28"><b>' + T('js.shell.minh-bao', 'Minh Bảo') + '</b></a>' +
+      '<a class="sbn-brand" href="' + H('/app') + '"><img src="/seal-128.webp" alt="" width="28" height="28"><b>' + T('js.shell.minh-bao', 'Minh Bảo') + '</b></a>' +
       '<button class="sbn-ib" type="button" data-sbn="search" data-tip="' + esc(T('js.shell.tim-kiem-ctrl-k', 'Tìm kiếm (Ctrl K)')) + '" aria-label="' + esc(T('js.shell.tim-kiem', 'Tìm kiếm')) + '">' + svg('search') + '</button>' +
       '<button class="sbn-ib" type="button" data-sbn="collapse" data-tip="' + esc(T('js.shell.thu-gon-thanh-ben', 'Thu gọn thanh bên')) + '" aria-label="' + esc(T('js.shell.thu-gon-thanh-ben', 'Thu gọn thanh bên')) + '">' + svg('panel-left') + '</button>' +
       '</div><nav class="sbn-scroll" aria-label="' + esc(T('js.shell.dieu-huong', 'Điều hướng')) + '">' +
-      '<a class="sbn-item" href="/app" data-sbn="new" data-tip="' + esc(T('js.shell.hoi-thay-moi', 'Hỏi Thầy mới')) + '" aria-label="' + esc(T('js.shell.hoi-thay-moi', 'Hỏi Thầy mới')) + '">' + svg('pen-line') + '<span class="sbn-tx">' + T('js.shell.hoi-thay-moi', 'Hỏi Thầy mới') + '</span></a>';
+      '<a class="sbn-item" href="' + H('/app') + '" data-sbn="new" data-tip="' + esc(T('js.shell.hoi-thay-moi', 'Hỏi Thầy mới')) + '" aria-label="' + esc(T('js.shell.hoi-thay-moi', 'Hỏi Thầy mới')) + '">' + svg('pen-line') + '<span class="sbn-tx">' + T('js.shell.hoi-thay-moi', 'Hỏi Thầy mới') + '</span></a>';
     SB_NAV.forEach(function (it) { h += sbItem(it); });
     h += '<button class="sbn-item" type="button" data-sbn="more" aria-expanded="false">' + svg('more-horizontal') + '<span class="sbn-tx">' + T('js.shell.them', 'Thêm') + '</span></button>' +
       '<div class="sbn-more" hidden>';
     SB_MORE.forEach(function (it) { h += sbItem(it); });
     h += '</div>' +
-      '<div class="sbn-sec"><span>' + T('js.shell.gan-day', 'Gần đây') + '</span><a href="/app/tro-chuyen">' + T('js.shell.xem-tat-ca', 'Xem tất cả') + '</a></div>' +
+      '<div class="sbn-sec"><span>' + T('js.shell.gan-day', 'Gần đây') + '</span><a href="' + H('/app/tro-chuyen') + '">' + T('js.shell.xem-tat-ca', 'Xem tất cả') + '</a></div>' +
       '<div class="sbn-recent" id="sbRecent"></div>' +
       '</nav>' +
       // Thẻ QR Zalo tĩnh — chỉ máy tính (CSS ẩn trên cảm ứng/màn thấp/sb-mini).
@@ -528,11 +536,11 @@
       '<div class="sbn-foot">' +
         '<div class="sbn-menu" id="sbMenu" hidden>' +
           '<div class="sbn-mail" id="sbMail"></div>' +
-          '<a class="sbn-item" href="/app/ho-so#account">' + svg('user') + '<span class="sbn-tx">' + T('js.shell.ho-so-cai-dat', 'Hồ sơ &amp; cài đặt') + '</span></a>' +
-          '<a class="sbn-item" href="/app/nap-luong">' + svg('wallet') + '<span class="sbn-tx">' + T('js.shell.nap-luong', 'Nạp Lượng') + '</span><span class="sbn-bal" id="sbBalance"></span></a>' +
+          '<a class="sbn-item" href="' + H('/app/ho-so') + '#account">' + svg('user') + '<span class="sbn-tx">' + T('js.shell.ho-so-cai-dat', 'Hồ sơ &amp; cài đặt') + '</span></a>' +
+          '<a class="sbn-item" href="' + H('/app/nap-luong') + '">' + svg('wallet') + '<span class="sbn-tx">' + T('js.shell.nap-luong', 'Nạp Lượng') + '</span><span class="sbn-bal" id="sbBalance"></span></a>' +
           '<button class="sbn-item" type="button" data-act="theme">' + svg('moon') + '<span class="sbn-tx">' + T('js.shell.doi-nen-sang-toi', 'Đổi nền sáng/tối') + '</span></button>' +
           '<hr>' +
-          '<a class="sbn-item" href="/contact.html">' + svg('message-circle') + '<span class="sbn-tx">' + T('js.shell.ho-tro', 'Hỗ trợ') + '</span></a>' +
+          '<a class="sbn-item" href="' + H('/contact.html') + '">' + svg('message-circle') + '<span class="sbn-tx">' + T('js.shell.ho-tro', 'Hỗ trợ') + '</span></a>' +
           // Mặc định ẨN — khách chưa đăng nhập thấy "Đăng xuất" là bịa ra một
           // hành động không có thật. `paintAuth()` tự hiện khi có session.
           '<a class="sbn-item danger" href="#" data-act="signout" id="sbSignout" style="display:none">' + svg('door-open') + '<span class="sbn-tx">' + T('js.shell.dang-xuat', 'Đăng xuất') + '</span></a>' +
@@ -564,7 +572,7 @@
     try { localStorage.setItem(SB_MINI_KEY, on ? '1' : '0'); } catch (e) { /* ignore */ }
     var b = document.querySelector('[data-sbn="collapse"]');
     if (b) {
-      var tip = on ? 'Mở thanh bên' : 'Thu gọn thanh bên';
+      var tip = on ? T('js.shellui.mo-thanh-ben', 'Mở thanh bên') : T('js.shell.thu-gon-thanh-ben', 'Thu gọn thanh bên');
       b.setAttribute('data-tip', tip); b.setAttribute('aria-label', tip);
     }
   }
@@ -590,14 +598,14 @@
       } else if (k === 'me') {
         // Khách chưa đăng nhập: không có gì để mở — đưa thẳng tới trang đăng nhập.
         var s = window.Auth && Auth.getSession && Auth.getSession();
-        if (!(s && s.user)) { location.href = '/app/ho-so#account'; return; }
+        if (!(s && s.user)) { location.href = H('/app/ho-so') + '#account'; return; }
         menu.hidden = !menu.hidden; me.setAttribute('aria-expanded', String(!menu.hidden));
       } else if (k === 'theme') {
         toggleTheme(); menu.hidden = true;
       } else if (k === 'signout') {
         e.preventDefault();
         try { window.Auth && Auth.signOut && Auth.signOut(); } catch (err) { /* ignore */ }
-        location.href = '/';
+        location.href = H('/');
       }
     });
     document.addEventListener('click', function (e) {
@@ -634,7 +642,7 @@
   // nào cũng là đường dẫn: tự ghép `/app/<tool>` là 404 (`/app/home` — chính là
   // lượt Hỏi Thầy phổ biến nhất). Thêm công cụ mà mã ≠ route thì khai ở đây.
   var RESTORE_ROUTE = { 'home': '/app', 'kieu-toc-phan-tich': '/app/kieu-toc', 'trang-diem-phan-tich': '/app/trang-diem' };
-  function sbRecentHref(s) { return (RESTORE_ROUTE[s.tool] || '/app/' + s.tool) + '?restore=' + encodeURIComponent(s.id); }
+  function sbRecentHref(s) { return H(RESTORE_ROUTE[s.tool] || '/app/' + s.tool) + '?restore=' + encodeURIComponent(s.id); }
   window.shellRestoreHref = function (tool, id) { return sbRecentHref({ tool: tool, id: id }); };
   function paintSidebarRecent(list) {
     var el = document.getElementById('sbRecent');
@@ -646,7 +654,7 @@
     var cur = sessionId;
     el.innerHTML = arr.slice(0, SB_RECENT_MAX).map(function (s) {
       var t = findToolItem(s.tool);
-      var name = s.q || s.title || (t && t.label) || 'Hỏi Thầy';
+      var name = s.q || s.title || (t && t.label) || T('js.nav.hoi-thay', 'Hỏi Thầy');
       return '<a class="sbn-item' + (s.id === cur ? ' active' : '') + '" href="' + sbRecentHref(s) + '"><span class="sbn-tx">' + esc(name) + '</span></a>';
     }).join('');
   }
@@ -687,8 +695,8 @@
   function setArtWideLabel(wide) {
     var ab = document.querySelector('.rh-art');
     if (ab) {
-      ab.textContent = wide ? 'Thu gọn' : 'Kết quả';
-      var tip = wide ? 'Thu gọn kết quả' : 'Xem kết quả';
+      ab.textContent = wide ? T('js.shellui.thu-gon', 'Thu gọn') : T('js.shellui.ket-qua', 'Kết quả');
+      var tip = wide ? T('js.shellui.thu-gon-ket-qua', 'Thu gọn kết quả') : T('js.shellui.xem-ket-qua', 'Xem kết quả');
       ab.setAttribute('data-tip', tip); ab.setAttribute('aria-label', tip);
     }
   }
@@ -703,8 +711,8 @@
     var box = document.createElement('div');
     box.className = 'ws-art-ctl';
     box.innerHTML =
-      '<button type="button" class="ws-art-btn" data-art="wide" data-tip="Mở rộng" aria-label="Mở rộng">' + svg('maximize') + '</button>' +
-      '<button type="button" class="ws-art-btn" data-art="close" data-tip="Đóng" aria-label="Đóng">' + svg('x') + '</button>';
+      T('js.shellui.text', '<button type="button" class="ws-art-btn" data-art="wide" data-tip="Mở rộng" aria-label="Mở rộng">') + svg('maximize') + '</button>' +
+      T('js.shellui.text-cvvj', '<button type="button" class="ws-art-btn" data-art="close" data-tip="Đóng" aria-label="Đóng">') + svg('x') + '</button>';
     top.appendChild(box);
     box.addEventListener('click', function (e) {
       var b = e.target.closest('[data-art]'); if (!b) return;
@@ -712,7 +720,7 @@
         document.body.classList.add('art-closed'); document.body.classList.remove('art-wide'); setArtWideLabel(false);
       } else {
         var wide = document.body.classList.toggle('art-wide'); setArtWideLabel(wide);
-        var tip = wide ? 'Thu hẹp' : 'Mở rộng';
+        var tip = wide ? T('js.shellui.thu-hep', 'Thu hẹp') : T('js.shellui.mo-rong', 'Mở rộng');
         b.setAttribute('data-tip', tip); b.setAttribute('aria-label', tip);
       }
     });
@@ -722,7 +730,7 @@
     var old = chat.querySelector('.art-card'); if (old) old.remove();
     var card = document.createElement('button');
     card.type = 'button'; card.className = 'art-card';
-    card.innerHTML = '<span class="art-ic">' + svg('file-text') + '</span><span class="art-tx"><b>' + esc(wsTitleText()) + '</b><span>Kết quả · Bấm để mở</span></span>';
+    card.innerHTML = '<span class="art-ic">' + svg('file-text') + '</span><span class="art-tx"><b>' + esc(wsTitleText()) + T('js.shellui.ket-qua-bam-de-mo', '</b><span>Kết quả · Bấm để mở</span></span>');
     card.addEventListener('click', openArtPanel);
     chat.appendChild(card); chat.scrollTop = chat.scrollHeight;
   }
@@ -736,13 +744,13 @@
       // ☰ mở sidebar trên điện thoại — từ 2026-09-26 không còn tabbar dưới
       // đáy, khung chat phủ toàn màn phải tự có lối vào điều hướng. Màn chat
       // trang chủ: đầu khung là MINH BẢO (ấn) cho tới khi một thầy được mời vào.
-      '<button class="rh-btn rh-menu mobile-only" type="button" data-act="sb-open" data-tip="Mở thanh bên" aria-label="Mở thanh bên">' + svg('menu') + '</button>' +
-      '<img class="rail-ava" src="' + (CHAT_HOME && !_navDone ? '/seal-128.webp' : authorAva()) + '" alt="Hỏi Thầy" data-tip="Đổi thầy luận giải">' +
+      T('js.shellui.text-1csk', '<button class="rh-btn rh-menu mobile-only" type="button" data-act="sb-open" data-tip="Mở thanh bên" aria-label="Mở thanh bên">') + svg('menu') + '</button>' +
+      '<img class="rail-ava" src="' + (CHAT_HOME && !_navDone ? '/seal-128.webp' : authorAva()) + T('js.shellui.alt-hoi-thay-data-tip-doi', '" alt="Hỏi Thầy" data-tip="Đổi thầy luận giải">') +
       // id="railHTitle": Henry 2026-09-23 — bấm gợi ý chuyển tool NGAY TRONG
       // rail (startInlineTool, không điều hướng trang) thì tiêu đề đổi sang
       // TÊN TOOL thay vì tên chung "Trợ lý Luận Đường", cho biết đang ở luồng
       // nào. Xem setHeaderTitle().
-      '<div><b id="railHTitle">' + (CHAT_HOME ? (_navDone ? esc(authorLabel()) : 'Minh Bảo') : 'Hỏi Thầy') + '</b><span>' + (CHAT_HOME ? (_navDone ? 'Đang tiếp chuyện' : 'Người dẫn đường') : esc(authorLabel())) + '</span></div>' +
+      '<div><b id="railHTitle">' + (CHAT_HOME ? (_navDone ? esc(authorLabel()) : T('js.shell.minh-bao', 'Minh Bảo')) : T('js.nav.hoi-thay', 'Hỏi Thầy')) + '</b><span>' + (CHAT_HOME ? (_navDone ? T('js.shellui.dang-tiep-chuyen', 'Đang tiếp chuyện') : T('js.shellui.nguoi-dan-duong', 'Người dẫn đường')) : esc(authorLabel())) + '</span></div>' +
       '<div class="tools">' +
         // Đợt 0 (2026-09-24, đóng vai khách chụp màn hình thật): chat-first
         // trên mobile KHÔNG có đường lui rõ ràng — "Kết quả" đọc như một
@@ -755,19 +763,19 @@
         (CHAT_HOME
           ? ''
           : CHATFIRST
-          ? '<button class="rh-btn mobile-only rh-back" data-tip="Đóng, xem kết quả" aria-label="Đóng, xem kết quả" data-act="rail-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M15 5 8 12l7 7"/></svg></button>' +
-            '<button class="rh-btn rh-art" data-tip="Xem kết quả" aria-label="Xem kết quả" data-act="artifact">Kết quả</button>'
-          : '<button class="rh-btn mobile-only" data-tip="Đóng" aria-label="Đóng" data-act="rail-close">✕</button>') +
-        (HIST_ON && !CHAT_HOME ? '<button class="rh-btn" data-tip="Lịch sử hội thoại" aria-label="Lịch sử hội thoại" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></button>' : '') +
-        '<button class="rh-btn" data-tip="Chia sẻ phiên" aria-label="Chia sẻ phiên" data-act="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>' +
-        '<button class="rh-btn" data-tip="Hội thoại mới" aria-label="Hội thoại mới" data-act="newchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg></button>' +
+          ? T('js.shellui.text-x08w', '<button class="rh-btn mobile-only rh-back" data-tip="Đóng, xem kết quả" aria-label="Đóng, xem kết quả" data-act="rail-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M15 5 8 12l7 7"/></svg></button>') +
+            T('js.shellui.ket-qua-uud5', '<button class="rh-btn rh-art" data-tip="Xem kết quả" aria-label="Xem kết quả" data-act="artifact">Kết quả</button>')
+          : T('js.shellui.text-2pfn', '<button class="rh-btn mobile-only" data-tip="Đóng" aria-label="Đóng" data-act="rail-close">✕</button>')) +
+        (HIST_ON && !CHAT_HOME ? T('js.shellui.text-rp08', '<button class="rh-btn" data-tip="Lịch sử hội thoại" aria-label="Lịch sử hội thoại" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></button>') : '') +
+        T('js.shellui.text-ewin', '<button class="rh-btn" data-tip="Chia sẻ phiên" aria-label="Chia sẻ phiên" data-act="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>') +
+        T('js.shellui.text-g12p', '<button class="rh-btn" data-tip="Hội thoại mới" aria-label="Hội thoại mới" data-act="newchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg></button>') +
       '</div></header>' +
       (HIST_ON ? '<div class="rail-hist" id="railHist" style="display:none"></div>' : '') +
       '<div class="ctx" id="railCtx" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:13px;height:13px;flex:0 0 auto"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg> <span id="railCtxTxt"></span></div>' +
       '<button type="button" class="rail-report" id="railReport" style="display:none"></button>' +
       '<div class="chat" id="chat">' +
-        '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="' + authorAva() + '" alt=""></div><b>Chưa có lá số nào</b>' +
-        '<p>Bạn lập lá số ở khung giữa xong, thầy trả lời liền —<br>chuyện sự nghiệp, tình duyên, năm nay, tháng tới, hỏi gì cũng được.</p></div>' +
+        '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="' + authorAva() + T('js.shellui.alt-chua-co-la-so-nao', '" alt=""></div><b>Chưa có lá số nào</b>') +
+        T('js.shellui.ban-lap-la-so-o-khung', '<p>Bạn lập lá số ở khung giữa xong, thầy trả lời liền —<br>chuyện sự nghiệp, tình duyên, năm nay, tháng tới, hỏi gì cũng được.</p></div>') +
       '</div>' +
       '<div class="rail-meter" id="railMeter" style="display:none"></div>' +
       '<div class="fam-strip" id="famStrip" style="display:none"></div>' +
@@ -775,12 +783,12 @@
       '<div class="rail-thumbs" id="railThumbs" style="display:none"></div>' +
       // Lối sang Zalo cho CẢM ỨNG: trên điện thoại rail phủ kín màn hình, che
       // mất nút Zalo của cụm FAB (xem khối ZALO OA). Máy tính ẩn bằng CSS.
-      '<a class="rail-zalo" id="railZalo" href="' + ZALO_OA_URL + '" target="_blank" rel="noopener"><span class="zl-badge" aria-hidden="true">Zalo</span><span>Hoặc nhắn thầy ngay trong <b>Zalo</b> <span aria-hidden="true">→</span></span></a>' +
+      '<a class="rail-zalo" id="railZalo" href="' + ZALO_OA_URL + T('js.shellui.target-blank-rel-noopener-zalo-hoac', '" target="_blank" rel="noopener"><span class="zl-badge" aria-hidden="true">Zalo</span><span>Hoặc nhắn thầy ngay trong <b>Zalo</b> <span aria-hidden="true">→</span></span></a>') +
       '<div class="rail-in">' +
-        '<button class="rail-attach" id="railAttach" data-act="attach" data-tip="Lập lá số trước đã" aria-label="Gửi ảnh" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg></button>' +
+        T('js.shellui.text-hzpo', '<button class="rail-attach" id="railAttach" data-act="attach" data-tip="Lập lá số trước đã" aria-label="Gửi ảnh" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg></button>') +
         '<input type="file" id="railFile" accept="image/*" multiple hidden>' +
-        '<textarea id="railInput" rows="1" placeholder="Lập lá số để bắt đầu hỏi…" disabled></textarea>' +
-        '<button class="send" id="railSend" disabled data-act="send" data-tip="Gửi" aria-label="Gửi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>';
+        T('js.shellui.text-6ojr', '<textarea id="railInput" rows="1" placeholder="Lập lá số để bắt đầu hỏi…" disabled></textarea>') +
+        T('js.shellui.text-vvf8', '<button class="send" id="railSend" disabled data-act="send" data-tip="Gửi" aria-label="Gửi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>');
     host.querySelector('[data-act="send"]').addEventListener('click', sendMsg);
     host.querySelector('#railZalo').addEventListener('click', function () { zlTrack('rail'); });
     host.querySelector('[data-act="newchat"]').addEventListener('click', newChat);
@@ -807,11 +815,11 @@
       var wide = document.body.classList.toggle('art-wide');
       // Nút CHỈ có chữ (không chứa <svg>) nên `textContent` ở đây an toàn —
       // xem luật "nút chỉ-icon cấm textContent" trong docs/ICONS.md.
-      _ab.textContent = wide ? 'Thu gọn' : 'Kết quả';
+      _ab.textContent = wide ? T('js.shellui.thu-gon', 'Thu gọn') : T('js.shellui.ket-qua', 'Kết quả');
       // `data-tip` và `aria-label` phải đổi CÙNG LÚC: đổi mỗi tooltip thì trình
       // đọc màn hình vẫn đọc nhãn cũ ("Xem kết quả") trong khi nút đã là "Thu
       // gọn". `npm run check:tooltip` canh đúng chỗ này — và đã bắt thật.
-      var _tip = wide ? 'Thu gọn kết quả' : 'Xem kết quả';
+      var _tip = wide ? T('js.shellui.thu-gon-ket-qua', 'Thu gọn kết quả') : T('js.shellui.xem-ket-qua', 'Xem kết quả');
       _ab.setAttribute('data-tip', _tip); _ab.setAttribute('aria-label', _tip);
     });
     host.querySelector('.rail-ava').addEventListener('click', function () { openAuthorModal(CHAT_HOME ? joinThay : null); });
@@ -1515,7 +1523,7 @@
     // Tool thuần-rail (không form/birth/lines để dựng lại center — vd xem tướng /
     // phong thủy qua ảnh): title generic giống nhau → lấy CÂU HỎI ĐẦU làm title
     // cho dễ phân biệt phiên.
-    var title = curMeta.title || 'Phiên', r = curMeta.restore || {};
+    var title = curMeta.title || T('js.shellui.phien', 'Phiên'), r = curMeta.restore || {};
     var hasCenter = (r.form && Object.keys(r.form).length) || r.birth || r.lines;
     if (!hasCenter) { for (var k = 0; k < msgs.length; k++) { if (msgs[k].role === 'user' && msgs[k].content) { title = msgs[k].content.slice(0, 50); break; } } }
     var rec = { id: sessionId, toolId: ACTIVE, title: title, restore: curMeta.restore || null,
@@ -1526,11 +1534,11 @@
   }
   function relTime(ts) {
     var s = Math.floor((Date.now() - ts) / 1000);
-    if (s < 60) return 'vừa xong';
-    if (s < 3600) return Math.floor(s / 60) + ' phút trước';
-    if (s < 86400) return Math.floor(s / 3600) + ' giờ trước';
-    if (s < 2592000) return Math.floor(s / 86400) + ' ngày trước';
-    return Math.floor(s / 2592000) + ' tháng trước';
+    if (s < 60) return T('js.shellui.vua-xong', 'vừa xong');
+    if (s < 3600) return Math.floor(s / 60) + T('js.shellui.phut-truoc', ' phút trước');
+    if (s < 86400) return Math.floor(s / 3600) + T('js.shellui.gio-truoc', ' giờ trước');
+    if (s < 2592000) return Math.floor(s / 86400) + T('js.shellui.ngay-truoc', ' ngày trước');
+    return Math.floor(s / 2592000) + T('js.shellui.thang-truoc', ' tháng trước');
   }
   function toolLabel(id) {
     var lb = id;
@@ -1588,29 +1596,29 @@
     if (!m || !d || m.toolId !== ACTIVE || !d.id) return;
     var r = d.restore || {};
     Shell.setContext({ birth: r.birth ? birthToApi(r.birth) : null, scenario: r.scenario || null,
-      label: d.title || 'Phiên đã lưu' });
+      label: d.title || T('js.shellui.phien-da-luu', 'Phiên đã lưu') });
     // Không đủ dữ liệu để hỏi tiếp (không có cả lá số lẫn kịch bản): cho xem lại
     // hội thoại nhưng nói THẲNG là phải chạy lại tool, đừng để ô nhập trông như
     // dùng được rồi bấm gửi không có gì xảy ra.
     if (!ctx) {
       var ta = document.getElementById('railInput'), sb = document.getElementById('railSend');
-      if (ta) { ta.disabled = true; ta.placeholder = 'Chạy lại công cụ để hỏi tiếp về phiên này.'; }
+      if (ta) { ta.disabled = true; ta.placeholder = T('js.shellui.chay-lai-cong-cu-de-hoi', 'Chạy lại công cụ để hỏi tiếp về phiên này.'); }
       if (sb) sb.disabled = true;
     }
   }
   // ── UI: panel lịch sử trong rail ──
   function histPanelHTML(list) {
-    if (!list.length) return '<div class="rh-empty">Chưa có phiên nào được lưu.</div>';
+    if (!list.length) return T('js.shellui.chua-co-phien-nao-duoc-luu', '<div class="rh-empty">Chưa có phiên nào được lưu.</div>');
     return list.map(function (s) {
       return '<div class="rh-item" data-id="' + esc(s.id) + '">' +
-        '<div class="rh-main"><div class="rh-t">' + esc(s.title || 'Phiên') + '</div>' +
+        '<div class="rh-main"><div class="rh-t">' + esc(s.title || T('js.shellui.phien', 'Phiên')) + '</div>' +
         '<div class="rh-sub">' + esc(relTime(s.updatedAt)) + (s.lastMsg ? ' · ' + esc(s.lastMsg.slice(0, 44)) : '') + '</div></div>' +
-        '<button class="rh-del" data-del="' + esc(s.id) + '" data-tip="Xoá phiên" aria-label="Xoá phiên">×</button></div>';
+        '<button class="rh-del" data-del="' + esc(s.id) + T('js.shellui.data-tip-xoa-phien-aria-label', '" data-tip="Xoá phiên" aria-label="Xoá phiên">×</button></div>');
     }).join('');
   }
   function renderHistInto(el) {
     histListAll(ACTIVE, function (list) {
-      el.innerHTML = '<div class="rh-head"><span>Lịch sử · ' + esc(toolLabel(ACTIVE)) + '</span><button class="rh-x" data-act="hist-close" aria-label="Đóng">×</button></div>' +
+      el.innerHTML = T('js.shellui.lich-su', '<div class="rh-head"><span>Lịch sử · ') + esc(toolLabel(ACTIVE)) + T('js.shellui.text-pdfk', '</span><button class="rh-x" data-act="hist-close" aria-label="Đóng">×</button></div>') +
         '<div class="rh-list">' + histPanelHTML(list) + '</div>';
       wireHist(el);
     });
@@ -1648,7 +1656,7 @@
   function sessTopic(s) {
     var ms = s.messages || [];
     for (var i = 0; i < ms.length; i++) if (ms[i].role === 'user' && ms[i].content) return ms[i].content.slice(0, 120);
-    return (s.lastMsg || s.title || 'Phiên').slice(0, 120);
+    return (s.lastMsg || s.title || T('js.shellui.phien', 'Phiên')).slice(0, 120);
   }
   // Dòng phụ dựng TỪ DỮ LIỆU LÁ SỐ, KHÔNG cắt chuỗi title: tiền tố title là chữ
   // mỗi tool tự viết, còn nhãn tool trong sidebar đọc từ `tool_pricing.label` —
@@ -1676,12 +1684,12 @@
       // Đếm số phiên theo LÁ SỐ để nói "· 3 phiên" thay vì bày 3 dòng trông y hệt.
       var cnt = {};
       list.forEach(function (s) { var k = sessBirthKey(s); if (k) cnt[k] = (cnt[k] || 0) + 1; });
-      el.innerHTML = '<div class="recent-h"><span>Phiên gần đây</span>' +
-        (list.length > RECENT_SHOW ? '<button type="button" class="recent-all" data-act="recent-all">Tất cả (' + list.length + ') ›</button>' : '') +
+      el.innerHTML = T('js.shellui.phien-gan-day', '<div class="recent-h"><span>Phiên gần đây</span>') +
+        (list.length > RECENT_SHOW ? T('js.shellui.tat-ca', '<button type="button" class="recent-all" data-act="recent-all">Tất cả (') + list.length + ') ›</button>' : '') +
         '</div><div class="recent-list">' +
         list.slice(0, RECENT_SHOW).map(function (s) {
           var k = sessBirthKey(s), sub = sessSubject(s);
-          if (sub && k && cnt[k] > 1) sub += ' · ' + cnt[k] + ' phiên';
+          if (sub && k && cnt[k] > 1) sub += ' · ' + cnt[k] + T('js.shellui.phien-meij', ' phiên');
           return '<button class="recent-item" type="button" data-id="' + esc(s.id) + '">' +
             '<span class="ri-m"><span class="ri-t">' + esc(sessTopic(s)) + '</span>' +
             (sub ? '<span class="ri-b">' + esc(sub) + '</span>' : '') + '</span>' +
@@ -1810,7 +1818,7 @@
     var f = AUTHOR_ROSTER.filter(function (a) { return a.name === name; })[0];
     return f ? '/authors/' + f.id + '.jpg' : authorAva();
   }
-  function authorLabel() { return _author ? 'Thầy ' + _author.name : 'Hiểu đúng lá số đang mở'; }
+  function authorLabel() { return _author ? T('js.shellui.thay', 'Thầy ') + _author.name : T('js.shellui.hieu-dung-la-so-dang-mo', 'Hiểu đúng lá số đang mở'); }
   function setAuthor(id) {
     var f = AUTHOR_ROSTER.filter(function (a) { return a.id === id; })[0];
     if (!f) return;
@@ -1828,7 +1836,7 @@
     var el = document.getElementById('introSrc');
     if (!el || !m) return;
     el.innerHTML = '<div class="intro-thay"><img src="/authors/' + esc(m.id) + '.jpg" alt="" onerror="this.remove()">' +
-      '<span>Thầy <b>' + esc(m.display_name || '') + '</b> đứng tên' + (m.discipline ? ' · ' + esc(m.discipline) : '') + '</span></div>';
+      T('js.shellui.thay-7g4t', '<span>Thầy <b>') + esc(m.display_name || '') + T('js.shellui.dung-ten', '</b> đứng tên') + (m.discipline ? ' · ' + esc(m.discipline) : '') + '</span></div>';
   }
   // Đóng overlay tự dựng bằng Esc — đường thoát KHÔNG PHỤ THUỘC vị trí, độc
   // lập với nút ✕/click-ra-ngoài đã có ở từng modal (CLAUDE.md: "mọi overlay
@@ -1855,10 +1863,10 @@
     wrap.className = 'sh-share-modal';
     wrap.innerHTML =
       '<div class="sam-card">' +
-        '<button class="ssm-x" aria-label="Đóng">✕</button>' +
-        '<div class="ssm-t">Chọn thầy luận giải</div>' +
-        '<div class="ssm-d">Mỗi thầy một văn phong riêng. Chọn thầy hợp gu, hoặc để hệ thống chọn ngẫu nhiên.</div>' +
-        '<button class="sam-rand">🎲 Để hệ thống chọn ngẫu nhiên</button>' +
+        T('js.shellui.text-7ef5', '<button class="ssm-x" aria-label="Đóng">✕</button>') +
+        T('js.shellui.chon-thay-luan-giai', '<div class="ssm-t">Chọn thầy luận giải</div>') +
+        T('js.shellui.moi-thay-mot-van-phong-rieng', '<div class="ssm-d">Mỗi thầy một văn phong riêng. Chọn thầy hợp gu, hoặc để hệ thống chọn ngẫu nhiên.</div>') +
+        T('js.shellui.de-he-thong-chon-ngau-nhien', '<button class="sam-rand">🎲 Để hệ thống chọn ngẫu nhiên</button>') +
         '<div class="sam-list">' + rows + '</div>' +
       '</div>';
     document.body.appendChild(wrap);
@@ -1885,7 +1893,7 @@
         return (r.scenario.data.nameA || 'A') + ' × ' + (r.scenario.data.nameB || 'B');
       var bd = r.birth;
       if (bd && bd.dd) {
-        var g = bd.gender === 'nu' ? 'Nữ' : 'Nam';
+        var g = bd.gender === 'nu' ? T('js.shellui.nu', 'Nữ') : 'Nam';
         var d = [bd.dd, bd.mm, bd.yyyy].filter(Boolean).join('/');
         return [(bd.name || '').trim(), d, g].filter(Boolean).join(' · ');
       }
@@ -1893,11 +1901,11 @@
     return '';
   }
   function shareSession() {
-    if (!messages || !messages.length) { alert('Chưa có nội dung để chia sẻ — hãy hỏi thầy vài câu trước.'); return; }
+    if (!messages || !messages.length) { alert(T('js.shellui.chua-co-noi-dung-de-chia', 'Chưa có nội dung để chia sẻ — hãy hỏi thầy vài câu trước.')); return; }
     var btn = document.querySelector('[data-act="share"]'); if (btn) btn.disabled = true;
     var payload = {
       toolId: ACTIVE || 'laso',
-      title: (curMeta && curMeta.title) || 'Hỏi Thầy',
+      title: (curMeta && curMeta.title) || T('js.nav.hoi-thay', 'Hỏi Thầy'),
       ctxLabel: _birthLabel(),
       thay: _author ? { id: _author.id, name: _author.name } : null,
       // restore: khung giữa (lá số/kịch bản) để người nhận NỐI PHIÊN hỏi tiếp.
@@ -1910,18 +1918,18 @@
       .then(function (r) { return r.json(); })
       .then(function (j) {
         if (btn) btn.disabled = false;
-        if (!j || !j.url) { alert('Không tạo được link chia sẻ, thử lại sau.'); return; }
+        if (!j || !j.url) { alert(T('js.shellui.khong-tao-duoc-link-chia-se', 'Không tạo được link chia sẻ, thử lại sau.')); return; }
         var sessTool = ACTIVE || 'laso';
         var url = withViralParams(location.origin + j.url, sessTool);
         var onMedium = function (m) { track('share', { tool_id: sessTool, meta: { medium: m, kind: 'session', with_ref: !!_refCode } }); };
         // Điện thoại (iOS/Android): mở SHARE SHEET native của hệ điều hành —
         // đủ WhatsApp, Messages, AirDrop, Zalo… đúng trải nghiệm quen thuộc.
         // Người dùng bấm ✕ (AbortError) thì thôi; lỗi khác → rơi về modal tự dựng.
-        var titleTxt = (curMeta && curMeta.title) || 'Hỏi Thầy';
-        var modalOpts = { title: 'Chia sẻ phiên Hỏi Thầy', desc: 'Ai có link đều đọc được lá số và toàn bộ hỏi đáp trong phiên này.', shareText: 'Xem phần luận giải của thầy cho lá số này: ' };
-        shareLink(url, { title: titleTxt + ' — Tử Vi Minh Bảo', text: 'Xem phần luận giải của thầy cho lá số này:', url: url }, modalOpts, onMedium);
+        var titleTxt = (curMeta && curMeta.title) || T('js.nav.hoi-thay', 'Hỏi Thầy');
+        var modalOpts = { title: T('js.shellui.chia-se-phien-hoi-thay', 'Chia sẻ phiên Hỏi Thầy'), desc: T('js.shellui.ai-co-link-deu-doc-duoc', 'Ai có link đều đọc được lá số và toàn bộ hỏi đáp trong phiên này.'), shareText: T('js.shellui.xem-phan-luan-giai-cua-thay', 'Xem phần luận giải của thầy cho lá số này: ') };
+        shareLink(url, { title: titleTxt + T('js.shellui.tu-vi-minh-bao', ' — Tử Vi Minh Bảo'), text: T('js.shellui.xem-phan-luan-giai-cua-thay-6as2', 'Xem phần luận giải của thầy cho lá số này:'), url: url }, modalOpts, onMedium);
       })
-      .catch(function () { if (btn) btn.disabled = false; alert('Lỗi mạng khi tạo link chia sẻ.'); });
+      .catch(function () { if (btn) btn.disabled = false; alert(T('js.shellui.loi-mang-khi-tao-link-chia', 'Lỗi mạng khi tạo link chia sẻ.')); });
   }
   // opts: {title, desc, shareText} — cho phép tái dùng modal cho cả "chia sẻ
   // phiên rail" (shareSession) lẫn "chia sẻ kết quả khung giữa" (shareWorkspace).
@@ -1968,23 +1976,23 @@
   function openShareModal(url, opts, onMedium) {
     opts = opts || {};
     var medium = function (m) { try { if (onMedium) onMedium(m); } catch (e) { /* ignore */ } };
-    var mTitle = opts.title || 'Chia sẻ';
-    var mDesc = opts.desc || 'Ai có link đều xem được nội dung này.';
+    var mTitle = opts.title || T('js.shellui.chia-se', 'Chia sẻ');
+    var mDesc = opts.desc || T('js.shellui.ai-co-link-deu-xem-duoc', 'Ai có link đều xem được nội dung này.');
     var shareText = opts.shareText || '';
     var enc = encodeURIComponent(url);
     var wrap = document.createElement('div');
     wrap.className = 'sh-share-modal';
     wrap.innerHTML =
       '<div class="ssm-card">' +
-        '<button class="ssm-x" aria-label="Đóng">✕</button>' +
+        T('js.shellui.text-7ef5', '<button class="ssm-x" aria-label="Đóng">✕</button>') +
         '<div class="ssm-t">' + esc(mTitle) + '</div>' +
         '<div class="ssm-d">' + esc(mDesc) + '</div>' +
-        '<div class="ssm-row"><input class="ssm-in" readonly value="' + esc(url) + '"><button class="ssm-copy">Sao chép</button></div>' +
+        '<div class="ssm-row"><input class="ssm-in" readonly value="' + esc(url) + T('js.shellui.sao-chep', '"><button class="ssm-copy">Sao chép</button></div>') +
         '<div class="ssm-share">' +
           '<a class="ssm-b fb" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=' + enc + '">Facebook</a>' +
           '<a class="ssm-b zl" target="_blank" rel="noopener" href="https://zalo.me/share/link?u=' + enc + '">Zalo</a>' +
           '<a class="ssm-b wa" target="_blank" rel="noopener" href="https://api.whatsapp.com/send?text=' + encodeURIComponent(shareText + url) + '">WhatsApp</a>' +
-          '<a class="ssm-b" target="_blank" rel="noopener" href="' + esc(url) + '">Mở ↗</a>' +
+          '<a class="ssm-b" target="_blank" rel="noopener" href="' + esc(url) + T('js.shellui.mo', '">Mở ↗</a>') +
         '</div>' +
       '</div>';
     document.body.appendChild(wrap);
@@ -2002,7 +2010,7 @@
     wrap.querySelector('.ssm-copy').addEventListener('click', function () {
       medium('copy');
       inp.select();
-      var done = function () { var b = wrap.querySelector('.ssm-copy'); b.textContent = 'Đã chép ✓'; setTimeout(function () { b.textContent = 'Sao chép'; }, 1600); };
+      var done = function () { var b = wrap.querySelector('.ssm-copy'); b.textContent = T('js.shellui.da-chep', 'Đã chép ✓'); setTimeout(function () { b.textContent = T('js.shellui.sao-chep-xpx5', 'Sao chép'); }, 1600); };
       if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, function () { try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } });
       else { try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } }
     });
@@ -2503,13 +2511,13 @@
       card = document.createElement('div');
       card.className = 'zl-card'; card.id = 'wsZaloCard';
       card.setAttribute('data-print-skip', '');
-      card.setAttribute('role', 'dialog'); card.setAttribute('aria-label', 'Hỏi thầy qua Zalo');
+      card.setAttribute('role', 'dialog'); card.setAttribute('aria-label', T('js.shell.hoi-thay-qua-zalo', 'Hỏi thầy qua Zalo'));
       card.innerHTML =
-        '<button type="button" class="zl-x" aria-label="Đóng">✕</button>' +
+        T('js.shellui.text-mio8', '<button type="button" class="zl-x" aria-label="Đóng">✕</button>') +
         '<div class="zl-h"><span class="zl-badge" aria-hidden="true">Zalo</span>' +
-        '<div><b>Hỏi thầy qua Zalo</b><small>Quét mã bằng Zalo, nhắn câu hỏi — thầy trả lời ngay</small></div></div>' +
-        '<img class="zl-qr" src="/zalo-oa-qr.png" width="168" height="168" alt="Mã QR Zalo OA Tử Vi Minh Bảo">' +
-        '<a class="zl-go" href="' + ZALO_OA_URL + '" target="_blank" rel="noopener">Mở Zalo <b aria-hidden="true">→</b></a>';
+        T('js.shellui.hoi-thay-qua-zalo-quet-ma', '<div><b>Hỏi thầy qua Zalo</b><small>Quét mã bằng Zalo, nhắn câu hỏi — thầy trả lời ngay</small></div></div>') +
+        T('js.shellui.text-6c8i', '<img class="zl-qr" src="/zalo-oa-qr.png" width="168" height="168" alt="Mã QR Zalo OA Tử Vi Minh Bảo">') +
+        '<a class="zl-go" href="' + ZALO_OA_URL + T('js.shellui.target-blank-rel-noopener-mo-zalo', '" target="_blank" rel="noopener">Mở Zalo <b aria-hidden="true">→</b></a>');
       card.querySelector('.zl-x').addEventListener('click', function () { zaloCard(false); zlTrack('close'); });
       card.querySelector('.zl-go').addEventListener('click', function () { zlTrack('go'); });
       document.body.appendChild(card);
@@ -2524,7 +2532,7 @@
     var a = document.createElement('a');
     a.className = 'btn fbtn-zl'; a.id = 'wsZaloBtn';
     a.href = ZALO_OA_URL; a.target = '_blank'; a.rel = 'noopener';
-    a.setAttribute('data-tip', 'Hỏi thầy qua Zalo'); a.setAttribute('aria-label', 'Hỏi thầy qua Zalo');
+    a.setAttribute('data-tip', T('js.shell.hoi-thay-qua-zalo', 'Hỏi thầy qua Zalo')); a.setAttribute('aria-label', T('js.shell.hoi-thay-qua-zalo', 'Hỏi thầy qua Zalo'));
     a.innerHTML = '<span aria-hidden="true">Zalo</span>';
     a.addEventListener('click', function (ev) {
       if (!zlDesktop()) { zlTrack('open'); return; } // cảm ứng: để link mở app Zalo
@@ -2554,7 +2562,7 @@
     if (btn) return;
     btn = document.createElement('button');
     btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsPdfBtn';
-    btn.setAttribute('data-tip', 'Lưu PDF'); btn.setAttribute('aria-label', 'Lưu PDF');
+    btn.setAttribute('data-tip', T('js.shellui.luu-pdf', 'Lưu PDF')); btn.setAttribute('aria-label', T('js.shellui.luu-pdf', 'Lưu PDF'));
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></svg>';
     btn.addEventListener('click', printWorkspace);
     fabAdd(host, btn);
@@ -2593,7 +2601,7 @@
     if (/Zalo/i.test(ua)) return 'Zalo';
     if (/FBAN|FBAV|FB_IAB|FBIOS/i.test(ua)) return 'Facebook';
     if (/Instagram/i.test(ua)) return 'Instagram';
-    return 'ứng dụng này';
+    return T('js.shellui.ung-dung-nay', 'ứng dụng này');
   }
   // {open(): Promise<{ok,url?,error?}>, toChat?(): Promise<{ok,error?}>, chatName?} | null
   var serverPdf = null;
@@ -2614,7 +2622,7 @@
     var call = function (to) {
       var p = null;
       try { p = reportSnapshot(); } catch (e) { console.error('[reportSnapshot]', e); }
-      if (!p) return Promise.resolve({ ok: false, error: 'Kết quả này chưa có nội dung để lưu PDF.' });
+      if (!p) return Promise.resolve({ ok: false, error: T('js.shellui.ket-qua-nay-chua-co-noi', 'Kết quả này chưa có nội dung để lưu PDF.') });
       p.to = to;
       return freshToken().then(function (tok) {
         return fetch('/api/reports/pdf', {
@@ -2638,16 +2646,16 @@
     wrap.className = 'sh-share-modal';
     wrap.innerHTML =
       '<div class="ssm-card">' +
-        '<button class="ssm-x" aria-label="Đóng">✕</button>' +
-        '<div class="ssm-t">Lưu bản PDF</div>' +
-        '<div class="ssm-d">Trình duyệt bên trong ' + esc(inAppName()) + ' không in/lưu PDF trực tiếp được' +
-          (src ? ' — chọn một cách dưới đây.' : '. Sao chép link, mở bằng Safari hoặc Chrome rồi bấm Lưu PDF.') + '</div>' +
+        T('js.shellui.text-7ef5', '<button class="ssm-x" aria-label="Đóng">✕</button>') +
+        T('js.shellui.luu-ban-pdf', '<div class="ssm-t">Lưu bản PDF</div>') +
+        T('js.shellui.trinh-duyet-ben-trong', '<div class="ssm-d">Trình duyệt bên trong ') + esc(inAppName()) + T('js.shellui.khong-in-luu-pdf-truc-tiep', ' không in/lưu PDF trực tiếp được') +
+          (src ? T('js.shellui.chon-mot-cach-duoi-day', ' — chọn một cách dưới đây.') : T('js.shellui.sao-chep-link-mo-bang-safari', '. Sao chép link, mở bằng Safari hoặc Chrome rồi bấm Lưu PDF.')) + '</div>' +
         (src ? '<div class="ssm-acts">' +
-          '<button type="button" class="ssm-act pri" data-a="open">Mở file PDF</button>' +
-          (src.toChat ? '<button type="button" class="ssm-act" data-a="chat">Gửi PDF vào ' + esc(src.chatName || 'Zalo') + '</button>' : '') +
+          T('js.shellui.mo-file-pdf', '<button type="button" class="ssm-act pri" data-a="open">Mở file PDF</button>') +
+          (src.toChat ? T('js.shellui.gui-pdf-vao', '<button type="button" class="ssm-act" data-a="chat">Gửi PDF vào ') + esc(src.chatName || 'Zalo') + '</button>' : '') +
         '</div>' : '') +
         '<div class="ssm-note" hidden></div>' +
-        '<div class="ssm-row"><input class="ssm-in" readonly value="' + esc(location.href) + '"><button class="ssm-copy">Sao chép link</button></div>' +
+        '<div class="ssm-row"><input class="ssm-in" readonly value="' + esc(location.href) + T('js.shellui.sao-chep-link', '"><button class="ssm-copy">Sao chép link</button></div>') +
       '</div>';
     document.body.appendChild(wrap);
     var close = _escCloses(function () { wrap.remove(); });
@@ -2659,19 +2667,19 @@
       b.addEventListener('click', function () {
         var isChat = b.getAttribute('data-a') === 'chat';
         var orig = b.textContent;
-        b.disabled = true; b.textContent = isChat ? 'Đang gửi…' : 'Đang dựng PDF…';
+        b.disabled = true; b.textContent = isChat ? T('js.shellui.dang-gui', 'Đang gửi…') : T('js.shellui.dang-dung-pdf', 'Đang dựng PDF…');
         (isChat ? src.toChat() : src.open()).then(function (r) {
           b.disabled = false; b.textContent = orig;
-          if (!r || !r.ok) { say((r && r.error) || 'Chưa tạo được PDF, thử lại sau ít phút.'); return; }
-          if (isChat) { b.textContent = '✓ Đã gửi — mở ' + (src.chatName || 'Zalo') + ' để xem'; b.disabled = true; return; }
+          if (!r || !r.ok) { say((r && r.error) || T('js.shellui.chua-tao-duoc-pdf-thu-lai', 'Chưa tạo được PDF, thử lại sau ít phút.')); return; }
+          if (isChat) { b.textContent = T('js.shellui.da-gui-mo', '✓ Đã gửi — mở ') + (src.chatName || 'Zalo') + T('js.shellui.de-xem', ' để xem'); b.disabled = true; return; }
           location.href = r.url; // điều hướng: webview iOS hiện thẳng file, Android tự tải về
-        }, function () { b.disabled = false; b.textContent = orig; say('Lỗi mạng, thử lại sau ít phút.'); });
+        }, function () { b.disabled = false; b.textContent = orig; say(T('js.shellui.loi-mang-thu-lai-sau-it', 'Lỗi mạng, thử lại sau ít phút.')); });
       });
     });
     var inp = wrap.querySelector('.ssm-in');
     wrap.querySelector('.ssm-copy').addEventListener('click', function () {
       inp.select();
-      var done = function () { wrap.querySelector('.ssm-copy').textContent = 'Đã chép ✓'; };
+      var done = function () { wrap.querySelector('.ssm-copy').textContent = T('js.shellui.da-chep', 'Đã chép ✓'); };
       if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(done, function () { try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } });
       else { try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } }
     });
@@ -3008,7 +3016,7 @@
     if (b && b.parentNode !== host) host.appendChild(b);
     if (b) {
       // Icon-only đồng bộ với 3 nút kia — chữ "Hỏi" dồn vào tooltip.
-      b.setAttribute('data-tip', 'Hỏi'); b.setAttribute('aria-label', 'Hỏi');
+      b.setAttribute('data-tip', T('js.shellui.hoi', 'Hỏi')); b.setAttribute('aria-label', T('js.shellui.hoi', 'Hỏi'));
       if (!_orbOn) b.innerHTML = ASK_ICON_SVG;
     }
   }
@@ -3036,7 +3044,7 @@
     if (!btn) {
       btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsShareBtn';
-      btn.setAttribute('data-tip', 'Chia sẻ'); btn.setAttribute('aria-label', 'Chia sẻ');
+      btn.setAttribute('data-tip', T('js.shellui.chia-se', 'Chia sẻ')); btn.setAttribute('aria-label', T('js.shellui.chia-se', 'Chia sẻ'));
       btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg>';
       btn.addEventListener('click', shareWorkspace);
       fabAdd(host, btn);
@@ -3068,13 +3076,13 @@
       var box = document.createElement('div');
       box.id = 'shGalNote';
       box.className = 'sh-gal-note';
-      box.innerHTML = '<span>Đã tạo link · bản này cũng hiện trong ' +
-        '<a href="/thu-vien" target="_blank" rel="noopener">Thư viện chung</a></span>' +
-        '<button type="button">Ẩn đi</button>';
+      box.innerHTML = T('js.shellui.da-tao-link-ban-nay-cung', '<span>Đã tạo link · bản này cũng hiện trong ') +
+        T('js.shellui.thu-vien-chung', '<a href="/thu-vien" target="_blank" rel="noopener">Thư viện chung</a></span>') +
+        T('js.shellui.an-di', '<button type="button">Ẩn đi</button>');
       host.parentNode.insertBefore(box, host.nextSibling);
       var btn = box.querySelector('button');
       btn.addEventListener('click', function () {
-        btn.disabled = true; btn.textContent = 'Đang ẩn…';
+        btn.disabled = true; btn.textContent = T('js.shellui.dang-an', 'Đang ẩn…');
         fetch('/api/share-result', {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getToken() },
@@ -3083,10 +3091,10 @@
           .then(function (r) { return r.json(); })
           .then(function (j) {
             if (j && j.gallery_opt_out) {
-              box.innerHTML = '<span>✓ Đã ẩn khỏi Thư viện chung. Link vẫn dùng được như thường.</span>';
-            } else { btn.disabled = false; btn.textContent = 'Thử lại'; }
+              box.innerHTML = T('js.shellui.da-an-khoi-thu-vien-chung', '<span>✓ Đã ẩn khỏi Thư viện chung. Link vẫn dùng được như thường.</span>');
+            } else { btn.disabled = false; btn.textContent = T('js.shellui.thu-lai', 'Thử lại'); }
           })
-          .catch(function () { btn.disabled = false; btn.textContent = 'Thử lại'; });
+          .catch(function () { btn.disabled = false; btn.textContent = T('js.shellui.thu-lai', 'Thử lại'); });
       });
       // 🪤 KHÔNG tự dọn theo hẹn giờ. Bản đầu xoá sau 30 giây, nhưng trên
       // desktop `openShareModal` phủ kín trang NGAY SAU đó — ai ngồi trong modal
@@ -3115,22 +3123,22 @@
       .then(function (r) { return r.json(); })
       .then(function (j) {
         reEnable();
-        if (!j || !j.url) { alert('Không tạo được link chia sẻ, thử lại sau.'); return; }
+        if (!j || !j.url) { alert(T('js.shellui.khong-tao-duoc-link-chia-se', 'Không tạo được link chia sẻ, thử lại sau.')); return; }
         cb(withViralParams(location.origin + j.url, s.toolId), s, j.id, !!j.galleryOptOut);
       })
-      .catch(function () { reEnable(); alert('Lỗi mạng khi tạo link chia sẻ.'); });
+      .catch(function () { reEnable(); alert(T('js.shellui.loi-mang-khi-tao-link-chia', 'Lỗi mạng khi tạo link chia sẻ.')); });
   }
   function shareWorkspace() {
     var btn = document.getElementById('wsShareBtn');
     fetchShareUrl(btn, function (url, s, shareId, galleryOptOut) {
       var onMedium = function (m) { track('share', { tool_id: s.toolId, meta: { medium: m, kind: 'workspace', with_ref: !!_refCode } }); };
-      var shareTxt = 'Xem kết quả này trên Tử Vi Minh Bảo:';
-      var modalOpts = { title: 'Chia sẻ ' + s.title, desc: 'Ai có link đều xem được kết quả này.', shareText: shareTxt + ' ' };
+      var shareTxt = T('js.shellui.xem-ket-qua-nay-tren-tu', 'Xem kết quả này trên Tử Vi Minh Bảo:');
+      var modalOpts = { title: T('js.shellui.chia-se-w5yz', 'Chia sẻ ') + s.title, desc: T('js.shellui.ai-co-link-deu-xem-duoc-ybjz', 'Ai có link đều xem được kết quả này.'), shareText: shareTxt + ' ' };
       // LUÔN share dạng LINK (giống hệt shareSession ở rail) — KHÔNG share
       // file ảnh thô qua Web Share API level 2: nhiều app nhận file (Messenger,
       // Zalo…) BỎ LUÔN url đi kèm, người nhận chỉ thấy ảnh, không bấm vào đâu
       // được. Ảnh vẫn hiện đẹp nhờ OG:image khi link được unfurl.
-      shareLink(url, { title: s.title + ' — Tử Vi Minh Bảo', text: shareTxt, url: url }, modalOpts, onMedium);
+      shareLink(url, { title: s.title + T('js.shellui.tu-vi-minh-bao', ' — Tử Vi Minh Bảo'), text: shareTxt, url: url }, modalOpts, onMedium);
       galleryNotice(shareId, galleryOptOut);
     });
   }
@@ -3148,7 +3156,7 @@
     if (btn) return;
     btn = document.createElement('button');
     btn.type = 'button'; btn.className = 'btn fbtn-fb'; btn.id = 'wsFbBtn';
-    btn.setAttribute('data-tip', 'Đăng Facebook'); btn.setAttribute('aria-label', 'Đăng Facebook');
+    btn.setAttribute('data-tip', T('js.shellui.dang-facebook', 'Đăng Facebook')); btn.setAttribute('aria-label', T('js.shellui.dang-facebook', 'Đăng Facebook'));
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.53 17.52 2.04 12 2.04S2 6.53 2 12.06c0 5 3.66 9.13 8.44 9.88v-6.99H7.9v-2.89h2.54V9.85c0-2.5 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99c4.78-.75 8.44-4.88 8.44-9.88z"/></svg>';
     btn.addEventListener('click', postFacebook);
     fabAdd(host, btn);
@@ -3206,7 +3214,7 @@
   // ngày giờ sinh mà trang tự vẽ vào #chat ngay sau boot.
   // Màn chat trang chủ (CHAT_HOME) không dùng hàm này: câu báo đi kèm lời chào
   // trong introThay() (joinThay dọn #chat trước khi thầy chào).
-  var FROMSHARE_NOTE = '<b>Lá số con vừa xem là của người đã chia sẻ link, không phải của con.</b>';
+  var FROMSHARE_NOTE = T('js.shellui.la-so-con-vua-xem-la', '<b>Lá số con vừa xem là của người đã chia sẻ link, không phải của con.</b>');
   function notifyFromShare() {
     var chat = document.getElementById('chat');
     if (!chat) return;
@@ -3214,7 +3222,7 @@
     el.className = 'msg a';
     el.innerHTML = '<img class="msg-ava" src="' + authorAva() + '" alt="">' +
       '<div class="msg-body"><p>' + FROMSHARE_NOTE + '<br>' +
-      'Muốn thầy luận cho chính con thì cho thầy xin ngày giờ sinh của con — thầy mở một phiên mới riêng cho con.</p></div>';
+      T('js.shellui.muon-thay-luan-cho-chinh-con', 'Muốn thầy luận cho chính con thì cho thầy xin ngày giờ sinh của con — thầy mở một phiên mới riêng cho con.</p></div>');
     chat.appendChild(el);
   }
   // Beacon đo phễu: người nhận nối phiên và hỏi thật lần đầu → +1 signup_count.
@@ -3361,17 +3369,17 @@
       // Khách chưa đăng nhập: nói rõ đây là lượt DÙNG THỬ, và lối đi tiếp là
       // ĐĂNG KÝ (kèm con số cụ thể) chứ không phải nạp tiền — người chưa từng
       // dùng thì mời nạp tiền là mời quá sớm.
-      txt = n === 0 ? 'Đã hết câu dùng thử' : 'Dùng thử: còn <b>' + n + '</b> câu';
-      act = '<a class="rm-a" href="#" data-act="anon-signup">Đăng ký nhận thêm</a>';
+      txt = n === 0 ? T('js.shellui.da-het-cau-dung-thu', 'Đã hết câu dùng thử') : T('js.shellui.dung-thu-con', 'Dùng thử: còn <b>') + n + T('js.shellui.cau', '</b> câu');
+      act = T('js.shellui.dang-ky-nhan-them', '<a class="rm-a" href="#" data-act="anon-signup">Đăng ký nhận thêm</a>');
     } else if (n === 0) {
-      txt = 'Đã dùng hết lượt hỏi';
-      act = '<a class="rm-a" href="/topup.html">Nạp thêm</a>';
+      txt = T('js.shellui.da-dung-het-luot-hoi', 'Đã dùng hết lượt hỏi');
+      act = T('js.shellui.nap-them', '<a class="rm-a" href="/topup.html">Nạp thêm</a>');
     } else if (_rc.freeTurns > 0) {
-      txt = 'Còn <b>' + n + '</b> câu hỏi <span class="rm-sub">(' + _rc.freeTurns + ' lượt tặng)</span>';
-      if (n <= 3) act = '<a class="rm-a" href="/topup.html">Nạp thêm</a>';
+      txt = T('js.shellui.con', 'Còn <b>') + n + T('js.shellui.cau-hoi', '</b> câu hỏi <span class="rm-sub">(') + _rc.freeTurns + T('js.shellui.luot-tang', ' lượt tặng)</span>');
+      if (n <= 3) act = T('js.shellui.nap-them', '<a class="rm-a" href="/topup.html">Nạp thêm</a>');
     } else {
-      txt = 'Còn <b>' + n + '</b> câu hỏi';
-      if (n <= 3) act = '<a class="rm-a" href="/topup.html">Nạp thêm</a>';
+      txt = T('js.shellui.con', 'Còn <b>') + n + T('js.shellui.cau-hoi-48ar', '</b> câu hỏi');
+      if (n <= 3) act = T('js.shellui.nap-them', '<a class="rm-a" href="/topup.html">Nạp thêm</a>');
     }
     el.className = 'rail-meter' + cls;
     el.innerHTML = '<span class="rm-t">' + txt + '</span>' + act;
@@ -3403,16 +3411,16 @@
     if (!el) return;
     var html = '', go = null;
     if (_rep && _rep.state === 'building') {
-      html = '<span class="rr-ic rr-spin"></span><span class="rr-t"><b>Đang viết báo cáo…</b><span>' +
-        _rep.done + ' / ' + _rep.total + ' phần đã xong</span></span>';
+      html = T('js.shellui.dang-viet-bao-cao', '<span class="rr-ic rr-spin"></span><span class="rr-t"><b>Đang viết báo cáo…</b><span>') +
+        _rep.done + ' / ' + _rep.total + T('js.shellui.phan-da-xong', ' phần đã xong</span></span>');
       go = openArtPanel;
     } else if (_rep && _rep.state === 'ready') {
-      html = '<span class="rr-ic rr-ok">' + svg('check') + '</span><span class="rr-t"><b>Báo cáo đã sẵn sàng</b><span>' +
-        esc(wsTitleText()) + ' · ' + _rep.total + ' phần</span></span><span class="rr-go">Xem →</span>';
+      html = '<span class="rr-ic rr-ok">' + svg('check') + T('js.shellui.bao-cao-da-san-sang', '</span><span class="rr-t"><b>Báo cáo đã sẵn sàng</b><span>') +
+        esc(wsTitleText()) + ' · ' + _rep.total + T('js.shellui.phan-xem', ' phần</span></span><span class="rr-go">Xem →</span>');
       go = openArtPanel;
     } else if (ctx && ctx.birth && !REPORT_PAGES[ACTIVE] && _rc.lasoPrice != null) {
-      html = '<span class="rr-ic">' + svg('lock') + '</span><span class="rr-t"><b>Luận Giải ' + LG_PHAN.length +
-        ' mục cho lá số này</b><span>' + creditUsd(_rc.lasoPrice) + ' (' + _rc.lasoPrice + ' Lượng)' + ' · chưa mở</span></span>' +
+      html = '<span class="rr-ic">' + svg('lock') + T('js.shellui.luan-giai', '</span><span class="rr-t"><b>Luận Giải ') + LG_PHAN.length +
+        T('js.shellui.muc-cho-la-so-nay', ' mục cho lá số này</b><span>') + creditUsd(_rc.lasoPrice) + ' (' + _rc.lasoPrice + T('js.shellui.luong', ' Lượng)') + T('js.shellui.chua-mo', ' · chưa mở</span></span>') +
         '<span class="rr-go">Xem →</span>';
       go = function () {
         try { track('cta_click', { tool_id: 'laso', meta: { from: 'rail_report_bar' } }); } catch (e) { /* ignore */ }
@@ -3434,12 +3442,12 @@
   // trang tự dùng lá số đã nhớ thay vì lập nhầm theo ngày dương.
   function luanGiaiHref() {
     var b = ctx && ctx.birth;
-    if (!b || b.isLunar || !b.day || !b.month || !b.year) return '/app/luan-giai';
+    if (!b || b.isLunar || !b.day || !b.month || !b.year) return H('/app/luan-giai');
     var q = ['ngay=' + b.day, 'thang=' + b.month, 'nam=' + b.year, 'gioitinh=' + (b.gender === 'nu' ? 'nu' : 'nam')];
     if (b.hourBranch != null && b.hourBranch >= 0) q.push('gio=' + (b.hourBranch * 2));
     if (b.name) q.push('ten=' + encodeURIComponent(b.name));
     q.push('auto=1');
-    return '/app/luan-giai?' + q.join('&');
+    return H('/app/luan-giai') + '?' + q.join('&');
   }
   // Trang TỰ viết báo cáo (có ReportDelivery) — thanh "chưa mở" không mời
   // sang chính nó; trạng thái ở đó lấy từ sự kiện `tvmb:report`.
@@ -3468,18 +3476,18 @@
       wrap.className = 'sh-topup-modal';
       wrap.innerHTML =
         '<div class="stm-card">' +
-          '<button class="stm-x" aria-label="Đóng">✕</button>' +
+          T('js.shellui.text-9k4p', '<button class="stm-x" aria-label="Đóng">✕</button>') +
           '<img class="stm-ava" src="' + authorAva() + '" alt="">' +
-          '<div class="stm-t">Hết phần dùng thử rồi…</div>' +
-          '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn nói về lá số này. Đăng ký miễn phí để:' +
+          T('js.shellui.het-phan-dung-thu-roi', '<div class="stm-t">Hết phần dùng thử rồi…</div>') +
+          '<div class="stm-d">' + esc(thay) + T('js.shellui.con-nhieu-dieu-muon-noi-ve', ' còn nhiều điều muốn nói về lá số này. Đăng ký miễn phí để:') +
             '<ul class="stm-ul">' +
-              li(câu ? 'Hỏi Thầy thêm <b>' + câu + ' câu</b> miễn phí' + (pendingQ ? ' — câu vừa rồi được trả lời ngay' : '')
-                     : 'Được tặng lượt hỏi Thầy miễn phí') +
-              li('Lưu lá số và cuộc trò chuyện — đổi máy vẫn còn') +
-              li('Mỗi sáng nhận vận ngày riêng cho lá số của bạn') +
+              li(câu ? T('js.shellui.hoi-thay-them', 'Hỏi Thầy thêm <b>') + câu + T('js.shellui.cau-mien-phi', ' câu</b> miễn phí') + (pendingQ ? T('js.shellui.cau-vua-roi-duoc-tra-loi', ' — câu vừa rồi được trả lời ngay') : '')
+                     : T('js.shellui.duoc-tang-luot-hoi-thay-mien', 'Được tặng lượt hỏi Thầy miễn phí')) +
+              li(T('js.shellui.luu-la-so-va-cuoc-tro', 'Lưu lá số và cuộc trò chuyện — đổi máy vẫn còn')) +
+              li(T('js.shellui.moi-sang-nhan-van-ngay-rieng', 'Mỗi sáng nhận vận ngày riêng cho lá số của bạn')) +
             '</ul></div>' +
-          '<button class="stm-btn" type="button" data-act="do-signup">Đăng ký miễn phí →</button>' +
-          '<button class="stm-later" type="button">Để sau</button>' +
+          T('js.shellui.dang-ky-mien-phi', '<button class="stm-btn" type="button" data-act="do-signup">Đăng ký miễn phí →</button>') +
+          T('js.shellui.de-sau', '<button class="stm-later" type="button">Để sau</button>') +
         '</div>';
       document.body.appendChild(wrap);
       var close = _escCloses(function () { wrap.remove(); });
@@ -3550,19 +3558,19 @@
     wrap.className = 'sh-topup-modal';
     wrap.innerHTML =
       '<div class="stm-card">' +
-        '<button class="stm-x" aria-label="Đóng">✕</button>' +
+        T('js.shellui.text-9k4p', '<button class="stm-x" aria-label="Đóng">✕</button>') +
         '<img class="stm-ava" src="' + authorAva() + '" alt="">' +
-        '<div class="stm-t">Quẻ còn dở, xin phép dừng ở đây…</div>' +
+        T('js.shellui.que-con-do-xin-phep-dung', '<div class="stm-t">Quẻ còn dở, xin phép dừng ở đây…</div>') +
         (hasLaso
-          ? '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
-              '. Bản <b>Luận Giải</b> soi trọn <b>' + LG_PHAN.length + ' mục</b> của chính lá số này — ' +
-              esc(preview) + '… — thay vì hỏi lẻ từng câu.</div>' +
-            '<a class="stm-btn" href="' + esc(luanGiaiHref()) + '">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng (' + creditUsd(_rc.lasoPrice) + ')</a>' +
-            '<a class="stm-alt" href="/topup.html">Hoặc nạp Lượng để hỏi tiếp từng câu →</a>'
-          : '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
-              ', nhưng phần Lượng trong ví đã cạn. Nạp thêm để thầy luận tiếp mạch còn dang dở nhé.</div>' +
-            '<a class="stm-btn" href="/topup.html">Nạp Lượng để hỏi tiếp →</a>') +
-        '<button class="stm-later" type="button">Để sau</button>' +
+          ? '<div class="stm-d">' + esc(thay) + T('js.shellui.con-nhieu-dieu-muon-to-tuong', ' còn nhiều điều muốn tỏ tường') + (nm ? ' cho ' + esc(nm) : '') +
+              T('js.shellui.ban-luan-giai-soi-tron', '. Bản <b>Luận Giải</b> soi trọn <b>') + LG_PHAN.length + T('js.shellui.muc-cua-chinh-la-so-nay', ' mục</b> của chính lá số này — ') +
+              esc(preview) + T('js.shellui.thay-vi-hoi-le-tung-cau', '… — thay vì hỏi lẻ từng câu.</div>') +
+            '<a class="stm-btn" href="' + esc(luanGiaiHref()) + T('js.shellui.xem-tron', '">Xem trọn ') + LG_PHAN.length + T('js.shellui.muc', ' mục — ') + _rc.lasoPrice + T('js.shellui.luong-n119', ' Lượng (') + creditUsd(_rc.lasoPrice) + ')</a>' +
+            T('js.shellui.hoac-nap-luong-de-hoi-tiep', '<a class="stm-alt" href="/topup.html">Hoặc nạp Lượng để hỏi tiếp từng câu →</a>')
+          : '<div class="stm-d">' + esc(thay) + T('js.shellui.con-nhieu-dieu-muon-to-tuong', ' còn nhiều điều muốn tỏ tường') + (nm ? ' cho ' + esc(nm) : '') +
+              T('js.shellui.nhung-phan-luong-trong-vi-da', ', nhưng phần Lượng trong ví đã cạn. Nạp thêm để thầy luận tiếp mạch còn dang dở nhé.</div>') +
+            T('js.shellui.nap-luong-de-hoi-tiep', '<a class="stm-btn" href="/topup.html">Nạp Lượng để hỏi tiếp →</a>')) +
+        T('js.shellui.de-sau', '<button class="stm-later" type="button">Để sau</button>') +
       '</div>';
     document.body.appendChild(wrap);
     try { track('cta_click', { tool_id: ACTIVE, meta: { from: hasLaso ? 'rail_wall_laso' : 'rail_wall_topup' } }); } catch (e) { /* ignore */ }
@@ -3620,7 +3628,7 @@
     } catch (e) { /* ignore */ }
     return getToken();
   }
-  function setSend(on) { var s = document.getElementById('railSend'), i = document.getElementById('railInput'), a = document.getElementById('railAttach'); if (s) s.disabled = !on; if (a) { a.disabled = !on; a.setAttribute('data-tip', on ? 'Gửi ảnh' : 'Lập lá số trước đã'); } if (i) { i.disabled = !on; if (on) i.focus(); } }
+  function setSend(on) { var s = document.getElementById('railSend'), i = document.getElementById('railInput'), a = document.getElementById('railAttach'); if (s) s.disabled = !on; if (a) { a.disabled = !on; a.setAttribute('data-tip', on ? T('js.shellui.gui-anh', 'Gửi ảnh') : T('js.shellui.lap-la-so-truoc-da', 'Lập lá số trước đã')); } if (i) { i.disabled = !on; if (on) i.focus(); } }
 
   function parseSSE(block) {
     var name = null, data = null;
@@ -4506,7 +4514,7 @@
   // KHÔNG hỏi xác nhận trước khi trừ khi đủ số dư — giá trên nút là lần DUY
   // NHẤT khách thấy số trước khi bị trừ, không phải chi tiết trang trí.
   function paidBtnPrice(product, bubbleEl, baseLabel) {
-    ensureScripts(['/tool-prices.js?v=11'], function () {
+    ensureScripts(['/tool-prices.js?v=12'], function () {
       if (typeof window.ToolPrices === 'undefined' || !window.ToolPrices.load) return;
       window.ToolPrices.load().then(function () {
         var cost = window.ToolPrices.get(product);
@@ -4524,7 +4532,7 @@
   // lúc mở (y hệt cả 4 trang thật — không trang nào gọi lại setContext() sau
   // khi có kết quả), streamed text ở lại trong lịch sử chat làm "kết quả".
   function runTuongMatSSE(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=42'], function (err) {
+    ensureScripts(['/auth.js?v=8', '/tuvi-paywall.js?v=43'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', '', 'Phân tích →', function (photo, bubbleEl, showErr) {
@@ -4597,7 +4605,7 @@
   // /api/tuong-mat, kết quả JSON. Trang thật gọi LẠI Shell.setContext() sau
   // khi có kết quả (label/greeting/chips theo đúng response) — replay y hệt.
   function runTuongMatJSON(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=42'], function (err) {
+    ensureScripts(['/auth.js?v=8', '/tuvi-paywall.js?v=43'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var bubble = inlPhotoBubble(chat, '<p>' + esc(opts.uploadHint) + '</p>', opts.extraFieldsHtml || '', 'Phân tích →', function (photo, bubbleEl, showErr) {
@@ -4718,7 +4726,7 @@
   // 'bat-trach' (bước 17), không chép công thức lần hai.
   var DOOR_DIR_OPTS = [['S', 'Nam'], ['N', 'Bắc'], ['E', 'Đông'], ['W', 'Tây'], ['SE', 'Đông Nam'], ['SW', 'Tây Nam'], ['NE', 'Đông Bắc'], ['NW', 'Tây Bắc']];
   function runPhongThuyPhoto(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=42', '/tools-shared/bat-trach.js?v=2'], function (err) {
+    ensureScripts(['/auth.js?v=8', '/tuvi-paywall.js?v=43', '/tools-shared/bat-trach.js?v=2'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var extraOpts = opts.extraOptions.map(function (o) { return '<option value="' + esc(o[0]) + '">' + esc(o[1]) + '</option>'; }).join('');
@@ -4829,7 +4837,7 @@
   // được 3/6 trục Cốt/Nhục/Thế — không phải suy diễn, chính trang thật cũng
   // chỉ đo được ngần đó khi người dùng chọn nhánh ảnh thay vì ký sống).
   function runButTuong(chat, toolId) {
-    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=42', '/tools-shared/but-tuong.js'], function (err) {
+    ensureScripts(['/auth.js?v=8', '/tuvi-paywall.js?v=43', '/tools-shared/but-tuong.js'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BuTuongTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Bút Tướng', placeholder: 'Hỏi thầy về bút tướng…',
@@ -4878,7 +4886,7 @@
   // ── Trả phí KHÔNG cần ảnh (mau-sac-hop-menh/trang-phuc-theo-ngay) — vẫn
   // qua requireCredits(), chỉ khác chỗ input là field chứ không phải ảnh.
   function runMauSacHopMenh(chat, toolId) {
-    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=42', '/tools-shared/bat-trach.js?v=2'], function (err) {
+    ensureScripts(['/auth.js?v=8', '/tuvi-paywall.js?v=43', '/tools-shared/bat-trach.js?v=2'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Màu Sắc Hợp Mệnh', placeholder: 'Hỏi thầy về màu sắc hợp mệnh…',
@@ -4944,7 +4952,7 @@
     return { text: 'Mệnh khắc Ngày — ngày trung bình, cẩn thận' };
   }
   function runTrangPhucTheoNgay(chat, toolId) {
-    ensureScripts(['/auth.js?v=4', '/tuvi-paywall.js?v=42'], function (err) {
+    ensureScripts(['/auth.js?v=8', '/tuvi-paywall.js?v=43'], function (err) {
       if (err || typeof TuviPaywall === 'undefined') { inlineErrorBubble(chat, 'không nạp được cổng thanh toán.'); return; }
       Shell.setContext({
         toolId: toolId, label: 'Trang Phục Theo Ngày', placeholder: 'Hỏi thầy về trang phục theo ngày…',
@@ -5010,8 +5018,8 @@
       chat.innerHTML = '<div class="home-hero"><img src="/seal-128.webp" alt="" width="64" height="64"><h1>' + esc(o.hero) + '</h1>' +
         (o.heroSub ? '<p>' + esc(o.heroSub) + '</p>' : '') +
         // Chưa có lá số: mời lập ngay tại đây (thầy xin ngày sinh trong chat).
-        (!(ctx && ctx.birth) ? '<button type="button" class="home-birth">Lập lá số của bạn để thầy xem sát hơn →</button>' : '') +
-        '<p class="home-pulse"><span class="sbp-dot"></span><b id="hpOnline">…</b> người đang xem<span aria-hidden="true">·</span><b id="hpPrompts">…</b> lượt hỏi hôm nay</p></div>';
+        (!(ctx && ctx.birth) ? T('js.shellui.lap-la-so-cua-ban-de', '<button type="button" class="home-birth">Lập lá số của bạn để thầy xem sát hơn →</button>') : '') +
+        T('js.shellui.nguoi-dang-xem-luot-hoi-hom', '<p class="home-pulse"><span class="sbp-dot"></span><b id="hpOnline">…</b> người đang xem<span aria-hidden="true">·</span><b id="hpPrompts">…</b> lượt hỏi hôm nay</p></div>');
       var hb = chat.querySelector('.home-birth');
       if (hb) hb.addEventListener('click', function () { askBirthHome(null); });
       startPulse();
@@ -5020,7 +5028,7 @@
       renderSuggs();
       return;
     }
-    var html = '<div class="msg a"><img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body">' + mdLite(o.greeting || 'Lá số đã sẵn sàng. Bạn muốn tôi soi điều gì trước?') + '</div></div>';
+    var html = '<div class="msg a"><img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body">' + mdLite(o.greeting || T('js.shellui.la-so-da-san-sang-ban', 'Lá số đã sẵn sàng. Bạn muốn tôi soi điều gì trước?')) + '</div></div>';
     // Henry 2026-09-23: luồng nhập liệu NGAY TRONG #chat (TuviForm.renderChat
     // prefix 'inl*'/'c*', hoặc inlStep/inlPhotoBubble/inlStreamBubble bước
     // 17/18 — id luôn bắt đầu 'chatStep-'/'inl') vừa dựng xong các bong bóng
@@ -5143,7 +5151,7 @@
       // khi tool không đưa (tool ảnh). Đọc thẳng app_birth là tool xem lá số
       // NGƯỜI KHÁC (day-con · nguoi-khac · nhan-mach) dán nhãn phiên bằng lá số
       // của chính người dùng — nhãn nói SAI người mà không có gì báo.
-      curMeta = { restore: Object.assign({ birth: normBirth(o.birth) || birthSnapshot(), selfBirth: birthOwned, scenario: o.scenario || null, form: snapshotForm() }, o.restore || {}), title: o.title || o.label || 'Phiên', createdAt: Date.now() };
+      curMeta = { restore: Object.assign({ birth: normBirth(o.birth) || birthSnapshot(), selfBirth: birthOwned, scenario: o.scenario || null, form: snapshotForm() }, o.restore || {}), title: o.title || o.label || T('js.shellui.phien', 'Phiên'), createdAt: Date.now() };
       var c = document.getElementById('railCtx'), t = document.getElementById('railCtxTxt');
       // Lưới an toàn soft-nav (cùng họ lỗi `initProfile()`/`authLoading` đã vá
       // ở Hồ Sơ, xem shell-soft-nav.js): `#shell-rail` (chứa `railCtx`/`chat`/
@@ -5154,12 +5162,12 @@
       // biến mất — không riêng `railCtx` — nên vẽ tiếp là vô nghĩa (trang sắp
       // bị thay hẳn); bỏ qua CẢ setContext, đừng ném lỗi giữa chừng.
       if (!c || !t) return;
-      if (o.label) { c.style.display = ''; t.innerHTML = 'Đang gắn: <b>' + esc(o.label) + '</b>'; }
+      if (o.label) { c.style.display = ''; t.innerHTML = T('js.shellui.dang-gan', 'Đang gắn: <b>') + esc(o.label) + '</b>'; }
       if (CHAT_HOME) paintHomeCtx(); // màn chat trang chủ: nhãn là LÁ SỐ đang hỏi, không phải tên kênh
       var ta = document.getElementById('railInput');
-      ta.disabled = false; ta.placeholder = o.placeholder || 'Hỏi bất cứ điều gì về lá số này…';
+      ta.disabled = false; ta.placeholder = o.placeholder || T('js.shellui.hoi-bat-cu-dieu-gi-ve', 'Hỏi bất cứ điều gì về lá số này…');
       document.getElementById('railSend').disabled = false;
-      var att = document.getElementById('railAttach'); if (att) { att.disabled = false; att.setAttribute('data-tip', 'Gửi ảnh'); }
+      var att = document.getElementById('railAttach'); if (att) { att.disabled = false; att.setAttribute('data-tip', T('js.shellui.gui-anh', 'Gửi ảnh')); }
       greet(o);
       // Henry 2026-09-23: vừa có kết quả MỚI (lá số/kịch bản) mà user có thể
       // đang ở khung chat, chưa biết `.ws` đã có gì để xem — chấm đỏ trên nút
@@ -5493,10 +5501,10 @@
     try { sessionStorage.removeItem(sessLiveKey(ACTIVE)); } catch (e) { /* ignore */ }
     if (ctx) {
       // Thread mới cùng ngữ cảnh: giữ restore/title, đổi id để không đè phiên cũ.
-      curMeta = { restore: (curMeta && curMeta.restore) || { birth: birthSnapshot(), scenario: ctx.scenario || null }, title: (curMeta && curMeta.title) || 'Phiên', createdAt: Date.now() };
+      curMeta = { restore: (curMeta && curMeta.restore) || { birth: birthSnapshot(), scenario: ctx.scenario || null }, title: (curMeta && curMeta.title) || T('js.shellui.phien', 'Phiên'), createdAt: Date.now() };
       ctxChips = ctxChipsOrig.slice(); ctxChipsSrc = 'static';
       if (CHAT_HOME && _ctxOpts) { _navDone = false; paintHomeHeader(); greet(_ctxOpts); }
-      else greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' });
+      else greet({ greeting: T('js.shellui.bat-dau-hoi-thoai-moi-ban', 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?') });
       // Hội thoại mới → đếm lại câu, và cho thẻ mời có cơ hội hiện lại (một lần
       // mỗi hội thoại, không phải một lần mỗi phiên trình duyệt).
       _suggestShown = false; pendingSuggest = null;
@@ -6172,9 +6180,9 @@
   var CMDS = [];
   function buildCmds() {
     CMDS.length = 0;
-    TOOLS.forEach(function (g) { g.items.forEach(function (it) { if (it.balance || it.id === 'ho-so') return; CMDS.push({ g: 'Công cụ', i: it.icon || 'grid', t: it.label, href: it.href, s: '' }); }); });
-    CMDS.push({ g: 'Hành động', i: 'bolt', t: 'Đổi nền sáng / tối', act: 'theme' });
-    CMDS.push({ g: 'Hành động', i: 'bolt', t: 'Nạp Lượng', href: '/topup' });
+    TOOLS.forEach(function (g) { g.items.forEach(function (it) { if (it.balance || it.id === 'ho-so') return; CMDS.push({ g: T('js.shell.cong-cu', 'Công cụ'), i: it.icon || 'grid', t: it.label, href: it.href, s: '' }); }); });
+    CMDS.push({ g: T('js.shellui.hanh-dong', 'Hành động'), i: 'bolt', t: T('js.shellui.doi-nen-sang-toi', 'Đổi nền sáng / tối'), act: 'theme' });
+    CMDS.push({ g: T('js.shellui.hanh-dong', 'Hành động'), i: 'bolt', t: T('js.shell.nap-luong', 'Nạp Lượng'), href: '/topup' });
     cShown = CMDS;
   }
   var cSel = 0, cShown = CMDS;
@@ -6182,7 +6190,7 @@
   function cmdIcon(n) { return '<svg class="ri" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + iconInner(n, ICONS.grid) + '</svg>'; }
   function cRender() {
     var el = document.getElementById('cmdkList'); if (!el) return;
-    if (!cShown.length) { el.innerHTML = '<div class="cmdk-empty">Không tìm thấy.</div>'; return; }
+    if (!cShown.length) { el.innerHTML = T('js.shellui.khong-tim-thay', '<div class="cmdk-empty">Không tìm thấy.</div>'); return; }
     var h = '', lastG = '';
     cShown.forEach(function (c, idx) {
       if (c.g !== lastG) { h += '<div class="cmdk-grp">' + c.g + '</div>'; lastG = c.g; }
@@ -6196,7 +6204,7 @@
     });
   }
   function paintSel() { document.querySelectorAll('#cmdkList .row').forEach(function (r, i) { r.classList.toggle('sel', i === cSel); }); }
-  function cRun(idx) { var c = cShown[idx]; if (!c) { closeCmd(); return; } closeCmd(); if (c.act === 'theme') toggleTheme(); else if (c.href) window.location.href = c.href; }
+  function cRun(idx) { var c = cShown[idx]; if (!c) { closeCmd(); return; } closeCmd(); if (c.act === 'theme') toggleTheme(); else if (c.href) window.location.href = H(c.href); }
   function filterCmd(q) { q = q.trim().toLowerCase(); cShown = q ? CMDS.filter(function (c) { return c.t.toLowerCase().indexOf(q) >= 0; }) : CMDS; cSel = 0; cRender(); }
   function cmdKeys(e) {
     if (e.key === 'ArrowDown') { e.preventDefault(); cSel = Math.min(cSel + 1, cShown.length - 1); paintSel(); }
@@ -6210,7 +6218,7 @@
     d.className = 'cmdk-wrap'; d.id = 'cmdk';
     d.innerHTML = '<div class="cmdk"><div class="cmdk-in">' +
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>' +
-      '<input id="cmdkInput" placeholder="Tìm công cụ, lệnh…"><span class="esc">Esc</span></div>' +
+      T('js.shellui.esc', '<input id="cmdkInput" placeholder="Tìm công cụ, lệnh…"><span class="esc">Esc</span></div>') +
       '<div class="cmdk-list" id="cmdkList"></div></div>';
     document.body.appendChild(d);
     d.addEventListener('click', function (e) { if (e.target === d) closeCmd(); });
@@ -6310,7 +6318,7 @@
       '<div class="tv-sheet-panel" role="dialog" aria-modal="true">' +
         '<div class="tv-sheet-grab"></div>' +
         '<div class="tv-sheet-head"><b class="tv-sheet-title"></b>' +
-          '<button class="tv-sheet-close" type="button" aria-label="Đóng" data-tip="Đóng">✕</button></div>' +
+          T('js.shellui.text-t29m', '<button class="tv-sheet-close" type="button" aria-label="Đóng" data-tip="Đóng">✕</button></div>') +
         '<div class="tv-sheet-body"></div>' +
       '</div>';
     document.body.appendChild(d);
@@ -6392,9 +6400,9 @@
       var known = _rc.balance != null && !_rc.anon;
       var txt = known ? _rc.balance.toLocaleString('vi-VN') : null;
       var sub = document.getElementById('sbSub');
-      if (sub) sub.innerHTML = txt != null ? ('<b>' + txt + '</b> Lượng') : 'Tài khoản';
+      if (sub) sub.innerHTML = txt != null ? ('<b>' + txt + T('js.shellui.luong-piya', '</b> Lượng')) : T('js.shellui.tai-khoan', 'Tài khoản');
       var pill = document.getElementById('sbBalance');
-      if (pill) pill.textContent = txt != null ? txt + ' Lượng' : '';
+      if (pill) pill.textContent = txt != null ? txt + T('js.shellui.luong-mo12', ' Lượng') : '';
     } catch (e) { /* ignore */ }
   }
 
@@ -6402,7 +6410,7 @@
     try {
       var s = window.Auth && Auth.getSession && Auth.getSession();
       if (s && s.user) {
-        var nm = (s.user.email || 'Bạn').split('@')[0];
+        var nm = (s.user.email || T('js.shellui.ban', 'Bạn')).split('@')[0];
         var e1 = document.getElementById('sbName'); if (e1) e1.textContent = nm;
         var e3 = document.getElementById('sbAva'); if (e3) e3.textContent = (nm[0] || '?').toUpperCase();
         var e4 = document.getElementById('sbMail'); if (e4) e4.textContent = s.user.email || '';

@@ -22,7 +22,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, PUBLIC, buildPages } from './_common.mjs';
 import { collectKeys, validateTranslation } from '../../lib/i18n/core.mjs';
-import { renderLocalized, ASSET_V } from '../../lib/i18n/render.mjs';
+import { renderLocalized, ASSET_V, CLIENT_V } from '../../lib/i18n/render.mjs';
 import { HREFLANG as LINK_HREFLANG, urlFor } from '../../lib/i18n/links.mjs';
 import {
   loadVi,
@@ -49,14 +49,25 @@ for (const f of htmlFiles) {
   for (const k of collectKeys(html))
     if (!(k in vi)) fail(`public/${f}: khoá "${k}" không có trong i18n/vi.json`);
 }
-const jsFiles = fs.readdirSync(PUBLIC).filter((f) => f.endsWith('.js'));
+// .js + <script> nội tuyến trong .html (vd topup.html). `_tvmbT` = bản toàn cục của auth.js.
+const jsFiles = fs.readdirSync(PUBLIC).filter((f) => f.endsWith('.js') || f.endsWith('.html'));
 let jsRefs = 0;
 for (const f of jsFiles) {
   const src = fs.readFileSync(path.join(PUBLIC, f), 'utf8');
-  for (const m of src.matchAll(/\bT\(\s*'(js\.[\w.-]+)'/g)) {
+  for (const m of src.matchAll(/\b(?:T|_tvmbT)\(\s*'(js\.[\w.-]+)'/g)) {
     jsRefs++;
     if (!(m[1] in vi)) fail(`public/${f}: T('${m[1]}') — khoá không có trong i18n/vi.json`);
   }
+}
+// window.I18n được server chèn vào trang /<locale>/ với ?v=CLIENT_V; trang tự nạp thì phải cùng số,
+// không thì hai bản khác nhau chạy trên cùng trang.
+for (const f of htmlFiles) {
+  const src = fs.readFileSync(path.join(PUBLIC, f), 'utf8');
+  for (const m of src.matchAll(/\/tools-shared\/i18n\.js(?:\?v=(\w+))?/g))
+    if (m[1] !== CLIENT_V)
+      fail(
+        `public/${f}: /tools-shared/i18n.js?v=${m[1]} ≠ CLIENT_V=${CLIENT_V} (lib/i18n/render.mjs)`
+      );
 }
 for (const [k, v] of Object.entries(vi))
   if (typeof v !== 'string' || !v.trim()) fail(`vi.json: khoá "${k}" rỗng`);
