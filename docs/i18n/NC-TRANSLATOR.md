@@ -7,8 +7,14 @@ văn xuôi mà `next` đưa ra.
 ## Vòng làm việc (một lô)
 
 ```bash
+# Bước 0 (phiên mới chưa có node_modules, thiếu thì nc-i18n.mjs chết vì `opencc-js`):
+npm install --no-save --no-package-lock --ignore-scripts opencc-js@1.4.2   # không đổi package.json/lockfile
+
 export NODE_USE_ENV_PROXY=1      # fetch của Node không tự đi qua proxy container
 # cần SUPABASE_URL + SUPABASE_SERVICE_KEY; không có thì thêm --source files --out-dir <thư mục> (chế độ thử)
+# Key nằm ở proxy của environment (credential KÉP cho host <ref>.supabase.co: Authorization Bearer + header `apikey`;
+# thiếu `apikey` là 401 "Invalid API key"). Khi đó đặt SUPABASE_SERVICE_KEY=proxy-injected — proxy ghi đè header.
+# 401/403 thật thì DỪNG, báo chỉ huy mã lỗi; không bao giờ in key.
 
 node scripts/nc-i18n.mjs status --locale ja                 # còn bao nhiêu (đọc nhanh, 1 dòng JSON)
 node scripts/nc-i18n.mjs next   --locale ja --n 4 > /tmp/lo.json     # lô cần dịch (JSON gọn, 1 dòng)
@@ -66,6 +72,10 @@ token/hồ sơ/ngôn ngữ ở trên vẫn chỉ là ước lượng theo ký t�
 
 Bẫy khi dịch (đều do `save` bắt):
 - **Viết số bằng chữ số Ả Rập**, kể cả khi tiếng đích quen viết chữ (`30`, không `三十`; `100`, không `百`) — `save` đối chiếu từng con số.
+- **"nghìn/triệu/tỉ" ở gốc: giữ chữ số gốc, đừng đổi sang 万/億** — `17 triệu` viết `17百万` (hoặc `17 million`), KHÔNG `1700万`:
+  `save` chỉ quy đổi 万 khi gốc là dạng `450.000`; gặp `1700万` nó báo "mất số 17" (đã xảy ra, hồ sơ lucille-ball).
+- **Đếm khoá trước `save`**: mỗi hồ sơ phải có ĐỦ khoá của `f` mà `next` đưa — kể cả `faq.1.*`, `gioRanhGioi.*` khi có — và
+  không thêm khoá lạ. Hồ sơ không có `gioRanhGioi` thì đừng tự thêm; JSON hỏng cấu trúc thì sửa trước khi `save`.
 - Ngày ở bản `en` viết tên tháng được (`June 14, 2022`): `save` tính tên tháng tiếng Anh là số tháng.
 - Một khoá bị từ chối chỉ cần sửa đúng khoá đó rồi `save` lại cả file (hồ sơ đạt được ghi đè an toàn).
 - Không có Wikidata thì `next` cho cùng một lô 4 hồ sơ ở mọi ngôn ngữ — nạp Wikidata trước để thứ tự ưu tiên có nghĩa.
