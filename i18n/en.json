@@ -4963,6 +4963,10 @@
   "t": "The <b>Engine</b> column is the good/bad verdict of the classical algorithm. The <b>Score</b> column is a relative rank computed by the page so that it can always point to the best direction — formula: auspicious gate +3 / inauspicious −3, star and deity ±2, Three Marvels +2, +1 per auspicious pattern and −1 per inauspicious pattern. Measured over 366 charts across a year, only 26.5% of charts have a palace the engine rates auspicious, so reading the Engine column alone, the chart says \"everywhere is bad\" most of the time.",
   "h": "839c2367"
  },
+ "js.shellui.kmx-chu-giai": {
+  "t": "Notes on the stars and deities on this board",
+  "h": "8cbabc1a"
+ },
  "js.shellui.kmx-khong-cua": {
   "t": "no gate",
   "h": "c1f2927e"
