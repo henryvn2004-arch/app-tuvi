@@ -179,8 +179,8 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'mai-hoa'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/kinh-dich-hao.js?v=1"></script>
-<script src="/tools-shared/kinh-dich.js?v=6"></script>
-<script src="/tools-shared/mai-hoa.js?v=3"></script>
+<script src="/tools-shared/kinh-dich.js?v=7"></script>
+<script src="/tools-shared/mai-hoa.js?v=4"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
@@ -225,7 +225,7 @@ function gieo() {
     : MaiHoaTool.gieoTheoGio();
   if (!g.ok) { _err('mhErr', g.error); return; }
   const r = MaiHoaTool.resolve(g);
-  if (!r.ok) { _err('mhErr', r.error || 'Không lập được quẻ.'); return; }
+  if (!r.ok) { _err('mhErr', r.error || _tvmbT('js.maihoa.khong-lap-duoc-que', 'Không lập được quẻ.')); return; }
   _r = r;
   showResult();
 }
@@ -237,12 +237,12 @@ function showResult() {
   document.getElementById('mhCard').innerHTML = MaiHoaTool.cardHTML(r);
   document.getElementById('mhChangs').innerHTML = MaiHoaTool.chungHTML(r);
   document.getElementById('mhHaoTu').innerHTML = r.haoTu
-    ? '<div class="mh-hao-tu"><div class="nhan">' + r.haoTu.nhan + ' của quẻ chính — tham khảo thêm</div><div class="han">' + r.haoTu.han + '</div><div class="viet">' + r.haoTu.viet + '</div></div>'
+    ? '<div class="mh-hao-tu"><div class="nhan">' + r.haoTu.nhan + _tvmbT('js.maihoa.cua-que-chinh-tham-khao-them', ' của quẻ chính — tham khảo thêm</div><div class="han">') + r.haoTu.han + '</div><div class="viet">' + r.haoTu.viet + '</div></div>'
     : '';
-  document.getElementById('mhBuoc').innerHTML = '<div class="mh-buoc"><b>Cách ra quẻ:</b> ' + r.gieo.calc.moTa + ' Hào động là hào ' + r.dong + '.</div>';
+  document.getElementById('mhBuoc').innerHTML = _tvmbT('js.maihoa.cach-ra-que', '<div class="mh-buoc"><b>Cách ra quẻ:</b> ') + MaiHoaTool.moTaText(r.gieo.calc) + _tvmbT('js.maihoa.hao-dong-la-hao', ' Hào động là hào ') + r.dong + '.</div>';
   const kw = r.chinh.que ? r.chinh.que.kw : 0;
   document.getElementById('mhAnh').innerHTML = kw
-    ? '<figure class="mh-anh"><img src="' + KinhDichTool.anhUrl(r.chinh.li, kw) + '" alt="Tranh quẻ ' + r.chinh.que.q.n + '" loading="lazy" decoding="async" width="1024" height="1536"><figcaption>Quẻ chính · ' + r.chinh.que.q.n + ' ' + r.chinh.que.q.zh + '</figcaption></figure>'
+    ? '<figure class="mh-anh"><img src="' + KinhDichTool.anhUrl(r.chinh.li, kw) + '" alt="' + _tvmbT('js.maihoa.tranh-que', 'Tranh quẻ ') + _tvmbG('que', r.chinh.que.q.n) + '" loading="lazy" decoding="async" width="1024" height="1536"><figcaption>' + _tvmbT('js.maihoa.que-chinh-fc', 'Quẻ chính · ') + _tvmbG('que', r.chinh.que.q.n) + ' ' + r.chinh.que.q.zh + '</figcaption></figure>'
     : '';
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
@@ -256,16 +256,16 @@ function showResult() {
     scenario: { type: 'mai-hoa', data: d },
     restore: { gieo: r.gieo, cauHoi: cHoi, mode: _mode },
     label: 'Mai Hoa · ' + tenChinh + ' — ' + _tvmbG('maihoa', r.ketLuan.ten),
-    greeting: 'Quẻ đã lập — Thể **' + _tvmbG('quai', r.the.n) + '** (' + _tvmbG('hanh', r.the.hanh) + '), Dụng **' + _tvmbG('quai', r.dung.n) + '** (' + _tvmbG('hanh', r.dung.hanh) + '), tức **' + _tvmbG('maihoa', r.ketLuan.ten) + '**. Tôi sẽ luận theo câu hỏi của bạn.',
-    chips: ['Luận quẻ này cho câu hỏi của tôi', 'Thể bị Dụng khắc thì nên làm gì?', 'Hỗ quái cho thấy khúc giữa ra sao?', 'Biến quái nói kết cục thế nào?']
+    greeting: _tvmbT('js.maihoa.que-da-lap-the', 'Quẻ đã lập — Thể **') + _tvmbG('quai', r.the.n) + '** (' + _tvmbG('hanh', r.the.hanh) + _tvmbT('js.maihoa.dung', '), Dụng **') + _tvmbG('quai', r.dung.n) + '** (' + _tvmbG('hanh', r.dung.hanh) + _tvmbT('js.maihoa.tuc', '), tức **') + _tvmbG('maihoa', r.ketLuan.ten) + _tvmbT('js.maihoa.toi-se-luan-theo-cau-hoi', '**. Tôi sẽ luận theo câu hỏi của bạn.'),
+    chips: [_tvmbT('js.maihoa.luan-que-nay-cho-cau-hoi', 'Luận quẻ này cho câu hỏi của tôi'), _tvmbT('js.maihoa.the-bi-dung-khac-thi-nen', 'Thể bị Dụng khắc thì nên làm gì?'), _tvmbT('js.maihoa.ho-quai-cho-thay-khuc-giua', 'Hỗ quái cho thấy khúc giữa ra sao?'), _tvmbT('js.maihoa.bien-quai-noi-ket-cuc-the', 'Biến quái nói kết cục thế nào?')]
   });
 
   const lines = [];
-  if (cHoi) lines.push('Câu hỏi: "' + cHoi + '"');
-  lines.push('Quẻ chính: ' + tenChinh);
+  if (cHoi) lines.push(_tvmbT('js.maihoa.cau-hoi', 'Câu hỏi: "') + cHoi + '"');
+  lines.push(_tvmbT('js.maihoa.que-chinh', 'Quẻ chính: ') + tenChinh);
   lines.push(d.theDung);
-  lines.push('Kết luận: ' + d.ketLuan);
-  Shell.setShareable({ kind: 'text', toolId: 'mai-hoa', title: 'Mai Hoa Dịch Số · ' + tenChinh, text: lines.join('\n') });
+  lines.push(_tvmbT('js.maihoa.ket-luan', 'Kết luận: ') + d.ketLuan);
+  Shell.setShareable({ kind: 'text', toolId: 'mai-hoa', title: _tvmbT('js.maihoa.mai-hoa-dich-so', 'Mai Hoa Dịch Số · ') + tenChinh, text: lines.join('\n') });
   document.querySelectorAll('#resPanel [data-ask]').forEach(function (el) {
     el.addEventListener('click', function () { Shell.ask(el.getAttribute('data-ask')); });
   });
@@ -280,17 +280,17 @@ function taiAnh() {
   const lbl = document.getElementById('taiBtnLabel');
   const old = lbl.textContent;
   btn.disabled = true;
-  lbl.textContent = 'Đang dựng ảnh…';
+  lbl.textContent = _tvmbT('js.maihoa.dang-dung-anh', 'Đang dựng ảnh…');
   MaiHoaTool.loadAnh(_r)
     .then(function (img) {
       const o = MaiHoaTool.posterOpts(_r, document.getElementById('cauHoi').value.trim());
       o.draw = MaiHoaTool.posterDraw(_r, img);
       o.qrUrl = Poster.qrLink('mai-hoa', '/app/mai-hoa');
-      o.qrCaption = 'Quét mã — gieo quẻ của bạn';
+      o.qrCaption = _tvmbT('js.maihoa.quet-ma-gieo-que-cua-ban', 'Quét mã — gieo quẻ của bạn');
       return Poster.download(o, 'mai-hoa-' + (_r.chinh.que ? _r.chinh.que.q.n.toLowerCase().replace(/\s+/g, '-') : 'que') + '-tuviminhbao.png');
     })
     .then(function () { if (window.Track) Track.event('poster_download', { tool_id: 'mai-hoa' }); })
-    .catch(function () { _err('mhErr2', 'Chưa dựng được ảnh. Thử lại sau ít giây.'); })
+    .catch(function () { _err('mhErr2', _tvmbT('js.maihoa.chua-dung-duoc-anh-thu-lai', 'Chưa dựng được ảnh. Thử lại sau ít giây.')); })
     .then(function () { btn.disabled = false; lbl.textContent = old; });
 }
 

@@ -194,9 +194,9 @@ body.chat-first-live .kd-anhs{grid-template-columns:1fr}
 // body.chat-first-live ở trên, .kd-anhs còn là bẫy NGƯỢC min-width).
 window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'kinh-dich'};</script>
-<script src="/tools-shared/kinh-dich-doc.js?v=1"></script>
+<script src="/tools-shared/kinh-dich-doc.js?v=2"></script>
 <script src="/tools-shared/kinh-dich-hao.js?v=1"></script>
-<script src="/tools-shared/kinh-dich.js?v=6"></script>
+<script src="/tools-shared/kinh-dich.js?v=7"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/shell.js?v=148"></script>
@@ -274,7 +274,7 @@ function addLine(val) {
     else { lineEl.innerHTML = '<div class="line-yin"><span></span><span></span></div>'; }
     const tagEl = document.createElement('div');
     tagEl.style.minWidth = '50px';
-    if (l.changing) tagEl.innerHTML = `<span class="line-tag lt-change">Hào động ${l.val}</span>`;
+    if (l.changing) tagEl.innerHTML = '<span class="line-tag lt-change">' + _tvmbT('js.kinhdich.hao-dong-so', 'Hào động {val}', { val: l.val }) + '</span>';
     row.appendChild(numEl);
     row.appendChild(lineEl);
     row.appendChild(tagEl);
@@ -282,10 +282,10 @@ function addLine(val) {
   });
   const counter = document.getElementById('stepCounter');
   if (step < 6) {
-    counter.textContent = `Đã gieo ${step}/6 hào — Bấm để gieo hào ${step + 1}`;
-    document.getElementById('tossBtnLabel').textContent = `Gieo Hào ${step + 1}`;
+    counter.textContent = _tvmbT('js.kinhdich.da-gieo-hao', 'Đã gieo {step}/6 hào — Bấm để gieo hào {next}', { step: step, next: step + 1 });
+    document.getElementById('tossBtnLabel').textContent = _tvmbT('js.kinhdich.gieo-hao', 'Gieo Hào {next}', { next: step + 1 });
   } else {
-    counter.textContent = 'Đã đủ 6 hào — Đang xem quẻ...';
+    counter.textContent = _tvmbT('js.kinhdich.da-du-6-hao-dang-xem', 'Đã đủ 6 hào — Đang xem quẻ...');
     document.getElementById('tossBtn').style.display = 'none';
     setTimeout(showResult, 600);
   }
@@ -307,16 +307,16 @@ function showResult() {
   Shell.setContext({
     scenario: { type: 'kinh-dich', data: d },
     restore: { lines: currentLines },
-    label: 'Gieo quẻ · ' + _tvmbG('que', r.que.n) + (r.cQue ? ' → ' + _tvmbG('que', r.cQue.n) : ''),
-    greeting: 'Quẻ đã lập — quẻ chính **' + _tvmbG('que', r.que.n) + '** (' + r.que.zh + ')' + (r.cQue ? ', quẻ biến **' + _tvmbG('que', r.cQue.n) + '**' : ' (không hào động)') + '. Tôi sẽ luận theo câu hỏi của bạn.',
-    chips: ['Luận quẻ này cho câu hỏi của tôi', 'Hào động nói lên điều gì?', 'Quẻ biến cho thấy xu hướng nào?', 'Nên hành động thế nào lúc này?']
+    label: _tvmbT('js.kinhdich.gieo-que', 'Gieo quẻ · ') + _tvmbG('que', r.que.n) + (r.cQue ? ' → ' + _tvmbG('que', r.cQue.n) : ''),
+    greeting: _tvmbT('js.kinhdich.que-da-lap-que-chinh', 'Quẻ đã lập — quẻ chính **') + _tvmbG('que', r.que.n) + '** (' + r.que.zh + ')' + (r.cQue ? _tvmbT('js.kinhdich.que-bien', ', quẻ biến **') + _tvmbG('que', r.cQue.n) + '**' : _tvmbT('js.kinhdich.khong-hao-dong', ' (không hào động)')) + _tvmbT('js.kinhdich.toi-se-luan-theo-cau-hoi', '. Tôi sẽ luận theo câu hỏi của bạn.'),
+    chips: [_tvmbT('js.kinhdich.luan-que-nay-cho-cau-hoi', 'Luận quẻ này cho câu hỏi của tôi'), _tvmbT('js.kinhdich.hao-dong-noi-len-dieu-gi', 'Hào động nói lên điều gì?'), _tvmbT('js.kinhdich.que-bien-cho-thay-xu-huong', 'Quẻ biến cho thấy xu hướng nào?'), _tvmbT('js.kinhdich.nen-hanh-dong-the-nao-luc', 'Nên hành động thế nào lúc này?')]
   });
   var _kdLines = [];
-  if (d.cauHoi) _kdLines.push('Câu hỏi: "' + d.cauHoi + '"');
-  _kdLines.push('Quẻ chính: ' + d.queChinh);
-  if (d.queBien) _kdLines.push('Quẻ biến: ' + d.queBien);
-  _kdLines.push('Hào động: ' + d.haoDong);
-  Shell.setShareable({ kind: 'text', toolId: 'kinh-dich', title: 'Gieo quẻ Kinh Dịch · ' + r.que.n, text: _kdLines.join('\n') });
+  if (d.cauHoi) _kdLines.push(_tvmbT('js.kinhdich.cau-hoi', 'Câu hỏi: "') + d.cauHoi + '"');
+  _kdLines.push(_tvmbT('js.kinhdich.que-chinh', 'Quẻ chính: ') + d.queChinh);
+  if (d.queBien) _kdLines.push(_tvmbT('js.kinhdich.que-bien-iift', 'Quẻ biến: ') + d.queBien);
+  _kdLines.push(_tvmbT('js.kinhdich.hao-dong', 'Hào động: ') + d.haoDong);
+  Shell.setShareable({ kind: 'text', toolId: 'kinh-dich', title: _tvmbT('js.kinhdich.gieo-que-kinh-dich', 'Gieo quẻ Kinh Dịch · ') + r.que.n, text: _kdLines.join('\n') });
   document.querySelectorAll('#resPanel [data-ask]').forEach(function (el) { el.addEventListener('click', function () { Shell.ask(el.getAttribute('data-ask')); }); });
 }
 
@@ -335,9 +335,9 @@ function reset() {
   document.getElementById('btnEdit').style.display = 'none';
   wsStepsSet(1); // về lại Gieo quẻ
   Shell.setShareable(null);
-  document.getElementById('stepCounter').textContent = 'Bấm để bắt đầu gieo quẻ — 6 lần gieo, mỗi lần xác định 1 hào';
+  document.getElementById('stepCounter').textContent = _tvmbT('js.kinhdich.bam-de-bat-dau-gieo-que', 'Bấm để bắt đầu gieo quẻ — 6 lần gieo, mỗi lần xác định 1 hào');
   const tossBtn = document.getElementById('tossBtn');
-  document.getElementById('tossBtnLabel').textContent = 'Tập Trung & Gieo Hào Đầu Tiên';
+  document.getElementById('tossBtnLabel').textContent = _tvmbT('js.kinhdich.tap-trung-gieo-hao-dau-tien', 'Tập Trung & Gieo Hào Đầu Tiên');
   tossBtn.style.display = 'block';
   tossBtn.disabled = false;
   [0, 1, 2].forEach(i => {

@@ -57,6 +57,36 @@
     return I && I.tv ? I.tv('js.shellui.km-cuc', vi, d) : vi.replace('{dun}', m[1]).replace('{n}', m[2]);
   }
 
+  // Nhãn câu chữ (khoá js.shellui.kmx-*): bản dịch nếu trang /<locale>/ nhúng từ điển, không thì chữ Việt (thế biến {x}).
+  function _tv(key, vi, vars) {
+    var I = root.I18n;
+    if (I && I.tv) return I.tv(key, vi, vars);
+    return vars ? vi.replace(/\{(\w+)\}/g, function (x, n) { return vars[n] !== undefined ? vars[n] : x; }) : vi;
+  }
+  // `viec` (cột "Vì sao") và `cua.nghia` do SERVER trả bằng chữ Việt (lib/qimen/terms.ts VIEC / CUA) — dịch ở chỗ vẽ bằng bảng câu→khoá.
+  var _VIEC = {
+    'Nên tránh hướng này': 'kmx-viec-tranh',
+    'Cầu quan chức, sự nghiệp, xin việc': 'kmx-viec-quan',
+    'Nghỉ dưỡng, cầu an, hàn gắn quan hệ': 'kmx-viec-nghi',
+    'Cầu tài, hợp tác, đầu tư': 'kmx-viec-tai',
+    'Nghỉ dưỡng, cầu an, quan hệ; gặp nạn thì cầu quý nhân': 'kmx-viec-nghi-nan',
+    'Cầu quan chức, sự nghiệp, xin việc; gặp nạn thì cầu quý nhân': 'kmx-viec-quan-nan',
+    'Cầu tài, hợp tác, đầu tư; gặp nạn thì cầu quý nhân': 'kmx-viec-tai-nan',
+  };
+  var _NGHIA = {
+    'Mở ra, khởi sự, giao dịch, gặp người có quyền': 'kmx-nghia-khai',
+    'Nghỉ ngơi, hòa hợp, cầu người giúp, việc êm': 'kmx-nghia-huu',
+    'Sinh lợi, cầu tài, mua bán, khai trương': 'kmx-nghia-sinh',
+    'Tổn thương, tranh chấp, đòi nợ, kiện tụng': 'kmx-nghia-thuong',
+    'Bế tắc, che giấu, trốn tránh, hợp việc kín': 'kmx-nghia-do',
+    'Phô bày, văn thư, thi cử, tin tức, quảng cáo': 'kmx-nghia-canh',
+    'Đình trệ, tang sự, chôn cất, việc chết cứng': 'kmx-nghia-tu',
+    'Kinh sợ, thị phi, khẩu thiệt, việc bất ngờ': 'kmx-nghia-kinh',
+  };
+  function _mapTv(tbl, vi) {
+    return tbl[vi] ? _tv('js.shellui.' + tbl[vi], vi) : vi;
+  }
+
   function _esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -86,7 +116,7 @@
         '</div>' +
         (c.cua
           ? '<div class="km-cua" style="color:' + MUC_MAU[c.cua.muc] + '">' + _esc(_g('kymon', c.cua.ten)) + '</div>'
-          : '<div class="km-cua km-khong">không cửa</div>') +
+          : '<div class="km-cua km-khong">' + _tv('js.shellui.kmx-khong-cua', 'không cửa') + '</div>') +
         '<div class="km-dong">' +
         (c.sao ? '<span class="km-sao">' + _esc(_g('kymon', c.sao.ten)) + '</span>' : '') +
         (c.than ? '<span class="km-than">' + _esc(_g('kymon', c.than.ten)) + '</span>' : '') +
@@ -102,9 +132,7 @@
     });
     return (
       '<div class="km-ban">' + cells.join('') + '</div>' +
-      '<div class="km-chu">Bàn vẽ theo Lạc Thư, <b>Nam ở trên</b> — đúng lối vẽ cổ pháp, ngược với bản đồ thường. ' +
-      'Mỗi ô: cửa (dòng lớn) · sao thiên bàn và thần · can thiên bàn (<b>đậm</b>) trên can địa bàn (<i>nghiêng</i>). ' +
-      '<b>#n</b> là thứ hạng tương đối trong chín cung, không phải phán cát hung.</div>'
+      '<div class="km-chu">' + _tv('js.shellui.kmx-chu-ban', 'Bàn vẽ theo Lạc Thư, <b>Nam ở trên</b> — đúng lối vẽ cổ pháp, ngược với bản đồ thường. Mỗi ô: cửa (dòng lớn) · sao thiên bàn và thần · can thiên bàn (<b>đậm</b>) trên can địa bàn (<i>nghiêng</i>). <b>#n</b> là thứ hạng tương đối trong chín cung, không phải phán cát hung.') + '</div>'
     );
   }
 
@@ -121,7 +149,7 @@
         '<td>' + (c.cua ? _esc(_g('kymon', c.cua.ten)) : '—') + '</td>' +
         '<td class="km-t-diem">' + (c.diem > 0 ? '+' : '') + c.diem + '</td>' +
         '<td><span class="km-pill" style="background:' + MUC_MAU[c.muc] + '">' + _nhan(c.muc) + '</span></td>' +
-        '<td class="km-t-ly">' + (c.viec ? _esc(c.viec) + '. ' : '') +
+        '<td class="km-t-ly">' + (c.viec ? _esc(_mapTv(_VIEC, c.viec)) + '. ' : '') +
         (c.lyDo || []).map(function (l) {
           return '<span class="km-ly" style="border-color:' + MUC_MAU[l.muc] + ';color:' + MUC_MAU[l.muc] + '">' + _esc(_ly(l.ten)) + '</span>';
         }).join('') + '</td>' +
@@ -130,12 +158,9 @@
     }).join('');
     return (
       '<div class="km-bang-wrap"><table class="km-bang">' +
-      '<thead><tr><th>#</th><th>Hướng</th><th>Cửa</th><th>Điểm</th><th>Engine</th><th>Vì sao</th></tr></thead>' +
+      '<thead><tr><th>#</th><th>' + _tv('js.shellui.kmx-th-huong', 'Hướng') + '</th><th>' + _tv('js.shellui.kmx-th-cua', 'Cửa') + '</th><th>' + _tv('js.shellui.kmx-th-diem', 'Điểm') + '</th><th>Engine</th><th>' + _tv('js.shellui.kmx-th-visao', 'Vì sao') + '</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table></div>' +
-      '<div class="km-chu">Cột <b>Engine</b> là phán quyết cát/hung của thuật toán cổ pháp. Cột <b>Điểm</b> là xếp hạng ' +
-      'tương đối do trang tính, để luôn chỉ ra được hướng đỡ nhất — công thức: cửa cát +3 / hung −3, sao và thần ±2, ' +
-      'Tam Kỳ +2, mỗi cát cách +1 và mỗi hung cách −1. Đo trên 366 bàn cả năm thì chỉ 26,5% số bàn có cung được engine ' +
-      'chấm cát, nên nếu chỉ đọc cột Engine thì phần lớn thời gian bàn nói "đi đâu cũng xấu".</div>'
+      '<div class="km-chu">' + _tv('js.shellui.kmx-chu-bang', 'Cột <b>Engine</b> là phán quyết cát/hung của thuật toán cổ pháp. Cột <b>Điểm</b> là xếp hạng tương đối do trang tính, để luôn chỉ ra được hướng đỡ nhất — công thức: cửa cát +3 / hung −3, sao và thần ±2, Tam Kỳ +2, mỗi cát cách +1 và mỗi hung cách −1. Đo trên 366 bàn cả năm thì chỉ 26,5% số bàn có cung được engine chấm cát, nên nếu chỉ đọc cột Engine thì phần lớn thời gian bàn nói "đi đâu cũng xấu".') + '</div>'
     );
   }
 
@@ -219,11 +244,16 @@
     var doNhat = (b.cungs || []).filter(function (c) { return c.hang === 1; })[0];
     var T = (root.Poster && root.Poster.THEME) || {};
     return {
-      title: 'Kỳ Môn — ' + _cuc(b.cuc),
-      subtitle: _g('lich', b.tietKhi) + ' ' + _g('kymon', b.nguyen) + ' · giờ ' + b.canChi.gio + ' ngày ' + b.canChi.ngay,
+      title: _tv('js.shellui.kmx-ps-title', 'Kỳ Môn — {cuc}', { cuc: _cuc(b.cuc) }),
+      subtitle: _tv('js.shellui.kmx-ps-sub', '{tiet} {nguyen} · giờ {gio} ngày {ngay}', {
+        tiet: _g('lich', b.tietKhi), nguyen: _g('kymon', b.nguyen), gio: b.canChi.gio, ngay: b.canChi.ngay,
+      }),
       quote: doNhat
-        ? 'Hướng đỡ nhất canh giờ này: ' + _g('huong', doNhat.huong) + ' — cửa ' + (doNhat.cua ? _g('kymon', doNhat.cua.ten) : '—') +
-          (doNhat.cua ? ', ' + doNhat.cua.nghia.toLowerCase() : '') + '.'
+        ? doNhat.cua
+          ? _tv('js.shellui.kmx-ps-quote-n', 'Hướng đỡ nhất canh giờ này: {huong} — cửa {cua}, {nghia}.', {
+              huong: _g('huong', doNhat.huong), cua: _g('kymon', doNhat.cua.ten), nghia: _mapTv(_NGHIA, doNhat.cua.nghia).toLowerCase(),
+            })
+          : _tv('js.shellui.kmx-ps-quote-0', 'Hướng đỡ nhất canh giờ này: {huong} — cửa —.', { huong: _g('huong', doNhat.huong) })
         : '',
       fonts: ['700 40px ' + (T.SERIF || 'serif'), '600 23px ' + (T.SANS || 'sans-serif')],
     };

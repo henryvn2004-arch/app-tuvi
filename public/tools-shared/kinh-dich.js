@@ -10,6 +10,18 @@
     var g = root.TuviGlossary;
     return g && v ? g.t(kind, v) : v;
   }
+  // Nhãn câu chữ (khoá js.shellui.kdx-*) qua window.I18n; vi/chưa nhúng từ điển ⇒ chữ Việt (thế {biến}).
+  function _tv(key, vi, vars) {
+    var I = root.I18n;
+    if (I && I.tv) return I.tv(key, vi, vars);
+    return vars ? vi.replace(/\{(\w+)\}/g, function (x, n) { return vars[n] !== undefined ? vars[n] : x; }) : vi;
+  }
+  // `nhan` ('Quẻ Chính'/'Quẻ Biến') vừa hiển thị vừa gửi server (railData) ⇒ chỉ dịch ở chỗ vẽ.
+  function _nhanQue(vi) {
+    if (vi === 'Quẻ Chính') return _tv('js.shellui.kdx-que-chinh', vi);
+    if (vi === 'Quẻ Biến') return _tv('js.shellui.kdx-que-bien', vi);
+    return vi;
+  }
 // ── 64 quẻ Kinh Dịch — King Wen sequence ──
 // lines: 6 chars từ hào 1 (dưới) → hào 6 (trên), 1=dương 0=âm
 // Unicode symbol: U+4DC0 + (index)
@@ -125,7 +137,11 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
   }
 
   const _fbCls = { tot: 'fb-tot', trung: 'fb-trung', canh: 'fb-canh' };
-  const _fbLabel = { tot: '✦ Cát', trung: '◆ Bình', canh: '⚠ Cần thận' };
+  const _fbLabel = {
+    tot: () => _tv('js.shellui.kdx-fb-tot', '✦ Cát'),
+    trung: () => _tv('js.shellui.kdx-fb-trung', '◆ Bình'),
+    canh: () => _tv('js.shellui.kdx-fb-canh', '⚠ Cần thận'),
+  };
 
   // ── HTML lưới quẻ (byte khớp bản standalone) ──
   function gridHTML(r) {
@@ -134,28 +150,28 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
       pIdx = r.pIdx,
       cIdx = r.cIdx;
     let html = `<div class="que-card primary">
-    <div class="que-eyebrow">Quẻ Chính</div>
+    <div class="que-eyebrow">${_tv('js.shellui.kdx-que-chinh', 'Quẻ Chính')}</div>
     <div class="que-symbol">${String.fromCodePoint(0x4dc0 + pIdx)}</div>
     <div class="que-name">${_g('que', que.n)}</div>
     <div class="que-zh">${que.zh} · ${que.li
       .split('')
       .map((b) => (b === '1' ? '⚊' : '⚋'))
       .join(' ')}</div>
-    <span class="fortune-badge ${_fbCls[que.f]}">${_fbLabel[que.f]}</span>
+    <span class="fortune-badge ${_fbCls[que.f]}">${_fbLabel[que.f]()}</span>
     <div class="que-meaning">${que.m}</div>
     <div class="que-guidance">${que.g}</div>
   </div>`;
 
     if (cQue) {
       html += `<div class="que-card">
-      <div class="que-eyebrow">Quẻ Biến (xu hướng)</div>
+      <div class="que-eyebrow">${_tv('js.shellui.kdx-que-bien-xh', 'Quẻ Biến (xu hướng)')}</div>
       <div class="que-symbol" style="opacity:0.7">${String.fromCodePoint(0x4dc0 + cIdx)}</div>
       <div class="que-name">${_g('que', cQue.n)}</div>
       <div class="que-zh">${cQue.zh} · ${cQue.li
         .split('')
         .map((b) => (b === '1' ? '⚊' : '⚋'))
         .join(' ')}</div>
-      <span class="fortune-badge ${_fbCls[cQue.f]}">${_fbLabel[cQue.f]}</span>
+      <span class="fortune-badge ${_fbCls[cQue.f]}">${_fbLabel[cQue.f]()}</span>
       <div class="que-meaning">${cQue.m}</div>
       <div class="que-guidance" style="font-size:13px">${cQue.g}</div>
     </div>`;
@@ -163,7 +179,7 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
       html += `<div class="que-card" style="display:flex;align-items:center;justify-content:center;opacity:0.5">
       <div style="text-align:center">
         <div style="font-size:32px;margin-bottom:8px">—</div>
-        <div style="font-size:13px;color:var(--text-lt)">Không có hào động<br>Tình huống ổn định<br>Chỉ đọc quẻ chính</div>
+        <div style="font-size:13px;color:var(--text-lt)">${_tv('js.shellui.kdx-khong-hao-dong', 'Không có hào động<br>Tình huống ổn định<br>Chỉ đọc quẻ chính')}</div>
       </div>
     </div>`;
     }
@@ -199,7 +215,7 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
         return { ...m, ...loi, queTen: (m.nguon === 'bien' ? r.cQue : r.que).n };
       })
       .filter(Boolean);
-    return { luat: chon.luat, soHaoDong: chon.soHaoDong, muc };
+    return { luat: chon.luat, luatKey: chon.luatKey, luatVars: chon.luatVars, soHaoDong: chon.soHaoDong, muc };
   }
 
   /** HTML khối "Cổ pháp chỉ đọc gì" — đặt dưới lưới quẻ. */
@@ -209,16 +225,16 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
     const rows = d.muc
       .map(
         (m) => `<div class="kd-loi${m.chinh ? ' kd-chu' : ''}">
-      <div class="kd-loi-nhan">${_esc(m.nhan)} · ${_esc(_g('que', m.queTen))}${m.nguon === 'bien' ? ' (quẻ biến)' : ''}${m.chinh && d.muc.length > 1 ? ' · làm chủ' : ''}</div>
+      <div class="kd-loi-nhan">${_esc(_nhanQue(m.nhan))} · ${_esc(_g('que', m.queTen))}${m.nguon === 'bien' ? _tv('js.shellui.kdx-que-bien-p', ' (quẻ biến)') : ''}${m.chinh && d.muc.length > 1 ? _tv('js.shellui.kdx-lam-chu', ' · làm chủ') : ''}</div>
       <div class="kd-loi-han">${_esc(m.han)}</div>
       <div class="kd-loi-viet">${_esc(m.viet)}</div>
     </div>`
       )
       .join('');
     return `<div class="kd-doc">
-    <div class="kd-doc-luat"><b>${d.soHaoDong} hào động</b> — ${_esc(d.luat)}</div>
+    <div class="kd-doc-luat"><b>${_tv('js.shellui.kdx-so-hao-dong', '{n} hào động', { n: d.soHaoDong })}</b> — ${_esc(d.luatKey ? _tv(d.luatKey, d.luat, d.luatVars) : d.luat)}</div>
     ${rows}
-    <div class="kd-doc-nguon">Luật đọc theo <i>Khảo Biến Chiêm</i> (Chu Hy, <i>Dịch Học Khải Mông</i>) — số hào động quyết định đọc lời quẻ hay hào từ, ở quẻ chính hay quẻ biến.</div>
+    <div class="kd-doc-nguon">${_tv('js.shellui.kdx-nguon-doc', 'Luật đọc theo <i>Khảo Biến Chiêm</i> (Chu Hy, <i>Dịch Học Khải Mông</i>) — số hào động quyết định đọc lời quẻ hay hào từ, ở quẻ chính hay quẻ biến.')}</div>
   </div>`;
   }
 
@@ -296,19 +312,19 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
           ? `<ol class="kd-anh-hao">${loi.hv
               .map((t, i) => {
                 const on = dangDoc.has(i + 1);
-                return `<li${on ? ' class="kd-hao-doc"' : ''}><b>Hào ${i + 1}</b> ${_esc(
+                return `<li${on ? ' class="kd-hao-doc"' : ''}><b>${_tv('js.shellui.kdx-hao-n', 'Hào {n}', { n: i + 1 })}</b> ${_esc(
                   _canhVe(t)
-                )}${on ? '<i class="kd-hao-tag">đang đọc</i>' : ''}</li>`;
+                )}${on ? `<i class="kd-hao-tag">${_tv('js.shellui.kdx-dang-doc', 'đang đọc')}</i>` : ''}</li>`;
               })
               .join('')}</ol>`
           : '';
       khoi.push(`<figure class="kd-anh">
       <div class="kd-anh-khung">
-        <img src="${_anhUrl(v.que.li, v.idx + 1)}" alt="Tranh quẻ ${_esc(v.que.n)}"
+        <img src="${_anhUrl(v.que.li, v.idx + 1)}" alt="${_esc(_tv('js.shellui.kdx-tranh-que', 'Tranh quẻ {que}', { que: _g('que', v.que.n) }))}"
              loading="lazy" decoding="async" width="1024" height="1536">
       </div>
       <figcaption>
-        <b>${_esc(v.nhan)} · ${_esc(_g('que', v.que.n))} ${_esc(v.que.zh)}</b>${
+        <b>${_esc(_nhanQue(v.nhan))} · ${_esc(_g('que', v.que.n))} ${_esc(v.que.zh)}</b>${
           loi && loi.qv ? `<span class="kd-anh-que">${_esc(loi.qv)}</span>` : ''
         }
       </figcaption>

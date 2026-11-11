@@ -1759,6 +1759,198 @@
   "t": "충하는 띠: ",
   "h": "e92ab4fa"
  },
+ "js.kinhdich.bam-de-bat-dau-gieo-que": {
+  "t": "눌러서 괘 뽑기를 시작하세요 — 6번 던지며, 한 번에 효 하나가 정해집니다",
+  "h": "5f61aa02"
+ },
+ "js.kinhdich.cau-hoi": {
+  "t": "질문: \"",
+  "h": "16a3ebd1"
+ },
+ "js.kinhdich.da-du-6-hao-dang-xem": {
+  "t": "6효가 모두 나왔습니다 — 괘를 보는 중…",
+  "h": "f181b6af"
+ },
+ "js.kinhdich.da-gieo-hao": {
+  "t": "{step}/6효를 던졌습니다 — 눌러서 {next}효를 던지세요",
+  "h": "5a45ef66"
+ },
+ "js.kinhdich.gieo-hao": {
+  "t": "{next}효 던지기",
+  "h": "673a916a"
+ },
+ "js.kinhdich.gieo-que": {
+  "t": "괘 뽑기 · ",
+  "h": "b41eb665"
+ },
+ "js.kinhdich.gieo-que-kinh-dich": {
+  "t": "주역 괘 뽑기 · ",
+  "h": "c0e31ebb"
+ },
+ "js.kinhdich.hao-dong": {
+  "t": "동효: ",
+  "h": "46236054"
+ },
+ "js.kinhdich.hao-dong-noi-len-dieu-gi": {
+  "t": "동효(動爻)는 무엇을 말해 주나요?",
+  "h": "4e9d2215"
+ },
+ "js.kinhdich.hao-dong-so": {
+  "t": "동효 {val}",
+  "h": "dfc3a9b0"
+ },
+ "js.kinhdich.khong-hao-dong": {
+  "t": " (동효 없음)",
+  "h": "b0233d0c"
+ },
+ "js.kinhdich.luan-que-nay-cho-cau-hoi": {
+  "t": "이 괘를 내 질문에 맞춰 풀이해 줘요",
+  "h": "327aeb50"
+ },
+ "js.kinhdich.nen-hanh-dong-the-nao-luc": {
+  "t": "지금은 어떻게 행동하는 게 좋을까요?",
+  "h": "b1dd8b79"
+ },
+ "js.kinhdich.que-bien": {
+  "t": ", 변괘 **",
+  "h": "b2123833"
+ },
+ "js.kinhdich.que-bien-cho-thay-xu-huong": {
+  "t": "변괘는 어떤 흐름을 보여 주나요?",
+  "h": "c06bb666"
+ },
+ "js.kinhdich.que-bien-iift": {
+  "t": "변괘: ",
+  "h": "191ff122"
+ },
+ "js.kinhdich.que-chinh": {
+  "t": "본괘: ",
+  "h": "516f228e"
+ },
+ "js.kinhdich.que-da-lap-que-chinh": {
+  "t": "괘를 세웠어요 — 본괘 **",
+  "h": "79f6b4e8"
+ },
+ "js.kinhdich.tap-trung-gieo-hao-dau-tien": {
+  "t": "집중하고 첫 효 던지기",
+  "h": "5e5106bc"
+ },
+ "js.kinhdich.toi-se-luan-theo-cau-hoi": {
+  "t": ". 질문하신 내용에 맞춰 풀이해 드릴게요.",
+  "h": "e0c8f943"
+ },
+ "js.kymon.ban-da-lap": {
+  "t": "판을 세웠어요 — **",
+  "h": "16637971"
+ },
+ "js.kymon.ban-ky-mon": {
+  "t": "기문 반 · ",
+  "h": "64c75e52"
+ },
+ "js.kymon.chua-dung-duoc-anh-thu-lai": {
+  "t": "이미지를 만들지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "h": "f8055429"
+ },
+ "js.kymon.cua": {
+  "t": " — 문 ",
+  "h": "30b23b9d"
+ },
+ "js.kymon.cuc": {
+  "t": "<div><span>국</span><b>",
+  "h": "8786d6cd"
+ },
+ "js.kymon.dang-dung-anh": {
+  "t": "이미지 만드는 중…",
+  "h": "7bce9760"
+ },
+ "js.kymon.gio": {
+  "t": " ・시: ",
+  "h": "9d8fa6cf"
+ },
+ "js.kymon.gio-5bb3": {
+  "t": "시각 ",
+  "h": "2b380a90"
+ },
+ "js.kymon.gio-nay-hop-lam-viec-gi": {
+  "t": "이 시진에는 어떤 일이 가장 잘 맞나요?",
+  "h": "74b7e572"
+ },
+ "js.kymon.gio-ngay": {
+  "t": "<div><span>시각 · 날짜</span><b>",
+  "h": "76c00c41"
+ },
+ "js.kymon.huong-do-nhat": {
+  "t": "가장 나은 방향: ",
+  "h": "0720a2bf"
+ },
+ "js.kymon.huong-nao-phai-tranh-va-vi": {
+  "t": "어떤 방향을 피해야 하고, 그 이유는 무엇인가요?",
+  "h": "ac2dbbcc"
+ },
+ "js.kymon.huong-xep-hang-cao-nhat-la": {
+  "t": " 최고 순위 방향: **",
+  "h": "abc77c37"
+ },
+ "js.kymon.khong-dung-duoc-ban": {
+  "t": "판을 세우지 못했어요.",
+  "h": "925f4f75"
+ },
+ "js.kymon.khong-dung-duoc-ban-ky-mon": {
+  "t": "기문둔갑 판을 세우지 못했어요.",
+  "h": "c30586ea"
+ },
+ "js.kymon.ky-mon": {
+  "t": "기문둔갑 · ",
+  "h": "d3a48969"
+ },
+ "js.kymon.ngay": {
+  "t": " 일 ",
+  "h": "c6e08941"
+ },
+ "js.kymon.quet-ma-lap-ban-cua-ban": {
+  "t": "코드를 스캔해 나만의 반을 세워 보세요",
+  "h": "afc18d97"
+ },
+ "js.kymon.tiet": {
+  "t": "**, 절기 ",
+  "h": "6b1922aa"
+ },
+ "js.kymon.tiet-6pzm": {
+  "t": " · 절기 ",
+  "h": "220b1eff"
+ },
+ "js.kymon.tiet-khi": {
+  "t": "<div><span>절기</span><b>",
+  "h": "539fd505"
+ },
+ "js.kymon.toi-se-luan-theo-viec-ban": {
+  "t": " 질문하신 내용에 맞춰 풀이해 드릴게요.",
+  "h": "58e203d6"
+ },
+ "js.kymon.truc-phu": {
+  "t": ", 치부 **",
+  "h": "16c60f0e"
+ },
+ "js.kymon.truc-phu-truc-su": {
+  "t": "<div><span>치부 · 치사</span><b>",
+  "h": "6ccf5eea"
+ },
+ "js.kymon.truc-phu-truc-su-noi-len": {
+  "t": "치부와 치사는 무엇을 말해 주나요?",
+  "h": "c69b295c"
+ },
+ "js.kymon.truc-su": {
+  "t": "**, 치사 **",
+  "h": "fae13856"
+ },
+ "js.kymon.viec-cua-toi-nen-di-huong": {
+  "t": "내 일은 어느 방향으로 가는 게 좋아요?",
+  "h": "72ff459d"
+ },
+ "js.kymon.viec-hoi": {
+  "t": "묻는 일: \"",
+  "h": "84ccbabf"
+ },
  "js.laso.dang-an-sao": {
   "t": "별 배치 중...",
   "h": "06275197"
@@ -1986,6 +2178,90 @@
  "js.luangiai.xem-la-so-day-du": {
   "t": "▸ 전체 명반 보기",
   "h": "fee98465"
+ },
+ "js.maihoa.bien-quai-noi-ket-cuc-the": {
+  "t": "변괘는 결말을 어떻게 말해 주나요?",
+  "h": "3c27069a"
+ },
+ "js.maihoa.cach-ra-que": {
+  "t": "<div class=\"mh-buoc\"><b>괘를 세우는 방법:</b> ",
+  "h": "0fd969d5"
+ },
+ "js.maihoa.cau-hoi": {
+  "t": "질문: \"",
+  "h": "16a3ebd1"
+ },
+ "js.maihoa.chua-dung-duoc-anh-thu-lai": {
+  "t": "이미지를 만들지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "h": "f8055429"
+ },
+ "js.maihoa.cua-que-chinh-tham-khao-them": {
+  "t": " — 본괘의 효사, 참고용</div><div class=\"han\">",
+  "h": "6c02237a"
+ },
+ "js.maihoa.dang-dung-anh": {
+  "t": "이미지 만드는 중…",
+  "h": "7bce9760"
+ },
+ "js.maihoa.dung": {
+  "t": "), 용 **",
+  "h": "139b0c3c"
+ },
+ "js.maihoa.hao-dong-la-hao": {
+  "t": " 동효는 ",
+  "h": "b6c66ef2"
+ },
+ "js.maihoa.ho-quai-cho-thay-khuc-giua": {
+  "t": "호괘(互卦)는 중간 과정을 어떻게 보여 주나요?",
+  "h": "640af3c9"
+ },
+ "js.maihoa.ket-luan": {
+  "t": "결론: ",
+  "h": "fe16dfe1"
+ },
+ "js.maihoa.khong-lap-duoc-que": {
+  "t": "괘를 세우지 못했어요.",
+  "h": "7181f9c7"
+ },
+ "js.maihoa.luan-que-nay-cho-cau-hoi": {
+  "t": "이 괘를 내 질문에 맞춰 풀이해 줘요",
+  "h": "327aeb50"
+ },
+ "js.maihoa.mai-hoa-dich-so": {
+  "t": "매화역수 · ",
+  "h": "f9124d22"
+ },
+ "js.maihoa.que-chinh": {
+  "t": "본괘: ",
+  "h": "516f228e"
+ },
+ "js.maihoa.que-chinh-fc": {
+  "t": "본괘 · ",
+  "h": "8316c7f3"
+ },
+ "js.maihoa.que-da-lap-the": {
+  "t": "괘를 세웠어요 — 체(體) **",
+  "h": "92a897ba"
+ },
+ "js.maihoa.quet-ma-gieo-que-cua-ban": {
+  "t": "코드를 스캔해 나만의 괘를 세워 보세요",
+  "h": "bd5366dc"
+ },
+ "js.maihoa.the-bi-dung-khac-thi-nen": {
+  "t": "체(體)가 용(用)에게 극당하면 어떻게 해야 하나요?",
+  "h": "197d34a9"
+ },
+ "js.maihoa.toi-se-luan-theo-cau-hoi": {
+  "t": "**. 질문하신 내용에 맞춰 풀이해 드릴게요.",
+  "h": "f2bafbac"
+ },
+ "js.maihoa.tranh-que": {
+  "t": "괘 그림: ",
+  "h": "6988d99c"
+ },
+ "js.maihoa.tuc": {
+  "t": "), 곧 **",
+  "h": "52e6128d"
  },
  "js.nav.brand": {
   "t": "명보 자미두수",
@@ -4343,6 +4619,98 @@
   "t": "iPhone / Mac",
   "h": "9a2b7d51"
  },
+ "js.shellui.kdx-dang-doc": {
+  "t": "읽는 중",
+  "h": "8932239a"
+ },
+ "js.shellui.kdx-fb-canh": {
+  "t": "⚠ 조심",
+  "h": "250c4761"
+ },
+ "js.shellui.kdx-fb-tot": {
+  "t": "✦ 길",
+  "h": "8979e6d2"
+ },
+ "js.shellui.kdx-fb-trung": {
+  "t": "◆ 평",
+  "h": "603a1ad6"
+ },
+ "js.shellui.kdx-hao-n": {
+  "t": "{n}효",
+  "h": "76351efb"
+ },
+ "js.shellui.kdx-khong-hao-dong": {
+  "t": "변효 없음<br>안정된 상황<br>본괘만 읽음",
+  "h": "7fe9390d"
+ },
+ "js.shellui.kdx-lam-chu": {
+  "t": " · 주도",
+  "h": "5f3d7276"
+ },
+ "js.shellui.kdx-luat-0": {
+  "t": "변효 없음 — 본괘의 괘사만 읽습니다.",
+  "h": "be9a7385"
+ },
+ "js.shellui.kdx-luat-1": {
+  "t": "변효 하나 — {a}효의 효사를 읽습니다.",
+  "h": "d39e3ef6"
+ },
+ "js.shellui.kdx-luat-2": {
+  "t": "변효 둘 — 두 효사를 모두 읽고, 위에 있는 {a}효를 주로 삼습니다.",
+  "h": "ca24ccf6"
+ },
+ "js.shellui.kdx-luat-3": {
+  "t": "변효 셋 — 효는 읽지 않고, 본괘와 변괘의 괘사를 읽으며 본괘를 주로 삼습니다.",
+  "h": "627d32e2"
+ },
+ "js.shellui.kdx-luat-4": {
+  "t": "변효 넷 — 변괘에서 움직이지 않는 두 효({a}효와 {b}효)의 효사를 읽고, 아래의 {a}효를 주로 삼습니다.",
+  "h": "ae45a84f"
+ },
+ "js.shellui.kdx-luat-5": {
+  "t": "변효 다섯 — 변괘에서 움직이지 않는 유일한 효({a}효)의 효사를 읽습니다.",
+  "h": "67f7d97a"
+ },
+ "js.shellui.kdx-luat-6": {
+  "t": "변효 여섯 — 변괘의 괘사를 읽습니다.",
+  "h": "10a6bd9d"
+ },
+ "js.shellui.kdx-luat-6c": {
+  "t": "변효 여섯, 순건괘 — 「용구」의 말을 읽습니다.",
+  "h": "094a2f2f"
+ },
+ "js.shellui.kdx-luat-6k": {
+  "t": "변효 여섯, 순곤괘 — 「용육」의 말을 읽습니다.",
+  "h": "1926530a"
+ },
+ "js.shellui.kdx-nguon-doc": {
+  "t": "<i>고변점(考變占)</i>(주희, <i>역학계몽</i>)에 따른 읽기 규칙 — 변효의 수가 괘사를 읽을지 효사를 읽을지, 본괘에서 읽을지 변괘에서 읽을지를 정합니다.",
+  "h": "f89320ca"
+ },
+ "js.shellui.kdx-que-bien": {
+  "t": "변괘",
+  "h": "67273d51"
+ },
+ "js.shellui.kdx-que-bien-p": {
+  "t": " (변괘)",
+  "h": "1f867cc2"
+ },
+ "js.shellui.kdx-que-bien-xh": {
+  "t": "변괘 (추세)",
+  "h": "091377d9"
+ },
+ "js.shellui.kdx-que-chinh": {
+  "t": "본괘",
+  "h": "56bf3175"
+ },
+ "js.shellui.kdx-so-hao-dong": {
+  "t": "변효 {n}개",
+  "h": "973e6fbd"
+ },
+ "js.shellui.kdx-tranh-que": {
+  "t": "{que}괘 그림",
+  "h": "4d8db49c"
+ },
  "js.shellui.ket-qua": {
   "t": "결과",
   "h": "c9f95514"
@@ -4574,6 +4942,110 @@
  "js.shellui.km-truc": {
   "t": "치{than}",
   "h": "cd8af7d6"
+ },
+ "js.shellui.kmx-chu-ban": {
+  "t": "반은 낙서(洛書)에 따라 <b>남쪽을 위</b>로 그립니다 — 옛 법식 그대로이며 보통 지도와는 반대입니다. 칸마다: 문(큰 줄) · 천반의 별과 신 · 천반 간(<b>굵게</b>)이 지반 간(<i>기울임</i>) 위에. <b>#n</b>은 아홉 궁 안에서의 상대 순위이며 길흉 판정이 아닙니다.",
+  "h": "8010514a"
+ },
+ "js.shellui.kmx-chu-bang": {
+  "t": "<b>Engine</b> 열은 고법 알고리즘의 길흉 판정입니다. <b>점수</b> 열은 페이지가 계산한 상대 순위로, 항상 가장 나은 방향을 가리키도록 한 것입니다 — 공식: 길문 +3 / 흉문 −3, 별과 신 ±2, 삼기 +2, 길격마다 +1, 흉격마다 −1. 1년치 366개 반으로 재면 엔진이 길로 판정한 궁이 있는 반은 26.5%뿐이어서, Engine 열만 읽으면 대부분의 시간 반은 \"어디로 가도 나쁘다\"고 말합니다.",
+  "h": "839c2367"
+ },
+ "js.shellui.kmx-khong-cua": {
+  "t": "문 없음",
+  "h": "c1f2927e"
+ },
+ "js.shellui.kmx-nghia-canh": {
+  "t": "드러냄, 문서, 시험, 소식, 광고",
+  "h": "921e6c41"
+ },
+ "js.shellui.kmx-nghia-do": {
+  "t": "막힘, 숨김, 회피, 은밀한 일에 맞음",
+  "h": "ad1a5167"
+ },
+ "js.shellui.kmx-nghia-huu": {
+  "t": "휴식, 화합, 도움 구하기, 순탄한 일",
+  "h": "b1fd265f"
+ },
+ "js.shellui.kmx-nghia-khai": {
+  "t": "열기, 일 시작, 거래, 권력자 만나기",
+  "h": "451cf90c"
+ },
+ "js.shellui.kmx-nghia-kinh": {
+  "t": "놀람, 시비, 구설, 뜻밖의 일",
+  "h": "dd92fabc"
+ },
+ "js.shellui.kmx-nghia-sinh": {
+  "t": "이익 창출, 재물 구하기, 매매, 개업",
+  "h": "d8d8805c"
+ },
+ "js.shellui.kmx-nghia-thuong": {
+  "t": "손상, 다툼, 빚 독촉, 소송",
+  "h": "4994840e"
+ },
+ "js.shellui.kmx-nghia-tu": {
+  "t": "정체, 장례, 매장, 꼼짝 않는 일",
+  "h": "1ae93312"
+ },
+ "js.shellui.kmx-ps-quote-0": {
+  "t": "이 시각 가장 나은 방향: {huong} — 문 없음.",
+  "h": "d2e6c7b9"
+ },
+ "js.shellui.kmx-ps-quote-n": {
+  "t": "이 시각 가장 나은 방향: {huong} — {cua}, {nghia}.",
+  "h": "db609f76"
+ },
+ "js.shellui.kmx-ps-sub": {
+  "t": "{tiet} {nguyen} · {gio}시 {ngay}일",
+  "h": "c4354592"
+ },
+ "js.shellui.kmx-ps-title": {
+  "t": "기문둔갑 — {cuc}",
+  "h": "6d14f8e2"
+ },
+ "js.shellui.kmx-th-cua": {
+  "t": "문",
+  "h": "91846f69"
+ },
+ "js.shellui.kmx-th-diem": {
+  "t": "점수",
+  "h": "024af419"
+ },
+ "js.shellui.kmx-th-huong": {
+  "t": "방향",
+  "h": "05c861c1"
+ },
+ "js.shellui.kmx-th-visao": {
+  "t": "이유",
+  "h": "497ad536"
+ },
+ "js.shellui.kmx-viec-nghi": {
+  "t": "휴양, 안녕 구하기, 관계 회복",
+  "h": "75edf4cb"
+ },
+ "js.shellui.kmx-viec-nghi-nan": {
+  "t": "휴양, 안녕 구하기, 관계; 어려움에는 귀인을 구함",
+  "h": "60b37686"
+ },
+ "js.shellui.kmx-viec-quan": {
+  "t": "관직, 경력, 구직",
+  "h": "2240b624"
+ },
+ "js.shellui.kmx-viec-quan-nan": {
+  "t": "관직, 경력, 구직; 어려움에는 귀인을 구함",
+  "h": "f4047a44"
+ },
+ "js.shellui.kmx-viec-tai": {
+  "t": "재물 구하기, 협력, 투자",
+  "h": "263dd716"
+ },
+ "js.shellui.kmx-viec-tai-nan": {
+  "t": "재물 구하기, 협력, 투자; 어려움에는 귀인을 구함",
+  "h": "57a7dae7"
+ },
+ "js.shellui.kmx-viec-tranh": {
+  "t": "이 방향은 피하는 것이 좋습니다",
+  "h": "edcc5081"
  },
  "js.shellui.ky-hop-dong-gio-nao-hop": {
   "t": "계약은 몇 시에 하는 게 좋아요?",
@@ -4870,6 +5342,94 @@
  "js.shellui.menh-sinh-ngay-hao-ton-chut": {
   "t": "본명이 그날을 생해 줘요 — 힘이 조금 빠지지만 그래도 좋아요",
   "h": "995978d5"
+ },
+ "js.shellui.mhx-c-bien": {
+  "t": "변괘",
+  "h": "b437a684"
+ },
+ "js.shellui.mhx-c-chinh": {
+  "t": "본괘",
+  "h": "d3c2c1d8"
+ },
+ "js.shellui.mhx-c-ho": {
+  "t": "호괘",
+  "h": "6f004dc7"
+ },
+ "js.shellui.mhx-chu-chang": {
+  "t": "세 단계는 다음 순서로 읽습니다: 본괘는 현재의 상황, 호괘는 묻는 사람이 흔히 예상하지 못하는 중간 국면, 변괘는 일이 도달하는 곳. 체가 용에게 극을 당하는 단계가 그 단계의 매듭입니다.",
+  "h": "03f63773"
+ },
+ "js.shellui.mhx-err-doi": {
+  "t": "양력 날짜를 음력으로 바꾸지 못했습니다.",
+  "h": "a645f9f1"
+ },
+ "js.shellui.mhx-err-gieo": {
+  "t": "괘를 뽑지 못했습니다.",
+  "h": "eabfd409"
+ },
+ "js.shellui.mhx-err-lich": {
+  "t": "음력을 불러오지 못했습니다 (tuvi-ansao-engine.js).",
+  "h": "1122cd79"
+ },
+ "js.shellui.mhx-err-lon": {
+  "t": "숫자가 너무 큽니다 — 12자리 미만의 숫자를 쓰세요.",
+  "h": "bd20c108"
+ },
+ "js.shellui.mhx-err-so": {
+  "t": "양의 정수를 입력하세요.",
+  "h": "5d631bad"
+ },
+ "js.shellui.mhx-mota-gio": {
+  "t": "해의 지지 {chi}({chiIdx}) + 음력 {thang}월 + {ngay}일 = {tong}, 8로 나눈 나머지 {du8} → 상괘; 시지 {gio}({gioIdx})를 더해 = {tongD}, 8로 나눈 나머지 {du8d} → 하괘, 6으로 나눈 나머지 {du6} → 동효.",
+  "h": "6d26b0b4"
+ },
+ "js.shellui.mhx-mota-so": {
+  "t": "수 {n}을 8로 나눈 나머지 {du8} → 상괘; {n} + 시지 {gio}({gioIdx}) = {tong} → 하괘와 동효.",
+  "h": "298e8ce3"
+ },
+ "js.shellui.mhx-p-dung": {
+  "t": "용",
+  "h": "a5a3c26b"
+ },
+ "js.shellui.mhx-p-the": {
+  "t": "체",
+  "h": "1a9e0157"
+ },
+ "js.shellui.mhx-ps-sub": {
+  "t": "체 {the} {theH} · 용 {dung} {dungH} — {kl}",
+  "h": "75583665"
+ },
+ "js.shellui.mhx-ps-title": {
+  "t": "{ten}괘",
+  "h": "51dff5b3"
+ },
+ "js.shellui.mhx-ps-title2": {
+  "t": "{ten}괘 → {bien}",
+  "h": "676652b0"
+ },
+ "js.shellui.mhx-td": {
+  "t": "체 {the}({theH}) · 용 {dung}({dungH})",
+  "h": "7ab82a19"
+ },
+ "js.shellui.mhx-vai-dung": {
+  "t": "용 · 일",
+  "h": "70792141"
+ },
+ "js.shellui.mhx-vai-the": {
+  "t": "체 · 나",
+  "h": "d540ee00"
+ },
+ "js.shellui.mhx-y-bien": {
+  "t": "결말이 향하는 곳",
+  "h": "56db0d14"
+ },
+ "js.shellui.mhx-y-chinh": {
+  "t": "지금의 상황",
+  "h": "4b8e8934"
+ },
+ "js.shellui.mhx-y-ho": {
+  "t": "중간의 전개",
+  "h": "5a858474"
  },
  "js.shellui.minh-bao-nguoi-dan-duong": {
   "t": "명보 · 길잡이",
