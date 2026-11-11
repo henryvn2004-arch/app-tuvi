@@ -33,9 +33,18 @@
     return g && v ? g.t(kind, v) : v;
   }
   // Nhãn câu chữ (khoá js.shellui.mn-*): bản dịch nếu trang /<locale>/ có nhúng từ điển, không thì chữ Việt.
-  function _tv(key, vi) {
+  function _tv(key, vi, vars) {
     var I = root.I18n;
-    return I && I.tv ? I.tv(key, vi) : vi;
+    if (I && I.tv) return I.tv(key, vi, vars);
+    return vars ? vi.replace(/\{(\w+)\}/g, function (x, n) { return vars[n] !== undefined ? vars[n] : x; }) : vi;
+  }
+  // `nhan`/`y` của ba chặng là chữ Việt vừa hiển thị vừa gửi server (railData) ⇒ chỉ dịch ở chỗ vẽ, qua bảng câu→khoá.
+  var _CHANG = {
+    'Quẻ chính': 'mhx-c-chinh', 'Hỗ quái': 'mhx-c-ho', 'Biến quái': 'mhx-c-bien',
+    'Tình thế lúc này': 'mhx-y-chinh', 'Diễn biến ở giữa': 'mhx-y-ho', 'Kết cục đi về đâu': 'mhx-y-bien',
+  };
+  function _chang_tv(vi) {
+    return _CHANG[vi] ? _tv('js.shellui.' + _CHANG[vi], vi) : vi;
   }
   // Nhãn mức cát/hung của quan hệ Thể–Dụng (MUC_NHAN[muc].nhan) — chỉ chỗ vẽ.
   function _nhan(muc) {
@@ -159,13 +168,13 @@
   function gieoTheoGio(d) {
     var date = d || new Date();
     if (typeof root.convertDuongToAm !== 'function') {
-      return { ok: false, error: 'Chưa nạp được lịch âm (tuvi-ansao-engine.js).' };
+      return { ok: false, error: _tv('js.shellui.mhx-err-lich', 'Chưa nạp được lịch âm (tuvi-ansao-engine.js).') };
     }
     var conv;
     try {
       conv = root.convertDuongToAm(date.getDate(), date.getMonth() + 1, date.getFullYear(), date.getHours());
     } catch (e) {
-      return { ok: false, error: 'Không đổi được ngày dương sang âm lịch.' };
+      return { ok: false, error: _tv('js.shellui.mhx-err-doi', 'Không đổi được ngày dương sang âm lịch.') };
     }
     var chiNamIdx = CHI.indexOf(conv.chiNam) + 1; // Tý=1 … Hợi=12
     var thang = conv.amLich.month;
@@ -196,6 +205,12 @@
           ' = ' + tongTren + ', chia 8 dư ' + _mod(tongTren, 8) + ' → thượng quái; cộng giờ ' +
           conv.gioChi + ' (' + chiGioIdx + ') = ' + tongDuoi + ', chia 8 dư ' + _mod(tongDuoi, 8) +
           ' → hạ quái, chia 6 dư ' + _mod(tongDuoi, 6) + ' → hào động.',
+        // Bản DỊCH được dựng lại ở chỗ vẽ (moTaText): khoá + biến, `moTa` Việt gốc giữ nguyên cho railData.
+        moTaKey: 'js.shellui.mhx-mota-gio',
+        moTaVars: {
+          chi: conv.chiNam, chiIdx: chiNamIdx, thang: thang, ngay: ngay, tong: tongTren, du8: _mod(tongTren, 8),
+          gio: conv.gioChi, gioIdx: chiGioIdx, tongD: tongDuoi, du8d: _mod(tongDuoi, 8), du6: _mod(tongDuoi, 6),
+        },
       },
     };
   }
@@ -213,8 +228,8 @@
     // input của người dùng, mà thông báo lỗi thì đang hứa "số nguyên dương".
     // Thà từ chối rõ ràng còn hơn trả về một quẻ họ không hề gieo.
     var n = Math.floor(Number(so));
-    if (!isFinite(n) || n <= 0) return { ok: false, error: 'Hãy nhập một số nguyên dương.' };
-    if (n > 1e12) return { ok: false, error: 'Số quá lớn — hãy dùng số dưới 12 chữ số.' };
+    if (!isFinite(n) || n <= 0) return { ok: false, error: _tv('js.shellui.mhx-err-so', 'Hãy nhập một số nguyên dương.') };
+    if (n > 1e12) return { ok: false, error: _tv('js.shellui.mhx-err-lon', 'Số quá lớn — hãy dùng số dưới 12 chữ số.') };
     var date = d || new Date();
     var chiGioIdx = Math.floor(((date.getHours() + 1) % 24) / 2) + 1; // Tý=1 (23–01h)
     var gioChi = CHI[chiGioIdx - 1];
@@ -233,6 +248,8 @@
         moTa:
           'Số ' + n + ' chia 8 dư ' + _mod(n, 8) + ' → thượng quái; ' + n + ' + giờ ' + gioChi +
           ' (' + chiGioIdx + ') = ' + tong + ' → hạ quái và hào động.',
+        moTaKey: 'js.shellui.mhx-mota-so',
+        moTaVars: { n: n, du8: _mod(n, 8), gio: gioChi, gioIdx: chiGioIdx, tong: tong },
       },
     };
   }
@@ -251,7 +268,7 @@
    * @returns quẻ chính / hỗ / biến + Thể-Dụng ba chặng
    */
   function resolve(g) {
-    if (!g || !g.ok) return g || { ok: false, error: 'Chưa gieo được quẻ.' };
+    if (!g || !g.ok) return g || { ok: false, error: _tv('js.shellui.mhx-err-gieo', 'Chưa gieo được quẻ.') };
     var qTren = _quaiTheoSo(g.tren);
     var qDuoi = _quaiTheoSo(g.duoi);
     var li = qDuoi.li + qTren.li; // hào 1..6, dưới → trên
@@ -319,6 +336,16 @@
     return BAT_QUAI[7];
   }
 
+  // Câu "cách ra quẻ" ở chỗ VẼ: dựng lại từ khoá + biến (chi qua glossary); không có khoá ⇒ chuỗi Việt gốc.
+  function moTaText(calc) {
+    if (!calc || !calc.moTaKey) return calc ? calc.moTa : '';
+    var v = {};
+    for (var k in calc.moTaVars) v[k] = calc.moTaVars[k];
+    if (v.chi) v.chi = _g('chi', v.chi);
+    if (v.gio && typeof v.gio === 'string') v.gio = _g('chi', v.gio);
+    return _tv(calc.moTaKey, calc.moTa, v);
+  }
+
   // ── Render ──────────────────────────────────────────────────────────────
   var _esc = function (s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -351,7 +378,7 @@
       '<div class="mh-card">' +
       '<div class="mh-doi">' +
       '<div class="mh-quai mh-the">' +
-      '<div class="mh-vai">Thể · mình</div>' +
+      '<div class="mh-vai">' + _tv('js.shellui.mhx-vai-the', 'Thể · mình') + '</div>' +
       _haoSVG(r.the.li, theMau) +
       '<div class="mh-ten">' + _esc(_g('quai', r.the.n)) + '</div>' +
       '<div class="mh-phu">' + _esc(r.the.zh) + ' · ' + _esc(_g('tuongquai', r.the.tuong)) + ' · <b style="color:' + theMau + '">' + _esc(_g('hanh', r.the.hanh)) + '</b></div>' +
@@ -362,7 +389,7 @@
       '<div class="mh-muc" style="background:' + mn.mau + '">' + _esc(_nhan(qh.muc)) + '</div>' +
       '</div>' +
       '<div class="mh-quai mh-dung">' +
-      '<div class="mh-vai">Dụng · việc</div>' +
+      '<div class="mh-vai">' + _tv('js.shellui.mhx-vai-dung', 'Dụng · việc') + '</div>' +
       _haoSVG(r.dung.li, dungMau) +
       '<div class="mh-ten">' + _esc(_g('quai', r.dung.n)) + '</div>' +
       '<div class="mh-phu">' + _esc(r.dung.zh) + ' · ' + _esc(_g('tuongquai', r.dung.tuong)) + ' · <b style="color:' + dungMau + '">' + _esc(_g('hanh', r.dung.hanh)) + '</b></div>' +
@@ -382,18 +409,20 @@
         var ten = c.que ? _g('que', c.que.q.n) + ' ' + c.que.q.zh : '—';
         return (
           '<div class="mh-chang">' +
-          '<div class="mh-chang-nhan">' + _esc(c.nhan) + '</div>' +
+          '<div class="mh-chang-nhan">' + _esc(_chang_tv(c.nhan)) + '</div>' +
           '<div class="mh-chang-que">' + _esc(ten) + '</div>' +
-          '<div class="mh-chang-y">' + _esc(c.y) + '</div>' +
+          '<div class="mh-chang-y">' + _esc(_chang_tv(c.y)) + '</div>' +
           '<div class="mh-chang-qh"><span style="background:' + mn.mau + '">' + _esc(_nhan(c.qh.muc)) + '</span> ' + _esc(_g('maihoa', c.qh.ten)) + '</div>' +
-          '<div class="mh-chang-td">Thể ' + _esc(_g('quai', c.the.n)) + ' (' + _esc(_g('hanh', c.the.hanh)) + ') · Dụng ' + _esc(_g('quai', c.dung.n)) + ' (' + _esc(_g('hanh', c.dung.hanh)) + ')</div>' +
+          '<div class="mh-chang-td">' + _esc(_tv('js.shellui.mhx-td', 'Thể {the} ({theH}) · Dụng {dung} ({dungH})', {
+            the: _g('quai', c.the.n), theH: _g('hanh', c.the.hanh), dung: _g('quai', c.dung.n), dungH: _g('hanh', c.dung.hanh),
+          })) + '</div>' +
           '</div>'
         );
       })
       .join('');
     return (
       '<div class="mh-changs">' + cells + '</div>' +
-      '<div class="mh-chang-chu">Ba chặng đọc theo thứ tự: quẻ chính là tình thế hiện tại, hỗ quái là khúc giữa mà người hỏi thường không lường trước, biến quái là chỗ việc đi tới. Chặng nào Thể bị Dụng khắc thì đó là nút thắt của chặng ấy.</div>'
+      '<div class="mh-chang-chu">' + _tv('js.shellui.mhx-chu-chang', 'Ba chặng đọc theo thứ tự: quẻ chính là tình thế hiện tại, hỗ quái là khúc giữa mà người hỏi thường không lường trước, biến quái là chỗ việc đi tới. Chặng nào Thể bị Dụng khắc thì đó là nút thắt của chặng ấy.') + '</div>'
     );
   }
 
@@ -499,8 +528,8 @@
 
       ctx.fillStyle = 'rgba(255,255,255,0.45)';
       ctx.font = '600 22px ' + SANS;
-      ctx.fillText('THỂ', box.x + box.w * 0.2, cy - 102);
-      ctx.fillText('DỤNG', box.x + box.w * 0.8, cy - 102);
+      ctx.fillText(_tv('js.shellui.mhx-p-the', 'THỂ'), box.x + box.w * 0.2, cy - 102);
+      ctx.fillText(_tv('js.shellui.mhx-p-dung', 'DỤNG'), box.x + box.w * 0.8, cy - 102);
 
       ctx.fillStyle = mn.mau;
       ctx.font = '700 62px ' + SERIF;
@@ -537,8 +566,14 @@
     var tenBien = r.bien.que ? _g('que', r.bien.que.q.n) : '';
     return {
       draw: null, // trang tự gắn sau khi loadAnh xong
-      title: 'Quẻ ' + ten + (tenBien && tenBien !== ten ? ' → ' + tenBien : ''),
-      subtitle: 'Thể ' + _g('quai', r.the.n) + ' ' + _g('hanh', r.the.hanh) + ' · Dụng ' + _g('quai', r.dung.n) + ' ' + _g('hanh', r.dung.hanh) + ' — ' + _g('maihoa', r.ketLuan.ten),
+      title:
+        tenBien && tenBien !== ten
+          ? _tv('js.shellui.mhx-ps-title2', 'Quẻ {ten} → {bien}', { ten: ten, bien: tenBien })
+          : _tv('js.shellui.mhx-ps-title', 'Quẻ {ten}', { ten: ten }),
+      subtitle: _tv('js.shellui.mhx-ps-sub', 'Thể {the} {theH} · Dụng {dung} {dungH} — {kl}', {
+        the: _g('quai', r.the.n), theH: _g('hanh', r.the.hanh), dung: _g('quai', r.dung.n), dungH: _g('hanh', r.dung.hanh),
+        kl: _g('maihoa', r.ketLuan.ten),
+      }),
       quote: (r.haoTu && r.haoTu.viet) || r.ketLuan.luan,
       cauHoi: cauHoi || '',
       // Cỡ chữ riêng của bàn quẻ — không nạp sẵn thì canvas rơi về font hệ thống.
@@ -572,6 +607,7 @@
     BAT_QUAI: BAT_QUAI,
     HANH_MAU: HANH_MAU,
     MUC_NHAN: MUC_NHAN,
+    moTaText: moTaText,
     quanHe: quanHe,
     gieoTheoGio: gieoTheoGio,
     gieoTheoSo: gieoTheoSo,

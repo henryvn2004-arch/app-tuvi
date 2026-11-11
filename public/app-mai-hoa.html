@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mai Hoa Dịch Số — Gieo quẻ — Tử Vi Minh Bảo</title>
-<meta name="description" content="Gieo quẻ Mai Hoa Dịch Số bằng một con số hoặc theo thời điểm — quẻ Thể, quẻ Dụng và ngũ hành sinh khắc qua ba chặng chính, hỗ, biến. Hỏi Thầy luận theo câu hỏi.">
+<title data-i18n="maihoa.mai-hoa-dich-so-gieo-que">Mai Hoa Dịch Số — Gieo quẻ — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:maihoa.gieo-que-mai-hoa-dich-so" name="description" content="Gieo quẻ Mai Hoa Dịch Số bằng một con số hoặc theo thời điểm — quẻ Thể, quẻ Dụng và ngũ hành sinh khắc qua ba chặng chính, hỗ, biến. Hỏi Thầy luận theo câu hỏi.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -75,10 +75,10 @@ body.chat-first-live .mh-changs{grid-template-columns:1fr}
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Mai Hoa Dịch Số</b><span>Thể · Dụng · ba chặng chính–hỗ–biến</span></div>
+      <div data-i18n="maihoa.mai-hoa-dich-so-the-dung" class="ws-title"><b>Mai Hoa Dịch Số</b><span>Thể · Dụng · ba chặng chính–hỗ–biến</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="reset()" style="display:none">Gieo lại</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="maihoa.gieo-lai" class="btn" id="btnEdit" onclick="reset()" style="display:none">Gieo lại</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -92,49 +92,49 @@ body.chat-first-live .mh-changs{grid-template-columns:1fr}
         <img class="intro-avatar" src="/tool-avatars/mai-hoa.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Mai Hoa Dịch Số</div>
-            <div class="intro-d">Một con số bất chợt nghĩ ra cũng có thể là khởi đầu của một quẻ dịch. Nhập số đó hoặc để hệ thống lấy theo giờ hiện tại, nhận hai quẻ Thể – Dụng cùng lời luận cho việc bạn đang hỏi.</div>
+            <div data-i18n="maihoa.mai-hoa-dich-so" class="intro-t">Mai Hoa Dịch Số</div>
+            <div data-i18n="maihoa.mot-con-so-bat-chot-nghi" class="intro-d">Một con số bất chợt nghĩ ra cũng có thể là khởi đầu của một quẻ dịch. Nhập số đó hoặc để hệ thống lấy theo giờ hiện tại, nhận hai quẻ Thể – Dụng cùng lời luận cho việc bạn đang hỏi.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="flower"></span><span>Quẻ Thể<br>&amp; Dụng</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span>Ba chặng<br>chính–hỗ–biến</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Hào từ &amp;<br>lời luận</span></div>
+          <div data-i18n="maihoa.que-the-dung" class="hero-pill"><span class="hp-ic" data-icon="flower"></span><span>Quẻ Thể<br>&amp; Dụng</span></div>
+          <div data-i18n="maihoa.ba-chang-chinh-ho-bien" class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span>Ba chặng<br>chính–hỗ–biến</span></div>
+          <div data-i18n="maihoa.hao-tu-loi-luan" class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Hào từ &amp;<br>lời luận</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
       <!-- Thanh tiến trình — tool này MIỄN PHÍ, không có paywall, chỉ 2 chặng
            thật: lập quẻ rồi xem kết quả. JS chuyển bước ở `wsStepsSet`. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Lập quẻ</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả</span></div>
+        <div data-i18n="maihoa.1-lap-que" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Lập quẻ</span></div>
+        <div data-i18n="napam.2-xem-ket-qua" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
-        <div class="fc-head"><span class="fc-ic" data-icon="flower"></span><h2>Thành tâm nghĩ về việc muốn hỏi</h2></div>
-        <p class="sub">Gieo theo giờ hiện tại hoặc một con số — hệ thống lập quẻ Thể–Dụng, xác định hào động và trả hào từ để luận.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="flower"></span><h2 data-i18n="maihoa.thanh-tam-nghi-ve-viec-muon">Thành tâm nghĩ về việc muốn hỏi</h2></div>
+        <p data-i18n="maihoa.gieo-theo-gio-hien-tai-hoac" class="sub">Gieo theo giờ hiện tại hoặc một con số — hệ thống lập quẻ Thể–Dụng, xác định hào động và trả hào từ để luận.</p>
         <div class="cost-box">
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
               <div class="cb-amt" data-tvp-price-label="mai-hoa">…</div>
             </div>
           </div>
         </div>
         <div class="fg">
-          <label>Câu hỏi (tuỳ chọn)</label>
-          <input type="text" id="cauHoi" placeholder="VD: Việc chuyển chỗ làm này có nên không?" maxlength="100">
+          <label data-i18n="maihoa.cau-hoi-tuy-chon">Câu hỏi (tuỳ chọn)</label>
+          <input data-i18n-attr="placeholder:maihoa.vd-viec-chuyen-cho-lam-nay" type="text" id="cauHoi" placeholder="VD: Việc chuyển chỗ làm này có nên không?" maxlength="100">
         </div>
         <div class="mh-mode">
-          <button type="button" id="modeGio" class="on" onclick="setMode('gio')">Gieo theo thời điểm này</button>
-          <button type="button" id="modeSo" onclick="setMode('so')">Gieo bằng một con số</button>
+          <button data-i18n="maihoa.gieo-theo-thoi-diem-nay" type="button" id="modeGio" class="on" onclick="setMode('gio')">Gieo theo thời điểm này</button>
+          <button data-i18n="maihoa.gieo-bang-mot-con-so" type="button" id="modeSo" onclick="setMode('so')">Gieo bằng một con số</button>
         </div>
         <div class="fg" id="soWrap" style="display:none">
-          <label>Con số nảy ra trong đầu</label>
-          <input type="number" id="soInput" placeholder="VD: 27" min="1" step="1" inputmode="numeric">
+          <label data-i18n="maihoa.con-so-nay-ra-trong-dau">Con số nảy ra trong đầu</label>
+          <input data-i18n-attr="placeholder:maihoa.vd-27" type="number" id="soInput" placeholder="VD: 27" min="1" step="1" inputmode="numeric">
         </div>
-        <button class="btn-go" id="goBtn" onclick="gieo()">
+        <button data-i18n="maihoa.lap-que" class="btn-go" id="goBtn" onclick="gieo()">
           <span class="bg-label"><span class="ic" data-icon="flower"></span><b>Lập Quẻ</b></span>
         </button>
         <div class="mh-err" id="mhErr" style="display:none"></div>
@@ -142,9 +142,9 @@ body.chat-first-live .mh-changs{grid-template-columns:1fr}
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Mai Hoa Dịch Số</div>
-        <p class="wsp-desc">Mai Hoa Dịch Số là phương pháp gieo quẻ tương truyền do Thiệu Khang Tiết đời Tống đặt nền móng, dựa trên Kinh Dịch nhưng lập quẻ nhanh từ một con số, thời điểm hoặc sự việc bất kỳ. Quẻ được chia thành Thể và Dụng để luận đoán diễn biến sự việc.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="maihoa.mai-hoa-dich-so" class="wsp-title">Mai Hoa Dịch Số</div>
+        <p data-i18n="maihoa.mai-hoa-dich-so-la-phuong" class="wsp-desc">Mai Hoa Dịch Số là phương pháp gieo quẻ tương truyền do Thiệu Khang Tiết đời Tống đặt nền móng, dựa trên Kinh Dịch nhưng lập quẻ nhanh từ một con số, thời điểm hoặc sự việc bất kỳ. Quẻ được chia thành Thể và Dụng để luận đoán diễn biến sự việc.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -158,11 +158,11 @@ body.chat-first-live .mh-changs{grid-template-columns:1fr}
         <div id="mhBuoc"></div>
         <div id="mhAnh"></div>
         <div class="mh-tai">
-          <button class="btn-go inline" id="taiBtn" onclick="taiAnh()"><span class="bg-label"><span class="ic" data-icon="save"></span><b id="taiBtnLabel">Tải ảnh chia sẻ (9:16)</b></span></button>
-          <button class="btn-go inline" onclick="reset()"><span class="bg-label"><span class="ic" data-icon="rotate-cw"></span><b>Gieo quẻ khác</b></span></button>
+          <button data-i18n="kymon.tai-anh-chia-se-9-16" class="btn-go inline" id="taiBtn" onclick="taiAnh()"><span class="bg-label"><span class="ic" data-icon="save"></span><b id="taiBtnLabel">Tải ảnh chia sẻ (9:16)</b></span></button>
+          <button data-i18n="maihoa.gieo-que-khac" class="btn-go inline" onclick="reset()"><span class="bg-label"><span class="ic" data-icon="rotate-cw"></span><b>Gieo quẻ khác</b></span></button>
         </div>
         <div class="mh-err" id="mhErr2" style="display:none"></div>
-        <div class="ask" data-ask="Luận giúp tôi quẻ Mai Hoa này theo đúng câu hỏi: quan hệ Thể–Dụng nói gì, ba chặng chính–hỗ–biến diễn ra thế nào, nên hành động ra sao?">✦ Hỏi Thầy luận quẻ theo câu hỏi</div>
+        <div data-i18n="maihoa.hoi-thay-luan-que-theo-cau" class="ask" data-ask="Luận giúp tôi quẻ Mai Hoa này theo đúng câu hỏi: quan hệ Thể–Dụng nói gì, ba chặng chính–hỗ–biến diễn ra thế nào, nên hành động ra sao?">✦ Hỏi Thầy luận quẻ theo câu hỏi</div>
       </div>
     </div>
   </main>
@@ -179,8 +179,8 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'mai-hoa'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/kinh-dich-hao.js?v=1"></script>
-<script src="/tools-shared/kinh-dich.js?v=6"></script>
-<script src="/tools-shared/mai-hoa.js?v=3"></script>
+<script src="/tools-shared/kinh-dich.js?v=7"></script>
+<script src="/tools-shared/mai-hoa.js?v=4"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
@@ -225,7 +225,7 @@ function gieo() {
     : MaiHoaTool.gieoTheoGio();
   if (!g.ok) { _err('mhErr', g.error); return; }
   const r = MaiHoaTool.resolve(g);
-  if (!r.ok) { _err('mhErr', r.error || 'Không lập được quẻ.'); return; }
+  if (!r.ok) { _err('mhErr', r.error || _tvmbT('js.maihoa.khong-lap-duoc-que', 'Không lập được quẻ.')); return; }
   _r = r;
   showResult();
 }
@@ -237,12 +237,12 @@ function showResult() {
   document.getElementById('mhCard').innerHTML = MaiHoaTool.cardHTML(r);
   document.getElementById('mhChangs').innerHTML = MaiHoaTool.chungHTML(r);
   document.getElementById('mhHaoTu').innerHTML = r.haoTu
-    ? '<div class="mh-hao-tu"><div class="nhan">' + r.haoTu.nhan + ' của quẻ chính — tham khảo thêm</div><div class="han">' + r.haoTu.han + '</div><div class="viet">' + r.haoTu.viet + '</div></div>'
+    ? '<div class="mh-hao-tu"><div class="nhan">' + r.haoTu.nhan + _tvmbT('js.maihoa.cua-que-chinh-tham-khao-them', ' của quẻ chính — tham khảo thêm</div><div class="han">') + r.haoTu.han + '</div><div class="viet">' + r.haoTu.viet + '</div></div>'
     : '';
-  document.getElementById('mhBuoc').innerHTML = '<div class="mh-buoc"><b>Cách ra quẻ:</b> ' + r.gieo.calc.moTa + ' Hào động là hào ' + r.dong + '.</div>';
+  document.getElementById('mhBuoc').innerHTML = _tvmbT('js.maihoa.cach-ra-que', '<div class="mh-buoc"><b>Cách ra quẻ:</b> ') + MaiHoaTool.moTaText(r.gieo.calc) + _tvmbT('js.maihoa.hao-dong-la-hao', ' Hào động là hào ') + r.dong + '.</div>';
   const kw = r.chinh.que ? r.chinh.que.kw : 0;
   document.getElementById('mhAnh').innerHTML = kw
-    ? '<figure class="mh-anh"><img src="' + KinhDichTool.anhUrl(r.chinh.li, kw) + '" alt="Tranh quẻ ' + r.chinh.que.q.n + '" loading="lazy" decoding="async" width="1024" height="1536"><figcaption>Quẻ chính · ' + r.chinh.que.q.n + ' ' + r.chinh.que.q.zh + '</figcaption></figure>'
+    ? '<figure class="mh-anh"><img src="' + KinhDichTool.anhUrl(r.chinh.li, kw) + '" alt="' + _tvmbT('js.maihoa.tranh-que', 'Tranh quẻ ') + _tvmbG('que', r.chinh.que.q.n) + '" loading="lazy" decoding="async" width="1024" height="1536"><figcaption>' + _tvmbT('js.maihoa.que-chinh-fc', 'Quẻ chính · ') + _tvmbG('que', r.chinh.que.q.n) + ' ' + r.chinh.que.q.zh + '</figcaption></figure>'
     : '';
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
@@ -256,16 +256,16 @@ function showResult() {
     scenario: { type: 'mai-hoa', data: d },
     restore: { gieo: r.gieo, cauHoi: cHoi, mode: _mode },
     label: 'Mai Hoa · ' + tenChinh + ' — ' + _tvmbG('maihoa', r.ketLuan.ten),
-    greeting: 'Quẻ đã lập — Thể **' + _tvmbG('quai', r.the.n) + '** (' + _tvmbG('hanh', r.the.hanh) + '), Dụng **' + _tvmbG('quai', r.dung.n) + '** (' + _tvmbG('hanh', r.dung.hanh) + '), tức **' + _tvmbG('maihoa', r.ketLuan.ten) + '**. Tôi sẽ luận theo câu hỏi của bạn.',
-    chips: ['Luận quẻ này cho câu hỏi của tôi', 'Thể bị Dụng khắc thì nên làm gì?', 'Hỗ quái cho thấy khúc giữa ra sao?', 'Biến quái nói kết cục thế nào?']
+    greeting: _tvmbT('js.maihoa.que-da-lap-the', 'Quẻ đã lập — Thể **') + _tvmbG('quai', r.the.n) + '** (' + _tvmbG('hanh', r.the.hanh) + _tvmbT('js.maihoa.dung', '), Dụng **') + _tvmbG('quai', r.dung.n) + '** (' + _tvmbG('hanh', r.dung.hanh) + _tvmbT('js.maihoa.tuc', '), tức **') + _tvmbG('maihoa', r.ketLuan.ten) + _tvmbT('js.maihoa.toi-se-luan-theo-cau-hoi', '**. Tôi sẽ luận theo câu hỏi của bạn.'),
+    chips: [_tvmbT('js.maihoa.luan-que-nay-cho-cau-hoi', 'Luận quẻ này cho câu hỏi của tôi'), _tvmbT('js.maihoa.the-bi-dung-khac-thi-nen', 'Thể bị Dụng khắc thì nên làm gì?'), _tvmbT('js.maihoa.ho-quai-cho-thay-khuc-giua', 'Hỗ quái cho thấy khúc giữa ra sao?'), _tvmbT('js.maihoa.bien-quai-noi-ket-cuc-the', 'Biến quái nói kết cục thế nào?')]
   });
 
   const lines = [];
-  if (cHoi) lines.push('Câu hỏi: "' + cHoi + '"');
-  lines.push('Quẻ chính: ' + tenChinh);
+  if (cHoi) lines.push(_tvmbT('js.maihoa.cau-hoi', 'Câu hỏi: "') + cHoi + '"');
+  lines.push(_tvmbT('js.maihoa.que-chinh', 'Quẻ chính: ') + tenChinh);
   lines.push(d.theDung);
-  lines.push('Kết luận: ' + d.ketLuan);
-  Shell.setShareable({ kind: 'text', toolId: 'mai-hoa', title: 'Mai Hoa Dịch Số · ' + tenChinh, text: lines.join('\n') });
+  lines.push(_tvmbT('js.maihoa.ket-luan', 'Kết luận: ') + d.ketLuan);
+  Shell.setShareable({ kind: 'text', toolId: 'mai-hoa', title: _tvmbT('js.maihoa.mai-hoa-dich-so', 'Mai Hoa Dịch Số · ') + tenChinh, text: lines.join('\n') });
   document.querySelectorAll('#resPanel [data-ask]').forEach(function (el) {
     el.addEventListener('click', function () { Shell.ask(el.getAttribute('data-ask')); });
   });
@@ -280,17 +280,17 @@ function taiAnh() {
   const lbl = document.getElementById('taiBtnLabel');
   const old = lbl.textContent;
   btn.disabled = true;
-  lbl.textContent = 'Đang dựng ảnh…';
+  lbl.textContent = _tvmbT('js.maihoa.dang-dung-anh', 'Đang dựng ảnh…');
   MaiHoaTool.loadAnh(_r)
     .then(function (img) {
       const o = MaiHoaTool.posterOpts(_r, document.getElementById('cauHoi').value.trim());
       o.draw = MaiHoaTool.posterDraw(_r, img);
       o.qrUrl = Poster.qrLink('mai-hoa', '/app/mai-hoa');
-      o.qrCaption = 'Quét mã — gieo quẻ của bạn';
+      o.qrCaption = _tvmbT('js.maihoa.quet-ma-gieo-que-cua-ban', 'Quét mã — gieo quẻ của bạn');
       return Poster.download(o, 'mai-hoa-' + (_r.chinh.que ? _r.chinh.que.q.n.toLowerCase().replace(/\s+/g, '-') : 'que') + '-tuviminhbao.png');
     })
     .then(function () { if (window.Track) Track.event('poster_download', { tool_id: 'mai-hoa' }); })
-    .catch(function () { _err('mhErr2', 'Chưa dựng được ảnh. Thử lại sau ít giây.'); })
+    .catch(function () { _err('mhErr2', _tvmbT('js.maihoa.chua-dung-duoc-anh-thu-lai', 'Chưa dựng được ảnh. Thử lại sau ít giây.')); })
     .then(function () { btn.disabled = false; lbl.textContent = old; });
 }
 

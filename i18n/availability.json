@@ -34,7 +34,28 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/kinh-dich": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/ky-mon": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/luan-giai": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/mai-hoa": [
   "en",
   "ja",
   "ko",

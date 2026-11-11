@@ -37,6 +37,7 @@
         return {
           soHaoDong: 0,
           luat: 'Không có hào động — chỉ đọc lời quẻ của quẻ chính.',
+          luatKey: 'js.shellui.kdx-luat-0',
           doc: [{ nguon: 'chinh', loai: 'que', hao: null, chinh: true }],
         };
 
@@ -44,6 +45,8 @@
         return {
           soHaoDong: 1,
           luat: `Một hào động — đọc hào từ của hào ${dong[0]}.`,
+          luatKey: 'js.shellui.kdx-luat-1',
+          luatVars: { a: dong[0] },
           doc: [{ nguon: 'chinh', loai: 'hao', hao: dong[0], chinh: true }],
         };
 
@@ -53,6 +56,8 @@
         return {
           soHaoDong: 2,
           luat: `Hai hào động — đọc cả hai hào từ, hào ${tren} (ở trên) làm chủ.`,
+          luatKey: 'js.shellui.kdx-luat-2',
+          luatVars: { a: tren },
           doc: [
             { nguon: 'chinh', loai: 'hao', hao: tren, chinh: true },
             { nguon: 'chinh', loai: 'hao', hao: duoi, chinh: false },
@@ -64,6 +69,7 @@
         return {
           soHaoDong: 3,
           luat: 'Ba hào động — không đọc hào nào; đọc lời quẻ của cả quẻ chính lẫn quẻ biến, quẻ chính làm chủ.',
+          luatKey: 'js.shellui.kdx-luat-3',
           doc: [
             { nguon: 'chinh', loai: 'que', hao: null, chinh: true },
             { nguon: 'bien', loai: 'que', hao: null, chinh: false },
@@ -76,6 +82,8 @@
         return {
           soHaoDong: 4,
           luat: `Bốn hào động — đọc hào từ của hai hào KHÔNG động (${duoi} và ${tren}) trong quẻ BIẾN, hào ${duoi} (ở dưới) làm chủ.`,
+          luatKey: 'js.shellui.kdx-luat-4',
+          luatVars: { a: duoi, b: tren },
           doc: [
             { nguon: 'bien', loai: 'hao', hao: duoi, chinh: true },
             { nguon: 'bien', loai: 'hao', hao: tren, chinh: false },
@@ -87,6 +95,8 @@
         return {
           soHaoDong: 5,
           luat: `Năm hào động — đọc hào từ của hào KHÔNG động duy nhất (hào ${tinh[0]}) trong quẻ BIẾN.`,
+          luatKey: 'js.shellui.kdx-luat-5',
+          luatVars: { a: tinh[0] },
           doc: [{ nguon: 'bien', loai: 'hao', hao: tinh[0], chinh: true }],
         };
 
@@ -95,17 +105,20 @@
           return {
             soHaoDong: 6,
             luat: 'Sáu hào động, quẻ thuần Càn — đọc lời "Dụng Cửu".',
+            luatKey: 'js.shellui.kdx-luat-6c',
             doc: [{ nguon: 'chinh', loai: 'dungCuu', hao: null, chinh: true }],
           };
         if (thuanKhon)
           return {
             soHaoDong: 6,
             luat: 'Sáu hào động, quẻ thuần Khôn — đọc lời "Dụng Lục".',
+            luatKey: 'js.shellui.kdx-luat-6k',
             doc: [{ nguon: 'chinh', loai: 'dungLuc', hao: null, chinh: true }],
           };
         return {
           soHaoDong: 6,
           luat: 'Sáu hào động — đọc lời quẻ của quẻ BIẾN.',
+          luatKey: 'js.shellui.kdx-luat-6',
           doc: [{ nguon: 'bien', loai: 'que', hao: null, chinh: true }],
         };
     }

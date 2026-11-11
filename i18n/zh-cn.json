@@ -1759,6 +1759,198 @@
   "t": "冲生肖 ",
   "h": "e92ab4fa"
  },
+ "js.kinhdich.bam-de-bat-dau-gieo-que": {
+  "t": "按下开始起卦——共掷 6 次，每次决定一个爻",
+  "h": "5f61aa02"
+ },
+ "js.kinhdich.cau-hoi": {
+  "t": "问题：「",
+  "h": "16a3ebd1"
+ },
+ "js.kinhdich.da-du-6-hao-dang-xem": {
+  "t": "六爻已齐——正在查看卦象…",
+  "h": "f181b6af"
+ },
+ "js.kinhdich.da-gieo-hao": {
+  "t": "已掷 {step}/6 爻——按下掷第 {next} 爻",
+  "h": "5a45ef66"
+ },
+ "js.kinhdich.gieo-hao": {
+  "t": "掷第 {next} 爻",
+  "h": "673a916a"
+ },
+ "js.kinhdich.gieo-que": {
+  "t": "起卦 · ",
+  "h": "b41eb665"
+ },
+ "js.kinhdich.gieo-que-kinh-dich": {
+  "t": "易经起卦 · ",
+  "h": "c0e31ebb"
+ },
+ "js.kinhdich.hao-dong": {
+  "t": "动爻：",
+  "h": "46236054"
+ },
+ "js.kinhdich.hao-dong-noi-len-dieu-gi": {
+  "t": "动爻说明了什么？",
+  "h": "4e9d2215"
+ },
+ "js.kinhdich.hao-dong-so": {
+  "t": "动爻 {val}",
+  "h": "dfc3a9b0"
+ },
+ "js.kinhdich.khong-hao-dong": {
+  "t": " (无动爻)",
+  "h": "b0233d0c"
+ },
+ "js.kinhdich.luan-que-nay-cho-cau-hoi": {
+  "t": "为我的问题解读这一卦",
+  "h": "327aeb50"
+ },
+ "js.kinhdich.nen-hanh-dong-the-nao-luc": {
+  "t": "此刻该如何行动？",
+  "h": "b1dd8b79"
+ },
+ "js.kinhdich.que-bien": {
+  "t": "，变卦 **",
+  "h": "b2123833"
+ },
+ "js.kinhdich.que-bien-cho-thay-xu-huong": {
+  "t": "变卦显示什么趋势？",
+  "h": "c06bb666"
+ },
+ "js.kinhdich.que-bien-iift": {
+  "t": "变卦：",
+  "h": "191ff122"
+ },
+ "js.kinhdich.que-chinh": {
+  "t": "本卦：",
+  "h": "516f228e"
+ },
+ "js.kinhdich.que-da-lap-que-chinh": {
+  "t": "卦已起好 — 本卦 **",
+  "h": "79f6b4e8"
+ },
+ "js.kinhdich.tap-trung-gieo-hao-dau-tien": {
+  "t": "专注心神，掷第一爻",
+  "h": "5e5106bc"
+ },
+ "js.kinhdich.toi-se-luan-theo-cau-hoi": {
+  "t": "。我会依您的问题来解读。",
+  "h": "e0c8f943"
+ },
+ "js.kymon.ban-da-lap": {
+  "t": "盘已排好 — **",
+  "h": "16637971"
+ },
+ "js.kymon.ban-ky-mon": {
+  "t": "奇门盘 · ",
+  "h": "64c75e52"
+ },
+ "js.kymon.chua-dung-duoc-anh-thu-lai": {
+  "t": "无法产生图片。请稍后几秒再试。",
+  "h": "f8055429"
+ },
+ "js.kymon.cua": {
+  "t": " — 门 ",
+  "h": "30b23b9d"
+ },
+ "js.kymon.cuc": {
+  "t": "<div><span>局</span><b>",
+  "h": "8786d6cd"
+ },
+ "js.kymon.dang-dung-anh": {
+  "t": "图片制作中…",
+  "h": "7bce9760"
+ },
+ "js.kymon.gio": {
+  "t": " · 时 ",
+  "h": "9d8fa6cf"
+ },
+ "js.kymon.gio-5bb3": {
+  "t": "时辰 ",
+  "h": "2b380a90"
+ },
+ "js.kymon.gio-nay-hop-lam-viec-gi": {
+  "t": "这个时辰最适合做什么事？",
+  "h": "74b7e572"
+ },
+ "js.kymon.gio-ngay": {
+  "t": "<div><span>时辰 · 日</span><b>",
+  "h": "76c00c41"
+ },
+ "js.kymon.huong-do-nhat": {
+  "t": "最佳方位：",
+  "h": "0720a2bf"
+ },
+ "js.kymon.huong-nao-phai-tranh-va-vi": {
+  "t": "哪些方位必须避开，为什么？",
+  "h": "ac2dbbcc"
+ },
+ "js.kymon.huong-xep-hang-cao-nhat-la": {
+  "t": " 排名最高的方位是 **",
+  "h": "abc77c37"
+ },
+ "js.kymon.khong-dung-duoc-ban": {
+  "t": "无法排盘。",
+  "h": "925f4f75"
+ },
+ "js.kymon.khong-dung-duoc-ban-ky-mon": {
+  "t": "无法排奇门盘。",
+  "h": "c30586ea"
+ },
+ "js.kymon.ky-mon": {
+  "t": "奇门 · ",
+  "h": "d3a48969"
+ },
+ "js.kymon.ngay": {
+  "t": " 日 ",
+  "h": "c6e08941"
+ },
+ "js.kymon.quet-ma-lap-ban-cua-ban": {
+  "t": "扫描 QR 码——排出你的盘",
+  "h": "afc18d97"
+ },
+ "js.kymon.tiet": {
+  "t": "**，节气 ",
+  "h": "6b1922aa"
+ },
+ "js.kymon.tiet-6pzm": {
+  "t": " · 节气 ",
+  "h": "220b1eff"
+ },
+ "js.kymon.tiet-khi": {
+  "t": "<div><span>节气</span><b>",
+  "h": "539fd505"
+ },
+ "js.kymon.toi-se-luan-theo-viec-ban": {
+  "t": " 我会依您所问的事来解读。",
+  "h": "58e203d6"
+ },
+ "js.kymon.truc-phu": {
+  "t": "，值符 **",
+  "h": "16c60f0e"
+ },
+ "js.kymon.truc-phu-truc-su": {
+  "t": "<div><span>值符 · 值使</span><b>",
+  "h": "6ccf5eea"
+ },
+ "js.kymon.truc-phu-truc-su-noi-len": {
+  "t": "值符值使说明了什么？",
+  "h": "c69b295c"
+ },
+ "js.kymon.truc-su": {
+  "t": "**，值使 **",
+  "h": "fae13856"
+ },
+ "js.kymon.viec-cua-toi-nen-di-huong": {
+  "t": "我这件事该往哪个方位走？",
+  "h": "72ff459d"
+ },
+ "js.kymon.viec-hoi": {
+  "t": "所问之事：「",
+  "h": "84ccbabf"
+ },
  "js.laso.dang-an-sao": {
   "t": "安星中...",
   "h": "06275197"
@@ -1986,6 +2178,90 @@
  "js.luangiai.xem-la-so-day-du": {
   "t": "▸ 查看完整命盘",
   "h": "fee98465"
+ },
+ "js.maihoa.bien-quai-noi-ket-cuc-the": {
+  "t": "变卦说明了怎样的结局？",
+  "h": "3c27069a"
+ },
+ "js.maihoa.cach-ra-que": {
+  "t": "<div class=\"mh-buoc\"><b>起卦方式：</b> ",
+  "h": "0fd969d5"
+ },
+ "js.maihoa.cau-hoi": {
+  "t": "问题：「",
+  "h": "16a3ebd1"
+ },
+ "js.maihoa.chua-dung-duoc-anh-thu-lai": {
+  "t": "无法产生图片。请稍后几秒再试。",
+  "h": "f8055429"
+ },
+ "js.maihoa.cua-que-chinh-tham-khao-them": {
+  "t": " ——本卦的爻辞，可再参考</div><div class=\"han\">",
+  "h": "6c02237a"
+ },
+ "js.maihoa.dang-dung-anh": {
+  "t": "图片制作中…",
+  "h": "7bce9760"
+ },
+ "js.maihoa.dung": {
+  "t": "），用 **",
+  "h": "139b0c3c"
+ },
+ "js.maihoa.hao-dong-la-hao": {
+  "t": " 动爻为第 ",
+  "h": "b6c66ef2"
+ },
+ "js.maihoa.ho-quai-cho-thay-khuc-giua": {
+  "t": "互卦显示中段的发展如何？",
+  "h": "640af3c9"
+ },
+ "js.maihoa.ket-luan": {
+  "t": "结论：",
+  "h": "fe16dfe1"
+ },
+ "js.maihoa.khong-lap-duoc-que": {
+  "t": "无法起卦。",
+  "h": "7181f9c7"
+ },
+ "js.maihoa.luan-que-nay-cho-cau-hoi": {
+  "t": "为我的问题解读这一卦",
+  "h": "327aeb50"
+ },
+ "js.maihoa.mai-hoa-dich-so": {
+  "t": "梅花易数 · ",
+  "h": "f9124d22"
+ },
+ "js.maihoa.que-chinh": {
+  "t": "本卦：",
+  "h": "516f228e"
+ },
+ "js.maihoa.que-chinh-fc": {
+  "t": "本卦 · ",
+  "h": "8316c7f3"
+ },
+ "js.maihoa.que-da-lap-the": {
+  "t": "卦已起好 — 体 **",
+  "h": "92a897ba"
+ },
+ "js.maihoa.quet-ma-gieo-que-cua-ban": {
+  "t": "扫描 QR 码——起你自己的卦",
+  "h": "bd5366dc"
+ },
+ "js.maihoa.the-bi-dung-khac-thi-nen": {
+  "t": "体被用克时该怎么办？",
+  "h": "197d34a9"
+ },
+ "js.maihoa.toi-se-luan-theo-cau-hoi": {
+  "t": "**。我会依您的问题来解读。",
+  "h": "f2bafbac"
+ },
+ "js.maihoa.tranh-que": {
+  "t": "卦图：",
+  "h": "6988d99c"
+ },
+ "js.maihoa.tuc": {
+  "t": "），即 **",
+  "h": "52e6128d"
  },
  "js.nav.brand": {
   "t": "明宝紫微斗数",
@@ -4343,6 +4619,110 @@
   "t": "iPhone / Mac",
   "h": "9a2b7d51"
  },
+ "js.shellui.kdx-dang-doc": {
+  "t": "解读中",
+  "h": "8932239a"
+ },
+ "js.shellui.kdx-dung-cuu": {
+  "t": "用九",
+  "h": "8634105f"
+ },
+ "js.shellui.kdx-dung-luc": {
+  "t": "用六",
+  "h": "193bcf88"
+ },
+ "js.shellui.kdx-fb-canh": {
+  "t": "⚠ 宜谨慎",
+  "h": "250c4761"
+ },
+ "js.shellui.kdx-fb-tot": {
+  "t": "✦ 吉",
+  "h": "8979e6d2"
+ },
+ "js.shellui.kdx-fb-trung": {
+  "t": "◆ 平",
+  "h": "603a1ad6"
+ },
+ "js.shellui.kdx-hao-n": {
+  "t": "第 {n} 爻",
+  "h": "76351efb"
+ },
+ "js.shellui.kdx-khong-hao-dong": {
+  "t": "无动爻<br>情势稳定<br>仅读本卦",
+  "h": "7fe9390d"
+ },
+ "js.shellui.kdx-lam-chu": {
+  "t": " · 为主",
+  "h": "5f3d7276"
+ },
+ "js.shellui.kdx-loi-que": {
+  "t": "卦辞",
+  "h": "5e731083"
+ },
+ "js.shellui.kdx-luat-0": {
+  "t": "无动爻——只读本卦的卦辞。",
+  "h": "be9a7385"
+ },
+ "js.shellui.kdx-luat-1": {
+  "t": "一个动爻——读第 {a} 爻的爻辞。",
+  "h": "d39e3ef6"
+ },
+ "js.shellui.kdx-luat-2": {
+  "t": "两个动爻——两爻的爻辞皆读，以上方的第 {a} 爻为主。",
+  "h": "ca24ccf6"
+ },
+ "js.shellui.kdx-luat-3": {
+  "t": "三个动爻——不读任何爻；读本卦与变卦的卦辞，以本卦为主。",
+  "h": "627d32e2"
+ },
+ "js.shellui.kdx-luat-4": {
+  "t": "四个动爻——读变卦中两个不动之爻（第 {a} 爻与第 {b} 爻）的爻辞，以下方的第 {a} 爻为主。",
+  "h": "ae45a84f"
+ },
+ "js.shellui.kdx-luat-5": {
+  "t": "五个动爻——读变卦中唯一不动之爻（第 {a} 爻）的爻辞。",
+  "h": "67f7d97a"
+ },
+ "js.shellui.kdx-luat-6": {
+  "t": "六个动爻——读变卦的卦辞。",
+  "h": "10a6bd9d"
+ },
+ "js.shellui.kdx-luat-6c": {
+  "t": "六个动爻，纯乾卦——读「用九」之辞。",
+  "h": "094a2f2f"
+ },
+ "js.shellui.kdx-luat-6k": {
+  "t": "六个动爻，纯坤卦——读「用六」之辞。",
+  "h": "1926530a"
+ },
+ "js.shellui.kdx-nguon-doc": {
+  "t": "依<i>《考变占》</i>（朱熹，<i>《易学启蒙》</i>）之法——动爻数决定读卦辞或爻辞，以及读本卦或变卦。",
+  "h": "f89320ca"
+ },
+ "js.shellui.kdx-que-bien": {
+  "t": "变卦",
+  "h": "67273d51"
+ },
+ "js.shellui.kdx-que-bien-p": {
+  "t": "（变卦）",
+  "h": "1f867cc2"
+ },
+ "js.shellui.kdx-que-bien-xh": {
+  "t": "变卦（趋势）",
+  "h": "091377d9"
+ },
+ "js.shellui.kdx-que-chinh": {
+  "t": "本卦",
+  "h": "56bf3175"
+ },
+ "js.shellui.kdx-so-hao-dong": {
+  "t": "{n} 个动爻",
+  "h": "973e6fbd"
+ },
+ "js.shellui.kdx-tranh-que": {
+  "t": "{que}卦图",
+  "h": "4d8db49c"
+ },
  "js.shellui.ket-qua": {
   "t": "结果",
   "h": "c9f95514"
@@ -4574,6 +4954,110 @@
  "js.shellui.km-truc": {
   "t": "值{than}",
   "h": "cd8af7d6"
+ },
+ "js.shellui.kmx-chu-ban": {
+  "t": "盘依洛书绘制，<b>南在上</b>——合乎古法，与一般地图相反。每格：门（大字行）· 天盘星与神 · 天盘干（<b>粗体</b>）叠在地盘干（<i>斜体</i>）之上。<b>#n</b> 是九宫中的相对名次，并非吉凶判定。",
+  "h": "8010514a"
+ },
+ "js.shellui.kmx-chu-bang": {
+  "t": "<b>Engine</b> 栏是古法演算的吉凶判定。<b>分数</b>栏是页面计算的相对名次，目的是永远能指出最好的方位——公式：吉门 +3 / 凶门 −3，星与神 ±2，三奇 +2，每个吉格 +1、每个凶格 −1。以一整年 366 个盘实测，引擎判为吉的宫位只出现在 26.5% 的盘中，所以若只看 Engine 栏，多数时候盘面都在说「去哪都不好」。",
+  "h": "839c2367"
+ },
+ "js.shellui.kmx-khong-cua": {
+  "t": "无门",
+  "h": "c1f2927e"
+ },
+ "js.shellui.kmx-nghia-canh": {
+  "t": "显露、文书、考试、消息、广告",
+  "h": "921e6c41"
+ },
+ "js.shellui.kmx-nghia-do": {
+  "t": "闭塞、隐藏、回避，宜密事",
+  "h": "ad1a5167"
+ },
+ "js.shellui.kmx-nghia-huu": {
+  "t": "休息、和谐、求人相助、事情平顺",
+  "h": "b1fd265f"
+ },
+ "js.shellui.kmx-nghia-khai": {
+  "t": "开展、起事、交易、谒见有权之人",
+  "h": "451cf90c"
+ },
+ "js.shellui.kmx-nghia-kinh": {
+  "t": "惊恐、是非、口舌、突发之事",
+  "h": "dd92fabc"
+ },
+ "js.shellui.kmx-nghia-sinh": {
+  "t": "生利、求财、买卖、开张",
+  "h": "d8d8805c"
+ },
+ "js.shellui.kmx-nghia-thuong": {
+  "t": "受伤、争执、讨债、诉讼",
+  "h": "4994840e"
+ },
+ "js.shellui.kmx-nghia-tu": {
+  "t": "停滞、丧事、安葬、死板不动之事",
+  "h": "1ae93312"
+ },
+ "js.shellui.kmx-ps-quote-0": {
+  "t": "此时辰最佳方位：{huong}——无门。",
+  "h": "d2e6c7b9"
+ },
+ "js.shellui.kmx-ps-quote-n": {
+  "t": "此时辰最佳方位：{huong}——{cua}，{nghia}。",
+  "h": "db609f76"
+ },
+ "js.shellui.kmx-ps-sub": {
+  "t": "{tiet} {nguyen} · {gio}时 {ngay}日",
+  "h": "c4354592"
+ },
+ "js.shellui.kmx-ps-title": {
+  "t": "奇门遁甲——{cuc}",
+  "h": "6d14f8e2"
+ },
+ "js.shellui.kmx-th-cua": {
+  "t": "门",
+  "h": "91846f69"
+ },
+ "js.shellui.kmx-th-diem": {
+  "t": "分数",
+  "h": "024af419"
+ },
+ "js.shellui.kmx-th-huong": {
+  "t": "方位",
+  "h": "05c861c1"
+ },
+ "js.shellui.kmx-th-visao": {
+  "t": "原因",
+  "h": "497ad536"
+ },
+ "js.shellui.kmx-viec-nghi": {
+  "t": "休养、求安、修复关系",
+  "h": "75edf4cb"
+ },
+ "js.shellui.kmx-viec-nghi-nan": {
+  "t": "休养、求安、人际关系；遇难则求贵人",
+  "h": "60b37686"
+ },
+ "js.shellui.kmx-viec-quan": {
+  "t": "求官职、事业、求职",
+  "h": "2240b624"
+ },
+ "js.shellui.kmx-viec-quan-nan": {
+  "t": "求官职、事业、求职；遇难则求贵人",
+  "h": "f4047a44"
+ },
+ "js.shellui.kmx-viec-tai": {
+  "t": "求财、合作、投资",
+  "h": "263dd716"
+ },
+ "js.shellui.kmx-viec-tai-nan": {
+  "t": "求财、合作、投资；遇难则求贵人",
+  "h": "57a7dae7"
+ },
+ "js.shellui.kmx-viec-tranh": {
+  "t": "宜避开此方位",
+  "h": "edcc5081"
  },
  "js.shellui.ky-hop-dong-gio-nao-hop": {
   "t": "几点签约比较合适？",
@@ -4870,6 +5354,94 @@
  "js.shellui.menh-sinh-ngay-hao-ton-chut": {
   "t": "命生日 — 略有耗损，仍然吉利",
   "h": "995978d5"
+ },
+ "js.shellui.mhx-c-bien": {
+  "t": "变卦",
+  "h": "b437a684"
+ },
+ "js.shellui.mhx-c-chinh": {
+  "t": "本卦",
+  "h": "d3c2c1d8"
+ },
+ "js.shellui.mhx-c-ho": {
+  "t": "互卦",
+  "h": "6f004dc7"
+ },
+ "js.shellui.mhx-chu-chang": {
+  "t": "三个阶段依序阅读：本卦是当前的处境，互卦是问卦者常常料想不到的中间阶段，变卦是事情的归宿。哪个阶段体被用所克，那就是该阶段的症结。",
+  "h": "03f63773"
+ },
+ "js.shellui.mhx-err-doi": {
+  "t": "无法将国历日期转换为农历。",
+  "h": "a645f9f1"
+ },
+ "js.shellui.mhx-err-gieo": {
+  "t": "无法起卦。",
+  "h": "eabfd409"
+ },
+ "js.shellui.mhx-err-lich": {
+  "t": "无法加载农历（tuvi-ansao-engine.js）。",
+  "h": "1122cd79"
+ },
+ "js.shellui.mhx-err-lon": {
+  "t": "数字太大——请使用 12 位数以内的数字。",
+  "h": "bd20c108"
+ },
+ "js.shellui.mhx-err-so": {
+  "t": "请输入一个正整数。",
+  "h": "5d631bad"
+ },
+ "js.shellui.mhx-mota-gio": {
+  "t": "年支 {chi}（{chiIdx}）＋ 农历月 {thang} ＋ 日 {ngay} ＝ {tong}，除以 8 余 {du8} → 上卦；再加时支 {gio}（{gioIdx}）＝ {tongD}，除以 8 余 {du8d} → 下卦，除以 6 余 {du6} → 动爻。",
+  "h": "6d26b0b4"
+ },
+ "js.shellui.mhx-mota-so": {
+  "t": "数字 {n} 除以 8 余 {du8} → 上卦；{n} ＋ 时支 {gio}（{gioIdx}）＝ {tong} → 下卦与动爻。",
+  "h": "298e8ce3"
+ },
+ "js.shellui.mhx-p-dung": {
+  "t": "用",
+  "h": "a5a3c26b"
+ },
+ "js.shellui.mhx-p-the": {
+  "t": "体",
+  "h": "1a9e0157"
+ },
+ "js.shellui.mhx-ps-sub": {
+  "t": "体 {the} {theH} · 用 {dung} {dungH} — {kl}",
+  "h": "75583665"
+ },
+ "js.shellui.mhx-ps-title": {
+  "t": "{ten}卦",
+  "h": "51dff5b3"
+ },
+ "js.shellui.mhx-ps-title2": {
+  "t": "{ten}卦 → {bien}",
+  "h": "676652b0"
+ },
+ "js.shellui.mhx-td": {
+  "t": "体 {the}（{theH}）· 用 {dung}（{dungH}）",
+  "h": "7ab82a19"
+ },
+ "js.shellui.mhx-vai-dung": {
+  "t": "用 · 事",
+  "h": "70792141"
+ },
+ "js.shellui.mhx-vai-the": {
+  "t": "体 · 自己",
+  "h": "d540ee00"
+ },
+ "js.shellui.mhx-y-bien": {
+  "t": "结局走向何处",
+  "h": "56db0d14"
+ },
+ "js.shellui.mhx-y-chinh": {
+  "t": "当前的处境",
+  "h": "4b8e8934"
+ },
+ "js.shellui.mhx-y-ho": {
+  "t": "中间的演变",
+  "h": "5a858474"
  },
  "js.shellui.minh-bao-nguoi-dan-duong": {
   "t": "明宝 · 引路人",
@@ -7043,6 +7615,146 @@
   "t": "只需出生年，快速判断两人的生肖是否相合——立即得到答案，不必深入解读。",
   "h": "ee011392"
  },
+ "kinhdich.1-gieo-que": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">起卦</span>",
+  "h": "bf868703"
+ },
+ "kinhdich.bam-de-bat-dau-gieo-que": {
+  "t": "按下开始起卦——共掷 6 次，每次决定一个爻",
+  "h": "5f61aa02"
+ },
+ "kinhdich.gieo-du-6-lan-bang-dong": {
+  "t": "以铜钱掷满 6 次，系统自动判定动爻，并从 64 卦中查出对应的卦——提供本卦、变卦与卦辞供论断。",
+  "h": "16e0aad0"
+ },
+ "kinhdich.gieo-que-kinh-dich-64-que": {
+  "t": "以三枚铜钱起 64 卦易经卦——含本卦、动爻、变卦与卦辞。请老师依你的问题论断。",
+  "h": "0f696c0b"
+ },
+ "kinhdich.hao-dong-ro-rang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"zap\"></span><span>动爻<br>清楚</span>",
+  "h": "36347db6"
+ },
+ "kinhdich.kinh-dich-chu-dich-la-mot": {
+  "t": "易经（周易）是中国最经典的古籍之一，以阴阳爻组合而成的 64 卦来论断事情的变化。以三枚铜钱起卦，是选出对应所问之卦最常见的方法之一。",
+  "h": "1e3cfe6a"
+ },
+ "kinhdich.kinh-dich-gieo-que": {
+  "t": "易经——起卦",
+  "h": "665be6f0"
+ },
+ "kinhdich.kinh-dich-gieo-que-chu-dich": {
+  "t": "<b>易经——起卦</b><span>周易 64 卦 · 三枚铜钱</span>",
+  "h": "7a49085a"
+ },
+ "kinhdich.kinh-dich-gieo-que-tu-vi": {
+  "t": "易经——起卦——明宝紫微斗数",
+  "h": "be561984"
+ },
+ "kinhdich.loi-que-hao-tu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>卦辞、<br>爻辞</span>",
+  "h": "49312043"
+ },
+ "kinhdich.que-chinh-que-bien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"aperture\"></span><span>本卦<br>与变卦</span>",
+  "h": "cbebb740"
+ },
+ "kinhdich.que-dang-hinh-thanh-tu-duoi": {
+  "t": "卦正在成形（由下而上）",
+  "h": "e51d5547"
+ },
+ "kinhdich.tap-trung-gieo-hao-dau-tien": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"aperture\"></span><b id=\"tossBtnLabel\">专注心神，掷第一爻</b></span>",
+  "h": "29a2de26"
+ },
+ "kinhdich.truoc-mot-quyet-dinh-kho-nguoi": {
+  "t": "面对艰难的决定，古人不凭空臆测，而是起卦问天意。专注于你正在犹豫的事，掷三枚铜钱，获得切合当下处境的古老忠告。",
+  "h": "5a1d9ee8"
+ },
+ "kinhdich.vd-cong-viec-sap-toi-cua": {
+  "t": "例如：我接下来的工作会如何？",
+  "h": "75b989e2"
+ },
+ "kymon.1-lap-ban": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">排盘</span>",
+  "h": "77b8dfda"
+ },
+ "kymon.ban-9-cung-day-du": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>完整的<br>九宫盘</span>",
+  "h": "5e9e1cc7"
+ },
+ "kymon.de-trong-thoi-diem-la-lay": {
+  "t": "时间留空即取现在时刻。系统排出九宫盘，并提供局数、值符与值使，以及各宫的详细内容。",
+  "h": "75433dd8"
+ },
+ "kymon.gio-tot-cho-viec": {
+  "t": "<span class=\"hp-ic\" data-icon=\"clock\"></span><span>适合行事的<br>吉时</span>",
+  "h": "9361b67c"
+ },
+ "kymon.hoi-thay-luan-ban-theo-viec": {
+  "t": "✦ 请老师依我的事论盘",
+  "h": "8e8842e4"
+ },
+ "kymon.huong-nen-di-huong-nen-tranh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>宜行的方位、<br>宜避的方位</span>",
+  "h": "92fd7884"
+ },
+ "kymon.ky-mon-don-giap": {
+  "t": "奇门遁甲",
+  "h": "857ee290"
+ },
+ "kymon.ky-mon-don-giap-ban-9": {
+  "t": "奇门遁甲——九宫盘——明宝紫微斗数",
+  "h": "804e2f7a"
+ },
+ "kymon.ky-mon-don-giap-ban-9-hlor": {
+  "t": "<b>奇门遁甲</b><span>九宫盘 · 八门 · 九星 · 八神</span>",
+  "h": "8bd844e9"
+ },
+ "kymon.ky-mon-don-giap-khong-tra": {
+  "t": "奇门遁甲不是泛泛查找，而是依当下时刻排出准确的九宫盘，直接指出眼前这件事该往哪个方位。立刻排盘，掌握你需要时的吉时与有利方位。",
+  "h": "44004989"
+ },
+ "kymon.ky-mon-don-giap-la-mot": {
+  "t": "奇门遁甲与太乙、六壬并称中国古代术数的「三式」。奇门盘依当下时辰的干支排出，配合九宫、八门与九星，指出适合某件具体事务的时机与方位。",
+  "h": "a538cb61"
+ },
+ "kymon.lap-ban-cho-mot-thoi-diem": {
+  "t": "为某个时刻排盘",
+  "h": "56ac40df"
+ },
+ "kymon.lap-ban-khac": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"rotate-cw\"></span><b>重新排盘</b></span>",
+  "h": "19849756"
+ },
+ "kymon.lap-ban-ky-mon": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"layout-grid\"></span><b>排奇门盘</b></span>",
+  "h": "2697f4a9"
+ },
+ "kymon.lap-ban-ky-mon-don-giap": {
+  "t": "依时辰排奇门遁甲盘——八门、九星、八神、三奇布于九宫。哪个方位宜行、哪个宜避。请老师依你的事论断。",
+  "h": "ee8b191e"
+ },
+ "kymon.lap-lai": {
+  "t": "重新排盘",
+  "h": "5370aded"
+ },
+ "kymon.tai-anh-chia-se-9-16": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"save\"></span><b id=\"taiBtnLabel\">下载分享图（9:16）</b></span>",
+  "h": "5f3a9343"
+ },
+ "kymon.thoi-diem-de-trong-bay-gio": {
+  "t": "时间（留空＝现在）",
+  "h": "b29345d0"
+ },
+ "kymon.vd-chieu-nay-di-gap-doi": {
+  "t": "例如：今天下午要去见合作伙伴，该往哪个方位？",
+  "h": "644a87b7"
+ },
+ "kymon.viec-muon-hoi-tuy-chon": {
+  "t": "想问的事（选填）",
+  "h": "680649e1"
+ },
  "laso.2026-tuviminhbao-com-all-rights-reserved": {
   "t": "© 2026 tuviminhbao.com — 版权所有",
   "h": "5772fefb"
@@ -7262,6 +7974,94 @@
  "luangiai.tu-vi-khong-du-doan-tuong": {
   "t": "紫微不是用来预测未来，而是帮助您了解自己，做出更好的选择。",
   "h": "ae92de9d"
+ },
+ "maihoa.1-lap-que": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">起卦</span>",
+  "h": "b51a3df6"
+ },
+ "maihoa.ba-chang-chinh-ho-bien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>三个阶段<br>本卦–互卦–变卦</span>",
+  "h": "0ccec2d4"
+ },
+ "maihoa.cau-hoi-tuy-chon": {
+  "t": "问题（选填）",
+  "h": "645f5819"
+ },
+ "maihoa.con-so-nay-ra-trong-dau": {
+  "t": "脑中忽然浮现的数字",
+  "h": "e65a46a7"
+ },
+ "maihoa.gieo-bang-mot-con-so": {
+  "t": "以数字起卦",
+  "h": "9e53c84b"
+ },
+ "maihoa.gieo-lai": {
+  "t": "重新起卦",
+  "h": "6c124c14"
+ },
+ "maihoa.gieo-que-khac": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"rotate-cw\"></span><b>重新起卦</b></span>",
+  "h": "1eed908e"
+ },
+ "maihoa.gieo-que-mai-hoa-dich-so": {
+  "t": "以数字或时刻起梅花易数卦——体卦、用卦与五行生克，经本卦、互卦、变卦三个阶段呈现。请老师依问题论断。",
+  "h": "81547445"
+ },
+ "maihoa.gieo-theo-gio-hien-tai-hoac": {
+  "t": "依现在时辰或一个数字起卦——系统排出体、用二卦，判定动爻，并提供爻辞供论断。",
+  "h": "0b36b3f2"
+ },
+ "maihoa.gieo-theo-thoi-diem-nay": {
+  "t": "以此刻起卦",
+  "h": "00972cbe"
+ },
+ "maihoa.hao-tu-loi-luan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>爻辞与<br>论断</span>",
+  "h": "959217eb"
+ },
+ "maihoa.hoi-thay-luan-que-theo-cau": {
+  "t": "✦ 请老师依问题论卦",
+  "h": "f13e6c1b"
+ },
+ "maihoa.lap-que": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"flower\"></span><b>起卦</b></span>",
+  "h": "dedaeff1"
+ },
+ "maihoa.mai-hoa-dich-so": {
+  "t": "梅花易数",
+  "h": "9093e560"
+ },
+ "maihoa.mai-hoa-dich-so-gieo-que": {
+  "t": "梅花易数——起卦——明宝紫微斗数",
+  "h": "7780e00b"
+ },
+ "maihoa.mai-hoa-dich-so-la-phuong": {
+  "t": "梅花易数相传由宋代邵康节奠基，以易经为本，但可从任意数字、时刻或事件快速起卦。卦分为体与用，用以论断事情的演变。",
+  "h": "35d69496"
+ },
+ "maihoa.mai-hoa-dich-so-the-dung": {
+  "t": "<b>梅花易数</b><span>体 · 用 · 三阶段 本卦–互卦–变卦</span>",
+  "h": "39147698"
+ },
+ "maihoa.mot-con-so-bat-chot-nghi": {
+  "t": "忽然想到的一个数字，也可以是一个易卦的开端。输入该数字，或交由系统取现在时辰，即可得到体、用二卦，以及针对你所问之事的论断。",
+  "h": "201f081c"
+ },
+ "maihoa.que-the-dung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"flower\"></span><span>体卦<br>与用卦</span>",
+  "h": "d2a7a4e8"
+ },
+ "maihoa.thanh-tam-nghi-ve-viec-muon": {
+  "t": "诚心思考你想问的事",
+  "h": "17259cfa"
+ },
+ "maihoa.vd-27": {
+  "t": "例如：27",
+  "h": "4afd7b36"
+ },
+ "maihoa.vd-viec-chuyen-cho-lam-nay": {
+  "t": "例如：这次换工作好吗？",
+  "h": "ec1b3e52"
  },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">输入出生年</span>",

@@ -1759,6 +1759,198 @@
   "t": "相冲 ",
   "h": "e92ab4fa"
  },
+ "js.kinhdich.bam-de-bat-dau-gieo-que": {
+  "t": "押すと卦立てを開始します——6回投げ、1回につき1つの爻が決まります",
+  "h": "5f61aa02"
+ },
+ "js.kinhdich.cau-hoi": {
+  "t": "質問：\"",
+  "h": "16a3ebd1"
+ },
+ "js.kinhdich.da-du-6-hao-dang-xem": {
+  "t": "6爻がそろいました——卦を表示しています…",
+  "h": "f181b6af"
+ },
+ "js.kinhdich.da-gieo-hao": {
+  "t": "{step}/6 爻を投げました——押すと第{next}爻を投げます",
+  "h": "5a45ef66"
+ },
+ "js.kinhdich.gieo-hao": {
+  "t": "第{next}爻を投げる",
+  "h": "673a916a"
+ },
+ "js.kinhdich.gieo-que": {
+  "t": "卦を立てる · ",
+  "h": "b41eb665"
+ },
+ "js.kinhdich.gieo-que-kinh-dich": {
+  "t": "易経の卦立て · ",
+  "h": "c0e31ebb"
+ },
+ "js.kinhdich.hao-dong": {
+  "t": "動爻：",
+  "h": "46236054"
+ },
+ "js.kinhdich.hao-dong-noi-len-dieu-gi": {
+  "t": "動爻は何を示していますか？",
+  "h": "4e9d2215"
+ },
+ "js.kinhdich.hao-dong-so": {
+  "t": "動爻 {val}",
+  "h": "dfc3a9b0"
+ },
+ "js.kinhdich.khong-hao-dong": {
+  "t": "（動爻なし）",
+  "h": "b0233d0c"
+ },
+ "js.kinhdich.luan-que-nay-cho-cau-hoi": {
+  "t": "この卦を、私の質問に当てはめて鑑定してください",
+  "h": "327aeb50"
+ },
+ "js.kinhdich.nen-hanh-dong-the-nao-luc": {
+  "t": "今、どう動くべきですか？",
+  "h": "b1dd8b79"
+ },
+ "js.kinhdich.que-bien": {
+  "t": "、変卦：**",
+  "h": "b2123833"
+ },
+ "js.kinhdich.que-bien-cho-thay-xu-huong": {
+  "t": "変卦はどんな流れを示していますか？",
+  "h": "c06bb666"
+ },
+ "js.kinhdich.que-bien-iift": {
+  "t": "変卦：",
+  "h": "191ff122"
+ },
+ "js.kinhdich.que-chinh": {
+  "t": "本卦：",
+  "h": "516f228e"
+ },
+ "js.kinhdich.que-da-lap-que-chinh": {
+  "t": "卦を立てました — 本卦：**",
+  "h": "79f6b4e8"
+ },
+ "js.kinhdich.tap-trung-gieo-hao-dau-tien": {
+  "t": "心を集中して初爻を投げる",
+  "h": "5e5106bc"
+ },
+ "js.kinhdich.toi-se-luan-theo-cau-hoi": {
+  "t": "。ご質問に沿って鑑定します。",
+  "h": "e0c8f943"
+ },
+ "js.kymon.ban-da-lap": {
+  "t": "盤を立てました — **",
+  "h": "16637971"
+ },
+ "js.kymon.ban-ky-mon": {
+  "t": "奇門盤 · ",
+  "h": "64c75e52"
+ },
+ "js.kymon.chua-dung-duoc-anh-thu-lai": {
+  "t": "画像を作成できませんでした。少し待ってから、もう一度お試しください。",
+  "h": "f8055429"
+ },
+ "js.kymon.cua": {
+  "t": " — 門 ",
+  "h": "30b23b9d"
+ },
+ "js.kymon.cuc": {
+  "t": "<div><span>局</span><b>",
+  "h": "8786d6cd"
+ },
+ "js.kymon.dang-dung-anh": {
+  "t": "画像を作成中…",
+  "h": "7bce9760"
+ },
+ "js.kymon.gio": {
+  "t": " · 時辰 ",
+  "h": "9d8fa6cf"
+ },
+ "js.kymon.gio-5bb3": {
+  "t": "時刻 ",
+  "h": "2b380a90"
+ },
+ "js.kymon.gio-nay-hop-lam-viec-gi": {
+  "t": "この時刻は何をするのに最も向いていますか？",
+  "h": "74b7e572"
+ },
+ "js.kymon.gio-ngay": {
+  "t": "<div><span>時刻 · 日</span><b>",
+  "h": "76c00c41"
+ },
+ "js.kymon.huong-do-nhat": {
+  "t": "最良の方位：",
+  "h": "0720a2bf"
+ },
+ "js.kymon.huong-nao-phai-tranh-va-vi": {
+  "t": "避けるべき方位とその理由は？",
+  "h": "ac2dbbcc"
+ },
+ "js.kymon.huong-xep-hang-cao-nhat-la": {
+  "t": " 最も評価の高い方位は**",
+  "h": "abc77c37"
+ },
+ "js.kymon.khong-dung-duoc-ban": {
+  "t": "盤を作成できませんでした。",
+  "h": "925f4f75"
+ },
+ "js.kymon.khong-dung-duoc-ban-ky-mon": {
+  "t": "奇門盤を作成できませんでした。",
+  "h": "c30586ea"
+ },
+ "js.kymon.ky-mon": {
+  "t": "奇門遁甲 · ",
+  "h": "d3a48969"
+ },
+ "js.kymon.ngay": {
+  "t": " 日 ",
+  "h": "c6e08941"
+ },
+ "js.kymon.quet-ma-lap-ban-cua-ban": {
+  "t": "QRコードを読み取って、あなたの盤を立てましょう",
+  "h": "afc18d97"
+ },
+ "js.kymon.tiet": {
+  "t": "**、節気：",
+  "h": "6b1922aa"
+ },
+ "js.kymon.tiet-6pzm": {
+  "t": " · 節気 ",
+  "h": "220b1eff"
+ },
+ "js.kymon.tiet-khi": {
+  "t": "<div><span>節気</span><b>",
+  "h": "539fd505"
+ },
+ "js.kymon.toi-se-luan-theo-viec-ban": {
+  "t": " ご質問の内容に沿って鑑定します。",
+  "h": "58e203d6"
+ },
+ "js.kymon.truc-phu": {
+  "t": "、値符：**",
+  "h": "16c60f0e"
+ },
+ "js.kymon.truc-phu-truc-su": {
+  "t": "<div><span>値符 · 値使</span><b>",
+  "h": "6ccf5eea"
+ },
+ "js.kymon.truc-phu-truc-su-noi-len": {
+  "t": "値符・値使は何を示していますか？",
+  "h": "c69b295c"
+ },
+ "js.kymon.truc-su": {
+  "t": "**、値使：**",
+  "h": "fae13856"
+ },
+ "js.kymon.viec-cua-toi-nen-di-huong": {
+  "t": "私の用件には、どの方位へ行くとよいですか？",
+  "h": "72ff459d"
+ },
+ "js.kymon.viec-hoi": {
+  "t": "尋ねる用件：\"",
+  "h": "84ccbabf"
+ },
  "js.laso.dang-an-sao": {
   "t": "星を配置中...",
   "h": "06275197"
@@ -1986,6 +2178,90 @@
  "js.luangiai.xem-la-so-day-du": {
   "t": "▸ 命盤の全体を見る",
   "h": "fee98465"
+ },
+ "js.maihoa.bien-quai-noi-ket-cuc-the": {
+  "t": "変卦は結末をどう示していますか？",
+  "h": "3c27069a"
+ },
+ "js.maihoa.cach-ra-que": {
+  "t": "<div class=\"mh-buoc\"><b>卦の立て方：</b> ",
+  "h": "0fd969d5"
+ },
+ "js.maihoa.cau-hoi": {
+  "t": "質問：\"",
+  "h": "16a3ebd1"
+ },
+ "js.maihoa.chua-dung-duoc-anh-thu-lai": {
+  "t": "画像を作成できませんでした。少し待ってから、もう一度お試しください。",
+  "h": "f8055429"
+ },
+ "js.maihoa.cua-que-chinh-tham-khao-them": {
+  "t": " ——本卦の爻辞、参考まで</div><div class=\"han\">",
+  "h": "6c02237a"
+ },
+ "js.maihoa.dang-dung-anh": {
+  "t": "画像を作成中…",
+  "h": "7bce9760"
+ },
+ "js.maihoa.dung": {
+  "t": "）、用 **",
+  "h": "139b0c3c"
+ },
+ "js.maihoa.hao-dong-la-hao": {
+  "t": " 動爻は第 ",
+  "h": "b6c66ef2"
+ },
+ "js.maihoa.ho-quai-cho-thay-khuc-giua": {
+  "t": "互卦は、中間の流れをどう示していますか？",
+  "h": "640af3c9"
+ },
+ "js.maihoa.ket-luan": {
+  "t": "結論：",
+  "h": "fe16dfe1"
+ },
+ "js.maihoa.khong-lap-duoc-que": {
+  "t": "卦を立てられませんでした。",
+  "h": "7181f9c7"
+ },
+ "js.maihoa.luan-que-nay-cho-cau-hoi": {
+  "t": "この卦を、私の質問に当てはめて鑑定してください",
+  "h": "327aeb50"
+ },
+ "js.maihoa.mai-hoa-dich-so": {
+  "t": "梅花易数 · ",
+  "h": "f9124d22"
+ },
+ "js.maihoa.que-chinh": {
+  "t": "本卦：",
+  "h": "516f228e"
+ },
+ "js.maihoa.que-chinh-fc": {
+  "t": "本卦 · ",
+  "h": "8316c7f3"
+ },
+ "js.maihoa.que-da-lap-the": {
+  "t": "卦を立てました — 体：**",
+  "h": "92a897ba"
+ },
+ "js.maihoa.quet-ma-gieo-que-cua-ban": {
+  "t": "QRコードを読み取って、あなたの卦を立てましょう",
+  "h": "bd5366dc"
+ },
+ "js.maihoa.the-bi-dung-khac-thi-nen": {
+  "t": "体が用に剋される場合は、どうすればよいですか？",
+  "h": "197d34a9"
+ },
+ "js.maihoa.toi-se-luan-theo-cau-hoi": {
+  "t": "**。ご質問に沿って鑑定します。",
+  "h": "f2bafbac"
+ },
+ "js.maihoa.tranh-que": {
+  "t": "卦図：",
+  "h": "6988d99c"
+ },
+ "js.maihoa.tuc": {
+  "t": "）、すなわち **",
+  "h": "52e6128d"
  },
  "js.nav.brand": {
   "t": "明宝紫微斗数",
@@ -4343,6 +4619,110 @@
   "t": "iPhone / Mac",
   "h": "9a2b7d51"
  },
+ "js.shellui.kdx-dang-doc": {
+  "t": "読み取り中",
+  "h": "8932239a"
+ },
+ "js.shellui.kdx-dung-cuu": {
+  "t": "用九",
+  "h": "8634105f"
+ },
+ "js.shellui.kdx-dung-luc": {
+  "t": "用六",
+  "h": "193bcf88"
+ },
+ "js.shellui.kdx-fb-canh": {
+  "t": "⚠ 要注意",
+  "h": "250c4761"
+ },
+ "js.shellui.kdx-fb-tot": {
+  "t": "✦ 吉",
+  "h": "8979e6d2"
+ },
+ "js.shellui.kdx-fb-trung": {
+  "t": "◆ 平",
+  "h": "603a1ad6"
+ },
+ "js.shellui.kdx-hao-n": {
+  "t": "第{n}爻",
+  "h": "76351efb"
+ },
+ "js.shellui.kdx-khong-hao-dong": {
+  "t": "変爻なし<br>状況は安定<br>本卦のみ読む",
+  "h": "7fe9390d"
+ },
+ "js.shellui.kdx-lam-chu": {
+  "t": " · 主",
+  "h": "5f3d7276"
+ },
+ "js.shellui.kdx-loi-que": {
+  "t": "卦辞",
+  "h": "5e731083"
+ },
+ "js.shellui.kdx-luat-0": {
+  "t": "動爻なし——本卦の卦辞のみを読みます。",
+  "h": "be9a7385"
+ },
+ "js.shellui.kdx-luat-1": {
+  "t": "動爻が1つ——第{a}爻の爻辞を読みます。",
+  "h": "d39e3ef6"
+ },
+ "js.shellui.kdx-luat-2": {
+  "t": "動爻が2つ——両方の爻辞を読み、上にある第{a}爻を主とします。",
+  "h": "ca24ccf6"
+ },
+ "js.shellui.kdx-luat-3": {
+  "t": "動爻が3つ——爻は読まず、本卦と変卦の卦辞を読み、本卦を主とします。",
+  "h": "627d32e2"
+ },
+ "js.shellui.kdx-luat-4": {
+  "t": "動爻が4つ——変卦のうち動かない2つの爻（第{a}爻と第{b}爻）の爻辞を読み、下の第{a}爻を主とします。",
+  "h": "ae45a84f"
+ },
+ "js.shellui.kdx-luat-5": {
+  "t": "動爻が5つ——変卦のうち動かない唯一の爻（第{a}爻）の爻辞を読みます。",
+  "h": "67f7d97a"
+ },
+ "js.shellui.kdx-luat-6": {
+  "t": "動爻が6つ——変卦の卦辞を読みます。",
+  "h": "10a6bd9d"
+ },
+ "js.shellui.kdx-luat-6c": {
+  "t": "動爻が6つ、乾為天——「用九」の辞を読みます。",
+  "h": "094a2f2f"
+ },
+ "js.shellui.kdx-luat-6k": {
+  "t": "動爻が6つ、坤為地——「用六」の辞を読みます。",
+  "h": "1926530a"
+ },
+ "js.shellui.kdx-nguon-doc": {
+  "t": "<i>考変占</i>（朱熹『<i>易学啓蒙</i>』）に基づく読み方——動爻の数が、卦辞を読むか爻辞を読むか、本卦で読むか変卦で読むかを決めます。",
+  "h": "f89320ca"
+ },
+ "js.shellui.kdx-que-bien": {
+  "t": "変卦",
+  "h": "67273d51"
+ },
+ "js.shellui.kdx-que-bien-p": {
+  "t": "（変卦）",
+  "h": "1f867cc2"
+ },
+ "js.shellui.kdx-que-bien-xh": {
+  "t": "変卦（趨勢）",
+  "h": "091377d9"
+ },
+ "js.shellui.kdx-que-chinh": {
+  "t": "本卦",
+  "h": "56bf3175"
+ },
+ "js.shellui.kdx-so-hao-dong": {
+  "t": "動爻{n}つ",
+  "h": "973e6fbd"
+ },
+ "js.shellui.kdx-tranh-que": {
+  "t": "{que}の卦図",
+  "h": "4d8db49c"
+ },
  "js.shellui.ket-qua": {
   "t": "結果",
   "h": "c9f95514"
@@ -4574,6 +4954,110 @@
  "js.shellui.km-truc": {
   "t": "値{than}",
   "h": "cd8af7d6"
+ },
+ "js.shellui.kmx-chu-ban": {
+  "t": "盤は洛書に従い、<b>南を上</b>にして描きます——古法どおりの描き方で、ふつうの地図とは逆です。各マス：門（大きい行）・天盤の星と神・天盤干（<b>太字</b>）と地盤干（<i>斜体</i>）。<b>#n</b> は九宮内での相対順位で、吉凶の判定ではありません。",
+  "h": "8010514a"
+ },
+ "js.shellui.kmx-chu-bang": {
+  "t": "<b>Engine</b> 列は古法アルゴリズムによる吉凶の判定です。<b>点数</b>列はページが計算する相対順位で、常に最も良い方位を示せるようにしたものです——式：吉門 +3 / 凶門 −3、星と神 ±2、三奇 +2、吉格ごとに +1、凶格ごとに −1。1年分366盤で測ると、エンジンが吉と判定する宮を持つ盤は26.5%にすぎず、Engine 列だけを読むと、盤は大半の時間「どこへ行っても悪い」と告げることになります。",
+  "h": "839c2367"
+ },
+ "js.shellui.kmx-khong-cua": {
+  "t": "門なし",
+  "h": "c1f2927e"
+ },
+ "js.shellui.kmx-nghia-canh": {
+  "t": "表に出す、文書、試験、知らせ、広告",
+  "h": "921e6c41"
+ },
+ "js.shellui.kmx-nghia-do": {
+  "t": "行き詰まり、隠す、避ける、秘め事に向く",
+  "h": "ad1a5167"
+ },
+ "js.shellui.kmx-nghia-huu": {
+  "t": "休息、調和、助けを求める、穏やかな事",
+  "h": "b1fd265f"
+ },
+ "js.shellui.kmx-nghia-khai": {
+  "t": "開く、事を始める、取引、権力者に会う",
+  "h": "451cf90c"
+ },
+ "js.shellui.kmx-nghia-kinh": {
+  "t": "驚き、是非、口舌、思いがけない事",
+  "h": "dd92fabc"
+ },
+ "js.shellui.kmx-nghia-sinh": {
+  "t": "利を生む、財を求める、売買、開業",
+  "h": "d8d8805c"
+ },
+ "js.shellui.kmx-nghia-thuong": {
+  "t": "傷つく、争い、借金の取り立て、訴訟",
+  "h": "4994840e"
+ },
+ "js.shellui.kmx-nghia-tu": {
+  "t": "停滞、葬儀、埋葬、まったく動かない事",
+  "h": "1ae93312"
+ },
+ "js.shellui.kmx-ps-quote-0": {
+  "t": "この時刻の最良の方位：{huong} —— 門なし。",
+  "h": "d2e6c7b9"
+ },
+ "js.shellui.kmx-ps-quote-n": {
+  "t": "この時刻の最良の方位：{huong} —— {cua}、{nghia}。",
+  "h": "db609f76"
+ },
+ "js.shellui.kmx-ps-sub": {
+  "t": "{tiet} {nguyen} · {gio}の刻 {ngay}の日",
+  "h": "c4354592"
+ },
+ "js.shellui.kmx-ps-title": {
+  "t": "奇門遁甲——{cuc}",
+  "h": "6d14f8e2"
+ },
+ "js.shellui.kmx-th-cua": {
+  "t": "門",
+  "h": "91846f69"
+ },
+ "js.shellui.kmx-th-diem": {
+  "t": "点数",
+  "h": "024af419"
+ },
+ "js.shellui.kmx-th-huong": {
+  "t": "方位",
+  "h": "05c861c1"
+ },
+ "js.shellui.kmx-th-visao": {
+  "t": "理由",
+  "h": "497ad536"
+ },
+ "js.shellui.kmx-viec-nghi": {
+  "t": "休養、安寧、人間関係の修復",
+  "h": "75edf4cb"
+ },
+ "js.shellui.kmx-viec-nghi-nan": {
+  "t": "休養、安寧、人間関係；災難のときは貴人に頼る",
+  "h": "60b37686"
+ },
+ "js.shellui.kmx-viec-quan": {
+  "t": "官職、キャリア、就職活動",
+  "h": "2240b624"
+ },
+ "js.shellui.kmx-viec-quan-nan": {
+  "t": "官職、キャリア、就職活動；災難のときは貴人に頼る",
+  "h": "f4047a44"
+ },
+ "js.shellui.kmx-viec-tai": {
+  "t": "財を求める、協力、投資",
+  "h": "263dd716"
+ },
+ "js.shellui.kmx-viec-tai-nan": {
+  "t": "財を求める、協力、投資；災難のときは貴人に頼る",
+  "h": "57a7dae7"
+ },
+ "js.shellui.kmx-viec-tranh": {
+  "t": "この方位は避けるのがよい",
+  "h": "edcc5081"
  },
  "js.shellui.ky-hop-dong-gio-nao-hop": {
   "t": "契約はどの時刻に結ぶと合いますか？",
@@ -4870,6 +5354,94 @@
  "js.shellui.menh-sinh-ngay-hao-ton-chut": {
   "t": "本命が日を生じる — 少し消耗するが、良い日",
   "h": "995978d5"
+ },
+ "js.shellui.mhx-c-bien": {
+  "t": "変卦",
+  "h": "b437a684"
+ },
+ "js.shellui.mhx-c-chinh": {
+  "t": "本卦",
+  "h": "d3c2c1d8"
+ },
+ "js.shellui.mhx-c-ho": {
+  "t": "互卦",
+  "h": "6f004dc7"
+ },
+ "js.shellui.mhx-chu-chang": {
+  "t": "三段階は次の順に読みます：本卦は現在の状況、互卦は尋ねる人が予想しないことの多い途中の局面、変卦は物事が行き着く先。体が用に剋される段階が、その段階のつまずきの点です。",
+  "h": "03f63773"
+ },
+ "js.shellui.mhx-err-doi": {
+  "t": "新暦の日付を旧暦に変換できませんでした。",
+  "h": "a645f9f1"
+ },
+ "js.shellui.mhx-err-gieo": {
+  "t": "卦を立てられませんでした。",
+  "h": "eabfd409"
+ },
+ "js.shellui.mhx-err-lich": {
+  "t": "旧暦を読み込めませんでした（tuvi-ansao-engine.js）。",
+  "h": "1122cd79"
+ },
+ "js.shellui.mhx-err-lon": {
+  "t": "数字が大きすぎます——12桁未満の数字を使ってください。",
+  "h": "bd20c108"
+ },
+ "js.shellui.mhx-err-so": {
+  "t": "正の整数を入力してください。",
+  "h": "5d631bad"
+ },
+ "js.shellui.mhx-mota-gio": {
+  "t": "年支 {chi}（{chiIdx}）+ 旧暦の月 {thang} + 日 {ngay} = {tong}、8で割った余り {du8} → 上卦；時支 {gio}（{gioIdx}）を加えて = {tongD}、8で割った余り {du8d} → 下卦、6で割った余り {du6} → 動爻。",
+  "h": "6d26b0b4"
+ },
+ "js.shellui.mhx-mota-so": {
+  "t": "数 {n} を8で割った余り {du8} → 上卦；{n} + 時支 {gio}（{gioIdx}）= {tong} → 下卦と動爻。",
+  "h": "298e8ce3"
+ },
+ "js.shellui.mhx-p-dung": {
+  "t": "用",
+  "h": "a5a3c26b"
+ },
+ "js.shellui.mhx-p-the": {
+  "t": "体",
+  "h": "1a9e0157"
+ },
+ "js.shellui.mhx-ps-sub": {
+  "t": "体 {the} {theH} · 用 {dung} {dungH} — {kl}",
+  "h": "75583665"
+ },
+ "js.shellui.mhx-ps-title": {
+  "t": "{ten}の卦",
+  "h": "51dff5b3"
+ },
+ "js.shellui.mhx-ps-title2": {
+  "t": "{ten}の卦 → {bien}",
+  "h": "676652b0"
+ },
+ "js.shellui.mhx-td": {
+  "t": "体 {the}（{theH}）· 用 {dung}（{dungH}）",
+  "h": "7ab82a19"
+ },
+ "js.shellui.mhx-vai-dung": {
+  "t": "用 · 用件",
+  "h": "70792141"
+ },
+ "js.shellui.mhx-vai-the": {
+  "t": "体 · 自分",
+  "h": "d540ee00"
+ },
+ "js.shellui.mhx-y-bien": {
+  "t": "行き着く先",
+  "h": "56db0d14"
+ },
+ "js.shellui.mhx-y-chinh": {
+  "t": "いまの状況",
+  "h": "4b8e8934"
+ },
+ "js.shellui.mhx-y-ho": {
+  "t": "途中の展開",
+  "h": "5a858474"
  },
  "js.shellui.minh-bao-nguoi-dan-duong": {
   "t": "明宝 · ご案内役",
@@ -7043,6 +7615,146 @@
   "t": "生まれ年だけで、お二人の年の相性をさっと確認できます。すぐに答えが出ます（詳しい鑑定ではありません）。",
   "h": "ee011392"
  },
+ "kinhdich.1-gieo-que": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">卦を立てる</span>",
+  "h": "bf868703"
+ },
+ "kinhdich.bam-de-bat-dau-gieo-que": {
+  "t": "押すと卦立てを開始します——6回投げ、1回につき1つの爻が決まります",
+  "h": "5f61aa02"
+ },
+ "kinhdich.gieo-du-6-lan-bang-dong": {
+  "t": "コイン6回で卦を立てると、変爻を自動判定し、64卦から該当する卦を引きます——本卦・変卦・卦辞を示して解釈に使います。",
+  "h": "16e0aad0"
+ },
+ "kinhdich.gieo-que-kinh-dich-64-que": {
+  "t": "3枚のコインで64卦の易経占いを行います——本卦、変爻、変卦と卦辞つき。あなたの質問に合わせて先生が解釈します。",
+  "h": "0f696c0b"
+ },
+ "kinhdich.hao-dong-ro-rang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"zap\"></span><span>変爻が<br>明確</span>",
+  "h": "36347db6"
+ },
+ "kinhdich.kinh-dich-chu-dich-la-mot": {
+  "t": "易経（周易）は中国で最も古典的な書の一つで、陰と陽の爻の組み合わせからなる64卦を用いて、物事の変化を読み解きます。3枚のコインで卦を立てる方法は、問いに応じた卦を選ぶ最も一般的な方法の一つです。",
+  "h": "1e3cfe6a"
+ },
+ "kinhdich.kinh-dich-gieo-que": {
+  "t": "易経——卦を立てる",
+  "h": "665be6f0"
+ },
+ "kinhdich.kinh-dich-gieo-que-chu-dich": {
+  "t": "<b>易経——卦を立てる</b><span>周易64卦 · コイン3枚</span>",
+  "h": "7a49085a"
+ },
+ "kinhdich.kinh-dich-gieo-que-tu-vi": {
+  "t": "易経——卦を立てる — 明宝紫微斗数",
+  "h": "be561984"
+ },
+ "kinhdich.loi-que-hao-tu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>卦辞、<br>爻辞</span>",
+  "h": "49312043"
+ },
+ "kinhdich.que-chinh-que-bien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"aperture\"></span><span>本卦と<br>変卦</span>",
+  "h": "cbebb740"
+ },
+ "kinhdich.que-dang-hinh-thanh-tu-duoi": {
+  "t": "卦が形づくられています（下から上へ）",
+  "h": "e51d5547"
+ },
+ "kinhdich.tap-trung-gieo-hao-dau-tien": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"aperture\"></span><b id=\"tossBtnLabel\">心を集中して初爻を投げる</b></span>",
+  "h": "29a2de26"
+ },
+ "kinhdich.truoc-mot-quyet-dinh-kho-nguoi": {
+  "t": "難しい決断を前にしたとき、昔の人は当て推量をせず、卦を立てて天の意を問いました。迷っていることに心を集中し、コインを3枚投げて、いまの状況にふさわしい古の助言を受け取りましょう。",
+  "h": "5a1d9ee8"
+ },
+ "kinhdich.vd-cong-viec-sap-toi-cua": {
+  "t": "例：これからの私の仕事はどうなりますか？",
+  "h": "75b989e2"
+ },
+ "kymon.1-lap-ban": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">盤を立てる</span>",
+  "h": "77b8dfda"
+ },
+ "kymon.ban-9-cung-day-du": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>九宮の盤を<br>完全表示</span>",
+  "h": "5e9e1cc7"
+ },
+ "kymon.de-trong-thoi-diem-la-lay": {
+  "t": "時刻を空欄にすると現在の時刻で立てます。システムが九宮の盤を組み、局、値符・値使、各宮の詳細を返します。",
+  "h": "75433dd8"
+ },
+ "kymon.gio-tot-cho-viec": {
+  "t": "<span class=\"hp-ic\" data-icon=\"clock\"></span><span>用事に<br>よい時刻</span>",
+  "h": "9361b67c"
+ },
+ "kymon.hoi-thay-luan-ban-theo-viec": {
+  "t": "✦ 私の用件に合わせて先生に盤を読んでもらう",
+  "h": "8e8842e4"
+ },
+ "kymon.huong-nen-di-huong-nen-tranh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>行くべき方位、<br>避ける方位</span>",
+  "h": "92fd7884"
+ },
+ "kymon.ky-mon-don-giap": {
+  "t": "奇門遁甲",
+  "h": "857ee290"
+ },
+ "kymon.ky-mon-don-giap-ban-9": {
+  "t": "奇門遁甲——九宮の盤 — 明宝紫微斗数",
+  "h": "804e2f7a"
+ },
+ "kymon.ky-mon-don-giap-ban-9-hlor": {
+  "t": "<b>奇門遁甲</b><span>九宮盤 · 八門 · 九星 · 八神</span>",
+  "h": "8bd844e9"
+ },
+ "kymon.ky-mon-don-giap-khong-tra": {
+  "t": "奇門遁甲は一般論を調べるのではなく、現在の時刻に合わせた九宮の盤を正確に組み、目の前の用件に向かうべき方位をまっすぐ示します。今すぐ盤を立てて、必要なときの吉時と利のある方位を知りましょう。",
+  "h": "44004989"
+ },
+ "kymon.ky-mon-don-giap-la-mot": {
+  "t": "奇門遁甲は、太乙・六壬とともに中国古来の術数「三式」の一つです。奇門の盤は現在の時刻の干支に基づき、九宮・八門・九星を組み合わせて、具体的な用件に適した時期と方位を示します。",
+  "h": "a538cb61"
+ },
+ "kymon.lap-ban-cho-mot-thoi-diem": {
+  "t": "ある時刻の盤を立てる",
+  "h": "56ac40df"
+ },
+ "kymon.lap-ban-khac": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"rotate-cw\"></span><b>別の盤を立てる</b></span>",
+  "h": "19849756"
+ },
+ "kymon.lap-ban-ky-mon": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"layout-grid\"></span><b>奇門盤を立てる</b></span>",
+  "h": "2697f4a9"
+ },
+ "kymon.lap-ban-ky-mon-don-giap": {
+  "t": "時刻に合わせて奇門遁甲の盤を立てます——八門、九星、八神、三奇を九宮に配置。行くべき方位、避けるべき方位がわかります。あなたの用件に合わせて先生が解釈します。",
+  "h": "ee8b191e"
+ },
+ "kymon.lap-lai": {
+  "t": "立て直す",
+  "h": "5370aded"
+ },
+ "kymon.tai-anh-chia-se-9-16": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"save\"></span><b id=\"taiBtnLabel\">シェア画像を保存（9:16）</b></span>",
+  "h": "5f3a9343"
+ },
+ "kymon.thoi-diem-de-trong-bay-gio": {
+  "t": "時刻（空欄＝今）",
+  "h": "b29345d0"
+ },
+ "kymon.vd-chieu-nay-di-gap-doi": {
+  "t": "例：今日の午後、取引先に会いに行くなら、どの方位がよいですか？",
+  "h": "644a87b7"
+ },
+ "kymon.viec-muon-hoi-tuy-chon": {
+  "t": "尋ねたい用件（任意）",
+  "h": "680649e1"
+ },
  "laso.2026-tuviminhbao-com-all-rights-reserved": {
   "t": "© 2026 tuviminhbao.com — All rights reserved",
   "h": "5772fefb"
@@ -7262,6 +7974,94 @@
  "luangiai.tu-vi-khong-du-doan-tuong": {
   "t": "紫微斗数は未来を言い当てるものではなく、自分を知って、よりよい選択をするための手がかりです。",
   "h": "ae92de9d"
+ },
+ "maihoa.1-lap-que": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">卦を立てる</span>",
+  "h": "b51a3df6"
+ },
+ "maihoa.ba-chang-chinh-ho-bien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>三段階<br>本卦・互卦・変卦</span>",
+  "h": "0ccec2d4"
+ },
+ "maihoa.cau-hoi-tuy-chon": {
+  "t": "質問（任意）",
+  "h": "645f5819"
+ },
+ "maihoa.con-so-nay-ra-trong-dau": {
+  "t": "ふと頭に浮かんだ数字",
+  "h": "e65a46a7"
+ },
+ "maihoa.gieo-bang-mot-con-so": {
+  "t": "数字で卦を立てる",
+  "h": "9e53c84b"
+ },
+ "maihoa.gieo-lai": {
+  "t": "やり直す",
+  "h": "6c124c14"
+ },
+ "maihoa.gieo-que-khac": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"rotate-cw\"></span><b>別の卦を立てる</b></span>",
+  "h": "1eed908e"
+ },
+ "maihoa.gieo-que-mai-hoa-dich-so": {
+  "t": "数字または時刻で梅花易数の卦を立てます——体卦・用卦と五行の生剋を、本卦・互卦・変卦の三段階で示します。質問に合わせて先生が解釈します。",
+  "h": "81547445"
+ },
+ "maihoa.gieo-theo-gio-hien-tai-hoac": {
+  "t": "現在の時刻または数字で卦を立てます——システムが体用の卦を立て、動爻を定め、爻辞を返して解釈に使います。",
+  "h": "0b36b3f2"
+ },
+ "maihoa.gieo-theo-thoi-diem-nay": {
+  "t": "この時刻で卦を立てる",
+  "h": "00972cbe"
+ },
+ "maihoa.hao-tu-loi-luan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>爻辞と<br>解釈</span>",
+  "h": "959217eb"
+ },
+ "maihoa.hoi-thay-luan-que-theo-cau": {
+  "t": "✦ 質問に合わせて先生に卦を読んでもらう",
+  "h": "f13e6c1b"
+ },
+ "maihoa.lap-que": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"flower\"></span><b>卦を立てる</b></span>",
+  "h": "dedaeff1"
+ },
+ "maihoa.mai-hoa-dich-so": {
+  "t": "梅花易数",
+  "h": "9093e560"
+ },
+ "maihoa.mai-hoa-dich-so-gieo-que": {
+  "t": "梅花易数——卦を立てる — 明宝紫微斗数",
+  "h": "7780e00b"
+ },
+ "maihoa.mai-hoa-dich-so-la-phuong": {
+  "t": "梅花易数は、宋代の邵康節が基礎を築いたと伝えられる占法で、易経に基づきながら、任意の数字・時刻・出来事からすばやく卦を立てます。卦を体と用に分けて、物事の推移を読み解きます。",
+  "h": "35d69496"
+ },
+ "maihoa.mai-hoa-dich-so-the-dung": {
+  "t": "<b>梅花易数</b><span>体 · 用 · 三段階 本卦–互卦–変卦</span>",
+  "h": "39147698"
+ },
+ "maihoa.mot-con-so-bat-chot-nghi": {
+  "t": "ふと思いついた数字も、一つの易卦の始まりになり得ます。その数字を入力するか、現在の時刻に任せると、体と用の二つの卦と、尋ねている用件への解釈が得られます。",
+  "h": "201f081c"
+ },
+ "maihoa.que-the-dung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"flower\"></span><span>体卦と<br>用卦</span>",
+  "h": "d2a7a4e8"
+ },
+ "maihoa.thanh-tam-nghi-ve-viec-muon": {
+  "t": "尋ねたい用件を、心をこめて思い浮かべる",
+  "h": "17259cfa"
+ },
+ "maihoa.vd-27": {
+  "t": "例：27",
+  "h": "4afd7b36"
+ },
+ "maihoa.vd-viec-chuyen-cho-lam-nay": {
+  "t": "例：この転職はしてもよいでしょうか？",
+  "h": "ec1b3e52"
  },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">生まれ年を入力</span>",

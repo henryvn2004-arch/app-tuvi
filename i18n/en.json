@@ -1759,6 +1759,198 @@
   "t": "Zodiac clash ",
   "h": "e92ab4fa"
  },
+ "js.kinhdich.bam-de-bat-dau-gieo-que": {
+  "t": "Tap to start casting — 6 tosses, each one determines a line",
+  "h": "5f61aa02"
+ },
+ "js.kinhdich.cau-hoi": {
+  "t": "Question: \"",
+  "h": "16a3ebd1"
+ },
+ "js.kinhdich.da-du-6-hao-dang-xem": {
+  "t": "All 6 lines are in — viewing the hexagram…",
+  "h": "f181b6af"
+ },
+ "js.kinhdich.da-gieo-hao": {
+  "t": "{step}/6 lines tossed — tap to toss line {next}",
+  "h": "5a45ef66"
+ },
+ "js.kinhdich.gieo-hao": {
+  "t": "Toss Line {next}",
+  "h": "673a916a"
+ },
+ "js.kinhdich.gieo-que": {
+  "t": "Cast a hexagram · ",
+  "h": "b41eb665"
+ },
+ "js.kinhdich.gieo-que-kinh-dich": {
+  "t": "I Ching casting · ",
+  "h": "c0e31ebb"
+ },
+ "js.kinhdich.hao-dong": {
+  "t": "Moving lines: ",
+  "h": "46236054"
+ },
+ "js.kinhdich.hao-dong-noi-len-dieu-gi": {
+  "t": "What does the changing line say?",
+  "h": "4e9d2215"
+ },
+ "js.kinhdich.hao-dong-so": {
+  "t": "Moving {val}",
+  "h": "dfc3a9b0"
+ },
+ "js.kinhdich.khong-hao-dong": {
+  "t": " (no changing lines)",
+  "h": "b0233d0c"
+ },
+ "js.kinhdich.luan-que-nay-cho-cau-hoi": {
+  "t": "Read this hexagram for my question",
+  "h": "327aeb50"
+ },
+ "js.kinhdich.nen-hanh-dong-the-nao-luc": {
+  "t": "How should I act right now?",
+  "h": "b1dd8b79"
+ },
+ "js.kinhdich.que-bien": {
+  "t": ", changed hexagram **",
+  "h": "b2123833"
+ },
+ "js.kinhdich.que-bien-cho-thay-xu-huong": {
+  "t": "What trend does the changed hexagram show?",
+  "h": "c06bb666"
+ },
+ "js.kinhdich.que-bien-iift": {
+  "t": "Changed hexagram: ",
+  "h": "191ff122"
+ },
+ "js.kinhdich.que-chinh": {
+  "t": "Primary hexagram: ",
+  "h": "516f228e"
+ },
+ "js.kinhdich.que-da-lap-que-chinh": {
+  "t": "Hexagram cast — primary hexagram **",
+  "h": "79f6b4e8"
+ },
+ "js.kinhdich.tap-trung-gieo-hao-dau-tien": {
+  "t": "Focus & Toss the First Line",
+  "h": "5e5106bc"
+ },
+ "js.kinhdich.toi-se-luan-theo-cau-hoi": {
+  "t": ". I'll read according to your question.",
+  "h": "e0c8f943"
+ },
+ "js.kymon.ban-da-lap": {
+  "t": "Chart cast — **",
+  "h": "16637971"
+ },
+ "js.kymon.ban-ky-mon": {
+  "t": "Qi Men chart · ",
+  "h": "64c75e52"
+ },
+ "js.kymon.chua-dung-duoc-anh-thu-lai": {
+  "t": "Couldn't build the image. Please try again in a few seconds.",
+  "h": "f8055429"
+ },
+ "js.kymon.cua": {
+  "t": " — gate ",
+  "h": "30b23b9d"
+ },
+ "js.kymon.cuc": {
+  "t": "<div><span>Ju</span><b>",
+  "h": "8786d6cd"
+ },
+ "js.kymon.dang-dung-anh": {
+  "t": "Building image…",
+  "h": "7bce9760"
+ },
+ "js.kymon.gio": {
+  "t": " · hour ",
+  "h": "9d8fa6cf"
+ },
+ "js.kymon.gio-5bb3": {
+  "t": "Hour ",
+  "h": "2b380a90"
+ },
+ "js.kymon.gio-nay-hop-lam-viec-gi": {
+  "t": "What is this hour best suited for?",
+  "h": "74b7e572"
+ },
+ "js.kymon.gio-ngay": {
+  "t": "<div><span>Hour · Day</span><b>",
+  "h": "76c00c41"
+ },
+ "js.kymon.huong-do-nhat": {
+  "t": "Best direction: ",
+  "h": "0720a2bf"
+ },
+ "js.kymon.huong-nao-phai-tranh-va-vi": {
+  "t": "Which directions should I avoid, and why?",
+  "h": "ac2dbbcc"
+ },
+ "js.kymon.huong-xep-hang-cao-nhat-la": {
+  "t": " The highest-ranked direction is **",
+  "h": "abc77c37"
+ },
+ "js.kymon.khong-dung-duoc-ban": {
+  "t": "Couldn't build the chart.",
+  "h": "925f4f75"
+ },
+ "js.kymon.khong-dung-duoc-ban-ky-mon": {
+  "t": "Couldn't build the Qi Men chart.",
+  "h": "c30586ea"
+ },
+ "js.kymon.ky-mon": {
+  "t": "Qi Men · ",
+  "h": "d3a48969"
+ },
+ "js.kymon.ngay": {
+  "t": " day ",
+  "h": "c6e08941"
+ },
+ "js.kymon.quet-ma-lap-ban-cua-ban": {
+  "t": "Scan the code — set up your own chart",
+  "h": "afc18d97"
+ },
+ "js.kymon.tiet": {
+  "t": "**, solar term ",
+  "h": "6b1922aa"
+ },
+ "js.kymon.tiet-6pzm": {
+  "t": " · solar term ",
+  "h": "220b1eff"
+ },
+ "js.kymon.tiet-khi": {
+  "t": "<div><span>Solar term</span><b>",
+  "h": "539fd505"
+ },
+ "js.kymon.toi-se-luan-theo-viec-ban": {
+  "t": " I'll read according to what you ask.",
+  "h": "58e203d6"
+ },
+ "js.kymon.truc-phu": {
+  "t": ", Zhi Fu **",
+  "h": "16c60f0e"
+ },
+ "js.kymon.truc-phu-truc-su": {
+  "t": "<div><span>Zhi Fu · Zhi Shi</span><b>",
+  "h": "6ccf5eea"
+ },
+ "js.kymon.truc-phu-truc-su-noi-len": {
+  "t": "What do Zhi Fu and Zhi Shi say?",
+  "h": "c69b295c"
+ },
+ "js.kymon.truc-su": {
+  "t": "**, Zhi Shi **",
+  "h": "fae13856"
+ },
+ "js.kymon.viec-cua-toi-nen-di-huong": {
+  "t": "Which direction should I go for my matter?",
+  "h": "72ff459d"
+ },
+ "js.kymon.viec-hoi": {
+  "t": "Matter asked: \"",
+  "h": "84ccbabf"
+ },
  "js.laso.dang-an-sao": {
   "t": "Placing stars...",
   "h": "06275197"
@@ -1986,6 +2178,90 @@
  "js.luangiai.xem-la-so-day-du": {
   "t": "▸ View full chart",
   "h": "fee98465"
+ },
+ "js.maihoa.bien-quai-noi-ket-cuc-the": {
+  "t": "What does the changed hexagram say about the outcome?",
+  "h": "3c27069a"
+ },
+ "js.maihoa.cach-ra-que": {
+  "t": "<div class=\"mh-buoc\"><b>How the hexagram was cast:</b> ",
+  "h": "0fd969d5"
+ },
+ "js.maihoa.cau-hoi": {
+  "t": "Question: \"",
+  "h": "16a3ebd1"
+ },
+ "js.maihoa.chua-dung-duoc-anh-thu-lai": {
+  "t": "Couldn't build the image. Please try again in a few seconds.",
+  "h": "f8055429"
+ },
+ "js.maihoa.cua-que-chinh-tham-khao-them": {
+  "t": " — of the primary hexagram, for further reference</div><div class=\"han\">",
+  "h": "6c02237a"
+ },
+ "js.maihoa.dang-dung-anh": {
+  "t": "Building image…",
+  "h": "7bce9760"
+ },
+ "js.maihoa.dung": {
+  "t": "), Yong **",
+  "h": "139b0c3c"
+ },
+ "js.maihoa.hao-dong-la-hao": {
+  "t": " The moving line is line ",
+  "h": "b6c66ef2"
+ },
+ "js.maihoa.ho-quai-cho-thay-khuc-giua": {
+  "t": "What does the nuclear hexagram show about the middle stretch?",
+  "h": "640af3c9"
+ },
+ "js.maihoa.ket-luan": {
+  "t": "Conclusion: ",
+  "h": "fe16dfe1"
+ },
+ "js.maihoa.khong-lap-duoc-que": {
+  "t": "Couldn't cast the hexagram.",
+  "h": "7181f9c7"
+ },
+ "js.maihoa.luan-que-nay-cho-cau-hoi": {
+  "t": "Read this hexagram for my question",
+  "h": "327aeb50"
+ },
+ "js.maihoa.mai-hoa-dich-so": {
+  "t": "Plum Blossom Numerology · ",
+  "h": "f9124d22"
+ },
+ "js.maihoa.que-chinh": {
+  "t": "Primary hexagram: ",
+  "h": "516f228e"
+ },
+ "js.maihoa.que-chinh-fc": {
+  "t": "Primary hexagram · ",
+  "h": "8316c7f3"
+ },
+ "js.maihoa.que-da-lap-the": {
+  "t": "Hexagram cast — Ti (Body) **",
+  "h": "92a897ba"
+ },
+ "js.maihoa.quet-ma-gieo-que-cua-ban": {
+  "t": "Scan the code — cast your own hexagram",
+  "h": "bd5366dc"
+ },
+ "js.maihoa.the-bi-dung-khac-thi-nen": {
+  "t": "If Ti (Body) is overcome by Yong (Use), what should I do?",
+  "h": "197d34a9"
+ },
+ "js.maihoa.toi-se-luan-theo-cau-hoi": {
+  "t": "**. I'll read according to your question.",
+  "h": "f2bafbac"
+ },
+ "js.maihoa.tranh-que": {
+  "t": "Hexagram image: ",
+  "h": "6988d99c"
+ },
+ "js.maihoa.tuc": {
+  "t": "), i.e. **",
+  "h": "52e6128d"
  },
  "js.nav.brand": {
   "t": "Minh Bao Zi Wei Dou Shu",
@@ -4343,6 +4619,110 @@
   "t": "iPhone / Mac",
   "h": "9a2b7d51"
  },
+ "js.shellui.kdx-dang-doc": {
+  "t": "reading",
+  "h": "8932239a"
+ },
+ "js.shellui.kdx-dung-cuu": {
+  "t": "Yong Jiu",
+  "h": "8634105f"
+ },
+ "js.shellui.kdx-dung-luc": {
+  "t": "Yong Liu",
+  "h": "193bcf88"
+ },
+ "js.shellui.kdx-fb-canh": {
+  "t": "⚠ Caution",
+  "h": "250c4761"
+ },
+ "js.shellui.kdx-fb-tot": {
+  "t": "✦ Auspicious",
+  "h": "8979e6d2"
+ },
+ "js.shellui.kdx-fb-trung": {
+  "t": "◆ Neutral",
+  "h": "603a1ad6"
+ },
+ "js.shellui.kdx-hao-n": {
+  "t": "Line {n}",
+  "h": "76351efb"
+ },
+ "js.shellui.kdx-khong-hao-dong": {
+  "t": "No moving lines<br>Stable situation<br>Read the primary hexagram only",
+  "h": "7fe9390d"
+ },
+ "js.shellui.kdx-lam-chu": {
+  "t": " · governing",
+  "h": "5f3d7276"
+ },
+ "js.shellui.kdx-loi-que": {
+  "t": "Judgment",
+  "h": "5e731083"
+ },
+ "js.shellui.kdx-luat-0": {
+  "t": "No moving lines — read only the judgment of the primary hexagram.",
+  "h": "be9a7385"
+ },
+ "js.shellui.kdx-luat-1": {
+  "t": "One moving line — read the line text of line {a}.",
+  "h": "d39e3ef6"
+ },
+ "js.shellui.kdx-luat-2": {
+  "t": "Two moving lines — read both line texts; line {a} (the upper one) governs.",
+  "h": "ca24ccf6"
+ },
+ "js.shellui.kdx-luat-3": {
+  "t": "Three moving lines — no line text is read; read the judgments of both the primary and the changed hexagram, the primary governing.",
+  "h": "627d32e2"
+ },
+ "js.shellui.kdx-luat-4": {
+  "t": "Four moving lines — read the line texts of the two NON-moving lines ({a} and {b}) in the CHANGED hexagram; line {a} (the lower one) governs.",
+  "h": "ae45a84f"
+ },
+ "js.shellui.kdx-luat-5": {
+  "t": "Five moving lines — read the line text of the single NON-moving line (line {a}) in the CHANGED hexagram.",
+  "h": "67f7d97a"
+ },
+ "js.shellui.kdx-luat-6": {
+  "t": "Six moving lines — read the judgment of the changed hexagram.",
+  "h": "10a6bd9d"
+ },
+ "js.shellui.kdx-luat-6c": {
+  "t": "Six moving lines, pure Qian — read the \"Yong Jiu\" text.",
+  "h": "094a2f2f"
+ },
+ "js.shellui.kdx-luat-6k": {
+  "t": "Six moving lines, pure Kun — read the \"Yong Liu\" text.",
+  "h": "1926530a"
+ },
+ "js.shellui.kdx-nguon-doc": {
+  "t": "Reading rule from the <i>Kao Bian Zhan</i> (Zhu Xi, <i>Yi Xue Qi Meng</i>) — the number of moving lines decides whether to read the hexagram judgment or the line texts, and in the primary or the changed hexagram.",
+  "h": "f89320ca"
+ },
+ "js.shellui.kdx-que-bien": {
+  "t": "Changed hexagram",
+  "h": "67273d51"
+ },
+ "js.shellui.kdx-que-bien-p": {
+  "t": " (changed hexagram)",
+  "h": "1f867cc2"
+ },
+ "js.shellui.kdx-que-bien-xh": {
+  "t": "Changed hexagram (trend)",
+  "h": "091377d9"
+ },
+ "js.shellui.kdx-que-chinh": {
+  "t": "Primary hexagram",
+  "h": "56bf3175"
+ },
+ "js.shellui.kdx-so-hao-dong": {
+  "t": "{n} moving lines",
+  "h": "973e6fbd"
+ },
+ "js.shellui.kdx-tranh-que": {
+  "t": "Hexagram image: {que}",
+  "h": "4d8db49c"
+ },
  "js.shellui.ket-qua": {
   "t": "Result",
   "h": "c9f95514"
@@ -4574,6 +4954,110 @@
  "js.shellui.km-truc": {
   "t": "Zhi {than}",
   "h": "cd8af7d6"
+ },
+ "js.shellui.kmx-chu-ban": {
+  "t": "The chart is drawn by the Luo Shu with <b>South at the top</b> — the classical way, the reverse of an ordinary map. Each cell: gate (large line) · heaven-plate star and deity · heaven-plate stem (<b>bold</b>) over earth-plate stem (<i>italic</i>). <b>#n</b> is the relative rank among the nine palaces, not a verdict of fortune.",
+  "h": "8010514a"
+ },
+ "js.shellui.kmx-chu-bang": {
+  "t": "The <b>Engine</b> column is the good/bad verdict of the classical algorithm. The <b>Score</b> column is a relative rank computed by the page so that it can always point to the best direction — formula: auspicious gate +3 / inauspicious −3, star and deity ±2, Three Marvels +2, +1 per auspicious pattern and −1 per inauspicious pattern. Measured over 366 charts across a year, only 26.5% of charts have a palace the engine rates auspicious, so reading the Engine column alone, the chart says \"everywhere is bad\" most of the time.",
+  "h": "839c2367"
+ },
+ "js.shellui.kmx-khong-cua": {
+  "t": "no gate",
+  "h": "c1f2927e"
+ },
+ "js.shellui.kmx-nghia-canh": {
+  "t": "Display, documents, exams, news, advertising",
+  "h": "921e6c41"
+ },
+ "js.shellui.kmx-nghia-do": {
+  "t": "Blockage, concealment, avoidance; suits private matters",
+  "h": "ad1a5167"
+ },
+ "js.shellui.kmx-nghia-huu": {
+  "t": "Rest, harmony, seeking help, smooth affairs",
+  "h": "b1fd265f"
+ },
+ "js.shellui.kmx-nghia-khai": {
+  "t": "Opening, starting out, dealings, meeting people of authority",
+  "h": "451cf90c"
+ },
+ "js.shellui.kmx-nghia-kinh": {
+  "t": "Fright, gossip, quarrels, sudden events",
+  "h": "dd92fabc"
+ },
+ "js.shellui.kmx-nghia-sinh": {
+  "t": "Gain, seeking wealth, trade, opening a business",
+  "h": "d8d8805c"
+ },
+ "js.shellui.kmx-nghia-thuong": {
+  "t": "Injury, disputes, collecting debts, lawsuits",
+  "h": "4994840e"
+ },
+ "js.shellui.kmx-nghia-tu": {
+  "t": "Stagnation, funerals, burials, matters that are dead still",
+  "h": "1ae93312"
+ },
+ "js.shellui.kmx-ps-quote-0": {
+  "t": "Best direction for this hour: {huong} — no gate.",
+  "h": "d2e6c7b9"
+ },
+ "js.shellui.kmx-ps-quote-n": {
+  "t": "Best direction for this hour: {huong} — {cua}, {nghia}.",
+  "h": "db609f76"
+ },
+ "js.shellui.kmx-ps-sub": {
+  "t": "{tiet} {nguyen} · hour {gio}, day {ngay}",
+  "h": "c4354592"
+ },
+ "js.shellui.kmx-ps-title": {
+  "t": "Qi Men — {cuc}",
+  "h": "6d14f8e2"
+ },
+ "js.shellui.kmx-th-cua": {
+  "t": "Gate",
+  "h": "91846f69"
+ },
+ "js.shellui.kmx-th-diem": {
+  "t": "Score",
+  "h": "024af419"
+ },
+ "js.shellui.kmx-th-huong": {
+  "t": "Direction",
+  "h": "05c861c1"
+ },
+ "js.shellui.kmx-th-visao": {
+  "t": "Why",
+  "h": "497ad536"
+ },
+ "js.shellui.kmx-viec-nghi": {
+  "t": "Rest, seeking peace, mending relationships",
+  "h": "75edf4cb"
+ },
+ "js.shellui.kmx-viec-nghi-nan": {
+  "t": "Rest, seeking peace, relationships; in distress, seek a noble helper",
+  "h": "60b37686"
+ },
+ "js.shellui.kmx-viec-quan": {
+  "t": "Seeking office, career, job hunting",
+  "h": "2240b624"
+ },
+ "js.shellui.kmx-viec-quan-nan": {
+  "t": "Seeking office, career, job hunting; in distress, seek a noble helper",
+  "h": "f4047a44"
+ },
+ "js.shellui.kmx-viec-tai": {
+  "t": "Seeking wealth, cooperation, investment",
+  "h": "263dd716"
+ },
+ "js.shellui.kmx-viec-tai-nan": {
+  "t": "Seeking wealth, cooperation, investment; in distress, seek a noble helper",
+  "h": "57a7dae7"
+ },
+ "js.shellui.kmx-viec-tranh": {
+  "t": "Best to avoid this direction",
+  "h": "edcc5081"
  },
  "js.shellui.ky-hop-dong-gio-nao-hop": {
   "t": "Which hour is good for signing a contract?",
@@ -4870,6 +5354,94 @@
  "js.shellui.menh-sinh-ngay-hao-ton-chut": {
   "t": "Your element generates the day — a slight drain, still good",
   "h": "995978d5"
+ },
+ "js.shellui.mhx-c-bien": {
+  "t": "Changed hexagram",
+  "h": "b437a684"
+ },
+ "js.shellui.mhx-c-chinh": {
+  "t": "Primary hexagram",
+  "h": "d3c2c1d8"
+ },
+ "js.shellui.mhx-c-ho": {
+  "t": "Nuclear hexagram",
+  "h": "6f004dc7"
+ },
+ "js.shellui.mhx-chu-chang": {
+  "t": "The three stages are read in order: the primary hexagram is the present situation, the nuclear hexagram is the middle stretch the asker usually does not foresee, the changed hexagram is where things end up. Whichever stage has Ti overcome by Yong is the sticking point of that stage.",
+  "h": "03f63773"
+ },
+ "js.shellui.mhx-err-doi": {
+  "t": "Could not convert the solar date to the lunar calendar.",
+  "h": "a645f9f1"
+ },
+ "js.shellui.mhx-err-gieo": {
+  "t": "Could not cast the hexagram.",
+  "h": "eabfd409"
+ },
+ "js.shellui.mhx-err-lich": {
+  "t": "Could not load the lunar calendar (tuvi-ansao-engine.js).",
+  "h": "1122cd79"
+ },
+ "js.shellui.mhx-err-lon": {
+  "t": "The number is too large — use a number under 12 digits.",
+  "h": "bd20c108"
+ },
+ "js.shellui.mhx-err-so": {
+  "t": "Please enter a positive integer.",
+  "h": "5d631bad"
+ },
+ "js.shellui.mhx-mota-gio": {
+  "t": "Year branch {chi} ({chiIdx}) + lunar month {thang} + day {ngay} = {tong}; remainder after dividing by 8 is {du8} → upper trigram; adding the hour branch {gio} ({gioIdx}) = {tongD}; remainder after dividing by 8 is {du8d} → lower trigram; remainder after dividing by 6 is {du6} → moving line.",
+  "h": "6d26b0b4"
+ },
+ "js.shellui.mhx-mota-so": {
+  "t": "The number {n} divided by 8 leaves {du8} → upper trigram; {n} + hour branch {gio} ({gioIdx}) = {tong} → lower trigram and moving line.",
+  "h": "298e8ce3"
+ },
+ "js.shellui.mhx-p-dung": {
+  "t": "YONG",
+  "h": "a5a3c26b"
+ },
+ "js.shellui.mhx-p-the": {
+  "t": "TI",
+  "h": "1a9e0157"
+ },
+ "js.shellui.mhx-ps-sub": {
+  "t": "Ti {the} {theH} · Yong {dung} {dungH} — {kl}",
+  "h": "75583665"
+ },
+ "js.shellui.mhx-ps-title": {
+  "t": "Hexagram {ten}",
+  "h": "51dff5b3"
+ },
+ "js.shellui.mhx-ps-title2": {
+  "t": "Hexagram {ten} → {bien}",
+  "h": "676652b0"
+ },
+ "js.shellui.mhx-td": {
+  "t": "Ti {the} ({theH}) · Yong {dung} ({dungH})",
+  "h": "7ab82a19"
+ },
+ "js.shellui.mhx-vai-dung": {
+  "t": "Yong · the matter",
+  "h": "70792141"
+ },
+ "js.shellui.mhx-vai-the": {
+  "t": "Ti · yourself",
+  "h": "d540ee00"
+ },
+ "js.shellui.mhx-y-bien": {
+  "t": "Where it ends up",
+  "h": "56db0d14"
+ },
+ "js.shellui.mhx-y-chinh": {
+  "t": "The situation now",
+  "h": "4b8e8934"
+ },
+ "js.shellui.mhx-y-ho": {
+  "t": "The middle development",
+  "h": "5a858474"
  },
  "js.shellui.minh-bao-nguoi-dan-duong": {
   "t": "Minh Bao · your guide",
@@ -7043,6 +7615,146 @@
   "t": "Quickly check whether two ages are compatible — just birth years, an instant answer, no deep reading yet.",
   "h": "ee011392"
  },
+ "kinhdich.1-gieo-que": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Cast the hexagram</span>",
+  "h": "bf868703"
+ },
+ "kinhdich.bam-de-bat-dau-gieo-que": {
+  "t": "Tap to start casting — 6 tosses, each one determines a line",
+  "h": "5f61aa02"
+ },
+ "kinhdich.gieo-du-6-lan-bang-dong": {
+  "t": "Toss the coins six times: the system works out the moving lines and looks up the right hexagram among the 64 — returning the primary hexagram, the changed hexagram and the judgment text for the reading.",
+  "h": "16e0aad0"
+ },
+ "kinhdich.gieo-que-kinh-dich-64-que": {
+  "t": "Cast an I Ching reading of the 64 hexagrams with three coins — primary hexagram, moving lines and changed hexagram with their judgments. Ask the Master to interpret it for your question.",
+  "h": "0f696c0b"
+ },
+ "kinhdich.hao-dong-ro-rang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"zap\"></span><span>Clear<br>moving lines</span>",
+  "h": "36347db6"
+ },
+ "kinhdich.kinh-dich-chu-dich-la-mot": {
+  "t": "The I Ching (Zhou Yi) is one of the most classic books of China. It uses 64 hexagrams, built from combinations of yin and yang lines, to read how a situation changes. Casting with three coins is one of the most common ways of choosing the hexagram that answers the question being asked.",
+  "h": "1e3cfe6a"
+ },
+ "kinhdich.kinh-dich-gieo-que": {
+  "t": "I Ching — Cast a hexagram",
+  "h": "665be6f0"
+ },
+ "kinhdich.kinh-dich-gieo-que-chu-dich": {
+  "t": "<b>I Ching — Cast a hexagram</b><span>Zhou Yi 64 hexagrams · 3 coins</span>",
+  "h": "7a49085a"
+ },
+ "kinhdich.kinh-dich-gieo-que-tu-vi": {
+  "t": "I Ching — Cast a hexagram — Minh Bao Zi Wei Dou Shu",
+  "h": "be561984"
+ },
+ "kinhdich.loi-que-hao-tu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>Judgments &amp;<br>line texts</span>",
+  "h": "49312043"
+ },
+ "kinhdich.que-chinh-que-bien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"aperture\"></span><span>Primary &amp;<br>changed hexagram</span>",
+  "h": "cbebb740"
+ },
+ "kinhdich.que-dang-hinh-thanh-tu-duoi": {
+  "t": "The hexagram is forming (from the bottom up)",
+  "h": "e51d5547"
+ },
+ "kinhdich.tap-trung-gieo-hao-dau-tien": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"aperture\"></span><b id=\"tossBtnLabel\">Focus &amp; Toss the First Line</b></span>",
+  "h": "29a2de26"
+ },
+ "kinhdich.truoc-mot-quyet-dinh-kho-nguoi": {
+  "t": "Faced with a hard decision, the ancients did not guess — they cast a hexagram to ask what heaven intended. Focus on the matter you are unsure about, toss three coins, and receive ancient advice that fits your present situation.",
+  "h": "5a1d9ee8"
+ },
+ "kinhdich.vd-cong-viec-sap-toi-cua": {
+  "t": "e.g. How will my work go in the coming period?",
+  "h": "75b989e2"
+ },
+ "kymon.1-lap-ban": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Set up the chart</span>",
+  "h": "77b8dfda"
+ },
+ "kymon.ban-9-cung-day-du": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>Full<br>9-palace chart</span>",
+  "h": "5e9e1cc7"
+ },
+ "kymon.de-trong-thoi-diem-la-lay": {
+  "t": "Leave the time empty to use the current moment. The system sets up the 9-palace chart and returns the ju, the Zhi Fu and Zhi Shi, and the detail of each palace.",
+  "h": "75433dd8"
+ },
+ "kymon.gio-tot-cho-viec": {
+  "t": "<span class=\"hp-ic\" data-icon=\"clock\"></span><span>Good hours<br>for the task</span>",
+  "h": "9361b67c"
+ },
+ "kymon.hoi-thay-luan-ban-theo-viec": {
+  "t": "✦ Ask the Master to read the chart for my matter",
+  "h": "8e8842e4"
+ },
+ "kymon.huong-nen-di-huong-nen-tranh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>Directions to take,<br>directions to avoid</span>",
+  "h": "92fd7884"
+ },
+ "kymon.ky-mon-don-giap": {
+  "t": "Qi Men Dun Jia",
+  "h": "857ee290"
+ },
+ "kymon.ky-mon-don-giap-ban-9": {
+  "t": "Qi Men Dun Jia — 9-palace chart — Minh Bao Zi Wei Dou Shu",
+  "h": "804e2f7a"
+ },
+ "kymon.ky-mon-don-giap-ban-9-hlor": {
+  "t": "<b>Qi Men Dun Jia</b><span>9-palace chart · Eight Gates · Nine Stars · Eight Deities</span>",
+  "h": "8bd844e9"
+ },
+ "kymon.ky-mon-don-giap-khong-tra": {
+  "t": "Qi Men Dun Jia does not look things up in general terms: it sets up the exact 9-palace chart for the current hour and points straight at the direction to take for the matter in front of you. Set up the chart now to learn the good hours and favourable directions right when you need them.",
+  "h": "44004989"
+ },
+ "kymon.ky-mon-don-giap-la-mot": {
+  "t": "Qi Men Dun Jia is one of the \"Three Arts\" (San Shi) of ancient Chinese divination, together with Tai Yi and Liu Ren. The chart is set up from the stem-branch of the current hour and combines the Nine Palaces, the Eight Gates and the Nine Stars to show the timing and direction that favour a specific matter.",
+  "h": "a538cb61"
+ },
+ "kymon.lap-ban-cho-mot-thoi-diem": {
+  "t": "Set up a chart for a moment in time",
+  "h": "56ac40df"
+ },
+ "kymon.lap-ban-khac": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"rotate-cw\"></span><b>Set up another chart</b></span>",
+  "h": "19849756"
+ },
+ "kymon.lap-ban-ky-mon": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"layout-grid\"></span><b>Set up the Qi Men chart</b></span>",
+  "h": "2697f4a9"
+ },
+ "kymon.lap-ban-ky-mon-don-giap": {
+  "t": "Set up a Qi Men Dun Jia chart for the hour — Eight Gates, Nine Stars, Eight Deities and Three Marvels across nine palaces. Which direction to take, which to avoid. Ask the Master to read it for your matter.",
+  "h": "ee8b191e"
+ },
+ "kymon.lap-lai": {
+  "t": "Redo",
+  "h": "5370aded"
+ },
+ "kymon.tai-anh-chia-se-9-16": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"save\"></span><b id=\"taiBtnLabel\">Save share image (9:16)</b></span>",
+  "h": "5f3a9343"
+ },
+ "kymon.thoi-diem-de-trong-bay-gio": {
+  "t": "Time (empty = now)",
+  "h": "b29345d0"
+ },
+ "kymon.vd-chieu-nay-di-gap-doi": {
+  "t": "e.g. This afternoon I am meeting a business partner — which direction should I go?",
+  "h": "644a87b7"
+ },
+ "kymon.viec-muon-hoi-tuy-chon": {
+  "t": "Matter you want to ask about (optional)",
+  "h": "680649e1"
+ },
  "laso.2026-tuviminhbao-com-all-rights-reserved": {
   "t": "© 2026 tuviminhbao.com — All rights reserved",
   "h": "5772fefb"
@@ -7262,6 +7974,94 @@
  "luangiai.tu-vi-khong-du-doan-tuong": {
   "t": "Zi Wei doesn't predict the future. It helps you understand yourself so you can choose better.",
   "h": "ae92de9d"
+ },
+ "maihoa.1-lap-que": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Cast the hexagram</span>",
+  "h": "b51a3df6"
+ },
+ "maihoa.ba-chang-chinh-ho-bien": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>Three stages<br>primary–nuclear–changed</span>",
+  "h": "0ccec2d4"
+ },
+ "maihoa.cau-hoi-tuy-chon": {
+  "t": "Question (optional)",
+  "h": "645f5819"
+ },
+ "maihoa.con-so-nay-ra-trong-dau": {
+  "t": "The number that came to mind",
+  "h": "e65a46a7"
+ },
+ "maihoa.gieo-bang-mot-con-so": {
+  "t": "Cast with a number",
+  "h": "9e53c84b"
+ },
+ "maihoa.gieo-lai": {
+  "t": "Cast again",
+  "h": "6c124c14"
+ },
+ "maihoa.gieo-que-khac": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"rotate-cw\"></span><b>Cast another hexagram</b></span>",
+  "h": "1eed908e"
+ },
+ "maihoa.gieo-que-mai-hoa-dich-so": {
+  "t": "Cast a Plum Blossom Numerology hexagram from a number or from the moment — the Ti and Yong trigrams and the generating and overcoming of the Five Elements across the primary, nuclear and changed stages. Ask the Master to read it for your question.",
+  "h": "81547445"
+ },
+ "maihoa.gieo-theo-gio-hien-tai-hoac": {
+  "t": "Cast by the current hour or a number — the system builds the Ti–Yong trigrams, finds the moving line and returns the line text for the reading.",
+  "h": "0b36b3f2"
+ },
+ "maihoa.gieo-theo-thoi-diem-nay": {
+  "t": "Cast by this moment",
+  "h": "00972cbe"
+ },
+ "maihoa.hao-tu-loi-luan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>Line texts &amp;<br>interpretation</span>",
+  "h": "959217eb"
+ },
+ "maihoa.hoi-thay-luan-que-theo-cau": {
+  "t": "✦ Ask the Master to read the hexagram for my question",
+  "h": "f13e6c1b"
+ },
+ "maihoa.lap-que": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"flower\"></span><b>Cast the Hexagram</b></span>",
+  "h": "dedaeff1"
+ },
+ "maihoa.mai-hoa-dich-so": {
+  "t": "Plum Blossom Numerology",
+  "h": "9093e560"
+ },
+ "maihoa.mai-hoa-dich-so-gieo-que": {
+  "t": "Plum Blossom Numerology — Cast a hexagram — Minh Bao Zi Wei Dou Shu",
+  "h": "7780e00b"
+ },
+ "maihoa.mai-hoa-dich-so-la-phuong": {
+  "t": "Plum Blossom Numerology is a method of casting hexagrams said to have been founded by Shao Kangjie of the Song dynasty. It rests on the I Ching but builds a hexagram quickly from any number, moment or event. The hexagram is divided into Ti and Yong to read how the matter will unfold.",
+  "h": "35d69496"
+ },
+ "maihoa.mai-hoa-dich-so-the-dung": {
+  "t": "<b>Plum Blossom Numerology</b><span>Ti · Yong · three stages primary–nuclear–changed</span>",
+  "h": "39147698"
+ },
+ "maihoa.mot-con-so-bat-chot-nghi": {
+  "t": "A number that pops into your head can be the start of a hexagram. Enter it, or let the system take the current hour, and you get the two trigrams Ti and Yong together with a reading for the matter you are asking about.",
+  "h": "201f081c"
+ },
+ "maihoa.que-the-dung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"flower\"></span><span>Ti &amp;<br>Yong trigrams</span>",
+  "h": "d2a7a4e8"
+ },
+ "maihoa.thanh-tam-nghi-ve-viec-muon": {
+  "t": "Think sincerely about the matter you want to ask about",
+  "h": "17259cfa"
+ },
+ "maihoa.vd-27": {
+  "t": "e.g. 27",
+  "h": "4afd7b36"
+ },
+ "maihoa.vd-viec-chuyen-cho-lam-nay": {
+  "t": "e.g. Is this job change a good idea?",
+  "h": "ec1b3e52"
  },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Enter birth year</span>",

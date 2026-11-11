@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kinh Dịch — Gieo quẻ — Tử Vi Minh Bảo</title>
-<meta name="description" content="Gieo quẻ Kinh Dịch 64 quẻ theo lối 3 đồng xu — quẻ chính, hào động và quẻ biến kèm lời đoán. Hỏi Thầy luận theo câu hỏi của bạn.">
+<title data-i18n="kinhdich.kinh-dich-gieo-que-tu-vi">Kinh Dịch — Gieo quẻ — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:kinhdich.gieo-que-kinh-dich-64-que" name="description" content="Gieo quẻ Kinh Dịch 64 quẻ theo lối 3 đồng xu — quẻ chính, hào động và quẻ biến kèm lời đoán. Hỏi Thầy luận theo câu hỏi của bạn.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -97,10 +97,10 @@ body.chat-first-live .kd-anhs{grid-template-columns:1fr}
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Kinh Dịch — Gieo quẻ</b><span>Chu Dịch 64 quẻ · 3 đồng xu</span></div>
+      <div data-i18n="kinhdich.kinh-dich-gieo-que-chu-dich" class="ws-title"><b>Kinh Dịch — Gieo quẻ</b><span>Chu Dịch 64 quẻ · 3 đồng xu</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="reset()" style="display:none">Gieo lại</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="maihoa.gieo-lai" class="btn" id="btnEdit" onclick="reset()" style="display:none">Gieo lại</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -114,60 +114,60 @@ body.chat-first-live .kd-anhs{grid-template-columns:1fr}
         <img class="intro-avatar" src="/tool-avatars/kinh-dich.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Kinh Dịch — Gieo quẻ</div>
-            <div class="intro-d">Trước một quyết định khó, người xưa không đoán mò mà gieo quẻ để hỏi ý trời. Tập trung vào việc đang phân vân rồi gieo 3 đồng xu, nhận lời khuyên cổ xưa cho đúng tình huống hiện tại.</div>
+            <div data-i18n="kinhdich.kinh-dich-gieo-que" class="intro-t">Kinh Dịch — Gieo quẻ</div>
+            <div data-i18n="kinhdich.truoc-mot-quyet-dinh-kho-nguoi" class="intro-d">Trước một quyết định khó, người xưa không đoán mò mà gieo quẻ để hỏi ý trời. Tập trung vào việc đang phân vân rồi gieo 3 đồng xu, nhận lời khuyên cổ xưa cho đúng tình huống hiện tại.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="aperture"></span><span>Quẻ chính<br>&amp; quẻ biến</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="zap"></span><span>Hào động<br>rõ ràng</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Lời quẻ,<br>hào từ</span></div>
+          <div data-i18n="kinhdich.que-chinh-que-bien" class="hero-pill"><span class="hp-ic" data-icon="aperture"></span><span>Quẻ chính<br>&amp; quẻ biến</span></div>
+          <div data-i18n="kinhdich.hao-dong-ro-rang" class="hero-pill"><span class="hp-ic" data-icon="zap"></span><span>Hào động<br>rõ ràng</span></div>
+          <div data-i18n="kinhdich.loi-que-hao-tu" class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Lời quẻ,<br>hào từ</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
       <!-- Thanh tiến trình — tool này MIỄN PHÍ, không có paywall, chỉ 2 chặng
            thật: gieo quẻ rồi xem kết quả. JS chuyển bước ở `wsStepsSet`. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Gieo quẻ</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả</span></div>
+        <div data-i18n="kinhdich.1-gieo-que" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Gieo quẻ</span></div>
+        <div data-i18n="napam.2-xem-ket-qua" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
-        <div class="fc-head"><span class="fc-ic" data-icon="aperture"></span><h2>Thành tâm nghĩ về việc muốn hỏi</h2></div>
-        <p class="sub">Gieo đủ 6 lần bằng đồng xu, hệ thống tự xác định hào động và tra đúng quẻ trong 64 quẻ — trả quẻ chính, quẻ biến, lời quẻ để luận.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="aperture"></span><h2 data-i18n="maihoa.thanh-tam-nghi-ve-viec-muon">Thành tâm nghĩ về việc muốn hỏi</h2></div>
+        <p data-i18n="kinhdich.gieo-du-6-lan-bang-dong" class="sub">Gieo đủ 6 lần bằng đồng xu, hệ thống tự xác định hào động và tra đúng quẻ trong 64 quẻ — trả quẻ chính, quẻ biến, lời quẻ để luận.</p>
         <div class="cost-box">
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
               <div class="cb-amt" data-tvp-price-label="kinh-dich">…</div>
             </div>
           </div>
         </div>
         <div class="fg">
-          <label>Câu hỏi (tuỳ chọn)</label>
-          <input type="text" id="cauHoi" placeholder="VD: Công việc sắp tới của tôi thế nào?" maxlength="100">
+          <label data-i18n="maihoa.cau-hoi-tuy-chon">Câu hỏi (tuỳ chọn)</label>
+          <input data-i18n-attr="placeholder:kinhdich.vd-cong-viec-sap-toi-cua" type="text" id="cauHoi" placeholder="VD: Công việc sắp tới của tôi thế nào?" maxlength="100">
         </div>
-        <div class="step-counter" id="stepCounter">Bấm để bắt đầu gieo quẻ — 6 lần gieo, mỗi lần xác định 1 hào</div>
+        <div data-i18n="kinhdich.bam-de-bat-dau-gieo-que" class="step-counter" id="stepCounter">Bấm để bắt đầu gieo quẻ — 6 lần gieo, mỗi lần xác định 1 hào</div>
         <div class="coins-wrap" id="coinsWrap" style="display:none">
           <div class="coin" id="coin0">?</div>
           <div class="coin" id="coin1">?</div>
           <div class="coin" id="coin2">?</div>
         </div>
         <div id="linesBuild" class="line-vis" style="display:none">
-          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#666;margin-bottom:4px">Quẻ đang hình thành (từ dưới lên)</div>
+          <div data-i18n="kinhdich.que-dang-hinh-thanh-tu-duoi" style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#666;margin-bottom:4px">Quẻ đang hình thành (từ dưới lên)</div>
           <div class="lines-build" id="linesContainer"></div>
         </div>
-        <button class="btn-go" id="tossBtn" onclick="toss()">
+        <button data-i18n="kinhdich.tap-trung-gieo-hao-dau-tien" class="btn-go" id="tossBtn" onclick="toss()">
           <span class="bg-label"><span class="ic" data-icon="aperture"></span><b id="tossBtnLabel">Tập Trung &amp; Gieo Hào Đầu Tiên</b></span>
         </button>
       </div>
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Kinh Dịch — Gieo quẻ</div>
-        <p class="wsp-desc">Kinh Dịch (Chu Dịch) là một trong những cổ thư kinh điển nhất của Trung Hoa, dùng 64 quẻ tạo từ tổ hợp hào Âm – Dương để luận giải sự biến chuyển của sự việc. Gieo quẻ bằng ba đồng xu là một trong những cách phổ biến để chọn ra quẻ ứng với câu hỏi đang đặt ra.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="kinhdich.kinh-dich-gieo-que" class="wsp-title">Kinh Dịch — Gieo quẻ</div>
+        <p data-i18n="kinhdich.kinh-dich-chu-dich-la-mot" class="wsp-desc">Kinh Dịch (Chu Dịch) là một trong những cổ thư kinh điển nhất của Trung Hoa, dùng 64 quẻ tạo từ tổ hợp hào Âm – Dương để luận giải sự biến chuyển của sự việc. Gieo quẻ bằng ba đồng xu là một trong những cách phổ biến để chọn ra quẻ ứng với câu hỏi đang đặt ra.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -178,8 +178,8 @@ body.chat-first-live .kd-anhs{grid-template-columns:1fr}
         <div class="que-grid" id="queGrid"></div>
         <div id="queAnh"></div>
         <div id="queDoc"></div>
-        <div class="ask" data-ask="Luận giúp tôi quẻ này theo đúng câu hỏi: ý nghĩa quẻ chính, hào động và quẻ biến cho thấy điều gì, nên hành động thế nào?">✦ Hỏi Thầy luận quẻ theo câu hỏi</div>
-        <button class="btn-go inline" onclick="reset()"><span class="bg-label"><span class="ic" data-icon="rotate-cw"></span><b>Gieo quẻ khác</b></span></button>
+        <div data-i18n="maihoa.hoi-thay-luan-que-theo-cau" class="ask" data-ask="Luận giúp tôi quẻ này theo đúng câu hỏi: ý nghĩa quẻ chính, hào động và quẻ biến cho thấy điều gì, nên hành động thế nào?">✦ Hỏi Thầy luận quẻ theo câu hỏi</div>
+        <button data-i18n="maihoa.gieo-que-khac" class="btn-go inline" onclick="reset()"><span class="bg-label"><span class="ic" data-icon="rotate-cw"></span><b>Gieo quẻ khác</b></span></button>
       </div>
     </div>
   </main>
@@ -194,9 +194,9 @@ body.chat-first-live .kd-anhs{grid-template-columns:1fr}
 // body.chat-first-live ở trên, .kd-anhs còn là bẫy NGƯỢC min-width).
 window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'kinh-dich'};</script>
-<script src="/tools-shared/kinh-dich-doc.js?v=1"></script>
+<script src="/tools-shared/kinh-dich-doc.js?v=2"></script>
 <script src="/tools-shared/kinh-dich-hao.js?v=1"></script>
-<script src="/tools-shared/kinh-dich.js?v=6"></script>
+<script src="/tools-shared/kinh-dich.js?v=7"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/shell.js?v=148"></script>
@@ -274,7 +274,7 @@ function addLine(val) {
     else { lineEl.innerHTML = '<div class="line-yin"><span></span><span></span></div>'; }
     const tagEl = document.createElement('div');
     tagEl.style.minWidth = '50px';
-    if (l.changing) tagEl.innerHTML = `<span class="line-tag lt-change">Hào động ${l.val}</span>`;
+    if (l.changing) tagEl.innerHTML = '<span class="line-tag lt-change">' + _tvmbT('js.kinhdich.hao-dong-so', 'Hào động {val}', { val: l.val }) + '</span>';
     row.appendChild(numEl);
     row.appendChild(lineEl);
     row.appendChild(tagEl);
@@ -282,10 +282,10 @@ function addLine(val) {
   });
   const counter = document.getElementById('stepCounter');
   if (step < 6) {
-    counter.textContent = `Đã gieo ${step}/6 hào — Bấm để gieo hào ${step + 1}`;
-    document.getElementById('tossBtnLabel').textContent = `Gieo Hào ${step + 1}`;
+    counter.textContent = _tvmbT('js.kinhdich.da-gieo-hao', 'Đã gieo {step}/6 hào — Bấm để gieo hào {next}', { step: step, next: step + 1 });
+    document.getElementById('tossBtnLabel').textContent = _tvmbT('js.kinhdich.gieo-hao', 'Gieo Hào {next}', { next: step + 1 });
   } else {
-    counter.textContent = 'Đã đủ 6 hào — Đang xem quẻ...';
+    counter.textContent = _tvmbT('js.kinhdich.da-du-6-hao-dang-xem', 'Đã đủ 6 hào — Đang xem quẻ...');
     document.getElementById('tossBtn').style.display = 'none';
     setTimeout(showResult, 600);
   }
@@ -307,16 +307,16 @@ function showResult() {
   Shell.setContext({
     scenario: { type: 'kinh-dich', data: d },
     restore: { lines: currentLines },
-    label: 'Gieo quẻ · ' + _tvmbG('que', r.que.n) + (r.cQue ? ' → ' + _tvmbG('que', r.cQue.n) : ''),
-    greeting: 'Quẻ đã lập — quẻ chính **' + _tvmbG('que', r.que.n) + '** (' + r.que.zh + ')' + (r.cQue ? ', quẻ biến **' + _tvmbG('que', r.cQue.n) + '**' : ' (không hào động)') + '. Tôi sẽ luận theo câu hỏi của bạn.',
-    chips: ['Luận quẻ này cho câu hỏi của tôi', 'Hào động nói lên điều gì?', 'Quẻ biến cho thấy xu hướng nào?', 'Nên hành động thế nào lúc này?']
+    label: _tvmbT('js.kinhdich.gieo-que', 'Gieo quẻ · ') + _tvmbG('que', r.que.n) + (r.cQue ? ' → ' + _tvmbG('que', r.cQue.n) : ''),
+    greeting: _tvmbT('js.kinhdich.que-da-lap-que-chinh', 'Quẻ đã lập — quẻ chính **') + _tvmbG('que', r.que.n) + '** (' + r.que.zh + ')' + (r.cQue ? _tvmbT('js.kinhdich.que-bien', ', quẻ biến **') + _tvmbG('que', r.cQue.n) + '**' : _tvmbT('js.kinhdich.khong-hao-dong', ' (không hào động)')) + _tvmbT('js.kinhdich.toi-se-luan-theo-cau-hoi', '. Tôi sẽ luận theo câu hỏi của bạn.'),
+    chips: [_tvmbT('js.kinhdich.luan-que-nay-cho-cau-hoi', 'Luận quẻ này cho câu hỏi của tôi'), _tvmbT('js.kinhdich.hao-dong-noi-len-dieu-gi', 'Hào động nói lên điều gì?'), _tvmbT('js.kinhdich.que-bien-cho-thay-xu-huong', 'Quẻ biến cho thấy xu hướng nào?'), _tvmbT('js.kinhdich.nen-hanh-dong-the-nao-luc', 'Nên hành động thế nào lúc này?')]
   });
   var _kdLines = [];
-  if (d.cauHoi) _kdLines.push('Câu hỏi: "' + d.cauHoi + '"');
-  _kdLines.push('Quẻ chính: ' + d.queChinh);
-  if (d.queBien) _kdLines.push('Quẻ biến: ' + d.queBien);
-  _kdLines.push('Hào động: ' + d.haoDong);
-  Shell.setShareable({ kind: 'text', toolId: 'kinh-dich', title: 'Gieo quẻ Kinh Dịch · ' + r.que.n, text: _kdLines.join('\n') });
+  if (d.cauHoi) _kdLines.push(_tvmbT('js.kinhdich.cau-hoi', 'Câu hỏi: "') + d.cauHoi + '"');
+  _kdLines.push(_tvmbT('js.kinhdich.que-chinh', 'Quẻ chính: ') + d.queChinh);
+  if (d.queBien) _kdLines.push(_tvmbT('js.kinhdich.que-bien-iift', 'Quẻ biến: ') + d.queBien);
+  _kdLines.push(_tvmbT('js.kinhdich.hao-dong', 'Hào động: ') + d.haoDong);
+  Shell.setShareable({ kind: 'text', toolId: 'kinh-dich', title: _tvmbT('js.kinhdich.gieo-que-kinh-dich', 'Gieo quẻ Kinh Dịch · ') + r.que.n, text: _kdLines.join('\n') });
   document.querySelectorAll('#resPanel [data-ask]').forEach(function (el) { el.addEventListener('click', function () { Shell.ask(el.getAttribute('data-ask')); }); });
 }
 
@@ -335,9 +335,9 @@ function reset() {
   document.getElementById('btnEdit').style.display = 'none';
   wsStepsSet(1); // về lại Gieo quẻ
   Shell.setShareable(null);
-  document.getElementById('stepCounter').textContent = 'Bấm để bắt đầu gieo quẻ — 6 lần gieo, mỗi lần xác định 1 hào';
+  document.getElementById('stepCounter').textContent = _tvmbT('js.kinhdich.bam-de-bat-dau-gieo-que', 'Bấm để bắt đầu gieo quẻ — 6 lần gieo, mỗi lần xác định 1 hào');
   const tossBtn = document.getElementById('tossBtn');
-  document.getElementById('tossBtnLabel').textContent = 'Tập Trung & Gieo Hào Đầu Tiên';
+  document.getElementById('tossBtnLabel').textContent = _tvmbT('js.kinhdich.tap-trung-gieo-hao-dau-tien', 'Tập Trung & Gieo Hào Đầu Tiên');
   tossBtn.style.display = 'block';
   tossBtn.disabled = false;
   [0, 1, 2].forEach(i => {

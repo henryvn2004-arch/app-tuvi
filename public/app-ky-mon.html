@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kỳ Môn Độn Giáp — Bàn 9 cung — Tử Vi Minh Bảo</title>
-<meta name="description" content="Lập bàn Kỳ Môn Độn Giáp theo giờ — bát môn, cửu tinh, bát thần, tam kỳ trên chín cung. Hướng nào nên đi, hướng nào nên tránh. Hỏi Thầy luận theo việc của bạn.">
+<title data-i18n="kymon.ky-mon-don-giap-ban-9">Kỳ Môn Độn Giáp — Bàn 9 cung — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:kymon.lap-ban-ky-mon-don-giap" name="description" content="Lập bàn Kỳ Môn Độn Giáp theo giờ — bát môn, cửu tinh, bát thần, tam kỳ trên chín cung. Hướng nào nên đi, hướng nào nên tránh. Hỏi Thầy luận theo việc của bạn.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -64,10 +64,10 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Kỳ Môn Độn Giáp</b><span>Bàn 9 cung · bát môn · cửu tinh · bát thần</span></div>
+      <div data-i18n="kymon.ky-mon-don-giap-ban-9-hlor" class="ws-title"><b>Kỳ Môn Độn Giáp</b><span>Bàn 9 cung · bát môn · cửu tinh · bát thần</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="reset()" style="display:none">Lập lại</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="kymon.lap-lai" class="btn" id="btnEdit" onclick="reset()" style="display:none">Lập lại</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -81,45 +81,45 @@
         <img class="intro-avatar" src="/tool-avatars/ky-mon.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Kỳ Môn Độn Giáp</div>
-            <div class="intro-d">Kỳ Môn Độn Giáp không tra chung chung mà dựng đúng bàn 9 cung theo giờ hiện tại — chỉ thẳng hướng nên đi cho việc trước mắt. Bấm dựng bàn ngay để biết giờ tốt, hướng lợi đúng lúc bạn cần.</div>
+            <div data-i18n="kymon.ky-mon-don-giap" class="intro-t">Kỳ Môn Độn Giáp</div>
+            <div data-i18n="kymon.ky-mon-don-giap-khong-tra" class="intro-d">Kỳ Môn Độn Giáp không tra chung chung mà dựng đúng bàn 9 cung theo giờ hiện tại — chỉ thẳng hướng nên đi cho việc trước mắt. Bấm dựng bàn ngay để biết giờ tốt, hướng lợi đúng lúc bạn cần.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span>Bàn 9 cung<br>đầy đủ</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Hướng nên đi,<br>hướng nên tránh</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="clock"></span><span>Giờ tốt<br>cho việc</span></div>
+          <div data-i18n="kymon.ban-9-cung-day-du" class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span>Bàn 9 cung<br>đầy đủ</span></div>
+          <div data-i18n="kymon.huong-nen-di-huong-nen-tranh" class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Hướng nên đi,<br>hướng nên tránh</span></div>
+          <div data-i18n="kymon.gio-tot-cho-viec" class="hero-pill"><span class="hp-ic" data-icon="clock"></span><span>Giờ tốt<br>cho việc</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
       <!-- Thanh tiến trình — tool này MIỄN PHÍ, không có paywall, chỉ 2 chặng
            thật: lập bàn rồi xem kết quả. JS chuyển bước ở `wsStepsSet`. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Lập bàn</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả</span></div>
+        <div data-i18n="kymon.1-lap-ban" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Lập bàn</span></div>
+        <div data-i18n="napam.2-xem-ket-qua" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
-        <div class="fc-head"><span class="fc-ic" data-icon="layout-grid"></span><h2>Lập bàn cho một thời điểm</h2></div>
-        <p class="sub">Để trống thời điểm là lấy giờ hiện tại. Hệ thống dựng bàn 9 cung, trả cục, trực phù–trực sử và chi tiết từng cung.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="layout-grid"></span><h2 data-i18n="kymon.lap-ban-cho-mot-thoi-diem">Lập bàn cho một thời điểm</h2></div>
+        <p data-i18n="kymon.de-trong-thoi-diem-la-lay" class="sub">Để trống thời điểm là lấy giờ hiện tại. Hệ thống dựng bàn 9 cung, trả cục, trực phù–trực sử và chi tiết từng cung.</p>
         <div class="cost-box">
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
               <div class="cb-amt" data-tvp-price-label="ky-mon">…</div>
             </div>
           </div>
         </div>
         <div class="fg">
-          <label>Việc muốn hỏi (tuỳ chọn)</label>
-          <input type="text" id="cauHoi" placeholder="VD: Chiều nay đi gặp đối tác nên đi hướng nào?" maxlength="100">
+          <label data-i18n="kymon.viec-muon-hoi-tuy-chon">Việc muốn hỏi (tuỳ chọn)</label>
+          <input data-i18n-attr="placeholder:kymon.vd-chieu-nay-di-gap-doi" type="text" id="cauHoi" placeholder="VD: Chiều nay đi gặp đối tác nên đi hướng nào?" maxlength="100">
         </div>
         <div class="fg">
-          <label>Thời điểm (để trống = bây giờ)</label>
+          <label data-i18n="kymon.thoi-diem-de-trong-bay-gio">Thời điểm (để trống = bây giờ)</label>
           <input type="datetime-local" id="tInput">
         </div>
-        <button class="btn-go" id="goBtn" onclick="lapBan()">
+        <button data-i18n="kymon.lap-ban-ky-mon" class="btn-go" id="goBtn" onclick="lapBan()">
           <span class="bg-label"><span class="ic" data-icon="layout-grid"></span><b>Lập Bàn Kỳ Môn</b></span>
         </button>
         <div class="km-err" id="kmErr" style="display:none"></div>
@@ -127,9 +127,9 @@
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Kỳ Môn Độn Giáp</div>
-        <p class="wsp-desc">Kỳ Môn Độn Giáp là một trong Tam Thức của thuật số cổ Trung Hoa, cùng với Thái Ất và Lục Nhâm. Bàn Kỳ Môn dựng theo Can Chi giờ hiện tại, phối Cửu Cung, Bát Môn và Cửu Tinh để chỉ ra thời điểm, phương hướng thuận lợi cho một việc cụ thể.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="kymon.ky-mon-don-giap" class="wsp-title">Kỳ Môn Độn Giáp</div>
+        <p data-i18n="kymon.ky-mon-don-giap-la-mot" class="wsp-desc">Kỳ Môn Độn Giáp là một trong Tam Thức của thuật số cổ Trung Hoa, cùng với Thái Ất và Lục Nhâm. Bàn Kỳ Môn dựng theo Can Chi giờ hiện tại, phối Cửu Cung, Bát Môn và Cửu Tinh để chỉ ra thời điểm, phương hướng thuận lợi cho một việc cụ thể.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -140,11 +140,11 @@
         <div id="kmBan"></div>
         <div id="kmChiTiet"></div>
         <div class="km-tai">
-          <button class="btn-go inline" id="taiBtn" onclick="taiAnh()"><span class="bg-label"><span class="ic" data-icon="save"></span><b id="taiBtnLabel">Tải ảnh chia sẻ (9:16)</b></span></button>
-          <button class="btn-go inline" onclick="reset()"><span class="bg-label"><span class="ic" data-icon="rotate-cw"></span><b>Lập bàn khác</b></span></button>
+          <button data-i18n="kymon.tai-anh-chia-se-9-16" class="btn-go inline" id="taiBtn" onclick="taiAnh()"><span class="bg-label"><span class="ic" data-icon="save"></span><b id="taiBtnLabel">Tải ảnh chia sẻ (9:16)</b></span></button>
+          <button data-i18n="kymon.lap-ban-khac" class="btn-go inline" onclick="reset()"><span class="bg-label"><span class="ic" data-icon="rotate-cw"></span><b>Lập bàn khác</b></span></button>
         </div>
         <div class="km-err" id="kmErr2" style="display:none"></div>
-        <div class="ask" data-ask="Luận giúp tôi bàn Kỳ Môn này theo đúng việc tôi hỏi: nên đi hướng nào, giờ này hợp làm gì, hướng nào phải tránh và vì sao?">✦ Hỏi Thầy luận bàn theo việc của tôi</div>
+        <div data-i18n="kymon.hoi-thay-luan-ban-theo-viec" class="ask" data-ask="Luận giúp tôi bàn Kỳ Môn này theo đúng việc tôi hỏi: nên đi hướng nào, giờ này hợp làm gì, hướng nào phải tránh và vì sao?">✦ Hỏi Thầy luận bàn theo việc của tôi</div>
       </div>
     </div>
   </main>
@@ -154,7 +154,7 @@
 
 <script>window.SHELL_ACTIVE='ky-mon';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'ky-mon'};</script>
-<script src="/tools-shared/ky-mon.js?v=3"></script>
+<script src="/tools-shared/ky-mon.js?v=4"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
@@ -192,11 +192,11 @@ function lapBan() {
   fetch('/api/qimen' + q, { headers: { accept: 'application/json' } })
     .then(function (r) { return r.json(); })
     .then(function (b) {
-      if (!b || !b.ok) throw new Error((b && b.error) || 'Không dựng được bàn.');
+      if (!b || !b.ok) throw new Error((b && b.error) || _tvmbT('js.kymon.khong-dung-duoc-ban', 'Không dựng được bàn.'));
       _b = b;
       showResult();
     })
-    .catch(function (e) { _err('kmErr', e.message || 'Không dựng được bàn Kỳ Môn.'); })
+    .catch(function (e) { _err('kmErr', e.message || _tvmbT('js.kymon.khong-dung-duoc-ban-ky-mon', 'Không dựng được bàn Kỳ Môn.')); })
     .then(function () { btn.disabled = false; });
 }
 
@@ -204,10 +204,10 @@ function showResult() {
   const b = _b;
   const cHoi = document.getElementById('cauHoi').value.trim();
   document.getElementById('kmMeta').innerHTML =
-    '<div><span>Cục</span><b>' + KyMonTool.fmt.cuc(b.cuc) + '</b></div>' +
-    '<div><span>Tiết khí</span><b>' + KyMonTool.fmt.tietKhi(b.tietKhi) + ' ' + KyMonTool.fmt.kymon(b.nguyen) + '</b></div>' +
-    '<div><span>Giờ · Ngày</span><b>' + b.canChi.gio + ' · ' + b.canChi.ngay + '</b></div>' +
-    '<div><span>Trực phù · Trực sử</span><b>' + KyMonTool.fmt.kymon(b.trucPhu) + ' · ' + KyMonTool.fmt.kymon(b.trucSu) + '</b></div>';
+    _tvmbT('js.kymon.cuc', '<div><span>Cục</span><b>') + KyMonTool.fmt.cuc(b.cuc) + '</b></div>' +
+    _tvmbT('js.kymon.tiet-khi', '<div><span>Tiết khí</span><b>') + KyMonTool.fmt.tietKhi(b.tietKhi) + ' ' + KyMonTool.fmt.kymon(b.nguyen) + '</b></div>' +
+    _tvmbT('js.kymon.gio-ngay', '<div><span>Giờ · Ngày</span><b>') + b.canChi.gio + ' · ' + b.canChi.ngay + '</b></div>' +
+    _tvmbT('js.kymon.truc-phu-truc-su', '<div><span>Trực phù · Trực sử</span><b>') + KyMonTool.fmt.kymon(b.trucPhu) + ' · ' + KyMonTool.fmt.kymon(b.trucSu) + '</b></div>';
   document.getElementById('kmBan').innerHTML = KyMonTool.boardHTML(b);
   document.getElementById('kmChiTiet').innerHTML = KyMonTool.chiTietHTML(b);
   document.getElementById('birthPanel').style.display = 'none';
@@ -224,17 +224,17 @@ function showResult() {
   Shell.setContext({
     scenario: { type: 'ky-mon', data: d },
     restore: { t: b.luc, cauHoi: cHoi },
-    label: 'Kỳ Môn · ' + KyMonTool.fmt.cuc(b.cuc) + ' · giờ ' + b.canChi.gio,
-    greeting: 'Bàn đã lập — **' + KyMonTool.fmt.cuc(b.cuc) + '**, tiết ' + KyMonTool.fmt.tietKhi(b.tietKhi) + ' ' + KyMonTool.fmt.kymon(b.nguyen) + ', trực phù **' + KyMonTool.fmt.kymon(b.trucPhu) + '**, trực sử **' + KyMonTool.fmt.kymon(b.trucSu) + '**.' + (doNhat ? ' Hướng xếp hạng cao nhất là **' + KyMonTool.fmt.huong(doNhat.huong) + '**.' : '') + ' Tôi sẽ luận theo việc bạn hỏi.',
-    chips: ['Việc của tôi nên đi hướng nào?', 'Giờ này hợp làm việc gì nhất?', 'Hướng nào phải tránh và vì sao?', 'Trực phù trực sử nói lên điều gì?']
+    label: _tvmbT('js.kymon.ky-mon', 'Kỳ Môn · ') + KyMonTool.fmt.cuc(b.cuc) + _tvmbT('js.kymon.gio', ' · giờ ') + b.canChi.gio,
+    greeting: _tvmbT('js.kymon.ban-da-lap', 'Bàn đã lập — **') + KyMonTool.fmt.cuc(b.cuc) + _tvmbT('js.kymon.tiet', '**, tiết ') + KyMonTool.fmt.tietKhi(b.tietKhi) + ' ' + KyMonTool.fmt.kymon(b.nguyen) + _tvmbT('js.kymon.truc-phu', ', trực phù **') + KyMonTool.fmt.kymon(b.trucPhu) + _tvmbT('js.kymon.truc-su', '**, trực sử **') + KyMonTool.fmt.kymon(b.trucSu) + '**.' + (doNhat ? _tvmbT('js.kymon.huong-xep-hang-cao-nhat-la', ' Hướng xếp hạng cao nhất là **') + KyMonTool.fmt.huong(doNhat.huong) + '**.' : '') + _tvmbT('js.kymon.toi-se-luan-theo-viec-ban', ' Tôi sẽ luận theo việc bạn hỏi.'),
+    chips: [_tvmbT('js.kymon.viec-cua-toi-nen-di-huong', 'Việc của tôi nên đi hướng nào?'), _tvmbT('js.kymon.gio-nay-hop-lam-viec-gi', 'Giờ này hợp làm việc gì nhất?'), _tvmbT('js.kymon.huong-nao-phai-tranh-va-vi', 'Hướng nào phải tránh và vì sao?'), _tvmbT('js.kymon.truc-phu-truc-su-noi-len', 'Trực phù trực sử nói lên điều gì?')]
   });
 
   const lines = [];
-  if (cHoi) lines.push('Việc hỏi: "' + cHoi + '"');
-  lines.push(b.cuc + ' · tiết ' + b.tietKhi + ' ' + b.nguyen);
-  lines.push('Giờ ' + b.canChi.gio + ' ngày ' + b.canChi.ngay);
-  if (doNhat) lines.push('Hướng đỡ nhất: ' + doNhat.huong + ' — cửa ' + (doNhat.cua ? doNhat.cua.ten : '—'));
-  Shell.setShareable({ kind: 'text', toolId: 'ky-mon', title: 'Bàn Kỳ Môn · ' + b.cuc, text: lines.join('\n') });
+  if (cHoi) lines.push(_tvmbT('js.kymon.viec-hoi', 'Việc hỏi: "') + cHoi + '"');
+  lines.push(b.cuc + _tvmbT('js.kymon.tiet-6pzm', ' · tiết ') + b.tietKhi + ' ' + b.nguyen);
+  lines.push(_tvmbT('js.kymon.gio-5bb3', 'Giờ ') + b.canChi.gio + _tvmbT('js.kymon.ngay', ' ngày ') + b.canChi.ngay);
+  if (doNhat) lines.push(_tvmbT('js.kymon.huong-do-nhat', 'Hướng đỡ nhất: ') + doNhat.huong + _tvmbT('js.kymon.cua', ' — cửa ') + (doNhat.cua ? doNhat.cua.ten : '—'));
+  Shell.setShareable({ kind: 'text', toolId: 'ky-mon', title: _tvmbT('js.kymon.ban-ky-mon', 'Bàn Kỳ Môn · ') + b.cuc, text: lines.join('\n') });
   document.querySelectorAll('#resPanel [data-ask]').forEach(function (el) {
     el.addEventListener('click', function () { Shell.ask(el.getAttribute('data-ask')); });
   });
@@ -247,14 +247,14 @@ function taiAnh() {
   const lbl = document.getElementById('taiBtnLabel');
   const old = lbl.textContent;
   btn.disabled = true;
-  lbl.textContent = 'Đang dựng ảnh…';
+  lbl.textContent = _tvmbT('js.kymon.dang-dung-anh', 'Đang dựng ảnh…');
   const o = KyMonTool.posterOpts(_b);
   o.draw = KyMonTool.posterDraw(_b);
   o.qrUrl = Poster.qrLink('ky-mon', '/app/ky-mon');
-  o.qrCaption = 'Quét mã — lập bàn của bạn';
+  o.qrCaption = _tvmbT('js.kymon.quet-ma-lap-ban-cua-ban', 'Quét mã — lập bàn của bạn');
   Poster.download(o, 'ky-mon-tuviminhbao.png')
     .then(function () { if (window.Track) Track.event('poster_download', { tool_id: 'ky-mon' }); })
-    .catch(function () { _err('kmErr2', 'Chưa dựng được ảnh. Thử lại sau ít giây.'); })
+    .catch(function () { _err('kmErr2', _tvmbT('js.kymon.chua-dung-duoc-anh-thu-lai', 'Chưa dựng được ảnh. Thử lại sau ít giây.')); })
     .then(function () { btn.disabled = false; lbl.textContent = old; });
 }
 
