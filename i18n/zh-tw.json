@@ -1,0 +1,134 @@
+{
+ "chat.ke-chuyen-cua-ban-minh-bao": {
+  "t": "說說您的故事，Minh Bảo 會從 15 位老師中請出最合適的一位為您解讀：紫微斗數命盤、八字、合婚、取名、擇日。",
+  "h": "0f564294"
+ },
+ "js.shell.an": {
+  "t": "隱藏",
+  "h": "f4ea7c30"
+ },
+ "js.shell.bao-cao": {
+  "t": "報告",
+  "h": "7013ca8b"
+ },
+ "js.shell.cac-luot-hoi-thay-cua-ban": {
+  "t": "您向老師提問的紀錄會顯示在這裡。",
+  "h": "e2617653"
+ },
+ "js.shell.cac-thay": {
+  "t": "老師們",
+  "h": "edb6a720"
+ },
+ "js.shell.cong-cu": {
+  "t": "工具",
+  "h": "6029ffef"
+ },
+ "js.shell.dang-nhap-de-luu-lich-su": {
+  "t": "登入以儲存紀錄",
+  "h": "b50f4e37"
+ },
+ "js.shell.dang-xuat": {
+  "t": "登出",
+  "h": "d513aac0"
+ },
+ "js.shell.dieu-huong": {
+  "t": "導覽",
+  "h": "72742031"
+ },
+ "js.shell.doi-nen-sang-toi": {
+  "t": "切換淺色／深色模式",
+  "h": "92ae697b"
+ },
+ "js.shell.gan-day": {
+  "t": "最近",
+  "h": "5c3d644b"
+ },
+ "js.shell.ho-so": {
+  "t": "個人檔案",
+  "h": "3acd974b"
+ },
+ "js.shell.ho-so-cai-dat": {
+  "t": "個人檔案與設定",
+  "h": "ce3d7ddb"
+ },
+ "js.shell.ho-tro": {
+  "t": "支援",
+  "h": "ed2a55ae"
+ },
+ "js.shell.hoi-thay-moi": {
+  "t": "新的提問",
+  "h": "b4d2c650"
+ },
+ "js.shell.hoi-thay-qua-zalo": {
+  "t": "透過 Zalo 請教老師",
+  "h": "b0e9649b"
+ },
+ "js.shell.hom-nay": {
+  "t": "今日",
+  "h": "0048b6a4"
+ },
+ "js.shell.khach": {
+  "t": "訪客",
+  "h": "8c19417f"
+ },
+ "js.shell.la-so": {
+  "t": "命盤",
+  "h": "685adfe6"
+ },
+ "js.shell.ma-qr-zalo-oa-tu-vi": {
+  "t": "Tử Vi Minh Bảo 的 Zalo OA QR 碼",
+  "h": "99554c71"
+ },
+ "js.shell.minh-bao": {
+  "t": "Minh Bảo",
+  "h": "e4158660"
+ },
+ "js.shell.moi-ban-be": {
+  "t": "邀請朋友",
+  "h": "6f8f4379"
+ },
+ "js.shell.nap-luong": {
+  "t": "儲值點數",
+  "h": "b70a5d1d"
+ },
+ "js.shell.nhiem-vu-nhan-luong": {
+  "t": "完成任務賺點數",
+  "h": "fba04eb9"
+ },
+ "js.shell.quet-ma-bang-zalo-nhan-cau": {
+  "t": "用 Zalo 掃碼並傳送問題，老師立即回覆",
+  "h": "559a993e"
+ },
+ "js.shell.tat-ca-luot-hoi-thay": {
+  "t": "所有提問紀錄",
+  "h": "56b20067"
+ },
+ "js.shell.them": {
+  "t": "更多",
+  "h": "cc88682f"
+ },
+ "js.shell.thu-gon-thanh-ben": {
+  "t": "收合側邊欄",
+  "h": "110215a1"
+ },
+ "js.shell.thu-vien": {
+  "t": "資料庫",
+  "h": "8bdb70c5"
+ },
+ "js.shell.tim-kiem": {
+  "t": "搜尋",
+  "h": "66719286"
+ },
+ "js.shell.tim-kiem-ctrl-k": {
+  "t": "搜尋 (Ctrl K)",
+  "h": "055b838e"
+ },
+ "js.shell.xem-tat-ca": {
+  "t": "查看全部",
+  "h": "7e040254"
+ },
+ "laso.tu-vi-minh-bao": {
+  "t": "Tử Vi Minh Bảo",
+  "h": "33336b26"
+ }
+}

@@ -1,0 +1,47 @@
+# Đa ngôn ngữ — quy ước kỹ thuật (W4)
+
+Hợp đồng ngôn ngữ ở `lib/i18n/locales.ts` · kế hoạch ở `WORKPLAN.md`. File này: **cách chạy** và **luật cho W6/W7/W8**.
+
+## Luồng một request `/ja/app/bat-tu`
+1. `proxy.ts` bóc `/ja`, gắn header `x-tvmb-locale: ja`, rewrite nội bộ → `app/i18n-render/[locale]/[[...path]]`.
+2. Route fetch NỘI BỘ `/app/bat-tu` (đi qua đủ rewrites/redirects/route SSR — không chép bảng URL), rồi `lib/i18n/render.mjs` thay chữ theo từ điển **trên server**.
+3. Trang dịch ĐỦ → canonical tự trỏ, `hreflang` đủ bản + `x-default`→vi, `<html lang>`. Trang CHƯA đủ → `noindex` (meta + `X-Robots-Tag`), không canonical/hreflang, không vào sitemap.
+4. URL `vi` đi nguyên trạng; proxy chỉ gắn header `Link: …hreflang…` cho trang đã có bản dịch. `/vi/…` → 308 về không tiền tố. Không redirect theo Accept-Language/cookie (crawler thấy URL ổn định).
+5. Client (`public/i18n.js`): bộ chọn ngôn ngữ (quả địa cầu + tên bản ngữ, không cờ), thanh gợi ý "View in 日本語?" (cookie `tvmb_locale`, chỉ khi trang đích đã dịch), `TVMB_I18N.t()` cho chữ JS. **Không dịch trang ở client.**
+
+## Đánh dấu chữ
+- HTML tĩnh: `data-i18n="khoá"` (thay innerHTML) · `data-i18n-attr="placeholder:khoá;title:khoá2"` · `<title data-i18n>` · meta `content:khoá`. Chữ Việt giữ trong HTML làm fallback.
+- Chữ do JS dựng: `T('js.<ns>.<khoá>', 'chữ Việt')` (`var T = …TVMB_I18N.t` ở đầu file). Khoá `js.*` được server nhúng vào trang. Namespace tự nhận: `shell` (trang nạp `shell.js`), `nav` (`nav.js` bản đầy đủ).
+- Rút tự động: `npm run i18n:tag -- public/x.html --prefix tiền-tố` · `npm run i18n:tag-js -- public/x.js --prefix js.ns --calls hàm:thứTự`. **Đọc diff** trước khi commit. Câu Y HỆT dùng lại khoá (HTML chỉ dùng lại khoá không phải `js.*`).
+- Trang HTML mới có chữ cần dịch: tag xong chạy `npm run i18n:pages`.
+
+## Từ điển
+- `i18n/vi.json` `{khoá: câu gốc}` = NGUỒN. `i18n/<locale>.json` `{khoá:{t,h}}`, `h` = hash câu gốc → biết câu nào đổi (stale: vẫn hiển thị, `i18n:next` đưa lại).
+- `zh-cn.json` **SINH** từ `zh-tw.json` bằng `opencc-js` (twp→cn). Không sửa tay (`check:i18n` bắt).
+- `i18n/pages.json`, `availability.json` **SINH** (`npm run i18n:pages`, `i18n:save` tự chạy). Conflict merge → chạy lại, đừng gộp tay.
+- Trang "đã dịch" = mọi khoá của trang (+ khoá `js.*` của namespace nó nạp) có bản dịch.
+
+## Dành cho W7 (người dịch)
+```bash
+npm run i18n:status [-- --pages]                     # còn thiếu/cũ bao nhiêu, trang nào sắp đủ
+npm run i18n:next -- --locale ja --n 200 [--page /app]  # lô JSON chỉ gồm khoá thiếu/cũ (thứ tự: shell → trang ưu tiên → còn lại)
+npm run i18n:save -- --locale ja --file lo.json      # {"khoá":"bản dịch"} hoặc [{"k","t","same":true?}]; stdin cũng được
+```
+`save` kiểm: khoá tồn tại · thẻ HTML + `{token}` khớp câu gốc · không chép nguyên câu gốc (tên riêng/email giữ nguyên → `"same":true`) · CJK không còn nhiều chữ Việt. Câu tốt vẫn lưu, câu hỏng in lý do, exit 1. Lưu `zh-tw` tự sinh lại `zh-cn`. KHÔNG dịch `zh-cn`. Thứ tự ưu tiên trang: `i18n/priority.json` (mảng đường dẫn, tuỳ chọn).
+
+## Route tự dịch từ DB (tự quản SEO)
+Route tự render đúng ngôn ngữ và tự xuất robots/canonical/hreflang theo từng bản ghi (hiện: `/nghiem-chung`, `/xac-dinh-gio-sinh`) đăng ký ở **`lib/i18n/self-managed.mjs`** (`SELF_MANAGED_PREFIXES`, một chỗ duy nhất). Với `/<locale>/<prefix>…` proxy bóc tiền tố + gắn `x-tvmb-locale` rồi rewrite THẲNG tới route, KHÔNG qua `i18n-render`, KHÔNG noindex tự động; route đọc `localeFromHeaders()` và tự quyết (bản chưa dịch → 404). Các prefix này không nằm trong `availability.json`; `check:i18n` cấm đăng ký chồng.
+
+## Dành cho W6 / W8
+- Route SSR/handler đọc ngôn ngữ qua `localeFromHeaders(req.headers)` — proxy đã gắn header, nhưng trang SSR (không phải HTML tĩnh) hiện chỉ được phục vụ dưới `/<locale>/…` ở dạng `noindex` (không có khoá data-i18n) cho tới khi tự chịu trách nhiệm bản dịch. Muốn index: render sẵn chữ đúng ngôn ngữ trong route VÀ đăng ký trang (đưa vào `availability`) — trao đổi với W4.
+- Prompt LLM: câu chỉ định ngôn ngữ đặt ở USER message (giữ cache `cachedSystemFor`).
+- `?v=` bump: đã bump `nav.js`→48, `shell.js`→140, `shell.css`→79 ở mọi nơi TRỪ `public/topup.html` (W5) và `lib/nghiem-chung/trang-hub.ts`, `trang-ho-so.ts` (W6) — **W5/W6 tự bump ba chỗ đó** (`nav.js?v=48`).
+
+## Font CJK
+`@fontsource-variable/noto-sans-{jp,kr,tc,sc}` (devDependencies) → `npm run i18n:fonts` (chạy trong `prebuild`) sinh `public/fonts/cjk/*.woff2` + `public/fonts/i18n-<locale>.css` (gitignore). Chỉ trang `/<locale>` CJK được chèn `<link>`; unicode-range theo lát nên chỉ tải lát có chữ. CLS: `font-display:swap`, 'Be Vietnam Pro' đứng đầu ngăn xếp (Latin giữ nét), sau đó Noto rồi font hệ thống CJK (glyph rộng 1em nên đổi font ít xô dòng). Tiêu đề dùng lớp riêng (vd Noto Serif) giữ nguyên font — CJK trong đó rơi về font hệ thống.
+
+## Bộ dò
+`npm run check:i18n` (trong lint CI): khoá có trong vi.json · pages/availability không cũ · zh-cn = OpenCC(zh-tw) · mô phỏng render từng trang×ngôn ngữ (đủ → hreflang đúng tập; thiếu → noindex, không hreflang) · không hreflang tĩnh viết tay cho bản chưa có · hằng số `i18n.js`/`links.mjs` khớp `locales.ts` · `?v=` của `/i18n.js` đồng nhất · matcher proxy phủ trang.
+
+## Chưa làm (cố ý, ngoài MVP)
+Chữ còn lại trong `shell.js` (rail chat, cmd-K, toast… hàng trăm chuỗi) và JS riêng từng trang — dùng `i18n:tag-js`/`T()`. Nội dung màn `/app` do JS dựng chưa dịch. `app/i18n-render` phục vụ HTML; route SSR có chữ trong code chưa có cơ chế dịch.

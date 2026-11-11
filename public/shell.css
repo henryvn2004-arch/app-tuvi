@@ -1265,3 +1265,12 @@ font-family:inherit}
 @media(prefers-reduced-motion:reduce){
   .sbp-dot,.sb-dot,.typing i{animation:none}
 }
+
+/* ── Bộ chọn ngôn ngữ ở chân sidebar (public/i18n.js dựng nội dung; [hidden] khi trang chưa có bản dịch) ── */
+.sbn-lang{padding:0 8px 4px}
+.sbn-lang[hidden]{display:none}
+.sbn-lang .tvl,.sbn-lang .tvl-b{width:100%}
+.sbn-lang .tvl-b{justify-content:flex-start;color:var(--sb-fg);padding:0 12px}
+.sbn-lang .tvl-m{left:8px;right:8px;min-width:0;background:var(--sb-bg);color:var(--sb-fg);border-color:var(--line)}
+html.sb-mini .sbn-lang .tvl-t{display:none}
+html.sb-mini .sbn-lang .tvl-b{justify-content:center;padding:0}

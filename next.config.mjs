@@ -37,6 +37,8 @@ const nextConfig = {
       './data/nghiem-chung/loai-tru/**',
       './scripts/nghiem-chung/PROMPT.md',
     ],
+    // Từ điển đa ngôn ngữ đọc bằng fs lúc chạy — app/i18n-render (lib/i18n/dict.mjs).
+    '/i18n-render/[locale]/[[...path]]': ['./i18n/*.json'],
     '/api/luan-giai/email-pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
     // Cùng lý do: các route dưới cũng dựng PDF (resend-pdf · gửi PDF vào kênh chat
     // từ web và từ webhook 4 kênh) — lib/pdf/paid-reports.ts.
@@ -150,6 +152,7 @@ const nextConfig = {
       { source: '/sitemap-noi-dung.xml', destination: '/sitemap-noi-dung'    },
       { source: '/sitemap-nghiem-chung.xml', destination: '/sitemap-nghiem-chung' },
       { source: '/sitemap-xac-dinh-gio-sinh.xml', destination: '/sitemap-xac-dinh-gio-sinh' },
+      { source: '/sitemap-i18n-:locale.xml', destination: '/sitemap-i18n/:locale' },
       { source: '/sitemap-seo.xml',     destination: '/sitemap-seo'          },
       { source: '/sitemap-van-han.xml', destination: '/sitemap-van-han'      },
       { source: '/sitemap-la-so.xml',   destination: '/sitemap-la-so'        },
