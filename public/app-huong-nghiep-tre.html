@@ -352,9 +352,10 @@ window.SHELL_INTRO={key:'huong-nghiep-tre'};</script>
 <script src="/tools-shared/illus-match.js?v=1"></script>
 <script src="/laso-chart.js?v=9"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=14"></script>
+<script src="/tools-shared/noi-sinh.js?v=1"></script>
+<script src="/tuvi-form.js?v=15"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=41"></script>
+<script src="/tuvi-paywall.js?v=42"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
 <script src="/auth.js?v=6"></script>
   <script src="/nav.js?v=48" data-icons-only></script>
@@ -444,7 +445,7 @@ function _birthOf(prefix) {
   if (!f.ngay || !f.thang || !f.nam) return null;
   return {
     day: f.ngay, month: f.thang, year: f.nam,
-    hourBranch: f.gioIdx, gender: f.gioitinh, isLunar: false,
+    hourBranch: f.gioIdx, gender: f.gioitinh, isLunar: false, lich: f.lich, noiSinh: f.noiSinh,
     name: (f.hoten || '').trim() || undefined
   };
 }
@@ -836,7 +837,7 @@ function _banGiaoNguoiLon(data) {
 function huongNghiepIllusHtml(data) {
   if (!window.IllusMatch || !window.anSaoLaSo || !window.convertDuongToAm || !_last) return '';
   try {
-    var conv = convertDuongToAm(_last.day, _last.month, _last.year, 0);
+    var conv = convertDuongToAm(_last.day, _last.month, _last.year, 0, _last.lich);
     if (!conv) return '';
     conv.gioIdx = _last.hourBranch;
     var ls = anSaoLaSo({

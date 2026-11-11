@@ -69,7 +69,7 @@ footer a{color:rgba(255,255,255,.5);text-decoration:none}
     <div class="step-num">2</div>
     <div class="step-content">
       <h3>Chọn gói nạp Lượng</h3>
-      <p>Vào trang <a href="/topup.html"><strong>Nạp Lượng</strong></a> và chọn một trong các gói bên dưới. Thanh toán qua <strong>chuyển khoản ngân hàng VND</strong> (quét mã QR payOS bằng app ngân hàng, Lượng vào tài khoản tự động) hoặc <strong>PayPal / thẻ Visa, Mastercard</strong> quốc tế.</p>
+      <p>Vào trang <a href="/topup.html"><strong>Nạp Lượng</strong></a> và chọn một trong các gói bên dưới. Thanh toán bằng <strong>USD</strong> qua <strong>PayPal</strong> hoặc <strong>thẻ Visa / Mastercard</strong> (không cần tài khoản PayPal), Lượng vào tài khoản tự động.</p>
 
       <div class="pkg-grid" id="pkgGrid" style="margin-top:16px">
         <div class="pkg-box"><div class="name">…</div><div class="credits">…</div><div class="price">…</div></div>
@@ -116,11 +116,8 @@ footer a{color:rgba(255,255,255,.5);text-decoration:none}
 
   <h2>Câu hỏi thường gặp</h2>
 
-  <p><strong>Ngoài PayPal, có cách nào thanh toán bằng ngân hàng Việt Nam không?</strong><br>
-  Có. Chọn <strong>Chuyển khoản</strong> ở trang Nạp Lượng — quét mã QR bằng app ngân hàng Việt Nam bất kỳ, Lượng vào tài khoản tự động, không cần thẻ quốc tế.</p>
-
   <p><strong>Tôi có thể thanh toán bằng thẻ không cần tài khoản PayPal không?</strong><br>
-  Có. Trong cửa sổ PayPal, chọn <em>"Pay with Debit or Credit Card"</em> để nhập thông tin thẻ trực tiếp.</p>
+  Có. Ở trang Nạp Lượng chọn <strong>Thẻ Visa / Mastercard</strong> — PayPal mở thẳng form nhập thẻ, không cần đăng nhập PayPal.</p>
 
   <p><strong>Lượng có hết hạn không?</strong><br>
   Không. Lượng không bao giờ hết hạn.</p>
@@ -137,7 +134,7 @@ footer a{color:rgba(255,255,255,.5);text-decoration:none}
   <div class="warn">Nếu gặp bất kỳ vấn đề nào với thanh toán, vui lòng liên hệ trước khi thực hiện giao dịch lại để tránh bị tính phí hai lần.</div>
 </div>
 
-<script src="/tool-prices.js"></script>
+<script src="/tool-prices.js?v=11"></script>
 <script>
 // Gói nạp KHÔNG chép số — cùng luật với `tool-prices.js` (đọc `credit_packages`
 // qua ToolPrices, admin đổi gói trong Admin là trang này tự đổi theo, không
@@ -148,13 +145,13 @@ footer a{color:rgba(255,255,255,.5);text-decoration:none}
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
-  function vnd(n) {
-    return Number(n).toLocaleString('vi-VN') + 'đ';
+  function usd(n) {
+    return '$' + Number(n).toFixed(2);
   }
   function render() {
     if (!window.ToolPrices) return;
     window.ToolPrices.load().then(function () {
-      var pkgs = window.ToolPrices.packages();
+      var pkgs = window.ToolPrices.packages().filter(function (p) { return p.amount_usd > 0; });
       var grid = document.getElementById('pkgGrid');
       if (!grid || !pkgs.length) return;
       var featuredIdx = Math.min(1, pkgs.length - 1);
@@ -165,7 +162,7 @@ footer a{color:rgba(255,255,255,.5);text-decoration:none}
             '<div class="pkg-box' + (pop ? ' pop' : '') + '">' +
             '<div class="name">' + esc(p.label || 'Gói ' + (i + 1)) + (pop ? ' ⭐' : '') + '</div>' +
             '<div class="credits">' + p.credits + ' Lượng</div>' +
-            '<div class="price">' + vnd(p.amount_vnd) + '</div>' +
+            '<div class="price">' + usd(p.amount_usd) + '</div>' +
             '</div>'
           );
         })

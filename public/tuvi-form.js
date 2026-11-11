@@ -21,7 +21,10 @@
  *   sẵn của trang gọi) — van an toàn, không phải cách dùng khuyến nghị.
  */
 
-window.TuviForm = (() => {
+// Nạp lại lần hai (vd `shell.js` `ensureScripts` xin `?v=` khác với thẻ <script>
+// của trang ⇒ khác URL ⇒ chạy lại file) KHÔNG được thay closure đang giữ
+// `_updaters` của các form đã vẽ — giữ bản đã có nếu nó cùng thế hệ (có `_noiSinh`).
+window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviForm : (() => {
   const CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
   const _updaters = {}; // prefix → update fn
   let _introShown = false; // renderChat() có thể gọi lại nhiều lần (2 người) — chỉ chào 1 lần/trang
@@ -52,6 +55,69 @@ window.TuviForm = (() => {
     throw new Error('tuvi-form.js: thiếu /tools-shared/vn-timezone.js — nạp nó TRƯỚC file này.');
   }
   const { toVnHour, hourMinToGioIdx } = window.VnTimezone;
+
+  // ── Nơi sinh: NGUỒN DUY NHẤT là tools-shared/noi-sinh.js ──
+  // Sinh ở VN (mặc định, ô "Sinh ở ngoài Việt Nam?" bỏ trống) → đi NGUYÊN đường
+  // cũ `toVnHour(…, 420, …)`, lá số y hệt trước đây. Sinh ở nước khác → đổi giờ
+  // đồng hồ nơi sinh (múi + giờ mùa hè lịch sử từ IANA) sang giờ của LỊCH ÂM nơi
+  // đó (VN · Trung/Đài/HK · Hàn · Nhật), kèm `lich` cho engine. Thẻ
+  // <script src="/tools-shared/noi-sinh.js"> nên đứng TRƯỚC file này. KHÔNG ném lỗi
+  // khi thiếu (khác vn-timezone.js): `shell.js` nạp lười file này mà chưa biết
+  // noi-sinh.js — thiếu thì tự chèn script, trong lúc chờ ô nơi sinh chỉ có "—"
+  // nên mọi lá số đi đường VN như cũ (an toàn), nạp xong thì đổ danh sách nước.
+  const NOI_SINH_SRC = '/tools-shared/noi-sinh.js?v=1';
+  const nsApi = () => window.NoiSinh;
+  if (!window.NoiSinh && !document.querySelector('script[src^="/tools-shared/noi-sinh.js"]')) {
+    const sc = document.createElement('script');
+    sc.src = NOI_SINH_SRC;
+    sc.onload = () => {
+      document.querySelectorAll('select[id$="tvf-noisinh"]').forEach((sel) => {
+        if (sel.options.length <= 1) sel.innerHTML = noiSinhOptions();
+      });
+    };
+    document.head.appendChild(sc);
+  }
+  const TEN_LICH = { vn: 'giờ VN', cn: 'giờ lịch Trung Hoa', kr: 'giờ lịch Hàn', jp: 'giờ lịch Nhật' };
+
+  /** {ma, tz} của nơi sinh đang chọn, hoặc null = sinh ở VN (đường cũ). */
+  function noiSinhOf(prefix = '') {
+    if (!gel('tvf-foreign', prefix)?.checked) return null;
+    const ma = gel('tvf-noisinh', prefix)?.value || '';
+    if (!ma || ma === 'VN' || !nsApi()) return null;
+    const tz = gel('tvf-vung', prefix)?.value || (nsApi().vungCuaNuoc(ma)[0] || [])[0];
+    return tz ? { ma, tz } : null;
+  }
+
+  /**
+   * Giờ đồng hồ người dùng nhập → ngày/giờ đưa vào engine.
+   * VN: đúng phép cũ (chỉ đổi giờ, không đổi ngày). Nước ngoài: đổi cả NGÀY khi
+   * qua nửa đêm và trả kèm `lich` · `noiSinh` · `goc` (giờ gốc để setData khôi phục).
+   */
+  function quyDoiGio(ns, ngay, thang, nam, hh, mm) {
+    if (!ns || !ngay || !thang || !nam) {
+      const vn = toVnHour(hh, mm, 420, ngay, thang, nam);
+      return { ngay, thang, nam, gioHour: vn.h, gioPhut: vn.m };
+    }
+    const q = nsApi().quyDoi({ ngay, thang, nam, gio: hh, phut: mm }, ns.ma, ns.tz);
+    return {
+      ngay: q.ngay, thang: q.thang, nam: q.nam, gioHour: q.gio, gioPhut: q.phut,
+      lich: q.lich, noiSinh: ns.ma, noiSinhTz: ns.tz,
+      goc: { ngay, thang, nam, gioHour: hh, gioPhut: mm },
+    };
+  }
+
+  /** Đổ danh sách vùng của nước đang chọn vào ô `tvf-vung` (ẩn khi nước chỉ một múi). */
+  function fillVung(prefix = '', chon) {
+    const sel = gel('tvf-vung', prefix);
+    if (!sel) return;
+    const ma = gel('tvf-noisinh', prefix)?.value || '';
+    const vung = ma && nsApi() ? nsApi().vungCuaNuoc(ma) : [];
+    sel.innerHTML = vung.map(([tz, ten]) => `<option value="${tz}">${ten || tz}</option>`).join('');
+    if (chon) sel.value = chon;
+    sel.style.display = vung.length > 1 ? '' : 'none';
+    const wrap = sel.closest('.tvf-ibox');
+    if (wrap) wrap.style.display = sel.style.display;
+  }
 
   // Dropdown "Ngày" liệt kê cố định 1-31 bất kể tháng nào đang chọn — chọn
   // được 31/2 thì lá số tính SAI ÂM THẦM (JD vẫn ra một ngày khác, không báo
@@ -84,18 +150,19 @@ window.TuviForm = (() => {
     clampNgayForMonth(prefix);
     const hh     = parseInt(gel('tvf-gio', prefix)?.value) || 0;
     const mm     = parseInt(gel('tvf-phut', prefix)?.value) || 0;
-    const utcOff = parseInt(gel('tvf-utc', prefix)?.value ?? '420');
     const ngay   = parseInt(gel('ngay', prefix)?.value) || 1;
     const thang  = parseInt(gel('thang', prefix)?.value) || 1;
     const nam    = parseInt(gel('nam', prefix)?.value) || 0;
-    const vn     = toVnHour(hh, mm, utcOff, ngay, thang, nam);
-    const idx    = hourMinToGioIdx(vn.h, vn.m);
+    const ns     = noiSinhOf(prefix);
+    const q      = quyDoiGio(ns, ngay, thang, nam, hh, mm);
+    const idx    = hourMinToGioIdx(q.gioHour, q.gioPhut);
     const el     = gel('tvf-gio-am', prefix);
     const elVn   = gel('tvf-gio-vn', prefix);
     if (el)  el.textContent = 'Giờ âm: ' + CHI[idx];
     if (elVn) {
-      if (utcOff !== 420) {
-        elVn.textContent = `→ ${String(vn.h).padStart(2,'0')}:${String(vn.m).padStart(2,'0')} (VN)`;
+      if (ns && q.lich) {
+        const p2 = (n) => String(n).padStart(2,'0');
+        elVn.textContent = `→ ${p2(q.ngay)}/${p2(q.thang)} ${p2(q.gioHour)}:${p2(q.gioPhut)} (${TEN_LICH[q.lich] || q.lich})`;
         elVn.style.display = 'block';
       } else {
         elVn.style.display = 'none';
@@ -108,9 +175,10 @@ window.TuviForm = (() => {
     const wrap = gel('tvf-utc-wrap', prefix);
     if (wrap) wrap.style.display = cb?.checked ? 'block' : 'none';
     if (!cb?.checked) {
-      const sel = gel('tvf-utc', prefix);
-      if (sel) sel.value = '420';
+      const sel = gel('tvf-noisinh', prefix);
+      if (sel) sel.value = '';
     }
+    fillVung(prefix);
     updateGioAmDisplay(prefix);
   }
 
@@ -133,19 +201,14 @@ window.TuviForm = (() => {
   }
 
   // ── Option lists ─────────────────────────────────────────────
-  const UTC_OPTIONS = [
-    {v:-720,l:'UTC−12'},{v:-660,l:'UTC−11'},{v:-600,l:'UTC−10'},{v:-570,l:'UTC−9:30'},
-    {v:-540,l:'UTC−9'},{v:-480,l:'UTC−8'},{v:-420,l:'UTC−7'},{v:-360,l:'UTC−6'},
-    {v:-300,l:'UTC−5'},{v:-240,l:'UTC−4'},{v:-210,l:'UTC−3:30'},{v:-180,l:'UTC−3'},
-    {v:-120,l:'UTC−2'},{v:-60,l:'UTC−1'},{v:0,l:'UTC±0'},{v:60,l:'UTC+1'},
-    {v:120,l:'UTC+2'},{v:180,l:'UTC+3'},{v:210,l:'UTC+3:30'},{v:240,l:'UTC+4'},
-    {v:270,l:'UTC+4:30'},{v:300,l:'UTC+5'},{v:330,l:'UTC+5:30 (Ấn Độ)'},
-    {v:345,l:'UTC+5:45 (Nepal)'},{v:360,l:'UTC+6'},{v:390,l:'UTC+6:30 (Myanmar)'},
-    {v:420,l:'UTC+7 — Việt Nam ✓',selected:true},{v:480,l:'UTC+8 (Singapore, TQ)'},
-    {v:525,l:'UTC+8:45'},{v:540,l:'UTC+9 (Nhật, Hàn)'},{v:570,l:'UTC+9:30'},
-    {v:600,l:'UTC+10 (Úc)'},{v:630,l:'UTC+10:30'},{v:660,l:'UTC+11'},{v:720,l:'UTC+12'},
-    {v:765,l:'UTC+12:45'},{v:780,l:'UTC+13'},{v:840,l:'UTC+14'},
-  ];
+  // Ô "Nơi sinh" (thay ô "Múi giờ nơi sinh" UTC cố định cũ — cái đó không biết
+  // giờ mùa hè, cũng không biết nơi sinh dùng lịch âm nào). VN không nằm ở đây:
+  // bỏ trống ô "Sinh ở ngoài Việt Nam?" chính là VN.
+  function noiSinhOptions() {
+    const N = nsApi();
+    return '<option value="">— Chọn nơi sinh —</option>' +
+      (N ? N.NUOC.filter((n) => n[0] !== 'VN').map((n) => `<option value="${n[0]}">${n[1]}</option>`).join('') : '');
+  }
 
   const TOOLTIP_CONTENT = `<div class="tvf-tooltip-box">
     <div class="tvf-tooltip-title"><span class="ic" data-icon="clock"></span> Lịch sử múi giờ Việt Nam</div>
@@ -246,7 +309,7 @@ window.TuviForm = (() => {
     for (let i = 1; i <= 31; i++) ngayOpts  += `<option value="${i}">${i}</option>`;
     for (let i = 1; i <= 12; i++) thangOpts += `<option value="${i}">${i}</option>`;
     for (let i = NAM_MIN; i <= NAM_MAX; i++) namOpts += `<option value="${i}"${i===NAM_DEFAULT?' selected':''}>${i}</option>`;
-    const utcOpts = UTC_OPTIONS.map(o => `<option value="${o.v}"${o.selected?' selected':''}>${o.l}</option>`).join('');
+    const utcOpts = noiSinhOptions();
     return { gioOpts, phutOpts, ngayOpts, thangOpts, namOpts, utcOpts };
   }
 
@@ -281,8 +344,9 @@ window.TuviForm = (() => {
         <span>Sinh ở ngoài Việt Nam?</span>
       </label>
       <div id="${pid('tvf-utc-wrap',prefix)}" style="display:none;margin-top:6px">
-        <label class="form-label">Múi giờ nơi sinh</label>
-        <select class="form-input" id="${pid('tvf-utc',prefix)}" oninput="TuviForm._update(${pf})">${utcOpts}</select>
+        <label class="form-label">Nơi sinh</label>
+        <select class="form-input" id="${pid('tvf-noisinh',prefix)}" oninput="TuviForm._noiSinh(${pf})">${utcOpts}</select>
+        <select class="form-input" id="${pid('tvf-vung',prefix)}" oninput="TuviForm._update(${pf})" style="display:none;margin-top:6px"></select>
       </div>
     </div>
     <div class="form-group">
@@ -334,8 +398,9 @@ window.TuviForm = (() => {
         Sinh ở ngoài Việt Nam?
       </label>
       <div class="fg tvf-compact-utc" id="${pid('tvf-utc-wrap',prefix)}" style="display:none">
-        <label>Múi giờ nơi sinh</label>
-        <select id="${pid('tvf-utc',prefix)}" oninput="TuviForm._update(${pf})">${utcOpts}</select>
+        <label>Nơi sinh</label>
+        <select id="${pid('tvf-noisinh',prefix)}" oninput="TuviForm._noiSinh(${pf})">${utcOpts}</select>
+        <select id="${pid('tvf-vung',prefix)}" oninput="TuviForm._update(${pf})" style="display:none;margin-top:6px"></select>
       </div>
     </div>`;
   }
@@ -391,10 +456,11 @@ window.TuviForm = (() => {
             <input type="checkbox" id="${pid('tvf-foreign',prefix)}" onchange="TuviForm._toggleUtc(${pf})">
             <span>Sinh ở ngoài Việt Nam?</span>
           </label>
-          <span class="tvf-foreign-hint">Chọn nếu bạn sinh tại nước ngoài để tính múi giờ chính xác hơn.</span>
+          <span class="tvf-foreign-hint">Chọn nếu bạn sinh tại nước ngoài — hệ thống tự tính múi giờ, giờ mùa hè và lịch âm của nơi sinh.</span>
           <div class="tvf-col" id="${pid('tvf-utc-wrap',prefix)}" style="display:none;margin:6px 0 0 24px;max-width:280px">
-            <label class="tvf-lb">Múi giờ nơi sinh</label>
-            <div class="tvf-ibox no-ic"><select id="${pid('tvf-utc',prefix)}" oninput="TuviForm._update(${pf})">${utcOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div>
+            <label class="tvf-lb">Nơi sinh</label>
+            <div class="tvf-ibox no-ic"><select id="${pid('tvf-noisinh',prefix)}" oninput="TuviForm._noiSinh(${pf})">${utcOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div>
+            <div class="tvf-ibox no-ic" style="display:none;margin-top:6px"><select id="${pid('tvf-vung',prefix)}" oninput="TuviForm._update(${pf})"></select><span class="tvf-chev" data-icon="chevron-down"></span></div>
           </div>
         </div>
       </div>
@@ -515,7 +581,6 @@ window.TuviForm = (() => {
   function getData(prefix = '') {
     const hh     = parseInt(gel('tvf-gio', prefix)?.value) || 0;
     const mm     = parseInt(gel('tvf-phut', prefix)?.value) || 0;
-    const utcOff = parseInt(gel('tvf-utc', prefix)?.value ?? '420');
     let   ngay   = parseInt(gel('ngay', prefix)?.value) || 0;
     const thang  = parseInt(gel('thang', prefix)?.value) || 0;
     const nam    = parseInt(gel('nam', prefix)?.value) || 0;
@@ -525,22 +590,40 @@ window.TuviForm = (() => {
       const maxDay = new Date(nam, thang, 0).getDate();
       if (ngay > maxDay) ngay = maxDay;
     }
-    const vn = toVnHour(hh, mm, utcOff, ngay, thang, nam);
-    return {
+    // Sinh ở VN: shape y như cũ. Nước ngoài: ngay/thang/nam/gio* là giờ CỦA LỊCH
+    // nơi sinh, kèm `lich` (đưa vào engine + API) · `noiSinh` · `noiSinhTz` · `goc`.
+    const q = quyDoiGio(noiSinhOf(prefix), ngay, thang, nam, hh, mm);
+    const out = {
       hoten:    (gel('hoten', prefix)?.value || '').trim(),
-      ngay, thang, nam,
-      gioIdx:   hourMinToGioIdx(vn.h, vn.m),
-      gioHour:  vn.h,
-      gioPhut:  vn.m,
+      ngay:     q.ngay, thang: q.thang, nam: q.nam,
+      gioIdx:   hourMinToGioIdx(q.gioHour, q.gioPhut),
+      gioHour:  q.gioHour,
+      gioPhut:  q.gioPhut,
       gioitinh: gel('gioitinh', prefix)?.value || 'nam',
       namXem:   parseInt(gel('namXem', prefix)?.value) || new Date().getFullYear(),
     };
+    if (q.lich) Object.assign(out, { lich: q.lich, noiSinh: q.noiSinh, noiSinhTz: q.noiSinhTz, goc: q.goc });
+    return out;
   }
 
   // ── setData(d, prefix) ───────────────────────────────────────
   function setData(d, prefix = '') {
     if (!d) return;
     const s = (id, val) => { const el = gel(id, prefix); if (el && val !== undefined) el.value = val; };
+    // Bản ghi từ nơi sinh nước ngoài: khôi phục GIỜ GỐC + nơi sinh (không thì
+    // getData lần sau đổi múi giờ LẦN HAI). Bản ghi cũ / sinh ở VN: như trước.
+    const cb = gel('tvf-foreign', prefix);
+    if (d.goc && d.noiSinh && d.noiSinh !== 'VN') {
+      d = Object.assign({}, d, d.goc);
+      if (cb) cb.checked = true;
+      const wrap = gel('tvf-utc-wrap', prefix);
+      if (wrap) wrap.style.display = 'block';
+      s('tvf-noisinh', d.noiSinh);
+      fillVung(prefix, d.noiSinhTz);
+    } else if (cb && cb.checked && d.ngay !== undefined) {
+      cb.checked = false;
+      toggleUtc(prefix);
+    }
     s('hoten',    d.hoten);
     s('ngay',     d.ngay);
     s('thang',    d.thang);
@@ -837,7 +920,8 @@ window.TuviForm = (() => {
           '<label style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-mid);cursor:pointer;margin-bottom:6px">' +
             `<input type="checkbox" id="${pid('tvf-foreign', cp)}"> Sinh ở ngoài Việt Nam?` +
           '</label>' +
-          `<div id="${pid('tvf-utc-wrap', cp)}" style="display:none;margin-bottom:8px"><select id="${pid('tvf-utc', cp)}">${opts.utcOpts}</select></div>` +
+          `<div id="${pid('tvf-utc-wrap', cp)}" style="display:none;margin-bottom:8px"><select id="${pid('tvf-noisinh', cp)}">${opts.utcOpts}</select>` +
+          `<select id="${pid('tvf-vung', cp)}" style="display:none;margin-top:6px"></select></div>` +
           `<p style="font-size:11.5px;margin-bottom:8px"><a href="/app/gio-sinh" target="_blank" style="color:#1455A4;font-weight:600">Không nhớ giờ sinh chính xác? Xác định giờ sinh →</a></p>` +
           `<button class="btn-go" type="button" id="${cp}-next3" style="width:auto;padding:9px 16px;font-size:13px">${submitLabel}</button>` +
           `<div class="err" id="${cp}-err3"></div>`);
@@ -845,16 +929,17 @@ window.TuviForm = (() => {
         const upd = () => updateGioAmDisplay(cp);
         document.getElementById(pid('tvf-gio', cp)).addEventListener('input', upd);
         document.getElementById(pid('tvf-phut', cp)).addEventListener('input', upd);
-        document.getElementById(pid('tvf-utc', cp)).addEventListener('input', upd);
+        document.getElementById(pid('tvf-noisinh', cp)).addEventListener('input', function () { fillVung(cp); upd(); });
+        document.getElementById(pid('tvf-vung', cp)).addEventListener('input', upd);
         document.getElementById(pid('tvf-foreign', cp)).addEventListener('change', function () { toggleUtc(cp); });
         _updaters[cp] = upd; upd();
         document.getElementById(cp + '-next3').addEventListener('click', function () {
           const hh = parseInt(document.getElementById(pid('tvf-gio', cp)).value) || 0;
           const mm = parseInt(document.getElementById(pid('tvf-phut', cp)).value) || 0;
-          const utcOff = parseInt(document.getElementById(pid('tvf-utc', cp))?.value ?? '420');
-          const vn = toVnHour(hh, mm, utcOff, ngay, thang, nam);
+          const q = quyDoiGio(noiSinhOf(cp), ngay, thang, nam, hh, mm);
           collapse(s3, '<p>Giờ sinh: <b>' + String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0') + '</b> ✓</p>');
-          const data = { hoten, gioitinh: gioitinhV, ngay, thang, nam, gioHour: vn.h, gioPhut: vn.m };
+          const data = { hoten, gioitinh: gioitinhV, ngay: q.ngay, thang: q.thang, nam: q.nam, gioHour: q.gioHour, gioPhut: q.gioPhut };
+          if (q.lich) Object.assign(data, { lich: q.lich, noiSinh: q.noiSinh, noiSinhTz: q.noiSinhTz, goc: q.goc });
           if (namXemV !== undefined) data.namXem = namXemV;
           clearDraft();
           setData(data, prefix);
@@ -876,6 +961,7 @@ window.TuviForm = (() => {
     clear,
     _update:    (prefix = '') => { (_updaters[prefix] || _updaters[''] || (() => {}))(); },
     _toggleUtc: (prefix = '') => toggleUtc(prefix),
+    _noiSinh:   (prefix = '') => { fillVung(prefix); (_updaters[prefix] || _updaters[''] || (() => {}))(); },
     _toggleTip: (iconEl) => toggleTip(iconEl),
     // xem chú thích ở khai báo `_introShown` phía trên
     _resetIntro: () => { _introShown = false; },

@@ -92,6 +92,8 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .pay-method [data-icon]{width:15px;height:15px}
 .pay-method:hover{color:var(--navy)}
 .pay-method[aria-pressed="true"]{background:var(--navy);color:#fff}
+/* `display` ở trên đè thuộc tính `hidden` ⇒ nút rail ẩn (QR/MoMo) vẫn hiện. Trả lại cho `hidden`. */
+.pay-method[hidden],.pm-actions [hidden]{display:none}
 
 /* ── Ý ĐỊNH ĐANG MỞ KHOÁ (từ trang tool quăng sang, xem `_pendingUnlock`) ── */
 .pending-banner{display:flex;align-items:center;gap:.75rem;background:var(--gold-lt);border:1.5px solid var(--gold-br);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:1.1rem;font-size:.86rem;color:var(--navy)}
@@ -258,7 +260,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 </style>
 <script src="/track.js?v=8"></script>
 <script>try{window.Track&&window.Track.event&&window.Track.event('topup_start',{meta:{from:'topup_page'}})}catch(e){}</script>
-<script src="/tool-prices.js?v=10"></script>
+<script src="/tool-prices.js?v=11"></script>
 <script src="/auth.js?v=6"></script>
 <script src="/promo.js?v=1"></script>
 </head>
@@ -323,11 +325,16 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
     <div class="section-head">
       <div class="section-label">Mức Đóng Góp</div>
       <div class="pay-methods" role="group" aria-label="Chọn phương thức thanh toán">
-        <button type="button" class="pay-method" id="mBank" aria-pressed="true" onclick="setMethod('bank')">
-          <span data-icon="landmark"></span> Chuyển khoản QR
+        <button type="button" class="pay-method" id="mPaypal" aria-pressed="true" onclick="setMethod('paypal')">
+          <span data-icon="wallet"></span> PayPal
         </button>
-        <button type="button" class="pay-method" id="mPaypal" aria-pressed="false" onclick="setMethod('paypal')">
-          <span data-icon="credit-card"></span> PayPal / Thẻ
+        <button type="button" class="pay-method" id="mCard" aria-pressed="false" onclick="setMethod('card')">
+          <span data-icon="credit-card"></span> Thẻ Visa / Mastercard
+        </button>
+        <!-- W5: rail VNĐ ẩn mặc định — chỉ hiện khi `/api/payment?action=pay-methods`
+             trả `bank:true` (cờ `app_config['billing.vnd_rails_enabled']`). -->
+        <button type="button" class="pay-method" id="mBank" aria-pressed="false" onclick="setMethod('bank')" hidden>
+          <span data-icon="landmark"></span> Chuyển khoản QR
         </button>
         <!-- Ẩn mặc định — chỉ hiện khi `/api/payment?action=momo-status` xác
              nhận CÓ cấu hình (Henry đăng ký merchant xong), xem `checkMomoAvailable()`.
@@ -355,14 +362,14 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
     <div class="custom-card">
       <div class="custom-label">
         <strong>Số tiền khác</strong>
-        <span id="customRateNote">Tối thiểu 50.000đ</span>
+        <span id="customRateNote">…</span>
       </div>
       <div class="custom-field">
-        <input type="number" class="custom-input" id="customInput" min="50000" max="5000000" step="1000" placeholder="100000" aria-label="Số tiền muốn nạp (VNĐ)" oninput="onCustomInput()">
-        <span class="custom-suffix">đ</span>
+        <input type="number" class="custom-input" id="customInput" min="2" max="200" step="0.01" placeholder="10" aria-label="Số tiền muốn nạp (USD)" oninput="onCustomInput()">
+        <span class="custom-suffix" id="customSuffix">USD</span>
       </div>
-      <span class="custom-preview" id="customPreview">Tối thiểu 50.000đ</span>
-      <button class="btn-custom" id="btnCustom" onclick="payCustom()"><span data-icon="landmark" id="btnCustomIcon"></span> <span id="btnCustomLabel">Chuyển khoản</span></button>
+      <span class="custom-preview" id="customPreview">…</span>
+      <button class="btn-custom" id="btnCustom" onclick="payCustom()"><span data-icon="wallet" id="btnCustomIcon"></span> <span id="btnCustomLabel">PayPal</span></button>
     </div>
   </section>
 
@@ -439,7 +446,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
     </div>
     <div class="faq-item">
       <div class="faq-q">Tôi có thể thanh toán bằng cách nào?</div>
-      <div class="faq-a"><strong>(1) Chuyển khoản ngân hàng VND</strong> qua payOS — quét QR bằng app ngân hàng Việt Nam, Lượng vào tài khoản tự động. <strong>(2) PayPal</strong> — nhận thẻ Visa/Mastercard quốc tế (chọn “Pay with Debit or Credit Card” trong cửa sổ PayPal, không cần có sẵn tài khoản PayPal).</div>
+      <div class="faq-a">Thanh toán bằng <strong>USD</strong> qua PayPal: trả bằng tài khoản PayPal, hoặc chọn <strong>Thẻ Visa / Mastercard</strong> để nhập thẻ trực tiếp — không cần có sẵn tài khoản PayPal. Lượng vào tài khoản tự động ngay sau khi thanh toán.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q">Quà Lượng chào mừng khi đăng ký dùng được gì?</div>
@@ -477,16 +484,33 @@ const PKG_ICONS = ['leaf', 'star', 'gem', 'crown'];
 // cho bảng chi phí bên dưới.
 const FEATURED_INDEX = 1;
 
-const State = { method: 'bank', packages: [], vndPerCredit: null, rateLabel: '' };
+const State = { method: 'paypal', packages: [], rateLabel: '', vndRails: false };
 
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 }
 function vnd(n) { return Number(n).toLocaleString('vi-VN') + 'đ'; }
+function usd(n) { return '$' + Number(n).toFixed(2); }
+
+// ── Tiền tệ ĐI THEO phương thức (W5) ─────────────────────────
+// PayPal/Thẻ thu USD (tiền bán từ W5, Henry chốt bỏ VNĐ). QR/MoMo là rail VNĐ,
+// chỉ hiện khi cờ `billing.vnd_rails_enabled` bật — khi đó gói hiện đúng giá
+// VNĐ mà rail đó thu. Một khách không bao giờ thấy hai tiền tệ trên cùng thẻ.
+function isVnd() { return State.method === 'bank' || State.method === 'momo'; }
+function priceOf(p) { return isVnd() ? p.amount_vnd : p.amount_usd; }
+function money(n) { return isVnd() ? vnd(n) : usd(n); }
+/** Đơn giá / Lượng: VNĐ làm tròn đồng, USD giữ 3 số lẻ ($0.019). */
+function moneyRate(r) { return isVnd() ? vnd(Math.round(r)) : '$' + Number(r).toFixed(3); }
+// Khoảng nạp lẻ — khớp ĐÚNG ngưỡng server chốt (`handleTopup`/`create-bank`).
+function customMin() { return isVnd() ? 50000 : 2; }
+function customMax() { return isVnd() ? 5000000 : 200; }
 function ic(key, cls) { return '<span data-icon="' + key + '"' + (cls ? ' class="' + cls + '"' : '') + '></span>'; }
 function mount(el) { if (window.mountIcons) window.mountIcons(el || document); }
-function pkgList() { return State.packages.length ? State.packages : FALLBACK_PACKAGES; }
+function pkgList() {
+  const list = State.packages.length ? State.packages : FALLBACK_PACKAGES;
+  return list.filter(p => priceOf(p) > 0);
+}
 
 // ── Ý định mở khoá quăng sang từ trang tool (xem `_insufficient` trong
 // tuvi-paywall.js) — cùng khoá `tpw_pending_unlock`, CHỈ ĐỌC (không xoá) ở
@@ -525,18 +549,36 @@ function showAlert(type, msg) {
 // PayPal là đường cho thẻ quốc tế. Bản cũ để PayPal làm nút chính (đậm màu) còn
 // chuyển khoản làm nút phụ — ngược với thực tế, mà lại tốn gấp đôi số nút trên
 // mỗi thẻ (8 nút cho 4 gói). Chọn phương thức MỘT lần, mỗi thẻ còn một nút.
+// W5: mặc định PayPal (USD). `card` vẫn là PayPal, chỉ khác là mở THẲNG form
+// nhập thẻ (`landing:'card'` → PayPal `landing_page: BILLING`).
 const METHOD_META = {
+  paypal: { icon: 'wallet',      label: 'PayPal' },
+  card:   { icon: 'credit-card', label: 'Thanh toán thẻ' },
   bank:   { icon: 'landmark',    label: 'Chuyển khoản' },
-  paypal: { icon: 'credit-card', label: 'PayPal' },
   momo:   { icon: 'wallet',      label: 'MoMo' },
 };
 function setMethod(m) {
-  State.method = METHOD_META[m] ? m : 'bank';
-  document.getElementById('mBank').setAttribute('aria-pressed', String(State.method === 'bank'));
-  document.getElementById('mPaypal').setAttribute('aria-pressed', String(State.method === 'paypal'));
-  const mm = document.getElementById('mMomo');
-  if (mm) mm.setAttribute('aria-pressed', String(State.method === 'momo'));
+  // Rail VNĐ chỉ chọn được khi cờ đang bật — chặn cả lối gọi thẳng `setMethod('bank')`.
+  if ((m === 'bank' || m === 'momo') && !State.vndRails) m = 'paypal';
+  const wasVnd = isVnd();
+  State.method = METHOD_META[m] ? m : 'paypal';
+  ['Paypal', 'Card', 'Bank', 'Momo'].forEach(k => {
+    const el = document.getElementById('m' + k);
+    if (el) el.setAttribute('aria-pressed', String(State.method === k.toLowerCase()));
+  });
+  // Đổi tiền tệ thì số trong ô nạp lẻ hết nghĩa (100000 đ ≠ 100000 USD) — xoá.
+  const inp = document.getElementById('customInput');
+  if (wasVnd !== isVnd()) {
+    inp.value = '';
+    inp.min = String(customMin()); inp.max = String(customMax());
+    inp.step = isVnd() ? '1000' : '0.01';
+    inp.placeholder = isVnd() ? '100000' : '10';
+    inp.setAttribute('aria-label', 'Số tiền muốn nạp (' + (isVnd() ? 'VNĐ' : 'USD') + ')');
+    document.getElementById('customSuffix').textContent = isVnd() ? 'đ' : 'USD';
+  }
   renderPackages();
+  renderHeaderRate();
+  onCustomInput();
   document.getElementById('btnCustomLabel').textContent = METHOD_META[State.method].label;
   const cIc = document.getElementById('btnCustomIcon');
   cIc.setAttribute('data-icon', METHOD_META[State.method].icon);
@@ -544,12 +586,29 @@ function setMethod(m) {
   mount(document.getElementById('btnCustom'));
 }
 
-// MoMo chỉ hiện khi server xác nhận CÓ cấu hình — hỏi 1 lần lúc trang tải.
+// Rail VNĐ (QR) chỉ hiện khi cờ bật — hỏi 1 lần lúc trang tải. Hỏi hụt ⇒ giữ ẩn
+// (PayPal vẫn còn, không ai bị chặn trả tiền).
+function checkPayMethods() {
+  fetch('/api/payment?action=pay-methods', { cache: 'no-store' })
+    .then(r => r.json())
+    .then(d => {
+      if (!d || !d.bank) return;
+      State.vndRails = true;
+      const mb = document.getElementById('mBank');
+      if (mb) { mb.hidden = false; mount(mb); }
+      const pb = document.getElementById('pmBank');
+      if (pb) pb.hidden = false;
+    })
+    .catch(() => {});
+}
+
+// MoMo chỉ hiện khi server xác nhận CÓ cấu hình (và cờ rail VNĐ bật) — hỏi 1 lần lúc trang tải.
 function checkMomoAvailable() {
   fetch('/api/payment?action=momo-status', { cache: 'no-store' })
     .then(r => r.json())
     .then(d => {
       if (!d.available) return;
+      State.vndRails = true;
       const mm = document.getElementById('mMomo');
       if (mm) { mm.hidden = false; mount(mm); }
     })
@@ -573,9 +632,9 @@ function renderPackages() {
   }
   // "Rẻ hơn N%" so với gói có ĐƠN GIÁ CAO NHẤT trong chính bảng này — mốc tự
   // suy từ dữ liệu nên đổi giá dưới DB là con số tự đúng, không viết cứng.
-  const rates = list.map(p => p.amount_vnd / p.credits);
+  const rates = list.map(p => priceOf(p) / p.credits);
   const worst = Math.max.apply(null, rates);
-  const btnIcon = { bank: 'qr-code', paypal: 'credit-card', momo: 'wallet' }[State.method];
+  const btnIcon = { bank: 'qr-code', paypal: 'wallet', card: 'credit-card', momo: 'wallet' }[State.method];
   const btnLabel = METHOD_META[State.method].label;
 
   // Đang mở khoá dở một tool cụ thể (xem `renderPendingBanner`) → nổi bật gói
@@ -593,15 +652,15 @@ function renderPackages() {
       + (featured ? '<div class="pkg-badge">' + badge + '</div>' : '')
       + '<div class="pkg-icon">' + ic(PKG_ICONS[i] || 'sparkles') + '</div>'
       + '<div class="pkg-name">' + esc(p.label) + '</div>'
-      + '<div class="pkg-price">' + vnd(p.amount_vnd) + '</div>'
+      + '<div class="pkg-price">' + money(priceOf(p)) + '</div>'
       + '<div class="pkg-credits">' + p.credits + ' Lượng</div>'
-      + '<div class="pkg-rate">' + vnd(Math.round(rate)) + ' / Lượng'
+      + '<div class="pkg-rate">' + moneyRate(rate) + ' / Lượng'
       + (save >= 5 ? '<span class="pkg-save">rẻ hơn ' + save + '%</span>' : '') + '</div>'
       + '<div class="pkg-note">Không hết hạn</div>'
       // Giá đã to đùng ngay trên nút → nhắc lại trong nút là thừa. Giữ ngữ cảnh
       // cho trình đọc màn hình bằng aria-label vì 4 nút giờ đọc giống hệt nhau.
       + '<button class="btn-pkg" id="btn-' + esc(p.package_id) + '" onclick="payPackage(\'' + esc(p.package_id) + '\')"'
-      + ' aria-label="Thanh toán ' + btnLabel + ' gói ' + esc(p.label) + ' — ' + vnd(p.amount_vnd) + '">'
+      + ' aria-label="Thanh toán ' + btnLabel + ' gói ' + esc(p.label) + ' — ' + money(priceOf(p)) + '">'
       + ic(btnIcon)
       + '<span>' + btnLabel + '</span></button>'
       + '</div>';
@@ -634,13 +693,17 @@ async function loadPackages() {
     return;
   }
   const ref = list[FEATURED_INDEX] || list[0];
-  State.vndPerCredit = ref.amount_vnd / ref.credits;
   State.rateLabel = ref.label;
   renderPackages();
-
-  const best = Math.min.apply(null, list.map(p => p.amount_vnd / p.credits));
-  document.getElementById('hdrRate').textContent = 'chỉ từ ' + vnd(Math.round(best)) + ' / Lượng';
+  renderHeaderRate();
   onCustomInput();
+}
+
+function renderHeaderRate() {
+  const list = pkgList();
+  if (!list.length) return;
+  const best = Math.min.apply(null, list.map(p => priceOf(p) / p.credits));
+  document.getElementById('hdrRate').textContent = 'chỉ từ ' + moneyRate(best) + ' / Lượng';
 }
 
 // Bearer cho số dư / tạo đơn — server chỉ phục vụ CHÍNH chủ userId.
@@ -743,7 +806,7 @@ async function renderPendingBanner() {
   host.innerHTML = ic('lock', 'ic') +
     '<span>Bạn đang mở khoá <b>' + esc(label) + '</b> — còn thiếu <b>' + pending.need + ' Lượng</b>. '
     + (exact
-        ? 'Ô <b>nạp số tiền tự chọn</b> đã điền sẵn <b>' + vnd(exact) + '</b> — vừa đủ, không phải mua cả gói.'
+        ? 'Ô <b>nạp số tiền tự chọn</b> đã điền sẵn <b>' + money(exact) + '</b> — vừa đủ, không phải mua cả gói.'
         : 'Gói được đánh dấu bên dưới vừa đủ cho lượt này.')
     + '</span>';
   host.className = 'pending-banner';
@@ -769,7 +832,7 @@ function showPendingModal(pending, label, exact) {
   } else {
     const idx = pkgIndexFor(pending.need);
     const pkg = idx >= 0 ? pkgList()[idx] : null;
-    if (pkg) { amount = pkg.amount_vnd; pkgId = pkg.package_id; }
+    if (pkg) { amount = priceOf(pkg); pkgId = pkg.package_id; }
   }
   // Chưa đọc được giá/gói nào đủ → đừng mở pop-up với một số tiền đoán mò,
   // banner tĩnh phía trên vẫn còn đó làm đường lùi.
@@ -777,10 +840,17 @@ function showPendingModal(pending, label, exact) {
 
   document.getElementById('pmTitle').textContent = 'Bạn đang mở khoá ' + label;
   document.getElementById('pmNeed').innerHTML =
-    'Cần thêm <b>' + pending.need + ' Lượng</b> để dùng tiếp — nạp <b>' + vnd(amount) + '</b> là đủ, '
+    'Cần thêm <b>' + pending.need + ' Lượng</b> để dùng tiếp — nạp <b>' + money(amount) + '</b> là đủ, '
     + 'mở ra ngay sau khi thanh toán xong.';
-  document.getElementById('pmBank').onclick = () => { closePendingModal(); setMethod('bank'); payPackage(pkgId); };
-  document.getElementById('pmPaypal').onclick = () => { closePendingModal(); setMethod('paypal'); payPackage(pkgId); };
+  // Số tiền ở trên tính theo tiền của phương thức ĐANG chọn — bấm nút nào thì
+  // giữ đúng tiền đó: nút PayPal/Thẻ chỉ đổi giữa hai cách trả USD; nút QR chỉ
+  // hiện khi đang ở rail VNĐ. Đổi chéo tiền tệ ở đây là trả sai số vừa hứa.
+  const pb = document.getElementById('pmBank');
+  pb.hidden = !isVnd();
+  pb.onclick = () => { closePendingModal(); setMethod('bank'); payPackage(pkgId); };
+  document.getElementById('pmPaypal').onclick = () => {
+    closePendingModal(); if (isVnd()) { setMethod('paypal'); prefillCustomFor(pending.need); } payPackage(pkgId);
+  };
   modal.classList.add('show');
   mount(modal);
 }
@@ -809,12 +879,21 @@ function prefillCustomFor(need) {
   const inp = document.getElementById('customInput');
   const n = Number(need) || 0;
   if (!inp || n <= 0) return null;
-  const q = quoteCustom(50000);           // đơn giá bậc vào cửa
-  if (!q || !q.vndPerCredit) return null;
-  const MIN = 50000;
-  let amount = Math.ceil((n * q.vndPerCredit) / 1000) * 1000;
+  const MIN = customMin();
+  const q = quoteCustom(MIN);             // đơn giá bậc vào cửa
+  if (!q || !q.perCredit) return null;
+  // VNĐ làm tròn LÊN nghìn; USD làm tròn LÊN cent rồi dò lên từng cent cho tới
+  // khi `quoteCustom` (bản sao công thức server) đủ — sai số dấu phẩy động
+  // không được làm khách thiếu 1 Lượng.
+  let amount;
+  if (isVnd()) {
+    amount = Math.ceil((n * q.perCredit) / 1000) * 1000;
+  } else {
+    amount = Math.ceil(n * q.perCredit * 100) / 100;
+    for (let i = 0; i < 100 && quoteCustom(amount).credits < n; i++) amount = Math.round(amount * 100 + 1) / 100;
+  }
   if (amount < MIN) amount = MIN;
-  if (amount > 5000000) return null;      // ngoài khoảng ô nhận — để khách tự chọn gói
+  if (amount > customMax()) return null;  // ngoài khoảng ô nhận — để khách tự chọn gói
   inp.value = String(amount);
   onCustomInput();
   return amount;
@@ -891,7 +970,10 @@ async function loadToolPricing() {
     // (chưa đọc được `credit_packages`) thì BỎ cột quy đổi, không nhân với một
     // hằng số: bản cũ nhân cứng 2.500đ — đơn giá của bảng giá đã bỏ — nên báo
     // đắt hơn thực tế gần 3 lần.
-    const perCredit = State.vndPerCredit;
+    // W5: bảng chi phí luôn nói USD (`ToolPrices.usdLabel` — cùng nhãn với mọi
+    // trang tool), kể cả khi rail VNĐ đang bật: đây là giá niêm yết.
+    const usdLabel = window.ToolPrices && window.ToolPrices.usdLabel;
+    const perCredit = window.ToolPrices && window.ToolPrices.usdPerCredit ? window.ToolPrices.usdPerCredit() : null;
 
     let html = '';
     sortedCats.forEach(cat => {
@@ -900,7 +982,7 @@ async function loadToolPricing() {
       if (!rows.length) return;
       html += '<div class="cost-category">' + esc(cat) + '</div>';
       rows.forEach(t => {
-        const money = perCredit ? Math.ceil((Number(t.credits) * perCredit) / 1000) * 1000 : null;
+        const moneyLbl = usdLabel ? usdLabel(Number(t.credits)) : '';
         html += '<div class="cost-row">'
           + '<div class="cost-left">'
           + '<div class="cost-icon-wrap">' + (
@@ -912,7 +994,7 @@ async function loadToolPricing() {
           + (t.description ? '<div class="cost-desc">' + esc(t.description) + '</div>' : '')
           + '</div></div>'
           + '<div class="cost-right"><div class="cost-credits">' + Number(t.credits) + ' Lượng</div>'
-          + (money ? '<div class="cost-vnd">≈ ' + vnd(money) + '</div>' : '') + '</div>'
+          + (moneyLbl ? '<div class="cost-vnd">' + moneyLbl + '</div>' : '') + '</div>'
           + '</div>';
       });
     });
@@ -922,7 +1004,7 @@ async function loadToolPricing() {
 
     document.getElementById('costsSubtitle').textContent = perCredit
       ? 'Cập nhật tự động khi có công cụ mới. Số tiền quy đổi theo gói ' + State.rateLabel
-        + ' (' + vnd(Math.round(perCredit)) + '/Lượng) — gói lớn hơn thì rẻ hơn nữa.'
+        + ' ($' + Number(perCredit).toFixed(3) + '/Lượng) — gói lớn hơn thì rẻ hơn nữa.'
       : 'Cập nhật tự động khi có công cụ mới.';
 
     if (freeCount > 0) {
@@ -942,51 +1024,58 @@ async function loadToolPricing() {
 }
 
 // ── Nạp số tiền tự chọn ──────────────────────────────────────
-/** BẢN SAO của `quoteCustomVnd` phía server — sửa một bên thì sửa cả hai. */
-function quoteCustom(vndAmount) {
-  const list = pkgList().filter(p => p.credits > 0 && p.amount_vnd > 0);
+/** BẢN SAO của `quoteCustomVnd`/`quoteCustomUsd` phía server (tiền theo phương
+ *  thức đang chọn) — sửa một bên thì sửa cả hai. */
+function quoteCustom(amount) {
+  const list = pkgList().filter(p => p.credits > 0 && priceOf(p) > 0);
   // Chưa biết bậc gói thì KHÔNG quy đổi. Bản cũ rơi về hằng số 2.500đ/Lượng —
   // đơn giá của bảng giá đã bỏ từ lâu — nên báo ít hơn thực nhận gần 3 lần.
   if (!list.length) return null;
-  const rate = p => p.amount_vnd / p.credits;
-  const afford = list.filter(p => p.amount_vnd <= vndAmount);
+  const rate = p => priceOf(p) / p.credits;
+  const afford = list.filter(p => priceOf(p) <= amount);
   const pool = afford.length ? afford : list;
   const tier = pool.reduce((best, p) =>
     (afford.length ? rate(p) < rate(best) : rate(p) > rate(best)) ? p : best);
-  const vndPerCredit = rate(tier);
-  return { credits: Math.floor(vndAmount / vndPerCredit), vndPerCredit, tierLabel: tier.label };
+  const perCredit = rate(tier);
+  return { credits: Math.floor(amount / perCredit), perCredit, tierLabel: tier.label };
 }
 
 function onCustomInput() {
   const val = parseFloat(document.getElementById('customInput').value) || 0;
   const q = quoteCustom(val);
+  const minTxt = 'Tối thiểu ' + money(customMin());
   document.getElementById('customPreview').textContent =
-    !q ? '…' : val >= 50000 ? '= ' + q.credits + ' Lượng' : 'Tối thiểu 50.000đ';
+    !q ? '…' : val >= customMin() ? '= ' + q.credits + ' Lượng' : minTxt;
   const note = document.getElementById('customRateNote');
   if (!note) return;
   if (!q) { note.textContent = 'Đang tải bảng giá…'; return; }
   // Đơn giá nạp lẻ nay BÁM theo bậc gói, nên không còn câu "các gói rẻ hơn" —
   // nói vậy bây giờ là sai. Hiện đúng bậc mà số tiền này đang hưởng.
-  note.textContent = val >= 50000
-    ? 'Tối thiểu 50.000đ · ' + vnd(Math.round(q.vndPerCredit)) + ' / Lượng'
+  note.textContent = val >= customMin()
+    ? minTxt + ' · ' + moneyRate(q.perCredit) + ' / Lượng'
       + (q.tierLabel ? ' (bậc ' + q.tierLabel + ')' : '')
-    : 'Tối thiểu 50.000đ · đơn giá theo bậc gói, càng nạp nhiều càng rẻ';
+    : minTxt + ' · đơn giá theo bậc gói, càng nạp nhiều càng rẻ';
 }
 
-/** Đọc ô số tiền tự chọn, kiểm theo ĐÚNG ngưỡng VNĐ mà server đang chốt. */
-function readCustomVnd() {
-  const v = parseFloat(document.getElementById('customInput').value) || 0;
-  if (v < 50000 || v > 5000000) {
-    showAlert('error', 'Vui lòng nhập số tiền từ 50.000đ đến 5.000.000đ.');
+/** Đọc ô số tiền tự chọn, kiểm theo ĐÚNG ngưỡng mà server đang chốt (theo tiền
+ *  của phương thức đang chọn). USD giữ 2 số lẻ. */
+function readCustom() {
+  const raw = parseFloat(document.getElementById('customInput').value) || 0;
+  const v = isVnd() ? raw : Math.round(raw * 100) / 100;
+  if (v < customMin() || v > customMax()) {
+    showAlert('error', 'Vui lòng nhập số tiền từ ' + money(customMin()) + ' đến ' + money(customMax()) + '.');
     return null;
   }
   return v;
 }
+/** Tên cũ — khối chuyển khoản QR (rail VNĐ) gọi hàm này. Chỉ đúng khi đang ở rail VNĐ. */
+function readCustomVnd() { return isVnd() ? readCustom() : null; }
 
 // ── Thanh toán ───────────────────────────────────────────────
 function payPackage(packageId) {
-  if (State.method === 'bank') return window.initiateBankTopup(packageId);
-  if (State.method === 'momo') return initiateMomoTopup(packageId);
+  if (State.method === 'bank' && State.vndRails) return window.initiateBankTopup(packageId);
+  if (State.method === 'momo' && State.vndRails) return initiateMomoTopup(packageId);
+  if (isVnd()) setMethod('paypal'); // cờ rail VNĐ vừa tắt — không gửi số VNĐ sang PayPal
   return initiateTopup(packageId);
 }
 function payCustom() {
@@ -1007,16 +1096,17 @@ async function initiateTopup(packageId) {
     return;
   }
   const userId = window.Auth.getUser()?.id;
-  let customAmountVnd = null;
+  let customAmountUsd = null;
   if (packageId === 'custom') {
-    customAmountVnd = readCustomVnd();
-    if (customAmountVnd === null) return;
+    customAmountUsd = readCustom();
+    if (customAmountUsd === null) return;
   }
 
   busyBtn(packageId, true);
   try {
-    const body = { packageId, userId };
-    if (customAmountVnd) body.customAmountVnd = customAmountVnd;
+    // `landing:'card'` → PayPal mở thẳng form thẻ (không cần tài khoản PayPal).
+    const body = { packageId, userId, landing: State.method === 'card' ? 'card' : 'paypal' };
+    if (customAmountUsd) body.customAmountUsd = customAmountUsd;
     const data = await (await fetch('/api/payment?action=topup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...(await _authHdr()) },
@@ -1186,7 +1276,8 @@ function shareRef(channel) {
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => mount());
 else mount();
 
-setMethod('bank');
+setMethod('paypal');
+checkPayMethods();
 checkMomoAvailable();
 checkCancelledPayment();
 loadStatus().then(loadReferralInfo).then(showPromoSection);
@@ -1205,8 +1296,8 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
     <div class="modal-title" id="pmTitle">Bạn đang mở khoá…</div>
     <div class="pm-need" id="pmNeed"></div>
     <div class="pm-actions">
-      <button type="button" class="btn-pkg" id="pmBank"><span data-icon="landmark"></span> Chuyển khoản QR</button>
-      <button type="button" class="btn-outline" id="pmPaypal"><span data-icon="credit-card"></span> PayPal / Thẻ</button>
+      <button type="button" class="btn-pkg" id="pmBank" hidden><span data-icon="landmark"></span> Chuyển khoản QR</button>
+      <button type="button" class="btn-pkg" id="pmPaypal"><span data-icon="credit-card"></span> PayPal / Thẻ</button>
     </div>
     <button type="button" class="pm-skip" onclick="closePendingModal()">Để sau, tự chọn gói bên dưới</button>
   </div>

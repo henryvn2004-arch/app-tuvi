@@ -248,9 +248,10 @@ window.SHELL_INTRO={key:'cong-so'};</script>
 <script src="/tools-shared/illus-match.js?v=1"></script>
 <script src="/tools-shared/cong-so.js?v=4"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=14"></script>
+<script src="/tools-shared/noi-sinh.js?v=1"></script>
+<script src="/tuvi-form.js?v=15"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=41"></script>
+<script src="/tuvi-paywall.js?v=42"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
 <script src="/poster.js?v=4"></script>
 <script src="/auth.js?v=6"></script>
@@ -291,7 +292,7 @@ function _err(m){var e=document.getElementById('error-msg');if(!m){e.classList.r
 function congSoIllusHtml(fd){
   if(!window.IllusMatch||!window.anSaoLaSo||!window.convertDuongToAm) return '';
   try{
-    var conv=convertDuongToAm(fd.ngay,fd.thang,fd.nam,fd.gioHour);
+    var conv=convertDuongToAm(fd.ngay,fd.thang,fd.nam,fd.gioHour,fd.lich);
     if(!conv) return '';
     conv.gioIdx=fd.gioIdx;
     var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,
@@ -344,7 +345,7 @@ function doCongSo(){
       // ⚠️ payload rail phải PHẲNG — `extractGenericContext` bỏ IM LẶNG mọi giá
       // trị là object. `j.rail` đã được server dẹp phẳng sẵn.
       Shell.setContext({
-        birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined},
+        birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined,lich:fd.lich,noiSinh:fd.noiSinh},
         scenario:{type:'cong-so',data:j.rail},
         label:'Tử Vi Công Sở · '+ten+' · '+_ho.kieu.ten,
         greeting:'Hồ sơ công sở đã dựng xong — bạn nghiêng về kiểu **'+_ho.kieu.ten+'** ('+_ho.kieu.tuTuong.split('(')[0].trim()+'). '+
@@ -366,7 +367,7 @@ function doCongSo(){
       // khoá (radar · lộ trình · ghép đội · nhánh) — cho rail biết trọn `j.rail`
       // thì hỏi một câu là lộ hết, tấm khoá trên màn hình thành vô nghĩa.
       Shell.setContext({
-        birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined},
+        birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined,lich:fd.lich,noiSinh:fd.noiSinh},
         scenario:{type:'cong-so',data:{kieu:_ho.kieu.ten,tuTuong:_ho.kieu.tuTuong,motCau:_ho.kieu.motCau,daDangKy:false}},
         label:'Tử Vi Công Sở · '+ten+' · '+_ho.kieu.ten,
         greeting:'Bạn nghiêng về kiểu **'+_ho.kieu.ten+'** ('+_ho.kieu.tuTuong.split('(')[0].trim()+'). '+
@@ -513,7 +514,7 @@ function moNhanh(){
     host.innerHTML=CongSoTool.nhanhHTML(_ho);
     // Rail nay biết cả tầng nhánh — nhưng CHỈ sau khi đã trả tiền.
     Shell.setContext({
-      birth:{day:_birth.ngay,month:_birth.thang,year:_birth.nam,hourBranch:_birth.gioIdx,gender:_birth.gioitinh,name:_birth.hoten||undefined},
+      birth:{day:_birth.ngay,month:_birth.thang,year:_birth.nam,hourBranch:_birth.gioIdx,gender:_birth.gioitinh,name:_birth.hoten||undefined,lich:_birth.lich,noiSinh:_birth.noiSinh},
       scenario:{type:'cong-so',data:r.data.rail},
       label:'Tử Vi Công Sở · '+(_birth.hoten||'Hồ sơ')+' · '+_ho.kieu.ten,
       greeting:'Đã mở phần nhánh nghề. Nhánh hợp nhất với bạn là **'+

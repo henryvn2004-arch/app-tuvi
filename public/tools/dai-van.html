@@ -20,7 +20,8 @@
 <link rel="stylesheet" href="/tools/tools.css">
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js"></script>
+<script src="/tools-shared/noi-sinh.js?v=1"></script>
+<script src="/tuvi-form.js?v=15"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="/tools-shared/pchip.js?v=1"></script>
 <script src="/tools-shared/daivan-chart.js?v=1"></script>
@@ -299,7 +300,7 @@ function buildDvDetailHtml(ls, dv) {
 }
 
 function luanGiai() {
-  const {hoten,ngay,thang,nam,gioIdx,gioHour,gioitinh,namXem}=TuviForm.getData();
+  const {hoten,ngay,thang,nam,gioIdx,gioHour,gioitinh,namXem,lich}=TuviForm.getData();
   const err=document.getElementById('error-msg');
   err.classList.remove('active');
   if(!ngay||!thang||!nam){err.textContent='Vui lòng điền đầy đủ thông tin.';err.classList.add('active');return;}
@@ -313,7 +314,7 @@ function luanGiai() {
   document.getElementById('chart-timeline-labels').innerHTML='';
 
   try {
-    const conv=convertDuongToAm(ngay,thang,nam,gioHour);
+    const conv=convertDuongToAm(ngay,thang,nam,gioHour,lich);
     const ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:nam,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:conv.gioIdx,gioitinh,namXem:namXem||CURRENT_YEAR});
     const dvs=ls.daiVans||[];
     const curDv=ls.daiVanHienTai;

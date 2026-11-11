@@ -14,7 +14,7 @@
 | Cần gì | Tra ở |
 |---|---|
 | Chi tiết một LUẬT | `docs/luat/README.md` → `tien` · `llm-prompt` · `engine-cophap` · `postgres` · `bay` |
-| Diễn biến từng PR (117+ mục) | `docs/nhat-ky/README.md` → `2026-10` · `2026-09` · `2026-08` · `2026-07` · `track-cu` |
+| Diễn biến từng PR (117+ mục) | `docs/nhat-ky/README.md` → `2026-11` · `2026-10` · `2026-09` · `2026-08` · `2026-07` · `track-cu` |
 | Luật icon đầy đủ | `docs/ICONS.md` |
 | Cấu hình QC · giới hạn đã biết · dựng máy mới | `docs/QC.md` |
 
@@ -135,13 +135,12 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 - **💰 Giá Lượng: client KHÔNG chép số.** Nguồn duy nhất `tool_pricing`+`credit_packages`
   (Admin, không deploy) · UI qua `public/tool-prices.js` (`data-tvp-price`) · đọc hụt
   → `…` + paywall **từ chối chạy** · chỉ `admin.html` fetch thẳng. `npm run check:prices` · `docs/luat/tien.md`.
-- **Giá trị 1 Lượng SUY TỪ `credit_packages`** (gói bậc hai/`sort_order` = 400.000/800 =
-  **500đ chính xác**, chốt 2026-09-20) · `app_config['credits.vnd_per_credit']` **ĐÃ GỠ**, đọc
-  lại rơi im lặng về `1000` · sửa kèm cả ba: SQL `credit_vnd()` · `vndPerCredit()` · `FALLBACK`
-  (`lib/billing/packages.ts`). `docs/luat/tien.md`.
-- **VNĐ là giá CHÍNH ở mọi câu nói giá cho khách** (paywall, hộp "Chi phí sử dụng", nhãn tool) —
-  Lượng lùi thành chú thích phụ trong ngoặc, trừ **gói mua Lượng** (`/topup.html`) vẫn để Lượng
-  làm chính. Nguồn: `ToolPrices.vndLabel()`/`priceLabel()` · `TuviPaywall._vndFirst()`.
+- **Giá trị 1 Lượng SUY TỪ `credit_packages` gói bậc hai** — USD (tiền bán, W5): sửa kèm SQL
+  `credit_usd()` · `usdPerCredit()` · `FALLBACK.amountUsd` · `ToolPrices.usdPerCredit()`; VNĐ (báo
+  cáo): `credit_vnd()` · `vndPerCredit()`. Khoá `credits.vnd_per_credit` **ĐÃ GỠ**. `docs/luat/tien.md`.
+- **USD là giá CHÍNH ở mọi câu nói giá cho khách** (W5, 2026-11) — Lượng lùi vào ngoặc. Nguồn duy
+  nhất `ToolPrices.usdLabel()` (`vndLabel` = tên cũ, nay ra USD) · `TuviPaywall._money()`. Rail VNĐ
+  (QR/MoMo) ẩn sau `app_config['billing.vnd_rails_enabled']`, thiếu khoá = ẩn. `docs/luat/tien.md`.
 - **Icon: KHÔNG dùng emoji màu** — bộ dùng chung `public/nav.js` (`data-icon="wallet"`)
   · dựng bằng `innerHTML` → gọi lại `window.mountIcons(el)` · giữ ký tự đơn sắc theo font
   (`→ ← ✦ ★ ✓ ✗ ✕ ⚠ ☰`), không áp dụng cho prompt LLM/Telegram admin · thêm icon → sửa
@@ -232,8 +231,8 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 - **Bảng âm lịch chỉ phủ `1900-01-01 → 2100-12-31`** — ngoài tầm: vanilla trả
   `null`, bản TS ném `RangeError`. **Mọi lượt import ngày sinh từ nguồn NGOÀI phải
   gọi `isLunarSupported()` trước.** `npm run check:lunar`.
-- **`_LUNAR_TABLE` SINH bằng `scripts/gen-lunar-table.mjs`**, không gõ tay/chép
-  thư viện ngoài; `npm run oracle:lunar` gate CI vét cạn 1900-2100.
+- **Bảng âm lịch (vn + cn/kr/jp theo NƠI SINH) SINH bằng `gen-lunar-table.mjs [--lich]`**,
+  `oracle:lunar` vét cạn + HKO/KASI. **`lich` phải theo lá số tới mọi chỗ tính/khoá** (thiếu = lịch VN, im lặng).
   **Bản vanilla BỎ cờ `isLeap`** — nợ CỐ Ý, đừng sửa mò.
 - **Khoá "cùng lá số" là ÂM LỊCH + giới tính, không phải ngày dương** (lá số lặp
   chu kỳ **60 năm**). ⚠️ `lasoKey()` băm ngày DƯƠNG — không tái dùng để gom lá số.

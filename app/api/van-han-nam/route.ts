@@ -131,6 +131,8 @@ function readBirth(b: AnyRec): BirthParams | null {
     gender: birth.gender === 'nu' ? 'nu' : 'nam',
     isLunar: !!birth.isLunar,
     name: birth.name ? String(birth.name) : undefined,
+    // Lịch âm theo nơi sinh (i18n W3) — chỉ chuyển tiếp; computeLaso tự lọc giá trị lạ (`lichOf`).
+    ...(typeof birth.lich === 'string' ? { lich: birth.lich as BirthParams['lich'] } : {}),
   } as BirthParams;
 }
 

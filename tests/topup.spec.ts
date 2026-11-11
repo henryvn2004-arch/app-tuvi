@@ -17,14 +17,13 @@ test.describe('Topup Page', () => {
     await expect(page.locator('text=VIP').first()).toBeVisible();
   });
 
-  test('4 muc gia hien dung', async ({ page }) => {
-    // Giá 4 gói: Khởi Đầu 199k, Cao Cấp 699k, VIP 999k (2026-08-30, xem
-    // _patches/migration-credit-packages-reprice-2026-08.sql); Phổ Thông
-    // 399k→400k (2026-09-20, _patches/migration-luong-500-exact.sql) để
-    // 1 Lượng = 500đ CHÍNH XÁC thay vì 499đ.
-    for (const price of ['199', '400', '699', '999']) {
-      await expect(page.locator(`text=/${price}/`).first()).toBeVisible();
-    }
+  test('4 muc gia hien bang USD', async ({ page }) => {
+    // W5 (2026-11): gói bán bằng USD qua PayPal — số cụ thể đọc từ
+    // `credit_packages.amount_usd` (Admin sửa, không deploy) nên KHÔNG ghim số
+    // ở đây, chỉ kiểm dạng "$X.XX" và không còn VNĐ trên thẻ gói.
+    const prices = page.locator('.pkg-card:not(.pkg-skel) .pkg-price');
+    await expect(prices).toHaveCount(4, { timeout: 15000 });
+    for (let i = 0; i < 4; i++) await expect(prices.nth(i)).toHaveText(/^\$\d+\.\d{2}$/);
   });
 
   test('buy button visible', async ({ page }) => {

@@ -44,10 +44,23 @@ const RULES = [
   {
     id: 'don-gia-cung',
     // hằng số quy đổi đ/Lượng từng gây báo giá sai gấp ~3 lần
-    re: /\b(VND_PER_CREDIT|CUSTOM_FALLBACK_RATE)\b|\b2500\s*\)?\s*;?\s*\/\/.*[Ll]ượng/,
+    // W5: thêm hai hằng số tỷ giá USD — client KHÔNG tự quy VNĐ↔USD hay tự
+    // giữ đơn giá USD/Lượng; đơn giá suy từ `credit_packages.amount_usd` qua
+    // `ToolPrices.usdPerCredit()`, tỷ giá chỉ sống ở server (lib/billing/paypal.ts).
+    re: /\b(VND_PER_CREDIT|CUSTOM_FALLBACK_RATE|VND_PER_USD|USD_PER_CREDIT)\b|\b2500\s*\)?\s*;?\s*\/\/.*[Ll]ượng/,
     msg: 'hằng số quy đổi đ/Lượng — suy từ credit_packages qua ToolPrices',
     // admin.html tự suy đơn giá từ `credit_packages` ngay trong trang (nó là
     // trang SỬA giá, không đọc qua ToolPrices).
+    allow: (f) => f === 'public/admin.html',
+  },
+  {
+    id: 'gia-usd-cung',
+    // W5 (USD là tiền bán): "$7.99" viết thẳng trong markup/chuỗi JS. Giá gói
+    // đọc `credit_packages.amount_usd`, giá công cụ qua `ToolPrices.usdLabel()`.
+    // Chỉ bắt dạng có ĐỦ 2 số lẻ — dạng giá tiền — để không kêu oan với `$1`
+    // của regex/template.
+    re: /\$\s?\d{1,4}\.\d{2}\b/,
+    msg: 'giá USD viết cứng — đọc credit_packages.amount_usd / ToolPrices.usdLabel()',
     allow: (f) => f === 'public/admin.html',
   },
 ];
