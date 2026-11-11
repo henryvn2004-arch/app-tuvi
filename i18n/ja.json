@@ -324,7 +324,7 @@
   "h": "a05551fa"
  },
  "home.bac-minh": {
-  "t": "Bắc Minh",
+  "t": "北冥",
   "h": "85833b15"
  },
  "home.bai-viet-kien-thuc": {
@@ -364,7 +364,7 @@
   "h": "e78d5a83"
  },
  "home.co-nguyet": {
-  "t": "Cổ Nguyệt",
+  "t": "古月",
   "h": "c58a8850"
  },
  "home.co-so-du-lieu-la-so": {
@@ -396,7 +396,7 @@
   "h": "6cd11a12"
  },
  "home.dau-nam": {
-  "t": "Đẩu Nam",
+  "t": "斗南",
   "h": "ecb2ae80"
  },
  "home.dien-giai": {
@@ -412,7 +412,7 @@
   "h": "e690108d"
  },
  "home.dieu-khong": {
-  "t": "Diệu Không",
+  "t": "妙空",
   "h": "3bfd70d7"
  },
  "home.doc-ngay": {
@@ -488,7 +488,7 @@
   "h": "462ae593"
  },
  "home.huyen-khong": {
-  "t": "Huyền Không",
+  "t": "玄空",
   "h": "664fa5b2"
  },
  "home.ke-cho-thay-nghe-cau-hoi": {
@@ -548,11 +548,11 @@
   "h": "cef5dbf2"
  },
  "home.linh-co": {
-  "t": "Linh Cơ",
+  "t": "霊機",
   "h": "530b426b"
  },
  "home.linh-son": {
-  "t": "Linh Sơn",
+  "t": "霊山",
   "h": "2a6f2364"
  },
  "home.luan-giai-la-so": {
@@ -576,7 +576,7 @@
   "h": "bef98605"
  },
  "home.ngoc-tinh": {
-  "t": "Ngọc Tinh",
+  "t": "玉星",
   "h": "448babdb"
  },
  "home.nguoi-co-gio-sinh-kiem-chung": {
@@ -592,7 +592,7 @@
   "h": "3e8f9b9f"
  },
  "home.nhat-nguyen": {
-  "t": "Nhật Nguyên",
+  "t": "日元",
   "h": "d1c0b144"
  },
  "home.nhom-chuyen-gia-cap-nhat-lien": {
@@ -644,7 +644,7 @@
   "h": "5bdd0199"
  },
  "home.tam-kinh": {
-  "t": "Tâm Kính",
+  "t": "心鏡",
   "h": "8c71a393"
  },
  "home.tarot-than-so": {
@@ -652,7 +652,7 @@
   "h": "8cd4677e"
  },
  "home.thai-hu": {
-  "t": "Thái Hư",
+  "t": "太虚",
   "h": "8164408e"
  },
  "home.tham-dinh": {
@@ -672,7 +672,7 @@
   "h": "fbfd5ac0"
  },
  "home.thanh-hu": {
-  "t": "Thanh Hư",
+  "t": "清虚",
   "h": "0fae72f2"
  },
  "home.thanh-tuong-xem-giong-noi": {
@@ -680,71 +680,71 @@
   "h": "9b94abc0"
  },
  "home.thay-bac-minh": {
-  "t": "Bắc Minh 先生",
+  "t": "北冥先生",
   "h": "8765f978"
  },
  "home.thay-co-nguyet": {
-  "t": "Cổ Nguyệt 先生",
+  "t": "古月先生",
   "h": "5c3beeeb"
  },
  "home.thay-dau-nam": {
-  "t": "Đẩu Nam 先生",
+  "t": "斗南先生",
   "h": "0e892f56"
  },
  "home.thay-dieu-khong": {
-  "t": "Diệu Không 先生",
+  "t": "妙空先生",
   "h": "f334056f"
  },
  "home.thay-huyen-khong": {
-  "t": "Huyền Không 先生",
+  "t": "玄空先生",
   "h": "ebc2e8ff"
  },
  "home.thay-linh-co": {
-  "t": "Linh Cơ 先生",
+  "t": "霊機先生",
   "h": "78e55359"
  },
  "home.thay-linh-son": {
-  "t": "Linh Sơn 先生",
+  "t": "霊山先生",
   "h": "490f9de0"
  },
  "home.thay-ngoc-tinh": {
-  "t": "Ngọc Tinh 先生",
+  "t": "玉星先生",
   "h": "7a5e8a22"
  },
  "home.thay-nhat-nguyen": {
-  "t": "Nhật Nguyên 先生",
+  "t": "日元先生",
   "h": "0f6eeeb3"
  },
  "home.thay-tam-kinh": {
-  "t": "Tâm Kính 先生",
+  "t": "心鏡先生",
   "h": "e5eb3f74"
  },
  "home.thay-thai-hu": {
-  "t": "Thái Hư 先生",
+  "t": "太虚先生",
   "h": "dd91916e"
  },
  "home.thay-thai-hu-tiep-chuyen-nhom": {
-  "t": "<b>Thái Hư 先生</b>がお相手します · 明宝チーム",
+  "t": "<b>太虚先生</b>がお相手します · 明宝チーム",
   "h": "3e53d65c"
  },
  "home.thay-thanh-hu": {
-  "t": "Thanh Hư 先生",
+  "t": "清虚先生",
   "h": "adc0bcd0"
  },
  "home.thay-thien-an": {
-  "t": "Thiên Ẩn 先生",
+  "t": "天隠先生",
   "h": "92670874"
  },
  "home.thay-tinh-quang": {
-  "t": "Tinh Quang 先生",
+  "t": "星光先生",
   "h": "3ccb5f21"
  },
  "home.thay-tu-nguyen": {
-  "t": "Tử Nguyên 先生",
+  "t": "紫元先生",
   "h": "a3df444c"
  },
  "home.thien-an": {
-  "t": "Thiên Ẩn",
+  "t": "天隠",
   "h": "cdd32e9c"
  },
  "home.thu-tuong-xem-chi-tay": {
@@ -760,7 +760,7 @@
   "h": "d5d3d4ea"
  },
  "home.tinh-quang": {
-  "t": "Tinh Quang",
+  "t": "星光",
   "h": "738207ad"
  },
  "home.toi-uu": {
@@ -784,7 +784,7 @@
   "h": "020c441d"
  },
  "home.tu-nguyen": {
-  "t": "Tử Nguyên",
+  "t": "紫元",
   "h": "e02fc21d"
  },
  "home.tu-vi-cong-so-hn": {
