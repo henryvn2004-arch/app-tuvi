@@ -29,6 +29,9 @@ npm run i18n:save -- --locale ja --file lo.json      # {"khoá":"bản dịch"} 
 ```
 `save` kiểm: khoá tồn tại · thẻ HTML + `{token}` khớp câu gốc · không chép nguyên câu gốc (tên riêng/email giữ nguyên → `"same":true`) · CJK không còn nhiều chữ Việt. Câu tốt vẫn lưu, câu hỏng in lý do, exit 1. Lưu `zh-tw` tự sinh lại `zh-cn`. KHÔNG dịch `zh-cn`. Thứ tự ưu tiên trang: `i18n/priority.json` (mảng đường dẫn, tuỳ chọn).
 
+## Route tự dịch từ DB (tự quản SEO)
+Route tự render đúng ngôn ngữ và tự xuất robots/canonical/hreflang theo từng bản ghi (hiện: `/nghiem-chung`, `/xac-dinh-gio-sinh`) đăng ký ở **`lib/i18n/self-managed.mjs`** (`SELF_MANAGED_PREFIXES`, một chỗ duy nhất). Với `/<locale>/<prefix>…` proxy bóc tiền tố + gắn `x-tvmb-locale` rồi rewrite THẲNG tới route, KHÔNG qua `i18n-render`, KHÔNG noindex tự động; route đọc `localeFromHeaders()` và tự quyết (bản chưa dịch → 404). Các prefix này không nằm trong `availability.json`; `check:i18n` cấm đăng ký chồng.
+
 ## Dành cho W6 / W8
 - Route SSR/handler đọc ngôn ngữ qua `localeFromHeaders(req.headers)` — proxy đã gắn header, nhưng trang SSR (không phải HTML tĩnh) hiện chỉ được phục vụ dưới `/<locale>/…` ở dạng `noindex` (không có khoá data-i18n) cho tới khi tự chịu trách nhiệm bản dịch. Muốn index: render sẵn chữ đúng ngôn ngữ trong route VÀ đăng ký trang (đưa vào `availability`) — trao đổi với W4.
 - Prompt LLM: câu chỉ định ngôn ngữ đặt ở USER message (giữ cache `cachedSystemFor`).

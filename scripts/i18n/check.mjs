@@ -34,6 +34,7 @@ import {
   TRANSLATED,
 } from '../../lib/i18n/dict.mjs';
 import { buildZhCn } from './zhcn.mjs';
+import { SELF_MANAGED_PREFIXES, isSelfManaged } from '../../lib/i18n/self-managed.mjs';
 
 const errors = [];
 const fail = (m) => errors.push(m);
@@ -61,6 +62,12 @@ for (const [k, v] of Object.entries(vi))
 
 // ── 2. pages.json / availability.json không cũ ──────────────────────────────
 const pages = await buildPages();
+// Route tự quản SEO (lib/i18n/self-managed.mjs) không được đăng ký chồng vào pages.json/availability.
+for (const u of Object.keys(pages))
+  if (isSelfManaged(u))
+    fail(
+      `${u}: nằm dưới prefix tự quản (${SELF_MANAGED_PREFIXES.join(', ')}) — không đăng ký trong pages.json`
+    );
 const strip = (o) => JSON.stringify(o);
 if (strip(pages) !== strip(loadPages()))
   fail('i18n/pages.json cũ so với HTML trong public/ — chạy: npm run i18n:pages');

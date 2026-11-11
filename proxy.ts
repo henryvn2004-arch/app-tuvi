@@ -13,6 +13,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { isLocale, LOCALE_HEADER } from '@/lib/i18n/locales';
 import { linkHeaderForVi, normPath } from '@/lib/i18n/links.mjs';
+import { isSelfManaged } from '@/lib/i18n/self-managed.mjs';
 import availability from '@/i18n/availability.json';
 
 const AVAIL = availability as Record<string, string[]>;
@@ -34,7 +35,8 @@ export function proxy(req: NextRequest) {
     // `/ja/ja/...` hay `/ja/en/...` không phải URL hợp lệ.
     if (isLocale(rest.split('/')[1] || '')) return new NextResponse('Not found', { status: 404 });
     const url = req.nextUrl.clone();
-    url.pathname = `/i18n-render/${seg}${rest === '/' ? '' : rest}`;
+    // Route tự dịch + tự quản SEO (lib/i18n/self-managed.mjs): chỉ bóc tiền tố + gắn header.
+    url.pathname = isSelfManaged(rest) ? rest : `/i18n-render/${seg}${rest === '/' ? '' : rest}`;
     const headers = new Headers(req.headers);
     headers.set(LOCALE_HEADER, seg);
     return NextResponse.rewrite(url, { request: { headers } });
