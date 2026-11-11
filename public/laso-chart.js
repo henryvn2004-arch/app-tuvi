@@ -73,6 +73,13 @@ function _legend() {
 function _lcG(kind, vi, opts) { return window.TuviGlossary ? window.TuviGlossary.t(kind, vi, opts) : vi; }
 function _lcVi() { return !window.TuviGlossary || window.TuviGlossary.locale() === 'vi'; }
 const _LC_SAO = ['chinh', 'sao'];
+// Nạp âm ô giữa: vi giữ NGUYÊN chuỗi NAP_AM_FULL (kèm giải nghĩa Việt trong ngoặc); ngôn ngữ khác lấy tên (phần
+// trước ngoặc) qua glossary loại 'napam' — giải nghĩa Việt trong ngoặc không có bản dịch nên bỏ.
+function _lcNapAm(ls) {
+  const f = NAP_AM_FULL[ls.canChiNam];
+  if (_lcVi()) return f || ls.napAm || '';
+  return f ? _lcG('napam', f.split(' (')[0]) : _lcG('hanh', ls.napAm || '');
+}
 function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 function _bShort(b) { const v = _BC_MAP[b] || ''; return v && !_lcVi() ? _lcG('sang', b, { abbr: true }) : v; }
 // Uỷ THẲNG cho VnTimezone (tools-shared/vn-timezone.js) — NGUỒN DUY NHẤT của
@@ -112,7 +119,7 @@ function renderCungCell(p, dvTuoi, canNamIdx, isCurVan) {
   const luuH = (p.luuStars || []).map(s => {
     const xau = !!s.xau; // engine đánh dấu (`danhGiaSaoLuu`) — không giữ danh sách ở đây
     const tip = s.sao ? `${s.ten} (${s.sao}) — chỉ tác dụng trong năm xem` : `${s.ten} — chỉ tác dụng trong năm xem`;
-    return `<span class="v2-luu-item${xau ? ' luu-xau' : ''}" title="${esc(tip)}">${esc(_lcG('sao', s.ten).replace(/^Lưu /, 'L.').toUpperCase())}</span>`;
+    return `<span class="v2-luu-item${xau ? ' luu-xau' : ''}" title="${esc(tip)}">${esc(_lcG(['sao', 'khai'], s.ten).replace(/^Lưu /, 'L.').toUpperCase())}</span>`;
   }).join('');
   // Khuôn Thiên Lương: can chi (màu hành của chi) + tên cung cùng một hàng; chân ô
   // Tràng Sinh giữa, tuổi vào đại hạn góc phải; Tuần/Triệt vẽ ở cấp lưới (_voidLabels).
@@ -148,7 +155,7 @@ function renderCenter(ls, fd) {
     <div class="center-row"><span class="ic-inline" data-icon="user" data-icon-emoji="⚧" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚧</span> Giới tính: ${fd.gioitinh === 'nam' ? 'Nam' : 'Nữ'}</div>
     ${fd.amDuongNam ? `<div class="center-row">${fd.amDuongNam === 'dương' ? 'Dương' : 'Âm'} ${fd.gioitinh === 'nam' ? 'Nam' : 'Nữ'} · Âm Dương ${(fd.amDuongNam === 'dương') === (fd.gioitinh === 'nam') ? 'Thuận Lý' : 'Nghịch Lý'}</div>` : ''}
     <hr class="center-divider">
-    <div class="center-row">Năm: <b style="color:var(--navy)">${esc(_lcG('canchi', ls.canChiNam))}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${esc(NAP_AM_FULL[ls.canChiNam] || ls.napAm || '')}</b></div>
+    <div class="center-row">Năm: <b style="color:var(--navy)">${esc(_lcG('canchi', ls.canChiNam))}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${esc(_lcNapAm(ls))}</b></div>
     <div class="center-row">Cục: <b style="color:var(--navy)">${esc(_lcG('cuc', ls.cuc || ''))}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${esc(_lcG('chi', ls.menhDC || ''))}</b> · Thân: <b style="color:var(--navy)">${esc(_lcG('chi', ls.thanDC || ''))}</b></div>
     <hr class="center-divider">
     <div class="center-row">Năm <b style="color:var(--blue)">${esc(_lcG('chi', ls.chiNamXem || ''))}</b> — Tuổi ${ls.tuoiXem}</div>

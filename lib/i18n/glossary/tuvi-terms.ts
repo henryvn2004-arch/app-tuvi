@@ -23,7 +23,12 @@
 //             'o' = sao/khái niệm RIÊNG của trường phái Việt (vnOnly): giữ chữ, người dịch phải GIẢI THÍCH, không tìm tương đương,
 //             'v' = tên Việt KHÔNG phải phiên Hán-Việt của chữ Hán (Lá Số ↔ 命盤…) — bộ dò check:glossary bỏ qua và liệt kê.
 
-export type TermKind = 'cung' | 'chinh' | 'sao' | 'tuhoa' | 'sang' | 'cuc' | 'hanh' | 'khai';
+export type TermKind =
+  | 'cung' | 'chinh' | 'sao' | 'tuhoa' | 'sang' | 'cuc' | 'hanh' | 'khai'
+  // W15b — ngoài Tử Vi: nạp âm 30 cặp, Kỳ Môn, Lục Nhâm, Hoàng Lịch (Kim Lâu…), Bát Trạch, tướng pháp, Mai Hoa.
+  | 'napam' | 'kymon' | 'lucnham' | 'lich' | 'battrach' | 'tuong' | 'maihoa'
+  // 28 tú (`NHI_THAP_BAT_TU`) và 12 trực (`TRUC_LIST`) của tuvi-engine/src/ngay-tot/constants.ts.
+  | 'tu' | 'truc';
 
 /** Ngoại lệ THEO NGÔN NGỮ khi cách dùng thật khác chữ Hán gốc (ghi nguyên chuỗi kết quả). */
 export type TermOverride = Partial<Record<'ja' | 'ko' | 'zh-cn', string>>;
@@ -229,6 +234,154 @@ export const TERMS: readonly TermRow[] = [
   ['khai', 'Tướng Phủ triều viên', '府相朝垣', 'Fu Xiang Chao Yuan'],
   ['khai', 'Cự Cơ Mão Dậu', '巨機卯酉', 'Ju Ji Mao You'],
   ['khai', 'Lưu Thái Tuế', '流太歲', 'Liu Tai Sui'],
+  // ── Sao lưu năm xem (W15b) — tên đúng như engine `luuStars` trả. Hán = 流 + chữ Hán của sao gốc ở trên
+  //    (không gõ chữ mới). Sách Hoa/Đài hay viết TẮT: 流祿 · 流羊 · 流陀 · 流馬 — chờ người duyệt chọn dạng hiển thị.
+  ['khai', 'Lưu Lộc Tồn', '流祿存'],
+  ['khai', 'Lưu Kình Dương', '流擎羊'],
+  ['khai', 'Lưu Đà La', '流陀羅'],
+  ['khai', 'Lưu Thiên Mã', '流天馬'],
+  ['khai', 'Lưu Tang Môn', '流喪門'],
+  ['khai', 'Lưu Bạch Hổ', '流白虎'],
+  ['khai', 'Lưu Thiên Khốc', '流天哭'],
+  ['khai', 'Lưu Thiên Hư', '流天虛'],
+  ['khai', 'Lưu Hóa Lộc', '流化祿'],
+  ['khai', 'Lưu Hóa Quyền', '流化權'],
+  ['khai', 'Lưu Hóa Khoa', '流化科'],
+  ['khai', 'Lưu Hóa Kỵ', '流化忌'],
+
+  // ── 30 nạp âm (W15b) — tên đúng như khoá `NAP_AM_FULL` (phần trước ngoặc) của laso-chart.js / tuvi-grid.js ──
+  ['napam', 'Hải Trung Kim', '海中金'],
+  ['napam', 'Lô Trung Hỏa', '爐中火'],
+  ['napam', 'Đại Lâm Mộc', '大林木'],
+  ['napam', 'Lộ Bàng Thổ', '路旁土'],
+  ['napam', 'Kiếm Phong Kim', '劍鋒金'],
+  ['napam', 'Sơn Đầu Hỏa', '山頭火'],
+  ['napam', 'Giản Hạ Thủy', '澗下水'],
+  ['napam', 'Thành Đầu Thổ', '城頭土'],
+  ['napam', 'Bạch Lạp Kim', '白蠟金'],
+  ['napam', 'Dương Liễu Mộc', '楊柳木'],
+  ['napam', 'Tuyền Trung Thủy', '泉中水'],
+  ['napam', 'Ốc Thượng Thổ', '屋上土'],
+  ['napam', 'Tích Lịch Hỏa', '霹靂火'],
+  ['napam', 'Tùng Bách Mộc', '松柏木'],
+  ['napam', 'Trường Lưu Thủy', '長流水'],
+  ['napam', 'Sa Trung Kim', '沙中金'],
+  ['napam', 'Sơn Hạ Hỏa', '山下火'],
+  ['napam', 'Bình Địa Mộc', '平地木'],
+  ['napam', 'Bích Thượng Thổ', '壁上土'],
+  ['napam', 'Kim Bạch Kim', '金箔金'],
+  ['napam', 'Phú Đăng Hỏa', '覆燈火'],
+  ['napam', 'Thiên Hà Thủy', '天河水'],
+  ['napam', 'Đại Dịch Thổ', '大驛土'],
+  ['napam', 'Thoa Xuyến Kim', '釵釧金'],
+  ['napam', 'Tang Đố Mộc', '桑柘木'],
+  ['napam', 'Đại Khê Thủy', '大溪水'],
+  ['napam', 'Sa Trung Thổ', '沙中土'],
+  ['napam', 'Thiên Thượng Hỏa', '天上火'],
+  ['napam', 'Thạch Lựu Mộc', '石榴木'],
+  ['napam', 'Đại Hải Thủy', '大海水'],
+
+  // ── Kỳ Môn (W15b) — engine lib/qimen trả chữ Hán 值符/值使; trùng tên Việt với sao Trực Phù (直符) của Tử Vi
+  //    nên cờ 'x' (chỉ tra chính xác theo loại, không dò trong văn — văn có "Trực Phù" thì không biết là môn nào).
+  ['kymon', 'Kỳ Môn Độn Giáp', '奇門遁甲', 'Qi Men Dun Jia'],
+  //    ko: 值 (U+503C) không có kHangul trong Unihan; lấy kHangul của 値 (U+5024 — dạng chuẩn Nhật/Hàn của cùng chữ) = 치.
+  ['kymon', 'Trực Phù', '值符', 'Zhi Fu (Chief)', 'x', { ko: '치부' }],
+  // "Trực Sử" (值使) CHƯA đưa vào: Unihan chỉ ghi 使 = sứ, hanviet.ts cũng vậy ⇒ âm "sử" không kiểm được — chờ người duyệt.
+  ['kymon', 'Cửu Tinh', '九星', 'Nine Stars'],
+  ['kymon', 'Bát Môn', '八門', 'Eight Gates'],
+  ['kymon', 'Bát Thần', '八神', 'Eight Deities'],
+
+  // ── Đại Lục Nhâm (W15b) — engine lib/liuren/terms.ts: 初传/中传/末传 = Sơ/Trung/Mạt truyền; "phép THỦ truyền"
+  //    = 12 pháp chọn truyền (贼克, 元首…) — 取 đọc "thủ", KHÁC "Sơ truyền". Không gộp hai mục.
+  ['lucnham', 'Đại Lục Nhâm', '大六壬', 'Da Liu Ren'],
+  ['lucnham', 'Tam Truyền', '三傳', 'Three Transmissions'],
+  ['lucnham', 'Sơ truyền', '初傳', 'Initial Transmission'],
+  ['lucnham', 'Trung truyền', '中傳', 'Middle Transmission'],
+  ['lucnham', 'Mạt truyền', '末傳', 'Final Transmission'],
+  ['lucnham', 'Thủ truyền', '取傳', 'transmission selection'],
+  ['lucnham', 'Tứ Khóa', '四課', 'Four Lessons'],
+
+  // ── Hoàng Lịch · làm nhà · cưới hỏi (W15b) ──
+  ['lich', 'Hoàng Đạo', '黃道', 'auspicious (Huang Dao)'],
+  ['lich', 'Hắc Đạo', '黑道', 'inauspicious (Hei Dao)'],
+  ['lich', 'Kim Lâu', '金樓', 'Jin Lou'],
+  ['lich', 'Hoang Ốc', '荒屋', 'Huang Wu'],
+  ['lich', 'Tam Tai', '三災', 'Three Calamities (San Zai)'],
+
+  // ── Bát Trạch + 8 du niên (W15b) — Thiên Y trùng tên sao Tử Vi (cùng chữ 天醫) ⇒ cờ 'x' ──
+  ['battrach', 'Bát Trạch', '八宅', 'Eight Mansions (Ba Zhai)'],
+  ['battrach', 'Bát Trạch Minh Kính', '八宅明鏡', 'Ba Zhai Ming Jing'],
+  ['battrach', 'Bát Tinh', '八星', 'Eight Stars'],
+  ['battrach', 'Sinh Khí', '生氣', 'Sheng Qi'],
+  ['battrach', 'Thiên Y', '天醫', 'Tian Yi', 'x'],
+  ['battrach', 'Diên Niên', '延年', 'Yan Nian'],
+  ['battrach', 'Phục Vị', '伏位', 'Fu Wei'],
+  ['battrach', 'Họa Hại', '禍害', 'Huo Hai'],
+  ['battrach', 'Lục Sát', '六煞', 'Liu Sha'],
+  ['battrach', 'Ngũ Quỷ', '五鬼', 'Wu Gui'],
+  ['battrach', 'Tuyệt Mệnh', '絕命', 'Jue Ming'],
+
+  // ── Tướng pháp: nhân tướng · khí sắc · thủ tướng · bút tướng (W15b) ──
+  ['tuong', 'Ma Y Thần Tướng', '麻衣神相', 'Ma Yi Shen Xiang'],
+  ['tuong', 'Ấn Đường', '印堂', 'Yin Tang (seal hall)'],
+  ['tuong', 'Ngũ Quan', '五官', 'Five Features'],
+  ['tuong', 'Ngũ Nhạc', '五嶽', 'Five Peaks'],
+  ['tuong', 'Khí Sắc', '氣色', 'Qi Se (complexion)'],
+  ['tuong', 'Thủ Tướng', '手相', 'palmistry'],
+  ['tuong', 'Bút Tướng', '筆相', 'Bi Xiang (handwriting reading)'],
+
+  // ── Mai Hoa Dịch Số (W15b) — Thể/Dụng đơn âm tiết ⇒ cờ 'x' ──
+  ['maihoa', 'Thể', '體', 'Ti (Body)', 'x'],
+  ['maihoa', 'Dụng', '用', 'Yong (Function)', 'x'],
+  ['maihoa', 'Bản quái', '本卦', 'original hexagram'],
+  ['maihoa', 'Biến quái', '變卦', 'changed hexagram'],
+  ['maihoa', 'Hỗ quái', '互卦', 'nuclear hexagram'],
+  ['maihoa', 'Động hào', '動爻', 'moving line'],
+
+  // ── 28 tú (W15b) — tên đúng như engine `NHI_THAP_BAT_TU` (tuvi-engine/src/ngay-tot/constants.ts), đúng thứ tự.
+  //    Đơn âm tiết, nhiều chữ trùng tên khác (Mão, Nguy, Tinh…) ⇒ cờ 'x': chỉ tra theo loại 'tu'.
+  ['lich', 'Nhị Thập Bát Tú', '二十八宿', '28 Lunar Mansions'],
+  ['tu', 'Giác', '角', '', 'x'],
+  ['tu', 'Cang', '亢', '', 'x'],
+  ['tu', 'Đê', '氐', '', 'x'],
+  ['tu', 'Phòng', '房', '', 'x'],
+  ['tu', 'Tâm', '心', '', 'x'],
+  ['tu', 'Vĩ', '尾', '', 'x'],
+  ['tu', 'Cơ', '箕', '', 'x'],
+  ['tu', 'Đẩu', '斗', '', 'x'],
+  ['tu', 'Ngưu', '牛', '', 'x'],
+  ['tu', 'Nữ', '女', '', 'x'],
+  ['tu', 'Hư', '虛', '', 'x'],
+  ['tu', 'Nguy', '危', '', 'x'],
+  ['tu', 'Thất', '室', '', 'x'],
+  ['tu', 'Bích', '壁', '', 'x'],
+  ['tu', 'Khuê', '奎', '', 'x'],
+  ['tu', 'Lâu', '婁', '', 'x'],
+  ['tu', 'Vị', '胃', '', 'x'],
+  ['tu', 'Mão', '昴', '', 'x'],
+  ['tu', 'Tất', '畢', '', 'x'],
+  ['tu', 'Chủy', '觜', '', 'x'],
+  ['tu', 'Sâm', '參', '', 'x'],
+  ['tu', 'Tỉnh', '井', '', 'x'],
+  ['tu', 'Quỷ', '鬼', '', 'x'],
+  ['tu', 'Liễu', '柳', '', 'x'],
+  ['tu', 'Tinh', '星', '', 'x'],
+  ['tu', 'Trương', '張', '', 'x'],
+  ['tu', 'Dực', '翼', '', 'x'],
+  ['tu', 'Chẩn', '軫', '', 'x'],
+  // ── 12 trực (W15b) — tên đúng như engine `TRUC_LIST`, đúng thứ tự Kiến…Bế. Đơn âm tiết ⇒ cờ 'x'.
+  ['truc', 'Kiến', '建', '', 'x'],
+  ['truc', 'Trừ', '除', '', 'x'],
+  ['truc', 'Mãn', '滿', '', 'x'],
+  ['truc', 'Bình', '平', '', 'x'],
+  ['truc', 'Định', '定', '', 'x'],
+  ['truc', 'Chấp', '執', '', 'x'],
+  ['truc', 'Phá', '破', '', 'x'],
+  ['truc', 'Nguy', '危', '', 'x'],
+  ['truc', 'Thành', '成', '', 'x'],
+  ['truc', 'Thu', '收', '', 'x'],
+  ['truc', 'Khai', '開', '', 'x'],
+  ['truc', 'Bế', '閉', '', 'x'],
 ];
 
 /** Địa chi: tiếng Việt → [con giáp en]. Chữ Hán lấy đảo từ `lib/hanviet.ts` CHI_HAN. */

@@ -28,6 +28,15 @@ Nghi sai thì GHI LẠI, không sửa. Đang treo:
   là đổi tứ trụ người VN đang có — cần chủ sản phẩm quyết; khi quyết thì chỉ cần
   cho `vn` đi cùng đường bảng (giờ của lịch VN lấy theo `VnTimezone`), và
   `check:tietkhi` mục 5 (hash lịch vn) sẽ đỏ — cố ý, phải chụp lại hash.
+- **"Thủ truyền" ở Đại Lục Nhâm** (W7a5 nghi, W15b soát 2026-11 — KHÔNG sửa chữ gốc). Nghi: `app-luc-nham.html:194`
+  viết "Thủ truyền theo phép **X**, sơ truyền **Y**", W7a5 cho rằng "Thủ truyền" không chuẩn, đúng phải là
+  "Sơ truyền". **Bằng chứng ngược:** cùng một câu đã có CẢ hai từ, chỉ hai thứ khác nhau; `lib/liuren/terms.ts`
+  gọi 12 pháp (贼克 · 元首 · 重审 · 比用 · 涉害 · 遥克 · 昴星 · 别责 · 八专 · 伏吟 · 返吟…, `PHAP_THU_TRUYEN`,
+  map từ `transmissionRule` của engine) là "pháp thủ truyền", còn 初传/中传/末传 là Sơ/Trung/Mạt truyền (dòng 118);
+  `tools-shared/dai-luc-nham.js:102` in tiêu đề "Phép thủ truyền" trên đúng danh sách 12 pháp đó. 取 đọc "thủ"
+  (lấy) ⇒ "thủ truyền" = cách LẤY ba truyền (sách Hoa gọi 九宗門 / 取傳法), không phải truyền thứ nhất.
+  ⇒ Chữ gốc ĐÚNG nghĩa; cái sai là bản dịch nếu đổi nó thành 初伝/초전/"first transmission". Glossary ghi
+  `lucnham|Thủ truyền = 取傳` (W15b). Còn treo: chọn từ hiển thị cho khách ngoài VN (取傳法 hay 九宗門) — người duyệt.
 
 ## Một nguồn số
 

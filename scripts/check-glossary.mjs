@@ -68,6 +68,19 @@ const NGOAI_LE = {
     sai: '府→Phủ≠Tướng, 相→Tương≠Phủ',
     vi: 'cùng chữ 府相朝垣 nhưng tên Việt viết đảo hai chữ đầu (Tướng Phủ); dạng chuẩn ở mục "Phủ Tướng triều viên"',
   },
+  // W15b — cùng lý do với Thiên Tướng: 相 trong tướng pháp đọc "Tướng" (xem tướng), hanviet.ts/Unihan chỉ ghi Tương.
+  'tuong|Ma Y Thần Tướng': {
+    sai: '相→Tương≠Tướng',
+    vi: '相 đa âm: Tương / Tướng (tướng pháp) — 麻衣神相 đọc Ma Y Thần Tướng',
+  },
+  'tuong|Thủ Tướng': {
+    sai: '相→Tương≠Tướng',
+    vi: '相 đa âm: Tương / Tướng (tướng pháp) — 手相 đọc Thủ Tướng',
+  },
+  'tuong|Bút Tướng': {
+    sai: '相→Tương≠Tướng',
+    vi: '相 đa âm: Tương / Tướng (tướng pháp) — 筆相 đọc Bút Tướng',
+  },
   'cung|Tử Tức': {
     sai: '子→Tý≠Tử, 女→Nữ≠Tức',
     vi: 'tên Việt cổ 子息 (Tử Tức); chữ chuẩn ở zh/ja/ko là 子女宮',
