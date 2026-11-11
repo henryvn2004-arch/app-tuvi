@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 📜 W16b — Dịch ko 613 chuỗi văn dài (thêm `ko` vào `LONG_COMPLETE`), vẽ thử 24k ô 0 chữ Việt |
 | 1 | 2026-11 | `2026-11.md` | 📜 W16a — Hạ tầng văn dài theo chỉ số (`i18n-long/`) + dịch ja 613 chuỗi: hào từ · lời khuyên quẻ · Thể–Dụng · nghĩa sao/thần |
 | 1 | 2026-11 | `2026-11.md` | 🏷️ W15e — Nhãn khung tĩnh + chữ trong trang Kỳ Môn · Mai Hoa · Kinh Dịch, câu viec, luật đọc quẻ |
 | 1 | 2026-11 | `2026-11.md` | 🧭 W15d — Hướng · Tam Kỳ · cách cục Kỳ Môn · nhãn Cát/Tránh/Bình · quan hệ Thể–Dụng Mai Hoa |
