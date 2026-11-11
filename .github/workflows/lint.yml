@@ -421,6 +421,11 @@ jobs:
       - name: Nghiệm Chứng đa ngôn ngữ — chữ khung + thuật ngữ phủ engine
         run: npm run check:nci18n
 
+      # Chữ Hán của bảng thuật ngữ là GÕ TAY: tra từng chữ sang âm Hán-Việt bằng lib/hanviet.ts, ghép lại so với tên Việt
+      # (chuanHoaDauThanh). Lệch → đỏ; chữ chưa có trong hanviet.ts được liệt kê riêng, không tính là đạt.
+      - name: Thuật ngữ Hán-Việt khớp lib/hanviet.ts (bộ dò tất định)
+        run: npm run check:glossary
+
   typecheck:
     runs-on: ubuntu-latest
     # Cùng lý do với job `lint` ở trên — xem chú thích tại đó.

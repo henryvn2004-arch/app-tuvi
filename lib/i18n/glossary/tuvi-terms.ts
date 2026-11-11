@@ -18,7 +18,8 @@
 //
 // Cờ (cột 5): 'x' = KHÔNG dò trong văn xuôi (đơn âm tiết mơ hồ: "Tử", "Mộ", "Bệnh"…),
 //             'c' = chỉ dò khi có tiền tố "cung " ("cung Mệnh" chứ không phải "mệnh" thường),
-//             'n' = cho phép số chữ Hán ≠ số âm tiết (Tuần → 旬空).
+//             'n' = cho phép số chữ Hán ≠ số âm tiết (Tuần → 旬空),
+//             'v' = tên Việt KHÔNG phải phiên Hán-Việt của chữ Hán (Lá Số ↔ 命盤…) — bộ dò check:glossary bỏ qua và liệt kê.
 
 export type TermKind = 'cung' | 'chinh' | 'sao' | 'tuhoa' | 'sang' | 'cuc' | 'hanh' | 'khai';
 
@@ -192,20 +193,20 @@ export const TERMS: readonly TermRow[] = [
   ['khai', 'Tiểu Hạn', '小限', 'Annual Limit (Xiao Xian)'],
   ['khai', 'Lưu Niên', '流年', 'Annual Flow (Liu Nian)'],
   ['khai', 'Lưu Niên Tứ Hóa', '流年四化', 'Annual Si Hua'],
-  ['khai', 'Chính Tinh', '主星', 'major stars'],
+  ['khai', 'Chính Tinh', '主星', 'major stars', 'v'],
   ['khai', 'Phụ Tinh', '輔星', 'minor stars'],
   ['khai', 'Sát Tinh', '煞星', 'malefic stars'],
-  ['khai', 'Lá Số', '命盤', 'natal chart'],
+  ['khai', 'Lá Số', '命盤', 'natal chart', 'v'],
   ['khai', 'Can Chi', '干支', 'Stems and Branches'],
   ['khai', 'Ngũ Hành', '五行', 'Five Elements'],
   ['khai', 'Nạp Âm', '納音', 'Na Yin'],
   // Hàn dùng 음력 (陰曆), Nhật dùng 旧暦 — không phải chữ 農曆 của Trung/Đài.
-  ['khai', 'Âm Lịch', '農曆', 'lunar calendar', '', { ko: '음력', ja: '旧暦' }],
+  ['khai', 'Âm Lịch', '農曆', 'lunar calendar', 'v', { ko: '음력', ja: '旧暦' }],
   ['khai', 'Dương Lịch', '陽曆', 'solar calendar', '', { ja: '新暦' }],
-  ['khai', 'Giờ Sinh', '生時', 'birth hour'],
+  ['khai', 'Giờ Sinh', '生時', 'birth hour', 'v'],
   ['khai', 'Thiên Can', '天干', 'Heavenly Stems'],
   ['khai', 'Địa Chi', '地支', 'Earthly Branches'],
-  ['khai', 'Sao Tử Vi', '紫微星', 'Zi Wei star'],
+  ['khai', 'Sao Tử Vi', '紫微星', 'Zi Wei star', 'v'],
   ['khai', 'Vô Chính Diệu', '無正曜', 'no major star'],
   ['khai', 'Đại Hạn', '大限', 'Major Limit (Da Xian)'],
 ];
