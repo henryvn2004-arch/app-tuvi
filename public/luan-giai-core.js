@@ -400,8 +400,12 @@
       maintainAspectRatio: false,
       tooltipExtra: function (dv) {
         var palace = ls.palaces && ls.palaces[dv.cungIdx];
+        // W15: tên cung/can chi theo ngôn ngữ trang (glossary.js); 'vi' giữ nguyên chuỗi cũ.
+        var G = window.TuviGlossary;
+        var vi = !G || G.locale() === 'vi';
+        var cc = vi ? canChiDaiVan(ls, dv) : G.t('canchi', canChiDaiVan(ls, dv));
         return [
-          (palace ? 'Cung ' + palace.cungName + ' (' + canChiDaiVan(ls, dv) + ')' : canChiDaiVan(ls, dv)),
+          (palace ? (vi ? 'Cung ' + palace.cungName : G.t('cung', palace.cungName)) + ' (' + cc + ')' : cc),
           dv.tuoiStart + '-' + dv.tuoiEnd + ' tuổi',
         ];
       },

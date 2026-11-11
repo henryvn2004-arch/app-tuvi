@@ -22,6 +22,8 @@ scripts/oracle/vendor/*.js
 
 # Generated / vendor data
 public/cach_cuc_all.json
+# SINH bằng scripts/gen-glossary.mjs — check:glossary so từng byte với nguồn
+public/tools-shared/glossary.js
 chunks_all.json
 sach/
 authors/

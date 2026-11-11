@@ -193,6 +193,8 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 </footer>
 
 <script src="/tuvi-ansao-engine.js"></script>
+<script src="/tools-shared/glossary.js?v=1"></script>
+<script src="/tools-shared/i18n.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
@@ -222,7 +224,12 @@ const HUNG_SAT_SET=new Set([
 ]);
 const TRANG_SINH_SET=new Set(['Tràng Sinh','Mộc Dục','Quan Đới','Lâm Quan','Đế Vượng','Suy','Bệnh','Tử','Mộ','Tuyệt','Thai','Dưỡng']);
 
-function bShort(b){return{Miếu:'M',Vượng:'V',Đắc:'Đ',Bình:'B',Hãm:'H'}[b]||''}
+// Lớp HIỂN THỊ theo ngôn ngữ trang (W15): tên qua /tools-shared/glossary.js (sinh từ lib/i18n/glossary).
+// Engine giữ tên Việt làm KHOÁ — so/tra màu vẫn dùng s.ten gốc. 'vi' trả NGUYÊN chuỗi vào.
+const _SAO=['chinh','sao'];
+function _g(kind,vi,opts){return window.TuviGlossary?window.TuviGlossary.t(kind,vi,opts):vi}
+function _isVi(){return!window.TuviGlossary||window.TuviGlossary.locale()==='vi'}
+function bShort(b){const v={Miếu:'M',Vượng:'V',Đắc:'Đ',Bình:'B',Hãm:'H'}[b]||'';return v&&!_isVi()?_g('sang',b,{abbr:true}):v}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function getStarElementClass(n){const d=(typeof STAR_DATA!=='undefined')?STAR_DATA[n]:null;if(!d?.element)return'sc-neutral';const m={'kim':'sc-kim','moc':'sc-moc','mộc':'sc-moc','thuy':'sc-thuy','thủy':'sc-thuy','hoa':'sc-hoa','hỏa':'sc-hoa','tho':'sc-tho','thổ':'sc-tho'};return m[d.element.toLowerCase()]||'sc-neutral'}
 function getStarClass(s){if(s.nhom==='chinh')return'sc-'+(CHINH_TINH_COLOR[s.ten]||'neutral');if(s.hoa==='Lộc')return'sc-hoa-loc';if(s.hoa==='Quyền')return'sc-hoa-quyen';if(s.hoa==='Khoa')return'sc-hoa-khoa';if(s.hoa==='Kỵ')return'sc-hoa-ky';return getStarElementClass(s.ten)}
@@ -233,22 +240,23 @@ function hourMinToGioAm(h,m){return window.VnTimezone.hourMinToGioIdx(h,m)}
 // ── RENDER CUNG CELL ──
 function renderCungCell(palace, dvTuoi, canNamIdx) {
   const dcIdx=CHI.indexOf(palace.diaChi),canIdx=getCungCan(canNamIdx,dcIdx);
-  const canChi=CAN[canIdx]+' '+CHI[dcIdx];
+  const canChi=_g('canchi',CAN[canIdx]+' '+CHI[dcIdx]);
   // Cung name + THÂN badge inline
-  const thanBadge=palace.isThan?` <span class="badge-than">THÂN</span>`:'';
+  const thanBadge=palace.isThan?` <span class="badge-than">${esc(_g('cung','Thân',{short:true}).toUpperCase())}</span>`:'';
   const tsS=palace.stars.find(s=>TRANG_SINH_SET.has(s.ten));
   const tuanS=palace.stars.find(s=>s.ten==='Tuần'||s.ten==='Tuần+Triệt');
   const trietS=palace.stars.find(s=>s.ten==='Triệt'||s.ten==='Tuần+Triệt');
   let tuanTriet='';
-  if(tuanS&&trietS)tuanTriet='<span class="tuan-tag">TUẦN+TRIỆT</span>';
-  else if(tuanS)tuanTriet='<span class="tuan-tag">TUẦN</span>';
-  else if(trietS)tuanTriet='<span class="triet-tag">TRIỆT</span>';
+  const TU=_g('sao','Tuần').toUpperCase(),TR=_g('sao','Triệt').toUpperCase();
+  if(tuanS&&trietS)tuanTriet='<span class="tuan-tag">'+TU+'+'+TR+'</span>';
+  else if(tuanS)tuanTriet='<span class="tuan-tag">'+TU+'</span>';
+  else if(trietS)tuanTriet='<span class="triet-tag">'+TR+'</span>';
   // Chinh tinh — no hóa suffix, hóa shown separately below
   let chinhHTML='';
   for(const s of palace.majorStars){
     const cls='sc-'+(CHINH_TINH_COLOR[s.ten]||'neutral');
     const b=s.brightness?` <span style="font-size:10px">(${bShort(s.brightness)})</span>`:'';
-    chinhHTML+=`<div class="chinh-tinh-item ${cls}">${esc(s.ten.toUpperCase())}${b}</div>`;
+    chinhHTML+=`<div class="chinh-tinh-item ${cls}">${esc(_g(_SAO,s.ten).toUpperCase())}${b}</div>`;
   }
   // Collect tất cả hóa tinh từ cả chính tinh lẫn phụ tinh → hiện riêng
   const hoaEntries=[];
@@ -258,7 +266,7 @@ function renderCungCell(palace, dvTuoi, canNamIdx) {
     const hoaCls=s.hoa==='Lộc'?'sc-hoa-loc':s.hoa==='Quyền'?'sc-hoa-quyen':s.hoa==='Khoa'?'sc-hoa-khoa':'sc-hoa-ky';
     // avoid duplicates (majorStars may overlap stars array)
     if(!hoaEntries.find(e=>e.hoa===s.hoa&&e.star===s.ten))
-      hoaEntries.push({label:`HÓA ${s.hoa.toUpperCase()}`,cls:hoaCls,isBad,hoa:s.hoa,star:s.ten});
+      hoaEntries.push({label:_isVi()?`HÓA ${s.hoa.toUpperCase()}`:esc(_g('sao','Hóa '+s.hoa).toUpperCase()),cls:hoaCls,isBad,hoa:s.hoa,star:s.ten});
   }
   // Phu tinh: split cat tinh (left) vs hung/bai tinh (right)
   const phuStars=palace.stars.filter(s=>s.nhom!=='chinh'&&!TRANG_SINH_SET.has(s.ten)&&s.ten!=='Tuần'&&s.ten!=='Triệt'&&s.ten!=='Tuần+Triệt');
@@ -267,7 +275,7 @@ function renderCungCell(palace, dvTuoi, canNamIdx) {
   function renderPhuStar(s){
     const cls=getStarClass(s);
     const b=s.brightness?` <span style="font-size:8px">(${bShort(s.brightness)})</span>`:'';
-    return `<div class="phu-tinh-item ${cls}">${esc(s.ten.toUpperCase())}${b}</div>`;
+    return `<div class="phu-tinh-item ${cls}">${esc(_g(_SAO,s.ten).toUpperCase())}${b}</div>`;
   }
   // Cat tinh: regular good stars + hóa lộc/quyền/khoa
   const catHTML = catTinh.map(renderPhuStar).join('')
@@ -276,14 +284,14 @@ function renderCungCell(palace, dvTuoi, canNamIdx) {
   const hungHTML = hungTinh.map(s=>{
     const cls=getStarClass(s);
     const b=s.brightness?` <span style="font-size:8px">(${bShort(s.brightness)})</span>`:'';
-    return `<div class="phu-tinh-item ${cls}" style="font-weight:600">${esc(s.ten.toUpperCase())}${b}</div>`;
+    return `<div class="phu-tinh-item ${cls}" style="font-weight:600">${esc(_g(_SAO,s.ten).toUpperCase())}${b}</div>`;
   }).join('')
     + hoaEntries.filter(h=>h.isBad).map(h=>`<div class="phu-tinh-item ${h.cls}" style="font-weight:700">${h.label}</div>`).join('');
   return `<div class="cung-cell">
-    <div class="cell-header"><span class="can-chi-label">${esc(canChi.toUpperCase())}</span><span class="cung-name-label">${esc(palace.cungName.toUpperCase())}${thanBadge}</span></div>
+    <div class="cell-header"><span class="can-chi-label">${esc(canChi.toUpperCase())}</span><span class="cung-name-label">${esc(_g('cung',palace.cungName,{short:true}).toUpperCase())}${thanBadge}</span></div>
     <div class="chinh-tinh-area">${chinhHTML}</div>
     <div class="phu-tinh-area"><div class="phu-col">${catHTML}</div><div class="phu-col" style="text-align:right">${hungHTML}</div></div>
-    <div class="cell-footer"><span class="trang-sinh-label">${tsS?tsS.ten.toUpperCase():''}</span><span class="dai-van-num">${dvTuoi??''}</span></div>
+    <div class="cell-footer"><span class="trang-sinh-label">${tsS?_g('sao',tsS.ten).toUpperCase():''}</span><span class="dai-van-num">${dvTuoi??''}</span></div>
     ${tuanTriet}
   </div>`;
 }
@@ -302,19 +310,19 @@ function renderCenter(ls, fd) {
   return `<div class="cell-center"><div class="cung-center">
     <div class="center-title">✦ ${esc((fd.name||'—').toUpperCase())} ✦</div>
     <hr class="center-divider">
-    <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${fd.dd}/${fd.mm}/${fd.yyyy} (Dương Lịch) · giờ ${fd.gioChi}</div>
-    <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${fd.amLich?fd.amLich.day+'/'+fd.amLich.month+'/'+fd.amLich.year:''} (Âm Lịch) · giờ ${fd.gioChi}</div>
+    <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${fd.dd}/${fd.mm}/${fd.yyyy} (Dương Lịch) · giờ ${_g('chi',fd.gioChi)}</div>
+    <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${fd.amLich?fd.amLich.day+'/'+fd.amLich.month+'/'+fd.amLich.year:''} (Âm Lịch) · giờ ${_g('chi',fd.gioChi)}</div>
     <div class="center-row"><span class="ic-inline" data-icon="cake" data-icon-emoji="🎂" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎂</span> ${ls.tuoiXem} tuổi (âm lịch)</div>
     <div class="center-row"><span class="ic-inline" data-icon="user" data-icon-emoji="⚧" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚧</span> Giới tính: ${fd.gioitinh==='nam'?'Nam':'Nữ'}</div>
     ${fd.amDuongNam?`<div class="center-row">${fd.amDuongNam==='dương'?'Dương':'Âm'} ${fd.gioitinh==='nam'?'Nam':'Nữ'} · Âm Dương ${(fd.amDuongNam==='dương')===(fd.gioitinh==='nam')?'Thuận Lý':'Nghịch Lý'}</div>`:''}
     <hr class="center-divider">
-    <div class="center-row">Năm: <b style="color:var(--navy)">${ls.canChiNam}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${NAP_AM_FULL[ls.canChiNam]||ls.napAm||''}</b></div>
-    <div class="center-row">Cục: <b style="color:var(--navy)">${ls.cuc||''}</b> &nbsp;·&nbsp; Mệnh: <b>${ls.menhDC||''}</b> · Thân: <b>${ls.thanDC||''}</b></div>
+    <div class="center-row">Năm: <b style="color:var(--navy)">${_g('canchi',ls.canChiNam)}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${NAP_AM_FULL[ls.canChiNam]||_g('hanh',ls.napAm||'')}</b></div>
+    <div class="center-row">Cục: <b style="color:var(--navy)">${_g('cuc',ls.cuc||'')}</b> &nbsp;·&nbsp; Mệnh: <b>${_g('chi',ls.menhDC||'')}</b> · Thân: <b>${_g('chi',ls.thanDC||'')}</b></div>
     <hr class="center-divider">
-    <div class="center-row">Năm <b style="color:var(--blue)">${ls.chiNamXem||''}</b> — Tuổi ${ls.tuoiXem}</div>
-    <div class="center-row">Đại vận: <b style="color:#1E6B3C">${dvHT?.diaChi||'?'}</b> (${dvHT?.tuoiStart}–${dvHT?.tuoiEnd}t)${dvScore}</div>
-    <div class="center-row">Tiểu hạn: <b style="color:#1E6B3C">${tvCung?.diaChi||'?'}</b> · ${tvCung?.cungName||''}</div>
-    <div class="center-row">Lưu đại hạn: <b style="color:var(--gold)">${ldh?.diaChi||'?'}</b> · ${ldh?.cungName||''}</div>
+    <div class="center-row">Năm <b style="color:var(--blue)">${_g('chi',ls.chiNamXem||'')}</b> — Tuổi ${ls.tuoiXem}</div>
+    <div class="center-row">Đại vận: <b style="color:#1E6B3C">${(dvHT?.diaChi&&_g('chi',dvHT.diaChi))||'?'}</b> (${dvHT?.tuoiStart}–${dvHT?.tuoiEnd}t)${dvScore}</div>
+    <div class="center-row">Tiểu hạn: <b style="color:#1E6B3C">${(tvCung?.diaChi&&_g('chi',tvCung.diaChi))||'?'}</b> · ${_g('cung',tvCung?.cungName||'')}</div>
+    <div class="center-row">Lưu đại hạn: <b style="color:var(--gold)">${(ldh?.diaChi&&_g('chi',ldh.diaChi))||'?'}</b> · ${_g('cung',ldh?.cungName||'')}</div>
     <hr class="center-divider">
     <div class="center-row" style="font-size:10px;color:var(--text-lt)"><span class="ic-inline" data-icon="calendar-days" data-icon-emoji="🗓" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🗓</span> Lập lá số: ${nowStr}</div>
     <div class="center-row" style="font-size:10px;color:var(--text-lt)">© 2026 紫微明寶 | Tử Vi Minh Bảo</div>

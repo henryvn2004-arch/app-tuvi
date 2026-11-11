@@ -14,9 +14,12 @@ import { createHash } from 'node:crypto';
 import { Converter } from 'opencc-js';
 import { TERMS, CHI_EN, CAN_EN } from '../lib/i18n/glossary/tuvi-terms.ts';
 import { CAN_HAN, CHI_HAN, HAN_VIET } from '../lib/hanviet.ts';
+import { clientGlossaryJs } from '../lib/i18n/glossary/client-file.mjs';
 
 const OUT = new URL('../lib/i18n/glossary/terms.generated.mjs', import.meta.url);
 const OUT_HV = new URL('../lib/i18n/glossary/han-viet-check.json', import.meta.url);
+// Bản CLIENT cho lớp hiển thị bảng lá số (W15) — cùng mảng `out`, không chép tay.
+const OUT_CLIENT = new URL('../public/tools-shared/glossary.js', import.meta.url);
 const args = process.argv.slice(2);
 const uIdx = args.indexOf('--unihan');
 const CHECK = args.includes('--check');
@@ -197,9 +200,12 @@ if (CHECK) {
   );
   const okHv = readFileSync(OUT_HV, 'utf8') === jsonHv;
   if (!okHv) console.log('han-viet-check.json LỆCH nguồn — chạy lại gen-glossary.');
-  process.exit(cur === json && okHv ? 0 : 1);
+  const okClient = readFileSync(OUT_CLIENT, 'utf8') === clientGlossaryJs(out);
+  if (!okClient) console.log('public/tools-shared/glossary.js LỆCH nguồn — chạy lại gen-glossary.');
+  process.exit(cur === json && okHv && okClient ? 0 : 1);
 }
 writeFileSync(OUT, json);
 writeFileSync(OUT_HV, jsonHv);
+writeFileSync(OUT_CLIENT, clientGlossaryJs(out));
 console.log(`Đã ghi ${out.length} thuật ngữ. Cảnh báo kVietnamese (xem lại): ${warns.length}`);
 if (warns.length) console.log(warns.join('\n'));

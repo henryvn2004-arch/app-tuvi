@@ -17,6 +17,7 @@ import ts from 'typescript';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { GENERATED_TERMS as G } from '../lib/i18n/glossary/terms.generated.mjs';
+import { clientGlossaryJs } from '../lib/i18n/glossary/client-file.mjs';
 
 const PHU = JSON.parse(
   readFileSync(join(process.cwd(), 'lib/i18n/glossary/han-viet-check.json'), 'utf8')
@@ -247,6 +248,25 @@ if (mutD.daDuyet.length || mutD.dat + mutD.datPhu.length) {
   console.error(`✗ ĐỘT BIẾN 3: sửa chữ Hán của ${tDuyet.vi} mà vẫn được miễn/đạt`);
   process.exit(1);
 }
+
+// ── Bản CLIENT (W15): public/tools-shared/glossary.js phải là đúng clientGlossaryJs(GENERATED_TERMS) ──
+// gen-glossary ghi cả hai từ cùng một mảng; ai sửa tay file client (hoặc sửa nguồn mà quên sinh lại) ⇒ đỏ.
+const CLIENT_PATH = 'public/tools-shared/glossary.js';
+const clientCur = readFileSync(join(ROOT, CLIENT_PATH), 'utf8');
+const clientWant = clientGlossaryJs(G);
+// đột biến 4: đổi MỘT thuật ngữ trong nguồn ⇒ bản dựng phải khác file đang commit (phép so không câm).
+const mutG = G.map((t, idx) => (idx === 0 ? { ...t, ja: t.ja + '玥' } : t));
+if (clientGlossaryJs(mutG) === clientCur) {
+  console.error(`✗ ĐỘT BIẾN 4: đổi thuật ngữ nguồn mà ${CLIENT_PATH} vẫn "khớp"`);
+  process.exit(1);
+}
+if (clientCur !== clientWant) {
+  console.error(
+    `✗ ${CLIENT_PATH} LỆCH nguồn terms.generated.mjs — chạy lại scripts/gen-glossary.mjs (đừng sửa tay).`
+  );
+  process.exit(1);
+}
+console.log(`  ${CLIENT_PATH} khớp nguồn (${G.length} thuật ngữ).`);
 
 if (r.lech.length) {
   console.error('✗ LỆCH:\n  - ' + r.lech.join('\n  - '));
