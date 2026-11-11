@@ -14,7 +14,7 @@
   var T = function (k, d) { return window.TVMB_I18N ? window.TVMB_I18N.t(k, d) : d; };
   if (!window.TVMB_I18N && !document.querySelector('script[src^="/i18n.js"]')) {
     var i18nS = document.createElement('script');
-    i18nS.src = '/i18n.js?v=2';
+    i18nS.src = '/i18n.js?v=3';
     i18nS.async = true;
     document.head.appendChild(i18nS);
   }

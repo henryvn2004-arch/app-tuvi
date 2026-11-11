@@ -75,7 +75,9 @@
       var c = JSON.parse(sessionStorage.getItem(K) || 'null');
       if (c && Date.now() - c.t < 600000) return setAvail(c.d);
     } catch (e) { /* sessionStorage không dùng được */ }
-    fetch('/api/i18n/availability', { credentials: 'omit' })
+    // credentials mặc định (same-origin): preview Vercel khoá SSO cần cookie phiên đi kèm, không thì
+    // fetch bị redirect sang vercel.com ⇒ lỗi CORS trong console (E2E coi là JS error). Prod không ảnh hưởng.
+    fetch('/api/i18n/availability', { credentials: 'same-origin' })
       .then(function (r) { return r.ok ? r.json() : {}; })
       .then(function (d) {
         try { sessionStorage.setItem(K, JSON.stringify({ t: Date.now(), d: d })); } catch (e) { /* ignore */ }
