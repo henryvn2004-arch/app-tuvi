@@ -4,6 +4,8 @@
 //   1. vi.json: khoá `js.*` không còn lời gọi T('…')/_tvmbT('…') hay chuỗi '…' nào trong public/ (chữ HTML
 //      `data-i18n` do i18n:pages quản, không đụng).
 //   2. <locale>.json: bản dịch của khoá không còn trong vi.json.
+//   3. <locale>.json: trả khoảng trắng đầu/cuối của câu gốc cho bản dịch bị trim (padEdges) — chạy sau khi
+//      merge một PR bản dịch cũ thay vì giải xung đột tay.
 // zh-cn sinh lại từ zh-tw (OpenCC). check:i18n bỏ qua khoá mồ côi nên không dọn cũng không đỏ — đây chỉ là dọn rác.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -17,6 +19,7 @@ import {
   GENERATED,
 } from '../../lib/i18n/dict.mjs';
 import { buildZhCn } from './zhcn.mjs';
+import { padEdges } from '../../lib/i18n/core.mjs';
 
 function walk(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -39,7 +42,15 @@ for (const l of own) {
   dicts[l] = loadLocale(l);
   const drop = Object.keys(dicts[l]).filter((k) => !(k in vi));
   for (const k of drop) delete dicts[l][k];
-  report[`${l}.json`] = drop.length;
+  let padded = 0;
+  for (const [k, e] of Object.entries(dicts[l])) {
+    const t = padEdges(vi[k], e.t);
+    if (t !== e.t) {
+      dicts[l][k] = { ...e, t };
+      padded++;
+    }
+  }
+  report[`${l}.json`] = `${drop.length} mồ côi, ${padded} vá khoảng trắng`;
 }
 console.log(
   'khoá mồ côi:',
