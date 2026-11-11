@@ -1263,9 +1263,33 @@
   "t": "。どんなご予定ですか？良い時刻をお選びします。命盤を作成すると、あなただけの運勢を鑑定できます。",
   "h": "71046a30"
  },
+ "js.home.ban-menh-khac-hanh-ngay-chu": {
+  "t": "本命が日の五行を剋す — 自分から動けるが、やや骨が折れる",
+  "h": "85ec87ed"
+ },
+ "js.home.ban-menh-sinh-cho-hanh-ngay": {
+  "t": "本命が日の五行を生じる — 力を消耗するので、体力を温存して",
+  "h": "a3adeebe"
+ },
+ "js.home.binh": {
+  "t": "平",
+  "h": "33e3bf5e"
+ },
+ "js.home.binh-on": {
+  "t": "安定",
+  "h": "a2f7dd20"
+ },
  "js.home.buoc-tao-tai-khoan-de-giu": {
   "t": "</b>ステップ。アカウントを作成すると進捗が保存され、完了したときに両を受け取れます。",
   "h": "e4db2a46"
+ },
+ "js.home.can-than-trong": {
+  "t": "慎重に",
+  "h": "0d1ada49"
+ },
+ "js.home.can-tranh": {
+  "t": "避けるべきこと",
+  "h": "84eadc4e"
  },
  "js.home.chao-con": {
   "t": "こんにちは{comma_name}。先生はここにいますよ。仕事のこと、家のこと、今日はちょっと疲れたということでも、何でもお話しください。今日 **{cc}** の日の運勢をご覧になりたければ、先生がすぐに見ます。",
@@ -1274,6 +1298,18 @@
  "js.home.chinh-tinh": {
   "t": " — 主星： ",
   "h": "595c5e1b"
+ },
+ "js.home.chu-dong-ton-cong": {
+  "t": "自分から動ける、やや骨が折れる",
+  "h": "5615bf97"
+ },
+ "js.home.co-con-nho-doc-la-so": {
+  "t": "小さなお子さまがいますか？お子さまの命盤を、気質と教え方の面から読みます。",
+  "h": "0c465eff"
+ },
+ "js.home.co-nguoi-giup": {
+  "t": "助けがある",
+  "h": "5a7129b9"
  },
  "js.home.co-phap-kieng-khoi-su": {
   "t": " — 古法では事始めを避ける日です。",
@@ -1291,6 +1327,10 @@
   "t": " — {sao}あり",
   "h": "f6d4710a"
  },
+ "js.home.con-dang-be-tac-chuyen-cong": {
+  "t": "仕事で行き詰まっています",
+  "h": "05beea63"
+ },
  "js.home.con-lai-ghe-roi": {
   "t": "またお越しくださいましたね{comma_name}。今日はいかがですか？心にかかっていることはありますか？",
   "h": "46c1f303"
@@ -1302,6 +1342,26 @@
  "js.home.cong-cu-chinh": {
   "t": "主なツール",
   "h": "fac531f0"
+ },
+ "js.home.cung-la-so-do-doc-theo": {
+  "t": "同じ命盤を、職業の面から読みます：どんな働き方に向くか、チームをどう組むか。",
+  "h": "1b974894"
+ },
+ "js.home.cung-ngay-sinh-doc-bang-mot": {
+  "t": "同じ生年月日を別の術（子平）で読み、双方が同じことを言っているか照らし合わせます。",
+  "h": "c23f5428"
+ },
+ "js.home.cung-phu-the-ta-nguoi-ban": {
+  "t": "夫妻宮はパートナーの姿を描きます — このツールでは、その姿をそのまま肖像画にします。",
+  "h": "80f61f5c"
+ },
+ "js.home.da-doc-la-so-tong-quan": {
+  "t": "全体の命盤を読んだら、次はこれからの12か月を、ひと月ずつ。",
+  "h": "51de0f1f"
+ },
+ "js.home.da-doc-tinh-khi-cua-be": {
+  "t": "お子さまの気質を読みました — どんな仕事に向いているかを見ましょう。",
+  "h": "ef15f560"
  },
  "js.home.da-luu-tren-may-nay": {
   "t": "この端末に保存済み",
@@ -1315,9 +1375,29 @@
   "t": "作成中…",
   "h": "b47d9598"
  },
+ "js.home.dao-nay-con-thay-met-moi": {
+  "t": "最近、とても疲れています",
+  "h": "5244e4d3"
+ },
+ "js.home.de-vuong-lam-cham": {
+  "t": "つまずきやすく、遅れがち",
+  "h": "41d076df"
+ },
+ "js.home.doc-ca-doi-2-8-nguoi": {
+  "t": "2〜8人のチーム全員を一度に読みます：誰が誰の足を引っ張るか、チームに足りないタイプは何か。",
+  "h": "7fac2a52"
+ },
  "js.home.doi-la-so": {
   "t": "命盤を変更",
   "h": "2daddd37"
+ },
+ "js.home.gap-go": {
+  "t": "出会い",
+  "h": "65b5fcbf"
+ },
+ "js.home.gia-dao": {
+  "t": "家庭",
+  "h": "5644f850"
  },
  "js.home.gio-dep": {
   "t": "吉時",
@@ -1343,6 +1423,26 @@
   "t": " （五行： ",
   "h": "b9ab7b34"
  },
+ "js.home.hanh-ngay-cung-hanh-ban-menh": {
+  "t": "日の五行が本命と同じ — 調和し、自分で舵を取れる",
+  "h": "80b2d011"
+ },
+ "js.home.hanh-ngay-khac-ban-menh-de": {
+  "t": "日の五行が本命を剋す — つまずきやすいので、ペースを落として",
+  "h": "e8142422"
+ },
+ "js.home.hanh-ngay-sinh-cho-ban-menh": {
+  "t": "日の五行が本命を生じる — 順調で、助けを得やすい",
+  "h": "a2a28344"
+ },
+ "js.home.hanh-thong": {
+  "t": "好調",
+  "h": "e379e3a6"
+ },
+ "js.home.hao-luc-giu-suc": {
+  "t": "消耗するので体力を温存",
+  "h": "d9ff8d7c"
+ },
  "js.home.hoi-thay": {
   "t": "先生に聞く",
   "h": "c9ffbbaf"
@@ -1351,17 +1451,37 @@
   "t": "。あなたの運勢は「先生に聞く」でどうぞ：",
   "h": "abbb0b48"
  },
+ "js.home.hom-nay-khong-viec-lon-nao": {
+  "t": "今日は高得点の大きな用事がありません — 別の日に回しましょう。",
+  "h": "4503ec5f"
+ },
  "js.home.hom-nay-la-ngay": {
   "t": "今日は**",
   "h": "01973599"
+ },
+ "js.home.hom-nay-la-ngay-ky-khoi": {
+  "t": "今日は物事を始めるのに不向きな日です — 大きな用事は延期し、普段のことは普段どおりで大丈夫です。",
+  "h": "926f129b"
  },
  "js.home.huy": {
   "t": "キャンセル",
   "h": "34ca764c"
  },
+ "js.home.khong-chac-gio-sinh-sai-gio": {
+  "t": "出生時刻に自信がありませんか？時刻が違うと命盤のほとんどがずれます — 一度確認し直すと安心です。",
+  "h": "124df32a"
+ },
  "js.home.khong-lap-duoc-thu-lai-sau": {
   "t": "作成できませんでした。しばらくしてからもう一度お試しください。",
   "h": "7855b0ef"
+ },
+ "js.home.khong-lay-duoc-gio-hoang-dao": {
+  "t": "黄道吉時を取得できませんでした。",
+  "h": "315b1b59"
+ },
+ "js.home.la-so-cua-ban-dat-vao": {
+  "t": "あなたの命盤を古い時代の情景に置きます — 肖像画と、読み物としての物語。",
+  "h": "1d0ad04a"
  },
  "js.home.lam-xong-ca-ba-mo-khoa": {
   "t": "3つすべて完了すると、<b>+",
@@ -1370,6 +1490,10 @@
  "js.home.lam-xong-ca-ba-nhan-thang": {
   "t": "3つすべて完了すると、<b>+",
   "h": "e79679d7"
+ },
+ "js.home.lap-la-so-mot-lan-24": {
+  "t": "命盤を一度作るだけで — 24項目の鑑定が得られ、ほかのほとんどのツールもここを元に読みます。",
+  "h": "ea1ef982"
  },
  "js.home.lau-roi-con-chua-ghe": {
   "t": "お久しぶりですね{comma_name}。最近はお変わりありませんか？先生に話したいことはありますか？",
@@ -1411,6 +1535,14 @@
   "t": "ここ数日はいかがですか{comma_name}？前回は **{worry}** のお話がありましたね。その後どうなりましたか？",
   "h": "d73269fa"
  },
+ "js.home.mien-phi-thu-ngay-khong-ton": {
+  "t": "無料 — 両を使わずに、今すぐお試しください。",
+  "h": "c2130339"
+ },
+ "js.home.nen-lam": {
+  "t": "すべきこと",
+  "h": "f6e516a6"
+ },
  "js.home.ngay": {
   "t": "日干支： ",
   "h": "e196e19b"
@@ -1435,6 +1567,18 @@
   "t": " · 忌日",
   "h": "83e5d5b7"
  },
+ "js.home.ngay-ky-hoan-viec-lon": {
+  "t": "凶日、大きな用事は延期",
+  "h": "cc9d129a"
+ },
+ "js.home.ngay-ky-lqyh": {
+  "t": "凶日",
+  "h": "21a3019b"
+ },
+ "js.home.ngay-nay-khong-co-gio-hoang": {
+  "t": "この日には黄道吉時がありません。",
+  "h": "7f175ac3"
+ },
  "js.home.ngay-sinh-chua-hop-le": {
   "t": "生年月日が正しくありません。",
   "h": "feec7b22"
@@ -1446,6 +1590,10 @@
  "js.home.ngay-xau": {
   "t": "凶日",
   "h": "3fe05eab"
+ },
+ "js.home.ngay-xung-chinh-tuoi-ban-nen": {
+  "t": "生まれ年と正面から冲する日です — ペースを保ち、大きな決断は避けて。",
+  "h": "f8a03446"
  },
  "js.home.ngay-xung-tuoi-can-than": {
   "t": " 相冲の日です。大事なことは慎重に進めてくださいね。",
@@ -1459,6 +1607,10 @@
   "t": "生年月日を一度入力すると、今日があなただけのどの宮に入るかが分かります。",
   "h": "45d9335c"
  },
+ "js.home.rieng-viec-thuong-ngay": {
+  "t": "日常のことに限れば、 ",
+  "h": "e7d64dd0"
+ },
  "js.home.so-lieu-rut-gon-thu-tai": {
   "t": " — 簡易データです。しばらくしてから再読み込みしてください。",
   "h": "84e3f4e7"
@@ -1471,13 +1623,37 @@
   "t": "先生です{comma_name}。ほかに聞きたいことや、お話ししたいことはありますか？",
   "h": "b606961a"
  },
+ "js.home.them-la-so-nguoi-thu-hai": {
+  "t": "2人目の命盤を加えると：前世でお二人が互いにどんな関係だったかが分かります。",
+  "h": "221d1e53"
+ },
  "js.home.theo-la-so": {
   "t": "命盤：<b>",
   "h": "7d39229e"
  },
+ "js.home.thi-cu": {
+  "t": "試験",
+  "h": "e6c5b5dd"
+ },
  "js.home.thieu-ngay-thang-nam-sinh": {
   "t": "生年月日が入力されていません。",
   "h": "1ce95cff"
+ },
+ "js.home.thoi-gian-toi-co-gi-dang": {
+  "t": "これから、気をつけることはありますか？",
+  "h": "384b8bca"
+ },
+ "js.home.thuan-loi": {
+  "t": "順調",
+  "h": "db3f793d"
+ },
+ "js.home.tien-bac": {
+  "t": "金運",
+  "h": "ae20605a"
+ },
+ "js.home.tot": {
+  "t": "吉",
+  "h": "f716d517"
  },
  "js.home.tranh-viec-lon-hom-nay": {
   "t": " — 今日は大事なことを避けましょう。",
@@ -1495,6 +1671,14 @@
   "t": "該当： ",
   "h": "f007dc98"
  },
+ "js.home.tu-chu-duoc": {
+  "t": "自分で舵を取れる",
+  "h": "462a5b16"
+ },
+ "js.home.tu-vi-minh-bao": {
+  "t": "明宝紫微斗数",
+  "h": "33336b26"
+ },
  "js.home.van-hom-nay": {
   "t": "今日の運勢",
   "h": "386c4c24"
@@ -1502,6 +1686,10 @@
  "js.home.van-hom-nay-ca-nhan": {
   "t": "またお越しくださいましたね{comma_name}。今日は**{cc}**の日、あなたの日限は**{cung}**宮にあります",
   "h": "1e60cafb"
+ },
+ "js.home.van-hom-nay-cua-con-the": {
+  "t": "今日の運勢はどうですか？",
+  "h": "ef5998e3"
  },
  "js.home.van-ngay": {
   "t": "運勢 ",
@@ -1515,9 +1703,17 @@
   "t": " — 無正曜",
   "h": "44a2723b"
  },
+ "js.home.vo-chinh-dieu-pwt9": {
+  "t": "無正曜",
+  "h": "bd07d7a9"
+ },
  "js.home.vua-cong": {
   "t": "✓ <b>+",
   "h": "716106fa"
+ },
+ "js.home.xau": {
+  "t": "凶",
+  "h": "5a8d08f3"
  },
  "js.home.xem-ca-7-ngay": {
   "t": "<b>7日間</b><small>すべて見る</small>",
@@ -1526,6 +1722,14 @@
  "js.home.xem-van-rieng-cua-toi": {
   "t": "自分の運勢を見る →",
   "h": "a669ddd6"
+ },
+ "js.home.xuat-hanh": {
+  "t": "出発",
+  "h": "424fcbb2"
+ },
+ "js.home.xung-chinh-tuoi-ban": {
+  "t": "生まれ年と真正面から冲",
+  "h": "7fec1ccf"
  },
  "js.home.xung-tuoi": {
   "t": "相冲",
@@ -2643,6 +2847,30 @@
   "t": "すべて見る",
   "h": "7e040254"
  },
+ "js.shellui.09xxxxxxxx": {
+  "t": "09xxxxxxxx",
+  "h": "dcb79fbf"
+ },
+ "js.shellui.100-ban-muon-hoi-them-ve": {
+  "t": "/100**まで上がる見込みです。どの提案について詳しく知りたいですか？",
+  "h": "26d9a4c7"
+ },
+ "js.shellui.100-sau-dieu-chinh-co-the": {
+  "t": "/100**、調整後は**",
+  "h": "a4c14f33"
+ },
+ "js.shellui.20-nam-toi-ban-muon-hoi": {
+  "t": "**、今後20年分）。何をお聞きになりたいですか？",
+  "h": "871e191d"
+ },
+ "js.shellui.4-chat-bai-nghia-la-gi": {
+  "t": "トランプの4つのスートは何を意味しますか？",
+  "h": "793f6bd3"
+ },
+ "js.shellui.5-sac-ngu-hanh-nghia-la": {
+  "t": "5色の五行は何を意味しますか？",
+  "h": "98715ca7"
+ },
  "js.shellui.ai-co-link-deu-doc-duoc": {
   "t": "リンクを知っている人は誰でも、この命盤とこのセッションのやり取りをすべて読めます。",
   "h": "39f8a716"
@@ -2663,9 +2891,21 @@
   "t": "非表示にする",
   "h": "3be211c7"
  },
+ "js.shellui.an-duong-la-gi": {
+  "t": "印堂とは何ですか？",
+  "h": "e1de6d6d"
+ },
  "js.shellui.anh-ay": {
   "t": "彼",
   "h": "b69e360e"
+ },
+ "js.shellui.anh-da-gui": {
+  "t": "<p>画像を送信しました ✓</p>",
+  "h": "a3d92bd3"
+ },
+ "js.shellui.anh-mat-noi-len-dieu-gi": {
+  "t": "目つきは何を物語っていますか？",
+  "h": "dca0ccee"
  },
  "js.shellui.anh-tuan": {
   "t": "Anh Tuấn",
@@ -2675,9 +2915,25 @@
   "t": "お母さん",
   "h": "f1d8177e"
  },
+ "js.shellui.ba-muoi-tuoi-lap-than-bon": {
+  "t": "三十にして立ち、四十にして惑わず、五十にして天命を知る。",
+  "h": "fb2fcd49"
+ },
  "js.shellui.ban": {
   "t": "あなた",
   "h": "40ffd8d0"
+ },
+ "js.shellui.ban-da-lap": {
+  "t": "盤を立てました — **",
+  "h": "16637971"
+ },
+ "js.shellui.ban-dinh-lam-viec-gi-de": {
+  "t": "**）。何をなさる予定ですか？最適な日をお選びします。",
+  "h": "28900fc7"
+ },
+ "js.shellui.ban-lam-viec-diem": {
+  "t": "デスクの風水 — スコア ",
+  "h": "1bfcfce8"
  },
  "js.shellui.ban-lap-la-so-o-khung": {
   "t": "<p>中央のフォームで命盤を作成すると、先生がすぐにお答えします。<br>仕事、恋愛、今年のこと、来月のこと、何でもご相談ください。</p></div>",
@@ -2691,6 +2947,74 @@
   "t": "フル鑑定",
   "h": "9008184e"
  },
+ "js.shellui.ban-menh": {
+  "t": "** — 納音：**",
+  "h": "c3f2a79e"
+ },
+ "js.shellui.ban-muon-hoi-huong-cho-viec": {
+  "t": "。どのようなご用件の方位を知りたいですか？",
+  "h": "50a5e3e2"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-dong": {
+  "t": "。漢方・食事・コスメのうち、ほかに知りたいことはありますか？",
+  "h": "2319a0e4"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-kieu": {
+  "t": "**です。髪型やメガネ選びについて、ほかに知りたいことはありますか？",
+  "h": "c09516c7"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-mau": {
+  "t": "。色やコーディネートについて、ほかに知りたいことはありますか？",
+  "h": "db0a07ec"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-mau-7ruw": {
+  "t": "。色やスタイルについて、ほかに知りたいことはありますか？",
+  "h": "fcca72b4"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-mau-lphd": {
+  "t": "。色や服の合わせ方について、ほかに知りたいことはありますか？",
+  "h": "f9f43e47"
+ },
+ "js.shellui.ban-muon-hoi-them-ve-phong": {
+  "t": "。どのようなメイクのスタイルについて知りたいですか？",
+  "h": "26be2c4a"
+ },
+ "js.shellui.ban-muon-hoi-viec-gi": {
+  "t": "**。何をお聞きになりたいですか？",
+  "h": "b20cbcea"
+ },
+ "js.shellui.ban-muon-toi-cham-ten": {
+  "t": "次の名前を採点しましょうか：**",
+  "h": "391dd027"
+ },
+ "js.shellui.ban-muon-toi-goi-y-ten": {
+  "t": "。どのような方向性で名前をご提案しましょうか？",
+  "h": "5de05973"
+ },
+ "js.shellui.ban-muon-toi-goi-y-ten-l4lz": {
+  "t": "どのような方向性で名前をご提案しましょうか？",
+  "h": "3ccf4b50"
+ },
+ "js.shellui.ban-muon-toi-luan-dieu-gi-8en2": {
+  "t": "。何について鑑定しましょうか？",
+  "h": "56e379d0"
+ },
+ "js.shellui.ban-muon-toi-tu-van-gi": {
+  "t": "**。まず何についてご相談しましょうか？",
+  "h": "32485c20"
+ },
+ "js.shellui.ban-muon-toi-tu-van-gi-p0lg": {
+  "t": "**）。まず何についてご相談しましょうか？",
+  "h": "e0e4e985"
+ },
+ "js.shellui.ban-thuoc-menh": {
+  "t": "あなたの本命は** ",
+  "h": "79bf73a7"
+ },
+ "js.shellui.ban-thuoc-season": {
+  "t": "あなたのシーズンは**",
+  "h": "0f6f3bdb"
+ },
  "js.shellui.banx": {
   "t": "あなた",
   "h": "e8f04322"
@@ -2699,13 +3023,53 @@
   "t": "<b>レポートの準備ができました</b>",
   "h": "ab59122b"
  },
+ "js.shellui.bao-gio-co-ket-qua": {
+  "t": "結果はいつ出ますか？",
+  "h": "698cf33d"
+ },
  "js.shellui.bat-dau-hoi-thoai-moi-ban": {
   "t": "新しい会話を始めます。この命盤について何を知りたいですか？",
   "h": "9d7d64ad"
  },
+ "js.shellui.bat-trach": {
+  "t": "八宅 · ",
+  "h": "ca2b345f"
+ },
+ "js.shellui.bat-trach-minh-canh-la-gi": {
+  "t": "八宅明鏡とは何ですか？",
+  "h": "a919defa"
+ },
+ "js.shellui.bat-tu-ky-mon": {
+  "t": "四柱推命・奇門遁甲",
+  "h": "eac6b8dd"
+ },
  "js.shellui.be-an": {
   "t": "Bé An",
   "h": "4010ce22"
+ },
+ "js.shellui.be-gai": {
+  "t": "女の子",
+  "h": "af93dba0"
+ },
+ "js.shellui.be-trai": {
+  "t": "男の子",
+  "h": "274225bc"
+ },
+ "js.shellui.bep-nen-dat-huong-nao": {
+  "t": "キッチン（かまど）はどの方位に置くとよいですか？",
+  "h": "3eafdc4a"
+ },
+ "js.shellui.bien-quai-noi-ket-cuc-the": {
+  "t": "変卦は結末をどう示していますか？",
+  "h": "3c27069a"
+ },
+ "js.shellui.biet-ma-lam-khong-bang-thich": {
+  "t": "之を知る者は之を好む者に如かず、之を好む者は之を楽しむ者に如かず。",
+  "h": "88e7bdea"
+ },
+ "js.shellui.biet-minh-biet-nguoi-tram-tran": {
+  "t": "彼を知り己を知れば、百戦殆うからず。",
+  "h": "1bc616cf"
  },
  "js.shellui.bo": {
   "t": "父",
@@ -2715,17 +3079,81 @@
   "t": "写真を外す",
   "h": "1ba6fb87"
  },
+ "js.shellui.bo-ceul": {
+  "t": "<p>父：<b>",
+  "h": "a9fbc79b"
+ },
  "js.shellui.bo-con": {
   "t": "お父さま",
   "h": "9a106c99"
+ },
+ "js.shellui.bo-lcm6": {
+  "t": " · 父 ",
+  "h": "1bb60db3"
+ },
+ "js.shellui.boi-bai-tay": {
+  "t": "トランプ占い",
+  "h": "4a54dbba"
+ },
+ "js.shellui.boi-bai-tay-khac-tarot-ra": {
+  "t": "トランプ占いとタロットの違いは？",
+  "h": "199a6ae6"
  },
  "js.shellui.brand": {
   "t": "明宝紫微斗数",
   "h": "33336b26"
  },
+ "js.shellui.buoc-o-huong-xau-thi-hoa": {
+  "t": "凶方位に結んでしまった場合、どう化解すればよいですか？",
+  "h": "8900960b"
+ },
+ "js.shellui.but-tuong": {
+  "t": "筆相",
+  "h": "6eab7d7c"
+ },
+ "js.shellui.but-tuong-cua-toi": {
+  "t": "私の筆相",
+  "h": "71e77c95"
+ },
  "js.shellui.ca-nha": {
   "t": "家族",
   "h": "158695a7"
+ },
+ "js.shellui.cach-cai-thien-theo-dong-y": {
+  "t": "漢方ではどう改善しますか？",
+  "h": "e84646cb"
+ },
+ "js.shellui.cach-cham-da-theo-dong-y": {
+  "t": "漢方ではどうスキンケアしますか？",
+  "h": "2992210c"
+ },
+ "js.shellui.cach-cuc-bat-tu-cua-toi": {
+  "t": "私の四柱推命の格局は何ですか？",
+  "h": "66f87290"
+ },
+ "js.shellui.cach-gieo": {
+  "t": "占い方",
+  "h": "ff8e39bb"
+ },
+ "js.shellui.cach-hoa-giai-huong-xau": {
+  "t": "凶方位の化解法は？",
+  "h": "c0c1db64"
+ },
+ "js.shellui.cach-kich-hoat-tai-vi": {
+  "t": "財位を活性化するには？",
+  "h": "69f99fe5"
+ },
+ "js.shellui.cach-phoi-do-theo-mau-menh": {
+  "t": "本命の色に合わせた服の合わせ方は？",
+  "h": "3d2ef763"
+ },
+ "js.shellui.cach-tang-van-tri-tue": {
+  "t": "知恵の運を高めるには？",
+  "h": "538015b7"
+ },
+ "js.shellui.can": {
+  "t": "先生に聞くには",
+  "h": "393b0153"
  },
  "js.shellui.cau": {
   "t": "</b>回",
@@ -2734,6 +3162,10 @@
  "js.shellui.cau-hoi-48ar": {
   "t": "</b>回質問できます",
   "h": "65c94d43"
+ },
+ "js.shellui.cau-hoi-tuy-chon": {
+  "t": "質問（任意）",
+  "h": "645f5819"
  },
  "js.shellui.cau-mien-phi": {
   "t": " 回</b>無料で質問できます",
@@ -2747,6 +3179,78 @@
   "t": " （先ほどの質問にもすぐお答えします）",
   "h": "70029ef5"
  },
+ "js.shellui.cham-diem": {
+  "t": "採点する →",
+  "h": "a4d402f6"
+ },
+ "js.shellui.chao-ban-cho-thay-xin-nam": {
+  "t": "こんにちは。チャットで生まれ年と性別を教えてください。納音五行にもとづいて、服装の色をご提案します。結果が出たら、続けて何でもご質問ください。",
+  "h": "eabb393e"
+ },
+ "js.shellui.chao-ban-dien-nam-sinh-ngay": {
+  "t": "こんにちは。チャットで生まれ年・出かける日・目的を入力してください。その日に合う色とスタイルをご提案します。結果が出たら、続けてご質問ください。",
+  "h": "31f4cde1"
+ },
+ "js.shellui.chao-ban-dien-nam-sinh-va": {
+  "t": "こんにちは。生まれ年を入力し、作業スペースの写真をチャットで送ってください。八宅にもとづいて風水を採点します。結果が出たら、続けてご質問ください。",
+  "h": "e2f81b3b"
+ },
+ "js.shellui.chao-ban-dien-nam-sinh-va-3mcz": {
+  "t": "こんにちは。生まれ年を入力し、お店・オフィスの写真をチャットで送ってください。レジの位置や入口の配置を、八宅にもとづいて採点します。結果が出たら、続けてご質問ください。",
+  "h": "513bc0ef"
+ },
+ "js.shellui.chao-ban-dien-nam-sinh-va-anel": {
+  "t": "こんにちは。生まれ年を入力し、お部屋の写真をチャットで送ってください。八宅にもとづいて風水を採点します。結果が出たら、続けてご質問ください。",
+  "h": "dfc7c600"
+ },
+ "js.shellui.chao-ban-dinh-tam-roi-hoi": {
+  "t": "こんにちは。心を落ち着けて、気がかりなことを尋ねてください。オラクルカードを引いて鑑定します。ご自分で引きたい場合は、オラクルのページも開けます。",
+  "h": "22f5ec78"
+ },
+ "js.shellui.chao-ban-gui-anh-chu-ky": {
+  "t": "こんにちは。署名の写真をチャットで送ってください（明るい背景で、はっきり撮影またはスキャンしたもの）。古法の軸で測定して鑑定します。結果が出たら、続けてご質問ください。",
+  "h": "6c75b8c4"
+ },
+ "js.shellui.chao-ban-gui-anh-da-mat": {
+  "t": "こんにちは。顔の肌の写真をチャットで送ってください。東洋医学と西洋医学、そして本命の五行を組み合わせて分析します。結果が出たら、続けてご質問ください。",
+  "h": "b75472f5"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat": {
+  "t": "こんにちは。顔写真をチャットで送ってください。古法の人相学にもとづいて分析します。結果が出たら、続けて何でもご質問ください。",
+  "h": "e7cd82e9"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-25m4": {
+  "t": "こんにちは。顔写真をチャットで送ってください。アンダートーンと、似合うシーズンカラーを分析します。結果が出たら、続けてご質問ください。",
+  "h": "9d4d0810"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-4w3x": {
+  "t": "こんにちは。顔写真をチャットで送ってください。麻衣神相にもとづいて気色を鑑定します。結果が出たら、続けて何でもご質問ください。",
+  "h": "005d8998"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-ixs1": {
+  "t": "こんにちは。顔写真をチャットで送ってください。目元をズームして、古来の目相の法で分析します。結果が出たら、続けてご質問ください。",
+  "h": "19ac08fd"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-jcki": {
+  "t": "こんにちは。顔写真をチャットで送ってください。顔立ちに合う髪型とメガネをご提案します。結果が出たら、続けてご質問ください。",
+  "h": "e6cde46a"
+ },
+ "js.shellui.chao-ban-gui-anh-khuon-mat-z4ez": {
+  "t": "こんにちは。顔写真をチャットで送ってください。顔立ちと本命に合うメイクのスタイルをご提案します。結果が出たら、続けてご質問ください。",
+  "h": "0cdc1f94"
+ },
+ "js.shellui.chao-ban-gui-anh-long-ban": {
+  "t": "こんにちは。手のひらの写真（平らに開いて上向きに）をチャットで送ってください。古法の手相学にもとづいて分析します。結果が出たら、続けてご質問ください。",
+  "h": "4ec607ce"
+ },
+ "js.shellui.chao-ban-hoi-toi-ve-mot": {
+  "t": "こんにちは。気になっていることや今の状況を尋ねてください。カードを引いて鑑定します。ご自分で引きたい場合は、タロットのページも開けます。",
+  "h": "dafd1fb0"
+ },
+ "js.shellui.chao-ban-hoi-toi-ve-mot-rpj1": {
+  "t": "こんにちは。気になっていることや今の状況を尋ねてください。トランプを引いて鑑定します。ご自分で引きたい場合は、トランプ占いのページも開けます。",
+  "h": "931febfd"
+ },
  "js.shellui.chau": {
   "t": "お子さん",
   "h": "a3d50d2f"
@@ -2758,6 +3262,14 @@
  "js.shellui.chi-ay": {
   "t": "彼女",
   "h": "2e7bb192"
+ },
+ "js.shellui.chi-khi-con-mo-app": {
+  "t": "アプリを開いたときだけ",
+  "h": "0838cde0"
+ },
+ "js.shellui.chi-minh-con": {
+  "t": "自分だけ",
+  "h": "75f0d516"
  },
  "js.shellui.chia-se": {
   "t": "シェア",
@@ -2775,13 +3287,57 @@
   "t": "シェア： ",
   "h": "f575b7df"
  },
+ "js.shellui.cho-minh-xin-ho-ten-va": {
+  "t": "お名前と性別を教えてください。",
+  "h": "a53c7ac5"
+ },
  "js.shellui.cho-ten": {
   "t": " （{name}さん宛て）",
   "h": "bc9cbc22"
  },
+ "js.shellui.cho-thay-day-so-con-muon": {
+  "t": "<p>採点したい番号（電話番号・ナンバープレートなど）を教えてください。</p>",
+  "h": "c393c3e5"
+ },
+ "js.shellui.cho-thay-xin-ho-cua-be": {
+  "t": "<p>お子さまの姓と、お子さま・父・母の生まれ年を教えてください。</p>",
+  "h": "bb587f9a"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-chu": {
+  "t": "<p>オーナーの生まれ年と、事業の業種を教えてください。</p>",
+  "h": "c3d9712d"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-duong": {
+  "t": "<p>西暦の生まれ年を教えてください。</p>",
+  "h": "ce0be17e"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-duong-453j": {
+  "t": "<p>父・母の西暦の生まれ年を教えてください。</p>",
+  "h": "d56f99b1"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-gioi": {
+  "t": "<p>生まれ年・性別・出かける予定日・目的を教えてください（有料ツールです。両が引かれる前に、ボタンに料金が表示されます）。</p>",
+  "h": "bc67e762"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-va": {
+  "t": "<p>生まれ年と性別を教えてください。</p>",
+  "h": "24d73bdb"
+ },
+ "js.shellui.cho-thay-xin-nam-sinh-va-sz0q": {
+  "t": "<p>生まれ年と性別を教えてください（有料ツールです。両が引かれる前に、ボタンに料金が表示されます）。</p>",
+  "h": "2a284e19"
+ },
+ "js.shellui.cho-thay-xin-thong-tin-nguoi": {
+  "t": "1人目の情報を教えてください。",
+  "h": "20efc20c"
+ },
  "js.shellui.chon-mot-cach-duoi-day": {
   "t": " 。下の方法からお選びください。",
   "h": "8b0c906e"
+ },
+ "js.shellui.chon-ngay": {
+  "t": "吉日選び： ",
+  "h": "7e322b37"
  },
  "js.shellui.chon-thay-luan-giai": {
   "t": "鑑定する先生を選ぶ",
@@ -2794,6 +3350,14 @@
  "js.shellui.chong-con": {
   "t": "ご主人",
   "h": "6ed699ab"
+ },
+ "js.shellui.chu": {
+  "t": " · 代表者 ",
+  "h": "d9836ef1"
+ },
+ "js.shellui.chu-su-tuoi": {
+  "t": "**（事主の干支：**",
+  "h": "8aafb6ee"
  },
  "js.shellui.chua-co-la-so-nao": {
   "t": "<b>命盤がまだありません</b>",
@@ -2815,9 +3379,25 @@
   "t": " ・未開封</span></span>",
   "h": "72204e26"
  },
+ "js.shellui.chua-mo-duoc-form-ngay-sinh": {
+  "t": "生年月日フォームを開けませんでした。",
+  "h": "9ae703ba"
+ },
+ "js.shellui.chua-mo-duoc-telegram-con-thu": {
+  "t": "Telegramを開けませんでした。プロフィールページからもう一度お試しください。",
+  "h": "3d5bcea0"
+ },
  "js.shellui.chua-tao-duoc-pdf-thu-lai": {
   "t": "PDFを作成できませんでした。しばらくしてからもう一度お試しください。",
   "h": "549a59fa"
+ },
+ "js.shellui.chua-thay-gi": {
+  "t": "まだ何も見当たりません",
+  "h": "d0b4990a"
+ },
+ "js.shellui.chua-them-duoc-lich-con-thu": {
+  "t": "<p>予定を追加できませんでした。「家族」ページからもう一度お試しください。</p>",
+  "h": "2e6ef436"
  },
  "js.shellui.chuyen": {
   "t": "ご相談の ",
@@ -2826,6 +3406,14 @@
  "js.shellui.chuyen-do-the-nao-roi-con": {
   "t": "<p>その件は、その後いかがですか？</p>",
   "h": "9e184650"
+ },
+ "js.shellui.chuyen-nay-thay-phai-xem-la": {
+  "t": "このことは、あなたの命盤を見ないと正確にお伝えできません。お名前と性別を教えてください。",
+  "h": "58f00a90"
+ },
+ "js.shellui.co-loi-thu-lai-giup-con": {
+  "t": "エラーが発生しました。もう一度お試しください。",
+  "h": "320cbdc2"
  },
  "js.shellui.co-noi": {
   "t": " 先生が言っていました：<i>“",
@@ -2839,6 +3427,18 @@
   "t": "<p>旧正月（テト）まであと ",
   "h": "b84493f3"
  },
+ "js.shellui.con-bam-start-trong-telegram-la": {
+  "t": "TelegramでStartを押せば完了です。当日、先生からメッセージをお送りします。",
+  "h": "3b43eb01"
+ },
+ "js.shellui.con-can-bo-ngu-hanh-gi": {
+  "t": "どの五行を補えばよいですか？",
+  "h": "2906ae80"
+ },
+ "js.shellui.con-dinh-lam-viec-gi-cho": {
+  "t": "<p>何を、誰のために、何月に行うかを教えてください。</p>",
+  "h": "1cb3abf3"
+ },
  "js.shellui.con-goi-la-gi": {
   "t": "{goi}のことは何とお呼びしますか（例：「{vd}」）？性別も教えてください。",
   "h": "70920c56"
@@ -2846,6 +3446,14 @@
  "js.shellui.con-hoi-tiep-di": {
   "t": "</b>の命盤を作成しました。続けてご質問くださいね。</p>",
   "h": "0de4fe93"
+ },
+ "js.shellui.con-muon-hoi-viec-gi-tuy": {
+  "t": "<p>知りたいこと（任意）を入力してください。先生が卦を立てます — 6爻をひと息に。</p>",
+  "h": "175bcf5b"
+ },
+ "js.shellui.con-muon-lap-khoa-luc-nham": {
+  "t": "<p>六壬の課を、いつの日時で立てますか？</p>",
+  "h": "812185b8"
  },
  "js.shellui.con-muon-thay-dua-ngay-tot": {
   "t": "<p>あなただけの吉日と、あなたの干支と相冲する日を、スマホのカレンダーに入れておきましょうか？毎朝カレンダーを開けばすぐ分かります。</p>",
@@ -2859,6 +3467,18 @@
   "t": "</b>の命盤を作成しました。まず何から見ましょうか？</p>",
   "h": "c643b581"
  },
+ "js.shellui.con-muon-thay-xem-la-so": {
+  "t": "どなたの命盤を見ましょうか？お名前と性別を教えてください。",
+  "h": "599ae642"
+ },
+ "js.shellui.con-muon-xem-gio-hoang-dao": {
+  "t": "<p>どの日の黄道吉時を見ますか？</p>",
+  "h": "618550f6"
+ },
+ "js.shellui.con-muon-xem-lich-ngay-tot": {
+  "t": "<p>何月の吉日カレンダーを見ますか？</p>",
+  "h": "5fa29f8b"
+ },
  "js.shellui.con-nhieu-dieu-muon-noi-ve": {
   "t": " には、この命盤についてまだお伝えしたいことがたくさんあります。無料登録すると、次のことができます。",
   "h": "b5e24689"
@@ -2867,17 +3487,101 @@
   "t": " にはまだお伝えしたいことがたくさんあります",
   "h": "2a2c8332"
  },
+ "js.shellui.con-so": {
+  "t": "数字",
+  "h": "ffeaf4b4"
+ },
  "js.shellui.con-thu-lai-o-so-la": {
   "t": "。「命盤ノート」からもう一度お試しください。",
   "h": "e3bb1032"
+ },
+ "js.shellui.con-tuoi-gi-hop-voi-bo": {
+  "t": "お子さまは、何年生まれだと両親に最も合いますか？",
+  "h": "702bccb6"
+ },
+ "js.shellui.cong-viec-chinh": {
+  "t": "主な仕事",
+  "h": "ff60cd13"
+ },
+ "js.shellui.cot-va-nhuc-khac-nhau-the": {
+  "t": "「骨」と「肉」はどう違いますか？",
+  "h": "79e5d699"
+ },
+ "js.shellui.cua-hang-van-phong-diem": {
+  "t": "お店・オフィスの風水 — スコア ",
+  "h": "70910085"
+ },
+ "js.shellui.cung-dien-trach": {
+  "t": "田宅宮",
+  "h": "9e958678"
+ },
+ "js.shellui.cung-huynh-de": {
+  "t": "兄弟宮",
+  "h": "3b9eb4f5"
+ },
+ "js.shellui.cung-menh": {
+  "t": "命宮",
+  "h": "3dc5da1d"
+ },
+ "js.shellui.cung-menh-cua-ban-la": {
+  "t": "あなたの命卦は**",
+  "h": "e7419937"
+ },
+ "js.shellui.cung-no-boc": {
+  "t": "僕役宮",
+  "h": "d3845b4b"
+ },
+ "js.shellui.cung-phu-mau": {
+  "t": "父母宮",
+  "h": "80b1dad9"
+ },
+ "js.shellui.cung-phu-the": {
+  "t": "夫妻宮",
+  "h": "5b9ae45f"
+ },
+ "js.shellui.cung-phuc-duc": {
+  "t": "福徳宮",
+  "h": "4a4ce3c4"
+ },
+ "js.shellui.cung-quan-loc": {
+  "t": "官禄宮",
+  "h": "44e094ad"
+ },
+ "js.shellui.cung-tai-bach": {
+  "t": "財帛宮",
+  "h": "06ea5e9f"
+ },
+ "js.shellui.cung-tat-ach": {
+  "t": "疾厄宮",
+  "h": "2287ab9c"
+ },
+ "js.shellui.cung-thien-di": {
+  "t": "遷移宮",
+  "h": "c0dff8fc"
+ },
+ "js.shellui.cung-tu-tuc": {
+  "t": "子女宮",
+  "h": "0aee19db"
  },
  "js.shellui.da-an-khoi-thu-vien-chung": {
   "t": "<span>✓ 共有ライブラリから非表示にしました。リンクはこれまでどおり使えます。</span>",
   "h": "e12e84c8"
  },
+ "js.shellui.da-cham-hop-xung-dia-chi": {
+  "t": "今後15年の地支の合・冲を確認しました（父：**",
+  "h": "0596e359"
+ },
  "js.shellui.da-chep": {
   "t": "コピーしました ✓",
   "h": "846252e0"
+ },
+ "js.shellui.da-co-du-gio-hoang-dao": {
+  "t": "**。黄道吉時、吉凶の行事、神殺をすべて確認しました。何をなさる予定ですか？",
+  "h": "f216588e"
+ },
+ "js.shellui.da-co-du-thong-tin": {
+  "t": "情報がそろいました：**",
+  "h": "638b1732"
  },
  "js.shellui.da-co-la-so-cua": {
   "t": "<p>作成済みの命盤：<b>",
@@ -2886,6 +3590,14 @@
  "js.shellui.da-dung-het-luot-hoi": {
   "t": "質問の回数を使い切りました",
   "h": "3ef9beae"
+ },
+ "js.shellui.da-gieo-du-6-hao": {
+  "t": "<p>6爻がそろいました ✓</p>",
+  "h": "a8830b8b"
+ },
+ "js.shellui.da-gui-anh": {
+  "t": "[画像を送信しました]",
+  "h": "8b8a14fd"
  },
  "js.shellui.da-gui-mo": {
   "t": "✓ 送信しました。 ",
@@ -2899,6 +3611,30 @@
   "t": "質問の回数を使い切りました。命盤は引き続き無料でご覧いただけます。続きは",
   "h": "f2acf059"
  },
+ "js.shellui.da-lap-ban": {
+  "t": "<p>盤を立てました ✓</p>",
+  "h": "c18977ee"
+ },
+ "js.shellui.da-lap-khoa-dai-luc-nham": {
+  "t": "**大六壬**の課を立てました — 日柱： ",
+  "h": "b7172965"
+ },
+ "js.shellui.da-lap-nen-cho-viec": {
+  "t": "次の件の土台を立てました：**",
+  "h": "768286ec"
+ },
+ "js.shellui.da-lap-que": {
+  "t": "<p>卦を立てました ✓</p>",
+  "h": "f4a3d08e"
+ },
+ "js.shellui.da-lieu": {
+  "t": "肌診断 — ",
+  "h": "5d98e4a3"
+ },
+ "js.shellui.da-san-sang-hoi-toi-bat": {
+  "t": "**、準備ができました。何でもご質問ください。",
+  "h": "13652508"
+ },
  "js.shellui.da-san-sang-hoi-toi-ve": {
   "t": "**の四柱（命式）の準備ができました。日干・用神・格局・大運について、私にお尋ねください。",
   "h": "7bde27db"
@@ -2907,13 +3643,41 @@
   "t": "<span>リンクを作成しました。この結果は ",
   "h": "11df14f6"
  },
+ "js.shellui.da-thuong": {
+  "t": "普通肌",
+  "h": "830c17ab"
+ },
+ "js.shellui.da-toi-hop-menh-gi": {
+  "t": "私の肌は、どの五行に合いますか？",
+  "h": "94a6ea06"
+ },
+ "js.shellui.da-tra-gio-hoang-dao-hac": {
+  "t": "。黄道・黒道の時刻を調べました。何をなさる予定ですか？最適な時刻をお選びします。",
+  "h": "c943d929"
+ },
+ "js.shellui.da-tra-kim-lau-tam-tai": {
+  "t": "金楼・三災・荒屋を調べました（干支：**",
+  "h": "2c862356"
+ },
  "js.shellui.da-vao-tiep-chuyen": {
   "t": " が会話に加わりました",
   "h": "31cef520"
  },
+ "js.shellui.da-xem-lich-thang": {
+  "t": "暦を確認しました（対象月：** ",
+  "h": "bd12b12f"
+ },
+ "js.shellui.dai-van-hien-tai-the-nao": {
+  "t": "現在の大運はどうですか？",
+  "h": "3b3146dd"
+ },
  "js.shellui.dang-an": {
   "t": "非表示にしています…",
   "h": "06dcaa3f"
+ },
+ "js.shellui.dang-cham-diem-phong-thuy": {
+  "t": "<p><i>風水を採点しています…</i></p>",
+  "h": "21564735"
  },
  "js.shellui.dang-dung-pdf": {
   "t": "PDFを作成しています…",
@@ -2935,25 +3699,77 @@
   "t": "無料で登録する →",
   "h": "89d5985d"
  },
+ "js.shellui.dang-ky-mien-phi-t076": {
+  "t": "無料で登録",
+  "h": "71ddeeae"
+ },
  "js.shellui.dang-ky-nhan-them": {
   "t": "登録してもっと使う",
   "h": "8bb9cbc2"
+ },
+ "js.shellui.dang-lap-khoa": {
+  "t": "<p>課を立てています…</p>",
+  "h": "d4e32377"
+ },
+ "js.shellui.dang-nhap": {
+  "t": "ログイン",
+  "h": "1afd3f6b"
+ },
+ "js.shellui.dang-phan-tich": {
+  "t": "<p><i>分析しています…</i></p>",
+  "h": "eac72554"
  },
  "js.shellui.dang-tiep-chuyen": {
   "t": "お話し中",
   "h": "37509a1d"
  },
+ "js.shellui.dang-tra-mau-hop-menh": {
+  "t": "<p><i>本命に合う色を調べています…</i></p>",
+  "h": "3f5c2690"
+ },
  "js.shellui.dang-viet-bao-cao": {
   "t": "<b>レポートを作成中…</b>",
   "h": "2d9fa930"
+ },
+ "js.shellui.dang-xem": {
+  "t": "確認中…",
+  "h": "a5c04b3d"
  },
  "js.shellui.dang-xem-la-so": {
   "t": "表示中の命盤：<b>",
   "h": "f6efbc2c"
  },
+ "js.shellui.dang-xem-trang-phuc-hop-ngay": {
+  "t": "<p><i>その日に合う服装を確認しています…</i></p>",
+  "h": "471afd48"
+ },
+ "js.shellui.dat-ten": {
+  "t": "命名： ",
+  "h": "d20b3ff3"
+ },
+ "js.shellui.dat-ten-dn": {
+  "t": "社名の命名 · ",
+  "h": "e07d8451"
+ },
  "js.shellui.day": {
   "t": " です。",
   "h": "7cac21ab"
+ },
+ "js.shellui.day-so": {
+  "t": "番号",
+  "h": "f3ccd2df"
+ },
+ "js.shellui.day-so-dzep": {
+  "t": "<p>番号：<b>",
+  "h": "537e1cab"
+ },
+ "js.shellui.day-so-nay-co-nen-dung": {
+  "t": "この番号は使ってもよいですか？",
+  "h": "8981877c"
+ },
+ "js.shellui.day-so-xgu3": {
+  "t": "番号：**",
+  "h": "01b9b7d5"
  },
  "js.shellui.de-bat-dau": {
   "t": "はじめに",
@@ -2963,9 +3779,17 @@
   "t": "🎲 おまかせで選ぶ",
   "h": "aee4de0f"
  },
+ "js.shellui.de-hoi-thay-xong-se-tu": {
+  "t": "が必要です。ログイン後は自動で戻り、続きを鑑定します。命盤は引き続き無料でご覧いただけます。",
+  "h": "d47c354b"
+ },
  "js.shellui.de-hoi-tiep": {
   "t": "からどうぞ。",
   "h": "2739fdb7"
+ },
+ "js.shellui.de-hoi-tiep-cau-vua-roi": {
+  "t": "すると、続けて質問できます。直前の質問には、登録後すぐにお答えします。",
+  "h": "68cc8b7d"
  },
  "js.shellui.de-sau": {
   "t": "あとで",
@@ -2975,6 +3799,14 @@
   "t": " ）。命盤にもとづいて、先生が的確に鑑定します。漠然とした質問ばかりでは、普通のチャットと変わりません。</p>",
   "h": "ec798250"
  },
+ "js.shellui.de-thay-xem-cho-sat-cho": {
+  "t": "正確に見るために、まずお名前と性別を教えてください。",
+  "h": "67e7511a"
+ },
+ "js.shellui.de-trong-la-thay-lap-ban": {
+  "t": "<p>空欄の場合は、現在の時刻で先生が盤を立てます。別の時刻や質問（任意）を指定することもできます。</p>",
+  "h": "68dda2bd"
+ },
  "js.shellui.de-xem": {
   "t": " を開いて確認してください",
   "h": "f6dcc1ba"
@@ -2982,6 +3814,26 @@
  "js.shellui.den-ngay": {
   "t": "<span> ",
   "h": "d4e0e872"
+ },
+ "js.shellui.diem-phong-thuy-ban-lam-viec": {
+  "t": "現在のデスクの風水スコア：**",
+  "h": "b68f30c6"
+ },
+ "js.shellui.diem-phong-thuy-cua-hang-van": {
+  "t": "現在のお店・オフィスの風水スコア：**",
+  "h": "abf14d8f"
+ },
+ "js.shellui.diem-phong-thuy-hien-tai": {
+  "t": "現在の風水スコア：**",
+  "h": "91e0a1f2"
+ },
+ "js.shellui.dien-tuong-cua-toi": {
+  "t": "私の面相",
+  "h": "d5784500"
+ },
+ "js.shellui.doi": {
+  "t": "変更",
+  "h": "c291a425"
  },
  "js.shellui.doi-nen-sang-toi": {
   "t": "ライト／ダークを切り替え",
@@ -2999,9 +3851,21 @@
   "t": "閉じて結果を見る",
   "h": "fba3c1e0"
  },
+ "js.shellui.dung": {
+  "t": "、用：**",
+  "h": "847dd55f"
+ },
+ "js.shellui.dung-roi-thay": {
+  "t": "そのとおりです、先生",
+  "h": "393b0d29"
+ },
  "js.shellui.dung-ten": {
   "t": "</b>先生",
   "h": "70d07a35"
+ },
+ "js.shellui.dung-than-la-gi-hanh-nao": {
+  "t": "用神とは何で、どの五行ですか？",
+  "h": "5236e12f"
  },
  "js.shellui.dung-thu-con": {
   "t": "お試し：残り<b>",
@@ -3015,17 +3879,73 @@
   "t": " （新暦）",
   "h": "4471b62b"
  },
+ "js.shellui.duong-van-menh-noi-len-dieu": {
+  "t": "運命線は何を物語っていますか？",
+  "h": "04b0d761"
+ },
  "js.shellui.esc": {
   "t": "Esc",
   "h": "1f7a4f9e"
+ },
+ "js.shellui.gieo-que": {
+  "t": "卦を立てる · ",
+  "h": "b41eb665"
+ },
+ "js.shellui.gieo-que-6-hao": {
+  "t": "卦を立てる（6爻）→",
+  "h": "5c3eaa5e"
+ },
+ "js.shellui.gio": {
+  "t": "時",
+  "h": "75f92388"
+ },
+ "js.shellui.gio-3uxy": {
+  "t": " · 時： ",
+  "h": "d50a9e73"
+ },
+ "js.shellui.gio-can-xem": {
+  "t": "見たい時刻",
+  "h": "84e96644"
  },
  "js.shellui.gio-chi": {
   "t": "時辰 {chi}（{khung}）",
   "h": "681b8452"
  },
+ "js.shellui.gio-den-nguoi-thu-hai": {
+  "t": "2人目の番です。",
+  "h": "63d5af59"
+ },
+ "js.shellui.gio-hoang-dao": {
+  "t": "黄道吉時 · ",
+  "h": "ecf3c685"
+ },
+ "js.shellui.gio-hoang-dao-cho-viec-nay": {
+  "t": "この件に向く黄道吉時は？",
+  "h": "005ba6f0"
+ },
+ "js.shellui.gio-hxu5": {
+  "t": "、時柱： ",
+  "h": "15247793"
+ },
  "js.shellui.gio-ke-chuyen-cua-ban-di": {
   "t": "</b>。ご相談内容をお話しください。ぴったりの先生をお呼びします。</p>",
   "h": "cfc0e866"
+ },
+ "js.shellui.gio-nao-can-tranh-tuyet-doi": {
+  "t": "絶対に避けるべき時刻は？",
+  "h": "3aff98fe"
+ },
+ "js.shellui.gio-nao-tot-de-khai-truong": {
+  "t": "開業に良い時刻は？",
+  "h": "f771c439"
+ },
+ "js.shellui.gio-nay-hop-lam-viec-gi": {
+  "t": "この時刻は何をするのに最も向いていますか？",
+  "h": "74b7e572"
+ },
+ "js.shellui.gio-r1j8": {
+  "t": "</b> · 時：<b>",
+  "h": "910eff27"
  },
  "js.shellui.gio-sinh-cua": {
   "t": "【 ",
@@ -3035,9 +3955,29 @@
   "t": " 時間前",
   "h": "ce828227"
  },
+ "js.shellui.gioi-tinh": {
+  "t": "性別",
+  "h": "80bbce55"
+ },
+ "js.shellui.gioi-tinh-con": {
+  "t": "お子さまの性別",
+  "h": "39dacada"
+ },
  "js.shellui.giox": {
   "t": " · 時辰 ",
   "h": "9d8fa6cf"
+ },
+ "js.shellui.giuong-ngu-quay-huong-nao": {
+  "t": "ベッドはどの向きにするとよいですか？",
+  "h": "08ee9028"
+ },
+ "js.shellui.goi-y-12-ten-hop-menh": {
+  "t": "本命に合う名前を、意味つきで12個提案",
+  "h": "61954ded"
+ },
+ "js.shellui.google-lich": {
+  "t": "Googleカレンダー",
+  "h": "8cdb619a"
  },
  "js.shellui.gui": {
   "t": "送信",
@@ -3046,6 +3986,46 @@
  "js.shellui.gui-anh": {
   "t": "画像を送る",
   "h": "f7dc07df"
+ },
+ "js.shellui.gui-anh-can-phong-cua-con": {
+  "t": "お部屋の写真をここに送ってください（有料ツールです。両が引かれる前に、ボタンに料金が表示されます）。",
+  "h": "2fb86d98"
+ },
+ "js.shellui.gui-anh-can-vung-mat-nhin": {
+  "t": "目元のアップ写真（正面を向き、十分な明るさで）をここに送ってください（有料ツールです。両が引かれる前に、ボタンに料金が表示されます）。",
+  "h": "201e34e3"
+ },
+ "js.shellui.gui-anh-chu-ky-cua-con": {
+  "t": "署名の写真をここに送ってください（有料ツールです。両が引かれる前に、ボタンに料金が表示されます）。静止画から測れるのは6軸のうち3軸（骨・肉・勢）です。6軸すべてを測るには、ページ上で直接署名してください",
+  "h": "e616ecbd"
+ },
+ "js.shellui.gui-anh-cua-hang-van-phong": {
+  "t": "お店・オフィスの写真をここに送ってください（有料ツールです。両が引かれる前に、ボタンに料金が表示されます）。",
+  "h": "fca7be14"
+ },
+ "js.shellui.gui-anh-da-mat-cua-con": {
+  "t": "顔の肌の写真をここに送ってください（有料ツールです。両が引かれる前に、ボタンに料金が表示されます）。生まれ年は必須ではありません。",
+  "h": "dda9340e"
+ },
+ "js.shellui.gui-anh-goc-lam-viec-cua": {
+  "t": "作業スペースの写真をここに送ってください（有料ツールです。両が引かれる前に、ボタンに料金が表示されます）。",
+  "h": "229ffe71"
+ },
+ "js.shellui.gui-anh-khuon-mat-cua-con": {
+  "t": "顔写真をここに送ってください（有料ツールです。両が引かれる前に、ボタンに料金が表示されます）。",
+  "h": "034b6960"
+ },
+ "js.shellui.gui-anh-khuon-mat-cua-con-x2xw": {
+  "t": "顔写真をここに送ってください（有料ツールです。両が引かれる前に、ボタンに料金が表示されます）。生まれ年は必須ではありません。",
+  "h": "15dcb8ec"
+ },
+ "js.shellui.gui-anh-khuon-mat-gan-day": {
+  "t": "最近撮影した顔写真（濃いメイクなし）をここに送ってください（有料ツールです。両が引かれる前に、ボタンに料金が表示されます）。",
+  "h": "6d5eec5f"
+ },
+ "js.shellui.gui-anh-long-ban-tay-xoe": {
+  "t": "手のひらの写真（平らに開いて上向きに）をここに送ってください（有料ツールです。両が引かれる前に、ボタンに料金が表示されます）。",
+  "h": "4cefab7b"
  },
  "js.shellui.gui-pdf-vao": {
   "t": "PDFを送る：",
@@ -3059,6 +4039,18 @@
   "t": "アクション",
   "h": "8e9fdd28"
  },
+ "js.shellui.hao-dong-noi-len-dieu-gi": {
+  "t": "動爻は何を示していますか？",
+  "h": "4e9d2215"
+ },
+ "js.shellui.hay-goi-y-ten-moi": {
+  "t": "**。それとも、新しい名前を提案しましょうか？",
+  "h": "d922a861"
+ },
+ "js.shellui.het-phan-dung-thu": {
+  "t": "お試しはここまでです。",
+  "h": "49a17e2d"
+ },
  "js.shellui.het-phan-dung-thu-roi": {
   "t": "お試し分は終了しました…",
   "h": "277af632"
@@ -3066,6 +4058,34 @@
  "js.shellui.hieu-dung-la-so-dang-mo": {
   "t": "開いている命盤を正しく読み解きます",
   "h": "b500bc82"
+ },
+ "js.shellui.ho": {
+  "t": "姓",
+  "h": "a9a24039"
+ },
+ "js.shellui.ho-4mdh": {
+  "t": " 姓 ",
+  "h": "c4ce89b4"
+ },
+ "js.shellui.ho-quai-cho-thay-khuc-giua": {
+  "t": "互卦は、中間の流れをどう示していますか？",
+  "h": "640af3c9"
+ },
+ "js.shellui.ho-so": {
+  "t": "プロフィール：**",
+  "h": "23a92be3"
+ },
+ "js.shellui.ho-ten-chu-su": {
+  "t": "事主の氏名",
+  "h": "b65bd926"
+ },
+ "js.shellui.hoa": {
+  "t": "火",
+  "h": "be792fa1"
+ },
+ "js.shellui.hoa-he-phuc-chi-so-y": {
+  "t": "禍は福の倚る所、福は禍の伏す所。",
+  "h": "0faeddcf"
  },
  "js.shellui.hoac-nap-luong-de-hoi-tiep": {
   "t": "または両をチャージして1問ずつ質問する →",
@@ -3095,17 +4115,125 @@
   "t": "「先生に聞く」でさらに<b>",
   "h": "04044619"
  },
+ "js.shellui.hoi-thay-ve-but-tuong": {
+  "t": "筆相について先生に聞く…",
+  "h": "abf79403"
+ },
+ "js.shellui.hoi-thay-ve-da-lieu": {
+  "t": "肌診断について先生に聞く…",
+  "h": "0ba0e8f2"
+ },
+ "js.shellui.hoi-thay-ve-khi-sac": {
+  "t": "気色について先生に聞く…",
+  "h": "af4fcb79"
+ },
+ "js.shellui.hoi-thay-ve-kieu-toc-hop": {
+  "t": "顔に合う髪型について先生に聞く…",
+  "h": "33ac1d0b"
+ },
+ "js.shellui.hoi-thay-ve-la-bai-vua": {
+  "t": "引いたカードについて先生に聞く…",
+  "h": "a92ebf3e"
+ },
+ "js.shellui.hoi-thay-ve-mau-sac-hop": {
+  "t": "本命に合う色について先生に聞く…",
+  "h": "98bdd51a"
+ },
+ "js.shellui.hoi-thay-ve-nhan-tuong": {
+  "t": "目相について先生に聞く…",
+  "h": "908e08ff"
+ },
+ "js.shellui.hoi-thay-ve-phong-thuy": {
+  "t": "風水について先生に聞く…",
+  "h": "0e6c95d3"
+ },
+ "js.shellui.hoi-thay-ve-phong-thuy-ban": {
+  "t": "デスクの風水について先生に聞く…",
+  "h": "e3a88042"
+ },
+ "js.shellui.hoi-thay-ve-phong-thuy-cua": {
+  "t": "お店の風水について先生に聞く…",
+  "h": "5ccebcd2"
+ },
+ "js.shellui.hoi-thay-ve-the-vua-rut": {
+  "t": "引いたカードについて先生に聞く…",
+  "h": "3a54f9a1"
+ },
+ "js.shellui.hoi-thay-ve-thu-tuong": {
+  "t": "手相について先生に聞く…",
+  "h": "ede75605"
+ },
+ "js.shellui.hoi-thay-ve-tong-mau-ca": {
+  "t": "パーソナルカラーについて先生に聞く…",
+  "h": "1f9cd726"
+ },
+ "js.shellui.hoi-thay-ve-trang-diem-hop": {
+  "t": "顔に合うメイクについて先生に聞く…",
+  "h": "57e99c47"
+ },
+ "js.shellui.hoi-thay-ve-trang-phuc-theo": {
+  "t": "日ごとの服装について先生に聞く…",
+  "h": "71f5f95c"
+ },
+ "js.shellui.hoi-thay-ve-tuong-mat": {
+  "t": "顔相について先生に聞く…",
+  "h": "bd5fbccb"
+ },
  "js.shellui.hoi-thoai-moi": {
   "t": "新しい会話",
   "h": "bba6fb9b"
+ },
+ "js.shellui.hoi-toi-de-luan-nhe": {
+  "t": "**。ご質問いただければ鑑定します。",
+  "h": "da298819"
  },
  "js.shellui.hom": {
   "t": "<p> ",
   "h": "5bfbea9a"
  },
+ "js.shellui.hom-nay-nen-lam-gi-kieng": {
+  "t": "今日は何をして、何を避けるべきですか？",
+  "h": "1e8037df"
+ },
+ "js.shellui.hop-mau-gi-ky-mau-gi": {
+  "t": "合う色と避ける色は？",
+  "h": "3af5cdfc"
+ },
+ "js.shellui.huong-cua": {
+  "t": "ドアの向き",
+  "h": "65a7e53d"
+ },
+ "js.shellui.huong-nao-phai-tranh-va-vi": {
+  "t": "避けるべき方位とその理由は？",
+  "h": "ac2dbbcc"
+ },
+ "js.shellui.huong-ngoi-sinh-khi-la-gi": {
+  "t": "「生気」の方位に座るとはどういうことですか？",
+  "h": "698ffaac"
+ },
+ "js.shellui.huong-nha-ban-lam-viec-nao": {
+  "t": "家・デスクはどの向きが合いますか？",
+  "h": "e1e3d123"
+ },
+ "js.shellui.huong-nha-nao-hop-nhat": {
+  "t": "家はどの向きが最も合いますか？",
+  "h": "cc262fd1"
+ },
+ "js.shellui.huong-xep-hang-cao-nhat-la": {
+  "t": " 最も評価の高い方位は**",
+  "h": "abc77c37"
+ },
+ "js.shellui.huong-xuat-hanh-tot-trong-ngay": {
+  "t": "その日の出発に良い方位は？",
+  "h": "0ef8b5dc"
+ },
  "js.shellui.in-ngay": {
   "t": "<span>印刷日： ",
   "h": "acf30636"
+ },
+ "js.shellui.iphone-mac": {
+  "t": "iPhone / Mac",
+  "h": "9a2b7d51"
  },
  "js.shellui.ket-qua": {
   "t": "結果",
@@ -3115,17 +4243,173 @@
   "t": "</b><span>結果・タップして開く</span></span>",
   "h": "50bffb45"
  },
+ "js.shellui.ket-qua-luan-giai": {
+  "t": "鑑定結果",
+  "h": "68ae23e5"
+ },
  "js.shellui.ket-qua-nay-chua-co-noi": {
   "t": "この結果にはPDFに保存できる内容がありません。",
   "h": "d8ae6583"
+ },
+ "js.shellui.ket-qua-phan-tich-da": {
+  "t": "肌分析の結果：**",
+  "h": "bf903ee5"
+ },
+ "js.shellui.ket-sat-nen-quay-huong-nao": {
+  "t": "金庫はどの向きに置くとよいですか？",
+  "h": "f74aaf2a"
  },
  "js.shellui.khac": {
   "t": "その他",
   "h": "5b8a28ab"
  },
+ "js.shellui.khai-truong-nen-chon-ngay-nao": {
+  "t": "開業はどの日がよいですか？",
+  "h": "b44fce94"
+ },
+ "js.shellui.khi-sac": {
+  "t": "気色",
+  "h": "e1205bcd"
+ },
+ "js.shellui.khi-sac-cua-toi": {
+  "t": "私の気色",
+  "h": "f4b00328"
+ },
+ "js.shellui.khi-sac-khac-dien-tuong-the": {
+  "t": "気色と面相は、どう違いますか？",
+  "h": "d826036b"
+ },
+ "js.shellui.khong-cham-diem-duoc-thu-lai": {
+  "t": "採点できませんでした。もう一度お試しください。",
+  "h": "eb17c20d"
+ },
+ "js.shellui.khong-chon": {
+  "t": "— 選択しない —",
+  "h": "80c4ffb0"
+ },
+ "js.shellui.khong-co-ket-qua": {
+  "t": "結果がありません。",
+  "h": "97fa6f91"
+ },
+ "js.shellui.khong-co-noi-dung": {
+  "t": "（内容なし）",
+  "h": "7d1286dc"
+ },
+ "js.shellui.khong-doc-duoc-anh-nay": {
+  "t": "この画像は読み取れません。",
+  "h": "89d3f00f"
+ },
+ "js.shellui.khong-doc-duoc-net-muc-tu": {
+  "t": "この画像から墨の筆跡を読み取れませんでした。",
+  "h": "7c89a420"
+ },
+ "js.shellui.khong-dung-duoc-ban": {
+  "t": "盤を作成できませんでした。",
+  "h": "925f4f75"
+ },
+ "js.shellui.khong-dung-duoc-ban-ky-mon": {
+  "t": "奇門盤を作成できませんでした。",
+  "h": "c30586ea"
+ },
+ "js.shellui.khong-dung-duoc-ho-so": {
+  "t": "プロフィールを作成できませんでした。",
+  "h": "b3112509"
+ },
+ "js.shellui.khong-dung-duoc-khoa-luc-nham": {
+  "t": "六壬の課を作成できませんでした。",
+  "h": "8e7a9dcc"
+ },
+ "js.shellui.khong-dung-duoc-khoa-luc-nham-ddel": {
+  "t": "六壬の課を作成できませんでした — 現在、数値を検証できません。",
+  "h": "0b13b5b7"
+ },
+ "js.shellui.khong-dung-duoc-khoa-luc-nham-s764": {
+  "t": "六壬の課を作成できませんでした。もう一度お試しください。",
+  "h": "9162a489"
+ },
+ "js.shellui.khong-hao-dong": {
+  "t": " （動爻なし）",
+  "h": "b0233d0c"
+ },
  "js.shellui.khong-in-luu-pdf-truc-tiep": {
   "t": " では、PDFを直接印刷・保存できません",
   "h": "27aa3510"
+ },
+ "js.shellui.khong-lap-duoc-que": {
+  "t": "卦を立てられませんでした。",
+  "h": "7181f9c7"
+ },
+ "js.shellui.khong-nap-duoc": {
+  "t": "読み込めませんでした： ",
+  "h": "7c1577a1"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-bat": {
+  "t": "八宅ツールを読み込めませんでした。",
+  "h": "5dc3cbaa"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-chon": {
+  "t": "吉日選びツールを読み込めませんでした。",
+  "h": "304c67a6"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-dat": {
+  "t": "命名ツールを読み込めませんでした。",
+  "h": "558419b0"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-dat-o35j": {
+  "t": "社名の命名ツールを読み込めませんでした。",
+  "h": "af21f073"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-gio": {
+  "t": "黄道吉時ツールを読み込めませんでした。",
+  "h": "6df69f74"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-kim": {
+  "t": "金楼ツールを読み込めませんでした。",
+  "h": "a1a5cb9e"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-kinh": {
+  "t": "易経ツールを読み込めませんでした。",
+  "h": "f4cedb61"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-ky": {
+  "t": "奇門遁甲ツールを読み込めませんでした。",
+  "h": "30038a86"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-luc": {
+  "t": "六壬ツールを読み込めませんでした。",
+  "h": "fd967141"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-mai": {
+  "t": "梅花易数ツールを読み込めませんでした。",
+  "h": "431cf8b1"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-nap": {
+  "t": "納音ツールを読み込めませんでした。",
+  "h": "3bc9a24e"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-ngay": {
+  "t": "吉日ツールを読み込めませんでした。",
+  "h": "28181959"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-so": {
+  "t": "吉数ツールを読み込めませんでした。",
+  "h": "d3960453"
+ },
+ "js.shellui.khong-nap-duoc-cong-cu-xem": {
+  "t": "お子さまの生まれ年ツールを読み込めませんでした。",
+  "h": "76551019"
+ },
+ "js.shellui.khong-nap-duoc-cong-thanh-toan": {
+  "t": "決済機能を読み込めませんでした。",
+  "h": "4e145f27"
+ },
+ "js.shellui.khong-nen-dat-gi-tren-ban": {
+  "t": "デスクの上に置かない方がよいものは？",
+  "h": "77ca1a05"
+ },
+ "js.shellui.khong-phan-tich-duoc-thu-lai": {
+  "t": "分析できませんでした。もう一度お試しください。",
+  "h": "7f4dd4c6"
  },
  "js.shellui.khong-tao-duoc-link-chia-se": {
   "t": "シェア用のリンクを作成できませんでした。しばらくしてからもう一度お試しください。",
@@ -3135,9 +4419,65 @@
   "t": "見つかりませんでした。",
   "h": "cb892c67"
  },
+ "js.shellui.khong-tra-duoc-thu-lai-giup": {
+  "t": "調べられませんでした。もう一度お試しください。",
+  "h": "9baf8962"
+ },
+ "js.shellui.khong-tu-luan-ngu-duong-hoa": {
+  "t": "孔子『論語』陽貨",
+  "h": "cbcf6d69"
+ },
+ "js.shellui.khong-tu-luan-ngu-ung-da": {
+  "t": "孔子『論語』雍也",
+  "h": "67297c6c"
+ },
+ "js.shellui.khong-tu-luan-ngu-vi-chinh": {
+  "t": "孔子『論語』為政",
+  "h": "bad5b3f1"
+ },
+ "js.shellui.khuon-mat-cua-ban": {
+  "t": "あなたの顔型：**",
+  "h": "4af23efa"
+ },
+ "js.shellui.khuon-mat-cua-ban-thuoc-dang": {
+  "t": "あなたの顔のタイプは**",
+  "h": "85935119"
+ },
+ "js.shellui.kieu-toc": {
+  "t": "髪型 — ",
+  "h": "37e30bf4"
+ },
+ "js.shellui.kieu-toc-kinh-mat-hop-tuong": {
+  "t": "顔立ちに合う髪型とメガネ",
+  "h": "114eae4b"
+ },
+ "js.shellui.kim-lau-tuoi": {
+  "t": "金楼 · 干支： ",
+  "h": "b4bb42fe"
+ },
+ "js.shellui.kinh-mat-nao-hop-tuong-mat": {
+  "t": "どんなメガネが私の顔に合いますか？",
+  "h": "e2a2a092"
+ },
+ "js.shellui.ky-hop-dong-gio-nao-hop": {
+  "t": "契約はどの時刻に結ぶと合いますか？",
+  "h": "01e5265d"
+ },
+ "js.shellui.ky-mon": {
+  "t": "奇門遁甲 · ",
+  "h": "d3a48969"
+ },
+ "js.shellui.la-bai-nguoc-nghia-la-gi": {
+  "t": "逆位置のカードは何を意味しますか？",
+  "h": "4f75a731"
+ },
  "js.shellui.la-may-gio": {
   "t": " 】の生まれた時刻は何時ですか？",
   "h": "1ea2e9f1"
+ },
+ "js.shellui.la-so": {
+  "t": "命盤：**",
+  "h": "e53a7c90"
  },
  "js.shellui.la-so-con-vua-xem-la": {
   "t": "<b>先ほど見た命盤は、リンクをシェアした方のもので、あなたのものではありません。</b>",
@@ -3147,9 +4487,29 @@
   "t": "命盤の準備ができました。まずどこから見てほしいですか？",
   "h": "0d8b388a"
  },
+ "js.shellui.la-so-dung-de-luan": {
+  "t": "鑑定に使う命盤",
+  "h": "688ae631"
+ },
  "js.shellui.la-so-tron-doi": {
   "t": "<b>生涯の命盤</b>",
   "h": "068a1d6c"
+ },
+ "js.shellui.lao-tu-dao-duc-kinh": {
+  "t": "老子『道徳経』",
+  "h": "7eb946dd"
+ },
+ "js.shellui.lap-ban-ky-mon": {
+  "t": "奇門盤を立てる →",
+  "h": "33f758e0"
+ },
+ "js.shellui.lap-khoa-luc-nham": {
+  "t": "六壬の課を立てる →",
+  "h": "8df44794"
+ },
+ "js.shellui.lap-la-so": {
+  "t": "命盤を作成する →",
+  "h": "88a696a9"
  },
  "js.shellui.lap-la-so-cua-ban-de": {
   "t": "あなたの命盤を作って、より的確に見てもらう →",
@@ -3163,6 +4523,10 @@
   "t": "先に命盤を作成してください",
   "h": "1b48590d"
  },
+ "js.shellui.lap-que": {
+  "t": "卦を立てる →",
+  "h": "95db5d4a"
+ },
  "js.shellui.lich-su": {
   "t": "履歴・",
   "h": "309a950b"
@@ -3170,6 +4534,22 @@
  "js.shellui.lich-su-hoi-thoai": {
   "t": "会話履歴",
   "h": "0fd2afce"
+ },
+ "js.shellui.loai-hinh-tuy-chon": {
+  "t": "種類（任意）",
+  "h": "c4eab07e"
+ },
+ "js.shellui.loai-khong-gian": {
+  "t": "スペースの種類",
+  "h": "b0b069bf"
+ },
+ "js.shellui.loai-phong": {
+  "t": "部屋の種類",
+  "h": "19905334"
+ },
+ "js.shellui.loi": {
+  "t": "エラー： ",
+  "h": "1b80116b"
  },
  "js.shellui.loi-mang-khi-tao-link-chia": {
   "t": "シェア用リンクの作成中にネットワークエラーが発生しました。",
@@ -3179,9 +4559,25 @@
   "t": "ネットワークエラーです。しばらくしてからもう一度お試しください。",
   "h": "4f6c5f14"
  },
+ "js.shellui.loi-phan-tich": {
+  "t": "分析エラーです。",
+  "h": "ff75bed2"
+ },
  "js.shellui.luan-giai": {
   "t": "<b>鑑定",
   "h": "489f2d1f"
+ },
+ "js.shellui.luan-que-nay-cho-cau-hoi": {
+  "t": "この卦を、私の質問に当てはめて鑑定してください",
+  "h": "327aeb50"
+ },
+ "js.shellui.luc-nham": {
+  "t": "六壬 · ",
+  "h": "dd89dab4"
+ },
+ "js.shellui.luc-nham-9v1c": {
+  "t": "六壬",
+  "h": "99909aea"
  },
  "js.shellui.luong": {
   "t": " 両)",
@@ -3223,9 +4619,41 @@
   "t": "「命盤ノート」に無料で保存します。次回からは @ を入力すれば呼び出せます。",
   "h": "08f063e7"
  },
+ "js.shellui.major-arcana-khac-minor-arcana-the": {
+  "t": "大アルカナと小アルカナは、どう違いますか？",
+  "h": "de30c37d"
+ },
  "js.shellui.mang-chap-chon-chua-luu-duoc": {
   "t": "ネットワークが不安定で、次の命盤を保存できませんでした： ",
   "h": "8f2cc0fe"
+ },
+ "js.shellui.manh-tu-tan-tam-thuong": {
+  "t": "孟子『尽心』上",
+  "h": "819ec1b8"
+ },
+ "js.shellui.mat-toi-hop-kieu-toc-nao": {
+  "t": "私の顔に合う髪型は？",
+  "h": "bfa362fc"
+ },
+ "js.shellui.mau-chu-dao": {
+  "t": "**。メインカラー： ",
+  "h": "37202018"
+ },
+ "js.shellui.mau-diem-nhan-nao-tot-nhat": {
+  "t": "最も効果的なアクセントカラーは？",
+  "h": "6d38e6a5"
+ },
+ "js.shellui.mau-nao-nen-tranh-khi-phong": {
+  "t": "面接で避けるべき色は？",
+  "h": "61460b1c"
+ },
+ "js.shellui.mau-sac-hop-menh-menh": {
+  "t": "本命に合う色 — 本命： ",
+  "h": "f73273a4"
+ },
+ "js.shellui.mau-son-nao-hop-tong-da": {
+  "t": "私の肌のトーンに合う口紅の色は？",
+  "h": "f013cf8c"
  },
  "js.shellui.me": {
   "t": "母",
@@ -3234,6 +4662,38 @@
  "js.shellui.me-con": {
   "t": "お母さま",
   "h": "224ac2ac"
+ },
+ "js.shellui.me-ifej": {
+  "t": "</b> · 母：<b>",
+  "h": "a8f51442"
+ },
+ "js.shellui.me-kv0j": {
+  "t": " × 母 ",
+  "h": "b9764667"
+ },
+ "js.shellui.me-lcly": {
+  "t": " · 母 ",
+  "h": "f67770ae"
+ },
+ "js.shellui.me-uug4": {
+  "t": "**・母：**",
+  "h": "aa1059f0"
+ },
+ "js.shellui.menh": {
+  "t": "、本命： ",
+  "h": "59e4d307"
+ },
+ "js.shellui.menh-khac-ngay-ngay-trung-binh": {
+  "t": "本命が日を剋す — 平均的な日、慎重に",
+  "h": "256fb5ff"
+ },
+ "js.shellui.menh-kz9z": {
+  "t": "本命：**",
+  "h": "002acae0"
+ },
+ "js.shellui.menh-sinh-ngay-hao-ton-chut": {
+  "t": "本命が日を生じる — 少し消耗するが、良い日",
+  "h": "995978d5"
  },
  "js.shellui.minh-bao-nguoi-dan-duong": {
   "t": "明宝 · ご案内役",
@@ -3247,6 +4707,10 @@
   "t": "開く ↗",
   "h": "275cceff"
  },
+ "js.shellui.mo-d4p": {
+  "t": "開く",
+  "h": "1acfbe82"
+ },
  "js.shellui.mo-file-pdf": {
   "t": "PDFを開く",
   "h": "8ac92ea1"
@@ -3259,13 +4723,25 @@
   "t": "サイドバーを開く",
   "h": "b1f48b75"
  },
+ "js.shellui.mo-trang-cong-cu": {
+  "t": "ツールのページを開く →",
+  "h": "0b442693"
+ },
  "js.shellui.mo-zalo": {
   "t": "Zaloを開く",
   "h": "d52365fa"
  },
+ "js.shellui.moc": {
+  "t": "木",
+  "h": "4bd601ae"
+ },
  "js.shellui.moi-nhom-hoi-chan-3-thay": {
   "t": "先生3人で一緒に見てもらう",
   "h": "d2433b80"
+ },
+ "js.shellui.moi-nhom-hoi-chan-3-thay-8dti": {
+  "t": "<span>チームで合同鑑定を依頼 <em>· 先生3名</em></span></button>",
+  "h": "b0fedb20"
  },
  "js.shellui.moi-sang-nhan-van-ngay-rieng": {
   "t": "毎朝、あなたの命盤に合わせた今日の運勢が届きます",
@@ -3295,6 +4771,10 @@
   "t": " 項目</b>を、この命盤そのものから読み解きます — ",
   "h": "8e5f0ada"
  },
+ "js.shellui.muc-dich": {
+  "t": "目的",
+  "h": "d71ffc6e"
+ },
  "js.shellui.muc-luc": {
   "t": "<b>目次</b>",
   "h": "14f7b262"
@@ -3307,9 +4787,73 @@
   "t": "男性",
   "h": "b580ba1b"
  },
+ "js.shellui.nam-1mfe": {
+  "t": "対象年：**",
+  "h": "b9886d97"
+ },
+ "js.shellui.nam-690x": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "js.shellui.nam-nao-cuoi-hoi-duoc": {
+  "t": "何年に結婚するとよいですか？",
+  "h": "5de89c72"
+ },
+ "js.shellui.nam-nao-dep-nhat-de-lam": {
+  "t": "家を建てるのに最もよい年は？",
+  "h": "992ff775"
+ },
+ "js.shellui.nam-nao-nen-tranh-sinh-con": {
+  "t": "子どもを授かるのを避けるべき年は？",
+  "h": "45ae05ad"
+ },
+ "js.shellui.nam-nao-tot-nhat-de-sinh": {
+  "t": "子どもを授かるのに最もよい年は？",
+  "h": "345bd2a8"
+ },
  "js.shellui.nam-nay": {
   "t": "今年の ",
   "h": "9f78db0d"
+ },
+ "js.shellui.nam-sinh": {
+  "t": "生まれ年",
+  "h": "75a6785f"
+ },
+ "js.shellui.nam-sinh-8ql1": {
+  "t": "<p>生まれ年：<b>",
+  "h": "0ff1d138"
+ },
+ "js.shellui.nam-sinh-bo": {
+  "t": "父の生まれ年",
+  "h": "a1009c64"
+ },
+ "js.shellui.nam-sinh-chu": {
+  "t": "オーナーの生まれ年",
+  "h": "124634b4"
+ },
+ "js.shellui.nam-sinh-con": {
+  "t": "お子さまの生まれ年",
+  "h": "724a46be"
+ },
+ "js.shellui.nam-sinh-me": {
+  "t": "母の生まれ年",
+  "h": "bef8fb8f"
+ },
+ "js.shellui.nam-sinh-tuy-chon": {
+  "t": "生まれ年（任意）",
+  "h": "114b3918"
+ },
+ "js.shellui.nam-sinh-wcj0": {
+  "t": "<p>生まれ年：<b>",
+  "h": "047b47a2"
+ },
+ "js.shellui.nam-thuan-nhat": {
+  "t": "**）。最も良い年：**",
+  "h": "cb3b51e0"
+ },
+ "js.shellui.nap-am": {
+  "t": "納音： ",
+  "h": "b49a2f37"
  },
  "js.shellui.nap-luong-de-hoi-tiep": {
   "t": "両をチャージして質問を続ける →",
@@ -3323,13 +4867,125 @@
   "t": "両の追加",
   "h": "c20441d9"
  },
+ "js.shellui.nen-doi-so-nao-de-tot": {
+  "t": "どの番号に変えるとよくなりますか？",
+  "h": "06cc25be"
+ },
+ "js.shellui.nen-dung-san-pham-nao-truoc": {
+  "t": "どの製品から使うべきですか？",
+  "h": "c4d20f9a"
+ },
+ "js.shellui.nen-hanh-dong-the-nao-luc": {
+  "t": "今、どう動くべきですか？",
+  "h": "b1dd8b79"
+ },
+ "js.shellui.nen-hoa-giai-the-nao": {
+  "t": "どう化解すればよいですか？",
+  "h": "1dee5079"
+ },
+ "js.shellui.nen-hoi-cau-hoi-kieu-gi": {
+  "t": "カードを引くとき、どんな質問をするとよいですか？",
+  "h": "f6e87d8f"
+ },
+ "js.shellui.nen-hoi-oracle-cau-hoi-kieu": {
+  "t": "オラクルでは、どんな質問をするとよいですか？",
+  "h": "8a001fd9"
+ },
+ "js.shellui.nen-hoi-tarot-cau-hoi-kieu": {
+  "t": "タロットでは、どんな質問をするとよいですか？",
+  "h": "a40f1c85"
+ },
+ "js.shellui.nen-menh-chu-da-san-sang": {
+  "t": "オーナーの命の土台ができました（代表者：**",
+  "h": "3ef59397"
+ },
+ "js.shellui.nen-menh-cua-be-da-san": {
+  "t": "お子さまの命の土台ができました（お子さま：**",
+  "h": "5444816b"
+ },
+ "js.shellui.nen-phoi-do-the-nao-theo": {
+  "t": "シーズンに合わせた服の合わせ方は？",
+  "h": "3a3ed4e0"
+ },
+ "js.shellui.nen-tien-hay-nen-lui": {
+  "t": "進むべきか、退くべきか？",
+  "h": "0735035e"
+ },
+ "js.shellui.nen-tranh-kieu-toc-nao": {
+  "t": "避けるべき髪型は？",
+  "h": "71021350"
+ },
+ "js.shellui.nen-tranh-mau-nao": {
+  "t": "避けるべき色は？",
+  "h": "19ab5099"
+ },
+ "js.shellui.nganh": {
+  "t": "、業種： ",
+  "h": "60b25e34"
+ },
+ "js.shellui.nganh-nghe": {
+  "t": "業種",
+  "h": "63d9f4dd"
+ },
+ "js.shellui.ngay": {
+  "t": "<p>日付：<b>",
+  "h": "f286f870"
+ },
+ "js.shellui.ngay-5amy": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "js.shellui.ngay-di": {
+  "t": "出発日",
+  "h": "ff25ff3f"
+ },
+ "js.shellui.ngay-dong-hanh-binh-on-thuan": {
+  "t": "同気の日 — 安定していて順調",
+  "h": "d1971f40"
+ },
+ "js.shellui.ngay-khac-menh-can-hoa-giai": {
+  "t": "日が本命を剋す ✦ 色で化解を",
+  "h": "f331fca5"
+ },
+ "js.shellui.ngay-lqyo": {
+  "t": "日付：**",
+  "h": "aae5837d"
+ },
+ "js.shellui.ngay-nao-can-tuyet-doi-tranh": {
+  "t": "絶対に避けるべき日は？",
+  "h": "36a0360f"
+ },
+ "js.shellui.ngay-nao-dep-de-cuoi-hoi": {
+  "t": "結婚に良い日はいつですか？",
+  "h": "409c6fd4"
+ },
+ "js.shellui.ngay-nao-dep-nhat-trong-thang": {
+  "t": "今月で最も良い日は？",
+  "h": "1d6514df"
+ },
+ "js.shellui.ngay-nao-tot-de-khoi-cong": {
+  "t": "着工・入居に良い日は？",
+  "h": "26db2036"
+ },
  "js.shellui.ngay-nua-la-tet-thay-xem": {
   "t": " 日です。ご家庭に合う「初客（新年最初の訪問者）」の干支と、旧暦1〜3日の出発の時刻・方角を、先生が見ましょうか？</p>",
   "h": "bab22689"
  },
+ "js.shellui.ngay-ot9a": {
+  "t": "**、当日：**",
+  "h": "794d0952"
+ },
  "js.shellui.ngay-sinh-duong-lich-cua": {
   "t": "新暦の生年月日を教えてください。対象： ",
   "h": "4f13847a"
+ },
+ "js.shellui.ngay-sinh-menh-cuc-ky-thuan": {
+  "t": "日が本命を生じる ✦ 非常に順調",
+  "h": "81b455cf"
+ },
+ "js.shellui.ngay-tot-thang": {
+  "t": "吉日 · 対象月： ",
+  "h": "22d98f26"
  },
  "js.shellui.ngay-truoc": {
   "t": " 日前",
@@ -3338,6 +4994,18 @@
  "js.shellui.nghe-them-mon-khac": {
   "t": "他の分野も聞く</span>",
   "h": "abd835bb"
+ },
+ "js.shellui.ngu-hanh-net-lien-quan-gi": {
+  "t": "筆跡の五行は、用神とどう関係しますか？",
+  "h": "a163e0cf"
+ },
+ "js.shellui.ngu-hanh-trong-oracle-nghia-la": {
+  "t": "オラクルの五行は何を意味しますか？",
+  "h": "c3180463"
+ },
+ "js.shellui.ngu-quan-gom-nhung-gi": {
+  "t": "五官とは何ですか？",
+  "h": "e8847ad0"
  },
  "js.shellui.nguoi-dan-duong": {
   "t": "ご案内役",
@@ -3351,13 +5019,33 @@
   "t": "家族 ",
   "h": "514d0e31"
  },
+ "js.shellui.nguoi-nha-rxn6": {
+  "t": "家族",
+  "h": "447d96d6"
+ },
+ "js.shellui.nguoi-thau-tan-long-minh-thi": {
+  "t": "其の心を尽くす者は其の性を知り、其の性を知れば則ち天を知る。",
+  "h": "ee637ff3"
+ },
  "js.shellui.nguoi-xem-ky-nhat-la-thay": {
   "t": " 、いちばん詳しいのは<b> ",
   "h": "d5168fd0"
  },
+ "js.shellui.nguyen": {
+  "t": "Nguyễn",
+  "h": "e79eb3d7"
+ },
+ "js.shellui.nhan-tuong-cua-toi": {
+  "t": "私の目相",
+  "h": "1943cfc5"
+ },
  "js.shellui.nhap-ngay-sinh": {
   "t": "<p>生年月日の入力が必要です（ ",
   "h": "96b95ba3"
+ },
+ "js.shellui.nhat-can-cua-toi-manh-hay": {
+  "t": "私の日干は強いですか、弱いですか？",
+  "h": "7d0db3d4"
  },
  "js.shellui.nhung-phan-luong-trong-vi-da": {
   "t": "、ただしウォレットの両が残りわずかです。チャージして、途中までの鑑定の続きをお聞きください。</div>",
@@ -3375,6 +5063,18 @@
   "t": "お父さん",
   "h": "d933443d"
  },
+ "js.shellui.oracle-khac-tarot-o-diem-nao": {
+  "t": "オラクルとタロットの違いは？",
+  "h": "6de59274"
+ },
+ "js.shellui.oracle-phuong-dong": {
+  "t": "東洋オラクル",
+  "h": "1146fb81"
+ },
+ "js.shellui.pham-kim-lau-thi-hoa-giai": {
+  "t": "金楼に当たったら、どう化解しますか？",
+  "h": "f9c9cb33"
+ },
  "js.shellui.phan": {
   "t": "セクション",
   "h": "d2cd4ec7"
@@ -3382,6 +5082,18 @@
  "js.shellui.phan-da-xong": {
   "t": " セクション完了</span></span>",
   "h": "f8ba3adb"
+ },
+ "js.shellui.phan-tich": {
+  "t": "分析する →",
+  "h": "e57345ec"
+ },
+ "js.shellui.phan-tich-ogw9": {
+  "t": "分析",
+  "h": "aad0782d"
+ },
+ "js.shellui.phan-tich-that-bai": {
+  "t": "分析に失敗しました。",
+  "h": "be032d5a"
  },
  "js.shellui.phien": {
   "t": "セッション",
@@ -3399,6 +5111,26 @@
   "t": " セッション",
   "h": "3ee6a226"
  },
+ "js.shellui.phong-ngu-nen-tranh-gi": {
+  "t": "寝室で避けるべきことは？",
+  "h": "da7e689d"
+ },
+ "js.shellui.phong-thuy-cua-hang-van-phong": {
+  "t": "お店・オフィスの風水",
+  "h": "fc68fd54"
+ },
+ "js.shellui.phong-thuy-diem": {
+  "t": "風水 — スコア ",
+  "h": "4c90b82a"
+ },
+ "js.shellui.phong-thuy-huong-nha": {
+  "t": "風水・家の向き",
+  "h": "4018bb17"
+ },
+ "js.shellui.phuong-nhan-la-gi": {
+  "t": "鳳眼とは何ですか？",
+  "h": "9ea5dc8a"
+ },
  "js.shellui.phut-truoc": {
   "t": " 分前",
   "h": "b1017a2c"
@@ -3407,13 +5139,41 @@
   "t": " のことは、あなたの命盤越しに見ただけです。次の方の生年月日を教えてください： ",
   "h": "c45acf9b"
  },
+ "js.shellui.qua-ngan-de-tinh-dong-thuan": {
+  "t": "短すぎて合意を計算できません",
+  "h": "361ce7b5"
+ },
+ "js.shellui.que-bien": {
+  "t": "、変卦：**",
+  "h": "b2123833"
+ },
+ "js.shellui.que-bien-cho-thay-xu-huong": {
+  "t": "変卦はどんな流れを示していますか？",
+  "h": "c06bb666"
+ },
  "js.shellui.que-con-do-xin-phep-dung": {
   "t": "占いの途中ですが、ここで一区切りとさせてください…",
   "h": "bab685a0"
  },
+ "js.shellui.que-da-lap-que-chinh": {
+  "t": "卦を立てました — 本卦：**",
+  "h": "79f6b4e8"
+ },
+ "js.shellui.que-da-lap-the": {
+  "t": "卦を立てました — 体：**",
+  "h": "92a897ba"
+ },
+ "js.shellui.que-dich-lap-duoc-noi-len": {
+  "t": "立てた易卦は何を示していますか？",
+  "h": "c921b99a"
+ },
  "js.shellui.quet-ma-de-quay-lai": {
   "t": "コードを読み取って戻る",
   "h": "04d8976e"
+ },
+ "js.shellui.sao-bat-tinh-noi-bat-nghia": {
+  "t": "目立つ八星の星は、何を意味しますか？",
+  "h": "cf4b5467"
  },
  "js.shellui.sao-chep-link": {
   "t": "リンクをコピー",
@@ -3427,21 +5187,113 @@
   "t": "コピー",
   "h": "09a1db3e"
  },
+ "js.shellui.sinh-con-bo": {
+  "t": "出産 · 父 ",
+  "h": "6b581c06"
+ },
+ "js.shellui.so-dep": {
+  "t": "吉数： ",
+  "h": "1ac75c4e"
+ },
  "js.shellui.so-la-so": {
   "t": "命盤ノート",
   "h": "0e67ec9d"
+ },
+ "js.shellui.so-truyen": {
+  "t": "**、初伝：**",
+  "h": "3dc1c742"
+ },
+ "js.shellui.su-nghiep-tien-bac": {
+  "t": "仕事・お金",
+  "h": "e1b5eac7"
  },
  "js.shellui.tai-khoan": {
   "t": "アカウント",
   "h": "4a60abe5"
  },
+ "js.shellui.tam-bach-nhan-co-y-nghia": {
+  "t": "三白眼にはどんな意味がありますか？",
+  "h": "913d8ad7"
+ },
+ "js.shellui.tam-dai-chi-la-gi": {
+  "t": "手相の三大線とは何ですか？",
+  "h": "baef21dd"
+ },
+ "js.shellui.tam-dinh-la-gi": {
+  "t": "三停とは何ですか？",
+  "h": "25930850"
+ },
+ "js.shellui.tam-tai-kieng-nhung-gi": {
+  "t": "三災では何を避けますか？",
+  "h": "27ba3819"
+ },
+ "js.shellui.tam-thap-nhi-lap-tu-thap": {
+  "t": "三十にして立ち、四十にして惑わず、五十にして天命を知る。",
+  "h": "70407892"
+ },
+ "js.shellui.tam-truyen-noi-gi-ve-dien": {
+  "t": "三伝は経過について何を語っていますか？",
+  "h": "43368fd7"
+ },
+ "js.shellui.tan-ky-tam-gia-tri-ky": {
+  "t": "其の心を尽くす者は其の性を知り、其の性を知れば則ち天を知る。",
+  "h": "d54978d2"
+ },
+ "js.shellui.tarot-78-la": {
+  "t": "タロット78枚",
+  "h": "0454df6e"
+ },
  "js.shellui.tat-ca": {
   "t": "すべて（",
   "h": "55873035"
  },
+ "js.shellui.tay-thuan-va-tay-khong-thuan": {
+  "t": "利き手と利き手でない手は、どう違いますか？",
+  "h": "10468033"
+ },
+ "js.shellui.telegram": {
+  "t": "Telegram",
+  "h": "edbea9ff"
+ },
+ "js.shellui.ten-dang-can-nhac-tuy-chon": {
+  "t": "検討中の名前（任意）",
+  "h": "9e834e48"
+ },
+ "js.shellui.ten-dem-nao-hop-cho-be": {
+  "t": "お子さまにはどんなミドルネームが合いますか？",
+  "h": "d59d5d7a"
+ },
+ "js.shellui.ten-hop-ca-tuoi-bo-va": {
+  "t": "父母どちらの干支にも合う名前は？",
+  "h": "ab665896"
+ },
+ "js.shellui.ten-nguoi-chu-tuy-chon": {
+  "t": "オーナーの名前（任意）",
+  "h": "c57ee47b"
+ },
+ "js.shellui.than-so-hoc": {
+  "t": "数秘術",
+  "h": "686db34b"
+ },
+ "js.shellui.thang": {
+  "t": "<p>月：<b>",
+  "h": "b8d6e6bd"
+ },
+ "js.shellui.thang-4nh6": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "js.shellui.thang-du-dinh": {
+  "t": "予定月",
+  "h": "db3fd9d6"
+ },
  "js.shellui.thang-truoc": {
   "t": " か月前",
   "h": "e1d0b08b"
+ },
+ "js.shellui.thanh-phan-my-pham-nen-tranh": {
+  "t": "避けた方がよいコスメ成分は？",
+  "h": "fdf4a070"
  },
  "js.shellui.thay": {
   "t": "先生 ",
@@ -3475,9 +5327,21 @@
   "t": "。先生が直接読み解くのは、 ",
   "h": "8dd5e740"
  },
+ "js.shellui.thay-ghi-lai-la-so-chi": {
+  "t": "<p>先生が記録しました。命盤が示すのは傾向であり、必ず起こると決まったことではありません。何も見当たらなければ、それも良いことです。</p>",
+  "h": "4d9f34f8"
+ },
+ "js.shellui.thay-ghi-lai-roi-co-gi": {
+  "t": "<p>先生が記録しました。ほかにあれば、続けてお話しください。引き続き見ていきます。</p>",
+  "h": "c3dc3800"
+ },
  "js.shellui.thay-ghi-vao-so-tien-tri": {
   "t": "先生が「予言ノート」に記録しました · 確認日： ",
   "h": "81f09315"
+ },
+ "js.shellui.thay-lap-que-theo-gio-hien": {
+  "t": "<p>先生が現在の時刻で卦を立てます。または、思いついた数字をひとつ教えていただければ、その数で占います。どちらにしますか？</p>",
+  "h": "dc5b731c"
  },
  "js.shellui.thay-moi-nhin": {
   "t": "先生はまだ",
@@ -3487,6 +5351,22 @@
   "t": "… 1問ずつ質問するより、まとめて読めて安心です。</div>",
   "h": "8836644b"
  },
+ "js.shellui.thay-xem-cho-con-tren-la": {
+  "t": " 先生が、あなた自身の命盤をもとに見ます。",
+  "h": "3962ceb8"
+ },
+ "js.shellui.thay-xem-giup-con-tuoi-xong": {
+  "t": "今年のお正月に、最初に家を訪れる人（xông đất）の干支と時刻、そして出発の時刻と方位を、ご家族みなさんの分で先生が見ます。",
+  "h": "aa40f1e4"
+ },
+ "js.shellui.thay-xem-giup-con-tuoi-xong-jdse": {
+  "t": "今年のお正月に、最初に家を訪れる人（xông đất）の干支と時刻、そして出発の時刻と方位を、先生が見ます。",
+  "h": "91001fe7"
+ },
+ "js.shellui.the-bi-dung-khac-thi-nen": {
+  "t": "体が用に剋される場合は、どうすればよいですか？",
+  "h": "197d34a9"
+ },
  "js.shellui.the-nao-thay": {
   "t": " はどうでしょうか、先生？",
   "h": "b144d974"
@@ -3495,9 +5375,25 @@
   "t": "命盤を追加：",
   "h": "77e87b1d"
  },
+ "js.shellui.theo-gio-hien-tai": {
+  "t": "現在の時刻で",
+  "h": "ebb251cc"
+ },
+ "js.shellui.theo-mot-con-so": {
+  "t": "数字で",
+  "h": "6f19ed96"
+ },
  "js.shellui.thi": {
   "t": " なら",
   "h": "084e1779"
+ },
+ "js.shellui.tho": {
+  "t": "土",
+  "h": "9a0da463"
+ },
+ "js.shellui.thoi-diem-tuy-chon": {
+  "t": "日時（任意）",
+  "h": "9ed07939"
  },
  "js.shellui.thu-gon": {
   "t": "縮小",
@@ -3515,17 +5411,121 @@
   "t": "再試行",
   "h": "e353f2f3"
  },
+ "js.shellui.thu-lai-giup-con-nhe": {
+  "t": " もう一度お試しください。",
+  "h": "96832959"
+ },
+ "js.shellui.thu-truyen-theo-phep": {
+  "t": "。取伝は**",
+  "h": "9ee2f319"
+ },
+ "js.shellui.thu-tuong-cua-toi": {
+  "t": "私の手相",
+  "h": "0af7a78d"
+ },
  "js.shellui.thu-vien-chung": {
   "t": "共有ライブラリ",
   "h": "404f456c"
+ },
+ "js.shellui.thuy": {
+  "t": "水",
+  "h": "f354741d"
+ },
+ "js.shellui.tiet": {
+  "t": "**、節気： ",
+  "h": "6b1922aa"
  },
  "js.shellui.tim-cong-cu-lenh": {
   "t": "ツール・コマンドを検索…",
   "h": "990f08e2"
  },
+ "js.shellui.tinh-nguoi-von-gan-nhau-do": {
+  "t": "性相近し、習い相遠し。",
+  "h": "e7a0b30c"
+ },
+ "js.shellui.tinh-tuong-can-da-tap-tuong": {
+  "t": "性相近し、習い相遠し。",
+  "h": "424fc2a7"
+ },
+ "js.shellui.toi-se-luan-theo-cau-hoi": {
+  "t": "。ご質問に沿って鑑定します。",
+  "h": "e0c8f943"
+ },
+ "js.shellui.toi-se-luan-theo-cau-hoi-n3t1": {
+  "t": "**。ご質問に沿って鑑定します。",
+  "h": "f2bafbac"
+ },
+ "js.shellui.toi-se-luan-theo-viec-ban": {
+  "t": " ご質問の内容に沿って鑑定します。",
+  "h": "58e203d6"
+ },
+ "js.shellui.toi-thuoc-season-nao": {
+  "t": "私はどのシーズンですか？",
+  "h": "b46bd5f3"
+ },
+ "js.shellui.ton-tu-binh-phap": {
+  "t": "孫子『兵法』",
+  "h": "87b28278"
+ },
+ "js.shellui.tra-loi-cau-hoi-o-tren": {
+  "t": "上の質問にお答えください…",
+  "h": "6bc13f17"
+ },
+ "js.shellui.trang-diem": {
+  "t": "メイク",
+  "h": "b67e6b3f"
+ },
+ "js.shellui.trang-diem-anh-huong-van-khi": {
+  "t": "メイクは運気にどう影響しますか？",
+  "h": "a175f487"
+ },
+ "js.shellui.trang-diem-yk4l": {
+  "t": "メイク — ",
+  "h": "eda12e71"
+ },
+ "js.shellui.trang-phuc-theo-ngay": {
+  "t": "日ごとの服装 — ",
+  "h": "7fd98ca1"
+ },
+ "js.shellui.tri-chi-gia-bat-nhu-hieu": {
+  "t": "之を知る者は之を好む者に如かず、之を好む者は之を楽しむ者に如かず。",
+  "h": "91dea6b3"
+ },
+ "js.shellui.tri-ky-tri-bi-bach-chien": {
+  "t": "彼を知り己を知れば、百戦殆うからず。",
+  "h": "a85650be"
+ },
  "js.shellui.trinh-duyet-ben-trong": {
   "t": "アプリ内ブラウザ",
   "h": "28553859"
+ },
+ "js.shellui.trong-hoa-co-mam-phuc-trong": {
+  "t": "禍は福の倚る所、福は禍の伏す所。",
+  "h": "fa956882"
+ },
+ "js.shellui.truc": {
+  "t": "— 十二直：**",
+  "h": "6f3f9038"
+ },
+ "js.shellui.truc-phu": {
+  "t": "、値符：**",
+  "h": "16c60f0e"
+ },
+ "js.shellui.truc-phu-truc-su-noi-len": {
+  "t": "値符・値使は何を示していますか？",
+  "h": "c69b295c"
+ },
+ "js.shellui.truc-su": {
+  "t": "**、値使：**",
+  "h": "fae13856"
+ },
+ "js.shellui.truc-than-la-gi": {
+  "t": "十二直とは何ですか？",
+  "h": "47cc8c8c"
+ },
+ "js.shellui.truong-phai-noi-tot": {
+  "t": " 派が吉と判断",
+  "h": "ba324e22"
  },
  "js.shellui.tu-tru-cua": {
   "t": "**",
@@ -3543,6 +5543,22 @@
   "t": "<div><b>明宝紫微斗数</b><span>紫微明寶 · tuviminhbao.com</span>",
   "h": "0326cda1"
  },
+ "js.shellui.tuc": {
+  "t": "、すなわち**",
+  "h": "2b564351"
+ },
+ "js.shellui.tuoi-nao-hop-tuoi-nao-khac": {
+  "t": "どの干支が合い、どの干支が剋しますか？",
+  "h": "06343f22"
+ },
+ "js.shellui.tuoi-toi-co-bi-xung-ngay": {
+  "t": "私の干支は、この日と相冲しますか？",
+  "h": "e7d32d0b"
+ },
+ "js.shellui.tuong-mat-co-thay-doi-duoc": {
+  "t": "顔相は変えられますか？",
+  "h": "602a11f2"
+ },
  "js.shellui.tuviminhbao-com": {
   "t": "tuviminhbao.com",
   "h": "c8dbdef2"
@@ -3551,9 +5567,93 @@
   "t": "このアプリ",
   "h": "cba1a9e4"
  },
+ "js.shellui.uu-tien-lam-gi-truoc": {
+  "t": "何を優先すべきですか？",
+  "h": "f3cab683"
+ },
  "js.shellui.va": {
   "t": "** と **",
   "h": "4f833f73"
+ },
+ "js.shellui.van-thang-chon-ngay": {
+  "t": "月運・吉日選び",
+  "h": "78fbc71e"
+ },
+ "js.shellui.vat-pham-nao-nen-mua-truoc": {
+  "t": "どのアイテムから買うべきですか？",
+  "h": "85fe11d3"
+ },
+ "js.shellui.vat-pham-phong-thuy-nao-nen": {
+  "t": "身につけるとよい風水アイテムは？",
+  "h": "024bffb6"
+ },
+ "js.shellui.vd-27": {
+  "t": "例：27",
+  "h": "4afd7b36"
+ },
+ "js.shellui.vd-viec-nay-nen-tien-hay": {
+  "t": "例：この件は進めるべきか、退くべきか？",
+  "h": "28527203"
+ },
+ "js.shellui.vi-sao-da-toi-thuoc-loai": {
+  "t": "なぜ私の肌はこのタイプなのですか？",
+  "h": "92ad930f"
+ },
+ "js.shellui.vi-sao-diem-hien-tai-thap": {
+  "t": "なぜ今のスコアは低いのですか？",
+  "h": "6c51a2da"
+ },
+ "js.shellui.vi-sao-kieu-nay-hop-mat": {
+  "t": "なぜこのスタイルが私の顔に合うのですか？",
+  "h": "e507a96f"
+ },
+ "js.shellui.vi-sao-menh-toi-hop-mau": {
+  "t": "なぜ私の本命はこの色に合うのですか？",
+  "h": "7ef6e8bc"
+ },
+ "js.shellui.vi-sao-nam-do-hop-ca": {
+  "t": "なぜその年は父母どちらにも合うのですか？",
+  "h": "bc9256b2"
+ },
+ "js.shellui.vi-sao-nen-tranh-kieu-nay": {
+  "t": "なぜこのスタイルは避けた方がよいのですか？",
+  "h": "c8ccd29d"
+ },
+ "js.shellui.vi-sao-nen-tranh-mau-nay": {
+  "t": "なぜこの色は避けた方がよいのですか？",
+  "h": "8162b54f"
+ },
+ "js.shellui.vi-sao-ngay-nay-khac-menh": {
+  "t": "なぜこの日は私の本命を剋すのですか？",
+  "h": "a98c2e50"
+ },
+ "js.shellui.vi-sao-phong-cach-nay-hop": {
+  "t": "なぜこのスタイルが私に合うのですか？",
+  "h": "7ed2d820"
+ },
+ "js.shellui.vi-sao-toi-thuoc-season-nay": {
+  "t": "なぜ私はこのシーズンなのですか？",
+  "h": "fd530a4e"
+ },
+ "js.shellui.vi-sao-tranh-ngay-ki": {
+  "t": "なぜ凶日を避けるのですか？",
+  "h": "2cc8c854"
+ },
+ "js.shellui.vi-tri-thu-ngan-nen-dat": {
+  "t": "レジはどこに置くとよいですか？",
+  "h": "3e0eb3b7"
+ },
+ "js.shellui.viec-can-chon-ngay": {
+  "t": "吉日を選びたい用件",
+  "h": "e84816a6"
+ },
+ "js.shellui.viec-cua-toi-nen-di-huong": {
+  "t": "私の用件には、どの方位へ行くとよいですか？",
+  "h": "72ff459d"
+ },
+ "js.shellui.viec-nay-thanh-hay-bai": {
+  "t": "この件は成功しますか、失敗しますか？",
+  "h": "fa905597"
  },
  "js.shellui.vo": {
   "t": "妻",
@@ -3567,6 +5667,30 @@
   "t": "たった今",
   "h": "d1a7c7fa"
  },
+ "js.shellui.vui-long-nhap-du-ho-va": {
+  "t": "お子さま・父・母の姓と生まれ年を、すべて入力してください。",
+  "h": "a40f12bf"
+ },
+ "js.shellui.vui-long-nhap-du-nam-sinh": {
+  "t": "父・母の生まれ年を、どちらも入力してください。",
+  "h": "76f77027"
+ },
+ "js.shellui.vui-long-nhap-ho-ten-nam": {
+  "t": "氏名、生まれ年、予定の月と年を入力してください。",
+  "h": "d60f4f07"
+ },
+ "js.shellui.vui-long-nhap-nam-sinh": {
+  "t": "生まれ年を入力してください。",
+  "h": "a44b0170"
+ },
+ "js.shellui.vui-long-nhap-nam-sinh-nguoi": {
+  "t": "オーナーの生まれ年を入力し、業種を選んでください。",
+  "h": "20fcc631"
+ },
+ "js.shellui.vui-long-nhap-nam-sinh-va": {
+  "t": "生まれ年と出発予定日を入力してください。",
+  "h": "57ef031d"
+ },
  "js.shellui.xem": {
   "t": "見る →",
   "h": "1e272706"
@@ -3574,6 +5698,18 @@
  "js.shellui.xem-bang": {
   "t": " — 鑑定法： ",
   "h": "b50dfad0"
+ },
+ "js.shellui.xem-bat-trach": {
+  "t": "八宅を見る →",
+  "h": "ed0e7729"
+ },
+ "js.shellui.xem-cho-ca-nha": {
+  "t": "家族みんなで見る",
+  "h": "b1dd36ab"
+ },
+ "js.shellui.xem-gio-hoang-dao": {
+  "t": "黄道吉時を見る →",
+  "h": "c5fbd65a"
  },
  "js.shellui.xem-kem": {
   "t": "あわせて見る：",
@@ -3587,6 +5723,42 @@
   "t": "明宝紫微斗数でこの結果を見る：",
   "h": "b03d8f15"
  },
+ "js.shellui.xem-kim-lau": {
+  "t": "金楼を見る →",
+  "h": "0b820f74"
+ },
+ "js.shellui.xem-mau-hop-menh": {
+  "t": "本命に合う色を見る →",
+  "h": "14856f69"
+ },
+ "js.shellui.xem-mau-hop-menh-gw03": {
+  "t": "本命に合う色を見る",
+  "h": "88f7c677"
+ },
+ "js.shellui.xem-nam-sinh-con": {
+  "t": "お子さまの生まれ年を見る →",
+  "h": "a1c0ecd3"
+ },
+ "js.shellui.xem-nap-am": {
+  "t": "納音を見る →",
+  "h": "cfa1071d"
+ },
+ "js.shellui.xem-nen-can-chi": {
+  "t": "干支の土台を見る →",
+  "h": "b2fd43ff"
+ },
+ "js.shellui.xem-nen-menh": {
+  "t": "命の土台を見る →",
+  "h": "17fdf9e1"
+ },
+ "js.shellui.xem-nen-menh-chu": {
+  "t": "オーナーの命の土台を見る →",
+  "h": "c399d0a8"
+ },
+ "js.shellui.xem-ngay-tot": {
+  "t": "吉日を見る →",
+  "h": "178eb8fe"
+ },
  "js.shellui.xem-phan-luan-giai-cua-thay": {
   "t": "この命盤についての先生の鑑定をご覧ください： ",
   "h": "8b9556e2"
@@ -3595,17 +5767,49 @@
   "t": "この命盤についての先生の鑑定をご覧ください：",
   "h": "6b8b5dbb"
  },
+ "js.shellui.xem-trang-phuc": {
+  "t": "服装を見る →",
+  "h": "0c807b67"
+ },
+ "js.shellui.xem-trang-phuc-t5sj": {
+  "t": "服装を見る",
+  "h": "0e97c9c6"
+ },
  "js.shellui.xem-tron": {
   "t": "全文を見る",
   "h": "18cdbfde"
+ },
+ "js.shellui.xin-loi": {
+  "t": "申し訳ありません。 ",
+  "h": "2a951ed5"
+ },
+ "js.shellui.xin-loi-edlu": {
+  "t": "申し訳ありません。",
+  "h": "f08350a2"
+ },
+ "js.shellui.xin-loi-fxsy": {
+  "t": "<p>申し訳ありません。 ",
+  "h": "6a7e27cd"
  },
  "js.shellui.xin-loi-gap-truc-trac": {
   "t": "申し訳ありません、問題が発生しました： ",
   "h": "7b2227c3"
  },
+ "js.shellui.xin-loi-ket-noi-truc-trac": {
+  "t": "<p>申し訳ありません。通信に不具合が出ています。もう一度お試しください。</p>",
+  "h": "f7335158"
+ },
  "js.shellui.xoa-phien": {
   "t": "セッションを削除",
   "h": "72d604e7"
+ },
+ "js.shellui.xong-roi-lich-tu-cap-nhat": {
+  "t": "<p>完了です。予定は毎日自動で更新されるので、ほかに何もする必要はありません。</p>",
+  "h": "9363d86a"
+ },
+ "js.shellui.xuat-hanh-nen-di-gio-nao": {
+  "t": "出発は何時がよいですか？",
+  "h": "d74e4f3f"
  },
  "js.shellui.zalo": {
   "t": "Zalo",
@@ -4075,6 +6279,26 @@
   "t": "/100 — どう受け止めればよいですか？",
   "h": "956024e9"
  },
+ "js.xemtuoi.8-chieu-hoa-hop": {
+  "t": "8項目の<br>調和",
+  "h": "247f6597"
+ },
+ "js.xemtuoi.8-chieu-hop-tac": {
+  "t": "8項目の<br>協力",
+  "h": "078d4280"
+ },
+ "js.xemtuoi.ai-nen-nam-tai-chinh": {
+  "t": "誰が財布を握るべき？",
+  "h": "d217723d"
+ },
+ "js.xemtuoi.ai-nen-nam-tai-chinh-45g2": {
+  "t": "財布を<br>握る人",
+  "h": "8fb8be89"
+ },
+ "js.xemtuoi.binh-hoa": {
+  "t": "穏やか",
+  "h": "e53232c5"
+ },
  "js.xemtuoi.ca": {
   "t": " 全 ",
   "h": "7eff84cf"
@@ -4083,6 +6307,18 @@
   "t": " 具体的な対処法は、詳しい鑑定にあります。",
   "h": "bb461286"
  },
+ "js.xemtuoi.cach-hoa-giai-diem-khac": {
+  "t": "相剋点の化解法は？",
+  "h": "eb83ed13"
+ },
+ "js.xemtuoi.cach-hoa-giai-khac": {
+  "t": "剋の<br>化解法",
+  "h": "9b942e43"
+ },
+ "js.xemtuoi.can-luu-y": {
+  "t": "要注意",
+  "h": "e177cd38"
+ },
  "js.xemtuoi.cham-8-yeu-to-hop-tac": {
   "t": "あなたと、これから一緒に事業を始める相手との間で、8つの協力要素を採点します。契約前の客観的な視点として。",
   "h": "fdda207e"
@@ -4090,6 +6326,10 @@
  "js.xemtuoi.cham-8-yeu-to-tuong-hop": {
   "t": "2つの命盤の間で、8つの相性要素を採点します。結婚を考えていて、はっきりした答えがほしいときにお使いください。",
   "h": "db3006a1"
+ },
+ "js.xemtuoi.chi-can-nam-sinh": {
+  "t": "生まれ年<br>だけでOK",
+  "h": "9f727504"
  },
  "js.xemtuoi.chieu": {
   "t": "観点 \"",
@@ -4111,6 +6351,14 @@
   "t": "最も相性の良い観点： ",
   "h": "3b6f195e"
  },
+ "js.xemtuoi.chieu-nao-dang-lo-nhat": {
+  "t": "いちばん気になる項目は？",
+  "h": "fa07e9c6"
+ },
+ "js.xemtuoi.chieu-nao-de-xung-dot-khi": {
+  "t": "協力するとき、衝突しやすい項目は？",
+  "h": "58449b93"
+ },
  "js.xemtuoi.chieu-thap-vi-sao": {
   "t": "観点「{label}」が低い（{score}/10）— 理由と対処法は？",
   "h": "3ab2ac81"
@@ -4123,6 +6371,10 @@
   "t": "夫 / Aさん",
   "h": "3fd2edae"
  },
+ "js.xemtuoi.chua-dung-duoc-anh-thu-lai": {
+  "t": "画像を作成できませんでした。少し待ってから、もう一度お試しください。",
+  "h": "f8055429"
+ },
  "js.xemtuoi.cung-menh": {
   "t": " · 命宮 ",
   "h": "ae7269b2"
@@ -4131,9 +6383,41 @@
   "t": "<br>命宮 ",
   "h": "2c272c79"
  },
+ "js.xemtuoi.da-so-tuoi": {
+  "t": "相性を比較：",
+  "h": "ab3ff10b"
+ },
+ "js.xemtuoi.da-so-tuong-hop": {
+  "t": "相性を鑑定：",
+  "h": "0d44035d"
+ },
+ "js.xemtuoi.da-xet-hop-tac": {
+  "t": "協力関係を判定：",
+  "h": "5662d902"
+ },
  "js.xemtuoi.dang-dung-anh": {
   "t": "画像を作成中…",
   "h": "7bce9760"
+ },
+ "js.xemtuoi.dang-so-tuoi": {
+  "t": "年齢を比べています…",
+  "h": "5d169757"
+ },
+ "js.xemtuoi.dang-so-tuong-hop": {
+  "t": "相性を鑑定しています…",
+  "h": "72bc4cb1"
+ },
+ "js.xemtuoi.dang-xet-hop-tac": {
+  "t": "協力関係を判定しています…",
+  "h": "e614a918"
+ },
+ "js.xemtuoi.de-va-cham-o-dau": {
+  "t": "どこでぶつかりやすいですか？",
+  "h": "40fb0c76"
+ },
+ "js.xemtuoi.diem-de-xung-dot": {
+  "t": "衝突<br>しやすい点",
+  "h": "5f85b2fd"
  },
  "js.xemtuoi.doi-tac-a": {
   "t": "パートナーA",
@@ -4151,6 +6435,10 @@
   "t": "1人目のパートナー",
   "h": "6efa76df"
  },
+ "js.xemtuoi.duong-con-cai-cua-hai-nguoi": {
+  "t": "お二人のお子さまの運はどうですか？",
+  "h": "bde6a4ed"
+ },
  "js.xemtuoi.gui-ket-qua-nay-cho": {
   "t": "この結果を<b>",
   "h": "016401eb"
@@ -4159,13 +6447,37 @@
   "t": "2つの命盤",
   "h": "36cfb3c6"
  },
+ "js.xemtuoi.hai-nguoi-co-hop-lam-vo": {
+  "t": "お二人は夫婦として合いますか？",
+  "h": "652abed1"
+ },
  "js.xemtuoi.hai-nguoi-hoa-hop": {
   "t": "ふたりの相性 ",
   "h": "1ddd5d3b"
  },
+ "js.xemtuoi.hai-nguoi-hop-lam-an-chung": {
+  "t": "お二人は共同で事業をするのに向いていますか？",
+  "h": "e895dc5e"
+ },
+ "js.xemtuoi.hai-nguoi-nay-co-hop-nhau": {
+  "t": "お二人は合いますか？",
+  "h": "6ed6138f"
+ },
  "js.xemtuoi.hoa-hop": {
   "t": "** — 相性 **",
   "h": "b8c22dab"
+ },
+ "js.xemtuoi.hop-nhau-o-mat-nao": {
+  "t": "どの面で相性が合いますか？",
+  "h": "d4b3d2f5"
+ },
+ "js.xemtuoi.ket-qua-tuc-thi": {
+  "t": "結果が<br>すぐに",
+  "h": "50a61566"
+ },
+ "js.xemtuoi.kha-hop": {
+  "t": "まずまず合う",
+  "h": "feeb19b6"
  },
  "js.xemtuoi.loi-khi-so-tuoi": {
   "t": "相性の比較でエラーが発生しました：",
@@ -4183,6 +6495,10 @@
   "t": "最も強い： ",
   "h": "b67b37ca"
  },
+ "js.xemtuoi.mien-phi-hoan-toan": {
+  "t": "完全<br>無料",
+  "h": "a0a85cd4"
+ },
  "js.xemtuoi.nap-am": {
   "t": " · 納音 ",
   "h": "c754b896"
@@ -4190,6 +6506,18 @@
  "js.xemtuoi.nap-am-jzle": {
   "t": "</b> · 納音 ",
   "h": "24107e5c"
+ },
+ "js.xemtuoi.nen-giu-khoang-cach-hay-gan": {
+  "t": "距離を置くべきか、寄り添うべきか？",
+  "h": "dc5da82d"
+ },
+ "js.xemtuoi.nen-gop-von-hay-chia-viec": {
+  "t": "出資し合うべきか、役割を分けるべきか？",
+  "h": "2f1d5a81"
+ },
+ "js.xemtuoi.ngu-hanh-con-cai": {
+  "t": "五行・<br>お子さま",
+  "h": "93e92978"
  },
  "js.xemtuoi.nguoi-a": {
   "t": "Aさん",
@@ -4207,6 +6535,14 @@
   "t": "1人目",
   "h": "955e7151"
  },
+ "js.xemtuoi.nhap-ngay-sinh-hai-doi-tac": {
+  "t": "共同経営者お二人の生年月日（西暦）を入力",
+  "h": "6e657e16"
+ },
+ "js.xemtuoi.nhap-ngay-sinh-hai-nguoi-duong": {
+  "t": "お二人の生年月日（西暦）を入力",
+  "h": "0a8681af"
+ },
  "js.xemtuoi.q1-a": {
   "t": "{p}（{ph}）の情報を教えてください。",
   "h": "12a20cf0"
@@ -4223,9 +6559,49 @@
   "t": "{ph}の生まれた時刻は何時ですか？",
   "h": "b2facf82"
  },
+ "js.xemtuoi.quet-ma-so-tuoi-cua-ban": {
+  "t": "コードを読み取って、あなたの相性も診断",
+  "h": "9731d82c"
+ },
+ "js.xemtuoi.rat-hop": {
+  "t": "とても合う",
+  "h": "36d3f434"
+ },
  "js.xemtuoi.ru": {
   "t": "誘う：",
   "h": "797be799"
+ },
+ "js.xemtuoi.so-hoa-hop-hai-la-so": {
+  "t": "2つの命盤の調和を、古法で比べます",
+  "h": "d715ccd1"
+ },
+ "js.xemtuoi.so-hop-hai-nguoi-bat-ky": {
+  "t": "任意の2人の相性を、古法で比べます",
+  "h": "aee0cb90"
+ },
+ "js.xemtuoi.so-hop-hai-nguoi-khi-bat": {
+  "t": "手を組むお二人の相性を、古法で比べます",
+  "h": "7c99a229"
+ },
+ "js.xemtuoi.so-tuoi": {
+  "t": "相性を比べる →",
+  "h": "99f5e0bd"
+ },
+ "js.xemtuoi.so-tuoi-ij72": {
+  "t": "相性を比べる",
+  "h": "602b2d86"
+ },
+ "js.xemtuoi.so-tuong-hop": {
+  "t": "相性を鑑定 →",
+  "h": "8d280558"
+ },
+ "js.xemtuoi.so-tuong-hop-yeo0": {
+  "t": "相性を鑑定",
+  "h": "a24be386"
+ },
+ "js.xemtuoi.tai-anh-chia-se-9-16": {
+  "t": "⬇ シェア用画像を保存（9:16）",
+  "h": "9e425572"
  },
  "js.xemtuoi.tong-diem": {
   "t": "\n総合点 ",
@@ -4234,6 +6610,10 @@
  "js.xemtuoi.tra-loi-thay-nhap-ngay-sinh": {
   "t": "チャット欄で先生に答えて、{a} と {b} の生年月日を入力してください。",
   "h": "f2617440"
+ },
+ "js.xemtuoi.tuong-hop-tuoi": {
+  "t": "相性鑑定",
+  "h": "e9fd3f4c"
  },
  "js.xemtuoi.tuong-hop-tuoi-tu-vi-minh": {
   "t": "相性鑑定 — 明宝紫微斗数",
@@ -4255,17 +6635,37 @@
   "t": "妻 / Bさん",
   "h": "714d3fc9"
  },
+ "js.xemtuoi.vui-long-nhap-day-du-ngay": {
+  "t": "お二人の生年月日（年・月・日）をすべて入力してください。",
+  "h": "804aebb6"
+ },
  "js.xemtuoi.xem-ho-to-mo-la-muon": {
   "t": "</b>さんに送りましょう。きっとご自身の命盤も調べたくなります。</div>",
   "h": "86627163"
+ },
+ "js.xemtuoi.xem-hop-tac": {
+  "t": "協力関係を見る →",
+  "h": "5a2bb9e9"
+ },
+ "js.xemtuoi.xem-tuoi-lam-an": {
+  "t": "ビジネスの相性",
+  "h": "791a32dc"
  },
  "js.xemtuoi.xem-tuoi-lam-an-tu-vi": {
   "t": "ビジネスの相性 — 明宝紫微斗数",
   "h": "6a071dab"
  },
+ "js.xemtuoi.xem-tuoi-vo-chong": {
+  "t": "夫婦の相性",
+  "h": "d6d67d5c"
+ },
  "js.xemtuoi.xem-tuoi-vo-chong-tu-vi": {
   "t": "夫婦の相性 — 明宝紫微斗数",
   "h": "4fd9f105"
+ },
+ "js.xemtuoi.xet-hop-tac": {
+  "t": "協力関係を判定",
+  "h": "d3041c86"
  },
  "js.xemtuoi.xet-nhanh-hai-tuoi-co-hop": {
   "t": "生まれ年だけで、お二人の年の相性をさっと確認できます。すぐに答えが出ます（詳しい鑑定ではありません）。",
