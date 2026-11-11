@@ -56,7 +56,7 @@
   "h": "315e8a7f"
  },
  "battu.luan-giai-chuyen-sau-ton-luong": {
-  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b>詳しい鑑定 →</b></span> <small>必要クレジット <span class=\"vnd\" data-tvp-price-vnd=\"tu-binh\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"tu-binh\">…</span> 両)</span></small>",
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b>詳しい鑑定 →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"tu-binh\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"tu-binh\">…</span> 両)</span></small>",
   "h": "cd1895af"
  },
  "battu.luan-giai-tu-vi": {
@@ -106,6 +106,142 @@
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "お話を聞かせてください。明宝が15人の先生の中から最適な先生をご案内します：紫微斗数の命盤、四柱推命、相性、命名、吉日選び。",
   "h": "0f564294"
+ },
+ "chutrinh.9-dai-van-tron-doi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>生涯の<br>9つの大運</span>",
+  "h": "5ab04ae7"
+ },
+ "chutrinh.9-dai-van-tron-doi-khong": {
+  "t": "生涯の9つの大運は一本道ではありません。前へ進む時期もあれば、慎重に守る時期もあります。あなたの命盤から、今がどの局面か、次に何をすべきかを読み解きます。",
+  "h": "47da40fe"
+ },
+ "chutrinh.ban-chu-trinh-cuoc-doi-mau": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>人生のサイクル　サンプル版</b><span>サンプル命盤の詳細な鑑定をPDFでダウンロードして、実際の内容を事前にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chu-trinh-cuoc-doi.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "69bf92cc"
+ },
+ "chutrinh.chang-thuan-chang-can-trong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>順調な時期、<br>慎重な時期</span>",
+  "h": "268f5efd"
+ },
+ "chutrinh.chu-trinh-cuoc-doi": {
+  "t": "人生のサイクル",
+  "h": "38c0c6ce"
+ },
+ "chutrinh.chu-trinh-cuoc-doi-9-dai": {
+  "t": "<b>人生のサイクル</b><span>9つの大運と今年の小運を、古法のスコアで読み解きます</span>",
+  "h": "9799aabe"
+ },
+ "chutrinh.chu-trinh-cuoc-doi-tu-vi": {
+  "t": "人生のサイクル — 明宝紫微斗数",
+  "h": "90ddc2f5"
+ },
+ "chutrinh.la-so": {
+  "t": "命盤 →",
+  "h": "2d56714d"
+ },
+ "chutrinh.luan-giai-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hourglass\"></span><b id=\"btnGoLabel\">鑑定する →</b></span> <small>無料</small>",
+  "h": "e4e89914"
+ },
+ "chutrinh.nhap-ngay-sinh-va-nam-muon": {
+  "t": "生年月日と、鑑定したい年を入力してください。9つの大運とその年の小運を算出し、局面ごとに読み解きます。",
+  "h": "b0296247"
+ },
+ "chutrinh.nhap-thong-tin-de-lap-la": {
+  "t": "情報を入力して、命盤の作成と人生のサイクルの鑑定を行います",
+  "h": "513b4cd4"
+ },
+ "chutrinh.soi-9-dai-van-tron-doi": {
+  "t": "生涯の9つの大運と今年の小運を、古法のスコアで読み解きます。局面ごとの天時・地利・人和を見て、気になる時期は「先生に聞く」でさらに深掘りできます。",
+  "h": "7db3757c"
+ },
+ "chutrinh.tieu-van-nam-xem": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>鑑定年の<br>小運</span>",
+  "h": "d0e7d2f5"
+ },
+ "congcu.3-ngay-toi": {
+  "t": "今後3日間",
+  "h": "a9fe9d66"
+ },
+ "congcu.chia-se": {
+  "t": "シェア",
+  "h": "1cb95080"
+ },
+ "congcu.cong-cu-tu-vi-minh-bao": {
+  "t": "ツール — 明宝紫微斗数",
+  "h": "6f708e6c"
+ },
+ "congcu.cong-cu-van-hom-nay-va": {
+  "t": "<b>ツール</b><span>今日の運勢と、古法にもとづくすべてのツール</span>",
+  "h": "33619403"
+ },
+ "congcu.cot-loi-cua-tu-vi-minh": {
+  "t": "明宝紫微斗数の強み",
+  "h": "4d2f9387"
+ },
+ "congcu.dang-tai-goi-y": {
+  "t": "候補を読み込み中",
+  "h": "c5a27e63"
+ },
+ "congcu.du-lieu-that-270-000-ho": {
+  "t": "<span class=\"ic\" data-icon=\"globe\"></span><b>実データ</b><span>270,000件以上の記録</span>",
+  "h": "eb3da539"
+ },
+ "congcu.hoi-thay": {
+  "t": "先生に聞く",
+  "h": "c9ffbbaf"
+ },
+ "congcu.hoi-thay-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span>今すぐ先生に聞く →",
+  "h": "e0b92ed5"
+ },
+ "congcu.hoi-thay-ve-van-menh-la": {
+  "t": "運命、紫微斗数の命盤、四柱推命、相性、名づけ、吉日選びまで、ひとつの会話で先生に聞けます。",
+  "h": "14b92d4e"
+ },
+ "congcu.hon-270-000-la-so-nguoi": {
+  "t": "270,000件以上の実在の人物の命盤を検証し、現代的な鑑定手法と古来の知恵を組み合わせて分析。暮らしに役立つ、信頼できる見立てをお届けします。",
+  "h": "4fd47b6e"
+ },
+ "congcu.khoa-hoc-tu-du-lieu-that": {
+  "t": "実データに基づく科学を、実際の暮らしのために",
+  "h": "9288a0c9"
+ },
+ "congcu.moi-ngay-mot-chi-dan-song": {
+  "t": "<span>毎日ひとつの道しるべで、より主体的に生きる</span>",
+  "h": "8b3a21d1"
+ },
+ "congcu.phuong-phap-chuan-co-hoc-hien": {
+  "t": "<span class=\"ic\" data-icon=\"shield-check\"></span><b>確かな手法</b><span>古学 × 現代</span>",
+  "h": "3a6260d0"
+ },
+ "congcu.so-lieu-ngay-do-co-phap": {
+  "t": "日ごとの数値は古法で正確に算出しています。あなただけの運勢は、先生に聞いてみてください。",
+  "h": "0445852a"
+ },
+ "congcu.tai-anh-9-16": {
+  "t": "画像を保存 (9:16)",
+  "h": "aad434c7"
+ },
+ "congcu.tim-cong-cu-la-so-bat": {
+  "t": "ツールを検索 — 命盤、四柱推命、相性…",
+  "h": "d1a666e1"
+ },
+ "congcu.ung-dung-thuc-tien-vi-cuoc": {
+  "t": "<span class=\"ic\" data-icon=\"users\"></span><b>実生活への応用</b><span>より良い暮らしのために</span>",
+  "h": "082de4b1"
+ },
+ "congcu.van-hom-nay": {
+  "t": "今日の運勢",
+  "h": "386c4c24"
+ },
+ "congcu.van-hom-nay-la-so-hay": {
+  "t": "今日の運勢、命盤、その他お悩みなど何でも…",
+  "h": "0b093636"
+ },
+ "congcu.ve-hom-nay": {
+  "t": "← 今日に戻る",
+  "h": "24faf89e"
  },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 参考情報としての性質",
@@ -272,7 +408,7 @@
   "h": "7e131aa8"
  },
  "home.dien-tuong-xem-tuong-mat": {
-  "t": "面相<br>顔相を見る",
+  "t": "面相<br>顔を見る",
   "h": "e690108d"
  },
  "home.dieu-khong": {
@@ -612,7 +748,7 @@
   "h": "cdd32e9c"
  },
  "home.thu-tuong-xem-chi-tay": {
-  "t": "手相<br>手相を見る",
+  "t": "手相<br>手のひらを見る",
   "h": "7abfb95d"
  },
  "home.thu-vien-100-000-la-so": {
@@ -730,6 +866,346 @@
  "home.xem-tuong": {
   "t": "相術",
   "h": "ae8ee50b"
+ },
+ "js.auth.bam-vao-link-trong-email-de": {
+  "t": "— メール内のリンクをクリックして完了すると、このページに自動で戻ります。",
+  "h": "8493b548"
+ },
+ "js.auth.ban-chua-luu-tai-khoan-dang": {
+  "t": "アカウントが保存されていません。ログアウトすると、両と履歴がすべて失われます。ログアウトしますか？",
+  "h": "e5c0eb4f"
+ },
+ "js.auth.ban-dang-dung-phien-tam-luong": {
+  "t": "一時セッションをご利用中です。ここにある両と履歴は、ブラウザのデータを削除したり端末を変えたりすると失われます。メールアドレスとパスワードを追加すれば、今ある内容はそのまま保管できます。",
+  "h": "41a9e315"
+ },
+ "js.auth.ban-dang-mo-trong-ung-dung": {
+  "t": "FacebookやInstagramのアプリ内で開いているため、ここではGoogle／Facebookログインを使えません。下のメールアドレスでの登録をご利用ください（1分もかかりません）。",
+  "h": "e9829563"
+ },
+ "js.auth.bang-cach-dang-ky-ban-dong": {
+  "t": "登録すると、明宝紫微斗数の利用規約に同意したものとみなされます。",
+  "h": "a349cfa3"
+ },
+ "js.auth.chao-mung-ban-da-nhan-luong": {
+  "t": "ようこそ！<strong>両</strong>をプレゼントしました。「先生に聞く」でお試しください",
+  "h": "3ebea363"
+ },
+ "js.auth.chua-luu-tai-khoan": {
+  "t": "アカウント未保存",
+  "h": "84b20565"
+ },
+ "js.auth.da-chat-voi-thay-qua-zalo": {
+  "t": "ZaloやMessengerで先生とチャット済みですか？メッセージでログイン →",
+  "h": "4a00d63e"
+ },
+ "js.auth.da-gui-email-xac-nhan-toi": {
+  "t": "確認メールを送信しました：",
+  "h": "213802a7"
+ },
+ "js.auth.da-luu-kiem-tra-email-de": {
+  "t": "✓ 保存しました。必要に応じて、メールを確認して承認してください",
+  "h": "feed02da"
+ },
+ "js.auth.dang-ky": {
+  "t": "登録",
+  "h": "d07fbd12"
+ },
+ "js.auth.dang-ky-that-bai": {
+  "t": "登録に失敗しました",
+  "h": "e7ab9de2"
+ },
+ "js.auth.dang-nhap": {
+  "t": "ログイン",
+  "h": "1d5caf09"
+ },
+ "js.auth.dang-nhap-that-bai": {
+  "t": "ログインに失敗しました",
+  "h": "fb63ae22"
+ },
+ "js.auth.email-nay-da-co-tai-khoan": {
+  "t": "このメールアドレスにはすでにアカウントがあります。パスワードを入力してログインしてください。",
+  "h": "d81bc47f"
+ },
+ "js.auth.ho-so-cua-toi": {
+  "t": "マイプロフィール",
+  "h": "fc70cfcb"
+ },
+ "js.auth.hoac": {
+  "t": "または",
+  "h": "2797f4b3"
+ },
+ "js.auth.khong-luu-duoc-tai-khoan": {
+  "t": "アカウントを保存できませんでした。",
+  "h": "066c8d0d"
+ },
+ "js.auth.khong-luu-duoc-vui-long-thu": {
+  "t": "保存できませんでした。もう一度お試しください。",
+  "h": "5b07f73c"
+ },
+ "js.auth.luong": {
+  "t": "… 両",
+  "h": "cbf99bc6"
+ },
+ "js.auth.luong-xu": {
+  "t": "両 · コイン",
+  "h": "e4e551dd"
+ },
+ "js.auth.luu-tai-khoan": {
+  "t": "アカウントを保存",
+  "h": "8d7fe16a"
+ },
+ "js.auth.luu-tai-khoan-tranh-mat-luong": {
+  "t": "⚠ アカウントを保存して、両を失わないようにする",
+  "h": "82a1d916"
+ },
+ "js.auth.ma-hop-le-tang-luong": {
+  "t": "✓ 有効なコードです。アカウント作成時に{credits}両をプレゼントします。",
+  "h": "9849e4dd"
+ },
+ "js.auth.ma-khuyen-mai-neu-co": {
+  "t": "プロモーションコード（任意）",
+  "h": "db43ff7b"
+ },
+ "js.auth.ma-nay-da-het-han-hoac": {
+  "t": "このコードは有効期限切れか、利用上限に達しています。",
+  "h": "608f19cd"
+ },
+ "js.auth.mat-khau-it-nhat-6-ky": {
+  "t": "パスワードは6文字以上にしてください。",
+  "h": "5593257f"
+ },
+ "js.auth.mat-khau-it-nhat-6-ky-p3y1": {
+  "t": "パスワード（6文字以上）",
+  "h": "8c43eb34"
+ },
+ "js.auth.nap": {
+  "t": "+ チャージ",
+  "h": "e9ce1f06"
+ },
+ "js.auth.nhanh-nhat": {
+  "t": "最速",
+  "h": "b4ba025d"
+ },
+ "js.auth.phien-da-het-han-vui-long": {
+  "t": "セッションの有効期限が切れました。もう一度お試しください。",
+  "h": "34b61273"
+ },
+ "js.auth.tang-luong": {
+  "t": "両プレゼント",
+  "h": "fdf6261f"
+ },
+ "js.auth.tao-tai-khoan": {
+  "t": "アカウントを作成",
+  "h": "98f4b91a"
+ },
+ "js.auth.tiep-tuc-voi-facebook": {
+  "t": "Facebookで続ける",
+  "h": "5e982ec8"
+ },
+ "js.auth.tiep-tuc-voi-google": {
+  "t": "Googleで続ける",
+  "h": "62ea2d29"
+ },
+ "js.auth.vui-long-dien-email-va-mat": {
+  "t": "メールアドレスとパスワードを入力してください。",
+  "h": "d84b9abd"
+ },
+ "js.battu.ban-muon-thay-dao-sau-dieu": {
+  "t": "どれから先生に深く見てほしいですか？",
+  "h": "08cdf1d4"
+ },
+ "js.battu.da-an-tu-tru": {
+  "t": "✓ 命式を作成しました",
+  "h": "845d9f25"
+ },
+ "js.battu.dang-an-tu-tru": {
+  "t": "命式を作成中…",
+  "h": "3a079d88"
+ },
+ "js.battu.dang-luan-giai": {
+  "t": "鑑定中…",
+  "h": "aa035f2b"
+ },
+ "js.battu.dang-luan-giai-phan": {
+  "t": "鑑定中：セクション",
+  "h": "5b228988"
+ },
+ "js.battu.lap-bat-tu": {
+  "t": "命式を作成 →",
+  "h": "6ba95ed1"
+ },
+ "js.battu.loi-khi-luan-giai-phan": {
+  "t": "エラー：セクション",
+  "h": "46fa5128"
+ },
+ "js.battu.loi-khi-tinh-bat-tu": {
+  "t": "四柱推命の計算でエラーが発生しました：",
+  "h": "0f394070"
+ },
+ "js.battu.luan-giai-hoan-tat": {
+  "t": "✓ 鑑定が完了しました",
+  "h": "8e9c2ae8"
+ },
+ "js.battu.thu-lai": {
+  "t": "↻ 再試行",
+  "h": "30508ad3"
+ },
+ "js.chat.ke-vai-dong-thoi-minh-bao": {
+  "t": "数行で大丈夫です。明宝が、15人の先生のチームからぴったりの先生をご案内します。",
+  "h": "e43855cc"
+ },
+ "js.chutrinh.chin-chang-dai-van-cot-cao": {
+  "t": "9つの大運の局面。棒の高さはエンジンのスコア、各局面にひとつのキーワード",
+  "h": "6b87e20d"
+ },
+ "js.chutrinh.luan-giai": {
+  "t": "鑑定する →",
+  "h": "a03abb8e"
+ },
+ "js.chutrinh.luan-giai-chuyen-sau": {
+  "t": "<b>詳しい鑑定 →</b>",
+  "h": "df2ecf55"
+ },
+ "js.home.dang-lap": {
+  "t": "作成中…",
+  "h": "b47d9598"
+ },
+ "js.home.hanh": {
+  "t": "五行：",
+  "h": "dc0810d8"
+ },
+ "js.home.khong-lap-duoc-thu-lai-sau": {
+  "t": "作成できませんでした。しばらくしてからもう一度お試しください。",
+  "h": "7855b0ef"
+ },
+ "js.home.ngay": {
+  "t": "日干支：",
+  "h": "e196e19b"
+ },
+ "js.home.ngay-binh": {
+  "t": "普通の日",
+  "h": "3e47de71"
+ },
+ "js.home.ngay-sinh-chua-hop-le": {
+  "t": "生年月日が正しくありません。",
+  "h": "feec7b22"
+ },
+ "js.home.ngay-tot": {
+  "t": "吉日",
+  "h": "cefb3c77"
+ },
+ "js.home.ngay-xau": {
+  "t": "凶日",
+  "h": "3fe05eab"
+ },
+ "js.home.so-lieu-rut-gon-thu-tai": {
+  "t": "— 簡易データです。しばらくしてから再読み込みしてください。",
+  "h": "84e3f4e7"
+ },
+ "js.home.thieu-ngay-thang-nam-sinh": {
+  "t": "生年月日が入力されていません。",
+  "h": "1ce95cff"
+ },
+ "js.home.van-hom-nay": {
+  "t": "今日の運勢",
+  "h": "386c4c24"
+ },
+ "js.home.van-ngay": {
+  "t": "運勢",
+  "h": "c082a900"
+ },
+ "js.home.xem-van-rieng-cua-toi": {
+  "t": "自分の運勢を見る →",
+  "h": "a669ddd6"
+ },
+ "js.laso.dang-an-sao": {
+  "t": "星を配置中...",
+  "h": "06275197"
+ },
+ "js.laso.dang-xuat": {
+  "t": "書き出し中...",
+  "h": "92b2d242"
+ },
+ "js.laso.gio-am": {
+  "t": "時辰：",
+  "h": "58bc0ba0"
+ },
+ "js.laso.lay-la-so": {
+  "t": "命盤を作成",
+  "h": "f7781d94"
+ },
+ "js.laso.tai-png": {
+  "t": "⬇ PNGで保存",
+  "h": "a5b32ccb"
+ },
+ "js.laso.vui-long-nhap-day-du-ngay": {
+  "t": "生年月日をすべて入力してください。",
+  "h": "2545b4dd"
+ },
+ "js.luangiai.an-la-so": {
+  "t": "▾ 命盤を隠す",
+  "h": "9f28e998"
+ },
+ "js.luangiai.bat-thong-bao-de-nhan-van": {
+  "t": "通知をオンにして、毎日の運勢を受け取る →",
+  "h": "ace576c9"
+ },
+ "js.luangiai.da-lap-la-so": {
+  "t": "✓ 命盤を作成しました",
+  "h": "0b838efd"
+ },
+ "js.luangiai.da-luu-la-so-nay-vao": {
+  "t": "✓ この命盤をあなたのアカウントに保存しました。",
+  "h": "5a2ac1c6"
+ },
+ "js.luangiai.dang-lap-la-so": {
+  "t": "命盤を作成中…",
+  "h": "fba688db"
+ },
+ "js.luangiai.dang-luan": {
+  "t": "鑑定中…",
+  "h": "d68f76a3"
+ },
+ "js.luangiai.dang-luan-giai-phan-1": {
+  "t": "鑑定中：セクション 1 /",
+  "h": "559646ca"
+ },
+ "js.luangiai.lap-la-so-luan-giai-ngay": {
+  "t": "命盤を作成して今すぐ鑑定 →",
+  "h": "edbdb6fc"
+ },
+ "js.luangiai.loi-khi-luan-giai": {
+  "t": "鑑定でエラーが発生しました：",
+  "h": "b251ca2c"
+ },
+ "js.luangiai.loi-phan": {
+  "t": "セクションのエラー",
+  "h": "9380a2a1"
+ },
+ "js.luangiai.luan-giai-chuyen-sau": {
+  "t": "✦ 詳しい鑑定 —",
+  "h": "887e02c9"
+ },
+ "js.luangiai.luan-giai-tu-vi": {
+  "t": "紫微斗数の鑑定",
+  "h": "ab5a4607"
+ },
+ "js.luangiai.luong": {
+  "t": "両 →",
+  "h": "36d6704d"
+ },
+ "js.luangiai.luu-la-so-nay-de-xem": {
+  "t": "✦ <b>この命盤を保存</b>すれば、いつでも見直せます。無料で、お支払いは不要です。",
+  "h": "1d1bbc24"
+ },
+ "js.luangiai.phan": {
+  "t": "セクション",
+  "h": "a74e8ed7"
+ },
+ "js.luangiai.xem-la-so-day-du": {
+  "t": "▸ 命盤の全体を見る",
+  "h": "fee98465"
  },
  "js.nav.brand": {
   "t": "明宝紫微斗数",
@@ -915,6 +1391,582 @@
   "t": "写真で相を見る",
   "h": "24c4d64e"
  },
+ "js.paywall.bam-mo-la-tra-tien-va": {
+  "t": "・開くとお支払いのうえ、すぐにお読みいただけます。",
+  "h": "9a6023cd"
+ },
+ "js.paywall.ban-ay-dang-ky-la-ban": {
+  "t": "友だちが<b>登録</b>すると、あなたに<b>+",
+  "h": "afb5cbf7"
+ },
+ "js.paywall.ban-co-the-thu-lai-sau": {
+  "t": "。後ほどもう一度お試しください。</p>",
+  "h": "d45f37cf"
+ },
+ "js.paywall.ban-con": {
+  "t": "残高 <b>",
+  "h": "418bc463"
+ },
+ "js.paywall.ban-da-dung-het-so-luot": {
+  "t": "この命盤の無料プレビュー回数を使い切りました。完全版の鑑定を開くと全文をお読みいただけ、再閲覧の回数にも制限はありません。",
+  "h": "af2b5217"
+ },
+ "js.paywall.ban-da-tao-ket-qua-cho": {
+  "t": "✓ この命盤の結果は作成済みです。再度開いても両は差し引かれません",
+  "h": "d59efda4"
+ },
+ "js.paywall.ban-da-tao-ket-qua-cho-uv5g": {
+  "t": "✓ この2つの命盤の組み合わせの結果は作成済みです。再度開いても両は差し引かれません",
+  "h": "7d7d74a8"
+ },
+ "js.paywall.ban-luan-day-du": {
+  "t": "完全版の鑑定",
+  "h": "8bbc9dde"
+ },
+ "js.paywall.can": {
+  "t": "</b> · 必要",
+  "h": "7e7713c7"
+ },
+ "js.paywall.can-them": {
+  "t": "追加で必要：",
+  "h": "a2dc705b"
+ },
+ "js.paywall.chan-dung-tien-kiep": {
+  "t": "前世の肖像",
+  "h": "e7d0f866"
+ },
+ "js.paywall.chan-dung-vo-chong": {
+  "t": "夫婦の肖像",
+  "h": "ed0abbb5"
+ },
+ "js.paywall.chep-link-moi-555v": {
+  "t": "招待リンクをコピー",
+  "h": "fa5ddbad"
+ },
+ "js.paywall.chep-so-tien": {
+  "t": "金額をコピー",
+  "h": "88eb1716"
+ },
+ "js.paywall.chep-so-tk": {
+  "t": "口座番号をコピー",
+  "h": "bc4e6db0"
+ },
+ "js.paywall.chon-ngay-tot": {
+  "t": "吉日選び",
+  "h": "e4844e35"
+ },
+ "js.paywall.chu-tk": {
+  "t": "<b>口座名義：</b>",
+  "h": "73fb1282"
+ },
+ "js.paywall.chu-trinh-cuoc-doi": {
+  "t": "人生のサイクル",
+  "h": "38c0c6ce"
+ },
+ "js.paywall.chua-doc-duoc-bang-gia": {
+  "t": "⊙ 料金表を読み込めません",
+  "h": "4ec2e38a"
+ },
+ "js.paywall.chua-ghi-nhan-cho-them-vai": {
+  "t": "まだ確認できていません。あと数秒お待ちください…",
+  "h": "cd70b377"
+ },
+ "js.paywall.chua-muon-nap-moi": {
+  "t": "チャージはまだ先ですか？ <b>友だち",
+  "h": "f63eee19"
+ },
+ "js.paywall.chua-tru-luong-nao-cua-ban": {
+  "t": "<br>お客様の両はまだ差し引かれていません。</div>",
+  "h": "62bb53db"
+ },
+ "js.paywall.chua-tru-luong-nao-cua-ban-ls92": {
+  "t": "お客様の両はまだ差し引かれていません",
+  "h": "34fe94f4"
+ },
+ "js.paywall.chuyen-dung-so-tien-o-tren": {
+  "t": "⚠ 上記の金額を、過不足なく、正しい口座番号へお振り込みください。振込内容（メモ）は自由で、口座番号でシステムが自動的に確認します",
+  "h": "9954fd84"
+ },
+ "js.paywall.chuyen-khoan": {
+  "t": "(銀行振込",
+  "h": "c135026b"
+ },
+ "js.paywall.chuyen-khoan-ngan-hang": {
+  "t": "ベトナム銀行振込",
+  "h": "d35c8163"
+ },
+ "js.paywall.chuyen-xong-quay-lai-tab-nay": {
+  "t": "お振り込み後、このタブに戻ってください。システムが自動で確認し、数秒後に続きを実行します。操作は不要です。</div>",
+  "h": "1126353e"
+ },
+ "js.paywall.co-app-momo-hoac-the-da": {
+  "t": "MoMoアプリまたは連携済みのカードをお持ちなら、アプリが金額を自動入力するので、確認するだけです。",
+  "h": "c037691b"
+ },
+ "js.paywall.con-thieu": {
+  "t": "⊙ 不足",
+  "h": "09093766"
+ },
+ "js.paywall.d": {
+  "t": "VND)</span>",
+  "h": "a62f69a1"
+ },
+ "js.paywall.d-bam-mo-la-hien-ma": {
+  "t": "VND、開くとQRコードが表示されます)</span>",
+  "h": "74afc758"
+ },
+ "js.paywall.da-co-tai-khoan-dang-nhap": {
+  "t": "アカウントをお持ちの方はログイン",
+  "h": "af8e782a"
+ },
+ "js.paywall.da-dung-het-luot-xem-truoc": {
+  "t": "⊙ 無料プレビューの回数を使い切りました",
+  "h": "154c17e6"
+ },
+ "js.paywall.da-hieu": {
+  "t": "わかりました",
+  "h": "f46981ba"
+ },
+ "js.paywall.da-lieu-toan-dien": {
+  "t": "肌の総合鑑定",
+  "h": "91cdb627"
+ },
+ "js.paywall.da-tru": {
+  "t": "✓",
+  "h": "0d13abf9"
+ },
+ "js.paywall.dang-cho-thanh-toan": {
+  "t": "お支払いを待っています…",
+  "h": "ab8523a1"
+ },
+ "js.paywall.dang-ky-de-giu-luong": {
+  "t": "登録して両を保管する",
+  "h": "4eac8986"
+ },
+ "js.paywall.dang-mo-momo": {
+  "t": "MoMoを開いています…",
+  "h": "49eec7ec"
+ },
+ "js.paywall.dang-nhap": {
+  "t": "ログイン",
+  "h": "1afd3f6b"
+ },
+ "js.paywall.dang-tai-qr": {
+  "t": "QRを読み込み中…",
+  "h": "f81c94ee"
+ },
+ "js.paywall.dang-tao-ma-qr": {
+  "t": "QRコードを作成しています…",
+  "h": "e18ed9a9"
+ },
+ "js.paywall.dang-xu-ly": {
+  "t": "処理中…",
+  "h": "a2e96c58"
+ },
+ "js.paywall.dat-ten-con": {
+  "t": "子どもの名づけ",
+  "h": "c79dbebf"
+ },
+ "js.paywall.dat-ten-doanh-nghiep": {
+  "t": "社名・屋号の名づけ",
+  "h": "56f1bfbe"
+ },
+ "js.paywall.day-con-theo-la-so": {
+  "t": "命盤で育てる子育て",
+  "h": "2013a771"
+ },
+ "js.paywall.de-mai": {
+  "t": "明日にする",
+  "h": "e094cff0"
+ },
+ "js.paywall.de-xem-so-du": {
+  "t": "して残高を確認",
+  "h": "62048ea1"
+ },
+ "js.paywall.dien-tuong": {
+  "t": "面相",
+  "h": "1e5e41e3"
+ },
+ "js.paywall.du": {
+  "t": "、余り",
+  "h": "63a0e7a7"
+ },
+ "js.paywall.duyen-no-tien-kiep": {
+  "t": "前世の縁",
+  "h": "c6b0ccb5"
+ },
+ "js.paywall.giu-trong-vi": {
+  "t": "両をウォレットに保管",
+  "h": "fa87cbb0"
+ },
+ "js.paywall.het-luot-tang-hom-nay": {
+  "t": "⊙ 本日のプレゼント分は終了しました",
+  "h": "c9551c56"
+ },
+ "js.paywall.hoac-mua-goi": {
+  "t": "またはパックを購入 →",
+  "h": "062471b0"
+ },
+ "js.paywall.hom-nay-so-luot-dung-thu": {
+  "t": "本日の無料お試しの回数は終了しました。また明日お越しください。",
+  "h": "631a725f"
+ },
+ "js.paywall.huong-nghiep-som-cho-con": {
+  "t": "子どもの早期進路鑑定",
+  "h": "2735212c"
+ },
+ "js.paywall.ket-noi-toi-may-chu-gia": {
+  "t": "料金サーバーへの接続に問題が発生しています。しばらくしてからもう一度お試しください。正確な料金を表示できない間は、ツールを実行しません。",
+  "h": "a3919658"
+ },
+ "js.paywall.khi-sac-van-khi": {
+  "t": "気色 — 運気",
+  "h": "07c6eb16"
+ },
+ "js.paywall.khoa": {
+  "t": "ロック",
+  "h": "393cb36a"
+ },
+ "js.paywall.khong-can-dang-ky-truoc": {
+  "t": "事前の登録は不要です。",
+  "h": "f5217505"
+ },
+ "js.paywall.khong-du-luong": {
+  "t": "⊙ 両が足りません",
+  "h": "957efb30"
+ },
+ "js.paywall.khong-mo-duoc-momo-thu-lai": {
+  "t": "MoMoを開けませんでした。再試行するか、下の方法をご利用ください。",
+  "h": "17415e69"
+ },
+ "js.paywall.khong-tao-duoc-don-momo": {
+  "t": "MoMoの注文を作成できませんでした",
+  "h": "b5941e00"
+ },
+ "js.paywall.la-so-nguoi-khac": {
+  "t": "他の人の命盤",
+  "h": "e454923c"
+ },
+ "js.paywall.loi": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.paywall.loi-ket-noi": {
+  "t": "接続エラー：",
+  "h": "46e34d76"
+ },
+ "js.paywall.loi-kiem-tra-thu-lai": {
+  "t": "確認エラーです。もう一度お試しください。",
+  "h": "8be05ffb"
+ },
+ "js.paywall.loi-tao-don": {
+  "t": "注文の作成エラー",
+  "h": "2ef88936"
+ },
+ "js.paywall.luan-giai-la-so": {
+  "t": "命盤鑑定",
+  "h": "72f1fa6d"
+ },
+ "js.paywall.luan-sau-phan-nay": {
+  "t": "この部分を詳しく鑑定",
+  "h": "8b0080c6"
+ },
+ "js.paywall.luong": {
+  "t": "両</b>が付与されます。",
+  "h": "9a10e8c4"
+ },
+ "js.paywall.luong-4tai": {
+  "t": "両",
+  "h": "6614284e"
+ },
+ "js.paywall.luong-can": {
+  "t": "両</strong> · 必要：",
+  "h": "17b0aa0f"
+ },
+ "js.paywall.luong-con-lai": {
+  "t": "両を使用 · 残り",
+  "h": "c99e3599"
+ },
+ "js.paywall.luong-ln0i": {
+  "t": "両)</span>",
+  "h": "49ad8e12"
+ },
+ "js.paywall.luong-luot-nay-dung": {
+  "t": "両 · 今回の使用",
+  "h": "e61f5fd5"
+ },
+ "js.paywall.luong-m6fn": {
+  "t": "両",
+  "h": "74224e60"
+ },
+ "js.paywall.luong-mo-day-du-ton": {
+  "t": "両</b> · フル版を開くには",
+  "h": "81466f88"
+ },
+ "js.paywall.luong-thao-tac-nay-ton": {
+  "t": "両</b> · この操作に必要：<b>",
+  "h": "e1bdd8d4"
+ },
+ "js.paywall.luong-uzlk": {
+  "t": "両</b>",
+  "h": "6820cc0e"
+ },
+ "js.paywall.luong-vao-vi-cua-ban": {
+  "t": "両</b>を返却しました",
+  "h": "0aa5bc03"
+ },
+ "js.paywall.luot-nay-chua-xu-ly-xong": {
+  "t": "今回の処理を完了できませんでした。ウォレットに<b>",
+  "h": "6e07bffd"
+ },
+ "js.paywall.ma-da-het-han-bam-nut": {
+  "t": "<b>コードの有効期限が切れました</b> — 下のボタンで新しいコードを作成してください。",
+  "h": "7b97f29d"
+ },
+ "js.paywall.ma-het-han-sau": {
+  "t": "コードの有効期限：残り",
+  "h": "d64d146a"
+ },
+ "js.paywall.ma-qr-chuyen-khoan": {
+  "t": "振込用QRコード",
+  "h": "c67a939b"
+ },
+ "js.paywall.mau-sac-hop-menh": {
+  "t": "命に合う色",
+  "h": "64b3b887"
+ },
+ "js.paywall.mo-app-ngan-hang-quet-qr": {
+  "t": "銀行アプリを開く → QRをスキャン、または手動で振込<br>",
+  "h": "00a7e55b"
+ },
+ "js.paywall.mo-ban-day-du": {
+  "t": "完全版を開く",
+  "h": "84fe9699"
+ },
+ "js.paywall.mo-day-du-ton": {
+  "t": "フル版を開くには",
+  "h": "3d05df05"
+ },
+ "js.paywall.mo-trang-thanh-toan": {
+  "t": "お支払いページを開く →",
+  "h": "71859417"
+ },
+ "js.paywall.mua-goi": {
+  "t": "パックを購入",
+  "h": "6baca719"
+ },
+ "js.paywall.nap-le-tinh-theo-don-gia": {
+  "t": "<br><small>単発チャージは単品価格で計算されます。",
+  "h": "e6adc76c"
+ },
+ "js.paywall.nap-luong": {
+  "t": "両をチャージ →",
+  "h": "96c6fb5d"
+ },
+ "js.paywall.nap-thanh-cong": {
+  "t": "✓ チャージ完了",
+  "h": "104f438d"
+ },
+ "js.paywall.nap-them": {
+  "t": "チャージする →",
+  "h": "e4f720af"
+ },
+ "js.paywall.nap-them-la-mo-ra-ngay": {
+  "t": "<br>チャージするとすぐに開けます。</div>",
+  "h": "363e04b9"
+ },
+ "js.paywall.nap-them-luong-de-tiep-tuc": {
+  "t": "続けるには両をチャージしてください。",
+  "h": "1f82488c"
+ },
+ "js.paywall.ngan-hang": {
+  "t": "<b>銀行：</b>",
+  "h": "2aa52434"
+ },
+ "js.paywall.nguoi": {
+  "t": "人を招待</b> —",
+  "h": "6134285c"
+ },
+ "js.paywall.nhan-tuong": {
+  "t": "目相",
+  "h": "1bc89b2e"
+ },
+ "js.paywall.noi-dung-ck": {
+  "t": "<b>振込内容：</b>",
+  "h": "f880969e"
+ },
+ "js.paywall.phan-tich-kieu-toc": {
+  "t": "ヘアスタイル分析",
+  "h": "016c2401"
+ },
+ "js.paywall.phan-tich-trang-diem": {
+  "t": "メイク分析",
+  "h": "d3643889"
+ },
+ "js.paywall.phien-dang-nhap-het-han-vui": {
+  "t": "ログインの有効期限が切れました。もう一度ログインしてください。",
+  "h": "abf575ee"
+ },
+ "js.paywall.phong-thuy-ban-lam-viec": {
+  "t": "デスクの風水",
+  "h": "2f08993f"
+ },
+ "js.paywall.phong-thuy-cua-hang-vp": {
+  "t": "店舗・オフィスの風水",
+  "h": "b64cd170"
+ },
+ "js.paywall.phong-thuy-noi-that": {
+  "t": "インテリアの風水",
+  "h": "3f80b53f"
+ },
+ "js.paywall.render-phong-phong-thuy": {
+  "t": "風水ルームのレンダリング",
+  "h": "0806581b"
+ },
+ "js.paywall.so-du": {
+  "t": "残高：<strong>",
+  "h": "e2c28dce"
+ },
+ "js.paywall.so-nhan-mach": {
+  "t": "人脈ノート",
+  "h": "17e83429"
+ },
+ "js.paywall.so-tk": {
+  "t": "<b>口座番号：</b>",
+  "h": "d2e75eae"
+ },
+ "js.paywall.tam-thoi": {
+  "t": "（一時ウォレット）",
+  "h": "3794c4c7"
+ },
+ "js.paywall.tao-ma-moi": {
+  "t": "新しいコードを作成 →",
+  "h": "b4caca90"
+ },
+ "js.paywall.thanh-toan-nhanh-qua-momo": {
+  "t": "MoMoですばやく支払う →",
+  "h": "98a66572"
+ },
+ "js.paywall.thanh-toan-thanh-cong-dang-tiep": {
+  "t": "お支払いが完了しました。続けています…",
+  "h": "fe44c04f"
+ },
+ "js.paywall.thanh-tuong": {
+  "t": "声相",
+  "h": "d47f6d49"
+ },
+ "js.paywall.thanh-tuong-pro": {
+  "t": "声相 Pro",
+  "h": "b2e5a151"
+ },
+ "js.paywall.thao-tac-nay-ton": {
+  "t": "この操作に必要：",
+  "h": "834c67c7"
+ },
+ "js.paywall.thao-tac-nay-ton-1zm6": {
+  "t": "</b> · この操作に必要：<b>",
+  "h": "c5248947"
+ },
+ "js.paywall.thi-moi-luong-re-hon": {
+  "t": "なら1両あたりがお得です。</small>",
+  "h": "96be8028"
+ },
+ "js.paywall.thieu": {
+  "t": "</b> — 不足",
+  "h": "03703206"
+ },
+ "js.paywall.thieu-8362": {
+  "t": "— 不足",
+  "h": "6f4749c9"
+ },
+ "js.paywall.thu-kieu-toc": {
+  "t": "ヘアスタイルを試す",
+  "h": "100a239f"
+ },
+ "js.paywall.thu-trang-diem": {
+  "t": "メイクを試す",
+  "h": "17d7b8c0"
+ },
+ "js.paywall.thu-trang-phuc": {
+  "t": "服を試す",
+  "h": "5d690ccc"
+ },
+ "js.paywall.thu-tuong": {
+  "t": "手相",
+  "h": "869631da"
+ },
+ "js.paywall.toi-da-chuyen-khoan-3482": {
+  "t": "振込しました",
+  "h": "b0a880c8"
+ },
+ "js.paywall.trang-phuc-theo-ngay": {
+  "t": "今日の服装",
+  "h": "6cfe1c1e"
+ },
+ "js.paywall.tu-binh-bat-tu": {
+  "t": "四柱推命（子平）",
+  "h": "6ade52e9"
+ },
+ "js.paywall.tu-vi-chat": {
+  "t": "紫微斗数チャット",
+  "h": "31c2fcda"
+ },
+ "js.paywall.van-han-12-thang-toi": {
+  "t": "運勢今後12か月",
+  "h": "f265e49d"
+ },
+ "js.paywall.vi-hien-tai-la-vi-tam": {
+  "t": "現在のウォレットは一時的なものです。ブラウザのデータを削除したり端末を変えたりすると、返却された両は失われます。アカウントを登録して、安全に保管しましょう。",
+  "h": "e0401dc5"
+ },
+ "js.paywall.vua-du-mo-dung-ban-nay": {
+  "t": "ちょうどこの結果を開ける分です。</div>",
+  "h": "6e2dce75"
+ },
+ "js.paywall.vui-long-dang-nhap-de-tiep": {
+  "t": "続けるにはログインしてください。",
+  "h": "dcefbef2"
+ },
+ "js.paywall.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
+ "js.paywall.xem-cach-mo-khoa": {
+  "t": "ロック解除の方法を見る →",
+  "h": "ad0da851"
+ },
+ "js.paywall.xem-tuoi-lam-an": {
+  "t": "ビジネスの相性",
+  "h": "5f5ba4e2"
+ },
+ "js.paywall.xem-tuoi-vo-chong": {
+  "t": "夫婦の相性",
+  "h": "f3e7b1ed"
+ },
+ "js.paywall.xin-loi-da-co-loi-xay": {
+  "t": "申し訳ありません。エラーが発生しました",
+  "h": "4195c600"
+ },
+ "js.prices.luong-moi-luot": {
+  "t": "1回 {credits}両",
+  "h": "d8f9af98"
+ },
+ "js.prices.luong-moi-luot-sale": {
+  "t": "1回 {sale}両（{credits}両から値下げ）",
+  "h": "0c35b4ef"
+ },
+ "js.prices.mien-phi": {
+  "t": "無料",
+  "h": "a999e722"
+ },
+ "js.prices.money-moi-luot": {
+  "t": "1回 {money}（{credits}両）",
+  "h": "61295b73"
+ },
+ "js.prices.money-moi-luot-sale": {
+  "t": "1回 {money}（{sale}両、{credits}両から値下げ）",
+  "h": "7aabe37f"
+ },
  "js.shell.an": {
   "t": "非表示",
   "h": "f4ea7c30"
@@ -1000,11 +2052,11 @@
   "h": "6f8f4379"
  },
  "js.shell.nap-luong": {
-  "t": "クレジットをチャージ",
+  "t": "両をチャージ",
   "h": "b70a5d1d"
  },
  "js.shell.nhiem-vu-nhan-luong": {
-  "t": "ミッションでクレジット獲得",
+  "t": "ミッションで両を獲得",
   "h": "fba04eb9"
  },
  "js.shell.quet-ma-bang-zalo-nhan-cau": {
@@ -1038,6 +2090,966 @@
  "js.shell.xem-tat-ca": {
   "t": "すべて見る",
   "h": "7e040254"
+ },
+ "js.shellui.ai-co-link-deu-doc-duoc": {
+  "t": "リンクを知っている人は誰でも、この命盤とこのセッションのやり取りをすべて読めます。",
+  "h": "39f8a716"
+ },
+ "js.shellui.ai-co-link-deu-xem-duoc": {
+  "t": "リンクを知っている人は誰でも、この内容を見られます。",
+  "h": "dde2d427"
+ },
+ "js.shellui.ai-co-link-deu-xem-duoc-ybjz": {
+  "t": "リンクを知っている人は誰でも、この結果を見られます。",
+  "h": "010150dd"
+ },
+ "js.shellui.an-di": {
+  "t": "非表示にする",
+  "h": "3be211c7"
+ },
+ "js.shellui.ban": {
+  "t": "あなた",
+  "h": "40ffd8d0"
+ },
+ "js.shellui.ban-lap-la-so-o-khung": {
+  "t": "<p>中央のフォームで命盤を作成すると、先生がすぐにお答えします。<br>仕事、恋愛、今年のこと、来月のこと、何でもご相談ください。</p></div>",
+  "h": "66d2cd29"
+ },
+ "js.shellui.ban-luan-giai-soi-tron": {
+  "t": "。<b>鑑定</b>では、この命盤の<b>",
+  "h": "b009e78c"
+ },
+ "js.shellui.bao-cao-da-san-sang": {
+  "t": "<b>レポートの準備ができました</b>",
+  "h": "ab59122b"
+ },
+ "js.shellui.bat-dau-hoi-thoai-moi-ban": {
+  "t": "新しい会話を始めます。この命盤について何を知りたいですか？",
+  "h": "9d7d64ad"
+ },
+ "js.shellui.cau": {
+  "t": "</b>回",
+  "h": "c4946182"
+ },
+ "js.shellui.cau-hoi-48ar": {
+  "t": "</b>回質問できます",
+  "h": "65c94d43"
+ },
+ "js.shellui.cau-mien-phi": {
+  "t": "回</b>無料で質問できます",
+  "h": "8ddf771c"
+ },
+ "js.shellui.cau-vua-roi-duoc-tra-loi": {
+  "t": "（先ほどの質問にもすぐお答えします）",
+  "h": "70029ef5"
+ },
+ "js.shellui.chay-lai-cong-cu-de-hoi": {
+  "t": "このセッションについて質問を続けるには、もう一度ツールを実行してください。",
+  "h": "e4e4c8f5"
+ },
+ "js.shellui.chia-se": {
+  "t": "シェア",
+  "h": "1cb95080"
+ },
+ "js.shellui.chia-se-phien": {
+  "t": "セッションをシェア",
+  "h": "8adfa925"
+ },
+ "js.shellui.chia-se-phien-hoi-thay": {
+  "t": "「先生に聞く」のセッションをシェア",
+  "h": "94185440"
+ },
+ "js.shellui.chia-se-w5yz": {
+  "t": "シェア：",
+  "h": "f575b7df"
+ },
+ "js.shellui.chon-mot-cach-duoi-day": {
+  "t": "。下の方法からお選びください。",
+  "h": "8b0c906e"
+ },
+ "js.shellui.chon-thay-luan-giai": {
+  "t": "鑑定する先生を選ぶ",
+  "h": "f717eb08"
+ },
+ "js.shellui.chua-co-la-so-nao": {
+  "t": "<b>命盤がまだありません</b>",
+  "h": "51d392d1"
+ },
+ "js.shellui.chua-co-noi-dung-de-chia": {
+  "t": "シェアできる内容がまだありません。まず先生にいくつか質問してみてください。",
+  "h": "19461a95"
+ },
+ "js.shellui.chua-co-phien-nao-duoc-luu": {
+  "t": "保存されたセッションはまだありません。",
+  "h": "f0665eb8"
+ },
+ "js.shellui.chua-mo": {
+  "t": "・未開封</span></span>",
+  "h": "72204e26"
+ },
+ "js.shellui.chua-tao-duoc-pdf-thu-lai": {
+  "t": "PDFを作成できませんでした。しばらくしてからもう一度お試しください。",
+  "h": "549a59fa"
+ },
+ "js.shellui.con": {
+  "t": "残り<b>",
+  "h": "21dc996b"
+ },
+ "js.shellui.con-nhieu-dieu-muon-noi-ve": {
+  "t": "には、この命盤についてまだお伝えしたいことがたくさんあります。無料登録すると、次のことができます。",
+  "h": "b5e24689"
+ },
+ "js.shellui.con-nhieu-dieu-muon-to-tuong": {
+  "t": "にはまだお伝えしたいことがたくさんあります",
+  "h": "2a2c8332"
+ },
+ "js.shellui.da-an-khoi-thu-vien-chung": {
+  "t": "<span>✓ 共有ライブラリから非表示にしました。リンクはこれまでどおり使えます。</span>",
+  "h": "e12e84c8"
+ },
+ "js.shellui.da-chep": {
+  "t": "コピーしました ✓",
+  "h": "846252e0"
+ },
+ "js.shellui.da-dung-het-luot-hoi": {
+  "t": "質問の回数を使い切りました",
+  "h": "3ef9beae"
+ },
+ "js.shellui.da-gui-mo": {
+  "t": "✓ 送信しました。",
+  "h": "12288a32"
+ },
+ "js.shellui.da-het-cau-dung-thu": {
+  "t": "お試しの質問回数を使い切りました",
+  "h": "f3c713d8"
+ },
+ "js.shellui.da-tao-link-ban-nay-cung": {
+  "t": "<span>リンクを作成しました。この結果は",
+  "h": "11df14f6"
+ },
+ "js.shellui.dang-an": {
+  "t": "非表示にしています…",
+  "h": "06dcaa3f"
+ },
+ "js.shellui.dang-dung-pdf": {
+  "t": "PDFを作成しています…",
+  "h": "819544ad"
+ },
+ "js.shellui.dang-facebook": {
+  "t": "Facebookに投稿",
+  "h": "af09f25c"
+ },
+ "js.shellui.dang-gan": {
+  "t": "添付中：<b>",
+  "h": "d599e8bc"
+ },
+ "js.shellui.dang-gui": {
+  "t": "送信しています…",
+  "h": "f04c8be3"
+ },
+ "js.shellui.dang-ky-mien-phi": {
+  "t": "無料で登録する →",
+  "h": "89d5985d"
+ },
+ "js.shellui.dang-ky-nhan-them": {
+  "t": "登録してもっと使う",
+  "h": "8bb9cbc2"
+ },
+ "js.shellui.dang-tiep-chuyen": {
+  "t": "お話し中",
+  "h": "37509a1d"
+ },
+ "js.shellui.dang-viet-bao-cao": {
+  "t": "<b>レポートを作成中…</b>",
+  "h": "2d9fa930"
+ },
+ "js.shellui.de-he-thong-chon-ngau-nhien": {
+  "t": "🎲 おまかせで選ぶ",
+  "h": "aee4de0f"
+ },
+ "js.shellui.de-sau": {
+  "t": "あとで",
+  "h": "fe71eacd"
+ },
+ "js.shellui.de-xem": {
+  "t": "を開いて確認してください",
+  "h": "f6dcc1ba"
+ },
+ "js.shellui.doi-nen-sang-toi": {
+  "t": "ライト／ダークを切り替え",
+  "h": "4379a733"
+ },
+ "js.shellui.doi-thay-luan-giai": {
+  "t": "鑑定する先生を変更",
+  "h": "6b6fc7cb"
+ },
+ "js.shellui.dong": {
+  "t": "閉じる",
+  "h": "d2b73ab2"
+ },
+ "js.shellui.dong-xem-ket-qua": {
+  "t": "閉じて結果を見る",
+  "h": "fba3c1e0"
+ },
+ "js.shellui.dung-ten": {
+  "t": "</b>先生",
+  "h": "70d07a35"
+ },
+ "js.shellui.dung-thu-con": {
+  "t": "お試し：残り<b>",
+  "h": "c0746c99"
+ },
+ "js.shellui.duoc-tang-luot-hoi-thay-mien": {
+  "t": "「先生に聞く」を無料でご利用いただけます",
+  "h": "f9bce370"
+ },
+ "js.shellui.esc": {
+  "t": "Esc",
+  "h": "1f7a4f9e"
+ },
+ "js.shellui.gio-truoc": {
+  "t": "時間前",
+  "h": "ce828227"
+ },
+ "js.shellui.gui": {
+  "t": "送信",
+  "h": "bbc4e7f5"
+ },
+ "js.shellui.gui-anh": {
+  "t": "画像を送る",
+  "h": "f7dc07df"
+ },
+ "js.shellui.gui-pdf-vao": {
+  "t": "PDFを送る：",
+  "h": "6e198ee6"
+ },
+ "js.shellui.hanh-dong": {
+  "t": "アクション",
+  "h": "8e9fdd28"
+ },
+ "js.shellui.het-phan-dung-thu-roi": {
+  "t": "お試し分は終了しました…",
+  "h": "277af632"
+ },
+ "js.shellui.hieu-dung-la-so-dang-mo": {
+  "t": "開いている命盤を正しく読み解きます",
+  "h": "b500bc82"
+ },
+ "js.shellui.hoac-nap-luong-de-hoi-tiep": {
+  "t": "または両をチャージして1問ずつ質問する →",
+  "h": "e5064786"
+ },
+ "js.shellui.hoac-nhan-thay-ngay-trong-zalo": {
+  "t": "または<b>Zalo</b>ですぐ先生にメッセージ",
+  "h": "e80f12e2"
+ },
+ "js.shellui.hoi": {
+  "t": "質問",
+  "h": "48fdacc9"
+ },
+ "js.shellui.hoi-bat-cu-dieu-gi-ve": {
+  "t": "この命盤について何でも聞いてください…",
+  "h": "67b4e55f"
+ },
+ "js.shellui.hoi-thay-qua-zalo-quet-ma": {
+  "t": "<div><b>Zaloで先生に聞く</b><small>Zaloでコードを読み取って質問を送ると、先生がすぐにお答えします</small></div></div>",
+  "h": "28466f2c"
+ },
+ "js.shellui.hoi-thay-them": {
+  "t": "「先生に聞く」でさらに<b>",
+  "h": "04044619"
+ },
+ "js.shellui.hoi-thoai-moi": {
+  "t": "新しい会話",
+  "h": "bba6fb9b"
+ },
+ "js.shellui.ket-qua": {
+  "t": "結果",
+  "h": "c9f95514"
+ },
+ "js.shellui.ket-qua-bam-de-mo": {
+  "t": "</b><span>結果・タップして開く</span></span>",
+  "h": "50bffb45"
+ },
+ "js.shellui.ket-qua-nay-chua-co-noi": {
+  "t": "この結果にはPDFに保存できる内容がありません。",
+  "h": "d8ae6583"
+ },
+ "js.shellui.khac": {
+  "t": "その他",
+  "h": "5b8a28ab"
+ },
+ "js.shellui.khong-in-luu-pdf-truc-tiep": {
+  "t": "では、PDFを直接印刷・保存できません",
+  "h": "27aa3510"
+ },
+ "js.shellui.khong-tao-duoc-link-chia-se": {
+  "t": "シェア用のリンクを作成できませんでした。しばらくしてからもう一度お試しください。",
+  "h": "77872d72"
+ },
+ "js.shellui.khong-tim-thay": {
+  "t": "見つかりませんでした。",
+  "h": "cb892c67"
+ },
+ "js.shellui.la-so-con-vua-xem-la": {
+  "t": "<b>先ほど見た命盤は、リンクをシェアした方のもので、あなたのものではありません。</b>",
+  "h": "138c9f16"
+ },
+ "js.shellui.la-so-da-san-sang-ban": {
+  "t": "命盤の準備ができました。まずどこから見てほしいですか？",
+  "h": "0d8b388a"
+ },
+ "js.shellui.lap-la-so-cua-ban-de": {
+  "t": "あなたの命盤を作って、より的確に見てもらう →",
+  "h": "6a209505"
+ },
+ "js.shellui.lap-la-so-de-bat-dau": {
+  "t": "命盤を作成して質問を始めましょう…",
+  "h": "0a0f5f98"
+ },
+ "js.shellui.lap-la-so-truoc-da": {
+  "t": "先に命盤を作成してください",
+  "h": "1b48590d"
+ },
+ "js.shellui.lich-su": {
+  "t": "履歴・",
+  "h": "309a950b"
+ },
+ "js.shellui.lich-su-hoi-thoai": {
+  "t": "会話履歴",
+  "h": "0fd2afce"
+ },
+ "js.shellui.loi-mang-khi-tao-link-chia": {
+  "t": "シェア用リンクの作成中にネットワークエラーが発生しました。",
+  "h": "7de46633"
+ },
+ "js.shellui.loi-mang-thu-lai-sau-it": {
+  "t": "ネットワークエラーです。しばらくしてからもう一度お試しください。",
+  "h": "4f6c5f14"
+ },
+ "js.shellui.luan-giai": {
+  "t": "<b>鑑定",
+  "h": "489f2d1f"
+ },
+ "js.shellui.luong": {
+  "t": "両)",
+  "h": "c25e2d61"
+ },
+ "js.shellui.luong-mo12": {
+  "t": "両",
+  "h": "77701acc"
+ },
+ "js.shellui.luong-n119": {
+  "t": "両(",
+  "h": "e002ee80"
+ },
+ "js.shellui.luong-piya": {
+  "t": "両</b>",
+  "h": "7ddc7cbc"
+ },
+ "js.shellui.luot-hoi-hom-nay": {
+  "t": "…</b>件の質問（本日）",
+  "h": "eb701f53"
+ },
+ "js.shellui.luot-tang": {
+  "t": "回分プレゼント）</span>",
+  "h": "428cbe75"
+ },
+ "js.shellui.luu-ban-pdf": {
+  "t": "PDFで保存",
+  "h": "384327e1"
+ },
+ "js.shellui.luu-la-so-va-cuoc-tro": {
+  "t": "命盤と会話を保存。端末を変えても引き継げます",
+  "h": "3cf815c8"
+ },
+ "js.shellui.luu-pdf": {
+  "t": "PDFで保存",
+  "h": "c815d87c"
+ },
+ "js.shellui.mo": {
+  "t": "開く ↗",
+  "h": "275cceff"
+ },
+ "js.shellui.mo-file-pdf": {
+  "t": "PDFを開く",
+  "h": "8ac92ea1"
+ },
+ "js.shellui.mo-rong": {
+  "t": "広げる",
+  "h": "d91c6264"
+ },
+ "js.shellui.mo-thanh-ben": {
+  "t": "サイドバーを開く",
+  "h": "b1f48b75"
+ },
+ "js.shellui.mo-zalo": {
+  "t": "Zaloを開く",
+  "h": "d52365fa"
+ },
+ "js.shellui.moi-sang-nhan-van-ngay-rieng": {
+  "t": "毎朝、あなたの命盤に合わせた今日の運勢が届きます",
+  "h": "6f9ffa30"
+ },
+ "js.shellui.moi-thay-mot-van-phong-rieng": {
+  "t": "先生ごとに文体が異なります。お好みの先生を選ぶか、おまかせで選べます。",
+  "h": "9f6ba6f2"
+ },
+ "js.shellui.muc": {
+  "t": "項目 —",
+  "h": "186bea21"
+ },
+ "js.shellui.muc-cho-la-so-nay": {
+  "t": "項目（この命盤用）</b><span>",
+  "h": "c78646f2"
+ },
+ "js.shellui.muc-cua-chinh-la-so-nay": {
+  "t": "項目</b>を、この命盤そのものから読み解きます —",
+  "h": "8e5f0ada"
+ },
+ "js.shellui.muon-thay-luan-cho-chinh-con": {
+  "t": "ご自身の命盤を先生に鑑定してほしい場合は、生年月日と生まれた時刻をお知らせください。ご自身専用の新しいセッションを開きます。</p></div>",
+  "h": "3ab45347"
+ },
+ "js.shellui.nap-luong-de-hoi-tiep": {
+  "t": "両をチャージして質問を続ける →",
+  "h": "6bd23774"
+ },
+ "js.shellui.nap-them": {
+  "t": "チャージする",
+  "h": "f3cb9ffa"
+ },
+ "js.shellui.ngay-truoc": {
+  "t": "日前",
+  "h": "92423d27"
+ },
+ "js.shellui.nguoi-dan-duong": {
+  "t": "ご案内役",
+  "h": "f38c3a9c"
+ },
+ "js.shellui.nguoi-dang-xem": {
+  "t": "…</b>人が閲覧中",
+  "h": "440579d4"
+ },
+ "js.shellui.nhung-phan-luong-trong-vi-da": {
+  "t": "、ただしウォレットの両が残りわずかです。チャージして、途中までの鑑定の続きをお聞きください。</div>",
+  "h": "8962fab5"
+ },
+ "js.shellui.nu": {
+  "t": "女性",
+  "h": "feb92ccd"
+ },
+ "js.shellui.phan": {
+  "t": "セクション",
+  "h": "d2cd4ec7"
+ },
+ "js.shellui.phan-da-xong": {
+  "t": "セクション完了</span></span>",
+  "h": "f8ba3adb"
+ },
+ "js.shellui.phien": {
+  "t": "セッション",
+  "h": "1d7b419f"
+ },
+ "js.shellui.phien-da-luu": {
+  "t": "保存済みのセッション",
+  "h": "5b37ec1e"
+ },
+ "js.shellui.phien-gan-day": {
+  "t": "最近のセッション",
+  "h": "edade345"
+ },
+ "js.shellui.phien-meij": {
+  "t": "セッション",
+  "h": "3ee6a226"
+ },
+ "js.shellui.phut-truoc": {
+  "t": "分前",
+  "h": "b1017a2c"
+ },
+ "js.shellui.que-con-do-xin-phep-dung": {
+  "t": "占いの途中ですが、ここで一区切りとさせてください…",
+  "h": "bab685a0"
+ },
+ "js.shellui.sao-chep-link": {
+  "t": "リンクをコピー",
+  "h": "899e8987"
+ },
+ "js.shellui.sao-chep-link-mo-bang-safari": {
+  "t": "。リンクをコピーして、SafariまたはChromeで開き、PDFで保存を押してください。",
+  "h": "f8145d14"
+ },
+ "js.shellui.sao-chep-xpx5": {
+  "t": "コピー",
+  "h": "09a1db3e"
+ },
+ "js.shellui.so-la-so": {
+  "t": "命盤ノート",
+  "h": "0e67ec9d"
+ },
+ "js.shellui.tai-khoan": {
+  "t": "アカウント",
+  "h": "4a60abe5"
+ },
+ "js.shellui.tat-ca": {
+  "t": "すべて（",
+  "h": "55873035"
+ },
+ "js.shellui.thang-truoc": {
+  "t": "か月前",
+  "h": "e1d0b08b"
+ },
+ "js.shellui.thay": {
+  "t": "先生",
+  "h": "90b92a70"
+ },
+ "js.shellui.thay-7g4t": {
+  "t": "<span>担当：<b>",
+  "h": "a8757512"
+ },
+ "js.shellui.thay-vi-hoi-le-tung-cau": {
+  "t": "… 1問ずつ質問するより、まとめて読めて安心です。</div>",
+  "h": "8836644b"
+ },
+ "js.shellui.thu-gon": {
+  "t": "縮小",
+  "h": "b1233168"
+ },
+ "js.shellui.thu-gon-ket-qua": {
+  "t": "結果を縮小",
+  "h": "45ef96ba"
+ },
+ "js.shellui.thu-hep": {
+  "t": "狭める",
+  "h": "3a848e39"
+ },
+ "js.shellui.thu-lai": {
+  "t": "再試行",
+  "h": "e353f2f3"
+ },
+ "js.shellui.thu-vien-chung": {
+  "t": "共有ライブラリ",
+  "h": "404f456c"
+ },
+ "js.shellui.tim-cong-cu-lenh": {
+  "t": "ツール・コマンドを検索…",
+  "h": "990f08e2"
+ },
+ "js.shellui.trinh-duyet-ben-trong": {
+  "t": "アプリ内ブラウザ",
+  "h": "28553859"
+ },
+ "js.shellui.tu-vi-minh-bao": {
+  "t": "— 明宝紫微斗数",
+  "h": "ef7f10f4"
+ },
+ "js.shellui.ung-dung-nay": {
+  "t": "このアプリ",
+  "h": "cba1a9e4"
+ },
+ "js.shellui.vua-xong": {
+  "t": "たった今",
+  "h": "d1a7c7fa"
+ },
+ "js.shellui.xem": {
+  "t": "見る →",
+  "h": "1e272706"
+ },
+ "js.shellui.xem-ket-qua": {
+  "t": "結果を見る",
+  "h": "9ab7d355"
+ },
+ "js.shellui.xem-ket-qua-nay-tren-tu": {
+  "t": "明宝紫微斗数でこの結果を見る：",
+  "h": "b03d8f15"
+ },
+ "js.shellui.xem-phan-luan-giai-cua-thay": {
+  "t": "この命盤についての先生の鑑定をご覧ください：",
+  "h": "8b9556e2"
+ },
+ "js.shellui.xem-phan-luan-giai-cua-thay-6as2": {
+  "t": "この命盤についての先生の鑑定をご覧ください：",
+  "h": "6b8b5dbb"
+ },
+ "js.shellui.xem-tron": {
+  "t": "全文を見る",
+  "h": "18cdbfde"
+ },
+ "js.shellui.xoa-phien": {
+  "t": "セッションを削除",
+  "h": "72d604e7"
+ },
+ "js.shellui.zalo": {
+  "t": "Zalo",
+  "h": "53b71aec"
+ },
+ "js.topup.aria-label-thanh-toan": {
+  "t": "aria-label=\"お支払い：",
+  "h": "3d7d89ae"
+ },
+ "js.topup.bac": {
+  "t": "(ティア",
+  "h": "d620a26c"
+ },
+ "js.topup.ban-chua-nhap-ma": {
+  "t": "コードが入力されていません。",
+  "h": "e3627774"
+ },
+ "js.topup.ban-dang-mo-khoa": {
+  "t": "<span>ロック解除中：<b>",
+  "h": "a5f495af"
+ },
+ "js.topup.ban-dang-mo-khoa-v2tc": {
+  "t": "ロック解除中：",
+  "h": "f9f2ebb7"
+ },
+ "js.topup.can-them": {
+  "t": "あと<b>",
+  "h": "235b3b03"
+ },
+ "js.topup.cap-nhat-tu-dong-khi-co": {
+  "t": "ツールが追加されると自動で更新されます。金額は次のパックを基準に換算しています：",
+  "h": "b44fa7dd"
+ },
+ "js.topup.cap-nhat-tu-dong-khi-co-u8hf": {
+  "t": "ツールが追加されると自動で更新されます。",
+  "h": "6d165b81"
+ },
+ "js.topup.chi-cac-cong-cu-luan-giai": {
+  "t": "有料なのは、詳しい鑑定ツールのみです。",
+  "h": "9cf1c314"
+ },
+ "js.topup.chi-tu": {
+  "t": "最安",
+  "h": "64117bb9"
+ },
+ "js.topup.chia-se-moi-ban": {
+  "t": "明宝紫微斗数を使っています。古法に基づいて命盤を鑑定してくれます。このリンクから登録すると、一緒に両がもらえます：{link}",
+  "h": "91b14709"
+ },
+ "js.topup.chuyen-khoan": {
+  "t": "銀行振込",
+  "h": "983bba81"
+ },
+ "js.topup.con-thieu": {
+  "t": "</b> — あと<b>",
+  "h": "e337446d"
+ },
+ "js.topup.cong-cu-ban-vua-xem": {
+  "t": "先ほど見たツール",
+  "h": "d666e2b0"
+ },
+ "js.topup.cong-cu-tra-cuu-co-phap": {
+  "t": "件の古法リファレンスツールは両がかかりません</strong>（安星、納音、黄道、易経、タロットなど）。",
+  "h": "13649dd5"
+ },
+ "js.topup.d": {
+  "t": "đ",
+  "h": "c5f95801"
+ },
+ "js.topup.da-sao-chep": {
+  "t": "コピーしました",
+  "h": "40e825db"
+ },
+ "js.topup.dang-ket-noi": {
+  "t": "接続中…",
+  "h": "dd0e25a1"
+ },
+ "js.topup.dang-ky": {
+  "t": "登録 →",
+  "h": "ef4ca9d9"
+ },
+ "js.topup.dang-tai-bang-gia": {
+  "t": "料金表を読み込み中",
+  "h": "0f8effca"
+ },
+ "js.topup.dang-tai-bang-gia-x0u0": {
+  "t": "料金表を読み込み中…",
+  "h": "40e009ff"
+ },
+ "js.topup.dang-tai-thu-lai-sau-mot": {
+  "t": "読み込み中です。1秒ほどしてからもう一度お試しください。",
+  "h": "1baf8990"
+ },
+ "js.topup.den": {
+  "t": "～",
+  "h": "addd467a"
+ },
+ "js.topup.don-gia-theo-bac-goi-cang": {
+  "t": "· パックのティアに応じた単価で、多くチャージするほどお得です",
+  "h": "563ecc73"
+ },
+ "js.topup.du-cho-luot-nay": {
+  "t": "今回の分に十分",
+  "h": "2b427e2f"
+ },
+ "js.topup.du-de-dung-thu-cong-cu": {
+  "t": "詳しい鑑定ツールを試すのに十分な量です。カード不要、契約もありません。",
+  "h": "2bba34ab"
+ },
+ "js.topup.goi": {
+  "t": "・パック",
+  "h": "ab6724d3"
+ },
+ "js.topup.goi-duoc-danh-dau-ben-duoi": {
+  "t": "下でマークされたパックが、今回の分にちょうど足ります。",
+  "h": "12d86ea6"
+ },
+ "js.topup.het-gio-cho": {
+  "t": "待機時間が終了しました。",
+  "h": "ffa75c30"
+ },
+ "js.topup.khong-co-du-lieu": {
+  "t": "データがありません。",
+  "h": "01d461ee"
+ },
+ "js.topup.khong-doi-duoc-ma": {
+  "t": "コードを交換できませんでした。",
+  "h": "795cb46c"
+ },
+ "js.topup.khong-het-han": {
+  "t": "有効期限なし",
+  "h": "b4fef21a"
+ },
+ "js.topup.khong-tai-duoc-vui-long-thu": {
+  "t": "読み込めませんでした。もう一度お試しください。",
+  "h": "cfce40b3"
+ },
+ "js.topup.khong-tao-duoc-don-paypal": {
+  "t": "PayPalの注文を作成できませんでした",
+  "h": "5ae11efc"
+ },
+ "js.topup.la-du": {
+  "t": "</b>で足ります。",
+  "h": "ff3301f5"
+ },
+ "js.topup.loi-ket-noi-momo": {
+  "t": "MoMo接続エラー：",
+  "h": "ab653854"
+ },
+ "js.topup.loi-ket-noi-paypal": {
+  "t": "PayPal接続エラー：",
+  "h": "b24c6f67"
+ },
+ "js.topup.luong": {
+  "t": "両</div>",
+  "h": "81dc9146"
+ },
+ "js.topup.luong-10zo": {
+  "t": "/ 両",
+  "h": "849064c1"
+ },
+ "js.topup.luong-8gog": {
+  "t": "<span>両</span></div>",
+  "h": "ea893023"
+ },
+ "js.topup.luong-cho-thanh-vien-moi": {
+  "t": "両プレゼント",
+  "h": "f9ec8743"
+ },
+ "js.topup.luong-de-dung-tiep-nap": {
+  "t": "両</b>で続けられます。チャージ：<b>",
+  "h": "cffae6dc"
+ },
+ "js.topup.luong-dung-duoc-cho-cac-cong": {
+  "t": "両。詳しい鑑定ツールと「先生に聞く」でお使いいただけます。",
+  "h": "220dda0b"
+ },
+ "js.topup.luong-goi-lon-hon-thi-re": {
+  "t": "/両)。上位のパックほどさらにお得です。",
+  "h": "7bdee349"
+ },
+ "js.topup.luong-ictb": {
+  "t": "両</b>不足しています。",
+  "h": "1d59cb4e"
+ },
+ "js.topup.luong-ngay-khi-ho-tao-tai": {
+  "t": "両</strong>（相手がアカウントを作成した時点で付与）",
+  "h": "efc01ca5"
+ },
+ "js.topup.luot-moi-duoc-thuong-30-ngay": {
+  "t": "回の招待まで特典対象 / 30日)",
+  "h": "d879cb28"
+ },
+ "js.topup.mo-ra-ngay-sau-khi-thanh": {
+  "t": "お支払い完了後、すぐに開きます。",
+  "h": "9db1b114"
+ },
+ "js.topup.mo-trang-payos": {
+  "t": "payOSのページを開く →",
+  "h": "c70cfbf8"
+ },
+ "js.topup.moi-nguoi-dang-ky-qua-link": {
+  "t": "あなたのリンクから登録した人1人につき：<strong>+",
+  "h": "af336cce"
+ },
+ "js.topup.muc-phi-cua-tung-cong-cu": {
+  "t": "ツールごとの料金は、各ツールのページに表示されます。",
+  "h": "4d90e17f"
+ },
+ "js.topup.nap-thanh-cong-luong": {
+  "t": "チャージ完了：{credits}両",
+  "h": "1ca6d695"
+ },
+ "js.topup.o-nap-so-tien-tu-chon": {
+  "t": "<b>任意金額のチャージ</b>欄に、<b>",
+  "h": "ca263938"
+ },
+ "js.topup.pho-bien-nhat": {
+  "t": "一番人気",
+  "h": "a0f0bedc"
+ },
+ "js.topup.re-hon": {
+  "t": "お得率",
+  "h": "00731702"
+ },
+ "js.topup.so-du-hien-tai": {
+  "t": "現在の残高",
+  "h": "0f33e086"
+ },
+ "js.topup.so-tien-muon-nap": {
+  "t": "チャージ金額 (",
+  "h": "3a034d1c"
+ },
+ "js.topup.tang": {
+  "t": "新規会員に",
+  "h": "ae208fd1"
+ },
+ "js.topup.tang-luong-mien-phi-cho-thanh": {
+  "t": "新規会員に両を無料プレゼント",
+  "h": "0ac0e4a1"
+ },
+ "js.topup.thanh-toan-da-bi-huy-ban": {
+  "t": "お支払いはキャンセルされました。いつでももう一度お試しいただけます。",
+  "h": "4336002a"
+ },
+ "js.topup.thanh-toan-thanh-cong-dang-cap": {
+  "t": "お支払いが完了しました。更新しています…",
+  "h": "9e4d16f3"
+ },
+ "js.topup.thanh-toan-the": {
+  "t": "カード決済",
+  "h": "6eccec15"
+ },
+ "js.topup.toi-da": {
+  "t": "(最大",
+  "h": "383d76a3"
+ },
+ "js.topup.toi-thieu": {
+  "t": "最低",
+  "h": "134e562d"
+ },
+ "js.topup.vnd": {
+  "t": "VND",
+  "h": "3537de8e"
+ },
+ "js.topup.vua-du-khong-phai-mua-ca": {
+  "t": "</b>を入力済みです。ちょうどの金額で、パックを丸ごと買う必要はありません。",
+  "h": "4ac59782"
+ },
+ "js.topup.vui-long-nhap-so-tien-tu": {
+  "t": "金額を入力してください：",
+  "h": "c3305e5b"
+ },
+ "js.topup.xem-lich-su": {
+  "t": "履歴を見る",
+  "h": "21a19fb0"
+ },
+ "js.vanhannam.ban-do": {
+  "t": "マップ：",
+  "h": "393d2725"
+ },
+ "js.vanhannam.dang-luan-phan-1": {
+  "t": "鑑定中：セクション 1 /",
+  "h": "9020516d"
+ },
+ "js.vanhannam.dang-tinh": {
+  "t": "計算中…",
+  "h": "76a9d5f0"
+ },
+ "js.vanhannam.loi-khi-luan-phan": {
+  "t": "エラー：セクション",
+  "h": "1ea71e16"
+ },
+ "js.vanhannam.loi-khi-tinh-van-han": {
+  "t": "運勢の計算でエラーが発生しました：",
+  "h": "831b40e0"
+ },
+ "js.vanhannam.luan-van-han-12-thang": {
+  "t": "<b>今後12か月の運勢を鑑定 →</b>",
+  "h": "c228dfa7"
+ },
+ "js.vanhannam.luan-van-han-hoan-tat": {
+  "t": "✓ 運勢の鑑定が完了しました",
+  "h": "e52ae239"
+ },
+ "js.vanhannam.luong": {
+  "t": "両)",
+  "h": "c99d25aa"
+ },
+ "js.vanhannam.thang-am-toi-moi-o-mot": {
+  "t": "か月（旧暦）分、各マスにキーワードがひとつ",
+  "h": "33508d52"
+ },
+ "js.vanhannam.ton": {
+  "t": "<small>必要：",
+  "h": "ca8d4e90"
+ },
+ "js.vanhannam.van-han-12-thang": {
+  "t": "運勢 12か月",
+  "h": "0bef064e"
+ },
+ "js.vanhannam.xem-van-han": {
+  "t": "運勢を見る →",
+  "h": "0f4545c1"
+ },
+ "js.xemtuoi.cham-8-yeu-to-hop-tac": {
+  "t": "あなたと、これから一緒に事業を始める相手との間で、8つの協力要素を採点します。契約前の客観的な視点として。",
+  "h": "fdda207e"
+ },
+ "js.xemtuoi.cham-8-yeu-to-tuong-hop": {
+  "t": "2つの命盤の間で、8つの相性要素を採点します。結婚を考えていて、はっきりした答えがほしいときにお使いください。",
+  "h": "db3006a1"
+ },
+ "js.xemtuoi.chieu-tuong-hop": {
+  "t": "項目の相性",
+  "h": "2d818e3c"
+ },
+ "js.xemtuoi.dang-dung-anh": {
+  "t": "画像を作成中…",
+  "h": "7bce9760"
+ },
+ "js.xemtuoi.loi-khi-so-tuoi": {
+  "t": "相性の比較でエラーが発生しました：",
+  "h": "4f62428a"
+ },
+ "js.xemtuoi.tra-loi-thay-o-khung-chat": {
+  "t": "チャット欄で先生に答えて、次の方の生年月日を入力してください：",
+  "h": "ec2999fc"
+ },
+ "js.xemtuoi.tuong-hop-tuoi-tu-vi-minh": {
+  "t": "相性鑑定 — 明宝紫微斗数",
+  "h": "b35bc9d1"
+ },
+ "js.xemtuoi.va": {
+  "t": "、",
+  "h": "a72340e8"
+ },
+ "js.xemtuoi.vanh": {
+  "t": "レーダーチャート：",
+  "h": "f78055f5"
+ },
+ "js.xemtuoi.xem-tuoi-lam-an-tu-vi": {
+  "t": "ビジネスの相性 — 明宝紫微斗数",
+  "h": "6a071dab"
+ },
+ "js.xemtuoi.xem-tuoi-vo-chong-tu-vi": {
+  "t": "夫婦の相性 — 明宝紫微斗数",
+  "h": "4fd9f105"
+ },
+ "js.xemtuoi.xet-nhanh-hai-tuoi-co-hop": {
+  "t": "生まれ年だけで、お二人の年の相性をさっと確認できます。すぐに答えが出ます（詳しい鑑定ではありません）。",
+  "h": "ee011392"
  },
  "laso.2026-tuviminhbao-com-all-rights-reserved": {
   "t": "© 2026 tuviminhbao.com — All rights reserved",
@@ -1200,7 +3212,7 @@
   "h": "557a13dc"
  },
  "luangiai.lap-la-so-luan-giai-ngay": {
-  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">命盤を作って今すぐ鑑定 →</b></span> <small>必要クレジット <span class=\"vnd\" data-tvp-price-vnd=\"laso\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"laso\">…</span> 両)</span></small>",
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">命盤を作って今すぐ鑑定 →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"laso\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"laso\">…</span> 両)</span></small>",
   "h": "a32c708b"
  },
  "luangiai.lap-la-so-tu-vi-12": {
@@ -1258,6 +3270,74 @@
  "luangiai.tu-vi-khong-du-doan-tuong": {
   "t": "紫微斗数は未来を言い当てるものではなく、自分を知って、よりよい選択をするための手がかりです。",
   "h": "ae92de9d"
+ },
+ "napam.1-nhap-nam-sinh": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">生まれ年を入力</span>",
+  "h": "ecce406c"
+ },
+ "napam.2-xem-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">結果を見る</span>",
+  "h": "70d46dd0"
+ },
+ "napam.hoi-thay-luan-sau-nap-am": {
+  "t": "✦ 先生に聞く：納音を深く読み解く",
+  "h": "349e0cc6"
+ },
+ "napam.mau-huong-hop": {
+  "t": "<span class=\"hp-ic\" data-icon=\"palette\"></span><span>相性の良い<br>色・方角</span>",
+  "h": "a297cc08"
+ },
+ "napam.moi-nam-sinh-mang-mot-menh": {
+  "t": "生まれ年ごとに固有の納音の命があり、あなたに合う色や方角を決めますが、意外と知られていません。生まれ年を入力すると、命の名前、五行、相性の良い色と方角がすべて無料でわかります。",
+  "h": "b260ec1c"
+ },
+ "napam.nam-sinh": {
+  "t": "生まれ年",
+  "h": "75a6785f"
+ },
+ "napam.nam-sinh-duong-lich": {
+  "t": "生まれ年（西暦）",
+  "h": "1fb839b6"
+ },
+ "napam.nap-am-la-phep-phoi-hanh": {
+  "t": "納音とは、六十花甲子（60年周期）の干支の組み合わせごとに五行を割り当てる方法で、生まれ年ごとに「海中金」「路傍土」といった固有の名前を持つ命を与えます。古代中国の術数における、五行の応用体系のひとつです。",
+  "h": "0b4fcbe2"
+ },
+ "napam.nap-am-ngu-hanh": {
+  "t": "納音五行",
+  "h": "0de9a4ee"
+ },
+ "napam.nap-am-ngu-hanh-hanh-ban": {
+  "t": "<b>納音五行</b><span>生まれ年による本命の五行</span>",
+  "h": "2e26bd13"
+ },
+ "napam.nap-am-ngu-hanh-tu-vi": {
+  "t": "納音五行 — 明宝紫微斗数",
+  "h": "b9503f87"
+ },
+ "napam.nhap-nam-sinh-cua-ban-nhan": {
+  "t": "生まれ年を入力してください。命の正式名称と、色・方角、相性の良い年・悪い年がわかります。",
+  "h": "3acbe82d"
+ },
+ "napam.sua": {
+  "t": "修正",
+  "h": "0963749f"
+ },
+ "napam.ten-menh-nap-am": {
+  "t": "<span class=\"hp-ic\" data-icon=\"tornado\"></span><span>納音の<br>命の名前</span>",
+  "h": "3077c3ba"
+ },
+ "napam.tra-nap-am-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"tornado\"></span><b>納音を調べる →</b></span> <small>無料</small>",
+  "h": "e2a87df0"
+ },
+ "napam.tra-nap-am-ngu-hanh-theo": {
+  "t": "生まれ年から納音五行（海中金、爐中火など）を調べます。天干、地支、本命の五行がわかります。色・方角・相性の良い年は、先生に聞いてみてください。",
+  "h": "b7a210ed"
+ },
+ "napam.tuoi-hop-ky": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>相性の良い年<br>悪い年</span>",
+  "h": "9a664cc3"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 収集する情報",
@@ -1626,5 +3706,329 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "チャージ済みで未使用の両数については、ご請求をいただければ、個別に検討いたします",
   "h": "f410ec3e"
+ },
+ "topup.ban-dang-mo-khoa": {
+  "t": "ロック解除中…",
+  "h": "a288081b"
+ },
+ "topup.bang-gia-nap-luong-tu-vi": {
+  "t": "料金表とチャージ — 明宝紫微斗数",
+  "h": "09810031"
+ },
+ "topup.cap-nhat-tu-dong-khi-co": {
+  "t": "ツールが追加されると自動で更新されます。",
+  "h": "6d165b81"
+ },
+ "topup.cau-hoi-thuong-gap": {
+  "t": "よくある質問",
+  "h": "0abbca1b"
+ },
+ "topup.chi-phi-cac-cong-cu": {
+  "t": "各ツールの料金",
+  "h": "5afccf48"
+ },
+ "topup.chon-phuong-thuc-thanh-toan": {
+  "t": "お支払い方法を選択",
+  "h": "43066cc7"
+ },
+ "topup.chuyen-du-so-tien-vao-dung": {
+  "t": "上記の金額を、正しい口座番号へお振り込みください。振込内容（メモ）は自由で、口座番号でシステムが自動的に確認します",
+  "h": "7626831b"
+ },
+ "topup.chuyen-khoan-ngan-hang": {
+  "t": "ベトナム銀行振込",
+  "h": "d35c8163"
+ },
+ "topup.chuyen-khoan-qr": {
+  "t": "QR振込",
+  "h": "31fdb4fb"
+ },
+ "topup.co-ma-tu-clip-hoac-chuong": {
+  "t": "動画やキャンペーンのコードをお持ちですか？こちらに入力すると、すぐに両が加算されます。",
+  "h": "3b61f23b"
+ },
+ "topup.da-moi": {
+  "t": "招待済み：",
+  "h": "38658fa9"
+ },
+ "topup.da-nap-lan-dau": {
+  "t": "初回チャージ済み：",
+  "h": "c9f0cd6b"
+ },
+ "topup.da-nhan-luong": {
+  "t": "獲得済み：",
+  "h": "7c97410c"
+ },
+ "topup.dang-tai": {
+  "t": "読み込み中…",
+  "h": "577a1d59"
+ },
+ "topup.dang-tai-bang-gia": {
+  "t": "料金表を読み込み中",
+  "h": "0f8effca"
+ },
+ "topup.dang-tai-g1gj": {
+  "t": "読み込み中",
+  "h": "f774f216"
+ },
+ "topup.de-sau-tu-chon-goi-ben": {
+  "t": "あとで、下からパックを選ぶ",
+  "h": "3dc12218"
+ },
+ "topup.doi-ma": {
+  "t": "<span>コードを交換</span>",
+  "h": "50a9ba25"
+ },
+ "topup.dong": {
+  "t": "閉じる",
+  "h": "d2b73ab2"
+ },
+ "topup.dong-gop-duy-tri": {
+  "t": "運営維持へのご協力",
+  "h": "c80888bc"
+ },
+ "topup.dung-duoc-cho-cac-cong-cu": {
+  "t": "詳しい鑑定ツールと「先生に聞く」でお使いいただけます。各ツールの料金は、そのツールのページに表示されます。",
+  "h": "9f2a96d9"
+ },
+ "topup.goi-cang-lon-cang-re": {
+  "t": "大きいパックほどお得",
+  "h": "33962657"
+ },
+ "topup.khong-bao-gio-luong-duoc-luu": {
+  "t": "いいえ。両はアカウントに永久に保管されます。",
+  "h": "ffe348cc"
+ },
+ "topup.khong-moi-la-so-ket-qua": {
+  "t": "いいえ。命盤・結果ごとに両が差し引かれるのは1回だけです。その後は何度でも無料で見直せます。",
+  "h": "c396c59c"
+ },
+ "topup.link-moi": {
+  "t": "招待リンク：",
+  "h": "4e609ece"
+ },
+ "topup.luong-co-dung-chung-tai-khoan": {
+  "t": "両はアカウント間で共有できますか？",
+  "h": "1becf98e"
+ },
+ "topup.luong-co-het-han-khong": {
+  "t": "両に有効期限はありますか？",
+  "h": "eb07c396"
+ },
+ "topup.luong-don-vi": {
+  "t": "両",
+  "h": "6614284e"
+ },
+ "topup.luong-gan-voi-mot-tai-khoan": {
+  "t": "両は1つのアカウントに紐づきます。ご家族みんなで使いたい場合は、より大きなご協力プラン（プレミアム／VIP）を選び、1つのアカウントを共有してください。",
+  "h": "056bcb24"
+ },
+ "topup.luong-la-don-vi-dung-cho": {
+  "t": "両は、詳しい鑑定ツールに使う単位です。パックで購入でき、<strong>有効期限はなく</strong>、",
+  "h": "56f0d587"
+ },
+ "topup.ma-gioi-thieu-cua-ban": {
+  "t": "あなたの紹介コード：",
+  "h": "d217efa0"
+ },
+ "topup.mo-app-ngan-hang-quet-qr": {
+  "t": "銀行アプリを開く → QRをスキャン、または手動で振込",
+  "h": "3b3fbc1c"
+ },
+ "topup.moi-ban-cung-nhan-luong": {
+  "t": "友だち招待 — 一緒に両をもらう",
+  "h": "9c581c98"
+ },
+ "topup.moi-ban-dang-ky-ban-nhan": {
+  "t": "友だちを招待すると、相手がアカウントを作成した時点であなたに両が付与されます。",
+  "h": "db75ad54"
+ },
+ "topup.moi-luan-giai-chuyen-sau-goi": {
+  "t": "詳しい鑑定ごとに大規模言語モデル（Claude/GPT）のAPIを呼び出し、1回あたり約0.05〜0.10 USDかかります。さらに保管とホスティングの費用も必要です。両は、プロジェクトが自立して続き、古法のリファレンスツールをすべての人に無料で提供し続けるための仕組みです。",
+  "h": "f9c1cb68"
+ },
+ "topup.moi-tai-khoan-dung-duoc-mot": {
+  "t": "1つのアカウントで使えるコードは1つです。",
+  "h": "03a3bf30"
+ },
+ "topup.muc-dong-gop": {
+  "t": "ご協力プラン",
+  "h": "995e94f7"
+ },
+ "topup.nap-luong-de-su-dung-cac": {
+  "t": "両をチャージして、明宝紫微斗数のツールをご利用ください。登録すると両が無料でもらえます。有効期限はありません。",
+  "h": "9b06e362"
+ },
+ "topup.nap-luong-de-tra-cuu-menh": {
+  "t": "両をチャージして命理を調べる",
+  "h": "9e20fbe1"
+ },
+ "topup.nhap-ma-khuyen-mai": {
+  "t": "プロモーションコードを入力",
+  "h": "e9e5205f"
+ },
+ "topup.paypal-the": {
+  "t": "PayPal / カード",
+  "h": "57ed0fb5"
+ },
+ "topup.qua-luong-chao-mung-khi-dang": {
+  "t": "登録時にもらえるウェルカム両は、何に使えますか？",
+  "h": "9eadf304"
+ },
+ "topup.sao-chep": {
+  "t": "コピー",
+  "h": "09a1db3e"
+ },
+ "topup.sao-chep-link": {
+  "t": "リンクをコピー",
+  "h": "899e8987"
+ },
+ "topup.so-tien-khac": {
+  "t": "その他の金額",
+  "h": "adbf09d4"
+ },
+ "topup.so-tien-muon-nap-usd": {
+  "t": "チャージ金額 (USD)",
+  "h": "8929ebe7"
+ },
+ "topup.thanh-toan-bang-usd-qua-paypal": {
+  "t": "PayPal経由で<strong>USD</strong>でお支払いいただけます。PayPalアカウントで支払うか、<strong>Visa / Mastercard</strong>を選んでカード情報を直接入力できます（PayPalアカウントは不要です）。お支払い後、両は自動でアカウントに加算されます。",
+  "h": "87906448"
+ },
+ "topup.the-visa-mastercard": {
+  "t": "Visa / Mastercardカード",
+  "h": "10db7446"
+ },
+ "topup.toi-co-the-thanh-toan-bang": {
+  "t": "どのような方法で支払えますか？",
+  "h": "2b5b80d1"
+ },
+ "topup.toi-da-chuyen-khoan": {
+  "t": "振込しました",
+  "h": "b0a880c8"
+ },
+ "topup.vd-tuviminhbao": {
+  "t": "例：TUVIMINHBAO",
+  "h": "f161ad1c"
+ },
+ "topup.vi-sao-co-thanh-toan-ma": {
+  "t": "なぜ完全無料ではなく、お支払いがあるのですか？",
+  "h": "f2bd2a70"
+ },
+ "topup.xem-lai-ket-qua-co-bi": {
+  "t": "結果を見直すと、また両が差し引かれますか？",
+  "h": "64b49a22"
+ },
+ "tuonghop.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>鑑定サンプル版</b><span>サンプル命盤の夫婦の相性の詳細版をPDFでダウンロードして、実際の内容を事前にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-xem-tuoi.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "17b7eecd"
+ },
+ "tuonghop.cham-8-yeu-to-tuong-hop": {
+  "t": "お二人の命盤の間で、8つの相性要素を採点します。年齢の相性について、両家からあれこれ言われて迷っているときに。結婚を考えていて、はっきりした答えがほしいときにお使いください。",
+  "h": "e3005a0a"
+ },
+ "tuonghop.luan-giai-chuyen-sau-luong": {
+  "t": "✦ 詳しい鑑定 — <span class=\"vnd\" data-tvp-price-vnd=\"xem-tuoi\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"xem-tuoi\">…</span> 両)</span> →",
+  "h": "10ed4fe8"
+ },
+ "tuonghop.moi-luot-luong": {
+  "t": "1回 <span class=\"vnd\" data-tvp-price-vnd=\"xem-tuoi\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"xem-tuoi\">…</span> 両)</span>",
+  "h": "552e83b3"
+ },
+ "tuonghop.nguoi-thu-hai": {
+  "t": "<span class=\"dotB\"></span> 2人目",
+  "h": "204354fd"
+ },
+ "tuonghop.nguoi-thu-nhat": {
+  "t": "<span class=\"dotA\"></span> 1人目",
+  "h": "14919cba"
+ },
+ "tuonghop.nhap-ngay-sinh-hai-nguoi-duong": {
+  "t": "お二人の生年月日を入力（西暦）",
+  "h": "0a8681af"
+ },
+ "tuonghop.so-tuoi-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"heart-handshake\"></span><b id=\"btnGoLabel\">相性を見る →</b></span> <small id=\"btnGoSub\">必要：<span class=\"vnd\" data-tvp-price-vnd=\"xem-tuoi\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"xem-tuoi\">…</span> 両)</span></small>",
+  "h": "b8b279bf"
+ },
+ "tuonghop.so-tuoi-vo-chong-theo-la": {
+  "t": "紫微斗数の命盤で夫婦の相性を見ます。8つの観点（年齢、五行、考え方、関係性、子ども、金銭）の調和度をスコア化し、先生に聞いてさらに深く読み解けます。",
+  "h": "8c8efe63"
+ },
+ "tuonghop.tra-loi-thay-o-khung-chat": {
+  "t": "チャット欄で先生に答えて、お二人の生年月日を入力してください。",
+  "h": "d670d014"
+ },
+ "tuonghop.viet-rieng-cho-hai-nguoi-nay": {
+  "t": "このお二人のために、古法にもとづいて書き下ろします。全体像と、各観点ごとの調和を読み解きます。",
+  "h": "7ce3e9e1"
+ },
+ "tuonghop.xem-tuoi-vo-chong-so-hoa": {
+  "t": "<b id=\"wsTitle\">夫婦の相性</b><span id=\"wsSub\">古法でお二人の命盤の調和を比べます</span>",
+  "h": "dec7e95a"
+ },
+ "tuonghop.xem-tuoi-vo-chong-tu-vi": {
+  "t": "夫婦の相性 — 明宝紫微斗数",
+  "h": "4fd9f105"
+ },
+ "vanhan.12-thang-am-lich-toi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>今後12か月<br>（旧暦）</span>",
+  "h": "3a53657a"
+ },
+ "vanhan.ban-van-han-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>運勢（年運）サンプル版</b><span>サンプル命盤の詳細な鑑定をPDFでダウンロードして、実際の内容を事前にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-van-han-nam.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "1e9bfd0f"
+ },
+ "vanhan.dang-dung": {
+  "t": "<span class=\"ic\" id=\"vhBtnPdfIcon\"><span class=\"rr-spin\"></span></span> <span id=\"vhBtnPdfLabel\">作成中…</span>",
+  "h": "2acb933e"
+ },
+ "vanhan.luan-giai-day-du": {
+  "t": "完全版の鑑定 →",
+  "h": "a2830f82"
+ },
+ "vanhan.mot-nam-12-thang-khong-thang": {
+  "t": "1年の12か月は、どの月も同じではありません。進むのに向いた月もあれば、じっと時を待つ月もあります。あなたの命盤から毎月の流れを読み解いて、受け身ではなく主体的に動きましょう。",
+  "h": "cc7a0558"
+ },
+ "vanhan.nhap-ngay-gio-sinh-he-thong": {
+  "t": "生年月日と生まれた時刻を入力してください。旧暦の月ごとに運勢を読み解きます（現在の大運、今年の小運、そして12か月それぞれの鑑定）。",
+  "h": "843980b9"
+ },
+ "vanhan.nhap-ngay-sinh-de-xem-van": {
+  "t": "生年月日を入力して、今後12か月の運勢を見る",
+  "h": "6d4946bd"
+ },
+ "vanhan.tai-anh-chia-se-9-16": {
+  "t": "⬇ シェア用画像を保存 (9:16)",
+  "h": "9e425572"
+ },
+ "vanhan.tai-chinh-tung-thang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"dollar-sign\"></span><span>毎月の<br>金運</span>",
+  "h": "be559339"
+ },
+ "vanhan.tinh-duyen-tung-thang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>毎月の<br>恋愛運</span>",
+  "h": "74f37a3c"
+ },
+ "vanhan.van-han-12-thang-toi": {
+  "t": "運勢今後12か月",
+  "h": "f265e49d"
+ },
+ "vanhan.van-han-12-thang-toi-tieu": {
+  "t": "<b>運勢今後12か月</b><span>今日から数えた、年の小運と月ごとの運</span>",
+  "h": "ee5bb33f"
+ },
+ "vanhan.van-han-12-thang-toi-tu": {
+  "t": "運勢今後12か月 — 明宝紫微斗数",
+  "h": "8209452b"
+ },
+ "vanhan.xem-van-han-12-thang-toi": {
+  "t": "今日から数えた今後12か月の運勢を確認できます。年の小運と月ごとの運を、限の宮・星・運のパターンから、古法にもとづいて月ごとに個別に読み解きます。",
+  "h": "b5015abf"
+ },
+ "vanhan.xem-van-han-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"calendar\"></span><b id=\"btnGoLabel\">運勢を見る →</b></span> <small>無料</small>",
+  "h": "3895d3c5"
  }
 }
