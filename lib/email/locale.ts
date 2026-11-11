@@ -6,7 +6,8 @@
 // (không có cookie), reminder/cross-sell/broadcast gửi từ cron (không có request).
 // Cookie `tvmb_locale` chỉ đọc được lúc khách còn ngồi trước máy — mua hàng, gửi
 // PDF — nên ghi vào bảng `user_locale` ở đúng hai khoảnh khắc đó
-// (`_patches/migration-user-locale.sql`). Đọc hụt/bảng chưa tạo ⇒ tiếng Việt,
+// (`_patches/migration-user-locale.sql`); chưa có dòng thì rơi về `user_metadata.locale` (lúc đăng ký).
+// Đọc hụt/bảng chưa tạo ⇒ tiếng Việt,
 // đúng hành vi trước W11 — không bao giờ làm hỏng việc gửi.
 // ============================================================
 import { DEFAULT_LOCALE, isLocale, type Locale } from '@/lib/i18n/locales';
@@ -46,7 +47,28 @@ export async function saveUserLocale(userId: string, locale: Locale | null): Pro
   }
 }
 
-/** Ngôn ngữ của nhiều người trong MỘT lượt gọi (cron). Thiếu người nào → không có khoá đó. */
+/** Ngôn ngữ gắn lúc signUp/claimAccount (`public/auth.js`, W4b) ở `user_metadata.locale`. */
+async function localeFromAuthMetadata(userId: string): Promise<Locale | null> {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return null;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${encodeURIComponent(userId)}`, {
+      headers: SB,
+      cache: 'no-store',
+    });
+    if (!res.ok) return null;
+    const v = ((await res.json()) as { user_metadata?: { locale?: unknown } }).user_metadata?.locale;
+    return isLocale(v) ? v : null;
+  } catch (e) {
+    console.error('[user-locale] đọc user_metadata lỗi', e);
+    return null;
+  }
+}
+
+/**
+ * Ngôn ngữ của nhiều người trong MỘT lượt gọi (cron). Thiếu người nào → không có khoá đó.
+ * Thứ tự ưu tiên: (1) bảng `user_locale` — cookie lúc MUA/gửi PDF, tức ngôn ngữ khách dùng gần nhất;
+ * (2) `user_metadata.locale` — ngôn ngữ lúc ĐĂNG KÝ, chỉ dùng khi bảng không có dòng.
+ */
 export async function getUserLocales(userIds: string[]): Promise<Map<string, Locale>> {
   const out = new Map<string, Locale>();
   const ids = [...new Set(userIds.filter(Boolean))];
@@ -69,6 +91,16 @@ export async function getUserLocales(userIds: string[]): Promise<Map<string, Loc
     } catch (e) {
       console.error('[user-locale] đọc lỗi', e);
     }
+  }
+  // Người chưa có dòng nào: hỏi metadata, 10 người song song (mỗi lượt cron tối đa vài trăm người).
+  const missing = ids.filter((id) => !out.has(id));
+  for (let i = 0; i < missing.length; i += 10) {
+    const part = missing.slice(i, i + 10);
+    const got = await Promise.all(part.map(localeFromAuthMetadata));
+    part.forEach((id, k) => {
+      const l = got[k];
+      if (l) out.set(id, l);
+    });
   }
   return out;
 }

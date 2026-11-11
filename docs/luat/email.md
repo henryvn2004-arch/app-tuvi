@@ -138,8 +138,9 @@ Khách mới là người Nhật · Hàn · Đài · Trung · Anh, nên cả 6 l
   `saveUserLocale` từ cookie `tvmb_locale` ở hai khoảnh khắc khách còn ngồi trước máy: tạo đơn nạp
   (`app/api/payment` `topup`) và gửi PDF (`email-pdf`, `resend-pdf`). Hoá đơn đi từ WEBHOOK PayPal và
   reminder/cross-sell/broadcast đi từ cron — không có cookie — nên PHẢI đọc từ bảng (`getUserLocale(s)`).
-  Bảng chưa tạo / không có dòng ⇒ tiếng Việt (đúng hành vi trước W11). Chưa có khách mới nào được ghi
-  lúc ĐĂNG KÝ vì đăng ký đi thẳng client → GoTrue, không qua server của mình.
+  Thứ tự: bảng `user_locale` (ngôn ngữ dùng gần nhất lúc mua/gửi PDF) → `user_metadata.locale`
+  (W4b gắn lúc signUp/claimAccount trong `auth.js`) → tiếng Việt. Metadata đọc qua GoTrue admin API, chỉ cho
+  người chưa có dòng trong bảng.
 - **Hoá đơn hiện USD** khi có `amountUsd` (PayPal truyền `paidUsd`, số tiền thật PayPal đã thu); webhook
   ngân hàng/MoMo cũ không có USD ⇒ vẫn VNĐ. Tên gói (tiếng Việt) chỉ hiện ở bản `vi`.
 - **Broadcast: nội dung do admin soạn** — tự lo ngôn ngữ (soạn riêng từng bản, gửi riêng từng danh sách);
