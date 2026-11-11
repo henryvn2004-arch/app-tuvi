@@ -1,7 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-547 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
-
+548 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -13,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 6 | 17,301 B |
+| `2026-11.md` | 7 | 18,957 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -29,6 +28,8 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🔎 W10 — SEO/GEO quốc tế: keyword theo ngôn ngữ + Naver, IndexNow, llms theo ngôn ngữ |
+
 | 1 | 2026-11 | `2026-11.md` | ⚖️ W11 — Trang pháp lý theo nước (特商法) + 6 loại email đa ngôn ngữ |
 
 | 1 | 2026-11 | `2026-11.md` | 🌗 W3b — Bát Tự cn/kr/jp: trụ tháng/năm theo THỜI ĐIỂM vào tiết |

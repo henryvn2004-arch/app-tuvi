@@ -23,6 +23,10 @@ const nextConfig = {
     '/xac-dinh-gio-sinh': ['./data/nghiem-chung/manifest.json'],
     '/xac-dinh-gio-sinh/[slug]': ['./data/nghiem-chung/**', './public/laso-chart.js'],
     '/sitemap-xac-dinh-gio-sinh': ['./data/nghiem-chung/manifest.json'],
+    // IndexNow + llms theo ngôn ngữ đọc i18n/*.json và manifest bằng fs lúc chạy (W10).
+    '/api/cron/indexnow': ['./i18n/*.json', './data/nghiem-chung/manifest.json'],
+    '/llms/[locale]': ['./i18n/availability.json', './data/nghiem-chung/manifest.json'],
+    '/llms-full/[locale]': ['./i18n/availability.json', './data/nghiem-chung/manifest.json'],
     // Cron sinh hồ sơ: hàng đợi (celebs.jsonl), danh sách đã xong (manifest + loai-tru) và luật viết (PROMPT.md).
     '/api/cron/nghiem-chung': [
       './data/nghiem-chung/celebs.jsonl',
@@ -153,6 +157,9 @@ const nextConfig = {
       { source: '/sitemap-nghiem-chung.xml', destination: '/sitemap-nghiem-chung' },
       { source: '/sitemap-xac-dinh-gio-sinh.xml', destination: '/sitemap-xac-dinh-gio-sinh' },
       { source: '/sitemap-i18n-:locale.xml', destination: '/sitemap-i18n/:locale' },
+      // llms.txt theo ngôn ngữ (W10). `llms-full-` đứng TRƯỚC: `:locale` của `llms-:locale` ăn được cả `full-ja`.
+      { source: '/llms-full-:locale.txt', destination: '/llms-full/:locale' },
+      { source: '/llms-:locale.txt',      destination: '/llms/:locale'      },
       { source: '/sitemap-seo.xml',     destination: '/sitemap-seo'          },
       { source: '/sitemap-van-han.xml', destination: '/sitemap-van-han'      },
       { source: '/sitemap-la-so.xml',   destination: '/sitemap-la-so'        },
