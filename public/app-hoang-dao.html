@@ -148,7 +148,7 @@ window.SHELL_INTRO={key:'hoang-dao'};</script>
 <script src="/tools-shared/hoang-lich.js?v=1"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=145"></script>
+<script src="/shell.js?v=146"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
@@ -200,13 +200,19 @@ function calculate(){
   // Hoàng lịch đầy đủ về sau thì NÂNG CẤP ngữ cảnh rail. Cố ý đặt context một
   // lần ngay ở trên rồi mới chồng lên: rail phải dùng được ngay cả khi
   // /api/almanac chậm hoặc chết, chứ không ngồi chờ.
+  // "Kiến (cát)" → tên qua glossary + nhãn cát/hung/bình qua _tvmbT. CHỈ hiển thị; scenario.data gửi server giữ chữ Việt.
+  function hlNhan(kind,v){
+    var m=/^(.+) \((cát|hung|bình)\)$/.exec(v||''); if(!m)return v;
+    var lab={'cát':_tvmbT('js.shellui.hl-cat','cát'),'hung':_tvmbT('js.shellui.hl-hung','hung'),'bình':_tvmbT('js.shellui.hl-binh','bình')};
+    return _tvmbG(kind,m[1])+' ('+lab[m[2]]+')';
+  }
   HoangLich.gan(document.getElementById('hoangLich'),+_d,+_m,+_y).then(function(hl){
     var extra=HoangLich.railData(hl); if(!extra)return;
     // ⚠️ `extractGenericContext` BỎ QUA mọi giá trị là object → payload phải PHẲNG.
     Shell.setContext({
       scenario:{type:'hoang-dao',data:Object.assign({},r.data,extra)},
       label:_tvmbT('js.shellui.gio-hoang-dao', 'Giờ Hoàng Đạo · ')+r.data.ngayDL,
-      greeting:_tvmbT('js.shellui.ngay-lqyo', 'Ngày **')+r.data.ngayDL+'** ('+_tvmbG('canchi', r.data.canChiNgay)+') '+_tvmbT('js.shellui.truc', '— trực **')+extra.truc+_tvmbT('js.shellui.sao-dam', '**, sao **')+extra.nhiThapBatTu+_tvmbT('js.shellui.da-co-du-gio-hoang-dao', '**. Đã có đủ giờ hoàng đạo, việc nên/kiêng và thần sát. Bạn định làm việc gì?'),
+      greeting:_tvmbT('js.shellui.ngay-lqyo', 'Ngày **')+r.data.ngayDL+'** ('+_tvmbG('canchi', r.data.canChiNgay)+') '+_tvmbT('js.shellui.truc', '— trực **')+hlNhan('truc', extra.truc)+_tvmbT('js.shellui.sao-dam', '**, sao **')+hlNhan('tu', extra.nhiThapBatTu)+_tvmbT('js.shellui.da-co-du-gio-hoang-dao', '**. Đã có đủ giờ hoàng đạo, việc nên/kiêng và thần sát. Bạn định làm việc gì?'),
       chips:[_tvmbT('js.shellui.gio-nao-tot-de-khai-truong', 'Giờ nào tốt để khai trương?'),_tvmbT('js.shellui.hom-nay-nen-lam-gi-kieng', 'Hôm nay nên làm gì, kiêng gì?'),_tvmbT('js.shellui.ky-hop-dong-gio-nao-hop', 'Ký hợp đồng giờ nào hợp?'),_tvmbT('js.shellui.tuoi-toi-co-bi-xung-ngay', 'Tuổi tôi có bị xung ngày này không?')]
     });
   });

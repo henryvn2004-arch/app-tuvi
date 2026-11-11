@@ -23,6 +23,14 @@
   // Tên sao/cung/can chi của ENGINE khi chèn vào câu HIỂN THỊ: qua TuviGlossary (W15). Chỉ dùng ở chỗ vẽ —
   // giá trị gốc vẫn là khoá tính toán/gửi server (luật W13c).
   var G = function (kind, v) { var g = window.TuviGlossary; return g && v ? g.t(kind, v) : v; };
+  // "Kiến (cát)" / "Giác (hung)" từ HoangLich.railData: tên qua glossary, nhãn cát/hung/bình qua T(). CHỈ để hiển thị —
+  // chuỗi gốc vẫn nằm trong scenario.data gửi server (luật W13c).
+  var HLN = function (kind, v) {
+    var m = /^(.+) \((cát|hung|bình)\)$/.exec(v || '');
+    if (!m) return v;
+    var lab = { 'cát': T('js.shellui.hl-cat', 'cát'), 'hung': T('js.shellui.hl-hung', 'hung'), 'bình': T('js.shellui.hl-binh', 'bình') };
+    return G(kind, m[1]) + ' (' + lab[m[2]] + ')';
+  };
   if (!window.TVMB_I18N && !document.querySelector('script[src^="/i18n.js"]')) {
     var i18nS = document.createElement('script');
     i18nS.src = '/i18n.js?v=3';
@@ -3974,7 +3982,7 @@
           Shell.setContext({
             toolId: toolId, scenario: { type: 'nap-am', data: ctx },
             label: T('js.shellui.nap-am', 'Nạp âm ') + G('canchi', r.data.canChi) + ' · ' + r.data.napAm,
-            greeting: T('js.shellui.nam-1mfe', 'Năm **') + r.data.nam + T('js.shellui.ban-menh', '** — bản mệnh **') + esc(r.data.napAm) + T('js.shellui.hanh-3if6', '** (hành ') + esc(r.data.hanh) + (')' + T('js.shellui.ban-muon-toi-luan-dieu-gi-8en2', '. Bạn muốn tôi luận điều gì?')),
+            greeting: T('js.shellui.nam-1mfe', 'Năm **') + r.data.nam + T('js.shellui.ban-menh', '** — bản mệnh **') + esc(G('napam', r.data.napAm)) + T('js.shellui.hanh-3if6', '** (hành ') + esc(G('hanh', r.data.hanh)) + (')' + T('js.shellui.ban-muon-toi-luan-dieu-gi-8en2', '. Bạn muốn tôi luận điều gì?')),
             chips: [T('js.shellui.hop-mau-gi-ky-mau-gi', 'Hợp màu gì, kỵ màu gì?'), T('js.shellui.huong-nha-ban-lam-viec-nao', 'Hướng nhà/bàn làm việc nào hợp?'), T('js.shellui.tuoi-nao-hop-tuoi-nao-khac', 'Tuổi nào hợp, tuổi nào khắc?'), T('js.shellui.vat-pham-phong-thuy-nao-nen', 'Vật phẩm phong thủy nào nên đeo?')],
           });
         });
@@ -4095,7 +4103,7 @@
               Shell.setContext({
                 toolId: toolId, scenario: { type: 'hoang-dao', data: Object.assign({}, r.data, extra) },
                 label: T('js.shellui.gio-hoang-dao', 'Giờ Hoàng Đạo · ') + r.data.ngayDL,
-                greeting: T('js.shellui.ngay-lqyo', 'Ngày **') + r.data.ngayDL + '** (' + G('canchi', r.data.canChiNgay) + (') ' + T('js.shellui.truc', '— trực **')) + extra.truc + T('js.shellui.sao-dam', '**, sao **') + extra.nhiThapBatTu + T('js.shellui.da-co-du-gio-hoang-dao', '**. Đã có đủ giờ hoàng đạo, việc nên/kiêng và thần sát. Bạn định làm việc gì?'),
+                greeting: T('js.shellui.ngay-lqyo', 'Ngày **') + r.data.ngayDL + '** (' + G('canchi', r.data.canChiNgay) + (') ' + T('js.shellui.truc', '— trực **')) + HLN('truc', extra.truc) + T('js.shellui.sao-dam', '**, sao **') + HLN('tu', extra.nhiThapBatTu) + T('js.shellui.da-co-du-gio-hoang-dao', '**. Đã có đủ giờ hoàng đạo, việc nên/kiêng và thần sát. Bạn định làm việc gì?'),
                 chips: [T('js.shellui.gio-nao-tot-de-khai-truong', 'Giờ nào tốt để khai trương?'), T('js.shellui.hom-nay-nen-lam-gi-kieng', 'Hôm nay nên làm gì, kiêng gì?'), T('js.shellui.ky-hop-dong-gio-nao-hop', 'Ký hợp đồng giờ nào hợp?'), T('js.shellui.tuoi-toi-co-bi-xung-ngay', 'Tuổi tôi có bị xung ngày này không?')],
               });
             });
@@ -4344,7 +4352,7 @@
           Shell.setContext({
             toolId: toolId, scenario: { type: 'mai-hoa', data: d },
             label: 'Mai Hoa · ' + tenChinh + ' — ' + r.ketLuan.ten,
-            greeting: T('js.shellui.que-da-lap-the', 'Quẻ đã lập — Thể **') + r.the.n + '** (' + r.the.hanh + (')' + T('js.shellui.dung', ', Dụng **')) + r.dung.n + '** (' + r.dung.hanh + (')' + T('js.shellui.tuc', ', tức **')) + r.ketLuan.ten + T('js.shellui.toi-se-luan-theo-cau-hoi-n3t1', '**. Tôi sẽ luận theo câu hỏi của bạn.'),
+            greeting: T('js.shellui.que-da-lap-the', 'Quẻ đã lập — Thể **') + r.the.n + '** (' + G('hanh', r.the.hanh) + (')' + T('js.shellui.dung', ', Dụng **')) + r.dung.n + '** (' + G('hanh', r.dung.hanh) + (')' + T('js.shellui.tuc', ', tức **')) + r.ketLuan.ten + T('js.shellui.toi-se-luan-theo-cau-hoi-n3t1', '**. Tôi sẽ luận theo câu hỏi của bạn.'),
             chips: [T('js.shellui.luan-que-nay-cho-cau-hoi', 'Luận quẻ này cho câu hỏi của tôi'), T('js.shellui.the-bi-dung-khac-thi-nen', 'Thể bị Dụng khắc thì nên làm gì?'), T('js.shellui.ho-quai-cho-thay-khuc-giua', 'Hỗ quái cho thấy khúc giữa ra sao?'), T('js.shellui.bien-quai-noi-ket-cuc-the', 'Biến quái nói kết cục thế nào?')],
           });
         });
@@ -4732,7 +4740,7 @@
       buildContext: function (d) {
         return {
           label: T('js.shellui.trang-diem-yk4l', 'Trang Điểm — ') + optLabel(d.faceShapeVN || ''),
-          greeting: T('js.shellui.khuon-mat-cua-ban', 'Khuôn mặt của bạn: **') + optLabel(d.faceShapeVN || '') + '**' + (d.napAmHanh ? T('js.shellui.menh', ', mệnh ') + d.napAmHanh : '') + T('js.shellui.ban-muon-hoi-them-ve-phong', '. Bạn muốn hỏi thêm về phong cách trang điểm nào?'),
+          greeting: T('js.shellui.khuon-mat-cua-ban', 'Khuôn mặt của bạn: **') + optLabel(d.faceShapeVN || '') + '**' + (d.napAmHanh ? T('js.shellui.menh', ', mệnh ') + G('hanh', d.napAmHanh) : '') + T('js.shellui.ban-muon-hoi-them-ve-phong', '. Bạn muốn hỏi thêm về phong cách trang điểm nào?'),
           chips: [T('js.shellui.vi-sao-phong-cach-nay-hop', 'Vì sao phong cách này hợp tôi?'), T('js.shellui.mau-son-nao-hop-tong-da', 'Màu son nào hợp tông da tôi?'), T('js.shellui.trang-diem-anh-huong-van-khi', 'Trang điểm ảnh hưởng vận khí thế nào?')],
         };
       },

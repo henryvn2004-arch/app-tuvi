@@ -4123,6 +4123,18 @@
   "t": "读懂目前打开的命盘",
   "h": "b500bc82"
  },
+ "js.shellui.hl-binh": {
+  "t": "平",
+  "h": "3318401b"
+ },
+ "js.shellui.hl-cat": {
+  "t": "吉",
+  "h": "70e9b769"
+ },
+ "js.shellui.hl-hung": {
+  "t": "凶",
+  "h": "3baaa792"
+ },
  "js.shellui.ho": {
   "t": "姓",
   "h": "a9a24039"
