@@ -19,7 +19,8 @@
 <link rel="stylesheet" href="/tools/tools.css">
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js"></script>
+<script src="/tools-shared/noi-sinh.js?v=1"></script>
+<script src="/tuvi-form.js?v=15"></script>
 <style>
 .thang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .thang-card{border:1px solid var(--border-lt);border-radius:8px;padding:16px;position:relative}
@@ -111,7 +112,7 @@ const CUNG_MEAN={
 };
 
 function luanGiai(){
-  const {hoten,ngay,thang,nam,gioIdx,gioHour,gioitinh,namXem}=TuviForm.getData();
+  const {hoten,ngay,thang,nam,gioIdx,gioHour,gioitinh,namXem,lich}=TuviForm.getData();
   const err=document.getElementById('error-msg');
   err.classList.remove('active');
   if(!ngay||!thang||!nam){err.textContent='Vui lòng điền đầy đủ thông tin.';err.classList.add('active');return;}
@@ -120,7 +121,7 @@ function luanGiai(){
   document.querySelector('.btn-submit').disabled=true;
   document.getElementById('result-section').classList.remove('active');
   try{
-    const conv=convertDuongToAm(ngay,thang,nam,gioHour);
+    const conv=convertDuongToAm(ngay,thang,nam,gioHour,lich);
     const ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:nam,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:conv.gioIdx,gioitinh,namXem:namXem||CURRENT_YEAR});
     const namXemVal=namXem||CURRENT_YEAR;
     const namChi=((namXemVal-4)%12+12)%12;

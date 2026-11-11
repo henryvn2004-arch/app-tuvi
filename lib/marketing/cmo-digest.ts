@@ -10,7 +10,6 @@
 import { llmText } from '@/lib/llm/complete';
 import { getGa4Breakdown, type Ga4Breakdown } from '@/lib/analytics/ga4';
 import { getSearchConsoleSnapshot, type GscSnapshot } from '@/lib/analytics/search-console';
-import { getLatestGrowthFindings, type Finding } from '@/lib/growth/findings';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -116,19 +115,13 @@ interface CmoSnapshot {
    */
   gsc: GscSnapshot | null;
   /**
-   * Bậc 6 của docs/GROWTH-DATA-PLAN.md — findings ads/campaign đã tính XONG
-   * bởi lib/growth/engine.ts + findings.ts (CAC/CPA/ROAS, cổng mẫu ≥30 đã áp
-   * SẴN trong `metrics`, xem lib/growth/engine.ts::sampleGate). Rỗng khi
-   * chưa có run nào (`app/api/cron/growth-insights` chưa chạy lần nào) hoặc
-   * run gần nhất không thấy gì đáng báo — KHÔNG phải "chưa nối ads".
-   */
-  growthFindings: Finding[];
-  /**
    * Microsoft Clarity — rage click/dead click/scroll depth, xem
    * `getLatestClarity()` ngay trên. null = chưa cấu hình hoặc cron
    * `ext-metrics` hôm nay chưa chạy/lỗi.
    */
   clarity: ClaritySnapshotForDigest | null;
+  /** Tên các RPC lỗi lượt này (khối tương ứng = null). Rỗng = đủ dữ liệu. */
+  rpcErrors: string[];
 }
 
 // Snapshot 7 ngày gần nhất SO VỚI 7 ngày trước đó (WoW) — đủ để LLM thấy xu
@@ -138,28 +131,40 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
   const now = new Date();
   const d = (days: number) => new Date(now.getTime() - days * 864e5).toISOString();
 
+  // Một RPC hỏng KHÔNG được kéo sập cả digest: trước đây Promise.all ném ngay khi
+  // `dashboard_engagement` dính 57014 nên 26/30 lượt không gửi được dòng nào, dù
+  // 15 khối còn lại đều đọc được. Hỏng → null + ghi tên vào `rpcErrors` để LLM nói
+  // thẳng "thiếu khối X" thay vì im lặng; lỗi vẫn ra log.
+  const rpcErrors: string[] = [];
+  const rpc = <T>(fn: string, params: Record<string, unknown>): Promise<T | null> =>
+    callRpc<T>(fn, params).catch((e: unknown) => {
+      console.error(`[cmo-digest] RPC ${fn} lỗi:`, (e as Error).message);
+      rpcErrors.push(fn);
+      return null;
+    });
+
   const day = (days: number) => d(days).slice(0, 10); // GA4 Data API nhận YYYY-MM-DD
 
   const [
     funnelThisWeek, funnelPrevWeek, sourcesThisWeek, engagement,
     revenueThisWeek, revenuePrevWeek, margin, channelHealth, atRisk,
     signupTruthThisWeek, signupTruthPrevWeek, trafficQuality, ga4, gsc,
-    growthFindings, clarity,
+    clarity,
   ] = await Promise.all([
-    callRpc('marketing_funnel', { p_from: d(7), p_to: d(0) }),
-    callRpc('marketing_funnel', { p_from: d(14), p_to: d(7) }),
-    callRpc('marketing_sources', { p_from: d(7), p_to: d(0) }),
-    callRpc('dashboard_engagement', { p_days: 14 }),
-    callRpc('marketing_revenue', { p_from: d(7), p_to: d(0) }),
-    callRpc('marketing_revenue', { p_from: d(14), p_to: d(7) }),
-    callRpc('dashboard_margin', { p_from: d(7), p_to: d(0) }),
-    callRpc('channel_error_rate', { p_hours: 24 }),
-    callRpc<unknown[]>('dashboard_at_risk', { p_idle_days: 14, p_min_events: 3, p_limit: 50 }),
+    rpc('marketing_funnel', { p_from: d(7), p_to: d(0) }),
+    rpc('marketing_funnel', { p_from: d(14), p_to: d(7) }),
+    rpc('marketing_sources', { p_from: d(7), p_to: d(0) }),
+    rpc('dashboard_engagement', { p_days: 14 }),
+    rpc('marketing_revenue', { p_from: d(7), p_to: d(0) }),
+    rpc('marketing_revenue', { p_from: d(14), p_to: d(7) }),
+    rpc('dashboard_margin', { p_from: d(7), p_to: d(0) }),
+    rpc('channel_error_rate', { p_hours: 24 }),
+    rpc<unknown[]>('dashboard_at_risk', { p_idle_days: 14, p_min_events: 3, p_limit: 50 }),
     // Số đăng ký THẬT + mốc bật tracking. Xem chú thích ở CmoSnapshot.
-    callRpc('marketing_signup_truth', { p_from: d(7), p_to: d(0) }),
-    callRpc('marketing_signup_truth', { p_from: d(14), p_to: d(7) }),
+    rpc('marketing_signup_truth', { p_from: d(7), p_to: d(0) }),
+    rpc('marketing_signup_truth', { p_from: d(14), p_to: d(7) }),
     // Bao nhiêu trong số "khách" là người thật. Xem chú thích ở CmoSnapshot.
-    callRpc('traffic_quality', { p_from: d(7), p_to: d(0) }),
+    rpc('traffic_quality', { p_from: d(7), p_to: d(0) }),
     // GA4 là nguồn DUY NHẤT thấy được organic/ads/social; thiếu nó thì digest chỉ
     // nhìn được phần traffic đã chạm track.js và dễ kết luận sai về kênh.
     // Best-effort: hỏng → null, không kéo sập cả digest.
@@ -170,10 +175,6 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     // ngày vì dữ liệu GSC luôn trễ 2–3 ngày; lấy tới hôm nay là tự tạo ra một
     // cái dốc đi xuống giả ở cuối. Best-effort như GA4.
     getSearchConsoleSnapshot(day(31), day(3)).catch(() => null),
-    // Bậc 6 Growth Data Plan — findings ads/campaign ĐÃ TÍNH XONG (CAC/CPA/
-    // ROAS, cổng mẫu ≥30 đã áp). getLatestGrowthFindings() tự fail-open
-    // (lỗi/rỗng → []), .catch() ở đây chỉ phòng thêm, không kéo sập digest.
-    getLatestGrowthFindings().catch(() => []),
     getLatestClarity().catch(() => null),
   ]);
 
@@ -191,8 +192,8 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
         }
       : null,
     gsc,
-    growthFindings,
     clarity,
+    rpcErrors,
   };
 }
 
@@ -247,6 +248,9 @@ VỀ KHỐI "trafficQuality" — ĐỌC KHỐI NÀY TRƯỚC MỌI KHỐI KHÁC,
   dựng ra một kết luận xấu về sản phẩm bằng một phép chia sai.
 - ua_coverage.with_ua = 0 nghĩa là CHƯA thu được User-Agent nào trong khoảng này. Khi đó fleet_bot và
   known_bot = 0 là "chưa đo được", KHÔNG phải "không có bot" — cấm đọc thành tin tốt.
+
+rpcErrors khác rỗng nghĩa là các khối tên đó ĐỌC HỤT (giá trị null) — nói thẳng "thiếu khối X lượt này"
+một câu, TUYỆT ĐỐI không suy số của khối đó.
 
 VỀ SỐ KHÁCH VÀ NGƯỜI DÙNG HOẠT ĐỘNG — chỗ này ĐÃ báo động giả một lần, đọc kỹ:
 - funnel*.visitors là số THÔ (gồm máy). Số phải dùng là funnel*.visitors_human; funnel*.visitors_bot
@@ -335,18 +339,7 @@ sổ ~24h TRƯỢT tính từ lúc cron chạy, KHÔNG phải một ngày lịch
   số đáng nêu ở "⚠️ Điểm nghẽn" khi có mặt và đáng kể, không phải count thô.
 - "avg_scroll_depth" là % cuộn trang trung bình (0-100) của TOÀN site, không
   tách theo trang — thấp không tự động là xấu (trang ngắn cuộn hết sớm là
-  bình thường), đừng kết luận UX tệ chỉ từ một con số này.
-
-VỀ KHỐI "growthFindings" (bậc 6 Growth Data Plan — findings ads/campaign):
-- Đây là mảng VIỆC đã tính XONG bởi code (CAC/CPA/ROAS, cổng mẫu ≥30 đã áp) — CHỈ đọc lại
-  "headline" và số trong "metrics", TUYỆT ĐỐI không tự tính lại hay tự suy % từ các số đó.
-- Mảng RỖNG nghĩa là "không có finding nào đủ mẫu để báo" — nói thẳng câu đó nếu được hỏi về
-  ads, KHÔNG suy diễn thành "ads đang tốt" hay "chưa nối được ads" (hai kết luận đó cần dữ liệu
-  khác, xem CmoSnapshot ở code).
-- "severity":"act" là việc CẦN LÀM NGAY (thêm hẳn vào "⚠️ Điểm nghẽn" hoặc mở gạch đầu dòng riêng
-  nếu có), "watch" là đáng để mắt nhưng chưa gấp, "info" thường bỏ qua trừ khi không còn gì khác.
-- "suggested_action" là ĐỀ XUẤT cho Henry TỰ BẤM, KHÔNG phải việc hệ thống đã/sẽ tự làm — đừng
-  viết như thể hành động đó đã xảy ra.`;
+  bình thường), đừng kết luận UX tệ chỉ từ một con số này.`;
 
 export interface CmoDigestResult {
   text: string;

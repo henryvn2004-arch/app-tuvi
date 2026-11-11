@@ -277,7 +277,8 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
 <script src="/tuvi-laso-format.js?v=6"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=14"></script>
+<script src="/tools-shared/noi-sinh.js?v=1"></script>
+<script src="/tuvi-form.js?v=15"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=6"></script>
 <script src="/tuvi-paywall.js?v=42"></script>
@@ -415,7 +416,7 @@ async function doXem(){
   try{ sessionStorage.setItem(VH_RESUME_KEY, JSON.stringify({fd:fdIn})); }catch(e){ /* ignore */ }
   btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang tính…';
   try{
-    var conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
+    var conv=convertDuongToAm(dd,mm,yyyy,hh,fdIn.lich);conv.gioIdx=gioAmIdx;
     // namXem = năm của THÁNG ĐANG XEM → đại vận/tiểu hạn "hiện tại" khớp đúng
     // thời điểm mở tool (server dùng CÙNG một mốc, xem /api/van-han-nam).
     var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:gioitinh,namXem:TU_NAM});
@@ -473,7 +474,7 @@ async function doXem(){
     if(window.CungNgaySinh)CungNgaySinh.mount('cnsHost',{ngay:dd,thang:mm,nam:yyyy,gioIdx:gioAmIdx,gioitinh:gioitinh});
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
-      birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
+      birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined,lich:fdIn.lich,noiSinh:fdIn.noiSinh},
       label:'Vận hạn 12 tháng · '+(name||'lá số')+' · từ '+_khung.tuNhan,
       greeting:'Khung **12 tháng âm lịch tới** ('+_khung.tuNhan+' → '+_khung.denNhan+', tức '+_khung.duongTu+' – '+_khung.duongDen+' dương lịch) đã sẵn sàng. Hỏi tôi về bất kỳ tháng nào.',
       chips:buildChips()
@@ -493,7 +494,7 @@ async function doXem(){
 
 function _birthPayload(){
   var f=TuviForm.getData();
-  return {day:f.ngay,month:f.thang,year:f.nam,hourBranch:f.gioIdx,gender:f.gioitinh,name:f.hoten||undefined};
+  return {day:f.ngay,month:f.thang,year:f.nam,hourBranch:f.gioIdx,gender:f.gioitinh,name:f.hoten||undefined,lich:f.lich,noiSinh:f.noiSinh};
 }
 
 function shareLines(){

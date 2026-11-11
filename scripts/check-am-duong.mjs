@@ -186,11 +186,14 @@ const laso = readFileSync(join(ROOT, 'lib/engine/laso.ts'), 'utf-8');
 const solarDateOf = laso.match(/export function solarDateOf\([\s\S]*?\n}/);
 if (
   !solarDateOf ||
-  !/lunarToSolar\(day, month, year, birth\.isLeapMonth === true\)/.test(solarDateOf[0])
+  !/lunarToSolar\(day, month, year, birth\.isLeapMonth === true[,)]/.test(solarDateOf[0])
 )
   fail('lib/engine/laso.ts: solarDateOf() không còn truyền cờ isLeapMonth vào lunarToSolar');
 const namAm = laso.match(/export function namAm\([\s\S]*?\n}/);
-if (!namAm || !/lunarToSolar\(b\.day, b\.month, b\.year, b\.isLeapMonth === true\)/.test(namAm[0]))
+if (
+  !namAm ||
+  !/lunarToSolar\(b\.day, b\.month, b\.year, b\.isLeapMonth === true[,)]/.test(namAm[0])
+)
   fail(
     'lib/engine/laso.ts: namAm() nhánh isLunar không còn đổi âm→dương (kèm cờ nhuận) trước lunarOf'
   );

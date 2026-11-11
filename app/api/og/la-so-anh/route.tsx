@@ -20,7 +20,7 @@ import type { NextRequest } from 'next/server';
 import { loadOgFonts, ogFallbackRedirect } from '@/lib/og/font';
 import { readLasoImageParams } from '@/lib/og/laso-image';
 import { BrandFooter, FOOT, LUOI_CHI } from '@/lib/og/brand';
-import { canChiNgayGio, canCung, computeLaso, solarDateOf, starMeta } from '@/lib/engine/laso';
+import { canChiNgayGio, canCung, computeLaso, lichOf, solarDateOf, starMeta } from '@/lib/engine/laso';
 import { ccInfo } from '@/lib/engine/diachi';
 
 type Star = { ten?: string; nhom?: string; brightness?: string; hoa?: string | null };
@@ -297,7 +297,7 @@ export async function GET(req: NextRequest) {
   const namXemCc = ccInfo(namXem)?.canChi || '';
   // Nhập âm lịch → đổi sang dương (`solarDateOf`) để vẫn có can chi ngày/giờ.
   const dl = solarDateOf(birth);
-  const lich = dl ? canChiNgayGio(dl.day, dl.month, dl.year, birth.hourBranch!) : null;
+  const lich = dl ? canChiNgayGio(dl.day, dl.month, dl.year, birth.hourBranch!, lichOf(birth)) : null;
   const rows: [string, string, string][] = lich && dl
     ? [
         ['Năm', `${dl.year} (${lich.amLich.year})`, canChiNam],

@@ -30,7 +30,9 @@
     return p + 'd=' + (b.day || 0) + '&' + p + 'm=' + (b.month || 0) + '&' + p + 'y=' + (b.year || 0) +
       '&' + (p ? p + 'h' : 'h') + '=' + (b.hourBranch == null ? -1 : b.hourBranch) +
       '&' + (p ? p + 'g' : 'g') + '=' + (b.gender === 'nu' ? 'nu' : 'nam') +
-      '&' + (p ? p + 'l' : 'lunar') + '=' + (b.isLunar ? '1' : '0');
+      '&' + (p ? p + 'l' : 'lunar') + '=' + (b.isLunar ? '1' : '0') +
+      // Lịch âm theo nơi sinh — vào khoá cache (`lasoKey`) nên phải đi kèm; VN thì bỏ trống.
+      (b.lich && b.lich !== 'vn' ? '&' + p + 'lc=' + encodeURIComponent(b.lich) : '');
   }
 
   /**
