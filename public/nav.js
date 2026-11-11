@@ -2,6 +2,18 @@
 (function () {
   var path = window.location.pathname;
 
+  // i18n (docs/i18n/QUY-UOC.md): T(khoá, chữViệt) — chữ do JS này dựng. Trang
+  // /<locale>/… được server nhúng từ điển nên có bản dịch NGAY lúc dựng; trang vi
+  // không có TVMB_I18N ⇒ trả chữ Việt mặc định, và i18n.js (nạp bất đồng bộ) chỉ lo
+  // bộ chọn ngôn ngữ. T ĐỊNH NGHĨA TRƯỚC mọi nhánh return sớm bên dưới.
+  var T = function (k, d) { return window.TVMB_I18N ? window.TVMB_I18N.t(k, d) : d; };
+  if (!window.TVMB_I18N && !document.querySelector('script[src^="/i18n.js"]')) {
+    var i18nS = document.createElement('script');
+    i18nS.src = '/i18n.js?v=2';
+    i18nS.async = true;
+    document.head.appendChild(i18nS);
+  }
+
   // Auto-generated from lucide-static v1.16.0 — 88 icons
   var ICONS = {
     'alert-triangle': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>',
@@ -300,12 +312,14 @@
     '.nav-dd-item .nav-ic svg{width:16px;height:16px;display:block}',
     '.nav-dd-section{padding:8px 16px 4px;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#9A7B3A;background:#fdfaf5;border-bottom:1px solid #efe8d8;margin-top:2px}',
     '.nav-dd-section:first-child{margin-top:0}',
+    '.nav-lang{display:flex;align-items:center;margin-left:4px}.nav-lang[hidden]{display:none}',
     '@media(max-width:900px){.topnav{padding:0 16px;gap:0}.nav-links{gap:0}}',
     '@media(max-width:700px){',
     '.nav-links{display:none;position:absolute;top:60px;left:0;right:0;background:#FBFAF6;flex-direction:column;padding:8px 0 16px;gap:0;border-bottom:1px solid #e8e3d8;z-index:199;overflow-y:auto;max-height:calc(100vh - 60px)}',
     '.nav-links.open{display:flex}',
     '.nav-link{padding:10px 24px;border-radius:0;width:100%;display:block}',
     '.nav-hamburger{display:block}',
+    '.nav-lang{padding:4px 16px}',
     // `#nav-auth-area` là `position:fixed` (xem comment ở JS bên dưới) nên
     // flexbox của `.topnav` KHÔNG biết dành chỗ cho nó — logo dài (brand +
     // slogan) tự do tràn ra tới sát/đè lên hamburger rồi đè lên nút "Đăng
@@ -440,7 +454,7 @@
   // Thay vì đẻ bảng icon thứ hai trong shell.js (28 icon, tên khác hẳn, thiếu
   // 11/15 icon cần dùng — đúng cái "hai bảng trôi khỏi nhau" đã cảnh báo),
   // mấy trang đó nạp CHÍNH file này kèm `data-icons-only`:
-  //     <script src="/nav.js?v=47" data-icons-only></script>
+  //     <script src="/nav.js?v=48" data-icons-only></script>
   // Lúc đó nav.js CHỈ cấp ICONS/iconHtml/mountIcons/EMOJI_TO_ICON + CSS icon,
   // rồi dừng — KHÔNG dựng thanh nav, KHÔNG chèn GA4, KHÔNG chèn conversion.js,
   // KHÔNG chèn auth.js. Một nguồn icon duy nhất cho cả site.
@@ -559,36 +573,36 @@
 
   // Khám phá — công cụ lẻ + tra cứu (gộp catalog + SEO hub)
   var dd_kp = '<div class="nav-dd" id="nav-dd-kp">'
-    + '<span class="nav-link' + (anyActive(KP_PATHS)?' active':'') + '" id="nav-dd-kp-toggle" role="button" tabindex="0">Khám phá ' + CHEV + '</span>'
+    + '<span class="nav-link' + (anyActive(KP_PATHS)?' active':'') + '" id="nav-dd-kp-toggle" role="button" tabindex="0">' + T('js.nav.kham-pha', 'Khám phá') + ' ' + CHEV + '</span>'
     + '<div class="nav-dd-menu" id="nav-dd-kp-menu">'
-    + ddSection('Công cụ')
+    + ddSection( T('js.nav.cong-cu', 'Công cụ'))
     // ⚠️ KHÔNG chép số lượng công cụ hay chữ "miễn phí" vào đây: nav.js nạp trên
     // ~89 trang nên một con số cũ sẽ nói dối ở khắp nơi (bản trước ghi "47" trong
     // khi `tool_pricing` đang có 55 tool bật). Giá và trạng thái free chỉ nêu ở
     // trang tool / tool trong shell, nơi đọc thẳng `tool_pricing`.
-    + ddItem('/cong-cu',                'layout-grid', 'Tất cả công cụ')
-    + ddItem('/app/dien-tuong','smile',       'Xem tướng qua ảnh')
-    + ddItem('/app/phong-thuy',  'compass',     'Phong thủy qua ảnh')
-    + ddSection('Tra cứu')
-    + ddItem('/menh-kho.html', 'gem',           'Mệnh Khố — 438K lá số')
-    + ddItem('/ngay-tot',      'calendar-days', 'Ngày Tốt — Lịch vạn niên')
+    + ddItem('/cong-cu',                'layout-grid', T('js.nav.tat-ca-cong-cu', 'Tất cả công cụ'))
+    + ddItem('/app/dien-tuong','smile', T('js.nav.xem-tuong-qua-anh', 'Xem tướng qua ảnh'))
+    + ddItem('/app/phong-thuy',  'compass', T('js.nav.phong-thuy-qua-anh', 'Phong thủy qua ảnh'))
+    + ddSection( T('js.nav.tra-cuu', 'Tra cứu'))
+    + ddItem('/menh-kho.html', 'gem', T('js.nav.menh-kho-438k-la-so', 'Mệnh Khố — 438K lá số'))
+    + ddItem('/ngay-tot',      'calendar-days', T('js.nav.ngay-tot-lich-van-nien', 'Ngày Tốt — Lịch vạn niên'))
     // C3 — đường vào thư viện. Trước đó `/thu-vien` chỉ tới được từ CHÂN TRANG
     // `/ket-qua`, tức chỉ ai đã mở một link chia sẻ mới thấy — gần như không ai
     // tìm ra. Đặt ở nav là bề mặt duy nhất phủ được toàn site.
-    + ddItem('/thu-vien',      'image',         'Thư Viện — bản luận đã chia sẻ')
-    + ddSection('Người nổi tiếng')
-    + ddItem('/nghiem-chung',  'shield-check',  'Nghiệm Chứng — lá số đối chiếu đời thật')
-    + ddItem('/xac-dinh-gio-sinh', 'clock',         'Xác Định Giờ Sinh — 12 lá số, giờ nào khớp')
+    + ddItem('/thu-vien',      'image', T('js.nav.thu-vien-ban-luan-da-chia', 'Thư Viện — bản luận đã chia sẻ'))
+    + ddSection( T('js.nav.nguoi-noi-tieng', 'Người nổi tiếng'))
+    + ddItem('/nghiem-chung',  'shield-check', T('js.nav.nghiem-chung-la-so-doi-chieu', 'Nghiệm Chứng — lá số đối chiếu đời thật'))
+    + ddItem('/xac-dinh-gio-sinh', 'clock', T('js.nav.xac-dinh-gio-sinh-12-la', 'Xác Định Giờ Sinh — 12 lá số, giờ nào khớp'))
     + '</div></div>';
 
   // Cẩm nang — nghiên cứu, tác giả, khảo luận
   var dd_cn = '<div class="nav-dd" id="nav-dd-cn">'
-    + '<span class="nav-link' + (anyActive(BAIVIET_PATHS)?' active':'') + '" id="nav-dd-cn-toggle" role="button" tabindex="0">Cẩm nang ' + CHEV + '</span>'
+    + '<span class="nav-link' + (anyActive(BAIVIET_PATHS)?' active':'') + '" id="nav-dd-cn-toggle" role="button" tabindex="0">' + T('js.nav.cam-nang', 'Cẩm nang') + ' ' + CHEV + '</span>'
     + '<div class="nav-dd-menu" id="nav-dd-cn-menu">'
-    + ddItem('/phuong-phap','shield-check',   'Phương Pháp & Độ Tin Cậy')
-    + ddItem('/nghien-cuu', 'file-text',      'Nghiên Cứu Tử Vi')
-    + ddItem('/tac-gia',    'user',           'Tác Giả')
-    + ddItem('/van-dap',    'message-circle', 'Vấn Đáp')
+    + ddItem('/phuong-phap','shield-check', T('js.nav.phuong-phap-do-tin-cay', 'Phương Pháp & Độ Tin Cậy'))
+    + ddItem('/nghien-cuu', 'file-text', T('js.nav.nghien-cuu-tu-vi', 'Nghiên Cứu Tử Vi'))
+    + ddItem('/tac-gia',    'user', T('js.nav.tac-gia', 'Tác Giả'))
+    + ddItem('/van-dap',    'message-circle', T('js.nav.van-dap', 'Vấn Đáp'))
     + '</div></div>';
 
   // Hamburger đứng TRƯỚC logo trong DOM (thay vì sau `.nav-links`/auth-area như
@@ -599,11 +613,13 @@
   var html = '<nav class="topnav">'
     + '<button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">' + ICONS.menu + '</button>'
     + '<a class="nav-logo" href="/"><img src="/seal.webp" alt="">'
-    + '<div class="nav-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div></a>'
+    + '<div class="nav-brand-text"><div class="name">' + T('js.nav.brand', 'Tử Vi Minh Bảo') + '</div><div class="url">' + T('js.nav.slogan', 'Tri mệnh lý – Thuận thế hành') + '</div></div></a>'
     + '<div class="nav-links" id="nav-links">'
-    + '<a class="nav-link nav-cta-ld' + (isActive('/app')?' active':'') + '" href="/app" title="Lập lá số và hỏi Thầy — vào đây để dùng công cụ">✦ Hỏi Thầy</a>'
+    + '<a class="nav-link nav-cta-ld' + (isActive('/app')?' active':'') + '" href="/app" title="' + T('js.nav.cta-title', 'Lập lá số và hỏi Thầy — vào đây để dùng công cụ') + '">✦ ' + T('js.nav.hoi-thay', 'Hỏi Thầy') + '</a>'
     + dd_kp
     + dd_cn
+    // Bộ chọn ngôn ngữ (public/i18n.js tự dựng nội dung; ẩn khi trang chưa có bản dịch).
+    + '<div class="nav-lang" data-lang-switcher hidden></div>'
     + '</div>'
     + '<div id="nav-auth-area"></div>'
     + '</nav>';
@@ -668,13 +684,13 @@
   function injectFooter(mountHost) {
     ensureFooterCss();
     var f = '<footer class="site-footer"><div class="ft-body"><div class="ft-top">'
-      + '<div class="ft-brand"><div class="ft-brand-row"><img src="/seal.webp" alt=""><div><div class="ft-brand-name">Tử Vi Minh Bảo</div><div class="ft-brand-zh">Tri mệnh lý – Thuận thế hành</div></div></div><div class="ft-tagline">Tử vi đẩu số theo cổ pháp, luận giải chuyên sâu.</div>'
+      + '<div class="ft-brand"><div class="ft-brand-row"><img src="/seal.webp" alt=""><div><div class="ft-brand-name">' + T('js.nav.brand', 'Tử Vi Minh Bảo') + '</div><div class="ft-brand-zh">' + T('js.nav.slogan', 'Tri mệnh lý – Thuận thế hành') + '</div></div></div><div class="ft-tagline">' + T('js.nav.footer-tagline', 'Tử vi đẩu số theo cổ pháp, luận giải chuyên sâu.') + '</div>'
       // Mã số doanh nghiệp CHƯA có trong hồ sơ được cung cấp — KHÔNG bịa số.
       // Bổ sung dòng "MST: ..." ngay khi có, theo Nghị định 52/2013.
       + '<div class="ft-legal">'
-      + ftLegalRow('building-2', '<strong>Công ty TNHH Kira Tech</strong><br><span class="dim">(Kira Tech Company Limited)</span>')
-      + ftLegalRow('pin', 'Toà nhà Master Building, 41-43 Trần Cao Vân,<br>Phường Xuân Hòa (Quận 3), TP.HCM')
-      + ftLegalRow('mail', 'contact@tuviminhbao.com &nbsp;·&nbsp; 0343.848.795')
+      + ftLegalRow('building-2', T('js.nav.cong-ty-tnhh-kira-tech-kira', '<strong>Công ty TNHH Kira Tech</strong><br><span class="dim">(Kira Tech Company Limited)</span>'))
+      + ftLegalRow('pin', T('js.nav.toa-nha-master-building-41-43', 'Toà nhà Master Building, 41-43 Trần Cao Vân,<br>Phường Xuân Hòa (Quận 3), TP.HCM'))
+      + ftLegalRow('mail', T('js.nav.contact-tuviminhbao-com-0343-848-795', 'contact@tuviminhbao.com &nbsp;·&nbsp; 0343.848.795'))
       + '</div>'
       + '<div class="ft-social">'
       + '<a href="https://www.facebook.com/profile.php?id=61591272875636" target="_blank" rel="noopener" class="ft-soc" title="Facebook"><span style="font-family:Georgia,serif;font-weight:700;font-style:italic;font-size:13px;line-height:1">f</span></a>'
@@ -683,36 +699,36 @@
       + '</div>'
       + '</div>'
       + '<div class="ft-divider"></div>'
-      + '<div class="ft-col"><div class="ft-col-title">Công Cụ<i></i></div>'
-      + ftItem('/app', 'message-circle', 'Hỏi Thầy')
-      + ftItem('/app/luan-giai', 'scroll-text', 'Lập Lá Số')
-      + ftItem('/cong-cu', 'layout-grid', 'Tất Cả Công Cụ')
+      + '<div class="ft-col"><div class="ft-col-title">' + T('js.nav.cong-cu-col', 'Công Cụ') + '<i></i></div>'
+      + ftItem('/app', 'message-circle', T('js.nav.hoi-thay', 'Hỏi Thầy'))
+      + ftItem('/app/luan-giai', 'scroll-text', T('js.nav.lap-la-so', 'Lập Lá Số'))
+      + ftItem('/cong-cu', 'layout-grid', T('js.nav.tat-ca-cong-cu-t5z9', 'Tất Cả Công Cụ'))
       + '</div>'
-      + '<div class="ft-col"><div class="ft-col-title">Tra Cứu<i></i></div>'
-      + ftItem('/menh-kho.html', 'gem', 'Mệnh Khố')
-      + ftItem('/ngay-tot', 'calendar-days', 'Ngày Tốt')
-      + ftItem('/thu-vien', 'image', 'Thư Viện')
-      + ftItem('/nghiem-chung', 'shield-check', 'Nghiệm Chứng')
-      + ftItem('/xac-dinh-gio-sinh', 'clock', 'Xác Định Giờ Sinh')
+      + '<div class="ft-col"><div class="ft-col-title">' + T('js.nav.tra-cuu-col', 'Tra Cứu') + '<i></i></div>'
+      + ftItem('/menh-kho.html', 'gem', T('js.nav.menh-kho', 'Mệnh Khố'))
+      + ftItem('/ngay-tot', 'calendar-days', T('js.nav.ngay-tot', 'Ngày Tốt'))
+      + ftItem('/thu-vien', 'image', T('js.nav.thu-vien', 'Thư Viện'))
+      + ftItem('/nghiem-chung', 'shield-check', T('js.nav.nghiem-chung', 'Nghiệm Chứng'))
+      + ftItem('/xac-dinh-gio-sinh', 'clock', T('js.nav.xac-dinh-gio-sinh', 'Xác Định Giờ Sinh'))
       + '</div>'
-      + '<div class="ft-col"><div class="ft-col-title">Về Chúng Tôi<i></i></div>'
-      + ftItem('/about.html', 'info', 'Giới Thiệu')
-      + ftItem('/tac-gia', 'user', 'Tác Giả')
-      + ftItem('/faqs.html', 'lightbulb', 'Câu Hỏi Thường Gặp')
-      + ftItem('/contact.html', 'mail', 'Liên Hệ')
+      + '<div class="ft-col"><div class="ft-col-title">' + T('js.nav.ve-chung-toi', 'Về Chúng Tôi') + '<i></i></div>'
+      + ftItem('/about.html', 'info', T('js.nav.gioi-thieu', 'Giới Thiệu'))
+      + ftItem('/tac-gia', 'user', T('js.nav.tac-gia', 'Tác Giả'))
+      + ftItem('/faqs.html', 'lightbulb', T('js.nav.cau-hoi-thuong-gap', 'Câu Hỏi Thường Gặp'))
+      + ftItem('/contact.html', 'mail', T('js.nav.lien-he', 'Liên Hệ'))
       + '</div>'
       + '</div>'
       + '<div class="ft-bottom">'
-      + '<div class="ft-bottom-left"><span>© 2026 Tử Vi Minh Bảo</span>'
-      + '<span class="ft-sep">·</span><a href="/dieu-khoan-dich-vu.html">Điều Khoản</a>'
-      + '<span class="ft-sep">·</span><a href="/chinh-sach-bao-mat.html">Chính Sách</a>'
-      + '<span class="ft-sep">·</span><a href="/san-pham-dich-vu.html">Sản Phẩm &amp; Dịch Vụ</a>'
-      + '<span class="ft-sep">·</span><a href="/huong-dan-thanh-toan.html">Thanh Toán</a>'
-      + '<span class="ft-sep">·</span><a href="/mien-tru-trach-nhiem.html">Miễn Trừ Trách Nhiệm</a>'
+      + '<div class="ft-bottom-left"><span>© 2026 ' + T('js.nav.brand', 'Tử Vi Minh Bảo') + '</span>'
+      + '<span class="ft-sep">·</span><a href="/dieu-khoan-dich-vu.html">' + T('js.nav.foot-terms', 'Điều Khoản') + '</a>'
+      + '<span class="ft-sep">·</span><a href="/chinh-sach-bao-mat.html">' + T('js.nav.foot-privacy', 'Chính Sách') + '</a>'
+      + '<span class="ft-sep">·</span><a href="/san-pham-dich-vu.html">' + T('js.nav.foot-products', 'Sản Phẩm &amp; Dịch Vụ') + '</a>'
+      + '<span class="ft-sep">·</span><a href="/huong-dan-thanh-toan.html">' + T('js.nav.foot-payment', 'Thanh Toán') + '</a>'
+      + '<span class="ft-sep">·</span><a href="/mien-tru-trach-nhiem.html">' + T('js.nav.foot-disclaimer', 'Miễn Trừ Trách Nhiệm') + '</a>'
       + '</div>'
-      + '<div class="ft-sign"><span>Tri mệnh nhi hành — vô ưu vô hoặc</span></div>'
+      + '<div class="ft-sign"><span>' + T('js.nav.sign', 'Tri mệnh nhi hành — vô ưu vô hoặc') + '</span></div>'
       + '</div>'
-      + '<div class="ft-disclaimer">Nội dung luận giải mang tính tham khảo, không thay thế tư vấn chuyên môn. <a href="/mien-tru-trach-nhiem.html" style="color:inherit;text-decoration:underline">Xem chi tiết</a>.</div>'
+      + '<div class="ft-disclaimer">' + T('js.nav.disclaimer', 'Nội dung luận giải mang tính tham khảo, không thay thế tư vấn chuyên môn.') + ' <a href="/mien-tru-trach-nhiem.html" style="color:inherit;text-decoration:underline">' + T('js.nav.see-detail', 'Xem chi tiết') + '</a>.</div>'
       + '</div></footer>';
     var ft=document.createElement('div'); ft.innerHTML=f;
     (mountHost || document.body).appendChild(ft.firstChild);

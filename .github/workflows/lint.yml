@@ -111,6 +111,14 @@ jobs:
       - name: Font thân bài/tiêu đề phải tự lưu trữ
         run: npm run check:font
 
+      # Đa ngôn ngữ (docs/i18n/QUY-UOC.md): khoá data-i18n/T() phải có trong vi.json;
+      # pages.json/availability.json không cũ; zh-cn = OpenCC(zh-tw); mô phỏng chính
+      # HTML server trả ra — trang chưa dịch PHẢI noindex + không hreflang, trang đã
+      # dịch phải có hreflang đúng tập. Sai kiểu này không lỗi gì: crawler chỉ lặng lẽ
+      # index chữ Việt dưới URL /ja.
+      - name: Đa ngôn ngữ — từ điển, hreflang, noindex
+        run: npm run check:i18n
+
       # Chặn tái phát GA4/Clarity/Meta Pixel đổ phiên giả từ CI: `playwright.yml`
       # nhắm thẳng vào prod mỗi push/PR và `smoke-prod.yml` đo prod mỗi 6h.
       # `track.js` đã chặn `navigator.webdriver` từ lâu, nhưng `nav.js` bỏ sót

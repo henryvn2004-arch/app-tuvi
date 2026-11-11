@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lá Số Tử Vi — Tử Vi Minh Bảo</title>
-<meta name="description" content="An sao lá số Tử Vi Đẩu Số — xem lá số cá nhân, ngũ hành, cung Mệnh, đại vận.">
+<title data-i18n="laso.la-so-tu-vi-tu-vi">Lá Số Tử Vi — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:laso.an-sao-la-so-tu-vi-98bu" name="description" content="An sao lá số Tử Vi Đẩu Số — xem lá số cá nhân, ngũ hành, cung Mệnh, đại vận.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -121,47 +121,47 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 <body>
 
 <nav class="topnav">
-  <a class="nav-logo" href="/"><img src="/seal.webp" alt="Tử Vi Minh Bảo"><div><div class="name">Tử Vi Minh Bảo</div></div></a>
+  <a class="nav-logo" href="/"><img data-i18n-attr="alt:laso.tu-vi-minh-bao" src="/seal.webp" alt="Tử Vi Minh Bảo"><div><div data-i18n="laso.tu-vi-minh-bao" class="name">Tử Vi Minh Bảo</div></div></a>
   <div class="nav-links" id="nav-links">
-    <a class="nav-link" href="/">Trang Chủ</a>
+    <a data-i18n="laso.trang-chu" class="nav-link" href="/">Trang Chủ</a>
     <div class="nav-dropdown">
-      <button class="nav-dropdown-btn" onclick="toggleDropdown(this)">Luận Giải ▾</button>
-      <div class="nav-dropdown-menu">
+      <button data-i18n="laso.luan-giai" class="nav-dropdown-btn" onclick="toggleDropdown(this)">Luận Giải ▾</button>
+      <div data-i18n="laso.luan-giai-la-so-xem-tuoi" class="nav-dropdown-menu">
         <a class="nav-dropdown-item" href="/app/luan-giai">Luận Giải Lá Số</a>
         <a class="nav-dropdown-item" href="/app/xem-tuoi">Xem Tuổi Vợ Chồng</a>
         <a class="nav-dropdown-item" href="/app/xem-lam-an">Xem Tuổi Làm Ăn</a>
       </div>
     </div>
-    <a class="nav-link" href="/about.html">Giới Thiệu</a>
-    <a class="nav-link" href="/resources.html">Tài Liệu</a>
-    <a class="nav-link" href="/van-dap">Khảo Luận</a>
-    <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
-    <a class="nav-link" href="/contact.html">Liên Hệ</a>
+    <a data-i18n="laso.gioi-thieu" class="nav-link" href="/about.html">Giới Thiệu</a>
+    <a data-i18n="laso.tai-lieu" class="nav-link" href="/resources.html">Tài Liệu</a>
+    <a data-i18n="laso.khao-luan" class="nav-link" href="/van-dap">Khảo Luận</a>
+    <a data-i18n="laso.menh-kho" class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
+    <a data-i18n="laso.lien-he" class="nav-link" href="/contact.html">Liên Hệ</a>
   </div>
   <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
 </nav>
 
 <div class="form-wrap">
   <div class="form-card">
-    <div class="form-title">An Sao Lá Số Tử Vi</div>
-    <div class="form-subtitle">Nhập thông tin để xem lá số — hoặc lá số sẽ tự động hiển thị nếu truy cập qua đường dẫn cá nhân.</div>
+    <div data-i18n="laso.an-sao-la-so-tu-vi" class="form-title">An Sao Lá Số Tử Vi</div>
+    <div data-i18n="laso.nhap-thong-tin-de-xem-la" class="form-subtitle">Nhập thông tin để xem lá số — hoặc lá số sẽ tự động hiển thị nếu truy cập qua đường dẫn cá nhân.</div>
     <div class="slug-loading" id="slug-loading">
       <div class="slug-spinner"></div>
-      <span>Đang tải lá số...</span>
+      <span data-i18n="laso.dang-tai-la-so">Đang tải lá số...</span>
     </div>
     <div class="form-row">
-      <div class="form-group fg-name"><label>Họ và Tên</label><input type="text" id="inp-name" placeholder="Nguyễn Văn A"></div>
-      <div class="form-group fg-gender"><label>Giới Tính</label><select id="inp-gender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
-      <div class="form-group fg-namxem"><label>Năm Xem</label><input type="number" id="inp-namxem" value="2026" min="1900" max="2100"></div>
+      <div class="form-group fg-name"><label data-i18n="laso.ho-va-ten">Họ và Tên</label><input data-i18n-attr="placeholder:laso.nguyen-van-a" type="text" id="inp-name" placeholder="Nguyễn Văn A"></div>
+      <div class="form-group fg-gender"><label data-i18n="laso.gioi-tinh">Giới Tính</label><select id="inp-gender"><option value="nam">Nam</option><option data-i18n="laso.nu" value="nu">Nữ</option></select></div>
+      <div class="form-group fg-namxem"><label data-i18n="laso.nam-xem">Năm Xem</label><input type="number" id="inp-namxem" value="2026" min="1900" max="2100"></div>
     </div>
     <div class="form-row">
-      <div class="form-group fg-dd"><label>Ngày (DL)</label><select id="inp-dd"></select></div>
-      <div class="form-group fg-mm"><label>Tháng (DL)</label><select id="inp-mm"></select></div>
-      <div class="form-group" style="width:110px"><label>Năm (DL)</label><input type="number" id="inp-yyyy" value="1990" min="1900" max="2099"></div>
-      <div class="form-group fg-hh"><label>Giờ</label><select id="inp-hh"></select></div>
-      <div class="form-group fg-pp"><label>Phút</label><select id="inp-pp"></select></div>
-      <div class="gio-info" id="gio-chi-display">Giờ âm: —</div>
-      <button class="btn-anlaso" id="btn-anlaso" onclick="doAnSao()">Lấy Lá Số</button>
+      <div class="form-group fg-dd"><label data-i18n="laso.ngay-dl">Ngày (DL)</label><select id="inp-dd"></select></div>
+      <div class="form-group fg-mm"><label data-i18n="laso.thang-dl">Tháng (DL)</label><select id="inp-mm"></select></div>
+      <div class="form-group" style="width:110px"><label data-i18n="laso.nam-dl">Năm (DL)</label><input type="number" id="inp-yyyy" value="1990" min="1900" max="2099"></div>
+      <div class="form-group fg-hh"><label data-i18n="laso.gio">Giờ</label><select id="inp-hh"></select></div>
+      <div class="form-group fg-pp"><label data-i18n="laso.phut">Phút</label><select id="inp-pp"></select></div>
+      <div data-i18n="laso.gio-am" class="gio-info" id="gio-chi-display">Giờ âm: —</div>
+      <button data-i18n="laso.lay-la-so" class="btn-anlaso" id="btn-anlaso" onclick="doAnSao()">Lấy Lá Số</button>
     </div>
   </div>
 </div>
@@ -170,10 +170,10 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
   <div class="grid-section-title" id="grid-title"></div>
   <div id="laso-grid-container"></div>
   <div class="grid-actions" id="grid-actions">
-    <button onclick="exportPNG()" id="btn-export" style="background:var(--navy);color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:6px">⬇ Tải PNG</button>
-    <button onclick="window.print()" style="background:transparent;color:var(--navy);border:1px solid var(--border);border-radius:6px;padding:8px 18px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">In lá số</button>
+    <button data-i18n="laso.tai-png" onclick="exportPNG()" id="btn-export" style="background:var(--navy);color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:6px">⬇ Tải PNG</button>
+    <button data-i18n="laso.in-la-so" onclick="window.print()" style="background:transparent;color:var(--navy);border:1px solid var(--border);border-radius:6px;padding:8px 18px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">In lá số</button>
   </div>
-  <div class="legend">
+  <div data-i18n="laso.ngu-hanh-hoa-moc-thuy-kim" class="legend">
     <strong style="color:#555">Ngũ Hành:</strong>
     <span class="legend-item"><span class="legend-dot" style="background:#E01010"></span><span class="sc-hoa">Hỏa</span></span>
     <span class="legend-item"><span class="legend-dot" style="background:#1a7a1a"></span><span class="sc-moc">Mộc</span></span>
@@ -187,7 +187,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 
 <footer class="site-footer">
   <div class="footer-bottom">
-    <span>© 2026 tuviminhbao.com — All rights reserved</span>
+    <span data-i18n="laso.2026-tuviminhbao-com-all-rights-reserved">© 2026 tuviminhbao.com — All rights reserved</span>
     <img src="/seal.webp" alt="">
   </div>
 </footer>
@@ -480,7 +480,7 @@ updateGioAm();
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName!=='BUTTON')doAnSao();});
 document.addEventListener('DOMContentLoaded', loadFromSlug);
 </script>
-<script src="/nav.js?v=47" data-icons-only></script>
+<script src="/nav.js?v=48" data-icons-only></script>
 <script>
 // `nav.js` ở chế độ `data-icons-only` CỐ Ý không chèn GA4/Ads/Meta Pixel
 // (đúng cho 27 trang shell — đã có qua shell.js — và 2 trang admin, không cần

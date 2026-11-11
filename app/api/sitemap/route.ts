@@ -22,6 +22,7 @@
 export const dynamic = 'force-dynamic';
 
 import { BASE_URL, xmlSitemapIndex, xmlResponse } from '@/lib/seo/sitemap-source';
+import availability from '@/i18n/availability.json';
 
 const CHILDREN = [
   '/sitemap-trang.xml',
@@ -34,6 +35,11 @@ const CHILDREN = [
   '/sitemap-la-so-pregen.xml',
 ];
 
+// Sitemap theo ngôn ngữ (đa ngôn ngữ): chỉ liệt kê ngôn ngữ ĐÃ có ít nhất một trang dịch đủ.
+const I18N_LOCALES = ['en', 'ja', 'ko', 'zh-tw', 'zh-cn'];
+
 export async function GET() {
-  return xmlResponse(xmlSitemapIndex(CHILDREN.map((p) => BASE_URL + p)));
+  const translated = new Set(Object.values(availability as Record<string, string[]>).flat());
+  const i18n = I18N_LOCALES.filter((l) => translated.has(l)).map((l) => `/sitemap-i18n-${l}.xml`);
+  return xmlResponse(xmlSitemapIndex([...CHILDREN, ...i18n].map((p) => BASE_URL + p)));
 }

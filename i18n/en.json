@@ -1,0 +1,390 @@
+{
+ "chat.ke-chuyen-cua-ban-minh-bao": {
+  "t": "Tell your story and Minh Bảo will bring in the right Master from our group of 15: Tử Vi chart, Bát Tự (Four Pillars), age compatibility, naming, date selection.",
+  "h": "0f564294"
+ },
+ "disclaimer.1-tinh-chat-tham-khao": {
+  "t": "1. For reference only",
+  "h": "99856a52"
+ },
+ "disclaimer.2-ve-cong-nghe-ai-su": {
+  "t": "2. About the AI technology used",
+  "h": "389e2fbe"
+ },
+ "disclaimer.3-trach-nhiem-cua-nguoi-dung": {
+  "t": "3. User responsibility",
+  "h": "95dd376e"
+ },
+ "disclaimer.4-gioi-han-trach-nhiem": {
+  "t": "4. Limitation of liability",
+  "h": "29f8c4dc"
+ },
+ "disclaimer.5-lien-quan": {
+  "t": "5. Related",
+  "h": "70a59e97"
+ },
+ "disclaimer.6-lien-he": {
+  "t": "6. Contact",
+  "h": "b428f4a9"
+ },
+ "disclaimer.ban-tu-chiu-trach-nhiem-ve": {
+  "t": "You are solely responsible for every personal decision — financial, marital, career, health or legal — made on the basis of a reading. For situations that genuinely call for professional advice (medical emergencies, legal disputes, major financial decisions), please consult a suitably qualified professional rather than relying on the results on this site alone.",
+  "h": "9792a37e"
+ },
+ "disclaimer.luan-giai-duoc-tao-bang-tri": {
+  "t": "Readings are generated with artificial intelligence (AI) on top of the classical Tử Vi Đẩu Số (Purple Star Astrology) rule system. Different schools of Tử Vi may interpret the same chart differently; we do not guarantee absolute accuracy or that any single result is the only correct one.",
+  "h": "cf677c1e"
+ },
+ "disclaimer.mien-tru-trach-nhiem": {
+  "t": "Disclaimer",
+  "h": "9f4943b3"
+ },
+ "disclaimer.mien-tru-trach-nhiem-tu-vi": {
+  "t": "Disclaimer — Tử Vi Minh Bảo",
+  "h": "33a75925"
+ },
+ "disclaimer.neu-co-cau-hoi-ve-noi": {
+  "t": "If you have questions about this disclaimer, please reach us through the <a href=\"/contact.html\">Contact</a> page.",
+  "h": "06ba42cc"
+ },
+ "disclaimer.noi-dung-luan-giai-tai-tu": {
+  "t": "Readings at Tử Vi Minh Bảo are cultural and scholarly references — they are not financial, medical or legal advice.",
+  "h": "f06e6f7c"
+ },
+ "disclaimer.toan-bo-noi-dung-tren-tuviminhbao": {
+  "t": "All content on tuviminhbao.com is for <strong>cultural and scholarly reference</strong> and is in no way <strong>financial, investment, medical, psychological or legal</strong> advice.",
+  "h": "a3adcb6e"
+ },
+ "disclaimer.trong-pham-vi-phap-luat-cho": {
+  "t": "To the extent permitted by law, Tử Vi Minh Bảo and Kira Tech Company Limited accept no liability for any direct or indirect loss arising from the use, interpretation or reliance on content provided on this website.",
+  "h": "7addf2c3"
+ },
+ "disclaimer.tu-vi-minh-bao-cung-cap": {
+  "t": "Tử Vi Minh Bảo provides star placement and readings for Tử Vi Đẩu Số, Tử Bình Bát Tự (Four Pillars), feng shui and physiognomy according to classical methods — for cultural study and personal reference. The content does <strong>not</strong> replace the advice of a licensed financial advisor, physician, lawyer or psychologist.",
+  "h": "b2e135de"
+ },
+ "disclaimer.xem-them-dieu-khoan-day-du": {
+  "t": "See the full terms in the <a href=\"/dieu-khoan-dich-vu.html\">Terms of Service</a> (section 2 — Limitation of liability) and the service description on the <a href=\"/san-pham-dich-vu.html\">Products &amp; Services</a> page.",
+  "h": "dc202339"
+ },
+ "js.nav.brand": {
+  "t": "Tử Vi Minh Bảo",
+  "h": "33336b26"
+ },
+ "js.nav.cam-nang": {
+  "t": "Guides",
+  "h": "399e7591"
+ },
+ "js.nav.cau-hoi-thuong-gap": {
+  "t": "FAQ",
+  "h": "0abbca1b"
+ },
+ "js.nav.cong-cu": {
+  "t": "Tools",
+  "h": "6029ffef"
+ },
+ "js.nav.cong-cu-col": {
+  "t": "Tools",
+  "h": "a601efbf"
+ },
+ "js.nav.cong-ty-tnhh-kira-tech-kira": {
+  "t": "<strong>Kira Tech Company Limited</strong><br><span class=\"dim\">(Công ty TNHH Kira Tech)</span>",
+  "h": "40cbf05c"
+ },
+ "js.nav.contact-tuviminhbao-com-0343-848-795": {
+  "t": "contact@tuviminhbao.com &nbsp;·&nbsp; 0343.848.795",
+  "h": "87ddf85d"
+ },
+ "js.nav.cta-title": {
+  "t": "Create a chart and ask the Master — start here to use the tools",
+  "h": "14f228d5"
+ },
+ "js.nav.disclaimer": {
+  "t": "Readings are for reference only and do not replace professional advice.",
+  "h": "00521049"
+ },
+ "js.nav.foot-disclaimer": {
+  "t": "Disclaimer",
+  "h": "9f4943b3"
+ },
+ "js.nav.foot-payment": {
+  "t": "Payment",
+  "h": "e3dc7276"
+ },
+ "js.nav.foot-privacy": {
+  "t": "Privacy",
+  "h": "7c3bbe11"
+ },
+ "js.nav.foot-products": {
+  "t": "Products &amp; Services",
+  "h": "5af2d451"
+ },
+ "js.nav.foot-terms": {
+  "t": "Terms",
+  "h": "f906694f"
+ },
+ "js.nav.footer-tagline": {
+  "t": "Purple Star astrology by classical method, in-depth readings.",
+  "h": "c1e39fad"
+ },
+ "js.nav.gioi-thieu": {
+  "t": "About",
+  "h": "20855749"
+ },
+ "js.nav.hoi-thay": {
+  "t": "Ask the Master",
+  "h": "c9ffbbaf"
+ },
+ "js.nav.kham-pha": {
+  "t": "Explore",
+  "h": "2dcfd93c"
+ },
+ "js.nav.lap-la-so": {
+  "t": "Create a Chart",
+  "h": "3501b515"
+ },
+ "js.nav.lien-he": {
+  "t": "Contact",
+  "h": "4df839b4"
+ },
+ "js.nav.menh-kho": {
+  "t": "Mệnh Khố",
+  "h": "2de2772c"
+ },
+ "js.nav.menh-kho-438k-la-so": {
+  "t": "Mệnh Khố — 438K charts",
+  "h": "dbdd9b4f"
+ },
+ "js.nav.ngay-tot": {
+  "t": "Auspicious Days",
+  "h": "97ad8226"
+ },
+ "js.nav.ngay-tot-lich-van-nien": {
+  "t": "Auspicious Days — perpetual calendar",
+  "h": "273eb4fa"
+ },
+ "js.nav.nghiem-chung": {
+  "t": "Verification",
+  "h": "e1110fe5"
+ },
+ "js.nav.nghiem-chung-la-so-doi-chieu": {
+  "t": "Verification — charts checked against real lives",
+  "h": "bef98605"
+ },
+ "js.nav.nghien-cuu-tu-vi": {
+  "t": "Tử Vi Research",
+  "h": "800f1679"
+ },
+ "js.nav.nguoi-noi-tieng": {
+  "t": "Famous people",
+  "h": "b79cf3ad"
+ },
+ "js.nav.phong-thuy-qua-anh": {
+  "t": "Feng shui from photos",
+  "h": "366d93c7"
+ },
+ "js.nav.phuong-phap-do-tin-cay": {
+  "t": "Method & Reliability",
+  "h": "c16eaaee"
+ },
+ "js.nav.see-detail": {
+  "t": "See details",
+  "h": "e30c9371"
+ },
+ "js.nav.sign": {
+  "t": "Know your fate, then act — free of worry and doubt",
+  "h": "7dc956c7"
+ },
+ "js.nav.slogan": {
+  "t": "Know your destiny, follow the flow",
+  "h": "ca64e3dc"
+ },
+ "js.nav.tac-gia": {
+  "t": "Authors",
+  "h": "7aa04605"
+ },
+ "js.nav.tat-ca-cong-cu": {
+  "t": "All tools",
+  "h": "ad4553ea"
+ },
+ "js.nav.tat-ca-cong-cu-t5z9": {
+  "t": "All Tools",
+  "h": "7ec66d57"
+ },
+ "js.nav.thu-vien": {
+  "t": "Library",
+  "h": "4d885bf7"
+ },
+ "js.nav.thu-vien-ban-luan-da-chia": {
+  "t": "Library — shared readings",
+  "h": "017d8d21"
+ },
+ "js.nav.toa-nha-master-building-41-43": {
+  "t": "Master Building, 41-43 Tran Cao Van Street,<br>Xuan Hoa Ward (District 3), Ho Chi Minh City",
+  "h": "249c141e"
+ },
+ "js.nav.tra-cuu": {
+  "t": "Look up",
+  "h": "735aa839"
+ },
+ "js.nav.tra-cuu-col": {
+  "t": "Look Up",
+  "h": "5fce202a"
+ },
+ "js.nav.van-dap": {
+  "t": "Q&A",
+  "h": "eb135e84"
+ },
+ "js.nav.ve-chung-toi": {
+  "t": "About Us",
+  "h": "63a47694"
+ },
+ "js.nav.xac-dinh-gio-sinh": {
+  "t": "Birth Hour Finder",
+  "h": "2b570401"
+ },
+ "js.nav.xac-dinh-gio-sinh-12-la": {
+  "t": "Birth Hour Finder — 12 charts, which hour fits?",
+  "h": "bbc3388e"
+ },
+ "js.nav.xem-tuong-qua-anh": {
+  "t": "Face reading from photos",
+  "h": "24c4d64e"
+ },
+ "js.shell.an": {
+  "t": "Hide",
+  "h": "f4ea7c30"
+ },
+ "js.shell.bao-cao": {
+  "t": "Reports",
+  "h": "7013ca8b"
+ },
+ "js.shell.cac-luot-hoi-thay-cua-ban": {
+  "t": "Your Ask-the-Master sessions will appear here.",
+  "h": "e2617653"
+ },
+ "js.shell.cac-thay": {
+  "t": "The Masters",
+  "h": "edb6a720"
+ },
+ "js.shell.cong-cu": {
+  "t": "Tools",
+  "h": "6029ffef"
+ },
+ "js.shell.dang-nhap-de-luu-lich-su": {
+  "t": "Sign in to save your history",
+  "h": "b50f4e37"
+ },
+ "js.shell.dang-xuat": {
+  "t": "Sign out",
+  "h": "d513aac0"
+ },
+ "js.shell.dieu-huong": {
+  "t": "Navigation",
+  "h": "72742031"
+ },
+ "js.shell.doi-nen-sang-toi": {
+  "t": "Switch light/dark theme",
+  "h": "92ae697b"
+ },
+ "js.shell.gan-day": {
+  "t": "Recent",
+  "h": "5c3d644b"
+ },
+ "js.shell.ho-so": {
+  "t": "Profile",
+  "h": "3acd974b"
+ },
+ "js.shell.ho-so-cai-dat": {
+  "t": "Profile &amp; settings",
+  "h": "ce3d7ddb"
+ },
+ "js.shell.ho-tro": {
+  "t": "Support",
+  "h": "ed2a55ae"
+ },
+ "js.shell.hoi-thay-moi": {
+  "t": "New question",
+  "h": "b4d2c650"
+ },
+ "js.shell.hoi-thay-qua-zalo": {
+  "t": "Ask the Master on Zalo",
+  "h": "b0e9649b"
+ },
+ "js.shell.hom-nay": {
+  "t": "Today",
+  "h": "0048b6a4"
+ },
+ "js.shell.khach": {
+  "t": "Guest",
+  "h": "8c19417f"
+ },
+ "js.shell.la-so": {
+  "t": "Charts",
+  "h": "685adfe6"
+ },
+ "js.shell.ma-qr-zalo-oa-tu-vi": {
+  "t": "Zalo OA QR code for Tử Vi Minh Bảo",
+  "h": "99554c71"
+ },
+ "js.shell.minh-bao": {
+  "t": "Minh Bảo",
+  "h": "e4158660"
+ },
+ "js.shell.moi-ban-be": {
+  "t": "Invite friends",
+  "h": "6f8f4379"
+ },
+ "js.shell.nap-luong": {
+  "t": "Top up credits",
+  "h": "b70a5d1d"
+ },
+ "js.shell.nhiem-vu-nhan-luong": {
+  "t": "Earn credits with quests",
+  "h": "fba04eb9"
+ },
+ "js.shell.quet-ma-bang-zalo-nhan-cau": {
+  "t": "Scan with Zalo, send your question — the Master replies right away",
+  "h": "559a993e"
+ },
+ "js.shell.tat-ca-luot-hoi-thay": {
+  "t": "All Ask-the-Master sessions",
+  "h": "56b20067"
+ },
+ "js.shell.them": {
+  "t": "More",
+  "h": "cc88682f"
+ },
+ "js.shell.thu-gon-thanh-ben": {
+  "t": "Collapse sidebar",
+  "h": "110215a1"
+ },
+ "js.shell.thu-vien": {
+  "t": "Library",
+  "h": "8bdb70c5"
+ },
+ "js.shell.tim-kiem": {
+  "t": "Search",
+  "h": "66719286"
+ },
+ "js.shell.tim-kiem-ctrl-k": {
+  "t": "Search (Ctrl K)",
+  "h": "055b838e"
+ },
+ "js.shell.xem-tat-ca": {
+  "t": "See all",
+  "h": "7e040254"
+ },
+ "laso.tu-vi-minh-bao": {
+  "t": "Tử Vi Minh Bảo",
+  "h": "33336b26"
+ },
+ "privacy.phap-ly": {
+  "t": "Legal",
+  "h": "1780af9e"
+ },
+ "terms.cap-nhat-lan-cuoi-thang-9": {
+  "t": "Last updated: September 2026",
+  "h": "8f1c24b0"
+ }
+}

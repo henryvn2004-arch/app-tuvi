@@ -1,0 +1,134 @@
+{
+ "chat.ke-chuyen-cua-ban-minh-bao": {
+  "t": "お話を聞かせてください。ミンバオが15人の師の中から最適な師をご案内します：紫微斗数の命盤、八字、相性、命名、吉日選び。",
+  "h": "0f564294"
+ },
+ "js.shell.an": {
+  "t": "非表示",
+  "h": "f4ea7c30"
+ },
+ "js.shell.bao-cao": {
+  "t": "レポート",
+  "h": "7013ca8b"
+ },
+ "js.shell.cac-luot-hoi-thay-cua-ban": {
+  "t": "師への相談履歴がここに表示されます。",
+  "h": "e2617653"
+ },
+ "js.shell.cac-thay": {
+  "t": "師の一覧",
+  "h": "edb6a720"
+ },
+ "js.shell.cong-cu": {
+  "t": "ツール",
+  "h": "6029ffef"
+ },
+ "js.shell.dang-nhap-de-luu-lich-su": {
+  "t": "ログインして履歴を保存",
+  "h": "b50f4e37"
+ },
+ "js.shell.dang-xuat": {
+  "t": "ログアウト",
+  "h": "d513aac0"
+ },
+ "js.shell.dieu-huong": {
+  "t": "ナビゲーション",
+  "h": "72742031"
+ },
+ "js.shell.doi-nen-sang-toi": {
+  "t": "ライト/ダークを切り替え",
+  "h": "92ae697b"
+ },
+ "js.shell.gan-day": {
+  "t": "最近",
+  "h": "5c3d644b"
+ },
+ "js.shell.ho-so": {
+  "t": "プロフィール",
+  "h": "3acd974b"
+ },
+ "js.shell.ho-so-cai-dat": {
+  "t": "プロフィールと設定",
+  "h": "ce3d7ddb"
+ },
+ "js.shell.ho-tro": {
+  "t": "サポート",
+  "h": "ed2a55ae"
+ },
+ "js.shell.hoi-thay-moi": {
+  "t": "新しい相談",
+  "h": "b4d2c650"
+ },
+ "js.shell.hoi-thay-qua-zalo": {
+  "t": "Zaloで師に相談",
+  "h": "b0e9649b"
+ },
+ "js.shell.hom-nay": {
+  "t": "今日",
+  "h": "0048b6a4"
+ },
+ "js.shell.khach": {
+  "t": "ゲスト",
+  "h": "8c19417f"
+ },
+ "js.shell.la-so": {
+  "t": "命盤",
+  "h": "685adfe6"
+ },
+ "js.shell.ma-qr-zalo-oa-tu-vi": {
+  "t": "Tử Vi Minh Bảo の Zalo OA QRコード",
+  "h": "99554c71"
+ },
+ "js.shell.minh-bao": {
+  "t": "Minh Bảo",
+  "h": "e4158660"
+ },
+ "js.shell.moi-ban-be": {
+  "t": "友達を招待",
+  "h": "6f8f4379"
+ },
+ "js.shell.nap-luong": {
+  "t": "クレジットをチャージ",
+  "h": "b70a5d1d"
+ },
+ "js.shell.nhiem-vu-nhan-luong": {
+  "t": "ミッションでクレジット獲得",
+  "h": "fba04eb9"
+ },
+ "js.shell.quet-ma-bang-zalo-nhan-cau": {
+  "t": "Zaloでスキャンして質問を送ると、師がすぐに回答します",
+  "h": "559a993e"
+ },
+ "js.shell.tat-ca-luot-hoi-thay": {
+  "t": "すべての相談履歴",
+  "h": "56b20067"
+ },
+ "js.shell.them": {
+  "t": "その他",
+  "h": "cc88682f"
+ },
+ "js.shell.thu-gon-thanh-ben": {
+  "t": "サイドバーを折りたたむ",
+  "h": "110215a1"
+ },
+ "js.shell.thu-vien": {
+  "t": "ライブラリ",
+  "h": "8bdb70c5"
+ },
+ "js.shell.tim-kiem": {
+  "t": "検索",
+  "h": "66719286"
+ },
+ "js.shell.tim-kiem-ctrl-k": {
+  "t": "検索 (Ctrl K)",
+  "h": "055b838e"
+ },
+ "js.shell.xem-tat-ca": {
+  "t": "すべて見る",
+  "h": "7e040254"
+ },
+ "laso.tu-vi-minh-bao": {
+  "t": "Tử Vi Minh Bảo",
+  "h": "33336b26"
+ }
+}

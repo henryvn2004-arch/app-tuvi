@@ -72,3 +72,6 @@ seal.*
 data/nghiem-chung/
 # Đầu ra tạm của pipeline (đã git-exclude cục bộ).
 work/
+
+# i18n: từ điển SINH/ghi bởi npm run i18n:save|tag|pages — máy ghi, không phải người format
+i18n/*.json

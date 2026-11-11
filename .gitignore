@@ -104,3 +104,7 @@ scripts/fixtures/lunar-table-new.json
 # Sheet mẫu 102 icon (Sprint 2) sinh thử để Henry duyệt style — bản final
 # (đã duyệt + cắt + optimize webp) mới vào public/, commit thẳng.
 .icon-sheet-sample/
+
+# i18n: font CJK SINH bởi npm run i18n:fonts (từ @fontsource-variable/noto-sans-*) trong prebuild
+/public/fonts/cjk/
+/public/fonts/i18n-*.css
