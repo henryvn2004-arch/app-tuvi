@@ -138,7 +138,7 @@
     ctx.save();
     ctx.translate(x0 + s + af * 0.9, cy);
     ctx.rotate(Math.PI / 2);
-    ctx.fillText('tranh', 0, 0);
+    ctx.fillText(_tvmbT('js.cs.tranh', 'tranh'), 0, 0);
     ctx.restore();
 
     // Chấm vị trí — bán kính vẽ theo nửa cạnh, kẹp trong khung.
