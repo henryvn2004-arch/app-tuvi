@@ -103,6 +103,122 @@
   "t": "依子平古法為這組四柱量身撰寫——共 16 個部分：格局、十神、大運、流年。",
   "h": "f54c0d01"
  },
+ "cdvc.2-xem-truoc-cung-phu-the": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽夫妻宮</span>",
+  "h": "108dcc06"
+ },
+ "cdvc.anh-chan-dung-minh-hoa": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>示意<br>肖像圖</span>",
+  "h": "493170c3"
+ },
+ "cdvc.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>範例解讀報告</b><span>下載範例命盤的「夫妻肖像」完整 PDF，先預覽真實內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chan-dung-vo-chong.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
+  "h": "53e5a8b4"
+ },
+ "cdvc.bang-tren-la-tra-bang-co": {
+  "t": "上表是依古法查表，對照您自己的命盤得出——尚未經過解讀這一步。",
+  "h": "e321a90c"
+ },
+ "cdvc.cach-cuc-dac-biet": {
+  "t": "特殊格局",
+  "h": "f0db7ce5"
+ },
+ "cdvc.chan-dung-nay-chi-mang-tinh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 這幅肖像僅供示意與參考，是系統依據您命盤夫妻宮中的主星、輔星所對應的外貌特徵模擬而成——並不是照片，也不是對現實中伴侶容貌的準確預測。若要得到更貼近現實的結果，還需要再對照對方本人的命盤。",
+  "h": "38ea85e6"
+ },
+ "cdvc.chan-dung-nguoi-phoi-ngau": {
+  "t": "<span class=\"res-block-title\">配偶肖像</span>",
+  "h": "6c75b667"
+ },
+ "cdvc.chan-dung-nguoi-phoi-ngau-xs4t": {
+  "t": "配偶肖像",
+  "h": "b3c9f474"
+ },
+ "cdvc.chan-dung-vo-chong": {
+  "t": "夫妻肖像",
+  "h": "ed0abbb5"
+ },
+ "cdvc.chan-dung-vo-chong-tu-vi": {
+  "t": "夫妻肖像——明寶紫微斗數",
+  "h": "192e3111"
+ },
+ "cdvc.chan-dung-vo-chong-ve-chan": {
+  "t": "<b>夫妻肖像</b><span>由夫妻宮繪製配偶的肖像</span>",
+  "h": "00184059"
+ },
+ "cdvc.chia-se-cho-ban-be-xem": {
+  "t": "分享給朋友看 →",
+  "h": "d4cae66e"
+ },
+ "cdvc.chinh-tinh": {
+  "t": "<b>主星：</b> <span id=\"ptChinh\">—</span>",
+  "h": "bddb0cff"
+ },
+ "cdvc.cung-phu-the-trong-la-so": {
+  "t": "<span class=\"res-block-title\">您命盤中的夫妻宮</span>",
+  "h": "f96e4460"
+ },
+ "cdvc.hinh-the-suy-tu-sao": {
+  "t": "<span class=\"hp-ic\" data-icon=\"user\"></span><span>由星曜推得的<br>體型外貌</span>",
+  "h": "ca30f981"
+ },
+ "cdvc.hinh-the-suy-tu-sao-tai": {
+  "t": "<span class=\"res-block-title\">由夫妻宮星曜推得的體型外貌</span>",
+  "h": "5207236c"
+ },
+ "cdvc.hoan-canh-gap-go": {
+  "t": "相遇的情境",
+  "h": "084d34b9"
+ },
+ "cdvc.luan-giai-cung-phu-the": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>夫妻宮<br>解讀</span>",
+  "h": "72f3c0e5"
+ },
+ "cdvc.luan-giai-cung-phu-the-e93e": {
+  "t": "<span class=\"res-block-title\">夫妻宮解讀</span>",
+  "h": "a976e83a"
+ },
+ "cdvc.mo-ta": {
+  "t": "描述",
+  "h": "0bf67d8a"
+ },
+ "cdvc.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-vo-chong\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-vo-chong\">…</span> 兩)</span>",
+  "h": "32e5c174"
+ },
+ "cdvc.nhap-ngay-sinh-khong-can-them": {
+  "t": "輸入出生日期即可，不需要再提供其他資料。系統會讀取夫妻宮並繪製肖像——包含由星曜推得的體型外貌、圖像與詳細解讀。",
+  "h": "091107bb"
+ },
+ "cdvc.phan-tich-cung-phu-the-trong": {
+  "t": "分析命盤中的夫妻宮，繪製伴侶的肖像，並附上性格與氣質風度的描述。",
+  "h": "b63e4e9d"
+ },
+ "cdvc.phu-tinh": {
+  "t": "<b>輔星：</b> <span id=\"ptPhu\">—</span>",
+  "h": "5e60dcdc"
+ },
+ "cdvc.tra-loi-thay-o-khung-chat": {
+  "t": "請在聊天欄回覆老師來繪製肖像——只需要您的出生日期與時辰。",
+  "h": "1933e964"
+ },
+ "cdvc.truoc-khi-gap-dung-nguoi-nhieu": {
+  "t": "在遇見對的人之前，許多人對對方的想像完全走樣。命盤中的夫妻宮會描繪出未來伴侶的肖像與氣質——比任何揣測都更清楚。",
+  "h": "d009dcc3"
+ },
+ "cdvc.ve-chan-dung-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"image\"></span><b id=\"btnGoLabel\">繪製肖像 →</b></span> <small>費用 <span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-vo-chong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-vo-chong\">…</span> 兩)</span></small>",
+  "h": "33f06010"
+ },
+ "cdvc.ve-lai": {
+  "t": "重新繪製",
+  "h": "fb8e0b72"
+ },
+ "cdvc.y-nghia-co-phap": {
+  "t": "古法的意涵",
+  "h": "c6403cb5"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "說說您的故事，明寶團隊會從 15 位老師中請出最合適的一位為您解讀：紫微斗數命盤、八字、合婚、取名、擇日。",
   "h": "0f564294"
@@ -1694,6 +1810,202 @@
  "js.battu.tuoi": {
   "t": " 歲",
   "h": "2e261bf5"
+ },
+ "js.cdvc.anh-dang-tai-co-the-hoi": {
+  "t": "圖片載入中，可能稍慢——請稍候，或",
+  "h": "c4e9709b"
+ },
+ "js.cdvc.anh-minh-hoa-chua-mo": {
+  "t": "示意圖——尚未開啟",
+  "h": "bef5f6d7"
+ },
+ "js.cdvc.anh-minh-hoa-mo-mo-khoa": {
+  "t": "示意圖（模糊）——解鎖後即可看到真正的肖像",
+  "h": "9e03ce37"
+ },
+ "js.cdvc.ban-da-tao-ket-qua-cho": {
+  "t": "✓ 您已為這張命盤產生過結果——重新開啟，不會扣兩",
+  "h": "d59efda4"
+ },
+ "js.cdvc.bao-gio-toi-lap-gia-dinh": {
+  "t": "我什麼時候會成家？",
+  "h": "359ca64d"
+ },
+ "js.cdvc.cach-cuc-dac-biet": {
+  "t": "特殊格局：",
+  "h": "f4dcacee"
+ },
+ "js.cdvc.chan-dung-nguoi-chong-cua-toi": {
+  "t": "我的丈夫肖像",
+  "h": "8037fff1"
+ },
+ "js.cdvc.chan-dung-nguoi-phoi-ngau": {
+  "t": "配偶肖像",
+  "h": "78b47413"
+ },
+ "js.cdvc.chan-dung-nguoi-phoi-ngau-chua": {
+  "t": "⊙ 配偶肖像尚未開啟",
+  "h": "c91a9a69"
+ },
+ "js.cdvc.chan-dung-nguoi-vo-cua-toi": {
+  "t": "我的妻子肖像",
+  "h": "54b4f3b2"
+ },
+ "js.cdvc.chinh-tinh-chu": {
+  "t": "<b>核心主星：</b> ",
+  "h": "a189d8a3"
+ },
+ "js.cdvc.chinh-tinh-ds": {
+  "t": "主星：{ds}",
+  "h": "0594f4e0"
+ },
+ "js.cdvc.chong": {
+  "t": "丈夫",
+  "h": "92a6f17f"
+ },
+ "js.cdvc.cung-phu-the": {
+  "t": "夫妻宮：",
+  "h": "42367865"
+ },
+ "js.cdvc.cung-phu-the-cua-toi-co-gi": {
+  "t": "我的夫妻宮有什麼特別之處？",
+  "h": "2ec84146"
+ },
+ "js.cdvc.cung-phu-the-trong-la-so": {
+  "t": "您命盤中的夫妻宮",
+  "h": "cf3fd3a1"
+ },
+ "js.cdvc.da-ve-xong-chan-dung-dua": {
+  "t": "已依據您的夫妻宮繪製完肖像。還想多問關於婚姻、夫妻宮或命盤的什麼嗎？",
+  "h": "777cc6a3"
+ },
+ "js.cdvc.dang-dung-anh": {
+  "t": "圖片製作中…",
+  "h": "7bce9760"
+ },
+ "js.cdvc.dang-ve-chan-dung-thuong-45": {
+  "t": "正在繪製肖像（通常 45–60 秒）",
+  "h": "8fb2076c"
+ },
+ "js.cdvc.dung-gu-ban-chua-gui-anh": {
+  "t": "合不合您的口味？把這張圖傳給朋友看，再邀他們也來畫畫看<b>自己未來的另一半</b>。",
+  "h": "d435c12c"
+ },
+ "js.cdvc.hoan-canh-gap-go": {
+  "t": "\n\n相遇的情境：",
+  "h": "7878e939"
+ },
+ "js.cdvc.hon-nhan-cua-toi-co-thuan": {
+  "t": "我的婚姻會順利嗎？",
+  "h": "9c01a229"
+ },
+ "js.cdvc.khong-the-ket-noi-vui-long": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.cdvc.lap-la-so-xac-dinh-cung": {
+  "t": "排出命盤並定出夫妻宮",
+  "h": "f8f01348"
+ },
+ "js.cdvc.loi": {
+  "t": "錯誤 ",
+  "h": "1b80116b"
+ },
+ "js.cdvc.loi-8d72": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.cdvc.luan-giai-chua-mo": {
+  "t": "解讀——尚未開啟",
+  "h": "4c4f7020"
+ },
+ "js.cdvc.luan-giai-cung-phu-the": {
+  "t": "夫妻宮解讀",
+  "h": "8e52b135"
+ },
+ "js.cdvc.luan-giai-cung-phu-the-p43z": {
+  "t": "夫妻宮解讀",
+  "h": "fee63cc7"
+ },
+ "js.cdvc.luc-giac-cung-phu-the": {
+  "t": "夫妻宮六角圖",
+  "h": "c1463a39"
+ },
+ "js.cdvc.luot-ve": {
+  "t": "次繪製",
+  "h": "85f72421"
+ },
+ "js.cdvc.mo-chan-dung-day-du": {
+  "t": "開啟完整肖像",
+  "h": "9f515b09"
+ },
+ "js.cdvc.n-tuoi-hist": {
+  "t": "{n} 歲",
+  "h": "25e7a2be"
+ },
+ "js.cdvc.nguoi-chong": {
+  "t": "丈夫",
+  "h": "bce4fcfa"
+ },
+ "js.cdvc.nguoi-vo": {
+  "t": "妻子",
+  "h": "f1b7338b"
+ },
+ "js.cdvc.phac-hoa-tu-cung-phu-the": {
+  "t": "依命盤中的夫妻宮描繪",
+  "h": "adeba7b7"
+ },
+ "js.cdvc.phac-thao-mo-ta-uoc-luong": {
+  "t": "草擬描述並估計伴侶年齡",
+  "h": "7ce20134"
+ },
+ "js.cdvc.phu-tinh-ds": {
+  "t": "輔星：{ds}",
+  "h": "7e63fae4"
+ },
+ "js.cdvc.quet-ma-xem-chan-dung-cua": {
+  "t": "掃描 QR 碼——查看您的肖像",
+  "h": "2b62e4a0"
+ },
+ "js.cdvc.sat-tinh-pha-cach": {
+  "t": "（煞星——破格）",
+  "h": "742dce66"
+ },
+ "js.cdvc.sat-tinh-pha-cach-ngay-tu": {
+  "t": " ——煞星，從根本破格",
+  "h": "14fa5401"
+ },
+ "js.cdvc.tai-lai": {
+  "t": "重新載入",
+  "h": "16371241"
+ },
+ "js.cdvc.theo-chinh-tinh": {
+  "t": "依主星 ",
+  "h": "ec1e2e45"
+ },
+ "js.cdvc.theo-phu-tinh": {
+  "t": "依輔星 ",
+  "h": "4c2c8bf3"
+ },
+ "js.cdvc.vo": {
+  "t": "妻子",
+  "h": "98c0d1da"
+ },
+ "js.cdvc.vo-chinh-dieu": {
+  "t": "無主星",
+  "h": "bb1c972d"
+ },
+ "js.cdvc.vui-long-nhap-day-du-ngay": {
+  "t": "請完整輸入出生年月日。",
+  "h": "2545b4dd"
+ },
+ "js.cdvc.xem-them-ve-tinh-cach": {
+  "t": "看看更多關於我個性的內容",
+  "h": "0c0df338"
+ },
+ "js.cdvc.y-nghia-co-phap": {
+  "t": "古法的意涵：",
+  "h": "396825c1"
  },
  "js.chat.chao": {
   "t": "您好 ",

@@ -103,6 +103,122 @@
   "t": "この四柱のために、子平の古法で一から書き下ろします。全16項目：格局、十神、大運、流年。",
   "h": "f54c0d01"
  },
+ "cdvc.2-xem-truoc-cung-phu-the": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">夫妻宮を先読み</span>",
+  "h": "108dcc06"
+ },
+ "cdvc.anh-chan-dung-minh-hoa": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>イメージ<br>肖像画</span>",
+  "h": "493170c3"
+ },
+ "cdvc.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>サンプル鑑定書</b><span>サンプル命盤の「夫婦の肖像」フル版PDFをダウンロードして、実際の内容を先にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chan-dung-vo-chong.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "53e5a8b4"
+ },
+ "cdvc.bang-tren-la-tra-bang-co": {
+  "t": "上の表は、あなた自身の命盤に古法の表を当てて引いたものです — まだ鑑定の段階には入っていません。",
+  "h": "e321a90c"
+ },
+ "cdvc.cach-cuc-dac-biet": {
+  "t": "特別な格局",
+  "h": "f0db7ce5"
+ },
+ "cdvc.chan-dung-nay-chi-mang-tinh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> この肖像はあくまでイメージと参考であり、あなたの命盤の夫妻宮にある主星・副星に結びつく外見の特徴から、システムが再現したものです — 写真でも、実際のパートナーの容姿を正確に予測したものでもありません。より現実に近い結果を得るには、その方本人の命盤とも照らし合わせる必要があります。",
+  "h": "38ea85e6"
+ },
+ "cdvc.chan-dung-nguoi-phoi-ngau": {
+  "t": "<span class=\"res-block-title\">配偶者の肖像</span>",
+  "h": "6c75b667"
+ },
+ "cdvc.chan-dung-nguoi-phoi-ngau-xs4t": {
+  "t": "配偶者の肖像",
+  "h": "b3c9f474"
+ },
+ "cdvc.chan-dung-vo-chong": {
+  "t": "夫婦の肖像",
+  "h": "ed0abbb5"
+ },
+ "cdvc.chan-dung-vo-chong-tu-vi": {
+  "t": "夫婦の肖像 — 明宝紫微斗数",
+  "h": "192e3111"
+ },
+ "cdvc.chan-dung-vo-chong-ve-chan": {
+  "t": "<b>夫婦の肖像</b><span>夫妻宮から配偶者の肖像を描く</span>",
+  "h": "00184059"
+ },
+ "cdvc.chia-se-cho-ban-be-xem": {
+  "t": "友達にシェアする →",
+  "h": "d4cae66e"
+ },
+ "cdvc.chinh-tinh": {
+  "t": "<b>主星：</b> <span id=\"ptChinh\">—</span>",
+  "h": "bddb0cff"
+ },
+ "cdvc.cung-phu-the-trong-la-so": {
+  "t": "<span class=\"res-block-title\">あなたの命盤の夫妻宮</span>",
+  "h": "f96e4460"
+ },
+ "cdvc.hinh-the-suy-tu-sao": {
+  "t": "<span class=\"hp-ic\" data-icon=\"user\"></span><span>星から読む<br>体つき</span>",
+  "h": "ca30f981"
+ },
+ "cdvc.hinh-the-suy-tu-sao-tai": {
+  "t": "<span class=\"res-block-title\">夫妻宮の星から読む体つき</span>",
+  "h": "5207236c"
+ },
+ "cdvc.hoan-canh-gap-go": {
+  "t": "出会いの状況",
+  "h": "084d34b9"
+ },
+ "cdvc.luan-giai-cung-phu-the": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>夫妻宮の<br>鑑定</span>",
+  "h": "72f3c0e5"
+ },
+ "cdvc.luan-giai-cung-phu-the-e93e": {
+  "t": "<span class=\"res-block-title\">夫妻宮の鑑定</span>",
+  "h": "a976e83a"
+ },
+ "cdvc.mo-ta": {
+  "t": "説明",
+  "h": "0bf67d8a"
+ },
+ "cdvc.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-vo-chong\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-vo-chong\">…</span> 両)</span>",
+  "h": "32e5c174"
+ },
+ "cdvc.nhap-ngay-sinh-khong-can-them": {
+  "t": "生年月日を入力するだけで、ほかに必要なものはありません。システムが夫妻宮を読み取り、肖像を描きます — 星から読む体つき、イラスト、そして詳しい鑑定付きです。",
+  "h": "091107bb"
+ },
+ "cdvc.phan-tich-cung-phu-the-trong": {
+  "t": "命盤の夫妻宮を分析し、性格や雰囲気の説明を添えて、パートナーの肖像を描きます。",
+  "h": "b63e4e9d"
+ },
+ "cdvc.phu-tinh": {
+  "t": "<b>副星：</b> <span id=\"ptPhu\">—</span>",
+  "h": "5e60dcdc"
+ },
+ "cdvc.tra-loi-thay-o-khung-chat": {
+  "t": "右のチャット欄で先生に答えて、肖像を描いてもらいましょう — 必要なのはあなたの生年月日と時刻だけです。",
+  "h": "1933e964"
+ },
+ "cdvc.truoc-khi-gap-dung-nguoi-nhieu": {
+  "t": "運命の人に出会う前に、多くの人は相手をまったく違う姿で思い描いています。命盤の夫妻宮は、未来のパートナーの肖像と気質を描き出します — どんな噂話よりもはっきりと。",
+  "h": "d009dcc3"
+ },
+ "cdvc.ve-chan-dung-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"image\"></span><b id=\"btnGoLabel\">肖像を描く →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-vo-chong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-vo-chong\">…</span> 両)</span></small>",
+  "h": "33f06010"
+ },
+ "cdvc.ve-lai": {
+  "t": "描き直す",
+  "h": "fb8e0b72"
+ },
+ "cdvc.y-nghia-co-phap": {
+  "t": "古法における意味",
+  "h": "c6403cb5"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "お話を聞かせてください。明宝が15人の先生の中から最適な先生をご案内します：紫微斗数の命盤、四柱推命、相性、命名、吉日選び。",
   "h": "0f564294"
@@ -1694,6 +1810,202 @@
  "js.battu.tuoi": {
   "t": " 歳",
   "h": "2e261bf5"
+ },
+ "js.cdvc.anh-dang-tai-co-the-hoi": {
+  "t": "画像を読み込み中です。少し時間がかかることがあります — しばらくお待ちいただくか、",
+  "h": "c4e9709b"
+ },
+ "js.cdvc.anh-minh-hoa-chua-mo": {
+  "t": "イメージ画像 — ロック中",
+  "h": "bef5f6d7"
+ },
+ "js.cdvc.anh-minh-hoa-mo-mo-khoa": {
+  "t": "参考イラスト（ぼかし） — ロックを解除すると、本来の肖像をご覧いただけます",
+  "h": "9e03ce37"
+ },
+ "js.cdvc.ban-da-tao-ket-qua-cho": {
+  "t": "✓ この命盤の結果は作成済みです。再度開いても両は差し引かれません",
+  "h": "d59efda4"
+ },
+ "js.cdvc.bao-gio-toi-lap-gia-dinh": {
+  "t": "私はいつ結婚しますか？",
+  "h": "359ca64d"
+ },
+ "js.cdvc.cach-cuc-dac-biet": {
+  "t": "特別な格局：",
+  "h": "f4dcacee"
+ },
+ "js.cdvc.chan-dung-nguoi-chong-cua-toi": {
+  "t": "私の夫の肖像",
+  "h": "8037fff1"
+ },
+ "js.cdvc.chan-dung-nguoi-phoi-ngau": {
+  "t": "配偶者の肖像",
+  "h": "78b47413"
+ },
+ "js.cdvc.chan-dung-nguoi-phoi-ngau-chua": {
+  "t": "⊙ 配偶者の肖像はまだ開かれていません",
+  "h": "c91a9a69"
+ },
+ "js.cdvc.chan-dung-nguoi-vo-cua-toi": {
+  "t": "私の妻の肖像",
+  "h": "54b4f3b2"
+ },
+ "js.cdvc.chinh-tinh-chu": {
+  "t": "<b>中心となる主星：</b> ",
+  "h": "a189d8a3"
+ },
+ "js.cdvc.chinh-tinh-ds": {
+  "t": "主星：{ds}",
+  "h": "0594f4e0"
+ },
+ "js.cdvc.chong": {
+  "t": "夫",
+  "h": "92a6f17f"
+ },
+ "js.cdvc.cung-phu-the": {
+  "t": "夫妻宮：",
+  "h": "42367865"
+ },
+ "js.cdvc.cung-phu-the-cua-toi-co-gi": {
+  "t": "私の夫妻宮には何か特別なところがありますか？",
+  "h": "2ec84146"
+ },
+ "js.cdvc.cung-phu-the-trong-la-so": {
+  "t": "あなたの命盤の夫妻宮",
+  "h": "cf3fd3a1"
+ },
+ "js.cdvc.da-ve-xong-chan-dung-dua": {
+  "t": "あなたの夫妻宮をもとに肖像を描き終えました。結婚や夫妻宮、命盤についてさらに聞きたいことはありますか？",
+  "h": "777cc6a3"
+ },
+ "js.cdvc.dang-dung-anh": {
+  "t": "画像を作成中…",
+  "h": "7bce9760"
+ },
+ "js.cdvc.dang-ve-chan-dung-thuong-45": {
+  "t": "肖像を描いています（通常45〜60秒）",
+  "h": "8fb2076c"
+ },
+ "js.cdvc.dung-gu-ban-chua-gui-anh": {
+  "t": "あなたの好みにぴったりでしたか？この画像を友達に送って、<b>それぞれの未来のパートナー</b>も描いてみようと誘いましょう。",
+  "h": "d435c12c"
+ },
+ "js.cdvc.hoan-canh-gap-go": {
+  "t": "\n\n出会いの状況：",
+  "h": "7878e939"
+ },
+ "js.cdvc.hon-nhan-cua-toi-co-thuan": {
+  "t": "私の結婚はうまくいきますか？",
+  "h": "9c01a229"
+ },
+ "js.cdvc.khong-the-ket-noi-vui-long": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.cdvc.lap-la-so-xac-dinh-cung": {
+  "t": "命盤を作成し、夫妻宮を割り出す",
+  "h": "f8f01348"
+ },
+ "js.cdvc.loi": {
+  "t": "エラー ",
+  "h": "1b80116b"
+ },
+ "js.cdvc.loi-8d72": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.cdvc.luan-giai-chua-mo": {
+  "t": "鑑定 — ロック中",
+  "h": "4c4f7020"
+ },
+ "js.cdvc.luan-giai-cung-phu-the": {
+  "t": "夫妻宮の鑑定",
+  "h": "8e52b135"
+ },
+ "js.cdvc.luan-giai-cung-phu-the-p43z": {
+  "t": "夫妻宮の鑑定",
+  "h": "fee63cc7"
+ },
+ "js.cdvc.luc-giac-cung-phu-the": {
+  "t": "夫妻宮の六角形",
+  "h": "c1463a39"
+ },
+ "js.cdvc.luot-ve": {
+  "t": "描画",
+  "h": "85f72421"
+ },
+ "js.cdvc.mo-chan-dung-day-du": {
+  "t": "フル版の肖像を開く",
+  "h": "9f515b09"
+ },
+ "js.cdvc.n-tuoi-hist": {
+  "t": "{n}歳",
+  "h": "25e7a2be"
+ },
+ "js.cdvc.nguoi-chong": {
+  "t": "夫",
+  "h": "bce4fcfa"
+ },
+ "js.cdvc.nguoi-vo": {
+  "t": "妻",
+  "h": "f1b7338b"
+ },
+ "js.cdvc.phac-hoa-tu-cung-phu-the": {
+  "t": "命盤の夫妻宮から描く",
+  "h": "adeba7b7"
+ },
+ "js.cdvc.phac-thao-mo-ta-uoc-luong": {
+  "t": "説明のスケッチとパートナーの年齢の推定",
+  "h": "7ce20134"
+ },
+ "js.cdvc.phu-tinh-ds": {
+  "t": "副星：{ds}",
+  "h": "7e63fae4"
+ },
+ "js.cdvc.quet-ma-xem-chan-dung-cua": {
+  "t": "QRコードを読み取って、あなたの肖像を見る",
+  "h": "2b62e4a0"
+ },
+ "js.cdvc.sat-tinh-pha-cach": {
+  "t": "（殺星 — 格を破る）",
+  "h": "742dce66"
+ },
+ "js.cdvc.sat-tinh-pha-cach-ngay-tu": {
+  "t": " — 殺星、根本から格を破る",
+  "h": "14fa5401"
+ },
+ "js.cdvc.tai-lai": {
+  "t": "再読み込み",
+  "h": "16371241"
+ },
+ "js.cdvc.theo-chinh-tinh": {
+  "t": "主星に基づく：",
+  "h": "ec1e2e45"
+ },
+ "js.cdvc.theo-phu-tinh": {
+  "t": "副星に基づく：",
+  "h": "4c2c8bf3"
+ },
+ "js.cdvc.vo": {
+  "t": "妻",
+  "h": "98c0d1da"
+ },
+ "js.cdvc.vo-chinh-dieu": {
+  "t": "主星なし",
+  "h": "bb1c972d"
+ },
+ "js.cdvc.vui-long-nhap-day-du-ngay": {
+  "t": "生年月日をすべて入力してください。",
+  "h": "2545b4dd"
+ },
+ "js.cdvc.xem-them-ve-tinh-cach": {
+  "t": "私の性格についてもっと見る",
+  "h": "0c0df338"
+ },
+ "js.cdvc.y-nghia-co-phap": {
+  "t": "古法における意味：",
+  "h": "396825c1"
  },
  "js.chat.chao": {
   "t": "こんにちは、",

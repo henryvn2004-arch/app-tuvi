@@ -103,6 +103,122 @@
   "t": "이 사주만을 위해 자평 고법으로 새로 씁니다. 총 16개 항목: 격국, 십신, 대운, 유년.",
   "h": "f54c0d01"
  },
+ "cdvc.2-xem-truoc-cung-phu-the": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">부처궁 미리보기</span>",
+  "h": "108dcc06"
+ },
+ "cdvc.anh-chan-dung-minh-hoa": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>예시<br>초상화</span>",
+  "h": "493170c3"
+ },
+ "cdvc.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「부부 초상」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chan-dung-vo-chong.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "53e5a8b4"
+ },
+ "cdvc.bang-tren-la-tra-bang-co": {
+  "t": "위 표는 당신의 명반에 고법의 표를 대조해 찾은 것이에요 — 아직 풀이 단계를 거치지 않았어요.",
+  "h": "e321a90c"
+ },
+ "cdvc.cach-cuc-dac-biet": {
+  "t": "특별한 격국",
+  "h": "f0db7ce5"
+ },
+ "cdvc.chan-dung-nay-chi-mang-tinh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 이 초상은 예시와 참고용일 뿐이며, 당신의 명반 부처궁에 있는 주성·보조성과 연결된 외형적 특징을 시스템이 재현한 것이에요 — 사진도, 실제 배우자의 모습을 정확히 예측한 것도 아니에요. 더 현실에 가까운 결과를 얻으려면 그 사람 본인의 명반과도 대조해야 해요.",
+  "h": "38ea85e6"
+ },
+ "cdvc.chan-dung-nguoi-phoi-ngau": {
+  "t": "<span class=\"res-block-title\">배우자의 초상</span>",
+  "h": "6c75b667"
+ },
+ "cdvc.chan-dung-nguoi-phoi-ngau-xs4t": {
+  "t": "배우자의 초상",
+  "h": "b3c9f474"
+ },
+ "cdvc.chan-dung-vo-chong": {
+  "t": "부부 초상",
+  "h": "ed0abbb5"
+ },
+ "cdvc.chan-dung-vo-chong-tu-vi": {
+  "t": "부부 초상 — 명보 자미두수",
+  "h": "192e3111"
+ },
+ "cdvc.chan-dung-vo-chong-ve-chan": {
+  "t": "<b>부부 초상</b><span>부처궁에서 배우자의 초상을 그려요</span>",
+  "h": "00184059"
+ },
+ "cdvc.chia-se-cho-ban-be-xem": {
+  "t": "친구에게 공유하기 →",
+  "h": "d4cae66e"
+ },
+ "cdvc.chinh-tinh": {
+  "t": "<b>주성:</b> <span id=\"ptChinh\">—</span>",
+  "h": "bddb0cff"
+ },
+ "cdvc.cung-phu-the-trong-la-so": {
+  "t": "<span class=\"res-block-title\">당신의 명반 속 부처궁</span>",
+  "h": "f96e4460"
+ },
+ "cdvc.hinh-the-suy-tu-sao": {
+  "t": "<span class=\"hp-ic\" data-icon=\"user\"></span><span>별에서 읽는<br>체형</span>",
+  "h": "ca30f981"
+ },
+ "cdvc.hinh-the-suy-tu-sao-tai": {
+  "t": "<span class=\"res-block-title\">부처궁의 별에서 읽는 체형</span>",
+  "h": "5207236c"
+ },
+ "cdvc.hoan-canh-gap-go": {
+  "t": "만남의 상황",
+  "h": "084d34b9"
+ },
+ "cdvc.luan-giai-cung-phu-the": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>부처궁<br>풀이</span>",
+  "h": "72f3c0e5"
+ },
+ "cdvc.luan-giai-cung-phu-the-e93e": {
+  "t": "<span class=\"res-block-title\">부처궁 풀이</span>",
+  "h": "a976e83a"
+ },
+ "cdvc.mo-ta": {
+  "t": "설명",
+  "h": "0bf67d8a"
+ },
+ "cdvc.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-vo-chong\"></span> / 회 <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-vo-chong\">…</span> 냥)</span>",
+  "h": "32e5c174"
+ },
+ "cdvc.nhap-ngay-sinh-khong-can-them": {
+  "t": "생년월일만 입력하면 다른 건 필요 없어요. 시스템이 부처궁을 읽고 초상을 그려 줘요 — 별에서 읽는 체형, 그림, 그리고 자세한 풀이까지요.",
+  "h": "091107bb"
+ },
+ "cdvc.phan-tich-cung-phu-the-trong": {
+  "t": "명반의 부처궁을 분석해 성격과 분위기에 대한 설명을 곁들여 배우자의 초상을 그려요.",
+  "h": "b63e4e9d"
+ },
+ "cdvc.phu-tinh": {
+  "t": "<b>보조성:</b> <span id=\"ptPhu\">—</span>",
+  "h": "5e60dcdc"
+ },
+ "cdvc.tra-loi-thay-o-khung-chat": {
+  "t": "채팅창에서 선생님께 답하면 초상을 그려 드려요 — 생년월일과 시간만 있으면 돼요.",
+  "h": "1933e964"
+ },
+ "cdvc.truoc-khi-gap-dung-nguoi-nhieu": {
+  "t": "맞는 사람을 만나기 전에 많은 사람이 그 사람을 전혀 다르게 상상해요. 명반의 부처궁은 미래 배우자의 초상과 기질을 그려 줘요 — 어떤 소문이나 짐작보다도 또렷하게요.",
+  "h": "d009dcc3"
+ },
+ "cdvc.ve-chan-dung-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"image\"></span><b id=\"btnGoLabel\">초상 그리기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-vo-chong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-vo-chong\">…</span> 냥)</span></small>",
+  "h": "33f06010"
+ },
+ "cdvc.ve-lai": {
+  "t": "다시 그리기",
+  "h": "fb8e0b72"
+ },
+ "cdvc.y-nghia-co-phap": {
+  "t": "고법에 따른 의미",
+  "h": "c6403cb5"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "이야기를 들려주세요. 명보가 15분의 선생님 중 알맞은 분을 안내해 드려요: 자미두수 명반, 사주, 궁합, 작명, 길일 택일.",
   "h": "0f564294"
@@ -1694,6 +1810,202 @@
  "js.battu.tuoi": {
   "t": " 세",
   "h": "2e261bf5"
+ },
+ "js.cdvc.anh-dang-tai-co-the-hoi": {
+  "t": "이미지를 불러오는 중이에요. 다소 느릴 수 있어요 — 잠시 기다리시거나",
+  "h": "c4e9709b"
+ },
+ "js.cdvc.anh-minh-hoa-chua-mo": {
+  "t": "예시 그림 — 아직 열리지 않음",
+  "h": "bef5f6d7"
+ },
+ "js.cdvc.anh-minh-hoa-mo-mo-khoa": {
+  "t": "예시 그림(흐림) — 잠금을 풀면 진짜 초상을 볼 수 있어요",
+  "h": "9e03ce37"
+ },
+ "js.cdvc.ban-da-tao-ket-qua-cho": {
+  "t": "✓ 이 명반의 결과를 이미 만들었어요 — 다시 열어도 냥이 차감되지 않아요",
+  "h": "d59efda4"
+ },
+ "js.cdvc.bao-gio-toi-lap-gia-dinh": {
+  "t": "저는 언제 결혼하게 되나요?",
+  "h": "359ca64d"
+ },
+ "js.cdvc.cach-cuc-dac-biet": {
+  "t": "특별한 격국: ",
+  "h": "f4dcacee"
+ },
+ "js.cdvc.chan-dung-nguoi-chong-cua-toi": {
+  "t": "나의 남편 초상",
+  "h": "8037fff1"
+ },
+ "js.cdvc.chan-dung-nguoi-phoi-ngau": {
+  "t": "배우자의 초상",
+  "h": "78b47413"
+ },
+ "js.cdvc.chan-dung-nguoi-phoi-ngau-chua": {
+  "t": "⊙ 배우자 초상이 아직 열리지 않았어요",
+  "h": "c91a9a69"
+ },
+ "js.cdvc.chan-dung-nguoi-vo-cua-toi": {
+  "t": "나의 아내 초상",
+  "h": "54b4f3b2"
+ },
+ "js.cdvc.chinh-tinh-chu": {
+  "t": "<b>중심 주성:</b> ",
+  "h": "a189d8a3"
+ },
+ "js.cdvc.chinh-tinh-ds": {
+  "t": "주성: {ds}",
+  "h": "0594f4e0"
+ },
+ "js.cdvc.chong": {
+  "t": "남편",
+  "h": "92a6f17f"
+ },
+ "js.cdvc.cung-phu-the": {
+  "t": "부처궁: ",
+  "h": "42367865"
+ },
+ "js.cdvc.cung-phu-the-cua-toi-co-gi": {
+  "t": "제 부처궁에는 특별한 점이 있나요?",
+  "h": "2ec84146"
+ },
+ "js.cdvc.cung-phu-the-trong-la-so": {
+  "t": "당신의 명반 속 부처궁",
+  "h": "cf3fd3a1"
+ },
+ "js.cdvc.da-ve-xong-chan-dung-dua": {
+  "t": "당신의 부처궁을 바탕으로 초상을 다 그렸어요. 결혼이나 부처궁, 명반에 대해 더 묻고 싶은 게 있나요?",
+  "h": "777cc6a3"
+ },
+ "js.cdvc.dang-dung-anh": {
+  "t": "이미지 만드는 중…",
+  "h": "7bce9760"
+ },
+ "js.cdvc.dang-ve-chan-dung-thuong-45": {
+  "t": "초상을 그리는 중이에요 (보통 45~60초)",
+  "h": "8fb2076c"
+ },
+ "js.cdvc.dung-gu-ban-chua-gui-anh": {
+  "t": "취향에 맞나요? 이 그림을 친구들에게 보내고, 친구들도 <b>자기 미래의 배우자</b>를 그려 보자고 권해 보세요.",
+  "h": "d435c12c"
+ },
+ "js.cdvc.hoan-canh-gap-go": {
+  "t": "\n\n만남의 상황: ",
+  "h": "7878e939"
+ },
+ "js.cdvc.hon-nhan-cua-toi-co-thuan": {
+  "t": "제 결혼은 순조로울까요?",
+  "h": "9c01a229"
+ },
+ "js.cdvc.khong-the-ket-noi-vui-long": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.cdvc.lap-la-so-xac-dinh-cung": {
+  "t": "명반을 세우고 부처궁을 정하는 중",
+  "h": "f8f01348"
+ },
+ "js.cdvc.loi": {
+  "t": "오류 ",
+  "h": "1b80116b"
+ },
+ "js.cdvc.loi-8d72": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.cdvc.luan-giai-chua-mo": {
+  "t": "풀이 — 아직 열리지 않음",
+  "h": "4c4f7020"
+ },
+ "js.cdvc.luan-giai-cung-phu-the": {
+  "t": "부처궁 풀이",
+  "h": "8e52b135"
+ },
+ "js.cdvc.luan-giai-cung-phu-the-p43z": {
+  "t": "부처궁 풀이",
+  "h": "fee63cc7"
+ },
+ "js.cdvc.luc-giac-cung-phu-the": {
+  "t": "부처궁 육각형",
+  "h": "c1463a39"
+ },
+ "js.cdvc.luot-ve": {
+  "t": "그리기",
+  "h": "85f72421"
+ },
+ "js.cdvc.mo-chan-dung-day-du": {
+  "t": "전체 초상 열기",
+  "h": "9f515b09"
+ },
+ "js.cdvc.n-tuoi-hist": {
+  "t": "{n}세",
+  "h": "25e7a2be"
+ },
+ "js.cdvc.nguoi-chong": {
+  "t": "남편",
+  "h": "bce4fcfa"
+ },
+ "js.cdvc.nguoi-vo": {
+  "t": "아내",
+  "h": "f1b7338b"
+ },
+ "js.cdvc.phac-hoa-tu-cung-phu-the": {
+  "t": "명반의 부처궁에서 그림",
+  "h": "adeba7b7"
+ },
+ "js.cdvc.phac-thao-mo-ta-uoc-luong": {
+  "t": "설명 스케치와 배우자 나이 추정",
+  "h": "7ce20134"
+ },
+ "js.cdvc.phu-tinh-ds": {
+  "t": "보조성: {ds}",
+  "h": "7e63fae4"
+ },
+ "js.cdvc.quet-ma-xem-chan-dung-cua": {
+  "t": "QR 코드를 스캔해 나의 초상 보기",
+  "h": "2b62e4a0"
+ },
+ "js.cdvc.sat-tinh-pha-cach": {
+  "t": " (살성 — 격을 깨뜨림)",
+  "h": "742dce66"
+ },
+ "js.cdvc.sat-tinh-pha-cach-ngay-tu": {
+  "t": " — 살성, 처음부터 격을 깨뜨림",
+  "h": "14fa5401"
+ },
+ "js.cdvc.tai-lai": {
+  "t": "다시 불러오기",
+  "h": "16371241"
+ },
+ "js.cdvc.theo-chinh-tinh": {
+  "t": "주성 기준: ",
+  "h": "ec1e2e45"
+ },
+ "js.cdvc.theo-phu-tinh": {
+  "t": "보조성 기준: ",
+  "h": "4c2c8bf3"
+ },
+ "js.cdvc.vo": {
+  "t": "아내",
+  "h": "98c0d1da"
+ },
+ "js.cdvc.vo-chinh-dieu": {
+  "t": "주성 없음",
+  "h": "bb1c972d"
+ },
+ "js.cdvc.vui-long-nhap-day-du-ngay": {
+  "t": "생년월일을 모두 입력해 주세요.",
+  "h": "2545b4dd"
+ },
+ "js.cdvc.xem-them-ve-tinh-cach": {
+  "t": "제 성격에 대해 더 보기",
+  "h": "0c0df338"
+ },
+ "js.cdvc.y-nghia-co-phap": {
+  "t": "고법에 따른 의미: ",
+  "h": "396825c1"
  },
  "js.chat.chao": {
   "t": "안녕하세요— ",
