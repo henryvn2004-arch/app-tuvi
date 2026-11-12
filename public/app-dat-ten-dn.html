@@ -199,6 +199,7 @@ window.SHELL_INTRO={key:'dat-ten-dn'};</script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=150"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
+<script src="/tools-shared/glossary.js?v=4"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
@@ -239,18 +240,21 @@ function doDatTenDn(){
   var namChu=parseInt(document.getElementById('inpNamChu').value);
   var nganh=document.getElementById('inpNganh').value;
   var loaiHinh=document.getElementById('inpLoaiHinh').value;
+  // Chữ HIỂN THỊ của ngành / loại hình (option đã dịch ở /<locale>/); value tiếng Việt vẫn gửi server.
+  function _optLb(id,v){ var s=document.getElementById(id), o=s&&s.selectedOptions[0]; return (o&&o.textContent)||v; }
+  var nganhLb=_optLb('inpNganh',nganh), loaiLb=_optLb('inpLoaiHinh',loaiHinh);
   var tenGoiY=document.getElementById('inpTenGoiY').value.trim();
-  if(!namChu||!nganh){ alert('Vui lòng nhập năm sinh người chủ và chọn ngành nghề.'); return; }
+  if(!namChu||!nganh){ alert(_tvmbT('js.dattendn.vui-long-nhap-nam-sinh','Vui lòng nhập năm sinh người chủ và chọn ngành nghề.')); return; }
   btn.disabled=true;
   try{
     var iChu=CanChi.ccInfo(namChu);
-    document.getElementById('resHead').textContent='Nền mệnh chủ · '+nganh+(loaiHinh?' · '+loaiHinh:'');
+    document.getElementById('resHead').textContent=_tvmbT('js.dattendn.res-head','Nền mệnh chủ · {nganh}',{nganh:nganhLb})+(loaiHinh?' · '+loaiLb:'');
     function ccCard(who,val,sub,hanh){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(val)+'</div>'+(sub?'<div class="na" style="--hanh:'+(HANH_COLOR[hanh]||'var(--gold-soft)')+'">'+esc(sub)+'</div>':'')+'</div>'; }
     document.getElementById('ccRow').innerHTML=
-      ccCard('Tuổi chủ'+(tenChu?' · '+tenChu:''),iChu.canChi,iChu.napAm+' · '+iChu.hanh,iChu.hanh)+
-      ccCard('Ngành',nganh,'')+
-      (tenGoiY?ccCard('Tên cân nhắc',tenGoiY,''):'');
-    document.getElementById('resNote').innerHTML='Mệnh chủ nạp âm <b>'+esc(iChu.napAm)+'</b> — hành <b>'+esc(iChu.hanh)+'</b>. Tên doanh nghiệp nên chọn chữ có ngũ hành <b>tương sinh / đồng hành</b> để bồi mệnh chủ (hành <b>'+esc(hanhSinhCho(iChu.hanh))+'</b> sinh <b>'+esc(iChu.hanh)+'</b>), đồng thời hợp khí chất ngành <b>'+esc(nganh.toLowerCase())+'</b>, đọc thuận, dễ nhớ. Hỏi Thầy để có danh sách tên cụ thể.';
+      ccCard(_tvmbT('js.dattendn.tuoi-chu','Tuổi chủ')+(tenChu?' · '+tenChu:''),_tvmbG('canchi',iChu.canChi),_tvmbG('napam',iChu.napAm)+' · '+_tvmbG('hanh',iChu.hanh),iChu.hanh)+
+      ccCard(_tvmbT('js.dattendn.nganh','Ngành'),nganhLb,'')+
+      (tenGoiY?ccCard(_tvmbT('js.dattendn.ten-can-nhac','Tên cân nhắc'),tenGoiY,''):'');
+    document.getElementById('resNote').innerHTML=_tvmbT('js.dattendn.res-note','Mệnh chủ nạp âm <b>{na}</b> — hành <b>{h}</b>. Tên doanh nghiệp nên chọn chữ có ngũ hành <b>tương sinh / đồng hành</b> để bồi mệnh chủ (hành <b>{hs}</b> sinh <b>{h}</b>), đồng thời hợp khí chất ngành <b>{nganh}</b>, đọc thuận, dễ nhớ. Hỏi Thầy để có danh sách tên cụ thể.',{na:esc(_tvmbG('napam',iChu.napAm)),h:esc(_tvmbG('hanh',iChu.hanh)),hs:esc(_tvmbG('hanh',hanhSinhCho(iChu.hanh))),nganh:esc(nganhLb.toLowerCase())});
     mountHook(iChu,nganh);
     // Globals cho khối "Gợi ý tên chuyên sâu AI" (gate+SSE, port từ tools/dat-ten-doanh-nghiep.html)
     _dtHoTen=tenChu||'Chủ doanh nghiệp'; _dtNamSinh=namChu; _dtInfoChu=iChu; _dtLinhVuc=nganh; _dtLoaiHinh=loaiHinh;
@@ -262,11 +266,11 @@ function doDatTenDn(){
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       scenario:{type:'dat-ten-dn',data:{tenChu:tenChu,namChu:namChu,nganh:nganh,loaiHinh:loaiHinh,tenGoiY:tenGoiY}},
-      label:'Đặt tên DN · '+nganh+' · chủ '+iChu.canChi,
-      greeting:'Nền mệnh chủ đã sẵn sàng (chủ **'+esc(iChu.canChi)+'** · '+esc(iChu.hanh)+', ngành '+esc(nganh.toLowerCase())+'). '+(tenGoiY?'Bạn muốn tôi chấm tên **'+esc(tenGoiY)+'** hay gợi ý tên mới?':'Bạn muốn tôi gợi ý tên theo hướng nào?'),
+      label:_tvmbT('js.dattendn.label','Đặt tên DN · {nganh} · chủ {cc}',{nganh:nganhLb,cc:_tvmbG('canchi',iChu.canChi)}),
+      greeting:_tvmbT('js.dattendn.greeting','Nền mệnh chủ đã sẵn sàng (chủ **{cc}** · {h}, ngành {nganh}).',{cc:esc(_tvmbG('canchi',iChu.canChi)),h:esc(_tvmbG('hanh',iChu.hanh)),nganh:esc(nganhLb.toLowerCase())})+' '+(tenGoiY?_tvmbT('js.dattendn.cham-ten','Bạn muốn tôi chấm tên **{ten}** hay gợi ý tên mới?',{ten:esc(tenGoiY)}):_tvmbT('js.dattendn.goi-y-huong','Bạn muốn tôi gợi ý tên theo hướng nào?')),
       chips:tenGoiY
-        ?['Chấm tên "'+tenGoiY+'" hợp mệnh chủ và ngành không?','Gợi ý 5 tên khác hợp hơn','Tên nên bổ ngũ hành gì?','Slogan nào hợp với tên này?']
-        :['Gợi ý 5 tên hợp mệnh kèm ý nghĩa','Tên nên bổ ngũ hành gì cho chủ?','Tên nào hợp khí chất ngành này?','Tránh chữ/âm nào khi đặt tên?']
+        ?[_tvmbT('js.dattendn.chip-cham','Chấm tên "{ten}" hợp mệnh chủ và ngành không?',{ten:tenGoiY}),_tvmbT('js.dattendn.chip-5-ten-khac','Gợi ý 5 tên khác hợp hơn'),_tvmbT('js.dattendn.chip-bo-hanh','Tên nên bổ ngũ hành gì?'),_tvmbT('js.dattendn.chip-slogan','Slogan nào hợp với tên này?')]
+        :[_tvmbT('js.dattendn.chip-5-ten','Gợi ý 5 tên hợp mệnh kèm ý nghĩa'),_tvmbT('js.dattendn.chip-bo-hanh-chu','Tên nên bổ ngũ hành gì cho chủ?'),_tvmbT('js.dattendn.chip-khi-chat','Tên nào hợp khí chất ngành này?'),_tvmbT('js.dattendn.chip-tranh','Tránh chữ/âm nào khi đặt tên?')]
     });
     var _dtLines=['Đặt tên doanh nghiệp · ngành '+nganh+(loaiHinh?' · '+loaiHinh:'')+' — nền mệnh chủ '+iChu.canChi+' ('+iChu.napAm+', '+iChu.hanh+')'];
     if(tenGoiY) _dtLines.push('Tên đang cân nhắc: '+tenGoiY);
@@ -274,7 +278,7 @@ function doDatTenDn(){
     Shell.setShareable({ kind:'text', toolId:'dat-ten-dn', title:'Đặt tên DN · '+nganh+' · chủ '+iChu.canChi, text:_dtLines.join('\n') });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   }catch(e){
-    document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
+    document.getElementById('ccRow').innerHTML='<div class="laso-error">'+_tvmbT('js.chonngay.loi-colon','Lỗi: ')+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
@@ -319,17 +323,17 @@ TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'da
     if (!panel || document.getElementById('sampBar')) return;
     var bar = document.createElement('div');
     bar.className = 'samp-bar'; bar.id = 'sampBar';
-    bar.innerHTML = '<div class="sb-txt">Đây là <b>BẢN MẪU</b> minh hoạ (dữ liệu khác) — chưa phải kết quả của bạn.</div>' +
-      '<button type="button" id="sampBarClose">Nhập thông tin của tôi →</button>';
+    bar.innerHTML = '<div class="sb-txt">'+_tvmbT('js.chonngay.ban-mau-note','Đây là <b>BẢN MẪU</b> minh hoạ (dữ liệu khác) — chưa phải kết quả của bạn.')+'</div>' +
+      '<button type="button" id="sampBarClose">'+_tvmbT('js.chonngay.nhap-thong-tin-cua-toi','Nhập thông tin của tôi →')+'</button>';
     panel.insertBefore(bar, panel.firstChild);
     document.getElementById('sampBarClose').onclick = function () {
       var b = document.getElementById('sampBar'); if (b) b.remove();
       showForm();
-      var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'flex';
+      var cta = document.getElementById('sampCta'); if (cta && (!window.I18n || I18n.locale === 'vi')) cta.style.display = 'flex';
     };
   }
   window.SampleHint.open = function (btn) {
-    if (btn) { btn.disabled = true; btn.textContent = 'Đang mở…'; }
+    if (btn) { btn.disabled = true; btn.textContent = _tvmbT('js.chonngay.dang-mo','Đang mở…'); }
     var p = _cache ? Promise.resolve(_cache) : fetch(SAMPLE_URL).then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
@@ -345,15 +349,17 @@ TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'da
       document.getElementById('dtResult').innerHTML = renderMarkdownDt(data.text);
       var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'none';
       _showSampleBar();
-      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+      if (btn) { btn.disabled = false; btn.textContent = _tvmbT('js.chonngay.xem-ban-mau','Xem bản mẫu →'); }
     }).catch(function (e) {
-      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+      if (btn) { btn.disabled = false; btn.textContent = _tvmbT('js.chonngay.xem-ban-mau','Xem bản mẫu →'); }
       if (window.console) console.error('sample:', e);
-      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
+      window.alert(_tvmbT('js.chonngay.chua-mo-duoc-ban-mau','Chưa mở được bản mẫu. Thử lại sau nhé.'));
     });
   };
   try {
-    if (!(window.Shell && Shell.autoRun && Shell.autoRun()) &&
+    // Bản mẫu là văn LLM đã lưu sẵn tiếng Việt ⇒ chỉ mời xem ở bản vi (xem app-chon-ngay.html).
+    if ((!window.I18n || I18n.locale === 'vi') &&
+        !(window.Shell && Shell.autoRun && Shell.autoRun()) &&
         !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {
       var c = document.getElementById('sampCta'); if (c) c.style.display = 'flex';
     }
@@ -387,7 +393,7 @@ function renderMarkdownDt(md){
 }
 
 async function initiateDatTenDnChuyenSau(){
-  if(!_dtInfoChu||!_dtLinhVuc){ alert('Vui lòng nhập thông tin trước.'); return; }
+  if(!_dtInfoChu||!_dtLinhVuc){ alert(_tvmbT('js.chonngay.vui-long-nhap-thong-tin','Vui lòng nhập thông tin trước.')); return; }
   var slug=TuviPaywall.generateToolSlug('dat-ten-dn-'+_dtNamSinh);
   wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   await TuviPaywall.requireCredits(slug, async function(){ await _doDatTenDnAI(); });
@@ -397,7 +403,7 @@ async function _doDatTenDnAI(){
   if(btn)btn.disabled=true;
   wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu gợi ý tên chuyên sâu
   var el=document.getElementById('dtResult');
-  el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('building-2'):'')+' Đang gợi ý tên doanh nghiệp… thường mất 15–25 giây</div>';
+  el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('building-2'):'')+' '+_tvmbT('js.dattendn.dang-goi-y','Đang gợi ý tên doanh nghiệp… thường mất 15–25 giây')+'</div>';
   el.scrollIntoView({behavior:'smooth',block:'nearest'});
   try{
     var res=await fetch('/api/xem-tuoi?action=dat-ten-doanh-nghiep',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
@@ -405,7 +411,7 @@ async function _doDatTenDnAI(){
       canChiChu:_dtInfoChu.canChi, napAmChu:_dtInfoChu.napAm,
       linhVuc:_dtLinhVuc, loaiHinh:_dtLoaiHinh
     })});
-    if(!res.ok){ var d=await res.json().catch(function(){return {};}); throw new Error(d.error||'Lỗi '+res.status); }
+    if(!res.ok){ var d=await res.json().catch(function(){return {};}); throw new Error(d.error||_tvmbT('js.chonngay.loi-status','Lỗi {s}',{s:res.status})); }
     var reader=res.body.getReader(), dec=new TextDecoder(), full='', buf='';
     el.innerHTML='';
     while(true){
@@ -425,10 +431,10 @@ async function _doDatTenDnAI(){
         }catch(e){ if(e.message&&e.message.indexOf('JSON')<0)throw e; }
       }
     }
-    if(!full)throw new Error('Không nhận được kết quả.');
+    if(!full)throw new Error(_tvmbT('js.chonngay.khong-nhan-duoc-ket-qua','Không nhận được kết quả.'));
     el.innerHTML=renderMarkdownDt(full);
   }catch(e){
-    el.innerHTML='<div class="laso-error">Lỗi: '+esc(e.message||'Không thể kết nối. Vui lòng thử lại.')+'</div>';
+    el.innerHTML='<div class="laso-error">'+_tvmbT('js.chonngay.loi-colon','Lỗi: ')+esc(e.message||_tvmbT('js.chonngay.khong-the-ket-noi','Không thể kết nối. Vui lòng thử lại.'))+'</div>';
   }
   if(btn)btn.disabled=false;
 }
