@@ -245,6 +245,7 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'thanh-tuong-pro'};</script>
 <script src="/auth.js?v=9"></script>
 <script src="/tuvi-paywall.js?v=44"></script>
+<script src="/tools-shared/glossary.js?v=4"></script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
   <script src="/nav.js?v=49" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
@@ -381,8 +382,8 @@ startBtn.addEventListener('click', () => {
 function loadTask(idx) {
   state.currentIdx = idx;
   const t = TASKS[idx];
-  taskNum.textContent = _tvmbT('js.thtp.bai', 'Bài ') + t.num;
-  taskTime.textContent = t.duration + _tvmbT('js.thtp.giay', ' giây');
+  taskNum.textContent = _tvmbT('js.thtp.bai-n', 'Bài {n}', { n: t.num });
+  taskTime.textContent = _tvmbT('js.thtp.n-giay', '{n} giây', { n: t.duration });
   taskTitle.textContent = t.title;
   taskInstruction.textContent = t.instruction;
   taskText.textContent = t.text;
@@ -941,17 +942,17 @@ function analyzeTask(taskId, buf, fs) {
 
 function miniSummary(taskId, f) {
   if (taskId === 'baseline') {
-    return _tvmbT('js.thtp.giong-nen-f0-trung-binh', 'Giọng nền: F0 trung bình <strong>') + f.f0Mean.toFixed(0) + _tvmbT('js.thtp.hz-toc-do', 'Hz</strong>, tốc độ ') + f.speechRate.toFixed(1) + _tvmbT('js.thtp.am-tiet-giay', ' âm tiết/giây.');
+    return _tvmbT('js.thtp.giong-nen-f0', 'Giọng nền: F0 trung bình <strong>{f0}Hz</strong>, tốc độ {rate} âm tiết/giây.', { f0: f.f0Mean.toFixed(0), rate: f.speechRate.toFixed(1) });
   }
   if (taskId === 'sustain') {
     const q = f.sustainDuration >= 3.5 ? _tvmbT('js.thtp.khi-luc-tot', 'khí lực tốt') : f.sustainDuration >= 2.5 ? _tvmbT('js.thtp.khi-trung-binh', 'khí trung bình') : _tvmbT('js.thtp.khi-bat-tuc', 'khí bất túc');
-    return _tvmbT('js.thtp.ngan-dai', 'Ngân dài <strong>') + f.sustainDuration.toFixed(1) + 's</strong>, shimmer ' + f.shimmer.toFixed(2) + 'dB — <em>' + q + '</em>.';
+    return _tvmbT('js.thtp.ngan-dai-shimmer', 'Ngân dài <strong>{d}s</strong>, shimmer {sh}dB — <em>{q}</em>.', { d: f.sustainDuration.toFixed(1), sh: f.shimmer.toFixed(2), q: q });
   }
   if (taskId === 'count') {
-    return _tvmbT('js.thtp.toc-do-dem', 'Tốc độ đếm: <strong>') + f.speechRate.toFixed(1) + _tvmbT('js.thtp.am-tiet-giay-1pmb', '</strong> âm tiết/giây.');
+    return _tvmbT('js.thtp.toc-do-dem-am-tiet', 'Tốc độ đếm: <strong>{rate}</strong> âm tiết/giây.', { rate: f.speechRate.toFixed(1) });
   }
   if (taskId === 'tonal') {
-    return 'Pitch range: <strong>' + f.f0Range.toFixed(0) + _tvmbT('js.thtp.hz-do-uyen-chuyen', 'Hz</strong>, độ uyển chuyển ') + f.pitchAgility.toFixed(1) + _tvmbT('js.thtp.hz-buoc', 'Hz/bước.');
+    return _tvmbT('js.thtp.pitch-range-uyen-chuyen', 'Pitch range: <strong>{r}Hz</strong>, độ uyển chuyển {a}Hz/bước.', { r: f.f0Range.toFixed(0), a: f.pitchAgility.toFixed(1) });
   }
   return 'Xong.';
 }
@@ -986,7 +987,7 @@ function compileAndShowFeatures() {
   `).join('');
 
   const nguam = estimateNguAm(r, state.gender);
-  nguamBadge.textContent = _tvmbT('js.thtp.ngu-am-uoc-tinh', 'Ngũ Âm ước tính: ') + nguam.label;
+  nguamBadge.textContent = _tvmbT('js.thtp.ngu-am-uoc-tinh-n', 'Ngũ Âm ước tính: {n}', { n: nguam.shown });
   mountHook(items, nguam);
 
   const warns = [];
@@ -1095,7 +1096,7 @@ function mountHook(items, nguam) {
     source: 'engine · thanh-tuong-pro F0 analysis',
   }, {
     tone: 'neutral',
-    title: _tvmbT('js.thtp.ngu-am-uoc-tinh', 'Ngũ Âm ước tính: ') + nguam.label,
+    title: _tvmbT('js.thtp.ngu-am-uoc-tinh-n', 'Ngũ Âm ước tính: {n}', { n: nguam.shown }),
     body: _tvmbT('js.thtp.xep-theo-12-chi-so-am', 'Xếp theo 12 chỉ số âm học đo được (HNR, sustain, jitter, centroid…). Ý nghĩa đầy đủ theo Ngũ Âm cổ pháp nằm trong bản phân tích chuyên sâu.'),
     source: 'engine · estimateNguAm',
   }];
@@ -1136,13 +1137,17 @@ function estimateNguAm(r, gender){
   const second = sorted[1];
   const names = { Kim:'Kim (金)', Moc:'Mộc (木)', Thuy:'Thủy (水)', Hoa:'Hỏa (火)', Tho:'Thổ (土)' };
   let label = names[top[0]];
+  // `label` (tiếng Việt) đi vào văn bản gửi server; `shown` chỉ để HIỂN THỊ (glossary 'hanh').
+  const hanhBase = (k) => names[k].split(' ')[0];
+  let shown = _tvmbG('hanh', hanhBase(top[0])) === hanhBase(top[0]) ? names[top[0]] : _tvmbG('hanh', hanhBase(top[0]));
   if (second[1] >= top[1] - 1 && second[1] >= 3) {
     label += ' chen ' + names[second[0]].split(' ')[0];
+    shown = _tvmbT('js.thtp.nguam-chen', '{a} chen {b}', { a: shown, b: _tvmbG('hanh', hanhBase(second[0])) });
   }
-  if (s.hnrMean >= 15) label = 'Thanh ' + label;
-  else if (s.hnrMean < 8) label = 'Trọc ' + label;
+  if (s.hnrMean >= 15) { label = 'Thanh ' + label; shown = _tvmbT('js.thtp.nguam-thanh', 'Thanh {x}', { x: shown }); }
+  else if (s.hnrMean < 8) { label = 'Trọc ' + label; shown = _tvmbT('js.thtp.nguam-troc', 'Trọc {x}', { x: shown }); }
 
-  return { label, scores, primary: top[0], secondary: second[0] };
+  return { label, shown, scores, primary: top[0], secondary: second[0] };
 }
 
 function buildGeoNote(gender, age, nguamEstimate, results) {
@@ -1222,7 +1227,7 @@ async function _doThanhTuongAnalyze() {
   analyzeBtn.disabled = true;
   var _analyzeBtnLb = document.getElementById('analyzeBtnLabel'); if (_analyzeBtnLb) _analyzeBtnLb.textContent = _tvmbT('js.thtp.dang-luan-giai', 'Đang luận giải…');
   resultsCard.style.display = 'block';
-  resultsPanel.innerHTML = _tvmbT('js.thtp.dang-phan-tich-theo-co-phap', '<p class="loading-dots" style="text-align:center;color:var(--text-lt);padding:30px 0">Đang phân tích theo cổ pháp</p>');
+  resultsPanel.innerHTML = '<p class="loading-dots" style="text-align:center;color:var(--text-lt);padding:30px 0">' + _tvmbT('js.thtp.dang-phan-tich-theo-co-phap', 'Đang phân tích theo cổ pháp') + '</p>';
   resultsCard.scrollIntoView({behavior:'smooth',block:'nearest'});
 
   const nguam = estimateNguAm(state.results, state.gender);
@@ -1269,14 +1274,14 @@ async function _doThanhTuongAnalyze() {
             resultsPanel.innerHTML = renderMarkdown(content);
           }
           if (json.err) {
-            resultsPanel.innerHTML += _tvmbT('js.thtp.loi-stream', '<p style="color:#C0392B;margin-top:14px">Lỗi stream: ') + json.err + '</p>';
+            resultsPanel.innerHTML += '<p style="color:#C0392B;margin-top:14px">' + _tvmbT('js.thtp.loi-stream-e', 'Lỗi stream: {e}', { e: json.err }) + '</p>';
           }
         } catch(_) { /* ignore malformed chunks */ }
       }
     }
 
     if (!content) {
-      resultsPanel.innerHTML = _tvmbT('js.thtp.khong-nhan-duoc-noi-dung-tra', '<p style="color:#C0392B;padding:20px;text-align:center">Không nhận được nội dung trả về. Thử lại.</p>');
+      resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">' + _tvmbT('js.thtp.khong-nhan-duoc-noi-dung-tra', 'Không nhận được nội dung trả về. Thử lại.') + '</p>';
     } else {
       _saveTuongReading('thanh-tuong-pro', content, null, null);
       // Chia sẻ CHỈ text luận giải của AI — KHÔNG đính kèm bản ghi âm giọng
@@ -1285,9 +1290,9 @@ async function _doThanhTuongAnalyze() {
 
       if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
       Shell.setContext({
-        label: _tvmbT('js.thtp.thanh-tuong-pro-t8ag', 'Thanh Tướng Pro — ') + nguam.label,
-        greeting: _tvmbT('js.thtp.giong-cua-ban-thuoc', 'Giọng của bạn thuộc **') + nguam.label + _tvmbT('js.thtp.do-qua-4-bai-12-chi', '** (đo qua 4 bài, 12 chỉ số âm học). Bạn muốn hỏi thêm về thanh tướng học?'),
-        chips: ['Jitter và Shimmer là gì?', 'HNR thấp nói lên điều gì?', 'Khác gì bản Thanh Tướng thường?']
+        label: _tvmbT('js.thtp.thanh-tuong-pro-n', 'Thanh Tướng Pro — {n}', { n: nguam.shown }),
+        greeting: _tvmbT('js.thtp.giong-cua-ban-thuoc-n', 'Giọng của bạn thuộc **{n}** (đo qua 4 bài, 12 chỉ số âm học). Bạn muốn hỏi thêm về thanh tướng học?', { n: nguam.shown }),
+        chips: [_tvmbT('js.thtp.jitter-va-shimmer-la-gi', 'Jitter và Shimmer là gì?'), _tvmbT('js.thtp.hnr-thap-noi-len-dieu-gi', 'HNR thấp nói lên điều gì?'), _tvmbT('js.thtp.khac-gi-ban-thanh-tuong-thuong', 'Khác gì bản Thanh Tướng thường?')]
       });
     }
 
@@ -1295,7 +1300,7 @@ async function _doThanhTuongAnalyze() {
     analyzeBtn.disabled = false;
   } catch (err) {
     console.error(err);
-    resultsPanel.innerHTML = _tvmbT('js.thtp.loi-dg9f', '<p style="color:#C0392B;padding:20px;text-align:center">Lỗi: ') + (err.message || err) + '</p>';
+    resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">' + _tvmbT('js.thtp.loi-e', 'Lỗi: {e}', { e: err.message || err }) + '</p>';
     if (_analyzeBtnLb) _analyzeBtnLb.textContent = _tvmbT('js.thtp.thu-lai', 'Thử Lại');
     analyzeBtn.disabled = false;
   }
