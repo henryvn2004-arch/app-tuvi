@@ -56,7 +56,8 @@
   // `/app/thay/:id` viết lại thành `?id=:id` ở next.config.mjs — nhưng rewrite
   // KHÔNG đổi URL trên trình duyệt, nên `location.search` trống: đọc id từ path,
   // query chỉ còn là lối lùi khi mở thẳng file tĩnh.
-  var id = (location.pathname.match(/^\/app\/thay\/([a-z-]+)/) || [])[1] ||
+  // Ở /<locale>/app/thay/<id> (W21) path mang tiền tố ngôn ngữ — bỏ đi trước khi khớp.
+  var id = (location.pathname.replace(/^\/(?:en|ja|ko|zh-tw|zh-cn)(?=\/)/, '').match(/^\/app\/thay\/([a-z-]+)/) || [])[1] ||
            new URLSearchParams(location.search).get('id') || '';
 
   // Tên thầy theo ngôn ngữ trang (I18n.master, W19) — chỉ để hiển thị.
@@ -83,7 +84,7 @@
   };
   function tr(m, i, v){ var r = TR[m.id] && TR[m.id][i]; return r && r[1] === v ? r[0] : v; }
   function toolTile(row){
-    return '<a class="tm-tool" href="' + esc(row.app_path) + '">' + esc(row.label) + '</a>';
+    return '<a class="tm-tool" href="' + esc(_tvmbHref(row.app_path)) + '">' + esc(row.label) + '</a>';
   }
 
   function render(m, toolRows){
@@ -116,7 +117,7 @@
     if (window.mountIcons) window.mountIcons(content);
     document.getElementById('tmChat').addEventListener('click', function(){
       try { if (window.Shell && Shell.chooseAuthor) Shell.chooseAuthor(m.id); } catch(e) {}
-      location.href = '/app#chat';
+      location.href = _tvmbHref('/app#chat');
     });
   }
 

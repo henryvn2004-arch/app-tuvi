@@ -89,7 +89,7 @@
     empty.style.display = 'none';
     grid.innerHTML = list.map(function(m){
       // Bấm thầy là vào chat thẳng với thầy đó (Shell.meetThay) — cùng đích với khối "Các Thầy" ở `/`.
-      return '<a class="thay-card" href="/app?thay=' + esc(m.id) + '#chat">' +
+      return '<a class="thay-card" href="' + _tvmbHref('/app?thay=' + esc(m.id) + '#chat') + '">' +
         '<img class="thay-ava" src="/authors/' + esc(m.id) + '.jpg" alt="" loading="lazy">' +
         '<div class="thay-tx">' +
           '<b>' + esc(mtitle(m)) + '</b>' +
