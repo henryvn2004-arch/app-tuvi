@@ -326,6 +326,48 @@
    "shell"
   ]
  },
+ "/app/duyen-no-tien-kiep": {
+  "file": "app-duyen-no-tien-kiep.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "daycon.da-xem-truoc-do",
+   "duyenno.2-thanh-toan",
+   "duyenno.3-nhan-ket-qua",
+   "duyenno.ban-luan-giai-mau-tai-pdf",
+   "duyenno.buc-tranh-ve-ca-nhom",
+   "duyenno.cau-chuyen-4-hoi",
+   "duyenno.co-nhung-moi-quan-he-vua",
+   "duyenno.co-so-trong-la-so",
+   "duyenno.dang-ve-buc-tranh-khoang-45",
+   "duyenno.duyen-no-tien-kiep",
+   "duyenno.duyen-no-tien-kiep-kiep-truoc",
+   "duyenno.duyen-no-tien-kiep-tu-vi",
+   "duyenno.gui-ket-qua-nay-cho-ho",
+   "duyenno.hai-den-nam-la-so-kiep",
+   "duyenno.lam-lai",
+   "duyenno.loai-duyen-no-theo-co-phap",
+   "duyenno.moi-duyen-4-hoi",
+   "duyenno.moi-duyen-kiep-truoc",
+   "duyenno.moi-duyen-va-cau-chuyen-phia",
+   "duyenno.moi-luot-luong",
+   "duyenno.nhap-ho-ten-gioi-tinh-va",
+   "duyenno.nhap-ngay-sinh-duong-lich",
+   "duyenno.tai-anh-dang-story",
+   "duyenno.them-nguoi",
+   "duyenno.tra-loi-thay-o-khung-chat",
+   "duyenno.tranh-duyen-no-tien-kiep",
+   "duyenno.xem-duyen-no-ton-luong",
+   "luangiai.chuyen-khoan-qua-qr-ngan-hang",
+   "luangiai.mua-goi-de-nhan-nhieu-uu",
+   "luangiai.tu-vi-dau-so-la-mot"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/kinh-dich": {
   "file": "app-kinh-dich.html",
   "keys": [
