@@ -1301,7 +1301,7 @@ function renderCoSo(data) {
   // không nội suy vào HTML thô.
   if (cs.trichDan) {
     h += '<div class="dc-quote">' + esc(cs.trichDan.cau) +
-      ('<span class="src">' + _tvmbT('js.daycon.sach-dan-ve-sao', '— sách dẫn về sao') + ' ') + esc(cs.trichDan.sao) + _tvmbT('js.daycon.tai-cung-menh', ' tại cung Mệnh</span></div>');
+      ('<span class="src">' + _tvmbT('js.daycon.sach-dan-ve-sao', '— sách dẫn về sao') + ' ') + esc(_tvmbG(['chinh', 'sao'], cs.trichDan.sao)) + _tvmbT('js.daycon.tai-cung-menh', ' tại cung Mệnh</span></div>');
   }
   csEl.innerHTML = h;
   csEl.style.display = 'block';
@@ -1360,17 +1360,17 @@ function renderMetaRest(data) {
 
   var rows = [];
   (data.matDoc || []).forEach(function (m) {
-    rows.push('<li><b>' + esc(m.nhan) + '</b> — cung ' + esc(m.cung) +
+    rows.push('<li><b>' + esc(m.nhan) + '</b> — ' + _tvmbT('js.daycon.cung-name', 'cung {name}', {name: _tvmbG('cung', m.cung)}) +
       (m.muon ? _tvmbT('js.daycon.muon-xung-chieu', ' (mượn xung chiếu)') : '') + ': ' +
-      esc((m.sao || []).join(', ') || _tvmbT('js.daycon.khong-co-chinh-tinh', 'không có chính tinh')) +
+      esc((m.sao || []).map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ') || _tvmbT('js.daycon.khong-co-chinh-tinh', 'không có chính tinh')) +
       ((m.cachCuc || []).length ? ' · ' + esc(m.cachCuc.join('; ')) : '') + '</li>');
   });
-  if (data.than && data.than.cung) rows.push(_tvmbT('js.daycon.cung-an-than', '<li><b>Cung an Thân</b> — ') + esc(data.than.cung) + '</li>');
+  if (data.than && data.than.cung) rows.push(_tvmbT('js.daycon.cung-an-than', '<li><b>Cung an Thân</b> — ') + esc(_tvmbG('cung', data.than.cung)) + '</li>');
   // Sao nào đã kéo chất nào lên. Không có dòng này thì con số ở Bước 2 trông
   // như từ trên trời rơi xuống — mà đó chính là chỗ người ta muốn soi nhất.
   (data.khieu || []).filter(function (k) { return k.noiBat && (k.saoDay || []).length; })
     .forEach(function (k) {
-      rows.push('<li><b>' + esc(k.ten) + _tvmbT('js.daycon.suy-tu', '</b> — suy từ: ') + esc(k.saoDay.join(', ')) + '</li>');
+      rows.push('<li><b>' + esc(k.ten) + _tvmbT('js.daycon.suy-tu', '</b> — suy từ: ') + esc(k.saoDay.map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ')) + '</li>');
     });
   if (data.vanNam) {
     // ⚠️ Đọc CẢ hai dạng payload: bản đã nằm trong `portrait_cache` từ trước
@@ -1383,8 +1383,8 @@ function renderMetaRest(data) {
     } else if (v.diem != null) {
       bit.push(v.diem + '/10');
     }
-    if (v.tieuHanCung) bit.push(_tvmbT('js.daycon.tieu-han-cung', 'tiểu hạn cung ') + esc(v.tieuHanCung));
-    if (v.luuNienCung) bit.push(_tvmbT('js.daycon.luu-nien-cung', 'lưu niên cung ') + esc(v.luuNienCung));
+    if (v.tieuHanCung) bit.push(_tvmbT('js.daycon.tieu-han-cung', 'tiểu hạn cung ') + esc(_tvmbG('cung', v.tieuHanCung)));
+    if (v.luuNienCung) bit.push(_tvmbT('js.daycon.luu-nien-cung', 'lưu niên cung ') + esc(_tvmbG('cung', v.luuNienCung)));
     if (v.catSat) bit.push(_tvmbT('js.daycon.cat', 'cát ') + v.catSat.cat + _tvmbT('js.daycon.sat', ' / sát ') + v.catSat.sat + ' — ' + esc(v.catSat.canCan));
     else if (v.huong) bit.push(_tvmbT('js.daycon.da', 'đà ') + esc(v.huong));
     rows.push(_tvmbT('js.daycon.van-nam', '<li><b>Vận năm ') + v.nam + '</b> — ' + (bit.join(' · ') || _tvmbT('js.daycon.chua-cham', 'chưa chấm')) + '</li>');

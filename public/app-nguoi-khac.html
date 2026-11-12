@@ -396,21 +396,21 @@ var _lastSelf = null;
 var _lastViec = 'hieu-them';
 var _lastData = null;
 var NK_STEPS = [
-  { label: 'Lập lá số & phân kiểu người', ms: 1300 },
-  { label: 'Đọc Mệnh · Phúc Đức · Thiên Di · Quan Lộc · Nô Bộc', ms: 2200 },
-  { label: 'Viết cẩm nang ứng xử', ms: 0 },
+  { label: _tvmbT('js.nguoikhac.lap-la-so-phan-kieu-nguoi', 'Lập lá số & phân kiểu người'), ms: 1300 },
+  { label: _tvmbT('js.nguoikhac.doc-menh-phuc-duc-thien-di', 'Đọc Mệnh · Phúc Đức · Thiên Di · Quan Lộc · Nô Bộc'), ms: 2200 },
+  { label: _tvmbT('js.nguoikhac.viet-cam-nang-ung-xu', 'Viết cẩm nang ứng xử'), ms: 0 },
 ];
 var _loadingCtl = null;
 
 var QH_HINT = {
-  'sep': 'Bạn sẽ nhận: trình bày thế nào để được duyệt, và lúc nào thì đừng trình bày.',
-  'dong-nghiep': 'Bạn sẽ nhận: chia việc thế nào cho khỏi giẫm chân, tránh gì để khỏi mất lòng.',
-  'cap-duoi': 'Bạn sẽ nhận: giao việc kiểu nào thì họ chạy, nhắc kiểu nào thì họ nghe.',
-  'doi-tac': 'Bạn sẽ nhận: họ quyết bằng cái gì, và điều gì làm họ chùn lại.',
-  'cha-me': 'Bạn sẽ nhận: nói thế nào để không thành cãi nhau về cùng một chuyện cũ.',
-  'con-cai': 'Bạn sẽ nhận: đứa trẻ này cần được thúc hay cần được để yên.',
-  'ban-doi': 'Bạn sẽ nhận: chỗ nào là khác biệt tính cách chứ không phải hết thương.',
-  'ban-be': 'Bạn sẽ nhận: trông cậy được ở việc gì, và đừng trông cậy ở việc gì.',
+  'sep': _tvmbT('js.nguoikhac.ban-se-nhan-trinh-bay-the', 'Bạn sẽ nhận: trình bày thế nào để được duyệt, và lúc nào thì đừng trình bày.'),
+  'dong-nghiep': _tvmbT('js.nguoikhac.ban-se-nhan-chia-viec-the', 'Bạn sẽ nhận: chia việc thế nào cho khỏi giẫm chân, tránh gì để khỏi mất lòng.'),
+  'cap-duoi': _tvmbT('js.nguoikhac.ban-se-nhan-giao-viec-kieu', 'Bạn sẽ nhận: giao việc kiểu nào thì họ chạy, nhắc kiểu nào thì họ nghe.'),
+  'doi-tac': _tvmbT('js.nguoikhac.ban-se-nhan-ho-quyet-bang', 'Bạn sẽ nhận: họ quyết bằng cái gì, và điều gì làm họ chùn lại.'),
+  'cha-me': _tvmbT('js.nguoikhac.ban-se-nhan-noi-the-nao', 'Bạn sẽ nhận: nói thế nào để không thành cãi nhau về cùng một chuyện cũ.'),
+  'con-cai': _tvmbT('js.nguoikhac.ban-se-nhan-dua-tre-nay', 'Bạn sẽ nhận: đứa trẻ này cần được thúc hay cần được để yên.'),
+  'ban-doi': _tvmbT('js.nguoikhac.ban-se-nhan-cho-nao-la', 'Bạn sẽ nhận: chỗ nào là khác biệt tính cách chứ không phải hết thương.'),
+  'ban-be': _tvmbT('js.nguoikhac.ban-se-nhan-trong-cay-duoc', 'Bạn sẽ nhận: trông cậy được ở việc gì, và đừng trông cậy ở việc gì.'),
 };
 
 // ⚠️ BẢN SAO CÓ KIỂM SOÁT của `VIEC_CAN_LAM` (lib/engine/nguoi-khac.ts).
@@ -421,17 +421,30 @@ var QH_HINT = {
 // họ trả tiền cho một bản chung chung. `npm run check:viec` (chạy trong CI lint)
 // canh đúng chỗ này — sửa một bên thì phải sửa cả hai.
 var NK_VIEC = [
-  { id: 'nho-viec', label: 'Sắp nhờ họ một việc / trình một đề xuất', hop: ['sep', 'dong-nghiep', 'doi-tac', 'cha-me', 'ban-doi', 'ban-be'] },
-  { id: 'thuong-luong', label: 'Sắp thương lượng quyền lợi (lương, chia phần)', hop: ['sep', 'dong-nghiep', 'doi-tac'] },
-  { id: 'bao-tin-xau', label: 'Sắp phải báo một tin họ không muốn nghe', hop: [] },
-  { id: 'tu-choi', label: 'Phải từ chối họ mà không muốn mất quan hệ', hop: [] },
-  { id: 'bat-dong', label: 'Đang có bất đồng chưa gỡ được', hop: [] },
-  { id: 'giao-viec', label: 'Cần giao việc / nhắc việc cho họ', hop: ['dong-nghiep', 'cap-duoi', 'doi-tac', 'con-cai'] },
-  { id: 'ru-hop-tac', label: 'Muốn rủ họ làm chung một việc lớn', hop: ['dong-nghiep', 'cap-duoi', 'doi-tac', 'ban-be', 'ban-doi'] },
-  { id: 'gan-lai', label: 'Muốn gần lại sau một thời gian xa cách', hop: ['cha-me', 'con-cai', 'ban-doi', 'ban-be', 'dong-nghiep'] },
-  { id: 'lan-dau', label: 'Sắp gặp / làm việc lần đầu, chưa biết gì về họ', hop: [] },
-  { id: 'hieu-them', label: 'Không có gì gấp, chỉ muốn hiểu người này hơn', hop: [] },
+  { id: 'nho-viec', label: _tvmbT('js.nguoikhac.sap-nho-ho-mot-viec-trinh', 'Sắp nhờ họ một việc / trình một đề xuất'), hop: ['sep', 'dong-nghiep', 'doi-tac', 'cha-me', 'ban-doi', 'ban-be'] },
+  { id: 'thuong-luong', label: _tvmbT('js.nguoikhac.sap-thuong-luong-quyen-loi-luong', 'Sắp thương lượng quyền lợi (lương, chia phần)'), hop: ['sep', 'dong-nghiep', 'doi-tac'] },
+  { id: 'bao-tin-xau', label: _tvmbT('js.nguoikhac.sap-phai-bao-mot-tin-ho', 'Sắp phải báo một tin họ không muốn nghe'), hop: [] },
+  { id: 'tu-choi', label: _tvmbT('js.nguoikhac.phai-tu-choi-ho-ma-khong', 'Phải từ chối họ mà không muốn mất quan hệ'), hop: [] },
+  { id: 'bat-dong', label: _tvmbT('js.nguoikhac.dang-co-bat-dong-chua-go', 'Đang có bất đồng chưa gỡ được'), hop: [] },
+  { id: 'giao-viec', label: _tvmbT('js.nguoikhac.can-giao-viec-nhac-viec-cho', 'Cần giao việc / nhắc việc cho họ'), hop: ['dong-nghiep', 'cap-duoi', 'doi-tac', 'con-cai'] },
+  { id: 'ru-hop-tac', label: _tvmbT('js.nguoikhac.muon-ru-ho-lam-chung-mot', 'Muốn rủ họ làm chung một việc lớn'), hop: ['dong-nghiep', 'cap-duoi', 'doi-tac', 'ban-be', 'ban-doi'] },
+  { id: 'gan-lai', label: _tvmbT('js.nguoikhac.muon-gan-lai-sau-mot-thoi', 'Muốn gần lại sau một thời gian xa cách'), hop: ['cha-me', 'con-cai', 'ban-doi', 'ban-be', 'dong-nghiep'] },
+  { id: 'lan-dau', label: _tvmbT('js.nguoikhac.sap-gap-lam-viec-lan-dau', 'Sắp gặp / làm việc lần đầu, chưa biết gì về họ'), hop: [] },
+  { id: 'hieu-them', label: _tvmbT('js.nguoikhac.khong-co-gi-gap-chi-muon', 'Không có gì gấp, chỉ muốn hiểu người này hơn'), hop: [] },
 ];
+
+// Nhãn quan hệ/việc do SERVER trả là chữ Việt: ở chỗ hiển thị tra theo id trong danh sách đã dịch của trang
+// (vi: cùng chuỗi với server, byte-giống); id lạ thì giữ nhãn server.
+function _nkQhLabel(qh) {
+  if (!qh) return '';
+  var o = qh.id ? document.querySelector('#quanHe option[value="' + qh.id + '"]') : null;
+  return o ? o.textContent : (qh.label || '');
+}
+function _nkViecLabel(v) {
+  if (!v) return '';
+  var f = v.id ? NK_VIEC.filter(function (x) { return x.id === v.id; })[0] : null;
+  return f ? f.label : (v.label || '');
+}
 
 function _fillViec() {
   var qh = document.getElementById('quanHe').value;
@@ -451,8 +464,8 @@ function onViecChange() {
   var v = document.getElementById('viecCanLam').value;
   document.getElementById('viecHint').textContent =
     v === 'hieu-them'
-      ? 'Chọn một việc cụ thể thì bản luận sẽ có thêm phần “cách đi” cho riêng việc đó.'
-      : 'Bản đầy đủ sẽ có một mục riêng chỉ để giải quyết đúng việc này.';
+      ? _tvmbT('js.nguoikhac.chon-mot-viec-cu-the-thi', 'Chọn một việc cụ thể thì bản luận sẽ có thêm phần “cách đi” cho riêng việc đó.')
+      : _tvmbT('js.nguoikhac.ban-day-du-se-co-mot', 'Bản đầy đủ sẽ có một mục riêng chỉ để giải quyết đúng việc này.');
 }
 
 function onQuanHeChange() {
@@ -476,7 +489,7 @@ try {
   if (_remembered) {
     TuviForm.setData(_remembered, 'self');
     var s = (window.Shell && Shell.birthSummary) ? Shell.birthSummary(_remembered) : '';
-    if (s) document.getElementById('selfSummary').textContent = 'Đối chiếu với lá số của bạn: ' + s;
+    if (s) document.getElementById('selfSummary').textContent = _tvmbT('js.nguoikhac.doi-chieu-voi-la-so-cua', 'Đối chiếu với lá số của bạn: ') + s;
   }
 } catch (e) { /* không có shell / chưa nhớ gì — bỏ qua, phần này không bắt buộc */ }
 
@@ -502,15 +515,15 @@ function chatStepQuanHe(){
   var empty=document.getElementById('railEmpty'); if(empty) empty.style.display='none';
   var el=document.createElement('div'); el.className='msg a';
   el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
-    '<div class="msg-body"><p>Người bạn muốn hiểu là ai với bạn?</p>'+
-    '<div class="frow"><div class="fg" style="flex:1"><label>Người này là</label><select id="cQuanHe">'+document.getElementById('quanHe').innerHTML+'</select></div></div>'+
-    '<button class="btn-go" type="button" id="qhNext" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button></div>';
+    ('<div class="msg-body"><p>' + _tvmbT('js.nguoikhac.nguoi-ban-muon-hieu-la-ai', 'Người bạn muốn hiểu là ai với bạn?') + '</p>')+
+    ('<div class="frow"><div class="fg" style="flex:1"><label>' + _tvmbT('js.nguoikhac.nguoi-nay-la', 'Người này là') + '</label><select id="cQuanHe">')+document.getElementById('quanHe').innerHTML+'</select></div></div>'+
+    ('<button class="btn-go" type="button" id="qhNext" style="width:auto;padding:9px 16px;font-size:13px">' + _tvmbT('js.nguoikhac.tiep-tuc', 'Tiếp tục →') + '</button></div>');
   chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
   document.getElementById('qhNext').addEventListener('click',function(){
     var sel=document.getElementById('cQuanHe');
     var qh=sel.value, label=sel.selectedOptions[0].text;
     document.getElementById('quanHe').value=qh; onQuanHeChange();
-    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Người này là: <b>'+esc(label)+'</b> ✓</p></div>';
+    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+('<div class="msg-body"><p>' + _tvmbT('js.nguoikhac.nguoi-nay-la-jle1', 'Người này là: <b>'))+esc(label)+'</b> ✓</p></div>';
     chatStepViec();
   });
 }
@@ -519,16 +532,16 @@ function chatStepViec(){
   if(!chat)return; // lưới an toàn soft-nav — xem chú thích ở Shell.setContext (shell.js)
   var el=document.createElement('div'); el.className='msg a';
   el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
-    '<div class="msg-body"><p>Bạn đang cần làm gì với người này?</p>'+
-    '<div class="frow"><div class="fg" style="flex:1"><label>Việc cần làm</label><select id="cViec">'+document.getElementById('viecCanLam').innerHTML+'</select></div></div>'+
-    '<button class="btn-go" type="button" id="viecNext" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button></div>';
+    ('<div class="msg-body"><p>' + _tvmbT('js.nguoikhac.ban-dang-can-lam-gi-voi', 'Bạn đang cần làm gì với người này?') + '</p>')+
+    ('<div class="frow"><div class="fg" style="flex:1"><label>' + _tvmbT('js.nguoikhac.viec-can-lam', 'Việc cần làm') + '</label><select id="cViec">')+document.getElementById('viecCanLam').innerHTML+'</select></div></div>'+
+    ('<button class="btn-go" type="button" id="viecNext" style="width:auto;padding:9px 16px;font-size:13px">' + _tvmbT('js.nguoikhac.tiep-tuc', 'Tiếp tục →') + '</button></div>');
   chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
   document.getElementById('viecNext').addEventListener('click',function(){
     var sel=document.getElementById('cViec');
     var viec=sel.value, label=sel.selectedOptions[0].text;
     document.getElementById('viecCanLam').value=viec;
-    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Việc cần làm: <b>'+esc(label)+'</b> ✓</p></div>';
-    TuviForm.renderChat({ q1:'Cho thầy xin thông tin của người này nhé.', onDone:chatStepSelfAsk });
+    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+('<div class="msg-body"><p>' + _tvmbT('js.nguoikhac.viec-can-lam-20zs', 'Việc cần làm: <b>'))+esc(label)+'</b> ✓</p></div>';
+    TuviForm.renderChat({ q1:_tvmbT('js.nguoikhac.cho-thay-xin-thong-tin-cua', 'Cho thầy xin thông tin của người này nhé.'), onDone:chatStepSelfAsk });
   });
 }
 function chatStepSelfAsk(){
@@ -538,16 +551,16 @@ function chatStepSelfAsk(){
   if(!chat)return; // lưới an toàn soft-nav — xem chú thích ở Shell.setContext (shell.js)
   var el=document.createElement('div'); el.className='msg a';
   el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+
-    '<div class="msg-body"><p>Bạn có muốn đối chiếu thêm với lá số của chính bạn không? Có thêm mục "Người này với bạn".</p>'+
-    '<button class="btn-go" type="button" id="selfYes" style="width:auto;padding:9px 16px;font-size:13px;margin-right:8px">Có, đối chiếu →</button>'+
-    '<button class="btn" type="button" id="selfNo" style="width:auto;padding:9px 16px;font-size:13px">Bỏ qua</button></div>';
+    ('<div class="msg-body"><p>' + _tvmbT('js.nguoikhac.ban-co-muon-doi-chieu-them', 'Bạn có muốn đối chiếu thêm với lá số của chính bạn không? Có thêm mục "Người này với bạn".') + '</p>')+
+    ('<button class="btn-go" type="button" id="selfYes" style="width:auto;padding:9px 16px;font-size:13px;margin-right:8px">' + _tvmbT('js.nguoikhac.co-doi-chieu', 'Có, đối chiếu →') + '</button>')+
+    ('<button class="btn" type="button" id="selfNo" style="width:auto;padding:9px 16px;font-size:13px">' + _tvmbT('js.nguoikhac.bo-qua', 'Bỏ qua') + '</button></div>');
   chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
   document.getElementById('selfYes').addEventListener('click',function(){
-    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Đối chiếu thêm với lá số của bạn ✓</p></div>';
+    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+('<div class="msg-body"><p>' + _tvmbT('js.nguoikhac.doi-chieu-them-voi-la-so', 'Đối chiếu thêm với lá số của bạn ✓') + '</p></div>');
     TuviForm.renderChat({ prefix:'self', showName:false, onDone:analyze });
   });
   document.getElementById('selfNo').addEventListener('click',function(){
-    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+'<div class="msg-body"><p>Bỏ qua đối chiếu lá số của bạn.</p></div>';
+    el.innerHTML='<img class="msg-ava" src="'+chatAva()+'" alt="">'+('<div class="msg-body"><p>' + _tvmbT('js.nguoikhac.bo-qua-doi-chieu-la-so', 'Bỏ qua đối chiếu lá số của bạn.') + '</p></div>');
     analyze();
   });
 }
@@ -659,11 +672,11 @@ function _cacheQuery(b, self, qh, viec) {
 // Mảng dưới chỉ là đường lùi khi payload cũ (còn trong cache trình duyệt)
 // không mang `khoa`.
 var NK_KHOA_FALLBACK = [
-  'Họ coi trọng cái gì — và sợ mất cái gì',
-  'Nên nói gì — 3 việc kèm câu nói thật',
-  'Tránh nói gì — 3 việc kèm câu nói thật',
-  'Lúc nào nên đưa việc lớn tới',
-  'Một câu chốt',
+  _tvmbT('js.nguoikhac.ho-coi-trong-cai-gi-va', 'Họ coi trọng cái gì — và sợ mất cái gì'),
+  _tvmbT('js.nguoikhac.nen-noi-gi-3-viec-kem', 'Nên nói gì — 3 việc kèm câu nói thật'),
+  _tvmbT('js.nguoikhac.tranh-noi-gi-3-viec-kem', 'Tránh nói gì — 3 việc kèm câu nói thật'),
+  _tvmbT('js.nguoikhac.luc-nao-nen-dua-viec-lon', 'Lúc nào nên đưa việc lớn tới'),
+  _tvmbT('js.nguoikhac.mot-cau-chot', 'Một câu chốt'),
 ];
 
 function _nkLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()); }
@@ -671,7 +684,7 @@ function _nkLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && wind
 async function analyze() {
   showError('');
   var b = _birthOf('');
-  if (!b) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh của người cần xem.'); return; }
+  if (!b) { showError(_tvmbT('js.nguoikhac.vui-long-nhap-day-du-ngay', 'Vui lòng nhập đầy đủ ngày tháng năm sinh của người cần xem.')); return; }
   var qh = document.getElementById('quanHe').value;
   var viec = document.getElementById('viecCanLam').value;
   var self = _birthOf('self');
@@ -699,7 +712,7 @@ async function analyze() {
     var free = false;
     try { free = await TuviPaywall.isFreeRerun('/api/nguoi-khac', _cacheQuery(b, self, qh, viec)); } catch (e) { free = false; }
     if (free) {
-      TuviPaywall._banner('✓ Bạn đã xem bản này rồi — mở lại, không trừ Lượng');
+      TuviPaywall._banner(_tvmbT('js.nguoikhac.ban-da-xem-ban-nay-roi', '✓ Bạn đã xem bản này rồi — mở lại, không trừ Lượng'));
       await _doGenerate(true, qh, viec);
       return;
     }
@@ -730,7 +743,7 @@ async function _runAnonPreview(b, self, qh, viec) {
       }),
     });
     var data = await res.json();
-    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    if (!res.ok || !data.success) throw new Error(data.error || _tvmbT('js.nguoikhac.loi', 'Lỗi ') + res.status);
     _lastData = data;
     renderMetaHead(data);
     renderProse(data);      // chỉ tinhKhi/chamNoc có mặt; các nhánh `if` khác tự trượt
@@ -746,7 +759,7 @@ async function _runAnonPreview(b, self, qh, viec) {
     _mountCnsNguoiKhac(b);
   } catch (e) {
     _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    showError(_tvmbT('js.nguoikhac.loi-8d72', 'Lỗi: ') + (e.message || _tvmbT('js.nguoikhac.khong-the-ket-noi-vui-long', 'Không thể kết nối. Vui lòng thử lại.')));
   }
 }
 
@@ -762,15 +775,15 @@ function mountHook(data) {
   var matDoc = data.matDoc || [];
   if (!matDoc.length) return;
   var facts = matDoc.map(function (m) {
-    var saoText = (m.sao || []).join(', ') || 'không có chính tinh';
+    var saoText = (m.sao || []).map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ') || _tvmbT('js.nguoikhac.khong-co-chinh-tinh', 'không có chính tinh');
     return {
       tone: 'neutral',
-      title: 'Chính tinh tại cung ' + m.cung + ': ' + saoText + (m.muon ? ' (mượn xung chiếu)' : ''),
-      body: 'Cách cục, đại vận, vận năm, và cách ứng xử cụ thể với người này nằm trong cẩm nang đầy đủ.',
+      title: _tvmbT('js.nguoikhac.chinh-tinh-tai-cung', 'Chính tinh tại cung ') + _tvmbG('cung', m.cung) + ': ' + saoText + (m.muon ? _tvmbT('js.nguoikhac.muon-xung-chieu', ' (mượn xung chiếu)') : ''),
+      body: _tvmbT('js.nguoikhac.cach-cuc-dai-van-van-nam', 'Cách cục, đại vận, vận năm, và cách ứng xử cụ thể với người này nằm trong cẩm nang đầy đủ.'),
       source: 'engine · matDoc',
     };
   });
-  var spec = { tool: 'nguoi-khac', toolLabel: 'Lá Số Người Khác', charts: [], facts: facts };
+  var spec = { tool: 'nguoi-khac', toolLabel: _tvmbT('js.nguoikhac.la-so-nguoi-khac', 'Lá Số Người Khác'), charts: [], facts: facts };
   window.HookLayer.run(host, spec);
 }
 // Nút phẳng cho khách ĐÃ đăng nhập (xem `_renderLockWall`) — đọc lại
@@ -790,15 +803,15 @@ function _renderLockWall(qh, viec, khoaRaw) {
   // Đã đăng nhập (chỉ còn thiếu tiền, không thiếu tài khoản) → nút phẳng, bỏ
   // qua màn "Đăng ký" — cùng mẫu app-chu-trinh-cuoc-doi.html `_renderUnlockBlock`.
   if (_nkLoggedIn()) {
-    host.innerHTML = '<button class="btn-go" type="button" onclick="_nkUnlockLoggedIn()">✦ Xem cẩm nang đầy đủ — <span data-tvp-price="nguoi-khac">…</span> Lượng →</button>';
+    host.innerHTML = ('<button class="btn-go" type="button" onclick="_nkUnlockLoggedIn()">' + _tvmbT('js.nguoikhac.xem-cam-nang-day-du', '✦ Xem cẩm nang đầy đủ —') + ' <span data-tvp-price="nguoi-khac">…</span> ' + _tvmbT('js.nguoikhac.luong', 'Lượng →') + '</button>');
     TuviPaywall.fillPriceSlots(host);
     return;
   }
   TuviPaywall.lockPreview({
     host: host,
-    title: 'Còn ' + khoa.length + ' phần chưa mở về người này',
+    title: _tvmbT('js.nguoikhac.con', 'Còn ') + khoa.length + _tvmbT('js.nguoikhac.phan-chua-mo-ve-nguoi-nay', ' phần chưa mở về người này'),
     items: khoa,
-    cta: 'Mở cẩm nang đầy đủ',
+    cta: _tvmbT('js.nguoikhac.mo-cam-nang-day-du', 'Mở cẩm nang đầy đủ'),
     slug: function () { return _currentSlug; },
     onUnlock: function () { return _doGenerate(false, qh, viec); },
   });
@@ -859,7 +872,7 @@ function _nkLockBlocks(data) {
     body.insertAdjacentHTML('beforeend',
       '<div class="tpw-ph-host">' + (sample || TuviPaywall.placeholderHtml(i, b[1])) + '</div>');
     var titleEl = block.querySelector('.res-block-title');
-    if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
+    if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge(_tvmbT('js.nguoikhac.khoa', 'Khoá')));
     block.style.display = 'block';
   });
   if (window.mountIcons) window.mountIcons(document.getElementById('resPanel'));
@@ -932,7 +945,7 @@ async function _doGenerate(freeRerun, qh, viec) {
       await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, qh, viec); });
       return;
     }
-    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    if (!res.ok || !data.success) throw new Error(data.error || _tvmbT('js.nguoikhac.loi', 'Lỗi ') + res.status);
     _lastData = data;
     renderMeta(data);
     renderProse(data);
@@ -956,19 +969,19 @@ async function _doGenerate(freeRerun, qh, viec) {
     // người dùng qua `wrapBirthB` nếu có. Lớp vỏ phía server có luật ĐÈ lên
     // luật xưng hô — nếu không, rail sẽ gọi người đang chat theo giới tính của
     // người trong lá số.
-    var ten = data.ten || (data.quanHe || {}).label || 'người này';
+    var ten = data.ten || _nkQhLabel(data.quanHe) || _tvmbT('js.nguoikhac.nguoi-nay', 'người này');
     Shell.setContext({
       birth: _last,
       wrap: 'nguoi-khac',
       wrapQuanHe: qh,
       wrapBirthB: _lastSelf || undefined,
       label: 'Lá số người khác',
-      greeting: 'Đây là bản cẩm nang ứng xử với **' + ten + '**. Bạn muốn hỏi thêm tình huống nào?',
+      greeting: _tvmbT('js.nguoikhac.day-la-ban-cam-nang-ung-ten', 'Đây là bản cẩm nang ứng xử với **{ten}**. Bạn muốn hỏi thêm tình huống nào?', {ten: ten}),
       chips: [
-        'Sắp phải trao đổi một việc khó với ' + ten + ', nên mở lời thế nào?',
-        'Vì sao lá số lại luận ra tính cách này?',
-        'Hai bên dễ va nhau ở chỗ nào?',
-        'Việc gì thì đừng giao cho ' + ten + '?',
+        _tvmbT('js.nguoikhac.sap-phai-trao-doi-mot-viec-kho', 'Sắp phải trao đổi một việc khó với {ten}, nên mở lời thế nào?', {ten: ten}),
+        _tvmbT('js.nguoikhac.vi-sao-la-so-lai-luan-ra', 'Vì sao lá số lại luận ra tính cách này?'),
+        _tvmbT('js.nguoikhac.hai-ben-de-va-nhau-o', 'Hai bên dễ va nhau ở chỗ nào?'),
+        _tvmbT('js.nguoikhac.viec-gi-thi-dung-giao-cho', 'Việc gì thì đừng giao cho {ten}?', {ten: ten}),
       ],
     });
 
@@ -980,10 +993,12 @@ async function _doGenerate(freeRerun, qh, viec) {
     Shell.setShareable({
       kind: 'text',
       toolId: 'nguoi-khac',
-      title: 'Cẩm nang ứng xử — ' + ten,
+      title: _tvmbT('js.nguoikhac.cam-nang-ung-xu', 'Cẩm nang ứng xử — ') + ten,
       text: [
-        ten + (data.quanHe && data.quanHe.label ? ' (' + data.quanHe.label + ')' : '') +
-          (data.kieu && data.kieu.ten ? ' nghiêng về kiểu ' + data.kieu.ten : ''),
+        (function () {
+          var who = ten + (data.quanHe && data.quanHe.label ? ' (' + _nkQhLabel(data.quanHe) + ')' : '');
+          return data.kieu && data.kieu.ten ? _tvmbT('js.nguoikhac.who-nghieng-ve-kieu-kieu', '{who} nghiêng về kiểu {kieu}', {who: who, kieu: data.kieu.ten}) : who;
+        })(),
         data.kieu && data.kieu.motCau ? data.kieu.motCau : '',
         data.motCau ? '— ' + data.motCau : '',
       ].filter(Boolean).join('\n'),
@@ -992,7 +1007,7 @@ async function _doGenerate(freeRerun, qh, viec) {
     if (window.TuviPaywall && TuviPaywall.showRefundNotice) TuviPaywall.showRefundNotice(data);
     _loadingCtl && _loadingCtl.stop();
     _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    showError(_tvmbT('js.nguoikhac.loi-8d72', 'Lỗi: ') + (e.message || _tvmbT('js.nguoikhac.khong-the-ket-noi-vui-long', 'Không thể kết nối. Vui lòng thử lại.')));
   }
 }
 
@@ -1018,13 +1033,13 @@ function _mucHtml(list) {
 function renderMetaHead(data) {
   var qh = data.quanHe || {};
   var kieu = data.kieu || {};
-  document.getElementById('nkName').textContent = data.ten || qh.label || 'Người này';
-  document.getElementById('nkRole').textContent = qh.label || '';
+  document.getElementById('nkName').textContent = data.ten || _nkQhLabel(qh) || _tvmbT('js.nguoikhac.nguoi-nay-rxn3', 'Người này');
+  document.getElementById('nkRole').textContent = _nkQhLabel(qh);
 
   var badges = [];
   if (kieu.ten) badges.push('<span class="nk-badge">' + esc(kieu.ten) + '</span>');
   if (data.lai && data.kieuPhu) {
-    badges.push('<span class="nk-badge alt">pha thêm ' + esc(data.kieuPhu.ten) + '</span>');
+    badges.push(('<span class="nk-badge alt">' + _tvmbT('js.nguoikhac.pha-them', 'pha thêm') + ' ') + esc(data.kieuPhu.ten) + '</span>');
   }
   if (kieu.motCau) badges.push('<span class="nk-badge alt">' + esc(kieu.motCau) + '</span>');
   document.getElementById('nkBadges').innerHTML = badges.join('');
@@ -1032,7 +1047,7 @@ function renderMetaHead(data) {
   var bl = document.getElementById('birthLine');
   var bs = (window.Shell && Shell.birthSummary) ? Shell.birthSummary : null;
   var line = bs ? bs(_last) : '';
-  if (line) { bl.textContent = 'Lá số: ' + line; bl.style.display = 'block'; }
+  if (line) { bl.textContent = _tvmbT('js.nguoikhac.la-so', 'Lá số: ') + line; bl.style.display = 'block'; }
   else { bl.style.display = 'none'; }
 
   document.getElementById('cauHoiChips').innerHTML = (kieu.cauHoi || []).map(function (c) {
@@ -1050,15 +1065,15 @@ function renderMetaBasis(data) {
   // bỏ canh đi là lượt tính thử ném lỗi ngay bậc đầu phễu.
   var rows = [];
   (data.matDoc || []).forEach(function (m) {
-    rows.push('<li><b>' + esc(m.nhan) + '</b> — cung ' + esc(m.cung) +
-      (m.muon ? ' (mượn xung chiếu)' : '') + ': ' +
-      esc((m.sao || []).join(', ') || 'không có chính tinh') +
+    rows.push('<li><b>' + esc(m.nhan) + '</b> — ' + _tvmbT('js.nguoikhac.cung-name', 'cung {name}', {name: _tvmbG('cung', m.cung)}) +
+      (m.muon ? _tvmbT('js.nguoikhac.muon-xung-chieu', ' (mượn xung chiếu)') : '') + ': ' +
+      esc((m.sao || []).map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ') || _tvmbT('js.nguoikhac.khong-co-chinh-tinh', 'không có chính tinh')) +
       ((m.cachCuc || []).length ? ' · ' + esc(m.cachCuc.join('; ')) : '') + '</li>');
   });
-  if (data.than && data.than.cung) rows.push('<li><b>Cung an Thân</b> — ' + esc(data.than.cung) + '</li>');
+  if (data.than && data.than.cung) rows.push(_tvmbT('js.nguoikhac.cung-an-than', '<li><b>Cung an Thân</b> — ') + esc(_tvmbG('cung', data.than.cung)) + '</li>');
   if (data.daiVan) {
-    rows.push('<li><b>Đại vận đang chạy</b> — ' + data.daiVan.tuoiStart + '–' + data.daiVan.tuoiEnd +
-      ' tuổi, cung ' + esc(data.daiVan.cung) +
+    rows.push(_tvmbT('js.nguoikhac.dai-van-dang-chay', '<li><b>Đại vận đang chạy</b> — ') + data.daiVan.tuoiStart + '–' + data.daiVan.tuoiEnd +
+      _tvmbT('js.nguoikhac.tuoi-cung', ' tuổi, cung ') + esc(_tvmbG('cung', data.daiVan.cung)) +
       (data.daiVan.diem == null ? '' : ', ' + data.daiVan.diem + '/10') + '</li>');
   }
   if (data.vanNam) {
@@ -1067,29 +1082,29 @@ function renderMetaBasis(data) {
     // trong lib/engine/cong-so.ts), bản mới mang `khung`/`catSat`.
     var v = data.vanNam, bit = [];
     if (v.khung) {
-      bit.push('khung đại vận ' + v.khung.tuoiStart + '–' + v.khung.tuoiEnd + ' tuổi' +
+      bit.push(_tvmbT('js.nguoikhac.khung-dai-van', 'khung đại vận ') + v.khung.tuoiStart + '–' + v.khung.tuoiEnd + _tvmbT('js.nguoikhac.tuoi', ' tuổi') +
         (v.khung.diem == null ? '' : ': ' + v.khung.diem + '/10'));
     } else if (v.diem != null) {
       bit.push(v.diem + '/10');
     }
-    if (v.tieuHanCung) bit.push('tiểu hạn cung ' + esc(v.tieuHanCung));
-    if (v.luuNienCung) bit.push('lưu niên cung ' + esc(v.luuNienCung));
-    if (v.catSat) bit.push('cát ' + v.catSat.cat + ' / sát ' + v.catSat.sat + ' — ' + esc(v.catSat.canCan));
-    else if (v.huong) bit.push('đà ' + esc(v.huong));
-    rows.push('<li><b>Vận năm ' + v.nam + '</b> — ' + (bit.join(' · ') || 'chưa chấm') + '</li>');
+    if (v.tieuHanCung) bit.push(_tvmbT('js.nguoikhac.tieu-han-cung', 'tiểu hạn cung ') + esc(_tvmbG('cung', v.tieuHanCung)));
+    if (v.luuNienCung) bit.push(_tvmbT('js.nguoikhac.luu-nien-cung', 'lưu niên cung ') + esc(_tvmbG('cung', v.luuNienCung)));
+    if (v.catSat) bit.push(_tvmbT('js.nguoikhac.cat', 'cát ') + v.catSat.cat + _tvmbT('js.nguoikhac.sat', ' / sát ') + v.catSat.sat + ' — ' + esc(v.catSat.canCan));
+    else if (v.huong) bit.push(_tvmbT('js.nguoikhac.da', 'đà ') + esc(v.huong));
+    rows.push(_tvmbT('js.nguoikhac.van-nam', '<li><b>Vận năm ') + v.nam + '</b> — ' + (bit.join(' · ') || _tvmbT('js.nguoikhac.chua-cham', 'chưa chấm')) + '</li>');
   }
   // C1 — bày engine ra. Chỉ có ở payload TÍNH THỬ; bản đã trả tiền không gửi
   // `coSo` nên khối này tự ẩn, không phải canh thêm điều kiện nào.
   var cs = data.coSo, csEl = document.getElementById('coSoDoc');
   if (cs && cs.tong > 0) {
-    var h = 'Bản này đọc từ <b>' + cs.tong + ' dữ kiện</b> lập ra từ chính ngày giờ sinh bạn nhập — ' +
-      cs.soSao + ' sao an trên 12 cung, ' + cs.soCachCuc + ' cách cục, ' + cs.soDaiVan + ' chặng đại vận. ' +
-      'Không có bước nào đoán mò: đổi một chi tiết trong ngày sinh là cả bảng trên đổi theo.';
+    var h = _tvmbT('js.nguoikhac.ban-nay-doc-tu', 'Bản này đọc từ <b>') + cs.tong + _tvmbT('js.nguoikhac.du-kien-lap-ra-tu-chinh', ' dữ kiện</b> lập ra từ chính ngày giờ sinh bạn nhập — ') +
+      cs.soSao + _tvmbT('js.nguoikhac.sao-an-tren-12-cung', ' sao an trên 12 cung, ') + cs.soCachCuc + _tvmbT('js.nguoikhac.cach-cuc', ' cách cục, ') + cs.soDaiVan + _tvmbT('js.nguoikhac.chang-dai-van', ' chặng đại vận. ') +
+      _tvmbT('js.nguoikhac.khong-co-buoc-nao-doan-mo', 'Không có bước nào đoán mò: đổi một chi tiết trong ngày sinh là cả bảng trên đổi theo.');
     // ⚠️ Câu trích là NGUYÊN VĂN cổ thư kèm nguồn — `esc()` cả cụm, tuyệt đối
     // không nội suy vào HTML thô.
     if (cs.trichDan) {
       h += '<div class="nk-quote">' + esc(cs.trichDan.cau) +
-        '<span class="src">— sách dẫn về sao ' + esc(cs.trichDan.sao) + ' tại cung Mệnh</span></div>';
+        ('<span class="src">' + _tvmbT('js.nguoikhac.sach-dan-ve-sao', '— sách dẫn về sao') + ' ') + esc(_tvmbG(['chinh', 'sao'], cs.trichDan.sao)) + _tvmbT('js.nguoikhac.tai-cung-menh', ' tại cung Mệnh</span></div>');
     }
     csEl.innerHTML = h;
     csEl.style.display = 'block';
@@ -1107,7 +1122,7 @@ function renderMetaBasis(data) {
     var rest = rows.slice(VISIBLE);
     var moreHost = document.getElementById('basisMore');
     if (rest.length) {
-      moreHost.innerHTML = '<summary>Xem thêm ' + rest.length + ' mục trong lá số</summary><ul class="nk-basis-list">' + rest.join('') + '</ul>';
+      moreHost.innerHTML = _tvmbT('js.nguoikhac.xem-them', '<summary>Xem thêm ') + rest.length + (' ' + _tvmbT('js.nguoikhac.muc-trong-la-so', 'mục trong lá số') + '</summary><ul class="nk-basis-list">') + rest.join('') + '</ul>';
       moreHost.style.display = '';
     } else {
       moreHost.style.display = 'none';
@@ -1121,7 +1136,7 @@ function _mountInviteCta() {
   var host = document.getElementById('resPanel');
   if (!host) return;
   var go = function () {
-    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'nguoi-khac', toolLabel: 'bản cẩm nang' });
+    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'nguoi-khac', toolLabel: _tvmbT('js.nguoikhac.ban-cam-nang', 'bản cẩm nang') });
   };
   if (window.InviteCta) return go();
   if (document.getElementById('_ivc_js')) return;
@@ -1139,7 +1154,7 @@ function renderProse(data) {
   // khối đều ẩn, chứ không lấp bằng câu chung chung.
   var viec = data.viec || {};
   if (viec.id && viec.id !== 'hieu-them') {
-    document.getElementById('keHoachTitle').textContent = 'Cách đi cho việc: ' + (viec.label || 'bạn đang cần làm');
+    document.getElementById('keHoachTitle').textContent = _tvmbT('js.nguoikhac.cach-di-cho-viec', 'Cách đi cho việc: ') + (_nkViecLabel(viec) || _tvmbT('js.nguoikhac.ban-dang-can-lam', 'bạn đang cần làm'));
     if (data.keHoach) {
       document.getElementById('keHoach').textContent = data.keHoach;
       document.getElementById('keHoachBlock').style.display = 'block';
@@ -1181,9 +1196,9 @@ function renderProse(data) {
   var vb = data.voiBanCoSo;
   if (data.voiBan && vb) {
     document.getElementById('voiBan').textContent = data.voiBan;
-    var chips = ['Cung ' + vb.cung + ' trong lá số của bạn' + (vb.muon ? ' (mượn xung chiếu)' : '')];
-    if (vb.sao && vb.sao.length) chips.push(vb.sao.join(', '));
-    chips.push(vb.cungTinh ? 'Cùng tính âm/dương — dễ va' : 'Khác tính âm/dương — dễ bù');
+    var chips = [_tvmbT('js.nguoikhac.cung-cung-trong-la-so-cua', 'Cung {cung} trong lá số của bạn', {cung: _tvmbG('cung', vb.cung)}) + (vb.muon ? _tvmbT('js.nguoikhac.muon-xung-chieu', ' (mượn xung chiếu)') : '')];
+    if (vb.sao && vb.sao.length) chips.push(vb.sao.map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', '));
+    chips.push(vb.cungTinh ? _tvmbT('js.nguoikhac.cung-tinh-am-duong-de-va', 'Cùng tính âm/dương — dễ va') : _tvmbT('js.nguoikhac.khac-tinh-am-duong-de-bu', 'Khác tính âm/dương — dễ bù'));
     document.getElementById('voiBanChips').innerHTML = chips.map(function (c) {
       return '<span class="nk-chip">' + esc(c) + '</span>';
     }).join('');
@@ -1211,7 +1226,7 @@ async function _loadHistory() {
     var d = await r.json();
     if (!d.success || !(d.items || []).length) return;
     document.getElementById('histList').innerHTML = d.items.map(function (it) {
-      return '<div>· ' + esc(it.ten || 'Không đặt tên') + ' — ' + esc(it.quan_he_label || '') +
+      return '<div>· ' + esc(it.ten || _tvmbT('js.nguoikhac.khong-dat-ten', 'Không đặt tên')) + ' — ' + esc(it.quan_he_label || '') +
         (it.kieu_ten ? ' · ' + esc(it.kieu_ten) : '') + '</div>';
     }).join('');
     document.getElementById('histBlock').style.display = 'block';
