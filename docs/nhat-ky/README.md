@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-596 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+597 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 49 | 200,462 B |
+| `2026-11.md` | 55 | 224,571 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -29,6 +29,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-11 | `2026-11.md` | 🧿 W30f-8 — Chân Dung / Duyên Nợ Tiền Kiếp: tên nhân vật + danh xưng nghề theo ngôn ngữ (mã additive `characterMa`/`titleMa`/`tenMa`, BUMP `SHAPE` 5→6, ns `past-life-ten` 522; prompt truyện nhận tên đã dịch qua `long-server.ts`; sửa câu sai của W30f-7; `cacheshape` không thấy `pastLifeMeta`) |
+| 1 | 2026-11 | `2026-11.md` | ✏️ Sửa 4 lỗi gõ trong câu engine lá số (Quý · sáng suốt · bất lợi · tai nạn về) + engine `?v=2` ở 19 trang; khoá dịch `cach-cuc` chuyển theo |
 | 1 | 2026-11 | `2026-11.md` | 🧿 W30f-7 — Chân Dung Tiền Kiếp: era · bậc · chức phận · trích dẫn theo ngôn ngữ, KHÔNG đổi `portrait_cache` (khoá suy từ `era.id`/`star`/`tier`; helper `past-life-t.js`; ns `past-life` +10); danh xưng nghề không hiện, tên nhân vật cần bump `SHAPE` — chờ quyết định |
 | 1 | 2026-11 | `2026-11.md` | 🀄 W30f-6 — `ls.cachCuc[]` (cách cục có tên: 217 mục, 3 mẫu có biến) cùng ns `cach-cuc` (1.471 mục) · gắn `TuviCachCuc` vào Chân Dung Vợ Chồng · Luận Giải lõi · khoản chấm Công Sở · `check:enginema` +752 câu thật; past-life danh xưng/tên/era chờ quyết định bump `SHAPE` |
 | 1 | 2026-11 | `2026-11.md` | 🀄 W30f-5 — `cachCucTungCung` (engine lõi, KHÔNG sửa) 5 ngôn ngữ: ns `cach-cuc` 1.254 mục (383 câu `out.push` + bảng `CACH_CUC_DATA` 725 câu + 138 tên sao tắt + 8 mẫu Tuần/Triệt) · khoá = fnv của câu Việt · `cach-cuc.js` dùng chung 4 trang · `check:enginema` chạy engine thật 23.512 lượt |
