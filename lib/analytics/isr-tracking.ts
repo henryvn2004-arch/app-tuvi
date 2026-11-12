@@ -17,7 +17,7 @@
 // (docs/nhat-ky/2026-09.md). track.js đã có hàng đợi/retry cho gtag('event')
 // lẫn fbq('track') nên trễ vài giây không làm mất event.
 export const GA4_TRACK_SNIPPET =
-  '<script src="/track.js?v=4" defer></script>' +
+  '<script src="/track.js?v=8" defer></script>' +
   "<script>(function(){function _lt(){if(!document.getElementById('gtag-js')&&!navigator.webdriver){" +
   "var ga=document.createElement('script');ga.id='gtag-js';ga.async=true;" +
   "ga.src='https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0';document.head.appendChild(ga);" +

@@ -493,3 +493,8 @@ jobs:
       # Tên 15 thầy bản ngữ (W19): bảng MASTERS trong tools-shared/i18n.js phủ đúng AUTHOR_ROSTER × 5 ngôn ngữ.
       - name: Tên thầy đa ngôn ngữ — đủ 15 id × 5 locale
         run: npm run check:masters
+
+      # Cùng một file tĩnh nạp với HAI ?v= khác nhau (W27: poster/track/pwa-push/bat-trach/illus-match lệch từ trước) ⇒
+      # trang giữ số cũ dính bản JS cũ trong cache trình duyệt.
+      - name: Mỗi tệp tĩnh đúng một ?v=
+        run: npm run check:assetv
