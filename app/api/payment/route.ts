@@ -8,6 +8,8 @@ export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
 import { localeFromCookieHeader, saveUserLocale } from '@/lib/email/locale';
+import { requestLocale } from '@/lib/llm/locale';
+import { localePrefix } from '@/lib/i18n/locales';
 import { waitUntil } from '@vercel/functions';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { createPayOSOrder } from '@/lib/billing/payos-order';
@@ -310,7 +312,8 @@ async function handleCheck(sp: URLSearchParams): Promise<Response> {
 }
 
 // ── POST: topup ───────────────────────────────────────────────
-async function handleTopup(body: Record<string, unknown>): Promise<Response> {
+// `locPrefix` (W21): '' (vi) hoặc '/ja'… — PayPal trả khách về đúng bản ngôn ngữ đang mua.
+async function handleTopup(body: Record<string, unknown>, locPrefix = ''): Promise<Response> {
   const packageId        = String(body.packageId        || '');
   const userId           = String(body.userId           || '');
   // W5: nạp lẻ PayPal gửi `customAmountUsd` (USD là tiền bán). `customAmountVnd`
@@ -379,8 +382,8 @@ async function handleTopup(body: Record<string, unknown>): Promise<Response> {
           // trang PayPal theo ngôn ngữ trình duyệt của chính họ.
           landing_page: landingPage,
           user_action:  'PAY_NOW',
-          return_url: `${SITE_URL}/payment-success.html?slug=${encodeURIComponent(slug)}&userId=${encodeURIComponent(userId)}`,
-          cancel_url:  `${SITE_URL}/topup.html?payment=cancelled`,
+          return_url: `${SITE_URL}${locPrefix}/payment-success.html?slug=${encodeURIComponent(slug)}&userId=${encodeURIComponent(userId)}`,
+          cancel_url:  `${SITE_URL}${locPrefix}/topup.html?payment=cancelled`,
         },
       }),
     });
@@ -3814,7 +3817,7 @@ export async function POST(request: NextRequest) {
     // Hoá đơn sẽ gửi từ WEBHOOK PayPal (không có cookie) ⇒ ghi ngôn ngữ khách ĐANG dùng ngay lúc mua
     // (docs/luat/email.md "Ngôn ngữ email"). Best-effort, không chặn đơn.
     await saveUserLocale(String(body.userId || ''), localeFromCookieHeader(request.headers.get('cookie')));
-    return handleTopup(body);
+    return handleTopup(body, localePrefix(requestLocale(request)));
   }
   if (action === 'capture')           return handleCapture(body);
   if (action === 'deduct')            return handleDeduct(request, body);

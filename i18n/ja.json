@@ -3411,6 +3411,74 @@
   "t": "写真で相を見る",
   "h": "24c4d64e"
  },
+ "js.paysuc.cam-on": {
+  "t": "明宝紫微斗数をご利用いただきありがとうございます。<br>両は命盤鑑定や相性鑑定にお使いいただけます。",
+  "h": "25108a9b"
+ },
+ "js.paysuc.co-loi": {
+  "t": "エラーが発生しました",
+  "h": "f2ebd14e"
+ },
+ "js.paysuc.cong-credits": {
+  "t": "+{n} 両",
+  "h": "2b2cc385"
+ },
+ "js.paysuc.dang-quay-lai": {
+  "t": "ロック解除の続きに戻っています…",
+  "h": "018f2e01"
+ },
+ "js.paysuc.hoac-dung-ngay": {
+  "t": "または今すぐ使う",
+  "h": "53432ef3"
+ },
+ "js.paysuc.lien-he-ho-tro": {
+  "t": "サポートに連絡",
+  "h": "554c1a63"
+ },
+ "js.paysuc.loi-ket-noi": {
+  "t": "接続エラーです。しばらくしてからもう一度お試しください。",
+  "h": "8d18d14b"
+ },
+ "js.paysuc.luan-giai-la-so": {
+  "t": "命盤鑑定",
+  "h": "72f1fa6d"
+ },
+ "js.paysuc.nap-thanh-cong": {
+  "t": "チャージが完了しました！",
+  "h": "897b5556"
+ },
+ "js.paysuc.nap-them": {
+  "t": "両を追加チャージ",
+  "h": "70a597bd"
+ },
+ "js.paysuc.quay-lai-nap": {
+  "t": "← チャージに戻る",
+  "h": "477330f2"
+ },
+ "js.paysuc.so-du": {
+  "t": "現在の残高：{n} 両",
+  "h": "0ed1f309"
+ },
+ "js.paysuc.that-bai": {
+  "t": "お支払いに失敗しました。サポートにご連絡ください。",
+  "h": "bddbcf89"
+ },
+ "js.paysuc.thieu-thong-tin": {
+  "t": "お支払い情報が不足しています。サポートにご連絡ください。",
+  "h": "1309e497"
+ },
+ "js.paysuc.xem-tai-khoan": {
+  "t": "アカウントを見る →",
+  "h": "0ad98c44"
+ },
+ "js.paysuc.xem-tuoi-lam-an": {
+  "t": "ビジネスの相性",
+  "h": "5f5ba4e2"
+ },
+ "js.paysuc.xem-tuoi-vo-chong": {
+  "t": "夫婦の相性",
+  "h": "f3e7b1ed"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " ・開くとお支払いのうえ、すぐにお読みいただけます。",
   "h": "9a6023cd"
@@ -9566,6 +9634,18 @@
  "nguon.vuong-dinh-chi-tai-lieu-tham": {
   "t": "王亭之 · 参考資料",
   "h": "f0de146d"
+ },
+ "paysuc.dang-xac-nhan-thanh-toan": {
+  "t": "お支払いを確認しています...",
+  "h": "d4f224cd"
+ },
+ "paysuc.vui-long-cho-trong-giay-lat": {
+  "t": "少々お待ちください",
+  "h": "f2af1ae9"
+ },
+ "paysuc.xac-nhan-thanh-toan-tu-vi": {
+  "t": "お支払いの確認 — 明宝紫微斗数",
+  "h": "b7b66e97"
  },
  "ppx.10-chuyen-gia-tu-vi-tham": {
   "t": "<b>10+</b><span>名の紫微斗数の専門家が審査に参加</span>",

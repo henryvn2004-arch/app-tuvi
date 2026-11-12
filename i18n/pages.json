@@ -1081,6 +1081,15 @@
    "nav"
   ]
  },
+ "/payment-success": {
+  "file": "payment-success.html",
+  "keys": [
+   "paysuc.dang-xac-nhan-thanh-toan",
+   "paysuc.vui-long-cho-trong-giay-lat",
+   "paysuc.xac-nhan-thanh-toan-tu-vi"
+  ],
+  "js": []
+ },
  "/phuong-phap": {
   "file": "phuong-phap.html",
   "keys": [

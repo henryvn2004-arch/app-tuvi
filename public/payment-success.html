@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Xác nhận thanh toán — Tử Vi Minh Bảo</title>
+<title data-i18n="paysuc.xac-nhan-thanh-toan-tu-vi">Xác nhận thanh toán — Tử Vi Minh Bảo</title>
 <meta name="robots" content="noindex">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -109,8 +109,8 @@ body {
 <body>
 <div class="card" id="card">
   <div class="spinner" id="spinner"></div>
-  <div class="title">Đang xác nhận thanh toán...</div>
-  <div class="subtitle" id="msg">Vui lòng chờ trong giây lát</div>
+  <div data-i18n="paysuc.dang-xac-nhan-thanh-toan" class="title">Đang xác nhận thanh toán...</div>
+  <div data-i18n="paysuc.vui-long-cho-trong-giay-lat" class="subtitle" id="msg">Vui lòng chờ trong giây lát</div>
 </div>
 
 <script src="/auth.js?v=9"></script>
@@ -165,7 +165,7 @@ function isTopup(s) { return s.startsWith('topup-'); }
 async function capture() {
   const ppToken = token || params.get('token');
   if (!ppToken || !slug) {
-    showError('Thiếu thông tin thanh toán. Vui lòng liên hệ hỗ trợ.');
+    showError(_tvmbT('js.paysuc.thieu-thong-tin', 'Thiếu thông tin thanh toán. Vui lòng liên hệ hỗ trợ.'));
     return;
   }
 
@@ -195,10 +195,10 @@ async function capture() {
       // tiền thật duy nhất — xem lib/marketing/server-conversions.ts.
       showSuccess(slug, data.credits || 0, data.balance || 0);
     } else {
-      showError(data.error || 'Thanh toán thất bại. Vui lòng liên hệ hỗ trợ.');
+      showError(data.error || _tvmbT('js.paysuc.that-bai', 'Thanh toán thất bại. Vui lòng liên hệ hỗ trợ.'));
     }
   } catch (e) {
-    showError('Lỗi kết nối. Vui lòng thử lại sau.');
+    showError(_tvmbT('js.paysuc.loi-ket-noi', 'Lỗi kết nối. Vui lòng thử lại sau.'));
   }
 }
 
@@ -227,9 +227,9 @@ function showSuccess(slug, credits, balance) {
   if (pending) {
     document.getElementById('card').innerHTML = `
       <div class="icon ic" style="width:1em;height:1em;margin-left:auto;margin-right:auto">${window.iconHtml?window.iconHtml('gift'):''}</div>
-      <div class="title">Nạp credits thành công!</div>
-      <div class="credit-badge">+${credits} Credits<small>Số dư hiện tại: ${balance} credits</small></div>
-      <div class="subtitle">Đang quay lại để mở khoá tiếp…</div>
+      <div class="title">${_tvmbT('js.paysuc.nap-thanh-cong', 'Nạp credits thành công!')}</div>
+      <div class="credit-badge">${_tvmbT('js.paysuc.cong-credits', '+{n} Credits', { n: credits })}<small>${_tvmbT('js.paysuc.so-du', 'Số dư hiện tại: {n} credits', { n: balance })}</small></div>
+      <div class="subtitle">${_tvmbT('js.paysuc.dang-quay-lai', 'Đang quay lại để mở khoá tiếp…')}</div>
     `;
     const sep = pending.returnUrl.indexOf('?') >= 0 ? '&' : '?';
     setTimeout(() => { window.location.href = pending.returnUrl + sep + 'tpwResume=1'; }, 1200);
@@ -238,38 +238,37 @@ function showSuccess(slug, credits, balance) {
   const label = getPackageLabel(slug);
   document.getElementById('card').innerHTML = `
     <div class="icon ic" style="width:1em;height:1em;margin-left:auto;margin-right:auto">${window.iconHtml?window.iconHtml('gift'):''}</div>
-    <div class="title">Nạp credits thành công!</div>
+    <div class="title">${_tvmbT('js.paysuc.nap-thanh-cong', 'Nạp credits thành công!')}</div>
     <div class="credit-badge">
-      +${credits} Credits
-      <small>Số dư hiện tại: ${balance} credits</small>
+      ${_tvmbT('js.paysuc.cong-credits', '+{n} Credits', { n: credits })}
+      <small>${_tvmbT('js.paysuc.so-du', 'Số dư hiện tại: {n} credits', { n: balance })}</small>
     </div>
     <div class="subtitle">
-      Cảm ơn bạn đã tin dùng Tử Vi Minh Bảo.<br>
-      Dùng credits để luận giải lá số và xem tuổi.
+      ${_tvmbT('js.paysuc.cam-on', 'Cảm ơn bạn đã tin dùng Tử Vi Minh Bảo.<br>Dùng credits để luận giải lá số và xem tuổi.')}
     </div>
-    <a href="/app/ho-so#credits" class="btn btn-gold" style="display:block;margin-bottom:16px">
-      Xem tài khoản →
+    <a href="${_tvmbHref('/app/ho-so')}#credits" class="btn btn-gold" style="display:block;margin-bottom:16px">
+      ${_tvmbT('js.paysuc.xem-tai-khoan', 'Xem tài khoản →')}
     </a>
-    <div style="font-size:12px;color:#999;margin-bottom:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Hoặc sử dụng ngay</div>
+    <div style="font-size:12px;color:#999;margin-bottom:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px">${_tvmbT('js.paysuc.hoac-dung-ngay', 'Hoặc sử dụng ngay')}</div>
     <div class="tools-grid">
-      <a href="/" class="tool-link"><span class="icon-sm"><img src="/mascot/tool-icons/luan-giai.webp" alt="" loading="lazy"></span>Luận Giải Lá Số</a>
-      <a href="/app/xem-tuoi" class="tool-link"><span class="icon-sm"><img src="/mascot/tool-icons/xem-tuoi.webp" alt="" loading="lazy"></span>Xem Tuổi Vợ Chồng</a>
-      <a href="/app/xem-lam-an" class="tool-link"><span class="icon-sm"><img src="/mascot/tool-icons/hop-tac-lam-an.webp" alt="" loading="lazy"></span>Xem Tuổi Làm Ăn</a>
-      <a href="/topup.html" class="tool-link"><span class="icon-sm"><span class="ic-inline" data-icon-emoji="💳" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">💳</span></span>Nạp Thêm Credits</a>
+      <a href="${_tvmbHref('/')}" class="tool-link"><span class="icon-sm"><img src="/mascot/tool-icons/luan-giai.webp" alt="" loading="lazy"></span>${_tvmbT('js.paysuc.luan-giai-la-so', 'Luận Giải Lá Số')}</a>
+      <a href="${_tvmbHref('/app/xem-tuoi')}" class="tool-link"><span class="icon-sm"><img src="/mascot/tool-icons/xem-tuoi.webp" alt="" loading="lazy"></span>${_tvmbT('js.paysuc.xem-tuoi-vo-chong', 'Xem Tuổi Vợ Chồng')}</a>
+      <a href="${_tvmbHref('/app/xem-lam-an')}" class="tool-link"><span class="icon-sm"><img src="/mascot/tool-icons/hop-tac-lam-an.webp" alt="" loading="lazy"></span>${_tvmbT('js.paysuc.xem-tuoi-lam-an', 'Xem Tuổi Làm Ăn')}</a>
+      <a href="${_tvmbHref('/topup.html')}" class="tool-link"><span class="icon-sm"><span class="ic-inline" data-icon-emoji="💳" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">💳</span></span>${_tvmbT('js.paysuc.nap-them', 'Nạp Thêm Credits')}</a>
     </div>
   `;
   // Auto redirect to profile after 4s
-  setTimeout(() => { window.location.href = '/app/ho-so'; }, 4500);
+  setTimeout(() => { window.location.href = _tvmbHref('/app/ho-so'); }, 4500);
 }
 
 function showError(msg) {
   document.getElementById('card').innerHTML = `
     <div class="icon ic" style="width:1em;height:1em;margin-left:auto;margin-right:auto">${window.iconHtml?window.iconHtml('x-circle'):''}</div>
-    <div class="title">Có lỗi xảy ra</div>
+    <div class="title">${_tvmbT('js.paysuc.co-loi', 'Có lỗi xảy ra')}</div>
     <div class="subtitle" style="color:#C0392B">${msg}</div>
     <div style="margin-top:20px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px">
-      <a href="/topup.html" class="btn btn-outline">← Quay lại nạp credits</a>
-      <a href="/contact.html" class="btn btn-gold">Liên hệ hỗ trợ</a>
+      <a href="${_tvmbHref('/topup.html')}" class="btn btn-outline">${_tvmbT('js.paysuc.quay-lai-nap', '← Quay lại nạp credits')}</a>
+      <a href="${_tvmbHref('/contact.html')}" class="btn btn-gold">${_tvmbT('js.paysuc.lien-he-ho-tro', 'Liên hệ hỗ trợ')}</a>
     </div>
   `;
 }

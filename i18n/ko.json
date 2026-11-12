@@ -3411,6 +3411,74 @@
   "t": "사진으로 관상 보기",
   "h": "24c4d64e"
  },
+ "js.paysuc.cam-on": {
+  "t": "명보 자미두수를 이용해 주셔서 감사합니다.<br>냥으로 명반 풀이와 궁합을 볼 수 있습니다.",
+  "h": "25108a9b"
+ },
+ "js.paysuc.co-loi": {
+  "t": "오류가 발생했습니다",
+  "h": "f2ebd14e"
+ },
+ "js.paysuc.cong-credits": {
+  "t": "+{n}냥",
+  "h": "2b2cc385"
+ },
+ "js.paysuc.dang-quay-lai": {
+  "t": "잠금 해제를 이어서 하러 돌아가는 중…",
+  "h": "018f2e01"
+ },
+ "js.paysuc.hoac-dung-ngay": {
+  "t": "또는 바로 사용하기",
+  "h": "53432ef3"
+ },
+ "js.paysuc.lien-he-ho-tro": {
+  "t": "고객 지원 문의",
+  "h": "554c1a63"
+ },
+ "js.paysuc.loi-ket-noi": {
+  "t": "연결 오류입니다. 잠시 후 다시 시도해 주세요.",
+  "h": "8d18d14b"
+ },
+ "js.paysuc.luan-giai-la-so": {
+  "t": "명반 풀이",
+  "h": "72f1fa6d"
+ },
+ "js.paysuc.nap-thanh-cong": {
+  "t": "충전이 완료되었습니다!",
+  "h": "897b5556"
+ },
+ "js.paysuc.nap-them": {
+  "t": "냥 더 충전하기",
+  "h": "70a597bd"
+ },
+ "js.paysuc.quay-lai-nap": {
+  "t": "← 충전으로 돌아가기",
+  "h": "477330f2"
+ },
+ "js.paysuc.so-du": {
+  "t": "현재 잔액: {n}냥",
+  "h": "0ed1f309"
+ },
+ "js.paysuc.that-bai": {
+  "t": "결제에 실패했습니다. 고객 지원에 문의해 주세요.",
+  "h": "bddbcf89"
+ },
+ "js.paysuc.thieu-thong-tin": {
+  "t": "결제 정보가 부족합니다. 고객 지원에 문의해 주세요.",
+  "h": "1309e497"
+ },
+ "js.paysuc.xem-tai-khoan": {
+  "t": "계정 보기 →",
+  "h": "0ad98c44"
+ },
+ "js.paysuc.xem-tuoi-lam-an": {
+  "t": "사업 궁합 보기",
+  "h": "5f5ba4e2"
+ },
+ "js.paysuc.xem-tuoi-vo-chong": {
+  "t": "부부 궁합 보기",
+  "h": "f3e7b1ed"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 열면 바로 결제되고 곧바로 읽을 수 있어요, ",
   "h": "9a6023cd"
@@ -9566,6 +9634,18 @@
  "nguon.vuong-dinh-chi-tai-lieu-tham": {
   "t": "왕정지 · 참고 자료",
   "h": "f0de146d"
+ },
+ "paysuc.dang-xac-nhan-thanh-toan": {
+  "t": "결제를 확인하는 중...",
+  "h": "d4f224cd"
+ },
+ "paysuc.vui-long-cho-trong-giay-lat": {
+  "t": "잠시만 기다려 주세요",
+  "h": "f2af1ae9"
+ },
+ "paysuc.xac-nhan-thanh-toan-tu-vi": {
+  "t": "결제 확인 — 명보 자미두수",
+  "h": "b7b66e97"
  },
  "ppx.10-chuyen-gia-tu-vi-tham": {
   "t": "<b>10+</b><span>명의 자미두수 전문가가 심사에 참여</span>",

@@ -3411,6 +3411,74 @@
   "t": "Face reading from photos",
   "h": "24c4d64e"
  },
+ "js.paysuc.cam-on": {
+  "t": "Thank you for choosing Minh Bao Zi Wei Dou Shu.<br>Use your credits for chart readings and compatibility checks.",
+  "h": "25108a9b"
+ },
+ "js.paysuc.co-loi": {
+  "t": "Something went wrong",
+  "h": "f2ebd14e"
+ },
+ "js.paysuc.cong-credits": {
+  "t": "+{n} credits",
+  "h": "2b2cc385"
+ },
+ "js.paysuc.dang-quay-lai": {
+  "t": "Taking you back to finish unlocking…",
+  "h": "018f2e01"
+ },
+ "js.paysuc.hoac-dung-ngay": {
+  "t": "Or use them now",
+  "h": "53432ef3"
+ },
+ "js.paysuc.lien-he-ho-tro": {
+  "t": "Contact support",
+  "h": "554c1a63"
+ },
+ "js.paysuc.loi-ket-noi": {
+  "t": "Connection error. Please try again later.",
+  "h": "8d18d14b"
+ },
+ "js.paysuc.luan-giai-la-so": {
+  "t": "Chart Reading",
+  "h": "72f1fa6d"
+ },
+ "js.paysuc.nap-thanh-cong": {
+  "t": "Top-up successful!",
+  "h": "897b5556"
+ },
+ "js.paysuc.nap-them": {
+  "t": "Top up more credits",
+  "h": "70a597bd"
+ },
+ "js.paysuc.quay-lai-nap": {
+  "t": "← Back to top-up",
+  "h": "477330f2"
+ },
+ "js.paysuc.so-du": {
+  "t": "Current balance: {n} credits",
+  "h": "0ed1f309"
+ },
+ "js.paysuc.that-bai": {
+  "t": "Payment failed. Please contact support.",
+  "h": "bddbcf89"
+ },
+ "js.paysuc.thieu-thong-tin": {
+  "t": "Payment details are missing. Please contact support.",
+  "h": "1309e497"
+ },
+ "js.paysuc.xem-tai-khoan": {
+  "t": "View account →",
+  "h": "0ad98c44"
+ },
+ "js.paysuc.xem-tuoi-lam-an": {
+  "t": "Business Compatibility",
+  "h": "5f5ba4e2"
+ },
+ "js.paysuc.xem-tuoi-vo-chong": {
+  "t": "Marriage Compatibility",
+  "h": "f3e7b1ed"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · tap to open — you pay and read right away, ",
   "h": "9a6023cd"
@@ -9566,6 +9634,18 @@
  "nguon.vuong-dinh-chi-tai-lieu-tham": {
   "t": "Wang Ting Zhi · reference",
   "h": "f0de146d"
+ },
+ "paysuc.dang-xac-nhan-thanh-toan": {
+  "t": "Confirming your payment...",
+  "h": "d4f224cd"
+ },
+ "paysuc.vui-long-cho-trong-giay-lat": {
+  "t": "Please wait a moment",
+  "h": "f2af1ae9"
+ },
+ "paysuc.xac-nhan-thanh-toan-tu-vi": {
+  "t": "Payment confirmation — Minh Bao Zi Wei Dou Shu",
+  "h": "b7b66e97"
  },
  "ppx.10-chuyen-gia-tu-vi-tham": {
   "t": "<b>10+</b><span>Zi Wei specialists involved in review</span>",

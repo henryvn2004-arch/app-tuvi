@@ -3411,6 +3411,74 @@
   "t": "照片看面相",
   "h": "24c4d64e"
  },
+ "js.paysuc.cam-on": {
+  "t": "感謝您使用明寶紫微斗數。<br>兩可用於命盤解讀與合婚等工具。",
+  "h": "25108a9b"
+ },
+ "js.paysuc.co-loi": {
+  "t": "發生錯誤",
+  "h": "f2ebd14e"
+ },
+ "js.paysuc.cong-credits": {
+  "t": "+{n} 兩",
+  "h": "2b2cc385"
+ },
+ "js.paysuc.dang-quay-lai": {
+  "t": "正在返回以繼續解鎖…",
+  "h": "018f2e01"
+ },
+ "js.paysuc.hoac-dung-ngay": {
+  "t": "或立即使用",
+  "h": "53432ef3"
+ },
+ "js.paysuc.lien-he-ho-tro": {
+  "t": "聯絡客服",
+  "h": "554c1a63"
+ },
+ "js.paysuc.loi-ket-noi": {
+  "t": "連線錯誤，請稍後再試。",
+  "h": "8d18d14b"
+ },
+ "js.paysuc.luan-giai-la-so": {
+  "t": "命盤解讀",
+  "h": "72f1fa6d"
+ },
+ "js.paysuc.nap-thanh-cong": {
+  "t": "儲值成功！",
+  "h": "897b5556"
+ },
+ "js.paysuc.nap-them": {
+  "t": "再儲值兩",
+  "h": "70a597bd"
+ },
+ "js.paysuc.quay-lai-nap": {
+  "t": "← 返回儲值",
+  "h": "477330f2"
+ },
+ "js.paysuc.so-du": {
+  "t": "目前餘額：{n} 兩",
+  "h": "0ed1f309"
+ },
+ "js.paysuc.that-bai": {
+  "t": "付款失敗，請聯絡客服。",
+  "h": "bddbcf89"
+ },
+ "js.paysuc.thieu-thong-tin": {
+  "t": "缺少付款資訊，請聯絡客服。",
+  "h": "1309e497"
+ },
+ "js.paysuc.xem-tai-khoan": {
+  "t": "查看帳號 →",
+  "h": "0ad98c44"
+ },
+ "js.paysuc.xem-tuoi-lam-an": {
+  "t": "合夥合盤",
+  "h": "5f5ba4e2"
+ },
+ "js.paysuc.xem-tuoi-vo-chong": {
+  "t": "夫妻合婚",
+  "h": "f3e7b1ed"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 點開即付款並立即閱讀，",
   "h": "9a6023cd"
@@ -9566,6 +9634,18 @@
  "nguon.vuong-dinh-chi-tai-lieu-tham": {
   "t": "王亭之 · 參考資料",
   "h": "f0de146d"
+ },
+ "paysuc.dang-xac-nhan-thanh-toan": {
+  "t": "正在確認付款...",
+  "h": "d4f224cd"
+ },
+ "paysuc.vui-long-cho-trong-giay-lat": {
+  "t": "請稍候",
+  "h": "f2af1ae9"
+ },
+ "paysuc.xac-nhan-thanh-toan-tu-vi": {
+  "t": "付款確認 — 明寶紫微斗數",
+  "h": "b7b66e97"
  },
  "ppx.10-chuyen-gia-tu-vi-tham": {
   "t": "<b>10+</b><span>位紫微斗數專家參與審定</span>",
