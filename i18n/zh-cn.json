@@ -243,6 +243,98 @@
   "t": "← 回到今天",
   "h": "24faf89e"
  },
+ "ctk.2-xem-truoc-chan-dung": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览肖像</span>",
+  "h": "db8c9fa4"
+ },
+ "ctk.5-nen-van-minh-co": {
+  "t": "<span class=\"hp-ic\" data-icon=\"landmark\"></span><span>5 个<br>古文明</span>",
+  "h": "88178537"
+ },
+ "ctk.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>范例解读报告</b><span>下载范例命盘的「前世肖像」完整 PDF，先预览真实内容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chan-dung-tien-kiep.pdf\" target=\"_blank\" rel=\"noopener\">下载 PDF →</a>",
+  "h": "d3ec11c0"
+ },
+ "ctk.chan-dung-cot-cach": {
+  "t": "<span class=\"res-block-title\">肖像与风骨</span>",
+  "h": "236dac15"
+ },
+ "ctk.chan-dung-tien-kiep": {
+  "t": "前世肖像",
+  "h": "e7d0f866"
+ },
+ "ctk.chan-dung-tien-kiep-gxr5": {
+  "t": "前世肖像",
+  "h": "7aa2c297"
+ },
+ "ctk.chan-dung-tien-kiep-la-so": {
+  "t": "<b>前世肖像</b><span>如果您的命盘生在古代</span>",
+  "h": "b05fc22e"
+ },
+ "ctk.chan-dung-tien-kiep-tu-vi": {
+  "t": "前世肖像——明宝紫微斗数",
+  "h": "ecf8e25b"
+ },
+ "ctk.chan-dung-va-cau-chuyen-phia": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 上方的肖像与故事，依据您紫微斗数命盘中的数据，并结合前人留下的研究经验描绘而成，仅供参考与娱乐。",
+  "h": "2e5ddc71"
+ },
+ "ctk.chan-dung-ve-rieng": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>专属于您的<br>肖像</span>",
+  "h": "bac45794"
+ },
+ "ctk.da-ve-truoc-do": {
+  "t": "<span class=\"res-block-title\">先前绘制过的</span>",
+  "h": "44b01ab4"
+ },
+ "ctk.dang-ve-chan-dung-khoang-45": {
+  "t": "正在绘制肖像…<br>（约 45–60 秒）",
+  "h": "7a762c71"
+ },
+ "ctk.dat-chinh-la-so-cua-ban": {
+  "t": "把您自己的命盘放进古代东亚五大文明之一——透过九个大运讲述一个人一生的肖像与故事。",
+  "h": "9d55b734"
+ },
+ "ctk.dung-la-so-da-lap-khong": {
+  "t": "使用已排好的命盘，不需要再输入任何东西。即可得到肖像、风骨，以及分五回讲述的一生故事。",
+  "h": "1220c601"
+ },
+ "ctk.khung-5-hoi-o-tren-do": {
+  "t": "上方的五回架构由您的命盘决定——每一回的文字都在完整版中。",
+  "h": "9c6e9720"
+ },
+ "ctk.la-so-khong-chi-ke-chuyen": {
+  "t": "命盘不只讲今生——放进一个古文明，它还会透露一则专属于您的前世故事。从现成的命盘，就能得到一幅完整的肖像与故事可读。",
+  "h": "558d4af3"
+ },
+ "ctk.mo-ta-nhan-vat": {
+  "t": "人物描述",
+  "h": "e5b0eb52"
+ },
+ "ctk.mo-ta-nhan-vat-ban-mau": {
+  "t": "人物描述（范例）",
+  "h": "a3b1a797"
+ },
+ "ctk.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-tien-kiep\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-tien-kiep\">…</span> 两)</span>",
+  "h": "a0c1a032"
+ },
+ "ctk.mot-doi-5-hoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>一生<br>五回</span>",
+  "h": "a838f04e"
+ },
+ "ctk.mot-doi-nguoi-5-hoi": {
+  "t": "<span class=\"res-block-title\">一个人的一生——五回</span>",
+  "h": "a7f7daa3"
+ },
+ "ctk.nhap-ngay-sinh-cua-ban-duong": {
+  "t": "输入您的出生日期（国历）",
+  "h": "1958d7e8"
+ },
+ "ctk.xem-tien-kiep-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"temple\"></span><b>查看前世 →</b></span> <small>费用 <span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-tien-kiep\">…</span> 两)</span></small>",
+  "h": "055f7d8e"
+ },
  "daycon.2-xem-truoc-chan-dung-con": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览孩子的肖像</span>",
   "h": "d8f50448"
@@ -1678,6 +1770,210 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "流年小运 ",
   "h": "1979c56a"
+ },
+ "js.ctk.anh-dang-tai-co-the-hoi": {
+  "t": "图片加载中，可能稍慢——请稍候，或",
+  "h": "c4e9709b"
+ },
+ "js.ctk.anh-minh-hoa": {
+  "t": "示意图",
+  "h": "f37e2fa9"
+ },
+ "js.ctk.anh-minh-hoa-mo-mo-khoa": {
+  "t": "示意图（模糊）——解锁后即可看到您真正的肖像",
+  "h": "e7c8b779"
+ },
+ "js.ctk.ba": {
+  "t": "她",
+  "h": "6edcd5c8"
+ },
+ "js.ctk.ba-ay-co-benh-tat-hay-tai": {
+  "t": "{ba}有没有什么疾病或灾厄？",
+  "h": "1df5a238"
+ },
+ "js.ctk.ba-ay-lay-vo-chong-the": {
+  "t": "{ba}的婚姻是怎么样的？",
+  "h": "c22fea33"
+ },
+ "js.ctk.bac-chuc-phan-engine-cham": {
+  "t": "引擎评定的职分等级",
+  "h": "694a2943"
+ },
+ "js.ctk.ban-da-tao-ket-qua-cho": {
+  "t": "✓ 您已为这张命盘产生过结果——重新打开，不会扣两",
+  "h": "d59efda4"
+ },
+ "js.ctk.bien-co": {
+  "t": "▼ 变故",
+  "h": "69c46bc9"
+ },
+ "js.ctk.buc-tranh-chan-dung-ve-rieng": {
+  "t": "依您的命盘专属绘制的肖像画",
+  "h": "998f85c8"
+ },
+ "js.ctk.chan-dung-cau-chuyen-chua-mo": {
+  "t": "⊙ 肖像与故事尚未打开",
+  "h": "2df0a1d7"
+ },
+ "js.ctk.chan-dung-tien-kiep": {
+  "t": "前世肖像",
+  "h": "e7d0f866"
+ },
+ "js.ctk.chan-dung-tien-kiep-cua-toi": {
+  "t": "我的前世肖像",
+  "h": "7f493523"
+ },
+ "js.ctk.chan-dung-tien-kiep-gxr5": {
+  "t": "前世肖像",
+  "h": "7aa2c297"
+ },
+ "js.ctk.chinh-tinh-tai-cung-menh": {
+  "t": "命宫中的主星",
+  "h": "64538c55"
+ },
+ "js.ctk.chinh-tinh-tai-cung-quan-loc": {
+  "t": "官禄宫中的主星",
+  "h": "2a194366"
+ },
+ "js.ctk.chuc-phan-suy-ra": {
+  "t": "推得的职分",
+  "h": "f76c76b7"
+ },
+ "js.ctk.chuyen-doi-nv-het-phan-chinh": {
+  "t": "**{nv}**的一生故事，主要内容到这里。命盘里还有许多故事没说到的事——您想多问关于{short}的什么？",
+  "h": "12c81ad9"
+ },
+ "js.ctk.cung-an-than": {
+  "t": "身宫所在",
+  "h": "778b10ab"
+ },
+ "js.ctk.dang-dung-anh": {
+  "t": "图片制作中…",
+  "h": "7bce9760"
+ },
+ "js.ctk.dang-ve-chan-dung": {
+  "t": "正在绘制肖像…",
+  "h": "8da3d107"
+ },
+ "js.ctk.dinh-cao": {
+  "t": "★ 巅峰",
+  "h": "329f34c6"
+ },
+ "js.ctk.doc-9-dai-van-chia-dong": {
+  "t": "解读九个大运，将人生分为五回",
+  "h": "6d04f8ee"
+ },
+ "js.ctk.khong-the-ket-noi-vui-long": {
+  "t": "无法连接，请再试一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.ctk.khong-ve-duoc-chan-dung-lan": {
+  "t": "这次无法绘制肖像，下方的故事部分仍然完整。",
+  "h": "45ebec08"
+ },
+ "js.ctk.la-so": {
+  "t": "命盘：",
+  "h": "2644d5f2"
+ },
+ "js.ctk.lap-la-so-xac-dinh-chuc": {
+  "t": "排出命盘并判定古代职分",
+  "h": "5bf8b6ae"
+ },
+ "js.ctk.loi": {
+  "t": "错误 ",
+  "h": "1b80116b"
+ },
+ "js.ctk.loi-8d72": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.ctk.loi-ket": {
+  "t": "结语",
+  "h": "319ac5e1"
+ },
+ "js.ctk.luc-giac-cung-menh": {
+  "t": "命宫六角图",
+  "h": "e7542de0"
+ },
+ "js.ctk.luot-ve": {
+  "t": "次绘制",
+  "h": "85f72421"
+ },
+ "js.ctk.mat-ket-noi-luc-tai-tranh": {
+  "t": "加载图片时连接中断——正在尝试重新取得…",
+  "h": "48d6deaf"
+ },
+ "js.ctk.mo-chan-dung-day-du": {
+  "t": "打开完整肖像",
+  "h": "9f515b09"
+ },
+ "js.ctk.mo-ta": {
+  "t": "描述 ",
+  "h": "9465dd78"
+ },
+ "js.ctk.mo-ta-nhan-vat-chu-viet": {
+  "t": "人物描述，以及五回中每一回的文字",
+  "h": "da0a1288"
+ },
+ "js.ctk.mot-doi-nguoi-5-hoi": {
+  "t": "一个人的一生——五回",
+  "h": "551d79c7"
+ },
+ "js.ctk.n-tuoi": {
+  "t": "{n} 岁",
+  "h": "25e7a2be"
+ },
+ "js.ctk.nhan-vat": {
+  "t": "人物",
+  "h": "c80feef9"
+ },
+ "js.ctk.nhan-vat-nay": {
+  "t": "这个人物",
+  "h": "6350a62b"
+ },
+ "js.ctk.nv-co-giau-khong": {
+  "t": "{nv}富有吗？",
+  "h": "586c4799"
+ },
+ "js.ctk.ong": {
+  "t": "他",
+  "h": "73f16f79"
+ },
+ "js.ctk.phu-tinh-tai-cung-menh": {
+  "t": "命宫中的辅星",
+  "h": "3d194cb8"
+ },
+ "js.ctk.quet-ma-xem-tien-kiep-cua": {
+  "t": "扫描 QR 码——查看您的前世",
+  "h": "fb7663cd"
+ },
+ "js.ctk.tai-lai": {
+  "t": "重新加载",
+  "h": "16371241"
+ },
+ "js.ctk.thang-tram": {
+  "t": "★▼ 起伏",
+  "h": "3ec8b7b2"
+ },
+ "js.ctk.tuoi-nhan-vat-trong-tranh": {
+  "t": "画中人物的年龄",
+  "h": "f6ab55f4"
+ },
+ "js.ctk.vi-sao-lai-luan-ra-nhu-vay": {
+  "t": "为什么会这样论断？",
+  "h": "ef2cc0e9"
+ },
+ "js.ctk.viet-cau-chuyen-cuoc-doi": {
+  "t": "撰写一生的故事",
+  "h": "2971394d"
+ },
+ "js.ctk.vo-chinh-dieu-muon-cung-xung": {
+  "t": " ——无主星，借对宫",
+  "h": "90aab3d9"
+ },
+ "js.ctk.vui-long-nhap-day-du-ngay": {
+  "t": "请完整输入出生年月日。",
+  "h": "2545b4dd"
  },
  "js.daycon.5-la-muc-giua-cua-hang": {
   "t": "\n\n5 是数千份孩童命盘的中间水准，并不是「10 分得 5 分」。轴的两端都各有价值。",

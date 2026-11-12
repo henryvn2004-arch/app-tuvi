@@ -243,6 +243,98 @@
   "t": "← Back to today",
   "h": "24faf89e"
  },
+ "ctk.2-xem-truoc-chan-dung": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview the portrait</span>",
+  "h": "db8c9fa4"
+ },
+ "ctk.5-nen-van-minh-co": {
+  "t": "<span class=\"hp-ic\" data-icon=\"landmark\"></span><span>5 ancient<br>civilisations</span>",
+  "h": "88178537"
+ },
+ "ctk.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>Sample reading</b><span>Download the full “Past-Life Portrait” PDF for a sample chart to preview the real content.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chan-dung-tien-kiep.pdf\" target=\"_blank\" rel=\"noopener\">Download PDF →</a>",
+  "h": "d3ec11c0"
+ },
+ "ctk.chan-dung-cot-cach": {
+  "t": "<span class=\"res-block-title\">Portrait &amp; Bearing</span>",
+  "h": "236dac15"
+ },
+ "ctk.chan-dung-tien-kiep": {
+  "t": "Past-Life Portrait",
+  "h": "e7d0f866"
+ },
+ "ctk.chan-dung-tien-kiep-gxr5": {
+  "t": "Past-life portrait",
+  "h": "7aa2c297"
+ },
+ "ctk.chan-dung-tien-kiep-la-so": {
+  "t": "<b>Past-Life Portrait</b><span>Your chart, had you been born in ancient times</span>",
+  "h": "b05fc22e"
+ },
+ "ctk.chan-dung-tien-kiep-tu-vi": {
+  "t": "Past-Life Portrait — Minh Bao Zi Wei Dou Shu",
+  "h": "ecf8e25b"
+ },
+ "ctk.chan-dung-va-cau-chuyen-phia": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> The portrait and story above are drawn from the data in your Zi Wei Dou Shu chart, combined with the research experience handed down by earlier masters. For reference and entertainment only.",
+  "h": "2e5ddc71"
+ },
+ "ctk.chan-dung-ve-rieng": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>A portrait<br>drawn for you</span>",
+  "h": "bac45794"
+ },
+ "ctk.da-ve-truoc-do": {
+  "t": "<span class=\"res-block-title\">Previously Drawn</span>",
+  "h": "44b01ab4"
+ },
+ "ctk.dang-ve-chan-dung-khoang-45": {
+  "t": "Drawing the portrait…<br>(about 45–60 seconds)",
+  "h": "7a762c71"
+ },
+ "ctk.dat-chinh-la-so-cua-ban": {
+  "t": "Place your own chart in one of 5 ancient East Asian civilisations — a portrait and the story of a lifetime told through 9 major cycles.",
+  "h": "9d55b734"
+ },
+ "ctk.dung-la-so-da-lap-khong": {
+  "t": "It uses the chart you've already made — nothing more to enter. You get a portrait, a sense of bearing and a lifetime story told in 5 chapters.",
+  "h": "1220c601"
+ },
+ "ctk.khung-5-hoi-o-tren-do": {
+  "t": "The 5-chapter frame above is decided by your chart — the text of each chapter is in the full version.",
+  "h": "9c6e9720"
+ },
+ "ctk.la-so-khong-chi-ke-chuyen": {
+  "t": "A chart doesn't only tell the story of this life — set in an ancient civilisation, it also hints at a past-life story that is yours alone. From the chart you already have, get a complete portrait and story to read.",
+  "h": "558d4af3"
+ },
+ "ctk.mo-ta-nhan-vat": {
+  "t": "Character description",
+  "h": "e5b0eb52"
+ },
+ "ctk.mo-ta-nhan-vat-ban-mau": {
+  "t": "Character description (sample)",
+  "h": "a3b1a797"
+ },
+ "ctk.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-tien-kiep\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-tien-kiep\">…</span> credits)</span>",
+  "h": "a0c1a032"
+ },
+ "ctk.mot-doi-5-hoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>A lifetime<br>in 5 chapters</span>",
+  "h": "a838f04e"
+ },
+ "ctk.mot-doi-nguoi-5-hoi": {
+  "t": "<span class=\"res-block-title\">A Life — 5 Chapters</span>",
+  "h": "a7f7daa3"
+ },
+ "ctk.nhap-ngay-sinh-cua-ban-duong": {
+  "t": "Enter your birth date (solar calendar)",
+  "h": "1958d7e8"
+ },
+ "ctk.xem-tien-kiep-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"temple\"></span><b>See your past life →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-tien-kiep\">…</span> credits)</span></small>",
+  "h": "055f7d8e"
+ },
  "daycon.2-xem-truoc-chan-dung-con": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview your child's portrait</span>",
   "h": "d8f50448"
@@ -1678,6 +1770,210 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "Annual cycle for ",
   "h": "1979c56a"
+ },
+ "js.ctk.anh-dang-tai-co-the-hoi": {
+  "t": "The image is loading and may be a little slow — please wait, or",
+  "h": "c4e9709b"
+ },
+ "js.ctk.anh-minh-hoa": {
+  "t": "Illustration",
+  "h": "f37e2fa9"
+ },
+ "js.ctk.anh-minh-hoa-mo-mo-khoa": {
+  "t": "Illustration (blurred) — unlock to see your real portrait",
+  "h": "e7c8b779"
+ },
+ "js.ctk.ba": {
+  "t": "She",
+  "h": "6edcd5c8"
+ },
+ "js.ctk.ba-ay-co-benh-tat-hay-tai": {
+  "t": "Did {ba} have any illness or misfortune?",
+  "h": "1df5a238"
+ },
+ "js.ctk.ba-ay-lay-vo-chong-the": {
+  "t": "What was {ba}'s marriage like?",
+  "h": "c22fea33"
+ },
+ "js.ctk.bac-chuc-phan-engine-cham": {
+  "t": "Rank of role as scored by the engine",
+  "h": "694a2943"
+ },
+ "js.ctk.ban-da-tao-ket-qua-cho": {
+  "t": "✓ You've already generated this result for this chart — open it again, no credits deducted",
+  "h": "d59efda4"
+ },
+ "js.ctk.bien-co": {
+  "t": "▼ Upheaval",
+  "h": "69c46bc9"
+ },
+ "js.ctk.buc-tranh-chan-dung-ve-rieng": {
+  "t": "A portrait drawn specifically from your chart",
+  "h": "998f85c8"
+ },
+ "js.ctk.chan-dung-cau-chuyen-chua-mo": {
+  "t": "⊙ Portrait & story not unlocked yet",
+  "h": "2df0a1d7"
+ },
+ "js.ctk.chan-dung-tien-kiep": {
+  "t": "Past-Life Portrait",
+  "h": "e7d0f866"
+ },
+ "js.ctk.chan-dung-tien-kiep-cua-toi": {
+  "t": "My past-life portrait",
+  "h": "7f493523"
+ },
+ "js.ctk.chan-dung-tien-kiep-gxr5": {
+  "t": "Past-life portrait",
+  "h": "7aa2c297"
+ },
+ "js.ctk.chinh-tinh-tai-cung-menh": {
+  "t": "Major stars in the Life Palace",
+  "h": "64538c55"
+ },
+ "js.ctk.chinh-tinh-tai-cung-quan-loc": {
+  "t": "Major star in the Career Palace",
+  "h": "2a194366"
+ },
+ "js.ctk.chuc-phan-suy-ra": {
+  "t": "Inferred role",
+  "h": "f76c76b7"
+ },
+ "js.ctk.chuyen-doi-nv-het-phan-chinh": {
+  "t": "That's the main part of the life story of **{nv}**. There is much more in the chart that the story hasn't told — what would you like to ask about {short}?",
+  "h": "12c81ad9"
+ },
+ "js.ctk.cung-an-than": {
+  "t": "Body Palace",
+  "h": "778b10ab"
+ },
+ "js.ctk.dang-dung-anh": {
+  "t": "Building image…",
+  "h": "7bce9760"
+ },
+ "js.ctk.dang-ve-chan-dung": {
+  "t": "Drawing the portrait…",
+  "h": "8da3d107"
+ },
+ "js.ctk.dinh-cao": {
+  "t": "★ Peak",
+  "h": "329f34c6"
+ },
+ "js.ctk.doc-9-dai-van-chia-dong": {
+  "t": "Reading the 9 major cycles and dividing the life into 5 chapters",
+  "h": "6d04f8ee"
+ },
+ "js.ctk.khong-the-ket-noi-vui-long": {
+  "t": "Couldn't connect. Please try again.",
+  "h": "bf0b6e7b"
+ },
+ "js.ctk.khong-ve-duoc-chan-dung-lan": {
+  "t": "We couldn't draw the portrait this time. The story below is still complete.",
+  "h": "45ebec08"
+ },
+ "js.ctk.la-so": {
+  "t": "Chart: ",
+  "h": "2644d5f2"
+ },
+ "js.ctk.lap-la-so-xac-dinh-chuc": {
+  "t": "Casting the chart and determining the role in ancient times",
+  "h": "5bf8b6ae"
+ },
+ "js.ctk.loi": {
+  "t": "Error ",
+  "h": "1b80116b"
+ },
+ "js.ctk.loi-8d72": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.ctk.loi-ket": {
+  "t": "Closing Words",
+  "h": "319ac5e1"
+ },
+ "js.ctk.luc-giac-cung-menh": {
+  "t": "Life Palace hexagon",
+  "h": "e7542de0"
+ },
+ "js.ctk.luot-ve": {
+  "t": "drawing",
+  "h": "85f72421"
+ },
+ "js.ctk.mat-ket-noi-luc-tai-tranh": {
+  "t": "Lost connection while loading the image — trying to fetch it again…",
+  "h": "48d6deaf"
+ },
+ "js.ctk.mo-chan-dung-day-du": {
+  "t": "Open the full portrait",
+  "h": "9f515b09"
+ },
+ "js.ctk.mo-ta": {
+  "t": "Description of ",
+  "h": "9465dd78"
+ },
+ "js.ctk.mo-ta-nhan-vat-chu-viet": {
+  "t": "Character description + the text of each of the 5 chapters",
+  "h": "da0a1288"
+ },
+ "js.ctk.mot-doi-nguoi-5-hoi": {
+  "t": "A Life — 5 Chapters",
+  "h": "551d79c7"
+ },
+ "js.ctk.n-tuoi": {
+  "t": "{n} years old",
+  "h": "25e7a2be"
+ },
+ "js.ctk.nhan-vat": {
+  "t": "the character",
+  "h": "c80feef9"
+ },
+ "js.ctk.nhan-vat-nay": {
+  "t": "this character",
+  "h": "6350a62b"
+ },
+ "js.ctk.nv-co-giau-khong": {
+  "t": "Was {nv} wealthy?",
+  "h": "586c4799"
+ },
+ "js.ctk.ong": {
+  "t": "He",
+  "h": "73f16f79"
+ },
+ "js.ctk.phu-tinh-tai-cung-menh": {
+  "t": "Minor stars in the Life Palace",
+  "h": "3d194cb8"
+ },
+ "js.ctk.quet-ma-xem-tien-kiep-cua": {
+  "t": "Scan the code — see your own past life",
+  "h": "fb7663cd"
+ },
+ "js.ctk.tai-lai": {
+  "t": "Reload",
+  "h": "16371241"
+ },
+ "js.ctk.thang-tram": {
+  "t": "★▼ Ups and downs",
+  "h": "3ec8b7b2"
+ },
+ "js.ctk.tuoi-nhan-vat-trong-tranh": {
+  "t": "Age of the character in the picture",
+  "h": "f6ab55f4"
+ },
+ "js.ctk.vi-sao-lai-luan-ra-nhu-vay": {
+  "t": "Why does the chart read this way?",
+  "h": "ef2cc0e9"
+ },
+ "js.ctk.viet-cau-chuyen-cuoc-doi": {
+  "t": "Writing the life story",
+  "h": "2971394d"
+ },
+ "js.ctk.vo-chinh-dieu-muon-cung-xung": {
+  "t": " — no major star, borrowing the opposite palace",
+  "h": "90aab3d9"
+ },
+ "js.ctk.vui-long-nhap-day-du-ngay": {
+  "t": "Please enter your full birth date.",
+  "h": "2545b4dd"
  },
  "js.daycon.5-la-muc-giua-cua-hang": {
   "t": "\n\n5 is the midpoint across thousands of children's charts — it does not mean “5 out of 10”. Both ends of each axis have value.",

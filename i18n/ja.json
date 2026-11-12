@@ -243,6 +243,98 @@
   "t": "← 今日に戻る",
   "h": "24faf89e"
  },
+ "ctk.2-xem-truoc-chan-dung": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">肖像を先読み</span>",
+  "h": "db8c9fa4"
+ },
+ "ctk.5-nen-van-minh-co": {
+  "t": "<span class=\"hp-ic\" data-icon=\"landmark\"></span><span>5つの<br>古代文明</span>",
+  "h": "88178537"
+ },
+ "ctk.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>サンプル鑑定書</b><span>サンプル命盤の「前世の肖像」フル版PDFをダウンロードして、実際の内容を先にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chan-dung-tien-kiep.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "d3ec11c0"
+ },
+ "ctk.chan-dung-cot-cach": {
+  "t": "<span class=\"res-block-title\">肖像と気骨</span>",
+  "h": "236dac15"
+ },
+ "ctk.chan-dung-tien-kiep": {
+  "t": "前世の肖像",
+  "h": "e7d0f866"
+ },
+ "ctk.chan-dung-tien-kiep-gxr5": {
+  "t": "前世の肖像",
+  "h": "7aa2c297"
+ },
+ "ctk.chan-dung-tien-kiep-la-so": {
+  "t": "<b>前世の肖像</b><span>もしあなたの命盤が古い時代に生まれたものだったら</span>",
+  "h": "b05fc22e"
+ },
+ "ctk.chan-dung-tien-kiep-tu-vi": {
+  "t": "前世の肖像 — 明宝紫微斗数",
+  "h": "ecf8e25b"
+ },
+ "ctk.chan-dung-va-cau-chuyen-phia": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 上の肖像と物語は、あなたの紫微斗数の命盤のデータに、先人が残した研究の経験を組み合わせて描いたものです。参考および娯楽としてお読みください。",
+  "h": "2e5ddc71"
+ },
+ "ctk.chan-dung-ve-rieng": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>あなただけの<br>肖像</span>",
+  "h": "bac45794"
+ },
+ "ctk.da-ve-truoc-do": {
+  "t": "<span class=\"res-block-title\">以前に描いたもの</span>",
+  "h": "44b01ab4"
+ },
+ "ctk.dang-ve-chan-dung-khoang-45": {
+  "t": "肖像を描いています…<br>（45～60秒ほど）",
+  "h": "7a762c71"
+ },
+ "ctk.dat-chinh-la-so-cua-ban": {
+  "t": "ご自身の命盤を、古代東アジアの5つの文明のいずれかに置いてみましょう — 9つの大運を通して語られる、一人の人生の肖像と物語です。",
+  "h": "9d55b734"
+ },
+ "ctk.dung-la-so-da-lap-khong": {
+  "t": "すでに作成した命盤を使うので、ほかに入力するものはありません。肖像、気骨、そして5つの章で語られる一生の物語が届きます。",
+  "h": "1220c601"
+ },
+ "ctk.khung-5-hoi-o-tren-do": {
+  "t": "上の5章の枠組みはあなたの命盤によって決まります — 各章の文章はフル版に入っています。",
+  "h": "9c6e9720"
+ },
+ "ctk.la-so-khong-chi-ke-chuyen": {
+  "t": "命盤は今世の話を語るだけではありません — 古代文明に置くと、あなただけの前世の物語がかすかに見えてきます。すでにある命盤から、完成した肖像と物語をお受け取りください。",
+  "h": "558d4af3"
+ },
+ "ctk.mo-ta-nhan-vat": {
+  "t": "人物の説明",
+  "h": "e5b0eb52"
+ },
+ "ctk.mo-ta-nhan-vat-ban-mau": {
+  "t": "人物の説明（サンプル）",
+  "h": "a3b1a797"
+ },
+ "ctk.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-tien-kiep\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-tien-kiep\">…</span> 両)</span>",
+  "h": "a0c1a032"
+ },
+ "ctk.mot-doi-5-hoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>一生を<br>5つの章で</span>",
+  "h": "a838f04e"
+ },
+ "ctk.mot-doi-nguoi-5-hoi": {
+  "t": "<span class=\"res-block-title\">一人の人生 — 5つの章</span>",
+  "h": "a7f7daa3"
+ },
+ "ctk.nhap-ngay-sinh-cua-ban-duong": {
+  "t": "あなたの生年月日を入力（西暦）",
+  "h": "1958d7e8"
+ },
+ "ctk.xem-tien-kiep-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"temple\"></span><b>前世を見る →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-tien-kiep\">…</span> 両)</span></small>",
+  "h": "055f7d8e"
+ },
  "daycon.2-xem-truoc-chan-dung-con": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">お子さんの肖像を先読み</span>",
   "h": "d8f50448"
@@ -1678,6 +1770,210 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "小運の年：",
   "h": "1979c56a"
+ },
+ "js.ctk.anh-dang-tai-co-the-hoi": {
+  "t": "画像を読み込み中です。少し時間がかかることがあります — しばらくお待ちいただくか、",
+  "h": "c4e9709b"
+ },
+ "js.ctk.anh-minh-hoa": {
+  "t": "イメージ画像",
+  "h": "f37e2fa9"
+ },
+ "js.ctk.anh-minh-hoa-mo-mo-khoa": {
+  "t": "参考イラスト（ぼかし） — ロックを解除すると、あなた本来の肖像をご覧いただけます",
+  "h": "e7c8b779"
+ },
+ "js.ctk.ba": {
+  "t": "彼女",
+  "h": "6edcd5c8"
+ },
+ "js.ctk.ba-ay-co-benh-tat-hay-tai": {
+  "t": "{ba}は病気や災難に見舞われることはありますか？",
+  "h": "1df5a238"
+ },
+ "js.ctk.ba-ay-lay-vo-chong-the": {
+  "t": "{ba}の結婚生活はどのようなものでしたか？",
+  "h": "c22fea33"
+ },
+ "js.ctk.bac-chuc-phan-engine-cham": {
+  "t": "エンジンが採点した職分の等級",
+  "h": "694a2943"
+ },
+ "js.ctk.ban-da-tao-ket-qua-cho": {
+  "t": "✓ この命盤の結果は作成済みです。再度開いても両は差し引かれません",
+  "h": "d59efda4"
+ },
+ "js.ctk.bien-co": {
+  "t": "▼ 転機",
+  "h": "69c46bc9"
+ },
+ "js.ctk.buc-tranh-chan-dung-ve-rieng": {
+  "t": "あなたの命盤に合わせて描き下ろす肖像画",
+  "h": "998f85c8"
+ },
+ "js.ctk.chan-dung-cau-chuyen-chua-mo": {
+  "t": "⊙ 肖像と物語はまだ開かれていません",
+  "h": "2df0a1d7"
+ },
+ "js.ctk.chan-dung-tien-kiep": {
+  "t": "前世の肖像",
+  "h": "e7d0f866"
+ },
+ "js.ctk.chan-dung-tien-kiep-cua-toi": {
+  "t": "私の前世の肖像",
+  "h": "7f493523"
+ },
+ "js.ctk.chan-dung-tien-kiep-gxr5": {
+  "t": "前世の肖像",
+  "h": "7aa2c297"
+ },
+ "js.ctk.chinh-tinh-tai-cung-menh": {
+  "t": "命宮にある主星",
+  "h": "64538c55"
+ },
+ "js.ctk.chinh-tinh-tai-cung-quan-loc": {
+  "t": "官禄宮にある主星",
+  "h": "2a194366"
+ },
+ "js.ctk.chuc-phan-suy-ra": {
+  "t": "導かれる職分",
+  "h": "f76c76b7"
+ },
+ "js.ctk.chuyen-doi-nv-het-phan-chinh": {
+  "t": "**{nv}**の人生物語は、ここまでが本編です。物語が語っていない命盤の中身はまだたくさんあります — {short}について何を聞きたいですか？",
+  "h": "12c81ad9"
+ },
+ "js.ctk.cung-an-than": {
+  "t": "身宮の位置",
+  "h": "778b10ab"
+ },
+ "js.ctk.dang-dung-anh": {
+  "t": "画像を作成中…",
+  "h": "7bce9760"
+ },
+ "js.ctk.dang-ve-chan-dung": {
+  "t": "肖像を描いています…",
+  "h": "8da3d107"
+ },
+ "js.ctk.dinh-cao": {
+  "t": "★ 頂点",
+  "h": "329f34c6"
+ },
+ "js.ctk.doc-9-dai-van-chia-dong": {
+  "t": "9つの大運を読み、人生の流れを5つの章に分ける",
+  "h": "6d04f8ee"
+ },
+ "js.ctk.khong-the-ket-noi-vui-long": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.ctk.khong-ve-duoc-chan-dung-lan": {
+  "t": "今回は肖像を描けませんでした。下の物語部分はすべてご覧いただけます。",
+  "h": "45ebec08"
+ },
+ "js.ctk.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.ctk.lap-la-so-xac-dinh-chuc": {
+  "t": "命盤を作成し、古代の職分を割り出す",
+  "h": "5bf8b6ae"
+ },
+ "js.ctk.loi": {
+  "t": "エラー ",
+  "h": "1b80116b"
+ },
+ "js.ctk.loi-8d72": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.ctk.loi-ket": {
+  "t": "結び",
+  "h": "319ac5e1"
+ },
+ "js.ctk.luc-giac-cung-menh": {
+  "t": "命宮の六角形",
+  "h": "e7542de0"
+ },
+ "js.ctk.luot-ve": {
+  "t": "描画",
+  "h": "85f72421"
+ },
+ "js.ctk.mat-ket-noi-luc-tai-tranh": {
+  "t": "画像の読み込み中に接続が切れました — 再取得を試みています…",
+  "h": "48d6deaf"
+ },
+ "js.ctk.mo-chan-dung-day-du": {
+  "t": "フル版の肖像を開く",
+  "h": "9f515b09"
+ },
+ "js.ctk.mo-ta": {
+  "t": "人物の説明：",
+  "h": "9465dd78"
+ },
+ "js.ctk.mo-ta-nhan-vat-chu-viet": {
+  "t": "人物の説明と、5つの章それぞれの文章",
+  "h": "da0a1288"
+ },
+ "js.ctk.mot-doi-nguoi-5-hoi": {
+  "t": "一人の人生 — 5つの章",
+  "h": "551d79c7"
+ },
+ "js.ctk.n-tuoi": {
+  "t": "{n}歳",
+  "h": "25e7a2be"
+ },
+ "js.ctk.nhan-vat": {
+  "t": "人物",
+  "h": "c80feef9"
+ },
+ "js.ctk.nhan-vat-nay": {
+  "t": "この人物",
+  "h": "6350a62b"
+ },
+ "js.ctk.nv-co-giau-khong": {
+  "t": "{nv}は裕福でしたか？",
+  "h": "586c4799"
+ },
+ "js.ctk.ong": {
+  "t": "彼",
+  "h": "73f16f79"
+ },
+ "js.ctk.phu-tinh-tai-cung-menh": {
+  "t": "命宮にある副星",
+  "h": "3d194cb8"
+ },
+ "js.ctk.quet-ma-xem-tien-kiep-cua": {
+  "t": "QRコードを読み取って、あなたの前世を見る",
+  "h": "fb7663cd"
+ },
+ "js.ctk.tai-lai": {
+  "t": "再読み込み",
+  "h": "16371241"
+ },
+ "js.ctk.thang-tram": {
+  "t": "★▼ 浮き沈み",
+  "h": "3ec8b7b2"
+ },
+ "js.ctk.tuoi-nhan-vat-trong-tranh": {
+  "t": "絵の人物の年齢",
+  "h": "f6ab55f4"
+ },
+ "js.ctk.vi-sao-lai-luan-ra-nhu-vay": {
+  "t": "なぜそう読み取れるのですか？",
+  "h": "ef2cc0e9"
+ },
+ "js.ctk.viet-cau-chuyen-cuoc-doi": {
+  "t": "人生の物語を書く",
+  "h": "2971394d"
+ },
+ "js.ctk.vo-chinh-dieu-muon-cung-xung": {
+  "t": " — 主星なし、対宮を借りる",
+  "h": "90aab3d9"
+ },
+ "js.ctk.vui-long-nhap-day-du-ngay": {
+  "t": "生年月日をすべて入力してください。",
+  "h": "2545b4dd"
  },
  "js.daycon.5-la-muc-giua-cua-hang": {
   "t": "\n\n5は、数千件の子どもの命盤の中間値であり、「10点満点で5点」という意味ではありません。軸の両端にはそれぞれ価値があります。",
