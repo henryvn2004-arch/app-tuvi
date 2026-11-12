@@ -75,7 +75,8 @@ for (const t of G) {
     if (!t[c] || typeof t[c] !== 'string') bad(`glossary ${id} thiếu cột ${c}`);
   // W25: kind 'chiemtinh' (chiêm tinh Tây) KHÔNG sinh từ chữ Hán — ja/ko viết tay (katakana/hangul + số, ngoặc, dấu cách).
   if (t.k === 'chiemtinh') {
-    if (!/^[가-힣A-Z0-9 ()—·&-]+$/u.test(t.ko)) bad(`glossary ${id}: ko chiemtinh chứa ký tự lạ: ${t.ko}`);
+    if (!/^[가-힣A-Z0-9 ()—·&-]+$/u.test(t.ko))
+      bad(`glossary ${id}: ko chiemtinh chứa ký tự lạ: ${t.ko}`);
   } else if (!/^[가-힣]+$/u.test(t.ko)) bad(`glossary ${id}: ko không thuần Hangul: ${t.ko}`);
 }
 // ja/zh-cn khớp OpenCC của zh-tw (ngoại lệ có chủ đích: 'Âm Lịch', 'Dương Lịch')
