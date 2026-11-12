@@ -4899,6 +4899,242 @@
   "t": "<summary>命盤の項目をさらに ",
   "h": "c5afdcd1"
  },
+ "js.nm.ban-be": {
+  "t": "友人",
+  "h": "159fe485"
+ },
+ "js.nm.ban-doc-nhom": {
+  "t": "グループ鑑定",
+  "h": "fb21922c"
+ },
+ "js.nm.ban-doi": {
+  "t": "パートナー",
+  "h": "08ebb385"
+ },
+ "js.nm.ban-nay-doc-tu-full": {
+  "t": "この鑑定は、ご入力の{n}件の命盤から立てた<b>{tong}件のデータ</b>を読み取っています — 各宮に配置された{sao}個の星、{cc}つの格局、{dv}つの大運の区間。当て推量の工程は一切ありません。誰か一人の生年月日のどれか一つを変えると、上の表全体が変わります。",
+  "h": "87d23b00"
+ },
+ "js.nm.bu-nhau": {
+  "t": "補い合う",
+  "h": "909aca10"
+ },
+ "js.nm.can-dang-nhap-de-luu-vao": {
+  "t": "ノートに保存するにはログインが必要です。",
+  "h": "5d26d852"
+ },
+ "js.nm.can-it-nhat-2": {
+  "t": " — 最低2人必要です。",
+  "h": "724525c8"
+ },
+ "js.nm.cap-duoi": {
+  "t": "部下",
+  "h": "4c2caab8"
+ },
+ "js.nm.cat-sat": {
+  "t": "吉−殺 ",
+  "h": "ba23fbfb"
+ },
+ "js.nm.cha-me": {
+  "t": "親",
+  "h": "efc7bb83"
+ },
+ "js.nm.chon-it-nhat-2-nguoi-trong": {
+  "t": "グループを読むには、ノートから少なくとも2人を選んでください。",
+  "h": "49d52946"
+ },
+ "js.nm.chua-cham-van-nam": {
+  "t": " — 年運はまだ採点されていません",
+  "h": "e73fd33a"
+ },
+ "js.nm.chua-chon-ai": {
+  "t": "まだ誰も選ばれていません。",
+  "h": "21f52574"
+ },
+ "js.nm.chua-luu-duoc": {
+  "t": "保存できませんでした。",
+  "h": "0fe9713c"
+ },
+ "js.nm.chua-luu-duoc-kiem-tra-dang": {
+  "t": "保存できませんでした — ログイン状態をご確認ください。",
+  "h": "08d31926"
+ },
+ "js.nm.co-nguoi-trong-so-thieu-ngay": {
+  "t": "ノートの中に生年月日が足りない人がいます — 選び直してください。",
+  "h": "6e0349ce"
+ },
+ "js.nm.con-cai": {
+  "t": "子ども",
+  "h": "eb70b34b"
+ },
+ "js.nm.dang-chon": {
+  "t": "選択中：",
+  "h": "9795c6eb"
+ },
+ "js.nm.dat-ten-goi-de-con-phan": {
+  "t": "ノートの中で区別できるよう、呼び名を付けてください。",
+  "h": "689ee850"
+ },
+ "js.nm.day-la-ban-doc-n-nguoi": {
+  "t": "ノートの**{n}人**についての鑑定です。誰についてさらに詳しく聞きたいですか？",
+  "h": "2c925bdc"
+ },
+ "js.nm.de-giam-chan": {
+  "t": "ぶつかりやすい",
+  "h": "3cd381b5"
+ },
+ "js.nm.doi-co-du-bon-kieu": {
+  "t": "チームには4つのタイプがそろっています。",
+  "h": "16d74569"
+ },
+ "js.nm.doi-dang-thieu-kieu-ds": {
+  "t": "チームに足りないタイプ：{ds}",
+  "h": "60efbac2"
+ },
+ "js.nm.doi-tac-khach": {
+  "t": "取引先／顧客",
+  "h": "7e407353"
+ },
+ "js.nm.dong-nghiep": {
+  "t": "同僚",
+  "h": "d8e2bdd8"
+ },
+ "js.nm.khong-ai-kieu": {
+  "t": "このタイプの人はいません：",
+  "h": "18a19cc7"
+ },
+ "js.nm.khong-the-ket-noi-vui-long": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.nm.khung-dai-van": {
+  "t": " · 大運の区間 ",
+  "h": "0beb874f"
+ },
+ "js.nm.khung-dai-van-dlx0": {
+  "t": "大運の区間 ",
+  "h": "06be9124"
+ },
+ "js.nm.kieu": {
+  "t": " · タイプ ",
+  "h": "6d81ffdf"
+ },
+ "js.nm.la-so-cua-ban": {
+  "t": "あなたの命盤：",
+  "h": "0202ce58"
+ },
+ "js.nm.lap-la-so-tung-nguoi": {
+  "t": "一人ずつ命盤を作成",
+  "h": "a94af28e"
+ },
+ "js.nm.loi": {
+  "t": "エラー ",
+  "h": "1b80116b"
+ },
+ "js.nm.loi-8d72": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.nm.moi-luot-doc-toi-da-8": {
+  "t": "一度に読めるのは最大8人までです — それ以上になると鑑定が名簿になってしまいます。",
+  "h": "e35f50af"
+ },
+ "js.nm.moi-luot-doc-toi-da-8-l7vo": {
+  "t": "一度に読めるのは最大8人までです。",
+  "h": "12b66f54"
+ },
+ "js.nm.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.nm.nen-tim-them": {
+  "t": "追加で探したいタイプ：",
+  "h": "b500e6d6"
+ },
+ "js.nm.nen-tim-them-kieu-ten": {
+  "t": "追加で探したいタイプ：{ten}",
+  "h": "22272ef1"
+ },
+ "js.nm.nguoi": {
+  "t": " 人",
+  "h": "e4c8f1aa"
+ },
+ "js.nm.nguoi-kgnv": {
+  "t": " 人 — ",
+  "h": "b0f59658"
+ },
+ "js.nm.nhap-du-ngay-thang-nam-sinh": {
+  "t": "生年月日をすべて入力してください。",
+  "h": "370f8e82"
+ },
+ "js.nm.nhom-dang-thieu-chat-gi-ai": {
+  "t": "このグループに足りないものは何で、誰がそれを負担していますか？",
+  "h": "760f9c41"
+ },
+ "js.nm.nhom-n-nguoi": {
+  "t": "{n}人のグループです。",
+  "h": "8c677b9d"
+ },
+ "js.nm.nu": {
+  "t": "女性",
+  "h": "feb92ccd"
+ },
+ "js.nm.phan-kieu-do-cho-trong-cua": {
+  "t": "タイプを分類し、グループの空きを探る",
+  "h": "338c1abe"
+ },
+ "js.nm.qua-nua-nhom-la-kieu": {
+  "t": "グループの半数超がこのタイプ：",
+  "h": "5c247c71"
+ },
+ "js.nm.sep-cap-tren": {
+  "t": "上司／目上の人",
+  "h": "976d7a60"
+ },
+ "js.nm.so-dang-trong-bam-them-nguoi": {
+  "t": "ノートは空です。下の<b>＋ ノートに人を追加</b>を押して、上司、同僚、部下、顧客など、少なくとも2人を追加してください。ノートをアカウントに保存するにはログインが必要です。",
+  "h": "564308fe"
+ },
+ "js.nm.so-nhan-mach-doc-nhom-n": {
+  "t": "人脈ノート — {n}人のグループを読む",
+  "h": "08a560d8"
+ },
+ "js.nm.toi-da-8": {
+  "t": " — 最大8人。",
+  "h": "0bccf420"
+ },
+ "js.nm.tuan-nay-nen-gap-ai-truoc": {
+  "t": "今週は誰から先に会うべきで、どう切り出せばよいですか？",
+  "h": "9337d347"
+ },
+ "js.nm.van-nam": {
+  "t": " · 年運 ",
+  "h": "357d4194"
+ },
+ "js.nm.van-nam-1z56": {
+  "t": " — 年運 ",
+  "h": "12429204"
+ },
+ "js.nm.vi-sao-hai-nguoi-do-de-giam": {
+  "t": "なぜその二人はぶつかりやすいのですか？",
+  "h": "9fbac3bc"
+ },
+ "js.nm.viec-sap-toi-nen-giao-cho-ai": {
+  "t": "近いうちの仕事は、このグループの誰に任せるのがよいですか？",
+  "h": "a25cdab3"
+ },
+ "js.nm.viet-ban-doc-ca-so": {
+  "t": "ノート全体の鑑定を書く",
+  "h": "c9c08f4c"
+ },
+ "js.nm.xoa-khoi-so": {
+  "t": "ノートから削除",
+  "h": "4ba4a755"
+ },
+ "js.nm.xoa-la-so-nay-khoi-so": {
+  "t": "この命盤をノートから削除しますか？",
+  "h": "d9231d4e"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " ・開くとお支払いのうえ、すぐにお読みいただけます。",
   "h": "9a6023cd"
@@ -10738,6 +10974,130 @@
  "nguoikhac.xem-nguoi-khac": {
   "t": "別の人を見る",
   "h": "a058d2f4"
+ },
+ "nm.ban-do-ca-nhom": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>グループ全体の<br>マップ</span>",
+  "h": "682f4a1b"
+ },
+ "nm.ban-doc-nay-phac-hoa-tu": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> この鑑定は、紫微斗数の命盤のデータに、先人が残した研究の経験を組み合わせて描いたものです。あくまで参考としてお読みください。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> これは<b>人に合わせて仕事を割り振る</b>ための枠組みであり、人事評価の採点表ではありません。ノートに入っている方々はここにいないため、本鑑定は<b>誰かの順位づけ、健康、個人的なお金、家庭の事情はあえて読まず</b>、<b>人の入れ替えも勧めません</b>。性格に良し悪しはなく、ある仕事に合うか合わないかがあるだけです。",
+  "h": "9a54fb99"
+ },
+ "nm.ban-dung-o-dau-trong-nhom": {
+  "t": "<span class=\"res-block-title\">グループの中でのあなたの立ち位置</span>",
+  "h": "e37f7177"
+ },
+ "nm.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>サンプル鑑定書</b><span>サンプル命盤の「人脈ノート」フル版PDFをダウンロードして、実際の内容を先にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nhan-mach.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "37e05c5a"
+ },
+ "nm.cac-cap-trong-nhom": {
+  "t": "<span class=\"res-block-title\">グループ内のペア</span>",
+  "h": "1f22e684"
+ },
+ "nm.cap-can-de-y": {
+  "t": "<span class=\"res-block-title\">注意したいペア</span>",
+  "h": "2fbe6792"
+ },
+ "nm.cap-de-giam-chan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>ぶつかりやすい<br>ペア</span>",
+  "h": "81f490fb"
+ },
+ "nm.cho-trong-cua-nhom": {
+  "t": "<span class=\"res-block-title\">グループに足りないところ</span>",
+  "h": "96c373bb"
+ },
+ "nm.chon-lai": {
+  "t": "選び直す",
+  "h": "25ee067e"
+ },
+ "nm.chon-nguoi-trong-so": {
+  "t": "ノートから人を選ぶ",
+  "h": "fb10fef6"
+ },
+ "nm.co-la-so-cua-ban-thi": {
+  "t": "あなた自身の命盤があれば、鑑定に<b>「グループの中でのあなたの立ち位置」</b>の項目が加わります — 誰とぶつかりやすく、誰を補えるか。",
+  "h": "883457f9"
+ },
+ "nm.da-doc-truoc-do": {
+  "t": "<span class=\"res-block-title\">以前に読んだ内容</span>",
+  "h": "073f164b"
+ },
+ "nm.doc-ca-so-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"users\"></span><b id=\"btnGoLabel\">ノート全体を読む →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 両)</span></small>",
+  "h": "708b8f51"
+ },
+ "nm.dua-ca-doi-hoac-danh-sach": {
+  "t": "チーム全員や顧客リストをひとつにまとめましょう：このグループに足りないタイプは何か、誰と誰がぶつかりやすいか、今週は誰から会うべきか。",
+  "h": "6afc2255"
+ },
+ "nm.goi-la": {
+  "t": "呼び名",
+  "h": "1e3d72e2"
+ },
+ "nm.lam-gi-tuan-nay": {
+  "t": "<span class=\"res-block-title\">今週やること</span>",
+  "h": "5b333d8e"
+ },
+ "nm.luu-vao-so": {
+  "t": "ノートに保存",
+  "h": "e88b1df6"
+ },
+ "nm.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 両)</span>",
+  "h": "110df12a"
+ },
+ "nm.nhom-nay-hinh-gi": {
+  "t": "<span class=\"res-block-title\">このグループはどんな姿か</span>",
+  "h": "f51250a4"
+ },
+ "nm.sep-hung-chi-lan-khach-a": {
+  "t": "上司のフン、ランさん、顧客A…",
+  "h": "503be7e7"
+ },
+ "nm.so-nhan-mach": {
+  "t": "人脈ノート",
+  "h": "17e83429"
+ },
+ "nm.so-nhan-mach-doc-ca-nhom": {
+  "t": "<b>人脈ノート</b><span>一人ずつではなく、グループ全体をまとめて読む</span>",
+  "h": "3b36ced2"
+ },
+ "nm.so-nhan-mach-tu-vi-minh": {
+  "t": "人脈ノート — 明宝紫微斗数",
+  "h": "d9d679ab"
+ },
+ "nm.them-la-so-cua-chinh-ban": {
+  "t": "あなた自身の命盤を追加（任意）",
+  "h": "2423d794"
+ },
+ "nm.them-nguoi-vao-so": {
+  "t": "＋ ノートに人を追加",
+  "h": "364e14c5"
+ },
+ "nm.them-ten-ngay-sinh-va-gioi": {
+  "t": "各メンバーの名前、生年月日、性別をノートに追加して、グループ全体を一度に分析します。",
+  "h": "7e27671a"
+ },
+ "nm.thu-tu-goi-y-tiep-can": {
+  "t": "<span class=\"res-block-title\">声をかける順番の提案</span>",
+  "h": "d0842a6c"
+ },
+ "nm.trong-mot-doi-nhom-ai-hop": {
+  "t": "チームの中で誰と誰が合い、誰と誰がぶつかりやすいかは、問題が起きてからようやく見えてくることが多いものです。各メンバーの生年月日を追加すると、チームの配置を組み直すための人材マップが届きます。",
+  "h": "09e8b31f"
+ },
+ "nm.tung-nguoi": {
+  "t": "<span class=\"res-block-title\">一人ずつ</span>",
+  "h": "d587410c"
+ },
+ "nm.viec-nen-lam-tuan-nay": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>今週<br>やること</span>",
+  "h": "7343e7f5"
+ },
+ "nm.xep-theo-van-nam-cua-tung": {
+  "t": "<b>一人ひとりの年運</b>の順に並べています — 良い年にいる人のほうが、新しい話を切り出しやすいからです。これは重要度の順位では<b>ありません</b>。",
+  "h": "cc8d076f"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 収集する情報",

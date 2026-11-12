@@ -4899,6 +4899,242 @@
   "t": "<summary>再看 ",
   "h": "c5afdcd1"
  },
+ "js.nm.ban-be": {
+  "t": "朋友",
+  "h": "159fe485"
+ },
+ "js.nm.ban-doc-nhom": {
+  "t": "群體解讀",
+  "h": "fb21922c"
+ },
+ "js.nm.ban-doi": {
+  "t": "另一半",
+  "h": "08ebb385"
+ },
+ "js.nm.ban-nay-doc-tu-full": {
+  "t": "本解讀讀取了依您輸入的 {n} 份命盤所排出的 <b>{tong} 筆資料</b>——各宮中安置的 {sao} 顆星、{cc} 種格局、{dv} 個大運階段。沒有任何一步是猜的：任何一個人的出生資料改動一個細節，上面整張表都會跟著變。",
+  "h": "87d23b00"
+ },
+ "js.nm.bu-nhau": {
+  "t": "互補",
+  "h": "909aca10"
+ },
+ "js.nm.can-dang-nhap-de-luu-vao": {
+  "t": "需要登入才能存入簿中。",
+  "h": "5d26d852"
+ },
+ "js.nm.can-it-nhat-2": {
+  "t": " ——至少需要 2 人。",
+  "h": "724525c8"
+ },
+ "js.nm.cap-duoi": {
+  "t": "部屬",
+  "h": "4c2caab8"
+ },
+ "js.nm.cat-sat": {
+  "t": "吉−煞 ",
+  "h": "ba23fbfb"
+ },
+ "js.nm.cha-me": {
+  "t": "父母",
+  "h": "efc7bb83"
+ },
+ "js.nm.chon-it-nhat-2-nguoi-trong": {
+  "t": "請從簿中至少選出 2 人，才能讀整個群體。",
+  "h": "49d52946"
+ },
+ "js.nm.chua-cham-van-nam": {
+  "t": " ——年運尚未評分",
+  "h": "e73fd33a"
+ },
+ "js.nm.chua-chon-ai": {
+  "t": "尚未選擇任何人。",
+  "h": "21f52574"
+ },
+ "js.nm.chua-luu-duoc": {
+  "t": "無法儲存。",
+  "h": "0fe9713c"
+ },
+ "js.nm.chua-luu-duoc-kiem-tra-dang": {
+  "t": "無法儲存——請檢查登入狀態。",
+  "h": "08d31926"
+ },
+ "js.nm.co-nguoi-trong-so-thieu-ngay": {
+  "t": "簿中有人缺少出生日期——請重新選擇。",
+  "h": "6e0349ce"
+ },
+ "js.nm.con-cai": {
+  "t": "子女",
+  "h": "eb70b34b"
+ },
+ "js.nm.dang-chon": {
+  "t": "已選 ",
+  "h": "9795c6eb"
+ },
+ "js.nm.dat-ten-goi-de-con-phan": {
+  "t": "請取一個稱呼，才能在簿中分辨。",
+  "h": "689ee850"
+ },
+ "js.nm.day-la-ban-doc-n-nguoi": {
+  "t": "這是您簿中 **{n} 人**的解讀。想更深入詢問哪一位？",
+  "h": "2c925bdc"
+ },
+ "js.nm.de-giam-chan": {
+  "t": "容易踩線",
+  "h": "3cd381b5"
+ },
+ "js.nm.doi-co-du-bon-kieu": {
+  "t": "團隊四種類型齊全。",
+  "h": "16d74569"
+ },
+ "js.nm.doi-dang-thieu-kieu-ds": {
+  "t": "團隊缺少的類型：{ds}",
+  "h": "60efbac2"
+ },
+ "js.nm.doi-tac-khach": {
+  "t": "合作夥伴／客戶",
+  "h": "7e407353"
+ },
+ "js.nm.dong-nghiep": {
+  "t": "同事",
+  "h": "d8e2bdd8"
+ },
+ "js.nm.khong-ai-kieu": {
+  "t": "沒有人屬於此類型：",
+  "h": "18a19cc7"
+ },
+ "js.nm.khong-the-ket-noi-vui-long": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.nm.khung-dai-van": {
+  "t": " · 大運區間 ",
+  "h": "0beb874f"
+ },
+ "js.nm.khung-dai-van-dlx0": {
+  "t": "大運區間 ",
+  "h": "06be9124"
+ },
+ "js.nm.kieu": {
+  "t": " · 類型 ",
+  "h": "6d81ffdf"
+ },
+ "js.nm.la-so-cua-ban": {
+  "t": "您的命盤：",
+  "h": "0202ce58"
+ },
+ "js.nm.lap-la-so-tung-nguoi": {
+  "t": "逐一排出每個人的命盤",
+  "h": "a94af28e"
+ },
+ "js.nm.loi": {
+  "t": "錯誤 ",
+  "h": "1b80116b"
+ },
+ "js.nm.loi-8d72": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.nm.moi-luot-doc-toi-da-8": {
+  "t": "每次最多讀 8 人——再多的話，解讀就變成通訊錄了。",
+  "h": "e35f50af"
+ },
+ "js.nm.moi-luot-doc-toi-da-8-l7vo": {
+  "t": "每次最多讀 8 人。",
+  "h": "12b66f54"
+ },
+ "js.nm.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.nm.nen-tim-them": {
+  "t": "建議再找：",
+  "h": "b500e6d6"
+ },
+ "js.nm.nen-tim-them-kieu-ten": {
+  "t": "建議再找的類型：{ten}",
+  "h": "22272ef1"
+ },
+ "js.nm.nguoi": {
+  "t": " 人",
+  "h": "e4c8f1aa"
+ },
+ "js.nm.nguoi-kgnv": {
+  "t": " 人 — ",
+  "h": "b0f59658"
+ },
+ "js.nm.nhap-du-ngay-thang-nam-sinh": {
+  "t": "請完整輸入出生年月日。",
+  "h": "370f8e82"
+ },
+ "js.nm.nhom-dang-thieu-chat-gi-ai": {
+  "t": "這個組缺少什麼特質，又是誰在扛？",
+  "h": "760f9c41"
+ },
+ "js.nm.nhom-n-nguoi": {
+  "t": "這個組共 {n} 人。",
+  "h": "8c677b9d"
+ },
+ "js.nm.nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.nm.phan-kieu-do-cho-trong-cua": {
+  "t": "分類型並找出組內的空缺",
+  "h": "338c1abe"
+ },
+ "js.nm.qua-nua-nhom-la-kieu": {
+  "t": "超過半數的人屬於此類型：",
+  "h": "5c247c71"
+ },
+ "js.nm.sep-cap-tren": {
+  "t": "上司／長官",
+  "h": "976d7a60"
+ },
+ "js.nm.so-dang-trong-bam-them-nguoi": {
+  "t": "簿中目前是空的。請按下方的<b>＋ 新增人物到簿中</b>，至少加入 2 人——上司、同事、部屬或客戶。需要登入，簿才會依帳號儲存。",
+  "h": "564308fe"
+ },
+ "js.nm.so-nhan-mach-doc-nhom-n": {
+  "t": "人脈簿——讀 {n} 人的群體",
+  "h": "08a560d8"
+ },
+ "js.nm.toi-da-8": {
+  "t": " ——最多 8 人。",
+  "h": "0bccf420"
+ },
+ "js.nm.tuan-nay-nen-gap-ai-truoc": {
+  "t": "這週該先見誰，又該怎麼開口？",
+  "h": "9337d347"
+ },
+ "js.nm.van-nam": {
+  "t": " · 年運 ",
+  "h": "357d4194"
+ },
+ "js.nm.van-nam-1z56": {
+  "t": " ——年運 ",
+  "h": "12429204"
+ },
+ "js.nm.vi-sao-hai-nguoi-do-de-giam": {
+  "t": "為什麼那兩個人容易踩線？",
+  "h": "9fbac3bc"
+ },
+ "js.nm.viec-sap-toi-nen-giao-cho-ai": {
+  "t": "接下來的事該交給這個組裡的誰？",
+  "h": "a25cdab3"
+ },
+ "js.nm.viet-ban-doc-ca-so": {
+  "t": "撰寫整本簿的解讀",
+  "h": "c9c08f4c"
+ },
+ "js.nm.xoa-khoi-so": {
+  "t": "從簿中移除",
+  "h": "4ba4a755"
+ },
+ "js.nm.xoa-la-so-nay-khoi-so": {
+  "t": "要把這份命盤從簿中移除嗎？",
+  "h": "d9231d4e"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 點開即付款並立即閱讀，",
   "h": "9a6023cd"
@@ -10738,6 +10974,130 @@
  "nguoikhac.xem-nguoi-khac": {
   "t": "查看另一個人",
   "h": "a058d2f4"
+ },
+ "nm.ban-do-ca-nhom": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>整組<br>人脈地圖</span>",
+  "h": "682f4a1b"
+ },
+ "nm.ban-doc-nay-phac-hoa-tu": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 本解讀依據紫微斗數命盤中的資料，並結合前人留下的研究經驗描繪而成，僅供參考。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 這是一個<b>讓事情安排得適合每個人</b>的框架，不是人事考核的評分表。簿中的人不在這裡，因此本解讀刻意<b>不替任何人排名，不談他們的健康、個人財務或家庭私事</b>，也<b>不建議換人</b>。個性沒有好壞，只有適合或不適合某件事。",
+  "h": "9a54fb99"
+ },
+ "nm.ban-dung-o-dau-trong-nhom": {
+  "t": "<span class=\"res-block-title\">您在組內的位置</span>",
+  "h": "e37f7177"
+ },
+ "nm.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>範例解讀報告</b><span>下載範例命盤的「人脈簿」完整 PDF，先預覽真實內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nhan-mach.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
+  "h": "37e05c5a"
+ },
+ "nm.cac-cap-trong-nhom": {
+  "t": "<span class=\"res-block-title\">組內的各對組合</span>",
+  "h": "1f22e684"
+ },
+ "nm.cap-can-de-y": {
+  "t": "<span class=\"res-block-title\">需要留意的組合</span>",
+  "h": "2fbe6792"
+ },
+ "nm.cap-de-giam-chan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>容易<br>踩線的組合</span>",
+  "h": "81f490fb"
+ },
+ "nm.cho-trong-cua-nhom": {
+  "t": "<span class=\"res-block-title\">組內的空缺</span>",
+  "h": "96c373bb"
+ },
+ "nm.chon-lai": {
+  "t": "重新選擇",
+  "h": "25ee067e"
+ },
+ "nm.chon-nguoi-trong-so": {
+  "t": "從簿中選人",
+  "h": "fb10fef6"
+ },
+ "nm.co-la-so-cua-ban-thi": {
+  "t": "若有您自己的命盤，解讀會多出<b>「您在組內的位置」</b>一節——您容易和誰起衝突、又能補足誰。",
+  "h": "883457f9"
+ },
+ "nm.da-doc-truoc-do": {
+  "t": "<span class=\"res-block-title\">先前讀過的內容</span>",
+  "h": "073f164b"
+ },
+ "nm.doc-ca-so-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"users\"></span><b id=\"btnGoLabel\">讀整本簿 →</b></span> <small>費用 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 兩)</span></small>",
+  "h": "708b8f51"
+ },
+ "nm.dua-ca-doi-hoac-danh-sach": {
+  "t": "把整個團隊或客戶名單放在一起：這個組缺少哪種類型、誰跟誰容易踩線、這週該先見誰。",
+  "h": "6afc2255"
+ },
+ "nm.goi-la": {
+  "t": "稱呼",
+  "h": "1e3d72e2"
+ },
+ "nm.lam-gi-tuan-nay": {
+  "t": "<span class=\"res-block-title\">本週該做的事</span>",
+  "h": "5b333d8e"
+ },
+ "nm.luu-vao-so": {
+  "t": "存入簿中",
+  "h": "e88b1df6"
+ },
+ "nm.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 兩)</span>",
+  "h": "110df12a"
+ },
+ "nm.nhom-nay-hinh-gi": {
+  "t": "<span class=\"res-block-title\">這個組是什麼樣貌</span>",
+  "h": "f51250a4"
+ },
+ "nm.sep-hung-chi-lan-khach-a": {
+  "t": "興主管、蘭姐、客戶 A…",
+  "h": "503be7e7"
+ },
+ "nm.so-nhan-mach": {
+  "t": "人脈簿",
+  "h": "17e83429"
+ },
+ "nm.so-nhan-mach-doc-ca-nhom": {
+  "t": "<b>人脈簿</b><span>一次讀整個群體，而不是一個一個看</span>",
+  "h": "3b36ced2"
+ },
+ "nm.so-nhan-mach-tu-vi-minh": {
+  "t": "人脈簿——明寶紫微斗數",
+  "h": "d9d679ab"
+ },
+ "nm.them-la-so-cua-chinh-ban": {
+  "t": "加入您自己的命盤（非必填）",
+  "h": "2423d794"
+ },
+ "nm.them-nguoi-vao-so": {
+  "t": "＋ 新增人物到簿中",
+  "h": "364e14c5"
+ },
+ "nm.them-ten-ngay-sinh-va-gioi": {
+  "t": "把每位成員的姓名、出生日期與性別加入簿中，一次分析整個群體。",
+  "h": "7e27671a"
+ },
+ "nm.thu-tu-goi-y-tiep-can": {
+  "t": "<span class=\"res-block-title\">建議的接觸順序</span>",
+  "h": "d0842a6c"
+ },
+ "nm.trong-mot-doi-nhom-ai-hop": {
+  "t": "在一個團隊裡，誰跟誰合得來、誰跟誰容易起衝突，往往要事情發生後才看得出來。加入每位成員的出生日期，就能得到人員地圖，用來重新安排陣容。",
+  "h": "09e8b31f"
+ },
+ "nm.tung-nguoi": {
+  "t": "<span class=\"res-block-title\">每個人</span>",
+  "h": "d587410c"
+ },
+ "nm.viec-nen-lam-tuan-nay": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>本週<br>該做的事</span>",
+  "h": "7343e7f5"
+ },
+ "nm.xep-theo-van-nam-cua-tung": {
+  "t": "依<b>每個人的年運</b>排序——處於順遂之年的人，比較容易談新事情。這<b>不是</b>重要程度的排名。",
+  "h": "cc8d076f"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 我們蒐集的資料",

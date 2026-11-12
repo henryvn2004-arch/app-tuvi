@@ -4899,6 +4899,242 @@
   "t": "<summary>再看 ",
   "h": "c5afdcd1"
  },
+ "js.nm.ban-be": {
+  "t": "朋友",
+  "h": "159fe485"
+ },
+ "js.nm.ban-doc-nhom": {
+  "t": "群体解读",
+  "h": "fb21922c"
+ },
+ "js.nm.ban-doi": {
+  "t": "另一半",
+  "h": "08ebb385"
+ },
+ "js.nm.ban-nay-doc-tu-full": {
+  "t": "本解读读取了依您输入的 {n} 份命盘所排出的 <b>{tong} 笔数据</b>——各宫中安置的 {sao} 颗星、{cc} 种格局、{dv} 个大运阶段。没有任何一步是猜的：任何一个人的出生数据改动一个细节，上面整张表都会跟着变。",
+  "h": "87d23b00"
+ },
+ "js.nm.bu-nhau": {
+  "t": "互补",
+  "h": "909aca10"
+ },
+ "js.nm.can-dang-nhap-de-luu-vao": {
+  "t": "需要登录才能存入簿中。",
+  "h": "5d26d852"
+ },
+ "js.nm.can-it-nhat-2": {
+  "t": " ——至少需要 2 人。",
+  "h": "724525c8"
+ },
+ "js.nm.cap-duoi": {
+  "t": "部属",
+  "h": "4c2caab8"
+ },
+ "js.nm.cat-sat": {
+  "t": "吉−煞 ",
+  "h": "ba23fbfb"
+ },
+ "js.nm.cha-me": {
+  "t": "父母",
+  "h": "efc7bb83"
+ },
+ "js.nm.chon-it-nhat-2-nguoi-trong": {
+  "t": "请从簿中至少选出 2 人，才能读整个群体。",
+  "h": "49d52946"
+ },
+ "js.nm.chua-cham-van-nam": {
+  "t": " ——年运尚未评分",
+  "h": "e73fd33a"
+ },
+ "js.nm.chua-chon-ai": {
+  "t": "尚未选择任何人。",
+  "h": "21f52574"
+ },
+ "js.nm.chua-luu-duoc": {
+  "t": "无法保存。",
+  "h": "0fe9713c"
+ },
+ "js.nm.chua-luu-duoc-kiem-tra-dang": {
+  "t": "无法保存——请检查登录状态。",
+  "h": "08d31926"
+ },
+ "js.nm.co-nguoi-trong-so-thieu-ngay": {
+  "t": "簿中有人缺少出生日期——请重新选择。",
+  "h": "6e0349ce"
+ },
+ "js.nm.con-cai": {
+  "t": "子女",
+  "h": "eb70b34b"
+ },
+ "js.nm.dang-chon": {
+  "t": "已选 ",
+  "h": "9795c6eb"
+ },
+ "js.nm.dat-ten-goi-de-con-phan": {
+  "t": "请取一个称呼，才能在簿中分辨。",
+  "h": "689ee850"
+ },
+ "js.nm.day-la-ban-doc-n-nguoi": {
+  "t": "这是您簿中 **{n} 人**的解读。想更深入询问哪一位？",
+  "h": "2c925bdc"
+ },
+ "js.nm.de-giam-chan": {
+  "t": "容易踩线",
+  "h": "3cd381b5"
+ },
+ "js.nm.doi-co-du-bon-kieu": {
+  "t": "团队四种类型齐全。",
+  "h": "16d74569"
+ },
+ "js.nm.doi-dang-thieu-kieu-ds": {
+  "t": "团队缺少的类型：{ds}",
+  "h": "60efbac2"
+ },
+ "js.nm.doi-tac-khach": {
+  "t": "合作伙伴／客户",
+  "h": "7e407353"
+ },
+ "js.nm.dong-nghiep": {
+  "t": "同事",
+  "h": "d8e2bdd8"
+ },
+ "js.nm.khong-ai-kieu": {
+  "t": "没有人属于此类型：",
+  "h": "18a19cc7"
+ },
+ "js.nm.khong-the-ket-noi-vui-long": {
+  "t": "无法连接，请再试一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.nm.khung-dai-van": {
+  "t": " · 大运区间 ",
+  "h": "0beb874f"
+ },
+ "js.nm.khung-dai-van-dlx0": {
+  "t": "大运区间 ",
+  "h": "06be9124"
+ },
+ "js.nm.kieu": {
+  "t": " · 类型 ",
+  "h": "6d81ffdf"
+ },
+ "js.nm.la-so-cua-ban": {
+  "t": "您的命盘：",
+  "h": "0202ce58"
+ },
+ "js.nm.lap-la-so-tung-nguoi": {
+  "t": "逐一排出每个人的命盘",
+  "h": "a94af28e"
+ },
+ "js.nm.loi": {
+  "t": "错误 ",
+  "h": "1b80116b"
+ },
+ "js.nm.loi-8d72": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.nm.moi-luot-doc-toi-da-8": {
+  "t": "每次最多读 8 人——再多的话，解读就变成通信录了。",
+  "h": "e35f50af"
+ },
+ "js.nm.moi-luot-doc-toi-da-8-l7vo": {
+  "t": "每次最多读 8 人。",
+  "h": "12b66f54"
+ },
+ "js.nm.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.nm.nen-tim-them": {
+  "t": "建议再找：",
+  "h": "b500e6d6"
+ },
+ "js.nm.nen-tim-them-kieu-ten": {
+  "t": "建议再找的类型：{ten}",
+  "h": "22272ef1"
+ },
+ "js.nm.nguoi": {
+  "t": " 人",
+  "h": "e4c8f1aa"
+ },
+ "js.nm.nguoi-kgnv": {
+  "t": " 人 — ",
+  "h": "b0f59658"
+ },
+ "js.nm.nhap-du-ngay-thang-nam-sinh": {
+  "t": "请完整输入出生年月日。",
+  "h": "370f8e82"
+ },
+ "js.nm.nhom-dang-thieu-chat-gi-ai": {
+  "t": "这个组缺少什么特质，又是谁在扛？",
+  "h": "760f9c41"
+ },
+ "js.nm.nhom-n-nguoi": {
+  "t": "这个组共 {n} 人。",
+  "h": "8c677b9d"
+ },
+ "js.nm.nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.nm.phan-kieu-do-cho-trong-cua": {
+  "t": "分类型并找出组内的空缺",
+  "h": "338c1abe"
+ },
+ "js.nm.qua-nua-nhom-la-kieu": {
+  "t": "超过半数的人属于此类型：",
+  "h": "5c247c71"
+ },
+ "js.nm.sep-cap-tren": {
+  "t": "上司／长官",
+  "h": "976d7a60"
+ },
+ "js.nm.so-dang-trong-bam-them-nguoi": {
+  "t": "簿中目前是空的。请按下方的<b>＋ 添加人物到簿中</b>，至少加入 2 人——上司、同事、部属或客户。需要登录，簿才会依帐号保存。",
+  "h": "564308fe"
+ },
+ "js.nm.so-nhan-mach-doc-nhom-n": {
+  "t": "人脉簿——读 {n} 人的群体",
+  "h": "08a560d8"
+ },
+ "js.nm.toi-da-8": {
+  "t": " ——最多 8 人。",
+  "h": "0bccf420"
+ },
+ "js.nm.tuan-nay-nen-gap-ai-truoc": {
+  "t": "这周该先见谁，又该怎么开口？",
+  "h": "9337d347"
+ },
+ "js.nm.van-nam": {
+  "t": " · 年运 ",
+  "h": "357d4194"
+ },
+ "js.nm.van-nam-1z56": {
+  "t": " ——年运 ",
+  "h": "12429204"
+ },
+ "js.nm.vi-sao-hai-nguoi-do-de-giam": {
+  "t": "为什么那两个人容易踩线？",
+  "h": "9fbac3bc"
+ },
+ "js.nm.viec-sap-toi-nen-giao-cho-ai": {
+  "t": "接下来的事该交给这个组里的谁？",
+  "h": "a25cdab3"
+ },
+ "js.nm.viet-ban-doc-ca-so": {
+  "t": "撰写整本簿的解读",
+  "h": "c9c08f4c"
+ },
+ "js.nm.xoa-khoi-so": {
+  "t": "从簿中移除",
+  "h": "4ba4a755"
+ },
+ "js.nm.xoa-la-so-nay-khoi-so": {
+  "t": "要把这份命盘从簿中移除吗？",
+  "h": "d9231d4e"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 点开即付款并立即阅读，",
   "h": "9a6023cd"
@@ -10738,6 +10974,130 @@
  "nguoikhac.xem-nguoi-khac": {
   "t": "查看另一个人",
   "h": "a058d2f4"
+ },
+ "nm.ban-do-ca-nhom": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>整组<br>人脉地图</span>",
+  "h": "682f4a1b"
+ },
+ "nm.ban-doc-nay-phac-hoa-tu": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 本解读依据紫微斗数命盘中的数据，并结合前人留下的研究经验描绘而成，仅供参考。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 这是一个<b>让事情安排得适合每个人</b>的框架，不是人事考核的评分表。簿中的人不在这里，因此本解读刻意<b>不替任何人排名，不谈他们的健康、个人财务或家庭私事</b>，也<b>不建议换人</b>。个性没有好坏，只有适合或不适合某件事。",
+  "h": "9a54fb99"
+ },
+ "nm.ban-dung-o-dau-trong-nhom": {
+  "t": "<span class=\"res-block-title\">您在组内的位置</span>",
+  "h": "e37f7177"
+ },
+ "nm.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>范例解读报告</b><span>下载范例命盘的「人脉簿」完整 PDF，先预览真实内容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nhan-mach.pdf\" target=\"_blank\" rel=\"noopener\">下载 PDF →</a>",
+  "h": "37e05c5a"
+ },
+ "nm.cac-cap-trong-nhom": {
+  "t": "<span class=\"res-block-title\">组内的各对组合</span>",
+  "h": "1f22e684"
+ },
+ "nm.cap-can-de-y": {
+  "t": "<span class=\"res-block-title\">需要留意的组合</span>",
+  "h": "2fbe6792"
+ },
+ "nm.cap-de-giam-chan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>容易<br>踩线的组合</span>",
+  "h": "81f490fb"
+ },
+ "nm.cho-trong-cua-nhom": {
+  "t": "<span class=\"res-block-title\">组内的空缺</span>",
+  "h": "96c373bb"
+ },
+ "nm.chon-lai": {
+  "t": "重新选择",
+  "h": "25ee067e"
+ },
+ "nm.chon-nguoi-trong-so": {
+  "t": "从簿中选人",
+  "h": "fb10fef6"
+ },
+ "nm.co-la-so-cua-ban-thi": {
+  "t": "若有您自己的命盘，解读会多出<b>「您在组内的位置」</b>一节——您容易和谁起冲突、又能补足谁。",
+  "h": "883457f9"
+ },
+ "nm.da-doc-truoc-do": {
+  "t": "<span class=\"res-block-title\">先前读过的内容</span>",
+  "h": "073f164b"
+ },
+ "nm.doc-ca-so-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"users\"></span><b id=\"btnGoLabel\">读整本簿 →</b></span> <small>费用 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 两)</span></small>",
+  "h": "708b8f51"
+ },
+ "nm.dua-ca-doi-hoac-danh-sach": {
+  "t": "把整个团队或客户名单放在一起：这个组缺少哪种类型、谁跟谁容易踩线、这周该先见谁。",
+  "h": "6afc2255"
+ },
+ "nm.goi-la": {
+  "t": "称呼",
+  "h": "1e3d72e2"
+ },
+ "nm.lam-gi-tuan-nay": {
+  "t": "<span class=\"res-block-title\">本周该做的事</span>",
+  "h": "5b333d8e"
+ },
+ "nm.luu-vao-so": {
+  "t": "存入簿中",
+  "h": "e88b1df6"
+ },
+ "nm.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 两)</span>",
+  "h": "110df12a"
+ },
+ "nm.nhom-nay-hinh-gi": {
+  "t": "<span class=\"res-block-title\">这个组是什么样貌</span>",
+  "h": "f51250a4"
+ },
+ "nm.sep-hung-chi-lan-khach-a": {
+  "t": "兴主管、兰姐、客户 A…",
+  "h": "503be7e7"
+ },
+ "nm.so-nhan-mach": {
+  "t": "人脉簿",
+  "h": "17e83429"
+ },
+ "nm.so-nhan-mach-doc-ca-nhom": {
+  "t": "<b>人脉簿</b><span>一次读整个群体，而不是一个一个看</span>",
+  "h": "3b36ced2"
+ },
+ "nm.so-nhan-mach-tu-vi-minh": {
+  "t": "人脉簿——明宝紫微斗数",
+  "h": "d9d679ab"
+ },
+ "nm.them-la-so-cua-chinh-ban": {
+  "t": "加入您自己的命盘（非必填）",
+  "h": "2423d794"
+ },
+ "nm.them-nguoi-vao-so": {
+  "t": "＋ 添加人物到簿中",
+  "h": "364e14c5"
+ },
+ "nm.them-ten-ngay-sinh-va-gioi": {
+  "t": "把每位成员的姓名、出生日期与性别加入簿中，一次分析整个群体。",
+  "h": "7e27671a"
+ },
+ "nm.thu-tu-goi-y-tiep-can": {
+  "t": "<span class=\"res-block-title\">建议的接触顺序</span>",
+  "h": "d0842a6c"
+ },
+ "nm.trong-mot-doi-nhom-ai-hop": {
+  "t": "在一个团队里，谁跟谁合得来、谁跟谁容易起冲突，往往要事情发生后才看得出来。加入每位成员的出生日期，就能得到人员地图，用来重新安排阵容。",
+  "h": "09e8b31f"
+ },
+ "nm.tung-nguoi": {
+  "t": "<span class=\"res-block-title\">每个人</span>",
+  "h": "d587410c"
+ },
+ "nm.viec-nen-lam-tuan-nay": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>本周<br>该做的事</span>",
+  "h": "7343e7f5"
+ },
+ "nm.xep-theo-van-nam-cua-tung": {
+  "t": "依<b>每个人的年运</b>排序——处于顺遂之年的人，比较容易谈新事情。这<b>不是</b>重要程度的排名。",
+  "h": "cc8d076f"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 我们搜集的数据",

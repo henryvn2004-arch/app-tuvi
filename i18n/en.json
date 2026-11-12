@@ -4899,6 +4899,242 @@
   "t": "<summary>See ",
   "h": "c5afdcd1"
  },
+ "js.nm.ban-be": {
+  "t": "Friend",
+  "h": "159fe485"
+ },
+ "js.nm.ban-doc-nhom": {
+  "t": "group reading",
+  "h": "fb21922c"
+ },
+ "js.nm.ban-doi": {
+  "t": "Partner",
+  "h": "08ebb385"
+ },
+ "js.nm.ban-nay-doc-tu-full": {
+  "t": "This reading draws on <b>{tong} data points</b> built from the {n} charts you entered — {sao} stars placed across the palaces, {cc} patterns, {dv} major-cycle stretches. No step is guesswork: change one detail of anyone's birth data and the whole table above changes with it.",
+  "h": "87d23b00"
+ },
+ "js.nm.bu-nhau": {
+  "t": "complement each other",
+  "h": "909aca10"
+ },
+ "js.nm.can-dang-nhap-de-luu-vao": {
+  "t": "You need to log in to save to the ledger.",
+  "h": "5d26d852"
+ },
+ "js.nm.can-it-nhat-2": {
+  "t": " — at least 2 needed.",
+  "h": "724525c8"
+ },
+ "js.nm.cap-duoi": {
+  "t": "Direct report",
+  "h": "4c2caab8"
+ },
+ "js.nm.cat-sat": {
+  "t": "good−harsh ",
+  "h": "ba23fbfb"
+ },
+ "js.nm.cha-me": {
+  "t": "Parent",
+  "h": "efc7bb83"
+ },
+ "js.nm.chon-it-nhat-2-nguoi-trong": {
+  "t": "Choose at least 2 people from the ledger to read the group.",
+  "h": "49d52946"
+ },
+ "js.nm.chua-cham-van-nam": {
+  "t": " — annual outlook not scored yet",
+  "h": "e73fd33a"
+ },
+ "js.nm.chua-chon-ai": {
+  "t": "No one chosen yet.",
+  "h": "21f52574"
+ },
+ "js.nm.chua-luu-duoc": {
+  "t": "Couldn't save.",
+  "h": "0fe9713c"
+ },
+ "js.nm.chua-luu-duoc-kiem-tra-dang": {
+  "t": "Couldn't save — please check that you're logged in.",
+  "h": "08d31926"
+ },
+ "js.nm.co-nguoi-trong-so-thieu-ngay": {
+  "t": "Someone in the ledger is missing a birth date — please choose again.",
+  "h": "6e0349ce"
+ },
+ "js.nm.con-cai": {
+  "t": "Child",
+  "h": "eb70b34b"
+ },
+ "js.nm.dang-chon": {
+  "t": "Selected: ",
+  "h": "9795c6eb"
+ },
+ "js.nm.dat-ten-goi-de-con-phan": {
+  "t": "Give a name so you can tell them apart in the ledger.",
+  "h": "689ee850"
+ },
+ "js.nm.day-la-ban-doc-n-nguoi": {
+  "t": "This is the reading for the **{n} people** in your ledger. Who would you like to ask about in more depth?",
+  "h": "2c925bdc"
+ },
+ "js.nm.de-giam-chan": {
+  "t": "tread on toes",
+  "h": "3cd381b5"
+ },
+ "js.nm.doi-co-du-bon-kieu": {
+  "t": "The team has all four types.",
+  "h": "16d74569"
+ },
+ "js.nm.doi-dang-thieu-kieu-ds": {
+  "t": "The team lacks these types: {ds}",
+  "h": "60efbac2"
+ },
+ "js.nm.doi-tac-khach": {
+  "t": "Partner / client",
+  "h": "7e407353"
+ },
+ "js.nm.dong-nghiep": {
+  "t": "Colleague",
+  "h": "d8e2bdd8"
+ },
+ "js.nm.khong-ai-kieu": {
+  "t": "No one of type",
+  "h": "18a19cc7"
+ },
+ "js.nm.khong-the-ket-noi-vui-long": {
+  "t": "Couldn't connect. Please try again.",
+  "h": "bf0b6e7b"
+ },
+ "js.nm.khung-dai-van": {
+  "t": " · major-cycle span ",
+  "h": "0beb874f"
+ },
+ "js.nm.khung-dai-van-dlx0": {
+  "t": "major-cycle span ",
+  "h": "06be9124"
+ },
+ "js.nm.kieu": {
+  "t": " · type ",
+  "h": "6d81ffdf"
+ },
+ "js.nm.la-so-cua-ban": {
+  "t": "Your chart: ",
+  "h": "0202ce58"
+ },
+ "js.nm.lap-la-so-tung-nguoi": {
+  "t": "Casting each person's chart",
+  "h": "a94af28e"
+ },
+ "js.nm.loi": {
+  "t": "Error ",
+  "h": "1b80116b"
+ },
+ "js.nm.loi-8d72": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.nm.moi-luot-doc-toi-da-8": {
+  "t": "At most 8 people per reading — more than that and the reading turns into an address book.",
+  "h": "e35f50af"
+ },
+ "js.nm.moi-luot-doc-toi-da-8-l7vo": {
+  "t": "At most 8 people per reading.",
+  "h": "12b66f54"
+ },
+ "js.nm.nam": {
+  "t": "South",
+  "h": "b580ba1b"
+ },
+ "js.nm.nen-tim-them": {
+  "t": "Worth finding more:",
+  "h": "b500e6d6"
+ },
+ "js.nm.nen-tim-them-kieu-ten": {
+  "t": "Type worth finding more of: {ten}",
+  "h": "22272ef1"
+ },
+ "js.nm.nguoi": {
+  "t": " people",
+  "h": "e4c8f1aa"
+ },
+ "js.nm.nguoi-kgnv": {
+  "t": " people — ",
+  "h": "b0f59658"
+ },
+ "js.nm.nhap-du-ngay-thang-nam-sinh": {
+  "t": "Please enter the full birth date.",
+  "h": "370f8e82"
+ },
+ "js.nm.nhom-dang-thieu-chat-gi-ai": {
+  "t": "What is this group missing, and who is carrying it?",
+  "h": "760f9c41"
+ },
+ "js.nm.nhom-n-nguoi": {
+  "t": "A group of {n} people.",
+  "h": "8c677b9d"
+ },
+ "js.nm.nu": {
+  "t": "Female",
+  "h": "feb92ccd"
+ },
+ "js.nm.phan-kieu-do-cho-trong-cua": {
+  "t": "Classifying types and finding the group's gaps",
+  "h": "338c1abe"
+ },
+ "js.nm.qua-nua-nhom-la-kieu": {
+  "t": "More than half the group is type",
+  "h": "5c247c71"
+ },
+ "js.nm.sep-cap-tren": {
+  "t": "Boss / superior",
+  "h": "976d7a60"
+ },
+ "js.nm.so-dang-trong-bam-them-nguoi": {
+  "t": "The ledger is empty. Tap <b>＋ Add a person to the ledger</b> below to add at least 2 people — a boss, colleagues, reports or clients. You need to log in for the ledger to be saved to your account.",
+  "h": "564308fe"
+ },
+ "js.nm.so-nhan-mach-doc-nhom-n": {
+  "t": "Network Ledger — reading a group of {n}",
+  "h": "08a560d8"
+ },
+ "js.nm.toi-da-8": {
+  "t": " — at most 8.",
+  "h": "0bccf420"
+ },
+ "js.nm.tuan-nay-nen-gap-ai-truoc": {
+  "t": "Who should I meet first this week, and how should I open?",
+  "h": "9337d347"
+ },
+ "js.nm.van-nam": {
+  "t": " · annual outlook ",
+  "h": "357d4194"
+ },
+ "js.nm.van-nam-1z56": {
+  "t": " — annual outlook ",
+  "h": "12429204"
+ },
+ "js.nm.vi-sao-hai-nguoi-do-de-giam": {
+  "t": "Why do those two tend to tread on each other's toes?",
+  "h": "9fbac3bc"
+ },
+ "js.nm.viec-sap-toi-nen-giao-cho-ai": {
+  "t": "Who in this group should the upcoming task go to?",
+  "h": "a25cdab3"
+ },
+ "js.nm.viet-ban-doc-ca-so": {
+  "t": "Writing the reading for the whole ledger",
+  "h": "c9c08f4c"
+ },
+ "js.nm.xoa-khoi-so": {
+  "t": "Remove from the ledger",
+  "h": "4ba4a755"
+ },
+ "js.nm.xoa-la-so-nay-khoi-so": {
+  "t": "Remove this chart from the ledger?",
+  "h": "d9231d4e"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · tap to open — you pay and read right away, ",
   "h": "9a6023cd"
@@ -10738,6 +10974,130 @@
  "nguoikhac.xem-nguoi-khac": {
   "t": "View someone else",
   "h": "a058d2f4"
+ },
+ "nm.ban-do-ca-nhom": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>Map of the<br>whole group</span>",
+  "h": "682f4a1b"
+ },
+ "nm.ban-doc-nay-phac-hoa-tu": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> This reading is drawn from the data in the Zi Wei Dou Shu charts, combined with the research experience handed down by earlier masters. Please treat it as a reference.<br><br> <span class=\"ic\" data-icon=\"scale\"></span> This is a framework for <b>assigning work to suit people</b>, not a scorecard for staff. The people in the ledger are not here, so this reading deliberately <b>does not rank anyone, or read their health, private finances or family matters</b>, and <b>does not advise replacing anyone</b>. A personality is neither good nor bad — it either suits or does not suit a task.",
+  "h": "9a54fb99"
+ },
+ "nm.ban-dung-o-dau-trong-nhom": {
+  "t": "<span class=\"res-block-title\">Where You Stand in the Group</span>",
+  "h": "e37f7177"
+ },
+ "nm.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>Sample reading</b><span>Download the full “Network Ledger” PDF for a sample chart to preview the real content.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nhan-mach.pdf\" target=\"_blank\" rel=\"noopener\">Download PDF →</a>",
+  "h": "37e05c5a"
+ },
+ "nm.cac-cap-trong-nhom": {
+  "t": "<span class=\"res-block-title\">Pairs in the Group</span>",
+  "h": "1f22e684"
+ },
+ "nm.cap-can-de-y": {
+  "t": "<span class=\"res-block-title\">Pairs to Watch</span>",
+  "h": "2fbe6792"
+ },
+ "nm.cap-de-giam-chan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>Pairs that<br>tread on toes</span>",
+  "h": "81f490fb"
+ },
+ "nm.cho-trong-cua-nhom": {
+  "t": "<span class=\"res-block-title\">Gaps in the Group</span>",
+  "h": "96c373bb"
+ },
+ "nm.chon-lai": {
+  "t": "Choose again",
+  "h": "25ee067e"
+ },
+ "nm.chon-nguoi-trong-so": {
+  "t": "Choose people from the ledger",
+  "h": "fb10fef6"
+ },
+ "nm.co-la-so-cua-ban-thi": {
+  "t": "If you add your own chart, the reading gains a <b>“Where You Stand in the Group”</b> section — who you tend to clash with and who you can complement.",
+  "h": "883457f9"
+ },
+ "nm.da-doc-truoc-do": {
+  "t": "<span class=\"res-block-title\">Previously Read</span>",
+  "h": "073f164b"
+ },
+ "nm.doc-ca-so-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"users\"></span><b id=\"btnGoLabel\">Read the whole ledger →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> credits)</span></small>",
+  "h": "708b8f51"
+ },
+ "nm.dua-ca-doi-hoac-danh-sach": {
+  "t": "Put a whole team or client list in one place: which type this group lacks, who tends to tread on whose toes, and who to meet first this week.",
+  "h": "6afc2255"
+ },
+ "nm.goi-la": {
+  "t": "Called",
+  "h": "1e3d72e2"
+ },
+ "nm.lam-gi-tuan-nay": {
+  "t": "<span class=\"res-block-title\">What to Do This Week</span>",
+  "h": "5b333d8e"
+ },
+ "nm.luu-vao-so": {
+  "t": "Save to the ledger",
+  "h": "e88b1df6"
+ },
+ "nm.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> credits)</span>",
+  "h": "110df12a"
+ },
+ "nm.nhom-nay-hinh-gi": {
+  "t": "<span class=\"res-block-title\">What This Group Looks Like</span>",
+  "h": "f51250a4"
+ },
+ "nm.sep-hung-chi-lan-khach-a": {
+  "t": "Boss Hung, Ms Lan, client A…",
+  "h": "503be7e7"
+ },
+ "nm.so-nhan-mach": {
+  "t": "Network Ledger",
+  "h": "17e83429"
+ },
+ "nm.so-nhan-mach-doc-ca-nhom": {
+  "t": "<b>Network Ledger</b><span>Read the whole group at once, not person by person</span>",
+  "h": "3b36ced2"
+ },
+ "nm.so-nhan-mach-tu-vi-minh": {
+  "t": "Network Ledger — Minh Bao Zi Wei Dou Shu",
+  "h": "d9d679ab"
+ },
+ "nm.them-la-so-cua-chinh-ban": {
+  "t": "Add your own chart (optional)",
+  "h": "2423d794"
+ },
+ "nm.them-nguoi-vao-so": {
+  "t": "＋ Add a person to the ledger",
+  "h": "364e14c5"
+ },
+ "nm.them-ten-ngay-sinh-va-gioi": {
+  "t": "Add each member's name, birth date and gender to the ledger to analyse the whole group at once.",
+  "h": "7e27671a"
+ },
+ "nm.thu-tu-goi-y-tiep-can": {
+  "t": "<span class=\"res-block-title\">Suggested Order of Approach</span>",
+  "h": "d0842a6c"
+ },
+ "nm.trong-mot-doi-nhom-ai-hop": {
+  "t": "In a team, who gets along with whom and who clashes with whom usually only shows up after it has happened. Add each member's birth date to get a people map for rearranging the line-up.",
+  "h": "09e8b31f"
+ },
+ "nm.tung-nguoi": {
+  "t": "<span class=\"res-block-title\">Each Person</span>",
+  "h": "d587410c"
+ },
+ "nm.viec-nen-lam-tuan-nay": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>What to do<br>this week</span>",
+  "h": "7343e7f5"
+ },
+ "nm.xep-theo-van-nam-cua-tung": {
+  "t": "Ordered by <b>each person's annual outlook</b> — someone in a favourable year is easier to approach with something new. This is <b>not</b> a ranking of importance.",
+  "h": "cc8d076f"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. Information we collect",

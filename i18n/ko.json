@@ -4899,6 +4899,242 @@
   "t": "<summary>명반 항목 ",
   "h": "c5afdcd1"
  },
+ "js.nm.ban-be": {
+  "t": "친구",
+  "h": "159fe485"
+ },
+ "js.nm.ban-doc-nhom": {
+  "t": "그룹 풀이",
+  "h": "fb21922c"
+ },
+ "js.nm.ban-doi": {
+  "t": "배우자·연인",
+  "h": "08ebb385"
+ },
+ "js.nm.ban-nay-doc-tu-full": {
+  "t": "이 풀이는 입력하신 {n}개의 명반으로 세운 <b>{tong}건의 데이터</b>를 읽어 낸 거예요 — 각 궁에 배치된 별 {sao}개, 격국 {cc}개, 대운 구간 {dv}개. 짐작으로 한 단계는 하나도 없어요. 누구든 한 사람의 생년월일시 세부를 하나만 바꿔도 위 표 전체가 달라져요.",
+  "h": "87d23b00"
+ },
+ "js.nm.bu-nhau": {
+  "t": "서로 채워 줌",
+  "h": "909aca10"
+ },
+ "js.nm.can-dang-nhap-de-luu-vao": {
+  "t": "노트에 저장하려면 로그인이 필요해요.",
+  "h": "5d26d852"
+ },
+ "js.nm.can-it-nhat-2": {
+  "t": " — 최소 2명이 필요해요.",
+  "h": "724525c8"
+ },
+ "js.nm.cap-duoi": {
+  "t": "부하 직원",
+  "h": "4c2caab8"
+ },
+ "js.nm.cat-sat": {
+  "t": "길−살 ",
+  "h": "ba23fbfb"
+ },
+ "js.nm.cha-me": {
+  "t": "부모",
+  "h": "efc7bb83"
+ },
+ "js.nm.chon-it-nhat-2-nguoi-trong": {
+  "t": "그룹을 읽으려면 노트에서 최소 2명을 골라 주세요.",
+  "h": "49d52946"
+ },
+ "js.nm.chua-cham-van-nam": {
+  "t": " — 연운은 아직 채점되지 않았어요",
+  "h": "e73fd33a"
+ },
+ "js.nm.chua-chon-ai": {
+  "t": "아직 아무도 고르지 않았어요.",
+  "h": "21f52574"
+ },
+ "js.nm.chua-luu-duoc": {
+  "t": "저장하지 못했어요.",
+  "h": "0fe9713c"
+ },
+ "js.nm.chua-luu-duoc-kiem-tra-dang": {
+  "t": "저장하지 못했어요 — 로그인 상태를 확인해 주세요.",
+  "h": "08d31926"
+ },
+ "js.nm.co-nguoi-trong-so-thieu-ngay": {
+  "t": "노트에 생년월일이 빠진 사람이 있어요 — 다시 골라 주세요.",
+  "h": "6e0349ce"
+ },
+ "js.nm.con-cai": {
+  "t": "자녀",
+  "h": "eb70b34b"
+ },
+ "js.nm.dang-chon": {
+  "t": "선택됨: ",
+  "h": "9795c6eb"
+ },
+ "js.nm.dat-ten-goi-de-con-phan": {
+  "t": "노트에서 구별할 수 있도록 호칭을 정해 주세요.",
+  "h": "689ee850"
+ },
+ "js.nm.day-la-ban-doc-n-nguoi": {
+  "t": "노트에 있는 **{n}명**에 대한 풀이예요. 누구에 대해 더 깊이 묻고 싶나요?",
+  "h": "2c925bdc"
+ },
+ "js.nm.de-giam-chan": {
+  "t": "서로 발을 밟기 쉬움",
+  "h": "3cd381b5"
+ },
+ "js.nm.doi-co-du-bon-kieu": {
+  "t": "팀에 네 가지 유형이 모두 있어요.",
+  "h": "16d74569"
+ },
+ "js.nm.doi-dang-thieu-kieu-ds": {
+  "t": "팀에 부족한 유형: {ds}",
+  "h": "60efbac2"
+ },
+ "js.nm.doi-tac-khach": {
+  "t": "거래처 / 고객",
+  "h": "7e407353"
+ },
+ "js.nm.dong-nghiep": {
+  "t": "동료",
+  "h": "d8e2bdd8"
+ },
+ "js.nm.khong-ai-kieu": {
+  "t": "이 유형인 사람이 없음:",
+  "h": "18a19cc7"
+ },
+ "js.nm.khong-the-ket-noi-vui-long": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.nm.khung-dai-van": {
+  "t": " · 대운 구간 ",
+  "h": "0beb874f"
+ },
+ "js.nm.khung-dai-van-dlx0": {
+  "t": "대운 구간 ",
+  "h": "06be9124"
+ },
+ "js.nm.kieu": {
+  "t": " · 유형 ",
+  "h": "6d81ffdf"
+ },
+ "js.nm.la-so-cua-ban": {
+  "t": "내 명반: ",
+  "h": "0202ce58"
+ },
+ "js.nm.lap-la-so-tung-nguoi": {
+  "t": "한 사람씩 명반을 세우는 중",
+  "h": "a94af28e"
+ },
+ "js.nm.loi": {
+  "t": "오류 ",
+  "h": "1b80116b"
+ },
+ "js.nm.loi-8d72": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.nm.moi-luot-doc-toi-da-8": {
+  "t": "한 번에 읽을 수 있는 사람은 최대 8명이에요 — 그보다 많으면 풀이가 연락처 목록이 돼 버려요.",
+  "h": "e35f50af"
+ },
+ "js.nm.moi-luot-doc-toi-da-8-l7vo": {
+  "t": "한 번에 읽을 수 있는 사람은 최대 8명이에요.",
+  "h": "12b66f54"
+ },
+ "js.nm.nam": {
+  "t": "남",
+  "h": "b580ba1b"
+ },
+ "js.nm.nen-tim-them": {
+  "t": "추가로 찾아볼 유형:",
+  "h": "b500e6d6"
+ },
+ "js.nm.nen-tim-them-kieu-ten": {
+  "t": "추가로 찾아볼 유형: {ten}",
+  "h": "22272ef1"
+ },
+ "js.nm.nguoi": {
+  "t": " 명",
+  "h": "e4c8f1aa"
+ },
+ "js.nm.nguoi-kgnv": {
+  "t": " 명 — ",
+  "h": "b0f59658"
+ },
+ "js.nm.nhap-du-ngay-thang-nam-sinh": {
+  "t": "생년월일을 모두 입력해 주세요.",
+  "h": "370f8e82"
+ },
+ "js.nm.nhom-dang-thieu-chat-gi-ai": {
+  "t": "이 그룹에 부족한 점은 무엇이고, 누가 그걸 떠안고 있나요?",
+  "h": "760f9c41"
+ },
+ "js.nm.nhom-n-nguoi": {
+  "t": "{n}명의 그룹이에요.",
+  "h": "8c677b9d"
+ },
+ "js.nm.nu": {
+  "t": "여",
+  "h": "feb92ccd"
+ },
+ "js.nm.phan-kieu-do-cho-trong-cua": {
+  "t": "유형을 분류하고 그룹의 빈자리를 찾는 중",
+  "h": "338c1abe"
+ },
+ "js.nm.qua-nua-nhom-la-kieu": {
+  "t": "그룹의 절반 넘게가 이 유형:",
+  "h": "5c247c71"
+ },
+ "js.nm.sep-cap-tren": {
+  "t": "상사 / 윗사람",
+  "h": "976d7a60"
+ },
+ "js.nm.so-dang-trong-bam-them-nguoi": {
+  "t": "노트가 비어 있어요. 아래의 <b>＋ 노트에 사람 추가</b>를 눌러 상사, 동료, 부하 직원, 고객 등 최소 2명을 추가하세요. 노트를 계정에 저장하려면 로그인이 필요해요.",
+  "h": "564308fe"
+ },
+ "js.nm.so-nhan-mach-doc-nhom-n": {
+  "t": "인맥 노트 — {n}명 그룹 읽기",
+  "h": "08a560d8"
+ },
+ "js.nm.toi-da-8": {
+  "t": " — 최대 8명.",
+  "h": "0bccf420"
+ },
+ "js.nm.tuan-nay-nen-gap-ai-truoc": {
+  "t": "이번 주에는 누구를 먼저 만나야 하고, 어떻게 말을 꺼내야 할까요?",
+  "h": "9337d347"
+ },
+ "js.nm.van-nam": {
+  "t": " · 연운 ",
+  "h": "357d4194"
+ },
+ "js.nm.van-nam-1z56": {
+  "t": " — 연운 ",
+  "h": "12429204"
+ },
+ "js.nm.vi-sao-hai-nguoi-do-de-giam": {
+  "t": "왜 그 두 사람은 서로 발을 밟기 쉬운가요?",
+  "h": "9fbac3bc"
+ },
+ "js.nm.viec-sap-toi-nen-giao-cho-ai": {
+  "t": "곧 있을 일은 이 그룹에서 누구에게 맡기면 좋을까요?",
+  "h": "a25cdab3"
+ },
+ "js.nm.viet-ban-doc-ca-so": {
+  "t": "노트 전체 풀이를 쓰는 중",
+  "h": "c9c08f4c"
+ },
+ "js.nm.xoa-khoi-so": {
+  "t": "노트에서 삭제",
+  "h": "4ba4a755"
+ },
+ "js.nm.xoa-la-so-nay-khoi-so": {
+  "t": "이 명반을 노트에서 삭제할까요?",
+  "h": "d9231d4e"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 열면 바로 결제되고 곧바로 읽을 수 있어요, ",
   "h": "9a6023cd"
@@ -10738,6 +10974,130 @@
  "nguoikhac.xem-nguoi-khac": {
   "t": "다른 사람 보기",
   "h": "a058d2f4"
+ },
+ "nm.ban-do-ca-nhom": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>그룹 전체<br>지도</span>",
+  "h": "682f4a1b"
+ },
+ "nm.ban-doc-nay-phac-hoa-tu": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 이 풀이는 자미두수 명반의 데이터에 선인들이 남긴 연구 경험을 더해 그려낸 것이에요. 참고용으로만 봐 주세요.<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 이것은 <b>사람에게 맞게 일을 배치하기 위한</b> 틀이지 인사 평가표가 아니에요. 노트에 들어 있는 사람들은 이 자리에 없기 때문에, 이 풀이는 <b>누구의 순위도, 건강도, 개인적인 재물도, 집안 사정도 일부러 읽지 않고</b> <b>사람을 바꾸라고 권하지도 않아요</b>. 성격에는 좋고 나쁨이 없고, 어떤 일에 맞거나 맞지 않을 뿐이에요.",
+  "h": "9a54fb99"
+ },
+ "nm.ban-dung-o-dau-trong-nhom": {
+  "t": "<span class=\"res-block-title\">그룹 안에서 나의 위치</span>",
+  "h": "e37f7177"
+ },
+ "nm.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「인맥 노트」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nhan-mach.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "37e05c5a"
+ },
+ "nm.cac-cap-trong-nhom": {
+  "t": "<span class=\"res-block-title\">그룹 안의 짝들</span>",
+  "h": "1f22e684"
+ },
+ "nm.cap-can-de-y": {
+  "t": "<span class=\"res-block-title\">눈여겨볼 짝</span>",
+  "h": "2fbe6792"
+ },
+ "nm.cap-de-giam-chan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>서로 발을<br>밟기 쉬운 짝</span>",
+  "h": "81f490fb"
+ },
+ "nm.cho-trong-cua-nhom": {
+  "t": "<span class=\"res-block-title\">그룹의 빈자리</span>",
+  "h": "96c373bb"
+ },
+ "nm.chon-lai": {
+  "t": "다시 고르기",
+  "h": "25ee067e"
+ },
+ "nm.chon-nguoi-trong-so": {
+  "t": "노트에서 사람 고르기",
+  "h": "fb10fef6"
+ },
+ "nm.co-la-so-cua-ban-thi": {
+  "t": "내 명반이 있으면 풀이에 <b>“그룹 안에서 나의 위치”</b> 항목이 더해져요 — 누구와 부딪히기 쉽고 누구를 채워 줄 수 있는지예요.",
+  "h": "883457f9"
+ },
+ "nm.da-doc-truoc-do": {
+  "t": "<span class=\"res-block-title\">이전에 읽은 내용</span>",
+  "h": "073f164b"
+ },
+ "nm.doc-ca-so-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"users\"></span><b id=\"btnGoLabel\">노트 전체 읽기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 냥)</span></small>",
+  "h": "708b8f51"
+ },
+ "nm.dua-ca-doi-hoac-danh-sach": {
+  "t": "팀 전체나 고객 목록을 한곳에 모아 보세요: 이 그룹에 부족한 유형은 무엇인지, 누구와 누가 서로 발을 밟기 쉬운지, 이번 주에는 누구를 먼저 만나야 하는지요.",
+  "h": "6afc2255"
+ },
+ "nm.goi-la": {
+  "t": "호칭",
+  "h": "1e3d72e2"
+ },
+ "nm.lam-gi-tuan-nay": {
+  "t": "<span class=\"res-block-title\">이번 주에 할 일</span>",
+  "h": "5b333d8e"
+ },
+ "nm.luu-vao-so": {
+  "t": "노트에 저장",
+  "h": "e88b1df6"
+ },
+ "nm.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> / 회 <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 냥)</span>",
+  "h": "110df12a"
+ },
+ "nm.nhom-nay-hinh-gi": {
+  "t": "<span class=\"res-block-title\">이 그룹은 어떤 모습인가</span>",
+  "h": "f51250a4"
+ },
+ "nm.sep-hung-chi-lan-khach-a": {
+  "t": "훙 상사, 란 씨, 고객 A…",
+  "h": "503be7e7"
+ },
+ "nm.so-nhan-mach": {
+  "t": "인맥 노트",
+  "h": "17e83429"
+ },
+ "nm.so-nhan-mach-doc-ca-nhom": {
+  "t": "<b>인맥 노트</b><span>한 사람씩이 아니라 그룹 전체를 한꺼번에 읽어요</span>",
+  "h": "3b36ced2"
+ },
+ "nm.so-nhan-mach-tu-vi-minh": {
+  "t": "인맥 노트 — 명보 자미두수",
+  "h": "d9d679ab"
+ },
+ "nm.them-la-so-cua-chinh-ban": {
+  "t": "내 명반 추가 (선택)",
+  "h": "2423d794"
+ },
+ "nm.them-nguoi-vao-so": {
+  "t": "+ 노트에 사람 추가",
+  "h": "364e14c5"
+ },
+ "nm.them-ten-ngay-sinh-va-gioi": {
+  "t": "각 구성원의 이름, 생년월일, 성별을 노트에 추가해 그룹 전체를 한꺼번에 분석해요.",
+  "h": "7e27671a"
+ },
+ "nm.thu-tu-goi-y-tiep-can": {
+  "t": "<span class=\"res-block-title\">접근 순서 제안</span>",
+  "h": "d0842a6c"
+ },
+ "nm.trong-mot-doi-nhom-ai-hop": {
+  "t": "팀 안에서 누구와 누가 맞고 누구와 누가 부딪히는지는 일이 터진 뒤에야 드러나는 경우가 많아요. 각 구성원의 생년월일을 추가하면 팀 구성을 다시 짜는 데 쓸 인력 지도를 받을 수 있어요.",
+  "h": "09e8b31f"
+ },
+ "nm.tung-nguoi": {
+  "t": "<span class=\"res-block-title\">한 사람씩</span>",
+  "h": "d587410c"
+ },
+ "nm.viec-nen-lam-tuan-nay": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>이번 주<br>할 일</span>",
+  "h": "7343e7f5"
+ },
+ "nm.xep-theo-van-nam-cua-tung": {
+  "t": "<b>각자의 연운</b> 순으로 나열했어요 — 순조로운 해에 있는 사람이 새 이야기를 꺼내기 더 쉬워요. 이것은 중요도 순위가 <b>아니에요</b>.",
+  "h": "cc8d076f"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 수집하는 정보",
