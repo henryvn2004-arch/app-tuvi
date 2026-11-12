@@ -6747,6 +6747,250 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.thtg.am-luong": {
+  "t": "음량",
+  "h": "71662f1b"
+ },
+ "js.thtg.am-sac-brightness": {
+  "t": "음색(밝기)",
+  "h": "b3cd8066"
+ },
+ "js.thtg.bat-dau-thu-am": {
+  "t": "녹음 시작",
+  "h": "61e33202"
+ },
+ "js.thtg.cao-do-pitch": {
+  "t": "음높이(피치)",
+  "h": "d81eb36d"
+ },
+ "js.thtg.chuan-bi-giong-noi": {
+  "t": "목소리를 준비하세요…",
+  "h": "f2647a9c"
+ },
+ "js.thtg.dang-luan-giai-thanh-tuong": {
+  "t": "성상을 풀이하는 중…",
+  "h": "69e05b82"
+ },
+ "js.thtg.dang-phan-tich-am-thanh": {
+  "t": "음성을 분석하는 중…",
+  "h": "f92bf29f"
+ },
+ "js.thtg.dang-thu-am-hay-doc-doan": {
+  "t": "녹음 중 — 위의 시를 읽어 주세요…",
+  "h": "9798c154"
+ },
+ "js.thtg.dang-xu-ly": {
+  "t": "처리 중…",
+  "h": "e8c1faab"
+ },
+ "js.thtg.do-on-dinh": {
+  "t": "안정도",
+  "h": "86509ba8"
+ },
+ "js.thtg.dung-lai": {
+  "t": "중지",
+  "h": "d313e7b3"
+ },
+ "js.thtg.giong-cua-ban-thuoc-n": {
+  "t": "당신의 목소리는 **{n}**에 속해요. 성상학에 대해 더 궁금한 점이 있나요?",
+  "h": "7f3afd32"
+ },
+ "js.thtg.giong-tram-noi-len-dieu-gi": {
+  "t": "낮은 목소리는 무엇을 뜻하나요?",
+  "h": "93f12462"
+ },
+ "js.thtg.kha-to": {
+  "t": "꽤 큼",
+  "h": "089b5f63"
+ },
+ "js.thtg.khong-co-ket-qua": {
+  "t": "결과가 없어요.",
+  "h": "97fa6f91"
+ },
+ "js.thtg.khong-ro": {
+  "t": "알 수 없음",
+  "h": "988a61b5"
+ },
+ "js.thtg.khong-the-ket-noi": {
+  "t": "연결할 수 없어요.",
+  "h": "3dc4d8cb"
+ },
+ "js.thtg.khong-the-truy-cap-microphone-vui": {
+  "t": "마이크에 접근할 수 없어요. 브라우저에서 권한을 허용해 주세요.",
+  "h": "f9d607c1"
+ },
+ "js.thtg.khong-the-xu-ly-am-thanh-e": {
+  "t": "음성을 처리할 수 없어요: {e}. 다시 시도해 주세요.",
+  "h": "96163473"
+ },
+ "js.thtg.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.thtg.loi-s": {
+  "t": "오류 {s}",
+  "h": "c406c72b"
+ },
+ "js.thtg.ngu-am": {
+  "t": "오음",
+  "h": "bc7a6d13"
+ },
+ "js.thtg.ngu-am-la-gi": {
+  "t": "오음이 뭐예요?",
+  "h": "ed2678e3"
+ },
+ "js.thtg.nguam-hoa": {
+  "t": "화(火)의 소리(치) — 높고 힘 있게 울림",
+  "h": "52199252"
+ },
+ "js.thtg.nguam-hoa-short": {
+  "t": "화(火)의 소리(치)",
+  "h": "eec6e5c6"
+ },
+ "js.thtg.nguam-kim": {
+  "t": "금(金)의 소리(상) — 맑고 멀리 울림",
+  "h": "83770d13"
+ },
+ "js.thtg.nguam-kim-short": {
+  "t": "금(金)의 소리(상)",
+  "h": "1e2fe8d9"
+ },
+ "js.thtg.nguam-moc": {
+  "t": "목(木)의 소리(각) — 둥글고 온후함",
+  "h": "1e8e07c1"
+ },
+ "js.thtg.nguam-moc-short": {
+  "t": "목(木)의 소리(각)",
+  "h": "7835647e"
+ },
+ "js.thtg.nguam-tho": {
+  "t": "토(土)의 소리(궁) — 낮고 따뜻하며 여운이 있음",
+  "h": "dbbc4796"
+ },
+ "js.thtg.nguam-tho-short": {
+  "t": "토(土)의 소리(궁)",
+  "h": "66f33677"
+ },
+ "js.thtg.nguam-thuy": {
+  "t": "수(水)의 소리(우) — 서늘하고 깊음",
+  "h": "48b02063"
+ },
+ "js.thtg.nguam-thuy-short": {
+  "t": "수(水)의 소리(우)",
+  "h": "51405ff5"
+ },
+ "js.thtg.nhan-de-bat-dau-thu-am": {
+  "t": "눌러서 녹음 시작 · 브라우저가 물어보면 마이크 사용을 허용해 주세요",
+  "h": "74465b56"
+ },
+ "js.thtg.nho-yeu": {
+  "t": "작고 약함",
+  "h": "906c7657"
+ },
+ "js.thtg.pitch-cao": {
+  "t": "{p}Hz — 높음",
+  "h": "526966ef"
+ },
+ "js.thtg.pitch-rat-tram": {
+  "t": "{p}Hz — 매우 낮음",
+  "h": "1b80b5d2"
+ },
+ "js.thtg.pitch-tram": {
+  "t": "{p}Hz — 낮음",
+  "h": "110698bc"
+ },
+ "js.thtg.pitch-trung-binh": {
+  "t": "{p}Hz — 보통",
+  "h": "8577f320"
+ },
+ "js.thtg.pitch-trung-cao": {
+  "t": "{p}Hz — 중간 높음",
+  "h": "163ebf39"
+ },
+ "js.thtg.pitch-trung-thap": {
+  "t": "{p}Hz — 중간 낮음",
+  "h": "d249a0d1"
+ },
+ "js.thtg.rat-sang": {
+  "t": "매우 밝음",
+  "h": "17b19c93"
+ },
+ "js.thtg.rate-cham": {
+  "t": "{r} 음절/초 — 느림",
+  "h": "7a1bd431"
+ },
+ "js.thtg.rate-nhanh": {
+  "t": "{r} 음절/초 — 빠름",
+  "h": "3a26518c"
+ },
+ "js.thtg.rate-rat-cham": {
+  "t": "{r} 음절/초 — 매우 느림",
+  "h": "73a0a454"
+ },
+ "js.thtg.rate-rat-nhanh": {
+  "t": "{r} 음절/초 — 매우 빠름",
+  "h": "40972e00"
+ },
+ "js.thtg.rate-vua": {
+  "t": "{r} 음절/초 — 보통",
+  "h": "39d27349"
+ },
+ "js.thtg.sang-trong": {
+  "t": "밝고 맑음",
+  "h": "754176c3"
+ },
+ "js.thtg.thanh-tuong": {
+  "t": "성상",
+  "h": "d47f6d49"
+ },
+ "js.thtg.thanh-tuong-co-doi-duoc-khong": {
+  "t": "성상은 바꿀 수 있나요?",
+  "h": "0bac268d"
+ },
+ "js.thtg.thanh-tuong-cua-toi": {
+  "t": "나의 성상",
+  "h": "f28a25a6"
+ },
+ "js.thtg.thoi-luong": {
+  "t": "소요 시간",
+  "h": "83dc4d39"
+ },
+ "js.thtg.thu-am-hoan-tat-nhan-phan": {
+  "t": "녹음이 끝났어요 — '분석'을 눌러 결과를 확인하세요.",
+  "h": "016efee8"
+ },
+ "js.thtg.thu-am-lai": {
+  "t": "다시 녹음",
+  "h": "e7849d1e"
+ },
+ "js.thtg.thuong-mat-10-15-giay": {
+  "t": "보통 10~15초 걸려요",
+  "h": "56670e66"
+ },
+ "js.thtg.to-co-luc": {
+  "t": "크고 힘 있음",
+  "h": "7514dffb"
+ },
+ "js.thtg.toc-do-noi": {
+  "t": "말하는 속도",
+  "h": "3e47bcf8"
+ },
+ "js.thtg.toi-am": {
+  "t": "어둡고 따뜻함",
+  "h": "4fb70bda"
+ },
+ "js.thtg.trung-binh-am": {
+  "t": "보통이며 따뜻함",
+  "h": "94def005"
+ },
+ "js.thtg.uoc-tinh-n": {
+  "t": "추정: {n}",
+  "h": "9c0f8c8c"
+ },
+ "js.thtg.vua-phai": {
+  "t": "적당함",
+  "h": "e3fa9054"
+ },
  "js.thtp.am-s": {
   "t": " 음절/초",
   "h": "49ed1880"
@@ -8938,6 +9182,106 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "충전했지만 사용하지 않은 냥은 요청해 주시면 사례별로 검토해 드립니다",
   "h": "f410ec3e"
+ },
+ "thtg.1-ghi-am-giong-noi": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">목소리 녹음</span>",
+  "h": "8a655678"
+ },
+ "thtg.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">결제</span>",
+  "h": "67c0b759"
+ },
+ "thtg.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">결과 받기</span>",
+  "h": "5b1e84a0"
+ },
+ "thtg.am-thanh-xu-ly-hoan-toan": {
+  "t": "음성은 브라우저 안에서만 처리돼요. 측정한 지표만(음성 파일은 보내지 않고) 서버로 보내 분석해요.",
+  "h": "cc7cd8bb"
+ },
+ "thtg.bat-dau-thu-am": {
+  "t": "<span id=\"recordIcon\" class=\"ic\" data-icon=\"mic\"></span> <span id=\"recordLabel\">녹음 시작</span>",
+  "h": "2de7804f"
+ },
+ "thtg.cong-cha-nhu-nui-thai-son": {
+  "t": "아버지의 은혜는 <em>태산</em>처럼 높고,<br> 어머니의 은혜는 샘에서 <em>흘러나오는 물</em>처럼 깊어라.<br> 한마음으로 어머니를 모시고 아버지를 공경하여,<br> 효를 다하는 것이 곧 <em>자식의 도리</em>.",
+  "h": "64ec2a8d"
+ },
+ "thtg.do-cao-do-toc-do-am": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>음높이·속도·<br>음색 측정</span>",
+  "h": "0098d11d"
+ },
+ "thtg.doc-cham-rai-tu-nhien-khoang": {
+  "t": "천천히 자연스럽게 읽어 주세요 — 약 10~15초 · 조용한 곳에서, 소음이 없는 환경을 권해요",
+  "h": "d43c4d70"
+ },
+ "thtg.doc-doan-tho-nay-tu-nhien": {
+  "t": "<span class=\"ic\" data-icon=\"book-open\"></span> 이 시를 읽어 주세요(자연스럽고 또렷하게)",
+  "h": "b1041484"
+ },
+ "thtg.doc-thanh-tieng-doan-mau-ben": {
+  "t": "아래 예시 문장을 소리 내어 읽으면 시스템이 녹음해 음향 지표를 측정하고, 오음 고법과 대조해요.",
+  "h": "c7a7cc92"
+ },
+ "thtg.ghi-am-doan-tho-ngan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"mic\"></span><span>짧은 시<br>녹음</span>",
+  "h": "a159c35f"
+ },
+ "thtg.ghi-am-doc-mot-doan-tho": {
+  "t": "짧은 시를 읽어 녹음하면 — 오음 고법(금·목·수·화·토)에 따라 성상을 분석해요.",
+  "h": "93f54a82"
+ },
+ "thtg.ghi-am-giong-noi": {
+  "t": "목소리 녹음",
+  "h": "c4c81682"
+ },
+ "thtg.giong-noi-khong-chi-de-giao": {
+  "t": "목소리는 대화만을 위한 것이 아니에요 — 고법 음성학은 목소리의 바탕만으로 맞는 직업과 피해야 할 직업까지 읽어 내요. 짧게 녹음하면 곧바로 오음 풀이를 받아 볼 수 있어요.",
+  "h": "0b8e2c03"
+ },
+ "thtg.ket-qua-do-luong-giong-noi": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> 목소리 측정 결과",
+  "h": "ccbc07c1"
+ },
+ "thtg.luan-theo-ngu-am-co-phap": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>오음 고법으로<br>풀이</span>",
+  "h": "fb865a03"
+ },
+ "thtg.moi-luot-luong": {
+  "t": "1회 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> 냥)</span>",
+  "h": "c4336d95"
+ },
+ "thtg.ngu-am-co-phap-ma-moi": {
+  "t": "오음 고법 · 마미 · 달마",
+  "h": "a036cb20"
+ },
+ "thtg.nhan-de-bat-dau-thu-am": {
+  "t": "눌러서 녹음 시작 · 브라우저가 물어보면 마이크 사용을 허용해 주세요",
+  "h": "74465b56"
+ },
+ "thtg.phan-tich-thanh-tuong-hoc": {
+  "t": "성상학 분석",
+  "h": "2c14b754"
+ },
+ "thtg.phan-tich-thanh-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">성상 분석하기 →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> 냥)</span> 필요</small>",
+  "h": "04250412"
+ },
+ "thtg.thanh-tuong": {
+  "t": "성상",
+  "h": "d47f6d49"
+ },
+ "thtg.thanh-tuong-tu-vi-minh-bao": {
+  "t": "성상 — 명보 자미두수",
+  "h": "edcb4bcf"
+ },
+ "thtg.thanh-tuong-xem-tuong-giong-noi": {
+  "t": "<b>성상</b><span>오음 고법으로 목소리의 상을 봐요 — <span data-tvp-price=\"thanh-tuong\">…</span> 냥</span>",
+  "h": "247ec01f"
+ },
+ "thtg.thu-am-lai": {
+  "t": "다시 녹음",
+  "h": "e7849d1e"
  },
  "thtp.12-chi-so-am-hoc": {
   "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>12개<br>음향 지표</span>",

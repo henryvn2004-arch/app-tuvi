@@ -6747,6 +6747,250 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.thtg.am-luong": {
+  "t": "Volume",
+  "h": "71662f1b"
+ },
+ "js.thtg.am-sac-brightness": {
+  "t": "Timbre (Brightness)",
+  "h": "b3cd8066"
+ },
+ "js.thtg.bat-dau-thu-am": {
+  "t": "Start recording",
+  "h": "61e33202"
+ },
+ "js.thtg.cao-do-pitch": {
+  "t": "Pitch",
+  "h": "d81eb36d"
+ },
+ "js.thtg.chuan-bi-giong-noi": {
+  "t": "Get your voice ready…",
+  "h": "f2647a9c"
+ },
+ "js.thtg.dang-luan-giai-thanh-tuong": {
+  "t": "Reading your voice…",
+  "h": "69e05b82"
+ },
+ "js.thtg.dang-phan-tich-am-thanh": {
+  "t": "Analyzing the audio…",
+  "h": "f92bf29f"
+ },
+ "js.thtg.dang-thu-am-hay-doc-doan": {
+  "t": "Recording — read the poem above…",
+  "h": "9798c154"
+ },
+ "js.thtg.dang-xu-ly": {
+  "t": "Processing…",
+  "h": "e8c1faab"
+ },
+ "js.thtg.do-on-dinh": {
+  "t": "Stability",
+  "h": "86509ba8"
+ },
+ "js.thtg.dung-lai": {
+  "t": "Stop",
+  "h": "d313e7b3"
+ },
+ "js.thtg.giong-cua-ban-thuoc-n": {
+  "t": "Your voice belongs to **{n}**. Would you like to ask more about voice reading?",
+  "h": "7f3afd32"
+ },
+ "js.thtg.giong-tram-noi-len-dieu-gi": {
+  "t": "What does a deep voice say about a person?",
+  "h": "93f12462"
+ },
+ "js.thtg.kha-to": {
+  "t": "Fairly loud",
+  "h": "089b5f63"
+ },
+ "js.thtg.khong-co-ket-qua": {
+  "t": "No result.",
+  "h": "97fa6f91"
+ },
+ "js.thtg.khong-ro": {
+  "t": "Unclear",
+  "h": "988a61b5"
+ },
+ "js.thtg.khong-the-ket-noi": {
+  "t": "Can't connect.",
+  "h": "3dc4d8cb"
+ },
+ "js.thtg.khong-the-truy-cap-microphone-vui": {
+  "t": "Can't access the microphone. Please allow permission in your browser.",
+  "h": "f9d607c1"
+ },
+ "js.thtg.khong-the-xu-ly-am-thanh-e": {
+  "t": "Can't process the audio: {e}. Please try again.",
+  "h": "96163473"
+ },
+ "js.thtg.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.thtg.loi-s": {
+  "t": "Error {s}",
+  "h": "c406c72b"
+ },
+ "js.thtg.ngu-am": {
+  "t": "Five Tones",
+  "h": "bc7a6d13"
+ },
+ "js.thtg.ngu-am-la-gi": {
+  "t": "What are the Five Tones?",
+  "h": "ed2678e3"
+ },
+ "js.thtg.nguam-hoa": {
+  "t": "Fire voice (Zhi) — high, with a forceful edge",
+  "h": "52199252"
+ },
+ "js.thtg.nguam-hoa-short": {
+  "t": "Fire voice (Zhi)",
+  "h": "eec6e5c6"
+ },
+ "js.thtg.nguam-kim": {
+  "t": "Metal voice (Shang) — clear, carrying far",
+  "h": "83770d13"
+ },
+ "js.thtg.nguam-kim-short": {
+  "t": "Metal voice (Shang)",
+  "h": "1e2fe8d9"
+ },
+ "js.thtg.nguam-moc": {
+  "t": "Wood voice (Jue) — round and kindly",
+  "h": "1e8e07c1"
+ },
+ "js.thtg.nguam-moc-short": {
+  "t": "Wood voice (Jue)",
+  "h": "7835647e"
+ },
+ "js.thtg.nguam-tho": {
+  "t": "Earth voice (Gong) — deep, warm, resonant",
+  "h": "dbbc4796"
+ },
+ "js.thtg.nguam-tho-short": {
+  "t": "Earth voice (Gong)",
+  "h": "66f33677"
+ },
+ "js.thtg.nguam-thuy": {
+  "t": "Water voice (Yu) — cool and deep",
+  "h": "48b02063"
+ },
+ "js.thtg.nguam-thuy-short": {
+  "t": "Water voice (Yu)",
+  "h": "51405ff5"
+ },
+ "js.thtg.nhan-de-bat-dau-thu-am": {
+  "t": "Tap to start recording · Allow microphone access when your browser asks",
+  "h": "74465b56"
+ },
+ "js.thtg.nho-yeu": {
+  "t": "Soft, weak",
+  "h": "906c7657"
+ },
+ "js.thtg.pitch-cao": {
+  "t": "{p}Hz — high",
+  "h": "526966ef"
+ },
+ "js.thtg.pitch-rat-tram": {
+  "t": "{p}Hz — very low",
+  "h": "1b80b5d2"
+ },
+ "js.thtg.pitch-tram": {
+  "t": "{p}Hz — low",
+  "h": "110698bc"
+ },
+ "js.thtg.pitch-trung-binh": {
+  "t": "{p}Hz — average",
+  "h": "8577f320"
+ },
+ "js.thtg.pitch-trung-cao": {
+  "t": "{p}Hz — mid-high",
+  "h": "163ebf39"
+ },
+ "js.thtg.pitch-trung-thap": {
+  "t": "{p}Hz — mid-low",
+  "h": "d249a0d1"
+ },
+ "js.thtg.rat-sang": {
+  "t": "Very bright",
+  "h": "17b19c93"
+ },
+ "js.thtg.rate-cham": {
+  "t": "{r} syl/s — slow",
+  "h": "7a1bd431"
+ },
+ "js.thtg.rate-nhanh": {
+  "t": "{r} syl/s — fast",
+  "h": "3a26518c"
+ },
+ "js.thtg.rate-rat-cham": {
+  "t": "{r} syl/s — very slow",
+  "h": "73a0a454"
+ },
+ "js.thtg.rate-rat-nhanh": {
+  "t": "{r} syl/s — very fast",
+  "h": "40972e00"
+ },
+ "js.thtg.rate-vua": {
+  "t": "{r} syl/s — moderate",
+  "h": "39d27349"
+ },
+ "js.thtg.sang-trong": {
+  "t": "Bright, clear",
+  "h": "754176c3"
+ },
+ "js.thtg.thanh-tuong": {
+  "t": "Voice Reading",
+  "h": "d47f6d49"
+ },
+ "js.thtg.thanh-tuong-co-doi-duoc-khong": {
+  "t": "Can your voice reading change?",
+  "h": "0bac268d"
+ },
+ "js.thtg.thanh-tuong-cua-toi": {
+  "t": "My Voice Reading",
+  "h": "f28a25a6"
+ },
+ "js.thtg.thoi-luong": {
+  "t": "Duration",
+  "h": "83dc4d39"
+ },
+ "js.thtg.thu-am-hoan-tat-nhan-phan": {
+  "t": "Recording complete — press \"Analyze\" to see the result.",
+  "h": "016efee8"
+ },
+ "js.thtg.thu-am-lai": {
+  "t": "Re-record",
+  "h": "e7849d1e"
+ },
+ "js.thtg.thuong-mat-10-15-giay": {
+  "t": "Usually takes 10–15 seconds",
+  "h": "56670e66"
+ },
+ "js.thtg.to-co-luc": {
+  "t": "Loud, strong",
+  "h": "7514dffb"
+ },
+ "js.thtg.toc-do-noi": {
+  "t": "Speaking Rate",
+  "h": "3e47bcf8"
+ },
+ "js.thtg.toi-am": {
+  "t": "Dark, warm",
+  "h": "4fb70bda"
+ },
+ "js.thtg.trung-binh-am": {
+  "t": "Average, warm",
+  "h": "94def005"
+ },
+ "js.thtg.uoc-tinh-n": {
+  "t": "Estimate: {n}",
+  "h": "9c0f8c8c"
+ },
+ "js.thtg.vua-phai": {
+  "t": "Moderate",
+  "h": "e3fa9054"
+ },
  "js.thtp.am-s": {
   "t": " syl/s",
   "h": "49ed1880"
@@ -8938,6 +9182,106 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "For credits you have topped up but not yet used, you may submit a request and we will review it case by case",
   "h": "f410ec3e"
+ },
+ "thtg.1-ghi-am-giong-noi": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Record your voice</span>",
+  "h": "8a655678"
+ },
+ "thtg.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Payment</span>",
+  "h": "67c0b759"
+ },
+ "thtg.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">Get your result</span>",
+  "h": "5b1e84a0"
+ },
+ "thtg.am-thanh-xu-ly-hoan-toan": {
+  "t": "Audio is processed entirely in your browser. Only the measured metrics (never the audio file) are sent to the server for analysis.",
+  "h": "cc7cd8bb"
+ },
+ "thtg.bat-dau-thu-am": {
+  "t": "<span id=\"recordIcon\" class=\"ic\" data-icon=\"mic\"></span> <span id=\"recordLabel\">Start recording</span>",
+  "h": "2de7804f"
+ },
+ "thtg.cong-cha-nhu-nui-thai-son": {
+  "t": "A father's love is like Mount <em>Tai</em>,<br> a mother's love, like water <em>flowing from the source</em>.<br> Serve your mother and honor your father with one heart,<br> for fulfilling filial duty is the true <em>way of a child</em>.",
+  "h": "64ec2a8d"
+ },
+ "thtg.do-cao-do-toc-do-am": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>Measures pitch,<br>pace and timbre</span>",
+  "h": "0098d11d"
+ },
+ "thtg.doc-cham-rai-tu-nhien-khoang": {
+  "t": "Read slowly and naturally — about 10–15 seconds · Best in a quiet place with no background noise",
+  "h": "d43c4d70"
+ },
+ "thtg.doc-doan-tho-nay-tu-nhien": {
+  "t": "<span class=\"ic\" data-icon=\"book-open\"></span> Read this poem aloud (naturally, clearly)",
+  "h": "b1041484"
+ },
+ "thtg.doc-thanh-tieng-doan-mau-ben": {
+  "t": "Read the sample below aloud so the system can record and measure your acoustic metrics, then compare them with the classical Five Tones.",
+  "h": "c7a7cc92"
+ },
+ "thtg.ghi-am-doan-tho-ngan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"mic\"></span><span>Record<br>a short poem</span>",
+  "h": "a159c35f"
+ },
+ "thtg.ghi-am-doc-mot-doan-tho": {
+  "t": "Record yourself reading a short poem — the system analyzes your voice by the classical Five Tones: Metal, Wood, Water, Fire, Earth.",
+  "h": "93f54a82"
+ },
+ "thtg.ghi-am-giong-noi": {
+  "t": "Record Your Voice",
+  "h": "c4c81682"
+ },
+ "thtg.giong-noi-khong-chi-de-giao": {
+  "t": "Your voice isn't only for talking — the classical science of sound can read which careers suit you and which to avoid from the very quality of your voice. Record a short passage and get your Five Tones reading right away.",
+  "h": "0b8e2c03"
+ },
+ "thtg.ket-qua-do-luong-giong-noi": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> Voice measurement results",
+  "h": "ccbc07c1"
+ },
+ "thtg.luan-theo-ngu-am-co-phap": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>Read by the<br>classical Five Tones</span>",
+  "h": "fb865a03"
+ },
+ "thtg.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> credits)</span>",
+  "h": "c4336d95"
+ },
+ "thtg.ngu-am-co-phap-ma-moi": {
+  "t": "Classical Five Tones · Ma Mei · Da Mo",
+  "h": "a036cb20"
+ },
+ "thtg.nhan-de-bat-dau-thu-am": {
+  "t": "Tap to start recording · Allow microphone access when your browser asks",
+  "h": "74465b56"
+ },
+ "thtg.phan-tich-thanh-tuong-hoc": {
+  "t": "Voice Reading Analysis",
+  "h": "2c14b754"
+ },
+ "thtg.phan-tich-thanh-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">Analyze My Voice →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> credits)</span></small>",
+  "h": "04250412"
+ },
+ "thtg.thanh-tuong": {
+  "t": "Voice Reading",
+  "h": "d47f6d49"
+ },
+ "thtg.thanh-tuong-tu-vi-minh-bao": {
+  "t": "Voice Reading — Minh Bao Zi Wei Dou Shu",
+  "h": "edcb4bcf"
+ },
+ "thtg.thanh-tuong-xem-tuong-giong-noi": {
+  "t": "<b>Voice Reading</b><span>Read the character of your voice by the classical Five Tones — <span data-tvp-price=\"thanh-tuong\">…</span> credits</span>",
+  "h": "247ec01f"
+ },
+ "thtg.thu-am-lai": {
+  "t": "Re-record",
+  "h": "e7849d1e"
  },
  "thtp.12-chi-so-am-hoc": {
   "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>12 acoustic<br>metrics</span>",

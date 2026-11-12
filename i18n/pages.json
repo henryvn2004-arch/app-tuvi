@@ -487,6 +487,47 @@
    "nav"
   ]
  },
+ "/app/thanh-tuong": {
+  "file": "app-thanh-tuong.html",
+  "keys": [
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "luangiai.chuyen-khoan-qua-qr-ngan-hang",
+   "luangiai.mua-goi-de-nhan-nhieu-uu",
+   "thtg.1-ghi-am-giong-noi",
+   "thtg.2-thanh-toan",
+   "thtg.3-nhan-ket-qua",
+   "thtg.am-thanh-xu-ly-hoan-toan",
+   "thtg.bat-dau-thu-am",
+   "thtg.cong-cha-nhu-nui-thai-son",
+   "thtg.do-cao-do-toc-do-am",
+   "thtg.doc-cham-rai-tu-nhien-khoang",
+   "thtg.doc-doan-tho-nay-tu-nhien",
+   "thtg.doc-thanh-tieng-doan-mau-ben",
+   "thtg.ghi-am-doan-tho-ngan",
+   "thtg.ghi-am-doc-mot-doan-tho",
+   "thtg.ghi-am-giong-noi",
+   "thtg.giong-noi-khong-chi-de-giao",
+   "thtg.ket-qua-do-luong-giong-noi",
+   "thtg.luan-theo-ngu-am-co-phap",
+   "thtg.moi-luot-luong",
+   "thtg.ngu-am-co-phap-ma-moi",
+   "thtg.nhan-de-bat-dau-thu-am",
+   "thtg.phan-tich-thanh-tuong-hoc",
+   "thtg.phan-tich-thanh-tuong-ton-luong",
+   "thtg.thanh-tuong",
+   "thtg.thanh-tuong-tu-vi-minh-bao",
+   "thtg.thanh-tuong-xem-tuong-giong-noi",
+   "thtg.thu-am-lai",
+   "thtp.chua-muon-ghi-am-ban-co",
+   "thtp.ngu-am-tuong-phap-la-mot",
+   "thtp.xem-ban-mau"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/thanh-tuong-pro": {
   "file": "app-thanh-tuong-pro.html",
   "keys": [

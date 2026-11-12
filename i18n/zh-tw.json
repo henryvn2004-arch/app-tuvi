@@ -6747,6 +6747,250 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.thtg.am-luong": {
+  "t": "音量",
+  "h": "71662f1b"
+ },
+ "js.thtg.am-sac-brightness": {
+  "t": "音色（明亮度）",
+  "h": "b3cd8066"
+ },
+ "js.thtg.bat-dau-thu-am": {
+  "t": "開始錄音",
+  "h": "61e33202"
+ },
+ "js.thtg.cao-do-pitch": {
+  "t": "音高（Pitch）",
+  "h": "d81eb36d"
+ },
+ "js.thtg.chuan-bi-giong-noi": {
+  "t": "請準備好嗓音…",
+  "h": "f2647a9c"
+ },
+ "js.thtg.dang-luan-giai-thanh-tuong": {
+  "t": "正在解讀聲相…",
+  "h": "69e05b82"
+ },
+ "js.thtg.dang-phan-tich-am-thanh": {
+  "t": "正在分析聲音…",
+  "h": "f92bf29f"
+ },
+ "js.thtg.dang-thu-am-hay-doc-doan": {
+  "t": "錄音中——請朗讀上方的詩句…",
+  "h": "9798c154"
+ },
+ "js.thtg.dang-xu-ly": {
+  "t": "處理中…",
+  "h": "e8c1faab"
+ },
+ "js.thtg.do-on-dinh": {
+  "t": "穩定度",
+  "h": "86509ba8"
+ },
+ "js.thtg.dung-lai": {
+  "t": "停止",
+  "h": "d313e7b3"
+ },
+ "js.thtg.giong-cua-ban-thuoc-n": {
+  "t": "您的聲音屬於 **{n}**。想進一步了解聲相學嗎？",
+  "h": "7f3afd32"
+ },
+ "js.thtg.giong-tram-noi-len-dieu-gi": {
+  "t": "低沉的聲音代表什麼？",
+  "h": "93f12462"
+ },
+ "js.thtg.kha-to": {
+  "t": "偏大",
+  "h": "089b5f63"
+ },
+ "js.thtg.khong-co-ket-qua": {
+  "t": "沒有結果。",
+  "h": "97fa6f91"
+ },
+ "js.thtg.khong-ro": {
+  "t": "不明",
+  "h": "988a61b5"
+ },
+ "js.thtg.khong-the-ket-noi": {
+  "t": "無法連線。",
+  "h": "3dc4d8cb"
+ },
+ "js.thtg.khong-the-truy-cap-microphone-vui": {
+  "t": "無法使用麥克風。請在瀏覽器中允許權限。",
+  "h": "f9d607c1"
+ },
+ "js.thtg.khong-the-xu-ly-am-thanh-e": {
+  "t": "無法處理聲音：{e}。請再試一次。",
+  "h": "96163473"
+ },
+ "js.thtg.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.thtg.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.thtg.ngu-am": {
+  "t": "五音",
+  "h": "bc7a6d13"
+ },
+ "js.thtg.ngu-am-la-gi": {
+  "t": "什麼是五音？",
+  "h": "ed2678e3"
+ },
+ "js.thtg.nguam-hoa": {
+  "t": "火聲（徵）——高亢有力",
+  "h": "52199252"
+ },
+ "js.thtg.nguam-hoa-short": {
+  "t": "火聲（徵）",
+  "h": "eec6e5c6"
+ },
+ "js.thtg.nguam-kim": {
+  "t": "金聲（商）——清亮悠遠",
+  "h": "83770d13"
+ },
+ "js.thtg.nguam-kim-short": {
+  "t": "金聲（商）",
+  "h": "1e2fe8d9"
+ },
+ "js.thtg.nguam-moc": {
+  "t": "木聲（角）——圓潤敦厚",
+  "h": "1e8e07c1"
+ },
+ "js.thtg.nguam-moc-short": {
+  "t": "木聲（角）",
+  "h": "7835647e"
+ },
+ "js.thtg.nguam-tho": {
+  "t": "土聲（宮）——低沉溫厚，餘音悠長",
+  "h": "dbbc4796"
+ },
+ "js.thtg.nguam-tho-short": {
+  "t": "土聲（宮）",
+  "h": "66f33677"
+ },
+ "js.thtg.nguam-thuy": {
+  "t": "水聲（羽）——清冷深邃",
+  "h": "48b02063"
+ },
+ "js.thtg.nguam-thuy-short": {
+  "t": "水聲（羽）",
+  "h": "51405ff5"
+ },
+ "js.thtg.nhan-de-bat-dau-thu-am": {
+  "t": "點擊開始錄音 · 瀏覽器詢問時請允許使用麥克風",
+  "h": "74465b56"
+ },
+ "js.thtg.nho-yeu": {
+  "t": "小而弱",
+  "h": "906c7657"
+ },
+ "js.thtg.pitch-cao": {
+  "t": "{p}Hz——高",
+  "h": "526966ef"
+ },
+ "js.thtg.pitch-rat-tram": {
+  "t": "{p}Hz——極低沉",
+  "h": "1b80b5d2"
+ },
+ "js.thtg.pitch-tram": {
+  "t": "{p}Hz——低沉",
+  "h": "110698bc"
+ },
+ "js.thtg.pitch-trung-binh": {
+  "t": "{p}Hz——中等",
+  "h": "8577f320"
+ },
+ "js.thtg.pitch-trung-cao": {
+  "t": "{p}Hz——中高",
+  "h": "163ebf39"
+ },
+ "js.thtg.pitch-trung-thap": {
+  "t": "{p}Hz——中低",
+  "h": "d249a0d1"
+ },
+ "js.thtg.rat-sang": {
+  "t": "非常明亮",
+  "h": "17b19c93"
+ },
+ "js.thtg.rate-cham": {
+  "t": "{r} 音節/秒——慢",
+  "h": "7a1bd431"
+ },
+ "js.thtg.rate-nhanh": {
+  "t": "{r} 音節/秒——快",
+  "h": "3a26518c"
+ },
+ "js.thtg.rate-rat-cham": {
+  "t": "{r} 音節/秒——很慢",
+  "h": "73a0a454"
+ },
+ "js.thtg.rate-rat-nhanh": {
+  "t": "{r} 音節/秒——很快",
+  "h": "40972e00"
+ },
+ "js.thtg.rate-vua": {
+  "t": "{r} 音節/秒——適中",
+  "h": "39d27349"
+ },
+ "js.thtg.sang-trong": {
+  "t": "明亮清澈",
+  "h": "754176c3"
+ },
+ "js.thtg.thanh-tuong": {
+  "t": "聲相",
+  "h": "d47f6d49"
+ },
+ "js.thtg.thanh-tuong-co-doi-duoc-khong": {
+  "t": "聲相可以改變嗎？",
+  "h": "0bac268d"
+ },
+ "js.thtg.thanh-tuong-cua-toi": {
+  "t": "我的聲相",
+  "h": "f28a25a6"
+ },
+ "js.thtg.thoi-luong": {
+  "t": "時長",
+  "h": "83dc4d39"
+ },
+ "js.thtg.thu-am-hoan-tat-nhan-phan": {
+  "t": "錄音完成——請點「分析」查看結果。",
+  "h": "016efee8"
+ },
+ "js.thtg.thu-am-lai": {
+  "t": "重新錄音",
+  "h": "e7849d1e"
+ },
+ "js.thtg.thuong-mat-10-15-giay": {
+  "t": "通常需要 10–15 秒",
+  "h": "56670e66"
+ },
+ "js.thtg.to-co-luc": {
+  "t": "大而有力",
+  "h": "7514dffb"
+ },
+ "js.thtg.toc-do-noi": {
+  "t": "語速",
+  "h": "3e47bcf8"
+ },
+ "js.thtg.toi-am": {
+  "t": "偏暗、溫暖",
+  "h": "4fb70bda"
+ },
+ "js.thtg.trung-binh-am": {
+  "t": "中等、溫暖",
+  "h": "94def005"
+ },
+ "js.thtg.uoc-tinh-n": {
+  "t": "推估：{n}",
+  "h": "9c0f8c8c"
+ },
+ "js.thtg.vua-phai": {
+  "t": "適中",
+  "h": "e3fa9054"
+ },
  "js.thtp.am-s": {
   "t": " 音節/秒",
   "h": "49ed1880"
@@ -8938,6 +9182,106 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "對於已儲值但尚未使用的兩，您可提出申請，由我們依個案審酌",
   "h": "f410ec3e"
+ },
+ "thtg.1-ghi-am-giong-noi": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">錄製聲音</span>",
+  "h": "8a655678"
+ },
+ "thtg.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">付款</span>",
+  "h": "67c0b759"
+ },
+ "thtg.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">取得結果</span>",
+  "h": "5b1e84a0"
+ },
+ "thtg.am-thanh-xu-ly-hoan-toan": {
+  "t": "聲音完全在瀏覽器內處理。僅將測得的指標（不傳送音檔）送至伺服器進行分析。",
+  "h": "cc7cd8bb"
+ },
+ "thtg.bat-dau-thu-am": {
+  "t": "<span id=\"recordIcon\" class=\"ic\" data-icon=\"mic\"></span> <span id=\"recordLabel\">開始錄音</span>",
+  "h": "2de7804f"
+ },
+ "thtg.cong-cha-nhu-nui-thai-son": {
+  "t": "父恩如<em>泰山</em>之高，<br> 母恩如源頭<em>流出之水</em>。<br> 一心侍奉母親、敬重父親，<br> 盡了孝道，才是<em>為子之道</em>。",
+  "h": "64ec2a8d"
+ },
+ "thtg.do-cao-do-toc-do-am": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>測量音高、<br>語速、音色</span>",
+  "h": "0098d11d"
+ },
+ "thtg.doc-cham-rai-tu-nhien-khoang": {
+  "t": "請緩慢、自然地朗讀——約 10–15 秒 · 建議在安靜、無噪音的地方進行",
+  "h": "d43c4d70"
+ },
+ "thtg.doc-doan-tho-nay-tu-nhien": {
+  "t": "<span class=\"ic\" data-icon=\"book-open\"></span> 請朗讀這段詩（自然、清晰）",
+  "h": "b1041484"
+ },
+ "thtg.doc-thanh-tieng-doan-mau-ben": {
+  "t": "請朗讀下方範例，系統會錄音並測量聲學指標，與五音古法對照。",
+  "h": "c7a7cc92"
+ },
+ "thtg.ghi-am-doan-tho-ngan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"mic\"></span><span>錄製<br>短詩一段</span>",
+  "h": "a159c35f"
+ },
+ "thtg.ghi-am-doc-mot-doan-tho": {
+  "t": "朗讀一小段詩並錄音——系統依五音古法（金、木、水、火、土）分析聲相。",
+  "h": "93f54a82"
+ },
+ "thtg.ghi-am-giong-noi": {
+  "t": "錄製聲音",
+  "h": "c4c81682"
+ },
+ "thtg.giong-noi-khong-chi-de-giao": {
+  "t": "聲音不只用來溝通——古法聲音學能從您的嗓音本質讀出適合與應避開的行業。錄一小段，立即獲得五音解讀。",
+  "h": "0b8e2c03"
+ },
+ "thtg.ket-qua-do-luong-giong-noi": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> 聲音測量結果",
+  "h": "ccbc07c1"
+ },
+ "thtg.luan-theo-ngu-am-co-phap": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依五音古法<br>解讀</span>",
+  "h": "fb865a03"
+ },
+ "thtg.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> 兩)</span>",
+  "h": "c4336d95"
+ },
+ "thtg.ngu-am-co-phap-ma-moi": {
+  "t": "五音古法 · 馬楣 · 達摩",
+  "h": "a036cb20"
+ },
+ "thtg.nhan-de-bat-dau-thu-am": {
+  "t": "點擊開始錄音 · 瀏覽器詢問時請允許使用麥克風",
+  "h": "74465b56"
+ },
+ "thtg.phan-tich-thanh-tuong-hoc": {
+  "t": "聲相學分析",
+  "h": "2c14b754"
+ },
+ "thtg.phan-tich-thanh-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">分析聲相 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> 兩)</span></small>",
+  "h": "04250412"
+ },
+ "thtg.thanh-tuong": {
+  "t": "聲相",
+  "h": "d47f6d49"
+ },
+ "thtg.thanh-tuong-tu-vi-minh-bao": {
+  "t": "聲相——明寶紫微斗數",
+  "h": "edcb4bcf"
+ },
+ "thtg.thanh-tuong-xem-tuong-giong-noi": {
+  "t": "<b>聲相</b><span>依五音古法看聲音之相——<span data-tvp-price=\"thanh-tuong\">…</span> 兩</span>",
+  "h": "247ec01f"
+ },
+ "thtg.thu-am-lai": {
+  "t": "重新錄音",
+  "h": "e7849d1e"
  },
  "thtp.12-chi-so-am-hoc": {
   "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>12 項<br>聲學指標</span>",

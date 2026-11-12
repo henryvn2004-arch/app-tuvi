@@ -6747,6 +6747,250 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.thtg.am-luong": {
+  "t": "音量",
+  "h": "71662f1b"
+ },
+ "js.thtg.am-sac-brightness": {
+  "t": "音色（明るさ）",
+  "h": "b3cd8066"
+ },
+ "js.thtg.bat-dau-thu-am": {
+  "t": "録音を始める",
+  "h": "61e33202"
+ },
+ "js.thtg.cao-do-pitch": {
+  "t": "音の高さ（ピッチ）",
+  "h": "d81eb36d"
+ },
+ "js.thtg.chuan-bi-giong-noi": {
+  "t": "声の準備をしてください…",
+  "h": "f2647a9c"
+ },
+ "js.thtg.dang-luan-giai-thanh-tuong": {
+  "t": "声相を鑑定しています…",
+  "h": "69e05b82"
+ },
+ "js.thtg.dang-phan-tich-am-thanh": {
+  "t": "音声を分析しています…",
+  "h": "f92bf29f"
+ },
+ "js.thtg.dang-thu-am-hay-doc-doan": {
+  "t": "録音中 — 上の詩を読んでください…",
+  "h": "9798c154"
+ },
+ "js.thtg.dang-xu-ly": {
+  "t": "処理中…",
+  "h": "e8c1faab"
+ },
+ "js.thtg.do-on-dinh": {
+  "t": "安定度",
+  "h": "86509ba8"
+ },
+ "js.thtg.dung-lai": {
+  "t": "停止",
+  "h": "d313e7b3"
+ },
+ "js.thtg.giong-cua-ban-thuoc-n": {
+  "t": "あなたの声は **{n}** に属します。声相学について、さらに質問はありますか？",
+  "h": "7f3afd32"
+ },
+ "js.thtg.giong-tram-noi-len-dieu-gi": {
+  "t": "低い声は何を表しますか？",
+  "h": "93f12462"
+ },
+ "js.thtg.kha-to": {
+  "t": "やや大きい",
+  "h": "089b5f63"
+ },
+ "js.thtg.khong-co-ket-qua": {
+  "t": "結果がありません。",
+  "h": "97fa6f91"
+ },
+ "js.thtg.khong-ro": {
+  "t": "不明",
+  "h": "988a61b5"
+ },
+ "js.thtg.khong-the-ket-noi": {
+  "t": "接続できません。",
+  "h": "3dc4d8cb"
+ },
+ "js.thtg.khong-the-truy-cap-microphone-vui": {
+  "t": "マイクにアクセスできません。ブラウザで許可してください。",
+  "h": "f9d607c1"
+ },
+ "js.thtg.khong-the-xu-ly-am-thanh-e": {
+  "t": "音声を処理できません: {e}。もう一度お試しください。",
+  "h": "96163473"
+ },
+ "js.thtg.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.thtg.loi-s": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.thtg.ngu-am": {
+  "t": "五音",
+  "h": "bc7a6d13"
+ },
+ "js.thtg.ngu-am-la-gi": {
+  "t": "五音とは？",
+  "h": "ed2678e3"
+ },
+ "js.thtg.nguam-hoa": {
+  "t": "火の声（徴）— 高く、力強く響く",
+  "h": "52199252"
+ },
+ "js.thtg.nguam-hoa-short": {
+  "t": "火の声（徴）",
+  "h": "eec6e5c6"
+ },
+ "js.thtg.nguam-kim": {
+  "t": "金の声（商）— 澄んでよく通る",
+  "h": "83770d13"
+ },
+ "js.thtg.nguam-kim-short": {
+  "t": "金の声（商）",
+  "h": "1e2fe8d9"
+ },
+ "js.thtg.nguam-moc": {
+  "t": "木の声（角）— まるく、温厚",
+  "h": "1e8e07c1"
+ },
+ "js.thtg.nguam-moc-short": {
+  "t": "木の声（角）",
+  "h": "7835647e"
+ },
+ "js.thtg.nguam-tho": {
+  "t": "土の声（宮）— 低く温かく、余韻がある",
+  "h": "dbbc4796"
+ },
+ "js.thtg.nguam-tho-short": {
+  "t": "土の声（宮）",
+  "h": "66f33677"
+ },
+ "js.thtg.nguam-thuy": {
+  "t": "水の声（羽）— ひんやりして深い",
+  "h": "48b02063"
+ },
+ "js.thtg.nguam-thuy-short": {
+  "t": "水の声（羽）",
+  "h": "51405ff5"
+ },
+ "js.thtg.nhan-de-bat-dau-thu-am": {
+  "t": "タップして録音を開始 · ブラウザから求められたらマイクの使用を許可してください",
+  "h": "74465b56"
+ },
+ "js.thtg.nho-yeu": {
+  "t": "小さく弱い",
+  "h": "906c7657"
+ },
+ "js.thtg.pitch-cao": {
+  "t": "{p}Hz — 高い",
+  "h": "526966ef"
+ },
+ "js.thtg.pitch-rat-tram": {
+  "t": "{p}Hz — とても低い",
+  "h": "1b80b5d2"
+ },
+ "js.thtg.pitch-tram": {
+  "t": "{p}Hz — 低い",
+  "h": "110698bc"
+ },
+ "js.thtg.pitch-trung-binh": {
+  "t": "{p}Hz — 中程度",
+  "h": "8577f320"
+ },
+ "js.thtg.pitch-trung-cao": {
+  "t": "{p}Hz — やや高い",
+  "h": "163ebf39"
+ },
+ "js.thtg.pitch-trung-thap": {
+  "t": "{p}Hz — やや低い",
+  "h": "d249a0d1"
+ },
+ "js.thtg.rat-sang": {
+  "t": "とても明るい",
+  "h": "17b19c93"
+ },
+ "js.thtg.rate-cham": {
+  "t": "{r} 音節/秒 — 遅い",
+  "h": "7a1bd431"
+ },
+ "js.thtg.rate-nhanh": {
+  "t": "{r} 音節/秒 — 速い",
+  "h": "3a26518c"
+ },
+ "js.thtg.rate-rat-cham": {
+  "t": "{r} 音節/秒 — とても遅い",
+  "h": "73a0a454"
+ },
+ "js.thtg.rate-rat-nhanh": {
+  "t": "{r} 音節/秒 — とても速い",
+  "h": "40972e00"
+ },
+ "js.thtg.rate-vua": {
+  "t": "{r} 音節/秒 — 普通",
+  "h": "39d27349"
+ },
+ "js.thtg.sang-trong": {
+  "t": "明るく澄んでいる",
+  "h": "754176c3"
+ },
+ "js.thtg.thanh-tuong": {
+  "t": "声相",
+  "h": "d47f6d49"
+ },
+ "js.thtg.thanh-tuong-co-doi-duoc-khong": {
+  "t": "声相は変えられますか？",
+  "h": "0bac268d"
+ },
+ "js.thtg.thanh-tuong-cua-toi": {
+  "t": "私の声相",
+  "h": "f28a25a6"
+ },
+ "js.thtg.thoi-luong": {
+  "t": "所要時間",
+  "h": "83dc4d39"
+ },
+ "js.thtg.thu-am-hoan-tat-nhan-phan": {
+  "t": "録音が完了しました — 「分析」を押して結果を見てください。",
+  "h": "016efee8"
+ },
+ "js.thtg.thu-am-lai": {
+  "t": "録り直す",
+  "h": "e7849d1e"
+ },
+ "js.thtg.thuong-mat-10-15-giay": {
+  "t": "通常10〜15秒かかります",
+  "h": "56670e66"
+ },
+ "js.thtg.to-co-luc": {
+  "t": "大きく力強い",
+  "h": "7514dffb"
+ },
+ "js.thtg.toc-do-noi": {
+  "t": "話す速さ",
+  "h": "3e47bcf8"
+ },
+ "js.thtg.toi-am": {
+  "t": "暗く温かい",
+  "h": "4fb70bda"
+ },
+ "js.thtg.trung-binh-am": {
+  "t": "中程度で温かい",
+  "h": "94def005"
+ },
+ "js.thtg.uoc-tinh-n": {
+  "t": "推定: {n}",
+  "h": "9c0f8c8c"
+ },
+ "js.thtg.vua-phai": {
+  "t": "ほどよい",
+  "h": "e3fa9054"
+ },
  "js.thtp.am-s": {
   "t": " 音節/秒",
   "h": "49ed1880"
@@ -8938,6 +9182,106 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "チャージ済みで未使用の両数については、ご請求をいただければ、個別に検討いたします",
   "h": "f410ec3e"
+ },
+ "thtg.1-ghi-am-giong-noi": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">声を録音</span>",
+  "h": "8a655678"
+ },
+ "thtg.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">お支払い</span>",
+  "h": "67c0b759"
+ },
+ "thtg.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">結果を受け取る</span>",
+  "h": "5b1e84a0"
+ },
+ "thtg.am-thanh-xu-ly-hoan-toan": {
+  "t": "音声はブラウザ内だけで処理されます。測定した指標のみ（音声ファイルは送らずに）サーバーへ送信し、分析します。",
+  "h": "cc7cd8bb"
+ },
+ "thtg.bat-dau-thu-am": {
+  "t": "<span id=\"recordIcon\" class=\"ic\" data-icon=\"mic\"></span> <span id=\"recordLabel\">録音を始める</span>",
+  "h": "2de7804f"
+ },
+ "thtg.cong-cha-nhu-nui-thai-son": {
+  "t": "父の恩は<em>泰山</em>のように高く、<br> 母の恩は源から<em>湧き出る水</em>のよう。<br> 心を尽くして母に仕え、父を敬い、<br> 孝の道を全うしてこそ<em>子の道</em>。",
+  "h": "64ec2a8d"
+ },
+ "thtg.do-cao-do-toc-do-am": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>高さ・速さ・<br>音色を測定</span>",
+  "h": "0098d11d"
+ },
+ "thtg.doc-cham-rai-tu-nhien-khoang": {
+  "t": "ゆっくり自然に読んでください — 約10〜15秒 · 静かな場所で、雑音のない環境がおすすめです",
+  "h": "d43c4d70"
+ },
+ "thtg.doc-doan-tho-nay-tu-nhien": {
+  "t": "<span class=\"ic\" data-icon=\"book-open\"></span> この詩を読んでください（自然に、はっきりと）",
+  "h": "b1041484"
+ },
+ "thtg.doc-thanh-tieng-doan-mau-ben": {
+  "t": "下の見本を声に出して読むと、システムが録音して音響指標を測定し、五音の古法と照らし合わせます。",
+  "h": "c7a7cc92"
+ },
+ "thtg.ghi-am-doan-tho-ngan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"mic\"></span><span>短い詩を<br>録音</span>",
+  "h": "a159c35f"
+ },
+ "thtg.ghi-am-doc-mot-doan-tho": {
+  "t": "短い詩を読んで録音するだけ — 五音の古法（金・木・水・火・土）で声相を分析します。",
+  "h": "93f54a82"
+ },
+ "thtg.ghi-am-giong-noi": {
+  "t": "声を録音",
+  "h": "c4c81682"
+ },
+ "thtg.giong-noi-khong-chi-de-giao": {
+  "t": "声は会話のためだけのものではありません — 古法の音声学では、声質そのものから、向いている仕事と避けるべき仕事まで読み取れます。短く録音すれば、すぐに五音の鑑定が届きます。",
+  "h": "0b8e2c03"
+ },
+ "thtg.ket-qua-do-luong-giong-noi": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> 声の測定結果",
+  "h": "ccbc07c1"
+ },
+ "thtg.luan-theo-ngu-am-co-phap": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>五音の古法で<br>鑑定</span>",
+  "h": "fb865a03"
+ },
+ "thtg.moi-luot-luong": {
+  "t": "1回 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> 両)</span>",
+  "h": "c4336d95"
+ },
+ "thtg.ngu-am-co-phap-ma-moi": {
+  "t": "五音の古法 · 馬楣 · 達磨",
+  "h": "a036cb20"
+ },
+ "thtg.nhan-de-bat-dau-thu-am": {
+  "t": "タップして録音を開始 · ブラウザから求められたらマイクの使用を許可してください",
+  "h": "74465b56"
+ },
+ "thtg.phan-tich-thanh-tuong-hoc": {
+  "t": "声相学の分析",
+  "h": "2c14b754"
+ },
+ "thtg.phan-tich-thanh-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">声相を分析する →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> 両)</span> 必要</small>",
+  "h": "04250412"
+ },
+ "thtg.thanh-tuong": {
+  "t": "声相",
+  "h": "d47f6d49"
+ },
+ "thtg.thanh-tuong-tu-vi-minh-bao": {
+  "t": "声相 — 明宝紫微斗数",
+  "h": "edcb4bcf"
+ },
+ "thtg.thanh-tuong-xem-tuong-giong-noi": {
+  "t": "<b>声相</b><span>五音の古法で声の相を読む — <span data-tvp-price=\"thanh-tuong\">…</span> 両</span>",
+  "h": "247ec01f"
+ },
+ "thtg.thu-am-lai": {
+  "t": "録り直す",
+  "h": "e7849d1e"
  },
  "thtp.12-chi-so-am-hoc": {
   "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>12の<br>音響指標</span>",
