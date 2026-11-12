@@ -487,6 +487,54 @@
    "nav"
   ]
  },
+ "/app/nhan-tuong": {
+  "file": "app-nhan-tuong.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "luangiai.chuyen-khoan-qua-qr-ngan-hang",
+   "luangiai.mua-goi-de-nhan-nhieu-uu",
+   "nhtg.anh-chi-gui-toi-may-chu",
+   "nhtg.anh-da-chon",
+   "nhtg.anh-da-chon-oxp5",
+   "nhtg.chua-muon-chup-anh-ban-co",
+   "nhtg.chup",
+   "nhtg.chup-anh",
+   "nhtg.doi-mat-duoc-xem-la-noi",
+   "nhtg.huy",
+   "nhtg.jpg-png-webp-toi-da-5mb",
+   "nhtg.keo-tha-anh-vao-day-hoac",
+   "nhtg.luan-theo-lieu-trang-than-tuong",
+   "nhtg.ma-y-than-tuong-la-mot",
+   "nhtg.ma-y-than-tuong-nhan-phap",
+   "nhtg.mat-da-xac-dinh",
+   "nhtg.mat-phai",
+   "nhtg.mat-trai",
+   "nhtg.mo-camera",
+   "nhtg.moi-luot-luong",
+   "nhtg.nhan-tuong",
+   "nhtg.nhan-tuong-tu-vi-minh-bao",
+   "nhtg.nhan-tuong-xem-tuong-mat-theo",
+   "nhtg.phan-tich-anh-khac",
+   "nhtg.phan-tich-nhan-tuong-hoc",
+   "nhtg.phan-tich-nhan-tuong-ton-luong",
+   "nhtg.tai-anh-hoac-chup-truc-tiep",
+   "nhtg.tai-anh-khuon-mat",
+   "nhtg.tai-anh-len",
+   "nhtg.tai-hoac-chup-anh-mat-he",
+   "nhtg.tai-mot-tam-anh-ro-khuon",
+   "nhtg.tu-zoom-vao-doi-mat",
+   "nhtg.xoa-anh",
+   "thtg.2-thanh-toan",
+   "thtg.3-nhan-ket-qua",
+   "thtp.xem-ban-mau"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/thanh-tuong": {
   "file": "app-thanh-tuong.html",
   "keys": [

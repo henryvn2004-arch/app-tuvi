@@ -2447,6 +2447,118 @@
   "t": "写真で相を見る",
   "h": "24c4d64e"
  },
+ "js.nhtg.anh-mat-noi-len-dieu-gi": {
+  "t": "まなざしは何を表しますか？",
+  "h": "dca0ccee"
+ },
+ "js.nhtg.anh-qua-lon-toi-da-5mb": {
+  "t": "画像が大きすぎます（最大5MB）。",
+  "h": "874f95b2"
+ },
+ "js.nhtg.da-phan-tich-xong-nhan-tuong": {
+  "t": "柳莊神相にもとづく眼相の分析が完了しました。ほかに知りたいことはありますか？",
+  "h": "040562fa"
+ },
+ "js.nhtg.dang-phan-tich-nhan-tuong": {
+  "t": "眼相を分析しています…",
+  "h": "7c6f7d8c"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang": {
+  "t": "MediaPipeで画像から直接測定しました（黒目の位置を上まぶた・下まぶたと比較）。『麻衣神相』にもとづく詳しい意味は、詳細分析に含まれています。",
+  "h": "09bcb88b"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang-si1j": {
+  "t": "MediaPipeで画像から直接測定しました。目の形、神気、そのほかの詳細は、詳細分析に含まれています。",
+  "h": "c13331fd"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang-ymai": {
+  "t": "MediaPipeで画像から直接測定しました。『麻衣神相』にもとづく詳しい意味は、詳細分析に含まれています。",
+  "h": "91c76fe7"
+ },
+ "js.nhtg.duoi-mat-cong-len": {
+  "t": "目尻が上がっている",
+  "h": "eddf4211"
+ },
+ "js.nhtg.duoi-mat-xuoi": {
+  "t": "目尻が下がっている",
+  "h": "8e2e1aeb"
+ },
+ "js.nhtg.goc-duoi-mat-a-d": {
+  "t": "目尻の角度: {a}°（{d}）",
+  "h": "f80c29d1"
+ },
+ "js.nhtg.khong-co-ket-qua": {
+  "t": "結果がありません。",
+  "h": "97fa6f91"
+ },
+ "js.nhtg.khong-doc-duoc-anh-nay-vui": {
+  "t": "この画像を読み込めません — JPGまたはPNGの画像を選んでください。",
+  "h": "32a1faf4"
+ },
+ "js.nhtg.khong-nhan-dien-duoc-mat-ro": {
+  "t": "⚠ 顔をはっきり検出できませんでした。分析は可能ですが、正面から撮った画像をおすすめします。",
+  "h": "8aef3360"
+ },
+ "js.nhtg.khong-the-ket-noi": {
+  "t": "接続できません。",
+  "h": "3dc4d8cb"
+ },
+ "js.nhtg.khong-the-mo-camera": {
+  "t": "カメラを開けません。",
+  "h": "39a33224"
+ },
+ "js.nhtg.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.nhtg.loi-s": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.nhtg.ngang": {
+  "t": "水平",
+  "h": "a704525f"
+ },
+ "js.nhtg.nhan-tuong": {
+  "t": "眼相",
+  "h": "1826b211"
+ },
+ "js.nhtg.nhan-tuong-cua-toi": {
+  "t": "私の目相",
+  "h": "1943cfc5"
+ },
+ "js.nhtg.nhan-tuong-d6ph": {
+  "t": "目相",
+  "h": "1bc89b2e"
+ },
+ "js.nhtg.phuong-nhan-la-gi": {
+  "t": "鳳眼とは？",
+  "h": "9ea5dc8a"
+ },
+ "js.nhtg.tam-bach-nhan-co-y-nghia": {
+  "t": "三白眼にはどんな意味がありますか？",
+  "h": "913d8ad7"
+ },
+ "js.nhtg.thuong-mat-15-20-giay": {
+  "t": "通常15〜20秒かかります",
+  "h": "087173ee"
+ },
+ "js.nhtg.trong-mat-hoi-lech-len-co": {
+  "t": "黒目がやや上寄り — 下三白眼の可能性",
+  "h": "2815a4af"
+ },
+ "js.nhtg.trong-mat-hoi-lech-xuong-co": {
+  "t": "黒目がやや下寄り — 上三白眼の可能性",
+  "h": "165636af"
+ },
+ "js.nhtg.vi-tri-trong-mat-can-doi": {
+  "t": "黒目の位置: バランスが取れている",
+  "h": "e253adf3"
+ },
+ "js.nhtg.vui-long-chon-file-anh": {
+  "t": "画像ファイルを選んでください。",
+  "h": "71a61127"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " ・開くとお支払いのうえ、すぐにお読みいただけます。",
   "h": "9a6023cd"
@@ -8814,6 +8926,130 @@
  "napam.tuoi-hop-ky": {
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>相性の良い年<br>悪い年</span>",
   "h": "9a664cc3"
+ },
+ "nhtg.anh-chi-gui-toi-may-chu": {
+  "t": "画像は分析のためにサーバーへ送るだけで、サーバーには保存しません。正面から、十分な明るさで撮影してください — システムが自動で目の部分にズームします。",
+  "h": "65e7d1ba"
+ },
+ "nhtg.anh-da-chon": {
+  "t": "✓ 画像を選択済み",
+  "h": "c435e239"
+ },
+ "nhtg.anh-da-chon-oxp5": {
+  "t": "画像を選択済み",
+  "h": "d1e5382e"
+ },
+ "nhtg.chua-muon-chup-anh-ban-co": {
+  "t": "<b>まだ撮影したくありませんか？</b><span>先にサンプルを見て、雰囲気を確かめられます。</span>",
+  "h": "70fdc9d9"
+ },
+ "nhtg.chup": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 撮影",
+  "h": "71b3b3cf"
+ },
+ "nhtg.chup-anh": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 撮影する",
+  "h": "f78326e0"
+ },
+ "nhtg.doi-mat-duoc-xem-la-noi": {
+  "t": "伝統的な相学では、目はその人の心のあり方が最もはっきり表れる場所とされます。顔写真をアップロードすると、柳莊神相にもとづき、目の形・まなざし・眉を詳しく鑑定します。",
+  "h": "f0bba1fa"
+ },
+ "nhtg.huy": {
+  "t": "✕ キャンセル",
+  "h": "a46abff1"
+ },
+ "nhtg.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG、PNG、WebP — 最大5MB · 正面から撮影し、両目がはっきり写るように",
+  "h": "79a1629f"
+ },
+ "nhtg.keo-tha-anh-vao-day-hoac": {
+  "t": "ここに画像をドラッグ＆ドロップ、またはクリックして選択",
+  "h": "2ce7b073"
+ },
+ "nhtg.luan-theo-lieu-trang-than-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>柳莊神相に<br>もとづく鑑定</span>",
+  "h": "6ad548df"
+ },
+ "nhtg.ma-y-than-tuong-la-mot": {
+  "t": "『麻衣神相』は、中国で最も有名な人相学の古典のひとつで、三停・五官など顔の各部位から性格と運命を読む方法を体系化しています。『柳莊神相』や『水鏡集』も、あわせて参照されることの多い相学の古典です。",
+  "h": "f21522a3"
+ },
+ "nhtg.ma-y-than-tuong-nhan-phap": {
+  "t": "麻衣神相 · 眼相の古法",
+  "h": "38e14ae2"
+ },
+ "nhtg.mat-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"eye\"></span> 目を検出しました",
+  "h": "b00eb630"
+ },
+ "nhtg.mat-phai": {
+  "t": "右目",
+  "h": "a88c59ed"
+ },
+ "nhtg.mat-trai": {
+  "t": "左目",
+  "h": "34e4f87a"
+ },
+ "nhtg.mo-camera": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> カメラを開く",
+  "h": "dda0b3af"
+ },
+ "nhtg.moi-luot-luong": {
+  "t": "1回 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-tuong\">…</span> 両)</span>",
+  "h": "3c4bc428"
+ },
+ "nhtg.nhan-tuong": {
+  "t": "目相",
+  "h": "1bc89b2e"
+ },
+ "nhtg.nhan-tuong-tu-vi-minh-bao": {
+  "t": "眼相 — 明宝紫微斗数",
+  "h": "beddeaa1"
+ },
+ "nhtg.nhan-tuong-xem-tuong-mat-theo": {
+  "t": "<b>眼相</b><span>古法で目の相を読む — <span data-tvp-price=\"nhan-tuong\">…</span> 両</span>",
+  "h": "f3a91f07"
+ },
+ "nhtg.phan-tich-anh-khac": {
+  "t": "別の画像を分析",
+  "h": "eceede8c"
+ },
+ "nhtg.phan-tich-nhan-tuong-hoc": {
+  "t": "眼相学の分析",
+  "h": "1ed9443b"
+ },
+ "nhtg.phan-tich-nhan-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"eye\"></span><b id=\"analyzeBtnLabel\">眼相を分析する →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"nhan-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-tuong\">…</span> 両)</span> 必要</small>",
+  "h": "1e319aa8"
+ },
+ "nhtg.tai-anh-hoac-chup-truc-tiep": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>画像を選ぶか<br>その場で撮影</span>",
+  "h": "45a94ade"
+ },
+ "nhtg.tai-anh-khuon-mat": {
+  "t": "顔写真をアップロード",
+  "h": "0ce655e6"
+ },
+ "nhtg.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> 画像をアップロード",
+  "h": "c3712e70"
+ },
+ "nhtg.tai-hoac-chup-anh-mat-he": {
+  "t": "顔写真をアップロードまたは撮影 — 『麻衣神相』『柳莊神相』にもとづき、眼相（目）を分析します。",
+  "h": "6b1bb466"
+ },
+ "nhtg.tai-mot-tam-anh-ro-khuon": {
+  "t": "顔がはっきり写った写真、特に目元が見える写真をアップロードしてください。柳莊神相の古法にもとづき、目の形・まなざし・眉・性格を鑑定します。",
+  "h": "030abd5a"
+ },
+ "nhtg.tu-zoom-vao-doi-mat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"eye\"></span><span>目元に<br>自動ズーム</span>",
+  "h": "214dd5e2"
+ },
+ "nhtg.xoa-anh": {
+  "t": "✕ 画像を削除",
+  "h": "36e95d9f"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 収集する情報",

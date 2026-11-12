@@ -2447,6 +2447,118 @@
   "t": "照片看面相",
   "h": "24c4d64e"
  },
+ "js.nhtg.anh-mat-noi-len-dieu-gi": {
+  "t": "眼神代表什么？",
+  "h": "dca0ccee"
+ },
+ "js.nhtg.anh-qua-lon-toi-da-5mb": {
+  "t": "图片过大（最大 5MB）。",
+  "h": "874f95b2"
+ },
+ "js.nhtg.da-phan-tich-xong-nhan-tuong": {
+  "t": "已依柳庄神相完成您的眼相分析。想再了解什么呢？",
+  "h": "040562fa"
+ },
+ "js.nhtg.dang-phan-tich-nhan-tuong": {
+  "t": "正在分析眼相…",
+  "h": "7c6f7d8c"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang": {
+  "t": "以 MediaPipe 直接从图片测得（瞳孔位置相对于上下眼睑）。依《麻衣神相》的完整意涵，收录于深度分析中。",
+  "h": "09bcb88b"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang-si1j": {
+  "t": "以 MediaPipe 直接从图片测得。眼形、神气与其他细节，收录于深度分析中。",
+  "h": "c13331fd"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang-ymai": {
+  "t": "以 MediaPipe 直接从图片测得。依《麻衣神相》的完整意涵，收录于深度分析中。",
+  "h": "91c76fe7"
+ },
+ "js.nhtg.duoi-mat-cong-len": {
+  "t": "眼尾上扬",
+  "h": "eddf4211"
+ },
+ "js.nhtg.duoi-mat-xuoi": {
+  "t": "眼尾下垂",
+  "h": "8e2e1aeb"
+ },
+ "js.nhtg.goc-duoi-mat-a-d": {
+  "t": "眼尾角度：{a}°（{d}）",
+  "h": "f80c29d1"
+ },
+ "js.nhtg.khong-co-ket-qua": {
+  "t": "没有结果。",
+  "h": "97fa6f91"
+ },
+ "js.nhtg.khong-doc-duoc-anh-nay-vui": {
+  "t": "无法读取此图片——请选择 JPG 或 PNG 图片。",
+  "h": "32a1faf4"
+ },
+ "js.nhtg.khong-nhan-dien-duoc-mat-ro": {
+  "t": "⚠ 未能清楚侦测到脸部。仍可进行分析，但建议使用正面的照片。",
+  "h": "8aef3360"
+ },
+ "js.nhtg.khong-the-ket-noi": {
+  "t": "无法连接。",
+  "h": "3dc4d8cb"
+ },
+ "js.nhtg.khong-the-mo-camera": {
+  "t": "无法打开相机。",
+  "h": "39a33224"
+ },
+ "js.nhtg.loi-e": {
+  "t": "错误：{e}",
+  "h": "a7267203"
+ },
+ "js.nhtg.loi-s": {
+  "t": "错误 {s}",
+  "h": "c406c72b"
+ },
+ "js.nhtg.ngang": {
+  "t": "水平",
+  "h": "a704525f"
+ },
+ "js.nhtg.nhan-tuong": {
+  "t": "眼相",
+  "h": "1826b211"
+ },
+ "js.nhtg.nhan-tuong-cua-toi": {
+  "t": "我的眼相",
+  "h": "1943cfc5"
+ },
+ "js.nhtg.nhan-tuong-d6ph": {
+  "t": "眼相",
+  "h": "1bc89b2e"
+ },
+ "js.nhtg.phuong-nhan-la-gi": {
+  "t": "什么是凤眼？",
+  "h": "9ea5dc8a"
+ },
+ "js.nhtg.tam-bach-nhan-co-y-nghia": {
+  "t": "三白眼有什么意义？",
+  "h": "913d8ad7"
+ },
+ "js.nhtg.thuong-mat-15-20-giay": {
+  "t": "通常需要 15–20 秒",
+  "h": "087173ee"
+ },
+ "js.nhtg.trong-mat-hoi-lech-len-co": {
+  "t": "瞳孔略偏上——可能为下三白眼",
+  "h": "2815a4af"
+ },
+ "js.nhtg.trong-mat-hoi-lech-xuong-co": {
+  "t": "瞳孔略偏下——可能为上三白眼",
+  "h": "165636af"
+ },
+ "js.nhtg.vi-tri-trong-mat-can-doi": {
+  "t": "瞳孔位置：均衡",
+  "h": "e253adf3"
+ },
+ "js.nhtg.vui-long-chon-file-anh": {
+  "t": "请选择图片档。",
+  "h": "71a61127"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 点开即付款并立即阅读，",
   "h": "9a6023cd"
@@ -8814,6 +8926,130 @@
  "napam.tuoi-hop-ky": {
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>相合、相克<br>的生肖</span>",
   "h": "9a664cc3"
+ },
+ "nhtg.anh-chi-gui-toi-may-chu": {
+  "t": "图片仅发送至服务器进行分析，不会保存在服务器上。请正面拍摄、光线充足——系统会自动放大眼部区域。",
+  "h": "65e7d1ba"
+ },
+ "nhtg.anh-da-chon": {
+  "t": "✓ 已选择图片",
+  "h": "c435e239"
+ },
+ "nhtg.anh-da-chon-oxp5": {
+  "t": "已选择图片",
+  "h": "d1e5382e"
+ },
+ "nhtg.chua-muon-chup-anh-ban-co": {
+  "t": "<b>还不想拍照吗？</b><span>您可以先看一份范例，预先体验。</span>",
+  "h": "70fdc9d9"
+ },
+ "nhtg.chup": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 拍摄",
+  "h": "71b3b3cf"
+ },
+ "nhtg.chup-anh": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 拍照",
+  "h": "f78326e0"
+ },
+ "nhtg.doi-mat-duoc-xem-la-noi": {
+  "t": "依传统相学，眼睛是最能显露一个人心性的地方。上传脸部照片，依柳庄神相详细解读眼形、眼神与眉毛。",
+  "h": "f0bba1fa"
+ },
+ "nhtg.huy": {
+  "t": "✕ 取消",
+  "h": "a46abff1"
+ },
+ "nhtg.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG、PNG、WebP——最大 5MB · 请正面拍摄，清楚拍到双眼",
+  "h": "79a1629f"
+ },
+ "nhtg.keo-tha-anh-vao-day-hoac": {
+  "t": "将图片拖放到这里，或点击选择",
+  "h": "2ce7b073"
+ },
+ "nhtg.luan-theo-lieu-trang-than-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依柳庄神相<br>解读</span>",
+  "h": "6ad548df"
+ },
+ "nhtg.ma-y-than-tuong-la-mot": {
+  "t": "《麻衣神相》是中国最著名的相学古籍之一，将三停、五官等脸部部位判读性格与命运的方法系统化。《柳庄神相》与《水镜集》则是常被一并对照的相学古籍。",
+  "h": "f21522a3"
+ },
+ "nhtg.ma-y-than-tuong-nhan-phap": {
+  "t": "麻衣神相 · 眼相古法",
+  "h": "38e14ae2"
+ },
+ "nhtg.mat-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"eye\"></span> 已侦测到眼睛",
+  "h": "b00eb630"
+ },
+ "nhtg.mat-phai": {
+  "t": "右眼",
+  "h": "a88c59ed"
+ },
+ "nhtg.mat-trai": {
+  "t": "左眼",
+  "h": "34e4f87a"
+ },
+ "nhtg.mo-camera": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 打开相机",
+  "h": "dda0b3af"
+ },
+ "nhtg.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-tuong\">…</span> 两)</span>",
+  "h": "3c4bc428"
+ },
+ "nhtg.nhan-tuong": {
+  "t": "眼相",
+  "h": "1bc89b2e"
+ },
+ "nhtg.nhan-tuong-tu-vi-minh-bao": {
+  "t": "眼相——明宝紫微斗数",
+  "h": "beddeaa1"
+ },
+ "nhtg.nhan-tuong-xem-tuong-mat-theo": {
+  "t": "<b>眼相</b><span>依古法看眼睛之相——<span data-tvp-price=\"nhan-tuong\">…</span> 两</span>",
+  "h": "f3a91f07"
+ },
+ "nhtg.phan-tich-anh-khac": {
+  "t": "分析其他图片",
+  "h": "eceede8c"
+ },
+ "nhtg.phan-tich-nhan-tuong-hoc": {
+  "t": "眼相学分析",
+  "h": "1ed9443b"
+ },
+ "nhtg.phan-tich-nhan-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"eye\"></span><b id=\"analyzeBtnLabel\">分析眼相 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-tuong\">…</span> 两)</span></small>",
+  "h": "1e319aa8"
+ },
+ "nhtg.tai-anh-hoac-chup-truc-tiep": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>上传图片或<br>直接拍摄</span>",
+  "h": "45a94ade"
+ },
+ "nhtg.tai-anh-khuon-mat": {
+  "t": "上传脸部照片",
+  "h": "0ce655e6"
+ },
+ "nhtg.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> 上传图片",
+  "h": "c3712e70"
+ },
+ "nhtg.tai-hoac-chup-anh-mat-he": {
+  "t": "上传或拍摄脸部照片——系统依《麻衣神相》《柳庄神相》分析眼相（眼睛）。",
+  "h": "6b1bb466"
+ },
+ "nhtg.tai-mot-tam-anh-ro-khuon": {
+  "t": "请上传脸部清晰的照片，特别是能看清眼部的照片。系统依柳庄神相古法，解读眼形、眼神、眉毛与性格。",
+  "h": "030abd5a"
+ },
+ "nhtg.tu-zoom-vao-doi-mat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"eye\"></span><span>自动放大<br>眼部</span>",
+  "h": "214dd5e2"
+ },
+ "nhtg.xoa-anh": {
+  "t": "✕ 删除图片",
+  "h": "36e95d9f"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 我们搜集的数据",

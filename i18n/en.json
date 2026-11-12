@@ -2447,6 +2447,118 @@
   "t": "Face reading from photos",
   "h": "24c4d64e"
  },
+ "js.nhtg.anh-mat-noi-len-dieu-gi": {
+  "t": "What does a person's gaze reveal?",
+  "h": "dca0ccee"
+ },
+ "js.nhtg.anh-qua-lon-toi-da-5mb": {
+  "t": "The image is too large (5MB max).",
+  "h": "874f95b2"
+ },
+ "js.nhtg.da-phan-tich-xong-nhan-tuong": {
+  "t": "Your eye reading is complete, based on the Liu Zhuang Shen Xiang. What else would you like to ask?",
+  "h": "040562fa"
+ },
+ "js.nhtg.dang-phan-tich-nhan-tuong": {
+  "t": "Analyzing your eyes…",
+  "h": "7c6f7d8c"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang": {
+  "t": "Measured directly from the image with MediaPipe (iris position relative to the upper/lower eyelid). The full meaning according to Ma Yi Shen Xiang is in the in-depth analysis.",
+  "h": "09bcb88b"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang-si1j": {
+  "t": "Measured directly from the image with MediaPipe. Eye shape, spirit (shen qi) and other details are in the in-depth analysis.",
+  "h": "c13331fd"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang-ymai": {
+  "t": "Measured directly from the image with MediaPipe. The full meaning according to Ma Yi Shen Xiang is in the in-depth analysis.",
+  "h": "91c76fe7"
+ },
+ "js.nhtg.duoi-mat-cong-len": {
+  "t": "outer corners tilt up",
+  "h": "eddf4211"
+ },
+ "js.nhtg.duoi-mat-xuoi": {
+  "t": "outer corners tilt down",
+  "h": "8e2e1aeb"
+ },
+ "js.nhtg.goc-duoi-mat-a-d": {
+  "t": "Outer-corner angle: {a}° ({d})",
+  "h": "f80c29d1"
+ },
+ "js.nhtg.khong-co-ket-qua": {
+  "t": "No result.",
+  "h": "97fa6f91"
+ },
+ "js.nhtg.khong-doc-duoc-anh-nay-vui": {
+  "t": "Can't read this image — please choose a JPG or PNG image.",
+  "h": "32a1faf4"
+ },
+ "js.nhtg.khong-nhan-dien-duoc-mat-ro": {
+  "t": "⚠ Couldn't clearly detect a face. You can still run the analysis, but a straight-on photo works better.",
+  "h": "8aef3360"
+ },
+ "js.nhtg.khong-the-ket-noi": {
+  "t": "Can't connect.",
+  "h": "3dc4d8cb"
+ },
+ "js.nhtg.khong-the-mo-camera": {
+  "t": "Can't open the camera.",
+  "h": "39a33224"
+ },
+ "js.nhtg.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.nhtg.loi-s": {
+  "t": "Error {s}",
+  "h": "c406c72b"
+ },
+ "js.nhtg.ngang": {
+  "t": "level",
+  "h": "a704525f"
+ },
+ "js.nhtg.nhan-tuong": {
+  "t": "Eye Reading",
+  "h": "1826b211"
+ },
+ "js.nhtg.nhan-tuong-cua-toi": {
+  "t": "My eye reading",
+  "h": "1943cfc5"
+ },
+ "js.nhtg.nhan-tuong-d6ph": {
+  "t": "Eye Reading",
+  "h": "1bc89b2e"
+ },
+ "js.nhtg.phuong-nhan-la-gi": {
+  "t": "What is a phoenix eye?",
+  "h": "9ea5dc8a"
+ },
+ "js.nhtg.tam-bach-nhan-co-y-nghia": {
+  "t": "What do sanpaku eyes mean?",
+  "h": "913d8ad7"
+ },
+ "js.nhtg.thuong-mat-15-20-giay": {
+  "t": "Usually takes 15–20 seconds",
+  "h": "087173ee"
+ },
+ "js.nhtg.trong-mat-hoi-lech-len-co": {
+  "t": "Iris sits slightly high — possibly Lower Sanpaku eyes (Xia San Bai Yan)",
+  "h": "2815a4af"
+ },
+ "js.nhtg.trong-mat-hoi-lech-xuong-co": {
+  "t": "Iris sits slightly low — possibly Upper Sanpaku eyes (Shang San Bai Yan)",
+  "h": "165636af"
+ },
+ "js.nhtg.vi-tri-trong-mat-can-doi": {
+  "t": "Iris position: balanced",
+  "h": "e253adf3"
+ },
+ "js.nhtg.vui-long-chon-file-anh": {
+  "t": "Please choose an image file.",
+  "h": "71a61127"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · tap to open — you pay and read right away, ",
   "h": "9a6023cd"
@@ -8814,6 +8926,130 @@
  "napam.tuoi-hop-ky": {
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>Compatible<br>and clashing years</span>",
   "h": "9a664cc3"
+ },
+ "nhtg.anh-chi-gui-toi-may-chu": {
+  "t": "The photo is only sent to the server for analysis and isn't stored there. Shoot straight on, in good light — the system zooms in on the eye area automatically.",
+  "h": "65e7d1ba"
+ },
+ "nhtg.anh-da-chon": {
+  "t": "✓ Image selected",
+  "h": "c435e239"
+ },
+ "nhtg.anh-da-chon-oxp5": {
+  "t": "Image selected",
+  "h": "d1e5382e"
+ },
+ "nhtg.chua-muon-chup-anh-ban-co": {
+  "t": "<b>Not ready to take a photo?</b><span>You can look at a sample first to get a feel for it.</span>",
+  "h": "70fdc9d9"
+ },
+ "nhtg.chup": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> Capture",
+  "h": "71b3b3cf"
+ },
+ "nhtg.chup-anh": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> Take Photo",
+  "h": "f78326e0"
+ },
+ "nhtg.doi-mat-duoc-xem-la-noi": {
+  "t": "In traditional physiognomy, the eyes are where a person's character shows most clearly. Upload a face photo for a detailed reading of eye shape, gaze and eyebrows according to the Liu Zhuang Shen Xiang.",
+  "h": "f0bba1fa"
+ },
+ "nhtg.huy": {
+  "t": "✕ Cancel",
+  "h": "a46abff1"
+ },
+ "nhtg.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG, PNG, WebP — 5MB max · Shoot straight on, with both eyes clearly visible",
+  "h": "79a1629f"
+ },
+ "nhtg.keo-tha-anh-vao-day-hoac": {
+  "t": "Drag and drop an image here, or click to choose",
+  "h": "2ce7b073"
+ },
+ "nhtg.luan-theo-lieu-trang-than-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>Read by the<br>Liu Zhuang Shen Xiang</span>",
+  "h": "6ad548df"
+ },
+ "nhtg.ma-y-than-tuong-la-mot": {
+  "t": "Ma Yi Shen Xiang is one of the most famous classical texts of Chinese physiognomy, systematizing how to read character and destiny from facial regions such as the Three Zones (San Ting) and the Five Features (Wu Guan). The Liu Zhuang Shen Xiang and the Shui Jing Ji are other classical texts often cross-checked alongside it.",
+  "h": "f21522a3"
+ },
+ "nhtg.ma-y-than-tuong-nhan-phap": {
+  "t": "Ma Yi Shen Xiang · Classical Eye Method",
+  "h": "38e14ae2"
+ },
+ "nhtg.mat-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"eye\"></span> Eyes detected",
+  "h": "b00eb630"
+ },
+ "nhtg.mat-phai": {
+  "t": "Right eye",
+  "h": "a88c59ed"
+ },
+ "nhtg.mat-trai": {
+  "t": "Left eye",
+  "h": "34e4f87a"
+ },
+ "nhtg.mo-camera": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> Open Camera",
+  "h": "dda0b3af"
+ },
+ "nhtg.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nhan-tuong\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-tuong\">…</span> credits)</span>",
+  "h": "3c4bc428"
+ },
+ "nhtg.nhan-tuong": {
+  "t": "Eye Reading",
+  "h": "1bc89b2e"
+ },
+ "nhtg.nhan-tuong-tu-vi-minh-bao": {
+  "t": "Eye Reading — Minh Bao Zi Wei Dou Shu",
+  "h": "beddeaa1"
+ },
+ "nhtg.nhan-tuong-xem-tuong-mat-theo": {
+  "t": "<b>Eye Reading</b><span>Read the eyes by the classical method — <span data-tvp-price=\"nhan-tuong\">…</span> credits</span>",
+  "h": "f3a91f07"
+ },
+ "nhtg.phan-tich-anh-khac": {
+  "t": "Analyze Another Image",
+  "h": "eceede8c"
+ },
+ "nhtg.phan-tich-nhan-tuong-hoc": {
+  "t": "Eye Reading Analysis",
+  "h": "1ed9443b"
+ },
+ "nhtg.phan-tich-nhan-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"eye\"></span><b id=\"analyzeBtnLabel\">Analyze My Eyes →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"nhan-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-tuong\">…</span> credits)</span></small>",
+  "h": "1e319aa8"
+ },
+ "nhtg.tai-anh-hoac-chup-truc-tiep": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>Upload a photo or<br>take one now</span>",
+  "h": "45a94ade"
+ },
+ "nhtg.tai-anh-khuon-mat": {
+  "t": "Upload a face photo",
+  "h": "0ce655e6"
+ },
+ "nhtg.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> Upload Image",
+  "h": "c3712e70"
+ },
+ "nhtg.tai-hoac-chup-anh-mat-he": {
+  "t": "Upload or take a face photo — the system analyzes your eye reading by Ma Yi Shen Xiang and Liu Zhuang Shen Xiang.",
+  "h": "6b1bb466"
+ },
+ "nhtg.tai-mot-tam-anh-ro-khuon": {
+  "t": "Upload a clear photo of your face, especially the eye area. The system reads eye shape, gaze, eyebrows and character by the classical Liu Zhuang Shen Xiang method.",
+  "h": "030abd5a"
+ },
+ "nhtg.tu-zoom-vao-doi-mat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"eye\"></span><span>Auto-zooms<br>on the eyes</span>",
+  "h": "214dd5e2"
+ },
+ "nhtg.xoa-anh": {
+  "t": "✕ Remove image",
+  "h": "36e95d9f"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. Information we collect",
