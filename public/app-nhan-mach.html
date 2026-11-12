@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sổ Nhân Mạch — Tử Vi Minh Bảo</title>
-<meta name="description" content="Đưa cả đội hoặc danh sách khách vào một chỗ: nhóm này thiếu kiểu người nào, ai với ai dễ giẫm chân, tuần này nên gặp ai trước.">
+<title data-i18n="nm.so-nhan-mach-tu-vi-minh">Sổ Nhân Mạch — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:nm.dua-ca-doi-hoac-danh-sach" name="description" content="Đưa cả đội hoặc danh sách khách vào một chỗ: nhóm này thiếu kiểu người nào, ai với ai dễ giẫm chân, tuần này nên gặp ai trước.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -77,10 +77,10 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Sổ Nhân Mạch</b><span>Đọc cả nhóm cùng lúc, không phải từng người</span></div>
+      <div data-i18n="nm.so-nhan-mach-doc-ca-nhom" class="ws-title"><b>Sổ Nhân Mạch</b><span>Đọc cả nhóm cùng lúc, không phải từng người</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Chọn Lại</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="nm.chon-lai" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Chọn Lại</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -94,15 +94,15 @@
         <img class="intro-avatar" src="/tool-avatars/nhan-mach.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Sổ Nhân Mạch</div>
-            <div class="intro-d">Trong một đội nhóm, ai hợp ai và ai dễ va chạm với ai thường chỉ lộ ra sau khi chuyện đã xảy ra. Thêm ngày sinh từng thành viên, nhận bản đồ nhân sự để sắp xếp lại đội hình.</div>
+            <div data-i18n="nm.so-nhan-mach" class="intro-t">Sổ Nhân Mạch</div>
+            <div data-i18n="nm.trong-mot-doi-nhom-ai-hop" class="intro-d">Trong một đội nhóm, ai hợp ai và ai dễ va chạm với ai thường chỉ lộ ra sau khi chuyện đã xảy ra. Thêm ngày sinh từng thành viên, nhận bản đồ nhân sự để sắp xếp lại đội hình.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="users"></span><span>Bản đồ<br>cả nhóm</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Cặp dễ<br>giẫm chân</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>Việc nên làm<br>tuần này</span></div>
+          <div data-i18n="nm.ban-do-ca-nhom" class="hero-pill"><span class="hp-ic" data-icon="users"></span><span>Bản đồ<br>cả nhóm</span></div>
+          <div data-i18n="nm.cap-de-giam-chan" class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Cặp dễ<br>giẫm chân</span></div>
+          <div data-i18n="nm.viec-nen-lam-tuan-nay" class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>Việc nên làm<br>tuần này</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -110,24 +110,24 @@
            là gate credit rồi chạy thẳng), nên chỉ 3 bước. JS đổi bước ở
            `wsStepsSet` (cuối file), gọi tại analyze()/_doGenerate/showForm. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="duyenno.2-thanh-toan" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="duyenno.3-nhan-ket-qua" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
-        <div class="fc-head"><span class="fc-ic" data-icon="users"></span><h2>Chọn người trong sổ</h2></div>
-        <p class="sub">Thêm tên, ngày sinh và giới tính từng thành viên vào sổ để phân tích cả nhóm cùng lúc.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="users"></span><h2 data-i18n="nm.chon-nguoi-trong-so">Chọn người trong sổ</h2></div>
+        <p data-i18n="nm.them-ten-ngay-sinh-va-gioi" class="sub">Thêm tên, ngày sinh và giới tính từng thành viên vào sổ để phân tích cả nhóm cùng lúc.</p>
 
         <div class="nm-list" id="soList"></div>
         <div class="nm-count" id="soCount"></div>
 
         <details class="nm-add" id="addWrap">
-          <summary>＋ Thêm người vào sổ</summary>
+          <summary data-i18n="nm.them-nguoi-vao-so">＋ Thêm người vào sổ</summary>
           <div class="inner">
             <div class="frow">
               <div class="fg" style="flex:1;min-width:180px">
-                <label for="addTen">Gọi là</label>
-                <input id="addTen" type="text" placeholder="Sếp Hùng, chị Lan, khách A…" maxlength="40">
+                <label data-i18n="nm.goi-la" for="addTen">Gọi là</label>
+                <input data-i18n-attr="placeholder:nm.sep-hung-chi-lan-khach-a" id="addTen" type="text" placeholder="Sếp Hùng, chị Lan, khách A…" maxlength="40">
               </div>
             </div>
             <!-- data-uc-skip: trang này TỰ quản sổ lá số (ô chọn + vai + xoá,
@@ -135,16 +135,16 @@
                  hai bộ điều khiển cho cùng một dữ liệu. -->
             <div id="addPersonBox" data-uc-skip></div>
             <div class="frow" style="margin-bottom:0;margin-top:10px">
-              <button class="btn" id="btnAdd" onclick="addPerson()">Lưu vào sổ</button>
+              <button data-i18n="nm.luu-vao-so" class="btn" id="btnAdd" onclick="addPerson()">Lưu vào sổ</button>
             </div>
             <div class="err" id="add-err"></div>
           </div>
         </details>
 
         <details class="nm-add" id="selfWrap" style="margin-top:10px">
-          <summary id="selfSummary">Thêm lá số của chính bạn (không bắt buộc)</summary>
+          <summary data-i18n="nm.them-la-so-cua-chinh-ban" id="selfSummary">Thêm lá số của chính bạn (không bắt buộc)</summary>
           <div class="inner">
-            <p class="sub" style="margin-bottom:9px">Có lá số của bạn thì bản đọc có thêm mục <b>“Bạn đứng ở đâu trong nhóm”</b> — bạn dễ va với ai, bù được cho ai.</p>
+            <p data-i18n="nm.co-la-so-cua-ban-thi" class="sub" style="margin-bottom:9px">Có lá số của bạn thì bản đọc có thêm mục <b>“Bạn đứng ở đâu trong nhóm”</b> — bạn dễ va với ai, bù được cho ai.</p>
             <div id="selfBox" data-uc-skip></div>
           </div>
         </details>
@@ -153,9 +153,9 @@
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="nhan-mach"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="nhan-mach">…</span> Lượng)</span></div>
-              <div class="cb-pay">
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="nm.moi-luot-luong" class="cb-amt"><span class="vnd" data-tvp-price-vnd="nhan-mach"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="nhan-mach">…</span> Lượng)</span></div>
+              <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
               </div>
@@ -163,11 +163,11 @@
           </div>
           <div class="cb-r">
             <span class="cb-ic" data-icon="gift"></span>
-            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
           </div>
         </div>
         <div class="frow" style="margin-bottom:0">
-          <button class="btn-go" id="btnGo" onclick="analyze()">
+          <button data-i18n="nm.doc-ca-so-ton-luong" class="btn-go" id="btnGo" onclick="analyze()">
             <span class="bg-label"><span class="ic" data-icon="users"></span><b id="btnGoLabel">Đọc Cả Sổ →</b></span>
             <small>Tốn <span class="vnd" data-tvp-price-vnd="nhan-mach"></span> <span class="cb-sub">(<span data-tvp-price="nhan-mach">…</span> Lượng)</span></small>
           </button>
@@ -177,11 +177,11 @@
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Sổ Nhân Mạch</div>
-        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="nm.so-nhan-mach" class="wsp-title">Sổ Nhân Mạch</div>
+        <p data-i18n="luangiai.tu-vi-dau-so-la-mot" class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
       </div>
-      <div class="samp-cta">
+      <div data-i18n="nm.ban-luan-giai-mau-tai-pdf" class="samp-cta">
         <span class="sc-ic" data-icon="file-text"></span>
         <span class="sc-txt"><b>Bản luận giải mẫu</b><span>Tải PDF Sổ Nhân Mạch đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
         <a class="sc-btn" href="/tai-mau/mau-nhan-mach.pdf" target="_blank" rel="noopener">Tải PDF →</a>
@@ -192,7 +192,7 @@
 
       <div id="resPanel" data-ws-result style="display:none">
         <div class="res-block">
-          <div class="res-block-header"><span class="res-block-title">Nhóm Này Hình Gì</span></div>
+          <div data-i18n="nm.nhom-nay-hinh-gi" class="res-block-header"><span class="res-block-title">Nhóm Này Hình Gì</span></div>
           <div class="res-block-body">
             <div id="loading"><div id="loadingSteps"></div></div>
             <div id="card" style="display:none">
@@ -209,7 +209,7 @@
         </div>
 
         <div class="res-block" id="gapBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Chỗ Trống Của Nhóm</span></div>
+          <div data-i18n="nm.cho-trong-cua-nhom" class="res-block-header"><span class="res-block-title">Chỗ Trống Của Nhóm</span></div>
           <div class="res-block-body">
             <div class="nm-chips" id="gapChips"></div>
             <p class="nm-para" id="loHong" style="display:none;margin-top:12px"></p>
@@ -217,35 +217,35 @@
         </div>
 
         <div class="res-block" id="peopleBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Từng Người</span></div>
+          <div data-i18n="nm.tung-nguoi" class="res-block-header"><span class="res-block-title">Từng Người</span></div>
           <div class="res-block-body"><div id="tungNguoi"></div></div>
         </div>
 
         <div class="res-block" id="capCoSoBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Các Cặp Trong Nhóm</span></div>
+          <div data-i18n="nm.cac-cap-trong-nhom" class="res-block-header"><span class="res-block-title">Các Cặp Trong Nhóm</span></div>
           <div class="res-block-body"><div id="capCoSo"></div></div>
         </div>
 
         <div class="res-block" id="capBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Cặp Cần Để Ý</span></div>
+          <div data-i18n="nm.cap-can-de-y" class="res-block-header"><span class="res-block-title">Cặp Cần Để Ý</span></div>
           <div class="res-block-body"><div id="capChuY"></div></div>
         </div>
 
         <div class="res-block" id="orderBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Thứ Tự Gợi Ý Tiếp Cận</span></div>
+          <div data-i18n="nm.thu-tu-goi-y-tiep-can" class="res-block-header"><span class="res-block-title">Thứ Tự Gợi Ý Tiếp Cận</span></div>
           <div class="res-block-body">
             <div class="nm-order" id="thuTu"></div>
-            <p style="font-size:11.5px;color:#7a705f;line-height:1.7;margin-top:9px">Xếp theo <b>vận năm của từng người</b> — người đang ở năm thuận thì dễ mở chuyện mới hơn. Đây <b>không phải</b> bảng xếp hạng mức quan trọng.</p>
+            <p data-i18n="nm.xep-theo-van-nam-cua-tung" style="font-size:11.5px;color:#7a705f;line-height:1.7;margin-top:9px">Xếp theo <b>vận năm của từng người</b> — người đang ở năm thuận thì dễ mở chuyện mới hơn. Đây <b>không phải</b> bảng xếp hạng mức quan trọng.</p>
           </div>
         </div>
 
         <div class="res-block" id="todoBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Làm Gì Tuần Này</span></div>
+          <div data-i18n="nm.lam-gi-tuan-nay" class="res-block-header"><span class="res-block-title">Làm Gì Tuần Này</span></div>
           <div class="res-block-body"><div id="tuanNay"></div></div>
         </div>
 
         <div class="res-block" id="withBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Bạn Đứng Ở Đâu Trong Nhóm</span></div>
+          <div data-i18n="nm.ban-dung-o-dau-trong-nhom" class="res-block-header"><span class="res-block-title">Bạn Đứng Ở Đâu Trong Nhóm</span></div>
           <div class="res-block-body"><p class="nm-para" id="voiBan"></p></div>
         </div>
 
@@ -256,19 +256,19 @@
              nhớ nhất. Nay câu chốt có tiêu đề riêng và đứng SAU phần cơ sở, để
              bản đọc kết bằng câu dùng được chứ không kết bằng bảng tra. -->
         <div class="res-block" id="endBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Nếu Chỉ Nhớ Một Câu</span></div>
+          <div data-i18n="daycon.neu-chi-nho-mot-cau" class="res-block-header"><span class="res-block-title">Nếu Chỉ Nhớ Một Câu</span></div>
           <div class="res-block-body"><div class="fb-card fb-trungtinh" id="motCau"></div></div>
         </div>
 
         <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
-          <div class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
+          <div data-i18n="nm.ban-doc-nay-phac-hoa-tu" class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
             <span class="ic" data-icon="lightbulb"></span> Bản đọc này phác hoạ từ các dữ liệu trong lá số Tử Vi, kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo.<br><br>
             <span class="ic" data-icon="scale"></span> Đây là khung <b>sắp việc cho hợp người</b>, không phải bảng chấm điểm nhân sự. Những người trong sổ không có mặt ở đây, nên bản luận cố ý <b>không xếp hạng ai, không đọc sức khoẻ, tiền bạc riêng hay chuyện gia đình</b> của họ, và <b>không khuyên thay người</b>. Tính cách không tốt cũng không xấu — chỉ hợp hoặc không hợp một việc.
           </div>
         </div>
 
         <div class="res-block" id="histBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Đã Đọc Trước Đó</span></div>
+          <div data-i18n="nm.da-doc-truoc-do" class="res-block-header"><span class="res-block-title">Đã Đọc Trước Đó</span></div>
           <div class="res-block-body"><div id="histList"></div></div>
         </div>
       </div>
