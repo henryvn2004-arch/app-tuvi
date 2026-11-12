@@ -3643,6 +3643,318 @@
   "t": "照片看面相",
   "h": "24c4d64e"
  },
+ "js.nhtg.anh-mat-noi-len-dieu-gi": {
+  "t": "眼神代表什麼？",
+  "h": "dca0ccee"
+ },
+ "js.nhtg.anh-qua-lon-toi-da-5mb": {
+  "t": "圖片過大（最大 5MB）。",
+  "h": "874f95b2"
+ },
+ "js.nhtg.da-phan-tich-xong-nhan-tuong": {
+  "t": "已依柳莊神相完成您的眼相分析。想再了解什麼呢？",
+  "h": "040562fa"
+ },
+ "js.nhtg.dang-phan-tich-nhan-tuong": {
+  "t": "正在分析眼相…",
+  "h": "7c6f7d8c"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang": {
+  "t": "以 MediaPipe 直接從圖片測得（瞳孔位置相對於上下眼瞼）。依《麻衣神相》的完整意涵，收錄於深度分析中。",
+  "h": "09bcb88b"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang-si1j": {
+  "t": "以 MediaPipe 直接從圖片測得。眼形、神氣與其他細節，收錄於深度分析中。",
+  "h": "c13331fd"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang-ymai": {
+  "t": "以 MediaPipe 直接從圖片測得。依《麻衣神相》的完整意涵，收錄於深度分析中。",
+  "h": "91c76fe7"
+ },
+ "js.nhtg.duoi-mat-cong-len": {
+  "t": "眼尾上揚",
+  "h": "eddf4211"
+ },
+ "js.nhtg.duoi-mat-xuoi": {
+  "t": "眼尾下垂",
+  "h": "8e2e1aeb"
+ },
+ "js.nhtg.goc-duoi-mat-a-d": {
+  "t": "眼尾角度：{a}°（{d}）",
+  "h": "f80c29d1"
+ },
+ "js.nhtg.khong-co-ket-qua": {
+  "t": "沒有結果。",
+  "h": "97fa6f91"
+ },
+ "js.nhtg.khong-doc-duoc-anh-nay-vui": {
+  "t": "無法讀取此圖片——請選擇 JPG 或 PNG 圖片。",
+  "h": "32a1faf4"
+ },
+ "js.nhtg.khong-nhan-dien-duoc-mat-ro": {
+  "t": "⚠ 未能清楚偵測到臉部。仍可進行分析，但建議使用正面的照片。",
+  "h": "8aef3360"
+ },
+ "js.nhtg.khong-the-ket-noi": {
+  "t": "無法連線。",
+  "h": "3dc4d8cb"
+ },
+ "js.nhtg.khong-the-mo-camera": {
+  "t": "無法開啟相機。",
+  "h": "39a33224"
+ },
+ "js.nhtg.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.nhtg.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.nhtg.ngang": {
+  "t": "水平",
+  "h": "a704525f"
+ },
+ "js.nhtg.nhan-tuong": {
+  "t": "眼相",
+  "h": "1826b211"
+ },
+ "js.nhtg.nhan-tuong-cua-toi": {
+  "t": "我的眼相",
+  "h": "1943cfc5"
+ },
+ "js.nhtg.nhan-tuong-d6ph": {
+  "t": "眼相",
+  "h": "1bc89b2e"
+ },
+ "js.nhtg.phuong-nhan-la-gi": {
+  "t": "什麼是鳳眼？",
+  "h": "9ea5dc8a"
+ },
+ "js.nhtg.tam-bach-nhan-co-y-nghia": {
+  "t": "三白眼有什麼意義？",
+  "h": "913d8ad7"
+ },
+ "js.nhtg.thuong-mat-15-20-giay": {
+  "t": "通常需要 15–20 秒",
+  "h": "087173ee"
+ },
+ "js.nhtg.trong-mat-hoi-lech-len-co": {
+  "t": "瞳孔略偏上——可能為下三白眼",
+  "h": "2815a4af"
+ },
+ "js.nhtg.trong-mat-hoi-lech-xuong-co": {
+  "t": "瞳孔略偏下——可能為上三白眼",
+  "h": "165636af"
+ },
+ "js.nhtg.vi-tri-trong-mat-can-doi": {
+  "t": "瞳孔位置：均衡",
+  "h": "e253adf3"
+ },
+ "js.nhtg.vui-long-chon-file-anh": {
+  "t": "請選擇圖片檔。",
+  "h": "71a61127"
+ },
+ "js.noisinh.noi-khac": {
+  "t": "其他（選擇時區）",
+  "h": "dee91293"
+ },
+ "js.noisinh.vung-america-anchorage": {
+  "t": "阿拉斯加",
+  "h": "7288f7f8"
+ },
+ "js.noisinh.vung-america-cancun": {
+  "t": "金塔納羅奧（坎昆）",
+  "h": "a0570d82"
+ },
+ "js.noisinh.vung-america-chicago": {
+  "t": "中部（芝加哥、德州）",
+  "h": "bff83b4f"
+ },
+ "js.noisinh.vung-america-chihuahua": {
+  "t": "奇瓦瓦",
+  "h": "c505a9ee"
+ },
+ "js.noisinh.vung-america-cuiaba": {
+  "t": "馬托格羅索（庫亞巴）",
+  "h": "93bc2a58"
+ },
+ "js.noisinh.vung-america-denver": {
+  "t": "山區（丹佛、猶他）",
+  "h": "134332e5"
+ },
+ "js.noisinh.vung-america-edmonton": {
+  "t": "亞伯達（卡加利、艾德蒙吞）",
+  "h": "b2e43118"
+ },
+ "js.noisinh.vung-america-fortaleza": {
+  "t": "東北部（福塔雷薩、累西腓）",
+  "h": "9aec8b83"
+ },
+ "js.noisinh.vung-america-halifax": {
+  "t": "新斯科細亞、新不倫瑞克",
+  "h": "a8df3343"
+ },
+ "js.noisinh.vung-america-hermosillo": {
+  "t": "索諾拉",
+  "h": "6bf7497c"
+ },
+ "js.noisinh.vung-america-los-angeles": {
+  "t": "西部（加州、華盛頓州、內華達）",
+  "h": "575d6232"
+ },
+ "js.noisinh.vung-america-manaus": {
+  "t": "亞馬遜州（馬瑙斯）",
+  "h": "ed2318c2"
+ },
+ "js.noisinh.vung-america-mexico-city": {
+  "t": "墨西哥城",
+  "h": "6f2504a8"
+ },
+ "js.noisinh.vung-america-new-york": {
+  "t": "東部（紐約、華盛頓、佛羅里達）",
+  "h": "dd133140"
+ },
+ "js.noisinh.vung-america-noronha": {
+  "t": "費爾南多迪諾羅尼亞",
+  "h": "2fde06cc"
+ },
+ "js.noisinh.vung-america-phoenix": {
+  "t": "亞利桑那",
+  "h": "104fd3fd"
+ },
+ "js.noisinh.vung-america-regina": {
+  "t": "薩斯喀徹溫",
+  "h": "59faf251"
+ },
+ "js.noisinh.vung-america-rio-branco": {
+  "t": "阿克里（白河市）",
+  "h": "f9bd2753"
+ },
+ "js.noisinh.vung-america-sao-paulo": {
+  "t": "聖保羅、里約熱內盧、巴西利亞",
+  "h": "399ffe72"
+ },
+ "js.noisinh.vung-america-st-johns": {
+  "t": "紐芬蘭",
+  "h": "26141861"
+ },
+ "js.noisinh.vung-america-tijuana": {
+  "t": "下加利福尼亞（提華納）",
+  "h": "13926f45"
+ },
+ "js.noisinh.vung-america-toronto": {
+  "t": "安大略、魁北克（多倫多、蒙特婁）",
+  "h": "269b79f5"
+ },
+ "js.noisinh.vung-america-vancouver": {
+  "t": "不列顛哥倫比亞（溫哥華）",
+  "h": "28973314"
+ },
+ "js.noisinh.vung-america-winnipeg": {
+  "t": "曼尼托巴（溫尼伯）",
+  "h": "80e2d9ca"
+ },
+ "js.noisinh.vung-asia-almaty": {
+  "t": "阿拉木圖、阿斯塔納",
+  "h": "aa213dd9"
+ },
+ "js.noisinh.vung-asia-aqtobe": {
+  "t": "哈薩克西部（阿克托比）",
+  "h": "6d10ee22"
+ },
+ "js.noisinh.vung-asia-irkutsk": {
+  "t": "伊爾庫次克",
+  "h": "f9bd4c15"
+ },
+ "js.noisinh.vung-asia-jakarta": {
+  "t": "印尼西部（雅加達、蘇門答臘）",
+  "h": "2392de20"
+ },
+ "js.noisinh.vung-asia-jayapura": {
+  "t": "印尼東部（巴布亞）",
+  "h": "df48b98d"
+ },
+ "js.noisinh.vung-asia-kamchatka": {
+  "t": "堪察加",
+  "h": "23e8a422"
+ },
+ "js.noisinh.vung-asia-krasnoyarsk": {
+  "t": "克拉斯諾亞爾斯克",
+  "h": "7f9fde59"
+ },
+ "js.noisinh.vung-asia-magadan": {
+  "t": "馬加丹",
+  "h": "4fdccca9"
+ },
+ "js.noisinh.vung-asia-makassar": {
+  "t": "印尼中部（峇里、蘇拉威西）",
+  "h": "8702559b"
+ },
+ "js.noisinh.vung-asia-novosibirsk": {
+  "t": "新西伯利亞",
+  "h": "fb8d7707"
+ },
+ "js.noisinh.vung-asia-omsk": {
+  "t": "鄂木斯克",
+  "h": "eb8ebb22"
+ },
+ "js.noisinh.vung-asia-vladivostok": {
+  "t": "海參崴",
+  "h": "fa32a249"
+ },
+ "js.noisinh.vung-asia-yakutsk": {
+  "t": "雅庫次克",
+  "h": "0613e23b"
+ },
+ "js.noisinh.vung-asia-yekaterinburg": {
+  "t": "葉卡捷琳堡",
+  "h": "c2daa856"
+ },
+ "js.noisinh.vung-australia-adelaide": {
+  "t": "南澳（阿德雷德）",
+  "h": "72ad53b3"
+ },
+ "js.noisinh.vung-australia-brisbane": {
+  "t": "昆士蘭（布里斯本）",
+  "h": "272e1f8b"
+ },
+ "js.noisinh.vung-australia-darwin": {
+  "t": "北領地（達爾文）",
+  "h": "450de8f0"
+ },
+ "js.noisinh.vung-australia-hobart": {
+  "t": "塔斯曼尼亞（荷巴特）",
+  "h": "902ee4e7"
+ },
+ "js.noisinh.vung-australia-melbourne": {
+  "t": "維多利亞（墨爾本）",
+  "h": "34e81b5d"
+ },
+ "js.noisinh.vung-australia-perth": {
+  "t": "西澳（伯斯）",
+  "h": "de084687"
+ },
+ "js.noisinh.vung-australia-sydney": {
+  "t": "新南威爾斯、首都領地（雪梨、坎培拉）",
+  "h": "5bc1b945"
+ },
+ "js.noisinh.vung-europe-kaliningrad": {
+  "t": "加里寧格勒",
+  "h": "7484e853"
+ },
+ "js.noisinh.vung-europe-moscow": {
+  "t": "莫斯科、聖彼得堡",
+  "h": "5a57fbcd"
+ },
+ "js.noisinh.vung-europe-samara": {
+  "t": "薩馬拉",
+  "h": "f6b8e61f"
+ },
+ "js.noisinh.vung-pacific-honolulu": {
+  "t": "夏威夷",
+  "h": "a1be9509"
+ },
  "js.paysuc.cam-on": {
   "t": "感謝您使用明寶紫微斗數。<br>兩可用於命盤解讀與合婚等工具。",
   "h": "25108a9b"
@@ -8671,6 +8983,686 @@
   "t": " — 明寶紫微斗數",
   "h": "ef7f10f4"
  },
+ "js.thtg.am-luong": {
+  "t": "音量",
+  "h": "71662f1b"
+ },
+ "js.thtg.am-sac-brightness": {
+  "t": "音色（明亮度）",
+  "h": "b3cd8066"
+ },
+ "js.thtg.bat-dau-thu-am": {
+  "t": "開始錄音",
+  "h": "61e33202"
+ },
+ "js.thtg.cao-do-pitch": {
+  "t": "音高（Pitch）",
+  "h": "d81eb36d"
+ },
+ "js.thtg.chuan-bi-giong-noi": {
+  "t": "請準備好嗓音…",
+  "h": "f2647a9c"
+ },
+ "js.thtg.dang-luan-giai-thanh-tuong": {
+  "t": "正在解讀聲相…",
+  "h": "69e05b82"
+ },
+ "js.thtg.dang-phan-tich-am-thanh": {
+  "t": "正在分析聲音…",
+  "h": "f92bf29f"
+ },
+ "js.thtg.dang-thu-am-hay-doc-doan": {
+  "t": "錄音中——請朗讀上方的詩句…",
+  "h": "9798c154"
+ },
+ "js.thtg.dang-xu-ly": {
+  "t": "處理中…",
+  "h": "e8c1faab"
+ },
+ "js.thtg.do-on-dinh": {
+  "t": "穩定度",
+  "h": "86509ba8"
+ },
+ "js.thtg.dung-lai": {
+  "t": "停止",
+  "h": "d313e7b3"
+ },
+ "js.thtg.giong-cua-ban-thuoc-n": {
+  "t": "您的聲音屬於 **{n}**。想進一步了解聲相學嗎？",
+  "h": "7f3afd32"
+ },
+ "js.thtg.giong-tram-noi-len-dieu-gi": {
+  "t": "低沉的聲音代表什麼？",
+  "h": "93f12462"
+ },
+ "js.thtg.kha-to": {
+  "t": "偏大",
+  "h": "089b5f63"
+ },
+ "js.thtg.khong-co-ket-qua": {
+  "t": "沒有結果。",
+  "h": "97fa6f91"
+ },
+ "js.thtg.khong-ro": {
+  "t": "不明",
+  "h": "988a61b5"
+ },
+ "js.thtg.khong-the-ket-noi": {
+  "t": "無法連線。",
+  "h": "3dc4d8cb"
+ },
+ "js.thtg.khong-the-truy-cap-microphone-vui": {
+  "t": "無法使用麥克風。請在瀏覽器中允許權限。",
+  "h": "f9d607c1"
+ },
+ "js.thtg.khong-the-xu-ly-am-thanh-e": {
+  "t": "無法處理聲音：{e}。請再試一次。",
+  "h": "96163473"
+ },
+ "js.thtg.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.thtg.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.thtg.ngu-am": {
+  "t": "五音",
+  "h": "bc7a6d13"
+ },
+ "js.thtg.ngu-am-la-gi": {
+  "t": "什麼是五音？",
+  "h": "ed2678e3"
+ },
+ "js.thtg.nguam-hoa": {
+  "t": "火聲（徵）——高亢有力",
+  "h": "52199252"
+ },
+ "js.thtg.nguam-hoa-short": {
+  "t": "火聲（徵）",
+  "h": "eec6e5c6"
+ },
+ "js.thtg.nguam-kim": {
+  "t": "金聲（商）——清亮悠遠",
+  "h": "83770d13"
+ },
+ "js.thtg.nguam-kim-short": {
+  "t": "金聲（商）",
+  "h": "1e2fe8d9"
+ },
+ "js.thtg.nguam-moc": {
+  "t": "木聲（角）——圓潤敦厚",
+  "h": "1e8e07c1"
+ },
+ "js.thtg.nguam-moc-short": {
+  "t": "木聲（角）",
+  "h": "7835647e"
+ },
+ "js.thtg.nguam-tho": {
+  "t": "土聲（宮）——低沉溫厚，餘音悠長",
+  "h": "dbbc4796"
+ },
+ "js.thtg.nguam-tho-short": {
+  "t": "土聲（宮）",
+  "h": "66f33677"
+ },
+ "js.thtg.nguam-thuy": {
+  "t": "水聲（羽）——清冷深邃",
+  "h": "48b02063"
+ },
+ "js.thtg.nguam-thuy-short": {
+  "t": "水聲（羽）",
+  "h": "51405ff5"
+ },
+ "js.thtg.nhan-de-bat-dau-thu-am": {
+  "t": "點擊開始錄音 · 瀏覽器詢問時請允許使用麥克風",
+  "h": "74465b56"
+ },
+ "js.thtg.nho-yeu": {
+  "t": "小而弱",
+  "h": "906c7657"
+ },
+ "js.thtg.pitch-cao": {
+  "t": "{p}Hz——高",
+  "h": "526966ef"
+ },
+ "js.thtg.pitch-rat-tram": {
+  "t": "{p}Hz——極低沉",
+  "h": "1b80b5d2"
+ },
+ "js.thtg.pitch-tram": {
+  "t": "{p}Hz——低沉",
+  "h": "110698bc"
+ },
+ "js.thtg.pitch-trung-binh": {
+  "t": "{p}Hz——中等",
+  "h": "8577f320"
+ },
+ "js.thtg.pitch-trung-cao": {
+  "t": "{p}Hz——中高",
+  "h": "163ebf39"
+ },
+ "js.thtg.pitch-trung-thap": {
+  "t": "{p}Hz——中低",
+  "h": "d249a0d1"
+ },
+ "js.thtg.rat-sang": {
+  "t": "非常明亮",
+  "h": "17b19c93"
+ },
+ "js.thtg.rate-cham": {
+  "t": "{r} 音節/秒——慢",
+  "h": "7a1bd431"
+ },
+ "js.thtg.rate-nhanh": {
+  "t": "{r} 音節/秒——快",
+  "h": "3a26518c"
+ },
+ "js.thtg.rate-rat-cham": {
+  "t": "{r} 音節/秒——很慢",
+  "h": "73a0a454"
+ },
+ "js.thtg.rate-rat-nhanh": {
+  "t": "{r} 音節/秒——很快",
+  "h": "40972e00"
+ },
+ "js.thtg.rate-vua": {
+  "t": "{r} 音節/秒——適中",
+  "h": "39d27349"
+ },
+ "js.thtg.sang-trong": {
+  "t": "明亮清澈",
+  "h": "754176c3"
+ },
+ "js.thtg.thanh-tuong": {
+  "t": "聲相",
+  "h": "d47f6d49"
+ },
+ "js.thtg.thanh-tuong-co-doi-duoc-khong": {
+  "t": "聲相可以改變嗎？",
+  "h": "0bac268d"
+ },
+ "js.thtg.thanh-tuong-cua-toi": {
+  "t": "我的聲相",
+  "h": "f28a25a6"
+ },
+ "js.thtg.thoi-luong": {
+  "t": "時長",
+  "h": "83dc4d39"
+ },
+ "js.thtg.thu-am-hoan-tat-nhan-phan": {
+  "t": "錄音完成——請點「分析」查看結果。",
+  "h": "016efee8"
+ },
+ "js.thtg.thu-am-lai": {
+  "t": "重新錄音",
+  "h": "e7849d1e"
+ },
+ "js.thtg.thuong-mat-10-15-giay": {
+  "t": "通常需要 10–15 秒",
+  "h": "56670e66"
+ },
+ "js.thtg.to-co-luc": {
+  "t": "大而有力",
+  "h": "7514dffb"
+ },
+ "js.thtg.toc-do-noi": {
+  "t": "語速",
+  "h": "3e47bcf8"
+ },
+ "js.thtg.toi-am": {
+  "t": "偏暗、溫暖",
+  "h": "4fb70bda"
+ },
+ "js.thtg.trung-binh-am": {
+  "t": "中等、溫暖",
+  "h": "94def005"
+ },
+ "js.thtg.uoc-tinh-n": {
+  "t": "推估：{n}",
+  "h": "9c0f8c8c"
+ },
+ "js.thtg.vua-phai": {
+  "t": "適中",
+  "h": "e3fa9054"
+ },
+ "js.thtp.am-s": {
+  "t": " 音節/秒",
+  "h": "49ed1880"
+ },
+ "js.thtp.am-sac-am-toi-tho-kim": {
+  "t": "音色溫暖偏暗——土／金偏低沉。",
+  "h": "12665913"
+ },
+ "js.thtp.am-sac-sang": {
+  "t": "音色明亮。",
+  "h": "8c1437e2"
+ },
+ "js.thtp.am-sac-trung-binh": {
+  "t": "音色中等。",
+  "h": "ed7134e9"
+ },
+ "js.thtp.amplitude-rat-on-dinh": {
+  "t": "振幅非常穩定。",
+  "h": "5f11e83b"
+ },
+ "js.thtp.bai-n": {
+  "t": "第 {n} 項",
+  "h": "9227ba34"
+ },
+ "js.thtp.bai-tiep-theo": {
+  "t": "下一項 →",
+  "h": "aad8808b"
+ },
+ "js.thtp.bat-dau-thu-am": {
+  "t": "開始錄音",
+  "h": "61e33202"
+ },
+ "js.thtp.bien-dong-lon": {
+  "t": "變動大。",
+  "h": "56e49443"
+ },
+ "js.thtp.binh-thuong": {
+  "t": "正常。",
+  "h": "4711eaec"
+ },
+ "js.thtp.cao-vung-moc": {
+  "t": "偏高——木之域。",
+  "h": "1f708e1f"
+ },
+ "js.thtp.cham-diem-dam": {
+  "t": "偏慢——沉穩。",
+  "h": "1761f7f1"
+ },
+ "js.thtp.co-bien-dong": {
+  "t": "略有變動。",
+  "h": "bb657503"
+ },
+ "js.thtp.co-tap-am-vung-giua-thanh": {
+  "t": "有雜音——介於清濁之間。",
+  "h": "72479b12"
+ },
+ "js.thtp.cong-cha-nhu-nui-thai-son": {
+  "t": "父恩如泰山之高，\n母恩如源頭之水，綿綿流長。",
+  "h": "5e8b8ca0"
+ },
+ "js.thtp.da-ghi-xong": {
+  "t": "已錄完",
+  "h": "8d555bc2"
+ },
+ "js.thtp.dang-ghi-am": {
+  "t": "錄音中…",
+  "h": "e8185717"
+ },
+ "js.thtp.dang-luan-giai": {
+  "t": "解讀中…",
+  "h": "aa035f2b"
+ },
+ "js.thtp.dang-phan-tich": {
+  "t": "分析中…",
+  "h": "6c1c499b"
+ },
+ "js.thtp.dang-phan-tich-theo-co-phap": {
+  "t": "正依古法分析",
+  "h": "18ad9517"
+ },
+ "js.thtp.dang-tinh-toan-dac-trung-am": {
+  "t": "正在計算聲學特徵…",
+  "h": "7e4c7703"
+ },
+ "js.thtp.dao-dong-manh-ky-cach-pha": {
+  "t": "波動劇烈——忌「破鑼」格。",
+  "h": "af8f73b4"
+ },
+ "js.thtp.dem-deu-toc-do-khong-gap": {
+  "t": "請以穩定的速度數數，不急也不慢，每個數字約間隔半秒。",
+  "h": "3c773947"
+ },
+ "js.thtp.dem-so-1-15": {
+  "t": "數數 1 → 15",
+  "h": "f6278207"
+ },
+ "js.thtp.do-on-dinh-f0": {
+  "t": "F0 穩定度",
+  "h": "f0626dcb"
+ },
+ "js.thtp.do-truc-tiep-tu-giong-noi": {
+  "t": " 此為透過麥克風直接測得的聲音結果。其餘 11 項聲學指標與完整解讀，收錄於深度分析中。",
+  "h": "1514c6cc"
+ },
+ "js.thtp.do-uyen-chuyen-tong-giong": {
+  "t": "音高的靈活度。",
+  "h": "c42d8f86"
+ },
+ "js.thtp.doc-binh-thuong-ro-rang-khong": {
+  "t": "請正常、清晰、不急不躁地朗讀，不必刻意壓低或拉高。這是您的基礎聲線。",
+  "h": "ace9a97f"
+ },
+ "js.thtp.doc-co-ngu-dieu-len-xuong": {
+  "t": "請帶著語調，自然地抑揚頓挫。這是越南名作《金雲翹傳》的開篇——請像朗誦詩歌一樣唸出來。",
+  "h": "deebf884"
+ },
+ "js.thtp.doc-doan-van": {
+  "t": "朗讀一段文字",
+  "h": "1d0b2c72"
+ },
+ "js.thtp.doc-ngan-theo-huong-dan": {
+  "t": "請依指示朗讀／拉長聲音。",
+  "h": "3c680985"
+ },
+ "js.thtp.doc-tho-bai-do-pitch-range": {
+  "t": "朗誦詩歌——音域測量",
+  "h": "73c2b60b"
+ },
+ "js.thtp.don-dieu-it-bieu-cam": {
+  "t": "單調——表情較少。",
+  "h": "3e48c9db"
+ },
+ "js.thtp.f0-trung-binh": {
+  "t": "F0 平均",
+  "h": "36f5bf55"
+ },
+ "js.thtp.giong-cao-bat-thuong-cho-nam": {
+  "t": "ℹ 以男性而言，聲音異常偏高。可能是在用假音說話，或資料不穩定。",
+  "h": "a3164510"
+ },
+ "js.thtp.giong-cua-ban-thuoc-n": {
+  "t": "您的聲音屬於 **{n}**（以 4 項測量、12 項聲學指標得出）。想進一步了解聲相學嗎？",
+  "h": "890b1b1b"
+ },
+ "js.thtp.giong-nen-f0": {
+  "t": "基礎聲線：F0 平均 <strong>{f0}Hz</strong>，語速 {rate} 音節/秒。",
+  "h": "a9e1812d"
+ },
+ "js.thtp.giong-thanh-trong-vang": {
+  "t": "「清」聲——清亮悅耳。",
+  "h": "b5424c0c"
+ },
+ "js.thtp.giong-tram-bat-thuong-cho-nu": {
+  "t": "ℹ 以女性而言，聲音異常偏低。可能是刻意壓低聲音，或資料不穩定。",
+  "h": "b7ed0210"
+ },
+ "js.thtp.giong-troc-duc": {
+  "t": "「濁」聲——混濁。",
+  "h": "b504dd91"
+ },
+ "js.thtp.giong-vua-thanh-vua-co-luc": {
+  "t": "聲音清亮又有力。",
+  "h": "a7a812ab"
+ },
+ "js.thtp.giu-deu-khi-day-tot": {
+  "t": "保持平穩——底氣良好。",
+  "h": "ee4f48e1"
+ },
+ "js.thtp.hit-mot-hoi-sau-sau-do": {
+  "t": "深吸一口氣，然後以同一個音高持續拉長「啊」的聲音，不要忽高忽低，越平穩越好。這是最重要的一項——測量氣力。",
+  "h": "a85ada27"
+ },
+ "js.thtp.hnr-do-trong": {
+  "t": "HNR（清澈度）",
+  "h": "372da110"
+ },
+ "js.thtp.hnr-thap-8db-nhieu-tap-am": {
+  "t": "⚠ HNR 偏低（<8dB）——雜音較多。請確認環境是否夠安靜。",
+  "h": "4f448bef"
+ },
+ "js.thtp.hnr-thap-noi-len-dieu-gi": {
+  "t": "HNR 偏低代表什麼？",
+  "h": "c0db1713"
+ },
+ "js.thtp.hoi-lech-dau-hieu-khi-khong": {
+  "t": "略有偏差——氣不均勻的徵兆。",
+  "h": "7392dcf4"
+ },
+ "js.thtp.hoi-rung-co-the-cang-thang": {
+  "t": "略有顫抖——可能是緊張。",
+  "h": "a544df6f"
+ },
+ "js.thtp.jitter-ngan": {
+  "t": "Jitter（長音）",
+  "h": "6ca69280"
+ },
+ "js.thtp.jitter-va-shimmer-la-gi": {
+  "t": "Jitter 和 Shimmer 是什麼？",
+  "h": "0fc478fd"
+ },
+ "js.thtp.khac-gi-ban-thanh-tuong-thuong": {
+  "t": "和一般的聲相有什麼不同？",
+  "h": "37afdd5e"
+ },
+ "js.thtp.khi-bat-tuc": {
+  "t": "氣不足",
+  "h": "26098327"
+ },
+ "js.thtp.khi-bat-tuc-can-luyen-duong": {
+  "t": "氣不足——需要鍛鍊養氣。",
+  "h": "a17003c2"
+ },
+ "js.thtp.khi-du-vung-quy-tuong": {
+  "t": "氣足——貴相之域。",
+  "h": "ba173e75"
+ },
+ "js.thtp.khi-luc-rat-tot-khi-tuc": {
+  "t": "氣力極佳——「氣足聲圓」。",
+  "h": "271ac112"
+ },
+ "js.thtp.khi-luc-tot": {
+  "t": "氣力良好",
+  "h": "191dd52d"
+ },
+ "js.thtp.khi-sustain": {
+  "t": "氣（持續時間）",
+  "h": "64bc1d84"
+ },
+ "js.thtp.khi-trung-binh": {
+  "t": "氣力中等",
+  "h": "7f2a227e"
+ },
+ "js.thtp.khi-trung-binh-dogb": {
+  "t": "氣力中等。",
+  "h": "29600da0"
+ },
+ "js.thtp.khong-nhan-duoc-noi-dung-tra": {
+  "t": "未收到結果，請再試一次。",
+  "h": "a80badc4"
+ },
+ "js.thtp.khong-truy-cap-duoc-microphone": {
+  "t": "無法使用麥克風",
+  "h": "a07b8893"
+ },
+ "js.thtp.loi": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.thtp.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.thtp.loi-stream-e": {
+  "t": "串流錯誤：{e}",
+  "h": "62596680"
+ },
+ "js.thtp.luan-giai-lai": {
+  "t": "重新解讀",
+  "h": "11d43587"
+ },
+ "js.thtp.mot-hai-ba-bon-nam-sau": {
+  "t": "一、二、三、四、五、六，\n七、八、九、十、十一，\n十二、十三、十四、十五。",
+  "h": "6b26e8a7"
+ },
+ "js.thtp.n-giay": {
+  "t": "{n} 秒",
+  "h": "4b5fecbd"
+ },
+ "js.thtp.ngan-am-a-bai-do-khi": {
+  "t": "拉長「啊」音——氣力測量",
+  "h": "df9c2325"
+ },
+ "js.thtp.ngan-am-qua-ngan-2-5s": {
+  "t": "⚠ 長音過短（<2.5s）——可能是氣不足，或麥克風未能完整收音。若非刻意，建議重錄第 2 項。",
+  "h": "608e2941"
+ },
+ "js.thtp.ngan-dai-shimmer": {
+  "t": "長音 <strong>{d}s</strong>，shimmer {sh}dB——<em>{q}</em>。",
+  "h": "e8a19bff"
+ },
+ "js.thtp.ngu-am-uoc-tinh-n": {
+  "t": "推估五音：{n}",
+  "h": "21219146"
+ },
+ "js.thtp.nguam-chen": {
+  "t": "{a}兼{b}",
+  "h": "8891cc34"
+ },
+ "js.thtp.nguam-thanh": {
+  "t": "{x}（清）",
+  "h": "796dcf40"
+ },
+ "js.thtp.nguam-troc": {
+  "t": "{x}（濁）",
+  "h": "8f9cb8cf"
+ },
+ "js.thtp.nhanh-linh-hoat": {
+  "t": "偏快——靈活。",
+  "h": "f8f7c567"
+ },
+ "js.thtp.on-dinh": {
+  "t": "穩定。",
+  "h": "44fce326"
+ },
+ "js.thtp.on-dinh-binh-thuong": {
+  "t": "穩定——正常。",
+  "h": "2d859433"
+ },
+ "js.thtp.pitch-range-uyen-chuyen": {
+  "t": "音域：<strong>{r}Hz</strong>，靈活度 {a}Hz/步。",
+  "h": "b98dd351"
+ },
+ "js.thtp.rat-bien-ao-co-the-kich": {
+  "t": "變化多端——可能帶有戲劇性。",
+  "h": "fc2e0818"
+ },
+ "js.thtp.rat-cao-bat-thuong-cho-nam": {
+  "t": "極高——對男性而言異常。",
+  "h": "6e3d8f7a"
+ },
+ "js.thtp.rat-cao-kiem-tra-lai": {
+  "t": "極高——請重新檢查。",
+  "h": "2fd84911"
+ },
+ "js.thtp.rat-duc-co-the-mic-kem": {
+  "t": "非常混濁——可能是麥克風品質差或聲音沙啞。",
+  "h": "532d0a63"
+ },
+ "js.thtp.rat-nhanh-co-the-gap-gap": {
+  "t": "極快——可能較為急躁。",
+  "h": "468f53f6"
+ },
+ "js.thtp.rat-on-dinh": {
+  "t": "非常穩定。",
+  "h": "01b80ed2"
+ },
+ "js.thtp.rat-on-dinh-giong-vien-man": {
+  "t": "非常穩定——「圓滿」之聲。",
+  "h": "3d4e7673"
+ },
+ "js.thtp.rat-sang-co-the-choi": {
+  "t": "極為明亮——可能刺耳。",
+  "h": "b82be1c7"
+ },
+ "js.thtp.rat-tram-vung-tho-ho-hong": {
+  "t": "極低沉——土／虎吼之域。",
+  "h": "25ff5eb4"
+ },
+ "js.thtp.rung-ro-ret-chu-y-suc": {
+  "t": "明顯顫抖——請留意嗓音健康。",
+  "h": "624dbc77"
+ },
+ "js.thtp.sang-vung-moc-oanh-minh": {
+  "t": "明亮——木／鶯鳴之域。",
+  "h": "4c2e15f1"
+ },
+ "js.thtp.shimmer-cao-1-2db-giong-khong": {
+  "t": "⚠ Shimmer 偏高（>1.2dB）——拉長音時聲音不穩。可能是聲音顫抖，或麥克風品質較低。",
+  "h": "3f02b1f2"
+ },
+ "js.thtp.shimmer-ngan": {
+  "t": "Shimmer（長音）",
+  "h": "4f46f5b3"
+ },
+ "js.thtp.suy-nhanh-huu-dau-vo-vi": {
+  "t": "快速衰減——「有頭無尾」，後段氣弱。",
+  "h": "70b554fb"
+ },
+ "js.thtp.suy-nhe-binh-thuong": {
+  "t": "輕微衰減——正常。",
+  "h": "e192d8a5"
+ },
+ "js.thtp.thanh-tuong-pro": {
+  "t": "聲相 Pro",
+  "h": "b2e5a151"
+ },
+ "js.thtp.thanh-tuong-pro-cua-toi": {
+  "t": "我的聲相 Pro",
+  "h": "9cca3092"
+ },
+ "js.thtp.thanh-tuong-pro-n": {
+  "t": "聲相 Pro——{n}",
+  "h": "677bf701"
+ },
+ "js.thtp.thu-lai": {
+  "t": "重試",
+  "h": "761e1380"
+ },
+ "js.thtp.toc-do-dem-am-tiet": {
+  "t": "數數速度：<strong>{rate}</strong> 音節/秒。",
+  "h": "76b9cb6a"
+ },
+ "js.thtp.toc-do-noi": {
+  "t": "語速",
+  "h": "3e47bcf8"
+ },
+ "js.thtp.tram-nam-trong-coi-nguoi-ta": {
+  "t": "人生百年之間，\n才與命往往相妒。",
+  "h": "820f3996"
+ },
+ "js.thtp.tram-vung-kim-tho": {
+  "t": "偏低——金／土之域。",
+  "h": "38ae56f0"
+ },
+ "js.thtp.tram-vung-tho": {
+  "t": "偏低——土之域。",
+  "h": "16b2fd85"
+ },
+ "js.thtp.trung-binh": {
+  "t": "中等。",
+  "h": "9942b5ce"
+ },
+ "js.thtp.trung-binh-vung-kim": {
+  "t": "中等——金之域。",
+  "h": "7f4bb46d"
+ },
+ "js.thtp.uyen-chuyen-vung-thuy": {
+  "t": "靈活——水之域。",
+  "h": "d127ffa4"
+ },
+ "js.thtp.vua-phai": {
+  "t": "適中。",
+  "h": "080fe879"
+ },
+ "js.thtp.vung-cong-huong-giong": {
+  "t": "聲音的共鳴區域。",
+  "h": "bb5e88f1"
+ },
+ "js.thtp.xem-ket-qua": {
+  "t": "查看結果 →",
+  "h": "73c02132"
+ },
+ "js.thtp.xep-theo-12-chi-so-am": {
+  "t": "依據測得的 12 項聲學指標（HNR、持續時間、jitter、頻譜重心…）歸類。依五音古法的完整意涵，收錄於深度分析中。",
+  "h": "0c3c0a37"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"付款 ",
   "h": "3d7d89ae"
@@ -9038,6 +10030,262 @@
  "js.trochuyen.vua-xong": {
   "t": "剛剛",
   "h": "d1a7c7fa"
+ },
+ "js.tuviform.ca-nhan": {
+  "t": "個人資料",
+  "h": "bbe1cce8"
+ },
+ "js.tuviform.chon-du-ngay": {
+  "t": "請選擇完整的出生日、月、年。",
+  "h": "808dc076"
+ },
+ "js.tuviform.chon-noi-sinh": {
+  "t": "— 選擇出生地 —",
+  "h": "87b109c3"
+ },
+ "js.tuviform.con-hoi-cho-ai": {
+  "t": "這次是為誰解讀？",
+  "h": "4171dda8"
+ },
+ "js.tuviform.con-muon-xem-nam": {
+  "t": "想看哪一年的運勢？",
+  "h": "43e3ee2b"
+ },
+ "js.tuviform.dien-day-du": {
+  "t": "請填寫左側的資料——國曆出生日期與出生時間——再按下解讀。",
+  "h": "618a618f"
+ },
+ "js.tuviform.gio": {
+  "t": "時",
+  "h": "75f92388"
+ },
+ "js.tuviform.gio-am": {
+  "t": "時辰：{chi}",
+  "h": "9ce5a400"
+ },
+ "js.tuviform.gio-sinh": {
+  "t": "出生時間",
+  "h": "2d0aa7eb"
+ },
+ "js.tuviform.gio-sinh-ok": {
+  "t": "出生時間：<b>{hm}</b> ✓",
+  "h": "b77347e7"
+ },
+ "js.tuviform.gioi-tinh": {
+  "t": "性別",
+  "h": "80bbce55"
+ },
+ "js.tuviform.gt-nam": {
+  "t": "男",
+  "h": "b580ba1b"
+ },
+ "js.tuviform.gt-nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.tuviform.ho-ten": {
+  "t": "姓名",
+  "h": "ad9f2994"
+ },
+ "js.tuviform.hoi-cho": {
+  "t": "為 <b>{ten}</b> 詢問 ✓",
+  "h": "3ced148a"
+ },
+ "js.tuviform.khong-nho-chinh-xac": {
+  "t": "不確定出生時間？推算看看 →",
+  "h": "333f8bee"
+ },
+ "js.tuviform.khong-ten": {
+  "t": "未命名",
+  "h": "7c5b38ee"
+ },
+ "js.tuviform.lich-cn": {
+  "t": "中國曆法時間",
+  "h": "5fe3ccc2"
+ },
+ "js.tuviform.lich-jp": {
+  "t": "日本曆法時間",
+  "h": "fe6e8036"
+ },
+ "js.tuviform.lich-kr": {
+  "t": "韓國曆法時間",
+  "h": "a8ae0a48"
+ },
+ "js.tuviform.lich-vn": {
+  "t": "越南時間",
+  "h": "f54ee2eb"
+ },
+ "js.tuviform.luan-giai-la-so": {
+  "t": "命盤解讀 →",
+  "h": "4bb771eb"
+ },
+ "js.tuviform.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "js.tuviform.nam-sinh": {
+  "t": "出生年",
+  "h": "75a6785f"
+ },
+ "js.tuviform.nam-xem-van": {
+  "t": "推算流年",
+  "h": "8f575533"
+ },
+ "js.tuviform.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "js.tuviform.ngay-sinh": {
+  "t": "出生日",
+  "h": "6f8de308"
+ },
+ "js.tuviform.ngay-sinh-duong": {
+  "t": "國曆出生日期",
+  "h": "5b85cc30"
+ },
+ "js.tuviform.ngay-sinh-ok": {
+  "t": "出生日期：<b>{y}年{m}月{d}日</b> ✓",
+  "h": "c457dbc0"
+ },
+ "js.tuviform.ngay-thang-nam-sinh": {
+  "t": "出生日期（日／月／年）",
+  "h": "84864f2e"
+ },
+ "js.tuviform.ngoai-goi-y": {
+  "t": "若出生於海外請勾選——系統會自動換算出生地的時區、夏令時間與農曆。",
+  "h": "6af69dc4"
+ },
+ "js.tuviform.ngoai-vn": {
+  "t": "出生於越南境外？",
+  "h": "db788745"
+ },
+ "js.tuviform.nguoi-moi": {
+  "t": "+ 新增對象",
+  "h": "eab3d0ff"
+ },
+ "js.tuviform.nguoi-moi-nhe": {
+  "t": "好的，新增一位。",
+  "h": "021dd849"
+ },
+ "js.tuviform.nhap-ho-ten": {
+  "t": "請輸入姓名。",
+  "h": "69dc7698"
+ },
+ "js.tuviform.noi-sinh": {
+  "t": "出生地",
+  "h": "39348136"
+ },
+ "js.tuviform.phut": {
+  "t": "分",
+  "h": "34ca51a4"
+ },
+ "js.tuviform.q1-gt": {
+  "t": "你的性別是？",
+  "h": "d8b7441e"
+ },
+ "js.tuviform.q1-ten": {
+  "t": "請告訴我你的完整姓名。",
+  "h": "1e9a5600"
+ },
+ "js.tuviform.q1-ten-gt": {
+  "t": "請告訴我你的姓名與性別。",
+  "h": "24ab2186"
+ },
+ "js.tuviform.q2": {
+  "t": "你的國曆出生日期是哪一天？",
+  "h": "abef36df"
+ },
+ "js.tuviform.q3": {
+  "t": "你是幾點出生的？",
+  "h": "e5d555b9"
+ },
+ "js.tuviform.ten-mau": {
+  "t": "王小明",
+  "h": "7388465b"
+ },
+ "js.tuviform.ten-mau-vd": {
+  "t": "例如：王小明",
+  "h": "eafae45a"
+ },
+ "js.tuviform.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "js.tuviform.thang-khong-co-ngay": {
+  "t": "{y}年{m}月沒有{d}日，請重新選擇。",
+  "h": "da49ec5e"
+ },
+ "js.tuviform.thang-sinh": {
+  "t": "出生月",
+  "h": "4695b6cf"
+ },
+ "js.tuviform.thong-tin": {
+  "t": "資料",
+  "h": "d5fc2a3b"
+ },
+ "js.tuviform.thuc-thi": {
+  "t": "送出",
+  "h": "c591a584"
+ },
+ "js.tuviform.tiep-tuc": {
+  "t": "繼續 →",
+  "h": "86f35ed9"
+ },
+ "js.tuviform.tip-auto": {
+  "t": "系統會依據輸入的出生日期自動調整。",
+  "h": "62305e4c"
+ },
+ "js.tuviform.tip-intro": {
+  "t": "古法的<b>子時</b>為 23:00–00:59。但越南歷史上多次更改時區：",
+  "h": "2cd8aaeb"
+ },
+ "js.tuviform.tip-khong-nho": {
+  "t": "<b>不記得出生時間？</b> 很多人都記不清，但出生時辰會影響本站許多解讀。<a href=\"/app/gio-sinh\" target=\"_blank\" style=\"color:#1455A4;font-weight:600\">推算你的出生時間 →</a>",
+  "h": "af1572d3"
+ },
+ "js.tuviform.tip-li1": {
+  "t": "<b>1942年～1944年3月9日</b>（UTC+8）：子時 = 00:00–01:59",
+  "h": "0d7e7b3f"
+ },
+ "js.tuviform.tip-li2": {
+  "t": "<b>1944年3月9日～1945年9月2日</b>（UTC+9）：子時 = 01:00–02:59",
+  "h": "ac7257ad"
+ },
+ "js.tuviform.tip-li3": {
+  "t": "<b>1945年9月2日～1946年12月18日</b>（UTC+7）：子時 = 23:00–00:59",
+  "h": "8375e4b8"
+ },
+ "js.tuviform.tip-li4": {
+  "t": "<b>1946年12月19日～1955年6月30日</b>（UTC+8）：子時 = 00:00–01:59",
+  "h": "72d27e9b"
+ },
+ "js.tuviform.tip-li5": {
+  "t": "<b>1955年7月1日～1959年12月31日</b>（UTC+7）：子時 = 23:00–00:59",
+  "h": "88a1bc9a"
+ },
+ "js.tuviform.tip-li6": {
+  "t": "<b>1960年1月1日～1975年4月30日</b>（UTC+8，南越）：子時 = 00:00–01:59",
+  "h": "a0d6511f"
+ },
+ "js.tuviform.tip-li7": {
+  "t": "<b>自 1975年5月1日起</b>（UTC+7）：子時 = 23:00–00:59",
+  "h": "4995b03d"
+ },
+ "js.tuviform.tip-title": {
+  "t": "越南時區沿革",
+  "h": "3172a126"
+ },
+ "js.tuviform.xem-mau-pdf": {
+  "t": "查看解讀範例（PDF）",
+  "h": "0053d860"
+ },
+ "js.tuviform.xem-van-nam": {
+  "t": "{n}年流年",
+  "h": "c2204f1d"
+ },
+ "js.tuviform.xem-van-nam-ok": {
+  "t": "<b>{n}</b>年流年 ✓",
+  "h": "f47721f2"
  },
  "js.vanhannam.bai-tinh": {
   "t": "敗星：",
@@ -10359,6 +11607,130 @@
   "t": "王亭之 · 參考資料",
   "h": "f0de146d"
  },
+ "nhtg.anh-chi-gui-toi-may-chu": {
+  "t": "圖片僅傳送至伺服器進行分析，不會儲存在伺服器上。請正面拍攝、光線充足——系統會自動放大眼部區域。",
+  "h": "65e7d1ba"
+ },
+ "nhtg.anh-da-chon": {
+  "t": "✓ 已選擇圖片",
+  "h": "c435e239"
+ },
+ "nhtg.anh-da-chon-oxp5": {
+  "t": "已選擇圖片",
+  "h": "d1e5382e"
+ },
+ "nhtg.chua-muon-chup-anh-ban-co": {
+  "t": "<b>還不想拍照嗎？</b><span>您可以先看一份範例，預先體驗。</span>",
+  "h": "70fdc9d9"
+ },
+ "nhtg.chup": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 拍攝",
+  "h": "71b3b3cf"
+ },
+ "nhtg.chup-anh": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 拍照",
+  "h": "f78326e0"
+ },
+ "nhtg.doi-mat-duoc-xem-la-noi": {
+  "t": "依傳統相學，眼睛是最能顯露一個人心性的地方。上傳臉部照片，依柳莊神相詳細解讀眼形、眼神與眉毛。",
+  "h": "f0bba1fa"
+ },
+ "nhtg.huy": {
+  "t": "✕ 取消",
+  "h": "a46abff1"
+ },
+ "nhtg.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG、PNG、WebP——最大 5MB · 請正面拍攝，清楚拍到雙眼",
+  "h": "79a1629f"
+ },
+ "nhtg.keo-tha-anh-vao-day-hoac": {
+  "t": "將圖片拖放到這裡，或點擊選擇",
+  "h": "2ce7b073"
+ },
+ "nhtg.luan-theo-lieu-trang-than-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依柳莊神相<br>解讀</span>",
+  "h": "6ad548df"
+ },
+ "nhtg.ma-y-than-tuong-la-mot": {
+  "t": "《麻衣神相》是中國最著名的相學古籍之一，將三停、五官等臉部部位判讀性格與命運的方法系統化。《柳莊神相》與《水鏡集》則是常被一併對照的相學古籍。",
+  "h": "f21522a3"
+ },
+ "nhtg.ma-y-than-tuong-nhan-phap": {
+  "t": "麻衣神相 · 眼相古法",
+  "h": "38e14ae2"
+ },
+ "nhtg.mat-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"eye\"></span> 已偵測到眼睛",
+  "h": "b00eb630"
+ },
+ "nhtg.mat-phai": {
+  "t": "右眼",
+  "h": "a88c59ed"
+ },
+ "nhtg.mat-trai": {
+  "t": "左眼",
+  "h": "34e4f87a"
+ },
+ "nhtg.mo-camera": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 開啟相機",
+  "h": "dda0b3af"
+ },
+ "nhtg.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-tuong\">…</span> 兩)</span>",
+  "h": "3c4bc428"
+ },
+ "nhtg.nhan-tuong": {
+  "t": "眼相",
+  "h": "1bc89b2e"
+ },
+ "nhtg.nhan-tuong-tu-vi-minh-bao": {
+  "t": "眼相——明寶紫微斗數",
+  "h": "beddeaa1"
+ },
+ "nhtg.nhan-tuong-xem-tuong-mat-theo": {
+  "t": "<b>眼相</b><span>依古法看眼睛之相——<span data-tvp-price=\"nhan-tuong\">…</span> 兩</span>",
+  "h": "f3a91f07"
+ },
+ "nhtg.phan-tich-anh-khac": {
+  "t": "分析其他圖片",
+  "h": "eceede8c"
+ },
+ "nhtg.phan-tich-nhan-tuong-hoc": {
+  "t": "眼相學分析",
+  "h": "1ed9443b"
+ },
+ "nhtg.phan-tich-nhan-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"eye\"></span><b id=\"analyzeBtnLabel\">分析眼相 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-tuong\">…</span> 兩)</span></small>",
+  "h": "1e319aa8"
+ },
+ "nhtg.tai-anh-hoac-chup-truc-tiep": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>上傳圖片或<br>直接拍攝</span>",
+  "h": "45a94ade"
+ },
+ "nhtg.tai-anh-khuon-mat": {
+  "t": "上傳臉部照片",
+  "h": "0ce655e6"
+ },
+ "nhtg.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> 上傳圖片",
+  "h": "c3712e70"
+ },
+ "nhtg.tai-hoac-chup-anh-mat-he": {
+  "t": "上傳或拍攝臉部照片——系統依《麻衣神相》《柳莊神相》分析眼相（眼睛）。",
+  "h": "6b1bb466"
+ },
+ "nhtg.tai-mot-tam-anh-ro-khuon": {
+  "t": "請上傳臉部清晰的照片，特別是能看清眼部的照片。系統依柳莊神相古法，解讀眼形、眼神、眉毛與性格。",
+  "h": "030abd5a"
+ },
+ "nhtg.tu-zoom-vao-doi-mat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"eye\"></span><span>自動放大<br>眼部</span>",
+  "h": "214dd5e2"
+ },
+ "nhtg.xoa-anh": {
+  "t": "✕ 刪除圖片",
+  "h": "36e95d9f"
+ },
  "paysuc.dang-xac-nhan-thanh-toan": {
   "t": "正在確認付款...",
   "h": "d4f224cd"
@@ -11454,6 +12826,230 @@
  "thaycct.thay-tu-vi-minh-bao": {
   "t": "老師 — 明寶紫微斗數",
   "h": "9f2d3044"
+ },
+ "thtg.1-ghi-am-giong-noi": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">錄製聲音</span>",
+  "h": "8a655678"
+ },
+ "thtg.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">付款</span>",
+  "h": "67c0b759"
+ },
+ "thtg.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">取得結果</span>",
+  "h": "5b1e84a0"
+ },
+ "thtg.am-thanh-xu-ly-hoan-toan": {
+  "t": "聲音完全在瀏覽器內處理。僅將測得的指標（不傳送音檔）送至伺服器進行分析。",
+  "h": "cc7cd8bb"
+ },
+ "thtg.bat-dau-thu-am": {
+  "t": "<span id=\"recordIcon\" class=\"ic\" data-icon=\"mic\"></span> <span id=\"recordLabel\">開始錄音</span>",
+  "h": "2de7804f"
+ },
+ "thtg.cong-cha-nhu-nui-thai-son": {
+  "t": "父恩如<em>泰山</em>之高，<br> 母恩如源頭<em>流出之水</em>。<br> 一心侍奉母親、敬重父親，<br> 盡了孝道，才是<em>為子之道</em>。",
+  "h": "64ec2a8d"
+ },
+ "thtg.do-cao-do-toc-do-am": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>測量音高、<br>語速、音色</span>",
+  "h": "0098d11d"
+ },
+ "thtg.doc-cham-rai-tu-nhien-khoang": {
+  "t": "請緩慢、自然地朗讀——約 10–15 秒 · 建議在安靜、無噪音的地方進行",
+  "h": "d43c4d70"
+ },
+ "thtg.doc-doan-tho-nay-tu-nhien": {
+  "t": "<span class=\"ic\" data-icon=\"book-open\"></span> 請朗讀這段詩（自然、清晰）",
+  "h": "b1041484"
+ },
+ "thtg.doc-thanh-tieng-doan-mau-ben": {
+  "t": "請朗讀下方範例，系統會錄音並測量聲學指標，與五音古法對照。",
+  "h": "c7a7cc92"
+ },
+ "thtg.ghi-am-doan-tho-ngan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"mic\"></span><span>錄製<br>短詩一段</span>",
+  "h": "a159c35f"
+ },
+ "thtg.ghi-am-doc-mot-doan-tho": {
+  "t": "朗讀一小段詩並錄音——系統依五音古法（金、木、水、火、土）分析聲相。",
+  "h": "93f54a82"
+ },
+ "thtg.ghi-am-giong-noi": {
+  "t": "錄製聲音",
+  "h": "c4c81682"
+ },
+ "thtg.giong-noi-khong-chi-de-giao": {
+  "t": "聲音不只用來溝通——古法聲音學能從您的嗓音本質讀出適合與應避開的行業。錄一小段，立即獲得五音解讀。",
+  "h": "0b8e2c03"
+ },
+ "thtg.ket-qua-do-luong-giong-noi": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> 聲音測量結果",
+  "h": "ccbc07c1"
+ },
+ "thtg.luan-theo-ngu-am-co-phap": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依五音古法<br>解讀</span>",
+  "h": "fb865a03"
+ },
+ "thtg.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> 兩)</span>",
+  "h": "c4336d95"
+ },
+ "thtg.ngu-am-co-phap-ma-moi": {
+  "t": "五音古法 · 馬楣 · 達摩",
+  "h": "a036cb20"
+ },
+ "thtg.nhan-de-bat-dau-thu-am": {
+  "t": "點擊開始錄音 · 瀏覽器詢問時請允許使用麥克風",
+  "h": "74465b56"
+ },
+ "thtg.phan-tich-thanh-tuong-hoc": {
+  "t": "聲相學分析",
+  "h": "2c14b754"
+ },
+ "thtg.phan-tich-thanh-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">分析聲相 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> 兩)</span></small>",
+  "h": "04250412"
+ },
+ "thtg.thanh-tuong": {
+  "t": "聲相",
+  "h": "d47f6d49"
+ },
+ "thtg.thanh-tuong-tu-vi-minh-bao": {
+  "t": "聲相——明寶紫微斗數",
+  "h": "edcb4bcf"
+ },
+ "thtg.thanh-tuong-xem-tuong-giong-noi": {
+  "t": "<b>聲相</b><span>依五音古法看聲音之相——<span data-tvp-price=\"thanh-tuong\">…</span> 兩</span>",
+  "h": "247ec01f"
+ },
+ "thtg.thu-am-lai": {
+  "t": "重新錄音",
+  "h": "e7849d1e"
+ },
+ "thtp.12-chi-so-am-hoc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>12 項<br>聲學指標</span>",
+  "h": "cf4e2866"
+ },
+ "thtp.2-xem-ket-qua-do": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">查看測量結果</span>",
+  "h": "93f0142c"
+ },
+ "thtp.4-bai-do-giong-chuyen-sau": {
+  "t": "<span class=\"hp-ic\" data-icon=\"mic\"></span><span>4 項測量<br>深度測聲</span>",
+  "h": "f5f91cc8"
+ },
+ "thtp.bai-1-4-10-giay": {
+  "t": "<span class=\"task-num\" id=\"taskNum\">第 1/4 項</span> <span class=\"task-time\" id=\"taskTime\">10 秒</span>",
+  "h": "72a8ecea"
+ },
+ "thtp.bai-tiep-theo": {
+  "t": "下一項 →",
+  "h": "aad8808b"
+ },
+ "thtp.bat-dau-bai-do": {
+  "t": "開始測量",
+  "h": "76374e88"
+ },
+ "thtp.bat-dau-thu-am": {
+  "t": "開始錄音",
+  "h": "61e33202"
+ },
+ "thtp.bon-bai-do-giong-noi-chuyen": {
+  "t": "四項深度聲音測量——依《麻衣神相》《神相全編》《水鏡集》分析五音的系統。",
+  "h": "1eef1ee9"
+ },
+ "thtp.buoc-1-thong-tin-co-ban": {
+  "t": "步驟 1 · 基本資料",
+  "h": "9c5356b8"
+ },
+ "thtp.buoc-2-bon-bai-do-giong": {
+  "t": "步驟 2 · 四項聲音測量",
+  "h": "5b99459f"
+ },
+ "thtp.buoc-3-ket-qua-do": {
+  "t": "步驟 3 · 測量結果",
+  "h": "3541b2e4"
+ },
+ "thtp.chua-muon-ghi-am-ban-co": {
+  "t": "<b>還不想錄音嗎？</b><span>您可以先看一份範例，預先體驗。</span>",
+  "h": "468bb930"
+ },
+ "thtp.da-ghi-xong": {
+  "t": "✓ 已錄完。",
+  "h": "53247aed"
+ },
+ "thtp.doc-binh-thuong-ro-rang-khong": {
+  "t": "請正常、清晰、不急不躁地朗讀。",
+  "h": "2998c866"
+ },
+ "thtp.doc-doan-van": {
+  "t": "朗讀一段文字",
+  "h": "1d0b2c72"
+ },
+ "thtp.ghi-am-du-4-bai-do": {
+  "t": "請依您的性別與年齡錄完 4 項測量。系統將深度分析，解讀氣、性格、運勢，以及養聲養氣之法。",
+  "h": "0e8aaf05"
+ },
+ "thtp.giong-noi-mang-nhieu-thong-tin": {
+  "t": "聲音蘊含的資訊比我們想像的更多——4 項深度測量得出的 12 項聲學指標，描繪出最完整的五音與氣力全貌。適合想比一般聲相看得更深的人。",
+  "h": "f907ddc6"
+ },
+ "thtp.luan-giai-thanh-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">解讀聲相 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> 兩)</span></small>",
+  "h": "39fe65f9"
+ },
+ "thtp.luan-ngu-am-va-khi-luc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>五音與氣力<br>解讀</span>",
+  "h": "c9962dad"
+ },
+ "thtp.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> 兩)</span>",
+  "h": "a06b62cc"
+ },
+ "thtp.ngu-am": {
+  "t": "五音：—",
+  "h": "6ab7c5b6"
+ },
+ "thtp.ngu-am-co-phap-ma-y": {
+  "t": "五音古法 · 麻衣神相 · 神相全編 · 水鏡集",
+  "h": "a2f34068"
+ },
+ "thtp.ngu-am-tuong-phap-la-mot": {
+  "t": "五音相法是相學的一個分支，透過聲音論斷命運，將聲音依宮、商、角、徵、羽分類，對應五行。此法見載於《麻衣神相》等相學古籍。",
+  "h": "8f425df6"
+ },
+ "thtp.phan-tich-thanh-tuong-chuyen-sau": {
+  "t": "聲相深度分析",
+  "h": "1e2230b3"
+ },
+ "thtp.thanh-tuong-pro": {
+  "t": "聲相 Pro",
+  "h": "b2e5a151"
+ },
+ "thtp.thanh-tuong-pro-4-bai-do": {
+  "t": "<b>聲相 Pro</b><span>4 項深度聲音測量——<span data-tvp-price=\"thanh-tuong-pro\">…</span> 兩</span>",
+  "h": "a4477440"
+ },
+ "thtp.thanh-tuong-pro-tu-vi-minh": {
+  "t": "聲相 Pro——明寶紫微斗數",
+  "h": "b4ae7c2a"
+ },
+ "thtp.thu-lai": {
+  "t": "重錄",
+  "h": "0e099100"
+ },
+ "thtp.tuoi": {
+  "t": "年齡",
+  "h": "3a6fc33f"
+ },
+ "thtp.vi-du-32": {
+  "t": "例如：32",
+  "h": "dc9bd965"
+ },
+ "thtp.xem-ban-mau": {
+  "t": "查看範例 →",
+  "h": "ba3671b1"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "您正在解鎖…",
