@@ -18,6 +18,7 @@ import { birthLine } from '@/lib/pdf/i18n';
 import { renderPdfMail, siteUrl } from '@/lib/email/i18n';
 import { renderLuanGiaiPdf } from '@/lib/pdf/luan-giai';
 import { buildPhans } from '@/lib/pdf/phan-labels';
+import { readLuanI18n } from '@/lib/laso/luan-i18n';
 import { getOrCreateReportToken } from '@/lib/pdf/report-link';
 import { classifyLuanGiaiSlug } from '@/lib/pdf/luan-giai-slug';
 
@@ -58,17 +59,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Bạn không sở hữu lá số này' }, { status: 403 });
   }
 
-  const phans = buildPhans(row.luan_giai as Record<string, unknown> | null)
+  // Cookie = ngôn ngữ khách ĐANG dùng; có thì ghi nhớ cho các email sau. Tính TRƯỚC khi dựng PDF:
+  // khung PDF (bìa/mục lục/nhãn phần/giờ sinh) VÀ văn luận đi cùng ngôn ngữ thư — W18.
+  const cookieLocale = localeFromCookieHeader(req.headers.get('cookie'));
+  if (cookieLocale) await saveUserLocale(user.id, cookieLocale);
+  const locale = cookieLocale ?? (await getUserLocale(user.id));
+
+  // Văn luận: ngôn ngữ ≠ vi đọc bản cùng slug ở `laso_public_i18n` (W17, cùng khoá số phần); chưa có
+  // bản đó (khách mua ở trang Việt) thì lùi về bản Việt của `laso_public` — PDF có chữ còn hơn từ chối.
+  const banNgoai = locale === 'vi' ? null : await readLuanI18n(slug, locale);
+  const phansNgoai = buildPhans(banNgoai?.luanGiai as Record<string, unknown> | null);
+  const phans = (phansNgoai.length ? phansNgoai : buildPhans(row.luan_giai as Record<string, unknown> | null))
     .map((p) => ({ title: p.title, text: p.text.slice(0, 50_000) }));
   if (!phans.length) {
     return NextResponse.json({ error: 'Chưa có nội dung luận giải nào được lưu cho lá số này' }, { status: 400 });
   }
-
-  // Cookie = ngôn ngữ khách ĐANG dùng; có thì ghi nhớ cho các email sau. Tính TRƯỚC khi dựng PDF:
-  // khung PDF (bìa/mục lục/nhãn phần/giờ sinh) đi cùng ngôn ngữ thư — W18.
-  const cookieLocale = localeFromCookieHeader(req.headers.get('cookie'));
-  if (cookieLocale) await saveUserLocale(user.id, cookieLocale);
-  const locale = cookieLocale ?? (await getUserLocale(user.id));
 
   const hoTen = row.person_name ? String(row.person_name) : '';
   const ngaySinh = [row.ngay_sinh, row.thang_sinh, row.nam_sinh].every((v) => v != null)
@@ -76,8 +81,6 @@ export async function POST(req: NextRequest) {
     : '';
 
   try {
-    // ⚠️ Văn luận đọc từ `laso_public.luan_giai` — hiện CHỈ tiếng Việt (CLAUDE.md "Ngôn ngữ đầu ra
-    // LLM"); chỉ KHUNG theo `locale`. Khi kho luận theo (slug, locale) có, đọc đúng bản ở đây.
     const pdfBuffer = await renderLuanGiaiPdf({
       locale,
       toolId, hoTen, ngaySinh,
@@ -109,7 +112,8 @@ export async function POST(req: NextRequest) {
     const mail = renderPdfMail(locale, toolId, hoTen, { resend: true, viewUrl });
 
     const result = await sendTransactionalEmail({
-      dedupeKey: `resend-pdf-luan-giai-${toolId}-${user.id}-${slug}-${dayBucket}`,
+      // Ngôn ngữ vào khoá (vi giữ khoá cũ): gửi bản Nhật rồi bản Việt trong cùng ngày là hai thư khác nhau.
+      dedupeKey: `resend-pdf-luan-giai-${toolId}-${user.id}-${slug}-${dayBucket}${locale === 'vi' ? '' : '-' + locale}`,
       template: 'luan-giai-pdf-resend',
       to: user.email,
       subject: mail.subject,

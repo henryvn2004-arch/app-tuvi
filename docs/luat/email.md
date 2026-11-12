@@ -149,7 +149,7 @@ Khách mới là người Nhật · Hàn · Đài · Trung · Anh, nên cả 6 l
   `locale` ⇒ `href` tới trang tuviminhbao.com thành `/<locale>/…` — kể cả broadcast admin soạn và `viewUrl`. Để nguyên
   `/api/…` (link huỷ), file tĩnh, link đã có tiền tố. Mẫu mới vẫn nên dùng `siteUrl(locale, …)`.
 - **PDF đính kèm (W18):** khung (bìa/mục lục/nhãn phần) theo `locale` của thư, font CJK/Hangul nhúng (`lib/pdf/`);
-  văn luận là thứ đã sinh — resend-pdf đọc `laso_public.luan_giai` (chỉ tiếng Việt).
+  văn luận là thứ đã sinh — resend-pdf ≠ vi đọc `laso_public_i18n` (W17), thiếu thì lùi bản Việt.
 - **Chưa phủ:** `lib/channels/email-link.ts` (mã gộp tài khoản — thuộc kênh chat, ngoài phạm vi W11),
   OTP đăng ký (Supabase Auth — việc tay, xem bên dưới).
 
