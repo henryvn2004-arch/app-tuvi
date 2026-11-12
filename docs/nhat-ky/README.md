@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-571 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+572 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🃏 W25 — Tarot · Bói Bài Tây · Oracle đủ 5 ngôn ngữ; khung tĩnh 10 trang (thần số học, bản đồ sao, phong thủy ×3, mệnh khố, công cụ, tài liệu) vào từ điển; tên sách giữ gốc; bẫy `i18n:prune` · chuỗi Việt không dấu |
 | 1 | 2026-11 | `2026-11.md` | 📨 W17b — "Gửi lại PDF" đọc văn luận theo ngôn ngữ người nhận (`readLuanI18n`), hụt lùi bản Việt |
 | 1 | 2026-11 | `2026-11.md` | 🌐 W18 — Chân dung/cẩm nang theo locale (cache tách ngôn ngữ, sở hữu giữ nguyên) · link email `/<locale>/` · PDF font CJK/Hangul + khung theo ngôn ngữ |
 | 1 | 2026-11 | `2026-11.md` | 🗂️ W17 — Bản luận lá số theo (slug, locale): bảng con `laso_public_i18n`, `/api/laso-luan`, `check:lasoi18n` |
