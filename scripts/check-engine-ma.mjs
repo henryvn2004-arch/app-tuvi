@@ -107,10 +107,23 @@ for (let i = 0; i < 400; i++) {
   out.truc.push(a.truc.map((t) => ({ id: t.id, ten: t.ten, cauHoi: t.cauHoi, nghieng: t.nghieng, nhanThap: t.nhanThap, nhanCao: t.nhanCao, cuc: t.cuc, canND: t.canND })));
   out.khieu.push(a.khieu.map((k) => ({ id: k.id, ten: k.ten, motCau: k.motCau, dauHieu: k.dauHieu, chuY: k.chuY, oLop: k.oLop })));
 }
+// GOLDEN: chữ Việt do engine TRƯỚC lô D dựng bằng chuỗi viết tay (scripts/fixtures/engine-ma-golden.json) — engine nay
+// dựng từ bảng khuôn và phải giữ từng byte (chữ còn vào prompt LLM + portrait_cache).
+const { readFileSync } = await import('node:fs');
+const gold = JSON.parse(readFileSync(process.env.GOLDEN, 'utf8'));
+out.golden = {
+  bond: gold.bond.map((g) => { const b = bond.computePastLifeBond(ls(g.A), g.A.gender, ls(g.B), g.B.gender); return { A: g.A, B: g.B, type: b.type, signals: b.signals.map((s) => [s.label, s.detail]) }; }),
+  nm: (() => { const vai = ['sep', 'dong-nghiep', 'cap-duoi', 'doi-tac']; const p = nm.computeNhanMach(gold.nm.people.map((b, j) => ({ ten: 'P' + j, vai: vai[j], ls: ls(b), gioiTinh: b.gender })), null, 2026); return p.cap.map((c) => [c.a, c.b, c.loai, c.vi]); })(),
+};
 console.log('__KQ__' + JSON.stringify(out));
 `
   );
-  const raw = execFileSync('node', [join(build, 'ma.mjs')], { encoding: 'utf8', maxBuffer: 256e6 });
+  const GOLD = join(ROOT, 'scripts/fixtures/engine-ma-golden.json');
+  const raw = execFileSync('node', [join(build, 'ma.mjs')], {
+    encoding: 'utf8',
+    maxBuffer: 256e6,
+    env: { ...process.env, GOLDEN: GOLD },
+  });
   const kq = JSON.parse(raw.slice(raw.indexOf('__KQ__') + 6));
 
   const { loadSources } = await import('../lib/i18n/long.mjs');
@@ -217,6 +230,23 @@ console.log('__KQ__' + JSON.stringify(out));
     bao(sai.length === 0, `day-con-assess — ${dung.size} khoá chạm bởi ${kq.truc.length} lá số mẫu, không trỏ trượt: ${[...new Set(sai)].slice(0, 5).join(', ') || 'không'}`);
     bao(lech.length === 0, `day-con-assess — chữ Việt trong payload == nguồn dịch: ${[...new Set(lech)].slice(0, 5).join(', ') || 'khớp'}`);
     bao(dung.size >= 100, `day-con-assess — mẫu chạm ${dung.size}/124 khoá (cần ≥100: cả hai cực + ca nằm giữa của 5 trục, 8 chất)`);
+  }
+
+  // ── GOLDEN: chữ Việt byte-giống engine cũ (nguồn độc lập với bảng khuôn)
+  {
+    const gold = JSON.parse(readFileSync(join(ROOT, 'scripts/fixtures/engine-ma-golden.json'), 'utf8'));
+    const lechB = [];
+    gold.bond.forEach((g, i) => {
+      const n = kq.golden.bond[i];
+      const a = JSON.stringify([g.type, g.signals]);
+      const b = JSON.stringify([n.type, n.signals]);
+      if (a !== b) lechB.push(`cặp #${i}`);
+    });
+    bao(gold.bond.length >= 10 && lechB.length === 0, `golden duyen-no — ${gold.bond.length} cặp (22 dạng câu) byte-giống engine cũ: ${lechB.join(', ') || 'khớp'}`);
+    bao(
+      JSON.stringify(gold.nm.cap) === JSON.stringify(kq.golden.nm),
+      `golden nhan-mach — ${gold.nm.cap.length} câu cặp byte-giống engine cũ`
+    );
   }
 } finally {
   rmSync(out, { recursive: true, force: true });
