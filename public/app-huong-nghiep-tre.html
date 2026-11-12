@@ -370,9 +370,9 @@ window.SHELL_INTRO={key:'huong-nghiep-tre'};</script>
 var _currentSlug = '';
 var _last = null;
 var HN_STEPS = [
-  { label: 'Lập lá số & phân kiểu người', ms: 1300 },
-  { label: 'Chấm 21 trục tính khí, chọn thiên hướng', ms: 2200 },
-  { label: 'Viết bản định hướng theo lứa tuổi', ms: 0 },
+  { label: _tvmbT('js.hnt.lap-la-so-phan-kieu-nguoi', 'Lập lá số & phân kiểu người'), ms: 1300 },
+  { label: _tvmbT('js.hnt.cham-21-truc-tinh-khi-chon', 'Chấm 21 trục tính khí, chọn thiên hướng'), ms: 2200 },
+  { label: _tvmbT('js.hnt.viet-ban-dinh-huong-theo-lua', 'Viết bản định hướng theo lứa tuổi'), ms: 0 },
 ];
 var _loadingCtl = null;
 
@@ -380,12 +380,12 @@ var _loadingCtl = null;
 // chép hai bản thì hai bản trôi khỏi nhau. Đây là bản DUY NHẤT ở phía client,
 // server đọc `MOI_LO` của engine; hai bên khớp nhau qua chính giá trị `id`.
 var LO_LIST = [
-  ['hieu-them', 'Không có gì gấp, chỉ muốn hiểu con hơn', 'Bạn sẽ nhận: một bản mô tả thiên hướng đủ rõ để nhận ra con trong đời thường, kèm việc nên cho làm quen.'],
-  ['chua-thich-gi', 'Con chưa thích gì rõ rệt, cái gì cũng nhàn nhạt', 'Bạn sẽ nhận: chỗ nên bày ra trước để con có cơ hội chạm đúng thứ hợp — và mốc nào thì thôi lo.'],
-  ['me-mot-thu', 'Con chỉ mê đúng một thứ, lo con lệch', 'Bạn sẽ nhận: cái con mê có phải chỗ mạnh thật không, và nên mở thêm hướng nào cho cân.'],
-  ['sap-chon', 'Sắp phải chọn môn / tổ hợp / trường', 'Bạn sẽ nhận: chất việc hợp với con và cách hỏi để con tự nói ra — không phải một cái tên ngành chốt sẵn.'],
-  ['khac-y-minh', 'Con thích hướng mà mình không muốn', 'Bạn sẽ nhận: phần nào trong ý con là chỗ mạnh có thật, và cách nói chuyện để không đẩy con đi xa hơn.'],
-  ['so-thua-kem', 'Sợ con không theo kịp bạn bè', 'Bạn sẽ nhận: con đang bị đo bằng thước của đứa khác ở chỗ nào, và thước nào mới là thước của con.']
+  ['hieu-them', _tvmbT('js.hnt.khong-co-gi-gap-chi-muon', 'Không có gì gấp, chỉ muốn hiểu con hơn'), _tvmbT('js.hnt.ban-se-nhan-mot-ban-mo', 'Bạn sẽ nhận: một bản mô tả thiên hướng đủ rõ để nhận ra con trong đời thường, kèm việc nên cho làm quen.')],
+  ['chua-thich-gi', _tvmbT('js.hnt.con-chua-thich-gi-ro-ret', 'Con chưa thích gì rõ rệt, cái gì cũng nhàn nhạt'), _tvmbT('js.hnt.ban-se-nhan-cho-nen-bay', 'Bạn sẽ nhận: chỗ nên bày ra trước để con có cơ hội chạm đúng thứ hợp — và mốc nào thì thôi lo.')],
+  ['me-mot-thu', _tvmbT('js.hnt.con-chi-me-dung-mot-thu', 'Con chỉ mê đúng một thứ, lo con lệch'), _tvmbT('js.hnt.ban-se-nhan-cai-con-me', 'Bạn sẽ nhận: cái con mê có phải chỗ mạnh thật không, và nên mở thêm hướng nào cho cân.')],
+  ['sap-chon', _tvmbT('js.hnt.sap-phai-chon-mon-to-hop', 'Sắp phải chọn môn / tổ hợp / trường'), _tvmbT('js.hnt.ban-se-nhan-chat-viec-hop', 'Bạn sẽ nhận: chất việc hợp với con và cách hỏi để con tự nói ra — không phải một cái tên ngành chốt sẵn.')],
+  ['khac-y-minh', _tvmbT('js.hnt.con-thich-huong-ma-minh-khong', 'Con thích hướng mà mình không muốn'), _tvmbT('js.hnt.ban-se-nhan-phan-nao-trong', 'Bạn sẽ nhận: phần nào trong ý con là chỗ mạnh có thật, và cách nói chuyện để không đẩy con đi xa hơn.')],
+  ['so-thua-kem', _tvmbT('js.hnt.so-thua-kem-lbl', 'Sợ con không theo kịp bạn bè'), _tvmbT('js.hnt.so-thua-kem-hint', 'Bạn sẽ nhận: con đang bị đo bằng thước của đứa khác ở chỗ nào, và thước nào mới là thước của con.')]
 ];
 (function () {
   var s = document.getElementById('moiLo');
@@ -477,7 +477,7 @@ function _hnLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && wind
 async function analyze() {
   showError('');
   var b = _birthOf('');
-  if (!b) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh của bé.'); return; }
+  if (!b) { showError(_tvmbT('js.hnt.vui-long-nhap-day-du-ngay', 'Vui lòng nhập đầy đủ ngày tháng năm sinh của bé.')); return; }
   var lo = document.getElementById('moiLo').value;
   _last = b;
   _currentSlug = TuviPaywall.generateToolSlug('huong-nghiep-tre-' + lo + '-' + b.day + b.month + b.year);
@@ -503,11 +503,11 @@ async function analyze() {
       body: JSON.stringify({ birth: b, name: b.name || '', moiLo: lo, anonId: TuviPaywall.previewAnonId() })
     });
     prev = await r.json();
-    if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
+    if (!r.ok || !prev.success) throw new Error(prev.error || _tvmbT('js.hnt.loi', 'Lỗi ') + r.status);
   } catch (e) {
     _loadingCtl && _loadingCtl.stop();
     _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    showError(_tvmbT('js.hnt.loi-8d72', 'Lỗi: ') + (e.message || _tvmbT('js.hnt.khong-the-ket-noi-vui-long', 'Không thể kết nối. Vui lòng thử lại.')));
     return;
   }
 
@@ -537,7 +537,7 @@ async function analyze() {
     var free = false;
     try { free = await TuviPaywall.isFreeRerun('/api/huong-nghiep-tre', _cacheQuery(b, lo)); } catch (e) { free = false; }
     if (free) {
-      TuviPaywall._banner('✓ Bạn đã xem bản này rồi — mở lại, không trừ Lượng');
+      TuviPaywall._banner(_tvmbT('js.hnt.ban-da-xem-ban-nay-roi', '✓ Bạn đã xem bản này rồi — mở lại, không trừ Lượng'));
       await _doGenerate(true, lo);
       return;
     }
@@ -609,7 +609,7 @@ function _hnLockBlocks(data) {
     body.insertAdjacentHTML('beforeend',
       '<div class="tpw-ph-host">' + (sample || TuviPaywall.placeholderHtml(i, b[1])) + '</div>');
     var titleEl = block.querySelector('.res-block-title');
-    if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
+    if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge(_tvmbT('js.hnt.khoa', 'Khoá')));
     block.style.display = 'block';
   });
   if (window.mountIcons) window.mountIcons(document.getElementById('resPanel'));
@@ -648,12 +648,12 @@ function mountHook(data) {
   var facts = top2.map(function (c, i) {
     return {
       tone: 'good',
-      title: (i === 0 ? 'Chất người nổi nhất: ' : 'Chất người nổi thứ nhì: ') + c.ten,
-      body: (c.cao || '') + ' — thiên hướng nổi nhất và cách cho con làm quen nằm trong bản định hướng đầy đủ.',
+      title: (i === 0 ? _tvmbT('js.hnt.chat-nguoi-noi-nhat', 'Chất người nổi nhất: ') : _tvmbT('js.hnt.chat-nguoi-noi-thu-nhi', 'Chất người nổi thứ nhì: ')) + c.ten,
+      body: (c.cao || '') + _tvmbT('js.hnt.thien-huong-noi-nhat-va-cach', ' — thiên hướng nổi nhất và cách cho con làm quen nằm trong bản định hướng đầy đủ.'),
       source: 'engine · chatNguoi[' + i + ']',
     };
   });
-  var spec = { tool: 'huong-nghiep-tre', toolLabel: 'Hướng Nghiệp Sớm Cho Con', charts: [], facts: facts };
+  var spec = { tool: 'huong-nghiep-tre', toolLabel: _tvmbT('js.hnt.huong-nghiep-som-cho-con', 'Hướng Nghiệp Sớm Cho Con'), charts: [], facts: facts };
   window.HookLayer.run(host, spec);
 }
 
@@ -671,18 +671,18 @@ function _renderLockWall(lo) {
   // Đã đăng nhập (chỉ còn thiếu tiền, không thiếu tài khoản) → nút phẳng, bỏ
   // qua màn "Đăng ký" — cùng mẫu app-chu-trinh-cuoc-doi.html `_renderUnlockBlock`.
   if (_hnLoggedIn()) {
-    host.innerHTML = '<button class="btn-go" type="button" onclick="_hnUnlockLoggedIn()">✦ Xem bản định hướng đầy đủ — <span data-tvp-price="huong-nghiep-tre">…</span> Lượng →</button>';
+    host.innerHTML = ('<button class="btn-go" type="button" onclick="_hnUnlockLoggedIn()">' + _tvmbT('js.hnt.xem-ban-dinh-huong-day-du', '✦ Xem bản định hướng đầy đủ —') + ' <span data-tvp-price="huong-nghiep-tre">…</span> ' + _tvmbT('js.hnt.luong', 'Lượng →') + '</button>');
     TuviPaywall.fillPriceSlots(host);
     return;
   }
   TuviPaywall.lockPreview({
     host: host,
-    title: '⊙ Bản định hướng đầy đủ chưa mở',
+    title: _tvmbT('js.hnt.ban-dinh-huong-day-du-chua', '⊙ Bản định hướng đầy đủ chưa mở'),
     items: [
-      'Ba hướng đáng cho con thử, kèm hoạt động cụ thể theo lứa tuổi',
-      'Việc nên làm trong tháng này / nên thôi, và mở lời với con thế nào',
+      _tvmbT('js.hnt.ba-huong-dang-cho-con-thu', 'Ba hướng đáng cho con thử, kèm hoạt động cụ thể theo lứa tuổi'),
+      _tvmbT('js.hnt.viec-nen-lam-trong-thang-nay', 'Việc nên làm trong tháng này / nên thôi, và mở lời với con thế nào'),
     ],
-    cta: 'Mở bản định hướng đầy đủ',
+    cta: _tvmbT('js.hnt.mo-ban-dinh-huong-day-du', 'Mở bản định hướng đầy đủ'),
     slug: function () { return _currentSlug; },
     onUnlock: function () { return _doGenerate(false, lo); },
   });
@@ -736,7 +736,7 @@ async function _doGenerate(freeRerun, lo) {
       await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, lo); });
       return;
     }
-    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    if (!res.ok || !data.success) throw new Error(data.error || _tvmbT('js.hnt.loi', 'Lỗi ') + res.status);
     renderMeta(data);
     renderProse(data);
     _loadingCtl && _loadingCtl.finish();
@@ -753,12 +753,12 @@ async function _doGenerate(freeRerun, lo) {
       wrap: 'huong-nghiep-tre',
       wrapMoiLo: lo,
       label: 'Hướng nghiệp sớm cho con',
-      greeting: 'Đây là bản định hướng sớm cho **' + ten + '**. Bạn muốn hỏi thêm gì?',
+      greeting: _tvmbT('js.hnt.day-la-ban-dinh-huong-som-ten', 'Đây là bản định hướng sớm cho **{ten}**. Bạn muốn hỏi thêm gì?', {ten: ten}),
       chips: [
-        'Cuối tuần này tôi nên cho ' + ten + ' thử việc gì trước?',
-        'Vì sao lá số lại nghiêng về hướng này?',
-        ten + ' đang mê một thứ khác hẳn — có nên cho theo không?',
-        'Tôi nên hỏi ' + ten + ' câu gì để con tự nói ra?'
+        _tvmbT('js.hnt.cuoi-tuan-nay-toi-nen-cho-ten', 'Cuối tuần này tôi nên cho {ten} thử việc gì trước?', {ten: ten}),
+        _tvmbT('js.hnt.vi-sao-la-so-lai-nghieng', 'Vì sao lá số lại nghiêng về hướng này?'),
+        _tvmbT('js.hnt.ten-dang-me-mot-thu-khac', '{ten} đang mê một thứ khác hẳn — có nên cho theo không?', {ten: ten}),
+        _tvmbT('js.hnt.toi-nen-hoi-ten-cau-gi', 'Tôi nên hỏi {ten} câu gì để con tự nói ra?', {ten: ten})
       ]
     });
 
@@ -768,12 +768,12 @@ async function _doGenerate(freeRerun, lo) {
     Shell.setShareable({
       kind: 'text',
       toolId: 'huong-nghiep-tre',
-      title: 'Hướng nghiệp sớm — ' + ten,
+      title: _tvmbT('js.hnt.huong-nghiep-som', 'Hướng nghiệp sớm — ') + ten,
       text: [
         ten + ' — ' + (data.lop ? data.lop.ten + ' (' + data.lop.tuoi + ')' : ''),
-        h0 ? 'Thiên hướng nổi nhất: ' + h0.ten + ' — ' + h0.chat : '',
-        h0 && h0.hoatDong && h0.hoatDong.length ? 'Nên cho làm quen: ' + h0.hoatDong.slice(0, 2).join(' · ') : '',
-        h0 ? 'Người lớn nên: ' + h0.chaMeNen : '',
+        h0 ? _tvmbT('js.hnt.thien-huong-noi-nhat-ten-chat', 'Thiên hướng nổi nhất: {ten} — {chat}', {ten: h0.ten, chat: h0.chat}) : '',
+        h0 && h0.hoatDong && h0.hoatDong.length ? _tvmbT('js.hnt.nen-cho-lam-quen-hd', 'Nên cho làm quen: {hd}', {hd: h0.hoatDong.slice(0, 2).join(' · ')}) : '',
+        h0 ? _tvmbT('js.hnt.nguoi-lon-nen-nen', 'Người lớn nên: {nen}', {nen: h0.chaMeNen}) : '',
         data.motCau ? '— ' + data.motCau : ''
       ].filter(Boolean).join('\n')
     });
@@ -781,7 +781,7 @@ async function _doGenerate(freeRerun, lo) {
     if (window.TuviPaywall && TuviPaywall.showRefundNotice) TuviPaywall.showRefundNotice(data);
     _loadingCtl && _loadingCtl.stop();
     _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    showError(_tvmbT('js.hnt.loi-8d72', 'Lỗi: ') + (e.message || _tvmbT('js.hnt.khong-the-ket-noi-vui-long', 'Không thể kết nối. Vui lòng thử lại.')));
   }
 }
 
@@ -799,10 +799,10 @@ async function _doGenerate(freeRerun, lo) {
 function _xungHoVai(data) {
   var nu = data.gioiTinh === 'nu';
   var t = data.tuoi;
-  if (t == null) return nu ? 'Nữ' : 'Nam';
-  if (t <= 12) return nu ? 'Bé gái' : 'Bé trai';
-  if (t <= 18) return nu ? 'Nữ' : 'Nam';
-  return nu ? 'Nữ' : 'Nam';
+  if (t == null) return nu ? _tvmbT('js.hnt.nu', 'Nữ') : 'Nam';
+  if (t <= 12) return nu ? _tvmbT('js.hnt.be-gai', 'Bé gái') : _tvmbT('js.hnt.be-trai', 'Bé trai');
+  if (t <= 18) return nu ? _tvmbT('js.hnt.nu', 'Nữ') : 'Nam';
+  return nu ? _tvmbT('js.hnt.nu', 'Nữ') : 'Nam';
 }
 
 /**
@@ -814,12 +814,12 @@ function _banGiaoNguoiLon(data) {
   var host = document.getElementById('lockHost');
   host.innerHTML =
     '<div class="hn-warn" style="margin-bottom:0">' +
-    '<b>Lá số này đã ' + (data.tuoi != null ? esc(String(data.tuoi)) + ' tuổi' : 'trưởng thành') +
-    '</b> — đây không còn là câu hỏi <i>định hướng sớm cho con</i>, nên phần định hướng viết cho ' +
-    'cha mẹ đọc về con <b>không mở ở đây</b> và <b>không trừ Lượng</b>.<br><br>' +
-    'Phần thiên hướng phía trên vẫn đọc được và vẫn miễn phí — nó đọc từ lá số nên đúng ở mọi ' +
-    'tuổi. Muốn đọc hướng nghiệp cho người trưởng thành (lĩnh vực, vai trò, quy mô, nhánh nghề) ' +
-    'thì dùng <a href="/app/cong-so">Tử Vi Công Sở &amp; Hướng Nghiệp</a>.' +
+    _tvmbT('js.hnt.la-so-nay-da', '<b>Lá số này đã ') + (data.tuoi != null ? esc(String(data.tuoi)) + _tvmbT('js.hnt.tuoi', ' tuổi') : _tvmbT('js.hnt.truong-thanh', 'trưởng thành')) +
+    _tvmbT('js.hnt.day-khong-con-la-cau-hoi', '</b> — đây không còn là câu hỏi <i>định hướng sớm cho con</i>, nên phần định hướng viết cho ') +
+    _tvmbT('js.hnt.cha-me-doc-ve-con-khong', 'cha mẹ đọc về con <b>không mở ở đây</b> và <b>không trừ Lượng</b>.<br><br>') +
+    _tvmbT('js.hnt.phan-thien-huong-phia-tren-van', 'Phần thiên hướng phía trên vẫn đọc được và vẫn miễn phí — nó đọc từ lá số nên đúng ở mọi ') +
+    _tvmbT('js.hnt.tuoi-muon-doc-huong-nghiep-cho', 'tuổi. Muốn đọc hướng nghiệp cho người trưởng thành (lĩnh vực, vai trò, quy mô, nhánh nghề) ') +
+    (_tvmbT('js.hnt.thi-dung', 'thì dùng') + ' <a href="/app/cong-so">' + _tvmbT('js.hnt.tu-vi-cong-so-huong-nghiep', 'Tử Vi Công Sở &amp; Hướng Nghiệp') + '</a>.') +
     '</div>';
   document.getElementById('lockBlock').style.display = 'block';
 }
@@ -860,11 +860,11 @@ function renderMetaHead(data) {
   document.getElementById('hnIllusHost').innerHTML = huongNghiepIllusHtml(data);
   // Bỏ trống ô tên thì tiêu đề rơi về một cách gọi — mà "Con" dán lên một lá số
   // 43 tuổi thì vẫn đúng chỗ Henry báo, chỉ khác một dòng.
-  var ten = data.ten || (data.laTreEm === false ? 'Lá số này' : 'Con');
+  var ten = data.ten || (data.laTreEm === false ? _tvmbT('js.hnt.la-so-nay', 'Lá số này') : 'Con');
   document.getElementById('heroName').textContent = ten;
   document.getElementById('heroRole').textContent =
     _xungHoVai(data) +
-    (data.tuoi != null ? ' · ' + data.tuoi + ' tuổi (tuổi mụ)' : '');
+    (data.tuoi != null ? ' · ' + data.tuoi + _tvmbT('js.hnt.tuoi-tuoi-mu', ' tuổi (tuổi mụ)') : '');
 
   var bd = [];
   // ⚠️ `lop` chỉ là chỗ đứng KỸ THUẬT khi laTreEm=false (payload giữ nguyên
@@ -872,7 +872,7 @@ function renderMetaHead(data) {
   // tuổi — đúng loại vô lý vừa đi sửa, chỉ đổi chỗ.
   if (data.lop && data.laTreEm !== false)
     bd.push('<span class="hn-badge">' + esc(data.lop.ten) + ' · ' + esc(data.lop.tuoi) + '</span>');
-  if (data.kieu) bd.push('<span class="hn-badge alt">Kiểu ' + esc(data.kieu.ten) + '</span>');
+  if (data.kieu) bd.push(('<span class="hn-badge alt">' + _tvmbT('js.hnt.kieu', 'Kiểu') + ' ') + esc(data.kieu.ten) + '</span>');
   if (data.lai && data.kieuPhu) bd.push('<span class="hn-badge alt">pha ' + esc(data.kieuPhu.ten) + '</span>');
   document.getElementById('heroBadges').innerHTML = bd.join('');
   // Dòng LÁ SỐ phải hiện ngay trên trang, không chỉ trong bản chia sẻ: cha mẹ
@@ -880,7 +880,7 @@ function renderMetaHead(data) {
   // gõ nhầm một trường). Dùng CHUNG `Shell.birthSummary` với bản chia sẻ.
   var bSum = '';
   try { bSum = (window.Shell && Shell.birthSummary && _last) ? Shell.birthSummary(_last) : ''; } catch (e) { bSum = ''; }
-  document.getElementById('heroBirth').textContent = bSum ? 'Lá số: ' + bSum : '';
+  document.getElementById('heroBirth').textContent = bSum ? _tvmbT('js.hnt.la-so', 'Lá số: ') + bSum : '';
   document.getElementById('heroVai').textContent =
     data.lop && data.laTreEm !== false ? data.lop.vaiChaMe : '';
 }
@@ -894,9 +894,9 @@ function renderMetaRest(data) {
   }
   var cr = document.getElementById('chuaRoNet');
   if (data.chuaRoNet) {
-    cr.innerHTML = '⚠️ <b>Lá số con chưa nghiêng hẳn về hướng nào.</b> Ở tuổi này đó là chuyện bình thường — ' +
-      'và lời khuyên đúng lúc này là <b>cho thử rộng</b> thay vì chốt sớm. Hướng dưới đây là hướng nghiêng nhất, ' +
-      'nhưng hãy đọc nó như một gợi ý để thử, không phải một kết luận.';
+    cr.innerHTML = _tvmbT('js.hnt.la-so-con-chua-nghieng-han', '⚠️ <b>Lá số con chưa nghiêng hẳn về hướng nào.</b> Ở tuổi này đó là chuyện bình thường — ') +
+      _tvmbT('js.hnt.va-loi-khuyen-dung-luc-nay', 'và lời khuyên đúng lúc này là <b>cho thử rộng</b> thay vì chốt sớm. Hướng dưới đây là hướng nghiêng nhất, ') +
+      _tvmbT('js.hnt.nhung-hay-doc-no-nhu-mot', 'nhưng hãy đọc nó như một gợi ý để thử, không phải một kết luận.');
     cr.style.display = 'block';
   } else {
     cr.style.display = 'none';
@@ -925,13 +925,13 @@ function renderMetaRest(data) {
   var md = data.matDoc || [];
   var li = md.map(function (m) {
     return '<li><b>' + esc(m.nhan) + '</b> (cung ' + esc(m.cung) + '): ' +
-      esc(m.sao.join(', ') || 'không có chính tinh') +
-      (m.muon ? ' <i>— mượn xung chiếu</i>' : '') +
+      esc(m.sao.join(', ') || _tvmbT('js.hnt.khong-co-chinh-tinh', 'không có chính tinh')) +
+      (m.muon ? _tvmbT('js.hnt.muon-xung-chieu', ' <i>— mượn xung chiếu</i>') : '') +
       (m.cachCuc && m.cachCuc.length ? ' — ' + esc(m.cachCuc.join('; ')) : '') + '</li>';
   });
   if (data.changDangO) {
-    li.push('<li><b>Chặng đang ở</b>: ' + data.changDangO.tuoiStart + '–' + data.changDangO.tuoiEnd +
-      ' tuổi (' + data.changDangO.namStart + '–' + data.changDangO.namEnd + '), cung ' +
+    li.push(_tvmbT('js.hnt.chang-dang-o', '<li><b>Chặng đang ở</b>: ') + data.changDangO.tuoiStart + '–' + data.changDangO.tuoiEnd +
+      _tvmbT('js.hnt.tuoi-lqk0', ' tuổi (') + data.changDangO.namStart + '–' + data.changDangO.namEnd + '), cung ' +
       esc(data.changDangO.cung) + '</li>');
   }
   if (li.length) {
@@ -949,35 +949,35 @@ function renderMeta(data) { renderMetaHead(data); renderMetaRest(data); }
 /** Một thẻ thiên hướng. `full` = có hoạt động + việc nên/tránh (đã trả tiền). */
 function _huongHtml(h, full, showDiem, dinhBang) {
   var s = '<div class="hn-h"><div class="hn-h-top"><div class="hn-h-ten">' + esc(h.ten) + '</div>' +
-    (showDiem ? '<div class="hn-h-diem">độ nghiêng ' + (h.diem || 0) + '</div>' : '') + '</div>';
+    (showDiem ? ('<div class="hn-h-diem">' + _tvmbT('js.hnt.do-nghieng', 'độ nghiêng') + ' ') + (h.diem || 0) + '</div>' : '') + '</div>';
   // Thanh chỉ vẽ khi có ÍT NHẤT HAI hướng để so — một thanh đứng một mình
   // không so với cái gì, chỉ làm người đọc tưởng đó là thang đo tuyệt đối.
   if (dinhBang > 0 && h.diem > 0) {
     var pct = Math.max(4, Math.min(100, (h.diem / dinhBang) * 100));
-    s += '<div class="hn-h-thanh' + (h.diem >= dinhBang ? ' top' : '') + '" role="img" aria-label="Độ nghiêng ' +
-      Math.round(pct) + ' phần trăm so với thiên hướng đứng đầu"><i style="width:' + pct.toFixed(1) + '%"></i></div>';
+    s += '<div class="hn-h-thanh' + (h.diem >= dinhBang ? ' top' : '') + '" role="img" aria-label="' + _tvmbT('js.hnt.do-nghieng-pct-phan-tram', 'Độ nghiêng {pct} phần trăm so với thiên hướng đứng đầu', {pct: Math.round(pct)}) +
+      '"><i style="width:' + pct.toFixed(1) + '%"></i></div>';
   }
   s += '<div class="hn-h-chat">' + esc(h.chat) + '</div>';
   if (h.vi && h.vi.length) {
-    s += '<div class="hn-h-vi"><b>Vì:</b> ' + esc(h.vi.join(' · ')) + '</div>';
+    s += ('<div class="hn-h-vi">' + _tvmbT('js.hnt.vi', '<b>Vì:</b>') + ' ') + esc(h.vi.join(' · ')) + '</div>';
   }
   if (h.dauHieu && h.dauHieu.length) {
-    s += '<div class="hn-sub">Dấu hiệu ở nhà</div><div class="hn-chips">' +
+    s += ('<div class="hn-sub">' + _tvmbT('js.hnt.dau-hieu-o-nha', 'Dấu hiệu ở nhà') + '</div><div class="hn-chips">') +
       h.dauHieu.map(function (d) { return '<span class="hn-chip">' + esc(d) + '</span>'; }).join('') + '</div>';
   }
   if (full) {
     if (h.hoatDong && h.hoatDong.length) {
-      s += '<div class="hn-sub">Nên cho làm quen ở lứa này</div><ul class="hn-list">' +
+      s += ('<div class="hn-sub">' + _tvmbT('js.hnt.nen-cho-lam-quen-o-lua', 'Nên cho làm quen ở lứa này') + '</div><ul class="hn-list">') +
         h.hoatDong.map(function (v) { return '<li>' + esc(v) + '</li>'; }).join('') + '</ul>';
     }
-    if (h.chaMeNen) s += '<div class="hn-sub">Người lớn nên</div><div class="hn-h-chat">' + esc(h.chaMeNen) + '</div>';
-    if (h.chaMeTranh) s += '<div class="hn-sub">Người lớn tránh</div><div class="hn-h-chat">' + esc(h.chaMeTranh) + '</div>';
-    if (h.deBiHieuNham) s += '<div class="hn-sub">Chỗ hay bị hiểu nhầm</div><div class="hn-h-chat">' + esc(h.deBiHieuNham) + '</div>';
-    if (h.chatViec) s += '<div class="hn-sub">Chất việc về sau</div><div class="hn-h-chat">' + esc(h.chatViec) + '</div>';
+    if (h.chaMeNen) s += ('<div class="hn-sub">' + _tvmbT('js.hnt.nguoi-lon-nen', 'Người lớn nên') + '</div><div class="hn-h-chat">') + esc(h.chaMeNen) + '</div>';
+    if (h.chaMeTranh) s += ('<div class="hn-sub">' + _tvmbT('js.hnt.nguoi-lon-tranh', 'Người lớn tránh') + '</div><div class="hn-h-chat">') + esc(h.chaMeTranh) + '</div>';
+    if (h.deBiHieuNham) s += ('<div class="hn-sub">' + _tvmbT('js.hnt.cho-hay-bi-hieu-nham', 'Chỗ hay bị hiểu nhầm') + '</div><div class="hn-h-chat">') + esc(h.deBiHieuNham) + '</div>';
+    if (h.chatViec) s += ('<div class="hn-sub">' + _tvmbT('js.hnt.chat-viec-ve-sau', 'Chất việc về sau') + '</div><div class="hn-h-chat">') + esc(h.chatViec) + '</div>';
     // Tên nghề CHỈ hiện khi server cho phép (từ 8 tuổi). Server đã trả mảng
     // rỗng cho trẻ nhỏ — chỗ này chỉ là lớp thứ hai, không phải chốt chặn duy nhất.
     if (h.ngheViDu && h.ngheViDu.length) {
-      s += '<div class="hn-sub">Nghề có chất đó — chỉ để hình dung</div><div class="hn-chips">' +
+      s += ('<div class="hn-sub">' + _tvmbT('js.hnt.nghe-co-chat-do-chi-de', 'Nghề có chất đó — chỉ để hình dung') + '</div><div class="hn-chips">') +
         h.ngheViDu.map(function (n) { return '<span class="hn-chip">' + esc(n) + '</span>'; }).join('') + '</div>';
     }
   }
@@ -1038,7 +1038,7 @@ async function _loadHistory() {
     var d = await r.json();
     if (!d.success || !d.items || !d.items.length) return;
     document.getElementById('histList').innerHTML = d.items.map(function (it) {
-      return '<div class="hist-row"><span class="n">' + esc(it.ten || 'Không tên') +
+      return '<div class="hist-row"><span class="n">' + esc(it.ten || _tvmbT('js.hnt.khong-ten', 'Không tên')) +
         (it.huong_ten ? ' · ' + esc(it.huong_ten) : '') + '</span>' +
         '<span class="d">' + new Date(it.created_at).toLocaleDateString('vi-VN') + '</span></div>';
     }).join('');

@@ -368,6 +368,56 @@
    "shell"
   ]
  },
+ "/app/huong-nghiep-tre": {
+  "file": "app-huong-nghiep-tre.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.3-thanh-toan",
+   "battu.4-nhan-ket-qua",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "daycon.co-so-trong-la-so",
+   "daycon.da-xem-truoc-do",
+   "daycon.dieu-ban-dang-lo",
+   "daycon.dieu-ban-dang-lo-pjp3",
+   "daycon.xem-be-khac",
+   "hnt.2-xem-truoc",
+   "hnt.3-huong-dang-thu",
+   "hnt.ba-huong-dang-cho-con-thu",
+   "hnt.ban-luan-giai-mau-tai-pdf",
+   "hnt.ban-nay-phac-hoa-tu-cac",
+   "hnt.bat-dau-tu-dau",
+   "hnt.chat-nguoi-doc-ra-tu-la",
+   "hnt.ep-con-hoc-dieu-con-khong",
+   "hnt.huong-nghiep-som-cho-con",
+   "hnt.huong-nghiep-som-cho-con-nen",
+   "hnt.huong-nghiep-som-cho-con-tu",
+   "hnt.lam-trong-thang-nay",
+   "hnt.may-mat-nay-khong-phai-cho",
+   "hnt.mo-loi-voi-con-the-nao",
+   "hnt.moi-luot-luong",
+   "hnt.nhap-la-so-cua-con-nhan",
+   "hnt.nhap-ngay-gio-sinh-cua-con",
+   "hnt.nhin-ra-con",
+   "hnt.noi-nhat",
+   "hnt.phan-dinh-huong-chua-mo",
+   "hnt.sang-lua-sau-thi-doi-gi",
+   "hnt.thien-huong-la-xu-huong-de",
+   "hnt.thien-huong-noi-nhat",
+   "hnt.thien-huong-noi-nhat-91zz",
+   "hnt.thoi-lam",
+   "hnt.viec-hop-voi-con-thuong-khong",
+   "hnt.viec-lam-theo-lua-tuoi",
+   "hnt.xem-thien-huong-cua-con-ton",
+   "luangiai.chuyen-khoan-qua-qr-ngan-hang",
+   "luangiai.mua-goi-de-nhan-nhieu-uu",
+   "luangiai.tu-vi-dau-so-la-mot"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/kinh-dich": {
   "file": "app-kinh-dich.html",
   "keys": [
