@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chọn ngày tốt — Tử Vi Minh Bảo</title>
-<meta name="description" content="Chọn ngày giờ tốt hợp tuổi theo can chi cho cưới hỏi, khai trương, nhập trạch, động thổ — hỏi Thầy luận ngày đẹp và ngày cần tránh.">
+<title data-i18n="chonngay.chon-ngay-tot-tu-vi-minh">Chọn ngày tốt — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:chonngay.chon-ngay-gio-tot-hop-tuoi" name="description" content="Chọn ngày giờ tốt hợp tuổi theo can chi cho cưới hỏi, khai trương, nhập trạch, động thổ — hỏi Thầy luận ngày đẹp và ngày cần tránh.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -49,10 +49,10 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Chọn ngày tốt</b><span>Ngày giờ hợp tuổi cho việc trọng đại</span></div>
+      <div data-i18n="chonngay.chon-ngay-tot-ngay-gio-hop" class="ws-title"><b>Chọn ngày tốt</b><span>Ngày giờ hợp tuổi cho việc trọng đại</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.sua-thong-tin" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -66,15 +66,15 @@
         <img class="intro-avatar" src="/tool-avatars/chon-ngay-tot.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Chọn ngày giờ tốt</div>
-            <div class="intro-d">Cưới hỏi, làm nhà, khai trương — chọn nhầm ngày là chuyện nhiều người tiếc cả đời không sửa được. Chọn loại việc và khoảng thời gian, nhận ngay danh sách ngày giờ hợp tuổi chủ sự.</div>
+            <div data-i18n="chonngay.chon-ngay-gio-tot" class="intro-t">Chọn ngày giờ tốt</div>
+            <div data-i18n="chonngay.cuoi-hoi-lam-nha-khai-truong" class="intro-d">Cưới hỏi, làm nhà, khai trương — chọn nhầm ngày là chuyện nhiều người tiếc cả đời không sửa được. Chọn loại việc và khoảng thời gian, nhận ngay danh sách ngày giờ hợp tuổi chủ sự.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="calendar-days"></span><span>Danh sách<br>ngày tốt</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Đối chiếu<br>hợp – xung</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="clock"></span><span>Giờ hoàng đạo<br>từng ngày</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="calendar-days"></span><span data-i18n="chonngay.danh-sach-ngay-tot">Danh sách<br>ngày tốt</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span data-i18n="chonngay.doi-chieu-hop-xung">Đối chiếu<br>hợp – xung</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="clock"></span><span data-i18n="chonngay.gio-hoang-dao-tung-ngay">Giờ hoàng đạo<br>từng ngày</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -82,50 +82,50 @@
            chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
            đã đổi trong code cũ (doChonNgay/showForm/unlock/chuyên sâu AI). -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem nền can chi</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="chonngay.2-xem-nen-can-chi" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem nền can chi</span></div>
+        <div data-i18n="battu.3-thanh-toan" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="battu.4-nhan-ket-qua" class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
-        <div class="fc-head"><span class="fc-ic" data-icon="calendar"></span><h2>Thông tin chọn ngày</h2></div>
-        <p class="sub">Chọn việc cần xem ngày, nhập tên và năm sinh chủ sự cùng tháng cần xem. Hệ thống tính can chi rồi đối chiếu hợp – xung với tuổi bạn.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="calendar"></span><h2 data-i18n="chonngay.thong-tin-chon-ngay">Thông tin chọn ngày</h2></div>
+        <p data-i18n="chonngay.chon-viec-can-xem-ngay-nhap" class="sub">Chọn việc cần xem ngày, nhập tên và năm sinh chủ sự cùng tháng cần xem. Hệ thống tính can chi rồi đối chiếu hợp – xung với tuổi bạn.</p>
         <div class="frow">
-          <div class="fg" style="flex:2;min-width:160px"><label>Việc cần chọn ngày</label>
+          <div class="fg" style="flex:2;min-width:160px"><label data-i18n="chonngay.viec-can-chon-ngay">Việc cần chọn ngày</label>
             <select id="inpSuKien">
-              <option value="Cưới hỏi">Cưới hỏi</option>
-              <option value="Ăn hỏi / dạm ngõ">Ăn hỏi / dạm ngõ</option>
-              <option value="Khai trương">Khai trương</option>
-              <option value="Nhập trạch (về nhà mới)">Nhập trạch (về nhà mới)</option>
-              <option value="Động thổ / khởi công">Động thổ / khởi công</option>
-              <option value="Ký kết hợp đồng">Ký kết hợp đồng</option>
-              <option value="Xuất hành">Xuất hành</option>
-              <option value="Mua xe">Mua xe</option>
+              <option data-i18n="chonngay.cuoi-hoi" value="Cưới hỏi">Cưới hỏi</option>
+              <option data-i18n="chonngay.an-hoi-dam-ngo" value="Ăn hỏi / dạm ngõ">Ăn hỏi / dạm ngõ</option>
+              <option data-i18n="chonngay.khai-truong" value="Khai trương">Khai trương</option>
+              <option data-i18n="chonngay.nhap-trach-ve-nha-moi" value="Nhập trạch (về nhà mới)">Nhập trạch (về nhà mới)</option>
+              <option data-i18n="chonngay.dong-tho-khoi-cong" value="Động thổ / khởi công">Động thổ / khởi công</option>
+              <option data-i18n="chonngay.ky-ket-hop-dong" value="Ký kết hợp đồng">Ký kết hợp đồng</option>
+              <option data-i18n="chonngay.xuat-hanh" value="Xuất hành">Xuất hành</option>
+              <option data-i18n="chonngay.mua-xe" value="Mua xe">Mua xe</option>
             </select>
           </div>
-          <div class="fg" style="flex:1;min-width:130px"><label>Họ tên người chủ sự</label><input type="text" id="inpHoTen" maxlength="50" placeholder="Nguyễn Văn A"></div>
+          <div class="fg" style="flex:1;min-width:130px"><label data-i18n="chonngay.ho-ten-nguoi-chu-su">Họ tên người chủ sự</label><input data-i18n-attr="placeholder:laso.nguyen-van-a" type="text" id="inpHoTen" maxlength="50" placeholder="Nguyễn Văn A"></div>
         </div>
         <div class="frow" style="margin-bottom:4px">
-          <div class="fg" style="width:120px"><label>Năm sinh</label><input type="number" id="inpNamSinh" placeholder="1990" min="1900" max="2100"></div>
-          <div class="fg" style="width:90px"><label>Tháng (DL)</label><select id="inpThang"></select></div>
-          <div class="fg" style="width:110px"><label>Năm (DL)</label><input type="number" id="inpNam" value="2026" min="1900" max="2100"></div>
+          <div class="fg" style="width:120px"><label data-i18n="napam.nam-sinh">Năm sinh</label><input type="number" id="inpNamSinh" placeholder="1990" min="1900" max="2100"></div>
+          <div class="fg" style="width:90px"><label data-i18n="laso.thang-dl">Tháng (DL)</label><select id="inpThang"></select></div>
+          <div class="fg" style="width:110px"><label data-i18n="laso.nam-dl">Năm (DL)</label><input type="number" id="inpNam" value="2026" min="1900" max="2100"></div>
           <button class="btn-go" id="btnGo" onclick="doChonNgay()">
-            <span class="bg-label"><span class="ic" data-icon="calendar"></span><b id="btnGoLabel">Lập nền →</b></span>
-            <small>Miễn phí</small>
+            <span class="bg-label"><span class="ic" data-icon="calendar"></span><b id="btnGoLabel" data-i18n="chonngay.lap-nen">Lập nền →</b></span>
+            <small data-i18n="battu.mien-phi">Miễn phí</small>
           </button>
         </div>
       </div>
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Chọn ngày giờ tốt</div>
-        <p class="wsp-desc">Hoàng Lịch (lịch vạn niên) là hệ thống lịch cổ Trung Hoa kết hợp Can Chi, Nhị Thập Bát Tú và các sao tốt – xấu để xác định giờ, ngày hoàng đạo phù hợp cho từng loại việc. Đây là cơ sở truyền thống cho việc chọn ngày giờ trong cưới hỏi, khai trương, động thổ.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="chonngay.chon-ngay-gio-tot" class="wsp-title">Chọn ngày giờ tốt</div>
+        <p data-i18n="chonngay.hoang-lich-lich-van-nien-la" class="wsp-desc">Hoàng Lịch (lịch vạn niên) là hệ thống lịch cổ Trung Hoa kết hợp Can Chi, Nhị Thập Bát Tú và các sao tốt – xấu để xác định giờ, ngày hoàng đạo phù hợp cho từng loại việc. Đây là cơ sở truyền thống cho việc chọn ngày giờ trong cưới hỏi, khai trương, động thổ.</p>
       </div>
       <div class="samp-cta" id="sampCta">
         <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="chon-ngay-tot" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+        <span data-i18n="chonngay.chua-muon-khai-thong-tin-ban" class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button data-i18n="chonngay.xem-ban-mau" type="button" id="btnSample" data-sample-tool="chon-ngay-tot" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -135,21 +135,21 @@
         <div class="res-head" id="resHead"></div>
         <div class="cc-row" id="ccRow"></div>
         <div class="note" id="resNote"></div>
-        <div class="ask" data-ask="Trong tháng và năm này, những ngày nào đẹp nhất hợp tuổi tôi cho việc trên? Nêu vài ngày cụ thể kèm giờ hoàng đạo và ngày cần tránh.">✦ Hỏi Thầy chọn ngày đẹp</div>
+        <div data-i18n="chonngay.hoi-thay-chon-ngay-dep" class="ask" data-ask="Trong tháng và năm này, những ngày nào đẹp nhất hợp tuổi tôi cho việc trên? Nêu vài ngày cụ thể kèm giờ hoàng đạo và ngày cần tránh.">✦ Hỏi Thầy chọn ngày đẹp</div>
         <!-- Khối hook (1 fact) — nhấn lại nền can chi chủ sự thành một câu nổi
              bật ngay trước CTA. Không tự suy diễn ngày/chi cụ thể nào hợp
              (bảng lục hợp/tam hợp chưa được dùng ở tầng client này) — chỉ
              lặp lại đúng dữ kiện đã có, không bịa thêm. -->
         <div id="hookHost"></div>
         <div class="dt-unlock" id="dtUnlock">
-          <p>Hệ thống phân tích can chi tuổi chủ sự + tháng năm dự định, gợi ý các khoảng ngày tốt kèm lý do cụ thể.</p>
+          <p data-i18n="chonngay.he-thong-phan-tich-can-chi">Hệ thống phân tích can chi tuổi chủ sự + tháng năm dự định, gợi ý các khoảng ngày tốt kèm lý do cụ thể.</p>
           <div class="cost-box">
             <div class="cb-l">
               <span class="cb-ic" data-icon="wallet"></span>
               <div>
-                <div class="cb-title">Chi phí sử dụng</div>
-                <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="chon-ngay-tot"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="chon-ngay-tot">…</span> Lượng)</span></div>
-                <div class="cb-pay">
+                <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+                <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="chon-ngay-tot"></span> <span data-i18n="chonngay.moi-luot">mỗi lượt</span> <span class="cb-sub">(<span data-tvp-price="chon-ngay-tot">…</span> <span data-i18n="topup.luong-don-vi">Lượng</span>)</span></div>
+                <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                   <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                   <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
                 </div>
@@ -157,12 +157,12 @@
             </div>
             <div class="cb-r">
               <span class="cb-ic" data-icon="gift"></span>
-              <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+              <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
             </div>
           </div>
           <button class="btn-go" id="btnUnlock" onclick="initiateChonNgayChuyenSau()">
-            <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnUnlockLabel">Chọn ngày chuyên sâu →</b></span>
-            <small>Tốn <span class="vnd" data-tvp-price-vnd="chon-ngay-tot"></span> <span class="cb-sub">(<span data-tvp-price="chon-ngay-tot">…</span> Lượng)</span></small>
+            <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnUnlockLabel" data-i18n="chonngay.chon-ngay-chuyen-sau">Chọn ngày chuyên sâu →</b></span>
+            <small><span data-i18n="chonngay.ton">Tốn</span> <span class="vnd" data-tvp-price-vnd="chon-ngay-tot"></span> <span class="cb-sub">(<span data-tvp-price="chon-ngay-tot">…</span> <span data-i18n="topup.luong-don-vi">Lượng</span>)</span></small>
           </button>
         </div>
         <div class="dt-result" id="dtResult"></div>
