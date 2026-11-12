@@ -691,7 +691,11 @@ Trả về JSON thuần túy:
   let raw: string;
   try {
     // Nâng 50% cùng đợt (Henry chốt 2026-08-20).
-    raw = await llmText({ luanGiai: true, system: ARC_GIONG_NGU_HANH, prompt, maxTokens: 1500 });
+    // Ngôn ngữ đầu ra ở USER (json:true giữ khoá/enum, asianStyle.id). Trang tra hex theo TÊN MÀU Việt (COLOR_HEX của
+    // app-trang-phuc-theo-ngay.html) ⇒ với ngôn ngữ khác ép chọn tên màu NGUYÊN VĂN từ danh sách đó. vi → chuỗi cũ từng byte.
+    const locale = requestLocale(request);
+    const colorNote = locale === 'vi' ? '' : '\n\n[mainColors, accentColors, avoidColors: chỉ chọn tên màu NGUYÊN VĂN tiếng Việt trong danh sách này, KHÔNG dịch (trang tra màu theo đúng tên): Trắng, Bạc, Xám nhạt, Vàng kim, Be, Kem, Xanh lá, Xanh ngọc, Xanh lam, Nâu gỗ, Đen, Navy, Xanh dương, Xám đậm, Đỏ, Cam, Hồng, Vàng, Nâu, Cam đất, Xanh rêu, Tím, Tím đỏ, Hồng phấn. Các giá trị chữ còn lại (lyGiai, asianStyle.desc/why, outfit, tip) viết bằng ngôn ngữ đã chỉ định.]';
+    raw = await llmText({ luanGiai: true, system: ARC_GIONG_NGU_HANH, prompt: withLang(prompt, locale, [], { json: true }) + colorNote, maxTokens: 1500 });
   } catch {
     return err('Lỗi hệ thống.', 500);
   }

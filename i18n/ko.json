@@ -13931,6 +13931,246 @@
   "t": "기록 보기",
   "h": "21a19fb0"
  },
+ "js.tpng.cat-ao": {
+  "t": "상의",
+  "h": "373c84b7"
+ },
+ "js.tpng.cat-ao-khoac": {
+  "t": "아우터",
+  "h": "dee0e8de"
+ },
+ "js.tpng.cat-giay": {
+  "t": "신발",
+  "h": "a47dc437"
+ },
+ "js.tpng.cat-phu-kien": {
+  "t": "액세서리",
+  "h": "f1f0fba9"
+ },
+ "js.tpng.cat-quan": {
+  "t": "바지 / 치마",
+  "h": "879b0cdf"
+ },
+ "js.tpng.chip-diem-nhan": {
+  "t": "포인트 색은 어떤 게 가장 좋아요?",
+  "h": "6d38e6a5"
+ },
+ "js.tpng.chip-hoa-giai": {
+  "t": "어떻게 풀어야 할까요?",
+  "h": "1dee5079"
+ },
+ "js.tpng.chip-khac": {
+  "t": "왜 이 날은 내 본명을 극하나요?",
+  "h": "a98c2e50"
+ },
+ "js.tpng.greeting": {
+  "t": "본명 **{m}**, 오늘의 오행 **{n}** — {r}. 색상이나 스타일에 대해 더 궁금한 점이 있나요?",
+  "h": "36a537dc"
+ },
+ "js.tpng.hanh-n": {
+  "t": "{h} 행",
+  "h": "3e50daab"
+ },
+ "js.tpng.label": {
+  "t": "날짜별 코디 — {r}",
+  "h": "26ec2299"
+ },
+ "js.tpng.loi": {
+  "t": "오류",
+  "h": "d2907807"
+ },
+ "js.tpng.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.tpng.loi-phan-tich": {
+  "t": "분석 오류",
+  "h": "3e06a99e"
+ },
+ "js.tpng.mau-bac": {
+  "t": "은색",
+  "h": "7386c9c6"
+ },
+ "js.tpng.mau-be": {
+  "t": "베이지",
+  "h": "11d1bf27"
+ },
+ "js.tpng.mau-cam": {
+  "t": "주황",
+  "h": "5e09769d"
+ },
+ "js.tpng.mau-cam-dat": {
+  "t": "테라코타",
+  "h": "aaa37477"
+ },
+ "js.tpng.mau-den": {
+  "t": "검정",
+  "h": "4d0c0faf"
+ },
+ "js.tpng.mau-do": {
+  "t": "빨강",
+  "h": "2eb7503e"
+ },
+ "js.tpng.mau-hong": {
+  "t": "분홍",
+  "h": "5a43ba9e"
+ },
+ "js.tpng.mau-hong-phan": {
+  "t": "연분홍",
+  "h": "0ec650f1"
+ },
+ "js.tpng.mau-kem": {
+  "t": "크림",
+  "h": "e52e6c26"
+ },
+ "js.tpng.mau-nau": {
+  "t": "갈색",
+  "h": "42ff42d9"
+ },
+ "js.tpng.mau-nau-go": {
+  "t": "우드 브라운",
+  "h": "24e064f8"
+ },
+ "js.tpng.mau-navy": {
+  "t": "네이비",
+  "h": "0229e960"
+ },
+ "js.tpng.mau-nen-mac": {
+  "t": "{r}. 입으면 좋은 색, 추천 스타일, 그날 오행에 딱 맞는 구체적인 코디는 심층 분석에 들어 있어요.",
+  "h": "51d59e76"
+ },
+ "js.tpng.mau-tim": {
+  "t": "보라",
+  "h": "684e5966"
+ },
+ "js.tpng.mau-tim-do": {
+  "t": "자주",
+  "h": "0b78db8f"
+ },
+ "js.tpng.mau-trang": {
+  "t": "흰색",
+  "h": "9cf5e0eb"
+ },
+ "js.tpng.mau-vang": {
+  "t": "노랑",
+  "h": "27d57aed"
+ },
+ "js.tpng.mau-vang-kim": {
+  "t": "골드",
+  "h": "b441fe1f"
+ },
+ "js.tpng.mau-xam-dam": {
+  "t": "짙은 회색",
+  "h": "01959534"
+ },
+ "js.tpng.mau-xam-nhat": {
+  "t": "연회색",
+  "h": "d8017939"
+ },
+ "js.tpng.mau-xanh-duong": {
+  "t": "파랑",
+  "h": "95beb520"
+ },
+ "js.tpng.mau-xanh-la": {
+  "t": "초록",
+  "h": "d0e8c4b1"
+ },
+ "js.tpng.mau-xanh-lam": {
+  "t": "하늘색",
+  "h": "0537307a"
+ },
+ "js.tpng.mau-xanh-ngoc": {
+  "t": "터콰이즈",
+  "h": "b8cbaa2e"
+ },
+ "js.tpng.mau-xanh-reu": {
+  "t": "모스 그린",
+  "h": "836bccc5"
+ },
+ "js.tpng.menh-ngay": {
+  "t": "본명 {h} · {c}일",
+  "h": "ac19a8fe"
+ },
+ "js.tpng.ngay-hanh": {
+  "t": "{c}일 — 오행 {h}",
+  "h": "6fd10f47"
+ },
+ "js.tpng.rel-binh-hoa": {
+  "t": "함께하는 날 — 평온하고 순조로워요",
+  "h": "d1971f40"
+ },
+ "js.tpng.rel-menh-khac-ngay": {
+  "t": "본명이 그날을 극해요 — 무난한 날이니 조심하세요",
+  "h": "256fb5ff"
+ },
+ "js.tpng.rel-menh-sinh-ngay": {
+  "t": "본명이 그날을 생해 줘요 — 힘이 조금 빠지지만 그래도 좋아요",
+  "h": "995978d5"
+ },
+ "js.tpng.rel-ngay-khac-menh": {
+  "t": "그날이 본명을 극해요 ✦ 색으로 풀어 주세요",
+  "h": "f331fca5"
+ },
+ "js.tpng.rel-ngay-sinh-menh": {
+  "t": "그날이 본명을 생해 줘요 ✦ 매우 순조로워요",
+  "h": "81b455cf"
+ },
+ "js.tpng.share-text": {
+  "t": "본명 {m} · {c}일({n}) — {r}",
+  "h": "a603ba42"
+ },
+ "js.tpng.share-title": {
+  "t": "오늘 나에게 맞는 의상",
+  "h": "36dc7dba"
+ },
+ "js.tpng.share-tryon-title": {
+  "t": "오늘 나에게 맞는 의상(가상 체험)",
+  "h": "7767c7e3"
+ },
+ "js.tpng.step-chuan-bi": {
+  "t": "오행에 맞는 의상 준비",
+  "h": "cf955a11"
+ },
+ "js.tpng.step-tao-anh": {
+  "t": "의상 이미지 생성 중",
+  "h": "ba6faaec"
+ },
+ "js.tpng.step-tinh": {
+  "t": "날짜의 간지와 오행 관계 계산",
+  "h": "7112616b"
+ },
+ "js.tpng.step-tu-van": {
+  "t": "그날에 맞는 의상 추천",
+  "h": "86c6bfcc"
+ },
+ "js.tpng.style-hoa-dan": {
+  "t": "소프트 화단 스타일",
+  "h": "c859a2ac"
+ },
+ "js.tpng.tryon-casual": {
+  "t": "캐주얼",
+  "h": "7b664f70"
+ },
+ "js.tpng.tryon-cong-so": {
+  "t": "출근룩",
+  "h": "81a4c6c6"
+ },
+ "js.tpng.tryon-dao-pho": {
+  "t": "거리 산책룩",
+  "h": "c1f7f4a0"
+ },
+ "js.tpng.tryon-label": {
+  "t": "본명 {h} · {s}",
+  "h": "c91f44b2"
+ },
+ "js.tpng.tryon-sang-trong": {
+  "t": "럭셔리",
+  "h": "3c6421de"
+ },
+ "js.tpng.vui-long-thu-lai": {
+  "t": "다시 시도해 주세요.",
+  "h": "2f1d18ee"
+ },
  "js.tuviform.ca-nhan": {
   "t": "개인 정보",
   "h": "bbe1cce8"
@@ -17874,6 +18114,110 @@
  "topup.xem-lai-ket-qua-co-bi": {
   "t": "결과를 다시 볼 때 냥이 또 차감되나요?",
   "h": "64b49a22"
+ },
+ "tpng.anh-chup-toan-than-hoac-nua": {
+  "t": "전신 또는 상반신 사진 · JPG/PNG",
+  "h": "17435ed7"
+ },
+ "tpng.co-ngay-an-mac-chin-chu": {
+  "t": "단정하게 차려입어도 일이 꼬이는 날이 있고, 편하게 입었는데 술술 풀리는 날도 있어요 — 운기는 매일 달라요. 출생 연도를 입력하고 오늘에 맞는 색과 옷 스타일을 받아 보세요.",
+  "h": "6350ffd2"
+ },
+ "tpng.diem-nhan": {
+  "t": "◎ 포인트",
+  "h": "a95e46c4"
+ },
+ "tpng.du-lich": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> 여행",
+  "h": "d7d6e7ed"
+ },
+ "tpng.goi-y-trang-phuc-cu-the": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 구체적인 코디 추천",
+  "h": "d9e6894d"
+ },
+ "tpng.hanh-ngay": {
+  "t": "그날의 오행",
+  "h": "f96db196"
+ },
+ "tpng.hen-ho": {
+  "t": "<span class=\"ic\" data-icon=\"heart\"></span> 데이트",
+  "h": "398a0192"
+ },
+ "tpng.kinh-doanh": {
+  "t": "<span class=\"ic\" data-icon=\"handshake\"></span> 비즈니스",
+  "h": "5e9fdd61"
+ },
+ "tpng.mau-sac-hop-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 그날에 맞는 색상",
+  "h": "e47839c0"
+ },
+ "tpng.meo-co-phap": {
+  "t": "<strong>✦ 고법 팁</strong> <span id=\"tipText\">—</span>",
+  "h": "cd8f1791"
+ },
+ "tpng.muc-dich-chon-1": {
+  "t": "목적 (하나 선택)",
+  "h": "a7f0975c"
+ },
+ "tpng.nen-mac": {
+  "t": "✓ 입으면 좋은 색",
+  "h": "4d634b8d"
+ },
+ "tpng.nen-tranh": {
+  "t": "✗ 피하면 좋은 색",
+  "h": "b4981595"
+ },
+ "tpng.ngay-di-duong-lich": {
+  "t": "외출하는 날 (양력)",
+  "h": "dfc6af38"
+ },
+ "tpng.nhap-nam-sinh-gioi-tinh-ngay": {
+  "t": "출생 연도, 성별, 입고 싶은 날, 외출 목적을 입력해 주세요. 시스템이 그날의 운기를 본명과 대조해요. 입으면 좋은 색, 피해야 할 색, 구체적인 코디 추천을 받아 보세요.",
+  "h": "737914fb"
+ },
+ "tpng.phong-cach": {
+  "t": "스타일:",
+  "h": "62e2075f"
+ },
+ "tpng.phong-cach-goi-y": {
+  "t": "✦ 추천 스타일",
+  "h": "b9a77fc8"
+ },
+ "tpng.phong-van": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 면접",
+  "h": "0f6621da"
+ },
+ "tpng.thong-tin": {
+  "t": "<span class=\"ic\" data-icon=\"calendar\"></span> 정보",
+  "h": "fb81e21c"
+ },
+ "tpng.thu-trang-phuc-luong-lan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 옷 체험 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px\"><span data-tvp-price=\"trang-phuc-tryon\">…</span> 냥/회</span>",
+  "h": "a56af403"
+ },
+ "tpng.thuong-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 평소",
+  "h": "f84f5bc4"
+ },
+ "tpng.trang-phuc-theo-ngay": {
+  "t": "오늘의 의상",
+  "h": "6cfe1c1e"
+ },
+ "tpng.trang-phuc-theo-ngay-can-chi": {
+  "t": "<b>날짜별 코디</b><span>날짜의 간지 × 본명의 납음 — 외출하는 날에 맞는 색과 스타일</span>",
+  "h": "4c8d4580"
+ },
+ "tpng.trang-phuc-theo-ngay-tu-vi": {
+  "t": "날짜별 코디 — 명보 자미두수",
+  "h": "654b038b"
+ },
+ "tpng.tu-van-mau-sac-trang-phuc": {
+  "t": "날짜의 간지와 본명에 따라 의상 색상을 추천해요 — 오행 납음 고법.",
+  "h": "dd5ad2b6"
+ },
+ "tpng.xem-trang-phuc-hop-ngay-luong": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 그날에 맞는 의상 보기 — <span data-tvp-price=\"trang-phuc-theo-ngay\">…</span> 냥",
+  "h": "589f0801"
  },
  "tuonghop.ban-luan-giai-mau-tai-pdf": {
   "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>풀이 샘플</b><span>샘플 명반의 부부 궁합 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-xem-tuoi.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",

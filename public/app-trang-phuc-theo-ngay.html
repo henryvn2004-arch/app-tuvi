@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trang Phục Theo Ngày — Tử Vi Minh Bảo</title>
-<meta name="description" content="Tư vấn màu sắc trang phục theo can-chi ngày và bản mệnh — cổ pháp Ngũ Hành Nạp Âm.">
+<title data-i18n="tpng.trang-phuc-theo-ngay-tu-vi">Trang Phục Theo Ngày — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:tpng.tu-van-mau-sac-trang-phuc" name="description" content="Tư vấn màu sắc trang phục theo can-chi ngày và bản mệnh — cổ pháp Ngũ Hành Nạp Âm.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -91,9 +91,9 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Trang Phục Theo Ngày</b><span>Can Chi ngày × Nạp Âm mệnh — màu và phong cách hợp ngày đi</span></div>
+      <div data-i18n="tpng.trang-phuc-theo-ngay-can-chi" class="ws-title"><b>Trang Phục Theo Ngày</b><span>Can Chi ngày × Nạp Âm mệnh — màu và phong cách hợp ngày đi</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -107,8 +107,8 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
         <img class="intro-avatar" src="/tool-avatars/trang-phuc-theo-ngay.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Trang Phục Theo Ngày</div>
-            <div class="intro-d">Có ngày ăn mặc chỉn chu vẫn trục trặc, có ngày xuề xoà lại thuận buồm xuôi gió — vận khí mỗi ngày một khác. Nhập ngày sinh, nhận gợi ý màu và kiểu đồ hợp với hôm nay.</div>
+            <div data-i18n="tpng.trang-phuc-theo-ngay" class="intro-t">Trang Phục Theo Ngày</div>
+            <div data-i18n="tpng.co-ngay-an-mac-chin-chu" class="intro-d">Có ngày ăn mặc chỉn chu vẫn trục trặc, có ngày xuề xoà lại thuận buồm xuôi gió — vận khí mỗi ngày một khác. Nhập ngày sinh, nhận gợi ý màu và kiểu đồ hợp với hôm nay.</div>
             <div id="introSrc"></div>
           </div>
         </div>
@@ -119,31 +119,31 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
            phục trên ảnh thật), không phải một chuỗi 3-4 bước tuyến tính như
            pilot — gán số bước cứng vào đây sẽ nói sai trạng thái thật. -->
       <div class="tn-card">
-        <h2><span class="ic" data-icon="calendar"></span> Thông Tin</h2>
-        <p class="sub">Nhập năm sinh, giới tính, ngày cần mặc và mục đích ra ngoài. Hệ thống đối chiếu vận khí ngày đó với bản mệnh của bạn. Nhận về màu nên mặc, màu nên tránh và gợi ý trang phục cụ thể.</p>
+        <h2 data-i18n="tpng.thong-tin"><span class="ic" data-icon="calendar"></span> Thông Tin</h2>
+        <p data-i18n="tpng.nhap-nam-sinh-gioi-tinh-ngay" class="sub">Nhập năm sinh, giới tính, ngày cần mặc và mục đích ra ngoài. Hệ thống đối chiếu vận khí ngày đó với bản mệnh của bạn. Nhận về màu nên mặc, màu nên tránh và gợi ý trang phục cụ thể.</p>
         <p class="price-note" data-tvp-price-label="trang-phuc-theo-ngay">…</p>
 
         <div class="pt-row">
-          <div class="pt-fg"><label>Năm sinh dương lịch</label><input type="number" id="namSinh" placeholder="VD: 1990" min="1920" max="2010" oninput="onFormChange()"></div>
-          <div class="pt-fg"><label>Giới tính</label>
+          <div class="pt-fg"><label data-i18n="phongthuy.nam-sinh-duong-lich">Năm sinh dương lịch</label><input data-i18n-attr="placeholder:phongthuy.vd-1990" type="number" id="namSinh" placeholder="VD: 1990" min="1920" max="2010" oninput="onFormChange()"></div>
+          <div class="pt-fg"><label data-i18n="phongthuy.gioi-tinh">Giới tính</label>
             <select id="gioiTinh" onchange="onFormChange()">
               <option value="male">Nam</option>
-              <option value="female">Nữ</option>
+              <option data-i18n="laso.nu" value="female">Nữ</option>
             </select>
           </div>
         </div>
 
-        <div class="pt-fg" style="margin-bottom:12px"><label>Ngày đi (dương lịch)</label><input type="date" id="ngayDi" oninput="onFormChange()"></div>
+        <div class="pt-fg" style="margin-bottom:12px"><label data-i18n="tpng.ngay-di-duong-lich">Ngày đi (dương lịch)</label><input type="date" id="ngayDi" oninput="onFormChange()"></div>
 
         <div class="pt-fg" style="margin-bottom:12px">
-          <label>Mục đích (chọn 1)</label>
+          <label data-i18n="tpng.muc-dich-chon-1">Mục đích (chọn 1)</label>
           <div class="purpose-pills" id="purposePills">
-            <div class="pill active" onclick="setPurpose(this,'ra ngoài thông thường')"><span class="ic" data-icon="leaf"></span> Thường ngày</div>
-            <div class="pill" onclick="setPurpose(this,'phỏng vấn xin việc, cần tạo ấn tượng chuyên nghiệp')"><span class="ic" data-icon="briefcase"></span> Phỏng vấn</div>
-            <div class="pill" onclick="setPurpose(this,'hẹn hò, gặp người yêu, cần thu hút và lãng mạn')"><span class="ic" data-icon="heart"></span> Hẹn hò</div>
-            <div class="pill" onclick="setPurpose(this,'gặp đối tác kinh doanh, ký kết hợp đồng')"><span class="ic" data-icon="handshake"></span> Kinh doanh</div>
-            <div class="pill" onclick="setPurpose(this,'sự kiện quan trọng, tiệc tùng, cần nổi bật')"><span class="ic" data-icon="sparkles"></span> Sự kiện</div>
-            <div class="pill" onclick="setPurpose(this,'đi du lịch, thư giãn, cần thoải mái')"><span class="ic" data-icon="compass"></span> Du lịch</div>
+            <div data-i18n="tpng.thuong-ngay" class="pill active" onclick="setPurpose(this,'ra ngoài thông thường')"><span class="ic" data-icon="leaf"></span> Thường ngày</div>
+            <div data-i18n="tpng.phong-van" class="pill" onclick="setPurpose(this,'phỏng vấn xin việc, cần tạo ấn tượng chuyên nghiệp')"><span class="ic" data-icon="briefcase"></span> Phỏng vấn</div>
+            <div data-i18n="tpng.hen-ho" class="pill" onclick="setPurpose(this,'hẹn hò, gặp người yêu, cần thu hút và lãng mạn')"><span class="ic" data-icon="heart"></span> Hẹn hò</div>
+            <div data-i18n="tpng.kinh-doanh" class="pill" onclick="setPurpose(this,'gặp đối tác kinh doanh, ký kết hợp đồng')"><span class="ic" data-icon="handshake"></span> Kinh doanh</div>
+            <div data-i18n="pcol.su-kien-cbgc" class="pill" onclick="setPurpose(this,'sự kiện quan trọng, tiệc tùng, cần nổi bật')"><span class="ic" data-icon="sparkles"></span> Sự kiện</div>
+            <div data-i18n="tpng.du-lich" class="pill" onclick="setPurpose(this,'đi du lịch, thư giãn, cần thoải mái')"><span class="ic" data-icon="compass"></span> Du lịch</div>
           </div>
         </div>
 
@@ -158,16 +158,16 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
              đang khoá/mờ — hook không hé thêm dữ liệu mới. -->
         <div id="hookHost"></div>
 
-        <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
+        <button data-i18n="tpng.xem-trang-phuc-hop-ngay-luong" class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
           <span class="ic" data-icon="shirt"></span> Xem Trang Phục Hợp Ngày — <span data-tvp-price="trang-phuc-theo-ngay">…</span> Lượng
         </button>
       </div>
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Trang Phục Theo Ngày</div>
-        <p class="wsp-desc">Ngũ Hành Nạp Âm gán mỗi năm sinh một mệnh riêng trong Lục Thập Hoa Giáp, còn Bát Trạch xét thêm yếu tố hướng và không gian. Kết hợp hai hệ thống này, người xưa suy ra những màu sắc, vật phẩm tương sinh hoặc tương khắc với bản mệnh của một người.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="tpng.trang-phuc-theo-ngay" class="wsp-title">Trang Phục Theo Ngày</div>
+        <p data-i18n="mshm.ngu-hanh-nap-am-gan-moi" class="wsp-desc">Ngũ Hành Nạp Âm gán mỗi năm sinh một mệnh riêng trong Lục Thập Hoa Giáp, còn Bát Trạch xét thêm yếu tố hướng và không gian. Kết hợp hai hệ thống này, người xưa suy ra những màu sắc, vật phẩm tương sinh hoặc tương khắc với bản mệnh của một người.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -188,24 +188,24 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
             </div>
             <div class="rel-tag">
               <div class="rel-tag-main" id="relTagMain">—</div>
-              <div class="rel-tag-label">Hành ngày</div>
+              <div data-i18n="tpng.hanh-ngay" class="rel-tag-label">Hành ngày</div>
             </div>
           </div>
           <div class="ly-giai" id="lyGiai"></div>
         </div>
 
         <div class="tn-card">
-          <h2><span class="ic" data-icon="palette"></span> Màu Sắc Hợp Ngày</h2>
-          <div class="color-label">✓ Nên mặc</div>
+          <h2 data-i18n="tpng.mau-sac-hop-ngay"><span class="ic" data-icon="palette"></span> Màu Sắc Hợp Ngày</h2>
+          <div data-i18n="tpng.nen-mac" class="color-label">✓ Nên mặc</div>
           <div class="color-row" id="mainColors"></div>
-          <div class="color-label">◎ Điểm nhấn</div>
+          <div data-i18n="tpng.diem-nhan" class="color-label">◎ Điểm nhấn</div>
           <div class="color-row" id="accentColors"></div>
-          <div class="color-label">✗ Nên tránh</div>
+          <div data-i18n="tpng.nen-tranh" class="color-label">✗ Nên tránh</div>
           <div class="color-row" id="avoidColors"></div>
         </div>
 
         <div class="tn-card">
-          <h2>✦ Phong Cách Gợi Ý</h2>
+          <h2 data-i18n="tpng.phong-cach-goi-y">✦ Phong Cách Gợi Ý</h2>
           <div class="style-card" id="styleCard">
             <div class="style-emoji ic" id="styleEmoji" data-icon="sparkles"></div>
             <div>
@@ -217,19 +217,19 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
         </div>
 
         <div class="tn-card">
-          <h2><span class="ic" data-icon="shirt"></span> Gợi Ý Trang Phục Cụ Thể</h2>
+          <h2 data-i18n="tpng.goi-y-trang-phuc-cu-the"><span class="ic" data-icon="shirt"></span> Gợi Ý Trang Phục Cụ Thể</h2>
           <div class="outfit-grid" id="outfitGrid"></div>
         </div>
 
         <div class="tn-card">
-          <div class="tip-box">
+          <div data-i18n="tpng.meo-co-phap" class="tip-box">
             <strong>✦ Mẹo Cổ Pháp</strong>
             <span id="tipText">—</span>
           </div>
         </div>
 
         <div class="tn-card" id="tryonCard">
-          <h2><span class="ic" data-icon="sparkles"></span> Thử Trang Phục
+          <h2 data-i18n="tpng.thu-trang-phuc-luong-lan"><span class="ic" data-icon="sparkles"></span> Thử Trang Phục
             <span style="font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px"><span data-tvp-price="trang-phuc-tryon">…</span> Lượng/lần</span>
           </h2>
 
@@ -241,25 +241,25 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
               <input type="file" accept="image/*" onchange="loadTryonFile(this.files[0])" id="tryonInput">
               <div id="tryonPrompt">
                 <div class="ic" data-icon="user" style="font-size:32px;margin-bottom:8px;display:block"></div>
-                <div style="font-size:13px;font-weight:600;color:var(--heading);margin-bottom:4px">Tải ảnh của bạn lên</div>
-                <div style="font-size:11px;color:var(--text-lt)">Ảnh chụp toàn thân hoặc nửa người · JPG/PNG</div>
+                <div data-i18n="mshm.tai-anh-cua-ban-len" style="font-size:13px;font-weight:600;color:var(--heading);margin-bottom:4px">Tải ảnh của bạn lên</div>
+                <div data-i18n="tpng.anh-chup-toan-than-hoac-nua" style="font-size:11px;color:var(--text-lt)">Ảnh chụp toàn thân hoặc nửa người · JPG/PNG</div>
               </div>
               <img id="tryonPreview" class="tryon-preview" src="" alt="" style="display:none">
             </div>
             <div style="text-align:center;margin-top:6px">
-              <button id="btnChangeTryon" onclick="clearTryon()" style="display:none;background:none;border:1px solid var(--line-2);border-radius:6px;padding:4px 13px;font-size:11px;color:var(--text-mid);cursor:pointer">✕ Đổi ảnh</button>
+              <button data-i18n="phongthuy.doi-anh" id="btnChangeTryon" onclick="clearTryon()" style="display:none;background:none;border:1px solid var(--line-2);border-radius:6px;padding:4px 13px;font-size:11px;color:var(--text-mid);cursor:pointer">✕ Đổi ảnh</button>
             </div>
           </div>
 
           <div id="tryonStep2" style="display:none;margin-top:12px">
-            <div style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Phong cách:</div>
+            <div data-i18n="tpng.phong-cach" style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Phong cách:</div>
             <div class="style-btns">
-              <button class="style-btn active" onclick="setTryonStyle('cong-so',this)"><span class="ic" data-icon="briefcase"></span> Công Sở</button>
+              <button data-i18n="pcol.cong-so" class="style-btn active" onclick="setTryonStyle('cong-so',this)"><span class="ic" data-icon="briefcase"></span> Công Sở</button>
               <button class="style-btn" onclick="setTryonStyle('casual',this)"><span class="ic" data-icon="shirt"></span> Casual</button>
-              <button class="style-btn" onclick="setTryonStyle('sang-trong',this)"><span class="ic" data-icon="sparkles"></span> Sang Trọng</button>
-              <button class="style-btn" onclick="setTryonStyle('dao-pho',this)"><span class="ic" data-icon="compass"></span> Dạo Phố</button>
+              <button data-i18n="mshm.sang-trong" class="style-btn" onclick="setTryonStyle('sang-trong',this)"><span class="ic" data-icon="sparkles"></span> Sang Trọng</button>
+              <button data-i18n="mshm.dao-pho" class="style-btn" onclick="setTryonStyle('dao-pho',this)"><span class="ic" data-icon="compass"></span> Dạo Phố</button>
             </div>
-            <button class="btn-tryon" id="btnTryon" onclick="doTryon()"><span class="ic" data-icon="sparkles"></span> Thử Trang Phục Ngay</button>
+            <button data-i18n="pcol.thu-trang-phuc-ngay" class="btn-tryon" id="btnTryon" onclick="doTryon()"><span class="ic" data-icon="sparkles"></span> Thử Trang Phục Ngay</button>
           </div>
 
           <div id="tryonLoading" style="display:none;text-align:center;padding:24px 0">
@@ -268,18 +268,18 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
 
           <div id="tryonResult" style="display:none;margin-top:12px">
             <div class="ba-grid">
-              <div><div class="ba-label">Ảnh gốc</div><img id="tryonBefore" class="ba-img" src="" alt="Trước"></div>
-              <div><div class="ba-label" id="tryonAfterLabel">Sau khi thử</div><img id="tryonAfter" class="ba-img" src="" alt="Sau"></div>
+              <div><div data-i18n="phongthuy.anh-goc" class="ba-label">Ảnh gốc</div><img data-i18n-attr="alt:phongthuy.truoc" id="tryonBefore" class="ba-img" src="" alt="Trước"></div>
+              <div><div data-i18n="kieut.sau-khi-thu" class="ba-label" id="tryonAfterLabel">Sau khi thử</div><img id="tryonAfter" class="ba-img" src="" alt="Sau"></div>
             </div>
             <div style="display:flex;gap:8px">
-              <button onclick="downloadTryon()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh</button>
-              <button onclick="resetTryon()" class="btn-cancel" style="flex:1"><span class="ic" data-icon="rotate-cw"></span> Thử Lại</button>
+              <button data-i18n="banlamviec.tai-anh" onclick="downloadTryon()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh</button>
+              <button data-i18n="pcol.thu-lai" onclick="resetTryon()" class="btn-cancel" style="flex:1"><span class="ic" data-icon="rotate-cw"></span> Thử Lại</button>
             </div>
           </div>
         </div>
 
         <div style="text-align:center;padding:12px 0 4px">
-          <button onclick="resetAll()" class="btn-cancel">← Xem Lại</button>
+          <button data-i18n="mshm.xem-lai" onclick="resetAll()" class="btn-cancel">← Xem Lại</button>
         </div>
       </div>
     </div>
@@ -345,38 +345,41 @@ function yearCanChi(y){ return `${_TPTN_CAN[(y-4+400)%10]} ${_TPTN_CHI[(y-4+480)
 var _SINH={Kim:'Thủy',Thủy:'Mộc',Mộc:'Hỏa',Hỏa:'Thổ',Thổ:'Kim'};
 var _KHAC={Kim:'Mộc',Mộc:'Thổ',Thổ:'Thủy',Thủy:'Hỏa',Hỏa:'Kim'};
 function getRelation(menh,ngay){
-  if(menh===ngay)return{code:'binh_hoa',text:'Ngày đồng hành — bình ổn, thuận lợi',icon:'scale',color:'linear-gradient(135deg,#1a3a2a,#2e5a42)'};
-  if(_SINH[ngay]===menh)return{code:'ngay_sinh_menh',text:'Ngày sinh Mệnh ✦ Cực kỳ thuận lợi',icon:'star',color:'linear-gradient(135deg,#1a2a10,#2e5010)'};
-  if(_SINH[menh]===ngay)return{code:'menh_sinh_ngay',text:'Mệnh sinh Ngày — hao tổn chút ít, vẫn tốt',icon:'moon',color:'linear-gradient(135deg,#1a2a40,#0d3b5e)'};
-  if(_KHAC[ngay]===menh)return{code:'ngay_khac_menh',text:'Ngày khắc Mệnh ✦ Cần hóa giải bằng màu',icon:'alert-triangle',color:'linear-gradient(135deg,#3a1a10,#6b2510)'};
-  return{code:'menh_khac_ngay',text:'Mệnh khắc Ngày — ngày trung bình, cẩn thận',icon:'info',color:'linear-gradient(135deg,#3a2a10,#6b4510)'};
+  if(menh===ngay)return{code:'binh_hoa',text:_tvmbT('js.tpng.rel-binh-hoa','Ngày đồng hành — bình ổn, thuận lợi'),icon:'scale',color:'linear-gradient(135deg,#1a3a2a,#2e5a42)'};
+  if(_SINH[ngay]===menh)return{code:'ngay_sinh_menh',text:_tvmbT('js.tpng.rel-ngay-sinh-menh','Ngày sinh Mệnh ✦ Cực kỳ thuận lợi'),icon:'star',color:'linear-gradient(135deg,#1a2a10,#2e5010)'};
+  if(_SINH[menh]===ngay)return{code:'menh_sinh_ngay',text:_tvmbT('js.tpng.rel-menh-sinh-ngay','Mệnh sinh Ngày — hao tổn chút ít, vẫn tốt'),icon:'moon',color:'linear-gradient(135deg,#1a2a40,#0d3b5e)'};
+  if(_KHAC[ngay]===menh)return{code:'ngay_khac_menh',text:_tvmbT('js.tpng.rel-ngay-khac-menh','Ngày khắc Mệnh ✦ Cần hóa giải bằng màu'),icon:'alert-triangle',color:'linear-gradient(135deg,#3a1a10,#6b2510)'};
+  return{code:'menh_khac_ngay',text:_tvmbT('js.tpng.rel-menh-khac-ngay','Mệnh khắc Ngày — ngày trung bình, cẩn thận'),icon:'info',color:'linear-gradient(135deg,#3a2a10,#6b4510)'};
 }
 
 var STYLE_META={
   glass_skin:{icon:'sparkles',name:'Glass Skin Korea'},j_sheer:{icon:'leaf',name:'J-Beauty Sheer'},
   kdrama_glam:{icon:'star',name:'K-Drama Glam'},guochao:{icon:'crown',name:'Guochao Editorial'},
-  hoa_dan:{icon:'flower',name:'Hoa Đán Soft'},dark_muse:{icon:'moon',name:'Dark Muse'},
+  hoa_dan:{icon:'flower',name:_tvmbT('js.tpng.style-hoa-dan','Hoa Đán Soft')},dark_muse:{icon:'moon',name:'Dark Muse'},
   clean_casual:{icon:'shirt',name:'Clean Casual'},warm_earth:{icon:'sun',name:'Warm Earth'},
 };
 var OUTFIT_META=[
-  {key:'top',icon:'shirt',cat:'Áo'},
-  {key:'bottom',icon:'shirt',cat:'Quần / Váy'},
-  {key:'outer',icon:'shirt',cat:'Áo Khoác'},
-  {key:'shoes',icon:'package',cat:'Giày'},
-  {key:'accessory',icon:'gem',cat:'Phụ Kiện'},
+  {key:'top',icon:'shirt',cat:_tvmbT('js.tpng.cat-ao','Áo')},
+  {key:'bottom',icon:'shirt',cat:_tvmbT('js.tpng.cat-quan','Quần / Váy')},
+  {key:'outer',icon:'shirt',cat:_tvmbT('js.tpng.cat-ao-khoac','Áo Khoác')},
+  {key:'shoes',icon:'package',cat:_tvmbT('js.tpng.cat-giay','Giày')},
+  {key:'accessory',icon:'gem',cat:_tvmbT('js.tpng.cat-phu-kien','Phụ Kiện')},
 ];
 var COLOR_HEX={'Trắng':'#FFFFFF','Bạc':'#C0C0C0','Xám nhạt':'#D3D3D3','Vàng kim':'#D4AF37','Be':'#D4B896','Kem':'#FFF8DC','Xanh lá':'#2E8B57','Xanh ngọc':'#40E0D0','Xanh lam':'#87CEEB','Nâu gỗ':'#8B4513','Đen':'#111111','Navy':'#000080','Xanh dương':'#1E90FF','Xám đậm':'#696969','Đỏ':'#CC0000','Cam':'#FF6600','Hồng':'#FF69B4','Vàng':'#FFD700','Nâu':'#8B6914','Cam đất':'#CC7722','Xanh rêu':'#6B8E23','Tím':'#800080','Tím đỏ':'#800040','Hồng phấn':'#FFB6C1'};
+// Tên màu HIỂN THỊ — COLOR_HEX tra theo tên Việt nên giữ nguyên, chữ hiện ra qua map này.
+var COLOR_NAME_SHOWN={'Trắng':_tvmbT('js.tpng.mau-trang','Trắng'),'Bạc':_tvmbT('js.tpng.mau-bac','Bạc'),'Xám nhạt':_tvmbT('js.tpng.mau-xam-nhat','Xám nhạt'),'Vàng kim':_tvmbT('js.tpng.mau-vang-kim','Vàng kim'),'Be':_tvmbT('js.tpng.mau-be','Be'),'Kem':_tvmbT('js.tpng.mau-kem','Kem'),'Xanh lá':_tvmbT('js.tpng.mau-xanh-la','Xanh lá'),'Xanh ngọc':_tvmbT('js.tpng.mau-xanh-ngoc','Xanh ngọc'),'Xanh lam':_tvmbT('js.tpng.mau-xanh-lam','Xanh lam'),'Nâu gỗ':_tvmbT('js.tpng.mau-nau-go','Nâu gỗ'),'Đen':_tvmbT('js.tpng.mau-den','Đen'),'Navy':_tvmbT('js.tpng.mau-navy','Navy'),'Xanh dương':_tvmbT('js.tpng.mau-xanh-duong','Xanh dương'),'Xám đậm':_tvmbT('js.tpng.mau-xam-dam','Xám đậm'),'Đỏ':_tvmbT('js.tpng.mau-do','Đỏ'),'Cam':_tvmbT('js.tpng.mau-cam','Cam'),'Hồng':_tvmbT('js.tpng.mau-hong','Hồng'),'Vàng':_tvmbT('js.tpng.mau-vang','Vàng'),'Nâu':_tvmbT('js.tpng.mau-nau','Nâu'),'Cam đất':_tvmbT('js.tpng.mau-cam-dat','Cam đất'),'Xanh rêu':_tvmbT('js.tpng.mau-xanh-reu','Xanh rêu'),'Tím':_tvmbT('js.tpng.mau-tim','Tím'),'Tím đỏ':_tvmbT('js.tpng.mau-tim-do','Tím đỏ'),'Hồng phấn':_tvmbT('js.tpng.mau-hong-phan','Hồng phấn')};
+function _tpColor(n){return COLOR_NAME_SHOWN[n]||n;}
 
 var _mucDich='ra ngoài thông thường';
 var _resultData=null;
 var _tryonImgData=null,_tryonMediaType='image/jpeg',_tryonStyle='cong-so',_tryonResultUrl=null;
 var ANALYSIS_STEPS=[
-  {label:'Tính can chi ngày & quan hệ ngũ hành',ms:900},
-  {label:'Tư vấn trang phục hợp ngày',ms:0},
+  {label:_tvmbT('js.tpng.step-tinh','Tính can chi ngày & quan hệ ngũ hành'),ms:900},
+  {label:_tvmbT('js.tpng.step-tu-van','Tư vấn trang phục hợp ngày'),ms:0},
 ];
 var TRYON_STEPS=[
-  {label:'Chuẩn bị trang phục theo ngũ hành',ms:1200},
-  {label:'Đang tạo ảnh trang phục',ms:0},
+  {label:_tvmbT('js.tpng.step-chuan-bi','Chuẩn bị trang phục theo ngũ hành'),ms:1200},
+  {label:_tvmbT('js.tpng.step-tao-anh','Đang tạo ảnh trang phục'),ms:0},
 ];
 var _analysisLoadingCtl=null;
 var _tryonLoadingCtl=null;
@@ -397,9 +400,9 @@ function onFormChange(){
   const menhCC=yearCanChi(yr);
   const menhHanh=_NAP_AM_YEAR[menhCC]||'Thổ';
   const rel=getRelation(menhHanh,hanh);
-  document.getElementById('previewCanChi').textContent=`${dd}/${mm}/${yy} — ${cc}`;
+  document.getElementById('previewCanChi').textContent=`${dd}/${mm}/${yy} — ${_tvmbG('canchi',cc)}`;
   const hanhEl=document.getElementById('previewHanh');
-  hanhEl.textContent='Hành '+hanh;
+  hanhEl.textContent=_tvmbT('js.tpng.hanh-n','Hành {h}',{h:_tvmbG('hanh',hanh)});
   const colors={Kim:'#888',Mộc:'#2E8B57',Thủy:'#1455A4',Hỏa:'#C0392B',Thổ:'#9A7B3A'};
   hanhEl.style.cssText=`background:${colors[hanh]||'#888'};color:#fff;padding:2px 9px;border-radius:10px;font-weight:600;font-size:11px;`;
   document.getElementById('previewRelation').textContent=rel.text;
@@ -419,8 +422,8 @@ function mountHook(cc,hanh,rel){
     charts:[],
     facts:[{
       tone:tot?'good':(rel.code==='ngay_khac_menh'?'bad':'neutral'),
-      title:'Ngày '+cc+' — hành '+hanh,
-      body:rel.text+'. Màu nên mặc, phong cách gợi ý, và trang phục cụ thể theo đúng hành ngày nằm trong bản phân tích chuyên sâu.',
+      title:_tvmbT('js.tpng.ngay-hanh','Ngày {c} — hành {h}',{c:_tvmbG('canchi',cc),h:_tvmbG('hanh',hanh)}),
+      body:_tvmbT('js.tpng.mau-nen-mac','{r}. Màu nên mặc, phong cách gợi ý, và trang phục cụ thể theo đúng hành ngày nằm trong bản phân tích chuyên sâu.',{r:rel.text}),
       source:'engine · dayCanChi/getRelation',
     }],
   });
@@ -456,7 +459,7 @@ async function analyze(){
             body:JSON.stringify({namSinh:yr,gioiTinh:g,ngay:dd,thang:mm,nam:yy,mucDich:_mucDich}),
           });
           const data=await res.json();
-          if(!data.success)throw new Error(data.error||'Lỗi phân tích');
+          if(!data.success)throw new Error(data.error||_tvmbT('js.tpng.loi-phan-tich','Lỗi phân tích'));
           _resultData=data;
           window.refreshNavCredits?.();
           _analysisLoadingCtl&&_analysisLoadingCtl.finish();
@@ -465,7 +468,7 @@ async function analyze(){
         }catch(e){reject(e);}
       });
     });
-  }catch(e){_analysisLoadingCtl&&_analysisLoadingCtl.stop();alert('Lỗi: '+(e.message||'Vui lòng thử lại.'));}
+  }catch(e){_analysisLoadingCtl&&_analysisLoadingCtl.stop();alert(_tvmbT('js.tpng.loi-e','Lỗi: {e}',{e:e.message||_tvmbT('js.tpng.vui-long-thu-lai','Vui lòng thử lại.')}));}
   finally{document.getElementById('btnAnalyze').disabled=false;document.getElementById('loading').classList.remove('show');}
 }
 
@@ -480,9 +483,9 @@ function renderResults(d){
   const banner=document.getElementById('relBanner');
   banner.style.background=rel.color;
   document.getElementById('relIcon').innerHTML=window.iconHtml?window.iconHtml(rel.icon):'';
-  document.getElementById('relTitle').textContent=`Mệnh ${menhHanh} · Ngày ${d.ngayCC||''}`;
-  document.getElementById('relSub').textContent=`${d.menhFull||menhHanh} — ${rel.text}`;
-  document.getElementById('relTagMain').textContent=ngayHanh;
+  document.getElementById('relTitle').textContent=_tvmbT('js.tpng.menh-ngay','Mệnh {h} · Ngày {c}',{h:_tvmbG('hanh',menhHanh),c:_tvmbG('canchi',d.ngayCC||'')});
+  document.getElementById('relSub').textContent=`${d.menhFull?_tvmbG('napam',d.menhFull):_tvmbG('hanh',menhHanh)} — ${rel.text}`;
+  document.getElementById('relTagMain').textContent=_tvmbG('hanh',ngayHanh);
   document.getElementById('lyGiai').textContent=d.lyGiai||'';
 
   renderColorRow('mainColors',d.mainColors||[],false);
@@ -513,13 +516,13 @@ function renderResults(d){
 
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({
-    label:'Trang Phục Theo Ngày — '+rel.text,
-    greeting:'Mệnh **'+menhHanh+'**, ngày **'+ngayHanh+'** — '+rel.text+'. Bạn muốn hỏi thêm về màu sắc hay phong cách?',
-    chips:['Vì sao ngày này khắc mệnh tôi?','Nên hóa giải thế nào?','Màu điểm nhấn nào tốt nhất?']
+    label:_tvmbT('js.tpng.label','Trang Phục Theo Ngày — {r}',{r:rel.text}),
+    greeting:_tvmbT('js.tpng.greeting','Mệnh **{m}**, ngày **{n}** — {r}. Bạn muốn hỏi thêm về màu sắc hay phong cách?',{m:_tvmbG('hanh',menhHanh),n:_tvmbG('hanh',ngayHanh),r:rel.text}),
+    chips:[_tvmbT('js.tpng.chip-khac','Vì sao ngày này khắc mệnh tôi?'),_tvmbT('js.tpng.chip-hoa-giai','Nên hóa giải thế nào?'),_tvmbT('js.tpng.chip-diem-nhan','Màu điểm nhấn nào tốt nhất?')]
   });
   Shell.setShareable({
-    kind:'text', toolId:'trang-phuc-theo-ngay', title:'Trang phục hợp ngày của tôi',
-    text:'Mệnh '+menhHanh+' · Ngày '+(d.ngayCC||'')+' ('+ngayHanh+') — '+rel.text+(d.tip?'\n\n✦ '+d.tip:'')
+    kind:'text', toolId:'trang-phuc-theo-ngay', title:_tvmbT('js.tpng.share-title','Trang phục hợp ngày của tôi'),
+    text:_tvmbT('js.tpng.share-text','Mệnh {m} · Ngày {c} ({n}) — {r}',{m:_tvmbG('hanh',menhHanh),c:_tvmbG('canchi',d.ngayCC||''),n:_tvmbG('hanh',ngayHanh),r:rel.text})+(d.tip?'\n\n✦ '+d.tip:'')
   });
 }
 
@@ -527,7 +530,7 @@ function renderColorRow(id,colors,isAvoid){
   const el=document.getElementById(id); el.innerHTML='';
   colors.forEach(name=>{
     const hex=COLOR_HEX[name]||'#888';
-    el.innerHTML+=`<div class="chip${isAvoid?' avoid':''}"><div class="chip-swatch" style="background:${hex}"></div><div class="chip-name">${esc(name)}</div></div>`;
+    el.innerHTML+=`<div class="chip${isAvoid?' avoid':''}"><div class="chip-swatch" style="background:${hex}"></div><div class="chip-name">${esc(_tpColor(name))}</div></div>`;
   });
 }
 
@@ -554,6 +557,9 @@ function clearTryon(){
   document.getElementById('tryonStep2').style.display='none';
   document.getElementById('tryonInput').value='';
 }
+// Nhãn kiểu thử đồ: vi giữ NGUYÊN id thô như trước (cong-so…), ngôn ngữ khác hiện tên bản ngữ.
+var _TP_STYLE_SHOWN={'cong-so':_tvmbT('js.tpng.tryon-cong-so','cong-so'),'casual':_tvmbT('js.tpng.tryon-casual','casual'),'sang-trong':_tvmbT('js.tpng.tryon-sang-trong','sang-trong'),'dao-pho':_tvmbT('js.tpng.tryon-dao-pho','dao-pho')};
+function _tpStyleShown(s){return _TP_STYLE_SHOWN[s]||s;}
 function setTryonStyle(s,btn){
   _tryonStyle=s;
   document.querySelectorAll('.style-btn').forEach(b=>b.classList.remove('active'));
@@ -579,19 +585,19 @@ async function doTryon(){
         body:JSON.stringify({imageBase64:_tryonImgData,imageType:_tryonMediaType,napAmHanh:_resultData.menhHanh,gioiTinh:document.getElementById('gioiTinh').value,style:_tryonStyle}),
       });
       const data=await res.json();
-      if(!data.imageUrl)throw new Error(data.error||'Lỗi');
+      if(!data.imageUrl)throw new Error(data.error||_tvmbT('js.tpng.loi','Lỗi'));
       _tryonResultUrl=data.imageUrl;
       document.getElementById('tryonBefore').src='data:'+_tryonMediaType+';base64,'+_tryonImgData;
       document.getElementById('tryonAfter').src=data.imageUrl;
-      document.getElementById('tryonAfterLabel').textContent='Mệnh '+_resultData.menhHanh+' · '+_tryonStyle;
+      document.getElementById('tryonAfterLabel').textContent=_tvmbT('js.tpng.tryon-label','Mệnh {h} · {s}',{h:_tvmbG('hanh',_resultData.menhHanh),s:_tpStyleShown(_tryonStyle)});
       _tryonLoadingCtl&&_tryonLoadingCtl.finish();
       document.getElementById('tryonResult').style.display='block';
       window.refreshNavCredits?.();
       Shell.setShareable({
-        kind:'image', title:'Trang phục hợp ngày của tôi (thử ảo)',
-        imageUrl:data.imageUrl, text:'Mệnh '+_resultData.menhHanh+' · '+_tryonStyle
+        kind:'image', title:_tvmbT('js.tpng.share-tryon-title','Trang phục hợp ngày của tôi (thử ảo)'),
+        imageUrl:data.imageUrl, text:_tvmbT('js.tpng.tryon-label','Mệnh {h} · {s}',{h:_tvmbG('hanh',_resultData.menhHanh),s:_tpStyleShown(_tryonStyle)})
       });
-    }catch(e){_tryonLoadingCtl&&_tryonLoadingCtl.stop();alert('Lỗi: '+(e.message||'Vui lòng thử lại.'));}
+    }catch(e){_tryonLoadingCtl&&_tryonLoadingCtl.stop();alert(_tvmbT('js.tpng.loi-e','Lỗi: {e}',{e:e.message||_tvmbT('js.tpng.vui-long-thu-lai','Vui lòng thử lại.')}));}
     finally{document.getElementById('tryonLoading').style.display='none';document.getElementById('tryonStep2').style.display='block';}
   });
 }

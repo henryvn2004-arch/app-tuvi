@@ -13931,6 +13931,246 @@
   "t": "查看紀錄",
   "h": "21a19fb0"
  },
+ "js.tpng.cat-ao": {
+  "t": "上衣",
+  "h": "373c84b7"
+ },
+ "js.tpng.cat-ao-khoac": {
+  "t": "外套",
+  "h": "dee0e8de"
+ },
+ "js.tpng.cat-giay": {
+  "t": "鞋子",
+  "h": "a47dc437"
+ },
+ "js.tpng.cat-phu-kien": {
+  "t": "配件",
+  "h": "f1f0fba9"
+ },
+ "js.tpng.cat-quan": {
+  "t": "褲子／裙子",
+  "h": "879b0cdf"
+ },
+ "js.tpng.chip-diem-nhan": {
+  "t": "哪個點綴色最好？",
+  "h": "6d38e6a5"
+ },
+ "js.tpng.chip-hoa-giai": {
+  "t": "該如何化解？",
+  "h": "1dee5079"
+ },
+ "js.tpng.chip-khac": {
+  "t": "為什麼這一天剋我的命格？",
+  "h": "a98c2e50"
+ },
+ "js.tpng.greeting": {
+  "t": "本命 **{m}**，當日五行 **{n}** —— {r}。想進一步了解色彩或風格嗎？",
+  "h": "36a537dc"
+ },
+ "js.tpng.hanh-n": {
+  "t": "{h}行",
+  "h": "3e50daab"
+ },
+ "js.tpng.label": {
+  "t": "每日穿搭——{r}",
+  "h": "26ec2299"
+ },
+ "js.tpng.loi": {
+  "t": "錯誤",
+  "h": "d2907807"
+ },
+ "js.tpng.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.tpng.loi-phan-tich": {
+  "t": "分析錯誤",
+  "h": "3e06a99e"
+ },
+ "js.tpng.mau-bac": {
+  "t": "銀色",
+  "h": "7386c9c6"
+ },
+ "js.tpng.mau-be": {
+  "t": "米色",
+  "h": "11d1bf27"
+ },
+ "js.tpng.mau-cam": {
+  "t": "橙色",
+  "h": "5e09769d"
+ },
+ "js.tpng.mau-cam-dat": {
+  "t": "陶土橙",
+  "h": "aaa37477"
+ },
+ "js.tpng.mau-den": {
+  "t": "黑色",
+  "h": "4d0c0faf"
+ },
+ "js.tpng.mau-do": {
+  "t": "紅色",
+  "h": "2eb7503e"
+ },
+ "js.tpng.mau-hong": {
+  "t": "粉紅色",
+  "h": "5a43ba9e"
+ },
+ "js.tpng.mau-hong-phan": {
+  "t": "淡粉色",
+  "h": "0ec650f1"
+ },
+ "js.tpng.mau-kem": {
+  "t": "奶油色",
+  "h": "e52e6c26"
+ },
+ "js.tpng.mau-nau": {
+  "t": "棕色",
+  "h": "42ff42d9"
+ },
+ "js.tpng.mau-nau-go": {
+  "t": "木棕色",
+  "h": "24e064f8"
+ },
+ "js.tpng.mau-navy": {
+  "t": "海軍藍",
+  "h": "0229e960"
+ },
+ "js.tpng.mau-nen-mac": {
+  "t": "{r}。適合穿的顏色、建議風格，以及依當日五行的具體穿搭，收錄於深度分析中。",
+  "h": "51d59e76"
+ },
+ "js.tpng.mau-tim": {
+  "t": "紫色",
+  "h": "684e5966"
+ },
+ "js.tpng.mau-tim-do": {
+  "t": "紫紅色",
+  "h": "0b78db8f"
+ },
+ "js.tpng.mau-trang": {
+  "t": "白色",
+  "h": "9cf5e0eb"
+ },
+ "js.tpng.mau-vang": {
+  "t": "黃色",
+  "h": "27d57aed"
+ },
+ "js.tpng.mau-vang-kim": {
+  "t": "金色",
+  "h": "b441fe1f"
+ },
+ "js.tpng.mau-xam-dam": {
+  "t": "深灰色",
+  "h": "01959534"
+ },
+ "js.tpng.mau-xam-nhat": {
+  "t": "淺灰色",
+  "h": "d8017939"
+ },
+ "js.tpng.mau-xanh-duong": {
+  "t": "藍色",
+  "h": "95beb520"
+ },
+ "js.tpng.mau-xanh-la": {
+  "t": "綠色",
+  "h": "d0e8c4b1"
+ },
+ "js.tpng.mau-xanh-lam": {
+  "t": "天藍色",
+  "h": "0537307a"
+ },
+ "js.tpng.mau-xanh-ngoc": {
+  "t": "青綠色",
+  "h": "b8cbaa2e"
+ },
+ "js.tpng.mau-xanh-reu": {
+  "t": "苔綠色",
+  "h": "836bccc5"
+ },
+ "js.tpng.menh-ngay": {
+  "t": "本命 {h} · {c}日",
+  "h": "ac19a8fe"
+ },
+ "js.tpng.ngay-hanh": {
+  "t": "{c}日——五行屬{h}",
+  "h": "6fd10f47"
+ },
+ "js.tpng.rel-binh-hoa": {
+  "t": "同行日 — 平穩順利",
+  "h": "d1971f40"
+ },
+ "js.tpng.rel-menh-khac-ngay": {
+  "t": "命剋日 — 中等日子，需謹慎",
+  "h": "256fb5ff"
+ },
+ "js.tpng.rel-menh-sinh-ngay": {
+  "t": "命生日 — 略有耗損，仍然吉利",
+  "h": "995978d5"
+ },
+ "js.tpng.rel-ngay-khac-menh": {
+  "t": "日剋命 ✦ 需以色彩化解",
+  "h": "f331fca5"
+ },
+ "js.tpng.rel-ngay-sinh-menh": {
+  "t": "日生命 ✦ 極為順利",
+  "h": "81b455cf"
+ },
+ "js.tpng.share-text": {
+  "t": "本命 {m} · {c}日（{n}）—— {r}",
+  "h": "a603ba42"
+ },
+ "js.tpng.share-title": {
+  "t": "適合我今日的穿搭",
+  "h": "36dc7dba"
+ },
+ "js.tpng.share-tryon-title": {
+  "t": "適合我今日的穿搭（虛擬試穿）",
+  "h": "7767c7e3"
+ },
+ "js.tpng.step-chuan-bi": {
+  "t": "依五行準備服裝",
+  "h": "cf955a11"
+ },
+ "js.tpng.step-tao-anh": {
+  "t": "正在生成服裝圖片",
+  "h": "ba6faaec"
+ },
+ "js.tpng.step-tinh": {
+  "t": "計算當日干支與五行關係",
+  "h": "7112616b"
+ },
+ "js.tpng.step-tu-van": {
+  "t": "建議適合當日的穿搭",
+  "h": "86c6bfcc"
+ },
+ "js.tpng.style-hoa-dan": {
+  "t": "柔美花旦風",
+  "h": "c859a2ac"
+ },
+ "js.tpng.tryon-casual": {
+  "t": "休閒",
+  "h": "7b664f70"
+ },
+ "js.tpng.tryon-cong-so": {
+  "t": "職場",
+  "h": "81a4c6c6"
+ },
+ "js.tpng.tryon-dao-pho": {
+  "t": "逛街",
+  "h": "c1f7f4a0"
+ },
+ "js.tpng.tryon-label": {
+  "t": "本命 {h} · {s}",
+  "h": "c91f44b2"
+ },
+ "js.tpng.tryon-sang-trong": {
+  "t": "高雅",
+  "h": "3c6421de"
+ },
+ "js.tpng.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
+ },
  "js.tuviform.ca-nhan": {
   "t": "個人資料",
   "h": "bbe1cce8"
@@ -17874,6 +18114,110 @@
  "topup.xem-lai-ket-qua-co-bi": {
   "t": "重新查看結果會再扣兩嗎？",
   "h": "64b49a22"
+ },
+ "tpng.anh-chup-toan-than-hoac-nua": {
+  "t": "全身或半身照片 · JPG/PNG",
+  "h": "17435ed7"
+ },
+ "tpng.co-ngay-an-mac-chin-chu": {
+  "t": "有些日子穿得再整齊也不順，有些日子隨性穿反而一帆風順——每天的運勢都不同。輸入出生年，立即獲得適合今天的顏色與穿搭風格。",
+  "h": "6350ffd2"
+ },
+ "tpng.diem-nhan": {
+  "t": "◎ 點綴",
+  "h": "a95e46c4"
+ },
+ "tpng.du-lich": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> 旅行",
+  "h": "d7d6e7ed"
+ },
+ "tpng.goi-y-trang-phuc-cu-the": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 具體穿搭建議",
+  "h": "d9e6894d"
+ },
+ "tpng.hanh-ngay": {
+  "t": "當日五行",
+  "h": "f96db196"
+ },
+ "tpng.hen-ho": {
+  "t": "<span class=\"ic\" data-icon=\"heart\"></span> 約會",
+  "h": "398a0192"
+ },
+ "tpng.kinh-doanh": {
+  "t": "<span class=\"ic\" data-icon=\"handshake\"></span> 商務",
+  "h": "5e9fdd61"
+ },
+ "tpng.mau-sac-hop-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 適合當日的色彩",
+  "h": "e47839c0"
+ },
+ "tpng.meo-co-phap": {
+  "t": "<strong>✦ 古法小訣竅</strong> <span id=\"tipText\">—</span>",
+  "h": "cd8f1791"
+ },
+ "tpng.muc-dich-chon-1": {
+  "t": "目的（選一項）",
+  "h": "a7f0975c"
+ },
+ "tpng.nen-mac": {
+  "t": "✓ 適合穿",
+  "h": "4d634b8d"
+ },
+ "tpng.nen-tranh": {
+  "t": "✗ 建議避開",
+  "h": "b4981595"
+ },
+ "tpng.ngay-di-duong-lich": {
+  "t": "出門日期（國曆）",
+  "h": "dfc6af38"
+ },
+ "tpng.nhap-nam-sinh-gioi-tinh-ngay": {
+  "t": "請輸入出生年、性別、想穿搭的日期與出門目的。系統會把當日運勢與您的本命對照。您會得到適合穿的顏色、建議避開的顏色，以及具體的穿搭建議。",
+  "h": "737914fb"
+ },
+ "tpng.phong-cach": {
+  "t": "風格：",
+  "h": "62e2075f"
+ },
+ "tpng.phong-cach-goi-y": {
+  "t": "✦ 建議風格",
+  "h": "b9a77fc8"
+ },
+ "tpng.phong-van": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 面試",
+  "h": "0f6621da"
+ },
+ "tpng.thong-tin": {
+  "t": "<span class=\"ic\" data-icon=\"calendar\"></span> 資訊",
+  "h": "fb81e21c"
+ },
+ "tpng.thu-trang-phuc-luong-lan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 試穿服裝 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px\"><span data-tvp-price=\"trang-phuc-tryon\">…</span> 兩／次</span>",
+  "h": "a56af403"
+ },
+ "tpng.thuong-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 日常",
+  "h": "f84f5bc4"
+ },
+ "tpng.trang-phuc-theo-ngay": {
+  "t": "每日穿搭",
+  "h": "6cfe1c1e"
+ },
+ "tpng.trang-phuc-theo-ngay-can-chi": {
+  "t": "<b>每日穿搭</b><span>當日干支 × 本命納音——適合出門當日的色彩與風格</span>",
+  "h": "4c8d4580"
+ },
+ "tpng.trang-phuc-theo-ngay-tu-vi": {
+  "t": "每日穿搭——明寶紫微斗數",
+  "h": "654b038b"
+ },
+ "tpng.tu-van-mau-sac-trang-phuc": {
+  "t": "依當日干支與本命建議服裝色彩——五行納音古法。",
+  "h": "dd5ad2b6"
+ },
+ "tpng.xem-trang-phuc-hop-ngay-luong": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 查看適合當日的穿搭——<span data-tvp-price=\"trang-phuc-theo-ngay\">…</span> 兩",
+  "h": "589f0801"
  },
  "tuonghop.ban-luan-giai-mau-tai-pdf": {
   "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>解讀範本</b><span>下載範例命盤的完整夫妻合婚 PDF，先看看實際內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-xem-tuoi.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
