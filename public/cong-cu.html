@@ -813,11 +813,11 @@ function toolCardHtml(t, byNeed) {
   // để một thẻ trả lời được cả hai: "sao tôi phải bấm vào" (câu hỏi) và "bấm
   // vào thì tôi nhận được gì" (description) — thiếu vế nào thẻ cũng yếu hơn.
   const head = byNeed && t.question
-    ? '<div class="tool-q">' + esc(t.question) + '</div>' +
+    ? '<div class="tool-q">' + esc(toolQ(t)) + '</div>' +
       '<div class="tool-src">' + esc(toolLb(t)) + '</div>' +
-      (t.description ? '<div class="tool-desc">' + esc(t.description) + '</div>' : '')
+      (t.description ? '<div class="tool-desc">' + esc(toolDesc(t)) + '</div>' : '')
     : '<div class="tool-name">' + esc(toolLb(t)) + '</div>' +
-      '<div class="tool-desc">' + esc(t.description || '') + '</div>';
+      '<div class="tool-desc">' + esc(t.description ? toolDesc(t) : '') + '</div>';
   return '<a href="' + url + '" class="tool-card' + featured + '">' +
     '<div class="tool-icon">' + toolIcon(t) + '</div>' +
     head +
@@ -831,6 +831,9 @@ function toolCardHtml(t, byNeed) {
 // đường chèn thẻ bằng chính quyền của người đang xem trang.
 // Nhãn công cụ từ DB (tool_pricing.label) theo ngôn ngữ trang — I18n.db dịch chỉ khi nhãn DB còn trùng câu gốc (W27). Chỉ hiển thị.
 function toolLb(r) { return window.I18n && I18n.db ? I18n.db('js.tool.' + r.tool_id, r.label) : r.label; }
+// Mô tả / câu hỏi từ DB (tool_pricing.description · question) — cùng cơ chế: dịch chỉ khi chữ DB còn trùng câu gốc (W29). Chỉ hiển thị.
+function toolDesc(r) { return window.I18n && I18n.db ? I18n.db('js.tool-desc.' + r.tool_id, r.description) : r.description; }
+function toolQ(r) { return window.I18n && I18n.db ? I18n.db('js.tool-q.' + r.tool_id, r.question) : r.question; }
 function esc(s) {
   return String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
