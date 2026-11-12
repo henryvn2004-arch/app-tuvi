@@ -13,7 +13,28 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/ban-do-sao": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/ban-lam-viec": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/bat-tu": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/boi-bai-tay": [
   "en",
   "ja",
   "ko",
@@ -35,6 +56,13 @@
   "zh-cn"
  ],
  "/app/cong-cu": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/cua-hang-phong-thuy": [
   "en",
   "ja",
   "ko",
@@ -104,6 +132,34 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/oracle": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/phong-thuy": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/tarot": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/than-so-hoc": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/thanh-tuong": [
   "en",
   "ja",
@@ -146,6 +202,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/cong-cu": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/dieu-khoan-dich-vu.html": [
   "en",
   "ja",
@@ -160,7 +223,35 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/menh-kho": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/mien-tru-trach-nhiem.html": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/resources": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/sach-detail.html": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/tai-lieu.html": [
   "en",
   "ja",
   "ko",

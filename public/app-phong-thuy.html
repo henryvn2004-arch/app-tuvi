@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Phong Thủy Nội Thất — Tử Vi Minh Bảo</title>
-<meta name="description" content="Chụp ảnh phòng, hệ thống phân tích phong thủy Bát Trạch — điểm trước/sau, sơ đồ bố trí, đề xuất và render phòng.">
+<title data-i18n="phongthuy.phong-thuy-noi-that-tu-vi">Phong Thủy Nội Thất — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:phongthuy.chup-anh-phong-he-thong-phan" name="description" content="Chụp ảnh phòng, hệ thống phân tích phong thủy Bát Trạch — điểm trước/sau, sơ đồ bố trí, đề xuất và render phòng.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -126,9 +126,9 @@ body.chat-first-live .fp-compare{grid-template-columns:1fr}
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Phong Thủy Nội Thất</b><span>Chụp ảnh phòng — hệ thống chấm điểm Bát Trạch, đề xuất bố trí</span></div>
+      <div data-i18n="phongthuy.phong-thuy-noi-that-chup-anh" class="ws-title"><b>Phong Thủy Nội Thất</b><span>Chụp ảnh phòng — hệ thống chấm điểm Bát Trạch, đề xuất bố trí</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -142,15 +142,15 @@ body.chat-first-live .fp-compare{grid-template-columns:1fr}
         <img class="intro-avatar" src="/tool-avatars/phong-thuy.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Phong Thủy Nội Thất</div>
-            <div class="intro-d">Một căn phòng bố trí sai phong thủy có thể âm thầm cản vận mà chủ nhân không hề hay biết. Chụp ảnh căn phòng, nhận điểm trước – sau theo Bát Trạch cùng đề xuất bố trí cụ thể.</div>
+            <div data-i18n="phongthuy.phong-thuy-noi-that" class="intro-t">Phong Thủy Nội Thất</div>
+            <div data-i18n="phongthuy.mot-can-phong-bo-tri-sai" class="intro-d">Một căn phòng bố trí sai phong thủy có thể âm thầm cản vận mà chủ nhân không hề hay biết. Chụp ảnh căn phòng, nhận điểm trước – sau theo Bát Trạch cùng đề xuất bố trí cụ thể.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Điểm trước<br>– sau</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span>Sơ đồ bố trí<br>đề xuất</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="camera"></span><span>Render phòng<br>theo phong thủy</span></div>
+          <div data-i18n="phongthuy.diem-truoc-sau" class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Điểm trước<br>– sau</span></div>
+          <div data-i18n="phongthuy.so-do-bo-tri-de-xuat" class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span>Sơ đồ bố trí<br>đề xuất</span></div>
+          <div data-i18n="phongthuy.render-phong-theo-phong-thuy" class="hero-pill"><span class="hp-ic" data-icon="camera"></span><span>Render phòng<br>theo phong thủy</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -158,67 +158,67 @@ body.chat-first-live .fp-compare{grid-template-columns:1fr}
            tại đúng chỗ trạng thái đã đổi trong flow cũ (doAnalyze/renderResults/
            resetAll). -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="phongthuy.2-thanh-toan" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="phongthuy.3-nhan-ket-qua" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="pt-card">
-        <h2><span class="pt-num">1</span> Bản Mệnh &amp; Thông Tin Phòng</h2>
+        <h2 data-i18n="phongthuy.1-ban-menh-thong-tin-phong"><span class="pt-num">1</span> Bản Mệnh &amp; Thông Tin Phòng</h2>
         <div class="pt-row">
-          <div class="pt-fg"><label>Năm sinh dương lịch</label><input type="number" id="namSinh" placeholder="VD: 1990" min="1900" oninput="onYearChange()"></div>
-          <div class="pt-fg"><label>Giới tính</label>
+          <div class="pt-fg"><label data-i18n="phongthuy.nam-sinh-duong-lich">Năm sinh dương lịch</label><input data-i18n-attr="placeholder:phongthuy.vd-1990" type="number" id="namSinh" placeholder="VD: 1990" min="1900" oninput="onYearChange()"></div>
+          <div class="pt-fg"><label data-i18n="phongthuy.gioi-tinh">Giới tính</label>
             <select id="gioiTinh" onchange="onYearChange()">
               <option value="male">Nam</option>
-              <option value="female">Nữ</option>
+              <option data-i18n="laso.nu" value="female">Nữ</option>
             </select>
           </div>
         </div>
         <div class="pt-row">
-          <div class="pt-fg"><label>Loại phòng</label>
+          <div class="pt-fg"><label data-i18n="phongthuy.loai-phong">Loại phòng</label>
             <select id="loaiPhong">
-              <option value="bedroom">Phòng ngủ</option>
-              <option value="living">Phòng khách</option>
-              <option value="workspace">Phòng làm việc</option>
+              <option data-i18n="phongthuy.phong-ngu" value="bedroom">Phòng ngủ</option>
+              <option data-i18n="phongthuy.phong-khach" value="living">Phòng khách</option>
+              <option data-i18n="phongthuy.phong-lam-viec" value="workspace">Phòng làm việc</option>
             </select>
           </div>
-          <div class="pt-fg"><label>Hướng cửa chính hướng về</label>
+          <div class="pt-fg"><label data-i18n="phongthuy.huong-cua-chinh-huong-ve">Hướng cửa chính hướng về</label>
             <select id="huongCua">
-              <option value="S">Nam (South)</option>
-              <option value="N">Bắc (North)</option>
-              <option value="E">Đông (East)</option>
-              <option value="W">Tây (West)</option>
-              <option value="SE">Đông Nam</option>
-              <option value="SW">Tây Nam</option>
-              <option value="NE">Đông Bắc</option>
-              <option value="NW">Tây Bắc</option>
+              <option data-i18n="phongthuy.nam-south" value="S">Nam (South)</option>
+              <option data-i18n="phongthuy.bac-north" value="N">Bắc (North)</option>
+              <option data-i18n="phongthuy.dong-east" value="E">Đông (East)</option>
+              <option data-i18n="phongthuy.tay-west" value="W">Tây (West)</option>
+              <option data-i18n="phongthuy.dong-nam" value="SE">Đông Nam</option>
+              <option data-i18n="phongthuy.tay-nam" value="SW">Tây Nam</option>
+              <option data-i18n="phongthuy.dong-bac" value="NE">Đông Bắc</option>
+              <option data-i18n="phongthuy.tay-bac" value="NW">Tây Bắc</option>
             </select>
-            <div class="pt-hint">Hướng nhìn ra khi đứng trong phòng nhìn ra ngoài</div>
+            <div data-i18n="phongthuy.huong-nhin-ra-khi-dung-trong" class="pt-hint">Hướng nhìn ra khi đứng trong phòng nhìn ra ngoài</div>
           </div>
         </div>
         <div class="gua-badge" id="guaBadge">
           <div class="gua-icon" id="guaIcon">☵</div>
           <div>
             <div class="gua-name" id="guaName"></div>
-            <div class="gua-dirs"><span class="g">✓ Tốt:</span> <span id="guaGood"></span></div>
-            <div class="gua-dirs"><span class="b">✗ Xấu:</span> <span id="guaBad"></span></div>
+            <div data-i18n="phongthuy.tot" class="gua-dirs"><span class="g">✓ Tốt:</span> <span id="guaGood"></span></div>
+            <div data-i18n="phongthuy.xau" class="gua-dirs"><span class="b">✗ Xấu:</span> <span id="guaBad"></span></div>
           </div>
         </div>
       </div>
 
       <div class="pt-card">
-        <div class="fc-head"><span class="fc-ic" data-icon="camera"></span><h2><span class="pt-num">2</span> Chụp / Tải Ảnh Phòng</h2></div>
-        <p class="sub">Chụp ảnh căn phòng sau khi đã điền năm sinh, giới tính và hướng cửa chính. Nhận về điểm phong thủy trước – sau, đề xuất bố trí và vật phẩm nên thêm.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="camera"></span><h2 data-i18n="phongthuy.2-chup-tai-anh-phong"><span class="pt-num">2</span> Chụp / Tải Ảnh Phòng</h2></div>
+        <p data-i18n="phongthuy.chup-anh-can-phong-sau-khi" class="sub">Chụp ảnh căn phòng sau khi đã điền năm sinh, giới tính và hướng cửa chính. Nhận về điểm phong thủy trước – sau, đề xuất bố trí và vật phẩm nên thêm.</p>
         <p class="price-note" data-tvp-price-label="phong-thuy">…</p>
         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="onDrag(event,1)" ondragleave="onDrag(event,0)" ondrop="onDrop(event)">
           <input type="file" id="fileInput" accept="image/*" onchange="onFile(event)">
           <span class="upload-icon"><span class="ic" data-icon="camera"></span></span>
-          <div style="font-size:13px;color:var(--text-mid);margin-bottom:4px">Kéo thả ảnh vào đây</div>
-          <span class="upload-btn-lbl">Chọn Ảnh</span>
-          <div style="font-size:11px;color:var(--text-lt);margin-top:8px">JPG, PNG, HEIC · Tối đa 20MB</div>
+          <div data-i18n="phongthuy.keo-tha-anh-vao-day" style="font-size:13px;color:var(--text-mid);margin-bottom:4px">Kéo thả ảnh vào đây</div>
+          <span data-i18n="phongthuy.chon-anh" class="upload-btn-lbl">Chọn Ảnh</span>
+          <div data-i18n="phongthuy.jpg-png-heic-toi-da-20mb" style="font-size:11px;color:var(--text-lt);margin-top:8px">JPG, PNG, HEIC · Tối đa 20MB</div>
         </div>
         <div class="preview-wrap" id="previewWrap">
           <img id="previewImg" src="" alt="" class="preview-img">
-          <button class="preview-change" onclick="resetUpload()">✕ Đổi ảnh</button>
+          <button data-i18n="phongthuy.doi-anh" class="preview-change" onclick="resetUpload()">✕ Đổi ảnh</button>
         </div>
       </div>
 
@@ -228,9 +228,9 @@ body.chat-first-live .fp-compare{grid-template-columns:1fr}
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="phong-thuy"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="phong-thuy">…</span> Lượng)</span></div>
-              <div class="cb-pay">
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="phongthuy.moi-luot-luong" class="cb-amt"><span class="vnd" data-tvp-price-vnd="phong-thuy"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="phong-thuy">…</span> Lượng)</span></div>
+              <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
               </div>
@@ -238,10 +238,10 @@ body.chat-first-live .fp-compare{grid-template-columns:1fr}
           </div>
           <div class="cb-r">
             <span class="cb-ic" data-icon="gift"></span>
-            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
           </div>
         </div>
-        <button class="btn-go" id="btnAnalyze" onclick="doAnalyze()">
+        <button data-i18n="phongthuy.phan-tich-phong-thuy-ton-luong" class="btn-go" id="btnAnalyze" onclick="doAnalyze()">
           <span class="bg-label"><span class="ic" data-icon="compass"></span><b id="btnAnalyzeLabel">Phân Tích Phong Thủy</b></span>
           <small>Tốn <span class="vnd" data-tvp-price-vnd="phong-thuy"></span> <span class="cb-sub">(<span data-tvp-price="phong-thuy">…</span> Lượng)</span></small>
         </button>
@@ -249,14 +249,14 @@ body.chat-first-live .fp-compare{grid-template-columns:1fr}
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Phong Thủy Nội Thất</div>
-        <p class="wsp-desc">Bát Trạch là một trường phái phong thủy cổ truyền, chia nhà ở theo 8 hướng ứng với Bát Quái rồi đối chiếu với mệnh quái của gia chủ để xác định hướng và vị trí tốt – xấu. <i>Bát Trạch Minh Kính</i> là một trong những cổ thư hệ thống hoá phương pháp này.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="phongthuy.phong-thuy-noi-that" class="wsp-title">Phong Thủy Nội Thất</div>
+        <p data-i18n="phongthuy.bat-trach-la-mot-truong-phai" class="wsp-desc">Bát Trạch là một trường phái phong thủy cổ truyền, chia nhà ở theo 8 hướng ứng với Bát Quái rồi đối chiếu với mệnh quái của gia chủ để xác định hướng và vị trí tốt – xấu. <i>Bát Trạch Minh Kính</i> là một trong những cổ thư hệ thống hoá phương pháp này.</p>
       </div>
       <div class="samp-cta" id="sampCta">
         <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai thông tin & ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="phong-thuy" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+        <span data-i18n="phongthuy.chua-muon-khai-thong-tin-anh" class="sc-txt"><b>Chưa muốn khai thông tin & ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button data-i18n="phongthuy.xem-ban-mau" type="button" id="btnSample" data-sample-tool="phong-thuy" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -268,55 +268,55 @@ body.chat-first-live .fp-compare{grid-template-columns:1fr}
 
       <div id="results-section" data-ws-result>
         <div class="pt-card">
-          <h2><span class="ic" data-icon="bar-chart-3"></span> Điểm Phong Thủy Trước &amp; Sau</h2>
+          <h2 data-i18n="phongthuy.diem-phong-thuy-truoc-sau"><span class="ic" data-icon="bar-chart-3"></span> Điểm Phong Thủy Trước &amp; Sau</h2>
           <div class="score-compare">
-            <div class="score-before"><div class="score-label">Hiện Tại</div><div class="score-num" id="scoreBefore">—</div><div class="score-bar-wrap"><div class="score-bar" id="sbarB"></div></div></div>
-            <div><div class="delta-num" id="scoreDelta">—</div><div class="delta-lbl">cải thiện</div></div>
-            <div class="score-after"><div class="score-label">Sau Điều Chỉnh</div><div class="score-num" id="scoreAfter">—</div><div class="score-bar-wrap"><div class="score-bar" id="sbarA"></div></div></div>
+            <div class="score-before"><div data-i18n="phongthuy.hien-tai" class="score-label">Hiện Tại</div><div class="score-num" id="scoreBefore">—</div><div class="score-bar-wrap"><div class="score-bar" id="sbarB"></div></div></div>
+            <div><div class="delta-num" id="scoreDelta">—</div><div data-i18n="phongthuy.cai-thien" class="delta-lbl">cải thiện</div></div>
+            <div class="score-after"><div data-i18n="phongthuy.sau-dieu-chinh" class="score-label">Sau Điều Chỉnh</div><div class="score-num" id="scoreAfter">—</div><div class="score-bar-wrap"><div class="score-bar" id="sbarA"></div></div></div>
           </div>
           <div class="score-expl" id="scoreExpl"></div>
         </div>
 
         <div class="pt-card">
-          <h2><span class="ic" data-icon="camera"></span> Ảnh Phòng &amp; Đồ Vật Nhận Diện</h2>
+          <h2 data-i18n="phongthuy.anh-phong-do-vat-nhan-dien"><span class="ic" data-icon="camera"></span> Ảnh Phòng &amp; Đồ Vật Nhận Diện</h2>
           <div id="photoDisplay" style="border-radius:8px;overflow:hidden;border:1px solid var(--border-lt);margin-bottom:12px"></div>
-          <div style="font-size:11px;color:var(--text-lt);font-weight:700;margin-bottom:5px">ĐỒ VẬT PHÁT HIỆN</div>
+          <div data-i18n="phongthuy.do-vat-phat-hien" style="font-size:11px;color:var(--text-lt);font-weight:700;margin-bottom:5px">ĐỒ VẬT PHÁT HIỆN</div>
           <div class="tag-list" id="tagList"></div>
           <div style="font-size:11px;color:var(--text-lt);font-style:italic;margin-top:7px" id="observations"></div>
         </div>
 
         <div class="pt-card">
-          <h2><span class="ic" data-icon="compass"></span> Sơ Đồ Bố Trí Trước / Sau</h2>
+          <h2 data-i18n="phongthuy.so-do-bo-tri-truoc-sau"><span class="ic" data-icon="compass"></span> Sơ Đồ Bố Trí Trước / Sau</h2>
           <div class="fp-compare">
-            <div class="fp-half"><div class="fp-half-title">⬛ Hiện Tại</div><div class="fp-grid" id="fpBefore"></div></div>
-            <div class="fp-half"><div class="fp-half-title"><span class="ic" data-icon="check-circle"></span> Sau Điều Chỉnh</div><div class="fp-grid" id="fpAfter"></div></div>
+            <div class="fp-half"><div data-i18n="phongthuy.hien-tai-bhng" class="fp-half-title">⬛ Hiện Tại</div><div class="fp-grid" id="fpBefore"></div></div>
+            <div class="fp-half"><div data-i18n="phongthuy.sau-dieu-chinh-uuro" class="fp-half-title"><span class="ic" data-icon="check-circle"></span> Sau Điều Chỉnh</div><div class="fp-grid" id="fpAfter"></div></div>
           </div>
-          <p style="font-size:11px;color:var(--text-lt);margin-top:8px;text-align:center">Lưới 3×3 theo la bàn · Nam ở trên · Bắc ở dưới</p>
+          <p data-i18n="phongthuy.luoi-3-3-theo-la-ban" style="font-size:11px;color:var(--text-lt);margin-top:8px;text-align:center">Lưới 3×3 theo la bàn · Nam ở trên · Bắc ở dưới</p>
         </div>
 
         <div class="pt-card">
-          <h2><span class="ic" data-icon="settings"></span> Đề Xuất Bố Trí</h2>
+          <h2 data-i18n="phongthuy.de-xuat-bo-tri"><span class="ic" data-icon="settings"></span> Đề Xuất Bố Trí</h2>
           <div class="rec-list" id="recList"></div>
         </div>
 
         <div class="pt-card">
-          <h2><span class="ic" data-icon="store"></span> Vật Phẩm Phong Thủy Nên Thêm</h2>
+          <h2 data-i18n="phongthuy.vat-pham-phong-thuy-nen-them"><span class="ic" data-icon="store"></span> Vật Phẩm Phong Thủy Nên Thêm</h2>
           <div class="shop-grid" id="shopGrid"></div>
         </div>
 
         <div class="pt-card">
-          <h2><span class="ic" data-icon="message-circle"></span> Lời Khuyên Tổng Thể</h2>
+          <h2 data-i18n="phongthuy.loi-khuyen-tong-the"><span class="ic" data-icon="message-circle"></span> Lời Khuyên Tổng Thể</h2>
           <div class="advice-text" id="adviceText"></div>
         </div>
 
         <div class="pt-card" id="renderCard" style="display:none">
-          <h2><span class="ic" data-icon="home"></span> Render Phòng Phong Thủy
+          <h2 data-i18n="phongthuy.render-phong-phong-thuy-luong"><span class="ic" data-icon="home"></span> Render Phòng Phong Thủy
             <span style="font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600"><span data-tvp-price="phong-thuy-render">…</span> Lượng</span>
           </h2>
-          <p class="sub">Hệ thống sẽ render lại ảnh phòng của bạn theo màu sắc ngũ hành và bố trí phong thủy tối ưu.</p>
+          <p data-i18n="phongthuy.he-thong-se-render-lai-anh" class="sub">Hệ thống sẽ render lại ảnh phòng của bạn theo màu sắc ngũ hành và bố trí phong thủy tối ưu.</p>
 
           <div id="renderIdle">
-            <button class="render-btn" id="btnRender" onclick="doRoomRender()"><span class="ic" data-icon="sparkles"></span> Render Phòng Theo Phong Thủy</button>
+            <button data-i18n="phongthuy.render-phong-theo-phong-thuy-j6h6" class="render-btn" id="btnRender" onclick="doRoomRender()"><span class="ic" data-icon="sparkles"></span> Render Phòng Theo Phong Thủy</button>
           </div>
 
           <div id="renderLoading" style="display:none;text-align:center;padding:20px 0">
@@ -325,12 +325,12 @@ body.chat-first-live .fp-compare{grid-template-columns:1fr}
 
           <div id="renderResult" style="display:none">
             <div class="render-ba">
-              <div class="render-ba-col"><div class="render-ba-label">Ảnh gốc</div><img id="renderBefore" class="render-ba-img" src="" alt="Trước"></div>
-              <div class="render-ba-col"><div class="render-ba-label">Sau phong thủy</div><img id="renderAfter" class="render-ba-img" src="" alt="Sau"></div>
+              <div class="render-ba-col"><div data-i18n="phongthuy.anh-goc" class="render-ba-label">Ảnh gốc</div><img data-i18n-attr="alt:phongthuy.truoc" id="renderBefore" class="render-ba-img" src="" alt="Trước"></div>
+              <div class="render-ba-col"><div data-i18n="phongthuy.sau-phong-thuy" class="render-ba-label">Sau phong thủy</div><img id="renderAfter" class="render-ba-img" src="" alt="Sau"></div>
             </div>
             <div style="display:flex;gap:8px">
-              <button onclick="downloadRender()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">⬇ Tải Ảnh</button>
-              <button onclick="resetRender()" class="btn-cancel" style="flex:1"><span class="ic" data-icon="rotate-cw"></span> Render Lại</button>
+              <button data-i18n="phongthuy.tai-anh" onclick="downloadRender()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">⬇ Tải Ảnh</button>
+              <button data-i18n="phongthuy.render-lai" onclick="resetRender()" class="btn-cancel" style="flex:1"><span class="ic" data-icon="rotate-cw"></span> Render Lại</button>
             </div>
           </div>
 
@@ -338,7 +338,7 @@ body.chat-first-live .fp-compare{grid-template-columns:1fr}
         </div>
 
         <div style="text-align:center;padding:14px 0 6px">
-          <button onclick="resetAll()" class="btn-cancel">← Phân Tích Phòng Khác</button>
+          <button data-i18n="phongthuy.phan-tich-phong-khac" onclick="resetAll()" class="btn-cancel">← Phân Tích Phòng Khác</button>
         </div>
       </div>
     </div>

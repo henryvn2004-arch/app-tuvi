@@ -1,4 +1,200 @@
 {
+ "bandosao.10-hanh-tinh-vi-tri": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sun\"></span><span>10天体の<br>位置</span>",
+  "h": "86d502e2"
+ },
+ "bandosao.4-truc-chinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>4つの<br>主要軸</span>",
+  "h": "4f00b7ee"
+ },
+ "bandosao.ban-do-sao-luc-sinh": {
+  "t": "出生星図",
+  "h": "2c2ee68e"
+ },
+ "bandosao.ban-do-sao-luc-sinh-chiem": {
+  "t": "<b>出生星図</b><span>西洋占星術 — アセンダント、12ハウス、アスペクト</span>",
+  "h": "4d91be0c"
+ },
+ "bandosao.ban-do-sao-luc-sinh-tu": {
+  "t": "出生星図 — 明宝紫微斗数",
+  "h": "622509ef"
+ },
+ "bandosao.banh-xe-ve-theo-quy-uoc": {
+  "t": "ホイールは標準的な作図の慣例どおりに描かれます。<b>アセンダントは左側</b>にあり、サインは反時計回りに並びます。青い線は調和的なアスペクト、赤い線は緊張的なアスペクトです。強いアスペクトだけを描いています。すべて描くと線が入り乱れて読めなくなるためです。<br><b>これは紫微斗数ではありません。</b>どちらの体系も「宮」と「ハウス」という言葉を使いますが、指しているものはまったく別です。あなたの紫微斗数の命盤と照らし合わせないでください。",
+  "h": "079a6d70"
+ },
+ "bandosao.chiem-tinh-hoc-phuong-tay-western": {
+  "t": "西洋占星術(Western Astrology)は、生まれた瞬間の惑星と黄道十二宮の位置にもとづいて読み解く体系です。空を生活のさまざまな領域に対応する12のハウスに分けます。出生星図(ネイタルチャート)は、その人の性格や傾向を読むための中心的な道具です。",
+  "h": "87d59586"
+ },
+ "bandosao.goc-chieu-noi-bat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"share-2\"></span><span>主要な<br>アスペクト</span>",
+  "h": "1d194367"
+ },
+ "bandosao.hoi-thay-doc-ban-do-nay": {
+  "t": "✦ この星図を先生に読んでもらう",
+  "h": "c3a04d9b"
+ },
+ "bandosao.kinh-do": {
+  "t": "経度",
+  "h": "565ba07f"
+ },
+ "bandosao.lap-ban-do-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sun\"></span><b id=\"btnGoLabel\">星図を作る →</b></span> <small>無料</small>",
+  "h": "f8344846"
+ },
+ "bandosao.lap-ban-do-sao-luc-sinh": {
+  "t": "西洋占星術にもとづく出生星図を作成します。アセンダント、12ハウス、10天体の位置、アスペクトがわかります。星図のホイール画像を保存して共有することもできます。",
+  "h": "472e68d9"
+ },
+ "bandosao.moi-nguoi-sinh-ra-duoi-mot": {
+  "t": "人は誰もが、それぞれ異なる空のもとに生まれます——あなたが生まれた瞬間の12ハウスの配置は、あなたという人について何を語るのでしょうか?まさにその瞬間の星図を作成して、無料で見て、保存できます。",
+  "h": "f4ee8f99"
+ },
+ "bandosao.mui-gio": {
+  "t": "タイムゾーン",
+  "h": "4a92729d"
+ },
+ "bandosao.ngay-gio-va-noi-sinh": {
+  "t": "生年月日・出生時刻・出生地",
+  "h": "d8855e46"
+ },
+ "bandosao.nhap-chinh-xac-ngay-gio-va": {
+  "t": "生年月日・出生時刻・出生地を正確に入力してください。4つの主要軸、天体の位置、主要なアスペクト、エレメントのバランス表が得られます。",
+  "h": "e74ddddc"
+ },
+ "bandosao.noi-sinh": {
+  "t": "出生地",
+  "h": "39348136"
+ },
+ "bandosao.tai-anh-ban-do": {
+  "t": "⬇ 星図の画像を保存",
+  "h": "9684a65c"
+ },
+ "bandosao.vi-do": {
+  "t": "緯度",
+  "h": "b9ec9d20"
+ },
+ "banlamviec.1-ban-menh-thong-tin": {
+  "t": "<span class=\"pt-num\">1</span> 本命と基本情報",
+  "h": "b18e5a9a"
+ },
+ "banlamviec.2-chup-tai-anh": {
+  "t": "<span class=\"pt-num\">2</span> 写真を撮る/アップロード",
+  "h": "76342e73"
+ },
+ "banlamviec.anh-vat-dung-nhan-dien": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 写真と認識されたアイテム",
+  "h": "ac137c18"
+ },
+ "banlamviec.chup-anh-goc-lam-viec-he": {
+  "t": "仕事スペースを撮影すると、八宅風水・座る向きを分析し、本命に合った配置を提案して作業効率を高めます。",
+  "h": "bc883f29"
+ },
+ "banlamviec.chup-anh-goc-lam-viec-sau": {
+  "t": "生年・性別・窓の向きを入力したあと、仕事スペースを撮影してください。風水の改善前後のスコアと、具体的な調整案が届きます。",
+  "h": "66e5f508"
+ },
+ "banlamviec.de-xuat-dieu-chinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"settings\"></span><span>調整の<br>提案</span>",
+  "h": "a3bfd761"
+ },
+ "banlamviec.de-xuat-dieu-chinh-t30o": {
+  "t": "<span class=\"ic\" data-icon=\"settings\"></span> 調整の提案",
+  "h": "355adcff"
+ },
+ "banlamviec.diem-phong-thuy-truoc-sau": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>風水スコア<br>改善前後</span>",
+  "h": "e7ecbd9a"
+ },
+ "banlamviec.he-thong-render-lai-goc-lam": {
+  "t": "本命の五行の色と最適な配置にあわせて、仕事スペースをレンダリングし直します。",
+  "h": "04cb62e4"
+ },
+ "banlamviec.hoc-tap-on-thi": {
+  "t": "勉強/試験対策",
+  "h": "5fc56198"
+ },
+ "banlamviec.huong-cua-so-chinh-hoac-nguon": {
+  "t": "メインの窓、または自然光が入る方向",
+  "h": "69065acc"
+ },
+ "banlamviec.huong-cua-so-nguon-sang-chinh": {
+  "t": "窓/メインの光源の向き",
+  "h": "e48392ba"
+ },
+ "banlamviec.huong-ngoi-lam-viec": {
+  "t": "<span class=\"hp-ic\" data-icon=\"briefcase\"></span><span>仕事で座る<br>向き</span>",
+  "h": "43706670"
+ },
+ "banlamviec.huong-ngoi-lam-viec-dflu": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 仕事で座る向き",
+  "h": "3adddca8"
+ },
+ "banlamviec.lam-viec-van-phong": {
+  "t": "オフィスワーク",
+  "h": "65734b65"
+ },
+ "banlamviec.meo-tang-tap-trung-theo-phong": {
+  "t": "<span class=\"ic\" data-icon=\"circle-dot\"></span> 風水で集中力を高めるコツ",
+  "h": "5b3cfa07"
+ },
+ "banlamviec.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"ban-lam-viec\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"ban-lam-viec\">…</span> 両)</span>",
+  "h": "56800ac5"
+ },
+ "banlamviec.muc-dich-su-dung": {
+  "t": "利用目的",
+  "h": "0ae5f77a"
+ },
+ "banlamviec.ngoi-ca-ngay-o-mot-goc": {
+  "t": "一日中デスクに向かっているのに仕事が進まず、アイデアも枯れていく——問題は能力ではなく、座り方そのものにあることもあります。仕事スペースの写真を1枚撮るだけで、運気を妨げている場所をはっきり示します。",
+  "h": "7995fd82"
+ },
+ "banlamviec.phan-tich-lai": {
+  "t": "← もう一度分析する",
+  "h": "86451f19"
+ },
+ "banlamviec.phan-tich-ngay-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"monitor\"></span><b id=\"btnAnalyzeLabel\">今すぐ分析 →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"ban-lam-viec\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"ban-lam-viec\">…</span> 両)</span></small>",
+  "h": "3409c62a"
+ },
+ "banlamviec.phong-thuy-ban-lam-viec": {
+  "t": "デスク風水",
+  "h": "2f08993f"
+ },
+ "banlamviec.phong-thuy-ban-lam-viec-chup": {
+  "t": "<b>デスク風水</b><span>仕事スペースを撮影 — 座る向きを八宅でスコア化します</span>",
+  "h": "398222d6"
+ },
+ "banlamviec.phong-thuy-ban-lam-viec-tu": {
+  "t": "デスク風水 — 明宝紫微斗数",
+  "h": "70ec68b0"
+ },
+ "banlamviec.render-khong-gian-lam-viec-luong": {
+  "t": "<span class=\"ic\" data-icon=\"monitor\"></span> 仕事スペースをレンダリング <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"phong-thuy-render\">…</span> 両</span>",
+  "h": "f066b43e"
+ },
+ "banlamviec.render-khong-gian-theo-phong-thuy": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 風水に沿って空間をレンダリング",
+  "h": "9896cb61"
+ },
+ "banlamviec.sang-tao-thiet-ke": {
+  "t": "クリエイティブ/デザイン",
+  "h": "9fd559b0"
+ },
+ "banlamviec.tai-anh": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 画像を保存",
+  "h": "73878385"
+ },
+ "banlamviec.vat-dung-nhan-dien": {
+  "t": "認識されたアイテム",
+  "h": "de9de137"
+ },
+ "banlamviec.vat-pham-nen-them": {
+  "t": "<span class=\"ic\" data-icon=\"store\"></span> 追加をおすすめするアイテム",
+  "h": "b07795fe"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">情報を入力</span>",
   "h": "487c9507"
@@ -102,6 +298,78 @@
  "battu.viet-rieng-cho-tu-tru-nay": {
   "t": "この四柱のために、子平の古法で一から書き下ろします。全16項目：格局、十神、大運、流年。",
   "h": "f54c0d01"
+ },
+ "boibai.1-la-thong-diep-hom-nay": {
+  "t": "1枚 — 今日のメッセージ",
+  "h": "f2ebf342"
+ },
+ "boibai.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">結果を受け取る</span>",
+  "h": "b0b2f830"
+ },
+ "boibai.3-la-tinh-trang-thach-thuc": {
+  "t": "3枚 — 現状 · 課題 · 結末",
+  "h": "a2b3d188"
+ },
+ "boibai.5-la-trai-bai-ngu-hanh": {
+  "t": "5枚 — 五行スプレッド",
+  "h": "d39d67bd"
+ },
+ "boibai.boi-bai-tay": {
+  "t": "トランプ占い",
+  "h": "4a54dbba"
+ },
+ "boibai.boi-bai-tay-rut-bai-52": {
+  "t": "<b>トランプ占い</b><span>52枚のカードを引く — 恋愛 · 仕事 · 金運 — 無料</span>",
+  "h": "8beef430"
+ },
+ "boibai.boi-bai-tay-truyen-thong-dung": {
+  "t": "伝統的なトランプ占いは、専用のタロットではなく一般的な52枚のトランプを使い、欧米の多くの国やベトナムの民間に広く親しまれてきました。各カードにはスートと数字ごとに固有の意味があり、これからの流れを占います。",
+  "h": "7e2a1c46"
+ },
+ "boibai.boi-bai-tay-tu-vi-minh": {
+  "t": "トランプ占い — 明宝紫微斗数",
+  "h": "0d1548c3"
+ },
+ "boibai.cau-hoi-tuy-chon": {
+  "t": "質問(任意)",
+  "h": "66f517b4"
+ },
+ "boibai.chon-kieu-rut-bai": {
+  "t": "引き方を選ぶ",
+  "h": "5215cc5a"
+ },
+ "boibai.chon-kieu-trai-1-3-hay": {
+  "t": "スプレッド(1・3・5枚)を選ぶと、システムが無作為にカードを引き、恋愛・仕事・金運の観点から1枚ずつ読み解きます。",
+  "h": "b47db074"
+ },
+ "boibai.khong-can-hieu-het-78-la": {
+  "t": "78枚すべてを理解する必要はありません。心に引っかかっている質問がひとつあれば十分です。直感で1枚引いて、短い占いの言葉を受け取りましょう。昔、祖母や母がしてくれたトランプ占いのように、やわらかく。",
+  "h": "2487c895"
+ },
+ "boibai.loi-boi-dan-gian": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>民間に伝わる<br>占い方</span>",
+  "h": "d309e0a7"
+ },
+ "boibai.rut-1-3-hay-5-la": {
+  "t": "<span class=\"hp-ic\" data-icon=\"spade\"></span><span>1・3・5枚<br>から選べる</span>",
+  "h": "658be253"
+ },
+ "boibai.rut-bai-tay-52-la-ngay": {
+  "t": "明宝紫微斗数で52枚のトランプ占い — 1・3・5枚のスプレッドで、恋愛・仕事・金運を読み解きます。",
+  "h": "1dff4433"
+ },
+ "boibai.tinh-cam-su-nghiep-tai-chinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>恋愛、<br>仕事、金運</span>",
+  "h": "397044b2"
+ },
+ "boibai.vd-tinh-hinh-tai-chinh-cua": {
+  "t": "例:これからの私の金運は?",
+  "h": "0d4f2217"
+ },
+ "boibai.xao-bai-rut": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"spade\"></span><b id=\"drawBtnLabel\">シャッフルして引く</b></span>",
+  "h": "e53dcebd"
  },
  "buto.11h-13h-ngo": {
   "t": "11〜13時（午）",
@@ -406,6 +674,138 @@
  "congcu.ve-hom-nay": {
   "t": "← 今日に戻る",
   "h": "24faf89e"
+ },
+ "congcutr.50-cong-cu-menh-ly-dung": {
+  "t": "50の命理ツール — 個別に使える",
+  "h": "8731ad3c"
+ },
+ "congcutr.50-cong-cu-menh-ly-tu": {
+  "t": "50の命理ツール — 明宝紫微斗数",
+  "h": "b35a67a8"
+ },
+ "congcutr.chon-ngay": {
+  "t": "日選び",
+  "h": "353d66a6"
+ },
+ "congcutr.cong-cu": {
+  "t": "ツール",
+  "h": "a601efbf"
+ },
+ "congcutr.cong-cu-chuyen-sau": {
+  "t": "専門ツール",
+  "h": "10f6e3a0"
+ },
+ "congcutr.dang-tai-cong-cu": {
+  "t": "<span class=\"ic\" data-icon=\"hourglass\"></span> ツールを読み込み中...",
+  "h": "1078fac1"
+ },
+ "congcutr.dat-ten": {
+  "t": "命名",
+  "h": "ca2c4ea5"
+ },
+ "congcutr.khi-ban-hoi-thay-thay-da": {
+  "t": "<a href=\"/app\" style=\"color:var(--gold-bright);font-weight:600\">先生に聞く</a>と、先生がたいていのツールを自分で呼び出してお答えします。もちろん、ツールを直接選ぶこともできます:命盤の鑑定、四柱推命、人相占い、風水、命名、日選び、カード占いなど。",
+  "h": "48d6d014"
+ },
+ "congcutr.khong-can-biet-bo-mon-nao": {
+  "t": "どの占術か知らなくても大丈夫です。気になっていることに合わせて選んでください。",
+  "h": "6723d4c3"
+ },
+ "congcutr.lam-dep": {
+  "t": "美容",
+  "h": "a4c8d630"
+ },
+ "congcutr.mien-phi": {
+  "t": "無料 <span class=\"tab-count\" id=\"freeCount\">…</span>",
+  "h": "eb8f87ac"
+ },
+ "congcutr.theo-bo-mon": {
+  "t": "占術別",
+  "h": "84683625"
+ },
+ "congcutr.toi-dang-lo-chuyen-gi": {
+  "t": "今、気がかりなこと",
+  "h": "648df752"
+ },
+ "congcutr.tu-binh": {
+  "t": "四柱推命",
+  "h": "66c4edf1"
+ },
+ "congcutr.tu-vi": {
+  "t": "紫微斗数",
+  "h": "f49901f4"
+ },
+ "cuahang.anh-khu-vuc-vat-dung-nhan": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 写真と認識されたエリア/アイテム",
+  "h": "dcd1e25d"
+ },
+ "cuahang.buon-ban-e-am-nhan-vien": {
+  "t": "商売がふるわず、スタッフの出入りも絶えない——原因は市場ではなく、空間の配置そのものにあることもあります。店舗やオフィスの写真を撮ると、財運を妨げている場所をはっきり分析します。",
+  "h": "fa001aee"
+ },
+ "cuahang.chup-anh-cua-hang-hoac-van": {
+  "t": "店舗やオフィスを撮影すると、レジ・入口・金庫・陳列エリアの配置を八宅の風水で分析し、財運を最大限に高めます。",
+  "h": "c0796110"
+ },
+ "cuahang.chup-anh-khong-gian-sau-khi": {
+  "t": "生年・性別・業種・入口の向きを入力したあと、空間を撮影してください。風水の改善前後のスコアと調整案が届きます。",
+  "h": "178623cb"
+ },
+ "cuahang.cua-hang-kinh-doanh": {
+  "t": "店舗",
+  "h": "c7a324c6"
+ },
+ "cuahang.he-thong-render-lai-khong-gian": {
+  "t": "本命の五行の色と、財運を呼び込む最適な配置にあわせて、ビジネス空間をレンダリングし直します。",
+  "h": "63dda3e0"
+ },
+ "cuahang.khu-vuc-vat-dung-nhan-dien": {
+  "t": "認識されたエリア/アイテム",
+  "h": "1d9eab0f"
+ },
+ "cuahang.loai-khong-gian": {
+  "t": "空間の種類",
+  "h": "b0b069bf"
+ },
+ "cuahang.meo-kich-hoat-tai-loc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"dollar-sign\"></span><span>財運を<br>呼び込むコツ</span>",
+  "h": "86d89378"
+ },
+ "cuahang.meo-kich-hoat-tai-loc-gfzc": {
+  "t": "<span class=\"ic\" data-icon=\"dollar-sign\"></span> 財運を呼び込むコツ",
+  "h": "aa02e0bc"
+ },
+ "cuahang.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"cua-hang-phong-thuy\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"cua-hang-phong-thuy\">…</span> 両)</span>",
+  "h": "faf2fd2d"
+ },
+ "cuahang.nha-hang-quan-an": {
+  "t": "レストラン/飲食店",
+  "h": "d0defd73"
+ },
+ "cuahang.phan-tich-ngay-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"store\"></span><b id=\"btnAnalyzeLabel\">今すぐ分析 →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"cua-hang-phong-thuy\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"cua-hang-phong-thuy\">…</span> 両)</span></small>",
+  "h": "a1939278"
+ },
+ "cuahang.phong-thuy-cua-hang-van-phong": {
+  "t": "店舗・オフィス風水 — 明宝紫微斗数",
+  "h": "fbde3673"
+ },
+ "cuahang.phong-thuy-cua-hang-van-phong-ayc9": {
+  "t": "<b>店舗・オフィス風水</b><span>店舗やオフィスを撮影 — レジ・入口の配置を八宅でスコア化します</span>",
+  "h": "d462466b"
+ },
+ "cuahang.phong-thuy-cua-hang-van-phong-yqxb": {
+  "t": "店舗・オフィス風水",
+  "h": "0ff0d09e"
+ },
+ "cuahang.render-khong-gian-kinh-doanh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"store\"></span> ビジネス空間をレンダリング <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"phong-thuy-render\">…</span> 両</span>",
+  "h": "4e52cc64"
+ },
+ "cuahang.van-phong-cong-ty": {
+  "t": "会社のオフィス",
+  "h": "d678c2d6"
  },
  "dient.anh-chi-gui-toi-may-chu": {
   "t": "画像は分析のためにサーバーへ送るだけで、サーバーには保存しません。正面から、十分な明るさで、顔を隠さずに撮影すると最も正確な結果が得られます。",
@@ -1407,6 +1807,434 @@
   "t": " 歳",
   "h": "2e261bf5"
  },
+ "js.boibai.4-chat-bai-nghia-la-gi": {
+  "t": "4つのスートはそれぞれ何を意味しますか?",
+  "h": "793f6bd3"
+ },
+ "js.boibai.anh-huong-tu-moi-truong-xung": {
+  "t": "周囲の環境からの影響",
+  "h": "511b93e0"
+ },
+ "js.boibai.at": {
+  "t": "エース",
+  "h": "ec2d5348"
+ },
+ "js.boibai.ba": {
+  "t": "3",
+  "h": "2fd22ce6"
+ },
+ "js.boibai.ban-muon-hoi-them-ve-la": {
+  "t": "**。どのカードについて、さらに知りたいですか?",
+  "h": "436f4393"
+ },
+ "js.boibai.bay": {
+  "t": "7",
+  "h": "ecfd1f8b"
+ },
+ "js.boibai.ben-ngoai": {
+  "t": "外側",
+  "h": "483f7fd9"
+ },
+ "js.boibai.ben-trong": {
+  "t": "内側",
+  "h": "474e3314"
+ },
+ "js.boibai.bich": {
+  "t": "スペード",
+  "h": "9cf21ff5"
+ },
+ "js.boibai.bien-dong-tai-chinh-rui-ro": {
+  "t": "金運に変動とリスクがあります。大きな支出の判断は慎重に。",
+  "h": "61f58a28"
+ },
+ "js.boibai.boi": {
+  "t": "ジャック",
+  "h": "003cb90e"
+ },
+ "js.boibai.boi-bai-tay": {
+  "t": "トランプ占い — ",
+  "h": "741dfabd"
+ },
+ "js.boibai.boi-bai-tay-khac-tarot-ra": {
+  "t": "トランプ占いとタロットはどう違いますか?",
+  "h": "199a6ae6"
+ },
+ "js.boibai.bon": {
+  "t": "4",
+  "h": "8c0bddbf"
+ },
+ "js.boibai.cau-hoi-cua-ban": {
+  "t": "ご質問: \"",
+  "h": "660c481c"
+ },
+ "js.boibai.chia-se-chi-phi-hoac-dau": {
+  "t": "費用を分け合う、または共同で投資する。金銭面の判断をひとりで下すのは避けましょう。",
+  "h": "dec106bc"
+ },
+ "js.boibai.chin": {
+  "t": "9",
+  "h": "c8fe0b37"
+ },
+ "js.boibai.chu-ky-tai-chinh-hoan-chinh": {
+  "t": "金銭面のサイクルがひとつ完結します。借金の完済、投資の満期、契約の終了などかもしれません。",
+  "h": "30a6c7c2"
+ },
+ "js.boibai.co": {
+  "t": "ハート",
+  "h": "aefc1852"
+ },
+ "js.boibai.co-hoi-bat-ngo-hoac-can": {
+  "t": "思いがけないチャンスが来るか、直感を頼りに決めるべき場面です。自分の予感を信じましょう。",
+  "h": "b8deed93"
+ },
+ "js.boibai.co-mau-thuan-hoac-thach-thuc": {
+  "t": "恋愛に葛藤や試練があります。率直に話し合って解決しましょう。",
+  "h": "95b8227d"
+ },
+ "js.boibai.dam": {
+  "t": "クイーン",
+  "h": "1798971f"
+ },
+ "js.boibai.dang-xao-bai": {
+  "t": "シャッフル中...",
+  "h": "033fb9a0"
+ },
+ "js.boibai.dieu-da-anh-huong-den-hien": {
+  "t": "現在に影響を与えてきたこと",
+  "h": "c28631f9"
+ },
+ "js.boibai.dieu-dang-can-tro-hoac-thu": {
+  "t": "あなたを妨げている、または試していること",
+  "h": "d4c2adc6"
+ },
+ "js.boibai.dong-nghiep-tre-hoac-nhan-vien": {
+  "t": "若い同僚や新入社員。年下の人からのチャンスかもしれません。",
+  "h": "2bb04297"
+ },
+ "js.boibai.du-an-hoac-giai-doan-cong": {
+  "t": "プロジェクトや仕事の段階が完結します。新たな試練とチャンスに備えましょう。",
+  "h": "619626f4"
+ },
+ "js.boibai.du-an-moi-hoac-co-hoi": {
+  "t": "新しいプロジェクトや大きなキャリアのチャンスが訪れます。何か新しいことを始める時です。",
+  "h": "dba9df01"
+ },
+ "js.boibai.du-an-sang-tao-dang-trien": {
+  "t": "創造的なプロジェクトが進行中です。コミュニティやネットワークとつながり、チャンスを広げましょう。",
+  "h": "196ea54f"
+ },
+ "js.boibai.duality-doi-tac-can-bang-hop": {
+  "t": "二面性、パートナー、バランス、協力。二人、または二つの力が状況に影響しています。",
+  "h": "53711b0b"
+ },
+ "js.boibai.duoc-dong-nghiep-va-cap-tren": {
+  "t": "同僚や上司の支えが得られます。調和のとれた職場環境です。",
+  "h": "2f2d4f44"
+ },
+ "js.boibai.gan-hoan-thanh-mot-giai-doan": {
+  "t": "ひとつの段階がもうすぐ終わります。次の章に進む前に、大切な学びを引き出しておきましょう。",
+  "h": "438e9dbe"
+ },
+ "js.boibai.gia": {
+  "t": "キング",
+  "h": "9d31d28a"
+ },
+ "js.boibai.giai-doan-kho-khan-hoac-canh": {
+  "t": "困難な時期、または競争の激しい時期です。もっと柔軟に適応する必要があります。",
+  "h": "28710428"
+ },
+ "js.boibai.hai": {
+  "t": "2",
+  "h": "916c7bfc"
+ },
+ "js.boibai.hai-hoa-ho-tro-trach-nhiem": {
+  "t": "調和、支え、責任、バランス。6は愛と責任の数です。",
+  "h": "6a77c6d9"
+ },
+ "js.boibai.hoan-chinh-chu-ky-ket-thuc": {
+  "t": "完成、サイクルの終わり、新たな始まり。10は完成の点であり、次のサイクルへの準備です。",
+  "h": "c6171d63"
+ },
+ "js.boibai.hoan-thanh-tri-tue-nhan-dao": {
+  "t": "完結、知恵、博愛、学び。9はゴール間近を示しますが、旅はまだ終わっていません。",
+  "h": "92ed3dc8"
+ },
+ "js.boibai.hop-tac-va-lam-viec-nhom": {
+  "t": "協力とチームワークがこれまで以上に大切です。成功には、ともに歩む人が必要です。",
+  "h": "e9952166"
+ },
+ "js.boibai.huong-di-co-the-neu-tiep": {
+  "t": "このまま進んだ場合に考えられる方向",
+  "h": "6efe93d8"
+ },
+ "js.boibai.ket-qua": {
+  "t": "結末",
+  "h": "75ff233d"
+ },
+ "js.boibai.ket-qua-boi-bai-tay-cua": {
+  "t": "私のトランプ占いの結果",
+  "h": "92e4c094"
+ },
+ "js.boibai.khoi-dau-manh-me-co-hoi": {
+  "t": "力強い始まり、大きなチャンス、最高の力。エースはもっとも強いカードで、純粋な力と無限の可能性を表します。",
+  "h": "e95b57b1"
+ },
+ "js.boibai.la": {
+  "t": " 枚",
+  "h": "f115358e"
+ },
+ "js.boibai.la-dau-tien-ban-rut-duoc": {
+  "t": "最初に引いたカードは **",
+  "h": "644c4dff"
+ },
+ "js.boibai.lbl-chat-bai": {
+  "t": "スート",
+  "h": "1322f86f"
+ },
+ "js.boibai.lbl-su-nghiep": {
+  "t": "仕事",
+  "h": "31bd53c9"
+ },
+ "js.boibai.lbl-tai-chinh": {
+  "t": "金運",
+  "h": "bdb2ffa6"
+ },
+ "js.boibai.lbl-tinh-cam": {
+  "t": "恋愛",
+  "h": "39234ecc"
+ },
+ "js.boibai.luan-giai-tung-la": {
+  "t": "カードごとの読み解き",
+  "h": "c811697f"
+ },
+ "js.boibai.moi-quan-he-da-truong-thanh": {
+  "t": "関係は成熟し、深まっています。これまで築いてきたものを振り返り、固める時です。",
+  "h": "9bb7ede1"
+ },
+ "js.boibai.moi-quan-he-hai-chieu-dang": {
+  "t": "双方向の関係が育っています。お互いのバランスと合意が必要です。",
+  "h": "1dfa37ee"
+ },
+ "js.boibai.moi-quan-he-hai-hoa-va": {
+  "t": "調和のとれた安定した関係です。二人とも、よく支え合っています。",
+  "h": "6930eb7b"
+ },
+ "js.boibai.moi-quan-he-on-dinh-va": {
+  "t": "安定して安心できる関係です。長く続くコミットメントを築く時です。",
+  "h": "112b37d3"
+ },
+ "js.boibai.mot-giai-doan-trong-tinh-cam": {
+  "t": "恋愛のひとつの段階が終わり、よりよい新しい段階が始まります。",
+  "h": "7362f723"
+ },
+ "js.boibai.muoi": {
+  "t": "10",
+  "h": "6f2ebecd"
+ },
+ "js.boibai.nam": {
+  "t": "5",
+  "h": "98926c7e"
+ },
+ "js.boibai.nang-luong-va-thong-diep-chinh": {
+  "t": "今日のエネルギーと中心となるメッセージ",
+  "h": "90d4de48"
+ },
+ "js.boibai.nen-hoi-cau-hoi-kieu-gi": {
+  "t": "カードを引くとき、どんな質問をするのがよいですか?",
+  "h": "f6e87d8f"
+ },
+ "js.boibai.nguoi-co-kinh-nghiem-tai-chinh": {
+  "t": "金銭面の経験が豊富な人、または大切なアドバイザー。専門家に相談する時です。",
+  "h": "6a671d97"
+ },
+ "js.boibai.nguoi-co-quyen-luc-truong-thanh": {
+  "t": "権威があり、成熟した、指導的な人物。キングはリーダーや影響力のある人を表します。",
+  "h": "6b6fa839"
+ },
+ "js.boibai.nguoi-dan-ong-quan-trong-hoac": {
+  "t": "恋愛における大切な男性、またはリーダーシップのエネルギー。安定していて成熟しています。",
+  "h": "22f7ec13"
+ },
+ "js.boibai.nguoi-moi-vao-cuoc-song-hoac": {
+  "t": "人生に新しく現れる人、または恋愛に関する知らせ。あなたに好意を持つ人かもしれません。",
+  "h": "b48125b4"
+ },
+ "js.boibai.nguoi-phu-nu-anh-huong-den": {
+  "t": "仕事に影響を与える女性。直感とコミュニケーション力を活かす必要があります。",
+  "h": "89780eb7"
+ },
+ "js.boibai.nguoi-phu-nu-lien-quan-den": {
+  "t": "金銭面の判断に関わる女性。投資では直感を頼りにしましょう。",
+  "h": "c17b0849"
+ },
+ "js.boibai.nguoi-phu-nu-quan-trong-trong": {
+  "t": "恋愛における大切な女性。あるいは、あなた自身がもっと繊細さと思いやりを示す必要があります。",
+  "h": "3fe5079f"
+ },
+ "js.boibai.nguoi-phu-nu-truc-giac-sang": {
+  "t": "女性、直感、創造性、思いやり。クイーンは一人の女性、または女性的なエネルギーを表します。",
+  "h": "74204343"
+ },
+ "js.boibai.nguoi-tre-tuoi-nang-luong-tuoi": {
+  "t": "若い人、新鮮なエネルギー、メッセージ、使者。ジャックは若い人、または新しい知らせを表します。",
+  "h": "6544e9d4"
+ },
+ "js.boibai.nhep": {
+  "t": "クラブ",
+  "h": "1f47da68"
+ },
+ "js.boibai.on-dinh-cong-viec-nhung-co": {
+  "t": "仕事は安定していますが、面白みに欠けるかもしれません。スキルと土台づくりに集中しましょう。",
+  "h": "47192d51"
+ },
+ "js.boibai.on-dinh-nen-tang-an-toan": {
+  "t": "安定、土台、安全、秩序。四隅が固まっています。広げる前に土台を築く必要があります。",
+  "h": "e9bff49c"
+ },
+ "js.boibai.phat-trien-sang-tao-bieu-dat": {
+  "t": "成長、創造、表現、コミュニティ。三角形——状況の三つの側面が動いています。",
+  "h": "4ccfdbfb"
+ },
+ "js.boibai.qua-khu": {
+  "t": "過去",
+  "h": "75e794ae"
+ },
+ "js.boibai.quyen-luc-suc-manh-thanh-tich": {
+  "t": "権力、強さ、実績、再生。8は力と繁栄の数です。",
+  "h": "4fd9bfc8"
+ },
+ "js.boibai.ro": {
+  "t": "ダイヤ",
+  "h": "2c83f6bf"
+ },
+ "js.boibai.sau": {
+  "t": "6",
+  "h": "8d7feaa0"
+ },
+ "js.boibai.sep-hoac-nguoi-co-quyen-luc": {
+  "t": "上司や影響力のある人。成熟さとリーダーシップを示しましょう。",
+  "h": "421d1273"
+ },
+ "js.boibai.suc-manh-va-dam-me-trong": {
+  "t": "恋愛における力と情熱。関係は力強く、深い段階にあります。",
+  "h": "697e4d28"
+ },
+ "js.boibai.suit-c": {
+  "t": "仕事、行動、成長",
+  "h": "e33ce278"
+ },
+ "js.boibai.suit-d": {
+  "t": "物質、お金、現実的な価値",
+  "h": "7667e511"
+ },
+ "js.boibai.suit-h": {
+  "t": "愛情、感情、人間関係",
+  "h": "4eb5d8b6"
+ },
+ "js.boibai.suit-s": {
+  "t": "試練、知性、対立",
+  "h": "68ec16dc"
+ },
+ "js.boibai.suy-nghi-va-cam-xuc-cua": {
+  "t": "あなたの考えと感情",
+  "h": "4cc72970"
+ },
+ "js.boibai.tai-chinh-manh-va-co-tiem": {
+  "t": "金運は強く、大きく伸びる可能性があります。もう少し大胆に投資する時です。",
+  "h": "a9f7c989"
+ },
+ "js.boibai.tai-chinh-on-dinh-khong-nhieu": {
+  "t": "金運は安定していて、変動は多くありません。貯蓄と蓄積の時です。",
+  "h": "4b335a36"
+ },
+ "js.boibai.tai-chinh-tot-co-the-chia": {
+  "t": "金運は良好で、人と分かち合う余裕があります。長く意味のあるものに投資する時です。",
+  "h": "19e7c7ca"
+ },
+ "js.boibai.tai-loc-bat-ngo-dau-tu": {
+  "t": "思いがけない財運、高い収益の投資。よい金銭面のチャンスが現れています。",
+  "h": "cc2ba266"
+ },
+ "js.boibai.tam": {
+  "t": "8",
+  "h": "0e3fc5e2"
+ },
+ "js.boibai.tang-truong-tai-chinh-dan-dan": {
+  "t": "金運は少しずつ伸びていきます。長期的な成長に投資しましょう。",
+  "h": "8389a057"
+ },
+ "js.boibai.thach-thuc": {
+  "t": "課題",
+  "h": "1576629b"
+ },
+ "js.boibai.thanh-tich-va-duoc-cong-nhan": {
+  "t": "実績と評価。実力を示し、主導権を取り戻す時です。",
+  "h": "3bfdc1a3"
+ },
+ "js.boibai.thay-doi-xung-dot-thu-thach": {
+  "t": "変化、衝突、試練、不安定。5は急変と挑戦の数です。",
+  "h": "14c74c71"
+ },
+ "js.boibai.thong-diep": {
+  "t": "メッセージ",
+  "h": "8d4fe659"
+ },
+ "js.boibai.thu-nhap-on-dinh-va-can": {
+  "t": "収入は安定し、支出のバランスもよく取れています。他の人を金銭面で支えることもできます。",
+  "h": "2904cf24"
+ },
+ "js.boibai.tin-tuc-ve-tai-chinh-dang": {
+  "t": "金銭面の知らせが届きます。若い人があなたのお金に影響するかもしれません。",
+  "h": "58e4e140"
+ },
+ "js.boibai.tinh-cam-co-yeu-to-bi": {
+  "t": "恋愛に謎めいた要素や、はっきりしない部分があります。恋愛では直感に耳を傾けましょう。",
+  "h": "83f22bbf"
+ },
+ "js.boibai.tinh-cam-dang-phat-trien-tot": {
+  "t": "恋愛は順調に育っています。第三者——仲人や共通の友人——が関わるかもしれません。",
+  "h": "acbf5cf4"
+ },
+ "js.boibai.tinh-huong-hien-tai-cua-ban": {
+  "t": "あなたの現在の状況",
+  "h": "5f1dc385"
+ },
+ "js.boibai.tinh-trang": {
+  "t": "現状",
+  "h": "5a46503e"
+ },
+ "js.boibai.tinh-yeu-moi-va-nong-nhiet": {
+  "t": "新しく情熱的な恋、または今の関係の再生。恋愛にとってすばらしいチャンスです。",
+  "h": "a8fda462"
+ },
+ "js.boibai.trong-tam-cua-tinh-huong": {
+  "t": "状況の中心",
+  "h": "e2f497fe"
+ },
+ "js.boibai.truc-giac-bi-an-chiem-nghiem": {
+  "t": "直感、神秘、内省、幸運。7は直感と幸運の数です。",
+  "h": "13e59cc8"
+ },
+ "js.boibai.trung-tam": {
+  "t": "中心",
+  "h": "26bda5d2"
+ },
+ "js.boibai.tuong-lai": {
+  "t": "未来",
+  "h": "b4320a2d"
+ },
+ "js.boibai.van-may-bat-ngo-co-the": {
+  "t": "思いがけない幸運が訪れるかもしれません。ただし、リスクの高い投資には慎重に。",
+  "h": "2cd63148"
+ },
+ "js.boibai.xao-bai-rut-lai": {
+  "t": "もう一度シャッフルして引く",
+  "h": "19371614"
+ },
+ "js.boibai.xu-huong-sap-xay-ra": {
+  "t": "これから起こる流れ",
+  "h": "6e5a1980"
+ },
  "js.buto.anh-qua-lon": {
   "t": "画像が大きすぎます。",
   "h": "cb4417d0"
@@ -1698,6 +2526,66 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "小運の年：",
   "h": "1979c56a"
+ },
+ "js.congcutr.chua-xep-vao-nhom-nao": {
+  "t": "どのグループにも未分類",
+  "h": "7ea3cc13"
+ },
+ "js.congcutr.cong-cu": {
+  "t": " 個のツール</span>",
+  "h": "e1059f84"
+ },
+ "js.congcutr.cong-cu-43pa": {
+  "t": " 個のツール</div>",
+  "h": "f2a9cef1"
+ },
+ "js.congcutr.cong-cu-menh-ly-dung-rieng": {
+  "t": " 個の命理ツール — 単体で使えます",
+  "h": "d6267101"
+ },
+ "js.congcutr.khac": {
+  "t": "その他",
+  "h": "5b8a28ab"
+ },
+ "js.congcutr.khong-can-biet-bo-mon-nao": {
+  "t": "どの術かを知らなくても大丈夫。気がかりなことに合わせて選んでください。",
+  "h": "6723d4c3"
+ },
+ "js.congcutr.khong-co-cong-cu-nao": {
+  "t": "<div class=\"tools-loading\">ツールがありません。</div>",
+  "h": "4bfcd6fb"
+ },
+ "js.congcutr.khong-co-cong-cu-nao-trong": {
+  "t": "<div class=\"tools-loading\">このグループにはツールがありません。</div>",
+  "h": "1d05d574"
+ },
+ "js.congcutr.khong-co-du-lieu": {
+  "t": "<div class=\"tools-loading\">データがありません。</div>",
+  "h": "0ad1bedb"
+ },
+ "js.congcutr.khong-tai-duoc-vui-long-f5": {
+  "t": "<div class=\"tools-loading\"><span data-icon=\"alert-triangle\" style=\"display:inline-flex;width:14px;height:14px;vertical-align:middle\"></span> 読み込めませんでした。F5で再読み込みしてください。</div>",
+  "h": "336d219d"
+ },
+ "js.congcutr.luong": {
+  "t": " 両)</div>",
+  "h": "7adeda99"
+ },
+ "js.congcutr.luong-icr4": {
+  "t": " 両</div>",
+  "h": "81dc9146"
+ },
+ "js.congcutr.mien-phi": {
+  "t": "<span class=\"tool-price-free\">無料</span>",
+  "h": "f09c2d4a"
+ },
+ "js.congcutr.mo": {
+  "t": "<div class=\"tool-cta\">開く →</div>",
+  "h": "c7121247"
+ },
+ "js.congcutr.xep-theo-mon-tu-vi-tu": {
+  "t": "術別に並べています:紫微斗数、四柱推命、人相占い、風水…",
+  "h": "cf4f8ecc"
  },
  "js.dient.anh-qua-lon-toi-da-5mb": {
   "t": "画像が大きすぎます（最大5MB）。",
@@ -3395,6 +4283,1142 @@
   "t": "ハワイ",
   "h": "a1be9509"
  },
+ "js.oracle.ai-dang-ho-tro-ban-ma": {
+  "t": "あなたを支えてくれているのに、まだ感謝していない人はいませんか?あなたは、人生の中で誰かを育むことができるでしょうか?",
+  "h": "96542020"
+ },
+ "js.oracle.am": {
+  "t": "陰",
+  "h": "99492f1a"
+ },
+ "js.oracle.am-cuc-tac-duong-duong-cuc": {
+  "t": "陰極まれば陽、陽極まれば陰。すべてが頂点に達すると、変化は必ず始まります。変化を恐れないでください。それは、あなたが生き、成長している証です。",
+  "h": "6675aca5"
+ },
+ "js.oracle.am-duong": {
+  "t": "陰陽",
+  "h": "5cbdb898"
+ },
+ "js.oracle.anh-huong": {
+  "t": "影響",
+  "h": "551b0c68"
+ },
+ "js.oracle.anh-sang": {
+  "t": "光",
+  "h": "ea1d6630"
+ },
+ "js.oracle.back-1": {
+  "t": "東洋の",
+  "h": "1de99eec"
+ },
+ "js.oracle.back-2": {
+  "t": "叡智",
+  "h": "5841c633"
+ },
+ "js.oracle.ban-co-dang-co-qua-khong": {
+  "t": "頑張りすぎていませんか?手放してみて、無理に押さないとき自然に何が起こるかを見てみましょう。",
+  "h": "ca702c46"
+ },
+ "js.oracle.ban-co-dang-di-qua-mot": {
+  "t": "どちらか一方に偏りすぎていませんか?極端にも、投げやりにもならず、中庸の道を探しましょう。",
+  "h": "ea3c5624"
+ },
+ "js.oracle.ban-muon-chiem-nghiem-sau-hon": {
+  "t": "**。どんなことを、さらに深く見つめたいですか?",
+  "h": "0700ae70"
+ },
+ "js.oracle.ban-than": {
+  "t": "自分自身",
+  "h": "b2d3973b"
+ },
+ "js.oracle.bat-ngo": {
+  "t": "思いがけなさ",
+  "h": "5ae13239"
+ },
+ "js.oracle.bat-quai": {
+  "t": "八卦",
+  "h": "943c4778"
+ },
+ "js.oracle.ben-bi": {
+  "t": "粘り強さ",
+  "h": "a108e917"
+ },
+ "js.oracle.ben-vung": {
+  "t": "持続性",
+  "h": "c7cb7a59"
+ },
+ "js.oracle.bien-doi": {
+  "t": "変容",
+  "h": "68315cd4"
+ },
+ "js.oracle.biet-du": {
+  "t": "足るを知る",
+  "h": "1781df4c"
+ },
+ "js.oracle.biet-on": {
+  "t": "感謝",
+  "h": "21f87639"
+ },
+ "js.oracle.binh-minh": {
+  "t": "夜明け",
+  "h": "04166e56"
+ },
+ "js.oracle.buong-bo": {
+  "t": "手放す",
+  "h": "eefa92c2"
+ },
+ "js.oracle.but-pha": {
+  "t": "飛躍",
+  "h": "9cf4ad3e"
+ },
+ "js.oracle.can-bang": {
+  "t": "バランス",
+  "h": "9fe59d4b"
+ },
+ "js.oracle.can-bang-mg6a": {
+  "t": "バランス",
+  "h": "3fe37e41"
+ },
+ "js.oracle.can-nui": {
+  "t": "艮 — 山",
+  "h": "9904522e"
+ },
+ "js.oracle.can-troi": {
+  "t": "乾 — 天",
+  "h": "7d4e516f"
+ },
+ "js.oracle.cat-bo": {
+  "t": "切り捨てる",
+  "h": "f4f3edd1"
+ },
+ "js.oracle.cau-hoi-cua-ban": {
+  "t": "ご質問: \"",
+  "h": "660c481c"
+ },
+ "js.oracle.cay-lon-bat-dau-tu-hat": {
+  "t": "大樹も小さな種から始まります。忍耐と粘り強さが鍵です。あなたが築いているものはすぐには見えなくても、毎日静かに育っています。",
+  "h": "2ac55d7b"
+ },
+ "js.oracle.chan-sam": {
+  "t": "震 — 雷",
+  "h": "7c1c107e"
+ },
+ "js.oracle.chia-se": {
+  "t": "分かち合い",
+  "h": "1cb95080"
+ },
+ "js.oracle.chieu-sau": {
+  "t": "深さ",
+  "h": "e865c387"
+ },
+ "js.oracle.chu-ky": {
+  "t": "サイクル",
+  "h": "ebc184a9"
+ },
+ "js.oracle.chu-ky-moi": {
+  "t": "新しいサイクル",
+  "h": "de8db018"
+ },
+ "js.oracle.chuyen-hoa": {
+  "t": "転化",
+  "h": "ed3d0950"
+ },
+ "js.oracle.chuyen-hoa-gpz3": {
+  "t": "転化",
+  "h": "c4b88b2f"
+ },
+ "js.oracle.co-hoi": {
+  "t": "チャンス",
+  "h": "da02f76b"
+ },
+ "js.oracle.con-duong-giua-khong-qua-cung": {
+  "t": "中庸の道 — 硬すぎず柔らかすぎず、張りすぎず緩めすぎず。中道とは平凡のことではなく、相反するものの間にある繊細な均衡のことです。",
+  "h": "455b601b"
+ },
+ "js.oracle.cung-ran": {
+  "t": "剛毅",
+  "h": "e9c3a1fd"
+ },
+ "js.oracle.dam-me": {
+  "t": "情熱",
+  "h": "60bf63eb"
+ },
+ "js.oracle.dan-dau": {
+  "t": "先頭に立つ",
+  "h": "9cff38f8"
+ },
+ "js.oracle.dan-ho": {
+  "t": "寅 虎",
+  "h": "0ba40037"
+ },
+ "js.oracle.dang-dinh-tam": {
+  "t": "心を静めています...",
+  "h": "da9206ab"
+ },
+ "js.oracle.danh-thoi-gian-hoc-hoi-va": {
+  "t": "学び、考える時間をとりましょう。あなたが探している答えは、表面ではなく深いところにあります。",
+  "h": "dd475149"
+ },
+ "js.oracle.danh-thoi-gian-mot-minh-lang": {
+  "t": "ひとりの時間を持ちましょう。直感に耳を傾けて。今すぐ輝こうと自分を急かさず、エネルギーが自然にたまるのを待ちましょう。",
+  "h": "0e43dd03"
+ },
+ "js.oracle.dat": {
+  "t": "土",
+  "h": "df7404fb"
+ },
+ "js.oracle.dau-la-nen-tang-trong-cuoc": {
+  "t": "あなたの人生の土台は何ですか?家族、健康、お金——広げる前に、まずこれらを固めましょう。",
+  "h": "550ab2e3"
+ },
+ "js.oracle.dau-tu-vao-cac-moi-quan": {
+  "t": "人間関係と創造に力を注ぎましょう。今のあなたの強みは、剛い力ではなく、穏やかさと情愛です。",
+  "h": "e0d2bef5"
+ },
+ "js.oracle.day-khong-phai-luc-lieu-linh": {
+  "t": "今は無謀に動く時ではありません。慎重に、よく見極め、直感を頼りに、この試練の時期を乗り越えましょう。",
+  "h": "bd217cbf"
+ },
+ "js.oracle.day-la-luc-hanh-dong-chia": {
+  "t": "今は行動する時です。アイデアを分かち合い、導き、生み出しましょう。あなたのエネルギーは頂点にあります。賢く使いましょう。",
+  "h": "4049c172"
+ },
+ "js.oracle.day-la-luc-hanh-dong-dut": {
+  "t": "今はきっぱりと行動する時です。準備は十分整いました。自分の力を信じて、一歩踏み出しましょう。",
+  "h": "b2641f22"
+ },
+ "js.oracle.day-la-luc-tang-toc-dung": {
+  "t": "今は加速する時です。小さな障害に足を止められず、情熱をもって前へ進みましょう。",
+  "h": "396d7ee9"
+ },
+ "js.oracle.day-la-thoi-diem-de-quan": {
+  "t": "今は観察の時で、急いで動く時ではありません。原因はいま蒔かれており、結果はちょうどよい時に届きます。",
+  "h": "c8d7fe99"
+ },
+ "js.oracle.day-la-thoi-diem-vang-nhung": {
+  "t": "今は黄金の時です。止まっていたプロジェクトは再び動き出し、ひびの入った関係も修復できます。",
+  "h": "5a1e9cfb"
+ },
+ "js.oracle.di-chuyen": {
+  "t": "移動",
+  "h": "df434ae0"
+ },
+ "js.oracle.dia-chi": {
+  "t": "地支",
+  "h": "9a9221c6"
+ },
+ "js.oracle.dia-chi-dan-ho-dung-manh": {
+  "t": "地支の寅 — 虎。勇猛で決断力があり、夜明けが近づいています。力強いエネルギーが立ち上がっています。大胆に、しかし計画をもって動きましょう。虎は勝てる確信がなければ出撃しません。",
+  "h": "1bd2174b"
+ },
+ "js.oracle.dia-chi-mui-de-on-hoa": {
+  "t": "地支の未 — 羊。穏やかで芸術的、深い情愛。やさしさ、創造、愛のエネルギーです。人間関係と創造的なプロジェクトを育む時です。",
+  "h": "4c0a6a31"
+ },
+ "js.oracle.dia-chi-ngo-ngua-tu-do": {
+  "t": "地支の午 — 馬。自由、速さ、熱意、情熱。移動、変化、そして休みなく前へ進むエネルギーです。",
+  "h": "91fef169"
+ },
+ "js.oracle.dia-chi-thin-nam-rong-khi": {
+  "t": "地支の辰 — 龍の年、雄大な気勢、天地が交わる時。大きな変容のエネルギーがここにあります。安定する時ではなく、飛躍する時です。",
+  "h": "16c18514"
+ },
+ "js.oracle.dia-chi-ty-nua-dem-diem": {
+  "t": "地支の子 — 真夜中、新しいサイクルの起点、陰が極まって陽が生まれる時。いちばん深い闇には、いちばん力強い命の芽が宿っています。あなたはひとつのサイクルの終わりにいて、新しいサイクルの始まりに立っています。",
+  "h": "a1e4ef73"
+ },
+ "js.oracle.dieu-an-sau-can-chu-y": {
+  "t": "深く潜んでいて、気をつけるべきこと",
+  "h": "de8671a7"
+ },
+ "js.oracle.dieu-chinh": {
+  "t": "調整",
+  "h": "37c5bf6b"
+ },
+ "js.oracle.dieu-dang-phat-trien-va-can": {
+  "t": "育ちつつあり、大切に育むべきこと",
+  "h": "b095817e"
+ },
+ "js.oracle.dieu-gi-can-duoc-loai-bo": {
+  "t": "あなたの人生から手放すべきものは何ですか?どんな難しい決断が待っていますか?きっぱりと決める時です。",
+  "h": "178dea6c"
+ },
+ "js.oracle.dieu-gi-dang-nay-mam-trong": {
+  "t": "あなたの人生で何が芽吹いていますか?育つ環境を整えてあげましょう。焦らないで。",
+  "h": "1492c6da"
+ },
+ "js.oracle.dieu-gi-dang-xay-ra-tu": {
+  "t": "あなたの人生で、自然に起きていることは何ですか?流れに逆らって泳ぐのではなく、その流れに乗りましょう。",
+  "h": "2292cc68"
+ },
+ "js.oracle.dieu-gi-trong-cuoc-song-cua": {
+  "t": "あなたの人生で、頂点に達して、まもなく転化しようとしているものは何ですか?避けられないこの変化を受け入れる心の準備をしましょう。",
+  "h": "a6188d40"
+ },
+ "js.oracle.dieu-vu-tru-muon-ban-biet": {
+  "t": "今、宇宙があなたに知らせたいこと",
+  "h": "40685257"
+ },
+ "js.oracle.dinh-cao": {
+  "t": "頂点",
+  "h": "524c5d21"
+ },
+ "js.oracle.dinh-tam-rut-lai": {
+  "t": "心を静めてもう一度引く",
+  "h": "09656849"
+ },
+ "js.oracle.doai-ho": {
+  "t": "兌 — 沢",
+  "h": "7eddb4b0"
+ },
+ "js.oracle.doi-lap": {
+  "t": "対立",
+  "h": "a8f8c625"
+ },
+ "js.oracle.dong-chay": {
+  "t": "流れ",
+  "h": "045724a4"
+ },
+ "js.oracle.dung-hoa": {
+  "t": "調和",
+  "h": "d56be20d"
+ },
+ "js.oracle.dung-lai": {
+  "t": "立ち止まる",
+  "h": "d8d8b916"
+ },
+ "js.oracle.dung-lai-va-dem-nhung-dieu": {
+  "t": "立ち止まって、いま持っているよい物事を数えてみましょう。幸せは、もっと持つことからではなく、いまあるものを大切にすることから生まれます。",
+  "h": "ac526a81"
+ },
+ "js.oracle.dung-lai-va-quan-sat-khong": {
+  "t": "立ち止まって観察しましょう。今は、すべての行動が必要なわけではありません。じっとしていることが、いちばん賢い一歩になることもあります。",
+  "h": "b61e007a"
+ },
+ "js.oracle.dung-manh": {
+  "t": "勇猛",
+  "h": "035952f2"
+ },
+ "js.oracle.dung-ngan-ngai-di-truoc-con": {
+  "t": "先に進むことをためらわないで。まだ誰も通っていない道は、間違いとは限りません。それこそがあなたの道かもしれません。",
+  "h": "97c9dd64"
+ },
+ "js.oracle.dung-so-khoang-toi-nay-no": {
+  "t": "この暗がりを恐れないで。それは新しい夜明けの前触れです。静かに種を蒔き、春を辛抱強く待ちましょう。",
+  "h": "ac09f152"
+ },
+ "js.oracle.dung-so-tieng-sam-no-den": {
+  "t": "雷鳴を恐れないで。それは目覚めさせるために来るのです。衝撃のあと、自分に問いかけてみましょう。何を変える必要があるのだろう、と。",
+  "h": "42c2bfa9"
+ },
+ "js.oracle.duong": {
+  "t": "陽",
+  "h": "0efa2ecf"
+ },
+ "js.oracle.duong-thuan": {
+  "t": "純陽",
+  "h": "862ecac8"
+ },
+ "js.oracle.duyen": {
+  "t": "縁",
+  "h": "98a81ff8"
+ },
+ "js.oracle.giao-tiep": {
+  "t": "コミュニケーション",
+  "h": "5e5bd903"
+ },
+ "js.oracle.giap-la-can-dau-tien-khoi": {
+  "t": "甲は最初の天干 — 始まり、先駆け、大樹のように剛健。力強い始まりの時です。あなたは先駆者になるよう呼ばれています。",
+  "h": "806e3471"
+ },
+ "js.oracle.giap-moc": {
+  "t": "甲木",
+  "h": "9536a92b"
+ },
+ "js.oracle.gieo-hat": {
+  "t": "種を蒔く",
+  "h": "badd83e5"
+ },
+ "js.oracle.hai-hoa": {
+  "t": "調和",
+  "h": "deffa707"
+ },
+ "js.oracle.hanh-dong": {
+  "t": "行動",
+  "h": "8e9fdd28"
+ },
+ "js.oracle.hanh-dong-nhu-mot-nha-lanh": {
+  "t": "リーダーのように行動しましょう。あなたにはビジョンがあります。それを分かち合い、人々を導きましょう。",
+  "h": "891328c8"
+ },
+ "js.oracle.hanh-hoa-mang-nang-luong-cua": {
+  "t": "火の五行は、情熱、熱意、光のエネルギーを帯びています。あなたの内の炎は燃えています。輝かせてあげてください。ただし、大切なものまで焼き尽くさないように。",
+  "h": "76fa246e"
+ },
+ "js.oracle.hanh-kim-sac-ben-quyet-doan": {
+  "t": "金の五行 — 鋭く、決断力があり、繊細で、価値あるもの。鍛えられる刃のように、不要なものを切り捨て、本当に価値のあるものを残す必要があります。",
+  "h": "d59eadcd"
+ },
+ "js.oracle.hanh-moc-dai-dien-cho-su": {
+  "t": "木の五行は、成長、しなやかさ、希望を表します。若木が地面から伸びるように、あなたの内にも何か新しいものが芽吹いています。忍耐と光をもって育てましょう。",
+  "h": "ec58fdd5"
+ },
+ "js.oracle.hanh-moc-vuon": {
+  "t": "木の五行 伸びる",
+  "h": "14cebce8"
+ },
+ "js.oracle.hanh-phuc": {
+  "t": "幸せ",
+  "h": "68d680dc"
+ },
+ "js.oracle.hanh-tho-la-nen-tang-cua": {
+  "t": "土の五行は万物の土台です — 安定していて、頼もしく、育む力があります。急いで高く伸びるより、しっかりした土台を築く時です。持続は速さよりも大切です。",
+  "h": "6022cf50"
+ },
+ "js.oracle.hanh-thuy-sau": {
+  "t": "水の五行 深く",
+  "h": "eb619381"
+ },
+ "js.oracle.hanh-thuy-thich-nghi-tham-sau": {
+  "t": "水の五行 — 適応力、深さ、知恵、直感。水は地形に沿って流れ、逆らいません。本当の知恵とは、いつ勢いよく流れ、いつ静かに沈むかを知ることです。",
+  "h": "f66a0a05"
+ },
+ "js.oracle.hao-hung": {
+  "t": "雄大",
+  "h": "d3338937"
+ },
+ "js.oracle.hay-chu-y-den-nhung-gi": {
+  "t": "はっきりしてきたことに注意を向けましょう。真実の光に照らされて見えてきたものを信じてください。",
+  "h": "e631bdf2"
+ },
+ "js.oracle.hay-danh-thoi-gian-tu-van": {
+  "t": "自分に問う時間をとりましょう。本当に自分を動かしているものは何か。避けていることは何か。自分についての真実は、最大の贈り物です。",
+  "h": "1ec9491c"
+ },
+ "js.oracle.hay-kien-tri-va-nhe-nhang": {
+  "t": "粘り強く、やさしく。長く続く影響力は、力で押しつけることではなく、一貫性から生まれます。",
+  "h": "8b9fe544"
+ },
+ "js.oracle.hay-la-nguoi-ho-tro-khong": {
+  "t": "今は先頭に立つ人ではなく、支える人になりましょう。周りの物事や人を育む——それが本当の強さです。",
+  "h": "b183fc76"
+ },
+ "js.oracle.hay-tao-bao-hon-binh-thuong": {
+  "t": "いつもより大胆に。辰は大きな変容のエネルギーを帯びています。飛躍のチャンスを逃さないで。",
+  "h": "a4ce94fe"
+ },
+ "js.oracle.hien-tai": {
+  "t": "現在",
+  "h": "d77bf3af"
+ },
+ "js.oracle.hieu-minh": {
+  "t": "自分を知る",
+  "h": "bd697c0a"
+ },
+ "js.oracle.ho-tro": {
+  "t": "支え",
+  "h": "ed2a55ae"
+ },
+ "js.oracle.hoa-nang-luong": {
+  "t": "火 — エネルギー",
+  "h": "af736f0b"
+ },
+ "js.oracle.hoa-nhiet-huyet": {
+  "t": "火 — 情熱",
+  "h": "b3665961"
+ },
+ "js.oracle.hoan-canh-va-dieu-kien-hien": {
+  "t": "現在の状況と条件",
+  "h": "d4bd1b9d"
+ },
+ "js.oracle.hoc-hoi": {
+  "t": "学び",
+  "h": "7e024951"
+ },
+ "js.oracle.huong-dan-thuc-hanh": {
+  "t": "実践のヒント:",
+  "h": "8b4d8530"
+ },
+ "js.oracle.huong-di-va-ket-qua-neu": {
+  "t": "このまま進んだ場合の方向と結果",
+  "h": "ce2aa255"
+ },
+ "js.oracle.hy-vong": {
+  "t": "希望",
+  "h": "5dddc812"
+ },
+ "js.oracle.ket-noi": {
+  "t": "つながり",
+  "h": "62b5a5f2"
+ },
+ "js.oracle.ket-noi-voi-nguoi-khac-chia": {
+  "t": "人とつながりましょう。いま経験していることを分かち合って。誠実な言葉が、かけがえのないつながりを生むことがあります。",
+  "h": "762b09a5"
+ },
+ "js.oracle.ket-qua-oracle-cua-toi": {
+  "t": "私のオラクルの結果",
+  "h": "817f308b"
+ },
+ "js.oracle.kham-nuoc": {
+  "t": "坎 — 水",
+  "h": "14eadf3a"
+ },
+ "js.oracle.khi-nam-hanh-van-hanh-hai": {
+  "t": "五行が調和して巡るとき、万物は栄えます。いま、人生のあらゆる要素が釣り合っている時期にいます。この追い風を活かして前へ進みましょう。",
+  "h": "9fa440dd"
+ },
+ "js.oracle.khoi-dau": {
+  "t": "始まり",
+  "h": "cdb621fc"
+ },
+ "js.oracle.khoi-nguyen": {
+  "t": "根源",
+  "h": "bd887944"
+ },
+ "js.oracle.khon-dat": {
+  "t": "坤 — 地",
+  "h": "3b414625"
+ },
+ "js.oracle.khon-ngoan": {
+  "t": "賢さ",
+  "h": "97a452bf"
+ },
+ "js.oracle.khong-cuc-doan": {
+  "t": "極端にならない",
+  "h": "f2d069e4"
+ },
+ "js.oracle.kiem-soat": {
+  "t": "制御",
+  "h": "6d5dbb4e"
+ },
+ "js.oracle.kien-dinh": {
+  "t": "揺るがなさ",
+  "h": "965a37b0"
+ },
+ "js.oracle.kien-nhan": {
+  "t": "忍耐",
+  "h": "c3a00bf7"
+ },
+ "js.oracle.kien-tri": {
+  "t": "粘り",
+  "h": "7856333a"
+ },
+ "js.oracle.kim-hien-tai": {
+  "t": "金 — 現在",
+  "h": "7ab65825"
+ },
+ "js.oracle.kim-khac-moc-moc-khac-tho": {
+  "t": "金剋木、木剋土……相剋は破壊ではなく、均衡を保つために必要な制御です。人生の中で、あなたを試している何かがあります。それを成長のチャンスとして見つめましょう。",
+  "h": "26d13882"
+ },
+ "js.oracle.kim-quyet-doan": {
+  "t": "金 — 決断",
+  "h": "954fe85f"
+ },
+ "js.oracle.lang-nghe-truc-giac-sau-sac": {
+  "t": "あなたの深い直感に耳を傾けましょう。いまの流れに逆らわず、適応して、自分だけの道を見つけましょう。",
+  "h": "f2864da6"
+ },
+ "js.oracle.lanh-dao": {
+  "t": "リーダーシップ",
+  "h": "d9b13441"
+ },
+ "js.oracle.linh-hoat": {
+  "t": "しなやかさ",
+  "h": "233a204d"
+ },
+ "js.oracle.luu-nien": {
+  "t": "流年",
+  "h": "f246e000"
+ },
+ "js.oracle.ly-lua": {
+  "t": "離 — 火",
+  "h": "03e7b319"
+ },
+ "js.oracle.mem-mong": {
+  "t": "やわらかさ",
+  "h": "9c2a0232"
+ },
+ "js.oracle.minh-triet": {
+  "t": "叡智",
+  "h": "6222b2a7"
+ },
+ "js.oracle.minh-triet-tung-la": {
+  "t": "カードごとの叡智",
+  "h": "7afc1deb"
+ },
+ "js.oracle.moc-sinh-truong": {
+  "t": "木 — 成長",
+  "h": "68bf8fc0"
+ },
+ "js.oracle.moc-tang-truong": {
+  "t": "木 — 伸長",
+  "h": "76b45bc1"
+ },
+ "js.oracle.mui-de": {
+  "t": "未 羊",
+  "h": "19351a0a"
+ },
+ "js.oracle.nang-luong": {
+  "t": "エネルギー",
+  "h": "f2c82118"
+ },
+ "js.oracle.nang-luong-am-tiep-nhan-noi": {
+  "t": "陰のエネルギー — 受け入れ、内面、休息、育み。静まり、内に収め、エネルギーを充電する時です。たくさん動くより、深く耳を傾けることのほうが大切です。",
+  "h": "147c7327"
+ },
+ "js.oracle.nang-luong-can-kich-hoat": {
+  "t": "呼び起こすべきエネルギー",
+  "h": "66c656bb"
+ },
+ "js.oracle.nang-luong-duong-toa-ra-hanh": {
+  "t": "陽のエネルギー — 放ち、行動し、創造し、表現する。力と表現の時です。あなたの内の光が、世界と分かち合われたがっています。",
+  "h": "82d51591"
+ },
+ "js.oracle.nay-mam": {
+  "t": "芽吹き",
+  "h": "d3bad34d"
+ },
+ "js.oracle.nen-hoi-oracle-cau-hoi-kieu": {
+  "t": "オラクルには、どんな質問をするのがよいですか?",
+  "h": "8a001fd9"
+ },
+ "js.oracle.nen-tang": {
+  "t": "土台",
+  "h": "4676be0d"
+ },
+ "js.oracle.nen-tang-can-cung-co": {
+  "t": "固めるべき土台",
+  "h": "12191113"
+ },
+ "js.oracle.nghi-ngoi": {
+  "t": "休息",
+  "h": "674b9610"
+ },
+ "js.oracle.nghiep": {
+  "t": "業",
+  "h": "bc44635e"
+ },
+ "js.oracle.ngo-ma": {
+  "t": "午 馬",
+  "h": "3e1b3c1e"
+ },
+ "js.oracle.ngu-hanh": {
+  "t": "五行",
+  "h": "68ac2473"
+ },
+ "js.oracle.ngu-hanh-hoa": {
+  "t": "五行の調和",
+  "h": "9181728e"
+ },
+ "js.oracle.ngu-hanh-trong-oracle-nghia-la": {
+  "t": "オラクルでいう五行とは何ですか?",
+  "h": "c3180463"
+ },
+ "js.oracle.nguon-goc": {
+  "t": "起源",
+  "h": "b071d309"
+ },
+ "js.oracle.nguy-hiem": {
+  "t": "危険",
+  "h": "9ab8bc5b"
+ },
+ "js.oracle.nguyen-nhan-goc-re-cua-tinh": {
+  "t": "この状況の根本的な原因",
+  "h": "be5bb52a"
+ },
+ "js.oracle.nham-la-can-thuy-duong-manh": {
+  "t": "壬は陽の水の天干 — 大河のように力強く、野心と知恵を備えています。あなたの強みは、先を読み、計画し、柔軟に適応する力です。",
+  "h": "855b4d25"
+ },
+ "js.oracle.nham-thuy": {
+  "t": "壬水",
+  "h": "b32b0718"
+ },
+ "js.oracle.nhan": {
+  "t": "因",
+  "h": "74d8e663"
+ },
+ "js.oracle.nhan-nao-qua-ay-hat-giong": {
+  "t": "因があれば果があります — 蒔いた種のとおりの実がなります。今日あなたが経験していることは、過去に蒔いたことの結果です。そして今日のあなたの行動が、未来の種を蒔いています。",
+  "h": "fcafa76e"
+ },
+ "js.oracle.nhan-qua": {
+  "t": "因果",
+  "h": "563d7385"
+ },
+ "js.oracle.nhan-qua-jhdj": {
+  "t": "因果",
+  "h": "ff35f868"
+ },
+ "js.oracle.nhan-thuc": {
+  "t": "気づき",
+  "h": "38f5078e"
+ },
+ "js.oracle.nhe-nhang": {
+  "t": "やわらかさ",
+  "h": "74e48410"
+ },
+ "js.oracle.nhiet-huyet": {
+  "t": "熱意",
+  "h": "d5f61be3"
+ },
+ "js.oracle.nhiet-huyet-la-mon-qua-nhung": {
+  "t": "熱意は贈り物ですが、制御が必要です。情熱を衝動ではなく、目的をもって使いましょう。",
+  "h": "5b47b77d"
+ },
+ "js.oracle.nhin-lai-nhung-nguyen-nhan-dan": {
+  "t": "今の状況に至った原因を振り返りましょう。今日どんな行動をとれば、望む未来がつくれるでしょうか?",
+  "h": "89bb212b"
+ },
+ "js.oracle.nhin-nhan-lai-tinh-huong-tu": {
+  "t": "状況を、反対の視点から見直してみましょう。あなたが否定していることこそ、いちばん大切な学びかもしれません。",
+  "h": "ef03df70"
+ },
+ "js.oracle.nhin-xa-hon-tinh-huong-truoc": {
+  "t": "目の前の状況の、その先を見ましょう。あなたには、他の人には見えないものを見る力があります。そのビジョンを活かしてください。",
+  "h": "4fd97731"
+ },
+ "js.oracle.nhu-thuan": {
+  "t": "柔順",
+  "h": "3d89cfeb"
+ },
+ "js.oracle.niem-vui": {
+  "t": "喜び",
+  "h": "86cf7ad6"
+ },
+ "js.oracle.noi-tam": {
+  "t": "内面",
+  "h": "22b1e894"
+ },
+ "js.oracle.nuoc-mem-nhung-thang-da-cung": {
+  "t": "水はやわらかくても、硬い石に勝ちます。水の強さは押す力ではなく、粘り強さとしなやかさにあります。前へ進むいちばんよい方法が、道を譲ることである場合もあります。",
+  "h": "636f00ee"
+ },
+ "js.oracle.nuoc-sau-khong-song-lon-tri": {
+  "t": "深い水に大波は立ちません。本当の知恵は、たいてい静かです。今は、外に見せるのではなく、深く入り込む時です。研究し、思索し、内面を探りましょう。",
+  "h": "d83a954b"
+ },
+ "js.oracle.nuoi-duong": {
+  "t": "育む",
+  "h": "5f526834"
+ },
+ "js.oracle.on-dinh": {
+  "t": "安定",
+  "h": "a3b55fa0"
+ },
+ "js.oracle.on-hoa": {
+  "t": "穏やかさ",
+  "h": "f607b321"
+ },
+ "js.oracle.oracle-khac-tarot-o-diem-nao": {
+  "t": "オラクルとタロットはどこが違いますか?",
+  "h": "6de59274"
+ },
+ "js.oracle.oracle-phuong-dong": {
+  "t": "東洋オラクル — ",
+  "h": "19829bd3"
+ },
+ "js.oracle.phat-trien": {
+  "t": "発展",
+  "h": "522a7db6"
+ },
+ "js.oracle.phon-thinh": {
+  "t": "繁栄",
+  "h": "8dd97f93"
+ },
+ "js.oracle.qua": {
+  "t": "果",
+  "h": "40985001"
+ },
+ "js.oracle.quan-sat": {
+  "t": "観察",
+  "h": "edd08b70"
+ },
+ "js.oracle.que-can-nui-su-dung-lai": {
+  "t": "艮 — 山の卦。止まることと揺るがなさを表します。いつ止まるべきかを知ることは、大きな知恵です。今は一時停止の時で、これ以上進まないほうがよいでしょう。いまにとどまり、次へ進む前にはっきり見極めましょう。",
+  "h": "4c8fa05f"
+ },
+ "js.oracle.que-can-troi-duong-thuan-suc": {
+  "t": "乾 — 天の卦。純陽で、創造の力です。導き、生み出すエネルギーが強く現れています。先頭に立ち、始め、あなたのいちばん強い意志を示す時です。",
+  "h": "68b09f57"
+ },
+ "js.oracle.que-chan-sam-set-su-thuc": {
+  "t": "震 — 雷の卦。突然の目覚めです。雷鳴が目を覚まさせます。思いがけない出来事、または、ものの見方を一変させる突然の気づきがあるかもしれません。",
+  "h": "c1a608f2"
+ },
+ "js.oracle.que-doai-ho-niem-vui-va": {
+  "t": "兌 — 沢の卦。喜びとコミュニケーションを表します。楽しさ、つながり、表現のエネルギーです。喜びは分かち合うと倍になり、悲しみは半分になります。今はつながる時です。",
+  "h": "e4aeee98"
+ },
+ "js.oracle.que-kham-nuoc-nguy-hiem-va": {
+  "t": "坎 — 水の卦。危険と深さを表します。深く危うい水域を渡っているところです。知恵と慎重さ、そして乗り越える力を自分で信じることが必要です。",
+  "h": "691e7eea"
+ },
+ "js.oracle.que-khon-dat-am-thuan-su": {
+  "t": "坤 — 地の卦。純陰で、受け入れと育みです。今は、育ちつつあるものを支え、仕え、育む時です。大地の強さは、万物を包み、養う力にあります。",
+  "h": "71ae1c19"
+ },
+ "js.oracle.que-ly-lua-su-sang-to": {
+  "t": "離 — 火の卦。明晰さと美しさを表します。気づきの光が照らしています。何かが明らかになります。真実、ひとつの考え、あるいは、あなたの人生で輝いている誰かが。",
+  "h": "cc0d2c7e"
+ },
+ "js.oracle.que-ton-gio-su-tham-dan": {
+  "t": "巽 — 風の卦。じわじわと染み入ることと粘り強さを表します。風は強い力で壊すのではなく、粘り強くあらゆる場所に染み入ります。あなたの影響力は、やさしく、長く続く形で広がっています。",
+  "h": "0785a3e6"
+ },
+ "js.oracle.quyet-doan": {
+  "t": "決断力",
+  "h": "5cbca4c7"
+ },
+ "js.oracle.sac-ben": {
+  "t": "鋭さ",
+  "h": "8aea464b"
+ },
+ "js.oracle.sam-set": {
+  "t": "雷",
+  "h": "e0e0f079"
+ },
+ "js.oracle.sang-tao": {
+  "t": "創造",
+  "h": "d4aba4d3"
+ },
+ "js.oracle.sang-to": {
+  "t": "明晰",
+  "h": "3250527f"
+ },
+ "js.oracle.sinh-truong": {
+  "t": "成長",
+  "h": "cde6988e"
+ },
+ "js.oracle.suc-manh-khong-phai-la-chien": {
+  "t": "強さとは、一方に勝つことではなく、相反する力の間で均衡を保つ力です。あなたは、自分自身の中心を取り戻すよう呼ばれています。",
+  "h": "4f824f6f"
+ },
+ "js.oracle.tam-nhin": {
+  "t": "ビジョン",
+  "h": "d1753f25"
+ },
+ "js.oracle.tao-bao": {
+  "t": "大胆さ",
+  "h": "2a1e2d46"
+ },
+ "js.oracle.thach-thuc": {
+  "t": "課題",
+  "h": "737adff9"
+ },
+ "js.oracle.thach-thuc-ban-dang-doi-mat": {
+  "t": "いま直面している課題は、人生の別の面を制御し、バランスをとるためのものです。抵抗せず、そこから学びましょう。",
+  "h": "2ec1c0ff"
+ },
+ "js.oracle.thai-cuc": {
+  "t": "太極",
+  "h": "eea5e24c"
+ },
+ "js.oracle.tham-dan": {
+  "t": "浸透",
+  "h": "7fff6148"
+ },
+ "js.oracle.tham-sau": {
+  "t": "奥深さ",
+  "h": "8ffd9297"
+ },
+ "js.oracle.tham-vong": {
+  "t": "野心",
+  "h": "9b13396e"
+ },
+ "js.oracle.than-trong": {
+  "t": "慎重さ",
+  "h": "0dea416d"
+ },
+ "js.oracle.thay-doi": {
+  "t": "変化",
+  "h": "2d141c14"
+ },
+ "js.oracle.thay-vi-bam-viu-hay-day": {
+  "t": "しがみついたり押し返したりせず、いまこの瞬間を観察し、十分に味わいましょう。これは手放しの学びです。",
+  "h": "4733a001"
+ },
+ "js.oracle.thay-vi-doi-dau-truc-tiep": {
+  "t": "正面からぶつかる代わりに、もっとしなやかなやり方を探しましょう。柔軟さは弱さではなく、知恵です。",
+  "h": "38bcd462"
+ },
+ "js.oracle.the": {
+  "t": " 枚",
+  "h": "aa64c8d5"
+ },
+ "js.oracle.the-dau-tien-ban-rut-duoc": {
+  "t": "最初に引いたカードは **",
+  "h": "7451613d"
+ },
+ "js.oracle.the-hien": {
+  "t": "表現",
+  "h": "72f7bd18"
+ },
+ "js.oracle.thich-nghi": {
+  "t": "適応",
+  "h": "b539346c"
+ },
+ "js.oracle.thien-can": {
+  "t": "天干",
+  "h": "4202f65e"
+ },
+ "js.oracle.thin-long": {
+  "t": "辰 龍",
+  "h": "551c2185"
+ },
+ "js.oracle.tho-nen-tang": {
+  "t": "土 — 土台",
+  "h": "73dabd49"
+ },
+ "js.oracle.tho-vung-chac": {
+  "t": "土 — 堅固",
+  "h": "784c3257"
+ },
+ "js.oracle.thoi-co": {
+  "t": "好機",
+  "h": "f5ccdc48"
+ },
+ "js.oracle.thoi-diem-vang": {
+  "t": "黄金の時",
+  "h": "cb5085fe"
+ },
+ "js.oracle.thoi-tiet": {
+  "t": "天候",
+  "h": "a517b7a2"
+ },
+ "js.oracle.thong-diep": {
+  "t": "メッセージ",
+  "h": "8d4fe659"
+ },
+ "js.oracle.thuan-le": {
+  "t": "理にかなう",
+  "h": "88d51987"
+ },
+ "js.oracle.thuan-the": {
+  "t": "時流に乗る",
+  "h": "6b992670"
+ },
+ "js.oracle.thuan-the-5ik6": {
+  "t": "時流に乗る",
+  "h": "b226424c"
+ },
+ "js.oracle.thuan-thien-gia-ton-nghich-thien": {
+  "t": "「順天者存、逆天者亡」——天の理に従う者は存し、逆らう者は滅びる。自然で避けられないことに逆らわないでください。状況と戦うのではなく、状況とともに働く道を探しましょう。",
+  "h": "266ea183"
+ },
+ "js.oracle.thuc-tinh": {
+  "t": "覚醒",
+  "h": "0c40657d"
+ },
+ "js.oracle.thuy-chieu-sau": {
+  "t": "水 — 深さ",
+  "h": "30b87c44"
+ },
+ "js.oracle.thuy-sinh-moc-moc-sinh-hoa": {
+  "t": "水生木、木生火……互いに支え合うことは、宇宙の本質です。あなたは誰かから支えを受けているか、あるいは、誰かの糧になるよう呼ばれています。",
+  "h": "95bfe0f9"
+ },
+ "js.oracle.thuy-tri-tue": {
+  "t": "水 — 知恵",
+  "h": "e4931a4f"
+ },
+ "js.oracle.tiem-nang": {
+  "t": "可能性",
+  "h": "dbd5fc81"
+ },
+ "js.oracle.tien-phong": {
+  "t": "先駆け",
+  "h": "7da37b6c"
+ },
+ "js.oracle.tiep-nhan": {
+  "t": "受け入れ",
+  "h": "7d1e28b5"
+ },
+ "js.oracle.tim-hieu-van-khi-nam-nay": {
+  "t": "今年のあなたの運気を調べましょう。時に沿って行動し、運命の流れに逆らわないことです。",
+  "h": "6b1162c4"
+ },
+ "js.oracle.tin-tuong": {
+  "t": "信頼",
+  "h": "8f76c3a5"
+ },
+ "js.oracle.tin-tuong-vao-qua-trinh-nhung": {
+  "t": "過程を信じましょう。あなたの静かな努力は積み重なっています。すぐに結果が見えないからといって、あきらめないでください。",
+  "h": "c4346208"
+ },
+ "js.oracle.tinh-cam": {
+  "t": "情愛",
+  "h": "ba217ecf"
+ },
+ "js.oracle.tinh-lang": {
+  "t": "静けさ",
+  "h": "50214643"
+ },
+ "js.oracle.tinh-te": {
+  "t": "繊細さ",
+  "h": "9045cd81"
+ },
+ "js.oracle.toa-sang": {
+  "t": "輝き",
+  "h": "ae22fb49"
+ },
+ "js.oracle.toc-do": {
+  "t": "速さ",
+  "h": "7c10386d"
+ },
+ "js.oracle.ton-gio": {
+  "t": "巽 — 風",
+  "h": "bfd2d8e9"
+ },
+ "js.oracle.trach-nhiem": {
+  "t": "責任",
+  "h": "08440470"
+ },
+ "js.oracle.tran-trong": {
+  "t": "大切にする",
+  "h": "54a3e6b3"
+ },
+ "js.oracle.trang-thai-thuc-te-bay-gio": {
+  "t": "いまの実際の状態",
+  "h": "093b5811"
+ },
+ "js.oracle.tri-an": {
+  "t": "恩に報いる",
+  "h": "7eb696b3"
+ },
+ "js.oracle.tri-nhan-gia-tri-tu-tri": {
+  "t": "「知人者智、自知者明」——人を知る者は智があり、自分を知る者は明がある。最高の理解とは、自分自身を理解することです。強み、弱み、原動力、そして本当の恐れを。",
+  "h": "3a84272e"
+ },
+ "js.oracle.tri-tuc": {
+  "t": "知足",
+  "h": "39cd778d"
+ },
+ "js.oracle.tri-tuc-biet-du-thi-thuong": {
+  "t": "知足——足るを知れば、常に楽しい。いちばん多く持つ人がいちばん幸せなわけではありません。いまあるものを大切にできる人こそ、本当に豊かな人です。",
+  "h": "60fe6429"
+ },
+ "js.oracle.tri-tue": {
+  "t": "知恵",
+  "h": "74e5d83d"
+ },
+ "js.oracle.triet-ly": {
+  "t": "哲理",
+  "h": "b7552b71"
+ },
+ "js.oracle.troi": {
+  "t": "天",
+  "h": "02698dc1"
+ },
+ "js.oracle.tron-ven": {
+  "t": "満ち足りる",
+  "h": "ae612b97"
+ },
+ "js.oracle.truc-giac": {
+  "t": "直感",
+  "h": "d86f73b7"
+ },
+ "js.oracle.trung-dao": {
+  "t": "中道",
+  "h": "61aa8015"
+ },
+ "js.oracle.trung-tam": {
+  "t": "中心",
+  "h": "a776588a"
+ },
+ "js.oracle.truong-thanh": {
+  "t": "成熟",
+  "h": "bbe03f16"
+ },
+ "js.oracle.tu-do": {
+  "t": "自由",
+  "h": "40d06bcd"
+ },
+ "js.oracle.tu-nhan-thuc": {
+  "t": "自己認識",
+  "h": "300c9c9a"
+ },
+ "js.oracle.tu-nhien": {
+  "t": "自然",
+  "h": "a16adcc3"
+ },
+ "js.oracle.tu-thai-cuc-sinh-luong-nghi": {
+  "t": "太極から両儀が生まれる——一から二が生まれ、やがて万物が生まれます。あなたは、新しいサイクルの出発点に立っています。あらゆる可能性が静けさの中にあり、熟す時を待っています。",
+  "h": "9beef9b2"
+ },
+ "js.oracle.tu-tri": {
+  "t": "自知",
+  "h": "cd9d3b04"
+ },
+ "js.oracle.tuong-khac": {
+  "t": "相剋",
+  "h": "04eb5bcd"
+ },
+ "js.oracle.tuong-sinh": {
+  "t": "相生",
+  "h": "b29d50a2"
+ },
+ "js.oracle.tuong-sinh-4int": {
+  "t": "相生",
+  "h": "1aad018d"
+ },
+ "js.oracle.ty-khoi-nguyen": {
+  "t": "子 — 根源",
+  "h": "f14c8865"
+ },
+ "js.oracle.van-luu-nien-van-khi-cua": {
+  "t": "流年の運——今年の運気が、あらゆる決断に強く影響しています。行動する前に、全体の運の流れを確かめましょう。時流に乗ることがいちばん賢明です。",
+  "h": "8824729d"
+ },
+ "js.oracle.van-trinh": {
+  "t": "運の歩み",
+  "h": "5c07d84c"
+ },
+ "js.oracle.van-trinh-37gw": {
+  "t": "運の歩み",
+  "h": "cd32c605"
+ },
+ "js.oracle.van-vat-deu-vo-thuong-khong": {
+  "t": "万物は無常です——苦しみも幸せも含め、永遠に続くものはありません。いまあなたを苦しめていることも過ぎ去り、いまあなたを喜ばせていることも変わります。この瞬間を、余すところなく生きましょう。",
+  "h": "4e0d90c3"
+ },
+ "js.oracle.van-vat-ton-tai-trong-su": {
+  "t": "万物は、調和した対立の中に存在します。あなたが暗いと思うものの中に光の芽があり、まばゆいものの中に闇の核があります。対立に逆らわず、その中に均衡を見つけましょう。",
+  "h": "34a745bc"
+ },
+ "js.oracle.ve-dep": {
+  "t": "美しさ",
+  "h": "784d2dc0"
+ },
+ "js.oracle.vo-thuong": {
+  "t": "無常",
+  "h": "8673ae43"
+ },
+ "js.oracle.vo-thuong-6avc": {
+  "t": "無常",
+  "h": "8030e2f3"
+ },
+ "js.oracle.vo-vi": {
+  "t": "無為",
+  "h": "cc46980f"
+ },
+ "js.oracle.vo-vi-4qy7": {
+  "t": "無為",
+  "h": "c4848930"
+ },
+ "js.oracle.vo-vi-nhi-vo-bat-vi": {
+  "t": "「無為にして為さざるなし」——何もしないようで、為されないことは何もない。自然に、無理強いせず、物事の自然なあり方に沿って行動すること。これが最高の力です。",
+  "h": "b8307c9c"
+ },
+ "js.oracle.vuot-qua": {
+  "t": "乗り越える",
+  "h": "624f1384"
+ },
+ "js.oracle.xem-xet-dau-la-nhung-dieu": {
+  "t": "人生で何がバランスを欠いているか見直しましょう。仕事と休息、与えることと受け取ること、行動と内省——整え直してください。",
+  "h": "64dee7e0"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " ・開くとお支払いのうえ、すぐにお読みいただけます。",
   "h": "9a6023cd"
@@ -3974,6 +5998,50 @@
  "js.prices.money-moi-luot-sale": {
   "t": "1回 {money}（{sale}両、{credits}両から値下げ）",
   "h": "7aabe37f"
+ },
+ "js.resources.ket-qua": {
+  "t": "{visible} / {total} 件",
+  "h": "011cac03"
+ },
+ "js.resources.tai-lieu": {
+  "t": "資料 {total} 点",
+  "h": "f0694133"
+ },
+ "js.sachdetail.chua-co-link-tai-xuong": {
+  "t": "ダウンロードリンクはまだありません",
+  "h": "e79f961c"
+ },
+ "js.sachdetail.file-pdf-chia-se-cho": {
+  "t": "PDFファイル — 紫微斗数を学ぶ皆さんへの共有資料です。",
+  "h": "7c5d9e1e"
+ },
+ "js.sachdetail.khong-ro-tac-gia": {
+  "t": "著者不明",
+  "h": "96dde3b9"
+ },
+ "js.sachdetail.tai-lieu-dang-duoc-cap-nhat": {
+  "t": "資料は更新中です。しばらくしてからもう一度ご確認いただくか、ご連絡ください。",
+  "h": "751a9da5"
+ },
+ "js.sachdetail.tai-xuong": {
+  "t": "⬇ ダウンロード",
+  "h": "e1981ed0"
+ },
+ "js.sachdetail.tai-xuong-mien-phi": {
+  "t": "無料ダウンロード",
+  "h": "ba3e26bc"
+ },
+ "js.sachdetail.tieng-trung": {
+  "t": "中国語",
+  "h": "58e04c6a"
+ },
+ "js.sachdetail.tieng-viet": {
+  "t": "ベトナム語",
+  "h": "4993440c"
+ },
+ "js.sachdetail.tu-vi-minh-bao": {
+  "t": "明宝紫微斗数",
+  "h": "33336b26"
  },
  "js.shell.an": {
   "t": "非表示",
@@ -7695,6 +9763,2298 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.tailieu.cat-cach-cuc": {
+  "t": "格局",
+  "h": "760d1ac9"
+ },
+ "js.tailieu.cat-cung": {
+  "t": "宮位",
+  "h": "275eb0cd"
+ },
+ "js.tailieu.cat-khai-niem": {
+  "t": "基本概念",
+  "h": "27006f25"
+ },
+ "js.tailieu.cat-luan-giai": {
+  "t": "解読",
+  "h": "4e36b042"
+ },
+ "js.tailieu.cat-sao-chinh": {
+  "t": "主星",
+  "h": "3f5b010b"
+ },
+ "js.tailieu.cat-sao-phu": {
+  "t": "副星",
+  "h": "44e6258b"
+ },
+ "js.tailieu.cat-van-han": {
+  "t": "運勢",
+  "h": "cf15573a"
+ },
+ "js.tailieu.noi-dung-dang-duoc-cap-nhat": {
+  "t": "内容は更新中です。",
+  "h": "dc838116"
+ },
+ "js.tailieu.tu-vi-minh-bao": {
+  "t": "明宝紫微斗数",
+  "h": "33336b26"
+ },
+ "js.tarot.ac-mong": {
+  "t": "悪夢",
+  "h": "c6b4b890"
+ },
+ "js.tarot.ac-quy": {
+  "t": "悪魔",
+  "h": "3871fef7"
+ },
+ "js.tarot.am-anh": {
+  "t": "執着",
+  "h": "a2b0d974"
+ },
+ "js.tarot.an-mung": {
+  "t": "祝福",
+  "h": "149e420c"
+ },
+ "js.tarot.an-mung-hai-hoa-thu-gian": {
+  "t": "お祝い、調和、くつろぎ、安定。成果を祝う時です。しっかりとした土台が築かれました。",
+  "h": "2b23f082"
+ },
+ "js.tarot.an-si": {
+  "t": "隠者",
+  "h": "c6f75858"
+ },
+ "js.tarot.an-toan": {
+  "t": "安全",
+  "h": "77c4a7f5"
+ },
+ "js.tarot.ao-giac": {
+  "t": "錯覚",
+  "h": "03762cc0"
+ },
+ "js.tarot.ao-giac-so-hai-tiem-thuc": {
+  "t": "錯覚、恐れ、潜在意識、夢。すべてが見かけどおりとは限りません。闇に隠れているものに注意しましょう。",
+  "h": "5fdc79a4"
+ },
+ "js.tarot.ao-tuong": {
+  "t": "幻想",
+  "h": "ba847935"
+ },
+ "js.tarot.ao-tuong-lua-chon-giac-mo": {
+  "t": "幻想、選択、夢、想像。選択肢が多すぎて圧倒されます。幻想にとらわれないよう気をつけましょう。",
+  "h": "b8107cdd"
+ },
+ "js.tarot.ap-luc": {
+  "t": "プレッシャー",
+  "h": "dad3b1e8"
+ },
+ "js.tarot.at": {
+  "t": "A",
+  "h": "ec2d5348"
+ },
+ "js.tarot.at-coc": {
+  "t": "カップのエース",
+  "h": "148af279"
+ },
+ "js.tarot.at-gay": {
+  "t": "ワンドのエース",
+  "h": "3c649b95"
+ },
+ "js.tarot.at-kiem": {
+  "t": "ソードのエース",
+  "h": "8d22ebb2"
+ },
+ "js.tarot.at-tien": {
+  "t": "ペンタクルのエース",
+  "h": "2dbb31f2"
+ },
+ "js.tarot.ba": {
+  "t": "3",
+  "h": "2fd22ce6"
+ },
+ "js.tarot.ba-coc": {
+  "t": "カップの3",
+  "h": "a6a7d0d5"
+ },
+ "js.tarot.ba-gay": {
+  "t": "ワンドの3",
+  "h": "197ca1a7"
+ },
+ "js.tarot.ba-kiem": {
+  "t": "ソードの3",
+  "h": "09c132fc"
+ },
+ "js.tarot.ba-tien": {
+  "t": "ペンタクルの3",
+  "h": "2c28d00d"
+ },
+ "js.tarot.bai-hoc": {
+  "t": "学び",
+  "h": "c52de730"
+ },
+ "js.tarot.ban-muon-toi-luan-theo-huong": {
+  "t": "。どの方向から読み解きましょうか?",
+  "h": "954f8120"
+ },
+ "js.tarot.ban-than": {
+  "t": "自分自身",
+  "h": "5124062f"
+ },
+ "js.tarot.banh-xe-so-phan": {
+  "t": "運命の輪",
+  "h": "d004b9c6"
+ },
+ "js.tarot.bao-ton": {
+  "t": "保全",
+  "h": "ca5b8c76"
+ },
+ "js.tarot.bao-ton-on-dinh-an-toan": {
+  "t": "保全、安定、安全、支配。資源をしっかり抱え込んでいます。ときに必要ですが、けちにならないようにしましょう。",
+  "h": "57f23fc4"
+ },
+ "js.tarot.bao-ve": {
+  "t": "守り",
+  "h": "184f46c3"
+ },
+ "js.tarot.bat-an": {
+  "t": "不安",
+  "h": "fbc5a654"
+ },
+ "js.tarot.bat-cong-thieu-trach-nhiem-tranh": {
+  "t": "不公平、責任感の欠如、結果からの逃避。責任を避けているか、不当な扱いを受けています。",
+  "h": "e024c351"
+ },
+ "js.tarot.bat-dong": {
+  "t": "不和",
+  "h": "e7229cd1"
+ },
+ "js.tarot.bat-hoa-lua-chon-sai-mat": {
+  "t": "不調和、誤った選択、バランスの崩れ。間違った理由で選んでいるか、大切な決断を避けているのかもしれません。",
+  "h": "a6e61673"
+ },
+ "js.tarot.bat-ngo": {
+  "t": "思いがけなさ",
+  "h": "5ae13239"
+ },
+ "js.tarot.bay": {
+  "t": "7",
+  "h": "ecfd1f8b"
+ },
+ "js.tarot.bay-coc": {
+  "t": "カップの7",
+  "h": "b56771dd"
+ },
+ "js.tarot.bay-gay": {
+  "t": "ワンドの7",
+  "h": "0c3ce9af"
+ },
+ "js.tarot.bay-kiem": {
+  "t": "ソードの7",
+  "h": "0f2da0ef"
+ },
+ "js.tarot.bay-tien": {
+  "t": "ペンタクルの7",
+  "h": "6c2ed05f"
+ },
+ "js.tarot.be-tac": {
+  "t": "行き詰まり",
+  "h": "f0eccc13"
+ },
+ "js.tarot.be-tac-pha-vo-thong-tin": {
+  "t": "行き詰まりが破れ、情報が表に出て、難しい選択が迫ります。ようやく、避けてきた現実と向き合う時です。",
+  "h": "3ebb6325"
+ },
+ "js.tarot.be-tac-tranh-ne-khong-quyet": {
+  "t": "行き詰まり、回避、決断できない状態、危ういバランス。真実から目を覆って、難しい決断を避けています。",
+  "h": "294a6db6"
+ },
+ "js.tarot.ben-vung": {
+  "t": "持続性",
+  "h": "c7cb7a59"
+ },
+ "js.tarot.bi-an": {
+  "t": "神秘",
+  "h": "bb6b7014"
+ },
+ "js.tarot.bi-an-lon": {
+  "t": "大アルカナ",
+  "h": "8998484c"
+ },
+ "js.tarot.bi-mat-bi-che-giau-ngat": {
+  "t": "隠された秘密、自分自身との断絶、直感の無視。内なる声が発している大切なサインを見過ごしています。",
+  "h": "79207b16"
+ },
+ "js.tarot.bi-quan-tam-thoi-thieu-nang": {
+  "t": "一時的な悲観、エネルギー不足、自己不信。光はまだそこにあります。闇から一歩出るだけでいいのです。",
+  "h": "8ddc44ce"
+ },
+ "js.tarot.binh-an": {
+  "t": "安らぎ",
+  "h": "426b7fa1"
+ },
+ "js.tarot.binh-minh": {
+  "t": "夜明け",
+  "h": "04166e56"
+ },
+ "js.tarot.binh-yen": {
+  "t": "平穏",
+  "h": "b702d55e"
+ },
+ "js.tarot.bo-qua-co-hoi": {
+  "t": "チャンスの見逃し",
+  "h": "fb1813f7"
+ },
+ "js.tarot.boc-dong-cam-xuc-khong-thuc": {
+  "t": "感情の衝動、非現実的、欺き。感情に振り回されすぎているか、盲目的なロマンスにとらわれています。",
+  "h": "ff709375"
+ },
+ "js.tarot.boc-dong-hung-han-xung-dot": {
+  "t": "衝動的、攻撃的、不必要な衝突。行動が速すぎて、思わぬ結果を招いています。",
+  "h": "38b6b637"
+ },
+ "js.tarot.bon": {
+  "t": "4",
+  "h": "8c0bddbf"
+ },
+ "js.tarot.bon-coc": {
+  "t": "カップの4",
+  "h": "20cc28aa"
+ },
+ "js.tarot.bon-gay": {
+  "t": "ワンドの4",
+  "h": "d940d4cf"
+ },
+ "js.tarot.bon-kiem": {
+  "t": "ソードの4",
+  "h": "9cc70cc4"
+ },
+ "js.tarot.bon-tien": {
+  "t": "ペンタクルの4",
+  "h": "23371d80"
+ },
+ "js.tarot.bong-toi": {
+  "t": "闇",
+  "h": "0fdbc741"
+ },
+ "js.tarot.buoc-ngoat": {
+  "t": "転換点",
+  "h": "df3f3579"
+ },
+ "js.tarot.buong-binh-cham-chap-khong-co": {
+  "t": "頑固、遅い、成果が出ない。習慣にはまり込んで、適応を拒んでいます。",
+  "h": "2be1dd89"
+ },
+ "js.tarot.buong-bo": {
+  "t": "手放す",
+  "h": "eefa92c2"
+ },
+ "js.tarot.cach-ban-nhin-nhan-tinh-huong": {
+  "t": "あなたが状況をどう見ているか",
+  "h": "f3db0f8c"
+ },
+ "js.tarot.cai-chet": {
+  "t": "死神",
+  "h": "c72e5c2a"
+ },
+ "js.tarot.cam-hung": {
+  "t": "インスピレーション",
+  "h": "9571e2f8"
+ },
+ "js.tarot.cam-hung-moi-tiem-nang-sang": {
+  "t": "新しいひらめき、創造の可能性、情熱に満ちた始まり。新しいプロジェクトや創造的なアイデアの種が芽吹こうとしています。",
+  "h": "a3558583"
+ },
+ "js.tarot.cam-xuc": {
+  "t": "感情",
+  "h": "5d160d22"
+ },
+ "js.tarot.cam-xuc-bi-chan-trai-tim": {
+  "t": "感情が塞がれ、心が閉ざされ、愛が拒まれています。愛を与えることも受け取ることも難しくなっています。",
+  "h": "ce6a324d"
+ },
+ "js.tarot.cam-xuc-that-thuong-nhay-cam": {
+  "t": "感情の波、過敏さ、噂。信頼できないメッセージか、感情が動きやすくなりすぎています。",
+  "h": "eae67a95"
+ },
+ "js.tarot.can-bang": {
+  "t": "バランス",
+  "h": "9fe59d4b"
+ },
+ "js.tarot.can-bang-cam-xuc": {
+  "t": "感情のバランス",
+  "h": "d1123271"
+ },
+ "js.tarot.can-bang-kien-nhan-muc-dich": {
+  "t": "バランス、忍耐、目的、調和。中庸の道を歩み、人生の相反する要素を調和させます。",
+  "h": "0f7a1692"
+ },
+ "js.tarot.can-bang-thich-nghi-quan-ly": {
+  "t": "バランス、適応、時間管理。いくつものことを同時にこなしています。バランスを保つには柔軟さが必要です。",
+  "h": "c8675dc0"
+ },
+ "js.tarot.can-dam": {
+  "t": "勇気",
+  "h": "799eb640"
+ },
+ "js.tarot.can-dam-kien-nhan-long-trac": {
+  "t": "勇気、忍耐、思いやり、内面の自制。本当の強さは内側から、優しさと忍耐から生まれるもので、力ずくではありません。",
+  "h": "243edf07"
+ },
+ "js.tarot.cang-thang": {
+  "t": "緊張",
+  "h": "124a70ce"
+ },
+ "js.tarot.canh-giac": {
+  "t": "警戒",
+  "h": "75f07413"
+ },
+ "js.tarot.canh-tranh": {
+  "t": "競争",
+  "h": "5eddba97"
+ },
+ "js.tarot.cau-hoi-cua-ban": {
+  "t": "ご質問: \"",
+  "h": "660c481c"
+ },
+ "js.tarot.cau-truc": {
+  "t": "構造",
+  "h": "0677e00b"
+ },
+ "js.tarot.cham-chi": {
+  "t": "勤勉",
+  "h": "7cfb6b94"
+ },
+ "js.tarot.cham-chi-dang-tin-kien-nhan": {
+  "t": "勤勉、信頼できる、忍耐強い、几帳面。ゆっくりでも着実に、過程を信じてあきらめません。",
+  "h": "e614eac7"
+ },
+ "js.tarot.cham-chi-hoc-ky-nang-ti": {
+  "t": "勤勉、技術の習得、丹念さ、仕事への献身。高い集中力で、技術を学び磨いています。",
+  "h": "f7742fc6"
+ },
+ "js.tarot.cham-soc": {
+  "t": "思いやり",
+  "h": "1fcae77e"
+ },
+ "js.tarot.cham-tre-hon-loan-thieu-kien": {
+  "t": "遅れ、混乱、短気。計画が遅れているか、情報が混乱しています。",
+  "h": "1d87d16c"
+ },
+ "js.tarot.chia-se": {
+  "t": "分かち合い",
+  "h": "1cb95080"
+ },
+ "js.tarot.chien-luoc": {
+  "t": "戦略",
+  "h": "a4477df9"
+ },
+ "js.tarot.chien-thang": {
+  "t": "勝利",
+  "h": "d91cbf56"
+ },
+ "js.tarot.chin": {
+  "t": "9",
+  "h": "c8fe0b37"
+ },
+ "js.tarot.chin-coc": {
+  "t": "カップの9",
+  "h": "27c377f0"
+ },
+ "js.tarot.chin-gay": {
+  "t": "ワンドの9",
+  "h": "f9f17651"
+ },
+ "js.tarot.chin-kiem": {
+  "t": "ソードの9",
+  "h": "5e9ffb53"
+ },
+ "js.tarot.chin-tien": {
+  "t": "ペンタクルの9",
+  "h": "0958d1a3"
+ },
+ "js.tarot.cho-di-nhan-lay-quao-phuc": {
+  "t": "与えること、受け取ること、恩恵、交換。与えることと受け取ることのバランスがとれています。寛大さが輝いています。",
+  "h": "ddc315a1"
+ },
+ "js.tarot.cho-doi": {
+  "t": "待つ",
+  "h": "d35e8462"
+ },
+ "js.tarot.choang-ngop": {
+  "t": "圧倒される",
+  "h": "f66e5ee6"
+ },
+ "js.tarot.chu-ky": {
+  "t": "サイクル",
+  "h": "ebc184a9"
+ },
+ "js.tarot.chu-ky-ket-thuc": {
+  "t": "サイクルの終わり",
+  "h": "6610c6f1"
+ },
+ "js.tarot.chua-hoan-chinh-thieu-ket-thuc": {
+  "t": "未完成、区切りの欠如、先延ばし。ゴール間近ですが、前へ進む前にまだ片づいていないことがあります。",
+  "h": "91cc393b"
+ },
+ "js.tarot.chua-lanh": {
+  "t": "癒し",
+  "h": "a6742d20"
+ },
+ "js.tarot.chuan-muc": {
+  "t": "規範",
+  "h": "f3a38140"
+ },
+ "js.tarot.chuyen-doi": {
+  "t": "転換",
+  "h": "b2ee87ff"
+ },
+ "js.tarot.chuyen-doi-roi-di-tien-ve": {
+  "t": "転換、立ち去ること、前進、より穏やかな心。困難から離れ、安らぎへ向かいます。",
+  "h": "26e94e72"
+ },
+ "js.tarot.chuyen-dong": {
+  "t": "動き",
+  "h": "71a27fe6"
+ },
+ "js.tarot.chuyen-hoa": {
+  "t": "転化",
+  "h": "c4b88b2f"
+ },
+ "js.tarot.co-don": {
+  "t": "孤独",
+  "h": "db8cff43"
+ },
+ "js.tarot.co-hoi": {
+  "t": "チャンス",
+  "h": "da02f76b"
+ },
+ "js.tarot.co-hoi-bi-bo-lo-thieu": {
+  "t": "逃したチャンス、金銭計画の欠如、浪費。チャンスはあっても、うまく活かせていません。",
+  "h": "0cb3876a"
+ },
+ "js.tarot.co-hoi-moi-hoc-hoi-thuc": {
+  "t": "新しいチャンス、実践的な学び、集中、お金の知らせ。実務的なことに対する学ぶ意欲があります。",
+  "h": "1a94fa49"
+ },
+ "js.tarot.co-hoi-moi-ve-tai-chinh": {
+  "t": "お金の新しいチャンス、繁栄、安定、物質的な土台。繁栄と物質的な安定の種が蒔かれます。",
+  "h": "79c8a314"
+ },
+ "js.tarot.co-lap-co-don-khong-mong": {
+  "t": "孤立、望まない孤独、人付き合いの回避。自分を閉じ込めているか、人との意味あるつながりを逃しています。",
+  "h": "c3a3ce89"
+ },
+ "js.tarot.co-xe": {
+  "t": "戦車",
+  "h": "72d5cdd1"
+ },
+ "js.tarot.coc-nuoc": {
+  "t": "カップ ♦ 水",
+  "h": "bd8c22ad"
+ },
+ "js.tarot.cong-bang": {
+  "t": "公正",
+  "h": "53a179d6"
+ },
+ "js.tarot.cong-bang-su-that-nhan-qua": {
+  "t": "公正、真実、因果、法。あらゆる行動には結果があります。バランスと公平さが回復されます。",
+  "h": "a47c3677"
+ },
+ "js.tarot.cong-dong": {
+  "t": "コミュニティ",
+  "h": "a0164a17"
+ },
+ "js.tarot.cong-ly": {
+  "t": "正義",
+  "h": "da42b3eb"
+ },
+ "js.tarot.cong-nhan": {
+  "t": "評価",
+  "h": "881d0ab6"
+ },
+ "js.tarot.cung-nhac-giao-dieu-pha-vo": {
+  "t": "硬直、教条主義、規則破り。伝統的な価値観に挑んでいるか、他人の期待に縛られています。",
+  "h": "921246d8"
+ },
+ "js.tarot.da-nhiem": {
+  "t": "マルチタスク",
+  "h": "033ec2c3"
+ },
+ "js.tarot.dam-me": {
+  "t": "情熱",
+  "h": "60bf63eb"
+ },
+ "js.tarot.dang-tin": {
+  "t": "信頼性",
+  "h": "7a063188"
+ },
+ "js.tarot.dang-xao-bai": {
+  "t": "シャッフル中...",
+  "h": "033fb9a0"
+ },
+ "js.tarot.danh-gia": {
+  "t": "見直し",
+  "h": "d0170783"
+ },
+ "js.tarot.danh-gia-kien-nhan-dau-tu": {
+  "t": "見直し、忍耐、長期投資、結果を待つこと。蒔いた種が芽吹くのを待っています。忍耐が必要です。",
+  "h": "26d0fe8d"
+ },
+ "js.tarot.danh-gia-lai": {
+  "t": "再評価",
+  "h": "9c307658"
+ },
+ "js.tarot.dao-duc": {
+  "t": "道徳",
+  "h": "8b9a81eb"
+ },
+ "js.tarot.dau-buon": {
+  "t": "悲しみ",
+  "h": "e39a2dbc"
+ },
+ "js.tarot.dau-buon-tu-choi-noi-dau": {
+  "t": "悲しみ、拒絶、痛み、心の傷。痛みと傷つきは、癒しの過程の一部です。",
+  "h": "62b7289d"
+ },
+ "js.tarot.dau-tranh": {
+  "t": "闘い",
+  "h": "825f819b"
+ },
+ "js.tarot.dau-tu": {
+  "t": "投資",
+  "h": "2b64c568"
+ },
+ "js.tarot.di-san": {
+  "t": "遺産",
+  "h": "e7b22b5e"
+ },
+ "js.tarot.dieu-dang-can-tro-hay-thach": {
+  "t": "あなたを妨げている、または試していること",
+  "h": "13130a2b"
+ },
+ "js.tarot.dieu-do": {
+  "t": "節制",
+  "h": "98818c96"
+ },
+ "js.tarot.dieu-do-v85g": {
+  "t": "節度",
+  "h": "ab4d0c9e"
+ },
+ "js.tarot.dieu-gi-do-vua-qua-anh": {
+  "t": "少し前に起きた、状況に影響を与えていること",
+  "h": "040ee16c"
+ },
+ "js.tarot.dieu-sap-xay-ra-trong-thoi": {
+  "t": "近いうちに起こること",
+  "h": "6072c9be"
+ },
+ "js.tarot.dieu-tot-nhat-co-the-dat": {
+  "t": "達成できるいちばんよいこと",
+  "h": "ed7cbcf1"
+ },
+ "js.tarot.do-vo": {
+  "t": "崩壊",
+  "h": "cbe2ec05"
+ },
+ "js.tarot.doanh-nghiep": {
+  "t": "ビジネス",
+  "h": "42d66217"
+ },
+ "js.tarot.doc-doan-boc-dong-ky-vong": {
+  "t": "独断的、衝動的、高すぎる期待。人を奮い立たせるのではなく、力ずくで率いています。",
+  "h": "cf6413f9"
+ },
+ "js.tarot.doc-doan-kiem-soat-qua-muc": {
+  "t": "独断的、過度な支配、柔軟性の欠如。権力の使い方を誤っているか、他人に支配されています。",
+  "h": "cabba9ca"
+ },
+ "js.tarot.doc-doan-lam-dung-quyen-luc": {
+  "t": "独断的、権力の乱用、操作。知性を、導くためではなく支配するために使っています。",
+  "h": "3b7907f5"
+ },
+ "js.tarot.doc-lap": {
+  "t": "自立",
+  "h": "404a2001"
+ },
+ "js.tarot.doc-lap-sac-ben-truc-tiep": {
+  "t": "自立、鋭さ、率直さ、経験。聡明で率直な人。感情に判断を曇らされません。",
+  "h": "f42549a0"
+ },
+ "js.tarot.doc-lap-tai-chinh-tu-tuc": {
+  "t": "経済的自立、自給自足、豊かさ、完成。安定と自律に達しました。努力の成果を味わいましょう。",
+  "h": "3fc7e095"
+ },
+ "js.tarot.dot-pha": {
+  "t": "突破",
+  "h": "121fffd9"
+ },
+ "js.tarot.dung-cam": {
+  "t": "勇敢さ",
+  "h": "84c15aad"
+ },
+ "js.tarot.ganh-nang": {
+  "t": "重荷",
+  "h": "30a55453"
+ },
+ "js.tarot.ganh-nang-trach-nhiem-qua-muc": {
+  "t": "重荷、過剰な責任、プレッシャー。背負いすぎています。もう必要ないものは下ろす必要があります。",
+  "h": "4123f0d7"
+ },
+ "js.tarot.gay-lua": {
+  "t": "ワンド ♦ 火",
+  "h": "0a933fcd"
+ },
+ "js.tarot.gia-dinh": {
+  "t": "家族",
+  "h": "bf9b33dc"
+ },
+ "js.tarot.giac-mo": {
+  "t": "夢",
+  "h": "cd70581d"
+ },
+ "js.tarot.giai-phong-thoat-khoi-rang-buoc": {
+  "t": "解放、束縛からの脱出、気づき。健全でないしがらみに気づき、断ち切り始めます。",
+  "h": "7495bee8"
+ },
+ "js.tarot.giao-duc": {
+  "t": "教育",
+  "h": "59c0feb9"
+ },
+ "js.tarot.giao-hoang": {
+  "t": "教皇",
+  "h": "62969d47"
+ },
+ "js.tarot.giau-co": {
+  "t": "豊かさ",
+  "h": "e81892ac"
+ },
+ "js.tarot.giau-co-di-san-hanh-phuc": {
+  "t": "豊かさ、遺産、家族の幸せ、物質面での完成。長く続く繁栄を、家族や次の世代と分かち合います。",
+  "h": "dbc78694"
+ },
+ "js.tarot.goc-nhin-moi": {
+  "t": "新しい視点",
+  "h": "fcb22fff"
+ },
+ "js.tarot.hai": {
+  "t": "2",
+  "h": "916c7bfc"
+ },
+ "js.tarot.hai-coc": {
+  "t": "カップの2",
+  "h": "ca8b937f"
+ },
+ "js.tarot.hai-gay": {
+  "t": "ワンドの2",
+  "h": "343b9500"
+ },
+ "js.tarot.hai-hoa": {
+  "t": "調和",
+  "h": "deffa707"
+ },
+ "js.tarot.hai-kiem": {
+  "t": "ソードの2",
+  "h": "0781f893"
+ },
+ "js.tarot.hai-long": {
+  "t": "満足",
+  "h": "525c3ad0"
+ },
+ "js.tarot.hai-tien": {
+  "t": "ペンタクルの2",
+  "h": "48417e91"
+ },
+ "js.tarot.han-che": {
+  "t": "制限",
+  "h": "0fb75911"
+ },
+ "js.tarot.hanh-dong": {
+  "t": "行動",
+  "h": "8e9fdd28"
+ },
+ "js.tarot.hanh-phuc": {
+  "t": "幸せ",
+  "h": "68d680dc"
+ },
+ "js.tarot.hanh-phuc-gia-dinh": {
+  "t": "家族の幸せ",
+  "h": "9bbe6e27"
+ },
+ "js.tarot.hanh-phuc-gia-dinh-hai-hoa": {
+  "t": "家族の幸せ、調和、長く続く満足。人間関係における本当の幸せと完成です。",
+  "h": "f3ecb4d8"
+ },
+ "js.tarot.hao-phong": {
+  "t": "寛大さ",
+  "h": "ed42ce8c"
+ },
+ "js.tarot.hao-phong-buong-bo-mo-cua": {
+  "t": "寛大さ、手放し、豊かさへの扉を開くこと。物質への執着を手放し始めます。",
+  "h": "9df21f91"
+ },
+ "js.tarot.hh": {
+  "t": "クイーン",
+  "h": "fc5d4b91"
+ },
+ "js.tarot.hien-tai": {
+  "t": "現在",
+  "h": "cd16704d"
+ },
+ "js.tarot.hoa-giai-hoi-han-giai-quyet": {
+  "t": "和解、後悔、対立の解決。過ちから学び、償う方法を探しています。",
+  "h": "99209079"
+ },
+ "js.tarot.hoa-hop": {
+  "t": "調和",
+  "h": "6c6047bd"
+ },
+ "js.tarot.hoai-niem": {
+  "t": "郷愁",
+  "h": "ed7fb958"
+ },
+ "js.tarot.hoai-niem-tuoi-tho-ky-niem": {
+  "t": "郷愁、子ども時代、思い出、よい記憶。愛おしさをもって過去を振り返ります。内なる子どもとつながりましょう。",
+  "h": "e654cb98"
+ },
+ "js.tarot.hoan-chinh": {
+  "t": "完成",
+  "h": "2ebc0bff"
+ },
+ "js.tarot.hoan-chinh-thanh-tich-hoi-nhap": {
+  "t": "完成、達成、統合、旅の終わり。サイクルが完結しました。成果を祝い、新たな旅への準備をする時です。",
+  "h": "eb501df8"
+ },
+ "js.tarot.hoang-de": {
+  "t": "皇帝",
+  "h": "358b3e7f"
+ },
+ "js.tarot.hoang-hau": {
+  "t": "女帝",
+  "h": "744dea49"
+ },
+ "js.tarot.hoang-hau-coc": {
+  "t": "カップのクイーン",
+  "h": "dc461129"
+ },
+ "js.tarot.hoang-hau-gay": {
+  "t": "ワンドのクイーン",
+  "h": "992e6e16"
+ },
+ "js.tarot.hoang-hau-kiem": {
+  "t": "ソードのクイーン",
+  "h": "a86a3815"
+ },
+ "js.tarot.hoang-hau-tien": {
+  "t": "ペンタクルのクイーン",
+  "h": "0fb40181"
+ },
+ "js.tarot.hoc-hoi": {
+  "t": "学び",
+  "h": "7e024951"
+ },
+ "js.tarot.hoi-nhap": {
+  "t": "統合",
+  "h": "9569d251"
+ },
+ "js.tarot.hoi-tiec": {
+  "t": "後悔",
+  "h": "08252707"
+ },
+ "js.tarot.hon-loan": {
+  "t": "混乱",
+  "h": "9e13eef7"
+ },
+ "js.tarot.hon-loan-dot-ngot-do-vo": {
+  "t": "突然の混乱、崩壊、啓示、目覚め。突然の衝撃が古い構造を壊します。痛みを伴いますが、よりよいものを築くために必要なことです。",
+  "h": "5afd0921"
+ },
+ "js.tarot.hon-loan-thieu-ro-rang-noi": {
+  "t": "混乱、不明瞭さ、嘘。感情や誤った情報のせいで、考えが曇っています。",
+  "h": "db763267"
+ },
+ "js.tarot.hop-tac": {
+  "t": "協力",
+  "h": "d934a7d7"
+ },
+ "js.tarot.hy-vong": {
+  "t": "希望",
+  "h": "5dddc812"
+ },
+ "js.tarot.hy-vong-cam-hung-binh-an": {
+  "t": "希望、ひらめき、安らぎ、刷新。闇のあとには光があります。癒しと、未来を信じる時です。",
+  "h": "cf44e5ec"
+ },
+ "js.tarot.hy-vong-lo-so": {
+  "t": "希望と不安",
+  "h": "c01fa9b0"
+ },
+ "js.tarot.hy-vong-sau-nhat-hoac-noi": {
+  "t": "あなたのいちばん深い希望、またはいちばん大きな不安",
+  "h": "a3d49660"
+ },
+ "js.tarot.ke-hoach": {
+  "t": "計画",
+  "h": "2bc4293e"
+ },
+ "js.tarot.ke-hoach-tuong-lai-quyet-dinh": {
+  "t": "未来の計画、決断、前進。目の前に広い世界が広がる交差点に立っています。計画を立て、進む方向を選ぶ時です。",
+  "h": "b56dcb55"
+ },
+ "js.tarot.ke-kho": {
+  "t": "愚者",
+  "h": "e6fdc14b"
+ },
+ "js.tarot.ke-treo-nguoc": {
+  "t": "吊られた男",
+  "h": "a41b6340"
+ },
+ "js.tarot.ket-noi": {
+  "t": "つながり",
+  "h": "62b5a5f2"
+ },
+ "js.tarot.ket-qua": {
+  "t": "結末",
+  "h": "75ff233d"
+ },
+ "js.tarot.ket-qua-co-kha-nang-xay": {
+  "t": "もっとも起こりやすい結果",
+  "h": "ffb4563c"
+ },
+ "js.tarot.ket-qua-tarot-cua-toi": {
+  "t": "私のタロットの結果",
+  "h": "50690c7b"
+ },
+ "js.tarot.ket-thuc": {
+  "t": "終わり",
+  "h": "9c1ae4f5"
+ },
+ "js.tarot.ket-thuc-chuyen-hoa-thay-doi": {
+  "t": "終わり、転化、避けられない変化、新しい始まり。肉体的な死ではありません。ひとつの段階の終わりと、新しいものの再生です。",
+  "h": "fc08fee1"
+ },
+ "js.tarot.ket-thuc-dau-don-mat-mat": {
+  "t": "痛みを伴う終わり、喪失、裏切り——けれど、それは終着点です。いちばん暗いサイクルが終わりに達しました。ここからは上がるだけです。",
+  "h": "477ee7fc"
+ },
+ "js.tarot.keu-goi": {
+  "t": "呼び声",
+  "h": "9ca505de"
+ },
+ "js.tarot.kha-nang-tot-nhat": {
+  "t": "最良の可能性",
+  "h": "6cd09562"
+ },
+ "js.tarot.khai-thi": {
+  "t": "啓示",
+  "h": "5fc23362"
+ },
+ "js.tarot.kham-pha": {
+  "t": "探求",
+  "h": "2dcfd93c"
+ },
+ "js.tarot.kham-pha-nhiet-tinh-y-tuong": {
+  "t": "探求、熱意、新しいアイデア、自由。若々しく、意欲に満ちたエネルギー。新しい領域を探る準備ができています。",
+  "h": "8ffe2051"
+ },
+ "js.tarot.khang-cu-roi-di-khong-tien": {
+  "t": "去ることへの抵抗、前に進めない、引き返す。変わる必要があるとわかっていても、これまでの状況から離れられません。",
+  "h": "97c48b6b"
+ },
+ "js.tarot.khang-cu-thay-doi-tri-tre": {
+  "t": "変化への抵抗、停滞、終わりへの恐れ。もうあなたの役に立たないものにしがみついています。",
+  "h": "6fc778d3"
+ },
+ "js.tarot.kho-khan": {
+  "t": "困難",
+  "h": "20912ebe"
+ },
+ "js.tarot.kho-khan-tai-chinh-bat-an": {
+  "t": "経済的な困難、不安、孤独、逆境。つらい時期を過ごしています。けれど、探せば助けは必ずあります。",
+  "h": "367e49e0"
+ },
+ "js.tarot.khoi-dau": {
+  "t": "始まり",
+  "h": "cdb621fc"
+ },
+ "js.tarot.khoi-dau-moi-tu-do-tinh": {
+  "t": "新しい始まり、自由、冒険心、無限の可能性。信頼と開かれた心で、新しい旅に踏み出しましょう。いまは、無限の可能性の時です。",
+  "h": "aef33b0d"
+ },
+ "js.tarot.khong-nghi-ngoi-duoc-ap-luc": {
+  "t": "休めない、プレッシャー、動けないことへの恐れ。行動すべき時なのに、身動きがとれない状態に追い込まれています。",
+  "h": "0aca59aa"
+ },
+ "js.tarot.khong-quyet-dinh": {
+  "t": "決断できない",
+  "h": "f77206a9"
+ },
+ "js.tarot.khong-tu-bo": {
+  "t": "あきらめない",
+  "h": "fcf2cf24"
+ },
+ "js.tarot.kiem-gio": {
+  "t": "ソード ♦ 風",
+  "h": "02106a2b"
+ },
+ "js.tarot.kiem-soat": {
+  "t": "コントロール",
+  "h": "6d5dbb4e"
+ },
+ "js.tarot.kien-cuong": {
+  "t": "不屈",
+  "h": "4fe1df3c"
+ },
+ "js.tarot.kien-cuong-khang-cu-bao-ve": {
+  "t": "不屈、抵抗、自分を守ること。多くの試練を経ても、まだ立っています。慎重に、けれどあきらめずに。",
+  "h": "e7ae2385"
+ },
+ "js.tarot.kien-dinh": {
+  "t": "揺るがなさ",
+  "h": "965a37b0"
+ },
+ "js.tarot.kien-nhan": {
+  "t": "忍耐",
+  "h": "c3a00bf7"
+ },
+ "js.tarot.kiet-suc-buong-binh-tu-choi": {
+  "t": "疲れ果て、頑固になり、助けを拒んでいます。守りに入りすぎているか、長い戦いで消耗しています。",
+  "h": "a7fb4147"
+ },
+ "js.tarot.kiet-suc-tu-bo-ap-dao": {
+  "t": "疲れ果て、あきらめ、圧倒されています。四方から攻められているように感じ、自分の立場を保つのが難しくなっています。",
+  "h": "1ed60bd8"
+ },
+ "js.tarot.kieu-ngao-ganh-ti-bat-an": {
+  "t": "傲慢、嫉妬、不安。自信という殻の下に、不確かさを隠しています。",
+  "h": "fc973000"
+ },
+ "js.tarot.kinh-nghiem": {
+  "t": "経験",
+  "h": "f21e5d31"
+ },
+ "js.tarot.ky-luat": {
+  "t": "規律",
+  "h": "c07b7fba"
+ },
+ "js.tarot.ky-nang": {
+  "t": "技術",
+  "h": "e66fff1c"
+ },
+ "js.tarot.ky-niem": {
+  "t": "思い出",
+  "h": "fc45b5c5"
+ },
+ "js.tarot.ky-si": {
+  "t": "ナイト",
+  "h": "0951da5c"
+ },
+ "js.tarot.ky-si-coc": {
+  "t": "カップのナイト",
+  "h": "26ae7686"
+ },
+ "js.tarot.ky-si-gay": {
+  "t": "ワンドのナイト",
+  "h": "78f1830f"
+ },
+ "js.tarot.ky-si-kiem": {
+  "t": "ソードのナイト",
+  "h": "81efef45"
+ },
+ "js.tarot.ky-si-tien": {
+  "t": "ペンタクルのナイト",
+  "h": "eed86e10"
+ },
+ "js.tarot.la": {
+  "t": " 枚",
+  "h": "f115358e"
+ },
+ "js.tarot.la-bai-nguoc-nghia-la-gi": {
+  "t": "逆位置のカードは何を意味しますか?",
+  "h": "4f75a731"
+ },
+ "js.tarot.la-dau-tien-ban-rut-duoc": {
+  "t": "最初に引いたカードは **",
+  "h": "644c4dff"
+ },
+ "js.tarot.lac-quan": {
+  "t": "楽観",
+  "h": "b7cee972"
+ },
+ "js.tarot.lam-viec-nhom-hop-tac-ky": {
+  "t": "チームワーク、協力、技術、土台づくり。力を合わせて、長く残る価値あるものを生み出します。",
+  "h": "c240df16"
+ },
+ "js.tarot.lang-man": {
+  "t": "ロマンス",
+  "h": "8e85c1fd"
+ },
+ "js.tarot.lang-man-quyen-ru-tri-tuong": {
+  "t": "ロマンス、魅力、想像力、心のままに追い求めること。ロマンチックで夢見がちな人が現れます。",
+  "h": "197f33e5"
+ },
+ "js.tarot.lanh-dao": {
+  "t": "リーダーシップ",
+  "h": "d9b13441"
+ },
+ "js.tarot.lanh-dao-tam-nhin-doanh-nghiep": {
+  "t": "ビジョンあるリーダーシップ、ビジネス、名誉、決断力。ビジョンとひらめきで率います。ビジネスとリーダーシップでの成功です。",
+  "h": "c4abed99"
+ },
+ "js.tarot.lanh-lung-chua-ngoa-co-don": {
+  "t": "冷たさ、辛辣さ、孤独。鋭い知性を、攻撃したり痛みを隠したりするために使っています。",
+  "h": "cb790c2c"
+ },
+ "js.tarot.lien-minh": {
+  "t": "結びつき",
+  "h": "ea62092f"
+ },
+ "js.tarot.lien-minh-hop-tac-moi-quan": {
+  "t": "結びつき、協力、関係、惹かれ合うこと。二人の間に、深くバランスのとれたつながりがあります。",
+  "h": "50e0a848"
+ },
+ "js.tarot.lieu-linh-thieu-suy-nghi-bat": {
+  "t": "考えなしの無謀さ、不注意、チャンスの見逃し。迷いすぎているか、逆に計画なしに動いています。",
+  "h": "962580b5"
+ },
+ "js.tarot.linh-hoat": {
+  "t": "しなやかさ",
+  "h": "233a204d"
+ },
+ "js.tarot.lo-lang": {
+  "t": "心配",
+  "h": "c941251c"
+ },
+ "js.tarot.lo-lang-ac-mong-tuyet-vong": {
+  "t": "心配、悪夢、絶望、精神的な緊張。不安が人生を支配しています。ほとんどの恐れは、現実より悪く見えているものです。",
+  "h": "abdb94a9"
+ },
+ "js.tarot.loi-cuon": {
+  "t": "魅力",
+  "h": "d68c5e41"
+ },
+ "js.tarot.long-tot": {
+  "t": "優しさ",
+  "h": "c6b5d498"
+ },
+ "js.tarot.long-trac-an-truc-giac-chua": {
+  "t": "思いやり、直感、癒し、深い感情。心の優しい、直感の強い人です。",
+  "h": "f9195382"
+ },
+ "js.tarot.lua-chon": {
+  "t": "選択",
+  "h": "e8f6699f"
+ },
+ "js.tarot.lua-doi": {
+  "t": "欺き",
+  "h": "d7dfe6f0"
+ },
+ "js.tarot.lua-doi-muu-meo-chien-luoc": {
+  "t": "欺き、策略、戦略、回避。今の状況では、器用さと戦略が必要です。",
+  "h": "8efb4cd1"
+ },
+ "js.tarot.luan-giai-tung-la": {
+  "t": "カードごとの読み解き",
+  "h": "c811697f"
+ },
+ "js.tarot.major-arcana-khac-minor-arcana-the": {
+  "t": "大アルカナと小アルカナはどう違いますか?",
+  "h": "de30c37d"
+ },
+ "js.tarot.mat-can-bang-thai-qua-thieu": {
+  "t": "バランスの崩れ、行き過ぎ、短気。やりすぎか、やらなすぎで、生活に節度がありません。",
+  "h": "3fa51f62"
+ },
+ "js.tarot.mat-ket-noi-mat-can-bang": {
+  "t": "つながりの喪失、バランスの崩れ、不調和。関係に問題があるか、お互いへの敬意が欠けています。",
+  "h": "b72f2abf"
+ },
+ "js.tarot.mat-kiem-soat-cang-thang-tai": {
+  "t": "制御不能、経済的な緊張、整理不足。やりすぎようとして、すべてが崩れ始めています。",
+  "h": "3a7b876d"
+ },
+ "js.tarot.mat-mat": {
+  "t": "喪失",
+  "h": "084a6741"
+ },
+ "js.tarot.mat-mat-hoi-tiec-dau-buon": {
+  "t": "喪失、後悔、悲しみ、否定的なことへの集中。失ったものを嘆くあまり、まだ残っているものが見えていません。",
+  "h": "ced3b574"
+ },
+ "js.tarot.mat-mat-tai-san-rac-roi": {
+  "t": "財産の喪失、家庭のトラブル、抵当。家族や遺産にかかわる経済的なリスクがあります。",
+  "h": "8ff6f9c1"
+ },
+ "js.tarot.mat-trang": {
+  "t": "月",
+  "h": "1c9bc170"
+ },
+ "js.tarot.mat-troi": {
+  "t": "太陽",
+  "h": "5593c0c1"
+ },
+ "js.tarot.mau-thuan-gia-dinh-thieu-cong": {
+  "t": "家族の対立、コミュニティの欠如、延期されたお祝い。家庭や身近な集まりでトラブルがあります。",
+  "h": "ca840a54"
+ },
+ "js.tarot.mo-mong": {
+  "t": "夢見心地",
+  "h": "be0655e3"
+ },
+ "js.tarot.mo-rong": {
+  "t": "拡大",
+  "h": "d91c6264"
+ },
+ "js.tarot.mo-rong-tam-nhin-xa-co": {
+  "t": "拡大、先を見通すこと、チャンスの到来。蒔いてきた計画が実を結び始めます。自信をもって地平線を見つめましょう。",
+  "h": "f091f769"
+ },
+ "js.tarot.moi-truong": {
+  "t": "環境",
+  "h": "8a3461c1"
+ },
+ "js.tarot.mu-quang": {
+  "t": "盲目",
+  "h": "efd5bf7d"
+ },
+ "js.tarot.muoi": {
+  "t": "10",
+  "h": "6f2ebecd"
+ },
+ "js.tarot.muoi-coc": {
+  "t": "カップの10",
+  "h": "007f04a2"
+ },
+ "js.tarot.muoi-gay": {
+  "t": "ワンドの10",
+  "h": "5e9e3e2e"
+ },
+ "js.tarot.muoi-kiem": {
+  "t": "ソードの10",
+  "h": "eb24cbee"
+ },
+ "js.tarot.muoi-tien": {
+  "t": "ペンタクルの10",
+  "h": "629f7264"
+ },
+ "js.tarot.muu-meo": {
+  "t": "策略",
+  "h": "db19d7b9"
+ },
+ "js.tarot.nam": {
+  "t": "5",
+  "h": "98926c7e"
+ },
+ "js.tarot.nam-coc": {
+  "t": "カップの5",
+  "h": "47d0be16"
+ },
+ "js.tarot.nam-gay": {
+  "t": "ワンドの5",
+  "h": "635ee3cc"
+ },
+ "js.tarot.nam-kiem": {
+  "t": "ソードの5",
+  "h": "1bddc805"
+ },
+ "js.tarot.nam-tien": {
+  "t": "ペンタクルの5",
+  "h": "519fa35d"
+ },
+ "js.tarot.nang-luong-dam-me-phieu-luu": {
+  "t": "エネルギー、情熱、冒険、大胆な行動。熱意と決意をもって前へ突き進みます。きっぱりと行動する時です。",
+  "h": "c1ddcbe2"
+ },
+ "js.tarot.nang-luong-va-thong-diep-chinh": {
+  "t": "あなたの質問に対するエネルギーと中心となるメッセージ",
+  "h": "db896f24"
+ },
+ "js.tarot.nap-nang-luong": {
+  "t": "充電",
+  "h": "bd1960f0"
+ },
+ "js.tarot.nen-hoi-tarot-cau-hoi-kieu": {
+  "t": "タロットには、どんな質問をするのがよいですか?",
+  "h": "a40f1c85"
+ },
+ "js.tarot.nen-tang": {
+  "t": "土台",
+  "h": "4676be0d"
+ },
+ "js.tarot.nen-tang-va-nhung-gi-da": {
+  "t": "土台と、現在の状況に至るまでのこと",
+  "h": "d78b97c9"
+ },
+ "js.tarot.nen-tang-xa-hon-cua-tinh": {
+  "t": "この状況の、より遠い土台",
+  "h": "9b5f190e"
+ },
+ "js.tarot.nga-man-khong-duoc-cong-nhan": {
+  "t": "うぬぼれ、評価されないこと、自信の欠如。成功が認められないか、成功のせいで傲慢になっています。",
+  "h": "86d6ca8c"
+ },
+ "js.tarot.nghi-ngoi": {
+  "t": "休息",
+  "h": "674b9610"
+ },
+ "js.tarot.nghi-ngoi-thu-gian-phuc-hoi": {
+  "t": "休息、くつろぎ、回復、瞑想。回復して、これから来るものに備える時間が必要です。",
+  "h": "bf54a20e"
+ },
+ "js.tarot.nghich-canh": {
+  "t": "逆境",
+  "h": "9c12da1a"
+ },
+ "js.tarot.ngoai-giao": {
+  "t": "外交",
+  "h": "3fd7aa56"
+ },
+ "js.tarot.ngoi-sao": {
+  "t": "星",
+  "h": "b7e41981"
+ },
+ "js.tarot.nguoc": {
+  "t": " (逆位置)",
+  "h": "c924d203"
+ },
+ "js.tarot.nguoc-2": {
+  "t": "逆位置",
+  "h": "5865440a"
+ },
+ "js.tarot.nguoc-wrh9": {
+  "t": "↕ 逆位置",
+  "h": "e3f3b5df"
+ },
+ "js.tarot.nguoi-me-nuoi-duong-thuc-te": {
+  "t": "育む母、現実的、豊か、家事。物質的な安定を築きながら、他の人の世話をします。",
+  "h": "56a867ec"
+ },
+ "js.tarot.nguoi-yeu": {
+  "t": "恋人",
+  "h": "711c866b"
+ },
+ "js.tarot.nhan-hau": {
+  "t": "情け深さ",
+  "h": "fd0bda7a"
+ },
+ "js.tarot.nhan-qua": {
+  "t": "因果",
+  "h": "ff35f868"
+ },
+ "js.tarot.nhay-cam": {
+  "t": "繊細さ",
+  "h": "7aefeb15"
+ },
+ "js.tarot.nhiet-huyet": {
+  "t": "熱意",
+  "h": "d5f61be3"
+ },
+ "js.tarot.nhiet-tinh": {
+  "t": "熱心さ",
+  "h": "8ef7ed53"
+ },
+ "js.tarot.nhung-nguoi-va-nang-luong-xung": {
+  "t": "あなたの周りの人々とエネルギー",
+  "h": "ea9c4c71"
+ },
+ "js.tarot.niem-vui": {
+  "t": "喜び",
+  "h": "86cf7ad6"
+ },
+ "js.tarot.niem-vui-thanh-cong-suc-song": {
+  "t": "喜び、成功、活力、楽観。光があらゆる暗がりを照らします。幸せで、明るく、成功に恵まれた時期です。",
+  "h": "a10de419"
+ },
+ "js.tarot.no-nan-long-tot-gia-tao": {
+  "t": "負債、見せかけの優しさ、不平等な力関係。条件つきの寛大さか、間違った目的での取引です。",
+  "h": "d421f276"
+ },
+ "js.tarot.noi-so-duoc-giai-phong-su": {
+  "t": "恐れが解き放たれ、真実が明らかになり、はっきり見えてきます。錯覚を少しずつ見通し、真実を見つけていきます。",
+  "h": "8e952f0b"
+ },
+ "js.tarot.noi-tam": {
+  "t": "内面",
+  "h": "22b1e894"
+ },
+ "js.tarot.noi-tam-co-don-co-y": {
+  "t": "内面、意味のある孤独、真実の探求、内なる導き。内省し、内側の明晰さを探すために、引きこもる時間です。",
+  "h": "11e70a2d"
+ },
+ "js.tarot.nong-voi-hung-hang-lieu-linh": {
+  "t": "せっかち、攻撃的、考えなしの無謀さ。計画を立てずに、急いで動きすぎています。",
+  "h": "0a3cef78"
+ },
+ "js.tarot.nu-tinh": {
+  "t": "女性性",
+  "h": "3d37d12c"
+ },
+ "js.tarot.nu-tinh-phong-phu-nuoi-duong": {
+  "t": "女性性、豊かさ、育み、創造、自然。命が増え、育つ時期です。愛と思いやりのエネルギーが輝いています。",
+  "h": "e08487cb"
+ },
+ "js.tarot.nu-tu-te": {
+  "t": "女教皇",
+  "h": "d7a0a7b2"
+ },
+ "js.tarot.nuoi-duong": {
+  "t": "育む",
+  "h": "5f526834"
+ },
+ "js.tarot.on-dinh": {
+  "t": "安定",
+  "h": "a3b55fa0"
+ },
+ "js.tarot.phan-anh-danh-gia-su-thuc": {
+  "t": "振り返り、見直し、目覚め、赦し。ひとつの段階が終わり、あなたは呼ばれています。過去を見直し、新しい高みへ進む時です。",
+  "h": "708013a1"
+ },
+ "js.tarot.phan-quyet": {
+  "t": "決断",
+  "h": "3563d651"
+ },
+ "js.tarot.phan-xet": {
+  "t": "審判",
+  "h": "860b3d6a"
+ },
+ "js.tarot.phap-su": {
+  "t": "魔術師",
+  "h": "6bfbec68"
+ },
+ "js.tarot.phieu-luu": {
+  "t": "冒険",
+  "h": "a6fbde5c"
+ },
+ "js.tarot.phong-phu": {
+  "t": "豊穣",
+  "h": "5163c0e2"
+ },
+ "js.tarot.phong-thu": {
+  "t": "防御",
+  "h": "fb43f1c0"
+ },
+ "js.tarot.phong-thu-ben-vung-kien-dinh": {
+  "t": "防御、持続、揺るがなさ、立場を守る闘い。外からの圧力や試練に対して、踏みとどまる必要があります。",
+  "h": "d1354a64"
+ },
+ "js.tarot.phu-thuoc-cam-xuc-bat-an": {
+  "t": "感情的な依存、不安、他人の感情を取り込むこと。他人の感情に巻き込まれているか、内面のバランスを失っています。",
+  "h": "f021531e"
+ },
+ "js.tarot.phu-thuoc-sang-tao-bi-chan": {
+  "t": "依存、創造性の停滞、セルフケアの不足。与えすぎて何も返ってこないか、自分をおろそかにしているのかもしれません。",
+  "h": "12809afb"
+ },
+ "js.tarot.phu-thuoc-tai-chinh-that-bai": {
+  "t": "経済的な依存、プロジェクトの失敗、短期的な視野。望む自立にはまだ達していないか、使いすぎています。",
+  "h": "01d543bd"
+ },
+ "js.tarot.phu-thuoc-thieu-su-can-bang": {
+  "t": "依存、バランスの欠如、仕事の怠り。他人の世話と自分の世話のバランスが崩れています。",
+  "h": "88362997"
+ },
+ "js.tarot.phuc-hoi": {
+  "t": "回復",
+  "h": "0d10e44d"
+ },
+ "js.tarot.phuc-hoi-khong-the-tranh-khoi": {
+  "t": "立ち直り、避けられないこと、終わりへの抵抗。避けられない終わりを受け入れるのを拒んでいます。",
+  "h": "c46ceb23"
+ },
+ "js.tarot.phuc-hoi-tai-chinh-cai-thien": {
+  "t": "経済の回復、好転、助けを受け入れること。つらい時期を少しずつ抜けつつあります。",
+  "h": "9d043f7d"
+ },
+ "js.tarot.phuc-hoi-tu-lo-lang-nhan": {
+  "t": "不安からの回復、恐れへの気づき、助けを求めること。不安だった時期を経て、少しずつ安らぎを見つけています。",
+  "h": "247a9b66"
+ },
+ "js.tarot.phuong-phap": {
+  "t": "方法",
+  "h": "4f7ecd74"
+ },
+ "js.tarot.qua-khu": {
+  "t": "過去",
+  "h": "75e794ae"
+ },
+ "js.tarot.qua-khu-gan": {
+  "t": "近い過去",
+  "h": "0baf0401"
+ },
+ "js.tarot.qua-khu-xa": {
+  "t": "遠い過去",
+  "h": "699e8c97"
+ },
+ "js.tarot.qua-tai": {
+  "t": "過負荷",
+  "h": "f57b3191"
+ },
+ "js.tarot.quyen-luc": {
+  "t": "権力",
+  "h": "78028efc"
+ },
+ "js.tarot.quyen-ru": {
+  "t": "魅惑",
+  "h": "15281d2f"
+ },
+ "js.tarot.quyet-dinh": {
+  "t": "決断",
+  "h": "9d2b5881"
+ },
+ "js.tarot.quyet-doan": {
+  "t": "決断力",
+  "h": "5cbca4c7"
+ },
+ "js.tarot.quyet-tam": {
+  "t": "決意",
+  "h": "4c971f00"
+ },
+ "js.tarot.ran-nut-gia-dinh-mau-thuan": {
+  "t": "家族のひび割れ、対立、不和。家庭や身近な関係に緊張があります。",
+  "h": "19e7f95b"
+ },
+ "js.tarot.rang-buoc": {
+  "t": "束縛",
+  "h": "236d5168"
+ },
+ "js.tarot.rang-buoc-vat-chat-am-anh": {
+  "t": "束縛、物質、執着、内なる闇。何かに縛られています——お金、害のある関係、悪い習慣。束縛に気づくことが、抜け出す第一歩です。",
+  "h": "2cc0b28d"
+ },
+ "js.tarot.ro-rang": {
+  "t": "明晰さ",
+  "h": "587b2a48"
+ },
+ "js.tarot.ro-rang-su-that-dot-pha": {
+  "t": "明晰さ、真実、突破、知性。新しい気づきと鋭い思考。曖昧さを断ち切る時です。",
+  "h": "671fa7df"
+ },
+ "js.tarot.roi-di": {
+  "t": "去る",
+  "h": "f9788f93"
+ },
+ "js.tarot.rut-lui": {
+  "t": "撤退",
+  "h": "76180c8c"
+ },
+ "js.tarot.sac-ben": {
+  "t": "鋭さ",
+  "h": "8aea464b"
+ },
+ "js.tarot.sang-suot": {
+  "t": "明敏さ",
+  "h": "0e82a022"
+ },
+ "js.tarot.sang-tao": {
+  "t": "創造",
+  "h": "d4aba4d3"
+ },
+ "js.tarot.sang-trong": {
+  "t": "豪華さ",
+  "h": "10b54509"
+ },
+ "js.tarot.sau": {
+  "t": "6",
+  "h": "8d7feaa0"
+ },
+ "js.tarot.sau-coc": {
+  "t": "カップの6",
+  "h": "a10d544c"
+ },
+ "js.tarot.sau-gay": {
+  "t": "ワンドの6",
+  "h": "edcb5340"
+ },
+ "js.tarot.sau-kiem": {
+  "t": "ソードの6",
+  "h": "cb249633"
+ },
+ "js.tarot.sau-tien": {
+  "t": "ペンタクルの6",
+  "h": "9923dba5"
+ },
+ "js.tarot.so-hai": {
+  "t": "恐れ",
+  "h": "d33e3545"
+ },
+ "js.tarot.so-thay-doi-ke-hoach-te": {
+  "t": "変化への恐れ、まずい計画、ビジョンの欠如。安全圏から踏み出すのをためらっています。",
+  "h": "0f7546f6"
+ },
+ "js.tarot.so-tu-bo-tri-tre-so": {
+  "t": "手放すことへの恐れ、停滞、変化への恐れ。去るべきだとわかっていても、踏み出せません。",
+  "h": "5dd509cc"
+ },
+ "js.tarot.song-trong-qua-khu-thieu-truong": {
+  "t": "過去に生きている、未熟、行き詰まり。過去に執着しすぎて、前へ進めません。",
+  "h": "362e484d"
+ },
+ "js.tarot.su-ro-rang-sau-hon-loan": {
+  "t": "混乱のあとの明晰さ、賢明な選択、現実的な判断。物事がはっきり見え始め、現実的な決断を下せるようになります。",
+  "h": "170ee602"
+ },
+ "js.tarot.su-that": {
+  "t": "真実",
+  "h": "5a83f94e"
+ },
+ "js.tarot.su-thinh-vuong-kinh-doanh-lanh": {
+  "t": "繁栄、ビジネス、リーダーシップ、安定。物質的な土台をしっかり築き、知恵をもって率いています。",
+  "h": "6ecfeeda"
+ },
+ "js.tarot.su-tri-hoan-thieu-dong-luc": {
+  "t": "先延ばし、意欲の欠如、エネルギーの停滞。アイデアが熟していないか、育つ環境が足りません。",
+  "h": "aa1e2bfa"
+ },
+ "js.tarot.suc-manh": {
+  "t": "力",
+  "h": "d80962d4"
+ },
+ "js.tarot.suc-song": {
+  "t": "活力",
+  "h": "631e6cca"
+ },
+ "js.tarot.suy-ngam": {
+  "t": "思索",
+  "h": "7fae55bc"
+ },
+ "js.tarot.suy-nghi-noi-tam-tho-o": {
+  "t": "内にこもる思考、無関心、見直し、嫌気。考え込むあまり、目の前にあるチャンスを見逃しています。",
+  "h": "aeb70685"
+ },
+ "js.tarot.tai-chinh": {
+  "t": "金運",
+  "h": "d82a9c42"
+ },
+ "js.tarot.tai-nang": {
+  "t": "才能",
+  "h": "808a29da"
+ },
+ "js.tarot.tai-sinh": {
+  "t": "再生",
+  "h": "ccee4311"
+ },
+ "js.tarot.tam": {
+  "t": "8",
+  "h": "0e3fc5e2"
+ },
+ "js.tarot.tam-coc": {
+  "t": "カップの8",
+  "h": "1b70bf71"
+ },
+ "js.tarot.tam-dung": {
+  "t": "一時停止",
+  "h": "b8d3bf31"
+ },
+ "js.tarot.tam-dung-buong-bo-hien-te": {
+  "t": "一時停止、手放し、犠牲、新しい視点。ときには立ち止まって、物事を別の角度から見る必要があります。コントロールを手放すことで、悟りに至ります。",
+  "h": "03ce458d"
+ },
+ "js.tarot.tam-gay": {
+  "t": "ワンドの8",
+  "h": "6154b794"
+ },
+ "js.tarot.tam-kiem": {
+  "t": "ソードの8",
+  "h": "05881e39"
+ },
+ "js.tarot.tam-linh": {
+  "t": "スピリチュアリティ",
+  "h": "51457a59"
+ },
+ "js.tarot.tam-nhin": {
+  "t": "ビジョン",
+  "h": "d1753f25"
+ },
+ "js.tarot.tam-nhin-xa": {
+  "t": "遠い先を見通す力",
+  "h": "5d4e5e07"
+ },
+ "js.tarot.tam-tien": {
+  "t": "ペンタクルの8",
+  "h": "6bd07c8a"
+ },
+ "js.tarot.tao-bao": {
+  "t": "大胆さ",
+  "h": "2a1e2d46"
+ },
+ "js.tarot.tap-trung": {
+  "t": "集中",
+  "h": "b94e8d2e"
+ },
+ "js.tarot.tarot-78-la": {
+  "t": "タロット78枚 — ",
+  "h": "b98544b5"
+ },
+ "js.tarot.tha-thu": {
+  "t": "赦し",
+  "h": "ae62fb04"
+ },
+ "js.tarot.tha-thu-chua-lanh-tien-len": {
+  "t": "赦し、癒し、前進。痛みから少しずつ癒え、前へ進む道を見つけています。",
+  "h": "dfd5bdf9"
+ },
+ "js.tarot.thach-thuc": {
+  "t": "課題",
+  "h": "1576629b"
+ },
+ "js.tarot.thai-qua-co-don-xung-dot": {
+  "t": "行き過ぎ、孤独、グループ内の衝突。お祝いが度を越しているか、仲間内に緊張があります。",
+  "h": "ac2121aa"
+ },
+ "js.tarot.tham-lam-tham-nhung-quan-ly": {
+  "t": "貪欲、腐敗、管理の失敗、保守的。お金と権力を不当に使っています。",
+  "h": "a745fc02"
+ },
+ "js.tarot.tham-lam-vat-chat-hoa-hanh": {
+  "t": "貪欲、幸せを物質に置き換えること、満足の欠如。幸せを、探す場所を間違えて探しています。",
+  "h": "6bba52ee"
+ },
+ "js.tarot.tham-quyen-cau-truc-on-dinh": {
+  "t": "権威、構造、安定、規律。しっかりした土台を築く時です。責任をもって状況を率い、掌握します。",
+  "h": "e03fdb94"
+ },
+ "js.tarot.tham-quyen-tri-tue-su-that": {
+  "t": "知的な権威、真実、道徳、賢明な決断。明晰な思考と公正な判断です。",
+  "h": "d1105b27"
+ },
+ "js.tarot.tham-vong": {
+  "t": "野心",
+  "h": "9b13396e"
+ },
+ "js.tarot.tham-vong-hanh-dong-quyet-doan": {
+  "t": "野心、決断力のある行動、率直さ、勇気。鉄の意志で目標に向かって突き進みます。",
+  "h": "11fb3744"
+ },
+ "js.tarot.than-trong": {
+  "t": "慎重さ",
+  "h": "0dea416d"
+ },
+ "js.tarot.thang-than": {
+  "t": "率直さ",
+  "h": "3560d613"
+ },
+ "js.tarot.thanh-cong": {
+  "t": "成功",
+  "h": "9a7d7037"
+ },
+ "js.tarot.thanh-cong-cong-nhan-tu-tin": {
+  "t": "成功、評価、自信、前進。努力に見合った評価を受けています。試練のあとの勝利です。",
+  "h": "3dc242cc"
+ },
+ "js.tarot.thanh-qua": {
+  "t": "成果",
+  "h": "eb776d8a"
+ },
+ "js.tarot.thanh-tich": {
+  "t": "実績",
+  "h": "161a6d3d"
+ },
+ "js.tarot.thao-tung-cam-xuc-bat-on": {
+  "t": "感情の操作、不安定、冷たさ。感情的な知性を、他人を操るために使っています。",
+  "h": "8df4cf27"
+ },
+ "js.tarot.thao-tung-lang-phi-tai-nang": {
+  "t": "操作、才能の浪費、集中の欠如。技術を間違った目的に使っているか、可能性を十分に発揮できていないのかもしれません。",
+  "h": "c967a375"
+ },
+ "js.tarot.thap": {
+  "t": "塔",
+  "h": "6e2e87a4"
+ },
+ "js.tarot.thay-doi": {
+  "t": "変化",
+  "h": "2d141c14"
+ },
+ "js.tarot.the-gioi": {
+  "t": "世界",
+  "h": "745f6b4c"
+ },
+ "js.tarot.the-hien": {
+  "t": "表現",
+  "h": "72f7bd18"
+ },
+ "js.tarot.theo-duoi": {
+  "t": "追求",
+  "h": "c4f35d3e"
+ },
+ "js.tarot.thich-nghi": {
+  "t": "適応",
+  "h": "b539346c"
+ },
+ "js.tarot.thien-dinh": {
+  "t": "瞑想",
+  "h": "8a78e661"
+ },
+ "js.tarot.thieu-dong-doi-tranh-cai-that": {
+  "t": "仲間の不在、口論、失望。他の人と協力できないか、評価されていません。",
+  "h": "501f503a"
+ },
+ "js.tarot.thieu-huong-dan-bon-chon-tri": {
+  "t": "導きの不足、落ち着かなさ、先延ばし。アイデアはたくさんありますが、実行の計画がありません。",
+  "h": "99904068"
+ },
+ "js.tarot.thieu-ket-qua-tu-cong-suc": {
+  "t": "努力に見合う結果がない、完璧主義、質の低い仕事。懸命に働いていますが、方向性が定まっていません。",
+  "h": "b328b3a2"
+ },
+ "js.tarot.thieu-kiem-soat-hung-hang-that": {
+  "t": "制御の欠如、攻撃性、失敗。いくつもの方向に引っ張られているか、力の使い方を誤っています。",
+  "h": "61b69e80"
+ },
+ "js.tarot.thieu-tam-nhin-dai-han-sot": {
+  "t": "長期的な視点の欠如、焦り、投資の損失。辛抱できなくなっているか、間違った方向に投資しています。",
+  "h": "e6cc92fc"
+ },
+ "js.tarot.thieu-tap-trung-tri-hoan-thieu": {
+  "t": "集中の欠如、先延ばし、実践的な技術の不足。学ぶつもりはあっても、やり遂げる辛抱が足りません。",
+  "h": "197ae51b"
+ },
+ "js.tarot.thinh-vuong": {
+  "t": "繁栄",
+  "h": "ece9d2e5"
+ },
+ "js.tarot.thinh-vuong-lau-dai": {
+  "t": "長く続く繁栄",
+  "h": "c7da13b7"
+ },
+ "js.tarot.tho-lo-thieu-ke-hoach-noi": {
+  "t": "粗野、計画性の欠如、口先ばかりで行動が伴わない。知性を否定的に使っているか、深みに欠けています。",
+  "h": "cd7f8613"
+ },
+ "js.tarot.tho-o": {
+  "t": "無関心",
+  "h": "545d78bc"
+ },
+ "js.tarot.thoa-man": {
+  "t": "満足",
+  "h": "0a34c2ee"
+ },
+ "js.tarot.thoat-khoi-tho-o-chon-loc": {
+  "t": "無関心からの脱却、選別力の向上、新しい意欲。受け身の状態から抜け出し始めます。",
+  "h": "f67e381b"
+ },
+ "js.tarot.thong-diep": {
+  "t": "メッセージ",
+  "h": "8d4fe659"
+ },
+ "js.tarot.thong-diep-sang-tao-truc-giac": {
+  "t": "創造的なメッセージ、直感、繊細さ、感情にかかわる知らせ。若い人や新しい知らせが、思いがけず届くかもしれません。",
+  "h": "15b23002"
+ },
+ "js.tarot.thong-thai": {
+  "t": "聡明さ",
+  "h": "df8e25a9"
+ },
+ "js.tarot.thong-thai-cam-xuc-ngoai-giao": {
+  "t": "感情面の聡明さ、外交、バランス、慈悲。感情を制御しながら、思いやりを保ちます。",
+  "h": "b1ee2010"
+ },
+ "js.tarot.thong-tin": {
+  "t": "情報",
+  "h": "64650334"
+ },
+ "js.tarot.thu-thach": {
+  "t": "試練",
+  "h": "aebbdd59"
+ },
+ "js.tarot.thuc-te": {
+  "t": "現実的",
+  "h": "1d81710c"
+ },
+ "js.tarot.thuc-tinh": {
+  "t": "覚醒",
+  "h": "0c40657d"
+ },
+ "js.tarot.ti-mi": {
+  "t": "丹念さ",
+  "h": "be630e98"
+ },
+ "js.tarot.tiem-nang": {
+  "t": "可能性",
+  "h": "dbd5fc81"
+ },
+ "js.tarot.tiem-thuc": {
+  "t": "潜在意識",
+  "h": "2d4df558"
+ },
+ "js.tarot.tien-dat": {
+  "t": "ペンタクル ♦ 地",
+  "h": "9b5d4c8a"
+ },
+ "js.tarot.tien-len": {
+  "t": "前進",
+  "h": "3e908eaa"
+ },
+ "js.tarot.tien-ve-phia-truoc": {
+  "t": "前へ進む",
+  "h": "9486d87a"
+ },
+ "js.tarot.tien-ve-phia-truoc-chap-nhan": {
+  "t": "前へ進む、受容、赦し。傷から少しずつ癒え、前へ進む方法を見つけています。",
+  "h": "cb1f58c7"
+ },
+ "js.tarot.tim-kiem": {
+  "t": "探求",
+  "h": "66719286"
+ },
+ "js.tarot.tim-kiem-binh-yen": {
+  "t": "安らぎを求める",
+  "h": "47825495"
+ },
+ "js.tarot.tim-kiem-giup-do": {
+  "t": "助けを求める",
+  "h": "e138acbd"
+ },
+ "js.tarot.tin-tuc": {
+  "t": "知らせ",
+  "h": "93140ca7"
+ },
+ "js.tarot.tinh-ban": {
+  "t": "友情",
+  "h": "41eb6d65"
+ },
+ "js.tarot.tinh-ban-cong-dong-an-mung": {
+  "t": "友情、コミュニティ、お祝い、創造。友人や親しい人と分かち合う喜び。集まり、祝う時間です。",
+  "h": "1f1b297c"
+ },
+ "js.tarot.tinh-cam": {
+  "t": "情愛",
+  "h": "ba217ecf"
+ },
+ "js.tarot.tinh-huong": {
+  "t": "状況",
+  "h": "9e767856"
+ },
+ "js.tarot.tinh-trang-hien-tai-va-nhung": {
+  "t": "現在の状態と、あなたに影響していること",
+  "h": "b1c09dac"
+ },
+ "js.tarot.tinh-yeu": {
+  "t": "愛",
+  "h": "5f2ccd9a"
+ },
+ "js.tarot.tinh-yeu-moi": {
+  "t": "新しい愛",
+  "h": "70f3b668"
+ },
+ "js.tarot.tinh-yeu-moi-truc-giac-tam": {
+  "t": "新しい愛、直感、スピリチュアルなもの、感情の始まり。新しい愛とつながりを迎え入れる、開かれた心です。",
+  "h": "333849cc"
+ },
+ "js.tarot.tinh-yeu-su-lua-chon-su": {
+  "t": "愛、選択、調和、個人の価値観。大切な選択が近づいています。魂のつながりと、共通の価値観にもとづく結びつきです。",
+  "h": "e307c6d0"
+ },
+ "js.tarot.to-mo": {
+  "t": "好奇心",
+  "h": "bbc1f746"
+ },
+ "js.tarot.to-mo-canh-giac-thong-tin": {
+  "t": "好奇心、警戒、新しい情報、鋭い思考。真実を探し、絶えず学び続ける心です。",
+  "h": "e42ff752"
+ },
+ "js.tarot.toc-do": {
+  "t": "速さ",
+  "h": "7c10386d"
+ },
+ "js.tarot.toc-do-hanh-dong-nhanh-tin": {
+  "t": "速さ、素早い行動、知らせ、動き。すべてがとても速く動いています。知らせが届き、出来事が次々と起こります。",
+  "h": "e6358054"
+ },
+ "js.tarot.ton-giao": {
+  "t": "宗教",
+  "h": "b04622fb"
+ },
+ "js.tarot.ton-thuong": {
+  "t": "傷",
+  "h": "d7085c3c"
+ },
+ "js.tarot.tra-lai-vat-bi-lay-thu": {
+  "t": "奪ったものの返還、告白、戦略の見直し。不当な行いと、正直に向き合い始めています。",
+  "h": "c6f8c830"
+ },
+ "js.tarot.trac-an": {
+  "t": "憐れみ",
+  "h": "3b6fa709"
+ },
+ "js.tarot.trach-nhiem": {
+  "t": "責任",
+  "h": "08440470"
+ },
+ "js.tarot.trang": {
+  "t": "ペイジ",
+  "h": "aec1223a"
+ },
+ "js.tarot.trang-coc": {
+  "t": "カップのペイジ",
+  "h": "52198a86"
+ },
+ "js.tarot.trang-gay": {
+  "t": "ワンドのペイジ",
+  "h": "bb414379"
+ },
+ "js.tarot.trang-kiem": {
+  "t": "ソードのペイジ",
+  "h": "5a38e4b4"
+ },
+ "js.tarot.trang-tien": {
+  "t": "ペンタクルのペイジ",
+  "h": "264034c3"
+ },
+ "js.tarot.tranh-ne": {
+  "t": "回避",
+  "h": "fba37afe"
+ },
+ "js.tarot.tranh-ne-tham-hoa-so-thay": {
+  "t": "災厄の回避、変化への恐れ、避けられないことの先延ばし。必要な崩壊を避けています。",
+  "h": "c9a22149"
+ },
+ "js.tarot.tranh-ne-xung-dot-cang-thang": {
+  "t": "対立の回避、内面の緊張、不和の解決。皆が同じ方向を向けるよう努めています。",
+  "h": "4cd04360"
+ },
+ "js.tarot.tri-hoan-khang-cu-hy-sinh": {
+  "t": "先延ばし、抵抗、無駄な犠牲。あなたを縛っているものを手放すことを拒んでいます。",
+  "h": "55121ec0"
+ },
+ "js.tarot.tri-hoan-thieu-tam-nhin-co": {
+  "t": "遅れ、ビジョンの欠如、逃したチャンス。計画が思ったように進みません。",
+  "h": "a8c26f77"
+ },
+ "js.tarot.tri-tue": {
+  "t": "知恵",
+  "h": "74e5d83d"
+ },
+ "js.tarot.truc-giac": {
+  "t": "直感",
+  "h": "d86f73b7"
+ },
+ "js.tarot.truc-giac-bi-an-noi-tam": {
+  "t": "直感、神秘、内面、潜在意識。内なる声に耳を傾けましょう。まだ明かされていない何かがあります。辛抱強く観察しましょう。",
+  "h": "bc44b4c5"
+ },
+ "js.tarot.truc-tiep": {
+  "t": "率直さ",
+  "h": "f69379c3"
+ },
+ "js.tarot.trung-tam-tinh-huong-hay-cau": {
+  "t": "中心 — 現在の状況、または質問",
+  "h": "62ec7b89"
+ },
+ "js.tarot.trut-bo-ganh-nang-uy-quyen": {
+  "t": "重荷を下ろし、任せること、手放しを学ぶこと。すべてをひとりで抱え込むことはできないと、気づき始めています。",
+  "h": "ec3ae632"
+ },
+ "js.tarot.truyen-cam-hung": {
+  "t": "人を鼓舞する力",
+  "h": "9e80a3d8"
+ },
+ "js.tarot.truyen-thong": {
+  "t": "伝統",
+  "h": "fb8c81f2"
+ },
+ "js.tarot.truyen-thong-ton-giao-giao-duc": {
+  "t": "伝統、宗教、教育、社会の規範。すでに確立された道を歩み、実績のあるものから導きを求めます。",
+  "h": "eeac5404"
+ },
+ "js.tarot.tu-bi": {
+  "t": "慈悲",
+  "h": "f773751e"
+ },
+ "js.tarot.tu-bo": {
+  "t": "手放し",
+  "h": "bc937497"
+ },
+ "js.tarot.tu-bo-rut-lui-tim-kiem": {
+  "t": "手放し、撤退、より深いものの探求。もう満たしてくれなくなったものを置いて、より意味のあるものを探しに行きます。",
+  "h": "51004f2c"
+ },
+ "js.tarot.tu-choi": {
+  "t": "拒絶",
+  "h": "63bbfd75"
+ },
+ "js.tarot.tu-do": {
+  "t": "自由",
+  "h": "40d06bcd"
+ },
+ "js.tarot.tu-duy-sac-ben": {
+  "t": "鋭い思考",
+  "h": "5080b847"
+ },
+ "js.tarot.tu-giai-phong-doi-mat-noi": {
+  "t": "自己解放、恐れとの対峙、責任を引き受けること。状況を変える力が自分にあると気づき始めています。",
+  "h": "30116140"
+ },
+ "js.tarot.tu-giam-cam": {
+  "t": "自らを閉じ込める",
+  "h": "386df7bc"
+ },
+ "js.tarot.tu-phan-xet-qua-muc-nghi": {
+  "t": "過度な自己批判、自己不信、呼びかけの無視。自分に厳しすぎるか、目覚めの声に耳を傾ける準備がまだできていません。",
+  "h": "9ac7344c"
+ },
+ "js.tarot.tu-phu": {
+  "t": "うぬぼれ",
+  "h": "ca9735a0"
+ },
+ "js.tarot.tu-tin": {
+  "t": "自信",
+  "h": "1edc09c5"
+ },
+ "js.tarot.tu-tin-can-dam-xac-dinh": {
+  "t": "自信、勇気、決意、社交的なエネルギー。魅力的で熱意があり、周りの人を鼓舞します。",
+  "h": "2445f38f"
+ },
+ "js.tarot.tu-tuc": {
+  "t": "自給自足",
+  "h": "50a0014f"
+ },
+ "js.tarot.tu-tung": {
+  "t": "閉塞感",
+  "h": "44a685c7"
+ },
+ "js.tarot.tu-tung-han-che-nan-nhan": {
+  "t": "閉塞感、制限、被害者意識、自らを閉じ込めること。囚われているように感じますが、実際には束縛は心の中の錯覚にすぎません。",
+  "h": "c5d3f7c9"
+ },
+ "js.tarot.tuoi-moi": {
+  "t": "新鮮さ",
+  "h": "9ad03710"
+ },
+ "js.tarot.tuoi-tho": {
+  "t": "子ども時代",
+  "h": "65383d48"
+ },
+ "js.tarot.tuong-lai": {
+  "t": "未来",
+  "h": "b4320a2d"
+ },
+ "js.tarot.tuong-lai-gan": {
+  "t": "近い未来",
+  "h": "5a972b1d"
+ },
+ "js.tarot.uoc-muon": {
+  "t": "願い",
+  "h": "ca8a3669"
+ },
+ "js.tarot.uoc-muon-thanh-hien-thuc-hai": {
+  "t": "願いの成就、満足、幸せ、繁栄。「願いのカード」——望んでいたことが近づいています。",
+  "h": "202199b4"
+ },
+ "js.tarot.van-may": {
+  "t": "幸運",
+  "h": "b9ac0b07"
+ },
+ "js.tarot.van-may-thay-doi-chu-ky": {
+  "t": "幸運、変化、サイクル、転換点。輪はよい方向に回っています。人生は常にサイクルで動いているので、変化を受け入れましょう。",
+  "h": "238da932"
+ },
+ "js.tarot.van-xui-khang-cu-thay-doi": {
+  "t": "不運、変化への抵抗、悪循環。避けられない変化に逆らっているか、古い繰り返しの中に閉じ込められています。",
+  "h": "eb1fe56a"
+ },
+ "js.tarot.vat-chat": {
+  "t": "物質",
+  "h": "d31a5059"
+ },
+ "js.tarot.vo-vong-mat-niem-tin-that": {
+  "t": "絶望、信頼の喪失、失望。未来を信じるのが難しいか、ひらめきの源とのつながりを失ったように感じています。",
+  "h": "52a9be30"
+ },
+ "js.tarot.vua": {
+  "t": "キング",
+  "h": "1268a594"
+ },
+ "js.tarot.vua-coc": {
+  "t": "カップのキング",
+  "h": "dbaf99fc"
+ },
+ "js.tarot.vua-gay": {
+  "t": "ワンドのキング",
+  "h": "0fd5c56d"
+ },
+ "js.tarot.vua-kiem": {
+  "t": "ソードのキング",
+  "h": "2232e669"
+ },
+ "js.tarot.vua-tien": {
+  "t": "ペンタクルのキング",
+  "h": "54b72ab9"
+ },
+ "js.tarot.xao-bai-rut-lai": {
+  "t": "もう一度シャッフルして引く",
+  "h": "19371614"
+ },
+ "js.tarot.xay-dung": {
+  "t": "築き上げる",
+  "h": "c5183426"
+ },
+ "js.tarot.xu-huong-va-ket-qua-co": {
+  "t": "このまま進んだ場合に考えられる流れと結果",
+  "h": "1c913af9"
+ },
+ "js.tarot.xung-dot": {
+  "t": "衝突",
+  "h": "2c2f103d"
+ },
+ "js.tarot.xung-dot-canh-tranh-bat-dong": {
+  "t": "衝突、競争、意見の違い、試練。誰もがそれぞれの意見を持っています。健全な競争、あるいは一時的な混乱です。",
+  "h": "d7b743df"
+ },
+ "js.tarot.xung-dot-mat-mat-danh-du": {
+  "t": "衝突、名誉の喪失、うぬぼれ、敗北。高すぎる代償を払った勝利、あるいは、戦う価値のない戦いに加わっています。",
+  "h": "6f5226a0"
+ },
+ "js.tarot.xuoi": {
+  "t": "↑ 正位置",
+  "h": "3386e148"
+ },
+ "js.tarot.xuoi-2": {
+  "t": "正位置",
+  "h": "bff3bb5a"
+ },
+ "js.tarot.y-chi": {
+  "t": "意志",
+  "h": "0a979548"
+ },
+ "js.tarot.y-chi-kiem-soat-chien-thang": {
+  "t": "意志、制御、勝利、決意。揺るがない心で前へ進みます。個人の意志と規律によって勝利をつかみます。",
+  "h": "8a707981"
+ },
+ "js.tarot.y-chi-tap-trung-tai-nang": {
+  "t": "意志、集中、才能、資源。目標を実現するための道具は、そろっています。行動し、力を示す時です。",
+  "h": "ca9d3481"
+ },
+ "js.tarot.y-nghia": {
+  "t": "意味",
+  "h": "1206aa20"
+ },
+ "js.tarot.yeu-duoi-tu-nghi-ngo-thieu": {
+  "t": "弱さ、自己不信、勇気の欠如。恐れに支配されているか、逆に力を冷酷に使っています。",
+  "h": "543f7227"
+ },
+ "js.thansohoc.9-bieu-do-thieu": {
+  "t": "/9 · 不足している数: ",
+  "h": "a961744e"
+ },
+ "js.thansohoc.bieu-do-ngay-sinh-toi-thieu": {
+  "t": "私の誕生日チャートに足りないものは?",
+  "h": "bf05b8d3"
+ },
+ "js.thansohoc.cho-thay-xin-ho-ten-day": {
+  "t": "出生時のフルネームを教えてください — ローマ字で入力してください(ベトナム語の声調記号は不要です)。",
+  "h": "9b335230"
+ },
+ "js.thansohoc.da-lap-ban-do-than-so": {
+  "t": "数秘マップを作成しました: **",
+  "h": "ef7d6a3a"
+ },
+ "js.thansohoc.dinh-menh": {
+  "t": "**、ディスティニー ",
+  "h": "6ccdbf93"
+ },
+ "js.thansohoc.dinh-menh-sba7": {
+  "t": " · ディスティニー: ",
+  "h": "4ed83cf2"
+ },
+ "js.thansohoc.dinh-menh-sxmj": {
+  "t": "ディスティニー",
+  "h": "04ce2b85"
+ },
+ "js.thansohoc.duong-doi": {
+  "t": "** (ライフパス **",
+  "h": "34cd1965"
+ },
+ "js.thansohoc.duong-doi-653r": {
+  "t": "ライフパス",
+  "h": "105d888c"
+ },
+ "js.thansohoc.duong-doi-6p15": {
+  "t": "ライフパス: ",
+  "h": "2ea6525b"
+ },
+ "js.thansohoc.kem-bieu-do-ngay-sinh-no": {
+  "t": ") — 誕生日チャート、カルマの負債、各時期のピークと課題も含まれています。どこから読み解きましょうか?",
+  "h": "5809cd7c"
+ },
+ "js.thansohoc.linh-hon": {
+  "t": "、ソウル ",
+  "h": "6e12f834"
+ },
+ "js.thansohoc.linh-hon-avwt": {
+  "t": " · ソウル: ",
+  "h": "dd806dd6"
+ },
+ "js.thansohoc.linh-hon-oll4": {
+  "t": "ソウル",
+  "h": "b656dfff"
+ },
+ "js.thansohoc.nam-ca-nhan": {
+  "t": "パーソナルイヤー ",
+  "h": "eb45f6cc"
+ },
+ "js.thansohoc.nam-cua-toi-nen-lam-gi": {
+  "t": "{y}年、私は何をするのがよいですか?",
+  "h": "92b21a84"
+ },
+ "js.thansohoc.ngay-sinh": {
+  "t": "バースデー: ",
+  "h": "20265f1b"
+ },
+ "js.thansohoc.nghe-nghiep-nao-hop": {
+  "t": "どんな職業が向いていますか?",
+  "h": "ea320897"
+ },
+ "js.thansohoc.no-nghiep-quat": {
+  "t": "カルマの負債: ",
+  "h": "a7848bc3"
+ },
+ "js.thansohoc.so-duong-doi-noi-gi-ve": {
+  "t": "ライフパスナンバーは私について何を語っていますか?",
+  "h": "c53334d7"
+ },
+ "js.thansohoc.su-menh": {
+  "t": "、ミッション ",
+  "h": "451fb36d"
+ },
+ "js.thansohoc.su-menh-hzws": {
+  "t": "ミッション",
+  "h": "de1c2c2d"
+ },
+ "js.thansohoc.su-menh-jyge": {
+  "t": " · ミッション: ",
+  "h": "31834686"
+ },
+ "js.thansohoc.thai-do": {
+  "t": " · アティチュード: ",
+  "h": "322d40a6"
+ },
+ "js.thansohoc.than-so-hoc": {
+  "t": "数秘術 · ",
+  "h": "365ce0d2"
+ },
+ "js.thansohoc.than-so-hoc-cua": {
+  "t": "数秘術: ",
+  "h": "ea8f5b40"
+ },
+ "js.thansohoc.than-so-hoc-r6ky": {
+  "t": "数秘術 — ",
+  "h": "b4ae646d"
+ },
+ "js.thansohoc.tinh-than-so": {
+  "t": "数秘を計算する →",
+  "h": "0aa2d8b7"
+ },
+ "js.thansohoc.toi-dang-o-chang-nao-thu": {
+  "t": "私は今どの段階にいて、どんな課題がありますか?",
+  "h": "b29a99ed"
+ },
+ "js.thansohoc.truong-thanh": {
+  "t": " · マチュリティ: ",
+  "h": "55b24485"
+ },
+ "js.thansohoc.xem-day-du-13-chi-so": {
+  "t": "<button type=\"button\" class=\"chat-hl-cta\" id=\"tshOpenSheet\">13の指標をすべて見る →</button></div></div>",
+  "h": "f89bb371"
+ },
  "js.thtg.am-luong": {
   "t": "音量",
   "h": "71662f1b"
@@ -10155,6 +14515,514 @@
   "t": "例：この転職はしてもよいでしょうか？",
   "h": "ec1b3e52"
  },
+ "menhkho.12-cung": {
+  "t": "十二宮",
+  "h": "2e6bdef9"
+ },
+ "menhkho.1960-canh-ty-1961-tan-suu": {
+  "t": "<a href=\"/menh-kho/1960\" class=\"year-pill\"><span class=\"yr\">1960</span><span class=\"cc\">庚子</span></a> <a href=\"/menh-kho/1961\" class=\"year-pill\"><span class=\"yr\">1961</span><span class=\"cc\">辛丑</span></a> <a href=\"/menh-kho/1962\" class=\"year-pill\"><span class=\"yr\">1962</span><span class=\"cc\">壬寅</span></a> <a href=\"/menh-kho/1963\" class=\"year-pill\"><span class=\"yr\">1963</span><span class=\"cc\">癸卯</span></a> <a href=\"/menh-kho/1964\" class=\"year-pill\"><span class=\"yr\">1964</span><span class=\"cc\">甲辰</span></a> <a href=\"/menh-kho/1965\" class=\"year-pill\"><span class=\"yr\">1965</span><span class=\"cc\">乙巳</span></a> <a href=\"/menh-kho/1966\" class=\"year-pill\"><span class=\"yr\">1966</span><span class=\"cc\">丙午</span></a> <a href=\"/menh-kho/1967\" class=\"year-pill\"><span class=\"yr\">1967</span><span class=\"cc\">丁未</span></a> <a href=\"/menh-kho/1968\" class=\"year-pill\"><span class=\"yr\">1968</span><span class=\"cc\">戊申</span></a> <a href=\"/menh-kho/1969\" class=\"year-pill\"><span class=\"yr\">1969</span><span class=\"cc\">己酉</span></a>",
+  "h": "f5165269"
+ },
+ "menhkho.1970-canh-tuat-1971-tan-hoi": {
+  "t": "<a href=\"/menh-kho/1970\" class=\"year-pill\"><span class=\"yr\">1970</span><span class=\"cc\">庚戌</span></a> <a href=\"/menh-kho/1971\" class=\"year-pill\"><span class=\"yr\">1971</span><span class=\"cc\">辛亥</span></a> <a href=\"/menh-kho/1972\" class=\"year-pill\"><span class=\"yr\">1972</span><span class=\"cc\">壬子</span></a> <a href=\"/menh-kho/1973\" class=\"year-pill\"><span class=\"yr\">1973</span><span class=\"cc\">癸丑</span></a> <a href=\"/menh-kho/1974\" class=\"year-pill\"><span class=\"yr\">1974</span><span class=\"cc\">甲寅</span></a> <a href=\"/menh-kho/1975\" class=\"year-pill popular\"><span class=\"yr\">1975</span><span class=\"cc\">乙卯</span></a> <a href=\"/menh-kho/1976\" class=\"year-pill popular\"><span class=\"yr\">1976</span><span class=\"cc\">丙辰</span></a> <a href=\"/menh-kho/1977\" class=\"year-pill popular\"><span class=\"yr\">1977</span><span class=\"cc\">丁巳</span></a> <a href=\"/menh-kho/1978\" class=\"year-pill popular\"><span class=\"yr\">1978</span><span class=\"cc\">戊午</span></a> <a href=\"/menh-kho/1979\" class=\"year-pill popular\"><span class=\"yr\">1979</span><span class=\"cc\">己未</span></a>",
+  "h": "5f663681"
+ },
+ "menhkho.1980-canh-than-1981-tan-dau": {
+  "t": "<a href=\"/menh-kho/1980\" class=\"year-pill popular\"><span class=\"yr\">1980</span><span class=\"cc\">庚申</span></a> <a href=\"/menh-kho/1981\" class=\"year-pill popular\"><span class=\"yr\">1981</span><span class=\"cc\">辛酉</span></a> <a href=\"/menh-kho/1982\" class=\"year-pill popular\"><span class=\"yr\">1982</span><span class=\"cc\">壬戌</span></a> <a href=\"/menh-kho/1983\" class=\"year-pill popular\"><span class=\"yr\">1983</span><span class=\"cc\">癸亥</span></a> <a href=\"/menh-kho/1984\" class=\"year-pill popular\"><span class=\"yr\">1984</span><span class=\"cc\">甲子</span></a> <a href=\"/menh-kho/1985\" class=\"year-pill popular\"><span class=\"yr\">1985</span><span class=\"cc\">乙丑</span></a> <a href=\"/menh-kho/1986\" class=\"year-pill popular\"><span class=\"yr\">1986</span><span class=\"cc\">丙寅</span></a> <a href=\"/menh-kho/1987\" class=\"year-pill popular\"><span class=\"yr\">1987</span><span class=\"cc\">丁卯</span></a> <a href=\"/menh-kho/1988\" class=\"year-pill popular\"><span class=\"yr\">1988</span><span class=\"cc\">戊辰</span></a> <a href=\"/menh-kho/1989\" class=\"year-pill popular\"><span class=\"yr\">1989</span><span class=\"cc\">己巳</span></a>",
+  "h": "aa98c822"
+ },
+ "menhkho.1990-canh-ngo-1991-tan-mui": {
+  "t": "<a href=\"/menh-kho/1990\" class=\"year-pill popular\"><span class=\"yr\">1990</span><span class=\"cc\">庚午</span></a> <a href=\"/menh-kho/1991\" class=\"year-pill popular\"><span class=\"yr\">1991</span><span class=\"cc\">辛未</span></a> <a href=\"/menh-kho/1992\" class=\"year-pill popular\"><span class=\"yr\">1992</span><span class=\"cc\">壬申</span></a> <a href=\"/menh-kho/1993\" class=\"year-pill popular\"><span class=\"yr\">1993</span><span class=\"cc\">癸酉</span></a> <a href=\"/menh-kho/1994\" class=\"year-pill popular\"><span class=\"yr\">1994</span><span class=\"cc\">甲戌</span></a> <a href=\"/menh-kho/1995\" class=\"year-pill popular\"><span class=\"yr\">1995</span><span class=\"cc\">乙亥</span></a> <a href=\"/menh-kho/1996\" class=\"year-pill popular\"><span class=\"yr\">1996</span><span class=\"cc\">丙子</span></a> <a href=\"/menh-kho/1997\" class=\"year-pill popular\"><span class=\"yr\">1997</span><span class=\"cc\">丁丑</span></a> <a href=\"/menh-kho/1998\" class=\"year-pill popular\"><span class=\"yr\">1998</span><span class=\"cc\">戊寅</span></a> <a href=\"/menh-kho/1999\" class=\"year-pill popular\"><span class=\"yr\">1999</span><span class=\"cc\">己卯</span></a>",
+  "h": "0a2d40fe"
+ },
+ "menhkho.2000-canh-thin-2001-tan-ty": {
+  "t": "<a href=\"/menh-kho/2000\" class=\"year-pill popular\"><span class=\"yr\">2000</span><span class=\"cc\">庚辰</span></a> <a href=\"/menh-kho/2001\" class=\"year-pill\"><span class=\"yr\">2001</span><span class=\"cc\">辛巳</span></a> <a href=\"/menh-kho/2002\" class=\"year-pill\"><span class=\"yr\">2002</span><span class=\"cc\">壬午</span></a> <a href=\"/menh-kho/2003\" class=\"year-pill\"><span class=\"yr\">2003</span><span class=\"cc\">癸未</span></a> <a href=\"/menh-kho/2004\" class=\"year-pill\"><span class=\"yr\">2004</span><span class=\"cc\">甲申</span></a> <a href=\"/menh-kho/2005\" class=\"year-pill\"><span class=\"yr\">2005</span><span class=\"cc\">乙酉</span></a> <a href=\"/menh-kho/2006\" class=\"year-pill\"><span class=\"yr\">2006</span><span class=\"cc\">丙戌</span></a> <a href=\"/menh-kho/2007\" class=\"year-pill\"><span class=\"yr\">2007</span><span class=\"cc\">丁亥</span></a> <a href=\"/menh-kho/2008\" class=\"year-pill\"><span class=\"yr\">2008</span><span class=\"cc\">戊子</span></a> <a href=\"/menh-kho/2009\" class=\"year-pill\"><span class=\"yr\">2009</span><span class=\"cc\">己丑</span></a> <a href=\"/menh-kho/2010\" class=\"year-pill\"><span class=\"yr\">2010</span><span class=\"cc\">庚寅</span></a>",
+  "h": "7c037110"
+ },
+ "menhkho.2011-tan-mao-2012-nham-thin": {
+  "t": "<a href=\"/menh-kho/2011\" class=\"year-pill\"><span class=\"yr\">2011</span><span class=\"cc\">辛卯</span></a> <a href=\"/menh-kho/2012\" class=\"year-pill\"><span class=\"yr\">2012</span><span class=\"cc\">壬辰</span></a> <a href=\"/menh-kho/2013\" class=\"year-pill\"><span class=\"yr\">2013</span><span class=\"cc\">癸巳</span></a> <a href=\"/menh-kho/2014\" class=\"year-pill\"><span class=\"yr\">2014</span><span class=\"cc\">甲午</span></a> <a href=\"/menh-kho/2015\" class=\"year-pill\"><span class=\"yr\">2015</span><span class=\"cc\">乙未</span></a> <a href=\"/menh-kho/2016\" class=\"year-pill\"><span class=\"yr\">2016</span><span class=\"cc\">丙申</span></a> <a href=\"/menh-kho/2017\" class=\"year-pill\"><span class=\"yr\">2017</span><span class=\"cc\">丁酉</span></a> <a href=\"/menh-kho/2018\" class=\"year-pill\"><span class=\"yr\">2018</span><span class=\"cc\">戊戌</span></a> <a href=\"/menh-kho/2019\" class=\"year-pill\"><span class=\"yr\">2019</span><span class=\"cc\">己亥</span></a>",
+  "h": "118614a2"
+ },
+ "menhkho.2020-canh-ty-2021-tan-suu": {
+  "t": "<a href=\"/menh-kho/2020\" class=\"year-pill\"><span class=\"yr\">2020</span><span class=\"cc\">庚子</span></a> <a href=\"/menh-kho/2021\" class=\"year-pill\"><span class=\"yr\">2021</span><span class=\"cc\">辛丑</span></a> <a href=\"/menh-kho/2022\" class=\"year-pill\"><span class=\"yr\">2022</span><span class=\"cc\">壬寅</span></a> <a href=\"/menh-kho/2023\" class=\"year-pill\"><span class=\"yr\">2023</span><span class=\"cc\">癸卯</span></a> <a href=\"/menh-kho/2024\" class=\"year-pill\"><span class=\"yr\">2024</span><span class=\"cc\">甲辰</span></a> <a href=\"/menh-kho/2025\" class=\"year-pill\"><span class=\"yr\">2025</span><span class=\"cc\">乙巳</span></a> <a href=\"/menh-kho/2026\" class=\"year-pill\"><span class=\"yr\">2026</span><span class=\"cc\">丙午</span></a>",
+  "h": "f68fbce7"
+ },
+ "menhkho.4-buoc-don-gian-de-xem": {
+  "t": "アカウント登録なしで、4つの簡単なステップで命盤を最後まで見られます。",
+  "h": "7312382e"
+ },
+ "menhkho.575-000-la-so-tu-vi": {
+  "t": "1960〜2026年の紫微斗数の命盤57万5千件以上。十二宮、格局、大運、小運を古法で分析します。",
+  "h": "148f146d"
+ },
+ "menhkho.an-sao-co-phap": {
+  "t": "古法の安星",
+  "h": "30aade6f"
+ },
+ "menhkho.an-sao-co-phap-tuan-theo": {
+  "t": "古法の安星は宋代から伝わる伝統の規則に従い、調整や独自の工夫を加えません。現代の方法では、新しい星を加えたり、安星のやり方を変えたりすることがあります。明宝紫微斗数は、一貫性と伝統を保つため、純粋な古法のみを用いています。",
+  "h": "ac291cdf"
+ },
+ "menhkho.an-sao-theo-co-phap-khac": {
+  "t": "古法の安星は、現代の方法とどう違いますか?",
+  "h": "4dd93138"
+ },
+ "menhkho.ban-do-12-cung-cach-cuc": {
+  "t": "十二宮の図、格局、大運、2027年の小運がすぐに表示されます。",
+  "h": "6e07f34b"
+ },
+ "menhkho.cac-sao-chinh-tu-vi-thien": {
+  "t": "主星(紫微、天府、廉貞など)は旧暦の生日に従って配置します。副星は生月と出生時刻に従って配置します。四化(禄、権、科、忌)は生年の天干に従って配置します。これにより、出生時刻ごとにほかにない星の配置が生まれます。",
+  "h": "8cfbecd2"
+ },
+ "menhkho.cach-cuc-dac-biet": {
+  "t": "特別な格局",
+  "h": "6d499784"
+ },
+ "menhkho.cach-cuc-la-su-phoi-hop": {
+  "t": "格局とは、星どうしが特別に組み合わさって、独自の運命を形づくるものです:紫府同宮、日月同梁、殺破狼など。それぞれの格局に固有の意味と影響があります。",
+  "h": "58eb0956"
+ },
+ "menhkho.cach-tra-cuu-la-so-tu": {
+  "t": "紫微斗数の命盤の調べ方",
+  "h": "7dc6b796"
+ },
+ "menhkho.cau-hoi-thuong-gap": {
+  "t": "よくある質問",
+  "h": "ef0eb919"
+ },
+ "menhkho.cc-at-dau": {
+  "t": "乙酉",
+  "h": "9842b7e9"
+ },
+ "menhkho.cc-at-hoi": {
+  "t": "乙亥",
+  "h": "5f156282"
+ },
+ "menhkho.cc-at-mao": {
+  "t": "乙卯",
+  "h": "fe60ff8d"
+ },
+ "menhkho.cc-at-mui": {
+  "t": "乙未",
+  "h": "3906728d"
+ },
+ "menhkho.cc-at-suu": {
+  "t": "乙丑",
+  "h": "1c28856d"
+ },
+ "menhkho.cc-at-ty": {
+  "t": "乙巳",
+  "h": "0f9da740"
+ },
+ "menhkho.cc-binh-dan": {
+  "t": "丙寅",
+  "h": "bb3f9222"
+ },
+ "menhkho.cc-binh-ngo": {
+  "t": "丙午",
+  "h": "3ec6e2f9"
+ },
+ "menhkho.cc-binh-than": {
+  "t": "丙申",
+  "h": "fcaad7a6"
+ },
+ "menhkho.cc-binh-thin": {
+  "t": "丙辰",
+  "h": "a40c3c50"
+ },
+ "menhkho.cc-binh-tuat": {
+  "t": "丙戌",
+  "h": "6f234952"
+ },
+ "menhkho.cc-binh-ty": {
+  "t": "丙子",
+  "h": "d0de6cd1"
+ },
+ "menhkho.cc-canh-dan": {
+  "t": "庚寅",
+  "h": "71041a51"
+ },
+ "menhkho.cc-canh-ngo": {
+  "t": "庚午",
+  "h": "d6703e8a"
+ },
+ "menhkho.cc-canh-than": {
+  "t": "庚申",
+  "h": "5f080d41"
+ },
+ "menhkho.cc-canh-thin": {
+  "t": "庚辰",
+  "h": "e61f8119"
+ },
+ "menhkho.cc-canh-tuat": {
+  "t": "庚戌",
+  "h": "223966c3"
+ },
+ "menhkho.cc-canh-ty": {
+  "t": "庚子",
+  "h": "6f3acf8f"
+ },
+ "menhkho.cc-dinh-dau": {
+  "t": "丁酉",
+  "h": "74b51915"
+ },
+ "menhkho.cc-dinh-hoi": {
+  "t": "丁亥",
+  "h": "062cc6af"
+ },
+ "menhkho.cc-dinh-mao": {
+  "t": "丁卯",
+  "h": "48fa829a"
+ },
+ "menhkho.cc-dinh-mui": {
+  "t": "丁未",
+  "h": "817c95a8"
+ },
+ "menhkho.cc-dinh-suu": {
+  "t": "丁丑",
+  "h": "05319c07"
+ },
+ "menhkho.cc-dinh-ty": {
+  "t": "丁巳",
+  "h": "ab0362c5"
+ },
+ "menhkho.cc-giap-dan": {
+  "t": "甲寅",
+  "h": "c61ed450"
+ },
+ "menhkho.cc-giap-ngo": {
+  "t": "甲午",
+  "h": "8fe62c84"
+ },
+ "menhkho.cc-giap-than": {
+  "t": "甲申",
+  "h": "c1ac08ba"
+ },
+ "menhkho.cc-giap-thin": {
+  "t": "甲辰",
+  "h": "2df357cf"
+ },
+ "menhkho.cc-giap-tuat": {
+  "t": "甲戌",
+  "h": "2962b2ce"
+ },
+ "menhkho.cc-giap-ty": {
+  "t": "甲子",
+  "h": "9978a63b"
+ },
+ "menhkho.cc-ky-dau": {
+  "t": "己酉",
+  "h": "38d58f6e"
+ },
+ "menhkho.cc-ky-hoi": {
+  "t": "己亥",
+  "h": "3f690e0c"
+ },
+ "menhkho.cc-ky-mao": {
+  "t": "己卯",
+  "h": "be766a5d"
+ },
+ "menhkho.cc-ky-mui": {
+  "t": "己未",
+  "h": "e0297da0"
+ },
+ "menhkho.cc-ky-suu": {
+  "t": "己丑",
+  "h": "d22fd87c"
+ },
+ "menhkho.cc-ky-ty": {
+  "t": "己巳",
+  "h": "372279bd"
+ },
+ "menhkho.cc-mau-dan": {
+  "t": "戊寅",
+  "h": "df81e0af"
+ },
+ "menhkho.cc-mau-ngo": {
+  "t": "戊午",
+  "h": "f9755851"
+ },
+ "menhkho.cc-mau-than": {
+  "t": "戊申",
+  "h": "4db26cc2"
+ },
+ "menhkho.cc-mau-thin": {
+  "t": "戊辰",
+  "h": "8ce701d1"
+ },
+ "menhkho.cc-mau-tuat": {
+  "t": "戊戌",
+  "h": "79712764"
+ },
+ "menhkho.cc-mau-ty": {
+  "t": "戊子",
+  "h": "1355db8c"
+ },
+ "menhkho.cc-nham-dan": {
+  "t": "壬寅",
+  "h": "d2c9aec3"
+ },
+ "menhkho.cc-nham-ngo": {
+  "t": "壬午",
+  "h": "7e6947bf"
+ },
+ "menhkho.cc-nham-than": {
+  "t": "壬申",
+  "h": "d94b15cc"
+ },
+ "menhkho.cc-nham-thin": {
+  "t": "壬辰",
+  "h": "5aec0635"
+ },
+ "menhkho.cc-nham-tuat": {
+  "t": "壬戌",
+  "h": "433e7e10"
+ },
+ "menhkho.cc-nham-ty": {
+  "t": "壬子",
+  "h": "a5792187"
+ },
+ "menhkho.cc-quy-dau": {
+  "t": "癸酉",
+  "h": "6b177e82"
+ },
+ "menhkho.cc-quy-hoi": {
+  "t": "癸亥",
+  "h": "ded499bb"
+ },
+ "menhkho.cc-quy-mao": {
+  "t": "癸卯",
+  "h": "87edaf91"
+ },
+ "menhkho.cc-quy-mui": {
+  "t": "癸未",
+  "h": "79ee2cfa"
+ },
+ "menhkho.cc-quy-suu": {
+  "t": "癸丑",
+  "h": "4c142bee"
+ },
+ "menhkho.cc-quy-ty": {
+  "t": "癸巳",
+  "h": "91c81644"
+ },
+ "menhkho.cc-tan-dau": {
+  "t": "辛酉",
+  "h": "e50c8461"
+ },
+ "menhkho.cc-tan-hoi": {
+  "t": "辛亥",
+  "h": "7fc784ac"
+ },
+ "menhkho.cc-tan-mao": {
+  "t": "辛卯",
+  "h": "914e1516"
+ },
+ "menhkho.cc-tan-mui": {
+  "t": "辛未",
+  "h": "1ef1fe2e"
+ },
+ "menhkho.cc-tan-suu": {
+  "t": "辛丑",
+  "h": "c94fd2bf"
+ },
+ "menhkho.cc-tan-ty": {
+  "t": "辛巳",
+  "h": "46b9d5af"
+ },
+ "menhkho.chon-gio-gioi-tinh": {
+  "t": "出生時刻と性別を選ぶ",
+  "h": "6ec7d44d"
+ },
+ "menhkho.chon-gio-sinh-ty-suu-dan": {
+  "t": "出生時刻(子、丑、寅…亥)と、男性/女性の性別を選びます。",
+  "h": "b6ca5d50"
+ },
+ "menhkho.chon-nam-sinh": {
+  "t": "生年を選ぶ",
+  "h": "994161b3"
+ },
+ "menhkho.chon-nam-sinh-1960-2026": {
+  "t": "生年を選ぶ(1960〜2026年)",
+  "h": "e41f285a"
+ },
+ "menhkho.chon-ngay-thang": {
+  "t": "生年月日を選ぶ",
+  "h": "f500cd1c"
+ },
+ "menhkho.click-vao-nam-sinh-duong-lich": {
+  "t": "上の検索表で、西暦の生年(1960〜2026年)をクリックします。",
+  "h": "6d7f1050"
+ },
+ "menhkho.cung-menh-la-cung-quan-trong": {
+  "t": "命宮は紫微斗数の命盤でもっとも重要な宮で、性格、容姿、全体の運命を映し出します。命宮は出生時刻と旧暦の生月から定め、そのうえで生年の天干と照らして主星を決めます。主星ごとに特性が異なります。",
+  "h": "e6d8d285"
+ },
+ "menhkho.cung-menh-la-gi": {
+  "t": "命宮とは?",
+  "h": "8fe0a543"
+ },
+ "menhkho.dai-van-la-chu-ky-10": {
+  "t": "大運は10年周期で十二宮をめぐります。小運は大運の枠の中での一年ごとの運です。この二層の運が、人生の順風と逆風の時期を決めます。",
+  "h": "d7196ebc"
+ },
+ "menhkho.dai-van-la-giai-doan-van": {
+  "t": "大運は10年続く運の区切りで、十二宮を順にめぐります。小運は大運の中の一年ごとの運です。この二層が合わさって、人生の好機と試練の時期を決めます。",
+  "h": "6b40dcf7"
+ },
+ "menhkho.dai-van-tieu-van": {
+  "t": "大運と小運",
+  "h": "cd7afeb6"
+ },
+ "menhkho.dai-van-va-tieu-van-la": {
+  "t": "大運と小運とは?",
+  "h": "0c4ed332"
+ },
+ "menhkho.gio-sinh": {
+  "t": "出生時刻",
+  "h": "2d0aa7eb"
+ },
+ "menhkho.gio-sinh-quyet-dinh-cung-menh": {
+  "t": "出生時刻は、命盤の土台となる二つの宮、命宮と身宮を決めます。同じ生年月日でも時刻が違えば、命宮がまったく異なり、主星も格局も運の巡りも変わります。出生時刻は12あり(子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥)、それぞれ2時間です。",
+  "h": "257166f6"
+ },
+ "menhkho.hoac-tra-lich-ngay-tot-2020": {
+  "t": "または、<a href=\"/ngay-tot\" style=\"color:#d4c060;text-decoration:underline\">吉日カレンダー2020〜2036</a>もご覧ください。結婚、着工、開業の吉日を古法で示した8,500ページです。",
+  "h": "55cf40a8"
+ },
+ "menhkho.huong-dan": {
+  "t": "ガイド",
+  "h": "e7c42639"
+ },
+ "menhkho.kho-luu-tru-tra-cuu": {
+  "t": "命庫 · アーカイブ · 検索",
+  "h": "1ba1dae2"
+ },
+ "menhkho.kien-thuc": {
+  "t": "知識",
+  "h": "b09dc5b0"
+ },
+ "menhkho.la-so-duoc-tinh-san-theo": {
+  "t": "1960〜2026年の生年月日について、命盤を古法であらかじめ算出してあります。生年を選んで検索を始めましょう。",
+  "h": "f6cf77a0"
+ },
+ "menhkho.la-so-tu-vi-chia-thanh": {
+  "t": "紫微斗数の命盤は十二宮に分かれます:命宮、父母宮、福徳宮、田宅宮、官禄宮、僕役宮、遷移宮、疾厄宮、財帛宮、子女宮、夫妻宮、兄弟宮。各宮が人生の一つの領域を司ります。",
+  "h": "a2ce3ef4"
+ },
+ "menhkho.la-so-tu-vi-dau-so": {
+  "t": "紫微斗数の命盤とは?",
+  "h": "b1c2516e"
+ },
+ "menhkho.la-so-tu-vi-dau-so-ulj5": {
+  "t": "紫微斗数の命盤とは、旧暦の生年月日と出生時刻から作る運命の図です。十二宮に、古法の規則に従って星を配置し、そこから性格、仕事、恋愛、一年ごとの運を読み解きます。",
+  "h": "454320e8"
+ },
+ "menhkho.menh-kho-chua-575-000-la": {
+  "t": "命庫には、1960〜2026年の生年月日について、あらかじめ算出した命盤が57万5千件以上あります(67年 × 365日 × 12時辰 × 男女2通り)。どの命盤も古法で安星し、十二宮、格局、大運、2027年の小運を分析しています。",
+  "h": "9d51d3f0"
+ },
+ "menhkho.menh-kho-co-bao-nhieu-la": {
+  "t": "命庫には命盤がいくつありますか?",
+  "h": "c61020ae"
+ },
+ "menhkho.menh-kho-tra-cuu-la-so": {
+  "t": "命庫 — 生年から調べる紫微斗数の命盤 | 明宝紫微斗数",
+  "h": "a3812551"
+ },
+ "menhkho.menh-kho-tra-cuu-la-so-25gy": {
+  "t": "命庫 — 紫微斗数の命盤を調べる",
+  "h": "b767449b"
+ },
+ "menhkho.menh-kho-tra-cuu-la-so-5d9p": {
+  "t": "命庫 — <br><em>紫微斗数の命盤を調べる</em>",
+  "h": "4de8fd05"
+ },
+ "menhkho.moi-nam-co-day-du-365": {
+  "t": "各年に、365日 × 12の出生時刻 × 男女 = 8,760件の命盤がそろっています。",
+  "h": "cec0232c"
+ },
+ "menhkho.muon-nhan-luan-giai-chuyen-sau": {
+  "t": "もっと深い鑑定をご希望ですか?",
+  "h": "fb3939f2"
+ },
+ "menhkho.nhap-ngay-gio-sinh-de-nhan": {
+  "t": "生年月日と出生時刻を入力すると、24項目の鑑定が届きます:性格、仕事、恋愛、2027年の運勢。",
+  "h": "8d39d980"
+ },
+ "menhkho.nhung-cau-hoi-pho-bien-ve": {
+  "t": "紫微斗数と命庫についてのよくある質問です。",
+  "h": "9548bc77"
+ },
+ "menhkho.phan-luan-giai": {
+  "t": "鑑定の内容",
+  "h": "d8df6bfc"
+ },
+ "menhkho.tai-sao-gio-sinh-quan-trong": {
+  "t": "紫微斗数で出生時刻が重要なのはなぜですか?",
+  "h": "fdf177c9"
+ },
+ "menhkho.thap-nien-1960": {
+  "t": "1960年代",
+  "h": "33c1a5a3"
+ },
+ "menhkho.thap-nien-1970": {
+  "t": "1970年代",
+  "h": "7afcb27c"
+ },
+ "menhkho.thap-nien-1980-pho-bien-nhat": {
+  "t": "1980年代 — いちばん人気",
+  "h": "96be036e"
+ },
+ "menhkho.thap-nien-1990-pho-bien-nhat": {
+  "t": "1990年代 — いちばん人気",
+  "h": "09308f62"
+ },
+ "menhkho.thap-nien-2000": {
+  "t": "2000年代",
+  "h": "bf0a97c8"
+ },
+ "menhkho.thap-nien-2010": {
+  "t": "2010年代",
+  "h": "1eda10c4"
+ },
+ "menhkho.thap-nien-2020": {
+  "t": "2020年代",
+  "h": "dcf667d2"
+ },
+ "menhkho.tra-cuu-la-so": {
+  "t": "命盤を調べる",
+  "h": "f0bbe872"
+ },
+ "menhkho.tra-cuu-la-so-tu-vi": {
+  "t": "1960〜2026年の生年から、紫微斗数の命盤を調べられます。十二宮、格局、大運、小運を古法で十分に分析。57万5千件以上の命盤がすぐに検索できます。",
+  "h": "490b342b"
+ },
+ "menhkho.trang-chu-menh-kho": {
+  "t": "<a href=\"/\">トップ</a><span>›</span> <span>命庫</span>",
+  "h": "ca56af70"
+ },
+ "menhkho.tren-trang-nam-sinh-click-vao": {
+  "t": "生年のページで、12か月のカレンダーから西暦の月日をクリックします。",
+  "h": "cd9fc291"
+ },
+ "menhkho.tu-vi-dau-so-khoa-menh": {
+  "t": "紫微斗数 — 古法の命理学",
+  "h": "79695a52"
+ },
+ "menhkho.tu-vi-dau-so-la-he": {
+  "t": "紫微斗数は宋代に始まる命理学の体系で、1,000年以上にわたって受け継がれてきました。",
+  "h": "c536dfdb"
+ },
+ "menhkho.xem-la-so-day-du": {
+  "t": "命盤を詳しく見る",
+  "h": "b6fb07d5"
+ },
+ "menhkho.xem-la-so-luan-giai": {
+  "t": "命盤と鑑定を見る →",
+  "h": "95889730"
+ },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">生まれ年を入力</span>",
   "h": "ecce406c"
@@ -10347,6 +15215,330 @@
   "t": "✕ 画像を削除",
   "h": "36e95d9f"
  },
+ "oracle.1-chon-kieu-rut": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">引き方を選ぶ</span>",
+  "h": "36067a21"
+ },
+ "oracle.1-la-thong-diep-hien-tai": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 1枚 — 今のメッセージ",
+  "h": "726e8adf"
+ },
+ "oracle.2-nhan-thong-diep": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">メッセージを受け取る</span>",
+  "h": "25e0a2ec"
+ },
+ "oracle.3-la-nhan-duyen-qua": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 3枚 — 因 · 縁 · 果",
+  "h": "9e43bc49"
+ },
+ "oracle.5-la-ngu-hanh-cuoc-doi": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 5枚 — 人生の五行",
+  "h": "1d191df9"
+ },
+ "oracle.am-duong-ngu-hanh-va-bat": {
+  "t": "陰陽・五行・八卦は、万物の動きと均衡の法則を説く、古代東洋哲学の三つの基礎理論です。易経や風水など多くの術数が、これらの根本概念の上に成り立っています。",
+  "h": "833f5e18"
+ },
+ "oracle.cau-hoi-hoac-chu-de-muon": {
+  "t": "思いを巡らせたい質問やテーマ(任意)",
+  "h": "c328ff62"
+ },
+ "oracle.chon-kieu-rut-1-3-hay": {
+  "t": "引き方(1・3・5枚)を選ぶと、システムが無作為にカードを引き、1枚ごとにメッセージと実践のヒントを示します。",
+  "h": "806df5fc"
+ },
+ "oracle.dinh-tam-rut-bai": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"drawBtnLabel\">心を静めて引く</b></span>",
+  "h": "d210cb2f"
+ },
+ "oracle.doi-khi-khong-can-mot-cau": {
+  "t": "具体的な答えは要らない、ただ立ち止まってゆっくり息をつく一瞬が欲しい——そんなときもあります。陰陽・五行・八卦の哲理を宿した1枚を引き、心を静める短い言葉を受け取りましょう。",
+  "h": "e0cc111c"
+ },
+ "oracle.huong-dan-thuc-hanh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"lightbulb\"></span><span>実践の<br>ヒント</span>",
+  "h": "c5fe62e9"
+ },
+ "oracle.oracle-phuong-dong": {
+  "t": "東洋オラクル",
+  "h": "1146fb81"
+ },
+ "oracle.oracle-phuong-dong-rut-the-minh": {
+  "t": "<b>東洋オラクル</b><span>陰陽 · 五行 · 八卦の叡智カードを引く — 無料</span>",
+  "h": "541241f2"
+ },
+ "oracle.oracle-phuong-dong-tu-vi-minh": {
+  "t": "東洋オラクル — 明宝紫微斗数",
+  "h": "1d867bec"
+ },
+ "oracle.rut-1-3-hay-5-la": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sparkles\"></span><span>1・3・5枚<br>から選べる</span>",
+  "h": "527946ce"
+ },
+ "oracle.rut-the-oracle-40-la-theo": {
+  "t": "明宝紫微斗数で、東洋哲学(陰陽・五行・八卦・天干地支)にもとづくオラクルカード40枚を引けます。",
+  "h": "83cb33e6"
+ },
+ "oracle.triet-ly-phuong-dong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"aperture\"></span><span>東洋の<br>哲理</span>",
+  "h": "5b82c97f"
+ },
+ "oracle.vd-toi-can-nhan-ra-dieu": {
+  "t": "例:この時期、私が気づくべきことは?",
+  "h": "fba02ed0"
+ },
+ "phongthuy.1-ban-menh-thong-tin-phong": {
+  "t": "<span class=\"pt-num\">1</span> 本命と部屋の情報",
+  "h": "862309d1"
+ },
+ "phongthuy.2-chup-tai-anh-phong": {
+  "t": "<span class=\"pt-num\">2</span> 部屋の写真を撮る/アップロード",
+  "h": "7d2e0fac"
+ },
+ "phongthuy.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">お支払い</span>",
+  "h": "67c0b759"
+ },
+ "phongthuy.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">結果を受け取る</span>",
+  "h": "5b1e84a0"
+ },
+ "phongthuy.anh-goc": {
+  "t": "元の写真",
+  "h": "d0cb0ec3"
+ },
+ "phongthuy.anh-phong-do-vat-nhan-dien": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 部屋の写真と認識された物",
+  "h": "9eb00bf0"
+ },
+ "phongthuy.bac-north": {
+  "t": "北 (North)",
+  "h": "ca46f9fa"
+ },
+ "phongthuy.bat-trach-la-mot-truong-phai": {
+  "t": "八宅は伝統的な風水の流派のひとつです。住まいを八卦に対応する8つの方位に分け、住む人の命卦と照らし合わせて、吉凶の方位や位置を判断します。<i>『八宅明鏡』</i>は、この方法を体系化した古典のひとつです。",
+  "h": "daa2d3d2"
+ },
+ "phongthuy.cai-thien": {
+  "t": "改善",
+  "h": "1eff6742"
+ },
+ "phongthuy.chon-anh": {
+  "t": "写真を選ぶ",
+  "h": "2656c1bc"
+ },
+ "phongthuy.chua-muon-khai-thong-tin-anh": {
+  "t": "<b>情報や写真をまだ入力したくない方へ</b><span>サンプルを見て、先に使い心地を試せます。</span>",
+  "h": "71c6551d"
+ },
+ "phongthuy.chup-anh-can-phong-sau-khi": {
+  "t": "生年・性別・玄関の向きを入力したあと、部屋を撮影してください。風水の改善前後のスコア、配置の提案、追加をおすすめするアイテムが届きます。",
+  "h": "6923766a"
+ },
+ "phongthuy.chup-anh-phong-he-thong-phan": {
+  "t": "部屋を撮影すると、八宅風水で分析します。改善前後のスコア、配置図、提案、部屋のレンダリングが得られます。",
+  "h": "4d18ac04"
+ },
+ "phongthuy.de-xuat-bo-tri": {
+  "t": "<span class=\"ic\" data-icon=\"settings\"></span> 配置の提案",
+  "h": "6f5bcc32"
+ },
+ "phongthuy.diem-phong-thuy-truoc-sau": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> 風水スコア(改善前・改善後)",
+  "h": "79bb8fe6"
+ },
+ "phongthuy.diem-truoc-sau": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>スコア<br>改善前後</span>",
+  "h": "c676882b"
+ },
+ "phongthuy.do-vat-phat-hien": {
+  "t": "検出された物",
+  "h": "58ad237d"
+ },
+ "phongthuy.doi-anh": {
+  "t": "✕ 写真を変更",
+  "h": "304a1319"
+ },
+ "phongthuy.dong-bac": {
+  "t": "東北",
+  "h": "9690921a"
+ },
+ "phongthuy.dong-east": {
+  "t": "東 (East)",
+  "h": "8779753d"
+ },
+ "phongthuy.dong-nam": {
+  "t": "東南",
+  "h": "dd71e07a"
+ },
+ "phongthuy.gioi-tinh": {
+  "t": "性別",
+  "h": "80bbce55"
+ },
+ "phongthuy.he-thong-se-render-lai-anh": {
+  "t": "五行の色と最適な風水配置にあわせて、あなたの部屋の写真をレンダリングし直します。",
+  "h": "40c4c8a9"
+ },
+ "phongthuy.hien-tai": {
+  "t": "現在",
+  "h": "cd16704d"
+ },
+ "phongthuy.hien-tai-bhng": {
+  "t": "⬛ 現在",
+  "h": "b1e26461"
+ },
+ "phongthuy.huong-cua-chinh-huong-ve": {
+  "t": "玄関(正面入口)が向いている方角",
+  "h": "9d976c7f"
+ },
+ "phongthuy.huong-nhin-ra-khi-dung-trong": {
+  "t": "部屋の中から外を見たときの方角",
+  "h": "f3f5bfa6"
+ },
+ "phongthuy.jpg-png-heic-toi-da-20mb": {
+  "t": "JPG、PNG、HEIC · 最大20MB",
+  "h": "6ec18858"
+ },
+ "phongthuy.keo-tha-anh-vao-day": {
+  "t": "ここに写真をドラッグ&ドロップ",
+  "h": "abbea49b"
+ },
+ "phongthuy.loai-phong": {
+  "t": "部屋の種類",
+  "h": "19905334"
+ },
+ "phongthuy.loi-khuyen-tong-the": {
+  "t": "<span class=\"ic\" data-icon=\"message-circle\"></span> 総合アドバイス",
+  "h": "a0211411"
+ },
+ "phongthuy.luoi-3-3-theo-la-ban": {
+  "t": "羅盤に沿った3×3のグリッド · 上が南 · 下が北",
+  "h": "a01fb977"
+ },
+ "phongthuy.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"phong-thuy\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"phong-thuy\">…</span> 両)</span>",
+  "h": "6c5c7ccf"
+ },
+ "phongthuy.mot-can-phong-bo-tri-sai": {
+  "t": "風水に合わない配置の部屋は、気づかないうちに運気を妨げていることがあります。部屋の写真を撮ると、八宅による改善前後のスコアと具体的な配置の提案が届きます。",
+  "h": "63e03f4e"
+ },
+ "phongthuy.nam-sinh-duong-lich": {
+  "t": "生年(西暦)",
+  "h": "9f8721e0"
+ },
+ "phongthuy.nam-south": {
+  "t": "南 (South)",
+  "h": "d3c7e97a"
+ },
+ "phongthuy.phan-tich-phong-khac": {
+  "t": "← 別の部屋を分析する",
+  "h": "b726d63b"
+ },
+ "phongthuy.phan-tich-phong-thuy-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"compass\"></span><b id=\"btnAnalyzeLabel\">風水を分析する</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"phong-thuy\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"phong-thuy\">…</span> 両)</span></small>",
+  "h": "ae2d9767"
+ },
+ "phongthuy.phong-khach": {
+  "t": "リビング",
+  "h": "17fb3f11"
+ },
+ "phongthuy.phong-lam-viec": {
+  "t": "書斎・仕事部屋",
+  "h": "956c0ca5"
+ },
+ "phongthuy.phong-ngu": {
+  "t": "寝室",
+  "h": "d9ac5522"
+ },
+ "phongthuy.phong-thuy-noi-that": {
+  "t": "インテリア風水",
+  "h": "3f80b53f"
+ },
+ "phongthuy.phong-thuy-noi-that-chup-anh": {
+  "t": "<b>インテリア風水</b><span>部屋を撮影 — 八宅でスコア化し、配置を提案します</span>",
+  "h": "4912ddf0"
+ },
+ "phongthuy.phong-thuy-noi-that-tu-vi": {
+  "t": "インテリア風水 — 明宝紫微斗数",
+  "h": "15015a61"
+ },
+ "phongthuy.render-lai": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 再レンダリング",
+  "h": "ccd807df"
+ },
+ "phongthuy.render-phong-phong-thuy-luong": {
+  "t": "<span class=\"ic\" data-icon=\"home\"></span> 風水ルームのレンダリング <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"phong-thuy-render\">…</span> 両</span>",
+  "h": "7b1e15ef"
+ },
+ "phongthuy.render-phong-theo-phong-thuy": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>風水に沿った<br>部屋のレンダリング</span>",
+  "h": "9a5c6021"
+ },
+ "phongthuy.render-phong-theo-phong-thuy-j6h6": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 風水に沿って部屋をレンダリング",
+  "h": "c1c514e3"
+ },
+ "phongthuy.sau-dieu-chinh": {
+  "t": "調整後",
+  "h": "0b773985"
+ },
+ "phongthuy.sau-dieu-chinh-uuro": {
+  "t": "<span class=\"ic\" data-icon=\"check-circle\"></span> 調整後",
+  "h": "b79d8310"
+ },
+ "phongthuy.sau-phong-thuy": {
+  "t": "風水改善後",
+  "h": "c9afd5a7"
+ },
+ "phongthuy.so-do-bo-tri-de-xuat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>おすすめの<br>配置図</span>",
+  "h": "c2aa6f34"
+ },
+ "phongthuy.so-do-bo-tri-truoc-sau": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> 配置図(改善前/改善後)",
+  "h": "c618db7f"
+ },
+ "phongthuy.tai-anh": {
+  "t": "⬇ 画像を保存",
+  "h": "c7a30ee2"
+ },
+ "phongthuy.tay-bac": {
+  "t": "西北",
+  "h": "0b1f47fd"
+ },
+ "phongthuy.tay-nam": {
+  "t": "西南",
+  "h": "c0484c26"
+ },
+ "phongthuy.tay-west": {
+  "t": "西 (West)",
+  "h": "5a60b5ba"
+ },
+ "phongthuy.tot": {
+  "t": "<span class=\"g\">✓ 吉:</span> <span id=\"guaGood\"></span>",
+  "h": "60f5b1ca"
+ },
+ "phongthuy.truoc": {
+  "t": "改善前",
+  "h": "42b0ca5a"
+ },
+ "phongthuy.vat-pham-phong-thuy-nen-them": {
+  "t": "<span class=\"ic\" data-icon=\"store\"></span> 追加をおすすめする風水アイテム",
+  "h": "f4b05d3b"
+ },
+ "phongthuy.vd-1990": {
+  "t": "例:1990",
+  "h": "c6e18d35"
+ },
+ "phongthuy.xau": {
+  "t": "<span class=\"b\">✗ 凶:</span> <span id=\"guaBad\"></span>",
+  "h": "a5cae0c2"
+ },
+ "phongthuy.xem-ban-mau": {
+  "t": "サンプルを見る →",
+  "h": "ba3671b1"
+ },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 収集する情報",
   "h": "5354d2ca"
@@ -10531,6 +15723,190 @@
   "t": "決済状況の確認と結果のご提供",
   "h": "84a1b3b2"
  },
+ "resources.hon-200-tai-lieu-hoc-thuat": {
+  "t": "紫微斗数に関する200点以上の学術資料(ベトナム語・中国語)。研究コミュニティのために無料で公開しています。",
+  "h": "2cf5c307"
+ },
+ "resources.kho-tai-lieu-hoc-thuat-suu": {
+  "t": "さまざまな出典から集めた学術資料のアーカイブ(ベトナム語・中国語)。紫微斗数の研究・学習のために、無料で共有しています。",
+  "h": "6d5a5887"
+ },
+ "resources.kho-tai-lieu-hoc-thuat-tu": {
+  "t": "紫微斗数の学術資料アーカイブ — 古典から現代まで、紫微斗数に関するベトナム語・中国語の書籍200冊以上。無料でダウンロードできます。",
+  "h": "61519361"
+ },
+ "resources.sap-xep-theo-thu-tu-a": {
+  "t": "A〜Z順に並べています。書名を押すとダウンロードできます(リンクがある場合)。",
+  "h": "9e746762"
+ },
+ "resources.tai-lieu-tieng-trung": {
+  "t": "中国語の資料",
+  "h": "53560984"
+ },
+ "resources.tai-lieu-tieng-viet": {
+  "t": "ベトナム語の資料",
+  "h": "a170a3bc"
+ },
+ "resources.tai-lieu-tu-vi-dau-so": {
+  "t": "紫微斗数の資料",
+  "h": "b6fe8eaa"
+ },
+ "resources.thu-vien": {
+  "t": "ライブラリ",
+  "h": "4d885bf7"
+ },
+ "resources.thu-vien-tai-lieu-tu-vi": {
+  "t": "紫微斗数資料ライブラリ — 明宝紫微斗数",
+  "h": "23d7aa3b"
+ },
+ "resources.tieng-trung": {
+  "t": "<span class=\"ic-inline\" data-icon-emoji=\"📕\" style=\"display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942\">📕</span> 中国語 <span id=\"count-trung\"></span>",
+  "h": "1368d2d7"
+ },
+ "resources.tieng-viet": {
+  "t": "<span class=\"ic-inline\" data-icon-emoji=\"📗\" style=\"display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942\">📗</span> ベトナム語 <span id=\"count-viet\"></span>",
+  "h": "b49a73b7"
+ },
+ "resources.tim-ten-sach-hoac-tac-gia": {
+  "t": "書名または著者名で検索...",
+  "h": "c8ffd8aa"
+ },
+ "resources.tong-cong": {
+  "t": "合計",
+  "h": "6c4fa8bc"
+ },
+ "sachdetail.dang-tai": {
+  "t": "読み込み中...",
+  "h": "3d8a48b7"
+ },
+ "sachdetail.khong-tim-thay-tai-lieu": {
+  "t": "資料が見つかりません",
+  "h": "ffd74f40"
+ },
+ "sachdetail.tai-lieu-khong-ton-tai-hoac": {
+  "t": "この資料は存在しないか、更新中です。",
+  "h": "ed1b9993"
+ },
+ "sachdetail.tai-xuong": {
+  "t": "ダウンロード",
+  "h": "ca78e23a"
+ },
+ "sachdetail.trang-chu-tai-lieu-dang-tai": {
+  "t": "<a href=\"/\">トップ</a> <span>›</span> <a href=\"/resources.html\">資料</a> <span>›</span> <span id=\"bc-title\">読み込み中...</span>",
+  "h": "f2687a46"
+ },
+ "sachdetail.ve-thu-vien": {
+  "t": "← ライブラリに戻る",
+  "h": "943a73f4"
+ },
+ "sachdetail.ve-thu-vien-tai-lieu": {
+  "t": "<a href=\"/resources.html\">← 資料ライブラリに戻る</a>",
+  "h": "99e834b4"
+ },
+ "tailieu.bai-viet-khong-ton-tai-hoac": {
+  "t": "この記事は存在しないか、削除されました。",
+  "h": "718123d0"
+ },
+ "tailieu.bai-viet-lien-quan": {
+  "t": "関連記事",
+  "h": "afd3c7f7"
+ },
+ "tailieu.dang-tai-bai-viet": {
+  "t": "記事を読み込み中...",
+  "h": "6f3c1901"
+ },
+ "tailieu.khong-tim-thay-bai-viet": {
+  "t": "記事が見つかりません",
+  "h": "914536b7"
+ },
+ "tailieu.tai-lieu-hoc-thuat-ve-tu": {
+  "t": "紫微斗数の学術資料 — 明宝紫微斗数",
+  "h": "f2581c1f"
+ },
+ "tailieu.tai-lieu-hoc-thuat-ve-tu-fish": {
+  "t": "紫微斗数の学術資料",
+  "h": "9e9a296b"
+ },
+ "tailieu.tai-lieu-tu-vi-tu-vi": {
+  "t": "紫微斗数の資料 — 明宝紫微斗数",
+  "h": "45b310bf"
+ },
+ "tailieu.trang-chu-tai-lieu-dang-tai": {
+  "t": "<a href=\"/\">トップ</a> <span>›</span> <a href=\"/resources.html\">資料</a> <span>›</span> <span id=\"breadcrumb-title\">読み込み中...</span>",
+  "h": "79e309ba"
+ },
+ "tailieu.ve-tai-lieu": {
+  "t": "← 資料に戻る",
+  "h": "0d77cc3d"
+ },
+ "tarot.1-la-thong-diep-hom-nay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 1枚 — 今日のメッセージ",
+  "h": "ccc434dd"
+ },
+ "tarot.3-la-qua-khu-hien-tai": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 3枚 — 過去 · 現在 · 未来",
+  "h": "880a5e95"
+ },
+ "tarot.cau-hoi-tuy-chon-nghi-trong": {
+  "t": "質問(任意 — 心の中で思い浮かべるか、ここに書いてください)",
+  "h": "1e7d5e62"
+ },
+ "tarot.celtic-cross-10-la": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> ケルト十字 — 10枚",
+  "h": "377006eb"
+ },
+ "tarot.chon-kieu-trai-1-3-hay": {
+  "t": "スプレッド(1・3・10枚)を選んでカードを無作為に引くと、正位置・逆位置を踏まえて、あなたの質問に沿った1枚ずつの読み解きが得られます。",
+  "h": "042a47ab"
+ },
+ "tarot.chon-kieu-trai-bai": {
+  "t": "スプレッドを選ぶ",
+  "h": "0d50f92b"
+ },
+ "tarot.doi-khi-chi-can-mot-la": {
+  "t": "迷っていることをはっきり見るには、カード1枚で十分なこともあります。スプレッドを選び、心にある質問を入力すれば、正位置・逆位置の読み解きがすぐに届きます。",
+  "h": "a7f0500b"
+ },
+ "tarot.luan-theo-cau-hoi-cua-ban": {
+  "t": "<span class=\"hp-ic\" data-icon=\"message-circle\"></span><span>あなたの質問に<br>沿って読み解く</span>",
+  "h": "85a815e9"
+ },
+ "tarot.rut-bai-tarot-78-la-ngay": {
+  "t": "明宝紫微斗数で78枚のタロットを引く — 1枚・3枚・ケルト十字10枚のスプレッドで、正位置・逆位置の意味を読み解きます。",
+  "h": "6902f0c6"
+ },
+ "tarot.tarot-78-la": {
+  "t": "タロット78枚",
+  "h": "0454df6e"
+ },
+ "tarot.tarot-78-la-rut-bai-trai": {
+  "t": "<b>タロット78枚</b><span>カードを引く — 1枚 / 3枚 / ケルト十字 — 無料</span>",
+  "h": "a74872de"
+ },
+ "tarot.tarot-78-la-tu-vi-minh": {
+  "t": "タロット78枚 — 明宝紫微斗数",
+  "h": "e9e2dbdf"
+ },
+ "tarot.tarot-la-bo-bai-78-la": {
+  "t": "タロットは78枚で構成されるカードで、22枚の大アルカナ(メジャーアルカナ)と56枚の小アルカナ(マイナーアルカナ)からなります。15世紀のヨーロッパに現れ、のちに内省や占いに広く用いられるようになりました。各カードには固有の象徴があり、正位置か逆位置かによって読み方が変わります。",
+  "h": "6a9eabe4"
+ },
+ "tarot.trai-1-3-hay-10-la": {
+  "t": "<span class=\"hp-ic\" data-icon=\"wallet-cards\"></span><span>1・3・10枚<br>のスプレッド</span>",
+  "h": "4355e693"
+ },
+ "tarot.vd-tinh-trang-su-nghiep-cua": {
+  "t": "例:今の私の仕事運はどうですか?",
+  "h": "69397559"
+ },
+ "tarot.xao-bai-rut": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"wallet-cards\"></span><b id=\"drawBtnLabel\">シャッフルして引く</b></span>",
+  "h": "f40097d9"
+ },
+ "tarot.xuoi-hay-nguoc-nghia": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sparkles\"></span><span>正位置と<br>逆位置</span>",
+  "h": "3097eb49"
+ },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. サービスの性質",
   "h": "7fb94895"
@@ -10714,6 +16090,86 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "チャージ済みで未使用の両数については、ご請求をいただければ、個別に検討いたします",
   "h": "f410ec3e"
+ },
+ "thansohoc.13-chi-so-pythagoras": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hash\"></span><span>ピタゴラス式の<br>13の指標</span>",
+  "h": "a752e4f5"
+ },
+ "thansohoc.duong-doi-dinh-menh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>ライフパス、<br>ディスティニー</span>",
+  "h": "49ec5008"
+ },
+ "thansohoc.ho-ten-day-du": {
+  "t": "フルネーム",
+  "h": "2c78151b"
+ },
+ "thansohoc.hoi-thay-luan-sau-than-so": {
+  "t": "✦ 数秘を先生に深く読んでもらう",
+  "h": "7193c825"
+ },
+ "thansohoc.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "thansohoc.nam-ca-nhan-dinh-cao": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>パーソナルイヤー、<br>ピナクル</span>",
+  "h": "63129b89"
+ },
+ "thansohoc.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "thansohoc.ngay-sinh-cua-ban-an-chua": {
+  "t": "あなたの生年月日には、ライフパスから現在のパーソナルイヤーまで、13の数字が隠れています。それらは、あなたが今どう考え、何を選んでいるのかを語ります。さっそく見て、自分自身をもっと深く知りましょう。",
+  "h": "91c3a41a"
+ },
+ "thansohoc.ngay-sinh-ten-day-du": {
+  "t": "生年月日とフルネーム",
+  "h": "787e2b10"
+ },
+ "thansohoc.nguyen-van-an": {
+  "t": "例:Yamada Taro",
+  "h": "dad5c28b"
+ },
+ "thansohoc.nhap-ngay-sinh-va-ho-ten": {
+  "t": "生年月日とフルネームを入力してください。ピタゴラス式で、ライフパス、ディスティニー、ソウル、ミッション、現在のパーソナルイヤーを算出します。",
+  "h": "a57588c8"
+ },
+ "thansohoc.nhap-ten-khai-sinh-day-du": {
+  "t": "出生時のフルネームを<b>ローマ字(アルファベット)</b>で入力してください。ベトナム語の声調記号の有無は問いません。",
+  "h": "073972bc"
+ },
+ "thansohoc.than-so-hoc": {
+  "t": "数秘術",
+  "h": "686db34b"
+ },
+ "thansohoc.than-so-hoc-13-chi-so": {
+  "t": "<b>数秘術</b><span>ピタゴラス式の13の指標</span>",
+  "h": "5d5b6737"
+ },
+ "thansohoc.than-so-hoc-numerology-theo-truong": {
+  "t": "ピタゴラス派の数秘術(ニューメロロジー)は、生年月日と氏名の数字を、ライフパスやピナクルといった固有の意味を持つ指標に換算します。この流派は、古代ギリシャの数学者ピタゴラスが唱えた「数と宇宙のつながり」という思想に由来します。",
+  "h": "29150586"
+ },
+ "thansohoc.than-so-hoc-tu-vi-minh": {
+  "t": "数秘術 — 明宝紫微斗数",
+  "h": "c3a04aa3"
+ },
+ "thansohoc.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "thansohoc.tinh-13-chi-so-than-so": {
+  "t": "数秘術の13の指標を算出します:ライフパス、ディスティニー、ソウル、ミッション、バースデー、アティチュード、マチュリティ、生年月日チャート、カルミックデット、パーソナルイヤー、ピナクルとチャレンジ、適職、キャリアのゴールデントライアングル。先生に深く読んでもらえます。",
+  "h": "8b46eb91"
+ },
+ "thansohoc.tinh-than-so-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hash\"></span><b id=\"btnGoLabel\">数秘を計算する →</b></span> <small>無料</small>",
+  "h": "b57b912e"
+ },
+ "thansohoc.tra-loi-thay-o-khung-chat": {
+  "t": "チャット欄で先生に答えると、数秘のチャートが作成されます。必要なのは生年月日とフルネームだけです。",
+  "h": "8268b781"
  },
  "thtg.1-ghi-am-giong-noi": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">声を録音</span>",
