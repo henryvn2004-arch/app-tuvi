@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Hỏi Thầy — Tử Vi Minh Bảo</title>
-<meta name="description" content="Toàn bộ các cuộc hỏi Thầy — mở lại bất kỳ lúc nào, hoặc bắt đầu một câu hỏi mới."/>
+<title data-i18n="trochuyen.hoi-thay-tu-vi-minh-bao">Hỏi Thầy — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:trochuyen.toan-bo-cac-cuoc-hoi-thay" name="description" content="Toàn bộ các cuộc hỏi Thầy — mở lại bất kỳ lúc nào, hoặc bắt đầu một câu hỏi mới."/>
 <link rel="icon" type="image/webp" href="/seal.webp"/>
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -34,15 +34,15 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Hỏi Thầy</b><span>Mọi cuộc hỏi Thầy, gộp từ mọi công cụ</span></div>
+      <div data-i18n="trochuyen.hoi-thay-moi-cuoc-hoi-thay" class="ws-title"><b>Hỏi Thầy</b><span>Mọi cuộc hỏi Thầy, gộp từ mọi công cụ</span></div>
     </div>
     <div class="ws-body">
-      <button type="button" class="tc-new" id="tcNew">
+      <button data-i18n="trochuyen.hoi-moi-bat-dau-mot-cau" type="button" class="tc-new" id="tcNew">
         <span class="tc-plus">+</span>
         <span><b>Hỏi mới</b><span>Bắt đầu một câu hỏi — hệ thống tự chọn đúng công cụ</span></span>
       </button>
-      <div id="tcLoading" style="padding:2.5rem 0;text-align:center;color:var(--text-lt);font-size:13px">Đang tải…</div>
-      <div id="tcEmpty" style="display:none;padding:2rem 1rem;text-align:center;color:var(--text-lt);font-size:13.5px;line-height:1.7">
+      <div data-i18n="topup.dang-tai" id="tcLoading" style="padding:2.5rem 0;text-align:center;color:var(--text-lt);font-size:13px">Đang tải…</div>
+      <div data-i18n="trochuyen.chua-co-hoi-thoai-nao-bam" id="tcEmpty" style="display:none;padding:2rem 1rem;text-align:center;color:var(--text-lt);font-size:13.5px;line-height:1.7">
         Chưa có hội thoại nào.<br>Bấm "Hỏi mới" ở trên, hoặc mở bất kỳ công cụ nào và hỏi Thầy.
       </div>
       <div class="tc-list" id="tcList"></div>
@@ -64,14 +64,15 @@
   // 2026-09-27 — Hồ sơ chỉ còn lối tắt trỏ về đây). Link mở lại phiên đi qua
   // `window.shellRestoreHref` (shell.js), KHÔNG tự ghép `/app/<tool>` — mã tool
   // `home` ghép ra `/app/home` là 404.
-  var TOOLMAP = { 'luan-giai': 'Luận giải Tử Vi', 'la-so': 'Lá số Tử Vi', 'bat-tu': 'Lá số Bát Tự', 'xem-tuoi': 'Xem tuổi vợ chồng', 'xem-lam-an': 'Xem tuổi làm ăn', 'tuong-hop': 'Tương hợp tuổi', 'sinh-con': 'Xem tuổi sinh con', 'chon-ngay': 'Chọn ngày tốt', 'dat-ten': 'Đặt tên con', 'dat-ten-dn': 'Đặt tên doanh nghiệp', 'ngu-hanh-ten': 'Ngũ hành tên', 'nap-am': 'Nạp âm ngũ hành', 'than-so-hoc': 'Thần số học', 'kim-lau': 'Kim Lâu & Tam Tai', 'bat-trach': 'Hướng Bát Trạch', 'kinh-dich': 'Kinh Dịch', 'xem-tuong': 'Xem tướng', 'phong-thuy': 'Phong thủy' };
+  // Nhãn chỉ để HIỂN THỊ (_tvmbT) — mã tool (khoá) giữ nguyên.
+  var TOOLMAP = { 'luan-giai': _tvmbT('js.trochuyen.tool-luan-giai', 'Luận giải Tử Vi'), 'la-so': _tvmbT('js.trochuyen.tool-la-so', 'Lá số Tử Vi'), 'bat-tu': _tvmbT('js.trochuyen.tool-bat-tu', 'Lá số Bát Tự'), 'xem-tuoi': _tvmbT('js.trochuyen.tool-xem-tuoi', 'Xem tuổi vợ chồng'), 'xem-lam-an': _tvmbT('js.trochuyen.tool-xem-lam-an', 'Xem tuổi làm ăn'), 'tuong-hop': _tvmbT('js.trochuyen.tool-tuong-hop', 'Tương hợp tuổi'), 'sinh-con': _tvmbT('js.trochuyen.tool-sinh-con', 'Xem tuổi sinh con'), 'chon-ngay': _tvmbT('js.trochuyen.tool-chon-ngay', 'Chọn ngày tốt'), 'dat-ten': _tvmbT('js.trochuyen.tool-dat-ten', 'Đặt tên con'), 'dat-ten-dn': _tvmbT('js.trochuyen.tool-dat-ten-dn', 'Đặt tên doanh nghiệp'), 'ngu-hanh-ten': _tvmbT('js.trochuyen.tool-ngu-hanh-ten', 'Ngũ hành tên'), 'nap-am': _tvmbT('js.trochuyen.tool-nap-am', 'Nạp âm ngũ hành'), 'than-so-hoc': _tvmbT('js.trochuyen.tool-than-so-hoc', 'Thần số học'), 'kim-lau': _tvmbT('js.trochuyen.tool-kim-lau', 'Kim Lâu & Tam Tai'), 'bat-trach': _tvmbT('js.trochuyen.tool-bat-trach', 'Hướng Bát Trạch'), 'kinh-dich': _tvmbT('js.trochuyen.tool-kinh-dich', 'Kinh Dịch'), 'xem-tuong': _tvmbT('js.trochuyen.tool-xem-tuong', 'Xem tướng'), 'phong-thuy': _tvmbT('js.trochuyen.tool-phong-thuy', 'Phong thủy') };
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function rel(ts){
     var d = Date.now() - ts;
-    if (d < 60000) return 'vừa xong';
-    if (d < 3600000) return Math.floor(d/60000) + ' phút trước';
-    if (d < 86400000) return Math.floor(d/3600000) + ' giờ trước';
-    return Math.floor(d/86400000) + ' ngày trước';
+    if (d < 60000) return _tvmbT('js.trochuyen.vua-xong', 'vừa xong');
+    if (d < 3600000) return _tvmbT('js.trochuyen.phut-truoc', '{n} phút trước', { n: Math.floor(d/60000) });
+    if (d < 86400000) return _tvmbT('js.trochuyen.gio-truoc', '{n} giờ trước', { n: Math.floor(d/3600000) });
+    return _tvmbT('js.trochuyen.ngay-truoc', '{n} ngày trước', { n: Math.floor(d/86400000) });
   }
   function local(){
     var out = [];
@@ -101,7 +102,7 @@
       '</a>';
     }).join('');
   }
-  document.getElementById('tcNew').addEventListener('click', function(){ location.href = '/app#chat'; });
+  document.getElementById('tcNew').addEventListener('click', function(){ location.href = _tvmbHref('/app#chat'); });
 
   var loc = local();
   render(loc);

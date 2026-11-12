@@ -67,7 +67,23 @@ giữ tên tiếng Việt làm KHOÁ nội bộ — W15 chỉ đổi lớp HIỂ
 
 Để đợt 4: `laso_public` theo (slug, locale) · chân dung/PDF/email-link · tên thầy bản ngữ.
 
+### Đợt 5 — các trang còn lại (mở 2026-11-12)
+Mỗi worker một nhóm trang, khoá theo namespace của trang; widget dùng chung (`tuvi-form.js`, `tools-shared/noi-sinh.js`,
+`vn-timezone.js`, `laso-chart.js`, `hook-layer.js`, `ai-loading-steps.js`, `portrait-recover.js`, `sample-hint.js`,
+`cung-ngay-sinh.js`) thuộc W26. KHÔNG sửa `shell.js`, `tools-shared/i18n.js`, `lib/i18n/*`, `scripts/check-*.mjs` của người
+khác — cần thì báo điều phối.
+
+| # | Nhóm trang | Model |
+|---|---|---|
+| W21 | Đường tiền + niềm tin: `app-tai-khoan` · `payment-success` · `huong-dan-thanh-toan` · `app-combo-tron-bo` · `app-combo-laso-tubinh` · `app-bao-cao` · `app-thay` · `app-thay-chi-tiet` · `xem-luan-giai` · `app-tro-chuyen` · `contact` · `about` · `faqs` · `phuong-phap` · `nguon-du-lieu` · `san-pham-dich-vu` | Opus |
+| W22 | Công cụ chân dung/quan hệ: `day-con` · `nguoi-khac` · `duyen-no`… · `nhan-mach` · `cong-so` · `ca-nha` · `sinh-con` | — |
+| W23 | Tướng/ngoại hình: `thanh-tuong*` · `kieu-toc` · `personal-color` · `mau-sac`… · điện/nhãn/thủ/bút tướng · `trang-diem` · `da-lieu-ai` · `khi-sac` · `trang-phuc` | — |
+| W24 | Lịch/tên/số: `gio-sinh` · `dat-ten*` · `chon-ngay` · `so-dep` · `ngu-hanh-ten` · `hoang-dao` · `ngay-tot` · `luc-nham` · `kim-lau` · `bat-trach` · `so-la-so` | — |
+| W25 | Bói/phong thuỷ/thư viện: `tarot` · `boi-bai-tay` · `oracle` · `than-so-hoc` · `ban-do-sao` · `phong-thuy` · `cua-hang-phong-thuy` · `ban-lam-viec` · `menh-kho` · `cong-cu` · `resources` · `tai-lieu` · `sach-detail` | — |
+| W26 | Widget dùng chung (danh sách ở trên) | — |
+
 ## Quyết định đã chốt (2026-11-11)
+- **Thuật ngữ/giọng văn ở các mục W15b–W19 nhật ký 2026-11: Henry duyệt nguyên trạng 2026-11-12.**
 - **Giá gói (USD, PayPal):** Khởi Đầu 350 L $19 · Phổ Thông 800 L $39 · Cao Cấp 1.750 L $79 ·
   VIP 3.800 L $159. 1 Lượng ≈ $0,04875 (gói bậc hai). Đã áp lên prod sau deploy #1209.
   ⚠️ `amount_vnd` CHƯA định giá lại — phải sửa trước khi bật `billing.vnd_rails_enabled`.

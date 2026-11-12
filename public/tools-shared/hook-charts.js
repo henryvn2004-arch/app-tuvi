@@ -17,6 +17,12 @@
 window.HookCharts = (function () {
   'use strict';
 
+  // Chữ HIỂN THỊ trong SVG qua I18n.tv (trang /<locale>/); vi / trang không nạp i18n ⇒ chữ Việt nguyên.
+  function _tv(key, vi) {
+    var I = window.I18n;
+    return I && I.tv ? I.tv(key, vi) : vi;
+  }
+
   function esc(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
@@ -83,7 +89,7 @@ window.HookCharts = (function () {
     const marker = curX != null
       ? '<line x1="' + curX.toFixed(1) + '" y1="' + (top - 8) + '" x2="' + curX.toFixed(1) + '" y2="' + bottom +
         '" class="hc-marker"></line>' +
-        '<text x="' + curX.toFixed(1) + '" y="' + (top - 10) + '" text-anchor="middle" class="hc-marker-t">bạn ở đây</text>'
+        '<text x="' + curX.toFixed(1) + '" y="' + (top - 10) + '" text-anchor="middle" class="hc-marker-t">'+_tv('js.shellui.hc-ban-o-day', 'bạn ở đây')+'</text>'
       : '';
     const label = esc(o.ariaLabel || 'Biểu đồ đường đời qua các đại vận');
     return _wrap(w, h, label,
@@ -363,7 +369,7 @@ window.HookCharts = (function () {
       var kw = _tspans(it.kw || '', midX, cy0 + 66, 15, 13, 'hc-kw', 3, mucColor(it.muc));
       g += kw.html;
       if (it.now) {
-        g += '<text x="' + midX + '" y="' + (cy0 + ch - 8) + '" text-anchor="middle" class="hc-marker-t">bạn ở đây</text>';
+        g += '<text x="' + midX + '" y="' + (cy0 + ch - 8) + '" text-anchor="middle" class="hc-marker-t">'+_tv('js.shellui.hc-ban-o-day', 'bạn ở đây')+'</text>';
       }
     });
     return _wrap(w, h, esc(o.ariaLabel || 'Bản đồ ' + items.length + ' tháng tới'), g);
@@ -460,7 +466,7 @@ window.HookCharts = (function () {
       g += '<text x="' + mid + '" y="' + (y0 + 17) + '" text-anchor="middle" class="hc-num">' +
         esc(y.nam) + '</text>';
       g += mucMark(muc, mid, y0 + 30, 6);
-      g += _tspans(sach ? 'được' : y.nhan + (y.them ? ' +' : ''),
+      g += _tspans(sach ? _tv('js.shellui.hc-duoc', 'được') : y.nhan + (y.them ? ' +' : ''),
         mid, y0 + 45, 12, 11, 'hc-kw-sm', 2, mucColor(muc)).html;
       g += '<text x="' + (x0 + cw - 5) + '" y="' + (y0 + 13) + '" text-anchor="end" class="hc-lbl">' +
         esc(y.tuoi) + '</text>';
