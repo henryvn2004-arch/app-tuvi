@@ -458,6 +458,8 @@ export interface NacDaiVan {
   hopMenh: boolean | null;
   dangChay: boolean;
   luan: string;
+  /** Mã khuôn câu `luan` (khoá `luan.<mã>` của bản dịch) — additive, KHÔNG hiển thị. */
+  luanMa: LuanNacMa;
 }
 
 // ── 4. Ghép đội ─────────────────────────────────────────────
@@ -478,6 +480,8 @@ export interface GhepDoi {
   /** Kiểu BỔ KHUYẾT nên tìm — theo luật âm dương tương bổ. */
   nenTim: KieuId;
   goiY: string;
+  /** Mã khuôn câu `goiY` (khoá `ghep.<mã>`) — additive, KHÔNG hiển thị. Biến `{kieu}`/`{nen}` client lấy từ `kieu`/`nenTim`. */
+  goiYMa: GhepMa;
 }
 
 /** Luật bù: âm ghép dương. Trong mỗi nửa, chọn kiểu bù cả trục nhịp cho đủ đôi
@@ -730,6 +734,9 @@ export interface NganhGoiY {
   nguon: string;
   /** Sắc thái từ phụ tinh + tứ hoá tại Quan Lộc. */
   sacThai: string[];
+  /** Mã bảng nguồn của `linhVuc`/`chatViec`/`nganh` (khoá `nganh.<mã>.*`) và của `quyMo` (`quymo.<mã>`) — additive. */
+  domainMa: string;
+  quyMoMa: string;
 }
 
 // `cb` truyền VÀO chứ không tự gọi lại `resolveCareerBase` — tầng nhánh cũng
@@ -737,12 +744,13 @@ export interface NganhGoiY {
 // nhau, đúng bẫy repo đã trả giá ở can chi ngày.
 function goiYNganh(cb: CareerBase, kieu: KieuId): NganhGoiY {
   const d = DOMAIN_NGANH[cb.domain];
+  const quyMoMa = cb.tier in QUY_MO_THEO_BAC ? cb.tier : 'giua';
   return {
     linhVuc: d.linhVuc,
     chatViec: d.chatViec,
     nganh: d.nganh,
     vaiTro: VAI_THEO_KIEU[kieu],
-    quyMo: QUY_MO_THEO_BAC[cb.tier] || QUY_MO_THEO_BAC.giua,
+    quyMo: QUY_MO_THEO_BAC[quyMoMa],
     bac: cb.tierLabel,
     bacDiem: cb.tierScore,
     bacChiTiet: cb.tierBreakdown,
@@ -752,6 +760,8 @@ function goiYNganh(cb: CareerBase, kieu: KieuId): NganhGoiY {
     chucPhanCo: cb.desc,
     nguon: cb.source,
     sacThai: cb.notes,
+    domainMa: cb.domain,
+    quyMoMa,
   };
 }
 
@@ -808,6 +818,13 @@ const LOI_THEO_TRANG_THAI: Record<TrangThai, Record<KieuId, string>> = {
       'Bạn cần môi trường ổn định và một người dẫn rõ ràng để phát huy. Đừng nhận việc phải tự bơi ngay từ tuần đầu chỉ vì ngại từ chối lời mời.',
   },
 };
+
+/** Vai trong đội ↔ cung đọc theo CỔ PHÁP (xem chú thích ở mục 4). Bản dịch nhãn `vai`: khoá `doi.<cung>`. */
+const VAI_CUNG: { vai: string; cung: string }[] = [
+  { vai: 'Cấp trên của bạn', cung: 'Phụ Mẫu' },
+  { vai: 'Đồng sự ngang hàng', cung: 'Huynh Đệ' },
+  { vai: 'Cấp dưới & đối tác', cung: 'Nô Bộc' },
+];
 
 // ── Kết quả ─────────────────────────────────────────────────
 
@@ -907,17 +924,12 @@ export function computeCongSo(ls: Laso, trangThai: TrangThai = 'nhan-vien', namX
       tinh,
       hopMenh,
       dangChay: !!dvHienTai && dvHienTai.tuoiStart === tuoiStart,
-      luan: luanNac(phan.kieu, tinh, hopMenh, nac.ten),
+      ...(({ ma, text }) => ({ luan: text, luanMa: ma }))(luanNac(phan.kieu, tinh, hopMenh, nac.ten)),
     };
   });
 
   // ── Ghép đội
-  const vaiCung: { vai: string; cung: string }[] = [
-    { vai: 'Cấp trên của bạn', cung: 'Phụ Mẫu' },
-    { vai: 'Đồng sự ngang hàng', cung: 'Huynh Đệ' },
-    { vai: 'Cấp dưới & đối tác', cung: 'Nô Bộc' },
-  ];
-  const doi: GhepDoi[] = vaiCung.map((v) => {
+  const doi: GhepDoi[] = VAI_CUNG.map((v) => {
     const k = kieuCuaCung(ls, v.cung);
     const nenTim = BU[phan.kieu];
     return {
@@ -928,7 +940,7 @@ export function computeCongSo(ls: Laso, trangThai: TrangThai = 'nhan-vien', namX
       kieu: k.kieu,
       kieuTen: k.kieu ? KIEU[k.kieu].ten : '—',
       nenTim,
-      goiY: goiYGhep(v.cung, phan.kieu, k.kieu, nenTim),
+      ...(({ ma, text }) => ({ goiY: text, goiYMa: ma }))(goiYGhep(v.cung, phan.kieu, k.kieu, nenTim)),
     };
   });
 
@@ -959,31 +971,51 @@ export function computeCongSo(ls: Laso, trangThai: TrangThai = 'nhan-vien', namX
   };
 }
 
-function luanNac(kieu: KieuId, tinh: 'duong' | 'am' | null, hop: boolean | null, nac: string): string {
-  if (!tinh || hop === null) return `Chặng ${nac.toLowerCase()} — đại vận không có chính tinh, tính chất mờ, đọc thêm ở cung xung chiếu.`;
+/** Khuôn câu lộ trình — chữ Việt do engine dựng từ ĐÂY (vi byte-giống), client tra bản dịch theo `luanMa` (`luan.<mã>`).
+ *  `{nac}` = tên chặng viết thường (client lấy từ `stt`). */
+const LUAN_NAC = {
+  mo: 'Chặng {nac} — đại vận không có chính tinh, tính chất mờ, đọc thêm ở cung xung chiếu.',
+  'duong-thuan':
+    'Vận cùng tính dương với bản mệnh: đà thuận, dám tranh và tranh được. Đây là quãng nên đặt cược lớn — chậm chân ở đây thì quãng sau phải trả giá đắt hơn nhiều.',
+  'am-thuan':
+    'Vận cùng tính âm với bản mệnh: êm, hợp tích luỹ và giữ quan hệ. Đừng lấy nhịp của người đang bung ra để đo mình trong quãng này.',
+  'duong-nghich':
+    'Vận ngược tính với bản mệnh (mệnh dương – vận âm): húc thẳng sẽ tốn sức mà ít kết quả. Quãng này ăn nhau ở chỗ nhẫn và ở chỗ dựng quan hệ, không ở chỗ thắng nhanh.',
+  'am-nghich':
+    'Vận ngược tính với bản mệnh (mệnh âm – vận dương): môi trường đẩy bạn ra phía trước sớm hơn bạn muốn. Nhận việc lộ diện đi — đây đúng là quãng bạn học được thứ mình vẫn né.',
+} as const;
+export type LuanNacMa = keyof typeof LUAN_NAC;
+
+function luanNac(kieu: KieuId, tinh: 'duong' | 'am' | null, hop: boolean | null, nac: string): { ma: LuanNacMa; text: string } {
+  if (!tinh || hop === null) return { ma: 'mo', text: LUAN_NAC.mo.replace('{nac}', nac.toLowerCase()) };
   const duongMenh = KIEU[kieu].amDuong === 'duong';
-  if (hop) {
-    return duongMenh
-      ? 'Vận cùng tính dương với bản mệnh: đà thuận, dám tranh và tranh được. Đây là quãng nên đặt cược lớn — chậm chân ở đây thì quãng sau phải trả giá đắt hơn nhiều.'
-      : 'Vận cùng tính âm với bản mệnh: êm, hợp tích luỹ và giữ quan hệ. Đừng lấy nhịp của người đang bung ra để đo mình trong quãng này.';
-  }
-  return duongMenh
-    ? 'Vận ngược tính với bản mệnh (mệnh dương – vận âm): húc thẳng sẽ tốn sức mà ít kết quả. Quãng này ăn nhau ở chỗ nhẫn và ở chỗ dựng quan hệ, không ở chỗ thắng nhanh.'
-    : 'Vận ngược tính với bản mệnh (mệnh âm – vận dương): môi trường đẩy bạn ra phía trước sớm hơn bạn muốn. Nhận việc lộ diện đi — đây đúng là quãng bạn học được thứ mình vẫn né.';
+  const ma: LuanNacMa = hop ? (duongMenh ? 'duong-thuan' : 'am-thuan') : duongMenh ? 'duong-nghich' : 'am-nghich';
+  return { ma, text: LUAN_NAC[ma] };
 }
 
-function goiYGhep(cung: string, menh: KieuId, cua: KieuId | null, nenTim: KieuId): string {
-  const tenNen = KIEU[nenTim].ten;
-  if (cung === 'Phụ Mẫu') {
-    if (!cua) return `Cung Phụ Mẫu không có chính tinh — quan hệ với cấp trên mờ nhạt, ít người đỡ mà cũng ít người chặn. Bạn phải tự tạo mối, đừng chờ được để mắt tới.`;
-    return `Bạn dễ ăn ý với sếp kiểu ${KIEU[cua].ten.toLowerCase()}. ${cua === menh ? 'Cùng kiểu với bạn nên hiểu nhau nhanh — nhưng cũng cùng điểm mù, hai người sẽ bỏ sót cùng một thứ.' : 'Khác kiểu bạn nên hay va lúc đầu; qua được khúc đó thì đây là người dạy bạn nhiều nhất.'}`;
-  }
-  if (cung === 'Nô Bộc') {
-    if (!cua) return `Cung Nô Bộc không có chính tinh — người dưới quyền khó thành chỗ dựa. Đừng trông vào một cánh tay phải; nên xây quy trình để việc không phụ thuộc một người.`;
-    return `Người dưới quyền hợp với bạn nghiêng về kiểu ${KIEU[cua].ten.toLowerCase()}. Còn kiểu bạn CẦN mà thường thiếu là ${tenNen.toLowerCase()} — tuyển bù chỗ đó trước khi tuyển thêm người giống mình.`;
-  }
-  if (!cua) return `Cung Huynh Đệ không có chính tinh — quan hệ đồng cấp nhạt, ít phe cánh mà cũng ít hậu thuẫn khi cần biểu quyết.`;
-  return `Đồng sự ăn ý với bạn thường là kiểu ${KIEU[cua].ten.toLowerCase()}. Trong một đội, cặp bù nhau tốt nhất cho bạn là ${tenNen.toLowerCase()}.`;
+/** Khuôn câu ghép đội. `{kieu}` = kiểu của cung (viết thường), `{nen}` = kiểu nên tìm để bù (viết thường). */
+const GHEP = {
+  'pm.none': 'Cung Phụ Mẫu không có chính tinh — quan hệ với cấp trên mờ nhạt, ít người đỡ mà cũng ít người chặn. Bạn phải tự tạo mối, đừng chờ được để mắt tới.',
+  'pm.same': 'Bạn dễ ăn ý với sếp kiểu {kieu}. Cùng kiểu với bạn nên hiểu nhau nhanh — nhưng cũng cùng điểm mù, hai người sẽ bỏ sót cùng một thứ.',
+  'pm.diff': 'Bạn dễ ăn ý với sếp kiểu {kieu}. Khác kiểu bạn nên hay va lúc đầu; qua được khúc đó thì đây là người dạy bạn nhiều nhất.',
+  'nb.none': 'Cung Nô Bộc không có chính tinh — người dưới quyền khó thành chỗ dựa. Đừng trông vào một cánh tay phải; nên xây quy trình để việc không phụ thuộc một người.',
+  'nb.has': 'Người dưới quyền hợp với bạn nghiêng về kiểu {kieu}. Còn kiểu bạn CẦN mà thường thiếu là {nen} — tuyển bù chỗ đó trước khi tuyển thêm người giống mình.',
+  'hd.none': 'Cung Huynh Đệ không có chính tinh — quan hệ đồng cấp nhạt, ít phe cánh mà cũng ít hậu thuẫn khi cần biểu quyết.',
+  'hd.has': 'Đồng sự ăn ý với bạn thường là kiểu {kieu}. Trong một đội, cặp bù nhau tốt nhất cho bạn là {nen}.',
+} as const;
+export type GhepMa = keyof typeof GHEP;
+
+function goiYGhep(cung: string, menh: KieuId, cua: KieuId | null, nenTim: KieuId): { ma: GhepMa; text: string } {
+  const ma: GhepMa =
+    cung === 'Phụ Mẫu'
+      ? !cua ? 'pm.none' : cua === menh ? 'pm.same' : 'pm.diff'
+      : cung === 'Nô Bộc'
+        ? cua ? 'nb.has' : 'nb.none'
+        : cua ? 'hd.has' : 'hd.none';
+  const text = GHEP[ma]
+    .replace('{kieu}', cua ? KIEU[cua].ten.toLowerCase() : '')
+    .replace('{nen}', KIEU[nenTim].ten.toLowerCase());
+  return { ma, text };
 }
 
 // ── Xuất cho rail (PHẲNG) ───────────────────────────────────
