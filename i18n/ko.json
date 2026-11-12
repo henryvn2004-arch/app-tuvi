@@ -1,4 +1,200 @@
 {
+ "bandosao.10-hanh-tinh-vi-tri": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sun\"></span><span>행성 10개<br>위치</span>",
+  "h": "86d502e2"
+ },
+ "bandosao.4-truc-chinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>4대<br>주요 축</span>",
+  "h": "4f00b7ee"
+ },
+ "bandosao.ban-do-sao-luc-sinh": {
+  "t": "출생 별자리 차트",
+  "h": "2c2ee68e"
+ },
+ "bandosao.ban-do-sao-luc-sinh-chiem": {
+  "t": "<b>출생 별자리 차트</b><span>서양 점성술 — 어센던트, 12하우스, 어스펙트</span>",
+  "h": "4d91be0c"
+ },
+ "bandosao.ban-do-sao-luc-sinh-tu": {
+  "t": "출생 별자리 차트 — 명보 자미두수",
+  "h": "622509ef"
+ },
+ "bandosao.banh-xe-ve-theo-quy-uoc": {
+  "t": "차트 휠은 표준 방식으로 그려요. <b>어센던트가 왼쪽</b>에 오고, 별자리는 시계 반대 방향으로 이어져요. 파란 선은 조화 각도, 빨간 선은 긴장 각도예요. 강한 각도만 그렸어요. 전부 그리면 복잡해서 읽을 수 없거든요.<br><b>이것은 자미두수가 아니에요.</b> 두 체계 모두 '궁'과 '하우스'라는 말을 쓰지만 가리키는 것은 전혀 달라요. 자미두수 명반과 서로 맞춰 보지 마세요.",
+  "h": "079a6d70"
+ },
+ "bandosao.chiem-tinh-hoc-phuong-tay-western": {
+  "t": "서양 점성술(Western Astrology)은 태어난 순간의 행성과 황도 12궁의 위치를 바탕으로 해석하는 체계예요. 하늘을 생활 영역에 대응하는 12하우스로 나누고, 출생 차트(natal chart)를 중심 도구로 삼아 한 사람의 성격과 경향을 읽어요.",
+  "h": "87d59586"
+ },
+ "bandosao.goc-chieu-noi-bat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"share-2\"></span><span>주요<br>어스펙트</span>",
+  "h": "1d194367"
+ },
+ "bandosao.hoi-thay-doc-ban-do-nay": {
+  "t": "✦ 선생님께 이 차트 읽어 달라고 하기",
+  "h": "c3a04d9b"
+ },
+ "bandosao.kinh-do": {
+  "t": "경도",
+  "h": "565ba07f"
+ },
+ "bandosao.lap-ban-do-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sun\"></span><b id=\"btnGoLabel\">차트 만들기 →</b></span> <small>무료</small>",
+  "h": "f8344846"
+ },
+ "bandosao.lap-ban-do-sao-luc-sinh": {
+  "t": "서양 점성술로 출생 별자리 차트를 만들어요 — 어센던트, 12하우스, 행성 10개의 위치와 어스펙트. 차트 휠 이미지를 내려받아 공유할 수도 있어요.",
+  "h": "472e68d9"
+ },
+ "bandosao.moi-nguoi-sinh-ra-duoi-mot": {
+  "t": "사람은 저마다 다른 하늘 아래에서 태어나요. 태어난 순간 12하우스의 위치는 당신에 대해 무엇을 말해 줄까요? 바로 그 순간의 별자리 차트를 만들어 무료로 보고 저장해 보세요.",
+  "h": "f4ee8f99"
+ },
+ "bandosao.mui-gio": {
+  "t": "시간대",
+  "h": "4a92729d"
+ },
+ "bandosao.ngay-gio-va-noi-sinh": {
+  "t": "생년월일시와 출생지",
+  "h": "d8855e46"
+ },
+ "bandosao.nhap-chinh-xac-ngay-gio-va": {
+  "t": "생년월일, 태어난 시각, 출생지를 정확히 입력하세요. 4대 축, 행성 위치, 주요 어스펙트, 원소 균형표를 받아볼 수 있어요.",
+  "h": "e74ddddc"
+ },
+ "bandosao.noi-sinh": {
+  "t": "출생지",
+  "h": "39348136"
+ },
+ "bandosao.tai-anh-ban-do": {
+  "t": "⬇ 차트 이미지 내려받기",
+  "h": "9684a65c"
+ },
+ "bandosao.vi-do": {
+  "t": "위도",
+  "h": "b9ec9d20"
+ },
+ "banlamviec.1-ban-menh-thong-tin": {
+  "t": "<span class=\"pt-num\">1</span> 본명 &amp; 정보",
+  "h": "b18e5a9a"
+ },
+ "banlamviec.2-chup-tai-anh": {
+  "t": "<span class=\"pt-num\">2</span> 촬영 / 사진 올리기",
+  "h": "76342e73"
+ },
+ "banlamviec.anh-vat-dung-nhan-dien": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 사진 &amp; 인식할 물건",
+  "h": "ac137c18"
+ },
+ "banlamviec.chup-anh-goc-lam-viec-he": {
+  "t": "작업 공간을 촬영하면 팔택 풍수, 앉는 방향을 분석하고 본명에 맞는 배치를 제안해 효율을 높여 드려요.",
+  "h": "bc883f29"
+ },
+ "banlamviec.chup-anh-goc-lam-viec-sau": {
+  "t": "출생 연도, 성별, 창문 방향을 입력한 뒤 작업 공간을 촬영하세요. 풍수 점수(전·후)와 구체적인 조정 제안을 받아볼 수 있어요.",
+  "h": "66e5f508"
+ },
+ "banlamviec.de-xuat-dieu-chinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"settings\"></span><span>조정<br>제안</span>",
+  "h": "a3bfd761"
+ },
+ "banlamviec.de-xuat-dieu-chinh-t30o": {
+  "t": "<span class=\"ic\" data-icon=\"settings\"></span> 조정 제안",
+  "h": "355adcff"
+ },
+ "banlamviec.diem-phong-thuy-truoc-sau": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>풍수 점수<br>전 · 후</span>",
+  "h": "e7ecbd9a"
+ },
+ "banlamviec.he-thong-render-lai-goc-lam": {
+  "t": "본명의 오행 색과 최적의 배치에 맞춰 작업 공간을 다시 렌더링해요.",
+  "h": "04cb62e4"
+ },
+ "banlamviec.hoc-tap-on-thi": {
+  "t": "공부 / 시험 준비",
+  "h": "5fc56198"
+ },
+ "banlamviec.huong-cua-so-chinh-hoac-nguon": {
+  "t": "주 창문 방향 또는 자연광이 들어오는 방향",
+  "h": "69065acc"
+ },
+ "banlamviec.huong-cua-so-nguon-sang-chinh": {
+  "t": "창문 방향 / 주 광원",
+  "h": "e48392ba"
+ },
+ "banlamviec.huong-ngoi-lam-viec": {
+  "t": "<span class=\"hp-ic\" data-icon=\"briefcase\"></span><span>작업 시<br>앉는 방향</span>",
+  "h": "43706670"
+ },
+ "banlamviec.huong-ngoi-lam-viec-dflu": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 작업 시 앉는 방향",
+  "h": "3adddca8"
+ },
+ "banlamviec.lam-viec-van-phong": {
+  "t": "사무직",
+  "h": "65734b65"
+ },
+ "banlamviec.meo-tang-tap-trung-theo-phong": {
+  "t": "<span class=\"ic\" data-icon=\"circle-dot\"></span> 풍수로 집중력 높이는 팁",
+  "h": "5b3cfa07"
+ },
+ "banlamviec.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"ban-lam-viec\"></span> /1회 <span class=\"cb-sub\">(<span data-tvp-price=\"ban-lam-viec\">…</span>냥)</span>",
+  "h": "56800ac5"
+ },
+ "banlamviec.muc-dich-su-dung": {
+  "t": "사용 목적",
+  "h": "0ae5f77a"
+ },
+ "banlamviec.ngoi-ca-ngay-o-mot-goc": {
+  "t": "하루 종일 책상 한구석에 앉아 있는데도 일은 더디고 아이디어는 바닥나는 것 같다면, 문제는 능력이 아니라 앉아 있는 방식에 있을지도 몰라요. 작업 공간 사진 한 장을 찍으면, 운을 가로막는 곳을 정확히 짚어 드려요.",
+  "h": "7995fd82"
+ },
+ "banlamviec.phan-tich-lai": {
+  "t": "← 다시 분석하기",
+  "h": "86451f19"
+ },
+ "banlamviec.phan-tich-ngay-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"monitor\"></span><b id=\"btnAnalyzeLabel\">지금 분석하기 →</b></span> <small>소요 <span class=\"vnd\" data-tvp-price-vnd=\"ban-lam-viec\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"ban-lam-viec\">…</span>냥)</span></small>",
+  "h": "3409c62a"
+ },
+ "banlamviec.phong-thuy-ban-lam-viec": {
+  "t": "책상 풍수",
+  "h": "2f08993f"
+ },
+ "banlamviec.phong-thuy-ban-lam-viec-chup": {
+  "t": "<b>책상 풍수</b><span>작업 공간 사진을 찍으면 팔택에 따라 앉는 방향을 점수로 평가해요</span>",
+  "h": "398222d6"
+ },
+ "banlamviec.phong-thuy-ban-lam-viec-tu": {
+  "t": "책상 풍수 — 명보 자미두수",
+  "h": "70ec68b0"
+ },
+ "banlamviec.render-khong-gian-lam-viec-luong": {
+  "t": "<span class=\"ic\" data-icon=\"monitor\"></span> 작업 공간 렌더링 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"phong-thuy-render\">…</span>냥</span>",
+  "h": "f066b43e"
+ },
+ "banlamviec.render-khong-gian-theo-phong-thuy": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 풍수에 맞춘 공간 렌더링",
+  "h": "9896cb61"
+ },
+ "banlamviec.sang-tao-thiet-ke": {
+  "t": "창작 / 디자인",
+  "h": "9fd559b0"
+ },
+ "banlamviec.tai-anh": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 이미지 내려받기",
+  "h": "73878385"
+ },
+ "banlamviec.vat-dung-nhan-dien": {
+  "t": "인식할 물건",
+  "h": "de9de137"
+ },
+ "banlamviec.vat-pham-nen-them": {
+  "t": "<span class=\"ic\" data-icon=\"store\"></span> 추가하면 좋은 물건",
+  "h": "b07795fe"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">정보 입력</span>",
   "h": "487c9507"
@@ -102,6 +298,78 @@
  "battu.viet-rieng-cho-tu-tru-nay": {
   "t": "이 사주만을 위해 자평 고법으로 새로 씁니다. 총 16개 항목: 격국, 십신, 대운, 유년.",
   "h": "f54c0d01"
+ },
+ "boibai.1-la-thong-diep-hom-nay": {
+  "t": "1장 — 오늘의 메시지",
+  "h": "f2ebf342"
+ },
+ "boibai.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">결과 받기</span>",
+  "h": "b0b2f830"
+ },
+ "boibai.3-la-tinh-trang-thach-thuc": {
+  "t": "3장 — 현재 상황 · 도전 · 결과",
+  "h": "a2b3d188"
+ },
+ "boibai.5-la-trai-bai-ngu-hanh": {
+  "t": "5장 — 오행 스프레드",
+  "h": "d39d67bd"
+ },
+ "boibai.boi-bai-tay": {
+  "t": "트럼프 카드 점",
+  "h": "4a54dbba"
+ },
+ "boibai.boi-bai-tay-rut-bai-52": {
+  "t": "<b>트럼프 카드 점</b><span>카드 52장 뽑기 — 연애 · 커리어 · 재물 — 무료</span>",
+  "h": "8beef430"
+ },
+ "boibai.boi-bai-tay-truyen-thong-dung": {
+  "t": "전통 트럼프 카드 점은 전용 타로 덱 대신 일반적인 52장짜리 트럼프 카드를 써요. 서양 여러 나라와 베트남의 민간에서 널리 전해 내려왔어요. 카드마다 무늬와 숫자에 따라 고유한 의미가 있어서, 앞으로의 흐름을 가늠하는 데 쓰여요.",
+  "h": "7e2a1c46"
+ },
+ "boibai.boi-bai-tay-tu-vi-minh": {
+  "t": "트럼프 카드 점 — 명보 자미두수",
+  "h": "0d1548c3"
+ },
+ "boibai.cau-hoi-tuy-chon": {
+  "t": "질문 (선택)",
+  "h": "66f517b4"
+ },
+ "boibai.chon-kieu-rut-bai": {
+  "t": "뽑는 방식 고르기",
+  "h": "5215cc5a"
+ },
+ "boibai.chon-kieu-trai-1-3-hay": {
+  "t": "스프레드(1장, 3장, 5장)를 고르면 시스템이 무작위로 카드를 뽑아, 카드마다 연애·커리어·재물 관점의 풀이를 알려 드려요.",
+  "h": "b47db074"
+ },
+ "boibai.khong-can-hieu-het-78-la": {
+  "t": "78장을 다 알 필요는 없어요. 마음에 걸리는 질문 하나면 충분해요. 직관으로 카드 한 장을 뽑고 짧은 풀이를 받아 보세요. 옛날 할머니와 어머니가 봐 주시던 카드 점처럼 부드럽게요.",
+  "h": "2487c895"
+ },
+ "boibai.loi-boi-dan-gian": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>민간에 전해 온<br>점치는 법</span>",
+  "h": "d309e0a7"
+ },
+ "boibai.rut-1-3-hay-5-la": {
+  "t": "<span class=\"hp-ic\" data-icon=\"spade\"></span><span>1장, 3장<br>또는 5장</span>",
+  "h": "658be253"
+ },
+ "boibai.rut-bai-tay-52-la-ngay": {
+  "t": "명보 자미두수에서 트럼프 카드 52장을 바로 뽑아 보세요 — 1장, 3장, 5장 스프레드로 연애 · 커리어 · 재물을 풀이해요.",
+  "h": "1dff4433"
+ },
+ "boibai.tinh-cam-su-nghiep-tai-chinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>연애,<br>커리어, 재물</span>",
+  "h": "397044b2"
+ },
+ "boibai.vd-tinh-hinh-tai-chinh-cua": {
+  "t": "예: 앞으로 제 재물운은 어떨까요?",
+  "h": "0d4f2217"
+ },
+ "boibai.xao-bai-rut": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"spade\"></span><b id=\"drawBtnLabel\">섞고 뽑기</b></span>",
+  "h": "e53dcebd"
  },
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "이야기를 들려주세요. 명보가 15분의 선생님 중 알맞은 분을 안내해 드려요: 자미두수 명반, 사주, 궁합, 작명, 길일 택일.",
@@ -362,6 +630,138 @@
  "congcu.ve-hom-nay": {
   "t": "← 오늘로 돌아가기",
   "h": "24faf89e"
+ },
+ "congcutr.50-cong-cu-menh-ly-dung": {
+  "t": "명리 도구 50종 — 하나씩 따로 쓰기",
+  "h": "8731ad3c"
+ },
+ "congcutr.50-cong-cu-menh-ly-tu": {
+  "t": "명리 도구 50종 — 명보 자미두수",
+  "h": "b35a67a8"
+ },
+ "congcutr.chon-ngay": {
+  "t": "택일",
+  "h": "353d66a6"
+ },
+ "congcutr.cong-cu": {
+  "t": "도구",
+  "h": "a601efbf"
+ },
+ "congcutr.cong-cu-chuyen-sau": {
+  "t": "전문 도구",
+  "h": "10f6e3a0"
+ },
+ "congcutr.dang-tai-cong-cu": {
+  "t": "<span class=\"ic\" data-icon=\"hourglass\"></span> 도구 불러오는 중...",
+  "h": "1078fac1"
+ },
+ "congcutr.dat-ten": {
+  "t": "작명",
+  "h": "ca2c4ea5"
+ },
+ "congcutr.khi-ban-hoi-thay-thay-da": {
+  "t": "<a href=\"/app\" style=\"color:var(--gold-bright);font-weight:600\">선생님께 묻기</a>를 하면, 선생님이 이 도구들 대부분을 직접 불러서 답해 드려요. 아니면 도구를 하나씩 직접 골라 보세요: 명반 풀이, 사주, 관상, 풍수, 작명, 택일, 카드 점…",
+  "h": "48d6d014"
+ },
+ "congcutr.khong-can-biet-bo-mon-nao": {
+  "t": "어떤 분야인지 몰라도 괜찮아요 — 지금 마음에 걸리는 일을 고르세요.",
+  "h": "6723d4c3"
+ },
+ "congcutr.lam-dep": {
+  "t": "뷰티",
+  "h": "a4c8d630"
+ },
+ "congcutr.mien-phi": {
+  "t": "무료 <span class=\"tab-count\" id=\"freeCount\">…</span>",
+  "h": "eb8f87ac"
+ },
+ "congcutr.theo-bo-mon": {
+  "t": "분야별",
+  "h": "84683625"
+ },
+ "congcutr.toi-dang-lo-chuyen-gi": {
+  "t": "요즘 걱정되는 일",
+  "h": "648df752"
+ },
+ "congcutr.tu-binh": {
+  "t": "사주",
+  "h": "66c4edf1"
+ },
+ "congcutr.tu-vi": {
+  "t": "자미두수",
+  "h": "f49901f4"
+ },
+ "cuahang.anh-khu-vuc-vat-dung-nhan": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 사진 &amp; 인식할 구역/물건",
+  "h": "dcd1e25d"
+ },
+ "cuahang.buon-ban-e-am-nhan-vien": {
+  "t": "장사는 안되고 직원은 계속 들락날락해요. 원인이 시장이 아니라 공간 배치에 있는 경우도 많아요. 매장이나 사무실 사진을 찍으면 재물운을 막는 곳을 정확히 분석해 드려요.",
+  "h": "fa001aee"
+ },
+ "cuahang.chup-anh-cua-hang-hoac-van": {
+  "t": "매장이나 사무실을 촬영하면 계산대, 출입문, 금고, 진열 구역의 배치를 팔택 풍수로 분석해 재물운을 높일 수 있도록 도와드려요.",
+  "h": "c0796110"
+ },
+ "cuahang.chup-anh-khong-gian-sau-khi": {
+  "t": "출생 연도, 성별, 업종, 출입문 방향을 입력한 뒤 공간을 촬영하세요. 풍수 점수(전·후)와 조정 제안을 함께 받아볼 수 있어요.",
+  "h": "178623cb"
+ },
+ "cuahang.cua-hang-kinh-doanh": {
+  "t": "영업 매장",
+  "h": "c7a324c6"
+ },
+ "cuahang.he-thong-render-lai-khong-gian": {
+  "t": "본명의 오행 색과 재물운을 끌어들이는 최적의 배치에 맞춰 영업 공간을 다시 렌더링해요.",
+  "h": "63dda3e0"
+ },
+ "cuahang.khu-vuc-vat-dung-nhan-dien": {
+  "t": "인식할 구역/물건",
+  "h": "1d9eab0f"
+ },
+ "cuahang.loai-khong-gian": {
+  "t": "공간 유형",
+  "h": "b0b069bf"
+ },
+ "cuahang.meo-kich-hoat-tai-loc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"dollar-sign\"></span><span>재물운 살리는<br>팁</span>",
+  "h": "86d89378"
+ },
+ "cuahang.meo-kich-hoat-tai-loc-gfzc": {
+  "t": "<span class=\"ic\" data-icon=\"dollar-sign\"></span> 재물운 살리는 팁",
+  "h": "aa02e0bc"
+ },
+ "cuahang.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"cua-hang-phong-thuy\"></span> /1회 <span class=\"cb-sub\">(<span data-tvp-price=\"cua-hang-phong-thuy\">…</span>냥)</span>",
+  "h": "faf2fd2d"
+ },
+ "cuahang.nha-hang-quan-an": {
+  "t": "음식점 / 식당",
+  "h": "d0defd73"
+ },
+ "cuahang.phan-tich-ngay-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"store\"></span><b id=\"btnAnalyzeLabel\">지금 분석하기 →</b></span> <small>소요 <span class=\"vnd\" data-tvp-price-vnd=\"cua-hang-phong-thuy\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"cua-hang-phong-thuy\">…</span>냥)</span></small>",
+  "h": "a1939278"
+ },
+ "cuahang.phong-thuy-cua-hang-van-phong": {
+  "t": "매장·사무실 풍수 — 명보 자미두수",
+  "h": "fbde3673"
+ },
+ "cuahang.phong-thuy-cua-hang-van-phong-ayc9": {
+  "t": "<b>매장·사무실 풍수</b><span>매장이나 사무실 사진을 찍으면 팔택에 따라 계산대와 출입문의 배치를 점수로 평가해요</span>",
+  "h": "d462466b"
+ },
+ "cuahang.phong-thuy-cua-hang-van-phong-yqxb": {
+  "t": "매장·사무실 풍수",
+  "h": "0ff0d09e"
+ },
+ "cuahang.render-khong-gian-kinh-doanh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"store\"></span> 영업 공간 렌더링 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"phong-thuy-render\">…</span>냥</span>",
+  "h": "4e52cc64"
+ },
+ "cuahang.van-phong-cong-ty": {
+  "t": "회사 사무실",
+  "h": "d678c2d6"
  },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 참고용이라는 성격",
@@ -1519,6 +1919,434 @@
   "t": " 세",
   "h": "2e261bf5"
  },
+ "js.boibai.4-chat-bai-nghia-la-gi": {
+  "t": "카드의 네 가지 무늬는 각각 무슨 뜻인가요?",
+  "h": "793f6bd3"
+ },
+ "js.boibai.anh-huong-tu-moi-truong-xung": {
+  "t": "주변 환경에서 오는 영향",
+  "h": "511b93e0"
+ },
+ "js.boibai.at": {
+  "t": "에이스",
+  "h": "ec2d5348"
+ },
+ "js.boibai.ba": {
+  "t": "3",
+  "h": "2fd22ce6"
+ },
+ "js.boibai.ban-muon-hoi-them-ve-la": {
+  "t": "**. 어떤 카드에 대해 더 물어보고 싶으세요?",
+  "h": "436f4393"
+ },
+ "js.boibai.bay": {
+  "t": "7",
+  "h": "ecfd1f8b"
+ },
+ "js.boibai.ben-ngoai": {
+  "t": "바깥",
+  "h": "483f7fd9"
+ },
+ "js.boibai.ben-trong": {
+  "t": "내면",
+  "h": "474e3314"
+ },
+ "js.boibai.bich": {
+  "t": "스페이드",
+  "h": "9cf21ff5"
+ },
+ "js.boibai.bien-dong-tai-chinh-rui-ro": {
+  "t": "재정에 변동과 위험이 있어요. 큰 지출을 결정할 때는 신중하세요.",
+  "h": "61f58a28"
+ },
+ "js.boibai.boi": {
+  "t": "잭",
+  "h": "003cb90e"
+ },
+ "js.boibai.boi-bai-tay": {
+  "t": "트럼프 카드 점 — ",
+  "h": "741dfabd"
+ },
+ "js.boibai.boi-bai-tay-khac-tarot-ra": {
+  "t": "트럼프 카드 점은 타로와 어떻게 다른가요?",
+  "h": "199a6ae6"
+ },
+ "js.boibai.bon": {
+  "t": "4",
+  "h": "8c0bddbf"
+ },
+ "js.boibai.cau-hoi-cua-ban": {
+  "t": "질문: \"",
+  "h": "660c481c"
+ },
+ "js.boibai.chia-se-chi-phi-hoac-dau": {
+  "t": "비용을 나누거나 공동 투자를 하게 될 수 있어요. 재정 결정을 혼자 내리지 마세요.",
+  "h": "dec106bc"
+ },
+ "js.boibai.chin": {
+  "t": "9",
+  "h": "c8fe0b37"
+ },
+ "js.boibai.chu-ky-tai-chinh-hoan-chinh": {
+  "t": "재정의 한 주기가 마무리돼요 — 빚을 다 갚거나, 투자를 마치거나, 계약이 끝나는 일일 수 있어요.",
+  "h": "30a6c7c2"
+ },
+ "js.boibai.co": {
+  "t": "하트",
+  "h": "aefc1852"
+ },
+ "js.boibai.co-hoi-bat-ngo-hoac-can": {
+  "t": "뜻밖의 기회가 오거나, 직관에 기대어 결정해야 할 수 있어요. 당신의 예감을 믿으세요.",
+  "h": "b8deed93"
+ },
+ "js.boibai.co-mau-thuan-hoac-thach-thuc": {
+  "t": "사랑에 갈등이나 도전이 있어요. 솔직하게 대화해야 풀 수 있어요.",
+  "h": "95b8227d"
+ },
+ "js.boibai.dam": {
+  "t": "퀸",
+  "h": "1798971f"
+ },
+ "js.boibai.dang-xao-bai": {
+  "t": "카드를 섞는 중...",
+  "h": "033fb9a0"
+ },
+ "js.boibai.dieu-da-anh-huong-den-hien": {
+  "t": "현재에 영향을 준 일",
+  "h": "c28631f9"
+ },
+ "js.boibai.dieu-dang-can-tro-hoac-thu": {
+  "t": "당신을 가로막거나 시험하는 것",
+  "h": "d4c2adc6"
+ },
+ "js.boibai.dong-nghiep-tre-hoac-nhan-vien": {
+  "t": "젊은 동료나 새 직원일 수 있어요. 더 젊은 사람에게서 오는 기회일 수도 있어요.",
+  "h": "2bb04297"
+ },
+ "js.boibai.du-an-hoac-giai-doan-cong": {
+  "t": "프로젝트나 업무 단계가 완성돼요. 새로운 도전과 기회를 준비하세요.",
+  "h": "619626f4"
+ },
+ "js.boibai.du-an-moi-hoac-co-hoi": {
+  "t": "새 프로젝트나 큰 커리어 기회가 다가오고 있어요. 무언가 새로 시작하기 좋은 때예요.",
+  "h": "dba9df01"
+ },
+ "js.boibai.du-an-sang-tao-dang-trien": {
+  "t": "창의적인 프로젝트가 진행 중이에요. 커뮤니티와 인맥을 연결해 기회를 넓히세요.",
+  "h": "196ea54f"
+ },
+ "js.boibai.duality-doi-tac-can-bang-hop": {
+  "t": "이중성, 파트너, 균형, 협력. 두 사람 또는 두 힘이 상황에 영향을 주고 있어요.",
+  "h": "53711b0b"
+ },
+ "js.boibai.duoc-dong-nghiep-va-cap-tren": {
+  "t": "동료와 상사의 도움을 받아요. 일하는 환경이 조화로워요.",
+  "h": "2f2d4f44"
+ },
+ "js.boibai.gan-hoan-thanh-mot-giai-doan": {
+  "t": "한 단계가 거의 마무리돼요. 다음 장으로 넘어가기 전에 중요한 교훈을 얻어야 해요.",
+  "h": "438e9dbe"
+ },
+ "js.boibai.gia": {
+  "t": "킹",
+  "h": "9d31d28a"
+ },
+ "js.boibai.giai-doan-kho-khan-hoac-canh": {
+  "t": "어렵거나 경쟁이 심한 시기예요. 더 유연하게 적응해야 해요.",
+  "h": "28710428"
+ },
+ "js.boibai.hai": {
+  "t": "2",
+  "h": "916c7bfc"
+ },
+ "js.boibai.hai-hoa-ho-tro-trach-nhiem": {
+  "t": "조화, 지원, 책임, 균형. 6은 사랑과 책임의 숫자예요.",
+  "h": "6a77c6d9"
+ },
+ "js.boibai.hoan-chinh-chu-ky-ket-thuc": {
+  "t": "완성, 주기의 끝, 새로운 시작. 10은 완성의 지점이자 다음 주기를 준비하는 때예요.",
+  "h": "c6171d63"
+ },
+ "js.boibai.hoan-thanh-tri-tue-nhan-dao": {
+  "t": "완성, 지혜, 인류애, 교훈. 9는 결승선이 가까운 숫자지만 여정은 아직 끝나지 않았어요.",
+  "h": "92ed3dc8"
+ },
+ "js.boibai.hop-tac-va-lam-viec-nhom": {
+  "t": "협력과 팀워크가 그 어느 때보다 중요해요. 성공하려면 함께할 사람이 필요해요.",
+  "h": "e9952166"
+ },
+ "js.boibai.huong-di-co-the-neu-tiep": {
+  "t": "이대로 계속하면 나아갈 수 있는 방향",
+  "h": "6efe93d8"
+ },
+ "js.boibai.ket-qua": {
+  "t": "결과",
+  "h": "75ff233d"
+ },
+ "js.boibai.ket-qua-boi-bai-tay-cua": {
+  "t": "나의 트럼프 카드 점 결과",
+  "h": "92e4c094"
+ },
+ "js.boibai.khoi-dau-manh-me-co-hoi": {
+  "t": "강력한 시작, 큰 기회, 최고의 힘. 에이스는 가장 강한 카드로, 순수한 힘과 무한한 잠재력을 상징해요.",
+  "h": "e95b57b1"
+ },
+ "js.boibai.la": {
+  "t": " 장",
+  "h": "f115358e"
+ },
+ "js.boibai.la-dau-tien-ban-rut-duoc": {
+  "t": "처음 뽑은 카드: **",
+  "h": "644c4dff"
+ },
+ "js.boibai.lbl-chat-bai": {
+  "t": "무늬",
+  "h": "1322f86f"
+ },
+ "js.boibai.lbl-su-nghiep": {
+  "t": "커리어",
+  "h": "31bd53c9"
+ },
+ "js.boibai.lbl-tai-chinh": {
+  "t": "재물",
+  "h": "bdb2ffa6"
+ },
+ "js.boibai.lbl-tinh-cam": {
+  "t": "연애",
+  "h": "39234ecc"
+ },
+ "js.boibai.luan-giai-tung-la": {
+  "t": "카드별 풀이",
+  "h": "c811697f"
+ },
+ "js.boibai.moi-quan-he-da-truong-thanh": {
+  "t": "관계가 성숙하고 깊어졌어요. 지금까지 쌓은 것을 돌아보고 다질 때예요.",
+  "h": "9bb7ede1"
+ },
+ "js.boibai.moi-quan-he-hai-chieu-dang": {
+  "t": "서로 주고받는 관계가 자라나고 있어요. 양쪽의 균형과 합의가 필요해요.",
+  "h": "1dfa37ee"
+ },
+ "js.boibai.moi-quan-he-hai-hoa-va": {
+  "t": "관계가 조화롭고 안정적이에요. 두 사람이 서로 잘 지지해 주고 있어요.",
+  "h": "6930eb7b"
+ },
+ "js.boibai.moi-quan-he-on-dinh-va": {
+  "t": "관계가 안정적이고 든든해요. 오래가는 약속을 쌓아 갈 때예요.",
+  "h": "112b37d3"
+ },
+ "js.boibai.mot-giai-doan-trong-tinh-cam": {
+  "t": "사랑의 한 시기가 끝나고 더 좋은 새 시기가 시작돼요.",
+  "h": "7362f723"
+ },
+ "js.boibai.muoi": {
+  "t": "10",
+  "h": "6f2ebecd"
+ },
+ "js.boibai.nam": {
+  "t": "5",
+  "h": "98926c7e"
+ },
+ "js.boibai.nang-luong-va-thong-diep-chinh": {
+  "t": "오늘의 에너지와 핵심 메시지",
+  "h": "90d4de48"
+ },
+ "js.boibai.nen-hoi-cau-hoi-kieu-gi": {
+  "t": "카드를 뽑을 때 어떤 질문을 하는 게 좋을까요?",
+  "h": "f6e87d8f"
+ },
+ "js.boibai.nguoi-co-kinh-nghiem-tai-chinh": {
+  "t": "재정 경험이 풍부한 사람이나 중요한 조언자예요. 전문가에게 상담할 때예요.",
+  "h": "6a671d97"
+ },
+ "js.boibai.nguoi-co-quyen-luc-truong-thanh": {
+  "t": "권력이 있는 사람, 성숙함, 권위, 리더십. 킹은 리더 또는 영향력 있는 사람을 상징해요.",
+  "h": "6b6fa839"
+ },
+ "js.boibai.nguoi-dan-ong-quan-trong-hoac": {
+  "t": "사랑에서 중요한 남성이거나 리더의 에너지예요. 안정적이고 성숙해요.",
+  "h": "22f7ec13"
+ },
+ "js.boibai.nguoi-moi-vao-cuoc-song-hoac": {
+  "t": "새로운 사람이 삶에 들어오거나 사랑에 관한 소식이 와요. 당신에게 호감을 품은 사람일 수 있어요.",
+  "h": "b48125b4"
+ },
+ "js.boibai.nguoi-phu-nu-anh-huong-den": {
+  "t": "커리어에 영향을 주는 여성이 있어요. 직관과 소통 능력을 활용하세요.",
+  "h": "89780eb7"
+ },
+ "js.boibai.nguoi-phu-nu-lien-quan-den": {
+  "t": "재정 결정과 관련된 여성이 있어요. 투자할 때는 직관에 기대세요.",
+  "h": "c17b0849"
+ },
+ "js.boibai.nguoi-phu-nu-quan-trong-trong": {
+  "t": "사랑에서 중요한 여성이 있어요. 또는 당신이 더 섬세함과 관심을 표현해야 할 때예요.",
+  "h": "3fe5079f"
+ },
+ "js.boibai.nguoi-phu-nu-truc-giac-sang": {
+  "t": "여성, 직관, 창의성, 돌봄. 퀸은 한 여성 또는 여성적인 에너지를 상징해요.",
+  "h": "74204343"
+ },
+ "js.boibai.nguoi-tre-tuoi-nang-luong-tuoi": {
+  "t": "젊은 사람, 신선한 에너지, 메시지, 전령. 잭은 젊은 사람이나 새로운 소식을 상징해요.",
+  "h": "6544e9d4"
+ },
+ "js.boibai.nhep": {
+  "t": "클럽",
+  "h": "1f47da68"
+ },
+ "js.boibai.on-dinh-cong-viec-nhung-co": {
+  "t": "일은 안정적이지만 지루할 수 있어요. 기술과 기반을 쌓는 데 집중하세요.",
+  "h": "47192d51"
+ },
+ "js.boibai.on-dinh-nen-tang-an-toan": {
+  "t": "안정, 기반, 안전, 질서. 네 모서리가 단단해요 — 넓히기 전에 먼저 기반을 쌓아야 해요.",
+  "h": "e9bff49c"
+ },
+ "js.boibai.phat-trien-sang-tao-bieu-dat": {
+  "t": "성장, 창의성, 표현, 공동체. 삼각형처럼 상황의 세 방향이 함께 움직이고 있어요.",
+  "h": "4ccfdbfb"
+ },
+ "js.boibai.qua-khu": {
+  "t": "과거",
+  "h": "75e794ae"
+ },
+ "js.boibai.quyen-luc-suc-manh-thanh-tich": {
+  "t": "권력, 힘, 성취, 재생. 8은 힘과 번영의 숫자예요.",
+  "h": "4fd9bfc8"
+ },
+ "js.boibai.ro": {
+  "t": "다이아몬드",
+  "h": "2c83f6bf"
+ },
+ "js.boibai.sau": {
+  "t": "6",
+  "h": "8d7feaa0"
+ },
+ "js.boibai.sep-hoac-nguoi-co-quyen-luc": {
+  "t": "상사나 영향력 있는 사람이에요. 성숙함과 리더십을 보여 주세요.",
+  "h": "421d1273"
+ },
+ "js.boibai.suc-manh-va-dam-me-trong": {
+  "t": "사랑에 힘과 열정이 있어요. 관계가 강렬하고 깊은 단계에 있어요.",
+  "h": "697e4d28"
+ },
+ "js.boibai.suit-c": {
+  "t": "커리어, 행동, 성장",
+  "h": "e33ce278"
+ },
+ "js.boibai.suit-d": {
+  "t": "물질, 돈, 현실적인 가치",
+  "h": "7667e511"
+ },
+ "js.boibai.suit-h": {
+  "t": "사랑, 감정, 인간관계",
+  "h": "4eb5d8b6"
+ },
+ "js.boibai.suit-s": {
+  "t": "도전, 지성, 갈등",
+  "h": "68ec16dc"
+ },
+ "js.boibai.suy-nghi-va-cam-xuc-cua": {
+  "t": "당신의 생각과 감정",
+  "h": "4cc72970"
+ },
+ "js.boibai.tai-chinh-manh-va-co-tiem": {
+  "t": "재정이 탄탄하고 크게 성장할 가능성이 있어요. 더 과감하게 투자할 때예요.",
+  "h": "a9f7c989"
+ },
+ "js.boibai.tai-chinh-on-dinh-khong-nhieu": {
+  "t": "재정이 안정적이고 변동이 크지 않아요. 저축하고 모을 때예요.",
+  "h": "4b335a36"
+ },
+ "js.boibai.tai-chinh-tot-co-the-chia": {
+  "t": "재정이 좋아서 다른 사람과 나눌 수 있어요. 오래 의미 있을 일에 투자할 때예요.",
+  "h": "19e7c7ca"
+ },
+ "js.boibai.tai-loc-bat-ngo-dau-tu": {
+  "t": "뜻밖의 재물운이 있고, 투자로 높은 수익을 낼 수 있어요. 좋은 재정 기회가 나타나고 있어요.",
+  "h": "cc2ba266"
+ },
+ "js.boibai.tam": {
+  "t": "8",
+  "h": "0e3fc5e2"
+ },
+ "js.boibai.tang-truong-tai-chinh-dan-dan": {
+  "t": "재정이 차츰 성장해요. 장기적인 성장에 투자하세요.",
+  "h": "8389a057"
+ },
+ "js.boibai.thach-thuc": {
+  "t": "도전",
+  "h": "1576629b"
+ },
+ "js.boibai.thanh-tich-va-duoc-cong-nhan": {
+  "t": "성취하고 인정받아요. 능력을 보여 주고 주도권을 되찾을 때예요.",
+  "h": "3bfdc1a3"
+ },
+ "js.boibai.thay-doi-xung-dot-thu-thach": {
+  "t": "변화, 갈등, 시련, 불안정. 5는 급변과 도전의 숫자예요.",
+  "h": "14c74c71"
+ },
+ "js.boibai.thong-diep": {
+  "t": "메시지",
+  "h": "8d4fe659"
+ },
+ "js.boibai.thu-nhap-on-dinh-va-can": {
+  "t": "수입이 안정적이고 지출 균형도 좋아요. 다른 사람의 재정을 도울 수도 있어요.",
+  "h": "2904cf24"
+ },
+ "js.boibai.tin-tuc-ve-tai-chinh-dang": {
+  "t": "재정에 관한 소식이 오고 있어요. 젊은 사람이 당신의 재정에 영향을 줄 수 있어요.",
+  "h": "58e4e140"
+ },
+ "js.boibai.tinh-cam-co-yeu-to-bi": {
+  "t": "사랑에 신비롭거나 분명하지 않은 요소가 있어요. 사랑에서는 직관에 귀 기울이세요.",
+  "h": "83f22bbf"
+ },
+ "js.boibai.tinh-cam-dang-phat-trien-tot": {
+  "t": "사랑이 잘 자라나고 있어요. 중매인이나 공통의 친구처럼 제3자가 관여할 수도 있어요.",
+  "h": "acbf5cf4"
+ },
+ "js.boibai.tinh-huong-hien-tai-cua-ban": {
+  "t": "당신의 현재 상황",
+  "h": "5f1dc385"
+ },
+ "js.boibai.tinh-trang": {
+  "t": "현재 상황",
+  "h": "5a46503e"
+ },
+ "js.boibai.tinh-yeu-moi-va-nong-nhiet": {
+  "t": "새롭고 뜨거운 사랑, 또는 지금 관계의 재탄생이에요. 사랑에 아주 좋은 기회예요.",
+  "h": "a8fda462"
+ },
+ "js.boibai.trong-tam-cua-tinh-huong": {
+  "t": "상황의 핵심",
+  "h": "e2f497fe"
+ },
+ "js.boibai.truc-giac-bi-an-chiem-nghiem": {
+  "t": "직관, 신비, 성찰, 행운. 7은 직관과 행운의 숫자예요.",
+  "h": "13e59cc8"
+ },
+ "js.boibai.trung-tam": {
+  "t": "중심",
+  "h": "26bda5d2"
+ },
+ "js.boibai.tuong-lai": {
+  "t": "미래",
+  "h": "b4320a2d"
+ },
+ "js.boibai.van-may-bat-ngo-co-the": {
+  "t": "뜻밖의 행운이 올 수 있어요. 하지만 위험한 투자는 조심하세요.",
+  "h": "2cd63148"
+ },
+ "js.boibai.xao-bai-rut-lai": {
+  "t": "다시 섞고 뽑기",
+  "h": "19371614"
+ },
+ "js.boibai.xu-huong-sap-xay-ra": {
+  "t": "곧 나타날 흐름",
+  "h": "6e5a1980"
+ },
  "js.chat.chao": {
   "t": "안녕하세요— ",
   "h": "35004652"
@@ -1686,6 +2514,66 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "소한 ‘ ",
   "h": "1979c56a"
+ },
+ "js.congcutr.chua-xep-vao-nhom-nao": {
+  "t": "아직 분류되지 않음",
+  "h": "7ea3cc13"
+ },
+ "js.congcutr.cong-cu": {
+  "t": " 개 도구</span>",
+  "h": "e1059f84"
+ },
+ "js.congcutr.cong-cu-43pa": {
+  "t": " 개 도구</div>",
+  "h": "f2a9cef1"
+ },
+ "js.congcutr.cong-cu-menh-ly-dung-rieng": {
+  "t": " 개의 명리 도구 — 하나씩 따로 쓰세요",
+  "h": "d6267101"
+ },
+ "js.congcutr.khac": {
+  "t": "기타",
+  "h": "5b8a28ab"
+ },
+ "js.congcutr.khong-can-biet-bo-mon-nao": {
+  "t": "어떤 분야인지 몰라도 괜찮아요. 지금 마음에 걸리는 일에 맞춰 고르세요.",
+  "h": "6723d4c3"
+ },
+ "js.congcutr.khong-co-cong-cu-nao": {
+  "t": "<div class=\"tools-loading\">도구가 없습니다.</div>",
+  "h": "4bfcd6fb"
+ },
+ "js.congcutr.khong-co-cong-cu-nao-trong": {
+  "t": "<div class=\"tools-loading\">이 그룹에는 도구가 없습니다.</div>",
+  "h": "1d05d574"
+ },
+ "js.congcutr.khong-co-du-lieu": {
+  "t": "<div class=\"tools-loading\">데이터가 없습니다.</div>",
+  "h": "0ad1bedb"
+ },
+ "js.congcutr.khong-tai-duoc-vui-long-f5": {
+  "t": "<div class=\"tools-loading\"><span data-icon=\"alert-triangle\" style=\"display:inline-flex;width:14px;height:14px;vertical-align:middle\"></span> 불러오지 못했어요. F5로 새로고침해 주세요.</div>",
+  "h": "336d219d"
+ },
+ "js.congcutr.luong": {
+  "t": " 냥)</div>",
+  "h": "7adeda99"
+ },
+ "js.congcutr.luong-icr4": {
+  "t": " 냥</div>",
+  "h": "81dc9146"
+ },
+ "js.congcutr.mien-phi": {
+  "t": "<span class=\"tool-price-free\">무료</span>",
+  "h": "f09c2d4a"
+ },
+ "js.congcutr.mo": {
+  "t": "<div class=\"tool-cta\">열기 →</div>",
+  "h": "c7121247"
+ },
+ "js.congcutr.xep-theo-mon-tu-vi-tu": {
+  "t": "분야별로 정렬: 자미두수, 사주, 관상, 풍수…",
+  "h": "cf4f8ecc"
  },
  "js.giosinh.am-lich": {
   "t": " (음력)",
@@ -3119,6 +4007,118 @@
   "t": "길일 · {y}년 {m}월",
   "h": "cbd777dc"
  },
+ "js.nhtg.anh-mat-noi-len-dieu-gi": {
+  "t": "눈빛은 무엇을 말해 주나요?",
+  "h": "dca0ccee"
+ },
+ "js.nhtg.anh-qua-lon-toi-da-5mb": {
+  "t": "이미지가 너무 커요(최대 5MB).",
+  "h": "874f95b2"
+ },
+ "js.nhtg.da-phan-tich-xong-nhan-tuong": {
+  "t": "유장신상에 따른 안상 분석이 끝났어요. 더 궁금한 점이 있나요?",
+  "h": "040562fa"
+ },
+ "js.nhtg.dang-phan-tich-nhan-tuong": {
+  "t": "안상을 분석하는 중…",
+  "h": "7c6f7d8c"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang": {
+  "t": "MediaPipe로 이미지에서 직접 측정했어요(눈동자 위치를 위·아래 눈꺼풀과 비교). 『마의신상』에 따른 전체 의미는 심층 분석에 들어 있어요.",
+  "h": "09bcb88b"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang-si1j": {
+  "t": "MediaPipe로 이미지에서 직접 측정했어요. 눈의 모양, 신기, 그 밖의 세부 내용은 심층 분석에 들어 있어요.",
+  "h": "c13331fd"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang-ymai": {
+  "t": "MediaPipe로 이미지에서 직접 측정했어요. 『마의신상』에 따른 전체 의미는 심층 분석에 들어 있어요.",
+  "h": "91c76fe7"
+ },
+ "js.nhtg.duoi-mat-cong-len": {
+  "t": "눈꼬리가 올라감",
+  "h": "eddf4211"
+ },
+ "js.nhtg.duoi-mat-xuoi": {
+  "t": "눈꼬리가 처짐",
+  "h": "8e2e1aeb"
+ },
+ "js.nhtg.goc-duoi-mat-a-d": {
+  "t": "눈꼬리 각도: {a}°({d})",
+  "h": "f80c29d1"
+ },
+ "js.nhtg.khong-co-ket-qua": {
+  "t": "결과가 없어요.",
+  "h": "97fa6f91"
+ },
+ "js.nhtg.khong-doc-duoc-anh-nay-vui": {
+  "t": "이 이미지를 읽을 수 없어요 — JPG나 PNG 이미지를 선택해 주세요.",
+  "h": "32a1faf4"
+ },
+ "js.nhtg.khong-nhan-dien-duoc-mat-ro": {
+  "t": "⚠ 얼굴을 뚜렷하게 인식하지 못했어요. 분석은 가능하지만 정면 사진을 쓰는 것이 좋아요.",
+  "h": "8aef3360"
+ },
+ "js.nhtg.khong-the-ket-noi": {
+  "t": "연결할 수 없어요.",
+  "h": "3dc4d8cb"
+ },
+ "js.nhtg.khong-the-mo-camera": {
+  "t": "카메라를 열 수 없어요.",
+  "h": "39a33224"
+ },
+ "js.nhtg.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.nhtg.loi-s": {
+  "t": "오류 {s}",
+  "h": "c406c72b"
+ },
+ "js.nhtg.ngang": {
+  "t": "수평",
+  "h": "a704525f"
+ },
+ "js.nhtg.nhan-tuong": {
+  "t": "안상",
+  "h": "1826b211"
+ },
+ "js.nhtg.nhan-tuong-cua-toi": {
+  "t": "내 안상",
+  "h": "1943cfc5"
+ },
+ "js.nhtg.nhan-tuong-d6ph": {
+  "t": "안상",
+  "h": "1bc89b2e"
+ },
+ "js.nhtg.phuong-nhan-la-gi": {
+  "t": "봉안이 뭐예요?",
+  "h": "9ea5dc8a"
+ },
+ "js.nhtg.tam-bach-nhan-co-y-nghia": {
+  "t": "삼백안은 어떤 의미가 있나요?",
+  "h": "913d8ad7"
+ },
+ "js.nhtg.thuong-mat-15-20-giay": {
+  "t": "보통 15~20초 걸려요",
+  "h": "087173ee"
+ },
+ "js.nhtg.trong-mat-hoi-lech-len-co": {
+  "t": "눈동자가 살짝 위로 치우침 — 하삼백안일 수 있어요",
+  "h": "2815a4af"
+ },
+ "js.nhtg.trong-mat-hoi-lech-xuong-co": {
+  "t": "눈동자가 살짝 아래로 치우침 — 상삼백안일 수 있어요",
+  "h": "165636af"
+ },
+ "js.nhtg.vi-tri-trong-mat-can-doi": {
+  "t": "눈동자 위치: 균형 잡힘",
+  "h": "e253adf3"
+ },
+ "js.nhtg.vui-long-chon-file-anh": {
+  "t": "이미지 파일을 선택해 주세요.",
+  "h": "71a61127"
+ },
  "js.noisinh.noi-khac": {
   "t": "기타 (시간대 선택)",
   "h": "dee91293"
@@ -3318,6 +4318,1142 @@
  "js.noisinh.vung-pacific-honolulu": {
   "t": "하와이",
   "h": "a1be9509"
+ },
+ "js.oracle.ai-dang-ho-tro-ban-ma": {
+  "t": "당신을 도와주고 있는데 아직 고마움을 전하지 못한 사람은 누구인가요? 당신이 돌봐 줄 수 있는 사람이 있지는 않나요?",
+  "h": "96542020"
+ },
+ "js.oracle.am": {
+  "t": "음",
+  "h": "99492f1a"
+ },
+ "js.oracle.am-cuc-tac-duong-duong-cuc": {
+  "t": "음이 극에 달하면 양이 되고, 양이 극에 달하면 음이 돼요. 모든 것이 정점에 이르면 변화는 필연적으로 시작돼요. 변화를 두려워하지 마세요. 그것은 당신이 살아 있고 성장하고 있다는 증거예요.",
+  "h": "6675aca5"
+ },
+ "js.oracle.am-duong": {
+  "t": "음양",
+  "h": "5cbdb898"
+ },
+ "js.oracle.anh-huong": {
+  "t": "영향",
+  "h": "551b0c68"
+ },
+ "js.oracle.anh-sang": {
+  "t": "빛",
+  "h": "ea1d6630"
+ },
+ "js.oracle.back-1": {
+  "t": "동양의",
+  "h": "1de99eec"
+ },
+ "js.oracle.back-2": {
+  "t": "지혜",
+  "h": "5841c633"
+ },
+ "js.oracle.ban-co-dang-co-qua-khong": {
+  "t": "너무 애쓰고 있지는 않나요? 내려놓고, 억지로 하지 않을 때 무엇이 저절로 일어나는지 지켜보세요.",
+  "h": "ca702c46"
+ },
+ "js.oracle.ban-co-dang-di-qua-mot": {
+  "t": "어느 한쪽으로 지나치게 기울어 있지는 않나요? 극단도 방임도 아닌 중간의 길을 찾아보세요.",
+  "h": "ea3c5624"
+ },
+ "js.oracle.ban-muon-chiem-nghiem-sau-hon": {
+  "t": "**. 어떤 점을 더 깊이 들여다보고 싶으세요?",
+  "h": "0700ae70"
+ },
+ "js.oracle.ban-than": {
+  "t": "나 자신",
+  "h": "b2d3973b"
+ },
+ "js.oracle.bat-ngo": {
+  "t": "뜻밖",
+  "h": "5ae13239"
+ },
+ "js.oracle.bat-quai": {
+  "t": "팔괘",
+  "h": "943c4778"
+ },
+ "js.oracle.ben-bi": {
+  "t": "끈기",
+  "h": "a108e917"
+ },
+ "js.oracle.ben-vung": {
+  "t": "지속가능",
+  "h": "c7cb7a59"
+ },
+ "js.oracle.bien-doi": {
+  "t": "변화",
+  "h": "68315cd4"
+ },
+ "js.oracle.biet-du": {
+  "t": "만족",
+  "h": "1781df4c"
+ },
+ "js.oracle.biet-on": {
+  "t": "감사",
+  "h": "21f87639"
+ },
+ "js.oracle.binh-minh": {
+  "t": "새벽",
+  "h": "04166e56"
+ },
+ "js.oracle.buong-bo": {
+  "t": "내려놓음",
+  "h": "eefa92c2"
+ },
+ "js.oracle.but-pha": {
+  "t": "돌파",
+  "h": "9cf4ad3e"
+ },
+ "js.oracle.can-bang": {
+  "t": "균형",
+  "h": "9fe59d4b"
+ },
+ "js.oracle.can-bang-mg6a": {
+  "t": "균형",
+  "h": "3fe37e41"
+ },
+ "js.oracle.can-nui": {
+  "t": "간 — 산",
+  "h": "9904522e"
+ },
+ "js.oracle.can-troi": {
+  "t": "건 — 하늘",
+  "h": "7d4e516f"
+ },
+ "js.oracle.cat-bo": {
+  "t": "덜어냄",
+  "h": "f4f3edd1"
+ },
+ "js.oracle.cau-hoi-cua-ban": {
+  "t": "질문: \"",
+  "h": "660c481c"
+ },
+ "js.oracle.cay-lon-bat-dau-tu-hat": {
+  "t": "큰 나무도 작은 씨앗에서 시작해요. 인내와 끈기가 열쇠예요. 지금 쌓고 있는 것이 당장은 보이지 않아도, 매일 조용히 자라고 있어요.",
+  "h": "2ac55d7b"
+ },
+ "js.oracle.chan-sam": {
+  "t": "진 — 우레",
+  "h": "7c1c107e"
+ },
+ "js.oracle.chia-se": {
+  "t": "나눔",
+  "h": "1cb95080"
+ },
+ "js.oracle.chieu-sau": {
+  "t": "깊이",
+  "h": "e865c387"
+ },
+ "js.oracle.chu-ky": {
+  "t": "주기",
+  "h": "ebc184a9"
+ },
+ "js.oracle.chu-ky-moi": {
+  "t": "새로운 주기",
+  "h": "de8db018"
+ },
+ "js.oracle.chuyen-hoa": {
+  "t": "전환",
+  "h": "ed3d0950"
+ },
+ "js.oracle.chuyen-hoa-gpz3": {
+  "t": "전환",
+  "h": "c4b88b2f"
+ },
+ "js.oracle.co-hoi": {
+  "t": "기회",
+  "h": "da02f76b"
+ },
+ "js.oracle.con-duong-giua-khong-qua-cung": {
+  "t": "중간의 길 — 너무 단단하지도 너무 무르지도 않게, 너무 조이지도 너무 풀지도 않게. 중도는 평범함이 아니라, 상반된 두 극 사이의 섬세한 균형이에요.",
+  "h": "455b601b"
+ },
+ "js.oracle.cung-ran": {
+  "t": "단단함",
+  "h": "e9c3a1fd"
+ },
+ "js.oracle.dam-me": {
+  "t": "열정",
+  "h": "60bf63eb"
+ },
+ "js.oracle.dan-dau": {
+  "t": "앞장섬",
+  "h": "9cff38f8"
+ },
+ "js.oracle.dan-ho": {
+  "t": "인 호랑이",
+  "h": "0ba40037"
+ },
+ "js.oracle.dang-dinh-tam": {
+  "t": "마음을 가다듬는 중...",
+  "h": "da9206ab"
+ },
+ "js.oracle.danh-thoi-gian-hoc-hoi-va": {
+  "t": "배우고 곰곰이 생각하는 시간을 가지세요. 찾고 있는 답은 겉이 아니라 깊은 곳에 있어요.",
+  "h": "dd475149"
+ },
+ "js.oracle.danh-thoi-gian-mot-minh-lang": {
+  "t": "혼자만의 시간을 보내세요. 직관에 귀를 기울이세요. 지금 당장 빛나야 한다고 스스로를 몰아붙이지 마세요. 에너지가 자연스럽게 쌓이도록 두세요.",
+  "h": "0e43dd03"
+ },
+ "js.oracle.dat": {
+  "t": "땅",
+  "h": "df7404fb"
+ },
+ "js.oracle.dau-la-nen-tang-trong-cuoc": {
+  "t": "당신 삶의 바탕은 무엇인가요? 가족, 건강, 재정 — 넓히기 전에 이것들부터 단단히 하세요.",
+  "h": "550ab2e3"
+ },
+ "js.oracle.dau-tu-vao-cac-moi-quan": {
+  "t": "관계와 창작에 힘을 쏟으세요. 지금 당신의 강점은 단단한 힘이 아니라 온화함과 다정함이에요.",
+  "h": "e0d2bef5"
+ },
+ "js.oracle.day-khong-phai-luc-lieu-linh": {
+  "t": "지금은 무모하게 나설 때가 아니에요. 신중하게 살피고 직관에 기대어 이 시련의 시기를 지나가세요.",
+  "h": "bd217cbf"
+ },
+ "js.oracle.day-la-luc-hanh-dong-chia": {
+  "t": "지금은 행동할 때예요. 아이디어를 나누고, 이끌고, 만들어 내세요. 당신의 에너지는 정점에 있어요. 현명하게 쓰세요.",
+  "h": "4049c172"
+ },
+ "js.oracle.day-la-luc-hanh-dong-dut": {
+  "t": "지금은 단호하게 행동할 때예요. 준비는 충분히 했어요. 당신의 힘을 믿고 한 걸음 내디디세요.",
+  "h": "b2641f22"
+ },
+ "js.oracle.day-la-luc-tang-toc-dung": {
+  "t": "지금은 속도를 낼 때예요. 작은 장애물에 발목 잡히지 말고 열정을 안고 앞으로 나아가세요.",
+  "h": "396d7ee9"
+ },
+ "js.oracle.day-la-thoi-diem-de-quan": {
+  "t": "지금은 서둘러 행동할 때가 아니라 지켜볼 때예요. 원인이 뿌려지고 있고, 결과는 때가 되면 찾아와요.",
+  "h": "c8d7fe99"
+ },
+ "js.oracle.day-la-thoi-diem-vang-nhung": {
+  "t": "지금은 황금 같은 시기예요. 멈춰 있던 프로젝트를 다시 시작할 수 있고, 금이 간 관계를 다시 이을 수 있어요.",
+  "h": "5a1e9cfb"
+ },
+ "js.oracle.di-chuyen": {
+  "t": "이동",
+  "h": "df434ae0"
+ },
+ "js.oracle.dia-chi": {
+  "t": "지지",
+  "h": "9a9221c6"
+ },
+ "js.oracle.dia-chi-dan-ho-dung-manh": {
+  "t": "지지 인(寅) — 호랑이, 용맹하고 결단력 있으며 새벽이 밝아 오고 있어요. 강한 에너지가 솟아오르고 있어요. 대담하되 계획을 갖고 행동하세요. 호랑이도 이길 확신이 없으면 나서지 않아요.",
+  "h": "1bd2174b"
+ },
+ "js.oracle.dia-chi-mui-de-on-hoa": {
+  "t": "지지 미(未) — 양, 온화함, 예술, 깊은 감성. 부드러움과 창의성, 사랑의 에너지예요. 관계와 창작 프로젝트를 가꿀 때예요.",
+  "h": "4c0a6a31"
+ },
+ "js.oracle.dia-chi-ngo-ngua-tu-do": {
+  "t": "지지 오(午) — 말, 자유, 속도, 열정과 정열. 이동과 변화, 멈추지 않고 앞으로 나아가는 에너지예요.",
+  "h": "91fef169"
+ },
+ "js.oracle.dia-chi-thin-nam-rong-khi": {
+  "t": "지지 진(辰) — 용의 해, 웅장한 기세, 하늘과 땅이 만나요. 크나큰 변화의 에너지가 와 있어요. 안정을 찾을 때가 아니라 돌파할 때예요.",
+  "h": "16c18514"
+ },
+ "js.oracle.dia-chi-ty-nua-dem-diem": {
+  "t": "지지 자(子) — 한밤중, 새 주기의 출발점, 음이 극에 달해 양이 태어나요. 가장 깊은 어둠 속에 가장 강한 생명의 싹이 있어요. 당신은 한 주기의 끝과 새 주기의 시작에 서 있어요.",
+  "h": "a1e4ef73"
+ },
+ "js.oracle.dieu-an-sau-can-chu-y": {
+  "t": "깊이 숨어 있어 눈여겨봐야 할 것",
+  "h": "de8671a7"
+ },
+ "js.oracle.dieu-chinh": {
+  "t": "조정",
+  "h": "37c5bf6b"
+ },
+ "js.oracle.dieu-dang-phat-trien-va-can": {
+  "t": "자라나고 있어 돌봐야 할 것",
+  "h": "b095817e"
+ },
+ "js.oracle.dieu-gi-can-duoc-loai-bo": {
+  "t": "삶에서 덜어내야 할 것은 무엇인가요? 어떤 어려운 결정이 기다리고 있나요? 지금은 단호해질 때예요.",
+  "h": "178dea6c"
+ },
+ "js.oracle.dieu-gi-dang-nay-mam-trong": {
+  "t": "당신의 삶에서 무엇이 싹트고 있나요? 자랄 수 있도록 여건을 만들어 주세요. 서두르지 마세요.",
+  "h": "1492c6da"
+ },
+ "js.oracle.dieu-gi-dang-xay-ra-tu": {
+  "t": "당신의 삶에서 무엇이 저절로 일어나고 있나요? 거슬러 헤엄치지 말고 그 흐름을 따라가 보세요.",
+  "h": "2292cc68"
+ },
+ "js.oracle.dieu-gi-trong-cuoc-song-cua": {
+  "t": "당신의 삶에서 무엇이 정점에 있고 곧 전환될까요? 이 피할 수 없는 변화를 받아들일 마음의 준비를 하세요.",
+  "h": "a6188d40"
+ },
+ "js.oracle.dieu-vu-tru-muon-ban-biet": {
+  "t": "우주가 지금 당신에게 알려 주고 싶은 것",
+  "h": "40685257"
+ },
+ "js.oracle.dinh-cao": {
+  "t": "정점",
+  "h": "524c5d21"
+ },
+ "js.oracle.dinh-tam-rut-lai": {
+  "t": "마음 가다듬고 다시 뽑기",
+  "h": "09656849"
+ },
+ "js.oracle.doai-ho": {
+  "t": "태 — 못",
+  "h": "7eddb4b0"
+ },
+ "js.oracle.doi-lap": {
+  "t": "대립",
+  "h": "a8f8c625"
+ },
+ "js.oracle.dong-chay": {
+  "t": "흐름",
+  "h": "045724a4"
+ },
+ "js.oracle.dung-hoa": {
+  "t": "조화로운 화합",
+  "h": "d56be20d"
+ },
+ "js.oracle.dung-lai": {
+  "t": "멈춤",
+  "h": "d8d8b916"
+ },
+ "js.oracle.dung-lai-va-dem-nhung-dieu": {
+  "t": "잠시 멈추고 지금 가진 좋은 것들을 헤아려 보세요. 행복은 더 가지는 데서가 아니라 가진 것을 소중히 여기는 데서 와요.",
+  "h": "ac526a81"
+ },
+ "js.oracle.dung-lai-va-quan-sat-khong": {
+  "t": "멈추고 살펴보세요. 모든 행동이 지금 꼭 필요한 것은 아니에요. 때로는 가만히 있는 것이 가장 현명한 한 걸음이에요.",
+  "h": "b61e007a"
+ },
+ "js.oracle.dung-manh": {
+  "t": "용맹",
+  "h": "035952f2"
+ },
+ "js.oracle.dung-ngan-ngai-di-truoc-con": {
+  "t": "앞서 가기를 망설이지 마세요. 아무도 가지 않은 길이라고 틀린 길은 아니에요. 때로는 그 길이 바로 당신의 길이에요.",
+  "h": "97c9dd64"
+ },
+ "js.oracle.dung-so-khoang-toi-nay-no": {
+  "t": "이 어둠을 두려워하지 마세요. 새로운 새벽의 전제예요. 조용히 씨앗을 뿌리고 봄을 참을성 있게 기다리세요.",
+  "h": "ac09f152"
+ },
+ "js.oracle.dung-so-tieng-sam-no-den": {
+  "t": "우레 소리를 두려워하지 마세요. 깨우치려고 찾아온 거예요. 충격이 지나간 뒤, 무엇이 바뀌어야 하는지 스스로에게 물어보세요.",
+  "h": "42c2bfa9"
+ },
+ "js.oracle.duong": {
+  "t": "양",
+  "h": "0efa2ecf"
+ },
+ "js.oracle.duong-thuan": {
+  "t": "순양",
+  "h": "862ecac8"
+ },
+ "js.oracle.duyen": {
+  "t": "연",
+  "h": "98a81ff8"
+ },
+ "js.oracle.giao-tiep": {
+  "t": "소통",
+  "h": "5e5bd903"
+ },
+ "js.oracle.giap-la-can-dau-tien-khoi": {
+  "t": "갑(甲)은 첫 번째 천간이에요 — 시작, 선구, 큰 나무처럼 굳셈. 강한 시작의 때예요. 당신은 선구자가 되도록 부름받고 있어요.",
+  "h": "806e3471"
+ },
+ "js.oracle.giap-moc": {
+  "t": "갑목",
+  "h": "9536a92b"
+ },
+ "js.oracle.gieo-hat": {
+  "t": "씨 뿌리기",
+  "h": "badd83e5"
+ },
+ "js.oracle.hai-hoa": {
+  "t": "조화",
+  "h": "deffa707"
+ },
+ "js.oracle.hanh-dong": {
+  "t": "행동",
+  "h": "8e9fdd28"
+ },
+ "js.oracle.hanh-dong-nhu-mot-nha-lanh": {
+  "t": "리더처럼 행동하세요. 당신에게는 비전이 있어요. 그것을 나누고 다른 사람들이 따르도록 이끄세요.",
+  "h": "891328c8"
+ },
+ "js.oracle.hanh-hoa-mang-nang-luong-cua": {
+  "t": "화(火) 행은 열정, 뜨거움, 빛의 에너지를 지녀요. 당신 안의 불꽃이 타오르고 있어요. 환히 빛나게 하되 소중한 것들까지 태우지는 않게 하세요.",
+  "h": "76fa246e"
+ },
+ "js.oracle.hanh-kim-sac-ben-quyet-doan": {
+  "t": "금(金) 행 — 날카롭고 결단력 있으며 섬세하고 값져요. 갈고닦아야 하는 칼날처럼, 불필요한 것은 잘라 내고 진짜 가치 있는 것만 남겨야 해요.",
+  "h": "d59eadcd"
+ },
+ "js.oracle.hanh-moc-dai-dien-cho-su": {
+  "t": "목(木) 행은 성장, 유연함, 희망을 나타내요. 어린 나무가 땅 위로 솟아오르듯, 당신 안에서 새로운 무언가가 싹트고 있어요. 인내와 빛으로 가꾸세요.",
+  "h": "ec58fdd5"
+ },
+ "js.oracle.hanh-moc-vuon": {
+  "t": "목 행이 뻗어 오름",
+  "h": "14cebce8"
+ },
+ "js.oracle.hanh-phuc": {
+  "t": "행복",
+  "h": "68d680dc"
+ },
+ "js.oracle.hanh-tho-la-nen-tang-cua": {
+  "t": "토(土) 행은 만물의 바탕이에요 — 안정적이고 믿음직하며 길러 줘요. 너무 빨리 높이 오르기보다 탄탄한 기반을 쌓을 때예요. 오래가는 것이 속도보다 중요해요.",
+  "h": "6022cf50"
+ },
+ "js.oracle.hanh-thuy-sau": {
+  "t": "수 행이 깊어짐",
+  "h": "eb619381"
+ },
+ "js.oracle.hanh-thuy-thich-nghi-tham-sau": {
+  "t": "수(水) 행 — 적응력, 깊이, 지혜, 직관. 물은 지형을 따라 흐르며 거스르지 않아요. 진짜 지혜는 언제 세차게 흐르고 언제 가라앉을지 아는 것이에요.",
+  "h": "f66a0a05"
+ },
+ "js.oracle.hao-hung": {
+  "t": "호방함",
+  "h": "d3338937"
+ },
+ "js.oracle.hay-chu-y-den-nhung-gi": {
+  "t": "점점 분명해지는 것에 주목하세요. 진실의 빛에 비춰 보이는 것을 믿으세요.",
+  "h": "e631bdf2"
+ },
+ "js.oracle.hay-danh-thoi-gian-tu-van": {
+  "t": "스스로 물어보는 시간을 가지세요. 나를 진정으로 움직이는 것은 무엇인가요? 내가 피하고 있는 것은 무엇인가요? 자신에 대한 진실이야말로 가장 큰 선물이에요.",
+  "h": "1ec9491c"
+ },
+ "js.oracle.hay-kien-tri-va-nhe-nhang": {
+  "t": "꾸준하고 부드럽게 하세요. 오래가는 영향력은 강압적인 힘이 아니라 한결같음에서 나와요.",
+  "h": "8b9fe544"
+ },
+ "js.oracle.hay-la-nguoi-ho-tro-khong": {
+  "t": "지금은 앞장서는 사람보다 받쳐 주는 사람이 되세요. 주변의 것과 사람들을 가꿔 주는 것이 진정한 힘이에요.",
+  "h": "b183fc76"
+ },
+ "js.oracle.hay-tao-bao-hon-binh-thuong": {
+  "t": "평소보다 대담해지세요. 진(辰)은 크나큰 변화의 에너지를 지니고 있어요. 돌파의 기회를 놓치지 마세요.",
+  "h": "a4ce94fe"
+ },
+ "js.oracle.hien-tai": {
+  "t": "현재",
+  "h": "d77bf3af"
+ },
+ "js.oracle.hieu-minh": {
+  "t": "자기 이해",
+  "h": "bd697c0a"
+ },
+ "js.oracle.ho-tro": {
+  "t": "지원",
+  "h": "ed2a55ae"
+ },
+ "js.oracle.hoa-nang-luong": {
+  "t": "화 — 에너지",
+  "h": "af736f0b"
+ },
+ "js.oracle.hoa-nhiet-huyet": {
+  "t": "화 — 열정",
+  "h": "b3665961"
+ },
+ "js.oracle.hoan-canh-va-dieu-kien-hien": {
+  "t": "현재의 처지와 조건",
+  "h": "d4bd1b9d"
+ },
+ "js.oracle.hoc-hoi": {
+  "t": "배움",
+  "h": "7e024951"
+ },
+ "js.oracle.huong-dan-thuc-hanh": {
+  "t": "실천 안내:",
+  "h": "8b4d8530"
+ },
+ "js.oracle.huong-di-va-ket-qua-neu": {
+  "t": "계속할 경우의 방향과 결과",
+  "h": "ce2aa255"
+ },
+ "js.oracle.hy-vong": {
+  "t": "희망",
+  "h": "5dddc812"
+ },
+ "js.oracle.ket-noi": {
+  "t": "연결",
+  "h": "62b5a5f2"
+ },
+ "js.oracle.ket-noi-voi-nguoi-khac-chia": {
+  "t": "다른 사람들과 연결되세요. 지금 겪고 있는 일을 나눠 보세요. 진심 어린 말은 소중한 인연을 만들 수 있어요.",
+  "h": "762b09a5"
+ },
+ "js.oracle.ket-qua-oracle-cua-toi": {
+  "t": "나의 오라클 결과",
+  "h": "817f308b"
+ },
+ "js.oracle.kham-nuoc": {
+  "t": "감 — 물",
+  "h": "14eadf3a"
+ },
+ "js.oracle.khi-nam-hanh-van-hanh-hai": {
+  "t": "오행이 조화롭게 돌아가면 만물이 번성해요. 지금 당신은 삶의 모든 요소가 균형을 이룬 때에 있어요. 이 순풍의 시기를 활용해 앞으로 나아가세요.",
+  "h": "9fa440dd"
+ },
+ "js.oracle.khoi-dau": {
+  "t": "시작",
+  "h": "cdb621fc"
+ },
+ "js.oracle.khoi-nguyen": {
+  "t": "근원",
+  "h": "bd887944"
+ },
+ "js.oracle.khon-dat": {
+  "t": "곤 — 땅",
+  "h": "3b414625"
+ },
+ "js.oracle.khon-ngoan": {
+  "t": "현명함",
+  "h": "97a452bf"
+ },
+ "js.oracle.khong-cuc-doan": {
+  "t": "극단 없음",
+  "h": "f2d069e4"
+ },
+ "js.oracle.kiem-soat": {
+  "t": "조절",
+  "h": "6d5dbb4e"
+ },
+ "js.oracle.kien-dinh": {
+  "t": "굳건함",
+  "h": "965a37b0"
+ },
+ "js.oracle.kien-nhan": {
+  "t": "인내",
+  "h": "c3a00bf7"
+ },
+ "js.oracle.kien-tri": {
+  "t": "끈기",
+  "h": "7856333a"
+ },
+ "js.oracle.kim-hien-tai": {
+  "t": "금 — 현재",
+  "h": "7ab65825"
+ },
+ "js.oracle.kim-khac-moc-moc-khac-tho": {
+  "t": "금이 목을 극하고, 목이 토를 극하고… 상극은 파괴가 아니라 균형을 지키기 위한 꼭 필요한 조절이에요. 삶에서 당신을 시험하는 일이 있다면, 성장의 기회로 바라보세요.",
+  "h": "26d13882"
+ },
+ "js.oracle.kim-quyet-doan": {
+  "t": "금 — 결단",
+  "h": "954fe85f"
+ },
+ "js.oracle.lang-nghe-truc-giac-sau-sac": {
+  "t": "당신의 깊은 직관에 귀를 기울이세요. 지금의 흐름을 거스르지 말고, 적응하면서 나만의 길을 찾으세요.",
+  "h": "f2864da6"
+ },
+ "js.oracle.lanh-dao": {
+  "t": "리더십",
+  "h": "d9b13441"
+ },
+ "js.oracle.linh-hoat": {
+  "t": "유연함",
+  "h": "233a204d"
+ },
+ "js.oracle.luu-nien": {
+  "t": "유년",
+  "h": "f246e000"
+ },
+ "js.oracle.ly-lua": {
+  "t": "이 — 불",
+  "h": "03e7b319"
+ },
+ "js.oracle.mem-mong": {
+  "t": "부드러움",
+  "h": "9c2a0232"
+ },
+ "js.oracle.minh-triet": {
+  "t": "지혜",
+  "h": "6222b2a7"
+ },
+ "js.oracle.minh-triet-tung-la": {
+  "t": "카드별 지혜",
+  "h": "7afc1deb"
+ },
+ "js.oracle.moc-sinh-truong": {
+  "t": "목 — 성장",
+  "h": "68bf8fc0"
+ },
+ "js.oracle.moc-tang-truong": {
+  "t": "목 — 자람",
+  "h": "76b45bc1"
+ },
+ "js.oracle.mui-de": {
+  "t": "미 양",
+  "h": "19351a0a"
+ },
+ "js.oracle.nang-luong": {
+  "t": "에너지",
+  "h": "f2c82118"
+ },
+ "js.oracle.nang-luong-am-tiep-nhan-noi": {
+  "t": "음의 에너지 — 받아들임, 내면, 휴식, 돌봄. 가라앉히고, 거두어들이고, 에너지를 채울 때예요. 많이 행동하는 것보다 깊이 듣는 것이 나아요.",
+  "h": "147c7327"
+ },
+ "js.oracle.nang-luong-can-kich-hoat": {
+  "t": "깨워야 할 에너지",
+  "h": "66c656bb"
+ },
+ "js.oracle.nang-luong-duong-toa-ra-hanh": {
+  "t": "양의 에너지 — 퍼져 나감, 행동, 창조, 표현. 힘과 드러냄의 때예요. 당신 안의 빛이 세상과 나뉘고 싶어 해요.",
+  "h": "82d51591"
+ },
+ "js.oracle.nay-mam": {
+  "t": "싹틈",
+  "h": "d3bad34d"
+ },
+ "js.oracle.nen-hoi-oracle-cau-hoi-kieu": {
+  "t": "오라클에는 어떤 질문을 하는 게 좋을까요?",
+  "h": "8a001fd9"
+ },
+ "js.oracle.nen-tang": {
+  "t": "바탕",
+  "h": "4676be0d"
+ },
+ "js.oracle.nen-tang-can-cung-co": {
+  "t": "다져야 할 바탕",
+  "h": "12191113"
+ },
+ "js.oracle.nghi-ngoi": {
+  "t": "휴식",
+  "h": "674b9610"
+ },
+ "js.oracle.nghiep": {
+  "t": "업",
+  "h": "bc44635e"
+ },
+ "js.oracle.ngo-ma": {
+  "t": "오 말",
+  "h": "3e1b3c1e"
+ },
+ "js.oracle.ngu-hanh": {
+  "t": "오행",
+  "h": "68ac2473"
+ },
+ "js.oracle.ngu-hanh-hoa": {
+  "t": "오행의 조화",
+  "h": "9181728e"
+ },
+ "js.oracle.ngu-hanh-trong-oracle-nghia-la": {
+  "t": "오라클에서 오행은 무슨 뜻인가요?",
+  "h": "c3180463"
+ },
+ "js.oracle.nguon-goc": {
+  "t": "근원",
+  "h": "b071d309"
+ },
+ "js.oracle.nguy-hiem": {
+  "t": "위험",
+  "h": "9ab8bc5b"
+ },
+ "js.oracle.nguyen-nhan-goc-re-cua-tinh": {
+  "t": "이 상황의 뿌리가 되는 원인",
+  "h": "be5bb52a"
+ },
+ "js.oracle.nham-la-can-thuy-duong-manh": {
+  "t": "임(壬)은 양수(陽水)의 천간이에요 — 큰 강처럼 힘차고, 야망과 지혜가 있어요. 당신의 힘은 내다보고, 계획하고, 유연하게 적응하는 능력이에요.",
+  "h": "855b4d25"
+ },
+ "js.oracle.nham-thuy": {
+  "t": "임수",
+  "h": "b32b0718"
+ },
+ "js.oracle.nhan": {
+  "t": "인",
+  "h": "74d8e663"
+ },
+ "js.oracle.nhan-nao-qua-ay-hat-giong": {
+  "t": "원인이 있으면 결과가 있어요 — 뿌린 씨앗대로 열매를 맺어요. 오늘 당신이 겪는 일은 과거에 뿌린 것의 결과예요. 그리고 오늘의 행동은 미래를 위한 씨앗을 뿌리고 있어요.",
+  "h": "fcafa76e"
+ },
+ "js.oracle.nhan-qua": {
+  "t": "인과",
+  "h": "563d7385"
+ },
+ "js.oracle.nhan-qua-jhdj": {
+  "t": "인과",
+  "h": "ff35f868"
+ },
+ "js.oracle.nhan-thuc": {
+  "t": "자각",
+  "h": "38f5078e"
+ },
+ "js.oracle.nhe-nhang": {
+  "t": "가벼움",
+  "h": "74e48410"
+ },
+ "js.oracle.nhiet-huyet": {
+  "t": "열정",
+  "h": "d5f61be3"
+ },
+ "js.oracle.nhiet-huyet-la-mon-qua-nhung": {
+  "t": "열정은 선물이지만 다스려야 해요. 충동적으로 말고, 뚜렷한 목적을 갖고 열정을 쓰세요.",
+  "h": "5b47b77d"
+ },
+ "js.oracle.nhin-lai-nhung-nguyen-nhan-dan": {
+  "t": "지금의 상황에 이르게 한 원인을 돌아보세요. 오늘 어떤 행동이 원하는 미래를 만들까요?",
+  "h": "89bb212b"
+ },
+ "js.oracle.nhin-nhan-lai-tinh-huong-tu": {
+  "t": "상황을 반대편의 시각에서 다시 바라보세요. 당신이 부정하고 있는 것이 가장 중요한 교훈일 수 있어요.",
+  "h": "ef03df70"
+ },
+ "js.oracle.nhin-xa-hon-tinh-huong-truoc": {
+  "t": "눈앞의 상황 너머를 보세요. 당신은 남들이 보지 못하는 것을 볼 수 있어요. 그 안목을 활용하세요.",
+  "h": "4fd97731"
+ },
+ "js.oracle.nhu-thuan": {
+  "t": "유순",
+  "h": "3d89cfeb"
+ },
+ "js.oracle.niem-vui": {
+  "t": "기쁨",
+  "h": "86cf7ad6"
+ },
+ "js.oracle.noi-tam": {
+  "t": "내면",
+  "h": "22b1e894"
+ },
+ "js.oracle.nuoc-mem-nhung-thang-da-cung": {
+  "t": "물은 부드럽지만 단단한 바위를 이겨요. 물의 힘은 누르는 힘이 아니라 끈기와 유연함에 있어요. 때로는 길을 양보하는 것이 앞으로 나아가는 가장 좋은 방법이에요.",
+  "h": "636f00ee"
+ },
+ "js.oracle.nuoc-sau-khong-song-lon-tri": {
+  "t": "깊은 물은 큰 파도를 일으키지 않아요. 진짜 지혜는 대개 고요해요. 지금은 겉으로 드러내기보다 깊이 들어갈 때예요 — 공부하고, 곰곰이 생각하고, 내면을 탐구하세요.",
+  "h": "d83a954b"
+ },
+ "js.oracle.nuoi-duong": {
+  "t": "돌봄",
+  "h": "5f526834"
+ },
+ "js.oracle.on-dinh": {
+  "t": "안정",
+  "h": "a3b55fa0"
+ },
+ "js.oracle.on-hoa": {
+  "t": "온화함",
+  "h": "f607b321"
+ },
+ "js.oracle.oracle-khac-tarot-o-diem-nao": {
+  "t": "오라클은 타로와 어떤 점이 다른가요?",
+  "h": "6de59274"
+ },
+ "js.oracle.oracle-phuong-dong": {
+  "t": "동양 오라클 — ",
+  "h": "19829bd3"
+ },
+ "js.oracle.phat-trien": {
+  "t": "발전",
+  "h": "522a7db6"
+ },
+ "js.oracle.phon-thinh": {
+  "t": "번성",
+  "h": "8dd97f93"
+ },
+ "js.oracle.qua": {
+  "t": "과",
+  "h": "40985001"
+ },
+ "js.oracle.quan-sat": {
+  "t": "관찰",
+  "h": "edd08b70"
+ },
+ "js.oracle.que-can-nui-su-dung-lai": {
+  "t": "간괘(艮) — 산, 멈춤과 굳건함. 언제 멈춰야 하는지 아는 것이 큰 지혜예요. 지금은 잠시 멈추고 더 나아가지 않을 때예요. 현재에 머물며 다음 걸음을 내딛기 전에 분명히 살피세요.",
+  "h": "4c8fa05f"
+ },
+ "js.oracle.que-can-troi-duong-thuan-suc": {
+  "t": "건괘(乾) — 하늘, 순양, 창조의 힘. 이끌고 만들어 내는 에너지가 강하게 와 있어요. 앞장서고, 시작하고, 당신의 가장 강한 의지를 드러낼 때예요.",
+  "h": "68b09f57"
+ },
+ "js.oracle.que-chan-sam-set-su-thuc": {
+  "t": "진괘(震) — 우레, 갑작스러운 깨어남. 천둥이 잠을 깨워요. 뜻밖의 일이 생기거나, 갑자기 시각을 바꾸는 깨달음이 찾아올 수 있어요.",
+  "h": "c1a608f2"
+ },
+ "js.oracle.que-doai-ho-niem-vui-va": {
+  "t": "태괘(兌) — 못, 기쁨과 소통. 즐거움, 연결, 표현의 에너지예요. 기쁨은 나누면 두 배가 되고 슬픔은 나누면 반으로 줄어요. 지금은 연결될 때예요.",
+  "h": "e4aeee98"
+ },
+ "js.oracle.que-kham-nuoc-nguy-hiem-va": {
+  "t": "감괘(坎) — 물, 위험과 깊이. 깊고 위험한 물을 지나는 중이에요. 지혜와 신중함이 필요하고, 스스로 이겨 낼 수 있다는 믿음이 필요해요.",
+  "h": "691e7eea"
+ },
+ "js.oracle.que-khon-dat-am-thuan-su": {
+  "t": "곤괘(坤) — 땅, 순음, 받아들임과 길러 줌. 지금은 자라나는 것을 돕고, 섬기고, 가꿀 때예요. 땅의 힘은 만물을 품고 길러 내는 능력에 있어요.",
+  "h": "71ae1c19"
+ },
+ "js.oracle.que-ly-lua-su-sang-to": {
+  "t": "이괘(離) — 불, 밝음과 아름다움. 깨달음의 빛이 비추고 있어요. 진실이든 생각이든 사람이든, 무언가가 분명해져 당신의 삶에서 빛나고 있어요.",
+  "h": "cc0d2c7e"
+ },
+ "js.oracle.que-ton-gio-su-tham-dan": {
+  "t": "손괘(巽) — 바람, 스며듦과 끈기. 바람은 센 힘이 아니라 어디든 스며드는 끈기로 이뤄 내요. 당신의 영향력이 부드럽고 오래가게 퍼지고 있어요.",
+  "h": "0785a3e6"
+ },
+ "js.oracle.quyet-doan": {
+  "t": "결단",
+  "h": "5cbca4c7"
+ },
+ "js.oracle.sac-ben": {
+  "t": "날카로움",
+  "h": "8aea464b"
+ },
+ "js.oracle.sam-set": {
+  "t": "우레",
+  "h": "e0e0f079"
+ },
+ "js.oracle.sang-tao": {
+  "t": "창조",
+  "h": "d4aba4d3"
+ },
+ "js.oracle.sang-to": {
+  "t": "밝음",
+  "h": "3250527f"
+ },
+ "js.oracle.sinh-truong": {
+  "t": "성장",
+  "h": "cde6988e"
+ },
+ "js.oracle.suc-manh-khong-phai-la-chien": {
+  "t": "힘은 한쪽이 이기는 것이 아니라, 상반된 힘 사이에서 균형을 지켜 내는 능력이에요. 당신은 자기 자신의 중심을 되찾도록 부름받고 있어요.",
+  "h": "4f824f6f"
+ },
+ "js.oracle.tam-nhin": {
+  "t": "안목",
+  "h": "d1753f25"
+ },
+ "js.oracle.tao-bao": {
+  "t": "대담함",
+  "h": "2a1e2d46"
+ },
+ "js.oracle.thach-thuc": {
+  "t": "도전",
+  "h": "737adff9"
+ },
+ "js.oracle.thach-thuc-ban-dang-doi-mat": {
+  "t": "당신이 마주한 도전은 삶의 다른 한 부분을 조절하고 균형 잡게 하려는 거예요. 맞서 싸우지 말고 그것에서 배우세요.",
+  "h": "2ec1c0ff"
+ },
+ "js.oracle.thai-cuc": {
+  "t": "태극",
+  "h": "eea5e24c"
+ },
+ "js.oracle.tham-dan": {
+  "t": "스며듦",
+  "h": "7fff6148"
+ },
+ "js.oracle.tham-sau": {
+  "t": "깊음",
+  "h": "8ffd9297"
+ },
+ "js.oracle.tham-vong": {
+  "t": "야망",
+  "h": "9b13396e"
+ },
+ "js.oracle.than-trong": {
+  "t": "신중함",
+  "h": "0dea416d"
+ },
+ "js.oracle.thay-doi": {
+  "t": "변화",
+  "h": "2d141c14"
+ },
+ "js.oracle.thay-vi-bam-viu-hay-day": {
+  "t": "붙잡거나 밀어내기보다, 지금 이 순간을 지켜보고 온전히 겪어 보세요. 내려놓음에 관한 가르침이에요.",
+  "h": "4733a001"
+ },
+ "js.oracle.thay-vi-doi-dau-truc-tiep": {
+  "t": "정면으로 맞서기보다 더 유연한 방법을 찾아보세요. 유연함은 나약함이 아니라 지혜예요.",
+  "h": "38bcd462"
+ },
+ "js.oracle.the": {
+  "t": " 장",
+  "h": "aa64c8d5"
+ },
+ "js.oracle.the-dau-tien-ban-rut-duoc": {
+  "t": "처음 뽑은 카드: **",
+  "h": "7451613d"
+ },
+ "js.oracle.the-hien": {
+  "t": "표현",
+  "h": "72f7bd18"
+ },
+ "js.oracle.thich-nghi": {
+  "t": "적응",
+  "h": "b539346c"
+ },
+ "js.oracle.thien-can": {
+  "t": "천간",
+  "h": "4202f65e"
+ },
+ "js.oracle.thin-long": {
+  "t": "진 용",
+  "h": "551c2185"
+ },
+ "js.oracle.tho-nen-tang": {
+  "t": "토 — 바탕",
+  "h": "73dabd49"
+ },
+ "js.oracle.tho-vung-chac": {
+  "t": "토 — 견고함",
+  "h": "784c3257"
+ },
+ "js.oracle.thoi-co": {
+  "t": "때를 만남",
+  "h": "f5ccdc48"
+ },
+ "js.oracle.thoi-diem-vang": {
+  "t": "황금기",
+  "h": "cb5085fe"
+ },
+ "js.oracle.thoi-tiet": {
+  "t": "시절",
+  "h": "a517b7a2"
+ },
+ "js.oracle.thong-diep": {
+  "t": "메시지",
+  "h": "8d4fe659"
+ },
+ "js.oracle.thuan-le": {
+  "t": "순리",
+  "h": "88d51987"
+ },
+ "js.oracle.thuan-the": {
+  "t": "흐름을 따름",
+  "h": "6b992670"
+ },
+ "js.oracle.thuan-the-5ik6": {
+  "t": "흐름을 따름",
+  "h": "b226424c"
+ },
+ "js.oracle.thuan-thien-gia-ton-nghich-thien": {
+  "t": "순천자존 역천자망(順天者存 逆天者亡) — 하늘의 이치를 따르는 자는 보존되고 거스르는 자는 사라져요. 자연스럽고 피할 수 없는 것에 맞서지 마세요. 상황을 거스르지 말고, 상황과 함께 일하는 길을 찾으세요.",
+  "h": "266ea183"
+ },
+ "js.oracle.thuc-tinh": {
+  "t": "깨어남",
+  "h": "0c40657d"
+ },
+ "js.oracle.thuy-chieu-sau": {
+  "t": "수 — 깊이",
+  "h": "30b87c44"
+ },
+ "js.oracle.thuy-sinh-moc-moc-sinh-hoa": {
+  "t": "수가 목을 낳고, 목이 화를 낳고… 서로 돕는 것이 우주의 본성이에요. 당신은 다른 사람의 도움을 받고 있거나, 누군가를 길러 주는 존재가 되도록 부름받고 있어요.",
+  "h": "95bfe0f9"
+ },
+ "js.oracle.thuy-tri-tue": {
+  "t": "수 — 지혜",
+  "h": "e4931a4f"
+ },
+ "js.oracle.tiem-nang": {
+  "t": "잠재력",
+  "h": "dbd5fc81"
+ },
+ "js.oracle.tien-phong": {
+  "t": "선구",
+  "h": "7da37b6c"
+ },
+ "js.oracle.tiep-nhan": {
+  "t": "받아들임",
+  "h": "7d1e28b5"
+ },
+ "js.oracle.tim-hieu-van-khi-nam-nay": {
+  "t": "올해 당신의 운의 기운을 알아보세요. 때에 맞게 움직이고, 운명의 흐름을 거스르지 마세요.",
+  "h": "6b1162c4"
+ },
+ "js.oracle.tin-tuong": {
+  "t": "믿음",
+  "h": "8f76c3a5"
+ },
+ "js.oracle.tin-tuong-vao-qua-trinh-nhung": {
+  "t": "과정을 믿으세요. 당신의 조용한 노력이 쌓이고 있어요. 결과가 당장 보이지 않는다고 포기하지 마세요.",
+  "h": "c4346208"
+ },
+ "js.oracle.tinh-cam": {
+  "t": "정",
+  "h": "ba217ecf"
+ },
+ "js.oracle.tinh-lang": {
+  "t": "고요",
+  "h": "50214643"
+ },
+ "js.oracle.tinh-te": {
+  "t": "섬세함",
+  "h": "9045cd81"
+ },
+ "js.oracle.toa-sang": {
+  "t": "빛남",
+  "h": "ae22fb49"
+ },
+ "js.oracle.toc-do": {
+  "t": "속도",
+  "h": "7c10386d"
+ },
+ "js.oracle.ton-gio": {
+  "t": "손 — 바람",
+  "h": "bfd2d8e9"
+ },
+ "js.oracle.trach-nhiem": {
+  "t": "책임",
+  "h": "08440470"
+ },
+ "js.oracle.tran-trong": {
+  "t": "소중히 여김",
+  "h": "54a3e6b3"
+ },
+ "js.oracle.trang-thai-thuc-te-bay-gio": {
+  "t": "지금의 실제 상태",
+  "h": "093b5811"
+ },
+ "js.oracle.tri-an": {
+  "t": "보은",
+  "h": "7eb696b3"
+ },
+ "js.oracle.tri-nhan-gia-tri-tu-tri": {
+  "t": "지인자지 자지자명(知人者智 自知者明) — 남을 아는 것은 지혜이고, 자신을 아는 것은 밝음이에요. 가장 높은 앎은 자기 자신을 이해하는 것이에요 — 나의 강점과 약점, 동기, 그리고 진짜 두려움을요.",
+  "h": "3a84272e"
+ },
+ "js.oracle.tri-tuc": {
+  "t": "지족",
+  "h": "39cd778d"
+ },
+ "js.oracle.tri-tuc-biet-du-thi-thuong": {
+  "t": "지족상락(知足常樂) — 족함을 알면 늘 즐거워요. 가장 많이 가진 사람이 가장 행복한 것은 아니에요. 지금 가진 것을 소중히 여길 줄 아는 사람이 진짜 부자예요.",
+  "h": "60fe6429"
+ },
+ "js.oracle.tri-tue": {
+  "t": "지혜",
+  "h": "74e5d83d"
+ },
+ "js.oracle.triet-ly": {
+  "t": "철학",
+  "h": "b7552b71"
+ },
+ "js.oracle.troi": {
+  "t": "하늘",
+  "h": "02698dc1"
+ },
+ "js.oracle.tron-ven": {
+  "t": "온전함",
+  "h": "ae612b97"
+ },
+ "js.oracle.truc-giac": {
+  "t": "직관",
+  "h": "d86f73b7"
+ },
+ "js.oracle.trung-dao": {
+  "t": "중도",
+  "h": "61aa8015"
+ },
+ "js.oracle.trung-tam": {
+  "t": "중심",
+  "h": "a776588a"
+ },
+ "js.oracle.truong-thanh": {
+  "t": "성숙",
+  "h": "bbe03f16"
+ },
+ "js.oracle.tu-do": {
+  "t": "자유",
+  "h": "40d06bcd"
+ },
+ "js.oracle.tu-nhan-thuc": {
+  "t": "자기 인식",
+  "h": "300c9c9a"
+ },
+ "js.oracle.tu-nhien": {
+  "t": "자연스러움",
+  "h": "a16adcc3"
+ },
+ "js.oracle.tu-thai-cuc-sinh-luong-nghi": {
+  "t": "태극에서 양의가 생겨나요 — 하나에서 둘이 나오고, 이어서 만물이 나와요. 당신은 새로운 주기의 출발점에 서 있어요. 모든 잠재력이 고요한 상태로 무르익을 때를 기다리고 있어요.",
+  "h": "9beef9b2"
+ },
+ "js.oracle.tu-tri": {
+  "t": "자지",
+  "h": "cd9d3b04"
+ },
+ "js.oracle.tuong-khac": {
+  "t": "상극",
+  "h": "04eb5bcd"
+ },
+ "js.oracle.tuong-sinh": {
+  "t": "상생",
+  "h": "b29d50a2"
+ },
+ "js.oracle.tuong-sinh-4int": {
+  "t": "상생",
+  "h": "1aad018d"
+ },
+ "js.oracle.ty-khoi-nguyen": {
+  "t": "자 — 근원",
+  "h": "f14c8865"
+ },
+ "js.oracle.van-luu-nien-van-khi-cua": {
+  "t": "유년운 — 올해의 운의 기운이 모든 결정에 강하게 영향을 주고 있어요. 행동하기 전에 전체 운의 흐름을 살펴보세요. 흐름을 따르는 것이 가장 현명해요.",
+  "h": "8824729d"
+ },
+ "js.oracle.van-trinh": {
+  "t": "운의 흐름",
+  "h": "5c07d84c"
+ },
+ "js.oracle.van-trinh-37gw": {
+  "t": "운의 흐름",
+  "h": "cd32c605"
+ },
+ "js.oracle.van-vat-deu-vo-thuong-khong": {
+  "t": "만물은 무상해요 — 고통도 행복도 영원히 있는 것은 없어요. 지금 당신을 괴롭히는 것도 지나가고, 지금 당신을 기쁘게 하는 것도 변해요. 이 순간을 온전히 살아가세요.",
+  "h": "4e0d90c3"
+ },
+ "js.oracle.van-vat-ton-tai-trong-su": {
+  "t": "만물은 조화로운 대립 속에 존재해요. 어둡다고 여기는 것은 빛의 씨앗을 품고 있고, 눈부신 것은 어둠의 핵을 지니고 있어요. 대립에 맞서지 말고 그 안에서 균형을 찾으세요.",
+  "h": "34a745bc"
+ },
+ "js.oracle.ve-dep": {
+  "t": "아름다움",
+  "h": "784d2dc0"
+ },
+ "js.oracle.vo-thuong": {
+  "t": "무상",
+  "h": "8673ae43"
+ },
+ "js.oracle.vo-thuong-6avc": {
+  "t": "무상",
+  "h": "8030e2f3"
+ },
+ "js.oracle.vo-vi": {
+  "t": "무위",
+  "h": "cc46980f"
+ },
+ "js.oracle.vo-vi-4qy7": {
+  "t": "무위",
+  "h": "c4848930"
+ },
+ "js.oracle.vo-vi-nhi-vo-bat-vi": {
+  "t": "무위이무불위(無爲而無不爲) — 하지 않는 듯하지만 하지 않는 것이 없어요. 억지로 구하지 않고 자연스럽게, 사물의 이치를 따라 행동하는 것이에요. 이것이 가장 높은 종류의 힘이에요.",
+  "h": "b8307c9c"
+ },
+ "js.oracle.vuot-qua": {
+  "t": "극복",
+  "h": "624f1384"
+ },
+ "js.oracle.xem-xet-dau-la-nhung-dieu": {
+  "t": "삶에서 균형이 깨진 곳이 어디인지 살펴보세요. 일/휴식, 주기/받기, 행동/성찰 — 다시 맞춰 보세요.",
+  "h": "64dee7e0"
  },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 열면 바로 결제되고 곧바로 읽을 수 있어요, ",
@@ -3898,6 +6034,50 @@
  "js.prices.money-moi-luot-sale": {
   "t": "1회당 {money} ({sale}냥, {credits}냥에서 할인)",
   "h": "7aabe37f"
+ },
+ "js.resources.ket-qua": {
+  "t": "{visible} / {total}건",
+  "h": "011cac03"
+ },
+ "js.resources.tai-lieu": {
+  "t": "자료 {total}건",
+  "h": "f0694133"
+ },
+ "js.sachdetail.chua-co-link-tai-xuong": {
+  "t": "다운로드 링크가 아직 없어요",
+  "h": "e79f961c"
+ },
+ "js.sachdetail.file-pdf-chia-se-cho": {
+  "t": "PDF 파일 — 자미두수를 연구하는 분들께 공유하는 자료예요.",
+  "h": "7c5d9e1e"
+ },
+ "js.sachdetail.khong-ro-tac-gia": {
+  "t": "저자 미상",
+  "h": "96dde3b9"
+ },
+ "js.sachdetail.tai-lieu-dang-duoc-cap-nhat": {
+  "t": "자료를 업데이트하는 중이에요. 나중에 다시 확인하시거나 요청해 주세요.",
+  "h": "751a9da5"
+ },
+ "js.sachdetail.tai-xuong": {
+  "t": "⬇ 다운로드",
+  "h": "e1981ed0"
+ },
+ "js.sachdetail.tai-xuong-mien-phi": {
+  "t": "무료 다운로드",
+  "h": "ba3e26bc"
+ },
+ "js.sachdetail.tieng-trung": {
+  "t": "중국어",
+  "h": "58e04c6a"
+ },
+ "js.sachdetail.tieng-viet": {
+  "t": "베트남어",
+  "h": "4993440c"
+ },
+ "js.sachdetail.tu-vi-minh-bao": {
+  "t": "명보 자미두수",
+  "h": "33336b26"
  },
  "js.shell.an": {
   "t": "숨기기",
@@ -7847,6 +10027,2978 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.tailieu.cat-cach-cuc": {
+  "t": "격국",
+  "h": "760d1ac9"
+ },
+ "js.tailieu.cat-cung": {
+  "t": "궁위",
+  "h": "275eb0cd"
+ },
+ "js.tailieu.cat-khai-niem": {
+  "t": "기본 개념",
+  "h": "27006f25"
+ },
+ "js.tailieu.cat-luan-giai": {
+  "t": "풀이",
+  "h": "4e36b042"
+ },
+ "js.tailieu.cat-sao-chinh": {
+  "t": "주성",
+  "h": "3f5b010b"
+ },
+ "js.tailieu.cat-sao-phu": {
+  "t": "보성",
+  "h": "44e6258b"
+ },
+ "js.tailieu.cat-van-han": {
+  "t": "운세",
+  "h": "cf15573a"
+ },
+ "js.tailieu.noi-dung-dang-duoc-cap-nhat": {
+  "t": "내용을 업데이트하는 중이에요.",
+  "h": "dc838116"
+ },
+ "js.tailieu.tu-vi-minh-bao": {
+  "t": "명보 자미두수",
+  "h": "33336b26"
+ },
+ "js.tarot.ac-mong": {
+  "t": "악몽",
+  "h": "c6b4b890"
+ },
+ "js.tarot.ac-quy": {
+  "t": "악마",
+  "h": "3871fef7"
+ },
+ "js.tarot.am-anh": {
+  "t": "집착",
+  "h": "a2b0d974"
+ },
+ "js.tarot.an-mung": {
+  "t": "축하",
+  "h": "149e420c"
+ },
+ "js.tarot.an-mung-hai-hoa-thu-gian": {
+  "t": "축하, 조화, 휴식, 안정. 성취를 기념할 때예요. 탄탄한 기반이 세워졌어요.",
+  "h": "2b23f082"
+ },
+ "js.tarot.an-si": {
+  "t": "은둔자",
+  "h": "c6f75858"
+ },
+ "js.tarot.an-toan": {
+  "t": "안전",
+  "h": "77c4a7f5"
+ },
+ "js.tarot.ao-giac": {
+  "t": "환각",
+  "h": "03762cc0"
+ },
+ "js.tarot.ao-giac-so-hai-tiem-thuc": {
+  "t": "환각, 두려움, 잠재의식, 꿈. 모든 것이 겉보기와 같지는 않아요. 어둠 속에 숨은 것을 조심하세요.",
+  "h": "5fdc79a4"
+ },
+ "js.tarot.ao-tuong": {
+  "t": "환상",
+  "h": "ba847935"
+ },
+ "js.tarot.ao-tuong-lua-chon-giac-mo": {
+  "t": "환상, 선택, 꿈, 상상. 선택지가 너무 많아 압도돼요. 환상에 갇히지 않도록 조심하세요.",
+  "h": "b8107cdd"
+ },
+ "js.tarot.ap-luc": {
+  "t": "압박",
+  "h": "dad3b1e8"
+ },
+ "js.tarot.at": {
+  "t": "에이스",
+  "h": "ec2d5348"
+ },
+ "js.tarot.at-coc": {
+  "t": "컵 에이스",
+  "h": "148af279"
+ },
+ "js.tarot.at-gay": {
+  "t": "완드 에이스",
+  "h": "3c649b95"
+ },
+ "js.tarot.at-kiem": {
+  "t": "소드 에이스",
+  "h": "8d22ebb2"
+ },
+ "js.tarot.at-tien": {
+  "t": "펜타클 에이스",
+  "h": "2dbb31f2"
+ },
+ "js.tarot.ba": {
+  "t": "3",
+  "h": "2fd22ce6"
+ },
+ "js.tarot.ba-coc": {
+  "t": "컵 3",
+  "h": "a6a7d0d5"
+ },
+ "js.tarot.ba-gay": {
+  "t": "완드 3",
+  "h": "197ca1a7"
+ },
+ "js.tarot.ba-kiem": {
+  "t": "소드 3",
+  "h": "09c132fc"
+ },
+ "js.tarot.ba-tien": {
+  "t": "펜타클 3",
+  "h": "2c28d00d"
+ },
+ "js.tarot.bai-hoc": {
+  "t": "교훈",
+  "h": "c52de730"
+ },
+ "js.tarot.ban-muon-toi-luan-theo-huong": {
+  "t": ". 어떤 방향으로 풀이해 드릴까요?",
+  "h": "954f8120"
+ },
+ "js.tarot.ban-than": {
+  "t": "나 자신",
+  "h": "5124062f"
+ },
+ "js.tarot.banh-xe-so-phan": {
+  "t": "운명의 수레바퀴",
+  "h": "d004b9c6"
+ },
+ "js.tarot.bao-ton": {
+  "t": "보존",
+  "h": "ca5b8c76"
+ },
+ "js.tarot.bao-ton-on-dinh-an-toan": {
+  "t": "보존, 안정, 안전, 통제. 자원을 꽉 쥐고 있어요. 때로는 필요하지만 인색해지지는 않도록 하세요.",
+  "h": "57f23fc4"
+ },
+ "js.tarot.bao-ve": {
+  "t": "보호",
+  "h": "184f46c3"
+ },
+ "js.tarot.bat-an": {
+  "t": "불안",
+  "h": "fbc5a654"
+ },
+ "js.tarot.bat-cong-thieu-trach-nhiem-tranh": {
+  "t": "불공정, 책임감 부족, 결과 회피. 책임을 피하고 있거나 부당한 대우를 받고 있어요.",
+  "h": "e024c351"
+ },
+ "js.tarot.bat-dong": {
+  "t": "의견 충돌",
+  "h": "e7229cd1"
+ },
+ "js.tarot.bat-hoa-lua-chon-sai-mat": {
+  "t": "불화, 잘못된 선택, 균형 상실. 잘못된 이유로 선택하고 있거나 중요한 결정을 피하고 있을 수 있어요.",
+  "h": "a6e61673"
+ },
+ "js.tarot.bat-ngo": {
+  "t": "뜻밖",
+  "h": "5ae13239"
+ },
+ "js.tarot.bay": {
+  "t": "7",
+  "h": "ecfd1f8b"
+ },
+ "js.tarot.bay-coc": {
+  "t": "컵 7",
+  "h": "b56771dd"
+ },
+ "js.tarot.bay-gay": {
+  "t": "완드 7",
+  "h": "0c3ce9af"
+ },
+ "js.tarot.bay-kiem": {
+  "t": "소드 7",
+  "h": "0f2da0ef"
+ },
+ "js.tarot.bay-tien": {
+  "t": "펜타클 7",
+  "h": "6c2ed05f"
+ },
+ "js.tarot.be-tac": {
+  "t": "교착",
+  "h": "f0eccc13"
+ },
+ "js.tarot.be-tac-pha-vo-thong-tin": {
+  "t": "교착이 풀리고, 정보가 나타나고, 어려운 선택이 와요. 마침내 피해 온 현실과 마주해야 해요.",
+  "h": "3ebb6325"
+ },
+ "js.tarot.be-tac-tranh-ne-khong-quyet": {
+  "t": "교착, 회피, 결정 못 함, 위태로운 균형. 진실에 눈을 가린 채 어려운 결정을 피하고 있어요.",
+  "h": "294a6db6"
+ },
+ "js.tarot.ben-vung": {
+  "t": "지속가능",
+  "h": "c7cb7a59"
+ },
+ "js.tarot.bi-an": {
+  "t": "신비",
+  "h": "bb6b7014"
+ },
+ "js.tarot.bi-an-lon": {
+  "t": "메이저 아르카나",
+  "h": "8998484c"
+ },
+ "js.tarot.bi-mat-bi-che-giau-ngat": {
+  "t": "감춰진 비밀, 자기 자신과의 단절, 직관 무시. 내면에서 오는 중요한 신호를 놓치고 있어요.",
+  "h": "79207b16"
+ },
+ "js.tarot.bi-quan-tam-thoi-thieu-nang": {
+  "t": "일시적인 비관, 에너지 부족, 자기 의심. 빛은 여전히 거기에 있어요. 어둠에서 걸어 나오기만 하면 돼요.",
+  "h": "8ddc44ce"
+ },
+ "js.tarot.binh-an": {
+  "t": "평안",
+  "h": "426b7fa1"
+ },
+ "js.tarot.binh-minh": {
+  "t": "새벽",
+  "h": "04166e56"
+ },
+ "js.tarot.binh-yen": {
+  "t": "평온",
+  "h": "b702d55e"
+ },
+ "js.tarot.bo-qua-co-hoi": {
+  "t": "기회를 놓침",
+  "h": "fb1813f7"
+ },
+ "js.tarot.boc-dong-cam-xuc-khong-thuc": {
+  "t": "감정적 충동, 비현실적, 기만. 감정에 지나치게 휘둘리거나 맹목적인 낭만에 빠져 있어요.",
+  "h": "ff709375"
+ },
+ "js.tarot.boc-dong-hung-han-xung-dot": {
+  "t": "충동적, 공격적, 불필요한 충돌. 너무 서둘러 행동해 뜻하지 않은 결과를 낳고 있어요.",
+  "h": "38b6b637"
+ },
+ "js.tarot.bon": {
+  "t": "4",
+  "h": "8c0bddbf"
+ },
+ "js.tarot.bon-coc": {
+  "t": "컵 4",
+  "h": "20cc28aa"
+ },
+ "js.tarot.bon-gay": {
+  "t": "완드 4",
+  "h": "d940d4cf"
+ },
+ "js.tarot.bon-kiem": {
+  "t": "소드 4",
+  "h": "9cc70cc4"
+ },
+ "js.tarot.bon-tien": {
+  "t": "펜타클 4",
+  "h": "23371d80"
+ },
+ "js.tarot.bong-toi": {
+  "t": "어둠",
+  "h": "0fdbc741"
+ },
+ "js.tarot.buoc-ngoat": {
+  "t": "전환점",
+  "h": "df3f3579"
+ },
+ "js.tarot.buong-binh-cham-chap-khong-co": {
+  "t": "고집스럽고, 더디고, 성과가 없어요. 습관에 갇혀 적응하기를 거부하고 있어요.",
+  "h": "2be1dd89"
+ },
+ "js.tarot.buong-bo": {
+  "t": "내려놓음",
+  "h": "eefa92c2"
+ },
+ "js.tarot.cach-ban-nhin-nhan-tinh-huong": {
+  "t": "당신이 상황을 바라보는 방식",
+  "h": "f3db0f8c"
+ },
+ "js.tarot.cai-chet": {
+  "t": "죽음",
+  "h": "c72e5c2a"
+ },
+ "js.tarot.cam-hung": {
+  "t": "영감",
+  "h": "9571e2f8"
+ },
+ "js.tarot.cam-hung-moi-tiem-nang-sang": {
+  "t": "새로운 영감, 창조적 잠재력, 열정 가득한 시작. 새 프로젝트나 창의적인 아이디어의 씨앗이 싹트고 있어요.",
+  "h": "a3558583"
+ },
+ "js.tarot.cam-xuc": {
+  "t": "감정",
+  "h": "5d160d22"
+ },
+ "js.tarot.cam-xuc-bi-chan-trai-tim": {
+  "t": "막힌 감정, 닫힌 마음, 거절당한 사랑. 사랑을 주거나 받기가 어려워요.",
+  "h": "ce6a324d"
+ },
+ "js.tarot.cam-xuc-that-thuong-nhay-cam": {
+  "t": "변덕스러운 감정, 지나친 예민함, 소문. 메시지를 믿기 어렵거나 감정이 너무 쉽게 흔들려요.",
+  "h": "eae67a95"
+ },
+ "js.tarot.can-bang": {
+  "t": "균형",
+  "h": "9fe59d4b"
+ },
+ "js.tarot.can-bang-cam-xuc": {
+  "t": "감정의 균형",
+  "h": "d1123271"
+ },
+ "js.tarot.can-bang-kien-nhan-muc-dich": {
+  "t": "균형, 인내, 목적, 조화. 중용의 길을 걸으며 삶의 상반된 요소들을 조화시켜요.",
+  "h": "0f7a1692"
+ },
+ "js.tarot.can-bang-thich-nghi-quan-ly": {
+  "t": "균형, 적응, 시간 관리. 여러 일을 동시에 저글링하고 있어요. 균형을 유지하려면 유연해야 해요.",
+  "h": "c8675dc0"
+ },
+ "js.tarot.can-dam": {
+  "t": "용기",
+  "h": "799eb640"
+ },
+ "js.tarot.can-dam-kien-nhan-long-trac": {
+  "t": "용기, 인내, 연민, 내면의 통제. 진짜 힘은 완력이 아니라 선함과 인내를 바탕으로 안에서 나와요.",
+  "h": "243edf07"
+ },
+ "js.tarot.cang-thang": {
+  "t": "긴장",
+  "h": "124a70ce"
+ },
+ "js.tarot.canh-giac": {
+  "t": "경계",
+  "h": "75f07413"
+ },
+ "js.tarot.canh-tranh": {
+  "t": "경쟁",
+  "h": "5eddba97"
+ },
+ "js.tarot.cau-hoi-cua-ban": {
+  "t": "질문: \"",
+  "h": "660c481c"
+ },
+ "js.tarot.cau-truc": {
+  "t": "구조",
+  "h": "0677e00b"
+ },
+ "js.tarot.cham-chi": {
+  "t": "성실",
+  "h": "7cfb6b94"
+ },
+ "js.tarot.cham-chi-dang-tin-kien-nhan": {
+  "t": "성실함, 믿음직함, 인내, 체계적인 방법. 느려도 확실하게, 과정을 믿고 포기하지 마세요.",
+  "h": "e614eac7"
+ },
+ "js.tarot.cham-chi-hoc-ky-nang-ti": {
+  "t": "성실함, 기술 익히기, 꼼꼼함, 일에 대한 헌신. 높은 집중력으로 기술을 배우고 다듬고 있어요.",
+  "h": "f7742fc6"
+ },
+ "js.tarot.cham-soc": {
+  "t": "돌봄",
+  "h": "1fcae77e"
+ },
+ "js.tarot.cham-tre-hon-loan-thieu-kien": {
+  "t": "지연, 혼란, 조급함. 계획이 미뤄지거나 정보가 뒤죽박죽이에요.",
+  "h": "1d87d16c"
+ },
+ "js.tarot.chia-se": {
+  "t": "나눔",
+  "h": "1cb95080"
+ },
+ "js.tarot.chien-luoc": {
+  "t": "전략",
+  "h": "a4477df9"
+ },
+ "js.tarot.chien-thang": {
+  "t": "승리",
+  "h": "d91cbf56"
+ },
+ "js.tarot.chin": {
+  "t": "9",
+  "h": "c8fe0b37"
+ },
+ "js.tarot.chin-coc": {
+  "t": "컵 9",
+  "h": "27c377f0"
+ },
+ "js.tarot.chin-gay": {
+  "t": "완드 9",
+  "h": "f9f17651"
+ },
+ "js.tarot.chin-kiem": {
+  "t": "소드 9",
+  "h": "5e9ffb53"
+ },
+ "js.tarot.chin-tien": {
+  "t": "펜타클 9",
+  "h": "0958d1a3"
+ },
+ "js.tarot.cho-di-nhan-lay-quao-phuc": {
+  "t": "주기, 받기, 선물, 교환. 주고받음에 균형이 있어요. 너그러움이 빛나고 있어요.",
+  "h": "ddc315a1"
+ },
+ "js.tarot.cho-doi": {
+  "t": "기다림",
+  "h": "d35e8462"
+ },
+ "js.tarot.choang-ngop": {
+  "t": "압도됨",
+  "h": "f66e5ee6"
+ },
+ "js.tarot.chu-ky": {
+  "t": "주기",
+  "h": "ebc184a9"
+ },
+ "js.tarot.chu-ky-ket-thuc": {
+  "t": "주기의 끝",
+  "h": "6610c6f1"
+ },
+ "js.tarot.chua-hoan-chinh-thieu-ket-thuc": {
+  "t": "미완성, 마무리 부족, 지연. 결승선이 가까운데도 나아가기 전에 해결해야 할 것이 남아 있어요.",
+  "h": "91cc393b"
+ },
+ "js.tarot.chua-lanh": {
+  "t": "치유",
+  "h": "a6742d20"
+ },
+ "js.tarot.chuan-muc": {
+  "t": "규범",
+  "h": "f3a38140"
+ },
+ "js.tarot.chuyen-doi": {
+  "t": "전환",
+  "h": "b2ee87ff"
+ },
+ "js.tarot.chuyen-doi-roi-di-tien-ve": {
+  "t": "전환, 떠남, 앞으로 나아감, 더 평온해짐. 어려움에서 벗어나 평화를 향해 가요.",
+  "h": "26e94e72"
+ },
+ "js.tarot.chuyen-dong": {
+  "t": "움직임",
+  "h": "71a27fe6"
+ },
+ "js.tarot.chuyen-hoa": {
+  "t": "변화",
+  "h": "c4b88b2f"
+ },
+ "js.tarot.co-don": {
+  "t": "외로움",
+  "h": "db8cff43"
+ },
+ "js.tarot.co-hoi": {
+  "t": "기회",
+  "h": "da02f76b"
+ },
+ "js.tarot.co-hoi-bi-bo-lo-thieu": {
+  "t": "놓친 기회, 재무 계획 부족, 낭비. 기회는 있지만 제대로 활용하지 못했어요.",
+  "h": "0cb3876a"
+ },
+ "js.tarot.co-hoi-moi-hoc-hoi-thuc": {
+  "t": "새로운 기회, 실용적인 배움, 집중, 돈에 관한 소식. 현실적인 일에 대한 배움의 의욕이 있어요.",
+  "h": "1a94fa49"
+ },
+ "js.tarot.co-hoi-moi-ve-tai-chinh": {
+  "t": "재정의 새로운 기회, 번영, 안정, 물질적 기반. 번영과 물질적 안정의 씨앗이에요.",
+  "h": "79c8a314"
+ },
+ "js.tarot.co-lap-co-don-khong-mong": {
+  "t": "고립, 원치 않는 외로움, 사회적 회피. 스스로를 가두고 있거나 다른 사람과의 의미 있는 연결을 놓치고 있어요.",
+  "h": "c3a3ce89"
+ },
+ "js.tarot.co-xe": {
+  "t": "전차",
+  "h": "72d5cdd1"
+ },
+ "js.tarot.coc-nuoc": {
+  "t": "컵 ♦ 물",
+  "h": "bd8c22ad"
+ },
+ "js.tarot.cong-bang": {
+  "t": "공정",
+  "h": "53a179d6"
+ },
+ "js.tarot.cong-bang-su-that-nhan-qua": {
+  "t": "공정, 진실, 인과, 법. 모든 행동에는 결과가 따라요. 균형과 공정함이 회복될 거예요.",
+  "h": "a47c3677"
+ },
+ "js.tarot.cong-dong": {
+  "t": "공동체",
+  "h": "a0164a17"
+ },
+ "js.tarot.cong-ly": {
+  "t": "정의",
+  "h": "da42b3eb"
+ },
+ "js.tarot.cong-nhan": {
+  "t": "인정",
+  "h": "881d0ab6"
+ },
+ "js.tarot.cung-nhac-giao-dieu-pha-vo": {
+  "t": "경직됨, 교조적, 규칙 깨기. 전통적인 가치에 도전하고 있거나 다른 사람의 기대에 얽매여 있어요.",
+  "h": "921246d8"
+ },
+ "js.tarot.da-nhiem": {
+  "t": "멀티태스킹",
+  "h": "033ec2c3"
+ },
+ "js.tarot.dam-me": {
+  "t": "열정",
+  "h": "60bf63eb"
+ },
+ "js.tarot.dang-tin": {
+  "t": "믿음직함",
+  "h": "7a063188"
+ },
+ "js.tarot.dang-xao-bai": {
+  "t": "카드를 섞는 중...",
+  "h": "033fb9a0"
+ },
+ "js.tarot.danh-gia": {
+  "t": "평가",
+  "h": "d0170783"
+ },
+ "js.tarot.danh-gia-kien-nhan-dau-tu": {
+  "t": "평가, 인내, 장기 투자, 결과 기다리기. 뿌려 둔 씨앗이 싹트기를 기다리고 있어요. 인내가 필요해요.",
+  "h": "26d0fe8d"
+ },
+ "js.tarot.danh-gia-lai": {
+  "t": "재평가",
+  "h": "9c307658"
+ },
+ "js.tarot.dao-duc": {
+  "t": "도덕",
+  "h": "8b9a81eb"
+ },
+ "js.tarot.dau-buon": {
+  "t": "슬픔",
+  "h": "e39a2dbc"
+ },
+ "js.tarot.dau-buon-tu-choi-noi-dau": {
+  "t": "슬픔, 거부, 고통, 마음의 상처. 아픔과 상처는 치유 과정의 일부예요.",
+  "h": "62b7289d"
+ },
+ "js.tarot.dau-tranh": {
+  "t": "투쟁",
+  "h": "825f819b"
+ },
+ "js.tarot.dau-tu": {
+  "t": "투자",
+  "h": "2b64c568"
+ },
+ "js.tarot.di-san": {
+  "t": "유산",
+  "h": "e7b22b5e"
+ },
+ "js.tarot.dieu-dang-can-tro-hay-thach": {
+  "t": "당신을 가로막거나 시험하는 것",
+  "h": "13130a2b"
+ },
+ "js.tarot.dieu-do": {
+  "t": "절제",
+  "h": "98818c96"
+ },
+ "js.tarot.dieu-do-v85g": {
+  "t": "절제",
+  "h": "ab4d0c9e"
+ },
+ "js.tarot.dieu-gi-do-vua-qua-anh": {
+  "t": "방금 지나간 일이 상황에 준 영향",
+  "h": "040ee16c"
+ },
+ "js.tarot.dieu-sap-xay-ra-trong-thoi": {
+  "t": "곧 일어날 일",
+  "h": "6072c9be"
+ },
+ "js.tarot.dieu-tot-nhat-co-the-dat": {
+  "t": "이룰 수 있는 가장 좋은 것",
+  "h": "ed7cbcf1"
+ },
+ "js.tarot.do-vo": {
+  "t": "무너짐",
+  "h": "cbe2ec05"
+ },
+ "js.tarot.doanh-nghiep": {
+  "t": "사업",
+  "h": "42d66217"
+ },
+ "js.tarot.doc-doan-boc-dong-ky-vong": {
+  "t": "독단적, 충동적, 높은 기대. 영감을 주는 대신 강압적인 방식으로 이끌고 있어요.",
+  "h": "cf6413f9"
+ },
+ "js.tarot.doc-doan-kiem-soat-qua-muc": {
+  "t": "독단적이고, 지나치게 통제하고, 융통성이 없어요. 권력을 잘못 쓰고 있거나 다른 사람에게 통제당하고 있어요.",
+  "h": "cabba9ca"
+ },
+ "js.tarot.doc-doan-lam-dung-quyen-luc": {
+  "t": "독단적이고, 권력을 남용하고, 조종해요. 이끌어 주는 대신 지성을 통제하는 데 쓰고 있어요.",
+  "h": "3b7907f5"
+ },
+ "js.tarot.doc-lap": {
+  "t": "독립",
+  "h": "404a2001"
+ },
+ "js.tarot.doc-lap-sac-ben-truc-tiep": {
+  "t": "독립적이고, 예리하고, 직설적이고, 경험이 있어요. 영리하고 솔직한 사람으로, 감정에 판단이 흐려지지 않아요.",
+  "h": "f42549a0"
+ },
+ "js.tarot.doc-lap-tai-chinh-tu-tuc": {
+  "t": "재정적 독립, 자급자족, 풍요, 완성. 안정과 자율을 이뤘어요. 노력의 결실을 누리세요.",
+  "h": "3fc7e095"
+ },
+ "js.tarot.dot-pha": {
+  "t": "돌파",
+  "h": "121fffd9"
+ },
+ "js.tarot.dung-cam": {
+  "t": "용감함",
+  "h": "84c15aad"
+ },
+ "js.tarot.ganh-nang": {
+  "t": "짐",
+  "h": "30a55453"
+ },
+ "js.tarot.ganh-nang-trach-nhiem-qua-muc": {
+  "t": "짐, 지나친 책임, 압박. 너무 많은 것을 짊어지고 있어요. 더 이상 필요 없는 것은 내려놓아야 해요.",
+  "h": "4123f0d7"
+ },
+ "js.tarot.gay-lua": {
+  "t": "완드 ♦ 불",
+  "h": "0a933fcd"
+ },
+ "js.tarot.gia-dinh": {
+  "t": "가족",
+  "h": "bf9b33dc"
+ },
+ "js.tarot.giac-mo": {
+  "t": "꿈",
+  "h": "cd70581d"
+ },
+ "js.tarot.giai-phong-thoat-khoi-rang-buoc": {
+  "t": "해방, 속박에서 벗어남, 깨달음. 건강하지 못한 속박을 알아차리고 끊어 내기 시작해요.",
+  "h": "7495bee8"
+ },
+ "js.tarot.giao-duc": {
+  "t": "교육",
+  "h": "59c0feb9"
+ },
+ "js.tarot.giao-hoang": {
+  "t": "교황",
+  "h": "62969d47"
+ },
+ "js.tarot.giau-co": {
+  "t": "풍요",
+  "h": "e81892ac"
+ },
+ "js.tarot.giau-co-di-san-hanh-phuc": {
+  "t": "풍요, 유산, 가정의 행복, 물질적 완성. 오래가는 번영을 가족과 다음 세대와 나눠요.",
+  "h": "dbc78694"
+ },
+ "js.tarot.goc-nhin-moi": {
+  "t": "새로운 시각",
+  "h": "fcb22fff"
+ },
+ "js.tarot.hai": {
+  "t": "2",
+  "h": "916c7bfc"
+ },
+ "js.tarot.hai-coc": {
+  "t": "컵 2",
+  "h": "ca8b937f"
+ },
+ "js.tarot.hai-gay": {
+  "t": "완드 2",
+  "h": "343b9500"
+ },
+ "js.tarot.hai-hoa": {
+  "t": "조화",
+  "h": "deffa707"
+ },
+ "js.tarot.hai-kiem": {
+  "t": "소드 2",
+  "h": "0781f893"
+ },
+ "js.tarot.hai-long": {
+  "t": "만족",
+  "h": "525c3ad0"
+ },
+ "js.tarot.hai-tien": {
+  "t": "펜타클 2",
+  "h": "48417e91"
+ },
+ "js.tarot.han-che": {
+  "t": "제한",
+  "h": "0fb75911"
+ },
+ "js.tarot.hanh-dong": {
+  "t": "행동",
+  "h": "8e9fdd28"
+ },
+ "js.tarot.hanh-phuc": {
+  "t": "행복",
+  "h": "68d680dc"
+ },
+ "js.tarot.hanh-phuc-gia-dinh": {
+  "t": "가정의 행복",
+  "h": "9bbe6e27"
+ },
+ "js.tarot.hanh-phuc-gia-dinh-hai-hoa": {
+  "t": "가정의 행복, 조화, 오래가는 만족. 관계에서 진정한 행복과 완성을 얻어요.",
+  "h": "f3ecb4d8"
+ },
+ "js.tarot.hao-phong": {
+  "t": "너그러움",
+  "h": "ed42ce8c"
+ },
+ "js.tarot.hao-phong-buong-bo-mo-cua": {
+  "t": "너그러움, 내려놓음, 풍요에 문을 열어요. 물질에 대한 집착을 내려놓기 시작해요.",
+  "h": "9df21f91"
+ },
+ "js.tarot.hh": {
+  "t": "퀸",
+  "h": "fc5d4b91"
+ },
+ "js.tarot.hien-tai": {
+  "t": "현재",
+  "h": "cd16704d"
+ },
+ "js.tarot.hoa-giai-hoi-han-giai-quyet": {
+  "t": "화해, 후회, 갈등 해결. 실수에서 배우고 바로잡을 방법을 찾고 있어요.",
+  "h": "99209079"
+ },
+ "js.tarot.hoa-hop": {
+  "t": "어우러짐",
+  "h": "6c6047bd"
+ },
+ "js.tarot.hoai-niem": {
+  "t": "그리움",
+  "h": "ed7fb958"
+ },
+ "js.tarot.hoai-niem-tuoi-tho-ky-niem": {
+  "t": "그리움, 어린 시절, 추억, 아름다운 기억. 애틋한 마음으로 과거를 돌아봐요. 내면의 아이와 이어지는 때예요.",
+  "h": "e654cb98"
+ },
+ "js.tarot.hoan-chinh": {
+  "t": "완성",
+  "h": "2ebc0bff"
+ },
+ "js.tarot.hoan-chinh-thanh-tich-hoi-nhap": {
+  "t": "완성, 성취, 통합, 여정의 끝. 한 주기가 완성됐어요. 성취를 기념하고 새로운 여정을 준비할 때예요.",
+  "h": "eb501df8"
+ },
+ "js.tarot.hoang-de": {
+  "t": "황제",
+  "h": "358b3e7f"
+ },
+ "js.tarot.hoang-hau": {
+  "t": "여황제",
+  "h": "744dea49"
+ },
+ "js.tarot.hoang-hau-coc": {
+  "t": "컵 퀸",
+  "h": "dc461129"
+ },
+ "js.tarot.hoang-hau-gay": {
+  "t": "완드 퀸",
+  "h": "992e6e16"
+ },
+ "js.tarot.hoang-hau-kiem": {
+  "t": "소드 퀸",
+  "h": "a86a3815"
+ },
+ "js.tarot.hoang-hau-tien": {
+  "t": "펜타클 퀸",
+  "h": "0fb40181"
+ },
+ "js.tarot.hoc-hoi": {
+  "t": "배움",
+  "h": "7e024951"
+ },
+ "js.tarot.hoi-nhap": {
+  "t": "통합",
+  "h": "9569d251"
+ },
+ "js.tarot.hoi-tiec": {
+  "t": "후회",
+  "h": "08252707"
+ },
+ "js.tarot.hon-loan": {
+  "t": "혼란",
+  "h": "9e13eef7"
+ },
+ "js.tarot.hon-loan-dot-ngot-do-vo": {
+  "t": "갑작스러운 혼란, 무너짐, 계시, 깨어남. 갑작스러운 충격이 낡은 구조를 부숴요. 아프지만 더 나은 것을 세우려면 필요한 일이에요.",
+  "h": "5afd0921"
+ },
+ "js.tarot.hon-loan-thieu-ro-rang-noi": {
+  "t": "혼란, 불분명함, 거짓말. 감정이나 잘못된 정보 때문에 생각이 흐려져 있어요.",
+  "h": "db763267"
+ },
+ "js.tarot.hop-tac": {
+  "t": "협력",
+  "h": "d934a7d7"
+ },
+ "js.tarot.hy-vong": {
+  "t": "희망",
+  "h": "5dddc812"
+ },
+ "js.tarot.hy-vong-cam-hung-binh-an": {
+  "t": "희망, 영감, 평안, 새로워짐. 어둠 뒤에는 빛이 와요. 치유하고 미래를 믿을 때예요.",
+  "h": "cf44e5ec"
+ },
+ "js.tarot.hy-vong-lo-so": {
+  "t": "희망과 두려움",
+  "h": "c01fa9b0"
+ },
+ "js.tarot.hy-vong-sau-nhat-hoac-noi": {
+  "t": "당신의 가장 깊은 희망 또는 가장 큰 두려움",
+  "h": "a3d49660"
+ },
+ "js.tarot.ke-hoach": {
+  "t": "계획",
+  "h": "2bc4293e"
+ },
+ "js.tarot.ke-hoach-tuong-lai-quyet-dinh": {
+  "t": "미래 계획, 결정, 앞으로 나아감. 넓은 세상을 앞에 두고 갈림길에 서 있어요. 계획을 세우고 방향을 고를 때예요.",
+  "h": "b56dcb55"
+ },
+ "js.tarot.ke-kho": {
+  "t": "바보",
+  "h": "e6fdc14b"
+ },
+ "js.tarot.ke-treo-nguoc": {
+  "t": "매달린 사람",
+  "h": "a41b6340"
+ },
+ "js.tarot.ket-noi": {
+  "t": "연결",
+  "h": "62b5a5f2"
+ },
+ "js.tarot.ket-qua": {
+  "t": "결과",
+  "h": "75ff233d"
+ },
+ "js.tarot.ket-qua-co-kha-nang-xay": {
+  "t": "가장 일어날 가능성이 높은 결과",
+  "h": "ffb4563c"
+ },
+ "js.tarot.ket-qua-tarot-cua-toi": {
+  "t": "나의 타로 결과",
+  "h": "50690c7b"
+ },
+ "js.tarot.ket-thuc": {
+  "t": "끝",
+  "h": "9c1ae4f5"
+ },
+ "js.tarot.ket-thuc-chuyen-hoa-thay-doi": {
+  "t": "끝, 변화, 피할 수 없는 변화, 새로운 시작. 육체적인 죽음이 아니라 한 시기의 끝과 새로운 것의 재탄생이에요.",
+  "h": "fc08fee1"
+ },
+ "js.tarot.ket-thuc-dau-don-mat-mat": {
+  "t": "고통스러운 끝, 상실, 배신이지만 종착점이에요. 가장 어두운 주기가 끝에 이르렀어요. 이제 올라가는 일만 남았어요.",
+  "h": "477ee7fc"
+ },
+ "js.tarot.keu-goi": {
+  "t": "부름",
+  "h": "9ca505de"
+ },
+ "js.tarot.kha-nang-tot-nhat": {
+  "t": "최선의 가능성",
+  "h": "6cd09562"
+ },
+ "js.tarot.khai-thi": {
+  "t": "계시",
+  "h": "5fc23362"
+ },
+ "js.tarot.kham-pha": {
+  "t": "탐험",
+  "h": "2dcfd93c"
+ },
+ "js.tarot.kham-pha-nhiet-tinh-y-tuong": {
+  "t": "탐험, 열정, 새로운 아이디어, 자유. 젊고 의욕 넘치는 에너지예요. 새로운 영역을 탐험할 준비가 됐어요.",
+  "h": "8ffe2051"
+ },
+ "js.tarot.khang-cu-roi-di-khong-tien": {
+  "t": "떠나기를 거부하고, 나아가지 못하고, 되돌아가요. 변해야 한다는 걸 알지만 옛 상황을 떠나지 못해요.",
+  "h": "97c48b6b"
+ },
+ "js.tarot.khang-cu-thay-doi-tri-tre": {
+  "t": "변화를 거부하고, 정체되고, 끝을 두려워해요. 더 이상 도움이 되지 않는 것에 매달리고 있어요.",
+  "h": "6fc778d3"
+ },
+ "js.tarot.kho-khan": {
+  "t": "어려움",
+  "h": "20912ebe"
+ },
+ "js.tarot.kho-khan-tai-chinh-bat-an": {
+  "t": "재정난, 불안, 외로움, 역경. 힘든 시기를 지나고 있어요. 하지만 도움을 구하면 언제나 손길이 있어요.",
+  "h": "367e49e0"
+ },
+ "js.tarot.khoi-dau": {
+  "t": "시작",
+  "h": "cdb621fc"
+ },
+ "js.tarot.khoi-dau-moi-tu-do-tinh": {
+  "t": "새로운 시작, 자유, 모험심, 무한한 잠재력. 믿음과 열린 마음으로 새로운 여정에 들어서요. 무한한 가능성의 때예요.",
+  "h": "aef33b0d"
+ },
+ "js.tarot.khong-nghi-ngoi-duoc-ap-luc": {
+  "t": "쉬지 못하고, 압박받고, 가만히 있는 것을 두려워해요. 행동해야 할 때 꼼짝 못 하는 상태에 몰려 있어요.",
+  "h": "0aca59aa"
+ },
+ "js.tarot.khong-quyet-dinh": {
+  "t": "결정 못 함",
+  "h": "f77206a9"
+ },
+ "js.tarot.khong-tu-bo": {
+  "t": "포기하지 않음",
+  "h": "fcf2cf24"
+ },
+ "js.tarot.kiem-gio": {
+  "t": "소드 ♦ 바람",
+  "h": "02106a2b"
+ },
+ "js.tarot.kiem-soat": {
+  "t": "통제",
+  "h": "6d5dbb4e"
+ },
+ "js.tarot.kien-cuong": {
+  "t": "굳셈",
+  "h": "4fe1df3c"
+ },
+ "js.tarot.kien-cuong-khang-cu-bao-ve": {
+  "t": "굳세고, 버티고, 스스로를 지켜요. 많은 시련을 겪고도 꿋꿋이 서 있어요. 조심하되 포기하지는 마세요.",
+  "h": "e7ae2385"
+ },
+ "js.tarot.kien-dinh": {
+  "t": "굳건함",
+  "h": "965a37b0"
+ },
+ "js.tarot.kien-nhan": {
+  "t": "인내",
+  "h": "c3a00bf7"
+ },
+ "js.tarot.kiet-suc-buong-binh-tu-choi": {
+  "t": "지치고, 고집을 부리고, 도움을 거절해요. 지나치게 방어하고 있거나 긴 싸움 뒤에 탈진했어요.",
+  "h": "a7fb4147"
+ },
+ "js.tarot.kiet-suc-tu-bo-ap-dao": {
+  "t": "탈진, 포기, 압도됨. 사방에서 공격받는 느낌이고 입장을 지키기가 어려워요.",
+  "h": "1ed60bd8"
+ },
+ "js.tarot.kieu-ngao-ganh-ti-bat-an": {
+  "t": "오만, 질투, 불안. 자신감이라는 껍질 뒤에 불확실함을 숨기고 있어요.",
+  "h": "fc973000"
+ },
+ "js.tarot.kinh-nghiem": {
+  "t": "경험",
+  "h": "f21e5d31"
+ },
+ "js.tarot.ky-luat": {
+  "t": "규율",
+  "h": "c07b7fba"
+ },
+ "js.tarot.ky-nang": {
+  "t": "기술",
+  "h": "e66fff1c"
+ },
+ "js.tarot.ky-niem": {
+  "t": "추억",
+  "h": "fc45b5c5"
+ },
+ "js.tarot.ky-si": {
+  "t": "나이트",
+  "h": "0951da5c"
+ },
+ "js.tarot.ky-si-coc": {
+  "t": "컵 나이트",
+  "h": "26ae7686"
+ },
+ "js.tarot.ky-si-gay": {
+  "t": "완드 나이트",
+  "h": "78f1830f"
+ },
+ "js.tarot.ky-si-kiem": {
+  "t": "소드 나이트",
+  "h": "81efef45"
+ },
+ "js.tarot.ky-si-tien": {
+  "t": "펜타클 나이트",
+  "h": "eed86e10"
+ },
+ "js.tarot.la": {
+  "t": " 장",
+  "h": "f115358e"
+ },
+ "js.tarot.la-bai-nguoc-nghia-la-gi": {
+  "t": "역방향 카드는 무슨 뜻인가요?",
+  "h": "4f75a731"
+ },
+ "js.tarot.la-dau-tien-ban-rut-duoc": {
+  "t": "처음 뽑은 카드: **",
+  "h": "644c4dff"
+ },
+ "js.tarot.lac-quan": {
+  "t": "낙관",
+  "h": "b7cee972"
+ },
+ "js.tarot.lam-viec-nhom-hop-tac-ky": {
+  "t": "팀워크, 협력, 기술, 기반 쌓기. 함께 일해 오래 남을 가치 있는 것을 만들어요.",
+  "h": "c240df16"
+ },
+ "js.tarot.lang-man": {
+  "t": "낭만",
+  "h": "8e85c1fd"
+ },
+ "js.tarot.lang-man-quyen-ru-tri-tuong": {
+  "t": "낭만, 매력, 상상력, 마음을 따름. 낭만적이고 꿈 많은 사람이 다가오고 있어요.",
+  "h": "197f33e5"
+ },
+ "js.tarot.lanh-dao": {
+  "t": "리더십",
+  "h": "d9b13441"
+ },
+ "js.tarot.lanh-dao-tam-nhin-doanh-nghiep": {
+  "t": "비전 있는 리더십, 사업, 명예, 결단력. 비전과 영감으로 이끌어요. 사업과 리더십에서 성공해요.",
+  "h": "c4abed99"
+ },
+ "js.tarot.lanh-lung-chua-ngoa-co-don": {
+  "t": "냉랭하고, 신랄하고, 외로워요. 날카로운 지성을 공격하거나 아픔을 감추는 데 쓰고 있어요.",
+  "h": "cb790c2c"
+ },
+ "js.tarot.lien-minh": {
+  "t": "동맹",
+  "h": "ea62092f"
+ },
+ "js.tarot.lien-minh-hop-tac-moi-quan": {
+  "t": "동맹, 협력, 관계, 서로 끌림. 두 사람 사이에 깊고 균형 잡힌 연결이 있어요.",
+  "h": "50e0a848"
+ },
+ "js.tarot.lieu-linh-thieu-suy-nghi-bat": {
+  "t": "생각 없이 무모하고, 조심성이 없고, 기회를 놓쳐요. 지나치게 망설이거나, 반대로 계획 없이 행동하고 있어요.",
+  "h": "962580b5"
+ },
+ "js.tarot.linh-hoat": {
+  "t": "유연함",
+  "h": "233a204d"
+ },
+ "js.tarot.lo-lang": {
+  "t": "걱정",
+  "h": "c941251c"
+ },
+ "js.tarot.lo-lang-ac-mong-tuyet-vong": {
+  "t": "걱정, 악몽, 절망, 정신적 긴장. 걱정이 삶을 지배하고 있어요. 두려움은 대부분 현실보다 더 나빠 보여요.",
+  "h": "abdb94a9"
+ },
+ "js.tarot.loi-cuon": {
+  "t": "매력",
+  "h": "d68c5e41"
+ },
+ "js.tarot.long-tot": {
+  "t": "선한 마음",
+  "h": "c6b5d498"
+ },
+ "js.tarot.long-trac-an-truc-giac-chua": {
+  "t": "연민, 직관, 치유, 깊은 감성. 따뜻한 마음과 강한 직관을 가진 사람이에요.",
+  "h": "f9195382"
+ },
+ "js.tarot.lua-chon": {
+  "t": "선택",
+  "h": "e8f6699f"
+ },
+ "js.tarot.lua-doi": {
+  "t": "기만",
+  "h": "d7dfe6f0"
+ },
+ "js.tarot.lua-doi-muu-meo-chien-luoc": {
+  "t": "기만, 책략, 전략, 회피. 지금 상황에서는 요령 있고 전략적일 필요가 있어요.",
+  "h": "8efb4cd1"
+ },
+ "js.tarot.luan-giai-tung-la": {
+  "t": "카드별 풀이",
+  "h": "c811697f"
+ },
+ "js.tarot.major-arcana-khac-minor-arcana-the": {
+  "t": "메이저 아르카나와 마이너 아르카나는 어떻게 다른가요?",
+  "h": "de30c37d"
+ },
+ "js.tarot.mat-can-bang-thai-qua-thieu": {
+  "t": "균형을 잃고, 지나치고, 조급해요. 너무 많이 하거나 너무 적게 하고 있어요. 삶에 절제가 부족해요.",
+  "h": "3fa51f62"
+ },
+ "js.tarot.mat-ket-noi-mat-can-bang": {
+  "t": "단절되고, 균형을 잃고, 어긋나요. 관계에 문제가 있거나 서로에 대한 존중이 부족해요.",
+  "h": "b72f2abf"
+ },
+ "js.tarot.mat-kiem-soat-cang-thang-tai": {
+  "t": "통제력 상실, 재정적 긴장, 체계 부족. 너무 많은 것을 하려다 모든 것이 무너지기 시작해요.",
+  "h": "3a7b876d"
+ },
+ "js.tarot.mat-mat": {
+  "t": "상실",
+  "h": "084a6741"
+ },
+ "js.tarot.mat-mat-hoi-tiec-dau-buon": {
+  "t": "상실, 후회, 슬픔, 부정적인 면에 집착해요. 잃은 것만 한탄하고 아직 남아 있는 것은 보지 못하고 있어요.",
+  "h": "ced3b574"
+ },
+ "js.tarot.mat-mat-tai-san-rac-roi": {
+  "t": "재산 손실, 집안 문제, 담보 대출. 가족이나 유산과 관련된 재정 위험이 있어요.",
+  "h": "8ff6f9c1"
+ },
+ "js.tarot.mat-trang": {
+  "t": "달",
+  "h": "1c9bc170"
+ },
+ "js.tarot.mat-troi": {
+  "t": "태양",
+  "h": "5593c0c1"
+ },
+ "js.tarot.mau-thuan-gia-dinh-thieu-cong": {
+  "t": "가족 갈등, 공동체 결핍, 미뤄진 축하. 집이나 가까운 공동체에 문제가 있어요.",
+  "h": "ca840a54"
+ },
+ "js.tarot.mo-mong": {
+  "t": "몽상",
+  "h": "be0655e3"
+ },
+ "js.tarot.mo-rong": {
+  "t": "확장",
+  "h": "d91c6264"
+ },
+ "js.tarot.mo-rong-tam-nhin-xa-co": {
+  "t": "확장, 먼 안목, 다가오는 기회. 심어 둔 계획이 열매를 맺기 시작해요. 자신감을 갖고 지평선을 바라보세요.",
+  "h": "f091f769"
+ },
+ "js.tarot.moi-truong": {
+  "t": "환경",
+  "h": "8a3461c1"
+ },
+ "js.tarot.mu-quang": {
+  "t": "맹목",
+  "h": "efd5bf7d"
+ },
+ "js.tarot.muoi": {
+  "t": "10",
+  "h": "6f2ebecd"
+ },
+ "js.tarot.muoi-coc": {
+  "t": "컵 10",
+  "h": "007f04a2"
+ },
+ "js.tarot.muoi-gay": {
+  "t": "완드 10",
+  "h": "5e9e3e2e"
+ },
+ "js.tarot.muoi-kiem": {
+  "t": "소드 10",
+  "h": "eb24cbee"
+ },
+ "js.tarot.muoi-tien": {
+  "t": "펜타클 10",
+  "h": "629f7264"
+ },
+ "js.tarot.muu-meo": {
+  "t": "책략",
+  "h": "db19d7b9"
+ },
+ "js.tarot.nam": {
+  "t": "5",
+  "h": "98926c7e"
+ },
+ "js.tarot.nam-coc": {
+  "t": "컵 5",
+  "h": "47d0be16"
+ },
+ "js.tarot.nam-gay": {
+  "t": "완드 5",
+  "h": "635ee3cc"
+ },
+ "js.tarot.nam-kiem": {
+  "t": "소드 5",
+  "h": "1bddc805"
+ },
+ "js.tarot.nam-tien": {
+  "t": "펜타클 5",
+  "h": "519fa35d"
+ },
+ "js.tarot.nang-luong-dam-me-phieu-luu": {
+  "t": "에너지, 열정, 모험, 대담한 행동. 열정과 결의를 안고 앞으로 달려가요. 단호하게 행동할 때예요.",
+  "h": "c1ddcbe2"
+ },
+ "js.tarot.nang-luong-va-thong-diep-chinh": {
+  "t": "당신의 질문에 대한 에너지와 핵심 메시지",
+  "h": "db896f24"
+ },
+ "js.tarot.nap-nang-luong": {
+  "t": "재충전",
+  "h": "bd1960f0"
+ },
+ "js.tarot.nen-hoi-tarot-cau-hoi-kieu": {
+  "t": "타로에는 어떤 질문을 하는 게 좋을까요?",
+  "h": "a40f1c85"
+ },
+ "js.tarot.nen-tang": {
+  "t": "바탕",
+  "h": "4676be0d"
+ },
+ "js.tarot.nen-tang-va-nhung-gi-da": {
+  "t": "현재 상황에 이르게 한 바탕과 그동안의 일들",
+  "h": "d78b97c9"
+ },
+ "js.tarot.nen-tang-xa-hon-cua-tinh": {
+  "t": "이 상황의 더 먼 바탕",
+  "h": "9b5f190e"
+ },
+ "js.tarot.nga-man-khong-duoc-cong-nhan": {
+  "t": "오만하고, 인정받지 못하고, 자신감이 부족해요. 성공이 알려지지 않았거나, 성공 때문에 스스로 교만해지고 있어요.",
+  "h": "86d6ca8c"
+ },
+ "js.tarot.nghi-ngoi": {
+  "t": "휴식",
+  "h": "674b9610"
+ },
+ "js.tarot.nghi-ngoi-thu-gian-phuc-hoi": {
+  "t": "휴식, 이완, 회복, 명상. 회복하고 다가올 일에 대비할 시간이 필요해요.",
+  "h": "bf54a20e"
+ },
+ "js.tarot.nghich-canh": {
+  "t": "역경",
+  "h": "9c12da1a"
+ },
+ "js.tarot.ngoai-giao": {
+  "t": "외교",
+  "h": "3fd7aa56"
+ },
+ "js.tarot.ngoi-sao": {
+  "t": "별",
+  "h": "b7e41981"
+ },
+ "js.tarot.nguoc": {
+  "t": " (역방향)",
+  "h": "c924d203"
+ },
+ "js.tarot.nguoc-2": {
+  "t": "역방향",
+  "h": "5865440a"
+ },
+ "js.tarot.nguoc-wrh9": {
+  "t": "↕ 역방향",
+  "h": "e3f3b5df"
+ },
+ "js.tarot.nguoi-me-nuoi-duong-thuc-te": {
+  "t": "돌보는 어머니, 현실적이고, 풍요롭고, 집안일. 물질적 안정을 쌓으면서 다른 사람을 돌봐요.",
+  "h": "56a867ec"
+ },
+ "js.tarot.nguoi-yeu": {
+  "t": "연인",
+  "h": "711c866b"
+ },
+ "js.tarot.nhan-hau": {
+  "t": "인자함",
+  "h": "fd0bda7a"
+ },
+ "js.tarot.nhan-qua": {
+  "t": "인과",
+  "h": "ff35f868"
+ },
+ "js.tarot.nhay-cam": {
+  "t": "섬세함",
+  "h": "7aefeb15"
+ },
+ "js.tarot.nhiet-huyet": {
+  "t": "열정",
+  "h": "d5f61be3"
+ },
+ "js.tarot.nhiet-tinh": {
+  "t": "열의",
+  "h": "8ef7ed53"
+ },
+ "js.tarot.nhung-nguoi-va-nang-luong-xung": {
+  "t": "당신 주변의 사람들과 에너지",
+  "h": "ea9c4c71"
+ },
+ "js.tarot.niem-vui": {
+  "t": "기쁨",
+  "h": "86cf7ad6"
+ },
+ "js.tarot.niem-vui-thanh-cong-suc-song": {
+  "t": "기쁨, 성공, 활력, 낙관. 빛이 모든 어두운 구석을 비춰요. 행복하고 분명하고 성공적인 시기예요.",
+  "h": "a10de419"
+ },
+ "js.tarot.no-nan-long-tot-gia-tao": {
+  "t": "빚, 가식적인 친절, 불평등한 힘. 조건이 붙은 너그러움이거나, 잘못된 목적으로 주고받고 있어요.",
+  "h": "d421f276"
+ },
+ "js.tarot.noi-so-duoc-giai-phong-su": {
+  "t": "두려움이 풀리고, 진실이 드러나고, 맑아져요. 차츰 환상을 꿰뚫어 보고 진실을 찾아가요.",
+  "h": "8e952f0b"
+ },
+ "js.tarot.noi-tam": {
+  "t": "내면",
+  "h": "22b1e894"
+ },
+ "js.tarot.noi-tam-co-don-co-y": {
+  "t": "내면, 의미 있는 고독, 진리 탐구, 내면의 인도. 물러나 성찰하며 안에서 맑음을 찾는 시간이에요.",
+  "h": "11e70a2d"
+ },
+ "js.tarot.nong-voi-hung-hang-lieu-linh": {
+  "t": "성급하고, 공격적이고, 생각 없이 무모해요. 계획 없이 너무 빨리 행동하고 있어요.",
+  "h": "0a3cef78"
+ },
+ "js.tarot.nu-tinh": {
+  "t": "여성성",
+  "h": "3d37d12c"
+ },
+ "js.tarot.nu-tinh-phong-phu-nuoi-duong": {
+  "t": "여성성, 풍요, 돌봄, 창조, 자연. 번성하고 자라나는 시기예요. 사랑과 보살핌의 에너지가 빛나고 있어요.",
+  "h": "e08487cb"
+ },
+ "js.tarot.nu-tu-te": {
+  "t": "여사제",
+  "h": "d7a0a7b2"
+ },
+ "js.tarot.nuoi-duong": {
+  "t": "돌봄",
+  "h": "5f526834"
+ },
+ "js.tarot.on-dinh": {
+  "t": "안정",
+  "h": "a3b55fa0"
+ },
+ "js.tarot.phan-anh-danh-gia-su-thuc": {
+  "t": "돌아봄, 평가, 깨어남, 용서. 한 시기가 끝나가고 당신은 부름을 받고 있어요. 과거를 돌아보고 새로운 높이로 오를 때예요.",
+  "h": "708013a1"
+ },
+ "js.tarot.phan-quyet": {
+  "t": "판결",
+  "h": "3563d651"
+ },
+ "js.tarot.phan-xet": {
+  "t": "심판",
+  "h": "860b3d6a"
+ },
+ "js.tarot.phap-su": {
+  "t": "마법사",
+  "h": "6bfbec68"
+ },
+ "js.tarot.phieu-luu": {
+  "t": "모험",
+  "h": "a6fbde5c"
+ },
+ "js.tarot.phong-phu": {
+  "t": "풍부함",
+  "h": "5163c0e2"
+ },
+ "js.tarot.phong-thu": {
+  "t": "방어",
+  "h": "fb43f1c0"
+ },
+ "js.tarot.phong-thu-ben-vung-kien-dinh": {
+  "t": "방어, 버팀, 굳건함, 자리를 지키기 위한 싸움. 바깥의 압박과 도전 앞에서 굳건히 서 있어야 해요.",
+  "h": "d1354a64"
+ },
+ "js.tarot.phu-thuoc-cam-xuc-bat-an": {
+  "t": "감정에 의존하고, 불안하고, 남의 감정을 받아들여요. 다른 사람의 감정에 휩쓸리거나 내면의 균형을 잃고 있어요.",
+  "h": "f021531e"
+ },
+ "js.tarot.phu-thuoc-sang-tao-bi-chan": {
+  "t": "의존적이고, 창조성이 막히고, 자기 돌봄이 부족해요. 받지 못한 채 너무 많이 주고 있거나, 자신을 소홀히 하고 있을 수 있어요.",
+  "h": "12809afb"
+ },
+ "js.tarot.phu-thuoc-tai-chinh-that-bai": {
+  "t": "재정적 의존, 프로젝트 실패, 단기적. 바라던 자율을 아직 이루지 못했거나 지나치게 소비하고 있어요.",
+  "h": "01d543bd"
+ },
+ "js.tarot.phu-thuoc-thieu-su-can-bang": {
+  "t": "의존적이고, 균형이 깨지고, 일을 소홀히 해요. 남을 돌보는 일과 나를 돌보는 일 사이의 균형이 무너졌어요.",
+  "h": "88362997"
+ },
+ "js.tarot.phuc-hoi": {
+  "t": "회복",
+  "h": "0d10e44d"
+ },
+ "js.tarot.phuc-hoi-khong-the-tranh-khoi": {
+  "t": "회복, 피할 수 없음, 끝에 대한 저항. 피할 수 없는 끝을 받아들이기를 거부하고 있어요.",
+  "h": "c46ceb23"
+ },
+ "js.tarot.phuc-hoi-tai-chinh-cai-thien": {
+  "t": "재정 회복, 개선, 도움을 받아들임. 어려운 시기를 차츰 넘어서고 있어요.",
+  "h": "9d043f7d"
+ },
+ "js.tarot.phuc-hoi-tu-lo-lang-nhan": {
+  "t": "불안에서 회복하고, 두려움을 알아차리고, 도움을 구해요. 불안했던 시기 뒤에 차츰 평화를 찾아가요.",
+  "h": "247a9b66"
+ },
+ "js.tarot.phuong-phap": {
+  "t": "방법",
+  "h": "4f7ecd74"
+ },
+ "js.tarot.qua-khu": {
+  "t": "과거",
+  "h": "75e794ae"
+ },
+ "js.tarot.qua-khu-gan": {
+  "t": "가까운 과거",
+  "h": "0baf0401"
+ },
+ "js.tarot.qua-khu-xa": {
+  "t": "먼 과거",
+  "h": "699e8c97"
+ },
+ "js.tarot.qua-tai": {
+  "t": "과부하",
+  "h": "f57b3191"
+ },
+ "js.tarot.quyen-luc": {
+  "t": "권력",
+  "h": "78028efc"
+ },
+ "js.tarot.quyen-ru": {
+  "t": "유혹",
+  "h": "15281d2f"
+ },
+ "js.tarot.quyet-dinh": {
+  "t": "결정",
+  "h": "9d2b5881"
+ },
+ "js.tarot.quyet-doan": {
+  "t": "결단",
+  "h": "5cbca4c7"
+ },
+ "js.tarot.quyet-tam": {
+  "t": "결의",
+  "h": "4c971f00"
+ },
+ "js.tarot.ran-nut-gia-dinh-mau-thuan": {
+  "t": "집안에 금이 가고, 갈등과 불화가 있어요. 집이나 가까운 관계에 긴장이 있어요.",
+  "h": "19e7f95b"
+ },
+ "js.tarot.rang-buoc": {
+  "t": "속박",
+  "h": "236d5168"
+ },
+ "js.tarot.rang-buoc-vat-chat-am-anh": {
+  "t": "속박, 물질, 집착, 내면의 어둠. 돈이든 해로운 관계든 나쁜 습관이든, 무언가에 묶여 있어요. 속박을 알아차리는 것이 벗어나는 첫걸음이에요.",
+  "h": "2cc0b28d"
+ },
+ "js.tarot.ro-rang": {
+  "t": "분명함",
+  "h": "587b2a48"
+ },
+ "js.tarot.ro-rang-su-that-dot-pha": {
+  "t": "분명함, 진실, 돌파, 지성. 새로운 인식과 예리한 사고예요. 모호함을 잘라 낼 때예요.",
+  "h": "671fa7df"
+ },
+ "js.tarot.roi-di": {
+  "t": "떠남",
+  "h": "f9788f93"
+ },
+ "js.tarot.rut-lui": {
+  "t": "물러남",
+  "h": "76180c8c"
+ },
+ "js.tarot.sac-ben": {
+  "t": "예리함",
+  "h": "8aea464b"
+ },
+ "js.tarot.sang-suot": {
+  "t": "맑은 통찰",
+  "h": "0e82a022"
+ },
+ "js.tarot.sang-tao": {
+  "t": "창조",
+  "h": "d4aba4d3"
+ },
+ "js.tarot.sang-trong": {
+  "t": "고급스러움",
+  "h": "10b54509"
+ },
+ "js.tarot.sau": {
+  "t": "6",
+  "h": "8d7feaa0"
+ },
+ "js.tarot.sau-coc": {
+  "t": "컵 6",
+  "h": "a10d544c"
+ },
+ "js.tarot.sau-gay": {
+  "t": "완드 6",
+  "h": "edcb5340"
+ },
+ "js.tarot.sau-kiem": {
+  "t": "소드 6",
+  "h": "cb249633"
+ },
+ "js.tarot.sau-tien": {
+  "t": "펜타클 6",
+  "h": "9923dba5"
+ },
+ "js.tarot.so-hai": {
+  "t": "두려움",
+  "h": "d33e3545"
+ },
+ "js.tarot.so-thay-doi-ke-hoach-te": {
+  "t": "변화를 두려워하고, 계획이 서툴고, 비전이 부족해요. 안전지대를 벗어나기를 망설이고 있어요.",
+  "h": "0f7546f6"
+ },
+ "js.tarot.so-tu-bo-tri-tre-so": {
+  "t": "포기를 두려워하고, 정체되고, 변화가 무서워요. 떠나야 한다는 걸 알지만 한 걸음 내딛지 못해요.",
+  "h": "5dd509cc"
+ },
+ "js.tarot.song-trong-qua-khu-thieu-truong": {
+  "t": "과거에 살고, 미성숙하고, 갇혀 있어요. 과거에 너무 매여 있어서 앞으로 나아가지 못하고 있어요.",
+  "h": "362e484d"
+ },
+ "js.tarot.su-ro-rang-sau-hon-loan": {
+  "t": "혼란 뒤의 분명함, 현명한 선택, 현실적. 또렷이 보기 시작해 현실적인 결정을 내리고 있어요.",
+  "h": "170ee602"
+ },
+ "js.tarot.su-that": {
+  "t": "진실",
+  "h": "5a83f94e"
+ },
+ "js.tarot.su-thinh-vuong-kinh-doanh-lanh": {
+  "t": "번영, 사업, 리더십, 안정. 탄탄한 물질적 기반을 세우고 지혜롭게 이끌었어요.",
+  "h": "6ecfeeda"
+ },
+ "js.tarot.su-tri-hoan-thieu-dong-luc": {
+  "t": "지연, 동기 부족, 막힌 에너지. 아이디어가 아직 무르익지 않았거나 자라날 환경이 부족해요.",
+  "h": "aa1e2bfa"
+ },
+ "js.tarot.suc-manh": {
+  "t": "힘",
+  "h": "d80962d4"
+ },
+ "js.tarot.suc-song": {
+  "t": "활력",
+  "h": "631e6cca"
+ },
+ "js.tarot.suy-ngam": {
+  "t": "사색",
+  "h": "7fae55bc"
+ },
+ "js.tarot.suy-nghi-noi-tam-tho-o": {
+  "t": "내면의 생각, 무관심, 재평가, 권태. 생각에 빠져 바로 눈앞의 기회를 지나치고 있어요.",
+  "h": "aeb70685"
+ },
+ "js.tarot.tai-chinh": {
+  "t": "재정",
+  "h": "d82a9c42"
+ },
+ "js.tarot.tai-nang": {
+  "t": "재능",
+  "h": "808a29da"
+ },
+ "js.tarot.tai-sinh": {
+  "t": "재탄생",
+  "h": "ccee4311"
+ },
+ "js.tarot.tam": {
+  "t": "8",
+  "h": "0e3fc5e2"
+ },
+ "js.tarot.tam-coc": {
+  "t": "컵 8",
+  "h": "1b70bf71"
+ },
+ "js.tarot.tam-dung": {
+  "t": "잠시 멈춤",
+  "h": "b8d3bf31"
+ },
+ "js.tarot.tam-dung-buong-bo-hien-te": {
+  "t": "잠시 멈춤, 내려놓음, 희생, 새로운 시각. 때로는 멈춰 서서 다른 각도에서 바라봐야 해요. 통제를 내려놓을 때 깨달음에 이르러요.",
+  "h": "03ce458d"
+ },
+ "js.tarot.tam-gay": {
+  "t": "완드 8",
+  "h": "6154b794"
+ },
+ "js.tarot.tam-kiem": {
+  "t": "소드 8",
+  "h": "05881e39"
+ },
+ "js.tarot.tam-linh": {
+  "t": "영성",
+  "h": "51457a59"
+ },
+ "js.tarot.tam-nhin": {
+  "t": "안목",
+  "h": "d1753f25"
+ },
+ "js.tarot.tam-nhin-xa": {
+  "t": "먼 안목",
+  "h": "5d4e5e07"
+ },
+ "js.tarot.tam-tien": {
+  "t": "펜타클 8",
+  "h": "6bd07c8a"
+ },
+ "js.tarot.tao-bao": {
+  "t": "대담함",
+  "h": "2a1e2d46"
+ },
+ "js.tarot.tap-trung": {
+  "t": "집중",
+  "h": "b94e8d2e"
+ },
+ "js.tarot.tarot-78-la": {
+  "t": "타로 78장 — ",
+  "h": "b98544b5"
+ },
+ "js.tarot.tha-thu": {
+  "t": "용서",
+  "h": "ae62fb04"
+ },
+ "js.tarot.tha-thu-chua-lanh-tien-len": {
+  "t": "용서, 치유, 앞으로 나아감. 아픔에서 차츰 치유되며 앞으로 나아갈 길을 찾고 있어요.",
+  "h": "dfd5bdf9"
+ },
+ "js.tarot.thach-thuc": {
+  "t": "도전",
+  "h": "1576629b"
+ },
+ "js.tarot.thai-qua-co-don-xung-dot": {
+  "t": "지나치고, 외롭고, 모임 안에서 충돌해요. 축하가 도를 넘고 있거나 친구들 사이에 긴장이 있어요.",
+  "h": "ac2121aa"
+ },
+ "js.tarot.tham-lam-tham-nhung-quan-ly": {
+  "t": "탐욕, 부패, 서툰 관리, 보수적. 돈과 권력을 부당하게 쓰고 있어요.",
+  "h": "a745fc02"
+ },
+ "js.tarot.tham-lam-vat-chat-hoa-hanh": {
+  "t": "탐욕, 행복을 물질로 환원함, 만족 부족. 엉뚱한 곳에서 행복을 찾고 있어요.",
+  "h": "6bba52ee"
+ },
+ "js.tarot.tham-quyen-cau-truc-on-dinh": {
+  "t": "권위, 구조, 안정, 규율. 탄탄한 기반을 세울 때예요. 책임감 있게 이끌고 상황을 통제해요.",
+  "h": "e03fdb94"
+ },
+ "js.tarot.tham-quyen-tri-tue-su-that": {
+  "t": "지적 권위, 진실, 도덕, 현명한 결정. 명료한 사고와 공정한 판단이에요.",
+  "h": "d1105b27"
+ },
+ "js.tarot.tham-vong": {
+  "t": "야망",
+  "h": "9b13396e"
+ },
+ "js.tarot.tham-vong-hanh-dong-quyet-doan": {
+  "t": "야망, 단호한 행동, 직설적, 용감함. 강철 같은 의지로 목표를 향해 달려가요.",
+  "h": "11fb3744"
+ },
+ "js.tarot.than-trong": {
+  "t": "신중함",
+  "h": "0dea416d"
+ },
+ "js.tarot.thang-than": {
+  "t": "솔직함",
+  "h": "3560d613"
+ },
+ "js.tarot.thanh-cong": {
+  "t": "성공",
+  "h": "9a7d7037"
+ },
+ "js.tarot.thanh-cong-cong-nhan-tu-tin": {
+  "t": "성공, 인정, 자신감, 진전. 노력에 걸맞은 인정을 받고 있어요. 시련을 이겨 낸 뒤의 승리예요.",
+  "h": "3dc242cc"
+ },
+ "js.tarot.thanh-qua": {
+  "t": "결실",
+  "h": "eb776d8a"
+ },
+ "js.tarot.thanh-tich": {
+  "t": "성취",
+  "h": "161a6d3d"
+ },
+ "js.tarot.thao-tung-cam-xuc-bat-on": {
+  "t": "감정 조종, 불안정, 냉랭함. 감성 지능을 다른 사람을 조종하는 데 쓰고 있어요.",
+  "h": "8df4cf27"
+ },
+ "js.tarot.thao-tung-lang-phi-tai-nang": {
+  "t": "조종하고, 재능을 낭비하고, 집중하지 못해요. 기술을 엉뚱한 목적에 쓰고 있거나 잠재력을 다 펼치지 못하고 있을 수 있어요.",
+  "h": "c967a375"
+ },
+ "js.tarot.thap": {
+  "t": "탑",
+  "h": "6e2e87a4"
+ },
+ "js.tarot.thay-doi": {
+  "t": "변화",
+  "h": "2d141c14"
+ },
+ "js.tarot.the-gioi": {
+  "t": "세계",
+  "h": "745f6b4c"
+ },
+ "js.tarot.the-hien": {
+  "t": "표현",
+  "h": "72f7bd18"
+ },
+ "js.tarot.theo-duoi": {
+  "t": "추구",
+  "h": "c4f35d3e"
+ },
+ "js.tarot.thich-nghi": {
+  "t": "적응",
+  "h": "b539346c"
+ },
+ "js.tarot.thien-dinh": {
+  "t": "명상",
+  "h": "8a78e661"
+ },
+ "js.tarot.thieu-dong-doi-tranh-cai-that": {
+  "t": "팀원 부족, 다툼, 실망. 다른 사람과 함께 일하지 못하거나 인정을 받지 못해요.",
+  "h": "501f503a"
+ },
+ "js.tarot.thieu-huong-dan-bon-chon-tri": {
+  "t": "인도 부족, 불안정, 미룸. 아이디어는 많지만 실행 계획이 없어요.",
+  "h": "99904068"
+ },
+ "js.tarot.thieu-ket-qua-tu-cong-suc": {
+  "t": "노력 대비 성과 부족, 완벽주의, 질 낮은 작업. 열심히 일하지만 방향이 없어요.",
+  "h": "b328b3a2"
+ },
+ "js.tarot.thieu-kiem-soat-hung-hang-that": {
+  "t": "통제력 부족, 공격적, 실패. 여러 방향으로 끌려다니거나 힘을 엉뚱하게 쓰고 있어요.",
+  "h": "61b69e80"
+ },
+ "js.tarot.thieu-tam-nhin-dai-han-sot": {
+  "t": "장기적 안목 부족, 조급함, 투자 손실. 인내심을 잃었거나 엉뚱한 방향에 투자하고 있어요.",
+  "h": "e6cc92fc"
+ },
+ "js.tarot.thieu-tap-trung-tri-hoan-thieu": {
+  "t": "집중력 부족, 미룸, 실무 기술 부족. 배울 마음은 있지만 실행할 인내가 부족해요.",
+  "h": "197ae51b"
+ },
+ "js.tarot.thinh-vuong": {
+  "t": "번영",
+  "h": "ece9d2e5"
+ },
+ "js.tarot.thinh-vuong-lau-dai": {
+  "t": "오래가는 번영",
+  "h": "c7da13b7"
+ },
+ "js.tarot.tho-lo-thieu-ke-hoach-noi": {
+  "t": "거칠고, 계획이 없고, 말만 많고 행동이 적어요. 지성을 부정적으로 쓰고 있거나 깊이가 부족해요.",
+  "h": "cd7f8613"
+ },
+ "js.tarot.tho-o": {
+  "t": "무관심",
+  "h": "545d78bc"
+ },
+ "js.tarot.thoa-man": {
+  "t": "충족",
+  "h": "0a34c2ee"
+ },
+ "js.tarot.thoat-khoi-tho-o-chon-loc": {
+  "t": "무관심에서 벗어나고, 선택이 나아지고, 새로운 동기가 생겨요. 수동적인 상태에서 벗어나기 시작해요.",
+  "h": "f67e381b"
+ },
+ "js.tarot.thong-diep": {
+  "t": "메시지",
+  "h": "8d4fe659"
+ },
+ "js.tarot.thong-diep-sang-tao-truc-giac": {
+  "t": "창조적 메시지, 직관, 섬세함, 감정에 관한 소식. 젊은 사람이나 새로운 소식이 뜻밖에 찾아올 수 있어요.",
+  "h": "15b23002"
+ },
+ "js.tarot.thong-thai": {
+  "t": "통달",
+  "h": "df8e25a9"
+ },
+ "js.tarot.thong-thai-cam-xuc-ngoai-giao": {
+  "t": "감정에 통달하고, 외교적이고, 균형 잡히고, 자비로워요. 연민을 간직한 채 감정을 다스려요.",
+  "h": "b1ee2010"
+ },
+ "js.tarot.thong-tin": {
+  "t": "정보",
+  "h": "64650334"
+ },
+ "js.tarot.thu-thach": {
+  "t": "시련",
+  "h": "aebbdd59"
+ },
+ "js.tarot.thuc-te": {
+  "t": "현실성",
+  "h": "1d81710c"
+ },
+ "js.tarot.thuc-tinh": {
+  "t": "깨어남",
+  "h": "0c40657d"
+ },
+ "js.tarot.ti-mi": {
+  "t": "꼼꼼함",
+  "h": "be630e98"
+ },
+ "js.tarot.tiem-nang": {
+  "t": "잠재력",
+  "h": "dbd5fc81"
+ },
+ "js.tarot.tiem-thuc": {
+  "t": "잠재의식",
+  "h": "2d4df558"
+ },
+ "js.tarot.tien-dat": {
+  "t": "펜타클 ♦ 땅",
+  "h": "9b5d4c8a"
+ },
+ "js.tarot.tien-len": {
+  "t": "전진",
+  "h": "3e908eaa"
+ },
+ "js.tarot.tien-ve-phia-truoc": {
+  "t": "앞으로 나아감",
+  "h": "9486d87a"
+ },
+ "js.tarot.tien-ve-phia-truoc-chap-nhan": {
+  "t": "앞으로 나아가고, 받아들이고, 용서해요. 상처에서 차츰 치유되며 앞으로 나아갈 길을 찾고 있어요.",
+  "h": "cb1f58c7"
+ },
+ "js.tarot.tim-kiem": {
+  "t": "탐색",
+  "h": "66719286"
+ },
+ "js.tarot.tim-kiem-binh-yen": {
+  "t": "평화를 찾음",
+  "h": "47825495"
+ },
+ "js.tarot.tim-kiem-giup-do": {
+  "t": "도움을 구함",
+  "h": "e138acbd"
+ },
+ "js.tarot.tin-tuc": {
+  "t": "소식",
+  "h": "93140ca7"
+ },
+ "js.tarot.tinh-ban": {
+  "t": "우정",
+  "h": "41eb6d65"
+ },
+ "js.tarot.tinh-ban-cong-dong-an-mung": {
+  "t": "우정, 공동체, 축하, 창조. 친구와 가족과 함께 나누는 기쁨이에요. 모여서 기념하는 시간이에요.",
+  "h": "1f1b297c"
+ },
+ "js.tarot.tinh-cam": {
+  "t": "정",
+  "h": "ba217ecf"
+ },
+ "js.tarot.tinh-huong": {
+  "t": "현재 상황",
+  "h": "9e767856"
+ },
+ "js.tarot.tinh-trang-hien-tai-va-nhung": {
+  "t": "현재 상태와 당신에게 영향을 주는 것들",
+  "h": "b1c09dac"
+ },
+ "js.tarot.tinh-yeu": {
+  "t": "사랑",
+  "h": "5f2ccd9a"
+ },
+ "js.tarot.tinh-yeu-moi": {
+  "t": "새로운 사랑",
+  "h": "70f3b668"
+ },
+ "js.tarot.tinh-yeu-moi-truc-giac-tam": {
+  "t": "새로운 사랑, 직관, 영성, 감정의 시작. 새로운 사랑과 연결을 받아들이도록 마음이 열려 있어요.",
+  "h": "333849cc"
+ },
+ "js.tarot.tinh-yeu-su-lua-chon-su": {
+  "t": "사랑, 선택, 어우러짐, 개인의 가치. 중요한 선택이 다가오고 있어요. 영혼의 연결, 그리고 공통의 가치에 바탕을 둔 결합이에요.",
+  "h": "e307c6d0"
+ },
+ "js.tarot.to-mo": {
+  "t": "호기심",
+  "h": "bbc1f746"
+ },
+ "js.tarot.to-mo-canh-giac-thong-tin": {
+  "t": "호기심, 경계, 새로운 정보, 예리한 사고. 진실을 찾고 끊임없이 배우려는 마음이에요.",
+  "h": "e42ff752"
+ },
+ "js.tarot.toc-do": {
+  "t": "속도",
+  "h": "7c10386d"
+ },
+ "js.tarot.toc-do-hanh-dong-nhanh-tin": {
+  "t": "속도, 빠른 행동, 소식, 움직임. 모든 것이 아주 빠르게 움직이고 있어요. 소식이 곧 오고, 일들이 한꺼번에 벌어지고 있어요.",
+  "h": "e6358054"
+ },
+ "js.tarot.ton-giao": {
+  "t": "종교",
+  "h": "b04622fb"
+ },
+ "js.tarot.ton-thuong": {
+  "t": "상처",
+  "h": "d7085c3c"
+ },
+ "js.tarot.tra-lai-vat-bi-lay-thu": {
+  "t": "빼앗은 것을 돌려주고, 자백하고, 전략을 다시 생각해요. 부당한 행동을 정직하게 마주하기 시작해요.",
+  "h": "c6f8c830"
+ },
+ "js.tarot.trac-an": {
+  "t": "측은지심",
+  "h": "3b6fa709"
+ },
+ "js.tarot.trach-nhiem": {
+  "t": "책임",
+  "h": "08440470"
+ },
+ "js.tarot.trang": {
+  "t": "페이지",
+  "h": "aec1223a"
+ },
+ "js.tarot.trang-coc": {
+  "t": "컵 페이지",
+  "h": "52198a86"
+ },
+ "js.tarot.trang-gay": {
+  "t": "완드 페이지",
+  "h": "bb414379"
+ },
+ "js.tarot.trang-kiem": {
+  "t": "소드 페이지",
+  "h": "5a38e4b4"
+ },
+ "js.tarot.trang-tien": {
+  "t": "펜타클 페이지",
+  "h": "264034c3"
+ },
+ "js.tarot.tranh-ne": {
+  "t": "회피",
+  "h": "fba37afe"
+ },
+ "js.tarot.tranh-ne-tham-hoa-so-thay": {
+  "t": "참사를 피하고, 변화를 두려워하고, 피할 수 없는 일을 미뤄요. 꼭 필요한 붕괴를 피하고 있어요.",
+  "h": "c9a22149"
+ },
+ "js.tarot.tranh-ne-xung-dot-cang-thang": {
+  "t": "충돌을 피하고, 내적 긴장이 있고, 의견 차이를 풀어요. 모두가 같은 방향을 향하도록 방법을 찾고 있어요.",
+  "h": "4cd04360"
+ },
+ "js.tarot.tri-hoan-khang-cu-hy-sinh": {
+  "t": "지연, 저항, 헛된 희생. 당신을 붙잡고 있는 무언가를 내려놓기를 거부하고 있어요.",
+  "h": "55121ec0"
+ },
+ "js.tarot.tri-hoan-thieu-tam-nhin-co": {
+  "t": "지연, 비전 부족, 놓친 기회. 기대한 대로 계획이 진전되지 않아요.",
+  "h": "a8c26f77"
+ },
+ "js.tarot.tri-tue": {
+  "t": "지혜",
+  "h": "74e5d83d"
+ },
+ "js.tarot.truc-giac": {
+  "t": "직관",
+  "h": "d86f73b7"
+ },
+ "js.tarot.truc-giac-bi-an-noi-tam": {
+  "t": "직관, 신비, 내면, 잠재의식. 내면의 목소리에 귀를 기울이세요. 아직 드러나지 않은 무언가가 있어요. 인내하며 지켜보세요.",
+  "h": "bc44b4c5"
+ },
+ "js.tarot.truc-tiep": {
+  "t": "직설적",
+  "h": "f69379c3"
+ },
+ "js.tarot.trung-tam-tinh-huong-hay-cau": {
+  "t": "중심 — 현재의 상황이나 질문",
+  "h": "62ec7b89"
+ },
+ "js.tarot.trut-bo-ganh-nang-uy-quyen": {
+  "t": "짐을 내려놓고, 위임하고, 내려놓는 법을 배워요. 모든 것을 혼자 끌어안을 수 없다는 걸 알아차리기 시작해요.",
+  "h": "ec3ae632"
+ },
+ "js.tarot.truyen-cam-hung": {
+  "t": "영감을 줌",
+  "h": "9e80a3d8"
+ },
+ "js.tarot.truyen-thong": {
+  "t": "전통",
+  "h": "fb8c81f2"
+ },
+ "js.tarot.truyen-thong-ton-giao-giao-duc": {
+  "t": "전통, 종교, 교육, 사회 규범. 이미 확립된 길을 따르며 검증된 것에서 인도를 구해요.",
+  "h": "eeac5404"
+ },
+ "js.tarot.tu-bi": {
+  "t": "자비",
+  "h": "f773751e"
+ },
+ "js.tarot.tu-bo": {
+  "t": "포기",
+  "h": "bc937497"
+ },
+ "js.tarot.tu-bo-rut-lui-tim-kiem": {
+  "t": "포기하고, 물러나고, 더 깊은 것을 찾아요. 더 이상 필요를 채워 주지 못하는 것을 두고 더 의미 있는 것을 찾아 나서요.",
+  "h": "51004f2c"
+ },
+ "js.tarot.tu-choi": {
+  "t": "거절",
+  "h": "63bbfd75"
+ },
+ "js.tarot.tu-do": {
+  "t": "자유",
+  "h": "40d06bcd"
+ },
+ "js.tarot.tu-duy-sac-ben": {
+  "t": "예리한 사고",
+  "h": "5080b847"
+ },
+ "js.tarot.tu-giai-phong-doi-mat-noi": {
+  "t": "스스로를 해방하고, 두려움과 마주하고, 책임을 받아들여요. 상황을 바꿀 힘이 자신에게 있음을 알아차리기 시작해요.",
+  "h": "30116140"
+ },
+ "js.tarot.tu-giam-cam": {
+  "t": "스스로 가둠",
+  "h": "386df7bc"
+ },
+ "js.tarot.tu-phan-xet-qua-muc-nghi": {
+  "t": "지나친 자기 심판, 자기 의심, 부름을 외면해요. 스스로에게 너무 가혹하거나 깨어남의 목소리를 들을 준비가 되지 않았어요.",
+  "h": "9ac7344c"
+ },
+ "js.tarot.tu-phu": {
+  "t": "자만",
+  "h": "ca9735a0"
+ },
+ "js.tarot.tu-tin": {
+  "t": "자신감",
+  "h": "1edc09c5"
+ },
+ "js.tarot.tu-tin-can-dam-xac-dinh": {
+  "t": "자신감, 용기, 결단, 사교적 에너지. 매력적이고 열정적이어서 주변 사람들에게 영감을 줘요.",
+  "h": "2445f38f"
+ },
+ "js.tarot.tu-tuc": {
+  "t": "자급자족",
+  "h": "50a0014f"
+ },
+ "js.tarot.tu-tung": {
+  "t": "갑갑함",
+  "h": "44a685c7"
+ },
+ "js.tarot.tu-tung-han-che-nan-nhan": {
+  "t": "갑갑함, 제한, 피해자 의식, 스스로 가둠. 갇힌 느낌이지만 사실 속박은 마음속 환상일 뿐이에요.",
+  "h": "c5d3f7c9"
+ },
+ "js.tarot.tuoi-moi": {
+  "t": "신선함",
+  "h": "9ad03710"
+ },
+ "js.tarot.tuoi-tho": {
+  "t": "어린 시절",
+  "h": "65383d48"
+ },
+ "js.tarot.tuong-lai": {
+  "t": "미래",
+  "h": "b4320a2d"
+ },
+ "js.tarot.tuong-lai-gan": {
+  "t": "가까운 미래",
+  "h": "5a972b1d"
+ },
+ "js.tarot.uoc-muon": {
+  "t": "소원",
+  "h": "ca8a3669"
+ },
+ "js.tarot.uoc-muon-thanh-hien-thuc-hai": {
+  "t": "소원이 현실이 되고, 만족하고, 행복하고, 번영해요. '소원 카드' — 바라던 것이 가까이 다가오고 있어요.",
+  "h": "202199b4"
+ },
+ "js.tarot.van-may": {
+  "t": "행운",
+  "h": "b9ac0b07"
+ },
+ "js.tarot.van-may-thay-doi-chu-ky": {
+  "t": "행운, 변화, 주기, 전환점. 수레바퀴가 좋은 방향으로 돌고 있어요. 삶은 늘 주기로 움직이니 변화를 받아들이세요.",
+  "h": "238da932"
+ },
+ "js.tarot.van-xui-khang-cu-thay-doi": {
+  "t": "불운, 변화에 대한 저항, 부정적인 주기. 피할 수 없는 변화에 맞서고 있거나 낡은 반복에 갇혀 있어요.",
+  "h": "eb1fe56a"
+ },
+ "js.tarot.vat-chat": {
+  "t": "물질",
+  "h": "d31a5059"
+ },
+ "js.tarot.vo-vong-mat-niem-tin-that": {
+  "t": "절망, 믿음을 잃음, 실망. 미래를 믿기 어렵거나 영감의 원천과 끊어진 느낌이에요.",
+  "h": "52a9be30"
+ },
+ "js.tarot.vua": {
+  "t": "킹",
+  "h": "1268a594"
+ },
+ "js.tarot.vua-coc": {
+  "t": "컵 킹",
+  "h": "dbaf99fc"
+ },
+ "js.tarot.vua-gay": {
+  "t": "완드 킹",
+  "h": "0fd5c56d"
+ },
+ "js.tarot.vua-kiem": {
+  "t": "소드 킹",
+  "h": "2232e669"
+ },
+ "js.tarot.vua-tien": {
+  "t": "펜타클 킹",
+  "h": "54b72ab9"
+ },
+ "js.tarot.xao-bai-rut-lai": {
+  "t": "다시 섞고 뽑기",
+  "h": "19371614"
+ },
+ "js.tarot.xay-dung": {
+  "t": "쌓아 올림",
+  "h": "c5183426"
+ },
+ "js.tarot.xu-huong-va-ket-qua-co": {
+  "t": "이대로 계속하면 나타날 흐름과 결과",
+  "h": "1c913af9"
+ },
+ "js.tarot.xung-dot": {
+  "t": "충돌",
+  "h": "2c2f103d"
+ },
+ "js.tarot.xung-dot-canh-tranh-bat-dong": {
+  "t": "충돌, 경쟁, 의견 차이, 시험. 모두가 자기 의견을 갖고 있어요. 건강한 경쟁이거나 일시적인 혼란이에요.",
+  "h": "d7b743df"
+ },
+ "js.tarot.xung-dot-mat-mat-danh-du": {
+  "t": "충돌, 명예 상실, 자만, 실패. 너무 비싼 값을 치르고 이기거나 가치 없는 싸움에 뛰어들었어요.",
+  "h": "6f5226a0"
+ },
+ "js.tarot.xuoi": {
+  "t": "↑ 정방향",
+  "h": "3386e148"
+ },
+ "js.tarot.xuoi-2": {
+  "t": "정방향",
+  "h": "bff3bb5a"
+ },
+ "js.tarot.y-chi": {
+  "t": "의지",
+  "h": "0a979548"
+ },
+ "js.tarot.y-chi-kiem-soat-chien-thang": {
+  "t": "의지, 통제, 승리, 결의. 흔들림 없이 앞으로 나아가요. 개인의 의지와 규율로 승리해요.",
+  "h": "8a707981"
+ },
+ "js.tarot.y-chi-tap-trung-tai-nang": {
+  "t": "의지, 집중, 재능, 자원. 목표를 이루기에 충분한 도구를 갖추고 있어요. 행동하고 능력을 드러낼 때예요.",
+  "h": "ca9d3481"
+ },
+ "js.tarot.y-nghia": {
+  "t": "의미",
+  "h": "1206aa20"
+ },
+ "js.tarot.yeu-duoi-tu-nghi-ngo-thieu": {
+  "t": "나약하고, 자기 의심이 있고, 용기가 부족해요. 두려움에 휘둘리고 있거나, 반대로 힘을 무자비하게 쓰고 있어요.",
+  "h": "543f7227"
+ },
+ "js.thansohoc.9-bieu-do-thieu": {
+  "t": "/9 · 부족한 수: ",
+  "h": "a961744e"
+ },
+ "js.thansohoc.bieu-do-ngay-sinh-toi-thieu": {
+  "t": "제 생일 차트에 부족한 것은 무엇인가요?",
+  "h": "bf05b8d3"
+ },
+ "js.thansohoc.cho-thay-xin-ho-ten-day": {
+  "t": "출생 신고된 전체 이름을 알려 주세요 — 로마자로 입력해 주세요(성조 기호는 없어도 돼요).",
+  "h": "9b335230"
+ },
+ "js.thansohoc.da-lap-ban-do-than-so": {
+  "t": "수비학 지도를 만들었어요: **",
+  "h": "ef7d6a3a"
+ },
+ "js.thansohoc.dinh-menh": {
+  "t": "**, 운명수 ",
+  "h": "6ccdbf93"
+ },
+ "js.thansohoc.dinh-menh-sba7": {
+  "t": " · 운명수: ",
+  "h": "4ed83cf2"
+ },
+ "js.thansohoc.dinh-menh-sxmj": {
+  "t": "운명수",
+  "h": "04ce2b85"
+ },
+ "js.thansohoc.duong-doi": {
+  "t": "** (생명수 **",
+  "h": "34cd1965"
+ },
+ "js.thansohoc.duong-doi-653r": {
+  "t": "생명수",
+  "h": "105d888c"
+ },
+ "js.thansohoc.duong-doi-6p15": {
+  "t": "생명수: ",
+  "h": "2ea6525b"
+ },
+ "js.thansohoc.kem-bieu-do-ngay-sinh-no": {
+  "t": ") — 생일 차트, 카르마 빚, 시기별 정점과 도전도 함께 담았어요. 어디부터 풀이해 드릴까요?",
+  "h": "5809cd7c"
+ },
+ "js.thansohoc.linh-hon": {
+  "t": "、영혼수 ",
+  "h": "6e12f834"
+ },
+ "js.thansohoc.linh-hon-avwt": {
+  "t": " · 영혼수: ",
+  "h": "dd806dd6"
+ },
+ "js.thansohoc.linh-hon-oll4": {
+  "t": "영혼수",
+  "h": "b656dfff"
+ },
+ "js.thansohoc.nam-ca-nhan": {
+  "t": "개인 연도수 ",
+  "h": "eb45f6cc"
+ },
+ "js.thansohoc.nam-cua-toi-nen-lam-gi": {
+  "t": "{y}년에 저는 무엇을 하면 좋을까요?",
+  "h": "92b21a84"
+ },
+ "js.thansohoc.ngay-sinh": {
+  "t": "생일수: ",
+  "h": "20265f1b"
+ },
+ "js.thansohoc.nghe-nghiep-nao-hop": {
+  "t": "어떤 직업이 잘 맞나요?",
+  "h": "ea320897"
+ },
+ "js.thansohoc.no-nghiep-quat": {
+  "t": "카르마 빚: ",
+  "h": "a7848bc3"
+ },
+ "js.thansohoc.so-duong-doi-noi-gi-ve": {
+  "t": "생명수는 저에 대해 무엇을 말해 주나요?",
+  "h": "c53334d7"
+ },
+ "js.thansohoc.su-menh": {
+  "t": "、사명수 ",
+  "h": "451fb36d"
+ },
+ "js.thansohoc.su-menh-hzws": {
+  "t": "사명수",
+  "h": "de1c2c2d"
+ },
+ "js.thansohoc.su-menh-jyge": {
+  "t": " · 사명수: ",
+  "h": "31834686"
+ },
+ "js.thansohoc.thai-do": {
+  "t": " · 태도수: ",
+  "h": "322d40a6"
+ },
+ "js.thansohoc.than-so-hoc": {
+  "t": "수비학 · ",
+  "h": "365ce0d2"
+ },
+ "js.thansohoc.than-so-hoc-cua": {
+  "t": "수비학: ",
+  "h": "ea8f5b40"
+ },
+ "js.thansohoc.than-so-hoc-r6ky": {
+  "t": "수비학 — ",
+  "h": "b4ae646d"
+ },
+ "js.thansohoc.tinh-than-so": {
+  "t": "수비학 계산하기 →",
+  "h": "0aa2d8b7"
+ },
+ "js.thansohoc.toi-dang-o-chang-nao-thu": {
+  "t": "저는 지금 어느 단계이고 어떤 과제가 있나요?",
+  "h": "b29a99ed"
+ },
+ "js.thansohoc.truong-thanh": {
+  "t": " · 성숙수: ",
+  "h": "55b24485"
+ },
+ "js.thansohoc.xem-day-du-13-chi-so": {
+  "t": "<button type=\"button\" class=\"chat-hl-cta\" id=\"tshOpenSheet\">13가지 수 전체 보기 →</button></div></div>",
+  "h": "f89bb371"
+ },
+ "js.thtg.am-luong": {
+  "t": "음량",
+  "h": "71662f1b"
+ },
+ "js.thtg.am-sac-brightness": {
+  "t": "음색(밝기)",
+  "h": "b3cd8066"
+ },
+ "js.thtg.bat-dau-thu-am": {
+  "t": "녹음 시작",
+  "h": "61e33202"
+ },
+ "js.thtg.cao-do-pitch": {
+  "t": "음높이(피치)",
+  "h": "d81eb36d"
+ },
+ "js.thtg.chuan-bi-giong-noi": {
+  "t": "목소리를 준비하세요…",
+  "h": "f2647a9c"
+ },
+ "js.thtg.dang-luan-giai-thanh-tuong": {
+  "t": "성상을 풀이하는 중…",
+  "h": "69e05b82"
+ },
+ "js.thtg.dang-phan-tich-am-thanh": {
+  "t": "음성을 분석하는 중…",
+  "h": "f92bf29f"
+ },
+ "js.thtg.dang-thu-am-hay-doc-doan": {
+  "t": "녹음 중 — 위의 시를 읽어 주세요…",
+  "h": "9798c154"
+ },
+ "js.thtg.dang-xu-ly": {
+  "t": "처리 중…",
+  "h": "e8c1faab"
+ },
+ "js.thtg.do-on-dinh": {
+  "t": "안정도",
+  "h": "86509ba8"
+ },
+ "js.thtg.dung-lai": {
+  "t": "중지",
+  "h": "d313e7b3"
+ },
+ "js.thtg.giong-cua-ban-thuoc-n": {
+  "t": "당신의 목소리는 **{n}**에 속해요. 성상학에 대해 더 궁금한 점이 있나요?",
+  "h": "7f3afd32"
+ },
+ "js.thtg.giong-tram-noi-len-dieu-gi": {
+  "t": "낮은 목소리는 무엇을 뜻하나요?",
+  "h": "93f12462"
+ },
+ "js.thtg.kha-to": {
+  "t": "꽤 큼",
+  "h": "089b5f63"
+ },
+ "js.thtg.khong-co-ket-qua": {
+  "t": "결과가 없어요.",
+  "h": "97fa6f91"
+ },
+ "js.thtg.khong-ro": {
+  "t": "알 수 없음",
+  "h": "988a61b5"
+ },
+ "js.thtg.khong-the-ket-noi": {
+  "t": "연결할 수 없어요.",
+  "h": "3dc4d8cb"
+ },
+ "js.thtg.khong-the-truy-cap-microphone-vui": {
+  "t": "마이크에 접근할 수 없어요. 브라우저에서 권한을 허용해 주세요.",
+  "h": "f9d607c1"
+ },
+ "js.thtg.khong-the-xu-ly-am-thanh-e": {
+  "t": "음성을 처리할 수 없어요: {e}. 다시 시도해 주세요.",
+  "h": "96163473"
+ },
+ "js.thtg.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.thtg.loi-s": {
+  "t": "오류 {s}",
+  "h": "c406c72b"
+ },
+ "js.thtg.ngu-am": {
+  "t": "오음",
+  "h": "bc7a6d13"
+ },
+ "js.thtg.ngu-am-la-gi": {
+  "t": "오음이 뭐예요?",
+  "h": "ed2678e3"
+ },
+ "js.thtg.nguam-hoa": {
+  "t": "화(火)의 소리(치) — 높고 힘 있게 울림",
+  "h": "52199252"
+ },
+ "js.thtg.nguam-hoa-short": {
+  "t": "화(火)의 소리(치)",
+  "h": "eec6e5c6"
+ },
+ "js.thtg.nguam-kim": {
+  "t": "금(金)의 소리(상) — 맑고 멀리 울림",
+  "h": "83770d13"
+ },
+ "js.thtg.nguam-kim-short": {
+  "t": "금(金)의 소리(상)",
+  "h": "1e2fe8d9"
+ },
+ "js.thtg.nguam-moc": {
+  "t": "목(木)의 소리(각) — 둥글고 온후함",
+  "h": "1e8e07c1"
+ },
+ "js.thtg.nguam-moc-short": {
+  "t": "목(木)의 소리(각)",
+  "h": "7835647e"
+ },
+ "js.thtg.nguam-tho": {
+  "t": "토(土)의 소리(궁) — 낮고 따뜻하며 여운이 있음",
+  "h": "dbbc4796"
+ },
+ "js.thtg.nguam-tho-short": {
+  "t": "토(土)의 소리(궁)",
+  "h": "66f33677"
+ },
+ "js.thtg.nguam-thuy": {
+  "t": "수(水)의 소리(우) — 서늘하고 깊음",
+  "h": "48b02063"
+ },
+ "js.thtg.nguam-thuy-short": {
+  "t": "수(水)의 소리(우)",
+  "h": "51405ff5"
+ },
+ "js.thtg.nhan-de-bat-dau-thu-am": {
+  "t": "눌러서 녹음 시작 · 브라우저가 물어보면 마이크 사용을 허용해 주세요",
+  "h": "74465b56"
+ },
+ "js.thtg.nho-yeu": {
+  "t": "작고 약함",
+  "h": "906c7657"
+ },
+ "js.thtg.pitch-cao": {
+  "t": "{p}Hz — 높음",
+  "h": "526966ef"
+ },
+ "js.thtg.pitch-rat-tram": {
+  "t": "{p}Hz — 매우 낮음",
+  "h": "1b80b5d2"
+ },
+ "js.thtg.pitch-tram": {
+  "t": "{p}Hz — 낮음",
+  "h": "110698bc"
+ },
+ "js.thtg.pitch-trung-binh": {
+  "t": "{p}Hz — 보통",
+  "h": "8577f320"
+ },
+ "js.thtg.pitch-trung-cao": {
+  "t": "{p}Hz — 중간 높음",
+  "h": "163ebf39"
+ },
+ "js.thtg.pitch-trung-thap": {
+  "t": "{p}Hz — 중간 낮음",
+  "h": "d249a0d1"
+ },
+ "js.thtg.rat-sang": {
+  "t": "매우 밝음",
+  "h": "17b19c93"
+ },
+ "js.thtg.rate-cham": {
+  "t": "{r} 음절/초 — 느림",
+  "h": "7a1bd431"
+ },
+ "js.thtg.rate-nhanh": {
+  "t": "{r} 음절/초 — 빠름",
+  "h": "3a26518c"
+ },
+ "js.thtg.rate-rat-cham": {
+  "t": "{r} 음절/초 — 매우 느림",
+  "h": "73a0a454"
+ },
+ "js.thtg.rate-rat-nhanh": {
+  "t": "{r} 음절/초 — 매우 빠름",
+  "h": "40972e00"
+ },
+ "js.thtg.rate-vua": {
+  "t": "{r} 음절/초 — 보통",
+  "h": "39d27349"
+ },
+ "js.thtg.sang-trong": {
+  "t": "밝고 맑음",
+  "h": "754176c3"
+ },
+ "js.thtg.thanh-tuong": {
+  "t": "성상",
+  "h": "d47f6d49"
+ },
+ "js.thtg.thanh-tuong-co-doi-duoc-khong": {
+  "t": "성상은 바꿀 수 있나요?",
+  "h": "0bac268d"
+ },
+ "js.thtg.thanh-tuong-cua-toi": {
+  "t": "나의 성상",
+  "h": "f28a25a6"
+ },
+ "js.thtg.thoi-luong": {
+  "t": "소요 시간",
+  "h": "83dc4d39"
+ },
+ "js.thtg.thu-am-hoan-tat-nhan-phan": {
+  "t": "녹음이 끝났어요 — '분석'을 눌러 결과를 확인하세요.",
+  "h": "016efee8"
+ },
+ "js.thtg.thu-am-lai": {
+  "t": "다시 녹음",
+  "h": "e7849d1e"
+ },
+ "js.thtg.thuong-mat-10-15-giay": {
+  "t": "보통 10~15초 걸려요",
+  "h": "56670e66"
+ },
+ "js.thtg.to-co-luc": {
+  "t": "크고 힘 있음",
+  "h": "7514dffb"
+ },
+ "js.thtg.toc-do-noi": {
+  "t": "말하는 속도",
+  "h": "3e47bcf8"
+ },
+ "js.thtg.toi-am": {
+  "t": "어둡고 따뜻함",
+  "h": "4fb70bda"
+ },
+ "js.thtg.trung-binh-am": {
+  "t": "보통이며 따뜻함",
+  "h": "94def005"
+ },
+ "js.thtg.uoc-tinh-n": {
+  "t": "추정: {n}",
+  "h": "9c0f8c8c"
+ },
+ "js.thtg.vua-phai": {
+  "t": "적당함",
+  "h": "e3fa9054"
+ },
+ "js.thtp.am-s": {
+  "t": " 음절/초",
+  "h": "49ed1880"
+ },
+ "js.thtp.am-sac-am-toi-tho-kim": {
+  "t": "음색이 따뜻하고 어두워요 — 토·금의 저음.",
+  "h": "12665913"
+ },
+ "js.thtp.am-sac-sang": {
+  "t": "음색이 밝아요.",
+  "h": "8c1437e2"
+ },
+ "js.thtp.am-sac-trung-binh": {
+  "t": "음색이 보통이에요.",
+  "h": "ed7134e9"
+ },
+ "js.thtp.amplitude-rat-on-dinh": {
+  "t": "진폭이 매우 안정적이에요.",
+  "h": "5f11e83b"
+ },
+ "js.thtp.bai-n": {
+  "t": "과제 {n}",
+  "h": "9227ba34"
+ },
+ "js.thtp.bai-tiep-theo": {
+  "t": "다음 과제 →",
+  "h": "aad8808b"
+ },
+ "js.thtp.bat-dau-thu-am": {
+  "t": "녹음 시작",
+  "h": "61e33202"
+ },
+ "js.thtp.bien-dong-lon": {
+  "t": "변동이 커요.",
+  "h": "56e49443"
+ },
+ "js.thtp.binh-thuong": {
+  "t": "보통이에요.",
+  "h": "4711eaec"
+ },
+ "js.thtp.cao-vung-moc": {
+  "t": "높음 — 목의 영역.",
+  "h": "1f708e1f"
+ },
+ "js.thtp.cham-diem-dam": {
+  "t": "느림 — 차분함.",
+  "h": "1761f7f1"
+ },
+ "js.thtp.co-bien-dong": {
+  "t": "변동이 있어요.",
+  "h": "bb657503"
+ },
+ "js.thtp.co-tap-am-vung-giua-thanh": {
+  "t": "잡음 있음 — 청과 탁의 중간.",
+  "h": "72479b12"
+ },
+ "js.thtp.cong-cha-nhu-nui-thai-son": {
+  "t": "아버지의 은혜는 태산처럼 높고,\n어머니의 은혜는 샘물처럼 끝없이 흐른다.",
+  "h": "5e8b8ca0"
+ },
+ "js.thtp.da-ghi-xong": {
+  "t": "녹음 완료",
+  "h": "8d555bc2"
+ },
+ "js.thtp.dang-ghi-am": {
+  "t": "녹음 중…",
+  "h": "e8185717"
+ },
+ "js.thtp.dang-luan-giai": {
+  "t": "풀이 중…",
+  "h": "aa035f2b"
+ },
+ "js.thtp.dang-phan-tich": {
+  "t": "분석 중…",
+  "h": "6c1c499b"
+ },
+ "js.thtp.dang-phan-tich-theo-co-phap": {
+  "t": "고법에 따라 분석하고 있어요",
+  "h": "18ad9517"
+ },
+ "js.thtp.dang-tinh-toan-dac-trung-am": {
+  "t": "음향 특징을 계산하고 있어요…",
+  "h": "7e4c7703"
+ },
+ "js.thtp.dao-dong-manh-ky-cach-pha": {
+  "t": "크게 흔들려요 — '파라(破鑼)'격을 꺼려요.",
+  "h": "af8f73b4"
+ },
+ "js.thtp.dem-deu-toc-do-khong-gap": {
+  "t": "일정한 속도로, 서두르지도 늦추지도 말고 세어 주세요. 숫자 사이 간격은 약 0.5초예요.",
+  "h": "3c773947"
+ },
+ "js.thtp.dem-so-1-15": {
+  "t": "1 → 15 세기",
+  "h": "f6278207"
+ },
+ "js.thtp.do-on-dinh-f0": {
+  "t": "F0 안정도",
+  "h": "f0626dcb"
+ },
+ "js.thtp.do-truc-tiep-tu-giong-noi": {
+  "t": " 마이크로 목소리를 직접 측정한 결과예요. 나머지 11개 음향 지표와 전체 풀이는 심층 분석에 들어 있어요.",
+  "h": "1514c6cc"
+ },
+ "js.thtp.do-uyen-chuyen-tong-giong": {
+  "t": "음높이의 유연함.",
+  "h": "c42d8f86"
+ },
+ "js.thtp.doc-binh-thuong-ro-rang-khong": {
+  "t": "평소처럼 또렷하게, 서두르지 말고, 일부러 낮추거나 높이지 말고 읽어 주세요. 기본이 되는 목소리예요.",
+  "h": "ace9a97f"
+ },
+ "js.thtp.doc-co-ngu-dieu-len-xuong": {
+  "t": "억양을 살려 자연스럽게 높낮이를 주며 읽어 주세요. 베트남 고전 『쭈옌 끼에우』의 첫 구절이에요 — 시를 낭송하듯 읽어 보세요.",
+  "h": "deebf884"
+ },
+ "js.thtp.doc-doan-van": {
+  "t": "문장 읽기",
+  "h": "1d0b2c72"
+ },
+ "js.thtp.doc-ngan-theo-huong-dan": {
+  "t": "안내에 따라 읽거나 소리를 길게 내 주세요.",
+  "h": "3c680985"
+ },
+ "js.thtp.doc-tho-bai-do-pitch-range": {
+  "t": "시 낭송 — 음역 측정",
+  "h": "73c2b60b"
+ },
+ "js.thtp.don-dieu-it-bieu-cam": {
+  "t": "단조로움 — 표현이 적어요.",
+  "h": "3e48c9db"
+ },
+ "js.thtp.f0-trung-binh": {
+  "t": "F0 평균",
+  "h": "36f5bf55"
+ },
+ "js.thtp.giong-cao-bat-thuong-cho-nam": {
+  "t": "ℹ 남성치고 비정상적으로 높은 목소리예요. 가성으로 말했거나 데이터가 불안정할 수 있어요.",
+  "h": "a3164510"
+ },
+ "js.thtp.giong-cua-ban-thuoc-n": {
+  "t": "당신의 목소리는 **{n}**에 속해요(4개 과제, 12개 음향 지표로 측정). 성상학에 대해 더 궁금한 점이 있나요?",
+  "h": "890b1b1b"
+ },
+ "js.thtp.giong-nen-f0": {
+  "t": "기본 목소리: F0 평균 <strong>{f0}Hz</strong>, 말하는 속도 {rate} 음절/초.",
+  "h": "a9e1812d"
+ },
+ "js.thtp.giong-thanh-trong-vang": {
+  "t": "'청(清)' 목소리 — 맑고 울림이 좋아요.",
+  "h": "b5424c0c"
+ },
+ "js.thtp.giong-tram-bat-thuong-cho-nu": {
+  "t": "ℹ 여성치고 비정상적으로 낮은 목소리예요. 일부러 꾸민 목소리이거나 데이터가 불안정할 수 있어요.",
+  "h": "b7ed0210"
+ },
+ "js.thtp.giong-troc-duc": {
+  "t": "'탁(濁)' 목소리 — 탁해요.",
+  "h": "b504dd91"
+ },
+ "js.thtp.giong-vua-thanh-vua-co-luc": {
+  "t": "맑으면서 힘이 있는 목소리.",
+  "h": "a7a812ab"
+ },
+ "js.thtp.giu-deu-khi-day-tot": {
+  "t": "고르게 유지 — 기의 바탕이 좋아요.",
+  "h": "ee4f48e1"
+ },
+ "js.thtp.hit-mot-hoi-sau-sau-do": {
+  "t": "숨을 깊이 들이쉰 뒤 '아' 소리를 같은 높이로 끊김 없이 길게 내 주세요. 오르내림 없이 고를수록 좋아요. 가장 중요한 과제예요 — 기력을 측정해요.",
+  "h": "a85ada27"
+ },
+ "js.thtp.hnr-do-trong": {
+  "t": "HNR(맑기)",
+  "h": "372da110"
+ },
+ "js.thtp.hnr-thap-8db-nhieu-tap-am": {
+  "t": "⚠ HNR이 낮아요(<8dB) — 잡음이 많아요. 더 조용한 환경인지 확인해 주세요.",
+  "h": "4f448bef"
+ },
+ "js.thtp.hnr-thap-noi-len-dieu-gi": {
+  "t": "HNR이 낮으면 무엇을 뜻하나요?",
+  "h": "c0db1713"
+ },
+ "js.thtp.hoi-lech-dau-hieu-khi-khong": {
+  "t": "약간 흔들림 — 기가 고르지 않다는 신호.",
+  "h": "7392dcf4"
+ },
+ "js.thtp.hoi-rung-co-the-cang-thang": {
+  "t": "약간 떨림 — 긴장했을 수 있어요.",
+  "h": "a544df6f"
+ },
+ "js.thtp.jitter-ngan": {
+  "t": "지터(지속음)",
+  "h": "6ca69280"
+ },
+ "js.thtp.jitter-va-shimmer-la-gi": {
+  "t": "지터와 시머가 뭐예요?",
+  "h": "0fc478fd"
+ },
+ "js.thtp.khac-gi-ban-thanh-tuong-thuong": {
+  "t": "일반 성상과 무엇이 다른가요?",
+  "h": "37afdd5e"
+ },
+ "js.thtp.khi-bat-tuc": {
+  "t": "기 부족",
+  "h": "26098327"
+ },
+ "js.thtp.khi-bat-tuc-can-luyen-duong": {
+  "t": "기 부족 — 양기 단련이 필요해요.",
+  "h": "a17003c2"
+ },
+ "js.thtp.khi-du-vung-quy-tuong": {
+  "t": "기가 충분해요 — 귀상의 영역.",
+  "h": "ba173e75"
+ },
+ "js.thtp.khi-luc-rat-tot-khi-tuc": {
+  "t": "기력이 매우 좋아요 — '기족성원(氣足聲圓)'.",
+  "h": "271ac112"
+ },
+ "js.thtp.khi-luc-tot": {
+  "t": "기력 좋음",
+  "h": "191dd52d"
+ },
+ "js.thtp.khi-sustain": {
+  "t": "기(지속 시간)",
+  "h": "64bc1d84"
+ },
+ "js.thtp.khi-trung-binh": {
+  "t": "기 보통",
+  "h": "7f2a227e"
+ },
+ "js.thtp.khi-trung-binh-dogb": {
+  "t": "기가 보통이에요.",
+  "h": "29600da0"
+ },
+ "js.thtp.khong-nhan-duoc-noi-dung-tra": {
+  "t": "결과를 받지 못했어요. 다시 시도해 주세요.",
+  "h": "a80badc4"
+ },
+ "js.thtp.khong-truy-cap-duoc-microphone": {
+  "t": "마이크에 접근할 수 없어요",
+  "h": "a07b8893"
+ },
+ "js.thtp.loi": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.thtp.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.thtp.loi-stream-e": {
+  "t": "스트림 오류: {e}",
+  "h": "62596680"
+ },
+ "js.thtp.luan-giai-lai": {
+  "t": "다시 풀이하기",
+  "h": "11d43587"
+ },
+ "js.thtp.mot-hai-ba-bon-nam-sau": {
+  "t": "하나, 둘, 셋, 넷, 다섯, 여섯,\n일곱, 여덟, 아홉, 열, 열하나,\n열둘, 열셋, 열넷, 열다섯.",
+  "h": "6b26e8a7"
+ },
+ "js.thtp.n-giay": {
+  "t": "{n}초",
+  "h": "4b5fecbd"
+ },
+ "js.thtp.ngan-am-a-bai-do-khi": {
+  "t": "'아' 소리 길게 내기 — 기 측정",
+  "h": "df9c2325"
+ },
+ "js.thtp.ngan-am-qua-ngan-2-5s": {
+  "t": "⚠ 소리가 너무 짧아요(<2.5s) — 기가 부족하거나 마이크가 제대로 담지 못했을 수 있어요. 의도한 것이 아니라면 2번 과제를 다시 녹음해 보세요.",
+  "h": "608e2941"
+ },
+ "js.thtp.ngan-dai-shimmer": {
+  "t": "지속 <strong>{d}s</strong>, 시머 {sh}dB — <em>{q}</em>.",
+  "h": "e8a19bff"
+ },
+ "js.thtp.ngu-am-uoc-tinh-n": {
+  "t": "추정 오음: {n}",
+  "h": "21219146"
+ },
+ "js.thtp.nguam-chen": {
+  "t": "{a}, {b} 섞임",
+  "h": "8891cc34"
+ },
+ "js.thtp.nguam-thanh": {
+  "t": "{x}(맑음)",
+  "h": "796dcf40"
+ },
+ "js.thtp.nguam-troc": {
+  "t": "{x}(탁함)",
+  "h": "8f9cb8cf"
+ },
+ "js.thtp.nhanh-linh-hoat": {
+  "t": "빠름 — 민첩함.",
+  "h": "f8f7c567"
+ },
+ "js.thtp.on-dinh": {
+  "t": "안정적이에요.",
+  "h": "44fce326"
+ },
+ "js.thtp.on-dinh-binh-thuong": {
+  "t": "안정적 — 보통이에요.",
+  "h": "2d859433"
+ },
+ "js.thtp.pitch-range-uyen-chuyen": {
+  "t": "음역: <strong>{r}Hz</strong>, 유연함 {a}Hz/단계.",
+  "h": "b98dd351"
+ },
+ "js.thtp.rat-bien-ao-co-the-kich": {
+  "t": "매우 변화무쌍 — 극적일 수 있어요.",
+  "h": "fc2e0818"
+ },
+ "js.thtp.rat-cao-bat-thuong-cho-nam": {
+  "t": "매우 높음 — 남성으로서는 비정상.",
+  "h": "6e3d8f7a"
+ },
+ "js.thtp.rat-cao-kiem-tra-lai": {
+  "t": "매우 높음 — 다시 확인해 주세요.",
+  "h": "2fd84911"
+ },
+ "js.thtp.rat-duc-co-the-mic-kem": {
+  "t": "매우 탁함 — 마이크 품질 문제이거나 목소리가 갈라졌을 수 있어요.",
+  "h": "532d0a63"
+ },
+ "js.thtp.rat-nhanh-co-the-gap-gap": {
+  "t": "매우 빠름 — 조급할 수 있어요.",
+  "h": "468f53f6"
+ },
+ "js.thtp.rat-on-dinh": {
+  "t": "매우 안정적이에요.",
+  "h": "01b80ed2"
+ },
+ "js.thtp.rat-on-dinh-giong-vien-man": {
+  "t": "매우 안정적 — '원만(圓滿)'한 목소리.",
+  "h": "3d4e7673"
+ },
+ "js.thtp.rat-sang-co-the-choi": {
+  "t": "매우 밝음 — 날카로울 수 있어요.",
+  "h": "b82be1c7"
+ },
+ "js.thtp.rat-tram-vung-tho-ho-hong": {
+  "t": "매우 낮음 — 토·호후(虎吼)의 영역.",
+  "h": "25ff5eb4"
+ },
+ "js.thtp.rung-ro-ret-chu-y-suc": {
+  "t": "뚜렷하게 떨려요 — 목소리 건강에 주의하세요.",
+  "h": "624dbc77"
+ },
+ "js.thtp.sang-vung-moc-oanh-minh": {
+  "t": "밝음 — 목·앵명(鶯鳴)의 영역.",
+  "h": "4c2e15f1"
+ },
+ "js.thtp.shimmer-cao-1-2db-giong-khong": {
+  "t": "⚠ 시머가 높아요(>1.2dB) — 소리를 길게 낼 때 불안정해요. 목소리 떨림이나 낮은 마이크 품질 때문일 수 있어요.",
+  "h": "3f02b1f2"
+ },
+ "js.thtp.shimmer-ngan": {
+  "t": "시머(지속음)",
+  "h": "4f46f5b3"
+ },
+ "js.thtp.suy-nhanh-huu-dau-vo-vi": {
+  "t": "빠르게 약해짐 — '유두무미(有頭無尾)', 뒤로 갈수록 기가 약해요.",
+  "h": "70b554fb"
+ },
+ "js.thtp.suy-nhe-binh-thuong": {
+  "t": "약간 줄어듦 — 보통이에요.",
+  "h": "e192d8a5"
+ },
+ "js.thtp.thanh-tuong-pro": {
+  "t": "성상 Pro",
+  "h": "b2e5a151"
+ },
+ "js.thtp.thanh-tuong-pro-cua-toi": {
+  "t": "나의 성상 Pro",
+  "h": "9cca3092"
+ },
+ "js.thtp.thanh-tuong-pro-n": {
+  "t": "성상 Pro — {n}",
+  "h": "677bf701"
+ },
+ "js.thtp.thu-lai": {
+  "t": "다시 시도",
+  "h": "761e1380"
+ },
+ "js.thtp.toc-do-dem-am-tiet": {
+  "t": "세는 속도: <strong>{rate}</strong> 음절/초.",
+  "h": "76b9cb6a"
+ },
+ "js.thtp.toc-do-noi": {
+  "t": "말하는 속도",
+  "h": "3e47bcf8"
+ },
+ "js.thtp.tram-nam-trong-coi-nguoi-ta": {
+  "t": "사람의 한평생 백 년 가운데,\n재주와 운명은 서로 시기하기 마련이니.",
+  "h": "820f3996"
+ },
+ "js.thtp.tram-vung-kim-tho": {
+  "t": "낮음 — 금·토의 영역.",
+  "h": "38ae56f0"
+ },
+ "js.thtp.tram-vung-tho": {
+  "t": "낮음 — 토의 영역.",
+  "h": "16b2fd85"
+ },
+ "js.thtp.trung-binh": {
+  "t": "보통이에요.",
+  "h": "9942b5ce"
+ },
+ "js.thtp.trung-binh-vung-kim": {
+  "t": "보통 — 금의 영역.",
+  "h": "7f4bb46d"
+ },
+ "js.thtp.uyen-chuyen-vung-thuy": {
+  "t": "유연함 — 수의 영역.",
+  "h": "d127ffa4"
+ },
+ "js.thtp.vua-phai": {
+  "t": "적당해요.",
+  "h": "080fe879"
+ },
+ "js.thtp.vung-cong-huong-giong": {
+  "t": "목소리의 공명 영역.",
+  "h": "bb5e88f1"
+ },
+ "js.thtp.xem-ket-qua": {
+  "t": "결과 보기 →",
+  "h": "73c02132"
+ },
+ "js.thtp.xep-theo-12-chi-so-am": {
+  "t": "측정한 12개 음향 지표(HNR, 지속 시간, 지터, 스펙트럼 중심…)를 기준으로 분류했어요. 오음 고법에 따른 전체 의미는 심층 분석에 들어 있어요.",
+  "h": "0c3c0a37"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"결제 ",
   "h": "3d7d89ae"
@@ -9495,6 +14647,514 @@
   "t": "예: 이번 이직을 해도 될까요?",
   "h": "ec1b3e52"
  },
+ "menhkho.12-cung": {
+  "t": "12궁",
+  "h": "2e6bdef9"
+ },
+ "menhkho.1960-canh-ty-1961-tan-suu": {
+  "t": "<a href=\"/menh-kho/1960\" class=\"year-pill\"><span class=\"yr\">1960</span><span class=\"cc\">경자</span></a> <a href=\"/menh-kho/1961\" class=\"year-pill\"><span class=\"yr\">1961</span><span class=\"cc\">신축</span></a> <a href=\"/menh-kho/1962\" class=\"year-pill\"><span class=\"yr\">1962</span><span class=\"cc\">임인</span></a> <a href=\"/menh-kho/1963\" class=\"year-pill\"><span class=\"yr\">1963</span><span class=\"cc\">계묘</span></a> <a href=\"/menh-kho/1964\" class=\"year-pill\"><span class=\"yr\">1964</span><span class=\"cc\">갑진</span></a> <a href=\"/menh-kho/1965\" class=\"year-pill\"><span class=\"yr\">1965</span><span class=\"cc\">을사</span></a> <a href=\"/menh-kho/1966\" class=\"year-pill\"><span class=\"yr\">1966</span><span class=\"cc\">병오</span></a> <a href=\"/menh-kho/1967\" class=\"year-pill\"><span class=\"yr\">1967</span><span class=\"cc\">정미</span></a> <a href=\"/menh-kho/1968\" class=\"year-pill\"><span class=\"yr\">1968</span><span class=\"cc\">무신</span></a> <a href=\"/menh-kho/1969\" class=\"year-pill\"><span class=\"yr\">1969</span><span class=\"cc\">기유</span></a>",
+  "h": "f5165269"
+ },
+ "menhkho.1970-canh-tuat-1971-tan-hoi": {
+  "t": "<a href=\"/menh-kho/1970\" class=\"year-pill\"><span class=\"yr\">1970</span><span class=\"cc\">경술</span></a> <a href=\"/menh-kho/1971\" class=\"year-pill\"><span class=\"yr\">1971</span><span class=\"cc\">신해</span></a> <a href=\"/menh-kho/1972\" class=\"year-pill\"><span class=\"yr\">1972</span><span class=\"cc\">임자</span></a> <a href=\"/menh-kho/1973\" class=\"year-pill\"><span class=\"yr\">1973</span><span class=\"cc\">계축</span></a> <a href=\"/menh-kho/1974\" class=\"year-pill\"><span class=\"yr\">1974</span><span class=\"cc\">갑인</span></a> <a href=\"/menh-kho/1975\" class=\"year-pill popular\"><span class=\"yr\">1975</span><span class=\"cc\">을묘</span></a> <a href=\"/menh-kho/1976\" class=\"year-pill popular\"><span class=\"yr\">1976</span><span class=\"cc\">병진</span></a> <a href=\"/menh-kho/1977\" class=\"year-pill popular\"><span class=\"yr\">1977</span><span class=\"cc\">정사</span></a> <a href=\"/menh-kho/1978\" class=\"year-pill popular\"><span class=\"yr\">1978</span><span class=\"cc\">무오</span></a> <a href=\"/menh-kho/1979\" class=\"year-pill popular\"><span class=\"yr\">1979</span><span class=\"cc\">기미</span></a>",
+  "h": "5f663681"
+ },
+ "menhkho.1980-canh-than-1981-tan-dau": {
+  "t": "<a href=\"/menh-kho/1980\" class=\"year-pill popular\"><span class=\"yr\">1980</span><span class=\"cc\">경신</span></a> <a href=\"/menh-kho/1981\" class=\"year-pill popular\"><span class=\"yr\">1981</span><span class=\"cc\">신유</span></a> <a href=\"/menh-kho/1982\" class=\"year-pill popular\"><span class=\"yr\">1982</span><span class=\"cc\">임술</span></a> <a href=\"/menh-kho/1983\" class=\"year-pill popular\"><span class=\"yr\">1983</span><span class=\"cc\">계해</span></a> <a href=\"/menh-kho/1984\" class=\"year-pill popular\"><span class=\"yr\">1984</span><span class=\"cc\">갑자</span></a> <a href=\"/menh-kho/1985\" class=\"year-pill popular\"><span class=\"yr\">1985</span><span class=\"cc\">을축</span></a> <a href=\"/menh-kho/1986\" class=\"year-pill popular\"><span class=\"yr\">1986</span><span class=\"cc\">병인</span></a> <a href=\"/menh-kho/1987\" class=\"year-pill popular\"><span class=\"yr\">1987</span><span class=\"cc\">정묘</span></a> <a href=\"/menh-kho/1988\" class=\"year-pill popular\"><span class=\"yr\">1988</span><span class=\"cc\">무진</span></a> <a href=\"/menh-kho/1989\" class=\"year-pill popular\"><span class=\"yr\">1989</span><span class=\"cc\">기사</span></a>",
+  "h": "aa98c822"
+ },
+ "menhkho.1990-canh-ngo-1991-tan-mui": {
+  "t": "<a href=\"/menh-kho/1990\" class=\"year-pill popular\"><span class=\"yr\">1990</span><span class=\"cc\">경오</span></a> <a href=\"/menh-kho/1991\" class=\"year-pill popular\"><span class=\"yr\">1991</span><span class=\"cc\">신미</span></a> <a href=\"/menh-kho/1992\" class=\"year-pill popular\"><span class=\"yr\">1992</span><span class=\"cc\">임신</span></a> <a href=\"/menh-kho/1993\" class=\"year-pill popular\"><span class=\"yr\">1993</span><span class=\"cc\">계유</span></a> <a href=\"/menh-kho/1994\" class=\"year-pill popular\"><span class=\"yr\">1994</span><span class=\"cc\">갑술</span></a> <a href=\"/menh-kho/1995\" class=\"year-pill popular\"><span class=\"yr\">1995</span><span class=\"cc\">을해</span></a> <a href=\"/menh-kho/1996\" class=\"year-pill popular\"><span class=\"yr\">1996</span><span class=\"cc\">병자</span></a> <a href=\"/menh-kho/1997\" class=\"year-pill popular\"><span class=\"yr\">1997</span><span class=\"cc\">정축</span></a> <a href=\"/menh-kho/1998\" class=\"year-pill popular\"><span class=\"yr\">1998</span><span class=\"cc\">무인</span></a> <a href=\"/menh-kho/1999\" class=\"year-pill popular\"><span class=\"yr\">1999</span><span class=\"cc\">기묘</span></a>",
+  "h": "0a2d40fe"
+ },
+ "menhkho.2000-canh-thin-2001-tan-ty": {
+  "t": "<a href=\"/menh-kho/2000\" class=\"year-pill popular\"><span class=\"yr\">2000</span><span class=\"cc\">경진</span></a> <a href=\"/menh-kho/2001\" class=\"year-pill\"><span class=\"yr\">2001</span><span class=\"cc\">신사</span></a> <a href=\"/menh-kho/2002\" class=\"year-pill\"><span class=\"yr\">2002</span><span class=\"cc\">임오</span></a> <a href=\"/menh-kho/2003\" class=\"year-pill\"><span class=\"yr\">2003</span><span class=\"cc\">계미</span></a> <a href=\"/menh-kho/2004\" class=\"year-pill\"><span class=\"yr\">2004</span><span class=\"cc\">갑신</span></a> <a href=\"/menh-kho/2005\" class=\"year-pill\"><span class=\"yr\">2005</span><span class=\"cc\">을유</span></a> <a href=\"/menh-kho/2006\" class=\"year-pill\"><span class=\"yr\">2006</span><span class=\"cc\">병술</span></a> <a href=\"/menh-kho/2007\" class=\"year-pill\"><span class=\"yr\">2007</span><span class=\"cc\">정해</span></a> <a href=\"/menh-kho/2008\" class=\"year-pill\"><span class=\"yr\">2008</span><span class=\"cc\">무자</span></a> <a href=\"/menh-kho/2009\" class=\"year-pill\"><span class=\"yr\">2009</span><span class=\"cc\">기축</span></a> <a href=\"/menh-kho/2010\" class=\"year-pill\"><span class=\"yr\">2010</span><span class=\"cc\">경인</span></a>",
+  "h": "7c037110"
+ },
+ "menhkho.2011-tan-mao-2012-nham-thin": {
+  "t": "<a href=\"/menh-kho/2011\" class=\"year-pill\"><span class=\"yr\">2011</span><span class=\"cc\">신묘</span></a> <a href=\"/menh-kho/2012\" class=\"year-pill\"><span class=\"yr\">2012</span><span class=\"cc\">임진</span></a> <a href=\"/menh-kho/2013\" class=\"year-pill\"><span class=\"yr\">2013</span><span class=\"cc\">계사</span></a> <a href=\"/menh-kho/2014\" class=\"year-pill\"><span class=\"yr\">2014</span><span class=\"cc\">갑오</span></a> <a href=\"/menh-kho/2015\" class=\"year-pill\"><span class=\"yr\">2015</span><span class=\"cc\">을미</span></a> <a href=\"/menh-kho/2016\" class=\"year-pill\"><span class=\"yr\">2016</span><span class=\"cc\">병신</span></a> <a href=\"/menh-kho/2017\" class=\"year-pill\"><span class=\"yr\">2017</span><span class=\"cc\">정유</span></a> <a href=\"/menh-kho/2018\" class=\"year-pill\"><span class=\"yr\">2018</span><span class=\"cc\">무술</span></a> <a href=\"/menh-kho/2019\" class=\"year-pill\"><span class=\"yr\">2019</span><span class=\"cc\">기해</span></a>",
+  "h": "118614a2"
+ },
+ "menhkho.2020-canh-ty-2021-tan-suu": {
+  "t": "<a href=\"/menh-kho/2020\" class=\"year-pill\"><span class=\"yr\">2020</span><span class=\"cc\">경자</span></a> <a href=\"/menh-kho/2021\" class=\"year-pill\"><span class=\"yr\">2021</span><span class=\"cc\">신축</span></a> <a href=\"/menh-kho/2022\" class=\"year-pill\"><span class=\"yr\">2022</span><span class=\"cc\">임인</span></a> <a href=\"/menh-kho/2023\" class=\"year-pill\"><span class=\"yr\">2023</span><span class=\"cc\">계묘</span></a> <a href=\"/menh-kho/2024\" class=\"year-pill\"><span class=\"yr\">2024</span><span class=\"cc\">갑진</span></a> <a href=\"/menh-kho/2025\" class=\"year-pill\"><span class=\"yr\">2025</span><span class=\"cc\">을사</span></a> <a href=\"/menh-kho/2026\" class=\"year-pill\"><span class=\"yr\">2026</span><span class=\"cc\">병오</span></a>",
+  "h": "f68fbce7"
+ },
+ "menhkho.4-buoc-don-gian-de-xem": {
+  "t": "계정을 만들지 않아도, 간단한 4단계로 전체 명반을 볼 수 있어요.",
+  "h": "7312382e"
+ },
+ "menhkho.575-000-la-so-tu-vi": {
+  "t": "1960~2026년의 자미두수 명반 57만 5천 건 이상. 12궁, 격국, 대운, 소운을 고법에 따라 분석해요.",
+  "h": "148f146d"
+ },
+ "menhkho.an-sao-co-phap": {
+  "t": "고법 안성",
+  "h": "30aade6f"
+ },
+ "menhkho.an-sao-co-phap-tuan-theo": {
+  "t": "고법 안성은 송나라 때부터 이어진 전통 규칙을 따르며, 조정하거나 덧붙인 것이 없어요. 현대적인 방식은 가끔 새 별을 더하거나 안성 방법을 바꾸기도 해요. 명보 자미두수는 일관성과 전통을 지키기 위해 순수한 고법만 써요.",
+  "h": "ac291cdf"
+ },
+ "menhkho.an-sao-theo-co-phap-khac": {
+  "t": "고법 안성은 현대적인 방식과 무엇이 다른가요?",
+  "h": "4dd93138"
+ },
+ "menhkho.ban-do-12-cung-cach-cuc": {
+  "t": "12궁, 격국, 대운, 2027년 소운 도표가 바로 나타나요.",
+  "h": "6e07f34b"
+ },
+ "menhkho.cac-sao-chinh-tu-vi-thien": {
+  "t": "주성(자미, 천부, 염정 등)은 음력 생일에 따라 안성하고, 보조성은 월과 시에 따라 안성해요. 사화(녹, 권, 과, 기)는 태어난 해의 천간에 따라 안성하며, 태어난 시마다 고유한 별의 구성이 만들어져요.",
+  "h": "8cfbecd2"
+ },
+ "menhkho.cach-cuc-dac-biet": {
+  "t": "특수 격국",
+  "h": "6d499784"
+ },
+ "menhkho.cach-cuc-la-su-phoi-hop": {
+  "t": "격국은 별들이 특별하게 어우러져 남다른 운명을 만들어 내는 조합이에요. 자부동궁, 일월동량, 살파탐 등이 있고, 격국마다 고유한 의미와 영향이 있어요.",
+  "h": "58eb0956"
+ },
+ "menhkho.cach-tra-cuu-la-so-tu": {
+  "t": "자미두수 명반 조회 방법",
+  "h": "7dc6b796"
+ },
+ "menhkho.cau-hoi-thuong-gap": {
+  "t": "자주 묻는 질문",
+  "h": "ef0eb919"
+ },
+ "menhkho.cc-at-dau": {
+  "t": "을유",
+  "h": "9842b7e9"
+ },
+ "menhkho.cc-at-hoi": {
+  "t": "을해",
+  "h": "5f156282"
+ },
+ "menhkho.cc-at-mao": {
+  "t": "을묘",
+  "h": "fe60ff8d"
+ },
+ "menhkho.cc-at-mui": {
+  "t": "을미",
+  "h": "3906728d"
+ },
+ "menhkho.cc-at-suu": {
+  "t": "을축",
+  "h": "1c28856d"
+ },
+ "menhkho.cc-at-ty": {
+  "t": "을사",
+  "h": "0f9da740"
+ },
+ "menhkho.cc-binh-dan": {
+  "t": "병인",
+  "h": "bb3f9222"
+ },
+ "menhkho.cc-binh-ngo": {
+  "t": "병오",
+  "h": "3ec6e2f9"
+ },
+ "menhkho.cc-binh-than": {
+  "t": "병신",
+  "h": "fcaad7a6"
+ },
+ "menhkho.cc-binh-thin": {
+  "t": "병진",
+  "h": "a40c3c50"
+ },
+ "menhkho.cc-binh-tuat": {
+  "t": "병술",
+  "h": "6f234952"
+ },
+ "menhkho.cc-binh-ty": {
+  "t": "병자",
+  "h": "d0de6cd1"
+ },
+ "menhkho.cc-canh-dan": {
+  "t": "경인",
+  "h": "71041a51"
+ },
+ "menhkho.cc-canh-ngo": {
+  "t": "경오",
+  "h": "d6703e8a"
+ },
+ "menhkho.cc-canh-than": {
+  "t": "경신",
+  "h": "5f080d41"
+ },
+ "menhkho.cc-canh-thin": {
+  "t": "경진",
+  "h": "e61f8119"
+ },
+ "menhkho.cc-canh-tuat": {
+  "t": "경술",
+  "h": "223966c3"
+ },
+ "menhkho.cc-canh-ty": {
+  "t": "경자",
+  "h": "6f3acf8f"
+ },
+ "menhkho.cc-dinh-dau": {
+  "t": "정유",
+  "h": "74b51915"
+ },
+ "menhkho.cc-dinh-hoi": {
+  "t": "정해",
+  "h": "062cc6af"
+ },
+ "menhkho.cc-dinh-mao": {
+  "t": "정묘",
+  "h": "48fa829a"
+ },
+ "menhkho.cc-dinh-mui": {
+  "t": "정미",
+  "h": "817c95a8"
+ },
+ "menhkho.cc-dinh-suu": {
+  "t": "정축",
+  "h": "05319c07"
+ },
+ "menhkho.cc-dinh-ty": {
+  "t": "정사",
+  "h": "ab0362c5"
+ },
+ "menhkho.cc-giap-dan": {
+  "t": "갑인",
+  "h": "c61ed450"
+ },
+ "menhkho.cc-giap-ngo": {
+  "t": "갑오",
+  "h": "8fe62c84"
+ },
+ "menhkho.cc-giap-than": {
+  "t": "갑신",
+  "h": "c1ac08ba"
+ },
+ "menhkho.cc-giap-thin": {
+  "t": "갑진",
+  "h": "2df357cf"
+ },
+ "menhkho.cc-giap-tuat": {
+  "t": "갑술",
+  "h": "2962b2ce"
+ },
+ "menhkho.cc-giap-ty": {
+  "t": "갑자",
+  "h": "9978a63b"
+ },
+ "menhkho.cc-ky-dau": {
+  "t": "기유",
+  "h": "38d58f6e"
+ },
+ "menhkho.cc-ky-hoi": {
+  "t": "기해",
+  "h": "3f690e0c"
+ },
+ "menhkho.cc-ky-mao": {
+  "t": "기묘",
+  "h": "be766a5d"
+ },
+ "menhkho.cc-ky-mui": {
+  "t": "기미",
+  "h": "e0297da0"
+ },
+ "menhkho.cc-ky-suu": {
+  "t": "기축",
+  "h": "d22fd87c"
+ },
+ "menhkho.cc-ky-ty": {
+  "t": "기사",
+  "h": "372279bd"
+ },
+ "menhkho.cc-mau-dan": {
+  "t": "무인",
+  "h": "df81e0af"
+ },
+ "menhkho.cc-mau-ngo": {
+  "t": "무오",
+  "h": "f9755851"
+ },
+ "menhkho.cc-mau-than": {
+  "t": "무신",
+  "h": "4db26cc2"
+ },
+ "menhkho.cc-mau-thin": {
+  "t": "무진",
+  "h": "8ce701d1"
+ },
+ "menhkho.cc-mau-tuat": {
+  "t": "무술",
+  "h": "79712764"
+ },
+ "menhkho.cc-mau-ty": {
+  "t": "무자",
+  "h": "1355db8c"
+ },
+ "menhkho.cc-nham-dan": {
+  "t": "임인",
+  "h": "d2c9aec3"
+ },
+ "menhkho.cc-nham-ngo": {
+  "t": "임오",
+  "h": "7e6947bf"
+ },
+ "menhkho.cc-nham-than": {
+  "t": "임신",
+  "h": "d94b15cc"
+ },
+ "menhkho.cc-nham-thin": {
+  "t": "임진",
+  "h": "5aec0635"
+ },
+ "menhkho.cc-nham-tuat": {
+  "t": "임술",
+  "h": "433e7e10"
+ },
+ "menhkho.cc-nham-ty": {
+  "t": "임자",
+  "h": "a5792187"
+ },
+ "menhkho.cc-quy-dau": {
+  "t": "계유",
+  "h": "6b177e82"
+ },
+ "menhkho.cc-quy-hoi": {
+  "t": "계해",
+  "h": "ded499bb"
+ },
+ "menhkho.cc-quy-mao": {
+  "t": "계묘",
+  "h": "87edaf91"
+ },
+ "menhkho.cc-quy-mui": {
+  "t": "계미",
+  "h": "79ee2cfa"
+ },
+ "menhkho.cc-quy-suu": {
+  "t": "계축",
+  "h": "4c142bee"
+ },
+ "menhkho.cc-quy-ty": {
+  "t": "계사",
+  "h": "91c81644"
+ },
+ "menhkho.cc-tan-dau": {
+  "t": "신유",
+  "h": "e50c8461"
+ },
+ "menhkho.cc-tan-hoi": {
+  "t": "신해",
+  "h": "7fc784ac"
+ },
+ "menhkho.cc-tan-mao": {
+  "t": "신묘",
+  "h": "914e1516"
+ },
+ "menhkho.cc-tan-mui": {
+  "t": "신미",
+  "h": "1ef1fe2e"
+ },
+ "menhkho.cc-tan-suu": {
+  "t": "신축",
+  "h": "c94fd2bf"
+ },
+ "menhkho.cc-tan-ty": {
+  "t": "신사",
+  "h": "46b9d5af"
+ },
+ "menhkho.chon-gio-gioi-tinh": {
+  "t": "태어난 시 &amp; 성별 고르기",
+  "h": "6ec7d44d"
+ },
+ "menhkho.chon-gio-sinh-ty-suu-dan": {
+  "t": "태어난 시(자, 축, 인… 해)와 성별(남 / 여)을 고르세요.",
+  "h": "b6ca5d50"
+ },
+ "menhkho.chon-nam-sinh": {
+  "t": "출생 연도 고르기",
+  "h": "994161b3"
+ },
+ "menhkho.chon-nam-sinh-1960-2026": {
+  "t": "출생 연도 고르기 (1960–2026)",
+  "h": "e41f285a"
+ },
+ "menhkho.chon-ngay-thang": {
+  "t": "월·일 고르기",
+  "h": "f500cd1c"
+ },
+ "menhkho.click-vao-nam-sinh-duong-lich": {
+  "t": "위 조회표에서 양력 출생 연도(1960–2026)를 클릭하세요.",
+  "h": "6d7f1050"
+ },
+ "menhkho.cung-menh-la-cung-quan-trong": {
+  "t": "명궁은 자미두수 명반에서 가장 중요한 궁으로, 성격과 외모, 전반적인 운명을 보여 줘요. 명궁은 태어난 시와 음력 출생 월로 정하고, 이어서 태어난 해의 천간과 대조해 주성을 정해요. 주성마다 특성이 달라요.",
+  "h": "e6d8d285"
+ },
+ "menhkho.cung-menh-la-gi": {
+  "t": "명궁이란 무엇인가요?",
+  "h": "8fe0a543"
+ },
+ "menhkho.dai-van-la-chu-ky-10": {
+  "t": "대운은 12궁을 차례로 돌아가는 10년 주기예요. 소운은 대운 안에서 해마다 바뀌는 운이에요. 이 두 겹의 운으로 인생에서 순조로운 때와 어려운 때를 가늠해요.",
+  "h": "d7196ebc"
+ },
+ "menhkho.dai-van-la-giai-doan-van": {
+  "t": "대운은 12궁을 차례로 돌아가며 10년간 이어지는 운의 구간이에요. 소운은 대운 안에서 해마다 바뀌는 운이에요. 두 겹의 운을 함께 보면 인생에서 순조로운 때와 도전의 때를 가늠할 수 있어요.",
+  "h": "6b40dcf7"
+ },
+ "menhkho.dai-van-tieu-van": {
+  "t": "대운 &amp; 소운",
+  "h": "cd7afeb6"
+ },
+ "menhkho.dai-van-va-tieu-van-la": {
+  "t": "대운과 소운이란 무엇인가요?",
+  "h": "0c4ed332"
+ },
+ "menhkho.gio-sinh": {
+  "t": "태어난 시",
+  "h": "2d0aa7eb"
+ },
+ "menhkho.gio-sinh-quyet-dinh-cung-menh": {
+  "t": "태어난 시는 명궁과 신궁, 즉 명반의 바탕이 되는 두 궁을 결정해요. 생일이 같아도 시가 다르면 명궁, 주성, 격국, 운세가 모두 완전히 달라져요. 태어난 시는 12개(자, 축, 인, 묘, 진, 사, 오, 미, 신, 유, 술, 해)이고, 한 시는 2시간씩이에요.",
+  "h": "257166f6"
+ },
+ "menhkho.hoac-tra-lich-ngay-tot-2020": {
+  "t": "또는 <a href=\"/ngay-tot\" style=\"color:#d4c060;text-decoration:underline\">길일 달력 2020–2036</a>을 찾아보세요 — 혼례, 착공, 개업을 위한 길일 페이지 8,500개를 고법에 따라 정리했어요.",
+  "h": "55cf40a8"
+ },
+ "menhkho.huong-dan": {
+  "t": "안내",
+  "h": "e7c42639"
+ },
+ "menhkho.kho-luu-tru-tra-cuu": {
+  "t": "命庫 · 보관소 · 조회",
+  "h": "1ba1dae2"
+ },
+ "menhkho.kien-thuc": {
+  "t": "지식",
+  "h": "b09dc5b0"
+ },
+ "menhkho.la-so-duoc-tinh-san-theo": {
+  "t": "1960년부터 2026년까지의 생일에 대해 고법으로 미리 계산해 둔 명반이에요. 출생 연도를 골라 조회를 시작하세요.",
+  "h": "f6cf77a0"
+ },
+ "menhkho.la-so-tu-vi-chia-thanh": {
+  "t": "자미두수 명반은 12궁으로 나뉘어요: 명궁, 부모궁, 복덕궁, 전택궁, 관록궁, 복역궁, 천이궁, 질액궁, 재백궁, 자녀궁, 부처궁, 형제궁. 궁마다 인생의 한 영역을 맡아요.",
+  "h": "a2ce3ef4"
+ },
+ "menhkho.la-so-tu-vi-dau-so": {
+  "t": "자미두수 명반이란 무엇인가요?",
+  "h": "b1c2516e"
+ },
+ "menhkho.la-so-tu-vi-dau-so-ulj5": {
+  "t": "자미두수 명반은 음력 생년월일시로 세우는 명리 도표예요. 명반은 12궁으로 이루어지며, 고법의 규칙에 따라 별을 배치해 성격, 커리어, 연애, 해마다의 운을 풀이해요.",
+  "h": "454320e8"
+ },
+ "menhkho.menh-kho-chua-575-000-la": {
+  "t": "명고에는 1960년부터 2026년까지의 생일에 대해 미리 계산한 명반 57만 5천 건 이상이 담겨 있어요(67년 × 365일 × 12시 × 2성별). 명반마다 고법에 따라 별을 배치하고, 12궁, 격국, 대운, 2027년 소운을 분석했어요.",
+  "h": "9d51d3f0"
+ },
+ "menhkho.menh-kho-co-bao-nhieu-la": {
+  "t": "명고에는 명반이 몇 건 있나요?",
+  "h": "c61020ae"
+ },
+ "menhkho.menh-kho-tra-cuu-la-so": {
+  "t": "명고 — 출생 연도별 자미두수 명반 조회 | 명보 자미두수",
+  "h": "a3812551"
+ },
+ "menhkho.menh-kho-tra-cuu-la-so-25gy": {
+  "t": "명고 — 자미두수 명반 조회",
+  "h": "b767449b"
+ },
+ "menhkho.menh-kho-tra-cuu-la-so-5d9p": {
+  "t": "명고 — <br><em>자미두수 명반 조회</em>",
+  "h": "4de8fd05"
+ },
+ "menhkho.moi-nam-co-day-du-365": {
+  "t": "해마다 365일 × 태어난 시 12개 × 남 &amp; 여 = 명반 8,760건이 모두 있어요.",
+  "h": "cec0232c"
+ },
+ "menhkho.muon-nhan-luan-giai-chuyen-sau": {
+  "t": "깊이 있는 풀이를 받고 싶나요?",
+  "h": "fb3939f2"
+ },
+ "menhkho.nhap-ngay-gio-sinh-de-nhan": {
+  "t": "생년월일시를 입력하면 24개 항목의 전체 분석을 받아볼 수 있어요 — 성격, 커리어, 연애, 2027년 운세.",
+  "h": "8d39d980"
+ },
+ "menhkho.nhung-cau-hoi-pho-bien-ve": {
+  "t": "자미두수와 명고에 대해 자주 묻는 질문이에요.",
+  "h": "9548bc77"
+ },
+ "menhkho.phan-luan-giai": {
+  "t": "풀이 부분",
+  "h": "d8df6bfc"
+ },
+ "menhkho.tai-sao-gio-sinh-quan-trong": {
+  "t": "자미두수에서 태어난 시가 왜 중요한가요?",
+  "h": "fdf177c9"
+ },
+ "menhkho.thap-nien-1960": {
+  "t": "1960년대",
+  "h": "33c1a5a3"
+ },
+ "menhkho.thap-nien-1970": {
+  "t": "1970년대",
+  "h": "7afcb27c"
+ },
+ "menhkho.thap-nien-1980-pho-bien-nhat": {
+  "t": "1980년대 — 가장 많이 찾는 연대",
+  "h": "96be036e"
+ },
+ "menhkho.thap-nien-1990-pho-bien-nhat": {
+  "t": "1990년대 — 가장 많이 찾는 연대",
+  "h": "09308f62"
+ },
+ "menhkho.thap-nien-2000": {
+  "t": "2000년대",
+  "h": "bf0a97c8"
+ },
+ "menhkho.thap-nien-2010": {
+  "t": "2010년대",
+  "h": "1eda10c4"
+ },
+ "menhkho.thap-nien-2020": {
+  "t": "2020년대",
+  "h": "dcf667d2"
+ },
+ "menhkho.tra-cuu-la-so": {
+  "t": "명반 조회",
+  "h": "f0bbe872"
+ },
+ "menhkho.tra-cuu-la-so-tu-vi": {
+  "t": "1960–2026년 출생 연도별 자미두수 명반 조회. 12궁, 격국, 대운, 소운을 고법에 따라 빠짐없이 분석해요. 57만 5천 건 이상의 명반을 바로 조회할 수 있어요.",
+  "h": "490b342b"
+ },
+ "menhkho.trang-chu-menh-kho": {
+  "t": "<a href=\"/\">홈</a><span>›</span> <span>명고</span>",
+  "h": "ca56af70"
+ },
+ "menhkho.tren-trang-nam-sinh-click-vao": {
+  "t": "출생 연도 페이지의 12개월 달력에서 양력 월·일을 클릭하세요.",
+  "h": "cd9fc291"
+ },
+ "menhkho.tu-vi-dau-so-khoa-menh": {
+  "t": "자미두수 — 고법 명리학",
+  "h": "79695a52"
+ },
+ "menhkho.tu-vi-dau-so-la-he": {
+  "t": "자미두수는 송나라 때부터 1,000년 넘게 전해 내려온 명리학 체계예요.",
+  "h": "c536dfdb"
+ },
+ "menhkho.xem-la-so-day-du": {
+  "t": "전체 명반 보기",
+  "h": "b6fb07d5"
+ },
+ "menhkho.xem-la-so-luan-giai": {
+  "t": "명반 &amp; 풀이 보기 →",
+  "h": "95889730"
+ },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">출생 연도 입력</span>",
   "h": "ecce406c"
@@ -9626,6 +15286,454 @@
  "ngaytot.xem-lich": {
   "t": "달력 보기 →",
   "h": "6fa85107"
+ },
+ "nhtg.anh-chi-gui-toi-may-chu": {
+  "t": "이미지는 분석을 위해 서버로만 보내고, 서버에 저장하지 않아요. 정면에서 밝은 곳에서 찍어 주세요 — 시스템이 눈 부위를 자동으로 확대해요.",
+  "h": "65e7d1ba"
+ },
+ "nhtg.anh-da-chon": {
+  "t": "✓ 이미지 선택됨",
+  "h": "c435e239"
+ },
+ "nhtg.anh-da-chon-oxp5": {
+  "t": "이미지 선택됨",
+  "h": "d1e5382e"
+ },
+ "nhtg.chua-muon-chup-anh-ban-co": {
+  "t": "<b>아직 촬영하고 싶지 않으신가요?</b><span>먼저 샘플을 보며 어떤 느낌인지 체험해 볼 수 있어요.</span>",
+  "h": "70fdc9d9"
+ },
+ "nhtg.chup": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 촬영",
+  "h": "71b3b3cf"
+ },
+ "nhtg.chup-anh": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 사진 찍기",
+  "h": "f78326e0"
+ },
+ "nhtg.doi-mat-duoc-xem-la-noi": {
+  "t": "전통 상학에서 눈은 사람의 마음이 가장 뚜렷이 드러나는 곳으로 여겨요. 얼굴 사진을 올리면 유장신상에 따라 눈의 모양, 눈빛, 눈썹을 자세히 풀이해 드려요.",
+  "h": "f0bba1fa"
+ },
+ "nhtg.huy": {
+  "t": "✕ 취소",
+  "h": "a46abff1"
+ },
+ "nhtg.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG, PNG, WebP — 최대 5MB · 정면에서 찍어 두 눈이 또렷이 보이게",
+  "h": "79a1629f"
+ },
+ "nhtg.keo-tha-anh-vao-day-hoac": {
+  "t": "이미지를 여기로 끌어다 놓거나 클릭해서 선택",
+  "h": "2ce7b073"
+ },
+ "nhtg.luan-theo-lieu-trang-than-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>유장신상에<br>따른 풀이</span>",
+  "h": "6ad548df"
+ },
+ "nhtg.ma-y-than-tuong-la-mot": {
+  "t": "『마의신상』은 중국에서 가장 유명한 인상학 고서 가운데 하나로, 삼정·오관 같은 얼굴 부위를 통해 성격과 운명을 읽는 방법을 체계화했어요. 『유장신상』과 『수경집』도 함께 대조해 보는 상학 고서예요.",
+  "h": "f21522a3"
+ },
+ "nhtg.ma-y-than-tuong-nhan-phap": {
+  "t": "마의신상 · 안법 고법",
+  "h": "38e14ae2"
+ },
+ "nhtg.mat-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"eye\"></span> 눈 인식됨",
+  "h": "b00eb630"
+ },
+ "nhtg.mat-phai": {
+  "t": "오른쪽 눈",
+  "h": "a88c59ed"
+ },
+ "nhtg.mat-trai": {
+  "t": "왼쪽 눈",
+  "h": "34e4f87a"
+ },
+ "nhtg.mo-camera": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 카메라 열기",
+  "h": "dda0b3af"
+ },
+ "nhtg.moi-luot-luong": {
+  "t": "1회 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-tuong\">…</span> 냥)</span>",
+  "h": "3c4bc428"
+ },
+ "nhtg.nhan-tuong": {
+  "t": "안상",
+  "h": "1bc89b2e"
+ },
+ "nhtg.nhan-tuong-tu-vi-minh-bao": {
+  "t": "안상 — 명보 자미두수",
+  "h": "beddeaa1"
+ },
+ "nhtg.nhan-tuong-xem-tuong-mat-theo": {
+  "t": "<b>안상</b><span>고법으로 눈의 상을 봐요 — <span data-tvp-price=\"nhan-tuong\">…</span> 냥</span>",
+  "h": "f3a91f07"
+ },
+ "nhtg.phan-tich-anh-khac": {
+  "t": "다른 이미지 분석",
+  "h": "eceede8c"
+ },
+ "nhtg.phan-tich-nhan-tuong-hoc": {
+  "t": "안상학 분석",
+  "h": "1ed9443b"
+ },
+ "nhtg.phan-tich-nhan-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"eye\"></span><b id=\"analyzeBtnLabel\">안상 분석하기 →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"nhan-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-tuong\">…</span> 냥)</span> 필요</small>",
+  "h": "1e319aa8"
+ },
+ "nhtg.tai-anh-hoac-chup-truc-tiep": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>이미지를 올리거나<br>바로 촬영</span>",
+  "h": "45a94ade"
+ },
+ "nhtg.tai-anh-khuon-mat": {
+  "t": "얼굴 사진 올리기",
+  "h": "0ce655e6"
+ },
+ "nhtg.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> 이미지 올리기",
+  "h": "c3712e70"
+ },
+ "nhtg.tai-hoac-chup-anh-mat-he": {
+  "t": "얼굴 사진을 올리거나 촬영하세요 — 『마의신상』, 『유장신상』에 따라 안상(눈)을 분석해요.",
+  "h": "6b1bb466"
+ },
+ "nhtg.tai-mot-tam-anh-ro-khuon": {
+  "t": "얼굴이 또렷하게 나온 사진, 특히 눈 부위가 잘 보이는 사진을 올려 주세요. 유장신상 고법에 따라 눈의 모양, 눈빛, 눈썹, 성격을 풀이해요.",
+  "h": "030abd5a"
+ },
+ "nhtg.tu-zoom-vao-doi-mat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"eye\"></span><span>눈 부위<br>자동 확대</span>",
+  "h": "214dd5e2"
+ },
+ "nhtg.xoa-anh": {
+  "t": "✕ 이미지 삭제",
+  "h": "36e95d9f"
+ },
+ "oracle.1-chon-kieu-rut": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">뽑는 방식 고르기</span>",
+  "h": "36067a21"
+ },
+ "oracle.1-la-thong-diep-hien-tai": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 1장 — 지금의 메시지",
+  "h": "726e8adf"
+ },
+ "oracle.2-nhan-thong-diep": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">메시지 받기</span>",
+  "h": "25e0a2ec"
+ },
+ "oracle.3-la-nhan-duyen-qua": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 3장 — 인 · 연 · 과",
+  "h": "9e43bc49"
+ },
+ "oracle.5-la-ngu-hanh-cuoc-doi": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 5장 — 인생의 오행",
+  "h": "1d191df9"
+ },
+ "oracle.am-duong-ngu-hanh-va-bat": {
+  "t": "음양, 오행, 팔괘는 만물의 운행과 균형의 법칙을 설명하는 고대 동양 철학의 세 가지 기초 이론이에요. 주역과 풍수를 비롯한 많은 술수가 이 근본 개념 위에 세워져 있어요.",
+  "h": "833f5e18"
+ },
+ "oracle.cau-hoi-hoac-chu-de-muon": {
+  "t": "곰곰이 생각해 보고 싶은 질문이나 주제 (선택)",
+  "h": "c328ff62"
+ },
+ "oracle.chon-kieu-rut-1-3-hay": {
+  "t": "뽑는 방식(1장, 3장, 5장)을 고르면 시스템이 무작위로 카드를 뽑아, 카드마다 메시지와 실천 안내를 전해 드려요.",
+  "h": "806df5fc"
+ },
+ "oracle.dinh-tam-rut-bai": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"drawBtnLabel\">마음 가다듬고 뽑기</b></span>",
+  "h": "d210cb2f"
+ },
+ "oracle.doi-khi-khong-can-mot-cau": {
+  "t": "때로는 구체적인 답이 필요하지 않아요. 잠시 멈춰 서서 천천히 숨을 고르는 순간이면 충분해요. 음양, 오행, 팔괘의 철학이 담긴 카드 한 장을 뽑고, 마음을 가라앉히는 짧은 조언을 받아 보세요.",
+  "h": "e0cc111c"
+ },
+ "oracle.huong-dan-thuc-hanh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"lightbulb\"></span><span>실천<br>안내</span>",
+  "h": "c5fe62e9"
+ },
+ "oracle.oracle-phuong-dong": {
+  "t": "동양 오라클",
+  "h": "1146fb81"
+ },
+ "oracle.oracle-phuong-dong-rut-the-minh": {
+  "t": "<b>동양 오라클</b><span>음양 · 오행 · 팔괘의 지혜 카드 뽑기 — 무료</span>",
+  "h": "541241f2"
+ },
+ "oracle.oracle-phuong-dong-tu-vi-minh": {
+  "t": "동양 오라클 — 명보 자미두수",
+  "h": "1d867bec"
+ },
+ "oracle.rut-1-3-hay-5-la": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sparkles\"></span><span>1장, 3장<br>또는 5장</span>",
+  "h": "527946ce"
+ },
+ "oracle.rut-the-oracle-40-la-theo": {
+  "t": "명보 자미두수에서 동양 철학(음양, 오행, 팔괘, 천간지지)에 따른 오라클 카드 40장을 바로 뽑아 보세요.",
+  "h": "83cb33e6"
+ },
+ "oracle.triet-ly-phuong-dong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"aperture\"></span><span>동양의<br>철학</span>",
+  "h": "5b82c97f"
+ },
+ "oracle.vd-toi-can-nhan-ra-dieu": {
+  "t": "예: 이 시기에 제가 알아차려야 할 것은 무엇일까요?",
+  "h": "fba02ed0"
+ },
+ "phongthuy.1-ban-menh-thong-tin-phong": {
+  "t": "<span class=\"pt-num\">1</span> 본명 &amp; 방 정보",
+  "h": "862309d1"
+ },
+ "phongthuy.2-chup-tai-anh-phong": {
+  "t": "<span class=\"pt-num\">2</span> 방 촬영 / 사진 올리기",
+  "h": "7d2e0fac"
+ },
+ "phongthuy.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">결제</span>",
+  "h": "67c0b759"
+ },
+ "phongthuy.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">결과 받기</span>",
+  "h": "5b1e84a0"
+ },
+ "phongthuy.anh-goc": {
+  "t": "원본 사진",
+  "h": "d0cb0ec3"
+ },
+ "phongthuy.anh-phong-do-vat-nhan-dien": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 방 사진 &amp; 인식할 물건",
+  "h": "9eb00bf0"
+ },
+ "phongthuy.bac-north": {
+  "t": "북 (North)",
+  "h": "ca46f9fa"
+ },
+ "phongthuy.bat-trach-la-mot-truong-phai": {
+  "t": "팔택은 전통 풍수의 한 유파예요. 집을 팔괘에 대응하는 8방위로 나누고, 집주인의 명괘와 대조해 길한 방향과 흉한 방향, 위치를 정해요. <i>팔택명경(八宅明鏡)</i>은 이 방법을 체계화한 고전 가운데 하나예요.",
+  "h": "daa2d3d2"
+ },
+ "phongthuy.cai-thien": {
+  "t": "개선",
+  "h": "1eff6742"
+ },
+ "phongthuy.chon-anh": {
+  "t": "사진 선택",
+  "h": "2656c1bc"
+ },
+ "phongthuy.chua-muon-khai-thong-tin-anh": {
+  "t": "<b>정보와 사진을 아직 입력하고 싶지 않나요?</b><span>샘플을 먼저 살펴보며 체험해 볼 수 있어요.</span>",
+  "h": "71c6551d"
+ },
+ "phongthuy.chup-anh-can-phong-sau-khi": {
+  "t": "출생 연도, 성별, 현관문 방향을 입력한 뒤 방을 촬영하세요. 풍수 점수(전·후), 배치 제안, 추가하면 좋은 물건을 받아볼 수 있어요.",
+  "h": "6923766a"
+ },
+ "phongthuy.chup-anh-phong-he-thong-phan": {
+  "t": "방을 촬영하면 팔택 풍수로 분석해 드려요 — 전·후 점수, 배치도, 제안, 방 렌더링까지.",
+  "h": "4d18ac04"
+ },
+ "phongthuy.de-xuat-bo-tri": {
+  "t": "<span class=\"ic\" data-icon=\"settings\"></span> 배치 제안",
+  "h": "6f5bcc32"
+ },
+ "phongthuy.diem-phong-thuy-truoc-sau": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> 풍수 점수 전 &amp; 후",
+  "h": "79bb8fe6"
+ },
+ "phongthuy.diem-truoc-sau": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>전 · 후<br>점수</span>",
+  "h": "c676882b"
+ },
+ "phongthuy.do-vat-phat-hien": {
+  "t": "발견된 물건",
+  "h": "58ad237d"
+ },
+ "phongthuy.doi-anh": {
+  "t": "✕ 사진 바꾸기",
+  "h": "304a1319"
+ },
+ "phongthuy.dong-bac": {
+  "t": "동북",
+  "h": "9690921a"
+ },
+ "phongthuy.dong-east": {
+  "t": "동 (East)",
+  "h": "8779753d"
+ },
+ "phongthuy.dong-nam": {
+  "t": "동남",
+  "h": "dd71e07a"
+ },
+ "phongthuy.gioi-tinh": {
+  "t": "성별",
+  "h": "80bbce55"
+ },
+ "phongthuy.he-thong-se-render-lai-anh": {
+  "t": "오행 색과 최적의 풍수 배치에 맞춰 방 사진을 다시 렌더링해 드려요.",
+  "h": "40c4c8a9"
+ },
+ "phongthuy.hien-tai": {
+  "t": "현재",
+  "h": "cd16704d"
+ },
+ "phongthuy.hien-tai-bhng": {
+  "t": "⬛ 현재",
+  "h": "b1e26461"
+ },
+ "phongthuy.huong-cua-chinh-huong-ve": {
+  "t": "출입문이 향하는 방향",
+  "h": "9d976c7f"
+ },
+ "phongthuy.huong-nhin-ra-khi-dung-trong": {
+  "t": "방 안에 서서 밖을 바라볼 때의 방향",
+  "h": "f3f5bfa6"
+ },
+ "phongthuy.jpg-png-heic-toi-da-20mb": {
+  "t": "JPG, PNG, HEIC · 최대 20MB",
+  "h": "6ec18858"
+ },
+ "phongthuy.keo-tha-anh-vao-day": {
+  "t": "사진을 여기로 끌어다 놓으세요",
+  "h": "abbea49b"
+ },
+ "phongthuy.loai-phong": {
+  "t": "방 유형",
+  "h": "19905334"
+ },
+ "phongthuy.loi-khuyen-tong-the": {
+  "t": "<span class=\"ic\" data-icon=\"message-circle\"></span> 종합 조언",
+  "h": "a0211411"
+ },
+ "phongthuy.luoi-3-3-theo-la-ban": {
+  "t": "나침반 기준 3×3 격자 · 남쪽이 위 · 북쪽이 아래",
+  "h": "a01fb977"
+ },
+ "phongthuy.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"phong-thuy\"></span> /1회 <span class=\"cb-sub\">(<span data-tvp-price=\"phong-thuy\">…</span>냥)</span>",
+  "h": "6c5c7ccf"
+ },
+ "phongthuy.mot-can-phong-bo-tri-sai": {
+  "t": "풍수에 맞지 않게 배치된 방은 집주인도 모르는 사이에 운을 조용히 막을 수 있어요. 방 사진을 찍으면 팔택에 따른 전·후 점수와 구체적인 배치 제안을 받아볼 수 있어요.",
+  "h": "63e03f4e"
+ },
+ "phongthuy.nam-sinh-duong-lich": {
+  "t": "출생 연도(양력)",
+  "h": "9f8721e0"
+ },
+ "phongthuy.nam-south": {
+  "t": "남 (South)",
+  "h": "d3c7e97a"
+ },
+ "phongthuy.phan-tich-phong-khac": {
+  "t": "← 다른 방 분석하기",
+  "h": "b726d63b"
+ },
+ "phongthuy.phan-tich-phong-thuy-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"compass\"></span><b id=\"btnAnalyzeLabel\">풍수 분석하기</b></span> <small>소요 <span class=\"vnd\" data-tvp-price-vnd=\"phong-thuy\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"phong-thuy\">…</span>냥)</span></small>",
+  "h": "ae2d9767"
+ },
+ "phongthuy.phong-khach": {
+  "t": "거실",
+  "h": "17fb3f11"
+ },
+ "phongthuy.phong-lam-viec": {
+  "t": "서재 / 작업실",
+  "h": "956c0ca5"
+ },
+ "phongthuy.phong-ngu": {
+  "t": "침실",
+  "h": "d9ac5522"
+ },
+ "phongthuy.phong-thuy-noi-that": {
+  "t": "인테리어 풍수",
+  "h": "3f80b53f"
+ },
+ "phongthuy.phong-thuy-noi-that-chup-anh": {
+  "t": "<b>인테리어 풍수</b><span>방 사진을 찍으면 팔택으로 점수를 매기고 배치를 제안해요</span>",
+  "h": "4912ddf0"
+ },
+ "phongthuy.phong-thuy-noi-that-tu-vi": {
+  "t": "인테리어 풍수 — 명보 자미두수",
+  "h": "15015a61"
+ },
+ "phongthuy.render-lai": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 다시 렌더링",
+  "h": "ccd807df"
+ },
+ "phongthuy.render-phong-phong-thuy-luong": {
+  "t": "<span class=\"ic\" data-icon=\"home\"></span> 풍수 룸 렌더링 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"phong-thuy-render\">…</span>냥</span>",
+  "h": "7b1e15ef"
+ },
+ "phongthuy.render-phong-theo-phong-thuy": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>풍수에 맞춘<br>방 렌더링</span>",
+  "h": "9a5c6021"
+ },
+ "phongthuy.render-phong-theo-phong-thuy-j6h6": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 풍수에 맞춘 방 렌더링",
+  "h": "c1c514e3"
+ },
+ "phongthuy.sau-dieu-chinh": {
+  "t": "조정 후",
+  "h": "0b773985"
+ },
+ "phongthuy.sau-dieu-chinh-uuro": {
+  "t": "<span class=\"ic\" data-icon=\"check-circle\"></span> 조정 후",
+  "h": "b79d8310"
+ },
+ "phongthuy.sau-phong-thuy": {
+  "t": "풍수 적용 후",
+  "h": "c9afd5a7"
+ },
+ "phongthuy.so-do-bo-tri-de-xuat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>제안<br>배치도</span>",
+  "h": "c2aa6f34"
+ },
+ "phongthuy.so-do-bo-tri-truoc-sau": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> 배치도 전 / 후",
+  "h": "c618db7f"
+ },
+ "phongthuy.tai-anh": {
+  "t": "⬇ 이미지 내려받기",
+  "h": "c7a30ee2"
+ },
+ "phongthuy.tay-bac": {
+  "t": "서북",
+  "h": "0b1f47fd"
+ },
+ "phongthuy.tay-nam": {
+  "t": "서남",
+  "h": "c0484c26"
+ },
+ "phongthuy.tay-west": {
+  "t": "서 (West)",
+  "h": "5a60b5ba"
+ },
+ "phongthuy.tot": {
+  "t": "<span class=\"g\">✓ 길:</span> <span id=\"guaGood\"></span>",
+  "h": "60f5b1ca"
+ },
+ "phongthuy.truoc": {
+  "t": "전",
+  "h": "42b0ca5a"
+ },
+ "phongthuy.vat-pham-phong-thuy-nen-them": {
+  "t": "<span class=\"ic\" data-icon=\"store\"></span> 추가하면 좋은 풍수 물건",
+  "h": "f4b05d3b"
+ },
+ "phongthuy.vd-1990": {
+  "t": "예: 1990",
+  "h": "c6e18d35"
+ },
+ "phongthuy.xau": {
+  "t": "<span class=\"b\">✗ 흉:</span> <span id=\"guaBad\"></span>",
+  "h": "a5cae0c2"
+ },
+ "phongthuy.xem-ban-mau": {
+  "t": "샘플 보기 →",
+  "h": "ba3671b1"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 수집하는 정보",
@@ -9811,6 +15919,190 @@
   "t": "결제 상태 확인 및 결과 제공",
   "h": "84a1b3b2"
  },
+ "resources.hon-200-tai-lieu-hoc-thuat": {
+  "t": "자미두수 학술 자료 200건 이상 — 베트남어와 중국어. 연구 커뮤니티를 위해 무료로 제공해요.",
+  "h": "2cf5c307"
+ },
+ "resources.kho-tai-lieu-hoc-thuat-suu": {
+  "t": "여러 출처에서 모은 학술 자료 보관소 — 베트남어와 중국어. 자미두수를 연구하고 공부하는 커뮤니티를 위해 무료로 공유해요.",
+  "h": "6d5a5887"
+ },
+ "resources.kho-tai-lieu-hoc-thuat-tu": {
+  "t": "자미두수 학술 자료 보관소 — 고전부터 현대까지, 자미두수에 관한 베트남어·중국어 서적 200권 이상. 무료로 내려받을 수 있어요.",
+  "h": "61519361"
+ },
+ "resources.sap-xep-theo-thu-tu-a": {
+  "t": "A–Z 순으로 정렬했어요. 책 이름을 누르면 내려받을 수 있어요(링크가 있는 경우).",
+  "h": "9e746762"
+ },
+ "resources.tai-lieu-tieng-trung": {
+  "t": "중국어 자료",
+  "h": "53560984"
+ },
+ "resources.tai-lieu-tieng-viet": {
+  "t": "베트남어 자료",
+  "h": "a170a3bc"
+ },
+ "resources.tai-lieu-tu-vi-dau-so": {
+  "t": "자미두수 자료",
+  "h": "b6fe8eaa"
+ },
+ "resources.thu-vien": {
+  "t": "자료실",
+  "h": "4d885bf7"
+ },
+ "resources.thu-vien-tai-lieu-tu-vi": {
+  "t": "자미두수 자료실 — 명보 자미두수",
+  "h": "23d7aa3b"
+ },
+ "resources.tieng-trung": {
+  "t": "<span class=\"ic-inline\" data-icon-emoji=\"📕\" style=\"display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942\">📕</span> 중국어 <span id=\"count-trung\"></span>",
+  "h": "1368d2d7"
+ },
+ "resources.tieng-viet": {
+  "t": "<span class=\"ic-inline\" data-icon-emoji=\"📗\" style=\"display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942\">📗</span> 베트남어 <span id=\"count-viet\"></span>",
+  "h": "b49a73b7"
+ },
+ "resources.tim-ten-sach-hoac-tac-gia": {
+  "t": "책 이름이나 저자를 검색...",
+  "h": "c8ffd8aa"
+ },
+ "resources.tong-cong": {
+  "t": "전체",
+  "h": "6c4fa8bc"
+ },
+ "sachdetail.dang-tai": {
+  "t": "불러오는 중...",
+  "h": "3d8a48b7"
+ },
+ "sachdetail.khong-tim-thay-tai-lieu": {
+  "t": "자료를 찾을 수 없어요",
+  "h": "ffd74f40"
+ },
+ "sachdetail.tai-lieu-khong-ton-tai-hoac": {
+  "t": "자료가 없거나 업데이트 중이에요.",
+  "h": "ed1b9993"
+ },
+ "sachdetail.tai-xuong": {
+  "t": "내려받기",
+  "h": "ca78e23a"
+ },
+ "sachdetail.trang-chu-tai-lieu-dang-tai": {
+  "t": "<a href=\"/\">홈</a> <span>›</span> <a href=\"/resources.html\">자료</a> <span>›</span> <span id=\"bc-title\">불러오는 중...</span>",
+  "h": "f2687a46"
+ },
+ "sachdetail.ve-thu-vien": {
+  "t": "← 자료실로 돌아가기",
+  "h": "943a73f4"
+ },
+ "sachdetail.ve-thu-vien-tai-lieu": {
+  "t": "<a href=\"/resources.html\">← 자료실로 돌아가기</a>",
+  "h": "99e834b4"
+ },
+ "tailieu.bai-viet-khong-ton-tai-hoac": {
+  "t": "글이 없거나 삭제되었어요.",
+  "h": "718123d0"
+ },
+ "tailieu.bai-viet-lien-quan": {
+  "t": "관련 글",
+  "h": "afd3c7f7"
+ },
+ "tailieu.dang-tai-bai-viet": {
+  "t": "글을 불러오는 중...",
+  "h": "6f3c1901"
+ },
+ "tailieu.khong-tim-thay-bai-viet": {
+  "t": "글을 찾을 수 없어요",
+  "h": "914536b7"
+ },
+ "tailieu.tai-lieu-hoc-thuat-ve-tu": {
+  "t": "자미두수 학술 자료 — 명보 자미두수",
+  "h": "f2581c1f"
+ },
+ "tailieu.tai-lieu-hoc-thuat-ve-tu-fish": {
+  "t": "자미두수 학술 자료",
+  "h": "9e9a296b"
+ },
+ "tailieu.tai-lieu-tu-vi-tu-vi": {
+  "t": "자미두수 자료 — 명보 자미두수",
+  "h": "45b310bf"
+ },
+ "tailieu.trang-chu-tai-lieu-dang-tai": {
+  "t": "<a href=\"/\">홈</a> <span>›</span> <a href=\"/resources.html\">자료</a> <span>›</span> <span id=\"breadcrumb-title\">불러오는 중...</span>",
+  "h": "79e309ba"
+ },
+ "tailieu.ve-tai-lieu": {
+  "t": "← 자료로 돌아가기",
+  "h": "0d77cc3d"
+ },
+ "tarot.1-la-thong-diep-hom-nay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 1장 — 오늘의 메시지",
+  "h": "ccc434dd"
+ },
+ "tarot.3-la-qua-khu-hien-tai": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 3장 — 과거 · 현재 · 미래",
+  "h": "880a5e95"
+ },
+ "tarot.cau-hoi-tuy-chon-nghi-trong": {
+  "t": "질문 (선택 — 마음속으로 떠올리거나 여기에 적어 주세요)",
+  "h": "1e7d5e62"
+ },
+ "tarot.celtic-cross-10-la": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 켈틱 크로스 — 10장",
+  "h": "377006eb"
+ },
+ "tarot.chon-kieu-trai-1-3-hay": {
+  "t": "스프레드(1장, 3장, 10장)를 고르면 카드가 무작위로 뽑히고, 정방향·역방향에 따라 질문에 맞는 카드별 풀이를 알려 드려요.",
+  "h": "042a47ab"
+ },
+ "tarot.chon-kieu-trai-bai": {
+  "t": "스프레드 고르기",
+  "h": "0d50f92b"
+ },
+ "tarot.doi-khi-chi-can-mot-la": {
+  "t": "고민되는 일을 또렷이 보려면 카드 한 장이면 충분할 때도 있어요. 스프레드를 고르고 마음에 걸리는 질문을 적으면 정방향·역방향 풀이를 바로 받아볼 수 있어요.",
+  "h": "a7f0500b"
+ },
+ "tarot.luan-theo-cau-hoi-cua-ban": {
+  "t": "<span class=\"hp-ic\" data-icon=\"message-circle\"></span><span>내 질문에<br>맞춘 풀이</span>",
+  "h": "85a815e9"
+ },
+ "tarot.rut-bai-tarot-78-la-ngay": {
+  "t": "명보 자미두수에서 타로 78장을 바로 뽑아 보세요 — 1장, 3장, 켈틱 크로스 10장 스프레드로 정방향·역방향의 의미를 풀이해요.",
+  "h": "6902f0c6"
+ },
+ "tarot.tarot-78-la": {
+  "t": "타로 78장",
+  "h": "0454df6e"
+ },
+ "tarot.tarot-78-la-rut-bai-trai": {
+  "t": "<b>타로 78장</b><span>카드 뽑기 — 1장 / 3장 / 켈틱 크로스 — 무료</span>",
+  "h": "a74872de"
+ },
+ "tarot.tarot-78-la-tu-vi-minh": {
+  "t": "타로 78장 — 명보 자미두수",
+  "h": "e9e2dbdf"
+ },
+ "tarot.tarot-la-bo-bai-78-la": {
+  "t": "타로는 78장으로 이루어진 카드 덱으로, 메이저 아르카나 22장과 마이너 아르카나 56장으로 구성돼요. 15세기 유럽에서 등장해 이후 성찰과 점술에 널리 쓰였어요. 카드마다 고유한 상징이 있고, 정방향인지 역방향인지에 따라 풀이가 달라져요.",
+  "h": "6a9eabe4"
+ },
+ "tarot.trai-1-3-hay-10-la": {
+  "t": "<span class=\"hp-ic\" data-icon=\"wallet-cards\"></span><span>1장, 3장<br>또는 10장</span>",
+  "h": "4355e693"
+ },
+ "tarot.vd-tinh-trang-su-nghiep-cua": {
+  "t": "예: 지금 제 커리어 상황은 어떤가요?",
+  "h": "69397559"
+ },
+ "tarot.xao-bai-rut": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"wallet-cards\"></span><b id=\"drawBtnLabel\">섞고 뽑기</b></span>",
+  "h": "f40097d9"
+ },
+ "tarot.xuoi-hay-nguoc-nghia": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sparkles\"></span><span>정방향과<br>역방향</span>",
+  "h": "3097eb49"
+ },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. 서비스의 성격",
   "h": "7fb94895"
@@ -9994,6 +16286,310 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "충전했지만 사용하지 않은 냥은 요청해 주시면 사례별로 검토해 드립니다",
   "h": "f410ec3e"
+ },
+ "thansohoc.13-chi-so-pythagoras": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hash\"></span><span>피타고라스<br>13가지 수</span>",
+  "h": "a752e4f5"
+ },
+ "thansohoc.duong-doi-dinh-menh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>생명수,<br>운명수</span>",
+  "h": "49ec5008"
+ },
+ "thansohoc.ho-ten-day-du": {
+  "t": "전체 이름",
+  "h": "2c78151b"
+ },
+ "thansohoc.hoi-thay-luan-sau-than-so": {
+  "t": "✦ 선생님께 수비학 깊이 풀이 청하기",
+  "h": "7193c825"
+ },
+ "thansohoc.nam": {
+  "t": "년",
+  "h": "98926c7e"
+ },
+ "thansohoc.nam-ca-nhan-dinh-cao": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>개인 연도수,<br>정점</span>",
+  "h": "63129b89"
+ },
+ "thansohoc.ngay": {
+  "t": "일",
+  "h": "368c4575"
+ },
+ "thansohoc.ngay-sinh-cua-ban-an-chua": {
+  "t": "당신의 생일에는 생명수부터 현재의 개인 연도수까지 13개의 고유한 숫자가 담겨 있어요. 지금 당신이 어떻게 생각하고 무엇을 선택하는지를 말해 줘요. 지금 확인하고 나 자신을 더 잘 이해해 보세요.",
+  "h": "91c3a41a"
+ },
+ "thansohoc.ngay-sinh-ten-day-du": {
+  "t": "생년월일 &amp; 전체 이름",
+  "h": "787e2b10"
+ },
+ "thansohoc.nguyen-van-an": {
+  "t": "예: Hong Gildong",
+  "h": "dad5c28b"
+ },
+ "thansohoc.nhap-ngay-sinh-va-ho-ten": {
+  "t": "생년월일과 전체 이름을 입력하세요. 피타고라스 체계로 생명수, 운명수, 영혼수, 사명수, 현재의 개인 연도수를 계산해요.",
+  "h": "a57588c8"
+ },
+ "thansohoc.nhap-ten-khai-sinh-day-du": {
+  "t": "출생 신고된 전체 이름을 <b>로마자(알파벳)</b>로 입력하세요. 성조 기호가 있든 없든 결과는 같아요.",
+  "h": "073972bc"
+ },
+ "thansohoc.than-so-hoc": {
+  "t": "수비학",
+  "h": "686db34b"
+ },
+ "thansohoc.than-so-hoc-13-chi-so": {
+  "t": "<b>수비학</b><span>피타고라스 체계의 13가지 수</span>",
+  "h": "5d5b6737"
+ },
+ "thansohoc.than-so-hoc-numerology-theo-truong": {
+  "t": "피타고라스 학파의 수비학(Numerology)은 생년월일과 이름의 숫자를 생명수나 정점수처럼 저마다 의미를 지닌 수로 바꿔 해석해요. 이 학파는 숫자와 우주의 관계에 대한 고대 그리스 수학자 피타고라스의 사상에서 비롯됐어요.",
+  "h": "29150586"
+ },
+ "thansohoc.than-so-hoc-tu-vi-minh": {
+  "t": "수비학 — 명보 자미두수",
+  "h": "c3a04aa3"
+ },
+ "thansohoc.thang": {
+  "t": "월",
+  "h": "0e2b3099"
+ },
+ "thansohoc.tinh-13-chi-so-than-so": {
+  "t": "수비학 13가지 수를 계산해요: 생명수, 운명수, 영혼수, 사명수, 생일수, 태도수, 성숙수, 생일 차트, 카르마 부채수, 개인 연도수, 정점과 도전, 적성 직업, 진로 황금 삼각형. 선생님께 깊이 있는 풀이도 청해 보세요.",
+  "h": "8b46eb91"
+ },
+ "thansohoc.tinh-than-so-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hash\"></span><b id=\"btnGoLabel\">수비학 계산하기 →</b></span> <small>무료</small>",
+  "h": "b57b912e"
+ },
+ "thansohoc.tra-loi-thay-o-khung-chat": {
+  "t": "채팅창에서 선생님께 답하며 수비학 차트를 만들어 보세요 — 생년월일과 이름만 있으면 돼요.",
+  "h": "8268b781"
+ },
+ "thtg.1-ghi-am-giong-noi": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">목소리 녹음</span>",
+  "h": "8a655678"
+ },
+ "thtg.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">결제</span>",
+  "h": "67c0b759"
+ },
+ "thtg.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">결과 받기</span>",
+  "h": "5b1e84a0"
+ },
+ "thtg.am-thanh-xu-ly-hoan-toan": {
+  "t": "음성은 브라우저 안에서만 처리돼요. 측정한 지표만(음성 파일은 보내지 않고) 서버로 보내 분석해요.",
+  "h": "cc7cd8bb"
+ },
+ "thtg.bat-dau-thu-am": {
+  "t": "<span id=\"recordIcon\" class=\"ic\" data-icon=\"mic\"></span> <span id=\"recordLabel\">녹음 시작</span>",
+  "h": "2de7804f"
+ },
+ "thtg.cong-cha-nhu-nui-thai-son": {
+  "t": "아버지의 은혜는 <em>태산</em>처럼 높고,<br> 어머니의 은혜는 샘에서 <em>흘러나오는 물</em>처럼 깊어라.<br> 한마음으로 어머니를 모시고 아버지를 공경하여,<br> 효를 다하는 것이 곧 <em>자식의 도리</em>.",
+  "h": "64ec2a8d"
+ },
+ "thtg.do-cao-do-toc-do-am": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>음높이·속도·<br>음색 측정</span>",
+  "h": "0098d11d"
+ },
+ "thtg.doc-cham-rai-tu-nhien-khoang": {
+  "t": "천천히 자연스럽게 읽어 주세요 — 약 10~15초 · 조용한 곳에서, 소음이 없는 환경을 권해요",
+  "h": "d43c4d70"
+ },
+ "thtg.doc-doan-tho-nay-tu-nhien": {
+  "t": "<span class=\"ic\" data-icon=\"book-open\"></span> 이 시를 읽어 주세요(자연스럽고 또렷하게)",
+  "h": "b1041484"
+ },
+ "thtg.doc-thanh-tieng-doan-mau-ben": {
+  "t": "아래 예시 문장을 소리 내어 읽으면 시스템이 녹음해 음향 지표를 측정하고, 오음 고법과 대조해요.",
+  "h": "c7a7cc92"
+ },
+ "thtg.ghi-am-doan-tho-ngan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"mic\"></span><span>짧은 시<br>녹음</span>",
+  "h": "a159c35f"
+ },
+ "thtg.ghi-am-doc-mot-doan-tho": {
+  "t": "짧은 시를 읽어 녹음하면 — 오음 고법(금·목·수·화·토)에 따라 성상을 분석해요.",
+  "h": "93f54a82"
+ },
+ "thtg.ghi-am-giong-noi": {
+  "t": "목소리 녹음",
+  "h": "c4c81682"
+ },
+ "thtg.giong-noi-khong-chi-de-giao": {
+  "t": "목소리는 대화만을 위한 것이 아니에요 — 고법 음성학은 목소리의 바탕만으로 맞는 직업과 피해야 할 직업까지 읽어 내요. 짧게 녹음하면 곧바로 오음 풀이를 받아 볼 수 있어요.",
+  "h": "0b8e2c03"
+ },
+ "thtg.ket-qua-do-luong-giong-noi": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> 목소리 측정 결과",
+  "h": "ccbc07c1"
+ },
+ "thtg.luan-theo-ngu-am-co-phap": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>오음 고법으로<br>풀이</span>",
+  "h": "fb865a03"
+ },
+ "thtg.moi-luot-luong": {
+  "t": "1회 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> 냥)</span>",
+  "h": "c4336d95"
+ },
+ "thtg.ngu-am-co-phap-ma-moi": {
+  "t": "오음 고법 · 마미 · 달마",
+  "h": "a036cb20"
+ },
+ "thtg.nhan-de-bat-dau-thu-am": {
+  "t": "눌러서 녹음 시작 · 브라우저가 물어보면 마이크 사용을 허용해 주세요",
+  "h": "74465b56"
+ },
+ "thtg.phan-tich-thanh-tuong-hoc": {
+  "t": "성상학 분석",
+  "h": "2c14b754"
+ },
+ "thtg.phan-tich-thanh-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">성상 분석하기 →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> 냥)</span> 필요</small>",
+  "h": "04250412"
+ },
+ "thtg.thanh-tuong": {
+  "t": "성상",
+  "h": "d47f6d49"
+ },
+ "thtg.thanh-tuong-tu-vi-minh-bao": {
+  "t": "성상 — 명보 자미두수",
+  "h": "edcb4bcf"
+ },
+ "thtg.thanh-tuong-xem-tuong-giong-noi": {
+  "t": "<b>성상</b><span>오음 고법으로 목소리의 상을 봐요 — <span data-tvp-price=\"thanh-tuong\">…</span> 냥</span>",
+  "h": "247ec01f"
+ },
+ "thtg.thu-am-lai": {
+  "t": "다시 녹음",
+  "h": "e7849d1e"
+ },
+ "thtp.12-chi-so-am-hoc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>12개<br>음향 지표</span>",
+  "h": "cf4e2866"
+ },
+ "thtp.2-xem-ket-qua-do": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">측정 결과 보기</span>",
+  "h": "93f0142c"
+ },
+ "thtp.4-bai-do-giong-chuyen-sau": {
+  "t": "<span class=\"hp-ic\" data-icon=\"mic\"></span><span>4개 과제로<br>목소리 심층 측정</span>",
+  "h": "f5f91cc8"
+ },
+ "thtp.bai-1-4-10-giay": {
+  "t": "<span class=\"task-num\" id=\"taskNum\">과제 1/4</span> <span class=\"task-time\" id=\"taskTime\">10초</span>",
+  "h": "72a8ecea"
+ },
+ "thtp.bai-tiep-theo": {
+  "t": "다음 과제 →",
+  "h": "aad8808b"
+ },
+ "thtp.bat-dau-bai-do": {
+  "t": "측정 시작",
+  "h": "76374e88"
+ },
+ "thtp.bat-dau-thu-am": {
+  "t": "녹음 시작",
+  "h": "61e33202"
+ },
+ "thtp.bon-bai-do-giong-noi-chuyen": {
+  "t": "4개 과제로 목소리를 깊이 측정 — 『마의신상』, 『신상전편』, 『수경집』에 따라 오음을 분석하는 시스템.",
+  "h": "1eef1ee9"
+ },
+ "thtp.buoc-1-thong-tin-co-ban": {
+  "t": "1단계 · 기본 정보",
+  "h": "9c5356b8"
+ },
+ "thtp.buoc-2-bon-bai-do-giong": {
+  "t": "2단계 · 목소리 4개 과제",
+  "h": "5b99459f"
+ },
+ "thtp.buoc-3-ket-qua-do": {
+  "t": "3단계 · 측정 결과",
+  "h": "3541b2e4"
+ },
+ "thtp.chua-muon-ghi-am-ban-co": {
+  "t": "<b>아직 녹음하고 싶지 않으신가요?</b><span>먼저 샘플을 보며 어떤 느낌인지 체험해 볼 수 있어요.</span>",
+  "h": "468bb930"
+ },
+ "thtp.da-ghi-xong": {
+  "t": "✓ 녹음을 마쳤어요.",
+  "h": "53247aed"
+ },
+ "thtp.doc-binh-thuong-ro-rang-khong": {
+  "t": "평소처럼 또렷하게, 서두르지 말고 읽어 주세요.",
+  "h": "2998c866"
+ },
+ "thtp.doc-doan-van": {
+  "t": "문장 읽기",
+  "h": "1d0b2c72"
+ },
+ "thtp.ghi-am-du-4-bai-do": {
+  "t": "성별과 나이에 맞춰 4개 과제를 모두 녹음해 주세요. 시스템이 심층 분석해 기, 성격, 운명, 그리고 목소리와 기를 기르는 방법까지 풀이해 드려요.",
+  "h": "0e8aaf05"
+ },
+ "thtp.giong-noi-mang-nhieu-thong-tin": {
+  "t": "목소리에는 생각보다 많은 정보가 담겨 있어요 — 4개의 심층 과제에서 얻은 12개 음향 지표가 오음과 기력의 가장 완전한 모습을 그려 줘요. 일반 성상보다 더 깊이 알고 싶은 분께 알맞아요.",
+  "h": "f907ddc6"
+ },
+ "thtp.luan-giai-thanh-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">성상 풀이하기 →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> 냥)</span> 필요</small>",
+  "h": "39fe65f9"
+ },
+ "thtp.luan-ngu-am-va-khi-luc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>오음과 기력<br>풀이</span>",
+  "h": "c9962dad"
+ },
+ "thtp.moi-luot-luong": {
+  "t": "1회 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> 냥)</span>",
+  "h": "a06b62cc"
+ },
+ "thtp.ngu-am": {
+  "t": "오음: —",
+  "h": "6ab7c5b6"
+ },
+ "thtp.ngu-am-co-phap-ma-y": {
+  "t": "오음 고법 · 마의신상 · 신상전편 · 수경집",
+  "h": "a2f34068"
+ },
+ "thtp.ngu-am-tuong-phap-la-mot": {
+  "t": "오음 상법은 목소리로 운명을 풀이하는 관상학의 한 갈래로, 소리를 궁·상·각·치·우로 나누어 오행에 대응시켜요. 이 방법은 『마의신상』 같은 상학 고서에 기록되어 있어요.",
+  "h": "8f425df6"
+ },
+ "thtp.phan-tich-thanh-tuong-chuyen-sau": {
+  "t": "성상 심층 분석",
+  "h": "1e2230b3"
+ },
+ "thtp.thanh-tuong-pro": {
+  "t": "성상 Pro",
+  "h": "b2e5a151"
+ },
+ "thtp.thanh-tuong-pro-4-bai-do": {
+  "t": "<b>성상 Pro</b><span>4개 과제로 목소리 심층 측정 — <span data-tvp-price=\"thanh-tuong-pro\">…</span> 냥</span>",
+  "h": "a4477440"
+ },
+ "thtp.thanh-tuong-pro-tu-vi-minh": {
+  "t": "성상 Pro — 명보 자미두수",
+  "h": "b4ae7c2a"
+ },
+ "thtp.thu-lai": {
+  "t": "다시 녹음",
+  "h": "0e099100"
+ },
+ "thtp.tuoi": {
+  "t": "나이",
+  "h": "3a6fc33f"
+ },
+ "thtp.vi-du-32": {
+  "t": "예: 32",
+  "h": "dc9bd965"
+ },
+ "thtp.xem-ban-mau": {
+  "t": "샘플 보기 →",
+  "h": "ba3671b1"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "잠금 해제 중…",
