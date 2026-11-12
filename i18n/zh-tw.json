@@ -619,6 +619,78 @@
   "t": "依名稱、工具搜尋…",
   "h": "86f221f0"
  },
+ "battrach2.4-huong-dai-cat": {
+  "t": "4個<br>大吉方位",
+  "h": "0b0b6a6a"
+ },
+ "battrach2.4-huong-dai-hung": {
+  "t": "4個<br>大凶方位",
+  "h": "45c6e01a"
+ },
+ "battrach2.bang-8-huong-chi-tiet": {
+  "t": "<span class=\"res-block-title\">八方位詳細表</span>",
+  "h": "0ef24790"
+ },
+ "battrach2.bat-trach-la-mot-truong-phai": {
+  "t": "八宅是傳統風水的一個流派，將住宅依八卦分為八個方位，再與屋主的命卦對照，判斷方位與位置的吉凶。<i>八宅明鏡</i>是將此法系統化的古籍之一。",
+  "h": "daa2d3d2"
+ },
+ "battrach2.goi-y-dung": {
+  "t": "建議用途",
+  "h": "1e297636"
+ },
+ "battrach2.hoi-thay-huong-hop-cach-hoa": {
+  "t": "✦ 請問老師合適方位與化解之道",
+  "h": "d656b02e"
+ },
+ "battrach2.huong": {
+  "t": "方位",
+  "h": "05c861c1"
+ },
+ "battrach2.huong-bat-trach": {
+  "t": "八宅方位",
+  "h": "a9176f82"
+ },
+ "battrach2.huong-bat-trach-cung-menh-8": {
+  "t": "<b>八宅方位</b><span>命宮與八個吉凶方位</span>",
+  "h": "7f6f63a9"
+ },
+ "battrach2.huong-bat-trach-tu-vi-minh": {
+  "t": "八宅方位——明寶紫微斗數",
+  "h": "1dd7c74f"
+ },
+ "battrach2.menh-quai-cung-menh": {
+  "t": "命卦、<br>命宮",
+  "h": "a7cd9aa8"
+ },
+ "battrach2.mua-nha-thue-van-phong-roi": {
+  "t": "買了房、租了辦公室才發現大門朝向與命卦不合，已經來不及。輸入出生年與性別，付訂金前就能知道該選哪個方位。",
+  "h": "22a1a2e8"
+ },
+ "battrach2.nam-sinh-gioi-tinh": {
+  "t": "出生年與性別",
+  "h": "2fe866aa"
+ },
+ "battrach2.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "輸入出生年與性別。系統依出生年準確推算命卦，並回傳命卦、宮位與八個吉凶方位的詳細表。",
+  "h": "5374993f"
+ },
+ "battrach2.ten-huong": {
+  "t": "方位名稱",
+  "h": "a2de1255"
+ },
+ "battrach2.tra-4-huong-dai-cat-va": {
+  "t": "依八宅命宮查詢4個大吉方位與4個大凶方位——適合您的房屋、大門、廚房、床位朝向。更深入的解讀可請教老師。",
+  "h": "4bcadf9b"
+ },
+ "battrach2.tra-huong-bat-trach": {
+  "t": "查詢八宅方位 →",
+  "h": "e3808961"
+ },
+ "battrach2.y-nghia": {
+  "t": "意義",
+  "h": "b1973c6d"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">輸入資料</span>",
   "h": "487c9507"
@@ -794,6 +866,170 @@
  "boibai.xao-bai-rut": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"spade\"></span><b id=\"drawBtnLabel\">洗牌並抽牌</b></span>",
   "h": "e53dcebd"
+ },
+ "buto.11h-13h-ngo": {
+  "t": "11–13 時（午）",
+  "h": "6a3975fa"
+ },
+ "buto.13h-15h-mui": {
+  "t": "13–15 時（未）",
+  "h": "b5abb37a"
+ },
+ "buto.15h-17h-than": {
+  "t": "15–17 時（申）",
+  "h": "d3239832"
+ },
+ "buto.17h-19h-dau": {
+  "t": "17–19 時（酉）",
+  "h": "892ef5c0"
+ },
+ "buto.19h-21h-tuat": {
+  "t": "19–21 時（戌）",
+  "h": "bfb8a38f"
+ },
+ "buto.1h-3h-suu": {
+  "t": "1–3 時（丑）",
+  "h": "43af3d63"
+ },
+ "buto.2-xem-truoc-6-truc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">六軸預覽</span>",
+  "h": "752b4fb3"
+ },
+ "buto.21h-23h-hoi": {
+  "t": "21–23 時（亥）",
+  "h": "6d57bf9d"
+ },
+ "buto.23h-1h-ty": {
+  "t": "23–1 時（子）",
+  "h": "3b1ae1a9"
+ },
+ "buto.3h-5h-dan": {
+  "t": "3–5 時（寅）",
+  "h": "801ae495"
+ },
+ "buto.5h-7h-mao": {
+  "t": "5–7 時（卯）",
+  "h": "a3681f23"
+ },
+ "buto.7h-9h-thin": {
+  "t": "7–9 時（辰）",
+  "h": "dd0d719c"
+ },
+ "buto.9h-11h-ty": {
+  "t": "9–11 時（巳）",
+  "h": "396e5fe1"
+ },
+ "buto.anh-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> 簽名圖片",
+  "h": "d254fb71"
+ },
+ "buto.anh-chu-ky-xqwx": {
+  "t": "簽名圖片",
+  "h": "41b431b6"
+ },
+ "buto.ban-ky-dua-theo-chu-nao": {
+  "t": "您的簽名是依名字中的哪個字？（選填）",
+  "h": "e757bef0"
+ },
+ "buto.but-tuong": {
+  "t": "筆相",
+  "h": "6eab7d7c"
+ },
+ "buto.but-tuong-hoc-phuong-dong-cho": {
+  "t": "東方筆相學認為，字跡、尤其是簽名，反映書寫者的神采與性格，依據書法的六項古典標準：神、氣、骨、肉、血、勢。這是將相學應用於手寫字跡的一個分支。",
+  "h": "16117b43"
+ },
+ "buto.but-tuong-tu-vi-minh-bao": {
+  "t": "筆相——明寶紫微斗數",
+  "h": "01e38f8b"
+ },
+ "buto.but-tuong-xem-chu-ky-theo": {
+  "t": "<b>筆相</b><span>依古法看簽名 — <span data-tvp-price=\"but-tuong\">…</span> 兩</span>",
+  "h": "68cc134b"
+ },
+ "buto.chu-ky-khong-duoc-luu-chi": {
+  "t": "簽名不會被儲存——只有測得的指標會送出解讀。",
+  "h": "e651b4d2"
+ },
+ "buto.co-phap-thu-phap-trung-hoa": {
+  "t": "中國書法古法",
+  "h": "ce0e060e"
+ },
+ "buto.do-6-truc-co-phap-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依書法古法<br>測量六軸</span>",
+  "h": "a97de25d"
+ },
+ "buto.do-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> 測量簽名 →",
+  "h": "afdd3301"
+ },
+ "buto.do-chu-ky-khac": {
+  "t": "測量另一個簽名",
+  "h": "d0b9860f"
+ },
+ "buto.doi-chieu-voi-dung-than-bat": {
+  "t": "+ 對照八字用神（選填）",
+  "h": "027429c6"
+ },
+ "buto.gio-sinh-bo-trong-neu-khong": {
+  "t": "出生時辰（不清楚可留空）",
+  "h": "72d40487"
+ },
+ "buto.keo-tha-anh-chu-ky-hoac": {
+  "t": "將簽名圖片拖放到這裡，或點擊選擇",
+  "h": "c5c50566"
+ },
+ "buto.khong-luu-chu-ky": {
+  "t": "<span class=\"hp-ic\" data-icon=\"shield-check\"></span><span>不儲存<br>簽名</span>",
+  "h": "99c2aaad"
+ },
+ "buto.ky-chu-ky": {
+  "t": "簽名",
+  "h": "6043c0d7"
+ },
+ "buto.ky-lai-lan-nua": {
+  "t": "+ 再簽一次",
+  "h": "a28512df"
+ },
+ "buto.ky-truc-tiep": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> 直接簽名",
+  "h": "604362e3"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"pen-line\"></span><span>直接在<br>螢幕上簽名</span>",
+  "h": "2e08b69a"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-d4z1": {
+  "t": "直接在螢幕上簽名，或上傳現有的簽名圖片。系統會測量筆跡的六個軸，依書法古法解讀。",
+  "h": "74ad947e"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-j0mj": {
+  "t": "直接在螢幕上簽名——系統依書法古法測量神、氣、骨、肉、血、勢六軸，解讀您的簽名。",
+  "h": "d92707db"
+ },
+ "buto.ky-voi-toc-do-that-dung": {
+  "t": "請以平常的速度簽名——不要刻意放慢。",
+  "h": "8ac53b46"
+ },
+ "buto.luan-giai-but-tuong": {
+  "t": "筆相解讀",
+  "h": "0760be41"
+ },
+ "buto.moi-ngay-ky-hang-chuc-chu": {
+  "t": "每天在合約、文件上簽下幾十次名，卻從沒想過這個簽名正在訴說您的運勢。直接在螢幕上簽名，即可獲得涵蓋神、氣、骨、肉、血、勢六軸的完整解讀。",
+  "h": "150efb97"
+ },
+ "buto.muc-sam-tren-nen-sang-toi": {
+  "t": "淺色底、深色墨跡 · 最大 5MB——僅能測得骨／肉／勢",
+  "h": "ddf489f7"
+ },
+ "buto.vd-khoa-dang-khoa": {
+  "t": "例：王、小明…",
+  "h": "bbb7526d"
+ },
+ "buto.xoa": {
+  "t": "清除",
+  "h": "82339c0a"
  },
  "cdvc.2-xem-truoc-cung-phu-the": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽夫妻宮</span>",
@@ -1619,6 +1855,226 @@
   "t": "公司辦公室",
   "h": "d678c2d6"
  },
+ "datten.12-goi-y-ten-chia": {
+  "t": "12個取名建議<br>分3組",
+  "h": "41bbf053"
+ },
+ "datten.2-xem-truoc-nen-menh": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽命理基礎</span>",
+  "h": "6db12426"
+ },
+ "datten.be-gai": {
+  "t": "女孩",
+  "h": "af93dba0"
+ },
+ "datten.be-trai": {
+  "t": "男孩",
+  "h": "274225bc"
+ },
+ "datten.dat-ten-cho-con-la-quyet": {
+  "t": "為孩子取名是一生只做一次、人人都想拿捏穩妥的決定。輸入全家人的生日，即可取得12個合五行的名字建議，並附漢越語詞義，讓您安心挑選。",
+  "h": "82b4de3d"
+ },
+ "datten.dat-ten-con-chon-ten-hop": {
+  "t": "<b>為孩子取名</b><span>依古法五行，挑選合孩子本命的名字</span>",
+  "h": "3d53836c"
+ },
+ "datten.dat-ten-con-hop-menh": {
+  "t": "依本命為孩子取名",
+  "h": "11462335"
+ },
+ "datten.dat-ten-con-tu-vi-minh": {
+  "t": "為孩子取名——明寶紫微斗數",
+  "h": "9805fdc3"
+ },
+ "datten.gioi-tinh-con": {
+  "t": "孩子性別",
+  "h": "39dacada"
+ },
+ "datten.goi-y-12-ten-hop": {
+  "t": "取得12個合命名字建議 →",
+  "h": "46b3b1ed"
+ },
+ "datten.goi-y-dat-ten-con-hop": {
+  "t": "依孩子與父母的干支、納音五行，建議合孩子本命的名字。名字建議與詞義解讀可請教老師。",
+  "h": "295edb5c"
+ },
+ "datten.he-thong-doc-ngu-hanh-nap": {
+  "t": "系統解讀孩子與父母的納音五行，並建議分為3組、附漢越語詞義的12個名字。",
+  "h": "ea884a81"
+ },
+ "datten.ho-cua-con": {
+  "t": "姓氏（孩子的）",
+  "h": "f4e1a613"
+ },
+ "datten.hoi-thay-goi-y-ten-hop": {
+  "t": "✦ 請老師建議合命的名字",
+  "h": "166f1459"
+ },
+ "datten.hop-ngu-hanh-con-bo": {
+  "t": "合孩子與父母<br>的五行",
+  "h": "622dcbc0"
+ },
+ "datten.kem-nghia-han-viet": {
+  "t": "附漢越語<br>詞義",
+  "h": "6cd753b8"
+ },
+ "datten.nam-sinh-bo": {
+  "t": "爸爸的出生年",
+  "h": "a1009c64"
+ },
+ "datten.nam-sinh-con": {
+  "t": "孩子的出生年",
+  "h": "724a46be"
+ },
+ "datten.nam-sinh-me": {
+  "t": "媽媽的出生年",
+  "h": "bef8fb8f"
+ },
+ "datten.nguyen": {
+  "t": "Nguyễn",
+  "h": "e79eb3d7"
+ },
+ "datten.nhap-ho-gioi-tinh-va-nam": {
+  "t": "輸入孩子的姓氏、性別，以及孩子、爸爸、媽媽的出生年，以推算納音五行並建立取名基礎。",
+  "h": "7a82f7d7"
+ },
+ "datten.thong-tin-de-dat-ten": {
+  "t": "取名所需資料",
+  "h": "a6b214ba"
+ },
+ "dattendn.2-xem-truoc-nen-menh-chu": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽負責人命理基礎</span>",
+  "h": "a96b5042"
+ },
+ "dattendn.an-uong-f-b-nha-hang": {
+  "t": "餐飲／F&amp;B／餐廳",
+  "h": "4c6e0036"
+ },
+ "dattendn.bat-dong-san-xay-dung": {
+  "t": "不動產／營建",
+  "h": "6b5154b8"
+ },
+ "dattendn.cong-nghe-phan-mem": {
+  "t": "科技／軟體",
+  "h": "2665d28f"
+ },
+ "dattendn.cong-ty": {
+  "t": "公司",
+  "h": "65bf381e"
+ },
+ "dattendn.cua-hang": {
+  "t": "商店",
+  "h": "050a31c8"
+ },
+ "dattendn.dat-ten-cong-ty-thuong-hieu": {
+  "t": "依納音五行，為合負責人本命與行業的公司、品牌、商店取名。名字建議與詞義、名字風水解讀可請教老師。",
+  "h": "5b43e7d9"
+ },
+ "dattendn.dat-ten-doanh-nghiep": {
+  "t": "為事業取名",
+  "h": "86ab8b27"
+ },
+ "dattendn.dat-ten-doanh-nghiep-ten-cong": {
+  "t": "<b>為事業取名</b><span>合負責人本命的公司・品牌・商店名稱</span>",
+  "h": "bed333e2"
+ },
+ "dattendn.dat-ten-doanh-nghiep-tu-vi": {
+  "t": "為事業取名——明寶紫微斗數",
+  "h": "81d7fe18"
+ },
+ "dattendn.de-trong-neu-muon-duoc-goi": {
+  "t": "若想取得全新建議請留空",
+  "h": "8130c366"
+ },
+ "dattendn.du-lich-khach-san": {
+  "t": "旅遊／飯店",
+  "h": "5369cdde"
+ },
+ "dattendn.giao-duc-dao-tao": {
+  "t": "教育／培訓",
+  "h": "f1adba55"
+ },
+ "dattendn.goi-y-ten-doanh-nghiep": {
+  "t": "取得事業名稱建議 →",
+  "h": "6008d180"
+ },
+ "dattendn.he-thong-doc-ngu-hanh-nap": {
+  "t": "系統解讀負責人的納音五行與行業，並建議分為「純越南語／漢越語／混合」3組的12個名稱。",
+  "h": "7d99610f"
+ },
+ "dattendn.ho-kinh-doanh": {
+  "t": "個體戶",
+  "h": "f886c8d3"
+ },
+ "dattendn.hop-menh-chu-nganh-nghe": {
+  "t": "合負責人<br>與行業",
+  "h": "cf10d77f"
+ },
+ "dattendn.khac": {
+  "t": "其他",
+  "h": "5b8a28ab"
+ },
+ "dattendn.loai-hinh-tuy-chon": {
+  "t": "型態（選填）",
+  "h": "1f3a6e19"
+ },
+ "dattendn.mot-cai-ten-hop-menh-co": {
+  "t": "合本命的名字能陪公司走完整段創業旅程——先隨便取、之後再改，永遠比一開始就選對更難。輸入負責人的出生年，登記營業前即可取得12個名稱建議。",
+  "h": "9184666b"
+ },
+ "dattendn.nam-sinh-chu": {
+  "t": "負責人的出生年",
+  "h": "124634b4"
+ },
+ "dattendn.nganh-nghe": {
+  "t": "行業別",
+  "h": "63d9f4dd"
+ },
+ "dattendn.nhap-nam-sinh-nguoi-chu-nganh": {
+  "t": "輸入負責人的出生年、行業別與經營型態，以推算納音五行並建立取名基礎。",
+  "h": "203d0ee8"
+ },
+ "dattendn.san-xuat-cong-nghiep": {
+  "t": "製造／工業",
+  "h": "f4a5458e"
+ },
+ "dattendn.tai-chinh-dich-vu": {
+  "t": "金融／服務",
+  "h": "67bbe42d"
+ },
+ "dattendn.ten-dang-can-nhac-tuy-chon": {
+  "t": "考慮中的名稱（選填）",
+  "h": "1ccc6b3d"
+ },
+ "dattendn.ten-nguoi-chu-tuy-chon": {
+  "t": "負責人姓名（選填）",
+  "h": "d5b78ffe"
+ },
+ "dattendn.thoi-trang-lam-dep": {
+  "t": "時尚／美妝",
+  "h": "72a2b0cf"
+ },
+ "dattendn.thong-tin-dat-ten-doanh-nghiep": {
+  "t": "為事業取名所需資料",
+  "h": "8d822dd3"
+ },
+ "dattendn.thuong-hieu-shop": {
+  "t": "品牌／店鋪",
+  "h": "aa184029"
+ },
+ "dattendn.thuong-mai-ban-le": {
+  "t": "貿易／零售",
+  "h": "991ccb29"
+ },
+ "dattendn.truoc-khi-thanh-lap": {
+  "t": "創立<br>之前",
+  "h": "0f9e340e"
+ },
+ "dattendn.y-te-suc-khoe": {
+  "t": "醫療／健康",
+  "h": "13ca73cd"
+ },
  "daycon.2-xem-truoc-chan-dung-con": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽孩子的肖像</span>",
   "h": "d8f50448"
@@ -1822,6 +2278,66 @@
  "daycon.xem-cach-day-con-ton-luong": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"baby\"></span><b>查看教養方式 →</b></span> <small>費用 <span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 兩)</span></small>",
   "h": "ccbaaea3"
+ },
+ "dient.anh-chi-gui-toi-may-chu": {
+  "t": "圖片僅傳送至伺服器進行分析，不會儲存在伺服器上。請正面拍攝、光線充足、不要遮住臉，結果最準確。",
+  "h": "b68f127c"
+ },
+ "dient.dien-tuong": {
+  "t": "面相",
+  "h": "1e5e41e3"
+ },
+ "dient.dien-tuong-tu-vi-minh-bao": {
+  "t": "面相——明寶紫微斗數",
+  "h": "1279c8b1"
+ },
+ "dient.dien-tuong-xem-tuong-khuon-mat": {
+  "t": "<b>面相</b><span>依古法看臉部之相 — <span data-tvp-price=\"dien-tuong\">…</span> 兩</span>",
+  "h": "4af70f75"
+ },
+ "dient.do-tam-dinh-ngu-quan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>測量三停、<br>五官</span>",
+  "h": "fb2a8a23"
+ },
+ "dient.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG、PNG、WebP——最大 5MB",
+  "h": "e7e468cd"
+ },
+ "dient.luan-theo-ma-y-than-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依《麻衣神相》<br>解讀</span>",
+  "h": "eecee1d3"
+ },
+ "dient.ma-y-than-tuong-co-phap": {
+  "t": "《麻衣神相》古法",
+  "h": "c9dac5c1"
+ },
+ "dient.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"dien-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"dien-tuong\">…</span> 兩)</span>",
+  "h": "2e7a2c43"
+ },
+ "dient.phan-tich-nhan-tuong-hoc": {
+  "t": "相學分析",
+  "h": "9b4da9c2"
+ },
+ "dient.phan-tich-tuong-mat-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"analyzeBtnLabel\">分析面相 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"dien-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"dien-tuong\">…</span> 兩)</span></small>",
+  "h": "3a64a361"
+ },
+ "dient.tai-hoac-chup-anh-khuon-mat": {
+  "t": "上傳或拍攝臉部照片——系統依古法相學《麻衣神相》分析三停、五官等重要部位。",
+  "h": "f24ad8af"
+ },
+ "dient.tai-mot-tam-anh-chan-dung": {
+  "t": "請上傳一張正面、光線充足、臉部清晰的人像照片。系統會分析三停、五官與各部位，解讀性格與運勢。",
+  "h": "453bd1c6"
+ },
+ "dient.tam-dinh-da-xac-dinh": {
+  "t": "✦ 已辨識三停",
+  "h": "ab4a740f"
+ },
+ "dient.tam-dinh-ngu-quan-tren-guong": {
+  "t": "臉上的三停、五官並非玄虛之談——古人已將它們系統化，成為解讀性格與運勢的具體方法。上傳一張人像照片，即可獲得依《麻衣神相》的解讀。",
+  "h": "3c70322e"
  },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 僅供參考",
@@ -3591,6 +4107,346 @@
   "t": "請填寫電子郵件與密碼。",
   "h": "d84b9abd"
  },
+ "js.bandosao.ban-do-sao": {
+  "t": "星盤 — ",
+  "h": "aaf64809"
+ },
+ "js.bandosao.ban-do-sao-gm5h": {
+  "t": "星盤",
+  "h": "0b3459d8"
+ },
+ "js.bandosao.ban-do-sao-luc-sinh": {
+  "t": "出生星盤 — ",
+  "h": "3f6bcfea"
+ },
+ "js.bandosao.ban-do-sao-tqhx": {
+  "t": "星盤 · ",
+  "h": "86318dde"
+ },
+ "js.bandosao.ban-muon-toi-doc-phan-nao": {
+  "t": "**。想先從哪一部分談起？",
+  "h": "e9d17729"
+ },
+ "js.bandosao.buon-ma-thuot": {
+  "t": "邦美蜀",
+  "h": "8bf97db6"
+ },
+ "js.bandosao.can-tho": {
+  "t": "芹苴",
+  "h": "462902c5"
+ },
+ "js.bandosao.chua-dung-duoc-anh-thu-lai": {
+  "t": "尚未能產生圖片，請稍後再試。",
+  "h": "f8055429"
+ },
+ "js.bandosao.chua-lap-duoc-ban-do-luc": {
+  "t": "目前無法排出星盤——請再試一次。",
+  "h": "a5e46558"
+ },
+ "js.bandosao.chuyen-tinh-cam-nhin-tu-ban": {
+  "t": "從這張星盤看感情如何？",
+  "h": "9a016ff9"
+ },
+ "js.bandosao.cung-moc": {
+  "t": "**，上升星座 **",
+  "h": "340f627c"
+ },
+ "js.bandosao.cung-moc-1y0y": {
+  "t": "上升點：",
+  "h": "230ed8b5"
+ },
+ "js.bandosao.cung-moc-bgoi": {
+  "t": " · 上升 ",
+  "h": "cad089c9"
+ },
+ "js.bandosao.da-lap-ban-do-sao": {
+  "t": "已排出星盤：**",
+  "h": "c16ca110"
+ },
+ "js.bandosao.da-nang": {
+  "t": "峴港",
+  "h": "fff4a50e"
+ },
+ "js.bandosao.dang-dung-anh": {
+  "t": "圖片產生中…",
+  "h": "7bce9760"
+ },
+ "js.bandosao.dang-lap": {
+  "t": "排盤中…",
+  "h": "b47d9598"
+ },
+ "js.bandosao.goc-chieu-nao-gay-kho-nhat": {
+  "t": "哪個相位對我最困難？",
+  "h": "8439668d"
+ },
+ "js.bandosao.ha-noi": {
+  "t": "河內",
+  "h": "89974fad"
+ },
+ "js.bandosao.hai-phong": {
+  "t": "海防",
+  "h": "18cf9167"
+ },
+ "js.bandosao.he-nha": {
+  "t": "（宮位制 ",
+  "h": "cb040ba9"
+ },
+ "js.bandosao.hue": {
+  "t": "順化",
+  "h": "23ed9a98"
+ },
+ "js.bandosao.mat-trang": {
+  "t": "**，月亮 **",
+  "h": "bfc8f041"
+ },
+ "js.bandosao.mat-troi": {
+  "t": "**。太陽 **",
+  "h": "b483737c"
+ },
+ "js.bandosao.mat-troi-8vvi": {
+  "t": "太陽 ",
+  "h": "40bd8b96"
+ },
+ "js.bandosao.nguyen-to": {
+  "t": "元素：",
+  "h": "503b548c"
+ },
+ "js.bandosao.nha": {
+  "t": " (宮位 ",
+  "h": "953fb7b3"
+ },
+ "js.bandosao.noi-khac-tu-nhap": {
+  "t": "— 其他（自行輸入）—",
+  "h": "5bda72d4"
+ },
+ "js.bandosao.quet-ma-lap-ban-do-sao": {
+  "t": "掃描 QR — 排出您的星盤",
+  "h": "2abde300"
+ },
+ "js.bandosao.quy-nhon": {
+  "t": "歸仁",
+  "h": "2b52fd6e"
+ },
+ "js.bandosao.su-nghiep-hop-huong-nao": {
+  "t": "適合哪個職涯方向？",
+  "h": "8d8b01c6"
+ },
+ "js.bandosao.tinh-cach-cot-loi-cua-toi": {
+  "t": "我的核心性格是什麼？",
+  "h": "485d721a"
+ },
+ "js.bandosao.tp-ho-chi-minh": {
+  "t": "胡志明市",
+  "h": "4fc20e5f"
+ },
+ "js.bandosao.vui-long-chon-noi-sinh-hoac": {
+  "t": "請選擇出生地，或輸入緯度／經度。",
+  "h": "1e78fa74"
+ },
+ "js.bandosao.vui-long-nhap-du-ngay-thang": {
+  "t": "請輸入完整的出生日、月、年。",
+  "h": "771ff27f"
+ },
+ "js.banlamviec.100-sau-dieu-chinh-co-the": {
+  "t": "/100**，調整後可提升至 **",
+  "h": "a4c14f33"
+ },
+ "js.banlamviec.bac": {
+  "t": "北",
+  "h": "130d45d1"
+ },
+ "js.banlamviec.ban-lam-viec-cua-toi-sau": {
+  "t": "風水調整後的我的書桌",
+  "h": "b345368e"
+ },
+ "js.banlamviec.ban-lam-viec-diem": {
+  "t": "書桌 — 分數 ",
+  "h": "1bfcfce8"
+ },
+ "js.banlamviec.ban-muon-hoi-them-ve-de": {
+  "t": "。您想進一步詢問哪一項建議？",
+  "h": "23ca71bc"
+ },
+ "js.banlamviec.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">目前的佈置大致良好。</p>",
+  "h": "16b60bfc"
+ },
+ "js.banlamviec.chua-xac-dinh": {
+  "t": "尚未確定",
+  "h": "3120f6db"
+ },
+ "js.banlamviec.chuan-bi-prompt-render-theo-ngu": {
+  "t": "依五行準備渲染指令",
+  "h": "17f4d17e"
+ },
+ "js.banlamviec.dang-render-khong-gian-moi": {
+  "t": "渲染新空間中",
+  "h": "814b3683"
+ },
+ "js.banlamviec.diem": {
+  "t": "分",
+  "h": "4a404c32"
+ },
+ "js.banlamviec.diem-phong-thuy-ban-lam-viec": {
+  "t": "目前書桌的風水分數：**",
+  "h": "b68f30c6"
+ },
+ "js.banlamviec.diem-phong-thuy-ban-lam-viec-8sd8": {
+  "t": "我的書桌風水分數",
+  "h": "21a93499"
+ },
+ "js.banlamviec.diem-phong-thuy-hien-tai": {
+  "t": "目前風水分數：",
+  "h": "d4ac7afe"
+ },
+ "js.banlamviec.dieu-chinh": {
+  "t": "調整",
+  "h": "37c5bf6b"
+ },
+ "js.banlamviec.don-bo": {
+  "t": "移除",
+  "h": "0825ec6d"
+ },
+ "js.banlamviec.dong": {
+  "t": "東",
+  "h": "6bd70b62"
+ },
+ "js.banlamviec.dong-bac": {
+  "t": "東北",
+  "h": "9690921a"
+ },
+ "js.banlamviec.dong-nam": {
+  "t": "東南",
+  "h": "dd71e07a"
+ },
+ "js.banlamviec.giu-nguyen-tpl": {
+  "t": "<span class=\"pos-keep\">✓ 維持原樣</span>",
+  "h": "aa00d929"
+ },
+ "js.banlamviec.hien-tai": {
+  "t": "目前：",
+  "h": "b17d885a"
+ },
+ "js.banlamviec.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">沒有額外的物品建議。</p>",
+  "h": "3a6c6f34"
+ },
+ "js.banlamviec.khong-nhan-duoc-anh": {
+  "t": "未收到圖片。",
+  "h": "62488d2f"
+ },
+ "js.banlamviec.loi": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.banlamviec.loi-doc-file": {
+  "t": "讀取檔案時發生錯誤",
+  "h": "3c56711b"
+ },
+ "js.banlamviec.loi-ppkl": {
+  "t": "⚠ 錯誤：",
+  "h": "a4f4adbc"
+ },
+ "js.banlamviec.loi-tai-anh": {
+  "t": "載入圖片時發生錯誤",
+  "h": "13fb84a7"
+ },
+ "js.banlamviec.menh-quai-cua-ban-la": {
+  "t": "，您的命卦為 **",
+  "h": "18a75d53"
+ },
+ "js.banlamviec.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.banlamviec.nen-co": {
+  "t": "建議必備",
+  "h": "3f6537af"
+ },
+ "js.banlamviec.nen-doi-sang": {
+  "t": "建議改為：",
+  "h": "32c9bd3d"
+ },
+ "js.banlamviec.nen-lam": {
+  "t": "→ 建議執行",
+  "h": "85492f9d"
+ },
+ "js.banlamviec.nhan-dien-do-vat-trong-anh": {
+  "t": "辨識照片中的物品",
+  "h": "5ecd0446"
+ },
+ "js.banlamviec.phan-tich-bat-trach-dua-de": {
+  "t": "分析八宅並提出建議",
+  "h": "dd12d6d9"
+ },
+ "js.banlamviec.phan-tich-that-bai": {
+  "t": "分析失敗",
+  "h": "44b68aa6"
+ },
+ "js.banlamviec.quai-n": {
+  "t": "卦 {n}",
+  "h": "1b238b88"
+ },
+ "js.banlamviec.quan-trong": {
+  "t": "⚠ 重要",
+  "h": "ebd388e2"
+ },
+ "js.banlamviec.sau-dieu-chinh-co-the-len": {
+  "t": " — 調整後可提升至 ",
+  "h": "9e6292bc"
+ },
+ "js.banlamviec.tay": {
+  "t": "西",
+  "h": "74b26936"
+ },
+ "js.banlamviec.tay-bac": {
+  "t": "西北",
+  "h": "0b1f47fd"
+ },
+ "js.banlamviec.tay-nam": {
+  "t": "西南",
+  "h": "c0484c26"
+ },
+ "js.banlamviec.tot-neu-co": {
+  "t": "有更好",
+  "h": "e48b654c"
+ },
+ "js.banlamviec.trung-tam": {
+  "t": "中央",
+  "h": "26bda5d2"
+ },
+ "js.banlamviec.tuy-y": {
+  "t": "◎ 隨意",
+  "h": "430debc7"
+ },
+ "js.banlamviec.tuy-y-4s40": {
+  "t": "隨意",
+  "h": "87b1fcd0"
+ },
+ "js.banlamviec.uu-tien-lam-gi-truoc": {
+  "t": "應該優先做什麼？",
+  "h": "f3cab683"
+ },
+ "js.banlamviec.vat-pham-nao-nen-mua-truoc": {
+  "t": "哪些物品應該先買？",
+  "h": "85fe11d3"
+ },
+ "js.banlamviec.vi-sao-diem-hien-tai-thap": {
+  "t": "為什麼目前分數偏低？",
+  "h": "6c51a2da"
+ },
+ "js.banlamviec.vui-long-chon-anh": {
+  "t": "請選擇照片",
+  "h": "dc2490ac"
+ },
+ "js.banlamviec.vui-long-nhap-nam-sinh-hop": {
+  "t": "請輸入有效的出生年",
+  "h": "16abd384"
+ },
+ "js.banlamviec.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
+ },
  "js.baocao.bao-cao": {
   "t": "報告",
   "h": "7013ca8b"
@@ -3666,6 +4522,38 @@
  "js.baocao.thu-lai-sau-it-phut": {
   "t": "。請稍後再試。",
   "h": "0795401e"
+ },
+ "js.battrach.chip1": {
+  "t": "房屋哪個方位最適合我？",
+  "h": "cc262fd1"
+ },
+ "js.battrach.chip2": {
+  "t": "廚房該設在哪個方位？",
+  "h": "3eafdc4a"
+ },
+ "js.battrach.chip3": {
+  "t": "床該朝向哪個方位？",
+  "h": "08ee9028"
+ },
+ "js.battrach.chip4": {
+  "t": "若被迫面對凶方位，該如何化解？",
+  "h": "8900960b"
+ },
+ "js.battrach.dong-tu-menh": {
+  "t": "東四命",
+  "h": "860976af"
+ },
+ "js.battrach.greeting": {
+  "t": "您的命卦是**{q}**（{n}）。想問哪件事的方位？",
+  "h": "9701f4f7"
+ },
+ "js.battrach.label": {
+  "t": "八宅・{q}・{n}",
+  "h": "38326507"
+ },
+ "js.battrach.tay-tu-menh": {
+  "t": "西四命",
+  "h": "e606c821"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10) — 請幫我詳細解讀",
@@ -4251,6 +5139,222 @@
   "t": "即將發生的趨勢",
   "h": "6e5a1980"
  },
+ "js.buto.anh-qua-lon": {
+  "t": "圖片過大。",
+  "h": "cb4417d0"
+ },
+ "js.buto.anh-tinh-chua-do-duoc": {
+  "t": "靜態圖片尚無法測得：{list}——請直接簽名以取得完整六軸。",
+  "h": "e61f9e1c"
+ },
+ "js.buto.but-tuong": {
+  "t": "筆相",
+  "h": "6eab7d7c"
+ },
+ "js.buto.but-tuong-cua-toi": {
+  "t": "我的筆相",
+  "h": "71e77c95"
+ },
+ "js.buto.but-tuong-diem": {
+  "t": "筆相——{n} 分／100",
+  "h": "8b96c2af"
+ },
+ "js.buto.chi-phi-su-dung": {
+  "t": "使用費用",
+  "h": "c2d36be8"
+ },
+ "js.buto.chip-ngu-hanh": {
+  "t": "筆畫的五行與用神有什麼關係？",
+  "h": "a163e0cf"
+ },
+ "js.buto.chip-on-dinh": {
+  "t": "為什麼多簽幾次就能測出穩定度？",
+  "h": "db6978cc"
+ },
+ "js.buto.chip-than": {
+  "t": "「神」這個面向是什麼？",
+  "h": "47cc8c8c"
+ },
+ "js.buto.chuyen-khoan-qr": {
+  "t": "銀行轉帳（掃描 QR 碼）",
+  "h": "d15d92d3"
+ },
+ "js.buto.dang-luan": {
+  "t": "正在解讀筆相…",
+  "h": "c11b136b"
+ },
+ "js.buto.dau-phay": {
+  "t": "，",
+  "h": "d3bc9a37"
+ },
+ "js.buto.diem-tong": {
+  "t": "/ 100 · 總分",
+  "h": "734b18a3"
+ },
+ "js.buto.diem-tong-anh": {
+  "t": "/ 100 · 總分（圖片可測得的 3 軸）",
+  "h": "2eeaa72f"
+ },
+ "js.buto.diem-tong-n": {
+  "t": "總分：{n}/100",
+  "h": "1a30535a"
+ },
+ "js.buto.goi-y": {
+  "t": "建議：",
+  "h": "ca8836e0"
+ },
+ "js.buto.goiy-cot": {
+  "t": "簽名缺少乾脆的收筆點（或相反，細碎的轉角太多）。請加上一筆挺直的線作為主軸，其餘筆畫都倚靠它。",
+  "h": "8398323b"
+ },
+ "js.buto.goiy-huyet": {
+  "t": "速度忽快忽慢，有些地方筆鋒停滯。請以平穩的節奏簽名——把它當成在畫一條曲線，而不是在寫字。",
+  "h": "a216d5ef"
+ },
+ "js.buto.goiy-khi": {
+  "t": "筆畫多次中斷。請盡量減少提筆的次數——一氣呵成的長線，勝過許多零碎的短筆。",
+  "h": "e111c883"
+ },
+ "js.buto.goiy-nhuc": {
+  "t": "筆畫偏細、偏急。請在簽名中段放慢——不必全字加重，只需強調一兩處關鍵即可。",
+  "h": "6df98c3a"
+ },
+ "js.buto.goiy-than": {
+  "t": "放慢一拍，並每天把同一個簽名重複練習 5–10 次——神靠一致性而旺，不是靠簽得快。",
+  "h": "e914cedd"
+ },
+ "js.buto.goiy-the": {
+  "t": "字的基線正在下垂。請試著以輕輕上揚的一筆收尾——這正是古代書法所說的「上勢」。",
+  "h": "e992fa88"
+ },
+ "js.buto.greeting": {
+  "t": "您的簽名總分為 **{n}/100**。想進一步了解解讀的哪個部分？",
+  "h": "6d9edb5f"
+ },
+ "js.buto.greeting-best": {
+  "t": "您的簽名總分為 **{n}/100**，最強的軸是 **{t}**（{s}/100）。想進一步了解解讀的哪個部分？",
+  "h": "b3ab7c3e"
+ },
+ "js.buto.khong-co-ket-qua": {
+  "t": "沒有結果。",
+  "h": "97fa6f91"
+ },
+ "js.buto.khong-do-duoc": {
+  "t": "無法測得",
+  "h": "ba0114d8"
+ },
+ "js.buto.khong-doc-duoc-net-muc-tu": {
+  "t": "無法從這張圖片讀取筆跡。",
+  "h": "7c89a420"
+ },
+ "js.buto.khong-the-ket-noi": {
+  "t": "無法連線。",
+  "h": "3dc4d8cb"
+ },
+ "js.buto.lan-n": {
+  "t": "第 {n} 次 ✓",
+  "h": "8b97f3d0"
+ },
+ "js.buto.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.buto.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.buto.luan-giai-day-du": {
+  "t": "完整解讀 →",
+  "h": "4c2c4d70"
+ },
+ "js.buto.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> 兩)</span>",
+  "h": "72b273e4"
+ },
+ "js.buto.mua-goi": {
+  "t": "購買方案可享更多優惠。<br><a href=\"/topup.html\">立即查看方案 →</a>",
+  "h": "074cd07f"
+ },
+ "js.buto.nghia-cot": {
+  "t": "骨架，筆畫的乾脆程度",
+  "h": "11b35dc9"
+ },
+ "js.buto.nghia-huyet": {
+  "t": "流動的順暢度，速度的均勻度",
+  "h": "bbf8ddc8"
+ },
+ "js.buto.nghia-khi": {
+  "t": "筆勢連貫，少有中斷",
+  "h": "ddda4d5b"
+ },
+ "js.buto.nghia-nhuc": {
+  "t": "飽滿程度，筆力",
+  "h": "fa2ac7b3"
+ },
+ "js.buto.nghia-than": {
+  "t": "生氣，筆畫的一致性",
+  "h": "1e27242e"
+ },
+ "js.buto.nghia-the": {
+  "t": "字的基線走向",
+  "h": "c9a78d22"
+ },
+ "js.buto.ngu-hanh-net": {
+  "t": "筆畫五行",
+  "h": "fed1c22a"
+ },
+ "js.buto.paypal-the": {
+  "t": "PayPal／國際信用卡",
+  "h": "70ff945c"
+ },
+ "js.buto.thuong-mat-10-20-giay": {
+  "t": "通常需要 10–20 秒",
+  "h": "9c118003"
+ },
+ "js.buto.tinh-tu-n-truc": {
+  "t": "依據從靜態圖片直接測得的 {n} 個軸計算。依筆相古法的完整解讀（神／氣／骨／肉／血／勢），收錄於深度分析中。",
+  "h": "dd2d2e04"
+ },
+ "js.buto.ton-luong": {
+  "t": "需 <span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> 兩)</span>",
+  "h": "4051f122"
+ },
+ "js.buto.truc-cot": {
+  "t": "骨力",
+  "h": "e5b9e8aa"
+ },
+ "js.buto.truc-huyet": {
+  "t": "血脈",
+  "h": "b28ba369"
+ },
+ "js.buto.truc-khi": {
+  "t": "氣韻",
+  "h": "8ce20f05"
+ },
+ "js.buto.truc-manh-nhat-body": {
+  "t": "{y}。其餘各軸與具體的改善建議，收錄於深度分析中。",
+  "h": "fcd915ce"
+ },
+ "js.buto.truc-manh-nhat-t": {
+  "t": "最強的軸：{t}（{h}）— {s}/100",
+  "h": "a03ee856"
+ },
+ "js.buto.truc-nhuc": {
+  "t": "肉感",
+  "h": "cb0d2007"
+ },
+ "js.buto.truc-than": {
+  "t": "精神",
+  "h": "b7cbb4d4"
+ },
+ "js.buto.truc-the": {
+  "t": "筆勢",
+  "h": "4b2db277"
+ },
+ "js.buto.vui-long-chon-file-anh": {
+  "t": "請選擇圖片檔。",
+  "h": "71a61127"
+ },
  "js.cdvc.anh-dang-tai-co-the-hoi": {
   "t": "圖片載入中，可能稍慢——請稍候，或",
   "h": "c4e9709b"
@@ -4766,6 +5870,22 @@
  "js.cns.rodden": {
   "t": "羅登評級的出生時間可信度",
   "h": "45221bc0"
+ },
+ "js.cns.tang-t0": {
+  "t": "生日相同",
+  "h": "6b9b0710"
+ },
+ "js.cns.tang-t1": {
+  "t": "相同農曆日",
+  "h": "25904580"
+ },
+ "js.cns.tang-t2": {
+  "t": "同一張命盤",
+  "h": "10a40788"
+ },
+ "js.cns.tang-t2b": {
+  "t": "相同命盤架構",
+  "h": "bd4da5be"
  },
  "js.cns.tim-hieu": {
   "t": "了解更多",
@@ -5647,6 +6767,334 @@
   "t": "請完整輸入出生年月日。",
   "h": "2545b4dd"
  },
+ "js.cuahang.100-sau-dieu-chinh-co-the": {
+  "t": "/100**，調整後可提升至 **",
+  "h": "a4c14f33"
+ },
+ "js.cuahang.bac": {
+  "t": "北",
+  "h": "130d45d1"
+ },
+ "js.cuahang.ban-muon-hoi-them-ve-de": {
+  "t": "。您想進一步詢問哪一項建議？",
+  "h": "23ca71bc"
+ },
+ "js.cuahang.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">目前的佈置大致良好。</p>",
+  "h": "16b60bfc"
+ },
+ "js.cuahang.chuan-bi-prompt-render-theo-ngu": {
+  "t": "依五行準備渲染指令",
+  "h": "17f4d17e"
+ },
+ "js.cuahang.cua-hang-cua-toi-sau-khi": {
+  "t": "風水調整後的我的店面",
+  "h": "110c4b6e"
+ },
+ "js.cuahang.cua-hang-van-phong-diem": {
+  "t": "店面與辦公室 — 分數 ",
+  "h": "70910085"
+ },
+ "js.cuahang.dang-render-khong-gian-moi": {
+  "t": "渲染新空間中",
+  "h": "814b3683"
+ },
+ "js.cuahang.diem": {
+  "t": "分",
+  "h": "4a404c32"
+ },
+ "js.cuahang.diem-phong-thuy-cua-hang-cua": {
+  "t": "我的店面風水分數",
+  "h": "f1a71fd5"
+ },
+ "js.cuahang.diem-phong-thuy-cua-hang-van": {
+  "t": "目前店面／辦公室的風水分數：**",
+  "h": "abf14d8f"
+ },
+ "js.cuahang.diem-phong-thuy-hien-tai": {
+  "t": "目前風水分數：",
+  "h": "d4ac7afe"
+ },
+ "js.cuahang.dieu-chinh": {
+  "t": "調整",
+  "h": "37c5bf6b"
+ },
+ "js.cuahang.don-bo": {
+  "t": "移除",
+  "h": "0825ec6d"
+ },
+ "js.cuahang.dong": {
+  "t": "東",
+  "h": "6bd70b62"
+ },
+ "js.cuahang.dong-bac": {
+  "t": "東北",
+  "h": "9690921a"
+ },
+ "js.cuahang.dong-nam": {
+  "t": "東南",
+  "h": "dd71e07a"
+ },
+ "js.cuahang.giu-nguyen-tpl": {
+  "t": "<span class=\"pos-keep\">✓ 維持原樣</span>",
+  "h": "aa00d929"
+ },
+ "js.cuahang.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">沒有額外的物品建議。</p>",
+  "h": "3a6c6f34"
+ },
+ "js.cuahang.khong-nhan-duoc-anh": {
+  "t": "未收到圖片。",
+  "h": "62488d2f"
+ },
+ "js.cuahang.loi": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.cuahang.loi-doc-file": {
+  "t": "讀取檔案時發生錯誤",
+  "h": "3c56711b"
+ },
+ "js.cuahang.loi-ppkl": {
+  "t": "⚠ 錯誤：",
+  "h": "a4f4adbc"
+ },
+ "js.cuahang.loi-tai-anh": {
+  "t": "載入圖片時發生錯誤",
+  "h": "13fb84a7"
+ },
+ "js.cuahang.menh-quai-cua-ban-la": {
+  "t": "，您的命卦為 **",
+  "h": "18a75d53"
+ },
+ "js.cuahang.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.cuahang.nen-co": {
+  "t": "建議必備",
+  "h": "3f6537af"
+ },
+ "js.cuahang.nen-lam": {
+  "t": "→ 建議執行",
+  "h": "85492f9d"
+ },
+ "js.cuahang.nhan-dien-do-vat-trong-anh": {
+  "t": "辨識照片中的物品",
+  "h": "5ecd0446"
+ },
+ "js.cuahang.phan-tich-bat-trach-dua-de": {
+  "t": "分析八宅並提出建議",
+  "h": "dd12d6d9"
+ },
+ "js.cuahang.phan-tich-that-bai": {
+  "t": "分析失敗",
+  "h": "44b68aa6"
+ },
+ "js.cuahang.quai-n": {
+  "t": "卦 {n}",
+  "h": "1b238b88"
+ },
+ "js.cuahang.quan-trong": {
+  "t": "⚠ 重要",
+  "h": "ebd388e2"
+ },
+ "js.cuahang.sau-dieu-chinh-co-the-len": {
+  "t": " — 調整後可提升至 ",
+  "h": "9e6292bc"
+ },
+ "js.cuahang.tay": {
+  "t": "西",
+  "h": "74b26936"
+ },
+ "js.cuahang.tay-bac": {
+  "t": "西北",
+  "h": "0b1f47fd"
+ },
+ "js.cuahang.tay-nam": {
+  "t": "西南",
+  "h": "c0484c26"
+ },
+ "js.cuahang.tot-neu-co": {
+  "t": "有更好",
+  "h": "e48b654c"
+ },
+ "js.cuahang.trung-tam": {
+  "t": "中央",
+  "h": "26bda5d2"
+ },
+ "js.cuahang.tuy-y": {
+  "t": "◎ 隨意",
+  "h": "430debc7"
+ },
+ "js.cuahang.tuy-y-4s40": {
+  "t": "隨意",
+  "h": "87b1fcd0"
+ },
+ "js.cuahang.uu-tien-lam-gi-truoc": {
+  "t": "應該優先做什麼？",
+  "h": "f3cab683"
+ },
+ "js.cuahang.vat-pham-nao-nen-mua-truoc": {
+  "t": "哪些物品應該先買？",
+  "h": "85fe11d3"
+ },
+ "js.cuahang.vi-sao-diem-hien-tai-thap": {
+  "t": "為什麼目前分數偏低？",
+  "h": "6c51a2da"
+ },
+ "js.cuahang.vui-long-chon-anh": {
+  "t": "請選擇照片",
+  "h": "dc2490ac"
+ },
+ "js.cuahang.vui-long-nhap-nam-sinh-hop": {
+  "t": "請輸入有效的出生年",
+  "h": "16abd384"
+ },
+ "js.cuahang.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
+ },
+ "js.datten.be-gai": {
+  "t": "女孩",
+  "h": "af93dba0"
+ },
+ "js.datten.be-trai": {
+  "t": "男孩",
+  "h": "274225bc"
+ },
+ "js.datten.bo": {
+  "t": "爸爸",
+  "h": "dbbdf270"
+ },
+ "js.datten.chip1": {
+  "t": "請建議12個合命名字並附詞義",
+  "h": "61954ded"
+ },
+ "js.datten.chip2": {
+  "t": "中間名（墊字）哪個合適？",
+  "h": "d59d5d7a"
+ },
+ "js.datten.chip3": {
+  "t": "孩子需要補哪個五行？",
+  "h": "2906ae80"
+ },
+ "js.datten.chip4": {
+  "t": "同時合爸爸與媽媽生肖的名字？",
+  "h": "ab665896"
+ },
+ "js.datten.con-gt": {
+  "t": "孩子（{gt}）",
+  "h": "8467608e"
+ },
+ "js.datten.dang-goi-y": {
+  "t": "正在為孩子建議名字⋯⋯通常需要15–25秒",
+  "h": "8dc8ac9b"
+ },
+ "js.datten.greeting": {
+  "t": "孩子的命理基礎已備妥（孩子**{cc}**・{h}）。您希望朝哪個方向建議名字？",
+  "h": "9e3424d6"
+ },
+ "js.datten.label": {
+  "t": "為{gt}取名・姓{ho}・{cc}",
+  "h": "21f99fa5"
+ },
+ "js.datten.loi-colon": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.datten.me": {
+  "t": "媽媽",
+  "h": "dfc6f90b"
+ },
+ "js.datten.res-head": {
+  "t": "干支基礎・{ho} 的五行——{gt}",
+  "h": "a23fe671"
+ },
+ "js.datten.res-note": {
+  "t": "孩子的納音為<b>{na}</b>——五行屬<b>{h}</b>。取名宜選五行能<b>相生</b>於孩子（<b>{hs}</b>生<b>{h}</b>）或<b>同行</b>的字來補益本命，避開相剋之行。想知道同時合孩子與父母的具體名字清單，請問老師。",
+  "h": "9bb9a346"
+ },
+ "js.datten.vui-long-nhap-ho": {
+  "t": "請輸入姓氏，以及孩子、爸爸、媽媽的出生年。",
+  "h": "1e4e4c71"
+ },
+ "js.dattendn.cham-ten": {
+  "t": "您想讓我為名稱**{ten}**評分，還是建議新名稱？",
+  "h": "76d469bb"
+ },
+ "js.dattendn.chip-5-ten": {
+  "t": "請建議5個合命名稱並附詞義",
+  "h": "4ab7930a"
+ },
+ "js.dattendn.chip-5-ten-khac": {
+  "t": "請另外建議5個更合適的名稱",
+  "h": "f3587ad3"
+ },
+ "js.dattendn.chip-bo-hanh": {
+  "t": "名稱該補哪個五行？",
+  "h": "f5cf0ccb"
+ },
+ "js.dattendn.chip-bo-hanh-chu": {
+  "t": "名稱該為負責人補哪個五行？",
+  "h": "6a1e73a2"
+ },
+ "js.dattendn.chip-cham": {
+  "t": "名稱「{ten}」合負責人本命與行業嗎？",
+  "h": "1039c58a"
+ },
+ "js.dattendn.chip-khi-chat": {
+  "t": "哪個名稱合這個行業的氣質？",
+  "h": "c012da1f"
+ },
+ "js.dattendn.chip-slogan": {
+  "t": "哪個口號適合這個名稱？",
+  "h": "8ab01273"
+ },
+ "js.dattendn.chip-tranh": {
+  "t": "取名時該避開哪些字或音？",
+  "h": "0493dad1"
+ },
+ "js.dattendn.dang-goi-y": {
+  "t": "正在建議事業名稱⋯⋯通常需要15–25秒",
+  "h": "9fbbe937"
+ },
+ "js.dattendn.goi-y-huong": {
+  "t": "您希望朝哪個方向建議名稱？",
+  "h": "3ccf4b50"
+ },
+ "js.dattendn.greeting": {
+  "t": "負責人的命理基礎已備妥（負責人**{cc}**・{h}，行業：{nganh}）。",
+  "h": "cd3c37de"
+ },
+ "js.dattendn.label": {
+  "t": "事業取名・{nganh}・負責人 {cc}",
+  "h": "179775da"
+ },
+ "js.dattendn.nganh": {
+  "t": "行業別",
+  "h": "549e0d8e"
+ },
+ "js.dattendn.res-head": {
+  "t": "負責人命理基礎・{nganh}",
+  "h": "7d04ac4e"
+ },
+ "js.dattendn.res-note": {
+  "t": "負責人的納音為<b>{na}</b>——五行屬<b>{h}</b>。事業名稱宜選五行<b>相生／相同</b>的字以補益負責人本命（<b>{hs}</b>生<b>{h}</b>），同時合<b>{nganh}</b>行業的氣質、唸起來順口、容易記住。想知道具體名稱清單，請問老師。",
+  "h": "cdd000b9"
+ },
+ "js.dattendn.ten-can-nhac": {
+  "t": "考慮中的名稱",
+  "h": "a8f03dde"
+ },
+ "js.dattendn.tuoi-chu": {
+  "t": "負責人生肖",
+  "h": "c6ec0cf0"
+ },
+ "js.dattendn.vui-long-nhap-nam-sinh": {
+  "t": "請輸入負責人的出生年並選擇行業別。",
+  "h": "20fcc631"
+ },
  "js.daycon.5-la-muc-giua-cua-hang": {
   "t": "\n\n5 是數千份孩童命盤的中間水準，並不是「10 分得 5 分」。軸的兩端都各有價值。",
   "h": "99fb1a17"
@@ -6158,6 +7606,142 @@
  "js.daycon.xem-them": {
   "t": "<summary>再看 ",
   "h": "c5afdcd1"
+ },
+ "js.dient.anh-qua-lon-toi-da-5mb": {
+  "t": "圖片過大（最大 5MB）。",
+  "h": "874f95b2"
+ },
+ "js.dient.canh-bao-chup": {
+  "t": "⚠ {w}——正面拍攝的照片，結果會更準確。",
+  "h": "231fb68c"
+ },
+ "js.dient.chip-ngu-quan": {
+  "t": "五官包括哪些？",
+  "h": "e8847ad0"
+ },
+ "js.dient.chip-tam-dinh": {
+  "t": "三停是什麼？",
+  "h": "25930850"
+ },
+ "js.dient.chip-thay-doi": {
+  "t": "面相可以改變嗎？",
+  "h": "602a11f2"
+ },
+ "js.dient.da-doc-xong": {
+  "t": "已依《麻衣神相》讀完您的面相。還想進一步了解什麼嗎？",
+  "h": "8cee9c62"
+ },
+ "js.dient.dang-phan-tich": {
+  "t": "正在分析面相…",
+  "h": "b2f15cf4"
+ },
+ "js.dient.dau-nghieng": {
+  "t": "頭部傾斜約 {n}°——請拍得更端正一些",
+  "h": "ad34a7cb"
+ },
+ "js.dient.dien-tuong": {
+  "t": "面相",
+  "h": "1e5e41e3"
+ },
+ "js.dient.dien-tuong-cua-toi": {
+  "t": "我的面相",
+  "h": "d5784500"
+ },
+ "js.dient.do-truc-tiep-bo-vi": {
+  "t": "以 MediaPipe 直接從圖片測得。依《麻衣神相》的意涵與其餘部位（眼、鼻、口、額、下巴），收錄於深度分析中。",
+  "h": "6d9235fd"
+ },
+ "js.dient.do-truc-tiep-tam-dinh": {
+  "t": "以 MediaPipe 直接從圖片測得——上停、中停、下停依您臉部的真實地標點劃分。依《麻衣神相》的完整解讀，收錄於深度分析中。",
+  "h": "3ded4f7e"
+ },
+ "js.dient.ha-dinh": {
+  "t": "下停",
+  "h": "11254397"
+ },
+ "js.dient.khong-doc-duoc-anh-nay-vui": {
+  "t": "無法讀取此圖片——請選擇 JPG 或 PNG 圖片。",
+  "h": "32a1faf4"
+ },
+ "js.dient.khong-nhan-dien-duoc-mat": {
+  "t": "⚠ 未能清楚偵測到臉部。仍可進行分析，但結果的準確度可能較低。",
+  "h": "b3bd7a6e"
+ },
+ "js.dient.khong-the-ket-noi": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.dient.khong-the-mo-camera": {
+  "t": "無法開啟相機，請改為上傳圖片。",
+  "h": "a57244b6"
+ },
+ "js.dient.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.dient.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.dient.mat-bau-duc": {
+  "t": "鵝蛋臉",
+  "h": "d9034e8f"
+ },
+ "js.dient.mat-dai-hep": {
+  "t": "長臉／窄臉",
+  "h": "ea8512c9"
+ },
+ "js.dient.mat-quay": {
+  "t": "臉部略微轉向一側——請正面拍攝",
+  "h": "589f7ce3"
+ },
+ "js.dient.mat-tron-vuong": {
+  "t": "圓臉／方臉",
+  "h": "64bb08c2"
+ },
+ "js.dient.may-chu-khong-tra-ve": {
+  "t": "伺服器未傳回結果。",
+  "h": "d1312308"
+ },
+ "js.dient.tam-bach-ha": {
+  "t": "下三白眼——瞳孔下方露出眼白",
+  "h": "1d45c786"
+ },
+ "js.dient.tam-bach-thuong": {
+  "t": "上三白眼——瞳孔上方露出眼白",
+  "h": "2f061c22"
+ },
+ "js.dient.tam-dinh-da-xac-dinh": {
+  "t": "✦ 已辨識三停",
+  "h": "ab4a740f"
+ },
+ "js.dient.tam-dinh-t": {
+  "t": "三停：上停 {t}% · 中停 {tr}% · 下停 {h}%",
+  "h": "47b2936f"
+ },
+ "js.dient.thuong-dinh": {
+  "t": "上停",
+  "h": "eb4f7b4f"
+ },
+ "js.dient.thuong-mat-15-25-giay": {
+  "t": "通常需要 15–25 秒",
+  "h": "f0dba195"
+ },
+ "js.dient.trung-dinh": {
+  "t": "中停",
+  "h": "bfbaff8b"
+ },
+ "js.dient.tu-bach": {
+  "t": "四白眼——瞳孔四周都露出眼白",
+  "h": "1ded61cb"
+ },
+ "js.dient.ty-le-rong-dai-mat": {
+  "t": "臉部寬／長比例：{r}（{s}）",
+  "h": "59af24fc"
+ },
+ "js.dient.vui-long-chon-file-anh": {
+  "t": "請選擇圖片檔。",
+  "h": "71a61127"
  },
  "js.duyenno.anh-dang-tai-co-the-hoi": {
   "t": "圖片載入中，可能稍慢——請稍候，或",
@@ -7447,6 +9031,66 @@
   "t": "儲值 →",
   "h": "96c6fb5d"
  },
+ "js.khis.anh-qua-lon-toi-da-10mb": {
+  "t": "圖片過大（最大 10MB）。",
+  "h": "27f729fb"
+ },
+ "js.khis.chip-5-sac": {
+  "t": "五行五色各代表什麼？",
+  "h": "98715ca7"
+ },
+ "js.khis.chip-an-duong": {
+  "t": "印堂是什麼？",
+  "h": "e1de6d6d"
+ },
+ "js.khis.chip-khac-dien-tuong": {
+  "t": "氣色和面相有什麼不同？",
+  "h": "d826036b"
+ },
+ "js.khis.da-luan-xong": {
+  "t": "已依《麻衣神相》論完您的氣色。還想進一步了解什麼嗎？",
+  "h": "26c2acd5"
+ },
+ "js.khis.khi-sac": {
+  "t": "氣色",
+  "h": "e1205bcd"
+ },
+ "js.khis.khi-sac-cua-toi": {
+  "t": "我的氣色",
+  "h": "f4b00328"
+ },
+ "js.khis.khong-doc-duoc-anh": {
+  "t": "無法讀取圖片",
+  "h": "12ab7c26"
+ },
+ "js.khis.khong-doc-duoc-file": {
+  "t": "無法讀取檔案",
+  "h": "1d32d14b"
+ },
+ "js.khis.khong-the-ket-noi": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.khis.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.khis.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.khis.loi-xu-ly-anh": {
+  "t": "圖片處理錯誤：{e}",
+  "h": "973ba3bb"
+ },
+ "js.khis.may-chu-khong-tra-ve": {
+  "t": "伺服器未傳回結果。",
+  "h": "d1312308"
+ },
+ "js.khis.vui-long-chon-file-anh": {
+  "t": "請選擇圖片檔（JPG 或 PNG）。",
+  "h": "ad4caa5b"
+ },
  "js.kimlau.chip1": {
   "t": "哪一年最適合蓋房？",
   "h": "992ff775"
@@ -8039,6 +9683,30 @@
   "t": "▸ 查看完整命盤",
   "h": "fee98465"
  },
+ "js.lucnham.chip1": {
+  "t": "此事會成還是敗？",
+  "h": "fa905597"
+ },
+ "js.lucnham.chip2": {
+  "t": "何時會有結果？",
+  "h": "698cf33d"
+ },
+ "js.lucnham.chip3": {
+  "t": "該進還是該退？",
+  "h": "0735035e"
+ },
+ "js.lucnham.chip4": {
+  "t": "三傳對事態的發展說了什麼？",
+  "h": "43368fd7"
+ },
+ "js.lucnham.greeting": {
+  "t": "已起**大六壬**課——日 {ngay}、時 {gio}、{tdem}。取傳依**{phap}**之法，初傳為**{chi}・{tuong}**。您想問什麼事？",
+  "h": "9e3179ca"
+ },
+ "js.lucnham.label": {
+  "t": "六壬・{ngay} {gio}",
+  "h": "f76e2ec9"
+ },
  "js.maihoa.bien-quai-noi-ket-cuc-the": {
   "t": "變卦說明了怎樣的結局？",
   "h": "3c27069a"
@@ -8330,6 +9998,42 @@
  "js.ngaytot.label": {
   "t": "吉日・{y}年{m}月",
   "h": "cbd777dc"
+ },
+ "js.nguhanhten.ban-muon-luan": {
+  "t": " 您想讓我論析什麼？",
+  "h": "4117a169"
+ },
+ "js.nguhanhten.chip1": {
+  "t": "為什麼我的名字是這個分數？",
+  "h": "2cd3c5cc"
+ },
+ "js.nguhanhten.chip2": {
+  "t": "名字中哪個字拉低了分數？",
+  "h": "c694fac3"
+ },
+ "js.nguhanhten.chip3": {
+  "t": "推薦幾個更合本命的字",
+  "h": "665a28f8"
+ },
+ "js.nguhanhten.chip4": {
+  "t": "主字如何補益本命？",
+  "h": "f1b4cfcb"
+ },
+ "js.nguhanhten.greeting": {
+  "t": "已查詢姓名**{ten}**的五行（{tc}）。",
+  "h": "a78484c2"
+ },
+ "js.nguhanhten.label": {
+  "t": "姓名五行・{ten}",
+  "h": "c5234e3e"
+ },
+ "js.nguhanhten.menh": {
+  "t": " 本命為**{m}**。",
+  "h": "ef0b1bae"
+ },
+ "js.nguhanhten.tc-item": {
+  "t": "{n}畫，{h}",
+  "h": "341d0ba2"
  },
  "js.nguoikhac.ban-cam-nang": {
   "t": "指南",
@@ -11039,6 +12743,194 @@
   "t": "抱歉，發生了錯誤",
   "h": "4195c600"
  },
+ "js.phongthuy.100-sau-dieu-chinh-co-the": {
+  "t": "/100**，調整後可提升至 **",
+  "h": "a4c14f33"
+ },
+ "js.phongthuy.bac": {
+  "t": "北",
+  "h": "130d45d1"
+ },
+ "js.phongthuy.ban-muon-hoi-them-ve-de": {
+  "t": "。您想進一步詢問哪一項建議？",
+  "h": "23ca71bc"
+ },
+ "js.phongthuy.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">目前的佈置大致良好。</p>",
+  "h": "65d526db"
+ },
+ "js.phongthuy.chuan-bi-prompt-render-theo-ngu": {
+  "t": "依五行準備渲染指令",
+  "h": "17f4d17e"
+ },
+ "js.phongthuy.dang-render-lai-phong": {
+  "t": "重新渲染房間中",
+  "h": "4f7ce5f5"
+ },
+ "js.phongthuy.diem": {
+  "t": " 分</div>",
+  "h": "8d925dd9"
+ },
+ "js.phongthuy.diem-phong-thuy-hien-tai": {
+  "t": "目前風水分數：",
+  "h": "91e0a1f2"
+ },
+ "js.phongthuy.diem-phong-thuy-hien-tai-kmy1": {
+  "t": "目前風水分數：",
+  "h": "d4ac7afe"
+ },
+ "js.phongthuy.diem-phong-thuy-phong-cua-toi": {
+  "t": "我的房間風水分數",
+  "h": "373da765"
+ },
+ "js.phongthuy.dieu-chinh": {
+  "t": "調整",
+  "h": "37c5bf6b"
+ },
+ "js.phongthuy.don-bo": {
+  "t": "移除",
+  "h": "0825ec6d"
+ },
+ "js.phongthuy.dong": {
+  "t": "東",
+  "h": "6bd70b62"
+ },
+ "js.phongthuy.dong-bac": {
+  "t": "東北",
+  "h": "9690921a"
+ },
+ "js.phongthuy.dong-nam": {
+  "t": "東南",
+  "h": "dd71e07a"
+ },
+ "js.phongthuy.giu-nguyen": {
+  "t": "<span class=\"pos-keep\">✓ 維持原樣</span>",
+  "h": "aa00d929"
+ },
+ "js.phongthuy.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">沒有額外的物品建議。</p>",
+  "h": "b8141e06"
+ },
+ "js.phongthuy.khong-nhan-duoc-anh": {
+  "t": "未收到圖片。",
+  "h": "62488d2f"
+ },
+ "js.phongthuy.loi": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.phongthuy.loi-doc-file": {
+  "t": "讀取檔案時發生錯誤",
+  "h": "3c56711b"
+ },
+ "js.phongthuy.loi-ppkl": {
+  "t": "⚠ 錯誤：",
+  "h": "a4f4adbc"
+ },
+ "js.phongthuy.loi-tai-anh": {
+  "t": "載入圖片時發生錯誤",
+  "h": "13fb84a7"
+ },
+ "js.phongthuy.menh-quai-cua-ban-la": {
+  "t": "，您的命卦為 **",
+  "h": "18a75d53"
+ },
+ "js.phongthuy.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.phongthuy.nen-co": {
+  "t": "建議必備",
+  "h": "3f6537af"
+ },
+ "js.phongthuy.nen-lam": {
+  "t": "→ 建議執行",
+  "h": "85492f9d"
+ },
+ "js.phongthuy.nhan-dien-do-vat-trong-anh": {
+  "t": "辨識照片中的物品",
+  "h": "5ecd0446"
+ },
+ "js.phongthuy.phan-tich-bat-trach-dua-de": {
+  "t": "分析八宅並提出建議",
+  "h": "dd12d6d9"
+ },
+ "js.phongthuy.phan-tich-that-bai": {
+  "t": "分析失敗",
+  "h": "44b68aa6"
+ },
+ "js.phongthuy.phong-cua-toi-sau-khi-phong": {
+  "t": "風水調整後的我的房間",
+  "h": "788d257f"
+ },
+ "js.phongthuy.phong-thuy-diem": {
+  "t": "風水 — 分數 ",
+  "h": "4c90b82a"
+ },
+ "js.phongthuy.quai": {
+  "t": "卦 ",
+  "h": "fc8feb12"
+ },
+ "js.phongthuy.quan-trong": {
+  "t": "⚠ 重要",
+  "h": "ebd388e2"
+ },
+ "js.phongthuy.sau-dieu-chinh-co-the-len": {
+  "t": " — 調整後可提升至 ",
+  "h": "9e6292bc"
+ },
+ "js.phongthuy.tay": {
+  "t": "西",
+  "h": "74b26936"
+ },
+ "js.phongthuy.tay-bac": {
+  "t": "西北",
+  "h": "0b1f47fd"
+ },
+ "js.phongthuy.tay-nam": {
+  "t": "西南",
+  "h": "c0484c26"
+ },
+ "js.phongthuy.tot-neu-co": {
+  "t": "有更好",
+  "h": "e48b654c"
+ },
+ "js.phongthuy.trung-tam": {
+  "t": "中央",
+  "h": "26bda5d2"
+ },
+ "js.phongthuy.tuy-y": {
+  "t": "◎ 隨意",
+  "h": "430debc7"
+ },
+ "js.phongthuy.tuy-y-4s40": {
+  "t": "隨意",
+  "h": "87b1fcd0"
+ },
+ "js.phongthuy.uu-tien-lam-gi-truoc": {
+  "t": "應該優先做什麼？",
+  "h": "f3cab683"
+ },
+ "js.phongthuy.vat-pham-nao-nen-mua-truoc": {
+  "t": "哪些物品應該先買？",
+  "h": "85fe11d3"
+ },
+ "js.phongthuy.vi-sao-diem-hien-tai-thap": {
+  "t": "為什麼目前分數偏低？",
+  "h": "6c51a2da"
+ },
+ "js.phongthuy.vui-long-chon-anh-phong": {
+  "t": "請選擇房間照片",
+  "h": "90bec971"
+ },
+ "js.phongthuy.vui-long-nhap-nam-sinh-hop": {
+  "t": "請輸入有效的出生年",
+  "h": "16abd384"
+ },
+ "js.phongthuy.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
+ },
  "js.prices.luong-moi-luot": {
   "t": "每次 {credits} 兩",
   "h": "d8f9af98"
@@ -11531,6 +13423,58 @@
   "t": "八字、奇門",
   "h": "eac6b8dd"
  },
+ "js.shellui.bds-ban-cau": {
+  "t": "半球：",
+  "h": "91679aa1"
+ },
+ "js.shellui.bds-bon-truc": {
+  "t": "四軸",
+  "h": "600b207c"
+ },
+ "js.shellui.bds-can-bang": {
+  "t": "平衡",
+  "h": "9fe59d4b"
+ },
+ "js.shellui.bds-goc-chieu": {
+  "t": "主要相位",
+  "h": "77aad29d"
+ },
+ "js.shellui.bds-hanh-tinh": {
+  "t": "行星",
+  "h": "0bfb6634"
+ },
+ "js.shellui.bds-hinh-the": {
+  "t": "相位圖形",
+  "h": "de8e9e43"
+ },
+ "js.shellui.bds-khong-co": {
+  "t": "無",
+  "h": "2884bacc"
+ },
+ "js.shellui.bds-lech": {
+  "t": "（容許度 {lech}°，強度 {manh}%）",
+  "h": "17e9c540"
+ },
+ "js.shellui.bds-nghich": {
+  "t": "℞ 逆行",
+  "h": "8093efa5"
+ },
+ "js.shellui.bds-nghich-hanh": {
+  "t": "逆行：",
+  "h": "6917d7e7"
+ },
+ "js.shellui.bds-nguyen-to": {
+  "t": "元素：",
+  "h": "69e4c7a2"
+ },
+ "js.shellui.bds-nha": {
+  "t": "第 {n} 宮",
+  "h": "19a346e7"
+ },
+ "js.shellui.bds-the": {
+  "t": "型態：",
+  "h": "3b48438e"
+ },
  "js.shellui.be-an": {
   "t": "小安",
   "h": "4010ce22"
@@ -11590,6 +13534,118 @@
  "js.shellui.brand": {
   "t": "明寶紫微斗數",
   "h": "33336b26"
+ },
+ "js.shellui.bt-cd-0": {
+  "t": "財祿、健康、發展最佳",
+  "h": "ba2fcc5f"
+ },
+ "js.shellui.bt-cd-1": {
+  "t": "健康、長壽、醫緣",
+  "h": "f2b6c53a"
+ },
+ "js.shellui.bt-cd-2": {
+  "t": "婚姻、事業長久",
+  "h": "eaa1aa66"
+ },
+ "js.shellui.bt-cd-3": {
+  "t": "平穩、安居、守成",
+  "h": "9d377762"
+ },
+ "js.shellui.bt-cu-0": {
+  "t": "大門、臥室、辦公桌",
+  "h": "9598844f"
+ },
+ "js.shellui.bt-cu-1": {
+  "t": "臥室、床頭朝向",
+  "h": "ff2bdd07"
+ },
+ "js.shellui.bt-cu-2": {
+  "t": "神桌、客廳、餐桌",
+  "h": "18d25898"
+ },
+ "js.shellui.bt-cu-3": {
+  "t": "倉庫、廁所、次要房間",
+  "h": "b7d8011a"
+ },
+ "js.shellui.bt-cung-menh": {
+  "t": "命宮",
+  "h": "3dc5da1d"
+ },
+ "js.shellui.bt-cung-n": {
+  "t": "第{c}宮",
+  "h": "b2bf68e0"
+ },
+ "js.shellui.bt-dong-hop": {
+  "t": "東四命——適合東、東南、南、北方位",
+  "h": "37481bde"
+ },
+ "js.shellui.bt-dong-tu-menh": {
+  "t": "東四命",
+  "h": "860976af"
+ },
+ "js.shellui.bt-hd-0": {
+  "t": "破財、是非、不順之事",
+  "h": "224b7b52"
+ },
+ "js.shellui.bt-hd-1": {
+  "t": "感情失和、健康衰退",
+  "h": "234cd72a"
+ },
+ "js.shellui.bt-hd-2": {
+  "t": "小人、暗中破壞",
+  "h": "e6644f6c"
+ },
+ "js.shellui.bt-hd-3": {
+  "t": "絕運、重病、大災禍",
+  "h": "72905f33"
+ },
+ "js.shellui.bt-hu-0": {
+  "t": "避免用於大門、臥室",
+  "h": "460c1435"
+ },
+ "js.shellui.bt-hu-1": {
+  "t": "避免設神桌、臥室",
+  "h": "f713260a"
+ },
+ "js.shellui.bt-hu-2": {
+  "t": "避免設廚房、主臥",
+  "h": "8fd85d89"
+ },
+ "js.shellui.bt-hu-3": {
+  "t": "不設門、不放床",
+  "h": "fde05a0d"
+ },
+ "js.shellui.bt-khong-tinh-duoc-cung": {
+  "t": "無法推算命宮。",
+  "h": "ce9bd2a4"
+ },
+ "js.shellui.bt-ngu-hanh": {
+  "t": "五行",
+  "h": "68ac2473"
+ },
+ "js.shellui.bt-nhap-nam-hop-le": {
+  "t": "請輸入有效的出生年份（1900–2010）。",
+  "h": "8363c20b"
+ },
+ "js.shellui.bt-nhom": {
+  "t": "組別",
+  "h": "ce7eab0a"
+ },
+ "js.shellui.bt-tay-hop": {
+  "t": "西四命——適合西、西北、東北、西南方位",
+  "h": "6f187842"
+ },
+ "js.shellui.bt-tay-tu-menh": {
+  "t": "西四命",
+  "h": "e606c821"
+ },
+ "js.shellui.bt-title": {
+  "t": "{y}年——第{c}宮 {q}——{n}",
+  "h": "44ed4978"
+ },
+ "js.shellui.bt-vi-tri-cung": {
+  "t": "宮位方位",
+  "h": "5a046cd0"
  },
  "js.shellui.buoc-o-huong-xau-thi-hoa": {
   "t": "如果綁在不吉的方位，該如何化解？",
@@ -12314,6 +14370,82 @@
  "js.shellui.dien-tuong-cua-toi": {
   "t": "我的面相",
   "h": "d5784500"
+ },
+ "js.shellui.dln-chua-lap-duoc": {
+  "t": "目前無法起課，請再試一次。（六壬課需依真實節氣取月將，必須在伺服器端起課。）",
+  "h": "349a0a1c"
+ },
+ "js.shellui.dln-dang-lap": {
+  "t": "正在起六壬課…",
+  "h": "24a55230"
+ },
+ "js.shellui.dln-gio-b": {
+  "t": "時 <b>{v}</b>",
+  "h": "d7ddd40f"
+ },
+ "js.shellui.dln-hanh-vuong-suy": {
+  "t": "五行 {h}——{vs}",
+  "h": "aafd8bf9"
+ },
+ "js.shellui.dln-khoa-the": {
+  "t": "課體",
+  "h": "1a2eeeba"
+ },
+ "js.shellui.dln-ngay-b": {
+  "t": "日 <b>{v}</b>",
+  "h": "5eec8778"
+ },
+ "js.shellui.dln-nguyet-tuong": {
+  "t": "月將 <b>{nt}</b> 加臨占時 <b>{ct}</b>",
+  "h": "17b75e38"
+ },
+ "js.shellui.dln-note": {
+  "t": "月將加臨占時以轉天盤；十二天將依日干貴人之位安布（晝用晝貴人，夜用夜貴人）。",
+  "h": "c0123ca5"
+ },
+ "js.shellui.dln-phep-thu-truyen": {
+  "t": "取傳之法",
+  "h": "cddbdb0f"
+ },
+ "js.shellui.dln-quy-nhan": {
+  "t": "貴人 <b>{tb}</b> 臨 <b>{db}</b>",
+  "h": "f66202db"
+ },
+ "js.shellui.dln-roi-tuan-khong": {
+  "t": "落旬空",
+  "h": "7118ae11"
+ },
+ "js.shellui.dln-tam-truyen": {
+  "t": "三傳",
+  "h": "68b2f0a5"
+ },
+ "js.shellui.dln-than-sat": {
+  "t": "神煞",
+  "h": "365af4b4"
+ },
+ "js.shellui.dln-thang-b": {
+  "t": "月 <b>{v}</b>",
+  "h": "1da6071f"
+ },
+ "js.shellui.dln-thien-ban-gia-dia-ban": {
+  "t": "天盤加地盤",
+  "h": "67a30bc5"
+ },
+ "js.shellui.dln-tren": {
+  "t": "臨 {v}",
+  "h": "6adfd61e"
+ },
+ "js.shellui.dln-tu-khoa": {
+  "t": "四課",
+  "h": "56938410"
+ },
+ "js.shellui.dln-tuan-khong": {
+  "t": "旬空 <b>{v}</b>",
+  "h": "ecffad13"
+ },
+ "js.shellui.dln-voi-can-ngay": {
+  "t": "與日干的關係：{v}",
+  "h": "e6e06e50"
  },
  "js.shellui.doi": {
   "t": "更換",
@@ -13507,6 +15639,14 @@
   "t": "對話紀錄",
   "h": "0fd2afce"
  },
+ "js.shellui.ln-nhap-ngay-thang-nam": {
+  "t": "請輸入日、月、年。",
+  "h": "f001ab44"
+ },
+ "js.shellui.ln-title": {
+  "t": "{date}——{chi}時（{time}）",
+  "h": "453d1ef5"
+ },
  "js.shellui.loai-cong-ty": {
   "t": "公司",
   "h": "65bf381e"
@@ -14246,6 +16386,190 @@
  "js.shellui.nguyen": {
   "t": "王",
   "h": "e79eb3d7"
+ },
+ "js.shellui.nh-a1": {
+  "t": "「{name}」屬{th}，生本命{m}——名字滋養本命，最為理想",
+  "h": "cda46ea4"
+ },
+ "js.shellui.nh-a2": {
+  "t": "「{name}」與本命同屬{m}——鞏固命氣",
+  "h": "ed7b09ef"
+ },
+ "js.shellui.nh-a3": {
+  "t": "「{name}」屬{th}，剋本命{m}",
+  "h": "ef919a58"
+ },
+ "js.shellui.nh-a4": {
+  "t": "本命{m}剋「{name}」的{th}",
+  "h": "67e11e3c"
+ },
+ "js.shellui.nh-a5": {
+  "t": "本命{m}生{th}——本命洩氣",
+  "h": "78fd2981"
+ },
+ "js.shellui.nh-a6": {
+  "t": "「{name}」屬{th}——不生也不剋本命{m}",
+  "h": "512e9b02"
+ },
+ "js.shellui.nh-b": {
+  "t": "{k}個字中有{d}種不同五行",
+  "h": "c86c53a6"
+ },
+ "js.shellui.nh-c1": {
+  "t": "有{sr}行的字——生本命{m}",
+  "h": "8063d498"
+ },
+ "js.shellui.nh-c2": {
+  "t": "有與本命同屬{m}的字",
+  "h": "b7d30df6"
+ },
+ "js.shellui.nh-c3": {
+  "t": "尚無任何字能生本命{m}或與其同行",
+  "h": "415fa26e"
+ },
+ "js.shellui.nh-caveat": {
+  "t": "此計分標準是本站為方便比較而訂的，並非古籍中的數字。對已在使用的名字而言，分數低<strong>並不代表名字不好</strong>，也不是改名的理由——這部分只在您挑選新名字時才有參考價值。",
+  "h": "d0c49d0c"
+ },
+ "js.shellui.nh-cd-ten": {
+  "t": "姓名評分",
+  "h": "56e67c7e"
+ },
+ "js.shellui.nh-cd-ten-menh": {
+  "t": "姓名評分——本命{m}",
+  "h": "d700b3c1"
+ },
+ "js.shellui.nh-chua-cham-duoc": {
+  "t": "因不知道名字持有者的<strong>本命</strong>，目前無法評分。請直接在此選擇：",
+  "h": "f7e87909"
+ },
+ "js.shellui.nh-chua-co-trong-bang": {
+  "t": "表中尚無",
+  "h": "26374f9c"
+ },
+ "js.shellui.nh-d1": {
+  "t": "有{k}個{h}行的字剋本命",
+  "h": "ecab105a"
+ },
+ "js.shellui.nh-d2": {
+  "t": "沒有任何字剋本命",
+  "h": "c6ffe9f6"
+ },
+ "js.shellui.nh-goi-y-tron-bo": {
+  "t": "查看完整的合命名字建議 →",
+  "h": "0457a007"
+ },
+ "js.shellui.nh-khong-biet-menh": {
+  "t": "不知道自己的本命嗎？",
+  "h": "afcf54e4"
+ },
+ "js.shellui.nh-la": {
+  "t": "主字與本命相合",
+  "h": "55588954"
+ },
+ "js.shellui.nh-lb": {
+  "t": "五行平衡",
+  "h": "2ceb2151"
+ },
+ "js.shellui.nh-lc": {
+  "t": "名字含補益本命的字",
+  "h": "40185ecf"
+ },
+ "js.shellui.nh-ld": {
+  "t": "無剋本命之字",
+  "h": "88245630"
+ },
+ "js.shellui.nh-nb1": {
+  "t": "名字已有生本命的{sr}行字。若想再加，可選{m}行的字來鞏固。",
+  "h": "1f2ab4f1"
+ },
+ "js.shellui.nh-nb2": {
+  "t": "{sr}生本命{m}——屬此行的字能滋養本命。",
+  "h": "388f50d5"
+ },
+ "js.shellui.nh-net-don-vi": {
+  "t": "{n}畫（個位：{d}）",
+  "h": "cc03c651"
+ },
+ "js.shellui.nh-nhap-ho-ten": {
+  "t": "請輸入姓名。",
+  "h": "852de967"
+ },
+ "js.shellui.nh-nhap-net-thu-cong": {
+  "t": "手動輸入筆畫",
+  "h": "60923759"
+ },
+ "js.shellui.nh-rel-cung": {
+  "t": "主字「<strong>{name}</strong>」屬<strong>{th}</strong>——與本命<strong>{m}</strong><strong>同行</strong>。補益良好，鞏固命氣。",
+  "h": "ae1602fe"
+ },
+ "js.shellui.nh-rel-khac-menh": {
+  "t": "主字「<strong>{name}</strong>」屬<strong>{th}</strong>——<strong>剋本命{m}</strong>（{th}剋{m}）。依民間說法，宜考慮調整。",
+  "h": "cfb34dae"
+ },
+ "js.shellui.nh-rel-menh-khac": {
+  "t": "主字「<strong>{name}</strong>」屬<strong>{th}</strong>——本命{m}剋名字之行（{m}剋{th}）。依民間說法，宜考慮調整。",
+  "h": "084dea54"
+ },
+ "js.shellui.nh-rel-menh-sinh": {
+  "t": "主字「<strong>{name}</strong>」屬<strong>{th}</strong>——本命{m}生名字之行（{m}→{th}）。中等，無害。",
+  "h": "6b8b312d"
+ },
+ "js.shellui.nh-rel-sinh-menh": {
+  "t": "主字「<strong>{name}</strong>」屬<strong>{th}</strong>——<strong>生本命{m}</strong>（{th}→{m}）。良好，名字滋養本命。",
+  "h": "e867c9b3"
+ },
+ "js.shellui.nh-rel-trung-tinh": {
+  "t": "主字「<strong>{name}</strong>」屬<strong>{th}</strong>，本命為<strong>{m}</strong>——彼此無直接相生也無相剋。中性。",
+  "h": "c5e52f31"
+ },
+ "js.shellui.nh-so-net": {
+  "t": "筆畫數",
+  "h": "6942afa1"
+ },
+ "js.shellui.nh-sug-head": {
+  "t": "若您正在擇名",
+  "h": "4307da08"
+ },
+ "js.shellui.nh-sug-p": {
+  "t": "宜優先選<strong>{boi}</strong>行的字。{note} 宜避開<strong>{tranh}</strong>行的字（剋本命{m}）。",
+  "h": "4634af56"
+ },
+ "js.shellui.nh-title-suffix": {
+  "t": " ——每個字的五行",
+  "h": "502b979c"
+ },
+ "js.shellui.nh-toi-da-6": {
+  "t": "最多6個音節。",
+  "h": "a95e6e3b"
+ },
+ "js.shellui.nh-tra-hanzii": {
+  "t": "到 hanzii.net 查詢 →",
+  "h": "d84d1c1b"
+ },
+ "js.shellui.nh-tra-menh": {
+  "t": "依出生年查詢本命 →",
+  "h": "83b945be"
+ },
+ "js.shellui.nh-v1": {
+  "t": "與本命非常相合",
+  "h": "8afe9243"
+ },
+ "js.shellui.nh-v2": {
+  "t": "與本命相合",
+  "h": "44069c43"
+ },
+ "js.shellui.nh-v3": {
+  "t": "尚可",
+  "h": "9f497b1e"
+ },
+ "js.shellui.nh-v4": {
+  "t": "有值得斟酌之處",
+  "h": "12311aa6"
+ },
+ "js.shellui.nh-v5": {
+  "t": "有許多值得斟酌之處",
+  "h": "e71f844e"
  },
  "js.shellui.nhan-tuong-cua-toi": {
   "t": "我的眼相",
@@ -15126,6 +17450,110 @@
  "js.shellui.zalo": {
   "t": "Zalo",
   "h": "53b71aec"
+ },
+ "js.solaso.bao-cao": {
+  "t": "報告",
+  "h": "7013ca8b"
+ },
+ "js.solaso.chua-co-la-so-nhom": {
+  "t": "此分組尚無命盤。",
+  "h": "79bf9444"
+ },
+ "js.solaso.chua-dat-ten": {
+  "t": "未命名",
+  "h": "dfb078dd"
+ },
+ "js.solaso.combo-1-s": {
+  "t": "兩者合購，比單買便宜",
+  "h": "584d7fc7"
+ },
+ "js.solaso.combo-1-t": {
+  "t": "組合：紫微斗數解讀＋八字",
+  "h": "c69e7864"
+ },
+ "js.solaso.combo-2-s": {
+  "t": "紫微斗數解讀＋八字＋人生週期＋年度運勢",
+  "h": "12345b3e"
+ },
+ "js.solaso.combo-2-t": {
+  "t": "組合：4項工具完整套組",
+  "h": "0726a4ab"
+ },
+ "js.solaso.da-co-xem-lai": {
+  "t": "✓ 已擁有・再次查看",
+  "h": "308bad31"
+ },
+ "js.solaso.rel-ban-be": {
+  "t": "朋友",
+  "h": "159fe485"
+ },
+ "js.solaso.rel-dong-nghiep": {
+  "t": "同事",
+  "h": "d8e2bdd8"
+ },
+ "js.solaso.rel-gia-dinh": {
+  "t": "家人",
+  "h": "bf9b33dc"
+ },
+ "js.solaso.rel-khac": {
+  "t": "其他",
+  "h": "5b8a28ab"
+ },
+ "js.solaso.tool-cdtk": {
+  "t": "前世肖像",
+  "h": "e7d0f866"
+ },
+ "js.solaso.tool-cdvc": {
+  "t": "伴侶肖像",
+  "h": "eb21b5ef"
+ },
+ "js.solaso.tool-ctcd": {
+  "t": "人生週期",
+  "h": "38c0c6ce"
+ },
+ "js.solaso.tool-dc": {
+  "t": "依命盤教養孩子",
+  "h": "6043b236"
+ },
+ "js.solaso.tool-dntk": {
+  "t": "前世緣分",
+  "h": "c6b0ccb5"
+ },
+ "js.solaso.tool-hnt": {
+  "t": "早期職涯指引",
+  "h": "826c517b"
+ },
+ "js.solaso.tool-lg": {
+  "t": "紫微斗數解讀",
+  "h": "ab5a4607"
+ },
+ "js.solaso.tool-nk": {
+  "t": "他人的命盤",
+  "h": "5a73dc8f"
+ },
+ "js.solaso.tool-nm": {
+  "t": "人脈",
+  "h": "78fdc03b"
+ },
+ "js.solaso.tool-tb": {
+  "t": "子平八字",
+  "h": "6ade52e9"
+ },
+ "js.solaso.tool-vhn": {
+  "t": "年度運勢",
+  "h": "ba425e43"
+ },
+ "js.solaso.xem-tao": {
+  "t": "檢視／建立",
+  "h": "a89b1542"
+ },
+ "js.solaso.xoa-khoi-so": {
+  "t": "從簿冊移除",
+  "h": "4ba4a755"
+ },
+ "js.solaso.xoa-la-so-nay": {
+  "t": "要將這張命盤從簿冊中移除嗎？",
+  "h": "d9231d4e"
  },
  "js.taikhoan.ban-chua-chia-se-luot-nao": {
   "t": "您還沒有分享過任何內容。",
@@ -18759,6 +21187,130 @@
   "t": "依據測得的 12 項聲學指標（HNR、持續時間、jitter、頻譜重心…）歸類。依五音古法的完整意涵，收錄於深度分析中。",
   "h": "0c3c0a37"
  },
+ "js.thtu.anh-qua-lon": {
+  "t": "圖片過大。",
+  "h": "cb4417d0"
+ },
+ "js.thtu.da-doc-xong-chi-tay-cua": {
+  "t": "已依古法手相學讀完您的掌紋。還想進一步了解什麼嗎？",
+  "h": "0e67099e"
+ },
+ "js.thtu.dang-doc-chi-tay": {
+  "t": "正在解讀掌紋…",
+  "h": "1d4e7200"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang": {
+  "t": "以 MediaPipe Hands 直接從圖片測得——依據您手掌真實地標點得出的手掌形狀。依古法手相的完整解讀，收錄於深度分析中。",
+  "h": "94672af2"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang-vwvq": {
+  "t": "以 MediaPipe Hands 直接從圖片測得。各手指的意涵、2D:4D 比例與各條掌紋，收錄於深度分析中。",
+  "h": "68dd31bc"
+ },
+ "js.thtu.duong-van-menh-noi-len-dieu-gi": {
+  "t": "命運線透露了什麼？",
+  "h": "04b0d761"
+ },
+ "js.thtu.hinh-bau-duc": {
+  "t": "橢圓形",
+  "h": "209cc96b"
+ },
+ "js.thtu.hinh-dai-thon": {
+  "t": "細長形",
+  "h": "36c13178"
+ },
+ "js.thtu.hinh-dang-s": {
+  "t": "形狀：{s}",
+  "h": "b7ac9175"
+ },
+ "js.thtu.hinh-vuong-rong": {
+  "t": "方形／寬闊形",
+  "h": "2114c5c3"
+ },
+ "js.thtu.khong-co-ket-qua": {
+  "t": "沒有結果。",
+  "h": "97fa6f91"
+ },
+ "js.thtu.khong-doc-duoc-anh-nay-vui": {
+  "t": "無法讀取此圖片——請選擇 JPG 或 PNG 圖片。",
+  "h": "32a1faf4"
+ },
+ "js.thtu.khong-nhan-dien-duoc-ban-tay": {
+  "t": "⚠ 未能偵測到手掌。請在與背景對比分明、光線充足的環境下重新拍得更清楚。",
+  "h": "5abad846"
+ },
+ "js.thtu.khong-the-ket-noi": {
+  "t": "無法連線。",
+  "h": "3dc4d8cb"
+ },
+ "js.thtu.khong-the-mo-camera": {
+  "t": "無法開啟相機。",
+  "h": "39a33224"
+ },
+ "js.thtu.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.thtu.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.thtu.ngon-ap-ut": {
+  "t": "無名指",
+  "h": "44dd840f"
+ },
+ "js.thtu.ngon-cai": {
+  "t": "拇指",
+  "h": "aa7ff125"
+ },
+ "js.thtu.ngon-dai-nhat-f": {
+  "t": "最長的手指：{f}",
+  "h": "8a5684eb"
+ },
+ "js.thtu.ngon-giua": {
+  "t": "中指",
+  "h": "b5a038e9"
+ },
+ "js.thtu.ngon-tro": {
+  "t": "食指",
+  "h": "379d7ea9"
+ },
+ "js.thtu.ngon-ut": {
+  "t": "小指",
+  "h": "6a313fb1"
+ },
+ "js.thtu.rong-dai-r": {
+  "t": "寬／長 = {r}",
+  "h": "86f06997"
+ },
+ "js.thtu.tam-dai-chi-la-gi": {
+  "t": "三大指是什麼？",
+  "h": "baef21dd"
+ },
+ "js.thtu.tay-thuan-khac-nhau": {
+  "t": "慣用手與非慣用手有什麼不同？",
+  "h": "10468033"
+ },
+ "js.thtu.thu-tuong": {
+  "t": "手相",
+  "h": "869631da"
+ },
+ "js.thtu.thu-tuong-cua-toi": {
+  "t": "我的手相",
+  "h": "0af7a78d"
+ },
+ "js.thtu.thuong-mat-15-20-giay": {
+  "t": "通常需要 15–20 秒",
+  "h": "087173ee"
+ },
+ "js.thtu.ty-le-rong-dai-long-ban-tay": {
+  "t": "手掌寬／長比例：{r}（{s}）",
+  "h": "e753f592"
+ },
+ "js.thtu.vui-long-chon-file-anh": {
+  "t": "請選擇圖片檔。",
+  "h": "71a61127"
+ },
  "js.tool.an-sao": {
   "t": "命盤安星",
   "h": "5c7c4676"
@@ -20339,6 +22891,86 @@
   "t": "{n} 月",
   "h": "4dd9659f"
  },
+ "khis.anh-chan-dung": {
+  "t": "人像照片",
+  "h": "13ef800c"
+ },
+ "khis.anh-chi-gui-toi-may-chu": {
+  "t": "圖片僅傳送至伺服器進行分析，不會儲存在伺服器上。請在上午或傍晚拍攝，不化妝、不加濾鏡。",
+  "h": "ee45336b"
+ },
+ "khis.chon-anh-khac": {
+  "t": "選擇其他圖片",
+  "h": "0c82c787"
+ },
+ "khis.chup-anh-khuon-mat-he-thong": {
+  "t": "請拍攝臉部照片——系統依《麻衣神相》以印堂、五嶽論氣色，預測未來 1–3 個月的運勢。",
+  "h": "1722144a"
+ },
+ "khis.chup-anh-trong-24-gio": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>24 小時內<br>拍攝</span>",
+  "h": "1e9673f3"
+ },
+ "khis.chup-mot-tam-anh-mat-ro": {
+  "t": "請在最近 24 小時內拍一張臉部清晰的照片。系統會分析印堂、五嶽，預測未來 1–3 個月的運勢，並提供養氣之道。",
+  "h": "912812d7"
+ },
+ "khis.dang-quan-sat-khi-sac-tu": {
+  "t": "正在從您的圖片觀察氣色——請稍候約 30 秒…<br><span style=\"font-size:12px;color:var(--text-lt)\">正在分析印堂與五嶽五個區域的氣色。</span>",
+  "h": "f82ea2fa"
+ },
+ "khis.do-an-duong-ngu-nhac": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sunrise\"></span><span>測量印堂、<br>五嶽</span>",
+  "h": "c8eb70da"
+ },
+ "khis.du-bao-van-khi-1-3": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>未來 1–3 個月<br>運勢預測</span>",
+  "h": "4a1cf555"
+ },
+ "khis.jpg-png-toi-da-10mb-chup": {
+  "t": "JPG、PNG——最大 10MB · 請於 24 小時內拍攝",
+  "h": "3b51d9fa"
+ },
+ "khis.khi-sac": {
+  "t": "氣色",
+  "h": "e1205bcd"
+ },
+ "khis.khi-sac-luan": {
+  "t": "氣色解讀",
+  "h": "95b743c6"
+ },
+ "khis.khi-sac-tren-guong-mat-thay": {
+  "t": "臉上的氣色，會在運勢真正改變之前先行改變——古人比任何其他徵兆都更早讀出這一點。上傳一張近期拍攝的臉部照片，即可獲得未來 1–3 個月的運勢解讀。",
+  "h": "b8d7084d"
+ },
+ "khis.khi-sac-tu-vi-minh-bao": {
+  "t": "氣色——明寶紫微斗數",
+  "h": "3bb0e032"
+ },
+ "khis.khi-sac-van-khi-1-3": {
+  "t": "<b>氣色</b><span>由印堂與五嶽看未來 1–3 個月的運勢 — <span data-tvp-price=\"khi-sac\">…</span> 兩</span>",
+  "h": "460ed941"
+ },
+ "khis.luan-khi-sac-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sunrise\"></span><b id=\"analyzeBtnLabel\">解讀氣色 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"khi-sac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"khi-sac\">…</span> 兩)</span></small>",
+  "h": "d256b1ce"
+ },
+ "khis.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"khi-sac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"khi-sac\">…</span> 兩)</span>",
+  "h": "212bf76e"
+ },
+ "khis.nhan-de-chon-anh-hoac-keo": {
+  "t": "點擊選擇圖片，或拖放到這裡",
+  "h": "988cbe04"
+ },
+ "khis.xem-anh-khac": {
+  "t": "看其他圖片",
+  "h": "c3d65ffa"
+ },
+ "khis.xem-khi-sac": {
+  "t": "看氣色",
+  "h": "7863a81d"
+ },
  "kimlau.bang-tra-20-nam-toi": {
   "t": "未來20年<br>查詢表",
   "h": "ded0c033"
@@ -21171,6 +23803,114 @@
   "t": "紫微不是用來預測未來，而是幫助您了解自己，做出更好的選擇。",
   "h": "ae92de9d"
  },
+ "lucnham.1-nhap-ngay-gio": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">輸入日期時辰</span>",
+  "h": "953e7b97"
+ },
+ "lucnham.dang-phan-van-chuyen-tien-bac": {
+  "t": "正為錢財、感情或需立刻拿定的決定猶豫不決嗎？依當下的時辰與日期起一課，直指重點作答。取得直切您所問之事的簡短論斷。",
+  "h": "295b866e"
+ },
+ "lucnham.de-trong-la-lay-gio-hien": {
+  "t": "留空則取當下時間。系統起大六壬課，回傳四課、三傳、貴人，以及依《考變占》的論斷。",
+  "h": "1e494a7c"
+ },
+ "lucnham.gio-can-xem": {
+  "t": "要查詢的時辰",
+  "h": "84e96644"
+ },
+ "lucnham.gio-dan-03-05h": {
+  "t": "寅時（03–05時）",
+  "h": "a2d01564"
+ },
+ "lucnham.gio-dau-17-19h": {
+  "t": "酉時（17–19時）",
+  "h": "d17bfbc2"
+ },
+ "lucnham.gio-hoi-21-23h": {
+  "t": "亥時（21–23時）",
+  "h": "9721a904"
+ },
+ "lucnham.gio-mao-05-07h": {
+  "t": "卯時（05–07時）",
+  "h": "58eab8cc"
+ },
+ "lucnham.gio-mui-13-15h": {
+  "t": "未時（13–15時）",
+  "h": "56d4bde0"
+ },
+ "lucnham.gio-ngo-11-13h": {
+  "t": "午時（11–13時）",
+  "h": "8b9d2da7"
+ },
+ "lucnham.gio-suu-01-03h": {
+  "t": "丑時（01–03時）",
+  "h": "33993400"
+ },
+ "lucnham.gio-than-15-17h": {
+  "t": "申時（15–17時）",
+  "h": "9d910299"
+ },
+ "lucnham.gio-thin-07-09h": {
+  "t": "辰時（07–09時）",
+  "h": "24c10915"
+ },
+ "lucnham.gio-tuat-19-21h": {
+  "t": "戌時（19–21時）",
+  "h": "8c0c8255"
+ },
+ "lucnham.gio-ty-09-11h": {
+  "t": "巳時（09–11時）",
+  "h": "4f543b45"
+ },
+ "lucnham.gio-ty-23-01h": {
+  "t": "子時（23–01時）",
+  "h": "b64ae149"
+ },
+ "lucnham.hoi-thay-luan-than-tuong": {
+  "t": "✦ 請老師論神將",
+  "h": "fd4349af"
+ },
+ "lucnham.luan-theo-khao-bien-chiem": {
+  "t": "依《考變占》<br>論斷",
+  "h": "d2082bef"
+ },
+ "lucnham.luc-nham-gian": {
+  "t": "簡易六壬",
+  "h": "a7f92fcb"
+ },
+ "lucnham.luc-nham-gian-12-than-tuong": {
+  "t": "<b>簡易六壬</b><span>依時辰、日期推十二神將</span>",
+  "h": "337b9381"
+ },
+ "lucnham.luc-nham-gian-tra-12-than": {
+  "t": "簡易六壬——依時辰／日期查詢十二神將，以及當值之神吉凶。會面、求財、出行等事，可請老師論斷。",
+  "h": "554217a5"
+ },
+ "lucnham.luc-nham-gian-tu-vi-minh": {
+  "t": "簡易六壬——明寶紫微斗數",
+  "h": "fd05d989"
+ },
+ "lucnham.luc-nham-la-mot-trong-tam": {
+  "t": "六壬是中國古代術數「三式」之一，以天盤、地盤配合當下的時辰與日期起課。論斷聚焦於所問的具體事項，依盤上天將的位置而定。",
+  "h": "1c7538cd"
+ },
+ "lucnham.ngay-gio-can-xem": {
+  "t": "要查詢的日期與時辰",
+  "h": "80c37086"
+ },
+ "lucnham.quy-nhan-dan-loi": {
+  "t": "貴人<br>指路",
+  "h": "b1fa7db6"
+ },
+ "lucnham.tu-khoa-tam-truyen": {
+  "t": "四課<br>三傳",
+  "h": "dfa03fb9"
+ },
+ "lucnham.xem-que-b": {
+  "t": "起課 →",
+  "h": "f19970b5"
+ },
  "maihoa.1-lap-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">起卦</span>",
   "h": "b51a3df6"
@@ -21898,6 +24638,98 @@
  "ngaytot.xem-lich": {
   "t": "查看日曆 →",
   "h": "6fa85107"
+ },
+ "nguhanhten.can-bang-ngu-hanh": {
+  "t": "五行<br>平衡",
+  "h": "6beeac0b"
+ },
+ "nguhanhten.can-bang-ngu-hanh-h4ql": {
+  "t": "五行平衡",
+  "h": "d1b5ef33"
+ },
+ "nguhanhten.chua-tim-thay-chu-han-cho": {
+  "t": "⚠ 找不到下列音節對應的漢字——請手動輸入筆畫數（可到 <a href=\"https://hanzii.net\" target=\"_blank\" style=\"color:var(--tx-blue)\">hanzii.net</a> 查詢）：",
+  "h": "464b3314"
+ },
+ "nguhanhten.diem-so-hop-khac": {
+  "t": "相合相剋<br>分數",
+  "h": "1b721b9d"
+ },
+ "nguhanhten.ho-va-ten-day-du": {
+  "t": "完整姓名",
+  "h": "e920e42c"
+ },
+ "nguhanhten.hoa": {
+  "t": "火",
+  "h": "be792fa1"
+ },
+ "nguhanhten.hoi-thay-luan-sau-ngu-hanh": {
+  "t": "✦ 請老師深入論析姓名五行",
+  "h": "ba1b2c72"
+ },
+ "nguhanhten.khong-ro-bo-qua": {
+  "t": "不確定／略過",
+  "h": "941d7cdc"
+ },
+ "nguhanhten.moc": {
+  "t": "木",
+  "h": "4bd601ae"
+ },
+ "nguhanhten.mot-cai-ten-goi-hang-ngay": {
+  "t": "每天被叫的名字也自帶五行——與本命相合還是相剋，很少人檢查過。輸入姓名，免費取得五行分數與明確結論。",
+  "h": "3e585f76"
+ },
+ "nguhanhten.ngu-hanh-ban-menh-tuy-chon": {
+  "t": "本命五行（選填）",
+  "h": "c90318f2"
+ },
+ "nguhanhten.ngu-hanh-kim-moc-thuy-hoa": {
+  "t": "五行（金、木、水、火、土）是中國古代描述五種基本元素相生相剋規律的學說，是眾多東方命理學的基礎。每個音、字或數字都可歸入某一行，與本命對照其相合與相剋。",
+  "h": "bcca1f1c"
+ },
+ "nguhanhten.ngu-hanh-ten": {
+  "t": "姓名五行",
+  "h": "9b92ea0c"
+ },
+ "nguhanhten.ngu-hanh-ten-ngu-hanh-tung": {
+  "t": "<b>姓名五行</b><span>每個字的五行與平衡</span>",
+  "h": "32d338b2"
+ },
+ "nguhanhten.ngu-hanh-ten-tu-vi-minh": {
+  "t": "姓名五行——明寶紫微斗數",
+  "h": "2de02e4f"
+ },
+ "nguhanhten.ngu-hanh-tung-chu": {
+  "t": "每個字的<br>五行",
+  "h": "f7103aec"
+ },
+ "nguhanhten.nhap-du-ho-ten-co-dau": {
+  "t": "請輸入姓＋名（含越南語聲調符號），以空格分隔",
+  "h": "aefee322"
+ },
+ "nguhanhten.nhap-ho-ten-day-du-co": {
+  "t": "請輸入完整姓名，也可另選本命五行。取得五行平衡圖、分數，以及與本命相合或相剋的結論。",
+  "h": "2fd9ddb3"
+ },
+ "nguhanhten.nhap-ten-tieng-viet-tra-chu": {
+  "t": "輸入越南語姓名——查詢漢字、筆畫數與每個字的五行、五行平衡，並與本命對照。更深入的解讀可請教老師。",
+  "h": "f620e146"
+ },
+ "nguhanhten.tho": {
+  "t": "土",
+  "h": "9a0da463"
+ },
+ "nguhanhten.thuy": {
+  "t": "水",
+  "h": "f354741d"
+ },
+ "nguhanhten.tra-ngu-hanh-ten": {
+  "t": "查詢姓名五行 →",
+  "h": "bfb81211"
+ },
+ "nguhanhten.vd-nguyen-van-an": {
+  "t": "例：Nguyễn Văn An",
+  "h": "4811bda0"
  },
  "nguoikhac.2-xem-truoc-cam-nang": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽相處指南</span>",
@@ -23399,6 +26231,26 @@
   "t": "看生孩子的生肖——明寶紫微斗數",
   "h": "23026bbb"
  },
+ "solaso.chua-co-la-so-nao-trong": {
+  "t": "簿冊中還沒有命盤。<br>在任何工具輸入出生年月日後，命盤會自動收進這裡。",
+  "h": "f40b05ed"
+ },
+ "solaso.dang-nhap-dang-ky": {
+  "t": "登入／註冊",
+  "h": "2bcf279e"
+ },
+ "solaso.dang-nhap-de-xem-so-la": {
+  "t": "請登入以查看已儲存的命盤簿。",
+  "h": "4fa47b77"
+ },
+ "solaso.la-so-da-luu-so-la": {
+  "t": "<b>已儲存的命盤</b><span>帳號專屬的命盤簿——依關係分組。點命盤上的「報告」，即可檢視或建立該命盤的報告。</span>",
+  "h": "703b7bd9"
+ },
+ "solaso.la-so-da-luu-tu-vi": {
+  "t": "已儲存的命盤——明寶紫微斗數",
+  "h": "183c05e5"
+ },
  "taikhoan.add-mcp-server-chon-streamable-http": {
   "t": "<strong>Add MCP server</strong> → 選擇 <strong>Streamable HTTP</strong>。",
   "h": "f63db93e"
@@ -24394,6 +27246,90 @@
  "thtp.xem-ban-mau": {
   "t": "查看範例 →",
   "h": "ba3671b1"
+ },
+ "thtu.1-tai-anh-ban-tay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">上傳手掌圖片</span>",
+  "h": "0c95364a"
+ },
+ "thtu.anh-chi-gui-toi-may-chu": {
+  "t": "圖片僅傳送至伺服器進行分析，不會儲存在伺服器上。請將手掌攤平、掌心向上，並在光線充足處拍攝。",
+  "h": "9007a9b3"
+ },
+ "thtu.ban-tay-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"hand\"></span> 已偵測到手掌",
+  "h": "720bc996"
+ },
+ "thtu.chi-tuong-hoc-phuong-dong-la": {
+  "t": "東方手相學是依據手掌上的主要線紋與周圍的掌丘，來推斷性格、事業與運勢的學問。它是傳統相學體系中獨立的一支，與面相並行。",
+  "h": "f4eb23c1"
+ },
+ "thtu.chup-va-tai-mot-tam-anh": {
+  "t": "請拍攝或上傳一張手掌清晰的圖片。系統依五行形相分析掌紋，解讀三大紋、命運線、掌丘與手指。",
+  "h": "ecabc37d"
+ },
+ "thtu.do-luong-mediapipe": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> MediaPipe 測量",
+  "h": "b51ea8c8"
+ },
+ "thtu.do-tam-dai-chi-duong-van": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hand\"></span><span>測量三大指、<br>命運線</span>",
+  "h": "91a1d8ca"
+ },
+ "thtu.dung-tay-thuan-de-xem-van": {
+  "t": "請用<strong>慣用手</strong>來看目前的運勢",
+  "h": "0fd522f1"
+ },
+ "thtu.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG、PNG、WebP——最大 5MB · 請拍攝手掌，並清楚拍到掌紋",
+  "h": "757ec708"
+ },
+ "thtu.keo-tha-anh-long-ban-tay": {
+  "t": "將手掌圖片拖放到這裡，或點擊選擇",
+  "h": "8281c1d6"
+ },
+ "thtu.long-ban-tay-luu-lai-dau": {
+  "t": "手掌留下了一路走來的痕跡——事業、感情、健康，都在掌上留下各自的紋路。拍下手掌，即可獲得依五行形相的解讀。",
+  "h": "75a0d71c"
+ },
+ "thtu.luan-theo-ngu-hanh-hinh-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依五行形相<br>解讀</span>",
+  "h": "afdecc3a"
+ },
+ "thtu.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> 兩)</span>",
+  "h": "21fe0a1c"
+ },
+ "thtu.phan-tich-thu-tuong-hoc": {
+  "t": "手相學分析",
+  "h": "f33d42ad"
+ },
+ "thtu.phan-tich-thu-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hand\"></span><b id=\"analyzeBtnLabel\">分析手相 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> 兩)</span></small>",
+  "h": "527662b0"
+ },
+ "thtu.tai-anh-long-ban-tay": {
+  "t": "上傳手掌圖片",
+  "h": "4d287ee7"
+ },
+ "thtu.tai-hoac-chup-anh-long-ban": {
+  "t": "上傳或拍攝手掌圖片——系統依東西方古法分析手相：三大指、命運線與各個掌丘。",
+  "h": "1f98998a"
+ },
+ "thtu.thu-tuong": {
+  "t": "手相",
+  "h": "869631da"
+ },
+ "thtu.thu-tuong-co-phap-dong-tay": {
+  "t": "東西古法手相",
+  "h": "cce8e613"
+ },
+ "thtu.thu-tuong-tu-vi-minh-bao": {
+  "t": "手相——明寶紫微斗數",
+  "h": "e64f49ab"
+ },
+ "thtu.thu-tuong-xem-chi-tay-theo": {
+  "t": "<b>手相</b><span>依古法看掌紋 — <span data-tvp-price=\"thu-tuong\">…</span> 兩</span>",
+  "h": "7461fe05"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "您正在解鎖…",

@@ -48,6 +48,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/bat-trach": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/bat-tu": [
   "en",
   "ja",
@@ -56,6 +63,13 @@
   "zh-cn"
  ],
  "/app/boi-bai-tay": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/but-tuong": [
   "en",
   "ja",
   "ko",
@@ -132,7 +146,28 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/dat-ten": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/dat-ten-dn": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/day-con": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/dien-tuong": [
   "en",
   "ja",
   "ko",
@@ -174,6 +209,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/khi-sac": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/kim-lau": [
   "en",
   "ja",
@@ -202,6 +244,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/luc-nham": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/mai-hoa": [
   "en",
   "ja",
@@ -224,6 +273,13 @@
   "zh-cn"
  ],
  "/app/ngay-tot": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/ngu-hanh-ten": [
   "en",
   "ja",
   "ko",
@@ -272,6 +328,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/so-la-so": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/tarot": [
   "en",
   "ja",
@@ -301,6 +364,13 @@
   "zh-cn"
  ],
  "/app/thay": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/thu-tuong": [
   "en",
   "ja",
   "ko",

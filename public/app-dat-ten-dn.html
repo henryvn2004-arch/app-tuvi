@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Đặt tên doanh nghiệp — Tử Vi Minh Bảo</title>
-<meta name="description" content="Đặt tên công ty, thương hiệu, cửa hàng hợp mệnh chủ và ngành nghề theo ngũ hành nạp âm — hỏi Thầy gợi ý tên và luận ý nghĩa, phong thủy tên.">
+<title data-i18n="dattendn.dat-ten-doanh-nghiep-tu-vi">Đặt tên doanh nghiệp — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:dattendn.dat-ten-cong-ty-thuong-hieu" name="description" content="Đặt tên công ty, thương hiệu, cửa hàng hợp mệnh chủ và ngành nghề theo ngũ hành nạp âm — hỏi Thầy gợi ý tên và luận ý nghĩa, phong thủy tên.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -50,10 +50,10 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Đặt tên doanh nghiệp</b><span>Tên công ty · thương hiệu · cửa hàng hợp mệnh chủ</span></div>
+      <div data-i18n="dattendn.dat-ten-doanh-nghiep-ten-cong" class="ws-title"><b>Đặt tên doanh nghiệp</b><span>Tên công ty · thương hiệu · cửa hàng hợp mệnh chủ</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.sua-thong-tin" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -67,15 +67,15 @@
         <img class="intro-avatar" src="/tool-avatars/dat-ten-dn.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Đặt tên doanh nghiệp</div>
-            <div class="intro-d">Một cái tên hợp mệnh có thể theo công ty suốt hành trình khởi nghiệp — chọn cho có rồi sửa sau luôn khó hơn chọn đúng từ đầu. Nhập năm sinh người chủ, nhận 12 gợi ý tên trước khi đăng ký kinh doanh.</div>
+            <div data-i18n="dattendn.dat-ten-doanh-nghiep" class="intro-t">Đặt tên doanh nghiệp</div>
+            <div data-i18n="dattendn.mot-cai-ten-hop-menh-co" class="intro-d">Một cái tên hợp mệnh có thể theo công ty suốt hành trình khởi nghiệp — chọn cho có rồi sửa sau luôn khó hơn chọn đúng từ đầu. Nhập năm sinh người chủ, nhận 12 gợi ý tên trước khi đăng ký kinh doanh.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="sparkles"></span><span>12 gợi ý tên<br>chia 3 nhóm</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Hợp mệnh chủ<br>& ngành nghề</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="building-2"></span><span>Trước khi<br>thành lập</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="sparkles"></span><span data-i18n="datten.12-goi-y-ten-chia">12 gợi ý tên<br>chia 3 nhóm</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span data-i18n="dattendn.hop-menh-chu-nganh-nghe">Hợp mệnh chủ<br>& ngành nghề</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="building-2"></span><span data-i18n="dattendn.truoc-khi-thanh-lap">Trước khi<br>thành lập</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -83,63 +83,63 @@
            chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
            đã đổi trong code cũ (doDatTenDn/showForm/gate/paywall/kết quả). -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước nền mệnh chủ</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="dattendn.2-xem-truoc-nen-menh-chu" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước nền mệnh chủ</span></div>
+        <div data-i18n="battu.3-thanh-toan" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="battu.4-nhan-ket-qua" class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
-        <div class="fc-head"><span class="fc-ic" data-icon="building-2"></span><h2>Thông tin đặt tên doanh nghiệp</h2></div>
-        <p class="sub">Nhập năm sinh người chủ, ngành nghề và loại hình kinh doanh để tính nạp âm ngũ hành và lập nền đặt tên.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="building-2"></span><h2 data-i18n="dattendn.thong-tin-dat-ten-doanh-nghiep">Thông tin đặt tên doanh nghiệp</h2></div>
+        <p data-i18n="dattendn.nhap-nam-sinh-nguoi-chu-nganh" class="sub">Nhập năm sinh người chủ, ngành nghề và loại hình kinh doanh để tính nạp âm ngũ hành và lập nền đặt tên.</p>
         <p class="price-note" data-tvp-price-label="dat-ten-dn">…</p>
         <div class="frow">
-          <div class="fg" style="flex:1;min-width:150px"><label>Tên người chủ (tùy chọn)</label><input type="text" id="inpTenChu" placeholder="Nguyễn Văn A"></div>
-          <div class="fg" style="width:120px"><label>Năm sinh chủ</label><input type="number" id="inpNamChu" placeholder="1988" min="1900" max="2100"></div>
+          <div class="fg" style="flex:1;min-width:150px"><label data-i18n="dattendn.ten-nguoi-chu-tuy-chon">Tên người chủ (tùy chọn)</label><input data-i18n-attr="placeholder:laso.nguyen-van-a" type="text" id="inpTenChu" placeholder="Nguyễn Văn A"></div>
+          <div class="fg" style="width:120px"><label data-i18n="dattendn.nam-sinh-chu">Năm sinh chủ</label><input type="number" id="inpNamChu" placeholder="1988" min="1900" max="2100"></div>
         </div>
         <div class="frow">
-          <div class="fg" style="flex:2;min-width:170px"><label>Ngành nghề</label>
+          <div class="fg" style="flex:2;min-width:170px"><label data-i18n="dattendn.nganh-nghe">Ngành nghề</label>
             <select id="inpNganh">
-              <option value="Thương mại / bán lẻ">Thương mại / bán lẻ</option>
-              <option value="Ăn uống / F&amp;B / nhà hàng">Ăn uống / F&amp;B / nhà hàng</option>
-              <option value="Bất động sản / xây dựng">Bất động sản / xây dựng</option>
-              <option value="Công nghệ / phần mềm">Công nghệ / phần mềm</option>
-              <option value="Thời trang / làm đẹp">Thời trang / làm đẹp</option>
-              <option value="Giáo dục / đào tạo">Giáo dục / đào tạo</option>
-              <option value="Y tế / sức khỏe">Y tế / sức khỏe</option>
-              <option value="Tài chính / dịch vụ">Tài chính / dịch vụ</option>
-              <option value="Sản xuất / công nghiệp">Sản xuất / công nghiệp</option>
-              <option value="Du lịch / khách sạn">Du lịch / khách sạn</option>
-              <option value="Khác">Khác</option>
+              <option data-i18n="dattendn.thuong-mai-ban-le" value="Thương mại / bán lẻ">Thương mại / bán lẻ</option>
+              <option data-i18n="dattendn.an-uong-f-b-nha-hang" value="Ăn uống / F&amp;B / nhà hàng">Ăn uống / F&amp;B / nhà hàng</option>
+              <option data-i18n="dattendn.bat-dong-san-xay-dung" value="Bất động sản / xây dựng">Bất động sản / xây dựng</option>
+              <option data-i18n="dattendn.cong-nghe-phan-mem" value="Công nghệ / phần mềm">Công nghệ / phần mềm</option>
+              <option data-i18n="dattendn.thoi-trang-lam-dep" value="Thời trang / làm đẹp">Thời trang / làm đẹp</option>
+              <option data-i18n="dattendn.giao-duc-dao-tao" value="Giáo dục / đào tạo">Giáo dục / đào tạo</option>
+              <option data-i18n="dattendn.y-te-suc-khoe" value="Y tế / sức khỏe">Y tế / sức khỏe</option>
+              <option data-i18n="dattendn.tai-chinh-dich-vu" value="Tài chính / dịch vụ">Tài chính / dịch vụ</option>
+              <option data-i18n="dattendn.san-xuat-cong-nghiep" value="Sản xuất / công nghiệp">Sản xuất / công nghiệp</option>
+              <option data-i18n="dattendn.du-lich-khach-san" value="Du lịch / khách sạn">Du lịch / khách sạn</option>
+              <option data-i18n="dattendn.khac" value="Khác">Khác</option>
             </select>
           </div>
-          <div class="fg" style="flex:1;min-width:130px"><label>Loại hình (tùy chọn)</label>
+          <div class="fg" style="flex:1;min-width:130px"><label data-i18n="dattendn.loai-hinh-tuy-chon">Loại hình (tùy chọn)</label>
             <select id="inpLoaiHinh">
               <option value="">—</option>
-              <option value="Công ty">Công ty</option>
-              <option value="Thương hiệu / shop">Thương hiệu / shop</option>
-              <option value="Cửa hàng">Cửa hàng</option>
-              <option value="Hộ kinh doanh">Hộ kinh doanh</option>
+              <option data-i18n="dattendn.cong-ty" value="Công ty">Công ty</option>
+              <option data-i18n="dattendn.thuong-hieu-shop" value="Thương hiệu / shop">Thương hiệu / shop</option>
+              <option data-i18n="dattendn.cua-hang" value="Cửa hàng">Cửa hàng</option>
+              <option data-i18n="dattendn.ho-kinh-doanh" value="Hộ kinh doanh">Hộ kinh doanh</option>
             </select>
           </div>
         </div>
         <div class="frow" style="margin-bottom:13px">
-          <div class="fg" style="flex:1;min-width:200px"><label>Tên đang cân nhắc (tùy chọn)</label><input type="text" id="inpTenGoiY" maxlength="60" placeholder="Để trống nếu muốn được gợi ý mới"></div>
+          <div class="fg" style="flex:1;min-width:200px"><label data-i18n="dattendn.ten-dang-can-nhac-tuy-chon">Tên đang cân nhắc (tùy chọn)</label><input data-i18n-attr="placeholder:dattendn.de-trong-neu-muon-duoc-goi" type="text" id="inpTenGoiY" maxlength="60" placeholder="Để trống nếu muốn được gợi ý mới"></div>
         </div>
         <button class="btn-go" id="btnGo" onclick="doDatTenDn()">
-          <span class="bg-label"><span class="ic" data-icon="building-2"></span><b id="btnGoLabel">Lập nền →</b></span>
+          <span class="bg-label"><span class="ic" data-icon="building-2"></span><b id="btnGoLabel" data-i18n="chonngay.lap-nen">Lập nền →</b></span>
         </button>
       </div>
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Đặt tên doanh nghiệp</div>
-        <p class="wsp-desc">Ngũ Hành (Kim, Mộc, Thủy, Hỏa, Thổ) là học thuyết cổ Trung Hoa mô tả quy luật tương sinh, tương khắc giữa năm nguyên tố cơ bản, làm nền tảng cho nhiều môn mệnh lý phương Đông. Mỗi âm, chữ hay con số đều có thể quy về một hành để đối chiếu hợp – khắc với bản mệnh.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="dattendn.dat-ten-doanh-nghiep" class="wsp-title">Đặt tên doanh nghiệp</div>
+        <p data-i18n="nguhanhten.ngu-hanh-kim-moc-thuy-hoa" class="wsp-desc">Ngũ Hành (Kim, Mộc, Thủy, Hỏa, Thổ) là học thuyết cổ Trung Hoa mô tả quy luật tương sinh, tương khắc giữa năm nguyên tố cơ bản, làm nền tảng cho nhiều môn mệnh lý phương Đông. Mỗi âm, chữ hay con số đều có thể quy về một hành để đối chiếu hợp – khắc với bản mệnh.</p>
       </div>
       <div class="samp-cta" id="sampCta">
         <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="dat-ten-dn" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+        <span data-i18n="chonngay.chua-muon-khai-thong-tin-ban" class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button data-i18n="chonngay.xem-ban-mau" type="button" id="btnSample" data-sample-tool="dat-ten-dn" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -149,7 +149,7 @@
         <div class="res-head" id="resHead"></div>
         <div class="cc-row" id="ccRow"></div>
         <div class="note" id="resNote"></div>
-        <div class="ask" data-ask="Gợi ý cho tôi 5 tên doanh nghiệp hợp mệnh chủ và ngành nghề, kèm ý nghĩa và ngũ hành từng tên.">✦ Hỏi Thầy gợi ý tên hợp mệnh</div>
+        <div data-i18n="datten.hoi-thay-goi-y-ten-hop" class="ask" data-ask="Gợi ý cho tôi 5 tên doanh nghiệp hợp mệnh chủ và ngành nghề, kèm ý nghĩa và ngũ hành từng tên.">✦ Hỏi Thầy gợi ý tên hợp mệnh</div>
         <!-- Khối hook (1 fact) — nhấn lại đúng kết luận vừa tính (hành nên
              chọn khi đặt tên DN) thành một câu nổi bật ngay trước CTA. -->
         <div id="hookHost"></div>
@@ -158,9 +158,9 @@
             <div class="cb-l">
               <span class="cb-ic" data-icon="wallet"></span>
               <div>
-                <div class="cb-title">Chi phí sử dụng</div>
-                <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="dat-ten-dn"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="dat-ten-dn">…</span> Lượng)</span></div>
-                <div class="cb-pay">
+                <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+                <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="dat-ten-dn"></span> <span data-i18n="chonngay.moi-luot">mỗi lượt</span> <span class="cb-sub">(<span data-tvp-price="dat-ten-dn">…</span> <span data-i18n="topup.luong-don-vi">Lượng</span>)</span></div>
+                <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                   <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                   <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
                 </div>
@@ -168,14 +168,14 @@
             </div>
             <div class="cb-r">
               <span class="cb-ic" data-icon="gift"></span>
-              <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+              <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
             </div>
           </div>
           <button class="btn-go" id="btnUnlock" onclick="initiateDatTenDnChuyenSau()">
-            <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnUnlockLabel">Gợi ý tên doanh nghiệp →</b></span>
-            <small>Tốn <span class="vnd" data-tvp-price-vnd="dat-ten-dn"></span> <span class="cb-sub">(<span data-tvp-price="dat-ten-dn">…</span> Lượng)</span></small>
+            <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnUnlockLabel" data-i18n="dattendn.goi-y-ten-doanh-nghiep">Gợi ý tên doanh nghiệp →</b></span>
+            <small><span data-i18n="chonngay.ton">Tốn</span> <span class="vnd" data-tvp-price-vnd="dat-ten-dn"></span> <span class="cb-sub">(<span data-tvp-price="dat-ten-dn">…</span> <span data-i18n="topup.luong-don-vi">Lượng</span>)</span></small>
           </button>
-          <p>Hệ thống đọc ngũ hành nạp âm chủ + ngành nghề, gợi ý 12 tên chia 3 nhóm: Thuần Việt / Hán Việt / Kết Hợp.</p>
+          <p data-i18n="dattendn.he-thong-doc-ngu-hanh-nap">Hệ thống đọc ngũ hành nạp âm chủ + ngành nghề, gợi ý 12 tên chia 3 nhóm: Thuần Việt / Hán Việt / Kết Hợp.</p>
         </div>
         <div class="dt-result" id="dtResult"></div>
       </div>
@@ -199,6 +199,7 @@ window.SHELL_INTRO={key:'dat-ten-dn'};</script>
 <script src="/tools-shared/sample-hint.js?v=2"></script>
 <script src="/shell.js?v=151"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
+<script src="/tools-shared/glossary.js?v=5"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
@@ -239,18 +240,21 @@ function doDatTenDn(){
   var namChu=parseInt(document.getElementById('inpNamChu').value);
   var nganh=document.getElementById('inpNganh').value;
   var loaiHinh=document.getElementById('inpLoaiHinh').value;
+  // Chữ HIỂN THỊ của ngành / loại hình (option đã dịch ở /<locale>/); value tiếng Việt vẫn gửi server.
+  function _optLb(id,v){ var s=document.getElementById(id), o=s&&s.selectedOptions[0]; return (o&&o.textContent)||v; }
+  var nganhLb=_optLb('inpNganh',nganh), loaiLb=_optLb('inpLoaiHinh',loaiHinh);
   var tenGoiY=document.getElementById('inpTenGoiY').value.trim();
-  if(!namChu||!nganh){ alert('Vui lòng nhập năm sinh người chủ và chọn ngành nghề.'); return; }
+  if(!namChu||!nganh){ alert(_tvmbT('js.dattendn.vui-long-nhap-nam-sinh','Vui lòng nhập năm sinh người chủ và chọn ngành nghề.')); return; }
   btn.disabled=true;
   try{
     var iChu=CanChi.ccInfo(namChu);
-    document.getElementById('resHead').textContent='Nền mệnh chủ · '+nganh+(loaiHinh?' · '+loaiHinh:'');
+    document.getElementById('resHead').textContent=_tvmbT('js.dattendn.res-head','Nền mệnh chủ · {nganh}',{nganh:nganhLb})+(loaiHinh?' · '+loaiLb:'');
     function ccCard(who,val,sub,hanh){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(val)+'</div>'+(sub?'<div class="na" style="--hanh:'+(HANH_COLOR[hanh]||'var(--gold-soft)')+'">'+esc(sub)+'</div>':'')+'</div>'; }
     document.getElementById('ccRow').innerHTML=
-      ccCard('Tuổi chủ'+(tenChu?' · '+tenChu:''),iChu.canChi,iChu.napAm+' · '+iChu.hanh,iChu.hanh)+
-      ccCard('Ngành',nganh,'')+
-      (tenGoiY?ccCard('Tên cân nhắc',tenGoiY,''):'');
-    document.getElementById('resNote').innerHTML='Mệnh chủ nạp âm <b>'+esc(iChu.napAm)+'</b> — hành <b>'+esc(iChu.hanh)+'</b>. Tên doanh nghiệp nên chọn chữ có ngũ hành <b>tương sinh / đồng hành</b> để bồi mệnh chủ (hành <b>'+esc(hanhSinhCho(iChu.hanh))+'</b> sinh <b>'+esc(iChu.hanh)+'</b>), đồng thời hợp khí chất ngành <b>'+esc(nganh.toLowerCase())+'</b>, đọc thuận, dễ nhớ. Hỏi Thầy để có danh sách tên cụ thể.';
+      ccCard(_tvmbT('js.dattendn.tuoi-chu','Tuổi chủ')+(tenChu?' · '+tenChu:''),_tvmbG('canchi',iChu.canChi),_tvmbG('napam',iChu.napAm)+' · '+_tvmbG('hanh',iChu.hanh),iChu.hanh)+
+      ccCard(_tvmbT('js.dattendn.nganh','Ngành'),nganhLb,'')+
+      (tenGoiY?ccCard(_tvmbT('js.dattendn.ten-can-nhac','Tên cân nhắc'),tenGoiY,''):'');
+    document.getElementById('resNote').innerHTML=_tvmbT('js.dattendn.res-note','Mệnh chủ nạp âm <b>{na}</b> — hành <b>{h}</b>. Tên doanh nghiệp nên chọn chữ có ngũ hành <b>tương sinh / đồng hành</b> để bồi mệnh chủ (hành <b>{hs}</b> sinh <b>{h}</b>), đồng thời hợp khí chất ngành <b>{nganh}</b>, đọc thuận, dễ nhớ. Hỏi Thầy để có danh sách tên cụ thể.',{na:esc(_tvmbG('napam',iChu.napAm)),h:esc(_tvmbG('hanh',iChu.hanh)),hs:esc(_tvmbG('hanh',hanhSinhCho(iChu.hanh))),nganh:esc(nganhLb.toLowerCase())});
     mountHook(iChu,nganh);
     // Globals cho khối "Gợi ý tên chuyên sâu AI" (gate+SSE, port từ tools/dat-ten-doanh-nghiep.html)
     _dtHoTen=tenChu||'Chủ doanh nghiệp'; _dtNamSinh=namChu; _dtInfoChu=iChu; _dtLinhVuc=nganh; _dtLoaiHinh=loaiHinh;
@@ -262,11 +266,11 @@ function doDatTenDn(){
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       scenario:{type:'dat-ten-dn',data:{tenChu:tenChu,namChu:namChu,nganh:nganh,loaiHinh:loaiHinh,tenGoiY:tenGoiY}},
-      label:'Đặt tên DN · '+nganh+' · chủ '+iChu.canChi,
-      greeting:'Nền mệnh chủ đã sẵn sàng (chủ **'+esc(iChu.canChi)+'** · '+esc(iChu.hanh)+', ngành '+esc(nganh.toLowerCase())+'). '+(tenGoiY?'Bạn muốn tôi chấm tên **'+esc(tenGoiY)+'** hay gợi ý tên mới?':'Bạn muốn tôi gợi ý tên theo hướng nào?'),
+      label:_tvmbT('js.dattendn.label','Đặt tên DN · {nganh} · chủ {cc}',{nganh:nganhLb,cc:_tvmbG('canchi',iChu.canChi)}),
+      greeting:_tvmbT('js.dattendn.greeting','Nền mệnh chủ đã sẵn sàng (chủ **{cc}** · {h}, ngành {nganh}).',{cc:esc(_tvmbG('canchi',iChu.canChi)),h:esc(_tvmbG('hanh',iChu.hanh)),nganh:esc(nganhLb.toLowerCase())})+' '+(tenGoiY?_tvmbT('js.dattendn.cham-ten','Bạn muốn tôi chấm tên **{ten}** hay gợi ý tên mới?',{ten:esc(tenGoiY)}):_tvmbT('js.dattendn.goi-y-huong','Bạn muốn tôi gợi ý tên theo hướng nào?')),
       chips:tenGoiY
-        ?['Chấm tên "'+tenGoiY+'" hợp mệnh chủ và ngành không?','Gợi ý 5 tên khác hợp hơn','Tên nên bổ ngũ hành gì?','Slogan nào hợp với tên này?']
-        :['Gợi ý 5 tên hợp mệnh kèm ý nghĩa','Tên nên bổ ngũ hành gì cho chủ?','Tên nào hợp khí chất ngành này?','Tránh chữ/âm nào khi đặt tên?']
+        ?[_tvmbT('js.dattendn.chip-cham','Chấm tên "{ten}" hợp mệnh chủ và ngành không?',{ten:tenGoiY}),_tvmbT('js.dattendn.chip-5-ten-khac','Gợi ý 5 tên khác hợp hơn'),_tvmbT('js.dattendn.chip-bo-hanh','Tên nên bổ ngũ hành gì?'),_tvmbT('js.dattendn.chip-slogan','Slogan nào hợp với tên này?')]
+        :[_tvmbT('js.dattendn.chip-5-ten','Gợi ý 5 tên hợp mệnh kèm ý nghĩa'),_tvmbT('js.dattendn.chip-bo-hanh-chu','Tên nên bổ ngũ hành gì cho chủ?'),_tvmbT('js.dattendn.chip-khi-chat','Tên nào hợp khí chất ngành này?'),_tvmbT('js.dattendn.chip-tranh','Tránh chữ/âm nào khi đặt tên?')]
     });
     var _dtLines=['Đặt tên doanh nghiệp · ngành '+nganh+(loaiHinh?' · '+loaiHinh:'')+' — nền mệnh chủ '+iChu.canChi+' ('+iChu.napAm+', '+iChu.hanh+')'];
     if(tenGoiY) _dtLines.push('Tên đang cân nhắc: '+tenGoiY);
@@ -274,7 +278,7 @@ function doDatTenDn(){
     Shell.setShareable({ kind:'text', toolId:'dat-ten-dn', title:'Đặt tên DN · '+nganh+' · chủ '+iChu.canChi, text:_dtLines.join('\n') });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   }catch(e){
-    document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
+    document.getElementById('ccRow').innerHTML='<div class="laso-error">'+_tvmbT('js.chonngay.loi-colon','Lỗi: ')+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
@@ -319,17 +323,17 @@ TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'da
     if (!panel || document.getElementById('sampBar')) return;
     var bar = document.createElement('div');
     bar.className = 'samp-bar'; bar.id = 'sampBar';
-    bar.innerHTML = '<div class="sb-txt">Đây là <b>BẢN MẪU</b> minh hoạ (dữ liệu khác) — chưa phải kết quả của bạn.</div>' +
-      '<button type="button" id="sampBarClose">Nhập thông tin của tôi →</button>';
+    bar.innerHTML = '<div class="sb-txt">'+_tvmbT('js.chonngay.ban-mau-note','Đây là <b>BẢN MẪU</b> minh hoạ (dữ liệu khác) — chưa phải kết quả của bạn.')+'</div>' +
+      '<button type="button" id="sampBarClose">'+_tvmbT('js.chonngay.nhap-thong-tin-cua-toi','Nhập thông tin của tôi →')+'</button>';
     panel.insertBefore(bar, panel.firstChild);
     document.getElementById('sampBarClose').onclick = function () {
       var b = document.getElementById('sampBar'); if (b) b.remove();
       showForm();
-      var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'flex';
+      var cta = document.getElementById('sampCta'); if (cta && (!window.I18n || I18n.locale === 'vi')) cta.style.display = 'flex';
     };
   }
   window.SampleHint.open = function (btn) {
-    if (btn) { btn.disabled = true; btn.textContent = 'Đang mở…'; }
+    if (btn) { btn.disabled = true; btn.textContent = _tvmbT('js.chonngay.dang-mo','Đang mở…'); }
     var p = _cache ? Promise.resolve(_cache) : fetch(SAMPLE_URL).then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
@@ -345,15 +349,17 @@ TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'da
       document.getElementById('dtResult').innerHTML = renderMarkdownDt(data.text);
       var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'none';
       _showSampleBar();
-      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+      if (btn) { btn.disabled = false; btn.textContent = _tvmbT('js.chonngay.xem-ban-mau','Xem bản mẫu →'); }
     }).catch(function (e) {
-      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+      if (btn) { btn.disabled = false; btn.textContent = _tvmbT('js.chonngay.xem-ban-mau','Xem bản mẫu →'); }
       if (window.console) console.error('sample:', e);
-      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
+      window.alert(_tvmbT('js.chonngay.chua-mo-duoc-ban-mau','Chưa mở được bản mẫu. Thử lại sau nhé.'));
     });
   };
   try {
-    if (!(window.Shell && Shell.autoRun && Shell.autoRun()) &&
+    // Bản mẫu là văn LLM đã lưu sẵn tiếng Việt ⇒ chỉ mời xem ở bản vi (xem app-chon-ngay.html).
+    if ((!window.I18n || I18n.locale === 'vi') &&
+        !(window.Shell && Shell.autoRun && Shell.autoRun()) &&
         !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {
       var c = document.getElementById('sampCta'); if (c) c.style.display = 'flex';
     }
@@ -387,7 +393,7 @@ function renderMarkdownDt(md){
 }
 
 async function initiateDatTenDnChuyenSau(){
-  if(!_dtInfoChu||!_dtLinhVuc){ alert('Vui lòng nhập thông tin trước.'); return; }
+  if(!_dtInfoChu||!_dtLinhVuc){ alert(_tvmbT('js.chonngay.vui-long-nhap-thong-tin','Vui lòng nhập thông tin trước.')); return; }
   var slug=TuviPaywall.generateToolSlug('dat-ten-dn-'+_dtNamSinh);
   wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   await TuviPaywall.requireCredits(slug, async function(){ await _doDatTenDnAI(); });
@@ -397,7 +403,7 @@ async function _doDatTenDnAI(){
   if(btn)btn.disabled=true;
   wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu gợi ý tên chuyên sâu
   var el=document.getElementById('dtResult');
-  el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('building-2'):'')+' Đang gợi ý tên doanh nghiệp… thường mất 15–25 giây</div>';
+  el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('building-2'):'')+' '+_tvmbT('js.dattendn.dang-goi-y','Đang gợi ý tên doanh nghiệp… thường mất 15–25 giây')+'</div>';
   el.scrollIntoView({behavior:'smooth',block:'nearest'});
   try{
     var res=await fetch('/api/xem-tuoi?action=dat-ten-doanh-nghiep',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
@@ -405,7 +411,7 @@ async function _doDatTenDnAI(){
       canChiChu:_dtInfoChu.canChi, napAmChu:_dtInfoChu.napAm,
       linhVuc:_dtLinhVuc, loaiHinh:_dtLoaiHinh
     })});
-    if(!res.ok){ var d=await res.json().catch(function(){return {};}); throw new Error(d.error||'Lỗi '+res.status); }
+    if(!res.ok){ var d=await res.json().catch(function(){return {};}); throw new Error(d.error||_tvmbT('js.chonngay.loi-status','Lỗi {s}',{s:res.status})); }
     var reader=res.body.getReader(), dec=new TextDecoder(), full='', buf='';
     el.innerHTML='';
     while(true){
@@ -425,10 +431,10 @@ async function _doDatTenDnAI(){
         }catch(e){ if(e.message&&e.message.indexOf('JSON')<0)throw e; }
       }
     }
-    if(!full)throw new Error('Không nhận được kết quả.');
+    if(!full)throw new Error(_tvmbT('js.chonngay.khong-nhan-duoc-ket-qua','Không nhận được kết quả.'));
     el.innerHTML=renderMarkdownDt(full);
   }catch(e){
-    el.innerHTML='<div class="laso-error">Lỗi: '+esc(e.message||'Không thể kết nối. Vui lòng thử lại.')+'</div>';
+    el.innerHTML='<div class="laso-error">'+_tvmbT('js.chonngay.loi-colon','Lỗi: ')+esc(e.message||_tvmbT('js.chonngay.khong-the-ket-noi','Không thể kết nối. Vui lòng thử lại.'))+'</div>';
   }
   if(btn)btn.disabled=false;
 }

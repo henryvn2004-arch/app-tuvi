@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diện Tướng — Tử Vi Minh Bảo</title>
-<meta name="description" content="Tải hoặc chụp ảnh khuôn mặt — hệ thống phân tích nhân tướng học cổ pháp Ma Y Thần Tướng: Tam Đình, Ngũ Quan, các bộ vị quan trọng.">
+<title data-i18n="dient.dien-tuong-tu-vi-minh-bao">Diện Tướng — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:dient.tai-hoac-chup-anh-khuon-mat" name="description" content="Tải hoặc chụp ảnh khuôn mặt — hệ thống phân tích nhân tướng học cổ pháp Ma Y Thần Tướng: Tam Đình, Ngũ Quan, các bộ vị quan trọng.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -61,9 +61,9 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Diện Tướng</b><span>Xem tướng khuôn mặt theo cổ pháp — <span data-tvp-price="dien-tuong">…</span> Lượng</span></div>
+      <div data-i18n="dient.dien-tuong-xem-tuong-khuon-mat" class="ws-title"><b>Diện Tướng</b><span>Xem tướng khuôn mặt theo cổ pháp — <span data-tvp-price="dien-tuong">…</span> Lượng</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -77,15 +77,15 @@
         <img class="intro-avatar" src="/tool-avatars/dien-tuong.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Diện Tướng</div>
-            <div class="intro-d">Tam Đình, Ngũ Quan trên gương mặt không phải chuyện huyền bí — cổ nhân đã hệ thống hoá thành phép đọc tính cách và vận trình cụ thể. Tải một tấm ảnh chân dung, nhận bản luận theo Ma Y Thần Tướng.</div>
+            <div data-i18n="dient.dien-tuong" class="intro-t">Diện Tướng</div>
+            <div data-i18n="dient.tam-dinh-ngu-quan-tren-guong" class="intro-d">Tam Đình, Ngũ Quan trên gương mặt không phải chuyện huyền bí — cổ nhân đã hệ thống hoá thành phép đọc tính cách và vận trình cụ thể. Tải một tấm ảnh chân dung, nhận bản luận theo Ma Y Thần Tướng.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="camera"></span><span>Tải ảnh hoặc<br>chụp trực tiếp</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span>Đo Tam Đình,<br>Ngũ Quan</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ma Y Thần Tướng</span></div>
+          <div data-i18n="nhtg.tai-anh-hoac-chup-truc-tiep" class="hero-pill"><span class="hp-ic" data-icon="camera"></span><span>Tải ảnh hoặc<br>chụp trực tiếp</span></div>
+          <div data-i18n="dient.do-tam-dinh-ngu-quan" class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span>Đo Tam Đình,<br>Ngũ Quan</span></div>
+          <div data-i18n="dient.luan-theo-ma-y-than-tuong" class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ma Y Thần Tướng</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -93,40 +93,40 @@
            chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
            đã đổi (analyze/paywall/_doAnalyze/resetTool). -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="thtg.2-thanh-toan" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="thtg.3-nhan-ket-qua" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="dt-card" id="inputCard">
-        <div class="fc-head"><span class="fc-ic" data-icon="camera"></span><h2>Tải ảnh khuôn mặt</h2></div>
-        <p class="sub">Tải một tấm ảnh chân dung chụp thẳng, đủ sáng, rõ mặt. Hệ thống phân tích Tam Đình, Ngũ Quan và các bộ vị, luận tính cách và vận trình.</p>
-        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Ảnh chỉ gửi tới máy chủ để phân tích, không lưu trên server. Chụp thẳng mặt, đủ sáng, không che mặt cho kết quả chính xác nhất.</div></div>
+        <div class="fc-head"><span class="fc-ic" data-icon="camera"></span><h2 data-i18n="nhtg.tai-anh-khuon-mat">Tải ảnh khuôn mặt</h2></div>
+        <p data-i18n="dient.tai-mot-tam-anh-chan-dung" class="sub">Tải một tấm ảnh chân dung chụp thẳng, đủ sáng, rõ mặt. Hệ thống phân tích Tam Đình, Ngũ Quan và các bộ vị, luận tính cách và vận trình.</p>
+        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div data-i18n="dient.anh-chi-gui-toi-may-chu">Ảnh chỉ gửi tới máy chủ để phân tích, không lưu trên server. Chụp thẳng mặt, đủ sáng, không che mặt cho kết quả chính xác nhất.</div></div>
 
         <div class="dt-input-tabs">
-          <button class="dt-input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
-          <button class="dt-input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
+          <button data-i18n="nhtg.tai-anh-len" class="dt-input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
+          <button data-i18n="nhtg.chup-anh" class="dt-input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
         </div>
 
         <div class="dt-input-pane active" id="pane-upload">
           <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
             <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
             <span class="upload-icon"><span class="ic" data-icon="image"></span></span>
-            <div class="upload-title">Kéo thả ảnh vào đây hoặc click để chọn</div>
-            <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB</div>
+            <div data-i18n="nhtg.keo-tha-anh-vao-day-hoac" class="upload-title">Kéo thả ảnh vào đây hoặc click để chọn</div>
+            <div data-i18n="dient.jpg-png-webp-toi-da-5mb" class="upload-sub">JPG, PNG, WebP — tối đa 5MB</div>
           </div>
         </div>
 
         <div class="dt-input-pane" id="pane-camera">
           <div style="text-align:center;padding:12px 0 16px">
             <div id="preCamTips">
-              <button class="camera-btn" id="openCamBtn" onclick="openCamera()"><span class="ic" data-icon="camera"></span> Mở Camera</button>
+              <button data-i18n="nhtg.mo-camera" class="camera-btn" id="openCamBtn" onclick="openCamera()"><span class="ic" data-icon="camera"></span> Mở Camera</button>
             </div>
             <div id="camWrap" style="display:none;position:relative;width:280px;margin:0 auto">
               <video id="camVideo" style="width:280px;border-radius:12px;display:block" autoplay playsinline></video>
             </div>
             <div id="camBtns" style="display:none;margin-top:14px;gap:10px;justify-content:center;flex-wrap:wrap">
-              <button class="btn-go inline" onclick="capturePhoto()"><span class="ic" data-icon="camera"></span> Chụp</button>
-              <button class="btn-cancel" onclick="stopCamera()">✕ Huỷ</button>
+              <button data-i18n="nhtg.chup" class="btn-go inline" onclick="capturePhoto()"><span class="ic" data-icon="camera"></span> Chụp</button>
+              <button data-i18n="nhtg.huy" class="btn-cancel" onclick="stopCamera()">✕ Huỷ</button>
             </div>
             <canvas id="camCanvas" style="display:none"></canvas>
           </div>
@@ -134,12 +134,12 @@
 
         <div id="previewSection" style="display:none;text-align:center;margin:18px 0">
           <div class="preview-wrap">
-            <img id="previewImg" class="preview-img" alt="Ảnh đã chọn">
+            <img data-i18n-attr="alt:nhtg.anh-da-chon-oxp5" id="previewImg" class="preview-img" alt="Ảnh đã chọn">
             <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
-            <div class="preview-badge">✓ Ảnh đã chọn</div>
-            <div class="mp-badge" id="mpBadge">✦ Tam Đình đã xác định</div>
+            <div data-i18n="nhtg.anh-da-chon" class="preview-badge">✓ Ảnh đã chọn</div>
+            <div data-i18n="dient.tam-dinh-da-xac-dinh" class="mp-badge" id="mpBadge">✦ Tam Đình đã xác định</div>
           </div>
-          <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
+          <button data-i18n="nhtg.xoa-anh" class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
         </div>
 
         <!-- Khối hook (1 fact) — hé dòng Tam Đình (window._geoNote, engine
@@ -151,9 +151,9 @@
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="dien-tuong"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="dien-tuong">…</span> Lượng)</span></div>
-              <div class="cb-pay">
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="dient.moi-luot-luong" class="cb-amt"><span class="vnd" data-tvp-price-vnd="dien-tuong"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="dien-tuong">…</span> Lượng)</span></div>
+              <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
               </div>
@@ -161,10 +161,10 @@
           </div>
           <div class="cb-r">
             <span class="cb-ic" data-icon="gift"></span>
-            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
           </div>
         </div>
-        <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
+        <button data-i18n="dient.phan-tich-tuong-mat-ton-luong" class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
           <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="analyzeBtnLabel">Phân Tích Tướng Mặt →</b></span>
           <small>Tốn <span class="vnd" data-tvp-price-vnd="dien-tuong"></span> <span class="cb-sub">(<span data-tvp-price="dien-tuong">…</span> Lượng)</span></small>
         </button>
@@ -173,25 +173,25 @@
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Diện Tướng</div>
-        <p class="wsp-desc">Ma Y Thần Tướng là một trong những cổ thư nhân tướng học nổi tiếng nhất Trung Hoa, hệ thống hoá cách đọc tính cách và vận mệnh qua các bộ vị trên khuôn mặt như Tam Đình, Ngũ Quan. Liễu Trang Thần Tướng và Thủy Kính Tập là những cổ thư tướng học khác thường được đối chiếu cùng.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="dient.dien-tuong" class="wsp-title">Diện Tướng</div>
+        <p data-i18n="nhtg.ma-y-than-tuong-la-mot" class="wsp-desc">Ma Y Thần Tướng là một trong những cổ thư nhân tướng học nổi tiếng nhất Trung Hoa, hệ thống hoá cách đọc tính cách và vận mệnh qua các bộ vị trên khuôn mặt như Tam Đình, Ngũ Quan. Liễu Trang Thần Tướng và Thủy Kính Tập là những cổ thư tướng học khác thường được đối chiếu cùng.</p>
       </div>
       <div class="samp-cta" id="sampCta">
         <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="dien-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+        <span data-i18n="nhtg.chua-muon-chup-anh-ban-co" class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button data-i18n="thtp.xem-ban-mau" type="button" id="btnSample" data-sample-tool="dien-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
       </div>
       <div id="shellRecent"></div>
       </div>
       </div>
 
       <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
-        <h2>Phân Tích Nhân Tướng Học</h2>
-        <p class="sub">Ma Y Thần Tướng cổ pháp</p>
+        <h2 data-i18n="dient.phan-tich-nhan-tuong-hoc">Phân Tích Nhân Tướng Học</h2>
+        <p data-i18n="dient.ma-y-than-tuong-co-phap" class="sub">Ma Y Thần Tướng cổ pháp</p>
         <div id="aiResult" class="dt-result"></div>
         <div style="text-align:center;margin-top:8px">
-          <button class="btn-cancel" onclick="resetTool()">Phân Tích Ảnh Khác</button>
+          <button data-i18n="nhtg.phan-tich-anh-khac" class="btn-cancel" onclick="resetTool()">Phân Tích Ảnh Khác</button>
         </div>
       </div>
     </div>
@@ -297,6 +297,9 @@ function analyzeGeometry(lm, w, h) {
     `Tỷ lệ trán/mặt: ${foreheadRatio} (${parseFloat(foreheadRatio)>0.85?'trán rộng':parseFloat(foreheadRatio)<0.7?'trán hẹp':'trung bình'})`,
     `Tỷ lệ cằm/mặt: ${chinRatio} (${parseFloat(chinRatio)>0.42?'cằm ngang rộng':parseFloat(chinRatio)<0.3?'cằm nhọn/thon':'trung bình'})`,
   ];
+  // Chữ HIỂN THỊ (fact hook) — `lines` ở trên là geoNote gửi server nên GIỮ chữ Việt.
+  window._geoShown = { thuong, trung, ha, ratio,
+    shape: parseFloat(ratio)>0.85 ? _tvmbT('js.dient.mat-tron-vuong','mặt tròn/vuông') : parseFloat(ratio)<0.75 ? _tvmbT('js.dient.mat-dai-hep','mặt dài/hẹp') : _tvmbT('js.dient.mat-bau-duc','mặt bầu dục') };
   return lines.join('\n');
 }
 
@@ -315,20 +318,20 @@ function mountHook() {
   if (!m) return;
   var facts = [{
     tone: 'neutral',
-    title: m[0],
-    body: 'Đo trực tiếp từ ảnh bằng MediaPipe — Thượng/Trung/Hạ Đình chia đúng theo landmark khuôn mặt của bạn. Luận giải đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.',
+    title: window._geoShown ? _tvmbT('js.dient.tam-dinh-t','Tam Đình: Thượng {t}% · Trung {tr}% · Hạ {h}%',{ t: window._geoShown.thuong, tr: window._geoShown.trung, h: window._geoShown.ha }) : m[0],
+    body: _tvmbT('js.dient.do-truc-tiep-tam-dinh','Đo trực tiếp từ ảnh bằng MediaPipe — Thượng/Trung/Hạ Đình chia đúng theo landmark khuôn mặt của bạn. Luận giải đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.'),
     source: 'engine · MediaPipe FaceMesh',
   }];
   var m2 = window._geoNote.match(/Tỷ lệ rộng\/dài mặt:[^\n]+/);
   if (m2) {
     facts.push({
       tone: 'neutral',
-      title: m2[0],
-      body: 'Đo trực tiếp từ ảnh bằng MediaPipe. Ý nghĩa theo Ma Y Thần Tướng và các bộ vị còn lại (mắt, mũi, miệng, trán, cằm) nằm trong bản phân tích chuyên sâu.',
+      title: window._geoShown ? _tvmbT('js.dient.ty-le-rong-dai-mat','Tỷ lệ rộng/dài mặt: {r} ({s})',{ r: window._geoShown.ratio, s: window._geoShown.shape }) : m2[0],
+      body: _tvmbT('js.dient.do-truc-tiep-bo-vi','Đo trực tiếp từ ảnh bằng MediaPipe. Ý nghĩa theo Ma Y Thần Tướng và các bộ vị còn lại (mắt, mũi, miệng, trán, cằm) nằm trong bản phân tích chuyên sâu.'),
       source: 'engine · MediaPipe FaceMesh',
     });
   }
-  var spec = { tool: 'dien-tuong', toolLabel: 'Diện Tướng', charts: [], facts: facts };
+  var spec = { tool: 'dien-tuong', toolLabel: _tvmbT('js.dient.dien-tuong','Diện Tướng'), charts: [], facts: facts };
   window.HookLayer.run(host, spec);
 }
 
@@ -340,8 +343,8 @@ function checkHeadTilt(lm, w, h) {
   const dRight = Math.abs(lm[454].x - lm[4].x);
   const yawRatio = dLeft > dRight ? dLeft/dRight : dRight/dLeft;
   const warnings = [];
-  if (rollDeg > 12) warnings.push(`Đầu nghiêng ~${Math.round(rollDeg)}° — nên chụp thẳng hơn`);
-  if (yawRatio > 1.35) warnings.push('Mặt hơi quay sang một bên — nên chụp chính diện');
+  if (rollDeg > 12) warnings.push(_tvmbT('js.dient.dau-nghieng','Đầu nghiêng ~{n}° — nên chụp thẳng hơn',{ n: Math.round(rollDeg) }));
+  if (yawRatio > 1.35) warnings.push(_tvmbT('js.dient.mat-quay','Mặt hơi quay sang một bên — nên chụp chính diện'));
   return warnings;
 }
 
@@ -367,11 +370,12 @@ function analyzeIris(lm) {
   if (!L || !R) return null;
   const avgExposed = (L.exposed + R.exposed) / 2;
   const avgBottom  = (L.whiteBottom ? 1:0) + (R.whiteBottom ? 1:0);
-  let type = null, label = '', color = '';
-  if (avgExposed >= 3) { type = 'tu-bach'; label = 'Tứ Bạch Nhãn — tròng trắng lộ nhiều phía'; color = '#C0392B'; }
-  else if (avgBottom >= 1.5) { type = 'tam-bach-ha'; label = 'Tam Bạch Nhãn Hạ — tròng trắng lộ phía dưới'; color = '#9A7B3A'; }
-  else if ((L.whiteTop && R.whiteTop)) { type = 'tam-bach-thuong'; label = 'Tam Bạch Nhãn Thượng — tròng trắng lộ phía trên'; color = '#9A7B3A'; }
-  return { type, label, color, L, R };
+  // `label` (Việt) VÀO irisNote gửi server — `shown` là chữ hiển thị trên badge.
+  let type = null, label = '', shown = '', color = '';
+  if (avgExposed >= 3) { type = 'tu-bach'; label = 'Tứ Bạch Nhãn — tròng trắng lộ nhiều phía'; shown = _tvmbT('js.dient.tu-bach','Tứ Bạch Nhãn — tròng trắng lộ nhiều phía'); color = '#C0392B'; }
+  else if (avgBottom >= 1.5) { type = 'tam-bach-ha'; label = 'Tam Bạch Nhãn Hạ — tròng trắng lộ phía dưới'; shown = _tvmbT('js.dient.tam-bach-ha','Tam Bạch Nhãn Hạ — tròng trắng lộ phía dưới'); color = '#9A7B3A'; }
+  else if ((L.whiteTop && R.whiteTop)) { type = 'tam-bach-thuong'; label = 'Tam Bạch Nhãn Thượng — tròng trắng lộ phía trên'; shown = _tvmbT('js.dient.tam-bach-thuong','Tam Bạch Nhãn Thượng — tròng trắng lộ phía trên'); color = '#9A7B3A'; }
+  return { type, label, shown, color, L, R };
 }
 
 function drawTamDinh(lm) {
@@ -417,9 +421,9 @@ function drawTamDinh(lm) {
   });
 
   const fs = Math.max(10, Math.round(w * 0.04));
-  [{ my:(yTop+yEyebrow)/2,     t:'THƯỢNG ĐÌNH', c:'rgba(20,85,164,0.95)' },
-   { my:(yEyebrow+yNoseTip)/2, t:'TRUNG ĐÌNH',  c:'rgba(154,123,58,0.95)' },
-   { my:(yNoseTip+yChin)/2,    t:'HẠ ĐÌNH',     c:'rgba(30,107,60,0.95)' },
+  [{ my:(yTop+yEyebrow)/2,     t:_tvmbT('js.dient.thuong-dinh','THƯỢNG ĐÌNH'), c:'rgba(20,85,164,0.95)' },
+   { my:(yEyebrow+yNoseTip)/2, t:_tvmbT('js.dient.trung-dinh','TRUNG ĐÌNH'),  c:'rgba(154,123,58,0.95)' },
+   { my:(yNoseTip+yChin)/2,    t:_tvmbT('js.dient.ha-dinh','HẠ ĐÌNH'),     c:'rgba(30,107,60,0.95)' },
   ].forEach(({ my, t, c }) => {
     ctx.save();
     ctx.font = `bold ${fs}px Arial`;
@@ -463,8 +467,8 @@ function onFileSelect(e) { const f=e.target.files[0]; if(f) processFile(f); }
 function processFile(file) {
   const err = document.getElementById('error-msg');
   err.classList.remove('active');
-  if (!file.type.startsWith('image/')) { err.textContent='Vui lòng chọn file ảnh.'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); return; }
-  if (file.size > 5*1024*1024) { err.textContent='Ảnh quá lớn (tối đa 5MB).'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); return; }
+  if (!file.type.startsWith('image/')) { err.textContent=_tvmbT('js.dient.vui-long-chon-file-anh','Vui lòng chọn file ảnh.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); return; }
+  if (file.size > 5*1024*1024) { err.textContent=_tvmbT('js.dient.anh-qua-lon-toi-da-5mb','Ảnh quá lớn (tối đa 5MB).'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); return; }
 
   const img = new Image();
   const ou = URL.createObjectURL(file);
@@ -478,7 +482,7 @@ function processFile(file) {
     _imageData=dataUrl.split(',')[1]; _mediaType='image/jpeg';
     showPreview(dataUrl);
   };
-  img.onerror = () => { URL.revokeObjectURL(ou); err.textContent='Không đọc được ảnh này — vui lòng chọn ảnh JPG hoặc PNG.'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); };
+  img.onerror = () => { URL.revokeObjectURL(ou); err.textContent=_tvmbT('js.dient.khong-doc-duoc-anh-nay-vui','Không đọc được ảnh này — vui lòng chọn ảnh JPG hoặc PNG.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); };
   img.src = ou;
 }
 
@@ -497,7 +501,7 @@ function showPreview(dataUrl) {
 
     if (lm === null) {
       const err = document.getElementById('error-msg');
-      err.textContent = '⚠ Không nhận diện được khuôn mặt rõ ràng. Vẫn có thể phân tích nhưng kết quả có thể kém chính xác hơn.';
+      err.textContent = _tvmbT('js.dient.khong-nhan-dien-duoc-mat','⚠ Không nhận diện được khuôn mặt rõ ràng. Vẫn có thể phân tích nhưng kết quả có thể kém chính xác hơn.');
       err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
       return;
     }
@@ -507,18 +511,18 @@ function showPreview(dataUrl) {
     const tiltWarnings = checkHeadTilt(lm, w, h);
     if (tiltWarnings.length > 0) {
       const err = document.getElementById('error-msg');
-      err.textContent = '⚠ ' + tiltWarnings.join(' · ') + ' — kết quả sẽ chính xác hơn với ảnh thẳng mặt.';
+      err.textContent = _tvmbT('js.dient.canh-bao-chup','⚠ {w} — kết quả sẽ chính xác hơn với ảnh thẳng mặt.',{ w: tiltWarnings.join(' · ') });
       err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
     }
 
     const iris = analyzeIris(lm);
     const badge = document.getElementById('mpBadge');
     if (iris && iris.type) {
-      badge.innerHTML = '<span class="ic" data-icon="eye"></span> ' + iris.label;
+      badge.innerHTML = '<span class="ic" data-icon="eye"></span> ' + iris.shown;
       window.mountIcons && window.mountIcons(badge);
       badge.style.background = iris.color + 'cc';
     } else {
-      badge.textContent = '✦ Tam Đình đã xác định';
+      badge.textContent = _tvmbT('js.dient.tam-dinh-da-xac-dinh','✦ Tam Đình đã xác định');
       badge.style.background = 'rgba(20,85,164,.85)';
     }
     badge.style.display = 'block';
@@ -552,7 +556,7 @@ async function openCamera() {
     document.getElementById('camBtns').style.display='flex';
   } catch(e) {
     const err=document.getElementById('error-msg');
-    err.textContent='Không thể mở camera. Vui lòng tải ảnh lên.'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
+    err.textContent=_tvmbT('js.dient.khong-the-mo-camera','Không thể mở camera. Vui lòng tải ảnh lên.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
   }
 }
 function capturePhoto() {
@@ -590,7 +594,7 @@ async function _doAnalyze() {
   wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu phân tích
   const aiResultEl = document.getElementById('aiResult');
   aiResultEl.innerHTML=
-    '<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="sparkles"></span><div class="dt-loading-text">Đang phân tích tướng mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
+    '<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="sparkles"></span><div class="dt-loading-text">' + _tvmbT('js.dient.dang-phan-tich','Đang phân tích tướng mặt...') + '<br><span style="font-size:12px;opacity:.7">' + _tvmbT('js.dient.thuong-mat-15-25-giay','Thường mất 15–25 giây') + '</span></div></div>';
   window.mountIcons && window.mountIcons(aiResultEl);
   document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'nearest'});
 
@@ -605,7 +609,7 @@ async function _doAnalyze() {
         geoNote: window._geoNote || null
       })
     });
-    if (!res.ok) { const d=await res.json().catch(()=>({})); throw new Error(d.error||'Lỗi '+res.status); }
+    if (!res.ok) { const d=await res.json().catch(()=>({})); throw new Error(d.error||_tvmbT('js.dient.loi-s','Lỗi {s}',{ s: res.status })); }
 
     const reader=res.body.getReader(); const dec=new TextDecoder();
     let full='', buf='';
@@ -625,26 +629,26 @@ async function _doAnalyze() {
         }catch(e){ if(e.message&&!e.message.includes('JSON')) throw e; }
       }
     }
-    if(!full) throw new Error('Máy chủ không trả về kết quả.');
+    if(!full) throw new Error(_tvmbT('js.dient.may-chu-khong-tra-ve','Máy chủ không trả về kết quả.'));
     el.innerHTML=renderMarkdown(full);
     _saveTuongReading('dien-tuong', full, _imageData, _mediaType);
     // Chia sẻ CHỈ text luận giải của AI — KHÔNG bao giờ đính kèm ảnh khuôn mặt
     // thật của user (riêng tư), dù ảnh đã tải lên để phân tích.
-    Shell.setShareable({ kind:'text', toolId:'dien-tuong', title:'Diện Tướng của tôi', text:full });
+    Shell.setShareable({ kind:'text', toolId:'dien-tuong', title:_tvmbT('js.dient.dien-tuong-cua-toi','Diện Tướng của tôi'), text:full });
     // setContext() chỉ chạy TỚI ĐÂY — sau khi có kết quả thật (chat-first),
     // không còn gọi ở boot. Kết quả là văn xuôi SSE thuần, không có field
     // cấu trúc để trích số liệu nên greeting không bịa dữ kiện.
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
-      label: 'Diện Tướng',
-      greeting: 'Đã đọc xong tướng mặt của bạn theo Ma Y Thần Tướng. Bạn muốn hỏi thêm điều gì?',
-      chips: ['Tam Đình là gì?', 'Ngũ Quan gồm những gì?', 'Tướng mặt có thay đổi được không?']
+      label: _tvmbT('js.dient.dien-tuong','Diện Tướng'),
+      greeting: _tvmbT('js.dient.da-doc-xong','Đã đọc xong tướng mặt của bạn theo Ma Y Thần Tướng. Bạn muốn hỏi thêm điều gì?'),
+      chips: [_tvmbT('js.dient.chip-tam-dinh','Tam Đình là gì?'), _tvmbT('js.dient.chip-ngu-quan','Ngũ Quan gồm những gì?'), _tvmbT('js.dient.chip-thay-doi','Tướng mặt có thay đổi được không?')]
     });
   } catch(e) {
     document.getElementById('aiResult').innerHTML='';
     document.getElementById('resultCard').style.display='none';
     const err=document.getElementById('error-msg');
-    err.textContent='Lỗi: '+(e.message||'Không thể kết nối. Vui lòng thử lại.');
+    err.textContent=_tvmbT('js.dient.loi-e','Lỗi: {e}',{ e: e.message||_tvmbT('js.dient.khong-the-ket-noi','Không thể kết nối. Vui lòng thử lại.') });
     err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
   }
 }

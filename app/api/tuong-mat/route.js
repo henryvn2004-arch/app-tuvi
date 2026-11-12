@@ -7,6 +7,7 @@ export const maxDuration = 300;
 // backup switch-được, không đổi prompt/parse/paywall.
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import { requestLocale, withLang } from '@/lib/llm/locale';
 import {
   DOC_ARC_DIEN_TUONG,
   DOC_ARC_NHAN_TUONG,
@@ -1522,7 +1523,8 @@ async function runPost(request) {
     // Stream qua helper Gemini-primary + Anthropic-backup. GIỮ NGUYÊN shape
     // SSE mà frontend parse: data:{t} / {err} / [DONE] (format 'delta').
     return await llmStreamResponse(
-      { luanGiai: true, system: systemPrompt, prompt: userText, images, maxTokens },
+      // Ngôn ngữ đầu ra ở USER (giữ system); vi → nguyên chuỗi cũ. Route không cache ⇒ không cần hậu tố khoá.
+      { luanGiai: true, system: systemPrompt, prompt: withLang(userText, requestLocale(request), [extraText]), images, maxTokens },
       'delta',
     );
 

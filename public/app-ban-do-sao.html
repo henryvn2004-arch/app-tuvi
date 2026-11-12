@@ -142,7 +142,7 @@
 // khong lat som luc boot, va vung ket qua khong tran o ca cot artifact 420px lan man 393px.
 window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'ban-do-sao'};</script>
-<script src="/tools-shared/ban-do-sao.js?v=1"></script>
+<script src="/tools-shared/ban-do-sao.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
@@ -152,12 +152,12 @@ window.SHELL_INTRO={key:'ban-do-sao'};</script>
 // Vài nơi sinh phổ biến để đỡ phải tra toạ độ. CỐ Ý vẫn cho sửa tay vĩ/kinh độ:
 // người sinh ở tỉnh lẻ mà bị ép chọn Hà Nội thì cung Mọc lệch mà không ai biết.
 var NOI=[
-  ['Hà Nội',21.0278,105.8342,7],['TP. Hồ Chí Minh',10.8231,106.6297,7],
-  ['Đà Nẵng',16.0544,108.2022,7],['Hải Phòng',20.8449,106.6881,7],
-  ['Cần Thơ',10.0452,105.7469,7],['Huế',16.4637,107.5909,7],
+  [_tvmbT('js.bandosao.ha-noi', 'Hà Nội'),21.0278,105.8342,7],[_tvmbT('js.bandosao.tp-ho-chi-minh', 'TP. Hồ Chí Minh'),10.8231,106.6297,7],
+  [_tvmbT('js.bandosao.da-nang', 'Đà Nẵng'),16.0544,108.2022,7],[_tvmbT('js.bandosao.hai-phong', 'Hải Phòng'),20.8449,106.6881,7],
+  [_tvmbT('js.bandosao.can-tho', 'Cần Thơ'),10.0452,105.7469,7],[_tvmbT('js.bandosao.hue', 'Huế'),16.4637,107.5909,7],
   ['Nha Trang',12.2388,109.1967,7],['Vinh',18.6790,105.6813,7],
-  ['Buôn Ma Thuột',12.6667,108.0500,7],['Quy Nhơn',13.7829,109.2196,7],
-  ['— Nơi khác (tự nhập) —',null,null,null]
+  [_tvmbT('js.bandosao.buon-ma-thuot', 'Buôn Ma Thuột'),12.6667,108.0500,7],[_tvmbT('js.bandosao.quy-nhon', 'Quy Nhơn'),13.7829,109.2196,7],
+  [_tvmbT('js.bandosao.noi-khac-tu-nhap', '— Nơi khác (tự nhập) —'),null,null,null]
 ];
 (function(){
   var sel=document.getElementById('noi');
@@ -199,15 +199,15 @@ function lapBanDo(){
     phut:+document.getElementById('phut').value||0,vido:+document.getElementById('vido').value,
     kinhdo:+document.getElementById('kinhdo').value,muiGio:+document.getElementById('tz').value};
   _err('');
-  if(!p.ngay||!p.thang||!p.nam){_err('Vui lòng nhập đủ ngày, tháng, năm sinh.');return;}
-  if(isNaN(p.vido)||isNaN(p.kinhdo)){_err('Vui lòng chọn nơi sinh hoặc nhập vĩ độ / kinh độ.');return;}
+  if(!p.ngay||!p.thang||!p.nam){_err(_tvmbT('js.bandosao.vui-long-nhap-du-ngay-thang', 'Vui lòng nhập đủ ngày, tháng, năm sinh.'));return;}
+  if(isNaN(p.vido)||isNaN(p.kinhdo)){_err(_tvmbT('js.bandosao.vui-long-chon-noi-sinh-hoac', 'Vui lòng chọn nơi sinh hoặc nhập vĩ độ / kinh độ.'));return;}
   var btn=document.getElementById('btnGo');var btnLb=document.getElementById('btnGoLabel');var old=btnLb.textContent;
-  btn.disabled=true;btnLb.textContent='Đang lập…';
+  btn.disabled=true;btnLb.textContent=_tvmbT('js.bandosao.dang-lap', 'Đang lập…');
   BanDoSao.lap(p).then(function(j){
     btn.disabled=false;btnLb.textContent=old;
-    if(!j){_err('Chưa lập được bản đồ lúc này — vui lòng thử lại.');return;}
+    if(!j){_err(_tvmbT('js.bandosao.chua-lap-duoc-ban-do-luc', 'Chưa lập được bản đồ lúc này — vui lòng thử lại.'));return;}
     _b=j.banDo;_in=p;
-    document.getElementById('resTitle').textContent='Bản đồ sao — '+_b.sinh;
+    document.getElementById('resTitle').textContent=_tvmbT('js.bandosao.ban-do-sao', 'Bản đồ sao — ')+_b.sinh;
     document.getElementById('chiTiet').innerHTML=BanDoSao.bangHTML(_b);
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
@@ -222,17 +222,17 @@ function lapBanDo(){
     // ⚠️ payload gửi rail phải PHẲNG — `extractGenericContext` bỏ qua object.
     Shell.setContext({
       scenario:{type:'ban-do-sao',data:j.rail},
-      label:'Bản đồ sao · '+_b.sinh,
-      greeting:'Đã lập bản đồ sao **'+_b.sinh+'**. Mặt Trời **'+(mt.cung||'')+'**, Mặt Trăng **'+(mtr.cung||'')+'**, cung Mọc **'+(asc.cung||'')+'**. Bạn muốn tôi đọc phần nào trước?',
-      chips:['Tính cách cốt lõi của tôi?','Chuyện tình cảm nhìn từ bản đồ này?','Sự nghiệp hợp hướng nào?','Góc chiếu nào gây khó nhất cho tôi?']
+      label:_tvmbT('js.bandosao.ban-do-sao-tqhx', 'Bản đồ sao · ')+_b.sinh,
+      greeting:_tvmbT('js.bandosao.da-lap-ban-do-sao', 'Đã lập bản đồ sao **')+_b.sinh+_tvmbT('js.bandosao.mat-troi', '**. Mặt Trời **')+(_tvmbG('chiemtinh',mt.cung||''))+_tvmbT('js.bandosao.mat-trang', '**, Mặt Trăng **')+(_tvmbG('chiemtinh',mtr.cung||''))+_tvmbT('js.bandosao.cung-moc', '**, cung Mọc **')+(_tvmbG('chiemtinh',asc.cung||''))+_tvmbT('js.bandosao.ban-muon-toi-doc-phan-nao', '**. Bạn muốn tôi đọc phần nào trước?'),
+      chips:[_tvmbT('js.bandosao.tinh-cach-cot-loi-cua-toi', 'Tính cách cốt lõi của tôi?'),_tvmbT('js.bandosao.chuyen-tinh-cam-nhin-tu-ban', 'Chuyện tình cảm nhìn từ bản đồ này?'),_tvmbT('js.bandosao.su-nghiep-hop-huong-nao', 'Sự nghiệp hợp hướng nào?'),_tvmbT('js.bandosao.goc-chieu-nao-gay-kho-nhat', 'Góc chiếu nào gây khó nhất cho tôi?')]
     });
     Shell.setShareable({
       kind:'text',toolId:'ban-do-sao',
-      title:'Bản đồ sao — '+_b.sinh,
-      text:['Bản đồ sao lúc sinh — '+_b.sinh+' (hệ nhà '+_b.heNha+')',
-        'Cung Mọc: '+(asc.do||0)+'° '+(asc.cung||''),
-        _b.sao.filter(function(s){return s.chinh;}).map(function(s){return s.ten+' '+s.cung+' (nhà '+(s.nha||'?')+')';}).join(' · '),
-        'Nguyên tố: '+_b.canBang.hanh.map(function(x){return x.ten+' '+x.so;}).join(', ')
+      title:_tvmbT('js.bandosao.ban-do-sao', 'Bản đồ sao — ')+_b.sinh,
+      text:[_tvmbT('js.bandosao.ban-do-sao-luc-sinh', 'Bản đồ sao lúc sinh — ')+_b.sinh+_tvmbT('js.bandosao.he-nha', ' (hệ nhà ')+_b.heNha+')',
+        _tvmbT('js.bandosao.cung-moc-1y0y', 'Cung Mọc: ')+(asc.do||0)+'° '+(_tvmbG('chiemtinh',asc.cung||'')),
+        _b.sao.filter(function(s){return s.chinh;}).map(function(s){return _tvmbG('chiemtinh',s.ten)+' '+_tvmbG('chiemtinh',s.cung)+_tvmbT('js.bandosao.nha', ' (nhà ')+(s.nha||'?')+')';}).join(' · '),
+        _tvmbT('js.bandosao.nguyen-to', 'Nguyên tố: ')+_b.canBang.hanh.map(function(x){return _tvmbG('chiemtinh',x.ten)+' '+x.so;}).join(', ')
       ].join('\n')
     });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){el.addEventListener('click',function(){Shell.ask(el.getAttribute('data-ask'));});});
@@ -243,19 +243,19 @@ function taiAnh(){
   if(!_b||!window.Poster)return;
   var e=document.getElementById('taiErr');e.classList.remove('active');
   var btn=document.getElementById('taiBtn'),old=btn.textContent;
-  btn.disabled=true;btn.textContent='Đang dựng ảnh…';
+  btn.disabled=true;btn.textContent=_tvmbT('js.bandosao.dang-dung-anh', 'Đang dựng ảnh…');
   var asc=(_b.truc[0]||{});
   var mt=(_b.sao.filter(function(s){return s.ten==='Mặt Trời';})[0]||{});
   Poster.download({
-    title:'Bản Đồ Sao',
+    title:_tvmbT('js.bandosao.ban-do-sao-gm5h', 'Bản Đồ Sao'),
     subtitle:_b.sinh,
-    quote:'Mặt Trời '+(mt.cung||'')+' · Cung Mọc '+(asc.cung||''),
+    quote:_tvmbT('js.bandosao.mat-troi-8vvi', 'Mặt Trời ')+(_tvmbG('chiemtinh',mt.cung||''))+_tvmbT('js.bandosao.cung-moc-bgoi', ' · Cung Mọc ')+(_tvmbG('chiemtinh',asc.cung||'')),
     draw:BanDoSao.posterDraw(_b),
     qrUrl:Poster.qrLink('ban-do-sao','/app/ban-do-sao'),
-    qrCaption:'Quét mã — lập bản đồ sao của bạn'
+    qrCaption:_tvmbT('js.bandosao.quet-ma-lap-ban-do-sao', 'Quét mã — lập bản đồ sao của bạn')
   },'ban-do-sao-tuviminhbao.png')
     .then(function(){if(window.Track)Track.event('poster_download',{tool_id:'ban-do-sao'});})
-    .catch(function(){e.textContent='Chưa dựng được ảnh. Thử lại sau ít giây.';e.classList.add('active');})
+    .catch(function(){e.textContent=_tvmbT('js.bandosao.chua-dung-duoc-anh-thu-lai', 'Chưa dựng được ảnh. Thử lại sau ít giây.');e.classList.add('active');})
     .then(function(){btn.disabled=false;btn.textContent=old;});
 }
 

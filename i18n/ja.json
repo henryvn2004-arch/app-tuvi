@@ -619,6 +619,78 @@
   "t": "名前やツールで検索…",
   "h": "86f221f0"
  },
+ "battrach2.4-huong-dai-cat": {
+  "t": "大吉の<br>方位4つ",
+  "h": "0b0b6a6a"
+ },
+ "battrach2.4-huong-dai-hung": {
+  "t": "大凶の<br>方位4つ",
+  "h": "45c6e01a"
+ },
+ "battrach2.bang-8-huong-chi-tiet": {
+  "t": "<span class=\"res-block-title\">8方位の詳細表</span>",
+  "h": "0ef24790"
+ },
+ "battrach2.bat-trach-la-mot-truong-phai": {
+  "t": "八宅は風水の伝統的な流派で、住まいを八卦に対応する8つの方位に分け、家主の本命卦と照らし合わせて、良い方位・悪い方位や位置を判断します。<i>八宅明鏡</i>は、この方法を体系化した古典のひとつです。",
+  "h": "daa2d3d2"
+ },
+ "battrach2.goi-y-dung": {
+  "t": "使い方の目安",
+  "h": "1e297636"
+ },
+ "battrach2.hoi-thay-huong-hop-cach-hoa": {
+  "t": "✦ 先生に、合う方位と対処法を聞く",
+  "h": "d656b02e"
+ },
+ "battrach2.huong": {
+  "t": "方位",
+  "h": "05c861c1"
+ },
+ "battrach2.huong-bat-trach": {
+  "t": "八宅の方位",
+  "h": "a9176f82"
+ },
+ "battrach2.huong-bat-trach-cung-menh-8": {
+  "t": "<b>八宅の方位</b><span>本命宮と、吉凶8つの方位</span>",
+  "h": "7f6f63a9"
+ },
+ "battrach2.huong-bat-trach-tu-vi-minh": {
+  "t": "八宅の方位 — 明宝紫微斗数",
+  "h": "1dd7c74f"
+ },
+ "battrach2.menh-quai-cung-menh": {
+  "t": "本命卦、<br>本命宮",
+  "h": "a7cd9aa8"
+ },
+ "battrach2.mua-nha-thue-van-phong-roi": {
+  "t": "家を買う、オフィスを借りたあとで、玄関の向きが本命卦に合わないと気づくのでは手遅れです。生まれ年と性別を入力すれば、手付金を払う前に選ぶべき方位がすぐにわかります。",
+  "h": "22a1a2e8"
+ },
+ "battrach2.nam-sinh-gioi-tinh": {
+  "t": "生まれ年と性別",
+  "h": "2fe866aa"
+ },
+ "battrach2.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "生まれ年と性別を入力してください。システムが生まれ年から本命卦を正確に算出し、本命卦・宮、そして吉凶8方位の詳細表を返します。",
+  "h": "5374993f"
+ },
+ "battrach2.ten-huong": {
+  "t": "方位名",
+  "h": "a2de1255"
+ },
+ "battrach2.tra-4-huong-dai-cat-va": {
+  "t": "八宅の本命宮から、大吉の方位4つと大凶の方位4つを調べます。住まい・玄関・キッチン・ベッドに合う方位がわかります。さらに詳しい鑑定は先生に。",
+  "h": "4bcadf9b"
+ },
+ "battrach2.tra-huong-bat-trach": {
+  "t": "八宅の方位を調べる →",
+  "h": "e3808961"
+ },
+ "battrach2.y-nghia": {
+  "t": "意味",
+  "h": "b1973c6d"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">情報を入力</span>",
   "h": "487c9507"
@@ -794,6 +866,170 @@
  "boibai.xao-bai-rut": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"spade\"></span><b id=\"drawBtnLabel\">シャッフルして引く</b></span>",
   "h": "e53dcebd"
+ },
+ "buto.11h-13h-ngo": {
+  "t": "11〜13時（午）",
+  "h": "6a3975fa"
+ },
+ "buto.13h-15h-mui": {
+  "t": "13〜15時（未）",
+  "h": "b5abb37a"
+ },
+ "buto.15h-17h-than": {
+  "t": "15〜17時（申）",
+  "h": "d3239832"
+ },
+ "buto.17h-19h-dau": {
+  "t": "17〜19時（酉）",
+  "h": "892ef5c0"
+ },
+ "buto.19h-21h-tuat": {
+  "t": "19〜21時（戌）",
+  "h": "bfb8a38f"
+ },
+ "buto.1h-3h-suu": {
+  "t": "1〜3時（丑）",
+  "h": "43af3d63"
+ },
+ "buto.2-xem-truoc-6-truc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">6軸のプレビュー</span>",
+  "h": "752b4fb3"
+ },
+ "buto.21h-23h-hoi": {
+  "t": "21〜23時（亥）",
+  "h": "6d57bf9d"
+ },
+ "buto.23h-1h-ty": {
+  "t": "23〜1時（子）",
+  "h": "3b1ae1a9"
+ },
+ "buto.3h-5h-dan": {
+  "t": "3〜5時（寅）",
+  "h": "801ae495"
+ },
+ "buto.5h-7h-mao": {
+  "t": "5〜7時（卯）",
+  "h": "a3681f23"
+ },
+ "buto.7h-9h-thin": {
+  "t": "7〜9時（辰）",
+  "h": "dd0d719c"
+ },
+ "buto.9h-11h-ty": {
+  "t": "9〜11時（巳）",
+  "h": "396e5fe1"
+ },
+ "buto.anh-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> 署名画像",
+  "h": "d254fb71"
+ },
+ "buto.anh-chu-ky-xqwx": {
+  "t": "署名画像",
+  "h": "41b431b6"
+ },
+ "buto.ban-ky-dua-theo-chu-nao": {
+  "t": "署名は名前のどの文字をもとにしていますか？（任意）",
+  "h": "e757bef0"
+ },
+ "buto.but-tuong": {
+  "t": "筆相",
+  "h": "6eab7d7c"
+ },
+ "buto.but-tuong-hoc-phuong-dong-cho": {
+  "t": "東洋の筆相学では、筆跡、とりわけ署名には書き手の気迫と性格が表れると考えます。書法に古くから伝わる6つの基準 — 神・気・骨・肉・血・勢 — にもとづく、人相学を手書き文字に応用した一分野です。",
+  "h": "16117b43"
+ },
+ "buto.but-tuong-tu-vi-minh-bao": {
+  "t": "筆相 — 明宝紫微斗数",
+  "h": "01e38f8b"
+ },
+ "buto.but-tuong-xem-chu-ky-theo": {
+  "t": "<b>筆相</b><span>古法で署名を読む — <span data-tvp-price=\"but-tuong\">…</span> 両</span>",
+  "h": "68cc134b"
+ },
+ "buto.chu-ky-khong-duoc-luu-chi": {
+  "t": "署名は保存されません — 測定された指標だけが鑑定のために送信されます。",
+  "h": "e651b4d2"
+ },
+ "buto.co-phap-thu-phap-trung-hoa": {
+  "t": "中国書法の古法",
+  "h": "ce0e060e"
+ },
+ "buto.do-6-truc-co-phap-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>書法の古法で<br>6軸を測定</span>",
+  "h": "a97de25d"
+ },
+ "buto.do-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> 署名を測定 →",
+  "h": "afdd3301"
+ },
+ "buto.do-chu-ky-khac": {
+  "t": "別の署名を測定",
+  "h": "d0b9860f"
+ },
+ "buto.doi-chieu-voi-dung-than-bat": {
+  "t": "+ 四柱推命の用神と照合（任意）",
+  "h": "027429c6"
+ },
+ "buto.gio-sinh-bo-trong-neu-khong": {
+  "t": "出生時刻（わからなければ空欄で）",
+  "h": "72d40487"
+ },
+ "buto.keo-tha-anh-chu-ky-hoac": {
+  "t": "署名の画像をドラッグ＆ドロップ、またはクリックして選択",
+  "h": "c5c50566"
+ },
+ "buto.khong-luu-chu-ky": {
+  "t": "<span class=\"hp-ic\" data-icon=\"shield-check\"></span><span>署名は<br>保存しません</span>",
+  "h": "99c2aaad"
+ },
+ "buto.ky-chu-ky": {
+  "t": "署名する",
+  "h": "6043c0d7"
+ },
+ "buto.ky-lai-lan-nua": {
+  "t": "+ もう一度署名する",
+  "h": "a28512df"
+ },
+ "buto.ky-truc-tiep": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> 画面に直接署名",
+  "h": "604362e3"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"pen-line\"></span><span>画面に<br>直接署名</span>",
+  "h": "2e08b69a"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-d4z1": {
+  "t": "画面に直接署名するか、手元の署名画像をアップロードしてください。システムが筆跡の6軸を測定し、書法の古法にもとづいて鑑定します。",
+  "h": "74ad947e"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-j0mj": {
+  "t": "画面に直接署名してください — 書法の古法にもとづき、神・気・骨・肉・血・勢の6軸を測定して、あなたの署名を読み解きます。",
+  "h": "d92707db"
+ },
+ "buto.ky-voi-toc-do-that-dung": {
+  "t": "普段どおりの速さで署名してください — わざとゆっくり書かないで。",
+  "h": "8ac53b46"
+ },
+ "buto.luan-giai-but-tuong": {
+  "t": "筆相の鑑定",
+  "h": "0760be41"
+ },
+ "buto.moi-ngay-ky-hang-chuc-chu": {
+  "t": "毎日、契約書や書類に何十回も署名していても、その署名があなたの運について何を語っているかは考えたことがないかもしれません。画面に直接署名すると、神・気・骨・肉・血・勢の6軸すべての鑑定が届きます。",
+  "h": "150efb97"
+ },
+ "buto.muc-sam-tren-nen-sang-toi": {
+  "t": "明るい背景に濃いインク · 最大5MB — 測定できるのは骨・肉・勢のみ",
+  "h": "ddf489f7"
+ },
+ "buto.vd-khoa-dang-khoa": {
+  "t": "例：田中、太郎…",
+  "h": "bbb7526d"
+ },
+ "buto.xoa": {
+  "t": "消す",
+  "h": "82339c0a"
  },
  "cdvc.2-xem-truoc-cung-phu-the": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">夫妻宮を先読み</span>",
@@ -1619,6 +1855,226 @@
   "t": "会社のオフィス",
   "h": "d678c2d6"
  },
+ "datten.12-goi-y-ten-chia": {
+  "t": "名前の候補12個<br>3グループ",
+  "h": "41bbf053"
+ },
+ "datten.2-xem-truoc-nen-menh": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">本命の土台をプレビュー</span>",
+  "h": "6db12426"
+ },
+ "datten.be-gai": {
+  "t": "女の子",
+  "h": "af93dba0"
+ },
+ "datten.be-trai": {
+  "t": "男の子",
+  "h": "274225bc"
+ },
+ "datten.dat-ten-cho-con-la-quyet": {
+  "t": "お子さまの名づけは一度きりの決断で、誰もが確かな選択をしたいものです。家族みんなの生年月日を入力すれば、五行に合った名前の候補12個を、漢越語の意味つきで受け取れます。安心して選べます。",
+  "h": "82b4de3d"
+ },
+ "datten.dat-ten-con-chon-ten-hop": {
+  "t": "<b>子どもの名づけ</b><span>古法の五行で、お子さまの本命に合う名前を選ぶ</span>",
+  "h": "3d53836c"
+ },
+ "datten.dat-ten-con-hop-menh": {
+  "t": "本命に合う子どもの名づけ",
+  "h": "11462335"
+ },
+ "datten.dat-ten-con-tu-vi-minh": {
+  "t": "子どもの名づけ — 明宝紫微斗数",
+  "h": "9805fdc3"
+ },
+ "datten.gioi-tinh-con": {
+  "t": "お子さまの性別",
+  "h": "39dacada"
+ },
+ "datten.goi-y-12-ten-hop": {
+  "t": "本命に合う名前の候補12個を見る →",
+  "h": "46b3b1ed"
+ },
+ "datten.goi-y-dat-ten-con-hop": {
+  "t": "お子さまと両親の干支・納音五行にもとづき、本命に合う名づけを提案します。名前の候補とその意味の鑑定は先生に。",
+  "h": "295edb5c"
+ },
+ "datten.he-thong-doc-ngu-hanh-nap": {
+  "t": "システムが、お子さまと両親の納音五行を読み取り、漢越語の意味つきで、3グループに分けた名前の候補12個を提案します。",
+  "h": "ea884a81"
+ },
+ "datten.ho-cua-con": {
+  "t": "姓（お子さまの）",
+  "h": "f4e1a613"
+ },
+ "datten.hoi-thay-goi-y-ten-hop": {
+  "t": "✦ 先生に、本命に合う名前を提案してもらう",
+  "h": "166f1459"
+ },
+ "datten.hop-ngu-hanh-con-bo": {
+  "t": "子と両親の<br>五行に合う",
+  "h": "622dcbc0"
+ },
+ "datten.kem-nghia-han-viet": {
+  "t": "漢越語の<br>意味つき",
+  "h": "6cd753b8"
+ },
+ "datten.nam-sinh-bo": {
+  "t": "父の生まれ年",
+  "h": "a1009c64"
+ },
+ "datten.nam-sinh-con": {
+  "t": "お子さまの生まれ年",
+  "h": "724a46be"
+ },
+ "datten.nam-sinh-me": {
+  "t": "母の生まれ年",
+  "h": "bef8fb8f"
+ },
+ "datten.nguyen": {
+  "t": "Nguyễn",
+  "h": "e79eb3d7"
+ },
+ "datten.nhap-ho-gioi-tinh-va-nam": {
+  "t": "お子さまの姓・性別と、お子さま・父・母の生まれ年を入力すると、納音五行を算出して名づけの土台を作ります。",
+  "h": "7a82f7d7"
+ },
+ "datten.thong-tin-de-dat-ten": {
+  "t": "名づけのための情報",
+  "h": "a6b214ba"
+ },
+ "dattendn.2-xem-truoc-nen-menh-chu": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">オーナーの本命の土台をプレビュー</span>",
+  "h": "a96b5042"
+ },
+ "dattendn.an-uong-f-b-nha-hang": {
+  "t": "飲食・F&amp;B・レストラン",
+  "h": "4c6e0036"
+ },
+ "dattendn.bat-dong-san-xay-dung": {
+  "t": "不動産・建設",
+  "h": "6b5154b8"
+ },
+ "dattendn.cong-nghe-phan-mem": {
+  "t": "テクノロジー・ソフトウェア",
+  "h": "2665d28f"
+ },
+ "dattendn.cong-ty": {
+  "t": "会社",
+  "h": "65bf381e"
+ },
+ "dattendn.cua-hang": {
+  "t": "店舗",
+  "h": "050a31c8"
+ },
+ "dattendn.dat-ten-cong-ty-thuong-hieu": {
+  "t": "納音五行にもとづき、オーナーの本命と業種に合う会社名・ブランド名・店名を考えます。名前の候補と、その意味・名前の風水の鑑定は先生に。",
+  "h": "5b43e7d9"
+ },
+ "dattendn.dat-ten-doanh-nghiep": {
+  "t": "事業の名づけ",
+  "h": "86ab8b27"
+ },
+ "dattendn.dat-ten-doanh-nghiep-ten-cong": {
+  "t": "<b>事業の名づけ</b><span>オーナーの本命に合う会社名・ブランド名・店名</span>",
+  "h": "bed333e2"
+ },
+ "dattendn.dat-ten-doanh-nghiep-tu-vi": {
+  "t": "事業の名づけ — 明宝紫微斗数",
+  "h": "81d7fe18"
+ },
+ "dattendn.de-trong-neu-muon-duoc-goi": {
+  "t": "新しく提案してほしい場合は空欄",
+  "h": "8130c366"
+ },
+ "dattendn.du-lich-khach-san": {
+  "t": "旅行・ホテル",
+  "h": "5369cdde"
+ },
+ "dattendn.giao-duc-dao-tao": {
+  "t": "教育・研修",
+  "h": "f1adba55"
+ },
+ "dattendn.goi-y-ten-doanh-nghiep": {
+  "t": "事業名の候補を見る →",
+  "h": "6008d180"
+ },
+ "dattendn.he-thong-doc-ngu-hanh-nap": {
+  "t": "システムがオーナーの納音五行と業種を読み取り、「純ベトナム語」「漢越語」「組み合わせ」の3グループに分けた名前の候補12個を提案します。",
+  "h": "7d99610f"
+ },
+ "dattendn.ho-kinh-doanh": {
+  "t": "個人事業",
+  "h": "f886c8d3"
+ },
+ "dattendn.hop-menh-chu-nganh-nghe": {
+  "t": "オーナーと<br>業種に合う",
+  "h": "cf10d77f"
+ },
+ "dattendn.khac": {
+  "t": "その他",
+  "h": "5b8a28ab"
+ },
+ "dattendn.loai-hinh-tuy-chon": {
+  "t": "事業形態（任意）",
+  "h": "1f3a6e19"
+ },
+ "dattendn.mot-cai-ten-hop-menh-co": {
+  "t": "本命に合う名前は、起業の道のりを通じて会社に寄り添い続けます。とりあえず決めて後で直すのは、最初から正しく選ぶよりずっと大変です。オーナーの生まれ年を入力すれば、事業登録の前に名前の候補12個を受け取れます。",
+  "h": "9184666b"
+ },
+ "dattendn.nam-sinh-chu": {
+  "t": "オーナーの生まれ年",
+  "h": "124634b4"
+ },
+ "dattendn.nganh-nghe": {
+  "t": "業種",
+  "h": "63d9f4dd"
+ },
+ "dattendn.nhap-nam-sinh-nguoi-chu-nganh": {
+  "t": "オーナーの生まれ年・業種・事業形態を入力すると、納音五行を算出して名づけの土台を作ります。",
+  "h": "203d0ee8"
+ },
+ "dattendn.san-xuat-cong-nghiep": {
+  "t": "製造・工業",
+  "h": "f4a5458e"
+ },
+ "dattendn.tai-chinh-dich-vu": {
+  "t": "金融・サービス",
+  "h": "67bbe42d"
+ },
+ "dattendn.ten-dang-can-nhac-tuy-chon": {
+  "t": "検討中の名前（任意）",
+  "h": "1ccc6b3d"
+ },
+ "dattendn.ten-nguoi-chu-tuy-chon": {
+  "t": "オーナーの名前（任意）",
+  "h": "d5b78ffe"
+ },
+ "dattendn.thoi-trang-lam-dep": {
+  "t": "ファッション・美容",
+  "h": "72a2b0cf"
+ },
+ "dattendn.thong-tin-dat-ten-doanh-nghiep": {
+  "t": "事業の名づけのための情報",
+  "h": "8d822dd3"
+ },
+ "dattendn.thuong-hieu-shop": {
+  "t": "ブランド・ショップ",
+  "h": "aa184029"
+ },
+ "dattendn.thuong-mai-ban-le": {
+  "t": "商業・小売",
+  "h": "991ccb29"
+ },
+ "dattendn.truoc-khi-thanh-lap": {
+  "t": "設立する<br>前に",
+  "h": "0f9e340e"
+ },
+ "dattendn.y-te-suc-khoe": {
+  "t": "医療・健康",
+  "h": "13ca73cd"
+ },
  "daycon.2-xem-truoc-chan-dung-con": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">お子さんの肖像を先読み</span>",
   "h": "d8f50448"
@@ -1822,6 +2278,66 @@
  "daycon.xem-cach-day-con-ton-luong": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"baby\"></span><b>子育ての方法を見る →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 両)</span></small>",
   "h": "ccbaaea3"
+ },
+ "dient.anh-chi-gui-toi-may-chu": {
+  "t": "画像は分析のためにサーバーへ送るだけで、サーバーには保存しません。正面から、十分な明るさで、顔を隠さずに撮影すると最も正確な結果が得られます。",
+  "h": "b68f127c"
+ },
+ "dient.dien-tuong": {
+  "t": "面相",
+  "h": "1e5e41e3"
+ },
+ "dient.dien-tuong-tu-vi-minh-bao": {
+  "t": "面相 — 明宝紫微斗数",
+  "h": "1279c8b1"
+ },
+ "dient.dien-tuong-xem-tuong-khuon-mat": {
+  "t": "<b>面相</b><span>古法で顔の相を読む — <span data-tvp-price=\"dien-tuong\">…</span> 両</span>",
+  "h": "4af70f75"
+ },
+ "dient.do-tam-dinh-ngu-quan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>三停・五官を<br>測定</span>",
+  "h": "fb2a8a23"
+ },
+ "dient.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG、PNG、WebP — 最大5MB",
+  "h": "e7e468cd"
+ },
+ "dient.luan-theo-ma-y-than-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>『麻衣神相』に<br>よる鑑定</span>",
+  "h": "eecee1d3"
+ },
+ "dient.ma-y-than-tuong-co-phap": {
+  "t": "『麻衣神相』の古法",
+  "h": "c9dac5c1"
+ },
+ "dient.moi-luot-luong": {
+  "t": "1回 <span class=\"vnd\" data-tvp-price-vnd=\"dien-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"dien-tuong\">…</span> 両)</span>",
+  "h": "2e7a2c43"
+ },
+ "dient.phan-tich-nhan-tuong-hoc": {
+  "t": "人相学の分析",
+  "h": "9b4da9c2"
+ },
+ "dient.phan-tich-tuong-mat-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"analyzeBtnLabel\">顔相を分析する →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"dien-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"dien-tuong\">…</span> 両)</span> 必要</small>",
+  "h": "3a64a361"
+ },
+ "dient.tai-hoac-chup-anh-khuon-mat": {
+  "t": "顔写真をアップロードまたは撮影してください — 古法の人相学『麻衣神相』にもとづき、三停・五官など重要な部位を分析します。",
+  "h": "f24ad8af"
+ },
+ "dient.tai-mot-tam-anh-chan-dung": {
+  "t": "正面から十分な明るさで、顔がはっきり写ったポートレート画像を1枚アップロードしてください。三停・五官と各部位を分析し、性格と運勢を読み解きます。",
+  "h": "453bd1c6"
+ },
+ "dient.tam-dinh-da-xac-dinh": {
+  "t": "✦ 三停を特定しました",
+  "h": "ab4a740f"
+ },
+ "dient.tam-dinh-ngu-quan-tren-guong": {
+  "t": "顔の三停・五官は神秘的な話ではありません — 古人が性格と運勢を具体的に読む方法として体系化したものです。ポートレート画像を1枚アップロードして、『麻衣神相』にもとづく鑑定を受け取りましょう。",
+  "h": "3c70322e"
  },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 参考情報としての性質",
@@ -3591,6 +4107,346 @@
   "t": "メールアドレスとパスワードを入力してください。",
   "h": "d84b9abd"
  },
+ "js.bandosao.ban-do-sao": {
+  "t": "星図 — ",
+  "h": "aaf64809"
+ },
+ "js.bandosao.ban-do-sao-gm5h": {
+  "t": "星図",
+  "h": "0b3459d8"
+ },
+ "js.bandosao.ban-do-sao-luc-sinh": {
+  "t": "出生星図 — ",
+  "h": "3f6bcfea"
+ },
+ "js.bandosao.ban-do-sao-tqhx": {
+  "t": "星図 · ",
+  "h": "86318dde"
+ },
+ "js.bandosao.ban-muon-toi-doc-phan-nao": {
+  "t": "**。どの部分から読み解きましょうか?",
+  "h": "e9d17729"
+ },
+ "js.bandosao.buon-ma-thuot": {
+  "t": "バンメトート",
+  "h": "8bf97db6"
+ },
+ "js.bandosao.can-tho": {
+  "t": "カントー",
+  "h": "462902c5"
+ },
+ "js.bandosao.chua-dung-duoc-anh-thu-lai": {
+  "t": "画像を作成できませんでした。少し待ってからもう一度お試しください。",
+  "h": "f8055429"
+ },
+ "js.bandosao.chua-lap-duoc-ban-do-luc": {
+  "t": "現在は星図を作成できません — もう一度お試しください。",
+  "h": "a5e46558"
+ },
+ "js.bandosao.chuyen-tinh-cam-nhin-tu-ban": {
+  "t": "この星図から見た恋愛は?",
+  "h": "9a016ff9"
+ },
+ "js.bandosao.cung-moc": {
+  "t": "**、アセンダント **",
+  "h": "340f627c"
+ },
+ "js.bandosao.cung-moc-1y0y": {
+  "t": "アセンダント: ",
+  "h": "230ed8b5"
+ },
+ "js.bandosao.cung-moc-bgoi": {
+  "t": " · アセンダント ",
+  "h": "cad089c9"
+ },
+ "js.bandosao.da-lap-ban-do-sao": {
+  "t": "星図を作成しました: **",
+  "h": "c16ca110"
+ },
+ "js.bandosao.da-nang": {
+  "t": "ダナン",
+  "h": "fff4a50e"
+ },
+ "js.bandosao.dang-dung-anh": {
+  "t": "画像を作成中…",
+  "h": "7bce9760"
+ },
+ "js.bandosao.dang-lap": {
+  "t": "作成中…",
+  "h": "b47d9598"
+ },
+ "js.bandosao.goc-chieu-nao-gay-kho-nhat": {
+  "t": "私にとって最も難しいアスペクトは?",
+  "h": "8439668d"
+ },
+ "js.bandosao.ha-noi": {
+  "t": "ハノイ",
+  "h": "89974fad"
+ },
+ "js.bandosao.hai-phong": {
+  "t": "ハイフォン",
+  "h": "18cf9167"
+ },
+ "js.bandosao.he-nha": {
+  "t": " (ハウスシステム ",
+  "h": "cb040ba9"
+ },
+ "js.bandosao.hue": {
+  "t": "フエ",
+  "h": "23ed9a98"
+ },
+ "js.bandosao.mat-trang": {
+  "t": "**、月 **",
+  "h": "bfc8f041"
+ },
+ "js.bandosao.mat-troi": {
+  "t": "**。太陽 **",
+  "h": "b483737c"
+ },
+ "js.bandosao.mat-troi-8vvi": {
+  "t": "太陽 ",
+  "h": "40bd8b96"
+ },
+ "js.bandosao.nguyen-to": {
+  "t": "エレメント: ",
+  "h": "503b548c"
+ },
+ "js.bandosao.nha": {
+  "t": " (ハウス ",
+  "h": "953fb7b3"
+ },
+ "js.bandosao.noi-khac-tu-nhap": {
+  "t": "— その他(手入力) —",
+  "h": "5bda72d4"
+ },
+ "js.bandosao.quet-ma-lap-ban-do-sao": {
+  "t": "コードをスキャン — あなたの星図を作成",
+  "h": "2abde300"
+ },
+ "js.bandosao.quy-nhon": {
+  "t": "クイニョン",
+  "h": "2b52fd6e"
+ },
+ "js.bandosao.su-nghiep-hop-huong-nao": {
+  "t": "どんな仕事の方向が合いますか?",
+  "h": "8d8b01c6"
+ },
+ "js.bandosao.tinh-cach-cot-loi-cua-toi": {
+  "t": "私の核となる性格は?",
+  "h": "485d721a"
+ },
+ "js.bandosao.tp-ho-chi-minh": {
+  "t": "ホーチミン市",
+  "h": "4fc20e5f"
+ },
+ "js.bandosao.vui-long-chon-noi-sinh-hoac": {
+  "t": "出生地を選ぶか、緯度・経度を入力してください。",
+  "h": "1e78fa74"
+ },
+ "js.bandosao.vui-long-nhap-du-ngay-thang": {
+  "t": "生年月日(日・月・年)をすべて入力してください。",
+  "h": "771ff27f"
+ },
+ "js.banlamviec.100-sau-dieu-chinh-co-the": {
+  "t": "/100**、調整後は **",
+  "h": "a4c14f33"
+ },
+ "js.banlamviec.bac": {
+  "t": "北",
+  "h": "130d45d1"
+ },
+ "js.banlamviec.ban-lam-viec-cua-toi-sau": {
+  "t": "風水を整えた後の私のデスク",
+  "h": "b345368e"
+ },
+ "js.banlamviec.ban-lam-viec-diem": {
+  "t": "デスク — スコア ",
+  "h": "1bfcfce8"
+ },
+ "js.banlamviec.ban-muon-hoi-them-ve-de": {
+  "t": "。どの提案についてさらに知りたいですか?",
+  "h": "23ca71bc"
+ },
+ "js.banlamviec.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">現在の配置はおおむね良好です。</p>",
+  "h": "16b60bfc"
+ },
+ "js.banlamviec.chua-xac-dinh": {
+  "t": "未確定",
+  "h": "3120f6db"
+ },
+ "js.banlamviec.chuan-bi-prompt-render-theo-ngu": {
+  "t": "五行に合わせたレンダリング指示を準備中",
+  "h": "17f4d17e"
+ },
+ "js.banlamviec.dang-render-khong-gian-moi": {
+  "t": "新しい空間をレンダリング中",
+  "h": "814b3683"
+ },
+ "js.banlamviec.diem": {
+  "t": "点",
+  "h": "4a404c32"
+ },
+ "js.banlamviec.diem-phong-thuy-ban-lam-viec": {
+  "t": "現在のデスクの風水スコア: **",
+  "h": "b68f30c6"
+ },
+ "js.banlamviec.diem-phong-thuy-ban-lam-viec-8sd8": {
+  "t": "私のデスクの風水スコア",
+  "h": "21a93499"
+ },
+ "js.banlamviec.diem-phong-thuy-hien-tai": {
+  "t": "現在の風水スコア: ",
+  "h": "d4ac7afe"
+ },
+ "js.banlamviec.dieu-chinh": {
+  "t": "調整",
+  "h": "37c5bf6b"
+ },
+ "js.banlamviec.don-bo": {
+  "t": "撤去",
+  "h": "0825ec6d"
+ },
+ "js.banlamviec.dong": {
+  "t": "東",
+  "h": "6bd70b62"
+ },
+ "js.banlamviec.dong-bac": {
+  "t": "北東",
+  "h": "9690921a"
+ },
+ "js.banlamviec.dong-nam": {
+  "t": "南東",
+  "h": "dd71e07a"
+ },
+ "js.banlamviec.giu-nguyen-tpl": {
+  "t": "<span class=\"pos-keep\">✓ そのまま</span>",
+  "h": "aa00d929"
+ },
+ "js.banlamviec.hien-tai": {
+  "t": "現在:",
+  "h": "b17d885a"
+ },
+ "js.banlamviec.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">追加で提案するアイテムはありません。</p>",
+  "h": "3a6c6f34"
+ },
+ "js.banlamviec.khong-nhan-duoc-anh": {
+  "t": "画像を受信できませんでした。",
+  "h": "62488d2f"
+ },
+ "js.banlamviec.loi": {
+  "t": "エラー: ",
+  "h": "471c0087"
+ },
+ "js.banlamviec.loi-doc-file": {
+  "t": "ファイルの読み込みエラー",
+  "h": "3c56711b"
+ },
+ "js.banlamviec.loi-ppkl": {
+  "t": "⚠ エラー: ",
+  "h": "a4f4adbc"
+ },
+ "js.banlamviec.loi-tai-anh": {
+  "t": "画像の読み込みエラー",
+  "h": "13fb84a7"
+ },
+ "js.banlamviec.menh-quai-cua-ban-la": {
+  "t": "、あなたの命卦は **",
+  "h": "18a75d53"
+ },
+ "js.banlamviec.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.banlamviec.nen-co": {
+  "t": "必須",
+  "h": "3f6537af"
+ },
+ "js.banlamviec.nen-doi-sang": {
+  "t": "変更先:",
+  "h": "32c9bd3d"
+ },
+ "js.banlamviec.nen-lam": {
+  "t": "→ やるべき",
+  "h": "85492f9d"
+ },
+ "js.banlamviec.nhan-dien-do-vat-trong-anh": {
+  "t": "写真内の物を認識中",
+  "h": "5ecd0446"
+ },
+ "js.banlamviec.phan-tich-bat-trach-dua-de": {
+  "t": "八宅を分析して提案を作成中",
+  "h": "dd12d6d9"
+ },
+ "js.banlamviec.phan-tich-that-bai": {
+  "t": "分析に失敗しました",
+  "h": "44b68aa6"
+ },
+ "js.banlamviec.quai-n": {
+  "t": "卦 {n}",
+  "h": "1b238b88"
+ },
+ "js.banlamviec.quan-trong": {
+  "t": "⚠ 重要",
+  "h": "ebd388e2"
+ },
+ "js.banlamviec.sau-dieu-chinh-co-the-len": {
+  "t": " — 調整後は ",
+  "h": "9e6292bc"
+ },
+ "js.banlamviec.tay": {
+  "t": "西",
+  "h": "74b26936"
+ },
+ "js.banlamviec.tay-bac": {
+  "t": "北西",
+  "h": "0b1f47fd"
+ },
+ "js.banlamviec.tay-nam": {
+  "t": "南西",
+  "h": "c0484c26"
+ },
+ "js.banlamviec.tot-neu-co": {
+  "t": "あれば良い",
+  "h": "e48b654c"
+ },
+ "js.banlamviec.trung-tam": {
+  "t": "中央",
+  "h": "26bda5d2"
+ },
+ "js.banlamviec.tuy-y": {
+  "t": "◎ お好みで",
+  "h": "430debc7"
+ },
+ "js.banlamviec.tuy-y-4s40": {
+  "t": "お好みで",
+  "h": "87b1fcd0"
+ },
+ "js.banlamviec.uu-tien-lam-gi-truoc": {
+  "t": "まず何を優先すべきですか?",
+  "h": "f3cab683"
+ },
+ "js.banlamviec.vat-pham-nao-nen-mua-truoc": {
+  "t": "どのアイテムを先に買うべきですか?",
+  "h": "85fe11d3"
+ },
+ "js.banlamviec.vi-sao-diem-hien-tai-thap": {
+  "t": "なぜ今のスコアは低いのですか?",
+  "h": "6c51a2da"
+ },
+ "js.banlamviec.vui-long-chon-anh": {
+  "t": "写真を選択してください",
+  "h": "dc2490ac"
+ },
+ "js.banlamviec.vui-long-nhap-nam-sinh-hop": {
+  "t": "有効な生年を入力してください",
+  "h": "16abd384"
+ },
+ "js.banlamviec.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
  "js.baocao.bao-cao": {
   "t": "レポート",
   "h": "7013ca8b"
@@ -3666,6 +4522,38 @@
  "js.baocao.thu-lai-sau-it-phut": {
   "t": "。しばらくしてからもう一度お試しください。",
   "h": "0795401e"
+ },
+ "js.battrach.chip1": {
+  "t": "住まいはどの方位が一番合いますか？",
+  "h": "cc262fd1"
+ },
+ "js.battrach.chip2": {
+  "t": "キッチンはどの方位に置くべきですか？",
+  "h": "3eafdc4a"
+ },
+ "js.battrach.chip3": {
+  "t": "ベッドはどちらを向けるべきですか？",
+  "h": "08ee9028"
+ },
+ "js.battrach.chip4": {
+  "t": "悪い方位から動かせない場合、どう対処すればよいですか？",
+  "h": "8900960b"
+ },
+ "js.battrach.dong-tu-menh": {
+  "t": "東四命",
+  "h": "860976af"
+ },
+ "js.battrach.greeting": {
+  "t": "あなたの本命卦は**{q}**（{n}）です。どんなことの方位について聞きたいですか？",
+  "h": "9701f4f7"
+ },
+ "js.battrach.label": {
+  "t": "八宅・{q}・{n}",
+  "h": "38326507"
+ },
+ "js.battrach.tay-tu-menh": {
+  "t": "西四命",
+  "h": "e606c821"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10) — 詳しく鑑定してください",
@@ -4251,6 +5139,222 @@
   "t": "これから起こる流れ",
   "h": "6e5a1980"
  },
+ "js.buto.anh-qua-lon": {
+  "t": "画像が大きすぎます。",
+  "h": "cb4417d0"
+ },
+ "js.buto.anh-tinh-chua-do-duoc": {
+  "t": "静止画では測定できなかった軸: {list} — 6軸すべてを測るには、画面に直接署名してください。",
+  "h": "e61f9e1c"
+ },
+ "js.buto.but-tuong": {
+  "t": "筆相",
+  "h": "6eab7d7c"
+ },
+ "js.buto.but-tuong-cua-toi": {
+  "t": "私の筆相",
+  "h": "71e77c95"
+ },
+ "js.buto.but-tuong-diem": {
+  "t": "筆相 — {n}点/100",
+  "h": "8b96c2af"
+ },
+ "js.buto.chi-phi-su-dung": {
+  "t": "ご利用料金",
+  "h": "c2d36be8"
+ },
+ "js.buto.chip-ngu-hanh": {
+  "t": "筆跡の五行は、用神とどう関係しますか？",
+  "h": "a163e0cf"
+ },
+ "js.buto.chip-on-dinh": {
+  "t": "何度も署名すると、なぜ安定度が測れるのですか？",
+  "h": "db6978cc"
+ },
+ "js.buto.chip-than": {
+  "t": "「神」の軸とは何ですか？",
+  "h": "47cc8c8c"
+ },
+ "js.buto.chuyen-khoan-qr": {
+  "t": "銀行振込（QRコード）",
+  "h": "d15d92d3"
+ },
+ "js.buto.dang-luan": {
+  "t": "筆相を読んでいます…",
+  "h": "c11b136b"
+ },
+ "js.buto.dau-phay": {
+  "t": "、",
+  "h": "d3bc9a37"
+ },
+ "js.buto.diem-tong": {
+  "t": "/ 100 · 総合点",
+  "h": "734b18a3"
+ },
+ "js.buto.diem-tong-anh": {
+  "t": "/ 100 · 総合点（画像から測れた3軸）",
+  "h": "2eeaa72f"
+ },
+ "js.buto.diem-tong-n": {
+  "t": "総合点: {n}/100",
+  "h": "1a30535a"
+ },
+ "js.buto.goi-y": {
+  "t": "アドバイス:",
+  "h": "ca8836e0"
+ },
+ "js.buto.goiy-cot": {
+  "t": "署名にきっぱりとした止めがありません（あるいは逆に、細かい角が多すぎます）。主軸となる直線を1本加え、ほかの線をそれに寄せましょう。",
+  "h": "8398323b"
+ },
+ "js.buto.goiy-huyet": {
+  "t": "速さが不規則に上下し、筆が滞る箇所があります。一定のリズムで署名してみましょう — 文字を書くのではなく、曲線を描くつもりで。",
+  "h": "a216d5ef"
+ },
+ "js.buto.goiy-khi": {
+  "t": "線が何度も途切れています。ペンを持ち上げる回数をできるだけ減らしてみましょう — 短い線をいくつも並べるより、長く一筆でつながるほうが良いです。",
+  "h": "e111c883"
+ },
+ "js.buto.goiy-nhuc": {
+  "t": "線が細く、急いでいます。署名の中ほどをゆっくり書きましょう — 全体を強調する必要はなく、要所の1〜2か所で十分です。",
+  "h": "6df98c3a"
+ },
+ "js.buto.goiy-than": {
+  "t": "ひと呼吸おいてゆっくり署名し、同じ署名を毎日5〜10回繰り返し練習しましょう — 神は速さではなく、一貫性によって充実します。",
+  "h": "e914cedd"
+ },
+ "js.buto.goiy-the": {
+  "t": "文字の基線が下がっています。署名の最後を軽く跳ね上げてみましょう — 古い書法でいう「上り勢」です。",
+  "h": "e992fa88"
+ },
+ "js.buto.greeting": {
+  "t": "あなたの署名の総合点は **{n}/100** です。鑑定のどの部分について、さらに知りたいですか？",
+  "h": "6d9edb5f"
+ },
+ "js.buto.greeting-best": {
+  "t": "あなたの署名の総合点は **{n}/100**、最も強い軸は **{t}**（{s}/100）です。鑑定のどの部分について、さらに知りたいですか？",
+  "h": "b3ab7c3e"
+ },
+ "js.buto.khong-co-ket-qua": {
+  "t": "結果がありません。",
+  "h": "97fa6f91"
+ },
+ "js.buto.khong-do-duoc": {
+  "t": "測定不可",
+  "h": "ba0114d8"
+ },
+ "js.buto.khong-doc-duoc-net-muc-tu": {
+  "t": "この画像から墨の筆跡を読み取れませんでした。",
+  "h": "7c89a420"
+ },
+ "js.buto.khong-the-ket-noi": {
+  "t": "接続できません。",
+  "h": "3dc4d8cb"
+ },
+ "js.buto.lan-n": {
+  "t": "{n}回目 ✓",
+  "h": "8b97f3d0"
+ },
+ "js.buto.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.buto.loi-s": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.buto.luan-giai-day-du": {
+  "t": "詳しい鑑定 →",
+  "h": "4c2c4d70"
+ },
+ "js.buto.moi-luot-luong": {
+  "t": "1回 <span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> 両)</span>",
+  "h": "72b273e4"
+ },
+ "js.buto.mua-goi": {
+  "t": "パックを購入すると、さらにお得です。<br><a href=\"/topup.html\">パックを見る →</a>",
+  "h": "074cd07f"
+ },
+ "js.buto.nghia-cot": {
+  "t": "骨組み、線のきっぱり具合",
+  "h": "11b35dc9"
+ },
+ "js.buto.nghia-huyet": {
+  "t": "流れのなめらかさ、速さの均一さ",
+  "h": "bbf8ddc8"
+ },
+ "js.buto.nghia-khi": {
+  "t": "筆の流れのつながり、途切れの少なさ",
+  "h": "ddda4d5b"
+ },
+ "js.buto.nghia-nhuc": {
+  "t": "ふくよかさ、筆圧",
+  "h": "fa2ac7b3"
+ },
+ "js.buto.nghia-than": {
+  "t": "生気、筆線の一貫性",
+  "h": "1e27242e"
+ },
+ "js.buto.nghia-the": {
+  "t": "文字の基線が向かう方向",
+  "h": "c9a78d22"
+ },
+ "js.buto.ngu-hanh-net": {
+  "t": "線の五行",
+  "h": "fed1c22a"
+ },
+ "js.buto.paypal-the": {
+  "t": "PayPal / 国際カード",
+  "h": "70ff945c"
+ },
+ "js.buto.thuong-mat-10-20-giay": {
+  "t": "通常10〜20秒かかります",
+  "h": "9c118003"
+ },
+ "js.buto.tinh-tu-n-truc": {
+  "t": "静止画から直接測れた{n}軸にもとづく結果です。筆相の古法による詳しい鑑定（神・気・骨・肉・血・勢）は、詳細分析に含まれています。",
+  "h": "dd2d2e04"
+ },
+ "js.buto.ton-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> 両)</span> 必要",
+  "h": "4051f122"
+ },
+ "js.buto.truc-cot": {
+  "t": "骨格",
+  "h": "e5b9e8aa"
+ },
+ "js.buto.truc-huyet": {
+  "t": "血流",
+  "h": "b28ba369"
+ },
+ "js.buto.truc-khi": {
+  "t": "気韻",
+  "h": "8ce20f05"
+ },
+ "js.buto.truc-manh-nhat-body": {
+  "t": "{y}。そのほかの軸と具体的な改善アドバイスは、詳細分析に含まれています。",
+  "h": "fcd915ce"
+ },
+ "js.buto.truc-manh-nhat-t": {
+  "t": "最も強い軸: {t}（{h}）— {s}/100",
+  "h": "a03ee856"
+ },
+ "js.buto.truc-nhuc": {
+  "t": "肉付き",
+  "h": "cb0d2007"
+ },
+ "js.buto.truc-than": {
+  "t": "精神",
+  "h": "b7cbb4d4"
+ },
+ "js.buto.truc-the": {
+  "t": "筆勢",
+  "h": "4b2db277"
+ },
+ "js.buto.vui-long-chon-file-anh": {
+  "t": "画像ファイルを選んでください。",
+  "h": "71a61127"
+ },
  "js.cdvc.anh-dang-tai-co-the-hoi": {
   "t": "画像を読み込み中です。少し時間がかかることがあります — しばらくお待ちいただくか、",
   "h": "c4e9709b"
@@ -4766,6 +5870,22 @@
  "js.cns.rodden": {
   "t": "ロッデン・レーティングによる出生時刻の信頼度",
   "h": "45221bc0"
+ },
+ "js.cns.tang-t0": {
+  "t": "誕生日が同じ",
+  "h": "6b9b0710"
+ },
+ "js.cns.tang-t1": {
+  "t": "同じ旧暦の日",
+  "h": "25904580"
+ },
+ "js.cns.tang-t2": {
+  "t": "同じ命盤",
+  "h": "10a40788"
+ },
+ "js.cns.tang-t2b": {
+  "t": "同じ命盤の枠組み",
+  "h": "bd4da5be"
  },
  "js.cns.tim-hieu": {
   "t": "詳しく見る",
@@ -5647,6 +6767,334 @@
   "t": "生年月日をすべて入力してください。",
   "h": "2545b4dd"
  },
+ "js.cuahang.100-sau-dieu-chinh-co-the": {
+  "t": "/100**、調整後は **",
+  "h": "a4c14f33"
+ },
+ "js.cuahang.bac": {
+  "t": "北",
+  "h": "130d45d1"
+ },
+ "js.cuahang.ban-muon-hoi-them-ve-de": {
+  "t": "。どの提案についてさらに知りたいですか?",
+  "h": "23ca71bc"
+ },
+ "js.cuahang.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">現在の配置はおおむね良好です。</p>",
+  "h": "16b60bfc"
+ },
+ "js.cuahang.chuan-bi-prompt-render-theo-ngu": {
+  "t": "五行に合わせたレンダリング指示を準備中",
+  "h": "17f4d17e"
+ },
+ "js.cuahang.cua-hang-cua-toi-sau-khi": {
+  "t": "風水を整えた後の私の店舗",
+  "h": "110c4b6e"
+ },
+ "js.cuahang.cua-hang-van-phong-diem": {
+  "t": "店舗・オフィス — スコア ",
+  "h": "70910085"
+ },
+ "js.cuahang.dang-render-khong-gian-moi": {
+  "t": "新しい空間をレンダリング中",
+  "h": "814b3683"
+ },
+ "js.cuahang.diem": {
+  "t": "点",
+  "h": "4a404c32"
+ },
+ "js.cuahang.diem-phong-thuy-cua-hang-cua": {
+  "t": "私の店舗の風水スコア",
+  "h": "f1a71fd5"
+ },
+ "js.cuahang.diem-phong-thuy-cua-hang-van": {
+  "t": "現在の店舗・オフィスの風水スコア: **",
+  "h": "abf14d8f"
+ },
+ "js.cuahang.diem-phong-thuy-hien-tai": {
+  "t": "現在の風水スコア: ",
+  "h": "d4ac7afe"
+ },
+ "js.cuahang.dieu-chinh": {
+  "t": "調整",
+  "h": "37c5bf6b"
+ },
+ "js.cuahang.don-bo": {
+  "t": "撤去",
+  "h": "0825ec6d"
+ },
+ "js.cuahang.dong": {
+  "t": "東",
+  "h": "6bd70b62"
+ },
+ "js.cuahang.dong-bac": {
+  "t": "北東",
+  "h": "9690921a"
+ },
+ "js.cuahang.dong-nam": {
+  "t": "南東",
+  "h": "dd71e07a"
+ },
+ "js.cuahang.giu-nguyen-tpl": {
+  "t": "<span class=\"pos-keep\">✓ そのまま</span>",
+  "h": "aa00d929"
+ },
+ "js.cuahang.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">追加で提案するアイテムはありません。</p>",
+  "h": "3a6c6f34"
+ },
+ "js.cuahang.khong-nhan-duoc-anh": {
+  "t": "画像を受信できませんでした。",
+  "h": "62488d2f"
+ },
+ "js.cuahang.loi": {
+  "t": "エラー: ",
+  "h": "471c0087"
+ },
+ "js.cuahang.loi-doc-file": {
+  "t": "ファイルの読み込みエラー",
+  "h": "3c56711b"
+ },
+ "js.cuahang.loi-ppkl": {
+  "t": "⚠ エラー: ",
+  "h": "a4f4adbc"
+ },
+ "js.cuahang.loi-tai-anh": {
+  "t": "画像の読み込みエラー",
+  "h": "13fb84a7"
+ },
+ "js.cuahang.menh-quai-cua-ban-la": {
+  "t": "、あなたの命卦は **",
+  "h": "18a75d53"
+ },
+ "js.cuahang.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.cuahang.nen-co": {
+  "t": "必須",
+  "h": "3f6537af"
+ },
+ "js.cuahang.nen-lam": {
+  "t": "→ やるべき",
+  "h": "85492f9d"
+ },
+ "js.cuahang.nhan-dien-do-vat-trong-anh": {
+  "t": "写真内の物を認識中",
+  "h": "5ecd0446"
+ },
+ "js.cuahang.phan-tich-bat-trach-dua-de": {
+  "t": "八宅を分析して提案を作成中",
+  "h": "dd12d6d9"
+ },
+ "js.cuahang.phan-tich-that-bai": {
+  "t": "分析に失敗しました",
+  "h": "44b68aa6"
+ },
+ "js.cuahang.quai-n": {
+  "t": "卦 {n}",
+  "h": "1b238b88"
+ },
+ "js.cuahang.quan-trong": {
+  "t": "⚠ 重要",
+  "h": "ebd388e2"
+ },
+ "js.cuahang.sau-dieu-chinh-co-the-len": {
+  "t": " — 調整後は ",
+  "h": "9e6292bc"
+ },
+ "js.cuahang.tay": {
+  "t": "西",
+  "h": "74b26936"
+ },
+ "js.cuahang.tay-bac": {
+  "t": "北西",
+  "h": "0b1f47fd"
+ },
+ "js.cuahang.tay-nam": {
+  "t": "南西",
+  "h": "c0484c26"
+ },
+ "js.cuahang.tot-neu-co": {
+  "t": "あれば良い",
+  "h": "e48b654c"
+ },
+ "js.cuahang.trung-tam": {
+  "t": "中央",
+  "h": "26bda5d2"
+ },
+ "js.cuahang.tuy-y": {
+  "t": "◎ お好みで",
+  "h": "430debc7"
+ },
+ "js.cuahang.tuy-y-4s40": {
+  "t": "お好みで",
+  "h": "87b1fcd0"
+ },
+ "js.cuahang.uu-tien-lam-gi-truoc": {
+  "t": "まず何を優先すべきですか?",
+  "h": "f3cab683"
+ },
+ "js.cuahang.vat-pham-nao-nen-mua-truoc": {
+  "t": "どのアイテムを先に買うべきですか?",
+  "h": "85fe11d3"
+ },
+ "js.cuahang.vi-sao-diem-hien-tai-thap": {
+  "t": "なぜ今のスコアは低いのですか?",
+  "h": "6c51a2da"
+ },
+ "js.cuahang.vui-long-chon-anh": {
+  "t": "写真を選択してください",
+  "h": "dc2490ac"
+ },
+ "js.cuahang.vui-long-nhap-nam-sinh-hop": {
+  "t": "有効な生年を入力してください",
+  "h": "16abd384"
+ },
+ "js.cuahang.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
+ "js.datten.be-gai": {
+  "t": "女の子",
+  "h": "af93dba0"
+ },
+ "js.datten.be-trai": {
+  "t": "男の子",
+  "h": "274225bc"
+ },
+ "js.datten.bo": {
+  "t": "父",
+  "h": "dbbdf270"
+ },
+ "js.datten.chip1": {
+  "t": "本命に合う名前の候補12個を、意味つきで提案してください",
+  "h": "61954ded"
+ },
+ "js.datten.chip2": {
+  "t": "ミドルネームはどれが合いますか？",
+  "h": "d59d5d7a"
+ },
+ "js.datten.chip3": {
+  "t": "お子さまはどの五行を補う必要がありますか？",
+  "h": "2906ae80"
+ },
+ "js.datten.chip4": {
+  "t": "父と母の干支の両方に合う名前は？",
+  "h": "ab665896"
+ },
+ "js.datten.con-gt": {
+  "t": "子（{gt}）",
+  "h": "8467608e"
+ },
+ "js.datten.dang-goi-y": {
+  "t": "お子さまの名前を考えています…通常15〜25秒かかります",
+  "h": "8dc8ac9b"
+ },
+ "js.datten.greeting": {
+  "t": "お子さまの本命の土台ができました（子：**{cc}**・{h}）。どんな方向で名前を提案しましょうか？",
+  "h": "9e3424d6"
+ },
+ "js.datten.label": {
+  "t": "{gt}の名づけ・姓 {ho}・{cc}",
+  "h": "21f99fa5"
+ },
+ "js.datten.loi-colon": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.datten.me": {
+  "t": "母",
+  "h": "dfc6f90b"
+ },
+ "js.datten.res-head": {
+  "t": "干支の土台・五行 {ho} — {gt}",
+  "h": "a23fe671"
+ },
+ "js.datten.res-note": {
+  "t": "お子さまの納音は<b>{na}</b>、五行は<b>{h}</b>です。名前には、お子さまを<b>相生</b>する五行（<b>{hs}</b>が<b>{h}</b>を生じる）か<b>同じ五行</b>の文字を選んで本命を補い、剋する五行は避けましょう。お子さまと両親の両方に合う具体的な名前の一覧は、先生にお尋ねください。",
+  "h": "9bb9a346"
+ },
+ "js.datten.vui-long-nhap-ho": {
+  "t": "姓と、お子さま・父・母の生まれ年を入力してください。",
+  "h": "1e4e4c71"
+ },
+ "js.dattendn.cham-ten": {
+  "t": "名前**{ten}**を採点しましょうか、それとも新しい名前を提案しましょうか？",
+  "h": "76d469bb"
+ },
+ "js.dattendn.chip-5-ten": {
+  "t": "本命に合う名前の候補5個を、意味つきで提案してください",
+  "h": "4ab7930a"
+ },
+ "js.dattendn.chip-5-ten-khac": {
+  "t": "もっと合う別の名前を5個提案してください",
+  "h": "f3587ad3"
+ },
+ "js.dattendn.chip-bo-hanh": {
+  "t": "名前はどの五行を補うべきですか？",
+  "h": "f5cf0ccb"
+ },
+ "js.dattendn.chip-bo-hanh-chu": {
+  "t": "オーナーのために、名前はどの五行を補うべきですか？",
+  "h": "6a1e73a2"
+ },
+ "js.dattendn.chip-cham": {
+  "t": "名前「{ten}」は、オーナーの本命と業種に合っていますか？",
+  "h": "1039c58a"
+ },
+ "js.dattendn.chip-khi-chat": {
+  "t": "この業種の気質に合う名前はどれですか？",
+  "h": "c012da1f"
+ },
+ "js.dattendn.chip-slogan": {
+  "t": "この名前に合うスローガンは？",
+  "h": "8ab01273"
+ },
+ "js.dattendn.chip-tranh": {
+  "t": "名づけで避けるべき文字や音は？",
+  "h": "0493dad1"
+ },
+ "js.dattendn.dang-goi-y": {
+  "t": "事業名を考えています…通常15〜25秒かかります",
+  "h": "9fbbe937"
+ },
+ "js.dattendn.goi-y-huong": {
+  "t": "どんな方向で名前を提案しましょうか？",
+  "h": "3ccf4b50"
+ },
+ "js.dattendn.greeting": {
+  "t": "オーナーの本命の土台ができました（オーナー：**{cc}**・{h}、業種：{nganh}）。",
+  "h": "cd3c37de"
+ },
+ "js.dattendn.label": {
+  "t": "事業の名づけ・{nganh}・オーナー {cc}",
+  "h": "179775da"
+ },
+ "js.dattendn.nganh": {
+  "t": "業種",
+  "h": "549e0d8e"
+ },
+ "js.dattendn.res-head": {
+  "t": "オーナーの本命の土台・{nganh}",
+  "h": "7d04ac4e"
+ },
+ "js.dattendn.res-note": {
+  "t": "オーナーの納音は<b>{na}</b>、五行は<b>{h}</b>です。事業名には、オーナーの本命を補うため、<b>相生・同じ</b>五行の文字（<b>{hs}</b>が<b>{h}</b>を生じる）を選び、あわせて<b>{nganh}</b>の気質に合い、読みやすく覚えやすいものにしましょう。具体的な名前の一覧は先生にお尋ねください。",
+  "h": "cdd000b9"
+ },
+ "js.dattendn.ten-can-nhac": {
+  "t": "検討中の名前",
+  "h": "a8f03dde"
+ },
+ "js.dattendn.tuoi-chu": {
+  "t": "オーナーの干支",
+  "h": "c6ec0cf0"
+ },
+ "js.dattendn.vui-long-nhap-nam-sinh": {
+  "t": "オーナーの生まれ年を入力し、業種を選んでください。",
+  "h": "20fcc631"
+ },
  "js.daycon.5-la-muc-giua-cua-hang": {
   "t": "\n\n5は、数千件の子どもの命盤の中間値であり、「10点満点で5点」という意味ではありません。軸の両端にはそれぞれ価値があります。",
   "h": "99fb1a17"
@@ -6158,6 +7606,142 @@
  "js.daycon.xem-them": {
   "t": "<summary>命盤の項目をさらに ",
   "h": "c5afdcd1"
+ },
+ "js.dient.anh-qua-lon-toi-da-5mb": {
+  "t": "画像が大きすぎます（最大5MB）。",
+  "h": "874f95b2"
+ },
+ "js.dient.canh-bao-chup": {
+  "t": "⚠ {w} — 正面から撮影した画像のほうが、より正確な結果になります。",
+  "h": "231fb68c"
+ },
+ "js.dient.chip-ngu-quan": {
+  "t": "五官とは何ですか？",
+  "h": "e8847ad0"
+ },
+ "js.dient.chip-tam-dinh": {
+  "t": "三停とは何ですか？",
+  "h": "25930850"
+ },
+ "js.dient.chip-thay-doi": {
+  "t": "顔相は変えられますか？",
+  "h": "602a11f2"
+ },
+ "js.dient.da-doc-xong": {
+  "t": "『麻衣神相』にもとづき、あなたの顔相を読み終えました。ほかに知りたいことはありますか？",
+  "h": "8cee9c62"
+ },
+ "js.dient.dang-phan-tich": {
+  "t": "顔相を分析しています…",
+  "h": "b2f15cf4"
+ },
+ "js.dient.dau-nghieng": {
+  "t": "頭が約{n}°傾いています — もっとまっすぐ撮影してください",
+  "h": "ad34a7cb"
+ },
+ "js.dient.dien-tuong": {
+  "t": "面相",
+  "h": "1e5e41e3"
+ },
+ "js.dient.dien-tuong-cua-toi": {
+  "t": "私の面相",
+  "h": "d5784500"
+ },
+ "js.dient.do-truc-tiep-bo-vi": {
+  "t": "MediaPipeで画像から直接測定しました。『麻衣神相』にもとづく意味と、そのほかの部位（目・鼻・口・額・あご）は、詳細分析に含まれています。",
+  "h": "6d9235fd"
+ },
+ "js.dient.do-truc-tiep-tam-dinh": {
+  "t": "MediaPipeで画像から直接測定しました — 上停・中停・下停は、あなたの顔の実際のランドマークに沿って区切っています。『麻衣神相』にもとづく詳しい鑑定は、詳細分析に含まれています。",
+  "h": "3ded4f7e"
+ },
+ "js.dient.ha-dinh": {
+  "t": "下停",
+  "h": "11254397"
+ },
+ "js.dient.khong-doc-duoc-anh-nay-vui": {
+  "t": "この画像を読み込めません — JPGまたはPNGの画像を選んでください。",
+  "h": "32a1faf4"
+ },
+ "js.dient.khong-nhan-dien-duoc-mat": {
+  "t": "⚠ 顔をはっきり検出できませんでした。分析は可能ですが、結果の精度が下がる場合があります。",
+  "h": "b3bd7a6e"
+ },
+ "js.dient.khong-the-ket-noi": {
+  "t": "接続できません。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.dient.khong-the-mo-camera": {
+  "t": "カメラを開けません。画像をアップロードしてください。",
+  "h": "a57244b6"
+ },
+ "js.dient.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.dient.loi-s": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.dient.mat-bau-duc": {
+  "t": "卵型の顔",
+  "h": "d9034e8f"
+ },
+ "js.dient.mat-dai-hep": {
+  "t": "面長・細面",
+  "h": "ea8512c9"
+ },
+ "js.dient.mat-quay": {
+  "t": "顔が少し横を向いています — 正面から撮影してください",
+  "h": "589f7ce3"
+ },
+ "js.dient.mat-tron-vuong": {
+  "t": "丸顔・四角顔",
+  "h": "64bb08c2"
+ },
+ "js.dient.may-chu-khong-tra-ve": {
+  "t": "サーバーから結果が返ってきませんでした。",
+  "h": "d1312308"
+ },
+ "js.dient.tam-bach-ha": {
+  "t": "下三白眼 — 黒目の下に白目が見えます",
+  "h": "1d45c786"
+ },
+ "js.dient.tam-bach-thuong": {
+  "t": "上三白眼 — 黒目の上に白目が見えます",
+  "h": "2f061c22"
+ },
+ "js.dient.tam-dinh-da-xac-dinh": {
+  "t": "✦ 三停を特定しました",
+  "h": "ab4a740f"
+ },
+ "js.dient.tam-dinh-t": {
+  "t": "三停: 上停 {t}% · 中停 {tr}% · 下停 {h}%",
+  "h": "47b2936f"
+ },
+ "js.dient.thuong-dinh": {
+  "t": "上停",
+  "h": "eb4f7b4f"
+ },
+ "js.dient.thuong-mat-15-25-giay": {
+  "t": "通常15〜25秒かかります",
+  "h": "f0dba195"
+ },
+ "js.dient.trung-dinh": {
+  "t": "中停",
+  "h": "bfbaff8b"
+ },
+ "js.dient.tu-bach": {
+  "t": "四白眼 — 黒目の周り何方向にも白目が見えます",
+  "h": "1ded61cb"
+ },
+ "js.dient.ty-le-rong-dai-mat": {
+  "t": "顔の幅÷長さの比: {r}（{s}）",
+  "h": "59af24fc"
+ },
+ "js.dient.vui-long-chon-file-anh": {
+  "t": "画像ファイルを選んでください。",
+  "h": "71a61127"
  },
  "js.duyenno.anh-dang-tai-co-the-hoi": {
   "t": "画像を読み込み中です。少し時間がかかることがあります — しばらくお待ちいただくか、",
@@ -7447,6 +9031,66 @@
   "t": "チャージする →",
   "h": "96c6fb5d"
  },
+ "js.khis.anh-qua-lon-toi-da-10mb": {
+  "t": "画像が大きすぎます（最大10MB）。",
+  "h": "27f729fb"
+ },
+ "js.khis.chip-5-sac": {
+  "t": "5色の五行は何を意味しますか？",
+  "h": "98715ca7"
+ },
+ "js.khis.chip-an-duong": {
+  "t": "印堂とは何ですか？",
+  "h": "e1de6d6d"
+ },
+ "js.khis.chip-khac-dien-tuong": {
+  "t": "気色と面相は、どう違いますか？",
+  "h": "d826036b"
+ },
+ "js.khis.da-luan-xong": {
+  "t": "『麻衣神相』にもとづき、あなたの気色を読み終えました。ほかに知りたいことはありますか？",
+  "h": "26c2acd5"
+ },
+ "js.khis.khi-sac": {
+  "t": "気色",
+  "h": "e1205bcd"
+ },
+ "js.khis.khi-sac-cua-toi": {
+  "t": "私の気色",
+  "h": "f4b00328"
+ },
+ "js.khis.khong-doc-duoc-anh": {
+  "t": "画像を読み込めません",
+  "h": "12ab7c26"
+ },
+ "js.khis.khong-doc-duoc-file": {
+  "t": "ファイルを読み込めません",
+  "h": "1d32d14b"
+ },
+ "js.khis.khong-the-ket-noi": {
+  "t": "接続できません。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.khis.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.khis.loi-s": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.khis.loi-xu-ly-anh": {
+  "t": "画像の処理でエラー: {e}",
+  "h": "973ba3bb"
+ },
+ "js.khis.may-chu-khong-tra-ve": {
+  "t": "サーバーから結果が返ってきませんでした。",
+  "h": "d1312308"
+ },
+ "js.khis.vui-long-chon-file-anh": {
+  "t": "画像ファイル（JPGまたはPNG）を選んでください。",
+  "h": "ad4caa5b"
+ },
  "js.kimlau.chip1": {
   "t": "家を建てるのに一番良い年はいつですか？",
   "h": "992ff775"
@@ -8039,6 +9683,30 @@
   "t": "▸ 命盤の全体を見る",
   "h": "fee98465"
  },
+ "js.lucnham.chip1": {
+  "t": "これは成功しますか、失敗しますか？",
+  "h": "fa905597"
+ },
+ "js.lucnham.chip2": {
+  "t": "いつ結果が出ますか？",
+  "h": "698cf33d"
+ },
+ "js.lucnham.chip3": {
+  "t": "進むべきですか、退くべきですか？",
+  "h": "0735035e"
+ },
+ "js.lucnham.chip4": {
+  "t": "三伝は経過について何を語っていますか？",
+  "h": "43368fd7"
+ },
+ "js.lucnham.greeting": {
+  "t": "**大六壬**の課を立てました。日 {ngay}、時 {gio}、{tdem}。取伝は**{phap}**の法により、初伝は**{chi}・{tuong}**です。どんなことを聞きたいですか？",
+  "h": "9e3179ca"
+ },
+ "js.lucnham.label": {
+  "t": "六壬・{ngay} {gio}",
+  "h": "f76e2ec9"
+ },
  "js.maihoa.bien-quai-noi-ket-cuc-the": {
   "t": "変卦は結末をどう示していますか？",
   "h": "3c27069a"
@@ -8330,6 +9998,42 @@
  "js.ngaytot.label": {
   "t": "吉日・{y}年{m}月",
   "h": "cbd777dc"
+ },
+ "js.nguhanhten.ban-muon-luan": {
+  "t": " 何を鑑定しましょうか？",
+  "h": "4117a169"
+ },
+ "js.nguhanhten.chip1": {
+  "t": "なぜ私の名前はこの点数になったのですか？",
+  "h": "2cd3c5cc"
+ },
+ "js.nguhanhten.chip2": {
+  "t": "名前のどの文字が点数を下げていますか？",
+  "h": "c694fac3"
+ },
+ "js.nguhanhten.chip3": {
+  "t": "本命により合う文字をいくつか提案してください",
+  "h": "665a28f8"
+ },
+ "js.nguhanhten.chip4": {
+  "t": "主となる文字は本命をどう補いますか？",
+  "h": "f1b4cfcb"
+ },
+ "js.nguhanhten.greeting": {
+  "t": "名前**{ten}**の五行（{tc}）を調べました。",
+  "h": "a78484c2"
+ },
+ "js.nguhanhten.label": {
+  "t": "名前の五行・{ten}",
+  "h": "c5234e3e"
+ },
+ "js.nguhanhten.menh": {
+  "t": " 本命は**{m}**です。",
+  "h": "ef0b1bae"
+ },
+ "js.nguhanhten.tc-item": {
+  "t": "{n}画・{h}",
+  "h": "341d0ba2"
  },
  "js.nguoikhac.ban-cam-nang": {
   "t": "ガイド",
@@ -11039,6 +12743,194 @@
   "t": "申し訳ありません。エラーが発生しました",
   "h": "4195c600"
  },
+ "js.phongthuy.100-sau-dieu-chinh-co-the": {
+  "t": "/100**、調整後は **",
+  "h": "a4c14f33"
+ },
+ "js.phongthuy.bac": {
+  "t": "北",
+  "h": "130d45d1"
+ },
+ "js.phongthuy.ban-muon-hoi-them-ve-de": {
+  "t": "。どの提案についてさらに知りたいですか?",
+  "h": "23ca71bc"
+ },
+ "js.phongthuy.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">現在の配置はおおむね良好です。</p>",
+  "h": "65d526db"
+ },
+ "js.phongthuy.chuan-bi-prompt-render-theo-ngu": {
+  "t": "五行に合わせたレンダリング指示を準備中",
+  "h": "17f4d17e"
+ },
+ "js.phongthuy.dang-render-lai-phong": {
+  "t": "部屋を再レンダリング中",
+  "h": "4f7ce5f5"
+ },
+ "js.phongthuy.diem": {
+  "t": " 点</div>",
+  "h": "8d925dd9"
+ },
+ "js.phongthuy.diem-phong-thuy-hien-tai": {
+  "t": "現在の風水スコア:",
+  "h": "91e0a1f2"
+ },
+ "js.phongthuy.diem-phong-thuy-hien-tai-kmy1": {
+  "t": "現在の風水スコア: ",
+  "h": "d4ac7afe"
+ },
+ "js.phongthuy.diem-phong-thuy-phong-cua-toi": {
+  "t": "私の部屋の風水スコア",
+  "h": "373da765"
+ },
+ "js.phongthuy.dieu-chinh": {
+  "t": "調整",
+  "h": "37c5bf6b"
+ },
+ "js.phongthuy.don-bo": {
+  "t": "撤去",
+  "h": "0825ec6d"
+ },
+ "js.phongthuy.dong": {
+  "t": "東",
+  "h": "6bd70b62"
+ },
+ "js.phongthuy.dong-bac": {
+  "t": "北東",
+  "h": "9690921a"
+ },
+ "js.phongthuy.dong-nam": {
+  "t": "南東",
+  "h": "dd71e07a"
+ },
+ "js.phongthuy.giu-nguyen": {
+  "t": "<span class=\"pos-keep\">✓ そのまま</span>",
+  "h": "aa00d929"
+ },
+ "js.phongthuy.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">追加で提案するアイテムはありません。</p>",
+  "h": "b8141e06"
+ },
+ "js.phongthuy.khong-nhan-duoc-anh": {
+  "t": "画像を受信できませんでした。",
+  "h": "62488d2f"
+ },
+ "js.phongthuy.loi": {
+  "t": "エラー: ",
+  "h": "471c0087"
+ },
+ "js.phongthuy.loi-doc-file": {
+  "t": "ファイルの読み込みエラー",
+  "h": "3c56711b"
+ },
+ "js.phongthuy.loi-ppkl": {
+  "t": "⚠ エラー: ",
+  "h": "a4f4adbc"
+ },
+ "js.phongthuy.loi-tai-anh": {
+  "t": "画像の読み込みエラー",
+  "h": "13fb84a7"
+ },
+ "js.phongthuy.menh-quai-cua-ban-la": {
+  "t": "、あなたの命卦は **",
+  "h": "18a75d53"
+ },
+ "js.phongthuy.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.phongthuy.nen-co": {
+  "t": "必須",
+  "h": "3f6537af"
+ },
+ "js.phongthuy.nen-lam": {
+  "t": "→ やるべき",
+  "h": "85492f9d"
+ },
+ "js.phongthuy.nhan-dien-do-vat-trong-anh": {
+  "t": "写真内の物を認識中",
+  "h": "5ecd0446"
+ },
+ "js.phongthuy.phan-tich-bat-trach-dua-de": {
+  "t": "八宅を分析して提案を作成中",
+  "h": "dd12d6d9"
+ },
+ "js.phongthuy.phan-tich-that-bai": {
+  "t": "分析に失敗しました",
+  "h": "44b68aa6"
+ },
+ "js.phongthuy.phong-cua-toi-sau-khi-phong": {
+  "t": "風水を整えた後の私の部屋",
+  "h": "788d257f"
+ },
+ "js.phongthuy.phong-thuy-diem": {
+  "t": "風水 — スコア ",
+  "h": "4c90b82a"
+ },
+ "js.phongthuy.quai": {
+  "t": "卦 ",
+  "h": "fc8feb12"
+ },
+ "js.phongthuy.quan-trong": {
+  "t": "⚠ 重要",
+  "h": "ebd388e2"
+ },
+ "js.phongthuy.sau-dieu-chinh-co-the-len": {
+  "t": " — 調整後は ",
+  "h": "9e6292bc"
+ },
+ "js.phongthuy.tay": {
+  "t": "西",
+  "h": "74b26936"
+ },
+ "js.phongthuy.tay-bac": {
+  "t": "北西",
+  "h": "0b1f47fd"
+ },
+ "js.phongthuy.tay-nam": {
+  "t": "南西",
+  "h": "c0484c26"
+ },
+ "js.phongthuy.tot-neu-co": {
+  "t": "あれば良い",
+  "h": "e48b654c"
+ },
+ "js.phongthuy.trung-tam": {
+  "t": "中央",
+  "h": "26bda5d2"
+ },
+ "js.phongthuy.tuy-y": {
+  "t": "◎ お好みで",
+  "h": "430debc7"
+ },
+ "js.phongthuy.tuy-y-4s40": {
+  "t": "お好みで",
+  "h": "87b1fcd0"
+ },
+ "js.phongthuy.uu-tien-lam-gi-truoc": {
+  "t": "まず何を優先すべきですか?",
+  "h": "f3cab683"
+ },
+ "js.phongthuy.vat-pham-nao-nen-mua-truoc": {
+  "t": "どのアイテムを先に買うべきですか?",
+  "h": "85fe11d3"
+ },
+ "js.phongthuy.vi-sao-diem-hien-tai-thap": {
+  "t": "なぜ今のスコアは低いのですか?",
+  "h": "6c51a2da"
+ },
+ "js.phongthuy.vui-long-chon-anh-phong": {
+  "t": "部屋の写真を選択してください",
+  "h": "90bec971"
+ },
+ "js.phongthuy.vui-long-nhap-nam-sinh-hop": {
+  "t": "有効な生年を入力してください",
+  "h": "16abd384"
+ },
+ "js.phongthuy.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
  "js.prices.luong-moi-luot": {
   "t": "1回 {credits}両",
   "h": "d8f9af98"
@@ -11531,6 +13423,58 @@
   "t": "四柱推命・奇門遁甲",
   "h": "eac6b8dd"
  },
+ "js.shellui.bds-ban-cau": {
+  "t": "半球:",
+  "h": "91679aa1"
+ },
+ "js.shellui.bds-bon-truc": {
+  "t": "4つの軸",
+  "h": "600b207c"
+ },
+ "js.shellui.bds-can-bang": {
+  "t": "バランス",
+  "h": "9fe59d4b"
+ },
+ "js.shellui.bds-goc-chieu": {
+  "t": "主なアスペクト",
+  "h": "77aad29d"
+ },
+ "js.shellui.bds-hanh-tinh": {
+  "t": "天体",
+  "h": "0bfb6634"
+ },
+ "js.shellui.bds-hinh-the": {
+  "t": "アスペクトパターン",
+  "h": "de8e9e43"
+ },
+ "js.shellui.bds-khong-co": {
+  "t": "なし",
+  "h": "2884bacc"
+ },
+ "js.shellui.bds-lech": {
+  "t": "(オーブ {lech}°、強さ {manh}%)",
+  "h": "17e9c540"
+ },
+ "js.shellui.bds-nghich": {
+  "t": "℞ 逆行",
+  "h": "8093efa5"
+ },
+ "js.shellui.bds-nghich-hanh": {
+  "t": "逆行:",
+  "h": "6917d7e7"
+ },
+ "js.shellui.bds-nguyen-to": {
+  "t": "エレメント:",
+  "h": "69e4c7a2"
+ },
+ "js.shellui.bds-nha": {
+  "t": "第{n}ハウス",
+  "h": "19a346e7"
+ },
+ "js.shellui.bds-the": {
+  "t": "クオリティ:",
+  "h": "3b48438e"
+ },
  "js.shellui.be-an": {
   "t": "Bé An",
   "h": "4010ce22"
@@ -11590,6 +13534,118 @@
  "js.shellui.brand": {
   "t": "明宝紫微斗数",
   "h": "33336b26"
+ },
+ "js.shellui.bt-cd-0": {
+  "t": "金運・健康・最も良い発展",
+  "h": "ba2fcc5f"
+ },
+ "js.shellui.bt-cd-1": {
+  "t": "健康・長寿・医療との縁",
+  "h": "f2b6c53a"
+ },
+ "js.shellui.bt-cd-2": {
+  "t": "結婚・仕事の安定",
+  "h": "eaa1aa66"
+ },
+ "js.shellui.bt-cd-3": {
+  "t": "安定・安心して暮らす・守りを固める",
+  "h": "9d377762"
+ },
+ "js.shellui.bt-cu-0": {
+  "t": "玄関、寝室、仕事机",
+  "h": "9598844f"
+ },
+ "js.shellui.bt-cu-1": {
+  "t": "寝室、ベッドの頭の向き",
+  "h": "ff2bdd07"
+ },
+ "js.shellui.bt-cu-2": {
+  "t": "祭壇、リビング、食卓",
+  "h": "18d25898"
+ },
+ "js.shellui.bt-cu-3": {
+  "t": "物置、トイレ、副次的な部屋",
+  "h": "b7d8011a"
+ },
+ "js.shellui.bt-cung-menh": {
+  "t": "本命宮",
+  "h": "3dc5da1d"
+ },
+ "js.shellui.bt-cung-n": {
+  "t": "第{c}宮",
+  "h": "b2bf68e0"
+ },
+ "js.shellui.bt-dong-hop": {
+  "t": "東四命 — 東・東南・南・北の方位に合う",
+  "h": "37481bde"
+ },
+ "js.shellui.bt-dong-tu-menh": {
+  "t": "東四命",
+  "h": "860976af"
+ },
+ "js.shellui.bt-hd-0": {
+  "t": "散財、いざこざ、よくない出来事",
+  "h": "224b7b52"
+ },
+ "js.shellui.bt-hd-1": {
+  "t": "人間関係のもつれ、健康の衰え",
+  "h": "234cd72a"
+ },
+ "js.shellui.bt-hd-2": {
+  "t": "小人、陰での妨害",
+  "h": "e6644f6c"
+ },
+ "js.shellui.bt-hd-3": {
+  "t": "運の途絶え、重い病、大きな災い",
+  "h": "72905f33"
+ },
+ "js.shellui.bt-hu-0": {
+  "t": "玄関と寝室は避ける",
+  "h": "460c1435"
+ },
+ "js.shellui.bt-hu-1": {
+  "t": "祭壇や寝室を置くのは避ける",
+  "h": "f713260a"
+ },
+ "js.shellui.bt-hu-2": {
+  "t": "キッチンと主寝室は避ける",
+  "h": "8fd85d89"
+ },
+ "js.shellui.bt-hu-3": {
+  "t": "ドアやベッドを置かない",
+  "h": "fde05a0d"
+ },
+ "js.shellui.bt-khong-tinh-duoc-cung": {
+  "t": "本命宮を算出できませんでした。",
+  "h": "ce9bd2a4"
+ },
+ "js.shellui.bt-ngu-hanh": {
+  "t": "五行",
+  "h": "68ac2473"
+ },
+ "js.shellui.bt-nhap-nam-hop-le": {
+  "t": "有効な生まれ年（1900〜2010）を入力してください。",
+  "h": "8363c20b"
+ },
+ "js.shellui.bt-nhom": {
+  "t": "グループ",
+  "h": "ce7eab0a"
+ },
+ "js.shellui.bt-tay-hop": {
+  "t": "西四命 — 西・西北・東北・西南の方位に合う",
+  "h": "6f187842"
+ },
+ "js.shellui.bt-tay-tu-menh": {
+  "t": "西四命",
+  "h": "e606c821"
+ },
+ "js.shellui.bt-title": {
+  "t": "{y}年 — 第{c}宮 {q} — {n}",
+  "h": "44ed4978"
+ },
+ "js.shellui.bt-vi-tri-cung": {
+  "t": "宮の位置",
+  "h": "5a046cd0"
  },
  "js.shellui.buoc-o-huong-xau-thi-hoa": {
   "t": "凶方位に結んでしまった場合、どう化解すればよいですか？",
@@ -12314,6 +14370,82 @@
  "js.shellui.dien-tuong-cua-toi": {
   "t": "私の面相",
   "h": "d5784500"
+ },
+ "js.shellui.dln-chua-lap-duoc": {
+  "t": "今は盤を立てられませんでした。もう一度お試しください。（六壬盤は、実際の節気にもとづく月将が必要なため、サーバー側で立てます。）",
+  "h": "349a0a1c"
+ },
+ "js.shellui.dln-dang-lap": {
+  "t": "六壬盤を作成中…",
+  "h": "24a55230"
+ },
+ "js.shellui.dln-gio-b": {
+  "t": "時 <b>{v}</b>",
+  "h": "d7ddd40f"
+ },
+ "js.shellui.dln-hanh-vuong-suy": {
+  "t": "五行 {h} — {vs}",
+  "h": "aafd8bf9"
+ },
+ "js.shellui.dln-khoa-the": {
+  "t": "課体",
+  "h": "1a2eeeba"
+ },
+ "js.shellui.dln-ngay-b": {
+  "t": "日 <b>{v}</b>",
+  "h": "5eec8778"
+ },
+ "js.shellui.dln-nguyet-tuong": {
+  "t": "月将 <b>{nt}</b> が占時 <b>{ct}</b> に加わる",
+  "h": "17b75e38"
+ },
+ "js.shellui.dln-note": {
+  "t": "月将を占時に加えて天盤を回します。十二天将は日干の貴人の位置から配置します（昼は昼貴人、夜は夜貴人を用います）。",
+  "h": "c0123ca5"
+ },
+ "js.shellui.dln-phep-thu-truyen": {
+  "t": "取伝の法",
+  "h": "cddbdb0f"
+ },
+ "js.shellui.dln-quy-nhan": {
+  "t": "貴人 <b>{tb}</b> が <b>{db}</b> の上",
+  "h": "f66202db"
+ },
+ "js.shellui.dln-roi-tuan-khong": {
+  "t": "空亡にあたる",
+  "h": "7118ae11"
+ },
+ "js.shellui.dln-tam-truyen": {
+  "t": "三伝",
+  "h": "68b2f0a5"
+ },
+ "js.shellui.dln-than-sat": {
+  "t": "神殺",
+  "h": "365af4b4"
+ },
+ "js.shellui.dln-thang-b": {
+  "t": "月 <b>{v}</b>",
+  "h": "1da6071f"
+ },
+ "js.shellui.dln-thien-ban-gia-dia-ban": {
+  "t": "天盤が地盤に加わる",
+  "h": "67a30bc5"
+ },
+ "js.shellui.dln-tren": {
+  "t": "{v}の上",
+  "h": "6adfd61e"
+ },
+ "js.shellui.dln-tu-khoa": {
+  "t": "四課",
+  "h": "56938410"
+ },
+ "js.shellui.dln-tuan-khong": {
+  "t": "空亡 <b>{v}</b>",
+  "h": "ecffad13"
+ },
+ "js.shellui.dln-voi-can-ngay": {
+  "t": "日干との関係：{v}",
+  "h": "e6e06e50"
  },
  "js.shellui.doi": {
   "t": "変更",
@@ -13507,6 +15639,14 @@
   "t": "会話履歴",
   "h": "0fd2afce"
  },
+ "js.shellui.ln-nhap-ngay-thang-nam": {
+  "t": "日・月・年を入力してください。",
+  "h": "f001ab44"
+ },
+ "js.shellui.ln-title": {
+  "t": "{date} — {chi}の刻（{time}）",
+  "h": "453d1ef5"
+ },
  "js.shellui.loai-cong-ty": {
   "t": "会社",
   "h": "65bf381e"
@@ -14246,6 +16386,190 @@
  "js.shellui.nguyen": {
   "t": "Nguyễn",
   "h": "e79eb3d7"
+ },
+ "js.shellui.nh-a1": {
+  "t": "「{name}」は{th}で、本命の{m}を生じます。名前が本命を養う最良の形です",
+  "h": "cda46ea4"
+ },
+ "js.shellui.nh-a2": {
+  "t": "「{name}」は本命と同じ{m}で、本命の気を強めます",
+  "h": "ed7b09ef"
+ },
+ "js.shellui.nh-a3": {
+  "t": "「{name}」は{th}で、本命の{m}を剋します",
+  "h": "ef919a58"
+ },
+ "js.shellui.nh-a4": {
+  "t": "本命の{m}が、「{name}」の{th}を剋します",
+  "h": "67e11e3c"
+ },
+ "js.shellui.nh-a5": {
+  "t": "本命の{m}が{th}を生じ、本命の気が洩れます",
+  "h": "78fd2981"
+ },
+ "js.shellui.nh-a6": {
+  "t": "「{name}」は{th}で、本命の{m}を生じも剋しもしません",
+  "h": "512e9b02"
+ },
+ "js.shellui.nh-b": {
+  "t": "{k}文字に{d}種類の五行",
+  "h": "c86c53a6"
+ },
+ "js.shellui.nh-c1": {
+  "t": "{sr}の文字があり、本命の{m}を生じます",
+  "h": "8063d498"
+ },
+ "js.shellui.nh-c2": {
+  "t": "本命と同じ{m}の文字があります",
+  "h": "b7d30df6"
+ },
+ "js.shellui.nh-c3": {
+  "t": "本命の{m}を生じる文字も、同じ五行の文字もまだありません",
+  "h": "415fa26e"
+ },
+ "js.shellui.nh-caveat": {
+  "t": "この点数は、比べやすいようにこのサイトが定めた尺度で、古典に書かれた数字ではありません。すでに使っている名前の場合、点数が低くても<strong>悪い名前という意味ではなく</strong>、名前を変える理由にもなりません。この部分は新しい名前を選ぶときにだけ役立ちます。",
+  "h": "d0c49d0c"
+ },
+ "js.shellui.nh-cd-ten": {
+  "t": "名前の採点",
+  "h": "56e67c7e"
+ },
+ "js.shellui.nh-cd-ten-menh": {
+  "t": "名前の採点 — 本命{m}",
+  "h": "d700b3c1"
+ },
+ "js.shellui.nh-chua-cham-duoc": {
+  "t": "名前の持ち主の<strong>本命</strong>がわからないため、まだ採点できません。ここで選んでください：",
+  "h": "f7e87909"
+ },
+ "js.shellui.nh-chua-co-trong-bang": {
+  "t": "表にまだありません",
+  "h": "26374f9c"
+ },
+ "js.shellui.nh-d1": {
+  "t": "{h}の文字が{k}つあり、本命を剋します",
+  "h": "ecab105a"
+ },
+ "js.shellui.nh-d2": {
+  "t": "本命を剋する文字はありません",
+  "h": "c6ffe9f6"
+ },
+ "js.shellui.nh-goi-y-tron-bo": {
+  "t": "本命に合う名前の候補をまとめて見る →",
+  "h": "0457a007"
+ },
+ "js.shellui.nh-khong-biet-menh": {
+  "t": "ご自身の本命がわかりませんか？",
+  "h": "afcf54e4"
+ },
+ "js.shellui.nh-la": {
+  "t": "主となる文字と本命の相性",
+  "h": "55588954"
+ },
+ "js.shellui.nh-lb": {
+  "t": "五行のバランス",
+  "h": "2ceb2151"
+ },
+ "js.shellui.nh-lc": {
+  "t": "名前に本命を補う文字がある",
+  "h": "40185ecf"
+ },
+ "js.shellui.nh-ld": {
+  "t": "本命を剋する文字がない",
+  "h": "88245630"
+ },
+ "js.shellui.nh-nb1": {
+  "t": "名前には、本命を生じる{sr}の文字がすでにあります。さらに足すなら、{m}の文字を選んで補強しましょう。",
+  "h": "1f2ab4f1"
+ },
+ "js.shellui.nh-nb2": {
+  "t": "{sr}は本命の{m}を生じます。この五行の文字は本命を養います。",
+  "h": "388f50d5"
+ },
+ "js.shellui.nh-net-don-vi": {
+  "t": "{n}画（一の位：{d}）",
+  "h": "cc03c651"
+ },
+ "js.shellui.nh-nhap-ho-ten": {
+  "t": "氏名を入力してください。",
+  "h": "852de967"
+ },
+ "js.shellui.nh-nhap-net-thu-cong": {
+  "t": "画数を手入力",
+  "h": "60923759"
+ },
+ "js.shellui.nh-rel-cung": {
+  "t": "主となる文字「<strong>{name}</strong>」は<strong>{th}</strong>で、本命<strong>{m}</strong>と<strong>同じ五行</strong>です。良い補強となり、本命の気を強めます。",
+  "h": "ae1602fe"
+ },
+ "js.shellui.nh-rel-khac-menh": {
+  "t": "主となる文字「<strong>{name}</strong>」は<strong>{th}</strong>で、<strong>本命の{m}を剋します</strong>（{th}剋{m}）。民間では調整を検討したほうがよいとされます。",
+  "h": "cfb34dae"
+ },
+ "js.shellui.nh-rel-menh-khac": {
+  "t": "主となる文字「<strong>{name}</strong>」は<strong>{th}</strong>で、本命の{m}が名前の五行を剋します（{m}剋{th}）。民間では調整を検討したほうがよいとされます。",
+  "h": "084dea54"
+ },
+ "js.shellui.nh-rel-menh-sinh": {
+  "t": "主となる文字「<strong>{name}</strong>」は<strong>{th}</strong>で、本命の{m}が名前の五行を生じます（{m}→{th}）。中程度で、害はありません。",
+  "h": "6b8b312d"
+ },
+ "js.shellui.nh-rel-sinh-menh": {
+  "t": "主となる文字「<strong>{name}</strong>」は<strong>{th}</strong>で、<strong>本命の{m}を生じます</strong>（{th}→{m}）。良好で、名前が本命を養います。",
+  "h": "e867c9b3"
+ },
+ "js.shellui.nh-rel-trung-tinh": {
+  "t": "主となる文字「<strong>{name}</strong>」は<strong>{th}</strong>、本命は<strong>{m}</strong>で、直接の相生も相剋もありません。中立です。",
+  "h": "c5e52f31"
+ },
+ "js.shellui.nh-so-net": {
+  "t": "画数",
+  "h": "6942afa1"
+ },
+ "js.shellui.nh-sug-head": {
+  "t": "名前を選ぶ場合",
+  "h": "4307da08"
+ },
+ "js.shellui.nh-sug-p": {
+  "t": "<strong>{boi}</strong>の文字を優先しましょう。{note} <strong>{tranh}</strong>の文字は避けましょう（本命の{m}を剋します）。",
+  "h": "4634af56"
+ },
+ "js.shellui.nh-title-suffix": {
+  "t": " — 一文字ごとの五行",
+  "h": "502b979c"
+ },
+ "js.shellui.nh-toi-da-6": {
+  "t": "音節は最大6つまでです。",
+  "h": "a95e6e3b"
+ },
+ "js.shellui.nh-tra-hanzii": {
+  "t": "hanzii.net で調べる →",
+  "h": "d84d1c1b"
+ },
+ "js.shellui.nh-tra-menh": {
+  "t": "生まれ年から本命を調べる →",
+  "h": "83b945be"
+ },
+ "js.shellui.nh-v1": {
+  "t": "本命と非常によく合う",
+  "h": "8afe9243"
+ },
+ "js.shellui.nh-v2": {
+  "t": "本命とよく合う",
+  "h": "44069c43"
+ },
+ "js.shellui.nh-v3": {
+  "t": "まずまず",
+  "h": "9f497b1e"
+ },
+ "js.shellui.nh-v4": {
+  "t": "考えたい点がある",
+  "h": "12311aa6"
+ },
+ "js.shellui.nh-v5": {
+  "t": "考えたい点が多い",
+  "h": "e71f844e"
  },
  "js.shellui.nhan-tuong-cua-toi": {
   "t": "私の目相",
@@ -15126,6 +17450,110 @@
  "js.shellui.zalo": {
   "t": "Zalo",
   "h": "53b71aec"
+ },
+ "js.solaso.bao-cao": {
+  "t": "レポート",
+  "h": "7013ca8b"
+ },
+ "js.solaso.chua-co-la-so-nhom": {
+  "t": "このグループにはまだ命盤がありません。",
+  "h": "79bf9444"
+ },
+ "js.solaso.chua-dat-ten": {
+  "t": "名称未設定",
+  "h": "dfb078dd"
+ },
+ "js.solaso.combo-1-s": {
+  "t": "2つまとめて購入すると、別々に買うよりお得",
+  "h": "584d7fc7"
+ },
+ "js.solaso.combo-1-t": {
+  "t": "セット：紫微斗数の鑑定＋四柱推命",
+  "h": "c69e7864"
+ },
+ "js.solaso.combo-2-s": {
+  "t": "紫微斗数の鑑定＋四柱推命＋人生のサイクル＋年運",
+  "h": "12345b3e"
+ },
+ "js.solaso.combo-2-t": {
+  "t": "セット：4ツール完全版",
+  "h": "0726a4ab"
+ },
+ "js.solaso.da-co-xem-lai": {
+  "t": "✓ 購入済み・もう一度見る",
+  "h": "308bad31"
+ },
+ "js.solaso.rel-ban-be": {
+  "t": "友人",
+  "h": "159fe485"
+ },
+ "js.solaso.rel-dong-nghiep": {
+  "t": "同僚",
+  "h": "d8e2bdd8"
+ },
+ "js.solaso.rel-gia-dinh": {
+  "t": "家族",
+  "h": "bf9b33dc"
+ },
+ "js.solaso.rel-khac": {
+  "t": "その他",
+  "h": "5b8a28ab"
+ },
+ "js.solaso.tool-cdtk": {
+  "t": "前世の肖像",
+  "h": "e7d0f866"
+ },
+ "js.solaso.tool-cdvc": {
+  "t": "配偶者の肖像",
+  "h": "eb21b5ef"
+ },
+ "js.solaso.tool-ctcd": {
+  "t": "人生のサイクル",
+  "h": "38c0c6ce"
+ },
+ "js.solaso.tool-dc": {
+  "t": "命盤で育てる子育て",
+  "h": "6043b236"
+ },
+ "js.solaso.tool-dntk": {
+  "t": "前世の縁",
+  "h": "c6b0ccb5"
+ },
+ "js.solaso.tool-hnt": {
+  "t": "若いうちの進路鑑定",
+  "h": "826c517b"
+ },
+ "js.solaso.tool-lg": {
+  "t": "紫微斗数の鑑定",
+  "h": "ab5a4607"
+ },
+ "js.solaso.tool-nk": {
+  "t": "他の人の命盤",
+  "h": "5a73dc8f"
+ },
+ "js.solaso.tool-nm": {
+  "t": "人脈",
+  "h": "78fdc03b"
+ },
+ "js.solaso.tool-tb": {
+  "t": "四柱推命（子平）",
+  "h": "6ade52e9"
+ },
+ "js.solaso.tool-vhn": {
+  "t": "年運",
+  "h": "ba425e43"
+ },
+ "js.solaso.xem-tao": {
+  "t": "見る／作る",
+  "h": "a89b1542"
+ },
+ "js.solaso.xoa-khoi-so": {
+  "t": "ノートから削除",
+  "h": "4ba4a755"
+ },
+ "js.solaso.xoa-la-so-nay": {
+  "t": "この命盤をノートから削除しますか？",
+  "h": "d9231d4e"
  },
  "js.taikhoan.ban-chua-chia-se-luot-nao": {
   "t": "まだ何もシェアしていません。",
@@ -18759,6 +21187,130 @@
   "t": "測定した12の音響指標（HNR、持続時間、ジッター、スペクトル重心…）にもとづく分類です。五音の古法による詳しい意味は、詳細分析に含まれています。",
   "h": "0c3c0a37"
  },
+ "js.thtu.anh-qua-lon": {
+  "t": "画像が大きすぎます。",
+  "h": "cb4417d0"
+ },
+ "js.thtu.da-doc-xong-chi-tay-cua": {
+  "t": "あなたの手相を古法の手相学で読み終えました。ほかに知りたいことはありますか？",
+  "h": "0e67099e"
+ },
+ "js.thtu.dang-doc-chi-tay": {
+  "t": "手相を読んでいます…",
+  "h": "1d4e7200"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang": {
+  "t": "MediaPipe Handsで画像から直接測定しました — あなたの実際のランドマークにもとづく手のひらの形です。古法の手相にもとづく詳しい鑑定は、詳細分析に含まれています。",
+  "h": "94672af2"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang-vwvq": {
+  "t": "MediaPipe Handsで画像から直接測定しました。各指の意味、2D:4D比、手相の各線は、詳細分析に含まれています。",
+  "h": "68dd31bc"
+ },
+ "js.thtu.duong-van-menh-noi-len-dieu-gi": {
+  "t": "運命線は何を物語っていますか？",
+  "h": "04b0d761"
+ },
+ "js.thtu.hinh-bau-duc": {
+  "t": "楕円形",
+  "h": "209cc96b"
+ },
+ "js.thtu.hinh-dai-thon": {
+  "t": "細長い",
+  "h": "36c13178"
+ },
+ "js.thtu.hinh-dang-s": {
+  "t": "形: {s}",
+  "h": "b7ac9175"
+ },
+ "js.thtu.hinh-vuong-rong": {
+  "t": "四角形・幅広",
+  "h": "2114c5c3"
+ },
+ "js.thtu.khong-co-ket-qua": {
+  "t": "結果がありません。",
+  "h": "97fa6f91"
+ },
+ "js.thtu.khong-doc-duoc-anh-nay-vui": {
+  "t": "この画像を読み込めません — JPGまたはPNGの画像を選んでください。",
+  "h": "32a1faf4"
+ },
+ "js.thtu.khong-nhan-dien-duoc-ban-tay": {
+  "t": "⚠ 手のひらを検出できませんでした。背景とコントラストのある場所で、十分な明るさのもと、もう一度はっきり撮影してみてください。",
+  "h": "5abad846"
+ },
+ "js.thtu.khong-the-ket-noi": {
+  "t": "接続できません。",
+  "h": "3dc4d8cb"
+ },
+ "js.thtu.khong-the-mo-camera": {
+  "t": "カメラを開けません。",
+  "h": "39a33224"
+ },
+ "js.thtu.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.thtu.loi-s": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.thtu.ngon-ap-ut": {
+  "t": "薬指",
+  "h": "44dd840f"
+ },
+ "js.thtu.ngon-cai": {
+  "t": "親指",
+  "h": "aa7ff125"
+ },
+ "js.thtu.ngon-dai-nhat-f": {
+  "t": "最も長い指: {f}",
+  "h": "8a5684eb"
+ },
+ "js.thtu.ngon-giua": {
+  "t": "中指",
+  "h": "b5a038e9"
+ },
+ "js.thtu.ngon-tro": {
+  "t": "人差し指",
+  "h": "379d7ea9"
+ },
+ "js.thtu.ngon-ut": {
+  "t": "小指",
+  "h": "6a313fb1"
+ },
+ "js.thtu.rong-dai-r": {
+  "t": "幅÷長さ = {r}",
+  "h": "86f06997"
+ },
+ "js.thtu.tam-dai-chi-la-gi": {
+  "t": "手相の三大線とは何ですか？",
+  "h": "baef21dd"
+ },
+ "js.thtu.tay-thuan-khac-nhau": {
+  "t": "利き手と利き手でない手は、どう違いますか？",
+  "h": "10468033"
+ },
+ "js.thtu.thu-tuong": {
+  "t": "手相",
+  "h": "869631da"
+ },
+ "js.thtu.thu-tuong-cua-toi": {
+  "t": "私の手相",
+  "h": "0af7a78d"
+ },
+ "js.thtu.thuong-mat-15-20-giay": {
+  "t": "通常15〜20秒かかります",
+  "h": "087173ee"
+ },
+ "js.thtu.ty-le-rong-dai-long-ban-tay": {
+  "t": "手のひらの幅÷長さの比: {r}（{s}）",
+  "h": "e753f592"
+ },
+ "js.thtu.vui-long-chon-file-anh": {
+  "t": "画像ファイルを選んでください。",
+  "h": "71a61127"
+ },
  "js.tool.an-sao": {
   "t": "命盤作成",
   "h": "5c7c4676"
@@ -20339,6 +22891,86 @@
   "t": "{n}月",
   "h": "4dd9659f"
  },
+ "khis.anh-chan-dung": {
+  "t": "ポートレート画像",
+  "h": "13ef800c"
+ },
+ "khis.anh-chi-gui-toi-may-chu": {
+  "t": "画像は分析のためにサーバーへ送るだけで、サーバーには保存しません。朝か夕方に、メイクもフィルターもなしで撮影してください。",
+  "h": "ee45336b"
+ },
+ "khis.chon-anh-khac": {
+  "t": "別の画像を選ぶ",
+  "h": "0c82c787"
+ },
+ "khis.chup-anh-khuon-mat-he-thong": {
+  "t": "顔写真を撮影してください — 『麻衣神相』にもとづき、印堂・五岳から今後1〜3か月の運気を読み解きます。",
+  "h": "1722144a"
+ },
+ "khis.chup-anh-trong-24-gio": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>24時間以内に<br>撮影</span>",
+  "h": "1e9673f3"
+ },
+ "khis.chup-mot-tam-anh-mat-ro": {
+  "t": "直近24時間以内に撮った、顔がはっきり写った画像を1枚用意してください。印堂と五岳を分析し、今後1〜3か月の運気と気を養う方法をお伝えします。",
+  "h": "912812d7"
+ },
+ "khis.dang-quan-sat-khi-sac-tu": {
+  "t": "あなたの画像から気色を観察しています — 30秒ほどお待ちください…<br><span style=\"font-size:12px;color:var(--text-lt)\">印堂と五岳の5つの部位の色を分析しています。</span>",
+  "h": "f82ea2fa"
+ },
+ "khis.do-an-duong-ngu-nhac": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sunrise\"></span><span>印堂・五岳を<br>測定</span>",
+  "h": "c8eb70da"
+ },
+ "khis.du-bao-van-khi-1-3": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>今後1〜3か月の<br>運気予報</span>",
+  "h": "4a1cf555"
+ },
+ "khis.jpg-png-toi-da-10mb-chup": {
+  "t": "JPG、PNG — 最大10MB · 24時間以内に撮影",
+  "h": "3b51d9fa"
+ },
+ "khis.khi-sac": {
+  "t": "気色",
+  "h": "e1205bcd"
+ },
+ "khis.khi-sac-luan": {
+  "t": "気色の鑑定",
+  "h": "95b743c6"
+ },
+ "khis.khi-sac-tren-guong-mat-thay": {
+  "t": "顔の気色は、運勢が実際に変わる前に変わります — 古人はそれを、ほかのどんな兆しよりも早く読み取りました。最近撮った顔写真をアップロードして、今後1〜3か月の運気の鑑定を受け取りましょう。",
+  "h": "b8d7084d"
+ },
+ "khis.khi-sac-tu-vi-minh-bao": {
+  "t": "気色 — 明宝紫微斗数",
+  "h": "3bb0e032"
+ },
+ "khis.khi-sac-van-khi-1-3": {
+  "t": "<b>気色</b><span>印堂と五岳から見る今後1〜3か月の運気 — <span data-tvp-price=\"khi-sac\">…</span> 両</span>",
+  "h": "460ed941"
+ },
+ "khis.luan-khi-sac-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sunrise\"></span><b id=\"analyzeBtnLabel\">気色を鑑定する →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"khi-sac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"khi-sac\">…</span> 両)</span> 必要</small>",
+  "h": "d256b1ce"
+ },
+ "khis.moi-luot-luong": {
+  "t": "1回 <span class=\"vnd\" data-tvp-price-vnd=\"khi-sac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"khi-sac\">…</span> 両)</span>",
+  "h": "212bf76e"
+ },
+ "khis.nhan-de-chon-anh-hoac-keo": {
+  "t": "タップして画像を選ぶか、ここにドラッグ＆ドロップ",
+  "h": "988cbe04"
+ },
+ "khis.xem-anh-khac": {
+  "t": "別の画像を見る",
+  "h": "c3d65ffa"
+ },
+ "khis.xem-khi-sac": {
+  "t": "気色を見る",
+  "h": "7863a81d"
+ },
  "kimlau.bang-tra-20-nam-toi": {
   "t": "今後20年の<br>早見表",
   "h": "ded0c033"
@@ -21171,6 +23803,114 @@
   "t": "紫微斗数は未来を言い当てるものではなく、自分を知って、よりよい選択をするための手がかりです。",
   "h": "ae92de9d"
  },
+ "lucnham.1-nhap-ngay-gio": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">日時を入力</span>",
+  "h": "953e7b97"
+ },
+ "lucnham.dang-phan-van-chuyen-tien-bac": {
+  "t": "お金や恋愛のこと、今すぐ決めたいことで迷っていませんか？今の日時にぴったり合わせた課を立てて、核心に答えます。ご質問にまっすぐ向き合う短い鑑定が届きます。",
+  "h": "295b866e"
+ },
+ "lucnham.de-trong-la-lay-gio-hien": {
+  "t": "空欄なら現在の日時を使います。システムが大六壬の課を立て、四課・三伝・貴人と、『考変占』にもとづく鑑定を返します。",
+  "h": "1e494a7c"
+ },
+ "lucnham.gio-can-xem": {
+  "t": "見たい時刻",
+  "h": "84e96644"
+ },
+ "lucnham.gio-dan-03-05h": {
+  "t": "寅の刻（03–05時）",
+  "h": "a2d01564"
+ },
+ "lucnham.gio-dau-17-19h": {
+  "t": "酉の刻（17–19時）",
+  "h": "d17bfbc2"
+ },
+ "lucnham.gio-hoi-21-23h": {
+  "t": "亥の刻（21–23時）",
+  "h": "9721a904"
+ },
+ "lucnham.gio-mao-05-07h": {
+  "t": "卯の刻（05–07時）",
+  "h": "58eab8cc"
+ },
+ "lucnham.gio-mui-13-15h": {
+  "t": "未の刻（13–15時）",
+  "h": "56d4bde0"
+ },
+ "lucnham.gio-ngo-11-13h": {
+  "t": "午の刻（11–13時）",
+  "h": "8b9d2da7"
+ },
+ "lucnham.gio-suu-01-03h": {
+  "t": "丑の刻（01–03時）",
+  "h": "33993400"
+ },
+ "lucnham.gio-than-15-17h": {
+  "t": "申の刻（15–17時）",
+  "h": "9d910299"
+ },
+ "lucnham.gio-thin-07-09h": {
+  "t": "辰の刻（07–09時）",
+  "h": "24c10915"
+ },
+ "lucnham.gio-tuat-19-21h": {
+  "t": "戌の刻（19–21時）",
+  "h": "8c0c8255"
+ },
+ "lucnham.gio-ty-09-11h": {
+  "t": "巳の刻（09–11時）",
+  "h": "4f543b45"
+ },
+ "lucnham.gio-ty-23-01h": {
+  "t": "子の刻（23–01時）",
+  "h": "b64ae149"
+ },
+ "lucnham.hoi-thay-luan-than-tuong": {
+  "t": "✦ 先生に天将を読み解いてもらう",
+  "h": "fd4349af"
+ },
+ "lucnham.luan-theo-khao-bien-chiem": {
+  "t": "『考変占』に<br>よる鑑定",
+  "h": "d2082bef"
+ },
+ "lucnham.luc-nham-gian": {
+  "t": "六壬（簡易）",
+  "h": "a7f92fcb"
+ },
+ "lucnham.luc-nham-gian-12-than-tuong": {
+  "t": "<b>六壬（簡易）</b><span>時・日ごとの十二天将</span>",
+  "h": "337b9381"
+ },
+ "lucnham.luc-nham-gian-tra-12-than": {
+  "t": "六壬（簡易） — 時・日ごとの十二天将と、当直の神が吉か凶かを調べます。会合・金運・出立について、先生に鑑定してもらえます。",
+  "h": "554217a5"
+ },
+ "lucnham.luc-nham-gian-tu-vi-minh": {
+  "t": "六壬（簡易） — 明宝紫微斗数",
+  "h": "fd05d989"
+ },
+ "lucnham.luc-nham-la-mot-trong-tam": {
+  "t": "六壬は中国古来の術数「三式」のひとつで、天盤と地盤を現在の時刻と日にあわせて課を立てます。鑑定は問われた具体的な事柄に焦点を当て、盤上の天将の位置にもとづきます。",
+  "h": "1c7538cd"
+ },
+ "lucnham.ngay-gio-can-xem": {
+  "t": "見たい日時",
+  "h": "80c37086"
+ },
+ "lucnham.quy-nhan-dan-loi": {
+  "t": "貴人が<br>導く",
+  "h": "b1fa7db6"
+ },
+ "lucnham.tu-khoa-tam-truyen": {
+  "t": "四課<br>三伝",
+  "h": "dfa03fb9"
+ },
+ "lucnham.xem-que-b": {
+  "t": "課を立てる →",
+  "h": "f19970b5"
+ },
  "maihoa.1-lap-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">卦を立てる</span>",
   "h": "b51a3df6"
@@ -21898,6 +24638,98 @@
  "ngaytot.xem-lich": {
   "t": "カレンダーを見る →",
   "h": "6fa85107"
+ },
+ "nguhanhten.can-bang-ngu-hanh": {
+  "t": "五行の<br>バランス",
+  "h": "6beeac0b"
+ },
+ "nguhanhten.can-bang-ngu-hanh-h4ql": {
+  "t": "五行のバランス",
+  "h": "d1b5ef33"
+ },
+ "nguhanhten.chua-tim-thay-chu-han-cho": {
+  "t": "⚠ 下の音節に対応する漢字が見つかりませんでした。画数を手入力してください（<a href=\"https://hanzii.net\" target=\"_blank\" style=\"color:var(--tx-blue)\">hanzii.net</a>で調べられます）：",
+  "h": "464b3314"
+ },
+ "nguhanhten.diem-so-hop-khac": {
+  "t": "相性（合・剋）<br>スコア",
+  "h": "1b721b9d"
+ },
+ "nguhanhten.ho-va-ten-day-du": {
+  "t": "氏名（フルネーム）",
+  "h": "e920e42c"
+ },
+ "nguhanhten.hoa": {
+  "t": "火",
+  "h": "be792fa1"
+ },
+ "nguhanhten.hoi-thay-luan-sau-ngu-hanh": {
+  "t": "✦ 先生に、名前の五行を詳しく読み解いてもらう",
+  "h": "ba1b2c72"
+ },
+ "nguhanhten.khong-ro-bo-qua": {
+  "t": "不明／スキップ",
+  "h": "941d7cdc"
+ },
+ "nguhanhten.moc": {
+  "t": "木",
+  "h": "4bd601ae"
+ },
+ "nguhanhten.mot-cai-ten-goi-hang-ngay": {
+  "t": "毎日呼ばれる名前にも、それぞれ五行があります。自分の本命と合うのか剋するのかを確かめた人は、ほとんどいません。氏名を入力すれば、五行のスコアと明確な結論が無料で届きます。",
+  "h": "3e585f76"
+ },
+ "nguhanhten.ngu-hanh-ban-menh-tuy-chon": {
+  "t": "本命の五行（任意）",
+  "h": "c90318f2"
+ },
+ "nguhanhten.ngu-hanh-kim-moc-thuy-hoa": {
+  "t": "五行（金・木・水・火・土）は、五つの基本要素の相生・相剋の法則を説く中国古来の学説で、多くの東洋の命理学の土台になっています。あらゆる音・文字・数は五行のいずれかに帰属させ、本命との相性（合・剋）を照らし合わせることができます。",
+  "h": "bcca1f1c"
+ },
+ "nguhanhten.ngu-hanh-ten": {
+  "t": "名前の五行",
+  "h": "9b92ea0c"
+ },
+ "nguhanhten.ngu-hanh-ten-ngu-hanh-tung": {
+  "t": "<b>名前の五行</b><span>一文字ごとの五行とバランス</span>",
+  "h": "32d338b2"
+ },
+ "nguhanhten.ngu-hanh-ten-tu-vi-minh": {
+  "t": "名前の五行 — 明宝紫微斗数",
+  "h": "2de02e4f"
+ },
+ "nguhanhten.ngu-hanh-tung-chu": {
+  "t": "一文字ごとの<br>五行",
+  "h": "f7103aec"
+ },
+ "nguhanhten.nhap-du-ho-ten-co-dau": {
+  "t": "姓＋名を、声調記号つきでスペース区切りで入力",
+  "h": "aefee322"
+ },
+ "nguhanhten.nhap-ho-ten-day-du-co": {
+  "t": "氏名を入力してください。本命の五行も選べます。五行のバランス図、スコア、そして本命との相性（合・剋）の結論が届きます。",
+  "h": "2fd9ddb3"
+ },
+ "nguhanhten.nhap-ten-tieng-viet-tra-chu": {
+  "t": "ベトナム語の名前を入力すると、漢字・画数・一文字ごとの五行、五行のバランス、本命との照合がわかります。さらに詳しい鑑定は先生に。",
+  "h": "f620e146"
+ },
+ "nguhanhten.tho": {
+  "t": "土",
+  "h": "9a0da463"
+ },
+ "nguhanhten.thuy": {
+  "t": "水",
+  "h": "f354741d"
+ },
+ "nguhanhten.tra-ngu-hanh-ten": {
+  "t": "名前の五行を調べる →",
+  "h": "bfb81211"
+ },
+ "nguhanhten.vd-nguyen-van-an": {
+  "t": "例：Nguyễn Văn An",
+  "h": "4811bda0"
  },
  "nguoikhac.2-xem-truoc-cam-nang": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">ガイドを先読み</span>",
@@ -23399,6 +26231,26 @@
   "t": "子どもを産む年の相性 — 明宝紫微斗数",
   "h": "23026bbb"
  },
+ "solaso.chua-co-la-so-nao-trong": {
+  "t": "命盤ノートにはまだ命盤がありません。<br>どのツールでも生年月日を入力すると、命盤が自動でここに入ります。",
+  "h": "f40b05ed"
+ },
+ "solaso.dang-nhap-dang-ky": {
+  "t": "ログイン／新規登録",
+  "h": "2bcf279e"
+ },
+ "solaso.dang-nhap-de-xem-so-la": {
+  "t": "保存した命盤ノートを見るにはログインしてください。",
+  "h": "4fa47b77"
+ },
+ "solaso.la-so-da-luu-so-la": {
+  "t": "<b>保存した命盤</b><span>アカウントの命盤ノート — 関係のグループ別に並びます。命盤の「レポート」を押すと、その命盤のレポートを見たり作ったりできます。</span>",
+  "h": "703b7bd9"
+ },
+ "solaso.la-so-da-luu-tu-vi": {
+  "t": "保存した命盤 — 明宝紫微斗数",
+  "h": "183c05e5"
+ },
  "taikhoan.add-mcp-server-chon-streamable-http": {
   "t": "<strong>Add MCP server</strong> → <strong>Streamable HTTP</strong> を選択。",
   "h": "f63db93e"
@@ -24394,6 +27246,90 @@
  "thtp.xem-ban-mau": {
   "t": "サンプルを見る →",
   "h": "ba3671b1"
+ },
+ "thtu.1-tai-anh-ban-tay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">手のひらの画像を選ぶ</span>",
+  "h": "0c95364a"
+ },
+ "thtu.anh-chi-gui-toi-may-chu": {
+  "t": "画像は分析のためにサーバーへ送るだけで、サーバーには保存しません。手を平らに開き、手のひらを上に向けて、十分な明るさで撮影してください。",
+  "h": "9007a9b3"
+ },
+ "thtu.ban-tay-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"hand\"></span> 手のひらを検出しました",
+  "h": "720bc996"
+ },
+ "thtu.chi-tuong-hoc-phuong-dong-la": {
+  "t": "東洋の手相学は、手のひらの主要な線とその周りの丘をもとに、性格・仕事・運勢を読み解く占術です。伝統的な人相学の体系の中の独立した一分野で、顔相と並び立ちます。",
+  "h": "f4eb23c1"
+ },
+ "thtu.chup-va-tai-mot-tam-anh": {
+  "t": "手のひらがはっきり写った画像を撮影またはアップロードしてください。五行形相にもとづき、三大線・運命線・丘・指を読み解きます。",
+  "h": "ecabc37d"
+ },
+ "thtu.do-luong-mediapipe": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> MediaPipeで測定",
+  "h": "b51ea8c8"
+ },
+ "thtu.do-tam-dai-chi-duong-van": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hand\"></span><span>三大線と運命線を<br>測定</span>",
+  "h": "91a1d8ca"
+ },
+ "thtu.dung-tay-thuan-de-xem-van": {
+  "t": "現在の運勢を見るには<strong>利き手</strong>を使ってください",
+  "h": "0fd522f1"
+ },
+ "thtu.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG、PNG、WebP — 最大5MB · 手のひらを撮影し、線がはっきり見えるように",
+  "h": "757ec708"
+ },
+ "thtu.keo-tha-anh-long-ban-tay": {
+  "t": "手のひらの画像をドラッグ＆ドロップ、またはクリックして選択",
+  "h": "8281c1d6"
+ },
+ "thtu.long-ban-tay-luu-lai-dau": {
+  "t": "手のひらには、歩んできた人生の軌跡が刻まれています — 仕事、恋愛、健康、それぞれが固有の線を残します。手のひらを撮影して、五行形相にもとづく鑑定を受け取りましょう。",
+  "h": "75a0d71c"
+ },
+ "thtu.luan-theo-ngu-hanh-hinh-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>五行形相<br>による鑑定</span>",
+  "h": "afdecc3a"
+ },
+ "thtu.moi-luot-luong": {
+  "t": "1回 <span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> 両)</span>",
+  "h": "21fe0a1c"
+ },
+ "thtu.phan-tich-thu-tuong-hoc": {
+  "t": "手相学の分析",
+  "h": "f33d42ad"
+ },
+ "thtu.phan-tich-thu-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hand\"></span><b id=\"analyzeBtnLabel\">手相を分析する →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> 両)</span> 必要</small>",
+  "h": "527662b0"
+ },
+ "thtu.tai-anh-long-ban-tay": {
+  "t": "手のひらの画像を選ぶ",
+  "h": "4d287ee7"
+ },
+ "thtu.tai-hoac-chup-anh-long-ban": {
+  "t": "手のひらの画像をアップロードまたは撮影してください — 東西の古法にもとづき、三大線・運命線・手の丘を分析します。",
+  "h": "1f98998a"
+ },
+ "thtu.thu-tuong": {
+  "t": "手相",
+  "h": "869631da"
+ },
+ "thtu.thu-tuong-co-phap-dong-tay": {
+  "t": "東西の古法による手相",
+  "h": "cce8e613"
+ },
+ "thtu.thu-tuong-tu-vi-minh-bao": {
+  "t": "手相 — 明宝紫微斗数",
+  "h": "e64f49ab"
+ },
+ "thtu.thu-tuong-xem-chi-tay-theo": {
+  "t": "<b>手相</b><span>古法で手のひらの線を読む — <span data-tvp-price=\"thu-tuong\">…</span> 両</span>",
+  "h": "7461fe05"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "ロック解除中…",
