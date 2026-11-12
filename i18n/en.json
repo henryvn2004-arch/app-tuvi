@@ -4119,6 +4119,10 @@
   "t": "… credits",
   "h": "cbf99bc6"
  },
+ "js.auth.luong-sau": {
+  "t": " credits",
+  "h": "74224e60"
+ },
  "js.auth.luong-xu": {
   "t": "Credits",
   "h": "e4e551dd"
@@ -4166,6 +4170,10 @@
  "js.auth.slogan": {
   "t": "Know your destiny, follow the flow",
   "h": "ca64e3dc"
+ },
+ "js.auth.tai-khoan": {
+  "t": "Account",
+  "h": "4a60abe5"
  },
  "js.auth.tang-luong": {
   "t": "free credits",
@@ -17895,6 +17903,274 @@
   "t": "**, lunar mansion **",
   "h": "fc0c8af6"
  },
+ "js.shellui.sd-ban-menh": {
+  "t": "Your birth-year Nap Am (sound element) is <b>{na}</b> (element: {hn}); your Life Gua (Nine Palaces) element is {hc}.",
+  "h": "80604291"
+ },
+ "js.shellui.sd-chu-dao": {
+  "t": "core number {n}",
+  "h": "96189155"
+ },
+ "js.shellui.sd-dg-13": {
+  "t": "avoided under Western culture (Friday the 13th) — not an East Asian tradition.",
+  "h": "d4580157"
+ },
+ "js.shellui.sd-dg-39": {
+  "t": "\"mãi phát\" (prosper for good) — a common reading among some people.",
+  "h": "c9386b28"
+ },
+ "js.shellui.sd-dg-4": {
+  "t": "a lone 4 — its Sino-Vietnamese sound is close to \"tử\" (death); widely avoided in Chinese-rooted business culture though not part of the classical methods.",
+  "h": "6e97ea92"
+ },
+ "js.shellui.sd-dg-49": {
+  "t": "\"tứ cửu\" — avoided by a folk reading in some regions, NOT a classical Eight Mansions / I Ching rule.",
+  "h": "769f9e93"
+ },
+ "js.shellui.sd-dg-53": {
+  "t": "\"ngũ tam\" — avoided by a slang reading in some regions.",
+  "h": "20b5f721"
+ },
+ "js.shellui.sd-dg-6": {
+  "t": "\"lộc\" (fortune) — well liked, often used as the last digit.",
+  "h": "2208e1cf"
+ },
+ "js.shellui.sd-dg-68": {
+  "t": "\"lộc phát\" (fortune and prosperity).",
+  "h": "19c43f6f"
+ },
+ "js.shellui.sd-dg-79": {
+  "t": "\"thất phát\" — folk belief is NOT unanimous: some places count it lucky, others avoid it because it sounds like \"thất\" (loss). Both views are given; no side is taken.",
+  "h": "0e34e481"
+ },
+ "js.shellui.sd-dg-8": {
+  "t": "\"phát\" (prosper) — the most favored number in Chinese-rooted business culture.",
+  "h": "6f275378"
+ },
+ "js.shellui.sd-dg-9": {
+  "t": "\"long-lasting, enduring\".",
+  "h": "303f4403"
+ },
+ "js.shellui.sd-diem": {
+  "t": "Auspicious score: <b>{d}/100</b>",
+  "h": "c0a0a91f"
+ },
+ "js.shellui.sd-diem-noibat": {
+  "t": "Auspicious score: <b>{d}/100</b> · Prominent stars: {s}",
+  "h": "364bf498"
+ },
+ "js.shellui.sd-doi-lap": {
+  "t": "repeated pairs: {l}",
+  "h": "821ad1b8"
+ },
+ "js.shellui.sd-doi-xung": {
+  "t": "symmetrical sequence (mirror)",
+  "h": "85d8997a"
+ },
+ "js.shellui.sd-dt-ngan": {
+  "t": "Too short to work out a consensus",
+  "h": "0c517b1a"
+ },
+ "js.shellui.sd-dt-tot": {
+  "t": "{t} of {n} classical schools say favorable",
+  "h": "e2ec98b6"
+ },
+ "js.shellui.sd-e-bat-trach": {
+  "t": "Eight Mansions",
+  "h": "79678bf6"
+ },
+ "js.shellui.sd-e-khong-phai": {
+  "t": "NOT a classical method",
+  "h": "5085b3d5"
+ },
+ "js.shellui.sd-e-lac-thu": {
+  "t": "Luo Shu",
+  "h": "aa2db932"
+ },
+ "js.shellui.sd-e-mai-hoa": {
+  "t": "Plum Blossom Numerology",
+  "h": "9093e560"
+ },
+ "js.shellui.sd-e-so-hoc": {
+  "t": "Arithmetic — not a classical method",
+  "h": "50675a71"
+ },
+ "js.shellui.sd-err-do-dai": {
+  "t": "Length must be a whole number from 4 to 20.",
+  "h": "23e93a0c"
+ },
+ "js.shellui.sd-err-khong-co-so": {
+  "t": "No valid digits found in the input.",
+  "h": "673fdfdf"
+ },
+ "js.shellui.sd-err-khong-sinh": {
+  "t": "No numbers could be generated — try a different length or fewer exclusions.",
+  "h": "c3a24e87"
+ },
+ "js.shellui.sd-err-lap-que": {
+  "t": "At least 2 digits are needed to cast a hexagram.",
+  "h": "ee93959c"
+ },
+ "js.shellui.sd-err-loai-het": {
+  "t": "Every digit from 1 to 9 (except 5) is excluded — nothing left to generate numbers from.",
+  "h": "221a7838"
+ },
+ "js.shellui.sd-err-muc-tieu": {
+  "t": "Invalid goal — only these are accepted: tai-loc, suc-khoe, ben-vung, on-dinh, tu-do.",
+  "h": "a8588d8e"
+ },
+ "js.shellui.sd-err-nap-bt": {
+  "t": "Could not load BatTrachTool.",
+  "h": "1348a059"
+ },
+ "js.shellui.sd-err-nap-que": {
+  "t": "Could not load MaiHoaTool/KinhDichTool.",
+  "h": "494db639"
+ },
+ "js.shellui.sd-err-qua-dai": {
+  "t": "The number is too long — 20 digits at most.",
+  "h": "a68b8a20"
+ },
+ "js.shellui.sd-err-tien-to": {
+  "t": "The prefix ({n} digits) must be SHORTER than the desired length ({d}).",
+  "h": "690e0955"
+ },
+ "js.shellui.sd-gc-chua-nap": {
+  "t": "Could not load BatTrachTool",
+  "h": "c2ff2510"
+ },
+ "js.shellui.sd-gc-so-0": {
+  "t": "Contains 0 — amplifies the pair before it, but is not a star itself",
+  "h": "6158f6d2"
+ },
+ "js.shellui.sd-gc-trung-cung": {
+  "t": "Center palace (5) — neutral, breaks the chain, counts as neither auspicious nor inauspicious",
+  "h": "a16f1108"
+ },
+ "js.shellui.sd-goiy-tot": {
+  "t": "{t}/{n} favorable",
+  "h": "5e56466b"
+ },
+ "js.shellui.sd-h-am-duong": {
+  "t": "Yin-Yang",
+  "h": "5cbdb898"
+ },
+ "js.shellui.sd-h-bat-tinh": {
+  "t": "Eight Stars",
+  "h": "04d4506a"
+ },
+ "js.shellui.sd-h-dan-gian": {
+  "t": "Folk belief",
+  "h": "8d5a7119"
+ },
+ "js.shellui.sd-h-ngu-hanh": {
+  "t": "Five Elements",
+  "h": "68ac2473"
+ },
+ "js.shellui.sd-h-que-dich": {
+  "t": "I Ching hexagram",
+  "h": "9b44a158"
+ },
+ "js.shellui.sd-hop-co": {
+  "t": "Elements in the sequence that suit your birth chart: {l}.",
+  "h": "4fa27db2"
+ },
+ "js.shellui.sd-hop-cungphi": {
+  "t": "Life Gua ({h})",
+  "h": "1fb772a2"
+ },
+ "js.shellui.sd-hop-khong": {
+  "t": "The sequence has NO element that suits your birth chart.",
+  "h": "95436f1e"
+ },
+ "js.shellui.sd-hop-napam": {
+  "t": "Nap Am ({h})",
+  "h": "8ab1b753"
+ },
+ "js.shellui.sd-khong-troi": {
+  "t": "No single element clearly dominates the sequence — this layer draws no conclusion.",
+  "h": "150addf3"
+ },
+ "js.shellui.sd-le-chan": {
+  "t": "{l} odd / {c} even digits",
+  "h": "d075ec93"
+ },
+ "js.shellui.sd-qh-dong": {
+  "t": "the same element as your birth chart",
+  "h": "beadac7b"
+ },
+ "js.shellui.sd-qh-khac": {
+  "t": "overcomes your birth element",
+  "h": "47805046"
+ },
+ "js.shellui.sd-qh-sinh": {
+  "t": "generates your birth element",
+  "h": "07fccdbf"
+ },
+ "js.shellui.sd-qh-trung": {
+  "t": "neither generates nor overcomes your birth element",
+  "h": "cb9bf438"
+ },
+ "js.shellui.sd-que-bien": {
+  "t": "Changes into hexagram <b>{q}</b> — {y}",
+  "h": "6c54f090"
+ },
+ "js.shellui.sd-que-meta": {
+  "t": "{t} above · {h} below · line {n} moving",
+  "h": "b11cc916"
+ },
+ "js.shellui.sd-sy-dien-nien": {
+  "t": "Lasting stability, marriage, a long career.",
+  "h": "ce70b2ac"
+ },
+ "js.shellui.sd-sy-hoa-hai": {
+  "t": "Gossip, quarrels, small money losses.",
+  "h": "f38e59bb"
+ },
+ "js.shellui.sd-sy-luc-sat": {
+  "t": "Tangled romance and relationships that drag on.",
+  "h": "f228d1b1"
+ },
+ "js.shellui.sd-sy-ngu-quy": {
+  "t": "Petty people, sudden upheaval, hidden sabotage.",
+  "h": "0d397826"
+ },
+ "js.shellui.sd-sy-phuc-vi": {
+  "t": "Calm, steady, no sudden shifts — safe but with little breakthrough.",
+  "h": "4d6da9b8"
+ },
+ "js.shellui.sd-sy-sinh-khi": {
+  "t": "Very auspicious — wealth, opportunity, growth. The best of the eight stars.",
+  "h": "797de7ca"
+ },
+ "js.shellui.sd-sy-thien-y": {
+  "t": "Health, helpful people, steady income.",
+  "h": "544c54b8"
+ },
+ "js.shellui.sd-sy-tuyet-menh": {
+  "t": "Extreme — all or nothing, big swings.",
+  "h": "a8d6b58d"
+ },
+ "js.shellui.sd-t1-thieu": {
+  "t": "Not enough valid digit pairs to judge the Eight Stars (all 0s and 5s, or too short).",
+  "h": "9f999f38"
+ },
+ "js.shellui.sd-thieu-hanh": {
+  "t": "Missing elements: {h}",
+  "h": "92830bfe"
+ },
+ "js.shellui.sd-tien-dan": {
+  "t": "contains a run of 3 rising digits",
+  "h": "c5b3e33a"
+ },
+ "js.shellui.sd-troi": {
+  "t": "The dominant element of this sequence is <b>{h}</b> — {qh} ({na}). This layer's vote is based on the dominant element.",
+  "h": "667890cd"
+ },
+ "js.shellui.sd-vanh-aria": {
+  "t": "Five Elements wheel of the number",
+  "h": "b9e1de4e"
+ },
  "js.shellui.sinh-con-bo": {
   "t": "Having a child · father ",
   "h": "6b581c06"
@@ -18562,6 +18838,86 @@
  "js.shellui.zalo": {
   "t": "Zalo",
   "h": "53b71aec"
+ },
+ "js.sodep.chip1": {
+  "t": "Is this number a good one to use?",
+  "h": "8981877c"
+ },
+ "js.sodep.chip2": {
+  "t": "What does the prominent Eight Stars star mean?",
+  "h": "cf4b5467"
+ },
+ "js.sodep.chip3": {
+  "t": "What does the I Ching hexagram say?",
+  "h": "c921b99a"
+ },
+ "js.sodep.chip4": {
+  "t": "Which number should I switch to for a better result?",
+  "h": "06cc25be"
+ },
+ "js.sodep.greeting": {
+  "t": "The number **{s}** — {kq}. What would you like me to read?",
+  "h": "caa3ffed"
+ },
+ "js.sodep.gy-chip": {
+  "t": "Read {s}",
+  "h": "60b8c9ee"
+ },
+ "js.sodep.gy-greeting": {
+  "t": "I suggested **{n}** numbers of {d} digits for the goal you chose. Which one should I read in depth?",
+  "h": "55fdb734"
+ },
+ "js.sodep.gy-label": {
+  "t": "Number suggestions — {d} digits",
+  "h": "d3058652"
+ },
+ "js.sodep.gy-sh-dong": {
+  "t": "Lucky number suggestions — {d} digits, goal: {m}",
+  "h": "a0d30b0e"
+ },
+ "js.sodep.gy-sh-title": {
+  "t": "Lucky number suggestions, {d} digits",
+  "h": "ad1c2c12"
+ },
+ "js.sodep.gy-tot": {
+  "t": "{t}/{n} favorable",
+  "h": "5e56466b"
+ },
+ "js.sodep.kq-ngan": {
+  "t": "too short to work out a consensus",
+  "h": "361ce7b5"
+ },
+ "js.sodep.kq-ngan-sh": {
+  "t": "too short",
+  "h": "0c8bb3fa"
+ },
+ "js.sodep.kq-tot": {
+  "t": "{t} of {n} schools say favorable",
+  "h": "8985ca2d"
+ },
+ "js.sodep.label": {
+  "t": "Lucky number {s}",
+  "h": "3a999ba0"
+ },
+ "js.sodep.sh-bat-tinh": {
+  "t": "Eight Stars: {d}/100",
+  "h": "07259fd2"
+ },
+ "js.sodep.sh-dong": {
+  "t": "Lucky number reading — number {s}",
+  "h": "d026e6fe"
+ },
+ "js.sodep.sh-dongthuan": {
+  "t": "Consensus: {kq}",
+  "h": "1cab3aef"
+ },
+ "js.sodep.sh-que": {
+  "t": "I Ching hexagram: {q}",
+  "h": "5312d449"
+ },
+ "js.sodep.sh-title": {
+  "t": "Lucky number reading {s}",
+  "h": "3e6d8b4f"
  },
  "js.solaso.bao-cao": {
   "t": "Reports",
@@ -22422,6 +22778,522 @@
  "js.thtu.vui-long-chon-file-anh": {
   "t": "Please choose an image file.",
   "h": "71a61127"
+ },
+ "js.tool-desc.an-sao": {
+  "t": "Builds your full 12-palace chart by the classical star-placement method. You have your birth date and time but have never seen your own chart. Use it to set up the base chart before asking anything else.",
+  "h": "ca67a4ae"
+ },
+ "js.tool-desc.ban-do-sao": {
+  "t": "Draws the 12-house wheel for the exact moment you were born. You only know your Sun sign and have never seen your Rising sign. Use it when you want a star map to save and share.",
+  "h": "9a1469ea"
+ },
+ "js.tool-desc.ban-lam-viec": {
+  "t": "Photograph your desk and see whether its layout is blocking your career growth. You sit in the same spot and work just drags on. Use it to rearrange your desk for a better flow.",
+  "h": "302e8398"
+ },
+ "js.tool-desc.bat-trach": {
+  "t": "Works out your Gua number and the house directions that suit you by Eight Mansions. You place your desk and bed by feel without knowing the right direction. Use it before moving in or rearranging your living space.",
+  "h": "9be297e6"
+ },
+ "js.tool-desc.boi-bai-tay": {
+  "t": "Draw playing cards the way grandparents used to, and read where things are heading. You remember the card readings at your grandmother's house at the start of each year. Use it when you like the familiar folk style, nothing fancy.",
+  "h": "cd47da29"
+ },
+ "js.tool-desc.but-tuong": {
+  "t": "Sign right on the screen or upload a photo of your signature — it measures 6 axes (Spirit · Qi · Bone · Flesh · Blood · Posture) by classical calligraphy, and checks the stroke element against your BaZi useful god if you give a birth date.",
+  "h": "24c894fc"
+ },
+ "js.tool-desc.cach-cuc": {
+  "t": "Looks at each palace to find the special patterns your chart carries. You've heard people talk about noble patterns but don't know what you have. Use it to read your chart palace by palace, not in generalities.",
+  "h": "2f43fdce"
+ },
+ "js.tool-desc.chan-dung-tien-kiep": {
+  "t": "Get a portrait and a life story drawn from your own chart. You've wondered who you were in a past life and how you lived. Use it when you want a story to read, not just a few lines of reading.",
+  "h": "b6859a2e"
+ },
+ "js.tool-desc.chan-dung-vo-chong": {
+  "t": "Paints a portrait of your future partner from your Spouse palace. You're curious what they will look like and what they're like. Use it when you want a concrete image, not just a few lines of text.",
+  "h": "01bd9dad"
+ },
+ "js.tool-desc.chon-ngay-tot": {
+  "t": "Suggests auspicious dates for your wedding, house building or business opening. You worry about picking the wrong day and being told the ground-breaking hour was off. Use it to settle an important date coming up.",
+  "h": "7056ee9e"
+ },
+ "js.tool-desc.chu-trinh-cuoc-doi": {
+  "t": "Looks at your 9 life-long major cycles and this year's minor cycle: which phases are smooth, which call for care, and the timing, terrain and harmony of each stretch. You've seen the chart overview but don't know how your life rises and falls over time. Use it to see the whole life cycle, not just one slice.",
+  "h": "883ad182"
+ },
+ "js.tool-desc.combo-laso-tubinh": {
+  "t": "Buy the full Zi Wei Chart Reading (13 parts) and Zi Ping BaZi together at a bundle price cheaper than buying separately (380 → 335 Credits). Compare two schools of reading on the same chart.",
+  "h": "5dae5c43"
+ },
+ "js.tool-desc.combo-tron-bo": {
+  "t": "Buy all 4: Zi Wei Chart Reading, Zi Ping BaZi, Life Cycles and Yearly Fortune — a bundle price cheaper than buying separately (760 → 610 Credits).",
+  "h": "6caeb527"
+ },
+ "js.tool-desc.cong-so": {
+  "t": "Reads what kind of person you are at work and across your career path. You're good at your job but not sure you're headed the right way. Use it when you need more concrete career direction than just trying harder.",
+  "h": "e052cedd"
+ },
+ "js.tool-desc.cua-hang-phong-thuy": {
+  "t": "Photograph your shop and see whether the display is keeping customers out. Your shop is quiet and you don't know why. Use it when opening a new shop or rearranging your sales space.",
+  "h": "9ee7d136"
+ },
+ "js.tool-desc.da-lieu-ai": {
+  "t": "Scans a photo of your skin and points out areas that need attention. You look in the mirror every day but aren't sure your skin is fine. Use it for an objective view before buying cosmetics.",
+  "h": "1ff3107a"
+ },
+ "js.tool-desc.dai-van": {
+  "t": "See where the next 10 years of major cycle are taking you. You feel the last few years went well and some didn't. Use it to know whether to push hard or conserve strength in the coming phase.",
+  "h": "926d1955"
+ },
+ "js.tool-desc.dat-ten-con": {
+  "t": "Get 12 names that suit your child's Five Elements and both parents'. You've gone through every naming book and still like none. Use it when you're about to welcome a baby and need a list to choose from.",
+  "h": "a74f6545"
+ },
+ "js.tool-desc.dat-ten-dn": {
+  "t": "Get 12 company names that fit the Five Elements and the owner's age. You're stuck on a name, picked one at random and wonder if it suits you. Use it when about to found a company and ready to settle on the real name.",
+  "h": "03327d3b"
+ },
+ "js.tool-desc.day-con": {
+  "t": "Reads how your child takes things in and which discipline backfires. You keep teaching the same way and your child still doesn't listen. Use it when the old way of teaching no longer works.",
+  "h": "fee14cb6"
+ },
+ "js.tool-desc.dien-tuong": {
+  "t": "Reads overall face reading from a photo of your face. You're curious what your face says to other people. Use it to understand yourself from an angle other than words.",
+  "h": "7bcd9f29"
+ },
+ "js.tool-desc.duyen-no-tien-kiep": {
+  "t": "Pairs two charts to find the past-life bond between you and that person. You feel you've known this person for ages though you only just met. Use it when you want a shared story for both of you.",
+  "h": "31687568"
+ },
+ "js.tool-desc.gio-sinh": {
+  "t": "Builds 12 charts for the 12 hours and narrows down to the true birth hour. You only remember being born in the morning and nobody at home remembers exactly. Use it when you don't know your birth hour and every other tool needs it.",
+  "h": "49c51e2e"
+ },
+ "js.tool-desc.han-nam": {
+  "t": "Looks up where this year's trouble falls by your age and element. You heard this is a bad year but don't know which trouble or where. Use it at the start of the year to know what to watch for.",
+  "h": "cae81f27"
+ },
+ "js.tool-desc.hoang-dao": {
+  "t": "Looks up today's auspicious hours, with what to do in each. You're about to do something big without watching the hour. Use it before signing a contract, setting off on a trip or starting something new.",
+  "h": "65af566d"
+ },
+ "js.tool-desc.huong-nghiep-tre": {
+  "t": "Suggests activities to introduce your child to for their age. You want to guide your child early but don't know where to start. Use it for reference, not to settle your child's career.",
+  "h": "739b4c5d"
+ },
+ "js.tool-desc.khi-sac": {
+  "t": "Reads the complexion on your face and the luck of the next 1 to 3 months. Lately you look tired, or suddenly glowing. Use it to know the short-term luck trend ahead.",
+  "h": "e80a001e"
+ },
+ "js.tool-desc.kieu-toc-phan-tich": {
+  "t": "Scores which hairstyle suits your face best. You get a haircut then go home regretting the wrong style. Use it when you plan a change but dare not try it at the salon right away.",
+  "h": "6cd20f2c"
+ },
+ "js.tool-desc.kieu-toc-tryon": {
+  "t": "Puts a new hairstyle straight onto your real photo as a preview. You're afraid of finding out it doesn't suit you only after the cut, when it's too late. Use it to see the result first, then decide to cut.",
+  "h": "5893ab56"
+ },
+ "js.tool-desc.kim-lau": {
+  "t": "Checks whether your age falls under Jin Lou or the Three Calamities. You plan a wedding or house building but fear a clashing age and haven't checked carefully. Use it before something big: a wedding, ground-breaking, a business opening.",
+  "h": "65ad1e38"
+ },
+ "js.tool-desc.kinh-dich": {
+  "t": "Casts one of the 64 hexagrams and reads your exact moving line. You can't decide whether to advance or step back on something. Use it for ancient advice on a decision right now.",
+  "h": "68d6155c"
+ },
+ "js.tool-desc.ky-mon": {
+  "t": "Builds the 9-palace board for the current hour and points to the direction to go. You're about to head out for something important and don't know which direction to pick. Use it to learn which hour today is good and which direction favors you.",
+  "h": "e3111133"
+ },
+ "js.tool-desc.laso": {
+  "t": "Reads all 13 parts of your chart: an overview and a separate reading for each of the 12 palaces, patterns, strengths and weaknesses. You've skimmed a chart somewhere but haven't grasped the full meaning. Use it for a full reading, not a few careless lines.",
+  "h": "310f68c1"
+ },
+ "js.tool-desc.luc-nham": {
+  "t": "Looks up a hexagram by hour and day for what weighs on your mind. You keep turning something over but haven't dared ask anyone. Use it for a quick answer to a specific worry.",
+  "h": "45a4c511"
+ },
+ "js.tool-desc.mai-hoa": {
+  "t": "Casts a hexagram by numbers or the hour and reads Ti and Yong for what you ask. You have something you're torn about and want a quick hint. Use it for a concise answer to a specific question.",
+  "h": "982d2e2a"
+ },
+ "js.tool-desc.mau-sac-hop-menh": {
+  "t": "Suggests the colors that suit your element by Five Elements. You buy things by taste without noticing if they suit you. Use it when shopping, painting your home or choosing colors for something important.",
+  "h": "33b65576"
+ },
+ "js.tool-desc.nap-am": {
+  "t": "Looks up your Na Yin element, color and directions that suit your birth year. You only know you're Metal and not what suits or clashes with it. Use it to check your element quickly before choosing colors or directions.",
+  "h": "a8a2069d"
+ },
+ "js.tool-desc.ngay-tot": {
+  "t": "Lists the auspicious days this month, day by day. You keep planning something big and having to postpone for a bad day. Use it to plan the whole month, not just one day.",
+  "h": "112a0530"
+ },
+ "js.tool-desc.ngu-hanh-ten": {
+  "t": "Scores the Five Elements of each letter in your name and whether it suits or clashes with your element. You wonder if the name your parents chose really suits you. Use it out of curiosity about your name, not to change it.",
+  "h": "f1d42a2a"
+ },
+ "js.tool-desc.nguoi-khac": {
+  "t": "Get an etiquette guide: what to say and what to avoid with that person. You guess your boss's nature and often guess wrong. Use it to quickly understand a person before an important meeting.",
+  "h": "67ad4012"
+ },
+ "js.tool-desc.nhan-mach": {
+  "t": "See which kinds of people your team lacks and who is likely to clash with whom. You manage a group and still feel something is out of step. Use it to rearrange the team or choose who meets first.",
+  "h": "cc3e86fa"
+ },
+ "js.tool-desc.nhan-tuong": {
+  "t": "Reads the eyes by Liu Zhuang Shen Xiang from your photo. You've heard eyes can speak but don't know what yours say. Use it to understand character through one small detail of the face.",
+  "h": "2458e59a"
+ },
+ "js.tool-desc.oracle": {
+  "t": "Draws an Eastern philosophy card and reads a calming piece of advice. Your mind is in a whirl and you need a place to stop and breathe slowly. Use it to settle your mind rather than to get a right-or-wrong answer.",
+  "h": "4ffae203"
+ },
+ "js.tool-desc.personal-color": {
+  "t": "Finds which of the 4 color seasons your skin tone suits. You wear a color that some call fresh and others say dulls your skin. Use it to know for sure which tones really suit you.",
+  "h": "079bad59"
+ },
+ "js.tool-desc.personal-color-tryon": {
+  "t": "Try the tone you were just matched with on your own photo. You know the tone suits you but still can't picture it on. Use it to see it first, before buying clothes in that tone.",
+  "h": "e69da328"
+ },
+ "js.tool-desc.phong-thuy": {
+  "t": "Photograph your room and get a feng shui analysis by Eight Mansions and Five Elements. You place things by feel and wonder why the house feels unsettled. Use it to rearrange a room with clearer grounds.",
+  "h": "877eea6c"
+ },
+ "js.tool-desc.phong-thuy-render": {
+  "t": "Preview a render of your room after feng shui changes. You hear renovation advice but can't picture how it will look. Use it to see a concrete image before actually changing anything.",
+  "h": "d66a90e1"
+ },
+ "js.tool-desc.sao-nam": {
+  "t": "A quick look at your Life palace and the main stars in your chart. You're curious what your chart says but don't want to go through all 12 palaces. Use it for an overview before digging deeper.",
+  "h": "dcff1a6d"
+ },
+ "js.tool-desc.so-dep": {
+  "t": "Scores a phone number, house number or license plate by Eight Stars, I Ching hexagram, Five Elements and Yin-Yang — each school kept separate, not merged into one made-up score like careless sites. You're about to change your phone number, pick a house number or a plate and don't know if it suits you. Use it for a quick check before settling an important number.",
+  "h": "b8be107d"
+ },
+ "js.tool-desc.tarot": {
+  "t": "Draw one card and hear a clear answer to something tangled. You keep asking friends in circles and still aren't at ease. Use it when you need another angle before deciding.",
+  "h": "eeb6a30b"
+ },
+ "js.tool-desc.than-so-hoc": {
+  "t": "Reads 11 numbers from your birth date: life path, peaks, personal year. You keep repeating the same kind of wrong decision without noticing. Use it to understand how you think before choosing again.",
+  "h": "a5328a1c"
+ },
+ "js.tool-desc.thanh-tuong": {
+  "t": "Record your voice and see which careers it suits. You sing karaoke or talk but have never noticed your own voice. Use it when weighing a career that needs lots of talking or presenting.",
+  "h": "18edcd8f"
+ },
+ "js.tool-desc.thanh-tuong-pro": {
+  "t": "In-depth voice analysis, reading the accompanying luck too. You tried the basic version and want to read more closely. Use it for a full voice reading, not just a few lines.",
+  "h": "311eef92"
+ },
+ "js.tool-desc.thu-tuong": {
+  "t": "Reads your palm by Five Elements Form Reading from a photo of your hand. You've heard of palm reading but haven't tried it with your own lines. Use it out of curiosity about what your palm foretells.",
+  "h": "a72cf9a9"
+ },
+ "js.tool-desc.trang-diem-phan-tich": {
+  "t": "Suggests the makeup style that suits your face best. You do makeup from online videos that don't suit your face. Use it for a clear direction before buying cosmetics.",
+  "h": "a71d3274"
+ },
+ "js.tool-desc.trang-diem-tryon": {
+  "t": "Puts the suggested makeup straight onto your real photo. You hesitate to try new makeup for fear it won't suit you once applied. Use it to see how your face will look first.",
+  "h": "2de6df75"
+ },
+ "js.tool-desc.trang-phuc-theo-ngay": {
+  "t": "Suggests today's outfit to suit your luck. You stand before your wardrobe each morning not knowing what to wear. Use it when something important is on and you want to dress with intent.",
+  "h": "ecdfe263"
+ },
+ "js.tool-desc.trang-phuc-tryon": {
+  "t": "Try the outfit you're unsure about on your own photo. You see clothes on a model and aren't sure how they'd look on you. Use it when weighing a purchase and wanting to see first.",
+  "h": "4379a44d"
+ },
+ "js.tool-desc.tu-binh": {
+  "t": "Builds your BaZi and reads your Day Master, Useful God, Structure and Major Cycles. You heard your element is weak and needs supporting but don't know where it's weak or what helps. Use it to read by the Four Pillars school, different from Zi Wei.",
+  "h": "23b7175a"
+ },
+ "js.tool-desc.tu-tru": {
+  "t": "Builds the Four Pillars: year, month, day and hour of birth by stem-branch. You've heard people read BaZi but never seen your own pillars. Use it to see the four pillars first, before reading deeper.",
+  "h": "3762928c"
+ },
+ "js.tool-desc.tuong-hop": {
+  "t": "Quickly checks whether two ages are compatible, using birth years only. You just met someone and looked it up for fun. Use it for a quick answer, no deep reading needed.",
+  "h": "1990463e"
+ },
+ "js.tool-desc.van-han-nam": {
+  "t": "See exactly the next 12 months: trouble palace, stars and pattern of each month. You want to know which month to be careful and which to advance. Use it for a concrete fortune calendar for the coming year.",
+  "h": "8d95f212"
+ },
+ "js.tool-desc.van-thang": {
+  "t": "Quickly looks up which palace of your chart this month's luck falls in. Some months everything flows, others keep going wrong. Use it for a short-term view of this month alone.",
+  "h": "5a72d803"
+ },
+ "js.tool-desc.xem-lam-an": {
+  "t": "Scores 8 partnership factors between you and your prospective business partner. You're about to put in capital with someone and still have a doubt. Use it for an objective view before signing.",
+  "h": "4e98795e"
+ },
+ "js.tool-desc.xem-tuoi": {
+  "t": "Scores 8 compatibility factors between your two charts. You hear both families chatting about your ages. Use it when planning a wedding and needing a clear answer.",
+  "h": "e3005a0a"
+ },
+ "js.tool-desc.xem-tuoi-sinh-con": {
+  "t": "Looks up child birth years that suit both the father's and mother's earthly branches. You're weighing which year to have a baby is best for the family. Use it when planning to have a child and wanting more to go on.",
+  "h": "3e46a879"
+ },
+ "js.tool-q.an-sao": {
+  "t": "What does my chart look like?",
+  "h": "ff68b4b9"
+ },
+ "js.tool-q.ban-do-sao": {
+  "t": "What does my birth star map say?",
+  "h": "5aa78ec7"
+ },
+ "js.tool-q.ban-lam-viec": {
+  "t": "How should I arrange my desk to support my career?",
+  "h": "9455969b"
+ },
+ "js.tool-q.bat-trach": {
+  "t": "Which direction should my home face?",
+  "h": "182fca18"
+ },
+ "js.tool-q.boi-bai-tay": {
+  "t": "What do the cards say about what's troubling me?",
+  "h": "f6ecf3bf"
+ },
+ "js.tool-q.but-tuong": {
+  "t": "What does my signature say about me?",
+  "h": "0b6801d3"
+ },
+ "js.tool-q.cach-cuc": {
+  "t": "What special patterns does my chart have?",
+  "h": "9d254f65"
+ },
+ "js.tool-q.chan-dung-tien-kiep": {
+  "t": "Who was I in a past life?",
+  "h": "46bcb7bd"
+ },
+ "js.tool-q.chan-dung-vo-chong": {
+  "t": "What does my future partner look like?",
+  "h": "b0677337"
+ },
+ "js.tool-q.chon-ngay-tot": {
+  "t": "Which day is good for a wedding, building a house or opening a business?",
+  "h": "76e7c278"
+ },
+ "js.tool-q.chu-trinh-cuoc-doi": {
+  "t": "Where am I strong and where am I weak across my whole life?",
+  "h": "8f963033"
+ },
+ "js.tool-q.cua-hang-phong-thuy": {
+  "t": "How should I set up my shop to draw more customers?",
+  "h": "4651c600"
+ },
+ "js.tool-q.da-lieu-ai": {
+  "t": "What skin problems do I have?",
+  "h": "afbbe49e"
+ },
+ "js.tool-q.dai-van": {
+  "t": "What do my next ten years look like?",
+  "h": "a3fe4468"
+ },
+ "js.tool-q.dat-ten-con": {
+  "t": "What name suits my child's element?",
+  "h": "779d670b"
+ },
+ "js.tool-q.dat-ten-dn": {
+  "t": "What company name suits the owner's age?",
+  "h": "b162b477"
+ },
+ "js.tool-q.day-con": {
+  "t": "How should I teach this child so they will listen?",
+  "h": "3d9b9ae6"
+ },
+ "js.tool-q.dien-tuong": {
+  "t": "What does my face say about me?",
+  "h": "118e749f"
+ },
+ "js.tool-q.duyen-no-tien-kiep": {
+  "t": "What were that person and I to each other in a past life?",
+  "h": "d44faa65"
+ },
+ "js.tool-q.gio-sinh": {
+  "t": "I don't remember my birth hour — how can I read my chart?",
+  "h": "0319df21"
+ },
+ "js.tool-q.han-nam": {
+  "t": "Do I have any bad luck this year?",
+  "h": "e9b7b9f9"
+ },
+ "js.tool-q.hoang-dao": {
+  "t": "Which hour today is right for something important?",
+  "h": "1dfa3522"
+ },
+ "js.tool-q.huong-nghiep-tre": {
+  "t": "What should I introduce my child to from now?",
+  "h": "666f4739"
+ },
+ "js.tool-q.khi-sac": {
+  "t": "What does my complexion lately signal?",
+  "h": "71bb8d9f"
+ },
+ "js.tool-q.kieu-toc-phan-tich": {
+  "t": "Which hairstyle suits my face?",
+  "h": "0ed56433"
+ },
+ "js.tool-q.kieu-toc-tryon": {
+  "t": "What would a new hairstyle look like on me?",
+  "h": "cb0e8036"
+ },
+ "js.tool-q.kim-lau": {
+  "t": "Does this age clash for building a house or a wedding?",
+  "h": "d7abb962"
+ },
+ "js.tool-q.kinh-dich": {
+  "t": "Should I advance or step back on this?",
+  "h": "e4bec0c7"
+ },
+ "js.tool-q.ky-mon": {
+  "t": "Which direction should I go today, and whom should I meet?",
+  "h": "52ae57f5"
+ },
+ "js.tool-q.laso": {
+  "t": "How is each side of my life (career, love, health...)?",
+  "h": "897c1192"
+ },
+ "js.tool-q.luc-nham": {
+  "t": "I'm worried about something — can I ask a hexagram?",
+  "h": "dd9fcda1"
+ },
+ "js.tool-q.mai-hoa": {
+  "t": "Cast a hexagram for something I'm torn about?",
+  "h": "87075e3e"
+ },
+ "js.tool-q.mau-sac-hop-menh": {
+  "t": "Which colors suit my element?",
+  "h": "6a6f9a2b"
+ },
+ "js.tool-q.nap-am": {
+  "t": "What is my element and which colors suit me?",
+  "h": "482ef8bc"
+ },
+ "js.tool-q.ngay-tot": {
+  "t": "Which days are good this month?",
+  "h": "16036874"
+ },
+ "js.tool-q.ngu-hanh-ten": {
+  "t": "Does my name suit or clash with my element?",
+  "h": "2fa191bc"
+ },
+ "js.tool-q.nguoi-khac": {
+  "t": "How can I talk to this boss/colleague?",
+  "h": "99cf6815"
+ },
+ "js.tool-q.nhan-mach": {
+  "t": "What kind of people is my team missing?",
+  "h": "20b5a207"
+ },
+ "js.tool-q.nhan-tuong": {
+  "t": "What character do my eyes reveal?",
+  "h": "bb7b4ff7"
+ },
+ "js.tool-q.oracle": {
+  "t": "Can I have some guidance for today?",
+  "h": "ad1af2e7"
+ },
+ "js.tool-q.personal-color": {
+  "t": "Which color tones suit my skin?",
+  "h": "5305d6c7"
+ },
+ "js.tool-q.personal-color-tryon": {
+  "t": "Can I try the color tones on my own photo?",
+  "h": "a242ceba"
+ },
+ "js.tool-q.phong-thuy": {
+  "t": "How should I arrange my home to flow well?",
+  "h": "c4da6cee"
+ },
+ "js.tool-q.phong-thuy-render": {
+  "t": "What would my room look like with feng shui changes?",
+  "h": "30d4aba5"
+ },
+ "js.tool-q.sao-nam": {
+  "t": "What does an overview of my chart say?",
+  "h": "da9a7dc3"
+ },
+ "js.tool-q.so-dep": {
+  "t": "Does this phone number / house number suit me?",
+  "h": "6c16d0c4"
+ },
+ "js.tool-q.tarot": {
+  "t": "Draw a card — how does this look?",
+  "h": "d86a66aa"
+ },
+ "js.tool-q.than-so-hoc": {
+  "t": "What do my birth-date numbers say about me?",
+  "h": "9ec0fd5f"
+ },
+ "js.tool-q.thanh-tuong": {
+  "t": "Which career does my voice suit?",
+  "h": "e61cddcc"
+ },
+ "js.tool-q.thanh-tuong-pro": {
+  "t": "What does my voice say about my luck?",
+  "h": "078b92e3"
+ },
+ "js.tool-q.thu-tuong": {
+  "t": "What does my palm foretell?",
+  "h": "594b5ce4"
+ },
+ "js.tool-q.trang-diem-phan-tich": {
+  "t": "Which makeup style suits me?",
+  "h": "18d9bbf7"
+ },
+ "js.tool-q.trang-diem-tryon": {
+  "t": "Can I try this makeup on my face?",
+  "h": "4d5b253a"
+ },
+ "js.tool-q.trang-phuc-theo-ngay": {
+  "t": "What should I wear today to match my luck?",
+  "h": "071b77b2"
+ },
+ "js.tool-q.trang-phuc-tryon": {
+  "t": "Can I try this outfit on me?",
+  "h": "63772c47"
+ },
+ "js.tool-q.tu-binh": {
+  "t": "Should I stay put or change jobs this year?",
+  "h": "e948d8d1"
+ },
+ "js.tool-q.tu-tru": {
+  "t": "What is in my BaZi?",
+  "h": "2a480fc2"
+ },
+ "js.tool-q.tuong-hop": {
+  "t": "Are my age and that person's age compatible?",
+  "h": "50db371c"
+ },
+ "js.tool-q.van-han-nam": {
+  "t": "How do my next 12 months look?",
+  "h": "de5ba432"
+ },
+ "js.tool-q.van-thang": {
+  "t": "How is this month for me?",
+  "h": "d460979f"
+ },
+ "js.tool-q.xem-lam-an": {
+  "t": "Is it fine to do business with this person?",
+  "h": "bc675e91"
+ },
+ "js.tool-q.xem-tuoi": {
+  "t": "Are we compatible enough to marry?",
+  "h": "bc7b074a"
+ },
+ "js.tool-q.xem-tuoi-sinh-con": {
+  "t": "Which birth year suits the parents' ages?",
+  "h": "4739e655"
  },
  "js.tool.an-sao": {
   "t": "Chart Star Placement",
@@ -28130,6 +29002,130 @@
  "sc.xem-tuoi-sinh-con-tu-vi": {
   "t": "Child Birth-Year Compatibility — Minh Bao Zi Wei Dou Shu",
   "h": "23026bbb"
+ },
+ "sodep.ben-vung-dien-nien": {
+  "t": "Lasting (Yan Nian)",
+  "h": "d8c83d0b"
+ },
+ "sodep.ca-nhan-hoa-theo-nam-sinh": {
+  "t": "Personalize by birth year (optional)",
+  "h": "64cde7ae"
+ },
+ "sodep.cham-diem": {
+  "t": "Score →",
+  "h": "a4d402f6"
+ },
+ "sodep.cham-diem-mot-day-so": {
+  "t": "Score a number",
+  "h": "b64551fa"
+ },
+ "sodep.cham-diem-so-dien-thoai-so": {
+  "t": "Score a phone number, house number or license plate by five separate schools: Eight Stars (Eight Mansions), I Ching hexagram, Five Elements, Yin-Yang and folk belief.",
+  "h": "c8a704fb"
+ },
+ "sodep.chon-do-dai-dau-so-va": {
+  "t": "Pick a length, a prefix and the goal you need. You get a list of numbers ranked by score — never a ready-made list.",
+  "h": "a8376b12"
+ },
+ "sodep.dau-so-tuy-chon": {
+  "t": "Prefix (optional)",
+  "h": "6194d2ab"
+ },
+ "sodep.day-so": {
+  "t": "Number",
+  "h": "f3ccd2df"
+ },
+ "sodep.do-dai": {
+  "t": "Length",
+  "h": "3eb3bee1"
+ },
+ "sodep.gioi-thieu": {
+  "t": "About",
+  "h": "f4272d6e"
+ },
+ "sodep.goi-y-5-so": {
+  "t": "Suggest 5 numbers →",
+  "h": "dbf15fa5"
+ },
+ "sodep.goi-y-so-theo-muc-tieu-j94s": {
+  "t": "Number suggestions by goal",
+  "h": "12bf5866"
+ },
+ "sodep.hoi-thay-luan-sau-hon": {
+  "t": "✦ Ask the Master to read it in depth",
+  "h": "159b57f0"
+ },
+ "sodep.hp-5-truong-phai": {
+  "t": "5 schools,<br>kept separate",
+  "h": "539584cc"
+ },
+ "sodep.hp-dong-thuan": {
+  "t": "Favorable vs.<br>unfavorable consensus",
+  "h": "7b5e34dd"
+ },
+ "sodep.hp-goi-y-so": {
+  "t": "Number ideas<br>by goal",
+  "h": "7c40cb16"
+ },
+ "sodep.mien-phi": {
+  "t": "Free",
+  "h": "a999e722"
+ },
+ "sodep.mot-so-dien-thoai-bien-so": {
+  "t": "A phone number or license plate that suits feng shui is worked out differently by different schools — and not every school gives the same answer. Enter a number and get a separate score from each school, without blending them into a vague average.",
+  "h": "207f067a"
+ },
+ "sodep.muc-tieu": {
+  "t": "Goal",
+  "h": "3ae2c479"
+ },
+ "sodep.nhan-ket-qua": {
+  "t": "Get your result",
+  "h": "7bd18e32"
+ },
+ "sodep.nhap-so-dien-thoai-so-nha": {
+  "t": "Enter a phone number, house number or license plate. You get a separate score from each school and the favorable / unfavorable consensus.",
+  "h": "3c94a356"
+ },
+ "sodep.nhap-thong-tin": {
+  "t": "Enter details",
+  "h": "7b7a57a2"
+ },
+ "sodep.on-dinh-phuc-vi": {
+  "t": "Stability (Fu Wei)",
+  "h": "fea696c9"
+ },
+ "sodep.sdt-so-nha-bien-so": {
+  "t": "Phone, house number, license plate across 5 schools",
+  "h": "55408215"
+ },
+ "sodep.so-dep-chi-la-mot-goc": {
+  "t": "A lucky number is only a quick view — <a href=\"/app/luan-giai\">see your whole life through your Zi Wei Dou Shu chart →</a>",
+  "h": "528b3aa2"
+ },
+ "sodep.suc-khoe-thien-y": {
+  "t": "Health (Tian Yi)",
+  "h": "7269efe8"
+ },
+ "sodep.tai-loc-sinh-khi": {
+  "t": "Wealth (Sheng Qi)",
+  "h": "718c3d04"
+ },
+ "sodep.tu-do-moi-sao-cat": {
+  "t": "Open (any auspicious star)",
+  "h": "9d6db3ad"
+ },
+ "sodep.xem-so-dep": {
+  "t": "Lucky Numbers",
+  "h": "14ed9523"
+ },
+ "sodep.xem-so-dep-phong-thuy-la": {
+  "t": "Reading lucky numbers by feng shui applies several different schools — the Eight Stars (Eight Mansions), the I Ching hexagram, the Five Elements, Yin-Yang and folk belief — to judge a number as auspicious or not. Because they start from different premises, the schools do not always reach the same conclusion.",
+  "h": "58cc1874"
+ },
+ "sodep.xem-so-dep-tu-vi-minh": {
+  "t": "Lucky Numbers — Tử Vi Minh Bảo",
+  "h": "beb7ef68"
  },
  "solaso.chua-co-la-so-nao-trong": {
   "t": "No charts in your book yet.<br>Charts will land here automatically once you enter a birth date in any tool.",

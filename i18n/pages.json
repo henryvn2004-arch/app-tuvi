@@ -2383,6 +2383,51 @@
    "shell"
   ]
  },
+ "/app/so-dep": {
+  "file": "app-so-dep.html",
+  "keys": [
+   "battu.chi-phi-su-dung",
+   "battu.hoi",
+   "laso.nu",
+   "napam.nam-sinh",
+   "napam.sua",
+   "sodep.ben-vung-dien-nien",
+   "sodep.ca-nhan-hoa-theo-nam-sinh",
+   "sodep.cham-diem",
+   "sodep.cham-diem-mot-day-so",
+   "sodep.cham-diem-so-dien-thoai-so",
+   "sodep.chon-do-dai-dau-so-va",
+   "sodep.dau-so-tuy-chon",
+   "sodep.day-so",
+   "sodep.do-dai",
+   "sodep.gioi-thieu",
+   "sodep.goi-y-5-so",
+   "sodep.goi-y-so-theo-muc-tieu-j94s",
+   "sodep.hoi-thay-luan-sau-hon",
+   "sodep.hp-5-truong-phai",
+   "sodep.hp-dong-thuan",
+   "sodep.hp-goi-y-so",
+   "sodep.mien-phi",
+   "sodep.mot-so-dien-thoai-bien-so",
+   "sodep.muc-tieu",
+   "sodep.nhan-ket-qua",
+   "sodep.nhap-so-dien-thoai-so-nha",
+   "sodep.nhap-thong-tin",
+   "sodep.on-dinh-phuc-vi",
+   "sodep.sdt-so-nha-bien-so",
+   "sodep.so-dep-chi-la-mot-goc",
+   "sodep.suc-khoe-thien-y",
+   "sodep.tai-loc-sinh-khi",
+   "sodep.tu-do-moi-sao-cat",
+   "sodep.xem-so-dep",
+   "sodep.xem-so-dep-phong-thuy-la",
+   "sodep.xem-so-dep-tu-vi-minh",
+   "xlg.gioi-tinh"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/so-la-so": {
   "file": "app-so-la-so.html",
   "keys": [

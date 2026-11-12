@@ -234,7 +234,7 @@ async function _loadNavCredits() {
     const badge = document.getElementById('nav-credit-badge');
     const menuVal = document.getElementById('nav-credit-menu-val');
     if (badge) badge.innerHTML = '<svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:3px"><ellipse cx="7" cy="8.5" rx="6.2" ry="2" fill="#C8A96A" opacity=".35"/><path d="M1.2 7C1.2 7 0.8 5.5 2 4.2C3 3.2 4.5 2.8 7 2.8C9.5 2.8 11 3.2 12 4.2C13.2 5.5 12.8 7 12.8 7C12.1 8.2 9.8 9 7 9C4.2 9 1.9 8.2 1.2 7Z" fill="#C8A96A"/><path d="M2.5 4.5C3.3 3.5 5 3 7 3C9 3 10.7 3.5 11.5 4.5" stroke="#E0CBA0" stroke-width=".7" stroke-linecap="round"/><ellipse cx="7" cy="3" rx="3.5" ry="1.2" fill="#D9C08F"/><path d="M5.5 3C5.5 3 6 1.5 7 1.2C8 1.5 8.5 3 8.5 3" stroke="#E0CBA0" stroke-width=".6" fill="none"/></svg>' + bal.toLocaleString();
-    if (menuVal) menuVal.textContent = bal.toLocaleString() + _tvmbT('js.paywall.luong-m6fn', ' lượng');
+    if (menuVal) menuVal.textContent = bal.toLocaleString() + _tvmbT('js.auth.luong-sau', ' lượng');
   } catch(e) {}
 }
 
@@ -569,7 +569,7 @@ function updateNavUI() {
         </div>
         <div id="nav-profile-menu" style="display:none;position:absolute;right:0;top:44px;background:#fff;border:1px solid #ddd;border-radius:10px;padding:8px 0;min-width:200px;box-shadow:0 8px 28px rgba(0,0,0,.14);z-index:1000">
           <div style="padding:11px 16px;border-bottom:1px solid #f0f0f0">
-            <div style="font-size:12px;font-weight:700;color:#333">${name || _tvmbT('js.shellui.tai-khoan', 'Tài khoản')}</div>
+            <div style="font-size:12px;font-weight:700;color:#333">${name || _tvmbT('js.auth.tai-khoan', 'Tài khoản')}</div>
             <div style="font-size:11px;color:#999;margin-top:2px">${isAnon ? _tvmbT('js.auth.chua-luu-tai-khoan', 'Chưa lưu tài khoản') : email}</div>
           </div>
           <div style="padding:10px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
