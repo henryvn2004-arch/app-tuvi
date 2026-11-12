@@ -4406,7 +4406,7 @@
     });
   }
   function runLucNham(chat, toolId) {
-    ensureScripts(['/tools-shared/luc-nham.js?v=4', '/tools-shared/dai-luc-nham.js?v=1'], function (err) {
+    ensureScripts(['/tools-shared/luc-nham.js?v=4', '/tools-shared/dai-luc-nham.js?v=2'], function (err) {
       if (err || typeof LucNhamTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-luc', 'không nạp được công cụ Lục Nhâm.')); return; }
       var t = new Date();
       var curGio = Math.floor(((t.getHours() * 60 + 60) % (24 * 60)) / 120) % 12;
