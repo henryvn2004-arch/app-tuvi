@@ -230,7 +230,7 @@ window.SHELL_INTRO={key:'thu-tuong'};</script>
 // + gate Lượng + SSE 'delta' stream tới /api/tuong-mat?action=thu-tuong.
 // ══════════════════════════════════════════════════════════════════════
 var _imageData=null, _mediaType='image/jpeg', _camStream=null;
-var _mpHandsReady=false, _handGeoNote=null, _currentSlug='';
+var _mpHandsReady=false, _handGeoNote=null, _handShown=null, _currentSlug='';
 
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
 // có sẵn trong flow cũ (tải ảnh → thanh toán → kết quả), không tạo trạng
@@ -270,6 +270,8 @@ var HAND_CONNECTIONS = [
 var FINGER_TIPS = [4,8,12,16,20];
 var FINGER_MCPS = [2,5,9,13,17];
 var FINGER_NAMES = ['Ngón cái','Ngón trỏ','Ngón giữa','Ngón áp út','Ngón út'];
+// Tên hiển thị (FINGER_NAMES giữ chữ Việt vì đi vào văn bản gửi server)
+function fingerShown(i){ return [_tvmbT('js.thtu.ngon-cai','Ngón cái'),_tvmbT('js.thtu.ngon-tro','Ngón trỏ'),_tvmbT('js.thtu.ngon-giua','Ngón giữa'),_tvmbT('js.thtu.ngon-ap-ut','Ngón áp út'),_tvmbT('js.thtu.ngon-ut','Ngón út')][i]; }
 
 function detectHand(imgEl, cb) {
   loadHands((err) => {
@@ -327,6 +329,8 @@ function analyzeHandGeometry(lm, w, h) {
   else if (parseFloat(palmRatio) < 0.7) handShape = 'dài/thon';
 
   const maxFinger = fingerLens.indexOf(Math.max(...fingerLens));
+  const shapeShown = handShape === 'vuông/rộng' ? _tvmbT('js.thtu.hinh-vuong-rong','vuông/rộng') : handShape === 'dài/thon' ? _tvmbT('js.thtu.hinh-dai-thon','dài/thon') : _tvmbT('js.thtu.hinh-bau-duc','bầu dục');
+  _handShown = { palmRatio: palmRatio, shape: shapeShown, finger: fingerShown(maxFinger) };
 
   const geoLines = [
     `[Số liệu MediaPipe bàn tay]`,
@@ -341,8 +345,8 @@ function analyzeHandGeometry(lm, w, h) {
   if (panel && txt) {
     panel.style.display = 'block';
     txt.innerHTML = [
-      `<span class="geom-tag">Hình dạng: ${handShape}</span>`,
-      `<span class="geom-tag">Ngón dài nhất: ${FINGER_NAMES[maxFinger]}</span>`,
+      `<span class="geom-tag">${_tvmbT('js.thtu.hinh-dang-s','Hình dạng: {s}',{ s: shapeShown })}</span>`,
+      `<span class="geom-tag">${_tvmbT('js.thtu.ngon-dai-nhat-f','Ngón dài nhất: {f}',{ f: fingerShown(maxFinger) })}</span>`,
       `<span class="geom-tag">2D:4D = ${ratio2D4D}</span>`,
       `<span class="geom-tag">Rộng/Dài = ${palmRatio}</span>`,
     ].join('');
@@ -360,22 +364,22 @@ function mountHook() {
   if (!host || !window.HookLayer || !_handGeoNote) return;
   var m1 = _handGeoNote.match(/Tỷ lệ rộng\/dài lòng bàn tay:[^\n]+/);
   var m2 = _handGeoNote.match(/Ngón dài nhất:[^\n]+/);
-  if (!m1) return;
+  if (!m1 || !_handShown) return;
   var facts = [{
     tone: 'neutral',
-    title: m1[0],
-    body: 'Đo trực tiếp từ ảnh bằng MediaPipe Hands — hình dạng lòng bàn tay theo landmark thật của bạn. Luận giải đầy đủ theo cổ pháp thủ tướng nằm trong bản phân tích chuyên sâu.',
+    title: _tvmbT('js.thtu.ty-le-rong-dai-long-ban-tay','Tỷ lệ rộng/dài lòng bàn tay: {r} ({s})',{ r: _handShown.palmRatio, s: _handShown.shape }),
+    body: _tvmbT('js.thtu.do-truc-tiep-tu-anh-bang', 'Đo trực tiếp từ ảnh bằng MediaPipe Hands — hình dạng lòng bàn tay theo landmark thật của bạn. Luận giải đầy đủ theo cổ pháp thủ tướng nằm trong bản phân tích chuyên sâu.'),
     source: 'engine · MediaPipe Hands',
   }];
   if (m2) {
     facts.push({
       tone: 'neutral',
-      title: m2[0],
-      body: 'Đo trực tiếp từ ảnh bằng MediaPipe Hands. Ý nghĩa từng ngón, tỷ lệ 2D:4D và các đường chỉ tay nằm trong bản phân tích chuyên sâu.',
+      title: _tvmbT('js.thtu.ngon-dai-nhat-f','Ngón dài nhất: {f}',{ f: _handShown.finger }),
+      body: _tvmbT('js.thtu.do-truc-tiep-tu-anh-bang-vwvq', 'Đo trực tiếp từ ảnh bằng MediaPipe Hands. Ý nghĩa từng ngón, tỷ lệ 2D:4D và các đường chỉ tay nằm trong bản phân tích chuyên sâu.'),
       source: 'engine · MediaPipe Hands',
     });
   }
-  var spec = { tool: 'thu-tuong', toolLabel: 'Thủ Tướng', charts: [], facts: facts };
+  var spec = { tool: 'thu-tuong', toolLabel: _tvmbT('js.thtu.thu-tuong', 'Thủ Tướng'), charts: [], facts: facts };
   window.HookLayer.run(host, spec);
 }
 
@@ -393,8 +397,8 @@ function onFileSelect(e){const f=e.target.files[0];if(f)processFile(f);}
 
 function processFile(file) {
   const err=document.getElementById('error-msg'); err.classList.remove('active');
-  if (!file.type.startsWith('image/')) {err.textContent='Vui lòng chọn file ảnh.';err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});return;}
-  if (file.size>5*1024*1024) {err.textContent='Ảnh quá lớn.';err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});return;}
+  if (!file.type.startsWith('image/')) {err.textContent=_tvmbT('js.thtu.vui-long-chon-file-anh', 'Vui lòng chọn file ảnh.');err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});return;}
+  if (file.size>5*1024*1024) {err.textContent=_tvmbT('js.thtu.anh-qua-lon', 'Ảnh quá lớn.');err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});return;}
   const img=new Image();
   const ou=URL.createObjectURL(file);
   img.onload=()=>{
@@ -407,7 +411,7 @@ function processFile(file) {
     _imageData=dataUrl.split(',')[1];_mediaType='image/jpeg';
     showPreview(dataUrl);
   };
-  img.onerror = () => { URL.revokeObjectURL(ou); err.textContent='Không đọc được ảnh này — vui lòng chọn ảnh JPG hoặc PNG.'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); };
+  img.onerror = () => { URL.revokeObjectURL(ou); err.textContent=_tvmbT('js.thtu.khong-doc-duoc-anh-nay-vui', 'Không đọc được ảnh này — vui lòng chọn ảnh JPG hoặc PNG.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); };
   img.src=ou;
 }
 
@@ -430,9 +434,9 @@ function showPreview(dataUrl) {
         mountHook();
       } else {
         const err=document.getElementById('error-msg');
-        err.textContent='⚠ Không nhận diện được bàn tay. Thử chụp rõ hơn với nền tương phản và ánh sáng đủ.';
+        err.textContent=_tvmbT('js.thtu.khong-nhan-dien-duoc-ban-tay', '⚠ Không nhận diện được bàn tay. Thử chụp rõ hơn với nền tương phản và ánh sáng đủ.');
         err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
-        _handGeoNote = null;
+        _handGeoNote = null; _handShown = null;
       }
     });
   };
@@ -440,7 +444,7 @@ function showPreview(dataUrl) {
 }
 
 function removePhoto() {
-  _imageData=null; _handGeoNote=null;
+  _imageData=null; _handGeoNote=null; _handShown=null;
   document.getElementById('previewSection').style.display='none';
   document.getElementById('uploadArea').style.display='block';
   document.getElementById('analyzeBtn').disabled=true;
@@ -467,7 +471,7 @@ async function openCamera() {
       document.getElementById('camBtns').style.display='flex';
     } catch(e2) {
       const err=document.getElementById('error-msg');
-      err.textContent='Không thể mở camera.'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
+      err.textContent=_tvmbT('js.thtu.khong-the-mo-camera', 'Không thể mở camera.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
     }
   }
 }
@@ -505,7 +509,7 @@ async function _doAnalyze() {
   document.getElementById('resultCard').style.display='block';
   wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu luận giải
   const aiResultEl = document.getElementById('aiResult');
-  aiResultEl.innerHTML='<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="hand"></span><div class="dt-loading-text">Đang đọc chỉ tay...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
+  aiResultEl.innerHTML='<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="hand"></span><div class="dt-loading-text">' + _tvmbT('js.thtu.dang-doc-chi-tay', 'Đang đọc chỉ tay...') + '<br><span style="font-size:12px;opacity:.7">' + _tvmbT('js.thtu.thuong-mat-15-20-giay', 'Thường mất 15–20 giây') + '</span></div></div>';
   window.mountIcons && window.mountIcons(aiResultEl);
   document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'nearest'});
 
@@ -514,7 +518,7 @@ async function _doAnalyze() {
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ image:_imageData, mediaType:_mediaType, action:'thu-tuong', geoNote:_handGeoNote||null })
     });
-    if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d.error||'Lỗi '+res.status);}
+    if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d.error||_tvmbT('js.thtu.loi-s', 'Lỗi {s}', { s: res.status }));}
 
     const reader=res.body.getReader(); const dec=new TextDecoder();
     let full='', buf='';
@@ -530,26 +534,26 @@ async function _doAnalyze() {
         try{const j=JSON.parse(raw);if(j.err)throw new Error(j.err);if(j.t){full+=j.t;el.innerHTML=renderMd(full);}}catch(e){if(e.message&&!e.message.includes('JSON'))throw e;}
       }
     }
-    if(!full) throw new Error('Không có kết quả.');
+    if(!full) throw new Error(_tvmbT('js.thtu.khong-co-ket-qua', 'Không có kết quả.'));
     el.innerHTML=renderMd(full);
     _saveTuongReading('thu-tuong', full, _imageData, _mediaType);
     // Chia sẻ CHỈ text luận giải của AI — KHÔNG bao giờ đính kèm ảnh bàn tay
     // thật của user (riêng tư), dù ảnh đã tải lên để phân tích.
-    Shell.setShareable({ kind:'text', toolId:'thu-tuong', title:'Thủ Tướng của tôi', text:full });
+    Shell.setShareable({ kind:'text', toolId:'thu-tuong', title:_tvmbT('js.thtu.thu-tuong-cua-toi', 'Thủ Tướng của tôi'), text:full });
     // setContext() chỉ chạy TỚI ĐÂY — sau khi có kết quả thật (chat-first),
     // không còn gọi ở boot. Kết quả là văn xuôi SSE thuần, không có field
     // cấu trúc để trích số liệu nên greeting không bịa dữ kiện.
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
-      label: 'Thủ Tướng',
-      greeting: 'Đã đọc xong chỉ tay của bạn theo thủ tướng học cổ pháp. Bạn muốn hỏi thêm điều gì?',
-      chips: ['Tam Đại Chỉ là gì?', 'Đường vận mệnh nói lên điều gì?', 'Tay thuận và tay không thuận khác nhau thế nào?']
+      label: _tvmbT('js.thtu.thu-tuong', 'Thủ Tướng'),
+      greeting: _tvmbT('js.thtu.da-doc-xong-chi-tay-cua', 'Đã đọc xong chỉ tay của bạn theo thủ tướng học cổ pháp. Bạn muốn hỏi thêm điều gì?'),
+      chips: [_tvmbT('js.thtu.tam-dai-chi-la-gi', 'Tam Đại Chỉ là gì?'), _tvmbT('js.thtu.duong-van-menh-noi-len-dieu-gi', 'Đường vận mệnh nói lên điều gì?'), _tvmbT('js.thtu.tay-thuan-khac-nhau', 'Tay thuận và tay không thuận khác nhau thế nào?')]
     });
   } catch(e){
     document.getElementById('aiResult').innerHTML='';
     document.getElementById('resultCard').style.display='none';
     const err=document.getElementById('error-msg');
-    err.textContent='Lỗi: '+(e.message||'Không thể kết nối.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
+    err.textContent=_tvmbT('js.thtu.loi-e', 'Lỗi: {e}', { e: e.message||_tvmbT('js.thtu.khong-the-ket-noi', 'Không thể kết nối.') }); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
   }
 }
 
