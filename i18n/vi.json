@@ -819,6 +819,7 @@
  "js.nguhanhten.greeting": "Đã tra ngũ hành tên **{ten}** ({tc}).",
  "js.nguhanhten.label": "Ngũ hành tên · {ten}",
  "js.nguhanhten.menh": " Mệnh **{m}**.",
+ "js.nguhanhten.tc-item": "{n} nét, {h}",
  "js.noisinh.noi-khac": "Nơi khác (chọn múi giờ)",
  "js.noisinh.vung-america-anchorage": "Alaska",
  "js.noisinh.vung-america-cancun": "Quintana Roo (Cancún)",

@@ -3247,6 +3247,42 @@
   "t": "吉日・{y}年{m}月",
   "h": "cbd777dc"
  },
+ "js.nguhanhten.ban-muon-luan": {
+  "t": " 何を鑑定しましょうか？",
+  "h": "4117a169"
+ },
+ "js.nguhanhten.chip1": {
+  "t": "なぜ私の名前はこの点数になったのですか？",
+  "h": "2cd3c5cc"
+ },
+ "js.nguhanhten.chip2": {
+  "t": "名前のどの文字が点数を下げていますか？",
+  "h": "c694fac3"
+ },
+ "js.nguhanhten.chip3": {
+  "t": "本命により合う文字をいくつか提案してください",
+  "h": "665a28f8"
+ },
+ "js.nguhanhten.chip4": {
+  "t": "主となる文字は本命をどう補いますか？",
+  "h": "f1b4cfcb"
+ },
+ "js.nguhanhten.greeting": {
+  "t": "名前**{ten}**の五行（{tc}）を調べました。",
+  "h": "a78484c2"
+ },
+ "js.nguhanhten.label": {
+  "t": "名前の五行・{ten}",
+  "h": "c5234e3e"
+ },
+ "js.nguhanhten.menh": {
+  "t": " 本命は**{m}**です。",
+  "h": "ef0b1bae"
+ },
+ "js.nguhanhten.tc-item": {
+  "t": "{n}画・{h}",
+  "h": "341d0ba2"
+ },
  "js.noisinh.noi-khac": {
   "t": "その他（タイムゾーンを選択）",
   "h": "dee91293"
@@ -7278,6 +7314,190 @@
  "js.shellui.nguyen": {
   "t": "Nguyễn",
   "h": "e79eb3d7"
+ },
+ "js.shellui.nh-a1": {
+  "t": "「{name}」は{th}で、本命の{m}を生じます。名前が本命を養う最良の形です",
+  "h": "cda46ea4"
+ },
+ "js.shellui.nh-a2": {
+  "t": "「{name}」は本命と同じ{m}で、本命の気を強めます",
+  "h": "ed7b09ef"
+ },
+ "js.shellui.nh-a3": {
+  "t": "「{name}」は{th}で、本命の{m}を剋します",
+  "h": "ef919a58"
+ },
+ "js.shellui.nh-a4": {
+  "t": "本命の{m}が、「{name}」の{th}を剋します",
+  "h": "67e11e3c"
+ },
+ "js.shellui.nh-a5": {
+  "t": "本命の{m}が{th}を生じ、本命の気が洩れます",
+  "h": "78fd2981"
+ },
+ "js.shellui.nh-a6": {
+  "t": "「{name}」は{th}で、本命の{m}を生じも剋しもしません",
+  "h": "512e9b02"
+ },
+ "js.shellui.nh-b": {
+  "t": "{k}文字に{d}種類の五行",
+  "h": "c86c53a6"
+ },
+ "js.shellui.nh-c1": {
+  "t": "{sr}の文字があり、本命の{m}を生じます",
+  "h": "8063d498"
+ },
+ "js.shellui.nh-c2": {
+  "t": "本命と同じ{m}の文字があります",
+  "h": "b7d30df6"
+ },
+ "js.shellui.nh-c3": {
+  "t": "本命の{m}を生じる文字も、同じ五行の文字もまだありません",
+  "h": "415fa26e"
+ },
+ "js.shellui.nh-caveat": {
+  "t": "この点数は、比べやすいようにこのサイトが定めた尺度で、古典に書かれた数字ではありません。すでに使っている名前の場合、点数が低くても<strong>悪い名前という意味ではなく</strong>、名前を変える理由にもなりません。この部分は新しい名前を選ぶときにだけ役立ちます。",
+  "h": "d0c49d0c"
+ },
+ "js.shellui.nh-cd-ten": {
+  "t": "名前の採点",
+  "h": "56e67c7e"
+ },
+ "js.shellui.nh-cd-ten-menh": {
+  "t": "名前の採点 — 本命{m}",
+  "h": "d700b3c1"
+ },
+ "js.shellui.nh-chua-cham-duoc": {
+  "t": "名前の持ち主の<strong>本命</strong>がわからないため、まだ採点できません。ここで選んでください：",
+  "h": "f7e87909"
+ },
+ "js.shellui.nh-chua-co-trong-bang": {
+  "t": "表にまだありません",
+  "h": "26374f9c"
+ },
+ "js.shellui.nh-d1": {
+  "t": "{h}の文字が{k}つあり、本命を剋します",
+  "h": "ecab105a"
+ },
+ "js.shellui.nh-d2": {
+  "t": "本命を剋する文字はありません",
+  "h": "c6ffe9f6"
+ },
+ "js.shellui.nh-goi-y-tron-bo": {
+  "t": "本命に合う名前の候補をまとめて見る →",
+  "h": "0457a007"
+ },
+ "js.shellui.nh-khong-biet-menh": {
+  "t": "ご自身の本命がわかりませんか？",
+  "h": "afcf54e4"
+ },
+ "js.shellui.nh-la": {
+  "t": "主となる文字と本命の相性",
+  "h": "55588954"
+ },
+ "js.shellui.nh-lb": {
+  "t": "五行のバランス",
+  "h": "2ceb2151"
+ },
+ "js.shellui.nh-lc": {
+  "t": "名前に本命を補う文字がある",
+  "h": "40185ecf"
+ },
+ "js.shellui.nh-ld": {
+  "t": "本命を剋する文字がない",
+  "h": "88245630"
+ },
+ "js.shellui.nh-nb1": {
+  "t": "名前には、本命を生じる{sr}の文字がすでにあります。さらに足すなら、{m}の文字を選んで補強しましょう。",
+  "h": "1f2ab4f1"
+ },
+ "js.shellui.nh-nb2": {
+  "t": "{sr}は本命の{m}を生じます。この五行の文字は本命を養います。",
+  "h": "388f50d5"
+ },
+ "js.shellui.nh-net-don-vi": {
+  "t": "{n}画（一の位：{d}）",
+  "h": "cc03c651"
+ },
+ "js.shellui.nh-nhap-ho-ten": {
+  "t": "氏名を入力してください。",
+  "h": "852de967"
+ },
+ "js.shellui.nh-nhap-net-thu-cong": {
+  "t": "画数を手入力",
+  "h": "60923759"
+ },
+ "js.shellui.nh-rel-cung": {
+  "t": "主となる文字「<strong>{name}</strong>」は<strong>{th}</strong>で、本命<strong>{m}</strong>と<strong>同じ五行</strong>です。良い補強となり、本命の気を強めます。",
+  "h": "ae1602fe"
+ },
+ "js.shellui.nh-rel-khac-menh": {
+  "t": "主となる文字「<strong>{name}</strong>」は<strong>{th}</strong>で、<strong>本命の{m}を剋します</strong>（{th}剋{m}）。民間では調整を検討したほうがよいとされます。",
+  "h": "cfb34dae"
+ },
+ "js.shellui.nh-rel-menh-khac": {
+  "t": "主となる文字「<strong>{name}</strong>」は<strong>{th}</strong>で、本命の{m}が名前の五行を剋します（{m}剋{th}）。民間では調整を検討したほうがよいとされます。",
+  "h": "084dea54"
+ },
+ "js.shellui.nh-rel-menh-sinh": {
+  "t": "主となる文字「<strong>{name}</strong>」は<strong>{th}</strong>で、本命の{m}が名前の五行を生じます（{m}→{th}）。中程度で、害はありません。",
+  "h": "6b8b312d"
+ },
+ "js.shellui.nh-rel-sinh-menh": {
+  "t": "主となる文字「<strong>{name}</strong>」は<strong>{th}</strong>で、<strong>本命の{m}を生じます</strong>（{th}→{m}）。良好で、名前が本命を養います。",
+  "h": "e867c9b3"
+ },
+ "js.shellui.nh-rel-trung-tinh": {
+  "t": "主となる文字「<strong>{name}</strong>」は<strong>{th}</strong>、本命は<strong>{m}</strong>で、直接の相生も相剋もありません。中立です。",
+  "h": "c5e52f31"
+ },
+ "js.shellui.nh-so-net": {
+  "t": "画数",
+  "h": "6942afa1"
+ },
+ "js.shellui.nh-sug-head": {
+  "t": "名前を選ぶ場合",
+  "h": "4307da08"
+ },
+ "js.shellui.nh-sug-p": {
+  "t": "<strong>{boi}</strong>の文字を優先しましょう。{note} <strong>{tranh}</strong>の文字は避けましょう（本命の{m}を剋します）。",
+  "h": "4634af56"
+ },
+ "js.shellui.nh-title-suffix": {
+  "t": " — 一文字ごとの五行",
+  "h": "502b979c"
+ },
+ "js.shellui.nh-toi-da-6": {
+  "t": "音節は最大6つまでです。",
+  "h": "a95e6e3b"
+ },
+ "js.shellui.nh-tra-hanzii": {
+  "t": "hanzii.net で調べる →",
+  "h": "d84d1c1b"
+ },
+ "js.shellui.nh-tra-menh": {
+  "t": "生まれ年から本命を調べる →",
+  "h": "83b945be"
+ },
+ "js.shellui.nh-v1": {
+  "t": "本命と非常によく合う",
+  "h": "8afe9243"
+ },
+ "js.shellui.nh-v2": {
+  "t": "本命とよく合う",
+  "h": "44069c43"
+ },
+ "js.shellui.nh-v3": {
+  "t": "まずまず",
+  "h": "9f497b1e"
+ },
+ "js.shellui.nh-v4": {
+  "t": "考えたい点がある",
+  "h": "12311aa6"
+ },
+ "js.shellui.nh-v5": {
+  "t": "考えたい点が多い",
+  "h": "e71f844e"
  },
  "js.shellui.nhan-tuong-cua-toi": {
   "t": "私の目相",

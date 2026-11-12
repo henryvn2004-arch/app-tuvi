@@ -249,7 +249,7 @@ function syncShell(menh) {
   Shell.setContext({
     scenario: { type: 'ngu-hanh-ten', data: d },
     label: _tvmbT('js.nguhanhten.label', 'Ngũ hành tên · {ten}', { ten: d.hoTen }),
-    greeting: _tvmbT('js.nguhanhten.greeting', 'Đã tra ngũ hành tên **{ten}** ({tc}).', { ten: d.hoTen, tc: d.tungChu }) + (menh ? _tvmbT('js.nguhanhten.menh', ' Mệnh **{m}**.', { m: _tvmbG('hanh', menh) }) : '') + _tvmbT('js.nguhanhten.ban-muon-luan', ' Bạn muốn tôi luận gì?'),
+    greeting: _tvmbT('js.nguhanhten.greeting', 'Đã tra ngũ hành tên **{ten}** ({tc}).', { ten: d.hoTen, tc: _syls.filter(function (s) { return s.n; }).map(function (s) { return s.display + ' (' + _tvmbT('js.nguhanhten.tc-item', '{n} nét, {h}', { n: s.n, h: _tvmbG('hanh', NguHanhTenTool.netToHanh(s.n)) }) + ')'; }).join(', ') }) + (menh ? _tvmbT('js.nguhanhten.menh', ' Mệnh **{m}**.', { m: _tvmbG('hanh', menh) }) : '') + _tvmbT('js.nguhanhten.ban-muon-luan', ' Bạn muốn tôi luận gì?'),
     chips: [_tvmbT('js.nguhanhten.chip1', 'Vì sao tên tôi được điểm này?'), _tvmbT('js.nguhanhten.chip2', 'Chữ nào trong tên đang kéo điểm xuống?'), _tvmbT('js.nguhanhten.chip3', 'Gợi ý vài chữ hợp mệnh hơn'), _tvmbT('js.nguhanhten.chip4', 'Chữ tên chính bồi mệnh thế nào?')]
   });
   var _nhLines = ['Ngũ hành tên: ' + d.hoTen];

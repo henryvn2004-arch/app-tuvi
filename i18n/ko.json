@@ -3247,6 +3247,42 @@
   "t": "길일 · {y}년 {m}월",
   "h": "cbd777dc"
  },
+ "js.nguhanhten.ban-muon-luan": {
+  "t": " 무엇을 풀이해 드릴까요?",
+  "h": "4117a169"
+ },
+ "js.nguhanhten.chip1": {
+  "t": "제 이름은 왜 이 점수가 나왔나요?",
+  "h": "2cd3c5cc"
+ },
+ "js.nguhanhten.chip2": {
+  "t": "이름의 어떤 글자가 점수를 깎고 있나요?",
+  "h": "c694fac3"
+ },
+ "js.nguhanhten.chip3": {
+  "t": "본명에 더 잘 맞는 글자를 몇 개 추천해 주세요",
+  "h": "665a28f8"
+ },
+ "js.nguhanhten.chip4": {
+  "t": "주된 글자는 본명을 어떻게 북돋나요?",
+  "h": "f1b4cfcb"
+ },
+ "js.nguhanhten.greeting": {
+  "t": "이름 **{ten}**의 오행({tc})을 조회했어요.",
+  "h": "a78484c2"
+ },
+ "js.nguhanhten.label": {
+  "t": "이름의 오행 · {ten}",
+  "h": "c5234e3e"
+ },
+ "js.nguhanhten.menh": {
+  "t": " 본명은 **{m}**이에요.",
+  "h": "ef0b1bae"
+ },
+ "js.nguhanhten.tc-item": {
+  "t": "{n}획, {h}",
+  "h": "341d0ba2"
+ },
  "js.noisinh.noi-khac": {
   "t": "기타 (시간대 선택)",
   "h": "dee91293"
@@ -7278,6 +7314,190 @@
  "js.shellui.nguyen": {
   "t": "Nguyễn",
   "h": "e79eb3d7"
+ },
+ "js.shellui.nh-a1": {
+  "t": "\"{name}\"은(는) {th}로 본명 {m}을(를) 생해 줘요 — 이름이 본명을 길러 주는 가장 좋은 경우예요",
+  "h": "cda46ea4"
+ },
+ "js.shellui.nh-a2": {
+  "t": "\"{name}\"은(는) 본명과 같은 {m}이라 본명의 기운을 북돋아 줘요",
+  "h": "ed7b09ef"
+ },
+ "js.shellui.nh-a3": {
+  "t": "\"{name}\"은(는) {th}로 본명 {m}을(를) 극해요",
+  "h": "ef919a58"
+ },
+ "js.shellui.nh-a4": {
+  "t": "본명 {m}이(가) \"{name}\"의 {th}을(를) 극해요",
+  "h": "67e11e3c"
+ },
+ "js.shellui.nh-a5": {
+  "t": "본명 {m}이(가) {th}을(를) 생해 본명의 기운이 빠져나가요",
+  "h": "78fd2981"
+ },
+ "js.shellui.nh-a6": {
+  "t": "\"{name}\"은(는) {th}로 본명 {m}을(를) 생하지도 극하지도 않아요",
+  "h": "512e9b02"
+ },
+ "js.shellui.nh-b": {
+  "t": "{k}글자에 {d}가지 오행",
+  "h": "c86c53a6"
+ },
+ "js.shellui.nh-c1": {
+  "t": "{sr} 오행의 글자가 있어 본명 {m}을(를) 생해요",
+  "h": "8063d498"
+ },
+ "js.shellui.nh-c2": {
+  "t": "본명과 같은 {m} 오행의 글자가 있어요",
+  "h": "b7d30df6"
+ },
+ "js.shellui.nh-c3": {
+  "t": "본명 {m}을(를) 생하거나 같은 오행인 글자가 아직 없어요",
+  "h": "415fa26e"
+ },
+ "js.shellui.nh-caveat": {
+  "t": "이 점수 체계는 비교하기 쉽도록 사이트가 정한 것으로, 고전에 있는 숫자가 아니에요. 이미 쓰고 있는 이름이라면 점수가 낮아도 <strong>나쁜 이름이라는 뜻이 아니며</strong> 이름을 바꿀 이유도 아니에요. 이 부분은 새 이름을 고를 때만 도움이 돼요.",
+  "h": "d0c49d0c"
+ },
+ "js.shellui.nh-cd-ten": {
+  "t": "이름 점수",
+  "h": "56e67c7e"
+ },
+ "js.shellui.nh-cd-ten-menh": {
+  "t": "이름 점수 — 본명 {m}",
+  "h": "d700b3c1"
+ },
+ "js.shellui.nh-chua-cham-duoc": {
+  "t": "이름 주인의 <strong>본명</strong>을 몰라서 아직 점수를 매길 수 없어요. 여기서 바로 고르세요:",
+  "h": "f7e87909"
+ },
+ "js.shellui.nh-chua-co-trong-bang": {
+  "t": "표에 아직 없음",
+  "h": "26374f9c"
+ },
+ "js.shellui.nh-d1": {
+  "t": "{h} 오행 글자 {k}개가 본명을 극해요",
+  "h": "ecab105a"
+ },
+ "js.shellui.nh-d2": {
+  "t": "본명을 극하는 글자가 없어요",
+  "h": "c6ffe9f6"
+ },
+ "js.shellui.nh-goi-y-tron-bo": {
+  "t": "본명에 맞는 이름 전체 추천 보기 →",
+  "h": "0457a007"
+ },
+ "js.shellui.nh-khong-biet-menh": {
+  "t": "본인의 본명을 모르시나요?",
+  "h": "afcf54e4"
+ },
+ "js.shellui.nh-la": {
+  "t": "주된 글자와 본명의 조화",
+  "h": "55588954"
+ },
+ "js.shellui.nh-lb": {
+  "t": "오행 균형",
+  "h": "2ceb2151"
+ },
+ "js.shellui.nh-lc": {
+  "t": "이름에 본명을 북돋는 글자가 있음",
+  "h": "40185ecf"
+ },
+ "js.shellui.nh-ld": {
+  "t": "본명을 극하는 글자가 없음",
+  "h": "88245630"
+ },
+ "js.shellui.nh-nb1": {
+  "t": "이름에 본명을 생하는 {sr} 오행 글자가 이미 있어요. 더 보태려면 {m} 오행 글자를 골라 북돋우세요.",
+  "h": "1f2ab4f1"
+ },
+ "js.shellui.nh-nb2": {
+  "t": "{sr}은(는) 본명 {m}을(를) 생해요 — 이 오행의 글자가 본명을 길러 줘요.",
+  "h": "388f50d5"
+ },
+ "js.shellui.nh-net-don-vi": {
+  "t": "{n}획 (일의 자리: {d})",
+  "h": "cc03c651"
+ },
+ "js.shellui.nh-nhap-ho-ten": {
+  "t": "성명을 입력해 주세요.",
+  "h": "852de967"
+ },
+ "js.shellui.nh-nhap-net-thu-cong": {
+  "t": "획수 직접 입력",
+  "h": "60923759"
+ },
+ "js.shellui.nh-rel-cung": {
+  "t": "주된 글자 \"<strong>{name}</strong>\"은(는) <strong>{th}</strong>로, 본명 <strong>{m}</strong>과(와) <strong>같은 오행</strong>이에요. 좋은 보완이 되어 본명의 기운을 북돋아 줘요.",
+  "h": "ae1602fe"
+ },
+ "js.shellui.nh-rel-khac-menh": {
+  "t": "주된 글자 \"<strong>{name}</strong>\"은(는) <strong>{th}</strong>로 <strong>본명 {m}을(를) 극해요</strong> ({th}극{m}). 민간에서는 조정을 고려해 볼 만하다고 봐요.",
+  "h": "cfb34dae"
+ },
+ "js.shellui.nh-rel-menh-khac": {
+  "t": "주된 글자 \"<strong>{name}</strong>\"은(는) <strong>{th}</strong>로, 본명 {m}이(가) 이름의 오행을 극해요 ({m}극{th}). 민간에서는 조정을 고려해 볼 만하다고 봐요.",
+  "h": "084dea54"
+ },
+ "js.shellui.nh-rel-menh-sinh": {
+  "t": "주된 글자 \"<strong>{name}</strong>\"은(는) <strong>{th}</strong>로, 본명 {m}이(가) 이름의 오행을 생해요 ({m}→{th}). 보통이며 해는 없어요.",
+  "h": "6b8b312d"
+ },
+ "js.shellui.nh-rel-sinh-menh": {
+  "t": "주된 글자 \"<strong>{name}</strong>\"은(는) <strong>{th}</strong>로 <strong>본명 {m}을(를) 생해요</strong> ({th}→{m}). 좋아요, 이름이 본명을 길러 줘요.",
+  "h": "e867c9b3"
+ },
+ "js.shellui.nh-rel-trung-tinh": {
+  "t": "주된 글자 \"<strong>{name}</strong>\"은(는) <strong>{th}</strong>, 본명은 <strong>{m}</strong>이며 직접적인 상생도 상극도 없어요. 중립이에요.",
+  "h": "c5e52f31"
+ },
+ "js.shellui.nh-so-net": {
+  "t": "획수",
+  "h": "6942afa1"
+ },
+ "js.shellui.nh-sug-head": {
+  "t": "이름을 고르는 중이라면",
+  "h": "4307da08"
+ },
+ "js.shellui.nh-sug-p": {
+  "t": "<strong>{boi}</strong> 오행 글자를 우선하세요. {note} <strong>{tranh}</strong> 오행 글자는 피하세요 (본명 {m}을(를) 극해요).",
+  "h": "4634af56"
+ },
+ "js.shellui.nh-title-suffix": {
+  "t": " — 글자별 오행",
+  "h": "502b979c"
+ },
+ "js.shellui.nh-toi-da-6": {
+  "t": "음절은 최대 6개예요.",
+  "h": "a95e6e3b"
+ },
+ "js.shellui.nh-tra-hanzii": {
+  "t": "hanzii.net에서 조회 →",
+  "h": "d84d1c1b"
+ },
+ "js.shellui.nh-tra-menh": {
+  "t": "출생 연도로 본명 조회하기 →",
+  "h": "83b945be"
+ },
+ "js.shellui.nh-v1": {
+  "t": "본명과 매우 잘 맞음",
+  "h": "8afe9243"
+ },
+ "js.shellui.nh-v2": {
+  "t": "본명과 잘 맞음",
+  "h": "44069c43"
+ },
+ "js.shellui.nh-v3": {
+  "t": "무난함",
+  "h": "9f497b1e"
+ },
+ "js.shellui.nh-v4": {
+  "t": "살펴볼 만한 부분이 있음",
+  "h": "12311aa6"
+ },
+ "js.shellui.nh-v5": {
+  "t": "살펴볼 만한 부분이 많음",
+  "h": "e71f844e"
  },
  "js.shellui.nhan-tuong-cua-toi": {
   "t": "내 안상",

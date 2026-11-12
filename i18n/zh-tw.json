@@ -3247,6 +3247,42 @@
   "t": "吉日・{y}年{m}月",
   "h": "cbd777dc"
  },
+ "js.nguhanhten.ban-muon-luan": {
+  "t": " 您想讓我論析什麼？",
+  "h": "4117a169"
+ },
+ "js.nguhanhten.chip1": {
+  "t": "為什麼我的名字是這個分數？",
+  "h": "2cd3c5cc"
+ },
+ "js.nguhanhten.chip2": {
+  "t": "名字中哪個字拉低了分數？",
+  "h": "c694fac3"
+ },
+ "js.nguhanhten.chip3": {
+  "t": "推薦幾個更合本命的字",
+  "h": "665a28f8"
+ },
+ "js.nguhanhten.chip4": {
+  "t": "主字如何補益本命？",
+  "h": "f1b4cfcb"
+ },
+ "js.nguhanhten.greeting": {
+  "t": "已查詢姓名**{ten}**的五行（{tc}）。",
+  "h": "a78484c2"
+ },
+ "js.nguhanhten.label": {
+  "t": "姓名五行・{ten}",
+  "h": "c5234e3e"
+ },
+ "js.nguhanhten.menh": {
+  "t": " 本命為**{m}**。",
+  "h": "ef0b1bae"
+ },
+ "js.nguhanhten.tc-item": {
+  "t": "{n}畫，{h}",
+  "h": "341d0ba2"
+ },
  "js.noisinh.noi-khac": {
   "t": "其他（選擇時區）",
   "h": "dee91293"
@@ -7278,6 +7314,190 @@
  "js.shellui.nguyen": {
   "t": "王",
   "h": "e79eb3d7"
+ },
+ "js.shellui.nh-a1": {
+  "t": "「{name}」屬{th}，生本命{m}——名字滋養本命，最為理想",
+  "h": "cda46ea4"
+ },
+ "js.shellui.nh-a2": {
+  "t": "「{name}」與本命同屬{m}——鞏固命氣",
+  "h": "ed7b09ef"
+ },
+ "js.shellui.nh-a3": {
+  "t": "「{name}」屬{th}，剋本命{m}",
+  "h": "ef919a58"
+ },
+ "js.shellui.nh-a4": {
+  "t": "本命{m}剋「{name}」的{th}",
+  "h": "67e11e3c"
+ },
+ "js.shellui.nh-a5": {
+  "t": "本命{m}生{th}——本命洩氣",
+  "h": "78fd2981"
+ },
+ "js.shellui.nh-a6": {
+  "t": "「{name}」屬{th}——不生也不剋本命{m}",
+  "h": "512e9b02"
+ },
+ "js.shellui.nh-b": {
+  "t": "{k}個字中有{d}種不同五行",
+  "h": "c86c53a6"
+ },
+ "js.shellui.nh-c1": {
+  "t": "有{sr}行的字——生本命{m}",
+  "h": "8063d498"
+ },
+ "js.shellui.nh-c2": {
+  "t": "有與本命同屬{m}的字",
+  "h": "b7d30df6"
+ },
+ "js.shellui.nh-c3": {
+  "t": "尚無任何字能生本命{m}或與其同行",
+  "h": "415fa26e"
+ },
+ "js.shellui.nh-caveat": {
+  "t": "此計分標準是本站為方便比較而訂的，並非古籍中的數字。對已在使用的名字而言，分數低<strong>並不代表名字不好</strong>，也不是改名的理由——這部分只在您挑選新名字時才有參考價值。",
+  "h": "d0c49d0c"
+ },
+ "js.shellui.nh-cd-ten": {
+  "t": "姓名評分",
+  "h": "56e67c7e"
+ },
+ "js.shellui.nh-cd-ten-menh": {
+  "t": "姓名評分——本命{m}",
+  "h": "d700b3c1"
+ },
+ "js.shellui.nh-chua-cham-duoc": {
+  "t": "因不知道名字持有者的<strong>本命</strong>，目前無法評分。請直接在此選擇：",
+  "h": "f7e87909"
+ },
+ "js.shellui.nh-chua-co-trong-bang": {
+  "t": "表中尚無",
+  "h": "26374f9c"
+ },
+ "js.shellui.nh-d1": {
+  "t": "有{k}個{h}行的字剋本命",
+  "h": "ecab105a"
+ },
+ "js.shellui.nh-d2": {
+  "t": "沒有任何字剋本命",
+  "h": "c6ffe9f6"
+ },
+ "js.shellui.nh-goi-y-tron-bo": {
+  "t": "查看完整的合命名字建議 →",
+  "h": "0457a007"
+ },
+ "js.shellui.nh-khong-biet-menh": {
+  "t": "不知道自己的本命嗎？",
+  "h": "afcf54e4"
+ },
+ "js.shellui.nh-la": {
+  "t": "主字與本命相合",
+  "h": "55588954"
+ },
+ "js.shellui.nh-lb": {
+  "t": "五行平衡",
+  "h": "2ceb2151"
+ },
+ "js.shellui.nh-lc": {
+  "t": "名字含補益本命的字",
+  "h": "40185ecf"
+ },
+ "js.shellui.nh-ld": {
+  "t": "無剋本命之字",
+  "h": "88245630"
+ },
+ "js.shellui.nh-nb1": {
+  "t": "名字已有生本命的{sr}行字。若想再加，可選{m}行的字來鞏固。",
+  "h": "1f2ab4f1"
+ },
+ "js.shellui.nh-nb2": {
+  "t": "{sr}生本命{m}——屬此行的字能滋養本命。",
+  "h": "388f50d5"
+ },
+ "js.shellui.nh-net-don-vi": {
+  "t": "{n}畫（個位：{d}）",
+  "h": "cc03c651"
+ },
+ "js.shellui.nh-nhap-ho-ten": {
+  "t": "請輸入姓名。",
+  "h": "852de967"
+ },
+ "js.shellui.nh-nhap-net-thu-cong": {
+  "t": "手動輸入筆畫",
+  "h": "60923759"
+ },
+ "js.shellui.nh-rel-cung": {
+  "t": "主字「<strong>{name}</strong>」屬<strong>{th}</strong>——與本命<strong>{m}</strong><strong>同行</strong>。補益良好，鞏固命氣。",
+  "h": "ae1602fe"
+ },
+ "js.shellui.nh-rel-khac-menh": {
+  "t": "主字「<strong>{name}</strong>」屬<strong>{th}</strong>——<strong>剋本命{m}</strong>（{th}剋{m}）。依民間說法，宜考慮調整。",
+  "h": "cfb34dae"
+ },
+ "js.shellui.nh-rel-menh-khac": {
+  "t": "主字「<strong>{name}</strong>」屬<strong>{th}</strong>——本命{m}剋名字之行（{m}剋{th}）。依民間說法，宜考慮調整。",
+  "h": "084dea54"
+ },
+ "js.shellui.nh-rel-menh-sinh": {
+  "t": "主字「<strong>{name}</strong>」屬<strong>{th}</strong>——本命{m}生名字之行（{m}→{th}）。中等，無害。",
+  "h": "6b8b312d"
+ },
+ "js.shellui.nh-rel-sinh-menh": {
+  "t": "主字「<strong>{name}</strong>」屬<strong>{th}</strong>——<strong>生本命{m}</strong>（{th}→{m}）。良好，名字滋養本命。",
+  "h": "e867c9b3"
+ },
+ "js.shellui.nh-rel-trung-tinh": {
+  "t": "主字「<strong>{name}</strong>」屬<strong>{th}</strong>，本命為<strong>{m}</strong>——彼此無直接相生也無相剋。中性。",
+  "h": "c5e52f31"
+ },
+ "js.shellui.nh-so-net": {
+  "t": "筆畫數",
+  "h": "6942afa1"
+ },
+ "js.shellui.nh-sug-head": {
+  "t": "若您正在擇名",
+  "h": "4307da08"
+ },
+ "js.shellui.nh-sug-p": {
+  "t": "宜優先選<strong>{boi}</strong>行的字。{note} 宜避開<strong>{tranh}</strong>行的字（剋本命{m}）。",
+  "h": "4634af56"
+ },
+ "js.shellui.nh-title-suffix": {
+  "t": " ——每個字的五行",
+  "h": "502b979c"
+ },
+ "js.shellui.nh-toi-da-6": {
+  "t": "最多6個音節。",
+  "h": "a95e6e3b"
+ },
+ "js.shellui.nh-tra-hanzii": {
+  "t": "到 hanzii.net 查詢 →",
+  "h": "d84d1c1b"
+ },
+ "js.shellui.nh-tra-menh": {
+  "t": "依出生年查詢本命 →",
+  "h": "83b945be"
+ },
+ "js.shellui.nh-v1": {
+  "t": "與本命非常相合",
+  "h": "8afe9243"
+ },
+ "js.shellui.nh-v2": {
+  "t": "與本命相合",
+  "h": "44069c43"
+ },
+ "js.shellui.nh-v3": {
+  "t": "尚可",
+  "h": "9f497b1e"
+ },
+ "js.shellui.nh-v4": {
+  "t": "有值得斟酌之處",
+  "h": "12311aa6"
+ },
+ "js.shellui.nh-v5": {
+  "t": "有許多值得斟酌之處",
+  "h": "e71f844e"
  },
  "js.shellui.nhan-tuong-cua-toi": {
   "t": "我的眼相",

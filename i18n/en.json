@@ -3247,6 +3247,42 @@
   "t": "Good days · {y}/{m}",
   "h": "cbd777dc"
  },
+ "js.nguhanhten.ban-muon-luan": {
+  "t": " What would you like me to read?",
+  "h": "4117a169"
+ },
+ "js.nguhanhten.chip1": {
+  "t": "Why did my name get this score?",
+  "h": "2cd3c5cc"
+ },
+ "js.nguhanhten.chip2": {
+  "t": "Which character in my name is pulling the score down?",
+  "h": "c694fac3"
+ },
+ "js.nguhanhten.chip3": {
+  "t": "Suggest a few characters that suit my life element better",
+  "h": "665a28f8"
+ },
+ "js.nguhanhten.chip4": {
+  "t": "How does the main character support my life element?",
+  "h": "f1b4cfcb"
+ },
+ "js.nguhanhten.greeting": {
+  "t": "I've checked the Five Elements of the name **{ten}** ({tc}).",
+  "h": "a78484c2"
+ },
+ "js.nguhanhten.label": {
+  "t": "Name Five Elements · {ten}",
+  "h": "c5234e3e"
+ },
+ "js.nguhanhten.menh": {
+  "t": " Life element **{m}**.",
+  "h": "ef0b1bae"
+ },
+ "js.nguhanhten.tc-item": {
+  "t": "{n} strokes, {h}",
+  "h": "341d0ba2"
+ },
  "js.noisinh.noi-khac": {
   "t": "Other (choose a time zone)",
   "h": "dee91293"
@@ -7278,6 +7314,190 @@
  "js.shellui.nguyen": {
   "t": "Nguyen",
   "h": "e79eb3d7"
+ },
+ "js.shellui.nh-a1": {
+  "t": "\"{name}\" is the {th} element and generates your {m} life element — the name nourishes your life element, the best case",
+  "h": "cda46ea4"
+ },
+ "js.shellui.nh-a2": {
+  "t": "\"{name}\" shares the {m} element with your life element — it strengthens your life energy",
+  "h": "ed7b09ef"
+ },
+ "js.shellui.nh-a3": {
+  "t": "\"{name}\" is the {th} element and restrains your {m} life element",
+  "h": "ef919a58"
+ },
+ "js.shellui.nh-a4": {
+  "t": "your {m} life element restrains the {th} element of \"{name}\"",
+  "h": "67e11e3c"
+ },
+ "js.shellui.nh-a5": {
+  "t": "your {m} life element generates the {th} element — your life element is drained",
+  "h": "78fd2981"
+ },
+ "js.shellui.nh-a6": {
+  "t": "\"{name}\" is the {th} element — it neither generates nor restrains your {m} life element",
+  "h": "512e9b02"
+ },
+ "js.shellui.nh-b": {
+  "t": "{d} different elements across {k} characters",
+  "h": "c86c53a6"
+ },
+ "js.shellui.nh-c1": {
+  "t": "has a character of the {sr} element — it generates your {m} life element",
+  "h": "8063d498"
+ },
+ "js.shellui.nh-c2": {
+  "t": "has a character of the same {m} element",
+  "h": "b7d30df6"
+ },
+ "js.shellui.nh-c3": {
+  "t": "no character yet generates or shares the {m} element of your life element",
+  "h": "415fa26e"
+ },
+ "js.shellui.nh-caveat": {
+  "t": "This scoring scale is set by the site for easy comparison — it is not a number from the classics. For a name already in use, a low score <strong>does not mean the name is bad</strong> and is not a reason to change it — this part is only useful when you are choosing a new name.",
+  "h": "d0c49d0c"
+ },
+ "js.shellui.nh-cd-ten": {
+  "t": "Name score",
+  "h": "56e67c7e"
+ },
+ "js.shellui.nh-cd-ten-menh": {
+  "t": "Name score — {m} life element",
+  "h": "d700b3c1"
+ },
+ "js.shellui.nh-chua-cham-duoc": {
+  "t": "It can't be scored yet because we don't know the <strong>life element</strong> of the person who carries the name. Choose it right here:",
+  "h": "f7e87909"
+ },
+ "js.shellui.nh-chua-co-trong-bang": {
+  "t": "Not in the table yet",
+  "h": "26374f9c"
+ },
+ "js.shellui.nh-d1": {
+  "t": "{k} character(s) of the {h} element restrain your life element",
+  "h": "ecab105a"
+ },
+ "js.shellui.nh-d2": {
+  "t": "no character restrains your life element",
+  "h": "c6ffe9f6"
+ },
+ "js.shellui.nh-goi-y-tron-bo": {
+  "t": "Get a full set of name suggestions that suit your life element →",
+  "h": "0457a007"
+ },
+ "js.shellui.nh-khong-biet-menh": {
+  "t": "Don't know your life element?",
+  "h": "afcf54e4"
+ },
+ "js.shellui.nh-la": {
+  "t": "Main character matches your life element",
+  "h": "55588954"
+ },
+ "js.shellui.nh-lb": {
+  "t": "Five Elements balance",
+  "h": "2ceb2151"
+ },
+ "js.shellui.nh-lc": {
+  "t": "Name has a character that supports your life element",
+  "h": "40185ecf"
+ },
+ "js.shellui.nh-ld": {
+  "t": "No character clashes with your life element",
+  "h": "88245630"
+ },
+ "js.shellui.nh-nb1": {
+  "t": "The name already has a character of the {sr} element that generates your life element. To add more, choose a character of the {m} element to strengthen it.",
+  "h": "1f2ab4f1"
+ },
+ "js.shellui.nh-nb2": {
+  "t": "{sr} generates your {m} life element — a character of this element nourishes your life element.",
+  "h": "388f50d5"
+ },
+ "js.shellui.nh-net-don-vi": {
+  "t": "{n} strokes (unit digit: {d})",
+  "h": "cc03c651"
+ },
+ "js.shellui.nh-nhap-ho-ten": {
+  "t": "Please enter your full name.",
+  "h": "852de967"
+ },
+ "js.shellui.nh-nhap-net-thu-cong": {
+  "t": "Enter strokes by hand",
+  "h": "60923759"
+ },
+ "js.shellui.nh-rel-cung": {
+  "t": "The main character \"<strong>{name}</strong>\" is the <strong>{th}</strong> element — the <strong>same element</strong> as your life element <strong>{m}</strong>. Good support that strengthens your life energy.",
+  "h": "ae1602fe"
+ },
+ "js.shellui.nh-rel-khac-menh": {
+  "t": "The main character \"<strong>{name}</strong>\" is the <strong>{th}</strong> element — it <strong>restrains the {m} life element</strong> ({th} restrains {m}). By folk belief it is worth considering an adjustment.",
+  "h": "cfb34dae"
+ },
+ "js.shellui.nh-rel-menh-khac": {
+  "t": "The main character \"<strong>{name}</strong>\" is the <strong>{th}</strong> element — your {m} life element restrains the name's element ({m} restrains {th}). By folk belief it is worth considering an adjustment.",
+  "h": "084dea54"
+ },
+ "js.shellui.nh-rel-menh-sinh": {
+  "t": "The main character \"<strong>{name}</strong>\" is the <strong>{th}</strong> element — your {m} life element generates the name's element ({m}→{th}). Average, no harm.",
+  "h": "6b8b312d"
+ },
+ "js.shellui.nh-rel-sinh-menh": {
+  "t": "The main character \"<strong>{name}</strong>\" is the <strong>{th}</strong> element — it <strong>generates the {m} life element</strong> ({th}→{m}). Good: the name nourishes your life element.",
+  "h": "e867c9b3"
+ },
+ "js.shellui.nh-rel-trung-tinh": {
+  "t": "The main character \"<strong>{name}</strong>\" is the <strong>{th}</strong> element and your life element is <strong>{m}</strong> — neither directly generates nor restrains the other. Neutral.",
+  "h": "c5e52f31"
+ },
+ "js.shellui.nh-so-net": {
+  "t": "Strokes",
+  "h": "6942afa1"
+ },
+ "js.shellui.nh-sug-head": {
+  "t": "If you are CHOOSING a name",
+  "h": "4307da08"
+ },
+ "js.shellui.nh-sug-p": {
+  "t": "Prefer characters of the <strong>{boi}</strong> element. {note} Avoid characters of the <strong>{tranh}</strong> element (it restrains the {m} life element).",
+  "h": "4634af56"
+ },
+ "js.shellui.nh-title-suffix": {
+  "t": " — Five Elements of Each Character",
+  "h": "502b979c"
+ },
+ "js.shellui.nh-toi-da-6": {
+  "t": "At most 6 syllables.",
+  "h": "a95e6e3b"
+ },
+ "js.shellui.nh-tra-hanzii": {
+  "t": "Look up at hanzii.net →",
+  "h": "d84d1c1b"
+ },
+ "js.shellui.nh-tra-menh": {
+  "t": "Look up your life element by birth year →",
+  "h": "83b945be"
+ },
+ "js.shellui.nh-v1": {
+  "t": "Excellent match for your life element",
+  "h": "8afe9243"
+ },
+ "js.shellui.nh-v2": {
+  "t": "Good match for your life element",
+  "h": "44069c43"
+ },
+ "js.shellui.nh-v3": {
+  "t": "Acceptable",
+  "h": "9f497b1e"
+ },
+ "js.shellui.nh-v4": {
+  "t": "Some points worth considering",
+  "h": "12311aa6"
+ },
+ "js.shellui.nh-v5": {
+  "t": "Many points worth considering",
+  "h": "e71f844e"
  },
  "js.shellui.nhan-tuong-cua-toi": {
   "t": "My eye reading",
