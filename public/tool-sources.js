@@ -36,7 +36,8 @@
   function slug(n) {
     return String(n).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/gi, 'd').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   }
-  function nm(n) { return T('js.toolsrc.nm-' + slug(n), n); }
+  var NM = 'js.toolsrc.nm-'; // khoá ghép động — để ngoài lời gọi T('…') cho bộ dò khoá tĩnh khỏi bắt nhầm
+  function nm(n) { return T(NM + slug(n), n); }
   var TAN_BIEN = { kind: 'co-phap', name: 'Tử Vi Đẩu Số Tân Biên (Vân Đằng Thái Thứ Lang)' };
   var VDC = { kind: 'co-phap', name: 'Trung Châu Phái — Lục Thập Tinh Hệ (Vương Đình Chi)' };
   var TU_BINH = { kind: 'co-phap', name: 'Tử Bình' };
