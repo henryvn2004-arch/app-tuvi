@@ -3591,6 +3591,346 @@
   "t": "Please enter your email and password.",
   "h": "d84b9abd"
  },
+ "js.bandosao.ban-do-sao": {
+  "t": "Star chart — ",
+  "h": "aaf64809"
+ },
+ "js.bandosao.ban-do-sao-gm5h": {
+  "t": "Star Chart",
+  "h": "0b3459d8"
+ },
+ "js.bandosao.ban-do-sao-luc-sinh": {
+  "t": "Birth star chart — ",
+  "h": "3f6bcfea"
+ },
+ "js.bandosao.ban-do-sao-tqhx": {
+  "t": "Star chart · ",
+  "h": "86318dde"
+ },
+ "js.bandosao.ban-muon-toi-doc-phan-nao": {
+  "t": "**. Which part shall I read first?",
+  "h": "e9d17729"
+ },
+ "js.bandosao.buon-ma-thuot": {
+  "t": "Buon Ma Thuot",
+  "h": "8bf97db6"
+ },
+ "js.bandosao.can-tho": {
+  "t": "Can Tho",
+  "h": "462902c5"
+ },
+ "js.bandosao.chua-dung-duoc-anh-thu-lai": {
+  "t": "Could not build the image. Please try again in a few seconds.",
+  "h": "f8055429"
+ },
+ "js.bandosao.chua-lap-duoc-ban-do-luc": {
+  "t": "Could not build the chart right now — please try again.",
+  "h": "a5e46558"
+ },
+ "js.bandosao.chuyen-tinh-cam-nhin-tu-ban": {
+  "t": "What does this chart say about love?",
+  "h": "9a016ff9"
+ },
+ "js.bandosao.cung-moc": {
+  "t": "**, Ascendant **",
+  "h": "340f627c"
+ },
+ "js.bandosao.cung-moc-1y0y": {
+  "t": "Ascendant: ",
+  "h": "230ed8b5"
+ },
+ "js.bandosao.cung-moc-bgoi": {
+  "t": " · Ascendant ",
+  "h": "cad089c9"
+ },
+ "js.bandosao.da-lap-ban-do-sao": {
+  "t": "Your chart is ready: **",
+  "h": "c16ca110"
+ },
+ "js.bandosao.da-nang": {
+  "t": "Da Nang",
+  "h": "fff4a50e"
+ },
+ "js.bandosao.dang-dung-anh": {
+  "t": "Building the image…",
+  "h": "7bce9760"
+ },
+ "js.bandosao.dang-lap": {
+  "t": "Building…",
+  "h": "b47d9598"
+ },
+ "js.bandosao.goc-chieu-nao-gay-kho-nhat": {
+  "t": "Which aspect is hardest for me?",
+  "h": "8439668d"
+ },
+ "js.bandosao.ha-noi": {
+  "t": "Hanoi",
+  "h": "89974fad"
+ },
+ "js.bandosao.hai-phong": {
+  "t": "Hai Phong",
+  "h": "18cf9167"
+ },
+ "js.bandosao.he-nha": {
+  "t": " (house system ",
+  "h": "cb040ba9"
+ },
+ "js.bandosao.hue": {
+  "t": "Hue",
+  "h": "23ed9a98"
+ },
+ "js.bandosao.mat-trang": {
+  "t": "**, Moon **",
+  "h": "bfc8f041"
+ },
+ "js.bandosao.mat-troi": {
+  "t": "**. Sun **",
+  "h": "b483737c"
+ },
+ "js.bandosao.mat-troi-8vvi": {
+  "t": "Sun ",
+  "h": "40bd8b96"
+ },
+ "js.bandosao.nguyen-to": {
+  "t": "Elements: ",
+  "h": "503b548c"
+ },
+ "js.bandosao.nha": {
+  "t": " (house ",
+  "h": "953fb7b3"
+ },
+ "js.bandosao.noi-khac-tu-nhap": {
+  "t": "— Other (enter manually) —",
+  "h": "5bda72d4"
+ },
+ "js.bandosao.quet-ma-lap-ban-do-sao": {
+  "t": "Scan the code — build your own star chart",
+  "h": "2abde300"
+ },
+ "js.bandosao.quy-nhon": {
+  "t": "Quy Nhon",
+  "h": "2b52fd6e"
+ },
+ "js.bandosao.su-nghiep-hop-huong-nao": {
+  "t": "Which career direction suits me?",
+  "h": "8d8b01c6"
+ },
+ "js.bandosao.tinh-cach-cot-loi-cua-toi": {
+  "t": "What is my core personality?",
+  "h": "485d721a"
+ },
+ "js.bandosao.tp-ho-chi-minh": {
+  "t": "Ho Chi Minh City",
+  "h": "4fc20e5f"
+ },
+ "js.bandosao.vui-long-chon-noi-sinh-hoac": {
+  "t": "Please choose a birthplace or enter latitude / longitude.",
+  "h": "1e78fa74"
+ },
+ "js.bandosao.vui-long-nhap-du-ngay-thang": {
+  "t": "Please enter the full day, month and year of birth.",
+  "h": "771ff27f"
+ },
+ "js.banlamviec.100-sau-dieu-chinh-co-the": {
+  "t": "/100**; after the adjustments it could reach **",
+  "h": "a4c14f33"
+ },
+ "js.banlamviec.bac": {
+  "t": "North",
+  "h": "130d45d1"
+ },
+ "js.banlamviec.ban-lam-viec-cua-toi-sau": {
+  "t": "My desk after the feng shui makeover",
+  "h": "b345368e"
+ },
+ "js.banlamviec.ban-lam-viec-diem": {
+  "t": "Desk — score ",
+  "h": "1bfcfce8"
+ },
+ "js.banlamviec.ban-muon-hoi-them-ve-de": {
+  "t": ". Which suggestion would you like to ask about?",
+  "h": "23ca71bc"
+ },
+ "js.banlamviec.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">Your current layout is fairly good.</p>",
+  "h": "16b60bfc"
+ },
+ "js.banlamviec.chua-xac-dinh": {
+  "t": "Not determined",
+  "h": "3120f6db"
+ },
+ "js.banlamviec.chuan-bi-prompt-render-theo-ngu": {
+  "t": "Preparing the render prompt by Five Elements",
+  "h": "17f4d17e"
+ },
+ "js.banlamviec.dang-render-khong-gian-moi": {
+  "t": "Rendering the new space",
+  "h": "814b3683"
+ },
+ "js.banlamviec.diem": {
+  "t": "points",
+  "h": "4a404c32"
+ },
+ "js.banlamviec.diem-phong-thuy-ban-lam-viec": {
+  "t": "Current desk feng shui score: **",
+  "h": "b68f30c6"
+ },
+ "js.banlamviec.diem-phong-thuy-ban-lam-viec-8sd8": {
+  "t": "My desk feng shui score",
+  "h": "21a93499"
+ },
+ "js.banlamviec.diem-phong-thuy-hien-tai": {
+  "t": "Current feng shui score: ",
+  "h": "d4ac7afe"
+ },
+ "js.banlamviec.dieu-chinh": {
+  "t": "Adjust",
+  "h": "37c5bf6b"
+ },
+ "js.banlamviec.don-bo": {
+  "t": "Remove",
+  "h": "0825ec6d"
+ },
+ "js.banlamviec.dong": {
+  "t": "East",
+  "h": "6bd70b62"
+ },
+ "js.banlamviec.dong-bac": {
+  "t": "Northeast",
+  "h": "9690921a"
+ },
+ "js.banlamviec.dong-nam": {
+  "t": "Southeast",
+  "h": "dd71e07a"
+ },
+ "js.banlamviec.giu-nguyen-tpl": {
+  "t": "<span class=\"pos-keep\">✓ Keep as is</span>",
+  "h": "aa00d929"
+ },
+ "js.banlamviec.hien-tai": {
+  "t": "Current:",
+  "h": "b17d885a"
+ },
+ "js.banlamviec.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">No additional items to suggest.</p>",
+  "h": "3a6c6f34"
+ },
+ "js.banlamviec.khong-nhan-duoc-anh": {
+  "t": "No image was received.",
+  "h": "62488d2f"
+ },
+ "js.banlamviec.loi": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.banlamviec.loi-doc-file": {
+  "t": "File read error",
+  "h": "3c56711b"
+ },
+ "js.banlamviec.loi-ppkl": {
+  "t": "⚠ Error: ",
+  "h": "a4f4adbc"
+ },
+ "js.banlamviec.loi-tai-anh": {
+  "t": "Image load error",
+  "h": "13fb84a7"
+ },
+ "js.banlamviec.menh-quai-cua-ban-la": {
+  "t": "; your Life Gua is **",
+  "h": "18a75d53"
+ },
+ "js.banlamviec.nam": {
+  "t": "South",
+  "h": "b580ba1b"
+ },
+ "js.banlamviec.nen-co": {
+  "t": "Must-have",
+  "h": "3f6537af"
+ },
+ "js.banlamviec.nen-doi-sang": {
+  "t": "Change to:",
+  "h": "32c9bd3d"
+ },
+ "js.banlamviec.nen-lam": {
+  "t": "→ Should do",
+  "h": "85492f9d"
+ },
+ "js.banlamviec.nhan-dien-do-vat-trong-anh": {
+  "t": "Identifying objects in the photo",
+  "h": "5ecd0446"
+ },
+ "js.banlamviec.phan-tich-bat-trach-dua-de": {
+  "t": "Analyzing Ba Zhai and preparing suggestions",
+  "h": "dd12d6d9"
+ },
+ "js.banlamviec.phan-tich-that-bai": {
+  "t": "Analysis failed",
+  "h": "44b68aa6"
+ },
+ "js.banlamviec.quai-n": {
+  "t": "Gua {n}",
+  "h": "1b238b88"
+ },
+ "js.banlamviec.quan-trong": {
+  "t": "⚠ Important",
+  "h": "ebd388e2"
+ },
+ "js.banlamviec.sau-dieu-chinh-co-the-len": {
+  "t": " — after adjustments it could reach ",
+  "h": "9e6292bc"
+ },
+ "js.banlamviec.tay": {
+  "t": "West",
+  "h": "74b26936"
+ },
+ "js.banlamviec.tay-bac": {
+  "t": "Northwest",
+  "h": "0b1f47fd"
+ },
+ "js.banlamviec.tay-nam": {
+  "t": "Southwest",
+  "h": "c0484c26"
+ },
+ "js.banlamviec.tot-neu-co": {
+  "t": "Nice to have",
+  "h": "e48b654c"
+ },
+ "js.banlamviec.trung-tam": {
+  "t": "Center",
+  "h": "26bda5d2"
+ },
+ "js.banlamviec.tuy-y": {
+  "t": "◎ Optional",
+  "h": "430debc7"
+ },
+ "js.banlamviec.tuy-y-4s40": {
+  "t": "Optional",
+  "h": "87b1fcd0"
+ },
+ "js.banlamviec.uu-tien-lam-gi-truoc": {
+  "t": "What should I prioritize first?",
+  "h": "f3cab683"
+ },
+ "js.banlamviec.vat-pham-nao-nen-mua-truoc": {
+  "t": "Which items should I buy first?",
+  "h": "85fe11d3"
+ },
+ "js.banlamviec.vi-sao-diem-hien-tai-thap": {
+  "t": "Why is the current score low?",
+  "h": "6c51a2da"
+ },
+ "js.banlamviec.vui-long-chon-anh": {
+  "t": "Please choose a photo",
+  "h": "dc2490ac"
+ },
+ "js.banlamviec.vui-long-nhap-nam-sinh-hop": {
+  "t": "Please enter a valid birth year",
+  "h": "16abd384"
+ },
+ "js.banlamviec.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
  "js.baocao.bao-cao": {
   "t": "Report",
   "h": "7013ca8b"
@@ -5646,6 +5986,194 @@
  "js.ctk.vui-long-nhap-day-du-ngay": {
   "t": "Please enter your full birth date.",
   "h": "2545b4dd"
+ },
+ "js.cuahang.100-sau-dieu-chinh-co-the": {
+  "t": "/100**; after the adjustments it could reach **",
+  "h": "a4c14f33"
+ },
+ "js.cuahang.bac": {
+  "t": "North",
+  "h": "130d45d1"
+ },
+ "js.cuahang.ban-muon-hoi-them-ve-de": {
+  "t": ". Which suggestion would you like to ask about?",
+  "h": "23ca71bc"
+ },
+ "js.cuahang.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">Your current layout is fairly good.</p>",
+  "h": "16b60bfc"
+ },
+ "js.cuahang.chuan-bi-prompt-render-theo-ngu": {
+  "t": "Preparing the render prompt by Five Elements",
+  "h": "17f4d17e"
+ },
+ "js.cuahang.cua-hang-cua-toi-sau-khi": {
+  "t": "My shop after the feng shui makeover",
+  "h": "110c4b6e"
+ },
+ "js.cuahang.cua-hang-van-phong-diem": {
+  "t": "Shop & Office — score ",
+  "h": "70910085"
+ },
+ "js.cuahang.dang-render-khong-gian-moi": {
+  "t": "Rendering the new space",
+  "h": "814b3683"
+ },
+ "js.cuahang.diem": {
+  "t": "points",
+  "h": "4a404c32"
+ },
+ "js.cuahang.diem-phong-thuy-cua-hang-cua": {
+  "t": "My shop feng shui score",
+  "h": "f1a71fd5"
+ },
+ "js.cuahang.diem-phong-thuy-cua-hang-van": {
+  "t": "Current shop/office feng shui score: **",
+  "h": "abf14d8f"
+ },
+ "js.cuahang.diem-phong-thuy-hien-tai": {
+  "t": "Current feng shui score: ",
+  "h": "d4ac7afe"
+ },
+ "js.cuahang.dieu-chinh": {
+  "t": "Adjust",
+  "h": "37c5bf6b"
+ },
+ "js.cuahang.don-bo": {
+  "t": "Remove",
+  "h": "0825ec6d"
+ },
+ "js.cuahang.dong": {
+  "t": "East",
+  "h": "6bd70b62"
+ },
+ "js.cuahang.dong-bac": {
+  "t": "Northeast",
+  "h": "9690921a"
+ },
+ "js.cuahang.dong-nam": {
+  "t": "Southeast",
+  "h": "dd71e07a"
+ },
+ "js.cuahang.giu-nguyen-tpl": {
+  "t": "<span class=\"pos-keep\">✓ Keep as is</span>",
+  "h": "aa00d929"
+ },
+ "js.cuahang.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">No additional items to suggest.</p>",
+  "h": "3a6c6f34"
+ },
+ "js.cuahang.khong-nhan-duoc-anh": {
+  "t": "No image was received.",
+  "h": "62488d2f"
+ },
+ "js.cuahang.loi": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.cuahang.loi-doc-file": {
+  "t": "File read error",
+  "h": "3c56711b"
+ },
+ "js.cuahang.loi-ppkl": {
+  "t": "⚠ Error: ",
+  "h": "a4f4adbc"
+ },
+ "js.cuahang.loi-tai-anh": {
+  "t": "Image load error",
+  "h": "13fb84a7"
+ },
+ "js.cuahang.menh-quai-cua-ban-la": {
+  "t": "; your Life Gua is **",
+  "h": "18a75d53"
+ },
+ "js.cuahang.nam": {
+  "t": "South",
+  "h": "b580ba1b"
+ },
+ "js.cuahang.nen-co": {
+  "t": "Must-have",
+  "h": "3f6537af"
+ },
+ "js.cuahang.nen-lam": {
+  "t": "→ Should do",
+  "h": "85492f9d"
+ },
+ "js.cuahang.nhan-dien-do-vat-trong-anh": {
+  "t": "Identifying objects in the photo",
+  "h": "5ecd0446"
+ },
+ "js.cuahang.phan-tich-bat-trach-dua-de": {
+  "t": "Analyzing Ba Zhai and preparing suggestions",
+  "h": "dd12d6d9"
+ },
+ "js.cuahang.phan-tich-that-bai": {
+  "t": "Analysis failed",
+  "h": "44b68aa6"
+ },
+ "js.cuahang.quai-n": {
+  "t": "Gua {n}",
+  "h": "1b238b88"
+ },
+ "js.cuahang.quan-trong": {
+  "t": "⚠ Important",
+  "h": "ebd388e2"
+ },
+ "js.cuahang.sau-dieu-chinh-co-the-len": {
+  "t": " — after adjustments it could reach ",
+  "h": "9e6292bc"
+ },
+ "js.cuahang.tay": {
+  "t": "West",
+  "h": "74b26936"
+ },
+ "js.cuahang.tay-bac": {
+  "t": "Northwest",
+  "h": "0b1f47fd"
+ },
+ "js.cuahang.tay-nam": {
+  "t": "Southwest",
+  "h": "c0484c26"
+ },
+ "js.cuahang.tot-neu-co": {
+  "t": "Nice to have",
+  "h": "e48b654c"
+ },
+ "js.cuahang.trung-tam": {
+  "t": "Center",
+  "h": "26bda5d2"
+ },
+ "js.cuahang.tuy-y": {
+  "t": "◎ Optional",
+  "h": "430debc7"
+ },
+ "js.cuahang.tuy-y-4s40": {
+  "t": "Optional",
+  "h": "87b1fcd0"
+ },
+ "js.cuahang.uu-tien-lam-gi-truoc": {
+  "t": "What should I prioritize first?",
+  "h": "f3cab683"
+ },
+ "js.cuahang.vat-pham-nao-nen-mua-truoc": {
+  "t": "Which items should I buy first?",
+  "h": "85fe11d3"
+ },
+ "js.cuahang.vi-sao-diem-hien-tai-thap": {
+  "t": "Why is the current score low?",
+  "h": "6c51a2da"
+ },
+ "js.cuahang.vui-long-chon-anh": {
+  "t": "Please choose a photo",
+  "h": "dc2490ac"
+ },
+ "js.cuahang.vui-long-nhap-nam-sinh-hop": {
+  "t": "Please enter a valid birth year",
+  "h": "16abd384"
+ },
+ "js.cuahang.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
  },
  "js.daycon.5-la-muc-giua-cua-hang": {
   "t": "\n\n5 is the midpoint across thousands of children's charts — it does not mean “5 out of 10”. Both ends of each axis have value.",
@@ -11023,6 +11551,194 @@
   "t": "Sorry, something went wrong",
   "h": "4195c600"
  },
+ "js.phongthuy.100-sau-dieu-chinh-co-the": {
+  "t": "/100**; after the adjustments it could reach **",
+  "h": "a4c14f33"
+ },
+ "js.phongthuy.bac": {
+  "t": "North",
+  "h": "130d45d1"
+ },
+ "js.phongthuy.ban-muon-hoi-them-ve-de": {
+  "t": ". Which suggestion would you like to ask about?",
+  "h": "23ca71bc"
+ },
+ "js.phongthuy.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">Your current layout is fairly good.</p>",
+  "h": "65d526db"
+ },
+ "js.phongthuy.chuan-bi-prompt-render-theo-ngu": {
+  "t": "Preparing the render prompt by Five Elements",
+  "h": "17f4d17e"
+ },
+ "js.phongthuy.dang-render-lai-phong": {
+  "t": "Re-rendering the room",
+  "h": "4f7ce5f5"
+ },
+ "js.phongthuy.diem": {
+  "t": " points</div>",
+  "h": "8d925dd9"
+ },
+ "js.phongthuy.diem-phong-thuy-hien-tai": {
+  "t": "Current feng shui score:",
+  "h": "91e0a1f2"
+ },
+ "js.phongthuy.diem-phong-thuy-hien-tai-kmy1": {
+  "t": "Current feng shui score: ",
+  "h": "d4ac7afe"
+ },
+ "js.phongthuy.diem-phong-thuy-phong-cua-toi": {
+  "t": "My room feng shui score",
+  "h": "373da765"
+ },
+ "js.phongthuy.dieu-chinh": {
+  "t": "Adjust",
+  "h": "37c5bf6b"
+ },
+ "js.phongthuy.don-bo": {
+  "t": "Remove",
+  "h": "0825ec6d"
+ },
+ "js.phongthuy.dong": {
+  "t": "East",
+  "h": "6bd70b62"
+ },
+ "js.phongthuy.dong-bac": {
+  "t": "Northeast",
+  "h": "9690921a"
+ },
+ "js.phongthuy.dong-nam": {
+  "t": "Southeast",
+  "h": "dd71e07a"
+ },
+ "js.phongthuy.giu-nguyen": {
+  "t": "<span class=\"pos-keep\">✓ Keep as is</span>",
+  "h": "aa00d929"
+ },
+ "js.phongthuy.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">No additional items to suggest.</p>",
+  "h": "b8141e06"
+ },
+ "js.phongthuy.khong-nhan-duoc-anh": {
+  "t": "No image was received.",
+  "h": "62488d2f"
+ },
+ "js.phongthuy.loi": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.phongthuy.loi-doc-file": {
+  "t": "File read error",
+  "h": "3c56711b"
+ },
+ "js.phongthuy.loi-ppkl": {
+  "t": "⚠ Error: ",
+  "h": "a4f4adbc"
+ },
+ "js.phongthuy.loi-tai-anh": {
+  "t": "Image load error",
+  "h": "13fb84a7"
+ },
+ "js.phongthuy.menh-quai-cua-ban-la": {
+  "t": "; your Life Gua is **",
+  "h": "18a75d53"
+ },
+ "js.phongthuy.nam": {
+  "t": "South",
+  "h": "b580ba1b"
+ },
+ "js.phongthuy.nen-co": {
+  "t": "Must-have",
+  "h": "3f6537af"
+ },
+ "js.phongthuy.nen-lam": {
+  "t": "→ Should do",
+  "h": "85492f9d"
+ },
+ "js.phongthuy.nhan-dien-do-vat-trong-anh": {
+  "t": "Identifying objects in the photo",
+  "h": "5ecd0446"
+ },
+ "js.phongthuy.phan-tich-bat-trach-dua-de": {
+  "t": "Analyzing Ba Zhai and preparing suggestions",
+  "h": "dd12d6d9"
+ },
+ "js.phongthuy.phan-tich-that-bai": {
+  "t": "Analysis failed",
+  "h": "44b68aa6"
+ },
+ "js.phongthuy.phong-cua-toi-sau-khi-phong": {
+  "t": "My room after the feng shui makeover",
+  "h": "788d257f"
+ },
+ "js.phongthuy.phong-thuy-diem": {
+  "t": "Feng Shui — score ",
+  "h": "4c90b82a"
+ },
+ "js.phongthuy.quai": {
+  "t": "Gua ",
+  "h": "fc8feb12"
+ },
+ "js.phongthuy.quan-trong": {
+  "t": "⚠ Important",
+  "h": "ebd388e2"
+ },
+ "js.phongthuy.sau-dieu-chinh-co-the-len": {
+  "t": " — after adjustments it could reach ",
+  "h": "9e6292bc"
+ },
+ "js.phongthuy.tay": {
+  "t": "West",
+  "h": "74b26936"
+ },
+ "js.phongthuy.tay-bac": {
+  "t": "Northwest",
+  "h": "0b1f47fd"
+ },
+ "js.phongthuy.tay-nam": {
+  "t": "Southwest",
+  "h": "c0484c26"
+ },
+ "js.phongthuy.tot-neu-co": {
+  "t": "Nice to have",
+  "h": "e48b654c"
+ },
+ "js.phongthuy.trung-tam": {
+  "t": "Center",
+  "h": "26bda5d2"
+ },
+ "js.phongthuy.tuy-y": {
+  "t": "◎ Optional",
+  "h": "430debc7"
+ },
+ "js.phongthuy.tuy-y-4s40": {
+  "t": "Optional",
+  "h": "87b1fcd0"
+ },
+ "js.phongthuy.uu-tien-lam-gi-truoc": {
+  "t": "What should I prioritize first?",
+  "h": "f3cab683"
+ },
+ "js.phongthuy.vat-pham-nao-nen-mua-truoc": {
+  "t": "Which items should I buy first?",
+  "h": "85fe11d3"
+ },
+ "js.phongthuy.vi-sao-diem-hien-tai-thap": {
+  "t": "Why is the current score low?",
+  "h": "6c51a2da"
+ },
+ "js.phongthuy.vui-long-chon-anh-phong": {
+  "t": "Please choose a photo of the room",
+  "h": "90bec971"
+ },
+ "js.phongthuy.vui-long-nhap-nam-sinh-hop": {
+  "t": "Please enter a valid birth year",
+  "h": "16abd384"
+ },
+ "js.phongthuy.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
  "js.prices.luong-moi-luot": {
   "t": "{credits} credits per use",
   "h": "d8f9af98"
@@ -11510,6 +12226,58 @@
  "js.shellui.bat-tu-ky-mon": {
   "t": "BaZi, Qi Men",
   "h": "eac6b8dd"
+ },
+ "js.shellui.bds-ban-cau": {
+  "t": "Hemispheres:",
+  "h": "91679aa1"
+ },
+ "js.shellui.bds-bon-truc": {
+  "t": "Four angles",
+  "h": "600b207c"
+ },
+ "js.shellui.bds-can-bang": {
+  "t": "Balance",
+  "h": "9fe59d4b"
+ },
+ "js.shellui.bds-goc-chieu": {
+  "t": "Key aspects",
+  "h": "77aad29d"
+ },
+ "js.shellui.bds-hanh-tinh": {
+  "t": "Planets",
+  "h": "0bfb6634"
+ },
+ "js.shellui.bds-hinh-the": {
+  "t": "Aspect patterns",
+  "h": "de8e9e43"
+ },
+ "js.shellui.bds-khong-co": {
+  "t": "none",
+  "h": "2884bacc"
+ },
+ "js.shellui.bds-lech": {
+  "t": "(orb {lech}°, strength {manh}%)",
+  "h": "17e9c540"
+ },
+ "js.shellui.bds-nghich": {
+  "t": "℞ retrograde",
+  "h": "8093efa5"
+ },
+ "js.shellui.bds-nghich-hanh": {
+  "t": "Retrograde:",
+  "h": "6917d7e7"
+ },
+ "js.shellui.bds-nguyen-to": {
+  "t": "Elements:",
+  "h": "69e4c7a2"
+ },
+ "js.shellui.bds-nha": {
+  "t": "house {n}",
+  "h": "19a346e7"
+ },
+ "js.shellui.bds-the": {
+  "t": "Modalities:",
+  "h": "3b48438e"
  },
  "js.shellui.be-an": {
   "t": "Annie",

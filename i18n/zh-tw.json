@@ -3591,6 +3591,346 @@
   "t": "請填寫電子郵件與密碼。",
   "h": "d84b9abd"
  },
+ "js.bandosao.ban-do-sao": {
+  "t": "星盤 — ",
+  "h": "aaf64809"
+ },
+ "js.bandosao.ban-do-sao-gm5h": {
+  "t": "星盤",
+  "h": "0b3459d8"
+ },
+ "js.bandosao.ban-do-sao-luc-sinh": {
+  "t": "出生星盤 — ",
+  "h": "3f6bcfea"
+ },
+ "js.bandosao.ban-do-sao-tqhx": {
+  "t": "星盤 · ",
+  "h": "86318dde"
+ },
+ "js.bandosao.ban-muon-toi-doc-phan-nao": {
+  "t": "**。想先從哪一部分談起？",
+  "h": "e9d17729"
+ },
+ "js.bandosao.buon-ma-thuot": {
+  "t": "邦美蜀",
+  "h": "8bf97db6"
+ },
+ "js.bandosao.can-tho": {
+  "t": "芹苴",
+  "h": "462902c5"
+ },
+ "js.bandosao.chua-dung-duoc-anh-thu-lai": {
+  "t": "尚未能產生圖片，請稍後再試。",
+  "h": "f8055429"
+ },
+ "js.bandosao.chua-lap-duoc-ban-do-luc": {
+  "t": "目前無法排出星盤——請再試一次。",
+  "h": "a5e46558"
+ },
+ "js.bandosao.chuyen-tinh-cam-nhin-tu-ban": {
+  "t": "從這張星盤看感情如何？",
+  "h": "9a016ff9"
+ },
+ "js.bandosao.cung-moc": {
+  "t": "**，上升星座 **",
+  "h": "340f627c"
+ },
+ "js.bandosao.cung-moc-1y0y": {
+  "t": "上升點：",
+  "h": "230ed8b5"
+ },
+ "js.bandosao.cung-moc-bgoi": {
+  "t": " · 上升 ",
+  "h": "cad089c9"
+ },
+ "js.bandosao.da-lap-ban-do-sao": {
+  "t": "已排出星盤：**",
+  "h": "c16ca110"
+ },
+ "js.bandosao.da-nang": {
+  "t": "峴港",
+  "h": "fff4a50e"
+ },
+ "js.bandosao.dang-dung-anh": {
+  "t": "圖片產生中…",
+  "h": "7bce9760"
+ },
+ "js.bandosao.dang-lap": {
+  "t": "排盤中…",
+  "h": "b47d9598"
+ },
+ "js.bandosao.goc-chieu-nao-gay-kho-nhat": {
+  "t": "哪個相位對我最困難？",
+  "h": "8439668d"
+ },
+ "js.bandosao.ha-noi": {
+  "t": "河內",
+  "h": "89974fad"
+ },
+ "js.bandosao.hai-phong": {
+  "t": "海防",
+  "h": "18cf9167"
+ },
+ "js.bandosao.he-nha": {
+  "t": "（宮位制 ",
+  "h": "cb040ba9"
+ },
+ "js.bandosao.hue": {
+  "t": "順化",
+  "h": "23ed9a98"
+ },
+ "js.bandosao.mat-trang": {
+  "t": "**，月亮 **",
+  "h": "bfc8f041"
+ },
+ "js.bandosao.mat-troi": {
+  "t": "**。太陽 **",
+  "h": "b483737c"
+ },
+ "js.bandosao.mat-troi-8vvi": {
+  "t": "太陽 ",
+  "h": "40bd8b96"
+ },
+ "js.bandosao.nguyen-to": {
+  "t": "元素：",
+  "h": "503b548c"
+ },
+ "js.bandosao.nha": {
+  "t": " (宮位 ",
+  "h": "953fb7b3"
+ },
+ "js.bandosao.noi-khac-tu-nhap": {
+  "t": "— 其他（自行輸入）—",
+  "h": "5bda72d4"
+ },
+ "js.bandosao.quet-ma-lap-ban-do-sao": {
+  "t": "掃描 QR — 排出您的星盤",
+  "h": "2abde300"
+ },
+ "js.bandosao.quy-nhon": {
+  "t": "歸仁",
+  "h": "2b52fd6e"
+ },
+ "js.bandosao.su-nghiep-hop-huong-nao": {
+  "t": "適合哪個職涯方向？",
+  "h": "8d8b01c6"
+ },
+ "js.bandosao.tinh-cach-cot-loi-cua-toi": {
+  "t": "我的核心性格是什麼？",
+  "h": "485d721a"
+ },
+ "js.bandosao.tp-ho-chi-minh": {
+  "t": "胡志明市",
+  "h": "4fc20e5f"
+ },
+ "js.bandosao.vui-long-chon-noi-sinh-hoac": {
+  "t": "請選擇出生地，或輸入緯度／經度。",
+  "h": "1e78fa74"
+ },
+ "js.bandosao.vui-long-nhap-du-ngay-thang": {
+  "t": "請輸入完整的出生日、月、年。",
+  "h": "771ff27f"
+ },
+ "js.banlamviec.100-sau-dieu-chinh-co-the": {
+  "t": "/100**，調整後可提升至 **",
+  "h": "a4c14f33"
+ },
+ "js.banlamviec.bac": {
+  "t": "北",
+  "h": "130d45d1"
+ },
+ "js.banlamviec.ban-lam-viec-cua-toi-sau": {
+  "t": "風水調整後的我的書桌",
+  "h": "b345368e"
+ },
+ "js.banlamviec.ban-lam-viec-diem": {
+  "t": "書桌 — 分數 ",
+  "h": "1bfcfce8"
+ },
+ "js.banlamviec.ban-muon-hoi-them-ve-de": {
+  "t": "。您想進一步詢問哪一項建議？",
+  "h": "23ca71bc"
+ },
+ "js.banlamviec.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">目前的佈置大致良好。</p>",
+  "h": "16b60bfc"
+ },
+ "js.banlamviec.chua-xac-dinh": {
+  "t": "尚未確定",
+  "h": "3120f6db"
+ },
+ "js.banlamviec.chuan-bi-prompt-render-theo-ngu": {
+  "t": "依五行準備渲染指令",
+  "h": "17f4d17e"
+ },
+ "js.banlamviec.dang-render-khong-gian-moi": {
+  "t": "渲染新空間中",
+  "h": "814b3683"
+ },
+ "js.banlamviec.diem": {
+  "t": "分",
+  "h": "4a404c32"
+ },
+ "js.banlamviec.diem-phong-thuy-ban-lam-viec": {
+  "t": "目前書桌的風水分數：**",
+  "h": "b68f30c6"
+ },
+ "js.banlamviec.diem-phong-thuy-ban-lam-viec-8sd8": {
+  "t": "我的書桌風水分數",
+  "h": "21a93499"
+ },
+ "js.banlamviec.diem-phong-thuy-hien-tai": {
+  "t": "目前風水分數：",
+  "h": "d4ac7afe"
+ },
+ "js.banlamviec.dieu-chinh": {
+  "t": "調整",
+  "h": "37c5bf6b"
+ },
+ "js.banlamviec.don-bo": {
+  "t": "移除",
+  "h": "0825ec6d"
+ },
+ "js.banlamviec.dong": {
+  "t": "東",
+  "h": "6bd70b62"
+ },
+ "js.banlamviec.dong-bac": {
+  "t": "東北",
+  "h": "9690921a"
+ },
+ "js.banlamviec.dong-nam": {
+  "t": "東南",
+  "h": "dd71e07a"
+ },
+ "js.banlamviec.giu-nguyen-tpl": {
+  "t": "<span class=\"pos-keep\">✓ 維持原樣</span>",
+  "h": "aa00d929"
+ },
+ "js.banlamviec.hien-tai": {
+  "t": "目前：",
+  "h": "b17d885a"
+ },
+ "js.banlamviec.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">沒有額外的物品建議。</p>",
+  "h": "3a6c6f34"
+ },
+ "js.banlamviec.khong-nhan-duoc-anh": {
+  "t": "未收到圖片。",
+  "h": "62488d2f"
+ },
+ "js.banlamviec.loi": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.banlamviec.loi-doc-file": {
+  "t": "讀取檔案時發生錯誤",
+  "h": "3c56711b"
+ },
+ "js.banlamviec.loi-ppkl": {
+  "t": "⚠ 錯誤：",
+  "h": "a4f4adbc"
+ },
+ "js.banlamviec.loi-tai-anh": {
+  "t": "載入圖片時發生錯誤",
+  "h": "13fb84a7"
+ },
+ "js.banlamviec.menh-quai-cua-ban-la": {
+  "t": "，您的命卦為 **",
+  "h": "18a75d53"
+ },
+ "js.banlamviec.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.banlamviec.nen-co": {
+  "t": "建議必備",
+  "h": "3f6537af"
+ },
+ "js.banlamviec.nen-doi-sang": {
+  "t": "建議改為：",
+  "h": "32c9bd3d"
+ },
+ "js.banlamviec.nen-lam": {
+  "t": "→ 建議執行",
+  "h": "85492f9d"
+ },
+ "js.banlamviec.nhan-dien-do-vat-trong-anh": {
+  "t": "辨識照片中的物品",
+  "h": "5ecd0446"
+ },
+ "js.banlamviec.phan-tich-bat-trach-dua-de": {
+  "t": "分析八宅並提出建議",
+  "h": "dd12d6d9"
+ },
+ "js.banlamviec.phan-tich-that-bai": {
+  "t": "分析失敗",
+  "h": "44b68aa6"
+ },
+ "js.banlamviec.quai-n": {
+  "t": "卦 {n}",
+  "h": "1b238b88"
+ },
+ "js.banlamviec.quan-trong": {
+  "t": "⚠ 重要",
+  "h": "ebd388e2"
+ },
+ "js.banlamviec.sau-dieu-chinh-co-the-len": {
+  "t": " — 調整後可提升至 ",
+  "h": "9e6292bc"
+ },
+ "js.banlamviec.tay": {
+  "t": "西",
+  "h": "74b26936"
+ },
+ "js.banlamviec.tay-bac": {
+  "t": "西北",
+  "h": "0b1f47fd"
+ },
+ "js.banlamviec.tay-nam": {
+  "t": "西南",
+  "h": "c0484c26"
+ },
+ "js.banlamviec.tot-neu-co": {
+  "t": "有更好",
+  "h": "e48b654c"
+ },
+ "js.banlamviec.trung-tam": {
+  "t": "中央",
+  "h": "26bda5d2"
+ },
+ "js.banlamviec.tuy-y": {
+  "t": "◎ 隨意",
+  "h": "430debc7"
+ },
+ "js.banlamviec.tuy-y-4s40": {
+  "t": "隨意",
+  "h": "87b1fcd0"
+ },
+ "js.banlamviec.uu-tien-lam-gi-truoc": {
+  "t": "應該優先做什麼？",
+  "h": "f3cab683"
+ },
+ "js.banlamviec.vat-pham-nao-nen-mua-truoc": {
+  "t": "哪些物品應該先買？",
+  "h": "85fe11d3"
+ },
+ "js.banlamviec.vi-sao-diem-hien-tai-thap": {
+  "t": "為什麼目前分數偏低？",
+  "h": "6c51a2da"
+ },
+ "js.banlamviec.vui-long-chon-anh": {
+  "t": "請選擇照片",
+  "h": "dc2490ac"
+ },
+ "js.banlamviec.vui-long-nhap-nam-sinh-hop": {
+  "t": "請輸入有效的出生年",
+  "h": "16abd384"
+ },
+ "js.banlamviec.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
+ },
  "js.baocao.bao-cao": {
   "t": "報告",
   "h": "7013ca8b"
@@ -5646,6 +5986,194 @@
  "js.ctk.vui-long-nhap-day-du-ngay": {
   "t": "請完整輸入出生年月日。",
   "h": "2545b4dd"
+ },
+ "js.cuahang.100-sau-dieu-chinh-co-the": {
+  "t": "/100**，調整後可提升至 **",
+  "h": "a4c14f33"
+ },
+ "js.cuahang.bac": {
+  "t": "北",
+  "h": "130d45d1"
+ },
+ "js.cuahang.ban-muon-hoi-them-ve-de": {
+  "t": "。您想進一步詢問哪一項建議？",
+  "h": "23ca71bc"
+ },
+ "js.cuahang.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">目前的佈置大致良好。</p>",
+  "h": "16b60bfc"
+ },
+ "js.cuahang.chuan-bi-prompt-render-theo-ngu": {
+  "t": "依五行準備渲染指令",
+  "h": "17f4d17e"
+ },
+ "js.cuahang.cua-hang-cua-toi-sau-khi": {
+  "t": "風水調整後的我的店面",
+  "h": "110c4b6e"
+ },
+ "js.cuahang.cua-hang-van-phong-diem": {
+  "t": "店面與辦公室 — 分數 ",
+  "h": "70910085"
+ },
+ "js.cuahang.dang-render-khong-gian-moi": {
+  "t": "渲染新空間中",
+  "h": "814b3683"
+ },
+ "js.cuahang.diem": {
+  "t": "分",
+  "h": "4a404c32"
+ },
+ "js.cuahang.diem-phong-thuy-cua-hang-cua": {
+  "t": "我的店面風水分數",
+  "h": "f1a71fd5"
+ },
+ "js.cuahang.diem-phong-thuy-cua-hang-van": {
+  "t": "目前店面／辦公室的風水分數：**",
+  "h": "abf14d8f"
+ },
+ "js.cuahang.diem-phong-thuy-hien-tai": {
+  "t": "目前風水分數：",
+  "h": "d4ac7afe"
+ },
+ "js.cuahang.dieu-chinh": {
+  "t": "調整",
+  "h": "37c5bf6b"
+ },
+ "js.cuahang.don-bo": {
+  "t": "移除",
+  "h": "0825ec6d"
+ },
+ "js.cuahang.dong": {
+  "t": "東",
+  "h": "6bd70b62"
+ },
+ "js.cuahang.dong-bac": {
+  "t": "東北",
+  "h": "9690921a"
+ },
+ "js.cuahang.dong-nam": {
+  "t": "東南",
+  "h": "dd71e07a"
+ },
+ "js.cuahang.giu-nguyen-tpl": {
+  "t": "<span class=\"pos-keep\">✓ 維持原樣</span>",
+  "h": "aa00d929"
+ },
+ "js.cuahang.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">沒有額外的物品建議。</p>",
+  "h": "3a6c6f34"
+ },
+ "js.cuahang.khong-nhan-duoc-anh": {
+  "t": "未收到圖片。",
+  "h": "62488d2f"
+ },
+ "js.cuahang.loi": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.cuahang.loi-doc-file": {
+  "t": "讀取檔案時發生錯誤",
+  "h": "3c56711b"
+ },
+ "js.cuahang.loi-ppkl": {
+  "t": "⚠ 錯誤：",
+  "h": "a4f4adbc"
+ },
+ "js.cuahang.loi-tai-anh": {
+  "t": "載入圖片時發生錯誤",
+  "h": "13fb84a7"
+ },
+ "js.cuahang.menh-quai-cua-ban-la": {
+  "t": "，您的命卦為 **",
+  "h": "18a75d53"
+ },
+ "js.cuahang.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.cuahang.nen-co": {
+  "t": "建議必備",
+  "h": "3f6537af"
+ },
+ "js.cuahang.nen-lam": {
+  "t": "→ 建議執行",
+  "h": "85492f9d"
+ },
+ "js.cuahang.nhan-dien-do-vat-trong-anh": {
+  "t": "辨識照片中的物品",
+  "h": "5ecd0446"
+ },
+ "js.cuahang.phan-tich-bat-trach-dua-de": {
+  "t": "分析八宅並提出建議",
+  "h": "dd12d6d9"
+ },
+ "js.cuahang.phan-tich-that-bai": {
+  "t": "分析失敗",
+  "h": "44b68aa6"
+ },
+ "js.cuahang.quai-n": {
+  "t": "卦 {n}",
+  "h": "1b238b88"
+ },
+ "js.cuahang.quan-trong": {
+  "t": "⚠ 重要",
+  "h": "ebd388e2"
+ },
+ "js.cuahang.sau-dieu-chinh-co-the-len": {
+  "t": " — 調整後可提升至 ",
+  "h": "9e6292bc"
+ },
+ "js.cuahang.tay": {
+  "t": "西",
+  "h": "74b26936"
+ },
+ "js.cuahang.tay-bac": {
+  "t": "西北",
+  "h": "0b1f47fd"
+ },
+ "js.cuahang.tay-nam": {
+  "t": "西南",
+  "h": "c0484c26"
+ },
+ "js.cuahang.tot-neu-co": {
+  "t": "有更好",
+  "h": "e48b654c"
+ },
+ "js.cuahang.trung-tam": {
+  "t": "中央",
+  "h": "26bda5d2"
+ },
+ "js.cuahang.tuy-y": {
+  "t": "◎ 隨意",
+  "h": "430debc7"
+ },
+ "js.cuahang.tuy-y-4s40": {
+  "t": "隨意",
+  "h": "87b1fcd0"
+ },
+ "js.cuahang.uu-tien-lam-gi-truoc": {
+  "t": "應該優先做什麼？",
+  "h": "f3cab683"
+ },
+ "js.cuahang.vat-pham-nao-nen-mua-truoc": {
+  "t": "哪些物品應該先買？",
+  "h": "85fe11d3"
+ },
+ "js.cuahang.vi-sao-diem-hien-tai-thap": {
+  "t": "為什麼目前分數偏低？",
+  "h": "6c51a2da"
+ },
+ "js.cuahang.vui-long-chon-anh": {
+  "t": "請選擇照片",
+  "h": "dc2490ac"
+ },
+ "js.cuahang.vui-long-nhap-nam-sinh-hop": {
+  "t": "請輸入有效的出生年",
+  "h": "16abd384"
+ },
+ "js.cuahang.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
  },
  "js.daycon.5-la-muc-giua-cua-hang": {
   "t": "\n\n5 是數千份孩童命盤的中間水準，並不是「10 分得 5 分」。軸的兩端都各有價值。",
@@ -11023,6 +11551,194 @@
   "t": "抱歉，發生了錯誤",
   "h": "4195c600"
  },
+ "js.phongthuy.100-sau-dieu-chinh-co-the": {
+  "t": "/100**，調整後可提升至 **",
+  "h": "a4c14f33"
+ },
+ "js.phongthuy.bac": {
+  "t": "北",
+  "h": "130d45d1"
+ },
+ "js.phongthuy.ban-muon-hoi-them-ve-de": {
+  "t": "。您想進一步詢問哪一項建議？",
+  "h": "23ca71bc"
+ },
+ "js.phongthuy.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">目前的佈置大致良好。</p>",
+  "h": "65d526db"
+ },
+ "js.phongthuy.chuan-bi-prompt-render-theo-ngu": {
+  "t": "依五行準備渲染指令",
+  "h": "17f4d17e"
+ },
+ "js.phongthuy.dang-render-lai-phong": {
+  "t": "重新渲染房間中",
+  "h": "4f7ce5f5"
+ },
+ "js.phongthuy.diem": {
+  "t": " 分</div>",
+  "h": "8d925dd9"
+ },
+ "js.phongthuy.diem-phong-thuy-hien-tai": {
+  "t": "目前風水分數：",
+  "h": "91e0a1f2"
+ },
+ "js.phongthuy.diem-phong-thuy-hien-tai-kmy1": {
+  "t": "目前風水分數：",
+  "h": "d4ac7afe"
+ },
+ "js.phongthuy.diem-phong-thuy-phong-cua-toi": {
+  "t": "我的房間風水分數",
+  "h": "373da765"
+ },
+ "js.phongthuy.dieu-chinh": {
+  "t": "調整",
+  "h": "37c5bf6b"
+ },
+ "js.phongthuy.don-bo": {
+  "t": "移除",
+  "h": "0825ec6d"
+ },
+ "js.phongthuy.dong": {
+  "t": "東",
+  "h": "6bd70b62"
+ },
+ "js.phongthuy.dong-bac": {
+  "t": "東北",
+  "h": "9690921a"
+ },
+ "js.phongthuy.dong-nam": {
+  "t": "東南",
+  "h": "dd71e07a"
+ },
+ "js.phongthuy.giu-nguyen": {
+  "t": "<span class=\"pos-keep\">✓ 維持原樣</span>",
+  "h": "aa00d929"
+ },
+ "js.phongthuy.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">沒有額外的物品建議。</p>",
+  "h": "b8141e06"
+ },
+ "js.phongthuy.khong-nhan-duoc-anh": {
+  "t": "未收到圖片。",
+  "h": "62488d2f"
+ },
+ "js.phongthuy.loi": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.phongthuy.loi-doc-file": {
+  "t": "讀取檔案時發生錯誤",
+  "h": "3c56711b"
+ },
+ "js.phongthuy.loi-ppkl": {
+  "t": "⚠ 錯誤：",
+  "h": "a4f4adbc"
+ },
+ "js.phongthuy.loi-tai-anh": {
+  "t": "載入圖片時發生錯誤",
+  "h": "13fb84a7"
+ },
+ "js.phongthuy.menh-quai-cua-ban-la": {
+  "t": "，您的命卦為 **",
+  "h": "18a75d53"
+ },
+ "js.phongthuy.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.phongthuy.nen-co": {
+  "t": "建議必備",
+  "h": "3f6537af"
+ },
+ "js.phongthuy.nen-lam": {
+  "t": "→ 建議執行",
+  "h": "85492f9d"
+ },
+ "js.phongthuy.nhan-dien-do-vat-trong-anh": {
+  "t": "辨識照片中的物品",
+  "h": "5ecd0446"
+ },
+ "js.phongthuy.phan-tich-bat-trach-dua-de": {
+  "t": "分析八宅並提出建議",
+  "h": "dd12d6d9"
+ },
+ "js.phongthuy.phan-tich-that-bai": {
+  "t": "分析失敗",
+  "h": "44b68aa6"
+ },
+ "js.phongthuy.phong-cua-toi-sau-khi-phong": {
+  "t": "風水調整後的我的房間",
+  "h": "788d257f"
+ },
+ "js.phongthuy.phong-thuy-diem": {
+  "t": "風水 — 分數 ",
+  "h": "4c90b82a"
+ },
+ "js.phongthuy.quai": {
+  "t": "卦 ",
+  "h": "fc8feb12"
+ },
+ "js.phongthuy.quan-trong": {
+  "t": "⚠ 重要",
+  "h": "ebd388e2"
+ },
+ "js.phongthuy.sau-dieu-chinh-co-the-len": {
+  "t": " — 調整後可提升至 ",
+  "h": "9e6292bc"
+ },
+ "js.phongthuy.tay": {
+  "t": "西",
+  "h": "74b26936"
+ },
+ "js.phongthuy.tay-bac": {
+  "t": "西北",
+  "h": "0b1f47fd"
+ },
+ "js.phongthuy.tay-nam": {
+  "t": "西南",
+  "h": "c0484c26"
+ },
+ "js.phongthuy.tot-neu-co": {
+  "t": "有更好",
+  "h": "e48b654c"
+ },
+ "js.phongthuy.trung-tam": {
+  "t": "中央",
+  "h": "26bda5d2"
+ },
+ "js.phongthuy.tuy-y": {
+  "t": "◎ 隨意",
+  "h": "430debc7"
+ },
+ "js.phongthuy.tuy-y-4s40": {
+  "t": "隨意",
+  "h": "87b1fcd0"
+ },
+ "js.phongthuy.uu-tien-lam-gi-truoc": {
+  "t": "應該優先做什麼？",
+  "h": "f3cab683"
+ },
+ "js.phongthuy.vat-pham-nao-nen-mua-truoc": {
+  "t": "哪些物品應該先買？",
+  "h": "85fe11d3"
+ },
+ "js.phongthuy.vi-sao-diem-hien-tai-thap": {
+  "t": "為什麼目前分數偏低？",
+  "h": "6c51a2da"
+ },
+ "js.phongthuy.vui-long-chon-anh-phong": {
+  "t": "請選擇房間照片",
+  "h": "90bec971"
+ },
+ "js.phongthuy.vui-long-nhap-nam-sinh-hop": {
+  "t": "請輸入有效的出生年",
+  "h": "16abd384"
+ },
+ "js.phongthuy.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
+ },
  "js.prices.luong-moi-luot": {
   "t": "每次 {credits} 兩",
   "h": "d8f9af98"
@@ -11510,6 +12226,58 @@
  "js.shellui.bat-tu-ky-mon": {
   "t": "八字、奇門",
   "h": "eac6b8dd"
+ },
+ "js.shellui.bds-ban-cau": {
+  "t": "半球：",
+  "h": "91679aa1"
+ },
+ "js.shellui.bds-bon-truc": {
+  "t": "四軸",
+  "h": "600b207c"
+ },
+ "js.shellui.bds-can-bang": {
+  "t": "平衡",
+  "h": "9fe59d4b"
+ },
+ "js.shellui.bds-goc-chieu": {
+  "t": "主要相位",
+  "h": "77aad29d"
+ },
+ "js.shellui.bds-hanh-tinh": {
+  "t": "行星",
+  "h": "0bfb6634"
+ },
+ "js.shellui.bds-hinh-the": {
+  "t": "相位圖形",
+  "h": "de8e9e43"
+ },
+ "js.shellui.bds-khong-co": {
+  "t": "無",
+  "h": "2884bacc"
+ },
+ "js.shellui.bds-lech": {
+  "t": "（容許度 {lech}°，強度 {manh}%）",
+  "h": "17e9c540"
+ },
+ "js.shellui.bds-nghich": {
+  "t": "℞ 逆行",
+  "h": "8093efa5"
+ },
+ "js.shellui.bds-nghich-hanh": {
+  "t": "逆行：",
+  "h": "6917d7e7"
+ },
+ "js.shellui.bds-nguyen-to": {
+  "t": "元素：",
+  "h": "69e4c7a2"
+ },
+ "js.shellui.bds-nha": {
+  "t": "第 {n} 宮",
+  "h": "19a346e7"
+ },
+ "js.shellui.bds-the": {
+  "t": "型態：",
+  "h": "3b48438e"
  },
  "js.shellui.be-an": {
   "t": "小安",
