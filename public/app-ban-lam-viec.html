@@ -335,10 +335,10 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'ban-lam-viec'};</script>
 <script src="/auth.js?v=9"></script>
 <script src="/tuvi-paywall.js?v=44"></script>
-  <script src="/nav.js?v=49" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
+  <script src="/nav.js?v=49" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=2"></script>
 <script src="/shell.js?v=150"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=11"></script>
 <script src="/tools-shared/bat-trach.js?v=2"></script>
 <script>
 // ══════════════════════════════════════════════════════════════════════
@@ -350,18 +350,18 @@ window.SHELL_INTRO={key:'ban-lam-viec'};</script>
 // đây sai 12/64 ô Du Niên + dùng công thức cung mệnh SAI (tổng 4 chữ số năm
 // thay vì 2 chữ số cuối — xem ghi chú đầu file bat-trach.js).
 var GUA_DATA=BatTrachTool.guaDataLegacy();
-var DIR_VN={N:'Bắc',NE:'Đông Bắc',E:'Đông',SE:'Đông Nam',S:'Nam',SW:'Tây Nam',W:'Tây',NW:'Tây Bắc',C:'Trung Tâm'};
+var DIR_VN={N:_tvmbT('js.banlamviec.bac', 'Bắc'),NE:_tvmbT('js.banlamviec.dong-bac', 'Đông Bắc'),E:_tvmbT('js.banlamviec.dong', 'Đông'),SE:_tvmbT('js.banlamviec.dong-nam', 'Đông Nam'),S:_tvmbT('js.banlamviec.nam', 'Nam'),SW:_tvmbT('js.banlamviec.tay-nam', 'Tây Nam'),W:_tvmbT('js.banlamviec.tay', 'Tây'),NW:_tvmbT('js.banlamviec.tay-bac', 'Tây Bắc'),C:_tvmbT('js.banlamviec.trung-tam', 'Trung Tâm')};
 
 function calcGua(y,g){return BatTrachTool.getCungMenh(y,g==='male'?'nam':'nu');}
 
 var _gua=null,_img64=null,_imgType='image/jpeg';
 var ANALYSIS_STEPS=[
-  {label:'Nhận diện đồ vật trong ảnh',ms:6000},
-  {label:'Phân tích Bát Trạch & đưa đề xuất',ms:0},
+  {label:_tvmbT('js.banlamviec.nhan-dien-do-vat-trong-anh', 'Nhận diện đồ vật trong ảnh'),ms:6000},
+  {label:_tvmbT('js.banlamviec.phan-tich-bat-trach-dua-de', 'Phân tích Bát Trạch & đưa đề xuất'),ms:0},
 ];
 var RENDER_STEPS=[
-  {label:'Chuẩn bị prompt render theo ngũ hành',ms:1200},
-  {label:'Đang render không gian mới',ms:0},
+  {label:_tvmbT('js.banlamviec.chuan-bi-prompt-render-theo-ngu', 'Chuẩn bị prompt render theo ngũ hành'),ms:1200},
+  {label:_tvmbT('js.banlamviec.dang-render-khong-gian-moi', 'Đang render không gian mới'),ms:0},
 ];
 var _analysisLoadingCtl=null;
 var _renderLoadingCtl=null;
@@ -373,7 +373,7 @@ function onYearChange(){
   _gua=calcGua(y,g);
   const d=GUA_DATA[_gua];if(!d)return;
   document.getElementById('guaIcon').textContent=d.icon;
-  document.getElementById('guaName').textContent=`Quái ${_gua} — ${d.name} (${d.elem})`;
+  document.getElementById('guaName').textContent=_tvmbT('js.banlamviec.quai-n', 'Quái {n}', {n:_gua})+` — ${_tvmbG('quai', d.name)} (${_tvmbG('hanh', d.elem)})`;
   document.getElementById('guaGood').textContent=Object.entries(d.good).map(([k,v])=>`${DIR_VN[k]||k} (${v})`).join(' · ');
   document.getElementById('guaBad').textContent=Object.entries(d.bad).map(([k,v])=>`${DIR_VN[k]||k} (${v})`).join(' · ');
   document.getElementById('guaBadge').classList.add('show');
@@ -406,14 +406,14 @@ async function processFile(file){
   document.getElementById('uploadZone').style.display='none';
   document.getElementById('previewWrap').classList.add('show');
 }
-function resizeImg(file){return new Promise((res,rej)=>{const r=new FileReader();r.onerror=()=>rej(new Error('Lỗi đọc file'));r.onload=e=>{const img=new Image();img.onerror=()=>rej(new Error('Lỗi tải ảnh'));img.onload=()=>{const M=1024;let{width:w,height:h}=img;if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res({base64:c.toDataURL('image/jpeg',.78).split(',')[1],type:'image/jpeg'});}; img.src=e.target.result;};r.readAsDataURL(file);})}
+function resizeImg(file){return new Promise((res,rej)=>{const r=new FileReader();r.onerror=()=>rej(new Error(_tvmbT('js.banlamviec.loi-doc-file', 'Lỗi đọc file')));r.onload=e=>{const img=new Image();img.onerror=()=>rej(new Error(_tvmbT('js.banlamviec.loi-tai-anh', 'Lỗi tải ảnh')));img.onload=()=>{const M=1024;let{width:w,height:h}=img;if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res({base64:c.toDataURL('image/jpeg',.78).split(',')[1],type:'image/jpeg'});}; img.src=e.target.result;};r.readAsDataURL(file);})}
 
 async function doAnalyze(){
   document.getElementById('errorBox').classList.remove('show');
   const y=parseInt(document.getElementById('namSinh').value);
   const g=document.getElementById('gioiTinh').value;
-  if(!y||y<1900||y>2025){showErr('Vui lòng nhập năm sinh hợp lệ');return;}
-  if(!_img64){showErr('Vui lòng chọn ảnh');return;}
+  if(!y||y<1900||y>2025){showErr(_tvmbT('js.banlamviec.vui-long-nhap-nam-sinh-hop', 'Vui lòng nhập năm sinh hợp lệ'));return;}
+  if(!_img64){showErr(_tvmbT('js.banlamviec.vui-long-chon-anh', 'Vui lòng chọn ảnh'));return;}
   if(!window.Auth?.isLoggedIn()){window.Auth?.require?.(()=>doAnalyze());return;}
 
   _gua=calcGua(y,g);
@@ -439,7 +439,7 @@ async function doAnalyze(){
             body:JSON.stringify({imageBase64:_img64,imageType:_imgType,doorDir,guaNumber:_gua,namSinh:y,gioiTinh:g,workType}),
           });
           const data=await res.json();
-          if(!data.success)throw new Error(data.error||'Phân tích thất bại');
+          if(!data.success)throw new Error(data.error||_tvmbT('js.banlamviec.phan-tich-that-bai', 'Phân tích thất bại'));
           window.refreshNavCredits&&window.refreshNavCredits();
           _analysisLoadingCtl&&_analysisLoadingCtl.finish();
           renderResults(data);
@@ -447,7 +447,7 @@ async function doAnalyze(){
         }catch(e){reject(e);}
       });
     });
-  }catch(e){_analysisLoadingCtl&&_analysisLoadingCtl.stop();showErr('Lỗi: '+e.message);}
+  }catch(e){_analysisLoadingCtl&&_analysisLoadingCtl.stop();showErr(_tvmbT('js.banlamviec.loi', 'Lỗi: ')+e.message);}
   finally{document.getElementById('loadingOverlay').classList.remove('show');document.getElementById('btnAnalyze').disabled=false;}
 }
 
@@ -476,23 +476,23 @@ function renderResults(data){
 
   const recs=(analysis.recommendations||[]).sort((a,b)=>{const p={high:0,medium:1,low:2};return(p[a.priority]||1)-(p[b.priority]||1);});
   const rl=document.getElementById('recList');rl.innerHTML='';
-  if(!recs.length){rl.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Bố trí hiện tại tương đối tốt.</p>';}
+  if(!recs.length){rl.innerHTML=_tvmbT('js.banlamviec.bo-tri-hien-tai-tuong-doi', '<p style="color:var(--text-lt);font-size:12px;">Bố trí hiện tại tương đối tốt.</p>');}
   else recs.forEach(r=>{
     const isMove=r.action==='move',isKeep=r.action==='keep';
-    const mv=isKeep?`<span class="pos-keep">✓ Giữ nguyên</span>`:isMove?`<span class="pos-from">${DIR_VN[r.currentPosition]||r.currentPosition}</span> → <span class="pos-to">${DIR_VN[r.recommendedPosition]||r.recommendedPosition}</span>`:`<span style="color:var(--text-mid)">${r.action==='remove'?'Dọn bỏ':'Điều chỉnh'}</span>`;
-    const pl={high:'⚠ Quan Trọng',medium:'→ Nên Làm',low:'◎ Tuỳ Ý'}[r.priority]||r.priority;
-    rl.innerHTML+=`<div class="rec-item priority-${r.priority||'medium'}"><div><span class="rec-badge">${pl}</span></div><div class="rec-body"><div class="rec-title">${getIcon(r.furnitureId||r.itemId)} ${r.furnitureName||r.itemName}</div><div class="rec-move">${mv}</div><div class="rec-reason">${r.reason||''}</div>${r.improvement?`<div class="rec-impr">↑ ~${r.improvement} điểm</div>`:''}${r.businessImpact?`<div style="font-size:10px;color:var(--tx-blue);margin-top:2px;"><span class="ic" data-icon="briefcase"></span> ${r.businessImpact}</div>`:''}</div></div>`;
+    const mv=isKeep?_tvmbT('js.banlamviec.giu-nguyen-tpl', '<span class="pos-keep">✓ Giữ nguyên</span>'):isMove?`<span class="pos-from">${DIR_VN[r.currentPosition]||r.currentPosition}</span> → <span class="pos-to">${DIR_VN[r.recommendedPosition]||r.recommendedPosition}</span>`:`<span style="color:var(--text-mid)">${r.action==='remove'?_tvmbT('js.banlamviec.don-bo', 'Dọn bỏ'):_tvmbT('js.banlamviec.dieu-chinh', 'Điều chỉnh')}</span>`;
+    const pl={high:_tvmbT('js.banlamviec.quan-trong', '⚠ Quan Trọng'),medium:_tvmbT('js.banlamviec.nen-lam', '→ Nên Làm'),low:_tvmbT('js.banlamviec.tuy-y', '◎ Tuỳ Ý')}[r.priority]||r.priority;
+    rl.innerHTML+=`<div class="rec-item priority-${r.priority||'medium'}"><div><span class="rec-badge">${pl}</span></div><div class="rec-body"><div class="rec-title">${getIcon(r.furnitureId||r.itemId)} ${r.furnitureName||r.itemName}</div><div class="rec-move">${mv}</div><div class="rec-reason">${r.reason||''}</div>${r.improvement?`<div class="rec-impr">↑ ~${r.improvement} ${_tvmbT('js.banlamviec.diem', 'điểm')}</div>`:''}${r.businessImpact?`<div style="font-size:10px;color:var(--tx-blue);margin-top:2px;"><span class="ic" data-icon="briefcase"></span> ${r.businessImpact}</div>`:''}</div></div>`;
   });
   window.mountIcons && window.mountIcons(rl);
 
   const sg=document.getElementById('shopGrid');sg.innerHTML='';
   (analysis.shoppingList||[]).forEach(s=>{
     const uc=s.urgency==='nên có'?'urg-must':s.urgency==='tốt nếu có'?'urg-good':'urg-opt';
-    const ul=s.urgency==='nên có'?'Nên Có':s.urgency==='tốt nếu có'?'Tốt Nếu Có':'Tuỳ Ý';
+    const ul=s.urgency==='nên có'?_tvmbT('js.banlamviec.nen-co', 'Nên Có'):s.urgency==='tốt nếu có'?_tvmbT('js.banlamviec.tot-neu-co', 'Tốt Nếu Có'):_tvmbT('js.banlamviec.tuy-y-4s40', 'Tuỳ Ý');
     sg.innerHTML+=`<div class="shop-item"><div class="shop-hdr"><span class="shop-icon ic">${window.iconHtml?window.iconHtml(s.icon):''}</span><span class="shop-name">${s.item}</span><span class="shop-urg ${uc}">${ul}</span></div><div class="shop-pos"><span class="ic" data-icon="pin"></span> ${DIR_VN[s.position]||s.position||''}</div><div class="shop-reason">${s.reason||''}</div><div class="shop-price"><span class="ic" data-icon="dollar-sign"></span> ${s.priceRange||''}</div></div>`;
   });
   window.mountIcons && window.mountIcons(sg);
-  if(!(analysis.shoppingList||[]).length)sg.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Không có đề xuất thêm vật phẩm.</p>';
+  if(!(analysis.shoppingList||[]).length)sg.innerHTML=_tvmbT('js.banlamviec.khong-co-de-xuat-them-vat', '<p style="color:var(--text-lt);font-size:12px;">Không có đề xuất thêm vật phẩm.</p>');
 
   document.getElementById('adviceText').textContent=analysis.generalAdvice||'';
   _renderGua=_gua; _renderWorkType=document.getElementById('workType').value;
@@ -505,14 +505,14 @@ function renderResults(data){
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
   var _guaD=GUA_DATA[_gua];
   Shell.setContext({
-    label:'Bàn Làm Việc — điểm '+before+'→'+after,
-    greeting:'Điểm phong thủy bàn làm việc hiện tại: **'+before+'/100**, sau điều chỉnh có thể lên **'+after+'/100**'+(_guaD?', mệnh quái của bạn là **'+_gua+' — '+_guaD.name+'**':'')+'. Bạn muốn hỏi thêm về đề xuất nào?',
-    chips:['Vì sao điểm hiện tại thấp?','Ưu tiên làm gì trước?','Vật phẩm nào nên mua trước?']
+    label:_tvmbT('js.banlamviec.ban-lam-viec-diem', 'Bàn Làm Việc — điểm ')+before+'→'+after,
+    greeting:_tvmbT('js.banlamviec.diem-phong-thuy-ban-lam-viec', 'Điểm phong thủy bàn làm việc hiện tại: **')+before+_tvmbT('js.banlamviec.100-sau-dieu-chinh-co-the', '/100**, sau điều chỉnh có thể lên **')+after+'/100**'+(_guaD?_tvmbT('js.banlamviec.menh-quai-cua-ban-la', ', mệnh quái của bạn là **')+_gua+' — '+_guaD.name+'**':'')+_tvmbT('js.banlamviec.ban-muon-hoi-them-ve-de', '. Bạn muốn hỏi thêm về đề xuất nào?'),
+    chips:[_tvmbT('js.banlamviec.vi-sao-diem-hien-tai-thap', 'Vì sao điểm hiện tại thấp?'),_tvmbT('js.banlamviec.uu-tien-lam-gi-truoc', 'Ưu tiên làm gì trước?'),_tvmbT('js.banlamviec.vat-pham-nao-nen-mua-truoc', 'Vật phẩm nào nên mua trước?')]
   });
   _ptBefore=before; _ptAfter=after; _ptAdvice=analysis.generalAdvice||'';
   Shell.setShareable({
-    kind:'text', toolId:'ban-lam-viec', title:'Điểm Phong Thủy bàn làm việc của tôi',
-    text:'Điểm phong thủy hiện tại: '+before+'/100'+(after>before?' — sau điều chỉnh có thể lên '+after+'/100':'')+(_ptAdvice?'\n\n'+_ptAdvice:'')
+    kind:'text', toolId:'ban-lam-viec', title:_tvmbT('js.banlamviec.diem-phong-thuy-ban-lam-viec-8sd8', 'Điểm Phong Thủy bàn làm việc của tôi'),
+    text:_tvmbT('js.banlamviec.diem-phong-thuy-hien-tai', 'Điểm phong thủy hiện tại: ')+before+'/100'+(after>before?_tvmbT('js.banlamviec.sau-dieu-chinh-co-the-len', ' — sau điều chỉnh có thể lên ')+after+'/100':'')+(_ptAdvice?'\n\n'+_ptAdvice:'')
   });
 }
 
@@ -520,7 +520,7 @@ var ITEM_ICON={bed:'home',desk:'briefcase',sofa:'home',altar:'temple',stove:'fla
 function getIcon(id){return '<span class="ic" data-icon="'+(ITEM_ICON[id]||'package')+'"></span>';}
 function renderExtraResults(data){
   const a=data.analysis;
-  if(a.chairDirection){const cc=document.getElementById('chairCard'),co=document.getElementById('chairContent');cc.style.display='block';co.innerHTML=`<strong>Hiện tại:</strong> ${DIR_VN[a.chairDirection.current]||a.chairDirection.current||'Chưa xác định'}<br><strong>Nên đổi sang:</strong> <span style="color:var(--tx-green);font-weight:700;">${DIR_VN[a.chairDirection.recommended]||a.chairDirection.recommended}</span><br><span style="color:var(--text-mid)">${a.chairDirection.reason||''}</span>`;}
+  if(a.chairDirection){const cc=document.getElementById('chairCard'),co=document.getElementById('chairContent');cc.style.display='block';co.innerHTML=`<strong>${_tvmbT('js.banlamviec.hien-tai', 'Hiện tại:')}</strong> ${DIR_VN[a.chairDirection.current]||a.chairDirection.current||_tvmbT('js.banlamviec.chua-xac-dinh', 'Chưa xác định')}<br><strong>${_tvmbT('js.banlamviec.nen-doi-sang', 'Nên đổi sang:')}</strong> <span style="color:var(--tx-green);font-weight:700;">${DIR_VN[a.chairDirection.recommended]||a.chairDirection.recommended}</span><br><span style="color:var(--text-mid)">${a.chairDirection.reason||''}</span>`;}
   if(a.focusTips){document.getElementById('focusCard').style.display='block';document.getElementById('focusContent').textContent=a.focusTips;}
 }
 
@@ -545,7 +545,7 @@ async function _doRenderCall(){
   try{
     const res=await fetch('/api/phong-thuy?action=phong-thuy-render',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||'')},body:JSON.stringify({imageBase64:_img64,imageType:_imgType,guaNumber:_renderGua,roomType:_renderWorkType,gioiTinh:_renderGender,topRecs:_renderRecs})});
     const data=await res.json();
-    if(!data.imageUrl)throw new Error(data.error||'Không nhận được ảnh.');
+    if(!data.imageUrl)throw new Error(data.error||_tvmbT('js.banlamviec.khong-nhan-duoc-anh', 'Không nhận được ảnh.'));
     _renderResultUrl=data.imageUrl;
     document.getElementById('renderBefore').src='data:'+_imgType+';base64,'+_img64;
     document.getElementById('renderAfter').src=data.imageUrl;
@@ -554,15 +554,15 @@ async function _doRenderCall(){
     document.getElementById('renderResult').style.display='block';
     document.getElementById('renderIdle').style.display='block';
     Shell.setShareable({
-      kind:'image', toolId:'ban-lam-viec', title:'Bàn làm việc của tôi sau khi Phong Thủy hóa',
+      kind:'image', toolId:'ban-lam-viec', title:_tvmbT('js.banlamviec.ban-lam-viec-cua-toi-sau', 'Bàn làm việc của tôi sau khi Phong Thủy hóa'),
       imageUrl:data.imageUrl,
-      text:(_ptBefore!=null?'Điểm phong thủy hiện tại: '+_ptBefore+'/100'+(_ptAfter>_ptBefore?' — sau điều chỉnh có thể lên '+_ptAfter+'/100':''):'')+(_ptAdvice?'\n\n'+_ptAdvice:'')
+      text:(_ptBefore!=null?_tvmbT('js.banlamviec.diem-phong-thuy-hien-tai', 'Điểm phong thủy hiện tại: ')+_ptBefore+'/100'+(_ptAfter>_ptBefore?_tvmbT('js.banlamviec.sau-dieu-chinh-co-the-len', ' — sau điều chỉnh có thể lên ')+_ptAfter+'/100':''):'')+(_ptAdvice?'\n\n'+_ptAdvice:'')
     });
   }catch(e){
     _renderLoadingCtl&&_renderLoadingCtl.stop();
     document.getElementById('renderLoading').style.display='none';
     document.getElementById('renderIdle').style.display='block';
-    const el=document.getElementById('renderErr');el.textContent='⚠ Lỗi: '+(e.message||'Vui lòng thử lại.');el.style.display='block';
+    const el=document.getElementById('renderErr');el.textContent=_tvmbT('js.banlamviec.loi-ppkl', '⚠ Lỗi: ')+(e.message||_tvmbT('js.banlamviec.vui-long-thu-lai', 'Vui lòng thử lại.'));el.style.display='block';
   }finally{document.getElementById('btnRender').disabled=false;}
 }
 async function downloadRender(){

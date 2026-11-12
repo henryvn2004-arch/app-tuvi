@@ -26,7 +26,7 @@
  */
 window.SampleHint = (function () {
   function open(btn) {
-    if (btn) window.alert('Bản mẫu đang được chuẩn bị, quay lại sau nhé!');
+    if (btn) window.alert((window.I18n && window.I18n.tv) ? window.I18n.tv('js.samplehint.dang-chuan-bi', 'Bản mẫu đang được chuẩn bị, quay lại sau nhé!') : 'Bản mẫu đang được chuẩn bị, quay lại sau nhé!');
   }
   return { open: open };
 })();

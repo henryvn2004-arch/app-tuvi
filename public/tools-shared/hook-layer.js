@@ -41,6 +41,12 @@
  */
 window.HookLayer = (function () {
   'use strict';
+  // i18n (docs/i18n/QUY-UOC.md): T(khoá, chữViệt, {biến}) — CHỈ để HIỂN THỊ.
+  var T = function (k, d, v) {
+    var I = window.I18n;
+    if (I && I.tv) return I.tv(k, d, v);
+    return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
+  };
 
   // ── Nạp public/laso-census.json (một lần, cache theo Promise) ──────────
   var _censusPromise = null;
@@ -84,7 +90,7 @@ window.HookLayer = (function () {
     if (!g) return '';
     var items = Array.isArray(g.items) ? g.items.map(function (i) { return '<li>' + esc(i) + '</li>'; }).join('') : '';
     var product = esc(g.product || toolId || '');
-    var ctaLabel = esc(g.cta || 'Mở bản đầy đủ');
+    var ctaLabel = esc(g.cta || T('js.hooklayer.mo-ban-day-du','Mở bản đầy đủ'));
     // VNĐ là giá CHÍNH ở paywall (luật CLAUDE.md, chốt Henry 2026-09-20) — dùng
     // `data-tvp-price-label` (đã đúng thứ tự VNĐ trước, Lượng phụ trong ngoặc,
     // xem `ToolPrices.priceLabel()`), KHÔNG tự ghép `data-tvp-price` (số Lượng
@@ -153,8 +159,7 @@ window.HookLayer = (function () {
             : '') +
         '</div>' +
       '</div>' +
-      '<div class="hkl-nb-section-t">' + facts.length + ' điều quan trọng nhất trong ' + esc(toolLabel) +
-        ' của bạn <span>(xem trước)</span></div>' +
+      '<div class="hkl-nb-section-t">' + T('js.hooklayer.dieu-quan-trong','{n} điều quan trọng nhất trong {tool} của bạn <span>(xem trước)</span>',{n:facts.length,tool:esc(toolLabel)}) + '</div>' +
       '<div class="hkl-nb-grid">' + boxesHtml + '</div>'
     );
   }
@@ -204,11 +209,11 @@ window.HookLayer = (function () {
    *  (user_id mới = quota mới); đã đăng nhập (ví rỗng) → nạp Lượng (ví >0 thì
    *  route đã bỏ qua cầu dao này từ đầu, không bao giờ tới nhánh này). */
   function _gateOnlyHtml(loggedIn) {
-    var title = loggedIn ? 'Đã dùng hết lượt xem trước miễn phí' : 'Đã dùng hết lượt xem trước miễn phí';
+    var title = T('js.hooklayer.het-luot','Đã dùng hết lượt xem trước miễn phí');
     var desc = loggedIn
-      ? 'Nạp Lượng để xem phần mở đầu nổi bật này không giới hạn ở mọi công cụ trên trang.'
-      : 'Đăng ký tài khoản miễn phí để có thêm lượt xem trước — hoặc nạp Lượng để xem không giới hạn ngay.';
-    var ctaLabel = loggedIn ? 'Nạp Lượng →' : 'Đăng ký miễn phí →';
+      ? T('js.hooklayer.nap-de-xem','Nạp Lượng để xem phần mở đầu nổi bật này không giới hạn ở mọi công cụ trên trang.')
+      : T('js.hooklayer.dang-ky-de-xem','Đăng ký tài khoản miễn phí để có thêm lượt xem trước — hoặc nạp Lượng để xem không giới hạn ngay.');
+    var ctaLabel = loggedIn ? T('js.hooklayer.nap-luong','Nạp Lượng →') : T('js.hooklayer.dang-ky-mien-phi','Đăng ký miễn phí →');
     var attr = loggedIn ? 'data-hkl-topup' : 'data-hkl-signup';
     return '<div class="hkl-block hkl-gateonly">' +
       '<div class="hkl-go-t"><span data-icon="sparkles"></span>' + esc(title) + '</div>' +
@@ -238,7 +243,7 @@ window.HookLayer = (function () {
   }
 
   function _pendingHtml() {
-    return '<div class="hkl-pending"><span class="rr-spin"></span><span>Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)</span></div>';
+    return '<div class="hkl-pending"><span class="rr-spin"></span><span>' + T('js.hooklayer.dang-soan-eta','Đang soạn phần mở đầu hấp dẫn hơn… (thường mất 5-8 giây)') + '</span></div>';
   }
 
   // Tự nạp ai-loading-steps.js nếu trang chưa có — cùng lý do `_ensurePrices()`
@@ -279,9 +284,9 @@ window.HookLayer = (function () {
     _ensureAiLoadingSteps().then(function () {
       if (done || !window.AiLoadingSteps || !window.AiLoadingSteps.mountWait) return;
       waitCtl = window.AiLoadingSteps.mountWait(host, {
-        label: 'Đang soạn phần mở đầu hấp dẫn hơn…',
+        label: T('js.hooklayer.dang-soan','Đang soạn phần mở đầu hấp dẫn hơn…'),
         center: true, orbSize: 96, fast: true,
-        expectSec: 7, expectText: '5-8 giây',
+        expectSec: 7, expectText: T('js.hooklayer.5-8-giay','5-8 giây'),
       });
       waitCtl.start();
     });
@@ -326,7 +331,7 @@ window.HookLayer = (function () {
     var gateHtml = _gate(spec.gate, spec.tool);
     if (!facts.length && !charts.length && !gateHtml) { host.innerHTML = ''; return; }
     _ensureCss();
-    var kicker = facts.length ? 'Đã lập xong lá số · ' + facts.length + ' điều đáng chú ý nhất' : '';
+    var kicker = facts.length ? T('js.hooklayer.da-lap-xong','Đã lập xong lá số · {n} điều đáng chú ý nhất',{n:facts.length}) : '';
     host.innerHTML =
       '<div class="hkl-block">' +
         (kicker ? '<div class="hkl-kicker">' + esc(kicker) + '</div>' : '') +

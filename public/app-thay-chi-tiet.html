@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Thầy — Tử Vi Minh Bảo</title>
+<title data-i18n="thaycct.thay-tu-vi-minh-bao">Thầy — Tử Vi Minh Bảo</title>
 <link rel="icon" type="image/webp" href="/seal.webp"/>
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -34,11 +34,11 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b id="tmTitle">Thầy</b><span>Chuyên môn, công cụ và cách bắt đầu trò chuyện</span></div>
+      <div data-i18n="thaycct.thay-chuyen-mon-cong-cu-va" class="ws-title"><b id="tmTitle">Thầy</b><span>Chuyên môn, công cụ và cách bắt đầu trò chuyện</span></div>
     </div>
     <div class="ws-body" id="tmBody">
-      <a class="tm-back" href="/app/thay">← Các Thầy</a>
-      <div id="tmLoading" style="padding:2rem 0;text-align:center;color:var(--text-lt);font-size:13px">Đang tải…</div>
+      <a data-i18n="thaycct.cac-thay" class="tm-back" href="/app/thay">← Các Thầy</a>
+      <div data-i18n="topup.dang-tai" id="tmLoading" style="padding:2rem 0;text-align:center;color:var(--text-lt);font-size:13px">Đang tải…</div>
       <div id="tmContent" style="display:none"></div>
     </div>
   </main>
@@ -56,25 +56,46 @@
   // `/app/thay/:id` viết lại thành `?id=:id` ở next.config.mjs — nhưng rewrite
   // KHÔNG đổi URL trên trình duyệt, nên `location.search` trống: đọc id từ path,
   // query chỉ còn là lối lùi khi mở thẳng file tĩnh.
-  var id = (location.pathname.match(/^\/app\/thay\/([a-z-]+)/) || [])[1] ||
+  // Ở /<locale>/app/thay/<id> (W21) path mang tiền tố ngôn ngữ — bỏ đi trước khi khớp.
+  var id = (location.pathname.replace(/^\/(?:en|ja|ko|zh-tw|zh-cn)(?=\/)/, '').match(/^\/app\/thay\/([a-z-]+)/) || [])[1] ||
            new URLSearchParams(location.search).get('id') || '';
 
   // Tên thầy theo ngôn ngữ trang (I18n.master, W19) — chỉ để hiển thị.
   function mname(m){ return (window.I18n && I18n.master) ? I18n.master(m.id, m.display_name) : m.display_name; }
   function mtitle(m){ return (window.I18n && I18n.masterTitle) ? I18n.masterTitle(m.id, m.display_name) : 'Thầy ' + m.display_name; }
+  // Chuyên môn · câu cửa miệng · lời chào: chữ gốc ở DB (`master_profiles`); cùng khoá `js.thay.*` với app-thay.html.
+  // Chỉ dịch khi chữ DB còn TRÙNG câu gốc — DB đổi chữ thì hiện chữ DB.
+  var TR = {
+    'co-nguyet': [[_tvmbT('js.thay.disc-co-nguyet', 'Tử Vi gốc & Luận giải'), 'Tử Vi gốc & Luận giải'], [_tvmbT('js.thay.tag-co-nguyet', 'Xem kỹ cái gốc trước khi luận cái ngọn.'), 'Xem kỹ cái gốc trước khi luận cái ngọn.'], [_tvmbT('js.thay.greet-co-nguyet', 'Ta là Cổ Nguyệt. Đưa ngày giờ sinh ra đây, ta lập lá số rồi cùng con soi cho kỹ gốc rễ.'), 'Ta là Cổ Nguyệt. Đưa ngày giờ sinh ra đây, ta lập lá số rồi cùng con soi cho kỹ gốc rễ.']],
+    'tu-nguyen': [[_tvmbT('js.thay.disc-tu-nguyen', 'Đại vận & Chu trình cuộc đời'), 'Đại vận & Chu trình cuộc đời'], [_tvmbT('js.thay.tag-tu-nguyen', 'Một câu, chốt luôn — không giải thích thêm.'), 'Một câu, chốt luôn — không giải thích thêm.'], [_tvmbT('js.thay.greet-tu-nguyen', 'Tử Nguyên đây. Nói đại vận thì đừng vòng vo — đưa lá số, ta chốt một câu.'), 'Tử Nguyên đây. Nói đại vận thì đừng vòng vo — đưa lá số, ta chốt một câu.']],
+    'nhat-nguyen': [[_tvmbT('js.thay.disc-nhat-nguyen', 'Vận ngắn hạn & Chọn ngày'), 'Vận ngắn hạn & Chọn ngày'], [_tvmbT('js.thay.tag-nhat-nguyen', 'Còn bao lâu nữa? Đếm ngược cho con luôn.'), 'Còn bao lâu nữa? Đếm ngược cho con luôn.'], [_tvmbT('js.thay.greet-nhat-nguyen', 'Nhật Nguyên đây. Việc gấp thì hỏi ngay — ta tính mốc thời gian cho con trước khi con quên mất.'), 'Nhật Nguyên đây. Việc gấp thì hỏi ngay — ta tính mốc thời gian cho con trước khi con quên mất.']],
+    'dau-nam': [[_tvmbT('js.thay.disc-dau-nam', 'Tình duyên & Hôn nhân'), 'Tình duyên & Hôn nhân'], [_tvmbT('js.thay.tag-dau-nam', 'Sự thật khó nghe, nhưng con cần nghe.'), 'Sự thật khó nghe, nhưng con cần nghe.'], [_tvmbT('js.thay.greet-dau-nam', 'Đẩu Nam đây. Chuyện tình cảm thì đừng ngại kể thật — ta nói thẳng, nhưng luôn vì con.'), 'Đẩu Nam đây. Chuyện tình cảm thì đừng ngại kể thật — ta nói thẳng, nhưng luôn vì con.']],
+    'ngoc-tinh': [[_tvmbT('js.thay.disc-ngoc-tinh', 'Tương hợp & Duyên nợ'), 'Tương hợp & Duyên nợ'], [_tvmbT('js.thay.tag-ngoc-tinh', 'So sánh với một điều con không ngờ tới.'), 'So sánh với một điều con không ngờ tới.'], [_tvmbT('js.thay.greet-ngoc-tinh', 'Ngọc Tinh đây. Duyên nợ giữa hai người, để ta kể cho con nghe theo một câu chuyện khác hẳn.'), 'Ngọc Tinh đây. Duyên nợ giữa hai người, để ta kể cho con nghe theo một câu chuyện khác hẳn.']],
+    'dieu-khong': [[_tvmbT('js.thay.disc-dieu-khong', 'Sự nghiệp & Tiền bạc'), 'Sự nghiệp & Tiền bạc'], [_tvmbT('js.thay.tag-dieu-khong', 'Đang lãng phí tài năng ở đúng chỗ này.'), 'Đang lãng phí tài năng ở đúng chỗ này.'], [_tvmbT('js.thay.greet-dieu-khong', 'Diệu Không đây. Chuyện tiền bạc, công việc — nói thẳng luôn cho nhanh, ta không vòng vo.'), 'Diệu Không đây. Chuyện tiền bạc, công việc — nói thẳng luôn cho nhanh, ta không vòng vo.']],
+    'tam-kinh': [[_tvmbT('js.thay.disc-tam-kinh', 'Bát Tự & Kỳ Môn'), 'Bát Tự & Kỳ Môn'], [_tvmbT('js.thay.tag-tam-kinh', 'Đối chiếu ba hệ thống để tìm điểm hội tụ.'), 'Đối chiếu ba hệ thống để tìm điểm hội tụ.'], [_tvmbT('js.thay.greet-tam-kinh', 'Tâm Kính đây. Đưa giờ sinh, ta soi bằng cả Bát Tự lẫn Kỳ Môn rồi nói cho con nghe điều chúng cùng chỉ tới.'), 'Tâm Kính đây. Đưa giờ sinh, ta soi bằng cả Bát Tự lẫn Kỳ Môn rồi nói cho con nghe điều chúng cùng chỉ tới.']],
+    'huyen-khong': [[_tvmbT('js.thay.disc-huyen-khong', 'Phong Thủy'), 'Phong Thủy'], [_tvmbT('js.thay.tag-huyen-khong', 'Nhà cửa đặt sai hướng, người trong nhà mệt mà không biết vì sao.'), 'Nhà cửa đặt sai hướng, người trong nhà mệt mà không biết vì sao.'], [_tvmbT('js.thay.greet-huyen-khong', 'Huyền Không đây. Không gian con đang sống, để ta xem có đang hợp với con không.'), 'Huyền Không đây. Không gian con đang sống, để ta xem có đang hợp với con không.']],
+    'bac-minh': [[_tvmbT('js.thay.disc-bac-minh', 'Xem Tướng'), 'Xem Tướng'], [_tvmbT('js.thay.tag-bac-minh', 'Gương mặt không giấu được điều gì với người biết nhìn.'), 'Gương mặt không giấu được điều gì với người biết nhìn.'], [_tvmbT('js.thay.greet-bac-minh', 'Bắc Minh đây. Gửi ảnh hoặc tả cho ta nghe gương mặt, dáng đi — ta xem tướng cho con.'), 'Bắc Minh đây. Gửi ảnh hoặc tả cho ta nghe gương mặt, dáng đi — ta xem tướng cho con.']],
+    'linh-son': [[_tvmbT('js.thay.disc-linh-son', 'Sự nghiệp cạnh tranh & Nhân mạch'), 'Sự nghiệp cạnh tranh & Nhân mạch'], [_tvmbT('js.thay.tag-linh-son', 'Ai giúp được con, ai chỉ đang ngáng đường — nhìn lá số là biết.'), 'Ai giúp được con, ai chỉ đang ngáng đường — nhìn lá số là biết.'], [_tvmbT('js.thay.greet-linh-son', 'Linh Sơn đây. Vòng quan hệ của con, để ta xem ai đáng giữ, ai nên buông.'), 'Linh Sơn đây. Vòng quan hệ của con, để ta xem ai đáng giữ, ai nên buông.']],
+    'thien-an': [[_tvmbT('js.thay.disc-thien-an', 'Đặt Tên & Dạy Con'), 'Đặt Tên & Dạy Con'], [_tvmbT('js.thay.tag-thien-an', 'Ít lời, nhưng mỗi lời đều có cân nhắc.'), 'Ít lời, nhưng mỗi lời đều có cân nhắc.'], [_tvmbT('js.thay.greet-thien-an', 'Thiên Ẩn đây. Chuyện con cái, tên tuổi — con cứ hỏi, ta trả lời từ tốn.'), 'Thiên Ẩn đây. Chuyện con cái, tên tuổi — con cứ hỏi, ta trả lời từ tốn.']],
+    'linh-co': [[_tvmbT('js.thay.disc-linh-co', 'Kinh Dịch & Mai Hoa'), 'Kinh Dịch & Mai Hoa'], [_tvmbT('js.thay.tag-linh-co', 'Một quẻ, một hình ảnh, một câu trả lời.'), 'Một quẻ, một hình ảnh, một câu trả lời.'], [_tvmbT('js.thay.greet-linh-co', 'Linh Cơ đây. Đang phân vân điều gì thì gieo một quẻ — ta đọc quẻ cho con.'), 'Linh Cơ đây. Đang phân vân điều gì thì gieo một quẻ — ta đọc quẻ cho con.']],
+    'thanh-hu': [[_tvmbT('js.thay.disc-thanh-hu', 'Tarot & Thần Số'), 'Tarot & Thần Số'], [_tvmbT('js.thay.tag-thanh-hu', 'Rút một lá, xem con đang thật sự muốn nghe điều gì.'), 'Rút một lá, xem con đang thật sự muốn nghe điều gì.'], [_tvmbT('js.thay.greet-thanh-hu', 'Thanh Hư nè! Rút một lá bài hay hỏi con số may mắn, mình cùng xem nha.'), 'Thanh Hư nè! Rút một lá bài hay hỏi con số may mắn, mình cùng xem nha.']],
+    'thai-hu': [[_tvmbT('js.thay.disc-thai-hu', 'Hỏi nhanh, phản biện'), 'Hỏi nhanh, phản biện'], [_tvmbT('js.thay.tag-thai-hu', 'Vấn đề không phải ở chỗ con tưởng.'), 'Vấn đề không phải ở chỗ con tưởng.'], [_tvmbT('js.thay.greet-thai-hu', 'Thái Hư đây. Trước khi trả lời, ta hỏi lại con một câu đã — con có chắc đang hỏi đúng điều mình cần không?'), 'Thái Hư đây. Trước khi trả lời, ta hỏi lại con một câu đã — con có chắc đang hỏi đúng điều mình cần không?']],
+    'tinh-quang': [[_tvmbT('js.thay.disc-tinh-quang', 'Chiêm tinh Tây'), 'Chiêm tinh Tây'], [_tvmbT('js.thay.tag-tinh-quang', 'Nhìn cả bầu trời để hiểu một con người.'), 'Nhìn cả bầu trời để hiểu một con người.'], [_tvmbT('js.thay.greet-tinh-quang', 'Tinh Quang đây. Ta nhìn lá số theo cách của thiên văn phương Tây — con muốn bắt đầu từ đâu?'), 'Tinh Quang đây. Ta nhìn lá số theo cách của thiên văn phương Tây — con muốn bắt đầu từ đâu?']],
+  };
+  function tr(m, i, v){ var r = TR[m.id] && TR[m.id][i]; return r && r[1] === v ? r[0] : v; }
   function toolTile(row){
-    return '<a class="tm-tool" href="' + esc(row.app_path) + '">' + esc(row.label) + '</a>';
+    return '<a class="tm-tool" href="' + esc(_tvmbHref(row.app_path)) + '">' + esc(row.label) + '</a>';
   }
 
   function render(m, toolRows){
     document.getElementById('tmLoading').style.display = 'none';
     var content = document.getElementById('tmContent');
     if (!m) {
-      content.innerHTML = '<p class="tm-empty">Không tìm thấy thầy này.</p>';
+      content.innerHTML = '<p class="tm-empty">' + _tvmbT('js.thaycct.khong-tim-thay-thay-nay', 'Không tìm thấy thầy này.') + '</p>';
       content.style.display = 'block';
       return;
     }
-    document.title = mtitle(m) + ' — Tử Vi Minh Bảo';
+    document.title = mtitle(m) + _tvmbT('js.thaycct.tieu-de-duoi', ' — Tử Vi Minh Bảo');
     document.getElementById('tmTitle').textContent = mtitle(m);
     var tools = (m.tool_ids || [])
       .map(function(tid){ for (var i=0;i<toolRows.length;i++) if (toolRows[i].tool_id===tid) return toolRows[i]; return null; })
@@ -83,20 +104,20 @@
       '<div class="tm-head">' +
         '<img class="tm-ava" src="/authors/' + esc(m.id) + '.jpg" alt="">' +
         '<div><div class="tm-name">' + esc(mtitle(m)) + '</div>' +
-        (m.discipline ? '<span class="tm-disc">' + esc(m.discipline) + '</span>' : '') + '</div>' +
+        (m.discipline ? '<span class="tm-disc">' + esc(tr(m, 0, m.discipline)) + '</span>' : '') + '</div>' +
       '</div>' +
-      (m.tagline ? '<p class="tm-tag">"' + esc(m.tagline) + '"</p>' : '') +
-      (m.greeting ? '<div class="tm-greet">' + esc(m.greeting) + '</div>' : '') +
-      '<button type="button" class="tm-cta" id="tmChat"><span data-icon="message-circle"></span>Hỏi Thầy ' + esc(mname(m)) + '</button>' +
-      '<div class="tm-sub">Công cụ Thầy ' + esc(mname(m)) + ' đứng tên</div>' +
+      (m.tagline ? '<p class="tm-tag">"' + esc(tr(m, 1, m.tagline)) + '"</p>' : '') +
+      (m.greeting ? '<div class="tm-greet">' + esc(tr(m, 2, m.greeting)) + '</div>' : '') +
+      '<button type="button" class="tm-cta" id="tmChat"><span data-icon="message-circle"></span>' + _tvmbT('js.thaycct.hoi-thay-ten', 'Hỏi Thầy {ten}', { ten: esc(mname(m)) }) + '</button>' +
+      '<div class="tm-sub">' + _tvmbT('js.thaycct.cong-cu-thay-dung-ten', 'Công cụ Thầy {ten} đứng tên', { ten: esc(mname(m)) }) + '</div>' +
       (tools.length
         ? '<div class="tm-tools">' + tools.map(toolTile).join('') + '</div>'
-        : '<p class="tm-empty">Thầy ' + esc(mname(m)) + ' hiện chưa đứng tên công cụ nào — vẫn có thể hỏi trực tiếp qua Hỏi Thầy.</p>');
+        : '<p class="tm-empty">' + _tvmbT('js.thaycct.chua-dung-ten-cong-cu', 'Thầy {ten} hiện chưa đứng tên công cụ nào — vẫn có thể hỏi trực tiếp qua Hỏi Thầy.', { ten: esc(mname(m)) }) + '</p>');
     content.style.display = 'block';
     if (window.mountIcons) window.mountIcons(content);
     document.getElementById('tmChat').addEventListener('click', function(){
       try { if (window.Shell && Shell.chooseAuthor) Shell.chooseAuthor(m.id); } catch(e) {}
-      location.href = '/app#chat';
+      location.href = _tvmbHref('/app#chat');
     });
   }
 

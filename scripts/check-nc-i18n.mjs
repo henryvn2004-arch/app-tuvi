@@ -73,14 +73,24 @@ for (const t of G) {
   seen.add(id);
   for (const c of ['en', 'zh-tw', 'zh-cn', 'ja', 'ko'])
     if (!t[c] || typeof t[c] !== 'string') bad(`glossary ${id} thiếu cột ${c}`);
-  if (!/^[가-힣]+$/u.test(t.ko)) bad(`glossary ${id}: ko không thuần Hangul: ${t.ko}`);
+  // W25: kind 'chiemtinh' (chiêm tinh Tây) KHÔNG sinh từ chữ Hán — ja/ko viết tay (katakana/hangul + số, ngoặc, dấu cách).
+  if (t.k === 'chiemtinh') {
+    if (!/^[가-힣A-Z0-9 ()—·&-]+$/u.test(t.ko))
+      bad(`glossary ${id}: ko chiemtinh chứa ký tự lạ: ${t.ko}`);
+  } else if (!/^[가-힣]+$/u.test(t.ko)) bad(`glossary ${id}: ko không thuần Hangul: ${t.ko}`);
 }
 // ja/zh-cn khớp OpenCC của zh-tw (ngoại lệ có chủ đích: 'Âm Lịch', 'Dương Lịch')
 // W15c: GHI ĐÈ CỐ Ý (tuvi-terms.ts, cột 6) vì OpenCC dịch sai tên quẻ: 乾 (quẻ Càn) → 干 ở zh-cn (đúng là 乾);
 // 豫 (quẻ Dự) → 予 ở ja (đúng là 豫). Chỉ ba mục này — thêm mục khác phải kèm lý do.
 const NGOAI_LE = new Set(['khai|Âm Lịch', 'khai|Dương Lịch', 'que|Càn', 'quai|Càn', 'que|Dự']);
 for (const t of G) {
-  if (NGOAI_LE.has(`${t.k}|${t.vi}`) || t.k === 'gio') continue; // 'gio': ja = 子の刻 (kiểm ở check:glossary)
+  if (NGOAI_LE.has(`${t.k}|${t.vi}`) || t.k === 'gio') continue;
+  if (t.k === 'chiemtinh') {
+    // zh-cn vẫn phải = OpenCC(zh-tw) trừ hai ghi đè cố ý (白羊座 · 双鱼座); ja viết tay (牡羊座… hoặc katakana).
+    if (t['zh-cn'] !== toCn(t['zh-tw']) && !['Bạch Dương', 'Song Ngư'].includes(t.vi))
+      bad(`glossary ${t.k}|${t.vi}: zh-cn "${t['zh-cn']}" ≠ OpenCC(zh-tw)`);
+    continue;
+  } // 'gio': ja = 子の刻 (kiểm ở check:glossary)
   if (t['zh-cn'] !== toCn(t['zh-tw']))
     bad(`glossary ${t.k}|${t.vi}: zh-cn "${t['zh-cn']}" ≠ OpenCC(zh-tw) "${toCn(t['zh-tw'])}"`);
   if (t.ja !== toJp(t['zh-tw']))

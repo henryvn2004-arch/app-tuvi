@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Tài khoản — Tử Vi Minh Bảo</title>
+<title data-i18n="taikhoan.tai-khoan-tu-vi-minh-bao">Tài khoản — Tử Vi Minh Bảo</title>
 <link rel="icon" type="image/webp" href="/seal.webp"/>
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -178,22 +178,22 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Hồ sơ</b><span>Ví Lượng · Kết nối · Cài đặt</span></div>
+      <div data-i18n="taikhoan.ho-so-vi-luong-ket-noi" class="ws-title"><b>Hồ sơ</b><span>Ví Lượng · Kết nối · Cài đặt</span></div>
     </div>
     <div class="ws-body">
       <div class="acct-scope">
 <div class="page-wrap">
 
   <!-- LOADING STATE -->
-  <div id="authLoading" style="text-align:center;padding:4rem;color:var(--text-lt)">Đang tải...</div>
+  <div data-i18n="taikhoan.dang-tai" id="authLoading" style="text-align:center;padding:4rem;color:var(--text-lt)">Đang tải...</div>
 
   <!-- NOT LOGGED IN -->
   <div id="notLoggedIn" style="display:none;text-align:center;padding:4rem 1rem">
     <div style="font-size:2.5rem;margin-bottom:1rem"><span data-icon="sparkles" style="width:40px;height:40px;color:var(--tx-gold)"></span></div>
-    <h2 style="font-family:'Noto Serif',serif;color:var(--heading);margin-bottom:.75rem">Đăng nhập để xem hồ sơ</h2>
-    <p style="color:var(--text-lt);margin-bottom:.6rem">Quản lý ví Lượng, nhận thêm Lượng, kết nối kênh chat và cài đặt tài khoản.</p>
-    <p style="color:var(--text-lt);font-size:.82rem;margin-bottom:1.5rem">Hỗ trợ đăng nhập qua <strong>Google</strong>, <strong>Facebook</strong> hoặc email.</p>
-    <button class="btn-primary" onclick="showAuthModal(function(){ location.reload(); })">Đăng Nhập / Đăng Ký</button>
+    <h2 data-i18n="taikhoan.dang-nhap-de-xem-ho-so" style="font-family:'Noto Serif',serif;color:var(--heading);margin-bottom:.75rem">Đăng nhập để xem hồ sơ</h2>
+    <p data-i18n="taikhoan.quan-ly-vi-luong-nhan-them" style="color:var(--text-lt);margin-bottom:.6rem">Quản lý ví Lượng, nhận thêm Lượng, kết nối kênh chat và cài đặt tài khoản.</p>
+    <p data-i18n="taikhoan.ho-tro-dang-nhap-qua-google" style="color:var(--text-lt);font-size:.82rem;margin-bottom:1.5rem">Hỗ trợ đăng nhập qua <strong>Google</strong>, <strong>Facebook</strong> hoặc email.</p>
+    <button data-i18n="taikhoan.dang-nhap-dang-ky" class="btn-primary" onclick="showAuthModal(function(){ location.reload(); })">Đăng Nhập / Đăng Ký</button>
   </div>
 
   <!-- MAIN DASHBOARD -->
@@ -204,12 +204,12 @@
       <div class="avatar" id="avatarLetter">?</div>
       <div class="profile-info">
         <div class="profile-email" id="userEmail"></div>
-        <div class="profile-name" id="userDisplayName">Người Dùng</div>
+        <div data-i18n="taikhoan.nguoi-dung" class="profile-name" id="userDisplayName">Người Dùng</div>
         <div class="profile-since" id="userSince"></div>
         <div id="providerBadge" style="display:none" class="provider-badge"></div>
       </div>
       <div class="profile-actions">
-        <button class="profile-signout" id="btnSignout">Đăng Xuất</button>
+        <button data-i18n="taikhoan.dang-xuat" class="profile-signout" id="btnSignout">Đăng Xuất</button>
       </div>
     </div>
 
@@ -236,18 +236,18 @@
         .my-link+.my-link{border-top:1px solid var(--border-lt)}
       }
     </style>
-    <nav class="my-links" aria-label="Của bạn">
-      <a class="my-link" href="/app/so-la-so"><span data-icon="folder"></span><span class="ml-tx">Lá số đã lưu</span><span class="ml-go">→</span></a>
-      <a class="my-link" href="/app/bao-cao"><span data-icon="file-text"></span><span class="ml-tx">Báo cáo</span><span class="ml-go">→</span></a>
-      <a class="my-link" href="/app/tro-chuyen"><span data-icon="message-circle"></span><span class="ml-tx">Lượt Hỏi Thầy</span><span class="ml-go">→</span></a>
+    <nav data-i18n-attr="aria-label:taikhoan.cua-ban" class="my-links" aria-label="Của bạn">
+      <a data-i18n="taikhoan.la-so-da-luu" class="my-link" href="/app/so-la-so"><span data-icon="folder"></span><span class="ml-tx">Lá số đã lưu</span><span class="ml-go">→</span></a>
+      <a data-i18n="taikhoan.bao-cao" class="my-link" href="/app/bao-cao"><span data-icon="file-text"></span><span class="ml-tx">Báo cáo</span><span class="ml-go">→</span></a>
+      <a data-i18n="taikhoan.luot-hoi-thay" class="my-link" href="/app/tro-chuyen"><span data-icon="message-circle"></span><span class="ml-tx">Lượt Hỏi Thầy</span><span class="ml-go">→</span></a>
     </nav>
 
     <!-- 3 tab. Hash cũ (#nhiemvu #moiban #gopy #lichsu) vẫn mở đúng chỗ —
          `openTabFromHash()` trong account-core.js giữ bảng bí danh. -->
     <div class="tabs">
-      <button class="tab-btn active" data-tab="credits"><span class="tab-ic" data-icon="wallet"></span> Ví Lượng</button>
-      <button class="tab-btn" data-tab="ketnoi"><span class="tab-ic" data-icon="link"></span> Kết nối</button>
-      <button class="tab-btn" data-tab="account"><span class="tab-ic" data-icon="settings"></span> Cài đặt</button>
+      <button data-i18n="taikhoan.vi-luong" class="tab-btn active" data-tab="credits"><span class="tab-ic" data-icon="wallet"></span> Ví Lượng</button>
+      <button data-i18n="taikhoan.ket-noi" class="tab-btn" data-tab="ketnoi"><span class="tab-ic" data-icon="link"></span> Kết nối</button>
+      <button data-i18n="taikhoan.cai-dat" class="tab-btn" data-tab="account"><span class="tab-ic" data-icon="settings"></span> Cài đặt</button>
     </div>
 
     <!-- Tab: Credits -->
@@ -255,14 +255,14 @@
       <div class="credit-hero">
         <div class="credit-hero-top">
           <div>
-            <div style="color:rgba(255,255,255,.55);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Số Dư Lượng</div>
+            <div data-i18n="taikhoan.so-du-luong" style="color:rgba(255,255,255,.55);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Số Dư Lượng</div>
             <div id="tabCreditBalance" class="credit-hero-bal">…</div>
-            <div style="color:rgba(255,255,255,.4);font-size:.75rem;margin-top:.3rem">Không hết hạn</div>
+            <div data-i18n="taikhoan.khong-het-han" style="color:rgba(255,255,255,.4);font-size:.75rem;margin-top:.3rem">Không hết hạn</div>
           </div>
-          <a href="/topup.html" class="credit-hero-btn"><span data-icon="wallet" style="width:16px;height:16px"></span> Nạp Lượng</a>
+          <a data-i18n="taikhoan.nap-luong" href="/topup.html" class="credit-hero-btn"><span data-icon="wallet" style="width:16px;height:16px"></span> Nạp Lượng</a>
         </div>
         <div class="credit-progress-wrap">
-          <div class="credit-progress-label">
+          <div data-i18n="taikhoan.da-dung-thang-nay-0-luong" class="credit-progress-label">
             <span>Đã dùng tháng này</span>
             <span id="monthlyUsageLabel">0 lượng</span>
           </div>
@@ -321,8 +321,8 @@
            sidebar "Nhiệm vụ nhận Lượng" (#nhiemvu) và "Mời bạn bè" (#moiban) đổ về đây. -->
 
       <div class="account-section" id="qtCard">
-        <h3><span data-icon="trophy" style="width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)"></span> Khởi Hành</h3>
-        <div id="qtBody"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
+        <h3 data-i18n="taikhoan.khoi-hanh"><span data-icon="trophy" style="width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)"></span> Khởi Hành</h3>
+        <div id="qtBody"><div data-i18n="taikhoan.dang-tai" style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
       </div>
 
       <!-- Kênh liên lạc (bật thông báo/liên kết chat) — tách khỏi Khởi Hành:
@@ -330,7 +330,7 @@
            như 3 bước Khởi Hành. Ẩn hẳn khi cả hai đã xong (account-core.js
            `renderChannelTasks`) — khác #qtCard vốn luôn hiện để TRA CỨU. -->
       <div class="account-section" id="chCard" style="display:none">
-        <h3><span data-icon="message-circle" style="width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)"></span> Kênh liên lạc</h3>
+        <h3 data-i18n="taikhoan.kenh-lien-lac"><span data-icon="message-circle" style="width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)"></span> Kênh liên lạc</h3>
         <div id="chBody"></div>
       </div>
 
@@ -338,39 +338,39 @@
            (account-core.js `loadReferralPanel()` render thẳng vào #refSection,
            dùng chung, không viết logic mới). -->
       <div class="account-section" id="refSection" style="display:none">
-        <h3>Mời Bạn — Nhận Thêm Lượng</h3>
+        <h3 data-i18n="taikhoan.moi-ban-nhan-them-luong">Mời Bạn — Nhận Thêm Lượng</h3>
         <p id="refPitch" style="font-size:.85rem;color:var(--text-mid);line-height:1.7;margin-bottom:1rem"></p>
         <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-bottom:.9rem">
           <input id="refLinkInput" readonly style="flex:1;min-width:220px;font-family:ui-monospace,Menlo,monospace;font-size:.78rem;padding:.55rem .7rem;border:1px solid var(--border-lt);border-radius:7px;background:var(--bg-soft);color:var(--text)">
-          <button id="refCopyBtn" style="background:var(--navy);color:#c9a84c;border:none;padding:.6rem 1.1rem;border-radius:7px;font-weight:700;cursor:pointer;font-size:.85rem">Sao chép</button>
+          <button data-i18n="topup.sao-chep" id="refCopyBtn" style="background:var(--navy);color:#c9a84c;border:none;padding:.6rem 1.1rem;border-radius:7px;font-weight:700;cursor:pointer;font-size:.85rem">Sao chép</button>
         </div>
         <div id="refProgressWrap">
-          <div style="display:flex;justify-content:space-between;font-size:.78rem;color:var(--text-lt);margin-bottom:.35rem">
+          <div data-i18n="taikhoan.da-moi-duoc-thuong-30-ngay" style="display:flex;justify-content:space-between;font-size:.78rem;color:var(--text-lt);margin-bottom:.35rem">
             <span>Đã mời được thưởng (30 ngày qua)</span>
             <span id="refProgressLabel">—</span>
           </div>
           <div style="height:8px;background:var(--border-lt);border-radius:5px;overflow:hidden">
             <div id="refProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#c9a84c,#9A7B3A);border-radius:5px;transition:width .4s"></div>
           </div>
-          <div style="margin-top:.6rem;font-size:.8rem;color:var(--text-lt)">
+          <div data-i18n="taikhoan.tong-da-moi-0-da-nhan" style="margin-top:.6rem;font-size:.8rem;color:var(--text-lt)">
             Tổng đã mời: <strong id="refTotalCount" style="color:var(--heading)">0</strong> ·
             Đã nhận: <strong id="refEarnedCount" style="color:var(--tx-gold)">0</strong> Lượng
           </div>
         </div>
       </div>
       <div class="account-section">
-        <h3>Lịch Sử Giao Dịch</h3>
+        <h3 data-i18n="taikhoan.lich-su-giao-dich">Lịch Sử Giao Dịch</h3>
         <div class="vilu-filters">
-          <select id="viluTypeFilter"><option value="">Tất cả loại giao dịch</option></select>
-          <input id="viluSearch" placeholder="Tìm theo nội dung…">
+          <select id="viluTypeFilter"><option data-i18n="taikhoan.tat-ca-loai-giao-dich" value="">Tất cả loại giao dịch</option></select>
+          <input data-i18n-attr="placeholder:taikhoan.tim-theo-noi-dung" id="viluSearch" placeholder="Tìm theo nội dung…">
         </div>
-        <div id="transactionList"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
+        <div id="transactionList"><div data-i18n="taikhoan.dang-tai" style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
         <div class="vilu-pager" id="viluPager" style="display:none"></div>
       </div>
       <div class="account-section" id="spCard">
-        <h3><span data-icon="share-2" style="width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)"></span> Chia Sẻ — Lịch Sử</h3>
-        <p class="sp-intro">Bấm nút <strong>"Chia sẻ"</strong> ở góc dưới bất kỳ trang kết quả nào để lấy link — gửi cho ai đó hoặc đăng lên Facebook/Zalo/WhatsApp. Các lượt bạn đã chia sẻ và số lượt xem hiện ở đây.</p>
-        <div id="spBody"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
+        <h3 data-i18n="taikhoan.chia-se-lich-su"><span data-icon="share-2" style="width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)"></span> Chia Sẻ — Lịch Sử</h3>
+        <p data-i18n="taikhoan.bam-nut-chia-se-o-goc" class="sp-intro">Bấm nút <strong>"Chia sẻ"</strong> ở góc dưới bất kỳ trang kết quả nào để lấy link — gửi cho ai đó hoặc đăng lên Facebook/Zalo/WhatsApp. Các lượt bạn đã chia sẻ và số lượt xem hiện ở đây.</p>
+        <div id="spBody"><div data-i18n="taikhoan.dang-tai" style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
       </div>
     </div>
 
@@ -417,76 +417,76 @@
       </style>
 
       <div class="conn-stats">
-        <div class="conn-stat"><div class="conn-stat-ic" style="background:var(--chip-green);color:var(--green)"><span data-icon="link"></span></div><div><div class="conn-stat-v" id="connOkCount">0/4</div><div class="conn-stat-l">Đã kết nối</div></div></div>
-        <div class="conn-stat"><div class="conn-stat-ic" style="background:var(--chip-red);color:var(--red)"><span data-icon="message-circle"></span></div><div><div class="conn-stat-v" id="connMissingCount">4/4</div><div class="conn-stat-l">Chưa kết nối</div></div></div>
+        <div class="conn-stat"><div class="conn-stat-ic" style="background:var(--chip-green);color:var(--green)"><span data-icon="link"></span></div><div><div class="conn-stat-v" id="connOkCount">0/4</div><div data-i18n="taikhoan.da-ket-noi" class="conn-stat-l">Đã kết nối</div></div></div>
+        <div class="conn-stat"><div class="conn-stat-ic" style="background:var(--chip-red);color:var(--red)"><span data-icon="message-circle"></span></div><div><div class="conn-stat-v" id="connMissingCount">4/4</div><div data-i18n="taikhoan.chua-ket-noi" class="conn-stat-l">Chưa kết nối</div></div></div>
       </div>
 
-      <p class="conn-intro">Dùng Tử Vi Minh Bảo ở mọi nơi bạn chat — Hỏi Thầy ngay trong trợ lý chat quen dùng, hoặc trong Telegram · WhatsApp · Messenger, tất cả chung một ví Lượng.</p>
+      <p data-i18n="taikhoan.dung-tu-vi-minh-bao-o" class="conn-intro">Dùng Tử Vi Minh Bảo ở mọi nơi bạn chat — Hỏi Thầy ngay trong trợ lý chat quen dùng, hoặc trong Telegram · WhatsApp · Messenger, tất cả chung một ví Lượng.</p>
 
       <!-- AI qua MCP -->
       <div class="conn-card conn-hero">
         <div class="conn-head">
           <div class="conn-ic" style="background:linear-gradient(120deg,#7b5cff,#4aa3ff)"><span data-icon="sparkles"></span></div>
           <div>
-            <div class="conn-title">Hỏi Thầy trong trợ lý chat của bạn <span class="conn-badge">Mới</span></div>
-            <div class="conn-sub">Claude · ChatGPT · Gemini · Grok</div>
+            <div data-i18n="taikhoan.hoi-thay-trong-tro-ly-chat" class="conn-title">Hỏi Thầy trong trợ lý chat của bạn <span class="conn-badge">Mới</span></div>
+            <div data-i18n="taikhoan.claude-chatgpt-gemini-grok" class="conn-sub">Claude · ChatGPT · Gemini · Grok</div>
           </div>
         </div>
-        <p class="conn-desc">Tạo một đường kết nối riêng rồi dán vào trợ lý chat của bạn. Sau đó hỏi thẳng "lập lá số cho nam sinh 9/5/1984 giờ Sửu", "năm 2027 vận hạn thế nào?" — hệ thống lấy số liệu <strong>chuẩn xác từ engine</strong> của tuviminhbao.com, không bịa.</p>
+        <p data-i18n="taikhoan.tao-mot-duong-ket-noi-rieng" class="conn-desc">Tạo một đường kết nối riêng rồi dán vào trợ lý chat của bạn. Sau đó hỏi thẳng "lập lá số cho nam sinh 9/5/1984 giờ Sửu", "năm 2027 vận hạn thế nào?" — hệ thống lấy số liệu <strong>chuẩn xác từ engine</strong> của tuviminhbao.com, không bịa.</p>
 
-        <div id="mcpChecking"><span class="conn-status"><span class="ic" data-icon="hourglass"></span> Đang kiểm tra…</span></div>
+        <div data-i18n="taikhoan.dang-kiem-tra" id="mcpChecking"><span class="conn-status"><span class="ic" data-icon="hourglass"></span> Đang kiểm tra…</span></div>
 
         <div id="mcpNoKey" style="display:none">
-          <button id="btnMcpGen" class="conn-btn conn-btn-ai">Tạo đường kết nối</button>
+          <button data-i18n="taikhoan.tao-duong-ket-noi" id="btnMcpGen" class="conn-btn conn-btn-ai">Tạo đường kết nối</button>
         </div>
 
         <div id="mcpReady" style="display:none">
-          <span class="conn-pill">● Đã sẵn sàng</span>
+          <span data-i18n="taikhoan.da-san-sang" class="conn-pill">● Đã sẵn sàng</span>
           <div style="margin-top:.75rem">
-            <label class="conn-label">Đường kết nối riêng của bạn</label>
+            <label data-i18n="taikhoan.duong-ket-noi-rieng-cua-ban" class="conn-label">Đường kết nối riêng của bạn</label>
             <div class="conn-url-row">
               <input id="mcpUrl" class="conn-url" readonly value="">
               <button id="btnMcpCopy" class="conn-copy">Copy</button>
             </div>
           </div>
           <div class="conn-steps">
-            <details open><summary>Kết nối vào Claude</summary>
+            <details open><summary data-i18n="taikhoan.ket-noi-vao-claude">Kết nối vào Claude</summary>
               <ol>
-                <li>Mở <strong>Settings → Connectors</strong> (Claude Desktop hoặc claude.ai).</li>
-                <li>Bấm <strong>Add custom connector</strong>.</li>
-                <li>Dán đường kết nối ở trên vào ô URL → <strong>Add</strong>.</li>
-                <li><strong>QUAN TRỌNG:</strong> trong khung chat, bấm nút công cụ (dấu <strong>+</strong>) → <strong>Tool access</strong> → chọn <strong>"Tools already loaded"</strong>. Mặc định là "Load tools when needed" khiến Claude không thấy công cụ và tự bịa lá số. Bật một lần, các chat sau tự giữ.</li>
-                <li>Xong! Hỏi Claude "lập lá số cho nam sinh 9/5/1984 giờ Sửu" là nó tự gọi công cụ Tử Vi Minh Bảo.</li>
+                <li data-i18n="taikhoan.mo-settings-connectors-claude-desktop-ho">Mở <strong>Settings → Connectors</strong> (Claude Desktop hoặc claude.ai).</li>
+                <li data-i18n="taikhoan.bam-add-custom-connector">Bấm <strong>Add custom connector</strong>.</li>
+                <li data-i18n="taikhoan.dan-duong-ket-noi-o-tren">Dán đường kết nối ở trên vào ô URL → <strong>Add</strong>.</li>
+                <li data-i18n="taikhoan.quan-trong-trong-khung-chat-bam"><strong>QUAN TRỌNG:</strong> trong khung chat, bấm nút công cụ (dấu <strong>+</strong>) → <strong>Tool access</strong> → chọn <strong>"Tools already loaded"</strong>. Mặc định là "Load tools when needed" khiến Claude không thấy công cụ và tự bịa lá số. Bật một lần, các chat sau tự giữ.</li>
+                <li data-i18n="taikhoan.xong-hoi-claude-lap-la-so">Xong! Hỏi Claude "lập lá số cho nam sinh 9/5/1984 giờ Sửu" là nó tự gọi công cụ Tử Vi Minh Bảo.</li>
               </ol>
             </details>
-            <details><summary>Kết nối vào ChatGPT</summary>
+            <details><summary data-i18n="taikhoan.ket-noi-vao-chatgpt">Kết nối vào ChatGPT</summary>
               <ol>
-                <li>Bật <strong>Settings → Connectors → Developer mode</strong>.</li>
-                <li><strong>Add MCP server</strong> → chọn <strong>Streamable HTTP</strong>.</li>
-                <li>Dán đường kết nối ở trên → lưu.</li>
+                <li data-i18n="taikhoan.bat-settings-connectors-developer-mode">Bật <strong>Settings → Connectors → Developer mode</strong>.</li>
+                <li data-i18n="taikhoan.add-mcp-server-chon-streamable-http"><strong>Add MCP server</strong> → chọn <strong>Streamable HTTP</strong>.</li>
+                <li data-i18n="taikhoan.dan-duong-ket-noi-o-tren-6lkt">Dán đường kết nối ở trên → lưu.</li>
               </ol>
             </details>
-            <details><summary>Gemini / Grok / trợ lý khác</summary>
+            <details><summary data-i18n="taikhoan.gemini-grok-tro-ly-khac">Gemini / Grok / trợ lý khác</summary>
               <ol>
-                <li>Tìm mục thêm <strong>MCP server</strong> / <strong>custom connector</strong> (Streamable HTTP).</li>
-                <li>Dán đường kết nối ở trên. Không cần cấu hình gì thêm — key nằm sẵn trong đường dẫn.</li>
+                <li data-i18n="taikhoan.tim-muc-them-mcp-server-custom">Tìm mục thêm <strong>MCP server</strong> / <strong>custom connector</strong> (Streamable HTTP).</li>
+                <li data-i18n="taikhoan.dan-duong-ket-noi-o-tren-bdph">Dán đường kết nối ở trên. Không cần cấu hình gì thêm — key nằm sẵn trong đường dẫn.</li>
               </ol>
             </details>
           </div>
           <div style="margin-top:1rem;background:var(--bg-soft);border-radius:10px;padding:.8rem .95rem">
-            <div style="font-size:.78rem;font-weight:800;color:var(--heading);margin-bottom:.4rem"><span data-icon="lightbulb" style="width:14px;height:14px;vertical-align:-2px"></span> Kết nối xong thì hỏi thế nào?</div>
+            <div data-i18n="taikhoan.ket-noi-xong-thi-hoi-the" style="font-size:.78rem;font-weight:800;color:var(--heading);margin-bottom:.4rem"><span data-icon="lightbulb" style="width:14px;height:14px;vertical-align:-2px"></span> Kết nối xong thì hỏi thế nào?</div>
             <div style="font-size:.82rem;color:var(--text-mid);line-height:1.7">
-              Không cần bấm gì — cứ chat bình thường, hệ thống tự gọi công cụ. Nhớ <strong>nói đủ ngày + giờ + giới tính sinh</strong>. Ví dụ:
+              <span data-i18n="taikhoan.khong-can-bam-gi-cu-chat">Không cần bấm gì — cứ chat bình thường, hệ thống tự gọi công cụ. Nhớ</span> <strong data-i18n="taikhoan.noi-du-ngay-gio-gioi-tinh">nói đủ ngày + giờ + giới tính sinh</strong><span data-i18n="taikhoan.vi-du">. Ví dụ:</span>
               <ul style="margin:.5rem 0 0 1.1rem;padding:0">
-                <li>"Lập lá số tử vi cho nam sinh 9/5/1984 lúc 1h45 sáng"</li>
-                <li>"Luận giải chi tiết lá số giúp tôi"</li>
-                <li>"Năm 2027 của tôi vận hạn ra sao? Tháng 3 thì sao?"</li>
-                <li>"Vợ chồng tuổi 1984 và 1986 có hợp không?"</li>
-                <li>"Sao Thất Sát ở cung Mệnh nghĩa là gì?"</li>
+                <li data-i18n="taikhoan.lap-la-so-tu-vi-cho">"Lập lá số tử vi cho nam sinh 9/5/1984 lúc 1h45 sáng"</li>
+                <li data-i18n="taikhoan.luan-giai-chi-tiet-la-so">"Luận giải chi tiết lá số giúp tôi"</li>
+                <li data-i18n="taikhoan.nam-2027-cua-toi-van-han">"Năm 2027 của tôi vận hạn ra sao? Tháng 3 thì sao?"</li>
+                <li data-i18n="taikhoan.vo-chong-tuoi-1984-va-1986">"Vợ chồng tuổi 1984 và 1986 có hợp không?"</li>
+                <li data-i18n="taikhoan.sao-that-sat-o-cung-menh">"Sao Thất Sát ở cung Mệnh nghĩa là gì?"</li>
               </ul>
             </div>
           </div>
-          <button id="btnMcpRevoke" class="conn-revoke">Thu hồi &amp; tạo key mới</button>
+          <button data-i18n="taikhoan.thu-hoi-tao-key-moi" id="btnMcpRevoke" class="conn-revoke">Thu hồi &amp; tạo key mới</button>
         </div>
       </div>
 
@@ -494,13 +494,13 @@
       <div class="conn-card">
         <div class="conn-head">
           <div class="conn-ic" style="background:#229ED9"><span data-icon="message-circle"></span></div>
-          <div><div class="conn-title">Telegram</div><div class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
+          <div><div class="conn-title">Telegram</div><div data-i18n="taikhoan.chat-voi-bot-bang-dung-vi" class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
         </div>
-        <p class="chan-desc">Nạp Lượng ở đây, nhắn bot Telegram là dùng được luôn cùng ví.</p>
+        <p data-i18n="taikhoan.nap-luong-o-day-nhan-bot" class="chan-desc">Nạp Lượng ở đây, nhắn bot Telegram là dùng được luôn cùng ví.</p>
         <div class="conn-row" id="tgLinkBox">
-          <span id="tgLinkStatus" class="conn-status">Đang kiểm tra…</span>
-          <button id="btnTgLink" style="display:none;background:#229ED9;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Liên kết Telegram</button>
-          <button id="btnTgUnlink" style="display:none;background:transparent;color:var(--red);border:1px solid var(--red);padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
+          <span data-i18n="taikhoan.dang-kiem-tra-akb9" id="tgLinkStatus" class="conn-status">Đang kiểm tra…</span>
+          <button data-i18n="taikhoan.lien-ket-telegram" id="btnTgLink" style="display:none;background:#229ED9;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Liên kết Telegram</button>
+          <button data-i18n="taikhoan.huy-lien-ket" id="btnTgUnlink" style="display:none;background:transparent;color:var(--red);border:1px solid var(--red);padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
         </div>
       </div>
 
@@ -508,13 +508,13 @@
       <div class="conn-card">
         <div class="conn-head">
           <div class="conn-ic" style="background:#25D366"><span data-icon="message-circle"></span></div>
-          <div><div class="conn-title">WhatsApp</div><div class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
+          <div><div class="conn-title">WhatsApp</div><div data-i18n="taikhoan.chat-voi-bot-bang-dung-vi" class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
         </div>
-        <p class="chan-desc">Nạp Lượng ở đây, nhắn bot WhatsApp là dùng được luôn cùng ví.</p>
+        <p data-i18n="taikhoan.nap-luong-o-day-nhan-bot-1xta" class="chan-desc">Nạp Lượng ở đây, nhắn bot WhatsApp là dùng được luôn cùng ví.</p>
         <div class="conn-row" id="waLinkBox">
-          <span id="waLinkStatus" class="conn-status">Đang kiểm tra…</span>
-          <button id="btnWaLink" style="display:none;background:#25D366;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Liên kết WhatsApp</button>
-          <button id="btnWaUnlink" style="display:none;background:transparent;color:var(--red);border:1px solid var(--red);padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
+          <span data-i18n="taikhoan.dang-kiem-tra-akb9" id="waLinkStatus" class="conn-status">Đang kiểm tra…</span>
+          <button data-i18n="taikhoan.lien-ket-whatsapp" id="btnWaLink" style="display:none;background:#25D366;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Liên kết WhatsApp</button>
+          <button data-i18n="taikhoan.huy-lien-ket" id="btnWaUnlink" style="display:none;background:transparent;color:var(--red);border:1px solid var(--red);padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
         </div>
       </div>
 
@@ -522,13 +522,13 @@
       <div class="conn-card">
         <div class="conn-head">
           <div class="conn-ic" style="background:#0084FF"><span data-icon="message-circle"></span></div>
-          <div><div class="conn-title">Messenger</div><div class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
+          <div><div class="conn-title">Messenger</div><div data-i18n="taikhoan.chat-voi-bot-bang-dung-vi" class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
         </div>
-        <p class="chan-desc">Nạp Lượng ở đây, nhắn bot Facebook Messenger là dùng được luôn cùng ví.</p>
+        <p data-i18n="taikhoan.nap-luong-o-day-nhan-bot-x2oh" class="chan-desc">Nạp Lượng ở đây, nhắn bot Facebook Messenger là dùng được luôn cùng ví.</p>
         <div class="conn-row" id="msgrLinkBox">
-          <span id="msgrLinkStatus" class="conn-status">Đang kiểm tra…</span>
-          <button id="btnMsgrLink" style="display:none;background:#0084FF;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Liên kết Messenger</button>
-          <button id="btnMsgrUnlink" style="display:none;background:transparent;color:var(--red);border:1px solid var(--red);padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
+          <span data-i18n="taikhoan.dang-kiem-tra-akb9" id="msgrLinkStatus" class="conn-status">Đang kiểm tra…</span>
+          <button data-i18n="taikhoan.lien-ket-messenger" id="btnMsgrLink" style="display:none;background:#0084FF;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Liên kết Messenger</button>
+          <button data-i18n="taikhoan.huy-lien-ket" id="btnMsgrUnlink" style="display:none;background:transparent;color:var(--red);border:1px solid var(--red);padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
         </div>
       </div>
 
@@ -537,13 +537,13 @@
       <div class="conn-card" id="zaloCard" style="display:none">
         <div class="conn-head">
           <div class="conn-ic" style="background:#0068FF"><span data-icon="message-circle"></span></div>
-          <div><div class="conn-title">Zalo</div><div class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
+          <div><div class="conn-title">Zalo</div><div data-i18n="taikhoan.chat-voi-bot-bang-dung-vi" class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
         </div>
-        <p class="chan-desc">Nạp Lượng ở đây, nhắn Zalo OA Tử Vi Minh Bảo là dùng được luôn cùng ví.</p>
+        <p data-i18n="taikhoan.nap-luong-o-day-nhan-zalo" class="chan-desc">Nạp Lượng ở đây, nhắn Zalo OA Tử Vi Minh Bảo là dùng được luôn cùng ví.</p>
         <div class="conn-row" id="zaloLinkBox">
-          <span id="zaloLinkStatus" class="conn-status">Đang kiểm tra…</span>
-          <button id="btnZaloLink" style="display:none;background:#0068FF;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Liên kết Zalo</button>
-          <button id="btnZaloUnlink" style="display:none;background:transparent;color:var(--red);border:1px solid var(--red);padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
+          <span data-i18n="taikhoan.dang-kiem-tra-akb9" id="zaloLinkStatus" class="conn-status">Đang kiểm tra…</span>
+          <button data-i18n="taikhoan.lien-ket-zalo" id="btnZaloLink" style="display:none;background:#0068FF;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Liên kết Zalo</button>
+          <button data-i18n="taikhoan.huy-lien-ket" id="btnZaloUnlink" style="display:none;background:transparent;color:var(--red);border:1px solid var(--red);padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
         </div>
       </div>
     </div>
@@ -577,45 +577,45 @@
 
       <div class="settle">
         <nav class="setnav">
-          <button class="setnav-btn active" type="button" data-pane="info"><span data-icon="user"></span> Thông tin</button>
-          <button class="setnav-btn" type="button" data-pane="security"><span data-icon="lock"></span> Bảo mật</button>
-          <button class="setnav-btn" type="button" data-pane="theme"><span data-icon="sun"></span> Giao diện</button>
-          <button class="setnav-btn" type="button" data-pane="gopy"><span data-icon="inbox"></span> Góp ý</button>
+          <button data-i18n="taikhoan.thong-tin" class="setnav-btn active" type="button" data-pane="info"><span data-icon="user"></span> Thông tin</button>
+          <button data-i18n="taikhoan.bao-mat" class="setnav-btn" type="button" data-pane="security"><span data-icon="lock"></span> Bảo mật</button>
+          <button data-i18n="taikhoan.giao-dien" class="setnav-btn" type="button" data-pane="theme"><span data-icon="sun"></span> Giao diện</button>
+          <button data-i18n="taikhoan.gop-y" class="setnav-btn" type="button" data-pane="gopy"><span data-icon="inbox"></span> Góp ý</button>
         </nav>
 
         <div class="setpanes">
           <div class="setpane active" data-pane="info">
             <div class="account-section">
-              <h3>Thông tin cá nhân</h3>
+              <h3 data-i18n="taikhoan.thong-tin-ca-nhan">Thông tin cá nhân</h3>
               <div class="form-row">
                 <label>Email</label>
                 <input type="email" id="accEmail" disabled/>
               </div>
               <div class="form-row">
-                <label>Tên hiển thị</label>
-                <input type="text" id="accName" placeholder="Nhập tên của bạn"/>
+                <label data-i18n="taikhoan.ten-hien-thi">Tên hiển thị</label>
+                <input data-i18n-attr="placeholder:taikhoan.nhap-ten-cua-ban" type="text" id="accName" placeholder="Nhập tên của bạn"/>
               </div>
-              <button class="btn-primary" onclick="saveDisplayName()" style="margin-top:.25rem">Lưu Tên</button>
+              <button data-i18n="taikhoan.luu-ten" class="btn-primary" onclick="saveDisplayName()" style="margin-top:.25rem">Lưu Tên</button>
               <div id="nameAlert"></div>
             </div>
           </div>
 
           <div class="setpane" data-pane="security">
             <div class="account-section">
-              <h3>Đổi mật khẩu</h3>
+              <h3 data-i18n="taikhoan.doi-mat-khau">Đổi mật khẩu</h3>
               <div id="pwdSection">
               <div class="form-row">
-                <label>Mật khẩu mới</label>
-                <input type="password" id="newPwd" placeholder="Nhập mật khẩu mới"/>
+                <label data-i18n="taikhoan.mat-khau-moi">Mật khẩu mới</label>
+                <input data-i18n-attr="placeholder:taikhoan.nhap-mat-khau-moi" type="password" id="newPwd" placeholder="Nhập mật khẩu mới"/>
               </div>
               <div class="form-row">
-                <label>Xác nhận mật khẩu</label>
-                <input type="password" id="confirmPwd" placeholder="Nhập lại mật khẩu"/>
+                <label data-i18n="taikhoan.xac-nhan-mat-khau">Xác nhận mật khẩu</label>
+                <input data-i18n-attr="placeholder:taikhoan.nhap-lai-mat-khau" type="password" id="confirmPwd" placeholder="Nhập lại mật khẩu"/>
               </div>
-              <button class="btn-primary" onclick="changePassword()">Đổi Mật Khẩu</button>
+              <button data-i18n="taikhoan.doi-mat-khau-9m0f" class="btn-primary" onclick="changePassword()">Đổi Mật Khẩu</button>
               <div id="pwdAlert"></div>
               </div>
-              <div id="pwdOAuthMsg" style="display:none;font-size:.85rem;color:var(--text-lt);padding:.5rem 0">
+              <div data-i18n="taikhoan.tai-khoan-dang-nhap-qua-oauth" id="pwdOAuthMsg" style="display:none;font-size:.85rem;color:var(--text-lt);padding:.5rem 0">
                 Tài khoản đăng nhập qua OAuth không sử dụng mật khẩu.
               </div>
             </div>
@@ -623,11 +623,11 @@
 
           <div class="setpane" data-pane="theme">
             <div class="account-section">
-              <h3>Giao diện</h3>
-              <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:.5rem">Chọn nền sáng hoặc tối cho toàn bộ Tử Vi Minh Bảo — áp dụng ngay, nhớ cho lần sau.</p>
+              <h3 data-i18n="taikhoan.giao-dien-e4yw">Giao diện</h3>
+              <p data-i18n="taikhoan.chon-nen-sang-hoac-toi-cho" style="font-size:.85rem;color:var(--text-mid);margin-bottom:.5rem">Chọn nền sáng hoặc tối cho toàn bộ Tử Vi Minh Bảo — áp dụng ngay, nhớ cho lần sau.</p>
               <div class="theme-choice">
-                <button class="theme-btn" type="button" data-theme-choice="light"><span data-icon="sun" style="width:14px;height:14px;vertical-align:-2px"></span> Sáng</button>
-                <button class="theme-btn" type="button" data-theme-choice="dark"><span data-icon="moon" style="width:14px;height:14px;vertical-align:-2px"></span> Tối</button>
+                <button data-i18n="taikhoan.sang" class="theme-btn" type="button" data-theme-choice="light"><span data-icon="sun" style="width:14px;height:14px;vertical-align:-2px"></span> Sáng</button>
+                <button data-i18n="taikhoan.toi" class="theme-btn" type="button" data-theme-choice="dark"><span data-icon="moon" style="width:14px;height:14px;vertical-align:-2px"></span> Tối</button>
               </div>
             </div>
           </div>
@@ -655,6 +655,12 @@ window.iconHtml=window.iconHtml||function(k){return (window.ICONS&&window.ICONS[
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/shell.js?v=150"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
-<script src="/account-core.js?v=15"></script>
+<script src="/account-core.js?v=16"></script>
+<script>
+// Chữ do account-core.js dựng nằm ở namespace js.taikhoan. Server (lib/i18n/render.mjs detectSoftNamespaces) chỉ
+// nhận namespace qua lời gọi T/_tvmbT('js.<ns>.…') NGAY TRONG HTML trang (file .js ngoài không được quét) ⇒ dòng
+// dưới chỉ để server nhúng từ điển js.taikhoan cho trang này; nó không làm gì lúc chạy.
+// _tvmbT('js.taikhoan.nguoi-dung', 'Người Dùng')
+</script>
 </body>
 </html>
