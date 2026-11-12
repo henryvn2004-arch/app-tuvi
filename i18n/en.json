@@ -6747,6 +6747,442 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.thtp.am-s": {
+  "t": " syl/s",
+  "h": "49ed1880"
+ },
+ "js.thtp.am-sac-am-toi-tho-kim": {
+  "t": "Warm, dark timbre — low Earth/Metal.",
+  "h": "12665913"
+ },
+ "js.thtp.am-sac-sang": {
+  "t": "Bright timbre.",
+  "h": "8c1437e2"
+ },
+ "js.thtp.am-sac-trung-binh": {
+  "t": "Medium timbre.",
+  "h": "ed7134e9"
+ },
+ "js.thtp.amplitude-rat-on-dinh": {
+  "t": "Amplitude is very steady.",
+  "h": "5f11e83b"
+ },
+ "js.thtp.bai-n": {
+  "t": "Task {n}",
+  "h": "9227ba34"
+ },
+ "js.thtp.bai-tiep-theo": {
+  "t": "Next task →",
+  "h": "aad8808b"
+ },
+ "js.thtp.bat-dau-thu-am": {
+  "t": "Start recording",
+  "h": "61e33202"
+ },
+ "js.thtp.bien-dong-lon": {
+  "t": "Large fluctuation.",
+  "h": "56e49443"
+ },
+ "js.thtp.binh-thuong": {
+  "t": "Normal.",
+  "h": "4711eaec"
+ },
+ "js.thtp.cao-vung-moc": {
+  "t": "High — Wood range.",
+  "h": "1f708e1f"
+ },
+ "js.thtp.cham-diem-dam": {
+  "t": "Slow — composed.",
+  "h": "1761f7f1"
+ },
+ "js.thtp.co-bien-dong": {
+  "t": "Some fluctuation.",
+  "h": "bb657503"
+ },
+ "js.thtp.co-tap-am-vung-giua-thanh": {
+  "t": "Some noise — between Clear and Muddy.",
+  "h": "72479b12"
+ },
+ "js.thtp.cong-cha-nhu-nui-thai-son": {
+  "t": "A father's love is like Mount Tai;\na mother's love, like water flowing from the source.",
+  "h": "5e8b8ca0"
+ },
+ "js.thtp.da-ghi-xong": {
+  "t": "Recorded",
+  "h": "8d555bc2"
+ },
+ "js.thtp.dang-ghi-am": {
+  "t": "Recording…",
+  "h": "e8185717"
+ },
+ "js.thtp.dang-luan-giai": {
+  "t": "Reading…",
+  "h": "aa035f2b"
+ },
+ "js.thtp.dang-phan-tich": {
+  "t": "Analyzing…",
+  "h": "6c1c499b"
+ },
+ "js.thtp.dang-phan-tich-theo-co-phap": {
+  "t": "Analyzing by the classical method",
+  "h": "18ad9517"
+ },
+ "js.thtp.dang-tinh-toan-dac-trung-am": {
+  "t": "Computing acoustic features…",
+  "h": "7e4c7703"
+ },
+ "js.thtp.dao-dong-manh-ky-cach-pha": {
+  "t": "Strong swings — the \"cracked gong\" (Po Luo) pattern is unfavorable.",
+  "h": "af8f73b4"
+ },
+ "js.thtp.dem-deu-toc-do-khong-gap": {
+  "t": "Count at an even pace, neither rushed nor slow. Leave about half a second between numbers.",
+  "h": "3c773947"
+ },
+ "js.thtp.dem-so-1-15": {
+  "t": "Count 1 → 15",
+  "h": "f6278207"
+ },
+ "js.thtp.do-on-dinh-f0": {
+  "t": "F0 Stability",
+  "h": "f0626dcb"
+ },
+ "js.thtp.do-truc-tiep-tu-giong-noi": {
+  "t": " Measured directly from your voice through the microphone. The other 11 acoustic metrics and the full reading are in the in-depth analysis.",
+  "h": "1514c6cc"
+ },
+ "js.thtp.do-uyen-chuyen-tong-giong": {
+  "t": "Flexibility of pitch.",
+  "h": "c42d8f86"
+ },
+ "js.thtp.doc-binh-thuong-ro-rang-khong": {
+  "t": "Read normally and clearly, without rushing, and don't deliberately go lower or higher. This is your baseline voice.",
+  "h": "ace9a97f"
+ },
+ "js.thtp.doc-co-ngu-dieu-len-xuong": {
+  "t": "Read with intonation, letting your pitch rise and fall naturally. These are the opening lines of The Tale of Kiều, a Vietnamese classic — read them as if reciting poetry.",
+  "h": "deebf884"
+ },
+ "js.thtp.doc-doan-van": {
+  "t": "Read a passage",
+  "h": "1d0b2c72"
+ },
+ "js.thtp.doc-ngan-theo-huong-dan": {
+  "t": "Read or hold the sound as instructed.",
+  "h": "3c680985"
+ },
+ "js.thtp.doc-tho-bai-do-pitch-range": {
+  "t": "Recite a poem — pitch range test",
+  "h": "73c2b60b"
+ },
+ "js.thtp.don-dieu-it-bieu-cam": {
+  "t": "Monotone — little expression.",
+  "h": "3e48c9db"
+ },
+ "js.thtp.f0-trung-binh": {
+  "t": "Mean F0",
+  "h": "36f5bf55"
+ },
+ "js.thtp.giong-cao-bat-thuong-cho-nam": {
+  "t": "ℹ Unusually high for a male voice. You may be using a falsetto, or the data may be unstable.",
+  "h": "a3164510"
+ },
+ "js.thtp.giong-cua-ban-thuoc-n": {
+  "t": "Your voice belongs to **{n}** (measured across 4 tasks and 12 acoustic metrics). Would you like to ask more about voice reading?",
+  "h": "890b1b1b"
+ },
+ "js.thtp.giong-nen-f0": {
+  "t": "Baseline voice: mean F0 <strong>{f0}Hz</strong>, speaking rate {rate} syllables/sec.",
+  "h": "a9e1812d"
+ },
+ "js.thtp.giong-thanh-trong-vang": {
+  "t": "\"Clear\" voice — bright and resonant.",
+  "h": "b5424c0c"
+ },
+ "js.thtp.giong-tram-bat-thuong-cho-nu": {
+  "t": "ℹ Unusually low for a female voice. You may be forcing a lower voice, or the data may be unstable.",
+  "h": "b7ed0210"
+ },
+ "js.thtp.giong-troc-duc": {
+  "t": "\"Muddy\" voice — cloudy.",
+  "h": "b504dd91"
+ },
+ "js.thtp.giong-vua-thanh-vua-co-luc": {
+  "t": "Clear and strong at once.",
+  "h": "a7a812ab"
+ },
+ "js.thtp.giu-deu-khi-day-tot": {
+  "t": "Holds steady — good foundational qi.",
+  "h": "ee4f48e1"
+ },
+ "js.thtp.hit-mot-hoi-sau-sau-do": {
+  "t": "Take a deep breath, then hold the sound \"Ah\" continuously at the SAME pitch, without rising or falling — the steadier, the better. This is the most important task — it measures your qi strength.",
+  "h": "a85ada27"
+ },
+ "js.thtp.hnr-do-trong": {
+  "t": "HNR (Clarity)",
+  "h": "372da110"
+ },
+ "js.thtp.hnr-thap-8db-nhieu-tap-am": {
+  "t": "⚠ Low HNR (<8dB) — a lot of noise. Check that your environment is quieter.",
+  "h": "4f448bef"
+ },
+ "js.thtp.hnr-thap-noi-len-dieu-gi": {
+  "t": "What does a low HNR mean?",
+  "h": "c0db1713"
+ },
+ "js.thtp.hoi-lech-dau-hieu-khi-khong": {
+  "t": "Slightly off — a sign of uneven qi.",
+  "h": "7392dcf4"
+ },
+ "js.thtp.hoi-rung-co-the-cang-thang": {
+  "t": "Slight tremor — possibly tension.",
+  "h": "a544df6f"
+ },
+ "js.thtp.jitter-ngan": {
+  "t": "Jitter (sustained)",
+  "h": "6ca69280"
+ },
+ "js.thtp.jitter-va-shimmer-la-gi": {
+  "t": "What are jitter and shimmer?",
+  "h": "0fc478fd"
+ },
+ "js.thtp.khac-gi-ban-thanh-tuong-thuong": {
+  "t": "How is this different from the regular Voice Reading?",
+  "h": "37afdd5e"
+ },
+ "js.thtp.khi-bat-tuc": {
+  "t": "insufficient qi",
+  "h": "26098327"
+ },
+ "js.thtp.khi-bat-tuc-can-luyen-duong": {
+  "t": "Insufficient qi — needs cultivating.",
+  "h": "a17003c2"
+ },
+ "js.thtp.khi-du-vung-quy-tuong": {
+  "t": "Sufficient qi — a noble-physiognomy range.",
+  "h": "ba173e75"
+ },
+ "js.thtp.khi-luc-rat-tot-khi-tuc": {
+  "t": "Excellent qi strength — \"full qi, round voice\".",
+  "h": "271ac112"
+ },
+ "js.thtp.khi-luc-tot": {
+  "t": "good qi strength",
+  "h": "191dd52d"
+ },
+ "js.thtp.khi-sustain": {
+  "t": "Qi (Sustain)",
+  "h": "64bc1d84"
+ },
+ "js.thtp.khi-trung-binh": {
+  "t": "average qi",
+  "h": "7f2a227e"
+ },
+ "js.thtp.khi-trung-binh-dogb": {
+  "t": "Average qi.",
+  "h": "29600da0"
+ },
+ "js.thtp.khong-nhan-duoc-noi-dung-tra": {
+  "t": "No result was returned. Please try again.",
+  "h": "a80badc4"
+ },
+ "js.thtp.khong-truy-cap-duoc-microphone": {
+  "t": "can't access the microphone",
+  "h": "a07b8893"
+ },
+ "js.thtp.loi": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.thtp.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.thtp.loi-stream-e": {
+  "t": "Stream error: {e}",
+  "h": "62596680"
+ },
+ "js.thtp.luan-giai-lai": {
+  "t": "Read again",
+  "h": "11d43587"
+ },
+ "js.thtp.mot-hai-ba-bon-nam-sau": {
+  "t": "One, two, three, four, five, six,\nseven, eight, nine, ten, eleven,\ntwelve, thirteen, fourteen, fifteen.",
+  "h": "6b26e8a7"
+ },
+ "js.thtp.n-giay": {
+  "t": "{n} sec",
+  "h": "4b5fecbd"
+ },
+ "js.thtp.ngan-am-a-bai-do-khi": {
+  "t": "Hold the \"Ah\" — qi test",
+  "h": "df9c2325"
+ },
+ "js.thtp.ngan-am-qua-ngan-2-5s": {
+  "t": "⚠ Sustained sound too short (<2.5s) — insufficient qi, or the mic didn't capture it fully. Unless intentional, re-record task 2.",
+  "h": "608e2941"
+ },
+ "js.thtp.ngan-dai-shimmer": {
+  "t": "Sustained <strong>{d}s</strong>, shimmer {sh}dB — <em>{q}</em>.",
+  "h": "e8a19bff"
+ },
+ "js.thtp.ngu-am-uoc-tinh-n": {
+  "t": "Estimated Five Tones: {n}",
+  "h": "21219146"
+ },
+ "js.thtp.nguam-chen": {
+  "t": "{a}, mixed with {b}",
+  "h": "8891cc34"
+ },
+ "js.thtp.nguam-thanh": {
+  "t": "Clear {x}",
+  "h": "796dcf40"
+ },
+ "js.thtp.nguam-troc": {
+  "t": "Muddy {x}",
+  "h": "8f9cb8cf"
+ },
+ "js.thtp.nhanh-linh-hoat": {
+  "t": "Fast — agile.",
+  "h": "f8f7c567"
+ },
+ "js.thtp.on-dinh": {
+  "t": "Stable.",
+  "h": "44fce326"
+ },
+ "js.thtp.on-dinh-binh-thuong": {
+  "t": "Stable — normal.",
+  "h": "2d859433"
+ },
+ "js.thtp.pitch-range-uyen-chuyen": {
+  "t": "Pitch range: <strong>{r}Hz</strong>, flexibility {a}Hz/step.",
+  "h": "b98dd351"
+ },
+ "js.thtp.rat-bien-ao-co-the-kich": {
+  "t": "Highly variable — possibly dramatic.",
+  "h": "fc2e0818"
+ },
+ "js.thtp.rat-cao-bat-thuong-cho-nam": {
+  "t": "Very high — unusual for a male voice.",
+  "h": "6e3d8f7a"
+ },
+ "js.thtp.rat-cao-kiem-tra-lai": {
+  "t": "Very high — please re-check.",
+  "h": "2fd84911"
+ },
+ "js.thtp.rat-duc-co-the-mic-kem": {
+  "t": "Very muddy — possibly a poor mic or a hoarse voice.",
+  "h": "532d0a63"
+ },
+ "js.thtp.rat-nhanh-co-the-gap-gap": {
+  "t": "Very fast — possibly hurried.",
+  "h": "468f53f6"
+ },
+ "js.thtp.rat-on-dinh": {
+  "t": "Very stable.",
+  "h": "01b80ed2"
+ },
+ "js.thtp.rat-on-dinh-giong-vien-man": {
+  "t": "Very stable — a \"complete\" (Yuan Man) voice.",
+  "h": "3d4e7673"
+ },
+ "js.thtp.rat-sang-co-the-choi": {
+  "t": "Very bright — may sound harsh.",
+  "h": "b82be1c7"
+ },
+ "js.thtp.rat-tram-vung-tho-ho-hong": {
+  "t": "Very low — Earth/Tiger-roar (Hu Hong) range.",
+  "h": "25ff5eb4"
+ },
+ "js.thtp.rung-ro-ret-chu-y-suc": {
+  "t": "Noticeable tremor — mind your vocal health.",
+  "h": "624dbc77"
+ },
+ "js.thtp.sang-vung-moc-oanh-minh": {
+  "t": "Bright — Wood/Oriole-song (Ying Ming) range.",
+  "h": "4c2e15f1"
+ },
+ "js.thtp.shimmer-cao-1-2db-giong-khong": {
+  "t": "⚠ High shimmer (>1.2dB) — your voice is unsteady while sustaining. It may come from a vocal tremor or a low-quality microphone.",
+  "h": "3f02b1f2"
+ },
+ "js.thtp.shimmer-ngan": {
+  "t": "Shimmer (sustained)",
+  "h": "4f46f5b3"
+ },
+ "js.thtp.suy-nhanh-huu-dau-vo-vi": {
+  "t": "Fades quickly — \"a head with no tail\", qi weakens toward the end.",
+  "h": "70b554fb"
+ },
+ "js.thtp.suy-nhe-binh-thuong": {
+  "t": "Slight decay — normal.",
+  "h": "e192d8a5"
+ },
+ "js.thtp.thanh-tuong-pro": {
+  "t": "Voice Reading Pro",
+  "h": "b2e5a151"
+ },
+ "js.thtp.thanh-tuong-pro-cua-toi": {
+  "t": "My Voice Reading Pro",
+  "h": "9cca3092"
+ },
+ "js.thtp.thanh-tuong-pro-n": {
+  "t": "Voice Reading Pro — {n}",
+  "h": "677bf701"
+ },
+ "js.thtp.thu-lai": {
+  "t": "Try again",
+  "h": "761e1380"
+ },
+ "js.thtp.toc-do-dem-am-tiet": {
+  "t": "Counting rate: <strong>{rate}</strong> syllables/sec.",
+  "h": "76b9cb6a"
+ },
+ "js.thtp.toc-do-noi": {
+  "t": "Speaking Rate",
+  "h": "3e47bcf8"
+ },
+ "js.thtp.tram-nam-trong-coi-nguoi-ta": {
+  "t": "Within a lifetime of a hundred years,\ntalent and fate so often clash.",
+  "h": "820f3996"
+ },
+ "js.thtp.tram-vung-kim-tho": {
+  "t": "Low — Metal/Earth range.",
+  "h": "38ae56f0"
+ },
+ "js.thtp.tram-vung-tho": {
+  "t": "Low — Earth range.",
+  "h": "16b2fd85"
+ },
+ "js.thtp.trung-binh": {
+  "t": "Average.",
+  "h": "9942b5ce"
+ },
+ "js.thtp.trung-binh-vung-kim": {
+  "t": "Average — Metal range.",
+  "h": "7f4bb46d"
+ },
+ "js.thtp.uyen-chuyen-vung-thuy": {
+  "t": "Flexible — Water range.",
+  "h": "d127ffa4"
+ },
+ "js.thtp.vua-phai": {
+  "t": "Moderate.",
+  "h": "080fe879"
+ },
+ "js.thtp.vung-cong-huong-giong": {
+  "t": "Your voice's resonance region.",
+  "h": "bb5e88f1"
+ },
+ "js.thtp.xem-ket-qua": {
+  "t": "See results →",
+  "h": "73c02132"
+ },
+ "js.thtp.xep-theo-12-chi-so-am": {
+  "t": "Classified from the 12 measured acoustic metrics (HNR, sustain, jitter, centroid…). The full meaning by the classical Five Tones method is in the in-depth analysis.",
+  "h": "0c3c0a37"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"Pay ",
   "h": "3d7d89ae"
@@ -8502,6 +8938,130 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "For credits you have topped up but not yet used, you may submit a request and we will review it case by case",
   "h": "f410ec3e"
+ },
+ "thtp.12-chi-so-am-hoc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>12 acoustic<br>metrics</span>",
+  "h": "cf4e2866"
+ },
+ "thtp.2-xem-ket-qua-do": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">See measurements</span>",
+  "h": "93f0142c"
+ },
+ "thtp.4-bai-do-giong-chuyen-sau": {
+  "t": "<span class=\"hp-ic\" data-icon=\"mic\"></span><span>4 tasks,<br>in-depth voice test</span>",
+  "h": "f5f91cc8"
+ },
+ "thtp.bai-1-4-10-giay": {
+  "t": "<span class=\"task-num\" id=\"taskNum\">Task 1/4</span> <span class=\"task-time\" id=\"taskTime\">10 sec</span>",
+  "h": "72a8ecea"
+ },
+ "thtp.bai-tiep-theo": {
+  "t": "Next task →",
+  "h": "aad8808b"
+ },
+ "thtp.bat-dau-bai-do": {
+  "t": "Start the test",
+  "h": "76374e88"
+ },
+ "thtp.bat-dau-thu-am": {
+  "t": "Start recording",
+  "h": "61e33202"
+ },
+ "thtp.bon-bai-do-giong-noi-chuyen": {
+  "t": "Four in-depth voice tests — a Five Tones analysis system based on Ma Yi Shen Xiang, Shen Xiang Quan Bian and Shui Jing Ji.",
+  "h": "1eef1ee9"
+ },
+ "thtp.buoc-1-thong-tin-co-ban": {
+  "t": "Step 1 · Basic Information",
+  "h": "9c5356b8"
+ },
+ "thtp.buoc-2-bon-bai-do-giong": {
+  "t": "Step 2 · Four Voice Tasks",
+  "h": "5b99459f"
+ },
+ "thtp.buoc-3-ket-qua-do": {
+  "t": "Step 3 · Measurements",
+  "h": "3541b2e4"
+ },
+ "thtp.chua-muon-ghi-am-ban-co": {
+  "t": "<b>Not ready to record?</b><span>You can look at a sample first to get a feel for it.</span>",
+  "h": "468bb930"
+ },
+ "thtp.da-ghi-xong": {
+  "t": "✓ Recorded.",
+  "h": "53247aed"
+ },
+ "thtp.doc-binh-thuong-ro-rang-khong": {
+  "t": "Read normally and clearly, without rushing.",
+  "h": "2998c866"
+ },
+ "thtp.doc-doan-van": {
+  "t": "Read a passage",
+  "h": "1d0b2c72"
+ },
+ "thtp.ghi-am-du-4-bai-do": {
+  "t": "Record all 4 tasks according to your gender and age. The system analyzes in depth and reads your qi, character, destiny, and how to nurture your voice and qi.",
+  "h": "0e8aaf05"
+ },
+ "thtp.giong-noi-mang-nhieu-thong-tin": {
+  "t": "Your voice carries more information than you'd think — 12 acoustic metrics from 4 in-depth tasks paint the fullest picture of your Five Tones and qi strength. For those who want to go deeper than the regular Voice Reading.",
+  "h": "f907ddc6"
+ },
+ "thtp.luan-giai-thanh-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">Read My Voice →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> credits)</span></small>",
+  "h": "39fe65f9"
+ },
+ "thtp.luan-ngu-am-va-khi-luc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>Five Tones &amp;<br>qi reading</span>",
+  "h": "c9962dad"
+ },
+ "thtp.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> credits)</span>",
+  "h": "a06b62cc"
+ },
+ "thtp.ngu-am": {
+  "t": "Five Tones: —",
+  "h": "6ab7c5b6"
+ },
+ "thtp.ngu-am-co-phap-ma-y": {
+  "t": "Classical Five Tones · Ma Yi Shen Xiang · Shen Xiang Quan Bian · Shui Jing Ji",
+  "h": "a2f34068"
+ },
+ "thtp.ngu-am-tuong-phap-la-mot": {
+  "t": "Five Tones physiognomy is a branch of face-and-body reading that judges fortune through the voice, classifying sound as Gong, Shang, Jue, Zhi and Yu, matched to the Five Elements. The method is recorded in classical physiognomy texts such as Ma Yi Shen Xiang.",
+  "h": "8f425df6"
+ },
+ "thtp.phan-tich-thanh-tuong-chuyen-sau": {
+  "t": "In-Depth Voice Reading Analysis",
+  "h": "1e2230b3"
+ },
+ "thtp.thanh-tuong-pro": {
+  "t": "Voice Reading Pro",
+  "h": "b2e5a151"
+ },
+ "thtp.thanh-tuong-pro-4-bai-do": {
+  "t": "<b>Voice Reading Pro</b><span>4 in-depth voice tasks — <span data-tvp-price=\"thanh-tuong-pro\">…</span> credits</span>",
+  "h": "a4477440"
+ },
+ "thtp.thanh-tuong-pro-tu-vi-minh": {
+  "t": "Voice Reading Pro — Minh Bao Zi Wei Dou Shu",
+  "h": "b4ae7c2a"
+ },
+ "thtp.thu-lai": {
+  "t": "Re-record",
+  "h": "0e099100"
+ },
+ "thtp.tuoi": {
+  "t": "Age",
+  "h": "3a6fc33f"
+ },
+ "thtp.vi-du-32": {
+  "t": "e.g. 32",
+  "h": "dc9bd965"
+ },
+ "thtp.xem-ban-mau": {
+  "t": "See a sample →",
+  "h": "ba3671b1"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "You're unlocking…",

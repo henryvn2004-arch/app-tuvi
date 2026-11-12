@@ -6747,6 +6747,442 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.thtp.am-s": {
+  "t": " 音節/秒",
+  "h": "49ed1880"
+ },
+ "js.thtp.am-sac-am-toi-tho-kim": {
+  "t": "音色は温かく暗め — 土・金の低音。",
+  "h": "12665913"
+ },
+ "js.thtp.am-sac-sang": {
+  "t": "音色は明るい。",
+  "h": "8c1437e2"
+ },
+ "js.thtp.am-sac-trung-binh": {
+  "t": "音色は中程度。",
+  "h": "ed7134e9"
+ },
+ "js.thtp.amplitude-rat-on-dinh": {
+  "t": "振幅はとても安定しています。",
+  "h": "5f11e83b"
+ },
+ "js.thtp.bai-n": {
+  "t": "課題{n}",
+  "h": "9227ba34"
+ },
+ "js.thtp.bai-tiep-theo": {
+  "t": "次の課題へ →",
+  "h": "aad8808b"
+ },
+ "js.thtp.bat-dau-thu-am": {
+  "t": "録音を始める",
+  "h": "61e33202"
+ },
+ "js.thtp.bien-dong-lon": {
+  "t": "変動が大きい。",
+  "h": "56e49443"
+ },
+ "js.thtp.binh-thuong": {
+  "t": "普通。",
+  "h": "4711eaec"
+ },
+ "js.thtp.cao-vung-moc": {
+  "t": "高め — 木の領域。",
+  "h": "1f708e1f"
+ },
+ "js.thtp.cham-diem-dam": {
+  "t": "ゆっくり — 落ち着いた印象。",
+  "h": "1761f7f1"
+ },
+ "js.thtp.co-bien-dong": {
+  "t": "多少の変動あり。",
+  "h": "bb657503"
+ },
+ "js.thtp.co-tap-am-vung-giua-thanh": {
+  "t": "雑音あり — 清と濁の中間。",
+  "h": "72479b12"
+ },
+ "js.thtp.cong-cha-nhu-nui-thai-son": {
+  "t": "父の恩は山より高く、\n母の恩は海より深い。",
+  "h": "5e8b8ca0"
+ },
+ "js.thtp.da-ghi-xong": {
+  "t": "録音完了",
+  "h": "8d555bc2"
+ },
+ "js.thtp.dang-ghi-am": {
+  "t": "録音中…",
+  "h": "e8185717"
+ },
+ "js.thtp.dang-luan-giai": {
+  "t": "鑑定中…",
+  "h": "aa035f2b"
+ },
+ "js.thtp.dang-phan-tich": {
+  "t": "分析中…",
+  "h": "6c1c499b"
+ },
+ "js.thtp.dang-phan-tich-theo-co-phap": {
+  "t": "古法で分析しています",
+  "h": "18ad9517"
+ },
+ "js.thtp.dang-tinh-toan-dac-trung-am": {
+  "t": "音響特徴を計算しています…",
+  "h": "7e4c7703"
+ },
+ "js.thtp.dao-dong-manh-ky-cach-pha": {
+  "t": "揺れが大きい — 「破鑼」の相を忌む。",
+  "h": "af8f73b4"
+ },
+ "js.thtp.dem-deu-toc-do-khong-gap": {
+  "t": "一定のペースで、急がずゆっくりにもせず数えてください。数字の間隔は約0.5秒です。",
+  "h": "3c773947"
+ },
+ "js.thtp.dem-so-1-15": {
+  "t": "1 → 15 を数える",
+  "h": "f6278207"
+ },
+ "js.thtp.do-on-dinh-f0": {
+  "t": "F0の安定度",
+  "h": "f0626dcb"
+ },
+ "js.thtp.do-truc-tiep-tu-giong-noi": {
+  "t": " 声をマイクで直接測定した結果です。残る11の音響指標と詳しい鑑定は、詳細分析に含まれています。",
+  "h": "1514c6cc"
+ },
+ "js.thtp.do-uyen-chuyen-tong-giong": {
+  "t": "声の高さの滑らかさ。",
+  "h": "c42d8f86"
+ },
+ "js.thtp.doc-binh-thuong-ro-rang-khong": {
+  "t": "普通に、はっきり、急がず、無理に低くも高くもせずに読んでください。あなたの基本の声です。",
+  "h": "ace9a97f"
+ },
+ "js.thtp.doc-co-ngu-dieu-len-xuong": {
+  "t": "抑揚をつけて、自然に上げ下げして読んでください。これはベトナムの古典『キエウ伝』の冒頭です — 詩を詠むように読みましょう。",
+  "h": "deebf884"
+ },
+ "js.thtp.doc-doan-van": {
+  "t": "一節を読む",
+  "h": "1d0b2c72"
+ },
+ "js.thtp.doc-ngan-theo-huong-dan": {
+  "t": "案内に合わせて読む／声を伸ばしてください。",
+  "h": "3c680985"
+ },
+ "js.thtp.doc-tho-bai-do-pitch-range": {
+  "t": "詩を読む — 音域の測定",
+  "h": "73c2b60b"
+ },
+ "js.thtp.don-dieu-it-bieu-cam": {
+  "t": "単調 — 表情が少ない。",
+  "h": "3e48c9db"
+ },
+ "js.thtp.f0-trung-binh": {
+  "t": "F0平均",
+  "h": "36f5bf55"
+ },
+ "js.thtp.giong-cao-bat-thuong-cho-nam": {
+  "t": "ℹ 男性にしては異常に高い声です。裏声で話しているか、データが不安定な可能性があります。",
+  "h": "a3164510"
+ },
+ "js.thtp.giong-cua-ban-thuoc-n": {
+  "t": "あなたの声は **{n}** に属します（4つの課題、12の音響指標で測定）。声相学について、さらに質問はありますか？",
+  "h": "890b1b1b"
+ },
+ "js.thtp.giong-nen-f0": {
+  "t": "基本の声: F0平均 <strong>{f0}Hz</strong>、話す速さ {rate} 音節/秒。",
+  "h": "a9e1812d"
+ },
+ "js.thtp.giong-thanh-trong-vang": {
+  "t": "「清」の声 — 澄んでよく響く。",
+  "h": "b5424c0c"
+ },
+ "js.thtp.giong-tram-bat-thuong-cho-nu": {
+  "t": "ℹ 女性にしては異常に低い声です。作った声で話しているか、データが不安定な可能性があります。",
+  "h": "b7ed0210"
+ },
+ "js.thtp.giong-troc-duc": {
+  "t": "「濁」の声 — にごっている。",
+  "h": "b504dd91"
+ },
+ "js.thtp.giong-vua-thanh-vua-co-luc": {
+  "t": "澄んでいて、力もある声。",
+  "h": "a7a812ab"
+ },
+ "js.thtp.giu-deu-khi-day-tot": {
+  "t": "保てている — 気の底力は良好。",
+  "h": "ee4f48e1"
+ },
+ "js.thtp.hit-mot-hoi-sau-sau-do": {
+  "t": "深く息を吸い、「アー」と同じ高さで途切れなく声を伸ばしてください。上下させず、できるだけ均一に保つほど良好です。これが最も重要な課題 — 気力の測定です。",
+  "h": "a85ada27"
+ },
+ "js.thtp.hnr-do-trong": {
+  "t": "HNR（澄み度）",
+  "h": "372da110"
+ },
+ "js.thtp.hnr-thap-8db-nhieu-tap-am": {
+  "t": "⚠ HNRが低い（<8dB） — 雑音が多めです。より静かな環境を確かめてください。",
+  "h": "4f448bef"
+ },
+ "js.thtp.hnr-thap-noi-len-dieu-gi": {
+  "t": "HNRが低いと何がわかりますか？",
+  "h": "c0db1713"
+ },
+ "js.thtp.hoi-lech-dau-hieu-khi-khong": {
+  "t": "やや乱れ — 気が不均一な兆し。",
+  "h": "7392dcf4"
+ },
+ "js.thtp.hoi-rung-co-the-cang-thang": {
+  "t": "やや震え — 緊張の可能性。",
+  "h": "a544df6f"
+ },
+ "js.thtp.jitter-ngan": {
+  "t": "ジッター（持続音）",
+  "h": "6ca69280"
+ },
+ "js.thtp.jitter-va-shimmer-la-gi": {
+  "t": "ジッターとシマーとは？",
+  "h": "0fc478fd"
+ },
+ "js.thtp.khac-gi-ban-thanh-tuong-thuong": {
+  "t": "通常の声相とどう違いますか？",
+  "h": "37afdd5e"
+ },
+ "js.thtp.khi-bat-tuc": {
+  "t": "気が不足",
+  "h": "26098327"
+ },
+ "js.thtp.khi-bat-tuc-can-luyen-duong": {
+  "t": "気が不足 — 養気の鍛錬が必要。",
+  "h": "a17003c2"
+ },
+ "js.thtp.khi-du-vung-quy-tuong": {
+  "t": "気は十分 — 貴相の領域。",
+  "h": "ba173e75"
+ },
+ "js.thtp.khi-luc-rat-tot-khi-tuc": {
+  "t": "気力は非常に良好 — 「氣足聲圓」。",
+  "h": "271ac112"
+ },
+ "js.thtp.khi-luc-tot": {
+  "t": "気力は良好",
+  "h": "191dd52d"
+ },
+ "js.thtp.khi-sustain": {
+  "t": "気（持続時間）",
+  "h": "64bc1d84"
+ },
+ "js.thtp.khi-trung-binh": {
+  "t": "気は中程度",
+  "h": "7f2a227e"
+ },
+ "js.thtp.khi-trung-binh-dogb": {
+  "t": "気は中程度。",
+  "h": "29600da0"
+ },
+ "js.thtp.khong-nhan-duoc-noi-dung-tra": {
+  "t": "結果を受け取れませんでした。もう一度お試しください。",
+  "h": "a80badc4"
+ },
+ "js.thtp.khong-truy-cap-duoc-microphone": {
+  "t": "マイクにアクセスできません",
+  "h": "a07b8893"
+ },
+ "js.thtp.loi": {
+  "t": "エラー: ",
+  "h": "471c0087"
+ },
+ "js.thtp.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.thtp.loi-stream-e": {
+  "t": "ストリームエラー: {e}",
+  "h": "62596680"
+ },
+ "js.thtp.luan-giai-lai": {
+  "t": "もう一度鑑定する",
+  "h": "11d43587"
+ },
+ "js.thtp.mot-hai-ba-bon-nam-sau": {
+  "t": "いち、に、さん、し、ご、ろく、\nしち、はち、く、じゅう、じゅういち、\nじゅうに、じゅうさん、じゅうし、じゅうご。",
+  "h": "6b26e8a7"
+ },
+ "js.thtp.n-giay": {
+  "t": "{n}秒",
+  "h": "4b5fecbd"
+ },
+ "js.thtp.ngan-am-a-bai-do-khi": {
+  "t": "「アー」を伸ばす — 気の測定",
+  "h": "df9c2325"
+ },
+ "js.thtp.ngan-am-qua-ngan-2-5s": {
+  "t": "⚠ 声の持続が短すぎます（<2.5s） — 気の不足か、マイクが十分に拾えていない可能性があります。意図的でなければ、課題2を録り直すことをおすすめします。",
+  "h": "608e2941"
+ },
+ "js.thtp.ngan-dai-shimmer": {
+  "t": "持続 <strong>{d}s</strong>、シマー {sh}dB — <em>{q}</em>。",
+  "h": "e8a19bff"
+ },
+ "js.thtp.ngu-am-uoc-tinh-n": {
+  "t": "推定される五音: {n}",
+  "h": "21219146"
+ },
+ "js.thtp.nguam-chen": {
+  "t": "{a}（{b}交じり）",
+  "h": "8891cc34"
+ },
+ "js.thtp.nguam-thanh": {
+  "t": "{x}（清）",
+  "h": "796dcf40"
+ },
+ "js.thtp.nguam-troc": {
+  "t": "{x}（濁）",
+  "h": "8f9cb8cf"
+ },
+ "js.thtp.nhanh-linh-hoat": {
+  "t": "速い — 機敏。",
+  "h": "f8f7c567"
+ },
+ "js.thtp.on-dinh": {
+  "t": "安定。",
+  "h": "44fce326"
+ },
+ "js.thtp.on-dinh-binh-thuong": {
+  "t": "安定 — 普通。",
+  "h": "2d859433"
+ },
+ "js.thtp.pitch-range-uyen-chuyen": {
+  "t": "音域: <strong>{r}Hz</strong>、滑らかさ {a}Hz/ステップ。",
+  "h": "b98dd351"
+ },
+ "js.thtp.rat-bien-ao-co-the-kich": {
+  "t": "非常に変化に富む — ドラマチックな可能性。",
+  "h": "fc2e0818"
+ },
+ "js.thtp.rat-cao-bat-thuong-cho-nam": {
+  "t": "非常に高い — 男性としては異常。",
+  "h": "6e3d8f7a"
+ },
+ "js.thtp.rat-cao-kiem-tra-lai": {
+  "t": "非常に高い — 再確認してください。",
+  "h": "2fd84911"
+ },
+ "js.thtp.rat-duc-co-the-mic-kem": {
+  "t": "非常ににごっている — マイクの品質か、声のかすれの可能性。",
+  "h": "532d0a63"
+ },
+ "js.thtp.rat-nhanh-co-the-gap-gap": {
+  "t": "非常に速い — せっかちな可能性。",
+  "h": "468f53f6"
+ },
+ "js.thtp.rat-on-dinh": {
+  "t": "非常に安定。",
+  "h": "01b80ed2"
+ },
+ "js.thtp.rat-on-dinh-giong-vien-man": {
+  "t": "非常に安定 — 「圓滿」の声。",
+  "h": "3d4e7673"
+ },
+ "js.thtp.rat-sang-co-the-choi": {
+  "t": "非常に明るい — 刺さる可能性。",
+  "h": "b82be1c7"
+ },
+ "js.thtp.rat-tram-vung-tho-ho-hong": {
+  "t": "非常に低い — 土・虎吼の領域。",
+  "h": "25ff5eb4"
+ },
+ "js.thtp.rung-ro-ret-chu-y-suc": {
+  "t": "はっきり震えています — 声の健康に注意。",
+  "h": "624dbc77"
+ },
+ "js.thtp.sang-vung-moc-oanh-minh": {
+  "t": "明るい — 木・鶯鳴の領域。",
+  "h": "4c2e15f1"
+ },
+ "js.thtp.shimmer-cao-1-2db-giong-khong": {
+  "t": "⚠ シマーが高い（>1.2dB） — 声を伸ばすときに不安定です。声の震えか、マイクの品質が低いことが原因かもしれません。",
+  "h": "3f02b1f2"
+ },
+ "js.thtp.shimmer-ngan": {
+  "t": "シマー（持続音）",
+  "h": "4f46f5b3"
+ },
+ "js.thtp.suy-nhanh-huu-dau-vo-vi": {
+  "t": "急に弱まる — 「有頭無尾」、後半で気が弱い。",
+  "h": "70b554fb"
+ },
+ "js.thtp.suy-nhe-binh-thuong": {
+  "t": "わずかに減衰 — 普通。",
+  "h": "e192d8a5"
+ },
+ "js.thtp.thanh-tuong-pro": {
+  "t": "声相 Pro",
+  "h": "b2e5a151"
+ },
+ "js.thtp.thanh-tuong-pro-cua-toi": {
+  "t": "私の声相 Pro",
+  "h": "9cca3092"
+ },
+ "js.thtp.thanh-tuong-pro-n": {
+  "t": "声相 Pro — {n}",
+  "h": "677bf701"
+ },
+ "js.thtp.thu-lai": {
+  "t": "やり直す",
+  "h": "761e1380"
+ },
+ "js.thtp.toc-do-dem-am-tiet": {
+  "t": "数える速さ: <strong>{rate}</strong> 音節/秒。",
+  "h": "76b9cb6a"
+ },
+ "js.thtp.toc-do-noi": {
+  "t": "話す速さ",
+  "h": "3e47bcf8"
+ },
+ "js.thtp.tram-nam-trong-coi-nguoi-ta": {
+  "t": "人の一生百年のうち、\n才と命とは、とかく反発し合うもの。",
+  "h": "820f3996"
+ },
+ "js.thtp.tram-vung-kim-tho": {
+  "t": "低め — 金・土の領域。",
+  "h": "38ae56f0"
+ },
+ "js.thtp.tram-vung-tho": {
+  "t": "低め — 土の領域。",
+  "h": "16b2fd85"
+ },
+ "js.thtp.trung-binh": {
+  "t": "中程度。",
+  "h": "9942b5ce"
+ },
+ "js.thtp.trung-binh-vung-kim": {
+  "t": "中程度 — 金の領域。",
+  "h": "7f4bb46d"
+ },
+ "js.thtp.uyen-chuyen-vung-thuy": {
+  "t": "滑らか — 水の領域。",
+  "h": "d127ffa4"
+ },
+ "js.thtp.vua-phai": {
+  "t": "ほどよい。",
+  "h": "080fe879"
+ },
+ "js.thtp.vung-cong-huong-giong": {
+  "t": "声の共鳴領域。",
+  "h": "bb5e88f1"
+ },
+ "js.thtp.xem-ket-qua": {
+  "t": "結果を見る →",
+  "h": "73c02132"
+ },
+ "js.thtp.xep-theo-12-chi-so-am": {
+  "t": "測定した12の音響指標（HNR、持続時間、ジッター、スペクトル重心…）にもとづく分類です。五音の古法による詳しい意味は、詳細分析に含まれています。",
+  "h": "0c3c0a37"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"お支払い：",
   "h": "3d7d89ae"
@@ -8502,6 +8938,130 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "チャージ済みで未使用の両数については、ご請求をいただければ、個別に検討いたします",
   "h": "f410ec3e"
+ },
+ "thtp.12-chi-so-am-hoc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>12の<br>音響指標</span>",
+  "h": "cf4e2866"
+ },
+ "thtp.2-xem-ket-qua-do": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">測定結果を見る</span>",
+  "h": "93f0142c"
+ },
+ "thtp.4-bai-do-giong-chuyen-sau": {
+  "t": "<span class=\"hp-ic\" data-icon=\"mic\"></span><span>4つの課題で<br>声を詳細測定</span>",
+  "h": "f5f91cc8"
+ },
+ "thtp.bai-1-4-10-giay": {
+  "t": "<span class=\"task-num\" id=\"taskNum\">課題 1/4</span> <span class=\"task-time\" id=\"taskTime\">10秒</span>",
+  "h": "72a8ecea"
+ },
+ "thtp.bai-tiep-theo": {
+  "t": "次の課題へ →",
+  "h": "aad8808b"
+ },
+ "thtp.bat-dau-bai-do": {
+  "t": "測定を始める",
+  "h": "76374e88"
+ },
+ "thtp.bat-dau-thu-am": {
+  "t": "録音を始める",
+  "h": "61e33202"
+ },
+ "thtp.bon-bai-do-giong-noi-chuyen": {
+  "t": "4つの課題で声を詳しく測定 — 『麻衣神相』『神相全編』『水鏡集』にもとづく五音の分析システム。",
+  "h": "1eef1ee9"
+ },
+ "thtp.buoc-1-thong-tin-co-ban": {
+  "t": "ステップ1 · 基本情報",
+  "h": "9c5356b8"
+ },
+ "thtp.buoc-2-bon-bai-do-giong": {
+  "t": "ステップ2 · 声の4つの課題",
+  "h": "5b99459f"
+ },
+ "thtp.buoc-3-ket-qua-do": {
+  "t": "ステップ3 · 測定結果",
+  "h": "3541b2e4"
+ },
+ "thtp.chua-muon-ghi-am-ban-co": {
+  "t": "<b>録音はまだ気が進みませんか？</b><span>先にサンプルを見て、雰囲気を確かめられます。</span>",
+  "h": "468bb930"
+ },
+ "thtp.da-ghi-xong": {
+  "t": "✓ 録音しました。",
+  "h": "53247aed"
+ },
+ "thtp.doc-binh-thuong-ro-rang-khong": {
+  "t": "普通に、はっきり、急がずに読んでください。",
+  "h": "2998c866"
+ },
+ "thtp.doc-doan-van": {
+  "t": "一節を読む",
+  "h": "1d0b2c72"
+ },
+ "thtp.ghi-am-du-4-bai-do": {
+  "t": "あなたの性別と年齢に合わせて、4つの課題をすべて録音してください。システムが詳細に分析し、気・性格・運命・養声養気の方法を鑑定します。",
+  "h": "0e8aaf05"
+ },
+ "thtp.giong-noi-mang-nhieu-thong-tin": {
+  "t": "声には思っている以上の情報があります — 4つの詳細な課題から得た12の音響指標が、五音と気力の最も完全な姿を描き出します。通常の声相より深く知りたい方向けです。",
+  "h": "f907ddc6"
+ },
+ "thtp.luan-giai-thanh-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">声相を鑑定する →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> 両)</span> 必要</small>",
+  "h": "39fe65f9"
+ },
+ "thtp.luan-ngu-am-va-khi-luc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>五音と気力の<br>鑑定</span>",
+  "h": "c9962dad"
+ },
+ "thtp.moi-luot-luong": {
+  "t": "1回 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> 両)</span>",
+  "h": "a06b62cc"
+ },
+ "thtp.ngu-am": {
+  "t": "五音: —",
+  "h": "6ab7c5b6"
+ },
+ "thtp.ngu-am-co-phap-ma-y": {
+  "t": "五音の古法 · 麻衣神相 · 神相全編 · 水鏡集",
+  "h": "a2f34068"
+ },
+ "thtp.ngu-am-tuong-phap-la-mot": {
+  "t": "五音の相法は、人相学の一分野で、声から運勢を読み解くものです。音を宮・商・角・徴・羽に分け、五行に対応させます。この方法は『麻衣神相』などの古典的な相学書に記されています。",
+  "h": "8f425df6"
+ },
+ "thtp.phan-tich-thanh-tuong-chuyen-sau": {
+  "t": "声相の詳細分析",
+  "h": "1e2230b3"
+ },
+ "thtp.thanh-tuong-pro": {
+  "t": "声相 Pro",
+  "h": "b2e5a151"
+ },
+ "thtp.thanh-tuong-pro-4-bai-do": {
+  "t": "<b>声相 Pro</b><span>4つの課題で声を詳細測定 — <span data-tvp-price=\"thanh-tuong-pro\">…</span> 両</span>",
+  "h": "a4477440"
+ },
+ "thtp.thanh-tuong-pro-tu-vi-minh": {
+  "t": "声相 Pro — 明宝紫微斗数",
+  "h": "b4ae7c2a"
+ },
+ "thtp.thu-lai": {
+  "t": "録り直す",
+  "h": "0e099100"
+ },
+ "thtp.tuoi": {
+  "t": "年齢",
+  "h": "3a6fc33f"
+ },
+ "thtp.vi-du-32": {
+  "t": "例: 32",
+  "h": "dc9bd965"
+ },
+ "thtp.xem-ban-mau": {
+  "t": "サンプルを見る →",
+  "h": "ba3671b1"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "ロック解除中…",

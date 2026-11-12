@@ -487,6 +487,55 @@
    "nav"
   ]
  },
+ "/app/thanh-tuong-pro": {
+  "file": "app-thanh-tuong-pro.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.3-thanh-toan",
+   "battu.4-nhan-ket-qua",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "laso.gioi-tinh",
+   "laso.nu",
+   "luangiai.chuyen-khoan-qua-qr-ngan-hang",
+   "luangiai.mua-goi-de-nhan-nhieu-uu",
+   "thtp.12-chi-so-am-hoc",
+   "thtp.2-xem-ket-qua-do",
+   "thtp.4-bai-do-giong-chuyen-sau",
+   "thtp.bai-1-4-10-giay",
+   "thtp.bai-tiep-theo",
+   "thtp.bat-dau-bai-do",
+   "thtp.bat-dau-thu-am",
+   "thtp.bon-bai-do-giong-noi-chuyen",
+   "thtp.buoc-1-thong-tin-co-ban",
+   "thtp.buoc-2-bon-bai-do-giong",
+   "thtp.buoc-3-ket-qua-do",
+   "thtp.chua-muon-ghi-am-ban-co",
+   "thtp.da-ghi-xong",
+   "thtp.doc-binh-thuong-ro-rang-khong",
+   "thtp.doc-doan-van",
+   "thtp.ghi-am-du-4-bai-do",
+   "thtp.giong-noi-mang-nhieu-thong-tin",
+   "thtp.luan-giai-thanh-tuong-ton-luong",
+   "thtp.luan-ngu-am-va-khi-luc",
+   "thtp.moi-luot-luong",
+   "thtp.ngu-am",
+   "thtp.ngu-am-co-phap-ma-y",
+   "thtp.ngu-am-tuong-phap-la-mot",
+   "thtp.phan-tich-thanh-tuong-chuyen-sau",
+   "thtp.thanh-tuong-pro",
+   "thtp.thanh-tuong-pro-4-bai-do",
+   "thtp.thanh-tuong-pro-tu-vi-minh",
+   "thtp.thu-lai",
+   "thtp.tuoi",
+   "thtp.vi-du-32",
+   "thtp.xem-ban-mau"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/van-han-nam": {
   "file": "app-van-han-nam.html",
   "keys": [
