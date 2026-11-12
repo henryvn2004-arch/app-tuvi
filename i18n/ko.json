@@ -695,6 +695,450 @@
   "t": "이용약관 전문은 <a href=\"/dieu-khoan-dich-vu.html\">이용약관</a>(제2항 — 책임의 제한)에, 서비스 설명은 <a href=\"/san-pham-dich-vu.html\">상품 및 서비스</a> 페이지에 있습니다.",
   "h": "dc202339"
  },
+ "faqs.1-chuyen-khoan-ngan-hang-vnd": {
+  "t": "<strong>(1) 베트남 동(VND) 계좌이체</strong>(베트남 국내용) — payOS를 통해 베트남 은행 앱으로 QR 코드를 스캔하면 냥이 자동으로 지갑에 들어옵니다.",
+  "h": "e24f0f9d"
+ },
+ "faqs.2-paypal-the-quoc-te-nhan": {
+  "t": "<strong>(2) PayPal / 해외 카드</strong> — Visa, Mastercard, JCB 사용 가능. PayPal 창에서 \"Pay with Debit or Credit Card\"를 고르면 PayPal 계정 없이도 카드로 결제할 수 있습니다.",
+  "h": "1c2327ba"
+ },
+ "faqs.ai-dung-sau-he-thong-nay": {
+  "t": "이 시스템은 누가 만들었나요? <span class=\"icon\">+</span>",
+  "h": "cbc0edbf"
+ },
+ "faqs.anh-huong-den-toan-bo-luan": {
+  "t": "풀이 전체에 영향을 준다",
+  "h": "ec484c31"
+ },
+ "faqs.ban-co-the-gui-phan-hoi": {
+  "t": "<a href=\"/contact.html\">문의 페이지</a>로 의견을 보내 주시면 시스템 개선에 반영합니다.",
+  "h": "5c411910"
+ },
+ "faqs.ban-nen-xem-luan-giai-nhu": {
+  "t": "풀이는 이렇게 보시면 됩니다:",
+  "h": "55e40baf"
+ },
+ "faqs.ban-than": {
+  "t": "자기 자신",
+  "h": "b2d3973b"
+ },
+ "faqs.cac-cong-cu-phan-tich-van": {
+  "t": "시기별 운세를 분석하는 도구",
+  "h": "8bbb8706"
+ },
+ "faqs.cac-giai-doan-trong-cuoc-doi": {
+  "t": "인생의 여러 단계",
+  "h": "6c24f2a6"
+ },
+ "faqs.cac-nguyen-ly-co-hoc-duoc": {
+  "t": "고학의 원리를 감에만 기대지 않고 데이터로 검증합니다. 그래서 결과에 더 근거가 있지만, 여전히 가치 있는 참고 자료로 보아야 합니다. 대조 과정의 자세한 내용은 <a href=\"/phuong-phap\">시스템 작동 방식</a>에서, 신뢰도에 관한 다른 질문은 <a href=\"/van-dap/do-tin-cay\">문답 — 신뢰도</a>에서 볼 수 있습니다.",
+  "h": "78384f09"
+ },
+ "faqs.cac-noi-dung-nghien-cuu-va": {
+  "t": "연구 콘텐츠와 활용 안내서",
+  "h": "b8acb1ad"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a": {
+  "t": "자주 묻는 질문(Q&amp;A) — 명보 자미두수",
+  "h": "c5f5cedb"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a-q5rv": {
+  "t": "자주 묻는 질문(Q&A) — 명보 자미두수",
+  "h": "6090dd15"
+ },
+ "faqs.cau-truc-la-so-co-tinh": {
+  "t": "명반 구조의 체계성",
+  "h": "657db941"
+ },
+ "faqs.chi-phi-bao-gom": {
+  "t": "비용에는 다음이 포함됩니다:",
+  "h": "b91ae52a"
+ },
+ "faqs.co-he-thong-duoc-cai-thien": {
+  "t": "네. 시스템은 다음을 바탕으로 계속 개선됩니다:",
+  "h": "1e990dc4"
+ },
+ "faqs.co-hoan-tien-khong": {
+  "t": "환불이 되나요? <span class=\"icon\">+</span>",
+  "h": "b6d3b591"
+ },
+ "faqs.co-nhung-cach-thanh-toan-nao": {
+  "t": "결제 방법은 무엇이 있나요? <span class=\"icon\">+</span>",
+  "h": "ed0165ac"
+ },
+ "faqs.co-phap": {
+  "t": "고법",
+  "h": "2f658ba5"
+ },
+ "faqs.cong-cu-tra-cuu-doi-chieu": {
+  "t": "명리를 조회하고 대조하는 도구",
+  "h": "0a4b7d02"
+ },
+ "faqs.day-co-phai-chi-la-website": {
+  "t": "그냥 자미두수 보는 사이트인가요? <span class=\"icon\">+</span>",
+  "h": "9af05020"
+ },
+ "faqs.day-la-cau-hoi-ve-he": {
+  "t": "여기는 시스템과 거래에 관한 질문입니다. 결혼, 재물, 일, 운세 등 자신의 명반이 궁금하다면 <a href=\"/van-dap\">자미두수 문답</a>을 보세요.",
+  "h": "79a010b3"
+ },
+ "faqs.dien-giai-noi-dung": {
+  "t": "내용 해설",
+  "h": "324af67f"
+ },
+ "faqs.dieu-nay-co-the-do": {
+  "t": "다음과 같은 이유일 수 있습니다:",
+  "h": "90c41523"
+ },
+ "faqs.dieu-nay-den-tu": {
+  "t": "그 이유는 다음과 같습니다:",
+  "h": "8448adbc"
+ },
+ "faqs.do-tinh-chat-la-ket-qua": {
+  "t": "디지털 결과물의 특성상 결과가 표시된 뒤에는 <a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">환불하지 않습니다</a>. 결제는 됐는데 결과를 받지 못하는 등 거래 오류가 있으면 바로 <a href=\"/contact.html\">연락</a>해 주세요. 확인 후 처리해 드립니다.",
+  "h": "2a30361f"
+ },
+ "faqs.doi-chieu-voi-cac-dien-bien": {
+  "t": "인생에서 실제로 일어난 일과 대조",
+  "h": "6a063fc7"
+ },
+ "faqs.doi-chieu-voi-du-lieu-thuc": {
+  "t": "실제 데이터와 대조",
+  "h": "94bad6e5"
+ },
+ "faqs.du-lieu-moi": {
+  "t": "새로운 데이터",
+  "h": "d2983792"
+ },
+ "faqs.du-lieu-ngay-gio-sinh-cua": {
+  "t": "실존 인물 27만 명 이상의 생년월일시 데이터",
+  "h": "234d93e8"
+ },
+ "faqs.du-lieu-thuc-te-giup-xac": {
+  "t": "실제 데이터로 패턴을 찾아낸다",
+  "h": "9f6ebf01"
+ },
+ "faqs.duy-tri-ha-tang-cong-nghe": {
+  "t": "기술 인프라 유지",
+  "h": "7d34730c"
+ },
+ "faqs.giai-dap-ve-he-thong-luan": {
+  "t": "풀이 시스템, 정확도, 냥과 결제에 관한 답변.",
+  "h": "b23b0625"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-4j0m": {
+  "t": "명보 자미두수 풀이 시스템에 관한 답변 — 작동 방식, 정확도, 그리고 냥·결제·환불에 관한 질문.",
+  "h": "c5884acb"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-cptq": {
+  "t": "명보 자미두수 풀이 시스템에 관한 답변 — 작동 방식, 정확도, 뒤에 있는 연구팀, 그리고 냥·결제·환불에 관한 질문.",
+  "h": "29c93c9e"
+ },
+ "faqs.giao-dich-luong-thanh-toan": {
+  "t": "거래 · 냥 · 결제",
+  "h": "6de5f2ee"
+ },
+ "faqs.gio-sinh-la-yeu-to-quan": {
+  "t": "출생 시각은 자미두수에서 중요한 요소입니다. 작은 오차라도:",
+  "h": "638bef44"
+ },
+ "faqs.he-thong-chi-dung-de": {
+  "t": "시스템이 하는 일은:",
+  "h": "9b5aa25a"
+ },
+ "faqs.he-thong-co-duoc-cap-nhat": {
+  "t": "시스템은 업데이트되나요? <span class=\"icon\">+</span>",
+  "h": "d573dfc9"
+ },
+ "faqs.he-thong-co-tu-bia-noi": {
+  "t": "시스템이 내용을 \"지어내지\"는 않나요? <span class=\"icon\">+</span>",
+  "h": "9163335f"
+ },
+ "faqs.he-thong-dien-giai-noi-dung": {
+  "t": "시스템이 내용을 해설",
+  "h": "45f13e71"
+ },
+ "faqs.he-thong-dien-giai-theo-dung": {
+  "t": "시스템이 개인의 상황에 맞춰 해설",
+  "h": "f598cd0b"
+ },
+ "faqs.he-thong-giup-ban-hieu-ro": {
+  "t": "시스템은 다음을 더 잘 이해하도록 돕습니다:",
+  "h": "e0d167f6"
+ },
+ "faqs.he-thong-hoat-dong-nhu-the": {
+  "t": "시스템은 어떻게 작동하나요? <span class=\"icon\">+</span>",
+  "h": "879a3e4e"
+ },
+ "faqs.he-thong-khong-tu-doan-ma": {
+  "t": "시스템은 스스로 \"추측\"하지 않고, 이미 확정된 결론을 다시 풀어 설명할 뿐입니다. 5단계 전체 과정은 <a href=\"/phuong-phap\">자미두수 검증</a>에서 보세요.",
+  "h": "4480c36f"
+ },
+ "faqs.hieu-chinh-boi-chuyen-gia": {
+  "t": "전문가의 보정",
+  "h": "10b36d86"
+ },
+ "faqs.hieu-chinh-noi-dung-lien-tuc": {
+  "t": "내용을 계속 보정",
+  "h": "69973443"
+ },
+ "faqs.ket-hop-voi-phuong-phap-va": {
+  "t": "현대의 방법과 기술을 결합",
+  "h": "9ecf21e0"
+ },
+ "faqs.kha-nang": {
+  "t": "가능성",
+  "h": "550f7b6b"
+ },
+ "faqs.khac-biet-trong-truong-phai": {
+  "t": "유파 간의 차이",
+  "h": "28a67aec"
+ },
+ "faqs.khong": {
+  "t": "아니요.",
+  "h": "f102a5bb"
+ },
+ "faqs.khong-co-he-thong-nao-co": {
+  "t": "절대적인 결론을 낼 수 있는 시스템은 없습니다.",
+  "h": "bb36c938"
+ },
+ "faqs.khong-luong-duoc-luu-vinh-vien": {
+  "t": "아니요. 냥은 계정에 영구히 보관되며 언제든 쓸 수 있습니다.",
+  "h": "ed0f9e73"
+ },
+ "faqs.khong-moi-la-so-hay-ket": {
+  "t": "아니요. 각 명반이나 결과는 처음 풀이할 때 한 번만 냥이 차감됩니다. 그 뒤로는 몇 번을 다시 봐도 무료입니다.",
+  "h": "75165ddc"
+ },
+ "faqs.khong-nen-phu-thuoc-hoan-toan": {
+  "t": "결과에 전적으로 의존해서는 안 됩니다.",
+  "h": "cb04372e"
+ },
+ "faqs.khong-tu-vi-minh-bao-la": {
+  "t": "아니요. 명보 자미두수는 여러 연구·풀이 도구로 이루어진 시스템이며, 자미두수는 그 중심이 되는 한 부분입니다.",
+  "h": "6d75d055"
+ },
+ "faqs.la-so-phan-anh": {
+  "t": "명반이 비추는 것:",
+  "h": "784be23d"
+ },
+ "faqs.lam-ro-luan-diem": {
+  "t": "논점을 명확히 한다",
+  "h": "6e34e839"
+ },
+ "faqs.lam-sao-de-nap-luong": {
+  "t": "냥은 어떻게 충전하나요? <span class=\"icon\">+</span>",
+  "h": "73577e49"
+ },
+ "faqs.lam-thay-doi-vi-tri-sao": {
+  "t": "별의 위치가 바뀐다",
+  "h": "9ecafe04"
+ },
+ "faqs.lay-kinh-dien-lam-nen-tang": {
+  "t": "고전을 토대로 삼는다",
+  "h": "a47b04f6"
+ },
+ "faqs.lay-thuc-chung-lam-tieu-chuan": {
+  "t": "실증을 기준으로 삼는다",
+  "h": "d1df793c"
+ },
+ "faqs.logic-luan-giai-da-duoc-xay": {
+  "t": "풀이의 논리는 미리 다음을 바탕으로 만들어져 있습니다:",
+  "h": "6084cf0a"
+ },
+ "faqs.luong-co-het-han-khong": {
+  "t": "냥에 유효기간이 있나요? <span class=\"icon\">+</span>",
+  "h": "05ce0b06"
+ },
+ "faqs.luong-la-don-vi-dung-de": {
+  "t": "냥은 명보 자미두수에서 심화 풀이 도구의 잠금을 해제하는 단위입니다. 한 번 충전하면 모든 도구에 쓸 수 있어, 기능마다 따로 살 필요가 없습니다.",
+  "h": "fe222fa9"
+ },
+ "faqs.luong-la-gi": {
+  "t": "냥이 무엇인가요? <span class=\"icon\">+</span>",
+  "h": "af09a5b2"
+ },
+ "faqs.moi-lan-mo-lai-ket-qua": {
+  "t": "예전 결과를 다시 열 때마다 냥이 차감되나요? <span class=\"icon\">+</span>",
+  "h": "8d7c06a5"
+ },
+ "faqs.mot-cong-cu-ho-tro-quyet": {
+  "t": "결정을 돕는 도구",
+  "h": "b3fa5457"
+ },
+ "faqs.mot-goc-nhin-co-he-thong": {
+  "t": "체계적인 시각",
+  "h": "b79d8456"
+ },
+ "faqs.mot-nguon-tham-khao-co-co": {
+  "t": "근거 있는 참고 자료",
+  "h": "5a51df4e"
+ },
+ "faqs.muc-tieu-khong-chi-la-xem": {
+  "t": "목표는 단지 \"점을 보는\" 것이 아니라, 명리를 이해하고 실생활에 활용하도록 돕는 도구 생태계를 만드는 것입니다.",
+  "h": "90ed16bd"
+ },
+ "faqs.neu-khong-chac-chan-ban-nen": {
+  "t": "확실하지 않다면 결과를 더 참고 수준으로만 활용하세요.",
+  "h": "e402d31b"
+ },
+ "faqs.neu-toi-thay-noi-dung-chua": {
+  "t": "내용이 맞지 않는다고 느끼면 어떻게 하나요? <span class=\"icon\">+</span>",
+  "h": "8818d326"
+ },
+ "faqs.ngoai-ra-nen-tang-con-bao": {
+  "t": "이 밖에 플랫폼에는 다음도 있습니다:",
+  "h": "c98ec9b0"
+ },
+ "faqs.nhom-bao-gom-cac-hoc-gia": {
+  "t": "팀에는 자미두수 학자와 연구자, 그리고 많은 명반을 실제로 풀이해 온 경험자들이 있습니다. 학술에서 실천까지 저마다 다른 시각을 지녔지만, 명리를 진지하게 이해하고 체계화한다는 목표를 함께합니다. 자세한 내용은 <a href=\"/about.html\">소개</a> 페이지를 보세요.",
+  "h": "fd39d8c1"
+ },
+ "faqs.nhung-ket-qua-cuoi-cung-van": {
+  "t": "하지만 최종 결과는 여전히 각자의 행동과 선택에 달려 있습니다.",
+  "h": "8d1d8452"
+ },
+ "faqs.nhung-xu-huong-co-the-xay": {
+  "t": "일어날 수 있는 경향",
+  "h": "e3dbdcb7"
+ },
+ "faqs.noi-dung-luan-giai-co-thuc": {
+  "t": "풀이 내용은 정말 정확한가요? <span class=\"icon\">+</span>",
+  "h": "08936df9"
+ },
+ "faqs.phan-hoi-nguoi-dung": {
+  "t": "사용자 피드백",
+  "h": "fe75cdef"
+ },
+ "faqs.phan-tich-cau-truc-theo-nguyen": {
+  "t": "자미두수 원리에 따라 구조를 분석",
+  "h": "3b937e5e"
+ },
+ "faqs.phat-trien-he-thong-luan-giai": {
+  "t": "풀이 시스템 개발",
+  "h": "cb9ef15b"
+ },
+ "faqs.phi-dich-vu-giup-dam-bao": {
+  "t": "이용료는 시스템의 품질과 진지한 투자를 뒷받침합니다.",
+  "h": "19322883"
+ },
+ "faqs.qua-trinh-kiem-nghiem-thuc-te": {
+  "t": "실제 검증 과정",
+  "h": "de20f584"
+ },
+ "faqs.quy-tac-da-kiem-nghiem": {
+  "t": "검증된 규칙",
+  "h": "bfadc1f0"
+ },
+ "faqs.quy-trinh-luan-giai-gom-nhieu": {
+  "t": "풀이 과정은 여러 단계로 이루어집니다:",
+  "h": "dc04d724"
+ },
+ "faqs.sai-gio-sinh": {
+  "t": "출생 시각 오류",
+  "h": "740a22eb"
+ },
+ "faqs.su-dung-la-ket-qua-cua": {
+  "t": "\"맞는다\"는 것은 방법의 결과이지, 우연한 추측이 아닙니다.",
+  "h": "517839bc"
+ },
+ "faqs.tai-sao-noi-dung-doc-giong": {
+  "t": "왜 내용이 \"나와 똑같이\" 읽히나요? <span class=\"icon\">+</span>",
+  "h": "f5983ec4"
+ },
+ "faqs.thanh-toan-xong-ma-chua-thay": {
+  "t": "결제했는데 지갑에 냥이 안 들어왔나요? <span class=\"icon\">+</span>",
+  "h": "eab1cb35"
+ },
+ "faqs.thoi-diem": {
+  "t": "시점",
+  "h": "020b0562"
+ },
+ "faqs.thu-lam-moi-trang-f5-hoac": {
+  "t": "페이지를 새로고침(F5)하거나 <a href=\"/app/ho-so\">프로필</a> → '냥 지갑' 탭에서 잔액을 다시 확인하세요. 1~2분이 지나도 보이지 않으면 거래 번호(PayPal 또는 payOS)와 함께 <a href=\"/contact.html\">문의 페이지</a>로 연락해 주세요.",
+  "h": "226c73c9"
+ },
+ "faqs.toan-bo-noi-dung-luan-giai": {
+  "t": "그 도구의 심화 풀이 전체 — 당신의 명반과 상황에 맞춰 쓰인 내용 — 와 무제한 다시 보기, 그리고 도구가 지원하면 다운로드까지.",
+  "h": "f4f821fa"
+ },
+ "faqs.toi-co-the-thay-doi-van": {
+  "t": "운명을 바꿀 수 있나요? <span class=\"icon\">+</span>",
+  "h": "5dfa0b85"
+ },
+ "faqs.toi-nen-su-dung-ket-qua": {
+  "t": "결과를 어떻게 활용해야 하나요? <span class=\"icon\">+</span>",
+  "h": "01d8b923"
+ },
+ "faqs.tra-phi-xong-toi-nhan-duoc": {
+  "t": "결제하면 무엇을 받나요? <span class=\"icon\">+</span>",
+  "h": "7bfad677"
+ },
+ "faqs.tu-vi-khong-phai-la-su": {
+  "t": "자미두수는 절대적인 정해진 운명이 아닙니다.",
+  "h": "cbd47d29"
+ },
+ "faqs.tu-vi-minh-bao-duoc-xay": {
+  "t": "명보 자미두수는 다음 방향을 가진 명리 연구팀이 만들었습니다:",
+  "h": "6fb267dd"
+ },
+ "faqs.tu-vi-minh-bao-la-gi": {
+  "t": "명보 자미두수는 무엇인가요? <span class=\"icon\">+</span>",
+  "h": "7085b3b2"
+ },
+ "faqs.tu-vi-minh-bao-la-he": {
+  "t": "명보 자미두수는 동양의 고학, 실제 데이터, 현대 기술을 결합한 개인 맞춤형 풀이 시스템입니다.",
+  "h": "253a2e07"
+ },
+ "faqs.tuy-nhien-tu-vi-minh-bao": {
+  "t": "다만 명보 자미두수는 다음 위에 세워졌습니다:",
+  "h": "3adb9017"
+ },
+ "faqs.vao-ho-so-tab-vi-luong": {
+  "t": "<a href=\"/app/ho-so\">프로필</a> → '냥 지갑' 탭에서 현재 잔액과 냥 충전·차감의 전체 기록을 볼 수 있습니다.",
+  "h": "1b550c61"
+ },
+ "faqs.vao-trang-nap-luong-chon-mot": {
+  "t": "<a href=\"/topup.html\">냥 충전</a> 페이지에서 알맞은 패키지를 골라 결제하세요. 거래가 성공하면 바로 냥이 지갑에 더해집니다.",
+  "h": "a8423928"
+ },
+ "faqs.ve-he-thong": {
+  "t": "시스템에 대하여",
+  "h": "f81106ca"
+ },
+ "faqs.vi-sao-phai-nhap-chinh-xac": {
+  "t": "왜 출생 시각을 정확히 입력해야 하나요? <span class=\"icon\">+</span>",
+  "h": "28f58ae2"
+ },
+ "faqs.vi-sao-phai-tra-phi-de": {
+  "t": "왜 전체를 보려면 요금을 내야 하나요? <span class=\"icon\">+</span>",
+  "h": "9fa7926b"
+ },
+ "faqs.xay-dung-la-so-tu-ngay": {
+  "t": "생년월일시로 명반을 세운다",
+  "h": "82018c4e"
+ },
+ "faqs.xay-dung-va-xu-ly-du": {
+  "t": "대규모 데이터 구축과 처리",
+  "h": "5b3550e6"
+ },
+ "faqs.xem-lai-lich-su-giao-dich": {
+  "t": "거래 내역은 어디서 보나요? <span class=\"icon\">+</span>",
+  "h": "c1de6029"
+ },
+ "faqs.xem-them": {
+  "t": "더 보기",
+  "h": "55d48a8e"
+ },
+ "faqs.xu-huong": {
+  "t": "경향",
+  "h": "7964ab99"
+ },
+ "faqs.yeu-to-ca-nhan-chua-duoc": {
+  "t": "개인적 요소가 충분히 반영되지 않았다",
+  "h": "4fbc118f"
+ },
  "hdtt.cach-hoat-dong": {
   "t": "이용 방법",
   "h": "8ad7f762"

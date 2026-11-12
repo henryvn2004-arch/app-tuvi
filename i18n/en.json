@@ -695,6 +695,450 @@
   "t": "See the full terms in the <a href=\"/dieu-khoan-dich-vu.html\">Terms of Service</a> (section 2 — Limitation of liability) and the service description on the <a href=\"/san-pham-dich-vu.html\">Products &amp; Services</a> page.",
   "h": "dc202339"
  },
+ "faqs.1-chuyen-khoan-ngan-hang-vnd": {
+  "t": "<strong>(1) VND bank transfer</strong> (Vietnam only) via payOS — scan the QR code with a Vietnamese banking app and credits land in your wallet automatically.",
+  "h": "e24f0f9d"
+ },
+ "faqs.2-paypal-the-quoc-te-nhan": {
+  "t": "<strong>(2) PayPal / international cards</strong> — Visa, Mastercard and JCB accepted; in the PayPal window you can choose \"Pay with Debit or Credit Card\" to pay by card without a PayPal account.",
+  "h": "1c2327ba"
+ },
+ "faqs.ai-dung-sau-he-thong-nay": {
+  "t": "Who is behind this system? <span class=\"icon\">+</span>",
+  "h": "cbc0edbf"
+ },
+ "faqs.anh-huong-den-toan-bo-luan": {
+  "t": "Affect the whole reading",
+  "h": "ec484c31"
+ },
+ "faqs.ban-co-the-gui-phan-hoi": {
+  "t": "You can send feedback through the <a href=\"/contact.html\">Contact page</a> to help improve the system.",
+  "h": "5c411910"
+ },
+ "faqs.ban-nen-xem-luan-giai-nhu": {
+  "t": "You should treat a reading as:",
+  "h": "55e40baf"
+ },
+ "faqs.ban-than": {
+  "t": "Yourself",
+  "h": "b2d3973b"
+ },
+ "faqs.cac-cong-cu-phan-tich-van": {
+  "t": "Tools that analyze luck over time",
+  "h": "8bbb8706"
+ },
+ "faqs.cac-giai-doan-trong-cuoc-doi": {
+  "t": "The stages of your life",
+  "h": "6c24f2a6"
+ },
+ "faqs.cac-nguyen-ly-co-hoc-duoc": {
+  "t": "Classical principles are tested on data rather than resting on intuition alone. Results are therefore better grounded, but should still be treated as valuable reference material. See how the cross-checking works in <a href=\"/phuong-phap\">How the system works</a>, or other questions about reliability in <a href=\"/van-dap/do-tin-cay\">Q&amp;A — Reliability</a>.",
+  "h": "78384f09"
+ },
+ "faqs.cac-noi-dung-nghien-cuu-va": {
+  "t": "Research content and practical guides",
+  "h": "b8acb1ad"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a": {
+  "t": "Frequently Asked Questions (Q&amp;A) — Minh Bao Zi Wei Dou Shu",
+  "h": "c5f5cedb"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a-q5rv": {
+  "t": "Frequently Asked Questions (Q&A) — Minh Bao Zi Wei Dou Shu",
+  "h": "6090dd15"
+ },
+ "faqs.cau-truc-la-so-co-tinh": {
+  "t": "Chart structures are systematic",
+  "h": "657db941"
+ },
+ "faqs.chi-phi-bao-gom": {
+  "t": "The cost covers:",
+  "h": "b91ae52a"
+ },
+ "faqs.co-he-thong-duoc-cai-thien": {
+  "t": "Yes. The system is continuously improved based on:",
+  "h": "1e990dc4"
+ },
+ "faqs.co-hoan-tien-khong": {
+  "t": "Do you offer refunds? <span class=\"icon\">+</span>",
+  "h": "b6d3b591"
+ },
+ "faqs.co-nhung-cach-thanh-toan-nao": {
+  "t": "What payment methods are there? <span class=\"icon\">+</span>",
+  "h": "ed0165ac"
+ },
+ "faqs.co-phap": {
+  "t": "Classical method",
+  "h": "2f658ba5"
+ },
+ "faqs.cong-cu-tra-cuu-doi-chieu": {
+  "t": "Tools for looking up and cross-checking destiny charts",
+  "h": "0a4b7d02"
+ },
+ "faqs.day-co-phai-chi-la-website": {
+  "t": "Is this just a Zi Wei fortune-telling website? <span class=\"icon\">+</span>",
+  "h": "9af05020"
+ },
+ "faqs.day-la-cau-hoi-ve-he": {
+  "t": "These are questions about the system and transactions. If you're wondering about your own chart — marriage, finances, career, timing — see <a href=\"/van-dap\">Zi Wei Q&amp;A</a>.",
+  "h": "79a010b3"
+ },
+ "faqs.dien-giai-noi-dung": {
+  "t": "Explain the content",
+  "h": "324af67f"
+ },
+ "faqs.dieu-nay-co-the-do": {
+  "t": "This may be due to:",
+  "h": "90c41523"
+ },
+ "faqs.dieu-nay-den-tu": {
+  "t": "This comes from:",
+  "h": "8448adbc"
+ },
+ "faqs.do-tinh-chat-la-ket-qua": {
+  "t": "Because results are digital, the system <a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">does not refund</a> once a result has been displayed. If a transaction goes wrong — you were charged but didn't get the result — <a href=\"/contact.html\">contact us</a> right away so we can check and fix it.",
+  "h": "2a30361f"
+ },
+ "faqs.doi-chieu-voi-cac-dien-bien": {
+  "t": "Checked against what actually happened in people's lives",
+  "h": "6a063fc7"
+ },
+ "faqs.doi-chieu-voi-du-lieu-thuc": {
+  "t": "Check against real data",
+  "h": "94bad6e5"
+ },
+ "faqs.du-lieu-moi": {
+  "t": "New data",
+  "h": "d2983792"
+ },
+ "faqs.du-lieu-ngay-gio-sinh-cua": {
+  "t": "Birth date and time data for more than 270,000 real people",
+  "h": "234d93e8"
+ },
+ "faqs.du-lieu-thuc-te-giup-xac": {
+  "t": "Real data helps identify patterns",
+  "h": "9f6ebf01"
+ },
+ "faqs.duy-tri-ha-tang-cong-nghe": {
+  "t": "Maintaining the technical infrastructure",
+  "h": "7d34730c"
+ },
+ "faqs.giai-dap-ve-he-thong-luan": {
+  "t": "Answers about the reading system, accuracy, and credits &amp; payment.",
+  "h": "b23b0625"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-4j0m": {
+  "t": "Answers about the Minh Bao Zi Wei Dou Shu reading system — how it works, how accurate it is, and questions about credits, payment and refunds.",
+  "h": "c5884acb"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-cptq": {
+  "t": "Answers about the Minh Bao Zi Wei Dou Shu reading system — how it works, how accurate it is, the research team behind it, and questions about credits, payment and refunds.",
+  "h": "29c93c9e"
+ },
+ "faqs.giao-dich-luong-thanh-toan": {
+  "t": "Transactions, Credits &amp; Payment",
+  "h": "6de5f2ee"
+ },
+ "faqs.gio-sinh-la-yeu-to-quan": {
+  "t": "Birth time is a key factor in Zi Wei Dou Shu. A small error can:",
+  "h": "638bef44"
+ },
+ "faqs.he-thong-chi-dung-de": {
+  "t": "The system is only used to:",
+  "h": "9b5aa25a"
+ },
+ "faqs.he-thong-co-duoc-cap-nhat": {
+  "t": "Is the system updated? <span class=\"icon\">+</span>",
+  "h": "d573dfc9"
+ },
+ "faqs.he-thong-co-tu-bia-noi": {
+  "t": "Does the system \"make things up\"? <span class=\"icon\">+</span>",
+  "h": "9163335f"
+ },
+ "faqs.he-thong-dien-giai-noi-dung": {
+  "t": "The system explains the content",
+  "h": "45f13e71"
+ },
+ "faqs.he-thong-dien-giai-theo-dung": {
+  "t": "The system explains it in your personal context",
+  "h": "f598cd0b"
+ },
+ "faqs.he-thong-giup-ban-hieu-ro": {
+  "t": "The system helps you better understand:",
+  "h": "e0d167f6"
+ },
+ "faqs.he-thong-hoat-dong-nhu-the": {
+  "t": "How does the system work? <span class=\"icon\">+</span>",
+  "h": "879a3e4e"
+ },
+ "faqs.he-thong-khong-tu-doan-ma": {
+  "t": "The system doesn't \"guess\" — it only re-explains conclusions that have already been determined. See the full 5-step process in <a href=\"/phuong-phap\">Zi Wei Verified</a>.",
+  "h": "4480c36f"
+ },
+ "faqs.hieu-chinh-boi-chuyen-gia": {
+  "t": "Calibration by specialists",
+  "h": "10b36d86"
+ },
+ "faqs.hieu-chinh-noi-dung-lien-tuc": {
+  "t": "Continuously calibrate the content",
+  "h": "69973443"
+ },
+ "faqs.ket-hop-voi-phuong-phap-va": {
+  "t": "Combined with modern methods and technology",
+  "h": "9ecf21e0"
+ },
+ "faqs.kha-nang": {
+  "t": "Possibilities",
+  "h": "550f7b6b"
+ },
+ "faqs.khac-biet-trong-truong-phai": {
+  "t": "Differences between schools",
+  "h": "28a67aec"
+ },
+ "faqs.khong": {
+  "t": "No.",
+  "h": "f102a5bb"
+ },
+ "faqs.khong-co-he-thong-nao-co": {
+  "t": "No system can deliver absolute conclusions.",
+  "h": "bb36c938"
+ },
+ "faqs.khong-luong-duoc-luu-vinh-vien": {
+  "t": "No. Credits stay in your account forever — use them whenever you like.",
+  "h": "ed0f9e73"
+ },
+ "faqs.khong-moi-la-so-hay-ket": {
+  "t": "No. Each chart or result deducts credits only once, the first time it is read. After that you can view it as many times as you like, free.",
+  "h": "75165ddc"
+ },
+ "faqs.khong-nen-phu-thuoc-hoan-toan": {
+  "t": "Don't rely on the results entirely.",
+  "h": "cb04372e"
+ },
+ "faqs.khong-tu-vi-minh-bao-la": {
+  "t": "No. Minh Bao Zi Wei Dou Shu is a system of many research and reading tools, of which Zi Wei Dou Shu is the core.",
+  "h": "6d75d055"
+ },
+ "faqs.la-so-phan-anh": {
+  "t": "A chart reflects:",
+  "h": "784be23d"
+ },
+ "faqs.lam-ro-luan-diem": {
+  "t": "Clarify the points",
+  "h": "6e34e839"
+ },
+ "faqs.lam-sao-de-nap-luong": {
+  "t": "How do I top up credits? <span class=\"icon\">+</span>",
+  "h": "73577e49"
+ },
+ "faqs.lam-thay-doi-vi-tri-sao": {
+  "t": "Shift star positions",
+  "h": "9ecafe04"
+ },
+ "faqs.lay-kinh-dien-lam-nen-tang": {
+  "t": "The classics as the foundation",
+  "h": "a47b04f6"
+ },
+ "faqs.lay-thuc-chung-lam-tieu-chuan": {
+  "t": "Evidence as the standard",
+  "h": "d1df793c"
+ },
+ "faqs.logic-luan-giai-da-duoc-xay": {
+  "t": "The reading logic has been built in advance on:",
+  "h": "6084cf0a"
+ },
+ "faqs.luong-co-het-han-khong": {
+  "t": "Do credits expire? <span class=\"icon\">+</span>",
+  "h": "05ce0b06"
+ },
+ "faqs.luong-la-don-vi-dung-de": {
+  "t": "Credits are the unit used to unlock the in-depth reading tools on Minh Bao Zi Wei Dou Shu. Top up once and use them on every tool — no need to buy each feature separately.",
+  "h": "fe222fa9"
+ },
+ "faqs.luong-la-gi": {
+  "t": "What are credits? <span class=\"icon\">+</span>",
+  "h": "af09a5b2"
+ },
+ "faqs.moi-lan-mo-lai-ket-qua": {
+  "t": "Am I charged credits every time I reopen an old result? <span class=\"icon\">+</span>",
+  "h": "8d7c06a5"
+ },
+ "faqs.mot-cong-cu-ho-tro-quyet": {
+  "t": "A decision-support tool",
+  "h": "b3fa5457"
+ },
+ "faqs.mot-goc-nhin-co-he-thong": {
+  "t": "A systematic perspective",
+  "h": "b79d8456"
+ },
+ "faqs.mot-nguon-tham-khao-co-co": {
+  "t": "A well-grounded reference",
+  "h": "5a51df4e"
+ },
+ "faqs.muc-tieu-khong-chi-la-xem": {
+  "t": "The goal isn't just \"fortune-telling\" but building an ecosystem of tools that help people understand destiny systems and apply them in real life.",
+  "h": "90ed16bd"
+ },
+ "faqs.neu-khong-chac-chan-ban-nen": {
+  "t": "If you're unsure, treat the results more as a reference.",
+  "h": "e402d31b"
+ },
+ "faqs.neu-toi-thay-noi-dung-chua": {
+  "t": "What if I think the content is wrong? <span class=\"icon\">+</span>",
+  "h": "8818d326"
+ },
+ "faqs.ngoai-ra-nen-tang-con-bao": {
+  "t": "The platform also includes:",
+  "h": "c98ec9b0"
+ },
+ "faqs.nhom-bao-gom-cac-hoc-gia": {
+  "t": "The team includes Zi Wei Dou Shu scholars and researchers, along with people who have hands-on experience reading a great many charts. Each brings their own perspective, from academic to practical, but all share the goal of understanding and systematizing destiny studies seriously. More on the <a href=\"/about.html\">About</a> page.",
+  "h": "fd39d8c1"
+ },
+ "faqs.nhung-ket-qua-cuoi-cung-van": {
+  "t": "But the final outcome still depends on each person's actions and choices.",
+  "h": "8d1d8452"
+ },
+ "faqs.nhung-xu-huong-co-the-xay": {
+  "t": "Tendencies that may unfold",
+  "h": "e3dbdcb7"
+ },
+ "faqs.noi-dung-luan-giai-co-thuc": {
+  "t": "Are the readings really accurate? <span class=\"icon\">+</span>",
+  "h": "08936df9"
+ },
+ "faqs.phan-hoi-nguoi-dung": {
+  "t": "User feedback",
+  "h": "fe75cdef"
+ },
+ "faqs.phan-tich-cau-truc-theo-nguyen": {
+  "t": "Analyze the structure by Zi Wei principles",
+  "h": "3b937e5e"
+ },
+ "faqs.phat-trien-he-thong-luan-giai": {
+  "t": "Developing the reading system",
+  "h": "cb9ef15b"
+ },
+ "faqs.phi-dich-vu-giup-dam-bao": {
+  "t": "The service fee ensures quality and serious investment in the system.",
+  "h": "19322883"
+ },
+ "faqs.qua-trinh-kiem-nghiem-thuc-te": {
+  "t": "Real-world testing",
+  "h": "de20f584"
+ },
+ "faqs.quy-tac-da-kiem-nghiem": {
+  "t": "Tested rules",
+  "h": "bfadc1f0"
+ },
+ "faqs.quy-trinh-luan-giai-gom-nhieu": {
+  "t": "The reading process has several steps:",
+  "h": "dc04d724"
+ },
+ "faqs.sai-gio-sinh": {
+  "t": "A wrong birth time",
+  "h": "740a22eb"
+ },
+ "faqs.su-dung-la-ket-qua-cua": {
+  "t": "Being \"right\" is the result of method, not a lucky guess.",
+  "h": "517839bc"
+ },
+ "faqs.tai-sao-noi-dung-doc-giong": {
+  "t": "Why does the reading sound \"just like me\"? <span class=\"icon\">+</span>",
+  "h": "f5983ec4"
+ },
+ "faqs.thanh-toan-xong-ma-chua-thay": {
+  "t": "Paid but no credits in your wallet yet? <span class=\"icon\">+</span>",
+  "h": "eab1cb35"
+ },
+ "faqs.thoi-diem": {
+  "t": "Timing",
+  "h": "020b0562"
+ },
+ "faqs.thu-lam-moi-trang-f5-hoac": {
+  "t": "Try refreshing the page (F5), or go to <a href=\"/app/ho-so\">Profile</a> → the \"Credit wallet\" tab to check your balance. If they still haven't arrived after 1–2 minutes, contact us via the <a href=\"/contact.html\">Contact page</a> with your transaction ID (PayPal or payOS) so we can sort it out.",
+  "h": "226c73c9"
+ },
+ "faqs.toan-bo-noi-dung-luan-giai": {
+  "t": "The tool's complete in-depth reading — written for your chart and personal context — plus unlimited re-viewing, and a download where the tool supports it.",
+  "h": "f4f821fa"
+ },
+ "faqs.toi-co-the-thay-doi-van": {
+  "t": "Can I change my destiny? <span class=\"icon\">+</span>",
+  "h": "5dfa0b85"
+ },
+ "faqs.toi-nen-su-dung-ket-qua": {
+  "t": "How should I use the results? <span class=\"icon\">+</span>",
+  "h": "01d8b923"
+ },
+ "faqs.tra-phi-xong-toi-nhan-duoc": {
+  "t": "What do I get when I pay? <span class=\"icon\">+</span>",
+  "h": "7bfad677"
+ },
+ "faqs.tu-vi-khong-phai-la-su": {
+  "t": "Zi Wei is not an absolute verdict.",
+  "h": "cbd47d29"
+ },
+ "faqs.tu-vi-minh-bao-duoc-xay": {
+  "t": "Minh Bao Zi Wei Dou Shu was built by a destiny-studies research team guided by:",
+  "h": "6fb267dd"
+ },
+ "faqs.tu-vi-minh-bao-la-gi": {
+  "t": "What is Minh Bao Zi Wei Dou Shu? <span class=\"icon\">+</span>",
+  "h": "7085b3b2"
+ },
+ "faqs.tu-vi-minh-bao-la-he": {
+  "t": "Minh Bao Zi Wei Dou Shu is a personalized reading system combining classical Eastern learning, real data and modern technology.",
+  "h": "253a2e07"
+ },
+ "faqs.tuy-nhien-tu-vi-minh-bao": {
+  "t": "That said, Minh Bao Zi Wei Dou Shu is built on:",
+  "h": "3adb9017"
+ },
+ "faqs.vao-ho-so-tab-vi-luong": {
+  "t": "Go to <a href=\"/app/ho-so\">Profile</a> → the \"Credit wallet\" tab to see your current balance and the full history of credit top-ups and deductions.",
+  "h": "1b550c61"
+ },
+ "faqs.vao-trang-nap-luong-chon-mot": {
+  "t": "Go to the <a href=\"/topup.html\">Top up credits</a> page, choose a suitable pack and pay. Credits are added to your wallet as soon as the transaction succeeds.",
+  "h": "a8423928"
+ },
+ "faqs.ve-he-thong": {
+  "t": "About the System",
+  "h": "f81106ca"
+ },
+ "faqs.vi-sao-phai-nhap-chinh-xac": {
+  "t": "Why do I need to enter my exact birth time? <span class=\"icon\">+</span>",
+  "h": "28f58ae2"
+ },
+ "faqs.vi-sao-phai-tra-phi-de": {
+  "t": "Why do I have to pay to see everything? <span class=\"icon\">+</span>",
+  "h": "9fa7926b"
+ },
+ "faqs.xay-dung-la-so-tu-ngay": {
+  "t": "Build the chart from the birth date and time",
+  "h": "82018c4e"
+ },
+ "faqs.xay-dung-va-xu-ly-du": {
+  "t": "Building and processing large-scale data",
+  "h": "5b3550e6"
+ },
+ "faqs.xem-lai-lich-su-giao-dich": {
+  "t": "Where can I see my transaction history? <span class=\"icon\">+</span>",
+  "h": "c1de6029"
+ },
+ "faqs.xem-them": {
+  "t": "See Also",
+  "h": "55d48a8e"
+ },
+ "faqs.xu-huong": {
+  "t": "Tendencies",
+  "h": "7964ab99"
+ },
+ "faqs.yeu-to-ca-nhan-chua-duoc": {
+  "t": "Personal factors not yet fully reflected",
+  "h": "4fbc118f"
+ },
  "hdtt.cach-hoat-dong": {
   "t": "How it works",
   "h": "8ad7f762"

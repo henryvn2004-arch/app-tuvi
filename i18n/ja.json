@@ -695,6 +695,450 @@
   "t": "利用規約の全文は<a href=\"/dieu-khoan-dich-vu.html\">利用規約</a>（第2項 — 責任の制限）に、サービスの説明は<a href=\"/san-pham-dich-vu.html\">商品・サービス</a>ページに掲載しています。",
   "h": "dc202339"
  },
+ "faqs.1-chuyen-khoan-ngan-hang-vnd": {
+  "t": "<strong>(1) ベトナムドンでの銀行振込</strong>（ベトナム国内向け）— payOS経由。ベトナムの銀行アプリでQRコードを読み取ると、両が自動でウォレットに入ります。",
+  "h": "e24f0f9d"
+ },
+ "faqs.2-paypal-the-quoc-te-nhan": {
+  "t": "<strong>(2) PayPal／国際カード</strong> — Visa、Mastercard、JCBに対応。PayPalの画面で「Pay with Debit or Credit Card」を選べば、PayPalアカウントがなくてもカードで支払えます。",
+  "h": "1c2327ba"
+ },
+ "faqs.ai-dung-sau-he-thong-nay": {
+  "t": "このシステムを作っているのは誰ですか？ <span class=\"icon\">+</span>",
+  "h": "cbc0edbf"
+ },
+ "faqs.anh-huong-den-toan-bo-luan": {
+  "t": "鑑定全体に影響する",
+  "h": "ec484c31"
+ },
+ "faqs.ban-co-the-gui-phan-hoi": {
+  "t": "<a href=\"/contact.html\">お問い合わせページ</a>からフィードバックをお送りいただければ、システムの改善に役立てます。",
+  "h": "5c411910"
+ },
+ "faqs.ban-nen-xem-luan-giai-nhu": {
+  "t": "鑑定は次のように受け止めてください：",
+  "h": "55e40baf"
+ },
+ "faqs.ban-than": {
+  "t": "自分自身",
+  "h": "b2d3973b"
+ },
+ "faqs.cac-cong-cu-phan-tich-van": {
+  "t": "時期ごとの運勢を分析するツール",
+  "h": "8bbb8706"
+ },
+ "faqs.cac-giai-doan-trong-cuoc-doi": {
+  "t": "人生のさまざまな段階",
+  "h": "6c24f2a6"
+ },
+ "faqs.cac-nguyen-ly-co-hoc-duoc": {
+  "t": "古学の原理を、勘だけに頼らずデータで検証しています。そのため結果にはより根拠がありますが、それでも価値ある参考情報として受け止めてください。照合の工程の詳細は<a href=\"/phuong-phap\">システムの仕組み</a>で、信頼性についての他の質問は<a href=\"/van-dap/do-tin-cay\">問答 — 信頼性</a>でご覧いただけます。",
+  "h": "78384f09"
+ },
+ "faqs.cac-noi-dung-nghien-cuu-va": {
+  "t": "研究コンテンツと実用ハンドブック",
+  "h": "b8acb1ad"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a": {
+  "t": "よくある質問（Q&amp;A）— 明宝紫微斗数",
+  "h": "c5f5cedb"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a-q5rv": {
+  "t": "よくある質問（Q&A）— 明宝紫微斗数",
+  "h": "6090dd15"
+ },
+ "faqs.cau-truc-la-so-co-tinh": {
+  "t": "命盤の構造に体系性がある",
+  "h": "657db941"
+ },
+ "faqs.chi-phi-bao-gom": {
+  "t": "費用に含まれるもの：",
+  "h": "b91ae52a"
+ },
+ "faqs.co-he-thong-duoc-cai-thien": {
+  "t": "はい。システムは次のものをもとに継続的に改善されています：",
+  "h": "1e990dc4"
+ },
+ "faqs.co-hoan-tien-khong": {
+  "t": "返金はありますか？ <span class=\"icon\">+</span>",
+  "h": "b6d3b591"
+ },
+ "faqs.co-nhung-cach-thanh-toan-nao": {
+  "t": "どんな支払い方法がありますか？ <span class=\"icon\">+</span>",
+  "h": "ed0165ac"
+ },
+ "faqs.co-phap": {
+  "t": "古法",
+  "h": "2f658ba5"
+ },
+ "faqs.cong-cu-tra-cuu-doi-chieu": {
+  "t": "命理を調べ、照合するツール",
+  "h": "0a4b7d02"
+ },
+ "faqs.day-co-phai-chi-la-website": {
+  "t": "ただの紫微斗数占いサイトですか？ <span class=\"icon\">+</span>",
+  "h": "9af05020"
+ },
+ "faqs.day-la-cau-hoi-ve-he": {
+  "t": "ここはシステムと取引についての質問です。結婚、お金、仕事、運勢など、ご自身の命盤についての疑問は<a href=\"/van-dap\">紫微斗数 問答</a>をご覧ください。",
+  "h": "79a010b3"
+ },
+ "faqs.dien-giai-noi-dung": {
+  "t": "内容を解説する",
+  "h": "324af67f"
+ },
+ "faqs.dieu-nay-co-the-do": {
+  "t": "次のような原因が考えられます：",
+  "h": "90c41523"
+ },
+ "faqs.dieu-nay-den-tu": {
+  "t": "それは次のことから来ています：",
+  "h": "8448adbc"
+ },
+ "faqs.do-tinh-chat-la-ket-qua": {
+  "t": "デジタルの成果物という性質上、結果が表示された後は<a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">返金いたしません</a>。代金が引かれたのに結果が届かないなど取引上の不具合があった場合は、すぐに<a href=\"/contact.html\">ご連絡</a>いただければ確認・対応します。",
+  "h": "2a30361f"
+ },
+ "faqs.doi-chieu-voi-cac-dien-bien": {
+  "t": "人生で実際に起きた出来事と照合する",
+  "h": "6a063fc7"
+ },
+ "faqs.doi-chieu-voi-du-lieu-thuc": {
+  "t": "実データと照合する",
+  "h": "94bad6e5"
+ },
+ "faqs.du-lieu-moi": {
+  "t": "新しいデータ",
+  "h": "d2983792"
+ },
+ "faqs.du-lieu-ngay-gio-sinh-cua": {
+  "t": "実在する27万人以上の生年月日時のデータ",
+  "h": "234d93e8"
+ },
+ "faqs.du-lieu-thuc-te-giup-xac": {
+  "t": "実データでパターンを見定める",
+  "h": "9f6ebf01"
+ },
+ "faqs.duy-tri-ha-tang-cong-nghe": {
+  "t": "技術基盤の維持",
+  "h": "7d34730c"
+ },
+ "faqs.giai-dap-ve-he-thong-luan": {
+  "t": "鑑定システム、精度、そして両とお支払いについてお答えします。",
+  "h": "b23b0625"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-4j0m": {
+  "t": "明宝紫微斗数の鑑定システムについて——仕組み、精度、そして両・お支払い・返金に関するご質問にお答えします。",
+  "h": "c5884acb"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-cptq": {
+  "t": "明宝紫微斗数の鑑定システムについて——仕組み、精度、それを支える研究チーム、そして両・お支払い・返金に関するご質問にお答えします。",
+  "h": "29c93c9e"
+ },
+ "faqs.giao-dich-luong-thanh-toan": {
+  "t": "取引・両・お支払い",
+  "h": "6de5f2ee"
+ },
+ "faqs.gio-sinh-la-yeu-to-quan": {
+  "t": "出生時刻は紫微斗数の重要な要素です。わずかなずれでも：",
+  "h": "638bef44"
+ },
+ "faqs.he-thong-chi-dung-de": {
+  "t": "システムが行うのは：",
+  "h": "9b5aa25a"
+ },
+ "faqs.he-thong-co-duoc-cap-nhat": {
+  "t": "システムは更新されますか？ <span class=\"icon\">+</span>",
+  "h": "d573dfc9"
+ },
+ "faqs.he-thong-co-tu-bia-noi": {
+  "t": "システムが内容を「でっち上げる」ことはありますか？ <span class=\"icon\">+</span>",
+  "h": "9163335f"
+ },
+ "faqs.he-thong-dien-giai-noi-dung": {
+  "t": "システムが内容を解説する",
+  "h": "45f13e71"
+ },
+ "faqs.he-thong-dien-giai-theo-dung": {
+  "t": "システムが一人ひとりの状況に沿って解説する",
+  "h": "f598cd0b"
+ },
+ "faqs.he-thong-giup-ban-hieu-ro": {
+  "t": "システムは次のことの理解を助けます：",
+  "h": "e0d167f6"
+ },
+ "faqs.he-thong-hoat-dong-nhu-the": {
+  "t": "システムはどのように動いていますか？ <span class=\"icon\">+</span>",
+  "h": "879a3e4e"
+ },
+ "faqs.he-thong-khong-tu-doan-ma": {
+  "t": "システムは自分で「当て推量」するのではなく、あらかじめ確定した結論を解説し直すだけです。5段階の工程の全体は<a href=\"/phuong-phap\">紫微斗数 検証</a>でご覧ください。",
+  "h": "4480c36f"
+ },
+ "faqs.hieu-chinh-boi-chuyen-gia": {
+  "t": "専門家による調整",
+  "h": "10b36d86"
+ },
+ "faqs.hieu-chinh-noi-dung-lien-tuc": {
+  "t": "内容をたえず調整する",
+  "h": "69973443"
+ },
+ "faqs.ket-hop-voi-phuong-phap-va": {
+  "t": "現代の方法と技術を組み合わせる",
+  "h": "9ecf21e0"
+ },
+ "faqs.kha-nang": {
+  "t": "可能性",
+  "h": "550f7b6b"
+ },
+ "faqs.khac-biet-trong-truong-phai": {
+  "t": "流派による違い",
+  "h": "28a67aec"
+ },
+ "faqs.khong": {
+  "t": "いいえ。",
+  "h": "f102a5bb"
+ },
+ "faqs.khong-co-he-thong-nao-co": {
+  "t": "絶対的な結論を出せるシステムはありません。",
+  "h": "bb36c938"
+ },
+ "faqs.khong-luong-duoc-luu-vinh-vien": {
+  "t": "いいえ。両はアカウントに無期限で保存され、いつでも使えます。",
+  "h": "ed0f9e73"
+ },
+ "faqs.khong-moi-la-so-hay-ket": {
+  "t": "いいえ。両が差し引かれるのは、各命盤や結果を初めて鑑定するときの一度だけです。その後は何度見直しても無料です。",
+  "h": "75165ddc"
+ },
+ "faqs.khong-nen-phu-thuoc-hoan-toan": {
+  "t": "結果に全面的に頼るべきではありません。",
+  "h": "cb04372e"
+ },
+ "faqs.khong-tu-vi-minh-bao-la": {
+  "t": "いいえ。明宝紫微斗数は多くの研究・鑑定ツールからなるシステムで、紫微斗数はその中心となる一部です。",
+  "h": "6d75d055"
+ },
+ "faqs.la-so-phan-anh": {
+  "t": "命盤が映すのは：",
+  "h": "784be23d"
+ },
+ "faqs.lam-ro-luan-diem": {
+  "t": "論点を明確にする",
+  "h": "6e34e839"
+ },
+ "faqs.lam-sao-de-nap-luong": {
+  "t": "両はどうやってチャージしますか？ <span class=\"icon\">+</span>",
+  "h": "73577e49"
+ },
+ "faqs.lam-thay-doi-vi-tri-sao": {
+  "t": "星の位置が変わる",
+  "h": "9ecafe04"
+ },
+ "faqs.lay-kinh-dien-lam-nen-tang": {
+  "t": "古典を土台とする",
+  "h": "a47b04f6"
+ },
+ "faqs.lay-thuc-chung-lam-tieu-chuan": {
+  "t": "実証を基準とする",
+  "h": "d1df793c"
+ },
+ "faqs.logic-luan-giai-da-duoc-xay": {
+  "t": "鑑定の論理は、あらかじめ次のものに基づいて構築されています：",
+  "h": "6084cf0a"
+ },
+ "faqs.luong-co-het-han-khong": {
+  "t": "両に有効期限はありますか？ <span class=\"icon\">+</span>",
+  "h": "05ce0b06"
+ },
+ "faqs.luong-la-don-vi-dung-de": {
+  "t": "両は、明宝紫微斗数で本格的な鑑定ツールのロックを解除するための単位です。一度チャージすれば全ツールで使え、機能ごとに別途購入する必要はありません。",
+  "h": "fe222fa9"
+ },
+ "faqs.luong-la-gi": {
+  "t": "両とは何ですか？ <span class=\"icon\">+</span>",
+  "h": "af09a5b2"
+ },
+ "faqs.moi-lan-mo-lai-ket-qua": {
+  "t": "過去の結果を開き直すたびに両が引かれますか？ <span class=\"icon\">+</span>",
+  "h": "8d7c06a5"
+ },
+ "faqs.mot-cong-cu-ho-tro-quyet": {
+  "t": "意思決定を助けるツール",
+  "h": "b3fa5457"
+ },
+ "faqs.mot-goc-nhin-co-he-thong": {
+  "t": "体系的なものの見方",
+  "h": "b79d8456"
+ },
+ "faqs.mot-nguon-tham-khao-co-co": {
+  "t": "根拠のある参考情報",
+  "h": "5a51df4e"
+ },
+ "faqs.muc-tieu-khong-chi-la-xem": {
+  "t": "目的は「占う」ことだけではなく、命理を理解し実生活に生かすためのツールのエコシステムを築くことです。",
+  "h": "90ed16bd"
+ },
+ "faqs.neu-khong-chac-chan-ban-nen": {
+  "t": "確信が持てない場合は、結果をより参考程度にとどめてご利用ください。",
+  "h": "e402d31b"
+ },
+ "faqs.neu-toi-thay-noi-dung-chua": {
+  "t": "内容が違うと感じたらどうすればいいですか？ <span class=\"icon\">+</span>",
+  "h": "8818d326"
+ },
+ "faqs.ngoai-ra-nen-tang-con-bao": {
+  "t": "このほか、プラットフォームには次のものもあります：",
+  "h": "c98ec9b0"
+ },
+ "faqs.nhom-bao-gom-cac-hoc-gia": {
+  "t": "チームには、紫微斗数の学者・研究者と、数多くの命盤を実際に鑑定してきた経験を持つ人々がいます。学術から実践まで、それぞれ異なる視点を持ちながら、命理を真剣に理解し体系化するという目標を共有しています。詳しくは<a href=\"/about.html\">紹介</a>ページをご覧ください。",
+  "h": "fd39d8c1"
+ },
+ "faqs.nhung-ket-qua-cuoi-cung-van": {
+  "t": "しかし最終的な結果は、やはり一人ひとりの行動と選択にかかっています。",
+  "h": "8d1d8452"
+ },
+ "faqs.nhung-xu-huong-co-the-xay": {
+  "t": "起こりうる傾向",
+  "h": "e3dbdcb7"
+ },
+ "faqs.noi-dung-luan-giai-co-thuc": {
+  "t": "鑑定の内容は本当に正確なのですか？ <span class=\"icon\">+</span>",
+  "h": "08936df9"
+ },
+ "faqs.phan-hoi-nguoi-dung": {
+  "t": "利用者からのフィードバック",
+  "h": "fe75cdef"
+ },
+ "faqs.phan-tich-cau-truc-theo-nguyen": {
+  "t": "紫微斗数の原理に沿って構造を分析する",
+  "h": "3b937e5e"
+ },
+ "faqs.phat-trien-he-thong-luan-giai": {
+  "t": "鑑定システムの開発",
+  "h": "cb9ef15b"
+ },
+ "faqs.phi-dich-vu-giup-dam-bao": {
+  "t": "利用料は、システムの品質と真剣な投資を支えるためのものです。",
+  "h": "19322883"
+ },
+ "faqs.qua-trinh-kiem-nghiem-thuc-te": {
+  "t": "実地での検証の過程",
+  "h": "de20f584"
+ },
+ "faqs.quy-tac-da-kiem-nghiem": {
+  "t": "検証済みの規則",
+  "h": "bfadc1f0"
+ },
+ "faqs.quy-trinh-luan-giai-gom-nhieu": {
+  "t": "鑑定の工程はいくつもの段階からなります：",
+  "h": "dc04d724"
+ },
+ "faqs.sai-gio-sinh": {
+  "t": "出生時刻の誤り",
+  "h": "740a22eb"
+ },
+ "faqs.su-dung-la-ket-qua-cua": {
+  "t": "「当たる」のは方法の結果であって、偶然の当て推量ではありません。",
+  "h": "517839bc"
+ },
+ "faqs.tai-sao-noi-dung-doc-giong": {
+  "t": "なぜ内容が「自分そっくり」に読めるのですか？ <span class=\"icon\">+</span>",
+  "h": "f5983ec4"
+ },
+ "faqs.thanh-toan-xong-ma-chua-thay": {
+  "t": "支払いが済んだのにウォレットに両が入らない場合は？ <span class=\"icon\">+</span>",
+  "h": "eab1cb35"
+ },
+ "faqs.thoi-diem": {
+  "t": "タイミング",
+  "h": "020b0562"
+ },
+ "faqs.thu-lam-moi-trang-f5-hoac": {
+  "t": "ページを再読み込み（F5）するか、<a href=\"/app/ho-so\">プロフィール</a> →「両ウォレット」タブで残高を確認してください。1〜2分たっても反映されない場合は、取引ID（PayPalまたはpayOS）を添えて<a href=\"/contact.html\">お問い合わせページ</a>からご連絡ください。",
+  "h": "226c73c9"
+ },
+ "faqs.toan-bo-noi-dung-luan-giai": {
+  "t": "そのツールの本格的な鑑定内容のすべて——あなたの命盤と状況に沿って書かれたもの——に加え、無制限の再閲覧、そしてツールが対応していればダウンロードもできます。",
+  "h": "f4f821fa"
+ },
+ "faqs.toi-co-the-thay-doi-van": {
+  "t": "運命を変えることはできますか？ <span class=\"icon\">+</span>",
+  "h": "5dfa0b85"
+ },
+ "faqs.toi-nen-su-dung-ket-qua": {
+  "t": "結果はどう活用すればいいですか？ <span class=\"icon\">+</span>",
+  "h": "01d8b923"
+ },
+ "faqs.tra-phi-xong-toi-nhan-duoc": {
+  "t": "支払うと何が手に入りますか？ <span class=\"icon\">+</span>",
+  "h": "7bfad677"
+ },
+ "faqs.tu-vi-khong-phai-la-su": {
+  "t": "紫微斗数は絶対的な定めではありません。",
+  "h": "cbd47d29"
+ },
+ "faqs.tu-vi-minh-bao-duoc-xay": {
+  "t": "明宝紫微斗数は、次の方針を持つ命理の研究チームによって築かれました：",
+  "h": "6fb267dd"
+ },
+ "faqs.tu-vi-minh-bao-la-gi": {
+  "t": "明宝紫微斗数とは何ですか？ <span class=\"icon\">+</span>",
+  "h": "7085b3b2"
+ },
+ "faqs.tu-vi-minh-bao-la-he": {
+  "t": "明宝紫微斗数は、東洋の古学、実データ、現代の技術を組み合わせた、一人ひとりに合わせた鑑定システムです。",
+  "h": "253a2e07"
+ },
+ "faqs.tuy-nhien-tu-vi-minh-bao": {
+  "t": "ただし、明宝紫微斗数は次のものの上に築かれています：",
+  "h": "3adb9017"
+ },
+ "faqs.vao-ho-so-tab-vi-luong": {
+  "t": "<a href=\"/app/ho-so\">プロフィール</a> →「両ウォレット」タブで、現在の残高と両のチャージ・利用の全履歴を確認できます。",
+  "h": "1b550c61"
+ },
+ "faqs.vao-trang-nap-luong-chon-mot": {
+  "t": "<a href=\"/topup.html\">両をチャージ</a>ページで、合うパックを選んでお支払いください。取引が成功するとすぐに両がウォレットに加算されます。",
+  "h": "a8423928"
+ },
+ "faqs.ve-he-thong": {
+  "t": "システムについて",
+  "h": "f81106ca"
+ },
+ "faqs.vi-sao-phai-nhap-chinh-xac": {
+  "t": "なぜ出生時刻を正確に入力する必要があるのですか？ <span class=\"icon\">+</span>",
+  "h": "28f58ae2"
+ },
+ "faqs.vi-sao-phai-tra-phi-de": {
+  "t": "なぜ全文を見るのに料金がかかるのですか？ <span class=\"icon\">+</span>",
+  "h": "9fa7926b"
+ },
+ "faqs.xay-dung-la-so-tu-ngay": {
+  "t": "生年月日と出生時刻から命盤を作る",
+  "h": "82018c4e"
+ },
+ "faqs.xay-dung-va-xu-ly-du": {
+  "t": "大規模なデータの構築と処理",
+  "h": "5b3550e6"
+ },
+ "faqs.xem-lai-lich-su-giao-dich": {
+  "t": "取引履歴はどこで確認できますか？ <span class=\"icon\">+</span>",
+  "h": "c1de6029"
+ },
+ "faqs.xem-them": {
+  "t": "もっと見る",
+  "h": "55d48a8e"
+ },
+ "faqs.xu-huong": {
+  "t": "傾向",
+  "h": "7964ab99"
+ },
+ "faqs.yeu-to-ca-nhan-chua-duoc": {
+  "t": "個人的な要素が十分に反映されていない",
+  "h": "4fbc118f"
+ },
  "hdtt.cach-hoat-dong": {
   "t": "ご利用の流れ",
   "h": "8ad7f762"

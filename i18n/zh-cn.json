@@ -695,6 +695,450 @@
   "t": "完整条款请见<a href=\"/dieu-khoan-dich-vu.html\">服务条款</a>（第 2 节——责任限制），服务说明请见<a href=\"/san-pham-dich-vu.html\">产品与服务</a>页面。",
   "h": "dc202339"
  },
+ "faqs.1-chuyen-khoan-ngan-hang-vnd": {
+  "t": "<strong>(1) 越南盾银行转帐</strong>（限越南境内）——透过 payOS，用越南银行 App 扫描 QR 码，两会自动存入钱包。",
+  "h": "e24f0f9d"
+ },
+ "faqs.2-paypal-the-quoc-te-nhan": {
+  "t": "<strong>(2) PayPal／国际信用卡</strong>——接受 Visa、Mastercard、JCB；在 PayPal 窗口中可选「Pay with Debit or Credit Card」，不需 PayPal 帐号即可刷卡。",
+  "h": "1c2327ba"
+ },
+ "faqs.ai-dung-sau-he-thong-nay": {
+  "t": "这套系统背后是谁？ <span class=\"icon\">+</span>",
+  "h": "cbc0edbf"
+ },
+ "faqs.anh-huong-den-toan-bo-luan": {
+  "t": "影响整份解读",
+  "h": "ec484c31"
+ },
+ "faqs.ban-co-the-gui-phan-hoi": {
+  "t": "您可以透过<a href=\"/contact.html\">联系我们页面</a>送出回馈，协助系统改进。",
+  "h": "5c411910"
+ },
+ "faqs.ban-nen-xem-luan-giai-nhu": {
+  "t": "建议您把解读看作：",
+  "h": "55e40baf"
+ },
+ "faqs.ban-than": {
+  "t": "自己",
+  "h": "b2d3973b"
+ },
+ "faqs.cac-cong-cu-phan-tich-van": {
+  "t": "依时间分析运势的工具",
+  "h": "8bbb8706"
+ },
+ "faqs.cac-giai-doan-trong-cuoc-doi": {
+  "t": "人生的各个阶段",
+  "h": "6c24f2a6"
+ },
+ "faqs.cac-nguyen-ly-co-hoc-duoc": {
+  "t": "古学原理经过数据验证，而非只凭感觉臆断。因此结果更有根据，但仍应视为有价值的参考。比对流程的详细说明请见<a href=\"/phuong-phap\">系统如何运作</a>，其他关于可信度的问题请见<a href=\"/van-dap/do-tin-cay\">问答——可信度</a>。",
+  "h": "78384f09"
+ },
+ "faqs.cac-noi-dung-nghien-cuu-va": {
+  "t": "研究内容与应用指南",
+  "h": "b8acb1ad"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a": {
+  "t": "常见问题（Q&amp;A）— 明宝紫微斗数",
+  "h": "c5f5cedb"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a-q5rv": {
+  "t": "常见问题（Q&A）— 明宝紫微斗数",
+  "h": "6090dd15"
+ },
+ "faqs.cau-truc-la-so-co-tinh": {
+  "t": "命盘结构具有系统性",
+  "h": "657db941"
+ },
+ "faqs.chi-phi-bao-gom": {
+  "t": "费用涵盖：",
+  "h": "b91ae52a"
+ },
+ "faqs.co-he-thong-duoc-cai-thien": {
+  "t": "会。系统依据以下各项持续改进：",
+  "h": "1e990dc4"
+ },
+ "faqs.co-hoan-tien-khong": {
+  "t": "可以退款吗？ <span class=\"icon\">+</span>",
+  "h": "b6d3b591"
+ },
+ "faqs.co-nhung-cach-thanh-toan-nao": {
+  "t": "有哪些付款方式？ <span class=\"icon\">+</span>",
+  "h": "ed0165ac"
+ },
+ "faqs.co-phap": {
+  "t": "古法",
+  "h": "2f658ba5"
+ },
+ "faqs.cong-cu-tra-cuu-doi-chieu": {
+  "t": "查找与比对命理的工具",
+  "h": "0a4b7d02"
+ },
+ "faqs.day-co-phai-chi-la-website": {
+  "t": "这只是一个算紫微的网站吗？ <span class=\"icon\">+</span>",
+  "h": "9af05020"
+ },
+ "faqs.day-la-cau-hoi-ve-he": {
+  "t": "这里是关于系统与交易的问题。若您想问的是自己的命盘——婚姻、财运、事业、运势——请见<a href=\"/van-dap\">紫微问答</a>。",
+  "h": "79a010b3"
+ },
+ "faqs.dien-giai-noi-dung": {
+  "t": "解说内容",
+  "h": "324af67f"
+ },
+ "faqs.dieu-nay-co-the-do": {
+  "t": "可能的原因：",
+  "h": "90c41523"
+ },
+ "faqs.dieu-nay-den-tu": {
+  "t": "这来自于：",
+  "h": "8448adbc"
+ },
+ "faqs.do-tinh-chat-la-ket-qua": {
+  "t": "由于属数字化结果，结果显示后系统<a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">不予退款</a>。若遇交易错误——已扣款却未收到结果——请立即<a href=\"/contact.html\">联系我们</a>，以便查核处理。",
+  "h": "2a30361f"
+ },
+ "faqs.doi-chieu-voi-cac-dien-bien": {
+  "t": "与人生中实际发生的事件比对",
+  "h": "6a063fc7"
+ },
+ "faqs.doi-chieu-voi-du-lieu-thuc": {
+  "t": "与实际数据比对",
+  "h": "94bad6e5"
+ },
+ "faqs.du-lieu-moi": {
+  "t": "新数据",
+  "h": "d2983792"
+ },
+ "faqs.du-lieu-ngay-gio-sinh-cua": {
+  "t": "超过 270,000 位真人的出生年月日时数据",
+  "h": "234d93e8"
+ },
+ "faqs.du-lieu-thuc-te-giup-xac": {
+  "t": "以实际数据找出规律",
+  "h": "9f6ebf01"
+ },
+ "faqs.duy-tri-ha-tang-cong-nghe": {
+  "t": "维护技术基础设施",
+  "h": "7d34730c"
+ },
+ "faqs.giai-dap-ve-he-thong-luan": {
+  "t": "解答关于解读系统、准确度，以及两与付款的问题。",
+  "h": "b23b0625"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-4j0m": {
+  "t": "解答关于明宝紫微斗数解读系统的问题——运作方式、准确度，以及两、付款、退款等问题。",
+  "h": "c5884acb"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-cptq": {
+  "t": "解答关于明宝紫微斗数解读系统的问题——运作方式、准确度、背后的研究团队，以及两、付款、退款等问题。",
+  "h": "29c93c9e"
+ },
+ "faqs.giao-dich-luong-thanh-toan": {
+  "t": "交易、两与付款",
+  "h": "6de5f2ee"
+ },
+ "faqs.gio-sinh-la-yeu-to-quan": {
+  "t": "出生时辰是紫微斗数的重要因素。微小的偏差可能：",
+  "h": "638bef44"
+ },
+ "faqs.he-thong-chi-dung-de": {
+  "t": "系统只用来：",
+  "h": "9b5aa25a"
+ },
+ "faqs.he-thong-co-duoc-cap-nhat": {
+  "t": "系统会更新吗？ <span class=\"icon\">+</span>",
+  "h": "d573dfc9"
+ },
+ "faqs.he-thong-co-tu-bia-noi": {
+  "t": "系统会自己「编造」内容吗？ <span class=\"icon\">+</span>",
+  "h": "9163335f"
+ },
+ "faqs.he-thong-dien-giai-noi-dung": {
+  "t": "系统解说内容",
+  "h": "45f13e71"
+ },
+ "faqs.he-thong-dien-giai-theo-dung": {
+  "t": "系统依个人情境解说",
+  "h": "f598cd0b"
+ },
+ "faqs.he-thong-giup-ban-hieu-ro": {
+  "t": "系统帮助您更了解：",
+  "h": "e0d167f6"
+ },
+ "faqs.he-thong-hoat-dong-nhu-the": {
+  "t": "系统如何运作？ <span class=\"icon\">+</span>",
+  "h": "879a3e4e"
+ },
+ "faqs.he-thong-khong-tu-doan-ma": {
+  "t": "系统不会自行「猜测」，只会重新解说已确定的结论。完整的 5 步骤流程请见<a href=\"/phuong-phap\">紫微验证</a>。",
+  "h": "4480c36f"
+ },
+ "faqs.hieu-chinh-boi-chuyen-gia": {
+  "t": "专家校正",
+  "h": "10b36d86"
+ },
+ "faqs.hieu-chinh-noi-dung-lien-tuc": {
+  "t": "持续校正内容",
+  "h": "69973443"
+ },
+ "faqs.ket-hop-voi-phuong-phap-va": {
+  "t": "结合现代方法与技术",
+  "h": "9ecf21e0"
+ },
+ "faqs.kha-nang": {
+  "t": "可能性",
+  "h": "550f7b6b"
+ },
+ "faqs.khac-biet-trong-truong-phai": {
+  "t": "流派差异",
+  "h": "28a67aec"
+ },
+ "faqs.khong": {
+  "t": "不会。",
+  "h": "f102a5bb"
+ },
+ "faqs.khong-co-he-thong-nao-co": {
+  "t": "没有任何系统能给出绝对的结论。",
+  "h": "bb36c938"
+ },
+ "faqs.khong-luong-duoc-luu-vinh-vien": {
+  "t": "不会。两永久保存在帐号中，随时可用。",
+  "h": "ed0f9e73"
+ },
+ "faqs.khong-moi-la-so-hay-ket": {
+  "t": "不会。每份命盘或结果只在首次解读时扣一次两。之后无论再看多少次都免费。",
+  "h": "75165ddc"
+ },
+ "faqs.khong-nen-phu-thuoc-hoan-toan": {
+  "t": "不应完全依赖结果。",
+  "h": "cb04372e"
+ },
+ "faqs.khong-tu-vi-minh-bao-la": {
+  "t": "不是。明宝紫微斗数是由多种研究与解读工具组成的系统，紫微斗数是其中的核心部分。",
+  "h": "6d75d055"
+ },
+ "faqs.la-so-phan-anh": {
+  "t": "命盘反映的是：",
+  "h": "784be23d"
+ },
+ "faqs.lam-ro-luan-diem": {
+  "t": "厘清论点",
+  "h": "6e34e839"
+ },
+ "faqs.lam-sao-de-nap-luong": {
+  "t": "如何储值两？ <span class=\"icon\">+</span>",
+  "h": "73577e49"
+ },
+ "faqs.lam-thay-doi-vi-tri-sao": {
+  "t": "改变星曜位置",
+  "h": "9ecafe04"
+ },
+ "faqs.lay-kinh-dien-lam-nen-tang": {
+  "t": "以经典为基础",
+  "h": "a47b04f6"
+ },
+ "faqs.lay-thuc-chung-lam-tieu-chuan": {
+  "t": "以实证为标准",
+  "h": "d1df793c"
+ },
+ "faqs.logic-luan-giai-da-duoc-xay": {
+  "t": "解读逻辑已事先依据以下创建：",
+  "h": "6084cf0a"
+ },
+ "faqs.luong-co-het-han-khong": {
+  "t": "两会过期吗？ <span class=\"icon\">+</span>",
+  "h": "05ce0b06"
+ },
+ "faqs.luong-la-don-vi-dung-de": {
+  "t": "两是在明宝紫微斗数上解锁深度解读工具的单位。储值一次即可用于所有工具——不必按功能分别购买。",
+  "h": "fe222fa9"
+ },
+ "faqs.luong-la-gi": {
+  "t": "两是什么？ <span class=\"icon\">+</span>",
+  "h": "af09a5b2"
+ },
+ "faqs.moi-lan-mo-lai-ket-qua": {
+  "t": "每次重新打开旧结果都会再扣两吗？ <span class=\"icon\">+</span>",
+  "h": "8d7c06a5"
+ },
+ "faqs.mot-cong-cu-ho-tro-quyet": {
+  "t": "辅助决策的工具",
+  "h": "b3fa5457"
+ },
+ "faqs.mot-goc-nhin-co-he-thong": {
+  "t": "有系统的观点",
+  "h": "b79d8456"
+ },
+ "faqs.mot-nguon-tham-khao-co-co": {
+  "t": "有根据的参考",
+  "h": "5a51df4e"
+ },
+ "faqs.muc-tieu-khong-chi-la-xem": {
+  "t": "目标不只是「算命」，而是创建一个工具生态系，帮助人理解并在生活中应用命理。",
+  "h": "90ed16bd"
+ },
+ "faqs.neu-khong-chac-chan-ban-nen": {
+  "t": "若不确定，建议以更偏参考的程度使用结果。",
+  "h": "e402d31b"
+ },
+ "faqs.neu-toi-thay-noi-dung-chua": {
+  "t": "如果我觉得内容不对怎么办？ <span class=\"icon\">+</span>",
+  "h": "8818d326"
+ },
+ "faqs.ngoai-ra-nen-tang-con-bao": {
+  "t": "此外，平台还包括：",
+  "h": "c98ec9b0"
+ },
+ "faqs.nhom-bao-gom-cac-hoc-gia": {
+  "t": "团队成员包括紫微斗数的学者与研究者，以及实际解读过大量命盘的实务者。每个人从学术到实务各有视角，但共同目标是认真地理解并系统化命理。更多请见<a href=\"/about.html\">关于我们</a>页面。",
+  "h": "fd39d8c1"
+ },
+ "faqs.nhung-ket-qua-cuoi-cung-van": {
+  "t": "但最终结果仍取决于每个人的行动与选择。",
+  "h": "8d1d8452"
+ },
+ "faqs.nhung-xu-huong-co-the-xay": {
+  "t": "可能发生的倾向",
+  "h": "e3dbdcb7"
+ },
+ "faqs.noi-dung-luan-giai-co-thuc": {
+  "t": "解读内容真的准确吗？ <span class=\"icon\">+</span>",
+  "h": "08936df9"
+ },
+ "faqs.phan-hoi-nguoi-dung": {
+  "t": "用户回馈",
+  "h": "fe75cdef"
+ },
+ "faqs.phan-tich-cau-truc-theo-nguyen": {
+  "t": "依紫微原理分析结构",
+  "h": "3b937e5e"
+ },
+ "faqs.phat-trien-he-thong-luan-giai": {
+  "t": "发展解读系统",
+  "h": "cb9ef15b"
+ },
+ "faqs.phi-dich-vu-giup-dam-bao": {
+  "t": "服务费用确保系统的品质与认真投入。",
+  "h": "19322883"
+ },
+ "faqs.qua-trinh-kiem-nghiem-thuc-te": {
+  "t": "实际验证的过程",
+  "h": "de20f584"
+ },
+ "faqs.quy-tac-da-kiem-nghiem": {
+  "t": "经验证的规则",
+  "h": "bfadc1f0"
+ },
+ "faqs.quy-trinh-luan-giai-gom-nhieu": {
+  "t": "解读流程包含多个步骤：",
+  "h": "dc04d724"
+ },
+ "faqs.sai-gio-sinh": {
+  "t": "出生时辰错误",
+  "h": "740a22eb"
+ },
+ "faqs.su-dung-la-ket-qua-cua": {
+  "t": "「准」是方法的结果，不是随机猜中。",
+  "h": "517839bc"
+ },
+ "faqs.tai-sao-noi-dung-doc-giong": {
+  "t": "为什么内容读起来「很像我」？ <span class=\"icon\">+</span>",
+  "h": "f5983ec4"
+ },
+ "faqs.thanh-toan-xong-ma-chua-thay": {
+  "t": "付款完成却没看到两入钱包？ <span class=\"icon\">+</span>",
+  "h": "eab1cb35"
+ },
+ "faqs.thoi-diem": {
+  "t": "时机",
+  "h": "020b0562"
+ },
+ "faqs.thu-lam-moi-trang-f5-hoac": {
+  "t": "请刷新页面（F5），或前往<a href=\"/app/ho-so\">个人文件</a> →「两钱包」分页再次确认余额。若 1–2 分钟后仍未看到，请附上交易编号（PayPal 或 payOS），透过<a href=\"/contact.html\">联系我们页面</a>与我们联系处理。",
+  "h": "226c73c9"
+ },
+ "faqs.toan-bo-noi-dung-luan-giai": {
+  "t": "该工具的完整深度解读内容——依您的命盘与个人情境撰写——以及无限次重看，工具支持时也可下载。",
+  "h": "f4f821fa"
+ },
+ "faqs.toi-co-the-thay-doi-van": {
+  "t": "我能改变命运吗？ <span class=\"icon\">+</span>",
+  "h": "5dfa0b85"
+ },
+ "faqs.toi-nen-su-dung-ket-qua": {
+  "t": "我该如何运用结果？ <span class=\"icon\">+</span>",
+  "h": "01d8b923"
+ },
+ "faqs.tra-phi-xong-toi-nhan-duoc": {
+  "t": "付费后我会得到什么？ <span class=\"icon\">+</span>",
+  "h": "7bfad677"
+ },
+ "faqs.tu-vi-khong-phai-la-su": {
+  "t": "紫微不是绝对的定数。",
+  "h": "cbd47d29"
+ },
+ "faqs.tu-vi-minh-bao-duoc-xay": {
+  "t": "明宝紫微斗数由一个命理研究团队依以下方向创建：",
+  "h": "6fb267dd"
+ },
+ "faqs.tu-vi-minh-bao-la-gi": {
+  "t": "明宝紫微斗数是什么？ <span class=\"icon\">+</span>",
+  "h": "7085b3b2"
+ },
+ "faqs.tu-vi-minh-bao-la-he": {
+  "t": "明宝紫微斗数是个人化的解读系统，结合东方古学、实际数据与现代技术。",
+  "h": "253a2e07"
+ },
+ "faqs.tuy-nhien-tu-vi-minh-bao": {
+  "t": "不过，明宝紫微斗数创建在：",
+  "h": "3adb9017"
+ },
+ "faqs.vao-ho-so-tab-vi-luong": {
+  "t": "前往<a href=\"/app/ho-so\">个人文件</a> →「两钱包」分页，可查看目前余额与所有储值、扣除两的纪录。",
+  "h": "1b550c61"
+ },
+ "faqs.vao-trang-nap-luong-chon-mot": {
+  "t": "前往<a href=\"/topup.html\">储值两</a>页面，选择合适的方案并付款。交易成功后两会立即加入钱包。",
+  "h": "a8423928"
+ },
+ "faqs.ve-he-thong": {
+  "t": "关于系统",
+  "h": "f81106ca"
+ },
+ "faqs.vi-sao-phai-nhap-chinh-xac": {
+  "t": "为什么要准确输入出生时辰？ <span class=\"icon\">+</span>",
+  "h": "28f58ae2"
+ },
+ "faqs.vi-sao-phai-tra-phi-de": {
+  "t": "为什么看完整内容要付费？ <span class=\"icon\">+</span>",
+  "h": "9fa7926b"
+ },
+ "faqs.xay-dung-la-so-tu-ngay": {
+  "t": "依出生年月日时排出命盘",
+  "h": "82018c4e"
+ },
+ "faqs.xay-dung-va-xu-ly-du": {
+  "t": "创建并处理大规模数据",
+  "h": "5b3550e6"
+ },
+ "faqs.xem-lai-lich-su-giao-dich": {
+  "t": "在哪里查看交易纪录？ <span class=\"icon\">+</span>",
+  "h": "c1de6029"
+ },
+ "faqs.xem-them": {
+  "t": "延伸阅读",
+  "h": "55d48a8e"
+ },
+ "faqs.xu-huong": {
+  "t": "倾向",
+  "h": "7964ab99"
+ },
+ "faqs.yeu-to-ca-nhan-chua-duoc": {
+  "t": "个人因素未被充分反映",
+  "h": "4fbc118f"
+ },
  "hdtt.cach-hoat-dong": {
   "t": "使用流程",
   "h": "8ad7f762"

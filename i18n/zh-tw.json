@@ -695,6 +695,450 @@
   "t": "完整條款請見<a href=\"/dieu-khoan-dich-vu.html\">服務條款</a>（第 2 節——責任限制），服務說明請見<a href=\"/san-pham-dich-vu.html\">產品與服務</a>頁面。",
   "h": "dc202339"
  },
+ "faqs.1-chuyen-khoan-ngan-hang-vnd": {
+  "t": "<strong>(1) 越南盾銀行轉帳</strong>（限越南境內）——透過 payOS，用越南銀行 App 掃描 QR 碼，兩會自動存入錢包。",
+  "h": "e24f0f9d"
+ },
+ "faqs.2-paypal-the-quoc-te-nhan": {
+  "t": "<strong>(2) PayPal／國際信用卡</strong>——接受 Visa、Mastercard、JCB；在 PayPal 視窗中可選「Pay with Debit or Credit Card」，不需 PayPal 帳號即可刷卡。",
+  "h": "1c2327ba"
+ },
+ "faqs.ai-dung-sau-he-thong-nay": {
+  "t": "這套系統背後是誰？ <span class=\"icon\">+</span>",
+  "h": "cbc0edbf"
+ },
+ "faqs.anh-huong-den-toan-bo-luan": {
+  "t": "影響整份解讀",
+  "h": "ec484c31"
+ },
+ "faqs.ban-co-the-gui-phan-hoi": {
+  "t": "您可以透過<a href=\"/contact.html\">聯絡我們頁面</a>送出回饋，協助系統改進。",
+  "h": "5c411910"
+ },
+ "faqs.ban-nen-xem-luan-giai-nhu": {
+  "t": "建議您把解讀看作：",
+  "h": "55e40baf"
+ },
+ "faqs.ban-than": {
+  "t": "自己",
+  "h": "b2d3973b"
+ },
+ "faqs.cac-cong-cu-phan-tich-van": {
+  "t": "依時間分析運勢的工具",
+  "h": "8bbb8706"
+ },
+ "faqs.cac-giai-doan-trong-cuoc-doi": {
+  "t": "人生的各個階段",
+  "h": "6c24f2a6"
+ },
+ "faqs.cac-nguyen-ly-co-hoc-duoc": {
+  "t": "古學原理經過資料驗證，而非只憑感覺臆斷。因此結果更有根據，但仍應視為有價值的參考。比對流程的詳細說明請見<a href=\"/phuong-phap\">系統如何運作</a>，其他關於可信度的問題請見<a href=\"/van-dap/do-tin-cay\">問答——可信度</a>。",
+  "h": "78384f09"
+ },
+ "faqs.cac-noi-dung-nghien-cuu-va": {
+  "t": "研究內容與應用指南",
+  "h": "b8acb1ad"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a": {
+  "t": "常見問題（Q&amp;A）— 明寶紫微斗數",
+  "h": "c5f5cedb"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a-q5rv": {
+  "t": "常見問題（Q&A）— 明寶紫微斗數",
+  "h": "6090dd15"
+ },
+ "faqs.cau-truc-la-so-co-tinh": {
+  "t": "命盤結構具有系統性",
+  "h": "657db941"
+ },
+ "faqs.chi-phi-bao-gom": {
+  "t": "費用涵蓋：",
+  "h": "b91ae52a"
+ },
+ "faqs.co-he-thong-duoc-cai-thien": {
+  "t": "會。系統依據以下各項持續改進：",
+  "h": "1e990dc4"
+ },
+ "faqs.co-hoan-tien-khong": {
+  "t": "可以退款嗎？ <span class=\"icon\">+</span>",
+  "h": "b6d3b591"
+ },
+ "faqs.co-nhung-cach-thanh-toan-nao": {
+  "t": "有哪些付款方式？ <span class=\"icon\">+</span>",
+  "h": "ed0165ac"
+ },
+ "faqs.co-phap": {
+  "t": "古法",
+  "h": "2f658ba5"
+ },
+ "faqs.cong-cu-tra-cuu-doi-chieu": {
+  "t": "查詢與比對命理的工具",
+  "h": "0a4b7d02"
+ },
+ "faqs.day-co-phai-chi-la-website": {
+  "t": "這只是一個算紫微的網站嗎？ <span class=\"icon\">+</span>",
+  "h": "9af05020"
+ },
+ "faqs.day-la-cau-hoi-ve-he": {
+  "t": "這裡是關於系統與交易的問題。若您想問的是自己的命盤——婚姻、財運、事業、運勢——請見<a href=\"/van-dap\">紫微問答</a>。",
+  "h": "79a010b3"
+ },
+ "faqs.dien-giai-noi-dung": {
+  "t": "解說內容",
+  "h": "324af67f"
+ },
+ "faqs.dieu-nay-co-the-do": {
+  "t": "可能的原因：",
+  "h": "90c41523"
+ },
+ "faqs.dieu-nay-den-tu": {
+  "t": "這來自於：",
+  "h": "8448adbc"
+ },
+ "faqs.do-tinh-chat-la-ket-qua": {
+  "t": "由於屬數位化結果，結果顯示後系統<a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">不予退款</a>。若遇交易錯誤——已扣款卻未收到結果——請立即<a href=\"/contact.html\">聯絡我們</a>，以便查核處理。",
+  "h": "2a30361f"
+ },
+ "faqs.doi-chieu-voi-cac-dien-bien": {
+  "t": "與人生中實際發生的事件比對",
+  "h": "6a063fc7"
+ },
+ "faqs.doi-chieu-voi-du-lieu-thuc": {
+  "t": "與實際資料比對",
+  "h": "94bad6e5"
+ },
+ "faqs.du-lieu-moi": {
+  "t": "新資料",
+  "h": "d2983792"
+ },
+ "faqs.du-lieu-ngay-gio-sinh-cua": {
+  "t": "超過 270,000 位真人的出生年月日時資料",
+  "h": "234d93e8"
+ },
+ "faqs.du-lieu-thuc-te-giup-xac": {
+  "t": "以實際資料找出規律",
+  "h": "9f6ebf01"
+ },
+ "faqs.duy-tri-ha-tang-cong-nghe": {
+  "t": "維護技術基礎設施",
+  "h": "7d34730c"
+ },
+ "faqs.giai-dap-ve-he-thong-luan": {
+  "t": "解答關於解讀系統、準確度，以及兩與付款的問題。",
+  "h": "b23b0625"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-4j0m": {
+  "t": "解答關於明寶紫微斗數解讀系統的問題——運作方式、準確度，以及兩、付款、退款等問題。",
+  "h": "c5884acb"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-cptq": {
+  "t": "解答關於明寶紫微斗數解讀系統的問題——運作方式、準確度、背後的研究團隊，以及兩、付款、退款等問題。",
+  "h": "29c93c9e"
+ },
+ "faqs.giao-dich-luong-thanh-toan": {
+  "t": "交易、兩與付款",
+  "h": "6de5f2ee"
+ },
+ "faqs.gio-sinh-la-yeu-to-quan": {
+  "t": "出生時辰是紫微斗數的重要因素。微小的偏差可能：",
+  "h": "638bef44"
+ },
+ "faqs.he-thong-chi-dung-de": {
+  "t": "系統只用來：",
+  "h": "9b5aa25a"
+ },
+ "faqs.he-thong-co-duoc-cap-nhat": {
+  "t": "系統會更新嗎？ <span class=\"icon\">+</span>",
+  "h": "d573dfc9"
+ },
+ "faqs.he-thong-co-tu-bia-noi": {
+  "t": "系統會自己「編造」內容嗎？ <span class=\"icon\">+</span>",
+  "h": "9163335f"
+ },
+ "faqs.he-thong-dien-giai-noi-dung": {
+  "t": "系統解說內容",
+  "h": "45f13e71"
+ },
+ "faqs.he-thong-dien-giai-theo-dung": {
+  "t": "系統依個人情境解說",
+  "h": "f598cd0b"
+ },
+ "faqs.he-thong-giup-ban-hieu-ro": {
+  "t": "系統幫助您更了解：",
+  "h": "e0d167f6"
+ },
+ "faqs.he-thong-hoat-dong-nhu-the": {
+  "t": "系統如何運作？ <span class=\"icon\">+</span>",
+  "h": "879a3e4e"
+ },
+ "faqs.he-thong-khong-tu-doan-ma": {
+  "t": "系統不會自行「猜測」，只會重新解說已確定的結論。完整的 5 步驟流程請見<a href=\"/phuong-phap\">紫微驗證</a>。",
+  "h": "4480c36f"
+ },
+ "faqs.hieu-chinh-boi-chuyen-gia": {
+  "t": "專家校正",
+  "h": "10b36d86"
+ },
+ "faqs.hieu-chinh-noi-dung-lien-tuc": {
+  "t": "持續校正內容",
+  "h": "69973443"
+ },
+ "faqs.ket-hop-voi-phuong-phap-va": {
+  "t": "結合現代方法與技術",
+  "h": "9ecf21e0"
+ },
+ "faqs.kha-nang": {
+  "t": "可能性",
+  "h": "550f7b6b"
+ },
+ "faqs.khac-biet-trong-truong-phai": {
+  "t": "流派差異",
+  "h": "28a67aec"
+ },
+ "faqs.khong": {
+  "t": "不會。",
+  "h": "f102a5bb"
+ },
+ "faqs.khong-co-he-thong-nao-co": {
+  "t": "沒有任何系統能給出絕對的結論。",
+  "h": "bb36c938"
+ },
+ "faqs.khong-luong-duoc-luu-vinh-vien": {
+  "t": "不會。兩永久保存在帳號中，隨時可用。",
+  "h": "ed0f9e73"
+ },
+ "faqs.khong-moi-la-so-hay-ket": {
+  "t": "不會。每份命盤或結果只在首次解讀時扣一次兩。之後無論再看多少次都免費。",
+  "h": "75165ddc"
+ },
+ "faqs.khong-nen-phu-thuoc-hoan-toan": {
+  "t": "不應完全依賴結果。",
+  "h": "cb04372e"
+ },
+ "faqs.khong-tu-vi-minh-bao-la": {
+  "t": "不是。明寶紫微斗數是由多種研究與解讀工具組成的系統，紫微斗數是其中的核心部分。",
+  "h": "6d75d055"
+ },
+ "faqs.la-so-phan-anh": {
+  "t": "命盤反映的是：",
+  "h": "784be23d"
+ },
+ "faqs.lam-ro-luan-diem": {
+  "t": "釐清論點",
+  "h": "6e34e839"
+ },
+ "faqs.lam-sao-de-nap-luong": {
+  "t": "如何儲值兩？ <span class=\"icon\">+</span>",
+  "h": "73577e49"
+ },
+ "faqs.lam-thay-doi-vi-tri-sao": {
+  "t": "改變星曜位置",
+  "h": "9ecafe04"
+ },
+ "faqs.lay-kinh-dien-lam-nen-tang": {
+  "t": "以經典為基礎",
+  "h": "a47b04f6"
+ },
+ "faqs.lay-thuc-chung-lam-tieu-chuan": {
+  "t": "以實證為標準",
+  "h": "d1df793c"
+ },
+ "faqs.logic-luan-giai-da-duoc-xay": {
+  "t": "解讀邏輯已事先依據以下建立：",
+  "h": "6084cf0a"
+ },
+ "faqs.luong-co-het-han-khong": {
+  "t": "兩會過期嗎？ <span class=\"icon\">+</span>",
+  "h": "05ce0b06"
+ },
+ "faqs.luong-la-don-vi-dung-de": {
+  "t": "兩是在明寶紫微斗數上解鎖深度解讀工具的單位。儲值一次即可用於所有工具——不必按功能分別購買。",
+  "h": "fe222fa9"
+ },
+ "faqs.luong-la-gi": {
+  "t": "兩是什麼？ <span class=\"icon\">+</span>",
+  "h": "af09a5b2"
+ },
+ "faqs.moi-lan-mo-lai-ket-qua": {
+  "t": "每次重新打開舊結果都會再扣兩嗎？ <span class=\"icon\">+</span>",
+  "h": "8d7c06a5"
+ },
+ "faqs.mot-cong-cu-ho-tro-quyet": {
+  "t": "輔助決策的工具",
+  "h": "b3fa5457"
+ },
+ "faqs.mot-goc-nhin-co-he-thong": {
+  "t": "有系統的觀點",
+  "h": "b79d8456"
+ },
+ "faqs.mot-nguon-tham-khao-co-co": {
+  "t": "有根據的參考",
+  "h": "5a51df4e"
+ },
+ "faqs.muc-tieu-khong-chi-la-xem": {
+  "t": "目標不只是「算命」，而是建立一個工具生態系，幫助人理解並在生活中應用命理。",
+  "h": "90ed16bd"
+ },
+ "faqs.neu-khong-chac-chan-ban-nen": {
+  "t": "若不確定，建議以更偏參考的程度使用結果。",
+  "h": "e402d31b"
+ },
+ "faqs.neu-toi-thay-noi-dung-chua": {
+  "t": "如果我覺得內容不對怎麼辦？ <span class=\"icon\">+</span>",
+  "h": "8818d326"
+ },
+ "faqs.ngoai-ra-nen-tang-con-bao": {
+  "t": "此外，平台還包括：",
+  "h": "c98ec9b0"
+ },
+ "faqs.nhom-bao-gom-cac-hoc-gia": {
+  "t": "團隊成員包括紫微斗數的學者與研究者，以及實際解讀過大量命盤的實務者。每個人從學術到實務各有視角，但共同目標是認真地理解並系統化命理。更多請見<a href=\"/about.html\">關於我們</a>頁面。",
+  "h": "fd39d8c1"
+ },
+ "faqs.nhung-ket-qua-cuoi-cung-van": {
+  "t": "但最終結果仍取決於每個人的行動與選擇。",
+  "h": "8d1d8452"
+ },
+ "faqs.nhung-xu-huong-co-the-xay": {
+  "t": "可能發生的傾向",
+  "h": "e3dbdcb7"
+ },
+ "faqs.noi-dung-luan-giai-co-thuc": {
+  "t": "解讀內容真的準確嗎？ <span class=\"icon\">+</span>",
+  "h": "08936df9"
+ },
+ "faqs.phan-hoi-nguoi-dung": {
+  "t": "使用者回饋",
+  "h": "fe75cdef"
+ },
+ "faqs.phan-tich-cau-truc-theo-nguyen": {
+  "t": "依紫微原理分析結構",
+  "h": "3b937e5e"
+ },
+ "faqs.phat-trien-he-thong-luan-giai": {
+  "t": "發展解讀系統",
+  "h": "cb9ef15b"
+ },
+ "faqs.phi-dich-vu-giup-dam-bao": {
+  "t": "服務費用確保系統的品質與認真投入。",
+  "h": "19322883"
+ },
+ "faqs.qua-trinh-kiem-nghiem-thuc-te": {
+  "t": "實際驗證的過程",
+  "h": "de20f584"
+ },
+ "faqs.quy-tac-da-kiem-nghiem": {
+  "t": "經驗證的規則",
+  "h": "bfadc1f0"
+ },
+ "faqs.quy-trinh-luan-giai-gom-nhieu": {
+  "t": "解讀流程包含多個步驟：",
+  "h": "dc04d724"
+ },
+ "faqs.sai-gio-sinh": {
+  "t": "出生時辰錯誤",
+  "h": "740a22eb"
+ },
+ "faqs.su-dung-la-ket-qua-cua": {
+  "t": "「準」是方法的結果，不是隨機猜中。",
+  "h": "517839bc"
+ },
+ "faqs.tai-sao-noi-dung-doc-giong": {
+  "t": "為什麼內容讀起來「很像我」？ <span class=\"icon\">+</span>",
+  "h": "f5983ec4"
+ },
+ "faqs.thanh-toan-xong-ma-chua-thay": {
+  "t": "付款完成卻沒看到兩入錢包？ <span class=\"icon\">+</span>",
+  "h": "eab1cb35"
+ },
+ "faqs.thoi-diem": {
+  "t": "時機",
+  "h": "020b0562"
+ },
+ "faqs.thu-lam-moi-trang-f5-hoac": {
+  "t": "請重新整理頁面（F5），或前往<a href=\"/app/ho-so\">個人檔案</a> →「兩錢包」分頁再次確認餘額。若 1–2 分鐘後仍未看到，請附上交易編號（PayPal 或 payOS），透過<a href=\"/contact.html\">聯絡我們頁面</a>與我們聯繫處理。",
+  "h": "226c73c9"
+ },
+ "faqs.toan-bo-noi-dung-luan-giai": {
+  "t": "該工具的完整深度解讀內容——依您的命盤與個人情境撰寫——以及無限次重看，工具支援時也可下載。",
+  "h": "f4f821fa"
+ },
+ "faqs.toi-co-the-thay-doi-van": {
+  "t": "我能改變命運嗎？ <span class=\"icon\">+</span>",
+  "h": "5dfa0b85"
+ },
+ "faqs.toi-nen-su-dung-ket-qua": {
+  "t": "我該如何運用結果？ <span class=\"icon\">+</span>",
+  "h": "01d8b923"
+ },
+ "faqs.tra-phi-xong-toi-nhan-duoc": {
+  "t": "付費後我會得到什麼？ <span class=\"icon\">+</span>",
+  "h": "7bfad677"
+ },
+ "faqs.tu-vi-khong-phai-la-su": {
+  "t": "紫微不是絕對的定數。",
+  "h": "cbd47d29"
+ },
+ "faqs.tu-vi-minh-bao-duoc-xay": {
+  "t": "明寶紫微斗數由一個命理研究團隊依以下方向建立：",
+  "h": "6fb267dd"
+ },
+ "faqs.tu-vi-minh-bao-la-gi": {
+  "t": "明寶紫微斗數是什麼？ <span class=\"icon\">+</span>",
+  "h": "7085b3b2"
+ },
+ "faqs.tu-vi-minh-bao-la-he": {
+  "t": "明寶紫微斗數是個人化的解讀系統，結合東方古學、實際資料與現代技術。",
+  "h": "253a2e07"
+ },
+ "faqs.tuy-nhien-tu-vi-minh-bao": {
+  "t": "不過，明寶紫微斗數建立在：",
+  "h": "3adb9017"
+ },
+ "faqs.vao-ho-so-tab-vi-luong": {
+  "t": "前往<a href=\"/app/ho-so\">個人檔案</a> →「兩錢包」分頁，可查看目前餘額與所有儲值、扣除兩的紀錄。",
+  "h": "1b550c61"
+ },
+ "faqs.vao-trang-nap-luong-chon-mot": {
+  "t": "前往<a href=\"/topup.html\">儲值兩</a>頁面，選擇合適的方案並付款。交易成功後兩會立即加入錢包。",
+  "h": "a8423928"
+ },
+ "faqs.ve-he-thong": {
+  "t": "關於系統",
+  "h": "f81106ca"
+ },
+ "faqs.vi-sao-phai-nhap-chinh-xac": {
+  "t": "為什麼要準確輸入出生時辰？ <span class=\"icon\">+</span>",
+  "h": "28f58ae2"
+ },
+ "faqs.vi-sao-phai-tra-phi-de": {
+  "t": "為什麼看完整內容要付費？ <span class=\"icon\">+</span>",
+  "h": "9fa7926b"
+ },
+ "faqs.xay-dung-la-so-tu-ngay": {
+  "t": "依出生年月日時排出命盤",
+  "h": "82018c4e"
+ },
+ "faqs.xay-dung-va-xu-ly-du": {
+  "t": "建立並處理大規模資料",
+  "h": "5b3550e6"
+ },
+ "faqs.xem-lai-lich-su-giao-dich": {
+  "t": "在哪裡查看交易紀錄？ <span class=\"icon\">+</span>",
+  "h": "c1de6029"
+ },
+ "faqs.xem-them": {
+  "t": "延伸閱讀",
+  "h": "55d48a8e"
+ },
+ "faqs.xu-huong": {
+  "t": "傾向",
+  "h": "7964ab99"
+ },
+ "faqs.yeu-to-ca-nhan-chua-duoc": {
+  "t": "個人因素未被充分反映",
+  "h": "4fbc118f"
+ },
  "hdtt.cach-hoat-dong": {
   "t": "使用流程",
   "h": "8ad7f762"
