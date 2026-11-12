@@ -144,6 +144,20 @@ for (const ns of Object.keys(ENGINE_NS)) {
         `${f}: bảng '${bang}' của ns ${ns} có bản dịch nhưng module không tra tới (chỗ vẽ bị gỡ/đổi tên?)`
       );
 }
+// hntre (W30a): nguồn đọc thẳng từ bảng TS nên khoá trùng id bảng; phần còn lại là MÃ trong payload do hàm dựng
+// hồ sơ gắn thêm (`ma` của mặt đọc + của chiều "không đòi hỏi") và trang tra đúng cửa. Gỡ `ma` khỏi engine ⇒ /ja lặng
+// lẽ lùi về chữ Việt ở hai khối đó — không bộ dò nào khác thấy, nên canh ở đây.
+{
+  const eng = fs.readFileSync(path.join(ROOT, ENGINE_NS.hntre), 'utf8');
+  for (const [snip, y] of [
+    ['ma: m.ma,', 'matDoc[].ma (cơ sở lá số)'],
+    ['ma: x.id })', 'khongDoiHoi[].ma (câu khuôn {ai})'],
+  ])
+    if (!eng.includes(snip)) fail(`${ENGINE_NS.hntre}: thiếu mã tra ${y} — "${snip}"`);
+  const page = fs.readFileSync(path.join(ROOT, LONG_MODULE.hntre), 'utf8');
+  for (const t of ["'kdh.' + c.ma", "'matdoc.' + m.ma", "'huong.' + h.id", "'lop.' + lopId"])
+    if (!page.includes(t)) fail(`${LONG_MODULE.hntre}: trang không tra ${t}`);
+}
 for (const f of new Set(Object.values(LONG_MODULE))) {
   const code = fs.readFileSync(path.join(ROOT, f), 'utf8');
   for (const m of code.matchAll(/(?:I18n\.long|\b_long)\(\s*'([^']+)'/g))
