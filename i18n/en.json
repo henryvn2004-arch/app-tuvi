@@ -1783,6 +1783,86 @@
   "t": "Company office",
   "h": "d678c2d6"
  },
+ "dali.an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> Diet",
+  "h": "a8b06b78"
+ },
+ "dali.anh-da-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> Facial Skin Photo",
+  "h": "d3d3689b"
+ },
+ "dali.anh-sang-tu-nhien-khong-filter": {
+  "t": "Natural light · No filter · Shoot close and clear<br>JPG/PNG, 5MB max",
+  "h": "13e0d13e"
+ },
+ "dali.chup-noi-co-anh-sang-tu": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"lightbulb\"></span> Shoot where there is natural light</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> Don’t use flash</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> Clean, makeup-free face</span>",
+  "h": "5c098d4e"
+ },
+ "dali.da-lieu-toan-dien": {
+  "t": "Complete Skin Reading",
+  "h": "91cdb627"
+ },
+ "dali.da-lieu-toan-dien-chup-anh": {
+  "t": "<b>Complete Skin Reading</b><span>Photograph your facial skin — TCM, Western medicine and the Five Elements method</span>",
+  "h": "72690cfa"
+ },
+ "dali.da-lieu-tu-vi-minh-bao": {
+  "t": "Skin — Minh Bao Zi Wei Dou Shu",
+  "h": "a3b8548f"
+ },
+ "dali.da-xuong-cap-ma-cu-do": {
+  "t": "Your skin is declining and you keep blaming age, while the real problem may lie where you’ve never looked closely. Upload one facial skin photo and get an objective analysis before spending money on new skincare.",
+  "h": "78702e4b"
+ },
+ "dali.day-la-tu-van-tham-khao": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> This is reference advice combining Eastern and Western medicine; it does not replace a dermatologist’s diagnosis and treatment. If you have a serious skin condition, please consult a specialist.",
+  "h": "b51f96df"
+ },
+ "dali.dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> TCM",
+  "h": "dd81a951"
+ },
+ "dali.luan-giai-dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> TCM Interpretation",
+  "h": "fd58cfd1"
+ },
+ "dali.luu-y-theo-ban-menh": {
+  "t": "<strong>✦ Notes for Your Birth Element</strong> <span id=\"luuYText\">—</span>",
+  "h": "d6e60118"
+ },
+ "dali.my-pham": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Skincare",
+  "h": "3d3cb659"
+ },
+ "dali.my-pham-routine": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Skincare & Routine",
+  "h": "bf4abdec"
+ },
+ "dali.nam-sinh-tuy-chon-tu-van": {
+  "t": "Birth year (optional — advice by birth element)",
+  "h": "2abf3e72"
+ },
+ "dali.phan-tich-da-mat-ket-hop": {
+  "t": "Facial skin analysis — combining TCM, Western medicine and the Five Elements method. Advice on diet, cosmetics and skin care by birth element.",
+  "h": "c9ffa0cc"
+ },
+ "dali.phan-tich-da-toan-dien-luong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> Analyze My Skin — <span data-tvp-price=\"da-lieu-ai\">…</span> credits",
+  "h": "b46628df"
+ },
+ "dali.tai-len-mot-tam-anh-da": {
+  "t": "Upload one clear photo of your facial skin without makeup. The system analyzes the condition of each area of skin in the photo. You get a skin assessment, a TCM interpretation and suitable dietary-therapy and skincare suggestions.",
+  "h": "5a19c79c"
+ },
+ "dali.thuc-duong-an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> Dietary Therapy & Diet",
+  "h": "9ce2b777"
+ },
+ "dali.tuong-hoc-da-mat-phuong-dong": {
+  "t": "Eastern facial-skin physiognomy holds that the condition of the skin reflects, to some degree, the health within, and cross-checks it with the observations of modern dermatology. This approach, combining Eastern and Western medicine, treats the skin as an indicator to monitor rather than judging it by aesthetic impression alone.",
+  "h": "466d834a"
+ },
  "daycon.2-xem-truoc-chan-dung-con": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview your child's portrait</span>",
   "h": "d8f50448"
@@ -6631,6 +6711,142 @@
   "t": "Please try again.",
   "h": "2f1d18ee"
  },
+ "js.dali.buoi-sang": {
+  "t": "Morning",
+  "h": "d95d88da"
+ },
+ "js.dali.buoi-toi": {
+  "t": "Evening",
+  "h": "adcf496a"
+ },
+ "js.dali.chip-dong-y": {
+  "t": "How can I improve it according to traditional Chinese medicine?",
+  "h": "e84646cb"
+ },
+ "js.dali.chip-san-pham": {
+  "t": "Which products should I use first?",
+  "h": "c4d20f9a"
+ },
+ "js.dali.chip-vi-sao": {
+  "t": "Why is my skin this type?",
+  "h": "92ad930f"
+ },
+ "js.dali.da-dau": {
+  "t": "oily skin",
+  "h": "2e16ebef"
+ },
+ "js.dali.da-hon-hop": {
+  "t": "combination skin",
+  "h": "68410286"
+ },
+ "js.dali.da-kho": {
+  "t": "dry skin",
+  "h": "6dcefb2d"
+ },
+ "js.dali.da-nhay-cam": {
+  "t": "sensitive skin",
+  "h": "336f6fce"
+ },
+ "js.dali.da-thuong": {
+  "t": "normal skin",
+  "h": "830c17ab"
+ },
+ "js.dali.greeting": {
+  "t": "Your skin analysis result: **{d}**{m}. Would you like to ask more about traditional Chinese medicine, diet or skincare products?",
+  "h": "edab53d9"
+ },
+ "js.dali.hanh-n": {
+  "t": "{h} element",
+  "h": "3e50daab"
+ },
+ "js.dali.ing-nen-dung": {
+  "t": "Ingredients to Use",
+  "h": "35fd5e5b"
+ },
+ "js.dali.ing-nen-tranh": {
+  "t": "Ingredients to Avoid",
+  "h": "c6f4ec17"
+ },
+ "js.dali.label": {
+  "t": "Skin — {d}",
+  "h": "8fcf6fa4"
+ },
+ "js.dali.lbl-anh-huong-menh": {
+  "t": "Influence of Your Birth Element",
+  "h": "28408328"
+ },
+ "js.dali.lbl-can-bang": {
+  "t": "Yin–Yang Balance",
+  "h": "716d7b88"
+ },
+ "js.dali.lbl-ly-giai": {
+  "t": "TCM Interpretation",
+  "h": "58af6bfb"
+ },
+ "js.dali.lbl-tang-phu": {
+  "t": "Related Zang-Fu Organs",
+  "h": "288ab910"
+ },
+ "js.dali.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.dali.loi-phan-tich": {
+  "t": "Analysis error",
+  "h": "3e06a99e"
+ },
+ "js.dali.menh-n": {
+  "t": "Birth element {h}",
+  "h": "e46cbb3b"
+ },
+ "js.dali.nen-an": {
+  "t": "Foods to Eat",
+  "h": "b29db199"
+ },
+ "js.dali.nen-tranh": {
+  "t": "Foods to Avoid",
+  "h": "41d7ed06"
+ },
+ "js.dali.nuoc-uong": {
+  "t": "Drinks & Herbal Teas",
+  "h": "706a3d71"
+ },
+ "js.dali.share-loai-da": {
+  "t": "Skin type: {d}{m}",
+  "h": "928754ce"
+ },
+ "js.dali.share-title": {
+  "t": "My skin reading result",
+  "h": "7e7757f7"
+ },
+ "js.dali.step-dong-y": {
+  "t": "TCM: reading the zang-fu organs & birth element",
+  "h": "8122b336"
+ },
+ "js.dali.step-my-pham": {
+  "t": "Suggesting skincare & a routine",
+  "h": "0014c3fb"
+ },
+ "js.dali.step-tay-y": {
+  "t": "Western medicine: identifying skin type & condition",
+  "h": "c11ccb03"
+ },
+ "js.dali.step-thuc-duong": {
+  "t": "Planning a dietary-therapy meal plan",
+  "h": "99292ce2"
+ },
+ "js.dali.tang-phu-lien-quan": {
+  "t": "The related zang-fu organs, skin tendencies by birth element, and the skin analysis from the photo (skin type, condition, severity) are in the in-depth analysis.",
+  "h": "d1caef52"
+ },
+ "js.dali.thuc-duong-theo-menh": {
+  "t": "Dietary Therapy for Your Birth Element",
+  "h": "7187b22e"
+ },
+ "js.dali.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
  "js.daycon.5-la-muc-giua-cua-hang": {
   "t": "\n\n5 is the midpoint across thousands of children's charts — it does not mean “5 out of 10”. Both ends of each axis have value.",
   "h": "99fb1a17"
@@ -8611,6 +8827,282 @@
   "t": "Please choose an image file (JPG or PNG).",
   "h": "ad4caa5b"
  },
+ "js.kieut.anh-qua-lon": {
+  "t": "The image is too large (5MB max). Please choose another image.",
+  "h": "84a5fa2b"
+ },
+ "js.kieut.chip-kinh": {
+  "t": "Which glasses suit my face?",
+  "h": "e2a2a092"
+ },
+ "js.kieut.chip-tranh": {
+  "t": "Which hairstyles should I avoid?",
+  "h": "71021350"
+ },
+ "js.kieut.chip-vi-sao": {
+  "t": "Why does this style suit my face?",
+  "h": "e507a96f"
+ },
+ "js.kieut.do-truc-tiep": {
+  "t": "Measured directly from the image with MediaPipe. The list of hairstyles and eyeglasses ranked for your face is in the in-depth analysis.",
+  "h": "45879030"
+ },
+ "js.kieut.gl-aviator-sub": {
+  "t": "Classic teardrop — unisex, strong and confident",
+  "h": "c07019a3"
+ },
+ "js.kieut.gl-browline-name": {
+  "t": "Browline (Half-Rim)",
+  "h": "f7013797"
+ },
+ "js.kieut.gl-browline-sub": {
+  "t": "Bold upper half rim — intellectual and refined",
+  "h": "076a871f"
+ },
+ "js.kieut.gl-cat_eye-sub": {
+  "t": "Upswept outer corners — feminine and alluring (suits women more)",
+  "h": "49a590df"
+ },
+ "js.kieut.gl-oval-name": {
+  "t": "Oval Frame",
+  "h": "30d636c4"
+ },
+ "js.kieut.gl-oval-sub": {
+  "t": "Soft and refined — harmonizes with every face",
+  "h": "851997e8"
+ },
+ "js.kieut.gl-rectangle-name": {
+  "t": "Rectangle Frame",
+  "h": "a0b6dd72"
+ },
+ "js.kieut.gl-rectangle-sub": {
+  "t": "Slim modern frame — suits most face shapes",
+  "h": "0d7fb906"
+ },
+ "js.kieut.gl-round-name": {
+  "t": "Retro Round Frame",
+  "h": "3fddc6b6"
+ },
+ "js.kieut.gl-round-sub": {
+  "t": "Korean/vintage style — softens a square face",
+  "h": "801e4e9b"
+ },
+ "js.kieut.greeting": {
+  "t": "Your face shape is **{s}**. Would you like to ask more about hairstyles or eyeglasses that suit your features?",
+  "h": "05992171"
+ },
+ "js.kieut.hinh-dai": {
+  "t": "long",
+  "h": "67167578"
+ },
+ "js.kieut.hinh-oval": {
+  "t": "oval",
+  "h": "181b45bd"
+ },
+ "js.kieut.hinh-tron-vuong": {
+  "t": "round/square",
+  "h": "a30fca34"
+ },
+ "js.kieut.khong-nhan-duoc-anh": {
+  "t": "Didn't receive the result image.",
+  "h": "a16f02df"
+ },
+ "js.kieut.khong-the-mo-camera": {
+  "t": "Can't open the camera. Please upload an image instead.",
+  "h": "4f7396b7"
+ },
+ "js.kieut.kieu-toc-label": {
+  "t": "Hairstyle — {s}",
+  "h": "c1e88a18"
+ },
+ "js.kieut.loi-phan-tich": {
+  "t": "Analysis error: {e}",
+  "h": "1d8ed1a8"
+ },
+ "js.kieut.loi-s": {
+  "t": "Error {s}",
+  "h": "c406c72b"
+ },
+ "js.kieut.loi-tao-anh": {
+  "t": "Image generation error: {e}",
+  "h": "091a4baf"
+ },
+ "js.kieut.share-shape": {
+  "t": "Face shape: {s}",
+  "h": "e52e2cf1"
+ },
+ "js.kieut.share-title": {
+  "t": "The hairstyles that suit my face",
+  "h": "d1806e98"
+ },
+ "js.kieut.share-tryon-text": {
+  "t": "Trying a hairstyle: {n}",
+  "h": "0d923cba"
+ },
+ "js.kieut.share-tryon-title": {
+  "t": "My new hairstyle (virtual try-on)",
+  "h": "5887ab87"
+ },
+ "js.kieut.st-aline_bob-sub": {
+  "t": "Angled bob — shorter at the back, longer in front, sharp and modern",
+  "h": "9eb34b60"
+ },
+ "js.kieut.st-blunt_fringe-sub": {
+  "t": "Straight-across fringe + long hair — defined and distinctive",
+  "h": "18f3e1fe"
+ },
+ "js.kieut.st-bob-name": {
+  "t": "Short Bob",
+  "h": "c19d992e"
+ },
+ "js.kieut.st-bob-sub": {
+  "t": "A neat chin-length bob — solid and clean",
+  "h": "532a2aad"
+ },
+ "js.kieut.st-butterfly-sub": {
+  "t": "Face-framing layers with lifted volume — hot on TikTok 2025",
+  "h": "6460949f"
+ },
+ "js.kieut.st-buzz-sub": {
+  "t": "Cut evenly short — shows off the face’s contours",
+  "h": "3b06ae07"
+ },
+ "js.kieut.st-curtain-sub": {
+  "t": "Center-parted curtain bangs, natural",
+  "h": "ca32d507"
+ },
+ "js.kieut.st-curtain_nu-sub": {
+  "t": "Soft curtain bangs, center part — romantic and feminine",
+  "h": "d0dece43"
+ },
+ "js.kieut.st-cushion_perm-sub": {
+  "t": "Korean soft wave perm — gently full and natural, hot in 2026",
+  "h": "bdca143d"
+ },
+ "js.kieut.st-glass_hair-sub": {
+  "t": "Ultra-glossy straight hair — the peak of Korean trends",
+  "h": "db26a044"
+ },
+ "js.kieut.st-hime-sub": {
+  "t": "Straight bangs + layers, Japanese princess style — going viral",
+  "h": "af1c27e2"
+ },
+ "js.kieut.st-jellyfish-sub": {
+  "t": "Short upper tier + long lower tier — Gen Z, edgy",
+  "h": "f2002985"
+ },
+ "js.kieut.st-korean_perm-sub": {
+  "t": "Romantic Korean wave perm — Asia’s #1 trend of 2025",
+  "h": "22d3d20d"
+ },
+ "js.kieut.st-layered_curl-sub": {
+  "t": "Soft layered curls — youthful, age-defying",
+  "h": "49a65a0e"
+ },
+ "js.kieut.st-lob-sub": {
+  "t": "Long bob to the shoulders — refined and versatile",
+  "h": "e2b1a249"
+ },
+ "js.kieut.st-long_layers-sub": {
+  "t": "Soft, natural long layers — feminine and elegant",
+  "h": "500da152"
+ },
+ "js.kieut.st-money_piece-sub": {
+  "t": "Face-framing highlights on both sides — trendy, low effort",
+  "h": "c4d6fd9f"
+ },
+ "js.kieut.st-perm_wave-sub": {
+  "t": "Natural Korean wave perm — easy to style, modern",
+  "h": "30da2ec0"
+ },
+ "js.kieut.st-pixie-sub": {
+  "t": "Bold, very short hair — distinctive and confident",
+  "h": "f42299de"
+ },
+ "js.kieut.st-pompadour-sub": {
+  "t": "Hair swept high at the front — vintage-modern",
+  "h": "25e80198"
+ },
+ "js.kieut.st-pompadour_nu-name": {
+  "t": "Women’s Pompadour",
+  "h": "9d31fa58"
+ },
+ "js.kieut.st-pompadour_nu-sub": {
+  "t": "Soft, full volume at the front — elegant and luxurious",
+  "h": "336c3d80"
+ },
+ "js.kieut.st-shag-sub": {
+  "t": "Choppy layers + curtain bangs — retro-modern",
+  "h": "60b2f94f"
+ },
+ "js.kieut.st-side_part-sub": {
+  "t": "Side part, combed flat — professional and polished",
+  "h": "cb1f2ff5"
+ },
+ "js.kieut.st-side_waves-sub": {
+  "t": "Side part + soft waves — graceful and sultry",
+  "h": "5d4fd178"
+ },
+ "js.kieut.st-slick_back-sub": {
+  "t": "Slicked back and glossy — strong and luxurious",
+  "h": "405b36d5"
+ },
+ "js.kieut.st-textured-sub": {
+  "t": "Short and textured, full of character — easy to style",
+  "h": "4ca046ff"
+ },
+ "js.kieut.st-textured_wavy-sub": {
+  "t": "Natural textured waves — effortless and trendy",
+  "h": "c565798c"
+ },
+ "js.kieut.st-two_block-sub": {
+  "t": "Korean style — shaved sides, naturally long top",
+  "h": "b7230e49"
+ },
+ "js.kieut.st-undercut-sub": {
+  "t": "Tight fade on the sides, longer on top — classic and modern",
+  "h": "b16e15c9"
+ },
+ "js.kieut.st-wispy-sub": {
+  "t": "Soft, wispy bangs — youthful and light",
+  "h": "6c6c0591"
+ },
+ "js.kieut.st-wolf-sub": {
+  "t": "Tiered, wispy layers — Gen Z character",
+  "h": "1444c559"
+ },
+ "js.kieut.step-chuan-bi": {
+  "t": "Preparing the image & prompt",
+  "h": "02fe352b"
+ },
+ "js.kieut.step-do-mat": {
+  "t": "Measuring the face with MediaPipe",
+  "h": "4af85689"
+ },
+ "js.kieut.step-phan-tich": {
+  "t": "Analyzing the face shape",
+  "h": "5059a835"
+ },
+ "js.kieut.step-tao-anh": {
+  "t": "Generating the new hairstyle image",
+  "h": "80940ba2"
+ },
+ "js.kieut.thu": {
+  "t": "Try →",
+  "h": "c1480a0a"
+ },
+ "js.kieut.thu-n": {
+  "t": "Try: {n}",
+  "h": "a246266d"
+ },
+ "js.kieut.ty-le-rong-cao": {
+  "t": "Face width/height ratio: {r} — tends toward {s}",
+  "h": "2094599e"
+ },
+ "js.kieut.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
  "js.kimlau.chip1": {
   "t": "Which year is best to build a house?",
   "h": "992ff775"
@@ -9286,6 +9778,334 @@
  "js.maihoa.tuc": {
   "t": "), i.e. **",
   "h": "52e6128d"
+ },
+ "js.mshm.anh-qua-lon": {
+  "t": "The image is too large (5MB max)",
+  "h": "5113c5f3"
+ },
+ "js.mshm.bang-du": {
+  "t": "The full palette (secondary colors, colors to avoid) and outfit guidance by occasion/role are in the in-depth analysis.",
+  "h": "06901dd7"
+ },
+ "js.mshm.cat-ao": {
+  "t": "Tops / Jackets",
+  "h": "84c67299"
+ },
+ "js.mshm.cat-ao-khoac": {
+  "t": "Outerwear",
+  "h": "7878fdb1"
+ },
+ "js.mshm.cat-giay": {
+  "t": "Shoes / Sandals",
+  "h": "d1f9572f"
+ },
+ "js.mshm.cat-phu-kien": {
+  "t": "Accessories",
+  "h": "f1f0fba9"
+ },
+ "js.mshm.cat-quan": {
+  "t": "Pants / Skirts",
+  "h": "84562745"
+ },
+ "js.mshm.cat-tui": {
+  "t": "Bags / Backpacks",
+  "h": "1979c758"
+ },
+ "js.mshm.chip-phoi-do": {
+  "t": "How do I coordinate outfits by my element colors?",
+  "h": "3d2ef763"
+ },
+ "js.mshm.chip-phong-van": {
+  "t": "Which colors should I avoid for an interview?",
+  "h": "61460b1c"
+ },
+ "js.mshm.chip-vi-sao": {
+  "t": "Why does my element suit this color?",
+  "h": "7ef6e8bc"
+ },
+ "js.mshm.combo-n": {
+  "t": "Combo {n}",
+  "h": "9769d38a"
+ },
+ "js.mshm.dau-phay": {
+  "t": ", ",
+  "h": "d3bc9a37"
+ },
+ "js.mshm.greeting": {
+  "t": "Your birth element is **{h}**. Main colors: {m}. Would you like to ask more about colors or outfits?",
+  "h": "e8cef7c1"
+ },
+ "js.mshm.khong-nhan-duoc-anh": {
+  "t": "Didn't receive the result image.",
+  "h": "a16f02df"
+ },
+ "js.mshm.label": {
+  "t": "Colors for Your Birth Element — {h}",
+  "h": "71fc87a5"
+ },
+ "js.mshm.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.mshm.mau-bac": {
+  "t": "Silver",
+  "h": "7386c9c6"
+ },
+ "js.mshm.mau-be": {
+  "t": "Beige",
+  "h": "11d1bf27"
+ },
+ "js.mshm.mau-be-dam": {
+  "t": "Deep beige",
+  "h": "c660f0a6"
+ },
+ "js.mshm.mau-cam": {
+  "t": "Orange",
+  "h": "5e09769d"
+ },
+ "js.mshm.mau-cam-dat": {
+  "t": "Terracotta",
+  "h": "aaa37477"
+ },
+ "js.mshm.mau-chu": {
+  "t": "Main colors: {m}",
+  "h": "7813be48"
+ },
+ "js.mshm.mau-den": {
+  "t": "Black",
+  "h": "4d0c0faf"
+ },
+ "js.mshm.mau-do": {
+  "t": "Red",
+  "h": "2eb7503e"
+ },
+ "js.mshm.mau-hong-phan": {
+  "t": "Pastel pink",
+  "h": "0ec650f1"
+ },
+ "js.mshm.mau-hong-tuoi": {
+  "t": "Bright pink",
+  "h": "74592632"
+ },
+ "js.mshm.mau-kem": {
+  "t": "Cream",
+  "h": "e52e6c26"
+ },
+ "js.mshm.mau-kem-dam": {
+  "t": "Deep cream",
+  "h": "e42e248c"
+ },
+ "js.mshm.mau-nau-am": {
+  "t": "Warm brown",
+  "h": "e0f4fd1e"
+ },
+ "js.mshm.mau-nau-do": {
+  "t": "Reddish brown",
+  "h": "9222313d"
+ },
+ "js.mshm.mau-nau-go": {
+  "t": "Wood brown",
+  "h": "24e064f8"
+ },
+ "js.mshm.mau-nau-vang": {
+  "t": "Golden brown",
+  "h": "48377d46"
+ },
+ "js.mshm.mau-navy": {
+  "t": "Navy",
+  "h": "0229e960"
+ },
+ "js.mshm.mau-tim": {
+  "t": "Purple",
+  "h": "684e5966"
+ },
+ "js.mshm.mau-tim-do": {
+  "t": "Magenta purple",
+  "h": "0b78db8f"
+ },
+ "js.mshm.mau-tim-than": {
+  "t": "Indigo",
+  "h": "7ca4120f"
+ },
+ "js.mshm.mau-trang": {
+  "t": "White",
+  "h": "9cf5e0eb"
+ },
+ "js.mshm.mau-vang-dat": {
+  "t": "Earthy yellow",
+  "h": "1552080b"
+ },
+ "js.mshm.mau-vang-kim": {
+  "t": "Gold",
+  "h": "b441fe1f"
+ },
+ "js.mshm.mau-vang-nhat": {
+  "t": "Pale yellow",
+  "h": "14fd960f"
+ },
+ "js.mshm.mau-vang-tuoi": {
+  "t": "Bright yellow",
+  "h": "f58c4a57"
+ },
+ "js.mshm.mau-xam-dam": {
+  "t": "Dark gray",
+  "h": "01959534"
+ },
+ "js.mshm.mau-xam-kim-loai": {
+  "t": "Metallic gray",
+  "h": "6e7d3e23"
+ },
+ "js.mshm.mau-xam-nhat": {
+  "t": "Light gray",
+  "h": "d8017939"
+ },
+ "js.mshm.mau-xanh-bien": {
+  "t": "Ocean blue",
+  "h": "9a3a3414"
+ },
+ "js.mshm.mau-xanh-duong-dam": {
+  "t": "Deep blue",
+  "h": "8d89093c"
+ },
+ "js.mshm.mau-xanh-la": {
+  "t": "Green",
+  "h": "d0e8c4b1"
+ },
+ "js.mshm.mau-xanh-lam-nhat": {
+  "t": "Light blue",
+  "h": "a72ef9cf"
+ },
+ "js.mshm.mau-xanh-mint": {
+  "t": "Mint green",
+  "h": "3607442e"
+ },
+ "js.mshm.mau-xanh-ngoc": {
+  "t": "Turquoise",
+  "h": "b8cbaa2e"
+ },
+ "js.mshm.mau-xanh-olive": {
+  "t": "Olive",
+  "h": "2dd139ab"
+ },
+ "js.mshm.mau-xanh-reu": {
+  "t": "Moss green",
+  "h": "836bccc5"
+ },
+ "js.mshm.mau-xanh-reu-dam": {
+  "t": "Deep moss green",
+  "h": "b49975fe"
+ },
+ "js.mshm.mau-xanh-tim": {
+  "t": "Blue-violet",
+  "h": "08e76f57"
+ },
+ "js.mshm.menh-mau-chinh": {
+  "t": "Birth element {h} — main colors to wear: {m}",
+  "h": "9a1a497e"
+ },
+ "js.mshm.menh-quai": {
+  "t": "Birth element {h} · Gua {n} {g}",
+  "h": "da1abf25"
+ },
+ "js.mshm.nam-sinh-khong-hop-le": {
+  "t": "Please enter a valid birth year (1900–2025)",
+  "h": "c628d3be"
+ },
+ "js.mshm.nap-am-line": {
+  "t": "Na Yin: {h} · Main colors by the {h} element",
+  "h": "6e1df23d"
+ },
+ "js.mshm.occ-doi-tac": {
+  "t": "Meeting Partners",
+  "h": "241559f4"
+ },
+ "js.mshm.occ-hang-ngay": {
+  "t": "Everyday",
+  "h": "c19adb2a"
+ },
+ "js.mshm.occ-hen-ho": {
+  "t": "Date",
+  "h": "c601615d"
+ },
+ "js.mshm.occ-phong-van": {
+  "t": "Interview",
+  "h": "0bfbac35"
+ },
+ "js.mshm.phan-tich-that-bai": {
+  "t": "The analysis failed",
+  "h": "44b68aa6"
+ },
+ "js.mshm.phan-tich-truoc": {
+  "t": "Please analyze your colors first.",
+  "h": "10049eff"
+ },
+ "js.mshm.phoi-mau-dua-tren": {
+  "t": "Color combinations are based on the suitable palette above.",
+  "h": "c4d3c4d3"
+ },
+ "js.mshm.quai-line": {
+  "t": "Gua {n} — {name} · {elem} element",
+  "h": "c5a1c901"
+ },
+ "js.mshm.share-text": {
+  "t": "Birth element {h} · Main colors: {m}",
+  "h": "d05a5128"
+ },
+ "js.mshm.share-title": {
+  "t": "The colors that suit my birth element",
+  "h": "2ba34c9a"
+ },
+ "js.mshm.share-tryon-title": {
+  "t": "The outfit for my birth element (virtual try-on)",
+  "h": "cd9fdc43"
+ },
+ "js.mshm.step-chuan-bi": {
+  "t": "Preparing an outfit for your element",
+  "h": "6ae0380a"
+ },
+ "js.mshm.step-tao-anh": {
+  "t": "Generating the outfit image",
+  "h": "ba6faaec"
+ },
+ "js.mshm.step-tinh-quai": {
+  "t": "Working out your gua number & Na Yin element",
+  "h": "39571eee"
+ },
+ "js.mshm.step-tu-van": {
+  "t": "Advising on colors & outfits",
+  "h": "58244246"
+ },
+ "js.mshm.style-cong-so": {
+  "t": "Work",
+  "h": "ff273e47"
+ },
+ "js.mshm.style-dao-pho": {
+  "t": "Street Stroll",
+  "h": "115c50ac"
+ },
+ "js.mshm.style-sang-trong": {
+  "t": "Luxe",
+  "h": "17db9fb4"
+ },
+ "js.mshm.tai-anh-truoc": {
+  "t": "Please upload an image first.",
+  "h": "733c1fec"
+ },
+ "js.mshm.tranh": {
+  "t": "Avoid:",
+  "h": "89f38636"
+ },
+ "js.mshm.tryon-label": {
+  "t": "{s} · Birth element {h}",
+  "h": "e69e839c"
+ },
+ "js.mshm.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
+ "js.mshm.xem-mau-chinh": {
+  "t": "See the main colors above to apply.",
+  "h": "95e8229c"
  },
  "js.nav.brand": {
   "t": "Minh Bao Zi Wei Dou Shu",
@@ -12202,6 +13022,194 @@
  "js.paywall.xin-loi-da-co-loi-xay": {
   "t": "Sorry, something went wrong",
   "h": "4195c600"
+ },
+ "js.pcol.ban-menh": {
+  "t": "✦ Birth element {h} ({f}) — season suggested by the classical method: {s}",
+  "h": "cadb88ef"
+ },
+ "js.pcol.chip-phoi-do": {
+  "t": "How should I put outfits together for my season?",
+  "h": "3a3ed4e0"
+ },
+ "js.pcol.chip-tranh": {
+  "t": "Which colors should I avoid?",
+  "h": "19ab5099"
+ },
+ "js.pcol.chip-vi-sao": {
+  "t": "Why am I in this color season?",
+  "h": "fd530a4e"
+ },
+ "js.pcol.conf-cao": {
+  "t": "high",
+  "h": "db10c479"
+ },
+ "js.pcol.conf-thap": {
+  "t": "low",
+  "h": "ecd6f14a"
+ },
+ "js.pcol.conf-trung-binh": {
+  "t": "medium",
+  "h": "9d324d94"
+ },
+ "js.pcol.day-la-goi-y": {
+  "t": "This is a suggestion from the Na Yin (nayin), not a reading of your actual skin tone from the photo — your exact season, color palette and outfit suggestions are in the in-depth analysis.",
+  "h": "25abe372"
+ },
+ "js.pcol.desc-autumn-deep": {
+  "t": "Deep earth tones, rich — warm brown skin, high contrast",
+  "h": "90f10d0f"
+ },
+ "js.pcol.desc-autumn-warm": {
+  "t": "Golden earth tones, deep warm — olive/wheat skin",
+  "h": "9b6a0f54"
+ },
+ "js.pcol.desc-spring-bright": {
+  "t": "Clear bright tones, high contrast, vivid standout colors",
+  "h": "20f039c2"
+ },
+ "js.pcol.desc-spring-warm": {
+  "t": "Warm, bright, fresh yellow-toned skin — peach/golden glow",
+  "h": "468acee7"
+ },
+ "js.pcol.desc-summer-cool": {
+  "t": "Cool pink tones, gentle — pink skin with a bluish cast",
+  "h": "1ed00edd"
+ },
+ "js.pcol.desc-summer-soft": {
+  "t": "Muted cool tones, soft — colors blended with a gentle gray",
+  "h": "5b194cf9"
+ },
+ "js.pcol.desc-winter-cool": {
+  "t": "High-contrast cool tones — blue-white skin or dark cool skin",
+  "h": "91dd2746"
+ },
+ "js.pcol.desc-winter-deep": {
+  "t": "Deep cool tones, very high contrast — brown/dark cool skin",
+  "h": "ca5cbf23"
+ },
+ "js.pcol.do-tin-cay": {
+  "t": "Confidence: {c}",
+  "h": "d9faf072"
+ },
+ "js.pcol.greeting": {
+  "t": "You belong to the **{s}** season, with a {u} undertone. Would you like to ask more about colors or outfits?",
+  "h": "72b706d2"
+ },
+ "js.pcol.lbl-ao": {
+  "t": "Top",
+  "h": "373c84b7"
+ },
+ "js.pcol.lbl-giay": {
+  "t": "Shoes",
+  "h": "a47dc437"
+ },
+ "js.pcol.lbl-layer": {
+  "t": "Outer layer",
+  "h": "c3f10446"
+ },
+ "js.pcol.lbl-quan-vay": {
+  "t": "Pants / Skirt",
+  "h": "879b0cdf"
+ },
+ "js.pcol.loi": {
+  "t": "Error",
+  "h": "d2907807"
+ },
+ "js.pcol.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.pcol.loi-phan-tich": {
+  "t": "Analysis error",
+  "h": "3e06a99e"
+ },
+ "js.pcol.menh-goi-y": {
+  "t": "Birth element {h} — season suggested by the classical method: {s}",
+  "h": "a8bdf4cb"
+ },
+ "js.pcol.nen-tranh": {
+  "t": "Colors to avoid",
+  "h": "4fd3dd20"
+ },
+ "js.pcol.season-autumn-deep": {
+  "t": "Deep Autumn",
+  "h": "576a8bf3"
+ },
+ "js.pcol.season-autumn-warm": {
+  "t": "Warm Autumn",
+  "h": "1034d9af"
+ },
+ "js.pcol.season-spring-bright": {
+  "t": "Bright Spring",
+  "h": "eedcebfe"
+ },
+ "js.pcol.season-spring-warm": {
+  "t": "Warm Spring",
+  "h": "1c006148"
+ },
+ "js.pcol.season-summer-cool": {
+  "t": "Cool Summer",
+  "h": "ee7b3719"
+ },
+ "js.pcol.season-summer-soft": {
+  "t": "Soft Summer",
+  "h": "3545a106"
+ },
+ "js.pcol.season-winter-cool": {
+  "t": "Cool Winter",
+  "h": "bde54243"
+ },
+ "js.pcol.season-winter-deep": {
+  "t": "Deep Winter",
+  "h": "0f222647"
+ },
+ "js.pcol.share-outfit-text": {
+  "t": "Season {s}",
+  "h": "f1a309aa"
+ },
+ "js.pcol.share-outfit-title": {
+  "t": "An outfit for my Personal Color",
+  "h": "26cbac11"
+ },
+ "js.pcol.share-text": {
+  "t": "Season: {n} ({s}) · Undertone: {u}",
+  "h": "d299d1fa"
+ },
+ "js.pcol.share-title": {
+  "t": "My Personal Color",
+  "h": "07a149e4"
+ },
+ "js.pcol.step-chuan-bi": {
+  "t": "Preparing an outfit for the season",
+  "h": "23134132"
+ },
+ "js.pcol.step-phan-tich": {
+  "t": "Analyzing skin tone & color season",
+  "h": "d712f3c3"
+ },
+ "js.pcol.step-tao-anh": {
+  "t": "Generating the new outfit image",
+  "h": "f192809a"
+ },
+ "js.pcol.step-tinh-menh": {
+  "t": "Working out your birth element from your birth year",
+  "h": "6c35f608"
+ },
+ "js.pcol.undertone-cool": {
+  "t": "Cool",
+  "h": "83997975"
+ },
+ "js.pcol.undertone-neutral": {
+  "t": "Neutral",
+  "h": "26af9b58"
+ },
+ "js.pcol.undertone-warm": {
+  "t": "Warm",
+  "h": "8e0429c4"
+ },
+ "js.pcol.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
  },
  "js.phongthuy.100-sau-dieu-chinh-co-the": {
   "t": "/100**; after the adjustments it could reach **",
@@ -20727,6 +21735,402 @@
   "t": "View history",
   "h": "21a19fb0"
  },
+ "js.tpng.cat-ao": {
+  "t": "Top",
+  "h": "373c84b7"
+ },
+ "js.tpng.cat-ao-khoac": {
+  "t": "Outerwear",
+  "h": "dee0e8de"
+ },
+ "js.tpng.cat-giay": {
+  "t": "Shoes",
+  "h": "a47dc437"
+ },
+ "js.tpng.cat-phu-kien": {
+  "t": "Accessories",
+  "h": "f1f0fba9"
+ },
+ "js.tpng.cat-quan": {
+  "t": "Pants / Skirt",
+  "h": "879b0cdf"
+ },
+ "js.tpng.chip-diem-nhan": {
+  "t": "Which accent color works best?",
+  "h": "6d38e6a5"
+ },
+ "js.tpng.chip-hoa-giai": {
+  "t": "How should it be remedied?",
+  "h": "1dee5079"
+ },
+ "js.tpng.chip-khac": {
+  "t": "Why does this day clash with my element?",
+  "h": "a98c2e50"
+ },
+ "js.tpng.greeting": {
+  "t": "Birth element **{m}**, today’s element **{n}** — {r}. Would you like to ask more about colors or style?",
+  "h": "36a537dc"
+ },
+ "js.tpng.hanh-n": {
+  "t": "{h} element",
+  "h": "3e50daab"
+ },
+ "js.tpng.label": {
+  "t": "Daily Outfit — {r}",
+  "h": "26ec2299"
+ },
+ "js.tpng.loi": {
+  "t": "Error",
+  "h": "d2907807"
+ },
+ "js.tpng.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.tpng.loi-phan-tich": {
+  "t": "Analysis error",
+  "h": "3e06a99e"
+ },
+ "js.tpng.mau-bac": {
+  "t": "Silver",
+  "h": "7386c9c6"
+ },
+ "js.tpng.mau-be": {
+  "t": "Beige",
+  "h": "11d1bf27"
+ },
+ "js.tpng.mau-cam": {
+  "t": "Orange",
+  "h": "5e09769d"
+ },
+ "js.tpng.mau-cam-dat": {
+  "t": "Terracotta",
+  "h": "aaa37477"
+ },
+ "js.tpng.mau-den": {
+  "t": "Black",
+  "h": "4d0c0faf"
+ },
+ "js.tpng.mau-do": {
+  "t": "Red",
+  "h": "2eb7503e"
+ },
+ "js.tpng.mau-hong": {
+  "t": "Pink",
+  "h": "5a43ba9e"
+ },
+ "js.tpng.mau-hong-phan": {
+  "t": "Pastel pink",
+  "h": "0ec650f1"
+ },
+ "js.tpng.mau-kem": {
+  "t": "Cream",
+  "h": "e52e6c26"
+ },
+ "js.tpng.mau-nau": {
+  "t": "Brown",
+  "h": "42ff42d9"
+ },
+ "js.tpng.mau-nau-go": {
+  "t": "Wood brown",
+  "h": "24e064f8"
+ },
+ "js.tpng.mau-navy": {
+  "t": "Navy",
+  "h": "0229e960"
+ },
+ "js.tpng.mau-nen-mac": {
+  "t": "{r}. The colors to wear, the suggested style and the specific outfit for that day’s element are in the in-depth analysis.",
+  "h": "51d59e76"
+ },
+ "js.tpng.mau-tim": {
+  "t": "Purple",
+  "h": "684e5966"
+ },
+ "js.tpng.mau-tim-do": {
+  "t": "Magenta purple",
+  "h": "0b78db8f"
+ },
+ "js.tpng.mau-trang": {
+  "t": "White",
+  "h": "9cf5e0eb"
+ },
+ "js.tpng.mau-vang": {
+  "t": "Yellow",
+  "h": "27d57aed"
+ },
+ "js.tpng.mau-vang-kim": {
+  "t": "Gold",
+  "h": "b441fe1f"
+ },
+ "js.tpng.mau-xam-dam": {
+  "t": "Dark gray",
+  "h": "01959534"
+ },
+ "js.tpng.mau-xam-nhat": {
+  "t": "Light gray",
+  "h": "d8017939"
+ },
+ "js.tpng.mau-xanh-duong": {
+  "t": "Blue",
+  "h": "95beb520"
+ },
+ "js.tpng.mau-xanh-la": {
+  "t": "Green",
+  "h": "d0e8c4b1"
+ },
+ "js.tpng.mau-xanh-lam": {
+  "t": "Sky blue",
+  "h": "0537307a"
+ },
+ "js.tpng.mau-xanh-ngoc": {
+  "t": "Turquoise",
+  "h": "b8cbaa2e"
+ },
+ "js.tpng.mau-xanh-reu": {
+  "t": "Moss green",
+  "h": "836bccc5"
+ },
+ "js.tpng.menh-ngay": {
+  "t": "Birth element {h} · {c} day",
+  "h": "ac19a8fe"
+ },
+ "js.tpng.ngay-hanh": {
+  "t": "{c} day — {h} element",
+  "h": "6fd10f47"
+ },
+ "js.tpng.rel-binh-hoa": {
+  "t": "A harmonious day — steady and favorable",
+  "h": "d1971f40"
+ },
+ "js.tpng.rel-menh-khac-ngay": {
+  "t": "Your element controls the day — an average day, take care",
+  "h": "256fb5ff"
+ },
+ "js.tpng.rel-menh-sinh-ngay": {
+  "t": "Your element generates the day — a slight drain, still good",
+  "h": "995978d5"
+ },
+ "js.tpng.rel-ngay-khac-menh": {
+  "t": "The day clashes with your element ✦ Remedy with color",
+  "h": "f331fca5"
+ },
+ "js.tpng.rel-ngay-sinh-menh": {
+  "t": "The day generates your element ✦ Extremely favorable",
+  "h": "81b455cf"
+ },
+ "js.tpng.share-text": {
+  "t": "Birth element {m} · {c} day ({n}) — {r}",
+  "h": "a603ba42"
+ },
+ "js.tpng.share-title": {
+  "t": "The outfit that suits my day",
+  "h": "36dc7dba"
+ },
+ "js.tpng.share-tryon-title": {
+  "t": "The outfit that suits my day (virtual try-on)",
+  "h": "7767c7e3"
+ },
+ "js.tpng.step-chuan-bi": {
+  "t": "Preparing an outfit by the Five Elements",
+  "h": "cf955a11"
+ },
+ "js.tpng.step-tao-anh": {
+  "t": "Generating the outfit image",
+  "h": "ba6faaec"
+ },
+ "js.tpng.step-tinh": {
+  "t": "Working out the day’s stem-branch & element relation",
+  "h": "7112616b"
+ },
+ "js.tpng.step-tu-van": {
+  "t": "Advising an outfit for the day",
+  "h": "86c6bfcc"
+ },
+ "js.tpng.style-hoa-dan": {
+  "t": "Hua Dan Soft",
+  "h": "c859a2ac"
+ },
+ "js.tpng.tryon-casual": {
+  "t": "casual",
+  "h": "7b664f70"
+ },
+ "js.tpng.tryon-cong-so": {
+  "t": "work",
+  "h": "81a4c6c6"
+ },
+ "js.tpng.tryon-dao-pho": {
+  "t": "street stroll",
+  "h": "c1f7f4a0"
+ },
+ "js.tpng.tryon-label": {
+  "t": "Birth element {h} · {s}",
+  "h": "c91f44b2"
+ },
+ "js.tpng.tryon-sang-trong": {
+  "t": "luxe",
+  "h": "3c6421de"
+ },
+ "js.tpng.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
+ "js.trdi.chip-mau-son": {
+  "t": "Which lipstick shade suits my skin tone?",
+  "h": "f013cf8c"
+ },
+ "js.trdi.chip-van-khi": {
+  "t": "How does makeup affect your fortune?",
+  "h": "a175f487"
+ },
+ "js.trdi.chip-vi-sao": {
+  "t": "Why does this style suit me?",
+  "h": "7ed2d820"
+ },
+ "js.trdi.do-truc-tiep": {
+  "t": "Measured directly from the image with MediaPipe.",
+  "h": "6bca61a6"
+ },
+ "js.trdi.goi-y-menh": {
+  "t": "Makeup style suggestions will prioritize tones that suit this birth element.",
+  "h": "30df970d"
+ },
+ "js.trdi.greeting": {
+  "t": "Your face shape is **{s}**. Which makeup style would you like to ask more about?",
+  "h": "b80d300f"
+ },
+ "js.trdi.greeting-menh": {
+  "t": "Your face shape is **{s}**, birth element {h}. Which makeup style would you like to ask more about?",
+  "h": "3a4fb4b5"
+ },
+ "js.trdi.hinh-dai": {
+  "t": "long",
+  "h": "67167578"
+ },
+ "js.trdi.hinh-oval": {
+  "t": "oval",
+  "h": "181b45bd"
+ },
+ "js.trdi.hinh-tron-vuong": {
+  "t": "round/square",
+  "h": "a30fca34"
+ },
+ "js.trdi.hop-menh": {
+  "t": "Fits your element",
+  "h": "44069c43"
+ },
+ "js.trdi.label": {
+  "t": "Makeup — {s}",
+  "h": "f0eca080"
+ },
+ "js.trdi.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.trdi.loi-phan-tich": {
+  "t": "Analysis error",
+  "h": "3e06a99e"
+ },
+ "js.trdi.loi-xu-ly-anh": {
+  "t": "Image processing error",
+  "h": "52fb0d60"
+ },
+ "js.trdi.mat-tuoi-da": {
+  "t": "{s} · {a} · Skin {d}",
+  "h": "07bd0f9d"
+ },
+ "js.trdi.menh-n": {
+  "t": "Birth element {h}",
+  "h": "e46cbb3b"
+ },
+ "js.trdi.rank-phu-hop": {
+  "t": "#{n} match",
+  "h": "20cdc5b5"
+ },
+ "js.trdi.share-mat": {
+  "t": "Face {s}",
+  "h": "04abbf18"
+ },
+ "js.trdi.share-title": {
+  "t": "The makeup suggestions that suit my face",
+  "h": "c6d0e9a5"
+ },
+ "js.trdi.share-tryon-text": {
+  "t": "Trying a style: {n}",
+  "h": "4641d81c"
+ },
+ "js.trdi.share-tryon-title": {
+  "t": "My makeup try-on (virtual)",
+  "h": "a431ac26"
+ },
+ "js.trdi.st-dark_muse-sub": {
+  "t": "Muted smoky, cool tones, editorial edge",
+  "h": "e51b61c7"
+ },
+ "js.trdi.st-glass_skin-sub": {
+  "t": "No-makeup makeup, dewy lit-from-within glow",
+  "h": "0c6ac518"
+ },
+ "js.trdi.st-guochao-sub": {
+  "t": "Deep red lips, sharp liner, an air of ancient elegance",
+  "h": "2df3d2b1"
+ },
+ "js.trdi.st-hoa-dan-name": {
+  "t": "Hua Dan Soft",
+  "h": "c859a2ac"
+ },
+ "js.trdi.st-hoa_dan-sub": {
+  "t": "Peach pink, rose blush, gentle and graceful",
+  "h": "ee95019a"
+ },
+ "js.trdi.st-j_gyaru-sub": {
+  "t": "Circle-lens vibes, dramatic lash, bright liner",
+  "h": "8342ee69"
+ },
+ "js.trdi.st-j_sheer-sub": {
+  "t": "Translucent skin, sheer lip, minimalist wabi-sabi",
+  "h": "bef5b3e4"
+ },
+ "js.trdi.st-kdrama_glam-sub": {
+  "t": "Defined liner, bold lip, top-tier elegance",
+  "h": "f6378d7f"
+ },
+ "js.trdi.st-soft_girl-sub": {
+  "t": "Blush bomb, gradient lip, innocent glow",
+  "h": "68ac4e8f"
+ },
+ "js.trdi.step-chuan-bi": {
+  "t": "Preparing the makeup prompt",
+  "h": "f2303939"
+ },
+ "js.trdi.step-nap-am": {
+  "t": "Working out your birth element’s Na Yin",
+  "h": "94bf98e8"
+ },
+ "js.trdi.step-phan-tich": {
+  "t": "Analyzing the face & suggesting makeup styles",
+  "h": "17ac9e7f"
+ },
+ "js.trdi.step-tao-anh": {
+  "t": "Generating the new makeup image",
+  "h": "060bcb1f"
+ },
+ "js.trdi.tam-phong-cach": {
+  "t": "The 8 ranked makeup styles, the color palette and the live try-on are in the in-depth analysis.",
+  "h": "d0bfd7a6"
+ },
+ "js.trdi.thu": {
+  "t": "Try →",
+  "h": "c1480a0a"
+ },
+ "js.trdi.ty-le-rong-cao": {
+  "t": "Face width/height ratio: {r} — tends toward {s}",
+  "h": "2094599e"
+ },
+ "js.trdi.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
  "js.trochuyen.gio-truoc": {
   "t": "{n} h ago",
   "h": "19a19d72"
@@ -21770,6 +23174,138 @@
  "khis.xem-khi-sac": {
   "t": "Read Complexion",
   "h": "7863a81d"
+ },
+ "kieut.anh-sang-tu-nhien-deu": {
+  "t": "✓ Natural, even light",
+  "h": "7f81d51a"
+ },
+ "kieut.chon-gioi-tinh-va-tai-len": {
+  "t": "Choose your gender and upload one photo with a clear face. The system analyzes your face shape and then tries styles on directly in the photo. You get hairstyle and eyeglass suggestions plus the try-on image.",
+  "h": "5c22b94e"
+ },
+ "kieut.chup-anh-khuon-mat-he-thong": {
+  "t": "Take a photo of your face — the system analyzes your face shape and suggests hairstyles that suit you by physiognomy. Try each hairstyle right on the photo.",
+  "h": "fd003738"
+ },
+ "kieut.doi-anh-khac": {
+  "t": "✕ Change Image",
+  "h": "d058264f"
+ },
+ "kieut.doi-mu-doi-khan-che-toc": {
+  "t": "✗ Hat or scarf covering the hair",
+  "h": "a40d8fd8"
+ },
+ "kieut.hinh-dang-khuon-mat": {
+  "t": "Face shape",
+  "h": "20dd1d13"
+ },
+ "kieut.huy": {
+  "t": "Cancel",
+  "h": "33639e92"
+ },
+ "kieut.ket-qua": {
+  "t": "Result",
+  "h": "c9f95514"
+ },
+ "kieut.kieu-kinh-phu-hop-theo-cau": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> Eyeglasses that suit your face structure",
+  "h": "39d8292c"
+ },
+ "kieut.kieu-toc": {
+  "t": "<span class=\"ic\" data-icon=\"scissors\"></span> Hairstyle",
+  "h": "7d47a3d3"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong": {
+  "t": "Hairstyles & Eyeglasses for Your Face — Minh Bao Zi Wei Dou Shu",
+  "h": "704b6aa7"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-v1r6": {
+  "t": "<b>Hairstyles &amp; Eyeglasses for Your Face</b><span>Analyzes your face shape, suggests hairstyles and lets you try them on the photo</span>",
+  "h": "745fe887"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-x53w": {
+  "t": "Hairstyles &amp; Eyeglasses for Your Face",
+  "h": "a6dff7d5"
+ },
+ "kieut.kinh-mat": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> Eyeglasses",
+  "h": "508d6f59"
+ },
+ "kieut.loi-khuyen": {
+  "t": "<strong><span class=\"ic\" data-icon=\"message-circle\"></span> Tip: </strong><span id=\"tipText\"></span>",
+  "h": "25976b6b"
+ },
+ "kieut.nghieng-mat-nhieu": {
+  "t": "✗ Face tilted a lot",
+  "h": "9d537acf"
+ },
+ "kieut.nguoc-sang-toi": {
+  "t": "✗ Backlit or dark",
+  "h": "97a94265"
+ },
+ "kieut.nhan-tuong-hoc-phuong-dong-khong": {
+  "t": "Eastern physiognomy does more than read destiny — it also classifies face shapes by the Five Elements (Metal, Wood, Water, Fire, Earth), each element matching a characteristic outline. This classification is used to suggest hairstyles and makeup that harmonize with the face.",
+  "h": "bff2f554"
+ },
+ "kieut.nhin-thang-vao-camera-dam-bao": {
+  "t": "Look straight into the camera, make sure the light is good and your face fills most of the frame.",
+  "h": "d5f2b4f9"
+ },
+ "kieut.phan-tich-5s-thu-kieu-25s": {
+  "t": "Analysis ~5s · Try-on ~25s",
+  "h": "d75a8d73"
+ },
+ "kieut.phan-tich-anh-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> Analyze Another Image",
+  "h": "727c28a0"
+ },
+ "kieut.phan-tich-khuon-mat-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Face Shape Analysis &amp; Style Suggestions — <span data-tvp-price=\"kieu-toc-phan-tich\">…</span> credits",
+  "h": "7ce5c0fd"
+ },
+ "kieut.preview-anh": {
+  "t": "Image preview",
+  "h": "6bc7c7e2"
+ },
+ "kieut.quyen-rieng-tu-anh-chi-gui": {
+  "t": "<strong>Privacy:</strong> The photo is only sent to the server for analysis and isn’t stored on our servers. Replicate processes it and returns the result image without long-term storage.",
+  "h": "5d8fcc8b"
+ },
+ "kieut.sau-khi-thu": {
+  "t": "After trying",
+  "h": "c3de1d39"
+ },
+ "kieut.tai-anh-ket-qua": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> Download Result Image",
+  "h": "5f15ca5b"
+ },
+ "kieut.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> Upload Photo",
+  "h": "633baad5"
+ },
+ "kieut.tat-ca-kieu-toc-la-phu": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> All hairstyles — <span class=\"ic\" data-icon=\"star\"></span> marks the best match for your face",
+  "h": "8a472eaa"
+ },
+ "kieut.thang-mat-chinh-dien": {
+  "t": "✓ Face straight on",
+  "h": "7a6bfbf8"
+ },
+ "kieut.thay-ro-tu-tran-den-cam": {
+  "t": "✓ Clearly visible from forehead to chin",
+  "h": "4ac86958"
+ },
+ "kieut.thu-kieu-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> Try Another Style",
+  "h": "0054a608"
+ },
+ "kieut.thu-tren-anh": {
+  "t": "<span class=\"ic\" id=\"tryonTitleIcon\"></span> <span id=\"tryonTitleText\">Try It On the Photo</span>",
+  "h": "586df119"
+ },
+ "kieut.ton-tien-lam-toc-doi-kinh": {
+  "t": "You spend money on a haircut or new glasses and still feel it’s not quite right — sometimes the problem isn’t your taste but that you never tried it on before doing it for real. Upload a portrait and see right away which style suits your face.",
+  "h": "b6de26af"
  },
  "kimlau.bang-tra-20-nam-toi": {
   "t": "20-year<br>lookup table",
@@ -22883,6 +24419,110 @@
   "t": "View Chart &amp; Reading →",
   "h": "95889730"
  },
+ "mshm.anh-chup-thang-nguoi-du-sang": {
+  "t": "Straight-on full-body photo, good light · JPG/PNG",
+  "h": "fe4086d9"
+ },
+ "mshm.bang-mau-theo-menh": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> Palette for Your Birth Element",
+  "h": "75158994"
+ },
+ "mshm.chi-phi-luong": {
+  "t": "<span>Cost: <strong><span data-tvp-price=\"mau-sac-hop-menh\">…</span> credits</strong></span>",
+  "h": "72c219ac"
+ },
+ "mshm.chon-phong-cach-trang-phuc": {
+  "t": "Choose an outfit style:",
+  "h": "b115ee23"
+ },
+ "mshm.dao-pho": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> Street Stroll",
+  "h": "5a035e78"
+ },
+ "mshm.goi-y-phoi-do-hoan-chinh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Complete Outfit Suggestions",
+  "h": "233b565f"
+ },
+ "mshm.huong-dan-trang-phuc-chi-tiet": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> Detailed Outfit Guide",
+  "h": "68e382ef"
+ },
+ "mshm.lam-an-e-am-tai-loc": {
+  "t": "Business is slow and wealth doesn’t gather — yet you may never have wondered whether the colors you wear and use every day clash with your birth element. Enter your birth year and get the list of colors to use and colors to avoid right away.",
+  "h": "fe0800d1"
+ },
+ "mshm.mau-chinh-tot-nhat": {
+  "t": "✓ Main Colors — Best",
+  "h": "d169b014"
+ },
+ "mshm.mau-nen-tranh": {
+  "t": "✗ Colors to Avoid",
+  "h": "adc4005c"
+ },
+ "mshm.mau-phu-chap-nhan-duoc": {
+  "t": "◎ Secondary Colors — Acceptable",
+  "h": "5679d14e"
+ },
+ "mshm.mau-sac-hop-menh": {
+  "t": "Colors That Suit Your Chart",
+  "h": "64b3b887"
+ },
+ "mshm.mau-sac-hop-menh-tu-van": {
+  "t": "<b>Colors for Your Birth Element</b><span>Outfit color advice by the Na Yin Five Elements + Eight Mansions, and try it on the photo</span>",
+  "h": "764edb0c"
+ },
+ "mshm.mau-sac-hop-menh-tu-vi": {
+  "t": "Colors for Your Birth Element — Minh Bao Zi Wei Dou Shu",
+  "h": "d1cab1d9"
+ },
+ "mshm.mau-theo-dip": {
+  "t": "<span class=\"ic\" data-icon=\"calendar\"></span> Colors by Occasion",
+  "h": "193da2e8"
+ },
+ "mshm.meo-dac-biet-theo-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> Special Tips for Your Birth Element",
+  "h": "ec862b7f"
+ },
+ "mshm.ngu-hanh-nap-am-gan-moi": {
+  "t": "The Na Yin Five Elements assign each birth year its own element within the Sixty Jiazi cycle, while the Eight Mansions (Ba Zhai) also weigh direction and space. Combining the two systems, the ancients worked out the colors and objects that generate or clash with a person’s birth element.",
+  "h": "245a2b78"
+ },
+ "mshm.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "Enter your birth year and gender. The system works out your gua number and checks it against the Five Elements color table. You get a palette for your birth element, colors by occasion and outfit suggestions.",
+  "h": "9b015181"
+ },
+ "mshm.sang-trong": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Luxe",
+  "h": "e0db35aa"
+ },
+ "mshm.tai-anh-cua-ban-len": {
+  "t": "Upload your photo",
+  "h": "1444e1ba"
+ },
+ "mshm.tai-sao-nen-tranh-nhung-mau": {
+  "t": "⚠ Why Avoid These Colors?",
+  "h": "d3b71bb0"
+ },
+ "mshm.thong-tin-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Birth Element Info",
+  "h": "0a614b1f"
+ },
+ "mshm.thu-trang-phuc-theo-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> Try On Clothes for Your Element <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"trang-phuc-tryon\">…</span> credits/try</span>",
+  "h": "f74ca71d"
+ },
+ "mshm.tu-van-mau-sac-trang-phuc": {
+  "t": "Outfit color advice for your birth element by the Na Yin Five Elements — tops, pants, shoes, bags, accessories. Complete outfit suggestions for each occasion.",
+  "h": "d55c587d"
+ },
+ "mshm.xem-lai": {
+  "t": "← Review",
+  "h": "e2aaadb4"
+ },
+ "mshm.xem-mau-sac-hop-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> See Your Element Colors — <span data-tvp-price=\"mau-sac-hop-menh\">…</span> credits",
+  "h": "85a1dcbd"
+ },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Enter birth year</span>",
   "h": "ecce406c"
@@ -23598,6 +25238,162 @@
  "paysuc.xac-nhan-thanh-toan-tu-vi": {
   "t": "Payment confirmation — Minh Bao Zi Wei Dou Shu",
   "h": "b7b66e97"
+ },
+ "pcol.anh-cua-ban": {
+  "t": "YOUR PHOTO",
+  "h": "e41a257b"
+ },
+ "pcol.anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> Face Photo",
+  "h": "553ce737"
+ },
+ "pcol.anh-sang-tu-nhien-ban-ngay": {
+  "t": "Natural daylight · No filter, no makeup<br>Your skin tone must be clearly visible, not overexposed",
+  "h": "4cff1a71"
+ },
+ "pcol.anh-sang-tu-nhien-tot-nhat": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"sun\"></span> Natural light is best</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> No color filter</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> No makeup</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"camera\"></span> Shoot close, skin clearly visible</span>",
+  "h": "30e85f5e"
+ },
+ "pcol.bang-mau-ca-nhan": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> Your Color Palette",
+  "h": "eda62269"
+ },
+ "pcol.celeb-cung-tong-mau": {
+  "t": "<span class=\"ic\" data-icon=\"star\"></span> <strong>Celebrities with the same tone:</strong> <span id=\"celebInspo\">—</span>",
+  "h": "3b09c33a"
+ },
+ "pcol.chon-style": {
+  "t": "CHOOSE A STYLE",
+  "h": "92f6c1b3"
+ },
+ "pcol.chup-anh-toan-than": {
+  "t": "Take a full-body photo",
+  "h": "3269c13d"
+ },
+ "pcol.chup-hoac-chon-anh-khuon-mat": {
+  "t": "Take or choose a face photo",
+  "h": "93732afc"
+ },
+ "pcol.cong-so": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> Work",
+  "h": "2a18c4c4"
+ },
+ "pcol.cong-so-li34": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> Work",
+  "h": "57f12434"
+ },
+ "pcol.dien-do-dung-mot-ma-van": {
+  "t": "You dress on trend and still hear that you look tired or dull — maybe you’ve never found out which color season you belong to. Upload a portrait and see the try-on on your real photo right away.",
+  "h": "d671ee98"
+ },
+ "pcol.goi-y-trang-phuc-theo-season": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> Outfit Suggestions for Your Season",
+  "h": "dc3ddd6e"
+ },
+ "pcol.gong-kinh": {
+  "t": "Eyeglass Frames",
+  "h": "9e539d7d"
+ },
+ "pcol.hang-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> Everyday",
+  "h": "e45465a4"
+ },
+ "pcol.hang-ngay-dbs5": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> Everyday",
+  "h": "55d92049"
+ },
+ "pcol.kim-loai": {
+  "t": "Metal",
+  "h": "8ff50d1f"
+ },
+ "pcol.kim-loai-phu-kien": {
+  "t": "<span class=\"ic\" data-icon=\"gem\"></span> Metal & Accessories",
+  "h": "90e92f92"
+ },
+ "pcol.ly-do": {
+  "t": "Reason",
+  "h": "0cbf3763"
+ },
+ "pcol.mau-ao-so-mi": {
+  "t": "Shirt Color",
+  "h": "870c2997"
+ },
+ "pcol.mau-hop-lam-sang-noi-bat": {
+  "t": "✓ Colors that suit you — brighten and make your face stand out",
+  "h": "b47aaef5"
+ },
+ "pcol.mau-nen-tranh-lam-xin-toi": {
+  "t": "✗ Colors to avoid — they dull and darken your skin",
+  "h": "190a8061"
+ },
+ "pcol.mau-toc": {
+  "t": "Hair Color",
+  "h": "2a321f26"
+ },
+ "pcol.nam-sinh-tuy-chon-ket-hop": {
+  "t": "Birth year (optional — combined with your birth element)",
+  "h": "a6c5911c"
+ },
+ "pcol.personal-color": {
+  "t": "Personal Color",
+  "h": "52515e4c"
+ },
+ "pcol.personal-color-phan-tich-mau-sac": {
+  "t": "Personal Color (personal color analysis) is a method that sorts skin, hair and eye tones into “color seasons” — Spring, Summer, Autumn, Winter — based on Western color theory, widely used in fashion and beauty in Korea and Japan. Each season matches a palette of clothing and makeup colors that suit it best.",
+  "h": "4d195af6"
+ },
+ "pcol.personal-color-phan-tich-undertone-seaso": {
+  "t": "<b>Personal Color</b><span>Analyzes your undertone and color season, suggests outfits and lets you try them on the photo</span>",
+  "h": "1946e328"
+ },
+ "pcol.personal-color-tu-vi-minh-bao": {
+  "t": "Personal Color — Minh Bao Zi Wei Dou Shu",
+  "h": "9b10e278"
+ },
+ "pcol.phan-tich-personal-color-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> Analyze My Personal Color — <span data-tvp-price=\"personal-color\">…</span> credits",
+  "h": "cfa46f2a"
+ },
+ "pcol.phan-tich-undertone-va-personal-color": {
+  "t": "Analyze your undertone and Personal Color season — suggests the shirt colors, hair colors and accessories that brighten your face most. Combined with the classical Five Elements method.",
+  "h": "69b0927d"
+ },
+ "pcol.su-kien": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Event",
+  "h": "f4429e62"
+ },
+ "pcol.su-kien-cbgc": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Event",
+  "h": "f80867ad"
+ },
+ "pcol.tai-len-mot-tam-anh-chan": {
+  "t": "Upload one portrait with a clear face, bright enough in natural light. The system analyzes your skin tone and then tries colors on directly in the photo. You get your color season, a palette of colors that suit you and colors to avoid, and the try-on image.",
+  "h": "f645c739"
+ },
+ "pcol.thu-lai": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> Try Again",
+  "h": "66e7a368"
+ },
+ "pcol.thu-trang-phuc-luong-lan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Try On Clothes <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px\"><span data-tvp-price=\"personal-color-tryon\">…</span> credits/try</span>",
+  "h": "0b55d845"
+ },
+ "pcol.thu-trang-phuc-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Try On Clothes Now",
+  "h": "92e398a6"
+ },
+ "pcol.tip-ap-dung-ngay": {
+  "t": "✦ Tip You Can Use Now",
+  "h": "236e351f"
+ },
+ "pcol.upload-anh-toan-than-he-thong": {
+  "t": "Upload a full-body photo → the system changes the clothes to the colors of your season <strong id=\"tryonSeasonLabel\"></strong>",
+  "h": "6403994e"
+ },
+ "pcol.vd-1992": {
+  "t": "e.g. 1992",
+  "h": "b50ab05e"
  },
  "phongthuy.1-ban-menh-thong-tin-phong": {
   "t": "<span class=\"pt-num\">1</span> Your Destiny Element &amp; Room Details",
@@ -25806,6 +27602,194 @@
  "topup.xem-lai-ket-qua-co-bi": {
   "t": "Am I charged again for viewing a result a second time?",
   "h": "64b49a22"
+ },
+ "tpng.anh-chup-toan-than-hoac-nua": {
+  "t": "Full-body or half-body photo · JPG/PNG",
+  "h": "17435ed7"
+ },
+ "tpng.co-ngay-an-mac-chin-chu": {
+  "t": "Some days you dress sharp and still nothing goes right; other days you dress casually and everything flows — your fortune is different every day. Enter your birth year and get the colors and outfit styles that suit today.",
+  "h": "6350ffd2"
+ },
+ "tpng.diem-nhan": {
+  "t": "◎ Accent",
+  "h": "a95e46c4"
+ },
+ "tpng.du-lich": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> Travel",
+  "h": "d7d6e7ed"
+ },
+ "tpng.goi-y-trang-phuc-cu-the": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> Specific Outfit Suggestions",
+  "h": "d9e6894d"
+ },
+ "tpng.hanh-ngay": {
+  "t": "Day element",
+  "h": "f96db196"
+ },
+ "tpng.hen-ho": {
+  "t": "<span class=\"ic\" data-icon=\"heart\"></span> Date",
+  "h": "398a0192"
+ },
+ "tpng.kinh-doanh": {
+  "t": "<span class=\"ic\" data-icon=\"handshake\"></span> Business",
+  "h": "5e9fdd61"
+ },
+ "tpng.mau-sac-hop-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> Colors for the Day",
+  "h": "e47839c0"
+ },
+ "tpng.meo-co-phap": {
+  "t": "<strong>✦ Classical Tip</strong> <span id=\"tipText\">—</span>",
+  "h": "cd8f1791"
+ },
+ "tpng.muc-dich-chon-1": {
+  "t": "Purpose (choose 1)",
+  "h": "a7f0975c"
+ },
+ "tpng.nen-mac": {
+  "t": "✓ Wear",
+  "h": "4d634b8d"
+ },
+ "tpng.nen-tranh": {
+  "t": "✗ Avoid",
+  "h": "b4981595"
+ },
+ "tpng.ngay-di-duong-lich": {
+  "t": "Date of going out (solar calendar)",
+  "h": "dfc6af38"
+ },
+ "tpng.nhap-nam-sinh-gioi-tinh-ngay": {
+  "t": "Enter your birth year, gender, the day you want to dress for and the purpose of going out. The system checks that day’s fortune against your birth element. You get the colors to wear, the colors to avoid and specific outfit suggestions.",
+  "h": "737914fb"
+ },
+ "tpng.phong-cach": {
+  "t": "Style:",
+  "h": "62e2075f"
+ },
+ "tpng.phong-cach-goi-y": {
+  "t": "✦ Suggested Style",
+  "h": "b9a77fc8"
+ },
+ "tpng.phong-van": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> Interview",
+  "h": "0f6621da"
+ },
+ "tpng.thong-tin": {
+  "t": "<span class=\"ic\" data-icon=\"calendar\"></span> Info",
+  "h": "fb81e21c"
+ },
+ "tpng.thu-trang-phuc-luong-lan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Try On Clothes <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px\"><span data-tvp-price=\"trang-phuc-tryon\">…</span> credits/try</span>",
+  "h": "a56af403"
+ },
+ "tpng.thuong-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> Casual",
+  "h": "f84f5bc4"
+ },
+ "tpng.trang-phuc-theo-ngay": {
+  "t": "Daily Outfit",
+  "h": "6cfe1c1e"
+ },
+ "tpng.trang-phuc-theo-ngay-can-chi": {
+  "t": "<b>Daily Outfit</b><span>The day’s stem-branch × your Na Yin element — colors and style for the day you go out</span>",
+  "h": "4c8d4580"
+ },
+ "tpng.trang-phuc-theo-ngay-tu-vi": {
+  "t": "Daily Outfit — Minh Bao Zi Wei Dou Shu",
+  "h": "654b038b"
+ },
+ "tpng.tu-van-mau-sac-trang-phuc": {
+  "t": "Outfit color advice by the day’s stem-branch and your birth element — the classical Na Yin Five Elements method.",
+  "h": "dd5ad2b6"
+ },
+ "tpng.xem-trang-phuc-hop-ngay-luong": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> See the Outfit for the Day — <span data-tvp-price=\"trang-phuc-theo-ngay\">…</span> credits",
+  "h": "589f0801"
+ },
+ "trdi.anh-ro-mat-anh-sang-du": {
+  "t": "A clear face, good light, no glasses",
+  "h": "68ec19ab"
+ },
+ "trdi.bang-mau-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> Suggested Color Palette",
+  "h": "d62e715b"
+ },
+ "trdi.chup-hoac-tai-anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> Take or Upload a Face Photo",
+  "h": "781a5bfa"
+ },
+ "trdi.loi-khuyen-co-phap": {
+  "t": "<strong>✦ Classical advice</strong> <span id=\"tipText\">—</span>",
+  "h": "0417547e"
+ },
+ "trdi.ma-hong": {
+  "t": "Blush",
+  "h": "21b3e53a"
+ },
+ "trdi.mat": {
+  "t": "Eyes",
+  "h": "5e87cc74"
+ },
+ "trdi.moi": {
+  "t": "Lips",
+  "h": "299ea53e"
+ },
+ "trdi.nam-sinh-tuy-chon": {
+  "t": "Birth year (optional)",
+  "h": "82f3a240"
+ },
+ "trdi.nap-am": {
+  "t": "Na Yin",
+  "h": "006a48d6"
+ },
+ "trdi.nhin-nguoi-khac-trang-diem-ma": {
+  "t": "Other people stand out with their makeup, while you still don’t feel confident every time you go out, however much you do. Upload a portrait and get style suggestions for your face and a try-on image right away.",
+  "h": "27d407e0"
+ },
+ "trdi.phan-tich-phong-cach-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> Analyze My Style — <span data-tvp-price=\"trang-diem-phan-tich\">…</span> credits",
+  "h": "5e1ca3e2"
+ },
+ "trdi.phan-tich-tuong-mat-theo-co": {
+  "t": "A classical face-reading analysis — suggests Asian makeup styles that suit your birth element and features.",
+  "h": "30eda66e"
+ },
+ "trdi.phong-cach-makeup-phu-hop-nhan": {
+  "t": "✦ Makeup styles that suit you — press “Try →” to see the result",
+  "h": "25e2d0d8"
+ },
+ "trdi.tai-anh": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> Download image",
+  "h": "a343e31b"
+ },
+ "trdi.tai-len-mot-tam-anh-chan": {
+  "t": "Upload one portrait with a clear face. The system analyzes your face and then tries makeup on directly in the photo. You get makeup styles that suit you, a lip–eye–cheek color palette and the try-on image.",
+  "h": "c8c9461c"
+ },
+ "trdi.thu-lai": {
+  "t": "↺ Try Again",
+  "h": "a1d342d1"
+ },
+ "trdi.thu-trang-diem": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Try On Makeup — <span id=\"tryonStyleName\"></span>",
+  "h": "cd545d92"
+ },
+ "trdi.trang-diem": {
+  "t": "Makeup",
+  "h": "b67e6b3f"
+ },
+ "trdi.trang-diem-phan-tich-tuong-mat": {
+  "t": "<b>Makeup</b><span>Classical face-reading analysis, makeup style suggestions, and try-on right on the photo</span>",
+  "h": "132106df"
+ },
+ "trdi.trang-diem-tu-vi-minh-bao": {
+  "t": "Makeup — Minh Bao Zi Wei Dou Shu",
+  "h": "10926a7a"
+ },
+ "trdi.tuong-mat": {
+  "t": "Face reading",
+  "h": "424915c5"
  },
  "trochuyen.chua-co-hoi-thoai-nao-bam": {
   "t": "No conversations yet.<br>Tap \"New question\" above, or open any tool and ask the Master.",

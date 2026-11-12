@@ -1783,6 +1783,86 @@
   "t": "公司办公室",
   "h": "d678c2d6"
  },
+ "dali.an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 饮食",
+  "h": "a8b06b78"
+ },
+ "dali.anh-da-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 脸部肌肤照片",
+  "h": "d3d3689b"
+ },
+ "dali.anh-sang-tu-nhien-khong-filter": {
+  "t": "自然光 · 不加滤镜 · 近距离拍清楚<br>JPG/PNG，最大 5MB",
+  "h": "13e0d13e"
+ },
+ "dali.chup-noi-co-anh-sang-tu": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"lightbulb\"></span> 在有自然光的地方拍摄</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> 不要使用闪光灯</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> 洗净素颜</span>",
+  "h": "5c098d4e"
+ },
+ "dali.da-lieu-toan-dien": {
+  "t": "全面肤质分析",
+  "h": "91cdb627"
+ },
+ "dali.da-lieu-toan-dien-chup-anh": {
+  "t": "<b>全面肤质分析</b><span>拍摄脸部肌肤——中医、西医与五行古法</span>",
+  "h": "72690cfa"
+ },
+ "dali.da-lieu-tu-vi-minh-bao": {
+  "t": "皮肤——明宝紫微斗数",
+  "h": "a3b8548f"
+ },
+ "dali.da-xuong-cap-ma-cu-do": {
+  "t": "皮肤变差了却总是怪年纪，但真正的问题，可能出在您从没仔细看过的地方。上传一张脸部肌肤照片，在花钱买新保养品之前，先获得客观的分析。",
+  "h": "78702e4b"
+ },
+ "dali.day-la-tu-van-tham-khao": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> 这是结合中西医的参考建议，不能取代皮肤科医师的诊断与治疗。若有严重的皮肤状况，请咨询专业人员。",
+  "h": "b51f96df"
+ },
+ "dali.dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> 中医",
+  "h": "dd81a951"
+ },
+ "dali.luan-giai-dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> 中医解读",
+  "h": "fd58cfd1"
+ },
+ "dali.luu-y-theo-ban-menh": {
+  "t": "<strong>✦ 依本命的注意事项</strong> <span id=\"luuYText\">—</span>",
+  "h": "d6e60118"
+ },
+ "dali.my-pham": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 保养品",
+  "h": "3d3cb659"
+ },
+ "dali.my-pham-routine": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 保养品与保养流程",
+  "h": "bf4abdec"
+ },
+ "dali.nam-sinh-tuy-chon-tu-van": {
+  "t": "出生年（选填——依本命提供建议）",
+  "h": "2abf3e72"
+ },
+ "dali.phan-tich-da-mat-ket-hop": {
+  "t": "分析脸部肌肤——结合中医、西医与五行古法。依本命提供饮食、保养品与护肤建议。",
+  "h": "c9ffa0cc"
+ },
+ "dali.phan-tich-da-toan-dien-luong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 全面分析肌肤——<span data-tvp-price=\"da-lieu-ai\">…</span> 两",
+  "h": "b46628df"
+ },
+ "dali.tai-len-mot-tam-anh-da": {
+  "t": "请上传一张未化妆、脸部肌肤清晰的照片。系统会分析照片上各部位肌肤的状况。您会得到肌肤评估、中医解读，以及适合的食疗与保养品建议。",
+  "h": "5a19c79c"
+ },
+ "dali.thuc-duong-an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 食疗与饮食",
+  "h": "9ce2b777"
+ },
+ "dali.tuong-hoc-da-mat-phuong-dong": {
+  "t": "东方脸部肌肤相学认为，皮肤状态在某种程度上反映体内的健康，并与现代皮肤科学的观察互相对照。这种结合中西医的方式，把皮肤视为需要追踪的指针，而不只凭美感来评断。",
+  "h": "466d834a"
+ },
  "daycon.2-xem-truoc-chan-dung-con": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览孩子的肖像</span>",
   "h": "d8f50448"
@@ -6631,6 +6711,142 @@
   "t": "请再试一次。",
   "h": "2f1d18ee"
  },
+ "js.dali.buoi-sang": {
+  "t": "早晨",
+  "h": "d95d88da"
+ },
+ "js.dali.buoi-toi": {
+  "t": "夜晚",
+  "h": "adcf496a"
+ },
+ "js.dali.chip-dong-y": {
+  "t": "中医上该如何改善？",
+  "h": "e84646cb"
+ },
+ "js.dali.chip-san-pham": {
+  "t": "应该先使用哪项产品？",
+  "h": "c4d20f9a"
+ },
+ "js.dali.chip-vi-sao": {
+  "t": "为什么我的皮肤属于这种类型？",
+  "h": "92ad930f"
+ },
+ "js.dali.da-dau": {
+  "t": "油性肌肤",
+  "h": "2e16ebef"
+ },
+ "js.dali.da-hon-hop": {
+  "t": "混合性肌肤",
+  "h": "68410286"
+ },
+ "js.dali.da-kho": {
+  "t": "干性肌肤",
+  "h": "6dcefb2d"
+ },
+ "js.dali.da-nhay-cam": {
+  "t": "敏感性肌肤",
+  "h": "336f6fce"
+ },
+ "js.dali.da-thuong": {
+  "t": "一般肤质",
+  "h": "830c17ab"
+ },
+ "js.dali.greeting": {
+  "t": "皮肤分析结果：**{d}**{m}。想多问中医、饮食还是保养品？",
+  "h": "edab53d9"
+ },
+ "js.dali.hanh-n": {
+  "t": "{h}行",
+  "h": "3e50daab"
+ },
+ "js.dali.ing-nen-dung": {
+  "t": "建议使用的成分",
+  "h": "35fd5e5b"
+ },
+ "js.dali.ing-nen-tranh": {
+  "t": "建议避开的成分",
+  "h": "c6f4ec17"
+ },
+ "js.dali.label": {
+  "t": "皮肤——{d}",
+  "h": "8fcf6fa4"
+ },
+ "js.dali.lbl-anh-huong-menh": {
+  "t": "本命的影响",
+  "h": "28408328"
+ },
+ "js.dali.lbl-can-bang": {
+  "t": "阴阳平衡",
+  "h": "716d7b88"
+ },
+ "js.dali.lbl-ly-giai": {
+  "t": "中医解读",
+  "h": "58af6bfb"
+ },
+ "js.dali.lbl-tang-phu": {
+  "t": "相关脏腑",
+  "h": "288ab910"
+ },
+ "js.dali.loi-e": {
+  "t": "错误：{e}",
+  "h": "a7267203"
+ },
+ "js.dali.loi-phan-tich": {
+  "t": "分析错误",
+  "h": "3e06a99e"
+ },
+ "js.dali.menh-n": {
+  "t": "本命 {h}",
+  "h": "e46cbb3b"
+ },
+ "js.dali.nen-an": {
+  "t": "适合吃",
+  "h": "b29db199"
+ },
+ "js.dali.nen-tranh": {
+  "t": "建议避开",
+  "h": "41d7ed06"
+ },
+ "js.dali.nuoc-uong": {
+  "t": "饮品与药草茶",
+  "h": "706a3d71"
+ },
+ "js.dali.share-loai-da": {
+  "t": "肤质：{d}{m}",
+  "h": "928754ce"
+ },
+ "js.dali.share-title": {
+  "t": "我的皮肤分析结果",
+  "h": "7e7757f7"
+ },
+ "js.dali.step-dong-y": {
+  "t": "中医：解读脏腑与本命",
+  "h": "8122b336"
+ },
+ "js.dali.step-my-pham": {
+  "t": "建议保养品与保养流程",
+  "h": "0014c3fb"
+ },
+ "js.dali.step-tay-y": {
+  "t": "西医：辨识肤质与状态",
+  "h": "c11ccb03"
+ },
+ "js.dali.step-thuc-duong": {
+  "t": "拟定食疗饮食计划",
+  "h": "99292ce2"
+ },
+ "js.dali.tang-phu-lien-quan": {
+  "t": "相关脏腑、依本命的皮肤倾向，以及从图片进行的皮肤分析（肤质、状态、程度），收录于深度分析中。",
+  "h": "d1caef52"
+ },
+ "js.dali.thuc-duong-theo-menh": {
+  "t": "依本命的食疗",
+  "h": "7187b22e"
+ },
+ "js.dali.vui-long-thu-lai": {
+  "t": "请再试一次。",
+  "h": "2f1d18ee"
+ },
  "js.daycon.5-la-muc-giua-cua-hang": {
   "t": "\n\n5 是数千份孩童命盘的中间水准，并不是「10 分得 5 分」。轴的两端都各有价值。",
   "h": "99fb1a17"
@@ -8611,6 +8827,282 @@
   "t": "请选择图片档（JPG 或 PNG）。",
   "h": "ad4caa5b"
  },
+ "js.kieut.anh-qua-lon": {
+  "t": "图片过大（最大 5MB）。请选择其他图片。",
+  "h": "84a5fa2b"
+ },
+ "js.kieut.chip-kinh": {
+  "t": "哪种眼镜适合我的脸型？",
+  "h": "e2a2a092"
+ },
+ "js.kieut.chip-tranh": {
+  "t": "应避开哪种发型？",
+  "h": "71021350"
+ },
+ "js.kieut.chip-vi-sao": {
+  "t": "为什么这种发型适合我的脸？",
+  "h": "e507a96f"
+ },
+ "js.kieut.do-truc-tiep": {
+  "t": "以 MediaPipe 直接从图片测得。依您的脸型排序的发型与眼镜清单，收录于深度分析中。",
+  "h": "45879030"
+ },
+ "js.kieut.gl-aviator-sub": {
+  "t": "经典水滴形——男女皆宜，强势且自信",
+  "h": "c07019a3"
+ },
+ "js.kieut.gl-browline-name": {
+  "t": "半框眉线镜框",
+  "h": "f7013797"
+ },
+ "js.kieut.gl-browline-sub": {
+  "t": "上半部粗框——知性而端正",
+  "h": "076a871f"
+ },
+ "js.kieut.gl-cat_eye-sub": {
+  "t": "尾端上扬——女性化、迷人（较适合女性）",
+  "h": "49a590df"
+ },
+ "js.kieut.gl-oval-name": {
+  "t": "椭圆镜框",
+  "h": "30d636c4"
+ },
+ "js.kieut.gl-oval-sub": {
+  "t": "柔和精致——与各种脸型都协调",
+  "h": "851997e8"
+ },
+ "js.kieut.gl-rectangle-name": {
+  "t": "长方形镜框",
+  "h": "a0b6dd72"
+ },
+ "js.kieut.gl-rectangle-sub": {
+  "t": "纤细现代的镜框——适合大多数脸型",
+  "h": "0d7fb906"
+ },
+ "js.kieut.gl-round-name": {
+  "t": "复古圆框",
+  "h": "3fddc6b6"
+ },
+ "js.kieut.gl-round-sub": {
+  "t": "韩系／复古风——柔化方形脸",
+  "h": "801e4e9b"
+ },
+ "js.kieut.greeting": {
+  "t": "您的脸型属于 **{s}**。想进一步了解适合您面相的发型或眼镜吗？",
+  "h": "05992171"
+ },
+ "js.kieut.hinh-dai": {
+  "t": "长脸",
+  "h": "67167578"
+ },
+ "js.kieut.hinh-oval": {
+  "t": "鹅蛋脸",
+  "h": "181b45bd"
+ },
+ "js.kieut.hinh-tron-vuong": {
+  "t": "圆脸／方脸",
+  "h": "a30fca34"
+ },
+ "js.kieut.khong-nhan-duoc-anh": {
+  "t": "未收到结果图片。",
+  "h": "a16f02df"
+ },
+ "js.kieut.khong-the-mo-camera": {
+  "t": "无法打开相机，请改为上传图片。",
+  "h": "4f7396b7"
+ },
+ "js.kieut.kieu-toc-label": {
+  "t": "发型——{s}",
+  "h": "c1e88a18"
+ },
+ "js.kieut.loi-phan-tich": {
+  "t": "分析错误：{e}",
+  "h": "1d8ed1a8"
+ },
+ "js.kieut.loi-s": {
+  "t": "错误 {s}",
+  "h": "c406c72b"
+ },
+ "js.kieut.loi-tao-anh": {
+  "t": "图片生成错误：{e}",
+  "h": "091a4baf"
+ },
+ "js.kieut.share-shape": {
+  "t": "脸型：{s}",
+  "h": "e52e2cf1"
+ },
+ "js.kieut.share-title": {
+  "t": "适合我面相的发型",
+  "h": "d1806e98"
+ },
+ "js.kieut.share-tryon-text": {
+  "t": "试发型：{n}",
+  "h": "0d923cba"
+ },
+ "js.kieut.share-tryon-title": {
+  "t": "我的新发型（虚拟试戴）",
+  "h": "5887ab87"
+ },
+ "js.kieut.st-aline_bob-sub": {
+  "t": "斜切鲍伯头——后短前长，俐落现代",
+  "h": "9eb34b60"
+ },
+ "js.kieut.st-blunt_fringe-sub": {
+  "t": "齐额平浏海＋长发——轮廓分明、有个性",
+  "h": "18f3e1fe"
+ },
+ "js.kieut.st-bob-name": {
+  "t": "短鲍伯头",
+  "h": "c19d992e"
+ },
+ "js.kieut.st-bob-sub": {
+  "t": "齐下巴的俐落鲍伯——稳重干净",
+  "h": "532a2aad"
+ },
+ "js.kieut.st-butterfly-sub": {
+  "t": "修饰脸部的层次、蓬松量感——2025 年 TikTok 热门",
+  "h": "6460949f"
+ },
+ "js.kieut.st-buzz-sub": {
+  "t": "均匀剪短——凸显脸部轮廓",
+  "h": "3b06ae07"
+ },
+ "js.kieut.st-curtain-sub": {
+  "t": "中分帘式浏海，自然随性",
+  "h": "ca32d507"
+ },
+ "js.kieut.st-curtain_nu-sub": {
+  "t": "柔软帘式浏海、中分——浪漫女性化",
+  "h": "d0dece43"
+ },
+ "js.kieut.st-cushion_perm-sub": {
+  "t": "韩式柔软波浪烫——自然微蓬，2026 年热门",
+  "h": "bdca143d"
+ },
+ "js.kieut.st-glass_hair-sub": {
+  "t": "超亮泽直发——韩系潮流顶峰",
+  "h": "db26a044"
+ },
+ "js.kieut.st-hime-sub": {
+  "t": "齐浏海＋层次的日式公主风——正在爆红",
+  "h": "af1c27e2"
+ },
+ "js.kieut.st-jellyfish-sub": {
+  "t": "上层短、下层长——Z 世代、个性前卫",
+  "h": "f2002985"
+ },
+ "js.kieut.st-korean_perm-sub": {
+  "t": "浪漫韩式波浪烫——2025 年亚洲第一潮流",
+  "h": "22d3d20d"
+ },
+ "js.kieut.st-layered_curl-sub": {
+  "t": "柔和分层卷发——年轻有活力、显嫩",
+  "h": "49a65a0e"
+ },
+ "js.kieut.st-lob-sub": {
+  "t": "及肩长鲍伯——精致百搭",
+  "h": "e2b1a249"
+ },
+ "js.kieut.st-long_layers-sub": {
+  "t": "柔软自然的长层次——女性化且优雅",
+  "h": "500da152"
+ },
+ "js.kieut.st-money_piece-sub": {
+  "t": "脸部两侧挑染——时髦又省事",
+  "h": "c4d6fd9f"
+ },
+ "js.kieut.st-perm_wave-sub": {
+  "t": "自然韩式波浪烫——好整理、现代",
+  "h": "30da2ec0"
+ },
+ "js.kieut.st-pixie-sub": {
+  "t": "大胆的极短发——个性自信",
+  "h": "f42299de"
+ },
+ "js.kieut.st-pompadour-sub": {
+  "t": "前额发高高梳起——复古×现代",
+  "h": "25e80198"
+ },
+ "js.kieut.st-pompadour_nu-name": {
+  "t": "女款庞巴度",
+  "h": "9d31fa58"
+ },
+ "js.kieut.st-pompadour_nu-sub": {
+  "t": "前侧柔软蓬起——优雅高贵",
+  "h": "336c3d80"
+ },
+ "js.kieut.st-shag-sub": {
+  "t": "粗犷层次＋帘式浏海——复古×现代",
+  "h": "60b2f94f"
+ },
+ "js.kieut.st-side_part-sub": {
+  "t": "旁分、梳得平整——专业端正",
+  "h": "cb1f2ff5"
+ },
+ "js.kieut.st-side_waves-sub": {
+  "t": "旁分＋柔软波浪——高贵又性感",
+  "h": "5d4fd178"
+ },
+ "js.kieut.st-slick_back-sub": {
+  "t": "向后梳得油亮——强势高贵",
+  "h": "405b36d5"
+ },
+ "js.kieut.st-textured-sub": {
+  "t": "短而有层次质感的个性派——好造型",
+  "h": "4ca046ff"
+ },
+ "js.kieut.st-textured_wavy-sub": {
+  "t": "有质感的自然波浪——随性又时髦",
+  "h": "c565798c"
+ },
+ "js.kieut.st-two_block-sub": {
+  "t": "韩系风格——两侧剃短，顶部保留自然长度",
+  "h": "b7230e49"
+ },
+ "js.kieut.st-undercut-sub": {
+  "t": "两侧渐层剃短、顶部留长——经典现代",
+  "h": "b16e15c9"
+ },
+ "js.kieut.st-wispy-sub": {
+  "t": "轻柔空气浏海——年轻轻盈",
+  "h": "6c6c0591"
+ },
+ "js.kieut.st-wolf-sub": {
+  "t": "分层的轻盈层次——Z 世代个性",
+  "h": "1444c559"
+ },
+ "js.kieut.step-chuan-bi": {
+  "t": "准备图片与提示词",
+  "h": "02fe352b"
+ },
+ "js.kieut.step-do-mat": {
+  "t": "以 MediaPipe 测量脸部",
+  "h": "4af85689"
+ },
+ "js.kieut.step-phan-tich": {
+  "t": "分析脸型",
+  "h": "5059a835"
+ },
+ "js.kieut.step-tao-anh": {
+  "t": "正在生成新发型图片",
+  "h": "80940ba2"
+ },
+ "js.kieut.thu": {
+  "t": "试试 →",
+  "h": "c1480a0a"
+ },
+ "js.kieut.thu-n": {
+  "t": "试戴：{n}",
+  "h": "a246266d"
+ },
+ "js.kieut.ty-le-rong-cao": {
+  "t": "脸部宽／高比例：{r}——倾向：{s}",
+  "h": "2094599e"
+ },
+ "js.kieut.vui-long-thu-lai": {
+  "t": "请再试一次。",
+  "h": "2f1d18ee"
+ },
  "js.kimlau.chip1": {
   "t": "哪一年最适合盖房？",
   "h": "992ff775"
@@ -9286,6 +9778,334 @@
  "js.maihoa.tuc": {
   "t": "），即 **",
   "h": "52e6128d"
+ },
+ "js.mshm.anh-qua-lon": {
+  "t": "图片过大（最大 5MB）",
+  "h": "5113c5f3"
+ },
+ "js.mshm.bang-du": {
+  "t": "完整清单（辅助色、建议避开的颜色）与依场合／角色的穿搭指引，收录于深度分析中。",
+  "h": "06901dd7"
+ },
+ "js.mshm.cat-ao": {
+  "t": "上衣／外套",
+  "h": "84c67299"
+ },
+ "js.mshm.cat-ao-khoac": {
+  "t": "外层外套",
+  "h": "7878fdb1"
+ },
+ "js.mshm.cat-giay": {
+  "t": "鞋子／凉鞋",
+  "h": "d1f9572f"
+ },
+ "js.mshm.cat-phu-kien": {
+  "t": "配件",
+  "h": "f1f0fba9"
+ },
+ "js.mshm.cat-quan": {
+  "t": "裤子／裙子",
+  "h": "84562745"
+ },
+ "js.mshm.cat-tui": {
+  "t": "包包／后背包",
+  "h": "1979c758"
+ },
+ "js.mshm.chip-phoi-do": {
+  "t": "如何依命格色彩搭配服装？",
+  "h": "3d2ef763"
+ },
+ "js.mshm.chip-phong-van": {
+  "t": "面试时该避开什么颜色？",
+  "h": "61460b1c"
+ },
+ "js.mshm.chip-vi-sao": {
+  "t": "为什么我的命格适合这个颜色？",
+  "h": "7ef6e8bc"
+ },
+ "js.mshm.combo-n": {
+  "t": "搭配 {n}",
+  "h": "9769d38a"
+ },
+ "js.mshm.dau-phay": {
+  "t": "，",
+  "h": "d3bc9a37"
+ },
+ "js.mshm.greeting": {
+  "t": "您的本命是 **{h}**。主色：{m}。想进一步了解色彩或穿搭吗？",
+  "h": "e8cef7c1"
+ },
+ "js.mshm.khong-nhan-duoc-anh": {
+  "t": "未收到结果图片。",
+  "h": "a16f02df"
+ },
+ "js.mshm.label": {
+  "t": "合命色彩——本命 {h}",
+  "h": "71fc87a5"
+ },
+ "js.mshm.loi-e": {
+  "t": "错误：{e}",
+  "h": "a7267203"
+ },
+ "js.mshm.mau-bac": {
+  "t": "银色",
+  "h": "7386c9c6"
+ },
+ "js.mshm.mau-be": {
+  "t": "米色",
+  "h": "11d1bf27"
+ },
+ "js.mshm.mau-be-dam": {
+  "t": "深米色",
+  "h": "c660f0a6"
+ },
+ "js.mshm.mau-cam": {
+  "t": "橙色",
+  "h": "5e09769d"
+ },
+ "js.mshm.mau-cam-dat": {
+  "t": "陶土橙",
+  "h": "aaa37477"
+ },
+ "js.mshm.mau-chu": {
+  "t": "主色：{m}",
+  "h": "7813be48"
+ },
+ "js.mshm.mau-den": {
+  "t": "黑色",
+  "h": "4d0c0faf"
+ },
+ "js.mshm.mau-do": {
+  "t": "红色",
+  "h": "2eb7503e"
+ },
+ "js.mshm.mau-hong-phan": {
+  "t": "淡粉色",
+  "h": "0ec650f1"
+ },
+ "js.mshm.mau-hong-tuoi": {
+  "t": "亮粉红",
+  "h": "74592632"
+ },
+ "js.mshm.mau-kem": {
+  "t": "奶油色",
+  "h": "e52e6c26"
+ },
+ "js.mshm.mau-kem-dam": {
+  "t": "深奶油色",
+  "h": "e42e248c"
+ },
+ "js.mshm.mau-nau-am": {
+  "t": "暖棕色",
+  "h": "e0f4fd1e"
+ },
+ "js.mshm.mau-nau-do": {
+  "t": "红棕色",
+  "h": "9222313d"
+ },
+ "js.mshm.mau-nau-go": {
+  "t": "木棕色",
+  "h": "24e064f8"
+ },
+ "js.mshm.mau-nau-vang": {
+  "t": "金棕色",
+  "h": "48377d46"
+ },
+ "js.mshm.mau-navy": {
+  "t": "海军蓝",
+  "h": "0229e960"
+ },
+ "js.mshm.mau-tim": {
+  "t": "紫色",
+  "h": "684e5966"
+ },
+ "js.mshm.mau-tim-do": {
+  "t": "紫红色",
+  "h": "0b78db8f"
+ },
+ "js.mshm.mau-tim-than": {
+  "t": "靛紫色",
+  "h": "7ca4120f"
+ },
+ "js.mshm.mau-trang": {
+  "t": "白色",
+  "h": "9cf5e0eb"
+ },
+ "js.mshm.mau-vang-dat": {
+  "t": "土黄色",
+  "h": "1552080b"
+ },
+ "js.mshm.mau-vang-kim": {
+  "t": "金色",
+  "h": "b441fe1f"
+ },
+ "js.mshm.mau-vang-nhat": {
+  "t": "浅黄色",
+  "h": "14fd960f"
+ },
+ "js.mshm.mau-vang-tuoi": {
+  "t": "亮黄色",
+  "h": "f58c4a57"
+ },
+ "js.mshm.mau-xam-dam": {
+  "t": "深灰色",
+  "h": "01959534"
+ },
+ "js.mshm.mau-xam-kim-loai": {
+  "t": "金属灰",
+  "h": "6e7d3e23"
+ },
+ "js.mshm.mau-xam-nhat": {
+  "t": "浅灰色",
+  "h": "d8017939"
+ },
+ "js.mshm.mau-xanh-bien": {
+  "t": "海洋蓝",
+  "h": "9a3a3414"
+ },
+ "js.mshm.mau-xanh-duong-dam": {
+  "t": "深蓝色",
+  "h": "8d89093c"
+ },
+ "js.mshm.mau-xanh-la": {
+  "t": "绿色",
+  "h": "d0e8c4b1"
+ },
+ "js.mshm.mau-xanh-lam-nhat": {
+  "t": "浅蓝色",
+  "h": "a72ef9cf"
+ },
+ "js.mshm.mau-xanh-mint": {
+  "t": "薄荷绿",
+  "h": "3607442e"
+ },
+ "js.mshm.mau-xanh-ngoc": {
+  "t": "青绿色",
+  "h": "b8cbaa2e"
+ },
+ "js.mshm.mau-xanh-olive": {
+  "t": "橄榄绿",
+  "h": "2dd139ab"
+ },
+ "js.mshm.mau-xanh-reu": {
+  "t": "苔绿色",
+  "h": "836bccc5"
+ },
+ "js.mshm.mau-xanh-reu-dam": {
+  "t": "深苔绿色",
+  "h": "b49975fe"
+ },
+ "js.mshm.mau-xanh-tim": {
+  "t": "蓝紫色",
+  "h": "08e76f57"
+ },
+ "js.mshm.menh-mau-chinh": {
+  "t": "本命 {h}——适合穿的主色：{m}",
+  "h": "9a1a497e"
+ },
+ "js.mshm.menh-quai": {
+  "t": "本命 {h} · 卦 {n} {g}",
+  "h": "da1abf25"
+ },
+ "js.mshm.nam-sinh-khong-hop-le": {
+  "t": "请输入有效的出生年（1900–2025）",
+  "h": "c628d3be"
+ },
+ "js.mshm.nap-am-line": {
+  "t": "纳音：{h} · 依{h}行的主色",
+  "h": "6e1df23d"
+ },
+ "js.mshm.occ-doi-tac": {
+  "t": "会见合作伙伴",
+  "h": "241559f4"
+ },
+ "js.mshm.occ-hang-ngay": {
+  "t": "日常",
+  "h": "c19adb2a"
+ },
+ "js.mshm.occ-hen-ho": {
+  "t": "约会",
+  "h": "c601615d"
+ },
+ "js.mshm.occ-phong-van": {
+  "t": "面试",
+  "h": "0bfbac35"
+ },
+ "js.mshm.phan-tich-that-bai": {
+  "t": "分析失败",
+  "h": "44b68aa6"
+ },
+ "js.mshm.phan-tich-truoc": {
+  "t": "请先分析色彩。",
+  "h": "10049eff"
+ },
+ "js.mshm.phoi-mau-dua-tren": {
+  "t": "配色依据上方合适的调色盘。",
+  "h": "c4d3c4d3"
+ },
+ "js.mshm.quai-line": {
+  "t": "卦 {n}——{name}（{elem}）",
+  "h": "c5a1c901"
+ },
+ "js.mshm.share-text": {
+  "t": "本命 {h} · 主色：{m}",
+  "h": "d05a5128"
+ },
+ "js.mshm.share-title": {
+  "t": "适合我本命的色彩",
+  "h": "2ba34c9a"
+ },
+ "js.mshm.share-tryon-title": {
+  "t": "适合我本命的穿搭（虚拟试穿）",
+  "h": "cd9fdc43"
+ },
+ "js.mshm.step-chuan-bi": {
+  "t": "依本命准备服装",
+  "h": "6ae0380a"
+ },
+ "js.mshm.step-tao-anh": {
+  "t": "正在生成服装图片",
+  "h": "ba6faaec"
+ },
+ "js.mshm.step-tinh-quai": {
+  "t": "计算卦数与本命纳音",
+  "h": "39571eee"
+ },
+ "js.mshm.step-tu-van": {
+  "t": "建议色彩与穿搭",
+  "h": "58244246"
+ },
+ "js.mshm.style-cong-so": {
+  "t": "职场",
+  "h": "ff273e47"
+ },
+ "js.mshm.style-dao-pho": {
+  "t": "逛街",
+  "h": "115c50ac"
+ },
+ "js.mshm.style-sang-trong": {
+  "t": "高雅",
+  "h": "17db9fb4"
+ },
+ "js.mshm.tai-anh-truoc": {
+  "t": "请先上传图片。",
+  "h": "733c1fec"
+ },
+ "js.mshm.tranh": {
+  "t": "避开：",
+  "h": "89f38636"
+ },
+ "js.mshm.tryon-label": {
+  "t": "{s} · 本命 {h}",
+  "h": "e69e839c"
+ },
+ "js.mshm.vui-long-thu-lai": {
+  "t": "请再试一次。",
+  "h": "2f1d18ee"
+ },
+ "js.mshm.xem-mau-chinh": {
+  "t": "请参考上方的主色。",
+  "h": "95e8229c"
  },
  "js.nav.brand": {
   "t": "明宝紫微斗数",
@@ -12202,6 +13022,194 @@
  "js.paywall.xin-loi-da-co-loi-xay": {
   "t": "抱歉，发生了错误",
   "h": "4195c600"
+ },
+ "js.pcol.ban-menh": {
+  "t": "✦ 本命 {h}（{f}）——古法建议的季型：{s}",
+  "h": "cadb88ef"
+ },
+ "js.pcol.chip-phoi-do": {
+  "t": "该如何依色彩季型搭配服装？",
+  "h": "3a3ed4e0"
+ },
+ "js.pcol.chip-tranh": {
+  "t": "应避开哪些颜色？",
+  "h": "19ab5099"
+ },
+ "js.pcol.chip-vi-sao": {
+  "t": "为什么我属于这个色彩季型？",
+  "h": "fd530a4e"
+ },
+ "js.pcol.conf-cao": {
+  "t": "高",
+  "h": "db10c479"
+ },
+ "js.pcol.conf-thap": {
+  "t": "低",
+  "h": "ecd6f14a"
+ },
+ "js.pcol.conf-trung-binh": {
+  "t": "中",
+  "h": "9d324d94"
+ },
+ "js.pcol.day-la-goi-y": {
+  "t": "这是依纳音得出的建议，并非从图片读取真实肤色的结果——准确的季型、色彩调色盘与服装建议，收录于深度分析中。",
+  "h": "25abe372"
+ },
+ "js.pcol.desc-autumn-deep": {
+  "t": "深沉大地色调、丰厚——暖褐肤色、高对比",
+  "h": "90f10d0f"
+ },
+ "js.pcol.desc-autumn-warm": {
+  "t": "黄褐大地色调、深暖——橄榄色／小麦肤色",
+  "h": "9b6a0f54"
+ },
+ "js.pcol.desc-spring-bright": {
+  "t": "明亮清晰的色调、高对比、鲜艳醒目的色彩",
+  "h": "20f039c2"
+ },
+ "js.pcol.desc-spring-warm": {
+  "t": "偏黄的暖亮肤色，明亮清新——蜜桃／金色光泽",
+  "h": "468acee7"
+ },
+ "js.pcol.desc-summer-cool": {
+  "t": "偏冷的粉色调，柔和——带蓝调的粉嫩肤色",
+  "h": "1ed00edd"
+ },
+ "js.pcol.desc-summer-soft": {
+  "t": "冷调偏雾、柔和——带灰的柔和色彩",
+  "h": "5b194cf9"
+ },
+ "js.pcol.desc-winter-cool": {
+  "t": "高对比冷色调——青白肤色或偏暗的冷肤色",
+  "h": "91dd2746"
+ },
+ "js.pcol.desc-winter-deep": {
+  "t": "深冷色调、对比极高——褐色／偏暗的冷肤色",
+  "h": "ca5cbf23"
+ },
+ "js.pcol.do-tin-cay": {
+  "t": "可信度：{c}",
+  "h": "d9faf072"
+ },
+ "js.pcol.greeting": {
+  "t": "您属于 **{s}** 季型，底色为 {u}。想进一步了解色彩或穿搭吗？",
+  "h": "72b706d2"
+ },
+ "js.pcol.lbl-ao": {
+  "t": "上衣",
+  "h": "373c84b7"
+ },
+ "js.pcol.lbl-giay": {
+  "t": "鞋子",
+  "h": "a47dc437"
+ },
+ "js.pcol.lbl-layer": {
+  "t": "外层",
+  "h": "c3f10446"
+ },
+ "js.pcol.lbl-quan-vay": {
+  "t": "裤子／裙子",
+  "h": "879b0cdf"
+ },
+ "js.pcol.loi": {
+  "t": "错误",
+  "h": "d2907807"
+ },
+ "js.pcol.loi-e": {
+  "t": "错误：{e}",
+  "h": "a7267203"
+ },
+ "js.pcol.loi-phan-tich": {
+  "t": "分析错误",
+  "h": "3e06a99e"
+ },
+ "js.pcol.menh-goi-y": {
+  "t": "本命 {h}——古法建议的季型：{s}",
+  "h": "a8bdf4cb"
+ },
+ "js.pcol.nen-tranh": {
+  "t": "建议避开",
+  "h": "4fd3dd20"
+ },
+ "js.pcol.season-autumn-deep": {
+  "t": "深秋型",
+  "h": "576a8bf3"
+ },
+ "js.pcol.season-autumn-warm": {
+  "t": "暖秋型",
+  "h": "1034d9af"
+ },
+ "js.pcol.season-spring-bright": {
+  "t": "亮春型",
+  "h": "eedcebfe"
+ },
+ "js.pcol.season-spring-warm": {
+  "t": "暖春型",
+  "h": "1c006148"
+ },
+ "js.pcol.season-summer-cool": {
+  "t": "冷夏型",
+  "h": "ee7b3719"
+ },
+ "js.pcol.season-summer-soft": {
+  "t": "柔夏型",
+  "h": "3545a106"
+ },
+ "js.pcol.season-winter-cool": {
+  "t": "冷冬型",
+  "h": "bde54243"
+ },
+ "js.pcol.season-winter-deep": {
+  "t": "深冬型",
+  "h": "0f222647"
+ },
+ "js.pcol.share-outfit-text": {
+  "t": "季型 {s}",
+  "h": "f1a309aa"
+ },
+ "js.pcol.share-outfit-title": {
+  "t": "符合我个人色彩的穿搭",
+  "h": "26cbac11"
+ },
+ "js.pcol.share-text": {
+  "t": "季型：{n}（{s}）· 底色：{u}",
+  "h": "d299d1fa"
+ },
+ "js.pcol.share-title": {
+  "t": "我的个人色彩",
+  "h": "07a149e4"
+ },
+ "js.pcol.step-chuan-bi": {
+  "t": "依季型准备穿搭",
+  "h": "23134132"
+ },
+ "js.pcol.step-phan-tich": {
+  "t": "分析肤色与色彩季型",
+  "h": "d712f3c3"
+ },
+ "js.pcol.step-tao-anh": {
+  "t": "正在生成新穿搭图片",
+  "h": "f192809a"
+ },
+ "js.pcol.step-tinh-menh": {
+  "t": "依出生年计算本命",
+  "h": "6c35f608"
+ },
+ "js.pcol.undertone-cool": {
+  "t": "冷调（Cool）",
+  "h": "83997975"
+ },
+ "js.pcol.undertone-neutral": {
+  "t": "中性（Neutral）",
+  "h": "26af9b58"
+ },
+ "js.pcol.undertone-warm": {
+  "t": "暖调（Warm）",
+  "h": "8e0429c4"
+ },
+ "js.pcol.vui-long-thu-lai": {
+  "t": "请再试一次。",
+  "h": "2f1d18ee"
  },
  "js.phongthuy.100-sau-dieu-chinh-co-the": {
   "t": "/100**，调整后可提升至 **",
@@ -20727,6 +21735,402 @@
   "t": "查看纪录",
   "h": "21a19fb0"
  },
+ "js.tpng.cat-ao": {
+  "t": "上衣",
+  "h": "373c84b7"
+ },
+ "js.tpng.cat-ao-khoac": {
+  "t": "外套",
+  "h": "dee0e8de"
+ },
+ "js.tpng.cat-giay": {
+  "t": "鞋子",
+  "h": "a47dc437"
+ },
+ "js.tpng.cat-phu-kien": {
+  "t": "配件",
+  "h": "f1f0fba9"
+ },
+ "js.tpng.cat-quan": {
+  "t": "裤子／裙子",
+  "h": "879b0cdf"
+ },
+ "js.tpng.chip-diem-nhan": {
+  "t": "哪个点缀色最好？",
+  "h": "6d38e6a5"
+ },
+ "js.tpng.chip-hoa-giai": {
+  "t": "该如何化解？",
+  "h": "1dee5079"
+ },
+ "js.tpng.chip-khac": {
+  "t": "为什么这一天克我的命格？",
+  "h": "a98c2e50"
+ },
+ "js.tpng.greeting": {
+  "t": "本命 **{m}**，当日五行 **{n}** —— {r}。想进一步了解色彩或风格吗？",
+  "h": "36a537dc"
+ },
+ "js.tpng.hanh-n": {
+  "t": "{h}行",
+  "h": "3e50daab"
+ },
+ "js.tpng.label": {
+  "t": "每日穿搭——{r}",
+  "h": "26ec2299"
+ },
+ "js.tpng.loi": {
+  "t": "错误",
+  "h": "d2907807"
+ },
+ "js.tpng.loi-e": {
+  "t": "错误：{e}",
+  "h": "a7267203"
+ },
+ "js.tpng.loi-phan-tich": {
+  "t": "分析错误",
+  "h": "3e06a99e"
+ },
+ "js.tpng.mau-bac": {
+  "t": "银色",
+  "h": "7386c9c6"
+ },
+ "js.tpng.mau-be": {
+  "t": "米色",
+  "h": "11d1bf27"
+ },
+ "js.tpng.mau-cam": {
+  "t": "橙色",
+  "h": "5e09769d"
+ },
+ "js.tpng.mau-cam-dat": {
+  "t": "陶土橙",
+  "h": "aaa37477"
+ },
+ "js.tpng.mau-den": {
+  "t": "黑色",
+  "h": "4d0c0faf"
+ },
+ "js.tpng.mau-do": {
+  "t": "红色",
+  "h": "2eb7503e"
+ },
+ "js.tpng.mau-hong": {
+  "t": "粉红色",
+  "h": "5a43ba9e"
+ },
+ "js.tpng.mau-hong-phan": {
+  "t": "淡粉色",
+  "h": "0ec650f1"
+ },
+ "js.tpng.mau-kem": {
+  "t": "奶油色",
+  "h": "e52e6c26"
+ },
+ "js.tpng.mau-nau": {
+  "t": "棕色",
+  "h": "42ff42d9"
+ },
+ "js.tpng.mau-nau-go": {
+  "t": "木棕色",
+  "h": "24e064f8"
+ },
+ "js.tpng.mau-navy": {
+  "t": "海军蓝",
+  "h": "0229e960"
+ },
+ "js.tpng.mau-nen-mac": {
+  "t": "{r}。适合穿的颜色、建议风格，以及依当日五行的具体穿搭，收录于深度分析中。",
+  "h": "51d59e76"
+ },
+ "js.tpng.mau-tim": {
+  "t": "紫色",
+  "h": "684e5966"
+ },
+ "js.tpng.mau-tim-do": {
+  "t": "紫红色",
+  "h": "0b78db8f"
+ },
+ "js.tpng.mau-trang": {
+  "t": "白色",
+  "h": "9cf5e0eb"
+ },
+ "js.tpng.mau-vang": {
+  "t": "黄色",
+  "h": "27d57aed"
+ },
+ "js.tpng.mau-vang-kim": {
+  "t": "金色",
+  "h": "b441fe1f"
+ },
+ "js.tpng.mau-xam-dam": {
+  "t": "深灰色",
+  "h": "01959534"
+ },
+ "js.tpng.mau-xam-nhat": {
+  "t": "浅灰色",
+  "h": "d8017939"
+ },
+ "js.tpng.mau-xanh-duong": {
+  "t": "蓝色",
+  "h": "95beb520"
+ },
+ "js.tpng.mau-xanh-la": {
+  "t": "绿色",
+  "h": "d0e8c4b1"
+ },
+ "js.tpng.mau-xanh-lam": {
+  "t": "天蓝色",
+  "h": "0537307a"
+ },
+ "js.tpng.mau-xanh-ngoc": {
+  "t": "青绿色",
+  "h": "b8cbaa2e"
+ },
+ "js.tpng.mau-xanh-reu": {
+  "t": "苔绿色",
+  "h": "836bccc5"
+ },
+ "js.tpng.menh-ngay": {
+  "t": "本命 {h} · {c}日",
+  "h": "ac19a8fe"
+ },
+ "js.tpng.ngay-hanh": {
+  "t": "{c}日——五行属{h}",
+  "h": "6fd10f47"
+ },
+ "js.tpng.rel-binh-hoa": {
+  "t": "同行日 — 平稳顺利",
+  "h": "d1971f40"
+ },
+ "js.tpng.rel-menh-khac-ngay": {
+  "t": "命克日 — 中等日子，需谨慎",
+  "h": "256fb5ff"
+ },
+ "js.tpng.rel-menh-sinh-ngay": {
+  "t": "命生日 — 略有耗损，仍然吉利",
+  "h": "995978d5"
+ },
+ "js.tpng.rel-ngay-khac-menh": {
+  "t": "日克命 ✦ 需以色彩化解",
+  "h": "f331fca5"
+ },
+ "js.tpng.rel-ngay-sinh-menh": {
+  "t": "日生命 ✦ 极为顺利",
+  "h": "81b455cf"
+ },
+ "js.tpng.share-text": {
+  "t": "本命 {m} · {c}日（{n}）—— {r}",
+  "h": "a603ba42"
+ },
+ "js.tpng.share-title": {
+  "t": "适合我今日的穿搭",
+  "h": "36dc7dba"
+ },
+ "js.tpng.share-tryon-title": {
+  "t": "适合我今日的穿搭（虚拟试穿）",
+  "h": "7767c7e3"
+ },
+ "js.tpng.step-chuan-bi": {
+  "t": "依五行准备服装",
+  "h": "cf955a11"
+ },
+ "js.tpng.step-tao-anh": {
+  "t": "正在生成服装图片",
+  "h": "ba6faaec"
+ },
+ "js.tpng.step-tinh": {
+  "t": "计算当日干支与五行关系",
+  "h": "7112616b"
+ },
+ "js.tpng.step-tu-van": {
+  "t": "建议适合当日的穿搭",
+  "h": "86c6bfcc"
+ },
+ "js.tpng.style-hoa-dan": {
+  "t": "柔美花旦风",
+  "h": "c859a2ac"
+ },
+ "js.tpng.tryon-casual": {
+  "t": "休闲",
+  "h": "7b664f70"
+ },
+ "js.tpng.tryon-cong-so": {
+  "t": "职场",
+  "h": "81a4c6c6"
+ },
+ "js.tpng.tryon-dao-pho": {
+  "t": "逛街",
+  "h": "c1f7f4a0"
+ },
+ "js.tpng.tryon-label": {
+  "t": "本命 {h} · {s}",
+  "h": "c91f44b2"
+ },
+ "js.tpng.tryon-sang-trong": {
+  "t": "高雅",
+  "h": "3c6421de"
+ },
+ "js.tpng.vui-long-thu-lai": {
+  "t": "请再试一次。",
+  "h": "2f1d18ee"
+ },
+ "js.trdi.chip-mau-son": {
+  "t": "哪种口红色号适合我的肤色？",
+  "h": "f013cf8c"
+ },
+ "js.trdi.chip-van-khi": {
+  "t": "化妆会如何影响运势？",
+  "h": "a175f487"
+ },
+ "js.trdi.chip-vi-sao": {
+  "t": "为什么这种风格适合我？",
+  "h": "7ed2d820"
+ },
+ "js.trdi.do-truc-tiep": {
+  "t": "以 MediaPipe 直接从图片测得。",
+  "h": "6bca61a6"
+ },
+ "js.trdi.goi-y-menh": {
+  "t": "妆容风格建议会优先选用适合此本命的色调。",
+  "h": "30df970d"
+ },
+ "js.trdi.greeting": {
+  "t": "您的脸型是 **{s}**。想进一步了解哪种妆容风格？",
+  "h": "b80d300f"
+ },
+ "js.trdi.greeting-menh": {
+  "t": "您的脸型是 **{s}**，本命为{h}。想进一步了解哪种妆容风格？",
+  "h": "3a4fb4b5"
+ },
+ "js.trdi.hinh-dai": {
+  "t": "长脸",
+  "h": "67167578"
+ },
+ "js.trdi.hinh-oval": {
+  "t": "鹅蛋脸",
+  "h": "181b45bd"
+ },
+ "js.trdi.hinh-tron-vuong": {
+  "t": "圆脸／方脸",
+  "h": "a30fca34"
+ },
+ "js.trdi.hop-menh": {
+  "t": "合本命",
+  "h": "44069c43"
+ },
+ "js.trdi.label": {
+  "t": "妆容——{s}",
+  "h": "f0eca080"
+ },
+ "js.trdi.loi-e": {
+  "t": "错误：{e}",
+  "h": "a7267203"
+ },
+ "js.trdi.loi-phan-tich": {
+  "t": "分析错误",
+  "h": "3e06a99e"
+ },
+ "js.trdi.loi-xu-ly-anh": {
+  "t": "图片处理错误",
+  "h": "52fb0d60"
+ },
+ "js.trdi.mat-tuoi-da": {
+  "t": "{s} · {a} · 肤色 {d}",
+  "h": "07bd0f9d"
+ },
+ "js.trdi.menh-n": {
+  "t": "本命 {h}",
+  "h": "e46cbb3b"
+ },
+ "js.trdi.rank-phu-hop": {
+  "t": "推荐 #{n}",
+  "h": "20cdc5b5"
+ },
+ "js.trdi.share-mat": {
+  "t": "脸型 {s}",
+  "h": "04abbf18"
+ },
+ "js.trdi.share-title": {
+  "t": "适合我面相的妆容建议",
+  "h": "c6d0e9a5"
+ },
+ "js.trdi.share-tryon-text": {
+  "t": "试风格：{n}",
+  "h": "4641d81c"
+ },
+ "js.trdi.share-tryon-title": {
+  "t": "我的妆容试戴（虚拟）",
+  "h": "a431ac26"
+ },
+ "js.trdi.st-dark_muse-sub": {
+  "t": "雾感烟熏、冷色调、编辑感个性",
+  "h": "e51b61c7"
+ },
+ "js.trdi.st-glass_skin-sub": {
+  "t": "裸妆感妆容，由内透亮的水光肌",
+  "h": "0c6ac518"
+ },
+ "js.trdi.st-guochao-sub": {
+  "t": "浓烈红唇、锐利眼线、古典气质",
+  "h": "2df3d2b1"
+ },
+ "js.trdi.st-hoa-dan-name": {
+  "t": "柔美花旦风",
+  "h": "c859a2ac"
+ },
+ "js.trdi.st-hoa_dan-sub": {
+  "t": "桃粉色、玫瑰腮红、轻柔婉约",
+  "h": "ee95019a"
+ },
+ "js.trdi.st-j_gyaru-sub": {
+  "t": "放大片感、戏剧感睫毛、鲜明眼线",
+  "h": "8342ee69"
+ },
+ "js.trdi.st-j_sheer-sub": {
+  "t": "透明肌、透明感唇色、侘寂式极简",
+  "h": "bef5b3e4"
+ },
+ "js.trdi.st-kdrama_glam-sub": {
+  "t": "清晰眼线、大胆唇色、顶级高雅",
+  "h": "f6378d7f"
+ },
+ "js.trdi.st-soft_girl-sub": {
+  "t": "腮红爆击、渐层唇、纯真光泽",
+  "h": "68ac4e8f"
+ },
+ "js.trdi.step-chuan-bi": {
+  "t": "准备妆容提示词",
+  "h": "f2303939"
+ },
+ "js.trdi.step-nap-am": {
+  "t": "计算本命纳音",
+  "h": "94bf98e8"
+ },
+ "js.trdi.step-phan-tich": {
+  "t": "分析脸部并建议妆容风格",
+  "h": "17ac9e7f"
+ },
+ "js.trdi.step-tao-anh": {
+  "t": "正在生成新妆容图片",
+  "h": "060bcb1f"
+ },
+ "js.trdi.tam-phong-cach": {
+  "t": "依序排名的 8 种妆容风格、色彩调色盘与直接试戴，收录于深度分析中。",
+  "h": "d0bfd7a6"
+ },
+ "js.trdi.thu": {
+  "t": "试试 →",
+  "h": "c1480a0a"
+ },
+ "js.trdi.ty-le-rong-cao": {
+  "t": "脸部宽／高比例：{r}——倾向：{s}",
+  "h": "2094599e"
+ },
+ "js.trdi.vui-long-thu-lai": {
+  "t": "请再试一次。",
+  "h": "2f1d18ee"
+ },
  "js.trochuyen.gio-truoc": {
   "t": "{n} 小时前",
   "h": "19a19d72"
@@ -21770,6 +23174,138 @@
  "khis.xem-khi-sac": {
   "t": "看气色",
   "h": "7863a81d"
+ },
+ "kieut.anh-sang-tu-nhien-deu": {
+  "t": "✓ 自然、均匀的光线",
+  "h": "7f81d51a"
+ },
+ "kieut.chon-gioi-tinh-va-tai-len": {
+  "t": "请选择性别并上传一张脸部清晰的图片。系统会分析脸型，并直接合成到图片上试戴。您会得到合适的发型、眼镜建议，以及试戴后的图片。",
+  "h": "5c22b94e"
+ },
+ "kieut.chup-anh-khuon-mat-he-thong": {
+  "t": "请拍摄脸部照片——系统会分析脸型，并依相学建议合适的发型。发型可直接在照片上试戴。",
+  "h": "fd003738"
+ },
+ "kieut.doi-anh-khac": {
+  "t": "✕ 更换图片",
+  "h": "d058264f"
+ },
+ "kieut.doi-mu-doi-khan-che-toc": {
+  "t": "✗ 戴帽子或围巾遮住头发",
+  "h": "a40d8fd8"
+ },
+ "kieut.hinh-dang-khuon-mat": {
+  "t": "脸型",
+  "h": "20dd1d13"
+ },
+ "kieut.huy": {
+  "t": "取消",
+  "h": "33639e92"
+ },
+ "kieut.ket-qua": {
+  "t": "结果",
+  "h": "c9f95514"
+ },
+ "kieut.kieu-kinh-phu-hop-theo-cau": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> 适合脸部结构的眼镜",
+  "h": "39d8292c"
+ },
+ "kieut.kieu-toc": {
+  "t": "<span class=\"ic\" data-icon=\"scissors\"></span> 发型",
+  "h": "7d47a3d3"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong": {
+  "t": "适合面相的发型与眼镜——明宝紫微斗数",
+  "h": "704b6aa7"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-v1r6": {
+  "t": "<b>适合面相的发型与眼镜</b><span>分析脸型、建议发型，并直接在照片上试戴</span>",
+  "h": "745fe887"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-x53w": {
+  "t": "适合面相的发型与眼镜",
+  "h": "a6dff7d5"
+ },
+ "kieut.kinh-mat": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> 眼镜",
+  "h": "508d6f59"
+ },
+ "kieut.loi-khuyen": {
+  "t": "<strong><span class=\"ic\" data-icon=\"message-circle\"></span> 建议：</strong><span id=\"tipText\"></span>",
+  "h": "25976b6b"
+ },
+ "kieut.nghieng-mat-nhieu": {
+  "t": "✗ 脸部明显倾斜",
+  "h": "9d537acf"
+ },
+ "kieut.nguoc-sang-toi": {
+  "t": "✗ 逆光、太暗",
+  "h": "97a94265"
+ },
+ "kieut.nhan-tuong-hoc-phuong-dong-khong": {
+  "t": "东方相学不只论命运，也依五行（金、木、水、火、土）区分脸型，每一行对应一种特有的轮廓。这套分类被用来建议与脸部协调的发型与妆容。",
+  "h": "bff2f554"
+ },
+ "kieut.nhin-thang-vao-camera-dam-bao": {
+  "t": "请直视镜头，确保光线充足，并让脸部占满大部分画面。",
+  "h": "d5f2b4f9"
+ },
+ "kieut.phan-tich-5s-thu-kieu-25s": {
+  "t": "分析约 5 秒 · 试戴约 25 秒",
+  "h": "d75a8d73"
+ },
+ "kieut.phan-tich-anh-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 分析其他图片",
+  "h": "727c28a0"
+ },
+ "kieut.phan-tich-khuon-mat-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 脸型分析与风格建议——<span data-tvp-price=\"kieu-toc-phan-tich\">…</span> 两",
+  "h": "7ce5c0fd"
+ },
+ "kieut.preview-anh": {
+  "t": "图片预览",
+  "h": "6bc7c7e2"
+ },
+ "kieut.quyen-rieng-tu-anh-chi-gui": {
+  "t": "<strong>隐私：</strong>图片仅发送至服务器进行分析，不会保存在我们的服务器上。Replicate 处理后传回结果图片，不会长期保存。",
+  "h": "5d8fcc8b"
+ },
+ "kieut.sau-khi-thu": {
+  "t": "试戴后",
+  "h": "c3de1d39"
+ },
+ "kieut.tai-anh-ket-qua": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 下载结果图片",
+  "h": "5f15ca5b"
+ },
+ "kieut.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 上传图片",
+  "h": "633baad5"
+ },
+ "kieut.tat-ca-kieu-toc-la-phu": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 所有发型——<span class=\"ic\" data-icon=\"star\"></span> 为最适合您面相的选择",
+  "h": "8a472eaa"
+ },
+ "kieut.thang-mat-chinh-dien": {
+  "t": "✓ 端正、正面朝前",
+  "h": "7a6bfbf8"
+ },
+ "kieut.thay-ro-tu-tran-den-cam": {
+  "t": "✓ 从额头到下巴都清晰可见",
+  "h": "4ac86958"
+ },
+ "kieut.thu-kieu-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 试其他风格",
+  "h": "0054a608"
+ },
+ "kieut.thu-tren-anh": {
+  "t": "<span class=\"ic\" id=\"tryonTitleIcon\"></span> <span id=\"tryonTitleText\">在照片上试戴</span>",
+  "h": "586df119"
+ },
+ "kieut.ton-tien-lam-toc-doi-kinh": {
+  "t": "花钱做了头发、换了眼镜，却还是觉得哪里不对——问题有时不在品味，而在于从没在真正去做之前先试戴过。上传人像照片，立即看看哪种风格适合您的面相。",
+  "h": "b6de26af"
  },
  "kimlau.bang-tra-20-nam-toi": {
   "t": "未来20年<br>查找表",
@@ -22883,6 +24419,110 @@
   "t": "查看命盘与解读 →",
   "h": "95889730"
  },
+ "mshm.anh-chup-thang-nguoi-du-sang": {
+  "t": "正面全身、光线充足 · JPG/PNG",
+  "h": "fe4086d9"
+ },
+ "mshm.bang-mau-theo-menh": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 依本命的调色盘",
+  "h": "75158994"
+ },
+ "mshm.chi-phi-luong": {
+  "t": "<span>费用：<strong><span data-tvp-price=\"mau-sac-hop-menh\">…</span> 两</strong></span>",
+  "h": "72c219ac"
+ },
+ "mshm.chon-phong-cach-trang-phuc": {
+  "t": "选择服装风格：",
+  "h": "b115ee23"
+ },
+ "mshm.dao-pho": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> 逛街",
+  "h": "5a035e78"
+ },
+ "mshm.goi-y-phoi-do-hoan-chinh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 完整穿搭建议",
+  "h": "233b565f"
+ },
+ "mshm.huong-dan-trang-phuc-chi-tiet": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 服装详细指引",
+  "h": "68e382ef"
+ },
+ "mshm.lam-an-e-am-tai-loc": {
+  "t": "生意清淡、财运不聚，却从没想过每天穿的、用的颜色，是否正与本命相克。输入出生年，立即获得应该使用与应该避开的颜色清单。",
+  "h": "fe0800d1"
+ },
+ "mshm.mau-chinh-tot-nhat": {
+  "t": "✓ 主色——最佳",
+  "h": "d169b014"
+ },
+ "mshm.mau-nen-tranh": {
+  "t": "✗ 建议避开的颜色",
+  "h": "adc4005c"
+ },
+ "mshm.mau-phu-chap-nhan-duoc": {
+  "t": "◎ 辅助色——可接受",
+  "h": "5679d14e"
+ },
+ "mshm.mau-sac-hop-menh": {
+  "t": "合命色彩",
+  "h": "64b3b887"
+ },
+ "mshm.mau-sac-hop-menh-tu-van": {
+  "t": "<b>合命色彩</b><span>依五行纳音与八宅建议服装颜色，并直接在照片上试穿</span>",
+  "h": "764edb0c"
+ },
+ "mshm.mau-sac-hop-menh-tu-vi": {
+  "t": "合命色彩——明宝紫微斗数",
+  "h": "d1cab1d9"
+ },
+ "mshm.mau-theo-dip": {
+  "t": "<span class=\"ic\" data-icon=\"calendar\"></span> 依场合的色彩",
+  "h": "193da2e8"
+ },
+ "mshm.meo-dac-biet-theo-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 依本命的特别小诀窍",
+  "h": "ec862b7f"
+ },
+ "mshm.ngu-hanh-nap-am-gan-moi": {
+  "t": "纳音五行在六十甲子中为每个出生年指定一个专属的本命，八宅则再考量方位与空间因素。结合这两套体系，古人推导出与一个人本命相生或相克的颜色与物品。",
+  "h": "245a2b78"
+ },
+ "mshm.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "请输入出生年与性别。系统会计算卦数，再与五行色彩对照表比对。您会得到合命的调色盘、各场合的色彩，以及穿搭建议。",
+  "h": "9b015181"
+ },
+ "mshm.sang-trong": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 高雅",
+  "h": "e0db35aa"
+ },
+ "mshm.tai-anh-cua-ban-len": {
+  "t": "上传您的照片",
+  "h": "1444e1ba"
+ },
+ "mshm.tai-sao-nen-tranh-nhung-mau": {
+  "t": "⚠ 为什么要避开这些颜色？",
+  "h": "d3b71bb0"
+ },
+ "mshm.thong-tin-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 本命信息",
+  "h": "0a614b1f"
+ },
+ "mshm.thu-trang-phuc-theo-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 试穿合命服装 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"trang-phuc-tryon\">…</span> 两／次</span>",
+  "h": "f74ca71d"
+ },
+ "mshm.tu-van-mau-sac-trang-phuc": {
+  "t": "依五行纳音，建议合本命的服装颜色——上衣、裤子、鞋子、包包、配件。并提供各场合的完整穿搭建议。",
+  "h": "d55c587d"
+ },
+ "mshm.xem-lai": {
+  "t": "← 重看",
+  "h": "e2aaadb4"
+ },
+ "mshm.xem-mau-sac-hop-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 查看合命色彩——<span data-tvp-price=\"mau-sac-hop-menh\">…</span> 两",
+  "h": "85a1dcbd"
+ },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">输入出生年</span>",
   "h": "ecce406c"
@@ -23598,6 +25238,162 @@
  "paysuc.xac-nhan-thanh-toan-tu-vi": {
   "t": "付款确认 — 明宝紫微斗数",
   "h": "b7b66e97"
+ },
+ "pcol.anh-cua-ban": {
+  "t": "您的照片",
+  "h": "e41a257b"
+ },
+ "pcol.anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 脸部照片",
+  "h": "553ce737"
+ },
+ "pcol.anh-sang-tu-nhien-ban-ngay": {
+  "t": "白天的自然光 · 不加滤镜、不化妆<br>需清楚呈现肤色、不要过曝",
+  "h": "4cff1a71"
+ },
+ "pcol.anh-sang-tu-nhien-tot-nhat": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"sun\"></span> 自然光最佳</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> 不加色彩滤镜</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> 素颜</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"camera\"></span> 近距离拍、拍清楚肌肤</span>",
+  "h": "30e85f5e"
+ },
+ "pcol.bang-mau-ca-nhan": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 您的专属调色盘",
+  "h": "eda62269"
+ },
+ "pcol.celeb-cung-tong-mau": {
+  "t": "<span class=\"ic\" data-icon=\"star\"></span> <strong>同色调的名人：</strong><span id=\"celebInspo\">—</span>",
+  "h": "3b09c33a"
+ },
+ "pcol.chon-style": {
+  "t": "选择风格",
+  "h": "92f6c1b3"
+ },
+ "pcol.chup-anh-toan-than": {
+  "t": "拍摄全身照",
+  "h": "3269c13d"
+ },
+ "pcol.chup-hoac-chon-anh-khuon-mat": {
+  "t": "拍摄或选择脸部照片",
+  "h": "93732afc"
+ },
+ "pcol.cong-so": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 职场",
+  "h": "2a18c4c4"
+ },
+ "pcol.cong-so-li34": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 职场",
+  "h": "57f12434"
+ },
+ "pcol.dien-do-dung-mot-ma-van": {
+  "t": "穿着流行的衣服，却仍被说看起来疲惫、气色黯沉——也许您还不知道自己属于哪个色彩季型。上传人像照片，立即看看在真实照片上的合成效果。",
+  "h": "d671ee98"
+ },
+ "pcol.goi-y-trang-phuc-theo-season": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 依季型的穿搭建议",
+  "h": "dc3ddd6e"
+ },
+ "pcol.gong-kinh": {
+  "t": "镜框",
+  "h": "9e539d7d"
+ },
+ "pcol.hang-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 日常",
+  "h": "e45465a4"
+ },
+ "pcol.hang-ngay-dbs5": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 日常",
+  "h": "55d92049"
+ },
+ "pcol.kim-loai": {
+  "t": "金属",
+  "h": "8ff50d1f"
+ },
+ "pcol.kim-loai-phu-kien": {
+  "t": "<span class=\"ic\" data-icon=\"gem\"></span> 金属与配件",
+  "h": "90e92f92"
+ },
+ "pcol.ly-do": {
+  "t": "理由",
+  "h": "0cbf3763"
+ },
+ "pcol.mau-ao-so-mi": {
+  "t": "衬衫颜色",
+  "h": "870c2997"
+ },
+ "pcol.mau-hop-lam-sang-noi-bat": {
+  "t": "✓ 适合的颜色——让脸庞明亮突出",
+  "h": "b47aaef5"
+ },
+ "pcol.mau-nen-tranh-lam-xin-toi": {
+  "t": "✗ 建议避开的颜色——使肤色黯沉",
+  "h": "190a8061"
+ },
+ "pcol.mau-toc": {
+  "t": "发色",
+  "h": "2a321f26"
+ },
+ "pcol.nam-sinh-tuy-chon-ket-hop": {
+  "t": "出生年（选填——结合本命）",
+  "h": "a6c5911c"
+ },
+ "pcol.personal-color": {
+  "t": "个人色彩",
+  "h": "52515e4c"
+ },
+ "pcol.personal-color-phan-tich-mau-sac": {
+  "t": "个人色彩（Personal Color）分析，是将肤色、发色与瞳色归类为「春、夏、秋、冬」色彩季型的方法，依据西方配色理论，在韩国、日本的时尚与美妆领域被广泛应用。每个季型都对应一组最适合的服装与妆容调色盘。",
+  "h": "4d195af6"
+ },
+ "pcol.personal-color-phan-tich-undertone-seaso": {
+  "t": "<b>个人色彩</b><span>分析底色与色彩季型，建议穿搭并直接在照片上试穿</span>",
+  "h": "1946e328"
+ },
+ "pcol.personal-color-tu-vi-minh-bao": {
+  "t": "个人色彩——明宝紫微斗数",
+  "h": "9b10e278"
+ },
+ "pcol.phan-tich-personal-color-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 分析个人色彩——<span data-tvp-price=\"personal-color\">…</span> 两",
+  "h": "cfa46f2a"
+ },
+ "pcol.phan-tich-undertone-va-personal-color": {
+  "t": "分析底色与个人色彩季型——建议最能让脸庞明亮的上衣颜色、发色与配件。并结合五行古法。",
+  "h": "69b0927d"
+ },
+ "pcol.su-kien": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 活动",
+  "h": "f4429e62"
+ },
+ "pcol.su-kien-cbgc": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 活动",
+  "h": "f80867ad"
+ },
+ "pcol.tai-len-mot-tam-anh-chan": {
+  "t": "请上传一张脸部清晰、自然光下足够明亮的人像照片。系统会分析肤色，并直接在照片上试色。您会得到自己的色彩季型、适合与应避开的调色盘，以及试穿后的图片。",
+  "h": "f645c739"
+ },
+ "pcol.thu-lai": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 再试一次",
+  "h": "66e7a368"
+ },
+ "pcol.thu-trang-phuc-luong-lan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 试穿服装 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px\"><span data-tvp-price=\"personal-color-tryon\">…</span> 两／次</span>",
+  "h": "0b55d845"
+ },
+ "pcol.thu-trang-phuc-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 立即试穿服装",
+  "h": "92e398a6"
+ },
+ "pcol.tip-ap-dung-ngay": {
+  "t": "✦ 立即可用的小诀窍",
+  "h": "236e351f"
+ },
+ "pcol.upload-anh-toan-than-he-thong": {
+  "t": "上传全身照 → 系统会把服装换成符合您季型 <strong id=\"tryonSeasonLabel\"></strong> 的颜色",
+  "h": "6403994e"
+ },
+ "pcol.vd-1992": {
+  "t": "例：1992",
+  "h": "b50ab05e"
  },
  "phongthuy.1-ban-menh-thong-tin-phong": {
   "t": "<span class=\"pt-num\">1</span> 本命与房间数据",
@@ -25806,6 +27602,194 @@
  "topup.xem-lai-ket-qua-co-bi": {
   "t": "重新查看结果会再扣两吗？",
   "h": "64b49a22"
+ },
+ "tpng.anh-chup-toan-than-hoac-nua": {
+  "t": "全身或半身照片 · JPG/PNG",
+  "h": "17435ed7"
+ },
+ "tpng.co-ngay-an-mac-chin-chu": {
+  "t": "有些日子穿得再整齐也不顺，有些日子随性穿反而一帆风顺——每天的运势都不同。输入出生年，立即获得适合今天的颜色与穿搭风格。",
+  "h": "6350ffd2"
+ },
+ "tpng.diem-nhan": {
+  "t": "◎ 点缀",
+  "h": "a95e46c4"
+ },
+ "tpng.du-lich": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> 旅行",
+  "h": "d7d6e7ed"
+ },
+ "tpng.goi-y-trang-phuc-cu-the": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 具体穿搭建议",
+  "h": "d9e6894d"
+ },
+ "tpng.hanh-ngay": {
+  "t": "当日五行",
+  "h": "f96db196"
+ },
+ "tpng.hen-ho": {
+  "t": "<span class=\"ic\" data-icon=\"heart\"></span> 约会",
+  "h": "398a0192"
+ },
+ "tpng.kinh-doanh": {
+  "t": "<span class=\"ic\" data-icon=\"handshake\"></span> 商务",
+  "h": "5e9fdd61"
+ },
+ "tpng.mau-sac-hop-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 适合当日的色彩",
+  "h": "e47839c0"
+ },
+ "tpng.meo-co-phap": {
+  "t": "<strong>✦ 古法小诀窍</strong> <span id=\"tipText\">—</span>",
+  "h": "cd8f1791"
+ },
+ "tpng.muc-dich-chon-1": {
+  "t": "目的（选一项）",
+  "h": "a7f0975c"
+ },
+ "tpng.nen-mac": {
+  "t": "✓ 适合穿",
+  "h": "4d634b8d"
+ },
+ "tpng.nen-tranh": {
+  "t": "✗ 建议避开",
+  "h": "b4981595"
+ },
+ "tpng.ngay-di-duong-lich": {
+  "t": "出门日期（国历）",
+  "h": "dfc6af38"
+ },
+ "tpng.nhap-nam-sinh-gioi-tinh-ngay": {
+  "t": "请输入出生年、性别、想穿搭的日期与出门目的。系统会把当日运势与您的本命对照。您会得到适合穿的颜色、建议避开的颜色，以及具体的穿搭建议。",
+  "h": "737914fb"
+ },
+ "tpng.phong-cach": {
+  "t": "风格：",
+  "h": "62e2075f"
+ },
+ "tpng.phong-cach-goi-y": {
+  "t": "✦ 建议风格",
+  "h": "b9a77fc8"
+ },
+ "tpng.phong-van": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 面试",
+  "h": "0f6621da"
+ },
+ "tpng.thong-tin": {
+  "t": "<span class=\"ic\" data-icon=\"calendar\"></span> 信息",
+  "h": "fb81e21c"
+ },
+ "tpng.thu-trang-phuc-luong-lan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 试穿服装 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px\"><span data-tvp-price=\"trang-phuc-tryon\">…</span> 两／次</span>",
+  "h": "a56af403"
+ },
+ "tpng.thuong-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 日常",
+  "h": "f84f5bc4"
+ },
+ "tpng.trang-phuc-theo-ngay": {
+  "t": "每日穿搭",
+  "h": "6cfe1c1e"
+ },
+ "tpng.trang-phuc-theo-ngay-can-chi": {
+  "t": "<b>每日穿搭</b><span>当日干支 × 本命纳音——适合出门当日的色彩与风格</span>",
+  "h": "4c8d4580"
+ },
+ "tpng.trang-phuc-theo-ngay-tu-vi": {
+  "t": "每日穿搭——明宝紫微斗数",
+  "h": "654b038b"
+ },
+ "tpng.tu-van-mau-sac-trang-phuc": {
+  "t": "依当日干支与本命建议服装色彩——五行纳音古法。",
+  "h": "dd5ad2b6"
+ },
+ "tpng.xem-trang-phuc-hop-ngay-luong": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 查看适合当日的穿搭——<span data-tvp-price=\"trang-phuc-theo-ngay\">…</span> 两",
+  "h": "589f0801"
+ },
+ "trdi.anh-ro-mat-anh-sang-du": {
+  "t": "脸部清晰、光线充足、不戴眼镜的照片",
+  "h": "68ec19ab"
+ },
+ "trdi.bang-mau-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 建议调色盘",
+  "h": "d62e715b"
+ },
+ "trdi.chup-hoac-tai-anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 拍摄或上传脸部照片",
+  "h": "781a5bfa"
+ },
+ "trdi.loi-khuyen-co-phap": {
+  "t": "<strong>✦ 古法建议</strong> <span id=\"tipText\">—</span>",
+  "h": "0417547e"
+ },
+ "trdi.ma-hong": {
+  "t": "腮红",
+  "h": "21b3e53a"
+ },
+ "trdi.mat": {
+  "t": "眼",
+  "h": "5e87cc74"
+ },
+ "trdi.moi": {
+  "t": "唇",
+  "h": "299ea53e"
+ },
+ "trdi.nam-sinh-tuy-chon": {
+  "t": "出生年（选填）",
+  "h": "82f3a240"
+ },
+ "trdi.nap-am": {
+  "t": "纳音",
+  "h": "006a48d6"
+ },
+ "trdi.nhin-nguoi-khac-trang-diem-ma": {
+  "t": "看别人化妆总是很出众，自己却怎么化都觉得每次出门不够有自信。上传人像照片，立即获得适合脸型的风格建议与试戴图片。",
+  "h": "27d407e0"
+ },
+ "trdi.phan-tich-phong-cach-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 分析风格——<span data-tvp-price=\"trang-diem-phan-tich\">…</span> 两",
+  "h": "5e1ca3e2"
+ },
+ "trdi.phan-tich-tuong-mat-theo-co": {
+  "t": "依古法分析面相——建议适合您本命与相貌的亚洲妆容风格。",
+  "h": "30eda66e"
+ },
+ "trdi.phong-cach-makeup-phu-hop-nhan": {
+  "t": "✦ 适合的妆容风格——点击「试试 →」查看结果",
+  "h": "25e2d0d8"
+ },
+ "trdi.tai-anh": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 下载图片",
+  "h": "a343e31b"
+ },
+ "trdi.tai-len-mot-tam-anh-chan": {
+  "t": "请上传一张脸部清晰的人像照片。系统会分析脸部，并直接在照片上试戴妆容。您会得到合适的妆容风格、唇／眼／颊的调色盘，以及试戴后的图片。",
+  "h": "c8c9461c"
+ },
+ "trdi.thu-lai": {
+  "t": "↺ 再试一次",
+  "h": "a1d342d1"
+ },
+ "trdi.thu-trang-diem": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 试戴妆容——<span id=\"tryonStyleName\"></span>",
+  "h": "cd545d92"
+ },
+ "trdi.trang-diem": {
+  "t": "妆容",
+  "h": "b67e6b3f"
+ },
+ "trdi.trang-diem-phan-tich-tuong-mat": {
+  "t": "<b>妆容</b><span>依古法分析面相，建议妆容风格，并直接在照片上试戴</span>",
+  "h": "132106df"
+ },
+ "trdi.trang-diem-tu-vi-minh-bao": {
+  "t": "妆容——明宝紫微斗数",
+  "h": "10926a7a"
+ },
+ "trdi.tuong-mat": {
+  "t": "面相",
+  "h": "424915c5"
  },
  "trochuyen.chua-co-hoi-thoai-nao-bam": {
   "t": "还没有任何对话。<br>按上方的「新提问」，或打开任一工具向老师提问。",
