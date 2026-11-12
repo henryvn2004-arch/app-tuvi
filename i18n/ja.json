@@ -7191,6 +7191,138 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.toolsrc.data": {
+  "t": "{name}を基準として使用しており、表示用の一覧ではありません。",
+  "h": "acff5b26"
+ },
+ "js.toolsrc.data-mac-dinh": {
+  "t": "オープンデータセット",
+  "h": "db94840d"
+ },
+ "js.toolsrc.lib": {
+  "t": "オープンソースライブラリ（MITライセンス）で照合。",
+  "h": "77e23ad9"
+ },
+ "js.toolsrc.nguon": {
+  "t": "出典：",
+  "h": "dcd2b5f7"
+ },
+ "js.toolsrc.nguon-du-lieu": {
+  "t": "データの出典 →",
+  "h": "78319924"
+ },
+ "js.toolsrc.nm-am-duong-ngu-hanh-bat-quai": {
+  "t": "陰陽・五行・八卦",
+  "h": "6a566782"
+ },
+ "js.toolsrc.nm-bat-trach-minh-kinh": {
+  "t": "八宅明鏡",
+  "h": "cc15ba54"
+ },
+ "js.toolsrc.nm-bat-trach-minh-kinh-loan-dau": {
+  "t": "八宅明鏡、巒頭",
+  "h": "1998ad34"
+ },
+ "js.toolsrc.nm-boi-bai-tay-truyen-thong-bo-52-la": {
+  "t": "西洋の伝統的カード占い（52枚）",
+  "h": "3f744877"
+ },
+ "js.toolsrc.nm-cau-truc-tarot-78-la-major-amp-minor-arcana": {
+  "t": "タロット78枚の構成（大アルカナ＆小アルカナ）",
+  "h": "fd0e71e3"
+ },
+ "js.toolsrc.nm-chi-tuong-hoc-phuong-dong": {
+  "t": "東洋の手相学",
+  "h": "966bd835"
+ },
+ "js.toolsrc.nm-dai-luc-nham": {
+  "t": "大六壬",
+  "h": "0787f5fc"
+ },
+ "js.toolsrc.nm-dong-tay-y-ket-hop-tuong-hoc-da-mat-phuong-dong": {
+  "t": "東西医学を融合した東洋の顔肌相学",
+  "h": "c68a02d7"
+ },
+ "js.toolsrc.nm-hoang-lich": {
+  "t": "皇暦",
+  "h": "06d0c30d"
+ },
+ "js.toolsrc.nm-kim-lau": {
+  "t": "金楼",
+  "h": "fdeb6811"
+ },
+ "js.toolsrc.nm-kinh-dich": {
+  "t": "易経",
+  "h": "9e1c199b"
+ },
+ "js.toolsrc.nm-ky-mon-don-giap": {
+  "t": "奇門遁甲",
+  "h": "857ee290"
+ },
+ "js.toolsrc.nm-luc-thap-hoa-giap": {
+  "t": "六十花甲子",
+  "h": "514b67b8"
+ },
+ "js.toolsrc.nm-ma-y-than-tuong-lieu-trang-than-tuong-thuy-kinh-tap": {
+  "t": "麻衣神相、柳荘神相、水鏡集",
+  "h": "c678958d"
+ },
+ "js.toolsrc.nm-ma-y-than-tuong-ngu-am-tuong-phap": {
+  "t": "麻衣神相、五音相法",
+  "h": "591efba5"
+ },
+ "js.toolsrc.nm-mai-hoa-dich-so": {
+  "t": "梅花易数",
+  "h": "9093e560"
+ },
+ "js.toolsrc.nm-ngu-hanh-nap-am-bat-trach": {
+  "t": "五行納音、八宅",
+  "h": "00ae64d4"
+ },
+ "js.toolsrc.nm-nhan-tuong-hoc-phuong-dong-hinh-tuong-ngu-hanh": {
+  "t": "東洋の人相学（五行の形相）",
+  "h": "a704a7a9"
+ },
+ "js.toolsrc.nm-nhan-tuong-hoc-phuong-dong-nap-am-ngu-hanh": {
+  "t": "東洋の人相学、納音五行",
+  "h": "f456450e"
+ },
+ "js.toolsrc.nm-personal-color-phan-tich-mau-sac-ca-nhan": {
+  "t": "パーソナルカラー（個人の色彩分析）",
+  "h": "6a35b8eb"
+ },
+ "js.toolsrc.nm-than-so-hoc-pythagoras": {
+  "t": "ピタゴラス数秘術",
+  "h": "8b181ba4"
+ },
+ "js.toolsrc.nm-trung-chau-phai-luc-thap-tinh-he-vuong-dinh-chi": {
+  "t": "中州派 — 六十星系（王亭之）",
+  "h": "743388f3"
+ },
+ "js.toolsrc.nm-tu-binh": {
+  "t": "子平",
+  "h": "66c4edf1"
+ },
+ "js.toolsrc.nm-tu-vi-dau-so-tan-bien-van-dang-thai-thu-lang": {
+  "t": "紫微斗数新編（Van Dang Thai Thu Lang）",
+  "h": "2e7fd5a8"
+ },
+ "js.toolsrc.theo": {
+  "t": "<i>{s}</i>に基づく。",
+  "h": "e7fd9754"
+ },
+ "js.toolsrc.tvmb": {
+  "t": "<b>明宝紫微斗数の専門家チーム</b>が独自に構築した参照枠組み。",
+  "h": "43366641"
+ },
+ "js.toolsrc.va": {
+  "t": "{a}、{b}",
+  "h": "cd730a63"
+ },
+ "js.toolsrc.xem-day-du": {
+  "t": "データの出典をすべて見る →",
+  "h": "833fe188"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"お支払い：",
   "h": "3d7d89ae"

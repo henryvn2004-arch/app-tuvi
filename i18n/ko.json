@@ -7191,6 +7191,138 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.toolsrc.data": {
+  "t": "{name}을(를) 기준으로 사용하며 표시용 목록이 아닙니다.",
+  "h": "acff5b26"
+ },
+ "js.toolsrc.data-mac-dinh": {
+  "t": "공개 데이터셋",
+  "h": "db94840d"
+ },
+ "js.toolsrc.lib": {
+  "t": "오픈소스 라이브러리(MIT 라이선스)로 대조.",
+  "h": "77e23ad9"
+ },
+ "js.toolsrc.nguon": {
+  "t": "출처:",
+  "h": "dcd2b5f7"
+ },
+ "js.toolsrc.nguon-du-lieu": {
+  "t": "데이터 출처 →",
+  "h": "78319924"
+ },
+ "js.toolsrc.nm-am-duong-ngu-hanh-bat-quai": {
+  "t": "음양, 오행, 팔괘",
+  "h": "6a566782"
+ },
+ "js.toolsrc.nm-bat-trach-minh-kinh": {
+  "t": "팔택명경",
+  "h": "cc15ba54"
+ },
+ "js.toolsrc.nm-bat-trach-minh-kinh-loan-dau": {
+  "t": "팔택명경, 난두",
+  "h": "1998ad34"
+ },
+ "js.toolsrc.nm-boi-bai-tay-truyen-thong-bo-52-la": {
+  "t": "서양 전통 카드점 (52장)",
+  "h": "3f744877"
+ },
+ "js.toolsrc.nm-cau-truc-tarot-78-la-major-amp-minor-arcana": {
+  "t": "타로 78장 구조 (메이저 &amp; 마이너 아르카나)",
+  "h": "fd0e71e3"
+ },
+ "js.toolsrc.nm-chi-tuong-hoc-phuong-dong": {
+  "t": "동양 수상학",
+  "h": "966bd835"
+ },
+ "js.toolsrc.nm-dai-luc-nham": {
+  "t": "대육임",
+  "h": "0787f5fc"
+ },
+ "js.toolsrc.nm-dong-tay-y-ket-hop-tuong-hoc-da-mat-phuong-dong": {
+  "t": "동서양 의학을 결합한 동양 안면 피부 상학",
+  "h": "c68a02d7"
+ },
+ "js.toolsrc.nm-hoang-lich": {
+  "t": "황력",
+  "h": "06d0c30d"
+ },
+ "js.toolsrc.nm-kim-lau": {
+  "t": "금루",
+  "h": "fdeb6811"
+ },
+ "js.toolsrc.nm-kinh-dich": {
+  "t": "주역",
+  "h": "9e1c199b"
+ },
+ "js.toolsrc.nm-ky-mon-don-giap": {
+  "t": "기문둔갑",
+  "h": "857ee290"
+ },
+ "js.toolsrc.nm-luc-thap-hoa-giap": {
+  "t": "육십갑자",
+  "h": "514b67b8"
+ },
+ "js.toolsrc.nm-ma-y-than-tuong-lieu-trang-than-tuong-thuy-kinh-tap": {
+  "t": "마의신상, 유장신상, 수경집",
+  "h": "c678958d"
+ },
+ "js.toolsrc.nm-ma-y-than-tuong-ngu-am-tuong-phap": {
+  "t": "마의신상, 오음상법",
+  "h": "591efba5"
+ },
+ "js.toolsrc.nm-mai-hoa-dich-so": {
+  "t": "매화역수",
+  "h": "9093e560"
+ },
+ "js.toolsrc.nm-ngu-hanh-nap-am-bat-trach": {
+  "t": "오행 납음, 팔택",
+  "h": "00ae64d4"
+ },
+ "js.toolsrc.nm-nhan-tuong-hoc-phuong-dong-hinh-tuong-ngu-hanh": {
+  "t": "동양 인상학 (오행 형상)",
+  "h": "a704a7a9"
+ },
+ "js.toolsrc.nm-nhan-tuong-hoc-phuong-dong-nap-am-ngu-hanh": {
+  "t": "동양 인상학, 납음오행",
+  "h": "f456450e"
+ },
+ "js.toolsrc.nm-personal-color-phan-tich-mau-sac-ca-nhan": {
+  "t": "퍼스널 컬러 (개인 색채 분석)",
+  "h": "6a35b8eb"
+ },
+ "js.toolsrc.nm-than-so-hoc-pythagoras": {
+  "t": "피타고라스 수비학",
+  "h": "8b181ba4"
+ },
+ "js.toolsrc.nm-trung-chau-phai-luc-thap-tinh-he-vuong-dinh-chi": {
+  "t": "중주파 — 육십성계 (왕정지)",
+  "h": "743388f3"
+ },
+ "js.toolsrc.nm-tu-binh": {
+  "t": "자평",
+  "h": "66c4edf1"
+ },
+ "js.toolsrc.nm-tu-vi-dau-so-tan-bien-van-dang-thai-thu-lang": {
+  "t": "자미두수 신편 (Van Dang Thai Thu Lang)",
+  "h": "2e7fd5a8"
+ },
+ "js.toolsrc.theo": {
+  "t": "<i>{s}</i>에 따름.",
+  "h": "e7fd9754"
+ },
+ "js.toolsrc.tvmb": {
+  "t": "<b>명보 자미두수 전문가 팀</b>이 자체 구축한 참조 체계.",
+  "h": "43366641"
+ },
+ "js.toolsrc.va": {
+  "t": "{a} 및 {b}",
+  "h": "cd730a63"
+ },
+ "js.toolsrc.xem-day-du": {
+  "t": "데이터 출처 전체 보기 →",
+  "h": "833fe188"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"결제 ",
   "h": "3d7d89ae"

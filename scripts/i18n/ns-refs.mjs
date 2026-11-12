@@ -20,6 +20,7 @@ export function scriptsOf(html) {
     if (has(f)) out.add(f);
   for (const f of [
     'laso-chart.js',
+    'tool-sources.js',
     'tools-shared/hook-layer.js',
     'tools-shared/ai-loading-steps.js',
     'tools-shared/cung-ngay-sinh.js',

@@ -7191,6 +7191,138 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.toolsrc.data": {
+  "t": "Uses {name} as a benchmark, not as a displayed catalog.",
+  "h": "acff5b26"
+ },
+ "js.toolsrc.data-mac-dinh": {
+  "t": "an open dataset",
+  "h": "db94840d"
+ },
+ "js.toolsrc.lib": {
+  "t": "Cross-checked with an open-source library (MIT License).",
+  "h": "77e23ad9"
+ },
+ "js.toolsrc.nguon": {
+  "t": "Sources:",
+  "h": "dcd2b5f7"
+ },
+ "js.toolsrc.nguon-du-lieu": {
+  "t": "Data sources →",
+  "h": "78319924"
+ },
+ "js.toolsrc.nm-am-duong-ngu-hanh-bat-quai": {
+  "t": "Yin-Yang, Five Elements, Eight Trigrams",
+  "h": "6a566782"
+ },
+ "js.toolsrc.nm-bat-trach-minh-kinh": {
+  "t": "Ba Zhai Ming Jing",
+  "h": "cc15ba54"
+ },
+ "js.toolsrc.nm-bat-trach-minh-kinh-loan-dau": {
+  "t": "Ba Zhai Ming Jing, Luan Tou",
+  "h": "1998ad34"
+ },
+ "js.toolsrc.nm-boi-bai-tay-truyen-thong-bo-52-la": {
+  "t": "Traditional Western card reading (52-card deck)",
+  "h": "3f744877"
+ },
+ "js.toolsrc.nm-cau-truc-tarot-78-la-major-amp-minor-arcana": {
+  "t": "78-card Tarot structure (Major &amp; Minor Arcana)",
+  "h": "fd0e71e3"
+ },
+ "js.toolsrc.nm-chi-tuong-hoc-phuong-dong": {
+  "t": "Eastern palmistry",
+  "h": "966bd835"
+ },
+ "js.toolsrc.nm-dai-luc-nham": {
+  "t": "Da Liu Ren",
+  "h": "0787f5fc"
+ },
+ "js.toolsrc.nm-dong-tay-y-ket-hop-tuong-hoc-da-mat-phuong-dong": {
+  "t": "Integrated Eastern–Western medicine with Eastern facial-skin physiognomy",
+  "h": "c68a02d7"
+ },
+ "js.toolsrc.nm-hoang-lich": {
+  "t": "Huangli (Chinese almanac)",
+  "h": "06d0c30d"
+ },
+ "js.toolsrc.nm-kim-lau": {
+  "t": "Jin Lou",
+  "h": "fdeb6811"
+ },
+ "js.toolsrc.nm-kinh-dich": {
+  "t": "I Ching",
+  "h": "9e1c199b"
+ },
+ "js.toolsrc.nm-ky-mon-don-giap": {
+  "t": "Qi Men Dun Jia",
+  "h": "857ee290"
+ },
+ "js.toolsrc.nm-luc-thap-hoa-giap": {
+  "t": "The sixty Jiazi cycle",
+  "h": "514b67b8"
+ },
+ "js.toolsrc.nm-ma-y-than-tuong-lieu-trang-than-tuong-thuy-kinh-tap": {
+  "t": "Ma Yi Shen Xiang, Liu Zhuang Shen Xiang, Shui Jing Ji",
+  "h": "c678958d"
+ },
+ "js.toolsrc.nm-ma-y-than-tuong-ngu-am-tuong-phap": {
+  "t": "Ma Yi Shen Xiang, Wu Yin physiognomy",
+  "h": "591efba5"
+ },
+ "js.toolsrc.nm-mai-hoa-dich-so": {
+  "t": "Mei Hua Yi Shu",
+  "h": "9093e560"
+ },
+ "js.toolsrc.nm-ngu-hanh-nap-am-bat-trach": {
+  "t": "Five Elements Na Yin, Ba Zhai",
+  "h": "00ae64d4"
+ },
+ "js.toolsrc.nm-nhan-tuong-hoc-phuong-dong-hinh-tuong-ngu-hanh": {
+  "t": "Eastern physiognomy (Five-Element face shapes)",
+  "h": "a704a7a9"
+ },
+ "js.toolsrc.nm-nhan-tuong-hoc-phuong-dong-nap-am-ngu-hanh": {
+  "t": "Eastern physiognomy, Na Yin Five Elements",
+  "h": "f456450e"
+ },
+ "js.toolsrc.nm-personal-color-phan-tich-mau-sac-ca-nhan": {
+  "t": "Personal Color (personal color analysis)",
+  "h": "6a35b8eb"
+ },
+ "js.toolsrc.nm-than-so-hoc-pythagoras": {
+  "t": "Pythagorean numerology",
+  "h": "8b181ba4"
+ },
+ "js.toolsrc.nm-trung-chau-phai-luc-thap-tinh-he-vuong-dinh-chi": {
+  "t": "Zhongzhou School — Sixty Star Systems (Wang Tingzhi)",
+  "h": "743388f3"
+ },
+ "js.toolsrc.nm-tu-binh": {
+  "t": "Zi Ping",
+  "h": "66c4edf1"
+ },
+ "js.toolsrc.nm-tu-vi-dau-so-tan-bien-van-dang-thai-thu-lang": {
+  "t": "Zi Wei Dou Shu Xin Bian (Van Dang Thai Thu Lang)",
+  "h": "2e7fd5a8"
+ },
+ "js.toolsrc.theo": {
+  "t": "According to <i>{s}</i>.",
+  "h": "e7fd9754"
+ },
+ "js.toolsrc.tvmb": {
+  "t": "Proprietary reference framework built by the <b>Minh Bao Zi Wei Dou Shu expert team</b>.",
+  "h": "43366641"
+ },
+ "js.toolsrc.va": {
+  "t": "{a} and {b}",
+  "h": "cd730a63"
+ },
+ "js.toolsrc.xem-day-du": {
+  "t": "See all data sources →",
+  "h": "833fe188"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"Pay ",
   "h": "3d7d89ae"

@@ -25,6 +25,18 @@
 // Tool KHÔNG có mặt trong REG thì mọi hàm trả về rỗng — im lặng, không suy
 // đoán ra một nguồn không kiểm chứng được cho nó.
 (function () {
+  // i18n (docs/i18n/QUY-UOC.md): T(khoá, chữViệt, {biến}) — CHỈ để HIỂN THỊ. vi ⇒ y hệt chữ gốc.
+  // Tên cổ thư/phương pháp (`REG[..].name`) là DỮ LIỆU: khoá tra giữ chữ Việt, chỉ lúc in ra mới qua nm()
+  // (khoá `js.toolsrc.nm-<slug không dấu>`; thiếu bản dịch ⇒ tên Việt, không vỡ).
+  function T(k, d, v) {
+    var I = window.I18n;
+    if (I && I.tv) return I.tv(k, d, v);
+    return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
+  }
+  function slug(n) {
+    return String(n).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/gi, 'd').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  }
+  function nm(n) { return T('js.toolsrc.nm-' + slug(n), n); }
   var TAN_BIEN = { kind: 'co-phap', name: 'Tử Vi Đẩu Số Tân Biên (Vân Đằng Thái Thứ Lang)' };
   var VDC = { kind: 'co-phap', name: 'Trung Châu Phái — Lục Thập Tinh Hệ (Vương Đình Chi)' };
   var TU_BINH = { kind: 'co-phap', name: 'Tử Bình' };
@@ -111,9 +123,10 @@
   // nhiều nguồn (vd. Xem Tướng trích 3 cổ thư trong CÙNG một entry `name`).
   function fmtCoPhap(names) {
     if (!names.length) return '';
+    names = names.map(nm);
     var s = names.length === 1 ? names[0]
-      : names.slice(0, -1).join(', ') + ' và ' + names[names.length - 1];
-    return 'Theo <i>' + s + '</i>.';
+      : T('js.toolsrc.va', '{a} và {b}', {a: names.slice(0, -1).join(', '), b: names[names.length - 1]});
+    return T('js.toolsrc.theo', 'Theo <i>{s}</i>.', {s: s});
   }
 
   function line(id) {
@@ -124,9 +137,9 @@
     var cp = fmtCoPhap(coPhapNames);
     if (cp) parts.push(cp);
     es.forEach(function (e) {
-      if (e.kind === 'tvmb') parts.push('Phần quy chiếu riêng do <b>đội ngũ chuyên gia Tử Vi Minh Bảo</b> xây dựng.');
-      if (e.kind === 'lib') parts.push('Đối chiếu qua một thư viện mã nguồn mở (giấy phép MIT).');
-      if (e.kind === 'data') parts.push('Dùng ' + (e.name || 'một bộ dữ liệu mở') + ' làm thước đo, không phải danh mục hiển thị.');
+      if (e.kind === 'tvmb') parts.push(T('js.toolsrc.tvmb', 'Phần quy chiếu riêng do <b>đội ngũ chuyên gia Tử Vi Minh Bảo</b> xây dựng.'));
+      if (e.kind === 'lib') parts.push(T('js.toolsrc.lib', 'Đối chiếu qua một thư viện mã nguồn mở (giấy phép MIT).'));
+      if (e.kind === 'data') parts.push(T('js.toolsrc.data', 'Dùng {name} làm thước đo, không phải danh mục hiển thị.', {name: e.name ? nm(e.name) : T('js.toolsrc.data-mac-dinh', 'một bộ dữ liệu mở')}));
     });
     return parts.join(' ');
   }
@@ -137,7 +150,7 @@
     var l = line(id);
     if (!l) return '';
     return '<div style="margin-top:9px;font-size:11.5px;line-height:1.6;color:#8a8a8a;opacity:.9">' + l +
-      ' <a href="/nguon-du-lieu.html" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Nguồn dữ liệu →</a></div>';
+      ' <a href="/nguon-du-lieu.html" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">' + T('js.toolsrc.nguon-du-lieu', 'Nguồn dữ liệu →') + '</a></div>';
   }
 
   // Khối ĐẦY ĐỦ hơn cho cuối phần kết quả — tự lo CSS bằng inline style (KHÔNG
@@ -160,8 +173,8 @@
     if (!l && !opts.prefix) return '';
     return '<div class="tvmb-src-note" data-share-skip style="margin-top:16px;padding:14px 18px;background:#FBF3DE;border:1px solid #e8d9b0;border-radius:10px;font-size:12.5px;line-height:1.68;color:#5a5145">' +
       (opts.prefix ? opts.prefix + '<br><br>' : '') +
-      (l ? (window.iconHtml ? '<span class="ic-inline">' + window.iconHtml('book-open') + '</span>' : '') + ' <b>Nguồn:</b> ' + l + ' ' : '') +
-      '<a href="/nguon-du-lieu.html" target="_blank" rel="noopener" style="color:#9A7B3A">Xem đầy đủ nguồn dữ liệu →</a>' +
+      (l ? (window.iconHtml ? '<span class="ic-inline">' + window.iconHtml('book-open') + '</span>' : '') + ' <b>' + T('js.toolsrc.nguon', 'Nguồn:') + '</b> ' + l + ' ' : '') +
+      '<a href="/nguon-du-lieu.html" target="_blank" rel="noopener" style="color:#9A7B3A">' + T('js.toolsrc.xem-day-du', 'Xem đầy đủ nguồn dữ liệu →') + '</a>' +
       '</div>';
   }
 

@@ -7191,6 +7191,138 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.toolsrc.data": {
+  "t": "以{name}作为衡量基准，并非用于显示的目录。",
+  "h": "acff5b26"
+ },
+ "js.toolsrc.data-mac-dinh": {
+  "t": "开放数据集",
+  "h": "db94840d"
+ },
+ "js.toolsrc.lib": {
+  "t": "透过开源程序库（MIT 授权）交叉核对。",
+  "h": "77e23ad9"
+ },
+ "js.toolsrc.nguon": {
+  "t": "来源：",
+  "h": "dcd2b5f7"
+ },
+ "js.toolsrc.nguon-du-lieu": {
+  "t": "数据源 →",
+  "h": "78319924"
+ },
+ "js.toolsrc.nm-am-duong-ngu-hanh-bat-quai": {
+  "t": "阴阳、五行、八卦",
+  "h": "6a566782"
+ },
+ "js.toolsrc.nm-bat-trach-minh-kinh": {
+  "t": "八宅明镜",
+  "h": "cc15ba54"
+ },
+ "js.toolsrc.nm-bat-trach-minh-kinh-loan-dau": {
+  "t": "八宅明镜、峦头",
+  "h": "1998ad34"
+ },
+ "js.toolsrc.nm-boi-bai-tay-truyen-thong-bo-52-la": {
+  "t": "西洋传统扑克牌占卜（52张）",
+  "h": "3f744877"
+ },
+ "js.toolsrc.nm-cau-truc-tarot-78-la-major-amp-minor-arcana": {
+  "t": "塔罗78张牌的结构（大阿尔克那与小阿尔克那）",
+  "h": "fd0e71e3"
+ },
+ "js.toolsrc.nm-chi-tuong-hoc-phuong-dong": {
+  "t": "东方手相学",
+  "h": "966bd835"
+ },
+ "js.toolsrc.nm-dai-luc-nham": {
+  "t": "大六壬",
+  "h": "0787f5fc"
+ },
+ "js.toolsrc.nm-dong-tay-y-ket-hop-tuong-hoc-da-mat-phuong-dong": {
+  "t": "结合中西医的东方面部肌肤相学",
+  "h": "c68a02d7"
+ },
+ "js.toolsrc.nm-hoang-lich": {
+  "t": "皇历",
+  "h": "06d0c30d"
+ },
+ "js.toolsrc.nm-kim-lau": {
+  "t": "金楼",
+  "h": "fdeb6811"
+ },
+ "js.toolsrc.nm-kinh-dich": {
+  "t": "易经",
+  "h": "9e1c199b"
+ },
+ "js.toolsrc.nm-ky-mon-don-giap": {
+  "t": "奇门遁甲",
+  "h": "857ee290"
+ },
+ "js.toolsrc.nm-luc-thap-hoa-giap": {
+  "t": "六十花甲子",
+  "h": "514b67b8"
+ },
+ "js.toolsrc.nm-ma-y-than-tuong-lieu-trang-than-tuong-thuy-kinh-tap": {
+  "t": "麻衣神相、柳庄神相、水镜集",
+  "h": "c678958d"
+ },
+ "js.toolsrc.nm-ma-y-than-tuong-ngu-am-tuong-phap": {
+  "t": "麻衣神相、五音相法",
+  "h": "591efba5"
+ },
+ "js.toolsrc.nm-mai-hoa-dich-so": {
+  "t": "梅花易数",
+  "h": "9093e560"
+ },
+ "js.toolsrc.nm-ngu-hanh-nap-am-bat-trach": {
+  "t": "五行纳音、八宅",
+  "h": "00ae64d4"
+ },
+ "js.toolsrc.nm-nhan-tuong-hoc-phuong-dong-hinh-tuong-ngu-hanh": {
+  "t": "东方人相学（五行形相）",
+  "h": "a704a7a9"
+ },
+ "js.toolsrc.nm-nhan-tuong-hoc-phuong-dong-nap-am-ngu-hanh": {
+  "t": "东方人相学、纳音五行",
+  "h": "f456450e"
+ },
+ "js.toolsrc.nm-personal-color-phan-tich-mau-sac-ca-nhan": {
+  "t": "个人色彩 Personal Color 分析",
+  "h": "6a35b8eb"
+ },
+ "js.toolsrc.nm-than-so-hoc-pythagoras": {
+  "t": "毕达哥拉斯数字学",
+  "h": "8b181ba4"
+ },
+ "js.toolsrc.nm-trung-chau-phai-luc-thap-tinh-he-vuong-dinh-chi": {
+  "t": "中州派 — 六十星系（王亭之）",
+  "h": "743388f3"
+ },
+ "js.toolsrc.nm-tu-binh": {
+  "t": "子平",
+  "h": "66c4edf1"
+ },
+ "js.toolsrc.nm-tu-vi-dau-so-tan-bien-van-dang-thai-thu-lang": {
+  "t": "紫微斗数新编（Van Dang Thai Thu Lang）",
+  "h": "2e7fd5a8"
+ },
+ "js.toolsrc.theo": {
+  "t": "依据<i>{s}</i>。",
+  "h": "e7fd9754"
+ },
+ "js.toolsrc.tvmb": {
+  "t": "由<b>明宝紫微斗数专家团队</b>自行创建的参照体系。",
+  "h": "43366641"
+ },
+ "js.toolsrc.va": {
+  "t": "{a}、{b}",
+  "h": "cd730a63"
+ },
+ "js.toolsrc.xem-day-du": {
+  "t": "查看完整数据源 →",
+  "h": "833fe188"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"付款 ",
   "h": "3d7d89ae"
