@@ -307,6 +307,162 @@
   "t": "See the full terms in the <a href=\"/dieu-khoan-dich-vu.html\">Terms of Service</a> (section 2 — Limitation of liability) and the service description on the <a href=\"/san-pham-dich-vu.html\">Products &amp; Services</a> page.",
   "h": "dc202339"
  },
+ "giosinh.12-la-so-kha-nghi": {
+  "t": "12 candidate<br>charts",
+  "h": "6b8b7bde"
+ },
+ "giosinh.2-xem-12-gio-kha-nghi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">See the 12 candidate hours</span>",
+  "h": "41d140ce"
+ },
+ "giosinh.am-lich": {
+  "t": "Lunar calendar",
+  "h": "b0246c79"
+ },
+ "giosinh.anh-chi-nhap-ngay-sinh-theo": {
+  "t": "You entered the birth date in the <b>lunar calendar</b>. The other tools take the <b>solar calendar</b>, and the system has no reverse lunar-to-solar conversion yet, so the hand-off cannot be automatic. The hour you just confirmed above is still usable — enter it by hand when you open another tool.",
+  "h": "edb9dc0c"
+ },
+ "giosinh.anh-chi-von-da-biet-chac": {
+  "t": "Already sure of your birth hour?",
+  "h": "d8efb8c1"
+ },
+ "giosinh.buoc-tiep-theo-thu-hep-bang": {
+  "t": "Next step — narrow it down with a survey",
+  "h": "12044ce6"
+ },
+ "giosinh.buoc-xem-12-la-so-kha": {
+  "t": "Viewing the 12 candidate charts is <b>free</b>. The narrowing survey and the ranking cost credits.",
+  "h": "88e80a48"
+ },
+ "giosinh.cach-kiem-chac-nhat-lap-la": {
+  "t": "The surest check: build charts for the <b>top two hours</b>, read the last 5 years of the fortune-cycle section, and keep the hour that describes your life better.",
+  "h": "9b5f4abc"
+ },
+ "giosinh.cach-nay-thu-hep-bang-muc": {
+  "t": "This method narrows things down by how well your answers match each chart, so it <b>ranks likelihood</b> rather than proving which hour is right. For people who answer close to reality, the true hour falls within the top 3 in most cases — but being first is less certain. That is why this page shows the whole list with evidence for you to check, instead of one confident-sounding number.",
+  "h": "eaefa2a0"
+ },
+ "giosinh.chon-gio-anh-chi-muon-dung": {
+  "t": "Choose the hour you want to use. It is saved to your account's <b>Chart Book</b>, so every other tool is pre-filled — no retyping, no remembering.",
+  "h": "36fd6d7b"
+ },
+ "giosinh.chot-gio-va-dung-tiep": {
+  "t": "Confirm the hour and keep going",
+  "h": "2c33bc41"
+ },
+ "giosinh.cung-mot-ngay-sinh-12-la": {
+  "t": "Same birth date — 12 completely different charts",
+  "h": "92803f8c"
+ },
+ "giosinh.duong-lich": {
+  "t": "Solar calendar",
+  "h": "dfac44de"
+ },
+ "giosinh.gio-dung-neu-biet": {
+  "t": "Actual hour (if you know it)",
+  "h": "f70330da"
+ },
+ "giosinh.gio-muon-dung": {
+  "t": "Hour to use",
+  "h": "853206cc"
+ },
+ "giosinh.gio-sinh-doi-thi-cung-menh": {
+  "t": "When the birth hour changes, the Life Palace changes, the Bureau changes, and every star position shifts with it. These are the 12 possibilities for <b id=\"freeLine\"></b> — only one of them is your real chart.",
+  "h": "ca364a84"
+ },
+ "giosinh.gio-sinh-kha-nang-cao-nhat": {
+  "t": "Most likely birth hours",
+  "h": "449a17e1"
+ },
+ "giosinh.gioi-tinh": {
+  "t": "Gender",
+  "h": "80bbce55"
+ },
+ "giosinh.gui-doi-chieu": {
+  "t": "Submit for comparison",
+  "h": "50ad4ad2"
+ },
+ "giosinh.khao-sat-thu-hep": {
+  "t": "Narrowing<br>survey",
+  "h": "c176396d"
+ },
+ "giosinh.khao-sat-thu-hep-ua1r": {
+  "t": "Narrowing survey",
+  "h": "0d669868"
+ },
+ "giosinh.khong-nho-chinh-xac-gio-sinh": {
+  "t": "Not remembering your exact birth hour can throw the whole Zi Wei Dou Shu chart off from the very root. Answer a few questions and the system narrows things down within the 12 two-hour periods to find the closest birth hour.",
+  "h": "83b0cbd2"
+ },
+ "giosinh.khong-nho-gio-sinh-lap-ca": {
+  "t": "Don't remember your birth hour? Build all 12 candidate charts, then narrow them down with a few questions about your health and the life stages you have been through.",
+  "h": "b7c6b615"
+ },
+ "giosinh.lam-lai": {
+  "t": "Start over",
+  "h": "535fca0d"
+ },
+ "giosinh.loai-lich": {
+  "t": "Calendar type",
+  "h": "4f30f6b5"
+ },
+ "giosinh.luan-giai-la-so-nay": {
+  "t": "Read this chart →",
+  "h": "5fea8efd"
+ },
+ "giosinh.luu-vao-so-la-so": {
+  "t": "Save to Chart Book",
+  "h": "b9785d51"
+ },
+ "giosinh.nam": {
+  "t": "Year",
+  "h": "98926c7e"
+ },
+ "giosinh.nam-gioi": {
+  "t": "Male",
+  "h": "b580ba1b"
+ },
+ "giosinh.neu-co-giay-khai-sinh-hoac": {
+  "t": "If you have a birth certificate or a family member who remembers for sure, tell us the real hour — comparing it with the result just now helps us calibrate the method. It is optional and does not change your reading at all.",
+  "h": "31f387ef"
+ },
+ "giosinh.ngay": {
+  "t": "Day",
+  "h": "368c4575"
+ },
+ "giosinh.nhap-ngay-thang-nam-sinh-gio": {
+  "t": "Enter your <b>birth date</b> — the birth hour is exactly what we are looking for. The system builds <b>12 candidate charts</b>, narrows them with a short survey, then ranks them by how well they match.",
+  "h": "287c421e"
+ },
+ "giosinh.thang": {
+  "t": "Month",
+  "h": "0e2b3099"
+ },
+ "giosinh.vi-sao-khong-phai-mot-con": {
+  "t": "Why it is not one confident number",
+  "h": "2bbd8eab"
+ },
+ "giosinh.xac-dinh-gio-sinh": {
+  "t": "Find Your Birth Hour",
+  "h": "2b570401"
+ },
+ "giosinh.xac-dinh-gio-sinh-khong-nho": {
+  "t": "<b>Find Your Birth Hour</b><span>Don't remember it? Start here</span>",
+  "h": "1407f5d3"
+ },
+ "giosinh.xac-dinh-gio-sinh-tu-vi": {
+  "t": "Find Your Birth Hour — Minh Bao Zi Wei Dou Shu",
+  "h": "c14e875f"
+ },
+ "giosinh.xem-12-gio-kha-nghi": {
+  "t": "See the 12 candidate hours",
+  "h": "3cd9aabf"
+ },
+ "giosinh.xep-hang-do-khop": {
+  "t": "Rank by<br>match",
+  "h": "a6655e79"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>Worldwide</span> <span><span class=\"ic\" data-icon=\"check\"></span>Verified</span>",
   "h": "4d77621e"
@@ -1258,6 +1414,194 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "Annual cycle for ",
   "h": "1979c56a"
+ },
+ "js.giosinh.am-lich": {
+  "t": " (lunar)",
+  "h": "ebf71daf"
+ },
+ "js.giosinh.anh-chi-chua-chot-duoc-gio": {
+  "t": "You haven't pinned down your birth hour yet — ask me how to tell the candidate hours apart.",
+  "h": "fe1408ea"
+ },
+ "js.giosinh.bat-dau-khao-sat": {
+  "t": "Start the narrowing survey →",
+  "h": "89663d6e"
+ },
+ "js.giosinh.cam-on-dung": {
+  "t": "Thank you — the true hour is in the list the system gave. Noted.",
+  "h": "816391d2"
+ },
+ "js.giosinh.cam-on-truot": {
+  "t": "Thank you — this time the system missed. Exactly the kind of case we need to refine the method.",
+  "h": "850e32a7"
+ },
+ "js.giosinh.cau-n-toi-da": {
+  "t": "Question {n} / up to {max}",
+  "h": "37d9a74f"
+ },
+ "js.giosinh.chip-cung-tat-ach": {
+  "t": "What does the Health Palace tell us?",
+  "h": "f6448214"
+ },
+ "js.giosinh.chip-khong-nho-gio": {
+  "t": "Can I still read my chart if I don't know my birth hour?",
+  "h": "36b87cba"
+ },
+ "js.giosinh.chip-vi-sao-doi-gio": {
+  "t": "Why does changing the birth hour change the whole chart?",
+  "h": "eb87751b"
+ },
+ "js.giosinh.chon-gio-dung-truoc": {
+  "t": "Please choose the actual hour first.",
+  "h": "b1862011"
+ },
+ "js.giosinh.chua-biet": {
+  "t": "— not sure —",
+  "h": "555657b4"
+ },
+ "js.giosinh.chua-co-ket-qua": {
+  "t": "There is no result to compare yet.",
+  "h": "49c0ec23"
+ },
+ "js.giosinh.chua-doc-duoc-bang-gia": {
+  "t": "Couldn't load the price list — please reload the page.",
+  "h": "247f0130"
+ },
+ "js.giosinh.chua-ghi-duoc-vao-so": {
+  "t": "Couldn't save to the book (network or sign-in session). The hour you just confirmed is still remembered on this device.",
+  "h": "d599ae15"
+ },
+ "js.giosinh.co-loi-xay-ra": {
+  "t": "Something went wrong.",
+  "h": "08eddac7"
+ },
+ "js.giosinh.cuc-n": {
+  "t": "{n}",
+  "h": "a0da4ad0"
+ },
+ "js.giosinh.da-luu-vao-so": {
+  "t": "Saved to your Chart Book. Other tools will pre-fill this hour.",
+  "h": "c43dc72d"
+ },
+ "js.giosinh.da-nho-tren-may-nay": {
+  "t": "Remembered on this device — it will be ready when you open another tool. Sign in and the chart goes into your account's book, staying with you across devices.",
+  "h": "10b9b2e9"
+ },
+ "js.giosinh.dang-lap-12-la-so": {
+  "t": "Building 12 charts…",
+  "h": "1e2ebabc"
+ },
+ "js.giosinh.dang-luu": {
+  "t": "Saving…",
+  "h": "b98712c0"
+ },
+ "js.giosinh.dang-tinh": {
+  "t": "Calculating…",
+  "h": "76a9d5f0"
+ },
+ "js.giosinh.dua-tren": {
+  "t": "Based on {n} answered questions · match {p}%",
+  "h": "0fb2318b"
+ },
+ "js.giosinh.duong-lich": {
+  "t": " (solar)",
+  "h": "4471b62b"
+ },
+ "js.giosinh.gio-chi": {
+  "t": "Hour of {chi}",
+  "h": "87e9bdfa"
+ },
+ "js.giosinh.gio-chi-khung": {
+  "t": "{chi} hour ({khung})",
+  "h": "86326af7"
+ },
+ "js.giosinh.khong-gui-duoc": {
+  "t": "Couldn't send it, but no worries — your reading is unchanged.",
+  "h": "5e875ab2"
+ },
+ "js.giosinh.khong-lap-duoc-la-so": {
+  "t": "Couldn't build the chart.",
+  "h": "16f828bd"
+ },
+ "js.giosinh.khong-ro-khong-nho-bo-qua": {
+  "t": "Not sure / don't remember — skip this question",
+  "h": "538ab29a"
+ },
+ "js.giosinh.lock-cta": {
+  "t": "Unlock all 12 charts + survey",
+  "h": "1b686643"
+ },
+ "js.giosinh.lock-i1": {
+  "t": "All 12 candidate charts (Life + Health Palace for each hour)",
+  "h": "672803dc"
+ },
+ "js.giosinh.lock-i2": {
+  "t": "A question set built for your birth date",
+  "h": "229e75db"
+ },
+ "js.giosinh.lock-i3": {
+  "t": "The 12 hours ranked by likelihood",
+  "h": "b08e68e7"
+ },
+ "js.giosinh.lock-i4": {
+  "t": "Evidence for and against, question by question",
+  "h": "ed0e1963"
+ },
+ "js.giosinh.lock-i5": {
+  "t": "Confidence level and advice on settling the hour",
+  "h": "4c5e6f1b"
+ },
+ "js.giosinh.lock-title": {
+  "t": "⊙ Birth-hour file not unlocked",
+  "h": "75ef5f41"
+ },
+ "js.giosinh.luong": {
+  "t": "credits",
+  "h": "6614284e"
+ },
+ "js.giosinh.menh-colon": {
+  "t": "Life Palace:",
+  "h": "d24288f5"
+ },
+ "js.giosinh.nhap-nam-sinh-trong-khoang-1900": {
+  "t": "Enter a birth year between 1900 and 2030.",
+  "h": "41815a93"
+ },
+ "js.giosinh.survey-pitch": {
+  "t": "For this birth date the system builds <b>{n} questions</b> of its own — the answers are groups of hours that show different signs for <b>this very date</b>, so everyone gets a different question set. When you finish, you get <b>the 2–3 most likely hours with evidence for each answer</b>.",
+  "h": "383cb5d5"
+ },
+ "js.giosinh.tat-ach-colon": {
+  "t": "Health Palace:",
+  "h": "80b98397"
+ },
+ "js.giosinh.tc-cao": {
+  "t": "high",
+  "h": "db10c479"
+ },
+ "js.giosinh.tc-thap": {
+  "t": "low",
+  "h": "ecd6f14a"
+ },
+ "js.giosinh.tc-vua": {
+  "t": "medium",
+  "h": "0467562c"
+ },
+ "js.giosinh.tin-cay": {
+  "t": "Confidence: {m}",
+  "h": "90b46fcf"
+ },
+ "js.giosinh.ton": {
+  "t": "Costs",
+  "h": "e603a0b9"
+ },
+ "js.giosinh.vo-chinh-dieu": {
+  "t": "no major star",
+  "h": "bd07d7a9"
+ },
+ "js.giosinh.xem-12-gio-kha-nghi": {
+  "t": "See the 12 candidate hours",
+  "h": "3cd9aabf"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "First 3 steps",

@@ -307,6 +307,162 @@
   "t": "完整条款请见<a href=\"/dieu-khoan-dich-vu.html\">服务条款</a>（第 2 节——责任限制），服务说明请见<a href=\"/san-pham-dich-vu.html\">产品与服务</a>页面。",
   "h": "dc202339"
  },
+ "giosinh.12-la-so-kha-nghi": {
+  "t": "12张候选<br>命盘",
+  "h": "6b8b7bde"
+ },
+ "giosinh.2-xem-12-gio-kha-nghi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">查看12个候选时辰</span>",
+  "h": "41d140ce"
+ },
+ "giosinh.am-lich": {
+  "t": "农历",
+  "h": "b0246c79"
+ },
+ "giosinh.anh-chi-nhap-ngay-sinh-theo": {
+  "t": "您输入的是<b>农历</b>生日。其他工具接收的是<b>国历</b>，而系统尚无「农历转国历」的反向换算，因此无法自动带入。上方刚确定的时辰仍可使用，打开其他工具时请手动输入。",
+  "h": "edb9dc0c"
+ },
+ "giosinh.anh-chi-von-da-biet-chac": {
+  "t": "已经确定出生时辰了吗？",
+  "h": "d8efb8c1"
+ },
+ "giosinh.buoc-tiep-theo-thu-hep-bang": {
+  "t": "下一步——用问卷逐步缩小范围",
+  "h": "12044ce6"
+ },
+ "giosinh.buoc-xem-12-la-so-kha": {
+  "t": "查看12张候选命盘这一步<b>免费</b>。缩小范围的问卷与排名才会扣两（点数）。",
+  "h": "88e80a48"
+ },
+ "giosinh.cach-kiem-chac-nhat-lap-la": {
+  "t": "最稳当的验证方式：为<b>排名前两名的时辰</b>各排一张命盘，阅读近5年的运势部分，哪个时辰描述得更贴近，就采用哪个。",
+  "h": "9b5f4abc"
+ },
+ "giosinh.cach-nay-thu-hep-bang-muc": {
+  "t": "此方法是依您的回答与各张命盘的吻合度逐步缩小范围，因此只能<b>排出可能性高低</b>，无法证明哪个时辰才是对的。对于回答贴近实际情况的人，多数情况下正确时辰会落在前3名——但排名第一则没有那么确定。所以本页提供附带依据的完整名单让您自行核对，而不是只给一个听起来很肯定的数字。",
+  "h": "eaefa2a0"
+ },
+ "giosinh.chon-gio-anh-chi-muon-dung": {
+  "t": "请选择您要使用的时辰。系统会存入帐号的<b>命盘簿</b>，其他工具都会自动带入——不必重打，也不必牢记。",
+  "h": "36fd6d7b"
+ },
+ "giosinh.chot-gio-va-dung-tiep": {
+  "t": "确定时辰并继续使用",
+  "h": "2c33bc41"
+ },
+ "giosinh.cung-mot-ngay-sinh-12-la": {
+  "t": "同一个生日——12张截然不同的命盘",
+  "h": "92803f8c"
+ },
+ "giosinh.duong-lich": {
+  "t": "国历",
+  "h": "dfac44de"
+ },
+ "giosinh.gio-dung-neu-biet": {
+  "t": "正确时辰（若您知道）",
+  "h": "f70330da"
+ },
+ "giosinh.gio-muon-dung": {
+  "t": "要使用的时辰",
+  "h": "853206cc"
+ },
+ "giosinh.gio-sinh-doi-thi-cung-menh": {
+  "t": "出生时辰一改，命宫就变，五行局也变，所有星曜的位置随之全部改变。这是<b id=\"freeLine\"></b>的12种可能——其中只有一张是您真正的命盘。",
+  "h": "ca364a84"
+ },
+ "giosinh.gio-sinh-kha-nang-cao-nhat": {
+  "t": "最有可能的出生时辰",
+  "h": "449a17e1"
+ },
+ "giosinh.gioi-tinh": {
+  "t": "性别",
+  "h": "80bbce55"
+ },
+ "giosinh.gui-doi-chieu": {
+  "t": "送出比对",
+  "h": "50ad4ad2"
+ },
+ "giosinh.khao-sat-thu-hep": {
+  "t": "缩小范围<br>问卷",
+  "h": "c176396d"
+ },
+ "giosinh.khao-sat-thu-hep-ua1r": {
+  "t": "缩小范围问卷",
+  "h": "0d669868"
+ },
+ "giosinh.khong-nho-chinh-xac-gio-sinh": {
+  "t": "记不清确切的出生时辰，整张紫微斗数命盘很容易从根源就偏掉。回答几个问题，系统会在12个时辰中逐步缩小范围，找出最接近的出生时辰。",
+  "h": "83b0cbd2"
+ },
+ "giosinh.khong-nho-gio-sinh-lap-ca": {
+  "t": "不记得出生时辰吗？先排出全部12张候选命盘，再透过几个关于健康与人生各阶段的问题逐步缩小范围。",
+  "h": "b7c6b615"
+ },
+ "giosinh.lam-lai": {
+  "t": "重新开始",
+  "h": "535fca0d"
+ },
+ "giosinh.loai-lich": {
+  "t": "历法类型",
+  "h": "4f30f6b5"
+ },
+ "giosinh.luan-giai-la-so-nay": {
+  "t": "解读这张命盘 →",
+  "h": "5fea8efd"
+ },
+ "giosinh.luu-vao-so-la-so": {
+  "t": "存入命盘簿",
+  "h": "b9785d51"
+ },
+ "giosinh.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "giosinh.nam-gioi": {
+  "t": "男",
+  "h": "b580ba1b"
+ },
+ "giosinh.neu-co-giay-khai-sinh-hoac": {
+  "t": "若您有出生证明或家人清楚记得，请告诉我们正确的时辰——与刚才的结果比对，能帮助我们校正方法。此项为选填，完全不影响您的解读内容。",
+  "h": "31f387ef"
+ },
+ "giosinh.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "giosinh.nhap-ngay-thang-nam-sinh-gio": {
+  "t": "请输入<b>出生年月日</b>——出生时辰正是要找的东西。系统会排出<b>12张候选命盘</b>，透过简短问卷缩小范围，再依吻合度排名。",
+  "h": "287c421e"
+ },
+ "giosinh.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "giosinh.vi-sao-khong-phai-mot-con": {
+  "t": "为什么不是一个斩钉截铁的数字",
+  "h": "2bbd8eab"
+ },
+ "giosinh.xac-dinh-gio-sinh": {
+  "t": "确认出生时辰",
+  "h": "2b570401"
+ },
+ "giosinh.xac-dinh-gio-sinh-khong-nho": {
+  "t": "<b>确认出生时辰</b><span>不记得出生时辰，就从这里开始</span>",
+  "h": "1407f5d3"
+ },
+ "giosinh.xac-dinh-gio-sinh-tu-vi": {
+  "t": "确认出生时辰——明宝紫微斗数",
+  "h": "c14e875f"
+ },
+ "giosinh.xem-12-gio-kha-nghi": {
+  "t": "查看12个候选时辰",
+  "h": "3cd9aabf"
+ },
+ "giosinh.xep-hang-do-khop": {
+  "t": "依吻合度<br>排名",
+  "h": "a6655e79"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>跨国数据</span> <span><span class=\"ic\" data-icon=\"check\"></span>已经查证</span>",
   "h": "4d77621e"
@@ -1258,6 +1414,194 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "流年小运 ",
   "h": "1979c56a"
+ },
+ "js.giosinh.am-lich": {
+  "t": "（农历）",
+  "h": "ebf71daf"
+ },
+ "js.giosinh.anh-chi-chua-chot-duoc-gio": {
+  "t": "您还没确定出生时辰——也可以问我如何分辨各个候选时辰。",
+  "h": "fe1408ea"
+ },
+ "js.giosinh.bat-dau-khao-sat": {
+  "t": "开始缩小范围问卷 →",
+  "h": "89663d6e"
+ },
+ "js.giosinh.cam-on-dung": {
+  "t": "谢谢您——正确时辰在系统给出的名单内，已记录。",
+  "h": "816391d2"
+ },
+ "js.giosinh.cam-on-truot": {
+  "t": "谢谢您——这次系统没猜中，正是我们用来调整方法所需要的案例。",
+  "h": "850e32a7"
+ },
+ "js.giosinh.cau-n-toi-da": {
+  "t": "第 {n} 题／最多 {max} 题",
+  "h": "37d9a74f"
+ },
+ "js.giosinh.chip-cung-tat-ach": {
+  "t": "疾厄宫代表什么？",
+  "h": "f6448214"
+ },
+ "js.giosinh.chip-khong-nho-gio": {
+  "t": "不知道出生时辰也能看紫微斗数吗？",
+  "h": "36b87cba"
+ },
+ "js.giosinh.chip-vi-sao-doi-gio": {
+  "t": "为什么出生时辰一改，整张命盘都会变？",
+  "h": "eb87751b"
+ },
+ "js.giosinh.chon-gio-dung-truoc": {
+  "t": "请先选择正确的时辰。",
+  "h": "b1862011"
+ },
+ "js.giosinh.chua-biet": {
+  "t": "— 不清楚 —",
+  "h": "555657b4"
+ },
+ "js.giosinh.chua-co-ket-qua": {
+  "t": "目前还没有可供比对的结果。",
+  "h": "49c0ec23"
+ },
+ "js.giosinh.chua-doc-duoc-bang-gia": {
+  "t": "无法读取价目表——请重新加载页面。",
+  "h": "247f0130"
+ },
+ "js.giosinh.chua-ghi-duoc-vao-so": {
+  "t": "无法写入簿册（网络或登录状态问题）。刚确定的时辰仍会记在这台设备上。",
+  "h": "d599ae15"
+ },
+ "js.giosinh.co-loi-xay-ra": {
+  "t": "发生错误。",
+  "h": "08eddac7"
+ },
+ "js.giosinh.cuc-n": {
+  "t": "{n}",
+  "h": "a0da4ad0"
+ },
+ "js.giosinh.da-luu-vao-so": {
+  "t": "已存入命盘簿，其他工具会自动带入这个时辰。",
+  "h": "c43dc72d"
+ },
+ "js.giosinh.da-nho-tren-may-nay": {
+  "t": "已记在这台设备上——打开其他工具即可直接使用。登录后命盘会进入帐号的簿册，换设备也不会消失。",
+  "h": "10b9b2e9"
+ },
+ "js.giosinh.dang-lap-12-la-so": {
+  "t": "正在排12张命盘…",
+  "h": "1e2ebabc"
+ },
+ "js.giosinh.dang-luu": {
+  "t": "保存中…",
+  "h": "b98712c0"
+ },
+ "js.giosinh.dang-tinh": {
+  "t": "计算中…",
+  "h": "76a9d5f0"
+ },
+ "js.giosinh.dua-tren": {
+  "t": "依据已回答的 {n} 题 · 吻合度 {p}%",
+  "h": "0fb2318b"
+ },
+ "js.giosinh.duong-lich": {
+  "t": "（国历）",
+  "h": "4471b62b"
+ },
+ "js.giosinh.gio-chi": {
+  "t": "{chi}时",
+  "h": "87e9bdfa"
+ },
+ "js.giosinh.gio-chi-khung": {
+  "t": "{chi}时（{khung}）",
+  "h": "86326af7"
+ },
+ "js.giosinh.khong-gui-duoc": {
+  "t": "无法送出，但没关系——您的解读内容不会改变。",
+  "h": "5e875ab2"
+ },
+ "js.giosinh.khong-lap-duoc-la-so": {
+  "t": "无法排出命盘。",
+  "h": "16f828bd"
+ },
+ "js.giosinh.khong-ro-khong-nho-bo-qua": {
+  "t": "不确定／不记得——跳过此题",
+  "h": "538ab29a"
+ },
+ "js.giosinh.lock-cta": {
+  "t": "解锁全部12张命盘＋问卷",
+  "h": "1b686643"
+ },
+ "js.giosinh.lock-i1": {
+  "t": "全部12张候选命盘（每个时辰的命宫＋疾厄宫）",
+  "h": "672803dc"
+ },
+ "js.giosinh.lock-i2": {
+  "t": "依您生日专属编制的问题组",
+  "h": "229e75db"
+ },
+ "js.giosinh.lock-i3": {
+  "t": "12个时辰依可能性排名",
+  "h": "b08e68e7"
+ },
+ "js.giosinh.lock-i4": {
+  "t": "逐题列出吻合／不吻合的依据",
+  "h": "ed0e1963"
+ },
+ "js.giosinh.lock-i5": {
+  "t": "可信度与确定时辰的建议",
+  "h": "4c5e6f1b"
+ },
+ "js.giosinh.lock-title": {
+  "t": "⊙ 出生时辰文件尚未解锁",
+  "h": "75ef5f41"
+ },
+ "js.giosinh.luong": {
+  "t": "两",
+  "h": "6614284e"
+ },
+ "js.giosinh.menh-colon": {
+  "t": "命宫：",
+  "h": "d24288f5"
+ },
+ "js.giosinh.nhap-nam-sinh-trong-khoang-1900": {
+  "t": "请输入1900–2030年之间的出生年份。",
+  "h": "41815a93"
+ },
+ "js.giosinh.survey-pitch": {
+  "t": "系统会依这个生日编出专属的<b>{n}道题</b>——选项是对<b>这一天</b>呈现不同征兆的时辰分组，因此每个人的题组都不一样。作答完毕后，会得到<b>2–3个最有可能的时辰，并附上每一题的依据</b>。",
+  "h": "383cb5d5"
+ },
+ "js.giosinh.tat-ach-colon": {
+  "t": "疾厄宫：",
+  "h": "80b98397"
+ },
+ "js.giosinh.tc-cao": {
+  "t": "高",
+  "h": "db10c479"
+ },
+ "js.giosinh.tc-thap": {
+  "t": "低",
+  "h": "ecd6f14a"
+ },
+ "js.giosinh.tc-vua": {
+  "t": "中",
+  "h": "0467562c"
+ },
+ "js.giosinh.tin-cay": {
+  "t": "可信度：{m}",
+  "h": "90b46fcf"
+ },
+ "js.giosinh.ton": {
+  "t": "需",
+  "h": "e603a0b9"
+ },
+ "js.giosinh.vo-chinh-dieu": {
+  "t": "无正曜",
+  "h": "bd07d7a9"
+ },
+ "js.giosinh.xem-12-gio-kha-nghi": {
+  "t": "查看12个候选时辰",
+  "h": "3cd9aabf"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初的 3 步",

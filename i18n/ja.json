@@ -307,6 +307,162 @@
   "t": "利用規約の全文は<a href=\"/dieu-khoan-dich-vu.html\">利用規約</a>（第2項 — 責任の制限）に、サービスの説明は<a href=\"/san-pham-dich-vu.html\">商品・サービス</a>ページに掲載しています。",
   "h": "dc202339"
  },
+ "giosinh.12-la-so-kha-nghi": {
+  "t": "候補の命盤<br>12枚",
+  "h": "6b8b7bde"
+ },
+ "giosinh.2-xem-12-gio-kha-nghi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">候補の12時刻を見る</span>",
+  "h": "41d140ce"
+ },
+ "giosinh.am-lich": {
+  "t": "旧暦（太陰暦）",
+  "h": "b0246c79"
+ },
+ "giosinh.anh-chi-nhap-ngay-sinh-theo": {
+  "t": "生年月日を<b>旧暦</b>で入力されました。ほかのツールは<b>新暦</b>で受け付けており、旧暦から新暦への逆変換にはまだ対応していないため、自動で引き継ぐことはできません。上で確定した時刻はそのままお使いいただけます。ほかのツールを開いたときは手入力してください。",
+  "h": "edb9dc0c"
+ },
+ "giosinh.anh-chi-von-da-biet-chac": {
+  "t": "出生時刻がすでに確かな方へ",
+  "h": "d8efb8c1"
+ },
+ "giosinh.buoc-tiep-theo-thu-hep-bang": {
+  "t": "次のステップ：質問で絞り込む",
+  "h": "12044ce6"
+ },
+ "giosinh.buoc-xem-12-la-so-kha": {
+  "t": "12枚の候補命盤を見るステップは<b>無料</b>です。絞り込みの質問とランキングには両（クレジット）がかかります。",
+  "h": "88e80a48"
+ },
+ "giosinh.cach-kiem-chac-nhat-lap-la": {
+  "t": "最も確実な確かめ方：<b>上位2つの時刻</b>で命盤を作り、直近5年の運勢の部分を読んで、より当てはまるほうの時刻を採用してください。",
+  "h": "9b5f4abc"
+ },
+ "giosinh.cach-nay-thu-hep-bang-muc": {
+  "t": "この方法は、あなたの回答と各命盤との一致度で絞り込むため、<b>可能性を順位づけ</b>するもので、どの時刻が正しいかを証明するものではありません。実際に近い回答をした方の場合、多くのケースで正しい時刻は上位3つに入りますが、1位かどうかはそこまで確実ではありません。そのため、このページは断定的に聞こえる数字ひとつではなく、根拠つきのリスト全体をお見せし、ご自身で確かめていただく形にしています。",
+  "h": "eaefa2a0"
+ },
+ "giosinh.chon-gio-anh-chi-muon-dung": {
+  "t": "使いたい時刻を選んでください。アカウントの<b>命盤ノート</b>に保存されるので、ほかのツールにも自動で入力されます。打ち直しも、覚えておく必要もありません。",
+  "h": "36fd6d7b"
+ },
+ "giosinh.chot-gio-va-dung-tiep": {
+  "t": "時刻を確定して次へ",
+  "h": "2c33bc41"
+ },
+ "giosinh.cung-mot-ngay-sinh-12-la": {
+  "t": "同じ生年月日でも、12枚の命盤はまったく異なる",
+  "h": "92803f8c"
+ },
+ "giosinh.duong-lich": {
+  "t": "新暦（太陽暦）",
+  "h": "dfac44de"
+ },
+ "giosinh.gio-dung-neu-biet": {
+  "t": "正しい時刻（わかる場合）",
+  "h": "f70330da"
+ },
+ "giosinh.gio-muon-dung": {
+  "t": "使う時刻",
+  "h": "853206cc"
+ },
+ "giosinh.gio-sinh-doi-thi-cung-menh": {
+  "t": "出生時刻が変わると命宮が変わり、局が変わり、星の配置もすべて変わります。これは<b id=\"freeLine\"></b>の12通りの可能性で、本当の命盤はそのうちの1枚だけです。",
+  "h": "ca364a84"
+ },
+ "giosinh.gio-sinh-kha-nang-cao-nhat": {
+  "t": "最も可能性の高い出生時刻",
+  "h": "449a17e1"
+ },
+ "giosinh.gioi-tinh": {
+  "t": "性別",
+  "h": "80bbce55"
+ },
+ "giosinh.gui-doi-chieu": {
+  "t": "照合を送信",
+  "h": "50ad4ad2"
+ },
+ "giosinh.khao-sat-thu-hep": {
+  "t": "絞り込みの<br>質問",
+  "h": "c176396d"
+ },
+ "giosinh.khao-sat-thu-hep-ua1r": {
+  "t": "絞り込みの質問",
+  "h": "0d669868"
+ },
+ "giosinh.khong-nho-chinh-xac-gio-sinh": {
+  "t": "出生時刻を正確に覚えていないと、紫微斗数の命盤は根本からずれやすくなります。いくつかの質問に答えると、システムが12の時間帯の中から段階的に絞り込み、最も近い出生時刻を探し出します。",
+  "h": "83b0cbd2"
+ },
+ "giosinh.khong-nho-gio-sinh-lap-ca": {
+  "t": "出生時刻を覚えていませんか？候補の命盤12枚をすべて作り、健康状態やこれまでの人生の時期に関するいくつかの質問で絞り込みます。",
+  "h": "b7c6b615"
+ },
+ "giosinh.lam-lai": {
+  "t": "やり直す",
+  "h": "535fca0d"
+ },
+ "giosinh.loai-lich": {
+  "t": "暦の種類",
+  "h": "4f30f6b5"
+ },
+ "giosinh.luan-giai-la-so-nay": {
+  "t": "この命盤を鑑定する →",
+  "h": "5fea8efd"
+ },
+ "giosinh.luu-vao-so-la-so": {
+  "t": "命盤ノートに保存",
+  "h": "b9785d51"
+ },
+ "giosinh.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "giosinh.nam-gioi": {
+  "t": "男性",
+  "h": "b580ba1b"
+ },
+ "giosinh.neu-co-giay-khai-sinh-hoac": {
+  "t": "出生証明書や、はっきり覚えているご家族がいれば、正しい時刻を教えてください。先ほどの結果と照らし合わせることで、方法の調整に役立ちます。任意であり、あなたの鑑定結果には一切影響しません。",
+  "h": "31f387ef"
+ },
+ "giosinh.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "giosinh.nhap-ngay-thang-nam-sinh-gio": {
+  "t": "<b>生年月日</b>を入力してください。出生時刻こそが探したいものです。システムが<b>12枚の候補命盤</b>を作り、短い質問で絞り込み、一致度の順に並べます。",
+  "h": "287c421e"
+ },
+ "giosinh.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "giosinh.vi-sao-khong-phai-mot-con": {
+  "t": "なぜ断定的な数字ひとつではないのか",
+  "h": "2bbd8eab"
+ },
+ "giosinh.xac-dinh-gio-sinh": {
+  "t": "出生時刻の特定",
+  "h": "2b570401"
+ },
+ "giosinh.xac-dinh-gio-sinh-khong-nho": {
+  "t": "<b>出生時刻の特定</b><span>覚えていなければここから</span>",
+  "h": "1407f5d3"
+ },
+ "giosinh.xac-dinh-gio-sinh-tu-vi": {
+  "t": "出生時刻の特定 — 明宝紫微斗数",
+  "h": "c14e875f"
+ },
+ "giosinh.xem-12-gio-kha-nghi": {
+  "t": "候補の12時刻を見る",
+  "h": "3cd9aabf"
+ },
+ "giosinh.xep-hang-do-khop": {
+  "t": "一致度で<br>ランキング",
+  "h": "a6655e79"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>多国籍</span> <span><span class=\"ic\" data-icon=\"check\"></span>検証済み</span>",
   "h": "4d77621e"
@@ -1258,6 +1414,194 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "小運の年：",
   "h": "1979c56a"
+ },
+ "js.giosinh.am-lich": {
+  "t": "（旧暦）",
+  "h": "ebf71daf"
+ },
+ "js.giosinh.anh-chi-chua-chot-duoc-gio": {
+  "t": "出生時刻がまだ決まっていないのですね。候補の時刻の見分け方について私に聞いてもかまいません。",
+  "h": "fe1408ea"
+ },
+ "js.giosinh.bat-dau-khao-sat": {
+  "t": "絞り込みの質問を始める →",
+  "h": "89663d6e"
+ },
+ "js.giosinh.cam-on-dung": {
+  "t": "ありがとうございます。正しい時刻はシステムが示した一覧に入っていました。記録しました。",
+  "h": "816391d2"
+ },
+ "js.giosinh.cam-on-truot": {
+  "t": "ありがとうございます。今回はシステムの推定が外れました。まさに方法を改善するために必要な事例です。",
+  "h": "850e32a7"
+ },
+ "js.giosinh.cau-n-toi-da": {
+  "t": "質問 {n} / 最大 {max} 問",
+  "h": "37d9a74f"
+ },
+ "js.giosinh.chip-cung-tat-ach": {
+  "t": "疾厄宮は何を表しますか？",
+  "h": "f6448214"
+ },
+ "js.giosinh.chip-khong-nho-gio": {
+  "t": "出生時刻がわからなくても占えますか？",
+  "h": "36b87cba"
+ },
+ "js.giosinh.chip-vi-sao-doi-gio": {
+  "t": "出生時刻が変わると、なぜ命盤全体が変わるのですか？",
+  "h": "eb87751b"
+ },
+ "js.giosinh.chon-gio-dung-truoc": {
+  "t": "先に正しい時刻を選んでください。",
+  "h": "b1862011"
+ },
+ "js.giosinh.chua-biet": {
+  "t": "— わからない —",
+  "h": "555657b4"
+ },
+ "js.giosinh.chua-co-ket-qua": {
+  "t": "照合する結果がまだありません。",
+  "h": "49c0ec23"
+ },
+ "js.giosinh.chua-doc-duoc-bang-gia": {
+  "t": "料金表を読み込めませんでした。ページを再読み込みしてください。",
+  "h": "247f0130"
+ },
+ "js.giosinh.chua-ghi-duoc-vao-so": {
+  "t": "ノートに保存できませんでした（ネットワークまたはログインセッションの問題）。確定した時刻はこの端末には保存されています。",
+  "h": "d599ae15"
+ },
+ "js.giosinh.co-loi-xay-ra": {
+  "t": "エラーが発生しました。",
+  "h": "08eddac7"
+ },
+ "js.giosinh.cuc-n": {
+  "t": "{n}",
+  "h": "a0da4ad0"
+ },
+ "js.giosinh.da-luu-vao-so": {
+  "t": "命盤ノートに保存しました。ほかのツールにもこの時刻が自動で入力されます。",
+  "h": "c43dc72d"
+ },
+ "js.giosinh.da-nho-tren-may-nay": {
+  "t": "この端末に記憶しました。ほかのツールを開けばそのまま使えます。ログインすれば命盤はアカウントのノートに入り、端末を変えても残ります。",
+  "h": "10b9b2e9"
+ },
+ "js.giosinh.dang-lap-12-la-so": {
+  "t": "命盤12枚を作成中…",
+  "h": "1e2ebabc"
+ },
+ "js.giosinh.dang-luu": {
+  "t": "保存中…",
+  "h": "b98712c0"
+ },
+ "js.giosinh.dang-tinh": {
+  "t": "計算中…",
+  "h": "76a9d5f0"
+ },
+ "js.giosinh.dua-tren": {
+  "t": "回答済み{n}問に基づく · 一致度 {p}%",
+  "h": "0fb2318b"
+ },
+ "js.giosinh.duong-lich": {
+  "t": "（新暦）",
+  "h": "4471b62b"
+ },
+ "js.giosinh.gio-chi": {
+  "t": "{chi}の刻",
+  "h": "87e9bdfa"
+ },
+ "js.giosinh.gio-chi-khung": {
+  "t": "{chi}の刻（{khung}）",
+  "h": "86326af7"
+ },
+ "js.giosinh.khong-gui-duoc": {
+  "t": "送信できませんでしたが、ご心配なく。鑑定結果は変わりません。",
+  "h": "5e875ab2"
+ },
+ "js.giosinh.khong-lap-duoc-la-so": {
+  "t": "命盤を作成できませんでした。",
+  "h": "16f828bd"
+ },
+ "js.giosinh.khong-ro-khong-nho-bo-qua": {
+  "t": "わからない／覚えていない — この質問をスキップ",
+  "h": "538ab29a"
+ },
+ "js.giosinh.lock-cta": {
+  "t": "12枚の命盤すべて＋質問を開く",
+  "h": "1b686643"
+ },
+ "js.giosinh.lock-i1": {
+  "t": "候補の命盤12枚すべて（各時刻の命宮＋疾厄宮）",
+  "h": "672803dc"
+ },
+ "js.giosinh.lock-i2": {
+  "t": "生年月日に合わせて作られる質問セット",
+  "h": "229e75db"
+ },
+ "js.giosinh.lock-i3": {
+  "t": "12の時刻を可能性の高さで順位づけ",
+  "h": "b08e68e7"
+ },
+ "js.giosinh.lock-i4": {
+  "t": "各質問ごとの一致・不一致の根拠",
+  "h": "ed0e1963"
+ },
+ "js.giosinh.lock-i5": {
+  "t": "信頼度と、時刻を確定するためのアドバイス",
+  "h": "4c5e6f1b"
+ },
+ "js.giosinh.lock-title": {
+  "t": "⊙ 出生時刻のレポートは未開封です",
+  "h": "75ef5f41"
+ },
+ "js.giosinh.luong": {
+  "t": "両",
+  "h": "6614284e"
+ },
+ "js.giosinh.menh-colon": {
+  "t": "命宮：",
+  "h": "d24288f5"
+ },
+ "js.giosinh.nhap-nam-sinh-trong-khoang-1900": {
+  "t": "出生年は1900〜2030年の範囲で入力してください。",
+  "h": "41815a93"
+ },
+ "js.giosinh.survey-pitch": {
+  "t": "この生年月日に合わせて、システムが専用の<b>{n}問</b>を作成します。選択肢は<b>この日そのもの</b>で異なる兆候を示す時刻のグループなので、質問セットは人によって異なります。回答が終わると、<b>可能性の高い2〜3つの時刻と、各回答ごとの根拠</b>が表示されます。",
+  "h": "383cb5d5"
+ },
+ "js.giosinh.tat-ach-colon": {
+  "t": "疾厄宮：",
+  "h": "80b98397"
+ },
+ "js.giosinh.tc-cao": {
+  "t": "高",
+  "h": "db10c479"
+ },
+ "js.giosinh.tc-thap": {
+  "t": "低",
+  "h": "ecd6f14a"
+ },
+ "js.giosinh.tc-vua": {
+  "t": "中",
+  "h": "0467562c"
+ },
+ "js.giosinh.tin-cay": {
+  "t": "信頼度：{m}",
+  "h": "90b46fcf"
+ },
+ "js.giosinh.ton": {
+  "t": "費用",
+  "h": "e603a0b9"
+ },
+ "js.giosinh.vo-chinh-dieu": {
+  "t": "主星なし",
+  "h": "bd07d7a9"
+ },
+ "js.giosinh.xem-12-gio-kha-nghi": {
+  "t": "候補の12時刻を見る",
+  "h": "3cd9aabf"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初の3ステップ",
