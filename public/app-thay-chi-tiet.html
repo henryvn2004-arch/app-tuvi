@@ -49,7 +49,7 @@
 <script>window.SHELL_ACTIVE='thay';</script>
 <!-- boot() cần ToolPrices ĐỒNG BỘ (cùng lý do với app-thay.html) — thiếu dòng này là mọi thầy ra "Không tìm thấy thầy này". -->
 <script id="_tvmb_prices_js" src="/tool-prices.js?v=12"></script>
-<script src="/shell.js?v=149"></script>
+<script src="/shell.js?v=150"></script>
 <script>
 (function(){
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -59,6 +59,9 @@
   var id = (location.pathname.match(/^\/app\/thay\/([a-z-]+)/) || [])[1] ||
            new URLSearchParams(location.search).get('id') || '';
 
+  // Tên thầy theo ngôn ngữ trang (I18n.master, W19) — chỉ để hiển thị.
+  function mname(m){ return (window.I18n && I18n.master) ? I18n.master(m.id, m.display_name) : m.display_name; }
+  function mtitle(m){ return (window.I18n && I18n.masterTitle) ? I18n.masterTitle(m.id, m.display_name) : 'Thầy ' + m.display_name; }
   function toolTile(row){
     return '<a class="tm-tool" href="' + esc(row.app_path) + '">' + esc(row.label) + '</a>';
   }
@@ -71,24 +74,24 @@
       content.style.display = 'block';
       return;
     }
-    document.title = 'Thầy ' + m.display_name + ' — Tử Vi Minh Bảo';
-    document.getElementById('tmTitle').textContent = 'Thầy ' + m.display_name;
+    document.title = mtitle(m) + ' — Tử Vi Minh Bảo';
+    document.getElementById('tmTitle').textContent = mtitle(m);
     var tools = (m.tool_ids || [])
       .map(function(tid){ for (var i=0;i<toolRows.length;i++) if (toolRows[i].tool_id===tid) return toolRows[i]; return null; })
       .filter(Boolean);
     content.innerHTML =
       '<div class="tm-head">' +
         '<img class="tm-ava" src="/authors/' + esc(m.id) + '.jpg" alt="">' +
-        '<div><div class="tm-name">Thầy ' + esc(m.display_name) + '</div>' +
+        '<div><div class="tm-name">' + esc(mtitle(m)) + '</div>' +
         (m.discipline ? '<span class="tm-disc">' + esc(m.discipline) + '</span>' : '') + '</div>' +
       '</div>' +
       (m.tagline ? '<p class="tm-tag">"' + esc(m.tagline) + '"</p>' : '') +
       (m.greeting ? '<div class="tm-greet">' + esc(m.greeting) + '</div>' : '') +
-      '<button type="button" class="tm-cta" id="tmChat"><span data-icon="message-circle"></span>Hỏi Thầy ' + esc(m.display_name) + '</button>' +
-      '<div class="tm-sub">Công cụ Thầy ' + esc(m.display_name) + ' đứng tên</div>' +
+      '<button type="button" class="tm-cta" id="tmChat"><span data-icon="message-circle"></span>Hỏi Thầy ' + esc(mname(m)) + '</button>' +
+      '<div class="tm-sub">Công cụ Thầy ' + esc(mname(m)) + ' đứng tên</div>' +
       (tools.length
         ? '<div class="tm-tools">' + tools.map(toolTile).join('') + '</div>'
-        : '<p class="tm-empty">Thầy ' + esc(m.display_name) + ' hiện chưa đứng tên công cụ nào — vẫn có thể hỏi trực tiếp qua Hỏi Thầy.</p>');
+        : '<p class="tm-empty">Thầy ' + esc(mname(m)) + ' hiện chưa đứng tên công cụ nào — vẫn có thể hỏi trực tiếp qua Hỏi Thầy.</p>');
     content.style.display = 'block';
     if (window.mountIcons) window.mountIcons(content);
     document.getElementById('tmChat').addEventListener('click', function(){

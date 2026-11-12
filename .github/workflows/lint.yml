@@ -441,6 +441,11 @@ jobs:
       - name: Thuật ngữ Hán-Việt khớp lib/hanviet.ts (bộ dò tất định)
         run: npm run check:glossary
 
+      # Bản luận lá số theo ngôn ngữ (laso_public_i18n, i18n W17): vi không chạm kho mới, hụt→sinh→ghi→trúng,
+      # fail an toàn khi bảng chưa có, save-laso/4 trang luận/migration đúng hợp đồng.
+      - name: Kho luận theo ngôn ngữ (laso_public_i18n)
+        run: npm run check:lasoi18n
+
   typecheck:
     runs-on: ubuntu-latest
     # Cùng lý do với job `lint` ở trên — xem chú thích tại đó.
@@ -484,3 +489,7 @@ jobs:
       # Hash khớp nguồn, không mục mồ côi, locale trong LONG_COMPLETE đủ 100%, zh-cn khớp OpenCC(zh-tw).
       - name: Văn dài đa ngôn ngữ — hash khớp nguồn, đủ mục, không mồ côi
         run: npm run check:i18nlong
+
+      # Tên 15 thầy bản ngữ (W19): bảng MASTERS trong tools-shared/i18n.js phủ đúng AUTHOR_ROSTER × 5 ngôn ngữ.
+      - name: Tên thầy đa ngôn ngữ — đủ 15 id × 5 locale
+        run: npm run check:masters

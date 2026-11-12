@@ -253,7 +253,7 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'bat-tu'};</script>
 <script src="/tools-shared/glossary.js?v=4"></script>
-<script src="/tools-shared/i18n.js?v=4"></script>
+<script src="/tools-shared/i18n.js?v=5"></script>
 <script src="/laso-chart.js?v=11"></script>
 <script src="/tubinh-ansao-engine.js?v=6"></script>
 <script src="/tubinh-domain-scores.js?v=2"></script>
@@ -283,7 +283,7 @@ window.SHELL_INTRO={key:'bat-tu'};</script>
 <script src="/tools-shared/hook-layer.js?v=7"></script>
 <script src="/auth.js?v=9"></script>
 <script src="/tuvi-paywall.js?v=44"></script>
-  <script src="/nav.js?v=49" data-icons-only></script><script src="/shell.js?v=149"></script>
+  <script src="/nav.js?v=49" data-icons-only></script><script src="/shell.js?v=150"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 // Bát Tự dùng ĐÚNG giờ đại diện của địa chi giờ (23,1,3,…) để tứ trụ trên
@@ -963,6 +963,13 @@ async function streamLuanGiai(phan,batTuText,docs,contentEl){
 // hay shell) thì hiện luôn, KHÔNG tính lại.
 async function _fetchCachedLuanGiai(slug){
   try{
+    // i18n W17: trang /<locale>/ ≠ vi đọc ngăn của CHÍNH ngôn ngữ đó (`laso_public_i18n`, qua server —
+    // bảng khoá RLS). `laso_public.luan_giai` chỉ là bản VIỆT; hụt ⇒ null ⇒ sinh như cũ. vi giữ nguyên.
+    if(((window.I18n&&window.I18n.locale)||'vi')!=='vi'){
+      var ri=await fetch('/api/laso-luan?slug='+encodeURIComponent(slug),{cache:'no-store'});
+      var di=ri.ok?await ri.json():null;
+      return (di&&di.luanGiai&&Object.keys(di.luanGiai).length>0)?di.luanGiai:null;
+    }
     var r=await fetch(SB_URL_BT+'/rest/v1/laso_public?slug=eq.'+encodeURIComponent(slug)+'&select=slug,luan_giai&limit=1',{headers:{apikey:SB_ANON_BT}});
     var rows=await r.json();
     if(rows&&rows[0]&&rows[0].luan_giai&&Object.keys(rows[0].luan_giai).length>0)return rows[0].luan_giai;
