@@ -7739,6 +7739,126 @@
   "t": "依據測得的 12 項聲學指標（HNR、持續時間、jitter、頻譜重心…）歸類。依五音古法的完整意涵，收錄於深度分析中。",
   "h": "0c3c0a37"
  },
+ "js.thtu.anh-qua-lon": {
+  "t": "圖片過大。",
+  "h": "cb4417d0"
+ },
+ "js.thtu.da-doc-xong-chi-tay-cua": {
+  "t": "已依古法手相學讀完您的掌紋。還想進一步了解什麼嗎？",
+  "h": "0e67099e"
+ },
+ "js.thtu.dang-doc-chi-tay": {
+  "t": "正在解讀掌紋…",
+  "h": "1d4e7200"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang": {
+  "t": "以 MediaPipe Hands 直接從圖片測得——依據您手掌真實地標點得出的手掌形狀。依古法手相的完整解讀，收錄於深度分析中。",
+  "h": "94672af2"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang-vwvq": {
+  "t": "以 MediaPipe Hands 直接從圖片測得。各手指的意涵、2D:4D 比例與各條掌紋，收錄於深度分析中。",
+  "h": "68dd31bc"
+ },
+ "js.thtu.duong-van-menh-noi-len-dieu-gi": {
+  "t": "命運線透露了什麼？",
+  "h": "04b0d761"
+ },
+ "js.thtu.hinh-bau-duc": {
+  "t": "橢圓形",
+  "h": "209cc96b"
+ },
+ "js.thtu.hinh-dai-thon": {
+  "t": "細長形",
+  "h": "36c13178"
+ },
+ "js.thtu.hinh-dang-s": {
+  "t": "形狀：{s}",
+  "h": "b7ac9175"
+ },
+ "js.thtu.hinh-vuong-rong": {
+  "t": "方形／寬闊形",
+  "h": "2114c5c3"
+ },
+ "js.thtu.khong-co-ket-qua": {
+  "t": "沒有結果。",
+  "h": "97fa6f91"
+ },
+ "js.thtu.khong-doc-duoc-anh-nay-vui": {
+  "t": "無法讀取此圖片——請選擇 JPG 或 PNG 圖片。",
+  "h": "32a1faf4"
+ },
+ "js.thtu.khong-nhan-dien-duoc-ban-tay": {
+  "t": "⚠ 未能偵測到手掌。請在與背景對比分明、光線充足的環境下重新拍得更清楚。",
+  "h": "5abad846"
+ },
+ "js.thtu.khong-the-ket-noi": {
+  "t": "無法連線。",
+  "h": "3dc4d8cb"
+ },
+ "js.thtu.khong-the-mo-camera": {
+  "t": "無法開啟相機。",
+  "h": "39a33224"
+ },
+ "js.thtu.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.thtu.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.thtu.ngon-ap-ut": {
+  "t": "無名指",
+  "h": "44dd840f"
+ },
+ "js.thtu.ngon-cai": {
+  "t": "拇指",
+  "h": "aa7ff125"
+ },
+ "js.thtu.ngon-dai-nhat-f": {
+  "t": "最長的手指：{f}",
+  "h": "8a5684eb"
+ },
+ "js.thtu.ngon-giua": {
+  "t": "中指",
+  "h": "b5a038e9"
+ },
+ "js.thtu.ngon-tro": {
+  "t": "食指",
+  "h": "379d7ea9"
+ },
+ "js.thtu.ngon-ut": {
+  "t": "小指",
+  "h": "6a313fb1"
+ },
+ "js.thtu.tam-dai-chi-la-gi": {
+  "t": "三大指是什麼？",
+  "h": "baef21dd"
+ },
+ "js.thtu.tay-thuan-khac-nhau": {
+  "t": "慣用手與非慣用手有什麼不同？",
+  "h": "10468033"
+ },
+ "js.thtu.thu-tuong": {
+  "t": "手相",
+  "h": "869631da"
+ },
+ "js.thtu.thu-tuong-cua-toi": {
+  "t": "我的手相",
+  "h": "0af7a78d"
+ },
+ "js.thtu.thuong-mat-15-20-giay": {
+  "t": "通常需要 15–20 秒",
+  "h": "087173ee"
+ },
+ "js.thtu.ty-le-rong-dai-long-ban-tay": {
+  "t": "手掌寬／長比例：{r}（{s}）",
+  "h": "e753f592"
+ },
+ "js.thtu.vui-long-chon-file-anh": {
+  "t": "請選擇圖片檔。",
+  "h": "71a61127"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"付款 ",
   "h": "3d7d89ae"
@@ -10098,6 +10218,90 @@
  "thtp.xem-ban-mau": {
   "t": "查看範例 →",
   "h": "ba3671b1"
+ },
+ "thtu.1-tai-anh-ban-tay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">上傳手掌圖片</span>",
+  "h": "0c95364a"
+ },
+ "thtu.anh-chi-gui-toi-may-chu": {
+  "t": "圖片僅傳送至伺服器進行分析，不會儲存在伺服器上。請將手掌攤平、掌心向上，並在光線充足處拍攝。",
+  "h": "9007a9b3"
+ },
+ "thtu.ban-tay-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"hand\"></span> 已偵測到手掌",
+  "h": "720bc996"
+ },
+ "thtu.chi-tuong-hoc-phuong-dong-la": {
+  "t": "東方手相學是依據手掌上的主要線紋與周圍的掌丘，來推斷性格、事業與運勢的學問。它是傳統相學體系中獨立的一支，與面相並行。",
+  "h": "f4eb23c1"
+ },
+ "thtu.chup-va-tai-mot-tam-anh": {
+  "t": "請拍攝或上傳一張手掌清晰的圖片。系統依五行形相分析掌紋，解讀三大紋、命運線、掌丘與手指。",
+  "h": "ecabc37d"
+ },
+ "thtu.do-luong-mediapipe": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> MediaPipe 測量",
+  "h": "b51ea8c8"
+ },
+ "thtu.do-tam-dai-chi-duong-van": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hand\"></span><span>測量三大指、<br>命運線</span>",
+  "h": "91a1d8ca"
+ },
+ "thtu.dung-tay-thuan-de-xem-van": {
+  "t": "請用<strong>慣用手</strong>來看目前的運勢",
+  "h": "0fd522f1"
+ },
+ "thtu.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG、PNG、WebP——最大 5MB · 請拍攝手掌，並清楚拍到掌紋",
+  "h": "757ec708"
+ },
+ "thtu.keo-tha-anh-long-ban-tay": {
+  "t": "將手掌圖片拖放到這裡，或點擊選擇",
+  "h": "8281c1d6"
+ },
+ "thtu.long-ban-tay-luu-lai-dau": {
+  "t": "手掌留下了一路走來的痕跡——事業、感情、健康，都在掌上留下各自的紋路。拍下手掌，即可獲得依五行形相的解讀。",
+  "h": "75a0d71c"
+ },
+ "thtu.luan-theo-ngu-hanh-hinh-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依五行形相<br>解讀</span>",
+  "h": "afdecc3a"
+ },
+ "thtu.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> 兩)</span>",
+  "h": "21fe0a1c"
+ },
+ "thtu.phan-tich-thu-tuong-hoc": {
+  "t": "手相學分析",
+  "h": "f33d42ad"
+ },
+ "thtu.phan-tich-thu-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hand\"></span><b id=\"analyzeBtnLabel\">分析手相 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> 兩)</span></small>",
+  "h": "527662b0"
+ },
+ "thtu.tai-anh-long-ban-tay": {
+  "t": "上傳手掌圖片",
+  "h": "4d287ee7"
+ },
+ "thtu.tai-hoac-chup-anh-long-ban": {
+  "t": "上傳或拍攝手掌圖片——系統依東西方古法分析手相：三大指、命運線與各個掌丘。",
+  "h": "1f98998a"
+ },
+ "thtu.thu-tuong": {
+  "t": "手相",
+  "h": "869631da"
+ },
+ "thtu.thu-tuong-co-phap-dong-tay": {
+  "t": "東西古法手相",
+  "h": "cce8e613"
+ },
+ "thtu.thu-tuong-tu-vi-minh-bao": {
+  "t": "手相——明寶紫微斗數",
+  "h": "e64f49ab"
+ },
+ "thtu.thu-tuong-xem-chi-tay-theo": {
+  "t": "<b>手相</b><span>依古法看掌紋 — <span data-tvp-price=\"thu-tuong\">…</span> 兩</span>",
+  "h": "7461fe05"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "您正在解鎖…",

@@ -7739,6 +7739,126 @@
   "t": "측정한 12개 음향 지표(HNR, 지속 시간, 지터, 스펙트럼 중심…)를 기준으로 분류했어요. 오음 고법에 따른 전체 의미는 심층 분석에 들어 있어요.",
   "h": "0c3c0a37"
  },
+ "js.thtu.anh-qua-lon": {
+  "t": "이미지가 너무 커요.",
+  "h": "cb4417d0"
+ },
+ "js.thtu.da-doc-xong-chi-tay-cua": {
+  "t": "고법 수상학으로 손금을 모두 읽었어요. 더 궁금한 점이 있나요?",
+  "h": "0e67099e"
+ },
+ "js.thtu.dang-doc-chi-tay": {
+  "t": "손금을 읽는 중…",
+  "h": "1d4e7200"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang": {
+  "t": "MediaPipe Hands로 이미지에서 직접 측정했어요 — 실제 랜드마크를 바탕으로 한 손바닥 모양이에요. 고법 수상에 따른 전체 풀이는 심층 분석에 들어 있어요.",
+  "h": "94672af2"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang-vwvq": {
+  "t": "MediaPipe Hands로 이미지에서 직접 측정했어요. 손가락별 의미, 2D:4D 비율, 각 손금선은 심층 분석에 들어 있어요.",
+  "h": "68dd31bc"
+ },
+ "js.thtu.duong-van-menh-noi-len-dieu-gi": {
+  "t": "운명선은 무엇을 말해 주나요?",
+  "h": "04b0d761"
+ },
+ "js.thtu.hinh-bau-duc": {
+  "t": "타원형",
+  "h": "209cc96b"
+ },
+ "js.thtu.hinh-dai-thon": {
+  "t": "길고 가는 형",
+  "h": "36c13178"
+ },
+ "js.thtu.hinh-dang-s": {
+  "t": "모양: {s}",
+  "h": "b7ac9175"
+ },
+ "js.thtu.hinh-vuong-rong": {
+  "t": "네모지고 넓은 형",
+  "h": "2114c5c3"
+ },
+ "js.thtu.khong-co-ket-qua": {
+  "t": "결과가 없어요.",
+  "h": "97fa6f91"
+ },
+ "js.thtu.khong-doc-duoc-anh-nay-vui": {
+  "t": "이 이미지를 읽을 수 없어요 — JPG나 PNG 이미지를 선택해 주세요.",
+  "h": "32a1faf4"
+ },
+ "js.thtu.khong-nhan-dien-duoc-ban-tay": {
+  "t": "⚠ 손바닥을 인식하지 못했어요. 배경과 대비되고 충분히 밝은 곳에서 더 또렷하게 다시 찍어 보세요.",
+  "h": "5abad846"
+ },
+ "js.thtu.khong-the-ket-noi": {
+  "t": "연결할 수 없어요.",
+  "h": "3dc4d8cb"
+ },
+ "js.thtu.khong-the-mo-camera": {
+  "t": "카메라를 열 수 없어요.",
+  "h": "39a33224"
+ },
+ "js.thtu.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.thtu.loi-s": {
+  "t": "오류 {s}",
+  "h": "c406c72b"
+ },
+ "js.thtu.ngon-ap-ut": {
+  "t": "약지",
+  "h": "44dd840f"
+ },
+ "js.thtu.ngon-cai": {
+  "t": "엄지",
+  "h": "aa7ff125"
+ },
+ "js.thtu.ngon-dai-nhat-f": {
+  "t": "가장 긴 손가락: {f}",
+  "h": "8a5684eb"
+ },
+ "js.thtu.ngon-giua": {
+  "t": "중지",
+  "h": "b5a038e9"
+ },
+ "js.thtu.ngon-tro": {
+  "t": "검지",
+  "h": "379d7ea9"
+ },
+ "js.thtu.ngon-ut": {
+  "t": "새끼손가락",
+  "h": "6a313fb1"
+ },
+ "js.thtu.tam-dai-chi-la-gi": {
+  "t": "삼대 손금선이란 무엇인가요?",
+  "h": "baef21dd"
+ },
+ "js.thtu.tay-thuan-khac-nhau": {
+  "t": "주로 쓰는 손과 쓰지 않는 손은 어떻게 다른가요?",
+  "h": "10468033"
+ },
+ "js.thtu.thu-tuong": {
+  "t": "수상",
+  "h": "869631da"
+ },
+ "js.thtu.thu-tuong-cua-toi": {
+  "t": "내 수상",
+  "h": "0af7a78d"
+ },
+ "js.thtu.thuong-mat-15-20-giay": {
+  "t": "보통 15~20초 걸려요",
+  "h": "087173ee"
+ },
+ "js.thtu.ty-le-rong-dai-long-ban-tay": {
+  "t": "손바닥 너비÷길이 비율: {r}({s})",
+  "h": "e753f592"
+ },
+ "js.thtu.vui-long-chon-file-anh": {
+  "t": "이미지 파일을 선택해 주세요.",
+  "h": "71a61127"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"결제 ",
   "h": "3d7d89ae"
@@ -10098,6 +10218,90 @@
  "thtp.xem-ban-mau": {
   "t": "샘플 보기 →",
   "h": "ba3671b1"
+ },
+ "thtu.1-tai-anh-ban-tay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">손바닥 이미지 올리기</span>",
+  "h": "0c95364a"
+ },
+ "thtu.anh-chi-gui-toi-may-chu": {
+  "t": "이미지는 분석을 위해 서버로만 보내고, 서버에 저장하지 않아요. 손을 평평하게 펴 손바닥이 위로 향하게 하고, 밝은 곳에서 찍어 주세요.",
+  "h": "9007a9b3"
+ },
+ "thtu.ban-tay-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"hand\"></span> 손바닥을 인식했어요",
+  "h": "720bc996"
+ },
+ "thtu.chi-tuong-hoc-phuong-dong-la": {
+  "t": "동양 수상학은 손바닥의 주요 선과 그 둘레의 언덕을 바탕으로 성격, 직업, 운세를 풀이하는 학문이에요. 전통 관상학 체계 안의 독립된 한 갈래로, 얼굴 관상과 나란히 이어져 왔어요.",
+  "h": "f4eb23c1"
+ },
+ "thtu.chup-va-tai-mot-tam-anh": {
+  "t": "손바닥이 또렷이 보이는 이미지를 찍거나 올려 주세요. 오행형상에 따라 삼대 손금선, 운명선, 언덕, 손가락을 풀이해 드려요.",
+  "h": "ecabc37d"
+ },
+ "thtu.do-luong-mediapipe": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> MediaPipe 측정",
+  "h": "b51ea8c8"
+ },
+ "thtu.do-tam-dai-chi-duong-van": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hand\"></span><span>삼대 손금선과<br>운명선 측정</span>",
+  "h": "91a1d8ca"
+ },
+ "thtu.dung-tay-thuan-de-xem-van": {
+  "t": "현재 운세를 보려면 <strong>주로 쓰는 손</strong>을 사용하세요",
+  "h": "0fd522f1"
+ },
+ "thtu.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG, PNG, WebP — 최대 5MB · 손바닥을 찍어 선이 또렷이 보이게",
+  "h": "757ec708"
+ },
+ "thtu.keo-tha-anh-long-ban-tay": {
+  "t": "손바닥 이미지를 끌어다 놓거나 클릭해서 선택",
+  "h": "8281c1d6"
+ },
+ "thtu.long-ban-tay-luu-lai-dau": {
+  "t": "손바닥에는 살아온 길의 흔적이 고스란히 남아 있어요 — 직업, 사랑, 건강 모두 저마다의 선을 남기죠. 손바닥을 찍어 오행형상에 따른 풀이를 받아 보세요.",
+  "h": "75a0d71c"
+ },
+ "thtu.luan-theo-ngu-hanh-hinh-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>오행형상에<br>따른 풀이</span>",
+  "h": "afdecc3a"
+ },
+ "thtu.moi-luot-luong": {
+  "t": "1회 <span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> 냥)</span>",
+  "h": "21fe0a1c"
+ },
+ "thtu.phan-tich-thu-tuong-hoc": {
+  "t": "수상학 분석",
+  "h": "f33d42ad"
+ },
+ "thtu.phan-tich-thu-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hand\"></span><b id=\"analyzeBtnLabel\">수상 분석하기 →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> 냥)</span> 필요</small>",
+  "h": "527662b0"
+ },
+ "thtu.tai-anh-long-ban-tay": {
+  "t": "손바닥 이미지 올리기",
+  "h": "4d287ee7"
+ },
+ "thtu.tai-hoac-chup-anh-long-ban": {
+  "t": "손바닥 이미지를 올리거나 찍어 주세요 — 동서양 고법에 따라 삼대 손금선, 운명선, 손의 언덕을 분석해요.",
+  "h": "1f98998a"
+ },
+ "thtu.thu-tuong": {
+  "t": "수상",
+  "h": "869631da"
+ },
+ "thtu.thu-tuong-co-phap-dong-tay": {
+  "t": "동서양 고법 수상",
+  "h": "cce8e613"
+ },
+ "thtu.thu-tuong-tu-vi-minh-bao": {
+  "t": "수상 — 명보 자미두수",
+  "h": "e64f49ab"
+ },
+ "thtu.thu-tuong-xem-chi-tay-theo": {
+  "t": "<b>수상</b><span>고법으로 손금을 봐요 — <span data-tvp-price=\"thu-tuong\">…</span> 냥</span>",
+  "h": "7461fe05"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "잠금 해제 중…",

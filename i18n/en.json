@@ -7739,6 +7739,126 @@
   "t": "Classified from the 12 measured acoustic metrics (HNR, sustain, jitter, centroid…). The full meaning by the classical Five Tones method is in the in-depth analysis.",
   "h": "0c3c0a37"
  },
+ "js.thtu.anh-qua-lon": {
+  "t": "The image is too large.",
+  "h": "cb4417d0"
+ },
+ "js.thtu.da-doc-xong-chi-tay-cua": {
+  "t": "I have finished reading your palm by classical palmistry. Is there anything more you would like to ask?",
+  "h": "0e67099e"
+ },
+ "js.thtu.dang-doc-chi-tay": {
+  "t": "Reading your palm…",
+  "h": "1d4e7200"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang": {
+  "t": "Measured directly from the image with MediaPipe Hands — the shape of your palm from your real landmarks. The full reading by classical palmistry is in the in-depth analysis.",
+  "h": "94672af2"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang-vwvq": {
+  "t": "Measured directly from the image with MediaPipe Hands. The meaning of each finger, the 2D:4D ratio and the palm lines are in the in-depth analysis.",
+  "h": "68dd31bc"
+ },
+ "js.thtu.duong-van-menh-noi-len-dieu-gi": {
+  "t": "What does the fate line say?",
+  "h": "04b0d761"
+ },
+ "js.thtu.hinh-bau-duc": {
+  "t": "oval",
+  "h": "209cc96b"
+ },
+ "js.thtu.hinh-dai-thon": {
+  "t": "long/slender",
+  "h": "36c13178"
+ },
+ "js.thtu.hinh-dang-s": {
+  "t": "Shape: {s}",
+  "h": "b7ac9175"
+ },
+ "js.thtu.hinh-vuong-rong": {
+  "t": "square/broad",
+  "h": "2114c5c3"
+ },
+ "js.thtu.khong-co-ket-qua": {
+  "t": "No result.",
+  "h": "97fa6f91"
+ },
+ "js.thtu.khong-doc-duoc-anh-nay-vui": {
+  "t": "Can't read this image — please choose a JPG or PNG image.",
+  "h": "32a1faf4"
+ },
+ "js.thtu.khong-nhan-dien-duoc-ban-tay": {
+  "t": "⚠ Couldn't detect a palm. Try again with a clearer photo, a contrasting background and enough light.",
+  "h": "5abad846"
+ },
+ "js.thtu.khong-the-ket-noi": {
+  "t": "Can't connect.",
+  "h": "3dc4d8cb"
+ },
+ "js.thtu.khong-the-mo-camera": {
+  "t": "Can't open the camera.",
+  "h": "39a33224"
+ },
+ "js.thtu.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.thtu.loi-s": {
+  "t": "Error {s}",
+  "h": "c406c72b"
+ },
+ "js.thtu.ngon-ap-ut": {
+  "t": "Ring finger",
+  "h": "44dd840f"
+ },
+ "js.thtu.ngon-cai": {
+  "t": "Thumb",
+  "h": "aa7ff125"
+ },
+ "js.thtu.ngon-dai-nhat-f": {
+  "t": "Longest finger: {f}",
+  "h": "8a5684eb"
+ },
+ "js.thtu.ngon-giua": {
+  "t": "Middle finger",
+  "h": "b5a038e9"
+ },
+ "js.thtu.ngon-tro": {
+  "t": "Index finger",
+  "h": "379d7ea9"
+ },
+ "js.thtu.ngon-ut": {
+  "t": "Little finger",
+  "h": "6a313fb1"
+ },
+ "js.thtu.tam-dai-chi-la-gi": {
+  "t": "What are the Three Great Fingers?",
+  "h": "baef21dd"
+ },
+ "js.thtu.tay-thuan-khac-nhau": {
+  "t": "How do the dominant and non-dominant hands differ?",
+  "h": "10468033"
+ },
+ "js.thtu.thu-tuong": {
+  "t": "Palm Reading",
+  "h": "869631da"
+ },
+ "js.thtu.thu-tuong-cua-toi": {
+  "t": "My palm reading",
+  "h": "0af7a78d"
+ },
+ "js.thtu.thuong-mat-15-20-giay": {
+  "t": "Usually takes 15–20 seconds",
+  "h": "087173ee"
+ },
+ "js.thtu.ty-le-rong-dai-long-ban-tay": {
+  "t": "Palm width/length ratio: {r} ({s})",
+  "h": "e753f592"
+ },
+ "js.thtu.vui-long-chon-file-anh": {
+  "t": "Please choose an image file.",
+  "h": "71a61127"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"Pay ",
   "h": "3d7d89ae"
@@ -10098,6 +10218,90 @@
  "thtp.xem-ban-mau": {
   "t": "See a sample →",
   "h": "ba3671b1"
+ },
+ "thtu.1-tai-anh-ban-tay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Upload a palm photo</span>",
+  "h": "0c95364a"
+ },
+ "thtu.anh-chi-gui-toi-may-chu": {
+  "t": "The photo is only sent to the server for analysis and isn't stored there. Spread your hand flat, palm facing up, in good light.",
+  "h": "9007a9b3"
+ },
+ "thtu.ban-tay-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"hand\"></span> Palm detected",
+  "h": "720bc996"
+ },
+ "thtu.chi-tuong-hoc-phuong-dong-la": {
+  "t": "Eastern palmistry reads character, career and fortune from the main lines of the palm and the mounts around them. It is a branch of its own within traditional physiognomy, running alongside face reading.",
+  "h": "f4eb23c1"
+ },
+ "thtu.chup-va-tai-mot-tam-anh": {
+  "t": "Take or upload a clear photo of your palm. The system analyzes your palm lines by the Five Elements body-type method, reading the three main lines, the fate line, the mounts and the fingers.",
+  "h": "ecabc37d"
+ },
+ "thtu.do-luong-mediapipe": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> Measured with MediaPipe",
+  "h": "b51ea8c8"
+ },
+ "thtu.do-tam-dai-chi-duong-van": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hand\"></span><span>Measure the three main<br>lines and the fate line</span>",
+  "h": "91a1d8ca"
+ },
+ "thtu.dung-tay-thuan-de-xem-van": {
+  "t": "Use your <strong>dominant</strong> hand to read your current fortune",
+  "h": "0fd522f1"
+ },
+ "thtu.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG, PNG, WebP — 5MB max · Photograph your palm with the lines clearly visible",
+  "h": "757ec708"
+ },
+ "thtu.keo-tha-anh-long-ban-tay": {
+  "t": "Drag and drop a palm photo here, or click to choose",
+  "h": "8281c1d6"
+ },
+ "thtu.long-ban-tay-luu-lai-dau": {
+  "t": "Your palm keeps the traces of the whole road you have walked — career, love and health each leave their own lines. Photograph your palm and receive a reading by the Five Elements body-type method.",
+  "h": "75a0d71c"
+ },
+ "thtu.luan-theo-ngu-hanh-hinh-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>A reading by the<br>Five Elements body type</span>",
+  "h": "afdecc3a"
+ },
+ "thtu.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> credits)</span>",
+  "h": "21fe0a1c"
+ },
+ "thtu.phan-tich-thu-tuong-hoc": {
+  "t": "Palmistry Analysis",
+  "h": "f33d42ad"
+ },
+ "thtu.phan-tich-thu-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hand\"></span><b id=\"analyzeBtnLabel\">Analyze My Palm →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> credits)</span></small>",
+  "h": "527662b0"
+ },
+ "thtu.tai-anh-long-ban-tay": {
+  "t": "Upload a palm photo",
+  "h": "4d287ee7"
+ },
+ "thtu.tai-hoac-chup-anh-long-ban": {
+  "t": "Upload or take a photo of your palm — the system reads the three main lines, the fate line and the mounts of the hand by classical Eastern and Western methods.",
+  "h": "1f98998a"
+ },
+ "thtu.thu-tuong": {
+  "t": "Palm Reading",
+  "h": "869631da"
+ },
+ "thtu.thu-tuong-co-phap-dong-tay": {
+  "t": "Classical Eastern & Western Palmistry",
+  "h": "cce8e613"
+ },
+ "thtu.thu-tuong-tu-vi-minh-bao": {
+  "t": "Palm Reading — Minh Bao Zi Wei Dou Shu",
+  "h": "e64f49ab"
+ },
+ "thtu.thu-tuong-xem-chi-tay-theo": {
+  "t": "<b>Palm Reading</b><span>Read your palm lines by the classical method — <span data-tvp-price=\"thu-tuong\">…</span> credits</span>",
+  "h": "7461fe05"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "You're unlocking…",

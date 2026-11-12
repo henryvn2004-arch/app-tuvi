@@ -7739,6 +7739,126 @@
   "t": "測定した12の音響指標（HNR、持続時間、ジッター、スペクトル重心…）にもとづく分類です。五音の古法による詳しい意味は、詳細分析に含まれています。",
   "h": "0c3c0a37"
  },
+ "js.thtu.anh-qua-lon": {
+  "t": "画像が大きすぎます。",
+  "h": "cb4417d0"
+ },
+ "js.thtu.da-doc-xong-chi-tay-cua": {
+  "t": "あなたの手相を古法の手相学で読み終えました。ほかに知りたいことはありますか？",
+  "h": "0e67099e"
+ },
+ "js.thtu.dang-doc-chi-tay": {
+  "t": "手相を読んでいます…",
+  "h": "1d4e7200"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang": {
+  "t": "MediaPipe Handsで画像から直接測定しました — あなたの実際のランドマークにもとづく手のひらの形です。古法の手相にもとづく詳しい鑑定は、詳細分析に含まれています。",
+  "h": "94672af2"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang-vwvq": {
+  "t": "MediaPipe Handsで画像から直接測定しました。各指の意味、2D:4D比、手相の各線は、詳細分析に含まれています。",
+  "h": "68dd31bc"
+ },
+ "js.thtu.duong-van-menh-noi-len-dieu-gi": {
+  "t": "運命線は何を物語っていますか？",
+  "h": "04b0d761"
+ },
+ "js.thtu.hinh-bau-duc": {
+  "t": "楕円形",
+  "h": "209cc96b"
+ },
+ "js.thtu.hinh-dai-thon": {
+  "t": "細長い",
+  "h": "36c13178"
+ },
+ "js.thtu.hinh-dang-s": {
+  "t": "形: {s}",
+  "h": "b7ac9175"
+ },
+ "js.thtu.hinh-vuong-rong": {
+  "t": "四角形・幅広",
+  "h": "2114c5c3"
+ },
+ "js.thtu.khong-co-ket-qua": {
+  "t": "結果がありません。",
+  "h": "97fa6f91"
+ },
+ "js.thtu.khong-doc-duoc-anh-nay-vui": {
+  "t": "この画像を読み込めません — JPGまたはPNGの画像を選んでください。",
+  "h": "32a1faf4"
+ },
+ "js.thtu.khong-nhan-dien-duoc-ban-tay": {
+  "t": "⚠ 手のひらを検出できませんでした。背景とコントラストのある場所で、十分な明るさのもと、もう一度はっきり撮影してみてください。",
+  "h": "5abad846"
+ },
+ "js.thtu.khong-the-ket-noi": {
+  "t": "接続できません。",
+  "h": "3dc4d8cb"
+ },
+ "js.thtu.khong-the-mo-camera": {
+  "t": "カメラを開けません。",
+  "h": "39a33224"
+ },
+ "js.thtu.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.thtu.loi-s": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.thtu.ngon-ap-ut": {
+  "t": "薬指",
+  "h": "44dd840f"
+ },
+ "js.thtu.ngon-cai": {
+  "t": "親指",
+  "h": "aa7ff125"
+ },
+ "js.thtu.ngon-dai-nhat-f": {
+  "t": "最も長い指: {f}",
+  "h": "8a5684eb"
+ },
+ "js.thtu.ngon-giua": {
+  "t": "中指",
+  "h": "b5a038e9"
+ },
+ "js.thtu.ngon-tro": {
+  "t": "人差し指",
+  "h": "379d7ea9"
+ },
+ "js.thtu.ngon-ut": {
+  "t": "小指",
+  "h": "6a313fb1"
+ },
+ "js.thtu.tam-dai-chi-la-gi": {
+  "t": "手相の三大線とは何ですか？",
+  "h": "baef21dd"
+ },
+ "js.thtu.tay-thuan-khac-nhau": {
+  "t": "利き手と利き手でない手は、どう違いますか？",
+  "h": "10468033"
+ },
+ "js.thtu.thu-tuong": {
+  "t": "手相",
+  "h": "869631da"
+ },
+ "js.thtu.thu-tuong-cua-toi": {
+  "t": "私の手相",
+  "h": "0af7a78d"
+ },
+ "js.thtu.thuong-mat-15-20-giay": {
+  "t": "通常15〜20秒かかります",
+  "h": "087173ee"
+ },
+ "js.thtu.ty-le-rong-dai-long-ban-tay": {
+  "t": "手のひらの幅÷長さの比: {r}（{s}）",
+  "h": "e753f592"
+ },
+ "js.thtu.vui-long-chon-file-anh": {
+  "t": "画像ファイルを選んでください。",
+  "h": "71a61127"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"お支払い：",
   "h": "3d7d89ae"
@@ -10098,6 +10218,90 @@
  "thtp.xem-ban-mau": {
   "t": "サンプルを見る →",
   "h": "ba3671b1"
+ },
+ "thtu.1-tai-anh-ban-tay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">手のひらの画像を選ぶ</span>",
+  "h": "0c95364a"
+ },
+ "thtu.anh-chi-gui-toi-may-chu": {
+  "t": "画像は分析のためにサーバーへ送るだけで、サーバーには保存しません。手を平らに開き、手のひらを上に向けて、十分な明るさで撮影してください。",
+  "h": "9007a9b3"
+ },
+ "thtu.ban-tay-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"hand\"></span> 手のひらを検出しました",
+  "h": "720bc996"
+ },
+ "thtu.chi-tuong-hoc-phuong-dong-la": {
+  "t": "東洋の手相学は、手のひらの主要な線とその周りの丘をもとに、性格・仕事・運勢を読み解く占術です。伝統的な人相学の体系の中の独立した一分野で、顔相と並び立ちます。",
+  "h": "f4eb23c1"
+ },
+ "thtu.chup-va-tai-mot-tam-anh": {
+  "t": "手のひらがはっきり写った画像を撮影またはアップロードしてください。五行形相にもとづき、三大線・運命線・丘・指を読み解きます。",
+  "h": "ecabc37d"
+ },
+ "thtu.do-luong-mediapipe": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> MediaPipeで測定",
+  "h": "b51ea8c8"
+ },
+ "thtu.do-tam-dai-chi-duong-van": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hand\"></span><span>三大線と運命線を<br>測定</span>",
+  "h": "91a1d8ca"
+ },
+ "thtu.dung-tay-thuan-de-xem-van": {
+  "t": "現在の運勢を見るには<strong>利き手</strong>を使ってください",
+  "h": "0fd522f1"
+ },
+ "thtu.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG、PNG、WebP — 最大5MB · 手のひらを撮影し、線がはっきり見えるように",
+  "h": "757ec708"
+ },
+ "thtu.keo-tha-anh-long-ban-tay": {
+  "t": "手のひらの画像をドラッグ＆ドロップ、またはクリックして選択",
+  "h": "8281c1d6"
+ },
+ "thtu.long-ban-tay-luu-lai-dau": {
+  "t": "手のひらには、歩んできた人生の軌跡が刻まれています — 仕事、恋愛、健康、それぞれが固有の線を残します。手のひらを撮影して、五行形相にもとづく鑑定を受け取りましょう。",
+  "h": "75a0d71c"
+ },
+ "thtu.luan-theo-ngu-hanh-hinh-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>五行形相<br>による鑑定</span>",
+  "h": "afdecc3a"
+ },
+ "thtu.moi-luot-luong": {
+  "t": "1回 <span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> 両)</span>",
+  "h": "21fe0a1c"
+ },
+ "thtu.phan-tich-thu-tuong-hoc": {
+  "t": "手相学の分析",
+  "h": "f33d42ad"
+ },
+ "thtu.phan-tich-thu-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hand\"></span><b id=\"analyzeBtnLabel\">手相を分析する →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> 両)</span> 必要</small>",
+  "h": "527662b0"
+ },
+ "thtu.tai-anh-long-ban-tay": {
+  "t": "手のひらの画像を選ぶ",
+  "h": "4d287ee7"
+ },
+ "thtu.tai-hoac-chup-anh-long-ban": {
+  "t": "手のひらの画像をアップロードまたは撮影してください — 東西の古法にもとづき、三大線・運命線・手の丘を分析します。",
+  "h": "1f98998a"
+ },
+ "thtu.thu-tuong": {
+  "t": "手相",
+  "h": "869631da"
+ },
+ "thtu.thu-tuong-co-phap-dong-tay": {
+  "t": "東西の古法による手相",
+  "h": "cce8e613"
+ },
+ "thtu.thu-tuong-tu-vi-minh-bao": {
+  "t": "手相 — 明宝紫微斗数",
+  "h": "e64f49ab"
+ },
+ "thtu.thu-tuong-xem-chi-tay-theo": {
+  "t": "<b>手相</b><span>古法で手のひらの線を読む — <span data-tvp-price=\"thu-tuong\">…</span> 両</span>",
+  "h": "7461fe05"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "ロック解除中…",
