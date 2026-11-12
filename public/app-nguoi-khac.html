@@ -464,7 +464,7 @@ function _nkSao(lb) {
 }
 function _nkMat(cung) { return cung ? _long('nguoikhac', 'mat.' + cung) : null; }
 // Các bảng (đoạn đầu khoá) tra QUA MÃ của payload (`khoa[].ma.k` và mã việc lồng) — mã lạ ⇒ không tra.
-// Nhãn mặt đọc (`'mat.' + cung`) tra ở `_nkMat`, không qua mã.
+// Nhãn mặt đọc tra ở `_nkMat` theo tên cung, không qua mã.
 var NK_BANG = ['khoa', 'viec'];
 function _nkHop(k) { return !!k && NK_BANG.indexOf(String(k).split('.')[0]) >= 0; }
 function _nkTr(ma, vi) {
