@@ -2335,6 +2335,66 @@
   "t": "沖生肖 ",
   "h": "e92ab4fa"
  },
+ "js.khis.anh-qua-lon-toi-da-10mb": {
+  "t": "圖片過大（最大 10MB）。",
+  "h": "27f729fb"
+ },
+ "js.khis.chip-5-sac": {
+  "t": "五行五色各代表什麼？",
+  "h": "98715ca7"
+ },
+ "js.khis.chip-an-duong": {
+  "t": "印堂是什麼？",
+  "h": "e1de6d6d"
+ },
+ "js.khis.chip-khac-dien-tuong": {
+  "t": "氣色和面相有什麼不同？",
+  "h": "d826036b"
+ },
+ "js.khis.da-luan-xong": {
+  "t": "已依《麻衣神相》論完您的氣色。還想進一步了解什麼嗎？",
+  "h": "26c2acd5"
+ },
+ "js.khis.khi-sac": {
+  "t": "氣色",
+  "h": "e1205bcd"
+ },
+ "js.khis.khi-sac-cua-toi": {
+  "t": "我的氣色",
+  "h": "f4b00328"
+ },
+ "js.khis.khong-doc-duoc-anh": {
+  "t": "無法讀取圖片",
+  "h": "12ab7c26"
+ },
+ "js.khis.khong-doc-duoc-file": {
+  "t": "無法讀取檔案",
+  "h": "1d32d14b"
+ },
+ "js.khis.khong-the-ket-noi": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.khis.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.khis.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.khis.loi-xu-ly-anh": {
+  "t": "圖片處理錯誤：{e}",
+  "h": "973ba3bb"
+ },
+ "js.khis.may-chu-khong-tra-ve": {
+  "t": "伺服器未傳回結果。",
+  "h": "d1312308"
+ },
+ "js.khis.vui-long-chon-file-anh": {
+  "t": "請選擇圖片檔（JPG 或 PNG）。",
+  "h": "ad4caa5b"
+ },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "按下開始起卦——共擲 6 次，每次決定一個爻",
   "h": "5f61aa02"
@@ -9566,6 +9626,86 @@
  "js.xemtuoi.xet-nhanh-hai-tuoi-co-hop": {
   "t": "只需出生年，快速判斷兩人的生肖是否相合——立即得到答案，不必深入解讀。",
   "h": "ee011392"
+ },
+ "khis.anh-chan-dung": {
+  "t": "人像照片",
+  "h": "13ef800c"
+ },
+ "khis.anh-chi-gui-toi-may-chu": {
+  "t": "圖片僅傳送至伺服器進行分析，不會儲存在伺服器上。請在上午或傍晚拍攝，不化妝、不加濾鏡。",
+  "h": "ee45336b"
+ },
+ "khis.chon-anh-khac": {
+  "t": "選擇其他圖片",
+  "h": "0c82c787"
+ },
+ "khis.chup-anh-khuon-mat-he-thong": {
+  "t": "請拍攝臉部照片——系統依《麻衣神相》以印堂、五嶽論氣色，預測未來 1–3 個月的運勢。",
+  "h": "1722144a"
+ },
+ "khis.chup-anh-trong-24-gio": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>24 小時內<br>拍攝</span>",
+  "h": "1e9673f3"
+ },
+ "khis.chup-mot-tam-anh-mat-ro": {
+  "t": "請在最近 24 小時內拍一張臉部清晰的照片。系統會分析印堂、五嶽，預測未來 1–3 個月的運勢，並提供養氣之道。",
+  "h": "912812d7"
+ },
+ "khis.dang-quan-sat-khi-sac-tu": {
+  "t": "正在從您的圖片觀察氣色——請稍候約 30 秒…<br><span style=\"font-size:12px;color:var(--text-lt)\">正在分析印堂與五嶽五個區域的氣色。</span>",
+  "h": "f82ea2fa"
+ },
+ "khis.do-an-duong-ngu-nhac": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sunrise\"></span><span>測量印堂、<br>五嶽</span>",
+  "h": "c8eb70da"
+ },
+ "khis.du-bao-van-khi-1-3": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>未來 1–3 個月<br>運勢預測</span>",
+  "h": "4a1cf555"
+ },
+ "khis.jpg-png-toi-da-10mb-chup": {
+  "t": "JPG、PNG——最大 10MB · 請於 24 小時內拍攝",
+  "h": "3b51d9fa"
+ },
+ "khis.khi-sac": {
+  "t": "氣色",
+  "h": "e1205bcd"
+ },
+ "khis.khi-sac-luan": {
+  "t": "氣色解讀",
+  "h": "95b743c6"
+ },
+ "khis.khi-sac-tren-guong-mat-thay": {
+  "t": "臉上的氣色，會在運勢真正改變之前先行改變——古人比任何其他徵兆都更早讀出這一點。上傳一張近期拍攝的臉部照片，即可獲得未來 1–3 個月的運勢解讀。",
+  "h": "b8d7084d"
+ },
+ "khis.khi-sac-tu-vi-minh-bao": {
+  "t": "氣色——明寶紫微斗數",
+  "h": "3bb0e032"
+ },
+ "khis.khi-sac-van-khi-1-3": {
+  "t": "<b>氣色</b><span>由印堂與五嶽看未來 1–3 個月的運勢 — <span data-tvp-price=\"khi-sac\">…</span> 兩</span>",
+  "h": "460ed941"
+ },
+ "khis.luan-khi-sac-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sunrise\"></span><b id=\"analyzeBtnLabel\">解讀氣色 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"khi-sac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"khi-sac\">…</span> 兩)</span></small>",
+  "h": "d256b1ce"
+ },
+ "khis.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"khi-sac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"khi-sac\">…</span> 兩)</span>",
+  "h": "212bf76e"
+ },
+ "khis.nhan-de-chon-anh-hoac-keo": {
+  "t": "點擊選擇圖片，或拖放到這裡",
+  "h": "988cbe04"
+ },
+ "khis.xem-anh-khac": {
+  "t": "看其他圖片",
+  "h": "c3d65ffa"
+ },
+ "khis.xem-khi-sac": {
+  "t": "看氣色",
+  "h": "7863a81d"
  },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">起卦</span>",

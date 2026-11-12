@@ -362,6 +362,46 @@
    "shell"
   ]
  },
+ "/app/khi-sac": {
+  "file": "app-khi-sac.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "dient.ma-y-than-tuong-co-phap",
+   "khis.anh-chan-dung",
+   "khis.anh-chi-gui-toi-may-chu",
+   "khis.chon-anh-khac",
+   "khis.chup-anh-khuon-mat-he-thong",
+   "khis.chup-anh-trong-24-gio",
+   "khis.chup-mot-tam-anh-mat-ro",
+   "khis.dang-quan-sat-khi-sac-tu",
+   "khis.do-an-duong-ngu-nhac",
+   "khis.du-bao-van-khi-1-3",
+   "khis.jpg-png-toi-da-10mb-chup",
+   "khis.khi-sac",
+   "khis.khi-sac-luan",
+   "khis.khi-sac-tren-guong-mat-thay",
+   "khis.khi-sac-tu-vi-minh-bao",
+   "khis.khi-sac-van-khi-1-3",
+   "khis.luan-khi-sac-ton-luong",
+   "khis.moi-luot-luong",
+   "khis.nhan-de-chon-anh-hoac-keo",
+   "khis.xem-anh-khac",
+   "khis.xem-khi-sac",
+   "luangiai.chuyen-khoan-qua-qr-ngan-hang",
+   "luangiai.mua-goi-de-nhan-nhieu-uu",
+   "nhtg.chua-muon-chup-anh-ban-co",
+   "nhtg.ma-y-than-tuong-la-mot",
+   "thtg.2-thanh-toan",
+   "thtg.3-nhan-ket-qua",
+   "thtp.xem-ban-mau"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/kinh-dich": {
   "file": "app-kinh-dich.html",
   "keys": [

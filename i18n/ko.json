@@ -2335,6 +2335,66 @@
   "t": "충하는 띠: ",
   "h": "e92ab4fa"
  },
+ "js.khis.anh-qua-lon-toi-da-10mb": {
+  "t": "이미지가 너무 커요(최대 10MB).",
+  "h": "27f729fb"
+ },
+ "js.khis.chip-5-sac": {
+  "t": "오행 5색은 무슨 뜻이에요?",
+  "h": "98715ca7"
+ },
+ "js.khis.chip-an-duong": {
+  "t": "인당(印堂)이란 무엇인가요?",
+  "h": "e1de6d6d"
+ },
+ "js.khis.chip-khac-dien-tuong": {
+  "t": "기색은 면상과 어떻게 다른가요?",
+  "h": "d826036b"
+ },
+ "js.khis.da-luan-xong": {
+  "t": "『마의신상』에 따라 기색을 모두 풀이했어요. 더 궁금한 점이 있나요?",
+  "h": "26c2acd5"
+ },
+ "js.khis.khi-sac": {
+  "t": "기색",
+  "h": "e1205bcd"
+ },
+ "js.khis.khi-sac-cua-toi": {
+  "t": "내 기색",
+  "h": "f4b00328"
+ },
+ "js.khis.khong-doc-duoc-anh": {
+  "t": "이미지를 읽을 수 없어요",
+  "h": "12ab7c26"
+ },
+ "js.khis.khong-doc-duoc-file": {
+  "t": "파일을 읽을 수 없어요",
+  "h": "1d32d14b"
+ },
+ "js.khis.khong-the-ket-noi": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.khis.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.khis.loi-s": {
+  "t": "오류 {s}",
+  "h": "c406c72b"
+ },
+ "js.khis.loi-xu-ly-anh": {
+  "t": "이미지 처리 오류: {e}",
+  "h": "973ba3bb"
+ },
+ "js.khis.may-chu-khong-tra-ve": {
+  "t": "서버에서 결과가 오지 않았어요.",
+  "h": "d1312308"
+ },
+ "js.khis.vui-long-chon-file-anh": {
+  "t": "이미지 파일(JPG 또는 PNG)을 선택해 주세요.",
+  "h": "ad4caa5b"
+ },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "눌러서 괘 뽑기를 시작하세요 — 6번 던지며, 한 번에 효 하나가 정해집니다",
   "h": "5f61aa02"
@@ -9566,6 +9626,86 @@
  "js.xemtuoi.xet-nhanh-hai-tuoi-co-hop": {
   "t": "두 띠가 맞는지 빠르게 확인해요. 출생 연도만 있으면 바로 답이 나와요 — 깊이 보기 전의 간단한 확인이에요.",
   "h": "ee011392"
+ },
+ "khis.anh-chan-dung": {
+  "t": "인물 사진",
+  "h": "13ef800c"
+ },
+ "khis.anh-chi-gui-toi-may-chu": {
+  "t": "이미지는 분석을 위해 서버로만 보내고, 서버에 저장하지 않아요. 아침이나 오후에, 화장도 필터도 없이 찍어 주세요.",
+  "h": "ee45336b"
+ },
+ "khis.chon-anh-khac": {
+  "t": "다른 이미지 선택",
+  "h": "0c82c787"
+ },
+ "khis.chup-anh-khuon-mat-he-thong": {
+  "t": "얼굴 사진을 찍어 주세요 — 『마의신상』에 따라 인당과 오악으로 앞으로 1~3개월의 운기를 풀이해요.",
+  "h": "1722144a"
+ },
+ "khis.chup-anh-trong-24-gio": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>24시간 안에<br>촬영</span>",
+  "h": "1e9673f3"
+ },
+ "khis.chup-mot-tam-anh-mat-ro": {
+  "t": "최근 24시간 안에 찍은, 얼굴이 또렷한 사진을 한 장 준비해 주세요. 인당과 오악을 분석해 앞으로 1~3개월의 운기와 기운을 기르는 방법을 알려 드려요.",
+  "h": "912812d7"
+ },
+ "khis.dang-quan-sat-khi-sac-tu": {
+  "t": "이미지에서 기색을 살펴보는 중이에요 — 30초 정도 기다려 주세요…<br><span style=\"font-size:12px;color:var(--text-lt)\">인당과 오악 5개 부위의 색을 분석하고 있어요.</span>",
+  "h": "f82ea2fa"
+ },
+ "khis.do-an-duong-ngu-nhac": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sunrise\"></span><span>인당·오악<br>측정</span>",
+  "h": "c8eb70da"
+ },
+ "khis.du-bao-van-khi-1-3": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>앞으로 1~3개월<br>운기 예보</span>",
+  "h": "4a1cf555"
+ },
+ "khis.jpg-png-toi-da-10mb-chup": {
+  "t": "JPG, PNG — 최대 10MB · 24시간 안에 촬영",
+  "h": "3b51d9fa"
+ },
+ "khis.khi-sac": {
+  "t": "기색",
+  "h": "e1205bcd"
+ },
+ "khis.khi-sac-luan": {
+  "t": "기색 풀이",
+  "h": "95b743c6"
+ },
+ "khis.khi-sac-tren-guong-mat-thay": {
+  "t": "얼굴의 기색은 운세가 실제로 바뀌기 전에 먼저 바뀌어요 — 옛사람들은 그 어떤 징후보다 이를 일찍 읽어 냈어요. 최근에 찍은 얼굴 사진을 올리고 앞으로 1~3개월의 운기 풀이를 받아 보세요.",
+  "h": "b8d7084d"
+ },
+ "khis.khi-sac-tu-vi-minh-bao": {
+  "t": "기색 — 명보 자미두수",
+  "h": "3bb0e032"
+ },
+ "khis.khi-sac-van-khi-1-3": {
+  "t": "<b>기색</b><span>인당과 오악으로 보는 앞으로 1~3개월의 운기 — <span data-tvp-price=\"khi-sac\">…</span> 냥</span>",
+  "h": "460ed941"
+ },
+ "khis.luan-khi-sac-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sunrise\"></span><b id=\"analyzeBtnLabel\">기색 풀이하기 →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"khi-sac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"khi-sac\">…</span> 냥)</span> 필요</small>",
+  "h": "d256b1ce"
+ },
+ "khis.moi-luot-luong": {
+  "t": "1회 <span class=\"vnd\" data-tvp-price-vnd=\"khi-sac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"khi-sac\">…</span> 냥)</span>",
+  "h": "212bf76e"
+ },
+ "khis.nhan-de-chon-anh-hoac-keo": {
+  "t": "눌러서 이미지를 선택하거나 여기로 끌어다 놓기",
+  "h": "988cbe04"
+ },
+ "khis.xem-anh-khac": {
+  "t": "다른 이미지 보기",
+  "h": "c3d65ffa"
+ },
+ "khis.xem-khi-sac": {
+  "t": "기색 보기",
+  "h": "7863a81d"
  },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">괘 뽑기</span>",
