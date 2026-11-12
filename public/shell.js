@@ -4406,7 +4406,7 @@
     });
   }
   function runLucNham(chat, toolId) {
-    ensureScripts(['/tools-shared/luc-nham.js?v=5', '/tools-shared/dai-luc-nham.js?v=2'], function (err) {
+    ensureScripts(['/tools-shared/luc-nham.js?v=5', '/tools-shared/dai-luc-nham.js?v=3'], function (err) {
       if (err || typeof LucNhamTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-luc', 'không nạp được công cụ Lục Nhâm.')); return; }
       var t = new Date();
       var curGio = Math.floor(((t.getHours() * 60 + 60) % (24 * 60)) / 120) % 12;
@@ -4431,11 +4431,13 @@
           DaiLucNham.ve(document.createElement('div'), khiTu).then(function (j) {
             if (!j) { showErr(T('js.shellui.khong-dung-duoc-khoa-luc-nham-ddel', 'Không dựng được khóa Lục Nhâm — số liệu chưa verify được lúc này.')); return; }
             var k = j.khoa, so = k.tamTruyen[0];
+            // Tên/cụm của khóa theo ngôn ngữ (W30e): module v3 có `DaiLucNham.tr`; thiếu ⇒ chữ Việt của engine.
+            var LNT = DaiLucNham.tr || null;
             inlCollapse(el, T('js.shellui.ngay', '<p>Ngày <b>') + _d + '/' + _m + '/' + _y + T('js.shellui.gio-r1j8', '</b> · giờ <b>') + G('canchi', k.canChi.gio) + '</b> ✓</p>');
             Shell.setContext({
               toolId: toolId, scenario: { type: 'luc-nham', data: Object.assign({ ngayDL: r.data.ngayDL, gio: r.data.gio }, j.rail) },
               label: T('js.shellui.luc-nham', 'Lục Nhâm · ') + G('canchi', k.canChi.ngay) + T('js.shellui.gio-3uxy', ' giờ ') + G('canchi', k.canChi.gio),
-              greeting: T('js.shellui.da-lap-khoa-dai-luc-nham', 'Đã lập khóa **Đại Lục Nhâm** — ngày ') + G('canchi', k.canChi.ngay) + T('js.shellui.gio-hxu5', ', giờ ') + G('canchi', k.canChi.gio) + T('js.shellui.p-phay', ', ') + k.truDem + T('js.shellui.thu-truyen-theo-phep', '. Thủ truyền theo phép **') + k.phap.ten + T('js.shellui.so-truyen', '**, sơ truyền **') + so.chi + ' · ' + so.tuong + T('js.shellui.ban-muon-hoi-viec-gi', '**. Bạn muốn hỏi việc gì?'),
+              greeting: T('js.shellui.da-lap-khoa-dai-luc-nham', 'Đã lập khóa **Đại Lục Nhâm** — ngày ') + G('canchi', k.canChi.ngay) + T('js.shellui.gio-hxu5', ', giờ ') + G('canchi', k.canChi.gio) + T('js.shellui.p-phay', ', ') + (LNT ? LNT.truDem(k) : k.truDem) + T('js.shellui.thu-truyen-theo-phep', '. Thủ truyền theo phép **') + (LNT ? LNT.phap(k.phap).ten : k.phap.ten) + T('js.shellui.so-truyen', '**, sơ truyền **') + G('chi', so.chi) + ' · ' + (LNT ? LNT.tuong(so.ma, so.tuong) : so.tuong) + T('js.shellui.ban-muon-hoi-viec-gi', '**. Bạn muốn hỏi việc gì?'),
               chips: [T('js.shellui.viec-nay-thanh-hay-bai', 'Việc này thành hay bại?'), T('js.shellui.bao-gio-co-ket-qua', 'Bao giờ có kết quả?'), T('js.shellui.nen-tien-hay-nen-lui', 'Nên tiến hay nên lui?'), T('js.shellui.tam-truyen-noi-gi-ve-dien', 'Tam truyền nói gì về diễn tiến?')],
             });
           }).catch(function () { showErr(T('js.shellui.khong-dung-duoc-khoa-luc-nham-s764', 'Không dựng được khóa Lục Nhâm. Thử lại giúp con nhé.')); });

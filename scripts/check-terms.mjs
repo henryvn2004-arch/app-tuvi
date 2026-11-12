@@ -164,7 +164,7 @@ TimeManager.setTimezoneOffsetMinutesOverride(420);
 const out = {};
 // \`ma\`/\`*Ma\` (W28) = MÃ GỐC của nguồn (chữ Hán mingyu / khoá Anh celestine) để client tra bản dịch theo
 // ngôn ngữ — KHÔNG hiển thị. Chỉ bỏ ở hai tool có mã này, tool khác vẫn quét trọn.
-const MA_TOOL = new Set(['hoang-lich', 'ban-do-sao']);
+const MA_TOOL = new Set(['hoang-lich', 'ban-do-sao', 'luc-nham']);
 function quet(ten, obj) {
   const s = JSON.stringify(obj, MA_TOOL.has(ten) ? (k, v) => (k === 'ma' || /^[a-z][A-Za-z]*Ma$/.test(k) ? undefined : v) : undefined);
   const han = s.match(${HAN.source ? '/[\\u3400-\\u4dbf\\u4e00-\\u9fff]/g' : '/x/'}) || [];
@@ -174,7 +174,24 @@ const { dungBan, railData: qmRail } = await import('./lib/qimen/board.js');
 quet('ky-mon', [0, 90, 180, 270].map(i => { const b = dungBan(new Date(Date.UTC(2026, 0, 1 + i, 5))); return [b, qmRail(b)]; }));
 
 const { lapKhoa, railData: lnRail } = await import('./lib/liuren/ke.js');
-quet('luc-nham', [0, 60, 150, 240, 330].flatMap(i => [1, 9, 17].map(h => { const k = lapKhoa(new Date(Date.UTC(2026, 0, 1 + i, h - 7))); return [k, lnRail(k)]; })));
+const lnMau = [0, 60, 150, 240, 330].flatMap(i => [1, 9, 17].map(h => { const k = lapKhoa(new Date(Date.UTC(2026, 0, 1 + i, h - 7))); return [k, lnRail(k)]; }));
+quet('luc-nham', lnMau);
+// Lô E: dai-luc-nham.js tra theo MÃ — đọc ngược đúng cách module ghép khoá (kể cả khóa thể/phép GHÉP).
+// Mẫu dày hơn lưới quét chữ (365 ngày × 3 giờ): mã thiếu chỉ lộ ở khóa hiếm.
+const lnMa = [];
+for (let d = 0; d < 365; d++) for (const h of [1, 9, 17]) lnMa.push(lapKhoa(new Date(Date.UTC(2026, 0, 1 + d, h - 7))));
+const lnQh = (r) => r === '比和' ? ['khuon.tyHoa'] : /^.(生|克).$/.test(r) ? [r[1] === '生' ? 'khuon.sinh' : 'khuon.khac'] : ['qh?' + r];
+out['ma-lucnham'] = { khoa: [...new Set(lnMa.flatMap(k => [
+  'trudem.' + k.truDemMa,
+  ...(k.phap.ma ? k.phap.ma.flatMap(m => ['phap.' + m + '.ten', 'phap.' + m + '.nghia']) : ['phap?']),
+  ...(k.phap.ma && k.phap.ma.length > 1 ? ['khuon.ketHop'] : []),
+  ...(k.dangTruyen.ma ? ['dt.' + k.dangTruyen.ma + '.ten', 'dt.' + k.dangTruyen.ma + '.nghia'] : ['dt?']),
+  ...k.thienBan.map(x => 'tuong.' + x.ma.tuong),
+  ...k.tuKhoa.flatMap(x => ['tuong.' + x.ma.tuong, 'khoa.' + x.ma.ten, ...lnQh(x.ma.quanHe)]),
+  ...k.tamTruyen.flatMap(x => ['tuong.' + x.ma.tuong, 'vs.' + x.ma.vuongSuy, ...lnQh(x.ma.quanHeCanNgay)]),
+  ...k.khoaTheMa.flatMap(p => !p ? ['khoathe?'] : p[1] === '发用' ? ['tuong.' + p[0], 'khuon.phatDung'] : p.map(x => 'khoathe.' + x)),
+  ...k.thanSat.map(x => 'thansat.' + x.ma),
+]))] };
 
 const { dungHoangLich } = await import('./lib/almanac/day.js');
 const hlMau = [0, 3, 6, 9].map(m => dungHoangLich(new Date(Date.UTC(2026, m, 1)), new Date(Date.UTC(2026, m, 20))));
@@ -268,7 +285,7 @@ try {
    theo lượt bump, nên khai thẳng tại đây. Chính \`遥克\`/\`昴星\` đứng một mình
    và \`铸印卦\` đã lọt qua 4.392 khóa mẫu mà không lá nào sinh ra. */
 try {
-  const { docKhoaThe: lnDoc, docPhap: lnPhap } = await import('./lib/liuren/terms.js');
+  const { docKhoaThe: lnDoc, docPhap: lnPhap, maKhoaThe: lnMaK, maPhap: lnMaP } = await import('./lib/liuren/terms.js');
   const nguon = ${JSON.stringify(
     'file://' +
       join(
@@ -295,6 +312,9 @@ try {
     ...quai.filter(s => HANR.test(lnDoc(s))),
     ...NHAN.filter(s => HANR.test(lnDoc(s))),
     ...phap.filter(s => HANR.test(lnPhap(s).ten)),
+    // Lô E: mọi tên trong tập ĐÓNG phải có MÃ tra bản dịch — không thì /ja… lùi về chữ Việt ở đúng khóa hiếm đó.
+    ...quai.concat(NHAN).filter(s => !lnMaK(s)).map(s => s + '(thiếu mã)'),
+    ...phap.filter(s => !lnMaP(s)).map(s => s + '(thiếu mã)'),
   ];
   out['tuvung-luc-nham'] = { n: quai.length, soKhai, soPhap: phap.length, sot };
 } catch (e) {
@@ -347,7 +367,7 @@ console.log('__KQ__' + JSON.stringify(out));
   {
     const { loadSources } = await import('../lib/i18n/long.mjs');
     const src = loadSources(process.cwd());
-    for (const ns of ['almanac', 'tayphuong', 'cong-so']) {
+    for (const ns of ['almanac', 'tayphuong', 'lucnham', 'cong-so']) {
       const co = new Set(src[ns].map((e) => e.k));
       const khoa = kq[`ma-${ns}`]?.khoa || [];
       const sot = khoa.filter((k) => !co.has(k));

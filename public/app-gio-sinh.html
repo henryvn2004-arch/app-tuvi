@@ -251,7 +251,7 @@ window.SHELL_INTRO={key:'gio-sinh'};</script>
      `check:shellboot` canh đúng chỗ này. -->
 <script src="/auth.js?v=10"></script>
 <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=154"></script>
+<script src="/shell.js?v=155"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/glossary.js?v=5"></script>
 <script>
@@ -284,6 +284,34 @@ function _fillVndSlots(host,product){
   var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
   els.forEach(function(el){ el.textContent = lbl || ''; });
 }
+
+// ── Văn ENGINE theo ngôn ngữ (W28, i18n lô E) ───────────────────────────────
+// /api/gio-sinh trả chữ Việt + MÃ `{k, v}` (khuôn `GS_VAN` ở lib/engine/gio-sinh.ts) cho tiêu đề/gợi ý/nhãn
+// đáp án/bằng chứng/lời khuyên. Dịch ở ĐÂY qua văn dài ns `giosinh`; mảnh nào thiếu mã/bản dịch ⇒ giữ NGUYÊN câu
+// Việt (vi không nạp gì ⇒ byte-giống). Nhãn đáp án theo sao (bảng dấu hiệu) chưa có mã ⇒ vẫn chữ Việt.
+if(window.I18n&&window.I18n.loadLong) window.I18n.loadLong('giosinh');
+function _long(ns,k){var I=window.I18n;if(!I||!I.long)return null;var s=I.long(ns,k,'\u0000');return s==='\u0000'?null:s;}
+function _gsFill(s,v){return s.replace(/\{(\w+)\}/g,function(m,n){return v[n]!==undefined?v[n]:m;});}
+// Các bảng của khuôn (đoạn đầu khoá) mà trang này dịch — mã lạ ⇒ không tra.
+var GS_BANG=['q','h','buoi','o','dvsom','dv','sl','lk'];
+function _gsR(ma){
+  if(!ma||!ma.k||GS_BANG.indexOf(String(ma.k).split('.')[0])<0) return null;
+  var s=_long('giosinh',ma.k); if(s==null) return null;
+  var v=ma.v||{}, o={};
+  for(var n in v){
+    var x=v[n];
+    if(n==='t'){ var t=x?_gsR(x):null; if(t==null) return null; if(ma.cut&&t.length>52) t=t.slice(0,50)+'…'; o[n]=t; }
+    else if(n==='ten'){
+      var g=_long('giosinh','lk.gio'), h=_long('giosinh','lk.hoac'); if(!g||!h) return null;
+      var p=(x||[]).map(function(e){return _gsFill(g,{chi:_tvmbG('chi',e.chi),khung:e.khung});});
+      o[n]=p.length?p.reduce(function(a,b){return _gsFill(h,{a:a,b:b});}):'';
+    }
+    else if(n==='cung') o[n]=_tvmbG('cung',x);
+    else o[n]=String(x);
+  }
+  return _gsFill(s,o);
+}
+function _gsTr(ma,vi){var r=_gsR(ma);return r==null?vi:r;}
 
 // Tên sao của engine ở chỗ VẼ → glossary (khoá tính toán giữ chữ Việt); rỗng = "vô chính diệu".
 function _gsStars(a){
@@ -505,11 +533,12 @@ function step(j){
   if(j.done){ renderResult(j); return; }
   _pub=j.question;
   document.getElementById('qprog').textContent=_tvmbT('js.giosinh.cau-n-toi-da','Câu {n} / tối đa {max}',{n:j.daHoi+1,max:j.tongToiDa});
-  document.getElementById('qtitle').textContent=j.question.title;
-  const h=document.getElementById('qhint'); h.textContent=j.question.hint||''; h.style.display=j.question.hint?'':'none';
+  const qm=j.question.ma||{};
+  document.getElementById('qtitle').textContent=_gsTr(qm.title,j.question.title);
+  const h=document.getElementById('qhint'); h.textContent=j.question.hint?_gsTr(qm.hint,j.question.hint):''; h.style.display=j.question.hint?'':'none';
   const box=document.getElementById('qopts'); box.innerHTML='';
   j.question.options.forEach(o=>{
-    const b=document.createElement('button'); b.className='opt'; b.textContent=o.label;
+    const b=document.createElement('button'); b.className='opt'; b.textContent=_gsTr(o.ma,o.label);
     b.onclick=()=>answer(o.value); box.appendChild(b);
   });
   // "Không rõ" LUÔN có: ép người ta chọn bừa là bơm nhiễu vào chính phép suy.
@@ -552,8 +581,8 @@ function renderResult(j){
 
   document.getElementById('rankHost').innerHTML = k.shortlist.map((r,i)=>{
     const ev=[].concat(
-      r.khop.slice(0,4).map(x=>'<div class="ev y">✓ '+esc(x)+'</div>'),
-      r.lech.slice(0,3).map(x=>'<div class="ev n">✕ '+esc(x)+'</div>'));
+      r.khop.slice(0,4).map((x,i)=>'<div class="ev y">✓ '+esc(_gsTr(r.khopMa&&r.khopMa[i],x))+'</div>'),
+      r.lech.slice(0,3).map((x,i)=>'<div class="ev n">✕ '+esc(_gsTr(r.lechMa&&r.lechMa[i],x))+'</div>'));
     return '<div class="rank'+(i===0?' top':'')+'">'+
       '<div class="rank-h"><b>'+_tvmbT('js.giosinh.gio-chi','Giờ {chi}',{chi:esc(_tvmbG('chi',r.chi))})+'</b><span class="note">'+esc(r.khung)+' · '+_tvmbT('js.giosinh.cuc-n','cục {n}',{n:esc(_tvmbG('cuc',r.cuc))})+'</span>'+
       '<span class="rank-pct">'+esc(r.pct)+'%</span></div>'+
@@ -561,7 +590,7 @@ function renderResult(j){
       '<div class="note" style="margin-bottom:6px">'+_tvmbT('js.giosinh.menh-colon','Mệnh:')+' '+esc(_gsStars(r.menhStars))+
       ' · '+_tvmbT('js.giosinh.tat-ach-colon','Tật Ách:')+' '+esc(_gsStars(r.tatStars))+'</div>'+ev.join('')+'</div>';
   }).join('');
-  document.getElementById('loiKhuyen').textContent=k.loiKhuyen;
+  document.getElementById('loiKhuyen').textContent=_gsTr(k.loiKhuyenMa,k.loiKhuyen);
   renderChot(k);
 
   Shell.setShareable&&Shell.setShareable({
