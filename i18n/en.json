@@ -103,6 +103,170 @@
   "t": "Written specifically for these Four Pillars by the classical Zi Ping method — 16 parts: structure, Ten Gods, luck cycles, annual pillars.",
   "h": "f54c0d01"
  },
+ "buto.11h-13h-ngo": {
+  "t": "11 AM–1 PM (Wu · Horse)",
+  "h": "6a3975fa"
+ },
+ "buto.13h-15h-mui": {
+  "t": "1–3 PM (Wei · Goat)",
+  "h": "b5abb37a"
+ },
+ "buto.15h-17h-than": {
+  "t": "3–5 PM (Shen · Monkey)",
+  "h": "d3239832"
+ },
+ "buto.17h-19h-dau": {
+  "t": "5–7 PM (You · Rooster)",
+  "h": "892ef5c0"
+ },
+ "buto.19h-21h-tuat": {
+  "t": "7–9 PM (Xu · Dog)",
+  "h": "bfb8a38f"
+ },
+ "buto.1h-3h-suu": {
+  "t": "1–3 AM (Chou · Ox)",
+  "h": "43af3d63"
+ },
+ "buto.2-xem-truoc-6-truc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview the 6 axes</span>",
+  "h": "752b4fb3"
+ },
+ "buto.21h-23h-hoi": {
+  "t": "9–11 PM (Hai · Pig)",
+  "h": "6d57bf9d"
+ },
+ "buto.23h-1h-ty": {
+  "t": "11 PM–1 AM (Zi · Rat)",
+  "h": "3b1ae1a9"
+ },
+ "buto.3h-5h-dan": {
+  "t": "3–5 AM (Yin · Tiger)",
+  "h": "801ae495"
+ },
+ "buto.5h-7h-mao": {
+  "t": "5–7 AM (Mao · Rabbit)",
+  "h": "a3681f23"
+ },
+ "buto.7h-9h-thin": {
+  "t": "7–9 AM (Chen · Dragon)",
+  "h": "dd0d719c"
+ },
+ "buto.9h-11h-ty": {
+  "t": "9–11 AM (Si · Snake)",
+  "h": "396e5fe1"
+ },
+ "buto.anh-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> Signature Image",
+  "h": "d254fb71"
+ },
+ "buto.anh-chu-ky-xqwx": {
+  "t": "Signature image",
+  "h": "41b431b6"
+ },
+ "buto.ban-ky-dua-theo-chu-nao": {
+  "t": "Which part of your name is your signature based on? (optional)",
+  "h": "e757bef0"
+ },
+ "buto.but-tuong": {
+  "t": "Handwriting Reading",
+  "h": "6eab7d7c"
+ },
+ "buto.but-tuong-hoc-phuong-dong-cho": {
+  "t": "Eastern signature reading (bi xiang) holds that handwriting, and the signature above all, reflects the writer’s spirit and character, based on six classical criteria of calligraphy: Spirit, Qi, Bone, Flesh, Blood and Momentum. It is a branch of physiognomy applied to handwriting.",
+  "h": "16117b43"
+ },
+ "buto.but-tuong-tu-vi-minh-bao": {
+  "t": "Signature Reading — Minh Bao Zi Wei Dou Shu",
+  "h": "01e38f8b"
+ },
+ "buto.but-tuong-xem-chu-ky-theo": {
+  "t": "<b>Signature Reading</b><span>Read your signature by the classical method — <span data-tvp-price=\"but-tuong\">…</span> credits</span>",
+  "h": "68cc134b"
+ },
+ "buto.chu-ky-khong-duoc-luu-chi": {
+  "t": "Your signature is NOT stored — only the measured metrics are sent for the reading.",
+  "h": "e651b4d2"
+ },
+ "buto.co-phap-thu-phap-trung-hoa": {
+  "t": "Classical Chinese Calligraphy",
+  "h": "ce0e060e"
+ },
+ "buto.do-6-truc-co-phap-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>Measure 6 axes by<br>classical calligraphy</span>",
+  "h": "a97de25d"
+ },
+ "buto.do-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> Measure My Signature →",
+  "h": "afdd3301"
+ },
+ "buto.do-chu-ky-khac": {
+  "t": "Measure Another Signature",
+  "h": "d0b9860f"
+ },
+ "buto.doi-chieu-voi-dung-than-bat": {
+  "t": "+ Compare with your BaZi useful god (optional)",
+  "h": "027429c6"
+ },
+ "buto.gio-sinh-bo-trong-neu-khong": {
+  "t": "Birth hour (leave blank if unknown)",
+  "h": "72d40487"
+ },
+ "buto.keo-tha-anh-chu-ky-hoac": {
+  "t": "Drag and drop a signature image, or click to choose",
+  "h": "c5c50566"
+ },
+ "buto.khong-luu-chu-ky": {
+  "t": "<span class=\"hp-ic\" data-icon=\"shield-check\"></span><span>Your signature<br>is not stored</span>",
+  "h": "99c2aaad"
+ },
+ "buto.ky-chu-ky": {
+  "t": "Sign here",
+  "h": "6043c0d7"
+ },
+ "buto.ky-lai-lan-nua": {
+  "t": "+ Sign once more",
+  "h": "a28512df"
+ },
+ "buto.ky-truc-tiep": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> Sign Live",
+  "h": "604362e3"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"pen-line\"></span><span>Sign live<br>on screen</span>",
+  "h": "2e08b69a"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-d4z1": {
+  "t": "Sign directly on the screen or upload an existing signature image. The system measures 6 axes of your strokes and reads them by classical calligraphy.",
+  "h": "74ad947e"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-j0mj": {
+  "t": "Sign directly on the screen — the system measures the 6 axes of Spirit · Qi · Bone · Flesh · Blood · Momentum by classical calligraphy and reads your signature.",
+  "h": "d92707db"
+ },
+ "buto.ky-voi-toc-do-that-dung": {
+  "t": "Sign at your natural speed — don’t slow down on purpose.",
+  "h": "8ac53b46"
+ },
+ "buto.luan-giai-but-tuong": {
+  "t": "Signature Reading",
+  "h": "0760be41"
+ },
+ "buto.moi-ngay-ky-hang-chuc-chu": {
+  "t": "You sign dozens of contracts and papers every day — yet you may never have wondered what that signature says about your fortune. Sign live on the screen and get a full reading across all 6 axes: Spirit, Qi, Bone, Flesh, Blood and Momentum.",
+  "h": "150efb97"
+ },
+ "buto.muc-sam-tren-nen-sang-toi": {
+  "t": "Dark ink on a light background · 5MB max — only Bone/Flesh/Momentum can be measured",
+  "h": "ddf489f7"
+ },
+ "buto.vd-khoa-dang-khoa": {
+  "t": "e.g. Smith, Anna…",
+  "h": "bbb7526d"
+ },
+ "buto.xoa": {
+  "t": "Clear",
+  "h": "82339c0a"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "Tell your story and Minh Bao will bring in the right Master from our team of 15: Zi Wei Dou Shu chart, BaZi (Four Pillars of Destiny), marriage compatibility, naming, date selection.",
   "h": "0f564294"
@@ -1182,6 +1346,222 @@
  "js.battu.tuoi": {
   "t": " years old",
   "h": "2e261bf5"
+ },
+ "js.buto.anh-qua-lon": {
+  "t": "The image is too large.",
+  "h": "cb4417d0"
+ },
+ "js.buto.anh-tinh-chua-do-duoc": {
+  "t": "A still image can’t measure: {list} — sign live to get all 6 axes.",
+  "h": "e61f9e1c"
+ },
+ "js.buto.but-tuong": {
+  "t": "Handwriting Reading",
+  "h": "6eab7d7c"
+ },
+ "js.buto.but-tuong-cua-toi": {
+  "t": "My handwriting reading",
+  "h": "71e77c95"
+ },
+ "js.buto.but-tuong-diem": {
+  "t": "Signature Reading — {n}/100",
+  "h": "8b96c2af"
+ },
+ "js.buto.chi-phi-su-dung": {
+  "t": "Cost",
+  "h": "c2d36be8"
+ },
+ "js.buto.chip-ngu-hanh": {
+  "t": "How does the stroke's Five Element relate to the Useful God?",
+  "h": "a163e0cf"
+ },
+ "js.buto.chip-on-dinh": {
+  "t": "Why can signing several times measure stability?",
+  "h": "db6978cc"
+ },
+ "js.buto.chip-than": {
+  "t": "What is the Spirit (Shen) axis?",
+  "h": "47cc8c8c"
+ },
+ "js.buto.chuyen-khoan-qr": {
+  "t": "Bank transfer (via bank QR)",
+  "h": "d15d92d3"
+ },
+ "js.buto.dang-luan": {
+  "t": "Reading your signature…",
+  "h": "c11b136b"
+ },
+ "js.buto.dau-phay": {
+  "t": ", ",
+  "h": "d3bc9a37"
+ },
+ "js.buto.diem-tong": {
+  "t": "/ 100 · overall score",
+  "h": "734b18a3"
+ },
+ "js.buto.diem-tong-anh": {
+  "t": "/ 100 · overall score (3 axes measured from the image)",
+  "h": "2eeaa72f"
+ },
+ "js.buto.diem-tong-n": {
+  "t": "Overall score: {n}/100",
+  "h": "1a30535a"
+ },
+ "js.buto.goi-y": {
+  "t": "Tip:",
+  "h": "ca8836e0"
+ },
+ "js.buto.goiy-cot": {
+  "t": "Your signature lacks a decisive stopping point (or, conversely, has too many small corners). Add ONE straight stroke as the main axis and let the other strokes lean on it.",
+  "h": "8398323b"
+ },
+ "js.buto.goiy-huyet": {
+  "t": "Your speed rises and falls erratically, and the pen lingers in places. Sign at an even rhythm — think of drawing a curve rather than writing letters.",
+  "h": "a216d5ef"
+ },
+ "js.buto.goiy-khi": {
+  "t": "Your strokes break off many times. Try to gather the signature into FEWER pen lifts — one long continuous flow beats many short, disjointed strokes.",
+  "h": "e111c883"
+ },
+ "js.buto.goiy-nhuc": {
+  "t": "Your strokes are thin or hurried. Slow down in the middle of the signature — you don’t need to press hard everywhere, just 1–2 key spots.",
+  "h": "6df98c3a"
+ },
+ "js.buto.goiy-than": {
+  "t": "Slow down a beat and practice REPEATING the same signature 5–10 times a day — spirit grows strong through consistency, not through signing fast.",
+  "h": "e914cedd"
+ },
+ "js.buto.goiy-the": {
+  "t": "Your baseline is sloping downward. Try ending the signature with a light upward flick — the classical calligraphy “rising momentum.”",
+  "h": "e992fa88"
+ },
+ "js.buto.greeting": {
+  "t": "Your signature’s overall score is **{n}/100**. Which part of the reading would you like to ask more about?",
+  "h": "6d9edb5f"
+ },
+ "js.buto.greeting-best": {
+  "t": "Your signature’s overall score is **{n}/100**, and the strongest axis is **{t}** ({s}/100). Which part of the reading would you like to ask more about?",
+  "h": "b3ab7c3e"
+ },
+ "js.buto.khong-co-ket-qua": {
+  "t": "No result.",
+  "h": "97fa6f91"
+ },
+ "js.buto.khong-do-duoc": {
+  "t": "not measurable",
+  "h": "ba0114d8"
+ },
+ "js.buto.khong-doc-duoc-net-muc-tu": {
+  "t": "Couldn't read the ink strokes from this photo.",
+  "h": "7c89a420"
+ },
+ "js.buto.khong-the-ket-noi": {
+  "t": "Can't connect.",
+  "h": "3dc4d8cb"
+ },
+ "js.buto.lan-n": {
+  "t": "Take {n} ✓",
+  "h": "8b97f3d0"
+ },
+ "js.buto.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.buto.loi-s": {
+  "t": "Error {s}",
+  "h": "c406c72b"
+ },
+ "js.buto.luan-giai-day-du": {
+  "t": "Full Reading →",
+  "h": "4c2c4d70"
+ },
+ "js.buto.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> credits)</span>",
+  "h": "72b273e4"
+ },
+ "js.buto.mua-goi": {
+  "t": "Buy a package for better value.<br><a href=\"/topup.html\">See packages →</a>",
+  "h": "074cd07f"
+ },
+ "js.buto.nghia-cot": {
+  "t": "the skeleton, how decisive the strokes are",
+  "h": "11b35dc9"
+ },
+ "js.buto.nghia-huyet": {
+  "t": "how smoothly it flows, how even the speed is",
+  "h": "bbf8ddc8"
+ },
+ "js.buto.nghia-khi": {
+  "t": "how connected the pen flow is, with few breaks",
+  "h": "ddda4d5b"
+ },
+ "js.buto.nghia-nhuc": {
+  "t": "fullness and stroke pressure",
+  "h": "fa2ac7b3"
+ },
+ "js.buto.nghia-than": {
+  "t": "vitality, the consistency of the strokes",
+  "h": "1e27242e"
+ },
+ "js.buto.nghia-the": {
+  "t": "the direction of the baseline",
+  "h": "c9a78d22"
+ },
+ "js.buto.ngu-hanh-net": {
+  "t": "Five Elements of the Strokes",
+  "h": "fed1c22a"
+ },
+ "js.buto.paypal-the": {
+  "t": "PayPal / International card",
+  "h": "70ff945c"
+ },
+ "js.buto.thuong-mat-10-20-giay": {
+  "t": "Usually takes 10–20 seconds",
+  "h": "9c118003"
+ },
+ "js.buto.tinh-tu-n-truc": {
+  "t": "Based on {n} axes measured directly from the still image. The full reading by classical signature analysis (Spirit/Qi/Bone/Flesh/Blood/Momentum) is in the in-depth analysis.",
+  "h": "dd2d2e04"
+ },
+ "js.buto.ton-luong": {
+  "t": "Costs <span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> credits)</span>",
+  "h": "4051f122"
+ },
+ "js.buto.truc-cot": {
+  "t": "Bone",
+  "h": "e5b9e8aa"
+ },
+ "js.buto.truc-huyet": {
+  "t": "Blood",
+  "h": "b28ba369"
+ },
+ "js.buto.truc-khi": {
+  "t": "Qi",
+  "h": "8ce20f05"
+ },
+ "js.buto.truc-manh-nhat-body": {
+  "t": "{y}. The other axes and specific tips for improvement are in the in-depth analysis.",
+  "h": "fcd915ce"
+ },
+ "js.buto.truc-manh-nhat-t": {
+  "t": "Strongest axis: {t} ({h}) — {s}/100",
+  "h": "a03ee856"
+ },
+ "js.buto.truc-nhuc": {
+  "t": "Flesh",
+  "h": "cb0d2007"
+ },
+ "js.buto.truc-than": {
+  "t": "Spirit",
+  "h": "b7cbb4d4"
+ },
+ "js.buto.truc-the": {
+  "t": "Momentum",
+  "h": "4b2db277"
+ },
+ "js.buto.vui-long-chon-file-anh": {
+  "t": "Please choose an image file.",
+  "h": "71a61127"
  },
  "js.chat.chao": {
   "t": "Hello ",

@@ -103,6 +103,170 @@
   "t": "この四柱のために、子平の古法で一から書き下ろします。全16項目：格局、十神、大運、流年。",
   "h": "f54c0d01"
  },
+ "buto.11h-13h-ngo": {
+  "t": "11〜13時（午）",
+  "h": "6a3975fa"
+ },
+ "buto.13h-15h-mui": {
+  "t": "13〜15時（未）",
+  "h": "b5abb37a"
+ },
+ "buto.15h-17h-than": {
+  "t": "15〜17時（申）",
+  "h": "d3239832"
+ },
+ "buto.17h-19h-dau": {
+  "t": "17〜19時（酉）",
+  "h": "892ef5c0"
+ },
+ "buto.19h-21h-tuat": {
+  "t": "19〜21時（戌）",
+  "h": "bfb8a38f"
+ },
+ "buto.1h-3h-suu": {
+  "t": "1〜3時（丑）",
+  "h": "43af3d63"
+ },
+ "buto.2-xem-truoc-6-truc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">6軸のプレビュー</span>",
+  "h": "752b4fb3"
+ },
+ "buto.21h-23h-hoi": {
+  "t": "21〜23時（亥）",
+  "h": "6d57bf9d"
+ },
+ "buto.23h-1h-ty": {
+  "t": "23〜1時（子）",
+  "h": "3b1ae1a9"
+ },
+ "buto.3h-5h-dan": {
+  "t": "3〜5時（寅）",
+  "h": "801ae495"
+ },
+ "buto.5h-7h-mao": {
+  "t": "5〜7時（卯）",
+  "h": "a3681f23"
+ },
+ "buto.7h-9h-thin": {
+  "t": "7〜9時（辰）",
+  "h": "dd0d719c"
+ },
+ "buto.9h-11h-ty": {
+  "t": "9〜11時（巳）",
+  "h": "396e5fe1"
+ },
+ "buto.anh-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> 署名画像",
+  "h": "d254fb71"
+ },
+ "buto.anh-chu-ky-xqwx": {
+  "t": "署名画像",
+  "h": "41b431b6"
+ },
+ "buto.ban-ky-dua-theo-chu-nao": {
+  "t": "署名は名前のどの文字をもとにしていますか？（任意）",
+  "h": "e757bef0"
+ },
+ "buto.but-tuong": {
+  "t": "筆相",
+  "h": "6eab7d7c"
+ },
+ "buto.but-tuong-hoc-phuong-dong-cho": {
+  "t": "東洋の筆相学では、筆跡、とりわけ署名には書き手の気迫と性格が表れると考えます。書法に古くから伝わる6つの基準 — 神・気・骨・肉・血・勢 — にもとづく、人相学を手書き文字に応用した一分野です。",
+  "h": "16117b43"
+ },
+ "buto.but-tuong-tu-vi-minh-bao": {
+  "t": "筆相 — 明宝紫微斗数",
+  "h": "01e38f8b"
+ },
+ "buto.but-tuong-xem-chu-ky-theo": {
+  "t": "<b>筆相</b><span>古法で署名を読む — <span data-tvp-price=\"but-tuong\">…</span> 両</span>",
+  "h": "68cc134b"
+ },
+ "buto.chu-ky-khong-duoc-luu-chi": {
+  "t": "署名は保存されません — 測定された指標だけが鑑定のために送信されます。",
+  "h": "e651b4d2"
+ },
+ "buto.co-phap-thu-phap-trung-hoa": {
+  "t": "中国書法の古法",
+  "h": "ce0e060e"
+ },
+ "buto.do-6-truc-co-phap-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>書法の古法で<br>6軸を測定</span>",
+  "h": "a97de25d"
+ },
+ "buto.do-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> 署名を測定 →",
+  "h": "afdd3301"
+ },
+ "buto.do-chu-ky-khac": {
+  "t": "別の署名を測定",
+  "h": "d0b9860f"
+ },
+ "buto.doi-chieu-voi-dung-than-bat": {
+  "t": "+ 四柱推命の用神と照合（任意）",
+  "h": "027429c6"
+ },
+ "buto.gio-sinh-bo-trong-neu-khong": {
+  "t": "出生時刻（わからなければ空欄で）",
+  "h": "72d40487"
+ },
+ "buto.keo-tha-anh-chu-ky-hoac": {
+  "t": "署名の画像をドラッグ＆ドロップ、またはクリックして選択",
+  "h": "c5c50566"
+ },
+ "buto.khong-luu-chu-ky": {
+  "t": "<span class=\"hp-ic\" data-icon=\"shield-check\"></span><span>署名は<br>保存しません</span>",
+  "h": "99c2aaad"
+ },
+ "buto.ky-chu-ky": {
+  "t": "署名する",
+  "h": "6043c0d7"
+ },
+ "buto.ky-lai-lan-nua": {
+  "t": "+ もう一度署名する",
+  "h": "a28512df"
+ },
+ "buto.ky-truc-tiep": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> 画面に直接署名",
+  "h": "604362e3"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"pen-line\"></span><span>画面に<br>直接署名</span>",
+  "h": "2e08b69a"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-d4z1": {
+  "t": "画面に直接署名するか、手元の署名画像をアップロードしてください。システムが筆跡の6軸を測定し、書法の古法にもとづいて鑑定します。",
+  "h": "74ad947e"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-j0mj": {
+  "t": "画面に直接署名してください — 書法の古法にもとづき、神・気・骨・肉・血・勢の6軸を測定して、あなたの署名を読み解きます。",
+  "h": "d92707db"
+ },
+ "buto.ky-voi-toc-do-that-dung": {
+  "t": "普段どおりの速さで署名してください — わざとゆっくり書かないで。",
+  "h": "8ac53b46"
+ },
+ "buto.luan-giai-but-tuong": {
+  "t": "筆相の鑑定",
+  "h": "0760be41"
+ },
+ "buto.moi-ngay-ky-hang-chuc-chu": {
+  "t": "毎日、契約書や書類に何十回も署名していても、その署名があなたの運について何を語っているかは考えたことがないかもしれません。画面に直接署名すると、神・気・骨・肉・血・勢の6軸すべての鑑定が届きます。",
+  "h": "150efb97"
+ },
+ "buto.muc-sam-tren-nen-sang-toi": {
+  "t": "明るい背景に濃いインク · 最大5MB — 測定できるのは骨・肉・勢のみ",
+  "h": "ddf489f7"
+ },
+ "buto.vd-khoa-dang-khoa": {
+  "t": "例：田中、太郎…",
+  "h": "bbb7526d"
+ },
+ "buto.xoa": {
+  "t": "消す",
+  "h": "82339c0a"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "お話を聞かせてください。明宝が15人の先生の中から最適な先生をご案内します：紫微斗数の命盤、四柱推命、相性、命名、吉日選び。",
   "h": "0f564294"
@@ -1182,6 +1346,222 @@
  "js.battu.tuoi": {
   "t": " 歳",
   "h": "2e261bf5"
+ },
+ "js.buto.anh-qua-lon": {
+  "t": "画像が大きすぎます。",
+  "h": "cb4417d0"
+ },
+ "js.buto.anh-tinh-chua-do-duoc": {
+  "t": "静止画では測定できなかった軸: {list} — 6軸すべてを測るには、画面に直接署名してください。",
+  "h": "e61f9e1c"
+ },
+ "js.buto.but-tuong": {
+  "t": "筆相",
+  "h": "6eab7d7c"
+ },
+ "js.buto.but-tuong-cua-toi": {
+  "t": "私の筆相",
+  "h": "71e77c95"
+ },
+ "js.buto.but-tuong-diem": {
+  "t": "筆相 — {n}点/100",
+  "h": "8b96c2af"
+ },
+ "js.buto.chi-phi-su-dung": {
+  "t": "ご利用料金",
+  "h": "c2d36be8"
+ },
+ "js.buto.chip-ngu-hanh": {
+  "t": "筆跡の五行は、用神とどう関係しますか？",
+  "h": "a163e0cf"
+ },
+ "js.buto.chip-on-dinh": {
+  "t": "何度も署名すると、なぜ安定度が測れるのですか？",
+  "h": "db6978cc"
+ },
+ "js.buto.chip-than": {
+  "t": "「神」の軸とは何ですか？",
+  "h": "47cc8c8c"
+ },
+ "js.buto.chuyen-khoan-qr": {
+  "t": "銀行振込（QRコード）",
+  "h": "d15d92d3"
+ },
+ "js.buto.dang-luan": {
+  "t": "筆相を読んでいます…",
+  "h": "c11b136b"
+ },
+ "js.buto.dau-phay": {
+  "t": "、",
+  "h": "d3bc9a37"
+ },
+ "js.buto.diem-tong": {
+  "t": "/ 100 · 総合点",
+  "h": "734b18a3"
+ },
+ "js.buto.diem-tong-anh": {
+  "t": "/ 100 · 総合点（画像から測れた3軸）",
+  "h": "2eeaa72f"
+ },
+ "js.buto.diem-tong-n": {
+  "t": "総合点: {n}/100",
+  "h": "1a30535a"
+ },
+ "js.buto.goi-y": {
+  "t": "アドバイス:",
+  "h": "ca8836e0"
+ },
+ "js.buto.goiy-cot": {
+  "t": "署名にきっぱりとした止めがありません（あるいは逆に、細かい角が多すぎます）。主軸となる直線を1本加え、ほかの線をそれに寄せましょう。",
+  "h": "8398323b"
+ },
+ "js.buto.goiy-huyet": {
+  "t": "速さが不規則に上下し、筆が滞る箇所があります。一定のリズムで署名してみましょう — 文字を書くのではなく、曲線を描くつもりで。",
+  "h": "a216d5ef"
+ },
+ "js.buto.goiy-khi": {
+  "t": "線が何度も途切れています。ペンを持ち上げる回数をできるだけ減らしてみましょう — 短い線をいくつも並べるより、長く一筆でつながるほうが良いです。",
+  "h": "e111c883"
+ },
+ "js.buto.goiy-nhuc": {
+  "t": "線が細く、急いでいます。署名の中ほどをゆっくり書きましょう — 全体を強調する必要はなく、要所の1〜2か所で十分です。",
+  "h": "6df98c3a"
+ },
+ "js.buto.goiy-than": {
+  "t": "ひと呼吸おいてゆっくり署名し、同じ署名を毎日5〜10回繰り返し練習しましょう — 神は速さではなく、一貫性によって充実します。",
+  "h": "e914cedd"
+ },
+ "js.buto.goiy-the": {
+  "t": "文字の基線が下がっています。署名の最後を軽く跳ね上げてみましょう — 古い書法でいう「上り勢」です。",
+  "h": "e992fa88"
+ },
+ "js.buto.greeting": {
+  "t": "あなたの署名の総合点は **{n}/100** です。鑑定のどの部分について、さらに知りたいですか？",
+  "h": "6d9edb5f"
+ },
+ "js.buto.greeting-best": {
+  "t": "あなたの署名の総合点は **{n}/100**、最も強い軸は **{t}**（{s}/100）です。鑑定のどの部分について、さらに知りたいですか？",
+  "h": "b3ab7c3e"
+ },
+ "js.buto.khong-co-ket-qua": {
+  "t": "結果がありません。",
+  "h": "97fa6f91"
+ },
+ "js.buto.khong-do-duoc": {
+  "t": "測定不可",
+  "h": "ba0114d8"
+ },
+ "js.buto.khong-doc-duoc-net-muc-tu": {
+  "t": "この画像から墨の筆跡を読み取れませんでした。",
+  "h": "7c89a420"
+ },
+ "js.buto.khong-the-ket-noi": {
+  "t": "接続できません。",
+  "h": "3dc4d8cb"
+ },
+ "js.buto.lan-n": {
+  "t": "{n}回目 ✓",
+  "h": "8b97f3d0"
+ },
+ "js.buto.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.buto.loi-s": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.buto.luan-giai-day-du": {
+  "t": "詳しい鑑定 →",
+  "h": "4c2c4d70"
+ },
+ "js.buto.moi-luot-luong": {
+  "t": "1回 <span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> 両)</span>",
+  "h": "72b273e4"
+ },
+ "js.buto.mua-goi": {
+  "t": "パックを購入すると、さらにお得です。<br><a href=\"/topup.html\">パックを見る →</a>",
+  "h": "074cd07f"
+ },
+ "js.buto.nghia-cot": {
+  "t": "骨組み、線のきっぱり具合",
+  "h": "11b35dc9"
+ },
+ "js.buto.nghia-huyet": {
+  "t": "流れのなめらかさ、速さの均一さ",
+  "h": "bbf8ddc8"
+ },
+ "js.buto.nghia-khi": {
+  "t": "筆の流れのつながり、途切れの少なさ",
+  "h": "ddda4d5b"
+ },
+ "js.buto.nghia-nhuc": {
+  "t": "ふくよかさ、筆圧",
+  "h": "fa2ac7b3"
+ },
+ "js.buto.nghia-than": {
+  "t": "生気、筆線の一貫性",
+  "h": "1e27242e"
+ },
+ "js.buto.nghia-the": {
+  "t": "文字の基線が向かう方向",
+  "h": "c9a78d22"
+ },
+ "js.buto.ngu-hanh-net": {
+  "t": "線の五行",
+  "h": "fed1c22a"
+ },
+ "js.buto.paypal-the": {
+  "t": "PayPal / 国際カード",
+  "h": "70ff945c"
+ },
+ "js.buto.thuong-mat-10-20-giay": {
+  "t": "通常10〜20秒かかります",
+  "h": "9c118003"
+ },
+ "js.buto.tinh-tu-n-truc": {
+  "t": "静止画から直接測れた{n}軸にもとづく結果です。筆相の古法による詳しい鑑定（神・気・骨・肉・血・勢）は、詳細分析に含まれています。",
+  "h": "dd2d2e04"
+ },
+ "js.buto.ton-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> 両)</span> 必要",
+  "h": "4051f122"
+ },
+ "js.buto.truc-cot": {
+  "t": "骨格",
+  "h": "e5b9e8aa"
+ },
+ "js.buto.truc-huyet": {
+  "t": "血流",
+  "h": "b28ba369"
+ },
+ "js.buto.truc-khi": {
+  "t": "気韻",
+  "h": "8ce20f05"
+ },
+ "js.buto.truc-manh-nhat-body": {
+  "t": "{y}。そのほかの軸と具体的な改善アドバイスは、詳細分析に含まれています。",
+  "h": "fcd915ce"
+ },
+ "js.buto.truc-manh-nhat-t": {
+  "t": "最も強い軸: {t}（{h}）— {s}/100",
+  "h": "a03ee856"
+ },
+ "js.buto.truc-nhuc": {
+  "t": "肉付き",
+  "h": "cb0d2007"
+ },
+ "js.buto.truc-than": {
+  "t": "精神",
+  "h": "b7cbb4d4"
+ },
+ "js.buto.truc-the": {
+  "t": "筆勢",
+  "h": "4b2db277"
+ },
+ "js.buto.vui-long-chon-file-anh": {
+  "t": "画像ファイルを選んでください。",
+  "h": "71a61127"
  },
  "js.chat.chao": {
   "t": "こんにちは、",

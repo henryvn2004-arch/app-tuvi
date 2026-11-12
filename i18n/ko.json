@@ -103,6 +103,170 @@
   "t": "이 사주만을 위해 자평 고법으로 새로 씁니다. 총 16개 항목: 격국, 십신, 대운, 유년.",
   "h": "f54c0d01"
  },
+ "buto.11h-13h-ngo": {
+  "t": "11~13시 (오시)",
+  "h": "6a3975fa"
+ },
+ "buto.13h-15h-mui": {
+  "t": "13~15시 (미시)",
+  "h": "b5abb37a"
+ },
+ "buto.15h-17h-than": {
+  "t": "15~17시 (신시)",
+  "h": "d3239832"
+ },
+ "buto.17h-19h-dau": {
+  "t": "17~19시 (유시)",
+  "h": "892ef5c0"
+ },
+ "buto.19h-21h-tuat": {
+  "t": "19~21시 (술시)",
+  "h": "bfb8a38f"
+ },
+ "buto.1h-3h-suu": {
+  "t": "1~3시 (축시)",
+  "h": "43af3d63"
+ },
+ "buto.2-xem-truoc-6-truc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">6축 미리보기</span>",
+  "h": "752b4fb3"
+ },
+ "buto.21h-23h-hoi": {
+  "t": "21~23시 (해시)",
+  "h": "6d57bf9d"
+ },
+ "buto.23h-1h-ty": {
+  "t": "23~1시 (자시)",
+  "h": "3b1ae1a9"
+ },
+ "buto.3h-5h-dan": {
+  "t": "3~5시 (인시)",
+  "h": "801ae495"
+ },
+ "buto.5h-7h-mao": {
+  "t": "5~7시 (묘시)",
+  "h": "a3681f23"
+ },
+ "buto.7h-9h-thin": {
+  "t": "7~9시 (진시)",
+  "h": "dd0d719c"
+ },
+ "buto.9h-11h-ty": {
+  "t": "9~11시 (사시)",
+  "h": "396e5fe1"
+ },
+ "buto.anh-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> 서명 이미지",
+  "h": "d254fb71"
+ },
+ "buto.anh-chu-ky-xqwx": {
+  "t": "서명 이미지",
+  "h": "41b431b6"
+ },
+ "buto.ban-ky-dua-theo-chu-nao": {
+  "t": "서명은 이름의 어떤 글자를 바탕으로 했나요? (선택)",
+  "h": "e757bef0"
+ },
+ "buto.but-tuong": {
+  "t": "필상",
+  "h": "6eab7d7c"
+ },
+ "buto.but-tuong-hoc-phuong-dong-cho": {
+  "t": "동양 필상학은 글씨, 특히 서명에 쓴 사람의 기운과 성격이 담긴다고 봐요. 서예의 여섯 가지 고전 기준 — 신·기·골·육·혈·세 — 을 바탕으로 한, 관상학을 손글씨에 적용한 한 갈래예요.",
+  "h": "16117b43"
+ },
+ "buto.but-tuong-tu-vi-minh-bao": {
+  "t": "필상 — 명보 자미두수",
+  "h": "01e38f8b"
+ },
+ "buto.but-tuong-xem-chu-ky-theo": {
+  "t": "<b>필상</b><span>고법으로 서명을 봐요 — <span data-tvp-price=\"but-tuong\">…</span> 냥</span>",
+  "h": "68cc134b"
+ },
+ "buto.chu-ky-khong-duoc-luu-chi": {
+  "t": "서명은 저장되지 않아요 — 측정된 지표만 풀이를 위해 전송돼요.",
+  "h": "e651b4d2"
+ },
+ "buto.co-phap-thu-phap-trung-hoa": {
+  "t": "중국 서예 고법",
+  "h": "ce0e060e"
+ },
+ "buto.do-6-truc-co-phap-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>서예 고법으로<br>6축 측정</span>",
+  "h": "a97de25d"
+ },
+ "buto.do-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> 서명 측정하기 →",
+  "h": "afdd3301"
+ },
+ "buto.do-chu-ky-khac": {
+  "t": "다른 서명 측정",
+  "h": "d0b9860f"
+ },
+ "buto.doi-chieu-voi-dung-than-bat": {
+  "t": "+ 사주 용신과 대조 (선택)",
+  "h": "027429c6"
+ },
+ "buto.gio-sinh-bo-trong-neu-khong": {
+  "t": "출생 시각 (모르면 비워 두세요)",
+  "h": "72d40487"
+ },
+ "buto.keo-tha-anh-chu-ky-hoac": {
+  "t": "서명 이미지를 끌어다 놓거나 클릭해서 선택",
+  "h": "c5c50566"
+ },
+ "buto.khong-luu-chu-ky": {
+  "t": "<span class=\"hp-ic\" data-icon=\"shield-check\"></span><span>서명은<br>저장하지 않아요</span>",
+  "h": "99c2aaad"
+ },
+ "buto.ky-chu-ky": {
+  "t": "서명하기",
+  "h": "6043c0d7"
+ },
+ "buto.ky-lai-lan-nua": {
+  "t": "+ 한 번 더 서명",
+  "h": "a28512df"
+ },
+ "buto.ky-truc-tiep": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> 직접 서명",
+  "h": "604362e3"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"pen-line\"></span><span>화면에<br>직접 서명</span>",
+  "h": "2e08b69a"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-d4z1": {
+  "t": "화면에 직접 서명하거나 가지고 있는 서명 이미지를 올려 주세요. 시스템이 필획의 6축을 측정하고 서예 고법에 따라 풀이해요.",
+  "h": "74ad947e"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-j0mj": {
+  "t": "화면에 직접 서명해 주세요 — 서예 고법에 따라 신·기·골·육·혈·세 6축을 측정하고 서명을 풀이해 드려요.",
+  "h": "d92707db"
+ },
+ "buto.ky-voi-toc-do-that-dung": {
+  "t": "평소 속도 그대로 서명해 주세요 — 일부러 천천히 쓰지 마세요.",
+  "h": "8ac53b46"
+ },
+ "buto.luan-giai-but-tuong": {
+  "t": "필상 풀이",
+  "h": "0760be41"
+ },
+ "buto.moi-ngay-ky-hang-chuc-chu": {
+  "t": "매일 계약서와 서류에 수십 번 서명하면서도, 그 서명이 내 운에 대해 무엇을 말해 주는지는 생각해 본 적 없을 거예요. 화면에 직접 서명하면 신·기·골·육·혈·세 6축을 모두 담은 풀이를 받을 수 있어요.",
+  "h": "150efb97"
+ },
+ "buto.muc-sam-tren-nen-sang-toi": {
+  "t": "밝은 배경에 진한 잉크 · 최대 5MB — 골·육·세만 측정할 수 있어요",
+  "h": "ddf489f7"
+ },
+ "buto.vd-khoa-dang-khoa": {
+  "t": "예: 김, 민준…",
+  "h": "bbb7526d"
+ },
+ "buto.xoa": {
+  "t": "지우기",
+  "h": "82339c0a"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "이야기를 들려주세요. 명보가 15분의 선생님 중 알맞은 분을 안내해 드려요: 자미두수 명반, 사주, 궁합, 작명, 길일 택일.",
   "h": "0f564294"
@@ -1182,6 +1346,222 @@
  "js.battu.tuoi": {
   "t": " 세",
   "h": "2e261bf5"
+ },
+ "js.buto.anh-qua-lon": {
+  "t": "이미지가 너무 커요.",
+  "h": "cb4417d0"
+ },
+ "js.buto.anh-tinh-chua-do-duoc": {
+  "t": "정지 이미지로는 측정하지 못한 축: {list} — 6축을 모두 측정하려면 직접 서명해 주세요.",
+  "h": "e61f9e1c"
+ },
+ "js.buto.but-tuong": {
+  "t": "필상",
+  "h": "6eab7d7c"
+ },
+ "js.buto.but-tuong-cua-toi": {
+  "t": "내 필상",
+  "h": "71e77c95"
+ },
+ "js.buto.but-tuong-diem": {
+  "t": "필상 — {n}점/100",
+  "h": "8b96c2af"
+ },
+ "js.buto.chi-phi-su-dung": {
+  "t": "이용 요금",
+  "h": "c2d36be8"
+ },
+ "js.buto.chip-ngu-hanh": {
+  "t": "필획의 오행은 용신과 어떤 관계가 있나요?",
+  "h": "a163e0cf"
+ },
+ "js.buto.chip-on-dinh": {
+  "t": "여러 번 서명하면 왜 안정도를 잴 수 있나요?",
+  "h": "db6978cc"
+ },
+ "js.buto.chip-than": {
+  "t": "'신(神)' 축이란 무엇인가요?",
+  "h": "47cc8c8c"
+ },
+ "js.buto.chuyen-khoan-qr": {
+  "t": "계좌 이체 (은행 QR)",
+  "h": "d15d92d3"
+ },
+ "js.buto.dang-luan": {
+  "t": "필상을 풀이하는 중…",
+  "h": "c11b136b"
+ },
+ "js.buto.dau-phay": {
+  "t": ", ",
+  "h": "d3bc9a37"
+ },
+ "js.buto.diem-tong": {
+  "t": "/ 100 · 종합 점수",
+  "h": "734b18a3"
+ },
+ "js.buto.diem-tong-anh": {
+  "t": "/ 100 · 종합 점수 (이미지에서 측정된 3축)",
+  "h": "2eeaa72f"
+ },
+ "js.buto.diem-tong-n": {
+  "t": "종합 점수: {n}/100",
+  "h": "1a30535a"
+ },
+ "js.buto.goi-y": {
+  "t": "조언:",
+  "h": "ca8836e0"
+ },
+ "js.buto.goiy-cot": {
+  "t": "서명에 단호하게 멈추는 지점이 없어요(또는 반대로 잔 모서리가 너무 많아요). 중심이 되는 곧은 획을 하나 더하고, 나머지 획이 그 획에 기대도록 해 보세요.",
+  "h": "8398323b"
+ },
+ "js.buto.goiy-huyet": {
+  "t": "속도가 들쭉날쭉하고 붓이 머무는 곳이 있어요. 일정한 리듬으로 서명해 보세요 — 글씨를 쓰는 게 아니라 곡선을 그린다고 생각하면 돼요.",
+  "h": "a216d5ef"
+ },
+ "js.buto.goiy-khi": {
+  "t": "획이 여러 번 끊겨요. 펜을 떼는 횟수를 가능한 한 줄여 보세요 — 짧은 획 여러 개보다 길게 한 번에 이어지는 편이 훨씬 좋아요.",
+  "h": "e111c883"
+ },
+ "js.buto.goiy-nhuc": {
+  "t": "획이 가늘고 급해요. 서명 중간 부분을 더 천천히 쓰세요 — 전체를 힘주어 쓸 필요 없이, 핵심 한두 군데면 충분해요.",
+  "h": "6df98c3a"
+ },
+ "js.buto.goiy-than": {
+  "t": "한 박자 늦춰서 서명하고, 같은 서명을 하루 5~10번 반복해서 연습하세요 — 신(神)은 빠르기가 아니라 일관성으로 왕성해져요.",
+  "h": "e914cedd"
+ },
+ "js.buto.goiy-the": {
+  "t": "글씨의 기준선이 아래로 처져 있어요. 서명을 살짝 치켜 올리며 끝내 보세요 — 옛 서예에서 말하는 ‘상승하는 세’예요.",
+  "h": "e992fa88"
+ },
+ "js.buto.greeting": {
+  "t": "당신 서명의 종합 점수는 **{n}/100**이에요. 풀이의 어떤 부분이 더 궁금하세요?",
+  "h": "6d9edb5f"
+ },
+ "js.buto.greeting-best": {
+  "t": "당신 서명의 종합 점수는 **{n}/100**이고, 가장 강한 축은 **{t}**({s}/100)이에요. 풀이의 어떤 부분이 더 궁금하세요?",
+  "h": "b3ab7c3e"
+ },
+ "js.buto.khong-co-ket-qua": {
+  "t": "결과가 없어요.",
+  "h": "97fa6f91"
+ },
+ "js.buto.khong-do-duoc": {
+  "t": "측정 불가",
+  "h": "ba0114d8"
+ },
+ "js.buto.khong-doc-duoc-net-muc-tu": {
+  "t": "이 사진에서 먹의 필획을 읽을 수 없어요.",
+  "h": "7c89a420"
+ },
+ "js.buto.khong-the-ket-noi": {
+  "t": "연결할 수 없어요.",
+  "h": "3dc4d8cb"
+ },
+ "js.buto.lan-n": {
+  "t": "{n}번째 ✓",
+  "h": "8b97f3d0"
+ },
+ "js.buto.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.buto.loi-s": {
+  "t": "오류 {s}",
+  "h": "c406c72b"
+ },
+ "js.buto.luan-giai-day-du": {
+  "t": "자세한 풀이 →",
+  "h": "4c2c4d70"
+ },
+ "js.buto.moi-luot-luong": {
+  "t": "1회 <span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> 냥)</span>",
+  "h": "72b273e4"
+ },
+ "js.buto.mua-goi": {
+  "t": "패키지를 구매하면 더 많은 혜택을 받을 수 있어요.<br><a href=\"/topup.html\">패키지 보기 →</a>",
+  "h": "074cd07f"
+ },
+ "js.buto.nghia-cot": {
+  "t": "뼈대, 획의 단호함",
+  "h": "11b35dc9"
+ },
+ "js.buto.nghia-huyet": {
+  "t": "흐름의 유연함, 속도의 균일함",
+  "h": "bbf8ddc8"
+ },
+ "js.buto.nghia-khi": {
+  "t": "붓의 흐름이 이어지는 정도, 끊김이 적음",
+  "h": "ddda4d5b"
+ },
+ "js.buto.nghia-nhuc": {
+  "t": "도톰함, 필압",
+  "h": "fa2ac7b3"
+ },
+ "js.buto.nghia-than": {
+  "t": "생기, 필획의 일관성",
+  "h": "1e27242e"
+ },
+ "js.buto.nghia-the": {
+  "t": "글씨 기준선이 향하는 방향",
+  "h": "c9a78d22"
+ },
+ "js.buto.ngu-hanh-net": {
+  "t": "획의 오행",
+  "h": "fed1c22a"
+ },
+ "js.buto.paypal-the": {
+  "t": "PayPal / 해외 카드",
+  "h": "70ff945c"
+ },
+ "js.buto.thuong-mat-10-20-giay": {
+  "t": "보통 10~20초 걸려요",
+  "h": "9c118003"
+ },
+ "js.buto.tinh-tu-n-truc": {
+  "t": "정지 이미지에서 직접 측정된 {n}개 축을 바탕으로 한 결과예요. 필상 고법에 따른 전체 풀이(신·기·골·육·혈·세)는 심층 분석에 들어 있어요.",
+  "h": "dd2d2e04"
+ },
+ "js.buto.ton-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> 냥)</span> 필요",
+  "h": "4051f122"
+ },
+ "js.buto.truc-cot": {
+  "t": "골격",
+  "h": "e5b9e8aa"
+ },
+ "js.buto.truc-huyet": {
+  "t": "혈류",
+  "h": "b28ba369"
+ },
+ "js.buto.truc-khi": {
+  "t": "기운",
+  "h": "8ce20f05"
+ },
+ "js.buto.truc-manh-nhat-body": {
+  "t": "{y}. 나머지 축과 구체적인 개선 조언은 심층 분석에 들어 있어요.",
+  "h": "fcd915ce"
+ },
+ "js.buto.truc-manh-nhat-t": {
+  "t": "가장 강한 축: {t}({h}) — {s}/100",
+  "h": "a03ee856"
+ },
+ "js.buto.truc-nhuc": {
+  "t": "살집",
+  "h": "cb0d2007"
+ },
+ "js.buto.truc-than": {
+  "t": "정신",
+  "h": "b7cbb4d4"
+ },
+ "js.buto.truc-the": {
+  "t": "기세",
+  "h": "4b2db277"
+ },
+ "js.buto.vui-long-chon-file-anh": {
+  "t": "이미지 파일을 선택해 주세요.",
+  "h": "71a61127"
  },
  "js.chat.chao": {
   "t": "안녕하세요— ",

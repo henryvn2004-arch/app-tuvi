@@ -103,6 +103,170 @@
   "t": "依子平古法为这组四柱量身撰写——共 16 个部分：格局、十神、大运、流年。",
   "h": "f54c0d01"
  },
+ "buto.11h-13h-ngo": {
+  "t": "11–13 时（午）",
+  "h": "6a3975fa"
+ },
+ "buto.13h-15h-mui": {
+  "t": "13–15 时（未）",
+  "h": "b5abb37a"
+ },
+ "buto.15h-17h-than": {
+  "t": "15–17 时（申）",
+  "h": "d3239832"
+ },
+ "buto.17h-19h-dau": {
+  "t": "17–19 时（酉）",
+  "h": "892ef5c0"
+ },
+ "buto.19h-21h-tuat": {
+  "t": "19–21 时（戌）",
+  "h": "bfb8a38f"
+ },
+ "buto.1h-3h-suu": {
+  "t": "1–3 时（丑）",
+  "h": "43af3d63"
+ },
+ "buto.2-xem-truoc-6-truc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">六轴预览</span>",
+  "h": "752b4fb3"
+ },
+ "buto.21h-23h-hoi": {
+  "t": "21–23 时（亥）",
+  "h": "6d57bf9d"
+ },
+ "buto.23h-1h-ty": {
+  "t": "23–1 时（子）",
+  "h": "3b1ae1a9"
+ },
+ "buto.3h-5h-dan": {
+  "t": "3–5 时（寅）",
+  "h": "801ae495"
+ },
+ "buto.5h-7h-mao": {
+  "t": "5–7 时（卯）",
+  "h": "a3681f23"
+ },
+ "buto.7h-9h-thin": {
+  "t": "7–9 时（辰）",
+  "h": "dd0d719c"
+ },
+ "buto.9h-11h-ty": {
+  "t": "9–11 时（巳）",
+  "h": "396e5fe1"
+ },
+ "buto.anh-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> 签名图片",
+  "h": "d254fb71"
+ },
+ "buto.anh-chu-ky-xqwx": {
+  "t": "签名图片",
+  "h": "41b431b6"
+ },
+ "buto.ban-ky-dua-theo-chu-nao": {
+  "t": "您的签名是依名字中的哪个字？（选填）",
+  "h": "e757bef0"
+ },
+ "buto.but-tuong": {
+  "t": "笔相",
+  "h": "6eab7d7c"
+ },
+ "buto.but-tuong-hoc-phuong-dong-cho": {
+  "t": "东方笔相学认为，字迹、尤其是签名，反映书写者的神采与性格，依据书法的六项古典标准：神、气、骨、肉、血、势。这是将相学应用于手写字迹的一个分支。",
+  "h": "16117b43"
+ },
+ "buto.but-tuong-tu-vi-minh-bao": {
+  "t": "笔相——明宝紫微斗数",
+  "h": "01e38f8b"
+ },
+ "buto.but-tuong-xem-chu-ky-theo": {
+  "t": "<b>笔相</b><span>依古法看签名 — <span data-tvp-price=\"but-tuong\">…</span> 两</span>",
+  "h": "68cc134b"
+ },
+ "buto.chu-ky-khong-duoc-luu-chi": {
+  "t": "签名不会被保存——只有测得的指针会送出解读。",
+  "h": "e651b4d2"
+ },
+ "buto.co-phap-thu-phap-trung-hoa": {
+  "t": "中国书法古法",
+  "h": "ce0e060e"
+ },
+ "buto.do-6-truc-co-phap-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依书法古法<br>测量六轴</span>",
+  "h": "a97de25d"
+ },
+ "buto.do-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> 测量签名 →",
+  "h": "afdd3301"
+ },
+ "buto.do-chu-ky-khac": {
+  "t": "测量另一个签名",
+  "h": "d0b9860f"
+ },
+ "buto.doi-chieu-voi-dung-than-bat": {
+  "t": "+ 对照八字用神（选填）",
+  "h": "027429c6"
+ },
+ "buto.gio-sinh-bo-trong-neu-khong": {
+  "t": "出生时辰（不清楚可留空）",
+  "h": "72d40487"
+ },
+ "buto.keo-tha-anh-chu-ky-hoac": {
+  "t": "将签名图片拖放到这里，或点击选择",
+  "h": "c5c50566"
+ },
+ "buto.khong-luu-chu-ky": {
+  "t": "<span class=\"hp-ic\" data-icon=\"shield-check\"></span><span>不保存<br>签名</span>",
+  "h": "99c2aaad"
+ },
+ "buto.ky-chu-ky": {
+  "t": "签名",
+  "h": "6043c0d7"
+ },
+ "buto.ky-lai-lan-nua": {
+  "t": "+ 再签一次",
+  "h": "a28512df"
+ },
+ "buto.ky-truc-tiep": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> 直接签名",
+  "h": "604362e3"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"pen-line\"></span><span>直接在<br>屏幕上签名</span>",
+  "h": "2e08b69a"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-d4z1": {
+  "t": "直接在屏幕上签名，或上传现有的签名图片。系统会测量笔迹的六个轴，依书法古法解读。",
+  "h": "74ad947e"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-j0mj": {
+  "t": "直接在屏幕上签名——系统依书法古法测量神、气、骨、肉、血、势六轴，解读您的签名。",
+  "h": "d92707db"
+ },
+ "buto.ky-voi-toc-do-that-dung": {
+  "t": "请以平常的速度签名——不要刻意放慢。",
+  "h": "8ac53b46"
+ },
+ "buto.luan-giai-but-tuong": {
+  "t": "笔相解读",
+  "h": "0760be41"
+ },
+ "buto.moi-ngay-ky-hang-chuc-chu": {
+  "t": "每天在合约、文档上签下几十次名，却从没想过这个签名正在诉说您的运势。直接在屏幕上签名，即可获得涵盖神、气、骨、肉、血、势六轴的完整解读。",
+  "h": "150efb97"
+ },
+ "buto.muc-sam-tren-nen-sang-toi": {
+  "t": "浅色底、深色墨迹 · 最大 5MB——仅能测得骨／肉／势",
+  "h": "ddf489f7"
+ },
+ "buto.vd-khoa-dang-khoa": {
+  "t": "例：王、小明…",
+  "h": "bbb7526d"
+ },
+ "buto.xoa": {
+  "t": "清除",
+  "h": "82339c0a"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "说说您的故事，明宝团队会从 15 位老师中请出最合适的一位为您解读：紫微斗数命盘、八字、合婚、取名、择日。",
   "h": "0f564294"
@@ -1182,6 +1346,222 @@
  "js.battu.tuoi": {
   "t": " 岁",
   "h": "2e261bf5"
+ },
+ "js.buto.anh-qua-lon": {
+  "t": "图片过大。",
+  "h": "cb4417d0"
+ },
+ "js.buto.anh-tinh-chua-do-duoc": {
+  "t": "静态图片尚无法测得：{list}——请直接签名以取得完整六轴。",
+  "h": "e61f9e1c"
+ },
+ "js.buto.but-tuong": {
+  "t": "笔相",
+  "h": "6eab7d7c"
+ },
+ "js.buto.but-tuong-cua-toi": {
+  "t": "我的笔相",
+  "h": "71e77c95"
+ },
+ "js.buto.but-tuong-diem": {
+  "t": "笔相——{n} 分／100",
+  "h": "8b96c2af"
+ },
+ "js.buto.chi-phi-su-dung": {
+  "t": "使用费用",
+  "h": "c2d36be8"
+ },
+ "js.buto.chip-ngu-hanh": {
+  "t": "笔画的五行与用神有什么关系？",
+  "h": "a163e0cf"
+ },
+ "js.buto.chip-on-dinh": {
+  "t": "为什么多签几次就能测出稳定度？",
+  "h": "db6978cc"
+ },
+ "js.buto.chip-than": {
+  "t": "「神」这个面向是什么？",
+  "h": "47cc8c8c"
+ },
+ "js.buto.chuyen-khoan-qr": {
+  "t": "银行转帐（扫描 QR 码）",
+  "h": "d15d92d3"
+ },
+ "js.buto.dang-luan": {
+  "t": "正在解读笔相…",
+  "h": "c11b136b"
+ },
+ "js.buto.dau-phay": {
+  "t": "，",
+  "h": "d3bc9a37"
+ },
+ "js.buto.diem-tong": {
+  "t": "/ 100 · 总分",
+  "h": "734b18a3"
+ },
+ "js.buto.diem-tong-anh": {
+  "t": "/ 100 · 总分（图片可测得的 3 轴）",
+  "h": "2eeaa72f"
+ },
+ "js.buto.diem-tong-n": {
+  "t": "总分：{n}/100",
+  "h": "1a30535a"
+ },
+ "js.buto.goi-y": {
+  "t": "建议：",
+  "h": "ca8836e0"
+ },
+ "js.buto.goiy-cot": {
+  "t": "签名缺少干脆的收笔点（或相反，细碎的转角太多）。请加上一笔挺直的线作为主轴，其余笔画都倚靠它。",
+  "h": "8398323b"
+ },
+ "js.buto.goiy-huyet": {
+  "t": "速度忽快忽慢，有些地方笔锋停滞。请以平稳的节奏签名——把它当成在画一条曲线，而不是在写字。",
+  "h": "a216d5ef"
+ },
+ "js.buto.goiy-khi": {
+  "t": "笔画多次中断。请尽量减少提笔的次数——一气呵成的长线，胜过许多零碎的短笔。",
+  "h": "e111c883"
+ },
+ "js.buto.goiy-nhuc": {
+  "t": "笔画偏细、偏急。请在签名中段放慢——不必全字加重，只需强调一两处关键即可。",
+  "h": "6df98c3a"
+ },
+ "js.buto.goiy-than": {
+  "t": "放慢一拍，并每天把同一个签名重复练习 5–10 次——神靠一致性而旺，不是靠签得快。",
+  "h": "e914cedd"
+ },
+ "js.buto.goiy-the": {
+  "t": "字的基线正在下垂。请试着以轻轻上扬的一笔收尾——这正是古代书法所说的「上势」。",
+  "h": "e992fa88"
+ },
+ "js.buto.greeting": {
+  "t": "您的签名总分为 **{n}/100**。想进一步了解解读的哪个部分？",
+  "h": "6d9edb5f"
+ },
+ "js.buto.greeting-best": {
+  "t": "您的签名总分为 **{n}/100**，最强的轴是 **{t}**（{s}/100）。想进一步了解解读的哪个部分？",
+  "h": "b3ab7c3e"
+ },
+ "js.buto.khong-co-ket-qua": {
+  "t": "没有结果。",
+  "h": "97fa6f91"
+ },
+ "js.buto.khong-do-duoc": {
+  "t": "无法测得",
+  "h": "ba0114d8"
+ },
+ "js.buto.khong-doc-duoc-net-muc-tu": {
+  "t": "无法从这张图片读取笔迹。",
+  "h": "7c89a420"
+ },
+ "js.buto.khong-the-ket-noi": {
+  "t": "无法连接。",
+  "h": "3dc4d8cb"
+ },
+ "js.buto.lan-n": {
+  "t": "第 {n} 次 ✓",
+  "h": "8b97f3d0"
+ },
+ "js.buto.loi-e": {
+  "t": "错误：{e}",
+  "h": "a7267203"
+ },
+ "js.buto.loi-s": {
+  "t": "错误 {s}",
+  "h": "c406c72b"
+ },
+ "js.buto.luan-giai-day-du": {
+  "t": "完整解读 →",
+  "h": "4c2c4d70"
+ },
+ "js.buto.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> 两)</span>",
+  "h": "72b273e4"
+ },
+ "js.buto.mua-goi": {
+  "t": "购买方案可享更多优惠。<br><a href=\"/topup.html\">立即查看方案 →</a>",
+  "h": "074cd07f"
+ },
+ "js.buto.nghia-cot": {
+  "t": "骨架，笔画的干脆程度",
+  "h": "11b35dc9"
+ },
+ "js.buto.nghia-huyet": {
+  "t": "流动的顺畅度，速度的均匀度",
+  "h": "bbf8ddc8"
+ },
+ "js.buto.nghia-khi": {
+  "t": "笔势连贯，少有中断",
+  "h": "ddda4d5b"
+ },
+ "js.buto.nghia-nhuc": {
+  "t": "饱满程度，笔力",
+  "h": "fa2ac7b3"
+ },
+ "js.buto.nghia-than": {
+  "t": "生气，笔画的一致性",
+  "h": "1e27242e"
+ },
+ "js.buto.nghia-the": {
+  "t": "字的基线走向",
+  "h": "c9a78d22"
+ },
+ "js.buto.ngu-hanh-net": {
+  "t": "笔画五行",
+  "h": "fed1c22a"
+ },
+ "js.buto.paypal-the": {
+  "t": "PayPal／国际信用卡",
+  "h": "70ff945c"
+ },
+ "js.buto.thuong-mat-10-20-giay": {
+  "t": "通常需要 10–20 秒",
+  "h": "9c118003"
+ },
+ "js.buto.tinh-tu-n-truc": {
+  "t": "依据从静态图片直接测得的 {n} 个轴计算。依笔相古法的完整解读（神／气／骨／肉／血／势），收录于深度分析中。",
+  "h": "dd2d2e04"
+ },
+ "js.buto.ton-luong": {
+  "t": "需 <span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> 两)</span>",
+  "h": "4051f122"
+ },
+ "js.buto.truc-cot": {
+  "t": "骨力",
+  "h": "e5b9e8aa"
+ },
+ "js.buto.truc-huyet": {
+  "t": "血脉",
+  "h": "b28ba369"
+ },
+ "js.buto.truc-khi": {
+  "t": "气韵",
+  "h": "8ce20f05"
+ },
+ "js.buto.truc-manh-nhat-body": {
+  "t": "{y}。其余各轴与具体的改善建议，收录于深度分析中。",
+  "h": "fcd915ce"
+ },
+ "js.buto.truc-manh-nhat-t": {
+  "t": "最强的轴：{t}（{h}）— {s}/100",
+  "h": "a03ee856"
+ },
+ "js.buto.truc-nhuc": {
+  "t": "肉感",
+  "h": "cb0d2007"
+ },
+ "js.buto.truc-than": {
+  "t": "精神",
+  "h": "b7cbb4d4"
+ },
+ "js.buto.truc-the": {
+  "t": "笔势",
+  "h": "4b2db277"
+ },
+ "js.buto.vui-long-chon-file-anh": {
+  "t": "请选择图片档。",
+  "h": "71a61127"
  },
  "js.chat.chao": {
   "t": "您好 ",
