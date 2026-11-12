@@ -233,6 +233,12 @@ jobs:
       - name: Vân tay cấu trúc payload ↔ SHAPE cache
         run: npm run check:cacheshape
 
+      # W30d — văn engine kết quả (Dạy Con–đánh giá · Duyên Nợ · Nhân Mạch) dịch ở client theo MÃ TRA trong payload.
+      # Route/engine thôi gửi `ma`/`id` thì /ja… lùi về chữ Việt IM LẶNG; bộ dò chạy engine thật, dựng đúng khoá
+      # mà trang tra và đòi khớp nguồn dịch (cần `tuvi-engine/dist` như check:cacheshape).
+      - name: Mã tra văn engine kết quả ↔ nguồn dịch
+        run: npm run check:enginema
+
       # Chặn bộ khảo sát "Xác Định Giờ Sinh" hỏi trẻ em thứ chỉ người lớn mới
       # có dữ liệu mà trả lời — đo được: một đứa 8 tuổi bị hỏi "về công việc",
       # "về tiền bạc" và "khoảng bao nhiêu tuổi thì cuộc sống ĐỔI HƯỚNG" ở 100%

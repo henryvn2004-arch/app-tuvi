@@ -342,6 +342,31 @@ var KIEU_MAU = {
   'khai-sang': '#A8342A', 'lanh-dao': '#7A5F26', 'ho-tro': '#1455A4', 'hop-tac': '#1E6B3C',
 };
 
+// ── i18n (W30d) — VĂN ENGINE SERVER: /api/nhan-mach trả chữ Việt KÈM mã tra (`kieu.id`, `cap[].kieuA/kieuB/bien`).
+// Dịch CHỈ ở chỗ VẼ (renderMeta + chia sẻ); `rail`/`railData`/prompt giữ chữ Việt (luật SERVER_BOUND). Bản dịch
+// theo chỉ số ở /tools-shared/i18n-long/<locale>/nhan-mach.js (docs/i18n/QUY-UOC.md "Văn engine server").
+// vi / payload cũ trong cache (thiếu mã) ⇒ nguyên chữ Việt, byte-giống bản cũ.
+if (window.I18n && window.I18n.loadLong) window.I18n.loadLong('nhan-mach');
+function _nmLong(key, vi, vars) {
+  if (window.I18n && window.I18n.long) return window.I18n.long('nhan-mach', key, vi, vars);
+  return vars ? vi.replace(/\{(\w+)\}/g, function (m, n) { return vars[n] !== undefined ? vars[n] : m; }) : vi;
+}
+/** Tên kiểu theo id (cùng chữ với trang Công Sở); thiếu id ⇒ chữ Việt của engine. */
+function _kieuTen(id, vi) { return id ? _nmLong('kieu.' + id + '.ten', vi) : vi; }
+/** Vai theo id: ngoài vi dùng bảng VAI ở trên (đã dịch sẵn, cùng nhãn ô chọn vai); vi · không có id/không khớp ⇒
+ *  nhãn engine (nhãn engine DÀI hơn nhãn ô chọn — "Đồng nghiệp ngang hàng" — nên vi giữ nguyên byte). */
+function _vaiTen(vai) {
+  vai = vai || {};
+  if (!window.I18n || window.I18n.locale === 'vi') return vai.label || '';
+  for (var i = 0; i < VAI.length; i++) if (VAI[i][0] === vai.id) return VAI[i][1];
+  return vai.label || '';
+}
+/** Câu cặp: khuôn theo `loai` + tên kiểu đã dịch; payload cũ (thiếu kieuA/kieuB/bien) ⇒ `c.vi` nguyên. */
+function _capVi(c) {
+  if (!c.kieuA || !c.kieuB || !c.bien) return c.vi;
+  return _nmLong('cap.' + c.loai, c.vi, { a: _kieuTen(c.kieuA, c.bien.a), b: _kieuTen(c.kieuB, c.bien.b) });
+}
+
 // 🔑 Hai ô nhập CỐ Ý không đặt id chứa "formHost": `user-charts.js` dò form theo
 // mẫu đó rồi tự gắn thanh chip sổ lên trên. Trang này TỰ quản sổ (danh sách có
 // ô chọn + vai), nên để nó gắn thêm một thanh nữa là hai bộ điều khiển cho cùng
@@ -610,11 +635,11 @@ async function _doGenerate() {
       text: [
         _tvmbT('js.nm.nhom-n-nguoi', 'Nhóm {n} người.', {n: data.soNguoi}),
         (data.phanBo || []).filter(function (b) { return b.soNguoi; })
-          .map(function (b) { return b.ten + ': ' + b.soNguoi; }).join(' · '),
+          .map(function (b) { return _kieuTen(b.kieu, b.ten) + ': ' + b.soNguoi; }).join(' · '),
         (data.thieuKieu || []).length
-          ? _tvmbT('js.nm.doi-dang-thieu-kieu-ds', 'Đội đang thiếu kiểu: {ds}', {ds: data.thieuKieu.map(function (k) { return k.ten; }).join(', ')})
+          ? _tvmbT('js.nm.doi-dang-thieu-kieu-ds', 'Đội đang thiếu kiểu: {ds}', {ds: data.thieuKieu.map(function (k) { return _kieuTen(k.id, k.ten); }).join(', ')})
           : _tvmbT('js.nm.doi-co-du-bon-kieu', 'Đội có đủ bốn kiểu.'),
-        data.nenTimThem ? _tvmbT('js.nm.nen-tim-them-kieu-ten', 'Nên tìm thêm kiểu: {ten}', {ten: data.nenTimThem.ten}) : '',
+        data.nenTimThem ? _tvmbT('js.nm.nen-tim-them-kieu-ten', 'Nên tìm thêm kiểu: {ten}', {ten: _kieuTen(data.nenTimThem.id, data.nenTimThem.ten)}) : '',
       ].filter(Boolean).join('\n'),
     });
   } catch (e) {
@@ -637,7 +662,7 @@ function renderMeta(data) {
     return '<span class="nm-seg" style="flex:' + x.soNguoi + ';background:' + (KIEU_MAU[x.kieu] || '#888') + '">' + x.soNguoi + '</span>';
   }).join('');
   document.getElementById('phanBoLegend').innerHTML = pb.map(function (x) {
-    return '<span><i style="background:' + (KIEU_MAU[x.kieu] || '#888') + '"></i>' + esc(x.ten) + ' · ' +
+    return '<span><i style="background:' + (KIEU_MAU[x.kieu] || '#888') + '"></i>' + esc(_kieuTen(x.kieu, x.ten)) + ' · ' +
       Math.round(x.soNguoi * 100 / tong) + '%</span>';
   }).join('');
 
@@ -654,10 +679,10 @@ function renderMeta(data) {
 
   if ((data.thieuKieu || []).length || data.duaKieu || data.nenTimThem) {
     var chips = (data.thieuKieu || []).map(function (k) {
-      return ('<span class="nm-chip">' + _tvmbT('js.nm.khong-ai-kieu', 'Không ai kiểu') + ' ') + esc(k.ten) + '</span>';
+      return ('<span class="nm-chip">' + _tvmbT('js.nm.khong-ai-kieu', 'Không ai kiểu') + ' ') + esc(_kieuTen(k.id, k.ten)) + '</span>';
     });
-    if (data.duaKieu) chips.push(('<span class="nm-chip">' + _tvmbT('js.nm.qua-nua-nhom-la-kieu', 'Quá nửa nhóm là kiểu') + ' ') + esc(data.duaKieu.ten) + '</span>');
-    if (data.nenTimThem) chips.push(('<span class="nm-chip">' + _tvmbT('js.nm.nen-tim-them', 'Nên tìm thêm:') + ' ') + esc(data.nenTimThem.ten) + '</span>');
+    if (data.duaKieu) chips.push(('<span class="nm-chip">' + _tvmbT('js.nm.qua-nua-nhom-la-kieu', 'Quá nửa nhóm là kiểu') + ' ') + esc(_kieuTen(data.duaKieu.id, data.duaKieu.ten)) + '</span>');
+    if (data.nenTimThem) chips.push(('<span class="nm-chip">' + _tvmbT('js.nm.nen-tim-them', 'Nên tìm thêm:') + ' ') + esc(_kieuTen(data.nenTimThem.id, data.nenTimThem.ten)) + '</span>');
     document.getElementById('gapChips').innerHTML = chips.join('');
     document.getElementById('gapBlock').style.display = 'block';
   }
@@ -666,9 +691,9 @@ function renderMeta(data) {
   // kiểu nào · nói câu gì" là chữ model viết → `renderProse` điền vào sau.
   var ppl = (data.thanhVien || []).map(function (t) {
     return '<div class="nm-person" data-ten="' + esc(t.ten) + '"><div class="h">' + esc(t.ten) + '</div>' +
-      '<div class="r">' + esc((t.vai || {}).label || '') +
-      ((t.kieu || {}).ten ? _tvmbT('js.nm.kieu', ' · kiểu ') + esc(t.kieu.ten) : '') +
-      (t.lai && t.kieuPhu ? ' (pha ' + esc(t.kieuPhu.ten) + ')' : '') +
+      '<div class="r">' + esc(_vaiTen(t.vai)) +
+      ((t.kieu || {}).ten ? _tvmbT('js.nm.kieu', ' · kiểu ') + esc(_kieuTen(t.kieu.id, t.kieu.ten)) : '') +
+      (t.lai && t.kieuPhu ? ' (pha ' + esc(_kieuTen(t.kieuPhu.id, t.kieuPhu.ten)) + ')' : '') +
       // ⚠️ Payload CŨ trong cache mang `diem` (điểm nội suy); bản mới mang
       // `khung` = điểm ĐẠI VẬN thật. Nêu rõ là khung, đừng để đọc thành điểm năm.
       (t.vanNam && t.vanNam.khung && t.vanNam.khung.diem != null
@@ -687,7 +712,7 @@ function renderMeta(data) {
     var va = c.loai === 'giam-chan';
     return '<div class="nm-cap"><b>' + esc(c.a) + ' ↔ ' + esc(c.b) + '</b>' +
       '<span class="tag ' + (va ? 'va' : 'bu') + '">' + (va ? _tvmbT('js.nm.de-giam-chan', 'dễ giẫm chân') : _tvmbT('js.nm.bu-nhau', 'bù nhau')) + '</span>' +
-      '<p>' + esc(c.vi) + '</p></div>';
+      '<p>' + esc(_capVi(c)) + '</p></div>';
   }).join('');
   if (coSo) {
     document.getElementById('capCoSo').innerHTML = coSo;

@@ -31,6 +31,9 @@ import {
   type PastLifeProfile,
 } from './past-life';
 
+import { dungMau } from './khuon';
+import { BOND_LABEL, BOND_GIST, SIGNAL_LABEL, SIGNAL_DETAIL } from './past-life-bond-terms';
+
 type Rec = Record<string, unknown>;
 
 // ── Quan hệ địa chi (cổ pháp) ───────────────────────────────────────────
@@ -130,31 +133,47 @@ export interface BondType {
   gist: string;
 }
 
+// Nhãn + câu mô tả nằm ở `past-life-bond-terms.ts` (bảng DỮ LIỆU duy nhất, client tra bản dịch theo `kind`).
+const bondType = (kind: BondKind): BondType => ({
+  kind,
+  label: BOND_LABEL[kind],
+  gist: BOND_GIST[kind],
+});
+
 const BOND_TYPES: Record<BondKind, BondType> = {
-  'phu-the': { kind: 'phu-the', label: 'Duyên phu thê',
-    gist: 'Hai người từng nên duyên chồng vợ, sống chung một mái, chia nhau cả phúc lẫn hoạ.' },
-  'kim-lan': { kind: 'kim-lan', label: 'Nghĩa kim lan',
-    gist: 'Hai người từng kết nghĩa sinh tử, coi nhau như ruột thịt dù không cùng huyết thống.' },
-  'an-nhan': { kind: 'an-nhan', label: 'Ơn cứu mạng',
-    gist: 'Một người từng ra tay cứu hoặc nâng đỡ người kia qua lúc ngặt nghèo nhất.' },
-  'thay-tro': { kind: 'thay-tro', label: 'Nghĩa thầy trò',
-    gist: 'Một người từng truyền nghề, truyền chữ hoặc dẫn đường cho người kia vào đời.' },
-  'oan-gia': { kind: 'oan-gia', label: 'Nợ chưa trả',
-    gist: 'Hai người từng làm tổn thương nhau, món nợ ấy khép lại mà chưa thật sự xong.' },
-  'doi-dau': { kind: 'doi-dau', label: 'Hai bờ chiến tuyến',
-    gist: 'Hai người từng đứng ở hai phía đối nghịch, không hẳn vì thù riêng mà vì thời cuộc.' },
+  'phu-the': bondType('phu-the'),
+  'kim-lan': bondType('kim-lan'),
+  'an-nhan': bondType('an-nhan'),
+  'thay-tro': bondType('thay-tro'),
+  'oan-gia': bondType('oan-gia'),
+  'doi-dau': bondType('doi-dau'),
   // Nhánh mặc định, dành cho cặp mà lá số không cho tín hiệu mạnh nào. Câu
   // này CỐ Ý vẫn có sức nặng: đây là kết quả của khá nhiều người, mà viết
   // kiểu "quen biết rồi mỗi người một ngả" thì đọc xong thấy hụt và không ai
   // gửi cho ai. Không hứa hơn những gì lá số nói, nhưng cũng đừng tự làm nhạt.
-  'ban-huu': { kind: 'ban-huu', label: 'Duyên tao ngộ',
-    gist: 'Hai người từng gặp nhau giữa đường đời, không ràng buộc gì lớn, nhưng lần gặp ấy để lại dấu.' },
+  'ban-huu': bondType('ban-huu'),
 };
 
 export interface BondSignal {
   /** Nhãn cổ pháp — hiện được cho người dùng xem "vì sao ra kết quả này". */
   label: string;
   detail: string;
+  /** Mã tra bản dịch (W30d, additive): khoá `SIGNAL_DETAIL`, phần trước dấu chấm = khoá `SIGNAL_LABEL`.
+   *  `bien` = biến Việt của câu khuôn (tên nhân vật · hành nạp âm · danh xưng). Client dịch tại chỗ vẽ;
+   *  thiếu (payload cũ trong cache) ⇒ dùng `label`/`detail`. */
+  ma?: string;
+  bien?: Record<string, string>;
+}
+
+/** Dựng một dấu hiệu: chữ Việt từ bảng khuôn (byte-giống câu viết tay cũ) + mã tra cho client. */
+function tinHieu(ma: string, bien: Record<string, string> = {}): BondSignal {
+  const s: BondSignal = {
+    label: SIGNAL_LABEL[ma.split('.')[0]],
+    detail: dungMau(SIGNAL_DETAIL[ma], bien),
+    ma,
+  };
+  if (Object.keys(bien).length) s.bien = bien;
+  return s;
 }
 
 export interface PastLifeBond {
@@ -238,15 +257,7 @@ export function computePastLifeBond(
   const tierGap = (TIER_RANK[a.occupation.tier] || 0) - (TIER_RANK[b.occupation.tier] || 0);
 
   const signals: BondSignal[] = [];
-  const CHI_TEXT: Record<ChiRel, string> = {
-    luchop: 'Mệnh hai người Lục Hợp — cổ pháp coi là duyên gắn bó bậc nhất',
-    tamhop: 'Mệnh hai người cùng Tam Hợp — một phe, một hướng',
-    same: 'Mệnh hai người cùng địa chi — cùng khí chất',
-    tuxung: 'Mệnh hai người Tứ Xung — ở hai đầu đối nhau',
-    tamhinh: 'Mệnh hai người phạm Tam Hình — dấu hiệu tổn thương lẫn nhau',
-    neutral: 'Mệnh hai người không hợp không xung',
-  };
-  signals.push({ label: 'Địa chi cung Mệnh', detail: CHI_TEXT[chi] });
+  signals.push(tinHieu(`chi.${chi}`));
 
   // 🔴 Hai dòng `sinh` TRƯỚC ĐÂY BỊ HOÁN VỊ CHO NHAU: `hanhRelation` trả
   // 'a-sinh-b' khi `NH_SINH[b] === a`, tức A sinh B — mà câu chữ lại ghi
@@ -257,36 +268,35 @@ export function computePastLifeBond(
   // Và gọi thẳng TÊN NHÂN VẬT thay cho "người trước / người sau": thứ tự hai lá
   // số đã được chuẩn hoá ở `lib/portraits/bond-key.ts` nên "người trước" không
   // còn là người nhập trước — không ai đọc ra được nó chỉ ai.
-  const HANH_TEXT: Record<HanhRel, string> = {
-    dong: 'Nạp âm cùng một hành — đồng khí tương cầu',
-    'a-sinh-b': `Nạp âm ${lsA.napAmHanh} sinh ${lsB.napAmHanh} — ${a.characterName} nuôi dưỡng ${b.characterName}`,
-    'b-sinh-a': `Nạp âm ${lsB.napAmHanh} sinh ${lsA.napAmHanh} — ${b.characterName} nuôi dưỡng ${a.characterName}`,
-    'a-khac-b': `Nạp âm ${lsA.napAmHanh} khắc ${lsB.napAmHanh} — ${a.characterName} kìm ${b.characterName}`,
-    'b-khac-a': `Nạp âm ${lsB.napAmHanh} khắc ${lsA.napAmHanh} — ${b.characterName} kìm ${a.characterName}`,
-    neutral: 'Nạp âm hai người không sinh không khắc',
-  };
-  signals.push({ label: 'Ngũ hành nạp âm', detail: HANH_TEXT[hanh] });
+  // `a-sinh-b`: A nuôi B ⇒ {x}=hành A, {y}=hành B, {p}=A, {q}=B. `b-sinh-a` đảo cả bốn biến.
+  // `khắc` cùng khuôn: `a-khac-b` ⇒ A kìm B.
+  const hanhA = String(lsA.napAmHanh);
+  const hanhB = String(lsB.napAmHanh);
+  const hanhBien = (aTruoc: boolean) => ({
+    x: aTruoc ? hanhA : hanhB,
+    y: aTruoc ? hanhB : hanhA,
+    p: aTruoc ? a.characterName : b.characterName,
+    q: aTruoc ? b.characterName : a.characterName,
+  });
+  signals.push(
+    hanh === 'a-sinh-b' || hanh === 'b-sinh-a'
+      ? tinHieu('hanh.sinh', hanhBien(hanh === 'a-sinh-b'))
+      : hanh === 'a-khac-b' || hanh === 'b-khac-a'
+        ? tinHieu('hanh.khac', hanhBien(hanh === 'a-khac-b'))
+        : tinHieu(`hanh.${hanh}`),
+  );
 
-  const STAR_TEXT: Record<StarRel, string> = {
-    'cap-hoa-hop': 'Chính tinh tại Mệnh hai người là một cặp cổ thư coi là đi liền nhau',
-    'dong-khi': 'Hai người có chung chính tinh tại Mệnh — cùng một chất người',
-    'hai-sao-cung': 'Cả hai đều mang sao cứng (Thất Sát / Phá Quân) tại Mệnh — dễ va nhau',
-    neutral: 'Chính tinh tại Mệnh hai người không có tương quan đặc biệt',
-  };
-  signals.push({ label: 'Chính tinh cung Mệnh', detail: STAR_TEXT[star] });
+  signals.push(tinHieu(`star.${star}`));
 
   if (Math.abs(tierGap) >= 2) {
-    signals.push({
-      label: 'Chức phận',
-      detail: `Chênh nhau rõ về vị thế (${a.occupation.title} — ${b.occupation.title})`,
-    });
+    signals.push(tinHieu('chucphan', { a: a.occupation.title, b: b.occupation.title }));
   }
 
   const hop = chi === 'luchop' || chi === 'tamhop' || chi === 'same';
   const ptChi = chiRelation(palaceDC(lsA, 'Phu Thê'), palaceDC(lsB, 'Phu Thê'));
   const ptHop = ptChi === 'luchop' || ptChi === 'tamhop' || ptChi === 'same';
   if (!hop && ptHop) {
-    signals.push({ label: 'Địa chi cung Phu Thê', detail: 'Phu Thê hai người ' + (ptChi === 'same' ? 'cùng địa chi' : ptChi === 'luchop' ? 'Lục Hợp' : 'cùng Tam Hợp') + ' — dấu hiệu ràng buộc đôi lứa' });
+    signals.push(tinHieu(`phuthe.${ptChi === 'same' ? 'same' : ptChi === 'luchop' ? 'luchop' : 'tamhop'}`));
   }
   const khac = hanh === 'a-khac-b' || hanh === 'b-khac-a';
   const sinh = hanh === 'a-sinh-b' || hanh === 'b-sinh-a';
