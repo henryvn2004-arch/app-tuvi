@@ -45,15 +45,21 @@ export interface NgayHoangLich {
   gioHoangDao: { chi: string; gio: string; sao: string }[];
   gioHacDao: { chi: string; gio: string; sao: string }[];
   ngayKy: string[];
-  /** Từ mingyu — phần repo không có. */
-  nen: { ten: string; nghia: string }[];
-  kieng: { ten: string; nghia: string }[];
-  thanSat: { ten: string; muc: Muc }[];
+  /**
+   * Từ mingyu — phần repo không có.
+   * `ma`/`*Ma` (W28, additive) = MÃ HÁN gốc của mingyu, KHÔNG để hiển thị: client tra bản dịch theo ngôn
+   * ngữ ở `i18n-long/<locale>/almanac.js` (docs/i18n/QUY-UOC.md "Văn engine server"). Chữ Việt giữ nguyên.
+   */
+  nen: { ten: string; nghia: string; ma: string }[];
+  kieng: { ten: string; nghia: string; ma: string }[];
+  thanSat: { ten: string; muc: Muc; ma: string }[];
   banhTo: string[];
-  cuuTinh: { ten: string; hanh: string } | null;
+  banhToMa: string[];
+  cuuTinh: { ten: string; hanh: string; ma: string } | null;
   tuoiXung: string;
   huongSat: string;
-  huongNam: { ten: string; muc: Muc; nghia: string; huong: string }[];
+  huongSatMa: string;
+  huongNam: { ten: string; muc: Muc; nghia: string; huong: string; ma: string; huongMa: string }[];
   /** Xếp hạng thô của engine repo, giữ nguyên chữ. */
   tongQuan: string;
 }
@@ -82,9 +88,10 @@ export function dungHoangLich(tuNgay: Date, denNgay: Date): NgayHoangLich[] {
     if (me.kyDuongCong) ky.push('Dương Công Kỵ Nhật');
 
     const xs = docXungSat(d.clash);
-    const banhTo = [BANH_TO_CAN[d.pengZuGan], BANH_TO_CHI[d.pengZuZhi]].filter(
-      (x): x is string => Boolean(x)
+    const banhToMa = [d.pengZuGan, d.pengZuZhi].filter(
+      (k): k is string => Boolean(BANH_TO_CAN[k] || BANH_TO_CHI[k])
     );
+    const banhTo = banhToMa.map((k) => (BANH_TO_CAN[k] || BANH_TO_CHI[k])!);
 
     // Thần sát: gộp tên (`gods`) với phân loại cát/hung (`godFacts`). Dùng
     // `gods` làm danh sách chuẩn — `godFacts` có thể thiếu mục nếu mingyu chưa
@@ -93,7 +100,7 @@ export function dungHoangLich(tuNgay: Date, denNgay: Date): NgayHoangLich[] {
     for (const f of (d.godFacts || []) as { name: string; classification: string }[]) {
       phanLoai.set(f.name, f.classification);
     }
-    const thanSat = ((d.gods || []) as string[]).map((g) => docThanSat(g, phanLoai.get(g)));
+    const thanSat = ((d.gods || []) as string[]).map((g) => ({ ...docThanSat(g, phanLoai.get(g)), ma: g }));
 
     return {
       ngayDL: `${D}/${M}/${Y}`,
@@ -108,19 +115,26 @@ export function dungHoangLich(tuNgay: Date, denNgay: Date): NgayHoangLich[] {
       gioHoangDao: me.gioHoangDao.map((g) => ({ chi: g.chi, gio: g.range, sao: g.sao })),
       gioHacDao: me.gioHacDao.map((g) => ({ chi: g.chi, gio: g.range, sao: g.sao })),
       ngayKy: ky,
-      nen: ((d.recommends || []) as string[]).map(docViec),
-      kieng: ((d.avoids || []) as string[]).map(docViec),
+      nen: ((d.recommends || []) as string[]).map((r) => ({ ...docViec(r), ma: r })),
+      kieng: ((d.avoids || []) as string[]).map((r) => ({ ...docViec(r), ma: r })),
       thanSat,
       banhTo,
-      cuuTinh: CUU_TINH[d.nineStar] || null,
+      banhToMa,
+      cuuTinh: CUU_TINH[d.nineStar] ? { ...CUU_TINH[d.nineStar]!, ma: String(d.nineStar) } : null,
       tuoiXung: xs.tuoiXung,
       huongSat: xs.huongSat,
+      huongSatMa: xs.huongSatMa,
       huongNam: ((d.annualDirectionGods || []) as { god: string; direction: string }[])
         .map((g) => {
           const t = THAN_NIEN[g.god];
-          return t ? { ...t, huong: docPhuong(g.direction) } : null;
+          return t
+            ? { ...t, huong: docPhuong(g.direction), ma: g.god, huongMa: String(g.direction || '') }
+            : null;
         })
-        .filter((x): x is { ten: string; muc: Muc; nghia: string; huong: string } => x !== null),
+        .filter(
+          (x): x is { ten: string; muc: Muc; nghia: string; huong: string; ma: string; huongMa: string } =>
+            x !== null
+        ),
       tongQuan: me.overallTinhChat,
     };
   });

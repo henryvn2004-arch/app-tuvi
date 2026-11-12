@@ -6,10 +6,13 @@
  *   1. file chạy được và gọi `I18n.defineLong('<đúng ns>', …)`;
  *   2. KHÔNG mồ côi — mọi khoá còn có trong bảng nguồn (số quẻ/hào, `ma`, số quái, tên sao/thần);
  *   3. hash `h` khớp câu Việt nguồn HIỆN TẠI (nguồn đổi mà bản dịch chưa dịch lại ⇒ đỏ);
- *   4. bản dịch hợp lệ: không rỗng, không chép nguyên câu Việt, không còn dấu tiếng Việt;
+ *   4. bản dịch hợp lệ: không rỗng, không chép nguyên câu Việt, không còn dấu tiếng Việt, token `{x}` khớp câu
+ *      Việt (câu KHUÔN có biến của văn engine — W28: I18n.long(ns, k, vi, {x}) thay ở cả hai bản);
  *   5. locale trong LONG_COMPLETE (lib/i18n/long.mjs) phải có ĐỦ mọi mục của mọi ns;
  *   6. zh-cn == OpenCC(zh-tw) mục theo mục (như check:i18n — zh-cn SINH, không sửa tay);
- * và phía module nguồn: mỗi module có gọi `loadLong('<ns>')`, và mọi `I18n.long`/`_long` dùng đúng ns.
+ * và phía module nguồn: mỗi module có gọi `loadLong('<ns>')`, và mọi `I18n.long`/`_long` dùng đúng ns;
+ * văn ENGINE SERVER (`ENGINE_NS`, W28): mỗi BẢNG có bản dịch phải có chỗ vẽ trong module (tiền tố `'<bảng>.'`
+ * hoặc `'<bảng>'` xuất hiện trong mã) — bảng dịch mà không ai tra là chữ chết, hoặc là chỗ vẽ bị gỡ mất.
  *
  * Chạy: node scripts/check-i18nlong.mjs
  */
@@ -17,12 +20,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as OpenCC from 'opencc-js';
-import { hashVi, hasVietnamese } from '../lib/i18n/core.mjs';
+import { hashVi, hasVietnamese, placeholderSignature } from '../lib/i18n/core.mjs';
 import { TRANSLATED } from '../lib/i18n/dict.mjs';
 import {
   LONG_NS,
   LONG_MODULE,
   LONG_COMPLETE,
+  ENGINE_NS,
   loadSources,
   readLong,
   longDir,
@@ -87,6 +91,10 @@ for (const locale of TRANSLATED) {
         fail(`${where}: "${k}" còn dấu tiếng Việt: ${e.t.slice(0, 40)}…`);
         continue;
       }
+      if (placeholderSignature(e.t) !== placeholderSignature(s.vi)) {
+        fail(`${where}: "${k}" token {…} lệch câu Việt (${placeholderSignature(s.vi) || '—'})`);
+        continue;
+      }
       ok++;
     }
     if (need) {
@@ -125,6 +133,16 @@ for (const ns of LONG_NS) {
     fail(`${f}: không gọi loadLong('${ns}') — file bản dịch sẽ không bao giờ được nạp`);
   if (!code.includes(`'${ns}'`) || !/I18n\.long|_long\(/.test(code))
     fail(`${f}: không có chỗ tra bản dịch (I18n.long/_long) cho '${ns}'`);
+}
+// Văn engine server: mỗi bảng (đoạn đầu khoá) phải được module tra tới.
+for (const ns of Object.keys(ENGINE_NS)) {
+  const f = LONG_MODULE[ns];
+  const code = fs.readFileSync(path.join(ROOT, f), 'utf8');
+  for (const bang of new Set(sources[ns].map((e) => e.k.split('.')[0])))
+    if (!code.includes(`'${bang}.'`) && !code.includes(`'${bang}'`))
+      fail(
+        `${f}: bảng '${bang}' của ns ${ns} có bản dịch nhưng module không tra tới (chỗ vẽ bị gỡ/đổi tên?)`
+      );
 }
 for (const f of new Set(Object.values(LONG_MODULE))) {
   const code = fs.readFileSync(path.join(ROOT, f), 'utf8');

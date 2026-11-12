@@ -231,14 +231,15 @@ export function docPhuong(raw: string): string {
   return PHUONG_HAN[String(raw || '')] || phienAm(String(raw || ''));
 }
 
-/** `冲未，煞东` → { tuoiXung: 'Mùi', huongSat: 'Đông' }. */
-export function docXungSat(raw: string): { tuoiXung: string; huongSat: string } {
+/** `冲未，煞东` → { tuoiXung: 'Mùi', huongSat: 'Đông', huongSatMa: '东' } (`huongSatMa` = mã tra bản dịch, W28). */
+export function docXungSat(raw: string): { tuoiXung: string; huongSat: string; huongSatMa: string } {
   const s = String(raw || '');
   const xung = /冲(.)/.exec(s);
   const sat = /煞(.)/.exec(s);
   return {
     tuoiXung: xung ? canChiViet(xung[1]!) : '',
     huongSat: sat ? docPhuong(sat[1]!) : '',
+    huongSatMa: sat ? sat[1]! : '',
   };
 }
 

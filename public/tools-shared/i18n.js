@@ -156,11 +156,15 @@
       }
     } catch (e) {}
   }
-  /** I18n.long('kinh-dich-hao', 'hao.1.3', 'câu Việt') — bản dịch nếu đã nạp, không thì câu Việt. */
-  function long(ns, key, vi) {
+  /**
+   * I18n.long('kinh-dich-hao', 'hao.1.3', 'câu Việt'[, {x: …}]) — bản dịch nếu đã nạp, không thì câu Việt.
+   * `vars` (W28, câu KHUÔN có biến của văn engine): thay `{x}` ở CẢ bản dịch lẫn câu Việt dự phòng.
+   */
+  function long(ns, key, vi, vars) {
     var d = LONG[ns];
     var e = d && Object.prototype.hasOwnProperty.call(d, key) ? d[key] : null;
-    return e && e.t ? e.t : vi;
+    var s = e && e.t ? e.t : vi;
+    return vars ? String(s).replace(/\{(\w+)\}/g, function (m, n) { return vars[n] !== undefined ? vars[n] : m; }) : s;
   }
 
   // ── Tên 15 thầy theo id (W19) — CHỈ để HIỂN THỊ ─────────────────────────────

@@ -20,7 +20,10 @@ import {
   docCung, docHanhTinh, docGoc, NHA, DIEM, HANH_VI, THE_VI, PHAM_VI, HINH_THE,
 } from './terms';
 
+/** `ma` (W28, additive) = khoá gốc của celestine (`Sun`, `trine`, `Grand Trine`…) — KHÔNG hiển thị, chỉ để
+ * client tra bản dịch `nghia` ở `i18n-long/<locale>/tayphuong.js`. Chữ Việt giữ nguyên (rail/prompt). */
 export interface DiemSao {
+  ma: string;
   ten: string;
   kyHieu: string;
   nghia: string;
@@ -41,13 +44,13 @@ export interface BanDoSao {
   heNha: string;
   sao: DiemSao[];
   giaoDiem: DiemSao[];
-  truc: { ten: string; nghia: string; cung: string; do: number; phut: number; kinhDo: number }[];
+  truc: { ma: string; ten: string; nghia: string; cung: string; do: number; phut: number; kinhDo: number }[];
   nha: { so: number; ten: string; nghia: string; cung: string; do: number; kinhDo: number }[];
   gocChieu: {
-    a: string; b: string; loai: string; kyHieu: string;
+    ma: string; a: string; b: string; loai: string; kyHieu: string;
     muc: 'hoa' | 'cang' | 'trung'; nghia: string; lech: number; manh: number;
   }[];
-  hinhThe: { ten: string; nghia: string; sao: string[] }[];
+  hinhThe: { ma: string; ten: string; nghia: string; sao: string[] }[];
   canBang: {
     hanh: { ten: string; so: number }[];
     the: { ten: string; so: number }[];
@@ -69,7 +72,7 @@ function mapDiem(p: Record<string, any>): DiemSao {
   const h = docHanhTinh(p.name);
   const c = docCung(p.sign);
   return {
-    ten: h.ten, kyHieu: h.kyHieu || p.symbol || '', nghia: h.nghia, chinh: h.chinh,
+    ma: String(p.name || ''), ten: h.ten, kyHieu: h.kyHieu || p.symbol || '', nghia: h.nghia, chinh: h.chinh,
     cung: c.ten, cungKyHieu: c.kyHieu,
     do: p.degree ?? 0, phut: p.minute ?? 0, kinhDo: p.longitude ?? 0,
     nha: p.house ?? null,
@@ -91,7 +94,7 @@ export function lapBanDo(v: DauVaoNatal): BanDoSao {
     .map((a: Record<string, any>) => {
       const d = DIEM[a.name] || { ten: a.name, nghia: '' };
       const c = docCung(a.sign);
-      return { ten: d.ten, nghia: d.nghia, cung: c.ten, do: a.degree, phut: a.minute, kinhDo: a.longitude };
+      return { ma: String(a.name || ''), ten: d.ten, nghia: d.nghia, cung: c.ten, do: a.degree, phut: a.minute, kinhDo: a.longitude };
     });
 
   const goc = ((ch.aspects?.all || []) as Record<string, any>[])
@@ -99,6 +102,7 @@ export function lapBanDo(v: DauVaoNatal): BanDoSao {
     .map((a) => {
       const g = docGoc(a.type);
       return {
+        ma: String(a.type || ''),
         a: docHanhTinh(a.body1).ten || a.body1,
         b: docHanhTinh(a.body2).ten || a.body2,
         loai: g.ten, kyHieu: g.kyHieu, muc: g.muc, nghia: g.nghia,
@@ -131,7 +135,7 @@ export function lapBanDo(v: DauVaoNatal): BanDoSao {
       const d = DIEM[n.name] || { ten: n.name, nghia: '' };
       const c = docCung(n.sign);
       return {
-        ten: d.ten, kyHieu: '☊', nghia: d.nghia, chinh: false,
+        ma: String(n.name || ''), ten: d.ten, kyHieu: '☊', nghia: d.nghia, chinh: false,
         cung: c.ten, cungKyHieu: c.kyHieu,
         do: n.degree ?? 0, phut: n.minute ?? 0, kinhDo: n.longitude ?? 0,
         nha: n.house ?? null, nghich: false, pham: '',
@@ -151,7 +155,7 @@ export function lapBanDo(v: DauVaoNatal): BanDoSao {
         ((ch.patterns || []) as Record<string, any>[]).map((p) => {
           const m = HINH_THE[p.type] || { ten: p.type, nghia: '' };
           const sao = (p.bodies || []).map((b: string) => docHanhTinh(b).ten || b);
-          return [m.ten + '|' + sao.join(','), { ten: m.ten, nghia: m.nghia, sao }];
+          return [m.ten + '|' + sao.join(','), { ma: String(p.type || ''), ten: m.ten, nghia: m.nghia, sao }];
         })
       ).values(),
     ],

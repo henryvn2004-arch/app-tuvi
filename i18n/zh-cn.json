@@ -10819,6 +10819,14 @@
   "t": "开张该选哪一天？",
   "h": "b44fce94"
  },
+ "js.ngaytot.chip5": {
+  "t": "这个月有哪几天忌安葬？",
+  "h": "eb750477"
+ },
+ "js.ngaytot.greet-hl": {
+  "t": "已查看**{y}年{m}月**的历，含建除、二十八宿及每日宜忌。您打算做什么？我来帮您挑最好的日子。",
+  "h": "670226c4"
+ },
  "js.ngaytot.greeting": {
   "t": "已查看**{y}年{m}月**的历。您打算做什么事，好让我挑选最好的日子？",
   "h": "3a05f3ac"
@@ -15843,6 +15851,10 @@
   "t": "读懂目前打开的命盘",
   "h": "b500bc82"
  },
+ "js.shellui.hl-banh-to": {
+  "t": "彭祖百忌",
+  "h": "81f442a3"
+ },
  "js.shellui.hl-binh": {
   "t": "平",
   "h": "3318401b"
@@ -15851,9 +15863,101 @@
   "t": "吉",
   "h": "70e9b769"
  },
+ "js.shellui.hl-dang-tra": {
+  "t": "正在查找黄历…",
+  "h": "56f3d355"
+ },
+ "js.shellui.hl-duong-cong-ky-nhat": {
+  "t": "杨公忌日",
+  "h": "33fe0f51"
+ },
  "js.shellui.hl-hung": {
   "t": "凶",
   "h": "3baaa792"
+ },
+ "js.shellui.hl-huong-nam": {
+  "t": "{x}年方位",
+  "h": "6f5d76ec"
+ },
+ "js.shellui.hl-ky-khoi-su": {
+  "t": "忌开工",
+  "h": "e4d75564"
+ },
+ "js.shellui.hl-nen-huong": {
+  "t": "宜向：",
+  "h": "f6c1955a"
+ },
+ "js.shellui.hl-nen-kieng": {
+  "t": "忌",
+  "h": "ab26c930"
+ },
+ "js.shellui.hl-nen-lam": {
+  "t": "宜",
+  "h": "f6e516a6"
+ },
+ "js.shellui.hl-nen-tranh": {
+  "t": "宜避：",
+  "h": "e5f7a459"
+ },
+ "js.shellui.hl-nguyet-ky": {
+  "t": "月忌",
+  "h": "3598b0c5"
+ },
+ "js.shellui.hl-o-ngay": {
+  "t": "{thu} · {cc}日 · 建除 {truc} · 星宿 {tu}\n宜：{nen}\n忌：{kieng}",
+  "h": "cea69d7d"
+ },
+ "js.shellui.hl-sao": {
+  "t": "星宿 {x}",
+  "h": "785d91ba"
+ },
+ "js.shellui.hl-sat-huong": {
+  "t": "煞{x}",
+  "h": "a7128899"
+ },
+ "js.shellui.hl-than-sat": {
+  "t": "当日神煞",
+  "h": "b7925292"
+ },
+ "js.shellui.hl-thu-0": {
+  "t": "星期日",
+  "h": "9d3bbd28"
+ },
+ "js.shellui.hl-thu-1": {
+  "t": "星期一",
+  "h": "f4e9f49c"
+ },
+ "js.shellui.hl-thu-2": {
+  "t": "星期二",
+  "h": "a60cae52"
+ },
+ "js.shellui.hl-thu-3": {
+  "t": "星期三",
+  "h": "f7b717ed"
+ },
+ "js.shellui.hl-thu-4": {
+  "t": "星期四",
+  "h": "01434e8b"
+ },
+ "js.shellui.hl-thu-5": {
+  "t": "星期五",
+  "h": "8072ecca"
+ },
+ "js.shellui.hl-thu-6": {
+  "t": "星期六",
+  "h": "82cf0ace"
+ },
+ "js.shellui.hl-truc": {
+  "t": "建除 {x}",
+  "h": "c00086a3"
+ },
+ "js.shellui.hl-xau": {
+  "t": "凶",
+  "h": "5a8d08f3"
+ },
+ "js.shellui.hl-xung-tuoi": {
+  "t": "冲{x}",
+  "h": "a57c17da"
  },
  "js.shellui.ho": {
   "t": "姓",
