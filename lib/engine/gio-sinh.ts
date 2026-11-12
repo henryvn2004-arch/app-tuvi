@@ -86,14 +86,116 @@ export const BUOI_CUA_GIO = [
   'Chiều tối (17h–19h)', 'Buổi tối (19h–21h)', 'Khuya (21h–23h)',
 ] as const;
 
+/**
+ * 🌐 CHỮ HIỂN THỊ của khảo sát, theo KHOÁ (W28 "văn engine server", i18n lô E).
+ *
+ * Engine dựng chữ Việt BẰNG chính bảng này (`van()`), rồi trả kèm MÃ `{ k, v }` để trang dịch ở chỗ vẽ
+ * (`app-gio-sinh.html`, ns `giosinh` ở `lib/i18n/long.mjs`). Đổi một câu ở đây = đổi hash ⇒ `check:i18nlong`
+ * đòi dịch lại. `{x}` là biến: số tuổi, tên địa chi/cung (glossary), hoặc một câu khác của chính bảng.
+ * ⚠️ Nhãn đáp án các cung (`netCua`, `TAT_ACH_DAU_HIEU`… ở `data/gio-sinh-dauhieu.ts`, `MENH_ROLE`) KHÔNG ở
+ * đây — chưa có mã, trang giữ chữ Việt cho chúng.
+ */
+export const GS_VAN: Record<string, string> = {
+  'q.buoi.tre': 'Cháu sinh vào khoảng nào trong ngày?',
+  'q.buoi': 'Người nhà có nói anh/chị sinh vào khoảng nào trong ngày không?',
+  'h.buoi': 'Không cần chính xác giờ — chỉ cần buổi. Nếu hoàn toàn không biết, chọn "Không rõ" ở dưới.',
+  'buoi.0': 'Nửa đêm – gần sáng (khoảng 23h–05h)',
+  'buoi.1': 'Sáng sớm (khoảng 05h–09h)',
+  'buoi.2': 'Cuối buổi sáng (khoảng 09h–11h)',
+  'buoi.3': 'Buổi trưa (khoảng 11h–13h)',
+  'buoi.4': 'Buổi chiều (khoảng 13h–17h)',
+  'buoi.5': 'Tối – khuya (khoảng 17h–23h)',
+  'q.mocvan': 'Nhìn lại cả đời, khoảng bao nhiêu tuổi thì cuộc sống anh/chị ĐỔI HƯỚNG rõ nhất?',
+  'h.mocvan': 'Đổi hướng lớn: đổi nghề, chuyển nơi ở, lập gia đình, một biến cố làm mọi thứ khác hẳn trước đó.',
+  'o.mocvan': 'Khoảng {v} tuổi',
+  'q.dvsom.tre': 'Mấy năm đầu đời của cháu (tới khoảng {den} tuổi), nuôi có dễ không?',
+  'q.dvsom': 'Những năm đầu đời của anh/chị (tới khoảng {den} tuổi), người nhà kể lại thế nào?',
+  'h.dvsom': 'Nói về giai đoạn đó nói chung: sức khoẻ, ăn ngủ, và không khí gia đình lúc ấy.',
+  'dvsom.tot': 'Dễ — ăn ngủ ổn, ít ốm vặt, nhà cửa lúc đó cũng êm',
+  'dvsom.tb': 'Bình thường — lúc này lúc kia, không có gì đáng kể',
+  'dvsom.xau': 'Vất vả — hay ốm, khó ăn khó ngủ, hoặc nhà có biến động lớn',
+  'q.dv': 'Giai đoạn {a}–{b} tuổi của anh/chị, nhìn lại thấy thế nào?',
+  'h.dv': 'So với chính mình ở các giai đoạn khác, không so với người ngoài.',
+  'dv.tot': 'Nhìn lại thấy thuận — mở ra được, có bước tiến rõ',
+  'dv.tb': 'Bình thường — không bứt lên mà cũng không đổ vỡ gì',
+  'dv.xau': 'Nhiều trắc trở — chật vật, mất mát hoặc bế tắc',
+  // Tiêu đề / gợi ý câu hỏi theo cung (slug: tat · menh · phuc · quan · tai · huynh · phumau).
+  'q.tat.tre': 'Về sức khoẻ và dấu vết trên người cháu, mô tả nào đúng nhất?',
+  'q.menh.tre': 'Người ngoài (ông bà, cô giáo) hay nhận xét cháu là đứa thế nào?',
+  'q.phuc.tre': 'Về nếp ăn ngủ và tính khí nền của cháu, điều nào giống nhất?',
+  'q.huynh.tre': 'Về anh chị em của cháu, điều nào đúng nhất?',
+  'q.phumau.tre': 'Về cha mẹ cháu và không khí trong nhà, điều nào đúng nhất?',
+  'q.tat': 'Về sức khoẻ và dấu vết trên người, mô tả nào đúng với anh/chị nhất?',
+  'q.menh': 'Người quen lâu năm hay nhận xét anh/chị là người thế nào?',
+  'q.phuc': 'Về đời sống bên trong — anh/chị thấy mình giống mô tả nào nhất?',
+  'q.quan': 'Về công việc, đường nào giống anh/chị nhất?',
+  'q.tai': 'Về tiền bạc, mô tả nào đúng nhất?',
+  'q.huynh': 'Về anh chị em (hoặc bạn thân như ruột thịt), điều nào đúng nhất?',
+  'q.phumau': 'Về cha mẹ và tuổi thơ, điều nào đúng nhất?',
+  'h.tat.tre': 'Chọn cái đã theo cháu TỪ NHỎ, không phải đợt ốm gần đây.',
+  'h.menh.tre': 'Lấy lời người ngoài nói về cháu — thường đúng hơn cảm nhận của bố mẹ.',
+  'h.huynh.tre': 'Cháu là con một thì tính anh chị em họ hoặc bạn chơi thân nhất.',
+  'h.phumau.tre': 'Cung này nói về chính bố mẹ cháu — tức về anh/chị. Chọn thật, đừng chọn cái nghe hay.',
+  'h.phuc.tre': 'Nếp nền từ bé, không phải mấy tuần gần đây.',
+  'h.tat': 'Chọn theo cái đã theo anh/chị NHIỀU NĂM, không phải bệnh mới bị gần đây.',
+  'h.menh': 'Chọn theo lời NGƯỜI KHÁC hay nói về mình, thường đúng hơn tự nhận xét.',
+  'h.huynh': 'Không có anh chị em ruột thì tính bạn thân gắn bó nhất.',
+  // Nhãn đáp án khi cung không có chính tinh nổi trội.
+  'o.menh.trong.tre': 'Chưa thấy nét nào nổi trội rõ — tuỳ lúc, tuỳ chỗ mà khác',
+  'o.menh.trong': 'Khó tự nhận ra một nét nổi trội — tuỳ hoàn cảnh mà đổi',
+  'o.nep.trong': 'Không có nếp nào nổi trội rõ',
+  'o.net.trong': 'Không có nét nào nổi trội rõ',
+  // Nhãn ngắn của bằng chứng khớp/lệch ({t} = nhãn đáp án, cắt ở 52 ký tự).
+  'sl.cung': '{cung}: {t}',
+  'sl.dvsom': 'Những năm đầu đời: {t}',
+  'sl.dv': '{a}–{b} tuổi: {t}',
+  'sl.mocvan': 'Mốc đổi hướng: {t}',
+  'sl.buoi': 'Buổi sinh: {t}',
+  // Lời khuyên chốt giờ. {ten} = các `lk.gio` nối bằng `lk.hoac`.
+  'lk.gio': 'giờ {chi} ({khung})',
+  'lk.hoac': '{a} hoặc {b}',
+  'lk.tre.cao': 'Câu trả lời dồn khá rõ về {ten}. Nên lấy giờ đứng đầu để lập lá số cho cháu, giữ giờ thứ hai làm đối chứng khi thấy bản luận có chỗ không giống.',
+  'lk.tre.vua': 'Kết quả nghiêng về {ten} nhưng chưa tách hẳn. Cách chắc nhất: lập lá số cho CẢ HAI giờ rồi đọc phần tính nết và sức khoẻ — giờ nào tả đúng đứa trẻ anh/chị đang nuôi thì lấy giờ đó.',
+  'lk.tre.thap': 'Bộ trả lời chưa đủ để chốt — không giờ nào giải thích được phần lớn câu trả lời. Với trẻ nhỏ điều này khá thường: số câu đối chiếu được ít hơn người lớn (chưa có chuyện nghề nghiệp, tiền bạc hay các chặng đời để soi). Đáng làm nhất lúc này là hỏi lại nhà hộ sinh hoặc người có mặt hôm sinh về BUỔI trong ngày — một câu đó cắt được nửa số khả năng. {ten} là hai hướng đáng thử trước.',
+  'lk.cao': 'Câu trả lời của anh/chị dồn khá rõ về {ten}. Nên lấy giờ đứng đầu để lập lá số, và giữ giờ thứ hai làm đối chứng khi thấy bản luận có chỗ lệch.',
+  'lk.vua': 'Kết quả nghiêng về {ten} nhưng chưa tách hẳn. Cách chắc nhất: lập lá số cho CẢ HAI giờ, đọc phần vận hạn 5 năm gần đây, giờ nào tả đúng hơn thì lấy giờ đó.',
+  'lk.thap': 'Bộ trả lời chưa đủ để chốt — không giờ nào giải thích được phần lớn câu trả lời của anh/chị. Điều này thường có ba lý do: hỏi lại được người nhà về buổi sinh, hoặc anh/chị còn trẻ nên chưa đủ giai đoạn để đối chiếu, hoặc lá số đơn giản không mô tả đúng anh/chị. Đừng chốt giờ nào vội; {ten} là hai hướng đáng thử trước.',
+};
+
+/**
+ * MÃ tra một câu của `GS_VAN` (additive — chữ Việt ở trường anh em giữ nguyên). `v` = biến của khuôn:
+ * số/chuỗi trơn, `chi`/`cung` (tên engine — trang qua glossary), `t` (mã câu lồng, `null` = câu không có mã
+ * ⇒ trang giữ cả câu Việt), `ten` (danh sách giờ của lời khuyên). `cut`: cắt `t` ở 52 ký tự như chữ Việt.
+ */
+export interface GsMa {
+  k: string;
+  v?: Record<string, string | number | GsMa | null | { chi: string; khung: string }[]>;
+  cut?: boolean;
+}
+
+/** Điền khuôn `GS_VAN[k]` — đường DUY NHẤT dựng chữ Việt của các câu trong bảng. */
+function van(k: string, v: Record<string, string | number> = {}): string {
+  const s = GS_VAN[k];
+  if (s === undefined) throw new Error(`gio-sinh: thiếu khuôn ${k}`);
+  return s.replace(/\{(\w+)\}/g, (m, n: string) => (v[n] !== undefined ? String(v[n]) : m));
+}
+
+/** Slug khoá cho tiêu đề/gợi ý theo cung. */
+const CUNG_SLUG: Record<string, string> = {
+  'Tật Ách': 'tat', 'Mệnh': 'menh', 'Phúc Đức': 'phuc', 'Quan Lộc': 'quan',
+  'Tài Bạch': 'tai', 'Huynh Đệ': 'huynh', 'Phụ Mẫu': 'phumau',
+};
+/** Dấu thô/khá/kém của thập niên → hậu tố khoá. */
+const THO_SLUG: Record<string, string> = { '+': 'tot', '0': 'tb', '-': 'xau' };
+
 /** Gộp 12 khung giờ thành 6 buổi mà người ta thật sự nhớ được. */
 const BUOI_GOM: { label: string; hours: number[] }[] = [
-  { label: 'Nửa đêm – gần sáng (khoảng 23h–05h)', hours: [0, 1, 2] },
-  { label: 'Sáng sớm (khoảng 05h–09h)', hours: [3, 4] },
-  { label: 'Cuối buổi sáng (khoảng 09h–11h)', hours: [5] },
-  { label: 'Buổi trưa (khoảng 11h–13h)', hours: [6] },
-  { label: 'Buổi chiều (khoảng 13h–17h)', hours: [7, 8] },
-  { label: 'Tối – khuya (khoảng 17h–23h)', hours: [9, 10, 11] },
+  { label: van('buoi.0'), hours: [0, 1, 2] },
+  { label: van('buoi.1'), hours: [3, 4] },
+  { label: van('buoi.2'), hours: [5] },
+  { label: van('buoi.3'), hours: [6] },
+  { label: van('buoi.4'), hours: [7, 8] },
+  { label: van('buoi.5'), hours: [9, 10, 11] },
 ];
 
 /**
@@ -197,6 +299,8 @@ export interface SurveyOption {
   label: string;
   /** Các giờ (0–11) khớp với đáp án này. KHÔNG gửi ra client — xem `publicQuestion`. */
   hours: number[];
+  /** Mã dịch nhãn (khi nhãn lấy từ `GS_VAN`); vắng = nhãn từ bảng dấu hiệu, trang giữ chữ Việt. */
+  ma?: GsMa;
 }
 
 export interface SurveyQuestion {
@@ -206,6 +310,8 @@ export interface SurveyQuestion {
   title: string;
   hint?: string;
   options: SurveyOption[];
+  /** Mã dịch tiêu đề/gợi ý (additive, xem `GsMa`). */
+  ma?: { title?: GsMa; hint?: GsMa };
 }
 
 export interface SurveyAnswer {
@@ -224,6 +330,9 @@ export interface RankedHour {
   /** Câu hỏi nào ủng hộ / phản đối giờ này — thứ người đọc soát lại được. */
   khop: string[];
   lech: string[];
+  /** Song song `khop`/`lech`: mã dịch từng dòng (additive). */
+  khopMa: GsMa[];
+  lechMa: GsMa[];
 }
 
 export interface GioSinhResult {
@@ -233,6 +342,8 @@ export interface GioSinhResult {
   doKhop: number;
   mucTinCay: 'cao' | 'vừa' | 'thấp';
   loiKhuyen: string;
+  /** Mã dịch `loiKhuyen` (additive). */
+  loiKhuyenMa: GsMa;
   soCauDaHoi: number;
 }
 
@@ -322,15 +433,15 @@ function tho(v: number | null): string {
  * 6 tuổi thì phụ huynh không biết chọn theo cái gì.
  */
 const NHAN_DV_SOM: Record<string, string> = {
-  '+': 'Dễ — ăn ngủ ổn, ít ốm vặt, nhà cửa lúc đó cũng êm',
-  '0': 'Bình thường — lúc này lúc kia, không có gì đáng kể',
-  '-': 'Vất vả — hay ốm, khó ăn khó ngủ, hoặc nhà có biến động lớn',
+  '+': van('dvsom.tot'),
+  '0': van('dvsom.tb'),
+  '-': van('dvsom.xau'),
 };
 
 const NHAN_DV: Record<string, string> = {
-  '+': 'Nhìn lại thấy thuận — mở ra được, có bước tiến rõ',
-  '0': 'Bình thường — không bứt lên mà cũng không đổ vỡ gì',
-  '-': 'Nhiều trắc trở — chật vật, mất mát hoặc bế tắc',
+  '+': van('dv.tot'),
+  '0': van('dv.tb'),
+  '-': van('dv.xau'),
 };
 
 // ── Ngân hàng câu hỏi ────────────────────────────────────────
@@ -357,11 +468,10 @@ export function buildQuestionBank(set: HypothesisSet): SurveyQuestion[] {
   qs.push({
     id: 'buoi',
     kind: 'buoi',
-    title: treEm
-      ? 'Cháu sinh vào khoảng nào trong ngày?'
-      : 'Người nhà có nói anh/chị sinh vào khoảng nào trong ngày không?',
-    hint: 'Không cần chính xác giờ — chỉ cần buổi. Nếu hoàn toàn không biết, chọn "Không rõ" ở dưới.',
-    options: BUOI_GOM.map((b, i) => ({ value: 'b' + i, label: b.label, hours: b.hours })),
+    title: van(treEm ? 'q.buoi.tre' : 'q.buoi'),
+    hint: van('h.buoi'),
+    options: BUOI_GOM.map((b, i) => ({ value: 'b' + i, label: b.label, hours: b.hours, ma: { k: 'buoi.' + i } })),
+    ma: { title: { k: treEm ? 'q.buoi.tre' : 'q.buoi' }, hint: { k: 'h.buoi' } },
   });
 
   // 2) MỐC ĐỔI VẬN — cắt đúng 5 nhóm (5 cục), và là cứu cánh cho người còn trẻ
@@ -380,11 +490,12 @@ export function buildQuestionBank(set: HypothesisSet): SurveyQuestion[] {
       qs.push({
         id: 'mocvan',
         kind: 'mocvan',
-        title: 'Nhìn lại cả đời, khoảng bao nhiêu tuổi thì cuộc sống anh/chị ĐỔI HƯỚNG rõ nhất?',
-        hint: 'Đổi hướng lớn: đổi nghề, chuyển nơi ở, lập gia đình, một biến cố làm mọi thứ khác hẳn trước đó.',
+        title: van('q.mocvan'),
+        hint: van('h.mocvan'),
         options: [...g.entries()]
           .sort((a, b) => Number(a[0]) - Number(b[0]))
-          .map(([v, hours]) => ({ value: v, label: `Khoảng ${v} tuổi`, hours })),
+          .map(([v, hours]) => ({ value: v, label: van('o.mocvan', { v }), hours, ma: { k: 'o.mocvan', v: { v } } })),
+        ma: { title: { k: 'q.mocvan' }, hint: { k: 'h.mocvan' } },
       });
     }
   }
@@ -407,13 +518,15 @@ export function buildQuestionBank(set: HypothesisSet): SurveyQuestion[] {
       qs.push({
         id: 'dvsom',
         kind: 'daivan',
-        title: treEm
-          ? `Mấy năm đầu đời của cháu (tới khoảng ${den} tuổi), nuôi có dễ không?`
-          : `Những năm đầu đời của anh/chị (tới khoảng ${den} tuổi), người nhà kể lại thế nào?`,
-        hint: 'Nói về giai đoạn đó nói chung: sức khoẻ, ăn ngủ, và không khí gia đình lúc ấy.',
+        title: van(treEm ? 'q.dvsom.tre' : 'q.dvsom', { den }),
+        hint: van('h.dvsom'),
         options: [...g.entries()]
           .sort((x, y) => ['+', '0', '-'].indexOf(x[0]) - ['+', '0', '-'].indexOf(y[0]))
-          .map(([v, hours]) => ({ value: v, label: NHAN_DV_SOM[v] ?? v, hours })),
+          .map(([v, hours]) => ({
+            value: v, label: NHAN_DV_SOM[v] ?? v, hours,
+            ...(THO_SLUG[v] ? { ma: { k: 'dvsom.' + THO_SLUG[v] } } : {}),
+          })),
+        ma: { title: { k: treEm ? 'q.dvsom.tre' : 'q.dvsom', v: { den } }, hint: { k: 'h.dvsom' } },
       });
     }
   }
@@ -427,14 +540,19 @@ export function buildQuestionBank(set: HypothesisSet): SurveyQuestion[] {
     const vals = charts.map((ls) => tho(diemKhoangTuoi(ls, a, Math.min(b, tuoi))));
     const g = gomTheoGiaTri(vals);
     if (g.size < 2) continue;
+    const bb = Math.min(b, tuoi);
     qs.push({
       id: `dv${a}`,
       kind: 'daivan',
-      title: `Giai đoạn ${a}–${Math.min(b, tuoi)} tuổi của anh/chị, nhìn lại thấy thế nào?`,
-      hint: 'So với chính mình ở các giai đoạn khác, không so với người ngoài.',
+      title: van('q.dv', { a, b: bb }),
+      hint: van('h.dv'),
       options: [...g.entries()]
         .sort((x, y) => ['+', '0', '-'].indexOf(x[0]) - ['+', '0', '-'].indexOf(y[0]))
-        .map(([v, hours]) => ({ value: v, label: NHAN_DV[v] ?? v, hours })),
+        .map(([v, hours]) => ({
+          value: v, label: NHAN_DV[v] ?? v, hours,
+          ...(THO_SLUG[v] ? { ma: { k: 'dv.' + THO_SLUG[v] } } : {}),
+        })),
+      ma: { title: { k: 'q.dv', v: { a, b: bb } }, hint: { k: 'h.dv' } },
     });
   }
 
@@ -448,9 +566,12 @@ export function buildQuestionBank(set: HypothesisSet): SurveyQuestion[] {
     for (const [key, hours] of g.entries()) {
       const stars = key === 'VCD' ? [] : key.split('+');
       const label = nhanCung(cung, stars, treEm);
-      if (label) opts.push({ value: key, label, hours });
+      const mk = maNhanCung(cung, stars, treEm);
+      if (label) opts.push({ value: key, label, hours, ...(mk ? { ma: { k: mk } } : {}) });
     }
     if (opts.length < 2) continue;
+    const kt = khoaCung('q', cung, treEm);
+    const kh = khoaCung('h', cung, treEm);
     qs.push({
       id: 'c:' + cung,
       kind: 'cung',
@@ -458,6 +579,7 @@ export function buildQuestionBank(set: HypothesisSet): SurveyQuestion[] {
       title: tieuDeCung(cung, treEm),
       hint: hintCung(cung, treEm),
       options: opts,
+      ma: { ...(kt ? { title: { k: kt } } : {}), ...(kh ? { hint: { k: kh } } : {}) },
     });
   }
   return qs;
@@ -473,9 +595,7 @@ function nhanCung(cung: string, stars: string[], treEm = false): string {
   }
   if (cung === 'Mệnh') {
     if (!stars.length)
-      return treEm
-        ? 'Chưa thấy nét nào nổi trội rõ — tuỳ lúc, tuỳ chỗ mà khác'
-        : 'Khó tự nhận ra một nét nổi trội — tuỳ hoàn cảnh mà đổi';
+      return van(treEm ? 'o.menh.trong.tre' : 'o.menh.trong');
     const bang = treEm ? MENH_TRE_EM : null;
     return stars
       .map((s) => (bang ? bang[s] : MENH_ROLE[s]?.role))
@@ -484,56 +604,41 @@ function nhanCung(cung: string, stars: string[], treEm = false): string {
   }
   if (treEm && (cung === 'Phúc Đức' || cung === 'Phụ Mẫu')) {
     const bang = cung === 'Phúc Đức' ? PHUC_DUC_TRE_EM : PHU_MAU_TRE_EM;
-    if (!stars.length) return cung === 'Phúc Đức' ? 'Không có nếp nào nổi trội rõ' : 'Không có nét nào nổi trội rõ';
+    if (!stars.length) return van(cung === 'Phúc Đức' ? 'o.nep.trong' : 'o.net.trong');
     return stars.map((s) => bang[s]).filter(Boolean).join(' · ');
   }
-  return netCua(cung, stars) || (stars.length ? '' : 'Không có nét nào nổi trội rõ');
+  return netCua(cung, stars) || (stars.length ? '' : van('o.net.trong'));
+}
+
+/**
+ * Khoá `GS_VAN` của nhãn đáp án — CHỈ khi `nhanCung` trả đúng một câu của bảng (cung trống chính tinh). Nhãn
+ * dựng từ bảng dấu hiệu theo sao (`netCua`…) chưa có mã ⇒ `null`. Cùng nhánh điều kiện với `nhanCung`.
+ */
+function maNhanCung(cung: string, stars: string[], treEm = false): string | null {
+  if (stars.length || cung === 'Tật Ách') return null;
+  if (cung === 'Mệnh') return treEm ? 'o.menh.trong.tre' : 'o.menh.trong';
+  if (treEm && (cung === 'Phúc Đức' || cung === 'Phụ Mẫu'))
+    return cung === 'Phúc Đức' ? 'o.nep.trong' : 'o.net.trong';
+  return netCua(cung, stars) ? null : 'o.net.trong';
+}
+
+/** Khoá tiêu đề (`q`) / gợi ý (`h`) của câu theo cung — `null` khi không có câu (khớp `tieuDeCung`/`hintCung`). */
+function khoaCung(loai: 'q' | 'h', cung: string, treEm: boolean): string | null {
+  const slug = CUNG_SLUG[cung];
+  if (!slug) return null;
+  const k = `${loai}.${slug}`;
+  if (treEm && GS_VAN[k + '.tre'] !== undefined) return k + '.tre';
+  if (treEm && loai === 'h') return null; // trẻ em: cung không có gợi ý riêng thì KHÔNG có gợi ý
+  return GS_VAN[k] !== undefined ? k : null;
 }
 
 function tieuDeCung(cung: string, treEm = false): string {
-  if (treEm) {
-    switch (cung) {
-      case 'Tật Ách': return 'Về sức khoẻ và dấu vết trên người cháu, mô tả nào đúng nhất?';
-      case 'Mệnh': return 'Người ngoài (ông bà, cô giáo) hay nhận xét cháu là đứa thế nào?';
-      case 'Phúc Đức': return 'Về nếp ăn ngủ và tính khí nền của cháu, điều nào giống nhất?';
-      case 'Huynh Đệ': return 'Về anh chị em của cháu, điều nào đúng nhất?';
-      case 'Phụ Mẫu': return 'Về cha mẹ cháu và không khí trong nhà, điều nào đúng nhất?';
-    }
-  }
-  switch (cung) {
-    case 'Tật Ách': return 'Về sức khoẻ và dấu vết trên người, mô tả nào đúng với anh/chị nhất?';
-    case 'Mệnh': return 'Người quen lâu năm hay nhận xét anh/chị là người thế nào?';
-    case 'Phúc Đức': return 'Về đời sống bên trong — anh/chị thấy mình giống mô tả nào nhất?';
-    case 'Quan Lộc': return 'Về công việc, đường nào giống anh/chị nhất?';
-    case 'Tài Bạch': return 'Về tiền bạc, mô tả nào đúng nhất?';
-    case 'Huynh Đệ': return 'Về anh chị em (hoặc bạn thân như ruột thịt), điều nào đúng nhất?';
-    case 'Phụ Mẫu': return 'Về cha mẹ và tuổi thơ, điều nào đúng nhất?';
-    default: return `Về cung ${cung}, điều nào đúng nhất?`;
-  }
+  const k = khoaCung('q', cung, treEm);
+  return k ? van(k) : `Về cung ${cung}, điều nào đúng nhất?`;
 }
 function hintCung(cung: string, treEm = false): string | undefined {
-  if (treEm) {
-    if (cung === 'Tật Ách')
-      return 'Chọn cái đã theo cháu TỪ NHỎ, không phải đợt ốm gần đây.';
-    if (cung === 'Mệnh')
-      return 'Lấy lời người ngoài nói về cháu — thường đúng hơn cảm nhận của bố mẹ.';
-    if (cung === 'Huynh Đệ')
-      return 'Cháu là con một thì tính anh chị em họ hoặc bạn chơi thân nhất.';
-    // 🔑 Cung Phụ Mẫu trong lá số của ĐỨA TRẺ nói về CHÍNH người đang trả lời.
-    // Không nhắc thì phụ huynh dễ chọn cái nghe hay thay vì cái đúng.
-    if (cung === 'Phụ Mẫu')
-      return 'Cung này nói về chính bố mẹ cháu — tức về anh/chị. Chọn thật, đừng chọn cái nghe hay.';
-    if (cung === 'Phúc Đức')
-      return 'Nếp nền từ bé, không phải mấy tuần gần đây.';
-    return undefined;
-  }
-  if (cung === 'Tật Ách')
-    return 'Chọn theo cái đã theo anh/chị NHIỀU NĂM, không phải bệnh mới bị gần đây.';
-  if (cung === 'Mệnh')
-    return 'Chọn theo lời NGƯỜI KHÁC hay nói về mình, thường đúng hơn tự nhận xét.';
-  if (cung === 'Huynh Đệ')
-    return 'Không có anh chị em ruột thì tính bạn thân gắn bó nhất.';
-  return undefined;
+  const k = khoaCung('h', cung, treEm);
+  return k ? van(k) : undefined;
 }
 
 // ── Bayes ────────────────────────────────────────────────────
@@ -703,6 +808,8 @@ export function scoreHours(
   const ranked: RankedHour[] = set.hyps.map((h) => {
     const khopQ: string[] = [];
     const lechQ: string[] = [];
+    const khopM: GsMa[] = [];
+    const lechM: GsMa[] = [];
     for (const a of answers) {
       if (a.value === '?') continue;
       const q = bank.find((x) => x.id === a.id);
@@ -710,7 +817,9 @@ export function scoreHours(
       const o = q.options.find((x) => x.value === a.value);
       if (!o) continue;
       const nhan = shortLabel(q, o);
-      (o.hours.includes(h.gioIdx) ? khopQ : lechQ).push(nhan);
+      const trung = o.hours.includes(h.gioIdx);
+      (trung ? khopQ : lechQ).push(nhan.vi);
+      (trung ? khopM : lechM).push(nhan.ma);
     }
     return {
       gioIdx: h.gioIdx,
@@ -722,6 +831,8 @@ export function scoreHours(
       tatStars: h.tatStars,
       khop: khopQ,
       lech: lechQ,
+      khopMa: khopM,
+      lechMa: lechM,
     };
   }).sort((a, b) => b.pct - a.pct);
 
@@ -749,49 +860,53 @@ export function scoreHours(
     tatCa: ranked,
     doKhop: Math.round(khop * 100) / 100,
     mucTinCay,
-    loiKhuyen: loiKhuyenCua(mucTinCay, shortlist, set.tuoi < TUOI_TRE_EM),
+    ...loiKhuyenCua(mucTinCay, shortlist, set.tuoi < TUOI_TRE_EM),
     soCauDaHoi: answers.filter((a) => a.value !== '?').length,
   };
 }
 
-function shortLabel(q: SurveyQuestion, o: SurveyOption): string {
+function shortLabel(q: SurveyQuestion, o: SurveyOption): { vi: string; ma: GsMa } {
   const t = o.label.length > 52 ? o.label.slice(0, 50) + '…' : o.label;
-  if (q.kind === 'cung' && q.cung) return `${q.cung}: ${t}`;
-  // 🪤 `dvsom` PHẢI có nhãn riêng: bộ cắt dưới dò `" tuổi"` ĐẦU TIÊN, mà tiêu đề
-  // câu này là "…(tới khoảng 10 tuổi), nuôi có dễ không?" ⇒ cắt ngay giữa ngoặc
-  // và in ra `"Mấy năm đầu đời của cháu (tới khoảng 10 tuổi"` — ngoặc mở không
-  // đóng, nằm ngay trong danh sách BẰNG CHỨNG của bản trả tiền.
-  if (q.id === 'dvsom') return `Những năm đầu đời: ${t}`;
-  if (q.kind === 'daivan') return `${q.title.replace(/^Giai đoạn /, '').replace(/ tuổi.*$/, ' tuổi')}: ${t}`;
-  if (q.kind === 'mocvan') return `Mốc đổi hướng: ${t}`;
-  return `Buổi sinh: ${t}`;
+  const tm = o.ma ?? null;
+  const ra = (k: string, v: Record<string, string | number> = {}) => ({
+    vi: van(k, { ...v, t }),
+    ma: { k, v: { ...v, t: tm }, cut: true },
+  });
+  if (q.kind === 'cung' && q.cung) return ra('sl.cung', { cung: q.cung });
+  if (q.id === 'dvsom') return ra('sl.dvsom');
+  if (q.kind === 'daivan') {
+    const v = q.ma?.title?.v as { a: number; b: number } | undefined;
+    if (v) return ra('sl.dv', { a: v.a, b: v.b });
+    // Không có mã (không xảy ra với ngân hàng hiện tại) — giữ đúng lối cắt tiêu đề cũ.
+    return { vi: `${q.title.replace(/^Giai đoạn /, '').replace(/ tuổi.*$/, ' tuổi')}: ${t}`, ma: { k: 'sl.dv', v: { t: null } } };
+  }
+  if (q.kind === 'mocvan') return ra('sl.mocvan');
+  return ra('sl.buoi');
 }
 
-function loiKhuyenCua(muc: GioSinhResult['mucTinCay'], sl: RankedHour[], treEm = false): string {
-  const ten = sl.map((s) => `giờ ${s.chi} (${s.khung})`).join(' hoặc ');
-  if (treEm) {
-    // Cách ĐỐI CHỨNG khác hẳn người lớn: đứa trẻ chưa có vận hạn 5 năm để đọc,
-    // nên chỗ soát lại là những gì cha mẹ quan sát được hằng ngày.
-    if (muc === 'cao')
-      return `Câu trả lời dồn khá rõ về ${ten}. Nên lấy giờ đứng đầu để lập lá số cho cháu, giữ giờ thứ hai làm đối chứng khi thấy bản luận có chỗ không giống.`;
-    if (muc === 'vừa')
-      return `Kết quả nghiêng về ${ten} nhưng chưa tách hẳn. Cách chắc nhất: lập lá số cho CẢ HAI giờ rồi đọc phần tính nết và sức khoẻ — giờ nào tả đúng đứa trẻ anh/chị đang nuôi thì lấy giờ đó.`;
-    return `Bộ trả lời chưa đủ để chốt — không giờ nào giải thích được phần lớn câu trả lời. Với trẻ nhỏ điều này khá thường: số câu đối chiếu được ít hơn người lớn (chưa có chuyện nghề nghiệp, tiền bạc hay các chặng đời để soi). Đáng làm nhất lúc này là hỏi lại nhà hộ sinh hoặc người có mặt hôm sinh về BUỔI trong ngày — một câu đó cắt được nửa số khả năng. ${ten} là hai hướng đáng thử trước.`;
-  }
-  if (muc === 'cao')
-    return `Câu trả lời của anh/chị dồn khá rõ về ${ten}. Nên lấy giờ đứng đầu để lập lá số, và giữ giờ thứ hai làm đối chứng khi thấy bản luận có chỗ lệch.`;
-  if (muc === 'vừa')
-    return `Kết quả nghiêng về ${ten} nhưng chưa tách hẳn. Cách chắc nhất: lập lá số cho CẢ HAI giờ, đọc phần vận hạn 5 năm gần đây, giờ nào tả đúng hơn thì lấy giờ đó.`;
-  return `Bộ trả lời chưa đủ để chốt — không giờ nào giải thích được phần lớn câu trả lời của anh/chị. Điều này thường có ba lý do: hỏi lại được người nhà về buổi sinh, hoặc anh/chị còn trẻ nên chưa đủ giai đoạn để đối chiếu, hoặc lá số đơn giản không mô tả đúng anh/chị. Đừng chốt giờ nào vội; ${ten} là hai hướng đáng thử trước.`;
+function loiKhuyenCua(
+  muc: GioSinhResult['mucTinCay'],
+  sl: RankedHour[],
+  treEm = false,
+): { loiKhuyen: string; loiKhuyenMa: GsMa } {
+  const gio = sl.map((s) => van('lk.gio', { chi: s.chi, khung: s.khung }));
+  // = `gio.join(' hoặc ')` của bản cũ, nhưng đi qua khuôn để bản dịch nối được theo ngữ pháp từng tiếng.
+  const ten = gio.length ? gio.reduce((a, b) => van('lk.hoac', { a, b })) : '';
+  const k = `lk.${treEm ? 'tre.' : ''}${muc === 'cao' ? 'cao' : muc === 'vừa' ? 'vua' : 'thap'}`;
+  return {
+    loiKhuyen: van(k, { ten }),
+    loiKhuyenMa: { k, v: { ten: sl.map((s) => ({ chi: s.chi, khung: s.khung })) } },
+  };
 }
 
 /** Bản gửi ra client — CẮT `hours` (đó là đáp án). */
 export function publicQuestion(q: SurveyQuestion): Omit<SurveyQuestion, 'options'> & {
-  options: { value: string; label: string }[];
+  options: { value: string; label: string; ma?: GsMa }[];
 } {
   return {
     id: q.id, kind: q.kind, cung: q.cung, title: q.title, hint: q.hint,
-    options: q.options.map((o) => ({ value: o.value, label: o.label })),
+    options: q.options.map((o) => ({ value: o.value, label: o.label, ...(o.ma ? { ma: o.ma } : {}) })),
+    ...(q.ma ? { ma: q.ma } : {}),
   };
 }
 
