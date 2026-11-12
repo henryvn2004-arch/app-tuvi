@@ -767,7 +767,8 @@
    "lienhe.tri-menh-ly-thuan-the-hanh",
    "lienhe.trong-cac-ngay-lam-viec-nhung",
    "lienhe.tu-vi-minh-bao-la-so",
-   "lienhe.van-de-ky-thuat-neu-gap"
+   "lienhe.van-de-ky-thuat-neu-gap",
+   "lienhe.website"
   ],
   "js": [
    "nav"
@@ -1185,5 +1186,34 @@
   "js": [
    "nav"
   ]
+ },
+ "/xem/luan-giai": {
+  "file": "xem-luan-giai.html",
+  "keys": [
+   "laso.nguyen-van-a",
+   "laso.nu",
+   "napam.nam-sinh",
+   "xlg.gio-sinh-duong-lich",
+   "xlg.gioi-tinh",
+   "xlg.gioi-tinh-nam",
+   "xlg.ho-ten-khong-bat-buoc",
+   "xlg.khong-nho-chinh-xac-chon-gio",
+   "xlg.la-so-12-cung-day-du",
+   "xlg.luan-giai-la-so-tu-vi",
+   "xlg.luan-giai-la-so-tu-vi-jv0q",
+   "xlg.luan-rieng-tung-cung-diem-manh",
+   "xlg.minh-bao",
+   "xlg.ngay",
+   "xlg.nhap-ngay-gio-sinh-he-thong",
+   "xlg.nhap-ngay-gio-sinh-xem-truoc",
+   "xlg.thang",
+   "xlg.thanh-toan-bang-chuyen-khoan-qr",
+   "xlg.tong-quan-cuoc-doi-tinh-cach",
+   "xlg.vui-long-chon-du-ngay-thang",
+   "xlg.xem-ban-luan-giai-mau-pdf",
+   "xlg.xem-la-so-mien-phi",
+   "xlg.xem-truoc-mien-phi-mo-ban"
+  ],
+  "js": []
  }
 }

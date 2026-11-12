@@ -8939,6 +8939,34 @@
   "t": "只需出生年，快速判斷兩人的生肖是否相合——立即得到答案，不必深入解讀。",
   "h": "ee011392"
  },
+ "js.xlg.chon-gio": {
+  "t": "選擇時間",
+  "h": "c10b0d98"
+ },
+ "js.xlg.gio": {
+  "t": "{h} 時",
+  "h": "68dda372"
+ },
+ "js.xlg.gio-chi": {
+  "t": "{h} 時（{chi}時）",
+  "h": "349b413b"
+ },
+ "js.xlg.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "js.xlg.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "js.xlg.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "js.xlg.thang-n": {
+  "t": "{n} 月",
+  "h": "4dd9659f"
+ },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">起卦</span>",
   "h": "bf868703"
@@ -9278,6 +9306,10 @@
  "lienhe.van-de-ky-thuat-neu-gap": {
   "t": "<b>技術問題</b>——使用系統時若遇到問題，請簡要描述：當時的操作、出現的錯誤訊息（如有）以及使用的裝置。",
   "h": "bd4a69d1"
+ },
+ "lienhe.website": {
+  "t": "網站",
+  "h": "2e8a57cc"
  },
  "luangiai.an-la-so": {
   "t": "▾ 收起命盤",
@@ -10702,5 +10734,85 @@
  "vanhan.xem-van-han-mien-phi": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"calendar\"></span><b id=\"btnGoLabel\">查看運勢 →</b></span> <small>免費</small>",
   "h": "3895d3c5"
+ },
+ "xlg.gio-sinh-duong-lich": {
+  "t": "出生時間（國曆）",
+  "h": "eefa6274"
+ },
+ "xlg.gioi-tinh": {
+  "t": "性別",
+  "h": "80bbce55"
+ },
+ "xlg.gioi-tinh-nam": {
+  "t": "男",
+  "h": "b580ba1b"
+ },
+ "xlg.ho-ten-khong-bat-buoc": {
+  "t": "姓名 <span class=\"opt\">（選填）</span>",
+  "h": "87ce95fd"
+ },
+ "xlg.khong-nho-chinh-xac-chon-gio": {
+  "t": "記不清楚？選最接近的時間即可，之後還能修改。",
+  "h": "21f75046"
+ },
+ "xlg.la-so-12-cung-day-du": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span><span><b>十二宮命盤</b>——主星、輔星、四化俱全</span>",
+  "h": "b0b67e2b"
+ },
+ "xlg.luan-giai-la-so-tu-vi": {
+  "t": "依出生年月日時解讀紫微斗數命盤 — 明寶",
+  "h": "ee3ea368"
+ },
+ "xlg.luan-giai-la-so-tu-vi-jv0q": {
+  "t": "依出生年月日時解讀紫微斗數命盤",
+  "h": "cd522af6"
+ },
+ "xlg.luan-rieng-tung-cung-diem-manh": {
+  "t": "<span class=\"ic\" data-icon=\"star\"></span><span><b>逐宮解讀</b>，強弱分析與今年的建議</span>",
+  "h": "60d3c68b"
+ },
+ "xlg.minh-bao": {
+  "t": "明寶",
+  "h": "e4158660"
+ },
+ "xlg.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "xlg.nhap-ngay-gio-sinh-he-thong": {
+  "t": "輸入出生年月日時，系統安星排出十二宮命盤並依古法解讀。立即預覽，無需註冊。",
+  "h": "7c5ecf1e"
+ },
+ "xlg.nhap-ngay-gio-sinh-xem-truoc": {
+  "t": "輸入出生年月日時，免費預覽十二宮紫微命盤與總論。只有打開 13 部分完整版時才需付費。",
+  "h": "38c4a34f"
+ },
+ "xlg.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "xlg.thanh-toan-bang-chuyen-khoan-qr": {
+  "t": "可使用 PayPal 或國際信用卡付款。",
+  "h": "84f70dc9"
+ },
+ "xlg.tong-quan-cuoc-doi-tinh-cach": {
+  "t": "<span class=\"ic\" data-icon=\"file-text\"></span><span><b>人生總論</b>：性格、事業、感情、財運</span>",
+  "h": "57dcca8b"
+ },
+ "xlg.vui-long-chon-du-ngay-thang": {
+  "t": "請選齊出生的日、月、年與時間。",
+  "h": "67e1d40f"
+ },
+ "xlg.xem-ban-luan-giai-mau-pdf": {
+  "t": "<a class=\"mini\" href=\"/tai-mau/mau-luan-giai-la-so.pdf\" target=\"_blank\" rel=\"noopener\"> <span class=\"ic\" data-icon=\"file-text\"></span> <span><b>查看解讀範例（PDF・越南文）</b>一份範例命盤的真實內容，決定前先讀讀看</span> </a> <a class=\"mini\" href=\"/app/thay\"> <span class=\"ic\" data-icon=\"book-open\"></span> <span><b>明寶 15 位老師</b>依《紫微斗數新編》與各古法版本論斷</span> </a>",
+  "h": "e8c2bc01"
+ },
+ "xlg.xem-la-so-mien-phi": {
+  "t": "免費查看命盤 →",
+  "h": "97bce6ab"
+ },
+ "xlg.xem-truoc-mien-phi-mo-ban": {
+  "t": "預覽<b>免費</b>。打開 13 部分完整版：<b><span data-lp-vnd>…</span></b>",
+  "h": "741a332d"
  }
 }

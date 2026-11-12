@@ -8939,6 +8939,34 @@
   "t": "Quickly check whether two ages are compatible — just birth years, an instant answer, no deep reading yet.",
   "h": "ee011392"
  },
+ "js.xlg.chon-gio": {
+  "t": "Choose a time",
+  "h": "c10b0d98"
+ },
+ "js.xlg.gio": {
+  "t": "{h}:00",
+  "h": "68dda372"
+ },
+ "js.xlg.gio-chi": {
+  "t": "{h}:00 ({chi} hour)",
+  "h": "349b413b"
+ },
+ "js.xlg.nam": {
+  "t": "Year",
+  "h": "98926c7e"
+ },
+ "js.xlg.ngay": {
+  "t": "Day",
+  "h": "368c4575"
+ },
+ "js.xlg.thang": {
+  "t": "Month",
+  "h": "0e2b3099"
+ },
+ "js.xlg.thang-n": {
+  "t": "Month {n}",
+  "h": "4dd9659f"
+ },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Cast the hexagram</span>",
   "h": "bf868703"
@@ -9278,6 +9306,10 @@
  "lienhe.van-de-ky-thuat-neu-gap": {
   "t": "<b>Technical issues</b> — if something goes wrong while using the system, briefly describe what you were doing, any error message shown, and the device you're using.",
   "h": "bd4a69d1"
+ },
+ "lienhe.website": {
+  "t": "Website",
+  "h": "2e8a57cc"
  },
  "luangiai.an-la-so": {
   "t": "▾ Hide chart",
@@ -10702,5 +10734,85 @@
  "vanhan.xem-van-han-mien-phi": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"calendar\"></span><b id=\"btnGoLabel\">See your outlook →</b></span> <small>Free</small>",
   "h": "3895d3c5"
+ },
+ "xlg.gio-sinh-duong-lich": {
+  "t": "Birth time (solar calendar)",
+  "h": "eefa6274"
+ },
+ "xlg.gioi-tinh": {
+  "t": "Gender",
+  "h": "80bbce55"
+ },
+ "xlg.gioi-tinh-nam": {
+  "t": "Male",
+  "h": "b580ba1b"
+ },
+ "xlg.ho-ten-khong-bat-buoc": {
+  "t": "Full name <span class=\"opt\">(optional)</span>",
+  "h": "87ce95fd"
+ },
+ "xlg.khong-nho-chinh-xac-chon-gio": {
+  "t": "Not sure of the exact time? Pick the closest one — you can change it later.",
+  "h": "21f75046"
+ },
+ "xlg.la-so-12-cung-day-du": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span><span><b>12-palace chart</b> with all major stars, minor stars and Four Transformations</span>",
+  "h": "b0b67e2b"
+ },
+ "xlg.luan-giai-la-so-tu-vi": {
+  "t": "Zi Wei Dou Shu chart reading by birth date and time — Minh Bao",
+  "h": "ee3ea368"
+ },
+ "xlg.luan-giai-la-so-tu-vi-jv0q": {
+  "t": "Zi Wei Dou Shu chart reading by birth date and time",
+  "h": "cd522af6"
+ },
+ "xlg.luan-rieng-tung-cung-diem-manh": {
+  "t": "<span class=\"ic\" data-icon=\"star\"></span><span><b>A reading for each palace</b>, strengths and weaknesses, and pointers for this year</span>",
+  "h": "60d3c68b"
+ },
+ "xlg.minh-bao": {
+  "t": "Minh Bao",
+  "h": "e4158660"
+ },
+ "xlg.ngay": {
+  "t": "Day",
+  "h": "368c4575"
+ },
+ "xlg.nhap-ngay-gio-sinh-he-thong": {
+  "t": "Enter your birth date and time; the system places the stars, builds your 12-palace chart and reads it by the classical method. Preview right away, no sign-up needed.",
+  "h": "7c5ecf1e"
+ },
+ "xlg.nhap-ngay-gio-sinh-xem-truoc": {
+  "t": "Enter your birth date and time to preview your 12-palace Zi Wei chart and overview for free. Pay only when you open the full 13-part reading.",
+  "h": "38c4a34f"
+ },
+ "xlg.thang": {
+  "t": "Month",
+  "h": "0e2b3099"
+ },
+ "xlg.thanh-toan-bang-chuyen-khoan-qr": {
+  "t": "Pay with PayPal or an international card.",
+  "h": "84f70dc9"
+ },
+ "xlg.tong-quan-cuoc-doi-tinh-cach": {
+  "t": "<span class=\"ic\" data-icon=\"file-text\"></span><span><b>Life overview</b>: personality, career, love, money</span>",
+  "h": "57dcca8b"
+ },
+ "xlg.vui-long-chon-du-ngay-thang": {
+  "t": "Please choose your birth day, month, year and time.",
+  "h": "67e1d40f"
+ },
+ "xlg.xem-ban-luan-giai-mau-pdf": {
+  "t": "<a class=\"mini\" href=\"/tai-mau/mau-luan-giai-la-so.pdf\" target=\"_blank\" rel=\"noopener\"> <span class=\"ic\" data-icon=\"file-text\"></span> <span><b>See a sample reading (PDF, in Vietnamese)</b>The real content of a sample chart — read it before you decide</span> </a> <a class=\"mini\" href=\"/app/thay\"> <span class=\"ic\" data-icon=\"book-open\"></span> <span><b>Minh Bao's 15 Masters</b>Readings based on Zi Wei Dou Shu: A New Compilation and other classical editions</span> </a>",
+  "h": "e8c2bc01"
+ },
+ "xlg.xem-la-so-mien-phi": {
+  "t": "See my chart free →",
+  "h": "97bce6ab"
+ },
+ "xlg.xem-truoc-mien-phi-mo-ban": {
+  "t": "Preview <b>free</b>. Full 13-part reading: <b><span data-lp-vnd>…</span></b>",
+  "h": "741a332d"
  }
 }
