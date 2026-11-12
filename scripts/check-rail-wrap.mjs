@@ -147,7 +147,7 @@ const TOOLS = [
     wrapFn: 'pastLifeRailWrapper',
     skip: {
       characterMa:
-        'mã tra bản dịch tên cho CLIENT (W30f-8) — rail nhận `characterName` chữ Việt; tên theo ngôn ngữ chưa vào rail (đang nối vào system, luật cache)',
+        'mã tra bản dịch tên cho CLIENT (W30f-8) — system rail giữ `characterName` chữ Việt (cache); tên theo ngôn ngữ đi ở USER message qua `runAgent` (W30f-9, `wrapNhanVat`)',
       thanCungName: LASO,
       threads: `${LASO} — tuyến đời quét từ cách cục 12 cung, model suy lại được`,
       readouts: 'readout nội bộ dùng dựng nhân vật/ảnh, không phải nội dung người đọc thấy',

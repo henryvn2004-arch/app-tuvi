@@ -45,7 +45,7 @@ interface NhanVat {
  * Khối NỐI vào prompt truyện: bảng "tên Việt trong dữ liệu → chữ phải dùng khi viết". `vi` → '' (prompt khách Việt giữ NGUYÊN từng
  * byte); không dịch được nhân vật nào → '' (không nói nửa vời).
  */
-export function khoiTenTheoNgonNgu(locale: Locale, nhanVat: NhanVat[]): string {
+export function khoiTenTheoNgonNgu(locale: Locale, nhanVat: NhanVat[], kieu: 'truyen' | 'rail' = 'truyen'): string {
   if (locale === 'vi') return '';
   const dong = nhanVat.flatMap((p) => {
     const ten = tenTheoNgonNgu(locale, p.characterMa);
@@ -54,6 +54,14 @@ export function khoiTenTheoNgonNgu(locale: Locale, nhanVat: NhanVat[]): string {
     return [`- ${p.characterName} → ${ten ?? p.characterName}${dx ? ` · danh xưng: ${p.occupation.title} → ${dx}` : ''}`];
   });
   if (!dong.length) return '';
+  // `truyen` = prompt viết truyện (nối sau prompt, cần dòng trống đầu). `rail` = trả lời hỏi-đáp về nhân vật (W30f-9): nối vào USER
+  // message cạnh `langBlock`, nên KHÔNG có dòng trống đầu (caller tự ngăn cách) và dặn "khi nhắc tới nhân vật".
+  if (kieu === 'rail')
+    return (
+      'TÊN VÀ DANH XƯNG CỦA NHÂN VẬT — đã chốt cùng chữ hiện trên màn hình khách. Khi nhắc tới nhân vật trong câu trả lời, gọi ĐÚNG bằng chữ bên phải mũi tên; ' +
+      'KHÔNG tự phiên âm lại, KHÔNG để tên hay danh xưng tiếng Việt lọt vào (dữ liệu lá số ở trên vẫn giữ tên Việt — chỉ chữ viết ra cho khách theo bảng này):\n' +
+      dong.join('\n')
+    );
   return (
     '\n\nTÊN VÀ DANH XƯNG KHI VIẾT TRUYỆN — đã chốt cùng chữ hiện trên màn hình khách. Ở MỌI chỗ (tiêu đề, mô tả, các hồi, lời kết) dùng ĐÚNG chữ bên phải mũi tên; ' +
     'KHÔNG tự phiên âm lại, KHÔNG để tên hay danh xưng tiếng Việt lọt vào:\n' +

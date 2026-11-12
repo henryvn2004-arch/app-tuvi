@@ -147,6 +147,7 @@ for (let i = 0; i < 1200; i++) {
     o: { star: o.star, tier: o.tier, tierLabel: o.tierLabel, desc: o.desc, source: o.source },
     name: p.characterName, nameMa: p.characterMa, title: o.title, titleMa: o.titleMa, gender: p.gender,
     srv, blockJa: PLTen.khoiTenTheoNgonNgu('ja', [p]), blockVi: PLTen.khoiTenTheoNgonNgu('vi', [p]),
+    railJa: PLTen.khoiTenTheoNgonNgu('ja', [p], 'rail'), railVi: PLTen.khoiTenTheoNgonNgu('vi', [p], 'rail'),
     meta: (function () { const m = PL.pastLifeMeta(p); return { c: m.characterMa, d: m.danhXungMa, n: m.characterName, t: m.danhXung }; })(),
   });
 }
@@ -614,6 +615,19 @@ console.log('__KQ__' + JSON.stringify(out));
     bao(
       kq.tk.every((g) => g.blockVi === ''),
       'past-life-ten — prompt khách vi KHÔNG đổi một byte (khối rỗng)'
+    );
+    // Rail (W30f-9): nối vào USER message cạnh langBlock — vi rỗng; ja nêu đúng tên + danh xưng, KHÔNG mở bằng dòng trống, giọng "nhân vật".
+    bao(
+      kq.tk.every(
+        (g) =>
+          g.railVi === '' &&
+          !g.railJa.startsWith('\n') &&
+          g.railJa.includes(g.name + ' → ' + g.srv.ja.n) &&
+          g.railJa.includes(g.srv.ja.t) &&
+          g.railJa.startsWith('TÊN VÀ DANH XƯNG CỦA NHÂN VẬT') &&
+          !g.railJa.includes('VIẾT TRUYỆN')
+      ),
+      'past-life-ten — khối rail: vi rỗng, ja đúng tên + danh xưng hiển thị, giọng nhân vật (không "viết truyện")'
     );
     bao(
       kq.tk.every(
