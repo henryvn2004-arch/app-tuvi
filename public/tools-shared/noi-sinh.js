@@ -168,6 +168,32 @@
     ['XX', 'Nơi khác (chọn múi giờ)', null],
   ];
 
+  // ── Hiển thị theo ngôn ngữ trang (i18n W26) — CHỈ để HIỂN THỊ ─────────────
+  // GIÁ TRỊ gửi server (mã nước ISO, múi IANA) giữ nguyên; chỉ chữ người dùng NHÌN đổi.
+  // Tên nước: Intl.DisplayNames của locale trang; thiếu Intl thì bảng tiếng Anh dưới đây; vi giữ tên Việt trong NUOC.
+  var BCP47 = { en: 'en', ja: 'ja', ko: 'ko', 'zh-tw': 'zh-TW', 'zh-cn': 'zh-CN' };
+  var EN_NAME = { CN: 'China', TW: 'Taiwan', HK: 'Hong Kong', MO: 'Macao', KR: 'South Korea', JP: 'Japan', US: 'United States', CA: 'Canada', AU: 'Australia', RU: 'Russia', BR: 'Brazil', MX: 'Mexico', ID: 'Indonesia', NZ: 'New Zealand', LA: 'Laos', KH: 'Cambodia', TH: 'Thailand', MM: 'Myanmar', MY: 'Malaysia', SG: 'Singapore', PH: 'Philippines', BN: 'Brunei', MN: 'Mongolia', IN: 'India', PK: 'Pakistan', BD: 'Bangladesh', NP: 'Nepal', LK: 'Sri Lanka', AE: 'United Arab Emirates', SA: 'Saudi Arabia', QA: 'Qatar', IL: 'Israel', TR: 'Türkiye', GB: 'United Kingdom', IE: 'Ireland', FR: 'France', DE: 'Germany', NL: 'Netherlands', BE: 'Belgium', CH: 'Switzerland', AT: 'Austria', IT: 'Italy', ES: 'Spain', PT: 'Portugal', SE: 'Sweden', NO: 'Norway', DK: 'Denmark', FI: 'Finland', PL: 'Poland', CZ: 'Czechia', SK: 'Slovakia', HU: 'Hungary', RO: 'Romania', BG: 'Bulgaria', GR: 'Greece', UA: 'Ukraine', BY: 'Belarus', KZ: 'Kazakhstan', ZA: 'South Africa', EG: 'Egypt', NG: 'Nigeria', KE: 'Kenya', AR: 'Argentina', CL: 'Chile', CO: 'Colombia', PE: 'Peru', CU: 'Cuba', VN: 'Vietnam' };
+  function _loc() { var I = root.I18n; return (I && I.locale) || 'vi'; }
+  function _tv(key, vi) { var I = root.I18n; return I && I.tv ? I.tv(key, vi) : vi; }
+  var _dn = {};
+  /** Tên nước theo ngôn ngữ trang: tenNuoc('JP', 'Nhật Bản') → 日本 (ja) · Japan (en) · Nhật Bản (vi). */
+  function tenNuoc(ma, vi) {
+    var loc = _loc();
+    if (loc === 'vi') return vi;
+    if (ma === 'XX') return _tv('js.noisinh.noi-khac', vi);
+    try {
+      var d = _dn[loc] || (_dn[loc] = new Intl.DisplayNames([BCP47[loc] || 'en'], { type: 'region' }));
+      var r = d.of(ma);
+      if (r && r !== ma) return r;
+    } catch (e) { /* không có Intl.DisplayNames ⇒ bảng */ }
+    return EN_NAME[ma] || vi;
+  }
+  /** Nhãn vùng/múi của một nước (đã có trong NUOC bằng tiếng Việt) theo ngôn ngữ trang; khoá theo múi IANA. */
+  function tenVung(tz, nhan) {
+    if (!nhan || _loc() === 'vi') return nhan;
+    return _tv('js.noisinh.vung-' + String(tz).toLowerCase().replace(/[^a-z0-9]+/g, '-'), nhan);
+  }
+
   function lichCuaNoiSinh(ma) {
     return Object.prototype.hasOwnProperty.call(LICH_THEO_NUOC, ma) ? LICH_THEO_NUOC[ma] : LICH_MAC_DINH;
   }
@@ -242,6 +268,8 @@
     GIO_LICH: GIO_LICH,
     lichCuaNoiSinh: lichCuaNoiSinh,
     vungCuaNuoc: vungCuaNuoc,
+    tenNuoc: tenNuoc,
+    tenVung: tenVung,
     offsetPhut: offsetPhut,
     quyDoi: quyDoi,
   };
