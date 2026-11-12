@@ -814,12 +814,10 @@ function _banGiaoNguoiLon(data) {
   var host = document.getElementById('lockHost');
   host.innerHTML =
     '<div class="hn-warn" style="margin-bottom:0">' +
-    _tvmbT('js.hnt.la-so-nay-da', '<b>Lá số này đã ') + (data.tuoi != null ? esc(String(data.tuoi)) + _tvmbT('js.hnt.tuoi', ' tuổi') : _tvmbT('js.hnt.truong-thanh', 'trưởng thành')) +
-    _tvmbT('js.hnt.day-khong-con-la-cau-hoi', '</b> — đây không còn là câu hỏi <i>định hướng sớm cho con</i>, nên phần định hướng viết cho ') +
-    _tvmbT('js.hnt.cha-me-doc-ve-con-khong', 'cha mẹ đọc về con <b>không mở ở đây</b> và <b>không trừ Lượng</b>.<br><br>') +
-    _tvmbT('js.hnt.phan-thien-huong-phia-tren-van', 'Phần thiên hướng phía trên vẫn đọc được và vẫn miễn phí — nó đọc từ lá số nên đúng ở mọi ') +
-    _tvmbT('js.hnt.tuoi-muon-doc-huong-nghiep-cho', 'tuổi. Muốn đọc hướng nghiệp cho người trưởng thành (lĩnh vực, vai trò, quy mô, nhánh nghề) ') +
-    (_tvmbT('js.hnt.thi-dung', 'thì dùng') + ' <a href="/app/cong-so">' + _tvmbT('js.hnt.tu-vi-cong-so-huong-nghiep', 'Tử Vi Công Sở &amp; Hướng Nghiệp') + '</a>.') +
+    _tvmbT('js.hnt.la-so-nay-da-tuoi-link', '<b>Lá số này đã {tuoi}</b> — đây không còn là câu hỏi <i>định hướng sớm cho con</i>, nên phần định hướng viết cho cha mẹ đọc về con <b>không mở ở đây</b> và <b>không trừ Lượng</b>.<br><br>Phần thiên hướng phía trên vẫn đọc được và vẫn miễn phí — nó đọc từ lá số nên đúng ở mọi tuổi. Muốn đọc hướng nghiệp cho người trưởng thành (lĩnh vực, vai trò, quy mô, nhánh nghề) thì dùng {link}.', {
+      tuoi: data.tuoi != null ? esc(String(data.tuoi)) + _tvmbT('js.hnt.tuoi', ' tuổi') : _tvmbT('js.hnt.truong-thanh', 'trưởng thành'),
+      link: '<a href="/app/cong-so">' + _tvmbT('js.hnt.tu-vi-cong-so-huong-nghiep', 'Tử Vi Công Sở &amp; Hướng Nghiệp') + '</a>'
+    }) +
     '</div>';
   document.getElementById('lockBlock').style.display = 'block';
 }
@@ -894,9 +892,7 @@ function renderMetaRest(data) {
   }
   var cr = document.getElementById('chuaRoNet');
   if (data.chuaRoNet) {
-    cr.innerHTML = _tvmbT('js.hnt.la-so-con-chua-nghieng-han', '⚠️ <b>Lá số con chưa nghiêng hẳn về hướng nào.</b> Ở tuổi này đó là chuyện bình thường — ') +
-      _tvmbT('js.hnt.va-loi-khuyen-dung-luc-nay', 'và lời khuyên đúng lúc này là <b>cho thử rộng</b> thay vì chốt sớm. Hướng dưới đây là hướng nghiêng nhất, ') +
-      _tvmbT('js.hnt.nhung-hay-doc-no-nhu-mot', 'nhưng hãy đọc nó như một gợi ý để thử, không phải một kết luận.');
+    cr.innerHTML = _tvmbT('js.hnt.la-so-con-chua-nghieng-han-full', '⚠️ <b>Lá số con chưa nghiêng hẳn về hướng nào.</b> Ở tuổi này đó là chuyện bình thường — và lời khuyên đúng lúc này là <b>cho thử rộng</b> thay vì chốt sớm. Hướng dưới đây là hướng nghiêng nhất, nhưng hãy đọc nó như một gợi ý để thử, không phải một kết luận.');
     cr.style.display = 'block';
   } else {
     cr.style.display = 'none';
@@ -924,15 +920,13 @@ function renderMetaRest(data) {
   // engine đọc đúng lá số của con mình.
   var md = data.matDoc || [];
   var li = md.map(function (m) {
-    return '<li><b>' + esc(m.nhan) + '</b> (cung ' + esc(m.cung) + '): ' +
-      esc(m.sao.join(', ') || _tvmbT('js.hnt.khong-co-chinh-tinh', 'không có chính tinh')) +
+    return '<li><b>' + esc(m.nhan) + '</b> (' + _tvmbT('js.hnt.cung-name', 'cung {name}', {name: _tvmbG('cung', m.cung)}) + '): ' +
+      esc(m.sao.map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ') || _tvmbT('js.hnt.khong-co-chinh-tinh', 'không có chính tinh')) +
       (m.muon ? _tvmbT('js.hnt.muon-xung-chieu', ' <i>— mượn xung chiếu</i>') : '') +
       (m.cachCuc && m.cachCuc.length ? ' — ' + esc(m.cachCuc.join('; ')) : '') + '</li>';
   });
   if (data.changDangO) {
-    li.push(_tvmbT('js.hnt.chang-dang-o', '<li><b>Chặng đang ở</b>: ') + data.changDangO.tuoiStart + '–' + data.changDangO.tuoiEnd +
-      _tvmbT('js.hnt.tuoi-lqk0', ' tuổi (') + data.changDangO.namStart + '–' + data.changDangO.namEnd + '), cung ' +
-      esc(data.changDangO.cung) + '</li>');
+    li.push(_tvmbT('js.hnt.chang-dang-o-full', '<li><b>Chặng đang ở</b>: {a}–{b} tuổi ({y1}–{y2}), cung {cung}</li>', {a: data.changDangO.tuoiStart, b: data.changDangO.tuoiEnd, y1: data.changDangO.namStart, y2: data.changDangO.namEnd, cung: esc(_tvmbG('cung', data.changDangO.cung))}));
   }
   if (li.length) {
     document.getElementById('basisList').innerHTML = li.join('');
