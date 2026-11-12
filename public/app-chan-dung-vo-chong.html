@@ -253,6 +253,7 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'chan-dung-vo-chong'};</script>
 <script src="/tools-shared/glossary.js?v=5"></script>
+<script src="/tools-shared/cach-cuc.js?v=1"></script>
 <script src="/tools-shared/i18n.js?v=7"></script>
 <script src="/laso-chart.js?v=12"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
@@ -770,14 +771,14 @@ function renderPhuThe(pt) {
   var ccWrap = document.getElementById('ptCachCucWrap');
   if (pt.cachCuc && pt.cachCuc.length) {
     document.getElementById('ptCachCuc').innerHTML = pt.cachCuc.map(function (c) {
-      return '<li><b>' + esc(c.ten) + '</b>' + (c.moTa ? ' — ' + esc(c.moTa) : '') + '</li>';
+      return '<li><b>' + esc(TuviCachCuc.t(c.ten)) + '</b>' + (c.moTa ? ' — ' + esc(TuviCachCuc.t(c.moTa)) : '') + '</li>';
     }).join('');
     ccWrap.style.display = 'block';
   } else { ccWrap.style.display = 'none'; }
 
   var ynWrap = document.getElementById('ptYNghiaWrap');
   if (pt.yNghia && pt.yNghia.length) {
-    document.getElementById('ptYNghia').innerHTML = pt.yNghia.map(function (y) { return '<li>' + esc(y) + '</li>'; }).join('');
+    document.getElementById('ptYNghia').innerHTML = pt.yNghia.map(function (y) { return '<li>' + esc(TuviCachCuc.t(y)) + '</li>'; }).join('');
     ynWrap.style.display = 'block';
   } else { ynWrap.style.display = 'none'; }
 

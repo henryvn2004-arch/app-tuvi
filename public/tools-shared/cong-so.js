@@ -69,7 +69,7 @@
     if (m.k === 'tuan-giai') return sign + tpl('tuan-giai', 'Tuần/Triệt án ngữ (giải hãm)');
     if (m.k === 'tuan-pha') return sign + tpl('tuan-pha', 'Tuần/Triệt án ngữ (phá cách tốt)');
     if (m.k === 'cat' || m.k === 'sat') return sign + GN(m.ds);
-    if (m.k === 'cach') return sign + tpl('cach', 'cách {ten}', { ten: m.ten });
+    if (m.k === 'cach') return sign + tpl('cach', 'cách {ten}', { ten: window.TuviCachCuc ? window.TuviCachCuc.t(m.ten) : m.ten });
     return vi;
   }
   function bdList(ng) { return (ng.bacChiTiet || []).map(function (v, i) { return bdKhoan(ng.ma && ng.ma.bd && ng.ma.bd[i], v); }); }

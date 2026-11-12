@@ -136,7 +136,7 @@ for (const ns of LONG_NS) {
 }
 // Văn engine server: mỗi bảng (đoạn đầu khoá) phải được module tra tới.
 // past-life (W30f-3): khoá KHÔNG viết trong module — engine trả sẵn khoá đầy đủ trong mã `ma` (xem khối riêng dưới).
-const KHOA_TRONG_MA = { 'past-life': ['nghe', 'pair', 'note', 'tier', 'menh'] };
+const KHOA_TRONG_MA = { 'past-life': ['nghe', 'pair', 'note', 'tier', 'menh', 'era'] };
 for (const ns of Object.keys(ENGINE_NS)) {
   const f = LONG_MODULE[ns];
   const code = fs.readFileSync(path.join(ROOT, f), 'utf8');
@@ -203,6 +203,41 @@ for (const ns of Object.keys(ENGINE_NS)) {
       fail(`${f}: không gọi TuviCachCuc.list (câu cachCucTungCung sẽ giữ chữ Việt)`);
     if (!code.includes('TuviStarLabel.'))
       fail(`${f}: không gọi TuviStarLabel (nhãn sao sẽ giữ chữ Việt)`);
+  }
+  // W30f-6: các trang hiện cách cục có tên / ý nghĩa cung ngoài 4 trang trên.
+  for (const f of [
+    'public/app-chan-dung-vo-chong.html',
+    'public/app-luan-giai.html',
+    'public/app-chu-trinh-cuoc-doi.html',
+    'public/app-van-han-nam.html',
+  ])
+    if (!/\/tools-shared\/cach-cuc\.js\?v=\d+/.test(doc(f)))
+      fail(`${f}: không nạp /tools-shared/cach-cuc.js`);
+  if (!doc('public/app-chan-dung-vo-chong.html').includes('TuviCachCuc.t('))
+    fail(
+      'public/app-chan-dung-vo-chong.html: không gọi TuviCachCuc.t (cách cục · ý nghĩa cổ pháp giữ chữ Việt)'
+    );
+  const lg = doc('public/luan-giai-core.js');
+  if ((lg.match(/_ccT\(/g) || []).length < 5)
+    fail(
+      'public/luan-giai-core.js: thiếu _ccT(...) ở khối Cách cục / Phân tích sao (cần ≥5 chỗ gọi + 1 định nghĩa)'
+    );
+  // W30f-7: Chân Dung Tiền Kiếp dịch era/bậc/chức phận/trích dẫn qua helper dùng chung (khoá suy từ trường sẵn có, không đổi SHAPE).
+  {
+    const h = doc('public/tools-shared/past-life-t.js');
+    for (const t of ["'era.'", "'tier.'", "'pair.'", "'nghe.'", "'desc'", "'src'"])
+      if (!h.includes(t)) fail(`public/tools-shared/past-life-t.js: không dựng khoá ${t}`);
+    const pg = doc('public/app-chan-dung-tien-kiep.html');
+    if (!/\/tools-shared\/past-life-t\.js\?v=\d+/.test(pg))
+      fail('public/app-chan-dung-tien-kiep.html: không nạp past-life-t.js');
+    for (const t of [
+      'TuviPastLife.eraLine(',
+      'TuviPastLife.eraLabel(',
+      'TuviPastLife.tier(',
+      'TuviPastLife.desc(',
+      'TuviPastLife.source(',
+    ])
+      if (!pg.includes(t)) fail(`public/app-chan-dung-tien-kiep.html: không gọi ${t}`);
   }
   const cs = doc('public/tools-shared/cong-so.js');
   if (!cs.includes('TuviCachCuc')) fail('public/tools-shared/cong-so.js: không gọi TuviCachCuc');
