@@ -371,6 +371,122 @@
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"spade\"></span><b id=\"drawBtnLabel\">섞고 뽑기</b></span>",
   "h": "e53dcebd"
  },
+ "cdvc.2-xem-truoc-cung-phu-the": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">부처궁 미리보기</span>",
+  "h": "108dcc06"
+ },
+ "cdvc.anh-chan-dung-minh-hoa": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>예시<br>초상화</span>",
+  "h": "493170c3"
+ },
+ "cdvc.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「부부 초상」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chan-dung-vo-chong.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "53e5a8b4"
+ },
+ "cdvc.bang-tren-la-tra-bang-co": {
+  "t": "위 표는 당신의 명반에 고법의 표를 대조해 찾은 것이에요 — 아직 풀이 단계를 거치지 않았어요.",
+  "h": "e321a90c"
+ },
+ "cdvc.cach-cuc-dac-biet": {
+  "t": "특별한 격국",
+  "h": "f0db7ce5"
+ },
+ "cdvc.chan-dung-nay-chi-mang-tinh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 이 초상은 예시와 참고용일 뿐이며, 당신의 명반 부처궁에 있는 주성·보조성과 연결된 외형적 특징을 시스템이 재현한 것이에요 — 사진도, 실제 배우자의 모습을 정확히 예측한 것도 아니에요. 더 현실에 가까운 결과를 얻으려면 그 사람 본인의 명반과도 대조해야 해요.",
+  "h": "38ea85e6"
+ },
+ "cdvc.chan-dung-nguoi-phoi-ngau": {
+  "t": "<span class=\"res-block-title\">배우자의 초상</span>",
+  "h": "6c75b667"
+ },
+ "cdvc.chan-dung-nguoi-phoi-ngau-xs4t": {
+  "t": "배우자의 초상",
+  "h": "b3c9f474"
+ },
+ "cdvc.chan-dung-vo-chong": {
+  "t": "부부 초상",
+  "h": "ed0abbb5"
+ },
+ "cdvc.chan-dung-vo-chong-tu-vi": {
+  "t": "부부 초상 — 명보 자미두수",
+  "h": "192e3111"
+ },
+ "cdvc.chan-dung-vo-chong-ve-chan": {
+  "t": "<b>부부 초상</b><span>부처궁에서 배우자의 초상을 그려요</span>",
+  "h": "00184059"
+ },
+ "cdvc.chia-se-cho-ban-be-xem": {
+  "t": "친구에게 공유하기 →",
+  "h": "d4cae66e"
+ },
+ "cdvc.chinh-tinh": {
+  "t": "<b>주성:</b> <span id=\"ptChinh\">—</span>",
+  "h": "bddb0cff"
+ },
+ "cdvc.cung-phu-the-trong-la-so": {
+  "t": "<span class=\"res-block-title\">당신의 명반 속 부처궁</span>",
+  "h": "f96e4460"
+ },
+ "cdvc.hinh-the-suy-tu-sao": {
+  "t": "<span class=\"hp-ic\" data-icon=\"user\"></span><span>별에서 읽는<br>체형</span>",
+  "h": "ca30f981"
+ },
+ "cdvc.hinh-the-suy-tu-sao-tai": {
+  "t": "<span class=\"res-block-title\">부처궁의 별에서 읽는 체형</span>",
+  "h": "5207236c"
+ },
+ "cdvc.hoan-canh-gap-go": {
+  "t": "만남의 상황",
+  "h": "084d34b9"
+ },
+ "cdvc.luan-giai-cung-phu-the": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>부처궁<br>풀이</span>",
+  "h": "72f3c0e5"
+ },
+ "cdvc.luan-giai-cung-phu-the-e93e": {
+  "t": "<span class=\"res-block-title\">부처궁 풀이</span>",
+  "h": "a976e83a"
+ },
+ "cdvc.mo-ta": {
+  "t": "설명",
+  "h": "0bf67d8a"
+ },
+ "cdvc.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-vo-chong\"></span> / 회 <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-vo-chong\">…</span> 냥)</span>",
+  "h": "32e5c174"
+ },
+ "cdvc.nhap-ngay-sinh-khong-can-them": {
+  "t": "생년월일만 입력하면 다른 건 필요 없어요. 시스템이 부처궁을 읽고 초상을 그려 줘요 — 별에서 읽는 체형, 그림, 그리고 자세한 풀이까지요.",
+  "h": "091107bb"
+ },
+ "cdvc.phan-tich-cung-phu-the-trong": {
+  "t": "명반의 부처궁을 분석해 성격과 분위기에 대한 설명을 곁들여 배우자의 초상을 그려요.",
+  "h": "b63e4e9d"
+ },
+ "cdvc.phu-tinh": {
+  "t": "<b>보조성:</b> <span id=\"ptPhu\">—</span>",
+  "h": "5e60dcdc"
+ },
+ "cdvc.tra-loi-thay-o-khung-chat": {
+  "t": "채팅창에서 선생님께 답하면 초상을 그려 드려요 — 생년월일과 시간만 있으면 돼요.",
+  "h": "1933e964"
+ },
+ "cdvc.truoc-khi-gap-dung-nguoi-nhieu": {
+  "t": "맞는 사람을 만나기 전에 많은 사람이 그 사람을 전혀 다르게 상상해요. 명반의 부처궁은 미래 배우자의 초상과 기질을 그려 줘요 — 어떤 소문이나 짐작보다도 또렷하게요.",
+  "h": "d009dcc3"
+ },
+ "cdvc.ve-chan-dung-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"image\"></span><b id=\"btnGoLabel\">초상 그리기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-vo-chong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-vo-chong\">…</span> 냥)</span></small>",
+  "h": "33f06010"
+ },
+ "cdvc.ve-lai": {
+  "t": "다시 그리기",
+  "h": "fb8e0b72"
+ },
+ "cdvc.y-nghia-co-phap": {
+  "t": "고법에 따른 의미",
+  "h": "c6403cb5"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "이야기를 들려주세요. 명보가 15분의 선생님 중 알맞은 분을 안내해 드려요: 자미두수 명반, 사주, 궁합, 작명, 길일 택일.",
   "h": "0f564294"
@@ -547,6 +663,62 @@
   "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>조회 연도<br>소운</span>",
   "h": "d0e7d2f5"
  },
+ "cn.12-thang-am-toi": {
+  "t": "앞으로 12개월(음력)",
+  "h": "c0166830"
+ },
+ "cn.ca-nha-minh-la-so-cua": {
+  "t": "<b>우리 집</b><span id=\"cnSub\">온 가족의 명반을 나란히 놓고 앞으로 12개월(음력)을 봐요.</span>",
+  "h": "f42a18f8"
+ },
+ "cn.ca-nha-minh-tu-vi-minh": {
+  "t": "우리 집 — 명보 자미두수",
+  "h": "12013a8d"
+ },
+ "cn.dang-nhap-dang-ky": {
+  "t": "로그인 / 가입",
+  "h": "2bcf279e"
+ },
+ "cn.dang-nhap-de-xem-la-so": {
+  "t": "로그인하고 온 가족의 명반을 확인하세요.",
+  "h": "6ccac799"
+ },
+ "cn.dang-xep-la-so-ca-nha": {
+  "t": "온 가족의 명반을 정리하는 중이에요…",
+  "h": "9c8b78a5"
+ },
+ "cn.dua-ngay-tot-va-ngay-xung": {
+  "t": "아이만을 위한 길일과 충일을 휴대폰 캘린더에 넣어 보세요. 캘린더는 매일 자동으로 업데이트돼요.",
+  "h": "b5850267"
+ },
+ "cn.google-lich": {
+  "t": "Google 캘린더",
+  "h": "8cdb619a"
+ },
+ "cn.hoi-thay-ve-ca-nha-so": {
+  "t": "<a class=\"go\" id=\"cnAsk\" href=\"/app\">가족에 대해 선생님께 묻기</a> <a class=\"sub\" href=\"/app/so-la-so\">명반 노트</a>",
+  "h": "c7bd3311"
+ },
+ "cn.iphone-mac": {
+  "t": "iPhone / Mac",
+  "h": "9a2b7d51"
+ },
+ "cn.lich-rieng": {
+  "t": "전용 캘린더",
+  "h": "6ff9fdd9"
+ },
+ "cn.moi-o-la-cung-nguyet-han": {
+  "t": "각 칸은 그 달의 월한 궁이에요. 노란 칸: 두 명 이상이 같은 궁에 함께 한이 드는 달. 칸을 누르면 별을 볼 수 있어요.",
+  "h": "8a6d6f48"
+ },
+ "cn.so-la-so-chua-co-nguoi": {
+  "t": "명반 노트에 아직 가족이 없어요.<br>남편이나 아이, 부모님에 대해 선생님께 물어보세요 — 선생님이 대화 중에 바로 명반 추가를 청해요.<br> 저장된 명반은 <a href=\"/app/so-la-so\">명반 노트</a>의 <b>가족</b> 그룹으로 옮겨 주세요.",
+  "h": "75422ea1"
+ },
+ "cn.thang-ca-nha-nen-de-y": {
+  "t": "온 가족이 눈여겨볼 달",
+  "h": "e66184b3"
+ },
  "congcu.3-ngay-toi": {
   "t": "앞으로 3일",
   "h": "a9fe9d66"
@@ -691,6 +863,190 @@
   "t": "자미두수",
   "h": "f49901f4"
  },
+ "cs.2-xem-truoc-ho-so": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">프로필 미리보기</span>",
+  "h": "cdf8b027"
+ },
+ "cs.40-nam-4-chang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"trending-up\"></span><span>40년을<br>4구간으로</span>",
+  "h": "62f02f8b"
+ },
+ "cs.ban-dang-o-vi-tri-nao": {
+  "t": "현재 어떤 위치에 있나요",
+  "h": "ae96bb68"
+ },
+ "cs.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「자미두수 직장」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-cong-so.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "2538ba5a"
+ },
+ "cs.bon-ten-goi-khai-sang-lanh": {
+  "t": "<b>개척·리더·서포터·협력</b>이라는 네 가지 이름은 읽기 쉽도록 이 페이지가 붙인 현대적인 라벨이며 고전에는 이런 호칭이 없어요. 나누는 방식에는 고법의 바탕이 있어요: <b>사상</b>(노양·소음·소양·노음)을 14주성에 대응시키면 고전의 별 조합에 정확히 들어맞아요.<br> 이것은 <b>명반을 읽는 하나의 틀</b>이지 검증을 거친 심리 검사가 아니에요. 뒷받침하는 대조 연구도 없어요. 나를 이해하고 대화의 실마리로 쓰되, 사람을 뽑거나 남에게 일을 배정하는 데 쓰지 마세요.",
+  "h": "4b3842bc"
+ },
+ "cs.chu-doanh-nghiep": {
+  "t": "사업주",
+  "h": "0ec2b6b1"
+ },
+ "cs.cung-mot-nang-luc-co-nguoi": {
+  "t": "같은 능력이라도 순조롭게 승진하는 사람이 있고 계속 제자리걸음인 사람이 있어요 — 대부분 맞는 환경을 고르고 자신을 드러내는 방식에서 갈려요. 직장에서의 내 유형을 읽고 방향을 더 분명히 잡아 보세요.",
+  "h": "af9f49d9"
+ },
+ "cs.dang-tim-viec-chuyen-huong": {
+  "t": "구직 중 / 방향 전환 중",
+  "h": "de0479f2"
+ },
+ "cs.doc-la-so-tu-vi-bang": {
+  "t": "자미두수 명반을 일의 언어로 읽어요: 직장에서 나는 어떤 유형인지, 열두 가지 측면의 강점과 약점, 일하는 40년을 나눈 네 구간, 그리고 누구와 팀을 짜면 좋은지요.",
+  "h": "7c9e83ec"
+ },
+ "cs.dung-ho-so-kieu-nguoi-12": {
+  "t": "유형 + 12가지 측면 프로필 만들기는 <b>무료</b>예요. 구체적인 직업 갈래를 열 때만 냥이 차감돼요.",
+  "h": "8ad49bf1"
+ },
+ "cs.dung-ho-so-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"briefcase\"></span><b id=\"btnGoLabel\">프로필 만들기 →</b></span> <small>무료</small>",
+  "h": "d7386efe"
+ },
+ "cs.hoi-thay-doc-ky-ho-so": {
+  "t": "✦ 선생님께 이 프로필을 자세히 읽어 달라고 하기",
+  "h": "dfa970e5"
+ },
+ "cs.kieu-nguoi-noi-cong-so": {
+  "t": "<span class=\"hp-ic\" data-icon=\"briefcase\"></span><span>직장에서의<br>유형</span>",
+  "h": "31b69ffd"
+ },
+ "cs.lam-tu-do-nghe-rieng": {
+  "t": "프리랜서 / 개인 사업",
+  "h": "1d5e99e6"
+ },
+ "cs.ngay-gio-sinh-va-cho-dung": {
+  "t": "생년월일·시간과 현재 위치",
+  "h": "ade29838"
+ },
+ "cs.nhan-vien-lam-thue": {
+  "t": "직장인",
+  "h": "0c9557d1"
+ },
+ "cs.nhanh-nghe-ghep-doi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>직업 갈래,<br>팀 짜기</span>",
+  "h": "f7580d7f"
+ },
+ "cs.nhap-ngay-gio-sinh-va-vi": {
+  "t": "생년월일과 시간, 현재 위치를 입력하세요. 시스템이 고법과 대조해요 — 직장에서의 유형, 맞는 직업 갈래, 그리고 40년 커리어를 4구간으로 나눠서요.",
+  "h": "f54c5793"
+ },
+ "cs.quan-ly-lam-thue": {
+  "t": "직장 내 관리자",
+  "h": "9e6cb7ab"
+ },
+ "cs.tai-anh": {
+  "t": "⬇ 이미지 저장",
+  "h": "eb8a56af"
+ },
+ "cs.tu-vi-cong-so": {
+  "t": "자미두수 직장·결혼",
+  "h": "9d18a955"
+ },
+ "cs.tu-vi-cong-so-la-so": {
+  "t": "<b>자미 직장</b><span>일의 언어로 읽는 명반</span>",
+  "h": "af1a1cbe"
+ },
+ "cs.tu-vi-cong-so-tu-vi": {
+  "t": "자미 직장 — 명보 자미두수",
+  "h": "91365f7b"
+ },
+ "ctk.2-xem-truoc-chan-dung": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">초상 미리보기</span>",
+  "h": "db8c9fa4"
+ },
+ "ctk.5-nen-van-minh-co": {
+  "t": "<span class=\"hp-ic\" data-icon=\"landmark\"></span><span>5개의<br>고대 문명</span>",
+  "h": "88178537"
+ },
+ "ctk.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「전생 초상」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chan-dung-tien-kiep.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "d3ec11c0"
+ },
+ "ctk.chan-dung-cot-cach": {
+  "t": "<span class=\"res-block-title\">초상과 기품</span>",
+  "h": "236dac15"
+ },
+ "ctk.chan-dung-tien-kiep": {
+  "t": "전생 초상",
+  "h": "e7d0f866"
+ },
+ "ctk.chan-dung-tien-kiep-gxr5": {
+  "t": "전생 초상",
+  "h": "7aa2c297"
+ },
+ "ctk.chan-dung-tien-kiep-la-so": {
+  "t": "<b>전생 초상</b><span>내 명반이 옛날에 태어난 것이라면</span>",
+  "h": "b05fc22e"
+ },
+ "ctk.chan-dung-tien-kiep-tu-vi": {
+  "t": "전생 초상 — 명보 자미두수",
+  "h": "ecf8e25b"
+ },
+ "ctk.chan-dung-va-cau-chuyen-phia": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 위의 초상과 이야기는 당신의 자미두수 명반 데이터에 선인들이 남긴 연구 경험을 더해 그려낸 것이에요. 참고와 오락용으로만 봐 주세요.",
+  "h": "2e5ddc71"
+ },
+ "ctk.chan-dung-ve-rieng": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>나만을 위해<br>그린 초상</span>",
+  "h": "bac45794"
+ },
+ "ctk.da-ve-truoc-do": {
+  "t": "<span class=\"res-block-title\">이전에 그린 것</span>",
+  "h": "44b01ab4"
+ },
+ "ctk.dang-ve-chan-dung-khoang-45": {
+  "t": "초상을 그리는 중이에요…<br>(45~60초 정도)",
+  "h": "7a762c71"
+ },
+ "ctk.dat-chinh-la-so-cua-ban": {
+  "t": "내 명반을 고대 동아시아의 다섯 문명 중 하나에 놓아 보세요 — 아홉 대운을 통해 들려주는 한 사람의 일생의 초상과 이야기예요.",
+  "h": "9d55b734"
+ },
+ "ctk.dung-la-so-da-lap-khong": {
+  "t": "이미 만든 명반을 쓰므로 따로 입력할 것은 없어요. 초상과 기품, 그리고 5막으로 들려주는 일생의 이야기를 받아 보세요.",
+  "h": "1220c601"
+ },
+ "ctk.khung-5-hoi-o-tren-do": {
+  "t": "위의 5막 틀은 당신의 명반이 정해요 — 각 막의 글은 전체 버전에 들어 있어요.",
+  "h": "9c6e9720"
+ },
+ "ctk.la-so-khong-chi-ke-chuyen": {
+  "t": "명반은 이번 생의 이야기만 들려주는 게 아니에요 — 고대 문명에 놓으면 나만의 전생 이야기가 슬며시 드러나요. 이미 있는 명반으로 완성된 초상과 이야기를 받아 보세요.",
+  "h": "558d4af3"
+ },
+ "ctk.mo-ta-nhan-vat": {
+  "t": "인물 설명",
+  "h": "e5b0eb52"
+ },
+ "ctk.mo-ta-nhan-vat-ban-mau": {
+  "t": "인물 설명 (샘플)",
+  "h": "a3b1a797"
+ },
+ "ctk.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-tien-kiep\"></span> / 회 <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-tien-kiep\">…</span> 냥)</span>",
+  "h": "a0c1a032"
+ },
+ "ctk.mot-doi-5-hoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>일생을<br>5막으로</span>",
+  "h": "a838f04e"
+ },
+ "ctk.mot-doi-nguoi-5-hoi": {
+  "t": "<span class=\"res-block-title\">한 사람의 일생 — 5막</span>",
+  "h": "a7f7daa3"
+ },
+ "ctk.nhap-ngay-sinh-cua-ban-duong": {
+  "t": "생년월일 입력 (양력)",
+  "h": "1958d7e8"
+ },
+ "ctk.xem-tien-kiep-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"temple\"></span><b>전생 보기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-tien-kiep\">…</span> 냥)</span></small>",
+  "h": "055f7d8e"
+ },
  "cuahang.anh-khu-vuc-vat-dung-nhan": {
   "t": "<span class=\"ic\" data-icon=\"camera\"></span> 사진 &amp; 인식할 구역/물건",
   "h": "dcd1e25d"
@@ -763,6 +1119,210 @@
   "t": "회사 사무실",
   "h": "d678c2d6"
  },
+ "daycon.2-xem-truoc-chan-dung-con": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">아이 초상 미리보기</span>",
+  "h": "d8f50448"
+ },
+ "daycon.5-la-muc-giua-cua-hang": {
+  "t": "<b>5는 중간값</b>이에요. 수천 건의 아이 명반을 기준으로 한 중간이며 “10점 만점에 5점”이라는 뜻이 아니에요. 회색 띠는 아이가 두 가지 방식 모두 소화할 수 있는 구간이에요. 축의 양 끝 모두 가치가 있어요.",
+  "h": "0a475048"
+ },
+ "daycon.5-truc-tinh-khi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>5가지<br>기질 축</span>",
+  "h": "2ee56c76"
+ },
+ "daycon.8-chat-nang-khieu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>8가지<br>재능 기질</span>",
+  "h": "a2098312"
+ },
+ "daycon.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「명반 맞춤 자녀 교육」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-day-con.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "93827cd3"
+ },
+ "daycon.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 이 풀이는 자미두수 명반의 데이터에 선인들이 남긴 연구 경험을 더해 그려낸 것이에요. <b>가르치는 방법</b> 부분은 이 페이지가 해석을 덧붙인 것이며 고전에 적힌 글귀가 아니에요. 참고용으로만 봐 주세요.<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 이것은 <b>아이에게 맞게 이해하고 가르치기 위한</b> 틀이에요. 아이는 아직 자라는 중이고 이 자리에 없기 때문에, 이 풀이는 <b>합격·불합격 예측, 직업 단정, 건강이나 연애 풀이를 일부러 하지 않아요</b>. 타고난 기질에는 좋고 나쁨이 없고, 어른이 하는 방식에 맞거나 맞지 않을 뿐이에요.<br><br> <span class=\"ic\" data-icon=\"book-open\"></span> <b>출처:</b> 명궁, 복덕궁, 부모궁 등은 <i>『자미두수 신편』</i>(Vân Đằng Thái Thứ Lang)에 따라 작성했어요. 5가지 축·8가지 기질의 틀과 유형별 교육 방식은 <b>명보 자미두수 전문가 팀</b>이 직접 만든 방법이에요. <a href=\"/nguon-du-lieu.html\" target=\"_blank\" rel=\"noopener\" style=\"color:#9A7B3A\">데이터 출처 전체 보기 →</a>",
+  "h": "77ff2cc9"
+ },
+ "daycon.boi-canh": {
+  "t": "<b>배경</b><i></i>",
+  "h": "a85d826c"
+ },
+ "daycon.buong-cai-lai-noi-khong-nghe": {
+  "t": "고집이 세고 말대꾸하며 말을 안 들어요",
+  "h": "76509c43"
+ },
+ "daycon.cac-chang-di-hoc": {
+  "t": "<span class=\"res-block-title\">학업 단계별 흐름</span>",
+  "h": "b2c2bb10"
+ },
+ "daycon.cach-day-con-nay": {
+  "t": "<span class=\"res-block-title\">이 아이에게 맞는 교육법</span>",
+  "h": "e203e71f"
+ },
+ "daycon.chon-dieu-dang-lo-nhap-ngay": {
+  "t": "걱정되는 점을 고르고 아이의 생년월일과 시간을 입력하세요. 아이에게 맞는 교육법과 오늘 밤부터 할 수 있는 일을 알려 드려요.",
+  "h": "b14b84f4"
+ },
+ "daycon.co-la-so-cua-ban-thi": {
+  "t": "내 명반이 있으면 풀이에 <b>“두 사람의 관계”</b> 항목이 더해져요. 부모와 아이가 자주 부딪히는 지점과 충돌을 줄이는 방법이에요. 비워 두어도 나머지 내용은 모두 볼 수 있어요.",
+  "h": "0ea6e4fe"
+ },
+ "daycon.co-so-trong-la-so": {
+  "t": "<span class=\"res-block-title\">명반상의 근거</span>",
+  "h": "c215623b"
+ },
+ "daycon.con-khong-chiu-noi-chuyen-voi": {
+  "t": "아이가 더는 저와 말을 하려고 하지 않아요",
+  "h": "245ca1b1"
+ },
+ "daycon.con-la-nguoi-the-nao": {
+  "t": "<span class=\"res-block-title\">어떤 아이인가</span>",
+  "h": "d97bd561"
+ },
+ "daycon.cung-mot-cach-day-co-dua": {
+  "t": "똑같은 방식으로 가르쳐도 눈에 띄게 나아지는 아이가 있고, 가르칠수록 멀어지는 아이도 있어요. 아이마다 받아들이는 방식이 다르기 때문이에요. 아이의 명반으로 어떤 방법이 역효과를 내고 있는지 읽어 보세요.",
+  "h": "eec3a103"
+ },
+ "daycon.da-xem-truoc-do": {
+  "t": "<span class=\"res-block-title\">이전에 본 내용</span>",
+  "h": "5dc13a72"
+ },
+ "daycon.dau-hieu-nhan-ra-o-nha": {
+  "t": "집에서 알아볼 수 있는 신호",
+  "h": "a07a9d36"
+ },
+ "daycon.day-con-theo-la-so": {
+  "t": "명반 맞춤 자녀 교육",
+  "h": "2013a771"
+ },
+ "daycon.day-con-theo-la-so-dua": {
+  "t": "<b>명반 맞춤 자녀 교육</b><span>이 아이에게 필요한 건 재촉일까, 기다림일까</span>",
+  "h": "89056d92"
+ },
+ "daycon.day-con-theo-la-so-tu": {
+  "t": "명반 맞춤 자녀 교육 — 명보 자미두수",
+  "h": "43088648"
+ },
+ "daycon.day-la-kieu-moi-truong-hoc": {
+  "t": "아이에게 맞는 <b>학습 환경의 유형</b>일 뿐이에요. 전공이나 직업은 일부러 정하지 않았어요.",
+  "h": "db05bd75"
+ },
+ "daycon.diem-o-day-la-muc-thuan": {
+  "t": "여기 점수는 <b>그 시기가 순조로운지 거스르는지의 정도</b>이지 학업 성적도, 아이에 대한 점수도 아니에요.",
+  "h": "799bb1dc"
+ },
+ "daycon.dieu-ban-dang-lo": {
+  "t": "걱정되는 점",
+  "h": "bd0e3bcd"
+ },
+ "daycon.dieu-ban-dang-lo-pjp3": {
+  "t": "<span class=\"res-block-title\" id=\"loTitle\">걱정되는 점</span>",
+  "h": "86a3d90a"
+ },
+ "daycon.dinh-huong": {
+  "t": "<span class=\"res-block-title\">방향 설정</span>",
+  "h": "ee21cc8a"
+ },
+ "daycon.dinh-huong-cach-day": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>교육<br>방향</span>",
+  "h": "c22dffe6"
+ },
+ "daycon.do-duoc-gi": {
+  "t": "<b>무엇을 측정했나</b><i></i>",
+  "h": "0ae0b676"
+ },
+ "daycon.goi-y-de-thu-khong-phai": {
+  "t": "시도해 볼 만한 제안일 뿐 처방이 아니에요. 고서는 사람의 기질을 말할 뿐, 지금 사는 곳에 어떤 동아리가 열려 있는지는 몰라요. 한 번 해 보게 하고 아이의 실제 반응을 살펴보세요.",
+  "h": "5f3bcee3"
+ },
+ "daycon.hai-ben-voi-nhau": {
+  "t": "<span class=\"res-block-title\">두 사람의 관계</span>",
+  "h": "12457260"
+ },
+ "daycon.hoat-dong-nen-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">아이에게 해 보게 할 활동</span>",
+  "h": "f4d526be"
+ },
+ "daycon.hoc-hanh-sa-sut-ngoi-vao": {
+  "t": "성적이 떨어지고 책상에 앉지를 못해요",
+  "h": "fab00484"
+ },
+ "daycon.khong-co-gi-gap-chi-muon": {
+  "t": "급한 건 없고, 그저 아이를 더 이해하고 싶어요",
+  "h": "cf2efa39"
+ },
+ "daycon.lam-gi-tu-toi-nay": {
+  "t": "<span class=\"res-block-title\">오늘 밤부터 할 일</span>",
+  "h": "1f882975"
+ },
+ "daycon.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> / 회 <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 냥)</span>",
+  "h": "10afd8c1"
+ },
+ "daycon.nam-truc-tinh-khi": {
+  "t": "<span class=\"res-block-title\">다섯 가지 기질 축</span>",
+  "h": "587fa869"
+ },
+ "daycon.nen": {
+  "t": "하면 좋은 것",
+  "h": "078cfc62"
+ },
+ "daycon.nen-lam-gi": {
+  "t": "<b>하면 좋은 일</b><i></i>",
+  "h": "021dc84d"
+ },
+ "daycon.neu-chi-nho-mot-cau": {
+  "t": "<span class=\"res-block-title\">한 문장만 기억한다면</span>",
+  "h": "6e372478"
+ },
+ "daycon.ngay-sinh-cua-con": {
+  "t": "아이의 생년월일",
+  "h": "3837783b"
+ },
+ "daycon.nhap-la-so-cua-con-nhan": {
+  "t": "아이의 명반을 입력하면 아이가 받아들이는 방식, 과제를 내줄 때 하게 만드는 방법, 역효과를 내는 훈육 방식, 부모와 아이가 부딪히는 지점을 알 수 있어요.",
+  "h": "244ebedb"
+ },
+ "daycon.phan-luan-chua-mo": {
+  "t": "<span class=\"res-block-title\">아직 열리지 않은 풀이</span>",
+  "h": "68cac5d9"
+ },
+ "daycon.rut-re-ngai-dam-dong-it": {
+  "t": "소심하고 사람 많은 곳을 어려워하며 친구가 적어요",
+  "h": "56c6a43d"
+ },
+ "daycon.sap-phai-chon-truong-chon-nganh": {
+  "t": "곧 학교나 전공을 골라야 해요",
+  "h": "926ae29e"
+ },
+ "daycon.tam-chat-nang-khieu": {
+  "t": "<span class=\"res-block-title\">여덟 가지 재능 기질</span>",
+  "h": "8ac0e142"
+ },
+ "daycon.them-la-so-cua-ban-cha": {
+  "t": "내 명반 추가 — 아버지 또는 어머니 (선택)",
+  "h": "e158b2b1"
+ },
+ "daycon.thoi": {
+  "t": "피할 것",
+  "h": "aa7d2f5d"
+ },
+ "daycon.tra-loi-thay-o-khung-chat": {
+  "t": "채팅창에서 선생님께 걱정되는 점과 아이의 생년월일을 알려 주세요.",
+  "h": "4cf5eddf"
+ },
+ "daycon.vuot-vach-dut-la-chat-dang": {
+  "t": "점선을 넘은 기질은 <b>해 볼 만한</b> 것일 뿐, 재능이 확인된 것은 아니에요. 집에서 보이는 신호와 맞춰 보고, 맞지 않으면 내 눈을 믿으세요.",
+  "h": "fbb5fd98"
+ },
+ "daycon.xem-be-khac": {
+  "t": "다른 아이 보기",
+  "h": "3ff33fa6"
+ },
+ "daycon.xem-cach-day-con-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"baby\"></span><b>자녀 교육법 보기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 냥)</span></small>",
+  "h": "ccbaaea3"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 참고용이라는 성격",
   "h": "99856a52"
@@ -826,6 +1386,110 @@
  "disclaimer.xem-them-dieu-khoan-day-du": {
   "t": "이용약관 전문은 <a href=\"/dieu-khoan-dich-vu.html\">이용약관</a>(제2항 — 책임의 제한)에, 서비스 설명은 <a href=\"/san-pham-dich-vu.html\">상품 및 서비스</a> 페이지에 있습니다.",
   "h": "dc202339"
+ },
+ "duyenno.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">결제</span>",
+  "h": "67c0b759"
+ },
+ "duyenno.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">결과 받기</span>",
+  "h": "5b1e84a0"
+ },
+ "duyenno.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「전생 인연」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-duyen-no-tien-kiep.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "c48f94d9"
+ },
+ "duyenno.buc-tranh-ve-ca-nhom": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>모두를 담아<br>그린 그림 한 장</span>",
+  "h": "43567703"
+ },
+ "duyenno.cau-chuyen-4-hoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"book-open\"></span><span>4막으로 된<br>이야기</span>",
+  "h": "824bdaa8"
+ },
+ "duyenno.co-nhung-moi-quan-he-vua": {
+  "t": "처음 만났는데도 낯익게 느껴지는 관계, 미리 약속이라도 한 듯한 만남이 있어요. 두 사람의 명반을 맞춰 그 느낌 뒤에 있는 인연 이야기를 찾아보세요. 일러스트도 함께 드려요.",
+  "h": "370ab59d"
+ },
+ "duyenno.co-so-trong-la-so": {
+  "t": "명반상의 근거",
+  "h": "43f95044"
+ },
+ "duyenno.dang-ve-buc-tranh-khoang-45": {
+  "t": "그림을 그리는 중이에요…<br>(45~60초 정도)",
+  "h": "28b5d982"
+ },
+ "duyenno.duyen-no-tien-kiep": {
+  "t": "전생 인연",
+  "h": "c6b0ccb5"
+ },
+ "duyenno.duyen-no-tien-kiep-kiep-truoc": {
+  "t": "<b>전생 인연</b><span>전생에 이 사람들은 서로 어떤 사이였을까</span>",
+  "h": "89867b1c"
+ },
+ "duyenno.duyen-no-tien-kiep-tu-vi": {
+  "t": "전생 인연 — 명보 자미두수",
+  "h": "f1c11bb4"
+ },
+ "duyenno.gui-ket-qua-nay-cho-ho": {
+  "t": "이 결과를 그들에게 보내기 →",
+  "h": "69958b00"
+ },
+ "duyenno.hai-den-nam-la-so-kiep": {
+  "t": "2~5명의 명반으로 전생에 이 사람들이 서로 어떤 사이였는지 풀이해요. 인연의 종류는 고법에서 도출하고, 4막 이야기와 모두를 함께 그린 그림 한 장을 드려요.",
+  "h": "109c47c2"
+ },
+ "duyenno.lam-lai": {
+  "t": "다시 하기",
+  "h": "d3a72f2a"
+ },
+ "duyenno.loai-duyen-no-theo-co-phap": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>고법에 따른<br>인연의 종류</span>",
+  "h": "50fab9c4"
+ },
+ "duyenno.moi-duyen-4-hoi": {
+  "t": "<span class=\"res-block-title\">인연 이야기 — 4막</span>",
+  "h": "d1b7220b"
+ },
+ "duyenno.moi-duyen-kiep-truoc": {
+  "t": "<span class=\"res-block-title\">전생의 인연</span>",
+  "h": "5c0af936"
+ },
+ "duyenno.moi-duyen-va-cau-chuyen-phia": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 위의 인연과 이야기는 자미두수 명반들의 관계에 선인들이 남긴 연구 경험을 더해 그려낸 것이에요. 참고와 오락용으로만 봐 주세요.",
+  "h": "e81a1fdc"
+ },
+ "duyenno.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> / 회 <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> 냥)</span>",
+  "h": "19bc9353"
+ },
+ "duyenno.nhap-ho-ten-gioi-tinh-va": {
+  "t": "보고 싶은 사람들(2~5명)의 이름, 성별, 생년월일과 시간을 입력하면 일러스트가 곁들여진 인연 이야기를 만들어 드려요.",
+  "h": "f61856b4"
+ },
+ "duyenno.nhap-ngay-sinh-duong-lich": {
+  "t": "생년월일 입력 (양력)",
+  "h": "6983427a"
+ },
+ "duyenno.tai-anh-dang-story": {
+  "t": "⬇ 스토리용 이미지 저장",
+  "h": "2c46ee3c"
+ },
+ "duyenno.them-nguoi": {
+  "t": "+ 사람 추가",
+  "h": "79cf4ccf"
+ },
+ "duyenno.tra-loi-thay-o-khung-chat": {
+  "t": "채팅창에서 선생님께 한 사람씩 생년월일(2~5명)을 알려 주세요.",
+  "h": "672120ed"
+ },
+ "duyenno.tranh-duyen-no-tien-kiep": {
+  "t": "전생 인연 그림",
+  "h": "95122c03"
+ },
+ "duyenno.xem-duyen-no-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">인연 보기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> 냥)</span></small>",
+  "h": "990649b6"
  },
  "giosinh.12-la-so-kha-nghi": {
   "t": "후보 명반<br>12개",
@@ -982,6 +1646,118 @@
  "giosinh.xep-hang-do-khop": {
   "t": "일치도<br>순위",
   "h": "a6655e79"
+ },
+ "hnt.2-xem-truoc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">미리보기</span>",
+  "h": "93d60bc7"
+ },
+ "hnt.3-huong-dang-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>해 볼 만한<br>세 가지 방향</span>",
+  "h": "cf93e32b"
+ },
+ "hnt.ba-huong-dang-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">아이에게 해 보게 할 세 가지 방향</span>",
+  "h": "116b88f2"
+ },
+ "hnt.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「자녀 조기 진로」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-huong-nghiep-tre.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "13902c17"
+ },
+ "hnt.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 이 풀이는 자미두수 명반의 데이터를 <i>『자미두수 신편』</i>(Vân Đằng Thái Thứ Lang)에 따라 세우고 선인들이 남긴 연구 경험을 더해 그려낸 것이에요. <b>성향과 활동</b> 부분은 <b>명보 자미두수 전문가 팀</b>이 직접 만든 방법이며 고전에 적힌 글귀가 아니에요. <a href=\"/nguon-du-lieu.html\">데이터 출처</a>를 확인해 보세요.<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 이것은 <b>참고를 위한 방향 제시</b>이지 아이의 길을 정해 주기 위한 것이 아니에요. 아이는 아직 자라는 중이고 이 자리에 없기 때문에, 이 풀이는 <b>합격·불합격 예측, 성공 약속, 건강이나 연애 풀이를 일부러 하지 않아요</b>. 성향이 알려 주는 것은 아이에게 <i>무엇을 해 보게 하면 좋은지</i>이지, 아이가 <i>어떤 직업을 가져야 하는지</i>가 아니에요.",
+  "h": "6a1cfd57"
+ },
+ "hnt.bat-dau-tu-dau": {
+  "t": "<span class=\"res-block-title\" id=\"doTitle\">어디서부터 시작할까</span>",
+  "h": "2bb617bb"
+ },
+ "hnt.chat-nguoi-doc-ra-tu-la": {
+  "t": "<span class=\"res-block-title\">명반에서 읽어 낸 기질</span>",
+  "h": "d983261f"
+ },
+ "hnt.ep-con-hoc-dieu-con-khong": {
+  "t": "아이에게 인연이 없는 것을 억지로 시키면 서로 더 지칠 뿐이에요. 아이의 명반으로 나이 단계마다 어떤 활동을 접하게 하면 좋을지 읽어 보세요.",
+  "h": "aa788dd7"
+ },
+ "hnt.huong-nghiep-som-cho-con": {
+  "t": "자녀 조기 진로",
+  "h": "2735212c"
+ },
+ "hnt.huong-nghiep-som-cho-con-nen": {
+  "t": "<b>자녀 조기 진로</b><span>지금부터 무엇을 접하게 하면 좋을까</span>",
+  "h": "14295eac"
+ },
+ "hnt.huong-nghiep-som-cho-con-tu": {
+  "t": "자녀 조기 진로 — 명보 자미두수",
+  "h": "9c8cd322"
+ },
+ "hnt.lam-trong-thang-nay": {
+  "t": "이번 달에 할 일",
+  "h": "a8ab8a7b"
+ },
+ "hnt.may-mat-nay-khong-phai-cho": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> 이 영역들은 <b>아이에게 부족한 부분이 아니에요</b>. 아이에게 맞는 일은 그 영역을 평가 기준으로 삼지 않는다는 뜻일 뿐이에요.",
+  "h": "c58a74dd"
+ },
+ "hnt.mo-loi-voi-con-the-nao": {
+  "t": "<span class=\"res-block-title\">아이에게 어떻게 말을 꺼낼까</span>",
+  "h": "b216c079"
+ },
+ "hnt.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> / 회 <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> 냥)</span>",
+  "h": "bdeef95d"
+ },
+ "hnt.nhap-la-so-cua-con-nhan": {
+  "t": "아이의 명반을 입력하면 명반에서 읽어 낸 성향, 연령에 맞는 접해 볼 활동, 어른이 하면 좋은 일과 그만둘 일을 알 수 있어요.",
+  "h": "d1c6abd2"
+ },
+ "hnt.nhap-ngay-gio-sinh-cua-con": {
+  "t": "아이의 생년월일과 시간, 걱정되는 점을 입력하세요. 가장 두드러진 성향, 해 볼 만한 활동, 어디서부터 시작할지를 알려 드려요.",
+  "h": "3d914a45"
+ },
+ "hnt.nhin-ra-con": {
+  "t": "<span class=\"res-block-title\">아이를 알아보기</span>",
+  "h": "a6d52b8a"
+ },
+ "hnt.noi-nhat": {
+  "t": "가장 두드러진 것",
+  "h": "b4fa86fd"
+ },
+ "hnt.phan-dinh-huong-chua-mo": {
+  "t": "<span class=\"res-block-title\">아직 열리지 않은 방향 풀이</span>",
+  "h": "a76cca13"
+ },
+ "hnt.sang-lua-sau-thi-doi-gi": {
+  "t": "<span class=\"res-block-title\">다음 연령대에서는 무엇이 달라지나</span>",
+  "h": "b5257805"
+ },
+ "hnt.thien-huong-la-xu-huong-de": {
+  "t": "성향은 <b>접해 보게 하는 경향</b>일 뿐 정해진 직업이 아니에요. 이 표는 이 페이지가 해석을 덧붙인 것이며 고전에 적힌 글귀가 아니에요.<br> 이 도구는 <a href=\"/app/day-con\">명반 맞춤 자녀 교육</a>과 <b>같은 잣대</b>(같은 5가지 기질 축과 8가지 재능 기질)로 아이를 읽지만, 답하는 질문은 달라요. 그쪽은 <i>아이가 어떤 과목을 잘하는지</i>를, 이쪽은 <i>아이에게 어떤 일하는 방식이 맞는지</i>를 물어요. 잣대가 같기 때문에 두 결과는 서로 어긋나지 않고, 질문이 다르기 때문에 순서가 딱 맞지 않을 수 있어요.",
+  "h": "fc1b1e95"
+ },
+ "hnt.thien-huong-noi-nhat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>가장 두드러진<br>성향</span>",
+  "h": "b3d9e48c"
+ },
+ "hnt.thien-huong-noi-nhat-91zz": {
+  "t": "<span class=\"res-block-title\">가장 두드러진 성향</span>",
+  "h": "2954ceff"
+ },
+ "hnt.thoi-lam": {
+  "t": "그만할 일",
+  "h": "ef8d27c0"
+ },
+ "hnt.viec-hop-voi-con-thuong-khong": {
+  "t": "아이에게 맞는 일이 보통 요구하지 않는 것",
+  "h": "513e2289"
+ },
+ "hnt.viec-lam-theo-lua-tuoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>연령대별<br>활동</span>",
+  "h": "56da2915"
+ },
+ "hnt.xem-thien-huong-cua-con-ton": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"compass\"></span><b>아이의 성향 보기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> 냥)</span></small>",
+  "h": "ebca1bd6"
  },
  "hoangdao.1-nhap-ngay": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">날짜 입력</span>",
@@ -2347,6 +3123,202 @@
   "t": "곧 나타날 흐름",
   "h": "6e5a1980"
  },
+ "js.cdvc.anh-dang-tai-co-the-hoi": {
+  "t": "이미지를 불러오는 중이에요. 다소 느릴 수 있어요 — 잠시 기다리시거나",
+  "h": "c4e9709b"
+ },
+ "js.cdvc.anh-minh-hoa-chua-mo": {
+  "t": "예시 그림 — 아직 열리지 않음",
+  "h": "bef5f6d7"
+ },
+ "js.cdvc.anh-minh-hoa-mo-mo-khoa": {
+  "t": "예시 그림(흐림) — 잠금을 풀면 진짜 초상을 볼 수 있어요",
+  "h": "9e03ce37"
+ },
+ "js.cdvc.ban-da-tao-ket-qua-cho": {
+  "t": "✓ 이 명반의 결과를 이미 만들었어요 — 다시 열어도 냥이 차감되지 않아요",
+  "h": "d59efda4"
+ },
+ "js.cdvc.bao-gio-toi-lap-gia-dinh": {
+  "t": "저는 언제 결혼하게 되나요?",
+  "h": "359ca64d"
+ },
+ "js.cdvc.cach-cuc-dac-biet": {
+  "t": "특별한 격국: ",
+  "h": "f4dcacee"
+ },
+ "js.cdvc.chan-dung-nguoi-chong-cua-toi": {
+  "t": "나의 남편 초상",
+  "h": "8037fff1"
+ },
+ "js.cdvc.chan-dung-nguoi-phoi-ngau": {
+  "t": "배우자의 초상",
+  "h": "78b47413"
+ },
+ "js.cdvc.chan-dung-nguoi-phoi-ngau-chua": {
+  "t": "⊙ 배우자 초상이 아직 열리지 않았어요",
+  "h": "c91a9a69"
+ },
+ "js.cdvc.chan-dung-nguoi-vo-cua-toi": {
+  "t": "나의 아내 초상",
+  "h": "54b4f3b2"
+ },
+ "js.cdvc.chinh-tinh-chu": {
+  "t": "<b>중심 주성:</b> ",
+  "h": "a189d8a3"
+ },
+ "js.cdvc.chinh-tinh-ds": {
+  "t": "주성: {ds}",
+  "h": "0594f4e0"
+ },
+ "js.cdvc.chong": {
+  "t": "남편",
+  "h": "92a6f17f"
+ },
+ "js.cdvc.cung-phu-the": {
+  "t": "부처궁: ",
+  "h": "42367865"
+ },
+ "js.cdvc.cung-phu-the-cua-toi-co-gi": {
+  "t": "제 부처궁에는 특별한 점이 있나요?",
+  "h": "2ec84146"
+ },
+ "js.cdvc.cung-phu-the-trong-la-so": {
+  "t": "당신의 명반 속 부처궁",
+  "h": "cf3fd3a1"
+ },
+ "js.cdvc.da-ve-xong-chan-dung-dua": {
+  "t": "당신의 부처궁을 바탕으로 초상을 다 그렸어요. 결혼이나 부처궁, 명반에 대해 더 묻고 싶은 게 있나요?",
+  "h": "777cc6a3"
+ },
+ "js.cdvc.dang-dung-anh": {
+  "t": "이미지 만드는 중…",
+  "h": "7bce9760"
+ },
+ "js.cdvc.dang-ve-chan-dung-thuong-45": {
+  "t": "초상을 그리는 중이에요 (보통 45~60초)",
+  "h": "8fb2076c"
+ },
+ "js.cdvc.dung-gu-ban-chua-gui-anh": {
+  "t": "취향에 맞나요? 이 그림을 친구들에게 보내고, 친구들도 <b>자기 미래의 배우자</b>를 그려 보자고 권해 보세요.",
+  "h": "d435c12c"
+ },
+ "js.cdvc.hoan-canh-gap-go": {
+  "t": "\n\n만남의 상황: ",
+  "h": "7878e939"
+ },
+ "js.cdvc.hon-nhan-cua-toi-co-thuan": {
+  "t": "제 결혼은 순조로울까요?",
+  "h": "9c01a229"
+ },
+ "js.cdvc.khong-the-ket-noi-vui-long": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.cdvc.lap-la-so-xac-dinh-cung": {
+  "t": "명반을 세우고 부처궁을 정하는 중",
+  "h": "f8f01348"
+ },
+ "js.cdvc.loi": {
+  "t": "오류 ",
+  "h": "1b80116b"
+ },
+ "js.cdvc.loi-8d72": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.cdvc.luan-giai-chua-mo": {
+  "t": "풀이 — 아직 열리지 않음",
+  "h": "4c4f7020"
+ },
+ "js.cdvc.luan-giai-cung-phu-the": {
+  "t": "부처궁 풀이",
+  "h": "8e52b135"
+ },
+ "js.cdvc.luan-giai-cung-phu-the-p43z": {
+  "t": "부처궁 풀이",
+  "h": "fee63cc7"
+ },
+ "js.cdvc.luc-giac-cung-phu-the": {
+  "t": "부처궁 육각형",
+  "h": "c1463a39"
+ },
+ "js.cdvc.luot-ve": {
+  "t": "그리기",
+  "h": "85f72421"
+ },
+ "js.cdvc.mo-chan-dung-day-du": {
+  "t": "전체 초상 열기",
+  "h": "9f515b09"
+ },
+ "js.cdvc.n-tuoi-hist": {
+  "t": "{n}세",
+  "h": "25e7a2be"
+ },
+ "js.cdvc.nguoi-chong": {
+  "t": "남편",
+  "h": "bce4fcfa"
+ },
+ "js.cdvc.nguoi-vo": {
+  "t": "아내",
+  "h": "f1b7338b"
+ },
+ "js.cdvc.phac-hoa-tu-cung-phu-the": {
+  "t": "명반의 부처궁에서 그림",
+  "h": "adeba7b7"
+ },
+ "js.cdvc.phac-thao-mo-ta-uoc-luong": {
+  "t": "설명 스케치와 배우자 나이 추정",
+  "h": "7ce20134"
+ },
+ "js.cdvc.phu-tinh-ds": {
+  "t": "보조성: {ds}",
+  "h": "7e63fae4"
+ },
+ "js.cdvc.quet-ma-xem-chan-dung-cua": {
+  "t": "QR 코드를 스캔해 나의 초상 보기",
+  "h": "2b62e4a0"
+ },
+ "js.cdvc.sat-tinh-pha-cach": {
+  "t": " (살성 — 격을 깨뜨림)",
+  "h": "742dce66"
+ },
+ "js.cdvc.sat-tinh-pha-cach-ngay-tu": {
+  "t": " — 살성, 처음부터 격을 깨뜨림",
+  "h": "14fa5401"
+ },
+ "js.cdvc.tai-lai": {
+  "t": "다시 불러오기",
+  "h": "16371241"
+ },
+ "js.cdvc.theo-chinh-tinh": {
+  "t": "주성 기준: ",
+  "h": "ec1e2e45"
+ },
+ "js.cdvc.theo-phu-tinh": {
+  "t": "보조성 기준: ",
+  "h": "4c2c8bf3"
+ },
+ "js.cdvc.vo": {
+  "t": "아내",
+  "h": "98c0d1da"
+ },
+ "js.cdvc.vo-chinh-dieu": {
+  "t": "주성 없음",
+  "h": "bb1c972d"
+ },
+ "js.cdvc.vui-long-nhap-day-du-ngay": {
+  "t": "생년월일을 모두 입력해 주세요.",
+  "h": "2545b4dd"
+ },
+ "js.cdvc.xem-them-ve-tinh-cach": {
+  "t": "제 성격에 대해 더 보기",
+  "h": "0c0df338"
+ },
+ "js.cdvc.y-nghia-co-phap": {
+  "t": "고법에 따른 의미: ",
+  "h": "396825c1"
+ },
  "js.chat.chao": {
   "t": "안녕하세요— ",
   "h": "35004652"
@@ -2515,6 +3487,110 @@
   "t": "소한 ‘ ",
   "h": "1979c56a"
  },
+ "js.cn.ai-cung-han-vao": {
+  "t": "{ai}은(는) 함께 <b>{cung}</b>에 한이 들어요.",
+  "h": "8f48fa76"
+ },
+ "js.cn.ask": {
+  "t": "우리 집은 앞으로 12개월이 어떨까요? 온 가족이 어느 달을 눈여겨봐야 할까요?",
+  "h": "5106642f"
+ },
+ "js.cn.bai-tinh-ds": {
+  "t": "패성: {ds}",
+  "h": "6fbe9f13"
+ },
+ "js.cn.cat-tinh-ds": {
+  "t": "길성: {ds}",
+  "h": "d335af36"
+ },
+ "js.cn.cham": {
+  "t": ".",
+  "h": "3a52ce78"
+ },
+ "js.cn.chua-co-gio-sinh": {
+  "t": "태어난 시간이 없어서 아직 자미두수 명반을 세울 수 없어요.",
+  "h": "3d8d3bbd"
+ },
+ "js.cn.chua-tai-duoc-la-so": {
+  "t": "온 가족의 명반을 불러오지 못했어요. 페이지를 새로고침해 주세요.",
+  "h": "131469d8"
+ },
+ "js.cn.chua-them-duoc-lich": {
+  "t": "캘린더를 추가하지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "h": "6075add3"
+ },
+ "js.cn.han-vao-cung": {
+  "t": "한이 <b>{cung}</b>에 들어요",
+  "h": "593101c7"
+ },
+ "js.cn.mang-chap-chon": {
+  "t": "네트워크가 불안정해 불러오지 못했어요. 페이지를 새로고침해 주세요.",
+  "h": "2adc56e0"
+ },
+ "js.cn.nam-nay-tieu-han-vao": {
+  "t": "올해 소한은 <b>{th}</b>, 유년은 <b>{ln}</b>에 들어 있어요.",
+  "h": "b4b04598"
+ },
+ "js.cn.nguoi": {
+  "t": "구성원",
+  "h": "65ae37a4"
+ },
+ "js.cn.nguoi-nha": {
+  "t": "가족",
+  "h": "447d96d6"
+ },
+ "js.cn.nha-ten-n-nguoi": {
+  "t": "{ten}가족 · {n}명 · 앞으로 12개월(음력)",
+  "h": "174da578"
+ },
+ "js.cn.nhuan-ngan": {
+  "t": "윤",
+  "h": "6eb03d88"
+ },
+ "js.cn.sat-tinh-ds": {
+  "t": "살성: {ds}",
+  "h": "5d9f3071"
+ },
+ "js.cn.thang-ngan": {
+  "t": "{n}월",
+  "h": "efb66afc"
+ },
+ "js.cn.vai-bo": {
+  "t": "아버지",
+  "h": "dbbdf270"
+ },
+ "js.cn.vai-chong": {
+  "t": "남편",
+  "h": "92a6f17f"
+ },
+ "js.cn.vai-con": {
+  "t": "자녀",
+  "h": "eb70b34b"
+ },
+ "js.cn.vai-me": {
+  "t": "어머니",
+  "h": "dfc6f90b"
+ },
+ "js.cn.vai-sinh-nam": {
+  "t": "{vai} · {nam}년생",
+  "h": "3d5b8ffa"
+ },
+ "js.cn.vai-toi": {
+  "t": "나",
+  "h": "40ffd8d0"
+ },
+ "js.cn.vai-vo": {
+  "t": "아내",
+  "h": "98c0d1da"
+ },
+ "js.cn.xac-dinh-gio-sinh": {
+  "t": "출생 시각 알아보기 →",
+  "h": "5122b0fd"
+ },
+ "js.cn.xong-roi-lich-tu-cap-nhat": {
+  "t": "완료됐어요 — 캘린더는 매일 자동으로 업데이트돼요.",
+  "h": "d89d8f57"
+ },
  "js.cns.ai-sinh": {
   "t": "나와 같은 날 태어난 사람",
   "h": "33d96a43"
@@ -2630,6 +3706,1534 @@
  "js.congcutr.xep-theo-mon-tu-vi-tu": {
   "t": "분야별로 정렬: 자미두수, 사주, 관상, 풍수…",
   "h": "cf4f8ecc"
+ },
+ "js.cs.ba-nhanh-nay-khac-nhau-o": {
+  "t": "이 세 갈래는 어디가 다른가요?",
+  "h": "19e39a35"
+ },
+ "js.cs.ba-nhanh-nghe-cu-the-ben": {
+  "t": "당신의 분야 안에 있는 세 가지 구체적인 직업 갈래",
+  "h": "879d2594"
+ },
+ "js.cs.ba-tang-o-tren-noi-ban": {
+  "t": "위의 세 층은 당신에게 맞는 <b>분야</b>와",
+  "h": "d7fe12dc"
+ },
+ "js.cs.bac-chuc-phan": {
+  "t": "직분 등급",
+  "h": "73d28e4f"
+ },
+ "js.cs.ban-hop-lam-gi": {
+  "t": "나에게 맞는 일",
+  "h": "7bf8b024"
+ },
+ "js.cs.ban-hop-lam-nganh-gi-linh": {
+  "t": "나에게 맞는 직업 — 분야 · 역할 · 규모",
+  "h": "ee981a25"
+ },
+ "js.cs.ban-nghieng-ve-kieu-full": {
+  "t": "당신은 **{kieu}** 유형에 가까워요({tt}). 계정을 등록하면(무료 냥 증정) 12가지 측면, 4구간 로드맵, 팀 짜기를 모두 볼 수 있어요 — 그 부분을 연 뒤에 제가 깊이 짚어 드릴게요.",
+  "h": "711e5f38"
+ },
+ "js.cs.boi-canh-viet-nam-dang-lam": {
+  "t": "베트남 상황에 맞춘 것이에요. 목록에 없는 일을 하고 있다면 ",
+  "h": "18705d1c"
+ },
+ "js.cs.bon-dai-van-lien-tiep-phu": {
+  "t": "이어지는 네 개의 대운이 일하는 시기를 덮고 있어요. 점수는 엔진이 매긴 대운 점수이고,",
+  "h": "5fe06b87"
+ },
+ "js.cs.bon-kieu-nguoi-va-cach-goi": {
+  "t": "네 가지 유형과 직업을 제안하는 방식은 <b>명보 자미두수 전문가 팀</b>이 직접 만든 방법이에요.<br><br>",
+  "h": "24a12349"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia": {
+  "t": "일하는 40년을 4구간으로",
+  "h": "ae99b53d"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia-90zk": {
+  "t": "일하는 40년을 네 구간으로 나누기",
+  "h": "ced9f68e"
+ },
+ "js.cs.bon-viec-phai-hoc-khi-bat": {
+  "t": "사람을 이끌기 시작할 때 배워야 할 네 가지",
+  "h": "d246f547"
+ },
+ "js.cs.cac-nhanh-duoi-day-hop-voi": {
+  "t": "아래 갈래들은 당신의 <b>사람으로서의 기질</b>에는 맞지만",
+  "h": "f9533187"
+ },
+ "js.cs.cach-cuc-tai-cung-quan-loc": {
+  "t": "관록궁의 격국",
+  "h": "2c8aa204"
+ },
+ "js.cs.cai-thuc-ban-di": {
+  "t": "당신을 움직이는 것",
+  "h": "e34c0d1a"
+ },
+ "js.cs.cau-hoi-chay-ngam-trong-dau": {
+  "t": "머릿속에서 늘 돌아가는 질문",
+  "h": "92b9b591"
+ },
+ "js.cs.chang-nghe-tiep-theo-cua-toi": {
+  "t": "제 다음 커리어 구간은 어떨까요?",
+  "h": "7e97fdda"
+ },
+ "js.cs.chat-nguoi-noi-bat": {
+  "t": "두드러진 사람으로서의 기질",
+  "h": "31efa257"
+ },
+ "js.cs.chat-nguoi-noi-bat-va-thu": {
+  "t": "두드러진 사람으로서의 기질과 나에게 맞는 일이 요구하지 않는 것",
+  "h": "5b90f04f"
+ },
+ "js.cs.chat-viec-dung-doc-thanh-ban": {
+  "t": "<b>일의 성격</b>으로 대조해 보세요. “당신이 직업을 잘못 골랐다”는 뜻으로 읽지 마세요. ",
+  "h": "4728caa7"
+ },
+ "js.cs.chat-viec-thay-vi-doi-chieu": {
+  "t": "업종 이름이 아니라 <i>일의 성격</i>으로 대조해 보세요.</p>",
+  "h": "94306405"
+ },
+ "js.cs.chinh-tinh-cung-menh": {
+  "t": "명궁의 주성",
+  "h": "dcba7b35"
+ },
+ "js.cs.chinh-tinh-cung-quan-loc": {
+  "t": "관록궁의 주성",
+  "h": "9c8bc6b2"
+ },
+ "js.cs.cho-hay-vap": {
+  "t": "<b>잘 걸려 넘어지는 부분</b>",
+  "h": "0fe4ac0b"
+ },
+ "js.cs.cho-nguoi-dang-o-vi-tri": {
+  "t": "이 위치에 있는 사람에게:",
+  "h": "c0aba160"
+ },
+ "js.cs.chua-dung-duoc-anh-thu-lai": {
+  "t": "이미지를 만들지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "h": "f8055429"
+ },
+ "js.cs.chua-dung-duoc-ho-so-luc": {
+  "t": "지금은 프로필을 만들지 못했어요 — 다시 시도해 주세요.",
+  "h": "3f85746f"
+ },
+ "js.cs.chua-khop-bac-chuc-phan-hien": {
+  "t": "<b>현재 직분 등급과는 아직 맞지 않아요</b>. 지금 서 있을 자리가 아니라 나아갈 방향으로 읽어 주세요. ",
+  "h": "cfa2e82b"
+ },
+ "js.cs.chua-mo-duoc-phan-nhanh-nghe": {
+  "t": "직업 갈래 부분을 열지 못했어요 — 다시 시도해 주세요.",
+  "h": "f13e7f15"
+ },
+ "js.cs.chuc-phan-theo-loi-co": {
+  "t": "고법식 직분",
+  "h": "0504275b"
+ },
+ "js.cs.co-so-trong-la-so": {
+  "t": "명반상의 근거",
+  "h": "43f95044"
+ },
+ "js.cs.con-so-phan-tram-la-do": {
+  "t": "퍼센트 숫자는 <b>사람의 기질과 일의 성격이 맞는 정도</b>이고, ",
+  "h": "65261dc8"
+ },
+ "js.cs.cung-mot-nganh-nhung-moi-nhanh": {
+  "t": "같은 업종이라도 갈래마다 필요한 사람의 기질이 완전히 달라요.</p>",
+  "h": "b2d6705d"
+ },
+ "js.cs.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.cs.da-mo-phan-nhanh-nghe-ten": {
+  "t": "직업 갈래 부분을 열었어요. 당신에게 가장 맞는 갈래는 **{ten}**이에요. 어떤 갈래를 깊이 짚어 볼까요, 아니면 특정 직업에 대해 물어볼까요?",
+  "h": "68b42e6e"
+ },
+ "js.cs.dang-dung": {
+  "t": "만드는 중…",
+  "h": "88400b94"
+ },
+ "js.cs.dang-dung-anh": {
+  "t": "이미지 만드는 중…",
+  "h": "7bce9760"
+ },
+ "js.cs.dang-mo-phan-nhanh-nghe": {
+  "t": "직업 갈래 부분을 여는 중이에요…",
+  "h": "f58ba0b1"
+ },
+ "js.cs.dang-o-day": {
+  "t": "지금 여기",
+  "h": "aa7d3c7e"
+ },
+ "js.cs.day-la-goi-y-huong-khong": {
+  "t": "이것은 방향에 대한 제안이지 직업 지정이 아니에요. 고서가 말하는 것은 <b>일의 성격</b>이에요",
+  "h": "0573bbbd"
+ },
+ "js.cs.day-la-the-manh-tuong-doi": {
+  "t": "이것은 당신 안에서 <b>각 측면 사이의 상대적인 강점</b>이지 다른 사람과 비교한 점수가 아니에요.</p>",
+  "h": "3cea3811"
+ },
+ "js.cs.diem": {
+  "t": " · 점수 ",
+  "h": "0ea58cf8"
+ },
+ "js.cs.diem-8vmw": {
+  "t": "점수",
+  "h": "024af419"
+ },
+ "js.cs.diem-do-engine-cham-tren-chinh": {
+  "t": "엔진이 당신의 명반을 바탕으로 매긴 점수예요(10점 만점).",
+  "h": "03be4bad"
+ },
+ "js.cs.doc-ca-hai-phan-dung-ep": {
+  "t": "</b>의 색채도 꽤 뚜렷해요. 두 부분을 모두 읽고 자신을 한 칸에 억지로 끼워 넣지 마세요.</div>",
+  "h": "24fcc1c0"
+ },
+ "js.cs.doc-theo-cap-dong-cung": {
+  "t": " — 같은 궁의 짝으로 읽음",
+  "h": "249d9a92"
+ },
+ "js.cs.doc-theo-co-phap-phu-mau": {
+  "t": "고법으로 읽으면 <b>부모궁</b>은 윗사람, <b>형제궁</b>은 동등한 사람,",
+  "h": "4f1fa3e2"
+ },
+ "js.cs.doi-mat-hay-ban-giay-cam": {
+  "t": "(대면인지 사무인지, 사람을 이끄는지 기술을 다루는지). 위의 현대 직업 목록은 이 페이지가 옮겨 놓은 것이에요. ",
+  "h": "84acb782"
+ },
+ "js.cs.dung-ngay-bay-gio": {
+  "t": "지금 당장 서 있을 자리가 아니에요.</div>",
+  "h": "cebffac0"
+ },
+ "js.cs.ghep-doi-ai-do-duoc-ban": {
+  "t": "팀 짜기 — 누가 나를 받쳐 줄 수 있나",
+  "h": "616debca"
+ },
+ "js.cs.ho-so": {
+  "t": "프로필",
+  "h": "ebe439c1"
+ },
+ "js.cs.ho-so-cong-so-da-dung-full": {
+  "t": "직장 프로필이 완성됐어요 — 당신은 **{kieu}** 유형에 가까워요({tt}). 가장 강한 것은 **{manh}**예요. 어느 부분을 깊이 짚어 볼까요?",
+  "h": "e1d2fcd1"
+ },
+ "js.cs.ho-so-day-du-chua-mo": {
+  "t": "⊙ 전체 프로필이 아직 열리지 않았어요",
+  "h": "7e47b133"
+ },
+ "js.cs.ho-tro": {
+  "t": "지원",
+  "h": "ed2a55ae"
+ },
+ "js.cs.hop-tac": {
+  "t": "협력",
+  "h": "d934a7d7"
+ },
+ "js.cs.huong-tham-khao-dung-doc-nhu": {
+  "t": "참고용 방향일 뿐이니 단정으로 읽지 마세요.</div>",
+  "h": "dede2dae"
+ },
+ "js.cs.khai-sang": {
+  "t": "개척",
+  "h": "b6833673"
+ },
+ "js.cs.khi-duoc-giao-quyen": {
+  "t": "권한을 위임받았을 때",
+  "h": "90c9e1e0"
+ },
+ "js.cs.khong-co-ten-nganh-ban-dang": {
+  "t": "지금 하고 있는 직업 이름이 목록에 없다고 해서 당신이 잘못 가고 있다는 뜻은 <b>아니에요</b> — ",
+  "h": "e9ea00be"
+ },
+ "js.cs.khong-phai-kha-nang-thanh-cong": {
+  "t": "<b>성공 가능성이 아니에요</b>. 직업 목록은 베트남 상황에 맞춰 이 페이지가 옮겨 놓은 것이에요. ",
+  "h": "a0d5aaf7"
+ },
+ "js.cs.khop": {
+  "t": "일치",
+  "h": "06321169"
+ },
+ "js.cs.kieu": {
+  "t": " · 유형 ",
+  "h": "6d81ffdf"
+ },
+ "js.cs.kieu-4mx9": {
+  "t": "유형 ",
+  "h": "6d21ae2a"
+ },
+ "js.cs.kieu-lai-toa-do-cua-ban": {
+  "t": "⚠ <b>혼합형.</b> 당신의 좌표가 경계선 가까이에 있어서 <b>",
+  "h": "11aff2e8"
+ },
+ "js.cs.kieu-nguoi-nay-la-gi": {
+  "t": "이 유형은 어떤 사람인가요?",
+  "h": "dd192f9f"
+ },
+ "js.cs.kieu-nguoi-o-cho-lam": {
+  "t": "직장에서의 유형",
+  "h": "399f87f5"
+ },
+ "js.cs.la-so-cua-ban-khong-chi": {
+  "t": "당신의 명반에는 <b>두드러지는 갈래가 하나도 나타나지 않아요</b>",
+  "h": "77e78dd8"
+ },
+ "js.cs.lanh-dao": {
+  "t": "리더",
+  "h": "d9b13441"
+ },
+ "js.cs.luong": {
+  "t": "냥)",
+  "h": "c99d25aa"
+ },
+ "js.cs.luu-nien-nam-nay": {
+  "t": "올해의 유년",
+  "h": "1b558770"
+ },
+ "js.cs.luu-nien-o-cung": {
+  "t": " · 유년은 ",
+  "h": "f72ac853"
+ },
+ "js.cs.manh-nhat": {
+  "t": "가장 강함: ",
+  "h": "b67b37ca"
+ },
+ "js.cs.manh-nhat-gixi": {
+  "t": "<b>가장 강한 부분</b>",
+  "h": "fe6a0e48"
+ },
+ "js.cs.mat": {
+  "t": "측면",
+  "h": "473db18f"
+ },
+ "js.cs.mat-can-boi-them-nhat": {
+  "t": "가장 보완이 필요한 측면: ",
+  "h": "91c25ad4"
+ },
+ "js.cs.mat-manh-nhat-trong-12-mat": {
+  "t": "열두 가지 측면 중 가장 강한 것: ",
+  "h": "01df7a24"
+ },
+ "js.cs.mo-ho-so-day-du": {
+  "t": "전체 프로필 열기",
+  "h": "3757bf2c"
+ },
+ "js.cs.mo-phan-nhanh-nghe": {
+  "t": "<b>직업 갈래 부분 열기 →</b>",
+  "h": "d178dc5c"
+ },
+ "js.cs.moi-truong-hop": {
+  "t": "맞는 환경",
+  "h": "14808d08"
+ },
+ "js.cs.moi-truong-ky": {
+  "t": "피해야 할 환경",
+  "h": "0edcadd9"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di": {
+  "t": "일하는 인생의 열두 가지 측면 — 측면별 점수와 이유",
+  "h": "b36da1b8"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di-gqoe": {
+  "t": "일하는 인생의 열두 가지 측면",
+  "h": "7612512c"
+ },
+ "js.cs.muoi-hai-thang-toi-nen-lam": {
+  "t": "앞으로 12개월 동안 무엇을 해야 할까요?",
+  "h": "f98b733c"
+ },
+ "js.cs.muon-cung-xung-chieu": {
+  "t": " — 맞은편 궁을 빌림",
+  "h": "1fb340ea"
+ },
+ "js.cs.muon-xung-chieu": {
+  "t": " (맞은편 궁을 빌림)",
+  "h": "7363dfe3"
+ },
+ "js.cs.nam-nay-chieu-kep": {
+  "t": "올해는 겹으로 비침",
+  "h": "b582a95f"
+ },
+ "js.cs.neu-toi-dang-lam-nghe-khac": {
+  "t": "지금 다른 일을 하고 있다면 어떨까요?",
+  "h": "efac8cf1"
+ },
+ "js.cs.nghe-hop-voi-ban-thuong-khong": {
+  "t": "나에게 맞는 일이 보통 요구하지 않는 것",
+  "h": "48816f36"
+ },
+ "js.cs.nguoc-da": {
+  "t": "흐름을 거스름",
+  "h": "50f7d6cf"
+ },
+ "js.cs.nguon-cach-chia-bon-kieu": {
+  "t": "네 가지 유형으로 나눈 방식의 출처",
+  "h": "8144bf17"
+ },
+ "js.cs.nguon-du-lieu": {
+  "t": "데이터 출처 →",
+  "h": "78319924"
+ },
+ "js.cs.nguon-theo-tu-vi-dau-so": {
+  "t": "📚 <b>출처:</b> <i>『자미두수 신편』</i>에 따름",
+  "h": "0917536a"
+ },
+ "js.cs.nhan-ra-o-cho-lam": {
+  "t": "직장에서 알아볼 수 있는 모습",
+  "h": "b6e2a171"
+ },
+ "js.cs.nhanh-dau-tien-cu-the-phai": {
+  "t": "가장 먼저 잡을 구체적인 갈래는 어디서부터 시작해야 할까요?",
+  "h": "a9550e65"
+ },
+ "js.cs.nhanh-nay-thuong-o-bac-khac": {
+  "t": "이 갈래는 보통 명반이 가리키는 직분 등급과 다른 등급에 있어요.",
+  "h": "a815d5d0"
+ },
+ "js.cs.nhanh-nghe-hop-voi-ban": {
+  "t": "나에게 맞는 직업 갈래",
+  "h": "488563f6"
+ },
+ "js.cs.nhung-pha-kha-ro": {
+  "t": "</b>에 가깝지만 <b>",
+  "h": "e4d67d67"
+ },
+ "js.cs.nhuong": {
+  "t": "양보",
+  "h": "c0333abd"
+ },
+ "js.cs.no-boc-la-thuoc-ha-va": {
+  "t": "<b>복역궁</b>은 부하와 동업자예요. 서로 채우는 법칙은 음과 양을 짝짓는 거예요.</p>",
+  "h": "f843e58b"
+ },
+ "js.cs.no-noi-ve": {
+  "t": "무엇에 대한 것인가",
+  "h": "2247dbea"
+ },
+ "js.cs.o-quy-mo-nao-phan-nay": {
+  "t": "어느 <b>규모</b>에서 맞는지를 말해요. 이 부분은 그 분야 안의 <b>구체적인 갈래</b>를 말해요 — ",
+  "h": "ab6aae0b"
+ },
+ "js.cs.phu-tinh-dong-tai-cung-quan": {
+  "t": "관록궁에 있는 보조성은 위 분야 <b>안에서 범위를 좁히는</b> 것이지 분야를 바꾸는 것이 아니에요. ",
+  "h": "c3fd465d"
+ },
+ "js.cs.quet-ma-xem-kieu-nguoi-cua": {
+  "t": "QR 코드를 스캔해 나의 유형 보기",
+  "h": "abb7f441"
+ },
+ "js.cs.quy-mo-ganh-duoc-bac": {
+  "t": "감당할 수 있는 규모 — 등급 ",
+  "h": "43f37473"
+ },
+ "js.cs.sao-quyet-dinh-linh-vuc": {
+  "t": "분야를 결정하는 별",
+  "h": "31023c67"
+ },
+ "js.cs.thuan-da": {
+  "t": "흐름을 탐",
+  "h": "c65246fb"
+ },
+ "js.cs.thuan-da-nguoc-da-la-so": {
+  "t": "“흐름을 탐 / 거스름”은 대운의 음양 성질을 당신의 본명 유형과 견준 거예요.</p>",
+  "h": "41c5ce0c"
+ },
+ "js.cs.tieu-han-nam-nay": {
+  "t": "올해의 소한",
+  "h": "62da8d5f"
+ },
+ "js.cs.tieu-han-o-cung": {
+  "t": "소한은 ",
+  "h": "aef732f3"
+ },
+ "js.cs.toa-do": {
+  "t": "좌표",
+  "h": "6fda44e7"
+ },
+ "js.cs.toi-co-hop-lam-nganh-x": {
+  "t": "저는 X 업종이 맞을까요?",
+  "h": "ac81904f"
+ },
+ "js.cs.toi-con-thieu-gi-de-vao": {
+  "t": "그 갈래에 들어가려면 무엇이 더 필요할까요?",
+  "h": "4e41376f"
+ },
+ "js.cs.toi-hop-lam-viec-voi-kieu": {
+  "t": "저는 어떤 유형의 사람과 일하면 잘 맞을까요?",
+  "h": "3fbf2004"
+ },
+ "js.cs.toi-nen-tranh-moi-truong-nao": {
+  "t": "어떤 환경을 피해야 할까요?",
+  "h": "14ba354e"
+ },
+ "js.cs.ton": {
+  "t": "<small>비용",
+  "h": "ca8d4e90"
+ },
+ "js.cs.tram-on": {
+  "t": "차분함",
+  "h": "78f14035"
+ },
+ "js.cs.tranh-nhuong": {
+  "t": "겨룸 ↔ 양보: ",
+  "h": "93f67a9e"
+ },
+ "js.cs.tren-thang-10-diem-11-mat": {
+  "t": "10점 만점 — 나머지 11가지 측면, 측면별 이유, 전체 표는 무료로 볼 수 있는 가입 후 프로필에 들어 있어요.",
+  "h": "5ada4a9d"
+ },
+ "js.cs.tren-thang-10-diem-ly-do": {
+  "t": "10점 만점 — 측면별 이유와 보완 방법은 무료로 볼 수 있는 가입 후 프로필에 들어 있어요.",
+  "h": "e5560e3d"
+ },
+ "js.cs.trich-dan-co-thu": {
+  "t": "고서 인용",
+  "h": "1a48a14b"
+ },
+ "js.cs.trong-linh-vuc-do-ban-nghieng": {
+  "t": "<b>그 분야 안에서 당신은 어느 갈래로 기울어 있나</b>",
+  "h": "46deb5f7"
+ },
+ "js.cs.trong-linh-vuc-nay-noi-thang": {
+  "t": "이 분야 안에서요. 솔직히 말해 단정하기에는 신호가 부족해요 — 아래는 그저 ",
+  "h": "288c730f"
+ },
+ "js.cs.trong-may-nganh-do-toi-nen": {
+  "t": "그 몇 가지 업종 중에서 저는 어느 것을 골라야 할까요?",
+  "h": "a94bba40"
+ },
+ "js.cs.tu-cach-theo-cung-menh": {
+  "t": "명궁에서 본 자격",
+  "h": "3623d661"
+ },
+ "js.cs.tu-vi-cong-so-kieu": {
+  "t": "자미 직장 — 유형 ",
+  "h": "910e8c28"
+ },
+ "js.cs.tu-vi-cong-so-ordd": {
+  "t": "자미 직장",
+  "h": "9d18a955"
+ },
+ "js.cs.tuoi": {
+  "t": " 세",
+  "h": "2e261bf5"
+ },
+ "js.cs.vai-ban-nen-nhan-trong-nganh": {
+  "t": "그 업계에서 맡으면 좋은 역할",
+  "h": "f8b3215e"
+ },
+ "js.cs.van-dang-thai-thu-lang-va": {
+  "t": "(운등태차랑)과 <i>『중주파 육십성계』</i>(왕정지). ",
+  "h": "77b93310"
+ },
+ "js.cs.van-nam": {
+  "t": "연운 ",
+  "h": "86712c6e"
+ },
+ "js.cs.vi-du-nghieng-chu-nghia-trong": {
+  "t": "예를 들어 의료 분야에서 “글·문장” 쪽으로 기울면 강의, 연구, 전문 집필 갈래예요 — 그래도 의료 분야예요.",
+  "h": "db475758"
+ },
+ "js.cs.vi-sao-hop": {
+  "t": "<b>맞는 이유:</b>",
+  "h": "6a37b393"
+ },
+ "js.cs.vi-sao-la-so-hop-nhanh": {
+  "t": "왜 명반이 그 갈래에 맞는지 — 사람의 기질을 이름 붙여서",
+  "h": "0ab395f8"
+ },
+ "js.cs.vi-sao-la-so-lai-ra": {
+  "t": "왜 명반에서 이런 유형이 나오나요?",
+  "h": "ed996a33"
+ },
+ "js.cs.viec-lam-duoc-ngay-o-tung": {
+  "t": "각 갈래에서 바로 할 수 있는 일 (베트남 상황 기준)",
+  "h": "3851e61e"
+ },
+ "js.cs.vo-chinh-dieu": {
+  "t": " · 주성 없음",
+  "h": "46b7d17a"
+ },
+ "js.cs.vo-chinh-dieu-pwt9": {
+  "t": "무정요",
+  "h": "bd07d7a9"
+ },
+ "js.cs.vui-long-nhap-du-ngay-thang": {
+  "t": "생년월일을 모두 입력해 주세요.",
+  "h": "771ff27f"
+ },
+ "js.cs.xong-pha": {
+  "t": "돌진",
+  "h": "3b22b749"
+ },
+ "js.cs.xong-tram": {
+  "t": " · 돌진 ↔ 차분함: ",
+  "h": "71afe77a"
+ },
+ "js.ctk.anh-dang-tai-co-the-hoi": {
+  "t": "이미지를 불러오는 중이에요. 다소 느릴 수 있어요 — 잠시 기다리시거나",
+  "h": "c4e9709b"
+ },
+ "js.ctk.anh-minh-hoa": {
+  "t": "예시 그림",
+  "h": "f37e2fa9"
+ },
+ "js.ctk.anh-minh-hoa-mo-mo-khoa": {
+  "t": "예시 그림(흐림) — 잠금을 풀면 나의 진짜 초상을 볼 수 있어요",
+  "h": "e7c8b779"
+ },
+ "js.ctk.ba": {
+  "t": "그분",
+  "h": "6edcd5c8"
+ },
+ "js.ctk.ba-ay-co-benh-tat-hay-tai": {
+  "t": "{ba}은(는) 병이나 재난을 겪은 적이 있나요?",
+  "h": "1df5a238"
+ },
+ "js.ctk.ba-ay-lay-vo-chong-the": {
+  "t": "{ba}의 결혼 생활은 어땠나요?",
+  "h": "c22fea33"
+ },
+ "js.ctk.bac-chuc-phan-engine-cham": {
+  "t": "엔진이 매긴 직분 등급",
+  "h": "694a2943"
+ },
+ "js.ctk.ban-da-tao-ket-qua-cho": {
+  "t": "✓ 이 명반의 결과를 이미 만들었어요 — 다시 열어도 냥이 차감되지 않아요",
+  "h": "d59efda4"
+ },
+ "js.ctk.bien-co": {
+  "t": "▼ 변고",
+  "h": "69c46bc9"
+ },
+ "js.ctk.buc-tranh-chan-dung-ve-rieng": {
+  "t": "당신의 명반에 맞춰 따로 그리는 초상화",
+  "h": "998f85c8"
+ },
+ "js.ctk.chan-dung-cau-chuyen-chua-mo": {
+  "t": "⊙ 초상과 이야기가 아직 열리지 않았어요",
+  "h": "2df0a1d7"
+ },
+ "js.ctk.chan-dung-tien-kiep": {
+  "t": "전생 초상",
+  "h": "e7d0f866"
+ },
+ "js.ctk.chan-dung-tien-kiep-cua-toi": {
+  "t": "나의 전생 초상",
+  "h": "7f493523"
+ },
+ "js.ctk.chan-dung-tien-kiep-gxr5": {
+  "t": "전생 초상",
+  "h": "7aa2c297"
+ },
+ "js.ctk.chinh-tinh-tai-cung-menh": {
+  "t": "명궁에 있는 주성",
+  "h": "64538c55"
+ },
+ "js.ctk.chinh-tinh-tai-cung-quan-loc": {
+  "t": "관록궁에 있는 주성",
+  "h": "2a194366"
+ },
+ "js.ctk.chuc-phan-suy-ra": {
+  "t": "추론된 직분",
+  "h": "f76c76b7"
+ },
+ "js.ctk.chuyen-doi-nv-het-phan-chinh": {
+  "t": "**{nv}**의 일생 이야기는 여기까지가 본문이에요. 이야기가 들려주지 않은 명반 속 내용이 아직 많아요 — {short}에 대해 무엇을 묻고 싶나요?",
+  "h": "12c81ad9"
+ },
+ "js.ctk.cung-an-than": {
+  "t": "신궁 위치",
+  "h": "778b10ab"
+ },
+ "js.ctk.dang-dung-anh": {
+  "t": "이미지 만드는 중…",
+  "h": "7bce9760"
+ },
+ "js.ctk.dang-ve-chan-dung": {
+  "t": "초상을 그리는 중이에요…",
+  "h": "8da3d107"
+ },
+ "js.ctk.dinh-cao": {
+  "t": "★ 정점",
+  "h": "329f34c6"
+ },
+ "js.ctk.doc-9-dai-van-chia-dong": {
+  "t": "아홉 대운을 읽고 인생의 흐름을 5막으로 나누는 중",
+  "h": "6d04f8ee"
+ },
+ "js.ctk.khong-the-ket-noi-vui-long": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.ctk.khong-ve-duoc-chan-dung-lan": {
+  "t": "이번에는 초상을 그리지 못했어요. 아래 이야기 부분은 그대로 모두 볼 수 있어요.",
+  "h": "45ebec08"
+ },
+ "js.ctk.la-so": {
+  "t": "명반: ",
+  "h": "2644d5f2"
+ },
+ "js.ctk.lap-la-so-xac-dinh-chuc": {
+  "t": "명반을 세우고 옛 직분을 정하는 중",
+  "h": "5bf8b6ae"
+ },
+ "js.ctk.loi": {
+  "t": "오류 ",
+  "h": "1b80116b"
+ },
+ "js.ctk.loi-8d72": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.ctk.loi-ket": {
+  "t": "맺음말",
+  "h": "319ac5e1"
+ },
+ "js.ctk.luc-giac-cung-menh": {
+  "t": "명궁 육각형",
+  "h": "e7542de0"
+ },
+ "js.ctk.luot-ve": {
+  "t": "그리기",
+  "h": "85f72421"
+ },
+ "js.ctk.mat-ket-noi-luc-tai-tranh": {
+  "t": "이미지를 불러오다 연결이 끊겼어요 — 다시 가져오는 중이에요…",
+  "h": "48d6deaf"
+ },
+ "js.ctk.mo-chan-dung-day-du": {
+  "t": "전체 초상 열기",
+  "h": "9f515b09"
+ },
+ "js.ctk.mo-ta": {
+  "t": "인물 설명: ",
+  "h": "9465dd78"
+ },
+ "js.ctk.mo-ta-nhan-vat-chu-viet": {
+  "t": "인물 설명과 5막 각각의 글",
+  "h": "da0a1288"
+ },
+ "js.ctk.mot-doi-nguoi-5-hoi": {
+  "t": "한 사람의 일생 — 5막",
+  "h": "551d79c7"
+ },
+ "js.ctk.n-tuoi": {
+  "t": "{n}세",
+  "h": "25e7a2be"
+ },
+ "js.ctk.nhan-vat": {
+  "t": "인물",
+  "h": "c80feef9"
+ },
+ "js.ctk.nhan-vat-nay": {
+  "t": "이 인물",
+  "h": "6350a62b"
+ },
+ "js.ctk.nv-co-giau-khong": {
+  "t": "{nv}은(는) 부유했나요?",
+  "h": "586c4799"
+ },
+ "js.ctk.ong": {
+  "t": "그분",
+  "h": "73f16f79"
+ },
+ "js.ctk.phu-tinh-tai-cung-menh": {
+  "t": "명궁에 있는 보조성",
+  "h": "3d194cb8"
+ },
+ "js.ctk.quet-ma-xem-tien-kiep-cua": {
+  "t": "QR 코드를 스캔해 나의 전생 보기",
+  "h": "fb7663cd"
+ },
+ "js.ctk.tai-lai": {
+  "t": "다시 불러오기",
+  "h": "16371241"
+ },
+ "js.ctk.thang-tram": {
+  "t": "★▼ 기복",
+  "h": "3ec8b7b2"
+ },
+ "js.ctk.tuoi-nhan-vat-trong-tranh": {
+  "t": "그림 속 인물의 나이",
+  "h": "f6ab55f4"
+ },
+ "js.ctk.vi-sao-lai-luan-ra-nhu-vay": {
+  "t": "왜 그렇게 풀이되나요?",
+  "h": "ef2cc0e9"
+ },
+ "js.ctk.viet-cau-chuyen-cuoc-doi": {
+  "t": "일생 이야기를 쓰는 중",
+  "h": "2971394d"
+ },
+ "js.ctk.vo-chinh-dieu-muon-cung-xung": {
+  "t": " — 주성 없음, 맞은편 궁을 빌림",
+  "h": "90aab3d9"
+ },
+ "js.ctk.vui-long-nhap-day-du-ngay": {
+  "t": "생년월일을 모두 입력해 주세요.",
+  "h": "2545b4dd"
+ },
+ "js.daycon.5-la-muc-giua-cua-hang": {
+  "t": "\n\n5는 수천 건의 아이 명반을 기준으로 한 중간값이며 “10점 만점에 5점”이라는 뜻이 아니에요. 축의 양 끝 모두 가치가 있어요.",
+  "h": "99fb1a17"
+ },
+ "js.daycon.7-chat-con-lai-5-truc": {
+  "t": "나머지 7가지 기질, 5가지 기질 축, 교육 방향은 전체 버전에 들어 있어요.",
+  "h": "00fde99c"
+ },
+ "js.daycon.ba-chat-dung-dau-o-duoi": {
+  "t": "위에 있는 상위 세 가지 기질은 결론이 아니라 먼저 해 볼 만한 곳이에요.</p></div>",
+  "h": "fa2636f2"
+ },
+ "js.daycon.ban-co-muon-doi-chieu-them": {
+  "t": "나 자신(아버지 또는 어머니)의 명반도 함께 대조해 볼까요? “두 사람의 관계” 항목이 더해져요.",
+  "h": "1fea98b9"
+ },
+ "js.daycon.ban-da-xem-ban-nay-roi": {
+  "t": "✓ 이미 본 풀이예요 — 다시 열어도 냥이 차감되지 않아요",
+  "h": "7d2c6a5b"
+ },
+ "js.daycon.ban-huong-dan-day-du-chua": {
+  "t": "⊙ 전체 교육 가이드가 아직 열리지 않았어요",
+  "h": "1e7a8a78"
+ },
+ "js.daycon.ban-luan": {
+  "t": "풀이서",
+  "h": "b6f609bf"
+ },
+ "js.daycon.ban-nay-doc-tu": {
+  "t": "이 풀이는 입력하신 생년월일시로 세운 <b>",
+  "h": "d989b954"
+ },
+ "js.daycon.ban-se-nhan-cach-ra-bai": {
+  "t": "받을 수 있는 내용: 공부 시간을 더 늘리는 대신, 아이가 받아들이는 방식에 맞는 과제 내기와 책상 꾸리기.",
+  "h": "49791304"
+ },
+ "js.daycon.ban-se-nhan-chat-viec-hop": {
+  "t": "받을 수 있는 내용: 아이에게 맞는 일의 결과, 아이가 스스로 말하게 만드는 질문법 — 전공 이름이 아니에요.",
+  "h": "dd0da12e"
+ },
+ "js.daycon.ban-se-nhan-chuyen-gi-con": {
+  "t": "받을 수 있는 내용: 아이가 아직 들어 주는 이야기와, 꺼내는 즉시 마음을 닫게 만드는 말투.",
+  "h": "20335789"
+ },
+ "js.daycon.ban-se-nhan-dua-nay-can": {
+  "t": "받을 수 있는 내용: 이 아이에게 필요한 건 밖으로 이끌어 주는 것일까, 가만히 두는 것일까. 겉으로는 비슷해 보여도 전혀 다른 두 유형의 아이예요.",
+  "h": "cd7192ac"
+ },
+ "js.daycon.ban-se-nhan-mot-ban-mo": {
+  "t": "받을 수 있는 내용: 이 아이가 어떤 사람인지 그려 낸 글이에요. 일상에서 그 아이를 알아볼 수 있을 만큼요.",
+  "h": "2846cd50"
+ },
+ "js.daycon.ban-se-nhan-phan-nao-la": {
+  "t": "받을 수 있는 내용: 어디까지가 타고난 기질이라 이끌어 줘야 하는 부분이고, 어디부터가 어른의 말투 때문인지 — 바로 고칠 수 있어요.",
+  "h": "565f27fd"
+ },
+ "js.daycon.bat-dau-the-nao": {
+  "t": "<b>시작하는 방법:</b>",
+  "h": "ac776bdf"
+ },
+ "js.daycon.bay-cua-chat-nay": {
+  "t": "<b>이 기질의 함정:</b>",
+  "h": "1847b63e"
+ },
+ "js.daycon.be-gai": {
+  "t": "여자아이",
+  "h": "af93dba0"
+ },
+ "js.daycon.be-trai": {
+  "t": "남자아이",
+  "h": "274225bc"
+ },
+ "js.daycon.bo-qua": {
+  "t": "건너뛰기",
+  "h": "861dafde"
+ },
+ "js.daycon.bo-qua-doi-chieu-la-so": {
+  "t": "내 명반 대조는 건너뛰었어요.",
+  "h": "7c25b196"
+ },
+ "js.daycon.cach-choi-ngay-o-nha-hop": {
+  "t": " 개의 집에서 할 수 있는 놀이</b>를 미리 골랐어요 — 구체적인 이름은 전체 버전에서 확인하세요.</p>",
+  "h": "4d33ef7d"
+ },
+ "js.daycon.cach-con-tiep-thu": {
+  "t": "아이가 받아들이는 방식",
+  "h": "d4eac771"
+ },
+ "js.daycon.cach-cuc": {
+  "t": " 개의 격국, ",
+  "h": "a4f8bc9a"
+ },
+ "js.daycon.cat": {
+  "t": "길 ",
+  "h": "bbbbd4e0"
+ },
+ "js.daycon.chan-dung": {
+  "t": "초상",
+  "h": "30421728"
+ },
+ "js.daycon.chang-dai-van": {
+  "t": " 개의 대운 구간이 있어요. ",
+  "h": "0bc2d397"
+ },
+ "js.daycon.chat-can-boi-them-nhat": {
+  "t": "가장 보완이 필요한 기질: ",
+  "h": "4c7acf8e"
+ },
+ "js.daycon.chat-nang-khieu-cao-nhat": {
+  "t": "가장 높은 재능 기질: ",
+  "h": "1018ec48"
+ },
+ "js.daycon.chat-nua-cung-noi": {
+  "t": " 가지 기질</b>도 두드러져요(",
+  "h": "7f9974ca"
+ },
+ "js.daycon.cho-con-tham-gia-kieu-nao": {
+  "t": "<h5>어떤 방식으로 참여시킬까</h5>",
+  "h": "1b74c443"
+ },
+ "js.daycon.cho-nguoi-lon-hay-hieu-nham": {
+  "t": "어른들이 자주 오해하는 부분",
+  "h": "f78ab78d"
+ },
+ "js.daycon.cho-thay-xin-thong-tin-cua": {
+  "t": "아이의 정보를 알려 주세요.",
+  "h": "e81463c3"
+ },
+ "js.daycon.chua-cham": {
+  "t": "미채점",
+  "h": "a20bbf69"
+ },
+ "js.daycon.chua-chat-nao-noi-han-len": {
+  "t": "아직 두드러진 기질이 없어요",
+  "h": "44a78494"
+ },
+ "js.daycon.chua-chat-nao-noi-han-nen": {
+  "t": " · 두드러진 기질이 없어서 <b>먼저 해 볼 만한 상위 세 가지 기질</b>을 보여 드려요",
+  "h": "95fc607c"
+ },
+ "js.daycon.chua-chat-nao-vuot-nguong-nen": {
+  "t": "기준선을 넘은 기질이 아직 없어요 — 폭넓게 해 보게 하고 아이의 실제 반응을 살펴보세요.",
+  "h": "986be904"
+ },
+ "js.daycon.chua-vuot-nguong-nhung-cao-nhat": {
+  "t": "아직 기준선을 넘지는 않았지만 8가지 기질 중에서는 가장 높아요. ",
+  "h": "7b04f512"
+ },
+ "js.daycon.co-doi-chieu": {
+  "t": "네, 대조할게요 →",
+  "h": "a3846e57"
+ },
+ "js.daycon.cung-an-than": {
+  "t": "<li><b>신궁 위치</b> — ",
+  "h": "23b5a7a9"
+ },
+ "js.daycon.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.daycon.cung-tinh-am-duong-de-va": {
+  "t": "음양 성질이 같아요 — 부딪히기 쉬워요",
+  "h": "38ee66ae"
+ },
+ "js.daycon.cung-tu-tuc-cua-ban": {
+  "t": "내 자녀궁",
+  "h": "f546ca50"
+ },
+ "js.daycon.da": {
+  "t": "흐름 ",
+  "h": "ea471098"
+ },
+ "js.daycon.da-chon-san": {
+  "t": "<p>이 기질에 맞는 활동으로 <b>",
+  "h": "0f8b5933"
+ },
+ "js.daycon.dang-o-chang-nay": {
+  "t": " · 지금 이 구간에 있어요",
+  "h": "dca615be"
+ },
+ "js.daycon.day-con-theo-la-so": {
+  "t": "명반 맞춤 자녀 교육",
+  "h": "2013a771"
+ },
+ "js.daycon.day-con-theo-la-so-6c04": {
+  "t": "명반 맞춤 자녀 교육",
+  "h": "80688ea6"
+ },
+ "js.daycon.day-con-theo-la-so-l6v3": {
+  "t": "명반 맞춤 자녀 교육 — ",
+  "h": "90ccd72e"
+ },
+ "js.daycon.day-la-ban-huong-dan-nuoi-ten": {
+  "t": "**{ten}**의 교육 가이드예요. 더 묻고 싶은 상황이 있나요?",
+  "h": "6e9c3d69"
+ },
+ "js.daycon.dieu-ban-dang-lo-ve-con": {
+  "t": "아이에 대해 걱정되는 점은 무엇인가요?",
+  "h": "75d020b9"
+ },
+ "js.daycon.dieu-ban-dang-lo-viet-rieng": {
+  "t": "걱정되는 점을 아이의 명반에 맞춰 따로 작성",
+  "h": "3f67856e"
+ },
+ "js.daycon.dieu-cha-me-dang-lo": {
+  "t": "부모가 걱정하는 점: {lo}",
+  "h": "cc98d53f"
+ },
+ "js.daycon.dieu-dang-lo": {
+  "t": "걱정되는 점",
+  "h": "1c1218e7"
+ },
+ "js.daycon.dieu-dang-lo-s1b1": {
+  "t": "걱정되는 점: <b>",
+  "h": "707a2eb1"
+ },
+ "js.daycon.dinh-huong-cach-day": {
+  "t": "교육 방향과 방법",
+  "h": "fb8a0485"
+ },
+ "js.daycon.dinh-huong-dh": {
+  "t": "방향: {dh}",
+  "h": "c20461b0"
+ },
+ "js.daycon.dinh-huong-moi-truong-hoc-phuong": {
+  "t": "학습 환경의 방향 + 아이에게 맞는 교육 방법",
+  "h": "9673ce91"
+ },
+ "js.daycon.do-5-truc-tinh-khi-va": {
+  "t": "5가지 기질 축과 8가지 재능 기질 측정",
+  "h": "44451f2e"
+ },
+ "js.daycon.doi-chieu-them-voi-la-so": {
+  "t": "내 명반과의 대조도 더했어요 ✓",
+  "h": "65992be6"
+ },
+ "js.daycon.doi-chieu-voi-la-so-cua": {
+  "t": "내 명반과의 대조: ",
+  "h": "69111647"
+ },
+ "js.daycon.dong-vien-kieu-nay-moi-vao": {
+  "t": "이런 방식이어야 마음에 와닿는 격려",
+  "h": "8615f222"
+ },
+ "js.daycon.du-kien-lap-ra-tu-chinh": {
+  "t": " 건의 데이터</b>를 읽어 낸 거예요 — ",
+  "h": "fdb76ddf"
+ },
+ "js.daycon.gio-sinh-cua-ban-la-may": {
+  "t": "태어난 시간은 몇 시인가요?",
+  "h": "3e121266"
+ },
+ "js.daycon.gioi-tinh-cua-ban-cha-me": {
+  "t": "내 성별(아버지/어머니)은 무엇인가요?",
+  "h": "3e7f29e6"
+ },
+ "js.daycon.hai-me-con-hay-va-nhau": {
+  "t": "엄마와 아이는 어디에서 자주 부딪히나요?",
+  "h": "8121e071"
+ },
+ "js.daycon.hay-bi-doc-nham": {
+  "t": "<p><b>자주 오해받는 점:</b> ",
+  "h": "560ec4eb"
+ },
+ "js.daycon.hoat-dong-de-dang-ky-ra": {
+  "t": " 개의 등록·외출 활동</b>과 <b>",
+  "h": "047d6333"
+ },
+ "js.daycon.hoi-nha-truong": {
+  "t": "<b>학교에 물어볼 것:</b>",
+  "h": "2b67b4bb"
+ },
+ "js.daycon.hop": {
+  "t": "<p><b>잘 맞는 것:</b> ",
+  "h": "23262161"
+ },
+ "js.daycon.khac-tinh-am-duong-de-bu": {
+  "t": "음양 성질이 달라요 — 서로 채워 주기 쉬워요",
+  "h": "b5f77a93"
+ },
+ "js.daycon.khoa": {
+  "t": "잠김",
+  "h": "393cb36a"
+ },
+ "js.daycon.khoang-mot-phan-bay-so-la": {
+  "t": "명반 일곱 개 중 하나쯤이 여기에 해당해요.</p>",
+  "h": "ff8e890c"
+ },
+ "js.daycon.khong-co-buoc-nao-doan-mo": {
+  "t": "짐작으로 한 단계는 하나도 없어요. 생년월일시의 세부를 하나만 바꿔도 위 표 전체가 달라져요.",
+  "h": "065d23da"
+ },
+ "js.daycon.khong-co-chinh-tinh": {
+  "t": "주성 없음",
+  "h": "753ded73"
+ },
+ "js.daycon.khong-dat-ten": {
+  "t": "이름 없음",
+  "h": "295915d5"
+ },
+ "js.daycon.khong-the-ket-noi-vui-long": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.daycon.khung-dai-van": {
+  "t": "대운 구간 ",
+  "h": "06be9124"
+ },
+ "js.daycon.kieu-cua-ban-kieu": {
+  "t": "내 유형: {kieu}",
+  "h": "1f89ad05"
+ },
+ "js.daycon.ky-luat-kieu-nay-phan-tac": {
+  "t": "역효과를 내는 훈육 방식",
+  "h": "0af70e1c"
+ },
+ "js.daycon.ky-luat-phan-tac-dung-kl": {
+  "t": "역효과를 내는 훈육 방식: {kl}",
+  "h": "4ed18b67"
+ },
+ "js.daycon.la-so": {
+  "t": "명반: ",
+  "h": "2644d5f2"
+ },
+ "js.daycon.la-so-cua-con-khong-nghieng": {
+  "t": "<p>아이의 명반은 어느 영역으로도 <b>뚜렷하게 기울지 않아요</b>. 기계가 못 읽은 것이 아니라 엄연한 하나의 결과예요. ",
+  "h": "4465b58f"
+ },
+ "js.daycon.lam-con-bo-ngang": {
+  "t": "<p><b>아이가 중간에 그만두게 되는 것:</b> ",
+  "h": "4bfcce62"
+ },
+ "js.daycon.lam-gi-tu-toi-nay-nen": {
+  "t": "오늘 밤부터 할 일 — 하면 좋은 것과 피할 것",
+  "h": "fabc2ced"
+ },
+ "js.daycon.lap-la-so-phan-kieu-nguoi": {
+  "t": "명반을 세우고 유형 분류",
+  "h": "61f07874"
+ },
+ "js.daycon.loi": {
+  "t": "오류 ",
+  "h": "1b80116b"
+ },
+ "js.daycon.loi-8d72": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.daycon.luong": {
+  "t": "냥 →",
+  "h": "36d6704d"
+ },
+ "js.daycon.luu-nien-cung": {
+  "t": "유년 궁 ",
+  "h": "8f5a16cc"
+ },
+ "js.daycon.mo-ban-huong-dan-day-du": {
+  "t": "전체 교육 가이드 열기",
+  "h": "5b95fbd4"
+ },
+ "js.daycon.muc-trong-la-so": {
+  "t": "개 더 보기",
+  "h": "4e83a32a"
+ },
+ "js.daycon.muon-xung-chieu": {
+  "t": " (맞은편 궁을 빌림)",
+  "h": "7363dfe3"
+ },
+ "js.daycon.nam-giua-dung-duoc-ca-hai": {
+  "t": "중간이라 두 방식 모두 쓸 수 있어요",
+  "h": "88eb619c"
+ },
+ "js.daycon.nam-truc-tinh-khi": {
+  "t": "다섯 가지 기질 축",
+  "h": "9d3afdaa"
+ },
+ "js.daycon.nam-truc-tinh-khi-tam-chat": {
+  "t": "다섯 가지 기질 축 + 여덟 가지 재능 기질을 아이의 명반으로 채점",
+  "h": "3ff91004"
+ },
+ "js.daycon.nen": {
+  "t": "<p><b>하면 좋은 것:</b> ",
+  "h": "96dd52e2"
+ },
+ "js.daycon.nen-cho-ten-thu-hoat-dong": {
+  "t": "{ten}에게 먼저 어떤 활동을 해 보게 하면 좋을까요?",
+  "h": "c13288e1"
+ },
+ "js.daycon.ngay-sinh-duong-lich-cua-ban": {
+  "t": "양력 생년월일은 언제인가요?",
+  "h": "ef23d3fb"
+ },
+ "js.daycon.nhom-tuoi": {
+  "t": "연령대: <b>",
+  "h": "974ef95b"
+ },
+ "js.daycon.o-nha": {
+  "t": "<p><b>집에서의 모습:</b> ",
+  "h": "adc7648c"
+ },
+ "js.daycon.pha-them": {
+  "t": "추가로 섞인 유형:",
+  "h": "4b629d3a"
+ },
+ "js.daycon.ra-bai-giao-viec": {
+  "t": "과제 내기 / 일 맡기기",
+  "h": "2dde825d"
+ },
+ "js.daycon.sach-dan-ve-sao": {
+  "t": "— 명궁의 별",
+  "h": "7b5e7401"
+ },
+ "js.daycon.sao-an-tren-12-cung": {
+  "t": " 개의 별이 12궁에 배치되고, ",
+  "h": "a6914f13"
+ },
+ "js.daycon.sat": {
+  "t": " / 살 ",
+  "h": "c472d1aa"
+ },
+ "js.daycon.suy-tu": {
+  "t": "</b> — 추론 근거: ",
+  "h": "55a15f14"
+ },
+ "js.daycon.tai-cung-menh": {
+  "t": " 에 대한 고전의 인용</span></div>",
+  "h": "173c6b01"
+ },
+ "js.daycon.tam-chat-nang-khieu": {
+  "t": "여덟 가지 재능 기질",
+  "h": "10c9f44e"
+ },
+ "js.daycon.ten-nghieng-ve-kieu-kieu": {
+  "t": "{ten}은(는) {kieu} 유형에 가까워요({tutuong})",
+  "h": "aea15b43"
+ },
+ "js.daycon.thap-nhat-trong-8-chat-cach": {
+  "t": "8가지 기질 중 가장 낮아요 — 보완하는 방법과 구체적인 방향은 전체 버전에 들어 있어요.",
+  "h": "a2f3c473"
+ },
+ "js.daycon.thu-con-can-duoc-day-them": {
+  "t": "아이에게 더 가르쳐야 할 것",
+  "h": "45fd44a4"
+ },
+ "js.daycon.tiep-tuc": {
+  "t": "계속 →",
+  "h": "86f35ed9"
+ },
+ "js.daycon.tieu-han-cung": {
+  "t": "소한 궁 ",
+  "h": "4d7ba471"
+ },
+ "js.daycon.toi-nay-ten-lai-khong-chiu": {
+  "t": "오늘 밤 {ten}이(가) 또 공부를 안 하려고 해요. 어떻게 말을 꺼내야 할까요?",
+  "h": "5cea25be"
+ },
+ "js.daycon.tuoi": {
+  "t": " 세</b>",
+  "h": "e5f74880"
+ },
+ "js.daycon.tuoi-3v6h": {
+  "t": " 세",
+  "h": "2e261bf5"
+ },
+ "js.daycon.tuoi-tuoi-mu": {
+  "t": " 세 (세는나이)",
+  "h": "f62485fd"
+ },
+ "js.daycon.vach-dut-nguong-dang-cho-thu": {
+  "t": "▲ 점선 = “해 볼 만한” 기준선",
+  "h": "16e23b36"
+ },
+ "js.daycon.van-nam": {
+  "t": "<li><b>연운 ",
+  "h": "1192aa32"
+ },
+ "js.daycon.vi-sao-la-so-lai-do": {
+  "t": "왜 명반에서 이런 축들이 측정되나요?",
+  "h": "f65c0dfb"
+ },
+ "js.daycon.viec-dung-luc-nay-la-cho": {
+  "t": "지금 필요한 건 <b>폭넓게 해 보게 하고 아이의 실제 반응을 살펴보는 것</b>이에요. 아이를 대신해 고르지 마세요.",
+  "h": "b4af8a17"
+ },
+ "js.daycon.viet-dinh-huong-va-huong-dan": {
+  "t": "방향과 교육 가이드 작성",
+  "h": "10f821e4"
+ },
+ "js.daycon.vui-long-nhap-day-du-ngay": {
+  "t": "아이의 생년월일을 연·월·일까지 모두 입력해 주세요.",
+  "h": "784233ac"
+ },
+ "js.daycon.vuot-nguong-dang-cho-thu": {
+  "t": "기준선을 넘었어요(“해 볼 만함”). ",
+  "h": "ee663dd4"
+ },
+ "js.daycon.vuot-nguong-dang-cho-thu-khong": {
+  "t": "★ = 기준선을 넘은 기질(“해 볼 만함”)이며 재능이 확인된 것은 아니에요.",
+  "h": "1dec3af7"
+ },
+ "js.daycon.xem-ban-huong-dan-day-du": {
+  "t": "✦ 전체 교육 가이드 보기 —",
+  "h": "3a668eed"
+ },
+ "js.daycon.xem-diem-o-bieu-do-tren": {
+  "t": ") — 점수는 위 그래프에서 확인하세요. 각 기질의 자세한 내용은 전체 버전에서 읽을 수 있어요.",
+  "h": "edfabb37"
+ },
+ "js.daycon.xem-them": {
+  "t": "<summary>명반 항목 ",
+  "h": "c5afdcd1"
+ },
+ "js.duyenno.anh-dang-tai-co-the-hoi": {
+  "t": "이미지를 불러오는 중이에요. 다소 느릴 수 있어요 — 잠시 기다리시거나",
+  "h": "c4e9709b"
+ },
+ "js.duyenno.anh-minh-hoa-mo": {
+  "t": "예시 그림 (흐림)",
+  "h": "bb4bd552"
+ },
+ "js.duyenno.ban-co-muon-them-who": {
+  "t": "{who}을(를) 이야기에 추가할까요? (최대 {max}명)",
+  "h": "b57078f6"
+ },
+ "js.duyenno.ban-da-xem-duyen-no-cua": {
+  "t": "✓ 이 명반 그룹의 인연은 이미 봤어요 — 다시 열어도 냥이 차감되지 않아요",
+  "h": "60fbdfb0"
+ },
+ "js.duyenno.bo-nguoi-nay": {
+  "t": "이 사람 삭제",
+  "h": "690b6802"
+ },
+ "js.duyenno.buc-tranh-chung-minh-hoa": {
+  "t": "모두의 그림 — 예시",
+  "h": "0e03eaba"
+ },
+ "js.duyenno.cac-dau-hieu-con-lai-va": {
+  "t": " — 나머지 신호와 모든 사람 사이의 인연 전체 관계망은 전체 버전에 들어 있어요.",
+  "h": "c9821896"
+ },
+ "js.duyenno.cac-moi-duyen-trong-nhom": {
+  "t": "그룹 안의 인연들",
+  "h": "d40e26f3"
+ },
+ "js.duyenno.can-it-nhat-hai-la-so": {
+  "t": "명반이 최소 두 개 필요해요.",
+  "h": "4708eed7"
+ },
+ "js.duyenno.cho-thay-xin-thong-tin-cua-who": {
+  "t": "{who}의 정보를 알려 주세요.",
+  "h": "471d6f1e"
+ },
+ "js.duyenno.co-them-nguoi": {
+  "t": "네, 추가할게요 →",
+  "h": "ff2cea9c"
+ },
+ "js.duyenno.dang-dung-anh": {
+  "t": "이미지 만드는 중…",
+  "h": "7bce9760"
+ },
+ "js.duyenno.dang-ve-buc-tranh-ca-nhom": {
+  "t": "모두를 담은 그림을 그리는 중이에요…",
+  "h": "dcd60961"
+ },
+ "js.duyenno.dau-hieu-label": {
+  "t": "신호: {label}",
+  "h": "cae6f731"
+ },
+ "js.duyenno.doi-chieu-dia-chi-ngu-hanh": {
+  "t": "지지, 오행, 주성을 대조하는 중",
+  "h": "7e76a0f2"
+ },
+ "js.duyenno.du-n-nguoi-xem-ngay": {
+  "t": "{n}명으로 바로 볼게요.",
+  "h": "fcfd4d3d"
+ },
+ "js.duyenno.du-roi-xem-ngay": {
+  "t": "충분해요, 지금 볼게요 →",
+  "h": "d8de245d"
+ },
+ "js.duyenno.dung-tu-la-so": {
+  "t": "<b>명반을 바탕으로 작성</b><br>",
+  "h": "5de147a7"
+ },
+ "js.duyenno.duyen-no-tien-kiep": {
+  "t": "전생 인연",
+  "h": "c6b0ccb5"
+ },
+ "js.duyenno.duyen-no-tien-kiep-r7a2": {
+  "t": "전생 인연",
+  "h": "fc5445d2"
+ },
+ "js.duyenno.giua-a-va-b-gist": {
+  "t": "{a}와(과) {b} 사이: {gist} 4막 이야기와 모두를 담은 그림은 전체 버전에 들어 있어요.",
+  "h": "b21b2737"
+ },
+ "js.duyenno.gui-ket-qua-nay-cho-ca-nhom-names": {
+  "t": "이 결과를 그룹 전체({names})에게 보내 보세요 — 다들 자기 역할이 궁금해서 곧바로 자기 명반도 찾아보고 싶어 할 거예요.",
+  "h": "a9813a1c"
+ },
+ "js.duyenno.gui-ket-qua-nay-cho-name-xem": {
+  "t": "이 결과를 <b>{name}</b>에게 보내 보세요 — 궁금해서 곧바로 자기 명반도 찾아보고 싶어 할 거예요.",
+  "h": "a89262bb"
+ },
+ "js.duyenno.hai-nguoi-de-va-nhau-o": {
+  "t": "두 사람은 어디에서 부딪히기 쉬운가요?",
+  "h": "7d27557f"
+ },
+ "js.duyenno.khong-the-ket-noi-vui-long": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.duyenno.khong-ve-duoc-buc-tranh-lan": {
+  "t": "이번에는 그림을 그리지 못했어요. 아래 이야기 부분은 그대로 모두 볼 수 있어요.",
+  "h": "8610db8b"
+ },
+ "js.duyenno.kiep-nay-gap-lai-thi-nen": {
+  "t": "이번 생에 다시 만났다면 거리를 어느 정도 두는 게 좋을까요?",
+  "h": "c7c61218"
+ },
+ "js.duyenno.la-so": {
+  "t": "명반: ",
+  "h": "2644d5f2"
+ },
+ "js.duyenno.la-so-vjrb": {
+  "t": " — 명반: ",
+  "h": "2a79724a"
+ },
+ "js.duyenno.lap-la-so-dung-nhan-vat": {
+  "t": "명반을 세우고 등장인물을 구성",
+  "h": "86c4f80f"
+ },
+ "js.duyenno.loai-duyen-label": {
+  "t": "인연의 종류: {label}",
+  "h": "943e47bf"
+ },
+ "js.duyenno.loi": {
+  "t": "오류 ",
+  "h": "1b80116b"
+ },
+ "js.duyenno.loi-8d72": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.duyenno.loi-ket": {
+  "t": "맺음말",
+  "h": "319ac5e1"
+ },
+ "js.duyenno.luot-xem": {
+  "t": "열람",
+  "h": "980f8057"
+ },
+ "js.duyenno.mac-dinh-hai-nguoi-them-max": {
+  "t": "기본은 두 사람이에요. 최대 {max}명까지 추가할 수 있어요 — 그룹 전체가 하나의 이야기와 한 장의 그림에 담겨요.",
+  "h": "18e1432f"
+ },
+ "js.duyenno.mat-ket-noi-luc-tai-tranh": {
+  "t": "이미지를 불러오다 연결이 끊겼어요 — 다시 가져오는 중이에요…",
+  "h": "48d6deaf"
+ },
+ "js.duyenno.moi-duyen": {
+  "t": "인연",
+  "h": "eb37f74e"
+ },
+ "js.duyenno.moi-duyen-4-hoi": {
+  "t": "인연 이야기 — 4막",
+  "h": "982f3e5a"
+ },
+ "js.duyenno.moi-duyen-giua-names": {
+  "t": "**{names}**의 인연은 여기까지가 본문이에요. 더 묻고 싶은 게 있나요?",
+  "h": "ea285156"
+ },
+ "js.duyenno.nam": {
+  "t": "남",
+  "h": "b580ba1b"
+ },
+ "js.duyenno.name-la-nguoi-the-nao": {
+  "t": "{name}은(는) 어떤 사람인가요?",
+  "h": "03c43db7"
+ },
+ "js.duyenno.nguoi-ban-muon-xem-duyen-no": {
+  "t": "인연을 보고 싶은 사람",
+  "h": "0f74fdf8"
+ },
+ "js.duyenno.nguoi-thu-ba": {
+  "t": "세 번째 사람",
+  "h": "ed014d5c"
+ },
+ "js.duyenno.nguoi-thu-hai": {
+  "t": "두 번째 사람",
+  "h": "b330c7a6"
+ },
+ "js.duyenno.nguoi-thu-nam": {
+  "t": "다섯 번째 사람",
+  "h": "b2a0303b"
+ },
+ "js.duyenno.nguoi-thu-nhat": {
+  "t": "첫 번째 사람",
+  "h": "955e7151"
+ },
+ "js.duyenno.nguoi-thu-tu": {
+  "t": "네 번째 사람",
+  "h": "12dadc83"
+ },
+ "js.duyenno.nhan-vat-cua-ban": {
+  "t": "내 등장인물",
+  "h": "850ad819"
+ },
+ "js.duyenno.nu": {
+  "t": "여",
+  "h": "feb92ccd"
+ },
+ "js.duyenno.quet-ma-xem-duyen-no-cua": {
+  "t": "QR 코드를 스캔해 나의 인연 보기",
+  "h": "2d7c866a"
+ },
+ "js.duyenno.tai-lai": {
+  "t": "다시 불러오기",
+  "h": "16371241"
+ },
+ "js.duyenno.them-vao-nhom": {
+  "t": "그룹에 추가",
+  "h": "366d87cc"
+ },
+ "js.duyenno.them-who": {
+  "t": "{who} 추가 ✓",
+  "h": "6ed59d06"
+ },
+ "js.duyenno.thuong-la-ban": {
+  "t": "보통은 본인",
+  "h": "a9671f02"
+ },
+ "js.duyenno.toi-da-max-nguoi-mot-luot": {
+  "t": "한 번에 최대 {max}명까지예요.",
+  "h": "05bf983e"
+ },
+ "js.duyenno.trong-nhom-nay-ai-de-va": {
+  "t": "이 그룹에서 가장 부딪히기 쉬운 사람은 누구인가요?",
+  "h": "4deab4cd"
+ },
+ "js.duyenno.truc-cua-cau-chuyen": {
+  "t": "이야기의 중심축",
+  "h": "1b316be1"
+ },
+ "js.duyenno.truc-cua-cau-chuyen-j6j5": {
+  "t": " (이야기의 중심축)",
+  "h": "de7a2dcc"
+ },
+ "js.duyenno.vi-sao-lai-luan-ra-moi-duyen": {
+  "t": "왜 이런 인연이 읽히나요?",
+  "h": "1ac5d62d"
+ },
+ "js.duyenno.viet-cau-chuyen-moi-duyen": {
+  "t": "인연 이야기 작성",
+  "h": "980f94e2"
+ },
+ "js.duyenno.vui-long-nhap-day-du-ngay-who": {
+  "t": "{who}의 생년월일을 연·월·일까지 모두 입력해 주세요.",
+  "h": "5698e85d"
  },
  "js.giosinh.am-lich": {
   "t": " (음력)",
@@ -2822,6 +5426,274 @@
  "js.giosinh.xem-12-gio-kha-nghi": {
   "t": "후보 12개 시각 보기",
   "h": "3cd9aabf"
+ },
+ "js.hnt.ba-huong-dang-cho-con-thu": {
+  "t": "해 볼 만한 세 가지 방향과 연령에 맞는 구체적인 활동",
+  "h": "b8c61ec7"
+ },
+ "js.hnt.ban-da-xem-ban-nay-roi": {
+  "t": "✓ 이미 본 풀이예요 — 다시 열어도 냥이 차감되지 않아요",
+  "h": "7d2c6a5b"
+ },
+ "js.hnt.ban-dinh-huong-day-du-chua": {
+  "t": "⊙ 전체 방향 풀이가 아직 열리지 않았어요",
+  "h": "0cc8ad2a"
+ },
+ "js.hnt.ban-se-nhan-cai-con-me": {
+  "t": "받을 수 있는 내용: 아이가 빠져 있는 것이 정말 강점인지, 균형을 위해 어떤 방향을 더 열어 주면 좋은지.",
+  "h": "3adee970"
+ },
+ "js.hnt.ban-se-nhan-chat-viec-hop": {
+  "t": "받을 수 있는 내용: 아이에게 맞는 일의 결과, 아이가 스스로 말하게 만드는 질문법 — 미리 정해진 전공 이름이 아니에요.",
+  "h": "51f3fd6d"
+ },
+ "js.hnt.ban-se-nhan-cho-nen-bay": {
+  "t": "받을 수 있는 내용: 아이가 맞는 것을 만날 수 있도록 무엇부터 펼쳐 보여 줄지, 그리고 어느 시점부터 걱정을 내려놓아도 되는지.",
+  "h": "120130d2"
+ },
+ "js.hnt.ban-se-nhan-mot-ban-mo": {
+  "t": "받을 수 있는 내용: 일상에서 아이를 알아볼 수 있을 만큼 분명한 성향 설명과 접해 보게 할 일.",
+  "h": "e48e5660"
+ },
+ "js.hnt.ban-se-nhan-phan-nao-trong": {
+  "t": "받을 수 있는 내용: 아이의 생각 중 진짜 강점인 부분은 어디인지, 아이를 더 멀어지게 하지 않는 대화법.",
+  "h": "24a0fdb2"
+ },
+ "js.hnt.be-gai": {
+  "t": "여자아이",
+  "h": "af93dba0"
+ },
+ "js.hnt.be-trai": {
+  "t": "남자아이",
+  "h": "274225bc"
+ },
+ "js.hnt.cham-21-truc-tinh-khi-chon": {
+  "t": "21가지 기질 축을 채점하고 성향을 고르는 중",
+  "h": "f27b81b0"
+ },
+ "js.hnt.chang-dang-o-full": {
+  "t": "<li><b>현재 구간</b>: {a}–{b}세({y1}–{y2}년), {cung}</li>",
+  "h": "894bc892"
+ },
+ "js.hnt.chat-nguoi-noi-nhat": {
+  "t": "가장 두드러진 기질: ",
+  "h": "5bb97cff"
+ },
+ "js.hnt.chat-nguoi-noi-thu-nhi": {
+  "t": "두 번째로 두드러진 기질: ",
+  "h": "cd07e9dc"
+ },
+ "js.hnt.chat-viec-ve-sau": {
+  "t": "나중 단계의 일의 결과",
+  "h": "614a78bb"
+ },
+ "js.hnt.cho-hay-bi-hieu-nham": {
+  "t": "자주 오해받는 점",
+  "h": "9d96dce2"
+ },
+ "js.hnt.con-chi-me-dung-mot-thu": {
+  "t": "한 가지에만 빠져 있어서 치우칠까 걱정돼요",
+  "h": "37b2feb7"
+ },
+ "js.hnt.con-chua-thich-gi-ro-ret": {
+  "t": "뚜렷하게 좋아하는 것이 없고 뭐든 시큰둥해요",
+  "h": "3c4412e1"
+ },
+ "js.hnt.con-thich-huong-ma-minh-khong": {
+  "t": "아이가 부모가 원하지 않는 방향을 좋아해요",
+  "h": "b2e58212"
+ },
+ "js.hnt.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.hnt.cuoi-tuan-nay-toi-nen-cho-ten": {
+  "t": "이번 주말에 {ten}에게 먼저 무엇을 해 보게 하면 좋을까요?",
+  "h": "f2a056eb"
+ },
+ "js.hnt.dau-hieu-o-nha": {
+  "t": "집에서의 신호",
+  "h": "df425a5c"
+ },
+ "js.hnt.day-la-ban-dinh-huong-som-ten": {
+  "t": "**{ten}**의 조기 진로 방향이에요. 더 묻고 싶은 게 있나요?",
+  "h": "fa23b364"
+ },
+ "js.hnt.do-nghieng": {
+  "t": "기울기 정도",
+  "h": "f640298c"
+ },
+ "js.hnt.do-nghieng-pct-phan-tram": {
+  "t": "가장 높은 성향 대비 {pct}퍼센트 기울어 있어요",
+  "h": "c8321ffe"
+ },
+ "js.hnt.huong-nghiep-som": {
+  "t": "조기 진로 — ",
+  "h": "9779b5fc"
+ },
+ "js.hnt.huong-nghiep-som-cho-con": {
+  "t": "자녀 조기 진로",
+  "h": "2735212c"
+ },
+ "js.hnt.khoa": {
+  "t": "잠김",
+  "h": "393cb36a"
+ },
+ "js.hnt.khong-co-chinh-tinh": {
+  "t": "주성 없음",
+  "h": "753ded73"
+ },
+ "js.hnt.khong-co-gi-gap-chi-muon": {
+  "t": "급한 건 없고, 그저 아이를 더 이해하고 싶어요",
+  "h": "cf2efa39"
+ },
+ "js.hnt.khong-ten": {
+  "t": "이름 없음",
+  "h": "7c5b38ee"
+ },
+ "js.hnt.khong-the-ket-noi-vui-long": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.hnt.kieu": {
+  "t": "유형",
+  "h": "17afe1d6"
+ },
+ "js.hnt.la-so": {
+  "t": "명반: ",
+  "h": "2644d5f2"
+ },
+ "js.hnt.la-so-con-chua-nghieng-han-full": {
+  "t": "⚠️ <b>아이의 명반은 아직 어느 방향으로도 뚜렷하게 기울지 않았어요.</b> 이 나이에는 지극히 자연스러운 일이에요 — 지금 어울리는 조언은 서둘러 정하지 말고 <b>폭넓게 해 보게 하는 것</b>이에요. 아래는 가장 기울어 있는 방향이지만, 결론이 아니라 해 볼 만한 힌트로 읽어 주세요.",
+  "h": "f97c9830"
+ },
+ "js.hnt.la-so-nay": {
+  "t": "이 명반",
+  "h": "9d459fb1"
+ },
+ "js.hnt.la-so-nay-da-tuoi-link": {
+  "t": "<b>이 명반은 {tuoi}</b> — 더는 <i>자녀의 조기 진로</i>를 묻는 것이 아니므로 부모가 아이에 대해 읽는 방향 풀이는 <b>여기서 열리지 않고</b> <b>냥도 차감되지 않아요</b>.<br><br>위의 성향 부분은 계속 볼 수 있고 무료예요 — 명반에서 읽어 내기 때문에 어느 나이에서나 맞아요. 성인의 진로(분야, 역할, 규모, 직업 갈래)를 읽고 싶다면 {link}을(를) 이용하세요.",
+  "h": "32842316"
+ },
+ "js.hnt.lap-la-so-phan-kieu-nguoi": {
+  "t": "명반을 세우고 유형 분류",
+  "h": "61f07874"
+ },
+ "js.hnt.loi": {
+  "t": "오류 ",
+  "h": "1b80116b"
+ },
+ "js.hnt.loi-8d72": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.hnt.luong": {
+  "t": "냥 →",
+  "h": "36d6704d"
+ },
+ "js.hnt.mo-ban-dinh-huong-day-du": {
+  "t": "전체 방향 풀이 열기",
+  "h": "88ead889"
+ },
+ "js.hnt.muon-xung-chieu": {
+  "t": " <i>— 맞은편 궁을 빌림</i>",
+  "h": "77b3f2b2"
+ },
+ "js.hnt.nen-cho-lam-quen-hd": {
+  "t": "접해 보게 할 일: {hd}",
+  "h": "699e4a26"
+ },
+ "js.hnt.nen-cho-lam-quen-o-lua": {
+  "t": "이 연령대에서 접해 보게 할 일",
+  "h": "cd2440b6"
+ },
+ "js.hnt.nghe-co-chat-do-chi-de": {
+  "t": "그런 결과를 지닌 직업 — 그려 보기 위한 것일 뿐",
+  "h": "1377df2f"
+ },
+ "js.hnt.nguoi-lon-nen": {
+  "t": "어른이 하면 좋은 일",
+  "h": "f397c75d"
+ },
+ "js.hnt.nguoi-lon-nen-nen": {
+  "t": "어른이 하면 좋은 일: {nen}",
+  "h": "8198bc18"
+ },
+ "js.hnt.nguoi-lon-tranh": {
+  "t": "어른이 피할 것",
+  "h": "5dd28891"
+ },
+ "js.hnt.nu": {
+  "t": "여",
+  "h": "feb92ccd"
+ },
+ "js.hnt.sap-phai-chon-mon-to-hop": {
+  "t": "곧 과목 / 계열 / 학교를 골라야 해요",
+  "h": "8e562a93"
+ },
+ "js.hnt.so-thua-kem-hint": {
+  "t": "받을 수 있는 내용: 아이가 다른 아이의 잣대로 재어지고 있는 곳은 어디이고, 어떤 잣대가 아이의 잣대인지.",
+  "h": "94d7dbae"
+ },
+ "js.hnt.so-thua-kem-lbl": {
+  "t": "아이가 친구들을 따라가지 못할까 봐 걱정돼요",
+  "h": "2c7bbfec"
+ },
+ "js.hnt.ten-dang-me-mot-thu-khac": {
+  "t": "{ten}이(가) 전혀 다른 것에 빠져 있어요 — 하게 해도 될까요?",
+  "h": "b40a573a"
+ },
+ "js.hnt.thien-huong-noi-nhat-ten-chat": {
+  "t": "가장 두드러진 성향: {ten} — {chat}",
+  "h": "208d9982"
+ },
+ "js.hnt.thien-huong-noi-nhat-va-cach": {
+  "t": " — 가장 두드러진 성향과 아이가 접해 보기 시작하는 방법은 전체 방향 풀이에 들어 있어요.",
+  "h": "a193a19d"
+ },
+ "js.hnt.toi-nen-hoi-ten-cau-gi": {
+  "t": "아이가 스스로 말하게 하려면 {ten}에게 어떤 질문을 해야 할까요?",
+  "h": "01a73584"
+ },
+ "js.hnt.truong-thanh": {
+  "t": "성인",
+  "h": "8971ff40"
+ },
+ "js.hnt.tu-vi-cong-so-huong-nghiep": {
+  "t": "자미두수 직장·진로",
+  "h": "45d9ae37"
+ },
+ "js.hnt.tuoi": {
+  "t": " 세",
+  "h": "2e261bf5"
+ },
+ "js.hnt.tuoi-tuoi-mu": {
+  "t": " 세 (세는나이)",
+  "h": "f62485fd"
+ },
+ "js.hnt.vi": {
+  "t": "<b>이유:</b>",
+  "h": "58409548"
+ },
+ "js.hnt.vi-sao-la-so-lai-nghieng": {
+  "t": "왜 명반은 이 방향으로 기울어 있나요?",
+  "h": "11faf439"
+ },
+ "js.hnt.viec-nen-lam-trong-thang-nay": {
+  "t": "이번 달에 할 일과 그만할 일, 그리고 아이에게 말을 꺼내는 방법",
+  "h": "6f97a853"
+ },
+ "js.hnt.viet-ban-dinh-huong-theo-lua": {
+  "t": "연령에 맞는 방향 풀이 작성",
+  "h": "6ca12949"
+ },
+ "js.hnt.vui-long-nhap-day-du-ngay": {
+  "t": "아이의 생년월일을 연·월·일까지 모두 입력해 주세요.",
+  "h": "784233ac"
+ },
+ "js.hnt.xem-ban-dinh-huong-day-du": {
+  "t": "✦ 전체 방향 풀이 보기 —",
+  "h": "efa29b24"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "처음 3단계",
@@ -4247,6 +7119,402 @@
   "t": "길일 · {y}년 {m}월",
   "h": "cbd777dc"
  },
+ "js.nguoikhac.ban-cam-nang": {
+  "t": "가이드",
+  "h": "a9696c9f"
+ },
+ "js.nguoikhac.ban-co-muon-doi-chieu-them": {
+  "t": "내 명반도 함께 대조해 볼까요? “이 사람과 나” 항목이 더해져요.",
+  "h": "e86dc3aa"
+ },
+ "js.nguoikhac.ban-da-xem-ban-nay-roi": {
+  "t": "✓ 이미 본 풀이예요 — 다시 열어도 냥이 차감되지 않아요",
+  "h": "7d2c6a5b"
+ },
+ "js.nguoikhac.ban-dang-can-lam": {
+  "t": "해야 할 일",
+  "h": "91e799f3"
+ },
+ "js.nguoikhac.ban-dang-can-lam-gi-voi": {
+  "t": "이 사람과 관련해 무엇을 해야 하나요?",
+  "h": "a3a85f1f"
+ },
+ "js.nguoikhac.ban-day-du-se-co-mot": {
+  "t": "전체 버전에는 바로 이 일만 다루는 별도 항목이 있어요.",
+  "h": "6c907e5e"
+ },
+ "js.nguoikhac.ban-nay-doc-tu": {
+  "t": "이 풀이는 입력하신 생년월일시로 세운 <b>",
+  "h": "d989b954"
+ },
+ "js.nguoikhac.ban-se-nhan-chia-viec-the": {
+  "t": "받을 수 있는 내용: 서로 발을 밟지 않도록 일을 나누는 방법, 마음 상하지 않도록 피할 것.",
+  "h": "8824cf10"
+ },
+ "js.nguoikhac.ban-se-nhan-cho-nao-la": {
+  "t": "받을 수 있는 내용: 어디까지가 성격 차이이고, 어디가 사랑이 식은 것이 아닌지.",
+  "h": "93bae219"
+ },
+ "js.nguoikhac.ban-se-nhan-dua-tre-nay": {
+  "t": "받을 수 있는 내용: 이 아이에게 필요한 건 재촉일까, 기다림일까.",
+  "h": "d6a5344d"
+ },
+ "js.nguoikhac.ban-se-nhan-giao-viec-kieu": {
+  "t": "받을 수 있는 내용: 어떤 방식으로 일을 맡기면 움직이고, 어떻게 일깨워 주면 귀 기울이는지.",
+  "h": "753ebc00"
+ },
+ "js.nguoikhac.ban-se-nhan-ho-quyet-bang": {
+  "t": "받을 수 있는 내용: 그 사람이 무엇을 기준으로 결정하는지, 무엇이 그 사람을 주춤하게 만드는지.",
+  "h": "65d83930"
+ },
+ "js.nguoikhac.ban-se-nhan-noi-the-nao": {
+  "t": "받을 수 있는 내용: 똑같은 옛일로 다투게 되지 않도록 말하는 방법.",
+  "h": "e80b5e7c"
+ },
+ "js.nguoikhac.ban-se-nhan-trinh-bay-the": {
+  "t": "받을 수 있는 내용: 승인을 받으려면 어떻게 제시해야 하는지, 그리고 제시하면 안 되는 때.",
+  "h": "ba10c251"
+ },
+ "js.nguoikhac.ban-se-nhan-trong-cay-duoc": {
+  "t": "받을 수 있는 내용: 어떤 일은 믿고 맡길 수 있고, 어떤 일은 기대하면 안 되는지.",
+  "h": "19b64bfa"
+ },
+ "js.nguoikhac.bo-qua": {
+  "t": "건너뛰기",
+  "h": "861dafde"
+ },
+ "js.nguoikhac.bo-qua-doi-chieu-la-so": {
+  "t": "내 명반 대조는 건너뛰었어요.",
+  "h": "7c25b196"
+ },
+ "js.nguoikhac.cach-cuc": {
+  "t": " 개의 격국, ",
+  "h": "a4f8bc9a"
+ },
+ "js.nguoikhac.cach-cuc-dai-van-van-nam": {
+  "t": "격국, 대운, 연운, 그리고 이 사람에게 구체적으로 대하는 방법은 전체 가이드에 들어 있어요.",
+  "h": "7a23f4d4"
+ },
+ "js.nguoikhac.cach-di-cho-viec": {
+  "t": "이 일을 풀어 가는 방법: ",
+  "h": "36885ebf"
+ },
+ "js.nguoikhac.cam-nang-ung-xu": {
+  "t": "대응 가이드 — ",
+  "h": "2aba8d61"
+ },
+ "js.nguoikhac.can-giao-viec-nhac-viec-cho": {
+  "t": "일을 맡기거나 상기시켜 줘야 해요",
+  "h": "8a5c5843"
+ },
+ "js.nguoikhac.cat": {
+  "t": "길 ",
+  "h": "bbbbd4e0"
+ },
+ "js.nguoikhac.chang-dai-van": {
+  "t": " 개의 대운 구간이 있어요. ",
+  "h": "0bc2d397"
+ },
+ "js.nguoikhac.chinh-tinh-tai-cung": {
+  "t": "주성이 있는 궁: ",
+  "h": "37742cf1"
+ },
+ "js.nguoikhac.cho-thay-xin-thong-tin-cua": {
+  "t": "이 사람의 정보를 알려 주세요.",
+  "h": "4704e927"
+ },
+ "js.nguoikhac.chon-mot-viec-cu-the-thi": {
+  "t": "구체적인 일을 고르면 그 일만을 위한 “풀어 가는 방법”이 풀이에 더해져요.",
+  "h": "29c1bbf5"
+ },
+ "js.nguoikhac.chua-cham": {
+  "t": "미채점",
+  "h": "a20bbf69"
+ },
+ "js.nguoikhac.co-doi-chieu": {
+  "t": "네, 대조할게요 →",
+  "h": "a3846e57"
+ },
+ "js.nguoikhac.con": {
+  "t": "아직 열리지 않은 ",
+  "h": "be81ceb0"
+ },
+ "js.nguoikhac.cung-an-than": {
+  "t": "<li><b>신궁 위치</b> — ",
+  "h": "23b5a7a9"
+ },
+ "js.nguoikhac.cung-cung-trong-la-so-cua": {
+  "t": "내 명반의 {cung}",
+  "h": "85ab2993"
+ },
+ "js.nguoikhac.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.nguoikhac.cung-tinh-am-duong-de-va": {
+  "t": "음양 성질이 같아요 — 부딪히기 쉬워요",
+  "h": "38ee66ae"
+ },
+ "js.nguoikhac.da": {
+  "t": "흐름 ",
+  "h": "ea471098"
+ },
+ "js.nguoikhac.dai-van-dang-chay": {
+  "t": "<li><b>진행 중인 대운</b> — ",
+  "h": "7e2a0133"
+ },
+ "js.nguoikhac.dang-co-bat-dong-chua-go": {
+  "t": "풀리지 않은 의견 충돌이 있어요",
+  "h": "f32b8bb1"
+ },
+ "js.nguoikhac.day-la-ban-cam-nang-ung-ten": {
+  "t": "**{ten}**에 대한 대응 가이드예요. 더 묻고 싶은 상황이 있나요?",
+  "h": "10e397ff"
+ },
+ "js.nguoikhac.doc-menh-phuc-duc-thien-di": {
+  "t": "명궁·복덕궁·천이궁·관록궁·복역궁을 읽는 중",
+  "h": "1a737bb6"
+ },
+ "js.nguoikhac.doi-chieu-them-voi-la-so": {
+  "t": "내 명반과의 대조도 더했어요 ✓",
+  "h": "65992be6"
+ },
+ "js.nguoikhac.doi-chieu-voi-la-so-cua": {
+  "t": "내 명반과의 대조: ",
+  "h": "69111647"
+ },
+ "js.nguoikhac.du-kien-lap-ra-tu-chinh": {
+  "t": " 건의 데이터</b>를 읽어 낸 거예요 — ",
+  "h": "fdb76ddf"
+ },
+ "js.nguoikhac.hai-ben-de-va-nhau-o": {
+  "t": "두 사람은 어디에서 자주 부딪히나요?",
+  "h": "4604fce9"
+ },
+ "js.nguoikhac.ho-coi-trong-cai-gi-va": {
+  "t": "무엇을 소중히 여기고, 무엇을 잃을까 두려워하는가",
+  "h": "cb1b27aa"
+ },
+ "js.nguoikhac.khac-tinh-am-duong-de-bu": {
+  "t": "음양 성질이 달라요 — 서로 채워 주기 쉬워요",
+  "h": "b5f77a93"
+ },
+ "js.nguoikhac.khoa": {
+  "t": "잠김",
+  "h": "393cb36a"
+ },
+ "js.nguoikhac.khong-co-buoc-nao-doan-mo": {
+  "t": "짐작으로 한 단계는 하나도 없어요. 생년월일시의 세부를 하나만 바꿔도 위 표 전체가 달라져요.",
+  "h": "065d23da"
+ },
+ "js.nguoikhac.khong-co-chinh-tinh": {
+  "t": "주성 없음",
+  "h": "753ded73"
+ },
+ "js.nguoikhac.khong-co-gi-gap-chi-muon": {
+  "t": "급한 건 없고, 그저 이 사람을 더 이해하고 싶어요",
+  "h": "7c188ebe"
+ },
+ "js.nguoikhac.khong-dat-ten": {
+  "t": "이름 없음",
+  "h": "295915d5"
+ },
+ "js.nguoikhac.khong-the-ket-noi-vui-long": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.nguoikhac.khung-dai-van": {
+  "t": "대운 구간 ",
+  "h": "06be9124"
+ },
+ "js.nguoikhac.la-so": {
+  "t": "명반: ",
+  "h": "2644d5f2"
+ },
+ "js.nguoikhac.la-so-nguoi-khac": {
+  "t": "타인 명반",
+  "h": "e454923c"
+ },
+ "js.nguoikhac.lap-la-so-phan-kieu-nguoi": {
+  "t": "명반을 세우고 유형 분류",
+  "h": "61f07874"
+ },
+ "js.nguoikhac.loi": {
+  "t": "오류 ",
+  "h": "1b80116b"
+ },
+ "js.nguoikhac.loi-8d72": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.nguoikhac.luc-nao-nen-dua-viec-lon": {
+  "t": "큰 일을 꺼낼 시점",
+  "h": "94a8e09a"
+ },
+ "js.nguoikhac.luong": {
+  "t": "냥 →",
+  "h": "36d6704d"
+ },
+ "js.nguoikhac.luu-nien-cung": {
+  "t": "유년 궁 ",
+  "h": "8f5a16cc"
+ },
+ "js.nguoikhac.mo-cam-nang-day-du": {
+  "t": "전체 가이드 열기",
+  "h": "1e071c6b"
+ },
+ "js.nguoikhac.mot-cau-chot": {
+  "t": "한 줄 요약",
+  "h": "9e19232a"
+ },
+ "js.nguoikhac.muc-trong-la-so": {
+  "t": "개 더 보기",
+  "h": "4e83a32a"
+ },
+ "js.nguoikhac.muon-gan-lai-sau-mot-thoi": {
+  "t": "한동안 멀어졌다가 다시 가까워지고 싶어요",
+  "h": "30e6d4da"
+ },
+ "js.nguoikhac.muon-ru-ho-lam-chung-mot": {
+  "t": "함께 큰 일을 해 보자고 제안하고 싶어요",
+  "h": "9c94c0ef"
+ },
+ "js.nguoikhac.muon-xung-chieu": {
+  "t": " (맞은편 궁을 빌림)",
+  "h": "7363dfe3"
+ },
+ "js.nguoikhac.nen-noi-gi-3-viec-kem": {
+  "t": "무슨 말을 할까 — 실제 말투를 곁들인 세 가지",
+  "h": "e6639d28"
+ },
+ "js.nguoikhac.nguoi-ban-muon-hieu-la-ai": {
+  "t": "이해하고 싶은 사람이 나에게 어떤 사람인가요?",
+  "h": "4f8c6227"
+ },
+ "js.nguoikhac.nguoi-nay": {
+  "t": "이 사람",
+  "h": "bed03c25"
+ },
+ "js.nguoikhac.nguoi-nay-la": {
+  "t": "이 사람은",
+  "h": "d70093a0"
+ },
+ "js.nguoikhac.nguoi-nay-la-jle1": {
+  "t": "이 사람은: <b>",
+  "h": "bdd5dac7"
+ },
+ "js.nguoikhac.nguoi-nay-rxn3": {
+  "t": "이 사람",
+  "h": "794cf474"
+ },
+ "js.nguoikhac.pha-them": {
+  "t": "추가로 섞인 유형:",
+  "h": "4b629d3a"
+ },
+ "js.nguoikhac.phai-tu-choi-ho-ma-khong": {
+  "t": "관계를 잃고 싶지 않지만 거절해야 해요",
+  "h": "c189e09a"
+ },
+ "js.nguoikhac.phan-chua-mo-ve-nguoi-nay": {
+  "t": " 개 항목 (이 사람에 대해)",
+  "h": "45be6b61"
+ },
+ "js.nguoikhac.sach-dan-ve-sao": {
+  "t": "— 명궁의 별",
+  "h": "7b5e7401"
+ },
+ "js.nguoikhac.sao-an-tren-12-cung": {
+  "t": " 개의 별이 12궁에 배치되고, ",
+  "h": "a6914f13"
+ },
+ "js.nguoikhac.sap-gap-lam-viec-lan-dau": {
+  "t": "처음 만나거나 함께 일하게 되는데 그 사람에 대해 아는 게 없어요",
+  "h": "e36b0cd8"
+ },
+ "js.nguoikhac.sap-nho-ho-mot-viec-trinh": {
+  "t": "곧 부탁하거나 제안을 올릴 예정이에요",
+  "h": "60e6e0e6"
+ },
+ "js.nguoikhac.sap-phai-bao-mot-tin-ho": {
+  "t": "그 사람이 듣고 싶어 하지 않을 소식을 전해야 해요",
+  "h": "0d739532"
+ },
+ "js.nguoikhac.sap-phai-trao-doi-mot-viec-kho": {
+  "t": "{ten}에게 어려운 이야기를 꺼내야 해요. 어떻게 말문을 열어야 할까요?",
+  "h": "db0677dd"
+ },
+ "js.nguoikhac.sap-thuong-luong-quyen-loi-luong": {
+  "t": "곧 처우(급여, 몫 나누기)를 협상할 예정이에요",
+  "h": "93d154e1"
+ },
+ "js.nguoikhac.sat": {
+  "t": " / 살 ",
+  "h": "c472d1aa"
+ },
+ "js.nguoikhac.tai-cung-menh": {
+  "t": " 에 대한 고전의 인용</span></div>",
+  "h": "173c6b01"
+ },
+ "js.nguoikhac.tiep-tuc": {
+  "t": "계속 →",
+  "h": "86f35ed9"
+ },
+ "js.nguoikhac.tieu-han-cung": {
+  "t": "소한 궁 ",
+  "h": "4d7ba471"
+ },
+ "js.nguoikhac.tranh-noi-gi-3-viec-kem": {
+  "t": "무슨 말을 피할까 — 실제 말투를 곁들인 세 가지",
+  "h": "3031b0e9"
+ },
+ "js.nguoikhac.tuoi": {
+  "t": " 세",
+  "h": "2e261bf5"
+ },
+ "js.nguoikhac.tuoi-cung": {
+  "t": " 세, ",
+  "h": "b6a16394"
+ },
+ "js.nguoikhac.van-nam": {
+  "t": "<li><b>연운 ",
+  "h": "1192aa32"
+ },
+ "js.nguoikhac.vi-sao-la-so-lai-luan-ra": {
+  "t": "왜 명반에서 이런 성격이 읽히나요?",
+  "h": "e91e824f"
+ },
+ "js.nguoikhac.viec-can-lam": {
+  "t": "해야 할 일",
+  "h": "33183420"
+ },
+ "js.nguoikhac.viec-can-lam-20zs": {
+  "t": "해야 할 일: <b>",
+  "h": "50291106"
+ },
+ "js.nguoikhac.viec-gi-thi-dung-giao-cho": {
+  "t": "{ten}에게 맡기면 안 되는 일은 무엇인가요?",
+  "h": "3e1787c1"
+ },
+ "js.nguoikhac.viet-cam-nang-ung-xu": {
+  "t": "대응 가이드 작성",
+  "h": "20a60416"
+ },
+ "js.nguoikhac.vui-long-nhap-day-du-ngay": {
+  "t": "이해하고 싶은 사람의 생년월일을 연·월·일까지 모두 입력해 주세요.",
+  "h": "62f8b003"
+ },
+ "js.nguoikhac.who-nghieng-ve-kieu-kieu": {
+  "t": "{who}은(는) {kieu} 유형에 가까워요",
+  "h": "03d0db57"
+ },
+ "js.nguoikhac.xem-cam-nang-day-du": {
+  "t": "✦ 전체 가이드 보기 —",
+  "h": "de73e107"
+ },
+ "js.nguoikhac.xem-them": {
+  "t": "<summary>명반 항목 ",
+  "h": "c5afdcd1"
+ },
  "js.nhtg.anh-mat-noi-len-dieu-gi": {
   "t": "눈빛은 무엇을 말해 주나요?",
   "h": "dca0ccee"
@@ -4358,6 +7626,242 @@
  "js.nhtg.vui-long-chon-file-anh": {
   "t": "이미지 파일을 선택해 주세요.",
   "h": "71a61127"
+ },
+ "js.nm.ban-be": {
+  "t": "친구",
+  "h": "159fe485"
+ },
+ "js.nm.ban-doc-nhom": {
+  "t": "그룹 풀이",
+  "h": "fb21922c"
+ },
+ "js.nm.ban-doi": {
+  "t": "배우자·연인",
+  "h": "08ebb385"
+ },
+ "js.nm.ban-nay-doc-tu-full": {
+  "t": "이 풀이는 입력하신 {n}개의 명반으로 세운 <b>{tong}건의 데이터</b>를 읽어 낸 거예요 — 각 궁에 배치된 별 {sao}개, 격국 {cc}개, 대운 구간 {dv}개. 짐작으로 한 단계는 하나도 없어요. 누구든 한 사람의 생년월일시 세부를 하나만 바꿔도 위 표 전체가 달라져요.",
+  "h": "87d23b00"
+ },
+ "js.nm.bu-nhau": {
+  "t": "서로 채워 줌",
+  "h": "909aca10"
+ },
+ "js.nm.can-dang-nhap-de-luu-vao": {
+  "t": "노트에 저장하려면 로그인이 필요해요.",
+  "h": "5d26d852"
+ },
+ "js.nm.can-it-nhat-2": {
+  "t": " — 최소 2명이 필요해요.",
+  "h": "724525c8"
+ },
+ "js.nm.cap-duoi": {
+  "t": "부하 직원",
+  "h": "4c2caab8"
+ },
+ "js.nm.cat-sat": {
+  "t": "길−살 ",
+  "h": "ba23fbfb"
+ },
+ "js.nm.cha-me": {
+  "t": "부모",
+  "h": "efc7bb83"
+ },
+ "js.nm.chon-it-nhat-2-nguoi-trong": {
+  "t": "그룹을 읽으려면 노트에서 최소 2명을 골라 주세요.",
+  "h": "49d52946"
+ },
+ "js.nm.chua-cham-van-nam": {
+  "t": " — 연운은 아직 채점되지 않았어요",
+  "h": "e73fd33a"
+ },
+ "js.nm.chua-chon-ai": {
+  "t": "아직 아무도 고르지 않았어요.",
+  "h": "21f52574"
+ },
+ "js.nm.chua-luu-duoc": {
+  "t": "저장하지 못했어요.",
+  "h": "0fe9713c"
+ },
+ "js.nm.chua-luu-duoc-kiem-tra-dang": {
+  "t": "저장하지 못했어요 — 로그인 상태를 확인해 주세요.",
+  "h": "08d31926"
+ },
+ "js.nm.co-nguoi-trong-so-thieu-ngay": {
+  "t": "노트에 생년월일이 빠진 사람이 있어요 — 다시 골라 주세요.",
+  "h": "6e0349ce"
+ },
+ "js.nm.con-cai": {
+  "t": "자녀",
+  "h": "eb70b34b"
+ },
+ "js.nm.dang-chon": {
+  "t": "선택됨: ",
+  "h": "9795c6eb"
+ },
+ "js.nm.dat-ten-goi-de-con-phan": {
+  "t": "노트에서 구별할 수 있도록 호칭을 정해 주세요.",
+  "h": "689ee850"
+ },
+ "js.nm.day-la-ban-doc-n-nguoi": {
+  "t": "노트에 있는 **{n}명**에 대한 풀이예요. 누구에 대해 더 깊이 묻고 싶나요?",
+  "h": "2c925bdc"
+ },
+ "js.nm.de-giam-chan": {
+  "t": "서로 발을 밟기 쉬움",
+  "h": "3cd381b5"
+ },
+ "js.nm.doi-co-du-bon-kieu": {
+  "t": "팀에 네 가지 유형이 모두 있어요.",
+  "h": "16d74569"
+ },
+ "js.nm.doi-dang-thieu-kieu-ds": {
+  "t": "팀에 부족한 유형: {ds}",
+  "h": "60efbac2"
+ },
+ "js.nm.doi-tac-khach": {
+  "t": "거래처 / 고객",
+  "h": "7e407353"
+ },
+ "js.nm.dong-nghiep": {
+  "t": "동료",
+  "h": "d8e2bdd8"
+ },
+ "js.nm.khong-ai-kieu": {
+  "t": "이 유형인 사람이 없음:",
+  "h": "18a19cc7"
+ },
+ "js.nm.khong-the-ket-noi-vui-long": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.nm.khung-dai-van": {
+  "t": " · 대운 구간 ",
+  "h": "0beb874f"
+ },
+ "js.nm.khung-dai-van-dlx0": {
+  "t": "대운 구간 ",
+  "h": "06be9124"
+ },
+ "js.nm.kieu": {
+  "t": " · 유형 ",
+  "h": "6d81ffdf"
+ },
+ "js.nm.la-so-cua-ban": {
+  "t": "내 명반: ",
+  "h": "0202ce58"
+ },
+ "js.nm.lap-la-so-tung-nguoi": {
+  "t": "한 사람씩 명반을 세우는 중",
+  "h": "a94af28e"
+ },
+ "js.nm.loi": {
+  "t": "오류 ",
+  "h": "1b80116b"
+ },
+ "js.nm.loi-8d72": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.nm.moi-luot-doc-toi-da-8": {
+  "t": "한 번에 읽을 수 있는 사람은 최대 8명이에요 — 그보다 많으면 풀이가 연락처 목록이 돼 버려요.",
+  "h": "e35f50af"
+ },
+ "js.nm.moi-luot-doc-toi-da-8-l7vo": {
+  "t": "한 번에 읽을 수 있는 사람은 최대 8명이에요.",
+  "h": "12b66f54"
+ },
+ "js.nm.nam": {
+  "t": "남",
+  "h": "b580ba1b"
+ },
+ "js.nm.nen-tim-them": {
+  "t": "추가로 찾아볼 유형:",
+  "h": "b500e6d6"
+ },
+ "js.nm.nen-tim-them-kieu-ten": {
+  "t": "추가로 찾아볼 유형: {ten}",
+  "h": "22272ef1"
+ },
+ "js.nm.nguoi": {
+  "t": " 명",
+  "h": "e4c8f1aa"
+ },
+ "js.nm.nguoi-kgnv": {
+  "t": " 명 — ",
+  "h": "b0f59658"
+ },
+ "js.nm.nhap-du-ngay-thang-nam-sinh": {
+  "t": "생년월일을 모두 입력해 주세요.",
+  "h": "370f8e82"
+ },
+ "js.nm.nhom-dang-thieu-chat-gi-ai": {
+  "t": "이 그룹에 부족한 점은 무엇이고, 누가 그걸 떠안고 있나요?",
+  "h": "760f9c41"
+ },
+ "js.nm.nhom-n-nguoi": {
+  "t": "{n}명의 그룹이에요.",
+  "h": "8c677b9d"
+ },
+ "js.nm.nu": {
+  "t": "여",
+  "h": "feb92ccd"
+ },
+ "js.nm.phan-kieu-do-cho-trong-cua": {
+  "t": "유형을 분류하고 그룹의 빈자리를 찾는 중",
+  "h": "338c1abe"
+ },
+ "js.nm.qua-nua-nhom-la-kieu": {
+  "t": "그룹의 절반 넘게가 이 유형:",
+  "h": "5c247c71"
+ },
+ "js.nm.sep-cap-tren": {
+  "t": "상사 / 윗사람",
+  "h": "976d7a60"
+ },
+ "js.nm.so-dang-trong-bam-them-nguoi": {
+  "t": "노트가 비어 있어요. 아래의 <b>＋ 노트에 사람 추가</b>를 눌러 상사, 동료, 부하 직원, 고객 등 최소 2명을 추가하세요. 노트를 계정에 저장하려면 로그인이 필요해요.",
+  "h": "564308fe"
+ },
+ "js.nm.so-nhan-mach-doc-nhom-n": {
+  "t": "인맥 노트 — {n}명 그룹 읽기",
+  "h": "08a560d8"
+ },
+ "js.nm.toi-da-8": {
+  "t": " — 최대 8명.",
+  "h": "0bccf420"
+ },
+ "js.nm.tuan-nay-nen-gap-ai-truoc": {
+  "t": "이번 주에는 누구를 먼저 만나야 하고, 어떻게 말을 꺼내야 할까요?",
+  "h": "9337d347"
+ },
+ "js.nm.van-nam": {
+  "t": " · 연운 ",
+  "h": "357d4194"
+ },
+ "js.nm.van-nam-1z56": {
+  "t": " — 연운 ",
+  "h": "12429204"
+ },
+ "js.nm.vi-sao-hai-nguoi-do-de-giam": {
+  "t": "왜 그 두 사람은 서로 발을 밟기 쉬운가요?",
+  "h": "9fbac3bc"
+ },
+ "js.nm.viec-sap-toi-nen-giao-cho-ai": {
+  "t": "곧 있을 일은 이 그룹에서 누구에게 맡기면 좋을까요?",
+  "h": "a25cdab3"
+ },
+ "js.nm.viet-ban-doc-ca-so": {
+  "t": "노트 전체 풀이를 쓰는 중",
+  "h": "c9c08f4c"
+ },
+ "js.nm.xoa-khoi-so": {
+  "t": "노트에서 삭제",
+  "h": "4ba4a755"
+ },
+ "js.nm.xoa-la-so-nay-khoi-so": {
+  "t": "이 명반을 노트에서 삭제할까요?",
+  "h": "d9231d4e"
  },
  "js.noisinh.noi-khac": {
   "t": "기타 (시간대 선택)",
@@ -6322,6 +9826,106 @@
  "js.samplehint.dang-chuan-bi": {
   "t": "샘플을 준비하고 있습니다. 잠시 후 다시 확인해 주세요!",
   "h": "992fd7e6"
+ },
+ "js.sc.binh-thuong": {
+  "t": "보통 ★",
+  "h": "d49b9158"
+ },
+ "js.sc.bo": {
+  "t": "아버지",
+  "h": "dbbdf270"
+ },
+ "js.sc.can-luu-y": {
+  "t": "주의 필요",
+  "h": "def723aa"
+ },
+ "js.sc.con-tuoi-gi-hop-voi": {
+  "t": "아이는 어떤 띠가 부모와 가장 잘 맞나요?",
+  "h": "702bccb6"
+ },
+ "js.sc.da-cham-hop-xung-dia-chi": {
+  "t": "앞으로 15년의 지지 합·충을 채점했어요(아버지 **{bo}** · 어머니 **{me}**). 가장 순조로운 해: **{tot}**. 무엇부터 상담해 드릴까요?",
+  "h": "669ae596"
+ },
+ "js.sc.ket-qua-a-b": {
+  "t": "{a} – {b}년 결과",
+  "h": "67cbb5f6"
+ },
+ "js.sc.loi": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.sc.luc-hop-voi-bo": {
+  "t": "아버지와 육합 ✓",
+  "h": "e0214f73"
+ },
+ "js.sc.luc-hop-voi-me": {
+  "t": "어머니와 육합 ✓",
+  "h": "f42895e4"
+ },
+ "js.sc.luc-xung-voi-bo": {
+  "t": "아버지와 육충 ✗",
+  "h": "fef3a745"
+ },
+ "js.sc.luc-xung-voi-me": {
+  "t": "어머니와 육충 ✗",
+  "h": "b043bcf2"
+ },
+ "js.sc.me": {
+  "t": "어머니",
+  "h": "dfc6f90b"
+ },
+ "js.sc.nam-nao-nen-tranh-sinh-con": {
+  "t": "출산을 피해야 할 해는 언제인가요?",
+  "h": "45ae05ad"
+ },
+ "js.sc.nam-nao-tot-nhat-de-sinh": {
+  "t": "출산하기 가장 좋은 해는 언제인가요?",
+  "h": "345bd2a8"
+ },
+ "js.sc.nam-thuan-nhat-top-3": {
+  "t": "가장 순조로운 해 (상위 3개)",
+  "h": "d65badf2"
+ },
+ "js.sc.nam-thuan-nhat-top-3-ds": {
+  "t": "가장 순조로운 해 (상위 3개): {ds}",
+  "h": "41c0bad6"
+ },
+ "js.sc.rat-thuan": {
+  "t": "매우 순조 ★★★",
+  "h": "ea8da095"
+ },
+ "js.sc.tam-hinh-voi-bo": {
+  "t": "아버지와 삼형",
+  "h": "0099e1e7"
+ },
+ "js.sc.tam-hinh-voi-me": {
+  "t": "어머니와 삼형",
+  "h": "996d2b57"
+ },
+ "js.sc.tam-hop-voi-bo": {
+  "t": "아버지와 삼합",
+  "h": "117b9ae6"
+ },
+ "js.sc.tam-hop-voi-me": {
+  "t": "어머니와 삼합",
+  "h": "5a98a39d"
+ },
+ "js.sc.thuan": {
+  "t": "순조 ★★",
+  "h": "7a571e7c"
+ },
+ "js.sc.trung-tinh": {
+  "t": "중립",
+  "h": "308793c3"
+ },
+ "js.sc.vi-sao-nam-do-hop-ca": {
+  "t": "왜 그해가 아버지와 어머니 모두에게 맞나요?",
+  "h": "bc9256b2"
+ },
+ "js.sc.vui-long-nhap-nam-sinh": {
+  "t": "아버지와 어머니의 올바른 태어난 해를 입력해 주세요.",
+  "h": "ad827462"
  },
  "js.shell.an": {
   "t": "숨기기",
@@ -15663,6 +19267,158 @@
   "t": "달력 보기 →",
   "h": "6fa85107"
  },
+ "nguoikhac.2-xem-truoc-cam-nang": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">가이드 미리보기</span>",
+  "h": "f63afb72"
+ },
+ "nguoikhac.ban-be": {
+  "t": "친구",
+  "h": "159fe485"
+ },
+ "nguoikhac.ban-cam-nang-nay-phac-hoa": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 이 대응 가이드는 자미두수 명반의 데이터에 선인들이 남긴 연구 경험을 더해 그려낸 것이에요. 참고용으로만 봐 주세요.<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 이것은 <b>함께 잘 지내기 위해 이해하는</b> 틀이지 누군가를 조종하기 위한 것이 아니에요. 풀이 대상인 사람은 이 자리에 없기 때문에, 이 풀이는 그 사람의 <b>건강, 개인적인 재물, 결혼 문제는 일부러 읽지 않아요</b>. 성격에는 좋고 나쁨이 없고, 상황에 맞거나 맞지 않을 뿐이에요.",
+  "h": "d4cf893e"
+ },
+ "nguoikhac.ban-dang-can-lam-gi-voi": {
+  "t": "이 사람과 관련해 무엇을 해야 하나요",
+  "h": "c237535b"
+ },
+ "nguoikhac.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「타인 명반」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nguoi-khac.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "90ab14f5"
+ },
+ "nguoikhac.cam-nang-ung-xu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>대응<br>가이드</span>",
+  "h": "02dec92e"
+ },
+ "nguoikhac.cap-duoi-nguoi-minh-quan": {
+  "t": "부하 직원 / 내가 관리하는 사람",
+  "h": "eb2f06ee"
+ },
+ "nguoikhac.cau-hoi-chay-ngam-trong-dau": {
+  "t": "그 사람 머릿속에서 늘 돌아가는 질문",
+  "h": "c0934bd9"
+ },
+ "nguoikhac.cha-me-nguoi-lon-trong-nha": {
+  "t": "부모 / 집안 어른",
+  "h": "5f1e7b56"
+ },
+ "nguoikhac.co-la-so-cua-ban-thi": {
+  "t": "내 명반이 있으면 풀이에 <b>“이 사람과 나”</b> 항목이 더해져요. 서로 부딪히기 쉬운 지점과 서로 채워 줄 수 있는 지점이에요. 비워 두어도 나머지 내용은 모두 볼 수 있어요.",
+  "h": "cfbb6a2e"
+ },
+ "nguoikhac.con-cai": {
+  "t": "자녀",
+  "h": "eb70b34b"
+ },
+ "nguoikhac.con-nguoi-nay-van-hanh-the": {
+  "t": "이 사람이 움직이는 방식",
+  "h": "444d1e25"
+ },
+ "nguoikhac.dieu-ho-coi-trong": {
+  "t": "<span class=\"res-block-title\">소중하게 여기는 것</span>",
+  "h": "5656f5b5"
+ },
+ "nguoikhac.dieu-lam-ho-kho-chiu": {
+  "t": "불편해하는 것",
+  "h": "754ed7ce"
+ },
+ "nguoikhac.doi-chieu-them-voi-la-so": {
+  "t": "내 명반도 함께 대조하기 (선택)",
+  "h": "c04c1f4c"
+ },
+ "nguoikhac.doi-tac-khach-hang": {
+  "t": "거래처 / 고객",
+  "h": "b39df542"
+ },
+ "nguoikhac.dong-nghiep-ngang-hang": {
+  "t": "동료 (같은 직급)",
+  "h": "c2321d8a"
+ },
+ "nguoikhac.hieu-sai-mot-nguoi-quan-trong": {
+  "t": "중요한 사람을 오해하는 것이 피할 수 있었던 갈등의 뿌리가 되곤 해요. 상사, 거래처, 연인 — 그 사람의 생년월일과 시간을 입력하면 무슨 말을 하고 무엇을 피해야 하는지 알려 주는 가이드를 받을 수 있어요.",
+  "h": "f8a6e6f5"
+ },
+ "nguoikhac.la-so-nguoi-khac": {
+  "t": "타인 명반",
+  "h": "e454923c"
+ },
+ "nguoikhac.la-so-nguoi-khac-cam-nang": {
+  "t": "<b>타인 명반</b><span>딱 한 사람에게 맞춘 대응 가이드</span>",
+  "h": "fdca2edd"
+ },
+ "nguoikhac.la-so-nguoi-khac-tu-vi": {
+  "t": "타인 명반 — 명보 자미두수",
+  "h": "b5ba1ea3"
+ },
+ "nguoikhac.luc-nao-nen-dua-viec-lon": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>큰 일을<br>꺼낼 시점</span>",
+  "h": "ff316436"
+ },
+ "nguoikhac.luc-nay-ho-dang-o-dau": {
+  "t": "<span class=\"res-block-title\">지금 그 사람은 어디쯤 있나</span>",
+  "h": "85151bc9"
+ },
+ "nguoikhac.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nguoi-khac\"></span> / 회 <span class=\"cb-sub\">(<span data-tvp-price=\"nguoi-khac\">…</span> 냥)</span>",
+  "h": "4e692d79"
+ },
+ "nguoikhac.nen-noi-gi-tranh-noi-gi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"message-circle\"></span><span>해야 할 말<br>피할 말</span>",
+  "h": "686a6593"
+ },
+ "nguoikhac.ngay-sinh-cua-nguoi-ban-muon": {
+  "t": "이해하고 싶은 사람의 생년월일",
+  "h": "983c4051"
+ },
+ "nguoikhac.nguoi-nay-la": {
+  "t": "이 사람은",
+  "h": "d70093a0"
+ },
+ "nguoikhac.nguoi-nay-la-ai": {
+  "t": "<span class=\"res-block-title\">이 사람은 어떤 사람인가</span>",
+  "h": "22ef9ce3"
+ },
+ "nguoikhac.nguoi-nay-voi-ban": {
+  "t": "<span class=\"res-block-title\">이 사람과 나</span>",
+  "h": "a89f8cc8"
+ },
+ "nguoikhac.nhap-la-so-sep-dong-nghiep": {
+  "t": "상사, 동료, 부하 직원이나 가까운 사람의 명반을 입력하면 대응 가이드를 받을 수 있어요: 그 사람이 움직이는 방식, 해야 할 말과 피할 말, 큰 일을 꺼낼 시점까지.",
+  "h": "95d5f29c"
+ },
+ "nguoikhac.nhap-ngay-gio-sinh-nguoi-do": {
+  "t": "그 사람의 생년월일과 시간, 나와의 관계, 그 사람과 관련해 필요한 일을 입력하면 말씀하신 용건에 맞춰 명반을 분석해요.",
+  "h": "8d0d8d61"
+ },
+ "nguoikhac.noi-the-nao": {
+  "t": "<span class=\"res-block-title\">어떻게 말할까</span>",
+  "h": "2757978b"
+ },
+ "nguoikhac.sep-cap-tren": {
+  "t": "상사 / 윗사람",
+  "h": "976d7a60"
+ },
+ "nguoikhac.tra-loi-thay-o-khung-chat": {
+  "t": "채팅창에서 선생님께 이해하고 싶은 사람이 누구인지와 그 사람의 생년월일을 알려 주세요.",
+  "h": "0b35941d"
+ },
+ "nguoikhac.tranh": {
+  "t": "피함",
+  "h": "718a6b75"
+ },
+ "nguoikhac.vo-chong-nguoi-yeu": {
+  "t": "배우자 / 연인",
+  "h": "4165e532"
+ },
+ "nguoikhac.xem-cam-nang-ung-xu-ton": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"user\"></span><b id=\"btnGoLabel\">대응 가이드 보기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"nguoi-khac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nguoi-khac\">…</span> 냥)</span></small>",
+  "h": "da20bb48"
+ },
+ "nguoikhac.xem-nguoi-khac": {
+  "t": "다른 사람 보기",
+  "h": "a058d2f4"
+ },
  "nhtg.anh-chi-gui-toi-may-chu": {
   "t": "이미지는 분석을 위해 서버로만 보내고, 서버에 저장하지 않아요. 정면에서 밝은 곳에서 찍어 주세요 — 시스템이 눈 부위를 자동으로 확대해요.",
   "h": "65e7d1ba"
@@ -15786,6 +19542,130 @@
  "nhtg.xoa-anh": {
   "t": "✕ 이미지 삭제",
   "h": "36e95d9f"
+ },
+ "nm.ban-do-ca-nhom": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>그룹 전체<br>지도</span>",
+  "h": "682f4a1b"
+ },
+ "nm.ban-doc-nay-phac-hoa-tu": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 이 풀이는 자미두수 명반의 데이터에 선인들이 남긴 연구 경험을 더해 그려낸 것이에요. 참고용으로만 봐 주세요.<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 이것은 <b>사람에게 맞게 일을 배치하기 위한</b> 틀이지 인사 평가표가 아니에요. 노트에 들어 있는 사람들은 이 자리에 없기 때문에, 이 풀이는 <b>누구의 순위도, 건강도, 개인적인 재물도, 집안 사정도 일부러 읽지 않고</b> <b>사람을 바꾸라고 권하지도 않아요</b>. 성격에는 좋고 나쁨이 없고, 어떤 일에 맞거나 맞지 않을 뿐이에요.",
+  "h": "9a54fb99"
+ },
+ "nm.ban-dung-o-dau-trong-nhom": {
+  "t": "<span class=\"res-block-title\">그룹 안에서 나의 위치</span>",
+  "h": "e37f7177"
+ },
+ "nm.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「인맥 노트」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nhan-mach.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "37e05c5a"
+ },
+ "nm.cac-cap-trong-nhom": {
+  "t": "<span class=\"res-block-title\">그룹 안의 짝들</span>",
+  "h": "1f22e684"
+ },
+ "nm.cap-can-de-y": {
+  "t": "<span class=\"res-block-title\">눈여겨볼 짝</span>",
+  "h": "2fbe6792"
+ },
+ "nm.cap-de-giam-chan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>서로 발을<br>밟기 쉬운 짝</span>",
+  "h": "81f490fb"
+ },
+ "nm.cho-trong-cua-nhom": {
+  "t": "<span class=\"res-block-title\">그룹의 빈자리</span>",
+  "h": "96c373bb"
+ },
+ "nm.chon-lai": {
+  "t": "다시 고르기",
+  "h": "25ee067e"
+ },
+ "nm.chon-nguoi-trong-so": {
+  "t": "노트에서 사람 고르기",
+  "h": "fb10fef6"
+ },
+ "nm.co-la-so-cua-ban-thi": {
+  "t": "내 명반이 있으면 풀이에 <b>“그룹 안에서 나의 위치”</b> 항목이 더해져요 — 누구와 부딪히기 쉽고 누구를 채워 줄 수 있는지예요.",
+  "h": "883457f9"
+ },
+ "nm.da-doc-truoc-do": {
+  "t": "<span class=\"res-block-title\">이전에 읽은 내용</span>",
+  "h": "073f164b"
+ },
+ "nm.doc-ca-so-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"users\"></span><b id=\"btnGoLabel\">노트 전체 읽기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 냥)</span></small>",
+  "h": "708b8f51"
+ },
+ "nm.dua-ca-doi-hoac-danh-sach": {
+  "t": "팀 전체나 고객 목록을 한곳에 모아 보세요: 이 그룹에 부족한 유형은 무엇인지, 누구와 누가 서로 발을 밟기 쉬운지, 이번 주에는 누구를 먼저 만나야 하는지요.",
+  "h": "6afc2255"
+ },
+ "nm.goi-la": {
+  "t": "호칭",
+  "h": "1e3d72e2"
+ },
+ "nm.lam-gi-tuan-nay": {
+  "t": "<span class=\"res-block-title\">이번 주에 할 일</span>",
+  "h": "5b333d8e"
+ },
+ "nm.luu-vao-so": {
+  "t": "노트에 저장",
+  "h": "e88b1df6"
+ },
+ "nm.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> / 회 <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 냥)</span>",
+  "h": "110df12a"
+ },
+ "nm.nhom-nay-hinh-gi": {
+  "t": "<span class=\"res-block-title\">이 그룹은 어떤 모습인가</span>",
+  "h": "f51250a4"
+ },
+ "nm.sep-hung-chi-lan-khach-a": {
+  "t": "훙 상사, 란 씨, 고객 A…",
+  "h": "503be7e7"
+ },
+ "nm.so-nhan-mach": {
+  "t": "인맥 노트",
+  "h": "17e83429"
+ },
+ "nm.so-nhan-mach-doc-ca-nhom": {
+  "t": "<b>인맥 노트</b><span>한 사람씩이 아니라 그룹 전체를 한꺼번에 읽어요</span>",
+  "h": "3b36ced2"
+ },
+ "nm.so-nhan-mach-tu-vi-minh": {
+  "t": "인맥 노트 — 명보 자미두수",
+  "h": "d9d679ab"
+ },
+ "nm.them-la-so-cua-chinh-ban": {
+  "t": "내 명반 추가 (선택)",
+  "h": "2423d794"
+ },
+ "nm.them-nguoi-vao-so": {
+  "t": "+ 노트에 사람 추가",
+  "h": "364e14c5"
+ },
+ "nm.them-ten-ngay-sinh-va-gioi": {
+  "t": "각 구성원의 이름, 생년월일, 성별을 노트에 추가해 그룹 전체를 한꺼번에 분석해요.",
+  "h": "7e27671a"
+ },
+ "nm.thu-tu-goi-y-tiep-can": {
+  "t": "<span class=\"res-block-title\">접근 순서 제안</span>",
+  "h": "d0842a6c"
+ },
+ "nm.trong-mot-doi-nhom-ai-hop": {
+  "t": "팀 안에서 누구와 누가 맞고 누구와 누가 부딪히는지는 일이 터진 뒤에야 드러나는 경우가 많아요. 각 구성원의 생년월일을 추가하면 팀 구성을 다시 짜는 데 쓸 인력 지도를 받을 수 있어요.",
+  "h": "09e8b31f"
+ },
+ "nm.tung-nguoi": {
+  "t": "<span class=\"res-block-title\">한 사람씩</span>",
+  "h": "d587410c"
+ },
+ "nm.viec-nen-lam-tuan-nay": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>이번 주<br>할 일</span>",
+  "h": "7343e7f5"
+ },
+ "nm.xep-theo-van-nam-cua-tung": {
+  "t": "<b>각자의 연운</b> 순으로 나열했어요 — 순조로운 해에 있는 사람이 새 이야기를 꺼내기 더 쉬워요. 이것은 중요도 순위가 <b>아니에요</b>.",
+  "h": "cc8d076f"
  },
  "oracle.1-chon-kieu-rut": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">뽑는 방식 고르기</span>",
@@ -16374,6 +20254,94 @@
  "sachdetail.ve-thu-vien-tai-lieu": {
   "t": "<a href=\"/resources.html\">← 자료실로 돌아가기</a>",
   "h": "99e834b4"
+ },
+ "sc.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">결과 받기</span>",
+  "h": "b0b2f830"
+ },
+ "sc.bang-du-15-nam-toi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar-days\"></span><span>앞으로 15년<br>전체 표</span>",
+  "h": "7fd926c3"
+ },
+ "sc.can-chi": {
+  "t": "간지",
+  "h": "8b784611"
+ },
+ "sc.cham-diem-luc-hop-tam-hop": {
+  "t": "아이의 태어난 해와 부모 사이의 지지 육합·삼합·육충을 채점해요 — 앞으로 15년 표와 가장 순조로운 해. 선생님께 깊이 물어볼 수도 있어요.",
+  "h": "1e93ec3a"
+ },
+ "sc.danh-gia": {
+  "t": "평가",
+  "h": "5df137aa"
+ },
+ "sc.ghi-chu-ket-qua-dua-tren": {
+  "t": "<strong style=\"color:#444\">참고:</strong> 결과는 태어난 해의 지지(양력)를 기준으로 해요. 아이가 양력 1~2월에 태어났다면 음력 해로 계산한 실제 지지가 1년 다를 수 있어요 — 더 꼼꼼한 확인이 필요해요.",
+  "h": "c4463c7c"
+ },
+ "sc.hanh": {
+  "t": "오행",
+  "h": "58608859"
+ },
+ "sc.hoi-thay-luan-sau-nam-nao": {
+  "t": "✦ 어느 해에 낳는 게 좋을지 선생님께 깊이 묻기",
+  "h": "665710f8"
+ },
+ "sc.ket-qua-15-nam-dia-chi": {
+  "t": "<span class=\"res-block-title\" id=\"resultTitle\">15년 결과</span> <span style=\"font-size:11px;color:#666\">지지 · 육합 · 삼합 · 육충</span>",
+  "h": "a7874a13"
+ },
+ "sc.luc-hop-tam-hop-luc-xung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>육합 · 삼합<br>육충</span>",
+  "h": "3c607a04"
+ },
+ "sc.ly-do": {
+  "t": "이유",
+  "h": "0cbf3763"
+ },
+ "sc.nam": {
+  "t": "연도",
+  "h": "98926c7e"
+ },
+ "sc.nam-sinh-bo": {
+  "t": "아버지 태어난 해",
+  "h": "a1009c64"
+ },
+ "sc.nam-sinh-cua-bo-va-me": {
+  "t": "아버지와 어머니의 태어난 해",
+  "h": "0cc92594"
+ },
+ "sc.nam-sinh-me": {
+  "t": "어머니 태어난 해",
+  "h": "bef8fb8f"
+ },
+ "sc.nam-thuan-nhat-de-sinh-con": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>아이를 낳기<br>가장 좋은 해</span>",
+  "h": "456f641b"
+ },
+ "sc.nhap-nam-sinh-bo-va-me": {
+  "t": "아버지와 어머니의 태어난 해를 입력하면 앞으로 15년 평가표와 가장 순조로운 해를 알 수 있어요.",
+  "h": "0cda7d1e"
+ },
+ "sc.sinh-con-dung-nam-hop-tuoi": {
+  "t": "부모와 띠가 맞는 해에 아이를 낳고 싶어 하는 가정이 많지만, 제대로 따져 보기는 쉽지 않아요. 부부의 태어난 해를 입력하고 앞으로 15년 중 가장 순조로운 해를 바로 찾아보세요.",
+  "h": "34b8b50b"
+ },
+ "sc.xem-15-nam-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hourglass\"></span><b id=\"btnGoLabel\">15년 보기 →</b></span> <small>무료</small>",
+  "h": "f03c38c9"
+ },
+ "sc.xem-tuoi-sinh-con": {
+  "t": "자녀 출산 띠 보기",
+  "h": "2e015092"
+ },
+ "sc.xem-tuoi-sinh-con-nam-sinh": {
+  "t": "<b>자녀 출산 띠 보기</b><span>지지로 보는 부모와 맞는 아이의 출생 연도</span>",
+  "h": "9da380f6"
+ },
+ "sc.xem-tuoi-sinh-con-tu-vi": {
+  "t": "자녀 출산 띠 보기 — 명보 자미두수",
+  "h": "23026bbb"
  },
  "tailieu.bai-viet-khong-ton-tai-hoac": {
   "t": "글이 없거나 삭제되었어요.",

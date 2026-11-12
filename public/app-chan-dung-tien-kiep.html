@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chân Dung Tiền Kiếp — Tử Vi Minh Bảo</title>
-<meta name="description" content="Đặt chính lá số của bạn vào một trong 5 nền văn minh Á Đông cổ — chân dung và câu chuyện một đời người kể qua 9 đại vận.">
+<title data-i18n="ctk.chan-dung-tien-kiep-tu-vi">Chân Dung Tiền Kiếp — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:ctk.dat-chinh-la-so-cua-ban" name="description" content="Đặt chính lá số của bạn vào một trong 5 nền văn minh Á Đông cổ — chân dung và câu chuyện một đời người kể qua 9 đại vận.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -76,10 +76,10 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Chân Dung Tiền Kiếp</b><span>Lá số của bạn nếu sinh vào thời xưa</span></div>
+      <div data-i18n="ctk.chan-dung-tien-kiep-la-so" class="ws-title"><b>Chân Dung Tiền Kiếp</b><span>Lá số của bạn nếu sinh vào thời xưa</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Làm Lại</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="duyenno.lam-lai" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Làm Lại</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -93,15 +93,15 @@
         <img class="intro-avatar" src="/tool-avatars/chan-dung-tien-kiep.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Chân Dung Tiền Kiếp</div>
-            <div class="intro-d">Lá số không chỉ kể chuyện đời này — đặt vào một nền văn minh cổ, nó còn hé lộ một câu chuyện tiền kiếp của riêng bạn. Từ lá số có sẵn, nhận một chân dung và câu chuyện trọn vẹn để đọc.</div>
+            <div data-i18n="ctk.chan-dung-tien-kiep" class="intro-t">Chân Dung Tiền Kiếp</div>
+            <div data-i18n="ctk.la-so-khong-chi-ke-chuyen" class="intro-d">Lá số không chỉ kể chuyện đời này — đặt vào một nền văn minh cổ, nó còn hé lộ một câu chuyện tiền kiếp của riêng bạn. Từ lá số có sẵn, nhận một chân dung và câu chuyện trọn vẹn để đọc.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="image"></span><span>Chân dung<br>vẽ riêng</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Một đời<br>5 hồi</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="landmark"></span><span>5 nền<br>văn minh cổ</span></div>
+          <div data-i18n="ctk.chan-dung-ve-rieng" class="hero-pill"><span class="hp-ic" data-icon="image"></span><span>Chân dung<br>vẽ riêng</span></div>
+          <div data-i18n="ctk.mot-doi-5-hoi" class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Một đời<br>5 hồi</span></div>
+          <div data-i18n="ctk.5-nen-van-minh-co" class="hero-pill"><span class="hp-ic" data-icon="landmark"></span><span>5 nền<br>văn minh cổ</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -109,23 +109,23 @@
            chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
            đã đổi trong code cũ (analyze/showForm/lockWall/doGenerate). -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước chân dung</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="ctk.2-xem-truoc-chan-dung" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước chân dung</span></div>
+        <div data-i18n="battu.3-thanh-toan" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="battu.4-nhan-ket-qua" class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
-        <div class="fc-head"><span class="fc-ic" data-icon="temple"></span><h2>Nhập ngày sinh của bạn (dương lịch)</h2></div>
-        <p class="sub">Dùng lá số đã lập, không cần nhập thêm gì khác. Nhận về chân dung, cốt cách và câu chuyện một đời kể theo 5 hồi.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="temple"></span><h2 data-i18n="ctk.nhap-ngay-sinh-cua-ban-duong">Nhập ngày sinh của bạn (dương lịch)</h2></div>
+        <p data-i18n="ctk.dung-la-so-da-lap-khong" class="sub">Dùng lá số đã lập, không cần nhập thêm gì khác. Nhận về chân dung, cốt cách và câu chuyện một đời kể theo 5 hồi.</p>
         <div id="tuviFormHost"></div>
 
         <div class="cost-box">
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="chan-dung-tien-kiep"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="chan-dung-tien-kiep">…</span> Lượng)</span></div>
-              <div class="cb-pay">
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="ctk.moi-luot-luong" class="cb-amt"><span class="vnd" data-tvp-price-vnd="chan-dung-tien-kiep"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="chan-dung-tien-kiep">…</span> Lượng)</span></div>
+              <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
               </div>
@@ -133,11 +133,11 @@
           </div>
           <div class="cb-r">
             <span class="cb-ic" data-icon="gift"></span>
-            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
           </div>
         </div>
         <div class="frow" style="margin-bottom:0">
-          <button class="btn-go" id="btnGo" onclick="analyze()">
+          <button data-i18n="ctk.xem-tien-kiep-ton-luong" class="btn-go" id="btnGo" onclick="analyze()">
             <span class="bg-label"><span class="ic" data-icon="temple"></span><b>Xem Tiền Kiếp →</b></span>
             <small>Tốn <span class="vnd" data-tvp-price-vnd="chan-dung-tien-kiep"></span> <span class="cb-sub">(<span data-tvp-price="chan-dung-tien-kiep">…</span> Lượng)</span></small>
           </button>
@@ -147,11 +147,11 @@
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Chân Dung Tiền Kiếp</div>
-        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="ctk.chan-dung-tien-kiep" class="wsp-title">Chân Dung Tiền Kiếp</div>
+        <p data-i18n="luangiai.tu-vi-dau-so-la-mot" class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
       </div>
-      <div class="samp-cta">
+      <div data-i18n="ctk.ban-luan-giai-mau-tai-pdf" class="samp-cta">
         <span class="sc-ic" data-icon="file-text"></span>
         <span class="sc-txt"><b>Bản luận giải mẫu</b><span>Tải PDF Chân Dung Tiền Kiếp đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
         <a class="sc-btn" href="/tai-mau/mau-chan-dung-tien-kiep.pdf" target="_blank" rel="noopener">Tải PDF →</a>
@@ -162,7 +162,7 @@
 
       <div id="resPanel" data-ws-result style="display:none">
         <div class="res-block">
-          <div class="res-block-header"><span class="res-block-title">Chân Dung &amp; Cốt Cách</span></div>
+          <div data-i18n="ctk.chan-dung-cot-cach" class="res-block-header"><span class="res-block-title">Chân Dung &amp; Cốt Cách</span></div>
           <div class="res-block-body">
             <div id="loading"><div id="loadingSteps"></div></div>
             <div id="card" style="display:none">
@@ -174,15 +174,15 @@
               </div>
               <div class="cdtk-top">
                 <div class="cdtk-imgwrap" id="imgWrap" style="display:none">
-                  <div class="cdtk-imgph" id="imgPlaceholder">Đang vẽ chân dung…<br>(khoảng 45–60 giây)</div>
-                  <img id="resultImg" alt="Chân dung tiền kiếp" style="display:none">
+                  <div data-i18n="ctk.dang-ve-chan-dung-khoang-45" class="cdtk-imgph" id="imgPlaceholder">Đang vẽ chân dung…<br>(khoảng 45–60 giây)</div>
+                  <img data-i18n-attr="alt:ctk.chan-dung-tien-kiep-gxr5" id="resultImg" alt="Chân dung tiền kiếp" style="display:none">
                   <div id="imgLoadStatus" style="display:none;margin-top:8px;font-size:12px;color:var(--text-lt);text-align:center"></div>
                   <div class="cdtk-actions" id="imgActions" style="display:none">
-                    <button class="btn" id="btnDownload" onclick="downloadResult()">⬇ Tải Ảnh Đăng Story</button>
+                    <button data-i18n="duyenno.tai-anh-dang-story" class="btn" id="btnDownload" onclick="downloadResult()">⬇ Tải Ảnh Đăng Story</button>
                   </div>
                 </div>
                 <div class="cdtk-mirror" id="moTaBlock" style="display:none">
-                  <div class="cdtk-eyebrow" id="moTaTitle">Mô tả nhân vật</div>
+                  <div data-i18n="ctk.mo-ta-nhan-vat" class="cdtk-eyebrow" id="moTaTitle">Mô tả nhân vật</div>
                   <p id="moTaNhanVat"></p>
                 </div>
               </div>
@@ -202,7 +202,7 @@
              dùng): `moTaBlock` chỉ hiện SAU khi trả tiền, tái dùng nó cho bản
              mẫu dễ để sót lớp mờ dính lại trên chữ THẬT nếu quên gỡ đúng chỗ. -->
         <div class="cdtk-mirror" id="cdtkDummyMota" style="display:none">
-          <div class="cdtk-eyebrow">Mô tả nhân vật (bản mẫu)</div>
+          <div data-i18n="ctk.mo-ta-nhan-vat-ban-mau" class="cdtk-eyebrow">Mô tả nhân vật (bản mẫu)</div>
           <p class="tpw-real-lock" id="cdtkDummyMotaText"></p>
         </div>
 
@@ -218,29 +218,29 @@
              Nhưng ở lượt CHƯA trả tiền thì vai của nó ngược lại: đây là bằng
              chứng duy nhất người ta có để tin engine thật sự đọc lá số mình. -->
         <div class="res-block" id="basisBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
+          <div data-i18n="daycon.co-so-trong-la-so" class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
           <div class="res-block-body">
             <div class="cdtk-basis" id="basisBody"></div>
           </div>
         </div>
 
         <div class="res-block" id="storyBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Một Đời Người — 5 Hồi</span></div>
+          <div data-i18n="ctk.mot-doi-nguoi-5-hoi" class="res-block-header"><span class="res-block-title">Một Đời Người — 5 Hồi</span></div>
           <div class="res-block-body">
             <div id="actList"></div>
-            <div id="actsLocked" style="display:none;margin-top:12px;font-size:12.5px;color:var(--text-lt);line-height:1.7">Khung 5 hồi ở trên do lá số của bạn quyết định — chữ của từng hồi nằm trong bản đầy đủ.</div>
+            <div data-i18n="ctk.khung-5-hoi-o-tren-do" id="actsLocked" style="display:none;margin-top:12px;font-size:12.5px;color:var(--text-lt);line-height:1.7">Khung 5 hồi ở trên do lá số của bạn quyết định — chữ của từng hồi nằm trong bản đầy đủ.</div>
             <div class="cdtk-ketluan" id="ketLuan" style="display:none"></div>
           </div>
         </div>
 
         <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
-          <div class="res-block-body" style="font-size:12.5px;line-height:1.6;color:#5a5145">
+          <div data-i18n="ctk.chan-dung-va-cau-chuyen-phia" class="res-block-body" style="font-size:12.5px;line-height:1.6;color:#5a5145">
             <span class="ic" data-icon="lightbulb"></span> Chân dung và câu chuyện phía trên được phác hoạ dựa trên các dữ liệu trong lá số Tử Vi của bạn, kết hợp với kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo và giải trí.
           </div>
         </div>
 
         <div class="res-block" id="histBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Đã Vẽ Trước Đó</span></div>
+          <div data-i18n="ctk.da-ve-truoc-do" class="res-block-header"><span class="res-block-title">Đã Vẽ Trước Đó</span></div>
           <div class="res-block-body"><div id="histList"></div></div>
         </div>
       </div>
@@ -284,18 +284,18 @@ var _resultImgUrl = '';
 var _lastBirth = null;
 var _lastStory = null;
 var CDTK_STEPS = [
-  { label: 'Lập lá số & xác định chức phận thời xưa', ms: 1200 },
-  { label: 'Đọc 9 đại vận, chia dòng đời thành 5 hồi', ms: 2600 },
-  { label: 'Viết câu chuyện cuộc đời', ms: 0 },
+  { label: _tvmbT('js.ctk.lap-la-so-xac-dinh-chuc', 'Lập lá số & xác định chức phận thời xưa'), ms: 1200 },
+  { label: _tvmbT('js.ctk.doc-9-dai-van-chia-dong', 'Đọc 9 đại vận, chia dòng đời thành 5 hồi'), ms: 2600 },
+  { label: _tvmbT('js.ctk.viet-cau-chuyen-cuoc-doi', 'Viết câu chuyện cuộc đời'), ms: 0 },
 ];
 var _loadingCtl = null;
 var _imgWait = null;      // đồng hồ chờ trong khung ảnh — PHẢI stop ở mọi nhánh thoát
 var _imgRetryTimer = null;
 
 var ROLE_BADGE = {
-  'dinh-cao': { cls: 'peak', label: '★ Đỉnh cao' },
-  'bien-co': { cls: 'low', label: '▼ Biến cố' },
-  'thang-tram': { cls: 'peak', label: '★▼ Thăng trầm' },
+  'dinh-cao': { cls: 'peak', label: _tvmbT('js.ctk.dinh-cao', '★ Đỉnh cao') },
+  'bien-co': { cls: 'low', label: _tvmbT('js.ctk.bien-co', '▼ Biến cố') },
+  'thang-tram': { cls: 'peak', label: _tvmbT('js.ctk.thang-tram', '★▼ Thăng trầm') },
 };
 
 function setResultImage(url) {
@@ -303,7 +303,7 @@ function setResultImage(url) {
   var status = document.getElementById('imgLoadStatus');
   function showWaiting() {
     if (!status) return;
-    status.innerHTML = 'Ảnh đang tải, có thể hơi chậm — vui lòng đợi hoặc <button type="button" class="btn" style="padding:2px 10px;font-size:12px;margin-left:4px" onclick="retryResultImage()">Tải lại</button>';
+    status.innerHTML = (_tvmbT('js.ctk.anh-dang-tai-co-the-hoi', 'Ảnh đang tải, có thể hơi chậm — vui lòng đợi hoặc') + ' <button type="button" class="btn" style="padding:2px 10px;font-size:12px;margin-left:4px" onclick="retryResultImage()">' + _tvmbT('js.ctk.tai-lai', 'Tải lại') + '</button>');
     status.style.display = 'block';
   }
   function hideWaiting() { if (status) status.style.display = 'none'; }
@@ -381,7 +381,7 @@ async function analyze() {
   showError('');
   var fdIn = TuviForm.getData();
   var gender = fdIn.gioitinh, dd = fdIn.ngay, mm = fdIn.thang, yyyy = fdIn.nam, gioAmIdx = fdIn.gioIdx;
-  if (!dd || !mm || !yyyy) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh.'); return; }
+  if (!dd || !mm || !yyyy) { showError(_tvmbT('js.ctk.vui-long-nhap-day-du-ngay', 'Vui lòng nhập đầy đủ ngày tháng năm sinh.')); return; }
 
   // name: form có ô "Họ và tên" nhưng trước đây bị bỏ rơi ở đây, nên dòng
   // tóm tắt lá số (trên trang lẫn trong link chia sẻ) không biết của ai.
@@ -402,7 +402,7 @@ async function analyze() {
     free = await TuviPaywall.isFreeRerun('/api/chan-dung-tien-kiep', PortraitRecover.birthQuery(_lastBirth));
   } catch (e) { free = false; }
   if (free) {
-    TuviPaywall._banner('✓ Bạn đã tạo kết quả cho lá số này — mở lại, không trừ Lượng');
+    TuviPaywall._banner(_tvmbT('js.ctk.ban-da-tao-ket-qua-cho', '✓ Bạn đã tạo kết quả cho lá số này — mở lại, không trừ Lượng'));
     await _doGenerate(true);
     return;
   }
@@ -427,7 +427,7 @@ async function _runAnonPreview() {
       body: JSON.stringify({ birth: _lastBirth }),
     });
     var data = await res.json();
-    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    if (!res.ok || !data.success) throw new Error(data.error || _tvmbT('js.ctk.loi', 'Lỗi ') + res.status);
     renderMetaHead(data);
     renderMetaRest(data);
     mountHook(data);
@@ -440,7 +440,7 @@ async function _runAnonPreview() {
     _showDummyMota();
   } catch (e) {
     _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    showError(_tvmbT('js.ctk.loi-8d72', 'Lỗi: ') + (e.message || _tvmbT('js.ctk.khong-the-ket-noi-vui-long', 'Không thể kết nối. Vui lòng thử lại.')));
   }
 }
 
@@ -465,8 +465,8 @@ function mountHook(data) {
     var hiem = HF.cachCucHiem(pseudoLs, census);
     var spec = {
       tool: 'chan-dung-tien-kiep',
-      toolLabel: 'Chân Dung Tiền Kiếp',
-      charts: [hexDims ? { type: 'hexRadar', data: { dims: hexDims }, title: 'Lục Giác cung Mệnh' } : null].filter(Boolean),
+      toolLabel: _tvmbT('js.ctk.chan-dung-tien-kiep', 'Chân Dung Tiền Kiếp'),
+      charts: [hexDims ? { type: 'hexRadar', data: { dims: hexDims }, title: _tvmbT('js.ctk.luc-giac-cung-menh', 'Lục Giác cung Mệnh') } : null].filter(Boolean),
       facts: [tongFact, hiem].filter(Boolean),
     };
     window.HookLayer.run(host, spec);
@@ -480,12 +480,12 @@ function _renderLockWall() {
   host.innerHTML = '';
   TuviPaywall.lockPreview({
     host: host,
-    title: '⊙ Chân dung & câu chuyện chưa mở',
+    title: _tvmbT('js.ctk.chan-dung-cau-chuyen-chua-mo', '⊙ Chân dung & câu chuyện chưa mở'),
     items: [
-      'Bức tranh chân dung — vẽ riêng theo lá số của bạn',
-      'Mô tả nhân vật + chữ viết cho từng hồi trong khung 5 hồi',
+      _tvmbT('js.ctk.buc-tranh-chan-dung-ve-rieng', 'Bức tranh chân dung — vẽ riêng theo lá số của bạn'),
+      _tvmbT('js.ctk.mo-ta-nhan-vat-chu-viet', 'Mô tả nhân vật + chữ viết cho từng hồi trong khung 5 hồi'),
     ],
-    cta: 'Mở chân dung đầy đủ',
+    cta: _tvmbT('js.ctk.mo-chan-dung-day-du', 'Mở chân dung đầy đủ'),
     slug: function () { return _currentSlug; },
     onUnlock: function () { return _doGenerate(false); },
   });
@@ -503,7 +503,7 @@ function _showDummyPortrait(gender) {
   if (!wrap || !img) return;
   document.getElementById('imgPlaceholder').style.display = 'none';
   img.src = TuviPaywall.dummyPortraitUrl(gender);
-  img.alt = 'Ảnh minh hoạ (mờ) — mở khoá để xem chân dung thật của bạn';
+  img.alt = _tvmbT('js.ctk.anh-minh-hoa-mo-mo-khoa', 'Ảnh minh hoạ (mờ) — mở khoá để xem chân dung thật của bạn');
   img.classList.add('tpw-real-lock');
   img.style.display = 'block';
   wrap.style.display = '';
@@ -512,7 +512,7 @@ function _showDummyPortrait(gender) {
     var badge = document.createElement('div');
     badge.id = 'imgLockBadge';
     badge.style.cssText = 'position:absolute;top:10px;left:10px;z-index:2';
-    badge.innerHTML = TuviPaywall.lockBadge('Ảnh minh hoạ');
+    badge.innerHTML = TuviPaywall.lockBadge(_tvmbT('js.ctk.anh-minh-hoa', 'Ảnh minh hoạ'));
     wrap.insertBefore(badge, wrap.firstChild);
   }
 }
@@ -564,7 +564,7 @@ async function _doGenerate(freeRerun) {
   document.getElementById('imgWrap').style.display = '';
   document.getElementById('imgPlaceholder').style.display = 'flex';
   _imgWait = AiLoadingSteps.mountWait
-    ? AiLoadingSteps.mountWait('imgPlaceholder', { label: 'Đang vẽ chân dung…' })
+    ? AiLoadingSteps.mountWait('imgPlaceholder', { label: _tvmbT('js.ctk.dang-ve-chan-dung', 'Đang vẽ chân dung…') })
     : null;
   _imgWait && _imgWait.start();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDTK_STEPS);
@@ -607,7 +607,7 @@ async function _doGenerate(freeRerun) {
       await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false); });
       return;
     }
-    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    if (!res.ok || !data.success) throw new Error(data.error || _tvmbT('js.ctk.loi', 'Lỗi ') + res.status);
     _lastStory = data;
     renderMeta(data);
     renderProse(data);
@@ -623,18 +623,18 @@ async function _doGenerate(freeRerun) {
     // Nên chips CỐ Ý hỏi về nhân vật bằng lời thường, KHÔNG dùng thuật ngữ tử
     // vi và không xưng "tôi" — bản cũ ("Cung Quan Lộc của tôi nói gì?") kéo
     // người đọc ra khỏi mạch truyện vừa đọc xong.
-    var nv = data.characterName || 'nhân vật này';
-    var ba = profileIsFemale() ? 'Bà' : 'Ông';
+    var nv = data.characterName || _tvmbT('js.ctk.nhan-vat-nay', 'nhân vật này');
+    var ba = profileIsFemale() ? _tvmbT('js.ctk.ba', 'Bà') : _tvmbT('js.ctk.ong', 'Ông');
     Shell.setContext({
       birth: _lastBirth,
       wrap: 'past-life',
       label: 'Chân dung tiền kiếp',
-      greeting: 'Chuyện đời **' + nv + '** đến đây là hết phần chính. Còn nhiều điều nữa nằm trong lá số mà truyện chưa kể — bạn muốn hỏi gì về ' + nv.split(' ').slice(-1)[0] + '?',
+      greeting: _tvmbT('js.ctk.chuyen-doi-nv-het-phan-chinh', 'Chuyện đời **{nv}** đến đây là hết phần chính. Còn nhiều điều nữa nằm trong lá số mà truyện chưa kể — bạn muốn hỏi gì về {short}?', {nv: nv, short: nv.split(' ').slice(-1)[0]}),
       chips: [
-        nv + ' có giàu không?',
-        ba + ' ấy lấy vợ chồng thế nào?',
-        ba + ' ấy có bệnh tật hay tai ách gì không?',
-        'Vì sao lại luận ra như vậy?',
+        _tvmbT('js.ctk.nv-co-giau-khong', '{nv} có giàu không?', {nv: nv}),
+        _tvmbT('js.ctk.ba-ay-lay-vo-chong-the', '{ba} ấy lấy vợ chồng thế nào?', {ba: ba}),
+        _tvmbT('js.ctk.ba-ay-co-benh-tat-hay-tai', '{ba} ấy có bệnh tật hay tai ách gì không?', {ba: ba}),
+        _tvmbT('js.ctk.vi-sao-lai-luan-ra-nhu-vay', 'Vì sao lại luận ra như vậy?'),
       ],
     });
   } catch (e) {
@@ -643,7 +643,7 @@ async function _doGenerate(freeRerun) {
     _imgWait && _imgWait.stop();   // truyện hỏng → ẩn cả khung ảnh, đừng để đồng hồ chạy ngầm
     _closePanel();
     imageP.catch(function () {});
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    showError(_tvmbT('js.ctk.loi-8d72', 'Lỗi: ') + (e.message || _tvmbT('js.ctk.khong-the-ket-noi-vui-long', 'Không thể kết nối. Vui lòng thử lại.')));
     return;
   }
 
@@ -651,7 +651,7 @@ async function _doGenerate(freeRerun) {
   try {
     _ires = await imageP;
     var idata = await _ires.json();
-    if (!_ires.ok || !idata.success) throw new Error(idata.error || 'Lỗi ' + _ires.status);
+    if (!_ires.ok || !idata.success) throw new Error(idata.error || _tvmbT('js.ctk.loi', 'Lỗi ') + _ires.status);
     _imgWait && _imgWait.stop();
     _resultImgUrl = idata.imageUrl;
     setResultImage(idata.imageUrl);
@@ -662,7 +662,7 @@ async function _doGenerate(freeRerun) {
     // kết nối / gateway bỏ cuộc, tức hàm trên server có thể vẫn đang vẽ.
     if (PortraitRecover.nenThuLai(_ires)) {
       // GIỮ đồng hồ chạy: tắt chỉ báo ở đây là nói dối theo hướng ngược lại.
-      if (_imgWait) _imgWait.note('Mất kết nối lúc tải tranh — đang thử lấy lại…');
+      if (_imgWait) _imgWait.note(_tvmbT('js.ctk.mat-ket-noi-luc-tai-tranh', 'Mất kết nối lúc tải tranh — đang thử lấy lại…'));
       var rd = await PortraitRecover.wait({
         endpoint: '/api/chan-dung-tien-kiep',
         query: PortraitRecover.birthQuery(_lastBirth),
@@ -679,7 +679,7 @@ async function _doGenerate(freeRerun) {
     }
     _imgWait && _imgWait.stop();
     if (window.TuviPaywall && TuviPaywall.showRefundNotice) TuviPaywall.showRefundNotice(idata);
-    document.getElementById('imgPlaceholder').textContent = 'Không vẽ được chân dung lần này. Phần câu chuyện phía dưới vẫn đầy đủ.';
+    document.getElementById('imgPlaceholder').textContent = _tvmbT('js.ctk.khong-ve-duoc-chan-dung-lan', 'Không vẽ được chân dung lần này. Phần câu chuyện phía dưới vẫn đầy đủ.');
     publishShareable('');
   }
 }
@@ -720,7 +720,7 @@ function renderMetaHead(data) {
   // chèn vào trang /ket-qua — lấy từ Shell nên không lệch nhau.
   var bl = document.getElementById('birthLine');
   var bs = (window.Shell && Shell.birthSummary) ? Shell.birthSummary(_lastBirth) : '';
-  if (bs) { bl.textContent = 'Lá số: ' + bs; bl.style.display = 'block'; }
+  if (bs) { bl.textContent = _tvmbT('js.ctk.la-so', 'Lá số: ') + bs; bl.style.display = 'block'; }
   else { bl.style.display = 'none'; }
 }
 
@@ -749,7 +749,7 @@ function renderMeta(data) { renderMetaHead(data); renderMetaRest(data); }
 
 function renderProse(data) {
   document.getElementById('moTaTitle').textContent =
-    'Mô tả ' + (data.characterName || 'nhân vật');
+    _tvmbT('js.ctk.mo-ta', 'Mô tả ') + (data.characterName || _tvmbT('js.ctk.nhan-vat', 'nhân vật'));
   document.getElementById('moTaNhanVat').textContent = data.moTaNhanVat || '';
   // Thiếu phần mô tả (LLM trả không đủ) → giấu cả khối, đừng để tiêu đề trơ
   // trên một đoạn rỗng. Truyện vẫn hiển thị bình thường.
@@ -767,22 +767,22 @@ function renderBasis(data) {
   var o = data.occupation || {};
   var rows = [];
   if (o.star) {
-    rows.push(['Chính tinh tại cung Quan Lộc',
-      o.star + (o.brightness ? ' (' + o.brightness + ')' : '') +
-      (o.borrowed ? ' — vô chính diệu, mượn cung xung chiếu' : '')]);
+    rows.push([_tvmbT('js.ctk.chinh-tinh-tai-cung-quan-loc', 'Chính tinh tại cung Quan Lộc'),
+      _tvmbG(['chinh', 'sao'], o.star) + (o.brightness ? ' (' + o.brightness + ')' : '') +
+      (o.borrowed ? _tvmbT('js.ctk.vo-chinh-dieu-muon-cung-xung', ' — vô chính diệu, mượn cung xung chiếu') : '')]);
   }
-  if (o.tierLabel) rows.push(['Bậc chức phận engine chấm', o.tierLabel]);
-  if (data.thanCungName) rows.push(['Cung an Thân', data.thanCungName]);
+  if (o.tierLabel) rows.push([_tvmbT('js.ctk.bac-chuc-phan-engine-cham', 'Bậc chức phận engine chấm'), o.tierLabel]);
+  if (data.thanCungName) rows.push([_tvmbT('js.ctk.cung-an-than', 'Cung an Thân'), _tvmbG('cung', data.thanCungName)]);
   var menh = data.menh || {};
-  if ((menh.chinhTinh || []).length) rows.push(['Chính tinh tại cung Mệnh', menh.chinhTinh.join(', ')]);
-  if ((menh.phuTinh || []).length) rows.push(['Phụ tinh tại cung Mệnh', menh.phuTinh.slice(0, 10).join(', ')]);
-  if (data.portraitAge) rows.push(['Tuổi nhân vật trong tranh', data.portraitAge + ' tuổi']);
+  if ((menh.chinhTinh || []).length) rows.push([_tvmbT('js.ctk.chinh-tinh-tai-cung-menh', 'Chính tinh tại cung Mệnh'), menh.chinhTinh.map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ')]);
+  if ((menh.phuTinh || []).length) rows.push([_tvmbT('js.ctk.phu-tinh-tai-cung-menh', 'Phụ tinh tại cung Mệnh'), menh.phuTinh.slice(0, 10).map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ')]);
+  if (data.portraitAge) rows.push([_tvmbT('js.ctk.tuoi-nhan-vat-trong-tranh', 'Tuổi nhân vật trong tranh'), _tvmbT('js.ctk.n-tuoi', '{n} tuổi', {n: data.portraitAge})]);
   if (!rows.length) { document.getElementById('basisBlock').style.display = 'none'; return; }
 
   var html = rows.map(function (r) {
     return '<div class="row"><span class="k">' + esc(r[0]) + '</span>' + esc(r[1]) + '</div>';
   }).join('');
-  if (o.desc) html += '<div class="row"><span class="k">Chức phận suy ra</span>' + esc(o.desc) + '</div>';
+  if (o.desc) html += ('<div class="row"><span class="k">' + _tvmbT('js.ctk.chuc-phan-suy-ra', 'Chức phận suy ra') + '</span>') + esc(o.desc) + '</div>';
   if (o.source) html += '<div class="src">' + esc(o.source) + '</div>';
   document.getElementById('basisBody').innerHTML = html;
   document.getElementById('basisBlock').style.display = 'block';
@@ -801,7 +801,7 @@ function publishShareable(imageUrl) {
   if (!d) return;
   var blocks = [];
   blocks.push({
-    header: 'Chân Dung Tiền Kiếp',
+    header: _tvmbT('js.ctk.chan-dung-tien-kiep', 'Chân Dung Tiền Kiếp'),
     image: imageUrl || undefined,
     text: [d.characterName, d.danhXung, d.biDanh].filter(Boolean).join(' — ') + '\n\n' + (d.moTaNhanVat || ''),
   });
@@ -810,14 +810,14 @@ function publishShareable(imageUrl) {
     return a.title + ' (' + a.stage + ')' +
       (badge ? ' — ' + badge.label : '') + '\n' + a.text;
   }).join('\n\n');
-  if (storyText) blocks.push({ header: 'Một Đời Người — 5 Hồi', text: storyText });
-  if (d.ketLuan) blocks.push({ header: 'Lời Kết', text: d.ketLuan });
+  if (storyText) blocks.push({ header: _tvmbT('js.ctk.mot-doi-nguoi-5-hoi', 'Một Đời Người — 5 Hồi'), text: storyText });
+  if (d.ketLuan) blocks.push({ header: _tvmbT('js.ctk.loi-ket', 'Lời Kết'), text: d.ketLuan });
 
   Shell.setShareable({
     kind: imageUrl ? 'image' : 'text',
     toolId: 'chan-dung-tien-kiep',
     birth: _lastBirth,
-    title: (d.characterName ? d.characterName + ' — ' : '') + (d.danhXung || 'Chân dung tiền kiếp của tôi'),
+    title: (d.characterName ? d.characterName + ' — ' : '') + (d.danhXung || _tvmbT('js.ctk.chan-dung-tien-kiep-cua-toi', 'Chân dung tiền kiếp của tôi')),
     imageUrl: imageUrl || undefined,
     blocks: blocks,
   });
@@ -831,7 +831,7 @@ function _mountInviteCta() {
   var host = document.getElementById('resPanel');
   if (!host) return;
   var go = function () {
-    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'chan-dung-tien-kiep', toolLabel: 'lượt vẽ' });
+    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'chan-dung-tien-kiep', toolLabel: _tvmbT('js.ctk.luot-ve', 'lượt vẽ') });
   };
   if (window.InviteCta) return go();
   if (document.getElementById('_ivc_js')) return;
@@ -862,13 +862,13 @@ function _posterOpts() {
   var d = _lastStory || {};
   return {
     imageUrl: _resultImgUrl,
-    title: d.characterName || d.danhXung || 'Chân dung tiền kiếp',
+    title: d.characterName || d.danhXung || _tvmbT('js.ctk.chan-dung-tien-kiep-gxr5', 'Chân dung tiền kiếp'),
     subtitle: [d.danhXung, (d.era || {}).label].filter(Boolean).join(' · '),
     // Lời Kết trước: đó là câu chốt của cả truyện, tách ra đứng một mình vẫn
     // có nghĩa. Mô tả nhân vật là lớp đỡ, cuối cùng mới bới trong 5 hồi.
     quote: Poster.pickQuote([d.ketLuan, d.moTaNhanVat, ((d.acts || []).map(function (a) { return a.text || ''; }).join(' '))]),
     qrUrl: Poster.qrLink('chan-dung-tien-kiep', '/app/chan-dung-tien-kiep'),
-    qrCaption: 'Quét mã — xem tiền kiếp của bạn',
+    qrCaption: _tvmbT('js.ctk.quet-ma-xem-tien-kiep-cua', 'Quét mã — xem tiền kiếp của bạn'),
   };
 }
 
@@ -876,7 +876,7 @@ async function downloadResult() {
   if (!_resultImgUrl) return;
   var btn = document.getElementById('btnDownload');
   var label = btn ? btn.textContent : '';
-  if (btn) { btn.disabled = true; btn.textContent = 'Đang dựng ảnh…'; }
+  if (btn) { btn.disabled = true; btn.textContent = _tvmbT('js.ctk.dang-dung-anh', 'Đang dựng ảnh…'); }
   try {
     await _ensurePoster();
     await Poster.download(_posterOpts(), 'chan-dung-tien-kiep-tuviminhbao.png');
