@@ -78,6 +78,7 @@ Chữ do engine TS trên SERVER viết sẵn (`lib/almanac`, `lib/tayphuong`, `l
 =======
 - **Khoá bằng id SẴN CÓ trong payload thì khỏi thêm mã** (W30c Dạy Con, ns `daycon`): `h.band` · `kieu.id` · `moiLo.id` · `matDoc[].cung` · chỉ số mảng đủ làm khoá ⇒ route/`SHAPE` không đổi; chỉ chuỗi KHÔNG có id (nhãn chặng) mới thêm mã additive. **Trước khi dịch một bảng, tìm chỗ VẼ** — bảng engine nhiều mà trang không hiện (192 tên hoạt động Dạy Con, trang chỉ in số lượng) là chữ chết. Trang HTML dựng bằng JS nội tuyến cũng được làm `LONG_MODULE` (helper tra `I18n.long('<ns>',…)` + `I18n.loadLong('<ns>')` đầu script).
 >>>>>>> 00748971c2e3ae47299c274cc2b16c7a2aa44de2
+- **Nhãn sao engine dựng (`Tên (độ sáng) [Hóa X]`) tra bằng `TuviStarLabel.t/.list` (`tools-shared/star-label.js`), KHÔNG `_tvmbG` trên nguyên chuỗi** (W30f) — glossary chỉ có tên trần ⇒ trượt IM LẶNG ở /ja. Nhãn đáp án có sẵn khoá trong payload (`value` 'A+B') thì dựng ở client từ bảng nguồn, không thêm mã mới; mã additive chỉ cho thứ client không tự biết (`treEm`, `khopMa`). Giờ Sinh: ns `gio-sinh`, `check-gio-sinh-tuoi` so nhãn dựng ở client với engine thật.
 - **Thêm một engine:** thêm `ma` ở route (additive) → bảng nguồn vào `loadSources()` + `LONG_NS`/`LONG_MODULE`/`ENGINE_NS` → module vẽ gọi `loadLong`/`I18n.long` → `npm run i18n:long -- next|save` từng locale (zh-tw tự sinh zh-cn) → chốt mã ở `check:terms` → vẽ thử vi byte-giống + đột biến. Bump `?v=` module (và `shell.js` nếu nó nạp lười module đó).
 
 ## Bộ dò

@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-588 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+589 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🌠 W30f-1/2 — `starT()` dùng chung → `tools-shared/star-label.js` (cong-so · day-con · hntre · nguoi-khac) · Giờ Sinh: nhãn đáp án câu cung 5 ngôn ngữ (ns `gio-sinh` 131 mục · mã additive `treEm`/`khopMa`/`lechMa` · `check-gio-sinh-tuoi` so nhãn dựng ở client với engine thật 445 mục) |
 | 1 | 2026-11 | `2026-11.md` | 🧒 W30a — Văn engine `huong-nghiep-tre.ts` theo ngôn ngữ (ns `hntre`, 305 mục × ja/ko/zh-tw/en + zh-cn OpenCC): thêm `ma` (matDoc · khongDoiHoi), đọc bảng TS bằng AST, vi byte-giống 10/10, red-team 8+5 đỏ; còn Việt: `kieu` (lô B) · `vi`/`chatNguoi` (lô D) |
 | 1 | 2026-11 | `2026-11.md` | 💼 W30b — Văn engine server lô B: `cong-so.ts` → Công Sở 5 ngôn ngữ (ns `cong-so` 204 mục · mã `luanMa`/`goiYMa`/`domainMa`/`quyMoMa` · tách `cong-so-terms.ts`); còn lại past-life/nghe-nghiep |
 | 1 | 2026-11 | `2026-11.md` | 👶 W30c — Dạy Con: văn engine theo ngôn ngữ (ns `daycon` 71 mục × 5 ngôn ngữ; 192 tên hoạt động không dịch vì trang chỉ hiện số lượng); mã `nhanMa` additive; còn nợ `starLabel` (cong-so.ts) ghép tên sao + độ sáng |
