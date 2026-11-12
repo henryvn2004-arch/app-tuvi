@@ -47,6 +47,7 @@ import {
   insertHistoryRow,
   userOwnsLaso,
 } from '@/lib/portraits/cache';
+import { requestLocale, withLang, type LangLocale } from '@/lib/llm/locale';
 
 
 
@@ -165,7 +166,13 @@ function meta(p: NhanMachProfile) {
   };
 }
 
-async function buildReport(p: NhanMachProfile, userId: string, key: string, coLaSoBan: boolean) {
+async function buildReport(
+  p: NhanMachProfile,
+  userId: string,
+  key: string,
+  locale: LangLocale,
+  coLaSoBan: boolean,
+) {
   const prompt = buildNhanMachPrompt(p);
 
   const ask = async (nudge: boolean) => {
@@ -173,11 +180,15 @@ async function buildReport(p: NhanMachProfile, userId: string, key: string, coLa
       const r = await llmTextFull({
         luanGiai: true,
         system: NHAN_MACH_SYSTEM_PROMPT,
-        prompt:
+        prompt: withLang(
           prompt +
-          (nudge
-            ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
-            : ''),
+            (nudge
+              ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
+              : ''),
+          locale,
+          [prompt],
+          { json: true },
+        ),
         json: true,
         jsonSchema: NHAN_MACH_SCHEMA,
         // Nhiều người ⇒ phần `tungNguoi` dài theo số người. Trần rộng hơn tool
@@ -258,7 +269,7 @@ async function buildReport(p: NhanMachProfile, userId: string, key: string, coLa
   };
   insertHistoryRow(TOOL_ID, { ...row, user_id: userId, laso_key: key });
   void railFreeTurnsPerGen().then((n) => railFreeGrant(userId, n)).catch(() => {});
-  CACHE.put('main', key, { payload, row }, userId);
+  CACHE.put('main', key, { payload, row }, userId, locale);
   return ok(payload);
 }
 
@@ -326,13 +337,14 @@ async function runPost(request: NextRequest) {
   }));
 
   const key = soKey(vaiList, birthSelf, births);
-  const [{ cached, stale }, owns] = await Promise.all([
-    CACHE.get('main', key),
+  const locale = requestLocale(request);
+  const [{ cached, coDong }, owns] = await Promise.all([
+    CACHE.get('main', key, locale),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
   // `free` xét cả dòng CŨ: người này đã trả tiền cho đúng lá số đó rồi. Còn
   // `cached` thì `CACHE.get` đã lọc — dòng cũ không bao giờ được phục vụ.
-  const free = Boolean(cached || stale) && owns;
+  const free = coDong && owns;
 
   if (!free) {
     const denied = await toolPaymentDenied(TOOL_ID, auth.user.id, String(body.slug || ''));
@@ -340,7 +352,7 @@ async function runPost(request: NextRequest) {
   }
 
   if (cached) {
-    CACHE.touch('main', key);
+    CACHE.touch('main', key, locale);
     if (!owns && cached.row) {
       insertHistoryRow(TOOL_ID, { ...cached.row, user_id: auth.user.id, laso_key: key });
       void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});
@@ -361,7 +373,7 @@ async function runPost(request: NextRequest) {
   }
 
   const profile = computeNhanMach(vaiList, lsBan);
-  const res = await buildReport(profile, auth.user.id, key, Boolean(lsBan));
+  const res = await buildReport(profile, auth.user.id, key, locale, Boolean(lsBan));
   return refundIfSystemFailure(res, {
     toolId: TOOL_ID,
     userId: auth.user.id,

@@ -352,10 +352,18 @@ let khoaSo = 0;
     writeFileSync(
       join(tmp, 'hook.mjs'),
       `import { existsSync } from 'node:fs';\nconst OUT = ${JSON.stringify(pathToFileURL(join(tmp, 'out')).href + '/')};\n` +
+        `const SRC = ${JSON.stringify(pathToFileURL(ROOT).href.replace(/\/?$/, '/'))};\n` +
+        // Thư mục có index.ts (vd '@/lib/i18n/glossary', kéo vào qua cache.ts → lib/llm/locale từ W18)
+        // biên dịch thành <thư mục>/index.js — thử cả hai đuôi.
+        `const pick = (base) => [base + '.js', base + '/index.js'].map((x) => new URL(x)).find((u) => existsSync(u));\n` +
         `export async function resolve(s, c, n) {\n` +
-        `  if (s.startsWith('@/')) return n(OUT + s.slice(2) + '.js', c);\n` +
+        `  if (s.startsWith('@/')) { const u = pick(OUT + s.slice(2)); return n(u ? u.href : OUT + s.slice(2) + '.js', c); }\n` +
         `  if (/^\\.\\.?\\//.test(s) && c.parentURL && c.parentURL.startsWith(OUT) && !/\\.[cm]?js$/.test(s)) {\n` +
-        `    const u = new URL(s + '.js', c.parentURL); if (existsSync(u)) return n(u.href, c);\n  }\n  return n(s, c);\n}\n`
+        `    const u = pick(new URL(s, c.parentURL).href); if (u) return n(u.href, c);\n  }\n` +
+        // File .mjs/.js thuần (vd glossary/terms.generated.mjs) tsc KHÔNG chép sang out/ ⇒ đọc thẳng bản nguồn.
+        `  if (/^\\.\\.?\\//.test(s) && c.parentURL && c.parentURL.startsWith(OUT) && /\\.[cm]?js$/.test(s)) {\n` +
+        `    const u = new URL(s, c.parentURL); if (!existsSync(u)) return n(SRC + u.href.slice(OUT.length), c);\n  }\n` +
+        `  return n(s, c);\n}\n`
     );
     register(pathToFileURL(join(tmp, 'hook.mjs')).href);
     const { lasoKey } = await import(pathToFileURL(join(tmp, 'out/lib/portraits/cache.js')).href);

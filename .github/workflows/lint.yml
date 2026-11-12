@@ -477,6 +477,14 @@ jobs:
       - name: Email đa ngôn ngữ — đủ khoá, đủ tham số, zh-cn khớp OpenCC
         run: npm run check:emaili18n
 
+      # PDF đa ngôn ngữ (W18): render PDF THẬT bằng react-pdf, soi font nhúng (pdffonts), chữ bóc lại
+      # (pdftotext) và MỰC trên trang (pdftoppm) — thiếu glyph CJK là hỏng IM LẶNG, route vẫn trả PDF.
+      - name: PDF đa ngôn ngữ — font CJK/Hangul nhúng và in ra được
+        run: |
+          command -v pdftoppm || sudo apt-get install -y poppler-utils
+          npm run pdf:fonts
+          npm run test:unit
+
       # Văn dài theo chỉ số (W16a): hào từ/lời khuyên quẻ/luận Thể–Dụng ở public/tools-shared/i18n-long/<locale>/.
       # Hash khớp nguồn, không mục mồ côi, locale trong LONG_COMPLETE đủ 100%, zh-cn khớp OpenCC(zh-tw).
       - name: Văn dài đa ngôn ngữ — hash khớp nguồn, đủ mục, không mồ côi

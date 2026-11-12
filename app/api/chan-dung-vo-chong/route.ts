@@ -37,6 +37,7 @@ import {
   userOwnsLaso,
   birthFromQuery,
 } from '@/lib/portraits/cache';
+import { requestLocale, withLang } from '@/lib/llm/locale';
 
 
 
@@ -69,6 +70,23 @@ const SHAPE_FINGERPRINT = '8cfee3e40522';
 
 /** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
 const CACHE = cacheFor(TOOL_ID, SHAPE);
+
+/**
+ * Khách ngoài `vi`: `withLang({json:true})` bảo model viết MỌI giá trị chữ bằng ngôn ngữ đích — trừ
+ * `imagePrompt`, thứ đi thẳng vào model vẽ và prompt gốc đòi tiếng Anh.
+ */
+const IMAGE_PROMPT_GIU_TIENG_ANH = '\nRiêng giá trị "imagePrompt" vẫn viết bằng tiếng ANH như hướng dẫn ở trên.';
+
+/** Ảnh + tuổi/giới của bản đã có (dòng `vi` dùng được) — `null` nếu không đủ để dùng lại. */
+function anhGoc(c: { payload: Record<string, unknown> } | null) {
+  const p = c?.payload;
+  if (!p || typeof p.imageUrl !== 'string' || !p.imageUrl || typeof p.spouseAge !== 'number') return null;
+  return {
+    imageUrl: p.imageUrl,
+    spouseAge: p.spouseAge,
+    spouseGender: p.spouseGender === 'nu' ? ('nu' as const) : ('nam' as const),
+  };
+}
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -132,7 +150,8 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   // ── Cache theo lá số (xem lib/portraits/cache.ts) ─────────────────────
   // Tra TRƯỚC cả chốt thanh toán, vì kết quả tra quyết định luôn có phải trả
   // tiền hay không: người đã từng trả cho đúng lá số này thì xem lại miễn phí.
-  const look = await CACHE.lookup('main', auth.user.id, birth);
+  const locale = requestLocale(request);
+  const look = await CACHE.lookup('main', auth.user.id, birth, locale);
 
   if (!look.free) {
     // Chốt chặn thanh toán PHÍA SERVER (S0 track COO) — xem chú thích cùng loại
@@ -142,7 +161,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   }
 
   if (look.cached) {
-    CACHE.touch('main', look.key);
+    CACHE.touch('main', look.key, locale);
     // Người mới (vừa trả đủ tiền) cần dòng lịch sử của RIÊNG họ: để thấy trong
     // mục Lịch sử, và để lần sau được nhận diện là đã trả cho lá số này.
     if (!look.owns && look.cached.row) {
@@ -174,7 +193,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     const llmRes = await llmTextFull({
       luanGiai: true,
       system: PHU_THE_LUAN_GIAI_SYSTEM_PROMPT,
-      prompt: buildPhuTheLuanGiaiPrompt(laSoText, undefined, userGender),
+      prompt: withLang(buildPhuTheLuanGiaiPrompt(laSoText, undefined, userGender), locale, [laSoText]),
       // 1350→1750 (2026-09-07, Henry): PHU_THE_DESC nới 150-220→200-260 từ +
       // thêm bộ câu hỏi trọng tâm (lib/agent/phu-the-luan-giai.ts) — trần
       // token tăng theo tỉ lệ từ tăng, tránh sát mép gây cắt giữa câu.
@@ -199,7 +218,12 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     const llmRes = await llmTextFull({
       luanGiai: true,
       system: CHAN_DUNG_VO_CHONG_ANALYSIS_SYSTEM_PROMPT,
-      prompt: buildChanDungVoChongAnalysisPrompt(morph, phuThe, phuTheLuanGiai, userGender),
+      prompt: withLang(
+        buildChanDungVoChongAnalysisPrompt(morph, phuThe, phuTheLuanGiai, userGender),
+        locale,
+        [phuTheLuanGiai],
+        { json: true },
+      ) + (locale === 'vi' ? '' : IMAGE_PROMPT_GIU_TIENG_ANH),
       maxTokens: 1650, // nâng 50% (Henry chốt 2026-08-20)
     });
     raw = llmRes.text;
@@ -215,39 +239,48 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   const parsed = parseLlmJson(raw) as ChanDungVoChongAnalysis | null;
   if (!parsed?.imagePrompt || !parsed?.description) return err('Lỗi phân tích kết quả trả về.', 500);
 
-  const { finalPrompt, spouseAge, spouseGender } = buildFinalPortraitImagePrompt(
-    parsed,
-    morph,
-    phuTheElement,
-    userGender
-  );
+  // i18n W18 — lá số đã có bản `vi` thì bản ngôn ngữ khác DÙNG LẠI bức ảnh + tuổi/giới của nó,
+  // chỉ viết lại phần chữ. Luật "một lá số một kết quả": người đã xem bản Việt chuyển sang /ja không
+  // được thấy một người bạn đời KHÁC; và không đốt thêm ~$0.08 tiền ảnh cho mỗi ngôn ngữ.
+  // (`spouseAge` có `Math.random()` — tính lại là lệch số với bản Việt.)
+  const goc = locale === 'vi' ? null : anhGoc((await CACHE.get('main', look.key, 'vi')).cached);
 
-  let imageB64: string;
-  try {
-    const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1024x1536' });
-    imageB64 = imgRes.b64;
-    void logImageUsage('chan-dung-vo-chong', imgRes.model, imgRes.usage, imgRes.durationMs);
-  } catch (e) {
-    return err('Lỗi sinh ảnh: ' + (e instanceof Error ? e.message : 'không rõ'), 500);
-  }
+  let imageUrl: string;
+  let spouseAge: number;
+  let spouseGender: 'nam' | 'nu';
+  if (goc) {
+    ({ imageUrl, spouseAge, spouseGender } = goc);
+  } else {
+    const fin = buildFinalPortraitImagePrompt(parsed, morph, phuTheElement, userGender);
+    ({ spouseAge, spouseGender } = fin);
 
-  // Upload Supabase Storage (bucket public 'portraits')
-  const path = `${auth.user.id}/${Date.now()}.png`;
-  const bytes = Buffer.from(imageB64, 'base64');
-  const upRes = await fetch(`${SUPABASE_URL}/storage/v1/object/portraits/${path}`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${SUPABASE_KEY}`,
-      apikey: SUPABASE_KEY,
-      'Content-Type': 'image/png',
-    },
-    body: bytes,
-  });
-  if (!upRes.ok) {
-    const t = await upRes.text().catch(() => '');
-    return err('Lỗi lưu ảnh: ' + t.slice(0, 200), 500);
+    let imageB64: string;
+    try {
+      const imgRes = await generatePortraitImage({ prompt: fin.finalPrompt, size: '1024x1536' });
+      imageB64 = imgRes.b64;
+      void logImageUsage('chan-dung-vo-chong', imgRes.model, imgRes.usage, imgRes.durationMs);
+    } catch (e) {
+      return err('Lỗi sinh ảnh: ' + (e instanceof Error ? e.message : 'không rõ'), 500);
+    }
+
+    // Upload Supabase Storage (bucket public 'portraits')
+    const path = `${auth.user.id}/${Date.now()}.png`;
+    const bytes = Buffer.from(imageB64, 'base64');
+    const upRes = await fetch(`${SUPABASE_URL}/storage/v1/object/portraits/${path}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        apikey: SUPABASE_KEY,
+        'Content-Type': 'image/png',
+      },
+      body: bytes,
+    });
+    if (!upRes.ok) {
+      const t = await upRes.text().catch(() => '');
+      return err('Lỗi lưu ảnh: ' + t.slice(0, 200), 500);
+    }
+    imageUrl = `${SUPABASE_URL}/storage/v1/object/public/portraits/${path}`;
   }
-  const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/portraits/${path}`;
 
   // Bộ cột lịch sử — dựng MỘT lần rồi dùng cho cả dòng của người sinh gốc lẫn
   // dòng của những người trúng cache về sau (`user_id` gắn lúc ghi, nên không
@@ -278,7 +311,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     spouseAge,
     phuThe,
   };
-  CACHE.put('main', look.key, { payload, row: historyRow }, auth.user.id);
+  CACHE.put('main', look.key, { payload, row: historyRow }, auth.user.id, locale);
   return ok(payload);
 }
 
@@ -306,13 +339,13 @@ async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
   if ('error' in auth) return err(auth.error, auth.status);
 
   const key = lasoKey(birthFromQuery(sp));
-  const [{ cached, stale }, owns] = await Promise.all([
-    CACHE.get('main', key),
+  const [{ cached, coDong }, owns] = await Promise.all([
+    CACHE.get('main', key, requestLocale(request)),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
   // `cached` = có dòng DÙNG ĐƯỢC (dòng cũ đã bị lọc). `free` = đã trả tiền cho
-  // lá số này, kể cả khi dòng cũ và sắp phải dựng lại.
-  return ok({ success: true, cached: Boolean(cached), free: Boolean(cached || stale) && owns });
+  // lá số này, kể cả khi dòng cũ / chỉ có bản ngôn ngữ khác và sắp phải dựng lại.
+  return ok({ success: true, cached: Boolean(cached), free: coDong && owns });
 }
 
 // ── Routes ────────────────────────────────────────────────────────────

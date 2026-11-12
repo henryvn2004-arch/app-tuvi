@@ -49,8 +49,10 @@ import {
   cacheFor,
   insertHistoryRow,
   userOwnsLaso,
+  KHONG_THEO_NGON_NGU,
   type PortraitPhase,
 } from '@/lib/portraits/cache';
+import { requestLocale, withLang, type LangLocale } from '@/lib/llm/locale';
 
 
 
@@ -223,7 +225,7 @@ const STORY_SCHEMA = {
   propertyOrdering: ['tuaDe', 'moTaMoiDuyen', 'acts', 'ketLuan'],
 };
 
-async function handleStory(grp: BondGroup, userId: string) {
+async function handleStory(grp: BondGroup, userId: string, locale: LangLocale) {
   const built = buildBond(grp);
   if (!built.ok) return err(built.error, 400);
   const { group } = built;
@@ -252,11 +254,17 @@ async function handleStory(grp: BondGroup, userId: string) {
       const llmRes = await llmTextFull({
         luanGiai: true,
         system: bondStorySystemPrompt(n),
-        prompt:
+        // Chỉ pha truyện nhận ngôn ngữ — pha ảnh tả mặt bằng tiếng Anh, dùng chung mọi ngôn ngữ.
+        // `vi` ⇒ withLang trả NGUYÊN chuỗi: n === 2 vẫn trùng khít từng byte bản cũ.
+        prompt: withLang(
           storyPrompt() +
-          (nudge
-            ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
-            : ''),
+            (nudge
+              ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
+              : ''),
+          locale,
+          [storyPrompt()],
+          { json: true },
+        ),
         json: true,
         jsonSchema: STORY_SCHEMA,
         // 4 hồi × 110–170 từ tiếng Việt + mô tả mối duyên + lời kết. Nhóm
@@ -321,7 +329,7 @@ async function handleStory(grp: BondGroup, userId: string) {
     grp,
   );
   // Pha `story` KHÔNG có dòng lịch sử riêng (chỉ pha `image` ghi) → `row: null`.
-  CACHE.put('story', grp.key, { payload, row: null }, userId);
+  CACHE.put('story', grp.key, { payload, row: null }, userId, locale);
   return ok(payload);
 }
 
@@ -444,7 +452,7 @@ async function handleImage(grp: BondGroup, userId: string) {
   void railFreeTurnsPerGen().then((k) => railFreeGrant(userId, k)).catch(() => {});
 
   const payload = withLaso({ success: true, imageUrl, ...bondMeta(group) }, grp);
-  CACHE.put('image', grp.key, { payload, row: historyRow }, userId);
+  CACHE.put('image', grp.key, { payload, row: historyRow }, userId, KHONG_THEO_NGON_NGU);
   return ok(payload);
 }
 
@@ -491,15 +499,15 @@ async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
 
   const { key } = pairFromQuery(sp);
   const [story, image, owns] = await Promise.all([
-    CACHE.get('story', key),
-    CACHE.get('image', key),
+    CACHE.get('story', key, requestLocale(request)),
+    CACHE.get('image', key, KHONG_THEO_NGON_NGU),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
   // ⚠️ `story`/`image` là OBJECT `{cached, stale}` — đọc thẳng chúng như boolean
   // thì lúc nào cũng "có cache" và client bỏ luôn bước trả tiền.
   const cached = Boolean(story.cached) && Boolean(image.cached);
-  const coDong = (story.cached || story.stale) && (image.cached || image.stale);
-  return ok({ success: true, cached, free: Boolean(coDong) && owns });
+  const coDong = story.coDong && image.coDong;
+  return ok({ success: true, cached, free: coDong && owns });
 }
 
 // ── Routes ──────────────────────────────────────────────────────────────
@@ -582,13 +590,15 @@ async function runPost(request: NextRequest) {
   // Tra cache RIÊNG từng pha — hai pha chạy song song, lượt gốc có thể hỏng
   // giữa chừng và chỉ một pha kịp vào cache; coi cả hai là một khối thì nửa còn
   // thiếu được phát miễn phí.
-  const [{ cached, stale }, owns] = await Promise.all([
-    CACHE.get(phase, pair.key),
+  // Ngôn ngữ chỉ tách dòng cache của pha TRUYỆN; ảnh dùng chung (xem `KHONG_THEO_NGON_NGU`).
+  const locale = phase === 'story' ? requestLocale(request) : KHONG_THEO_NGON_NGU;
+  const [{ cached, coDong }, owns] = await Promise.all([
+    CACHE.get(phase, pair.key, locale),
     userOwnsLaso(TOOL_ID, auth.user.id, pair.key),
   ]);
-  // `free` xét cả dòng CŨ: đã trả tiền cho đúng cặp lá số đó rồi. `cached` thì
-  // `CACHE.get` đã lọc — dòng cũ không bao giờ được phục vụ.
-  const free = Boolean(cached || stale) && owns;
+  // `free` xét cả dòng CŨ / dòng của ngôn ngữ khác: đã trả tiền cho đúng cặp lá số đó
+  // rồi. `cached` thì `CACHE.get` đã lọc — dòng cũ không bao giờ được phục vụ.
+  const free = coDong && owns;
 
   if (!free) {
     // Chốt chặn thanh toán PHÍA SERVER — không có bước này thì gọi thẳng
@@ -598,7 +608,7 @@ async function runPost(request: NextRequest) {
   }
 
   if (cached) {
-    CACHE.touch(phase, pair.key);
+    CACHE.touch(phase, pair.key, locale);
     if (phase === 'image' && !owns && cached.row) {
       insertHistoryRow(TOOL_ID, { ...cached.row, user_id: auth.user.id, laso_key: pair.key });
       void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});
@@ -607,7 +617,9 @@ async function runPost(request: NextRequest) {
   }
 
   const res =
-    phase === 'story' ? await handleStory(pair, auth.user.id) : await handleImage(pair, auth.user.id);
+    phase === 'story'
+      ? await handleStory(pair, auth.user.id, locale)
+      : await handleImage(pair, auth.user.id);
   return refundIfSystemFailure(res, {
     toolId: TOOL_ID,
     userId: auth.user.id,
