@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-589 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+590 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 48 | 192259 B |
+| `2026-11.md` | 49 | 200,462 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -29,6 +29,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-11 | `2026-11.md` | 🧭 W30e — Lục Nhâm · Giờ Sinh · Người Khác: văn engine theo ngôn ngữ (ns `lucnham` 115 · `giosinh` 60 · `nguoikhac` 24); KHUÔN `{x}` engine dựng chữ Việt bằng chính bảng + mã `{k,v}` lồng; vá glossary nguyệt tướng/can ngày/nhãn sao có độ sáng |
+| 1 | 2026-11 | `2026-11.md` | 🧒 W30d — Văn engine kết quả lô D: Dạy Con (5 trục · 8 chất) · Duyên Nợ Tiền Kiếp · Sổ Nhân Mạch × 4 ngôn ngữ (i18n-long `day-con-assess` 124 · `duyen-no` 37 · `nhan-mach` 6); mã tra additive, KHÔNG bump SHAPE; bộ dò mới `check:enginema` + golden từ engine cũ |
 | 1 | 2026-11 | `2026-11.md` | 🧒 W30a — Văn engine `huong-nghiep-tre.ts` theo ngôn ngữ (ns `hntre`, 305 mục × ja/ko/zh-tw/en + zh-cn OpenCC): thêm `ma` (matDoc · khongDoiHoi), đọc bảng TS bằng AST, vi byte-giống 10/10, red-team 8+5 đỏ; còn Việt: `kieu` (lô B) · `vi`/`chatNguoi` (lô D) |
 | 1 | 2026-11 | `2026-11.md` | 💼 W30b — Văn engine server lô B: `cong-so.ts` → Công Sở 5 ngôn ngữ (ns `cong-so` 204 mục · mã `luanMa`/`goiYMa`/`domainMa`/`quyMoMa` · tách `cong-so-terms.ts`); còn lại past-life/nghe-nghiep |
 | 1 | 2026-11 | `2026-11.md` | 👶 W30c — Dạy Con: văn engine theo ngôn ngữ (ns `daycon` 71 mục × 5 ngôn ngữ; 192 tên hoạt động không dịch vì trang chỉ hiện số lượng); mã `nhanMa` additive; còn nợ `starLabel` (cong-so.ts) ghép tên sao + độ sáng |

@@ -98,6 +98,7 @@
     "check:tokushoho": "node scripts/check-tokushoho.mjs",
     "check:emaili18n": "node scripts/check-email-i18n.mjs",
     "check:i18nlong": "node scripts/check-i18nlong.mjs",
+    "check:enginema": "node scripts/check-engine-ma.mjs",
     "check:masters": "node scripts/check-masters-i18n.mjs",
     "check:assetv": "node scripts/check-asset-v.mjs"
   },

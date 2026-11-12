@@ -42,6 +42,8 @@ import {
   LUAT_VAN_NAM_AN_CUNG,
   type VanNam,
 } from './cong-so';
+import { CAP_MAU } from './nhan-mach-terms';
+import { dungMau } from './khuon';
 import {
   QUAN_HE,
   type QuanHeDef,
@@ -100,6 +102,11 @@ export interface CapNguoi {
   b: string;
   loai: 'giam-chan' | 'bu-nhau';
   vi: string;
+  /** Mã tra bản dịch (W30d, additive): id kiểu của hai người + biến Việt của câu khuôn `CAP_MAU[loai]`.
+   *  Client dịch tại chỗ vẽ; thiếu (payload cũ trong cache) ⇒ dùng `vi`. */
+  kieuA?: KieuId;
+  kieuB?: KieuId;
+  bien?: { a: string; b: string };
 }
 
 export interface NhanMachProfile {
@@ -222,14 +229,20 @@ export function computeNhanMach(
           a: a.ten,
           b: b.ten,
           loai: 'giam-chan',
-          vi: `Cùng kiểu ${a.kieu.ten} — nghĩ giống nhau nên hợp lúc cần dồn sức, nhưng giao cùng một loại việc là giẫm chân và tranh phần.`,
+          vi: dungMau(CAP_MAU['giam-chan'], { a: a.kieu.ten }),
+          kieuA: a.kieu.id,
+          kieuB: b.kieu.id,
+          bien: { a: a.kieu.ten, b: b.kieu.ten },
         });
       } else if (a.kieu.amDuong !== b.kieu.amDuong) {
         cap.push({
           a: a.ten,
           b: b.ten,
           loai: 'bu-nhau',
-          vi: `${a.kieu.ten} và ${b.kieu.ten} khác tính âm/dương — một bên xông, một bên giữ. Ghép được, miễn là chia rõ ai quyết phần nào.`,
+          vi: dungMau(CAP_MAU['bu-nhau'], { a: a.kieu.ten, b: b.kieu.ten }),
+          kieuA: a.kieu.id,
+          kieuB: b.kieu.id,
+          bien: { a: a.kieu.ten, b: b.kieu.ten },
         });
       }
     }
