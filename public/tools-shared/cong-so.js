@@ -27,7 +27,19 @@
 
   // Chỗ HIỂN THỊ: tên sao/cung qua glossary (vi trả nguyên), tên kiểu qua id (server trả chữ Việt).
   function G(kind, v) { return typeof _tvmbG === 'function' && v ? _tvmbG(kind, v) : v; }
-  function GS(arr) { return (arr || []).map(function (x) { return G(['chinh', 'sao'], x); }).join(', '); }
+  // Nhãn sao do engine dựng: `Tên (độ sáng) [Hóa X]` — tách ra dịch từng phần (độ sáng ← 'sang', Hóa X ← 'sao'); vi trả nguyên.
+  var SANG_ALIAS = { 'Đắc địa': 'Đắc', 'Bình hòa': 'Bình', 'Bình hoà': 'Bình' }; // cùng nghĩa, glossary chỉ có dạng ngắn
+  function starT(x) {
+    var m = /^(.+?)(?: \((.+?)\))?(?: \[Hóa (.+?)\])?$/.exec(String(x == null ? '' : x));
+    if (!m) return x;
+    return G(['chinh', 'sao'], m[1]) + (m[2] ? ' (' + G('sang', SANG_ALIAS[m[2]] || m[2]) + ')' : '') + (m[3] ? ' [' + G('sao', 'Hóa ' + m[3]) + ']' : '');
+  }
+  // `nganh.sao` (past-life.ts) là tên sao HOẶC cặp 'A + B' kèm đuôi ' đồng cung' — tách từng tên rồi ghép lại.
+  function saoNganh(x) {
+    var m = /^(.*?)( đồng cung)?$/.exec(String(x == null ? '' : x));
+    return m[1].split(' + ').map(starT).join(' + ') + (m[2] ? _tvmbT('js.cs.dong-cung', ' đồng cung') : '');
+  }
+  function GS(arr) { return (arr || []).map(starT).join(', '); }
   var KIEU_TEN = {
     'khai-sang': function () { return _tvmbT('js.cs.khai-sang', 'Khai sáng'); },
     'lanh-dao': function () { return _tvmbT('js.cs.lanh-dao', 'Lãnh đạo'); },
@@ -384,7 +396,7 @@
     return (
       '<div class="cs-head" style="border-left:4px solid ' + mau + '">' +
         '<div class="cs-kieu" style="color:' + mau + '">' + esc(kieuTen(k)) + '</div>' +
-        '<div class="cs-tt">' + esc(KF(k, 'tuTuong', k.tuTuong)) + ' · ' + esc(GS(k.saoNhom)) + '</div>' +
+        '<div class="cs-tt">' + esc(KF(k, 'tuTuong', k.tuTuong)) + ' · ' + esc((k.saoNhom || []).map(starT).join(' · ')) + '</div>' +
         '<div class="cs-mot">' + esc(KF(k, 'motCau', k.motCau)) + '</div>' +
         (ho.phan.lai && ho.kieuPhu
           ? ('<div class="cs-lai">' + _tvmbT('js.cs.kieu-lai-toa-do-cua-ban', '⚠ <b>Kiểu lai.</b> Toạ độ của bạn nằm sát ranh giới nên nghiêng <b>')) +
@@ -539,7 +551,7 @@
         row(_tvmbT('js.cs.chinh-tinh-cung-quan-loc', 'Chính tinh cung Quan Lộc'), (GS(ho.phan.saoQuan) || _tvmbT('js.cs.vo-chinh-dieu-pwt9', 'vô chính diệu')) + (ho.phan.muonQuan ? _tvmbT('js.cs.muon-cung-xung-chieu', ' — mượn cung xung chiếu') : '')) +
         row(_tvmbT('js.cs.toa-do', 'Toạ độ'), _tvmbT('js.cs.tranh-nhuong', 'tranh ↔ nhường: ') + ho.phan.x + _tvmbT('js.cs.xong-tram', ' · xông ↔ trầm: ') + ho.phan.y) +
         (ho.phan.vaiTro ? row(_tvmbT('js.cs.tu-cach-theo-cung-menh', 'Tư cách theo cung Mệnh'), ho.phan.vaiTro.role) : '') +
-        row(_tvmbT('js.cs.sao-quyet-dinh-linh-vuc', 'Sao quyết định lĩnh vực'), G(['chinh', 'sao'], ho.nganh.sao) + (ho.nganh.laCap ? _tvmbT('js.cs.doc-theo-cap-dong-cung', ' — đọc theo CẶP đồng cung') : '') + (ho.nganh.muon ? _tvmbT('js.cs.muon-cung-xung-chieu', ' — mượn cung xung chiếu') : '')) +
+        row(_tvmbT('js.cs.sao-quyet-dinh-linh-vuc', 'Sao quyết định lĩnh vực'), saoNganh(ho.nganh.sao) + (ho.nganh.laCap ? _tvmbT('js.cs.doc-theo-cap-dong-cung', ' — đọc theo CẶP đồng cung') : '') + (ho.nganh.muon ? _tvmbT('js.cs.muon-cung-xung-chieu', ' — mượn cung xung chiếu') : '')) +
         row(_tvmbT('js.cs.bac-chuc-phan', 'Bậc chức phận'), ho.nganh.bac + _tvmbT('js.cs.diem', ' · điểm ') + ho.nganh.bacDiem + (ho.nganh.bacChiTiet.length ? ' (' + ho.nganh.bacChiTiet.join(', ') + ')' : '')) +
         row(_tvmbT('js.cs.chuc-phan-theo-loi-co', 'Chức phận theo lối cổ'), ho.nganh.chucPhanCo) +
         row(_tvmbT('js.cs.trich-dan-co-thu', 'Trích dẫn cổ thư'), ho.nganh.nguon) +
@@ -551,7 +563,7 @@
                 _tvmbT('js.cs.tieu-han-o-cung', 'tiểu hạn ở cung ') + (G('cung', ho.vanNam.tieuHanCung) || '—') + _tvmbT('js.cs.luu-nien-o-cung', ' · lưu niên ở cung ') + (G('cung', ho.vanNam.luuNienCung) || '—')
             )
           : '') +
-        row(_tvmbT('js.cs.nguon-cach-chia-bon-kieu', 'Nguồn cách chia bốn kiểu'), ho.kieu.source) +
+        row(_tvmbT('js.cs.nguon-cach-chia-bon-kieu', 'Nguồn cách chia bốn kiểu'), KF(ho.kieu, 'source', ho.kieu.source)) +
         '</div></div>'
     );
 
