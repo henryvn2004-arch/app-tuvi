@@ -1,4 +1,3 @@
-/* global _tvmbG */
 // public/tools-shared/cach-cuc.js — MỘT nơi dịch câu "ý nghĩa từng cung" của lá số (W30f-5).
 //
 // Engine lõi `tuvi-ansao-engine.js` (`phanTichCungYNghia`) sinh `ls.cachCucTungCung[cung][]` = các câu Việt dựng bằng ~375 lệnh

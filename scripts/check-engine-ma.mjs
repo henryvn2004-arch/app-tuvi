@@ -436,7 +436,10 @@ console.log('__KQ__' + JSON.stringify(out));
       thieu.length === 0,
       `cach-cuc — ${duy.length} câu khác nhau từ ${kq.cc.length} lượt (700 lá số), không câu nào hụt khoá: ${thieu.slice(0, 3).join(' | ') || 'không'}`
     );
-    bao(duy.length >= 250, `cach-cuc — mẫu chạm ${duy.length}/383 câu+mẫu (cần ≥250)`);
+    bao(
+      duy.length >= 250,
+      `cach-cuc — mẫu chạm ${duy.length} câu khác nhau (cần ≥250; nguồn có 1.116 câu + 8 mẫu Tuần/Triệt)`
+    );
     const mauTrung = new Set(
       duy.filter((x) => /^(Tuần|Triệt)/.test(x)).map((x) => x.replace(/\(.+?\)/, '({dc})'))
     );
