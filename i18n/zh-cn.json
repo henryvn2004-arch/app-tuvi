@@ -547,6 +547,82 @@
   "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>流年<br>小运</span>",
   "h": "d0e7d2f5"
  },
+ "combolt.combo-luan-giai-tu-binh-mua": {
+  "t": "<b>组合：命盘解读＋子平八字</b><span>两份完整解读一次购入，比分开买更划算</span>",
+  "h": "af0cc437"
+ },
+ "combolt.combo-luan-giai-tu-binh-tu": {
+  "t": "命盘解读＋子平八字组合 — 明宝紫微斗数",
+  "h": "0df54f90"
+ },
+ "combolt.da-mo-khoa-ca-hai-ban": {
+  "t": "两份解读皆已解锁",
+  "h": "91f94c21"
+ },
+ "combolt.luong": {
+  "t": "<span data-tvp-price=\"combo-laso-tubinh\">…</span> 两",
+  "h": "8fbbb057"
+ },
+ "combolt.mua-tron-luan-giai-tu-vi": {
+  "t": "一次购入紫微斗数 13 部分解读与子平八字，比分开买更划算。",
+  "h": "05aa9b4c"
+ },
+ "combolt.xem-luan-giai-tu-vi-xem": {
+  "t": "<a href=\"/app/luan-giai\" id=\"cbLinkLaso\">查看紫微斗数解读 →</a> <a href=\"/app/bat-tu\" id=\"cbLinkTuBinh\">查看子平八字 →</a>",
+  "h": "4bf08a19"
+ },
+ "combotb.chu-trinh-cuoc-doi-9-chang": {
+  "t": "✦ <b>人生周期</b>——9 段大运，人生的高峰与低谷",
+  "h": "af10818a"
+ },
+ "combotb.combo": {
+  "t": "紫微明宝 · 组合",
+  "h": "da13096a"
+ },
+ "combotb.combo-tron-bo-4-tool-mua": {
+  "t": "<b>组合：4 项工具全套</b><span>4 份解读一次购入，比分开买更划算</span>",
+  "h": "c20edb9c"
+ },
+ "combotb.combo-tron-bo-4-tool-tu": {
+  "t": "4 项工具全套组合 — 明宝紫微斗数",
+  "h": "e2aba5d5"
+ },
+ "combotb.da-mo-khoa-ca-4-ban": {
+  "t": "4 份解读皆已解锁",
+  "h": "809c0f7b"
+ },
+ "combotb.dang-tai-gia": {
+  "t": "正在加载价格…",
+  "h": "d6a0be25"
+ },
+ "combotb.luan-giai-tu-vi-tron-13": {
+  "t": "✦ <b>紫微斗数解读</b>——完整 13 部分，十二宫＋总论",
+  "h": "adbc495f"
+ },
+ "combotb.luong": {
+  "t": "<span data-tvp-price=\"combo-tron-bo\">…</span> 两",
+  "h": "9b9ca891"
+ },
+ "combotb.mua-combo": {
+  "t": "购买组合 →",
+  "h": "7eaa5de2"
+ },
+ "combotb.mua-tron-luan-giai-tu-vi": {
+  "t": "一次购入紫微斗数解读、子平八字、人生周期与流年运势，比分开买更划算。",
+  "h": "8103dab5"
+ },
+ "combotb.tu-binh-bat-tu-nhat-can": {
+  "t": "✦ <b>子平八字</b>——日干、用神、格局、大运",
+  "h": "67131116"
+ },
+ "combotb.van-han-nam-12-thang-toi": {
+  "t": "✦ <b>流年运势</b>——从今天起的 12 个月",
+  "h": "4dba2179"
+ },
+ "combotb.xem-luan-giai-tu-vi-xem": {
+  "t": "<a href=\"/app/luan-giai\" id=\"cbLinkLaso\">查看紫微斗数解读 →</a> <a href=\"/app/bat-tu\" id=\"cbLinkTuBinh\">查看子平八字 →</a> <a href=\"/app/chu-trinh-cuoc-doi\" id=\"cbLinkCtcd\">查看人生周期 →</a> <a href=\"/app/van-han-nam\" id=\"cbLinkVhn\">查看流年运势 →</a>",
+  "h": "8849b82c"
+ },
  "congcu.3-ngay-toi": {
   "t": "未来 3 天",
   "h": "a9fe9d66"
@@ -2198,6 +2274,50 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "流年小运 ",
   "h": "1979c56a"
+ },
+ "js.combo.cham-tran": {
+  "t": "已达试用次数上限。",
+  "h": "2fdb2e1a"
+ },
+ "js.combo.dang-tinh": {
+  "t": "计算中…",
+  "h": "76a9d5f0"
+ },
+ "js.combo.dang-xu-ly": {
+  "t": "处理中…",
+  "h": "a2e96c58"
+ },
+ "js.combo.het-phien": {
+  "t": "登录已逾时，请重新登录。",
+  "h": "aba6739e"
+ },
+ "js.combo.khong-du-luong": {
+  "t": "两不足——请先储值。",
+  "h": "1d9e17da"
+ },
+ "js.combo.khong-dung-khung": {
+  "t": "无法创建流年运势的框架，请再试一次。",
+  "h": "07f0a83f"
+ },
+ "js.combo.loi": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.combo.loi-ket-noi": {
+  "t": "连接错误：",
+  "h": "46e34d76"
+ },
+ "js.combo.ngoai-pham-vi": {
+  "t": "出生日期超出支持范围（1900–2100）。",
+  "h": "5e5d6ef9"
+ },
+ "js.combo.nhap-du-ngay": {
+  "t": "请完整输入出生的日、月、年。",
+  "h": "075a6b15"
+ },
+ "js.combo.thu-lai": {
+  "t": "请再试一次。",
+  "h": "2f1d18ee"
  },
  "js.hdtt.goi-cao-cap": {
   "t": "高级",

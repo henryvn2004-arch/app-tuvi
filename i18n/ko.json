@@ -547,6 +547,82 @@
   "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>조회 연도<br>소운</span>",
   "h": "d0e7d2f5"
  },
+ "combolt.combo-luan-giai-tu-binh-mua": {
+  "t": "<b>세트: 명반 풀이 + 사주</b><span>두 가지 전체판 풀이를 한 번에, 따로 사는 것보다 저렴하게</span>",
+  "h": "af0cc437"
+ },
+ "combolt.combo-luan-giai-tu-binh-tu": {
+  "t": "명반 풀이 + 사주 세트 — 명보 자미두수",
+  "h": "0df54f90"
+ },
+ "combolt.da-mo-khoa-ca-hai-ban": {
+  "t": "두 풀이의 잠금이 모두 해제되었습니다",
+  "h": "91f94c21"
+ },
+ "combolt.luong": {
+  "t": "<span data-tvp-price=\"combo-laso-tubinh\">…</span>냥",
+  "h": "8fbbb057"
+ },
+ "combolt.mua-tron-luan-giai-tu-vi": {
+  "t": "자미두수 13부 풀이와 자평 사주를 한 번에 구매하세요. 따로 사는 것보다 저렴합니다.",
+  "h": "05aa9b4c"
+ },
+ "combolt.xem-luan-giai-tu-vi-xem": {
+  "t": "<a href=\"/app/luan-giai\" id=\"cbLinkLaso\">자미두수 풀이 보기 →</a> <a href=\"/app/bat-tu\" id=\"cbLinkTuBinh\">자평 사주 보기 →</a>",
+  "h": "4bf08a19"
+ },
+ "combotb.chu-trinh-cuoc-doi-9-chang": {
+  "t": "✦ <b>인생 사이클</b> — 대운 9단계, 인생의 정점과 바닥",
+  "h": "af10818a"
+ },
+ "combotb.combo": {
+  "t": "紫微明寶 · 세트",
+  "h": "da13096a"
+ },
+ "combotb.combo-tron-bo-4-tool-mua": {
+  "t": "<b>세트: 도구 4종 전체</b><span>네 가지 풀이를 한 번에, 따로 사는 것보다 저렴하게</span>",
+  "h": "c20edb9c"
+ },
+ "combotb.combo-tron-bo-4-tool-tu": {
+  "t": "도구 4종 전체 세트 — 명보 자미두수",
+  "h": "e2aba5d5"
+ },
+ "combotb.da-mo-khoa-ca-4-ban": {
+  "t": "네 가지 풀이의 잠금이 모두 해제되었습니다",
+  "h": "809c0f7b"
+ },
+ "combotb.dang-tai-gia": {
+  "t": "요금을 불러오는 중…",
+  "h": "d6a0be25"
+ },
+ "combotb.luan-giai-tu-vi-tron-13": {
+  "t": "✦ <b>자미두수 풀이</b> — 13부 전체, 십이궁 + 총론",
+  "h": "adbc495f"
+ },
+ "combotb.luong": {
+  "t": "<span data-tvp-price=\"combo-tron-bo\">…</span>냥",
+  "h": "9b9ca891"
+ },
+ "combotb.mua-combo": {
+  "t": "세트 구매 →",
+  "h": "7eaa5de2"
+ },
+ "combotb.mua-tron-luan-giai-tu-vi": {
+  "t": "자미두수 풀이, 자평 사주, 인생 사이클, 연간 운세를 한 번에 구매하세요. 따로 사는 것보다 저렴합니다.",
+  "h": "8103dab5"
+ },
+ "combotb.tu-binh-bat-tu-nhat-can": {
+  "t": "✦ <b>자평 사주팔자</b> — 일간, 용신, 격국, 대운",
+  "h": "67131116"
+ },
+ "combotb.van-han-nam-12-thang-toi": {
+  "t": "✦ <b>연간 운세</b> — 오늘부터 앞으로 12개월",
+  "h": "4dba2179"
+ },
+ "combotb.xem-luan-giai-tu-vi-xem": {
+  "t": "<a href=\"/app/luan-giai\" id=\"cbLinkLaso\">자미두수 풀이 보기 →</a> <a href=\"/app/bat-tu\" id=\"cbLinkTuBinh\">자평 사주 보기 →</a> <a href=\"/app/chu-trinh-cuoc-doi\" id=\"cbLinkCtcd\">인생 사이클 보기 →</a> <a href=\"/app/van-han-nam\" id=\"cbLinkVhn\">연간 운세 보기 →</a>",
+  "h": "8849b82c"
+ },
  "congcu.3-ngay-toi": {
   "t": "앞으로 3일",
   "h": "a9fe9d66"
@@ -2198,6 +2274,50 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "소한 ‘ ",
   "h": "1979c56a"
+ },
+ "js.combo.cham-tran": {
+  "t": "체험 이용 한도에 도달했습니다.",
+  "h": "2fdb2e1a"
+ },
+ "js.combo.dang-tinh": {
+  "t": "계산 중…",
+  "h": "76a9d5f0"
+ },
+ "js.combo.dang-xu-ly": {
+  "t": "처리 중…",
+  "h": "a2e96c58"
+ },
+ "js.combo.het-phien": {
+  "t": "로그인 세션이 만료되었습니다. 다시 로그인해 주세요.",
+  "h": "aba6739e"
+ },
+ "js.combo.khong-du-luong": {
+  "t": "냥이 부족합니다 — 충전해 주세요.",
+  "h": "1d9e17da"
+ },
+ "js.combo.khong-dung-khung": {
+  "t": "연간 운세의 틀을 만들지 못했습니다. 다시 시도해 주세요.",
+  "h": "07f0a83f"
+ },
+ "js.combo.loi": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.combo.loi-ket-noi": {
+  "t": "연결 오류: ",
+  "h": "46e34d76"
+ },
+ "js.combo.ngoai-pham-vi": {
+  "t": "지원 범위(1900–2100년)를 벗어난 생년월일입니다.",
+  "h": "5e5d6ef9"
+ },
+ "js.combo.nhap-du-ngay": {
+  "t": "태어난 일, 월, 연도를 모두 입력해 주세요.",
+  "h": "075a6b15"
+ },
+ "js.combo.thu-lai": {
+  "t": "다시 시도해 주세요.",
+  "h": "2f1d18ee"
  },
  "js.hdtt.goi-cao-cap": {
   "t": "프리미엄",

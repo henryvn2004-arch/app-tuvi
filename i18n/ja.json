@@ -547,6 +547,82 @@
   "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>鑑定年の<br>小運</span>",
   "h": "d0e7d2f5"
  },
+ "combolt.combo-luan-giai-tu-binh-mua": {
+  "t": "<b>セット：命盤鑑定＋四柱推命</b><span>二つの完全版鑑定をまとめて購入。別々に買うよりお得です</span>",
+  "h": "af0cc437"
+ },
+ "combolt.combo-luan-giai-tu-binh-tu": {
+  "t": "命盤鑑定＋四柱推命セット — 明宝紫微斗数",
+  "h": "0df54f90"
+ },
+ "combolt.da-mo-khoa-ca-hai-ban": {
+  "t": "二つの鑑定のロックを解除しました",
+  "h": "91f94c21"
+ },
+ "combolt.luong": {
+  "t": "<span data-tvp-price=\"combo-laso-tubinh\">…</span> 両",
+  "h": "8fbbb057"
+ },
+ "combolt.mua-tron-luan-giai-tu-vi": {
+  "t": "紫微斗数の13章の鑑定と四柱推命をまとめて購入。別々に買うよりお得です。",
+  "h": "05aa9b4c"
+ },
+ "combolt.xem-luan-giai-tu-vi-xem": {
+  "t": "<a href=\"/app/luan-giai\" id=\"cbLinkLaso\">紫微斗数の鑑定を見る →</a> <a href=\"/app/bat-tu\" id=\"cbLinkTuBinh\">四柱推命を見る →</a>",
+  "h": "4bf08a19"
+ },
+ "combotb.chu-trinh-cuoc-doi-9-chang": {
+  "t": "✦ <b>人生のサイクル</b> — 大運の9つの段階、人生の山と谷",
+  "h": "af10818a"
+ },
+ "combotb.combo": {
+  "t": "紫微明寶 · セット",
+  "h": "da13096a"
+ },
+ "combotb.combo-tron-bo-4-tool-mua": {
+  "t": "<b>セット：4ツールまるごと</b><span>4つの鑑定をまとめて購入。別々に買うよりお得です</span>",
+  "h": "c20edb9c"
+ },
+ "combotb.combo-tron-bo-4-tool-tu": {
+  "t": "4ツールまるごとセット — 明宝紫微斗数",
+  "h": "e2aba5d5"
+ },
+ "combotb.da-mo-khoa-ca-4-ban": {
+  "t": "4つの鑑定すべてのロックを解除しました",
+  "h": "809c0f7b"
+ },
+ "combotb.dang-tai-gia": {
+  "t": "料金を読み込み中…",
+  "h": "d6a0be25"
+ },
+ "combotb.luan-giai-tu-vi-tron-13": {
+  "t": "✦ <b>紫微斗数の鑑定</b> — 13章すべて、十二宮＋総論",
+  "h": "adbc495f"
+ },
+ "combotb.luong": {
+  "t": "<span data-tvp-price=\"combo-tron-bo\">…</span> 両",
+  "h": "9b9ca891"
+ },
+ "combotb.mua-combo": {
+  "t": "セットを購入 →",
+  "h": "7eaa5de2"
+ },
+ "combotb.mua-tron-luan-giai-tu-vi": {
+  "t": "紫微斗数の鑑定、四柱推命、人生のサイクル、年運をまとめて購入。別々に買うよりお得です。",
+  "h": "8103dab5"
+ },
+ "combotb.tu-binh-bat-tu-nhat-can": {
+  "t": "✦ <b>四柱推命（子平）</b> — 日干、用神、格局、大運",
+  "h": "67131116"
+ },
+ "combotb.van-han-nam-12-thang-toi": {
+  "t": "✦ <b>年運</b> — 今日から先の12か月",
+  "h": "4dba2179"
+ },
+ "combotb.xem-luan-giai-tu-vi-xem": {
+  "t": "<a href=\"/app/luan-giai\" id=\"cbLinkLaso\">紫微斗数の鑑定を見る →</a> <a href=\"/app/bat-tu\" id=\"cbLinkTuBinh\">四柱推命を見る →</a> <a href=\"/app/chu-trinh-cuoc-doi\" id=\"cbLinkCtcd\">人生のサイクルを見る →</a> <a href=\"/app/van-han-nam\" id=\"cbLinkVhn\">年運を見る →</a>",
+  "h": "8849b82c"
+ },
  "congcu.3-ngay-toi": {
   "t": "今後3日間",
   "h": "a9fe9d66"
@@ -2198,6 +2274,50 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "小運の年：",
   "h": "1979c56a"
+ },
+ "js.combo.cham-tran": {
+  "t": "お試し回数の上限に達しました。",
+  "h": "2fdb2e1a"
+ },
+ "js.combo.dang-tinh": {
+  "t": "計算中…",
+  "h": "76a9d5f0"
+ },
+ "js.combo.dang-xu-ly": {
+  "t": "処理中…",
+  "h": "a2e96c58"
+ },
+ "js.combo.het-phien": {
+  "t": "ログインの有効期限が切れました。もう一度ログインしてください。",
+  "h": "aba6739e"
+ },
+ "js.combo.khong-du-luong": {
+  "t": "両が足りません——チャージしてください。",
+  "h": "1d9e17da"
+ },
+ "js.combo.khong-dung-khung": {
+  "t": "年運の枠組みを作れませんでした。もう一度お試しください。",
+  "h": "07f0a83f"
+ },
+ "js.combo.loi": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.combo.loi-ket-noi": {
+  "t": "接続エラー：",
+  "h": "46e34d76"
+ },
+ "js.combo.ngoai-pham-vi": {
+  "t": "対応範囲外の生年月日です（1900〜2100年）。",
+  "h": "5e5d6ef9"
+ },
+ "js.combo.nhap-du-ngay": {
+  "t": "生まれた日・月・年をすべて入力してください。",
+  "h": "075a6b15"
+ },
+ "js.combo.thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
  },
  "js.hdtt.goi-cao-cap": {
   "t": "プレミアム",

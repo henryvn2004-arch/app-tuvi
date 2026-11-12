@@ -547,6 +547,82 @@
   "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>Annual luck<br>for the year</span>",
   "h": "d0e7d2f5"
  },
+ "combolt.combo-luan-giai-tu-binh-mua": {
+  "t": "<b>Bundle: Chart Reading + BaZi</b><span>Both full readings together, cheaper than buying separately</span>",
+  "h": "af0cc437"
+ },
+ "combolt.combo-luan-giai-tu-binh-tu": {
+  "t": "Chart Reading + BaZi Bundle — Minh Bao Zi Wei Dou Shu",
+  "h": "0df54f90"
+ },
+ "combolt.da-mo-khoa-ca-hai-ban": {
+  "t": "Both readings are unlocked",
+  "h": "91f94c21"
+ },
+ "combolt.luong": {
+  "t": "<span data-tvp-price=\"combo-laso-tubinh\">…</span> credits",
+  "h": "8fbbb057"
+ },
+ "combolt.mua-tron-luan-giai-tu-vi": {
+  "t": "Get the full 13-part Zi Wei reading and Zi Ping BaZi together, cheaper than buying separately.",
+  "h": "05aa9b4c"
+ },
+ "combolt.xem-luan-giai-tu-vi-xem": {
+  "t": "<a href=\"/app/luan-giai\" id=\"cbLinkLaso\">See the Zi Wei reading →</a> <a href=\"/app/bat-tu\" id=\"cbLinkTuBinh\">See Zi Ping BaZi →</a>",
+  "h": "4bf08a19"
+ },
+ "combotb.chu-trinh-cuoc-doi-9-chang": {
+  "t": "✦ <b>Life Cycles</b> — 9 major-cycle stages, life's peaks and troughs",
+  "h": "af10818a"
+ },
+ "combotb.combo": {
+  "t": "紫微明寶 · Bundle",
+  "h": "da13096a"
+ },
+ "combotb.combo-tron-bo-4-tool-mua": {
+  "t": "<b>Bundle: All 4 Tools</b><span>All 4 readings together, cheaper than buying separately</span>",
+  "h": "c20edb9c"
+ },
+ "combotb.combo-tron-bo-4-tool-tu": {
+  "t": "All 4 Tools Bundle — Minh Bao Zi Wei Dou Shu",
+  "h": "e2aba5d5"
+ },
+ "combotb.da-mo-khoa-ca-4-ban": {
+  "t": "All 4 readings are unlocked",
+  "h": "809c0f7b"
+ },
+ "combotb.dang-tai-gia": {
+  "t": "Loading price…",
+  "h": "d6a0be25"
+ },
+ "combotb.luan-giai-tu-vi-tron-13": {
+  "t": "✦ <b>Zi Wei Reading</b> — all 13 parts, 12 palaces + overview",
+  "h": "adbc495f"
+ },
+ "combotb.luong": {
+  "t": "<span data-tvp-price=\"combo-tron-bo\">…</span> credits",
+  "h": "9b9ca891"
+ },
+ "combotb.mua-combo": {
+  "t": "Buy the bundle →",
+  "h": "7eaa5de2"
+ },
+ "combotb.mua-tron-luan-giai-tu-vi": {
+  "t": "Get the Zi Wei reading, Zi Ping BaZi, Life Cycles and the Year Ahead together, cheaper than buying separately.",
+  "h": "8103dab5"
+ },
+ "combotb.tu-binh-bat-tu-nhat-can": {
+  "t": "✦ <b>Zi Ping BaZi</b> — Day Master, Useful God, structure, major cycles",
+  "h": "67131116"
+ },
+ "combotb.van-han-nam-12-thang-toi": {
+  "t": "✦ <b>Year Ahead</b> — the next 12 months, starting today",
+  "h": "4dba2179"
+ },
+ "combotb.xem-luan-giai-tu-vi-xem": {
+  "t": "<a href=\"/app/luan-giai\" id=\"cbLinkLaso\">See the Zi Wei reading →</a> <a href=\"/app/bat-tu\" id=\"cbLinkTuBinh\">See Zi Ping BaZi →</a> <a href=\"/app/chu-trinh-cuoc-doi\" id=\"cbLinkCtcd\">See Life Cycles →</a> <a href=\"/app/van-han-nam\" id=\"cbLinkVhn\">See the Year Ahead →</a>",
+  "h": "8849b82c"
+ },
  "congcu.3-ngay-toi": {
   "t": "Next 3 days",
   "h": "a9fe9d66"
@@ -2198,6 +2274,50 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "Annual cycle for ",
   "h": "1979c56a"
+ },
+ "js.combo.cham-tran": {
+  "t": "You've reached the free-trial limit.",
+  "h": "2fdb2e1a"
+ },
+ "js.combo.dang-tinh": {
+  "t": "Calculating…",
+  "h": "76a9d5f0"
+ },
+ "js.combo.dang-xu-ly": {
+  "t": "Processing…",
+  "h": "a2e96c58"
+ },
+ "js.combo.het-phien": {
+  "t": "Your session has expired. Please sign in again.",
+  "h": "aba6739e"
+ },
+ "js.combo.khong-du-luong": {
+  "t": "Not enough credits — please top up.",
+  "h": "1d9e17da"
+ },
+ "js.combo.khong-dung-khung": {
+  "t": "Couldn't build the Year Ahead frame. Please try again.",
+  "h": "07f0a83f"
+ },
+ "js.combo.loi": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.combo.loi-ket-noi": {
+  "t": "Connection error: ",
+  "h": "46e34d76"
+ },
+ "js.combo.ngoai-pham-vi": {
+  "t": "Birth date is outside the supported range (1900–2100).",
+  "h": "5e5d6ef9"
+ },
+ "js.combo.nhap-du-ngay": {
+  "t": "Please enter your full birth day, month and year.",
+  "h": "075a6b15"
+ },
+ "js.combo.thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
  },
  "js.hdtt.goi-cao-cap": {
   "t": "Premium",

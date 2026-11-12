@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Combo Trọn Bộ 4 Tool — Tử Vi Minh Bảo</title>
-<meta name="description" content="Mua trọn Luận Giải Tử Vi, Tử Bình Bát Tự, Chu Trình Cuộc Đời và Vận Hạn Năm cùng lúc, giá gộp rẻ hơn mua rời.">
+<title data-i18n="combotb.combo-tron-bo-4-tool-tu">Combo Trọn Bộ 4 Tool — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:combotb.mua-tron-luan-giai-tu-vi" name="description" content="Mua trọn Luận Giải Tử Vi, Tử Bình Bát Tự, Chu Trình Cuộc Đời và Vận Hạn Năm cùng lúc, giá gộp rẻ hơn mua rời.">
 <link rel="icon" type="image/webp" href="/seal.webp"/>
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -41,28 +41,28 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Combo: Trọn Bộ 4 Tool</b><span>Mua gộp cả 4 bản luận giải, giá rẻ hơn mua rời</span></div>
+      <div data-i18n="combotb.combo-tron-bo-4-tool-mua" class="ws-title"><b>Combo: Trọn Bộ 4 Tool</b><span>Mua gộp cả 4 bản luận giải, giá rẻ hơn mua rời</span></div>
     </div>
     <div class="ws-body">
       <div class="cb-price">
-        <div class="cb-eyebrow">紫微明寶 · Combo</div>
-        <div class="cb-num"><span data-tvp-price="combo-tron-bo">…</span> Lượng</div>
-        <p class="cb-sub" data-tvp-price-label="combo-tron-bo">Đang tải giá…</p>
+        <div data-i18n="combotb.combo" class="cb-eyebrow">紫微明寶 · Combo</div>
+        <div data-i18n="combotb.luong" class="cb-num"><span data-tvp-price="combo-tron-bo">…</span> Lượng</div>
+        <p data-i18n="combotb.dang-tai-gia" class="cb-sub" data-tvp-price-label="combo-tron-bo">Đang tải giá…</p>
       </div>
       <div class="cb-items">
-        <div class="cb-item">✦ <b>Luận Giải Tử Vi</b> — trọn 13 phần, đủ 12 cung + tổng quan</div>
-        <div class="cb-item">✦ <b>Tử Bình Bát Tự</b> — nhật can, dụng thần, cách cục, đại vận</div>
-        <div class="cb-item">✦ <b>Chu Trình Cuộc Đời</b> — 9 chặng đại vận, đỉnh/đáy đời</div>
-        <div class="cb-item">✦ <b>Vận Hạn Năm</b> — 12 tháng tới, tính từ hôm nay</div>
+        <div data-i18n="combotb.luan-giai-tu-vi-tron-13" class="cb-item">✦ <b>Luận Giải Tử Vi</b> — trọn 13 phần, đủ 12 cung + tổng quan</div>
+        <div data-i18n="combotb.tu-binh-bat-tu-nhat-can" class="cb-item">✦ <b>Tử Bình Bát Tự</b> — nhật can, dụng thần, cách cục, đại vận</div>
+        <div data-i18n="combotb.chu-trinh-cuoc-doi-9-chang" class="cb-item">✦ <b>Chu Trình Cuộc Đời</b> — 9 chặng đại vận, đỉnh/đáy đời</div>
+        <div data-i18n="combotb.van-han-nam-12-thang-toi" class="cb-item">✦ <b>Vận Hạn Năm</b> — 12 tháng tới, tính từ hôm nay</div>
       </div>
       <div id="tuviFormHost"></div>
-      <button type="button" class="btn cb-buy" id="cbBuyBtn" onclick="buyCombo()">Mua Combo →</button>
+      <button data-i18n="combotb.mua-combo" type="button" class="btn cb-buy" id="cbBuyBtn" onclick="buyCombo()">Mua Combo →</button>
       <p class="cb-err" id="cbErr"></p>
 
       <div class="cb-done" id="cbDone">
         <div class="cb-tick">✓</div>
-        <b>Đã mở khoá cả 4 bản luận giải</b>
-        <div class="cb-done-links">
+        <b data-i18n="combotb.da-mo-khoa-ca-4-ban">Đã mở khoá cả 4 bản luận giải</b>
+        <div data-i18n="combotb.xem-luan-giai-tu-vi-xem" class="cb-done-links">
           <a href="/app/luan-giai" id="cbLinkLaso">Xem Luận Giải Tử Vi →</a>
           <a href="/app/bat-tu" id="cbLinkTuBinh">Xem Tử Bình Bát Tự →</a>
           <a href="/app/chu-trinh-cuoc-doi" id="cbLinkCtcd">Xem Chu Trình Cuộc Đời →</a>
@@ -121,10 +121,10 @@ function vnNow(){
 async function buyCombo(){
   var errEl=document.getElementById('cbErr'); errEl.style.display='none';
   var fd=TuviForm.getData();
-  if(!fd.ngay||!fd.thang||!fd.nam){ errEl.textContent='Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'; errEl.style.display='block'; return; }
+  if(!fd.ngay||!fd.thang||!fd.nam){ errEl.textContent=_tvmbT('js.combo.nhap-du-ngay', 'Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); errEl.style.display='block'; return; }
 
   var btn=document.getElementById('cbBuyBtn');
-  btn.disabled=true; var _origLbl=btn.textContent; btn.textContent='Đang tính…';
+  btn.disabled=true; var _origLbl=btn.textContent; btn.textContent=_tvmbT('js.combo.dang-tinh', 'Đang tính…');
   try{
     var namXem=new Date().getFullYear();
 
@@ -133,7 +133,7 @@ async function buyCombo(){
     // anSaoLaSo(...) này (đã đối chiếu từng dòng), `namXem` không ảnh hưởng
     // `canChiNam` (chỉ phụ thuộc năm SINH) nên tính một lần dùng lại được.
     var conv=convertDuongToAm(fd.ngay,fd.thang,fd.nam,fd.gioHour,fd.lich);
-    if(!conv){ errEl.textContent='Ngày sinh ngoài phạm vi hỗ trợ (1900–2100).'; errEl.style.display='block'; return; }
+    if(!conv){ errEl.textContent=_tvmbT('js.combo.ngoai-pham-vi', 'Ngày sinh ngoài phạm vi hỗ trợ (1900–2100).'); errEl.style.display='block'; return; }
     conv.gioIdx=fd.gioIdx;
     var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:fd.gioIdx,gioitinh:fd.gioitinh,namXem:namXem});
 
@@ -160,7 +160,7 @@ async function buyCombo(){
     var kr=await fetch('/api/van-han-nam?action=khung',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,hour:fd.gioHour,minute:fd.gioPhut,gender:fd.gioitinh,name:fd.hoten||undefined,lich:fd.lich,noiSinh:fd.noiSinh},tuNgay:now.d,tuThang:now.m,tuNam:now.y})});
     var kd=await kr.json();
-    if(!kd||!kd.khung){ errEl.textContent='Không dựng được khung Vận Hạn Năm, vui lòng thử lại.'; errEl.style.display='block'; return; }
+    if(!kd||!kd.khung){ errEl.textContent=_tvmbT('js.combo.khong-dung-khung', 'Không dựng được khung Vận Hạn Năm, vui lòng thử lại.'); errEl.style.display='block'; return; }
     var t0=kd.khung.thangs[0];
     var vhnToolType='van-han-nam-al'+t0.namAL+'-'+String(t0.thangAL).padStart(2,'0')+(t0.isLeap?'n':'');
     var vhnSlug=toSlugAscii([vhnToolType,ls.canChiNam||'',String(fd.ngay).padStart(2,'0'),String(fd.thang).padStart(2,'0'),fd.nam,fd.gioitinh,'gio-'+(conv.gioChi||'unknown')].join('-'));
@@ -169,9 +169,9 @@ async function buyCombo(){
     if(!gate.ok) return; // ensureCredits đã tự hiện modal đăng nhập/thiếu Lượng/giá chưa đọc được
 
     var token=window.Auth.getFreshToken?await window.Auth.getFreshToken():(window.Auth.getSession&&window.Auth.getSession().access_token);
-    if(!token){ errEl.textContent='Phiên đăng nhập hết hạn, vui lòng đăng nhập lại.'; errEl.style.display='block'; return; }
+    if(!token){ errEl.textContent=_tvmbT('js.combo.het-phien', 'Phiên đăng nhập hết hạn, vui lòng đăng nhập lại.'); errEl.style.display='block'; return; }
 
-    btn.textContent='Đang xử lý…';
+    btn.textContent=_tvmbT('js.combo.dang-xu-ly', 'Đang xử lý…');
     var res=await fetch('/api/payment?action=deduct',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
@@ -186,10 +186,10 @@ async function buyCombo(){
     if(data.success||data.alreadyPaid){
       window.refreshNavCredits&&window.refreshNavCredits();
       try{ localStorage.setItem('app_birth',JSON.stringify(fd)); }catch(e){ /* ignore */ }
-      document.getElementById('cbLinkLaso').href='/app/luan-giai';
-      document.getElementById('cbLinkTuBinh').href='/app/bat-tu';
-      document.getElementById('cbLinkCtcd').href='/app/chu-trinh-cuoc-doi';
-      document.getElementById('cbLinkVhn').href='/app/van-han-nam';
+      document.getElementById('cbLinkLaso').href=_tvmbHref('/app/luan-giai');
+      document.getElementById('cbLinkTuBinh').href=_tvmbHref('/app/bat-tu');
+      document.getElementById('cbLinkCtcd').href=_tvmbHref('/app/chu-trinh-cuoc-doi');
+      document.getElementById('cbLinkVhn').href=_tvmbHref('/app/van-han-nam');
       document.querySelector('.ws-body > .cb-price').style.display='none';
       document.querySelector('.cb-items').style.display='none';
       document.getElementById('tuviFormHost').style.display='none';
@@ -197,11 +197,11 @@ async function buyCombo(){
       document.getElementById('cbDone').style.display='block';
       return;
     }
-    if(data.insufficientBalance){ errEl.textContent='Không đủ Lượng — vui lòng nạp thêm.'; errEl.style.display='block'; return; }
-    if(data.capReached){ errEl.textContent=data.message||'Đã chạm trần lượt dùng thử.'; errEl.style.display='block'; return; }
-    errEl.textContent='Lỗi: '+(data.error||'Vui lòng thử lại.'); errEl.style.display='block';
+    if(data.insufficientBalance){ errEl.textContent=_tvmbT('js.combo.khong-du-luong', 'Không đủ Lượng — vui lòng nạp thêm.'); errEl.style.display='block'; return; }
+    if(data.capReached){ errEl.textContent=data.message||_tvmbT('js.combo.cham-tran', 'Đã chạm trần lượt dùng thử.'); errEl.style.display='block'; return; }
+    errEl.textContent=_tvmbT('js.combo.loi', 'Lỗi: ')+(data.error||_tvmbT('js.combo.thu-lai', 'Vui lòng thử lại.')); errEl.style.display='block';
   }catch(e){
-    errEl.textContent='Lỗi kết nối: '+e.message; errEl.style.display='block';
+    errEl.textContent=_tvmbT('js.combo.loi-ket-noi', 'Lỗi kết nối: ')+e.message; errEl.style.display='block';
   }finally{
     btn.disabled=false; btn.textContent=_origLbl;
   }

@@ -349,6 +349,46 @@
    "shell"
   ]
  },
+ "/app/combo-laso-tubinh": {
+  "file": "app-combo-laso-tubinh.html",
+  "keys": [
+   "combolt.combo-luan-giai-tu-binh-mua",
+   "combolt.combo-luan-giai-tu-binh-tu",
+   "combolt.da-mo-khoa-ca-hai-ban",
+   "combolt.luong",
+   "combolt.mua-tron-luan-giai-tu-vi",
+   "combolt.xem-luan-giai-tu-vi-xem",
+   "combotb.combo",
+   "combotb.dang-tai-gia",
+   "combotb.luan-giai-tu-vi-tron-13",
+   "combotb.mua-combo",
+   "combotb.tu-binh-bat-tu-nhat-can"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
+ "/app/combo-tron-bo": {
+  "file": "app-combo-tron-bo.html",
+  "keys": [
+   "combotb.chu-trinh-cuoc-doi-9-chang",
+   "combotb.combo",
+   "combotb.combo-tron-bo-4-tool-mua",
+   "combotb.combo-tron-bo-4-tool-tu",
+   "combotb.da-mo-khoa-ca-4-ban",
+   "combotb.dang-tai-gia",
+   "combotb.luan-giai-tu-vi-tron-13",
+   "combotb.luong",
+   "combotb.mua-combo",
+   "combotb.mua-tron-luan-giai-tu-vi",
+   "combotb.tu-binh-bat-tu-nhat-can",
+   "combotb.van-han-nam-12-thang-toi",
+   "combotb.xem-luan-giai-tu-vi-xem"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/cong-cu": {
   "file": "app-home.html",
   "keys": [
