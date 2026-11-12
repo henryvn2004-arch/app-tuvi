@@ -3895,6 +3895,346 @@
   "t": "メールアドレスとパスワードを入力してください。",
   "h": "d84b9abd"
  },
+ "js.bandosao.ban-do-sao": {
+  "t": "星図 — ",
+  "h": "aaf64809"
+ },
+ "js.bandosao.ban-do-sao-gm5h": {
+  "t": "星図",
+  "h": "0b3459d8"
+ },
+ "js.bandosao.ban-do-sao-luc-sinh": {
+  "t": "出生星図 — ",
+  "h": "3f6bcfea"
+ },
+ "js.bandosao.ban-do-sao-tqhx": {
+  "t": "星図 · ",
+  "h": "86318dde"
+ },
+ "js.bandosao.ban-muon-toi-doc-phan-nao": {
+  "t": "**。どの部分から読み解きましょうか?",
+  "h": "e9d17729"
+ },
+ "js.bandosao.buon-ma-thuot": {
+  "t": "バンメトート",
+  "h": "8bf97db6"
+ },
+ "js.bandosao.can-tho": {
+  "t": "カントー",
+  "h": "462902c5"
+ },
+ "js.bandosao.chua-dung-duoc-anh-thu-lai": {
+  "t": "画像を作成できませんでした。少し待ってからもう一度お試しください。",
+  "h": "f8055429"
+ },
+ "js.bandosao.chua-lap-duoc-ban-do-luc": {
+  "t": "現在は星図を作成できません — もう一度お試しください。",
+  "h": "a5e46558"
+ },
+ "js.bandosao.chuyen-tinh-cam-nhin-tu-ban": {
+  "t": "この星図から見た恋愛は?",
+  "h": "9a016ff9"
+ },
+ "js.bandosao.cung-moc": {
+  "t": "**、アセンダント **",
+  "h": "340f627c"
+ },
+ "js.bandosao.cung-moc-1y0y": {
+  "t": "アセンダント: ",
+  "h": "230ed8b5"
+ },
+ "js.bandosao.cung-moc-bgoi": {
+  "t": " · アセンダント ",
+  "h": "cad089c9"
+ },
+ "js.bandosao.da-lap-ban-do-sao": {
+  "t": "星図を作成しました: **",
+  "h": "c16ca110"
+ },
+ "js.bandosao.da-nang": {
+  "t": "ダナン",
+  "h": "fff4a50e"
+ },
+ "js.bandosao.dang-dung-anh": {
+  "t": "画像を作成中…",
+  "h": "7bce9760"
+ },
+ "js.bandosao.dang-lap": {
+  "t": "作成中…",
+  "h": "b47d9598"
+ },
+ "js.bandosao.goc-chieu-nao-gay-kho-nhat": {
+  "t": "私にとって最も難しいアスペクトは?",
+  "h": "8439668d"
+ },
+ "js.bandosao.ha-noi": {
+  "t": "ハノイ",
+  "h": "89974fad"
+ },
+ "js.bandosao.hai-phong": {
+  "t": "ハイフォン",
+  "h": "18cf9167"
+ },
+ "js.bandosao.he-nha": {
+  "t": " (ハウスシステム ",
+  "h": "cb040ba9"
+ },
+ "js.bandosao.hue": {
+  "t": "フエ",
+  "h": "23ed9a98"
+ },
+ "js.bandosao.mat-trang": {
+  "t": "**、月 **",
+  "h": "bfc8f041"
+ },
+ "js.bandosao.mat-troi": {
+  "t": "**。太陽 **",
+  "h": "b483737c"
+ },
+ "js.bandosao.mat-troi-8vvi": {
+  "t": "太陽 ",
+  "h": "40bd8b96"
+ },
+ "js.bandosao.nguyen-to": {
+  "t": "エレメント: ",
+  "h": "503b548c"
+ },
+ "js.bandosao.nha": {
+  "t": " (ハウス ",
+  "h": "953fb7b3"
+ },
+ "js.bandosao.noi-khac-tu-nhap": {
+  "t": "— その他(手入力) —",
+  "h": "5bda72d4"
+ },
+ "js.bandosao.quet-ma-lap-ban-do-sao": {
+  "t": "コードをスキャン — あなたの星図を作成",
+  "h": "2abde300"
+ },
+ "js.bandosao.quy-nhon": {
+  "t": "クイニョン",
+  "h": "2b52fd6e"
+ },
+ "js.bandosao.su-nghiep-hop-huong-nao": {
+  "t": "どんな仕事の方向が合いますか?",
+  "h": "8d8b01c6"
+ },
+ "js.bandosao.tinh-cach-cot-loi-cua-toi": {
+  "t": "私の核となる性格は?",
+  "h": "485d721a"
+ },
+ "js.bandosao.tp-ho-chi-minh": {
+  "t": "ホーチミン市",
+  "h": "4fc20e5f"
+ },
+ "js.bandosao.vui-long-chon-noi-sinh-hoac": {
+  "t": "出生地を選ぶか、緯度・経度を入力してください。",
+  "h": "1e78fa74"
+ },
+ "js.bandosao.vui-long-nhap-du-ngay-thang": {
+  "t": "生年月日(日・月・年)をすべて入力してください。",
+  "h": "771ff27f"
+ },
+ "js.banlamviec.100-sau-dieu-chinh-co-the": {
+  "t": "/100**、調整後は **",
+  "h": "a4c14f33"
+ },
+ "js.banlamviec.bac": {
+  "t": "北",
+  "h": "130d45d1"
+ },
+ "js.banlamviec.ban-lam-viec-cua-toi-sau": {
+  "t": "風水を整えた後の私のデスク",
+  "h": "b345368e"
+ },
+ "js.banlamviec.ban-lam-viec-diem": {
+  "t": "デスク — スコア ",
+  "h": "1bfcfce8"
+ },
+ "js.banlamviec.ban-muon-hoi-them-ve-de": {
+  "t": "。どの提案についてさらに知りたいですか?",
+  "h": "23ca71bc"
+ },
+ "js.banlamviec.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">現在の配置はおおむね良好です。</p>",
+  "h": "16b60bfc"
+ },
+ "js.banlamviec.chua-xac-dinh": {
+  "t": "未確定",
+  "h": "3120f6db"
+ },
+ "js.banlamviec.chuan-bi-prompt-render-theo-ngu": {
+  "t": "五行に合わせたレンダリング指示を準備中",
+  "h": "17f4d17e"
+ },
+ "js.banlamviec.dang-render-khong-gian-moi": {
+  "t": "新しい空間をレンダリング中",
+  "h": "814b3683"
+ },
+ "js.banlamviec.diem": {
+  "t": "点",
+  "h": "4a404c32"
+ },
+ "js.banlamviec.diem-phong-thuy-ban-lam-viec": {
+  "t": "現在のデスクの風水スコア: **",
+  "h": "b68f30c6"
+ },
+ "js.banlamviec.diem-phong-thuy-ban-lam-viec-8sd8": {
+  "t": "私のデスクの風水スコア",
+  "h": "21a93499"
+ },
+ "js.banlamviec.diem-phong-thuy-hien-tai": {
+  "t": "現在の風水スコア: ",
+  "h": "d4ac7afe"
+ },
+ "js.banlamviec.dieu-chinh": {
+  "t": "調整",
+  "h": "37c5bf6b"
+ },
+ "js.banlamviec.don-bo": {
+  "t": "撤去",
+  "h": "0825ec6d"
+ },
+ "js.banlamviec.dong": {
+  "t": "東",
+  "h": "6bd70b62"
+ },
+ "js.banlamviec.dong-bac": {
+  "t": "北東",
+  "h": "9690921a"
+ },
+ "js.banlamviec.dong-nam": {
+  "t": "南東",
+  "h": "dd71e07a"
+ },
+ "js.banlamviec.giu-nguyen-tpl": {
+  "t": "<span class=\"pos-keep\">✓ そのまま</span>",
+  "h": "aa00d929"
+ },
+ "js.banlamviec.hien-tai": {
+  "t": "現在:",
+  "h": "b17d885a"
+ },
+ "js.banlamviec.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">追加で提案するアイテムはありません。</p>",
+  "h": "3a6c6f34"
+ },
+ "js.banlamviec.khong-nhan-duoc-anh": {
+  "t": "画像を受信できませんでした。",
+  "h": "62488d2f"
+ },
+ "js.banlamviec.loi": {
+  "t": "エラー: ",
+  "h": "471c0087"
+ },
+ "js.banlamviec.loi-doc-file": {
+  "t": "ファイルの読み込みエラー",
+  "h": "3c56711b"
+ },
+ "js.banlamviec.loi-ppkl": {
+  "t": "⚠ エラー: ",
+  "h": "a4f4adbc"
+ },
+ "js.banlamviec.loi-tai-anh": {
+  "t": "画像の読み込みエラー",
+  "h": "13fb84a7"
+ },
+ "js.banlamviec.menh-quai-cua-ban-la": {
+  "t": "、あなたの命卦は **",
+  "h": "18a75d53"
+ },
+ "js.banlamviec.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.banlamviec.nen-co": {
+  "t": "必須",
+  "h": "3f6537af"
+ },
+ "js.banlamviec.nen-doi-sang": {
+  "t": "変更先:",
+  "h": "32c9bd3d"
+ },
+ "js.banlamviec.nen-lam": {
+  "t": "→ やるべき",
+  "h": "85492f9d"
+ },
+ "js.banlamviec.nhan-dien-do-vat-trong-anh": {
+  "t": "写真内の物を認識中",
+  "h": "5ecd0446"
+ },
+ "js.banlamviec.phan-tich-bat-trach-dua-de": {
+  "t": "八宅を分析して提案を作成中",
+  "h": "dd12d6d9"
+ },
+ "js.banlamviec.phan-tich-that-bai": {
+  "t": "分析に失敗しました",
+  "h": "44b68aa6"
+ },
+ "js.banlamviec.quai-n": {
+  "t": "卦 {n}",
+  "h": "1b238b88"
+ },
+ "js.banlamviec.quan-trong": {
+  "t": "⚠ 重要",
+  "h": "ebd388e2"
+ },
+ "js.banlamviec.sau-dieu-chinh-co-the-len": {
+  "t": " — 調整後は ",
+  "h": "9e6292bc"
+ },
+ "js.banlamviec.tay": {
+  "t": "西",
+  "h": "74b26936"
+ },
+ "js.banlamviec.tay-bac": {
+  "t": "北西",
+  "h": "0b1f47fd"
+ },
+ "js.banlamviec.tay-nam": {
+  "t": "南西",
+  "h": "c0484c26"
+ },
+ "js.banlamviec.tot-neu-co": {
+  "t": "あれば良い",
+  "h": "e48b654c"
+ },
+ "js.banlamviec.trung-tam": {
+  "t": "中央",
+  "h": "26bda5d2"
+ },
+ "js.banlamviec.tuy-y": {
+  "t": "◎ お好みで",
+  "h": "430debc7"
+ },
+ "js.banlamviec.tuy-y-4s40": {
+  "t": "お好みで",
+  "h": "87b1fcd0"
+ },
+ "js.banlamviec.uu-tien-lam-gi-truoc": {
+  "t": "まず何を優先すべきですか?",
+  "h": "f3cab683"
+ },
+ "js.banlamviec.vat-pham-nao-nen-mua-truoc": {
+  "t": "どのアイテムを先に買うべきですか?",
+  "h": "85fe11d3"
+ },
+ "js.banlamviec.vi-sao-diem-hien-tai-thap": {
+  "t": "なぜ今のスコアは低いのですか?",
+  "h": "6c51a2da"
+ },
+ "js.banlamviec.vui-long-chon-anh": {
+  "t": "写真を選択してください",
+  "h": "dc2490ac"
+ },
+ "js.banlamviec.vui-long-nhap-nam-sinh-hop": {
+  "t": "有効な生年を入力してください",
+  "h": "16abd384"
+ },
+ "js.banlamviec.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
  "js.baocao.bao-cao": {
   "t": "レポート",
   "h": "7013ca8b"
@@ -6166,6 +6506,194 @@
  "js.ctk.vui-long-nhap-day-du-ngay": {
   "t": "生年月日をすべて入力してください。",
   "h": "2545b4dd"
+ },
+ "js.cuahang.100-sau-dieu-chinh-co-the": {
+  "t": "/100**、調整後は **",
+  "h": "a4c14f33"
+ },
+ "js.cuahang.bac": {
+  "t": "北",
+  "h": "130d45d1"
+ },
+ "js.cuahang.ban-muon-hoi-them-ve-de": {
+  "t": "。どの提案についてさらに知りたいですか?",
+  "h": "23ca71bc"
+ },
+ "js.cuahang.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">現在の配置はおおむね良好です。</p>",
+  "h": "16b60bfc"
+ },
+ "js.cuahang.chuan-bi-prompt-render-theo-ngu": {
+  "t": "五行に合わせたレンダリング指示を準備中",
+  "h": "17f4d17e"
+ },
+ "js.cuahang.cua-hang-cua-toi-sau-khi": {
+  "t": "風水を整えた後の私の店舗",
+  "h": "110c4b6e"
+ },
+ "js.cuahang.cua-hang-van-phong-diem": {
+  "t": "店舗・オフィス — スコア ",
+  "h": "70910085"
+ },
+ "js.cuahang.dang-render-khong-gian-moi": {
+  "t": "新しい空間をレンダリング中",
+  "h": "814b3683"
+ },
+ "js.cuahang.diem": {
+  "t": "点",
+  "h": "4a404c32"
+ },
+ "js.cuahang.diem-phong-thuy-cua-hang-cua": {
+  "t": "私の店舗の風水スコア",
+  "h": "f1a71fd5"
+ },
+ "js.cuahang.diem-phong-thuy-cua-hang-van": {
+  "t": "現在の店舗・オフィスの風水スコア: **",
+  "h": "abf14d8f"
+ },
+ "js.cuahang.diem-phong-thuy-hien-tai": {
+  "t": "現在の風水スコア: ",
+  "h": "d4ac7afe"
+ },
+ "js.cuahang.dieu-chinh": {
+  "t": "調整",
+  "h": "37c5bf6b"
+ },
+ "js.cuahang.don-bo": {
+  "t": "撤去",
+  "h": "0825ec6d"
+ },
+ "js.cuahang.dong": {
+  "t": "東",
+  "h": "6bd70b62"
+ },
+ "js.cuahang.dong-bac": {
+  "t": "北東",
+  "h": "9690921a"
+ },
+ "js.cuahang.dong-nam": {
+  "t": "南東",
+  "h": "dd71e07a"
+ },
+ "js.cuahang.giu-nguyen-tpl": {
+  "t": "<span class=\"pos-keep\">✓ そのまま</span>",
+  "h": "aa00d929"
+ },
+ "js.cuahang.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">追加で提案するアイテムはありません。</p>",
+  "h": "3a6c6f34"
+ },
+ "js.cuahang.khong-nhan-duoc-anh": {
+  "t": "画像を受信できませんでした。",
+  "h": "62488d2f"
+ },
+ "js.cuahang.loi": {
+  "t": "エラー: ",
+  "h": "471c0087"
+ },
+ "js.cuahang.loi-doc-file": {
+  "t": "ファイルの読み込みエラー",
+  "h": "3c56711b"
+ },
+ "js.cuahang.loi-ppkl": {
+  "t": "⚠ エラー: ",
+  "h": "a4f4adbc"
+ },
+ "js.cuahang.loi-tai-anh": {
+  "t": "画像の読み込みエラー",
+  "h": "13fb84a7"
+ },
+ "js.cuahang.menh-quai-cua-ban-la": {
+  "t": "、あなたの命卦は **",
+  "h": "18a75d53"
+ },
+ "js.cuahang.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.cuahang.nen-co": {
+  "t": "必須",
+  "h": "3f6537af"
+ },
+ "js.cuahang.nen-lam": {
+  "t": "→ やるべき",
+  "h": "85492f9d"
+ },
+ "js.cuahang.nhan-dien-do-vat-trong-anh": {
+  "t": "写真内の物を認識中",
+  "h": "5ecd0446"
+ },
+ "js.cuahang.phan-tich-bat-trach-dua-de": {
+  "t": "八宅を分析して提案を作成中",
+  "h": "dd12d6d9"
+ },
+ "js.cuahang.phan-tich-that-bai": {
+  "t": "分析に失敗しました",
+  "h": "44b68aa6"
+ },
+ "js.cuahang.quai-n": {
+  "t": "卦 {n}",
+  "h": "1b238b88"
+ },
+ "js.cuahang.quan-trong": {
+  "t": "⚠ 重要",
+  "h": "ebd388e2"
+ },
+ "js.cuahang.sau-dieu-chinh-co-the-len": {
+  "t": " — 調整後は ",
+  "h": "9e6292bc"
+ },
+ "js.cuahang.tay": {
+  "t": "西",
+  "h": "74b26936"
+ },
+ "js.cuahang.tay-bac": {
+  "t": "北西",
+  "h": "0b1f47fd"
+ },
+ "js.cuahang.tay-nam": {
+  "t": "南西",
+  "h": "c0484c26"
+ },
+ "js.cuahang.tot-neu-co": {
+  "t": "あれば良い",
+  "h": "e48b654c"
+ },
+ "js.cuahang.trung-tam": {
+  "t": "中央",
+  "h": "26bda5d2"
+ },
+ "js.cuahang.tuy-y": {
+  "t": "◎ お好みで",
+  "h": "430debc7"
+ },
+ "js.cuahang.tuy-y-4s40": {
+  "t": "お好みで",
+  "h": "87b1fcd0"
+ },
+ "js.cuahang.uu-tien-lam-gi-truoc": {
+  "t": "まず何を優先すべきですか?",
+  "h": "f3cab683"
+ },
+ "js.cuahang.vat-pham-nao-nen-mua-truoc": {
+  "t": "どのアイテムを先に買うべきですか?",
+  "h": "85fe11d3"
+ },
+ "js.cuahang.vi-sao-diem-hien-tai-thap": {
+  "t": "なぜ今のスコアは低いのですか?",
+  "h": "6c51a2da"
+ },
+ "js.cuahang.vui-long-chon-anh": {
+  "t": "写真を選択してください",
+  "h": "dc2490ac"
+ },
+ "js.cuahang.vui-long-nhap-nam-sinh-hop": {
+  "t": "有効な生年を入力してください",
+  "h": "16abd384"
+ },
+ "js.cuahang.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
  },
  "js.dali.buoi-sang": {
   "t": "朝",
@@ -12667,6 +13195,194 @@
   "t": "もう一度お試しください。",
   "h": "2f1d18ee"
  },
+ "js.phongthuy.100-sau-dieu-chinh-co-the": {
+  "t": "/100**、調整後は **",
+  "h": "a4c14f33"
+ },
+ "js.phongthuy.bac": {
+  "t": "北",
+  "h": "130d45d1"
+ },
+ "js.phongthuy.ban-muon-hoi-them-ve-de": {
+  "t": "。どの提案についてさらに知りたいですか?",
+  "h": "23ca71bc"
+ },
+ "js.phongthuy.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">現在の配置はおおむね良好です。</p>",
+  "h": "65d526db"
+ },
+ "js.phongthuy.chuan-bi-prompt-render-theo-ngu": {
+  "t": "五行に合わせたレンダリング指示を準備中",
+  "h": "17f4d17e"
+ },
+ "js.phongthuy.dang-render-lai-phong": {
+  "t": "部屋を再レンダリング中",
+  "h": "4f7ce5f5"
+ },
+ "js.phongthuy.diem": {
+  "t": " 点</div>",
+  "h": "8d925dd9"
+ },
+ "js.phongthuy.diem-phong-thuy-hien-tai": {
+  "t": "現在の風水スコア:",
+  "h": "91e0a1f2"
+ },
+ "js.phongthuy.diem-phong-thuy-hien-tai-kmy1": {
+  "t": "現在の風水スコア: ",
+  "h": "d4ac7afe"
+ },
+ "js.phongthuy.diem-phong-thuy-phong-cua-toi": {
+  "t": "私の部屋の風水スコア",
+  "h": "373da765"
+ },
+ "js.phongthuy.dieu-chinh": {
+  "t": "調整",
+  "h": "37c5bf6b"
+ },
+ "js.phongthuy.don-bo": {
+  "t": "撤去",
+  "h": "0825ec6d"
+ },
+ "js.phongthuy.dong": {
+  "t": "東",
+  "h": "6bd70b62"
+ },
+ "js.phongthuy.dong-bac": {
+  "t": "北東",
+  "h": "9690921a"
+ },
+ "js.phongthuy.dong-nam": {
+  "t": "南東",
+  "h": "dd71e07a"
+ },
+ "js.phongthuy.giu-nguyen": {
+  "t": "<span class=\"pos-keep\">✓ そのまま</span>",
+  "h": "aa00d929"
+ },
+ "js.phongthuy.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">追加で提案するアイテムはありません。</p>",
+  "h": "b8141e06"
+ },
+ "js.phongthuy.khong-nhan-duoc-anh": {
+  "t": "画像を受信できませんでした。",
+  "h": "62488d2f"
+ },
+ "js.phongthuy.loi": {
+  "t": "エラー: ",
+  "h": "471c0087"
+ },
+ "js.phongthuy.loi-doc-file": {
+  "t": "ファイルの読み込みエラー",
+  "h": "3c56711b"
+ },
+ "js.phongthuy.loi-ppkl": {
+  "t": "⚠ エラー: ",
+  "h": "a4f4adbc"
+ },
+ "js.phongthuy.loi-tai-anh": {
+  "t": "画像の読み込みエラー",
+  "h": "13fb84a7"
+ },
+ "js.phongthuy.menh-quai-cua-ban-la": {
+  "t": "、あなたの命卦は **",
+  "h": "18a75d53"
+ },
+ "js.phongthuy.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.phongthuy.nen-co": {
+  "t": "必須",
+  "h": "3f6537af"
+ },
+ "js.phongthuy.nen-lam": {
+  "t": "→ やるべき",
+  "h": "85492f9d"
+ },
+ "js.phongthuy.nhan-dien-do-vat-trong-anh": {
+  "t": "写真内の物を認識中",
+  "h": "5ecd0446"
+ },
+ "js.phongthuy.phan-tich-bat-trach-dua-de": {
+  "t": "八宅を分析して提案を作成中",
+  "h": "dd12d6d9"
+ },
+ "js.phongthuy.phan-tich-that-bai": {
+  "t": "分析に失敗しました",
+  "h": "44b68aa6"
+ },
+ "js.phongthuy.phong-cua-toi-sau-khi-phong": {
+  "t": "風水を整えた後の私の部屋",
+  "h": "788d257f"
+ },
+ "js.phongthuy.phong-thuy-diem": {
+  "t": "風水 — スコア ",
+  "h": "4c90b82a"
+ },
+ "js.phongthuy.quai": {
+  "t": "卦 ",
+  "h": "fc8feb12"
+ },
+ "js.phongthuy.quan-trong": {
+  "t": "⚠ 重要",
+  "h": "ebd388e2"
+ },
+ "js.phongthuy.sau-dieu-chinh-co-the-len": {
+  "t": " — 調整後は ",
+  "h": "9e6292bc"
+ },
+ "js.phongthuy.tay": {
+  "t": "西",
+  "h": "74b26936"
+ },
+ "js.phongthuy.tay-bac": {
+  "t": "北西",
+  "h": "0b1f47fd"
+ },
+ "js.phongthuy.tay-nam": {
+  "t": "南西",
+  "h": "c0484c26"
+ },
+ "js.phongthuy.tot-neu-co": {
+  "t": "あれば良い",
+  "h": "e48b654c"
+ },
+ "js.phongthuy.trung-tam": {
+  "t": "中央",
+  "h": "26bda5d2"
+ },
+ "js.phongthuy.tuy-y": {
+  "t": "◎ お好みで",
+  "h": "430debc7"
+ },
+ "js.phongthuy.tuy-y-4s40": {
+  "t": "お好みで",
+  "h": "87b1fcd0"
+ },
+ "js.phongthuy.uu-tien-lam-gi-truoc": {
+  "t": "まず何を優先すべきですか?",
+  "h": "f3cab683"
+ },
+ "js.phongthuy.vat-pham-nao-nen-mua-truoc": {
+  "t": "どのアイテムを先に買うべきですか?",
+  "h": "85fe11d3"
+ },
+ "js.phongthuy.vi-sao-diem-hien-tai-thap": {
+  "t": "なぜ今のスコアは低いのですか?",
+  "h": "6c51a2da"
+ },
+ "js.phongthuy.vui-long-chon-anh-phong": {
+  "t": "部屋の写真を選択してください",
+  "h": "90bec971"
+ },
+ "js.phongthuy.vui-long-nhap-nam-sinh-hop": {
+  "t": "有効な生年を入力してください",
+  "h": "16abd384"
+ },
+ "js.phongthuy.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
  "js.prices.luong-moi-luot": {
   "t": "1回 {credits}両",
   "h": "d8f9af98"
@@ -13154,6 +13870,58 @@
  "js.shellui.bat-tu-ky-mon": {
   "t": "四柱推命・奇門遁甲",
   "h": "eac6b8dd"
+ },
+ "js.shellui.bds-ban-cau": {
+  "t": "半球:",
+  "h": "91679aa1"
+ },
+ "js.shellui.bds-bon-truc": {
+  "t": "4つの軸",
+  "h": "600b207c"
+ },
+ "js.shellui.bds-can-bang": {
+  "t": "バランス",
+  "h": "9fe59d4b"
+ },
+ "js.shellui.bds-goc-chieu": {
+  "t": "主なアスペクト",
+  "h": "77aad29d"
+ },
+ "js.shellui.bds-hanh-tinh": {
+  "t": "天体",
+  "h": "0bfb6634"
+ },
+ "js.shellui.bds-hinh-the": {
+  "t": "アスペクトパターン",
+  "h": "de8e9e43"
+ },
+ "js.shellui.bds-khong-co": {
+  "t": "なし",
+  "h": "2884bacc"
+ },
+ "js.shellui.bds-lech": {
+  "t": "(オーブ {lech}°、強さ {manh}%)",
+  "h": "17e9c540"
+ },
+ "js.shellui.bds-nghich": {
+  "t": "℞ 逆行",
+  "h": "8093efa5"
+ },
+ "js.shellui.bds-nghich-hanh": {
+  "t": "逆行:",
+  "h": "6917d7e7"
+ },
+ "js.shellui.bds-nguyen-to": {
+  "t": "エレメント:",
+  "h": "69e4c7a2"
+ },
+ "js.shellui.bds-nha": {
+  "t": "第{n}ハウス",
+  "h": "19a346e7"
+ },
+ "js.shellui.bds-the": {
+  "t": "クオリティ:",
+  "h": "3b48438e"
  },
  "js.shellui.be-an": {
   "t": "Bé An",

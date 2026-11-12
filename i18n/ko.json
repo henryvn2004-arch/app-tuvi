@@ -3895,6 +3895,346 @@
   "t": "이메일과 비밀번호를 입력해 주세요.",
   "h": "d84b9abd"
  },
+ "js.bandosao.ban-do-sao": {
+  "t": "별자리 차트 — ",
+  "h": "aaf64809"
+ },
+ "js.bandosao.ban-do-sao-gm5h": {
+  "t": "별자리 차트",
+  "h": "0b3459d8"
+ },
+ "js.bandosao.ban-do-sao-luc-sinh": {
+  "t": "출생 별자리 차트 — ",
+  "h": "3f6bcfea"
+ },
+ "js.bandosao.ban-do-sao-tqhx": {
+  "t": "별자리 차트 · ",
+  "h": "86318dde"
+ },
+ "js.bandosao.ban-muon-toi-doc-phan-nao": {
+  "t": "**. 어느 부분부터 읽어 드릴까요?",
+  "h": "e9d17729"
+ },
+ "js.bandosao.buon-ma-thuot": {
+  "t": "부온마투옷",
+  "h": "8bf97db6"
+ },
+ "js.bandosao.can-tho": {
+  "t": "껀터",
+  "h": "462902c5"
+ },
+ "js.bandosao.chua-dung-duoc-anh-thu-lai": {
+  "t": "이미지를 만들지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "h": "f8055429"
+ },
+ "js.bandosao.chua-lap-duoc-ban-do-luc": {
+  "t": "지금은 차트를 만들지 못했어요 — 다시 시도해 주세요.",
+  "h": "a5e46558"
+ },
+ "js.bandosao.chuyen-tinh-cam-nhin-tu-ban": {
+  "t": "이 차트로 본 연애는 어떤가요?",
+  "h": "9a016ff9"
+ },
+ "js.bandosao.cung-moc": {
+  "t": "**, 어센던트 **",
+  "h": "340f627c"
+ },
+ "js.bandosao.cung-moc-1y0y": {
+  "t": "어센던트: ",
+  "h": "230ed8b5"
+ },
+ "js.bandosao.cung-moc-bgoi": {
+  "t": " · 어센던트 ",
+  "h": "cad089c9"
+ },
+ "js.bandosao.da-lap-ban-do-sao": {
+  "t": "차트를 만들었어요: **",
+  "h": "c16ca110"
+ },
+ "js.bandosao.da-nang": {
+  "t": "다낭",
+  "h": "fff4a50e"
+ },
+ "js.bandosao.dang-dung-anh": {
+  "t": "이미지 만드는 중…",
+  "h": "7bce9760"
+ },
+ "js.bandosao.dang-lap": {
+  "t": "만드는 중…",
+  "h": "b47d9598"
+ },
+ "js.bandosao.goc-chieu-nao-gay-kho-nhat": {
+  "t": "저에게 가장 힘든 각도는 무엇인가요?",
+  "h": "8439668d"
+ },
+ "js.bandosao.ha-noi": {
+  "t": "하노이",
+  "h": "89974fad"
+ },
+ "js.bandosao.hai-phong": {
+  "t": "하이퐁",
+  "h": "18cf9167"
+ },
+ "js.bandosao.he-nha": {
+  "t": " (하우스 시스템 ",
+  "h": "cb040ba9"
+ },
+ "js.bandosao.hue": {
+  "t": "후에",
+  "h": "23ed9a98"
+ },
+ "js.bandosao.mat-trang": {
+  "t": "**, 달 **",
+  "h": "bfc8f041"
+ },
+ "js.bandosao.mat-troi": {
+  "t": "**. 태양 **",
+  "h": "b483737c"
+ },
+ "js.bandosao.mat-troi-8vvi": {
+  "t": "태양 ",
+  "h": "40bd8b96"
+ },
+ "js.bandosao.nguyen-to": {
+  "t": "원소: ",
+  "h": "503b548c"
+ },
+ "js.bandosao.nha": {
+  "t": " (하우스 ",
+  "h": "953fb7b3"
+ },
+ "js.bandosao.noi-khac-tu-nhap": {
+  "t": "— 다른 곳(직접 입력) —",
+  "h": "5bda72d4"
+ },
+ "js.bandosao.quet-ma-lap-ban-do-sao": {
+  "t": "QR 코드 스캔 — 나만의 차트 만들기",
+  "h": "2abde300"
+ },
+ "js.bandosao.quy-nhon": {
+  "t": "꾸이년",
+  "h": "2b52fd6e"
+ },
+ "js.bandosao.su-nghiep-hop-huong-nao": {
+  "t": "어떤 진로가 잘 맞나요?",
+  "h": "8d8b01c6"
+ },
+ "js.bandosao.tinh-cach-cot-loi-cua-toi": {
+  "t": "저의 핵심 성격은 무엇인가요?",
+  "h": "485d721a"
+ },
+ "js.bandosao.tp-ho-chi-minh": {
+  "t": "호찌민시",
+  "h": "4fc20e5f"
+ },
+ "js.bandosao.vui-long-chon-noi-sinh-hoac": {
+  "t": "출생지를 고르거나 위도·경도를 입력해 주세요.",
+  "h": "1e78fa74"
+ },
+ "js.bandosao.vui-long-nhap-du-ngay-thang": {
+  "t": "출생 일·월·연도를 모두 입력해 주세요.",
+  "h": "771ff27f"
+ },
+ "js.banlamviec.100-sau-dieu-chinh-co-the": {
+  "t": "/100**, 조정 후에는 **",
+  "h": "a4c14f33"
+ },
+ "js.banlamviec.bac": {
+  "t": "북",
+  "h": "130d45d1"
+ },
+ "js.banlamviec.ban-lam-viec-cua-toi-sau": {
+  "t": "풍수를 반영한 뒤의 내 책상",
+  "h": "b345368e"
+ },
+ "js.banlamviec.ban-lam-viec-diem": {
+  "t": "책상 — 점수 ",
+  "h": "1bfcfce8"
+ },
+ "js.banlamviec.ban-muon-hoi-them-ve-de": {
+  "t": ". 어떤 제안에 대해 더 물어보시겠어요?",
+  "h": "23ca71bc"
+ },
+ "js.banlamviec.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">현재 배치는 비교적 좋은 편이에요.</p>",
+  "h": "16b60bfc"
+ },
+ "js.banlamviec.chua-xac-dinh": {
+  "t": "미정",
+  "h": "3120f6db"
+ },
+ "js.banlamviec.chuan-bi-prompt-render-theo-ngu": {
+  "t": "오행에 맞춰 렌더링 지시문 준비 중",
+  "h": "17f4d17e"
+ },
+ "js.banlamviec.dang-render-khong-gian-moi": {
+  "t": "새 공간을 렌더링하는 중",
+  "h": "814b3683"
+ },
+ "js.banlamviec.diem": {
+  "t": "점",
+  "h": "4a404c32"
+ },
+ "js.banlamviec.diem-phong-thuy-ban-lam-viec": {
+  "t": "현재 책상의 풍수 점수: **",
+  "h": "b68f30c6"
+ },
+ "js.banlamviec.diem-phong-thuy-ban-lam-viec-8sd8": {
+  "t": "내 책상의 풍수 점수",
+  "h": "21a93499"
+ },
+ "js.banlamviec.diem-phong-thuy-hien-tai": {
+  "t": "현재 풍수 점수: ",
+  "h": "d4ac7afe"
+ },
+ "js.banlamviec.dieu-chinh": {
+  "t": "조정",
+  "h": "37c5bf6b"
+ },
+ "js.banlamviec.don-bo": {
+  "t": "치우기",
+  "h": "0825ec6d"
+ },
+ "js.banlamviec.dong": {
+  "t": "동",
+  "h": "6bd70b62"
+ },
+ "js.banlamviec.dong-bac": {
+  "t": "북동",
+  "h": "9690921a"
+ },
+ "js.banlamviec.dong-nam": {
+  "t": "남동",
+  "h": "dd71e07a"
+ },
+ "js.banlamviec.giu-nguyen-tpl": {
+  "t": "<span class=\"pos-keep\">✓ 그대로 유지</span>",
+  "h": "aa00d929"
+ },
+ "js.banlamviec.hien-tai": {
+  "t": "현재:",
+  "h": "b17d885a"
+ },
+ "js.banlamviec.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">추가로 제안할 물품이 없어요.</p>",
+  "h": "3a6c6f34"
+ },
+ "js.banlamviec.khong-nhan-duoc-anh": {
+  "t": "이미지를 받지 못했어요.",
+  "h": "62488d2f"
+ },
+ "js.banlamviec.loi": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.banlamviec.loi-doc-file": {
+  "t": "파일 읽기 오류",
+  "h": "3c56711b"
+ },
+ "js.banlamviec.loi-ppkl": {
+  "t": "⚠ 오류: ",
+  "h": "a4f4adbc"
+ },
+ "js.banlamviec.loi-tai-anh": {
+  "t": "이미지 불러오기 오류",
+  "h": "13fb84a7"
+ },
+ "js.banlamviec.menh-quai-cua-ban-la": {
+  "t": ", 당신의 명괘는 **",
+  "h": "18a75d53"
+ },
+ "js.banlamviec.nam": {
+  "t": "남",
+  "h": "b580ba1b"
+ },
+ "js.banlamviec.nen-co": {
+  "t": "꼭 필요",
+  "h": "3f6537af"
+ },
+ "js.banlamviec.nen-doi-sang": {
+  "t": "바꿀 방향:",
+  "h": "32c9bd3d"
+ },
+ "js.banlamviec.nen-lam": {
+  "t": "→ 하면 좋음",
+  "h": "85492f9d"
+ },
+ "js.banlamviec.nhan-dien-do-vat-trong-anh": {
+  "t": "사진 속 물건 인식 중",
+  "h": "5ecd0446"
+ },
+ "js.banlamviec.phan-tich-bat-trach-dua-de": {
+  "t": "팔택을 분석해 제안을 만드는 중",
+  "h": "dd12d6d9"
+ },
+ "js.banlamviec.phan-tich-that-bai": {
+  "t": "분석에 실패했어요",
+  "h": "44b68aa6"
+ },
+ "js.banlamviec.quai-n": {
+  "t": "괘 {n}",
+  "h": "1b238b88"
+ },
+ "js.banlamviec.quan-trong": {
+  "t": "⚠ 중요",
+  "h": "ebd388e2"
+ },
+ "js.banlamviec.sau-dieu-chinh-co-the-len": {
+  "t": " — 조정 후에는 ",
+  "h": "9e6292bc"
+ },
+ "js.banlamviec.tay": {
+  "t": "서",
+  "h": "74b26936"
+ },
+ "js.banlamviec.tay-bac": {
+  "t": "북서",
+  "h": "0b1f47fd"
+ },
+ "js.banlamviec.tay-nam": {
+  "t": "남서",
+  "h": "c0484c26"
+ },
+ "js.banlamviec.tot-neu-co": {
+  "t": "있으면 좋음",
+  "h": "e48b654c"
+ },
+ "js.banlamviec.trung-tam": {
+  "t": "중앙",
+  "h": "26bda5d2"
+ },
+ "js.banlamviec.tuy-y": {
+  "t": "◎ 선택",
+  "h": "430debc7"
+ },
+ "js.banlamviec.tuy-y-4s40": {
+  "t": "선택",
+  "h": "87b1fcd0"
+ },
+ "js.banlamviec.uu-tien-lam-gi-truoc": {
+  "t": "무엇부터 우선해야 하나요?",
+  "h": "f3cab683"
+ },
+ "js.banlamviec.vat-pham-nao-nen-mua-truoc": {
+  "t": "어떤 물품을 먼저 사야 하나요?",
+  "h": "85fe11d3"
+ },
+ "js.banlamviec.vi-sao-diem-hien-tai-thap": {
+  "t": "왜 현재 점수가 낮은가요?",
+  "h": "6c51a2da"
+ },
+ "js.banlamviec.vui-long-chon-anh": {
+  "t": "사진을 선택해 주세요",
+  "h": "dc2490ac"
+ },
+ "js.banlamviec.vui-long-nhap-nam-sinh-hop": {
+  "t": "올바른 출생 연도를 입력해 주세요",
+  "h": "16abd384"
+ },
+ "js.banlamviec.vui-long-thu-lai": {
+  "t": "다시 시도해 주세요.",
+  "h": "2f1d18ee"
+ },
  "js.baocao.bao-cao": {
   "t": "리포트",
   "h": "7013ca8b"
@@ -6166,6 +6506,194 @@
  "js.ctk.vui-long-nhap-day-du-ngay": {
   "t": "생년월일을 모두 입력해 주세요.",
   "h": "2545b4dd"
+ },
+ "js.cuahang.100-sau-dieu-chinh-co-the": {
+  "t": "/100**, 조정 후에는 **",
+  "h": "a4c14f33"
+ },
+ "js.cuahang.bac": {
+  "t": "북",
+  "h": "130d45d1"
+ },
+ "js.cuahang.ban-muon-hoi-them-ve-de": {
+  "t": ". 어떤 제안에 대해 더 물어보시겠어요?",
+  "h": "23ca71bc"
+ },
+ "js.cuahang.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">현재 배치는 비교적 좋은 편이에요.</p>",
+  "h": "16b60bfc"
+ },
+ "js.cuahang.chuan-bi-prompt-render-theo-ngu": {
+  "t": "오행에 맞춰 렌더링 지시문 준비 중",
+  "h": "17f4d17e"
+ },
+ "js.cuahang.cua-hang-cua-toi-sau-khi": {
+  "t": "풍수를 반영한 뒤의 내 매장",
+  "h": "110c4b6e"
+ },
+ "js.cuahang.cua-hang-van-phong-diem": {
+  "t": "매장·사무실 — 점수 ",
+  "h": "70910085"
+ },
+ "js.cuahang.dang-render-khong-gian-moi": {
+  "t": "새 공간을 렌더링하는 중",
+  "h": "814b3683"
+ },
+ "js.cuahang.diem": {
+  "t": "점",
+  "h": "4a404c32"
+ },
+ "js.cuahang.diem-phong-thuy-cua-hang-cua": {
+  "t": "내 매장의 풍수 점수",
+  "h": "f1a71fd5"
+ },
+ "js.cuahang.diem-phong-thuy-cua-hang-van": {
+  "t": "현재 매장·사무실의 풍수 점수: **",
+  "h": "abf14d8f"
+ },
+ "js.cuahang.diem-phong-thuy-hien-tai": {
+  "t": "현재 풍수 점수: ",
+  "h": "d4ac7afe"
+ },
+ "js.cuahang.dieu-chinh": {
+  "t": "조정",
+  "h": "37c5bf6b"
+ },
+ "js.cuahang.don-bo": {
+  "t": "치우기",
+  "h": "0825ec6d"
+ },
+ "js.cuahang.dong": {
+  "t": "동",
+  "h": "6bd70b62"
+ },
+ "js.cuahang.dong-bac": {
+  "t": "북동",
+  "h": "9690921a"
+ },
+ "js.cuahang.dong-nam": {
+  "t": "남동",
+  "h": "dd71e07a"
+ },
+ "js.cuahang.giu-nguyen-tpl": {
+  "t": "<span class=\"pos-keep\">✓ 그대로 유지</span>",
+  "h": "aa00d929"
+ },
+ "js.cuahang.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">추가로 제안할 물품이 없어요.</p>",
+  "h": "3a6c6f34"
+ },
+ "js.cuahang.khong-nhan-duoc-anh": {
+  "t": "이미지를 받지 못했어요.",
+  "h": "62488d2f"
+ },
+ "js.cuahang.loi": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.cuahang.loi-doc-file": {
+  "t": "파일 읽기 오류",
+  "h": "3c56711b"
+ },
+ "js.cuahang.loi-ppkl": {
+  "t": "⚠ 오류: ",
+  "h": "a4f4adbc"
+ },
+ "js.cuahang.loi-tai-anh": {
+  "t": "이미지 불러오기 오류",
+  "h": "13fb84a7"
+ },
+ "js.cuahang.menh-quai-cua-ban-la": {
+  "t": ", 당신의 명괘는 **",
+  "h": "18a75d53"
+ },
+ "js.cuahang.nam": {
+  "t": "남",
+  "h": "b580ba1b"
+ },
+ "js.cuahang.nen-co": {
+  "t": "꼭 필요",
+  "h": "3f6537af"
+ },
+ "js.cuahang.nen-lam": {
+  "t": "→ 하면 좋음",
+  "h": "85492f9d"
+ },
+ "js.cuahang.nhan-dien-do-vat-trong-anh": {
+  "t": "사진 속 물건 인식 중",
+  "h": "5ecd0446"
+ },
+ "js.cuahang.phan-tich-bat-trach-dua-de": {
+  "t": "팔택을 분석해 제안을 만드는 중",
+  "h": "dd12d6d9"
+ },
+ "js.cuahang.phan-tich-that-bai": {
+  "t": "분석에 실패했어요",
+  "h": "44b68aa6"
+ },
+ "js.cuahang.quai-n": {
+  "t": "괘 {n}",
+  "h": "1b238b88"
+ },
+ "js.cuahang.quan-trong": {
+  "t": "⚠ 중요",
+  "h": "ebd388e2"
+ },
+ "js.cuahang.sau-dieu-chinh-co-the-len": {
+  "t": " — 조정 후에는 ",
+  "h": "9e6292bc"
+ },
+ "js.cuahang.tay": {
+  "t": "서",
+  "h": "74b26936"
+ },
+ "js.cuahang.tay-bac": {
+  "t": "북서",
+  "h": "0b1f47fd"
+ },
+ "js.cuahang.tay-nam": {
+  "t": "남서",
+  "h": "c0484c26"
+ },
+ "js.cuahang.tot-neu-co": {
+  "t": "있으면 좋음",
+  "h": "e48b654c"
+ },
+ "js.cuahang.trung-tam": {
+  "t": "중앙",
+  "h": "26bda5d2"
+ },
+ "js.cuahang.tuy-y": {
+  "t": "◎ 선택",
+  "h": "430debc7"
+ },
+ "js.cuahang.tuy-y-4s40": {
+  "t": "선택",
+  "h": "87b1fcd0"
+ },
+ "js.cuahang.uu-tien-lam-gi-truoc": {
+  "t": "무엇부터 우선해야 하나요?",
+  "h": "f3cab683"
+ },
+ "js.cuahang.vat-pham-nao-nen-mua-truoc": {
+  "t": "어떤 물품을 먼저 사야 하나요?",
+  "h": "85fe11d3"
+ },
+ "js.cuahang.vi-sao-diem-hien-tai-thap": {
+  "t": "왜 현재 점수가 낮은가요?",
+  "h": "6c51a2da"
+ },
+ "js.cuahang.vui-long-chon-anh": {
+  "t": "사진을 선택해 주세요",
+  "h": "dc2490ac"
+ },
+ "js.cuahang.vui-long-nhap-nam-sinh-hop": {
+  "t": "올바른 출생 연도를 입력해 주세요",
+  "h": "16abd384"
+ },
+ "js.cuahang.vui-long-thu-lai": {
+  "t": "다시 시도해 주세요.",
+  "h": "2f1d18ee"
  },
  "js.dali.buoi-sang": {
   "t": "아침",
@@ -12667,6 +13195,194 @@
   "t": "다시 시도해 주세요.",
   "h": "2f1d18ee"
  },
+ "js.phongthuy.100-sau-dieu-chinh-co-the": {
+  "t": "/100**, 조정 후에는 **",
+  "h": "a4c14f33"
+ },
+ "js.phongthuy.bac": {
+  "t": "북",
+  "h": "130d45d1"
+ },
+ "js.phongthuy.ban-muon-hoi-them-ve-de": {
+  "t": ". 어떤 제안에 대해 더 물어보시겠어요?",
+  "h": "23ca71bc"
+ },
+ "js.phongthuy.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">현재 배치는 비교적 좋은 편이에요.</p>",
+  "h": "65d526db"
+ },
+ "js.phongthuy.chuan-bi-prompt-render-theo-ngu": {
+  "t": "오행에 맞춰 렌더링 지시문 준비 중",
+  "h": "17f4d17e"
+ },
+ "js.phongthuy.dang-render-lai-phong": {
+  "t": "방을 다시 렌더링하는 중",
+  "h": "4f7ce5f5"
+ },
+ "js.phongthuy.diem": {
+  "t": " 점</div>",
+  "h": "8d925dd9"
+ },
+ "js.phongthuy.diem-phong-thuy-hien-tai": {
+  "t": "현재 풍수 점수:",
+  "h": "91e0a1f2"
+ },
+ "js.phongthuy.diem-phong-thuy-hien-tai-kmy1": {
+  "t": "현재 풍수 점수: ",
+  "h": "d4ac7afe"
+ },
+ "js.phongthuy.diem-phong-thuy-phong-cua-toi": {
+  "t": "내 방의 풍수 점수",
+  "h": "373da765"
+ },
+ "js.phongthuy.dieu-chinh": {
+  "t": "조정",
+  "h": "37c5bf6b"
+ },
+ "js.phongthuy.don-bo": {
+  "t": "치우기",
+  "h": "0825ec6d"
+ },
+ "js.phongthuy.dong": {
+  "t": "동",
+  "h": "6bd70b62"
+ },
+ "js.phongthuy.dong-bac": {
+  "t": "북동",
+  "h": "9690921a"
+ },
+ "js.phongthuy.dong-nam": {
+  "t": "남동",
+  "h": "dd71e07a"
+ },
+ "js.phongthuy.giu-nguyen": {
+  "t": "<span class=\"pos-keep\">✓ 그대로 유지</span>",
+  "h": "aa00d929"
+ },
+ "js.phongthuy.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">추가로 제안할 물품이 없어요.</p>",
+  "h": "b8141e06"
+ },
+ "js.phongthuy.khong-nhan-duoc-anh": {
+  "t": "이미지를 받지 못했어요.",
+  "h": "62488d2f"
+ },
+ "js.phongthuy.loi": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.phongthuy.loi-doc-file": {
+  "t": "파일 읽기 오류",
+  "h": "3c56711b"
+ },
+ "js.phongthuy.loi-ppkl": {
+  "t": "⚠ 오류: ",
+  "h": "a4f4adbc"
+ },
+ "js.phongthuy.loi-tai-anh": {
+  "t": "이미지 불러오기 오류",
+  "h": "13fb84a7"
+ },
+ "js.phongthuy.menh-quai-cua-ban-la": {
+  "t": ", 당신의 명괘는 **",
+  "h": "18a75d53"
+ },
+ "js.phongthuy.nam": {
+  "t": "남",
+  "h": "b580ba1b"
+ },
+ "js.phongthuy.nen-co": {
+  "t": "꼭 필요",
+  "h": "3f6537af"
+ },
+ "js.phongthuy.nen-lam": {
+  "t": "→ 하면 좋음",
+  "h": "85492f9d"
+ },
+ "js.phongthuy.nhan-dien-do-vat-trong-anh": {
+  "t": "사진 속 물건 인식 중",
+  "h": "5ecd0446"
+ },
+ "js.phongthuy.phan-tich-bat-trach-dua-de": {
+  "t": "팔택을 분석해 제안을 만드는 중",
+  "h": "dd12d6d9"
+ },
+ "js.phongthuy.phan-tich-that-bai": {
+  "t": "분석에 실패했어요",
+  "h": "44b68aa6"
+ },
+ "js.phongthuy.phong-cua-toi-sau-khi-phong": {
+  "t": "풍수를 반영한 뒤의 내 방",
+  "h": "788d257f"
+ },
+ "js.phongthuy.phong-thuy-diem": {
+  "t": "풍수 — 점수 ",
+  "h": "4c90b82a"
+ },
+ "js.phongthuy.quai": {
+  "t": "괘 ",
+  "h": "fc8feb12"
+ },
+ "js.phongthuy.quan-trong": {
+  "t": "⚠ 중요",
+  "h": "ebd388e2"
+ },
+ "js.phongthuy.sau-dieu-chinh-co-the-len": {
+  "t": " — 조정 후에는 ",
+  "h": "9e6292bc"
+ },
+ "js.phongthuy.tay": {
+  "t": "서",
+  "h": "74b26936"
+ },
+ "js.phongthuy.tay-bac": {
+  "t": "북서",
+  "h": "0b1f47fd"
+ },
+ "js.phongthuy.tay-nam": {
+  "t": "남서",
+  "h": "c0484c26"
+ },
+ "js.phongthuy.tot-neu-co": {
+  "t": "있으면 좋음",
+  "h": "e48b654c"
+ },
+ "js.phongthuy.trung-tam": {
+  "t": "중앙",
+  "h": "26bda5d2"
+ },
+ "js.phongthuy.tuy-y": {
+  "t": "◎ 선택",
+  "h": "430debc7"
+ },
+ "js.phongthuy.tuy-y-4s40": {
+  "t": "선택",
+  "h": "87b1fcd0"
+ },
+ "js.phongthuy.uu-tien-lam-gi-truoc": {
+  "t": "무엇부터 우선해야 하나요?",
+  "h": "f3cab683"
+ },
+ "js.phongthuy.vat-pham-nao-nen-mua-truoc": {
+  "t": "어떤 물품을 먼저 사야 하나요?",
+  "h": "85fe11d3"
+ },
+ "js.phongthuy.vi-sao-diem-hien-tai-thap": {
+  "t": "왜 현재 점수가 낮은가요?",
+  "h": "6c51a2da"
+ },
+ "js.phongthuy.vui-long-chon-anh-phong": {
+  "t": "방 사진을 선택해 주세요",
+  "h": "90bec971"
+ },
+ "js.phongthuy.vui-long-nhap-nam-sinh-hop": {
+  "t": "올바른 출생 연도를 입력해 주세요",
+  "h": "16abd384"
+ },
+ "js.phongthuy.vui-long-thu-lai": {
+  "t": "다시 시도해 주세요.",
+  "h": "2f1d18ee"
+ },
  "js.prices.luong-moi-luot": {
   "t": "1회당 {credits}냥",
   "h": "d8f9af98"
@@ -13154,6 +13870,58 @@
  "js.shellui.bat-tu-ky-mon": {
   "t": "사주 · 기문둔갑",
   "h": "eac6b8dd"
+ },
+ "js.shellui.bds-ban-cau": {
+  "t": "반구:",
+  "h": "91679aa1"
+ },
+ "js.shellui.bds-bon-truc": {
+  "t": "네 개의 축",
+  "h": "600b207c"
+ },
+ "js.shellui.bds-can-bang": {
+  "t": "균형",
+  "h": "9fe59d4b"
+ },
+ "js.shellui.bds-goc-chieu": {
+  "t": "주요 각도",
+  "h": "77aad29d"
+ },
+ "js.shellui.bds-hanh-tinh": {
+  "t": "행성",
+  "h": "0bfb6634"
+ },
+ "js.shellui.bds-hinh-the": {
+  "t": "각도 패턴",
+  "h": "de8e9e43"
+ },
+ "js.shellui.bds-khong-co": {
+  "t": "없음",
+  "h": "2884bacc"
+ },
+ "js.shellui.bds-lech": {
+  "t": "(오브 {lech}°, 강도 {manh}%)",
+  "h": "17e9c540"
+ },
+ "js.shellui.bds-nghich": {
+  "t": "℞ 역행",
+  "h": "8093efa5"
+ },
+ "js.shellui.bds-nghich-hanh": {
+  "t": "역행:",
+  "h": "6917d7e7"
+ },
+ "js.shellui.bds-nguyen-to": {
+  "t": "원소:",
+  "h": "69e4c7a2"
+ },
+ "js.shellui.bds-nha": {
+  "t": "{n}하우스",
+  "h": "19a346e7"
+ },
+ "js.shellui.bds-the": {
+  "t": "양태:",
+  "h": "3b48438e"
  },
  "js.shellui.be-an": {
   "t": "하준",
