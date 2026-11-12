@@ -161,8 +161,11 @@ import { readFileSync } from 'node:fs';
 const { TimeManager } = await import('mingyu-core/calendar');
 TimeManager.setTimezoneOffsetMinutesOverride(420);
 const out = {};
+// \`ma\`/\`*Ma\` (W28) = MÃ GỐC của nguồn (chữ Hán mingyu / khoá Anh celestine) để client tra bản dịch theo
+// ngôn ngữ — KHÔNG hiển thị. Chỉ bỏ ở hai tool có mã này, tool khác vẫn quét trọn.
+const MA_TOOL = new Set(['hoang-lich', 'ban-do-sao']);
 function quet(ten, obj) {
-  const s = JSON.stringify(obj);
+  const s = JSON.stringify(obj, MA_TOOL.has(ten) ? (k, v) => (k === 'ma' || /^[a-z][A-Za-z]*Ma$/.test(k) ? undefined : v) : undefined);
   const han = s.match(${HAN.source ? '/[\\u3400-\\u4dbf\\u4e00-\\u9fff]/g' : '/x/'}) || [];
   out[ten] = { han: [...new Set(han)], raw: s };
 }
@@ -173,13 +176,31 @@ const { lapKhoa, railData: lnRail } = await import('./lib/liuren/ke.js');
 quet('luc-nham', [0, 60, 150, 240, 330].flatMap(i => [1, 9, 17].map(h => { const k = lapKhoa(new Date(Date.UTC(2026, 0, 1 + i, h - 7))); return [k, lnRail(k)]; })));
 
 const { dungHoangLich } = await import('./lib/almanac/day.js');
-quet('hoang-lich', [0, 3, 6, 9].map(m => dungHoangLich(new Date(Date.UTC(2026, m, 1)), new Date(Date.UTC(2026, m, 20)))));
+const hlMau = [0, 3, 6, 9].map(m => dungHoangLich(new Date(Date.UTC(2026, m, 1)), new Date(Date.UTC(2026, m, 20))));
+quet('hoang-lich', hlMau);
+// W28: khoá bản dịch mà client sẽ tra từ MÃ trong payload (hoang-lich.js) — đối chiếu nguồn i18n-long ở dưới.
+out['ma-almanac'] = { khoa: [...new Set(hlMau.flat().flatMap(d => [
+  ...d.nen.concat(d.kieng).flatMap(v => [\`viec.\${v.ma}.ten\`, \`viec.\${v.ma}.nghia\`]),
+  ...d.thanSat.map(t => \`than.\${t.ma}\`),
+  ...d.banhToMa.map(x => \`bt.\${x}\`),
+  ...(d.cuuTinh ? [\`cuu.\${d.cuuTinh.ma}\`] : []),
+  ...(d.huongSat ? [\`phuong.\${d.huongSatMa}\`] : []),
+  ...d.huongNam.flatMap(h => [\`nien.\${h.ma}.ten\`, \`phuong.\${h.huongMa}\`]),
+]))] };
 
 const { phanTich, railData: bzRail } = await import('./lib/bazi/phan-tich.js');
 quet('bat-tu', [[3,6,1998,1],[17,11,1975,7],[28,2,2004,11]].map(([d,m,y,g]) => { const p = phanTich({ngay:d,thang:m,nam:y,gioChi:g,gioiTinh:'nam'}); return [p, bzRail(p)]; }));
 
 const { lapBanDo, railData: bdRail } = await import('./lib/tayphuong/natal.js');
-quet('ban-do-sao', [[3,6,1998,1,30],[22,12,1980,18,5]].map(([d,m,y,h,mi]) => { const b = lapBanDo({ngay:d,thang:m,nam:y,gio:h,phut:mi,vido:21.03,kinhdo:105.83,muiGio:7}); return [b, bdRail(b)]; }));
+const bdMau = [[3,6,1998,1,30],[22,12,1980,18,5]].map(([d,m,y,h,mi]) => { const b = lapBanDo({ngay:d,thang:m,nam:y,gio:h,phut:mi,vido:21.03,kinhdo:105.83,muiGio:7}); return [b, bdRail(b)]; });
+quet('ban-do-sao', bdMau);
+// W28: ban-do-sao.js tra nghĩa theo \`<bảng>.<ma>\` — sao→hanhtinh, trục→diem, góc→goc, hình thế→hinhthe.
+out['ma-tayphuong'] = { khoa: [...new Set(bdMau.flatMap(([b]) => [
+  ...b.sao.filter(x => x.nghia).map(x => \`hanhtinh.\${x.ma}\`),
+  ...b.truc.filter(x => x.nghia).map(x => \`diem.\${x.ma}\`),
+  ...b.gocChieu.filter(x => x.nghia).map(x => \`goc.\${x.ma}\`),
+  ...b.hinhThe.filter(x => x.nghia).map(x => \`hinhthe.\${x.ma}\`),
+]))] };
 
 /* ─── PHỦ TRỌN TỪ VỰNG, không phải phủ mẫu ────────────────────────────────
    Quét mẫu ở trên chỉ chứng minh được thứ mà mẫu CHẠM TỚI. Đo thật: lưới cũ
@@ -272,7 +293,7 @@ console.log('__KQ__' + JSON.stringify(out));
   for (const [ten, r] of Object.entries(kq)) {
     // Hai mục `tuvung-*` không phải payload — chúng đối chiếu TRỌN danh sách
     // tên của nguồn, xử riêng ở dưới.
-    if (ten.startsWith('tuvung-')) continue;
+    if (ten.startsWith('tuvung-') || ten.startsWith('ma-')) continue;
     bao(r.han.length === 0, `${ten.padEnd(12)} — chữ Hán lọt: ${r.han.join('') || 'không'}`);
 
     // 🐞 Loại lỗi THỨ HAI, khác hẳn chữ chưa dịch: giá trị hỏng bị NỘI SUY vào
@@ -296,6 +317,22 @@ console.log('__KQ__' + JSON.stringify(out));
       bao(
         sot.length === 0,
         `${ten.padEnd(12)} — thuật ngữ Anh của celestine còn sót: ${sot.join(', ') || 'không'}`
+      );
+    }
+  }
+
+  // W28 — MÃ tra trong payload phải trỏ ĐÚNG khoá nguồn văn engine (lib/i18n/long.mjs). Route thôi gửi `ma`
+  // (hay đổi dạng mã) thì client lặng lẽ lùi về chữ Việt ở /ja… — không bộ dò nào khác thấy.
+  {
+    const { loadSources } = await import('../lib/i18n/long.mjs');
+    const src = loadSources(process.cwd());
+    for (const ns of ['almanac', 'tayphuong']) {
+      const co = new Set(src[ns].map((e) => e.k));
+      const khoa = kq[`ma-${ns}`]?.khoa || [];
+      const sot = khoa.filter((k) => !co.has(k));
+      bao(
+        khoa.length > 20 && sot.length === 0,
+        `ma-${ns.padEnd(10)} — ${khoa.length} mã trong payload mẫu, không khớp nguồn dịch: ${sot.slice(0, 5).join(', ') || 'không'}`
       );
     }
   }

@@ -16,6 +16,46 @@
 (function () {
   var CACHE = {};
 
+  // ── i18n (W28) — VĂN ENGINE SERVER: /api/almanac trả chữ Việt (lib/almanac/terms.ts) KÈM mã Hán `ma`/`*Ma`.
+  // Chỉ đổi ở chỗ VẼ (html/napThang): bản dịch theo mã ở /tools-shared/i18n-long/<locale>/almanac.js
+  // (docs/i18n/QUY-UOC.md "Văn engine server"); chữ khung qua I18n.tv (js.shellui.hl-*); trực/tú/can chi/chi
+  // qua glossary. `tra`/`railData`/`railThang`/`xepHang` GIỮ chữ Việt (rail/prompt — luật SERVER_BOUND).
+  // vi / trang không nạp i18n ⇒ mọi hàm dưới trả nguyên chữ Việt (byte-giống bản cũ).
+  if (window.I18n && window.I18n.loadLong) window.I18n.loadLong('almanac');
+  function _long(ns, key, vi) {
+    var I = window.I18n;
+    return I && I.long ? I.long(ns, key, vi) : vi;
+  }
+  function _tv(key, vi, vars) {
+    var I = window.I18n;
+    if (I && I.tv) return I.tv(key, vi, vars);
+    return vars ? vi.replace(/\{(\w+)\}/g, function (x, n) { return vars[n] !== undefined ? vars[n] : x; }) : vi;
+  }
+  function _g(kind, v) {
+    var g = window.TuviGlossary;
+    return g && v ? g.t(kind, v) : v;
+  }
+  /** Mục có mã ⇒ tra bản dịch; thiếu mã (payload cũ trong CDN) ⇒ chữ Việt. */
+  function _m(prefix, ma, vi) { return ma ? _long('almanac', prefix + ma, vi) : vi; }
+  // 12 thần trực nhật (saoNgay) — cùng khoá với hoang-dao.js; 3 ngày kỵ do lib/almanac/day.ts đặt tên.
+  var THAN_KEY = {
+    'Thanh Long': 'js.shellui.hdt-tl', 'Minh Đường': 'js.shellui.hdt-md', 'Thiên Hình': 'js.shellui.hdt-th',
+    'Châu Tước': 'js.shellui.hdt-ct', 'Kim Quỹ': 'js.shellui.hdt-kq', 'Thiên Đức': 'js.shellui.hdt-td',
+    'Bạch Hổ': 'js.shellui.hdt-bh', 'Ngọc Đường': 'js.shellui.hdt-nd', 'Thiên Lao': 'js.shellui.hdt-tlao',
+    'Huyền Vũ': 'js.shellui.hdt-hv', 'Tư Mệnh': 'js.shellui.hdt-tm', 'Câu Trận': 'js.shellui.hdt-cht'
+  };
+  var KY_KEY = {
+    'Tam Nương': 'js.shellui.ngt-tam-nuong', 'Nguyệt Kỵ': 'js.shellui.hl-nguyet-ky',
+    'Dương Công Kỵ Nhật': 'js.shellui.hl-duong-cong-ky-nhat'
+  };
+  var NHAN_KEY = { 'Tốt': 'js.shellui.ngt-tot', 'Xấu': 'js.shellui.hl-xau', 'Bình': 'js.shellui.mn-binh',
+    'Kỵ khởi sự': 'js.shellui.hl-ky-khoi-su' };
+  var THU_KEY = { 'Chủ nhật': 'js.shellui.hl-thu-0', 'Thứ hai': 'js.shellui.hl-thu-1', 'Thứ ba': 'js.shellui.hl-thu-2',
+    'Thứ tư': 'js.shellui.hl-thu-3', 'Thứ năm': 'js.shellui.hl-thu-4', 'Thứ sáu': 'js.shellui.hl-thu-5',
+    'Thứ bảy': 'js.shellui.hl-thu-6' };
+  function _k(map, vi) { return map[vi] ? _tv(map[vi], vi) : vi; }
+  function _viec(v) { return { ten: _m('viec.', v.ma && v.ma + '.ten', v.ten), nghia: v.nghia ? _m('viec.', v.ma && v.ma + '.nghia', v.nghia) : '' }; }
+
   // CSS đi KÈM module thay vì nằm trong tools.css: trang standalone dùng
   // tools.css còn shell dùng shell.css — để ở một trong hai thì bên kia mất
   // sạch định dạng. Tiêm đúng một lần, dùng biến màu sẵn có của cả hai theme.
@@ -75,7 +115,8 @@
   function khoiViec(tieuDe, items, loai) {
     if (!items || !items.length) return '';
     var body = items
-      .map(function (v) {
+      .map(function (v0) {
+        var v = _viec(v0);
         var t = esc(v.ten);
         return v.nghia
           ? '<span class="hl-viec" title="' + esc(v.nghia) + '">' + t +
@@ -97,34 +138,34 @@
 
     // ── hàng nhãn cấu trúc ──
     var tags = [];
-    tags.push(chip('Trực ' + d.truc.ten, d.truc.muc));
-    tags.push(chip('Sao ' + d.tu.ten, d.tu.muc));
-    tags.push(chip(d.saoNgay.ten, d.saoNgay.hoangDao ? 'cat' : 'hung'));
-    if (d.cuuTinh) tags.push(chip(d.cuuTinh.ten, 'binh'));
-    if (d.tuoiXung) tags.push(chip('Xung tuổi ' + d.tuoiXung, 'hung'));
-    if (d.huongSat) tags.push(chip('Sát hướng ' + d.huongSat, 'hung'));
-    (d.ngayKy || []).forEach(function (k) { tags.push(chip(k, 'hung')); });
+    tags.push(chip(_tv('js.shellui.hl-truc', 'Trực {x}', { x: _g('truc', d.truc.ten) }), d.truc.muc));
+    tags.push(chip(_tv('js.shellui.hl-sao', 'Sao {x}', { x: _g('tu', d.tu.ten) }), d.tu.muc));
+    tags.push(chip(_k(THAN_KEY, d.saoNgay.ten), d.saoNgay.hoangDao ? 'cat' : 'hung'));
+    if (d.cuuTinh) tags.push(chip(_m('cuu.', d.cuuTinh.ma, d.cuuTinh.ten), 'binh'));
+    if (d.tuoiXung) tags.push(chip(_tv('js.shellui.hl-xung-tuoi', 'Xung tuổi {x}', { x: _g('chi', d.tuoiXung) }), 'hung'));
+    if (d.huongSat) tags.push(chip(_tv('js.shellui.hl-sat-huong', 'Sát hướng {x}', { x: _m('phuong.', d.huongSatMa, d.huongSat) }), 'hung'));
+    (d.ngayKy || []).forEach(function (k) { tags.push(chip(_k(KY_KEY, k), 'hung')); });
     out.push('<div class="hl-tags">' + tags.join('') + '</div>');
 
-    out.push(khoiViec('Nên làm', d.nen, 'nen'));
-    out.push(khoiViec('Nên kiêng', d.kieng, 'kieng'));
+    out.push(khoiViec(_tv('js.shellui.hl-nen-lam', 'Nên làm'), d.nen, 'nen'));
+    out.push(khoiViec(_tv('js.shellui.hl-nen-kieng', 'Nên kiêng'), d.kieng, 'kieng'));
 
     // ── thần sát ──
     if (d.thanSat && d.thanSat.length) {
       var cat = d.thanSat.filter(function (t) { return t.muc === 'cat'; });
       var hung = d.thanSat.filter(function (t) { return t.muc === 'hung'; });
       out.push(
-        '<div class="hl-block"><div class="hl-block-t">Thần sát trực nhật</div><div class="hl-tags">' +
-        cat.map(function (t) { return chip(t.ten, 'cat'); }).join('') +
-        hung.map(function (t) { return chip(t.ten, 'hung'); }).join('') +
+        '<div class="hl-block"><div class="hl-block-t">' + esc(_tv('js.shellui.hl-than-sat', 'Thần sát trực nhật')) + '</div><div class="hl-tags">' +
+        cat.map(function (t) { return chip(_m('than.', t.ma, t.ten), 'cat'); }).join('') +
+        hung.map(function (t) { return chip(_m('than.', t.ma, t.ten), 'hung'); }).join('') +
         '</div></div>'
       );
     }
 
     if (d.banhTo && d.banhTo.length) {
       out.push(
-        '<div class="hl-block"><div class="hl-block-t">Bành Tổ bách kỵ</div>' +
-        d.banhTo.map(function (s) { return '<div class="hl-bt">' + esc(s) + '</div>'; }).join('') +
+        '<div class="hl-block"><div class="hl-block-t">' + esc(_tv('js.shellui.hl-banh-to', 'Bành Tổ bách kỵ')) + '</div>' +
+        d.banhTo.map(function (s, i) { return '<div class="hl-bt">' + esc(_m('bt.', (d.banhToMa || [])[i], s)) + '</div>'; }).join('') +
         '</div>'
       );
     }
@@ -133,15 +174,18 @@
       var tot = d.huongNam.filter(function (h) { return h.muc === 'cat'; });
       var xau = d.huongNam.filter(function (h) { return h.muc === 'hung'; });
       out.push(
-        '<div class="hl-block"><div class="hl-block-t">Hướng theo năm ' + esc(d.canChiNam) + '</div>' +
-        '<div class="hl-huong"><b>Nên hướng:</b> ' +
-        (tot.map(function (h) { return esc(h.ten + ' — ' + h.huong); }).join(' · ') || '—') +
-        '</div><div class="hl-huong"><b>Nên tránh:</b> ' +
-        (xau.map(function (h) { return esc(h.ten + ' — ' + h.huong); }).join(' · ') || '—') +
+        '<div class="hl-block"><div class="hl-block-t">' + esc(_tv('js.shellui.hl-huong-nam', 'Hướng theo năm {x}', { x: _g('canchi', d.canChiNam) })) + '</div>' +
+        '<div class="hl-huong"><b>' + esc(_tv('js.shellui.hl-nen-huong', 'Nên hướng:')) + '</b> ' +
+        (tot.map(huongTxt).join(' · ') || '—') +
+        '</div><div class="hl-huong"><b>' + esc(_tv('js.shellui.hl-nen-tranh', 'Nên tránh:')) + '</b> ' +
+        (xau.map(huongTxt).join(' · ') || '—') +
         '</div></div>'
       );
     }
     return out.join('');
+  }
+  function huongTxt(h) {
+    return esc(_m('nien.', h.ma && h.ma + '.ten', h.ten) + ' — ' + _m('phuong.', h.huongMa, h.huong));
   }
 
   /**
@@ -150,7 +194,7 @@
    */
   function gan(el, ngay, thang, nam) {
     if (!el) return Promise.resolve(null);
-    el.innerHTML = '<div class="hl-loading">Đang tra hoàng lịch…</div>';
+    el.innerHTML = '<div class="hl-loading">' + esc(_tv('js.shellui.hl-dang-tra', 'Đang tra hoàng lịch…')) + '</div>';
     return tra(ngay, thang, nam).then(function (d) {
       el.innerHTML = d ? html(d) : '';
       return d;
@@ -214,14 +258,16 @@
         var cls = h.muc === 'good' ? 't-good' : h.muc === 'bad' ? 't-bad' : 't-warn';
         var tags = cell.querySelector('.cd-tags');
         if (!tags) return;
+        // h.vi = ngayKy nối ' · ' (chữ Việt cho rail) ⇒ vẽ lại từ từng mục đã dịch.
         tags.innerHTML =
-          '<span class="cd-tag ' + cls + '">' + esc(h.nhan) + '</span>' +
-          '<span class="cd-tag t-neutral">' + esc(d.truc.ten) + '</span>' +
-          (h.vi ? '<span class="cd-tag t-bad">' + esc(h.vi) + '</span>' : '');
-        cell.title =
-          d.thu + ' · ngày ' + d.canChiNgay + ' · trực ' + d.truc.ten + ' · sao ' + d.tu.ten +
-          '\nNên: ' + (d.nen.map(function (v) { return v.ten; }).join(', ') || '—') +
-          '\nKiêng: ' + (d.kieng.map(function (v) { return v.ten; }).join(', ') || '—');
+          '<span class="cd-tag ' + cls + '">' + esc(_k(NHAN_KEY, h.nhan)) + '</span>' +
+          '<span class="cd-tag t-neutral">' + esc(_g('truc', d.truc.ten)) + '</span>' +
+          (h.vi ? '<span class="cd-tag t-bad">' + esc(d.ngayKy.map(function (k) { return _k(KY_KEY, k); }).join(' · ')) + '</span>' : '');
+        cell.title = _tv('js.shellui.hl-o-ngay', '{thu} · ngày {cc} · trực {truc} · sao {tu}\nNên: {nen}\nKiêng: {kieng}', {
+          thu: _k(THU_KEY, d.thu), cc: _g('canchi', d.canChiNgay), truc: _g('truc', d.truc.ten), tu: _g('tu', d.tu.ten),
+          nen: d.nen.map(function (v) { return _viec(v).ten; }).join(', ') || '—',
+          kieng: d.kieng.map(function (v) { return _viec(v).ten; }).join(', ') || '—'
+        });
       });
       return ds;
     });

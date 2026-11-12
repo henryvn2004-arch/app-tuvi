@@ -18,6 +18,15 @@
   // Dữ liệu server trả (nghia, tên) giữ chữ Việt gốc — chỉ đổi ở chỗ VẼ; thiếu bản dịch ⇒ nguyên chữ Việt.
   function T(k, vi, v) { return window.I18n && window.I18n.tv ? window.I18n.tv(k, vi, v) : (v ? String(vi).replace(/\{(\w+)\}/g, function (m, n) { return v[n] !== undefined ? v[n] : m; }) : vi); }
   function G(x) { return window.TuviGlossary && x ? window.TuviGlossary.t('chiemtinh', x) : x; }
+  // Văn engine server (W28): câu `nghia` do /api/natal trả chữ Việt (lib/tayphuong/terms.ts) kèm mã celestine `ma`
+  // ⇒ bản dịch ở /tools-shared/i18n-long/<locale>/tayphuong.js. Chỉ ở bảng VẼ; `rail` của route giữ chữ Việt.
+  if (window.I18n && window.I18n.loadLong) window.I18n.loadLong('tayphuong');
+  function _long(ns, key, vi) { var I = window.I18n; return I && I.long ? I.long(ns, key, vi) : vi; }
+  /** nghĩa của một mục có mã ⇒ bản dịch; payload cũ không mã ⇒ chữ Việt. Sao/giao điểm cùng bảng HANH_TINH|DIEM. */
+  function N(bang, x) {
+    if (!x || !x.nghia || !x.ma) return x ? x.nghia : '';
+    return _long('tayphuong', bang + '.' + x.ma, x.nghia);
+  }
   var TAU = Math.PI * 2;
   var CUNG_KH = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
   // Màu theo NGUYÊN TỐ của cung — người đọc nhận ra nhóm ngay cả khi không biết
@@ -228,7 +237,7 @@
     o.push(H(T('js.shellui.bds-bon-truc', 'Bốn trục')));
     o.push('<div style="font-size:13px;line-height:1.9;color:var(--text-mid,#4a5058)">' +
       (b.truc || []).map(function (t) {
-        return '<div><b>' + esc(G(t.ten)) + '</b> — ' + esc(t.do) + '° ' + esc(G(t.cung)) + ' · <span style="color:var(--text-lt,#8a8f98)">' + esc(t.nghia) + '</span></div>';
+        return '<div><b>' + esc(G(t.ten)) + '</b> — ' + esc(t.do) + '° ' + esc(G(t.cung)) + ' · <span style="color:var(--text-lt,#8a8f98)">' + esc(N('diem', t)) + '</span></div>';
       }).join('') + '</div>');
 
     o.push(H(T('js.shellui.bds-hanh-tinh', 'Hành tinh')));
@@ -239,7 +248,7 @@
           (s.nghich ? ' <span style="color:#B8912B;font-size:11px">' + esc(T('js.shellui.bds-nghich', '℞ nghịch')) + '</span>' : '') + '</div>' +
           '<div style="font-size:12px;color:var(--text-mid,#4a5058)">' + esc(s.do) + '°' + esc(s.phut) + "' " + esc(G(s.cung)) +
           ' · ' + esc(T('js.shellui.bds-nha', 'nhà {n}', { n: s.nha == null ? '?' : s.nha })) + (s.pham ? ' · ' + esc(G(s.pham)) : '') + '</div>' +
-          (s.nghia ? '<div style="font-size:10.5px;color:var(--text-lt,#8a8f98);line-height:1.45;margin-top:3px">' + esc(s.nghia) + '</div>' : '') +
+          (s.nghia ? '<div style="font-size:10.5px;color:var(--text-lt,#8a8f98);line-height:1.45;margin-top:3px">' + esc(N('hanhtinh', s)) + '</div>' : '') +
           '</div>';
       }).join('') + '</div>');
 
@@ -249,14 +258,14 @@
         b.gocChieu.slice(0, 12).map(function (g) {
           var mau = g.muc === 'cang' ? '#C0392B' : g.muc === 'hoa' ? '#2E6DA4' : '#6b5b2e';
           return '<div><b>' + esc(G(g.a)) + '</b> <span style="color:' + mau + '">' + esc(g.kyHieu) + ' ' + esc(G(g.loai)) + '</span> <b>' + esc(G(g.b)) + '</b>' +
-            ' <span style="color:var(--text-lt,#8a8f98)">' + esc(T('js.shellui.bds-lech', '(lệch {lech}°, mạnh {manh}%)', { lech: g.lech, manh: g.manh })) + ' — ' + esc(g.nghia) + '</span></div>';
+            ' <span style="color:var(--text-lt,#8a8f98)">' + esc(T('js.shellui.bds-lech', '(lệch {lech}°, mạnh {manh}%)', { lech: g.lech, manh: g.manh })) + ' — ' + esc(N('goc', g)) + '</span></div>';
         }).join('') + '</div>');
     }
     if ((b.hinhThe || []).length) {
       o.push(H(T('js.shellui.bds-hinh-the', 'Hình thế')));
       o.push('<div style="font-size:12.5px;line-height:1.8;color:var(--text-mid,#4a5058)">' +
         b.hinhThe.map(function (h) {
-          return '<div><b>' + esc(G(h.ten)) + '</b> [' + esc(h.sao.map(G).join(', ')) + '] — <span style="color:var(--text-lt,#8a8f98)">' + esc(h.nghia) + '</span></div>';
+          return '<div><b>' + esc(G(h.ten)) + '</b> [' + esc(h.sao.map(G).join(', ')) + '] — <span style="color:var(--text-lt,#8a8f98)">' + esc(N('hinhthe', h)) + '</span></div>';
         }).join('') + '</div>');
     }
     o.push(H(T('js.shellui.bds-can-bang', 'Cân bằng')));
