@@ -435,6 +435,226 @@
   "t": "← 回到今天",
   "h": "24faf89e"
  },
+ "datten.12-goi-y-ten-chia": {
+  "t": "12个取名建议<br>分3组",
+  "h": "41bbf053"
+ },
+ "datten.2-xem-truoc-nen-menh": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览命理基础</span>",
+  "h": "6db12426"
+ },
+ "datten.be-gai": {
+  "t": "女孩",
+  "h": "af93dba0"
+ },
+ "datten.be-trai": {
+  "t": "男孩",
+  "h": "274225bc"
+ },
+ "datten.dat-ten-cho-con-la-quyet": {
+  "t": "为孩子取名是一生只做一次、人人都想拿捏稳妥的决定。输入全家人的生日，即可取得12个合五行的名字建议，并附汉越语词义，让您安心挑选。",
+  "h": "82b4de3d"
+ },
+ "datten.dat-ten-con-chon-ten-hop": {
+  "t": "<b>为孩子取名</b><span>依古法五行，挑选合孩子本命的名字</span>",
+  "h": "3d53836c"
+ },
+ "datten.dat-ten-con-hop-menh": {
+  "t": "依本命为孩子取名",
+  "h": "11462335"
+ },
+ "datten.dat-ten-con-tu-vi-minh": {
+  "t": "为孩子取名——明宝紫微斗数",
+  "h": "9805fdc3"
+ },
+ "datten.gioi-tinh-con": {
+  "t": "孩子性别",
+  "h": "39dacada"
+ },
+ "datten.goi-y-12-ten-hop": {
+  "t": "取得12个合命名字建议 →",
+  "h": "46b3b1ed"
+ },
+ "datten.goi-y-dat-ten-con-hop": {
+  "t": "依孩子与父母的干支、纳音五行，建议合孩子本命的名字。名字建议与词义解读可请教老师。",
+  "h": "295edb5c"
+ },
+ "datten.he-thong-doc-ngu-hanh-nap": {
+  "t": "系统解读孩子与父母的纳音五行，并建议分为3组、附汉越语词义的12个名字。",
+  "h": "ea884a81"
+ },
+ "datten.ho-cua-con": {
+  "t": "姓氏（孩子的）",
+  "h": "f4e1a613"
+ },
+ "datten.hoi-thay-goi-y-ten-hop": {
+  "t": "✦ 请老师建议合命的名字",
+  "h": "166f1459"
+ },
+ "datten.hop-ngu-hanh-con-bo": {
+  "t": "合孩子与父母<br>的五行",
+  "h": "622dcbc0"
+ },
+ "datten.kem-nghia-han-viet": {
+  "t": "附汉越语<br>词义",
+  "h": "6cd753b8"
+ },
+ "datten.nam-sinh-bo": {
+  "t": "爸爸的出生年",
+  "h": "a1009c64"
+ },
+ "datten.nam-sinh-con": {
+  "t": "孩子的出生年",
+  "h": "724a46be"
+ },
+ "datten.nam-sinh-me": {
+  "t": "妈妈的出生年",
+  "h": "bef8fb8f"
+ },
+ "datten.nguyen": {
+  "t": "Nguyễn",
+  "h": "e79eb3d7"
+ },
+ "datten.nhap-ho-gioi-tinh-va-nam": {
+  "t": "输入孩子的姓氏、性别，以及孩子、爸爸、妈妈的出生年，以推算纳音五行并创建取名基础。",
+  "h": "7a82f7d7"
+ },
+ "datten.thong-tin-de-dat-ten": {
+  "t": "取名所需数据",
+  "h": "a6b214ba"
+ },
+ "dattendn.2-xem-truoc-nen-menh-chu": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览负责人命理基础</span>",
+  "h": "a96b5042"
+ },
+ "dattendn.an-uong-f-b-nha-hang": {
+  "t": "餐饮／F&amp;B／餐厅",
+  "h": "4c6e0036"
+ },
+ "dattendn.bat-dong-san-xay-dung": {
+  "t": "不动产／营建",
+  "h": "6b5154b8"
+ },
+ "dattendn.cong-nghe-phan-mem": {
+  "t": "科技／软件",
+  "h": "2665d28f"
+ },
+ "dattendn.cong-ty": {
+  "t": "公司",
+  "h": "65bf381e"
+ },
+ "dattendn.cua-hang": {
+  "t": "商店",
+  "h": "050a31c8"
+ },
+ "dattendn.dat-ten-cong-ty-thuong-hieu": {
+  "t": "依纳音五行，为合负责人本命与行业的公司、品牌、商店取名。名字建议与词义、名字风水解读可请教老师。",
+  "h": "5b43e7d9"
+ },
+ "dattendn.dat-ten-doanh-nghiep": {
+  "t": "为事业取名",
+  "h": "86ab8b27"
+ },
+ "dattendn.dat-ten-doanh-nghiep-ten-cong": {
+  "t": "<b>为事业取名</b><span>合负责人本命的公司・品牌・商店名称</span>",
+  "h": "bed333e2"
+ },
+ "dattendn.dat-ten-doanh-nghiep-tu-vi": {
+  "t": "为事业取名——明宝紫微斗数",
+  "h": "81d7fe18"
+ },
+ "dattendn.de-trong-neu-muon-duoc-goi": {
+  "t": "若想取得全新建议请留空",
+  "h": "8130c366"
+ },
+ "dattendn.du-lich-khach-san": {
+  "t": "旅游／饭店",
+  "h": "5369cdde"
+ },
+ "dattendn.giao-duc-dao-tao": {
+  "t": "教育／培训",
+  "h": "f1adba55"
+ },
+ "dattendn.goi-y-ten-doanh-nghiep": {
+  "t": "取得事业名称建议 →",
+  "h": "6008d180"
+ },
+ "dattendn.he-thong-doc-ngu-hanh-nap": {
+  "t": "系统解读负责人的纳音五行与行业，并建议分为「纯越南语／汉越语／混合」3组的12个名称。",
+  "h": "7d99610f"
+ },
+ "dattendn.ho-kinh-doanh": {
+  "t": "个体户",
+  "h": "f886c8d3"
+ },
+ "dattendn.hop-menh-chu-nganh-nghe": {
+  "t": "合负责人<br>与行业",
+  "h": "cf10d77f"
+ },
+ "dattendn.khac": {
+  "t": "其他",
+  "h": "5b8a28ab"
+ },
+ "dattendn.loai-hinh-tuy-chon": {
+  "t": "型态（选填）",
+  "h": "1f3a6e19"
+ },
+ "dattendn.mot-cai-ten-hop-menh-co": {
+  "t": "合本命的名字能陪公司走完整段创业旅程——先随便取、之后再改，永远比一开始就选对更难。输入负责人的出生年，登记营业前即可取得12个名称建议。",
+  "h": "9184666b"
+ },
+ "dattendn.nam-sinh-chu": {
+  "t": "负责人的出生年",
+  "h": "124634b4"
+ },
+ "dattendn.nganh-nghe": {
+  "t": "行业别",
+  "h": "63d9f4dd"
+ },
+ "dattendn.nhap-nam-sinh-nguoi-chu-nganh": {
+  "t": "输入负责人的出生年、行业别与经营型态，以推算纳音五行并创建取名基础。",
+  "h": "203d0ee8"
+ },
+ "dattendn.san-xuat-cong-nghiep": {
+  "t": "制造／工业",
+  "h": "f4a5458e"
+ },
+ "dattendn.tai-chinh-dich-vu": {
+  "t": "金融／服务",
+  "h": "67bbe42d"
+ },
+ "dattendn.ten-dang-can-nhac-tuy-chon": {
+  "t": "考虑中的名称（选填）",
+  "h": "1ccc6b3d"
+ },
+ "dattendn.ten-nguoi-chu-tuy-chon": {
+  "t": "负责人姓名（选填）",
+  "h": "d5b78ffe"
+ },
+ "dattendn.thoi-trang-lam-dep": {
+  "t": "时尚／美妆",
+  "h": "72a2b0cf"
+ },
+ "dattendn.thong-tin-dat-ten-doanh-nghiep": {
+  "t": "为事业取名所需数据",
+  "h": "8d822dd3"
+ },
+ "dattendn.thuong-hieu-shop": {
+  "t": "品牌／店铺",
+  "h": "aa184029"
+ },
+ "dattendn.thuong-mai-ban-le": {
+  "t": "贸易／零售",
+  "h": "991ccb29"
+ },
+ "dattendn.truoc-khi-thanh-lap": {
+  "t": "创立<br>之前",
+  "h": "0f9e340e"
+ },
+ "dattendn.y-te-suc-khoe": {
+  "t": "医疗／健康",
+  "h": "13ca73cd"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 仅供参考",
   "h": "99856a52"
@@ -1790,6 +2010,146 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "流年小运 ",
   "h": "1979c56a"
+ },
+ "js.datten.be-gai": {
+  "t": "女孩",
+  "h": "af93dba0"
+ },
+ "js.datten.be-trai": {
+  "t": "男孩",
+  "h": "274225bc"
+ },
+ "js.datten.bo": {
+  "t": "爸爸",
+  "h": "dbbdf270"
+ },
+ "js.datten.chip1": {
+  "t": "请建议12个合命名字并附词义",
+  "h": "61954ded"
+ },
+ "js.datten.chip2": {
+  "t": "中间名（垫字）哪个合适？",
+  "h": "d59d5d7a"
+ },
+ "js.datten.chip3": {
+  "t": "孩子需要补哪个五行？",
+  "h": "2906ae80"
+ },
+ "js.datten.chip4": {
+  "t": "同时合爸爸与妈妈生肖的名字？",
+  "h": "ab665896"
+ },
+ "js.datten.con-gt": {
+  "t": "孩子（{gt}）",
+  "h": "8467608e"
+ },
+ "js.datten.dang-goi-y": {
+  "t": "正在为孩子建议名字⋯⋯通常需要15–25秒",
+  "h": "8dc8ac9b"
+ },
+ "js.datten.greeting": {
+  "t": "孩子的命理基础已备妥（孩子**{cc}**・{h}）。您希望朝哪个方向建议名字？",
+  "h": "9e3424d6"
+ },
+ "js.datten.label": {
+  "t": "为{gt}取名・姓{ho}・{cc}",
+  "h": "21f99fa5"
+ },
+ "js.datten.loi-colon": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.datten.me": {
+  "t": "妈妈",
+  "h": "dfc6f90b"
+ },
+ "js.datten.res-head": {
+  "t": "干支基础・{ho} 的五行——{gt}",
+  "h": "a23fe671"
+ },
+ "js.datten.res-note": {
+  "t": "孩子的纳音为<b>{na}</b>——五行属<b>{h}</b>。取名宜选五行能<b>相生</b>于孩子（<b>{hs}</b>生<b>{h}</b>）或<b>同行</b>的字来补益本命，避开相克之行。想知道同时合孩子与父母的具体名字清单，请问老师。",
+  "h": "9bb9a346"
+ },
+ "js.datten.vui-long-nhap-ho": {
+  "t": "请输入姓氏，以及孩子、爸爸、妈妈的出生年。",
+  "h": "1e4e4c71"
+ },
+ "js.dattendn.cham-ten": {
+  "t": "您想让我为名称**{ten}**评分，还是建议新名称？",
+  "h": "76d469bb"
+ },
+ "js.dattendn.chip-5-ten": {
+  "t": "请建议5个合命名称并附词义",
+  "h": "4ab7930a"
+ },
+ "js.dattendn.chip-5-ten-khac": {
+  "t": "请另外建议5个更合适的名称",
+  "h": "f3587ad3"
+ },
+ "js.dattendn.chip-bo-hanh": {
+  "t": "名称该补哪个五行？",
+  "h": "f5cf0ccb"
+ },
+ "js.dattendn.chip-bo-hanh-chu": {
+  "t": "名称该为负责人补哪个五行？",
+  "h": "6a1e73a2"
+ },
+ "js.dattendn.chip-cham": {
+  "t": "名称「{ten}」合负责人本命与行业吗？",
+  "h": "1039c58a"
+ },
+ "js.dattendn.chip-khi-chat": {
+  "t": "哪个名称合这个行业的气质？",
+  "h": "c012da1f"
+ },
+ "js.dattendn.chip-slogan": {
+  "t": "哪个口号适合这个名称？",
+  "h": "8ab01273"
+ },
+ "js.dattendn.chip-tranh": {
+  "t": "取名时该避开哪些字或音？",
+  "h": "0493dad1"
+ },
+ "js.dattendn.dang-goi-y": {
+  "t": "正在建议事业名称⋯⋯通常需要15–25秒",
+  "h": "9fbbe937"
+ },
+ "js.dattendn.goi-y-huong": {
+  "t": "您希望朝哪个方向建议名称？",
+  "h": "3ccf4b50"
+ },
+ "js.dattendn.greeting": {
+  "t": "负责人的命理基础已备妥（负责人**{cc}**・{h}，行业：{nganh}）。",
+  "h": "cd3c37de"
+ },
+ "js.dattendn.label": {
+  "t": "事业取名・{nganh}・负责人 {cc}",
+  "h": "179775da"
+ },
+ "js.dattendn.nganh": {
+  "t": "行业别",
+  "h": "549e0d8e"
+ },
+ "js.dattendn.res-head": {
+  "t": "负责人命理基础・{nganh}",
+  "h": "7d04ac4e"
+ },
+ "js.dattendn.res-note": {
+  "t": "负责人的纳音为<b>{na}</b>——五行属<b>{h}</b>。事业名称宜选五行<b>相生／相同</b>的字以补益负责人本命（<b>{hs}</b>生<b>{h}</b>），同时合<b>{nganh}</b>行业的气质、念起来顺口、容易记住。想知道具体名称清单，请问老师。",
+  "h": "cdd000b9"
+ },
+ "js.dattendn.ten-can-nhac": {
+  "t": "考虑中的名称",
+  "h": "a8f03dde"
+ },
+ "js.dattendn.tuoi-chu": {
+  "t": "负责人生肖",
+  "h": "c6ec0cf0"
+ },
+ "js.dattendn.vui-long-nhap-nam-sinh": {
+  "t": "请输入负责人的出生年并选择行业别。",
+  "h": "20fcc631"
  },
  "js.giosinh.am-lich": {
   "t": "（农历）",

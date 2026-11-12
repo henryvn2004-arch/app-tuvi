@@ -435,6 +435,226 @@
   "t": "← 今日に戻る",
   "h": "24faf89e"
  },
+ "datten.12-goi-y-ten-chia": {
+  "t": "名前の候補12個<br>3グループ",
+  "h": "41bbf053"
+ },
+ "datten.2-xem-truoc-nen-menh": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">本命の土台をプレビュー</span>",
+  "h": "6db12426"
+ },
+ "datten.be-gai": {
+  "t": "女の子",
+  "h": "af93dba0"
+ },
+ "datten.be-trai": {
+  "t": "男の子",
+  "h": "274225bc"
+ },
+ "datten.dat-ten-cho-con-la-quyet": {
+  "t": "お子さまの名づけは一度きりの決断で、誰もが確かな選択をしたいものです。家族みんなの生年月日を入力すれば、五行に合った名前の候補12個を、漢越語の意味つきで受け取れます。安心して選べます。",
+  "h": "82b4de3d"
+ },
+ "datten.dat-ten-con-chon-ten-hop": {
+  "t": "<b>子どもの名づけ</b><span>古法の五行で、お子さまの本命に合う名前を選ぶ</span>",
+  "h": "3d53836c"
+ },
+ "datten.dat-ten-con-hop-menh": {
+  "t": "本命に合う子どもの名づけ",
+  "h": "11462335"
+ },
+ "datten.dat-ten-con-tu-vi-minh": {
+  "t": "子どもの名づけ — 明宝紫微斗数",
+  "h": "9805fdc3"
+ },
+ "datten.gioi-tinh-con": {
+  "t": "お子さまの性別",
+  "h": "39dacada"
+ },
+ "datten.goi-y-12-ten-hop": {
+  "t": "本命に合う名前の候補12個を見る →",
+  "h": "46b3b1ed"
+ },
+ "datten.goi-y-dat-ten-con-hop": {
+  "t": "お子さまと両親の干支・納音五行にもとづき、本命に合う名づけを提案します。名前の候補とその意味の鑑定は先生に。",
+  "h": "295edb5c"
+ },
+ "datten.he-thong-doc-ngu-hanh-nap": {
+  "t": "システムが、お子さまと両親の納音五行を読み取り、漢越語の意味つきで、3グループに分けた名前の候補12個を提案します。",
+  "h": "ea884a81"
+ },
+ "datten.ho-cua-con": {
+  "t": "姓（お子さまの）",
+  "h": "f4e1a613"
+ },
+ "datten.hoi-thay-goi-y-ten-hop": {
+  "t": "✦ 先生に、本命に合う名前を提案してもらう",
+  "h": "166f1459"
+ },
+ "datten.hop-ngu-hanh-con-bo": {
+  "t": "子と両親の<br>五行に合う",
+  "h": "622dcbc0"
+ },
+ "datten.kem-nghia-han-viet": {
+  "t": "漢越語の<br>意味つき",
+  "h": "6cd753b8"
+ },
+ "datten.nam-sinh-bo": {
+  "t": "父の生まれ年",
+  "h": "a1009c64"
+ },
+ "datten.nam-sinh-con": {
+  "t": "お子さまの生まれ年",
+  "h": "724a46be"
+ },
+ "datten.nam-sinh-me": {
+  "t": "母の生まれ年",
+  "h": "bef8fb8f"
+ },
+ "datten.nguyen": {
+  "t": "Nguyễn",
+  "h": "e79eb3d7"
+ },
+ "datten.nhap-ho-gioi-tinh-va-nam": {
+  "t": "お子さまの姓・性別と、お子さま・父・母の生まれ年を入力すると、納音五行を算出して名づけの土台を作ります。",
+  "h": "7a82f7d7"
+ },
+ "datten.thong-tin-de-dat-ten": {
+  "t": "名づけのための情報",
+  "h": "a6b214ba"
+ },
+ "dattendn.2-xem-truoc-nen-menh-chu": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">オーナーの本命の土台をプレビュー</span>",
+  "h": "a96b5042"
+ },
+ "dattendn.an-uong-f-b-nha-hang": {
+  "t": "飲食・F&amp;B・レストラン",
+  "h": "4c6e0036"
+ },
+ "dattendn.bat-dong-san-xay-dung": {
+  "t": "不動産・建設",
+  "h": "6b5154b8"
+ },
+ "dattendn.cong-nghe-phan-mem": {
+  "t": "テクノロジー・ソフトウェア",
+  "h": "2665d28f"
+ },
+ "dattendn.cong-ty": {
+  "t": "会社",
+  "h": "65bf381e"
+ },
+ "dattendn.cua-hang": {
+  "t": "店舗",
+  "h": "050a31c8"
+ },
+ "dattendn.dat-ten-cong-ty-thuong-hieu": {
+  "t": "納音五行にもとづき、オーナーの本命と業種に合う会社名・ブランド名・店名を考えます。名前の候補と、その意味・名前の風水の鑑定は先生に。",
+  "h": "5b43e7d9"
+ },
+ "dattendn.dat-ten-doanh-nghiep": {
+  "t": "事業の名づけ",
+  "h": "86ab8b27"
+ },
+ "dattendn.dat-ten-doanh-nghiep-ten-cong": {
+  "t": "<b>事業の名づけ</b><span>オーナーの本命に合う会社名・ブランド名・店名</span>",
+  "h": "bed333e2"
+ },
+ "dattendn.dat-ten-doanh-nghiep-tu-vi": {
+  "t": "事業の名づけ — 明宝紫微斗数",
+  "h": "81d7fe18"
+ },
+ "dattendn.de-trong-neu-muon-duoc-goi": {
+  "t": "新しく提案してほしい場合は空欄",
+  "h": "8130c366"
+ },
+ "dattendn.du-lich-khach-san": {
+  "t": "旅行・ホテル",
+  "h": "5369cdde"
+ },
+ "dattendn.giao-duc-dao-tao": {
+  "t": "教育・研修",
+  "h": "f1adba55"
+ },
+ "dattendn.goi-y-ten-doanh-nghiep": {
+  "t": "事業名の候補を見る →",
+  "h": "6008d180"
+ },
+ "dattendn.he-thong-doc-ngu-hanh-nap": {
+  "t": "システムがオーナーの納音五行と業種を読み取り、「純ベトナム語」「漢越語」「組み合わせ」の3グループに分けた名前の候補12個を提案します。",
+  "h": "7d99610f"
+ },
+ "dattendn.ho-kinh-doanh": {
+  "t": "個人事業",
+  "h": "f886c8d3"
+ },
+ "dattendn.hop-menh-chu-nganh-nghe": {
+  "t": "オーナーと<br>業種に合う",
+  "h": "cf10d77f"
+ },
+ "dattendn.khac": {
+  "t": "その他",
+  "h": "5b8a28ab"
+ },
+ "dattendn.loai-hinh-tuy-chon": {
+  "t": "事業形態（任意）",
+  "h": "1f3a6e19"
+ },
+ "dattendn.mot-cai-ten-hop-menh-co": {
+  "t": "本命に合う名前は、起業の道のりを通じて会社に寄り添い続けます。とりあえず決めて後で直すのは、最初から正しく選ぶよりずっと大変です。オーナーの生まれ年を入力すれば、事業登録の前に名前の候補12個を受け取れます。",
+  "h": "9184666b"
+ },
+ "dattendn.nam-sinh-chu": {
+  "t": "オーナーの生まれ年",
+  "h": "124634b4"
+ },
+ "dattendn.nganh-nghe": {
+  "t": "業種",
+  "h": "63d9f4dd"
+ },
+ "dattendn.nhap-nam-sinh-nguoi-chu-nganh": {
+  "t": "オーナーの生まれ年・業種・事業形態を入力すると、納音五行を算出して名づけの土台を作ります。",
+  "h": "203d0ee8"
+ },
+ "dattendn.san-xuat-cong-nghiep": {
+  "t": "製造・工業",
+  "h": "f4a5458e"
+ },
+ "dattendn.tai-chinh-dich-vu": {
+  "t": "金融・サービス",
+  "h": "67bbe42d"
+ },
+ "dattendn.ten-dang-can-nhac-tuy-chon": {
+  "t": "検討中の名前（任意）",
+  "h": "1ccc6b3d"
+ },
+ "dattendn.ten-nguoi-chu-tuy-chon": {
+  "t": "オーナーの名前（任意）",
+  "h": "d5b78ffe"
+ },
+ "dattendn.thoi-trang-lam-dep": {
+  "t": "ファッション・美容",
+  "h": "72a2b0cf"
+ },
+ "dattendn.thong-tin-dat-ten-doanh-nghiep": {
+  "t": "事業の名づけのための情報",
+  "h": "8d822dd3"
+ },
+ "dattendn.thuong-hieu-shop": {
+  "t": "ブランド・ショップ",
+  "h": "aa184029"
+ },
+ "dattendn.thuong-mai-ban-le": {
+  "t": "商業・小売",
+  "h": "991ccb29"
+ },
+ "dattendn.truoc-khi-thanh-lap": {
+  "t": "設立する<br>前に",
+  "h": "0f9e340e"
+ },
+ "dattendn.y-te-suc-khoe": {
+  "t": "医療・健康",
+  "h": "13ca73cd"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 参考情報としての性質",
   "h": "99856a52"
@@ -1790,6 +2010,146 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "小運の年：",
   "h": "1979c56a"
+ },
+ "js.datten.be-gai": {
+  "t": "女の子",
+  "h": "af93dba0"
+ },
+ "js.datten.be-trai": {
+  "t": "男の子",
+  "h": "274225bc"
+ },
+ "js.datten.bo": {
+  "t": "父",
+  "h": "dbbdf270"
+ },
+ "js.datten.chip1": {
+  "t": "本命に合う名前の候補12個を、意味つきで提案してください",
+  "h": "61954ded"
+ },
+ "js.datten.chip2": {
+  "t": "ミドルネームはどれが合いますか？",
+  "h": "d59d5d7a"
+ },
+ "js.datten.chip3": {
+  "t": "お子さまはどの五行を補う必要がありますか？",
+  "h": "2906ae80"
+ },
+ "js.datten.chip4": {
+  "t": "父と母の干支の両方に合う名前は？",
+  "h": "ab665896"
+ },
+ "js.datten.con-gt": {
+  "t": "子（{gt}）",
+  "h": "8467608e"
+ },
+ "js.datten.dang-goi-y": {
+  "t": "お子さまの名前を考えています…通常15〜25秒かかります",
+  "h": "8dc8ac9b"
+ },
+ "js.datten.greeting": {
+  "t": "お子さまの本命の土台ができました（子：**{cc}**・{h}）。どんな方向で名前を提案しましょうか？",
+  "h": "9e3424d6"
+ },
+ "js.datten.label": {
+  "t": "{gt}の名づけ・姓 {ho}・{cc}",
+  "h": "21f99fa5"
+ },
+ "js.datten.loi-colon": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.datten.me": {
+  "t": "母",
+  "h": "dfc6f90b"
+ },
+ "js.datten.res-head": {
+  "t": "干支の土台・五行 {ho} — {gt}",
+  "h": "a23fe671"
+ },
+ "js.datten.res-note": {
+  "t": "お子さまの納音は<b>{na}</b>、五行は<b>{h}</b>です。名前には、お子さまを<b>相生</b>する五行（<b>{hs}</b>が<b>{h}</b>を生じる）か<b>同じ五行</b>の文字を選んで本命を補い、剋する五行は避けましょう。お子さまと両親の両方に合う具体的な名前の一覧は、先生にお尋ねください。",
+  "h": "9bb9a346"
+ },
+ "js.datten.vui-long-nhap-ho": {
+  "t": "姓と、お子さま・父・母の生まれ年を入力してください。",
+  "h": "1e4e4c71"
+ },
+ "js.dattendn.cham-ten": {
+  "t": "名前**{ten}**を採点しましょうか、それとも新しい名前を提案しましょうか？",
+  "h": "76d469bb"
+ },
+ "js.dattendn.chip-5-ten": {
+  "t": "本命に合う名前の候補5個を、意味つきで提案してください",
+  "h": "4ab7930a"
+ },
+ "js.dattendn.chip-5-ten-khac": {
+  "t": "もっと合う別の名前を5個提案してください",
+  "h": "f3587ad3"
+ },
+ "js.dattendn.chip-bo-hanh": {
+  "t": "名前はどの五行を補うべきですか？",
+  "h": "f5cf0ccb"
+ },
+ "js.dattendn.chip-bo-hanh-chu": {
+  "t": "オーナーのために、名前はどの五行を補うべきですか？",
+  "h": "6a1e73a2"
+ },
+ "js.dattendn.chip-cham": {
+  "t": "名前「{ten}」は、オーナーの本命と業種に合っていますか？",
+  "h": "1039c58a"
+ },
+ "js.dattendn.chip-khi-chat": {
+  "t": "この業種の気質に合う名前はどれですか？",
+  "h": "c012da1f"
+ },
+ "js.dattendn.chip-slogan": {
+  "t": "この名前に合うスローガンは？",
+  "h": "8ab01273"
+ },
+ "js.dattendn.chip-tranh": {
+  "t": "名づけで避けるべき文字や音は？",
+  "h": "0493dad1"
+ },
+ "js.dattendn.dang-goi-y": {
+  "t": "事業名を考えています…通常15〜25秒かかります",
+  "h": "9fbbe937"
+ },
+ "js.dattendn.goi-y-huong": {
+  "t": "どんな方向で名前を提案しましょうか？",
+  "h": "3ccf4b50"
+ },
+ "js.dattendn.greeting": {
+  "t": "オーナーの本命の土台ができました（オーナー：**{cc}**・{h}、業種：{nganh}）。",
+  "h": "cd3c37de"
+ },
+ "js.dattendn.label": {
+  "t": "事業の名づけ・{nganh}・オーナー {cc}",
+  "h": "179775da"
+ },
+ "js.dattendn.nganh": {
+  "t": "業種",
+  "h": "549e0d8e"
+ },
+ "js.dattendn.res-head": {
+  "t": "オーナーの本命の土台・{nganh}",
+  "h": "7d04ac4e"
+ },
+ "js.dattendn.res-note": {
+  "t": "オーナーの納音は<b>{na}</b>、五行は<b>{h}</b>です。事業名には、オーナーの本命を補うため、<b>相生・同じ</b>五行の文字（<b>{hs}</b>が<b>{h}</b>を生じる）を選び、あわせて<b>{nganh}</b>の気質に合い、読みやすく覚えやすいものにしましょう。具体的な名前の一覧は先生にお尋ねください。",
+  "h": "cdd000b9"
+ },
+ "js.dattendn.ten-can-nhac": {
+  "t": "検討中の名前",
+  "h": "a8f03dde"
+ },
+ "js.dattendn.tuoi-chu": {
+  "t": "オーナーの干支",
+  "h": "c6ec0cf0"
+ },
+ "js.dattendn.vui-long-nhap-nam-sinh": {
+  "t": "オーナーの生まれ年を入力し、業種を選んでください。",
+  "h": "20fcc631"
  },
  "js.giosinh.am-lich": {
   "t": "（旧暦）",

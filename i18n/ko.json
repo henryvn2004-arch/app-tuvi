@@ -435,6 +435,226 @@
   "t": "← 오늘로 돌아가기",
   "h": "24faf89e"
  },
+ "datten.12-goi-y-ten-chia": {
+  "t": "이름 추천 12개<br>3그룹",
+  "h": "41bbf053"
+ },
+ "datten.2-xem-truoc-nen-menh": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">본명 기반 미리 보기</span>",
+  "h": "6db12426"
+ },
+ "datten.be-gai": {
+  "t": "여자아이",
+  "h": "af93dba0"
+ },
+ "datten.be-trai": {
+  "t": "남자아이",
+  "h": "274225bc"
+ },
+ "datten.dat-ten-cho-con-la-quyet": {
+  "t": "아이의 이름을 짓는 일은 단 한 번뿐이라 누구나 확실하게 하고 싶어 해요. 온 가족의 생년월일을 입력하면 오행에 맞는 이름 추천 12개를 한월(漢越) 뜻과 함께 받아 안심하고 고를 수 있어요.",
+  "h": "82b4de3d"
+ },
+ "datten.dat-ten-con-chon-ten-hop": {
+  "t": "<b>아이 이름 짓기</b><span>고법 오행으로 아이의 본명에 맞는 이름 고르기</span>",
+  "h": "3d53836c"
+ },
+ "datten.dat-ten-con-hop-menh": {
+  "t": "본명에 맞는 아이 이름 짓기",
+  "h": "11462335"
+ },
+ "datten.dat-ten-con-tu-vi-minh": {
+  "t": "아이 이름 짓기 — 명보 자미두수",
+  "h": "9805fdc3"
+ },
+ "datten.gioi-tinh-con": {
+  "t": "아이 성별",
+  "h": "39dacada"
+ },
+ "datten.goi-y-12-ten-hop": {
+  "t": "본명에 맞는 이름 추천 12개 받기 →",
+  "h": "46b3b1ed"
+ },
+ "datten.goi-y-dat-ten-con-hop": {
+  "t": "아이와 부모의 간지·납음 오행을 바탕으로 본명에 맞는 이름을 추천해요. 이름 추천과 뜻 풀이는 선생님께 물어보세요.",
+  "h": "295edb5c"
+ },
+ "datten.he-thong-doc-ngu-hanh-nap": {
+  "t": "시스템이 아이와 부모의 납음 오행을 읽고, 한월(漢越) 뜻과 함께 3그룹으로 나눈 이름 12개를 추천해요.",
+  "h": "ea884a81"
+ },
+ "datten.ho-cua-con": {
+  "t": "성(아이의)",
+  "h": "f4e1a613"
+ },
+ "datten.hoi-thay-goi-y-ten-hop": {
+  "t": "✦ 선생님께 본명에 맞는 이름 추천 묻기",
+  "h": "166f1459"
+ },
+ "datten.hop-ngu-hanh-con-bo": {
+  "t": "아이와 부모의<br>오행에 맞음",
+  "h": "622dcbc0"
+ },
+ "datten.kem-nghia-han-viet": {
+  "t": "한월(漢越)<br>뜻 포함",
+  "h": "6cd753b8"
+ },
+ "datten.nam-sinh-bo": {
+  "t": "아버지 태어난 해",
+  "h": "a1009c64"
+ },
+ "datten.nam-sinh-con": {
+  "t": "자녀 태어난 해",
+  "h": "724a46be"
+ },
+ "datten.nam-sinh-me": {
+  "t": "어머니 태어난 해",
+  "h": "bef8fb8f"
+ },
+ "datten.nguyen": {
+  "t": "Nguyễn",
+  "h": "e79eb3d7"
+ },
+ "datten.nhap-ho-gioi-tinh-va-nam": {
+  "t": "아이의 성·성별과 아이·아버지·어머니의 태어난 해를 입력하면 납음 오행을 계산해 이름 짓기의 기반을 만들어요.",
+  "h": "7a82f7d7"
+ },
+ "datten.thong-tin-de-dat-ten": {
+  "t": "이름 짓기를 위한 정보",
+  "h": "a6b214ba"
+ },
+ "dattendn.2-xem-truoc-nen-menh-chu": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">사업주 본명 기반 미리 보기</span>",
+  "h": "a96b5042"
+ },
+ "dattendn.an-uong-f-b-nha-hang": {
+  "t": "음식 / F&amp;B / 레스토랑",
+  "h": "4c6e0036"
+ },
+ "dattendn.bat-dong-san-xay-dung": {
+  "t": "부동산 / 건설",
+  "h": "6b5154b8"
+ },
+ "dattendn.cong-nghe-phan-mem": {
+  "t": "기술 / 소프트웨어",
+  "h": "2665d28f"
+ },
+ "dattendn.cong-ty": {
+  "t": "회사",
+  "h": "65bf381e"
+ },
+ "dattendn.cua-hang": {
+  "t": "가게",
+  "h": "050a31c8"
+ },
+ "dattendn.dat-ten-cong-ty-thuong-hieu": {
+  "t": "납음 오행에 따라 사업주의 본명과 업종에 맞는 회사·브랜드·가게 이름을 지어요. 이름 추천과 뜻·이름 풍수 풀이는 선생님께 물어보세요.",
+  "h": "5b43e7d9"
+ },
+ "dattendn.dat-ten-doanh-nghiep": {
+  "t": "사업 이름 짓기",
+  "h": "86ab8b27"
+ },
+ "dattendn.dat-ten-doanh-nghiep-ten-cong": {
+  "t": "<b>사업 이름 짓기</b><span>사업주의 본명에 맞는 회사 · 브랜드 · 가게 이름</span>",
+  "h": "bed333e2"
+ },
+ "dattendn.dat-ten-doanh-nghiep-tu-vi": {
+  "t": "사업 이름 짓기 — 명보 자미두수",
+  "h": "81d7fe18"
+ },
+ "dattendn.de-trong-neu-muon-duoc-goi": {
+  "t": "새로 추천받으려면 비워 두세요",
+  "h": "8130c366"
+ },
+ "dattendn.du-lich-khach-san": {
+  "t": "여행 / 호텔",
+  "h": "5369cdde"
+ },
+ "dattendn.giao-duc-dao-tao": {
+  "t": "교육 / 훈련",
+  "h": "f1adba55"
+ },
+ "dattendn.goi-y-ten-doanh-nghiep": {
+  "t": "사업 이름 추천 받기 →",
+  "h": "6008d180"
+ },
+ "dattendn.he-thong-doc-ngu-hanh-nap": {
+  "t": "시스템이 사업주의 납음 오행과 업종을 읽고 순수 베트남어 / 한월(漢越) / 혼합의 3그룹으로 나눈 이름 12개를 추천해요.",
+  "h": "7d99610f"
+ },
+ "dattendn.ho-kinh-doanh": {
+  "t": "가계 사업자",
+  "h": "f886c8d3"
+ },
+ "dattendn.hop-menh-chu-nganh-nghe": {
+  "t": "사업주와<br>업종에 맞음",
+  "h": "cf10d77f"
+ },
+ "dattendn.khac": {
+  "t": "기타",
+  "h": "5b8a28ab"
+ },
+ "dattendn.loai-hinh-tuy-chon": {
+  "t": "사업 형태 (선택)",
+  "h": "1f3a6e19"
+ },
+ "dattendn.mot-cai-ten-hop-menh-co": {
+  "t": "본명에 맞는 이름은 창업 여정 내내 회사와 함께해요. 일단 정해 놓고 나중에 고치는 것은 처음부터 제대로 고르는 것보다 늘 더 어려워요. 사업주의 태어난 해를 입력하면 사업자 등록 전에 이름 추천 12개를 받을 수 있어요.",
+  "h": "9184666b"
+ },
+ "dattendn.nam-sinh-chu": {
+  "t": "사업주 태어난 해",
+  "h": "124634b4"
+ },
+ "dattendn.nganh-nghe": {
+  "t": "업종",
+  "h": "63d9f4dd"
+ },
+ "dattendn.nhap-nam-sinh-nguoi-chu-nganh": {
+  "t": "사업주의 태어난 해·업종·사업 형태를 입력하면 납음 오행을 계산해 이름 짓기의 기반을 만들어요.",
+  "h": "203d0ee8"
+ },
+ "dattendn.san-xuat-cong-nghiep": {
+  "t": "제조 / 산업",
+  "h": "f4a5458e"
+ },
+ "dattendn.tai-chinh-dich-vu": {
+  "t": "금융 / 서비스",
+  "h": "67bbe42d"
+ },
+ "dattendn.ten-dang-can-nhac-tuy-chon": {
+  "t": "고려 중인 이름 (선택)",
+  "h": "1ccc6b3d"
+ },
+ "dattendn.ten-nguoi-chu-tuy-chon": {
+  "t": "사업주 이름 (선택)",
+  "h": "d5b78ffe"
+ },
+ "dattendn.thoi-trang-lam-dep": {
+  "t": "패션 / 뷰티",
+  "h": "72a2b0cf"
+ },
+ "dattendn.thong-tin-dat-ten-doanh-nghiep": {
+  "t": "사업 이름 짓기를 위한 정보",
+  "h": "8d822dd3"
+ },
+ "dattendn.thuong-hieu-shop": {
+  "t": "브랜드 / 샵",
+  "h": "aa184029"
+ },
+ "dattendn.thuong-mai-ban-le": {
+  "t": "상업 / 소매",
+  "h": "991ccb29"
+ },
+ "dattendn.truoc-khi-thanh-lap": {
+  "t": "설립하기<br>전에",
+  "h": "0f9e340e"
+ },
+ "dattendn.y-te-suc-khoe": {
+  "t": "의료 / 건강",
+  "h": "13ca73cd"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 참고용이라는 성격",
   "h": "99856a52"
@@ -1790,6 +2010,146 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "소한 ‘ ",
   "h": "1979c56a"
+ },
+ "js.datten.be-gai": {
+  "t": "여자아이",
+  "h": "af93dba0"
+ },
+ "js.datten.be-trai": {
+  "t": "남자아이",
+  "h": "274225bc"
+ },
+ "js.datten.bo": {
+  "t": "아버지",
+  "h": "dbbdf270"
+ },
+ "js.datten.chip1": {
+  "t": "본명에 맞는 이름 12개를 뜻과 함께 추천해 주세요",
+  "h": "61954ded"
+ },
+ "js.datten.chip2": {
+  "t": "중간 이름(가운데 이름)은 어떤 게 어울릴까요?",
+  "h": "d59d5d7a"
+ },
+ "js.datten.chip3": {
+  "t": "우리 아이는 어떤 오행을 보충해야 하나요?",
+  "h": "2906ae80"
+ },
+ "js.datten.chip4": {
+  "t": "아버지와 어머니의 띠에 모두 맞는 이름은요?",
+  "h": "ab665896"
+ },
+ "js.datten.con-gt": {
+  "t": "아이({gt})",
+  "h": "8467608e"
+ },
+ "js.datten.dang-goi-y": {
+  "t": "아이 이름을 추천하는 중… 보통 15~25초 걸려요",
+  "h": "8dc8ac9b"
+ },
+ "js.datten.greeting": {
+  "t": "아이의 본명 기반을 만들었어요 (아이 **{cc}** · {h}). 어떤 방향으로 이름을 추천해 드릴까요?",
+  "h": "9e3424d6"
+ },
+ "js.datten.label": {
+  "t": "{gt} 이름 짓기 · 성 {ho} · {cc}",
+  "h": "21f99fa5"
+ },
+ "js.datten.loi-colon": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.datten.me": {
+  "t": "어머니",
+  "h": "dfc6f90b"
+ },
+ "js.datten.res-head": {
+  "t": "간지 기반 · {ho}의 오행 — {gt}",
+  "h": "a23fe671"
+ },
+ "js.datten.res-note": {
+  "t": "아이의 납음은 <b>{na}</b>, 오행은 <b>{h}</b>이에요. 이름에는 아이를 <b>상생</b>해 주는 오행(<b>{hs}</b>이(가) <b>{h}</b>을(를) 생함)이나 <b>같은 오행</b>의 글자를 골라 본명을 북돋우고, 극하는 오행은 피하세요. 아이와 부모 모두에게 맞는 구체적인 이름 목록은 선생님께 물어보세요.",
+  "h": "9bb9a346"
+ },
+ "js.datten.vui-long-nhap-ho": {
+  "t": "성과 아이·아버지·어머니의 태어난 해를 입력해 주세요.",
+  "h": "1e4e4c71"
+ },
+ "js.dattendn.cham-ten": {
+  "t": "이름 **{ten}**의 점수를 매겨 드릴까요, 아니면 새 이름을 추천해 드릴까요?",
+  "h": "76d469bb"
+ },
+ "js.dattendn.chip-5-ten": {
+  "t": "본명에 맞는 이름 5개를 뜻과 함께 추천해 주세요",
+  "h": "4ab7930a"
+ },
+ "js.dattendn.chip-5-ten-khac": {
+  "t": "더 잘 맞는 다른 이름 5개를 추천해 주세요",
+  "h": "f3587ad3"
+ },
+ "js.dattendn.chip-bo-hanh": {
+  "t": "이름은 어떤 오행을 보충해야 하나요?",
+  "h": "f5cf0ccb"
+ },
+ "js.dattendn.chip-bo-hanh-chu": {
+  "t": "사업주를 위해 이름은 어떤 오행을 보충해야 하나요?",
+  "h": "6a1e73a2"
+ },
+ "js.dattendn.chip-cham": {
+  "t": "이름 \"{ten}\"은(는) 사업주의 본명과 업종에 맞나요?",
+  "h": "1039c58a"
+ },
+ "js.dattendn.chip-khi-chat": {
+  "t": "이 업종의 기질에 맞는 이름은 무엇인가요?",
+  "h": "c012da1f"
+ },
+ "js.dattendn.chip-slogan": {
+  "t": "이 이름에 어울리는 슬로건은요?",
+  "h": "8ab01273"
+ },
+ "js.dattendn.chip-tranh": {
+  "t": "이름을 지을 때 피해야 할 글자나 소리는요?",
+  "h": "0493dad1"
+ },
+ "js.dattendn.dang-goi-y": {
+  "t": "사업 이름을 추천하는 중… 보통 15~25초 걸려요",
+  "h": "9fbbe937"
+ },
+ "js.dattendn.goi-y-huong": {
+  "t": "어떤 방향으로 이름을 추천해 드릴까요?",
+  "h": "3ccf4b50"
+ },
+ "js.dattendn.greeting": {
+  "t": "사업주의 본명 기반을 만들었어요 (사업주 **{cc}** · {h}, 업종: {nganh}).",
+  "h": "cd3c37de"
+ },
+ "js.dattendn.label": {
+  "t": "사업 이름 짓기 · {nganh} · 사업주 {cc}",
+  "h": "179775da"
+ },
+ "js.dattendn.nganh": {
+  "t": "업종",
+  "h": "549e0d8e"
+ },
+ "js.dattendn.res-head": {
+  "t": "사업주 본명 기반 · {nganh}",
+  "h": "7d04ac4e"
+ },
+ "js.dattendn.res-note": {
+  "t": "사업주의 납음은 <b>{na}</b>, 오행은 <b>{h}</b>이에요. 사업 이름에는 사업주의 본명을 북돋우도록 <b>상생 / 같은</b> 오행의 글자(<b>{hs}</b>이(가) <b>{h}</b>을(를) 생함)를 고르고, 동시에 <b>{nganh}</b> 업종의 기질에 맞고 읽기 쉽고 기억하기 쉬워야 해요. 구체적인 이름 목록은 선생님께 물어보세요.",
+  "h": "cdd000b9"
+ },
+ "js.dattendn.ten-can-nhac": {
+  "t": "고려 중인 이름",
+  "h": "a8f03dde"
+ },
+ "js.dattendn.tuoi-chu": {
+  "t": "사업주 띠",
+  "h": "c6ec0cf0"
+ },
+ "js.dattendn.vui-long-nhap-nam-sinh": {
+  "t": "사업주의 태어난 해를 입력하고 업종을 선택해 주세요.",
+  "h": "20fcc631"
  },
  "js.giosinh.am-lich": {
   "t": " (음력)",

@@ -435,6 +435,226 @@
   "t": "← Back to today",
   "h": "24faf89e"
  },
+ "datten.12-goi-y-ten-chia": {
+  "t": "12 name ideas<br>in 3 groups",
+  "h": "41bbf053"
+ },
+ "datten.2-xem-truoc-nen-menh": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview the life-element foundation</span>",
+  "h": "6db12426"
+ },
+ "datten.be-gai": {
+  "t": "Girl",
+  "h": "af93dba0"
+ },
+ "datten.be-trai": {
+  "t": "Boy",
+  "h": "274225bc"
+ },
+ "datten.dat-ten-cho-con-la-quyet": {
+  "t": "Naming a child is a decision you make only once and want to get right. Enter the birth dates of the whole family and get 12 name ideas matched to the Five Elements, with Sino-Vietnamese meanings, so you can choose with peace of mind.",
+  "h": "82b4de3d"
+ },
+ "datten.dat-ten-con-chon-ten-hop": {
+  "t": "<b>Name Your Child</b><span>Choose a name that suits your child's life element by classical Five Elements</span>",
+  "h": "3d53836c"
+ },
+ "datten.dat-ten-con-hop-menh": {
+  "t": "Name Your Child by Life Element",
+  "h": "11462335"
+ },
+ "datten.dat-ten-con-tu-vi-minh": {
+  "t": "Name Your Child — Minh Bao Zi Wei Dou Shu",
+  "h": "9805fdc3"
+ },
+ "datten.gioi-tinh-con": {
+  "t": "Child's gender",
+  "h": "39dacada"
+ },
+ "datten.goi-y-12-ten-hop": {
+  "t": "Get 12 name ideas that suit the life element →",
+  "h": "46b3b1ed"
+ },
+ "datten.goi-y-dat-ten-con-hop": {
+  "t": "Name suggestions for your child that suit their life element, based on the Stems & Branches and Na Yin Five Elements of the child and parents — ask the Master for name ideas and a reading of their meaning.",
+  "h": "295edb5c"
+ },
+ "datten.he-thong-doc-ngu-hanh-nap": {
+  "t": "The system reads the Na Yin Five Elements of the child and parents and suggests 12 names in 3 groups with Sino-Vietnamese meanings.",
+  "h": "ea884a81"
+ },
+ "datten.ho-cua-con": {
+  "t": "Family name (the child's)",
+  "h": "f4e1a613"
+ },
+ "datten.hoi-thay-goi-y-ten-hop": {
+  "t": "✦ Ask the Master for names that suit the life element",
+  "h": "166f1459"
+ },
+ "datten.hop-ngu-hanh-con-bo": {
+  "t": "Matches the elements of<br>child &amp; parents",
+  "h": "622dcbc0"
+ },
+ "datten.kem-nghia-han-viet": {
+  "t": "With Sino-Vietnamese<br>meanings",
+  "h": "6cd753b8"
+ },
+ "datten.nam-sinh-bo": {
+  "t": "Father's birth year",
+  "h": "a1009c64"
+ },
+ "datten.nam-sinh-con": {
+  "t": "Child's birth year",
+  "h": "724a46be"
+ },
+ "datten.nam-sinh-me": {
+  "t": "Mother's birth year",
+  "h": "bef8fb8f"
+ },
+ "datten.nguyen": {
+  "t": "Nguyễn",
+  "h": "e79eb3d7"
+ },
+ "datten.nhap-ho-gioi-tinh-va-nam": {
+  "t": "Enter the child's family name and gender, and the birth years of the child, father and mother, to work out the Na Yin Five Elements and set up the naming foundation.",
+  "h": "7a82f7d7"
+ },
+ "datten.thong-tin-de-dat-ten": {
+  "t": "Details for naming",
+  "h": "a6b214ba"
+ },
+ "dattendn.2-xem-truoc-nen-menh-chu": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview the owner's life-element foundation</span>",
+  "h": "a96b5042"
+ },
+ "dattendn.an-uong-f-b-nha-hang": {
+  "t": "Food &amp; beverage / restaurants",
+  "h": "4c6e0036"
+ },
+ "dattendn.bat-dong-san-xay-dung": {
+  "t": "Real estate / construction",
+  "h": "6b5154b8"
+ },
+ "dattendn.cong-nghe-phan-mem": {
+  "t": "Technology / software",
+  "h": "2665d28f"
+ },
+ "dattendn.cong-ty": {
+  "t": "Company",
+  "h": "65bf381e"
+ },
+ "dattendn.cua-hang": {
+  "t": "Store",
+  "h": "050a31c8"
+ },
+ "dattendn.dat-ten-cong-ty-thuong-hieu": {
+  "t": "Name a company, brand or shop to suit the owner's life element and the line of business by Na Yin Five Elements — ask the Master for name ideas and a reading of their meaning and name feng shui.",
+  "h": "5b43e7d9"
+ },
+ "dattendn.dat-ten-doanh-nghiep": {
+  "t": "Name Your Business",
+  "h": "86ab8b27"
+ },
+ "dattendn.dat-ten-doanh-nghiep-ten-cong": {
+  "t": "<b>Name Your Business</b><span>Company · brand · shop names that suit the owner's life element</span>",
+  "h": "bed333e2"
+ },
+ "dattendn.dat-ten-doanh-nghiep-tu-vi": {
+  "t": "Name Your Business — Minh Bao Zi Wei Dou Shu",
+  "h": "81d7fe18"
+ },
+ "dattendn.de-trong-neu-muon-duoc-goi": {
+  "t": "Leave blank if you want fresh suggestions",
+  "h": "8130c366"
+ },
+ "dattendn.du-lich-khach-san": {
+  "t": "Travel / hotels",
+  "h": "5369cdde"
+ },
+ "dattendn.giao-duc-dao-tao": {
+  "t": "Education / training",
+  "h": "f1adba55"
+ },
+ "dattendn.goi-y-ten-doanh-nghiep": {
+  "t": "Get business name ideas →",
+  "h": "6008d180"
+ },
+ "dattendn.he-thong-doc-ngu-hanh-nap": {
+  "t": "The system reads the owner's Na Yin Five Elements and line of business and suggests 12 names in 3 groups: Pure Vietnamese / Sino-Vietnamese / Combined.",
+  "h": "7d99610f"
+ },
+ "dattendn.ho-kinh-doanh": {
+  "t": "Household business",
+  "h": "f886c8d3"
+ },
+ "dattendn.hop-menh-chu-nganh-nghe": {
+  "t": "Matches owner<br>&amp; line of business",
+  "h": "cf10d77f"
+ },
+ "dattendn.khac": {
+  "t": "Other",
+  "h": "5b8a28ab"
+ },
+ "dattendn.loai-hinh-tuy-chon": {
+  "t": "Business type (optional)",
+  "h": "1f3a6e19"
+ },
+ "dattendn.mot-cai-ten-hop-menh-co": {
+  "t": "A name that suits your life element can stay with the company through its whole startup journey — picking one just to have one and fixing it later is always harder than choosing right from the start. Enter the owner's birth year and get 12 name ideas before registering the business.",
+  "h": "9184666b"
+ },
+ "dattendn.nam-sinh-chu": {
+  "t": "Owner's birth year",
+  "h": "124634b4"
+ },
+ "dattendn.nganh-nghe": {
+  "t": "Line of business",
+  "h": "63d9f4dd"
+ },
+ "dattendn.nhap-nam-sinh-nguoi-chu-nganh": {
+  "t": "Enter the owner's birth year, line of business and business type to work out the Na Yin Five Elements and set up the naming foundation.",
+  "h": "203d0ee8"
+ },
+ "dattendn.san-xuat-cong-nghiep": {
+  "t": "Manufacturing / industry",
+  "h": "f4a5458e"
+ },
+ "dattendn.tai-chinh-dich-vu": {
+  "t": "Finance / services",
+  "h": "67bbe42d"
+ },
+ "dattendn.ten-dang-can-nhac-tuy-chon": {
+  "t": "Name under consideration (optional)",
+  "h": "1ccc6b3d"
+ },
+ "dattendn.ten-nguoi-chu-tuy-chon": {
+  "t": "Owner's name (optional)",
+  "h": "d5b78ffe"
+ },
+ "dattendn.thoi-trang-lam-dep": {
+  "t": "Fashion / beauty",
+  "h": "72a2b0cf"
+ },
+ "dattendn.thong-tin-dat-ten-doanh-nghiep": {
+  "t": "Details for naming your business",
+  "h": "8d822dd3"
+ },
+ "dattendn.thuong-hieu-shop": {
+  "t": "Brand / shop",
+  "h": "aa184029"
+ },
+ "dattendn.thuong-mai-ban-le": {
+  "t": "Trade / retail",
+  "h": "991ccb29"
+ },
+ "dattendn.truoc-khi-thanh-lap": {
+  "t": "Before you<br>set up",
+  "h": "0f9e340e"
+ },
+ "dattendn.y-te-suc-khoe": {
+  "t": "Healthcare / wellness",
+  "h": "13ca73cd"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. For reference only",
   "h": "99856a52"
@@ -1790,6 +2010,146 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "Annual cycle for ",
   "h": "1979c56a"
+ },
+ "js.datten.be-gai": {
+  "t": "girl",
+  "h": "af93dba0"
+ },
+ "js.datten.be-trai": {
+  "t": "boy",
+  "h": "274225bc"
+ },
+ "js.datten.bo": {
+  "t": "Father",
+  "h": "dbbdf270"
+ },
+ "js.datten.chip1": {
+  "t": "Suggest 12 names that suit the life element, with meanings",
+  "h": "61954ded"
+ },
+ "js.datten.chip2": {
+  "t": "Which middle name suits the baby?",
+  "h": "d59d5d7a"
+ },
+ "js.datten.chip3": {
+  "t": "Which element does my child need to boost?",
+  "h": "2906ae80"
+ },
+ "js.datten.chip4": {
+  "t": "A name that suits both the father's and mother's zodiac years?",
+  "h": "ab665896"
+ },
+ "js.datten.con-gt": {
+  "t": "Child ({gt})",
+  "h": "8467608e"
+ },
+ "js.datten.dang-goi-y": {
+  "t": "Suggesting names for your child… usually takes 15–25 seconds",
+  "h": "8dc8ac9b"
+ },
+ "js.datten.greeting": {
+  "t": "The baby's life-element foundation is ready (child **{cc}** · {h}). Which direction would you like name suggestions in?",
+  "h": "9e3424d6"
+ },
+ "js.datten.label": {
+  "t": "Naming a {gt}, family name {ho} · {cc}",
+  "h": "21f99fa5"
+ },
+ "js.datten.loi-colon": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.datten.me": {
+  "t": "Mother",
+  "h": "dfc6f90b"
+ },
+ "js.datten.res-head": {
+  "t": "Stems & Branches foundation · Five Elements of {ho} — {gt}",
+  "h": "a23fe671"
+ },
+ "js.datten.res-note": {
+  "t": "The child's Na Yin is <b>{na}</b> — the <b>{h}</b> element. For the name, choose characters whose element <b>generates</b> the child (<b>{hs}</b> generates <b>{h}</b>) or is the <b>same element</b> to strengthen the life element, and avoid restraining elements. Ask the Master for a list of specific names that suit both the child and the parents.",
+  "h": "9bb9a346"
+ },
+ "js.datten.vui-long-nhap-ho": {
+  "t": "Please enter the family name and the birth years of the child, father and mother.",
+  "h": "1e4e4c71"
+ },
+ "js.dattendn.cham-ten": {
+  "t": "Would you like me to score the name **{ten}** or suggest a new one?",
+  "h": "76d469bb"
+ },
+ "js.dattendn.chip-5-ten": {
+  "t": "Suggest 5 names that suit the life element, with meanings",
+  "h": "4ab7930a"
+ },
+ "js.dattendn.chip-5-ten-khac": {
+  "t": "Suggest 5 other names that fit better",
+  "h": "f3587ad3"
+ },
+ "js.dattendn.chip-bo-hanh": {
+  "t": "Which element should the name boost?",
+  "h": "f5cf0ccb"
+ },
+ "js.dattendn.chip-bo-hanh-chu": {
+  "t": "Which element should the name boost for the owner?",
+  "h": "6a1e73a2"
+ },
+ "js.dattendn.chip-cham": {
+  "t": "Does the name \"{ten}\" suit the owner's life element and the business?",
+  "h": "1039c58a"
+ },
+ "js.dattendn.chip-khi-chat": {
+  "t": "Which name suits the character of this line of business?",
+  "h": "c012da1f"
+ },
+ "js.dattendn.chip-slogan": {
+  "t": "Which slogan suits this name?",
+  "h": "8ab01273"
+ },
+ "js.dattendn.chip-tranh": {
+  "t": "Which characters or sounds should I avoid when naming?",
+  "h": "0493dad1"
+ },
+ "js.dattendn.dang-goi-y": {
+  "t": "Suggesting business names… usually takes 15–25 seconds",
+  "h": "9fbbe937"
+ },
+ "js.dattendn.goi-y-huong": {
+  "t": "Which direction would you like name suggestions in?",
+  "h": "3ccf4b50"
+ },
+ "js.dattendn.greeting": {
+  "t": "The owner's life-element foundation is ready (owner **{cc}** · {h}, line of business: {nganh}).",
+  "h": "cd3c37de"
+ },
+ "js.dattendn.label": {
+  "t": "Business naming · {nganh} · owner {cc}",
+  "h": "179775da"
+ },
+ "js.dattendn.nganh": {
+  "t": "Line of business",
+  "h": "549e0d8e"
+ },
+ "js.dattendn.res-head": {
+  "t": "Owner's life-element foundation · {nganh}",
+  "h": "7d04ac4e"
+ },
+ "js.dattendn.res-note": {
+  "t": "The owner's Na Yin is <b>{na}</b> — the <b>{h}</b> element. For the business name, choose characters whose element <b>generates / matches</b> to strengthen the owner's life element (<b>{hs}</b> generates <b>{h}</b>), while also suiting the character of the <b>{nganh}</b> business, reading smoothly and being easy to remember. Ask the Master for a list of specific names.",
+  "h": "cdd000b9"
+ },
+ "js.dattendn.ten-can-nhac": {
+  "t": "Name under consideration",
+  "h": "a8f03dde"
+ },
+ "js.dattendn.tuoi-chu": {
+  "t": "Owner's zodiac year",
+  "h": "c6ec0cf0"
+ },
+ "js.dattendn.vui-long-nhap-nam-sinh": {
+  "t": "Please enter the owner's birth year and choose a line of business.",
+  "h": "20fcc631"
  },
  "js.giosinh.am-lich": {
   "t": " (lunar)",
