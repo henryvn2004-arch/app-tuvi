@@ -438,6 +438,7 @@
    "battu.hoi",
    "battu.mien-phi",
    "giosinh.gioi-tinh",
+   "giosinh.nam-gioi",
    "kimlau.nam-sinh-duong-lich",
    "laso.nu",
    "napam.sua",
@@ -991,6 +992,112 @@
    "phongthuy.vd-1990",
    "thtg.2-thanh-toan",
    "thtg.3-nhan-ket-qua"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
+ "/app/dat-ten": {
+  "file": "app-dat-ten.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.3-thanh-toan",
+   "battu.4-nhan-ket-qua",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "battu.sua-thong-tin",
+   "chonngay.chua-muon-khai-thong-tin-ban",
+   "chonngay.lap-nen",
+   "chonngay.moi-luot",
+   "chonngay.ton",
+   "chonngay.xem-ban-mau",
+   "datten.12-goi-y-ten-chia",
+   "datten.2-xem-truoc-nen-menh",
+   "datten.be-gai",
+   "datten.be-trai",
+   "datten.dat-ten-cho-con-la-quyet",
+   "datten.dat-ten-con-chon-ten-hop",
+   "datten.dat-ten-con-hop-menh",
+   "datten.dat-ten-con-tu-vi-minh",
+   "datten.gioi-tinh-con",
+   "datten.goi-y-12-ten-hop",
+   "datten.goi-y-dat-ten-con-hop",
+   "datten.he-thong-doc-ngu-hanh-nap",
+   "datten.ho-cua-con",
+   "datten.hoi-thay-goi-y-ten-hop",
+   "datten.hop-ngu-hanh-con-bo",
+   "datten.kem-nghia-han-viet",
+   "datten.nam-sinh-bo",
+   "datten.nam-sinh-con",
+   "datten.nam-sinh-me",
+   "datten.nguyen",
+   "datten.nhap-ho-gioi-tinh-va-nam",
+   "datten.thong-tin-de-dat-ten",
+   "luangiai.chuyen-khoan-qua-qr-ngan-hang",
+   "luangiai.mua-goi-de-nhan-nhieu-uu",
+   "nguhanhten.ngu-hanh-kim-moc-thuy-hoa",
+   "topup.luong-don-vi"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
+ "/app/dat-ten-dn": {
+  "file": "app-dat-ten-dn.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.3-thanh-toan",
+   "battu.4-nhan-ket-qua",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "battu.sua-thong-tin",
+   "chonngay.chua-muon-khai-thong-tin-ban",
+   "chonngay.lap-nen",
+   "chonngay.moi-luot",
+   "chonngay.ton",
+   "chonngay.xem-ban-mau",
+   "datten.12-goi-y-ten-chia",
+   "datten.hoi-thay-goi-y-ten-hop",
+   "dattendn.2-xem-truoc-nen-menh-chu",
+   "dattendn.an-uong-f-b-nha-hang",
+   "dattendn.bat-dong-san-xay-dung",
+   "dattendn.cong-nghe-phan-mem",
+   "dattendn.cong-ty",
+   "dattendn.cua-hang",
+   "dattendn.dat-ten-cong-ty-thuong-hieu",
+   "dattendn.dat-ten-doanh-nghiep",
+   "dattendn.dat-ten-doanh-nghiep-ten-cong",
+   "dattendn.dat-ten-doanh-nghiep-tu-vi",
+   "dattendn.de-trong-neu-muon-duoc-goi",
+   "dattendn.du-lich-khach-san",
+   "dattendn.giao-duc-dao-tao",
+   "dattendn.goi-y-ten-doanh-nghiep",
+   "dattendn.he-thong-doc-ngu-hanh-nap",
+   "dattendn.ho-kinh-doanh",
+   "dattendn.hop-menh-chu-nganh-nghe",
+   "dattendn.khac",
+   "dattendn.loai-hinh-tuy-chon",
+   "dattendn.mot-cai-ten-hop-menh-co",
+   "dattendn.nam-sinh-chu",
+   "dattendn.nganh-nghe",
+   "dattendn.nhap-nam-sinh-nguoi-chu-nganh",
+   "dattendn.san-xuat-cong-nghiep",
+   "dattendn.tai-chinh-dich-vu",
+   "dattendn.ten-dang-can-nhac-tuy-chon",
+   "dattendn.ten-nguoi-chu-tuy-chon",
+   "dattendn.thoi-trang-lam-dep",
+   "dattendn.thong-tin-dat-ten-doanh-nghiep",
+   "dattendn.thuong-hieu-shop",
+   "dattendn.thuong-mai-ban-le",
+   "dattendn.truoc-khi-thanh-lap",
+   "dattendn.y-te-suc-khoe",
+   "laso.nguyen-van-a",
+   "luangiai.chuyen-khoan-qua-qr-ngan-hang",
+   "luangiai.mua-goi-de-nhan-nhieu-uu",
+   "nguhanhten.ngu-hanh-kim-moc-thuy-hoa",
+   "topup.luong-don-vi"
   ],
   "js": [
    "shell"
@@ -1662,7 +1769,7 @@
    "lucnham.ngay-gio-can-xem",
    "lucnham.quy-nhan-dan-loi",
    "lucnham.tu-khoa-tam-truyen",
-   "lucnham.xem-que",
+   "lucnham.xem-que-b",
    "napam.2-xem-ket-qua",
    "napam.sua"
   ],
@@ -1885,6 +1992,7 @@
    "battu.chi-phi-su-dung",
    "battu.gioi-thieu",
    "battu.hoi",
+   "battu.mien-phi",
    "napam.sua",
    "ngaytot.2-nhan-ket-qua",
    "nguhanhten.can-bang-ngu-hanh",
@@ -1908,7 +2016,7 @@
    "nguhanhten.nhap-ten-tieng-viet-tra-chu",
    "nguhanhten.tho",
    "nguhanhten.thuy",
-   "nguhanhten.tra-ngu-hanh-ten-mien-phi",
+   "nguhanhten.tra-ngu-hanh-ten",
    "nguhanhten.vd-nguyen-van-an"
   ],
   "js": [
@@ -2270,6 +2378,20 @@
    "sc.xem-tuoi-sinh-con",
    "sc.xem-tuoi-sinh-con-nam-sinh",
    "sc.xem-tuoi-sinh-con-tu-vi"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
+ "/app/so-la-so": {
+  "file": "app-so-la-so.html",
+  "keys": [
+   "solaso.chua-co-la-so-nao-trong",
+   "solaso.dang-nhap-dang-ky",
+   "solaso.dang-nhap-de-xem-so-la",
+   "solaso.la-so-da-luu-so-la",
+   "solaso.la-so-da-luu-tu-vi",
+   "topup.dang-tai"
   ],
   "js": [
    "shell"

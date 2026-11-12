@@ -48,6 +48,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/bat-trach": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/bat-tu": [
   "en",
   "ja",
@@ -146,6 +153,20 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/dat-ten": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/dat-ten-dn": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/day-con": [
   "en",
   "ja",
@@ -237,6 +258,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/luc-nham": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/mai-hoa": [
   "en",
   "ja",
@@ -266,6 +294,13 @@
   "zh-cn"
  ],
  "/app/ngay-tot": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/ngu-hanh-ten": [
   "en",
   "ja",
   "ko",
@@ -315,6 +350,13 @@
   "zh-cn"
  ],
  "/app/sinh-con": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/so-la-so": [
   "en",
   "ja",
   "ko",

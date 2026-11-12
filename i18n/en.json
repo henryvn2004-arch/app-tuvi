@@ -619,6 +619,78 @@
   "t": "Search by name, tool…",
   "h": "86f221f0"
  },
+ "battrach2.4-huong-dai-cat": {
+  "t": "4 highly<br>auspicious directions",
+  "h": "0b0b6a6a"
+ },
+ "battrach2.4-huong-dai-hung": {
+  "t": "4 highly<br>inauspicious directions",
+  "h": "45c6e01a"
+ },
+ "battrach2.bang-8-huong-chi-tiet": {
+  "t": "<span class=\"res-block-title\">Detailed Table of the 8 Directions</span>",
+  "h": "0ef24790"
+ },
+ "battrach2.bat-trach-la-mot-truong-phai": {
+  "t": "Ba Zhai (Eight Mansions) is a traditional school of feng shui that divides a dwelling into 8 directions matching the Eight Trigrams, then compares them with the owner's life trigram to determine good and bad directions and positions. <i>Ba Zhai Ming Jing</i> is one of the classics that systematized this method.",
+  "h": "daa2d3d2"
+ },
+ "battrach2.goi-y-dung": {
+  "t": "Suggested use",
+  "h": "1e297636"
+ },
+ "battrach2.hoi-thay-huong-hop-cach-hoa": {
+  "t": "✦ Ask the Master about suitable directions & remedies",
+  "h": "d656b02e"
+ },
+ "battrach2.huong": {
+  "t": "Direction",
+  "h": "05c861c1"
+ },
+ "battrach2.huong-bat-trach": {
+  "t": "Ba Zhai Directions",
+  "h": "a9176f82"
+ },
+ "battrach2.huong-bat-trach-cung-menh-8": {
+  "t": "<b>Ba Zhai Directions</b><span>Your life trigram &amp; the 8 good and bad directions</span>",
+  "h": "7f6f63a9"
+ },
+ "battrach2.huong-bat-trach-tu-vi-minh": {
+  "t": "Ba Zhai Directions — Minh Bao Zi Wei Dou Shu",
+  "h": "1dd7c74f"
+ },
+ "battrach2.menh-quai-cung-menh": {
+  "t": "Life trigram,<br>life palace",
+  "h": "a7cd9aa8"
+ },
+ "battrach2.mua-nha-thue-van-phong-roi": {
+  "t": "Buying a house or renting an office only to realize later that the door direction doesn't suit your life trigram is too late. Enter your birth year and gender to know right away which direction to choose before paying a deposit.",
+  "h": "22a1a2e8"
+ },
+ "battrach2.nam-sinh-gioi-tinh": {
+  "t": "Birth year & gender",
+  "h": "2fe866aa"
+ },
+ "battrach2.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "Enter your birth year and gender. The system works out your life trigram from the exact birth year and returns the trigram, palace and a detailed table of the 8 good and bad directions.",
+  "h": "5374993f"
+ },
+ "battrach2.ten-huong": {
+  "t": "Direction name",
+  "h": "a2de1255"
+ },
+ "battrach2.tra-4-huong-dai-cat-va": {
+  "t": "Look up the 4 highly auspicious and 4 highly inauspicious directions for your Ba Zhai life trigram — directions for the house, door, kitchen and bed that suit you. Ask the Master for a deeper reading.",
+  "h": "4bcadf9b"
+ },
+ "battrach2.tra-huong-bat-trach": {
+  "t": "Look up Ba Zhai directions →",
+  "h": "e3808961"
+ },
+ "battrach2.y-nghia": {
+  "t": "Meaning",
+  "h": "b1973c6d"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Enter details</span>",
   "h": "487c9507"
@@ -1862,6 +1934,226 @@
  "dali.tuong-hoc-da-mat-phuong-dong": {
   "t": "Eastern facial-skin physiognomy holds that the condition of the skin reflects, to some degree, the health within, and cross-checks it with the observations of modern dermatology. This approach, combining Eastern and Western medicine, treats the skin as an indicator to monitor rather than judging it by aesthetic impression alone.",
   "h": "466d834a"
+ },
+ "datten.12-goi-y-ten-chia": {
+  "t": "12 name ideas<br>in 3 groups",
+  "h": "41bbf053"
+ },
+ "datten.2-xem-truoc-nen-menh": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview the life-element foundation</span>",
+  "h": "6db12426"
+ },
+ "datten.be-gai": {
+  "t": "Girl",
+  "h": "af93dba0"
+ },
+ "datten.be-trai": {
+  "t": "Boy",
+  "h": "274225bc"
+ },
+ "datten.dat-ten-cho-con-la-quyet": {
+  "t": "Naming a child is a decision you make only once and want to get right. Enter the birth dates of the whole family and get 12 name ideas matched to the Five Elements, with Sino-Vietnamese meanings, so you can choose with peace of mind.",
+  "h": "82b4de3d"
+ },
+ "datten.dat-ten-con-chon-ten-hop": {
+  "t": "<b>Name Your Child</b><span>Choose a name that suits your child's life element by classical Five Elements</span>",
+  "h": "3d53836c"
+ },
+ "datten.dat-ten-con-hop-menh": {
+  "t": "Name Your Child by Life Element",
+  "h": "11462335"
+ },
+ "datten.dat-ten-con-tu-vi-minh": {
+  "t": "Name Your Child — Minh Bao Zi Wei Dou Shu",
+  "h": "9805fdc3"
+ },
+ "datten.gioi-tinh-con": {
+  "t": "Child's gender",
+  "h": "39dacada"
+ },
+ "datten.goi-y-12-ten-hop": {
+  "t": "Get 12 name ideas that suit the life element →",
+  "h": "46b3b1ed"
+ },
+ "datten.goi-y-dat-ten-con-hop": {
+  "t": "Name suggestions for your child that suit their life element, based on the Stems & Branches and Na Yin Five Elements of the child and parents — ask the Master for name ideas and a reading of their meaning.",
+  "h": "295edb5c"
+ },
+ "datten.he-thong-doc-ngu-hanh-nap": {
+  "t": "The system reads the Na Yin Five Elements of the child and parents and suggests 12 names in 3 groups with Sino-Vietnamese meanings.",
+  "h": "ea884a81"
+ },
+ "datten.ho-cua-con": {
+  "t": "Family name (the child's)",
+  "h": "f4e1a613"
+ },
+ "datten.hoi-thay-goi-y-ten-hop": {
+  "t": "✦ Ask the Master for names that suit the life element",
+  "h": "166f1459"
+ },
+ "datten.hop-ngu-hanh-con-bo": {
+  "t": "Matches the elements of<br>child &amp; parents",
+  "h": "622dcbc0"
+ },
+ "datten.kem-nghia-han-viet": {
+  "t": "With Sino-Vietnamese<br>meanings",
+  "h": "6cd753b8"
+ },
+ "datten.nam-sinh-bo": {
+  "t": "Father's birth year",
+  "h": "a1009c64"
+ },
+ "datten.nam-sinh-con": {
+  "t": "Child's birth year",
+  "h": "724a46be"
+ },
+ "datten.nam-sinh-me": {
+  "t": "Mother's birth year",
+  "h": "bef8fb8f"
+ },
+ "datten.nguyen": {
+  "t": "Nguyễn",
+  "h": "e79eb3d7"
+ },
+ "datten.nhap-ho-gioi-tinh-va-nam": {
+  "t": "Enter the child's family name and gender, and the birth years of the child, father and mother, to work out the Na Yin Five Elements and set up the naming foundation.",
+  "h": "7a82f7d7"
+ },
+ "datten.thong-tin-de-dat-ten": {
+  "t": "Details for naming",
+  "h": "a6b214ba"
+ },
+ "dattendn.2-xem-truoc-nen-menh-chu": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview the owner's life-element foundation</span>",
+  "h": "a96b5042"
+ },
+ "dattendn.an-uong-f-b-nha-hang": {
+  "t": "Food &amp; beverage / restaurants",
+  "h": "4c6e0036"
+ },
+ "dattendn.bat-dong-san-xay-dung": {
+  "t": "Real estate / construction",
+  "h": "6b5154b8"
+ },
+ "dattendn.cong-nghe-phan-mem": {
+  "t": "Technology / software",
+  "h": "2665d28f"
+ },
+ "dattendn.cong-ty": {
+  "t": "Company",
+  "h": "65bf381e"
+ },
+ "dattendn.cua-hang": {
+  "t": "Store",
+  "h": "050a31c8"
+ },
+ "dattendn.dat-ten-cong-ty-thuong-hieu": {
+  "t": "Name a company, brand or shop to suit the owner's life element and the line of business by Na Yin Five Elements — ask the Master for name ideas and a reading of their meaning and name feng shui.",
+  "h": "5b43e7d9"
+ },
+ "dattendn.dat-ten-doanh-nghiep": {
+  "t": "Name Your Business",
+  "h": "86ab8b27"
+ },
+ "dattendn.dat-ten-doanh-nghiep-ten-cong": {
+  "t": "<b>Name Your Business</b><span>Company · brand · shop names that suit the owner's life element</span>",
+  "h": "bed333e2"
+ },
+ "dattendn.dat-ten-doanh-nghiep-tu-vi": {
+  "t": "Name Your Business — Minh Bao Zi Wei Dou Shu",
+  "h": "81d7fe18"
+ },
+ "dattendn.de-trong-neu-muon-duoc-goi": {
+  "t": "Leave blank if you want fresh suggestions",
+  "h": "8130c366"
+ },
+ "dattendn.du-lich-khach-san": {
+  "t": "Travel / hotels",
+  "h": "5369cdde"
+ },
+ "dattendn.giao-duc-dao-tao": {
+  "t": "Education / training",
+  "h": "f1adba55"
+ },
+ "dattendn.goi-y-ten-doanh-nghiep": {
+  "t": "Get business name ideas →",
+  "h": "6008d180"
+ },
+ "dattendn.he-thong-doc-ngu-hanh-nap": {
+  "t": "The system reads the owner's Na Yin Five Elements and line of business and suggests 12 names in 3 groups: Pure Vietnamese / Sino-Vietnamese / Combined.",
+  "h": "7d99610f"
+ },
+ "dattendn.ho-kinh-doanh": {
+  "t": "Household business",
+  "h": "f886c8d3"
+ },
+ "dattendn.hop-menh-chu-nganh-nghe": {
+  "t": "Matches owner<br>&amp; line of business",
+  "h": "cf10d77f"
+ },
+ "dattendn.khac": {
+  "t": "Other",
+  "h": "5b8a28ab"
+ },
+ "dattendn.loai-hinh-tuy-chon": {
+  "t": "Business type (optional)",
+  "h": "1f3a6e19"
+ },
+ "dattendn.mot-cai-ten-hop-menh-co": {
+  "t": "A name that suits your life element can stay with the company through its whole startup journey — picking one just to have one and fixing it later is always harder than choosing right from the start. Enter the owner's birth year and get 12 name ideas before registering the business.",
+  "h": "9184666b"
+ },
+ "dattendn.nam-sinh-chu": {
+  "t": "Owner's birth year",
+  "h": "124634b4"
+ },
+ "dattendn.nganh-nghe": {
+  "t": "Line of business",
+  "h": "63d9f4dd"
+ },
+ "dattendn.nhap-nam-sinh-nguoi-chu-nganh": {
+  "t": "Enter the owner's birth year, line of business and business type to work out the Na Yin Five Elements and set up the naming foundation.",
+  "h": "203d0ee8"
+ },
+ "dattendn.san-xuat-cong-nghiep": {
+  "t": "Manufacturing / industry",
+  "h": "f4a5458e"
+ },
+ "dattendn.tai-chinh-dich-vu": {
+  "t": "Finance / services",
+  "h": "67bbe42d"
+ },
+ "dattendn.ten-dang-can-nhac-tuy-chon": {
+  "t": "Name under consideration (optional)",
+  "h": "1ccc6b3d"
+ },
+ "dattendn.ten-nguoi-chu-tuy-chon": {
+  "t": "Owner's name (optional)",
+  "h": "d5b78ffe"
+ },
+ "dattendn.thoi-trang-lam-dep": {
+  "t": "Fashion / beauty",
+  "h": "72a2b0cf"
+ },
+ "dattendn.thong-tin-dat-ten-doanh-nghiep": {
+  "t": "Details for naming your business",
+  "h": "8d822dd3"
+ },
+ "dattendn.thuong-hieu-shop": {
+  "t": "Brand / shop",
+  "h": "aa184029"
+ },
+ "dattendn.thuong-mai-ban-le": {
+  "t": "Trade / retail",
+  "h": "991ccb29"
+ },
+ "dattendn.truoc-khi-thanh-lap": {
+  "t": "Before you<br>set up",
+  "h": "0f9e340e"
+ },
+ "dattendn.y-te-suc-khoe": {
+  "t": "Healthcare / wellness",
+  "h": "13ca73cd"
  },
  "daycon.2-xem-truoc-chan-dung-con": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview your child's portrait</span>",
@@ -4310,6 +4602,38 @@
  "js.baocao.thu-lai-sau-it-phut": {
   "t": ". Please try again in a few minutes.",
   "h": "0795401e"
+ },
+ "js.battrach.chip1": {
+  "t": "Which house direction suits me best?",
+  "h": "cc262fd1"
+ },
+ "js.battrach.chip2": {
+  "t": "Which direction should the kitchen face?",
+  "h": "3eafdc4a"
+ },
+ "js.battrach.chip3": {
+  "t": "Which way should the bed face?",
+  "h": "08ee9028"
+ },
+ "js.battrach.chip4": {
+  "t": "What if I'm stuck with a bad direction — how do I remedy it?",
+  "h": "8900960b"
+ },
+ "js.battrach.dong-tu-menh": {
+  "t": "East Group",
+  "h": "860976af"
+ },
+ "js.battrach.greeting": {
+  "t": "Your life trigram is **{q}** ({n}). What would you like to ask about directions for?",
+  "h": "9701f4f7"
+ },
+ "js.battrach.label": {
+  "t": "Ba Zhai · {q} · {n}",
+  "h": "38326507"
+ },
+ "js.battrach.tay-tu-menh": {
+  "t": "West Group",
+  "h": "e606c821"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10) — please read this in detail for me",
@@ -6846,6 +7170,146 @@
  "js.dali.vui-long-thu-lai": {
   "t": "Please try again.",
   "h": "2f1d18ee"
+ },
+ "js.datten.be-gai": {
+  "t": "girl",
+  "h": "af93dba0"
+ },
+ "js.datten.be-trai": {
+  "t": "boy",
+  "h": "274225bc"
+ },
+ "js.datten.bo": {
+  "t": "Father",
+  "h": "dbbdf270"
+ },
+ "js.datten.chip1": {
+  "t": "Suggest 12 names that suit the life element, with meanings",
+  "h": "61954ded"
+ },
+ "js.datten.chip2": {
+  "t": "Which middle name suits the baby?",
+  "h": "d59d5d7a"
+ },
+ "js.datten.chip3": {
+  "t": "Which element does my child need to boost?",
+  "h": "2906ae80"
+ },
+ "js.datten.chip4": {
+  "t": "A name that suits both the father's and mother's zodiac years?",
+  "h": "ab665896"
+ },
+ "js.datten.con-gt": {
+  "t": "Child ({gt})",
+  "h": "8467608e"
+ },
+ "js.datten.dang-goi-y": {
+  "t": "Suggesting names for your child… usually takes 15–25 seconds",
+  "h": "8dc8ac9b"
+ },
+ "js.datten.greeting": {
+  "t": "The baby's life-element foundation is ready (child **{cc}** · {h}). Which direction would you like name suggestions in?",
+  "h": "9e3424d6"
+ },
+ "js.datten.label": {
+  "t": "Naming a {gt}, family name {ho} · {cc}",
+  "h": "21f99fa5"
+ },
+ "js.datten.loi-colon": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.datten.me": {
+  "t": "Mother",
+  "h": "dfc6f90b"
+ },
+ "js.datten.res-head": {
+  "t": "Stems & Branches foundation · Five Elements of {ho} — {gt}",
+  "h": "a23fe671"
+ },
+ "js.datten.res-note": {
+  "t": "The child's Na Yin is <b>{na}</b> — the <b>{h}</b> element. For the name, choose characters whose element <b>generates</b> the child (<b>{hs}</b> generates <b>{h}</b>) or is the <b>same element</b> to strengthen the life element, and avoid restraining elements. Ask the Master for a list of specific names that suit both the child and the parents.",
+  "h": "9bb9a346"
+ },
+ "js.datten.vui-long-nhap-ho": {
+  "t": "Please enter the family name and the birth years of the child, father and mother.",
+  "h": "1e4e4c71"
+ },
+ "js.dattendn.cham-ten": {
+  "t": "Would you like me to score the name **{ten}** or suggest a new one?",
+  "h": "76d469bb"
+ },
+ "js.dattendn.chip-5-ten": {
+  "t": "Suggest 5 names that suit the life element, with meanings",
+  "h": "4ab7930a"
+ },
+ "js.dattendn.chip-5-ten-khac": {
+  "t": "Suggest 5 other names that fit better",
+  "h": "f3587ad3"
+ },
+ "js.dattendn.chip-bo-hanh": {
+  "t": "Which element should the name boost?",
+  "h": "f5cf0ccb"
+ },
+ "js.dattendn.chip-bo-hanh-chu": {
+  "t": "Which element should the name boost for the owner?",
+  "h": "6a1e73a2"
+ },
+ "js.dattendn.chip-cham": {
+  "t": "Does the name \"{ten}\" suit the owner's life element and the business?",
+  "h": "1039c58a"
+ },
+ "js.dattendn.chip-khi-chat": {
+  "t": "Which name suits the character of this line of business?",
+  "h": "c012da1f"
+ },
+ "js.dattendn.chip-slogan": {
+  "t": "Which slogan suits this name?",
+  "h": "8ab01273"
+ },
+ "js.dattendn.chip-tranh": {
+  "t": "Which characters or sounds should I avoid when naming?",
+  "h": "0493dad1"
+ },
+ "js.dattendn.dang-goi-y": {
+  "t": "Suggesting business names… usually takes 15–25 seconds",
+  "h": "9fbbe937"
+ },
+ "js.dattendn.goi-y-huong": {
+  "t": "Which direction would you like name suggestions in?",
+  "h": "3ccf4b50"
+ },
+ "js.dattendn.greeting": {
+  "t": "The owner's life-element foundation is ready (owner **{cc}** · {h}, line of business: {nganh}).",
+  "h": "cd3c37de"
+ },
+ "js.dattendn.label": {
+  "t": "Business naming · {nganh} · owner {cc}",
+  "h": "179775da"
+ },
+ "js.dattendn.nganh": {
+  "t": "Line of business",
+  "h": "549e0d8e"
+ },
+ "js.dattendn.res-head": {
+  "t": "Owner's life-element foundation · {nganh}",
+  "h": "7d04ac4e"
+ },
+ "js.dattendn.res-note": {
+  "t": "The owner's Na Yin is <b>{na}</b> — the <b>{h}</b> element. For the business name, choose characters whose element <b>generates / matches</b> to strengthen the owner's life element (<b>{hs}</b> generates <b>{h}</b>), while also suiting the character of the <b>{nganh}</b> business, reading smoothly and being easy to remember. Ask the Master for a list of specific names.",
+  "h": "cdd000b9"
+ },
+ "js.dattendn.ten-can-nhac": {
+  "t": "Name under consideration",
+  "h": "a8f03dde"
+ },
+ "js.dattendn.tuoi-chu": {
+  "t": "Owner's zodiac year",
+  "h": "c6ec0cf0"
+ },
+ "js.dattendn.vui-long-nhap-nam-sinh": {
+  "t": "Please enter the owner's birth year and choose a line of business.",
+  "h": "20fcc631"
  },
  "js.daycon.5-la-muc-giua-cua-hang": {
   "t": "\n\n5 is the midpoint across thousands of children's charts — it does not mean “5 out of 10”. Both ends of each axis have value.",
@@ -9695,6 +10159,30 @@
   "t": "▸ View full chart",
   "h": "fee98465"
  },
+ "js.lucnham.chip1": {
+  "t": "Will this succeed or fail?",
+  "h": "fa905597"
+ },
+ "js.lucnham.chip2": {
+  "t": "When will there be a result?",
+  "h": "698cf33d"
+ },
+ "js.lucnham.chip3": {
+  "t": "Should I advance or hold back?",
+  "h": "0735035e"
+ },
+ "js.lucnham.chip4": {
+  "t": "What do the Three Transmissions say about how it unfolds?",
+  "h": "43368fd7"
+ },
+ "js.lucnham.greeting": {
+  "t": "The **Da Liu Ren** chart is ready — day {ngay}, hour {gio}, {tdem}. The transmission is selected by the method **{phap}**, with the initial transmission **{chi} · {tuong}**. What would you like to ask about?",
+  "h": "9e3179ca"
+ },
+ "js.lucnham.label": {
+  "t": "Liu Ren · {ngay}, hour {gio}",
+  "h": "f76e2ec9"
+ },
  "js.maihoa.bien-quai-noi-ket-cuc-the": {
   "t": "What does the changed hexagram say about the outcome?",
   "h": "3c27069a"
@@ -10314,6 +10802,42 @@
  "js.ngaytot.label": {
   "t": "Good days · {y}/{m}",
   "h": "cbd777dc"
+ },
+ "js.nguhanhten.ban-muon-luan": {
+  "t": " What would you like me to read?",
+  "h": "4117a169"
+ },
+ "js.nguhanhten.chip1": {
+  "t": "Why did my name get this score?",
+  "h": "2cd3c5cc"
+ },
+ "js.nguhanhten.chip2": {
+  "t": "Which character in my name is pulling the score down?",
+  "h": "c694fac3"
+ },
+ "js.nguhanhten.chip3": {
+  "t": "Suggest a few characters that suit my life element better",
+  "h": "665a28f8"
+ },
+ "js.nguhanhten.chip4": {
+  "t": "How does the main character support my life element?",
+  "h": "f1b4cfcb"
+ },
+ "js.nguhanhten.greeting": {
+  "t": "I've checked the Five Elements of the name **{ten}** ({tc}).",
+  "h": "a78484c2"
+ },
+ "js.nguhanhten.label": {
+  "t": "Name Five Elements · {ten}",
+  "h": "c5234e3e"
+ },
+ "js.nguhanhten.menh": {
+  "t": " Life element **{m}**.",
+  "h": "ef0b1bae"
+ },
+ "js.nguhanhten.tc-item": {
+  "t": "{n} strokes, {h}",
+  "h": "341d0ba2"
  },
  "js.nguoikhac.ban-cam-nang": {
   "t": "guide",
@@ -13999,6 +14523,118 @@
   "t": "Minh Bao Zi Wei Dou Shu",
   "h": "33336b26"
  },
+ "js.shellui.bt-cd-0": {
+  "t": "Wealth, health, the best growth",
+  "h": "ba2fcc5f"
+ },
+ "js.shellui.bt-cd-1": {
+  "t": "Health, longevity, good medical luck",
+  "h": "f2b6c53a"
+ },
+ "js.shellui.bt-cd-2": {
+  "t": "Lasting marriage and career",
+  "h": "eaa1aa66"
+ },
+ "js.shellui.bt-cd-3": {
+  "t": "Stability, a settled home, holding steady",
+  "h": "9d377762"
+ },
+ "js.shellui.bt-cu-0": {
+  "t": "Main door, bedroom, work desk",
+  "h": "9598844f"
+ },
+ "js.shellui.bt-cu-1": {
+  "t": "Bedroom, direction of the bed head",
+  "h": "ff2bdd07"
+ },
+ "js.shellui.bt-cu-2": {
+  "t": "Altar, living room, dining table",
+  "h": "18d25898"
+ },
+ "js.shellui.bt-cu-3": {
+  "t": "Storeroom, toilet, secondary rooms",
+  "h": "b7d8011a"
+ },
+ "js.shellui.bt-cung-menh": {
+  "t": "Life Trigram",
+  "h": "3dc5da1d"
+ },
+ "js.shellui.bt-cung-n": {
+  "t": "PALACE {c}",
+  "h": "b2bf68e0"
+ },
+ "js.shellui.bt-dong-hop": {
+  "t": "East Group — suits the East, Southeast, South and North directions",
+  "h": "37481bde"
+ },
+ "js.shellui.bt-dong-tu-menh": {
+  "t": "East Group",
+  "h": "860976af"
+ },
+ "js.shellui.bt-hd-0": {
+  "t": "Loss of wealth, gossip, unpleasant affairs",
+  "h": "224b7b52"
+ },
+ "js.shellui.bt-hd-1": {
+  "t": "Relationship trouble, declining health",
+  "h": "234cd72a"
+ },
+ "js.shellui.bt-hd-2": {
+  "t": "Petty people, hidden sabotage",
+  "h": "e6644f6c"
+ },
+ "js.shellui.bt-hd-3": {
+  "t": "Utter bad luck, serious illness, major disaster",
+  "h": "72905f33"
+ },
+ "js.shellui.bt-hu-0": {
+  "t": "Avoid for the main door and bedroom",
+  "h": "460c1435"
+ },
+ "js.shellui.bt-hu-1": {
+  "t": "Avoid placing the altar or bedroom here",
+  "h": "f713260a"
+ },
+ "js.shellui.bt-hu-2": {
+  "t": "Avoid the kitchen and the master room",
+  "h": "8fd85d89"
+ },
+ "js.shellui.bt-hu-3": {
+  "t": "Do not put a door or a bed here",
+  "h": "fde05a0d"
+ },
+ "js.shellui.bt-khong-tinh-duoc-cung": {
+  "t": "Couldn't work out the life trigram.",
+  "h": "ce9bd2a4"
+ },
+ "js.shellui.bt-ngu-hanh": {
+  "t": "Five Elements",
+  "h": "68ac2473"
+ },
+ "js.shellui.bt-nhap-nam-hop-le": {
+  "t": "Please enter a valid birth year (1900–2010).",
+  "h": "8363c20b"
+ },
+ "js.shellui.bt-nhom": {
+  "t": "Group",
+  "h": "ce7eab0a"
+ },
+ "js.shellui.bt-tay-hop": {
+  "t": "West Group — suits the West, Northwest, Northeast and Southwest directions",
+  "h": "6f187842"
+ },
+ "js.shellui.bt-tay-tu-menh": {
+  "t": "West Group",
+  "h": "e606c821"
+ },
+ "js.shellui.bt-title": {
+  "t": "Year {y} — Trigram {c} {q} — {n}",
+  "h": "44ed4978"
+ },
+ "js.shellui.bt-vi-tri-cung": {
+  "t": "Palace position",
+  "h": "5a046cd0"
+ },
  "js.shellui.buoc-o-huong-xau-thi-hoa": {
   "t": "If it is tied in an unfavorable direction, how can that be remedied?",
   "h": "8900960b"
@@ -14734,6 +15370,82 @@
  "js.shellui.dien-tuong-cua-toi": {
   "t": "My face reading",
   "h": "d5784500"
+ },
+ "js.shellui.dln-chua-lap-duoc": {
+  "t": "Couldn't build the chart right now — please try again. (The Liu Ren chart must be built on the server because it needs the monthly general by the real solar term.)",
+  "h": "349a0a1c"
+ },
+ "js.shellui.dln-dang-lap": {
+  "t": "Building the Liu Ren chart…",
+  "h": "24a55230"
+ },
+ "js.shellui.dln-gio-b": {
+  "t": "Hour <b>{v}</b>",
+  "h": "d7ddd40f"
+ },
+ "js.shellui.dln-hanh-vuong-suy": {
+  "t": "Element {h} — {vs}",
+  "h": "aafd8bf9"
+ },
+ "js.shellui.dln-khoa-the": {
+  "t": "Chart type",
+  "h": "1a2eeeba"
+ },
+ "js.shellui.dln-ngay-b": {
+  "t": "Day <b>{v}</b>",
+  "h": "5eec8778"
+ },
+ "js.shellui.dln-nguyet-tuong": {
+  "t": "Monthly General <b>{nt}</b> placed on the divination hour <b>{ct}</b>",
+  "h": "17b75e38"
+ },
+ "js.shellui.dln-note": {
+  "t": "The Monthly General is placed on the divination hour to rotate the Heaven Plate; the 12 Heavenly Generals are set from the Noble Person position for the day stem (day uses the daytime Noble Person, night uses the nighttime one).",
+  "h": "c0123ca5"
+ },
+ "js.shellui.dln-phep-thu-truyen": {
+  "t": "Method of selecting the transmission",
+  "h": "cddbdb0f"
+ },
+ "js.shellui.dln-quy-nhan": {
+  "t": "Noble Person <b>{tb}</b> over <b>{db}</b>",
+  "h": "f66202db"
+ },
+ "js.shellui.dln-roi-tuan-khong": {
+  "t": "falls in the Void",
+  "h": "7118ae11"
+ },
+ "js.shellui.dln-tam-truyen": {
+  "t": "Three Transmissions",
+  "h": "68b2f0a5"
+ },
+ "js.shellui.dln-than-sat": {
+  "t": "Spirit stars",
+  "h": "365af4b4"
+ },
+ "js.shellui.dln-thang-b": {
+  "t": "Month <b>{v}</b>",
+  "h": "1da6071f"
+ },
+ "js.shellui.dln-thien-ban-gia-dia-ban": {
+  "t": "Heaven Plate over Earth Plate",
+  "h": "67a30bc5"
+ },
+ "js.shellui.dln-tren": {
+  "t": "over {v}",
+  "h": "6adfd61e"
+ },
+ "js.shellui.dln-tu-khoa": {
+  "t": "Four Lessons",
+  "h": "56938410"
+ },
+ "js.shellui.dln-tuan-khong": {
+  "t": "Void <b>{v}</b>",
+  "h": "ecffad13"
+ },
+ "js.shellui.dln-voi-can-ngay": {
+  "t": "Relation to the day stem: {v}",
+  "h": "e6e06e50"
  },
  "js.shellui.doi": {
   "t": "Change",
@@ -15927,6 +16639,14 @@
   "t": "Conversation history",
   "h": "0fd2afce"
  },
+ "js.shellui.ln-nhap-ngay-thang-nam": {
+  "t": "Please enter the day, month and year.",
+  "h": "f001ab44"
+ },
+ "js.shellui.ln-title": {
+  "t": "{date} — {chi} hour ({time})",
+  "h": "453d1ef5"
+ },
  "js.shellui.loai-cong-ty": {
   "t": "Company",
   "h": "65bf381e"
@@ -16674,6 +17394,190 @@
  "js.shellui.nguyen": {
   "t": "Nguyen",
   "h": "e79eb3d7"
+ },
+ "js.shellui.nh-a1": {
+  "t": "\"{name}\" is the {th} element and generates your {m} life element — the name nourishes your life element, the best case",
+  "h": "cda46ea4"
+ },
+ "js.shellui.nh-a2": {
+  "t": "\"{name}\" shares the {m} element with your life element — it strengthens your life energy",
+  "h": "ed7b09ef"
+ },
+ "js.shellui.nh-a3": {
+  "t": "\"{name}\" is the {th} element and restrains your {m} life element",
+  "h": "ef919a58"
+ },
+ "js.shellui.nh-a4": {
+  "t": "your {m} life element restrains the {th} element of \"{name}\"",
+  "h": "67e11e3c"
+ },
+ "js.shellui.nh-a5": {
+  "t": "your {m} life element generates the {th} element — your life element is drained",
+  "h": "78fd2981"
+ },
+ "js.shellui.nh-a6": {
+  "t": "\"{name}\" is the {th} element — it neither generates nor restrains your {m} life element",
+  "h": "512e9b02"
+ },
+ "js.shellui.nh-b": {
+  "t": "{d} different elements across {k} characters",
+  "h": "c86c53a6"
+ },
+ "js.shellui.nh-c1": {
+  "t": "has a character of the {sr} element — it generates your {m} life element",
+  "h": "8063d498"
+ },
+ "js.shellui.nh-c2": {
+  "t": "has a character of the same {m} element",
+  "h": "b7d30df6"
+ },
+ "js.shellui.nh-c3": {
+  "t": "no character yet generates or shares the {m} element of your life element",
+  "h": "415fa26e"
+ },
+ "js.shellui.nh-caveat": {
+  "t": "This scoring scale is set by the site for easy comparison — it is not a number from the classics. For a name already in use, a low score <strong>does not mean the name is bad</strong> and is not a reason to change it — this part is only useful when you are choosing a new name.",
+  "h": "d0c49d0c"
+ },
+ "js.shellui.nh-cd-ten": {
+  "t": "Name score",
+  "h": "56e67c7e"
+ },
+ "js.shellui.nh-cd-ten-menh": {
+  "t": "Name score — {m} life element",
+  "h": "d700b3c1"
+ },
+ "js.shellui.nh-chua-cham-duoc": {
+  "t": "It can't be scored yet because we don't know the <strong>life element</strong> of the person who carries the name. Choose it right here:",
+  "h": "f7e87909"
+ },
+ "js.shellui.nh-chua-co-trong-bang": {
+  "t": "Not in the table yet",
+  "h": "26374f9c"
+ },
+ "js.shellui.nh-d1": {
+  "t": "{k} character(s) of the {h} element restrain your life element",
+  "h": "ecab105a"
+ },
+ "js.shellui.nh-d2": {
+  "t": "no character restrains your life element",
+  "h": "c6ffe9f6"
+ },
+ "js.shellui.nh-goi-y-tron-bo": {
+  "t": "Get a full set of name suggestions that suit your life element →",
+  "h": "0457a007"
+ },
+ "js.shellui.nh-khong-biet-menh": {
+  "t": "Don't know your life element?",
+  "h": "afcf54e4"
+ },
+ "js.shellui.nh-la": {
+  "t": "Main character matches your life element",
+  "h": "55588954"
+ },
+ "js.shellui.nh-lb": {
+  "t": "Five Elements balance",
+  "h": "2ceb2151"
+ },
+ "js.shellui.nh-lc": {
+  "t": "Name has a character that supports your life element",
+  "h": "40185ecf"
+ },
+ "js.shellui.nh-ld": {
+  "t": "No character clashes with your life element",
+  "h": "88245630"
+ },
+ "js.shellui.nh-nb1": {
+  "t": "The name already has a character of the {sr} element that generates your life element. To add more, choose a character of the {m} element to strengthen it.",
+  "h": "1f2ab4f1"
+ },
+ "js.shellui.nh-nb2": {
+  "t": "{sr} generates your {m} life element — a character of this element nourishes your life element.",
+  "h": "388f50d5"
+ },
+ "js.shellui.nh-net-don-vi": {
+  "t": "{n} strokes (unit digit: {d})",
+  "h": "cc03c651"
+ },
+ "js.shellui.nh-nhap-ho-ten": {
+  "t": "Please enter your full name.",
+  "h": "852de967"
+ },
+ "js.shellui.nh-nhap-net-thu-cong": {
+  "t": "Enter strokes by hand",
+  "h": "60923759"
+ },
+ "js.shellui.nh-rel-cung": {
+  "t": "The main character \"<strong>{name}</strong>\" is the <strong>{th}</strong> element — the <strong>same element</strong> as your life element <strong>{m}</strong>. Good support that strengthens your life energy.",
+  "h": "ae1602fe"
+ },
+ "js.shellui.nh-rel-khac-menh": {
+  "t": "The main character \"<strong>{name}</strong>\" is the <strong>{th}</strong> element — it <strong>restrains the {m} life element</strong> ({th} restrains {m}). By folk belief it is worth considering an adjustment.",
+  "h": "cfb34dae"
+ },
+ "js.shellui.nh-rel-menh-khac": {
+  "t": "The main character \"<strong>{name}</strong>\" is the <strong>{th}</strong> element — your {m} life element restrains the name's element ({m} restrains {th}). By folk belief it is worth considering an adjustment.",
+  "h": "084dea54"
+ },
+ "js.shellui.nh-rel-menh-sinh": {
+  "t": "The main character \"<strong>{name}</strong>\" is the <strong>{th}</strong> element — your {m} life element generates the name's element ({m}→{th}). Average, no harm.",
+  "h": "6b8b312d"
+ },
+ "js.shellui.nh-rel-sinh-menh": {
+  "t": "The main character \"<strong>{name}</strong>\" is the <strong>{th}</strong> element — it <strong>generates the {m} life element</strong> ({th}→{m}). Good: the name nourishes your life element.",
+  "h": "e867c9b3"
+ },
+ "js.shellui.nh-rel-trung-tinh": {
+  "t": "The main character \"<strong>{name}</strong>\" is the <strong>{th}</strong> element and your life element is <strong>{m}</strong> — neither directly generates nor restrains the other. Neutral.",
+  "h": "c5e52f31"
+ },
+ "js.shellui.nh-so-net": {
+  "t": "Strokes",
+  "h": "6942afa1"
+ },
+ "js.shellui.nh-sug-head": {
+  "t": "If you are CHOOSING a name",
+  "h": "4307da08"
+ },
+ "js.shellui.nh-sug-p": {
+  "t": "Prefer characters of the <strong>{boi}</strong> element. {note} Avoid characters of the <strong>{tranh}</strong> element (it restrains the {m} life element).",
+  "h": "4634af56"
+ },
+ "js.shellui.nh-title-suffix": {
+  "t": " — Five Elements of Each Character",
+  "h": "502b979c"
+ },
+ "js.shellui.nh-toi-da-6": {
+  "t": "At most 6 syllables.",
+  "h": "a95e6e3b"
+ },
+ "js.shellui.nh-tra-hanzii": {
+  "t": "Look up at hanzii.net →",
+  "h": "d84d1c1b"
+ },
+ "js.shellui.nh-tra-menh": {
+  "t": "Look up your life element by birth year →",
+  "h": "83b945be"
+ },
+ "js.shellui.nh-v1": {
+  "t": "Excellent match for your life element",
+  "h": "8afe9243"
+ },
+ "js.shellui.nh-v2": {
+  "t": "Good match for your life element",
+  "h": "44069c43"
+ },
+ "js.shellui.nh-v3": {
+  "t": "Acceptable",
+  "h": "9f497b1e"
+ },
+ "js.shellui.nh-v4": {
+  "t": "Some points worth considering",
+  "h": "12311aa6"
+ },
+ "js.shellui.nh-v5": {
+  "t": "Many points worth considering",
+  "h": "e71f844e"
  },
  "js.shellui.nhan-tuong-cua-toi": {
   "t": "My eye reading",
@@ -17566,6 +18470,110 @@
  "js.shellui.zalo": {
   "t": "Zalo",
   "h": "53b71aec"
+ },
+ "js.solaso.bao-cao": {
+  "t": "Reports",
+  "h": "7013ca8b"
+ },
+ "js.solaso.chua-co-la-so-nhom": {
+  "t": "No charts in this group yet.",
+  "h": "79bf9444"
+ },
+ "js.solaso.chua-dat-ten": {
+  "t": "Unnamed",
+  "h": "dfb078dd"
+ },
+ "js.solaso.combo-1-s": {
+  "t": "Buy both together — cheaper than buying separately",
+  "h": "584d7fc7"
+ },
+ "js.solaso.combo-1-t": {
+  "t": "Combo: Zi Wei Reading + BaZi",
+  "h": "c69e7864"
+ },
+ "js.solaso.combo-2-s": {
+  "t": "Zi Wei Reading + BaZi + Life Cycles + Yearly Fortune",
+  "h": "12345b3e"
+ },
+ "js.solaso.combo-2-t": {
+  "t": "Combo: The Full Set of 4 Tools",
+  "h": "0726a4ab"
+ },
+ "js.solaso.da-co-xem-lai": {
+  "t": "✓ Owned · View again",
+  "h": "308bad31"
+ },
+ "js.solaso.rel-ban-be": {
+  "t": "Friends",
+  "h": "159fe485"
+ },
+ "js.solaso.rel-dong-nghiep": {
+  "t": "Colleagues",
+  "h": "d8e2bdd8"
+ },
+ "js.solaso.rel-gia-dinh": {
+  "t": "Family",
+  "h": "bf9b33dc"
+ },
+ "js.solaso.rel-khac": {
+  "t": "Other",
+  "h": "5b8a28ab"
+ },
+ "js.solaso.tool-cdtk": {
+  "t": "Past-Life Portrait",
+  "h": "e7d0f866"
+ },
+ "js.solaso.tool-cdvc": {
+  "t": "Spouse Portrait",
+  "h": "eb21b5ef"
+ },
+ "js.solaso.tool-ctcd": {
+  "t": "Life Cycles",
+  "h": "38c0c6ce"
+ },
+ "js.solaso.tool-dc": {
+  "t": "Parenting by Chart",
+  "h": "6043b236"
+ },
+ "js.solaso.tool-dntk": {
+  "t": "Past-Life Karmic Bonds",
+  "h": "c6b0ccb5"
+ },
+ "js.solaso.tool-hnt": {
+  "t": "Early Career Guidance",
+  "h": "826c517b"
+ },
+ "js.solaso.tool-lg": {
+  "t": "Zi Wei Reading",
+  "h": "ab5a4607"
+ },
+ "js.solaso.tool-nk": {
+  "t": "Someone Else's Chart",
+  "h": "5a73dc8f"
+ },
+ "js.solaso.tool-nm": {
+  "t": "People Connections",
+  "h": "78fdc03b"
+ },
+ "js.solaso.tool-tb": {
+  "t": "Zi Ping BaZi",
+  "h": "6ade52e9"
+ },
+ "js.solaso.tool-vhn": {
+  "t": "Yearly Fortune",
+  "h": "ba425e43"
+ },
+ "js.solaso.xem-tao": {
+  "t": "View / Create",
+  "h": "a89b1542"
+ },
+ "js.solaso.xoa-khoi-so": {
+  "t": "Remove from the book",
+  "h": "4ba4a755"
+ },
+ "js.solaso.xoa-la-so-nay": {
+  "t": "Remove this chart from the book?",
+  "h": "d9231d4e"
  },
  "js.taikhoan.ban-chua-chia-se-luot-nao": {
   "t": "You haven't shared anything yet.",
@@ -23823,6 +24831,114 @@
   "t": "Zi Wei doesn't predict the future. It helps you understand yourself so you can choose better.",
   "h": "ae92de9d"
  },
+ "lucnham.1-nhap-ngay-gio": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Enter date &amp; time</span>",
+  "h": "953e7b97"
+ },
+ "lucnham.dang-phan-van-chuyen-tien-bac": {
+  "t": "Torn over money, love or a decision that must be made right now — cast a chart for the exact current hour and day to answer the heart of it. Get a short reading that goes straight to what you are asking.",
+  "h": "295b866e"
+ },
+ "lucnham.de-trong-la-lay-gio-hien": {
+  "t": "Leave blank to use the current time. The system builds a Da Liu Ren chart and returns the Four Lessons, Three Transmissions, the Noble Person and a reading following the Kao Bian Zhan.",
+  "h": "1e494a7c"
+ },
+ "lucnham.gio-can-xem": {
+  "t": "Hour to check",
+  "h": "84e96644"
+ },
+ "lucnham.gio-dan-03-05h": {
+  "t": "Yin hour (03–05)",
+  "h": "a2d01564"
+ },
+ "lucnham.gio-dau-17-19h": {
+  "t": "You hour (17–19)",
+  "h": "d17bfbc2"
+ },
+ "lucnham.gio-hoi-21-23h": {
+  "t": "Hai hour (21–23)",
+  "h": "9721a904"
+ },
+ "lucnham.gio-mao-05-07h": {
+  "t": "Mao hour (05–07)",
+  "h": "58eab8cc"
+ },
+ "lucnham.gio-mui-13-15h": {
+  "t": "Wei hour (13–15)",
+  "h": "56d4bde0"
+ },
+ "lucnham.gio-ngo-11-13h": {
+  "t": "Wu hour (11–13)",
+  "h": "8b9d2da7"
+ },
+ "lucnham.gio-suu-01-03h": {
+  "t": "Chou hour (01–03)",
+  "h": "33993400"
+ },
+ "lucnham.gio-than-15-17h": {
+  "t": "Shen hour (15–17)",
+  "h": "9d910299"
+ },
+ "lucnham.gio-thin-07-09h": {
+  "t": "Chen hour (07–09)",
+  "h": "24c10915"
+ },
+ "lucnham.gio-tuat-19-21h": {
+  "t": "Xu hour (19–21)",
+  "h": "8c0c8255"
+ },
+ "lucnham.gio-ty-09-11h": {
+  "t": "Si hour (09–11)",
+  "h": "4f543b45"
+ },
+ "lucnham.gio-ty-23-01h": {
+  "t": "Zi hour (23–01)",
+  "h": "b64ae149"
+ },
+ "lucnham.hoi-thay-luan-than-tuong": {
+  "t": "✦ Ask the Master to read the generals",
+  "h": "fd4349af"
+ },
+ "lucnham.luan-theo-khao-bien-chiem": {
+  "t": "Reading by the<br>Kao Bian Zhan",
+  "h": "d2082bef"
+ },
+ "lucnham.luc-nham-gian": {
+  "t": "Simple Liu Ren",
+  "h": "a7f92fcb"
+ },
+ "lucnham.luc-nham-gian-12-than-tuong": {
+  "t": "<b>Simple Liu Ren</b><span>The 12 generals by hour · day</span>",
+  "h": "337b9381"
+ },
+ "lucnham.luc-nham-gian-tra-12-than": {
+  "t": "Simple Liu Ren — look up the 12 generals by hour/day and whether the general on duty is auspicious or inauspicious. Ask the Master for a reading on meetings, seeking wealth, setting out.",
+  "h": "554217a5"
+ },
+ "lucnham.luc-nham-gian-tu-vi-minh": {
+  "t": "Simple Liu Ren — Minh Bao Zi Wei Dou Shu",
+  "h": "fd05d989"
+ },
+ "lucnham.luc-nham-la-mot-trong-tam": {
+  "t": "Liu Ren is one of the Three Arts of traditional Chinese divination, using the Heaven Plate and Earth Plate matched to the current hour and day to cast a chart. The reading focuses on the specific matter being asked, based on the positions of the Heavenly Generals on the plate.",
+  "h": "1c7538cd"
+ },
+ "lucnham.ngay-gio-can-xem": {
+  "t": "Date &amp; time to check",
+  "h": "80c37086"
+ },
+ "lucnham.quy-nhan-dan-loi": {
+  "t": "Noble Person<br>shows the way",
+  "h": "b1fa7db6"
+ },
+ "lucnham.tu-khoa-tam-truyen": {
+  "t": "Four Lessons<br>Three Transmissions",
+  "h": "dfa03fb9"
+ },
+ "lucnham.xem-que-b": {
+  "t": "Cast the chart →",
+  "h": "f19970b5"
+ },
  "maihoa.1-lap-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Cast the hexagram</span>",
   "h": "b51a3df6"
@@ -24654,6 +25770,98 @@
  "ngaytot.xem-lich": {
   "t": "See calendar →",
   "h": "6fa85107"
+ },
+ "nguhanhten.can-bang-ngu-hanh": {
+  "t": "Five Elements<br>balance",
+  "h": "6beeac0b"
+ },
+ "nguhanhten.can-bang-ngu-hanh-h4ql": {
+  "t": "Five Elements Balance",
+  "h": "d1b5ef33"
+ },
+ "nguhanhten.chua-tim-thay-chu-han-cho": {
+  "t": "⚠ No Chinese character found for the syllables below — enter the stroke count by hand (look it up at <a href=\"https://hanzii.net\" target=\"_blank\" style=\"color:var(--tx-blue)\">hanzii.net</a>):",
+  "h": "464b3314"
+ },
+ "nguhanhten.diem-so-hop-khac": {
+  "t": "Match / clash<br>score",
+  "h": "1b721b9d"
+ },
+ "nguhanhten.ho-va-ten-day-du": {
+  "t": "Full name",
+  "h": "e920e42c"
+ },
+ "nguhanhten.hoa": {
+  "t": "Fire",
+  "h": "be792fa1"
+ },
+ "nguhanhten.hoi-thay-luan-sau-ngu-hanh": {
+  "t": "✦ Ask the Master for an in-depth reading of the name's Five Elements",
+  "h": "ba1b2c72"
+ },
+ "nguhanhten.khong-ro-bo-qua": {
+  "t": "Not sure / skip",
+  "h": "941d7cdc"
+ },
+ "nguhanhten.moc": {
+  "t": "Wood",
+  "h": "4bd601ae"
+ },
+ "nguhanhten.mot-cai-ten-goi-hang-ngay": {
+  "t": "Even the name you are called every day carries its own Five Element — whether it harmonizes with or clashes with your life element is something few people have ever checked. Enter your full name for a Five Element score and a clear verdict, free.",
+  "h": "3e585f76"
+ },
+ "nguhanhten.ngu-hanh-ban-menh-tuy-chon": {
+  "t": "Life element (optional)",
+  "h": "c90318f2"
+ },
+ "nguhanhten.ngu-hanh-kim-moc-thuy-hoa": {
+  "t": "The Five Elements (Metal, Wood, Water, Fire, Earth) is an ancient Chinese doctrine describing the laws of generation and restraint among the five basic elements, underlying many Eastern fate-reading arts. Every sound, character or number can be assigned to an element to compare harmony and clash with one's life element.",
+  "h": "bcca1f1c"
+ },
+ "nguhanhten.ngu-hanh-ten": {
+  "t": "Name Five Elements",
+  "h": "9b92ea0c"
+ },
+ "nguhanhten.ngu-hanh-ten-ngu-hanh-tung": {
+  "t": "<b>Name Five Elements</b><span>Each character's element &amp; the balance</span>",
+  "h": "32d338b2"
+ },
+ "nguhanhten.ngu-hanh-ten-tu-vi-minh": {
+  "t": "Name Five Elements — Minh Bao Zi Wei Dou Shu",
+  "h": "2de02e4f"
+ },
+ "nguhanhten.ngu-hanh-tung-chu": {
+  "t": "Element of<br>each character",
+  "h": "f7103aec"
+ },
+ "nguhanhten.nhap-du-ho-ten-co-dau": {
+  "t": "Enter the family name + given name with diacritics, separated by spaces",
+  "h": "aefee322"
+ },
+ "nguhanhten.nhap-ho-ten-day-du-co": {
+  "t": "Enter your full name; you can also choose your life element. Get a Five Element balance chart, a score and a verdict on whether it harmonizes or clashes with your life element.",
+  "h": "2fd9ddb3"
+ },
+ "nguhanhten.nhap-ten-tieng-viet-tra-chu": {
+  "t": "Enter a Vietnamese name — look up the Chinese characters, stroke counts and element of each character, the Five Element balance and the comparison with your life element. Ask the Master for a deeper reading.",
+  "h": "f620e146"
+ },
+ "nguhanhten.tho": {
+  "t": "Earth",
+  "h": "9a0da463"
+ },
+ "nguhanhten.thuy": {
+  "t": "Water",
+  "h": "f354741d"
+ },
+ "nguhanhten.tra-ngu-hanh-ten": {
+  "t": "Check name elements →",
+  "h": "bfb81211"
+ },
+ "nguhanhten.vd-nguyen-van-an": {
+  "t": "e.g. Nguyễn Văn An",
+  "h": "4811bda0"
  },
  "nguoikhac.2-xem-truoc-cam-nang": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview the guide</span>",
@@ -26310,6 +27518,26 @@
  "sc.xem-tuoi-sinh-con-tu-vi": {
   "t": "Child Birth-Year Compatibility — Minh Bao Zi Wei Dou Shu",
   "h": "23026bbb"
+ },
+ "solaso.chua-co-la-so-nao-trong": {
+  "t": "No charts in your book yet.<br>Charts will land here automatically once you enter a birth date in any tool.",
+  "h": "f40b05ed"
+ },
+ "solaso.dang-nhap-dang-ky": {
+  "t": "Sign in / Sign up",
+  "h": "2bcf279e"
+ },
+ "solaso.dang-nhap-de-xem-so-la": {
+  "t": "Sign in to see your saved Chart Book.",
+  "h": "4fa47b77"
+ },
+ "solaso.la-so-da-luu-so-la": {
+  "t": "<b>Saved Charts</b><span>Your account's Chart Book — grouped by relationship. Tap \"Reports\" on a chart to view or create reports for that chart.</span>",
+  "h": "703b7bd9"
+ },
+ "solaso.la-so-da-luu-tu-vi": {
+  "t": "Saved Charts — Minh Bao Zi Wei Dou Shu",
+  "h": "183c05e5"
  },
  "taikhoan.add-mcp-server-chon-streamable-http": {
   "t": "<strong>Add MCP server</strong> → choose <strong>Streamable HTTP</strong>.",

@@ -619,6 +619,78 @@
   "t": "이름, 도구로 검색…",
   "h": "86f221f0"
  },
+ "battrach2.4-huong-dai-cat": {
+  "t": "대길<br>방위 4개",
+  "h": "0b0b6a6a"
+ },
+ "battrach2.4-huong-dai-hung": {
+  "t": "대흉<br>방위 4개",
+  "h": "45c6e01a"
+ },
+ "battrach2.bang-8-huong-chi-tiet": {
+  "t": "<span class=\"res-block-title\">8방위 상세표</span>",
+  "h": "0ef24790"
+ },
+ "battrach2.bat-trach-la-mot-truong-phai": {
+  "t": "팔택은 전통 풍수의 한 갈래로, 집을 팔괘에 대응하는 8개 방위로 나눈 뒤 집주인의 본명괘와 대조해 좋고 나쁜 방위와 자리를 정해요. <i>팔택명경</i>은 이 방법을 체계화한 고전 중 하나예요.",
+  "h": "daa2d3d2"
+ },
+ "battrach2.goi-y-dung": {
+  "t": "쓰임새 추천",
+  "h": "1e297636"
+ },
+ "battrach2.hoi-thay-huong-hop-cach-hoa": {
+  "t": "✦ 선생님께 맞는 방위와 액막이 방법 묻기",
+  "h": "d656b02e"
+ },
+ "battrach2.huong": {
+  "t": "방위",
+  "h": "05c861c1"
+ },
+ "battrach2.huong-bat-trach": {
+  "t": "팔택 방위",
+  "h": "a9176f82"
+ },
+ "battrach2.huong-bat-trach-cung-menh-8": {
+  "t": "<b>팔택 방위</b><span>본명궁과 길흉 8방위</span>",
+  "h": "7f6f63a9"
+ },
+ "battrach2.huong-bat-trach-tu-vi-minh": {
+  "t": "팔택 방위 — 명보 자미두수",
+  "h": "1dd7c74f"
+ },
+ "battrach2.menh-quai-cung-menh": {
+  "t": "본명괘,<br>본명궁",
+  "h": "a7cd9aa8"
+ },
+ "battrach2.mua-nha-thue-van-phong-roi": {
+  "t": "집을 사거나 사무실을 빌린 뒤에야 문 방향이 본명괘와 맞지 않는다는 걸 알면 늦어요. 출생 연도와 성별을 입력하면 계약금을 내기 전에 어느 방위를 골라야 하는지 바로 알 수 있어요.",
+  "h": "22a1a2e8"
+ },
+ "battrach2.nam-sinh-gioi-tinh": {
+  "t": "출생 연도와 성별",
+  "h": "2fe866aa"
+ },
+ "battrach2.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "출생 연도와 성별을 입력하세요. 시스템이 출생 연도로 본명괘를 정확히 계산해 본명괘·궁과 길흉 8방위 상세표를 돌려줘요.",
+  "h": "5374993f"
+ },
+ "battrach2.ten-huong": {
+  "t": "방위 이름",
+  "h": "a2de1255"
+ },
+ "battrach2.tra-4-huong-dai-cat-va": {
+  "t": "팔택 본명궁에 따른 대길 방위 4개와 대흉 방위 4개를 조회해요. 집·문·주방·침대에 맞는 방위를 알 수 있어요. 더 깊은 풀이는 선생님께 물어보세요.",
+  "h": "4bcadf9b"
+ },
+ "battrach2.tra-huong-bat-trach": {
+  "t": "팔택 방위 조회하기 →",
+  "h": "e3808961"
+ },
+ "battrach2.y-nghia": {
+  "t": "의미",
+  "h": "b1973c6d"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">정보 입력</span>",
   "h": "487c9507"
@@ -1862,6 +1934,226 @@
  "dali.tuong-hoc-da-mat-phuong-dong": {
   "t": "동양 얼굴 피부 상학은 피부 상태가 몸 안의 건강을 어느 정도 반영한다고 보고, 현대 피부과학의 관찰과 함께 대조해요. 한의학과 서양의학을 결합한 이 접근은 피부를 미적 감각만으로 평가하지 않고, 지켜봐야 할 지표로 바라봐요.",
   "h": "466d834a"
+ },
+ "datten.12-goi-y-ten-chia": {
+  "t": "이름 추천 12개<br>3그룹",
+  "h": "41bbf053"
+ },
+ "datten.2-xem-truoc-nen-menh": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">본명 기반 미리 보기</span>",
+  "h": "6db12426"
+ },
+ "datten.be-gai": {
+  "t": "여자아이",
+  "h": "af93dba0"
+ },
+ "datten.be-trai": {
+  "t": "남자아이",
+  "h": "274225bc"
+ },
+ "datten.dat-ten-cho-con-la-quyet": {
+  "t": "아이의 이름을 짓는 일은 단 한 번뿐이라 누구나 확실하게 하고 싶어 해요. 온 가족의 생년월일을 입력하면 오행에 맞는 이름 추천 12개를 한월(漢越) 뜻과 함께 받아 안심하고 고를 수 있어요.",
+  "h": "82b4de3d"
+ },
+ "datten.dat-ten-con-chon-ten-hop": {
+  "t": "<b>아이 이름 짓기</b><span>고법 오행으로 아이의 본명에 맞는 이름 고르기</span>",
+  "h": "3d53836c"
+ },
+ "datten.dat-ten-con-hop-menh": {
+  "t": "본명에 맞는 아이 이름 짓기",
+  "h": "11462335"
+ },
+ "datten.dat-ten-con-tu-vi-minh": {
+  "t": "아이 이름 짓기 — 명보 자미두수",
+  "h": "9805fdc3"
+ },
+ "datten.gioi-tinh-con": {
+  "t": "아이 성별",
+  "h": "39dacada"
+ },
+ "datten.goi-y-12-ten-hop": {
+  "t": "본명에 맞는 이름 추천 12개 받기 →",
+  "h": "46b3b1ed"
+ },
+ "datten.goi-y-dat-ten-con-hop": {
+  "t": "아이와 부모의 간지·납음 오행을 바탕으로 본명에 맞는 이름을 추천해요. 이름 추천과 뜻 풀이는 선생님께 물어보세요.",
+  "h": "295edb5c"
+ },
+ "datten.he-thong-doc-ngu-hanh-nap": {
+  "t": "시스템이 아이와 부모의 납음 오행을 읽고, 한월(漢越) 뜻과 함께 3그룹으로 나눈 이름 12개를 추천해요.",
+  "h": "ea884a81"
+ },
+ "datten.ho-cua-con": {
+  "t": "성(아이의)",
+  "h": "f4e1a613"
+ },
+ "datten.hoi-thay-goi-y-ten-hop": {
+  "t": "✦ 선생님께 본명에 맞는 이름 추천 묻기",
+  "h": "166f1459"
+ },
+ "datten.hop-ngu-hanh-con-bo": {
+  "t": "아이와 부모의<br>오행에 맞음",
+  "h": "622dcbc0"
+ },
+ "datten.kem-nghia-han-viet": {
+  "t": "한월(漢越)<br>뜻 포함",
+  "h": "6cd753b8"
+ },
+ "datten.nam-sinh-bo": {
+  "t": "아버지 태어난 해",
+  "h": "a1009c64"
+ },
+ "datten.nam-sinh-con": {
+  "t": "자녀 태어난 해",
+  "h": "724a46be"
+ },
+ "datten.nam-sinh-me": {
+  "t": "어머니 태어난 해",
+  "h": "bef8fb8f"
+ },
+ "datten.nguyen": {
+  "t": "Nguyễn",
+  "h": "e79eb3d7"
+ },
+ "datten.nhap-ho-gioi-tinh-va-nam": {
+  "t": "아이의 성·성별과 아이·아버지·어머니의 태어난 해를 입력하면 납음 오행을 계산해 이름 짓기의 기반을 만들어요.",
+  "h": "7a82f7d7"
+ },
+ "datten.thong-tin-de-dat-ten": {
+  "t": "이름 짓기를 위한 정보",
+  "h": "a6b214ba"
+ },
+ "dattendn.2-xem-truoc-nen-menh-chu": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">사업주 본명 기반 미리 보기</span>",
+  "h": "a96b5042"
+ },
+ "dattendn.an-uong-f-b-nha-hang": {
+  "t": "음식 / F&amp;B / 레스토랑",
+  "h": "4c6e0036"
+ },
+ "dattendn.bat-dong-san-xay-dung": {
+  "t": "부동산 / 건설",
+  "h": "6b5154b8"
+ },
+ "dattendn.cong-nghe-phan-mem": {
+  "t": "기술 / 소프트웨어",
+  "h": "2665d28f"
+ },
+ "dattendn.cong-ty": {
+  "t": "회사",
+  "h": "65bf381e"
+ },
+ "dattendn.cua-hang": {
+  "t": "가게",
+  "h": "050a31c8"
+ },
+ "dattendn.dat-ten-cong-ty-thuong-hieu": {
+  "t": "납음 오행에 따라 사업주의 본명과 업종에 맞는 회사·브랜드·가게 이름을 지어요. 이름 추천과 뜻·이름 풍수 풀이는 선생님께 물어보세요.",
+  "h": "5b43e7d9"
+ },
+ "dattendn.dat-ten-doanh-nghiep": {
+  "t": "사업 이름 짓기",
+  "h": "86ab8b27"
+ },
+ "dattendn.dat-ten-doanh-nghiep-ten-cong": {
+  "t": "<b>사업 이름 짓기</b><span>사업주의 본명에 맞는 회사 · 브랜드 · 가게 이름</span>",
+  "h": "bed333e2"
+ },
+ "dattendn.dat-ten-doanh-nghiep-tu-vi": {
+  "t": "사업 이름 짓기 — 명보 자미두수",
+  "h": "81d7fe18"
+ },
+ "dattendn.de-trong-neu-muon-duoc-goi": {
+  "t": "새로 추천받으려면 비워 두세요",
+  "h": "8130c366"
+ },
+ "dattendn.du-lich-khach-san": {
+  "t": "여행 / 호텔",
+  "h": "5369cdde"
+ },
+ "dattendn.giao-duc-dao-tao": {
+  "t": "교육 / 훈련",
+  "h": "f1adba55"
+ },
+ "dattendn.goi-y-ten-doanh-nghiep": {
+  "t": "사업 이름 추천 받기 →",
+  "h": "6008d180"
+ },
+ "dattendn.he-thong-doc-ngu-hanh-nap": {
+  "t": "시스템이 사업주의 납음 오행과 업종을 읽고 순수 베트남어 / 한월(漢越) / 혼합의 3그룹으로 나눈 이름 12개를 추천해요.",
+  "h": "7d99610f"
+ },
+ "dattendn.ho-kinh-doanh": {
+  "t": "가계 사업자",
+  "h": "f886c8d3"
+ },
+ "dattendn.hop-menh-chu-nganh-nghe": {
+  "t": "사업주와<br>업종에 맞음",
+  "h": "cf10d77f"
+ },
+ "dattendn.khac": {
+  "t": "기타",
+  "h": "5b8a28ab"
+ },
+ "dattendn.loai-hinh-tuy-chon": {
+  "t": "사업 형태 (선택)",
+  "h": "1f3a6e19"
+ },
+ "dattendn.mot-cai-ten-hop-menh-co": {
+  "t": "본명에 맞는 이름은 창업 여정 내내 회사와 함께해요. 일단 정해 놓고 나중에 고치는 것은 처음부터 제대로 고르는 것보다 늘 더 어려워요. 사업주의 태어난 해를 입력하면 사업자 등록 전에 이름 추천 12개를 받을 수 있어요.",
+  "h": "9184666b"
+ },
+ "dattendn.nam-sinh-chu": {
+  "t": "사업주 태어난 해",
+  "h": "124634b4"
+ },
+ "dattendn.nganh-nghe": {
+  "t": "업종",
+  "h": "63d9f4dd"
+ },
+ "dattendn.nhap-nam-sinh-nguoi-chu-nganh": {
+  "t": "사업주의 태어난 해·업종·사업 형태를 입력하면 납음 오행을 계산해 이름 짓기의 기반을 만들어요.",
+  "h": "203d0ee8"
+ },
+ "dattendn.san-xuat-cong-nghiep": {
+  "t": "제조 / 산업",
+  "h": "f4a5458e"
+ },
+ "dattendn.tai-chinh-dich-vu": {
+  "t": "금융 / 서비스",
+  "h": "67bbe42d"
+ },
+ "dattendn.ten-dang-can-nhac-tuy-chon": {
+  "t": "고려 중인 이름 (선택)",
+  "h": "1ccc6b3d"
+ },
+ "dattendn.ten-nguoi-chu-tuy-chon": {
+  "t": "사업주 이름 (선택)",
+  "h": "d5b78ffe"
+ },
+ "dattendn.thoi-trang-lam-dep": {
+  "t": "패션 / 뷰티",
+  "h": "72a2b0cf"
+ },
+ "dattendn.thong-tin-dat-ten-doanh-nghiep": {
+  "t": "사업 이름 짓기를 위한 정보",
+  "h": "8d822dd3"
+ },
+ "dattendn.thuong-hieu-shop": {
+  "t": "브랜드 / 샵",
+  "h": "aa184029"
+ },
+ "dattendn.thuong-mai-ban-le": {
+  "t": "상업 / 소매",
+  "h": "991ccb29"
+ },
+ "dattendn.truoc-khi-thanh-lap": {
+  "t": "설립하기<br>전에",
+  "h": "0f9e340e"
+ },
+ "dattendn.y-te-suc-khoe": {
+  "t": "의료 / 건강",
+  "h": "13ca73cd"
  },
  "daycon.2-xem-truoc-chan-dung-con": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">아이 초상 미리보기</span>",
@@ -4310,6 +4602,38 @@
  "js.baocao.thu-lai-sau-it-phut": {
   "t": ". 잠시 후 다시 시도해 주세요.",
   "h": "0795401e"
+ },
+ "js.battrach.chip1": {
+  "t": "집은 어느 방위가 가장 잘 맞나요?",
+  "h": "cc262fd1"
+ },
+ "js.battrach.chip2": {
+  "t": "주방은 어느 방향에 두는 게 좋나요?",
+  "h": "3eafdc4a"
+ },
+ "js.battrach.chip3": {
+  "t": "침대는 어느 쪽을 향하게 해야 하나요?",
+  "h": "08ee9028"
+ },
+ "js.battrach.chip4": {
+  "t": "나쁜 방위를 피할 수 없다면 어떻게 액막이하나요?",
+  "h": "8900960b"
+ },
+ "js.battrach.dong-tu-menh": {
+  "t": "동사명",
+  "h": "860976af"
+ },
+ "js.battrach.greeting": {
+  "t": "회원님의 본명괘는 **{q}**({n})예요. 어떤 일의 방위를 묻고 싶으세요?",
+  "h": "9701f4f7"
+ },
+ "js.battrach.label": {
+  "t": "팔택 · {q} · {n}",
+  "h": "38326507"
+ },
+ "js.battrach.tay-tu-menh": {
+  "t": "서사명",
+  "h": "e606c821"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10)’ — 자세히 풀이해 주세요",
@@ -6846,6 +7170,146 @@
  "js.dali.vui-long-thu-lai": {
   "t": "다시 시도해 주세요.",
   "h": "2f1d18ee"
+ },
+ "js.datten.be-gai": {
+  "t": "여자아이",
+  "h": "af93dba0"
+ },
+ "js.datten.be-trai": {
+  "t": "남자아이",
+  "h": "274225bc"
+ },
+ "js.datten.bo": {
+  "t": "아버지",
+  "h": "dbbdf270"
+ },
+ "js.datten.chip1": {
+  "t": "본명에 맞는 이름 12개를 뜻과 함께 추천해 주세요",
+  "h": "61954ded"
+ },
+ "js.datten.chip2": {
+  "t": "중간 이름(가운데 이름)은 어떤 게 어울릴까요?",
+  "h": "d59d5d7a"
+ },
+ "js.datten.chip3": {
+  "t": "우리 아이는 어떤 오행을 보충해야 하나요?",
+  "h": "2906ae80"
+ },
+ "js.datten.chip4": {
+  "t": "아버지와 어머니의 띠에 모두 맞는 이름은요?",
+  "h": "ab665896"
+ },
+ "js.datten.con-gt": {
+  "t": "아이({gt})",
+  "h": "8467608e"
+ },
+ "js.datten.dang-goi-y": {
+  "t": "아이 이름을 추천하는 중… 보통 15~25초 걸려요",
+  "h": "8dc8ac9b"
+ },
+ "js.datten.greeting": {
+  "t": "아이의 본명 기반을 만들었어요 (아이 **{cc}** · {h}). 어떤 방향으로 이름을 추천해 드릴까요?",
+  "h": "9e3424d6"
+ },
+ "js.datten.label": {
+  "t": "{gt} 이름 짓기 · 성 {ho} · {cc}",
+  "h": "21f99fa5"
+ },
+ "js.datten.loi-colon": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.datten.me": {
+  "t": "어머니",
+  "h": "dfc6f90b"
+ },
+ "js.datten.res-head": {
+  "t": "간지 기반 · {ho}의 오행 — {gt}",
+  "h": "a23fe671"
+ },
+ "js.datten.res-note": {
+  "t": "아이의 납음은 <b>{na}</b>, 오행은 <b>{h}</b>이에요. 이름에는 아이를 <b>상생</b>해 주는 오행(<b>{hs}</b>이(가) <b>{h}</b>을(를) 생함)이나 <b>같은 오행</b>의 글자를 골라 본명을 북돋우고, 극하는 오행은 피하세요. 아이와 부모 모두에게 맞는 구체적인 이름 목록은 선생님께 물어보세요.",
+  "h": "9bb9a346"
+ },
+ "js.datten.vui-long-nhap-ho": {
+  "t": "성과 아이·아버지·어머니의 태어난 해를 입력해 주세요.",
+  "h": "1e4e4c71"
+ },
+ "js.dattendn.cham-ten": {
+  "t": "이름 **{ten}**의 점수를 매겨 드릴까요, 아니면 새 이름을 추천해 드릴까요?",
+  "h": "76d469bb"
+ },
+ "js.dattendn.chip-5-ten": {
+  "t": "본명에 맞는 이름 5개를 뜻과 함께 추천해 주세요",
+  "h": "4ab7930a"
+ },
+ "js.dattendn.chip-5-ten-khac": {
+  "t": "더 잘 맞는 다른 이름 5개를 추천해 주세요",
+  "h": "f3587ad3"
+ },
+ "js.dattendn.chip-bo-hanh": {
+  "t": "이름은 어떤 오행을 보충해야 하나요?",
+  "h": "f5cf0ccb"
+ },
+ "js.dattendn.chip-bo-hanh-chu": {
+  "t": "사업주를 위해 이름은 어떤 오행을 보충해야 하나요?",
+  "h": "6a1e73a2"
+ },
+ "js.dattendn.chip-cham": {
+  "t": "이름 \"{ten}\"은(는) 사업주의 본명과 업종에 맞나요?",
+  "h": "1039c58a"
+ },
+ "js.dattendn.chip-khi-chat": {
+  "t": "이 업종의 기질에 맞는 이름은 무엇인가요?",
+  "h": "c012da1f"
+ },
+ "js.dattendn.chip-slogan": {
+  "t": "이 이름에 어울리는 슬로건은요?",
+  "h": "8ab01273"
+ },
+ "js.dattendn.chip-tranh": {
+  "t": "이름을 지을 때 피해야 할 글자나 소리는요?",
+  "h": "0493dad1"
+ },
+ "js.dattendn.dang-goi-y": {
+  "t": "사업 이름을 추천하는 중… 보통 15~25초 걸려요",
+  "h": "9fbbe937"
+ },
+ "js.dattendn.goi-y-huong": {
+  "t": "어떤 방향으로 이름을 추천해 드릴까요?",
+  "h": "3ccf4b50"
+ },
+ "js.dattendn.greeting": {
+  "t": "사업주의 본명 기반을 만들었어요 (사업주 **{cc}** · {h}, 업종: {nganh}).",
+  "h": "cd3c37de"
+ },
+ "js.dattendn.label": {
+  "t": "사업 이름 짓기 · {nganh} · 사업주 {cc}",
+  "h": "179775da"
+ },
+ "js.dattendn.nganh": {
+  "t": "업종",
+  "h": "549e0d8e"
+ },
+ "js.dattendn.res-head": {
+  "t": "사업주 본명 기반 · {nganh}",
+  "h": "7d04ac4e"
+ },
+ "js.dattendn.res-note": {
+  "t": "사업주의 납음은 <b>{na}</b>, 오행은 <b>{h}</b>이에요. 사업 이름에는 사업주의 본명을 북돋우도록 <b>상생 / 같은</b> 오행의 글자(<b>{hs}</b>이(가) <b>{h}</b>을(를) 생함)를 고르고, 동시에 <b>{nganh}</b> 업종의 기질에 맞고 읽기 쉽고 기억하기 쉬워야 해요. 구체적인 이름 목록은 선생님께 물어보세요.",
+  "h": "cdd000b9"
+ },
+ "js.dattendn.ten-can-nhac": {
+  "t": "고려 중인 이름",
+  "h": "a8f03dde"
+ },
+ "js.dattendn.tuoi-chu": {
+  "t": "사업주 띠",
+  "h": "c6ec0cf0"
+ },
+ "js.dattendn.vui-long-nhap-nam-sinh": {
+  "t": "사업주의 태어난 해를 입력하고 업종을 선택해 주세요.",
+  "h": "20fcc631"
  },
  "js.daycon.5-la-muc-giua-cua-hang": {
   "t": "\n\n5는 수천 건의 아이 명반을 기준으로 한 중간값이며 “10점 만점에 5점”이라는 뜻이 아니에요. 축의 양 끝 모두 가치가 있어요.",
@@ -9695,6 +10159,30 @@
   "t": "▸ 전체 명반 보기",
   "h": "fee98465"
  },
+ "js.lucnham.chip1": {
+  "t": "이 일은 성사될까요, 실패할까요?",
+  "h": "fa905597"
+ },
+ "js.lucnham.chip2": {
+  "t": "언제쯤 결과가 나올까요?",
+  "h": "698cf33d"
+ },
+ "js.lucnham.chip3": {
+  "t": "나아가야 할까요, 물러나야 할까요?",
+  "h": "0735035e"
+ },
+ "js.lucnham.chip4": {
+  "t": "삼전은 전개에 대해 무엇을 말해 주나요?",
+  "h": "43368fd7"
+ },
+ "js.lucnham.greeting": {
+  "t": "**대육임** 과를 세웠어요 — 일 {ngay}, 시 {gio}, {tdem}. 취전은 **{phap}** 법에 따르며 초전은 **{chi} · {tuong}**이에요. 어떤 일을 묻고 싶으세요?",
+  "h": "9e3179ca"
+ },
+ "js.lucnham.label": {
+  "t": "육임 · {ngay} {gio}시",
+  "h": "f76e2ec9"
+ },
  "js.maihoa.bien-quai-noi-ket-cuc-the": {
   "t": "변괘는 결말을 어떻게 말해 주나요?",
   "h": "3c27069a"
@@ -10314,6 +10802,42 @@
  "js.ngaytot.label": {
   "t": "길일 · {y}년 {m}월",
   "h": "cbd777dc"
+ },
+ "js.nguhanhten.ban-muon-luan": {
+  "t": " 무엇을 풀이해 드릴까요?",
+  "h": "4117a169"
+ },
+ "js.nguhanhten.chip1": {
+  "t": "제 이름은 왜 이 점수가 나왔나요?",
+  "h": "2cd3c5cc"
+ },
+ "js.nguhanhten.chip2": {
+  "t": "이름의 어떤 글자가 점수를 깎고 있나요?",
+  "h": "c694fac3"
+ },
+ "js.nguhanhten.chip3": {
+  "t": "본명에 더 잘 맞는 글자를 몇 개 추천해 주세요",
+  "h": "665a28f8"
+ },
+ "js.nguhanhten.chip4": {
+  "t": "주된 글자는 본명을 어떻게 북돋나요?",
+  "h": "f1b4cfcb"
+ },
+ "js.nguhanhten.greeting": {
+  "t": "이름 **{ten}**의 오행({tc})을 조회했어요.",
+  "h": "a78484c2"
+ },
+ "js.nguhanhten.label": {
+  "t": "이름의 오행 · {ten}",
+  "h": "c5234e3e"
+ },
+ "js.nguhanhten.menh": {
+  "t": " 본명은 **{m}**이에요.",
+  "h": "ef0b1bae"
+ },
+ "js.nguhanhten.tc-item": {
+  "t": "{n}획, {h}",
+  "h": "341d0ba2"
  },
  "js.nguoikhac.ban-cam-nang": {
   "t": "가이드",
@@ -13999,6 +14523,118 @@
   "t": "명보 자미두수",
   "h": "33336b26"
  },
+ "js.shellui.bt-cd-0": {
+  "t": "재물운, 건강, 가장 좋은 발전",
+  "h": "ba2fcc5f"
+ },
+ "js.shellui.bt-cd-1": {
+  "t": "건강, 장수, 의료 인연",
+  "h": "f2b6c53a"
+ },
+ "js.shellui.bt-cd-2": {
+  "t": "결혼과 사업의 안정",
+  "h": "eaa1aa66"
+ },
+ "js.shellui.bt-cd-3": {
+  "t": "안정, 편안한 거처, 굳건히 지킴",
+  "h": "9d377762"
+ },
+ "js.shellui.bt-cu-0": {
+  "t": "현관문, 침실, 업무용 책상",
+  "h": "9598844f"
+ },
+ "js.shellui.bt-cu-1": {
+  "t": "침실, 침대 머리 방향",
+  "h": "ff2bdd07"
+ },
+ "js.shellui.bt-cu-2": {
+  "t": "제단, 거실, 식탁",
+  "h": "18d25898"
+ },
+ "js.shellui.bt-cu-3": {
+  "t": "창고, 화장실, 보조 방",
+  "h": "b7d8011a"
+ },
+ "js.shellui.bt-cung-menh": {
+  "t": "본명궁",
+  "h": "3dc5da1d"
+ },
+ "js.shellui.bt-cung-n": {
+  "t": "제{c}궁",
+  "h": "b2bf68e0"
+ },
+ "js.shellui.bt-dong-hop": {
+  "t": "동사명 — 동·동남·남·북 방위에 맞음",
+  "h": "37481bde"
+ },
+ "js.shellui.bt-dong-tu-menh": {
+  "t": "동사명",
+  "h": "860976af"
+ },
+ "js.shellui.bt-hd-0": {
+  "t": "재물 손실, 구설, 좋지 않은 일",
+  "h": "224b7b52"
+ },
+ "js.shellui.bt-hd-1": {
+  "t": "애정 문제, 건강 악화",
+  "h": "234cd72a"
+ },
+ "js.shellui.bt-hd-2": {
+  "t": "소인배, 은밀한 훼방",
+  "h": "e6644f6c"
+ },
+ "js.shellui.bt-hd-3": {
+  "t": "운이 끊김, 중병, 큰 재앙",
+  "h": "72905f33"
+ },
+ "js.shellui.bt-hu-0": {
+  "t": "현관문과 침실은 피하세요",
+  "h": "460c1435"
+ },
+ "js.shellui.bt-hu-1": {
+  "t": "제단과 침실은 두지 마세요",
+  "h": "f713260a"
+ },
+ "js.shellui.bt-hu-2": {
+  "t": "주방과 안방은 피하세요",
+  "h": "8fd85d89"
+ },
+ "js.shellui.bt-hu-3": {
+  "t": "문이나 침대를 두지 마세요",
+  "h": "fde05a0d"
+ },
+ "js.shellui.bt-khong-tinh-duoc-cung": {
+  "t": "본명궁을 계산하지 못했어요.",
+  "h": "ce9bd2a4"
+ },
+ "js.shellui.bt-ngu-hanh": {
+  "t": "오행",
+  "h": "68ac2473"
+ },
+ "js.shellui.bt-nhap-nam-hop-le": {
+  "t": "올바른 출생 연도(1900~2010)를 입력해 주세요.",
+  "h": "8363c20b"
+ },
+ "js.shellui.bt-nhom": {
+  "t": "그룹",
+  "h": "ce7eab0a"
+ },
+ "js.shellui.bt-tay-hop": {
+  "t": "서사명 — 서·서북·동북·서남 방위에 맞음",
+  "h": "6f187842"
+ },
+ "js.shellui.bt-tay-tu-menh": {
+  "t": "서사명",
+  "h": "e606c821"
+ },
+ "js.shellui.bt-title": {
+  "t": "{y}년 — 제{c}궁 {q} — {n}",
+  "h": "44ed4978"
+ },
+ "js.shellui.bt-vi-tri-cung": {
+  "t": "궁의 위치",
+  "h": "5a046cd0"
+ },
  "js.shellui.buoc-o-huong-xau-thi-hoa": {
   "t": "나쁜 방향에 묶어 두었다면 어떻게 풀어야 하나요?",
   "h": "8900960b"
@@ -14734,6 +15370,82 @@
  "js.shellui.dien-tuong-cua-toi": {
   "t": "내 면상",
   "h": "d5784500"
+ },
+ "js.shellui.dln-chua-lap-duoc": {
+  "t": "지금은 반을 세우지 못했어요. 다시 시도해 주세요. (육임반은 실제 절기에 따른 월장이 필요해 서버에서 세워야 해요.)",
+  "h": "349a0a1c"
+ },
+ "js.shellui.dln-dang-lap": {
+  "t": "육임반을 세우는 중…",
+  "h": "24a55230"
+ },
+ "js.shellui.dln-gio-b": {
+  "t": "시 <b>{v}</b>",
+  "h": "d7ddd40f"
+ },
+ "js.shellui.dln-hanh-vuong-suy": {
+  "t": "오행 {h} — {vs}",
+  "h": "aafd8bf9"
+ },
+ "js.shellui.dln-khoa-the": {
+  "t": "과체",
+  "h": "1a2eeeba"
+ },
+ "js.shellui.dln-ngay-b": {
+  "t": "일 <b>{v}</b>",
+  "h": "5eec8778"
+ },
+ "js.shellui.dln-nguyet-tuong": {
+  "t": "월장 <b>{nt}</b>이(가) 점시 <b>{ct}</b>에 가해짐",
+  "h": "17b75e38"
+ },
+ "js.shellui.dln-note": {
+  "t": "월장을 점시에 가해 천반을 돌려요. 12천장은 일간의 귀인 위치에서 배치해요 (낮에는 주귀인, 밤에는 야귀인을 써요).",
+  "h": "c0123ca5"
+ },
+ "js.shellui.dln-phep-thu-truyen": {
+  "t": "취전법",
+  "h": "cddbdb0f"
+ },
+ "js.shellui.dln-quy-nhan": {
+  "t": "귀인 <b>{tb}</b>이(가) <b>{db}</b> 위에",
+  "h": "f66202db"
+ },
+ "js.shellui.dln-roi-tuan-khong": {
+  "t": "공망에 듦",
+  "h": "7118ae11"
+ },
+ "js.shellui.dln-tam-truyen": {
+  "t": "삼전",
+  "h": "68b2f0a5"
+ },
+ "js.shellui.dln-than-sat": {
+  "t": "신살",
+  "h": "365af4b4"
+ },
+ "js.shellui.dln-thang-b": {
+  "t": "월 <b>{v}</b>",
+  "h": "1da6071f"
+ },
+ "js.shellui.dln-thien-ban-gia-dia-ban": {
+  "t": "천반이 지반에 가해짐",
+  "h": "67a30bc5"
+ },
+ "js.shellui.dln-tren": {
+  "t": "{v} 위",
+  "h": "6adfd61e"
+ },
+ "js.shellui.dln-tu-khoa": {
+  "t": "사과",
+  "h": "56938410"
+ },
+ "js.shellui.dln-tuan-khong": {
+  "t": "공망 <b>{v}</b>",
+  "h": "ecffad13"
+ },
+ "js.shellui.dln-voi-can-ngay": {
+  "t": "일간과의 관계: {v}",
+  "h": "e6e06e50"
  },
  "js.shellui.doi": {
   "t": "변경",
@@ -15927,6 +16639,14 @@
   "t": "대화 기록",
   "h": "0fd2afce"
  },
+ "js.shellui.ln-nhap-ngay-thang-nam": {
+  "t": "일·월·연을 입력해 주세요.",
+  "h": "f001ab44"
+ },
+ "js.shellui.ln-title": {
+  "t": "{date} — {chi}시 ({time})",
+  "h": "453d1ef5"
+ },
  "js.shellui.loai-cong-ty": {
   "t": "회사",
   "h": "65bf381e"
@@ -16674,6 +17394,190 @@
  "js.shellui.nguyen": {
   "t": "Nguyễn",
   "h": "e79eb3d7"
+ },
+ "js.shellui.nh-a1": {
+  "t": "\"{name}\"은(는) {th}로 본명 {m}을(를) 생해 줘요 — 이름이 본명을 길러 주는 가장 좋은 경우예요",
+  "h": "cda46ea4"
+ },
+ "js.shellui.nh-a2": {
+  "t": "\"{name}\"은(는) 본명과 같은 {m}이라 본명의 기운을 북돋아 줘요",
+  "h": "ed7b09ef"
+ },
+ "js.shellui.nh-a3": {
+  "t": "\"{name}\"은(는) {th}로 본명 {m}을(를) 극해요",
+  "h": "ef919a58"
+ },
+ "js.shellui.nh-a4": {
+  "t": "본명 {m}이(가) \"{name}\"의 {th}을(를) 극해요",
+  "h": "67e11e3c"
+ },
+ "js.shellui.nh-a5": {
+  "t": "본명 {m}이(가) {th}을(를) 생해 본명의 기운이 빠져나가요",
+  "h": "78fd2981"
+ },
+ "js.shellui.nh-a6": {
+  "t": "\"{name}\"은(는) {th}로 본명 {m}을(를) 생하지도 극하지도 않아요",
+  "h": "512e9b02"
+ },
+ "js.shellui.nh-b": {
+  "t": "{k}글자에 {d}가지 오행",
+  "h": "c86c53a6"
+ },
+ "js.shellui.nh-c1": {
+  "t": "{sr} 오행의 글자가 있어 본명 {m}을(를) 생해요",
+  "h": "8063d498"
+ },
+ "js.shellui.nh-c2": {
+  "t": "본명과 같은 {m} 오행의 글자가 있어요",
+  "h": "b7d30df6"
+ },
+ "js.shellui.nh-c3": {
+  "t": "본명 {m}을(를) 생하거나 같은 오행인 글자가 아직 없어요",
+  "h": "415fa26e"
+ },
+ "js.shellui.nh-caveat": {
+  "t": "이 점수 체계는 비교하기 쉽도록 사이트가 정한 것으로, 고전에 있는 숫자가 아니에요. 이미 쓰고 있는 이름이라면 점수가 낮아도 <strong>나쁜 이름이라는 뜻이 아니며</strong> 이름을 바꿀 이유도 아니에요. 이 부분은 새 이름을 고를 때만 도움이 돼요.",
+  "h": "d0c49d0c"
+ },
+ "js.shellui.nh-cd-ten": {
+  "t": "이름 점수",
+  "h": "56e67c7e"
+ },
+ "js.shellui.nh-cd-ten-menh": {
+  "t": "이름 점수 — 본명 {m}",
+  "h": "d700b3c1"
+ },
+ "js.shellui.nh-chua-cham-duoc": {
+  "t": "이름 주인의 <strong>본명</strong>을 몰라서 아직 점수를 매길 수 없어요. 여기서 바로 고르세요:",
+  "h": "f7e87909"
+ },
+ "js.shellui.nh-chua-co-trong-bang": {
+  "t": "표에 아직 없음",
+  "h": "26374f9c"
+ },
+ "js.shellui.nh-d1": {
+  "t": "{h} 오행 글자 {k}개가 본명을 극해요",
+  "h": "ecab105a"
+ },
+ "js.shellui.nh-d2": {
+  "t": "본명을 극하는 글자가 없어요",
+  "h": "c6ffe9f6"
+ },
+ "js.shellui.nh-goi-y-tron-bo": {
+  "t": "본명에 맞는 이름 전체 추천 보기 →",
+  "h": "0457a007"
+ },
+ "js.shellui.nh-khong-biet-menh": {
+  "t": "본인의 본명을 모르시나요?",
+  "h": "afcf54e4"
+ },
+ "js.shellui.nh-la": {
+  "t": "주된 글자와 본명의 조화",
+  "h": "55588954"
+ },
+ "js.shellui.nh-lb": {
+  "t": "오행 균형",
+  "h": "2ceb2151"
+ },
+ "js.shellui.nh-lc": {
+  "t": "이름에 본명을 북돋는 글자가 있음",
+  "h": "40185ecf"
+ },
+ "js.shellui.nh-ld": {
+  "t": "본명을 극하는 글자가 없음",
+  "h": "88245630"
+ },
+ "js.shellui.nh-nb1": {
+  "t": "이름에 본명을 생하는 {sr} 오행 글자가 이미 있어요. 더 보태려면 {m} 오행 글자를 골라 북돋우세요.",
+  "h": "1f2ab4f1"
+ },
+ "js.shellui.nh-nb2": {
+  "t": "{sr}은(는) 본명 {m}을(를) 생해요 — 이 오행의 글자가 본명을 길러 줘요.",
+  "h": "388f50d5"
+ },
+ "js.shellui.nh-net-don-vi": {
+  "t": "{n}획 (일의 자리: {d})",
+  "h": "cc03c651"
+ },
+ "js.shellui.nh-nhap-ho-ten": {
+  "t": "성명을 입력해 주세요.",
+  "h": "852de967"
+ },
+ "js.shellui.nh-nhap-net-thu-cong": {
+  "t": "획수 직접 입력",
+  "h": "60923759"
+ },
+ "js.shellui.nh-rel-cung": {
+  "t": "주된 글자 \"<strong>{name}</strong>\"은(는) <strong>{th}</strong>로, 본명 <strong>{m}</strong>과(와) <strong>같은 오행</strong>이에요. 좋은 보완이 되어 본명의 기운을 북돋아 줘요.",
+  "h": "ae1602fe"
+ },
+ "js.shellui.nh-rel-khac-menh": {
+  "t": "주된 글자 \"<strong>{name}</strong>\"은(는) <strong>{th}</strong>로 <strong>본명 {m}을(를) 극해요</strong> ({th}극{m}). 민간에서는 조정을 고려해 볼 만하다고 봐요.",
+  "h": "cfb34dae"
+ },
+ "js.shellui.nh-rel-menh-khac": {
+  "t": "주된 글자 \"<strong>{name}</strong>\"은(는) <strong>{th}</strong>로, 본명 {m}이(가) 이름의 오행을 극해요 ({m}극{th}). 민간에서는 조정을 고려해 볼 만하다고 봐요.",
+  "h": "084dea54"
+ },
+ "js.shellui.nh-rel-menh-sinh": {
+  "t": "주된 글자 \"<strong>{name}</strong>\"은(는) <strong>{th}</strong>로, 본명 {m}이(가) 이름의 오행을 생해요 ({m}→{th}). 보통이며 해는 없어요.",
+  "h": "6b8b312d"
+ },
+ "js.shellui.nh-rel-sinh-menh": {
+  "t": "주된 글자 \"<strong>{name}</strong>\"은(는) <strong>{th}</strong>로 <strong>본명 {m}을(를) 생해요</strong> ({th}→{m}). 좋아요, 이름이 본명을 길러 줘요.",
+  "h": "e867c9b3"
+ },
+ "js.shellui.nh-rel-trung-tinh": {
+  "t": "주된 글자 \"<strong>{name}</strong>\"은(는) <strong>{th}</strong>, 본명은 <strong>{m}</strong>이며 직접적인 상생도 상극도 없어요. 중립이에요.",
+  "h": "c5e52f31"
+ },
+ "js.shellui.nh-so-net": {
+  "t": "획수",
+  "h": "6942afa1"
+ },
+ "js.shellui.nh-sug-head": {
+  "t": "이름을 고르는 중이라면",
+  "h": "4307da08"
+ },
+ "js.shellui.nh-sug-p": {
+  "t": "<strong>{boi}</strong> 오행 글자를 우선하세요. {note} <strong>{tranh}</strong> 오행 글자는 피하세요 (본명 {m}을(를) 극해요).",
+  "h": "4634af56"
+ },
+ "js.shellui.nh-title-suffix": {
+  "t": " — 글자별 오행",
+  "h": "502b979c"
+ },
+ "js.shellui.nh-toi-da-6": {
+  "t": "음절은 최대 6개예요.",
+  "h": "a95e6e3b"
+ },
+ "js.shellui.nh-tra-hanzii": {
+  "t": "hanzii.net에서 조회 →",
+  "h": "d84d1c1b"
+ },
+ "js.shellui.nh-tra-menh": {
+  "t": "출생 연도로 본명 조회하기 →",
+  "h": "83b945be"
+ },
+ "js.shellui.nh-v1": {
+  "t": "본명과 매우 잘 맞음",
+  "h": "8afe9243"
+ },
+ "js.shellui.nh-v2": {
+  "t": "본명과 잘 맞음",
+  "h": "44069c43"
+ },
+ "js.shellui.nh-v3": {
+  "t": "무난함",
+  "h": "9f497b1e"
+ },
+ "js.shellui.nh-v4": {
+  "t": "살펴볼 만한 부분이 있음",
+  "h": "12311aa6"
+ },
+ "js.shellui.nh-v5": {
+  "t": "살펴볼 만한 부분이 많음",
+  "h": "e71f844e"
  },
  "js.shellui.nhan-tuong-cua-toi": {
   "t": "내 안상",
@@ -17566,6 +18470,110 @@
  "js.shellui.zalo": {
   "t": "Zalo",
   "h": "53b71aec"
+ },
+ "js.solaso.bao-cao": {
+  "t": "리포트",
+  "h": "7013ca8b"
+ },
+ "js.solaso.chua-co-la-so-nhom": {
+  "t": "이 그룹에는 아직 명반이 없어요.",
+  "h": "79bf9444"
+ },
+ "js.solaso.chua-dat-ten": {
+  "t": "이름 없음",
+  "h": "dfb078dd"
+ },
+ "js.solaso.combo-1-s": {
+  "t": "두 가지를 묶어 사면 따로 사는 것보다 저렴해요",
+  "h": "584d7fc7"
+ },
+ "js.solaso.combo-1-t": {
+  "t": "콤보: 자미두수 풀이 + 사주",
+  "h": "c69e7864"
+ },
+ "js.solaso.combo-2-s": {
+  "t": "자미두수 풀이 + 사주 + 인생 사이클 + 연운",
+  "h": "12345b3e"
+ },
+ "js.solaso.combo-2-t": {
+  "t": "콤보: 4개 도구 풀세트",
+  "h": "0726a4ab"
+ },
+ "js.solaso.da-co-xem-lai": {
+  "t": "✓ 보유 · 다시 보기",
+  "h": "308bad31"
+ },
+ "js.solaso.rel-ban-be": {
+  "t": "친구",
+  "h": "159fe485"
+ },
+ "js.solaso.rel-dong-nghiep": {
+  "t": "동료",
+  "h": "d8e2bdd8"
+ },
+ "js.solaso.rel-gia-dinh": {
+  "t": "가족",
+  "h": "bf9b33dc"
+ },
+ "js.solaso.rel-khac": {
+  "t": "기타",
+  "h": "5b8a28ab"
+ },
+ "js.solaso.tool-cdtk": {
+  "t": "전생 초상",
+  "h": "e7d0f866"
+ },
+ "js.solaso.tool-cdvc": {
+  "t": "배우자 초상",
+  "h": "eb21b5ef"
+ },
+ "js.solaso.tool-ctcd": {
+  "t": "인생 사이클",
+  "h": "38c0c6ce"
+ },
+ "js.solaso.tool-dc": {
+  "t": "명반으로 하는 자녀 교육",
+  "h": "6043b236"
+ },
+ "js.solaso.tool-dntk": {
+  "t": "전생 인연",
+  "h": "c6b0ccb5"
+ },
+ "js.solaso.tool-hnt": {
+  "t": "이른 진로 안내",
+  "h": "826c517b"
+ },
+ "js.solaso.tool-lg": {
+  "t": "자미두수 풀이",
+  "h": "ab5a4607"
+ },
+ "js.solaso.tool-nk": {
+  "t": "다른 사람의 명반",
+  "h": "5a73dc8f"
+ },
+ "js.solaso.tool-nm": {
+  "t": "인맥",
+  "h": "78fdc03b"
+ },
+ "js.solaso.tool-tb": {
+  "t": "자평 사주팔자",
+  "h": "6ade52e9"
+ },
+ "js.solaso.tool-vhn": {
+  "t": "연운",
+  "h": "ba425e43"
+ },
+ "js.solaso.xem-tao": {
+  "t": "보기 / 만들기",
+  "h": "a89b1542"
+ },
+ "js.solaso.xoa-khoi-so": {
+  "t": "보관함에서 삭제",
+  "h": "4ba4a755"
+ },
+ "js.solaso.xoa-la-so-nay": {
+  "t": "이 명반을 보관함에서 삭제할까요?",
+  "h": "d9231d4e"
  },
  "js.taikhoan.ban-chua-chia-se-luot-nao": {
   "t": "아직 공유한 내역이 없습니다.",
@@ -23823,6 +24831,114 @@
   "t": "자미두수는 미래를 맞히는 것이 아니라, 나를 이해하고 더 나은 선택을 하도록 돕습니다.",
   "h": "ae92de9d"
  },
+ "lucnham.1-nhap-ngay-gio": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">날짜·시각 입력</span>",
+  "h": "953e7b97"
+ },
+ "lucnham.dang-phan-van-chuyen-tien-bac": {
+  "t": "돈이나 애정, 지금 당장 정해야 할 결정으로 고민 중인가요? 현재 시각과 날짜에 딱 맞춰 점을 쳐서 핵심에 답해 드려요. 묻는 일에 곧바로 들어가는 짧은 풀이를 받아 보세요.",
+  "h": "295b866e"
+ },
+ "lucnham.de-trong-la-lay-gio-hien": {
+  "t": "비워 두면 현재 시각을 써요. 시스템이 대육임 과를 세워 사과·삼전·귀인과 『고변점』에 따른 풀이를 돌려줘요.",
+  "h": "1e494a7c"
+ },
+ "lucnham.gio-can-xem": {
+  "t": "볼 시각",
+  "h": "84e96644"
+ },
+ "lucnham.gio-dan-03-05h": {
+  "t": "인시 (03–05시)",
+  "h": "a2d01564"
+ },
+ "lucnham.gio-dau-17-19h": {
+  "t": "유시 (17–19시)",
+  "h": "d17bfbc2"
+ },
+ "lucnham.gio-hoi-21-23h": {
+  "t": "해시 (21–23시)",
+  "h": "9721a904"
+ },
+ "lucnham.gio-mao-05-07h": {
+  "t": "묘시 (05–07시)",
+  "h": "58eab8cc"
+ },
+ "lucnham.gio-mui-13-15h": {
+  "t": "미시 (13–15시)",
+  "h": "56d4bde0"
+ },
+ "lucnham.gio-ngo-11-13h": {
+  "t": "오시 (11–13시)",
+  "h": "8b9d2da7"
+ },
+ "lucnham.gio-suu-01-03h": {
+  "t": "축시 (01–03시)",
+  "h": "33993400"
+ },
+ "lucnham.gio-than-15-17h": {
+  "t": "신시 (15–17시)",
+  "h": "9d910299"
+ },
+ "lucnham.gio-thin-07-09h": {
+  "t": "진시 (07–09시)",
+  "h": "24c10915"
+ },
+ "lucnham.gio-tuat-19-21h": {
+  "t": "술시 (19–21시)",
+  "h": "8c0c8255"
+ },
+ "lucnham.gio-ty-09-11h": {
+  "t": "사시 (09–11시)",
+  "h": "4f543b45"
+ },
+ "lucnham.gio-ty-23-01h": {
+  "t": "자시 (23–01시)",
+  "h": "b64ae149"
+ },
+ "lucnham.hoi-thay-luan-than-tuong": {
+  "t": "✦ 선생님께 신장 풀이 묻기",
+  "h": "fd4349af"
+ },
+ "lucnham.luan-theo-khao-bien-chiem": {
+  "t": "『고변점』에<br>따른 풀이",
+  "h": "d2082bef"
+ },
+ "lucnham.luc-nham-gian": {
+  "t": "육임 간이판",
+  "h": "a7f92fcb"
+ },
+ "lucnham.luc-nham-gian-12-than-tuong": {
+  "t": "<b>육임 간이판</b><span>시각·날짜별 12신장</span>",
+  "h": "337b9381"
+ },
+ "lucnham.luc-nham-gian-tra-12-than": {
+  "t": "육임 간이판 — 시각/날짜별 12신장과 당직 신이 길한지 흉한지 조회해요. 만남·재물·출행에 대한 풀이는 선생님께 물어보세요.",
+  "h": "554217a5"
+ },
+ "lucnham.luc-nham-gian-tu-vi-minh": {
+  "t": "육임 간이판 — 명보 자미두수",
+  "h": "fd05d989"
+ },
+ "lucnham.luc-nham-la-mot-trong-tam": {
+  "t": "육임은 중국 고대 술수 「삼식」의 하나로, 천반과 지반을 현재 시각·날짜에 맞춰 과를 세워요. 풀이는 묻는 구체적인 일에 초점을 두고, 반 위 천장의 위치를 근거로 해요.",
+  "h": "1c7538cd"
+ },
+ "lucnham.ngay-gio-can-xem": {
+  "t": "볼 날짜·시각",
+  "h": "80c37086"
+ },
+ "lucnham.quy-nhan-dan-loi": {
+  "t": "귀인이<br>이끌어줌",
+  "h": "b1fa7db6"
+ },
+ "lucnham.tu-khoa-tam-truyen": {
+  "t": "사과<br>삼전",
+  "h": "dfa03fb9"
+ },
+ "lucnham.xem-que-b": {
+  "t": "과 세우기 →",
+  "h": "f19970b5"
+ },
  "maihoa.1-lap-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">괘 세우기</span>",
   "h": "b51a3df6"
@@ -24654,6 +25770,98 @@
  "ngaytot.xem-lich": {
   "t": "달력 보기 →",
   "h": "6fa85107"
+ },
+ "nguhanhten.can-bang-ngu-hanh": {
+  "t": "오행<br>균형",
+  "h": "6beeac0b"
+ },
+ "nguhanhten.can-bang-ngu-hanh-h4ql": {
+  "t": "오행 균형",
+  "h": "d1b5ef33"
+ },
+ "nguhanhten.chua-tim-thay-chu-han-cho": {
+  "t": "⚠ 아래 음절에 해당하는 한자를 찾지 못했어요. 획수를 직접 입력해 주세요 (<a href=\"https://hanzii.net\" target=\"_blank\" style=\"color:var(--tx-blue)\">hanzii.net</a>에서 조회):",
+  "h": "464b3314"
+ },
+ "nguhanhten.diem-so-hop-khac": {
+  "t": "합·극<br>점수",
+  "h": "1b721b9d"
+ },
+ "nguhanhten.ho-va-ten-day-du": {
+  "t": "성명(전체)",
+  "h": "e920e42c"
+ },
+ "nguhanhten.hoa": {
+  "t": "화",
+  "h": "be792fa1"
+ },
+ "nguhanhten.hoi-thay-luan-sau-ngu-hanh": {
+  "t": "✦ 선생님께 이름의 오행 깊이 풀이받기",
+  "h": "ba1b2c72"
+ },
+ "nguhanhten.khong-ro-bo-qua": {
+  "t": "잘 모름 / 건너뛰기",
+  "h": "941d7cdc"
+ },
+ "nguhanhten.moc": {
+  "t": "목",
+  "h": "4bd601ae"
+ },
+ "nguhanhten.mot-cai-ten-goi-hang-ngay": {
+  "t": "매일 불리는 이름에도 저마다의 오행이 있어요. 본명(命)과 어울리는지 극하는지 확인해 본 사람은 드물어요. 성명을 입력하면 오행 점수와 분명한 결론을 무료로 받아 볼 수 있어요.",
+  "h": "3e585f76"
+ },
+ "nguhanhten.ngu-hanh-ban-menh-tuy-chon": {
+  "t": "본명 오행 (선택)",
+  "h": "c90318f2"
+ },
+ "nguhanhten.ngu-hanh-kim-moc-thuy-hoa": {
+  "t": "오행(금·목·수·화·토)은 다섯 가지 기본 요소 사이의 상생·상극 법칙을 설명하는 중국 고대 학설로, 여러 동양 명리학의 토대가 돼요. 모든 소리·글자·숫자는 오행 중 하나로 귀속시켜 본명과의 합·극을 대조할 수 있어요.",
+  "h": "bcca1f1c"
+ },
+ "nguhanhten.ngu-hanh-ten": {
+  "t": "이름의 오행",
+  "h": "9b92ea0c"
+ },
+ "nguhanhten.ngu-hanh-ten-ngu-hanh-tung": {
+  "t": "<b>이름의 오행</b><span>글자별 오행과 균형</span>",
+  "h": "32d338b2"
+ },
+ "nguhanhten.ngu-hanh-ten-tu-vi-minh": {
+  "t": "이름의 오행 — 명보 자미두수",
+  "h": "2de02e4f"
+ },
+ "nguhanhten.ngu-hanh-tung-chu": {
+  "t": "글자별<br>오행",
+  "h": "f7103aec"
+ },
+ "nguhanhten.nhap-du-ho-ten-co-dau": {
+  "t": "성 + 이름을 성조 부호와 함께 띄어쓰기로 구분해 입력",
+  "h": "aefee322"
+ },
+ "nguhanhten.nhap-ho-ten-day-du-co": {
+  "t": "성명을 입력하세요. 본명 오행도 선택할 수 있어요. 오행 균형 도표, 점수, 그리고 본명과 합인지 극인지에 대한 결론을 받아요.",
+  "h": "2fd9ddb3"
+ },
+ "nguhanhten.nhap-ten-tieng-viet-tra-chu": {
+  "t": "베트남어 이름을 입력하면 한자·획수·글자별 오행, 오행 균형, 본명과의 대조를 알 수 있어요. 더 깊은 풀이는 선생님께 물어보세요.",
+  "h": "f620e146"
+ },
+ "nguhanhten.tho": {
+  "t": "토",
+  "h": "9a0da463"
+ },
+ "nguhanhten.thuy": {
+  "t": "수",
+  "h": "f354741d"
+ },
+ "nguhanhten.tra-ngu-hanh-ten": {
+  "t": "이름의 오행 조회하기 →",
+  "h": "bfb81211"
+ },
+ "nguhanhten.vd-nguyen-van-an": {
+  "t": "예: Nguyễn Văn An",
+  "h": "4811bda0"
  },
  "nguoikhac.2-xem-truoc-cam-nang": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">가이드 미리보기</span>",
@@ -26310,6 +27518,26 @@
  "sc.xem-tuoi-sinh-con-tu-vi": {
   "t": "자녀 출산 띠 보기 — 명보 자미두수",
   "h": "23026bbb"
+ },
+ "solaso.chua-co-la-so-nao-trong": {
+  "t": "명반 보관함에 아직 명반이 없어요.<br>어떤 도구에서든 생년월일을 입력하면 명반이 자동으로 여기에 들어와요.",
+  "h": "f40b05ed"
+ },
+ "solaso.dang-nhap-dang-ky": {
+  "t": "로그인 / 가입",
+  "h": "2bcf279e"
+ },
+ "solaso.dang-nhap-de-xem-so-la": {
+  "t": "저장된 명반 보관함을 보려면 로그인하세요.",
+  "h": "4fa47b77"
+ },
+ "solaso.la-so-da-luu-so-la": {
+  "t": "<b>저장된 명반</b><span>계정별 명반 보관함 — 관계 그룹별로 정리돼요. 명반의 \"리포트\"를 누르면 그 명반의 리포트를 보거나 만들 수 있어요.</span>",
+  "h": "703b7bd9"
+ },
+ "solaso.la-so-da-luu-tu-vi": {
+  "t": "저장된 명반 — 명보 자미두수",
+  "h": "183c05e5"
  },
  "taikhoan.add-mcp-server-chon-streamable-http": {
   "t": "<strong>Add MCP server</strong> → <strong>Streamable HTTP</strong> 선택.",

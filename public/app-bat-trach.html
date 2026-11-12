@@ -110,7 +110,7 @@ body.chat-first-live .bt-grid{grid-template-columns:1fr}
         <p data-i18n="battrach2.nhap-nam-sinh-va-gioi-tinh" class="sub">Nhập năm sinh và giới tính. Hệ thống tính mệnh quái theo đúng năm sinh, trả về mệnh quái, cung và bảng chi tiết 8 hướng tốt – xấu.</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="width:120px"><label data-i18n="kimlau.nam-sinh-duong-lich">Năm sinh dương lịch</label><input type="number" id="year" placeholder="1990" min="1900" max="2010"></div>
-          <div class="fg" style="width:110px"><label data-i18n="giosinh.gioi-tinh">Giới tính</label><select id="gender"><option value="nam">Nam</option><option data-i18n="laso.nu" value="nu">Nữ</option></select></div>
+          <div class="fg" style="width:110px"><label data-i18n="giosinh.gioi-tinh">Giới tính</label><select id="gender"><option data-i18n="giosinh.nam-gioi" value="nam">Nam</option><option data-i18n="laso.nu" value="nu">Nữ</option></select></div>
           <button class="btn-go" id="btnGo" onclick="calculate()">
             <span class="bg-label"><span class="ic" data-icon="compass"></span><b id="btnGoLabel" data-i18n="battrach2.tra-huong-bat-trach">Tra hướng Bát Trạch →</b></span>
             <small data-i18n="battu.mien-phi">Miễn phí</small>
@@ -170,11 +170,12 @@ body.chat-first-live .bt-grid{grid-template-columns:1fr}
 // trên, cùng mẫu huong-nghiep-tre).
 window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'bat-trach'};</script>
-<script src="/tools-shared/bat-trach.js?v=1"></script>
+<script src="/tools-shared/bat-trach.js?v=3"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/shell.js?v=150"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
+<script src="/tools-shared/glossary.js?v=5"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/bat-trach.js với trang standalone.
 function calculate(){
@@ -193,11 +194,13 @@ function calculate(){
   wsStepsSet(2); // Nhận kết quả — mệnh quái + bảng 8 hướng đã tính xong
   document.getElementById('btnEdit').style.display='';
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
+  // Nhãn nhóm đã dịch ("Đông Tứ Mệnh" → khoá bt-*) CHỈ để hiển thị; r.data.nhom giữ chữ Việt gửi rail.
+  var _nhomLb=/^Đông/.test(r.data.nhom)?_tvmbT('js.battrach.dong-tu-menh','Đông Tứ Mệnh'):_tvmbT('js.battrach.tay-tu-menh','Tây Tứ Mệnh');
   Shell.setContext({
     scenario:{type:'bat-trach',data:r.data},
-    label:'Bát Trạch · '+r.data.menhQuai+' · '+r.data.nhom,
-    greeting:'Cung mệnh của bạn là **'+r.data.menhQuai+'** ('+r.data.nhom+'). Bạn muốn hỏi hướng cho việc gì?',
-    chips:['Hướng nhà nào hợp nhất?','Bếp nên đặt hướng nào?','Giường ngủ quay hướng nào?','Buộc ở hướng xấu thì hóa giải sao?']
+    label:_tvmbT('js.battrach.label','Bát Trạch · {q} · {n}',{q:_tvmbG('quai',r.data.menhQuai),n:_nhomLb}),
+    greeting:_tvmbT('js.battrach.greeting','Cung mệnh của bạn là **{q}** ({n}). Bạn muốn hỏi hướng cho việc gì?',{q:_tvmbG('quai',r.data.menhQuai),n:_nhomLb}),
+    chips:[_tvmbT('js.battrach.chip1','Hướng nhà nào hợp nhất?'),_tvmbT('js.battrach.chip2','Bếp nên đặt hướng nào?'),_tvmbT('js.battrach.chip3','Giường ngủ quay hướng nào?'),_tvmbT('js.battrach.chip4','Buộc ở hướng xấu thì hóa giải sao?')]
   });
   var _btLines=['Hướng Bát Trạch — năm '+r.data.nam+' ('+(r.data.gioiTinh==='nam'?'Nam':'Nữ')+')'];
   _btLines.push('Cung mệnh: '+r.data.cung+' — '+r.data.menhQuai+' ('+r.data.quaiHanh+') — '+r.data.nhom);

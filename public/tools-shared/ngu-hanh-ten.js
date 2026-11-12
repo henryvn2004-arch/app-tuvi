@@ -264,6 +264,19 @@ const DB = {
   'ứng':{h:'應',n:17},
 };
 
+// Chữ HIỂN THỊ qua I18n.tv + glossary (trang /<locale>/); vi / trang không nạp ⇒ chữ Việt nguyên.
+// `railData`, `note`/`label`/`verdict` gốc (gửi rail/server) GIỮ chữ Việt — bản hiển thị đi qua `disp*` ở từng phần.
+// Họ tên/âm tiết người nhập là DỮ LIỆU: không dịch.
+function _tv(key, vi, vars) {
+  const I = root.I18n;
+  if (I && I.tv) return I.tv(key, vi, vars);
+  return vars ? vi.replace(/\{(\w+)\}/g, (x, n) => (vars[n] !== undefined ? vars[n] : x)) : vi;
+}
+function _g(kind, v) {
+  const g = root.TuviGlossary;
+  return g && v ? g.t(kind, v) : v;
+}
+const _h = (h) => _g('hanh', h);
 const H_COLOR = {Mộc:'#1E6B3C',Hỏa:'#C0392B',Thổ:'#9A7B3A',Kim:'#5a6a72',Thủy:'#1455A4'};
 const SINH = {Mộc:'Hỏa',Hỏa:'Thổ',Thổ:'Kim',Kim:'Thủy',Thủy:'Mộc'};
 const SINH_REV = {Hỏa:'Mộc',Thổ:'Hỏa',Kim:'Thổ',Thủy:'Kim',Mộc:'Thủy'};
@@ -280,9 +293,9 @@ function netToHanh(n) {
   // ── Parse họ tên thô → mảng âm tiết {display,key,h?,n?} ──
   function parseSyls(raw) {
     raw = (raw || '').trim();
-    if (!raw) return { ok: false, error: 'Vui lòng nhập họ và tên.' };
+    if (!raw) return { ok: false, error: _tv('js.shellui.nh-nhap-ho-ten', 'Vui lòng nhập họ và tên.') };
     const parts = raw.split(/\s+/).filter(Boolean);
-    if (parts.length > 6) return { ok: false, error: 'Tối đa 6 âm tiết.' };
+    if (parts.length > 6) return { ok: false, error: _tv('js.shellui.nh-toi-da-6', 'Tối đa 6 âm tiết.') };
     const syls = parts.map((p) => {
       const key = p.toLowerCase().normalize('NFC');
       const entry = DB[key];
@@ -293,7 +306,7 @@ function netToHanh(n) {
 
   // ── Tiêu đề kết quả ──
   function titleText(syls) {
-    return syls.map((s) => s.display).join(' ') + ' — Ngũ Hành Từng Chữ';
+    return syls.map((s) => s.display).join(' ') + _tv('js.shellui.nh-title-suffix', ' — Ngũ Hành Từng Chữ');
   }
 
   // ── Thẻ ngũ hành từng chữ (+ danh sách chỉ số chưa tra được) ──
@@ -306,8 +319,8 @@ function netToHanh(n) {
           return `<div class="syl-card syl-unknown" id="scard-${i}">
         <div class="syl-viet">${s.display}</div>
         <div class="syl-han" style="color:#ccc;font-size:22px">?</div>
-        <div class="syl-net">Chưa có trong bảng</div>
-        <div class="syl-hanh">Nhập nét thủ công</div>
+        <div class="syl-net">${_tv('js.shellui.nh-chua-co-trong-bang', 'Chưa có trong bảng')}</div>
+        <div class="syl-hanh">${_tv('js.shellui.nh-nhap-net-thu-cong', 'Nhập nét thủ công')}</div>
       </div>`;
         }
         const hanh = netToHanh(s.n);
@@ -315,8 +328,8 @@ function netToHanh(n) {
         return `<div class="syl-card hanh-${hanh}" id="scard-${i}">
       <div class="syl-viet">${s.display}</div>
       <div class="syl-han">${s.h}</div>
-      <div class="syl-net">${s.n} nét (đơn vị: ${d})</div>
-      <div class="syl-hanh">${hanh}</div>
+      <div class="syl-net">${_tv('js.shellui.nh-net-don-vi', '{n} nét (đơn vị: {d})', { n: s.n, d })}</div>
+      <div class="syl-hanh">${_h(hanh)}</div>
     </div>`;
       })
       .join('');
@@ -330,10 +343,10 @@ function netToHanh(n) {
         (i) => `
       <div style="display:flex;flex-direction:column;gap:4px">
         <label style="font-size:12px;font-weight:600;color:var(--navy)">"${syls[i].display}"</label>
-        <input type="number" class="form-input" id="unk-${i}" placeholder="Số nét" min="1" max="64"
+        <input type="number" class="form-input" id="unk-${i}" placeholder="${_tv('js.shellui.nh-so-net', 'Số nét')}" min="1" max="64"
           style="width:88px;padding:6px 10px;font-size:13px" oninput="applyManual(${i})">
         <a href="https://hanzii.net/search/word/${encodeURIComponent(syls[i].display)}" target="_blank"
-          style="font-size:10px;color:var(--blue)">Tra tại hanzii.net →</a>
+          style="font-size:10px;color:var(--blue)">${_tv('js.shellui.nh-tra-hanzii', 'Tra tại hanzii.net →')}</a>
       </div>`
       )
       .join('');
@@ -348,13 +361,13 @@ function netToHanh(n) {
     const balanceHTML = Object.entries(hCount)
       .map(
         ([h, c]) =>
-          `<div class="nh-seg" style="flex:${c || 0.2};background:${H_COLOR[h]};min-width:${c ? 18 : 3}px">${c > 0 ? h : ''}</div>`
+          `<div class="nh-seg" style="flex:${c || 0.2};background:${H_COLOR[h]};min-width:${c ? 18 : 3}px">${c > 0 ? _h(h) : ''}</div>`
       )
       .join('');
     const legendHTML = Object.entries(hCount)
       .map(
         ([h, c]) =>
-          `<span class="nh-dot" style="background:${H_COLOR[h]}"></span><span style="color:${H_COLOR[h]};font-weight:600">${h}</span><span style="color:var(--text-lt);margin-right:10px"> ×${c}</span>`
+          `<span class="nh-dot" style="background:${H_COLOR[h]}"></span><span style="color:${H_COLOR[h]};font-weight:600">${_h(h)}</span><span style="color:var(--text-lt);margin-right:10px"> ×${c}</span>`
       )
       .join('');
     return { hCount, balanceHTML, legendHTML };
@@ -370,25 +383,25 @@ function netToHanh(n) {
       cls = 'rel-trun',
       icon = '◆';
     if (tenHanh === menh) {
-      rel = `Chữ tên chính "<strong>${lastName.display}</strong>" mang hành <strong>${tenHanh}</strong> — <strong>cùng hành</strong> với mệnh <strong>${menh}</strong>. Bổ trợ tốt, củng cố khí mệnh.`;
+      rel = _tv('js.shellui.nh-rel-cung', 'Chữ tên chính "<strong>{name}</strong>" mang hành <strong>{th}</strong> — <strong>cùng hành</strong> với mệnh <strong>{m}</strong>. Bổ trợ tốt, củng cố khí mệnh.', { name: lastName.display, th: _h(tenHanh), m: _h(menh) });
       cls = 'rel-tot';
       icon = '✦';
     } else if (SINH_REV[menh] === tenHanh) {
-      rel = `Chữ tên chính "<strong>${lastName.display}</strong>" mang hành <strong>${tenHanh}</strong> — <strong>sinh mệnh ${menh}</strong> (${tenHanh}→${menh}). Tốt, tên nuôi dưỡng mệnh cục.`;
+      rel = _tv('js.shellui.nh-rel-sinh-menh', 'Chữ tên chính "<strong>{name}</strong>" mang hành <strong>{th}</strong> — <strong>sinh mệnh {m}</strong> ({th}→{m}). Tốt, tên nuôi dưỡng mệnh cục.', { name: lastName.display, th: _h(tenHanh), m: _h(menh) });
       cls = 'rel-tot';
       icon = '✦';
     } else if (SINH[menh] === tenHanh) {
-      rel = `Chữ tên chính "<strong>${lastName.display}</strong>" mang hành <strong>${tenHanh}</strong> — mệnh ${menh} sinh ra hành tên (${menh}→${tenHanh}). Trung bình, không có hại.`;
+      rel = _tv('js.shellui.nh-rel-menh-sinh', 'Chữ tên chính "<strong>{name}</strong>" mang hành <strong>{th}</strong> — mệnh {m} sinh ra hành tên ({m}→{th}). Trung bình, không có hại.', { name: lastName.display, th: _h(tenHanh), m: _h(menh) });
     } else if (KHAC[tenHanh] === menh) {
-      rel = `Chữ tên chính "<strong>${lastName.display}</strong>" mang hành <strong>${tenHanh}</strong> — <strong>khắc mệnh ${menh}</strong> (${tenHanh} khắc ${menh}). Theo dân gian nên cân nhắc điều chỉnh.`;
+      rel = _tv('js.shellui.nh-rel-khac-menh', 'Chữ tên chính "<strong>{name}</strong>" mang hành <strong>{th}</strong> — <strong>khắc mệnh {m}</strong> ({th} khắc {m}). Theo dân gian nên cân nhắc điều chỉnh.', { name: lastName.display, th: _h(tenHanh), m: _h(menh) });
       cls = 'rel-xau';
       icon = '⚠';
     } else if (KHAC[menh] === tenHanh) {
-      rel = `Chữ tên chính "<strong>${lastName.display}</strong>" mang hành <strong>${tenHanh}</strong> — mệnh ${menh} khắc hành tên (${menh} khắc ${tenHanh}). Theo dân gian nên cân nhắc điều chỉnh.`;
+      rel = _tv('js.shellui.nh-rel-menh-khac', 'Chữ tên chính "<strong>{name}</strong>" mang hành <strong>{th}</strong> — mệnh {m} khắc hành tên ({m} khắc {th}). Theo dân gian nên cân nhắc điều chỉnh.', { name: lastName.display, th: _h(tenHanh), m: _h(menh) });
       cls = 'rel-xau';
       icon = '⚠';
     } else {
-      rel = `Chữ tên chính "<strong>${lastName.display}</strong>" mang hành <strong>${tenHanh}</strong>, mệnh <strong>${menh}</strong> — không tương sinh cũng không tương khắc trực tiếp. Trung tính.`;
+      rel = _tv('js.shellui.nh-rel-trung-tinh', 'Chữ tên chính "<strong>{name}</strong>" mang hành <strong>{th}</strong>, mệnh <strong>{m}</strong> — không tương sinh cũng không tương khắc trực tiếp. Trung tính.', { name: lastName.display, th: _h(tenHanh), m: _h(menh) });
     }
     return `<div class="rel-box ${cls}">${icon} ${rel}</div>`;
   }
@@ -441,27 +454,33 @@ function netToHanh(n) {
 
     // A. Chữ tên chính ↔ mệnh — trọng số lớn nhất vì đây là điều cổ pháp
     //    THẬT SỰ nói tới; ba phần sau là cách trang mở rộng ra cả tên.
-    let a, aNote;
+    let a, aNote, aDisp;
     if (SINH_REV[menh] === tenHanh) {
       a = 40;
       aNote = `"${lastName.display}" hành ${tenHanh} sinh mệnh ${menh} — tên nuôi mệnh, tốt nhất`;
+      aDisp = () => _tv('js.shellui.nh-a1', '"{name}" hành {th} sinh mệnh {m} — tên nuôi mệnh, tốt nhất', { name: lastName.display, th: _h(tenHanh), m: _h(menh) });
     } else if (tenHanh === menh) {
       a = 34;
       aNote = `"${lastName.display}" cùng hành ${menh} với mệnh — củng cố khí mệnh`;
+      aDisp = () => _tv('js.shellui.nh-a2', '"{name}" cùng hành {m} với mệnh — củng cố khí mệnh', { name: lastName.display, m: _h(menh) });
     } else if (KHAC[tenHanh] === menh) {
       a = 6;
       aNote = `"${lastName.display}" hành ${tenHanh} khắc mệnh ${menh}`;
+      aDisp = () => _tv('js.shellui.nh-a3', '"{name}" hành {th} khắc mệnh {m}', { name: lastName.display, th: _h(tenHanh), m: _h(menh) });
     } else if (KHAC[menh] === tenHanh) {
       a = 12;
       aNote = `mệnh ${menh} khắc hành ${tenHanh} của "${lastName.display}"`;
+      aDisp = () => _tv('js.shellui.nh-a4', 'mệnh {m} khắc hành {th} của "{name}"', { name: lastName.display, th: _h(tenHanh), m: _h(menh) });
     } else if (SINH[menh] === tenHanh) {
       a = 18;
       aNote = `mệnh ${menh} sinh ra hành ${tenHanh} — mệnh bị tiết khí`;
+      aDisp = () => _tv('js.shellui.nh-a5', 'mệnh {m} sinh ra hành {th} — mệnh bị tiết khí', { th: _h(tenHanh), m: _h(menh) });
     } else {
       a = 24;
       aNote = `"${lastName.display}" hành ${tenHanh} — không sinh không khắc mệnh ${menh}`;
+      aDisp = () => _tv('js.shellui.nh-a6', '"{name}" hành {th} — không sinh không khắc mệnh {m}', { name: lastName.display, th: _h(tenHanh), m: _h(menh) });
     }
-    parts.push({ label: 'Chữ tên chính hợp mệnh', diem: a, max: 40, note: aNote });
+    parts.push({ label: 'Chữ tên chính hợp mệnh', diem: a, max: 40, note: aNote, disp: () => ({ label: _tv('js.shellui.nh-la', 'Chữ tên chính hợp mệnh'), note: aDisp() }) });
 
     // B. Cân bằng ngũ hành cả tên — tên dồn hết vào một hành thì đơn điệu.
     const distinct = new Set(hanhs).size;
@@ -471,21 +490,25 @@ function netToHanh(n) {
       diem: b,
       max: 25,
       note: `${distinct} hành khác nhau trên ${known.length} chữ`,
+      disp: () => ({ label: _tv('js.shellui.nh-lb', 'Cân bằng ngũ hành'), note: _tv('js.shellui.nh-b', '{d} hành khác nhau trên {k} chữ', { d: distinct, k: known.length }) }),
     });
 
     // C. Trong tên có hành BỒI mệnh không
-    let c, cNote;
+    let c, cNote, cDisp;
     if (hanhs.indexOf(SINH_REV[menh]) > -1) {
       c = 20;
       cNote = `có chữ hành ${SINH_REV[menh]} — sinh mệnh ${menh}`;
+      cDisp = () => _tv('js.shellui.nh-c1', 'có chữ hành {sr} — sinh mệnh {m}', { sr: _h(SINH_REV[menh]), m: _h(menh) });
     } else if (hanhs.indexOf(menh) > -1) {
       c = 14;
       cNote = `có chữ cùng hành ${menh}`;
+      cDisp = () => _tv('js.shellui.nh-c2', 'có chữ cùng hành {m}', { m: _h(menh) });
     } else {
       c = 6;
       cNote = `chưa có chữ nào sinh hoặc cùng hành với mệnh ${menh}`;
+      cDisp = () => _tv('js.shellui.nh-c3', 'chưa có chữ nào sinh hoặc cùng hành với mệnh {m}', { m: _h(menh) });
     }
-    parts.push({ label: 'Tên có chữ bồi mệnh', diem: c, max: 20, note: cNote });
+    parts.push({ label: 'Tên có chữ bồi mệnh', diem: c, max: 20, note: cNote, disp: () => ({ label: _tv('js.shellui.nh-lc', 'Tên có chữ bồi mệnh'), note: cDisp() }) });
 
     // D. Chữ khắc mệnh
     const soKhac = hanhs.filter((h) => KHAC[h] === menh).length;
@@ -495,24 +518,33 @@ function netToHanh(n) {
       diem: d,
       max: 15,
       note: soKhac ? `${soKhac} chữ mang hành ${hanhKhac(menh)} khắc mệnh` : 'không có chữ nào khắc mệnh',
+      disp: () => ({
+        label: _tv('js.shellui.nh-ld', 'Không có chữ khắc mệnh'),
+        note: soKhac ? _tv('js.shellui.nh-d1', '{k} chữ mang hành {h} khắc mệnh', { k: soKhac, h: _h(hanhKhac(menh)) }) : _tv('js.shellui.nh-d2', 'không có chữ nào khắc mệnh'),
+      }),
     });
 
     const tong = a + b + c + d;
-    let verdict, cls;
+    let verdict, cls, vDisp;
     if (tong >= 85) {
       verdict = 'Rất hợp mệnh';
+      vDisp = () => _tv('js.shellui.nh-v1', 'Rất hợp mệnh');
       cls = 'tot';
     } else if (tong >= 70) {
       verdict = 'Hợp mệnh';
+      vDisp = () => _tv('js.shellui.nh-v2', 'Hợp mệnh');
       cls = 'tot';
     } else if (tong >= 55) {
       verdict = 'Tạm ổn';
+      vDisp = () => _tv('js.shellui.nh-v3', 'Tạm ổn');
       cls = 'trun';
     } else if (tong >= 40) {
       verdict = 'Có chỗ đáng cân nhắc';
+      vDisp = () => _tv('js.shellui.nh-v4', 'Có chỗ đáng cân nhắc');
       cls = 'trun';
     } else {
       verdict = 'Nhiều chỗ đáng cân nhắc';
+      vDisp = () => _tv('js.shellui.nh-v5', 'Nhiều chỗ đáng cân nhắc');
       cls = 'xau';
     }
 
@@ -530,6 +562,10 @@ function netToHanh(n) {
       tenChinh: lastName.display,
       tenChinhHanh: tenHanh,
       nenBoi,
+      verdictDisp: vDisp,
+      nenBoiDisp: () => daCoMe
+        ? _tv('js.shellui.nh-nb1', 'Tên đã có chữ hành {sr} sinh mệnh. Muốn thêm thì chọn chữ hành {m} để củng cố.', { sr: _h(SINH_REV[menh]), m: _h(menh) })
+        : _tv('js.shellui.nh-nb2', 'Hành {sr} sinh mệnh {m} — chữ mang hành này nuôi mệnh cục.', { sr: _h(SINH_REV[menh]), m: _h(menh) }),
       nenBoiVi: daCoMe
         ? `Tên đã có chữ hành ${SINH_REV[menh]} sinh mệnh. Muốn thêm thì chọn chữ hành ${menh} để củng cố.`
         : `Hành ${SINH_REV[menh]} sinh mệnh ${menh} — chữ mang hành này nuôi mệnh cục.`,
@@ -556,37 +592,38 @@ function netToHanh(n) {
       // ngay ở đó. Cùng luật với M3 ("mỗi lần chuyển trang ở đáy phễu là một
       // lần rơi") và với ô nhập lá số ngay trong thẻ Vận hôm nay.
       const nut = HANH_LIST.map(
-        (h) => `<button type="button" class="nh-menh-btn" data-nh-menh="${h}">${h}</button>`
+        (h) => `<button type="button" class="nh-menh-btn" data-nh-menh="${h}">${_h(h)}</button>`
       ).join('');
       return `<div class="nh-score nh-score-empty">
-      <div class="nh-score-head">Chấm điểm tên</div>
-      <p class="nh-score-empty-p">Chưa chấm được vì chưa biết <strong>mệnh cục</strong> của người mang tên. Chọn ngay tại đây:</p>
+      <div class="nh-score-head">${_tv('js.shellui.nh-cd-ten', 'Chấm điểm tên')}</div>
+      <p class="nh-score-empty-p">${_tv('js.shellui.nh-chua-cham-duoc', 'Chưa chấm được vì chưa biết <strong>mệnh cục</strong> của người mang tên. Chọn ngay tại đây:')}</p>
       <div class="nh-menh-pick">${nut}</div>
-      <p class="nh-score-empty-sub">Không biết mệnh của mình?</p>
-      <a class="nh-link" href="${napAm}">Tra mệnh theo năm sinh →</a>
+      <p class="nh-score-empty-sub">${_tv('js.shellui.nh-khong-biet-menh', 'Không biết mệnh của mình?')}</p>
+      <a class="nh-link" href="${napAm}">${_tv('js.shellui.nh-tra-menh', 'Tra mệnh theo năm sinh →')}</a>
     </div>`;
     }
     const bars = s.parts
+      .map((p) => ({ p, v: p.disp() }))
       .map(
-        (p) => `<div class="nh-part">
-        <div class="nh-part-top"><span class="nh-part-l">${p.label}</span><span class="nh-part-n">${p.diem}/${p.max}</span></div>
+        ({ p, v }) => `<div class="nh-part">
+        <div class="nh-part-top"><span class="nh-part-l">${v.label}</span><span class="nh-part-n">${p.diem}/${p.max}</span></div>
         <div class="nh-part-track"><div class="nh-part-fill" style="width:${Math.round((p.diem / p.max) * 100)}%"></div></div>
-        <div class="nh-part-note">${p.note}</div>
+        <div class="nh-part-note">${v.note}</div>
       </div>`
       )
       .join('');
     const chips = s.goiY.map((g) => `<span class="nh-chip">${g}</span>`).join('');
     return `<div class="nh-score nh-score-${s.cls}">
-      <div class="nh-score-head">Chấm điểm tên — mệnh ${s.menh}</div>
-      <div class="nh-score-top"><div class="nh-score-num">${s.tong}<span>/100</span></div><div class="nh-score-verdict">${s.verdict}</div></div>
+      <div class="nh-score-head">${_tv('js.shellui.nh-cd-ten-menh', 'Chấm điểm tên — mệnh {m}', { m: _h(s.menh) })}</div>
+      <div class="nh-score-top"><div class="nh-score-num">${s.tong}<span>/100</span></div><div class="nh-score-verdict">${s.verdictDisp()}</div></div>
       <div class="nh-parts">${bars}</div>
       <div class="nh-sug">
-        <div class="nh-sug-head">Nếu đang CHỌN tên</div>
-        <p class="nh-sug-p">Nên ưu tiên chữ hành <strong>${s.nenBoi}</strong>. ${s.nenBoiVi} Nên tránh chữ hành <strong>${s.nenTranh}</strong> (khắc mệnh ${s.menh}).</p>
+        <div class="nh-sug-head">${_tv('js.shellui.nh-sug-head', 'Nếu đang CHỌN tên')}</div>
+        <p class="nh-sug-p">${_tv('js.shellui.nh-sug-p', 'Nên ưu tiên chữ hành <strong>{boi}</strong>. {note} Nên tránh chữ hành <strong>{tranh}</strong> (khắc mệnh {m}).', { boi: _h(s.nenBoi), note: s.nenBoiDisp(), tranh: _h(s.nenTranh), m: _h(s.menh) })}</p>
         <div class="nh-chips">${chips}</div>
-        <a class="nh-link" href="${datTen}">Gợi ý trọn bộ tên hợp mệnh →</a>
+        <a class="nh-link" href="${datTen}">${_tv('js.shellui.nh-goi-y-tron-bo', 'Gợi ý trọn bộ tên hợp mệnh →')}</a>
       </div>
-      <p class="nh-caveat">Thang điểm này do trang quy ước để so sánh cho dễ, không phải con số của cổ thư. Với một cái tên đã dùng, điểm thấp <strong>không có nghĩa là tên xấu</strong> và không phải lý do để đổi tên — phần này chỉ hữu ích khi bạn đang chọn tên mới.</p>
+      <p class="nh-caveat">${_tv('js.shellui.nh-caveat', 'Thang điểm này do trang quy ước để so sánh cho dễ, không phải con số của cổ thư. Với một cái tên đã dùng, điểm thấp <strong>không có nghĩa là tên xấu</strong> và không phải lý do để đổi tên — phần này chỉ hữu ích khi bạn đang chọn tên mới.')}</p>
     </div>`;
   }
 

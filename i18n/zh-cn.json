@@ -619,6 +619,78 @@
   "t": "依名称、工具搜索…",
   "h": "86f221f0"
  },
+ "battrach2.4-huong-dai-cat": {
+  "t": "4个<br>大吉方位",
+  "h": "0b0b6a6a"
+ },
+ "battrach2.4-huong-dai-hung": {
+  "t": "4个<br>大凶方位",
+  "h": "45c6e01a"
+ },
+ "battrach2.bang-8-huong-chi-tiet": {
+  "t": "<span class=\"res-block-title\">八方位详细表</span>",
+  "h": "0ef24790"
+ },
+ "battrach2.bat-trach-la-mot-truong-phai": {
+  "t": "八宅是传统风水的一个流派，将住宅依八卦分为八个方位，再与屋主的命卦对照，判断方位与位置的吉凶。<i>八宅明镜</i>是将此法系统化的古籍之一。",
+  "h": "daa2d3d2"
+ },
+ "battrach2.goi-y-dung": {
+  "t": "建议用途",
+  "h": "1e297636"
+ },
+ "battrach2.hoi-thay-huong-hop-cach-hoa": {
+  "t": "✦ 请问老师合适方位与化解之道",
+  "h": "d656b02e"
+ },
+ "battrach2.huong": {
+  "t": "方位",
+  "h": "05c861c1"
+ },
+ "battrach2.huong-bat-trach": {
+  "t": "八宅方位",
+  "h": "a9176f82"
+ },
+ "battrach2.huong-bat-trach-cung-menh-8": {
+  "t": "<b>八宅方位</b><span>命宫与八个吉凶方位</span>",
+  "h": "7f6f63a9"
+ },
+ "battrach2.huong-bat-trach-tu-vi-minh": {
+  "t": "八宅方位——明宝紫微斗数",
+  "h": "1dd7c74f"
+ },
+ "battrach2.menh-quai-cung-menh": {
+  "t": "命卦、<br>命宫",
+  "h": "a7cd9aa8"
+ },
+ "battrach2.mua-nha-thue-van-phong-roi": {
+  "t": "买了房、租了办公室才发现大门朝向与命卦不合，已经来不及。输入出生年与性别，付订金前就能知道该选哪个方位。",
+  "h": "22a1a2e8"
+ },
+ "battrach2.nam-sinh-gioi-tinh": {
+  "t": "出生年与性别",
+  "h": "2fe866aa"
+ },
+ "battrach2.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "输入出生年与性别。系统依出生年准确推算命卦，并回传命卦、宫位与八个吉凶方位的详细表。",
+  "h": "5374993f"
+ },
+ "battrach2.ten-huong": {
+  "t": "方位名称",
+  "h": "a2de1255"
+ },
+ "battrach2.tra-4-huong-dai-cat-va": {
+  "t": "依八宅命宫查找4个大吉方位与4个大凶方位——适合您的房屋、大门、厨房、床位朝向。更深入的解读可请教老师。",
+  "h": "4bcadf9b"
+ },
+ "battrach2.tra-huong-bat-trach": {
+  "t": "查找八宅方位 →",
+  "h": "e3808961"
+ },
+ "battrach2.y-nghia": {
+  "t": "意义",
+  "h": "b1973c6d"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">输入数据</span>",
   "h": "487c9507"
@@ -1862,6 +1934,226 @@
  "dali.tuong-hoc-da-mat-phuong-dong": {
   "t": "东方脸部肌肤相学认为，皮肤状态在某种程度上反映体内的健康，并与现代皮肤科学的观察互相对照。这种结合中西医的方式，把皮肤视为需要追踪的指针，而不只凭美感来评断。",
   "h": "466d834a"
+ },
+ "datten.12-goi-y-ten-chia": {
+  "t": "12个取名建议<br>分3组",
+  "h": "41bbf053"
+ },
+ "datten.2-xem-truoc-nen-menh": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览命理基础</span>",
+  "h": "6db12426"
+ },
+ "datten.be-gai": {
+  "t": "女孩",
+  "h": "af93dba0"
+ },
+ "datten.be-trai": {
+  "t": "男孩",
+  "h": "274225bc"
+ },
+ "datten.dat-ten-cho-con-la-quyet": {
+  "t": "为孩子取名是一生只做一次、人人都想拿捏稳妥的决定。输入全家人的生日，即可取得12个合五行的名字建议，并附汉越语词义，让您安心挑选。",
+  "h": "82b4de3d"
+ },
+ "datten.dat-ten-con-chon-ten-hop": {
+  "t": "<b>为孩子取名</b><span>依古法五行，挑选合孩子本命的名字</span>",
+  "h": "3d53836c"
+ },
+ "datten.dat-ten-con-hop-menh": {
+  "t": "依本命为孩子取名",
+  "h": "11462335"
+ },
+ "datten.dat-ten-con-tu-vi-minh": {
+  "t": "为孩子取名——明宝紫微斗数",
+  "h": "9805fdc3"
+ },
+ "datten.gioi-tinh-con": {
+  "t": "孩子性别",
+  "h": "39dacada"
+ },
+ "datten.goi-y-12-ten-hop": {
+  "t": "取得12个合命名字建议 →",
+  "h": "46b3b1ed"
+ },
+ "datten.goi-y-dat-ten-con-hop": {
+  "t": "依孩子与父母的干支、纳音五行，建议合孩子本命的名字。名字建议与词义解读可请教老师。",
+  "h": "295edb5c"
+ },
+ "datten.he-thong-doc-ngu-hanh-nap": {
+  "t": "系统解读孩子与父母的纳音五行，并建议分为3组、附汉越语词义的12个名字。",
+  "h": "ea884a81"
+ },
+ "datten.ho-cua-con": {
+  "t": "姓氏（孩子的）",
+  "h": "f4e1a613"
+ },
+ "datten.hoi-thay-goi-y-ten-hop": {
+  "t": "✦ 请老师建议合命的名字",
+  "h": "166f1459"
+ },
+ "datten.hop-ngu-hanh-con-bo": {
+  "t": "合孩子与父母<br>的五行",
+  "h": "622dcbc0"
+ },
+ "datten.kem-nghia-han-viet": {
+  "t": "附汉越语<br>词义",
+  "h": "6cd753b8"
+ },
+ "datten.nam-sinh-bo": {
+  "t": "爸爸的出生年",
+  "h": "a1009c64"
+ },
+ "datten.nam-sinh-con": {
+  "t": "孩子的出生年",
+  "h": "724a46be"
+ },
+ "datten.nam-sinh-me": {
+  "t": "妈妈的出生年",
+  "h": "bef8fb8f"
+ },
+ "datten.nguyen": {
+  "t": "Nguyễn",
+  "h": "e79eb3d7"
+ },
+ "datten.nhap-ho-gioi-tinh-va-nam": {
+  "t": "输入孩子的姓氏、性别，以及孩子、爸爸、妈妈的出生年，以推算纳音五行并创建取名基础。",
+  "h": "7a82f7d7"
+ },
+ "datten.thong-tin-de-dat-ten": {
+  "t": "取名所需数据",
+  "h": "a6b214ba"
+ },
+ "dattendn.2-xem-truoc-nen-menh-chu": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览负责人命理基础</span>",
+  "h": "a96b5042"
+ },
+ "dattendn.an-uong-f-b-nha-hang": {
+  "t": "餐饮／F&amp;B／餐厅",
+  "h": "4c6e0036"
+ },
+ "dattendn.bat-dong-san-xay-dung": {
+  "t": "不动产／营建",
+  "h": "6b5154b8"
+ },
+ "dattendn.cong-nghe-phan-mem": {
+  "t": "科技／软件",
+  "h": "2665d28f"
+ },
+ "dattendn.cong-ty": {
+  "t": "公司",
+  "h": "65bf381e"
+ },
+ "dattendn.cua-hang": {
+  "t": "商店",
+  "h": "050a31c8"
+ },
+ "dattendn.dat-ten-cong-ty-thuong-hieu": {
+  "t": "依纳音五行，为合负责人本命与行业的公司、品牌、商店取名。名字建议与词义、名字风水解读可请教老师。",
+  "h": "5b43e7d9"
+ },
+ "dattendn.dat-ten-doanh-nghiep": {
+  "t": "为事业取名",
+  "h": "86ab8b27"
+ },
+ "dattendn.dat-ten-doanh-nghiep-ten-cong": {
+  "t": "<b>为事业取名</b><span>合负责人本命的公司・品牌・商店名称</span>",
+  "h": "bed333e2"
+ },
+ "dattendn.dat-ten-doanh-nghiep-tu-vi": {
+  "t": "为事业取名——明宝紫微斗数",
+  "h": "81d7fe18"
+ },
+ "dattendn.de-trong-neu-muon-duoc-goi": {
+  "t": "若想取得全新建议请留空",
+  "h": "8130c366"
+ },
+ "dattendn.du-lich-khach-san": {
+  "t": "旅游／饭店",
+  "h": "5369cdde"
+ },
+ "dattendn.giao-duc-dao-tao": {
+  "t": "教育／培训",
+  "h": "f1adba55"
+ },
+ "dattendn.goi-y-ten-doanh-nghiep": {
+  "t": "取得事业名称建议 →",
+  "h": "6008d180"
+ },
+ "dattendn.he-thong-doc-ngu-hanh-nap": {
+  "t": "系统解读负责人的纳音五行与行业，并建议分为「纯越南语／汉越语／混合」3组的12个名称。",
+  "h": "7d99610f"
+ },
+ "dattendn.ho-kinh-doanh": {
+  "t": "个体户",
+  "h": "f886c8d3"
+ },
+ "dattendn.hop-menh-chu-nganh-nghe": {
+  "t": "合负责人<br>与行业",
+  "h": "cf10d77f"
+ },
+ "dattendn.khac": {
+  "t": "其他",
+  "h": "5b8a28ab"
+ },
+ "dattendn.loai-hinh-tuy-chon": {
+  "t": "型态（选填）",
+  "h": "1f3a6e19"
+ },
+ "dattendn.mot-cai-ten-hop-menh-co": {
+  "t": "合本命的名字能陪公司走完整段创业旅程——先随便取、之后再改，永远比一开始就选对更难。输入负责人的出生年，登记营业前即可取得12个名称建议。",
+  "h": "9184666b"
+ },
+ "dattendn.nam-sinh-chu": {
+  "t": "负责人的出生年",
+  "h": "124634b4"
+ },
+ "dattendn.nganh-nghe": {
+  "t": "行业别",
+  "h": "63d9f4dd"
+ },
+ "dattendn.nhap-nam-sinh-nguoi-chu-nganh": {
+  "t": "输入负责人的出生年、行业别与经营型态，以推算纳音五行并创建取名基础。",
+  "h": "203d0ee8"
+ },
+ "dattendn.san-xuat-cong-nghiep": {
+  "t": "制造／工业",
+  "h": "f4a5458e"
+ },
+ "dattendn.tai-chinh-dich-vu": {
+  "t": "金融／服务",
+  "h": "67bbe42d"
+ },
+ "dattendn.ten-dang-can-nhac-tuy-chon": {
+  "t": "考虑中的名称（选填）",
+  "h": "1ccc6b3d"
+ },
+ "dattendn.ten-nguoi-chu-tuy-chon": {
+  "t": "负责人姓名（选填）",
+  "h": "d5b78ffe"
+ },
+ "dattendn.thoi-trang-lam-dep": {
+  "t": "时尚／美妆",
+  "h": "72a2b0cf"
+ },
+ "dattendn.thong-tin-dat-ten-doanh-nghiep": {
+  "t": "为事业取名所需数据",
+  "h": "8d822dd3"
+ },
+ "dattendn.thuong-hieu-shop": {
+  "t": "品牌／店铺",
+  "h": "aa184029"
+ },
+ "dattendn.thuong-mai-ban-le": {
+  "t": "贸易／零售",
+  "h": "991ccb29"
+ },
+ "dattendn.truoc-khi-thanh-lap": {
+  "t": "创立<br>之前",
+  "h": "0f9e340e"
+ },
+ "dattendn.y-te-suc-khoe": {
+  "t": "医疗／健康",
+  "h": "13ca73cd"
  },
  "daycon.2-xem-truoc-chan-dung-con": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览孩子的肖像</span>",
@@ -4310,6 +4602,38 @@
  "js.baocao.thu-lai-sau-it-phut": {
   "t": "。请稍后再试。",
   "h": "0795401e"
+ },
+ "js.battrach.chip1": {
+  "t": "房屋哪个方位最适合我？",
+  "h": "cc262fd1"
+ },
+ "js.battrach.chip2": {
+  "t": "厨房该设在哪个方位？",
+  "h": "3eafdc4a"
+ },
+ "js.battrach.chip3": {
+  "t": "床该朝向哪个方位？",
+  "h": "08ee9028"
+ },
+ "js.battrach.chip4": {
+  "t": "若被迫面对凶方位，该如何化解？",
+  "h": "8900960b"
+ },
+ "js.battrach.dong-tu-menh": {
+  "t": "东四命",
+  "h": "860976af"
+ },
+ "js.battrach.greeting": {
+  "t": "您的命卦是**{q}**（{n}）。想问哪件事的方位？",
+  "h": "9701f4f7"
+ },
+ "js.battrach.label": {
+  "t": "八宅・{q}・{n}",
+  "h": "38326507"
+ },
+ "js.battrach.tay-tu-menh": {
+  "t": "西四命",
+  "h": "e606c821"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10) — 请帮我详细解读",
@@ -6846,6 +7170,146 @@
  "js.dali.vui-long-thu-lai": {
   "t": "请再试一次。",
   "h": "2f1d18ee"
+ },
+ "js.datten.be-gai": {
+  "t": "女孩",
+  "h": "af93dba0"
+ },
+ "js.datten.be-trai": {
+  "t": "男孩",
+  "h": "274225bc"
+ },
+ "js.datten.bo": {
+  "t": "爸爸",
+  "h": "dbbdf270"
+ },
+ "js.datten.chip1": {
+  "t": "请建议12个合命名字并附词义",
+  "h": "61954ded"
+ },
+ "js.datten.chip2": {
+  "t": "中间名（垫字）哪个合适？",
+  "h": "d59d5d7a"
+ },
+ "js.datten.chip3": {
+  "t": "孩子需要补哪个五行？",
+  "h": "2906ae80"
+ },
+ "js.datten.chip4": {
+  "t": "同时合爸爸与妈妈生肖的名字？",
+  "h": "ab665896"
+ },
+ "js.datten.con-gt": {
+  "t": "孩子（{gt}）",
+  "h": "8467608e"
+ },
+ "js.datten.dang-goi-y": {
+  "t": "正在为孩子建议名字⋯⋯通常需要15–25秒",
+  "h": "8dc8ac9b"
+ },
+ "js.datten.greeting": {
+  "t": "孩子的命理基础已备妥（孩子**{cc}**・{h}）。您希望朝哪个方向建议名字？",
+  "h": "9e3424d6"
+ },
+ "js.datten.label": {
+  "t": "为{gt}取名・姓{ho}・{cc}",
+  "h": "21f99fa5"
+ },
+ "js.datten.loi-colon": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.datten.me": {
+  "t": "妈妈",
+  "h": "dfc6f90b"
+ },
+ "js.datten.res-head": {
+  "t": "干支基础・{ho} 的五行——{gt}",
+  "h": "a23fe671"
+ },
+ "js.datten.res-note": {
+  "t": "孩子的纳音为<b>{na}</b>——五行属<b>{h}</b>。取名宜选五行能<b>相生</b>于孩子（<b>{hs}</b>生<b>{h}</b>）或<b>同行</b>的字来补益本命，避开相克之行。想知道同时合孩子与父母的具体名字清单，请问老师。",
+  "h": "9bb9a346"
+ },
+ "js.datten.vui-long-nhap-ho": {
+  "t": "请输入姓氏，以及孩子、爸爸、妈妈的出生年。",
+  "h": "1e4e4c71"
+ },
+ "js.dattendn.cham-ten": {
+  "t": "您想让我为名称**{ten}**评分，还是建议新名称？",
+  "h": "76d469bb"
+ },
+ "js.dattendn.chip-5-ten": {
+  "t": "请建议5个合命名称并附词义",
+  "h": "4ab7930a"
+ },
+ "js.dattendn.chip-5-ten-khac": {
+  "t": "请另外建议5个更合适的名称",
+  "h": "f3587ad3"
+ },
+ "js.dattendn.chip-bo-hanh": {
+  "t": "名称该补哪个五行？",
+  "h": "f5cf0ccb"
+ },
+ "js.dattendn.chip-bo-hanh-chu": {
+  "t": "名称该为负责人补哪个五行？",
+  "h": "6a1e73a2"
+ },
+ "js.dattendn.chip-cham": {
+  "t": "名称「{ten}」合负责人本命与行业吗？",
+  "h": "1039c58a"
+ },
+ "js.dattendn.chip-khi-chat": {
+  "t": "哪个名称合这个行业的气质？",
+  "h": "c012da1f"
+ },
+ "js.dattendn.chip-slogan": {
+  "t": "哪个口号适合这个名称？",
+  "h": "8ab01273"
+ },
+ "js.dattendn.chip-tranh": {
+  "t": "取名时该避开哪些字或音？",
+  "h": "0493dad1"
+ },
+ "js.dattendn.dang-goi-y": {
+  "t": "正在建议事业名称⋯⋯通常需要15–25秒",
+  "h": "9fbbe937"
+ },
+ "js.dattendn.goi-y-huong": {
+  "t": "您希望朝哪个方向建议名称？",
+  "h": "3ccf4b50"
+ },
+ "js.dattendn.greeting": {
+  "t": "负责人的命理基础已备妥（负责人**{cc}**・{h}，行业：{nganh}）。",
+  "h": "cd3c37de"
+ },
+ "js.dattendn.label": {
+  "t": "事业取名・{nganh}・负责人 {cc}",
+  "h": "179775da"
+ },
+ "js.dattendn.nganh": {
+  "t": "行业别",
+  "h": "549e0d8e"
+ },
+ "js.dattendn.res-head": {
+  "t": "负责人命理基础・{nganh}",
+  "h": "7d04ac4e"
+ },
+ "js.dattendn.res-note": {
+  "t": "负责人的纳音为<b>{na}</b>——五行属<b>{h}</b>。事业名称宜选五行<b>相生／相同</b>的字以补益负责人本命（<b>{hs}</b>生<b>{h}</b>），同时合<b>{nganh}</b>行业的气质、念起来顺口、容易记住。想知道具体名称清单，请问老师。",
+  "h": "cdd000b9"
+ },
+ "js.dattendn.ten-can-nhac": {
+  "t": "考虑中的名称",
+  "h": "a8f03dde"
+ },
+ "js.dattendn.tuoi-chu": {
+  "t": "负责人生肖",
+  "h": "c6ec0cf0"
+ },
+ "js.dattendn.vui-long-nhap-nam-sinh": {
+  "t": "请输入负责人的出生年并选择行业别。",
+  "h": "20fcc631"
  },
  "js.daycon.5-la-muc-giua-cua-hang": {
   "t": "\n\n5 是数千份孩童命盘的中间水准，并不是「10 分得 5 分」。轴的两端都各有价值。",
@@ -9695,6 +10159,30 @@
   "t": "▸ 查看完整命盘",
   "h": "fee98465"
  },
+ "js.lucnham.chip1": {
+  "t": "此事会成还是败？",
+  "h": "fa905597"
+ },
+ "js.lucnham.chip2": {
+  "t": "何时会有结果？",
+  "h": "698cf33d"
+ },
+ "js.lucnham.chip3": {
+  "t": "该进还是该退？",
+  "h": "0735035e"
+ },
+ "js.lucnham.chip4": {
+  "t": "三传对事态的发展说了什么？",
+  "h": "43368fd7"
+ },
+ "js.lucnham.greeting": {
+  "t": "已起**大六壬**课——日 {ngay}、时 {gio}、{tdem}。取传依**{phap}**之法，初传为**{chi}・{tuong}**。您想问什么事？",
+  "h": "9e3179ca"
+ },
+ "js.lucnham.label": {
+  "t": "六壬・{ngay} {gio}",
+  "h": "f76e2ec9"
+ },
  "js.maihoa.bien-quai-noi-ket-cuc-the": {
   "t": "变卦说明了怎样的结局？",
   "h": "3c27069a"
@@ -10314,6 +10802,42 @@
  "js.ngaytot.label": {
   "t": "吉日・{y}年{m}月",
   "h": "cbd777dc"
+ },
+ "js.nguhanhten.ban-muon-luan": {
+  "t": " 您想让我论析什么？",
+  "h": "4117a169"
+ },
+ "js.nguhanhten.chip1": {
+  "t": "为什么我的名字是这个分数？",
+  "h": "2cd3c5cc"
+ },
+ "js.nguhanhten.chip2": {
+  "t": "名字中哪个字拉低了分数？",
+  "h": "c694fac3"
+ },
+ "js.nguhanhten.chip3": {
+  "t": "推荐几个更合本命的字",
+  "h": "665a28f8"
+ },
+ "js.nguhanhten.chip4": {
+  "t": "主字如何补益本命？",
+  "h": "f1b4cfcb"
+ },
+ "js.nguhanhten.greeting": {
+  "t": "已查找姓名**{ten}**的五行（{tc}）。",
+  "h": "a78484c2"
+ },
+ "js.nguhanhten.label": {
+  "t": "姓名五行・{ten}",
+  "h": "c5234e3e"
+ },
+ "js.nguhanhten.menh": {
+  "t": " 本命为**{m}**。",
+  "h": "ef0b1bae"
+ },
+ "js.nguhanhten.tc-item": {
+  "t": "{n}画，{h}",
+  "h": "341d0ba2"
  },
  "js.nguoikhac.ban-cam-nang": {
   "t": "指南",
@@ -13999,6 +14523,118 @@
   "t": "明宝紫微斗数",
   "h": "33336b26"
  },
+ "js.shellui.bt-cd-0": {
+  "t": "财禄、健康、发展最佳",
+  "h": "ba2fcc5f"
+ },
+ "js.shellui.bt-cd-1": {
+  "t": "健康、长寿、医缘",
+  "h": "f2b6c53a"
+ },
+ "js.shellui.bt-cd-2": {
+  "t": "婚姻、事业长久",
+  "h": "eaa1aa66"
+ },
+ "js.shellui.bt-cd-3": {
+  "t": "平稳、安居、守成",
+  "h": "9d377762"
+ },
+ "js.shellui.bt-cu-0": {
+  "t": "大门、卧室、办公桌",
+  "h": "9598844f"
+ },
+ "js.shellui.bt-cu-1": {
+  "t": "卧室、床头朝向",
+  "h": "ff2bdd07"
+ },
+ "js.shellui.bt-cu-2": {
+  "t": "神桌、客厅、餐桌",
+  "h": "18d25898"
+ },
+ "js.shellui.bt-cu-3": {
+  "t": "仓库、厕所、次要房间",
+  "h": "b7d8011a"
+ },
+ "js.shellui.bt-cung-menh": {
+  "t": "命宫",
+  "h": "3dc5da1d"
+ },
+ "js.shellui.bt-cung-n": {
+  "t": "第{c}宫",
+  "h": "b2bf68e0"
+ },
+ "js.shellui.bt-dong-hop": {
+  "t": "东四命——适合东、东南、南、北方位",
+  "h": "37481bde"
+ },
+ "js.shellui.bt-dong-tu-menh": {
+  "t": "东四命",
+  "h": "860976af"
+ },
+ "js.shellui.bt-hd-0": {
+  "t": "破财、是非、不顺之事",
+  "h": "224b7b52"
+ },
+ "js.shellui.bt-hd-1": {
+  "t": "感情失和、健康衰退",
+  "h": "234cd72a"
+ },
+ "js.shellui.bt-hd-2": {
+  "t": "小人、暗中破坏",
+  "h": "e6644f6c"
+ },
+ "js.shellui.bt-hd-3": {
+  "t": "绝运、重病、大灾祸",
+  "h": "72905f33"
+ },
+ "js.shellui.bt-hu-0": {
+  "t": "避免用于大门、卧室",
+  "h": "460c1435"
+ },
+ "js.shellui.bt-hu-1": {
+  "t": "避免设神桌、卧室",
+  "h": "f713260a"
+ },
+ "js.shellui.bt-hu-2": {
+  "t": "避免设厨房、主卧",
+  "h": "8fd85d89"
+ },
+ "js.shellui.bt-hu-3": {
+  "t": "不设门、不放床",
+  "h": "fde05a0d"
+ },
+ "js.shellui.bt-khong-tinh-duoc-cung": {
+  "t": "无法推算命宫。",
+  "h": "ce9bd2a4"
+ },
+ "js.shellui.bt-ngu-hanh": {
+  "t": "五行",
+  "h": "68ac2473"
+ },
+ "js.shellui.bt-nhap-nam-hop-le": {
+  "t": "请输入有效的出生年份（1900–2010）。",
+  "h": "8363c20b"
+ },
+ "js.shellui.bt-nhom": {
+  "t": "组别",
+  "h": "ce7eab0a"
+ },
+ "js.shellui.bt-tay-hop": {
+  "t": "西四命——适合西、西北、东北、西南方位",
+  "h": "6f187842"
+ },
+ "js.shellui.bt-tay-tu-menh": {
+  "t": "西四命",
+  "h": "e606c821"
+ },
+ "js.shellui.bt-title": {
+  "t": "{y}年——第{c}宫 {q}——{n}",
+  "h": "44ed4978"
+ },
+ "js.shellui.bt-vi-tri-cung": {
+  "t": "宫位方位",
+  "h": "5a046cd0"
+ },
  "js.shellui.buoc-o-huong-xau-thi-hoa": {
   "t": "如果绑在不吉的方位，该如何化解？",
   "h": "8900960b"
@@ -14734,6 +15370,82 @@
  "js.shellui.dien-tuong-cua-toi": {
   "t": "我的面相",
   "h": "d5784500"
+ },
+ "js.shellui.dln-chua-lap-duoc": {
+  "t": "目前无法起课，请再试一次。（六壬课需依真实节气取月将，必须在服务器端起课。）",
+  "h": "349a0a1c"
+ },
+ "js.shellui.dln-dang-lap": {
+  "t": "正在起六壬课…",
+  "h": "24a55230"
+ },
+ "js.shellui.dln-gio-b": {
+  "t": "时 <b>{v}</b>",
+  "h": "d7ddd40f"
+ },
+ "js.shellui.dln-hanh-vuong-suy": {
+  "t": "五行 {h}——{vs}",
+  "h": "aafd8bf9"
+ },
+ "js.shellui.dln-khoa-the": {
+  "t": "课体",
+  "h": "1a2eeeba"
+ },
+ "js.shellui.dln-ngay-b": {
+  "t": "日 <b>{v}</b>",
+  "h": "5eec8778"
+ },
+ "js.shellui.dln-nguyet-tuong": {
+  "t": "月将 <b>{nt}</b> 加临占时 <b>{ct}</b>",
+  "h": "17b75e38"
+ },
+ "js.shellui.dln-note": {
+  "t": "月将加临占时以转天盘；十二天将依日干贵人之位安布（昼用昼贵人，夜用夜贵人）。",
+  "h": "c0123ca5"
+ },
+ "js.shellui.dln-phep-thu-truyen": {
+  "t": "取传之法",
+  "h": "cddbdb0f"
+ },
+ "js.shellui.dln-quy-nhan": {
+  "t": "贵人 <b>{tb}</b> 临 <b>{db}</b>",
+  "h": "f66202db"
+ },
+ "js.shellui.dln-roi-tuan-khong": {
+  "t": "落旬空",
+  "h": "7118ae11"
+ },
+ "js.shellui.dln-tam-truyen": {
+  "t": "三传",
+  "h": "68b2f0a5"
+ },
+ "js.shellui.dln-than-sat": {
+  "t": "神煞",
+  "h": "365af4b4"
+ },
+ "js.shellui.dln-thang-b": {
+  "t": "月 <b>{v}</b>",
+  "h": "1da6071f"
+ },
+ "js.shellui.dln-thien-ban-gia-dia-ban": {
+  "t": "天盘加地盘",
+  "h": "67a30bc5"
+ },
+ "js.shellui.dln-tren": {
+  "t": "临 {v}",
+  "h": "6adfd61e"
+ },
+ "js.shellui.dln-tu-khoa": {
+  "t": "四课",
+  "h": "56938410"
+ },
+ "js.shellui.dln-tuan-khong": {
+  "t": "旬空 <b>{v}</b>",
+  "h": "ecffad13"
+ },
+ "js.shellui.dln-voi-can-ngay": {
+  "t": "与日干的关系：{v}",
+  "h": "e6e06e50"
  },
  "js.shellui.doi": {
   "t": "更换",
@@ -15927,6 +16639,14 @@
   "t": "对话纪录",
   "h": "0fd2afce"
  },
+ "js.shellui.ln-nhap-ngay-thang-nam": {
+  "t": "请输入日、月、年。",
+  "h": "f001ab44"
+ },
+ "js.shellui.ln-title": {
+  "t": "{date}——{chi}时（{time}）",
+  "h": "453d1ef5"
+ },
  "js.shellui.loai-cong-ty": {
   "t": "公司",
   "h": "65bf381e"
@@ -16674,6 +17394,190 @@
  "js.shellui.nguyen": {
   "t": "王",
   "h": "e79eb3d7"
+ },
+ "js.shellui.nh-a1": {
+  "t": "「{name}」属{th}，生本命{m}——名字滋养本命，最为理想",
+  "h": "cda46ea4"
+ },
+ "js.shellui.nh-a2": {
+  "t": "「{name}」与本命同属{m}——巩固命气",
+  "h": "ed7b09ef"
+ },
+ "js.shellui.nh-a3": {
+  "t": "「{name}」属{th}，克本命{m}",
+  "h": "ef919a58"
+ },
+ "js.shellui.nh-a4": {
+  "t": "本命{m}克「{name}」的{th}",
+  "h": "67e11e3c"
+ },
+ "js.shellui.nh-a5": {
+  "t": "本命{m}生{th}——本命泄气",
+  "h": "78fd2981"
+ },
+ "js.shellui.nh-a6": {
+  "t": "「{name}」属{th}——不生也不克本命{m}",
+  "h": "512e9b02"
+ },
+ "js.shellui.nh-b": {
+  "t": "{k}个字中有{d}种不同五行",
+  "h": "c86c53a6"
+ },
+ "js.shellui.nh-c1": {
+  "t": "有{sr}行的字——生本命{m}",
+  "h": "8063d498"
+ },
+ "js.shellui.nh-c2": {
+  "t": "有与本命同属{m}的字",
+  "h": "b7d30df6"
+ },
+ "js.shellui.nh-c3": {
+  "t": "尚无任何字能生本命{m}或与其同行",
+  "h": "415fa26e"
+ },
+ "js.shellui.nh-caveat": {
+  "t": "此计分标准是本站为方便比较而订的，并非古籍中的数字。对已在使用的名字而言，分数低<strong>并不代表名字不好</strong>，也不是改名的理由——这部分只在您挑选新名字时才有参考价值。",
+  "h": "d0c49d0c"
+ },
+ "js.shellui.nh-cd-ten": {
+  "t": "姓名评分",
+  "h": "56e67c7e"
+ },
+ "js.shellui.nh-cd-ten-menh": {
+  "t": "姓名评分——本命{m}",
+  "h": "d700b3c1"
+ },
+ "js.shellui.nh-chua-cham-duoc": {
+  "t": "因不知道名字持有者的<strong>本命</strong>，目前无法评分。请直接在此选择：",
+  "h": "f7e87909"
+ },
+ "js.shellui.nh-chua-co-trong-bang": {
+  "t": "表中尚无",
+  "h": "26374f9c"
+ },
+ "js.shellui.nh-d1": {
+  "t": "有{k}个{h}行的字克本命",
+  "h": "ecab105a"
+ },
+ "js.shellui.nh-d2": {
+  "t": "没有任何字克本命",
+  "h": "c6ffe9f6"
+ },
+ "js.shellui.nh-goi-y-tron-bo": {
+  "t": "查看完整的合命名字建议 →",
+  "h": "0457a007"
+ },
+ "js.shellui.nh-khong-biet-menh": {
+  "t": "不知道自己的本命吗？",
+  "h": "afcf54e4"
+ },
+ "js.shellui.nh-la": {
+  "t": "主字与本命相合",
+  "h": "55588954"
+ },
+ "js.shellui.nh-lb": {
+  "t": "五行平衡",
+  "h": "2ceb2151"
+ },
+ "js.shellui.nh-lc": {
+  "t": "名字含补益本命的字",
+  "h": "40185ecf"
+ },
+ "js.shellui.nh-ld": {
+  "t": "无克本命之字",
+  "h": "88245630"
+ },
+ "js.shellui.nh-nb1": {
+  "t": "名字已有生本命的{sr}行字。若想再加，可选{m}行的字来巩固。",
+  "h": "1f2ab4f1"
+ },
+ "js.shellui.nh-nb2": {
+  "t": "{sr}生本命{m}——属此行的字能滋养本命。",
+  "h": "388f50d5"
+ },
+ "js.shellui.nh-net-don-vi": {
+  "t": "{n}画（个位：{d}）",
+  "h": "cc03c651"
+ },
+ "js.shellui.nh-nhap-ho-ten": {
+  "t": "请输入姓名。",
+  "h": "852de967"
+ },
+ "js.shellui.nh-nhap-net-thu-cong": {
+  "t": "手动输入笔画",
+  "h": "60923759"
+ },
+ "js.shellui.nh-rel-cung": {
+  "t": "主字「<strong>{name}</strong>」属<strong>{th}</strong>——与本命<strong>{m}</strong><strong>同行</strong>。补益良好，巩固命气。",
+  "h": "ae1602fe"
+ },
+ "js.shellui.nh-rel-khac-menh": {
+  "t": "主字「<strong>{name}</strong>」属<strong>{th}</strong>——<strong>克本命{m}</strong>（{th}克{m}）。依民间说法，宜考虑调整。",
+  "h": "cfb34dae"
+ },
+ "js.shellui.nh-rel-menh-khac": {
+  "t": "主字「<strong>{name}</strong>」属<strong>{th}</strong>——本命{m}克名字之行（{m}克{th}）。依民间说法，宜考虑调整。",
+  "h": "084dea54"
+ },
+ "js.shellui.nh-rel-menh-sinh": {
+  "t": "主字「<strong>{name}</strong>」属<strong>{th}</strong>——本命{m}生名字之行（{m}→{th}）。中等，无害。",
+  "h": "6b8b312d"
+ },
+ "js.shellui.nh-rel-sinh-menh": {
+  "t": "主字「<strong>{name}</strong>」属<strong>{th}</strong>——<strong>生本命{m}</strong>（{th}→{m}）。良好，名字滋养本命。",
+  "h": "e867c9b3"
+ },
+ "js.shellui.nh-rel-trung-tinh": {
+  "t": "主字「<strong>{name}</strong>」属<strong>{th}</strong>，本命为<strong>{m}</strong>——彼此无直接相生也无相克。中性。",
+  "h": "c5e52f31"
+ },
+ "js.shellui.nh-so-net": {
+  "t": "笔画数",
+  "h": "6942afa1"
+ },
+ "js.shellui.nh-sug-head": {
+  "t": "若您正在择名",
+  "h": "4307da08"
+ },
+ "js.shellui.nh-sug-p": {
+  "t": "宜优先选<strong>{boi}</strong>行的字。{note} 宜避开<strong>{tranh}</strong>行的字（克本命{m}）。",
+  "h": "4634af56"
+ },
+ "js.shellui.nh-title-suffix": {
+  "t": " ——每个字的五行",
+  "h": "502b979c"
+ },
+ "js.shellui.nh-toi-da-6": {
+  "t": "最多6个音节。",
+  "h": "a95e6e3b"
+ },
+ "js.shellui.nh-tra-hanzii": {
+  "t": "到 hanzii.net 查找 →",
+  "h": "d84d1c1b"
+ },
+ "js.shellui.nh-tra-menh": {
+  "t": "依出生年查找本命 →",
+  "h": "83b945be"
+ },
+ "js.shellui.nh-v1": {
+  "t": "与本命非常相合",
+  "h": "8afe9243"
+ },
+ "js.shellui.nh-v2": {
+  "t": "与本命相合",
+  "h": "44069c43"
+ },
+ "js.shellui.nh-v3": {
+  "t": "尚可",
+  "h": "9f497b1e"
+ },
+ "js.shellui.nh-v4": {
+  "t": "有值得斟酌之处",
+  "h": "12311aa6"
+ },
+ "js.shellui.nh-v5": {
+  "t": "有许多值得斟酌之处",
+  "h": "e71f844e"
  },
  "js.shellui.nhan-tuong-cua-toi": {
   "t": "我的眼相",
@@ -17566,6 +18470,110 @@
  "js.shellui.zalo": {
   "t": "Zalo",
   "h": "53b71aec"
+ },
+ "js.solaso.bao-cao": {
+  "t": "报告",
+  "h": "7013ca8b"
+ },
+ "js.solaso.chua-co-la-so-nhom": {
+  "t": "此分组尚无命盘。",
+  "h": "79bf9444"
+ },
+ "js.solaso.chua-dat-ten": {
+  "t": "未命名",
+  "h": "dfb078dd"
+ },
+ "js.solaso.combo-1-s": {
+  "t": "两者合购，比单买便宜",
+  "h": "584d7fc7"
+ },
+ "js.solaso.combo-1-t": {
+  "t": "组合：紫微斗数解读＋八字",
+  "h": "c69e7864"
+ },
+ "js.solaso.combo-2-s": {
+  "t": "紫微斗数解读＋八字＋人生周期＋年度运势",
+  "h": "12345b3e"
+ },
+ "js.solaso.combo-2-t": {
+  "t": "组合：4项工具完整套组",
+  "h": "0726a4ab"
+ },
+ "js.solaso.da-co-xem-lai": {
+  "t": "✓ 已拥有・再次查看",
+  "h": "308bad31"
+ },
+ "js.solaso.rel-ban-be": {
+  "t": "朋友",
+  "h": "159fe485"
+ },
+ "js.solaso.rel-dong-nghiep": {
+  "t": "同事",
+  "h": "d8e2bdd8"
+ },
+ "js.solaso.rel-gia-dinh": {
+  "t": "家人",
+  "h": "bf9b33dc"
+ },
+ "js.solaso.rel-khac": {
+  "t": "其他",
+  "h": "5b8a28ab"
+ },
+ "js.solaso.tool-cdtk": {
+  "t": "前世肖像",
+  "h": "e7d0f866"
+ },
+ "js.solaso.tool-cdvc": {
+  "t": "伴侣肖像",
+  "h": "eb21b5ef"
+ },
+ "js.solaso.tool-ctcd": {
+  "t": "人生周期",
+  "h": "38c0c6ce"
+ },
+ "js.solaso.tool-dc": {
+  "t": "依命盘教养孩子",
+  "h": "6043b236"
+ },
+ "js.solaso.tool-dntk": {
+  "t": "前世缘分",
+  "h": "c6b0ccb5"
+ },
+ "js.solaso.tool-hnt": {
+  "t": "早期职涯指引",
+  "h": "826c517b"
+ },
+ "js.solaso.tool-lg": {
+  "t": "紫微斗数解读",
+  "h": "ab5a4607"
+ },
+ "js.solaso.tool-nk": {
+  "t": "他人的命盘",
+  "h": "5a73dc8f"
+ },
+ "js.solaso.tool-nm": {
+  "t": "人脉",
+  "h": "78fdc03b"
+ },
+ "js.solaso.tool-tb": {
+  "t": "子平八字",
+  "h": "6ade52e9"
+ },
+ "js.solaso.tool-vhn": {
+  "t": "年度运势",
+  "h": "ba425e43"
+ },
+ "js.solaso.xem-tao": {
+  "t": "查看／创建",
+  "h": "a89b1542"
+ },
+ "js.solaso.xoa-khoi-so": {
+  "t": "从簿册移除",
+  "h": "4ba4a755"
+ },
+ "js.solaso.xoa-la-so-nay": {
+  "t": "要将这张命盘从簿册中移除吗？",
+  "h": "d9231d4e"
  },
  "js.taikhoan.ban-chua-chia-se-luot-nao": {
   "t": "您还没有分享过任何内容。",
@@ -23823,6 +24831,114 @@
   "t": "紫微不是用来预测未来，而是帮助您了解自己，做出更好的选择。",
   "h": "ae92de9d"
  },
+ "lucnham.1-nhap-ngay-gio": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">输入日期时辰</span>",
+  "h": "953e7b97"
+ },
+ "lucnham.dang-phan-van-chuyen-tien-bac": {
+  "t": "正为钱财、感情或需立刻拿定的决定犹豫不决吗？依当下的时辰与日期起一课，直指重点作答。取得直切您所问之事的简短论断。",
+  "h": "295b866e"
+ },
+ "lucnham.de-trong-la-lay-gio-hien": {
+  "t": "留空则取当下时间。系统起大六壬课，回传四课、三传、贵人，以及依《考变占》的论断。",
+  "h": "1e494a7c"
+ },
+ "lucnham.gio-can-xem": {
+  "t": "要查找的时辰",
+  "h": "84e96644"
+ },
+ "lucnham.gio-dan-03-05h": {
+  "t": "寅时（03–05时）",
+  "h": "a2d01564"
+ },
+ "lucnham.gio-dau-17-19h": {
+  "t": "酉时（17–19时）",
+  "h": "d17bfbc2"
+ },
+ "lucnham.gio-hoi-21-23h": {
+  "t": "亥时（21–23时）",
+  "h": "9721a904"
+ },
+ "lucnham.gio-mao-05-07h": {
+  "t": "卯时（05–07时）",
+  "h": "58eab8cc"
+ },
+ "lucnham.gio-mui-13-15h": {
+  "t": "未时（13–15时）",
+  "h": "56d4bde0"
+ },
+ "lucnham.gio-ngo-11-13h": {
+  "t": "午时（11–13时）",
+  "h": "8b9d2da7"
+ },
+ "lucnham.gio-suu-01-03h": {
+  "t": "丑时（01–03时）",
+  "h": "33993400"
+ },
+ "lucnham.gio-than-15-17h": {
+  "t": "申时（15–17时）",
+  "h": "9d910299"
+ },
+ "lucnham.gio-thin-07-09h": {
+  "t": "辰时（07–09时）",
+  "h": "24c10915"
+ },
+ "lucnham.gio-tuat-19-21h": {
+  "t": "戌时（19–21时）",
+  "h": "8c0c8255"
+ },
+ "lucnham.gio-ty-09-11h": {
+  "t": "巳时（09–11时）",
+  "h": "4f543b45"
+ },
+ "lucnham.gio-ty-23-01h": {
+  "t": "子时（23–01时）",
+  "h": "b64ae149"
+ },
+ "lucnham.hoi-thay-luan-than-tuong": {
+  "t": "✦ 请老师论神将",
+  "h": "fd4349af"
+ },
+ "lucnham.luan-theo-khao-bien-chiem": {
+  "t": "依《考变占》<br>论断",
+  "h": "d2082bef"
+ },
+ "lucnham.luc-nham-gian": {
+  "t": "简易六壬",
+  "h": "a7f92fcb"
+ },
+ "lucnham.luc-nham-gian-12-than-tuong": {
+  "t": "<b>简易六壬</b><span>依时辰、日期推十二神将</span>",
+  "h": "337b9381"
+ },
+ "lucnham.luc-nham-gian-tra-12-than": {
+  "t": "简易六壬——依时辰／日期查找十二神将，以及当值之神吉凶。会面、求财、出行等事，可请老师论断。",
+  "h": "554217a5"
+ },
+ "lucnham.luc-nham-gian-tu-vi-minh": {
+  "t": "简易六壬——明宝紫微斗数",
+  "h": "fd05d989"
+ },
+ "lucnham.luc-nham-la-mot-trong-tam": {
+  "t": "六壬是中国古代术数「三式」之一，以天盘、地盘配合当下的时辰与日期起课。论断聚焦于所问的具体事项，依盘上天将的位置而定。",
+  "h": "1c7538cd"
+ },
+ "lucnham.ngay-gio-can-xem": {
+  "t": "要查找的日期与时辰",
+  "h": "80c37086"
+ },
+ "lucnham.quy-nhan-dan-loi": {
+  "t": "贵人<br>指路",
+  "h": "b1fa7db6"
+ },
+ "lucnham.tu-khoa-tam-truyen": {
+  "t": "四课<br>三传",
+  "h": "dfa03fb9"
+ },
+ "lucnham.xem-que-b": {
+  "t": "起课 →",
+  "h": "f19970b5"
+ },
  "maihoa.1-lap-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">起卦</span>",
   "h": "b51a3df6"
@@ -24654,6 +25770,98 @@
  "ngaytot.xem-lich": {
   "t": "查看日历 →",
   "h": "6fa85107"
+ },
+ "nguhanhten.can-bang-ngu-hanh": {
+  "t": "五行<br>平衡",
+  "h": "6beeac0b"
+ },
+ "nguhanhten.can-bang-ngu-hanh-h4ql": {
+  "t": "五行平衡",
+  "h": "d1b5ef33"
+ },
+ "nguhanhten.chua-tim-thay-chu-han-cho": {
+  "t": "⚠ 找不到下列音节对应的汉字——请手动输入笔画数（可到 <a href=\"https://hanzii.net\" target=\"_blank\" style=\"color:var(--tx-blue)\">hanzii.net</a> 查找）：",
+  "h": "464b3314"
+ },
+ "nguhanhten.diem-so-hop-khac": {
+  "t": "相合相克<br>分数",
+  "h": "1b721b9d"
+ },
+ "nguhanhten.ho-va-ten-day-du": {
+  "t": "完整姓名",
+  "h": "e920e42c"
+ },
+ "nguhanhten.hoa": {
+  "t": "火",
+  "h": "be792fa1"
+ },
+ "nguhanhten.hoi-thay-luan-sau-ngu-hanh": {
+  "t": "✦ 请老师深入论析姓名五行",
+  "h": "ba1b2c72"
+ },
+ "nguhanhten.khong-ro-bo-qua": {
+  "t": "不确定／略过",
+  "h": "941d7cdc"
+ },
+ "nguhanhten.moc": {
+  "t": "木",
+  "h": "4bd601ae"
+ },
+ "nguhanhten.mot-cai-ten-goi-hang-ngay": {
+  "t": "每天被叫的名字也自带五行——与本命相合还是相克，很少人检查过。输入姓名，免费取得五行分数与明确结论。",
+  "h": "3e585f76"
+ },
+ "nguhanhten.ngu-hanh-ban-menh-tuy-chon": {
+  "t": "本命五行（选填）",
+  "h": "c90318f2"
+ },
+ "nguhanhten.ngu-hanh-kim-moc-thuy-hoa": {
+  "t": "五行（金、木、水、火、土）是中国古代描述五种基本元素相生相克规律的学说，是众多东方命理学的基础。每个音、字或数字都可归入某一行，与本命对照其相合与相克。",
+  "h": "bcca1f1c"
+ },
+ "nguhanhten.ngu-hanh-ten": {
+  "t": "姓名五行",
+  "h": "9b92ea0c"
+ },
+ "nguhanhten.ngu-hanh-ten-ngu-hanh-tung": {
+  "t": "<b>姓名五行</b><span>每个字的五行与平衡</span>",
+  "h": "32d338b2"
+ },
+ "nguhanhten.ngu-hanh-ten-tu-vi-minh": {
+  "t": "姓名五行——明宝紫微斗数",
+  "h": "2de02e4f"
+ },
+ "nguhanhten.ngu-hanh-tung-chu": {
+  "t": "每个字的<br>五行",
+  "h": "f7103aec"
+ },
+ "nguhanhten.nhap-du-ho-ten-co-dau": {
+  "t": "请输入姓＋名（含越南语声调符号），以空格分隔",
+  "h": "aefee322"
+ },
+ "nguhanhten.nhap-ho-ten-day-du-co": {
+  "t": "请输入完整姓名，也可另选本命五行。取得五行平衡图、分数，以及与本命相合或相克的结论。",
+  "h": "2fd9ddb3"
+ },
+ "nguhanhten.nhap-ten-tieng-viet-tra-chu": {
+  "t": "输入越南语姓名——查找汉字、笔画数与每个字的五行、五行平衡，并与本命对照。更深入的解读可请教老师。",
+  "h": "f620e146"
+ },
+ "nguhanhten.tho": {
+  "t": "土",
+  "h": "9a0da463"
+ },
+ "nguhanhten.thuy": {
+  "t": "水",
+  "h": "f354741d"
+ },
+ "nguhanhten.tra-ngu-hanh-ten": {
+  "t": "查找姓名五行 →",
+  "h": "bfb81211"
+ },
+ "nguhanhten.vd-nguyen-van-an": {
+  "t": "例：Nguyễn Văn An",
+  "h": "4811bda0"
  },
  "nguoikhac.2-xem-truoc-cam-nang": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览相处指南</span>",
@@ -26310,6 +27518,26 @@
  "sc.xem-tuoi-sinh-con-tu-vi": {
   "t": "看生孩子的生肖——明宝紫微斗数",
   "h": "23026bbb"
+ },
+ "solaso.chua-co-la-so-nao-trong": {
+  "t": "簿册中还没有命盘。<br>在任何工具输入出生年月日后，命盘会自动收进这里。",
+  "h": "f40b05ed"
+ },
+ "solaso.dang-nhap-dang-ky": {
+  "t": "登录／注册",
+  "h": "2bcf279e"
+ },
+ "solaso.dang-nhap-de-xem-so-la": {
+  "t": "请登录以查看已保存的命盘簿。",
+  "h": "4fa47b77"
+ },
+ "solaso.la-so-da-luu-so-la": {
+  "t": "<b>已保存的命盘</b><span>帐号专属的命盘簿——依关系分组。点命盘上的「报告」，即可查看或创建该命盘的报告。</span>",
+  "h": "703b7bd9"
+ },
+ "solaso.la-so-da-luu-tu-vi": {
+  "t": "已保存的命盘——明宝紫微斗数",
+  "h": "183c05e5"
  },
  "taikhoan.add-mcp-server-chon-streamable-http": {
   "t": "<strong>Add MCP server</strong> → 选择 <strong>Streamable HTTP</strong>。",
