@@ -6591,6 +6591,10 @@
   "t": "Most favourable years (top 3)",
   "h": "d65badf2"
  },
+ "js.sc.nam-thuan-nhat-top-3-ds": {
+  "t": "Most favourable years (top 3): {ds}",
+  "h": "41c0bad6"
+ },
  "js.sc.rat-thuan": {
   "t": "Very favourable ★★★",
   "h": "ea8da095"

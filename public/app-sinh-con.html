@@ -198,12 +198,12 @@ function doSinhCon(){
     Shell.setContext({
       scenario:{type:'xem-tuoi-sinh-con',data:{namBo:namBo,namMe:namMe}},
       label:'Sinh con · bố '+iBo.canChi+' × mẹ '+iMe.canChi,
-      greeting:_tvmbT('js.sc.da-cham-hop-xung-dia-chi', 'Đã chấm hợp/xung địa chi 15 năm tới (bố **{bo}** · mẹ **{me}**). Năm thuận nhất: **{tot}**. Bạn muốn tôi tư vấn gì trước?', {bo:esc(_g('canchi',iBo.canChi)), me:esc(_g('canchi',iMe.canChi)), tot:esc(r.data.namTot)}),
+      greeting:_tvmbT('js.sc.da-cham-hop-xung-dia-chi', 'Đã chấm hợp/xung địa chi 15 năm tới (bố **{bo}** · mẹ **{me}**). Năm thuận nhất: **{tot}**. Bạn muốn tôi tư vấn gì trước?', {bo:esc(_g('canchi',iBo.canChi)), me:esc(_g('canchi',iMe.canChi)), tot:esc(r.data.namTotHienThi||r.data.namTot)}),
       chips:[_tvmbT('js.sc.nam-nao-tot-nhat-de-sinh','Năm nào tốt nhất để sinh con?'),_tvmbT('js.sc.vi-sao-nam-do-hop-ca','Vì sao năm đó hợp cả bố lẫn mẹ?'),_tvmbT('js.sc.nam-nao-nen-tranh-sinh-con','Năm nào nên tránh sinh con?'),_tvmbT('js.sc.con-tuoi-gi-hop-voi','Con tuổi gì hợp với bố mẹ nhất?')]
     });
     var _scLines=['Xem tuổi sinh con · bố '+iBo.canChi+' ('+iBo.napAm+', '+iBo.hanh+') · mẹ '+iMe.canChi+' ('+iMe.napAm+', '+iMe.hanh+')'];
     _scLines.push(r.resultTitle);
-    _scLines.push('Năm thuận nhất (Top 3): '+r.data.namTot);
+    _scLines.push(_tvmbT('js.sc.nam-thuan-nhat-top-3-ds','Năm thuận nhất (Top 3): {ds}',{ds:r.data.namTotHienThi||r.data.namTot}));
     Shell.setShareable({ kind:'text', toolId:'sinh-con', title:'Xem tuổi sinh con · bố '+iBo.canChi+' × mẹ '+iMe.canChi, text:_scLines.join('\n') });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   }catch(e){

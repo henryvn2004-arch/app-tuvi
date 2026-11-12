@@ -146,7 +146,7 @@
     <div style="background:#f0faf4;border:1px solid #b7e4c7;border-radius:8px;padding:12px 16px;margin-bottom:4px">
       <div style="font-size:12px;font-weight:600;color:#1E6B3C;margin-bottom:8px">🌟 ${_t('js.sc.nam-thuan-nhat-top-3', 'Năm Thuận Nhất (Top 3)')}</div>
       <div style="display:flex;flex-wrap:wrap;gap:10px">
-        ${top3.map((r, i) => `<span style="background:#fff;border:1px solid #b7e4c7;border-radius:6px;padding:4px 12px;font-size:13px;font-weight:700;color:var(--navy)">${i + 1}. ${r.year} — ${_g('canchi', r.info.canChi)} (${r.info.hanh})</span>`).join('')}
+        ${top3.map((r, i) => `<span style="background:#fff;border:1px solid #b7e4c7;border-radius:6px;padding:4px 12px;font-size:13px;font-weight:700;color:var(--navy)">${i + 1}. ${r.year} — ${_g('canchi', r.info.canChi)} (${_g('hanh', r.info.hanh)})</span>`).join('')}
       </div>
     </div>`;
 
@@ -165,6 +165,8 @@
         canChiBo: iB.canChi + ' (' + iB.napAm + ', ' + iB.hanh + ')',
         canChiMe: iM.canChi + ' (' + iM.napAm + ', ' + iM.hanh + ')',
         namTot: top3.map((r) => r.year + ' ' + r.info.canChi + ' (' + r.info.hanh + ')').join(', '),
+        // Bản HIỂN THỊ của namTot (glossary); namTot giữ chữ Việt cho rail/dữ liệu gửi đi.
+        namTotHienThi: top3.map((r) => r.year + ' ' + _g('canchi', r.info.canChi) + ' (' + _g('hanh', r.info.hanh) + ')').join(', '),
       },
     };
   }
