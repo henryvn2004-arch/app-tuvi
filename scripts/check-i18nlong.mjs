@@ -6,7 +6,7 @@
  *   1. file chạy được và gọi `I18n.defineLong('<đúng ns>', …)`;
  *   2. KHÔNG mồ côi — mọi khoá còn có trong bảng nguồn (số quẻ/hào, `ma`, số quái, tên sao/thần);
  *   3. hash `h` khớp câu Việt nguồn HIỆN TẠI (nguồn đổi mà bản dịch chưa dịch lại ⇒ đỏ);
- *   4. bản dịch hợp lệ: không rỗng, không chép nguyên câu Việt, không còn dấu tiếng Việt, token `{x}` khớp câu
+ *   4. bản dịch hợp lệ: không rỗng, không chép nguyên câu Việt (trừ mục đánh dấu `same` — tên riêng giữ nguyên chữ gốc), không còn dấu tiếng Việt, token `{x}` khớp câu
  *      Việt (câu KHUÔN có biến của văn engine — W28: I18n.long(ns, k, vi, {x}) thay ở cả hai bản);
  *   5. locale trong LONG_COMPLETE (lib/i18n/long.mjs) phải có ĐỦ mọi mục của mọi ns;
  *   6. zh-cn == OpenCC(zh-tw) mục theo mục (như check:i18n — zh-cn SINH, không sửa tay);
@@ -83,8 +83,12 @@ for (const locale of TRANSLATED) {
         );
         continue;
       }
-      if (e.t.trim() === s.vi.trim()) {
+      if (e.t.trim() === s.vi.trim() && !e.same) {
         fail(`${where}: "${k}" chép nguyên câu Việt`);
+        continue;
+      }
+      if (e.same && e.t.trim() !== s.vi.trim()) {
+        fail(`${where}: "${k}" đánh dấu same (giữ nguyên chữ gốc) mà chữ khác nguồn`);
         continue;
       }
       if (hasVietnamese(e.t)) {
@@ -238,6 +242,42 @@ for (const ns of Object.keys(ENGINE_NS)) {
       'TuviPastLife.source(',
     ])
       if (!pg.includes(t)) fail(`public/app-chan-dung-tien-kiep.html: không gọi ${t}`);
+  }
+  // W30f-8: tên nhân vật + danh xưng nghề tiền kiếp — engine phát mã, trang tra qua helper dùng chung, prompt truyện nhận bản dịch.
+  {
+    const h = doc('public/tools-shared/past-life-ten.js');
+    for (const t of ["'name.'", "'title.'", "'suf.'", "'fmt.'"])
+      if (!h.includes(t)) fail(`public/tools-shared/past-life-ten.js: không dựng khoá ${t}`);
+    for (const [f, calls] of [
+      ['public/app-chan-dung-tien-kiep.html', ['TuviPastLifeTen.name(', 'TuviPastLifeTen.title(']],
+      ['public/app-duyen-no-tien-kiep.html', ['TuviPastLifeTen.name(', 'TuviPastLifeTen.title(']],
+    ]) {
+      const pg = doc(f);
+      if (!/\/tools-shared\/past-life-ten\.js\?v=\d+/.test(pg))
+        fail(`${f}: không nạp past-life-ten.js`);
+      for (const t of calls) if (!pg.includes(t)) fail(`${f}: không gọi ${t}`);
+    }
+    const eng = doc('lib/engine/past-life.ts');
+    for (const t of ['characterMa:', 'titleMa:', 'danhXungMa:'])
+      if (!eng.includes(t)) fail(`lib/engine/past-life.ts: thiếu mã tra ${t}`);
+    const dn = doc('app/api/duyen-no-tien-kiep/route.ts');
+    for (const t of ['tenMa:', 'danhXungMa:', 'khoiTenTheoNgonNgu('])
+      if (!dn.includes(t)) fail(`app/api/duyen-no-tien-kiep/route.ts: thiếu ${t}`);
+    if (!doc('app/api/chan-dung-tien-kiep/route.ts').includes('khoiTenTheoNgonNgu('))
+      fail(
+        'app/api/chan-dung-tien-kiep/route.ts: prompt truyện không nhận tên theo ngôn ngữ (truyện sẽ tự phiên âm ra tên khác màn hình)'
+      );
+    // Server đọc file dịch trong public/ bằng fs ⇒ phải khai tracing, không thì hàm Vercel thiếu file và tên lặng lẽ lùi về chữ Việt.
+    const nc = doc('next.config.mjs');
+    for (const r of ['/api/chan-dung-tien-kiep', '/api/duyen-no-tien-kiep'])
+      if (
+        !new RegExp(
+          `'${r}':\\s*\\['\\./public/tools-shared/i18n-long/\\*/past-life-ten\\.js'\\]`
+        ).test(nc)
+      )
+        fail(
+          `next.config.mjs: outputFileTracingIncludes thiếu ${r} → i18n-long/*/past-life-ten.js`
+        );
   }
   const cs = doc('public/tools-shared/cong-so.js');
   if (!cs.includes('TuviCachCuc')) fail('public/tools-shared/cong-so.js: không gọi TuviCachCuc');

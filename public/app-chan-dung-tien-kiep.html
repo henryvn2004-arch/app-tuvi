@@ -262,6 +262,7 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'chan-dung-tien-kiep'};</script>
 <script src="/tools-shared/glossary.js?v=5"></script>
 <script src="/tools-shared/past-life-t.js?v=1"></script>
+<script src="/tools-shared/past-life-ten.js?v=1"></script>
 <script src="/tools-shared/i18n.js?v=7"></script>
 <script src="/laso-chart.js?v=12"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
@@ -624,7 +625,7 @@ async function _doGenerate(freeRerun) {
     // Nên chips CỐ Ý hỏi về nhân vật bằng lời thường, KHÔNG dùng thuật ngữ tử
     // vi và không xưng "tôi" — bản cũ ("Cung Quan Lộc của tôi nói gì?") kéo
     // người đọc ra khỏi mạch truyện vừa đọc xong.
-    var nv = data.characterName || _tvmbT('js.ctk.nhan-vat-nay', 'nhân vật này');
+    var nv = _nm(data) || _tvmbT('js.ctk.nhan-vat-nay', 'nhân vật này');
     var ba = profileIsFemale() ? _tvmbT('js.ctk.ba', 'Bà') : _tvmbT('js.ctk.ong', 'Ông');
     Shell.setContext({
       birth: _lastBirth,
@@ -698,6 +699,11 @@ function renderEraLine(data) {
   el.style.display = 'inline-block';
 }
 
+// Tên nhân vật + danh xưng theo ngôn ngữ trang (W30f-8) — CHỈ để HIỂN THỊ/chia sẻ. Engine trả chữ Việt + mã (`characterMa`/`danhXungMa`);
+// payload cũ không mã / vi ⇒ nguyên chữ Việt. Rail/prompt/sổ giữ tên Việt.
+function _nm(d) { return d && d.characterName ? TuviPastLifeTen.name(d.characterName, d.characterMa) : ''; }
+function _dx(d) { return d && d.danhXung ? TuviPastLifeTen.title(d.danhXung, d.danhXungMa) : ''; }
+
 // ── Tách render theo ĐƯỜNG TIỀN, không theo bố cục (W1b) ────────────────────
 //   renderMetaHead = phần đầu (danh xưng + tên nhân vật + nền văn minh + lá
 //                    số) — thứ khách CHƯA đăng ký cũng được xem
@@ -706,13 +712,13 @@ function renderEraLine(data) {
 //   renderMeta     = cả hai, dùng cho đường đã đăng nhập/đã trả
 //   renderProse    = thứ model viết/vẽ, tốn tiền → chỉ vẽ sau khi đã trả
 function renderMetaHead(data) {
-  document.getElementById('danhXung').textContent = data.danhXung || '';
+  document.getElementById('danhXung').textContent = _dx(data);
   // Hero CỐ Ý chỉ còn: chức phận (to) + tên nhân vật & vế bí danh (nhỏ).
   // Phần "chính tinh nào tại cung nào" nằm ở khối "Cơ Sở Trong Lá Số" — Henry
   // phản hồi: để thuật ngữ tử vi lẫn vào phần đọc chính khiến nó nghe như bản
   // luận giải chứ không phải một câu chuyện.
   var sub = [];
-  if (data.characterName) sub.push(data.characterName);
+  if (data.characterName) sub.push(_nm(data));
   if (data.biDanh) sub.push(data.biDanh);   // biDanh do LLM viết → chỉ có ở lượt trả tiền
   document.getElementById('danhXungSub').textContent = sub.join(' — ');
   renderEraLine(data);
@@ -750,7 +756,7 @@ function renderMeta(data) { renderMetaHead(data); renderMetaRest(data); }
 
 function renderProse(data) {
   document.getElementById('moTaTitle').textContent =
-    _tvmbT('js.ctk.mo-ta', 'Mô tả ') + (data.characterName || _tvmbT('js.ctk.nhan-vat', 'nhân vật'));
+    _tvmbT('js.ctk.mo-ta', 'Mô tả ') + (_nm(data) || _tvmbT('js.ctk.nhan-vat', 'nhân vật'));
   document.getElementById('moTaNhanVat').textContent = data.moTaNhanVat || '';
   // Thiếu phần mô tả (LLM trả không đủ) → giấu cả khối, đừng để tiêu đề trơ
   // trên một đoạn rỗng. Truyện vẫn hiển thị bình thường.
@@ -804,7 +810,7 @@ function publishShareable(imageUrl) {
   blocks.push({
     header: _tvmbT('js.ctk.chan-dung-tien-kiep', 'Chân Dung Tiền Kiếp'),
     image: imageUrl || undefined,
-    text: [d.characterName, d.danhXung, d.biDanh].filter(Boolean).join(' — ') + '\n\n' + (d.moTaNhanVat || ''),
+    text: [_nm(d), _dx(d), d.biDanh].filter(Boolean).join(' — ') + '\n\n' + (d.moTaNhanVat || ''),
   });
   var storyText = (d.acts || []).map(function (a) {
     var badge = ROLE_BADGE[a.role];
@@ -818,7 +824,7 @@ function publishShareable(imageUrl) {
     kind: imageUrl ? 'image' : 'text',
     toolId: 'chan-dung-tien-kiep',
     birth: _lastBirth,
-    title: (d.characterName ? d.characterName + ' — ' : '') + (d.danhXung || _tvmbT('js.ctk.chan-dung-tien-kiep-cua-toi', 'Chân dung tiền kiếp của tôi')),
+    title: (d.characterName ? _nm(d) + ' — ' : '') + (_dx(d) || _tvmbT('js.ctk.chan-dung-tien-kiep-cua-toi', 'Chân dung tiền kiếp của tôi')),
     imageUrl: imageUrl || undefined,
     blocks: blocks,
   });
@@ -863,8 +869,8 @@ function _posterOpts() {
   var d = _lastStory || {};
   return {
     imageUrl: _resultImgUrl,
-    title: d.characterName || d.danhXung || _tvmbT('js.ctk.chan-dung-tien-kiep-gxr5', 'Chân dung tiền kiếp'),
-    subtitle: [d.danhXung, TuviPastLife.eraLabel(d.era)].filter(Boolean).join(' · '),
+    title: _nm(d) || _dx(d) || _tvmbT('js.ctk.chan-dung-tien-kiep-gxr5', 'Chân dung tiền kiếp'),
+    subtitle: [_dx(d), TuviPastLife.eraLabel(d.era)].filter(Boolean).join(' · '),
     // Lời Kết trước: đó là câu chốt của cả truyện, tách ra đứng một mình vẫn
     // có nghĩa. Mô tả nhân vật là lớp đỡ, cuối cùng mới bới trong 5 hồi.
     quote: Poster.pickQuote([d.ketLuan, d.moTaNhanVat, ((d.acts || []).map(function (a) { return a.text || ''; }).join(' '))]),

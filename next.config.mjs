@@ -52,6 +52,9 @@ const nextConfig = {
     ],
     // Từ điển đa ngôn ngữ đọc bằng fs lúc chạy — app/i18n-render (lib/i18n/dict.mjs).
     '/i18n-render/[locale]/[[...path]]': ['./i18n/*.json'],
+    // W30f-8: prompt truyện tiền kiếp đọc bản dịch tên/danh xưng (file client trong `public/`) bằng fs lúc chạy — lib/i18n/long-server.ts.
+    '/api/chan-dung-tien-kiep': ['./public/tools-shared/i18n-long/*/past-life-ten.js'],
+    '/api/duyen-no-tien-kiep': ['./public/tools-shared/i18n-long/*/past-life-ten.js'],
     '/api/luan-giai/email-pdf': PDF_FONT_FILES,
     // Cùng lý do: các route dưới cũng dựng PDF (resend-pdf · gửi PDF vào kênh chat
     // từ web và từ webhook 4 kênh) — lib/pdf/paid-reports.ts.

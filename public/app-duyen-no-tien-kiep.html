@@ -282,6 +282,7 @@ window.SHELL_INTRO={key:'duyen-no-tien-kiep'};</script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=11"></script>
 <script src="/tools-shared/portrait-recover.js?v=4"></script>
+<script src="/tools-shared/past-life-ten.js?v=1"></script>
 <script>
 
 var _currentSlug = '';
@@ -321,6 +322,8 @@ function _sigDetail(s) {
     for (var k in s.bien) bien[k] = s.bien[k];
     if (bien.x) bien.x = _tvmbG('hanh', bien.x);
     if (bien.y) bien.y = _tvmbG('hanh', bien.y);
+    ['p', 'q'].forEach(function (k) { if (bien[k] && _nvLoc.ten[bien[k]]) bien[k] = _nvLoc.ten[bien[k]]; });
+    ['a', 'b'].forEach(function (k) { if (bien[k] && _nvLoc.dx[bien[k]]) bien[k] = _nvLoc.dx[bien[k]]; });
   }
   return _dnLong('sigd.' + s.ma, s.detail, bien);
 }
@@ -540,6 +543,20 @@ function _nhanVats(d) {
   return [d && d.nhanVatA, d && d.nhanVatB].filter(Boolean);
 }
 
+// Tên + danh xưng theo ngôn ngữ trang (W30f-8) — CHỈ để HIỂN THỊ/chia sẻ; engine trả chữ Việt + mã (`tenMa`/`danhXungMa`), payload cũ/mẫu
+// không mã hoặc vi ⇒ nguyên chữ Việt. `bien.p/q` (tên) và `bien.a/b` (danh xưng) của dấu hiệu cổ pháp là CHÍNH chuỗi Việt của
+// nhân vật ⇒ tra ngược qua `_nvLoc`, dựng lại mỗi lần vẽ từ `nhanVats`.
+function _tenOf(p) { return p && p.ten ? TuviPastLifeTen.name(p.ten, p.tenMa) : ''; }
+function _dxOf(p) { return p && p.danhXung ? TuviPastLifeTen.title(p.danhXung, p.danhXungMa) : ''; }
+var _nvLoc = { ten: {}, dx: {} };
+function _indexNv(list) {
+  _nvLoc = { ten: {}, dx: {} };
+  (list || []).forEach(function (p) {
+    if (p.ten) _nvLoc.ten[p.ten] = _tenOf(p);
+    if (p.danhXung) _nvLoc.dx[p.danhXung] = _dxOf(p);
+  });
+}
+
 /** Một dòng "lá số nào" cho nhân vật — chuỗi DÙNG CHUNG với bản chia sẻ. */
 function _lsLine(nv) {
   var b = _localBirthOf(nv);
@@ -607,10 +624,11 @@ function mountHook(data) {
   var host = document.getElementById('hookHost');
   if (!host || !window.HookLayer || !data.bond) return;
   var a = data.nhanVats[data.bond.a], b = data.nhanVats[data.bond.b];
+  _indexNv(data.nhanVats);
   var facts = [{
     tone: 'neutral',
     title: _tvmbT('js.duyenno.loai-duyen-label', 'Loại duyên: {label}', {label: _bondLabel(data.bond)}),
-    body: _tvmbT('js.duyenno.giua-a-va-b-gist', 'Giữa {a} và {b}: {gist} Câu chuyện 4 hồi + bức tranh chung nằm trong bản đầy đủ.', {a: esc(a.ten), b: esc(b.ten), gist: _bondGist(data.bond)}),
+    body: _tvmbT('js.duyenno.giua-a-va-b-gist', 'Giữa {a} và {b}: {gist} Câu chuyện 4 hồi + bức tranh chung nằm trong bản đầy đủ.', {a: esc(_tenOf(a)), b: esc(_tenOf(b)), gist: _bondGist(data.bond)}),
     source: 'engine · computeGroupBond',
   }];
   var sig = Array.isArray(data.bond.signals) ? data.bond.signals[0] : null;
@@ -782,7 +800,7 @@ async function _doGenerate(freeRerun) {
     // server có luật cứng cấm luận sâu về người thứ hai — không có lá số của
     // họ trong ngữ cảnh, nói bừa là bịa.
     var nvList = _nhanVats(data);
-    var nvNames = nvList.map(function (p) { return p.ten || ''; }).filter(Boolean);
+    var nvNames = nvList.map(function (p) { return _tenOf(p); }).filter(Boolean);
     // Chip hỏi về nhân vật phải nhắm ĐÚNG nhân vật của người đang ngồi đây (ô
     // nhập thứ nhất). Thứ tự nhân vật đã bị server chuẩn hoá nên không suy được
     // bằng vị trí, mà rail có luật cứng cấm luận sâu về những người còn lại —
@@ -790,7 +808,7 @@ async function _doGenerate(freeRerun) {
     var me = _lastBirths[0];
     var nvSelf = nvNames[0] || _tvmbT('js.duyenno.nhan-vat-cua-ban', 'nhân vật của bạn');
     for (var q = 0; q < nvList.length; q++) {
-      if (_localBirthOf(nvList[q]) === me) { nvSelf = nvList[q].ten || nvSelf; break; }
+      if (_localBirthOf(nvList[q]) === me) { nvSelf = _tenOf(nvList[q]) || nvSelf; break; }
     }
     Shell.setContext({
       birth: _lastBirths[0],
@@ -885,6 +903,7 @@ function renderStory(data) {
   } else { el.style.display = 'none'; }
 
   var nvs = _nhanVats(data);
+  _indexNv(nvs);
 
   // Dòng lá số — người nhận link chia sẻ phải biết bản này của những ai.
   // Xếp theo THỨ TỰ NHÂN VẬT bên dưới (không phải thứ tự nhập): cả trang nói
@@ -902,8 +921,8 @@ function renderStory(data) {
     // và nhân vật luôn cùng giới với lá số dựng ra nó.
     var ls = _lsLine(p);
     return '<div class="dn-person">' +
-      '<div class="nm">' + esc(p.ten || '') + '</div>' +
-      '<div class="oc">' + esc(p.danhXung || '') + '</div>' +
+      '<div class="nm">' + esc(_tenOf(p)) + '</div>' +
+      '<div class="oc">' + esc(_dxOf(p)) + '</div>' +
       (ls
         ? ('<div class="ls">' + _tvmbT('js.duyenno.dung-tu-la-so', '<b>Dựng từ lá số</b><br>')) + esc(ls) + '</div>'
         : '<div class="of">' + (p.gioiTinh === 'nu' ? _tvmbT('js.duyenno.nu', 'Nữ') : _tvmbT('js.duyenno.nam', 'Nam')) + '</div>') +
@@ -916,7 +935,7 @@ function renderStory(data) {
   var caps = data.capDuyen || [];
   if (caps.length > 1) {
     cg.innerHTML = caps.map(function (c) {
-      var na = (nvs[c.a] || {}).ten || '', nb = (nvs[c.b] || {}).ten || '';
+      var na = _tenOf(nvs[c.a]), nb = _tenOf(nvs[c.b]);
       return '<div class="dn-cap' + (c.truc ? ' truc' : '') + '">' +
         '<div class="dn-cap-top">' +
           '<span class="dn-cap-who">' + esc(na) + ' — ' + esc(nb) + '</span>' +
@@ -958,7 +977,7 @@ function renderStory(data) {
   // "Người thứ nhất — Thường là bạn": nhân vật ĐẦU coi như người đang dùng
   // tool, mấy người sau là "họ" — mời đúng người còn thiếu trong cuộc, không
   // mời chung chung.
-  var others = nvs.slice(1).map(function (p) { return p.ten; }).filter(Boolean);
+  var others = nvs.slice(1).map(function (p) { return _tenOf(p); }).filter(Boolean);
   var inviteText = '';
   if (others.length === 1) {
     inviteText = _tvmbT('js.duyenno.gui-ket-qua-nay-cho-name-xem', 'Gửi kết quả này cho <b>{name}</b> xem — họ tò mò là muốn tự tra lá số của mình luôn.', {name: esc(others[0])});
@@ -979,10 +998,10 @@ function publishShareable(imageUrl) {
   if (!d) return;
   var bond = d.bond || {};
   var nvs = _nhanVats(d);
-  var tenAll = nvs.map(function (p) { return p.ten || ''; }).filter(Boolean);
+  var tenAll = nvs.map(function (p) { return _tenOf(p); }).filter(Boolean);
   var pairLine = function (p) {
     var ls = _lsLine(p);
-    return (p.ten || '') + (ls ? _tvmbT('js.duyenno.la-so-vjrb', ' — lá số: ') + ls : '');
+    return _tenOf(p) + (ls ? _tvmbT('js.duyenno.la-so-vjrb', ' — lá số: ') + ls : '');
   };
   var blocks = [];
   blocks.push({
@@ -998,7 +1017,7 @@ function publishShareable(imageUrl) {
     blocks.push({
       header: _tvmbT('js.duyenno.cac-moi-duyen-trong-nhom', 'Các Mối Duyên Trong Nhóm'),
       text: caps.map(function (c) {
-        return ((nvs[c.a] || {}).ten || '') + ' — ' + ((nvs[c.b] || {}).ten || '') +
+        return _tenOf(nvs[c.a]) + ' — ' + _tenOf(nvs[c.b]) +
           ': ' + _bondLabel(c) + (c.truc ? _tvmbT('js.duyenno.truc-cua-cau-chuyen-j6j5', ' (trục của câu chuyện)') : '') + '\n' + _bondGist(c);
       }).join('\n\n'),
     });
@@ -1017,7 +1036,7 @@ function publishShareable(imageUrl) {
     // sẻ chỉ nêu một cái, người nhận link tưởng bản luận chỉ của người đó.
     // `births` có nhãn nên khối đó nói luôn nhân vật nào từ lá số nào.
     births: nvs.map(function (p, i) {
-      return { label: p.ten || 'Nhân vật thứ ' + (i + 1), birth: _localBirthOf(p) || _lastBirths[i] };
+      return { label: _tenOf(p) || 'Nhân vật thứ ' + (i + 1), birth: _localBirthOf(p) || _lastBirths[i] };
     }),
     title: tenAll.join(' & ') || _tvmbT('js.duyenno.duyen-no-tien-kiep-r7a2', 'Duyên nợ tiền kiếp'),
     imageUrl: imageUrl || undefined,
@@ -1065,7 +1084,7 @@ function _ensurePoster() {
 function _posterOpts() {
   var d = _lastStory || {};
   var bond = d.bond || {};
-  var tenAll = _nhanVats(d).map(function (p) { return p.ten || ''; }).filter(Boolean);
+  var tenAll = _nhanVats(d).map(function (p) { return _tenOf(p); }).filter(Boolean);
   return {
     imageUrl: _resultImgUrl,
     // 🔑 Ảnh tool này KHỔ NGANG. Để mặc định `cover` thì khung 9:16 cắt mất
