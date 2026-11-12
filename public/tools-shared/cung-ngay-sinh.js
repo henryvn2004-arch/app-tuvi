@@ -72,6 +72,18 @@
     return '<div class="cns-anh-nguon">' + T('js.cns.anh','Ảnh: {nguon}',{nguon:noi}) + '</div>';
   }
 
+  // Nhãn badge theo ngôn ngữ trang. Route `/api/v1/cung-ngay-sinh` trả `nhan` bằng chữ Việt (hợp đồng additive-only,
+  // app khác vẫn đọc) kèm MÃ tầng `tang` — dịch ở client theo `tang`, không đoán từ chữ Việt. vi ⇒ y hệt `it.nhan`.
+  // Chữ gốc của 4 nhãn nằm ở route (`TIER_LABEL`); `npm run check:cns` bắt lệch với `i18n/vi.json`.
+  function nhanOf(it) {
+    var vi = it.nhan;
+    if (it.tang === 't2') return T('js.cns.tang-t2', 'CÙNG MỘT LÁ SỐ');
+    if (it.tang === 't2b') return T('js.cns.tang-t2b', 'Cùng khung lá số');
+    if (it.tang === 't1') return T('js.cns.tang-t1', 'Cùng ngày âm lịch');
+    if (it.tang === 't0') return T('js.cns.tang-t0', 'Cùng ngày sinh nhật');
+    return vi;
+  }
+
   function card(it) {
     var vang = it.tang === 't2';
     var bac = it.tang === 't2b';
@@ -119,7 +131,7 @@
       '<div class="cns-than">' +
       // Badge hiện cho MỌI tầng (trước chỉ t2/t2b) — t1/t0 không có nhãn thì
       // người đọc tưởng đang so ngày dương lịch, trong khi t1 so ngày âm lịch.
-      '<span class="cns-badge' + (vang ? ' cns-badge-vang' : bac ? ' cns-badge-bac' : '') + '">' + esc(it.nhan) + '</span>' +
+      '<span class="cns-badge' + (vang ? ' cns-badge-vang' : bac ? ' cns-badge-bac' : '') + '">' + esc(nhanOf(it)) + '</span>' +
       '<div class="cns-ten">' + esc(it.ten) + '</div>' +
       '<div class="cns-meta">' + dong.join('<br>') + '</div>' +
       (it.lienKet

@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-580 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+581 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 39 | 143,144 B |
+| `2026-11.md` | 40 | 144,560 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🏷️ W26c — Badge 4 tầng "Ai sinh cùng ngày" theo ngôn ngữ (client dịch theo mã `tang`, route không đổi) |
 | 1 | 2026-11 | `2026-11.md` | 💄 W23b (lô 2) — Kiểu Tóc · Personal Color · Màu Sắc Hợp Mệnh · Trang Phục Theo Ngày · Trang Điểm · Da Liệu đủ 5 ngôn ngữ; action JSON tuong-mat/phong-thuy truyền locale; bẫy enum/khoá tra cứu do LLM sinh |
 | 1 | 2026-11 | `2026-11.md` | 🖐️ W23b (lô 1) — Thủ Tướng · Bút Tướng · Diện Tướng · Khí Sắc đủ 5 ngôn ngữ; route `tuong-mat`/`but-tuong` truyền locale (`withLang`); bẫy bộ quét bỏ sót nút nội dung hỗn hợp |
 | 1 | 2026-11 | `2026-11.md` | 💳 W21 — Đường tiền + niềm tin: 16 trang đủ 5 ngôn ngữ (Hồ sơ, xác nhận thanh toán, combo, báo cáo, thầy, FAQ…) · khuôn "Thầy {tên}" · PayPal trả về đúng `/<locale>` |
