@@ -16,6 +16,7 @@ import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { phanTich, railData as baziRailData } from '@/lib/bazi/phan-tich';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { DOC_ARC_BUT_TUONG } from '@/lib/agent/prompts';
+import { requestLocale, withLang } from '@/lib/llm/locale';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 120;
@@ -157,8 +158,10 @@ async function runPost(request) {
 
     const userText = `Hãy luận bút tướng cho chữ ký sau đây theo cổ pháp, đủ 5 phần.\n\n${lines.join('\n')}${dungThanContext(birth)}`;
 
+    // Ngôn ngữ đầu ra: câu chỉ định ở USER (giữ system); vi → nguyên chuỗi cũ. Route không cache ⇒ không cần hậu tố khoá.
+    const prompt = withLang(userText, requestLocale(request), [userText]);
     return await llmStreamResponse(
-      { luanGiai: true, system: SP_BUT_TUONG, prompt: userText, images: [], maxTokens: 4500 },
+      { luanGiai: true, system: SP_BUT_TUONG, prompt, images: [], maxTokens: 4500 },
       'delta',
     );
   } catch (e) {

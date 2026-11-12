@@ -39,6 +39,68 @@
    object/mảng**. Chỉ số nào là danh sách thì phải dẹp thành CHUỖI ở đây,
    nếu không rail nhận thiếu và luận chay mà không có gì báo. */
 (function (root) {
+  // ── i18n (W25): chữ HIỂN THỊ qua i18n-long (public/tools-shared/i18n-long/<locale>/than-so-hoc.js), tra theo CHỈ SỐ.
+  // `data` gửi rail + khoá tra cứu GIỮ chữ Việt gốc — bản dịch chỉ dựng ở chỗ vẽ (luật SERVER_BOUND).
+  if (root.I18n && root.I18n.loadLong) root.I18n.loadLong('than-so-hoc');
+  var UI = {
+    'core.dd.t': 'Số Đường Đời', 'core.dd.s': '(từ ngày sinh)',
+    'core.dm.t': 'Số Định Mệnh', 'core.dm.s': '(từ tên đầy đủ)',
+    'core.lh.t': 'Số Linh Hồn', 'core.lh.s': '(từ nguyên âm)',
+    'core.sm.t': 'Số Sứ Mệnh', 'core.sm.s': '(từ phụ âm)',
+    'core.zero': 'Không tính được từ tên đã nhập (tên không chứa {what} nào sau khi bỏ dấu). Hãy nhập đầy đủ họ và tên khai sinh.',
+    'word.vowel': 'nguyên âm', 'word.consonant': 'phụ âm',
+    'sec.derived.t': 'Ba chỉ số bổ sung',
+    'sec.derived.s': 'Ba lớp nữa của cùng một lá số: cách bạn bước vào đời, cách người khác gặp bạn lần đầu, và con người bạn trở thành ở nửa sau cuộc đời.',
+    'ngaysinh.t': 'Số Ngày Sinh', 'ngaysinh.s': '(ngày {d})',
+    'ngaysinh.d': 'Món quà bẩm sinh — tài lẻ có sẵn không cần học, thường lộ ra rất sớm. ',
+    'thaido.t': 'Số Thái Độ', 'thaido.s': '(ngày + tháng)',
+    'thaido.d': 'Ấn tượng đầu tiên bạn tạo ra và phản xạ của bạn khi bị dồn — mạnh nhất trong khoảng 30–35 năm đầu, và thường KHÁC hẳn con người thật bên trong. ',
+    'truongthanh.t': 'Số Trưởng Thành', 'truongthanh.s': '(Đường Đời + Định Mệnh)',
+    'truongthanh.d': 'Đích đến của nửa sau cuộc đời, thường phát huy rõ từ khoảng 35–40 tuổi trở đi, khi hai dòng năng lượng lớn nhất trong lá số hòa vào nhau. ',
+    'sec.py.t': 'Năm cá nhân {y}',
+    'sec.py.s': 'Chỉ số duy nhất đổi theo thời gian — mỗi năm rơi vào một bậc trong vòng 9 năm.',
+    'py.t': 'Năm Cá Nhân {n}/9', 'py.s': '(năm {y})',
+    'sec.grid.t': 'Biểu đồ ngày sinh',
+    'sec.grid.s': 'Các chữ số có trong {dob} xếp vào lưới Pythagoras. Ô đậm là năng lượng sẵn có, ô mờ là phần còn thiếu.',
+    'grid.empty': 'trống',
+    'arrow.strong': 'Mũi tên mạnh:', 'arrow.empty': 'Mũi tên trống:',
+    'arrow.none': 'Ngày sinh này không tạo thành mũi tên đủ 3 số nào, cũng không có hàng nào trống hẳn — năng lượng trải khá đều, không có thái cực rõ rệt.',
+    'sec.lesson.t': 'Bài học còn thiếu & đam mê tiềm ẩn',
+    'sec.lesson.s': 'Đọc từ TÊN: chữ số nào vắng mặt là bài học phải học trong đời, chữ số lặp nhiều nhất là thứ bạn bị cuốn vào mà không cưỡng được.',
+    'lesson.title': 'Bài học còn thiếu ({list}):',
+    'lesson.none': 'Tên của bạn chứa đủ cả 9 chữ số — <b>không có bài học còn thiếu</b>. Trường hợp khá hiếm: không mảng nào bị bỏ trống, nhưng cũng không có mảng nào được nhấn mạnh sẵn, mọi thứ đều phải tự chọn mà rèn.',
+    'passion.title': 'Đam mê tiềm ẩn ({list}):',
+    'passion.tail': ' — đây là thứ bạn quay về mãi dù có chuyển nghề bao nhiêu lần; mạnh quá thì thành lệch, cần chỗ xả lành mạnh.',
+    'sec.karma.t': 'Nợ nghiệp quật',
+    'sec.karma.s': 'Bốn con số 13 · 14 · 16 · 19 — chỉ hiện khi TỔNG THÔ (trước lúc rút gọn) rơi đúng vào chúng.',
+    'karma.at': '(ở chỉ số {name})',
+    'karma.none': 'Lá số này <b>không mang nợ nghiệp quật</b> nào trong bốn con số 13/14/16/19. Không có nghĩa là đời không có thử thách — phần đó nằm ở mục Thử Thách bên dưới.',
+    'idx.dd': 'Đường Đời', 'idx.dm': 'Định Mệnh', 'idx.lh': 'Linh Hồn', 'idx.sm': 'Sứ Mệnh', 'idx.ns': 'Ngày Sinh',
+    'sec.peak.t': 'Đỉnh cao & thử thách theo giai đoạn',
+    'sec.peak.s': 'Bốn chặng đời, mỗi chặng có một Đỉnh Cao (cơ hội nổi bật) đi kèm một Thử Thách (bài học phải trả). Mốc tuổi suy từ Số Đường Đời {ld} (36 − {ld} = {e}).',
+    'peak.stage': 'Chặng {i} · {range}', 'peak.here': '— bạn đang ở đây',
+    'peak.top': 'Đỉnh cao {n}:', 'peak.chal': 'Thử thách {n}:',
+    'age.from': '{a} tuổi trở đi', 'age.range': '{a}–{b} tuổi',
+    'sec.career.t': 'Nghề nghiệp phù hợp',
+    'sec.career.s': 'Suy từ Số Đường Đời {n} — hướng công việc năng lượng chủ đạo dễ phát huy nhất, không phải khung đóng cứng.',
+    'career.note': 'Đây là hướng THUẬN theo năng lượng, không phải giới hạn — nghề ngoài danh sách vẫn tốt nếu công việc hằng ngày cho dùng đúng thế mạnh của số {n}.',
+    'sec.tgv.t': 'Tam giác vàng hướng nghiệp',
+    'sec.tgv.s': 'Ba số cốt lõi cho hướng sự nghiệp, đọc CHUNG thành một hướng thay vì tách rời.',
+    'tgv.a.l': 'Cống Hiến', 'tgv.a.s': '(Đường Đời)', 'tgv.b.l': 'Tài Năng', 'tgv.b.s': '(Ngày Sinh)', 'tgv.c.l': 'Sứ Mệnh', 'tgv.c.s': '(Định Mệnh)',
+    'tgv.text': 'Bạn <b>cống hiến</b> tốt nhất khi được {a}; <b>tài năng</b> bẩm sinh nghiêng về {b}; và <b>thể hiện ra ngoài</b> rõ nhất qua {c}. Nghề bền nhất là nơi CẢ BA cùng có đất dùng, không phải nghề chỉ hợp với một trong ba.',
+    'tgv.cross': 'Giao điểm nghề nghiệp của ba số:',
+    'err.empty': 'Vui lòng nhập ngày tháng năm sinh.',
+    'err.invalid': 'Ngày tháng năm sinh không hợp lệ.',
+    'err.name': 'Vui lòng nhập tên (có dấu hay không dấu đều được).'
+  };
+  function L(k, vi) { return root.I18n && root.I18n.long ? root.I18n.long('than-so-hoc', k, vi) : vi; }
+  function U(k, v) {
+    var s = L('ui.' + k, UI[k]);
+    return v ? s.replace(/\{(\w+)\}/g, function (m, n) { return v[n] !== undefined ? v[n] : m; }) : s;
+  }
+  // Bảng nghĩa theo chỉ số: nghĩa (desc) và từ khoá (kw) của số n.
+  function mDesc(n) { return L('m.' + n + '.desc', MEANINGS[n].desc); }
+  function mKw(n) { return MEANINGS[n].kw.map(function (k, i) { return L('m.' + n + '.kw.' + i, k); }); }
   var NUM_COLORS = ['', '#C0392B', '#E67E22', '#F1C40F', '#2ECC71', '#1455A4', '#8E44AD', '#1ABC9C', '#E91E63', '#2C3E50', '#c9a84c', '#5FA8D3', '#1E6B3C'];
   var VOWELS = new Set('AEIOU');
   var CHAR_VAL = { A: 1, B: 2, C: 3, D: 4, E: 5, F: 6, G: 7, H: 8, I: 9, J: 1, K: 2, L: 3, M: 4, N: 5, O: 6, P: 7, Q: 8, R: 9, S: 1, T: 2, U: 3, V: 4, W: 5, X: 6, Y: 7, Z: 8 };
@@ -196,6 +258,10 @@
     { line: [3, 5, 7], manh: 'Mũi tên Tâm Linh', yeu: 'Mũi tên Hoài Nghi', mo: 'trực giác mạnh, nhạy với điều chưa nói ra', mv: 'chỉ tin cái thấy được, khó chấp nhận điều mơ hồ' },
   ];
 
+  function careerL(vi) {
+    for (var n in CAREER) for (var i = 0; i < CAREER[n].length; i++) if (CAREER[n][i] === vi) return L('ca.' + n + '.' + i, vi);
+    return vi;
+  }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function circle(n, size) {
     var sz = size || 64, fs = Math.round(sz * 0.44);
@@ -221,14 +287,14 @@
    */
   function compute(ngay, thang, nam, tenRaw, namXem) {
     ngay = parseInt(ngay, 10); thang = parseInt(thang, 10); nam = parseInt(nam, 10);
-    if (!ngay || !thang || !nam) return { ok: false, error: 'Vui lòng nhập ngày tháng năm sinh.' };
+    if (!ngay || !thang || !nam) return { ok: false, error: U('err.empty') };
     // 31/2 lọt `ngay > 31` rồi vẫn ra số chủ đạo như thật — kiểm ngày CÓ trong tháng.
     if (ngay < 1 || thang < 1 || thang > 12 || nam < 1000 || nam > 9999 ||
         new Date(nam, thang - 1, ngay).getDate() !== ngay) {
-      return { ok: false, error: 'Ngày tháng năm sinh không hợp lệ.' };
+      return { ok: false, error: U('err.invalid') };
     }
     var ten = boDau(tenRaw);
-    if (!ten) return { ok: false, error: 'Vui lòng nhập tên (có dấu hay không dấu đều được).' };
+    if (!ten) return { ok: false, error: U('err.name') };
 
     var namHienTai = namXem || vnYear();
 
@@ -281,6 +347,7 @@
     var moc = [[0, end1], [end1 + 1, end1 + 9], [end1 + 10, end1 + 18], [end1 + 19, null]];
     var tuoiHienTai = namHienTai - nam;
     function mocLabel(i) { var a = moc[i]; return a[1] == null ? (a[0] + ' tuổi trở đi') : (a[0] + '–' + a[1] + ' tuổi'); }
+    function mocLabelUI(i) { var a = moc[i]; return a[1] == null ? U('age.from', { a: a[0] }) : U('age.range', { a: a[0], b: a[1] }); }
     function dangO(i) { var a = moc[i]; return tuoiHienTai >= a[0] && (a[1] == null || tuoiHienTai <= a[1]); }
     var dinhCaoArr = [p1, p2, p3, p4], thuThachArr = [c1, c2, c3, c4];
     var idxHienTai = -1; for (var q = 0; q < 4; q++) if (dangO(q)) { idxHienTai = q; break; }
@@ -290,10 +357,10 @@
 
     // 4 số cốt lõi (giữ nguyên bố cục cũ)
     var core = [
-      { n: duongDoi, t: 'Số Đường Đời', s: '(từ ngày sinh)' },
-      { n: dinhMenh, t: 'Số Định Mệnh', s: '(từ tên đầy đủ)' },
-      { n: linhHon, t: 'Số Linh Hồn', s: '(từ nguyên âm)' },
-      { n: suMenh, t: 'Số Sứ Mệnh', s: '(từ phụ âm)' },
+      { n: duongDoi, k: 'dd' },
+      { n: dinhMenh, k: 'dm' },
+      { n: linhHon, k: 'lh' },
+      { n: suMenh, k: 'sm' },
     ];
     html += core.map(function (c) {
       /* 0 = tên không có nguyên âm (hoặc phụ âm) nào. KHÔNG mượn nghĩa số
@@ -301,112 +368,112 @@
          văn diễn giải của số 9, tự mâu thuẫn ngay trên màn hình. */
       if (!c.n) {
         return '<div class="num-card"><div style="width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;flex-shrink:0;color:' + C_LT + ';border:2px dashed ' + C_LINE + '">—</div>' +
-          '<div class="num-content"><div class="num-title">' + esc(c.t) + ' <span style="font-weight:400;color:' + C_LT + '">' + esc(c.s) + '</span></div>' +
-          '<div class="num-desc">Không tính được từ tên đã nhập (tên không chứa ' + (c.t === 'Số Linh Hồn' ? 'nguyên âm' : 'phụ âm') + ' nào sau khi bỏ dấu). Hãy nhập đầy đủ họ và tên khai sinh.</div></div></div>';
+          '<div class="num-content"><div class="num-title">' + esc(U('core.' + c.k + '.t')) + ' <span style="font-weight:400;color:' + C_LT + '">' + esc(U('core.' + c.k + '.s')) + '</span></div>' +
+          '<div class="num-desc">' + esc(U('core.zero', { what: U(c.k === 'lh' ? 'word.vowel' : 'word.consonant') })) + '</div></div></div>';
       }
-      var m = MEANINGS[c.n];
-      return numCard(c.n, c.t, c.s, m.desc, m.kw);
+      return numCard(c.n, U('core.' + c.k + '.t'), U('core.' + c.k + '.s'), mDesc(c.n), mKw(c.n));
     }).join('');
 
     // Nhóm phái sinh
-    html += sectionTitle('Ba chỉ số bổ sung', 'Ba lớp nữa của cùng một lá số: cách bạn bước vào đời, cách người khác gặp bạn lần đầu, và con người bạn trở thành ở nửa sau cuộc đời.');
-    html += numCard(ngaySinh, 'Số Ngày Sinh', '(ngày ' + ngay + ')', 'Món quà bẩm sinh — tài lẻ có sẵn không cần học, thường lộ ra rất sớm. ' + MEANINGS[ngaySinh].desc.replace(/^Số \d+ (là|mang) /, 'Ở đây nó là '), MEANINGS[ngaySinh].kw);
-    html += numCard(thaiDo, 'Số Thái Độ', '(ngày + tháng)', 'Ấn tượng đầu tiên bạn tạo ra và phản xạ của bạn khi bị dồn — mạnh nhất trong khoảng 30–35 năm đầu, và thường KHÁC hẳn con người thật bên trong. ' + MEANINGS[thaiDo].desc, MEANINGS[thaiDo].kw);
+    html += sectionTitle(U('sec.derived.t'), U('sec.derived.s'));
+    html += numCard(ngaySinh, U('ngaysinh.t'), U('ngaysinh.s', { d: ngay }), U('ngaysinh.d') + (root.I18n && root.I18n.locale && root.I18n.locale !== 'vi' ? mDesc(ngaySinh) : mDesc(ngaySinh).replace(/^Số \d+ (là|mang) /, 'Ở đây nó là ')), mKw(ngaySinh));
+    html += numCard(thaiDo, U('thaido.t'), U('thaido.s'), U('thaido.d') + mDesc(thaiDo), mKw(thaiDo));
     if (truongThanh) {
-      html += numCard(truongThanh, 'Số Trưởng Thành', '(Đường Đời + Định Mệnh)', 'Đích đến của nửa sau cuộc đời, thường phát huy rõ từ khoảng 35–40 tuổi trở đi, khi hai dòng năng lượng lớn nhất trong lá số hòa vào nhau. ' + MEANINGS[truongThanh].desc, MEANINGS[truongThanh].kw);
+      html += numCard(truongThanh, U('truongthanh.t'), U('truongthanh.s'), U('truongthanh.d') + mDesc(truongThanh), mKw(truongThanh));
     }
 
     // Năm cá nhân
-    html += sectionTitle('Năm cá nhân ' + namHienTai, 'Chỉ số duy nhất đổi theo thời gian — mỗi năm rơi vào một bậc trong vòng 9 năm.');
-    html += numCard(namCaNhan, 'Năm Cá Nhân ' + namCaNhan + '/9', '(năm ' + namHienTai + ')', PERSONAL_YEAR[namCaNhan], []);
+    html += sectionTitle(U('sec.py.t', { y: namHienTai }), U('sec.py.s'));
+    html += numCard(namCaNhan, U('py.t', { n: namCaNhan }), U('py.s', { y: namHienTai }), L('py.' + namCaNhan, PERSONAL_YEAR[namCaNhan]), []);
 
     // Biểu đồ ngày sinh
-    html += sectionTitle('Biểu đồ ngày sinh', 'Các chữ số có trong ' + String(ngay).padStart(2, '0') + '/' + String(thang).padStart(2, '0') + '/' + nam + ' xếp vào lưới Pythagoras. Ô đậm là năng lượng sẵn có, ô mờ là phần còn thiếu.');
+    html += sectionTitle(U('sec.grid.t'), U('sec.grid.s', { dob: String(ngay).padStart(2, '0') + '/' + String(thang).padStart(2, '0') + '/' + nam }));
     html += '<div style="padding:4px 24px 18px"><div style="display:grid;grid-template-columns:repeat(3,52px);gap:6px">';
     [[3, 6, 9], [2, 5, 8], [1, 4, 7]].forEach(function (row) {
       row.forEach(function (n) {
         var has = grid[n] > 0;
         html += '<div style="height:52px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid ' + C_LINE + ';background:' + (has ? C_SOFT : 'transparent') + ';color:' + (has ? C_NAVY : '#CFCFCF') + '">' +
           '<div style="font-size:17px;font-weight:700;line-height:1">' + (has ? String(n).repeat(Math.min(grid[n], 4)) : n) + '</div>' +
-          '<div style="font-size:9px;color:' + (has ? C_LT : '#CFCFCF') + ';margin-top:2px">' + (has ? '×' + grid[n] : 'trống') + '</div></div>';
+          '<div style="font-size:9px;color:' + (has ? C_LT : '#CFCFCF') + ';margin-top:2px">' + (has ? '×' + grid[n] : U('grid.empty')) + '</div></div>';
       });
     });
     html += '</div>';
     if (mtManh.length) {
-      html += '<div style="margin-top:14px;font-size:12.5px;color:' + C_TEXT + ';line-height:1.75"><b style="color:' + C_NAVY + '">Mũi tên mạnh:</b> ' +
-        mtManh.map(function (a) { return '<b>' + esc(a.manh) + '</b> (' + esc(a.line.join('-')) + ') — ' + esc(a.mo); }).join('; ') + '.</div>';
+      html += '<div style="margin-top:14px;font-size:12.5px;color:' + C_TEXT + ';line-height:1.75"><b style="color:' + C_NAVY + '">' + esc(U('arrow.strong')) + '</b> ' +
+        mtManh.map(function (a) { var ai = ARROWS.indexOf(a); return '<b>' + esc(L('ar.' + ai + '.manh', a.manh)) + '</b> (' + esc(a.line.join('-')) + ') — ' + esc(L('ar.' + ai + '.mo', a.mo)); }).join('; ') + '.</div>';
     }
     if (mtTrong.length) {
-      html += '<div style="margin-top:8px;font-size:12.5px;color:' + C_TEXT + ';line-height:1.75"><b style="color:' + C_NAVY + '">Mũi tên trống:</b> ' +
-        mtTrong.map(function (a) { return '<b>' + esc(a.yeu) + '</b> (' + esc(a.line.join('-')) + ') — ' + esc(a.mv); }).join('; ') + '.</div>';
+      html += '<div style="margin-top:8px;font-size:12.5px;color:' + C_TEXT + ';line-height:1.75"><b style="color:' + C_NAVY + '">' + esc(U('arrow.empty')) + '</b> ' +
+        mtTrong.map(function (a) { var ai = ARROWS.indexOf(a); return '<b>' + esc(L('ar.' + ai + '.yeu', a.yeu)) + '</b> (' + esc(a.line.join('-')) + ') — ' + esc(L('ar.' + ai + '.mv', a.mv)); }).join('; ') + '.</div>';
     }
     if (!mtManh.length && !mtTrong.length) {
-      html += '<div style="margin-top:14px;font-size:12.5px;color:' + C_LT + ';line-height:1.7">Ngày sinh này không tạo thành mũi tên đủ 3 số nào, cũng không có hàng nào trống hẳn — năng lượng trải khá đều, không có thái cực rõ rệt.</div>';
+      html += '<div style="margin-top:14px;font-size:12.5px;color:' + C_LT + ';line-height:1.7">' + esc(U('arrow.none')) + '</div>';
     }
     html += '</div>';
 
     // Bài học còn thiếu / đam mê tiềm ẩn
-    html += sectionTitle('Bài học còn thiếu & đam mê tiềm ẩn', 'Đọc từ TÊN: chữ số nào vắng mặt là bài học phải học trong đời, chữ số lặp nhiều nhất là thứ bạn bị cuốn vào mà không cưỡng được.');
+    html += sectionTitle(U('sec.lesson.t'), U('sec.lesson.s'));
     html += '<div style="padding:4px 24px 18px;font-size:12.5px;color:' + C_TEXT + ';line-height:1.75">';
     if (baiHoc.length) {
-      html += '<div><b style="color:' + C_NAVY + '">Bài học còn thiếu (' + baiHoc.join(', ') + '):</b></div><ul style="margin:6px 0 0;padding-left:18px">' +
-        baiHoc.map(function (n) { return '<li style="margin-bottom:4px">' + esc(KARMIC_LESSON[n]) + '</li>'; }).join('') + '</ul>';
+      html += '<div><b style="color:' + C_NAVY + '">' + esc(U('lesson.title', { list: baiHoc.join(', ') })) + '</b></div><ul style="margin:6px 0 0;padding-left:18px">' +
+        baiHoc.map(function (n) { return '<li style="margin-bottom:4px">' + esc(L('kl.' + n, KARMIC_LESSON[n])) + '</li>'; }).join('') + '</ul>';
     } else {
-      html += '<div>Tên của bạn chứa đủ cả 9 chữ số — <b>không có bài học còn thiếu</b>. Trường hợp khá hiếm: không mảng nào bị bỏ trống, nhưng cũng không có mảng nào được nhấn mạnh sẵn, mọi thứ đều phải tự chọn mà rèn.</div>';
+      html += '<div>' + U('lesson.none') + '</div>';
     }
     if (damMe.length) {
-      html += '<div style="margin-top:12px"><b style="color:' + C_NAVY + '">Đam mê tiềm ẩn (' + damMe.join(', ') + '):</b> ' +
-        damMe.map(function (n) { return esc(MEANINGS[n].kw.join(' · ')); }).join(' | ') +
-        ' — đây là thứ bạn quay về mãi dù có chuyển nghề bao nhiêu lần; mạnh quá thì thành lệch, cần chỗ xả lành mạnh.</div>';
+      html += '<div style="margin-top:12px"><b style="color:' + C_NAVY + '">' + esc(U('passion.title', { list: damMe.join(', ') })) + '</b> ' +
+        damMe.map(function (n) { return esc(mKw(n).join(' · ')); }).join(' | ') +
+        esc(U('passion.tail')) + '</div>';
     }
     html += '</div>';
 
     // Nợ nghiệp quật
-    html += sectionTitle('Nợ nghiệp quật', 'Bốn con số 13 · 14 · 16 · 19 — chỉ hiện khi TỔNG THÔ (trước lúc rút gọn) rơi đúng vào chúng.');
+    html += sectionTitle(U('sec.karma.t'), U('sec.karma.s'));
     html += '<div style="padding:4px 24px 18px;font-size:12.5px;color:' + C_TEXT + ';line-height:1.75">';
     if (noList.length) {
       html += noList.map(function (s) {
-        var p = s.split('|'), kd = KARMIC_DEBT[parseInt(p[0], 10)];
-        return '<div style="margin-bottom:10px"><b style="color:' + C_NAVY + '">' + esc(kd.ten) + '</b> <span style="color:' + C_LT + '">(ở chỉ số ' + esc(p[1]) + ')</span><br>' + esc(kd.desc) + '</div>';
+        var p = s.split('|'), kn = parseInt(p[0], 10), kd = KARMIC_DEBT[kn];
+        var idxKey = { 'Đường Đời': 'dd', 'Định Mệnh': 'dm', 'Linh Hồn': 'lh', 'Sứ Mệnh': 'sm', 'Ngày Sinh': 'ns' }[p[1]];
+        return '<div style="margin-bottom:10px"><b style="color:' + C_NAVY + '">' + esc(L('kd.' + kn + '.ten', kd.ten)) + '</b> <span style="color:' + C_LT + '">' + esc(U('karma.at', { name: U('idx.' + idxKey) })) + '</span><br>' + esc(L('kd.' + kn + '.desc', kd.desc)) + '</div>';
       }).join('');
     } else {
-      html += 'Lá số này <b>không mang nợ nghiệp quật</b> nào trong bốn con số 13/14/16/19. Không có nghĩa là đời không có thử thách — phần đó nằm ở mục Thử Thách bên dưới.';
+      html += U('karma.none');
     }
     html += '</div>';
 
     // Đỉnh cao & thử thách
-    html += sectionTitle('Đỉnh cao & thử thách theo giai đoạn', 'Bốn chặng đời, mỗi chặng có một Đỉnh Cao (cơ hội nổi bật) đi kèm một Thử Thách (bài học phải trả). Mốc tuổi suy từ Số Đường Đời ' + reduce1(duongDoi) + ' (36 − ' + reduce1(duongDoi) + ' = ' + end1 + ').');
+    html += sectionTitle(U('sec.peak.t'), U('sec.peak.s', { ld: reduce1(duongDoi), e: end1 }));
     html += '<div style="padding:4px 24px 18px">';
     for (var s2 = 0; s2 < 4; s2++) {
       var here = s2 === idxHienTai;
       html += '<div style="display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:8px;margin-bottom:6px;border:1px solid ' + (here ? '#c9a84c' : C_LINE) + ';background:' + (here ? '#FBF7EC' : 'transparent') + '">' +
         circle(dinhCaoArr[s2], 40) +
         '<div style="flex:1;font-size:12.5px;color:' + C_TEXT + ';line-height:1.7">' +
-        '<div style="font-weight:700;color:' + C_NAVY + '">Chặng ' + (s2 + 1) + ' · ' + esc(mocLabel(s2)) + (here ? ' <span style="color:#a8863a">— bạn đang ở đây</span>' : '') + '</div>' +
-        '<div style="margin-top:3px"><b>Đỉnh cao ' + dinhCaoArr[s2] + ':</b> ' + esc(MEANINGS[dinhCaoArr[s2]].kw.join(' · ')) + '.</div>' +
-        '<div style="margin-top:2px"><b>Thử thách ' + thuThachArr[s2] + ':</b> ' + esc(CHALLENGE[thuThachArr[s2]]) + '</div>' +
+        '<div style="font-weight:700;color:' + C_NAVY + '">' + esc(U('peak.stage', { i: s2 + 1, range: mocLabelUI(s2) })) + (here ? ' <span style="color:#a8863a">' + esc(U('peak.here')) + '</span>' : '') + '</div>' +
+        '<div style="margin-top:3px"><b>' + esc(U('peak.top', { n: dinhCaoArr[s2] })) + '</b> ' + esc(mKw(dinhCaoArr[s2]).join(' · ')) + '.</div>' +
+        '<div style="margin-top:2px"><b>' + esc(U('peak.chal', { n: thuThachArr[s2] })) + '</b> ' + esc(L('ch.' + thuThachArr[s2], CHALLENGE[thuThachArr[s2]])) + '</div>' +
         '</div></div>';
     }
     html += '</div>';
 
     // Nghề nghiệp phù hợp — suy từ Số Đường Đời, KHÔNG phải chỉ số mới, chỉ
     // là lớp diễn giải mới trên số đã có (xem ghi chú đầu file, 2026-09).
-    html += sectionTitle('Nghề nghiệp phù hợp', 'Suy từ Số Đường Đời ' + duongDoi + ' — hướng công việc năng lượng chủ đạo dễ phát huy nhất, không phải khung đóng cứng.');
+    html += sectionTitle(U('sec.career.t'), U('sec.career.s', { n: duongDoi }));
     html += '<div style="padding:4px 24px 18px;font-size:12.5px;color:' + C_TEXT + ';line-height:1.8">' +
-      CAREER[duongDoi].map(function (n) { return '<span class="num-kw" style="display:inline-block;margin:0 6px 6px 0">' + esc(n) + '</span>'; }).join('') +
-      '<div style="margin-top:10px;color:' + C_LT + '">Đây là hướng THUẬN theo năng lượng, không phải giới hạn — nghề ngoài danh sách vẫn tốt nếu công việc hằng ngày cho dùng đúng thế mạnh của số ' + duongDoi + '.</div></div>';
+      CAREER[duongDoi].map(function (n, ci) { return '<span class="num-kw" style="display:inline-block;margin:0 6px 6px 0">' + esc(L('ca.' + duongDoi + '.' + ci, n)) + '</span>'; }).join('') +
+      '<div style="margin-top:10px;color:' + C_LT + '">' + esc(U('career.note', { n: duongDoi })) + '</div></div>';
 
     // Tam Giác Vàng Hướng Nghiệp — ghép 3 số ĐÃ TÍNH (Đường Đời/Ngày Sinh/
     // Định Mệnh) thành MỘT bài đọc, thay vì để 3 mục rời nhau như phần trên.
     var tgV = [
-      { label: 'Cống Hiến', sub: '(Đường Đời)', n: duongDoi },
-      { label: 'Tài Năng', sub: '(Ngày Sinh)', n: ngaySinh },
-      { label: 'Sứ Mệnh', sub: '(Định Mệnh)', n: dinhMenh },
+      { label: U('tgv.a.l'), sub: U('tgv.a.s'), n: duongDoi },
+      { label: U('tgv.b.l'), sub: U('tgv.b.s'), n: ngaySinh },
+      { label: U('tgv.c.l'), sub: U('tgv.c.s'), n: dinhMenh },
     ];
     var tgCareerCount = {};
     tgV.forEach(function (v) { CAREER[v.n].forEach(function (c) { tgCareerCount[c] = (tgCareerCount[c] || 0) + 1; }); });
     var tgCareerRanked = Object.keys(tgCareerCount).sort(function (a, b) { return tgCareerCount[b] - tgCareerCount[a]; }).slice(0, 4);
-    html += sectionTitle('Tam giác vàng hướng nghiệp', 'Ba số cốt lõi cho hướng sự nghiệp, đọc CHUNG thành một hướng thay vì tách rời.');
+    html += sectionTitle(U('sec.tgv.t'), U('sec.tgv.s'));
     html += '<div style="padding:4px 24px 6px;display:flex;gap:10px;flex-wrap:wrap">' +
       tgV.map(function (v) {
         return '<div style="flex:1;min-width:130px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;border:1px solid ' + C_LINE + ';border-radius:8px">' +
@@ -414,8 +481,8 @@
           '<div style="font-size:10px;color:' + C_LT + '">' + esc(v.sub) + '</div></div>';
       }).join('') + '</div>';
     html += '<div style="padding:10px 24px 18px;font-size:12.5px;color:' + C_TEXT + ';line-height:1.8">' +
-      '<div>Bạn <b>cống hiến</b> tốt nhất khi được ' + esc(MEANINGS[duongDoi].kw.join(', ').toLowerCase()) + '; <b>tài năng</b> bẩm sinh nghiêng về ' + esc(MEANINGS[ngaySinh].kw.join(', ').toLowerCase()) + '; và <b>thể hiện ra ngoài</b> rõ nhất qua ' + esc(MEANINGS[dinhMenh].kw.join(', ').toLowerCase()) + '. Nghề bền nhất là nơi CẢ BA cùng có đất dùng, không phải nghề chỉ hợp với một trong ba.</div>' +
-      '<div style="margin-top:10px"><b style="color:' + C_NAVY + '">Giao điểm nghề nghiệp của ba số:</b> ' + tgCareerRanked.map(esc).join(', ') + '.</div></div>';
+      '<div>' + U('tgv.text', { a: esc(mKw(duongDoi).join(', ').toLowerCase()), b: esc(mKw(ngaySinh).join(', ').toLowerCase()), c: esc(mKw(dinhMenh).join(', ').toLowerCase()) }) + '</div>' +
+      '<div style="margin-top:10px"><b style="color:' + C_NAVY + '">' + esc(U('tgv.cross')) + '</b> ' + tgCareerRanked.map(function (c) { return esc(careerL(c)); }).join(', ') + '.</div></div>';
 
     // ── data PHẲNG cho rail ──────────────────────────────────────────────
     var dinhCaoStr = [0, 1, 2, 3].map(function (i) { return 'Chặng ' + (i + 1) + ' (' + mocLabel(i) + '): đỉnh ' + dinhCaoArr[i] + ' / thử thách ' + thuThachArr[i]; }).join(' · ');
@@ -451,7 +518,7 @@
     };
   }
 
-  var API = { compute: compute, vnYear: vnYear };
+  var API = { compute: compute, vnYear: vnYear, TABLES: { MEANINGS: MEANINGS, KARMIC_DEBT: KARMIC_DEBT, KARMIC_LESSON: KARMIC_LESSON, CAREER: CAREER, PERSONAL_YEAR: PERSONAL_YEAR, CHALLENGE: CHALLENGE, ARROWS: ARROWS, UI: UI } };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.ThanSoTool = API;
 })(typeof window !== 'undefined' ? window : globalThis);

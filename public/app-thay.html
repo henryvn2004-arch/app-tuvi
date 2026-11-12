@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Các Thầy — Tử Vi Minh Bảo</title>
-<meta name="description" content="15 thầy luận giải của Tử Vi Minh Bảo — mỗi thầy một chuyên môn, một giọng luận riêng."/>
+<title data-i18n="thay.cac-thay-tu-vi-minh-bao">Các Thầy — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:thay.15-thay-luan-giai-cua-tu" name="description" content="15 thầy luận giải của Tử Vi Minh Bảo — mỗi thầy một chuyên môn, một giọng luận riêng."/>
 <link rel="icon" type="image/webp" href="/seal.webp"/>
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -32,12 +32,12 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Các Thầy</b><span>15 thầy luận giải — mỗi thầy một chuyên môn, một giọng riêng</span></div>
+      <div data-i18n="thay.cac-thay-15-thay-luan-giai" class="ws-title"><b>Các Thầy</b><span>15 thầy luận giải — mỗi thầy một chuyên môn, một giọng riêng</span></div>
     </div>
     <div class="ws-body">
-      <input class="thay-search" type="search" id="thaySearch" placeholder="Tìm thầy theo tên hoặc chuyên môn…" autocomplete="off">
+      <input data-i18n-attr="placeholder:thay.tim-thay-theo-ten-hoac-chuyen" class="thay-search" type="search" id="thaySearch" placeholder="Tìm thầy theo tên hoặc chuyên môn…" autocomplete="off">
       <div class="thay-grid" id="thayGrid"></div>
-      <p class="thay-empty" id="thayEmpty" style="display:none">Không tìm thấy thầy nào khớp.</p>
+      <p data-i18n="thay.khong-tim-thay-thay-nao-khop" class="thay-empty" id="thayEmpty" style="display:none">Không tìm thấy thầy nào khớp.</p>
     </div>
   </main>
 </div>
@@ -60,6 +60,26 @@
   // Tên thầy theo ngôn ngữ trang (I18n.master, W19) — chỉ để hiển thị; vi ⇒ nguyên tên Việt.
   function mname(m){ return (window.I18n && I18n.master) ? I18n.master(m.id, m.display_name) : m.display_name; }
   function mtitle(m){ return (window.I18n && I18n.masterTitle) ? I18n.masterTitle(m.id, m.display_name) : 'Thầy ' + m.display_name; }
+  // Chuyên môn + câu cửa miệng: chữ gốc nằm ở DB (`master_profiles`, seed `_patches/migration-master-profiles-thay.sql`).
+  // Chỉ dịch khi chữ DB còn TRÙNG câu gốc dưới đây — DB đổi chữ thì hiện chữ DB (không hiện bản dịch cũ của câu khác).
+  var TR = {
+    'co-nguyet': [[_tvmbT('js.thay.disc-co-nguyet', 'Tử Vi gốc & Luận giải'), 'Tử Vi gốc & Luận giải'], [_tvmbT('js.thay.tag-co-nguyet', 'Xem kỹ cái gốc trước khi luận cái ngọn.'), 'Xem kỹ cái gốc trước khi luận cái ngọn.']],
+    'tu-nguyen': [[_tvmbT('js.thay.disc-tu-nguyen', 'Đại vận & Chu trình cuộc đời'), 'Đại vận & Chu trình cuộc đời'], [_tvmbT('js.thay.tag-tu-nguyen', 'Một câu, chốt luôn — không giải thích thêm.'), 'Một câu, chốt luôn — không giải thích thêm.']],
+    'nhat-nguyen': [[_tvmbT('js.thay.disc-nhat-nguyen', 'Vận ngắn hạn & Chọn ngày'), 'Vận ngắn hạn & Chọn ngày'], [_tvmbT('js.thay.tag-nhat-nguyen', 'Còn bao lâu nữa? Đếm ngược cho con luôn.'), 'Còn bao lâu nữa? Đếm ngược cho con luôn.']],
+    'dau-nam': [[_tvmbT('js.thay.disc-dau-nam', 'Tình duyên & Hôn nhân'), 'Tình duyên & Hôn nhân'], [_tvmbT('js.thay.tag-dau-nam', 'Sự thật khó nghe, nhưng con cần nghe.'), 'Sự thật khó nghe, nhưng con cần nghe.']],
+    'ngoc-tinh': [[_tvmbT('js.thay.disc-ngoc-tinh', 'Tương hợp & Duyên nợ'), 'Tương hợp & Duyên nợ'], [_tvmbT('js.thay.tag-ngoc-tinh', 'So sánh với một điều con không ngờ tới.'), 'So sánh với một điều con không ngờ tới.']],
+    'dieu-khong': [[_tvmbT('js.thay.disc-dieu-khong', 'Sự nghiệp & Tiền bạc'), 'Sự nghiệp & Tiền bạc'], [_tvmbT('js.thay.tag-dieu-khong', 'Đang lãng phí tài năng ở đúng chỗ này.'), 'Đang lãng phí tài năng ở đúng chỗ này.']],
+    'tam-kinh': [[_tvmbT('js.thay.disc-tam-kinh', 'Bát Tự & Kỳ Môn'), 'Bát Tự & Kỳ Môn'], [_tvmbT('js.thay.tag-tam-kinh', 'Đối chiếu ba hệ thống để tìm điểm hội tụ.'), 'Đối chiếu ba hệ thống để tìm điểm hội tụ.']],
+    'huyen-khong': [[_tvmbT('js.thay.disc-huyen-khong', 'Phong Thủy'), 'Phong Thủy'], [_tvmbT('js.thay.tag-huyen-khong', 'Nhà cửa đặt sai hướng, người trong nhà mệt mà không biết vì sao.'), 'Nhà cửa đặt sai hướng, người trong nhà mệt mà không biết vì sao.']],
+    'bac-minh': [[_tvmbT('js.thay.disc-bac-minh', 'Xem Tướng'), 'Xem Tướng'], [_tvmbT('js.thay.tag-bac-minh', 'Gương mặt không giấu được điều gì với người biết nhìn.'), 'Gương mặt không giấu được điều gì với người biết nhìn.']],
+    'linh-son': [[_tvmbT('js.thay.disc-linh-son', 'Sự nghiệp cạnh tranh & Nhân mạch'), 'Sự nghiệp cạnh tranh & Nhân mạch'], [_tvmbT('js.thay.tag-linh-son', 'Ai giúp được con, ai chỉ đang ngáng đường — nhìn lá số là biết.'), 'Ai giúp được con, ai chỉ đang ngáng đường — nhìn lá số là biết.']],
+    'thien-an': [[_tvmbT('js.thay.disc-thien-an', 'Đặt Tên & Dạy Con'), 'Đặt Tên & Dạy Con'], [_tvmbT('js.thay.tag-thien-an', 'Ít lời, nhưng mỗi lời đều có cân nhắc.'), 'Ít lời, nhưng mỗi lời đều có cân nhắc.']],
+    'linh-co': [[_tvmbT('js.thay.disc-linh-co', 'Kinh Dịch & Mai Hoa'), 'Kinh Dịch & Mai Hoa'], [_tvmbT('js.thay.tag-linh-co', 'Một quẻ, một hình ảnh, một câu trả lời.'), 'Một quẻ, một hình ảnh, một câu trả lời.']],
+    'thanh-hu': [[_tvmbT('js.thay.disc-thanh-hu', 'Tarot & Thần Số'), 'Tarot & Thần Số'], [_tvmbT('js.thay.tag-thanh-hu', 'Rút một lá, xem con đang thật sự muốn nghe điều gì.'), 'Rút một lá, xem con đang thật sự muốn nghe điều gì.']],
+    'thai-hu': [[_tvmbT('js.thay.disc-thai-hu', 'Hỏi nhanh, phản biện'), 'Hỏi nhanh, phản biện'], [_tvmbT('js.thay.tag-thai-hu', 'Vấn đề không phải ở chỗ con tưởng.'), 'Vấn đề không phải ở chỗ con tưởng.']],
+    'tinh-quang': [[_tvmbT('js.thay.disc-tinh-quang', 'Chiêm tinh Tây'), 'Chiêm tinh Tây'], [_tvmbT('js.thay.tag-tinh-quang', 'Nhìn cả bầu trời để hiểu một con người.'), 'Nhìn cả bầu trời để hiểu một con người.']],
+  };
+  function tr(m, i, v){ var r = TR[m.id] && TR[m.id][i]; return r && r[1] === v ? r[0] : v; }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
   function render(list){
@@ -69,12 +89,12 @@
     empty.style.display = 'none';
     grid.innerHTML = list.map(function(m){
       // Bấm thầy là vào chat thẳng với thầy đó (Shell.meetThay) — cùng đích với khối "Các Thầy" ở `/`.
-      return '<a class="thay-card" href="/app?thay=' + esc(m.id) + '#chat">' +
+      return '<a class="thay-card" href="' + _tvmbHref('/app?thay=' + esc(m.id) + '#chat') + '">' +
         '<img class="thay-ava" src="/authors/' + esc(m.id) + '.jpg" alt="" loading="lazy">' +
         '<div class="thay-tx">' +
           '<b>' + esc(mtitle(m)) + '</b>' +
-          (m.discipline ? '<span class="thay-disc">' + esc(m.discipline) + '</span>' : '') +
-          (m.tagline ? '<span class="thay-tag">' + esc(m.tagline) + '</span>' : '') +
+          (m.discipline ? '<span class="thay-disc">' + esc(tr(m, 0, m.discipline)) + '</span>' : '') +
+          (m.tagline ? '<span class="thay-tag">' + esc(tr(m, 1, m.tagline)) + '</span>' : '') +
         '</div>' +
       '</a>';
     }).join('');
@@ -89,7 +109,8 @@
         var q = e.target.value.trim().toLowerCase();
         render(!q ? list : list.filter(function(m){
           return (m.display_name || '').toLowerCase().indexOf(q) >= 0 || String(mname(m)).toLowerCase().indexOf(q) >= 0 ||
-                 (m.discipline || '').toLowerCase().indexOf(q) >= 0;
+                 (m.discipline || '').toLowerCase().indexOf(q) >= 0 ||
+                 String(tr(m, 0, m.discipline || '')).toLowerCase().indexOf(q) >= 0;
         }));
       });
     });
