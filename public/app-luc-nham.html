@@ -141,7 +141,7 @@
 window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'luc-nham'};</script>
 <script src="/tools-shared/luc-nham.js?v=5"></script>
-<script src="/tools-shared/dai-luc-nham.js?v=2"></script>
+<script src="/tools-shared/dai-luc-nham.js?v=3"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/shell.js?v=153"></script>
@@ -191,7 +191,7 @@ function calculate(){
     Shell.setContext({
       scenario:{type:'luc-nham',data:Object.assign({ngayDL:r.data.ngayDL,gio:r.data.gio,khoa:k},j.rail)},
       label:_tvmbT('js.lucnham.label','Lục Nhâm · {ngay} giờ {gio}',{ngay:_tvmbG('canchi',k.canChi.ngay),gio:_tvmbG('canchi',k.canChi.gio)}),
-      greeting:_tvmbT('js.lucnham.greeting','Đã lập khóa **Đại Lục Nhâm** — ngày {ngay}, giờ {gio}, {tdem}. Thủ truyền theo phép **{phap}**, sơ truyền **{chi} · {tuong}**. Bạn muốn hỏi việc gì?',{ngay:_tvmbG('canchi',k.canChi.ngay),gio:_tvmbG('canchi',k.canChi.gio),tdem:k.truDem,phap:k.phap.ten,chi:_tvmbG('chi',so.chi),tuong:so.tuong}),
+      greeting:_tvmbT('js.lucnham.greeting','Đã lập khóa **Đại Lục Nhâm** — ngày {ngay}, giờ {gio}, {tdem}. Thủ truyền theo phép **{phap}**, sơ truyền **{chi} · {tuong}**. Bạn muốn hỏi việc gì?',{ngay:_tvmbG('canchi',k.canChi.ngay),gio:_tvmbG('canchi',k.canChi.gio),tdem:DaiLucNham.tr.truDem(k),phap:DaiLucNham.tr.phap(k.phap).ten,chi:_tvmbG('chi',so.chi),tuong:DaiLucNham.tr.tuong(so.ma,so.tuong)}),
       chips:[_tvmbT('js.lucnham.chip1','Việc này thành hay bại?'),_tvmbT('js.lucnham.chip2','Bao giờ có kết quả?'),_tvmbT('js.lucnham.chip3','Nên tiến hay nên lui?'),_tvmbT('js.lucnham.chip4','Tam truyền nói gì về diễn tiến?')]
     });
     Shell.setShareable({

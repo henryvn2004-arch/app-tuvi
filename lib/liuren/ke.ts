@@ -30,8 +30,8 @@
 import { generateLiuren } from 'mingyu-core/divination/liuren';
 import { TimeManager } from 'mingyu-core/calendar';
 import {
-  THIEN_TUONG, VUONG_SUY, HANH, KHOA_TEN, TRUYEN_TEN, DANG_TRUYEN,
-  docQuanHe, docKhoaThe, docPhap, docThanSat, canChiViet, phienAm, type Muc,
+  THIEN_TUONG, VUONG_SUY, HANH, KHOA_TEN, TRUYEN_TEN, DANG_TRUYEN, TRU_DEM, THAN_SAT,
+  docQuanHe, docKhoaThe, docPhap, docThanSat, canChiViet, phienAm, maKhoaThe, maPhap, type Muc,
 } from './terms';
 
 /** ⚠️ BẮT BUỘC — mingyu mặc định +480 (Bắc Kinh). Xem `lib/qimen/board.ts`. */
@@ -41,22 +41,37 @@ export interface KhoaLucNham {
   khi: string;
   canChi: { nam: string; thang: string; ngay: string; gio: string };
   truDem: string;
+  /**
+   * MÃ tra bản dịch (W28, additive — chữ Việt ở trường anh em GIỮ NGUYÊN cho rail/prompt). Mã = khoá Hán của
+   * mingyu, client tra ns `lucnham` ở chỗ vẽ (`dai-luc-nham.js`). Thiếu mã ⇒ client giữ chữ Việt.
+   */
+  truDemMa: string;
   nguyetTuong: string;
   chiemThoi: string;
   quyNhan: { thienBan: string; diaBan: string };
   tuanKhong: string[];
   canNgayKyCung: string;
-  phap: { ten: string; nghia: string };
-  dangTruyen: { ten: string; nghia: string };
-  thienBan: { thien: string; dia: string; tuong: string; muc: Muc; nghia: string }[];
-  tuKhoa: { ten: string; tren: string; duoi: string; tuong: string; muc: Muc; quanHe: string }[];
+  phap: { ten: string; nghia: string; ma: string[] | null };
+  dangTruyen: { ten: string; nghia: string; ma: string | null };
+  thienBan: { thien: string; dia: string; tuong: string; muc: Muc; nghia: string; ma: MaTuong }[];
+  tuKhoa: {
+    ten: string; tren: string; duoi: string; tuong: string; muc: Muc; quanHe: string;
+    ma: MaTuong & { ten: string | null; quanHe: string };
+  }[];
   tamTruyen: {
     ten: string; chi: string; tuong: string; muc: Muc; hanh: string;
     vuongSuy: string; tuanKhong: boolean; quanHe: string; quanHeCanNgay: string;
+    ma: MaTuong & { vuongSuy: string | null; quanHeCanNgay: string };
   }[];
   khoaThe: string[];
-  thanSat: { ten: string; muc: Muc; nghia: string }[];
+  /** Song song `khoaThe`: danh sách khoá ns `lucnham` (xem `maKhoaThe`), `null` = phiên âm lùi. */
+  khoaTheMa: (string[] | null)[];
+  thanSat: { ten: string; muc: Muc; nghia: string; ma: string | null }[];
 }
+
+/** Mã thiên tướng (khoá Hán) — `null` khi tên lùi về phiên âm (không có trong bảng). */
+type MaTuong = { tuong: string | null };
+const maTuong = (g: string): MaTuong => ({ tuong: THIEN_TUONG[g] ? g : null });
 
 function tuong(g: string) {
   const t = THIEN_TUONG[g];
@@ -81,7 +96,8 @@ export function lapKhoa(khi?: Date): KhoaLucNham {
       gio: canChiViet(r.ganzhi.hour),
     },
     // 昼占 / 夜占 — quyết định dùng Quý Nhân ban ngày hay ban đêm.
-    truDem: r.dayNight === '昼占' ? 'Trú chiêm (ban ngày)' : 'Dạ chiêm (ban đêm)',
+    truDem: TRU_DEM[r.dayNight === '昼占' ? '昼占' : '夜占']!,
+    truDemMa: r.dayNight === '昼占' ? '昼占' : '夜占',
     nguyetTuong: canChiViet(r.monthLeader),
     chiemThoi: canChiViet(r.divinationBranch),
     quyNhan: {
@@ -90,11 +106,14 @@ export function lapKhoa(khi?: Date): KhoaLucNham {
     },
     tuanKhong: (r.xunKong || []).map((c: string) => canChiViet(c)),
     canNgayKyCung: canChiViet(r.dayStemResidence),
-    phap,
-    dangTruyen: dt,
+    phap: { ...phap, ma: maPhap(r.transmissionRule) },
+    dangTruyen: { ...dt, ma: DANG_TRUYEN[r.transmissionPattern] ? r.transmissionPattern : null },
     thienBan: (r.heavenlyPlate || []).map((x: any) => {
       const g = tuong(x.god);
-      return { thien: canChiViet(x.branch), dia: canChiViet(x.under), tuong: g.ten, muc: g.muc, nghia: g.nghia };
+      return {
+        thien: canChiViet(x.branch), dia: canChiViet(x.under), tuong: g.ten, muc: g.muc, nghia: g.nghia,
+        ma: maTuong(x.god),
+      };
     }),
     tuKhoa: (r.fourLessons || []).map((x: any) => {
       const g = tuong(x.god);
@@ -105,6 +124,7 @@ export function lapKhoa(khi?: Date): KhoaLucNham {
         tuong: g.ten,
         muc: g.muc,
         quanHe: docQuanHe(x.relation),
+        ma: { ...maTuong(x.god), ten: KHOA_TEN[x.name] ? x.name : null, quanHe: String(x.relation || '') },
       };
     }),
     tamTruyen: (r.threeTransmissions || []).map((x: any) => {
@@ -119,10 +139,19 @@ export function lapKhoa(khi?: Date): KhoaLucNham {
         tuanKhong: !!x.isVoid,
         quanHe: docQuanHe(x.relation),
         quanHeCanNgay: docQuanHe(x.dayRelation),
+        ma: {
+          ...maTuong(x.god),
+          vuongSuy: VUONG_SUY[x.seasonState] ? x.seasonState : null,
+          quanHeCanNgay: String(x.dayRelation || ''),
+        },
       };
     }),
     khoaThe: (r.patternTags || []).map((x: string) => docKhoaThe(x)),
-    thanSat: (r.shenShaFacts || []).map((x: any) => docThanSat(x.name)),
+    khoaTheMa: (r.patternTags || []).map((x: string) => maKhoaThe(x)),
+    thanSat: (r.shenShaFacts || []).map((x: any) => ({
+      ...docThanSat(x.name),
+      ma: THAN_SAT[x.name] ? (x.name as string) : null,
+    })),
   };
 }
 

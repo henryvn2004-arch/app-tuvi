@@ -118,12 +118,40 @@ export const TRUYEN_TEN: Record<string, string> = {
   初传: 'Sơ truyền', 中传: 'Trung truyền', 末传: 'Mạt truyền',
 };
 
+/** 昼占 / 夜占 — quyết định dùng Quý Nhân ban ngày hay ban đêm. */
+export const TRU_DEM: Record<string, string> = {
+  昼占: 'Trú chiêm (ban ngày)',
+  夜占: 'Dạ chiêm (ban đêm)',
+};
+
+/**
+ * KHUÔN câu ghép biến (W28 loại b, i18n lô E): engine dựng chữ Việt BẰNG chính khuôn này nên bản dịch theo
+ * khoá (`lib/i18n/long.mjs` ns `lucnham`, `khuon.<khoá>`) luôn cùng nghĩa với chữ Việt đang hiện. Đổi chữ ở đây
+ * là đổi hash ⇒ `check:i18nlong` đòi dịch lại. `{a}`/`{b}` là TÊN hành (glossary `hanh`) hoặc câu đã dịch.
+ */
+export const KHUON: Record<string, string> = {
+  tyHoa: 'tỷ hòa (cùng hành)',
+  sinh: '{a} sinh {b}',
+  khac: '{a} khắc {b}',
+  ketHop: '{a}; kết hợp {b}',
+  phatDung: '{tuong} phát dụng',
+};
+
+/** Điền `{x}` của một khuôn — dùng CHUNG cho mọi câu ghép của file này. */
+export function dien(khuon: string, v: Record<string, string>): string {
+  return khuon.replace(/\{(\w+)\}/g, (m, n: string) => (v[n] !== undefined ? v[n] : m));
+}
+
 /** `土生金` · `火克金` · `比和` → tiếng Việt. */
 export function docQuanHe(raw: string): string {
   const s = String(raw || '');
-  if (s === '比和') return 'tỷ hòa (cùng hành)';
+  if (s === '比和') return KHUON.tyHoa!;
   const m = /^(.)(生|克)(.)$/.exec(s);
-  if (m) return `${HANH[m[1]!] || m[1]} ${m[2] === '生' ? 'sinh' : 'khắc'} ${HANH[m[3]!] || m[3]}`;
+  if (m)
+    return dien(m[2] === '生' ? KHUON.sinh! : KHUON.khac!, {
+      a: HANH[m[1]!] || m[1]!,
+      b: HANH[m[3]!] || m[3]!,
+    });
   return phienAm(s);
 }
 
@@ -147,7 +175,7 @@ export function docKhoaThe(raw: string): string {
   if (KHOA_THE[s]) return KHOA_THE[s];
   if (s.endsWith('发用')) {
     const g = THIEN_TUONG[s.slice(0, -2)];
-    return (g ? g.ten : phienAm(s.slice(0, -2))) + ' phát dụng';
+    return dien(KHUON.phatDung!, { tuong: g ? g.ten : phienAm(s.slice(0, -2)) });
   }
   for (let i = 1; i < s.length; i++) {
     const a = KHOA_THE[s.slice(0, i)];
@@ -171,9 +199,42 @@ export function docPhap(raw: string): { ten: string; nghia: string } {
   for (let i = 1; i < s.length; i++) {
     const a = PHAP_THU_TRUYEN[s.slice(0, i)];
     const b = PHAP_THU_TRUYEN[s.slice(i)];
-    if (a && b) return { ten: `${a.ten} ${b.ten}`, nghia: `${a.nghia}; kết hợp ${b.nghia}` };
+    if (a && b) return { ten: `${a.ten} ${b.ten}`, nghia: dien(KHUON.ketHop!, { a: a.nghia, b: b.nghia }) };
   }
   return { ten: phienAm(s), nghia: '' };
+}
+
+// ── MÃ tra cho client (W28, additive) ─────────────────────────────────────────
+// Cùng đường tách với `docKhoaThe`/`docPhap` ở trên, nhưng trả KHOÁ nguồn văn engine (ns `lucnham`) thay cho
+// chữ Việt — client dịch ở chỗ vẽ. `null` = đường lùi phiên âm (không có bản dịch, client giữ chữ Việt).
+
+/**
+ * Khóa thể → mã: `[X]` (khoá `khoathe.X`) · `[A, B]` (ghép, `khoathe.A` + `khoathe.B`) · `[G, '发用']` (thiên
+ * tướng G phát dụng: `tuong.G` + `khuon.phatDung`).
+ */
+export function maKhoaThe(raw: string): string[] | null {
+  const s = String(raw || '');
+  if (KHOA_THE[s]) return [s];
+  if (s.endsWith('发用')) {
+    const g = s.slice(0, -2);
+    return THIEN_TUONG[g] ? [g, '发用'] : null;
+  }
+  for (let i = 1; i < s.length; i++)
+    if (KHOA_THE[s.slice(0, i)] && KHOA_THE[s.slice(i)]) return [s.slice(0, i), s.slice(i)];
+  // Đường lùi phiên âm mà ra ĐÚNG NGUYÊN VĂN một mục bảng (vd nhãn đứng một mình `返吟` → "Phản Ngâm" = `反吟`)
+  // ⇒ mượn mã mục đó: cùng chữ Việt thì cùng bản dịch. Không đụng `docKhoaThe` (chữ Việt giữ nguyên byte).
+  const pa = phienAm(s);
+  const cung = Object.keys(KHOA_THE).find((k) => KHOA_THE[k] === pa);
+  return cung ? [cung] : null;
+}
+
+/** Phép thủ truyền → mã phép (1 hoặc 2 khi ghép); client tra `phap.<mã>.ten|nghia`. */
+export function maPhap(raw: string): string[] | null {
+  const s = String(raw || '').replace(/法$/, '');
+  if (PHAP_THU_TRUYEN[s]) return [s];
+  for (let i = 1; i < s.length; i++)
+    if (PHAP_THU_TRUYEN[s.slice(0, i)] && PHAP_THU_TRUYEN[s.slice(i)]) return [s.slice(0, i), s.slice(i)];
+  return null;
 }
 
 export function docThanSat(raw: string): { ten: string; muc: Muc; nghia: string } {

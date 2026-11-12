@@ -23,6 +23,62 @@
     var g = window.TuviGlossary;
     return g && v ? g.t(kind, v) : v;
   }
+
+  // ── Văn ENGINE theo ngôn ngữ (W28, lô E): `/api/liuren` trả chữ Việt + MÃ Hán (`ma`/`*Ma`) — dịch ở ĐÂY,
+  // chỗ vẽ, qua văn dài ns `lucnham` (lib/i18n/long.mjs). Mảnh nào thiếu mã/bản dịch ⇒ giữ NGUYÊN câu Việt
+  // của engine (vi không nạp gì nên byte-giống; payload cũ trong CDN thiếu `ma` cũng lùi về Việt).
+  if (window.I18n && window.I18n.loadLong) window.I18n.loadLong('lucnham');
+  var NUL = '\u0000';
+  function _long(ns, k) {
+    var I = window.I18n;
+    if (!I || !I.long) return null;
+    var s = I.long(ns, k, NUL);
+    return s === NUL ? null : s;
+  }
+  function _t(k) { return _long('lucnham', k); }
+  function _khuon(n) { return _t('khuon.' + n); }
+  function _fill(s, v) {
+    return s.replace(/\{(\w+)\}/g, function (m, n) { return v[n] !== undefined ? v[n] : m; });
+  }
+  function _sp() { return /^(ja|zh)/.test((window.I18n && window.I18n.locale) || '') ? '' : ' '; }
+  // Chữ Hán hành → tên Việt (khoá glossary `hanh`) — chỉ để dựng lại câu "A sinh/khắc B" theo ngôn ngữ.
+  var HANH_VI = { '木': 'Mộc', '火': 'Hỏa', '土': 'Thổ', '金': 'Kim', '水': 'Thủy' };
+  function tTuong(ma, vi) { return (ma && ma.tuong && _t('tuong.' + ma.tuong)) || vi; }
+  function tQuanHe(raw, vi) {
+    if (!raw) return vi;
+    if (raw === '比和') return _khuon('tyHoa') || vi;
+    var m = /^(.)(生|克)(.)$/.exec(raw);
+    var k = m && _t(m[2] === '生' ? 'khuon.sinh' : 'khuon.khac');
+    return k ? _fill(k, { a: _g('hanh', HANH_VI[m[1]] || m[1]), b: _g('hanh', HANH_VI[m[3]] || m[3]) }) : vi;
+  }
+  function tKhoaThe(p, vi) {
+    if (!p || !p.length) return vi;
+    if (p[1] === '发用') {
+      var t = _t('tuong.' + p[0]), f = _khuon('phatDung');
+      return t && f ? _fill(f, { tuong: t }) : vi;
+    }
+    var o = p.map(function (x) { return _t('khoathe.' + x); });
+    return o.every(Boolean) ? o.join(_sp()) : vi;
+  }
+  function tPhap(ph) {
+    var ma = ph && ph.ma;
+    if (!ma || !ma.length) return ph;
+    var t = ma.map(function (x) { return _t('phap.' + x + '.ten'); });
+    var n = ma.map(function (x) { return _t('phap.' + x + '.nghia'); });
+    if (!t.every(Boolean) || !n.every(Boolean)) return ph;
+    if (ma.length === 1) return { ten: t[0], nghia: n[0] };
+    var kh = _khuon('ketHop');
+    return kh ? { ten: t.join(_sp()), nghia: _fill(kh, { a: n[0], b: n[1] }) } : ph;
+  }
+  function tDangTruyen(dt) {
+    var ma = dt && dt.ma;
+    var t = ma && _t('dt.' + ma + '.ten'), n = ma && _t('dt.' + ma + '.nghia');
+    return t && n ? { ten: t, nghia: n } : dt;
+  }
+  function tTruDem(k) { return (k.truDemMa && _t('trudem.' + k.truDemMa)) || k.truDem; }
+  function tVuongSuy(ma, vi) { return (ma && ma.vuongSuy && _t('vs.' + ma.vuongSuy)) || vi; }
+  function tKhoaTen(ma, vi) { return (ma && ma.ten && _t('khoa.' + ma.ten)) || vi; }
+  function tThanSat(s) { return (s.ma && _t('thansat.' + s.ma)) || s.ten; }
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -76,7 +132,7 @@
       '<div class="lnk-row"><span>' + _tv('js.shellui.dln-ngay-b', 'Ngày <b>{v}</b>', { v: esc(_g('canchi', k.canChi.ngay)) }) + '</span>' +
       '<span>' + _tv('js.shellui.dln-gio-b', 'Giờ <b>{v}</b>', { v: esc(_g('canchi', k.canChi.gio)) }) + '</span>' +
       '<span>' + _tv('js.shellui.dln-thang-b', 'Tháng <b>{v}</b>', { v: esc(_g('canchi', k.canChi.thang)) }) + '</span>' +
-      '<span><b>' + esc(k.truDem) + '</b></span></div>'
+      '<span><b>' + esc(tTruDem(k)) + '</b></span></div>'
     );
     o.push(
       '<div class="lnk-row"><span>' + _tv('js.shellui.dln-nguyet-tuong', 'Nguyệt tướng <b>{nt}</b> gia lên giờ chiêm <b>{ct}</b>', { nt: esc(k.nguyetTuong), ct: esc(_g('chi', k.chiemThoi)) }) + '</span>' +
@@ -89,7 +145,7 @@
     k.tuKhoa.forEach(function (x) {
       o.push(
         '<div class="lnk-cell ' + x.muc + '"><b>' + esc(_g('chi', x.tren)) + ' / ' + esc(_g('chi', x.duoi)) + '</b>' +
-        '<span>' + esc(x.ten) + ' · ' + esc(x.tuong) + '<br>' + esc(x.quanHe) + '</span></div>'
+        '<span>' + esc(tKhoaTen(x.ma, x.ten)) + ' · ' + esc(tTuong(x.ma, x.tuong)) + '<br>' + esc(tQuanHe(x.ma && x.ma.quanHe, x.quanHe)) + '</span></div>'
       );
     });
     o.push('</div>');
@@ -99,26 +155,27 @@
     k.tamTruyen.forEach(function (x) {
       o.push(
         '<div class="lnk-cell ' + x.muc + '" style="text-align:left">' +
-        '<div class="st">' + esc(x.ten) + '</div>' +
-        '<div class="ch">' + esc(_g('chi', x.chi)) + ' · ' + esc(x.tuong) + '</div>' +
-        '<div class="mt">' + _tv('js.shellui.dln-hanh-vuong-suy', 'Hành {h} — {vs}', { h: esc(_g('hanh', x.hanh)), vs: esc(x.vuongSuy) }) +
+        '<div class="st">' + esc(_g('lucnham', x.ten)) + '</div>' +
+        '<div class="ch">' + esc(_g('chi', x.chi)) + ' · ' + esc(tTuong(x.ma, x.tuong)) + '</div>' +
+        '<div class="mt">' + _tv('js.shellui.dln-hanh-vuong-suy', 'Hành {h} — {vs}', { h: esc(_g('hanh', x.hanh)), vs: esc(tVuongSuy(x.ma, x.vuongSuy)) }) +
         (x.tuanKhong ? ' · <b>' + _tv('js.shellui.dln-roi-tuan-khong', 'rơi Tuần Không') + '</b>' : '') +
-        '<br>' + _tv('js.shellui.dln-voi-can-ngay', 'Với can ngày: {v}', { v: esc(x.quanHeCanNgay) }) + '</div></div>'
+        '<br>' + _tv('js.shellui.dln-voi-can-ngay', 'Với can ngày: {v}', { v: esc(tQuanHe(x.ma && x.ma.quanHeCanNgay, x.quanHeCanNgay)) }) + '</div></div>'
       );
     });
     o.push('</div>');
 
     o.push('<div class="lnk-h">' + _tv('js.shellui.dln-phep-thu-truyen', 'Phép thủ truyền') + '</div>');
-    o.push('<div class="lnk-row"><span><b>' + esc(k.phap.ten) + '</b> — ' + esc(k.phap.nghia) + '</span></div>');
-    o.push('<div class="lnk-row"><span><b>' + esc(k.dangTruyen.ten) + '</b> — ' + esc(k.dangTruyen.nghia) + '</span></div>');
+    var ph = tPhap(k.phap), dt = tDangTruyen(k.dangTruyen);
+    o.push('<div class="lnk-row"><span><b>' + esc(ph.ten) + '</b> — ' + esc(ph.nghia) + '</span></div>');
+    o.push('<div class="lnk-row"><span><b>' + esc(dt.ten) + '</b> — ' + esc(dt.nghia) + '</span></div>');
 
     if (k.khoaThe && k.khoaThe.length) {
       o.push('<div class="lnk-h">' + _tv('js.shellui.dln-khoa-the', 'Khóa thể') + '</div><div>' +
-        k.khoaThe.map(function (t) { return chip(t, 'binh'); }).join('') + '</div>');
+        k.khoaThe.map(function (t, i) { return chip(tKhoaThe(k.khoaTheMa && k.khoaTheMa[i], t), 'binh'); }).join('') + '</div>');
     }
     if (k.thanSat && k.thanSat.length) {
       o.push('<div class="lnk-h">' + _tv('js.shellui.dln-than-sat', 'Thần sát') + '</div><div>' +
-        k.thanSat.map(function (s) { return chip(s.ten, s.muc); }).join('') + '</div>');
+        k.thanSat.map(function (s) { return chip(tThanSat(s), s.muc); }).join('') + '</div>');
     }
 
     // ── thiên địa bàn ──
@@ -126,7 +183,7 @@
     k.thienBan.forEach(function (x) {
       o.push(
         '<div class="lnk-cell ' + x.muc + '"><b>' + esc(_g('chi', x.thien)) + '</b>' +
-        '<span>' + _tv('js.shellui.dln-tren', 'trên {v}', { v: esc(_g('chi', x.dia)) }) + '<br>' + esc(x.tuong) + '</span></div>'
+        '<span>' + _tv('js.shellui.dln-tren', 'trên {v}', { v: esc(_g('chi', x.dia)) }) + '<br>' + esc(tTuong(x.ma, x.tuong)) + '</span></div>'
       );
     });
     o.push('</div>');
@@ -148,5 +205,9 @@
     });
   }
 
-  window.DaiLucNham = { lap: lap, html: html, ve: ve };
+  // `tr`: dịch tên/cụm của khóa cho chỗ vẽ ngoài module (lời chào rail của trang) — cùng đường lùi Việt.
+  window.DaiLucNham = {
+    lap: lap, html: html, ve: ve,
+    tr: { truDem: tTruDem, phap: tPhap, tuong: tTuong },
+  };
 })();
