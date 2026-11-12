@@ -358,9 +358,17 @@ console.log('__KQ__' + JSON.stringify(out));
       if (ns === 'cong-so') {
         // Khuôn câu: chữ Việt hàm dựng ra phải = khuôn nguồn thay biến (vi byte-giống) và mọi khuôn phải có đường tới.
         const lech = kq['ma-cong-so'].lech;
-        bao(lech.length === 0, `ma-cong-so  — câu dựng ≠ khuôn nguồn: ${[...new Set(lech)].join(', ') || 'không'}`);
-        const chuaToi = src[ns].map((e) => e.k).filter((k) => /^(luan|ghep)\./.test(k) && !khoa.includes(k));
-        bao(chuaToi.length === 0, `ma-cong-so  — khuôn không hàm nào dựng tới (chữ chết): ${chuaToi.join(', ') || 'không'}`);
+        bao(
+          lech.length === 0,
+          `ma-cong-so  — câu dựng ≠ khuôn nguồn: ${[...new Set(lech)].join(', ') || 'không'}`
+        );
+        const chuaToi = src[ns]
+          .map((e) => e.k)
+          .filter((k) => /^(luan|ghep)\./.test(k) && !khoa.includes(k));
+        bao(
+          chuaToi.length === 0,
+          `ma-cong-so  — khuôn không hàm nào dựng tới (chữ chết): ${chuaToi.join(', ') || 'không'}`
+        );
       }
     }
   }
