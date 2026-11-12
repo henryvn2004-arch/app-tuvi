@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-576 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+577 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -29,6 +29,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🧰 W27 — Việc dùng chung đợt 5: "Thầy {tên}" ở shell.js · `I18n.db` cho nhãn DB (công cụ/gói/thầy) · JSON-LD theo ngôn ngữ (`ld.*`) · `js.auth`/`js.taikhoan` nhúng đúng · check:i18n quét tools-shared |
 | 1 | 2026-11 | `2026-11.md` | 💳 W21 — Đường tiền + niềm tin: 16 trang đủ 5 ngôn ngữ (Hồ sơ, xác nhận thanh toán, combo, báo cáo, thầy, FAQ…) · khuôn "Thầy {tên}" · PayPal trả về đúng `/<locale>` |
 | 1 | 2026-11 | `2026-11.md` | 🃏 W25 — Tarot · Bói Bài Tây · Oracle đủ 5 ngôn ngữ; khung tĩnh 10 trang (thần số học, bản đồ sao, phong thủy ×3, mệnh khố, công cụ, tài liệu) vào từ điển; tên sách giữ gốc; bẫy `i18n:prune` · chuỗi Việt không dấu |
 | 1 | 2026-11 | `2026-11.md` | 🎙️ W23 — Thanh Tướng Pro · Thanh Tướng · Nhãn Tướng đủ 5 ngôn ngữ; Thủ Tướng dở dang; 9 trang còn lại chưa làm |
