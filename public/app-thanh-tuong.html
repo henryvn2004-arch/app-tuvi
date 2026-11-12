@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thanh Tướng — Tử Vi Minh Bảo</title>
-<meta name="description" content="Ghi âm đọc một đoạn thơ ngắn — hệ thống phân tích thanh tướng theo Ngũ Âm cổ pháp: Kim, Mộc, Thủy, Hỏa, Thổ.">
+<title data-i18n="thtg.thanh-tuong-tu-vi-minh-bao">Thanh Tướng — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:thtg.ghi-am-doc-mot-doan-tho" name="description" content="Ghi âm đọc một đoạn thơ ngắn — hệ thống phân tích thanh tướng theo Ngũ Âm cổ pháp: Kim, Mộc, Thủy, Hỏa, Thổ.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -81,9 +81,9 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Thanh Tướng</b><span>Xem tướng giọng nói theo Ngũ Âm cổ pháp — <span data-tvp-price="thanh-tuong">…</span> Lượng</span></div>
+      <div data-i18n="thtg.thanh-tuong-xem-tuong-giong-noi" class="ws-title"><b>Thanh Tướng</b><span>Xem tướng giọng nói theo Ngũ Âm cổ pháp — <span data-tvp-price="thanh-tuong">…</span> Lượng</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -97,15 +97,15 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
         <img class="intro-avatar" src="/tool-avatars/thanh-tuong.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Thanh Tướng</div>
-            <div class="intro-d">Giọng nói không chỉ để giao tiếp — cổ pháp thanh âm học đọc được cả nghề hợp, nghề nên tránh từ chính chất giọng của bạn. Ghi âm một đoạn ngắn, nhận bản luận Ngũ Âm ngay.</div>
+            <div data-i18n="thtg.thanh-tuong" class="intro-t">Thanh Tướng</div>
+            <div data-i18n="thtg.giong-noi-khong-chi-de-giao" class="intro-d">Giọng nói không chỉ để giao tiếp — cổ pháp thanh âm học đọc được cả nghề hợp, nghề nên tránh từ chính chất giọng của bạn. Ghi âm một đoạn ngắn, nhận bản luận Ngũ Âm ngay.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="mic"></span><span>Ghi âm<br>đoạn thơ ngắn</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Đo cao độ,<br>tốc độ, âm sắc</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ngũ Âm cổ pháp</span></div>
+          <div data-i18n="thtg.ghi-am-doan-tho-ngan" class="hero-pill"><span class="hp-ic" data-icon="mic"></span><span>Ghi âm<br>đoạn thơ ngắn</span></div>
+          <div data-i18n="thtg.do-cao-do-toc-do-am" class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Đo cao độ,<br>tốc độ, âm sắc</span></div>
+          <div data-i18n="thtg.luan-theo-ngu-am-co-phap" class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ngũ Âm cổ pháp</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -115,33 +115,33 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
            không có màn "xem trước" tách riêng — đo giọng xong vẫn đứng
            nguyên ở bước 1 cho tới khi bấm phân tích, nên chỉ 3 bước. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Ghi âm giọng nói</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="thtg.1-ghi-am-giong-noi" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Ghi âm giọng nói</span></div>
+        <div data-i18n="thtg.2-thanh-toan" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="thtg.3-nhan-ket-qua" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="dt-card" id="inputCard">
-        <div class="fc-head"><span class="fc-ic" data-icon="mic"></span><h2>Ghi Âm Giọng Nói</h2></div>
-        <p class="sub">Đọc thành tiếng đoạn mẫu bên dưới để hệ thống ghi âm và đo chỉ số âm học, đối chiếu với Ngũ Âm cổ pháp.</p>
-        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Âm thanh xử lý hoàn toàn trong trình duyệt. Chỉ gửi các chỉ số đo được (không gửi file audio) lên server để máy chủ phân tích.</div></div>
+        <div class="fc-head"><span class="fc-ic" data-icon="mic"></span><h2 data-i18n="thtg.ghi-am-giong-noi">Ghi Âm Giọng Nói</h2></div>
+        <p data-i18n="thtg.doc-thanh-tieng-doan-mau-ben" class="sub">Đọc thành tiếng đoạn mẫu bên dưới để hệ thống ghi âm và đo chỉ số âm học, đối chiếu với Ngũ Âm cổ pháp.</p>
+        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div data-i18n="thtg.am-thanh-xu-ly-hoan-toan">Âm thanh xử lý hoàn toàn trong trình duyệt. Chỉ gửi các chỉ số đo được (không gửi file audio) lên server để máy chủ phân tích.</div></div>
 
         <div class="passage-card">
-          <div class="passage-label"><span class="ic" data-icon="book-open"></span> Đọc đoạn thơ này (tự nhiên, rõ ràng)</div>
-          <div class="passage-text">
+          <div data-i18n="thtg.doc-doan-tho-nay-tu-nhien" class="passage-label"><span class="ic" data-icon="book-open"></span> Đọc đoạn thơ này (tự nhiên, rõ ràng)</div>
+          <div data-i18n="thtg.cong-cha-nhu-nui-thai-son" class="passage-text">
             Công cha như núi <em>Thái Sơn</em>,<br>
             nghĩa mẹ như nước trong nguồn <em>chảy ra</em>.<br>
             Một lòng thờ mẹ kính cha,<br>
             cho tròn chữ hiếu mới là <em>đạo con</em>.
           </div>
-          <div class="passage-note">Đọc chậm rãi, tự nhiên — khoảng 10–15 giây · Nên ở nơi yên tĩnh, không có tiếng ồn</div>
+          <div data-i18n="thtg.doc-cham-rai-tu-nhien-khoang" class="passage-note">Đọc chậm rãi, tự nhiên — khoảng 10–15 giây · Nên ở nơi yên tĩnh, không có tiếng ồn</div>
         </div>
 
         <div class="record-wrap">
           <div class="countdown-badge" id="countdownBadge"></div>
-          <button class="btn-record" id="recordBtn" onclick="toggleRecord()">
+          <button data-i18n="thtg.bat-dau-thu-am" class="btn-record" id="recordBtn" onclick="toggleRecord()">
             <span id="recordIcon" class="ic" data-icon="mic"></span>
             <span id="recordLabel">Bắt Đầu Thu Âm</span>
           </button>
-          <div class="status-msg" id="statusMsg">Nhấn để bắt đầu thu âm · Cho phép truy cập microphone khi trình duyệt hỏi</div>
+          <div data-i18n="thtg.nhan-de-bat-dau-thu-am" class="status-msg" id="statusMsg">Nhấn để bắt đầu thu âm · Cho phép truy cập microphone khi trình duyệt hỏi</div>
           <div class="timer-bar-wrap" id="timerBarWrap">
             <div class="timer-bar" id="timerBar"></div>
           </div>
@@ -152,7 +152,7 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
         </div>
 
         <div class="features-panel" id="featuresPanel">
-          <div class="features-title"><span class="ic" data-icon="bar-chart-3"></span> Kết quả đo lường giọng nói</div>
+          <div data-i18n="thtg.ket-qua-do-luong-giong-noi" class="features-title"><span class="ic" data-icon="bar-chart-3"></span> Kết quả đo lường giọng nói</div>
           <div class="features-grid" id="featuresGrid"></div>
           <div style="text-align:center;margin-top:6px">
             <span id="nguAmBadge" class="ngu-am-badge"></span>
@@ -163,9 +163,9 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="thanh-tuong"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="thanh-tuong">…</span> Lượng)</span></div>
-              <div class="cb-pay">
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="thtg.moi-luot-luong" class="cb-amt"><span class="vnd" data-tvp-price-vnd="thanh-tuong"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="thanh-tuong">…</span> Lượng)</span></div>
+              <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
               </div>
@@ -173,10 +173,10 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
           </div>
           <div class="cb-r">
             <span class="cb-ic" data-icon="gift"></span>
-            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
           </div>
         </div>
-        <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
+        <button data-i18n="thtg.phan-tich-thanh-tuong-ton-luong" class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
           <span class="bg-label"><span class="ic" data-icon="music"></span><b id="analyzeBtnLabel">Phân Tích Thanh Tướng →</b></span>
           <small>Tốn <span class="vnd" data-tvp-price-vnd="thanh-tuong"></span> <span class="cb-sub">(<span data-tvp-price="thanh-tuong">…</span> Lượng)</span></small>
         </button>
@@ -185,25 +185,25 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Thanh Tướng</div>
-        <p class="wsp-desc">Ngũ Âm tướng pháp là một nhánh của nhân tướng học luận đoán qua giọng nói, phân loại âm thanh theo Cung, Thương, Giốc, Chủy, Vũ tương ứng với Ngũ Hành. Phương pháp này được ghi nhận trong các cổ thư tướng học như Ma Y Thần Tướng.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="thtg.thanh-tuong" class="wsp-title">Thanh Tướng</div>
+        <p data-i18n="thtp.ngu-am-tuong-phap-la-mot" class="wsp-desc">Ngũ Âm tướng pháp là một nhánh của nhân tướng học luận đoán qua giọng nói, phân loại âm thanh theo Cung, Thương, Giốc, Chủy, Vũ tương ứng với Ngũ Hành. Phương pháp này được ghi nhận trong các cổ thư tướng học như Ma Y Thần Tướng.</p>
       </div>
       <div class="samp-cta" id="sampCta">
         <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn ghi âm?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="thanh-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+        <span data-i18n="thtp.chua-muon-ghi-am-ban-co" class="sc-txt"><b>Chưa muốn ghi âm?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button data-i18n="thtp.xem-ban-mau" type="button" id="btnSample" data-sample-tool="thanh-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
       </div>
       <div id="shellRecent"></div>
       </div>
       </div>
 
       <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
-        <h2>Phân Tích Thanh Tướng Học</h2>
-        <p class="sub">Ngũ Âm Cổ Pháp · Mã Môi · Đạt Ma</p>
+        <h2 data-i18n="thtg.phan-tich-thanh-tuong-hoc">Phân Tích Thanh Tướng Học</h2>
+        <p data-i18n="thtg.ngu-am-co-phap-ma-moi" class="sub">Ngũ Âm Cổ Pháp · Mã Môi · Đạt Ma</p>
         <div id="aiResult" class="dt-result"></div>
         <div style="text-align:center;margin-top:8px">
-          <button class="btn-cancel" onclick="resetTool()">Thu Âm Lại</button>
+          <button data-i18n="thtg.thu-am-lai" class="btn-cancel" onclick="resetTool()">Thu Âm Lại</button>
         </div>
       </div>
     </div>
