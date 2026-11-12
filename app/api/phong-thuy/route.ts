@@ -14,7 +14,6 @@ import { llmText, type LlmImage } from '@/lib/llm/complete';
 import { requestLocale, withLang } from '@/lib/llm/locale';
 import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
-import { requestLocale, withLang } from '@/lib/llm/locale';
 import { guaOf } from '@/lib/engine/bat-trach';
 
 // ── LLM helper (Gemini-primary + Anthropic-backup qua lib/llm/complete) ──────
