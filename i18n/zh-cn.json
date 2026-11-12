@@ -2559,6 +2559,206 @@
   "t": "请选择图片档。",
   "h": "71a61127"
  },
+ "js.noisinh.noi-khac": {
+  "t": "其他（选择时区）",
+  "h": "dee91293"
+ },
+ "js.noisinh.vung-america-anchorage": {
+  "t": "阿拉斯加",
+  "h": "7288f7f8"
+ },
+ "js.noisinh.vung-america-cancun": {
+  "t": "金塔纳罗奥（坎昆）",
+  "h": "a0570d82"
+ },
+ "js.noisinh.vung-america-chicago": {
+  "t": "中部（芝加哥、德州）",
+  "h": "bff83b4f"
+ },
+ "js.noisinh.vung-america-chihuahua": {
+  "t": "奇瓦瓦",
+  "h": "c505a9ee"
+ },
+ "js.noisinh.vung-america-cuiaba": {
+  "t": "马托格罗索（库亚巴）",
+  "h": "93bc2a58"
+ },
+ "js.noisinh.vung-america-denver": {
+  "t": "山区（丹佛、犹他）",
+  "h": "134332e5"
+ },
+ "js.noisinh.vung-america-edmonton": {
+  "t": "亚伯达（卡加利、艾德蒙吞）",
+  "h": "b2e43118"
+ },
+ "js.noisinh.vung-america-fortaleza": {
+  "t": "东北部（福塔雷萨、累西腓）",
+  "h": "9aec8b83"
+ },
+ "js.noisinh.vung-america-halifax": {
+  "t": "新斯科细亚、新不伦瑞克",
+  "h": "a8df3343"
+ },
+ "js.noisinh.vung-america-hermosillo": {
+  "t": "索诺拉",
+  "h": "6bf7497c"
+ },
+ "js.noisinh.vung-america-los-angeles": {
+  "t": "西部（加州、华盛顿州、内华达）",
+  "h": "575d6232"
+ },
+ "js.noisinh.vung-america-manaus": {
+  "t": "亚马逊州（马瑙斯）",
+  "h": "ed2318c2"
+ },
+ "js.noisinh.vung-america-mexico-city": {
+  "t": "墨西哥城",
+  "h": "6f2504a8"
+ },
+ "js.noisinh.vung-america-new-york": {
+  "t": "东部（纽约、华盛顿、佛罗里达）",
+  "h": "dd133140"
+ },
+ "js.noisinh.vung-america-noronha": {
+  "t": "费尔南多迪诺罗尼亚",
+  "h": "2fde06cc"
+ },
+ "js.noisinh.vung-america-phoenix": {
+  "t": "亚利桑那",
+  "h": "104fd3fd"
+ },
+ "js.noisinh.vung-america-regina": {
+  "t": "萨斯喀彻温",
+  "h": "59faf251"
+ },
+ "js.noisinh.vung-america-rio-branco": {
+  "t": "阿克里（白河市）",
+  "h": "f9bd2753"
+ },
+ "js.noisinh.vung-america-sao-paulo": {
+  "t": "圣保罗、里约热内卢、巴西利亚",
+  "h": "399ffe72"
+ },
+ "js.noisinh.vung-america-st-johns": {
+  "t": "纽芬兰",
+  "h": "26141861"
+ },
+ "js.noisinh.vung-america-tijuana": {
+  "t": "下加利福尼亚（提华纳）",
+  "h": "13926f45"
+ },
+ "js.noisinh.vung-america-toronto": {
+  "t": "安大略、魁北克（多伦多、蒙特娄）",
+  "h": "269b79f5"
+ },
+ "js.noisinh.vung-america-vancouver": {
+  "t": "不列颠哥伦比亚（温哥华）",
+  "h": "28973314"
+ },
+ "js.noisinh.vung-america-winnipeg": {
+  "t": "曼尼托巴（温尼伯）",
+  "h": "80e2d9ca"
+ },
+ "js.noisinh.vung-asia-almaty": {
+  "t": "阿拉木图、阿斯塔纳",
+  "h": "aa213dd9"
+ },
+ "js.noisinh.vung-asia-aqtobe": {
+  "t": "哈萨克斯坦西部（阿克托比）",
+  "h": "6d10ee22"
+ },
+ "js.noisinh.vung-asia-irkutsk": {
+  "t": "伊尔库次克",
+  "h": "f9bd4c15"
+ },
+ "js.noisinh.vung-asia-jakarta": {
+  "t": "印尼西部（雅加达、苏门答腊）",
+  "h": "2392de20"
+ },
+ "js.noisinh.vung-asia-jayapura": {
+  "t": "印尼东部（巴布亚）",
+  "h": "df48b98d"
+ },
+ "js.noisinh.vung-asia-kamchatka": {
+  "t": "堪察加",
+  "h": "23e8a422"
+ },
+ "js.noisinh.vung-asia-krasnoyarsk": {
+  "t": "克拉斯诺亚尔斯克",
+  "h": "7f9fde59"
+ },
+ "js.noisinh.vung-asia-magadan": {
+  "t": "马加丹",
+  "h": "4fdccca9"
+ },
+ "js.noisinh.vung-asia-makassar": {
+  "t": "印尼中部（峇里、苏拉威西）",
+  "h": "8702559b"
+ },
+ "js.noisinh.vung-asia-novosibirsk": {
+  "t": "新西伯利亚",
+  "h": "fb8d7707"
+ },
+ "js.noisinh.vung-asia-omsk": {
+  "t": "鄂木斯克",
+  "h": "eb8ebb22"
+ },
+ "js.noisinh.vung-asia-vladivostok": {
+  "t": "海参崴",
+  "h": "fa32a249"
+ },
+ "js.noisinh.vung-asia-yakutsk": {
+  "t": "雅库次克",
+  "h": "0613e23b"
+ },
+ "js.noisinh.vung-asia-yekaterinburg": {
+  "t": "叶卡捷琳堡",
+  "h": "c2daa856"
+ },
+ "js.noisinh.vung-australia-adelaide": {
+  "t": "南澳（阿德雷德）",
+  "h": "72ad53b3"
+ },
+ "js.noisinh.vung-australia-brisbane": {
+  "t": "昆士兰（布里斯本）",
+  "h": "272e1f8b"
+ },
+ "js.noisinh.vung-australia-darwin": {
+  "t": "北领地（达尔文）",
+  "h": "450de8f0"
+ },
+ "js.noisinh.vung-australia-hobart": {
+  "t": "塔斯曼尼亚（荷巴特）",
+  "h": "902ee4e7"
+ },
+ "js.noisinh.vung-australia-melbourne": {
+  "t": "维多利亚（墨尔本）",
+  "h": "34e81b5d"
+ },
+ "js.noisinh.vung-australia-perth": {
+  "t": "西澳（伯斯）",
+  "h": "de084687"
+ },
+ "js.noisinh.vung-australia-sydney": {
+  "t": "新南威尔斯、首都领地（雪梨、坎培拉）",
+  "h": "5bc1b945"
+ },
+ "js.noisinh.vung-europe-kaliningrad": {
+  "t": "加里宁格勒",
+  "h": "7484e853"
+ },
+ "js.noisinh.vung-europe-moscow": {
+  "t": "莫斯科、圣彼得堡",
+  "h": "5a57fbcd"
+ },
+ "js.noisinh.vung-europe-samara": {
+  "t": "萨马拉",
+  "h": "f6b8e61f"
+ },
+ "js.noisinh.vung-pacific-honolulu": {
+  "t": "夏威夷",
+  "h": "a1be9509"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 点开即付款并立即阅读，",
   "h": "9a6023cd"
@@ -7818,6 +8018,262 @@
  "js.topup.xem-lich-su": {
   "t": "查看纪录",
   "h": "21a19fb0"
+ },
+ "js.tuviform.ca-nhan": {
+  "t": "个人数据",
+  "h": "bbe1cce8"
+ },
+ "js.tuviform.chon-du-ngay": {
+  "t": "请选择完整的出生日、月、年。",
+  "h": "808dc076"
+ },
+ "js.tuviform.chon-noi-sinh": {
+  "t": "— 选择出生地 —",
+  "h": "87b109c3"
+ },
+ "js.tuviform.con-hoi-cho-ai": {
+  "t": "这次是为谁解读？",
+  "h": "4171dda8"
+ },
+ "js.tuviform.con-muon-xem-nam": {
+  "t": "想看哪一年的运势？",
+  "h": "43e3ee2b"
+ },
+ "js.tuviform.dien-day-du": {
+  "t": "请填写左侧的数据——国历出生日期与出生时间——再按下解读。",
+  "h": "618a618f"
+ },
+ "js.tuviform.gio": {
+  "t": "时",
+  "h": "75f92388"
+ },
+ "js.tuviform.gio-am": {
+  "t": "时辰：{chi}",
+  "h": "9ce5a400"
+ },
+ "js.tuviform.gio-sinh": {
+  "t": "出生时间",
+  "h": "2d0aa7eb"
+ },
+ "js.tuviform.gio-sinh-ok": {
+  "t": "出生时间：<b>{hm}</b> ✓",
+  "h": "b77347e7"
+ },
+ "js.tuviform.gioi-tinh": {
+  "t": "性别",
+  "h": "80bbce55"
+ },
+ "js.tuviform.gt-nam": {
+  "t": "男",
+  "h": "b580ba1b"
+ },
+ "js.tuviform.gt-nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.tuviform.ho-ten": {
+  "t": "姓名",
+  "h": "ad9f2994"
+ },
+ "js.tuviform.hoi-cho": {
+  "t": "为 <b>{ten}</b> 询问 ✓",
+  "h": "3ced148a"
+ },
+ "js.tuviform.khong-nho-chinh-xac": {
+  "t": "不确定出生时间？推算看看 →",
+  "h": "333f8bee"
+ },
+ "js.tuviform.khong-ten": {
+  "t": "未命名",
+  "h": "7c5b38ee"
+ },
+ "js.tuviform.lich-cn": {
+  "t": "中国历法时间",
+  "h": "5fe3ccc2"
+ },
+ "js.tuviform.lich-jp": {
+  "t": "日本历法时间",
+  "h": "fe6e8036"
+ },
+ "js.tuviform.lich-kr": {
+  "t": "韩国历法时间",
+  "h": "a8ae0a48"
+ },
+ "js.tuviform.lich-vn": {
+  "t": "越南时间",
+  "h": "f54ee2eb"
+ },
+ "js.tuviform.luan-giai-la-so": {
+  "t": "命盘解读 →",
+  "h": "4bb771eb"
+ },
+ "js.tuviform.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "js.tuviform.nam-sinh": {
+  "t": "出生年",
+  "h": "75a6785f"
+ },
+ "js.tuviform.nam-xem-van": {
+  "t": "推算流年",
+  "h": "8f575533"
+ },
+ "js.tuviform.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "js.tuviform.ngay-sinh": {
+  "t": "出生日",
+  "h": "6f8de308"
+ },
+ "js.tuviform.ngay-sinh-duong": {
+  "t": "国历出生日期",
+  "h": "5b85cc30"
+ },
+ "js.tuviform.ngay-sinh-ok": {
+  "t": "出生日期：<b>{y}年{m}月{d}日</b> ✓",
+  "h": "c457dbc0"
+ },
+ "js.tuviform.ngay-thang-nam-sinh": {
+  "t": "出生日期（日／月／年）",
+  "h": "84864f2e"
+ },
+ "js.tuviform.ngoai-goi-y": {
+  "t": "若出生于海外请勾选——系统会自动换算出生地的时区、夏令时间与农历。",
+  "h": "6af69dc4"
+ },
+ "js.tuviform.ngoai-vn": {
+  "t": "出生于越南境外？",
+  "h": "db788745"
+ },
+ "js.tuviform.nguoi-moi": {
+  "t": "+ 添加对象",
+  "h": "eab3d0ff"
+ },
+ "js.tuviform.nguoi-moi-nhe": {
+  "t": "好的，添加一位。",
+  "h": "021dd849"
+ },
+ "js.tuviform.nhap-ho-ten": {
+  "t": "请输入姓名。",
+  "h": "69dc7698"
+ },
+ "js.tuviform.noi-sinh": {
+  "t": "出生地",
+  "h": "39348136"
+ },
+ "js.tuviform.phut": {
+  "t": "分",
+  "h": "34ca51a4"
+ },
+ "js.tuviform.q1-gt": {
+  "t": "你的性别是？",
+  "h": "d8b7441e"
+ },
+ "js.tuviform.q1-ten": {
+  "t": "请告诉我你的完整姓名。",
+  "h": "1e9a5600"
+ },
+ "js.tuviform.q1-ten-gt": {
+  "t": "请告诉我你的姓名与性别。",
+  "h": "24ab2186"
+ },
+ "js.tuviform.q2": {
+  "t": "你的国历出生日期是哪一天？",
+  "h": "abef36df"
+ },
+ "js.tuviform.q3": {
+  "t": "你是几点出生的？",
+  "h": "e5d555b9"
+ },
+ "js.tuviform.ten-mau": {
+  "t": "王小明",
+  "h": "7388465b"
+ },
+ "js.tuviform.ten-mau-vd": {
+  "t": "例如：王小明",
+  "h": "eafae45a"
+ },
+ "js.tuviform.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "js.tuviform.thang-khong-co-ngay": {
+  "t": "{y}年{m}月没有{d}日，请重新选择。",
+  "h": "da49ec5e"
+ },
+ "js.tuviform.thang-sinh": {
+  "t": "出生月",
+  "h": "4695b6cf"
+ },
+ "js.tuviform.thong-tin": {
+  "t": "数据",
+  "h": "d5fc2a3b"
+ },
+ "js.tuviform.thuc-thi": {
+  "t": "送出",
+  "h": "c591a584"
+ },
+ "js.tuviform.tiep-tuc": {
+  "t": "继续 →",
+  "h": "86f35ed9"
+ },
+ "js.tuviform.tip-auto": {
+  "t": "系统会依据输入的出生日期自动调整。",
+  "h": "62305e4c"
+ },
+ "js.tuviform.tip-intro": {
+  "t": "古法的<b>子时</b>为 23:00–00:59。但越南历史上多次更改时区：",
+  "h": "2cd8aaeb"
+ },
+ "js.tuviform.tip-khong-nho": {
+  "t": "<b>不记得出生时间？</b> 很多人都记不清，但出生时辰会影响本站许多解读。<a href=\"/app/gio-sinh\" target=\"_blank\" style=\"color:#1455A4;font-weight:600\">推算你的出生时间 →</a>",
+  "h": "af1572d3"
+ },
+ "js.tuviform.tip-li1": {
+  "t": "<b>1942年～1944年3月9日</b>（UTC+8）：子时 = 00:00–01:59",
+  "h": "0d7e7b3f"
+ },
+ "js.tuviform.tip-li2": {
+  "t": "<b>1944年3月9日～1945年9月2日</b>（UTC+9）：子时 = 01:00–02:59",
+  "h": "ac7257ad"
+ },
+ "js.tuviform.tip-li3": {
+  "t": "<b>1945年9月2日～1946年12月18日</b>（UTC+7）：子时 = 23:00–00:59",
+  "h": "8375e4b8"
+ },
+ "js.tuviform.tip-li4": {
+  "t": "<b>1946年12月19日～1955年6月30日</b>（UTC+8）：子时 = 00:00–01:59",
+  "h": "72d27e9b"
+ },
+ "js.tuviform.tip-li5": {
+  "t": "<b>1955年7月1日～1959年12月31日</b>（UTC+7）：子时 = 23:00–00:59",
+  "h": "88a1bc9a"
+ },
+ "js.tuviform.tip-li6": {
+  "t": "<b>1960年1月1日～1975年4月30日</b>（UTC+8，南越）：子时 = 00:00–01:59",
+  "h": "a0d6511f"
+ },
+ "js.tuviform.tip-li7": {
+  "t": "<b>自 1975年5月1日起</b>（UTC+7）：子时 = 23:00–00:59",
+  "h": "4995b03d"
+ },
+ "js.tuviform.tip-title": {
+  "t": "越南时区沿革",
+  "h": "3172a126"
+ },
+ "js.tuviform.xem-mau-pdf": {
+  "t": "查看解读范例（PDF）",
+  "h": "0053d860"
+ },
+ "js.tuviform.xem-van-nam": {
+  "t": "{n}年流年",
+  "h": "c2204f1d"
+ },
+ "js.tuviform.xem-van-nam-ok": {
+  "t": "<b>{n}</b>年流年 ✓",
+  "h": "f47721f2"
  },
  "js.vanhannam.bai-tinh": {
   "t": "败星：",

@@ -2559,6 +2559,206 @@
   "t": "이미지 파일을 선택해 주세요.",
   "h": "71a61127"
  },
+ "js.noisinh.noi-khac": {
+  "t": "기타 (시간대 선택)",
+  "h": "dee91293"
+ },
+ "js.noisinh.vung-america-anchorage": {
+  "t": "알래스카",
+  "h": "7288f7f8"
+ },
+ "js.noisinh.vung-america-cancun": {
+  "t": "킨타나로오 (칸쿤)",
+  "h": "a0570d82"
+ },
+ "js.noisinh.vung-america-chicago": {
+  "t": "중부 (시카고, 텍사스)",
+  "h": "bff83b4f"
+ },
+ "js.noisinh.vung-america-chihuahua": {
+  "t": "치와와",
+  "h": "c505a9ee"
+ },
+ "js.noisinh.vung-america-cuiaba": {
+  "t": "마투그로수 (쿠이아바)",
+  "h": "93bc2a58"
+ },
+ "js.noisinh.vung-america-denver": {
+  "t": "산악 (덴버, 유타)",
+  "h": "134332e5"
+ },
+ "js.noisinh.vung-america-edmonton": {
+  "t": "앨버타 (캘거리, 에드먼턴)",
+  "h": "b2e43118"
+ },
+ "js.noisinh.vung-america-fortaleza": {
+  "t": "북동부 (포르탈레자, 헤시피)",
+  "h": "9aec8b83"
+ },
+ "js.noisinh.vung-america-halifax": {
+  "t": "노바스코샤, 뉴브런즈윅",
+  "h": "a8df3343"
+ },
+ "js.noisinh.vung-america-hermosillo": {
+  "t": "소노라",
+  "h": "6bf7497c"
+ },
+ "js.noisinh.vung-america-los-angeles": {
+  "t": "서부 (캘리포니아, 워싱턴, 네바다)",
+  "h": "575d6232"
+ },
+ "js.noisinh.vung-america-manaus": {
+  "t": "아마조나스 (마나우스)",
+  "h": "ed2318c2"
+ },
+ "js.noisinh.vung-america-mexico-city": {
+  "t": "멕시코시티",
+  "h": "6f2504a8"
+ },
+ "js.noisinh.vung-america-new-york": {
+  "t": "동부 (뉴욕, 워싱턴, 플로리다)",
+  "h": "dd133140"
+ },
+ "js.noisinh.vung-america-noronha": {
+  "t": "페르난두지노로냐",
+  "h": "2fde06cc"
+ },
+ "js.noisinh.vung-america-phoenix": {
+  "t": "애리조나",
+  "h": "104fd3fd"
+ },
+ "js.noisinh.vung-america-regina": {
+  "t": "서스캐처원",
+  "h": "59faf251"
+ },
+ "js.noisinh.vung-america-rio-branco": {
+  "t": "아크리 (히우브랑쿠)",
+  "h": "f9bd2753"
+ },
+ "js.noisinh.vung-america-sao-paulo": {
+  "t": "상파울루, 리우데자네이루, 브라질리아",
+  "h": "399ffe72"
+ },
+ "js.noisinh.vung-america-st-johns": {
+  "t": "뉴펀들랜드",
+  "h": "26141861"
+ },
+ "js.noisinh.vung-america-tijuana": {
+  "t": "바하칼리포르니아 (티후아나)",
+  "h": "13926f45"
+ },
+ "js.noisinh.vung-america-toronto": {
+  "t": "온타리오, 퀘벡 (토론토, 몬트리올)",
+  "h": "269b79f5"
+ },
+ "js.noisinh.vung-america-vancouver": {
+  "t": "브리티시컬럼비아 (밴쿠버)",
+  "h": "28973314"
+ },
+ "js.noisinh.vung-america-winnipeg": {
+  "t": "매니토바 (위니펙)",
+  "h": "80e2d9ca"
+ },
+ "js.noisinh.vung-asia-almaty": {
+  "t": "알마티, 아스타나",
+  "h": "aa213dd9"
+ },
+ "js.noisinh.vung-asia-aqtobe": {
+  "t": "카자흐스탄 서부 (악토베)",
+  "h": "6d10ee22"
+ },
+ "js.noisinh.vung-asia-irkutsk": {
+  "t": "이르쿠츠크",
+  "h": "f9bd4c15"
+ },
+ "js.noisinh.vung-asia-jakarta": {
+  "t": "인도네시아 서부 (자카르타, 수마트라)",
+  "h": "2392de20"
+ },
+ "js.noisinh.vung-asia-jayapura": {
+  "t": "인도네시아 동부 (파푸아)",
+  "h": "df48b98d"
+ },
+ "js.noisinh.vung-asia-kamchatka": {
+  "t": "캄차카",
+  "h": "23e8a422"
+ },
+ "js.noisinh.vung-asia-krasnoyarsk": {
+  "t": "크라스노야르스크",
+  "h": "7f9fde59"
+ },
+ "js.noisinh.vung-asia-magadan": {
+  "t": "마가단",
+  "h": "4fdccca9"
+ },
+ "js.noisinh.vung-asia-makassar": {
+  "t": "인도네시아 중부 (발리, 술라웨시)",
+  "h": "8702559b"
+ },
+ "js.noisinh.vung-asia-novosibirsk": {
+  "t": "노보시비르스크",
+  "h": "fb8d7707"
+ },
+ "js.noisinh.vung-asia-omsk": {
+  "t": "옴스크",
+  "h": "eb8ebb22"
+ },
+ "js.noisinh.vung-asia-vladivostok": {
+  "t": "블라디보스토크",
+  "h": "fa32a249"
+ },
+ "js.noisinh.vung-asia-yakutsk": {
+  "t": "야쿠츠크",
+  "h": "0613e23b"
+ },
+ "js.noisinh.vung-asia-yekaterinburg": {
+  "t": "예카테린부르크",
+  "h": "c2daa856"
+ },
+ "js.noisinh.vung-australia-adelaide": {
+  "t": "사우스오스트레일리아 (애들레이드)",
+  "h": "72ad53b3"
+ },
+ "js.noisinh.vung-australia-brisbane": {
+  "t": "퀸즐랜드 (브리즈번)",
+  "h": "272e1f8b"
+ },
+ "js.noisinh.vung-australia-darwin": {
+  "t": "노던테리토리 (다윈)",
+  "h": "450de8f0"
+ },
+ "js.noisinh.vung-australia-hobart": {
+  "t": "태즈메이니아 (호바트)",
+  "h": "902ee4e7"
+ },
+ "js.noisinh.vung-australia-melbourne": {
+  "t": "빅토리아 (멜버른)",
+  "h": "34e81b5d"
+ },
+ "js.noisinh.vung-australia-perth": {
+  "t": "웨스턴오스트레일리아 (퍼스)",
+  "h": "de084687"
+ },
+ "js.noisinh.vung-australia-sydney": {
+  "t": "뉴사우스웨일스, ACT (시드니, 캔버라)",
+  "h": "5bc1b945"
+ },
+ "js.noisinh.vung-europe-kaliningrad": {
+  "t": "칼리닌그라드",
+  "h": "7484e853"
+ },
+ "js.noisinh.vung-europe-moscow": {
+  "t": "모스크바, 상트페테르부르크",
+  "h": "5a57fbcd"
+ },
+ "js.noisinh.vung-europe-samara": {
+  "t": "사마라",
+  "h": "f6b8e61f"
+ },
+ "js.noisinh.vung-pacific-honolulu": {
+  "t": "하와이",
+  "h": "a1be9509"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 열면 바로 결제되고 곧바로 읽을 수 있어요, ",
   "h": "9a6023cd"
@@ -7818,6 +8018,262 @@
  "js.topup.xem-lich-su": {
   "t": "기록 보기",
   "h": "21a19fb0"
+ },
+ "js.tuviform.ca-nhan": {
+  "t": "개인 정보",
+  "h": "bbe1cce8"
+ },
+ "js.tuviform.chon-du-ngay": {
+  "t": "생년월일(일·월·년)을 모두 선택해 주세요.",
+  "h": "808dc076"
+ },
+ "js.tuviform.chon-noi-sinh": {
+  "t": "— 출생지 선택 —",
+  "h": "87b109c3"
+ },
+ "js.tuviform.con-hoi-cho-ai": {
+  "t": "누구의 풀이인가요?",
+  "h": "4171dda8"
+ },
+ "js.tuviform.con-muon-xem-nam": {
+  "t": "어느 해의 운세를 볼까요?",
+  "h": "43e3ee2b"
+ },
+ "js.tuviform.dien-day-du": {
+  "t": "왼쪽에 양력 생년월일과 태어난 시각을 모두 입력한 뒤 풀이를 시작하세요.",
+  "h": "618a618f"
+ },
+ "js.tuviform.gio": {
+  "t": "시",
+  "h": "75f92388"
+ },
+ "js.tuviform.gio-am": {
+  "t": "시진: {chi}",
+  "h": "9ce5a400"
+ },
+ "js.tuviform.gio-sinh": {
+  "t": "태어난 시각",
+  "h": "2d0aa7eb"
+ },
+ "js.tuviform.gio-sinh-ok": {
+  "t": "태어난 시각: <b>{hm}</b> ✓",
+  "h": "b77347e7"
+ },
+ "js.tuviform.gioi-tinh": {
+  "t": "성별",
+  "h": "80bbce55"
+ },
+ "js.tuviform.gt-nam": {
+  "t": "남성",
+  "h": "b580ba1b"
+ },
+ "js.tuviform.gt-nu": {
+  "t": "여성",
+  "h": "feb92ccd"
+ },
+ "js.tuviform.ho-ten": {
+  "t": "이름",
+  "h": "ad9f2994"
+ },
+ "js.tuviform.hoi-cho": {
+  "t": "<b>{ten}</b>님에 대해 ✓",
+  "h": "3ced148a"
+ },
+ "js.tuviform.khong-nho-chinh-xac": {
+  "t": "태어난 시각이 정확하지 않나요? 알아보기 →",
+  "h": "333f8bee"
+ },
+ "js.tuviform.khong-ten": {
+  "t": "이름 없음",
+  "h": "7c5b38ee"
+ },
+ "js.tuviform.lich-cn": {
+  "t": "중국 역법 시각",
+  "h": "5fe3ccc2"
+ },
+ "js.tuviform.lich-jp": {
+  "t": "일본 역법 시각",
+  "h": "fe6e8036"
+ },
+ "js.tuviform.lich-kr": {
+  "t": "한국 역법 시각",
+  "h": "a8ae0a48"
+ },
+ "js.tuviform.lich-vn": {
+  "t": "베트남 시간",
+  "h": "f54ee2eb"
+ },
+ "js.tuviform.luan-giai-la-so": {
+  "t": "명반 풀이 →",
+  "h": "4bb771eb"
+ },
+ "js.tuviform.nam": {
+  "t": "년",
+  "h": "98926c7e"
+ },
+ "js.tuviform.nam-sinh": {
+  "t": "태어난 해",
+  "h": "75a6785f"
+ },
+ "js.tuviform.nam-xem-van": {
+  "t": "운세를 볼 해",
+  "h": "8f575533"
+ },
+ "js.tuviform.ngay": {
+  "t": "일",
+  "h": "368c4575"
+ },
+ "js.tuviform.ngay-sinh": {
+  "t": "태어난 일",
+  "h": "6f8de308"
+ },
+ "js.tuviform.ngay-sinh-duong": {
+  "t": "양력 생년월일",
+  "h": "5b85cc30"
+ },
+ "js.tuviform.ngay-sinh-ok": {
+  "t": "생년월일: <b>{y}년 {m}월 {d}일</b> ✓",
+  "h": "c457dbc0"
+ },
+ "js.tuviform.ngay-thang-nam-sinh": {
+  "t": "생년월일 (일 / 월 / 년)",
+  "h": "84864f2e"
+ },
+ "js.tuviform.ngoai-goi-y": {
+  "t": "해외에서 태어났다면 선택하세요. 출생지의 시간대·서머타임·음력을 자동으로 계산합니다.",
+  "h": "6af69dc4"
+ },
+ "js.tuviform.ngoai-vn": {
+  "t": "베트남 밖에서 태어났나요?",
+  "h": "db788745"
+ },
+ "js.tuviform.nguoi-moi": {
+  "t": "+ 새 사람",
+  "h": "eab3d0ff"
+ },
+ "js.tuviform.nguoi-moi-nhe": {
+  "t": "새로운 분이시군요.",
+  "h": "021dd849"
+ },
+ "js.tuviform.nhap-ho-ten": {
+  "t": "이름을 입력해 주세요.",
+  "h": "69dc7698"
+ },
+ "js.tuviform.noi-sinh": {
+  "t": "출생지",
+  "h": "39348136"
+ },
+ "js.tuviform.phut": {
+  "t": "분",
+  "h": "34ca51a4"
+ },
+ "js.tuviform.q1-gt": {
+  "t": "성별이 어떻게 되나요?",
+  "h": "d8b7441e"
+ },
+ "js.tuviform.q1-ten": {
+  "t": "성함을 전체 이름으로 알려 주세요.",
+  "h": "1e9a5600"
+ },
+ "js.tuviform.q1-ten-gt": {
+  "t": "성함과 성별을 알려 주세요.",
+  "h": "24ab2186"
+ },
+ "js.tuviform.q2": {
+  "t": "양력 생년월일이 언제인가요?",
+  "h": "abef36df"
+ },
+ "js.tuviform.q3": {
+  "t": "태어난 시각은 몇 시인가요?",
+  "h": "e5d555b9"
+ },
+ "js.tuviform.ten-mau": {
+  "t": "홍길동",
+  "h": "7388465b"
+ },
+ "js.tuviform.ten-mau-vd": {
+  "t": "예: 홍길동",
+  "h": "eafae45a"
+ },
+ "js.tuviform.thang": {
+  "t": "월",
+  "h": "0e2b3099"
+ },
+ "js.tuviform.thang-khong-co-ngay": {
+  "t": "{y}년 {m}월에는 {d}일이 없습니다. 다시 선택해 주세요.",
+  "h": "da49ec5e"
+ },
+ "js.tuviform.thang-sinh": {
+  "t": "태어난 월",
+  "h": "4695b6cf"
+ },
+ "js.tuviform.thong-tin": {
+  "t": "정보",
+  "h": "d5fc2a3b"
+ },
+ "js.tuviform.thuc-thi": {
+  "t": "제출",
+  "h": "c591a584"
+ },
+ "js.tuviform.tiep-tuc": {
+  "t": "계속 →",
+  "h": "86f35ed9"
+ },
+ "js.tuviform.tip-auto": {
+  "t": "입력한 생년월일에 따라 자동으로 보정됩니다.",
+  "h": "62305e4c"
+ },
+ "js.tuviform.tip-intro": {
+  "t": "고법에서 <b>자시(子時)</b>는 23:00–00:59입니다. 그러나 베트남은 역사적으로 여러 차례 표준시를 바꿨습니다.",
+  "h": "2cd8aaeb"
+ },
+ "js.tuviform.tip-khong-nho": {
+  "t": "<b>태어난 시각이 기억나지 않나요?</b> 정확히 모르는 분이 많지만, 태어난 시각은 이 사이트의 여러 풀이를 좌우합니다. <a href=\"/app/gio-sinh\" target=\"_blank\" style=\"color:#1455A4;font-weight:600\">태어난 시각 알아보기 →</a>",
+  "h": "af1572d3"
+ },
+ "js.tuviform.tip-li1": {
+  "t": "<b>1942년 ~ 1944년 3월 9일</b> (UTC+8): 자시 = 00:00–01:59",
+  "h": "0d7e7b3f"
+ },
+ "js.tuviform.tip-li2": {
+  "t": "<b>1944년 3월 9일 ~ 1945년 9월 2일</b> (UTC+9): 자시 = 01:00–02:59",
+  "h": "ac7257ad"
+ },
+ "js.tuviform.tip-li3": {
+  "t": "<b>1945년 9월 2일 ~ 1946년 12월 18일</b> (UTC+7): 자시 = 23:00–00:59",
+  "h": "8375e4b8"
+ },
+ "js.tuviform.tip-li4": {
+  "t": "<b>1946년 12월 19일 ~ 1955년 6월 30일</b> (UTC+8): 자시 = 00:00–01:59",
+  "h": "72d27e9b"
+ },
+ "js.tuviform.tip-li5": {
+  "t": "<b>1955년 7월 1일 ~ 1959년 12월 31일</b> (UTC+7): 자시 = 23:00–00:59",
+  "h": "88a1bc9a"
+ },
+ "js.tuviform.tip-li6": {
+  "t": "<b>1960년 1월 1일 ~ 1975년 4월 30일</b> (UTC+8, 남베트남): 자시 = 00:00–01:59",
+  "h": "a0d6511f"
+ },
+ "js.tuviform.tip-li7": {
+  "t": "<b>1975년 5월 1일부터</b> (UTC+7): 자시 = 23:00–00:59",
+  "h": "4995b03d"
+ },
+ "js.tuviform.tip-title": {
+  "t": "베트남 표준시의 변천",
+  "h": "3172a126"
+ },
+ "js.tuviform.xem-mau-pdf": {
+  "t": "풀이 샘플(PDF) 보기",
+  "h": "0053d860"
+ },
+ "js.tuviform.xem-van-nam": {
+  "t": "{n}년 운세",
+  "h": "c2204f1d"
+ },
+ "js.tuviform.xem-van-nam-ok": {
+  "t": "<b>{n}</b>년 운세 ✓",
+  "h": "f47721f2"
  },
  "js.vanhannam.bai-tinh": {
   "t": "패성:",
