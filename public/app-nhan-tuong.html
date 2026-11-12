@@ -357,19 +357,19 @@ function mountHook(lm, imgEl) {
   if (!host || !window.HookLayer) return;
   let title, body;
   if (_irisNote && _irisNote.includes('lệch lên')) {
-    title = 'Tròng mắt hơi lệch lên — có thể Tam Bạch Nhãn Hạ';
-    body = 'Đo trực tiếp từ ảnh bằng MediaPipe (vị trí tròng mắt so với mí trên/dưới). Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.';
+    title = _tvmbT('js.nhtg.trong-mat-hoi-lech-len-co', 'Tròng mắt hơi lệch lên — có thể Tam Bạch Nhãn Hạ');
+    body = _tvmbT('js.nhtg.do-truc-tiep-tu-anh-bang', 'Đo trực tiếp từ ảnh bằng MediaPipe (vị trí tròng mắt so với mí trên/dưới). Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.');
   } else if (_irisNote && _irisNote.includes('lệch xuống')) {
-    title = 'Tròng mắt hơi lệch xuống — có thể Tam Bạch Nhãn Thượng';
-    body = 'Đo trực tiếp từ ảnh bằng MediaPipe (vị trí tròng mắt so với mí trên/dưới). Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.';
+    title = _tvmbT('js.nhtg.trong-mat-hoi-lech-xuong-co', 'Tròng mắt hơi lệch xuống — có thể Tam Bạch Nhãn Thượng');
+    body = _tvmbT('js.nhtg.do-truc-tiep-tu-anh-bang', 'Đo trực tiếp từ ảnh bằng MediaPipe (vị trí tròng mắt so với mí trên/dưới). Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.');
   } else {
-    title = 'Vị trí tròng mắt: cân đối';
-    body = 'Đo trực tiếp từ ảnh bằng MediaPipe. Nhãn hình, thần khí và các chi tiết khác nằm trong bản phân tích chuyên sâu.';
+    title = _tvmbT('js.nhtg.vi-tri-trong-mat-can-doi', 'Vị trí tròng mắt: cân đối');
+    body = _tvmbT('js.nhtg.do-truc-tiep-tu-anh-bang-si1j', 'Đo trực tiếp từ ảnh bằng MediaPipe. Nhãn hình, thần khí và các chi tiết khác nằm trong bản phân tích chuyên sâu.');
   }
   const facts = [{ tone: 'neutral', title, body, source: 'engine · MediaPipe iris landmark' }];
   const angleFact = analyzeEyeAngleFact(lm, imgEl);
   if (angleFact) facts.push(angleFact);
-  const spec = { tool: 'nhan-tuong', toolLabel: 'Nhân Tướng', charts: [], facts: facts };
+  const spec = { tool: 'nhan-tuong', toolLabel: _tvmbT('js.nhtg.nhan-tuong', 'Nhân Tướng'), charts: [], facts: facts };
   window.HookLayer.run(host, spec);
 }
 
@@ -402,11 +402,11 @@ function analyzeEyeAngleFact(lm, imgEl) {
   const eyeLAngle = Math.atan2((p(lm[33],'y') - p(lm[133],'y')), (p(lm[133],'x') - p(lm[33],'x'))) * 180 / Math.PI;
   const eyeRAngle = Math.atan2((p(lm[263],'y') - p(lm[362],'y')), (p(lm[263],'x') - p(lm[362],'x'))) * 180 / Math.PI;
   const eyeAngle = (eyeLAngle + eyeRAngle) / 2;
-  const desc = eyeAngle > 2 ? 'đuôi mắt cong lên' : eyeAngle < -2 ? 'đuôi mắt xuôi' : 'ngang';
+  const desc = eyeAngle > 2 ? _tvmbT('js.nhtg.duoi-mat-cong-len', 'đuôi mắt cong lên') : eyeAngle < -2 ? _tvmbT('js.nhtg.duoi-mat-xuoi', 'đuôi mắt xuôi') : _tvmbT('js.nhtg.ngang', 'ngang');
   return {
     tone: 'neutral',
-    title: 'Góc đuôi mắt: ' + eyeAngle.toFixed(1) + '° (' + desc + ')',
-    body: 'Đo trực tiếp từ ảnh bằng MediaPipe. Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.',
+    title: _tvmbT('js.nhtg.goc-duoi-mat-a-d', 'Góc đuôi mắt: {a}° ({d})', { a: eyeAngle.toFixed(1), d: desc }),
+    body: _tvmbT('js.nhtg.do-truc-tiep-tu-anh-bang-ymai', 'Đo trực tiếp từ ảnh bằng MediaPipe. Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.'),
     source: 'engine · MediaPipe FaceMesh',
   };
 }
@@ -425,8 +425,8 @@ function onFileSelect(e) { const f=e.target.files[0]; if(f) processFile(f); }
 
 function processFile(file) {
   const err=document.getElementById('error-msg'); err.classList.remove('active');
-  if (!file.type.startsWith('image/')) { err.textContent='Vui lòng chọn file ảnh.'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); return; }
-  if (file.size > 5*1024*1024) { err.textContent='Ảnh quá lớn (tối đa 5MB).'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); return; }
+  if (!file.type.startsWith('image/')) { err.textContent=_tvmbT('js.nhtg.vui-long-chon-file-anh', 'Vui lòng chọn file ảnh.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); return; }
+  if (file.size > 5*1024*1024) { err.textContent=_tvmbT('js.nhtg.anh-qua-lon-toi-da-5mb', 'Ảnh quá lớn (tối đa 5MB).'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); return; }
   const img = new Image();
   const ou = URL.createObjectURL(file);
   img.onload = () => {
@@ -439,7 +439,7 @@ function processFile(file) {
     _imageData=dataUrl.split(',')[1]; _mediaType='image/jpeg';
     showPreview(dataUrl);
   };
-  img.onerror = () => { URL.revokeObjectURL(ou); err.textContent='Không đọc được ảnh này — vui lòng chọn ảnh JPG hoặc PNG.'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); };
+  img.onerror = () => { URL.revokeObjectURL(ou); err.textContent=_tvmbT('js.nhtg.khong-doc-duoc-anh-nay-vui', 'Không đọc được ảnh này — vui lòng chọn ảnh JPG hoặc PNG.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); };
   img.src=ou;
 }
 
@@ -463,7 +463,7 @@ function showPreview(dataUrl) {
       mountHook(lm, imgEl);
     } else {
       const err=document.getElementById('error-msg');
-      err.textContent='⚠ Không nhận diện được mặt rõ ràng. Vẫn có thể phân tích nhưng nên dùng ảnh thẳng mặt hơn.';
+      err.textContent=_tvmbT('js.nhtg.khong-nhan-dien-duoc-mat-ro', '⚠ Không nhận diện được mặt rõ ràng. Vẫn có thể phân tích nhưng nên dùng ảnh thẳng mặt hơn.');
       err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
     }
   });
@@ -491,7 +491,7 @@ async function openCamera() {
     document.getElementById('camBtns').style.display='flex';
   } catch(e) {
     const err=document.getElementById('error-msg');
-    err.textContent='Không thể mở camera.'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
+    err.textContent=_tvmbT('js.nhtg.khong-the-mo-camera', 'Không thể mở camera.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
   }
 }
 function capturePhoto() {
@@ -528,7 +528,7 @@ async function _doAnalyze() {
   document.getElementById('resultCard').style.display='block';
   wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu phân tích nhãn tướng
   const aiResultEl = document.getElementById('aiResult');
-  aiResultEl.innerHTML='<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="eye"></span><div class="dt-loading-text">Đang phân tích nhãn tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
+  aiResultEl.innerHTML='<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="eye"></span><div class="dt-loading-text">' + _tvmbT('js.nhtg.dang-phan-tich-nhan-tuong', 'Đang phân tích nhãn tướng...') + '<br><span style="font-size:12px;opacity:.7">' + _tvmbT('js.nhtg.thuong-mat-15-20-giay', 'Thường mất 15–20 giây') + '</span></div></div>';
   window.mountIcons && window.mountIcons(aiResultEl);
   document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'nearest'});
 
@@ -537,7 +537,7 @@ async function _doAnalyze() {
       method:'POST', headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ image:_imageData, mediaType:_mediaType, action:'nhan-tuong', irisNote:_irisNote||null })
     });
-    if (!res.ok) { const d=await res.json().catch(()=>({})); throw new Error(d.error||'Lỗi '+res.status); }
+    if (!res.ok) { const d=await res.json().catch(()=>({})); throw new Error(d.error||_tvmbT('js.nhtg.loi-s', 'Lỗi {s}', { s: res.status })); }
 
     const reader=res.body.getReader(); const dec=new TextDecoder();
     let full='', buf='';
@@ -553,26 +553,26 @@ async function _doAnalyze() {
         try{ const j=JSON.parse(raw); if(j.err) throw new Error(j.err); if(j.t){ full+=j.t; el.innerHTML=renderMd(full); } }catch(e){ if(e.message&&!e.message.includes('JSON')) throw e; }
       }
     }
-    if(!full) throw new Error('Không có kết quả.');
+    if(!full) throw new Error(_tvmbT('js.nhtg.khong-co-ket-qua', 'Không có kết quả.'));
     el.innerHTML=renderMd(full);
     _saveTuongReading('nhan-tuong', full, _imageData, _mediaType);
     // Chia sẻ CHỈ text luận giải của AI — KHÔNG bao giờ đính kèm ảnh mắt thật
     // của user (riêng tư), dù ảnh đã tải lên để phân tích.
-    Shell.setShareable({ kind:'text', toolId:'nhan-tuong', title:'Nhãn Tướng của tôi', text:full });
+    Shell.setShareable({ kind:'text', toolId:'nhan-tuong', title:_tvmbT('js.nhtg.nhan-tuong-cua-toi', 'Nhãn Tướng của tôi'), text:full });
     // setContext() chỉ chạy TỚI ĐÂY — sau khi có kết quả thật (chat-first),
     // không còn gọi ở boot. Kết quả là văn xuôi SSE thuần, không có field
     // cấu trúc để trích số liệu nên greeting không bịa dữ kiện.
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
-      label: 'Nhãn Tướng',
-      greeting: 'Đã phân tích xong nhãn tướng của bạn theo Liễu Trang Thần Tướng. Bạn muốn hỏi thêm điều gì?',
-      chips: ['Phượng nhãn là gì?', 'Tam Bạch Nhãn có ý nghĩa gì?', 'Ánh mắt nói lên điều gì?']
+      label: _tvmbT('js.nhtg.nhan-tuong-d6ph', 'Nhãn Tướng'),
+      greeting: _tvmbT('js.nhtg.da-phan-tich-xong-nhan-tuong', 'Đã phân tích xong nhãn tướng của bạn theo Liễu Trang Thần Tướng. Bạn muốn hỏi thêm điều gì?'),
+      chips: [_tvmbT('js.nhtg.phuong-nhan-la-gi', 'Phượng nhãn là gì?'), _tvmbT('js.nhtg.tam-bach-nhan-co-y-nghia', 'Tam Bạch Nhãn có ý nghĩa gì?'), _tvmbT('js.nhtg.anh-mat-noi-len-dieu-gi', 'Ánh mắt nói lên điều gì?')]
     });
   } catch(e){
     document.getElementById('aiResult').innerHTML='';
     document.getElementById('resultCard').style.display='none';
     const err=document.getElementById('error-msg');
-    err.textContent='Lỗi: '+(e.message||'Không thể kết nối.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
+    err.textContent=_tvmbT('js.nhtg.loi-e', 'Lỗi: {e}', { e: e.message||_tvmbT('js.nhtg.khong-the-ket-noi', 'Không thể kết nối.') }); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
   }
 }
 
