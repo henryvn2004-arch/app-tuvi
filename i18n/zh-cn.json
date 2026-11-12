@@ -1,4 +1,392 @@
 {
+ "about.1-nen-tang-du-lieu-thuc": {
+  "t": "1. 实证数据基础",
+  "h": "06f1cf11"
+ },
+ "about.2-he-thong-hoa-co-phap": {
+  "t": "2. 古法系统化",
+  "h": "c85d8fdb"
+ },
+ "about.3-mo-hinh-hoa-va-kiem": {
+  "t": "3. 建模与验证",
+  "h": "1d0efb46"
+ },
+ "about.4-dien-giai-bang-he-thong": {
+  "t": "4. 以语言系统解说",
+  "h": "00f2b090"
+ },
+ "about.5-hieu-chinh-boi-chuyen-gia": {
+  "t": "5. 专家校正",
+  "h": "ca3a8140"
+ },
+ "about.bat-ky-he-thong-luan-giai": {
+  "t": "任何解读系统，无论建构得多么用心，都有一定的局限。",
+  "h": "0e8a20f5"
+ },
+ "about.biet-menh-khong-phai-de-pho": {
+  "t": "知命，不是为了听天由命，而是为了顺应时势、趋吉避凶、发挥所长。",
+  "h": "aefd2bae"
+ },
+ "about.cac-chuyen-gia-nghien-cuu-tu": {
+  "t": "研究紫微斗数的专家",
+  "h": "6d130b45"
+ },
+ "about.cac-hoc-gia-va-nha-nghien": {
+  "t": "历史、东方哲学等相关领域的学者与研究者",
+  "h": "9593da42"
+ },
+ "about.cac-ket-qua-luan-giai-nen": {
+  "t": "解读结果应视为有根据的参考，而非最终定论。",
+  "h": "cd55943a"
+ },
+ "about.cac-kinh-dien-ve-tu-vi": {
+  "t": "紫微斗数的经典有许多异本，诠释也不尽相同，因此系统化必然需要取舍与参照。",
+  "h": "1b957db9"
+ },
+ "about.cac-mo-hinh-duoc-xay-dung": {
+  "t": "创建模型，以辨识命盘与现实之间的关联",
+  "h": "5de73c5a"
+ },
+ "about.cac-nguyen-ly-va-cau-truc": {
+  "t": "传统紫微斗数的原理与结构",
+  "h": "a25d74ee"
+ },
+ "about.cac-quy-tac-duoc-dieu-chinh": {
+  "t": "依与现实的吻合程度调整规则",
+  "h": "4ceb5ffc"
+ },
+ "about.cac-thay-va-nguoi-thuc-hanh": {
+  "t": "多年从事紫微斗数与玄学的老师和实务者",
+  "h": "01aafa8a"
+ },
+ "about.cach-xay-dung-he-thong-luan": {
+  "t": "解读系统如何创建",
+  "h": "b8c3ccad"
+ },
+ "about.chung-toi-xay-dung-he-thong": {
+  "t": "我们以下列基础创建系统：",
+  "h": "eeb432ac"
+ },
+ "about.cong-nghe-duoc-su-dung-o": {
+  "t": "在此使用技术的目的是：",
+  "h": "93bb9357"
+ },
+ "about.dam-bao-tinh-can-bang-giua": {
+  "t": "确保理论与实务之间的平衡",
+  "h": "01471d41"
+ },
+ "about.dieu-quan-trong-la": {
+  "t": "重要的是：",
+  "h": "0d9b396c"
+ },
+ "about.do-do-phuong-phap-ma-chung": {
+  "t": "因此，我们所追求的方法，是将传统原则的系统化与已记录的实际案例比对结合起来。技术只是辅助研究的工具，而不是取代人的判断。",
+  "h": "8fb84663"
+ },
+ "about.doi-chieu-voi-cac-dien-bien": {
+  "t": "与他们人生中实际发生的事件比对",
+  "h": "e59344b7"
+ },
+ "about.du-lieu-ngay-gio-sinh-cua": {
+  "t": "超过 270,000 人的出生年月日时数据",
+  "h": "b1e54c19"
+ },
+ "about.du-lieu-nguyen-ly-mo-hinh": {
+  "t": "数据 → 原理 → 模型 → 验证 → 解说 → 校正——多层次的流程，让每一则解读不只合乎逻辑，也能与现实相互对照。",
+  "h": "47a0b07e"
+ },
+ "about.gia-tri-cua-tu-vi-dau": {
+  "t": "紫微斗数的价值不在于绝对的预言，而在于启发人更了解自己。",
+  "h": "37d2ea4c"
+ },
+ "about.giam-sai-lech-do-yeu-to": {
+  "t": "减少主观因素造成的偏差",
+  "h": "dd267c7a"
+ },
+ "about.gioi-han-cua-he-thong": {
+  "t": "系统的局限",
+  "h": "7fa9c9a0"
+ },
+ "about.gioi-thieu-phuong-phap-tinh-than": {
+  "t": "关于我们 — 方法与精神 | 明宝紫微斗数",
+  "h": "6455ef7c"
+ },
+ "about.gioi-thieu-tu-vi-minh-bao": {
+  "t": "明宝紫微斗数介绍 — 方法与精神",
+  "h": "6eee8cba"
+ },
+ "about.giu-vung-tinh-than-cua-co": {
+  "t": "坚守古法的精神",
+  "h": "9e74633e"
+ },
+ "about.han-che-cac-dien-giai-cuc": {
+  "t": "减少极端或缺乏根据的诠释",
+  "h": "7537c280"
+ },
+ "about.he-thong-an-sao-tu-vi": {
+  "t": "依古法的紫微斗数安星排盘与深入解读。了解明宝紫微斗数的解读方法与原则。",
+  "h": "4a00d1c0"
+ },
+ "about.he-thong-khong-tu-suy-doan": {
+  "t": "系统不会自行推测论点",
+  "h": "e89edab4"
+ },
+ "about.he-thong-luan-giai-tai-tu": {
+  "t": "明宝紫微斗数的解读系统，是以结合古学基础、实证数据与现代技术的方向创建，力求一致性、可验证性与实际应用价值。",
+  "h": "6d5da226"
+ },
+ "about.he-thong-ngon-ngu-duoc-su": {
+  "t": "以语言系统将内容解说得清楚、易懂且实用",
+  "h": "2caad752"
+ },
+ "about.ket-hop-giua-ly-thuyet-va": {
+  "t": "理论与实务结合",
+  "h": "c0fb9eab"
+ },
+ "about.ket-hop-voi-co-so-du": {
+  "t": "结合 AstroDataBank 的国际数据库",
+  "h": "cbdd4e16"
+ },
+ "about.ket-qua-duoc-doi-chieu-nguoc": {
+  "t": "将结果反向与既有数据比对",
+  "h": "24c827a1"
+ },
+ "about.khong-gay-hoang-mang": {
+  "t": "不制造恐慌",
+  "h": "e0832f25"
+ },
+ "about.khong-phan-xet": {
+  "t": "不评判",
+  "h": "b0409d0a"
+ },
+ "about.khong-tuyet-doi-hoa": {
+  "t": "不绝对化",
+  "h": "4df88785"
+ },
+ "about.kiem-nghiem-lai-cac-nguyen-ly": {
+  "t": "以实际数据重新验证古学原理",
+  "h": "b2f40cd9"
+ },
+ "about.la-so-chi-phan-anh-nhung": {
+  "t": "命盘只反映可能发生的倾向，而非一成不变的定数。",
+  "h": "2f15ed93"
+ },
+ "about.lien-he": {
+  "t": "联系",
+  "h": "603522f1"
+ },
+ "about.lien-tuc-hieu-chinh": {
+  "t": "持续校正",
+  "h": "45ab3f13"
+ },
+ "about.loai-bo-cac-yeu-to-mang": {
+  "t": "剔除凭感觉臆断或缺乏根据的因素",
+  "h": "e9b79749"
+ },
+ "about.ma-chi-dien-giai-lai-cac": {
+  "t": "只是重新解说事先已确定的结果",
+  "h": "101c64d5"
+ },
+ "about.mo-dau": {
+  "t": "开篇",
+  "h": "44717b8f"
+ },
+ "about.mo-rong-quy-mo-kiem-nghiem": {
+  "t": "扩大验证规模",
+  "h": "ab8a2f59"
+ },
+ "about.moi-mo-hinh-luan-giai-duoc": {
+  "t": "所有解读模型都会依累积的数据与实际回馈重新查看与验证。",
+  "h": "4f3e7b8d"
+ },
+ "about.moi-nhan-dinh-deu-nham-giup": {
+  "t": "每一则论断都是为了帮助读者更了解自身处境，做出合适的选择。",
+  "h": "6a29f2d0"
+ },
+ "about.moi-y-kien-trao-doi-gop": {
+  "t": "凡是关于解读内容、研究方法或系统使用的意见、建议与问题，欢迎与我们联系。",
+  "h": "0b3d271b"
+ },
+ "about.mot-so-thanh-vien-theo-duoi": {
+  "t": "有些成员以命理解读为本业，另一些成员则来自不同的专业领域，但都经过长期认真的研究与实践。",
+  "h": "a852a127"
+ },
+ "about.muc-tieu-chung-cua-nhom-khong": {
+  "t": "团队的共同目标不是给出绝对的结论，而是创建一套有根据、经过验证、能在现实中应用的解读系统。",
+  "h": "81a815ce"
+ },
+ "about.muc-tieu-la-chuyen-tu-cac": {
+  "t": "目标是把经典中零散的知识，转化为有结构、一致且可验证的解读系统。",
+  "h": "fbf9c61c"
+ },
+ "about.nguyen-tac": {
+  "t": "原则",
+  "h": "17807d55"
+ },
+ "about.nguyen-tac-luan-giai": {
+  "t": "解读原则",
+  "h": "23987592"
+ },
+ "about.nhan-dien-cac-mo-hinh-lap": {
+  "t": "辨识命盘结构与人生变化之间反复出现的模式",
+  "h": "d2f81c8f"
+ },
+ "about.nhieu-thanh-vien-da-co-kinh": {
+  "t": "许多成员曾在中国与香港学习、接触紫微斗数与玄学的各个流派——这些理论体系正是在当地发展并广为流传。",
+  "h": "3b355fa3"
+ },
+ "about.nhom-nghien-cuu": {
+  "t": "研究团队",
+  "h": "91d9432b"
+ },
+ "about.nhung-nguoi-co-kinh-nghiem-thuc": {
+  "t": "在玄学领域具实务经验的人",
+  "h": "e3fc3042"
+ },
+ "about.nhung-nguoi-lam-viec-trong-moi": {
+  "t": "在学术环境工作的人，包括大学讲师与研究者",
+  "h": "4e7bc04a"
+ },
+ "about.noi-dung-duoc-trinh-bay-theo": {
+  "t": "内容依个人情境呈现，而非笼统的描述",
+  "h": "997e3c47"
+ },
+ "about.o-nuoc-ta-viec-nghien-cuu": {
+  "t": "在越南，紫微斗数的研究由来已久。正因如此，我们认为需要回到基本原理，审慎而系统地考察。",
+  "h": "8b0850cc"
+ },
+ "about.phan-hoi-trong-vong-24-48": {
+  "t": "工作日 24–48 小时内回复",
+  "h": "ff250e5f"
+ },
+ "about.phuong-phap": {
+  "t": "方法",
+  "h": "4f7ecd74"
+ },
+ "about.phuong-phap-luan": {
+  "t": "方法论",
+  "h": "2c2e64e2"
+ },
+ "about.qua-trinh-nay-cho-phep": {
+  "t": "这个过程让我们能：",
+  "h": "e87bc961"
+ },
+ "about.quan-diem": {
+  "t": "观点",
+  "h": "b9aa2091"
+ },
+ "about.quy-trinh-nay-giup": {
+  "t": "这套流程有助于：",
+  "h": "196d0c1e"
+ },
+ "about.sai-lech-co-the-phat-sinh": {
+  "t": "偏差可能来自输入的数据——出生时辰不准确，或各传统安星方式的差异。",
+  "h": "bfa633e6"
+ },
+ "about.sau-khi-xac-dinh-duoc-cau": {
+  "t": "确定结构与主要论点之后：",
+  "h": "8b98ad49"
+ },
+ "about.su-bien-chuyen-cua-doi-nguoi": {
+  "t": "人生的变迁，归根结柢仍是多种因素交织的结果，其中也包括每个人的选择与行动。研究与应用紫微斗数若有意义，正在于帮助人在人生的转折点前多一分清醒。",
+  "h": "2d06614d"
+ },
+ "about.su-da-dang-ve-nen-tang": {
+  "t": "背景的多元让团队能：",
+  "h": "ff2c1cfd"
+ },
+ "about.tang-tinh-nhat-quan-trong-luan": {
+  "t": "提高解读的一致性",
+  "h": "66a7712a"
+ },
+ "about.thanh-phan-nhom-bao-gom": {
+  "t": "团队成员包括：",
+  "h": "62092e20"
+ },
+ "about.thanh-that-ma-noi": {
+  "t": "坦白说",
+  "h": "b765edeb"
+ },
+ "about.theo-truyen-thong-luu-truyen-mon": {
+  "t": "据传统流传，此学由宋代博学的理学家希夷子陈抟所创。此后历经多代，学者们不断补充、诠释与系统化，使紫微斗数成为一门有规矩、有条理的学问。",
+  "h": "6de49b2f"
+ },
+ "about.tiep-can-van-de-tu-nhieu": {
+  "t": "从多种角度切入问题",
+  "h": "db146275"
+ },
+ "about.toan-bo-he-thong-duoc-ra": {
+  "t": "整套系统由以下协作团队审视与校正：",
+  "h": "9ed0fc71"
+ },
+ "about.toan-bo-logic-luan-giai-duoc": {
+  "t": "整套解读逻辑创建在：",
+  "h": "b742fa01"
+ },
+ "about.tranh-su-phien-dien-trong-qua": {
+  "t": "在系统化与解读过程中避免片面",
+  "h": "f4dc0a94"
+ },
+ "about.trao-doi-gop-y": {
+  "t": "交流与建议",
+  "h": "f6890a8e"
+ },
+ "about.tren-nen-tang-du-lieu-va": {
+  "t": "在已系统化的数据与古法基础上：",
+  "h": "d691aa6d"
+ },
+ "about.tri-tue-nhan-tao-chi-xu": {
+  "t": "人工智能只能依据所提供的数据与规则来处理。超出此范围的事，仍需要人的斟酌。",
+  "h": "32a7ac28"
+ },
+ "about.tu-vi-dau-so": {
+  "t": "紫微斗数 · Zi Wei Dou Shu",
+  "h": "33616a8e"
+ },
+ "about.tu-vi-dau-so-hemc": {
+  "t": "紫微斗数",
+  "h": "cdc48904"
+ },
+ "about.tu-vi-dau-so-la-mot": {
+  "t": "紫微斗数是一门东方古学，借此人们可以在定数的框架内，窥探人生前后运行的部分道理。学紫微，要在知己，也在知人。",
+  "h": "176262d0"
+ },
+ "about.tu-vi-la-cong-cu-quan": {
+  "t": "紫微斗数是观察与分析的工具，不是衡量人品的尺度，也不是评断他人的依据。",
+  "h": "317bf0cc"
+ },
+ "about.tu-vi-minh-bao-duoc-phat": {
+  "t": "明宝紫微斗数由一个独立研究团队开发，成员背景与方向各异，但都对东方命理学有着深切的关注。",
+  "h": "81fe0d3c"
+ },
+ "about.tu-vi-minh-bao-la-he": {
+  "t": "明宝紫微斗数是依古法安星排盘与解读紫微斗数的系统。了解系统的方法、原则与精神。",
+  "h": "2f6ab085"
+ },
+ "about.ve-chung-toi": {
+  "t": "关于我们",
+  "h": "e96992fa"
+ },
+ "about.ve-phuong-phap-tinh-than-va": {
+  "t": "关于明宝紫微斗数解读系统的方法、精神与局限",
+  "h": "2a8ba5a3"
+ },
+ "about.viec-chuan-hoa-cac-cach-cuc": {
+  "t": "格局、规则与论断顺序的标准化",
+  "h": "0ef7ac43"
+ },
+ "about.viec-luan-giai-tu-vi-dau": {
+  "t": "依我们浅见，紫微斗数的解读首先应立足于经典，其次才考量现实中的变化。若离开原理而只凭感觉臆断，容易流于武断；反之，若只拘泥文字而不考验实证，则难免僵化。",
+  "h": "86255e75"
+ },
+ "about.xac-dinh-cac-giai-doan-bien": {
+  "t": "找出随时间变动的阶段",
+  "h": "e0adca76"
+ },
+ "about.y-nghia-cua-tu-vi": {
+  "t": "紫微斗数的意义",
+  "h": "835e8685"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">输入数据</span>",
   "h": "487c9507"

@@ -1,4 +1,392 @@
 {
+ "about.1-nen-tang-du-lieu-thuc": {
+  "t": "1. An empirical data foundation",
+  "h": "06f1cf11"
+ },
+ "about.2-he-thong-hoa-co-phap": {
+  "t": "2. Systematizing the classical method",
+  "h": "c85d8fdb"
+ },
+ "about.3-mo-hinh-hoa-va-kiem": {
+  "t": "3. Modeling and testing",
+  "h": "1d0efb46"
+ },
+ "about.4-dien-giai-bang-he-thong": {
+  "t": "4. Explanation through a language system",
+  "h": "00f2b090"
+ },
+ "about.5-hieu-chinh-boi-chuyen-gia": {
+  "t": "5. Calibration by specialists",
+  "h": "ca3a8140"
+ },
+ "about.bat-ky-he-thong-luan-giai": {
+  "t": "Any reading system, however carefully built, has its limits.",
+  "h": "0e8a20f5"
+ },
+ "about.biet-menh-khong-phai-de-pho": {
+  "t": "Knowing your destiny is not about resignation — it is about moving with the times, avoiding what harms you and making the most of what is possible.",
+  "h": "aefd2bae"
+ },
+ "about.cac-chuyen-gia-nghien-cuu-tu": {
+  "t": "Zi Wei Dou Shu research specialists",
+  "h": "6d130b45"
+ },
+ "about.cac-hoc-gia-va-nha-nghien": {
+  "t": "Scholars and researchers in related fields such as history and Eastern philosophy",
+  "h": "9593da42"
+ },
+ "about.cac-ket-qua-luan-giai-nen": {
+  "t": "Readings should be taken as well-grounded reference material rather than a final verdict.",
+  "h": "cd55943a"
+ },
+ "about.cac-kinh-dien-ve-tu-vi": {
+  "t": "The Zi Wei Dou Shu classics exist in many variant editions and their interpretations are not fully consistent, so systematizing them inevitably involves choices and a frame of reference.",
+  "h": "1b957db9"
+ },
+ "about.cac-mo-hinh-duoc-xay-dung": {
+  "t": "Models are built to identify links between the chart and real life",
+  "h": "5de73c5a"
+ },
+ "about.cac-nguyen-ly-va-cau-truc": {
+  "t": "The principles and structure of traditional Zi Wei Dou Shu",
+  "h": "a25d74ee"
+ },
+ "about.cac-quy-tac-duoc-dieu-chinh": {
+  "t": "Rules are adjusted according to how well they fit reality",
+  "h": "4ceb5ffc"
+ },
+ "about.cac-thay-va-nguoi-thuc-hanh": {
+  "t": "Masters and long-time practitioners of Zi Wei Dou Shu and the esoteric arts",
+  "h": "01aafa8a"
+ },
+ "about.cach-xay-dung-he-thong-luan": {
+  "t": "How the Reading System Is Built",
+  "h": "b8c3ccad"
+ },
+ "about.chung-toi-xay-dung-he-thong": {
+  "t": "We build the system on:",
+  "h": "eeb432ac"
+ },
+ "about.cong-nghe-duoc-su-dung-o": {
+  "t": "Technology is used here to:",
+  "h": "93bb9357"
+ },
+ "about.dam-bao-tinh-can-bang-giua": {
+  "t": "Keep theory and practice in balance",
+  "h": "01471d41"
+ },
+ "about.dieu-quan-trong-la": {
+  "t": "What matters is:",
+  "h": "0d9b396c"
+ },
+ "about.do-do-phuong-phap-ma-chung": {
+  "t": "So the method we pursue combines systematizing the traditional principles with checking them against documented real cases. Technology is only a research aid — never a replacement for human judgment.",
+  "h": "8fb84663"
+ },
+ "about.doi-chieu-voi-cac-dien-bien": {
+  "t": "Checked against what actually happened in their lives",
+  "h": "e59344b7"
+ },
+ "about.du-lieu-ngay-gio-sinh-cua": {
+  "t": "Birth date and time data for more than 270,000 people",
+  "h": "b1e54c19"
+ },
+ "about.du-lieu-nguyen-ly-mo-hinh": {
+  "t": "Data → Principles → Models → Testing → Explanation → Calibration — a multi-layered process, so that every reading is not only logical but can also be checked against reality.",
+  "h": "47a0b07e"
+ },
+ "about.gia-tri-cua-tu-vi-dau": {
+  "t": "The value of Zi Wei Dou Shu lies not in absolute prediction but in prompting people to understand themselves better.",
+  "h": "37d2ea4c"
+ },
+ "about.giam-sai-lech-do-yeu-to": {
+  "t": "Reduce bias from subjective factors",
+  "h": "dd267c7a"
+ },
+ "about.gioi-han-cua-he-thong": {
+  "t": "Limits of the System",
+  "h": "7fa9c9a0"
+ },
+ "about.gioi-thieu-phuong-phap-tinh-than": {
+  "t": "About — Method & Spirit | Minh Bao Zi Wei Dou Shu",
+  "h": "6455ef7c"
+ },
+ "about.gioi-thieu-tu-vi-minh-bao": {
+  "t": "About Minh Bao Zi Wei Dou Shu — Method & Spirit",
+  "h": "6eee8cba"
+ },
+ "about.giu-vung-tinh-than-cua-co": {
+  "t": "Stay true to the spirit of the classical method",
+  "h": "9e74633e"
+ },
+ "about.han-che-cac-dien-giai-cuc": {
+  "t": "Limit extreme or unfounded interpretations",
+  "h": "7537c280"
+ },
+ "about.he-thong-an-sao-tu-vi": {
+  "t": "Classical Zi Wei Dou Shu chart construction and in-depth readings. Learn about Minh Bao Zi Wei Dou Shu's methods and reading principles.",
+  "h": "4a00d1c0"
+ },
+ "about.he-thong-khong-tu-suy-doan": {
+  "t": "The system does not invent its own conclusions",
+  "h": "e89edab4"
+ },
+ "about.he-thong-luan-giai-tai-tu": {
+  "t": "The reading system at Minh Bao Zi Wei Dou Shu is built by combining a foundation in classical learning, empirical data and modern technology, to ensure consistency, testability and real-world usefulness.",
+  "h": "6d5da226"
+ },
+ "about.he-thong-ngon-ngu-duoc-su": {
+  "t": "A language system is used to explain the content clearly, accessibly and practically",
+  "h": "2caad752"
+ },
+ "about.ket-hop-giua-ly-thuyet-va": {
+  "t": "Combining theory and practice",
+  "h": "c0fb9eab"
+ },
+ "about.ket-hop-voi-co-so-du": {
+  "t": "Combined with the international AstroDataBank database",
+  "h": "cbdd4e16"
+ },
+ "about.ket-qua-duoc-doi-chieu-nguoc": {
+  "t": "Results are checked back against existing data",
+  "h": "24c827a1"
+ },
+ "about.khong-gay-hoang-mang": {
+  "t": "No fear-mongering",
+  "h": "e0832f25"
+ },
+ "about.khong-phan-xet": {
+  "t": "No judgment",
+  "h": "b0409d0a"
+ },
+ "about.khong-tuyet-doi-hoa": {
+  "t": "No absolutes",
+  "h": "4df88785"
+ },
+ "about.kiem-nghiem-lai-cac-nguyen-ly": {
+  "t": "Re-test classical principles on real data",
+  "h": "b2f40cd9"
+ },
+ "about.la-so-chi-phan-anh-nhung": {
+  "t": "A chart reflects tendencies that may unfold, not an immutable fate.",
+  "h": "2f15ed93"
+ },
+ "about.lien-he": {
+  "t": "Contact",
+  "h": "603522f1"
+ },
+ "about.lien-tuc-hieu-chinh": {
+  "t": "Continuous calibration",
+  "h": "45ab3f13"
+ },
+ "about.loai-bo-cac-yeu-to-mang": {
+  "t": "Remove elements based on guesswork or lacking grounds",
+  "h": "e9b79749"
+ },
+ "about.ma-chi-dien-giai-lai-cac": {
+  "t": "It only re-explains results that have already been determined",
+  "h": "101c64d5"
+ },
+ "about.mo-dau": {
+  "t": "Introduction",
+  "h": "44717b8f"
+ },
+ "about.mo-rong-quy-mo-kiem-nghiem": {
+  "t": "Widen the scale of testing",
+  "h": "ab8a2f59"
+ },
+ "about.moi-mo-hinh-luan-giai-duoc": {
+  "t": "Every reading model is reviewed and re-tested against accumulated data and real feedback.",
+  "h": "4f3e7b8d"
+ },
+ "about.moi-nhan-dinh-deu-nham-giup": {
+  "t": "Every assessment aims to help you understand your situation better so you can make a fitting choice.",
+  "h": "6a29f2d0"
+ },
+ "about.moi-y-kien-trao-doi-gop": {
+  "t": "For any comments, suggestions or questions about our readings, research methods or using the system, please get in touch.",
+  "h": "0b3d271b"
+ },
+ "about.mot-so-thanh-vien-theo-duoi": {
+  "t": "Some members practice destiny reading as their main profession, while others come from different professional fields but have long, serious records of study and practice.",
+  "h": "a852a127"
+ },
+ "about.muc-tieu-chung-cua-nhom-khong": {
+  "t": "The team's shared goal is not to hand down absolute conclusions, but to build a reading system that is well-grounded, tested and usable in real life.",
+  "h": "81a815ce"
+ },
+ "about.muc-tieu-la-chuyen-tu-cac": {
+  "t": "The goal is to turn the scattered knowledge of the classics into a structured, consistent and testable reading system.",
+  "h": "fbf9c61c"
+ },
+ "about.nguyen-tac": {
+  "t": "Principles",
+  "h": "17807d55"
+ },
+ "about.nguyen-tac-luan-giai": {
+  "t": "Reading Principles",
+  "h": "23987592"
+ },
+ "about.nhan-dien-cac-mo-hinh-lap": {
+  "t": "Identify recurring patterns between chart structure and the course of a life",
+  "h": "d2f81c8f"
+ },
+ "about.nhieu-thanh-vien-da-co-kinh": {
+  "t": "Many members have studied and engaged with Zi Wei Dou Shu and esoteric schools in China and Hong Kong, where these theoretical systems developed and are still strongly transmitted.",
+  "h": "3b355fa3"
+ },
+ "about.nhom-nghien-cuu": {
+  "t": "Research Team",
+  "h": "91d9432b"
+ },
+ "about.nhung-nguoi-co-kinh-nghiem-thuc": {
+  "t": "People with hands-on experience in the esoteric arts",
+  "h": "e3fc3042"
+ },
+ "about.nhung-nguoi-lam-viec-trong-moi": {
+  "t": "People working in academia, including university lecturers and researchers",
+  "h": "4e7bc04a"
+ },
+ "about.noi-dung-duoc-trinh-bay-theo": {
+  "t": "Content is presented in your personal context rather than in generic descriptions",
+  "h": "997e3c47"
+ },
+ "about.o-nuoc-ta-viec-nghien-cuu": {
+  "t": "In Vietnam, the study of Zi Wei Dou Shu goes back a long way. That is why we believe it is necessary to return to first principles and examine them carefully and systematically.",
+  "h": "8b0850cc"
+ },
+ "about.phan-hoi-trong-vong-24-48": {
+  "t": "We reply within 24–48 business hours",
+  "h": "ff250e5f"
+ },
+ "about.phuong-phap": {
+  "t": "Method",
+  "h": "4f7ecd74"
+ },
+ "about.phuong-phap-luan": {
+  "t": "Methodology",
+  "h": "2c2e64e2"
+ },
+ "about.qua-trinh-nay-cho-phep": {
+  "t": "This process makes it possible to:",
+  "h": "e87bc961"
+ },
+ "about.quan-diem": {
+  "t": "Outlook",
+  "h": "b9aa2091"
+ },
+ "about.quy-trinh-nay-giup": {
+  "t": "This process helps:",
+  "h": "196d0c1e"
+ },
+ "about.sai-lech-co-the-phat-sinh": {
+  "t": "Errors can come from the input data — an inaccurate birth time, or differences in star-placement methods between traditions.",
+  "h": "bfa633e6"
+ },
+ "about.sau-khi-xac-dinh-duoc-cau": {
+  "t": "Once the structure and main points are established:",
+  "h": "8b98ad49"
+ },
+ "about.su-bien-chuyen-cua-doi-nguoi": {
+  "t": "The turns of a human life are, in the end, the result of many interwoven factors — including each person's own choices and actions. If studying and applying Zi Wei Dou Shu has any meaning, it is in helping people stay clear-headed at the turning points of their lives.",
+  "h": "2d06614d"
+ },
+ "about.su-da-dang-ve-nen-tang": {
+  "t": "The diversity of backgrounds helps the team:",
+  "h": "ff2c1cfd"
+ },
+ "about.tang-tinh-nhat-quan-trong-luan": {
+  "t": "Increase consistency across readings",
+  "h": "66a7712a"
+ },
+ "about.thanh-phan-nhom-bao-gom": {
+  "t": "The team includes:",
+  "h": "62092e20"
+ },
+ "about.thanh-that-ma-noi": {
+  "t": "In all honesty",
+  "h": "b765edeb"
+ },
+ "about.theo-truyen-thong-luu-truyen-mon": {
+  "t": "According to tradition, the art was founded by Chen Tuan (Xi Yi Zi), a profound scholar of the Song dynasty. Over many generations, scholars continued to supplement, interpret and systematize it, making Zi Wei Dou Shu a coherent, well-ordered discipline.",
+  "h": "6de49b2f"
+ },
+ "about.tiep-can-van-de-tu-nhieu": {
+  "t": "Approach problems from many angles",
+  "h": "db146275"
+ },
+ "about.toan-bo-he-thong-duoc-ra": {
+  "t": "The whole system is reviewed and calibrated by a collaborating team that includes:",
+  "h": "9ed0fc71"
+ },
+ "about.toan-bo-logic-luan-giai-duoc": {
+  "t": "All the reading logic is built on:",
+  "h": "b742fa01"
+ },
+ "about.tranh-su-phien-dien-trong-qua": {
+  "t": "Avoid one-sidedness when systematizing and interpreting",
+  "h": "f4dc0a94"
+ },
+ "about.trao-doi-gop-y": {
+  "t": "Questions &amp; Feedback",
+  "h": "f6890a8e"
+ },
+ "about.tren-nen-tang-du-lieu-va": {
+  "t": "On the foundation of systematized data and classical method:",
+  "h": "d691aa6d"
+ },
+ "about.tri-tue-nhan-tao-chi-xu": {
+  "t": "Artificial intelligence can only work from the data and rules it has been given. Anything beyond that still requires human judgment.",
+  "h": "32a7ac28"
+ },
+ "about.tu-vi-dau-so": {
+  "t": "紫微斗數 · Zi Wei Dou Shu",
+  "h": "33616a8e"
+ },
+ "about.tu-vi-dau-so-hemc": {
+  "t": "Zi Wei Dou Shu",
+  "h": "cdc48904"
+ },
+ "about.tu-vi-dau-so-la-mot": {
+  "t": "Zi Wei Dou Shu is a classical Eastern discipline through which one can glimpse something of how a human life unfolds, from beginning to end, within the bounds of destiny. One studies Zi Wei to understand oneself — and to understand others.",
+  "h": "176262d0"
+ },
+ "about.tu-vi-la-cong-cu-quan": {
+  "t": "Zi Wei Dou Shu is a tool for observation and analysis, not a measure of a person's worth or a basis for judging people.",
+  "h": "317bf0cc"
+ },
+ "about.tu-vi-minh-bao-duoc-phat": {
+  "t": "Minh Bao Zi Wei Dou Shu is developed by an independent research team that brings together people of different backgrounds and paths, united by a deep interest in Eastern destiny studies.",
+  "h": "81fe0d3c"
+ },
+ "about.tu-vi-minh-bao-la-he": {
+  "t": "Minh Bao Zi Wei Dou Shu is a system for constructing and reading Zi Wei Dou Shu charts by the classical method. Learn about its methods, principles and spirit.",
+  "h": "2f6ab085"
+ },
+ "about.ve-chung-toi": {
+  "t": "About us",
+  "h": "e96992fa"
+ },
+ "about.ve-phuong-phap-tinh-than-va": {
+  "t": "On the method, spirit and limits of the Minh Bao Zi Wei Dou Shu reading system",
+  "h": "2a8ba5a3"
+ },
+ "about.viec-chuan-hoa-cac-cach-cuc": {
+  "t": "Standardizing chart patterns, rules and the order of judgment",
+  "h": "0ef7ac43"
+ },
+ "about.viec-luan-giai-tu-vi-dau": {
+  "t": "In our humble view, reading Zi Wei Dou Shu must first rest on the classics, and only then take account of how things vary in practice. Abandon the principles and rely on intuition alone, and one easily slides into arbitrariness; cling to the letter of the texts without testing them against evidence, and rigidity is hard to avoid.",
+  "h": "86255e75"
+ },
+ "about.xac-dinh-cac-giai-doan-bien": {
+  "t": "Identify periods of change over time",
+  "h": "e0adca76"
+ },
+ "about.y-nghia-cua-tu-vi": {
+  "t": "The Meaning of Zi Wei Dou Shu",
+  "h": "835e8685"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Enter details</span>",
   "h": "487c9507"
