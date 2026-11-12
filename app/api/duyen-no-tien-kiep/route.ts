@@ -53,6 +53,7 @@ import {
   type PortraitPhase,
 } from '@/lib/portraits/cache';
 import { requestLocale, withLang, type LangLocale } from '@/lib/llm/locale';
+import { khoiTenTheoNgonNgu } from '@/lib/engine/past-life-ten';
 
 
 
@@ -78,10 +79,13 @@ const TOOL_ID = 'duyen-no-tien-kiep';
 // Thiên Lương, cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
 // P4 (2026-09): bump tiếp — La-Võng đổi từ 2 sao cố định Thìn/Tuất sang nhãn
 // theo Đà La, cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
-const SHAPE = 5;
+// W30f-8 (2026-11): bump vì payload THÊM khoá cấu trúc — mã tra bản dịch tên nhân vật + danh xưng (`characterMa`/`danhXungMa`
+// ở chan-dung-tien-kiep · `tenMa`/`danhXungMa` ở duyen-no-tien-kiep). Chữ Việt giữ nguyên; dòng cũ thiếu mã sẽ hiện tên Việt ở /ja…
+// nên phải dựng lại. Không đụng `lasoKey`/khoá sở hữu. Ghi sổ: docs/nhat-ky/2026-11.md "W30f-8".
+const SHAPE = 6;
 
 /** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
-const SHAPE_FINGERPRINT = '7e1e42a5757a';
+const SHAPE_FINGERPRINT = '42ad56632f89';
 
 /** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
 const CACHE = cacheFor(TOOL_ID, SHAPE);
@@ -170,7 +174,10 @@ function bondMeta(group: GroupBond) {
   const sp = group.spine;
   const nv = (i: number) => ({
     ten: group.profiles[i].characterName,
+    // Mã tra bản dịch tên/danh xưng (ns `past-life-ten`, ADDITIVE — chữ Việt ở trên giữ nguyên cho prompt/cache).
+    tenMa: group.profiles[i].characterMa,
     danhXung: group.profiles[i].occupation.title,
+    danhXungMa: group.profiles[i].occupation.titleMa,
     gioiTinh: group.profiles[i].gender,
   });
   return {
@@ -258,6 +265,8 @@ async function handleStory(grp: BondGroup, userId: string, locale: LangLocale) {
         // `vi` ⇒ withLang trả NGUYÊN chuỗi: n === 2 vẫn trùng khít từng byte bản cũ.
         prompt: withLang(
           storyPrompt() +
+            // W30f-8: tên + danh xưng đã dịch (cùng chữ hiện trên màn hình); `vi` → '' nên n === 2 vẫn trùng khít byte.
+            khoiTenTheoNgonNgu(locale, group.profiles) +
             (nudge
               ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
               : ''),

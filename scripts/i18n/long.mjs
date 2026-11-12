@@ -3,6 +3,7 @@
 //   npm run i18n:long -- status
 //   npm run i18n:long -- next --locale ja [--ns kinh-dich-hao] [--n 100]   → JSON {items:[{k,ns,vi,ctx}]} còn thiếu/cũ
 //   npm run i18n:long -- save --locale ja --file lo.json                    → {"<ns>/<khoá>":"bản dịch"} (stdin cũng được)
+//        tên riêng/khuôn giữ NGUYÊN chữ gốc (vd tên Nhật viết Latin ở bản en) → {"<ns>/<khoá>":{"t":"…","same":true}}
 //   npm run i18n:long -- zhcn                                               → sinh lại zh-cn từ zh-tw (OpenCC)
 // `save --locale zh-tw` tự sinh lại zh-cn. KHÔNG dịch/lưu zh-cn trực tiếp.
 import fs from 'node:fs';
@@ -109,14 +110,17 @@ if (cmd === 'status') {
   const loaded = {};
   let saved = 0,
     bad = 0;
-  for (const [key, t] of Object.entries(input)) {
+  for (const [key, raw] of Object.entries(input)) {
     const e = bySrc.get(key);
     if (!e) {
       console.error(`✗ ${key}: khoá không có trong nguồn`);
       bad++;
       continue;
     }
-    let err = validateTranslation(e.vi, t, locale);
+    // Dạng đối tượng `{t, same:true}` = chủ ý giữ nguyên chữ gốc (validateTranslation đã có cờ `same`).
+    const same = !!(raw && typeof raw === 'object' && raw.same === true);
+    const t = raw && typeof raw === 'object' ? raw.t : raw;
+    let err = validateTranslation(e.vi, t, locale, { same });
     if (!err && hasVietnamese(t)) err = 'còn chữ Việt có dấu';
     if (err) {
       console.error(`✗ ${key}: ${err}`);
@@ -125,7 +129,7 @@ if (cmd === 'status') {
     }
     const ns = key.slice(0, key.indexOf('/'));
     loaded[ns] ||= readLong(ROOT, locale, ns) || {};
-    loaded[ns][e.k] = { t: t.trim(), h: hashVi(e.vi) };
+    loaded[ns][e.k] = { t: t.trim(), h: hashVi(e.vi), ...(same ? { same: 1 } : {}) };
     saved++;
   }
   for (const [ns, d] of Object.entries(loaded))

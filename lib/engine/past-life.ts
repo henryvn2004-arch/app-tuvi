@@ -1901,7 +1901,17 @@ export function stableHash(seed: string): number {
   return Math.abs(h);
 }
 
-function pickCharacterName(ls: Laso, gender: 'nam' | 'nu', era: Era): string {
+/**
+ * Mã tra bản dịch của MỘT tên nhân vật (ADDITIVE — chữ Việt `characterName` giữ NGUYÊN, còn vào prompt/`portrait_cache`).
+ * `ho` / `ten` = khoá đầy đủ trong ns `past-life-ten` sau tiền tố `name.`: `<era>.ho.<chỉ số>` · `<era>.<nam|nu>.<chỉ số>` (chỉ số
+ * trong `NAME_POOLS`). Chỉ số chứ không phải chữ: dịch theo CHỖ trong bảng, `check:enginema` đối chiếu từng chỉ số với bảng nguồn.
+ */
+export interface NameMa {
+  ho: string;
+  ten: string;
+}
+
+function pickCharacter(ls: Laso, gender: 'nam' | 'nu', era: Era): { name: string; ma: NameMa } {
   // Seed CỐ Ý không chứa era: cùng một lá số đổi bối cảnh vẫn là "cùng một
   // người" được hình dung lại ở nơi khác, nên chọn cùng vị trí trong pool —
   // chỉ pool đổi, thứ tự bốc thì giữ nguyên.
@@ -1909,7 +1919,12 @@ function pickCharacterName(ls: Laso, gender: 'nam' | 'nu', era: Era): string {
   const h = stableHash(seed);
   const pool = NAME_POOLS[era.id];
   const ten = gender === 'nu' ? pool.nu : pool.nam;
-  return `${pool.ho[h % pool.ho.length]} ${ten[Math.floor(h / pool.ho.length) % ten.length]}`;
+  const hi = h % pool.ho.length;
+  const ti = Math.floor(h / pool.ho.length) % ten.length;
+  return {
+    name: `${pool.ho[hi]} ${ten[ti]}`,
+    ma: { ho: `${era.id}.ho.${hi}`, ten: `${era.id}.${gender}.${ti}` },
+  };
 }
 
 function palaceStarObjs(p: Rec | undefined, majorsOnly = false): StarObj[] {
@@ -2093,9 +2108,22 @@ const TIER_LABEL: Record<OccTier, string> = {
   thap: 'lận đận',
 };
 
+/**
+ * Mã tra bản dịch của danh xưng (ADDITIVE — chữ Việt `title` giữ NGUYÊN). Ns `past-life-ten`:
+ * `t` = khoá bản gốc, `title.<t>` (`<nghe|pair>.<…>.<bậc>.<nam|nu>` · `nghe.default.<nam|nu>`);
+ * `s` = hậu tố cung Thân ĐÃ QUA bậc thang `TITLE_MAX_LEN` (`suf.<s>` = `<cung>.<nhóm nghề>.<f|s>`, f = đầy đủ · s = ngắn),
+ * rỗng khi hậu tố bị bỏ — client không phải tính lại độ dài.
+ */
+export interface TitleMa {
+  t: string;
+  s: string;
+}
+
 export interface OccupationResult extends Occupation {
   /** Danh xưng đã chọn theo giới tính. */
   title: string;
+  /** Mã tra bản dịch của `title` (xem TitleMa). */
+  titleMa: TitleMa;
   /** Chính tinh quyết định nghề. */
   star: string;
   brightness?: string;
@@ -2309,8 +2337,15 @@ function computeOccupation(ls: Laso, gender: 'nam' | 'nu', thanCungName: string)
   };
   const ok = (sfx: string) =>
     !sfx || (baseTitle.length + 1 + sfx.length <= TITLE_MAX_LEN && !overlaps(sfx));
-  if (!ok(suffix)) suffix = than.suffixShort[base.domain] || '';
-  if (!ok(suffix)) suffix = '';
+  let sufMode: 'f' | 's' | '' = suffix ? 'f' : '';
+  if (!ok(suffix)) {
+    suffix = than.suffixShort[base.domain] || '';
+    sufMode = suffix ? 's' : '';
+  }
+  if (!ok(suffix)) {
+    suffix = '';
+    sufMode = '';
+  }
 
   // TƯ CÁCH (chính tinh chủ cung Mệnh) — chỉ vào prompt, không vào danh xưng.
   // Mệnh vô chính diệu thì mượn chính tinh cung xung chiếu, CÙNG cổ pháp 8.45
@@ -2328,6 +2363,10 @@ function computeOccupation(ls: Laso, gender: 'nam' | 'nu', thanCungName: string)
   return {
     ...base,
     title: suffix ? `${baseTitle} ${suffix}` : baseTitle,
+    titleMa: {
+      t: `${cb.ma.desc.replace(/\.desc$/, '')}.${gender}`,
+      s: sufMode ? `${thanCungName}.${base.domain}.${sufMode}` : '',
+    },
     // Cặp thì nêu CẢ HAI sao — chức phận suy từ cả cặp, ghi mỗi sao chủ là nói
     // sai căn cứ. Bỏ độ sáng ở nhánh cặp vì đó là độ sáng của riêng sao chủ,
     // gắn vào tên cặp sẽ đọc thành độ sáng của cả hai.
@@ -2566,8 +2605,10 @@ export function computeLifeThreads(ls: Laso, maxThreads = 5): LifeThread[] {
 export interface PastLifeProfile {
   gender: 'nam' | 'nu';
   era: Era;
-  /** Tên nhân vật — chọn deterministic từ pool (xem pickCharacterName). */
+  /** Tên nhân vật — chọn deterministic từ pool (xem pickCharacter). */
   characterName: string;
+  /** Mã tra bản dịch của `characterName` (xem NameMa). */
+  characterMa: NameMa;
   occupation: OccupationResult;
   arc: LifeArc;
   /** Tên cung mà Thân đóng vào (Thân luôn trùng 1 trong 12 cung). */
@@ -2601,10 +2642,12 @@ export function computePastLife(ls: Laso, gender: 'nam' | 'nu', era?: Era): Past
   const thanP = palaces.find((p) => p.isThan) as Rec | undefined;
   const thanCungName = String(thanP?.cungName || 'Mệnh');
 
+  const character = pickCharacter(ls, gender, era);
   return {
     gender,
     era,
-    characterName: pickCharacterName(ls, gender, era),
+    characterName: character.name,
+    characterMa: character.ma,
     occupation: computeOccupation(ls, gender, thanCungName),
     arc: computeLifeArc(ls),
     threads: computeLifeThreads(ls),
@@ -2636,7 +2679,9 @@ export function pastLifeMeta(profile: PastLifeProfile) {
     // án…) — ngắn, cụ thể, người dùng kể lại được. biDanh (LLM) chỉ là vế phụ
     // hiển thị nhỏ bên dưới.
     danhXung: profile.occupation.title,
+    danhXungMa: profile.occupation.titleMa,
     characterName: profile.characterName,
+    characterMa: profile.characterMa,
     occupation: {
       title: profile.occupation.title,
       desc: profile.occupation.desc,

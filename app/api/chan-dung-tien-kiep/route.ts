@@ -44,6 +44,7 @@ import {
   type PortraitPhase,
 } from '@/lib/portraits/cache';
 import { requestLocale, withLang, type LangLocale } from '@/lib/llm/locale';
+import { khoiTenTheoNgonNgu } from '@/lib/engine/past-life-ten';
 
 
 
@@ -69,10 +70,13 @@ const TOOL_ID = 'chan-dung-tien-kiep';
 // Thiên Lương, cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
 // P4 (2026-09): bump tiếp — La-Võng đổi từ 2 sao cố định Thìn/Tuất sang nhãn
 // theo Đà La, cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
-const SHAPE = 5;
+// W30f-8 (2026-11): bump vì payload THÊM khoá cấu trúc — mã tra bản dịch tên nhân vật + danh xưng (`characterMa`/`danhXungMa`
+// ở chan-dung-tien-kiep · `tenMa`/`danhXungMa` ở duyen-no-tien-kiep). Chữ Việt giữ nguyên; dòng cũ thiếu mã sẽ hiện tên Việt ở /ja…
+// nên phải dựng lại. Không đụng `lasoKey`/khoá sở hữu. Ghi sổ: docs/nhat-ky/2026-11.md "W30f-8".
+const SHAPE = 6;
 
 /** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
-const SHAPE_FINGERPRINT = 'f256a213cbd1';
+const SHAPE_FINGERPRINT = 'dfd069e67477';
 
 /** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
 const CACHE = cacheFor(TOOL_ID, SHAPE);
@@ -185,6 +189,8 @@ async function handleStory(
         // tiếng Anh cho model vẽ, dùng chung mọi ngôn ngữ).
         prompt: withLang(
           buildPastLifeStoryPrompt(profile) +
+            // W30f-8: tên + danh xưng đã dịch (cùng chữ hiện trên màn hình); `vi` → '' nên prompt khách Việt giữ nguyên byte.
+            khoiTenTheoNgonNgu(locale, [profile]) +
             (nudge
               ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
               : ''),

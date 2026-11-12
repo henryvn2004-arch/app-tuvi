@@ -44,7 +44,11 @@ try {
         esModuleInterop: true,
         noEmitOnError: false,
       },
-      include: [join(ROOT, 'lib/engine/*.ts'), join(ROOT, 'lib/contract/*.ts')],
+      include: [
+        join(ROOT, 'lib/engine/*.ts'),
+        join(ROOT, 'lib/contract/*.ts'),
+        join(ROOT, 'lib/i18n/long-server.ts'),
+      ],
     })
   );
   try {
@@ -87,6 +91,7 @@ const bond = await import('./lib/engine/past-life-bond.js');
 const nm = await import('./lib/engine/nhan-mach.js');
 const dc = await import('./lib/engine/day-con-assess.js');
 const PL = await import('./lib/engine/past-life.js');
+const PLTen = await import('./lib/engine/past-life-ten.js');
 const NN = await import('./lib/engine/nghe-nghiep.js');
 let seed = 20261112;
 const rnd = (n) => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed % n; };
@@ -131,11 +136,19 @@ for (let i = 0; i < 150; i++) {
 }
 // Chân Dung Tiền Kiếp (W30f-7): payload THẬT của computePastLife (era + occupation) — khoá suy từ trường sẵn có.
 out.tk = [];
-for (let i = 0; i < 400; i++) {
+for (let i = 0; i < 1200; i++) {
   const b = mk();
   const p = PL.computePastLife(ls(b), b.gender);
   const o = p.occupation;
-  out.tk.push({ era: { id: p.era.id, label: p.era.label, ageLabel: p.era.ageLabel }, o: { star: o.star, tier: o.tier, tierLabel: o.tierLabel, desc: o.desc, source: o.source } });
+  const srv = {};
+  for (const l of ['en', 'ja', 'ko', 'zh-tw', 'zh-cn']) srv[l] = { n: PLTen.tenTheoNgonNgu(l, p.characterMa), t: PLTen.danhXungTheoNgonNgu(l, o.titleMa) };
+  out.tk.push({
+    era: { id: p.era.id, label: p.era.label, ageLabel: p.era.ageLabel },
+    o: { star: o.star, tier: o.tier, tierLabel: o.tierLabel, desc: o.desc, source: o.source },
+    name: p.characterName, nameMa: p.characterMa, title: o.title, titleMa: o.titleMa, gender: p.gender,
+    srv, blockJa: PLTen.khoiTenTheoNgonNgu('ja', [p]), blockVi: PLTen.khoiTenTheoNgonNgu('vi', [p]),
+    meta: (function () { const m = PL.pastLifeMeta(p); return { c: m.characterMa, d: m.danhXungMa, n: m.characterName, t: m.danhXung }; })(),
+  });
 }
 // Câu ý nghĩa từng cung (W30f-5): MỌI chuỗi trong ls.cachCucTungCung trên lưới lá số rộng (đủ tuổi để Tuần/Triệt bật + tắt).
 out.cc = [];
@@ -457,6 +470,160 @@ console.log('__KQ__' + JSON.stringify(out));
     bao(
       cv.window.TuviPastLife.desc(g0.o) === g0.o.desc + '!',
       'past-life-t — đường tra đi qua I18n.long (vi dùng I18n gốc trả nguyên)'
+    );
+  }
+
+  // ── Tên nhân vật + danh xưng (W30f-8): mã `characterMa`/`titleMa` của engine THẬT phải trỏ đúng khoá nguồn, chữ Việt ghép lại
+  // bằng khuôn == `characterName`/`title` của engine, và CLIENT (past-life-ten.js) ra cùng chữ với SERVER (lib/engine/past-life-ten.ts)
+  // trên bản dịch THẬT của cả 5 ngôn ngữ.
+  {
+    const vm = await import('node:vm');
+    const S = nguon('past-life-ten');
+    const nap = (file, ctx) => vm.runInContext(readFileSync(join(ROOT, file), 'utf8'), ctx);
+    const sai = [];
+    // (1) mã ↔ nguồn: chỉ số bảng + chữ Việt
+    const hit = { ho: new Set(), ten: new Set(), t: new Set(), s: new Set(), era: new Set() };
+    for (const g of kq.tk) {
+      const m = g.nameMa;
+      const [ho, ...ten] = g.name.split(' ');
+      if (S.get('name.' + m.ho) !== ho) sai.push('ho ' + m.ho);
+      if (S.get('name.' + m.ten) !== ten.join(' ')) sai.push('ten ' + m.ten);
+      if (m.ho.split('.')[0] !== g.era.id) sai.push('era≠nền ' + m.ho);
+      if (!m.ten.startsWith(g.era.id + '.' + g.gender + '.')) sai.push('giới ' + m.ten);
+      hit.ho.add(m.ho);
+      hit.ten.add(m.ten);
+      hit.era.add(g.era.id);
+      const tm = g.titleMa;
+      const base = S.get('title.' + tm.t);
+      if (base === undefined) sai.push('title ' + tm.t);
+      else {
+        const suf = tm.s ? S.get('suf.' + tm.s) : null;
+        if (tm.s && suf === undefined) sai.push('suf ' + tm.s);
+        else if ((suf ? base + ' ' + suf : base) !== g.title) sai.push('ghép ' + tm.t + '|' + tm.s);
+      }
+      hit.t.add(tm.t);
+      if (tm.s) hit.s.add(tm.s);
+    }
+    // (2) helper client với I18n giả (marker \u0001 chứng minh ĐÃ tra khoá) ⇒ chữ ghép == chữ Việt engine
+    const fake = {
+      locale: 'xx',
+      loadLong() {},
+      long: (ns, k, vi) => (ns === 'past-life-ten' && S.has(k) ? '\u0001' + S.get(k) : vi),
+    };
+    const cx = vm.createContext({ window: { I18n: fake } });
+    nap('public/tools-shared/past-life-ten.js', cx);
+    const H = cx.window.TuviPastLifeTen;
+    for (const g of kq.tk) {
+      const n = H.name(g.name, g.nameMa);
+      const t = H.title(g.title, g.titleMa);
+      if (!n.includes('\u0001') || n.replace(/\u0001/g, '') !== g.name)
+        sai.push('client name ' + g.name);
+      if (!t.includes('\u0001') || t.replace(/\u0001/g, '') !== g.title)
+        sai.push('client title ' + g.title);
+    }
+    // Payload THẬT của route Chân Dung (`pastLifeMeta`) phải mang mã — check:cacheshape chỉ vân tay hoá hồ sơ engine, KHÔNG thấy
+    // việc bỏ mã khỏi `pastLifeMeta` (client lặng lẽ lùi về chữ Việt ở /ja…).
+    for (const g of kq.tk) {
+      if (
+        JSON.stringify(g.meta.c) !== JSON.stringify(g.nameMa) ||
+        JSON.stringify(g.meta.d) !== JSON.stringify(g.titleMa)
+      )
+        sai.push('pastLifeMeta thiếu/lệch mã ' + g.name);
+      if (g.meta.n !== g.name || g.meta.t !== g.title)
+        sai.push('pastLifeMeta đổi chữ Việt ' + g.name);
+    }
+    // thiếu mã (payload cũ/mẫu tĩnh) ⇒ nguyên chữ Việt
+    if (H.name('A B', undefined) !== 'A B' || H.title('X', null) !== 'X')
+      sai.push('thiếu mã không lùi về chữ Việt');
+    // vi: không đụng chữ
+    const cvi = vm.createContext({ window: { I18n: { locale: 'vi', long: () => 'SAI' } } });
+    nap('public/tools-shared/past-life-ten.js', cvi);
+    if (cvi.window.TuviPastLifeTen.name(kq.tk[0].name, kq.tk[0].nameMa) !== kq.tk[0].name)
+      sai.push('vi đổi tên');
+    if (cvi.window.TuviPastLifeTen.title(kq.tk[0].title, kq.tk[0].titleMa) !== kq.tk[0].title)
+      sai.push('vi đổi danh xưng');
+    bao(
+      sai.length === 0,
+      'past-life-ten — ' +
+        kq.tk.length +
+        ' nhân vật thật: mã trỏ đúng khoá nguồn, chữ Việt ghép lại == engine, client lùi đúng: ' +
+        ([...new Set(sai)].slice(0, 4).join(', ') || 'khớp')
+    );
+    bao(hit.era.size === 5, 'past-life-ten — mẫu chạm đủ ' + hit.era.size + '/5 nền');
+    bao(
+      hit.ho.size >= 40 && hit.ten.size >= 40,
+      'past-life-ten — mẫu chạm ' +
+        hit.ho.size +
+        ' họ · ' +
+        hit.ten.size +
+        ' tên (cần ≥40 mỗi loại)'
+    );
+    bao(
+      hit.t.size >= 100 && hit.s.size >= 15,
+      'past-life-ten — mẫu chạm ' +
+        hit.t.size +
+        ' danh xưng gốc (cần ≥100) · ' +
+        hit.s.size +
+        ' hậu tố (cần ≥15)'
+    );
+    // (3) bản dịch THẬT: client == server, đủ chữ, không còn dấu Việt
+    const VI = /[ăâđêôơưàáảãạằắẳẵặầấẩẫậèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ]/i;
+    for (const l of ['en', 'ja', 'ko', 'zh-tw', 'zh-cn']) {
+      const d = {};
+      vm.runInNewContext(
+        readFileSync(
+          join(ROOT, 'public/tools-shared/i18n-long/' + l + '/past-life-ten.js'),
+          'utf8'
+        ),
+        {
+          window: { I18n: { defineLong: (n, x) => Object.assign(d, x) } },
+        }
+      );
+      const c2 = vm.createContext({
+        window: { I18n: { locale: l, loadLong() {}, long: (ns, k, vi) => (d[k] ? d[k].t : vi) } },
+      });
+      nap('public/tools-shared/past-life-ten.js', c2);
+      const T2 = c2.window.TuviPastLifeTen;
+      const lech = [];
+      for (const g of kq.tk) {
+        const n = T2.name(g.name, g.nameMa);
+        const t = T2.title(g.title, g.titleMa);
+        const sv = g.srv[l];
+        if (sv.n !== n)
+          lech.push('tên ' + l + ' ' + g.name + ': client "' + n + '" ≠ server "' + sv.n + '"');
+        if (sv.t !== t)
+          lech.push(
+            'danh xưng ' + l + ' ' + g.title + ': client "' + t + '" ≠ server "' + sv.t + '"'
+          );
+        if (VI.test(n) || VI.test(t)) lech.push('còn dấu Việt ' + l + ' ' + n + ' / ' + t);
+        if (n === g.name && l !== 'en') lech.push('tên không đổi ' + l + ' ' + g.name);
+        if (t === g.title) lech.push('danh xưng không đổi ' + l + ' ' + g.title);
+      }
+      bao(
+        lech.length === 0,
+        'past-life-ten ' +
+          l +
+          ' — client == server trên ' +
+          kq.tk.length +
+          ' nhân vật, đủ chữ, không dấu Việt: ' +
+          (lech.slice(0, 2).join(' | ') || 'khớp')
+      );
+    }
+    // (4) khối prompt: vi rỗng (byte-giống); ja nêu đúng tên + danh xưng đã dịch
+    const g0 = kq.tk[0];
+    bao(
+      kq.tk.every((g) => g.blockVi === ''),
+      'past-life-ten — prompt khách vi KHÔNG đổi một byte (khối rỗng)'
+    );
+    bao(
+      kq.tk.every(
+        (g) => g.blockJa.includes(g.name + ' → ' + g.srv.ja.n) && g.blockJa.includes(g.srv.ja.t)
+      ),
+      'past-life-ten — khối prompt ja chứa đúng tên + danh xưng hiển thị (' +
+        g0.name +
+        ' → ' +
+        g0.srv.ja.n +
+        ')'
     );
   }
 
