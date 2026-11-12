@@ -421,17 +421,32 @@ var QH_HINT = {
 // họ trả tiền cho một bản chung chung. `npm run check:viec` (chạy trong CI lint)
 // canh đúng chỗ này — sửa một bên thì phải sửa cả hai.
 var NK_VIEC = [
-  { id: 'nho-viec', label: _tvmbT('js.nguoikhac.sap-nho-ho-mot-viec-trinh', 'Sắp nhờ họ một việc / trình một đề xuất'), hop: ['sep', 'dong-nghiep', 'doi-tac', 'cha-me', 'ban-doi', 'ban-be'] },
-  { id: 'thuong-luong', label: _tvmbT('js.nguoikhac.sap-thuong-luong-quyen-loi-luong', 'Sắp thương lượng quyền lợi (lương, chia phần)'), hop: ['sep', 'dong-nghiep', 'doi-tac'] },
-  { id: 'bao-tin-xau', label: _tvmbT('js.nguoikhac.sap-phai-bao-mot-tin-ho', 'Sắp phải báo một tin họ không muốn nghe'), hop: [] },
-  { id: 'tu-choi', label: _tvmbT('js.nguoikhac.phai-tu-choi-ho-ma-khong', 'Phải từ chối họ mà không muốn mất quan hệ'), hop: [] },
-  { id: 'bat-dong', label: _tvmbT('js.nguoikhac.dang-co-bat-dong-chua-go', 'Đang có bất đồng chưa gỡ được'), hop: [] },
-  { id: 'giao-viec', label: _tvmbT('js.nguoikhac.can-giao-viec-nhac-viec-cho', 'Cần giao việc / nhắc việc cho họ'), hop: ['dong-nghiep', 'cap-duoi', 'doi-tac', 'con-cai'] },
-  { id: 'ru-hop-tac', label: _tvmbT('js.nguoikhac.muon-ru-ho-lam-chung-mot', 'Muốn rủ họ làm chung một việc lớn'), hop: ['dong-nghiep', 'cap-duoi', 'doi-tac', 'ban-be', 'ban-doi'] },
-  { id: 'gan-lai', label: _tvmbT('js.nguoikhac.muon-gan-lai-sau-mot-thoi', 'Muốn gần lại sau một thời gian xa cách'), hop: ['cha-me', 'con-cai', 'ban-doi', 'ban-be', 'dong-nghiep'] },
-  { id: 'lan-dau', label: _tvmbT('js.nguoikhac.sap-gap-lam-viec-lan-dau', 'Sắp gặp / làm việc lần đầu, chưa biết gì về họ'), hop: [] },
-  { id: 'hieu-them', label: _tvmbT('js.nguoikhac.khong-co-gi-gap-chi-muon', 'Không có gì gấp, chỉ muốn hiểu người này hơn'), hop: [] },
+  { id: 'nho-viec', label: 'Sắp nhờ họ một việc / trình một đề xuất', hop: ['sep', 'dong-nghiep', 'doi-tac', 'cha-me', 'ban-doi', 'ban-be'] },
+  { id: 'thuong-luong', label: 'Sắp thương lượng quyền lợi (lương, chia phần)', hop: ['sep', 'dong-nghiep', 'doi-tac'] },
+  { id: 'bao-tin-xau', label: 'Sắp phải báo một tin họ không muốn nghe', hop: [] },
+  { id: 'tu-choi', label: 'Phải từ chối họ mà không muốn mất quan hệ', hop: [] },
+  { id: 'bat-dong', label: 'Đang có bất đồng chưa gỡ được', hop: [] },
+  { id: 'giao-viec', label: 'Cần giao việc / nhắc việc cho họ', hop: ['dong-nghiep', 'cap-duoi', 'doi-tac', 'con-cai'] },
+  { id: 'ru-hop-tac', label: 'Muốn rủ họ làm chung một việc lớn', hop: ['dong-nghiep', 'cap-duoi', 'doi-tac', 'ban-be', 'ban-doi'] },
+  { id: 'gan-lai', label: 'Muốn gần lại sau một thời gian xa cách', hop: ['cha-me', 'con-cai', 'ban-doi', 'ban-be', 'dong-nghiep'] },
+  { id: 'lan-dau', label: 'Sắp gặp / làm việc lần đầu, chưa biết gì về họ', hop: [] },
+  { id: 'hieu-them', label: 'Không có gì gấp, chỉ muốn hiểu người này hơn', hop: [] },
 ];
+var NK_VIEC_T = {
+  'nho-viec': function () { return _tvmbT('js.nguoikhac.sap-nho-ho-mot-viec-trinh', 'Sắp nhờ họ một việc / trình một đề xuất'); },
+  'thuong-luong': function () { return _tvmbT('js.nguoikhac.sap-thuong-luong-quyen-loi-luong', 'Sắp thương lượng quyền lợi (lương, chia phần)'); },
+  'bao-tin-xau': function () { return _tvmbT('js.nguoikhac.sap-phai-bao-mot-tin-ho', 'Sắp phải báo một tin họ không muốn nghe'); },
+  'tu-choi': function () { return _tvmbT('js.nguoikhac.phai-tu-choi-ho-ma-khong', 'Phải từ chối họ mà không muốn mất quan hệ'); },
+  'bat-dong': function () { return _tvmbT('js.nguoikhac.dang-co-bat-dong-chua-go', 'Đang có bất đồng chưa gỡ được'); },
+  'giao-viec': function () { return _tvmbT('js.nguoikhac.can-giao-viec-nhac-viec-cho', 'Cần giao việc / nhắc việc cho họ'); },
+  'ru-hop-tac': function () { return _tvmbT('js.nguoikhac.muon-ru-ho-lam-chung-mot', 'Muốn rủ họ làm chung một việc lớn'); },
+  'gan-lai': function () { return _tvmbT('js.nguoikhac.muon-gan-lai-sau-mot-thoi', 'Muốn gần lại sau một thời gian xa cách'); },
+  'lan-dau': function () { return _tvmbT('js.nguoikhac.sap-gap-lam-viec-lan-dau', 'Sắp gặp / làm việc lần đầu, chưa biết gì về họ'); },
+  'hieu-them': function () { return _tvmbT('js.nguoikhac.khong-co-gi-gap-chi-muon', 'Không có gì gấp, chỉ muốn hiểu người này hơn'); },
+};
+// Nhãn việc: NK_VIEC giữ chữ Việt (khớp engine — check:viec); hiển thị tra theo id qua NK_VIEC_T.
+function _nkViecTen(v) { return NK_VIEC_T[v.id] ? NK_VIEC_T[v.id]() : v.label; }
+
 
 // Nhãn quan hệ/việc do SERVER trả là chữ Việt: ở chỗ hiển thị tra theo id trong danh sách đã dịch của trang
 // (vi: cùng chuỗi với server, byte-giống); id lạ thì giữ nhãn server.
@@ -443,7 +458,7 @@ function _nkQhLabel(qh) {
 function _nkViecLabel(v) {
   if (!v) return '';
   var f = v.id ? NK_VIEC.filter(function (x) { return x.id === v.id; })[0] : null;
-  return f ? f.label : (v.label || '');
+  return f ? _nkViecTen(f) : (v.label || '');
 }
 
 function _fillViec() {
@@ -452,7 +467,7 @@ function _fillViec() {
   var giu = sel.value;
   var hop = NK_VIEC.filter(function (v) { return !v.hop.length || v.hop.indexOf(qh) >= 0; });
   sel.innerHTML = hop.map(function (v) {
-    return '<option value="' + v.id + '">' + esc(v.label) + '</option>';
+    return '<option value="' + v.id + '">' + esc(_nkViecTen(v)) + '</option>';
   }).join('');
   // Giữ lựa chọn cũ nếu nó còn hợp với quan hệ mới; không thì về mặc định.
   // Không giữ thì mỗi lần đổi quan hệ là người dùng phải chọn lại từ đầu.
