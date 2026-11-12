@@ -17791,6 +17791,274 @@
   "t": "**、二十八宿：**",
   "h": "fc0c8af6"
  },
+ "js.shellui.sd-ban-menh": {
+  "t": "本命の納音は<b>{na}</b>（五行は{hn}）、命卦（九宮）の五行は{hc}です。",
+  "h": "80604291"
+ },
+ "js.shellui.sd-chu-dao": {
+  "t": "主導数 {n}",
+  "h": "96189155"
+ },
+ "js.shellui.sd-dg-13": {
+  "t": "西洋文化に由来する忌み数（13日の金曜日）で、東洋古来の考え方ではありません。",
+  "h": "d4580157"
+ },
+ "js.shellui.sd-dg-39": {
+  "t": "「mãi phát」（末永く発展）— 一部の人の一般的な読み方によるものです。",
+  "h": "c9386b28"
+ },
+ "js.shellui.sd-dg-4": {
+  "t": "単独の「4」— ベトナム語の漢字音が「tử（死）」に近く、古法ではないものの華人系の商習慣で広く忌まれます。",
+  "h": "6e97ea92"
+ },
+ "js.shellui.sd-dg-49": {
+  "t": "「tứ cửu」— 一部地域の民間の読み方による忌み数で、八宅や易経の古法ではありません。",
+  "h": "769f9e93"
+ },
+ "js.shellui.sd-dg-53": {
+  "t": "「ngũ tam」— 一部地域の語呂（読み替え）による忌み数です。",
+  "h": "20b5f721"
+ },
+ "js.shellui.sd-dg-6": {
+  "t": "「lộc（禄）」— 好まれ、末尾の数字によく使われます。",
+  "h": "2208e1cf"
+ },
+ "js.shellui.sd-dg-68": {
+  "t": "「lộc phát（禄発）」。",
+  "h": "19c43f6f"
+ },
+ "js.shellui.sd-dg-79": {
+  "t": "「thất phát」— 民間でも意見が分かれます。吉とする地域もあれば、「thất（失う）」に近いため忌む地域もあります。両論を併記し、どちらにも与しません。",
+  "h": "0e34e481"
+ },
+ "js.shellui.sd-dg-8": {
+  "t": "「phát（発）」— 華人系の商習慣で最も好まれる数字です。",
+  "h": "6f275378"
+ },
+ "js.shellui.sd-dg-9": {
+  "t": "「長久で揺るがない」。",
+  "h": "303f4403"
+ },
+ "js.shellui.sd-diem": {
+  "t": "吉点：<b>{d}/100</b>",
+  "h": "c0a0a91f"
+ },
+ "js.shellui.sd-diem-noibat": {
+  "t": "吉点：<b>{d}/100</b> · 目立つ星：{s}",
+  "h": "364bf498"
+ },
+ "js.shellui.sd-doi-lap": {
+  "t": "重なるペア：{l}",
+  "h": "821ad1b8"
+ },
+ "js.shellui.sd-doi-xung": {
+  "t": "左右対称の並び（鏡合わせ）",
+  "h": "85d8997a"
+ },
+ "js.shellui.sd-dt-ngan": {
+  "t": "短すぎて合意度を算出できません",
+  "h": "0c517b1a"
+ },
+ "js.shellui.sd-dt-tot": {
+  "t": "古法の{n}流派中{t}流派が吉",
+  "h": "e2ec98b6"
+ },
+ "js.shellui.sd-e-bat-trach": {
+  "t": "八宅",
+  "h": "79678bf6"
+ },
+ "js.shellui.sd-e-khong-phai": {
+  "t": "古法ではありません",
+  "h": "5085b3d5"
+ },
+ "js.shellui.sd-e-lac-thu": {
+  "t": "洛書",
+  "h": "aa2db932"
+ },
+ "js.shellui.sd-e-mai-hoa": {
+  "t": "梅花易数",
+  "h": "9093e560"
+ },
+ "js.shellui.sd-e-so-hoc": {
+  "t": "数学的分析 — 古法ではありません",
+  "h": "50675a71"
+ },
+ "js.shellui.sd-err-do-dai": {
+  "t": "桁数は4〜20の整数で指定してください。",
+  "h": "23e93a0c"
+ },
+ "js.shellui.sd-err-khong-co-so": {
+  "t": "入力に有効な数字が見つかりません。",
+  "h": "673fdfdf"
+ },
+ "js.shellui.sd-err-khong-sinh": {
+  "t": "番号を生成できませんでした。桁数を調整するか、除外を減らしてください。",
+  "h": "c3a24e87"
+ },
+ "js.shellui.sd-err-lap-que": {
+  "t": "卦を立てるには2桁以上の数字が必要です。",
+  "h": "ee93959c"
+ },
+ "js.shellui.sd-err-loai-het": {
+  "t": "1〜9（5を除く）の数字をすべて除外しているため、番号を生成できません。",
+  "h": "221a7838"
+ },
+ "js.shellui.sd-err-muc-tieu": {
+  "t": "目的が正しくありません。指定できるのは tai-loc・suc-khoe・ben-vung・on-dinh・tu-do のみです。",
+  "h": "a8588d8e"
+ },
+ "js.shellui.sd-err-nap-bt": {
+  "t": "BatTrachToolを読み込めませんでした。",
+  "h": "1348a059"
+ },
+ "js.shellui.sd-err-nap-que": {
+  "t": "MaiHoaTool/KinhDichToolを読み込めませんでした。",
+  "h": "494db639"
+ },
+ "js.shellui.sd-err-qua-dai": {
+  "t": "数字が長すぎます。最大20桁までです。",
+  "h": "a68b8a20"
+ },
+ "js.shellui.sd-err-tien-to": {
+  "t": "先頭の数字（{n}桁）は希望の桁数（{d}桁）より短くしてください。",
+  "h": "690e0955"
+ },
+ "js.shellui.sd-gc-chua-nap": {
+  "t": "BatTrachToolを読み込めませんでした",
+  "h": "c2ff2510"
+ },
+ "js.shellui.sd-gc-so-0": {
+  "t": "0を含む — 直前のペアを増幅するが、それ自体は星にならない",
+  "h": "6158f6d2"
+ },
+ "js.shellui.sd-gc-trung-cung": {
+  "t": "中宮（5）— 中立で流れを断ち、吉凶に数えない",
+  "h": "a16f1108"
+ },
+ "js.shellui.sd-goiy-tot": {
+  "t": "{t}/{n}が吉",
+  "h": "5e56466b"
+ },
+ "js.shellui.sd-h-am-duong": {
+  "t": "陰陽",
+  "h": "5cbdb898"
+ },
+ "js.shellui.sd-h-bat-tinh": {
+  "t": "八星",
+  "h": "04d4506a"
+ },
+ "js.shellui.sd-h-dan-gian": {
+  "t": "民間の言い伝え",
+  "h": "8d5a7119"
+ },
+ "js.shellui.sd-h-ngu-hanh": {
+  "t": "五行",
+  "h": "68ac2473"
+ },
+ "js.shellui.sd-h-que-dich": {
+  "t": "易卦",
+  "h": "9b44a158"
+ },
+ "js.shellui.sd-hop-co": {
+  "t": "この数字列には、本命に合う五行が含まれています：{l}。",
+  "h": "4fa27db2"
+ },
+ "js.shellui.sd-hop-cungphi": {
+  "t": "命卦（{h}）",
+  "h": "1fb772a2"
+ },
+ "js.shellui.sd-hop-khong": {
+  "t": "この数字列には、本命に合う五行が含まれていません。",
+  "h": "95436f1e"
+ },
+ "js.shellui.sd-hop-napam": {
+  "t": "納音（{h}）",
+  "h": "8ab1b753"
+ },
+ "js.shellui.sd-khong-troi": {
+  "t": "この数字列には突出した五行がなく、この層では結論を出しません。",
+  "h": "150addf3"
+ },
+ "js.shellui.sd-le-chan": {
+  "t": "奇数{l}個／偶数{c}個",
+  "h": "d075ec93"
+ },
+ "js.shellui.sd-qh-dong": {
+  "t": "本命と同じ五行",
+  "h": "beadac7b"
+ },
+ "js.shellui.sd-qh-khac": {
+  "t": "本命を剋する",
+  "h": "47805046"
+ },
+ "js.shellui.sd-qh-sinh": {
+  "t": "本命を生じる",
+  "h": "07fccdbf"
+ },
+ "js.shellui.sd-qh-trung": {
+  "t": "本命を生じも剋しもしない",
+  "h": "cb9bf438"
+ },
+ "js.shellui.sd-que-bien": {
+  "t": "変卦は<b>{q}</b> — {y}",
+  "h": "6c54f090"
+ },
+ "js.shellui.sd-que-meta": {
+  "t": "上卦{t}・下卦{h}・第{n}爻が動",
+  "h": "b11cc916"
+ },
+ "js.shellui.sd-sy-dien-nien": {
+  "t": "長続き、結婚、息の長い仕事運。",
+  "h": "ce70b2ac"
+ },
+ "js.shellui.sd-sy-hoa-hai": {
+  "t": "揉め事、口論、細かな散財。",
+  "h": "f38e59bb"
+ },
+ "js.shellui.sd-sy-luc-sat": {
+  "t": "恋愛・人間関係のもつれが長引く。",
+  "h": "f228d1b1"
+ },
+ "js.shellui.sd-sy-ngu-quy": {
+  "t": "小人、思わぬ変動、陰での妨害。",
+  "h": "0d397826"
+ },
+ "js.shellui.sd-sy-phuc-vi": {
+  "t": "安定して守りを固め、急変はない。安全だが飛躍は少ない。",
+  "h": "4d6da9b8"
+ },
+ "js.shellui.sd-sy-sinh-khi": {
+  "t": "大吉 — 財運・好機・発展。八星の中で最も良い星。",
+  "h": "797de7ca"
+ },
+ "js.shellui.sd-sy-thien-y": {
+  "t": "健康、貴人、安定した金運。",
+  "h": "544c54b8"
+ },
+ "js.shellui.sd-sy-tuyet-menh": {
+  "t": "極端 — 一か八か、大きな変動。",
+  "h": "a8d6b58d"
+ },
+ "js.shellui.sd-t1-thieu": {
+  "t": "八星を判定できる有効なペアが足りません（0と5だけ、または短すぎる）。",
+  "h": "9f999f38"
+ },
+ "js.shellui.sd-thieu-hanh": {
+  "t": "不足する五行：{h}",
+  "h": "92830bfe"
+ },
+ "js.shellui.sd-tien-dan": {
+  "t": "3つ連続で増える並びを含む",
+  "h": "c5b3e33a"
+ },
+ "js.shellui.sd-troi": {
+  "t": "この数字列で優勢な五行は<b>{h}</b> — {qh}（{na}）。この層の判定は優勢な五行で決まります。",
+  "h": "667890cd"
+ },
+ "js.shellui.sd-vanh-aria": {
+  "t": "数字列の五行の分布図",
+  "h": "b9e1de4e"
+ },
  "js.shellui.sinh-con-bo": {
   "t": "出産 · 父 ",
   "h": "6b581c06"
@@ -18458,6 +18726,86 @@
  "js.shellui.zalo": {
   "t": "Zalo",
   "h": "53b71aec"
+ },
+ "js.sodep.chip1": {
+  "t": "この番号は使ってもよいですか？",
+  "h": "8981877c"
+ },
+ "js.sodep.chip2": {
+  "t": "目立つ八星の星は、何を意味しますか？",
+  "h": "cf4b5467"
+ },
+ "js.sodep.chip3": {
+  "t": "立てた易卦は何を示していますか？",
+  "h": "c921b99a"
+ },
+ "js.sodep.chip4": {
+  "t": "どの番号に変えるとより良くなりますか？",
+  "h": "06cc25be"
+ },
+ "js.sodep.greeting": {
+  "t": "番号 **{s}** — {kq}。どんなことを鑑定しましょうか？",
+  "h": "caa3ffed"
+ },
+ "js.sodep.gy-chip": {
+  "t": "{s} を鑑定",
+  "h": "60b8c9ee"
+ },
+ "js.sodep.gy-greeting": {
+  "t": "選んだ目的に合わせて、{d}桁の番号を **{n}** 件提案しました。どの番号を詳しく鑑定しましょうか？",
+  "h": "55fdb734"
+ },
+ "js.sodep.gy-label": {
+  "t": "番号の提案 — {d}桁",
+  "h": "d3058652"
+ },
+ "js.sodep.gy-sh-dong": {
+  "t": "吉数の提案 — {d}桁、目的：{m}",
+  "h": "a0d30b0e"
+ },
+ "js.sodep.gy-sh-title": {
+  "t": "{d}桁の吉数の提案",
+  "h": "ad1c2c12"
+ },
+ "js.sodep.gy-tot": {
+  "t": "{t}/{n}が吉",
+  "h": "5e56466b"
+ },
+ "js.sodep.kq-ngan": {
+  "t": "短すぎて合意度を算出できません",
+  "h": "361ce7b5"
+ },
+ "js.sodep.kq-ngan-sh": {
+  "t": "短すぎます",
+  "h": "0c8bb3fa"
+ },
+ "js.sodep.kq-tot": {
+  "t": "{n}流派中{t}流派が吉",
+  "h": "8985ca2d"
+ },
+ "js.sodep.label": {
+  "t": "吉数 {s}",
+  "h": "3a999ba0"
+ },
+ "js.sodep.sh-bat-tinh": {
+  "t": "八星：{d}/100",
+  "h": "07259fd2"
+ },
+ "js.sodep.sh-dong": {
+  "t": "吉数鑑定 — 番号 {s}",
+  "h": "d026e6fe"
+ },
+ "js.sodep.sh-dongthuan": {
+  "t": "合意度：{kq}",
+  "h": "1cab3aef"
+ },
+ "js.sodep.sh-que": {
+  "t": "易卦：{q}",
+  "h": "5312d449"
+ },
+ "js.sodep.sh-title": {
+  "t": "吉数鑑定 {s}",
+  "h": "3e6d8b4f"
  },
  "js.solaso.bao-cao": {
   "t": "レポート",
@@ -28026,6 +28374,130 @@
  "sc.xem-tuoi-sinh-con-tu-vi": {
   "t": "子どもを産む年の相性 — 明宝紫微斗数",
   "h": "23026bbb"
+ },
+ "sodep.ben-vung-dien-nien": {
+  "t": "長続き（延年）",
+  "h": "d8c83d0b"
+ },
+ "sodep.ca-nhan-hoa-theo-nam-sinh": {
+  "t": "生年でパーソナライズ（任意）",
+  "h": "64cde7ae"
+ },
+ "sodep.cham-diem": {
+  "t": "採点する →",
+  "h": "a4d402f6"
+ },
+ "sodep.cham-diem-mot-day-so": {
+  "t": "1つの番号を採点",
+  "h": "b64551fa"
+ },
+ "sodep.cham-diem-so-dien-thoai-so": {
+  "t": "電話番号・家の番号・ナンバープレートを、八星（八宅）・易卦・五行・陰陽・民間の言い伝えの5つの流派に分けて採点します。",
+  "h": "c8a704fb"
+ },
+ "sodep.chon-do-dai-dau-so-va": {
+  "t": "桁数・先頭の数字・目的を選ぶと、点数順の番号リストを返します。既成のリストは使いません。",
+  "h": "a8376b12"
+ },
+ "sodep.dau-so-tuy-chon": {
+  "t": "先頭の数字（任意）",
+  "h": "6194d2ab"
+ },
+ "sodep.day-so": {
+  "t": "番号",
+  "h": "f3ccd2df"
+ },
+ "sodep.do-dai": {
+  "t": "桁数",
+  "h": "3eb3bee1"
+ },
+ "sodep.gioi-thieu": {
+  "t": "ご紹介",
+  "h": "f4272d6e"
+ },
+ "sodep.goi-y-5-so": {
+  "t": "5件提案 →",
+  "h": "dbf15fa5"
+ },
+ "sodep.goi-y-so-theo-muc-tieu-j94s": {
+  "t": "目的に合う番号の提案",
+  "h": "12bf5866"
+ },
+ "sodep.hoi-thay-luan-sau-hon": {
+  "t": "✦ 先生にさらに詳しく鑑定してもらう",
+  "h": "159b57f0"
+ },
+ "sodep.hp-5-truong-phai": {
+  "t": "5つの流派を<br>別々に判定",
+  "h": "539584cc"
+ },
+ "sodep.hp-dong-thuan": {
+  "t": "吉・凶の<br>合意度",
+  "h": "7b5e34dd"
+ },
+ "sodep.hp-goi-y-so": {
+  "t": "目的に合う<br>番号の提案",
+  "h": "7c40cb16"
+ },
+ "sodep.mien-phi": {
+  "t": "無料",
+  "h": "a999e722"
+ },
+ "sodep.mot-so-dien-thoai-bien-so": {
+  "t": "電話番号やナンバープレートの風水は流派によって算出が異なり、すべての流派が同じ答えになるとは限りません。番号を入力すると、流派ごとの点数をあいまいに混ぜずに別々にお返しします。",
+  "h": "207f067a"
+ },
+ "sodep.muc-tieu": {
+  "t": "目的",
+  "h": "3ae2c479"
+ },
+ "sodep.nhan-ket-qua": {
+  "t": "結果を受け取る",
+  "h": "7bd18e32"
+ },
+ "sodep.nhap-so-dien-thoai-so-nha": {
+  "t": "電話番号・家の番号・ナンバープレートを入力してください。流派ごとの点数と、吉・凶の合意度をお返しします。",
+  "h": "3c94a356"
+ },
+ "sodep.nhap-thong-tin": {
+  "t": "情報を入力",
+  "h": "7b7a57a2"
+ },
+ "sodep.on-dinh-phuc-vi": {
+  "t": "安定（伏位）",
+  "h": "fea696c9"
+ },
+ "sodep.sdt-so-nha-bien-so": {
+  "t": "電話番号・家の番号・ナンバープレートを5つの流派で判定",
+  "h": "55408215"
+ },
+ "sodep.so-dep-chi-la-mot-goc": {
+  "t": "吉数はあくまで手早く見る一つの視点です — <a href=\"/app/luan-giai\">紫微斗数の命盤で生涯を詳しく見る →</a>",
+  "h": "528b3aa2"
+ },
+ "sodep.suc-khoe-thien-y": {
+  "t": "健康（天医）",
+  "h": "7269efe8"
+ },
+ "sodep.tai-loc-sinh-khi": {
+  "t": "財運（生気）",
+  "h": "718c3d04"
+ },
+ "sodep.tu-do-moi-sao-cat": {
+  "t": "指定なし（吉星すべて）",
+  "h": "9d6db3ad"
+ },
+ "sodep.xem-so-dep": {
+  "t": "吉数を見る",
+  "h": "14ed9523"
+ },
+ "sodep.xem-so-dep-phong-thuy-la": {
+  "t": "吉数鑑定（風水の番号占い）は、八星（八宅）・易卦・五行・陰陽、そして民間の言い伝えなど、複数の流派を用いて数字列の吉凶を判断する分野です。出発点が異なるため、流派どうしが常に同じ結論になるとは限りません。",
+  "h": "58cc1874"
+ },
+ "sodep.xem-so-dep-tu-vi-minh": {
+  "t": "吉数を見る — Tử Vi Minh Bảo",
+  "h": "beb7ef68"
  },
  "solaso.chua-co-la-so-nao-trong": {
   "t": "命盤ノートにはまだ命盤がありません。<br>どのツールでも生年月日を入力すると、命盤が自動でここに入ります。",

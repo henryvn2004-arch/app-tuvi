@@ -17791,6 +17791,274 @@
   "t": "**, lunar mansion **",
   "h": "fc0c8af6"
  },
+ "js.shellui.sd-ban-menh": {
+  "t": "Your birth-year Nap Am (sound element) is <b>{na}</b> (element: {hn}); your Life Gua (Nine Palaces) element is {hc}.",
+  "h": "80604291"
+ },
+ "js.shellui.sd-chu-dao": {
+  "t": "core number {n}",
+  "h": "96189155"
+ },
+ "js.shellui.sd-dg-13": {
+  "t": "avoided under Western culture (Friday the 13th) — not an East Asian tradition.",
+  "h": "d4580157"
+ },
+ "js.shellui.sd-dg-39": {
+  "t": "\"mãi phát\" (prosper for good) — a common reading among some people.",
+  "h": "c9386b28"
+ },
+ "js.shellui.sd-dg-4": {
+  "t": "a lone 4 — its Sino-Vietnamese sound is close to \"tử\" (death); widely avoided in Chinese-rooted business culture though not part of the classical methods.",
+  "h": "6e97ea92"
+ },
+ "js.shellui.sd-dg-49": {
+  "t": "\"tứ cửu\" — avoided by a folk reading in some regions, NOT a classical Eight Mansions / I Ching rule.",
+  "h": "769f9e93"
+ },
+ "js.shellui.sd-dg-53": {
+  "t": "\"ngũ tam\" — avoided by a slang reading in some regions.",
+  "h": "20b5f721"
+ },
+ "js.shellui.sd-dg-6": {
+  "t": "\"lộc\" (fortune) — well liked, often used as the last digit.",
+  "h": "2208e1cf"
+ },
+ "js.shellui.sd-dg-68": {
+  "t": "\"lộc phát\" (fortune and prosperity).",
+  "h": "19c43f6f"
+ },
+ "js.shellui.sd-dg-79": {
+  "t": "\"thất phát\" — folk belief is NOT unanimous: some places count it lucky, others avoid it because it sounds like \"thất\" (loss). Both views are given; no side is taken.",
+  "h": "0e34e481"
+ },
+ "js.shellui.sd-dg-8": {
+  "t": "\"phát\" (prosper) — the most favored number in Chinese-rooted business culture.",
+  "h": "6f275378"
+ },
+ "js.shellui.sd-dg-9": {
+  "t": "\"long-lasting, enduring\".",
+  "h": "303f4403"
+ },
+ "js.shellui.sd-diem": {
+  "t": "Auspicious score: <b>{d}/100</b>",
+  "h": "c0a0a91f"
+ },
+ "js.shellui.sd-diem-noibat": {
+  "t": "Auspicious score: <b>{d}/100</b> · Prominent stars: {s}",
+  "h": "364bf498"
+ },
+ "js.shellui.sd-doi-lap": {
+  "t": "repeated pairs: {l}",
+  "h": "821ad1b8"
+ },
+ "js.shellui.sd-doi-xung": {
+  "t": "symmetrical sequence (mirror)",
+  "h": "85d8997a"
+ },
+ "js.shellui.sd-dt-ngan": {
+  "t": "Too short to work out a consensus",
+  "h": "0c517b1a"
+ },
+ "js.shellui.sd-dt-tot": {
+  "t": "{t} of {n} classical schools say favorable",
+  "h": "e2ec98b6"
+ },
+ "js.shellui.sd-e-bat-trach": {
+  "t": "Eight Mansions",
+  "h": "79678bf6"
+ },
+ "js.shellui.sd-e-khong-phai": {
+  "t": "NOT a classical method",
+  "h": "5085b3d5"
+ },
+ "js.shellui.sd-e-lac-thu": {
+  "t": "Luo Shu",
+  "h": "aa2db932"
+ },
+ "js.shellui.sd-e-mai-hoa": {
+  "t": "Plum Blossom Numerology",
+  "h": "9093e560"
+ },
+ "js.shellui.sd-e-so-hoc": {
+  "t": "Arithmetic — not a classical method",
+  "h": "50675a71"
+ },
+ "js.shellui.sd-err-do-dai": {
+  "t": "Length must be a whole number from 4 to 20.",
+  "h": "23e93a0c"
+ },
+ "js.shellui.sd-err-khong-co-so": {
+  "t": "No valid digits found in the input.",
+  "h": "673fdfdf"
+ },
+ "js.shellui.sd-err-khong-sinh": {
+  "t": "No numbers could be generated — try a different length or fewer exclusions.",
+  "h": "c3a24e87"
+ },
+ "js.shellui.sd-err-lap-que": {
+  "t": "At least 2 digits are needed to cast a hexagram.",
+  "h": "ee93959c"
+ },
+ "js.shellui.sd-err-loai-het": {
+  "t": "Every digit from 1 to 9 (except 5) is excluded — nothing left to generate numbers from.",
+  "h": "221a7838"
+ },
+ "js.shellui.sd-err-muc-tieu": {
+  "t": "Invalid goal — only these are accepted: tai-loc, suc-khoe, ben-vung, on-dinh, tu-do.",
+  "h": "a8588d8e"
+ },
+ "js.shellui.sd-err-nap-bt": {
+  "t": "Could not load BatTrachTool.",
+  "h": "1348a059"
+ },
+ "js.shellui.sd-err-nap-que": {
+  "t": "Could not load MaiHoaTool/KinhDichTool.",
+  "h": "494db639"
+ },
+ "js.shellui.sd-err-qua-dai": {
+  "t": "The number is too long — 20 digits at most.",
+  "h": "a68b8a20"
+ },
+ "js.shellui.sd-err-tien-to": {
+  "t": "The prefix ({n} digits) must be SHORTER than the desired length ({d}).",
+  "h": "690e0955"
+ },
+ "js.shellui.sd-gc-chua-nap": {
+  "t": "Could not load BatTrachTool",
+  "h": "c2ff2510"
+ },
+ "js.shellui.sd-gc-so-0": {
+  "t": "Contains 0 — amplifies the pair before it, but is not a star itself",
+  "h": "6158f6d2"
+ },
+ "js.shellui.sd-gc-trung-cung": {
+  "t": "Center palace (5) — neutral, breaks the chain, counts as neither auspicious nor inauspicious",
+  "h": "a16f1108"
+ },
+ "js.shellui.sd-goiy-tot": {
+  "t": "{t}/{n} favorable",
+  "h": "5e56466b"
+ },
+ "js.shellui.sd-h-am-duong": {
+  "t": "Yin-Yang",
+  "h": "5cbdb898"
+ },
+ "js.shellui.sd-h-bat-tinh": {
+  "t": "Eight Stars",
+  "h": "04d4506a"
+ },
+ "js.shellui.sd-h-dan-gian": {
+  "t": "Folk belief",
+  "h": "8d5a7119"
+ },
+ "js.shellui.sd-h-ngu-hanh": {
+  "t": "Five Elements",
+  "h": "68ac2473"
+ },
+ "js.shellui.sd-h-que-dich": {
+  "t": "I Ching hexagram",
+  "h": "9b44a158"
+ },
+ "js.shellui.sd-hop-co": {
+  "t": "Elements in the sequence that suit your birth chart: {l}.",
+  "h": "4fa27db2"
+ },
+ "js.shellui.sd-hop-cungphi": {
+  "t": "Life Gua ({h})",
+  "h": "1fb772a2"
+ },
+ "js.shellui.sd-hop-khong": {
+  "t": "The sequence has NO element that suits your birth chart.",
+  "h": "95436f1e"
+ },
+ "js.shellui.sd-hop-napam": {
+  "t": "Nap Am ({h})",
+  "h": "8ab1b753"
+ },
+ "js.shellui.sd-khong-troi": {
+  "t": "No single element clearly dominates the sequence — this layer draws no conclusion.",
+  "h": "150addf3"
+ },
+ "js.shellui.sd-le-chan": {
+  "t": "{l} odd / {c} even digits",
+  "h": "d075ec93"
+ },
+ "js.shellui.sd-qh-dong": {
+  "t": "the same element as your birth chart",
+  "h": "beadac7b"
+ },
+ "js.shellui.sd-qh-khac": {
+  "t": "overcomes your birth element",
+  "h": "47805046"
+ },
+ "js.shellui.sd-qh-sinh": {
+  "t": "generates your birth element",
+  "h": "07fccdbf"
+ },
+ "js.shellui.sd-qh-trung": {
+  "t": "neither generates nor overcomes your birth element",
+  "h": "cb9bf438"
+ },
+ "js.shellui.sd-que-bien": {
+  "t": "Changes into hexagram <b>{q}</b> — {y}",
+  "h": "6c54f090"
+ },
+ "js.shellui.sd-que-meta": {
+  "t": "{t} above · {h} below · line {n} moving",
+  "h": "b11cc916"
+ },
+ "js.shellui.sd-sy-dien-nien": {
+  "t": "Lasting stability, marriage, a long career.",
+  "h": "ce70b2ac"
+ },
+ "js.shellui.sd-sy-hoa-hai": {
+  "t": "Gossip, quarrels, small money losses.",
+  "h": "f38e59bb"
+ },
+ "js.shellui.sd-sy-luc-sat": {
+  "t": "Tangled romance and relationships that drag on.",
+  "h": "f228d1b1"
+ },
+ "js.shellui.sd-sy-ngu-quy": {
+  "t": "Petty people, sudden upheaval, hidden sabotage.",
+  "h": "0d397826"
+ },
+ "js.shellui.sd-sy-phuc-vi": {
+  "t": "Calm, steady, no sudden shifts — safe but with little breakthrough.",
+  "h": "4d6da9b8"
+ },
+ "js.shellui.sd-sy-sinh-khi": {
+  "t": "Very auspicious — wealth, opportunity, growth. The best of the eight stars.",
+  "h": "797de7ca"
+ },
+ "js.shellui.sd-sy-thien-y": {
+  "t": "Health, helpful people, steady income.",
+  "h": "544c54b8"
+ },
+ "js.shellui.sd-sy-tuyet-menh": {
+  "t": "Extreme — all or nothing, big swings.",
+  "h": "a8d6b58d"
+ },
+ "js.shellui.sd-t1-thieu": {
+  "t": "Not enough valid digit pairs to judge the Eight Stars (all 0s and 5s, or too short).",
+  "h": "9f999f38"
+ },
+ "js.shellui.sd-thieu-hanh": {
+  "t": "Missing elements: {h}",
+  "h": "92830bfe"
+ },
+ "js.shellui.sd-tien-dan": {
+  "t": "contains a run of 3 rising digits",
+  "h": "c5b3e33a"
+ },
+ "js.shellui.sd-troi": {
+  "t": "The dominant element of this sequence is <b>{h}</b> — {qh} ({na}). This layer's vote is based on the dominant element.",
+  "h": "667890cd"
+ },
+ "js.shellui.sd-vanh-aria": {
+  "t": "Five Elements wheel of the number",
+  "h": "b9e1de4e"
+ },
  "js.shellui.sinh-con-bo": {
   "t": "Having a child · father ",
   "h": "6b581c06"
@@ -18458,6 +18726,86 @@
  "js.shellui.zalo": {
   "t": "Zalo",
   "h": "53b71aec"
+ },
+ "js.sodep.chip1": {
+  "t": "Is this number a good one to use?",
+  "h": "8981877c"
+ },
+ "js.sodep.chip2": {
+  "t": "What does the prominent Eight Stars star mean?",
+  "h": "cf4b5467"
+ },
+ "js.sodep.chip3": {
+  "t": "What does the I Ching hexagram say?",
+  "h": "c921b99a"
+ },
+ "js.sodep.chip4": {
+  "t": "Which number should I switch to for a better result?",
+  "h": "06cc25be"
+ },
+ "js.sodep.greeting": {
+  "t": "The number **{s}** — {kq}. What would you like me to read?",
+  "h": "caa3ffed"
+ },
+ "js.sodep.gy-chip": {
+  "t": "Read {s}",
+  "h": "60b8c9ee"
+ },
+ "js.sodep.gy-greeting": {
+  "t": "I suggested **{n}** numbers of {d} digits for the goal you chose. Which one should I read in depth?",
+  "h": "55fdb734"
+ },
+ "js.sodep.gy-label": {
+  "t": "Number suggestions — {d} digits",
+  "h": "d3058652"
+ },
+ "js.sodep.gy-sh-dong": {
+  "t": "Lucky number suggestions — {d} digits, goal: {m}",
+  "h": "a0d30b0e"
+ },
+ "js.sodep.gy-sh-title": {
+  "t": "Lucky number suggestions, {d} digits",
+  "h": "ad1c2c12"
+ },
+ "js.sodep.gy-tot": {
+  "t": "{t}/{n} favorable",
+  "h": "5e56466b"
+ },
+ "js.sodep.kq-ngan": {
+  "t": "too short to work out a consensus",
+  "h": "361ce7b5"
+ },
+ "js.sodep.kq-ngan-sh": {
+  "t": "too short",
+  "h": "0c8bb3fa"
+ },
+ "js.sodep.kq-tot": {
+  "t": "{t} of {n} schools say favorable",
+  "h": "8985ca2d"
+ },
+ "js.sodep.label": {
+  "t": "Lucky number {s}",
+  "h": "3a999ba0"
+ },
+ "js.sodep.sh-bat-tinh": {
+  "t": "Eight Stars: {d}/100",
+  "h": "07259fd2"
+ },
+ "js.sodep.sh-dong": {
+  "t": "Lucky number reading — number {s}",
+  "h": "d026e6fe"
+ },
+ "js.sodep.sh-dongthuan": {
+  "t": "Consensus: {kq}",
+  "h": "1cab3aef"
+ },
+ "js.sodep.sh-que": {
+  "t": "I Ching hexagram: {q}",
+  "h": "5312d449"
+ },
+ "js.sodep.sh-title": {
+  "t": "Lucky number reading {s}",
+  "h": "3e6d8b4f"
  },
  "js.solaso.bao-cao": {
   "t": "Reports",
@@ -28026,6 +28374,130 @@
  "sc.xem-tuoi-sinh-con-tu-vi": {
   "t": "Child Birth-Year Compatibility — Minh Bao Zi Wei Dou Shu",
   "h": "23026bbb"
+ },
+ "sodep.ben-vung-dien-nien": {
+  "t": "Lasting (Yan Nian)",
+  "h": "d8c83d0b"
+ },
+ "sodep.ca-nhan-hoa-theo-nam-sinh": {
+  "t": "Personalize by birth year (optional)",
+  "h": "64cde7ae"
+ },
+ "sodep.cham-diem": {
+  "t": "Score →",
+  "h": "a4d402f6"
+ },
+ "sodep.cham-diem-mot-day-so": {
+  "t": "Score a number",
+  "h": "b64551fa"
+ },
+ "sodep.cham-diem-so-dien-thoai-so": {
+  "t": "Score a phone number, house number or license plate by five separate schools: Eight Stars (Eight Mansions), I Ching hexagram, Five Elements, Yin-Yang and folk belief.",
+  "h": "c8a704fb"
+ },
+ "sodep.chon-do-dai-dau-so-va": {
+  "t": "Pick a length, a prefix and the goal you need. You get a list of numbers ranked by score — never a ready-made list.",
+  "h": "a8376b12"
+ },
+ "sodep.dau-so-tuy-chon": {
+  "t": "Prefix (optional)",
+  "h": "6194d2ab"
+ },
+ "sodep.day-so": {
+  "t": "Number",
+  "h": "f3ccd2df"
+ },
+ "sodep.do-dai": {
+  "t": "Length",
+  "h": "3eb3bee1"
+ },
+ "sodep.gioi-thieu": {
+  "t": "About",
+  "h": "f4272d6e"
+ },
+ "sodep.goi-y-5-so": {
+  "t": "Suggest 5 numbers →",
+  "h": "dbf15fa5"
+ },
+ "sodep.goi-y-so-theo-muc-tieu-j94s": {
+  "t": "Number suggestions by goal",
+  "h": "12bf5866"
+ },
+ "sodep.hoi-thay-luan-sau-hon": {
+  "t": "✦ Ask the Master to read it in depth",
+  "h": "159b57f0"
+ },
+ "sodep.hp-5-truong-phai": {
+  "t": "5 schools,<br>kept separate",
+  "h": "539584cc"
+ },
+ "sodep.hp-dong-thuan": {
+  "t": "Favorable vs.<br>unfavorable consensus",
+  "h": "7b5e34dd"
+ },
+ "sodep.hp-goi-y-so": {
+  "t": "Number ideas<br>by goal",
+  "h": "7c40cb16"
+ },
+ "sodep.mien-phi": {
+  "t": "Free",
+  "h": "a999e722"
+ },
+ "sodep.mot-so-dien-thoai-bien-so": {
+  "t": "A phone number or license plate that suits feng shui is worked out differently by different schools — and not every school gives the same answer. Enter a number and get a separate score from each school, without blending them into a vague average.",
+  "h": "207f067a"
+ },
+ "sodep.muc-tieu": {
+  "t": "Goal",
+  "h": "3ae2c479"
+ },
+ "sodep.nhan-ket-qua": {
+  "t": "Get your result",
+  "h": "7bd18e32"
+ },
+ "sodep.nhap-so-dien-thoai-so-nha": {
+  "t": "Enter a phone number, house number or license plate. You get a separate score from each school and the favorable / unfavorable consensus.",
+  "h": "3c94a356"
+ },
+ "sodep.nhap-thong-tin": {
+  "t": "Enter details",
+  "h": "7b7a57a2"
+ },
+ "sodep.on-dinh-phuc-vi": {
+  "t": "Stability (Fu Wei)",
+  "h": "fea696c9"
+ },
+ "sodep.sdt-so-nha-bien-so": {
+  "t": "Phone, house number, license plate across 5 schools",
+  "h": "55408215"
+ },
+ "sodep.so-dep-chi-la-mot-goc": {
+  "t": "A lucky number is only a quick view — <a href=\"/app/luan-giai\">see your whole life through your Zi Wei Dou Shu chart →</a>",
+  "h": "528b3aa2"
+ },
+ "sodep.suc-khoe-thien-y": {
+  "t": "Health (Tian Yi)",
+  "h": "7269efe8"
+ },
+ "sodep.tai-loc-sinh-khi": {
+  "t": "Wealth (Sheng Qi)",
+  "h": "718c3d04"
+ },
+ "sodep.tu-do-moi-sao-cat": {
+  "t": "Open (any auspicious star)",
+  "h": "9d6db3ad"
+ },
+ "sodep.xem-so-dep": {
+  "t": "Lucky Numbers",
+  "h": "14ed9523"
+ },
+ "sodep.xem-so-dep-phong-thuy-la": {
+  "t": "Reading lucky numbers by feng shui applies several different schools — the Eight Stars (Eight Mansions), the I Ching hexagram, the Five Elements, Yin-Yang and folk belief — to judge a number as auspicious or not. Because they start from different premises, the schools do not always reach the same conclusion.",
+  "h": "58cc1874"
+ },
+ "sodep.xem-so-dep-tu-vi-minh": {
+  "t": "Lucky Numbers — Tử Vi Minh Bảo",
+  "h": "beb7ef68"
  },
  "solaso.chua-co-la-so-nao-trong": {
   "t": "No charts in your book yet.<br>Charts will land here automatically once you enter a birth date in any tool.",

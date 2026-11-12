@@ -4026,7 +4026,7 @@
     });
   }
   function runSoDep(chat, toolId) {
-    ensureScripts(['/tools-shared/bat-trach.js?v=3', '/tools-shared/mai-hoa.js?v=6', '/tools-shared/kinh-dich.js?v=8', '/tools-shared/kinh-dich-hao.js?v=2', '/tools-shared/kinh-dich-doc.js?v=2', '/tools-shared/nap-am.js?v=3', '/tools-shared/so-dep.js?v=2'], function (err) {
+    ensureScripts(['/tools-shared/bat-trach.js?v=3', '/tools-shared/mai-hoa.js?v=6', '/tools-shared/kinh-dich.js?v=8', '/tools-shared/kinh-dich-hao.js?v=2', '/tools-shared/kinh-dich-doc.js?v=2', '/tools-shared/nap-am.js?v=3', '/tools-shared/so-dep.js?v=3'], function (err) {
       if (err || typeof SoDepTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-so', 'không nạp được công cụ Số Đẹp.')); return; }
       inlStep(chat,
         T('js.shellui.cho-thay-day-so-con-muon', '<p>Cho thầy dãy số con muốn chấm điểm nhé (số điện thoại, biển số…).</p>') +

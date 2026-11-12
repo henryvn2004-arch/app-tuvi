@@ -17791,6 +17791,274 @@
   "t": "**，星宿 **",
   "h": "fc0c8af6"
  },
+ "js.shellui.sd-ban-menh": {
+  "t": "本命纳音为<b>{na}</b>（五行属{hn}），命卦（九宫）五行属{hc}。",
+  "h": "80604291"
+ },
+ "js.shellui.sd-chu-dao": {
+  "t": "主导数 {n}",
+  "h": "96189155"
+ },
+ "js.shellui.sd-dg-13": {
+  "t": "源自西方文化的禁忌（13号星期五），并非东方传统观念。",
+  "h": "d4580157"
+ },
+ "js.shellui.sd-dg-39": {
+  "t": "「mãi phát」（长久发达）— 部分人常见的读法。",
+  "h": "c9386b28"
+ },
+ "js.shellui.sd-dg-4": {
+  "t": "单独的数字 4 — 越南语的汉字音近「tử（死）」，虽不属古法，但在华人商业文化中普遍忌讳。",
+  "h": "6e97ea92"
+ },
+ "js.shellui.sd-dg-49": {
+  "t": "「tứ cửu」— 依部分地区民间读法而忌，并非八宅／易经的古法。",
+  "h": "769f9e93"
+ },
+ "js.shellui.sd-dg-53": {
+  "t": "「ngũ tam」— 依部分地区的谐音读法而忌。",
+  "h": "20b5f721"
+ },
+ "js.shellui.sd-dg-6": {
+  "t": "「lộc（禄）」— 受人喜爱，常用作末位数字。",
+  "h": "2208e1cf"
+ },
+ "js.shellui.sd-dg-68": {
+  "t": "「lộc phát（禄发）」。",
+  "h": "19c43f6f"
+ },
+ "js.shellui.sd-dg-79": {
+  "t": "「thất phát」— 民间看法不一：有些地方视为吉，有些地方因近「thất（失去）」而忌。两种看法并陈，不偏袒任何一方。",
+  "h": "0e34e481"
+ },
+ "js.shellui.sd-dg-8": {
+  "t": "「phát（发）」— 华人商业文化中最受青睐的数字。",
+  "h": "6f275378"
+ },
+ "js.shellui.sd-dg-9": {
+  "t": "「长久稳固」。",
+  "h": "303f4403"
+ },
+ "js.shellui.sd-diem": {
+  "t": "吉分：<b>{d}/100</b>",
+  "h": "c0a0a91f"
+ },
+ "js.shellui.sd-diem-noibat": {
+  "t": "吉分：<b>{d}/100</b> · 突出的星：{s}",
+  "h": "364bf498"
+ },
+ "js.shellui.sd-doi-lap": {
+  "t": "重复的数对：{l}",
+  "h": "821ad1b8"
+ },
+ "js.shellui.sd-doi-xung": {
+  "t": "对称数列（镜像）",
+  "h": "85d8997a"
+ },
+ "js.shellui.sd-dt-ngan": {
+  "t": "数列太短，无法计算共识度",
+  "h": "0c517b1a"
+ },
+ "js.shellui.sd-dt-tot": {
+  "t": "古法 {n} 个流派中有 {t} 个说吉",
+  "h": "e2ec98b6"
+ },
+ "js.shellui.sd-e-bat-trach": {
+  "t": "八宅",
+  "h": "79678bf6"
+ },
+ "js.shellui.sd-e-khong-phai": {
+  "t": "并非古法",
+  "h": "5085b3d5"
+ },
+ "js.shellui.sd-e-lac-thu": {
+  "t": "洛书",
+  "h": "aa2db932"
+ },
+ "js.shellui.sd-e-mai-hoa": {
+  "t": "梅花易数",
+  "h": "9093e560"
+ },
+ "js.shellui.sd-e-so-hoc": {
+  "t": "数学分析 — 并非古法",
+  "h": "50675a71"
+ },
+ "js.shellui.sd-err-do-dai": {
+  "t": "长度须为 4 到 20 的整数。",
+  "h": "23e93a0c"
+ },
+ "js.shellui.sd-err-khong-co-so": {
+  "t": "输入中找不到有效的数字。",
+  "h": "673fdfdf"
+ },
+ "js.shellui.sd-err-khong-sinh": {
+  "t": "无法产生任何号码，请调整长度或减少排除条件。",
+  "h": "c3a24e87"
+ },
+ "js.shellui.sd-err-lap-que": {
+  "t": "起卦至少需要 2 位数字。",
+  "h": "ee93959c"
+ },
+ "js.shellui.sd-err-loai-het": {
+  "t": "已排除 1–9（5 除外）的所有数字，无法产生号码。",
+  "h": "221a7838"
+ },
+ "js.shellui.sd-err-muc-tieu": {
+  "t": "目标无效，只接受：tai-loc、suc-khoe、ben-vung、on-dinh、tu-do。",
+  "h": "a8588d8e"
+ },
+ "js.shellui.sd-err-nap-bt": {
+  "t": "无法加载 BatTrachTool。",
+  "h": "1348a059"
+ },
+ "js.shellui.sd-err-nap-que": {
+  "t": "无法加载 MaiHoaTool/KinhDichTool。",
+  "h": "494db639"
+ },
+ "js.shellui.sd-err-qua-dai": {
+  "t": "数字太长，最多 20 位。",
+  "h": "a68b8a20"
+ },
+ "js.shellui.sd-err-tien-to": {
+  "t": "前缀（{n} 位）必须比期望长度（{d} 位）短。",
+  "h": "690e0955"
+ },
+ "js.shellui.sd-gc-chua-nap": {
+  "t": "无法加载 BatTrachTool",
+  "h": "c2ff2510"
+ },
+ "js.shellui.sd-gc-so-0": {
+  "t": "含 0 — 放大前一组数对，本身不成星",
+  "h": "6158f6d2"
+ },
+ "js.shellui.sd-gc-trung-cung": {
+  "t": "中宫（5）— 中性、截断气脉，不计吉凶",
+  "h": "a16f1108"
+ },
+ "js.shellui.sd-goiy-tot": {
+  "t": "{t}/{n} 吉",
+  "h": "5e56466b"
+ },
+ "js.shellui.sd-h-am-duong": {
+  "t": "阴阳",
+  "h": "5cbdb898"
+ },
+ "js.shellui.sd-h-bat-tinh": {
+  "t": "八星",
+  "h": "04d4506a"
+ },
+ "js.shellui.sd-h-dan-gian": {
+  "t": "民间说法",
+  "h": "8d5a7119"
+ },
+ "js.shellui.sd-h-ngu-hanh": {
+  "t": "五行",
+  "h": "68ac2473"
+ },
+ "js.shellui.sd-h-que-dich": {
+  "t": "易卦",
+  "h": "9b44a158"
+ },
+ "js.shellui.sd-hop-co": {
+  "t": "数列中出现与本命相合的五行：{l}。",
+  "h": "4fa27db2"
+ },
+ "js.shellui.sd-hop-cungphi": {
+  "t": "命卦（{h}）",
+  "h": "1fb772a2"
+ },
+ "js.shellui.sd-hop-khong": {
+  "t": "数列中没有与本命相合的五行。",
+  "h": "95436f1e"
+ },
+ "js.shellui.sd-hop-napam": {
+  "t": "纳音（{h}）",
+  "h": "8ab1b753"
+ },
+ "js.shellui.sd-khong-troi": {
+  "t": "数列中没有明显偏旺的五行，此层不下结论。",
+  "h": "150addf3"
+ },
+ "js.shellui.sd-le-chan": {
+  "t": "奇数 {l} 个／偶数 {c} 个",
+  "h": "d075ec93"
+ },
+ "js.shellui.sd-qh-dong": {
+  "t": "与本命同五行",
+  "h": "beadac7b"
+ },
+ "js.shellui.sd-qh-khac": {
+  "t": "克本命",
+  "h": "47805046"
+ },
+ "js.shellui.sd-qh-sinh": {
+  "t": "生本命",
+  "h": "07fccdbf"
+ },
+ "js.shellui.sd-qh-trung": {
+  "t": "不生也不克本命",
+  "h": "cb9bf438"
+ },
+ "js.shellui.sd-que-bien": {
+  "t": "变卦为<b>{q}</b> — {y}",
+  "h": "6c54f090"
+ },
+ "js.shellui.sd-que-meta": {
+  "t": "上卦{t}・下卦{h}・第 {n} 爻动",
+  "h": "b11cc916"
+ },
+ "js.shellui.sd-sy-dien-nien": {
+  "t": "长久稳固、婚姻、事业长远。",
+  "h": "ce70b2ac"
+ },
+ "js.shellui.sd-sy-hoa-hai": {
+  "t": "是非、口舌、小额破财。",
+  "h": "f38e59bb"
+ },
+ "js.shellui.sd-sy-luc-sat": {
+  "t": "感情／人际关系纠缠，拖延不清。",
+  "h": "f228d1b1"
+ },
+ "js.shellui.sd-sy-ngu-quy": {
+  "t": "小人、突发变动、暗中破坏。",
+  "h": "0d397826"
+ },
+ "js.shellui.sd-sy-phuc-vi": {
+  "t": "平稳守成、少有突变 — 安全但缺乏突破。",
+  "h": "4d6da9b8"
+ },
+ "js.shellui.sd-sy-sinh-khi": {
+  "t": "大吉 — 财禄、机会、发展。八星中最好的一颗。",
+  "h": "797de7ca"
+ },
+ "js.shellui.sd-sy-thien-y": {
+  "t": "健康、贵人、财源稳定。",
+  "h": "544c54b8"
+ },
+ "js.shellui.sd-sy-tuyet-menh": {
+  "t": "极端 — 不成功便成仁，变动巨大。",
+  "h": "a8d6b58d"
+ },
+ "js.shellui.sd-t1-thieu": {
+  "t": "有效的数对不足，无法判断八星（全是 0/5，或数列太短）。",
+  "h": "9f999f38"
+ },
+ "js.shellui.sd-thieu-hanh": {
+  "t": "缺少的五行：{h}",
+  "h": "92830bfe"
+ },
+ "js.shellui.sd-tien-dan": {
+  "t": "含有连续 3 个递增的数字",
+  "h": "c5b3e33a"
+ },
+ "js.shellui.sd-troi": {
+  "t": "此数列偏旺的五行是<b>{h}</b> — {qh}（{na}）。此层的票依偏旺五行计算。",
+  "h": "667890cd"
+ },
+ "js.shellui.sd-vanh-aria": {
+  "t": "数列的五行分布图",
+  "h": "b9e1de4e"
+ },
  "js.shellui.sinh-con-bo": {
   "t": "生育 · 爸爸 ",
   "h": "6b581c06"
@@ -18458,6 +18726,86 @@
  "js.shellui.zalo": {
   "t": "Zalo",
   "h": "53b71aec"
+ },
+ "js.sodep.chip1": {
+  "t": "这组数字适合使用吗？",
+  "h": "8981877c"
+ },
+ "js.sodep.chip2": {
+  "t": "突出的八星代表什么？",
+  "h": "cf4b5467"
+ },
+ "js.sodep.chip3": {
+  "t": "起出的这一卦说明了什么？",
+  "h": "c921b99a"
+ },
+ "js.sodep.chip4": {
+  "t": "换成哪一组数字会更好？",
+  "h": "06cc25be"
+ },
+ "js.sodep.greeting": {
+  "t": "数字 **{s}** — {kq}。您想让我论断哪方面？",
+  "h": "caa3ffed"
+ },
+ "js.sodep.gy-chip": {
+  "t": "论断 {s}",
+  "h": "60b8c9ee"
+ },
+ "js.sodep.gy-greeting": {
+  "t": "已依您选择的目标推荐 **{n}** 组 {d} 位数字。想让我深入论断哪一组？",
+  "h": "55fdb734"
+ },
+ "js.sodep.gy-label": {
+  "t": "数字推荐 — {d} 位",
+  "h": "d3058652"
+ },
+ "js.sodep.gy-sh-dong": {
+  "t": "吉祥号码推荐 — {d} 位，目标：{m}",
+  "h": "a0d30b0e"
+ },
+ "js.sodep.gy-sh-title": {
+  "t": "{d} 位吉祥号码推荐",
+  "h": "ad1c2c12"
+ },
+ "js.sodep.gy-tot": {
+  "t": "{t}/{n} 吉",
+  "h": "5e56466b"
+ },
+ "js.sodep.kq-ngan": {
+  "t": "太短，无法计算共识度",
+  "h": "361ce7b5"
+ },
+ "js.sodep.kq-ngan-sh": {
+  "t": "数列太短",
+  "h": "0c8bb3fa"
+ },
+ "js.sodep.kq-tot": {
+  "t": "{n} 个流派中有 {t} 个说吉",
+  "h": "8985ca2d"
+ },
+ "js.sodep.label": {
+  "t": "吉祥数字 {s}",
+  "h": "3a999ba0"
+ },
+ "js.sodep.sh-bat-tinh": {
+  "t": "八星：{d}/100",
+  "h": "07259fd2"
+ },
+ "js.sodep.sh-dong": {
+  "t": "查看吉祥号码 — 数字 {s}",
+  "h": "d026e6fe"
+ },
+ "js.sodep.sh-dongthuan": {
+  "t": "共识度：{kq}",
+  "h": "1cab3aef"
+ },
+ "js.sodep.sh-que": {
+  "t": "易卦：{q}",
+  "h": "5312d449"
+ },
+ "js.sodep.sh-title": {
+  "t": "查看吉祥号码 {s}",
+  "h": "3e6d8b4f"
  },
  "js.solaso.bao-cao": {
   "t": "报告",
@@ -28026,6 +28374,130 @@
  "sc.xem-tuoi-sinh-con-tu-vi": {
   "t": "看生孩子的生肖——明宝紫微斗数",
   "h": "23026bbb"
+ },
+ "sodep.ben-vung-dien-nien": {
+  "t": "长久稳固（延年）",
+  "h": "d8c83d0b"
+ },
+ "sodep.ca-nhan-hoa-theo-nam-sinh": {
+  "t": "依出生年个人化（选填）",
+  "h": "64cde7ae"
+ },
+ "sodep.cham-diem": {
+  "t": "评分 →",
+  "h": "a4d402f6"
+ },
+ "sodep.cham-diem-mot-day-so": {
+  "t": "为一组数字评分",
+  "h": "b64551fa"
+ },
+ "sodep.cham-diem-so-dien-thoai-so": {
+  "t": "依八星（八宅）、易卦、五行、阴阳与民间说法五个流派，分别为电话号码、门牌号码、车牌评分。",
+  "h": "c8a704fb"
+ },
+ "sodep.chon-do-dai-dau-so-va": {
+  "t": "选择长度、前缀与目标，即回传依分数排序的号码清单，不使用现成的名单。",
+  "h": "a8376b12"
+ },
+ "sodep.dau-so-tuy-chon": {
+  "t": "前缀（选填）",
+  "h": "6194d2ab"
+ },
+ "sodep.day-so": {
+  "t": "数字",
+  "h": "f3ccd2df"
+ },
+ "sodep.do-dai": {
+  "t": "长度",
+  "h": "3eb3bee1"
+ },
+ "sodep.gioi-thieu": {
+  "t": "简介",
+  "h": "f4272d6e"
+ },
+ "sodep.goi-y-5-so": {
+  "t": "推荐 5 组 →",
+  "h": "dbf15fa5"
+ },
+ "sodep.goi-y-so-theo-muc-tieu-j94s": {
+  "t": "依目标推荐号码",
+  "h": "12bf5866"
+ },
+ "sodep.hoi-thay-luan-sau-hon": {
+  "t": "✦ 请老师更深入论断",
+  "h": "159b57f0"
+ },
+ "sodep.hp-5-truong-phai": {
+  "t": "5 个流派<br>各自判定",
+  "h": "539584cc"
+ },
+ "sodep.hp-dong-thuan": {
+  "t": "吉凶<br>共识度",
+  "h": "7b5e34dd"
+ },
+ "sodep.hp-goi-y-so": {
+  "t": "依目标<br>推荐号码",
+  "h": "7c40cb16"
+ },
+ "sodep.mien-phi": {
+  "t": "免费",
+  "h": "a999e722"
+ },
+ "sodep.mot-so-dien-thoai-bien-so": {
+  "t": "电话号码、车牌的风水吉凶，各流派的算法不同，并不是每个流派都会得出同一个答案。输入数字后，会分别给出各流派的分数，不含糊地混在一起。",
+  "h": "207f067a"
+ },
+ "sodep.muc-tieu": {
+  "t": "目标",
+  "h": "3ae2c479"
+ },
+ "sodep.nhan-ket-qua": {
+  "t": "取得结果",
+  "h": "7bd18e32"
+ },
+ "sodep.nhap-so-dien-thoai-so-nha": {
+  "t": "输入电话号码、门牌号码或车牌，即可得到各流派的分数与吉凶共识度。",
+  "h": "3c94a356"
+ },
+ "sodep.nhap-thong-tin": {
+  "t": "输入数据",
+  "h": "7b7a57a2"
+ },
+ "sodep.on-dinh-phuc-vi": {
+  "t": "稳定（伏位）",
+  "h": "fea696c9"
+ },
+ "sodep.sdt-so-nha-bien-so": {
+  "t": "电话、门牌、车牌，以 5 个流派判定",
+  "h": "55408215"
+ },
+ "sodep.so-dep-chi-la-mot-goc": {
+  "t": "吉祥号码只是快速的一个观点 — <a href=\"/app/luan-giai\">透过紫微斗数命盘看完整一生 →</a>",
+  "h": "528b3aa2"
+ },
+ "sodep.suc-khoe-thien-y": {
+  "t": "健康（天医）",
+  "h": "7269efe8"
+ },
+ "sodep.tai-loc-sinh-khi": {
+  "t": "财禄（生气）",
+  "h": "718c3d04"
+ },
+ "sodep.tu-do-moi-sao-cat": {
+  "t": "不限（所有吉星）",
+  "h": "9d6db3ad"
+ },
+ "sodep.xem-so-dep": {
+  "t": "查看吉祥号码",
+  "h": "14ed9523"
+ },
+ "sodep.xem-so-dep-phong-thuy-la": {
+  "t": "查看吉祥号码（风水数字论断）是运用八星（八宅）、易卦、五行、阴阳以及民间说法等多个流派，来判断一组数字吉凶的领域。由于出发点不同，各流派并不总是得出相同的结论。",
+  "h": "58cc1874"
+ },
+ "sodep.xem-so-dep-tu-vi-minh": {
+  "t": "查看吉祥号码 — Tử Vi Minh Bảo",
+  "h": "beb7ef68"
  },
  "solaso.chua-co-la-so-nao-trong": {
   "t": "簿册中还没有命盘。<br>在任何工具输入出生年月日后，命盘会自动收进这里。",

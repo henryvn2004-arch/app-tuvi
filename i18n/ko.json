@@ -17791,6 +17791,274 @@
   "t": "**, 이십팔수 **",
   "h": "fc0c8af6"
  },
+ "js.shellui.sd-ban-menh": {
+  "t": "본명 납음은 <b>{na}</b>(오행 {hn}), 명괘(구궁)의 오행은 {hc}입니다.",
+  "h": "80604291"
+ },
+ "js.shellui.sd-chu-dao": {
+  "t": "주도수 {n}",
+  "h": "96189155"
+ },
+ "js.shellui.sd-dg-13": {
+  "t": "서양 문화(13일의 금요일)에서 온 금기이며, 동양 고유의 관념이 아닙니다.",
+  "h": "d4580157"
+ },
+ "js.shellui.sd-dg-39": {
+  "t": "\"mãi phát\"(오래도록 발전) — 일부 사람들 사이의 흔한 읽는 방식입니다.",
+  "h": "c9386b28"
+ },
+ "js.shellui.sd-dg-4": {
+  "t": "단독 숫자 4 — 베트남식 한자음이 \"tử(死)\"와 가까워, 고법에는 없지만 화교 상업 문화에서 널리 꺼립니다.",
+  "h": "6e97ea92"
+ },
+ "js.shellui.sd-dg-49": {
+  "t": "\"tứ cửu\" — 일부 지역의 민간 읽기 방식에 따른 금기로, 팔택·역경의 고법이 아닙니다.",
+  "h": "769f9e93"
+ },
+ "js.shellui.sd-dg-53": {
+  "t": "\"ngũ tam\" — 일부 지역의 말장난식 읽기에 따른 금기입니다.",
+  "h": "20b5f721"
+ },
+ "js.shellui.sd-dg-6": {
+  "t": "\"lộc(祿)\" — 선호되며 끝자리에 자주 쓰입니다.",
+  "h": "2208e1cf"
+ },
+ "js.shellui.sd-dg-68": {
+  "t": "\"lộc phát(祿發)\".",
+  "h": "19c43f6f"
+ },
+ "js.shellui.sd-dg-79": {
+  "t": "\"thất phát\" — 민간에서도 의견이 갈립니다. 길하다고 보는 곳도 있고, \"thất(잃음)\"과 가까워 꺼리는 곳도 있습니다. 두 입장을 모두 적고 어느 편도 들지 않습니다.",
+  "h": "0e34e481"
+ },
+ "js.shellui.sd-dg-8": {
+  "t": "\"phát(發)\" — 화교 상업 문화에서 가장 선호되는 숫자입니다.",
+  "h": "6f275378"
+ },
+ "js.shellui.sd-dg-9": {
+  "t": "\"오래가고 변치 않음\".",
+  "h": "303f4403"
+ },
+ "js.shellui.sd-diem": {
+  "t": "길점: <b>{d}/100</b>",
+  "h": "c0a0a91f"
+ },
+ "js.shellui.sd-diem-noibat": {
+  "t": "길점: <b>{d}/100</b> · 두드러지는 별: {s}",
+  "h": "364bf498"
+ },
+ "js.shellui.sd-doi-lap": {
+  "t": "반복되는 쌍: {l}",
+  "h": "821ad1b8"
+ },
+ "js.shellui.sd-doi-xung": {
+  "t": "대칭 배열(거울형)",
+  "h": "85d8997a"
+ },
+ "js.shellui.sd-dt-ngan": {
+  "t": "너무 짧아 합의도를 계산할 수 없습니다",
+  "h": "0c517b1a"
+ },
+ "js.shellui.sd-dt-tot": {
+  "t": "고법 {n}개 유파 중 {t}개가 길하다고 봅니다",
+  "h": "e2ec98b6"
+ },
+ "js.shellui.sd-e-bat-trach": {
+  "t": "팔택",
+  "h": "79678bf6"
+ },
+ "js.shellui.sd-e-khong-phai": {
+  "t": "고법이 아닙니다",
+  "h": "5085b3d5"
+ },
+ "js.shellui.sd-e-lac-thu": {
+  "t": "낙서",
+  "h": "aa2db932"
+ },
+ "js.shellui.sd-e-mai-hoa": {
+  "t": "매화역수",
+  "h": "9093e560"
+ },
+ "js.shellui.sd-e-so-hoc": {
+  "t": "수학적 분석 — 고법이 아닙니다",
+  "h": "50675a71"
+ },
+ "js.shellui.sd-err-do-dai": {
+  "t": "자릿수는 4~20 사이의 정수여야 합니다.",
+  "h": "23e93a0c"
+ },
+ "js.shellui.sd-err-khong-co-so": {
+  "t": "입력에서 유효한 숫자를 찾을 수 없습니다.",
+  "h": "673fdfdf"
+ },
+ "js.shellui.sd-err-khong-sinh": {
+  "t": "번호를 만들지 못했습니다. 자릿수를 조정하거나 제외 조건을 줄여 보세요.",
+  "h": "c3a24e87"
+ },
+ "js.shellui.sd-err-lap-que": {
+  "t": "괘를 세우려면 최소 2자리 숫자가 필요합니다.",
+  "h": "ee93959c"
+ },
+ "js.shellui.sd-err-loai-het": {
+  "t": "1~9(5 제외) 숫자를 모두 제외해 번호를 만들 수 없습니다.",
+  "h": "221a7838"
+ },
+ "js.shellui.sd-err-muc-tieu": {
+  "t": "목표가 올바르지 않습니다. tai-loc, suc-khoe, ben-vung, on-dinh, tu-do만 사용할 수 있습니다.",
+  "h": "a8588d8e"
+ },
+ "js.shellui.sd-err-nap-bt": {
+  "t": "BatTrachTool을 불러오지 못했습니다.",
+  "h": "1348a059"
+ },
+ "js.shellui.sd-err-nap-que": {
+  "t": "MaiHoaTool/KinhDichTool을 불러오지 못했습니다.",
+  "h": "494db639"
+ },
+ "js.shellui.sd-err-qua-dai": {
+  "t": "숫자가 너무 깁니다. 최대 20자리까지입니다.",
+  "h": "a68b8a20"
+ },
+ "js.shellui.sd-err-tien-to": {
+  "t": "앞자리({n}자리)는 원하는 자릿수({d}자리)보다 짧아야 합니다.",
+  "h": "690e0955"
+ },
+ "js.shellui.sd-gc-chua-nap": {
+  "t": "BatTrachTool을 불러오지 못했습니다",
+  "h": "c2ff2510"
+ },
+ "js.shellui.sd-gc-so-0": {
+  "t": "0 포함 — 앞의 쌍을 증폭하지만 그 자체로는 별이 되지 않음",
+  "h": "6158f6d2"
+ },
+ "js.shellui.sd-gc-trung-cung": {
+  "t": "중궁(5) — 중립이며 흐름을 끊고 길흉에 넣지 않음",
+  "h": "a16f1108"
+ },
+ "js.shellui.sd-goiy-tot": {
+  "t": "{t}/{n} 길",
+  "h": "5e56466b"
+ },
+ "js.shellui.sd-h-am-duong": {
+  "t": "음양",
+  "h": "5cbdb898"
+ },
+ "js.shellui.sd-h-bat-tinh": {
+  "t": "팔성",
+  "h": "04d4506a"
+ },
+ "js.shellui.sd-h-dan-gian": {
+  "t": "민간 속설",
+  "h": "8d5a7119"
+ },
+ "js.shellui.sd-h-ngu-hanh": {
+  "t": "오행",
+  "h": "68ac2473"
+ },
+ "js.shellui.sd-h-que-dich": {
+  "t": "역괘",
+  "h": "9b44a158"
+ },
+ "js.shellui.sd-hop-co": {
+  "t": "이 숫자열에는 본명에 맞는 오행이 들어 있습니다: {l}.",
+  "h": "4fa27db2"
+ },
+ "js.shellui.sd-hop-cungphi": {
+  "t": "명괘({h})",
+  "h": "1fb772a2"
+ },
+ "js.shellui.sd-hop-khong": {
+  "t": "이 숫자열에는 본명에 맞는 오행이 들어 있지 않습니다.",
+  "h": "95436f1e"
+ },
+ "js.shellui.sd-hop-napam": {
+  "t": "납음({h})",
+  "h": "8ab1b753"
+ },
+ "js.shellui.sd-khong-troi": {
+  "t": "이 숫자열에는 뚜렷하게 우세한 오행이 없어 이 층에서는 결론을 내리지 않습니다.",
+  "h": "150addf3"
+ },
+ "js.shellui.sd-le-chan": {
+  "t": "홀수 {l}개 / 짝수 {c}개",
+  "h": "d075ec93"
+ },
+ "js.shellui.sd-qh-dong": {
+  "t": "본명과 같은 오행",
+  "h": "beadac7b"
+ },
+ "js.shellui.sd-qh-khac": {
+  "t": "본명을 극함",
+  "h": "47805046"
+ },
+ "js.shellui.sd-qh-sinh": {
+  "t": "본명을 생함",
+  "h": "07fccdbf"
+ },
+ "js.shellui.sd-qh-trung": {
+  "t": "본명을 생하지도 극하지도 않음",
+  "h": "cb9bf438"
+ },
+ "js.shellui.sd-que-bien": {
+  "t": "변괘는 <b>{q}</b> — {y}",
+  "h": "6c54f090"
+ },
+ "js.shellui.sd-que-meta": {
+  "t": "상괘 {t} · 하괘 {h} · {n}효 동",
+  "h": "b11cc916"
+ },
+ "js.shellui.sd-sy-dien-nien": {
+  "t": "오래가는 안정, 혼인, 길게 이어지는 직업운.",
+  "h": "ce70b2ac"
+ },
+ "js.shellui.sd-sy-hoa-hai": {
+  "t": "구설, 말다툼, 자잘한 재물 손실.",
+  "h": "f38e59bb"
+ },
+ "js.shellui.sd-sy-luc-sat": {
+  "t": "애정·인간관계가 꼬이고 질질 끌림.",
+  "h": "f228d1b1"
+ },
+ "js.shellui.sd-sy-ngu-quy": {
+  "t": "소인, 뜻밖의 변동, 뒤에서 방해.",
+  "h": "0d397826"
+ },
+ "js.shellui.sd-sy-phuc-vi": {
+  "t": "안정적이고 지키는 힘이 있으며 급변이 없음 — 안전하지만 도약은 적음.",
+  "h": "4d6da9b8"
+ },
+ "js.shellui.sd-sy-sinh-khi": {
+  "t": "대길 — 재물운·기회·발전. 팔성 중 가장 좋은 별.",
+  "h": "797de7ca"
+ },
+ "js.shellui.sd-sy-thien-y": {
+  "t": "건강, 귀인, 꾸준한 수입.",
+  "h": "544c54b8"
+ },
+ "js.shellui.sd-sy-tuyet-menh": {
+  "t": "극단적 — 대박 아니면 쪽박, 큰 변동.",
+  "h": "a8d6b58d"
+ },
+ "js.shellui.sd-t1-thieu": {
+  "t": "팔성을 판정할 유효한 숫자 쌍이 부족합니다(0과 5뿐이거나 너무 짧음).",
+  "h": "9f999f38"
+ },
+ "js.shellui.sd-thieu-hanh": {
+  "t": "부족한 오행: {h}",
+  "h": "92830bfe"
+ },
+ "js.shellui.sd-tien-dan": {
+  "t": "3개 연속 증가하는 구간이 있음",
+  "h": "c5b3e33a"
+ },
+ "js.shellui.sd-troi": {
+  "t": "이 숫자열에서 우세한 오행은 <b>{h}</b> — {qh}({na}). 이 층의 표는 우세한 오행으로 정해집니다.",
+  "h": "667890cd"
+ },
+ "js.shellui.sd-vanh-aria": {
+  "t": "숫자열의 오행 분포도",
+  "h": "b9e1de4e"
+ },
  "js.shellui.sinh-con-bo": {
   "t": "출산 · 아버지 ",
   "h": "6b581c06"
@@ -18458,6 +18726,86 @@
  "js.shellui.zalo": {
   "t": "Zalo",
   "h": "53b71aec"
+ },
+ "js.sodep.chip1": {
+  "t": "이 번호를 써도 될까요?",
+  "h": "8981877c"
+ },
+ "js.sodep.chip2": {
+  "t": "두드러지는 팔성(八星)은 무슨 뜻이에요?",
+  "h": "cf4b5467"
+ },
+ "js.sodep.chip3": {
+  "t": "세워진 주역 괘는 무엇을 말해 주나요?",
+  "h": "c921b99a"
+ },
+ "js.sodep.chip4": {
+  "t": "어떤 번호로 바꾸면 더 좋아질까요?",
+  "h": "06cc25be"
+ },
+ "js.sodep.greeting": {
+  "t": "번호 **{s}** — {kq}. 어떤 점을 풀이해 드릴까요?",
+  "h": "caa3ffed"
+ },
+ "js.sodep.gy-chip": {
+  "t": "{s} 풀이",
+  "h": "60b8c9ee"
+ },
+ "js.sodep.gy-greeting": {
+  "t": "선택한 목표에 맞춰 {d}자리 번호를 **{n}**개 추천했어요. 어느 번호를 더 자세히 풀이해 드릴까요?",
+  "h": "55fdb734"
+ },
+ "js.sodep.gy-label": {
+  "t": "번호 추천 — {d}자리",
+  "h": "d3058652"
+ },
+ "js.sodep.gy-sh-dong": {
+  "t": "좋은 번호 추천 — {d}자리, 목표: {m}",
+  "h": "a0d30b0e"
+ },
+ "js.sodep.gy-sh-title": {
+  "t": "{d}자리 좋은 번호 추천",
+  "h": "ad1c2c12"
+ },
+ "js.sodep.gy-tot": {
+  "t": "{t}/{n} 길",
+  "h": "5e56466b"
+ },
+ "js.sodep.kq-ngan": {
+  "t": "너무 짧아 합의도를 계산할 수 없어요",
+  "h": "361ce7b5"
+ },
+ "js.sodep.kq-ngan-sh": {
+  "t": "너무 짧음",
+  "h": "0c8bb3fa"
+ },
+ "js.sodep.kq-tot": {
+  "t": "{n}개 유파 중 {t}개가 길하다고 봐요",
+  "h": "8985ca2d"
+ },
+ "js.sodep.label": {
+  "t": "좋은 번호 {s}",
+  "h": "3a999ba0"
+ },
+ "js.sodep.sh-bat-tinh": {
+  "t": "팔성: {d}/100",
+  "h": "07259fd2"
+ },
+ "js.sodep.sh-dong": {
+  "t": "좋은 번호 보기 — 번호 {s}",
+  "h": "d026e6fe"
+ },
+ "js.sodep.sh-dongthuan": {
+  "t": "합의도: {kq}",
+  "h": "1cab3aef"
+ },
+ "js.sodep.sh-que": {
+  "t": "역괘: {q}",
+  "h": "5312d449"
+ },
+ "js.sodep.sh-title": {
+  "t": "좋은 번호 보기 {s}",
+  "h": "3e6d8b4f"
  },
  "js.solaso.bao-cao": {
   "t": "리포트",
@@ -28026,6 +28374,130 @@
  "sc.xem-tuoi-sinh-con-tu-vi": {
   "t": "자녀 출산 띠 보기 — 명보 자미두수",
   "h": "23026bbb"
+ },
+ "sodep.ben-vung-dien-nien": {
+  "t": "오래가는 안정(연년)",
+  "h": "d8c83d0b"
+ },
+ "sodep.ca-nhan-hoa-theo-nam-sinh": {
+  "t": "생년으로 맞춤 분석(선택)",
+  "h": "64cde7ae"
+ },
+ "sodep.cham-diem": {
+  "t": "점수 보기 →",
+  "h": "a4d402f6"
+ },
+ "sodep.cham-diem-mot-day-so": {
+  "t": "번호 하나 점수 보기",
+  "h": "b64551fa"
+ },
+ "sodep.cham-diem-so-dien-thoai-so": {
+  "t": "전화번호·집 번호·차량 번호를 팔성(팔택)·역괘·오행·음양·민간 속설의 5개 유파로 나누어 점수를 매깁니다.",
+  "h": "c8a704fb"
+ },
+ "sodep.chon-do-dai-dau-so-va": {
+  "t": "자릿수, 앞자리, 원하는 목표를 고르면 점수순 번호 목록을 보여 드립니다. 미리 만들어 둔 목록은 쓰지 않습니다.",
+  "h": "a8376b12"
+ },
+ "sodep.dau-so-tuy-chon": {
+  "t": "앞자리(선택)",
+  "h": "6194d2ab"
+ },
+ "sodep.day-so": {
+  "t": "번호",
+  "h": "f3ccd2df"
+ },
+ "sodep.do-dai": {
+  "t": "자릿수",
+  "h": "3eb3bee1"
+ },
+ "sodep.gioi-thieu": {
+  "t": "소개",
+  "h": "f4272d6e"
+ },
+ "sodep.goi-y-5-so": {
+  "t": "5개 추천 →",
+  "h": "dbf15fa5"
+ },
+ "sodep.goi-y-so-theo-muc-tieu-j94s": {
+  "t": "목표별 번호 추천",
+  "h": "12bf5866"
+ },
+ "sodep.hoi-thay-luan-sau-hon": {
+  "t": "✦ 선생님께 더 깊이 풀이 부탁하기",
+  "h": "159b57f0"
+ },
+ "sodep.hp-5-truong-phai": {
+  "t": "5개 유파<br>각각 판정",
+  "h": "539584cc"
+ },
+ "sodep.hp-dong-thuan": {
+  "t": "길·흉<br>합의도",
+  "h": "7b5e34dd"
+ },
+ "sodep.hp-goi-y-so": {
+  "t": "목표별<br>번호 추천",
+  "h": "7c40cb16"
+ },
+ "sodep.mien-phi": {
+  "t": "무료",
+  "h": "a999e722"
+ },
+ "sodep.mot-so-dien-thoai-bien-so": {
+  "t": "전화번호나 차량 번호의 풍수는 유파마다 계산법이 달라, 모든 유파가 같은 답을 내지는 않습니다. 번호를 입력하면 유파별 점수를 뭉뚱그리지 않고 따로 보여 드립니다.",
+  "h": "207f067a"
+ },
+ "sodep.muc-tieu": {
+  "t": "목표",
+  "h": "3ae2c479"
+ },
+ "sodep.nhan-ket-qua": {
+  "t": "결과 받기",
+  "h": "7bd18e32"
+ },
+ "sodep.nhap-so-dien-thoai-so-nha": {
+  "t": "전화번호, 집 번호 또는 차량 번호를 입력하세요. 유파별 점수와 길·흉 합의도를 보여 드립니다.",
+  "h": "3c94a356"
+ },
+ "sodep.nhap-thong-tin": {
+  "t": "정보 입력",
+  "h": "7b7a57a2"
+ },
+ "sodep.on-dinh-phuc-vi": {
+  "t": "안정(복위)",
+  "h": "fea696c9"
+ },
+ "sodep.sdt-so-nha-bien-so": {
+  "t": "전화번호·집 번호·차량 번호를 5개 유파로 판정",
+  "h": "55408215"
+ },
+ "sodep.so-dep-chi-la-mot-goc": {
+  "t": "좋은 번호는 빠르게 보는 하나의 관점일 뿐입니다 — <a href=\"/app/luan-giai\">자미두수 명반으로 평생 운 전체 보기 →</a>",
+  "h": "528b3aa2"
+ },
+ "sodep.suc-khoe-thien-y": {
+  "t": "건강(천의)",
+  "h": "7269efe8"
+ },
+ "sodep.tai-loc-sinh-khi": {
+  "t": "재물(생기)",
+  "h": "718c3d04"
+ },
+ "sodep.tu-do-moi-sao-cat": {
+  "t": "지정 안 함(모든 길성)",
+  "h": "9d6db3ad"
+ },
+ "sodep.xem-so-dep": {
+  "t": "좋은 번호 보기",
+  "h": "14ed9523"
+ },
+ "sodep.xem-so-dep-phong-thuy-la": {
+  "t": "좋은 번호 보기(풍수 번호 풀이)는 팔성(팔택)·역괘·오행·음양, 그리고 민간 속설 등 여러 유파를 활용해 숫자열의 길흉을 판단하는 분야입니다. 출발점이 서로 달라 유파끼리 항상 같은 결론을 내지는 않습니다.",
+  "h": "58cc1874"
+ },
+ "sodep.xem-so-dep-tu-vi-minh": {
+  "t": "좋은 번호 보기 — Tử Vi Minh Bảo",
+  "h": "beb7ef68"
  },
  "solaso.chua-co-la-so-nao-trong": {
   "t": "명반 보관함에 아직 명반이 없어요.<br>어떤 도구에서든 생년월일을 입력하면 명반이 자동으로 여기에 들어와요.",
