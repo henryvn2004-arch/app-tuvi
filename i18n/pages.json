@@ -191,6 +191,28 @@
    "shell"
   ]
  },
+ "/app/ca-nha": {
+  "file": "app-ca-nha.html",
+  "keys": [
+   "cn.12-thang-am-toi",
+   "cn.ca-nha-minh-la-so-cua",
+   "cn.ca-nha-minh-tu-vi-minh",
+   "cn.dang-nhap-dang-ky",
+   "cn.dang-nhap-de-xem-la-so",
+   "cn.dang-xep-la-so-ca-nha",
+   "cn.dua-ngay-tot-va-ngay-xung",
+   "cn.google-lich",
+   "cn.hoi-thay-ve-ca-nha-so",
+   "cn.iphone-mac",
+   "cn.lich-rieng",
+   "cn.moi-o-la-cung-nguyet-han",
+   "cn.so-la-so-chua-co-nguoi",
+   "cn.thang-ca-nha-nen-de-y"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/chan-dung-tien-kiep": {
   "file": "app-chan-dung-tien-kiep.html",
   "keys": [
@@ -883,6 +905,42 @@
    "nm.tung-nguoi",
    "nm.viec-nen-lam-tuan-nay",
    "nm.xep-theo-van-nam-cua-tung"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
+ "/app/sinh-con": {
+  "file": "app-sinh-con.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "battu.sua-thong-tin",
+   "luangiai.tu-vi-dau-so-la-mot",
+   "sc.2-nhan-ket-qua",
+   "sc.bang-du-15-nam-toi",
+   "sc.can-chi",
+   "sc.cham-diem-luc-hop-tam-hop",
+   "sc.danh-gia",
+   "sc.ghi-chu-ket-qua-dua-tren",
+   "sc.hanh",
+   "sc.hoi-thay-luan-sau-nam-nao",
+   "sc.ket-qua-15-nam-dia-chi",
+   "sc.luc-hop-tam-hop-luc-xung",
+   "sc.ly-do",
+   "sc.nam",
+   "sc.nam-sinh-bo",
+   "sc.nam-sinh-cua-bo-va-me",
+   "sc.nam-sinh-me",
+   "sc.nam-thuan-nhat-de-sinh-con",
+   "sc.nhap-nam-sinh-bo-va-me",
+   "sc.sinh-con-dung-nam-hop-tuoi",
+   "sc.xem-15-nam-mien-phi",
+   "sc.xem-tuoi-sinh-con",
+   "sc.xem-tuoi-sinh-con-nam-sinh",
+   "sc.xem-tuoi-sinh-con-tu-vi"
   ],
   "js": [
    "shell"

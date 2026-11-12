@@ -94,6 +94,7 @@
   </main>
 </div>
 
+<script src="/tools-shared/glossary.js?v=4"></script>
 <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/auth.js?v=9"></script>
 <script>window.SHELL_ACTIVE='so-la-so';</script>
@@ -103,15 +104,20 @@
   // Số liệu: app/api/ca-nha (lib/engine/ca-nha.ts — cùng nguồn với tool rail
   // `tra_ca_nha`). Trang CHỈ hiện dữ kiện engine, KHÔNG tô tháng tốt/xấu: repo
   // không có công thức chấm tháng, và tự đặt một cái ở client là cấm.
-  var VAI = { toi: 'Bạn', chong: 'Chồng', vo: 'Vợ', con: 'Con cái', bo: 'Bố', me: 'Mẹ' };
+  var VAI = { toi: _tvmbT('js.cn.vai-toi', 'Bạn'), chong: _tvmbT('js.cn.vai-chong', 'Chồng'), vo: _tvmbT('js.cn.vai-vo', 'Vợ'), con: _tvmbT('js.cn.vai-con', 'Con cái'), bo: _tvmbT('js.cn.vai-bo', 'Bố'), me: _tvmbT('js.cn.vai-me', 'Mẹ') };
   var NGAN = { 'Mệnh':'Mệnh','Huynh Đệ':'Huynh','Phu Thê':'Phu','Tử Tức':'Tử','Tài Bạch':'Tài','Tật Ách':'Tật',
                'Thiên Di':'Di','Nô Bộc':'Nô','Quan Lộc':'Quan','Điền Trạch':'Điền','Phúc Đức':'Phúc','Phụ Mẫu':'Phụ' };
-  var ASK = 'Nhà mình 12 tháng tới thế nào thầy? Tháng nào cả nhà nên để ý?';
+  var ASK = _tvmbT('js.cn.ask', 'Nhà mình 12 tháng tới thế nào thầy? Tháng nào cả nhà nên để ý?');
   var D = null;
+  // Hiển thị: tên cung/sao của engine qua glossary (vi trả nguyên); `short` = chữ gọn cho ô hẹp.
+  function gcung(c, short){ var g = window.TuviGlossary; return g && c ? g.t('cung', c, short ? { short: true } : undefined) : c; }
+  // Ô hẹp: vi giữ bảng NGAN cũ (byte-giống); ngôn ngữ khác lấy bản ngắn của glossary.
+  function gcungNgan(c){ var I = window.I18n; if (!I || !I.locale || I.locale === 'vi' || !window.TuviGlossary) return NGAN[c] || c; return gcung(c, true); }
+  function gsao(arr){ return (arr || []).map(function(x){ return _tvmbG(['chinh', 'sao'], x); }).join(', '); }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function $(id){ return document.getElementById(id); }
   function initial(name){ var n = String(name||'').replace(/^(anh|chị|em|bé|con|cô|chú|bác|ông|bà)\s+/i, ''); return (n.charAt(0)||'?').toUpperCase(); }
-  function thangNgan(nhan){ return String(nhan||'').replace(/^Tháng\s*/, 'T').replace(/\s*ÂL/, '').replace(/\s*nhuận/, ' nh'); }
+  function thangNgan(nhan){ return String(nhan||'').replace(/^Tháng\s*(\d+)/, function(_m, n){ return _tvmbT('js.cn.thang-ngan', 'T{n}', { n: n }); }).replace(/\s*ÂL/, '').replace(/\s*nhuận/, ' ' + _tvmbT('js.cn.nhuan-ngan', 'nh')); }
   async function token(){
     try { return (window.Auth && window.Auth.getFreshToken) ? await window.Auth.getFreshToken() : ((window.Auth && window.Auth.getSession && window.Auth.getSession().access_token) || null); }
     catch(e){ return null; }
@@ -123,24 +129,24 @@
     $('cnLoading').style.display = 'none';
     if (!d.familyCount) { $('cnEmpty').style.display = 'block'; return; }
     var ok = d.nguoi.filter(function(n){ return !n.loi; });
-    $('cnSub').textContent = 'Nhà ' + (d.nguoi[0] && d.nguoi[0].vaiTro === 'toi' ? d.nguoi[0].ten + ' · ' : '') + d.nguoi.length + ' người · 12 tháng âm tới';
+    $('cnSub').textContent = _tvmbT('js.cn.nha-ten-n-nguoi', 'Nhà {ten}{n} người · 12 tháng âm tới', { ten: (d.nguoi[0] && d.nguoi[0].vaiTro === 'toi' ? d.nguoi[0].ten + ' · ' : ''), n: d.nguoi.length });
     $('cnPeople').innerHTML = d.nguoi.map(function(n){
       var line = n.loi
-        ? '<p>Chưa có giờ sinh nên chưa lập được lá số Tử Vi. <a href="/app/gio-sinh">Xác định giờ sinh →</a></p>'
-        : '<p>Năm nay tiểu hạn vào <b>' + esc(n.cungTieuHan) + '</b>, lưu niên vào <b>' + esc(n.cungLuuNien) + '</b>.</p>';
+        ? '<p>' + _tvmbT('js.cn.chua-co-gio-sinh', 'Chưa có giờ sinh nên chưa lập được lá số Tử Vi.') + ' <a href="' + _tvmbHref('/app/gio-sinh') + '">' + _tvmbT('js.cn.xac-dinh-gio-sinh', 'Xác định giờ sinh →') + '</a></p>'
+        : '<p>' + _tvmbT('js.cn.nam-nay-tieu-han-vao', 'Năm nay tiểu hạn vào <b>{th}</b>, lưu niên vào <b>{ln}</b>.', { th: esc(gcung(n.cungTieuHan)), ln: esc(gcung(n.cungLuuNien)) }) + '</p>';
       return '<div class="cn-p"><div class="cn-ava">' + esc(initial(n.ten)) + '</div><div class="cn-tx"><b>' + esc(n.ten) + '</b>' +
-        '<span>' + esc((VAI[n.vaiTro] || 'Người nhà') + ' · sinh ' + n.namSinh) + '</span>' + line + '</div></div>';
+        '<span>' + esc(_tvmbT('js.cn.vai-sinh-nam', '{vai} · sinh {nam}', { vai: VAI[n.vaiTro] || _tvmbT('js.cn.nguoi-nha', 'Người nhà'), nam: n.namSinh })) + '</span>' + line + '</div></div>';
     }).join('');
 
     var trungSet = {};
     (d.trung || []).forEach(function(t){ t.ai.forEach(function(ten){ trungSet[t.i + '|' + ten] = 1; }); });
-    var h = '<thead><tr><th scope="col">Người</th>' + d.thangs.map(function(t){
+    var h = '<thead><tr><th scope="col">' + _tvmbT('js.cn.nguoi', 'Người') + '</th>' + d.thangs.map(function(t){
       return '<th scope="col"' + (t.dangDienRa ? ' class="now"' : '') + ' title="' + esc(t.nhanDay) + '">' + esc(thangNgan(t.nhan)) + (t.dangDienRa ? ' •' : '') + '</th>';
     }).join('') + '</tr></thead><tbody>';
     ok.forEach(function(n, pi){
       h += '<tr><td>' + esc(n.ten) + '</td>' + n.thangs.map(function(c, i){
         var cls = trungSet[i + '|' + n.ten] ? 'trung' : '';
-        return '<td><button type="button" class="' + cls + '" data-p="' + pi + '" data-i="' + i + '">' + esc(c.loi ? '?' : (NGAN[c.cung] || c.cung)) + '</button></td>';
+        return '<td><button type="button" class="' + cls + '" data-p="' + pi + '" data-i="' + i + '">' + esc(c.loi ? '?' : gcungNgan(c.cung)) + '</button></td>';
       }).join('') + '</tr>';
     });
     $('cnGrid').innerHTML = h + '</tbody>';
@@ -150,16 +156,16 @@
       b.classList.add('on');
       var n = ok[+b.getAttribute('data-p')], i = +b.getAttribute('data-i'), c = n.thangs[i], t = d.thangs[i];
       var bits = [];
-      if (c.sat.length) bits.push('sát tinh: ' + c.sat.join(', '));
-      if (c.bai.length) bits.push('bại tinh: ' + c.bai.join(', '));
-      if (c.cat.length) bits.push('cát tinh: ' + c.cat.join(', '));
-      $('cnDetail').innerHTML = '<b>' + esc(n.ten) + ' · ' + esc(t.nhanDay) + '</b><br>Hạn vào cung <b>' + esc(c.cung) + '</b>' +
-        (bits.length ? ' — ' + esc(bits.join(' · ')) : '') + '.';
+      if (c.sat.length) bits.push(_tvmbT('js.cn.sat-tinh-ds', 'sát tinh: {ds}', { ds: gsao(c.sat) }));
+      if (c.bai.length) bits.push(_tvmbT('js.cn.bai-tinh-ds', 'bại tinh: {ds}', { ds: gsao(c.bai) }));
+      if (c.cat.length) bits.push(_tvmbT('js.cn.cat-tinh-ds', 'cát tinh: {ds}', { ds: gsao(c.cat) }));
+      $('cnDetail').innerHTML = '<b>' + esc(n.ten) + ' · ' + esc(t.nhanDay) + '</b><br>' + _tvmbT('js.cn.han-vao-cung', 'Hạn vào cung <b>{cung}</b>', { cung: esc(gcung(c.cung)) }) +
+        (bits.length ? ' — ' + esc(bits.join(' · ')) : '') + _tvmbT('js.cn.cham', '.');
       $('cnDetail').style.display = '';
     };
     if (d.trung && d.trung.length) {
       $('cnTrung').innerHTML = d.trung.map(function(t){
-        return '<li><b>' + esc(t.nhan) + ':</b> ' + esc(t.ai.join(', ')) + ' cùng hạn vào <b>' + esc(t.cung) + '</b>.</li>';
+        return '<li><b>' + esc(t.nhan) + ':</b> ' + _tvmbT('js.cn.ai-cung-han-vao', '{ai} cùng hạn vào <b>{cung}</b>.', { ai: esc(t.ai.join(', ')), cung: esc(gcung(t.cung)) }) + '</li>';
       }).join('');
       $('cnTrungWrap').style.display = '';
     }
@@ -172,7 +178,7 @@
         var b = e.target.closest('button[data-k]'); if (!b) return;
         Shell.moLichRieng(b.getAttribute('data-k')).then(function(okk){
           var m = $('cnLichMsg'); m.hidden = false;
-          m.textContent = okk ? 'Xong rồi — lịch tự cập nhật mỗi ngày.' : 'Chưa thêm được lịch, con thử lại sau nhé.';
+          m.textContent = okk ? _tvmbT('js.cn.xong-roi-lich-tu-cap-nhat', 'Xong rồi — lịch tự cập nhật mỗi ngày.') : _tvmbT('js.cn.chua-them-duoc-lich', 'Chưa thêm được lịch, con thử lại sau nhé.');
         });
       };
     }
@@ -188,10 +194,10 @@
         body: JSON.stringify({ owner: owner() }),
       }).then(function(r){ return r.ok ? r.json() : null; })
         .then(function(d){
-          if (!d || !d.success) { $('cnLoading').textContent = 'Chưa tải được lá số cả nhà. Thử tải lại trang nhé.'; return; }
+          if (!d || !d.success) { $('cnLoading').textContent = _tvmbT('js.cn.chua-tai-duoc-la-so', 'Chưa tải được lá số cả nhà. Thử tải lại trang nhé.'); return; }
           render(d);
         });
-    }).catch(function(){ $('cnLoading').textContent = 'Mạng chập chờn, chưa tải được. Thử tải lại trang nhé.'; });
+    }).catch(function(){ $('cnLoading').textContent = _tvmbT('js.cn.mang-chap-chon', 'Mạng chập chờn, chưa tải được. Thử tải lại trang nhé.'); });
   }
   var deadline = Date.now() + 1500;
   (function wait(){
