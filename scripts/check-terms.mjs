@@ -135,6 +135,7 @@ try {
         join(process.cwd(), 'lib/almanac/*.ts'),
         join(process.cwd(), 'lib/bazi/*.ts'),
         join(process.cwd(), 'lib/tayphuong/*.ts'),
+        join(process.cwd(), 'lib/engine/cong-so-terms.ts'),
       ],
     })
   );
@@ -218,6 +219,26 @@ out['ma-tayphuong'] = { khoa: [...new Set(bdMau.flatMap(([b]) => [
   ...b.gocChieu.filter(x => x.nghia).map(x => \`goc.\${x.ma}\`),
   ...b.hinhThe.filter(x => x.nghia).map(x => \`hinhthe.\${x.ma}\`),
 ]))] };
+
+// W30b: Công Sở — khoá bản dịch mà cong-so.js sẽ tra từ MÃ do chính hàm dựng câu của engine trả (luanNac/goiYGhep,
+// chạy thật trên MỌI tổ hợp đầu vào). Hàm thôi trả mã (hay đổi dạng mã) ⇒ /ja lặng lẽ lùi về chữ Việt.
+// Phần còn lại của khoá (kieu.<id>.* · tt · loi · radar · nac · doi · vai · quymo · nganh) lấy theo id có sẵn trong hồ sơ —
+// đã được check:i18nlong (nguồn) + vẽ thử bao.
+const CS = await import('./lib/engine/cong-so-terms.js');
+const csKhoa = new Set();
+const csLech = [];
+for (const kieu of Object.keys(CS.KIEU)) for (const tinh of ['duong', 'am', null]) for (const hop of [true, false, null])
+  for (const nac of CS.NAC_NGHE) {
+    const r = CS.luanNac(kieu, tinh, hop, nac.ten);
+    csKhoa.add(\`luan.\${r.ma}\`);
+    if (CS.LUAN_NAC[r.ma].replace('{nac}', nac.ten.toLowerCase()) !== r.text) csLech.push(\`luan.\${r.ma}\`);
+  }
+for (const v of CS.VAI_CUNG) for (const menh of Object.keys(CS.KIEU)) for (const nen of Object.keys(CS.KIEU)) for (const cua of [null, ...Object.keys(CS.KIEU)]) {
+  const r = CS.goiYGhep(v.cung, menh, cua, nen);
+  csKhoa.add(\`ghep.\${r.ma}\`);
+  if (CS.GHEP[r.ma].replace('{kieu}', cua ? CS.KIEU[cua].ten.toLowerCase() : '').replace('{nen}', CS.KIEU[nen].ten.toLowerCase()) !== r.text) csLech.push(\`ghep.\${r.ma}\`);
+}
+out['ma-cong-so'] = { khoa: [...csKhoa], lech: csLech, bang: Object.keys(CS.LUAN_NAC).length + Object.keys(CS.GHEP).length };
 
 /* ─── PHỦ TRỌN TỪ VỰNG, không phải phủ mẫu ────────────────────────────────
    Quét mẫu ở trên chỉ chứng minh được thứ mà mẫu CHẠM TỚI. Đo thật: lưới cũ
@@ -346,14 +367,29 @@ console.log('__KQ__' + JSON.stringify(out));
   {
     const { loadSources } = await import('../lib/i18n/long.mjs');
     const src = loadSources(process.cwd());
-    for (const ns of ['almanac', 'tayphuong', 'lucnham']) {
+    for (const ns of ['almanac', 'tayphuong', 'lucnham', 'cong-so']) {
       const co = new Set(src[ns].map((e) => e.k));
       const khoa = kq[`ma-${ns}`]?.khoa || [];
       const sot = khoa.filter((k) => !co.has(k));
       bao(
-        khoa.length > 20 && sot.length === 0,
+        khoa.length > (ns === 'cong-so' ? 0 : 20) && sot.length === 0,
         `ma-${ns.padEnd(10)} — ${khoa.length} mã trong payload mẫu, không khớp nguồn dịch: ${sot.slice(0, 5).join(', ') || 'không'}`
       );
+      if (ns === 'cong-so') {
+        // Khuôn câu: chữ Việt hàm dựng ra phải = khuôn nguồn thay biến (vi byte-giống) và mọi khuôn phải có đường tới.
+        const lech = kq['ma-cong-so'].lech;
+        bao(
+          lech.length === 0,
+          `ma-cong-so  — câu dựng ≠ khuôn nguồn: ${[...new Set(lech)].join(', ') || 'không'}`
+        );
+        const chuaToi = src[ns]
+          .map((e) => e.k)
+          .filter((k) => /^(luan|ghep)\./.test(k) && !khoa.includes(k));
+        bao(
+          chuaToi.length === 0,
+          `ma-cong-so  — khuôn không hàm nào dựng tới (chữ chết): ${chuaToi.join(', ') || 'không'}`
+        );
+      }
     }
   }
 

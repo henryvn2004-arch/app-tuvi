@@ -367,6 +367,46 @@ window.SHELL_INTRO={key:'huong-nghiep-tre'};</script>
 <script src="/tools-shared/ai-loading-steps.js?v=11"></script>
 <script>
 
+// W30a — VĂN ENGINE (`lib/engine/huong-nghiep-tre.ts`) dịch ở CHỖ VẼ theo MÃ: engine/route vẫn trả chữ Việt nguyên
+// (rail, prompt, cache không đổi byte), client tra `i18n-long/<locale>/hntre.js` bằng id của chính bảng
+// (`huong.<id>…` · `lop.<id>…` · `moilo.<id>…` · `kdh.<ma>` · `matdoc.<ma>…`). Ở vi `hntLoc` trả nguyên `data`;
+// thiếu mã/bản dịch (payload cũ trong cache) ⇒ chữ Việt, không vỡ. Chữ chỉ đi vào rail/prompt (`can`, `y`) KHÔNG dịch.
+if (window.I18n) I18n.loadLong('hntre');
+function _hl(k, vi, vars) { return window.I18n ? I18n.long('hntre', k, vi, vars) : vi; }
+function _hntLocHuong(h, lopId) {
+  if (!h || !h.id) return h;
+  var p = 'huong.' + h.id + '.';
+  var o = Object.assign({}, h, { ten: _hl(p + 'ten', h.ten), chat: _hl(p + 'chat', h.chat) });
+  if (h.dauHieu) o.dauHieu = h.dauHieu.map(function (v, i) { return _hl(p + 'dauHieu.' + i, v); });
+  if (h.hoatDong && lopId) o.hoatDong = h.hoatDong.map(function (v, i) { return _hl(p + 'hd.' + lopId + '.' + i, v); });
+  ['chaMeNen', 'chaMeTranh', 'deBiHieuNham', 'chatViec'].forEach(function (f) { if (h[f]) o[f] = _hl(p + f, h[f]); });
+  if (h.ngheViDu) o.ngheViDu = h.ngheViDu.map(function (v, i) { return _hl(p + 'nghe.' + i, v); });
+  return o;
+}
+function hntLoc(data) {
+  if (!data || !window.I18n || I18n.locale === 'vi') return data;
+  var d = Object.assign({}, data);
+  var lopId = d.lop && d.lop.id;
+  if (d.lop && lopId) {
+    var q = 'lop.' + lopId + '.';
+    d.lop = Object.assign({}, d.lop, {
+      ten: _hl(q + 'ten', d.lop.ten), tuoi: _hl(q + 'tuoi', d.lop.tuoi),
+      vaiChaMe: _hl(q + 'vaiChaMe', d.lop.vaiChaMe), xungHo: _hl(q + 'xungho', d.lop.xungHo)
+    });
+  }
+  if (d.moiLo && d.moiLo.id) d.moiLo = Object.assign({}, d.moiLo, { label: _hl('moilo.' + d.moiLo.id + '.label', d.moiLo.label) });
+  var ai = d.laTreEm === false ? _hl('xungho.nguoi-lon', 'người này') : (d.lop ? d.lop.xungHo : '');
+  if (d.khongDoiHoi) d.khongDoiHoi = d.khongDoiHoi.map(function (c) {
+    return c.ma ? Object.assign({}, c, { thap: _hl('kdh.' + c.ma, c.thap, { ai: ai }) }) : c;
+  });
+  if (d.matDoc) d.matDoc = d.matDoc.map(function (m) {
+    return m.ma ? Object.assign({}, m, { nhan: _hl('matdoc.' + m.ma + '.nhan', m.nhan) }) : m;
+  });
+  if (d.huongDau) d.huongDau = _hntLocHuong(d.huongDau, lopId);
+  if (d.huong) d.huong = d.huong.map(function (h) { return _hntLocHuong(h, lopId); });
+  return d;
+}
+
 var _currentSlug = '';
 var _last = null;
 var HN_STEPS = [
@@ -764,13 +804,14 @@ async function _doGenerate(freeRerun, lo) {
 
     // Chia sẻ CHỈ gắn ở đường đã mở khoá — bản chia sẻ mà rỗng phần chữ thì
     // người mở link không hiểu đang xem gì.
-    var h0 = (data.huong && data.huong[0]) || null;
+    var L = hntLoc(data);
+    var h0 = (L.huong && L.huong[0]) || null;
     Shell.setShareable({
       kind: 'text',
       toolId: 'huong-nghiep-tre',
       title: _tvmbT('js.hnt.huong-nghiep-som', 'Hướng nghiệp sớm — ') + ten,
       text: [
-        ten + ' — ' + (data.lop ? data.lop.ten + ' (' + data.lop.tuoi + ')' : ''),
+        ten + ' — ' + (L.lop ? L.lop.ten + ' (' + L.lop.tuoi + ')' : ''),
         h0 ? _tvmbT('js.hnt.thien-huong-noi-nhat-ten-chat', 'Thiên hướng nổi nhất: {ten} — {chat}', {ten: h0.ten, chat: h0.chat}) : '',
         h0 && h0.hoatDong && h0.hoatDong.length ? _tvmbT('js.hnt.nen-cho-lam-quen-hd', 'Nên cho làm quen: {hd}', {hd: h0.hoatDong.slice(0, 2).join(' · ')}) : '',
         h0 ? _tvmbT('js.hnt.nguoi-lon-nen-nen', 'Người lớn nên: {nen}', {nen: h0.chaMeNen}) : '',
@@ -855,6 +896,7 @@ function huongNghiepIllusHtml(data) {
 }
 
 function renderMetaHead(data) {
+  data = hntLoc(data);
   document.getElementById('hnIllusHost').innerHTML = huongNghiepIllusHtml(data);
   // Bỏ trống ô tên thì tiêu đề rơi về một cách gọi — mà "Con" dán lên một lá số
   // 43 tuổi thì vẫn đúng chỗ Henry báo, chỉ khác một dòng.
@@ -884,6 +926,7 @@ function renderMetaHead(data) {
 }
 
 function renderMetaRest(data) {
+  data = hntLoc(data);
   // Thiên hướng đứng đầu (miễn phí)
   var hd = data.huongDau;
   if (hd) {
@@ -986,6 +1029,7 @@ function _mucHtml(list) {
 }
 
 function renderProse(data) {
+  data = hntLoc(data);
   var set = function (id, v, blockId) {
     var el = document.getElementById(id);
     if (!el) return;
@@ -1033,7 +1077,7 @@ async function _loadHistory() {
     if (!d.success || !d.items || !d.items.length) return;
     document.getElementById('histList').innerHTML = d.items.map(function (it) {
       return '<div class="hist-row"><span class="n">' + esc(it.ten || _tvmbT('js.hnt.khong-ten', 'Không tên')) +
-        (it.huong_ten ? ' · ' + esc(it.huong_ten) : '') + '</span>' +
+        (it.huong_ten ? ' · ' + esc(_hl('huong.' + it.huong + '.ten', it.huong_ten)) : '') + '</span>' +
         '<span class="d">' + new Date(it.created_at).toLocaleDateString('vi-VN') + '</span></div>';
     }).join('');
     document.getElementById('histBlock').style.display = 'block';
