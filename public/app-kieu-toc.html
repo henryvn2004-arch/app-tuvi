@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kiểu Tóc & Kính Mắt Hợp Tướng Mặt — Tử Vi Minh Bảo</title>
-<meta name="description" content="Chụp ảnh khuôn mặt — hệ thống phân tích hình dạng và gợi ý kiểu tóc phù hợp theo nhân tướng học. Thử kiểu tóc ngay trên ảnh.">
+<title data-i18n="kieut.kieu-toc-kinh-mat-hop-tuong">Kiểu Tóc & Kính Mắt Hợp Tướng Mặt — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:kieut.chup-anh-khuon-mat-he-thong" name="description" content="Chụp ảnh khuôn mặt — hệ thống phân tích hình dạng và gợi ý kiểu tóc phù hợp theo nhân tướng học. Thử kiểu tóc ngay trên ảnh.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -92,9 +92,9 @@ body.chat-first-live .before-after{grid-template-columns:1fr}
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Kiểu Tóc &amp; Kính Mắt Hợp Tướng Mặt</b><span>Hệ thống phân tích hình dạng khuôn mặt, gợi ý kiểu tóc + thử ngay trên ảnh</span></div>
+      <div data-i18n="kieut.kieu-toc-kinh-mat-hop-tuong-v1r6" class="ws-title"><b>Kiểu Tóc &amp; Kính Mắt Hợp Tướng Mặt</b><span>Hệ thống phân tích hình dạng khuôn mặt, gợi ý kiểu tóc + thử ngay trên ảnh</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -108,8 +108,8 @@ body.chat-first-live .before-after{grid-template-columns:1fr}
         <img class="intro-avatar" src="/tool-avatars/kieu-toc-phan-tich.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Kiểu Tóc &amp; Kính Mắt Hợp Tướng Mặt</div>
-            <div class="intro-d">Tốn tiền làm tóc, đổi kính mà vẫn thấy chưa ổn — đôi khi vấn đề không phải ở gu thẩm mỹ mà ở việc chưa từng ghép thử trước khi làm thật. Tải ảnh chân dung, xem ngay kiểu nào hợp tướng mặt bạn.</div>
+            <div data-i18n="kieut.kieu-toc-kinh-mat-hop-tuong-x53w" class="intro-t">Kiểu Tóc &amp; Kính Mắt Hợp Tướng Mặt</div>
+            <div data-i18n="kieut.ton-tien-lam-toc-doi-kinh" class="intro-d">Tốn tiền làm tóc, đổi kính mà vẫn thấy chưa ổn — đôi khi vấn đề không phải ở gu thẩm mỹ mà ở việc chưa từng ghép thử trước khi làm thật. Tải ảnh chân dung, xem ngay kiểu nào hợp tướng mặt bạn.</div>
             <div id="introSrc"></div>
           </div>
         </div>
@@ -121,89 +121,89 @@ body.chat-first-live .before-after{grid-template-columns:1fr}
            JS chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng
            thái đã đổi trong code cũ (analyze/_doPhanTich/resetAll). -->
       <div class="ws-steps" id="ktSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="thtg.2-thanh-toan" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="thtg.3-nhan-ket-qua" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="kt-card" id="inputSection">
-        <h2><span class="ic" data-icon="camera"></span> Tải Ảnh Lên</h2>
-        <p class="sub">Chọn giới tính và tải lên một tấm ảnh rõ khuôn mặt. Hệ thống phân tích hình dạng khuôn mặt rồi ghép thử trực tiếp lên ảnh. Nhận về gợi ý kiểu tóc, kiểu kính phù hợp và ảnh đã ghép thử.</p>
+        <h2 data-i18n="kieut.tai-anh-len"><span class="ic" data-icon="camera"></span> Tải Ảnh Lên</h2>
+        <p data-i18n="kieut.chon-gioi-tinh-va-tai-len" class="sub">Chọn giới tính và tải lên một tấm ảnh rõ khuôn mặt. Hệ thống phân tích hình dạng khuôn mặt rồi ghép thử trực tiếp lên ảnh. Nhận về gợi ý kiểu tóc, kiểu kính phù hợp và ảnh đã ghép thử.</p>
         <p class="price-note" data-tvp-price-label="kieu-toc-phan-tich">…</p>
 
         <div style="margin-bottom:20px">
-          <div style="font-size:13px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Giới tính</div>
+          <div data-i18n="phongthuy.gioi-tinh" style="font-size:13px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Giới tính</div>
           <div class="gender-row">
             <button class="gender-btn active" id="genderNam" onclick="setGender('nam',this)">Nam</button>
-            <button class="gender-btn" id="genderNu" onclick="setGender('nu',this)">Nữ</button>
+            <button data-i18n="laso.nu" class="gender-btn" id="genderNu" onclick="setGender('nu',this)">Nữ</button>
           </div>
         </div>
 
         <div class="privacy-notice">
           <span class="ic" data-icon="lock"></span>
-          <div><strong>Quyền riêng tư:</strong> Ảnh chỉ gửi đến máy chủ để phân tích, không lưu trên server của chúng tôi. Replicate xử lý và trả về ảnh kết quả, không lưu trữ lâu dài.</div>
+          <div data-i18n="kieut.quyen-rieng-tu-anh-chi-gui"><strong>Quyền riêng tư:</strong> Ảnh chỉ gửi đến máy chủ để phân tích, không lưu trên server của chúng tôi. Replicate xử lý và trả về ảnh kết quả, không lưu trữ lâu dài.</div>
         </div>
 
         <div class="input-tabs" style="margin-top:20px">
-          <button class="input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
-          <button class="input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
+          <button data-i18n="nhtg.tai-anh-len" class="input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
+          <button data-i18n="nhtg.chup-anh" class="input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
         </div>
 
         <div class="input-pane active" id="pane-upload">
           <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
             <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
             <span class="upload-icon ic" data-icon="scissors" style="font-size:48px;display:block"></span>
-            <div class="upload-title">Kéo thả ảnh vào đây hoặc click để chọn</div>
-            <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB</div>
+            <div data-i18n="nhtg.keo-tha-anh-vao-day-hoac" class="upload-title">Kéo thả ảnh vào đây hoặc click để chọn</div>
+            <div data-i18n="dient.jpg-png-webp-toi-da-5mb" class="upload-sub">JPG, PNG, WebP — tối đa 5MB</div>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;justify-content:center">
-            <div class="tag-good">✓ Thẳng mặt, chính diện</div>
-            <div class="tag-good">✓ Ánh sáng tự nhiên, đều</div>
-            <div class="tag-good">✓ Thấy rõ từ trán đến cằm</div>
-            <div class="tag-bad">✗ Đội mũ, đội khăn che tóc</div>
-            <div class="tag-bad">✗ Ngược sáng, tối</div>
-            <div class="tag-bad">✗ Nghiêng mặt nhiều</div>
+            <div data-i18n="kieut.thang-mat-chinh-dien" class="tag-good">✓ Thẳng mặt, chính diện</div>
+            <div data-i18n="kieut.anh-sang-tu-nhien-deu" class="tag-good">✓ Ánh sáng tự nhiên, đều</div>
+            <div data-i18n="kieut.thay-ro-tu-tran-den-cam" class="tag-good">✓ Thấy rõ từ trán đến cằm</div>
+            <div data-i18n="kieut.doi-mu-doi-khan-che-toc" class="tag-bad">✗ Đội mũ, đội khăn che tóc</div>
+            <div data-i18n="kieut.nguoc-sang-toi" class="tag-bad">✗ Ngược sáng, tối</div>
+            <div data-i18n="kieut.nghieng-mat-nhieu" class="tag-bad">✗ Nghiêng mặt nhiều</div>
           </div>
         </div>
 
         <div class="input-pane" id="pane-camera">
           <div style="text-align:center;padding:16px 20px 20px">
             <div id="preCamTips" style="margin-bottom:16px">
-              <p style="font-size:14px;color:var(--text-mid)">Nhìn thẳng vào camera, đảm bảo ánh sáng đủ và khuôn mặt chiếm phần lớn khung hình.</p>
+              <p data-i18n="kieut.nhin-thang-vao-camera-dam-bao" style="font-size:14px;color:var(--text-mid)">Nhìn thẳng vào camera, đảm bảo ánh sáng đủ và khuôn mặt chiếm phần lớn khung hình.</p>
             </div>
             <div id="camWrap" style="display:none;position:relative;max-width:320px;margin:0 auto">
               <video id="camVideo" autoplay playsinline style="width:100%;border-radius:10px;transform:scaleX(-1)"></video>
               <canvas id="camCanvas" style="display:none"></canvas>
             </div>
             <div id="camBtns" style="display:none;gap:12px;justify-content:center;margin-top:12px">
-              <button onclick="capturePhoto()" style="padding:10px 24px;background:var(--navy);color:var(--gold);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="camera"></span> Chụp</button>
-              <button onclick="stopCamera()" style="padding:10px 20px;background:transparent;border:1.5px solid var(--line-2);border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text-mid)">Huỷ</button>
+              <button data-i18n="nhtg.chup" onclick="capturePhoto()" style="padding:10px 24px;background:var(--navy);color:var(--gold);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="camera"></span> Chụp</button>
+              <button data-i18n="kieut.huy" onclick="stopCamera()" style="padding:10px 20px;background:transparent;border:1.5px solid var(--line-2);border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text-mid)">Huỷ</button>
             </div>
-            <button id="openCamBtn" class="camera-btn" onclick="openCamera()"><span class="ic" data-icon="camera"></span> Mở Camera</button>
+            <button data-i18n="nhtg.mo-camera" id="openCamBtn" class="camera-btn" onclick="openCamera()"><span class="ic" data-icon="camera"></span> Mở Camera</button>
           </div>
         </div>
 
         <div id="previewSection" style="display:none;margin-top:16px;text-align:center">
           <div class="preview-wrap">
-            <img id="previewImg" class="preview-img" src="" alt="Preview ảnh">
+            <img data-i18n-attr="alt:kieut.preview-anh" id="previewImg" class="preview-img" src="" alt="Preview ảnh">
           </div>
-          <button class="remove-btn" onclick="removePhoto()">✕ Đổi ảnh khác</button>
+          <button data-i18n="kieut.doi-anh-khac" class="remove-btn" onclick="removePhoto()">✕ Đổi ảnh khác</button>
         </div>
 
         <div class="error-msg" id="error-msg"></div>
 
         <div id="hookHost"></div>
 
-        <button id="analyzeBtn" onclick="analyze()" disabled class="btn-analyze" style="width:100%;margin-top:20px;padding:14px;background:var(--navy);color:var(--gold);border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--serif);letter-spacing:.3px;transition:opacity .15s">
+        <button data-i18n="kieut.phan-tich-khuon-mat-goi-y" id="analyzeBtn" onclick="analyze()" disabled class="btn-analyze" style="width:100%;margin-top:20px;padding:14px;background:var(--navy);color:var(--gold);border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--serif);letter-spacing:.3px;transition:opacity .15s">
           <span class="ic" data-icon="sparkles"></span> Phân Tích Khuôn Mặt &amp; Gợi Ý Phong Cách — <span data-tvp-price="kieu-toc-phan-tich">…</span> Lượng
         </button>
-        <div style="font-size:11px;color:var(--text-lt);text-align:center;margin-top:8px">Phân tích ~5s · Thử kiểu ~25s</div>
+        <div data-i18n="kieut.phan-tich-5s-thu-kieu-25s" style="font-size:11px;color:var(--text-lt);text-align:center;margin-top:8px">Phân tích ~5s · Thử kiểu ~25s</div>
       </div>
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Kiểu Tóc &amp; Kính Mắt Hợp Tướng Mặt</div>
-        <p class="wsp-desc">Nhân tướng học phương Đông không chỉ luận vận mệnh mà còn phân loại hình dáng khuôn mặt theo Ngũ Hành (Kim, Mộc, Thủy, Hỏa, Thổ), mỗi hành ứng với một kiểu đường nét đặc trưng. Cách phân loại này được ứng dụng để gợi ý kiểu tóc, trang điểm hài hoà với gương mặt.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="kieut.kieu-toc-kinh-mat-hop-tuong-x53w" class="wsp-title">Kiểu Tóc &amp; Kính Mắt Hợp Tướng Mặt</div>
+        <p data-i18n="kieut.nhan-tuong-hoc-phuong-dong-khong" class="wsp-desc">Nhân tướng học phương Đông không chỉ luận vận mệnh mà còn phân loại hình dáng khuôn mặt theo Ngũ Hành (Kim, Mộc, Thủy, Hỏa, Thổ), mỗi hành ứng với một kiểu đường nét đặc trưng. Cách phân loại này được ứng dụng để gợi ý kiểu tóc, trang điểm hài hoà với gương mặt.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -218,7 +218,7 @@ body.chat-first-live .before-after{grid-template-columns:1fr}
           <div class="shape-emoji ic" id="shapeEmoji" data-icon="user"></div>
           <div style="flex:1">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
-              <div class="shape-label" style="margin:0">Hình dạng khuôn mặt</div>
+              <div data-i18n="kieut.hinh-dang-khuon-mat" class="shape-label" style="margin:0">Hình dạng khuôn mặt</div>
               <span id="ageGroupBadge" style="font-size:10px;background:rgba(255,255,255,.15);color:#fff;padding:2px 8px;border-radius:10px;display:none"></span>
             </div>
             <div class="shape-name" id="shapeName">—</div>
@@ -229,51 +229,51 @@ body.chat-first-live .before-after{grid-template-columns:1fr}
 
         <div class="kt-card" id="resultTabsWrap" data-ws-result style="display:none">
           <div style="display:flex;gap:0;border-bottom:2px solid var(--border-lt);margin-bottom:16px">
-            <button class="result-tab active" id="tab-hair" onclick="switchResultTab('hair',this)"><span class="ic" data-icon="scissors"></span> Kiểu Tóc</button>
-            <button class="result-tab" id="tab-glasses" onclick="switchResultTab('glasses',this)"><span class="ic" data-icon="glasses"></span> Kính Mắt</button>
+            <button data-i18n="kieut.kieu-toc" class="result-tab active" id="tab-hair" onclick="switchResultTab('hair',this)"><span class="ic" data-icon="scissors"></span> Kiểu Tóc</button>
+            <button data-i18n="kieut.kinh-mat" class="result-tab" id="tab-glasses" onclick="switchResultTab('glasses',this)"><span class="ic" data-icon="glasses"></span> Kính Mắt</button>
           </div>
 
           <div id="pane-hair" class="result-pane active">
-            <div class="styles-title"><span class="ic" data-icon="sparkles"></span> Tất cả kiểu tóc — <span class="ic" data-icon="star"></span> là phù hợp nhất theo tướng mặt của bạn</div>
+            <div data-i18n="kieut.tat-ca-kieu-toc-la-phu" class="styles-title"><span class="ic" data-icon="sparkles"></span> Tất cả kiểu tóc — <span class="ic" data-icon="star"></span> là phù hợp nhất theo tướng mặt của bạn</div>
             <div class="style-cards" id="styleCardsList"></div>
           </div>
 
           <div id="pane-glasses" class="result-pane" style="display:none">
-            <div class="styles-title"><span class="ic" data-icon="glasses"></span> Kiểu kính phù hợp theo cấu trúc khuôn mặt</div>
+            <div data-i18n="kieut.kieu-kinh-phu-hop-theo-cau" class="styles-title"><span class="ic" data-icon="glasses"></span> Kiểu kính phù hợp theo cấu trúc khuôn mặt</div>
             <div class="style-cards" id="glassesCardsList"></div>
           </div>
 
-          <div class="tip-box" id="tipBox" style="display:none;margin-top:12px">
+          <div data-i18n="kieut.loi-khuyen" class="tip-box" id="tipBox" style="display:none;margin-top:12px">
             <strong><span class="ic" data-icon="message-circle"></span> Lời khuyên: </strong><span id="tipText"></span>
           </div>
         </div>
 
         <div class="kt-card tryon-section" id="tryonSection" style="display:none">
-          <div class="tryon-title" id="tryonTitle"><span class="ic" id="tryonTitleIcon"></span> <span id="tryonTitleText">Thử Trên Ảnh</span></div>
+          <div data-i18n="kieut.thu-tren-anh" class="tryon-title" id="tryonTitle"><span class="ic" id="tryonTitleIcon"></span> <span id="tryonTitleText">Thử Trên Ảnh</span></div>
           <div class="tryon-loading" id="tryonLoading">
             <div id="tryonStepsHost"></div>
           </div>
           <div id="tryonResult" style="display:none">
             <div class="before-after">
               <div class="ba-col">
-                <div class="ba-label">Ảnh gốc</div>
-                <img id="imgBefore" class="ba-img ba-img-before" src="" alt="Ảnh gốc">
+                <div data-i18n="phongthuy.anh-goc" class="ba-label">Ảnh gốc</div>
+                <img data-i18n-attr="alt:phongthuy.anh-goc" id="imgBefore" class="ba-img ba-img-before" src="" alt="Ảnh gốc">
               </div>
               <div class="ba-col">
-                <div class="ba-label" id="afterLabel">Sau khi thử</div>
-                <img id="imgAfter" class="ba-img" src="" alt="Kết quả">
+                <div data-i18n="kieut.sau-khi-thu" class="ba-label" id="afterLabel">Sau khi thử</div>
+                <img data-i18n-attr="alt:kieut.ket-qua" id="imgAfter" class="ba-img" src="" alt="Kết quả">
               </div>
             </div>
             <div class="tryon-actions">
-              <button class="btn-download" onclick="downloadResult()"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh Kết Quả</button>
-              <button class="btn-retry" onclick="clearTryon()"><span class="ic" data-icon="rotate-cw"></span> Thử Kiểu Khác</button>
+              <button data-i18n="kieut.tai-anh-ket-qua" class="btn-download" onclick="downloadResult()"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh Kết Quả</button>
+              <button data-i18n="kieut.thu-kieu-khac" class="btn-retry" onclick="clearTryon()"><span class="ic" data-icon="rotate-cw"></span> Thử Kiểu Khác</button>
             </div>
           </div>
           <div class="error-msg" id="tryon-error-msg"></div>
         </div>
 
         <div id="resetWrap" style="display:none;margin-top:12px;text-align:center">
-          <button onclick="resetAll()" class="btn-cancel"><span class="ic" data-icon="rotate-cw"></span> Phân tích ảnh khác</button>
+          <button data-i18n="kieut.phan-tich-anh-khac" onclick="resetAll()" class="btn-cancel"><span class="ic" data-icon="rotate-cw"></span> Phân tích ảnh khác</button>
         </div>
       </div>
     </div>
@@ -342,45 +342,45 @@ function _hairThumb(id, gender) {
 }
 
 var STYLE_META = {
-  undercut:    { name: 'Undercut',         sub: 'Fade hai bên sát, đỉnh dài — cổ điển hiện đại' },
-  pompadour:   { name: 'Pompadour',        sub: 'Bờm vuốt cao phía trước — vintage-modern' },
-  curtain:     { name: 'Curtain Bangs',    sub: 'Mái rèm rẽ ngôi giữa, tự nhiên' },
-  buzz:        { name: 'Buzz Cut',         sub: 'Cắt đều ngắn, tôn đường nét khuôn mặt' },
-  textured:    { name: 'Textured Crop',    sub: 'Ngắn lởm kết cấu, cá tính, dễ tạo kiểu' },
-  two_block:   { name: 'Two Block',        sub: 'Phong cách Hàn — cạo hai bên, đỉnh dài tự nhiên' },
-  side_part:   { name: 'Side Part',        sub: 'Rẽ ngôi bên, chải phẳng — chuyên nghiệp lịch lãm' },
-  slick_back:  { name: 'Slick Back',       sub: 'Chải ngược ra sau bóng mượt — mạnh mẽ sang trọng' },
-  curtain_nu:  { name: 'Curtain Bangs',    sub: 'Mái rèm mềm, rẽ ngôi giữa — lãng mạn nữ tính' },
-  wolf:        { name: 'Wolf Cut',         sub: 'Layers phân tầng wispy — cá tính Gen Z' },
-  bob:         { name: 'Bob Ngắn',         sub: 'Bob ngang hàm gọn gàng — chắc và sạch sẽ' },
-  long_layers: { name: 'Long Layers',      sub: 'Tóc dài layers mềm tự nhiên — nữ tính thanh lịch' },
-  pixie:       { name: 'Pixie Cut',        sub: 'Tóc rất ngắn táo bạo — cá tính tự tin' },
-  side_waves:  { name: 'Side Part Waves',  sub: 'Rẽ ngôi bên + sóng mềm — quý phái gợi cảm' },
-  wispy:       { name: 'Wispy Bangs',      sub: 'Mái thưa mềm mại — trẻ trung nhẹ nhàng' },
-  shag:        { name: 'Shag Cut',         sub: 'Layers lởm + curtain bangs — retro-modern' },
-  lob:         { name: 'Lob (Long Bob)',   sub: 'Bob dài ngang vai — tinh tế đa dụng' },
-  blunt_fringe:{ name: 'Blunt Fringe',     sub: 'Mái thẳng ngang trán + tóc dài — rõ nét cá tính' },
-  textured_wavy:{ name:'Textured Wavy',    sub: 'Sóng tự nhiên có kết cấu — effortless và trendy' },
-  pompadour_nu:{ name: 'Pompadour Nữ',     sub: 'Bờm phồng phía trước mềm mại — thanh lịch sang trọng' },
-  cushion_perm:{ name: 'Cushion Perm',     sub: 'Perm sóng mềm Hàn — phồng nhẹ tự nhiên, đang hot 2026' },
-  layered_curl:{ name: 'Layered Curl',     sub: 'Curl phân tầng khói mềm — trẻ trung, chống lão hóa' },
-  perm_wave:   { name: 'Wave Perm',        sub: 'Perm sóng Hàn tự nhiên — dễ tạo kiểu, hiện đại' },
-  korean_perm: { name: 'Korean Wave Perm', sub: 'Perm sóng Hàn lãng mạn — xu hướng số 1 châu Á 2025' },
-  hime:        { name: 'Hime Cut',         sub: 'Mái thẳng + layers kiểu công chúa Nhật — đang viral' },
-  jellyfish:   { name: 'Jellyfish Cut',    sub: 'Tầng trên ngắn + tầng dưới dài — Gen Z, edgy' },
-  butterfly:   { name: 'Butterfly Cut',    sub: 'Layers frame mặt, phồng volume — hot TikTok 2025' },
-  aline_bob:   { name: 'A-line Bob',       sub: 'Bob vát góc — ngắn sau, dài trước, sắc nét hiện đại' },
-  glass_hair:  { name: 'Glass Hair',       sub: 'Tóc thẳng siêu bóng mượt — trend Hàn đỉnh cao' },
-  money_piece: { name: 'Money Piece',      sub: 'Highlight frame mặt 2 bên — trendy, ít tốn công' },
+  undercut:    { name: 'Undercut',         sub: _tvmbT('js.kieut.st-undercut-sub','Fade hai bên sát, đỉnh dài — cổ điển hiện đại') },
+  pompadour:   { name: 'Pompadour',        sub: _tvmbT('js.kieut.st-pompadour-sub','Bờm vuốt cao phía trước — vintage-modern') },
+  curtain:     { name: 'Curtain Bangs',    sub: _tvmbT('js.kieut.st-curtain-sub','Mái rèm rẽ ngôi giữa, tự nhiên') },
+  buzz:        { name: 'Buzz Cut',         sub: _tvmbT('js.kieut.st-buzz-sub','Cắt đều ngắn, tôn đường nét khuôn mặt') },
+  textured:    { name: 'Textured Crop',    sub: _tvmbT('js.kieut.st-textured-sub','Ngắn lởm kết cấu, cá tính, dễ tạo kiểu') },
+  two_block:   { name: 'Two Block',        sub: _tvmbT('js.kieut.st-two_block-sub','Phong cách Hàn — cạo hai bên, đỉnh dài tự nhiên') },
+  side_part:   { name: 'Side Part',        sub: _tvmbT('js.kieut.st-side_part-sub','Rẽ ngôi bên, chải phẳng — chuyên nghiệp lịch lãm') },
+  slick_back:  { name: 'Slick Back',       sub: _tvmbT('js.kieut.st-slick_back-sub','Chải ngược ra sau bóng mượt — mạnh mẽ sang trọng') },
+  curtain_nu:  { name: 'Curtain Bangs',    sub: _tvmbT('js.kieut.st-curtain_nu-sub','Mái rèm mềm, rẽ ngôi giữa — lãng mạn nữ tính') },
+  wolf:        { name: 'Wolf Cut',         sub: _tvmbT('js.kieut.st-wolf-sub','Layers phân tầng wispy — cá tính Gen Z') },
+  bob:         { name: _tvmbT('js.kieut.st-bob-name','Bob Ngắn'),         sub: _tvmbT('js.kieut.st-bob-sub','Bob ngang hàm gọn gàng — chắc và sạch sẽ') },
+  long_layers: { name: 'Long Layers',      sub: _tvmbT('js.kieut.st-long_layers-sub','Tóc dài layers mềm tự nhiên — nữ tính thanh lịch') },
+  pixie:       { name: 'Pixie Cut',        sub: _tvmbT('js.kieut.st-pixie-sub','Tóc rất ngắn táo bạo — cá tính tự tin') },
+  side_waves:  { name: 'Side Part Waves',  sub: _tvmbT('js.kieut.st-side_waves-sub','Rẽ ngôi bên + sóng mềm — quý phái gợi cảm') },
+  wispy:       { name: 'Wispy Bangs',      sub: _tvmbT('js.kieut.st-wispy-sub','Mái thưa mềm mại — trẻ trung nhẹ nhàng') },
+  shag:        { name: 'Shag Cut',         sub: _tvmbT('js.kieut.st-shag-sub','Layers lởm + curtain bangs — retro-modern') },
+  lob:         { name: 'Lob (Long Bob)',   sub: _tvmbT('js.kieut.st-lob-sub','Bob dài ngang vai — tinh tế đa dụng') },
+  blunt_fringe:{ name: 'Blunt Fringe',     sub: _tvmbT('js.kieut.st-blunt_fringe-sub','Mái thẳng ngang trán + tóc dài — rõ nét cá tính') },
+  textured_wavy:{ name:'Textured Wavy',    sub: _tvmbT('js.kieut.st-textured_wavy-sub','Sóng tự nhiên có kết cấu — effortless và trendy') },
+  pompadour_nu:{ name: _tvmbT('js.kieut.st-pompadour_nu-name','Pompadour Nữ'),     sub: _tvmbT('js.kieut.st-pompadour_nu-sub','Bờm phồng phía trước mềm mại — thanh lịch sang trọng') },
+  cushion_perm:{ name: 'Cushion Perm',     sub: _tvmbT('js.kieut.st-cushion_perm-sub','Perm sóng mềm Hàn — phồng nhẹ tự nhiên, đang hot 2026') },
+  layered_curl:{ name: 'Layered Curl',     sub: _tvmbT('js.kieut.st-layered_curl-sub','Curl phân tầng khói mềm — trẻ trung, chống lão hóa') },
+  perm_wave:   { name: 'Wave Perm',        sub: _tvmbT('js.kieut.st-perm_wave-sub','Perm sóng Hàn tự nhiên — dễ tạo kiểu, hiện đại') },
+  korean_perm: { name: 'Korean Wave Perm', sub: _tvmbT('js.kieut.st-korean_perm-sub','Perm sóng Hàn lãng mạn — xu hướng số 1 châu Á 2025') },
+  hime:        { name: 'Hime Cut',         sub: _tvmbT('js.kieut.st-hime-sub','Mái thẳng + layers kiểu công chúa Nhật — đang viral') },
+  jellyfish:   { name: 'Jellyfish Cut',    sub: _tvmbT('js.kieut.st-jellyfish-sub','Tầng trên ngắn + tầng dưới dài — Gen Z, edgy') },
+  butterfly:   { name: 'Butterfly Cut',    sub: _tvmbT('js.kieut.st-butterfly-sub','Layers frame mặt, phồng volume — hot TikTok 2025') },
+  aline_bob:   { name: 'A-line Bob',       sub: _tvmbT('js.kieut.st-aline_bob-sub','Bob vát góc — ngắn sau, dài trước, sắc nét hiện đại') },
+  glass_hair:  { name: 'Glass Hair',       sub: _tvmbT('js.kieut.st-glass_hair-sub','Tóc thẳng siêu bóng mượt — trend Hàn đỉnh cao') },
+  money_piece: { name: 'Money Piece',      sub: _tvmbT('js.kieut.st-money_piece-sub','Highlight frame mặt 2 bên — trendy, ít tốn công') },
 };
 
 var GLASSES_META = {
-  rectangle: { name: 'Gọng Chữ Nhật',   sub: 'Gọng mỏng hiện đại — phù hợp hầu hết khuôn mặt',  icon: 'glasses' },
-  round:     { name: 'Gọng Tròn Retro',  sub: 'Phong cách Hàn/vintage — làm mềm khuôn mặt vuông',  icon: 'circle-dot' },
-  oval:      { name: 'Gọng Oval',        sub: 'Nhẹ nhàng tinh tế — hài hòa với mọi khuôn mặt',     icon: 'glasses' },
-  browline:  { name: 'Browline Bán Viền', sub: 'Nửa viền trên đậm — trí thức lịch lãm',             icon: 'glasses' },
-  cat_eye:   { name: 'Cat Eye',          sub: 'Đuôi vát lên — nữ tính quyến rũ (phù hợp nữ nhiều)', icon: 'glasses' },
-  aviator:   { name: 'Aviator',          sub: 'Giọt nước cổ điển — unisex, mạnh mẽ tự tin',         icon: 'glasses' },
+  rectangle: { name: _tvmbT('js.kieut.gl-rectangle-name','Gọng Chữ Nhật'),   sub: _tvmbT('js.kieut.gl-rectangle-sub','Gọng mỏng hiện đại — phù hợp hầu hết khuôn mặt'),  icon: 'glasses' },
+  round:     { name: _tvmbT('js.kieut.gl-round-name','Gọng Tròn Retro'),  sub: _tvmbT('js.kieut.gl-round-sub','Phong cách Hàn/vintage — làm mềm khuôn mặt vuông'),  icon: 'circle-dot' },
+  oval:      { name: _tvmbT('js.kieut.gl-oval-name','Gọng Oval'),        sub: _tvmbT('js.kieut.gl-oval-sub','Nhẹ nhàng tinh tế — hài hòa với mọi khuôn mặt'),     icon: 'glasses' },
+  browline:  { name: _tvmbT('js.kieut.gl-browline-name','Browline Bán Viền'), sub: _tvmbT('js.kieut.gl-browline-sub','Nửa viền trên đậm — trí thức lịch lãm'),             icon: 'glasses' },
+  cat_eye:   { name: 'Cat Eye',          sub: _tvmbT('js.kieut.gl-cat_eye-sub','Đuôi vát lên — nữ tính quyến rũ (phù hợp nữ nhiều)'), icon: 'glasses' },
+  aviator:   { name: 'Aviator',          sub: _tvmbT('js.kieut.gl-aviator-sub','Giọt nước cổ điển — unisex, mạnh mẽ tự tin'),         icon: 'glasses' },
 };
 
 var ALL_STYLES_NAM = ['undercut','pompadour','curtain','buzz','textured','two_block','side_part','slick_back','cushion_perm','layered_curl','perm_wave'];
@@ -413,12 +413,12 @@ function wsStepsSet(n) {
   }
 }
 var ANALYSIS_STEPS = [
-  { label: 'Đo khuôn mặt bằng MediaPipe', ms: 1000 },
-  { label: 'Phân tích hình dạng khuôn mặt', ms: 0 },
+  { label: _tvmbT('js.kieut.step-do-mat','Đo khuôn mặt bằng MediaPipe'), ms: 1000 },
+  { label: _tvmbT('js.kieut.step-phan-tich','Phân tích hình dạng khuôn mặt'), ms: 0 },
 ];
 var TRYON_STEPS = [
-  { label: 'Chuẩn bị ảnh & prompt', ms: 1200 },
-  { label: 'Đang tạo ảnh kiểu tóc mới', ms: 0 },
+  { label: _tvmbT('js.kieut.step-chuan-bi','Chuẩn bị ảnh & prompt'), ms: 1200 },
+  { label: _tvmbT('js.kieut.step-tao-anh','Đang tạo ảnh kiểu tóc mới'), ms: 0 },
 ];
 var _analysisLoadingCtl = null;
 var _tryonLoadingCtl = null;
@@ -448,7 +448,7 @@ function onFileSelect(e) { if (e.target.files[0]) loadFile(e.target.files[0]); }
 
 async function loadFile(file) {
   if (!file.type.startsWith('image/')) return;
-  if (file.size > 5 * 1024 * 1024) { showError('Ảnh quá lớn (tối đa 5MB). Vui lòng chọn ảnh khác.'); return; }
+  if (file.size > 5 * 1024 * 1024) { showError(_tvmbT('js.kieut.anh-qua-lon','Ảnh quá lớn (tối đa 5MB). Vui lòng chọn ảnh khác.')); return; }
   const MAX = 1024;
   try {
     const bitmap = await createImageBitmap(file);
@@ -500,14 +500,14 @@ function mountHook(m) {
   const host = document.getElementById('hookHost');
   if (!host || !window.HookLayer || !m) return;
   const r = m.widthToHeight;
-  const shape = r > 0.85 ? 'tròn/vuông' : r < 0.75 ? 'dài' : 'oval';
+  const shape = r > 0.85 ? _tvmbT('js.kieut.hinh-tron-vuong','tròn/vuông') : r < 0.75 ? _tvmbT('js.kieut.hinh-dai','dài') : _tvmbT('js.kieut.hinh-oval','oval');
   window.HookLayer.mount(host, {
     tool: 'kieu-toc',
     charts: [],
     facts: [{
       tone: 'neutral',
-      title: 'Tỷ lệ rộng/cao khuôn mặt: ' + r + ' — xu hướng ' + shape,
-      body: 'Đo trực tiếp từ ảnh bằng MediaPipe. Danh sách kiểu tóc & kính mắt xếp hạng theo khuôn mặt của bạn nằm trong bản phân tích chuyên sâu.',
+      title: _tvmbT('js.kieut.ty-le-rong-cao','Tỷ lệ rộng/cao khuôn mặt: {r} — xu hướng {s}',{ r: r, s: shape }),
+      body: _tvmbT('js.kieut.do-truc-tiep','Đo trực tiếp từ ảnh bằng MediaPipe. Danh sách kiểu tóc & kính mắt xếp hạng theo khuôn mặt của bạn nằm trong bản phân tích chuyên sâu.'),
       source: 'engine · MediaPipe FaceMesh',
     }],
   });
@@ -534,7 +534,7 @@ async function openCamera() {
     document.getElementById('camBtns').style.display = 'flex';
     document.getElementById('openCamBtn').style.display = 'none';
   } catch(e) {
-    showError('Không thể mở camera. Vui lòng tải ảnh lên thay thế.');
+    showError(_tvmbT('js.kieut.khong-the-mo-camera','Không thể mở camera. Vui lòng tải ảnh lên thay thế.'));
   }
 }
 function capturePhoto() {
@@ -653,7 +653,7 @@ async function _doPhanTich() {
     });
     if (!res.ok) {
       const d = await res.json().catch(() => ({}));
-      throw new Error(d.error || 'Lỗi ' + res.status);
+      throw new Error(d.error || _tvmbT('js.kieut.loi-s','Lỗi {s}',{ s: res.status }));
     }
     const data = await res.json();
     if (data.error) throw new Error(data.error);
@@ -662,7 +662,7 @@ async function _doPhanTich() {
   } catch(e) {
     _analysisLoadingCtl && _analysisLoadingCtl.stop();
     document.getElementById('analysisLoading').style.display = 'none';
-    showError('Lỗi phân tích: ' + (e.message || 'Vui lòng thử lại.'));
+    showError(_tvmbT('js.kieut.loi-phan-tich','Lỗi phân tích: {e}',{ e: e.message || _tvmbT('js.kieut.vui-long-thu-lai','Vui lòng thử lại.') }));
     resultSec.style.display = 'none';
   }
 }
@@ -722,7 +722,7 @@ function renderAnalysis(data) {
         <div class="style-sub">${meta.sub}</div>
         ${(data.hairReasons||data.reasons||{})[id] ? `<div class="style-reason"><span class="ic" data-icon="lightbulb"></span> ${(data.hairReasons||data.reasons)[id]}</div>` : ''}
       </div>
-      <button class="try-btn" onclick="selectStyle('${id}','hair')">Thử →</button>
+      <button class="try-btn" onclick="selectStyle('${id}','hair')">${_tvmbT('js.kieut.thu','Thử →')}</button>
     `;
     hairList.appendChild(card);
   });
@@ -745,7 +745,7 @@ function renderAnalysis(data) {
         <div class="style-sub">${meta.sub}</div>
         ${(data.glassesReasons||{})[id] ? `<div class="style-reason"><span class="ic" data-icon="lightbulb"></span> ${data.glassesReasons[id]}</div>` : ''}
       </div>
-      <button class="try-btn" onclick="selectStyle('${id}','glasses')">Thử →</button>
+      <button class="try-btn" onclick="selectStyle('${id}','glasses')">${_tvmbT('js.kieut.thu','Thử →')}</button>
     `;
     glassesList.appendChild(card);
   });
@@ -763,13 +763,13 @@ function renderAnalysis(data) {
 
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({
-    label: 'Kiểu Tóc — ' + (data.faceShapeVN || ''),
-    greeting: 'Khuôn mặt của bạn thuộc dạng **' + (data.faceShapeVN || '') + '**. Bạn muốn hỏi thêm về kiểu tóc hay kính mắt hợp tướng?',
-    chips: ['Vì sao kiểu này hợp mặt tôi?', 'Nên tránh kiểu tóc nào?', 'Kính mắt nào hợp tướng mặt tôi?']
+    label: _tvmbT('js.kieut.kieu-toc-label','Kiểu Tóc — {s}',{ s: data.faceShapeVN || '' }),
+    greeting: _tvmbT('js.kieut.greeting','Khuôn mặt của bạn thuộc dạng **{s}**. Bạn muốn hỏi thêm về kiểu tóc hay kính mắt hợp tướng?',{ s: data.faceShapeVN || '' }),
+    chips: [_tvmbT('js.kieut.chip-vi-sao','Vì sao kiểu này hợp mặt tôi?'), _tvmbT('js.kieut.chip-tranh','Nên tránh kiểu tóc nào?'), _tvmbT('js.kieut.chip-kinh','Kính mắt nào hợp tướng mặt tôi?')]
   });
   Shell.setShareable({
-    kind: 'text', toolId: 'kieu-toc-phan-tich', title: 'Kiểu tóc hợp tướng mặt của tôi',
-    text: 'Hình dạng khuôn mặt: ' + (data.faceShapeVN || '') + (data.desc ? '\n' + data.desc : '') + (data.tip ? '\n\n' + data.tip : '')
+    kind: 'text', toolId: 'kieu-toc-phan-tich', title: _tvmbT('js.kieut.share-title','Kiểu tóc hợp tướng mặt của tôi'),
+    text: _tvmbT('js.kieut.share-shape','Hình dạng khuôn mặt: {s}',{ s: data.faceShapeVN || '' }) + (data.desc ? '\n' + data.desc : '') + (data.tip ? '\n\n' + data.tip : '')
   });
 }
 
@@ -796,7 +796,7 @@ async function _doTryOn(styleId, meta, type = 'hair') {
   tryonSec.style.display = 'block';
   const typeIconKey = type === 'glasses' ? 'glasses' : 'scissors';
   document.getElementById('tryonTitleIcon').innerHTML = window.iconHtml ? window.iconHtml(typeIconKey) : '';
-  document.getElementById('tryonTitleText').textContent = 'Thử: ' + (meta?.name || styleId);
+  document.getElementById('tryonTitleText').textContent = _tvmbT('js.kieut.thu-n','Thử: {n}',{ n: meta?.name || styleId });
   document.getElementById('tryonLoading').style.display = 'block';
   document.getElementById('tryonResult').style.display = 'none';
   tryonSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -820,10 +820,10 @@ async function _doTryOn(styleId, meta, type = 'hair') {
     });
     if (!res.ok) {
       const d = await res.json().catch(() => ({}));
-      throw new Error(d.error || 'Lỗi ' + res.status);
+      throw new Error(d.error || _tvmbT('js.kieut.loi-s','Lỗi {s}',{ s: res.status }));
     }
     const data = await res.json();
-    if (!data.imageUrl) throw new Error('Không nhận được ảnh kết quả.');
+    if (!data.imageUrl) throw new Error(_tvmbT('js.kieut.khong-nhan-duoc-anh','Không nhận được ảnh kết quả.'));
 
     _tryonImgUrl = data.imageUrl;
     document.getElementById('imgBefore').src = 'data:' + _mediaType + ';base64,' + _imageData;
@@ -834,13 +834,13 @@ async function _doTryOn(styleId, meta, type = 'hair') {
     document.getElementById('tryonResult').style.display = 'block';
     _saveTryonReading(styleId, data.imageUrl);
     Shell.setShareable({
-      kind: 'image', title: 'Kiểu tóc mới của tôi (thử ảo)',
-      imageUrl: data.imageUrl, text: 'Thử kiểu tóc: ' + (meta?.name || styleId)
+      kind: 'image', title: _tvmbT('js.kieut.share-tryon-title','Kiểu tóc mới của tôi (thử ảo)'),
+      imageUrl: data.imageUrl, text: _tvmbT('js.kieut.share-tryon-text','Thử kiểu tóc: {n}',{ n: meta?.name || styleId })
     });
   } catch(e) {
     _tryonLoadingCtl && _tryonLoadingCtl.stop();
     document.getElementById('tryonLoading').style.display = 'none';
-    showTryonError('Lỗi tạo ảnh: ' + (e.message || 'Vui lòng thử lại.'));
+    showTryonError(_tvmbT('js.kieut.loi-tao-anh','Lỗi tạo ảnh: {e}',{ e: e.message || _tvmbT('js.kieut.vui-long-thu-lai','Vui lòng thử lại.') }));
   } finally {
     document.querySelectorAll('.try-btn').forEach(b => b.disabled = false);
   }

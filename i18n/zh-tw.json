@@ -795,6 +795,170 @@
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"spade\"></span><b id=\"drawBtnLabel\">洗牌並抽牌</b></span>",
   "h": "e53dcebd"
  },
+ "buto.11h-13h-ngo": {
+  "t": "11–13 時（午）",
+  "h": "6a3975fa"
+ },
+ "buto.13h-15h-mui": {
+  "t": "13–15 時（未）",
+  "h": "b5abb37a"
+ },
+ "buto.15h-17h-than": {
+  "t": "15–17 時（申）",
+  "h": "d3239832"
+ },
+ "buto.17h-19h-dau": {
+  "t": "17–19 時（酉）",
+  "h": "892ef5c0"
+ },
+ "buto.19h-21h-tuat": {
+  "t": "19–21 時（戌）",
+  "h": "bfb8a38f"
+ },
+ "buto.1h-3h-suu": {
+  "t": "1–3 時（丑）",
+  "h": "43af3d63"
+ },
+ "buto.2-xem-truoc-6-truc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">六軸預覽</span>",
+  "h": "752b4fb3"
+ },
+ "buto.21h-23h-hoi": {
+  "t": "21–23 時（亥）",
+  "h": "6d57bf9d"
+ },
+ "buto.23h-1h-ty": {
+  "t": "23–1 時（子）",
+  "h": "3b1ae1a9"
+ },
+ "buto.3h-5h-dan": {
+  "t": "3–5 時（寅）",
+  "h": "801ae495"
+ },
+ "buto.5h-7h-mao": {
+  "t": "5–7 時（卯）",
+  "h": "a3681f23"
+ },
+ "buto.7h-9h-thin": {
+  "t": "7–9 時（辰）",
+  "h": "dd0d719c"
+ },
+ "buto.9h-11h-ty": {
+  "t": "9–11 時（巳）",
+  "h": "396e5fe1"
+ },
+ "buto.anh-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> 簽名圖片",
+  "h": "d254fb71"
+ },
+ "buto.anh-chu-ky-xqwx": {
+  "t": "簽名圖片",
+  "h": "41b431b6"
+ },
+ "buto.ban-ky-dua-theo-chu-nao": {
+  "t": "您的簽名是依名字中的哪個字？（選填）",
+  "h": "e757bef0"
+ },
+ "buto.but-tuong": {
+  "t": "筆相",
+  "h": "6eab7d7c"
+ },
+ "buto.but-tuong-hoc-phuong-dong-cho": {
+  "t": "東方筆相學認為，字跡、尤其是簽名，反映書寫者的神采與性格，依據書法的六項古典標準：神、氣、骨、肉、血、勢。這是將相學應用於手寫字跡的一個分支。",
+  "h": "16117b43"
+ },
+ "buto.but-tuong-tu-vi-minh-bao": {
+  "t": "筆相——明寶紫微斗數",
+  "h": "01e38f8b"
+ },
+ "buto.but-tuong-xem-chu-ky-theo": {
+  "t": "<b>筆相</b><span>依古法看簽名 — <span data-tvp-price=\"but-tuong\">…</span> 兩</span>",
+  "h": "68cc134b"
+ },
+ "buto.chu-ky-khong-duoc-luu-chi": {
+  "t": "簽名不會被儲存——只有測得的指標會送出解讀。",
+  "h": "e651b4d2"
+ },
+ "buto.co-phap-thu-phap-trung-hoa": {
+  "t": "中國書法古法",
+  "h": "ce0e060e"
+ },
+ "buto.do-6-truc-co-phap-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依書法古法<br>測量六軸</span>",
+  "h": "a97de25d"
+ },
+ "buto.do-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> 測量簽名 →",
+  "h": "afdd3301"
+ },
+ "buto.do-chu-ky-khac": {
+  "t": "測量另一個簽名",
+  "h": "d0b9860f"
+ },
+ "buto.doi-chieu-voi-dung-than-bat": {
+  "t": "+ 對照八字用神（選填）",
+  "h": "027429c6"
+ },
+ "buto.gio-sinh-bo-trong-neu-khong": {
+  "t": "出生時辰（不清楚可留空）",
+  "h": "72d40487"
+ },
+ "buto.keo-tha-anh-chu-ky-hoac": {
+  "t": "將簽名圖片拖放到這裡，或點擊選擇",
+  "h": "c5c50566"
+ },
+ "buto.khong-luu-chu-ky": {
+  "t": "<span class=\"hp-ic\" data-icon=\"shield-check\"></span><span>不儲存<br>簽名</span>",
+  "h": "99c2aaad"
+ },
+ "buto.ky-chu-ky": {
+  "t": "簽名",
+  "h": "6043c0d7"
+ },
+ "buto.ky-lai-lan-nua": {
+  "t": "+ 再簽一次",
+  "h": "a28512df"
+ },
+ "buto.ky-truc-tiep": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> 直接簽名",
+  "h": "604362e3"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"pen-line\"></span><span>直接在<br>螢幕上簽名</span>",
+  "h": "2e08b69a"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-d4z1": {
+  "t": "直接在螢幕上簽名，或上傳現有的簽名圖片。系統會測量筆跡的六個軸，依書法古法解讀。",
+  "h": "74ad947e"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-j0mj": {
+  "t": "直接在螢幕上簽名——系統依書法古法測量神、氣、骨、肉、血、勢六軸，解讀您的簽名。",
+  "h": "d92707db"
+ },
+ "buto.ky-voi-toc-do-that-dung": {
+  "t": "請以平常的速度簽名——不要刻意放慢。",
+  "h": "8ac53b46"
+ },
+ "buto.luan-giai-but-tuong": {
+  "t": "筆相解讀",
+  "h": "0760be41"
+ },
+ "buto.moi-ngay-ky-hang-chuc-chu": {
+  "t": "每天在合約、文件上簽下幾十次名，卻從沒想過這個簽名正在訴說您的運勢。直接在螢幕上簽名，即可獲得涵蓋神、氣、骨、肉、血、勢六軸的完整解讀。",
+  "h": "150efb97"
+ },
+ "buto.muc-sam-tren-nen-sang-toi": {
+  "t": "淺色底、深色墨跡 · 最大 5MB——僅能測得骨／肉／勢",
+  "h": "ddf489f7"
+ },
+ "buto.vd-khoa-dang-khoa": {
+  "t": "例：王、小明…",
+  "h": "bbb7526d"
+ },
+ "buto.xoa": {
+  "t": "清除",
+  "h": "82339c0a"
+ },
  "cdvc.2-xem-truoc-cung-phu-the": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽夫妻宮</span>",
   "h": "108dcc06"
@@ -1619,6 +1783,86 @@
   "t": "公司辦公室",
   "h": "d678c2d6"
  },
+ "dali.an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 飲食",
+  "h": "a8b06b78"
+ },
+ "dali.anh-da-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 臉部肌膚照片",
+  "h": "d3d3689b"
+ },
+ "dali.anh-sang-tu-nhien-khong-filter": {
+  "t": "自然光 · 不加濾鏡 · 近距離拍清楚<br>JPG/PNG，最大 5MB",
+  "h": "13e0d13e"
+ },
+ "dali.chup-noi-co-anh-sang-tu": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"lightbulb\"></span> 在有自然光的地方拍攝</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> 不要使用閃光燈</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> 洗淨素顏</span>",
+  "h": "5c098d4e"
+ },
+ "dali.da-lieu-toan-dien": {
+  "t": "全面膚質分析",
+  "h": "91cdb627"
+ },
+ "dali.da-lieu-toan-dien-chup-anh": {
+  "t": "<b>全面膚質分析</b><span>拍攝臉部肌膚——中醫、西醫與五行古法</span>",
+  "h": "72690cfa"
+ },
+ "dali.da-lieu-tu-vi-minh-bao": {
+  "t": "皮膚——明寶紫微斗數",
+  "h": "a3b8548f"
+ },
+ "dali.da-xuong-cap-ma-cu-do": {
+  "t": "皮膚變差了卻總是怪年紀，但真正的問題，可能出在您從沒仔細看過的地方。上傳一張臉部肌膚照片，在花錢買新保養品之前，先獲得客觀的分析。",
+  "h": "78702e4b"
+ },
+ "dali.day-la-tu-van-tham-khao": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> 這是結合中西醫的參考建議，不能取代皮膚科醫師的診斷與治療。若有嚴重的皮膚狀況，請諮詢專業人員。",
+  "h": "b51f96df"
+ },
+ "dali.dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> 中醫",
+  "h": "dd81a951"
+ },
+ "dali.luan-giai-dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> 中醫解讀",
+  "h": "fd58cfd1"
+ },
+ "dali.luu-y-theo-ban-menh": {
+  "t": "<strong>✦ 依本命的注意事項</strong> <span id=\"luuYText\">—</span>",
+  "h": "d6e60118"
+ },
+ "dali.my-pham": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 保養品",
+  "h": "3d3cb659"
+ },
+ "dali.my-pham-routine": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 保養品與保養流程",
+  "h": "bf4abdec"
+ },
+ "dali.nam-sinh-tuy-chon-tu-van": {
+  "t": "出生年（選填——依本命提供建議）",
+  "h": "2abf3e72"
+ },
+ "dali.phan-tich-da-mat-ket-hop": {
+  "t": "分析臉部肌膚——結合中醫、西醫與五行古法。依本命提供飲食、保養品與護膚建議。",
+  "h": "c9ffa0cc"
+ },
+ "dali.phan-tich-da-toan-dien-luong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 全面分析肌膚——<span data-tvp-price=\"da-lieu-ai\">…</span> 兩",
+  "h": "b46628df"
+ },
+ "dali.tai-len-mot-tam-anh-da": {
+  "t": "請上傳一張未化妝、臉部肌膚清晰的照片。系統會分析照片上各部位肌膚的狀況。您會得到肌膚評估、中醫解讀，以及適合的食療與保養品建議。",
+  "h": "5a19c79c"
+ },
+ "dali.thuc-duong-an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 食療與飲食",
+  "h": "9ce2b777"
+ },
+ "dali.tuong-hoc-da-mat-phuong-dong": {
+  "t": "東方臉部肌膚相學認為，皮膚狀態在某種程度上反映體內的健康，並與現代皮膚科學的觀察互相對照。這種結合中西醫的方式，把皮膚視為需要追蹤的指標，而不只憑美感來評斷。",
+  "h": "466d834a"
+ },
  "daycon.2-xem-truoc-chan-dung-con": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽孩子的肖像</span>",
   "h": "d8f50448"
@@ -1822,6 +2066,66 @@
  "daycon.xem-cach-day-con-ton-luong": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"baby\"></span><b>查看教養方式 →</b></span> <small>費用 <span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 兩)</span></small>",
   "h": "ccbaaea3"
+ },
+ "dient.anh-chi-gui-toi-may-chu": {
+  "t": "圖片僅傳送至伺服器進行分析，不會儲存在伺服器上。請正面拍攝、光線充足、不要遮住臉，結果最準確。",
+  "h": "b68f127c"
+ },
+ "dient.dien-tuong": {
+  "t": "面相",
+  "h": "1e5e41e3"
+ },
+ "dient.dien-tuong-tu-vi-minh-bao": {
+  "t": "面相——明寶紫微斗數",
+  "h": "1279c8b1"
+ },
+ "dient.dien-tuong-xem-tuong-khuon-mat": {
+  "t": "<b>面相</b><span>依古法看臉部之相 — <span data-tvp-price=\"dien-tuong\">…</span> 兩</span>",
+  "h": "4af70f75"
+ },
+ "dient.do-tam-dinh-ngu-quan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>測量三停、<br>五官</span>",
+  "h": "fb2a8a23"
+ },
+ "dient.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG、PNG、WebP——最大 5MB",
+  "h": "e7e468cd"
+ },
+ "dient.luan-theo-ma-y-than-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依《麻衣神相》<br>解讀</span>",
+  "h": "eecee1d3"
+ },
+ "dient.ma-y-than-tuong-co-phap": {
+  "t": "《麻衣神相》古法",
+  "h": "c9dac5c1"
+ },
+ "dient.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"dien-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"dien-tuong\">…</span> 兩)</span>",
+  "h": "2e7a2c43"
+ },
+ "dient.phan-tich-nhan-tuong-hoc": {
+  "t": "相學分析",
+  "h": "9b4da9c2"
+ },
+ "dient.phan-tich-tuong-mat-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"analyzeBtnLabel\">分析面相 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"dien-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"dien-tuong\">…</span> 兩)</span></small>",
+  "h": "3a64a361"
+ },
+ "dient.tai-hoac-chup-anh-khuon-mat": {
+  "t": "上傳或拍攝臉部照片——系統依古法相學《麻衣神相》分析三停、五官等重要部位。",
+  "h": "f24ad8af"
+ },
+ "dient.tai-mot-tam-anh-chan-dung": {
+  "t": "請上傳一張正面、光線充足、臉部清晰的人像照片。系統會分析三停、五官與各部位，解讀性格與運勢。",
+  "h": "453bd1c6"
+ },
+ "dient.tam-dinh-da-xac-dinh": {
+  "t": "✦ 已辨識三停",
+  "h": "ab4a740f"
+ },
+ "dient.tam-dinh-ngu-quan-tren-guong": {
+  "t": "臉上的三停、五官並非玄虛之談——古人已將它們系統化，成為解讀性格與運勢的具體方法。上傳一張人像照片，即可獲得依《麻衣神相》的解讀。",
+  "h": "3c70322e"
  },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 僅供參考",
@@ -4591,6 +4895,222 @@
   "t": "即將發生的趨勢",
   "h": "6e5a1980"
  },
+ "js.buto.anh-qua-lon": {
+  "t": "圖片過大。",
+  "h": "cb4417d0"
+ },
+ "js.buto.anh-tinh-chua-do-duoc": {
+  "t": "靜態圖片尚無法測得：{list}——請直接簽名以取得完整六軸。",
+  "h": "e61f9e1c"
+ },
+ "js.buto.but-tuong": {
+  "t": "筆相",
+  "h": "6eab7d7c"
+ },
+ "js.buto.but-tuong-cua-toi": {
+  "t": "我的筆相",
+  "h": "71e77c95"
+ },
+ "js.buto.but-tuong-diem": {
+  "t": "筆相——{n} 分／100",
+  "h": "8b96c2af"
+ },
+ "js.buto.chi-phi-su-dung": {
+  "t": "使用費用",
+  "h": "c2d36be8"
+ },
+ "js.buto.chip-ngu-hanh": {
+  "t": "筆畫的五行與用神有什麼關係？",
+  "h": "a163e0cf"
+ },
+ "js.buto.chip-on-dinh": {
+  "t": "為什麼多簽幾次就能測出穩定度？",
+  "h": "db6978cc"
+ },
+ "js.buto.chip-than": {
+  "t": "「神」這個面向是什麼？",
+  "h": "47cc8c8c"
+ },
+ "js.buto.chuyen-khoan-qr": {
+  "t": "銀行轉帳（掃描 QR 碼）",
+  "h": "d15d92d3"
+ },
+ "js.buto.dang-luan": {
+  "t": "正在解讀筆相…",
+  "h": "c11b136b"
+ },
+ "js.buto.dau-phay": {
+  "t": "，",
+  "h": "d3bc9a37"
+ },
+ "js.buto.diem-tong": {
+  "t": "/ 100 · 總分",
+  "h": "734b18a3"
+ },
+ "js.buto.diem-tong-anh": {
+  "t": "/ 100 · 總分（圖片可測得的 3 軸）",
+  "h": "2eeaa72f"
+ },
+ "js.buto.diem-tong-n": {
+  "t": "總分：{n}/100",
+  "h": "1a30535a"
+ },
+ "js.buto.goi-y": {
+  "t": "建議：",
+  "h": "ca8836e0"
+ },
+ "js.buto.goiy-cot": {
+  "t": "簽名缺少乾脆的收筆點（或相反，細碎的轉角太多）。請加上一筆挺直的線作為主軸，其餘筆畫都倚靠它。",
+  "h": "8398323b"
+ },
+ "js.buto.goiy-huyet": {
+  "t": "速度忽快忽慢，有些地方筆鋒停滯。請以平穩的節奏簽名——把它當成在畫一條曲線，而不是在寫字。",
+  "h": "a216d5ef"
+ },
+ "js.buto.goiy-khi": {
+  "t": "筆畫多次中斷。請盡量減少提筆的次數——一氣呵成的長線，勝過許多零碎的短筆。",
+  "h": "e111c883"
+ },
+ "js.buto.goiy-nhuc": {
+  "t": "筆畫偏細、偏急。請在簽名中段放慢——不必全字加重，只需強調一兩處關鍵即可。",
+  "h": "6df98c3a"
+ },
+ "js.buto.goiy-than": {
+  "t": "放慢一拍，並每天把同一個簽名重複練習 5–10 次——神靠一致性而旺，不是靠簽得快。",
+  "h": "e914cedd"
+ },
+ "js.buto.goiy-the": {
+  "t": "字的基線正在下垂。請試著以輕輕上揚的一筆收尾——這正是古代書法所說的「上勢」。",
+  "h": "e992fa88"
+ },
+ "js.buto.greeting": {
+  "t": "您的簽名總分為 **{n}/100**。想進一步了解解讀的哪個部分？",
+  "h": "6d9edb5f"
+ },
+ "js.buto.greeting-best": {
+  "t": "您的簽名總分為 **{n}/100**，最強的軸是 **{t}**（{s}/100）。想進一步了解解讀的哪個部分？",
+  "h": "b3ab7c3e"
+ },
+ "js.buto.khong-co-ket-qua": {
+  "t": "沒有結果。",
+  "h": "97fa6f91"
+ },
+ "js.buto.khong-do-duoc": {
+  "t": "無法測得",
+  "h": "ba0114d8"
+ },
+ "js.buto.khong-doc-duoc-net-muc-tu": {
+  "t": "無法從這張圖片讀取筆跡。",
+  "h": "7c89a420"
+ },
+ "js.buto.khong-the-ket-noi": {
+  "t": "無法連線。",
+  "h": "3dc4d8cb"
+ },
+ "js.buto.lan-n": {
+  "t": "第 {n} 次 ✓",
+  "h": "8b97f3d0"
+ },
+ "js.buto.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.buto.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.buto.luan-giai-day-du": {
+  "t": "完整解讀 →",
+  "h": "4c2c4d70"
+ },
+ "js.buto.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> 兩)</span>",
+  "h": "72b273e4"
+ },
+ "js.buto.mua-goi": {
+  "t": "購買方案可享更多優惠。<br><a href=\"/topup.html\">立即查看方案 →</a>",
+  "h": "074cd07f"
+ },
+ "js.buto.nghia-cot": {
+  "t": "骨架，筆畫的乾脆程度",
+  "h": "11b35dc9"
+ },
+ "js.buto.nghia-huyet": {
+  "t": "流動的順暢度，速度的均勻度",
+  "h": "bbf8ddc8"
+ },
+ "js.buto.nghia-khi": {
+  "t": "筆勢連貫，少有中斷",
+  "h": "ddda4d5b"
+ },
+ "js.buto.nghia-nhuc": {
+  "t": "飽滿程度，筆力",
+  "h": "fa2ac7b3"
+ },
+ "js.buto.nghia-than": {
+  "t": "生氣，筆畫的一致性",
+  "h": "1e27242e"
+ },
+ "js.buto.nghia-the": {
+  "t": "字的基線走向",
+  "h": "c9a78d22"
+ },
+ "js.buto.ngu-hanh-net": {
+  "t": "筆畫五行",
+  "h": "fed1c22a"
+ },
+ "js.buto.paypal-the": {
+  "t": "PayPal／國際信用卡",
+  "h": "70ff945c"
+ },
+ "js.buto.thuong-mat-10-20-giay": {
+  "t": "通常需要 10–20 秒",
+  "h": "9c118003"
+ },
+ "js.buto.tinh-tu-n-truc": {
+  "t": "依據從靜態圖片直接測得的 {n} 個軸計算。依筆相古法的完整解讀（神／氣／骨／肉／血／勢），收錄於深度分析中。",
+  "h": "dd2d2e04"
+ },
+ "js.buto.ton-luong": {
+  "t": "需 <span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> 兩)</span>",
+  "h": "4051f122"
+ },
+ "js.buto.truc-cot": {
+  "t": "骨力",
+  "h": "e5b9e8aa"
+ },
+ "js.buto.truc-huyet": {
+  "t": "血脈",
+  "h": "b28ba369"
+ },
+ "js.buto.truc-khi": {
+  "t": "氣韻",
+  "h": "8ce20f05"
+ },
+ "js.buto.truc-manh-nhat-body": {
+  "t": "{y}。其餘各軸與具體的改善建議，收錄於深度分析中。",
+  "h": "fcd915ce"
+ },
+ "js.buto.truc-manh-nhat-t": {
+  "t": "最強的軸：{t}（{h}）— {s}/100",
+  "h": "a03ee856"
+ },
+ "js.buto.truc-nhuc": {
+  "t": "肉感",
+  "h": "cb0d2007"
+ },
+ "js.buto.truc-than": {
+  "t": "精神",
+  "h": "b7cbb4d4"
+ },
+ "js.buto.truc-the": {
+  "t": "筆勢",
+  "h": "4b2db277"
+ },
+ "js.buto.vui-long-chon-file-anh": {
+  "t": "請選擇圖片檔。",
+  "h": "71a61127"
+ },
  "js.cdvc.anh-dang-tai-co-the-hoi": {
   "t": "圖片載入中，可能稍慢——請稍候，或",
   "h": "c4e9709b"
@@ -6175,6 +6695,142 @@
   "t": "請再試一次。",
   "h": "2f1d18ee"
  },
+ "js.dali.buoi-sang": {
+  "t": "早晨",
+  "h": "d95d88da"
+ },
+ "js.dali.buoi-toi": {
+  "t": "夜晚",
+  "h": "adcf496a"
+ },
+ "js.dali.chip-dong-y": {
+  "t": "中醫上該如何改善？",
+  "h": "e84646cb"
+ },
+ "js.dali.chip-san-pham": {
+  "t": "應該先使用哪項產品？",
+  "h": "c4d20f9a"
+ },
+ "js.dali.chip-vi-sao": {
+  "t": "為什麼我的皮膚屬於這種類型？",
+  "h": "92ad930f"
+ },
+ "js.dali.da-dau": {
+  "t": "油性肌膚",
+  "h": "2e16ebef"
+ },
+ "js.dali.da-hon-hop": {
+  "t": "混合性肌膚",
+  "h": "68410286"
+ },
+ "js.dali.da-kho": {
+  "t": "乾性肌膚",
+  "h": "6dcefb2d"
+ },
+ "js.dali.da-nhay-cam": {
+  "t": "敏感性肌膚",
+  "h": "336f6fce"
+ },
+ "js.dali.da-thuong": {
+  "t": "一般膚質",
+  "h": "830c17ab"
+ },
+ "js.dali.greeting": {
+  "t": "皮膚分析結果：**{d}**{m}。想多問中醫、飲食還是保養品？",
+  "h": "edab53d9"
+ },
+ "js.dali.hanh-n": {
+  "t": "{h}行",
+  "h": "3e50daab"
+ },
+ "js.dali.ing-nen-dung": {
+  "t": "建議使用的成分",
+  "h": "35fd5e5b"
+ },
+ "js.dali.ing-nen-tranh": {
+  "t": "建議避開的成分",
+  "h": "c6f4ec17"
+ },
+ "js.dali.label": {
+  "t": "皮膚——{d}",
+  "h": "8fcf6fa4"
+ },
+ "js.dali.lbl-anh-huong-menh": {
+  "t": "本命的影響",
+  "h": "28408328"
+ },
+ "js.dali.lbl-can-bang": {
+  "t": "陰陽平衡",
+  "h": "716d7b88"
+ },
+ "js.dali.lbl-ly-giai": {
+  "t": "中醫解讀",
+  "h": "58af6bfb"
+ },
+ "js.dali.lbl-tang-phu": {
+  "t": "相關臟腑",
+  "h": "288ab910"
+ },
+ "js.dali.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.dali.loi-phan-tich": {
+  "t": "分析錯誤",
+  "h": "3e06a99e"
+ },
+ "js.dali.menh-n": {
+  "t": "本命 {h}",
+  "h": "e46cbb3b"
+ },
+ "js.dali.nen-an": {
+  "t": "適合吃",
+  "h": "b29db199"
+ },
+ "js.dali.nen-tranh": {
+  "t": "建議避開",
+  "h": "41d7ed06"
+ },
+ "js.dali.nuoc-uong": {
+  "t": "飲品與藥草茶",
+  "h": "706a3d71"
+ },
+ "js.dali.share-loai-da": {
+  "t": "膚質：{d}{m}",
+  "h": "928754ce"
+ },
+ "js.dali.share-title": {
+  "t": "我的皮膚分析結果",
+  "h": "7e7757f7"
+ },
+ "js.dali.step-dong-y": {
+  "t": "中醫：解讀臟腑與本命",
+  "h": "8122b336"
+ },
+ "js.dali.step-my-pham": {
+  "t": "建議保養品與保養流程",
+  "h": "0014c3fb"
+ },
+ "js.dali.step-tay-y": {
+  "t": "西醫：辨識膚質與狀態",
+  "h": "c11ccb03"
+ },
+ "js.dali.step-thuc-duong": {
+  "t": "擬定食療飲食計畫",
+  "h": "99292ce2"
+ },
+ "js.dali.tang-phu-lien-quan": {
+  "t": "相關臟腑、依本命的皮膚傾向，以及從圖片進行的皮膚分析（膚質、狀態、程度），收錄於深度分析中。",
+  "h": "d1caef52"
+ },
+ "js.dali.thuc-duong-theo-menh": {
+  "t": "依本命的食療",
+  "h": "7187b22e"
+ },
+ "js.dali.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
+ },
  "js.daycon.5-la-muc-giua-cua-hang": {
   "t": "\n\n5 是數千份孩童命盤的中間水準，並不是「10 分得 5 分」。軸的兩端都各有價值。",
   "h": "99fb1a17"
@@ -6686,6 +7342,142 @@
  "js.daycon.xem-them": {
   "t": "<summary>再看 ",
   "h": "c5afdcd1"
+ },
+ "js.dient.anh-qua-lon-toi-da-5mb": {
+  "t": "圖片過大（最大 5MB）。",
+  "h": "874f95b2"
+ },
+ "js.dient.canh-bao-chup": {
+  "t": "⚠ {w}——正面拍攝的照片，結果會更準確。",
+  "h": "231fb68c"
+ },
+ "js.dient.chip-ngu-quan": {
+  "t": "五官包括哪些？",
+  "h": "e8847ad0"
+ },
+ "js.dient.chip-tam-dinh": {
+  "t": "三停是什麼？",
+  "h": "25930850"
+ },
+ "js.dient.chip-thay-doi": {
+  "t": "面相可以改變嗎？",
+  "h": "602a11f2"
+ },
+ "js.dient.da-doc-xong": {
+  "t": "已依《麻衣神相》讀完您的面相。還想進一步了解什麼嗎？",
+  "h": "8cee9c62"
+ },
+ "js.dient.dang-phan-tich": {
+  "t": "正在分析面相…",
+  "h": "b2f15cf4"
+ },
+ "js.dient.dau-nghieng": {
+  "t": "頭部傾斜約 {n}°——請拍得更端正一些",
+  "h": "ad34a7cb"
+ },
+ "js.dient.dien-tuong": {
+  "t": "面相",
+  "h": "1e5e41e3"
+ },
+ "js.dient.dien-tuong-cua-toi": {
+  "t": "我的面相",
+  "h": "d5784500"
+ },
+ "js.dient.do-truc-tiep-bo-vi": {
+  "t": "以 MediaPipe 直接從圖片測得。依《麻衣神相》的意涵與其餘部位（眼、鼻、口、額、下巴），收錄於深度分析中。",
+  "h": "6d9235fd"
+ },
+ "js.dient.do-truc-tiep-tam-dinh": {
+  "t": "以 MediaPipe 直接從圖片測得——上停、中停、下停依您臉部的真實地標點劃分。依《麻衣神相》的完整解讀，收錄於深度分析中。",
+  "h": "3ded4f7e"
+ },
+ "js.dient.ha-dinh": {
+  "t": "下停",
+  "h": "11254397"
+ },
+ "js.dient.khong-doc-duoc-anh-nay-vui": {
+  "t": "無法讀取此圖片——請選擇 JPG 或 PNG 圖片。",
+  "h": "32a1faf4"
+ },
+ "js.dient.khong-nhan-dien-duoc-mat": {
+  "t": "⚠ 未能清楚偵測到臉部。仍可進行分析，但結果的準確度可能較低。",
+  "h": "b3bd7a6e"
+ },
+ "js.dient.khong-the-ket-noi": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.dient.khong-the-mo-camera": {
+  "t": "無法開啟相機，請改為上傳圖片。",
+  "h": "a57244b6"
+ },
+ "js.dient.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.dient.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.dient.mat-bau-duc": {
+  "t": "鵝蛋臉",
+  "h": "d9034e8f"
+ },
+ "js.dient.mat-dai-hep": {
+  "t": "長臉／窄臉",
+  "h": "ea8512c9"
+ },
+ "js.dient.mat-quay": {
+  "t": "臉部略微轉向一側——請正面拍攝",
+  "h": "589f7ce3"
+ },
+ "js.dient.mat-tron-vuong": {
+  "t": "圓臉／方臉",
+  "h": "64bb08c2"
+ },
+ "js.dient.may-chu-khong-tra-ve": {
+  "t": "伺服器未傳回結果。",
+  "h": "d1312308"
+ },
+ "js.dient.tam-bach-ha": {
+  "t": "下三白眼——瞳孔下方露出眼白",
+  "h": "1d45c786"
+ },
+ "js.dient.tam-bach-thuong": {
+  "t": "上三白眼——瞳孔上方露出眼白",
+  "h": "2f061c22"
+ },
+ "js.dient.tam-dinh-da-xac-dinh": {
+  "t": "✦ 已辨識三停",
+  "h": "ab4a740f"
+ },
+ "js.dient.tam-dinh-t": {
+  "t": "三停：上停 {t}% · 中停 {tr}% · 下停 {h}%",
+  "h": "47b2936f"
+ },
+ "js.dient.thuong-dinh": {
+  "t": "上停",
+  "h": "eb4f7b4f"
+ },
+ "js.dient.thuong-mat-15-25-giay": {
+  "t": "通常需要 15–25 秒",
+  "h": "f0dba195"
+ },
+ "js.dient.trung-dinh": {
+  "t": "中停",
+  "h": "bfbaff8b"
+ },
+ "js.dient.tu-bach": {
+  "t": "四白眼——瞳孔四周都露出眼白",
+  "h": "1ded61cb"
+ },
+ "js.dient.ty-le-rong-dai-mat": {
+  "t": "臉部寬／長比例：{r}（{s}）",
+  "h": "59af24fc"
+ },
+ "js.dient.vui-long-chon-file-anh": {
+  "t": "請選擇圖片檔。",
+  "h": "71a61127"
  },
  "js.duyenno.anh-dang-tai-co-the-hoi": {
   "t": "圖片載入中，可能稍慢——請稍候，或",
@@ -7959,6 +8751,342 @@
   "t": "儲值 →",
   "h": "96c6fb5d"
  },
+ "js.khis.anh-qua-lon-toi-da-10mb": {
+  "t": "圖片過大（最大 10MB）。",
+  "h": "27f729fb"
+ },
+ "js.khis.chip-5-sac": {
+  "t": "五行五色各代表什麼？",
+  "h": "98715ca7"
+ },
+ "js.khis.chip-an-duong": {
+  "t": "印堂是什麼？",
+  "h": "e1de6d6d"
+ },
+ "js.khis.chip-khac-dien-tuong": {
+  "t": "氣色和面相有什麼不同？",
+  "h": "d826036b"
+ },
+ "js.khis.da-luan-xong": {
+  "t": "已依《麻衣神相》論完您的氣色。還想進一步了解什麼嗎？",
+  "h": "26c2acd5"
+ },
+ "js.khis.khi-sac": {
+  "t": "氣色",
+  "h": "e1205bcd"
+ },
+ "js.khis.khi-sac-cua-toi": {
+  "t": "我的氣色",
+  "h": "f4b00328"
+ },
+ "js.khis.khong-doc-duoc-anh": {
+  "t": "無法讀取圖片",
+  "h": "12ab7c26"
+ },
+ "js.khis.khong-doc-duoc-file": {
+  "t": "無法讀取檔案",
+  "h": "1d32d14b"
+ },
+ "js.khis.khong-the-ket-noi": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.khis.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.khis.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.khis.loi-xu-ly-anh": {
+  "t": "圖片處理錯誤：{e}",
+  "h": "973ba3bb"
+ },
+ "js.khis.may-chu-khong-tra-ve": {
+  "t": "伺服器未傳回結果。",
+  "h": "d1312308"
+ },
+ "js.khis.vui-long-chon-file-anh": {
+  "t": "請選擇圖片檔（JPG 或 PNG）。",
+  "h": "ad4caa5b"
+ },
+ "js.kieut.anh-qua-lon": {
+  "t": "圖片過大（最大 5MB）。請選擇其他圖片。",
+  "h": "84a5fa2b"
+ },
+ "js.kieut.chip-kinh": {
+  "t": "哪種眼鏡適合我的臉型？",
+  "h": "e2a2a092"
+ },
+ "js.kieut.chip-tranh": {
+  "t": "應避開哪種髮型？",
+  "h": "71021350"
+ },
+ "js.kieut.chip-vi-sao": {
+  "t": "為什麼這種髮型適合我的臉？",
+  "h": "e507a96f"
+ },
+ "js.kieut.do-truc-tiep": {
+  "t": "以 MediaPipe 直接從圖片測得。依您的臉型排序的髮型與眼鏡清單，收錄於深度分析中。",
+  "h": "45879030"
+ },
+ "js.kieut.gl-aviator-sub": {
+  "t": "經典水滴形——男女皆宜，強勢且自信",
+  "h": "c07019a3"
+ },
+ "js.kieut.gl-browline-name": {
+  "t": "半框眉線鏡框",
+  "h": "f7013797"
+ },
+ "js.kieut.gl-browline-sub": {
+  "t": "上半部粗框——知性而端正",
+  "h": "076a871f"
+ },
+ "js.kieut.gl-cat_eye-sub": {
+  "t": "尾端上揚——女性化、迷人（較適合女性）",
+  "h": "49a590df"
+ },
+ "js.kieut.gl-oval-name": {
+  "t": "橢圓鏡框",
+  "h": "30d636c4"
+ },
+ "js.kieut.gl-oval-sub": {
+  "t": "柔和精緻——與各種臉型都協調",
+  "h": "851997e8"
+ },
+ "js.kieut.gl-rectangle-name": {
+  "t": "長方形鏡框",
+  "h": "a0b6dd72"
+ },
+ "js.kieut.gl-rectangle-sub": {
+  "t": "纖細現代的鏡框——適合大多數臉型",
+  "h": "0d7fb906"
+ },
+ "js.kieut.gl-round-name": {
+  "t": "復古圓框",
+  "h": "3fddc6b6"
+ },
+ "js.kieut.gl-round-sub": {
+  "t": "韓系／復古風——柔化方形臉",
+  "h": "801e4e9b"
+ },
+ "js.kieut.greeting": {
+  "t": "您的臉型屬於 **{s}**。想進一步了解適合您面相的髮型或眼鏡嗎？",
+  "h": "05992171"
+ },
+ "js.kieut.hinh-dai": {
+  "t": "長臉",
+  "h": "67167578"
+ },
+ "js.kieut.hinh-oval": {
+  "t": "鵝蛋臉",
+  "h": "181b45bd"
+ },
+ "js.kieut.hinh-tron-vuong": {
+  "t": "圓臉／方臉",
+  "h": "a30fca34"
+ },
+ "js.kieut.khong-nhan-duoc-anh": {
+  "t": "未收到結果圖片。",
+  "h": "a16f02df"
+ },
+ "js.kieut.khong-the-mo-camera": {
+  "t": "無法開啟相機，請改為上傳圖片。",
+  "h": "4f7396b7"
+ },
+ "js.kieut.kieu-toc-label": {
+  "t": "髮型——{s}",
+  "h": "c1e88a18"
+ },
+ "js.kieut.loi-phan-tich": {
+  "t": "分析錯誤：{e}",
+  "h": "1d8ed1a8"
+ },
+ "js.kieut.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.kieut.loi-tao-anh": {
+  "t": "圖片生成錯誤：{e}",
+  "h": "091a4baf"
+ },
+ "js.kieut.share-shape": {
+  "t": "臉型：{s}",
+  "h": "e52e2cf1"
+ },
+ "js.kieut.share-title": {
+  "t": "適合我面相的髮型",
+  "h": "d1806e98"
+ },
+ "js.kieut.share-tryon-text": {
+  "t": "試髮型：{n}",
+  "h": "0d923cba"
+ },
+ "js.kieut.share-tryon-title": {
+  "t": "我的新髮型（虛擬試戴）",
+  "h": "5887ab87"
+ },
+ "js.kieut.st-aline_bob-sub": {
+  "t": "斜切鮑伯頭——後短前長，俐落現代",
+  "h": "9eb34b60"
+ },
+ "js.kieut.st-blunt_fringe-sub": {
+  "t": "齊額平瀏海＋長髮——輪廓分明、有個性",
+  "h": "18f3e1fe"
+ },
+ "js.kieut.st-bob-name": {
+  "t": "短鮑伯頭",
+  "h": "c19d992e"
+ },
+ "js.kieut.st-bob-sub": {
+  "t": "齊下巴的俐落鮑伯——穩重乾淨",
+  "h": "532a2aad"
+ },
+ "js.kieut.st-butterfly-sub": {
+  "t": "修飾臉部的層次、蓬鬆量感——2025 年 TikTok 熱門",
+  "h": "6460949f"
+ },
+ "js.kieut.st-buzz-sub": {
+  "t": "均勻剪短——凸顯臉部輪廓",
+  "h": "3b06ae07"
+ },
+ "js.kieut.st-curtain-sub": {
+  "t": "中分簾式瀏海，自然隨性",
+  "h": "ca32d507"
+ },
+ "js.kieut.st-curtain_nu-sub": {
+  "t": "柔軟簾式瀏海、中分——浪漫女性化",
+  "h": "d0dece43"
+ },
+ "js.kieut.st-cushion_perm-sub": {
+  "t": "韓式柔軟波浪燙——自然微蓬，2026 年熱門",
+  "h": "bdca143d"
+ },
+ "js.kieut.st-glass_hair-sub": {
+  "t": "超亮澤直髮——韓系潮流頂峰",
+  "h": "db26a044"
+ },
+ "js.kieut.st-hime-sub": {
+  "t": "齊瀏海＋層次的日式公主風——正在爆紅",
+  "h": "af1c27e2"
+ },
+ "js.kieut.st-jellyfish-sub": {
+  "t": "上層短、下層長——Z 世代、個性前衛",
+  "h": "f2002985"
+ },
+ "js.kieut.st-korean_perm-sub": {
+  "t": "浪漫韓式波浪燙——2025 年亞洲第一潮流",
+  "h": "22d3d20d"
+ },
+ "js.kieut.st-layered_curl-sub": {
+  "t": "柔和分層捲髮——年輕有活力、顯嫩",
+  "h": "49a65a0e"
+ },
+ "js.kieut.st-lob-sub": {
+  "t": "及肩長鮑伯——精緻百搭",
+  "h": "e2b1a249"
+ },
+ "js.kieut.st-long_layers-sub": {
+  "t": "柔軟自然的長層次——女性化且優雅",
+  "h": "500da152"
+ },
+ "js.kieut.st-money_piece-sub": {
+  "t": "臉部兩側挑染——時髦又省事",
+  "h": "c4d6fd9f"
+ },
+ "js.kieut.st-perm_wave-sub": {
+  "t": "自然韓式波浪燙——好整理、現代",
+  "h": "30da2ec0"
+ },
+ "js.kieut.st-pixie-sub": {
+  "t": "大膽的極短髮——個性自信",
+  "h": "f42299de"
+ },
+ "js.kieut.st-pompadour-sub": {
+  "t": "前額髮高高梳起——復古×現代",
+  "h": "25e80198"
+ },
+ "js.kieut.st-pompadour_nu-name": {
+  "t": "女款龐巴度",
+  "h": "9d31fa58"
+ },
+ "js.kieut.st-pompadour_nu-sub": {
+  "t": "前側柔軟蓬起——優雅高貴",
+  "h": "336c3d80"
+ },
+ "js.kieut.st-shag-sub": {
+  "t": "粗獷層次＋簾式瀏海——復古×現代",
+  "h": "60b2f94f"
+ },
+ "js.kieut.st-side_part-sub": {
+  "t": "旁分、梳得平整——專業端正",
+  "h": "cb1f2ff5"
+ },
+ "js.kieut.st-side_waves-sub": {
+  "t": "旁分＋柔軟波浪——高貴又性感",
+  "h": "5d4fd178"
+ },
+ "js.kieut.st-slick_back-sub": {
+  "t": "向後梳得油亮——強勢高貴",
+  "h": "405b36d5"
+ },
+ "js.kieut.st-textured-sub": {
+  "t": "短而有層次質感的個性派——好造型",
+  "h": "4ca046ff"
+ },
+ "js.kieut.st-textured_wavy-sub": {
+  "t": "有質感的自然波浪——隨性又時髦",
+  "h": "c565798c"
+ },
+ "js.kieut.st-two_block-sub": {
+  "t": "韓系風格——兩側剃短，頂部保留自然長度",
+  "h": "b7230e49"
+ },
+ "js.kieut.st-undercut-sub": {
+  "t": "兩側漸層剃短、頂部留長——經典現代",
+  "h": "b16e15c9"
+ },
+ "js.kieut.st-wispy-sub": {
+  "t": "輕柔空氣瀏海——年輕輕盈",
+  "h": "6c6c0591"
+ },
+ "js.kieut.st-wolf-sub": {
+  "t": "分層的輕盈層次——Z 世代個性",
+  "h": "1444c559"
+ },
+ "js.kieut.step-chuan-bi": {
+  "t": "準備圖片與提示詞",
+  "h": "02fe352b"
+ },
+ "js.kieut.step-do-mat": {
+  "t": "以 MediaPipe 測量臉部",
+  "h": "4af85689"
+ },
+ "js.kieut.step-phan-tich": {
+  "t": "分析臉型",
+  "h": "5059a835"
+ },
+ "js.kieut.step-tao-anh": {
+  "t": "正在生成新髮型圖片",
+  "h": "80940ba2"
+ },
+ "js.kieut.thu": {
+  "t": "試試 →",
+  "h": "c1480a0a"
+ },
+ "js.kieut.thu-n": {
+  "t": "試戴：{n}",
+  "h": "a246266d"
+ },
+ "js.kieut.ty-le-rong-cao": {
+  "t": "臉部寬／高比例：{r}——傾向：{s}",
+  "h": "2094599e"
+ },
+ "js.kieut.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
+ },
  "js.kimlau.chip1": {
   "t": "哪一年最適合蓋房？",
   "h": "992ff775"
@@ -8634,6 +9762,334 @@
  "js.maihoa.tuc": {
   "t": "），即 **",
   "h": "52e6128d"
+ },
+ "js.mshm.anh-qua-lon": {
+  "t": "圖片過大（最大 5MB）",
+  "h": "5113c5f3"
+ },
+ "js.mshm.bang-du": {
+  "t": "完整清單（輔助色、建議避開的顏色）與依場合／角色的穿搭指引，收錄於深度分析中。",
+  "h": "06901dd7"
+ },
+ "js.mshm.cat-ao": {
+  "t": "上衣／外套",
+  "h": "84c67299"
+ },
+ "js.mshm.cat-ao-khoac": {
+  "t": "外層外套",
+  "h": "7878fdb1"
+ },
+ "js.mshm.cat-giay": {
+  "t": "鞋子／涼鞋",
+  "h": "d1f9572f"
+ },
+ "js.mshm.cat-phu-kien": {
+  "t": "配件",
+  "h": "f1f0fba9"
+ },
+ "js.mshm.cat-quan": {
+  "t": "褲子／裙子",
+  "h": "84562745"
+ },
+ "js.mshm.cat-tui": {
+  "t": "包包／後背包",
+  "h": "1979c758"
+ },
+ "js.mshm.chip-phoi-do": {
+  "t": "如何依命格色彩搭配服裝？",
+  "h": "3d2ef763"
+ },
+ "js.mshm.chip-phong-van": {
+  "t": "面試時該避開什麼顏色？",
+  "h": "61460b1c"
+ },
+ "js.mshm.chip-vi-sao": {
+  "t": "為什麼我的命格適合這個顏色？",
+  "h": "7ef6e8bc"
+ },
+ "js.mshm.combo-n": {
+  "t": "搭配 {n}",
+  "h": "9769d38a"
+ },
+ "js.mshm.dau-phay": {
+  "t": "，",
+  "h": "d3bc9a37"
+ },
+ "js.mshm.greeting": {
+  "t": "您的本命是 **{h}**。主色：{m}。想進一步了解色彩或穿搭嗎？",
+  "h": "e8cef7c1"
+ },
+ "js.mshm.khong-nhan-duoc-anh": {
+  "t": "未收到結果圖片。",
+  "h": "a16f02df"
+ },
+ "js.mshm.label": {
+  "t": "合命色彩——本命 {h}",
+  "h": "71fc87a5"
+ },
+ "js.mshm.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.mshm.mau-bac": {
+  "t": "銀色",
+  "h": "7386c9c6"
+ },
+ "js.mshm.mau-be": {
+  "t": "米色",
+  "h": "11d1bf27"
+ },
+ "js.mshm.mau-be-dam": {
+  "t": "深米色",
+  "h": "c660f0a6"
+ },
+ "js.mshm.mau-cam": {
+  "t": "橙色",
+  "h": "5e09769d"
+ },
+ "js.mshm.mau-cam-dat": {
+  "t": "陶土橙",
+  "h": "aaa37477"
+ },
+ "js.mshm.mau-chu": {
+  "t": "主色：{m}",
+  "h": "7813be48"
+ },
+ "js.mshm.mau-den": {
+  "t": "黑色",
+  "h": "4d0c0faf"
+ },
+ "js.mshm.mau-do": {
+  "t": "紅色",
+  "h": "2eb7503e"
+ },
+ "js.mshm.mau-hong-phan": {
+  "t": "淡粉色",
+  "h": "0ec650f1"
+ },
+ "js.mshm.mau-hong-tuoi": {
+  "t": "亮粉紅",
+  "h": "74592632"
+ },
+ "js.mshm.mau-kem": {
+  "t": "奶油色",
+  "h": "e52e6c26"
+ },
+ "js.mshm.mau-kem-dam": {
+  "t": "深奶油色",
+  "h": "e42e248c"
+ },
+ "js.mshm.mau-nau-am": {
+  "t": "暖棕色",
+  "h": "e0f4fd1e"
+ },
+ "js.mshm.mau-nau-do": {
+  "t": "紅棕色",
+  "h": "9222313d"
+ },
+ "js.mshm.mau-nau-go": {
+  "t": "木棕色",
+  "h": "24e064f8"
+ },
+ "js.mshm.mau-nau-vang": {
+  "t": "金棕色",
+  "h": "48377d46"
+ },
+ "js.mshm.mau-navy": {
+  "t": "海軍藍",
+  "h": "0229e960"
+ },
+ "js.mshm.mau-tim": {
+  "t": "紫色",
+  "h": "684e5966"
+ },
+ "js.mshm.mau-tim-do": {
+  "t": "紫紅色",
+  "h": "0b78db8f"
+ },
+ "js.mshm.mau-tim-than": {
+  "t": "靛紫色",
+  "h": "7ca4120f"
+ },
+ "js.mshm.mau-trang": {
+  "t": "白色",
+  "h": "9cf5e0eb"
+ },
+ "js.mshm.mau-vang-dat": {
+  "t": "土黃色",
+  "h": "1552080b"
+ },
+ "js.mshm.mau-vang-kim": {
+  "t": "金色",
+  "h": "b441fe1f"
+ },
+ "js.mshm.mau-vang-nhat": {
+  "t": "淺黃色",
+  "h": "14fd960f"
+ },
+ "js.mshm.mau-vang-tuoi": {
+  "t": "亮黃色",
+  "h": "f58c4a57"
+ },
+ "js.mshm.mau-xam-dam": {
+  "t": "深灰色",
+  "h": "01959534"
+ },
+ "js.mshm.mau-xam-kim-loai": {
+  "t": "金屬灰",
+  "h": "6e7d3e23"
+ },
+ "js.mshm.mau-xam-nhat": {
+  "t": "淺灰色",
+  "h": "d8017939"
+ },
+ "js.mshm.mau-xanh-bien": {
+  "t": "海洋藍",
+  "h": "9a3a3414"
+ },
+ "js.mshm.mau-xanh-duong-dam": {
+  "t": "深藍色",
+  "h": "8d89093c"
+ },
+ "js.mshm.mau-xanh-la": {
+  "t": "綠色",
+  "h": "d0e8c4b1"
+ },
+ "js.mshm.mau-xanh-lam-nhat": {
+  "t": "淺藍色",
+  "h": "a72ef9cf"
+ },
+ "js.mshm.mau-xanh-mint": {
+  "t": "薄荷綠",
+  "h": "3607442e"
+ },
+ "js.mshm.mau-xanh-ngoc": {
+  "t": "青綠色",
+  "h": "b8cbaa2e"
+ },
+ "js.mshm.mau-xanh-olive": {
+  "t": "橄欖綠",
+  "h": "2dd139ab"
+ },
+ "js.mshm.mau-xanh-reu": {
+  "t": "苔綠色",
+  "h": "836bccc5"
+ },
+ "js.mshm.mau-xanh-reu-dam": {
+  "t": "深苔綠色",
+  "h": "b49975fe"
+ },
+ "js.mshm.mau-xanh-tim": {
+  "t": "藍紫色",
+  "h": "08e76f57"
+ },
+ "js.mshm.menh-mau-chinh": {
+  "t": "本命 {h}——適合穿的主色：{m}",
+  "h": "9a1a497e"
+ },
+ "js.mshm.menh-quai": {
+  "t": "本命 {h} · 卦 {n} {g}",
+  "h": "da1abf25"
+ },
+ "js.mshm.nam-sinh-khong-hop-le": {
+  "t": "請輸入有效的出生年（1900–2025）",
+  "h": "c628d3be"
+ },
+ "js.mshm.nap-am-line": {
+  "t": "納音：{h} · 依{h}行的主色",
+  "h": "6e1df23d"
+ },
+ "js.mshm.occ-doi-tac": {
+  "t": "會見合作夥伴",
+  "h": "241559f4"
+ },
+ "js.mshm.occ-hang-ngay": {
+  "t": "日常",
+  "h": "c19adb2a"
+ },
+ "js.mshm.occ-hen-ho": {
+  "t": "約會",
+  "h": "c601615d"
+ },
+ "js.mshm.occ-phong-van": {
+  "t": "面試",
+  "h": "0bfbac35"
+ },
+ "js.mshm.phan-tich-that-bai": {
+  "t": "分析失敗",
+  "h": "44b68aa6"
+ },
+ "js.mshm.phan-tich-truoc": {
+  "t": "請先分析色彩。",
+  "h": "10049eff"
+ },
+ "js.mshm.phoi-mau-dua-tren": {
+  "t": "配色依據上方合適的調色盤。",
+  "h": "c4d3c4d3"
+ },
+ "js.mshm.quai-line": {
+  "t": "卦 {n}——{name}（{elem}）",
+  "h": "c5a1c901"
+ },
+ "js.mshm.share-text": {
+  "t": "本命 {h} · 主色：{m}",
+  "h": "d05a5128"
+ },
+ "js.mshm.share-title": {
+  "t": "適合我本命的色彩",
+  "h": "2ba34c9a"
+ },
+ "js.mshm.share-tryon-title": {
+  "t": "適合我本命的穿搭（虛擬試穿）",
+  "h": "cd9fdc43"
+ },
+ "js.mshm.step-chuan-bi": {
+  "t": "依本命準備服裝",
+  "h": "6ae0380a"
+ },
+ "js.mshm.step-tao-anh": {
+  "t": "正在生成服裝圖片",
+  "h": "ba6faaec"
+ },
+ "js.mshm.step-tinh-quai": {
+  "t": "計算卦數與本命納音",
+  "h": "39571eee"
+ },
+ "js.mshm.step-tu-van": {
+  "t": "建議色彩與穿搭",
+  "h": "58244246"
+ },
+ "js.mshm.style-cong-so": {
+  "t": "職場",
+  "h": "ff273e47"
+ },
+ "js.mshm.style-dao-pho": {
+  "t": "逛街",
+  "h": "115c50ac"
+ },
+ "js.mshm.style-sang-trong": {
+  "t": "高雅",
+  "h": "17db9fb4"
+ },
+ "js.mshm.tai-anh-truoc": {
+  "t": "請先上傳圖片。",
+  "h": "733c1fec"
+ },
+ "js.mshm.tranh": {
+  "t": "避開：",
+  "h": "89f38636"
+ },
+ "js.mshm.tryon-label": {
+  "t": "{s} · 本命 {h}",
+  "h": "e69e839c"
+ },
+ "js.mshm.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
+ },
+ "js.mshm.xem-mau-chinh": {
+  "t": "請參考上方的主色。",
+  "h": "95e8229c"
  },
  "js.nav.brand": {
   "t": "明寶紫微斗數",
@@ -11550,6 +13006,194 @@
  "js.paywall.xin-loi-da-co-loi-xay": {
   "t": "抱歉，發生了錯誤",
   "h": "4195c600"
+ },
+ "js.pcol.ban-menh": {
+  "t": "✦ 本命 {h}（{f}）——古法建議的季型：{s}",
+  "h": "cadb88ef"
+ },
+ "js.pcol.chip-phoi-do": {
+  "t": "該如何依色彩季型搭配服裝？",
+  "h": "3a3ed4e0"
+ },
+ "js.pcol.chip-tranh": {
+  "t": "應避開哪些顏色？",
+  "h": "19ab5099"
+ },
+ "js.pcol.chip-vi-sao": {
+  "t": "為什麼我屬於這個色彩季型？",
+  "h": "fd530a4e"
+ },
+ "js.pcol.conf-cao": {
+  "t": "高",
+  "h": "db10c479"
+ },
+ "js.pcol.conf-thap": {
+  "t": "低",
+  "h": "ecd6f14a"
+ },
+ "js.pcol.conf-trung-binh": {
+  "t": "中",
+  "h": "9d324d94"
+ },
+ "js.pcol.day-la-goi-y": {
+  "t": "這是依納音得出的建議，並非從圖片讀取真實膚色的結果——準確的季型、色彩調色盤與服裝建議，收錄於深度分析中。",
+  "h": "25abe372"
+ },
+ "js.pcol.desc-autumn-deep": {
+  "t": "深沉大地色調、豐厚——暖褐膚色、高對比",
+  "h": "90f10d0f"
+ },
+ "js.pcol.desc-autumn-warm": {
+  "t": "黃褐大地色調、深暖——橄欖色／小麥膚色",
+  "h": "9b6a0f54"
+ },
+ "js.pcol.desc-spring-bright": {
+  "t": "明亮清晰的色調、高對比、鮮豔醒目的色彩",
+  "h": "20f039c2"
+ },
+ "js.pcol.desc-spring-warm": {
+  "t": "偏黃的暖亮膚色，明亮清新——蜜桃／金色光澤",
+  "h": "468acee7"
+ },
+ "js.pcol.desc-summer-cool": {
+  "t": "偏冷的粉色調，柔和——帶藍調的粉嫩膚色",
+  "h": "1ed00edd"
+ },
+ "js.pcol.desc-summer-soft": {
+  "t": "冷調偏霧、柔和——帶灰的柔和色彩",
+  "h": "5b194cf9"
+ },
+ "js.pcol.desc-winter-cool": {
+  "t": "高對比冷色調——青白膚色或偏暗的冷膚色",
+  "h": "91dd2746"
+ },
+ "js.pcol.desc-winter-deep": {
+  "t": "深冷色調、對比極高——褐色／偏暗的冷膚色",
+  "h": "ca5cbf23"
+ },
+ "js.pcol.do-tin-cay": {
+  "t": "可信度：{c}",
+  "h": "d9faf072"
+ },
+ "js.pcol.greeting": {
+  "t": "您屬於 **{s}** 季型，底色為 {u}。想進一步了解色彩或穿搭嗎？",
+  "h": "72b706d2"
+ },
+ "js.pcol.lbl-ao": {
+  "t": "上衣",
+  "h": "373c84b7"
+ },
+ "js.pcol.lbl-giay": {
+  "t": "鞋子",
+  "h": "a47dc437"
+ },
+ "js.pcol.lbl-layer": {
+  "t": "外層",
+  "h": "c3f10446"
+ },
+ "js.pcol.lbl-quan-vay": {
+  "t": "褲子／裙子",
+  "h": "879b0cdf"
+ },
+ "js.pcol.loi": {
+  "t": "錯誤",
+  "h": "d2907807"
+ },
+ "js.pcol.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.pcol.loi-phan-tich": {
+  "t": "分析錯誤",
+  "h": "3e06a99e"
+ },
+ "js.pcol.menh-goi-y": {
+  "t": "本命 {h}——古法建議的季型：{s}",
+  "h": "a8bdf4cb"
+ },
+ "js.pcol.nen-tranh": {
+  "t": "建議避開",
+  "h": "4fd3dd20"
+ },
+ "js.pcol.season-autumn-deep": {
+  "t": "深秋型",
+  "h": "576a8bf3"
+ },
+ "js.pcol.season-autumn-warm": {
+  "t": "暖秋型",
+  "h": "1034d9af"
+ },
+ "js.pcol.season-spring-bright": {
+  "t": "亮春型",
+  "h": "eedcebfe"
+ },
+ "js.pcol.season-spring-warm": {
+  "t": "暖春型",
+  "h": "1c006148"
+ },
+ "js.pcol.season-summer-cool": {
+  "t": "冷夏型",
+  "h": "ee7b3719"
+ },
+ "js.pcol.season-summer-soft": {
+  "t": "柔夏型",
+  "h": "3545a106"
+ },
+ "js.pcol.season-winter-cool": {
+  "t": "冷冬型",
+  "h": "bde54243"
+ },
+ "js.pcol.season-winter-deep": {
+  "t": "深冬型",
+  "h": "0f222647"
+ },
+ "js.pcol.share-outfit-text": {
+  "t": "季型 {s}",
+  "h": "f1a309aa"
+ },
+ "js.pcol.share-outfit-title": {
+  "t": "符合我個人色彩的穿搭",
+  "h": "26cbac11"
+ },
+ "js.pcol.share-text": {
+  "t": "季型：{n}（{s}）· 底色：{u}",
+  "h": "d299d1fa"
+ },
+ "js.pcol.share-title": {
+  "t": "我的個人色彩",
+  "h": "07a149e4"
+ },
+ "js.pcol.step-chuan-bi": {
+  "t": "依季型準備穿搭",
+  "h": "23134132"
+ },
+ "js.pcol.step-phan-tich": {
+  "t": "分析膚色與色彩季型",
+  "h": "d712f3c3"
+ },
+ "js.pcol.step-tao-anh": {
+  "t": "正在生成新穿搭圖片",
+  "h": "f192809a"
+ },
+ "js.pcol.step-tinh-menh": {
+  "t": "依出生年計算本命",
+  "h": "6c35f608"
+ },
+ "js.pcol.undertone-cool": {
+  "t": "冷調（Cool）",
+  "h": "83997975"
+ },
+ "js.pcol.undertone-neutral": {
+  "t": "中性（Neutral）",
+  "h": "26af9b58"
+ },
+ "js.pcol.undertone-warm": {
+  "t": "暖調（Warm）",
+  "h": "8e0429c4"
+ },
+ "js.pcol.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
  },
  "js.phongthuy.100-sau-dieu-chinh-co-the": {
   "t": "/100**，調整後可提升至 **",
@@ -19539,6 +21183,130 @@
   "t": "依據測得的 12 項聲學指標（HNR、持續時間、jitter、頻譜重心…）歸類。依五音古法的完整意涵，收錄於深度分析中。",
   "h": "0c3c0a37"
  },
+ "js.thtu.anh-qua-lon": {
+  "t": "圖片過大。",
+  "h": "cb4417d0"
+ },
+ "js.thtu.da-doc-xong-chi-tay-cua": {
+  "t": "已依古法手相學讀完您的掌紋。還想進一步了解什麼嗎？",
+  "h": "0e67099e"
+ },
+ "js.thtu.dang-doc-chi-tay": {
+  "t": "正在解讀掌紋…",
+  "h": "1d4e7200"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang": {
+  "t": "以 MediaPipe Hands 直接從圖片測得——依據您手掌真實地標點得出的手掌形狀。依古法手相的完整解讀，收錄於深度分析中。",
+  "h": "94672af2"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang-vwvq": {
+  "t": "以 MediaPipe Hands 直接從圖片測得。各手指的意涵、2D:4D 比例與各條掌紋，收錄於深度分析中。",
+  "h": "68dd31bc"
+ },
+ "js.thtu.duong-van-menh-noi-len-dieu-gi": {
+  "t": "命運線透露了什麼？",
+  "h": "04b0d761"
+ },
+ "js.thtu.hinh-bau-duc": {
+  "t": "橢圓形",
+  "h": "209cc96b"
+ },
+ "js.thtu.hinh-dai-thon": {
+  "t": "細長形",
+  "h": "36c13178"
+ },
+ "js.thtu.hinh-dang-s": {
+  "t": "形狀：{s}",
+  "h": "b7ac9175"
+ },
+ "js.thtu.hinh-vuong-rong": {
+  "t": "方形／寬闊形",
+  "h": "2114c5c3"
+ },
+ "js.thtu.khong-co-ket-qua": {
+  "t": "沒有結果。",
+  "h": "97fa6f91"
+ },
+ "js.thtu.khong-doc-duoc-anh-nay-vui": {
+  "t": "無法讀取此圖片——請選擇 JPG 或 PNG 圖片。",
+  "h": "32a1faf4"
+ },
+ "js.thtu.khong-nhan-dien-duoc-ban-tay": {
+  "t": "⚠ 未能偵測到手掌。請在與背景對比分明、光線充足的環境下重新拍得更清楚。",
+  "h": "5abad846"
+ },
+ "js.thtu.khong-the-ket-noi": {
+  "t": "無法連線。",
+  "h": "3dc4d8cb"
+ },
+ "js.thtu.khong-the-mo-camera": {
+  "t": "無法開啟相機。",
+  "h": "39a33224"
+ },
+ "js.thtu.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.thtu.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.thtu.ngon-ap-ut": {
+  "t": "無名指",
+  "h": "44dd840f"
+ },
+ "js.thtu.ngon-cai": {
+  "t": "拇指",
+  "h": "aa7ff125"
+ },
+ "js.thtu.ngon-dai-nhat-f": {
+  "t": "最長的手指：{f}",
+  "h": "8a5684eb"
+ },
+ "js.thtu.ngon-giua": {
+  "t": "中指",
+  "h": "b5a038e9"
+ },
+ "js.thtu.ngon-tro": {
+  "t": "食指",
+  "h": "379d7ea9"
+ },
+ "js.thtu.ngon-ut": {
+  "t": "小指",
+  "h": "6a313fb1"
+ },
+ "js.thtu.rong-dai-r": {
+  "t": "寬／長 = {r}",
+  "h": "86f06997"
+ },
+ "js.thtu.tam-dai-chi-la-gi": {
+  "t": "三大指是什麼？",
+  "h": "baef21dd"
+ },
+ "js.thtu.tay-thuan-khac-nhau": {
+  "t": "慣用手與非慣用手有什麼不同？",
+  "h": "10468033"
+ },
+ "js.thtu.thu-tuong": {
+  "t": "手相",
+  "h": "869631da"
+ },
+ "js.thtu.thu-tuong-cua-toi": {
+  "t": "我的手相",
+  "h": "0af7a78d"
+ },
+ "js.thtu.thuong-mat-15-20-giay": {
+  "t": "通常需要 15–20 秒",
+  "h": "087173ee"
+ },
+ "js.thtu.ty-le-rong-dai-long-ban-tay": {
+  "t": "手掌寬／長比例：{r}（{s}）",
+  "h": "e753f592"
+ },
+ "js.thtu.vui-long-chon-file-anh": {
+  "t": "請選擇圖片檔。",
+  "h": "71a61127"
+ },
  "js.toolsrc.data": {
   "t": "以{name}作為衡量基準，並非用於顯示的目錄。",
   "h": "acff5b26"
@@ -19950,6 +21718,402 @@
  "js.topup.xem-lich-su": {
   "t": "查看紀錄",
   "h": "21a19fb0"
+ },
+ "js.tpng.cat-ao": {
+  "t": "上衣",
+  "h": "373c84b7"
+ },
+ "js.tpng.cat-ao-khoac": {
+  "t": "外套",
+  "h": "dee0e8de"
+ },
+ "js.tpng.cat-giay": {
+  "t": "鞋子",
+  "h": "a47dc437"
+ },
+ "js.tpng.cat-phu-kien": {
+  "t": "配件",
+  "h": "f1f0fba9"
+ },
+ "js.tpng.cat-quan": {
+  "t": "褲子／裙子",
+  "h": "879b0cdf"
+ },
+ "js.tpng.chip-diem-nhan": {
+  "t": "哪個點綴色最好？",
+  "h": "6d38e6a5"
+ },
+ "js.tpng.chip-hoa-giai": {
+  "t": "該如何化解？",
+  "h": "1dee5079"
+ },
+ "js.tpng.chip-khac": {
+  "t": "為什麼這一天剋我的命格？",
+  "h": "a98c2e50"
+ },
+ "js.tpng.greeting": {
+  "t": "本命 **{m}**，當日五行 **{n}** —— {r}。想進一步了解色彩或風格嗎？",
+  "h": "36a537dc"
+ },
+ "js.tpng.hanh-n": {
+  "t": "{h}行",
+  "h": "3e50daab"
+ },
+ "js.tpng.label": {
+  "t": "每日穿搭——{r}",
+  "h": "26ec2299"
+ },
+ "js.tpng.loi": {
+  "t": "錯誤",
+  "h": "d2907807"
+ },
+ "js.tpng.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.tpng.loi-phan-tich": {
+  "t": "分析錯誤",
+  "h": "3e06a99e"
+ },
+ "js.tpng.mau-bac": {
+  "t": "銀色",
+  "h": "7386c9c6"
+ },
+ "js.tpng.mau-be": {
+  "t": "米色",
+  "h": "11d1bf27"
+ },
+ "js.tpng.mau-cam": {
+  "t": "橙色",
+  "h": "5e09769d"
+ },
+ "js.tpng.mau-cam-dat": {
+  "t": "陶土橙",
+  "h": "aaa37477"
+ },
+ "js.tpng.mau-den": {
+  "t": "黑色",
+  "h": "4d0c0faf"
+ },
+ "js.tpng.mau-do": {
+  "t": "紅色",
+  "h": "2eb7503e"
+ },
+ "js.tpng.mau-hong": {
+  "t": "粉紅色",
+  "h": "5a43ba9e"
+ },
+ "js.tpng.mau-hong-phan": {
+  "t": "淡粉色",
+  "h": "0ec650f1"
+ },
+ "js.tpng.mau-kem": {
+  "t": "奶油色",
+  "h": "e52e6c26"
+ },
+ "js.tpng.mau-nau": {
+  "t": "棕色",
+  "h": "42ff42d9"
+ },
+ "js.tpng.mau-nau-go": {
+  "t": "木棕色",
+  "h": "24e064f8"
+ },
+ "js.tpng.mau-navy": {
+  "t": "海軍藍",
+  "h": "0229e960"
+ },
+ "js.tpng.mau-nen-mac": {
+  "t": "{r}。適合穿的顏色、建議風格，以及依當日五行的具體穿搭，收錄於深度分析中。",
+  "h": "51d59e76"
+ },
+ "js.tpng.mau-tim": {
+  "t": "紫色",
+  "h": "684e5966"
+ },
+ "js.tpng.mau-tim-do": {
+  "t": "紫紅色",
+  "h": "0b78db8f"
+ },
+ "js.tpng.mau-trang": {
+  "t": "白色",
+  "h": "9cf5e0eb"
+ },
+ "js.tpng.mau-vang": {
+  "t": "黃色",
+  "h": "27d57aed"
+ },
+ "js.tpng.mau-vang-kim": {
+  "t": "金色",
+  "h": "b441fe1f"
+ },
+ "js.tpng.mau-xam-dam": {
+  "t": "深灰色",
+  "h": "01959534"
+ },
+ "js.tpng.mau-xam-nhat": {
+  "t": "淺灰色",
+  "h": "d8017939"
+ },
+ "js.tpng.mau-xanh-duong": {
+  "t": "藍色",
+  "h": "95beb520"
+ },
+ "js.tpng.mau-xanh-la": {
+  "t": "綠色",
+  "h": "d0e8c4b1"
+ },
+ "js.tpng.mau-xanh-lam": {
+  "t": "天藍色",
+  "h": "0537307a"
+ },
+ "js.tpng.mau-xanh-ngoc": {
+  "t": "青綠色",
+  "h": "b8cbaa2e"
+ },
+ "js.tpng.mau-xanh-reu": {
+  "t": "苔綠色",
+  "h": "836bccc5"
+ },
+ "js.tpng.menh-ngay": {
+  "t": "本命 {h} · {c}日",
+  "h": "ac19a8fe"
+ },
+ "js.tpng.ngay-hanh": {
+  "t": "{c}日——五行屬{h}",
+  "h": "6fd10f47"
+ },
+ "js.tpng.rel-binh-hoa": {
+  "t": "同行日 — 平穩順利",
+  "h": "d1971f40"
+ },
+ "js.tpng.rel-menh-khac-ngay": {
+  "t": "命剋日 — 中等日子，需謹慎",
+  "h": "256fb5ff"
+ },
+ "js.tpng.rel-menh-sinh-ngay": {
+  "t": "命生日 — 略有耗損，仍然吉利",
+  "h": "995978d5"
+ },
+ "js.tpng.rel-ngay-khac-menh": {
+  "t": "日剋命 ✦ 需以色彩化解",
+  "h": "f331fca5"
+ },
+ "js.tpng.rel-ngay-sinh-menh": {
+  "t": "日生命 ✦ 極為順利",
+  "h": "81b455cf"
+ },
+ "js.tpng.share-text": {
+  "t": "本命 {m} · {c}日（{n}）—— {r}",
+  "h": "a603ba42"
+ },
+ "js.tpng.share-title": {
+  "t": "適合我今日的穿搭",
+  "h": "36dc7dba"
+ },
+ "js.tpng.share-tryon-title": {
+  "t": "適合我今日的穿搭（虛擬試穿）",
+  "h": "7767c7e3"
+ },
+ "js.tpng.step-chuan-bi": {
+  "t": "依五行準備服裝",
+  "h": "cf955a11"
+ },
+ "js.tpng.step-tao-anh": {
+  "t": "正在生成服裝圖片",
+  "h": "ba6faaec"
+ },
+ "js.tpng.step-tinh": {
+  "t": "計算當日干支與五行關係",
+  "h": "7112616b"
+ },
+ "js.tpng.step-tu-van": {
+  "t": "建議適合當日的穿搭",
+  "h": "86c6bfcc"
+ },
+ "js.tpng.style-hoa-dan": {
+  "t": "柔美花旦風",
+  "h": "c859a2ac"
+ },
+ "js.tpng.tryon-casual": {
+  "t": "休閒",
+  "h": "7b664f70"
+ },
+ "js.tpng.tryon-cong-so": {
+  "t": "職場",
+  "h": "81a4c6c6"
+ },
+ "js.tpng.tryon-dao-pho": {
+  "t": "逛街",
+  "h": "c1f7f4a0"
+ },
+ "js.tpng.tryon-label": {
+  "t": "本命 {h} · {s}",
+  "h": "c91f44b2"
+ },
+ "js.tpng.tryon-sang-trong": {
+  "t": "高雅",
+  "h": "3c6421de"
+ },
+ "js.tpng.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
+ },
+ "js.trdi.chip-mau-son": {
+  "t": "哪種口紅色號適合我的膚色？",
+  "h": "f013cf8c"
+ },
+ "js.trdi.chip-van-khi": {
+  "t": "化妝會如何影響運勢？",
+  "h": "a175f487"
+ },
+ "js.trdi.chip-vi-sao": {
+  "t": "為什麼這種風格適合我？",
+  "h": "7ed2d820"
+ },
+ "js.trdi.do-truc-tiep": {
+  "t": "以 MediaPipe 直接從圖片測得。",
+  "h": "6bca61a6"
+ },
+ "js.trdi.goi-y-menh": {
+  "t": "妝容風格建議會優先選用適合此本命的色調。",
+  "h": "30df970d"
+ },
+ "js.trdi.greeting": {
+  "t": "您的臉型是 **{s}**。想進一步了解哪種妝容風格？",
+  "h": "b80d300f"
+ },
+ "js.trdi.greeting-menh": {
+  "t": "您的臉型是 **{s}**，本命為{h}。想進一步了解哪種妝容風格？",
+  "h": "3a4fb4b5"
+ },
+ "js.trdi.hinh-dai": {
+  "t": "長臉",
+  "h": "67167578"
+ },
+ "js.trdi.hinh-oval": {
+  "t": "鵝蛋臉",
+  "h": "181b45bd"
+ },
+ "js.trdi.hinh-tron-vuong": {
+  "t": "圓臉／方臉",
+  "h": "a30fca34"
+ },
+ "js.trdi.hop-menh": {
+  "t": "合本命",
+  "h": "44069c43"
+ },
+ "js.trdi.label": {
+  "t": "妝容——{s}",
+  "h": "f0eca080"
+ },
+ "js.trdi.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.trdi.loi-phan-tich": {
+  "t": "分析錯誤",
+  "h": "3e06a99e"
+ },
+ "js.trdi.loi-xu-ly-anh": {
+  "t": "圖片處理錯誤",
+  "h": "52fb0d60"
+ },
+ "js.trdi.mat-tuoi-da": {
+  "t": "{s} · {a} · 膚色 {d}",
+  "h": "07bd0f9d"
+ },
+ "js.trdi.menh-n": {
+  "t": "本命 {h}",
+  "h": "e46cbb3b"
+ },
+ "js.trdi.rank-phu-hop": {
+  "t": "推薦 #{n}",
+  "h": "20cdc5b5"
+ },
+ "js.trdi.share-mat": {
+  "t": "臉型 {s}",
+  "h": "04abbf18"
+ },
+ "js.trdi.share-title": {
+  "t": "適合我面相的妝容建議",
+  "h": "c6d0e9a5"
+ },
+ "js.trdi.share-tryon-text": {
+  "t": "試風格：{n}",
+  "h": "4641d81c"
+ },
+ "js.trdi.share-tryon-title": {
+  "t": "我的妝容試戴（虛擬）",
+  "h": "a431ac26"
+ },
+ "js.trdi.st-dark_muse-sub": {
+  "t": "霧感煙燻、冷色調、編輯感個性",
+  "h": "e51b61c7"
+ },
+ "js.trdi.st-glass_skin-sub": {
+  "t": "裸妝感妝容，由內透亮的水光肌",
+  "h": "0c6ac518"
+ },
+ "js.trdi.st-guochao-sub": {
+  "t": "濃烈紅唇、銳利眼線、古典氣質",
+  "h": "2df3d2b1"
+ },
+ "js.trdi.st-hoa-dan-name": {
+  "t": "柔美花旦風",
+  "h": "c859a2ac"
+ },
+ "js.trdi.st-hoa_dan-sub": {
+  "t": "桃粉色、玫瑰腮紅、輕柔婉約",
+  "h": "ee95019a"
+ },
+ "js.trdi.st-j_gyaru-sub": {
+  "t": "放大片感、戲劇感睫毛、鮮明眼線",
+  "h": "8342ee69"
+ },
+ "js.trdi.st-j_sheer-sub": {
+  "t": "透明肌、透明感唇色、侘寂式極簡",
+  "h": "bef5b3e4"
+ },
+ "js.trdi.st-kdrama_glam-sub": {
+  "t": "清晰眼線、大膽唇色、頂級高雅",
+  "h": "f6378d7f"
+ },
+ "js.trdi.st-soft_girl-sub": {
+  "t": "腮紅爆擊、漸層唇、純真光澤",
+  "h": "68ac4e8f"
+ },
+ "js.trdi.step-chuan-bi": {
+  "t": "準備妝容提示詞",
+  "h": "f2303939"
+ },
+ "js.trdi.step-nap-am": {
+  "t": "計算本命納音",
+  "h": "94bf98e8"
+ },
+ "js.trdi.step-phan-tich": {
+  "t": "分析臉部並建議妝容風格",
+  "h": "17ac9e7f"
+ },
+ "js.trdi.step-tao-anh": {
+  "t": "正在生成新妝容圖片",
+  "h": "060bcb1f"
+ },
+ "js.trdi.tam-phong-cach": {
+  "t": "依序排名的 8 種妝容風格、色彩調色盤與直接試戴，收錄於深度分析中。",
+  "h": "d0bfd7a6"
+ },
+ "js.trdi.thu": {
+  "t": "試試 →",
+  "h": "c1480a0a"
+ },
+ "js.trdi.ty-le-rong-cao": {
+  "t": "臉部寬／高比例：{r}——傾向：{s}",
+  "h": "2094599e"
+ },
+ "js.trdi.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
  },
  "js.trochuyen.gio-truoc": {
   "t": "{n} 小時前",
@@ -20914,6 +23078,218 @@
  "js.xlg.thang-n": {
   "t": "{n} 月",
   "h": "4dd9659f"
+ },
+ "khis.anh-chan-dung": {
+  "t": "人像照片",
+  "h": "13ef800c"
+ },
+ "khis.anh-chi-gui-toi-may-chu": {
+  "t": "圖片僅傳送至伺服器進行分析，不會儲存在伺服器上。請在上午或傍晚拍攝，不化妝、不加濾鏡。",
+  "h": "ee45336b"
+ },
+ "khis.chon-anh-khac": {
+  "t": "選擇其他圖片",
+  "h": "0c82c787"
+ },
+ "khis.chup-anh-khuon-mat-he-thong": {
+  "t": "請拍攝臉部照片——系統依《麻衣神相》以印堂、五嶽論氣色，預測未來 1–3 個月的運勢。",
+  "h": "1722144a"
+ },
+ "khis.chup-anh-trong-24-gio": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>24 小時內<br>拍攝</span>",
+  "h": "1e9673f3"
+ },
+ "khis.chup-mot-tam-anh-mat-ro": {
+  "t": "請在最近 24 小時內拍一張臉部清晰的照片。系統會分析印堂、五嶽，預測未來 1–3 個月的運勢，並提供養氣之道。",
+  "h": "912812d7"
+ },
+ "khis.dang-quan-sat-khi-sac-tu": {
+  "t": "正在從您的圖片觀察氣色——請稍候約 30 秒…<br><span style=\"font-size:12px;color:var(--text-lt)\">正在分析印堂與五嶽五個區域的氣色。</span>",
+  "h": "f82ea2fa"
+ },
+ "khis.do-an-duong-ngu-nhac": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sunrise\"></span><span>測量印堂、<br>五嶽</span>",
+  "h": "c8eb70da"
+ },
+ "khis.du-bao-van-khi-1-3": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>未來 1–3 個月<br>運勢預測</span>",
+  "h": "4a1cf555"
+ },
+ "khis.jpg-png-toi-da-10mb-chup": {
+  "t": "JPG、PNG——最大 10MB · 請於 24 小時內拍攝",
+  "h": "3b51d9fa"
+ },
+ "khis.khi-sac": {
+  "t": "氣色",
+  "h": "e1205bcd"
+ },
+ "khis.khi-sac-luan": {
+  "t": "氣色解讀",
+  "h": "95b743c6"
+ },
+ "khis.khi-sac-tren-guong-mat-thay": {
+  "t": "臉上的氣色，會在運勢真正改變之前先行改變——古人比任何其他徵兆都更早讀出這一點。上傳一張近期拍攝的臉部照片，即可獲得未來 1–3 個月的運勢解讀。",
+  "h": "b8d7084d"
+ },
+ "khis.khi-sac-tu-vi-minh-bao": {
+  "t": "氣色——明寶紫微斗數",
+  "h": "3bb0e032"
+ },
+ "khis.khi-sac-van-khi-1-3": {
+  "t": "<b>氣色</b><span>由印堂與五嶽看未來 1–3 個月的運勢 — <span data-tvp-price=\"khi-sac\">…</span> 兩</span>",
+  "h": "460ed941"
+ },
+ "khis.luan-khi-sac-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sunrise\"></span><b id=\"analyzeBtnLabel\">解讀氣色 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"khi-sac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"khi-sac\">…</span> 兩)</span></small>",
+  "h": "d256b1ce"
+ },
+ "khis.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"khi-sac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"khi-sac\">…</span> 兩)</span>",
+  "h": "212bf76e"
+ },
+ "khis.nhan-de-chon-anh-hoac-keo": {
+  "t": "點擊選擇圖片，或拖放到這裡",
+  "h": "988cbe04"
+ },
+ "khis.xem-anh-khac": {
+  "t": "看其他圖片",
+  "h": "c3d65ffa"
+ },
+ "khis.xem-khi-sac": {
+  "t": "看氣色",
+  "h": "7863a81d"
+ },
+ "kieut.anh-sang-tu-nhien-deu": {
+  "t": "✓ 自然、均勻的光線",
+  "h": "7f81d51a"
+ },
+ "kieut.chon-gioi-tinh-va-tai-len": {
+  "t": "請選擇性別並上傳一張臉部清晰的圖片。系統會分析臉型，並直接合成到圖片上試戴。您會得到合適的髮型、眼鏡建議，以及試戴後的圖片。",
+  "h": "5c22b94e"
+ },
+ "kieut.chup-anh-khuon-mat-he-thong": {
+  "t": "請拍攝臉部照片——系統會分析臉型，並依相學建議合適的髮型。髮型可直接在照片上試戴。",
+  "h": "fd003738"
+ },
+ "kieut.doi-anh-khac": {
+  "t": "✕ 更換圖片",
+  "h": "d058264f"
+ },
+ "kieut.doi-mu-doi-khan-che-toc": {
+  "t": "✗ 戴帽子或圍巾遮住頭髮",
+  "h": "a40d8fd8"
+ },
+ "kieut.hinh-dang-khuon-mat": {
+  "t": "臉型",
+  "h": "20dd1d13"
+ },
+ "kieut.huy": {
+  "t": "取消",
+  "h": "33639e92"
+ },
+ "kieut.ket-qua": {
+  "t": "結果",
+  "h": "c9f95514"
+ },
+ "kieut.kieu-kinh-phu-hop-theo-cau": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> 適合臉部結構的眼鏡",
+  "h": "39d8292c"
+ },
+ "kieut.kieu-toc": {
+  "t": "<span class=\"ic\" data-icon=\"scissors\"></span> 髮型",
+  "h": "7d47a3d3"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong": {
+  "t": "適合面相的髮型與眼鏡——明寶紫微斗數",
+  "h": "704b6aa7"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-v1r6": {
+  "t": "<b>適合面相的髮型與眼鏡</b><span>分析臉型、建議髮型，並直接在照片上試戴</span>",
+  "h": "745fe887"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-x53w": {
+  "t": "適合面相的髮型與眼鏡",
+  "h": "a6dff7d5"
+ },
+ "kieut.kinh-mat": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> 眼鏡",
+  "h": "508d6f59"
+ },
+ "kieut.loi-khuyen": {
+  "t": "<strong><span class=\"ic\" data-icon=\"message-circle\"></span> 建議：</strong><span id=\"tipText\"></span>",
+  "h": "25976b6b"
+ },
+ "kieut.nghieng-mat-nhieu": {
+  "t": "✗ 臉部明顯傾斜",
+  "h": "9d537acf"
+ },
+ "kieut.nguoc-sang-toi": {
+  "t": "✗ 逆光、太暗",
+  "h": "97a94265"
+ },
+ "kieut.nhan-tuong-hoc-phuong-dong-khong": {
+  "t": "東方相學不只論命運，也依五行（金、木、水、火、土）區分臉型，每一行對應一種特有的輪廓。這套分類被用來建議與臉部協調的髮型與妝容。",
+  "h": "bff2f554"
+ },
+ "kieut.nhin-thang-vao-camera-dam-bao": {
+  "t": "請直視鏡頭，確保光線充足，並讓臉部佔滿大部分畫面。",
+  "h": "d5f2b4f9"
+ },
+ "kieut.phan-tich-5s-thu-kieu-25s": {
+  "t": "分析約 5 秒 · 試戴約 25 秒",
+  "h": "d75a8d73"
+ },
+ "kieut.phan-tich-anh-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 分析其他圖片",
+  "h": "727c28a0"
+ },
+ "kieut.phan-tich-khuon-mat-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 臉型分析與風格建議——<span data-tvp-price=\"kieu-toc-phan-tich\">…</span> 兩",
+  "h": "7ce5c0fd"
+ },
+ "kieut.preview-anh": {
+  "t": "圖片預覽",
+  "h": "6bc7c7e2"
+ },
+ "kieut.quyen-rieng-tu-anh-chi-gui": {
+  "t": "<strong>隱私：</strong>圖片僅傳送至伺服器進行分析，不會儲存在我們的伺服器上。Replicate 處理後傳回結果圖片，不會長期保存。",
+  "h": "5d8fcc8b"
+ },
+ "kieut.sau-khi-thu": {
+  "t": "試戴後",
+  "h": "c3de1d39"
+ },
+ "kieut.tai-anh-ket-qua": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 下載結果圖片",
+  "h": "5f15ca5b"
+ },
+ "kieut.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 上傳圖片",
+  "h": "633baad5"
+ },
+ "kieut.tat-ca-kieu-toc-la-phu": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 所有髮型——<span class=\"ic\" data-icon=\"star\"></span> 為最適合您面相的選擇",
+  "h": "8a472eaa"
+ },
+ "kieut.thang-mat-chinh-dien": {
+  "t": "✓ 端正、正面朝前",
+  "h": "7a6bfbf8"
+ },
+ "kieut.thay-ro-tu-tran-den-cam": {
+  "t": "✓ 從額頭到下巴都清晰可見",
+  "h": "4ac86958"
+ },
+ "kieut.thu-kieu-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 試其他風格",
+  "h": "0054a608"
+ },
+ "kieut.thu-tren-anh": {
+  "t": "<span class=\"ic\" id=\"tryonTitleIcon\"></span> <span id=\"tryonTitleText\">在照片上試戴</span>",
+  "h": "586df119"
+ },
+ "kieut.ton-tien-lam-toc-doi-kinh": {
+  "t": "花錢做了頭髮、換了眼鏡，卻還是覺得哪裡不對——問題有時不在品味，而在於從沒在真正去做之前先試戴過。上傳人像照片，立即看看哪種風格適合您的面相。",
+  "h": "b6de26af"
  },
  "kimlau.bang-tra-20-nam-toi": {
   "t": "未來20年<br>查詢表",
@@ -22027,6 +24403,110 @@
   "t": "查看命盤與解讀 →",
   "h": "95889730"
  },
+ "mshm.anh-chup-thang-nguoi-du-sang": {
+  "t": "正面全身、光線充足 · JPG/PNG",
+  "h": "fe4086d9"
+ },
+ "mshm.bang-mau-theo-menh": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 依本命的調色盤",
+  "h": "75158994"
+ },
+ "mshm.chi-phi-luong": {
+  "t": "<span>費用：<strong><span data-tvp-price=\"mau-sac-hop-menh\">…</span> 兩</strong></span>",
+  "h": "72c219ac"
+ },
+ "mshm.chon-phong-cach-trang-phuc": {
+  "t": "選擇服裝風格：",
+  "h": "b115ee23"
+ },
+ "mshm.dao-pho": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> 逛街",
+  "h": "5a035e78"
+ },
+ "mshm.goi-y-phoi-do-hoan-chinh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 完整穿搭建議",
+  "h": "233b565f"
+ },
+ "mshm.huong-dan-trang-phuc-chi-tiet": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 服裝詳細指引",
+  "h": "68e382ef"
+ },
+ "mshm.lam-an-e-am-tai-loc": {
+  "t": "生意清淡、財運不聚，卻從沒想過每天穿的、用的顏色，是否正與本命相剋。輸入出生年，立即獲得應該使用與應該避開的顏色清單。",
+  "h": "fe0800d1"
+ },
+ "mshm.mau-chinh-tot-nhat": {
+  "t": "✓ 主色——最佳",
+  "h": "d169b014"
+ },
+ "mshm.mau-nen-tranh": {
+  "t": "✗ 建議避開的顏色",
+  "h": "adc4005c"
+ },
+ "mshm.mau-phu-chap-nhan-duoc": {
+  "t": "◎ 輔助色——可接受",
+  "h": "5679d14e"
+ },
+ "mshm.mau-sac-hop-menh": {
+  "t": "合命色彩",
+  "h": "64b3b887"
+ },
+ "mshm.mau-sac-hop-menh-tu-van": {
+  "t": "<b>合命色彩</b><span>依五行納音與八宅建議服裝顏色，並直接在照片上試穿</span>",
+  "h": "764edb0c"
+ },
+ "mshm.mau-sac-hop-menh-tu-vi": {
+  "t": "合命色彩——明寶紫微斗數",
+  "h": "d1cab1d9"
+ },
+ "mshm.mau-theo-dip": {
+  "t": "<span class=\"ic\" data-icon=\"calendar\"></span> 依場合的色彩",
+  "h": "193da2e8"
+ },
+ "mshm.meo-dac-biet-theo-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 依本命的特別小訣竅",
+  "h": "ec862b7f"
+ },
+ "mshm.ngu-hanh-nap-am-gan-moi": {
+  "t": "納音五行在六十甲子中為每個出生年指定一個專屬的本命，八宅則再考量方位與空間因素。結合這兩套體系，古人推導出與一個人本命相生或相剋的顏色與物品。",
+  "h": "245a2b78"
+ },
+ "mshm.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "請輸入出生年與性別。系統會計算卦數，再與五行色彩對照表比對。您會得到合命的調色盤、各場合的色彩，以及穿搭建議。",
+  "h": "9b015181"
+ },
+ "mshm.sang-trong": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 高雅",
+  "h": "e0db35aa"
+ },
+ "mshm.tai-anh-cua-ban-len": {
+  "t": "上傳您的照片",
+  "h": "1444e1ba"
+ },
+ "mshm.tai-sao-nen-tranh-nhung-mau": {
+  "t": "⚠ 為什麼要避開這些顏色？",
+  "h": "d3b71bb0"
+ },
+ "mshm.thong-tin-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 本命資訊",
+  "h": "0a614b1f"
+ },
+ "mshm.thu-trang-phuc-theo-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 試穿合命服裝 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"trang-phuc-tryon\">…</span> 兩／次</span>",
+  "h": "f74ca71d"
+ },
+ "mshm.tu-van-mau-sac-trang-phuc": {
+  "t": "依五行納音，建議合本命的服裝顏色——上衣、褲子、鞋子、包包、配件。並提供各場合的完整穿搭建議。",
+  "h": "d55c587d"
+ },
+ "mshm.xem-lai": {
+  "t": "← 重看",
+  "h": "e2aaadb4"
+ },
+ "mshm.xem-mau-sac-hop-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 查看合命色彩——<span data-tvp-price=\"mau-sac-hop-menh\">…</span> 兩",
+  "h": "85a1dcbd"
+ },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">輸入出生年</span>",
   "h": "ecce406c"
@@ -22742,6 +25222,162 @@
  "paysuc.xac-nhan-thanh-toan-tu-vi": {
   "t": "付款確認 — 明寶紫微斗數",
   "h": "b7b66e97"
+ },
+ "pcol.anh-cua-ban": {
+  "t": "您的照片",
+  "h": "e41a257b"
+ },
+ "pcol.anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 臉部照片",
+  "h": "553ce737"
+ },
+ "pcol.anh-sang-tu-nhien-ban-ngay": {
+  "t": "白天的自然光 · 不加濾鏡、不化妝<br>需清楚呈現膚色、不要過曝",
+  "h": "4cff1a71"
+ },
+ "pcol.anh-sang-tu-nhien-tot-nhat": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"sun\"></span> 自然光最佳</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> 不加色彩濾鏡</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> 素顏</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"camera\"></span> 近距離拍、拍清楚肌膚</span>",
+  "h": "30e85f5e"
+ },
+ "pcol.bang-mau-ca-nhan": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 您的專屬調色盤",
+  "h": "eda62269"
+ },
+ "pcol.celeb-cung-tong-mau": {
+  "t": "<span class=\"ic\" data-icon=\"star\"></span> <strong>同色調的名人：</strong><span id=\"celebInspo\">—</span>",
+  "h": "3b09c33a"
+ },
+ "pcol.chon-style": {
+  "t": "選擇風格",
+  "h": "92f6c1b3"
+ },
+ "pcol.chup-anh-toan-than": {
+  "t": "拍攝全身照",
+  "h": "3269c13d"
+ },
+ "pcol.chup-hoac-chon-anh-khuon-mat": {
+  "t": "拍攝或選擇臉部照片",
+  "h": "93732afc"
+ },
+ "pcol.cong-so": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 職場",
+  "h": "2a18c4c4"
+ },
+ "pcol.cong-so-li34": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 職場",
+  "h": "57f12434"
+ },
+ "pcol.dien-do-dung-mot-ma-van": {
+  "t": "穿著流行的衣服，卻仍被說看起來疲憊、氣色黯沉——也許您還不知道自己屬於哪個色彩季型。上傳人像照片，立即看看在真實照片上的合成效果。",
+  "h": "d671ee98"
+ },
+ "pcol.goi-y-trang-phuc-theo-season": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 依季型的穿搭建議",
+  "h": "dc3ddd6e"
+ },
+ "pcol.gong-kinh": {
+  "t": "鏡框",
+  "h": "9e539d7d"
+ },
+ "pcol.hang-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 日常",
+  "h": "e45465a4"
+ },
+ "pcol.hang-ngay-dbs5": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 日常",
+  "h": "55d92049"
+ },
+ "pcol.kim-loai": {
+  "t": "金屬",
+  "h": "8ff50d1f"
+ },
+ "pcol.kim-loai-phu-kien": {
+  "t": "<span class=\"ic\" data-icon=\"gem\"></span> 金屬與配件",
+  "h": "90e92f92"
+ },
+ "pcol.ly-do": {
+  "t": "理由",
+  "h": "0cbf3763"
+ },
+ "pcol.mau-ao-so-mi": {
+  "t": "襯衫顏色",
+  "h": "870c2997"
+ },
+ "pcol.mau-hop-lam-sang-noi-bat": {
+  "t": "✓ 適合的顏色——讓臉龐明亮突出",
+  "h": "b47aaef5"
+ },
+ "pcol.mau-nen-tranh-lam-xin-toi": {
+  "t": "✗ 建議避開的顏色——使膚色黯沉",
+  "h": "190a8061"
+ },
+ "pcol.mau-toc": {
+  "t": "髮色",
+  "h": "2a321f26"
+ },
+ "pcol.nam-sinh-tuy-chon-ket-hop": {
+  "t": "出生年（選填——結合本命）",
+  "h": "a6c5911c"
+ },
+ "pcol.personal-color": {
+  "t": "個人色彩",
+  "h": "52515e4c"
+ },
+ "pcol.personal-color-phan-tich-mau-sac": {
+  "t": "個人色彩（Personal Color）分析，是將膚色、髮色與瞳色歸類為「春、夏、秋、冬」色彩季型的方法，依據西方配色理論，在韓國、日本的時尚與美妝領域被廣泛應用。每個季型都對應一組最適合的服裝與妝容調色盤。",
+  "h": "4d195af6"
+ },
+ "pcol.personal-color-phan-tich-undertone-seaso": {
+  "t": "<b>個人色彩</b><span>分析底色與色彩季型，建議穿搭並直接在照片上試穿</span>",
+  "h": "1946e328"
+ },
+ "pcol.personal-color-tu-vi-minh-bao": {
+  "t": "個人色彩——明寶紫微斗數",
+  "h": "9b10e278"
+ },
+ "pcol.phan-tich-personal-color-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 分析個人色彩——<span data-tvp-price=\"personal-color\">…</span> 兩",
+  "h": "cfa46f2a"
+ },
+ "pcol.phan-tich-undertone-va-personal-color": {
+  "t": "分析底色與個人色彩季型——建議最能讓臉龐明亮的上衣顏色、髮色與配件。並結合五行古法。",
+  "h": "69b0927d"
+ },
+ "pcol.su-kien": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 活動",
+  "h": "f4429e62"
+ },
+ "pcol.su-kien-cbgc": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 活動",
+  "h": "f80867ad"
+ },
+ "pcol.tai-len-mot-tam-anh-chan": {
+  "t": "請上傳一張臉部清晰、自然光下足夠明亮的人像照片。系統會分析膚色，並直接在照片上試色。您會得到自己的色彩季型、適合與應避開的調色盤，以及試穿後的圖片。",
+  "h": "f645c739"
+ },
+ "pcol.thu-lai": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 再試一次",
+  "h": "66e7a368"
+ },
+ "pcol.thu-trang-phuc-luong-lan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 試穿服裝 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px\"><span data-tvp-price=\"personal-color-tryon\">…</span> 兩／次</span>",
+  "h": "0b55d845"
+ },
+ "pcol.thu-trang-phuc-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 立即試穿服裝",
+  "h": "92e398a6"
+ },
+ "pcol.tip-ap-dung-ngay": {
+  "t": "✦ 立即可用的小訣竅",
+  "h": "236e351f"
+ },
+ "pcol.upload-anh-toan-than-he-thong": {
+  "t": "上傳全身照 → 系統會把服裝換成符合您季型 <strong id=\"tryonSeasonLabel\"></strong> 的顏色",
+  "h": "6403994e"
+ },
+ "pcol.vd-1992": {
+  "t": "例：1992",
+  "h": "b50ab05e"
  },
  "phongthuy.1-ban-menh-thong-tin-phong": {
   "t": "<span class=\"pt-num\">1</span> 本命與房間資料",
@@ -24655,6 +27291,90 @@
   "t": "查看範例 →",
   "h": "ba3671b1"
  },
+ "thtu.1-tai-anh-ban-tay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">上傳手掌圖片</span>",
+  "h": "0c95364a"
+ },
+ "thtu.anh-chi-gui-toi-may-chu": {
+  "t": "圖片僅傳送至伺服器進行分析，不會儲存在伺服器上。請將手掌攤平、掌心向上，並在光線充足處拍攝。",
+  "h": "9007a9b3"
+ },
+ "thtu.ban-tay-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"hand\"></span> 已偵測到手掌",
+  "h": "720bc996"
+ },
+ "thtu.chi-tuong-hoc-phuong-dong-la": {
+  "t": "東方手相學是依據手掌上的主要線紋與周圍的掌丘，來推斷性格、事業與運勢的學問。它是傳統相學體系中獨立的一支，與面相並行。",
+  "h": "f4eb23c1"
+ },
+ "thtu.chup-va-tai-mot-tam-anh": {
+  "t": "請拍攝或上傳一張手掌清晰的圖片。系統依五行形相分析掌紋，解讀三大紋、命運線、掌丘與手指。",
+  "h": "ecabc37d"
+ },
+ "thtu.do-luong-mediapipe": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> MediaPipe 測量",
+  "h": "b51ea8c8"
+ },
+ "thtu.do-tam-dai-chi-duong-van": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hand\"></span><span>測量三大指、<br>命運線</span>",
+  "h": "91a1d8ca"
+ },
+ "thtu.dung-tay-thuan-de-xem-van": {
+  "t": "請用<strong>慣用手</strong>來看目前的運勢",
+  "h": "0fd522f1"
+ },
+ "thtu.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG、PNG、WebP——最大 5MB · 請拍攝手掌，並清楚拍到掌紋",
+  "h": "757ec708"
+ },
+ "thtu.keo-tha-anh-long-ban-tay": {
+  "t": "將手掌圖片拖放到這裡，或點擊選擇",
+  "h": "8281c1d6"
+ },
+ "thtu.long-ban-tay-luu-lai-dau": {
+  "t": "手掌留下了一路走來的痕跡——事業、感情、健康，都在掌上留下各自的紋路。拍下手掌，即可獲得依五行形相的解讀。",
+  "h": "75a0d71c"
+ },
+ "thtu.luan-theo-ngu-hanh-hinh-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依五行形相<br>解讀</span>",
+  "h": "afdecc3a"
+ },
+ "thtu.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> 兩)</span>",
+  "h": "21fe0a1c"
+ },
+ "thtu.phan-tich-thu-tuong-hoc": {
+  "t": "手相學分析",
+  "h": "f33d42ad"
+ },
+ "thtu.phan-tich-thu-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hand\"></span><b id=\"analyzeBtnLabel\">分析手相 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> 兩)</span></small>",
+  "h": "527662b0"
+ },
+ "thtu.tai-anh-long-ban-tay": {
+  "t": "上傳手掌圖片",
+  "h": "4d287ee7"
+ },
+ "thtu.tai-hoac-chup-anh-long-ban": {
+  "t": "上傳或拍攝手掌圖片——系統依東西方古法分析手相：三大指、命運線與各個掌丘。",
+  "h": "1f98998a"
+ },
+ "thtu.thu-tuong": {
+  "t": "手相",
+  "h": "869631da"
+ },
+ "thtu.thu-tuong-co-phap-dong-tay": {
+  "t": "東西古法手相",
+  "h": "cce8e613"
+ },
+ "thtu.thu-tuong-tu-vi-minh-bao": {
+  "t": "手相——明寶紫微斗數",
+  "h": "e64f49ab"
+ },
+ "thtu.thu-tuong-xem-chi-tay-theo": {
+  "t": "<b>手相</b><span>依古法看掌紋 — <span data-tvp-price=\"thu-tuong\">…</span> 兩</span>",
+  "h": "7461fe05"
+ },
  "topup.ban-dang-mo-khoa": {
   "t": "您正在解鎖…",
   "h": "a288081b"
@@ -24866,6 +27586,194 @@
  "topup.xem-lai-ket-qua-co-bi": {
   "t": "重新查看結果會再扣兩嗎？",
   "h": "64b49a22"
+ },
+ "tpng.anh-chup-toan-than-hoac-nua": {
+  "t": "全身或半身照片 · JPG/PNG",
+  "h": "17435ed7"
+ },
+ "tpng.co-ngay-an-mac-chin-chu": {
+  "t": "有些日子穿得再整齊也不順，有些日子隨性穿反而一帆風順——每天的運勢都不同。輸入出生年，立即獲得適合今天的顏色與穿搭風格。",
+  "h": "6350ffd2"
+ },
+ "tpng.diem-nhan": {
+  "t": "◎ 點綴",
+  "h": "a95e46c4"
+ },
+ "tpng.du-lich": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> 旅行",
+  "h": "d7d6e7ed"
+ },
+ "tpng.goi-y-trang-phuc-cu-the": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 具體穿搭建議",
+  "h": "d9e6894d"
+ },
+ "tpng.hanh-ngay": {
+  "t": "當日五行",
+  "h": "f96db196"
+ },
+ "tpng.hen-ho": {
+  "t": "<span class=\"ic\" data-icon=\"heart\"></span> 約會",
+  "h": "398a0192"
+ },
+ "tpng.kinh-doanh": {
+  "t": "<span class=\"ic\" data-icon=\"handshake\"></span> 商務",
+  "h": "5e9fdd61"
+ },
+ "tpng.mau-sac-hop-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 適合當日的色彩",
+  "h": "e47839c0"
+ },
+ "tpng.meo-co-phap": {
+  "t": "<strong>✦ 古法小訣竅</strong> <span id=\"tipText\">—</span>",
+  "h": "cd8f1791"
+ },
+ "tpng.muc-dich-chon-1": {
+  "t": "目的（選一項）",
+  "h": "a7f0975c"
+ },
+ "tpng.nen-mac": {
+  "t": "✓ 適合穿",
+  "h": "4d634b8d"
+ },
+ "tpng.nen-tranh": {
+  "t": "✗ 建議避開",
+  "h": "b4981595"
+ },
+ "tpng.ngay-di-duong-lich": {
+  "t": "出門日期（國曆）",
+  "h": "dfc6af38"
+ },
+ "tpng.nhap-nam-sinh-gioi-tinh-ngay": {
+  "t": "請輸入出生年、性別、想穿搭的日期與出門目的。系統會把當日運勢與您的本命對照。您會得到適合穿的顏色、建議避開的顏色，以及具體的穿搭建議。",
+  "h": "737914fb"
+ },
+ "tpng.phong-cach": {
+  "t": "風格：",
+  "h": "62e2075f"
+ },
+ "tpng.phong-cach-goi-y": {
+  "t": "✦ 建議風格",
+  "h": "b9a77fc8"
+ },
+ "tpng.phong-van": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 面試",
+  "h": "0f6621da"
+ },
+ "tpng.thong-tin": {
+  "t": "<span class=\"ic\" data-icon=\"calendar\"></span> 資訊",
+  "h": "fb81e21c"
+ },
+ "tpng.thu-trang-phuc-luong-lan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 試穿服裝 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px\"><span data-tvp-price=\"trang-phuc-tryon\">…</span> 兩／次</span>",
+  "h": "a56af403"
+ },
+ "tpng.thuong-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 日常",
+  "h": "f84f5bc4"
+ },
+ "tpng.trang-phuc-theo-ngay": {
+  "t": "每日穿搭",
+  "h": "6cfe1c1e"
+ },
+ "tpng.trang-phuc-theo-ngay-can-chi": {
+  "t": "<b>每日穿搭</b><span>當日干支 × 本命納音——適合出門當日的色彩與風格</span>",
+  "h": "4c8d4580"
+ },
+ "tpng.trang-phuc-theo-ngay-tu-vi": {
+  "t": "每日穿搭——明寶紫微斗數",
+  "h": "654b038b"
+ },
+ "tpng.tu-van-mau-sac-trang-phuc": {
+  "t": "依當日干支與本命建議服裝色彩——五行納音古法。",
+  "h": "dd5ad2b6"
+ },
+ "tpng.xem-trang-phuc-hop-ngay-luong": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 查看適合當日的穿搭——<span data-tvp-price=\"trang-phuc-theo-ngay\">…</span> 兩",
+  "h": "589f0801"
+ },
+ "trdi.anh-ro-mat-anh-sang-du": {
+  "t": "臉部清晰、光線充足、不戴眼鏡的照片",
+  "h": "68ec19ab"
+ },
+ "trdi.bang-mau-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 建議調色盤",
+  "h": "d62e715b"
+ },
+ "trdi.chup-hoac-tai-anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 拍攝或上傳臉部照片",
+  "h": "781a5bfa"
+ },
+ "trdi.loi-khuyen-co-phap": {
+  "t": "<strong>✦ 古法建議</strong> <span id=\"tipText\">—</span>",
+  "h": "0417547e"
+ },
+ "trdi.ma-hong": {
+  "t": "腮紅",
+  "h": "21b3e53a"
+ },
+ "trdi.mat": {
+  "t": "眼",
+  "h": "5e87cc74"
+ },
+ "trdi.moi": {
+  "t": "唇",
+  "h": "299ea53e"
+ },
+ "trdi.nam-sinh-tuy-chon": {
+  "t": "出生年（選填）",
+  "h": "82f3a240"
+ },
+ "trdi.nap-am": {
+  "t": "納音",
+  "h": "006a48d6"
+ },
+ "trdi.nhin-nguoi-khac-trang-diem-ma": {
+  "t": "看別人化妝總是很出眾，自己卻怎麼化都覺得每次出門不夠有自信。上傳人像照片，立即獲得適合臉型的風格建議與試戴圖片。",
+  "h": "27d407e0"
+ },
+ "trdi.phan-tich-phong-cach-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 分析風格——<span data-tvp-price=\"trang-diem-phan-tich\">…</span> 兩",
+  "h": "5e1ca3e2"
+ },
+ "trdi.phan-tich-tuong-mat-theo-co": {
+  "t": "依古法分析面相——建議適合您本命與相貌的亞洲妝容風格。",
+  "h": "30eda66e"
+ },
+ "trdi.phong-cach-makeup-phu-hop-nhan": {
+  "t": "✦ 適合的妝容風格——點選「試試 →」查看結果",
+  "h": "25e2d0d8"
+ },
+ "trdi.tai-anh": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 下載圖片",
+  "h": "a343e31b"
+ },
+ "trdi.tai-len-mot-tam-anh-chan": {
+  "t": "請上傳一張臉部清晰的人像照片。系統會分析臉部，並直接在照片上試戴妝容。您會得到合適的妝容風格、唇／眼／頰的調色盤，以及試戴後的圖片。",
+  "h": "c8c9461c"
+ },
+ "trdi.thu-lai": {
+  "t": "↺ 再試一次",
+  "h": "a1d342d1"
+ },
+ "trdi.thu-trang-diem": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 試戴妝容——<span id=\"tryonStyleName\"></span>",
+  "h": "cd545d92"
+ },
+ "trdi.trang-diem": {
+  "t": "妝容",
+  "h": "b67e6b3f"
+ },
+ "trdi.trang-diem-phan-tich-tuong-mat": {
+  "t": "<b>妝容</b><span>依古法分析面相，建議妝容風格，並直接在照片上試戴</span>",
+  "h": "132106df"
+ },
+ "trdi.trang-diem-tu-vi-minh-bao": {
+  "t": "妝容——明寶紫微斗數",
+  "h": "10926a7a"
+ },
+ "trdi.tuong-mat": {
+  "t": "面相",
+  "h": "424915c5"
  },
  "trochuyen.chua-co-hoi-thoai-nao-bam": {
   "t": "還沒有任何對話。<br>按上方的「新提問」，或打開任一工具向老師提問。",
