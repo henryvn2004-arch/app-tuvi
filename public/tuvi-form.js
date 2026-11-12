@@ -25,6 +25,14 @@
 // của trang ⇒ khác URL ⇒ chạy lại file) KHÔNG được thay closure đang giữ
 // `_updaters` của các form đã vẽ — giữ bản đã có nếu nó cùng thế hệ (có `_noiSinh`).
 window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviForm : (() => {
+  // i18n (docs/i18n/QUY-UOC.md): T(khoá, chữViệt, {biến}) CHỈ để HIỂN THỊ. Giá trị gửi server (value="nam"/"nu", họ tên, số) giữ nguyên.
+  const T = (k, d, v) => {
+    const I = window.I18n;
+    if (I && I.tv) return I.tv(k, d, v);
+    return v ? String(d).replace(/\{(\w+)\}/g, (x, n) => (v[n] !== undefined ? v[n] : x)) : d;
+  };
+  // Địa chi do ENGINE trả (khoá tra) → hiển thị qua TuviGlossary (W15); không có thì chữ gốc.
+  const G = (kind, v) => { const g = window.TuviGlossary; return g && v ? g.t(kind, v) : v; };
   const CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
   const _updaters = {}; // prefix → update fn
   let _introShown = false; // renderChat() có thể gọi lại nhiều lần (2 người) — chỉ chào 1 lần/trang
@@ -65,7 +73,7 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
   // khi thiếu (khác vn-timezone.js): `shell.js` nạp lười file này mà chưa biết
   // noi-sinh.js — thiếu thì tự chèn script, trong lúc chờ ô nơi sinh chỉ có "—"
   // nên mọi lá số đi đường VN như cũ (an toàn), nạp xong thì đổ danh sách nước.
-  const NOI_SINH_SRC = '/tools-shared/noi-sinh.js?v=1';
+  const NOI_SINH_SRC = '/tools-shared/noi-sinh.js?v=2';
   const nsApi = () => window.NoiSinh;
   if (!window.NoiSinh && !document.querySelector('script[src^="/tools-shared/noi-sinh.js"]')) {
     const sc = document.createElement('script');
@@ -77,7 +85,12 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
     };
     document.head.appendChild(sc);
   }
-  const TEN_LICH = { vn: 'giờ VN', cn: 'giờ lịch Trung Hoa', kr: 'giờ lịch Hàn', jp: 'giờ lịch Nhật' };
+  const TEN_LICH = {
+    vn: T('js.tuviform.lich-vn','giờ VN'),
+    cn: T('js.tuviform.lich-cn','giờ lịch Trung Hoa'),
+    kr: T('js.tuviform.lich-kr','giờ lịch Hàn'),
+    jp: T('js.tuviform.lich-jp','giờ lịch Nhật'),
+  };
 
   /** {ma, tz} của nơi sinh đang chọn, hoặc null = sinh ở VN (đường cũ). */
   function noiSinhOf(prefix = '') {
@@ -112,7 +125,7 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
     if (!sel) return;
     const ma = gel('tvf-noisinh', prefix)?.value || '';
     const vung = ma && nsApi() ? nsApi().vungCuaNuoc(ma) : [];
-    sel.innerHTML = vung.map(([tz, ten]) => `<option value="${tz}">${ten || tz}</option>`).join('');
+    sel.innerHTML = vung.map(([tz, ten]) => `<option value="${tz}">${nsApi().tenVung(tz, ten) || tz}</option>`).join('');
     if (chon) sel.value = chon;
     sel.style.display = vung.length > 1 ? '' : 'none';
     const wrap = sel.closest('.tvf-ibox');
@@ -158,7 +171,7 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
     const idx    = hourMinToGioIdx(q.gioHour, q.gioPhut);
     const el     = gel('tvf-gio-am', prefix);
     const elVn   = gel('tvf-gio-vn', prefix);
-    if (el)  el.textContent = 'Giờ âm: ' + CHI[idx];
+    if (el)  el.textContent = T('js.tuviform.gio-am','Giờ âm: {chi}',{chi:G('chi',CHI[idx])});
     if (elVn) {
       if (ns && q.lich) {
         const p2 = (n) => String(n).padStart(2,'0');
@@ -206,27 +219,25 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
   // bỏ trống ô "Sinh ở ngoài Việt Nam?" chính là VN.
   function noiSinhOptions() {
     const N = nsApi();
-    return '<option value="">— Chọn nơi sinh —</option>' +
-      (N ? N.NUOC.filter((n) => n[0] !== 'VN').map((n) => `<option value="${n[0]}">${n[1]}</option>`).join('') : '');
+    return '<option value="">' + T('js.tuviform.chon-noi-sinh','— Chọn nơi sinh —') + '</option>' +
+      (N ? N.NUOC.filter((n) => n[0] !== 'VN').map((n) => `<option value="${n[0]}">${N.tenNuoc(n[0], n[1])}</option>`).join('') : '');
   }
 
   const TOOLTIP_CONTENT = `<div class="tvf-tooltip-box">
-    <div class="tvf-tooltip-title"><span class="ic" data-icon="clock"></span> Lịch sử múi giờ Việt Nam</div>
-    <p>Giờ gốc theo cổ pháp: giờ <b>Tý</b> = 23:00–00:59. Tuy nhiên trong lịch sử, VN đã nhiều lần thay đổi múi giờ:</p>
+    <div class="tvf-tooltip-title"><span class="ic" data-icon="clock"></span> ${T('js.tuviform.tip-title','Lịch sử múi giờ Việt Nam')}</div>
+    <p>${T('js.tuviform.tip-intro','Giờ gốc theo cổ pháp: giờ <b>Tý</b> = 23:00–00:59. Tuy nhiên trong lịch sử, VN đã nhiều lần thay đổi múi giờ:')}</p>
     <ul>
-      <li><b>1942–09/3/1944</b> (UTC+8): giờ Tý = 00:00–01:59</li>
-      <li><b>09/3/1944–02/9/1945</b> (UTC+9): giờ Tý = 01:00–02:59</li>
-      <li><b>02/9/1945–18/12/1946</b> (UTC+7): giờ Tý = 23:00–00:59</li>
-      <li><b>19/12/1946–30/6/1955</b> (UTC+8): giờ Tý = 00:00–01:59</li>
-      <li><b>01/7/1955–31/12/1959</b> (UTC+7): giờ Tý = 23:00–00:59</li>
-      <li><b>01/1/1960–30/4/1975</b> (UTC+8, miền Nam): giờ Tý = 00:00–01:59</li>
-      <li><b>Từ 01/5/1975</b> (UTC+7): giờ Tý = 23:00–00:59</li>
+      <li>${T('js.tuviform.tip-li1','<b>1942–09/3/1944</b> (UTC+8): giờ Tý = 00:00–01:59')}</li>
+      <li>${T('js.tuviform.tip-li2','<b>09/3/1944–02/9/1945</b> (UTC+9): giờ Tý = 01:00–02:59')}</li>
+      <li>${T('js.tuviform.tip-li3','<b>02/9/1945–18/12/1946</b> (UTC+7): giờ Tý = 23:00–00:59')}</li>
+      <li>${T('js.tuviform.tip-li4','<b>19/12/1946–30/6/1955</b> (UTC+8): giờ Tý = 00:00–01:59')}</li>
+      <li>${T('js.tuviform.tip-li5','<b>01/7/1955–31/12/1959</b> (UTC+7): giờ Tý = 23:00–00:59')}</li>
+      <li>${T('js.tuviform.tip-li6','<b>01/1/1960–30/4/1975</b> (UTC+8, miền Nam): giờ Tý = 00:00–01:59')}</li>
+      <li>${T('js.tuviform.tip-li7','<b>Từ 01/5/1975</b> (UTC+7): giờ Tý = 23:00–00:59')}</li>
     </ul>
-    <p style="color:#888;font-size:11px;margin-top:8px">Hệ thống tự động điều chỉnh dựa trên ngày tháng năm sinh đã nhập.</p>
+    <p style="color:#888;font-size:11px;margin-top:8px">${T('js.tuviform.tip-auto','Hệ thống tự động điều chỉnh dựa trên ngày tháng năm sinh đã nhập.')}</p>
     <p style="margin-top:10px;padding-top:10px;border-top:1px solid #eee">
-      <b>Không nhớ giờ sinh?</b> Rất nhiều người không nhớ chính xác — giờ sinh
-      lại quyết định đúng nhiều tool khác trên trang này.
-      <a href="/app/gio-sinh" target="_blank" style="color:#1455A4;font-weight:600">Xác định giờ sinh của bạn →</a>
+      ${T('js.tuviform.tip-khong-nho','<b>Không nhớ giờ sinh?</b> Rất nhiều người không nhớ chính xác — giờ sinh\n      lại quyết định đúng nhiều tool khác trên trang này.\n      <a href="/app/gio-sinh" target="_blank" style="color:#1455A4;font-weight:600">Xác định giờ sinh của bạn →</a>')}
     </p>
   </div>`;
 
@@ -303,7 +314,7 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
   // trị mặc định ở giữa màn, không phải cuộn tìm.
   const NAM_MIN = 1900, NAM_MAX = 2070, NAM_DEFAULT = 1985;
   function buildOptions() {
-    let gioOpts = '', phutOpts = '', ngayOpts = '<option value="">Ngày</option>', thangOpts = '<option value="">Tháng</option>', namOpts = '';
+    let gioOpts = '', phutOpts = '', ngayOpts = '<option value="">' + T('js.tuviform.ngay','Ngày') + '</option>', thangOpts = '<option value="">' + T('js.tuviform.thang','Tháng') + '</option>', namOpts = '';
     for (let i = 0; i <= 23; i++) gioOpts  += `<option value="${i}">${String(i).padStart(2,'0')}</option>`;
     for (let i = 0; i <= 59; i++) phutOpts += `<option value="${i}">${String(i).padStart(2,'0')}</option>`;
     for (let i = 1; i <= 31; i++) ngayOpts  += `<option value="${i}">${i}</option>`;
@@ -320,18 +331,18 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
     return `
     ${showNameYear ? `
     <div class="form-group">
-      <label class="form-label">Họ và tên</label>
-      <input class="form-input" type="text" id="${pid('hoten',prefix)}" placeholder="Nguyễn Văn A" autocomplete="off" />
+      <label class="form-label">${T('js.tuviform.ho-ten','Họ và tên')}</label>
+      <input class="form-input" type="text" id="${pid('hoten',prefix)}" placeholder="${T('js.tuviform.ten-mau','Nguyễn Văn A')}" autocomplete="off" />
     </div>
     <div class="form-group">
-      <label class="form-label">Giới tính</label>
+      <label class="form-label">${T('js.tuviform.gioi-tinh','Giới tính')}</label>
       <select class="form-input" id="${pid('gioitinh',prefix)}">
-        <option value="nam"${defaultGioitinh==='nam'?' selected':''}>Nam</option>
-        <option value="nu"${defaultGioitinh==='nu'?' selected':''}>Nữ</option>
+        <option value="nam"${defaultGioitinh==='nam'?' selected':''}>${T('js.tuviform.gt-nam','Nam')}</option>
+        <option value="nu"${defaultGioitinh==='nu'?' selected':''}>${T('js.tuviform.gt-nu','Nữ')}</option>
       </select>
     </div>` : ''}
     <div class="form-group">
-      <label class="form-label">Ngày / Tháng / Năm sinh</label>
+      <label class="form-label">${T('js.tuviform.ngay-thang-nam-sinh','Ngày / Tháng / Năm sinh')}</label>
       <div class="form-row-3">
         <select class="form-input" id="${pid('ngay',prefix)}" oninput="TuviForm._update(${pf})">${ngayOpts}</select>
         <select class="form-input" id="${pid('thang',prefix)}" oninput="TuviForm._update(${pf})">${thangOpts}</select>
@@ -341,17 +352,17 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
     <div class="form-group">
       <label class="form-label" style="display:flex;align-items:center;gap:6px;cursor:pointer">
         <input type="checkbox" id="${pid('tvf-foreign',prefix)}" onchange="TuviForm._toggleUtc(${pf})" style="cursor:pointer">
-        <span>Sinh ở ngoài Việt Nam?</span>
+        <span>${T('js.tuviform.ngoai-vn','Sinh ở ngoài Việt Nam?')}</span>
       </label>
       <div id="${pid('tvf-utc-wrap',prefix)}" style="display:none;margin-top:6px">
-        <label class="form-label">Nơi sinh</label>
+        <label class="form-label">${T('js.tuviform.noi-sinh','Nơi sinh')}</label>
         <select class="form-input" id="${pid('tvf-noisinh',prefix)}" oninput="TuviForm._noiSinh(${pf})">${utcOpts}</select>
         <select class="form-input" id="${pid('tvf-vung',prefix)}" oninput="TuviForm._update(${pf})" style="display:none;margin-top:6px"></select>
       </div>
     </div>
     <div class="form-group">
       <label class="form-label" style="display:flex;align-items:center;gap:4px">
-        Giờ sinh
+        ${T('js.tuviform.gio-sinh','Giờ sinh')}
         <span class="tvf-tooltip-wrap">
           <span class="tvf-tooltip-icon" onclick="event.stopPropagation();TuviForm._toggleTip(this)">?</span>
           ${TOOLTIP_CONTENT}
@@ -361,7 +372,7 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
         <select class="form-input" id="${pid('tvf-gio',prefix)}" oninput="TuviForm._update(${pf})">${gioOpts}</select>
         <select class="form-input" id="${pid('tvf-phut',prefix)}" oninput="TuviForm._update(${pf})">${phutOpts}</select>
         <div class="tvf-gio-am-wrap">
-          <span class="tvf-gio-am" id="${pid('tvf-gio-am',prefix)}">Giờ âm: Tý</span>
+          <span class="tvf-gio-am" id="${pid('tvf-gio-am',prefix)}">${T('js.tuviform.gio-am','Giờ âm: {chi}',{chi:G('chi','Tý')})}</span>
           <span class="tvf-gio-vn" id="${pid('tvf-gio-vn',prefix)}"></span>
         </div>
       </div>
@@ -375,30 +386,30 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
     const namXemDefault = new Date().getFullYear();
     return `
     <div class="frow">
-      ${showName ? `<div class="fg" style="flex:2;min-width:150px"><label>Họ và tên</label><input type="text" id="${pid('hoten',prefix)}" placeholder="Nguyễn Văn A" autocomplete="off"></div>` : ''}
-      <div class="fg" style="width:90px"><label>Giới tính</label>
+      ${showName ? `<div class="fg" style="flex:2;min-width:150px"><label>${T('js.tuviform.ho-ten','Họ và tên')}</label><input type="text" id="${pid('hoten',prefix)}" placeholder="${T('js.tuviform.ten-mau','Nguyễn Văn A')}" autocomplete="off"></div>` : ''}
+      <div class="fg" style="width:90px"><label>${T('js.tuviform.gioi-tinh','Giới tính')}</label>
         <select id="${pid('gioitinh',prefix)}">
-          <option value="nam"${defaultGioitinh==='nam'?' selected':''}>Nam</option>
-          <option value="nu"${defaultGioitinh==='nu'?' selected':''}>Nữ</option>
+          <option value="nam"${defaultGioitinh==='nam'?' selected':''}>${T('js.tuviform.gt-nam','Nam')}</option>
+          <option value="nu"${defaultGioitinh==='nu'?' selected':''}>${T('js.tuviform.gt-nu','Nữ')}</option>
         </select>
       </div>
-      ${showNamXem ? `<div class="fg" style="width:90px"><label>Năm xem vận</label><input type="number" id="${pid('namXem',prefix)}" value="${namXemDefault}" min="1900" max="2100"></div>` : ''}
+      ${showNamXem ? `<div class="fg" style="width:90px"><label>${T('js.tuviform.nam-xem-van','Năm xem vận')}</label><input type="number" id="${pid('namXem',prefix)}" value="${namXemDefault}" min="1900" max="2100"></div>` : ''}
     </div>
     <div class="frow">
-      <div class="fg" style="width:74px"><label>Ngày</label><select id="${pid('ngay',prefix)}" oninput="TuviForm._update(${pf})">${ngayOpts}</select></div>
-      <div class="fg" style="width:82px"><label>Tháng</label><select id="${pid('thang',prefix)}" oninput="TuviForm._update(${pf})">${thangOpts}</select></div>
-      <div class="fg" style="width:90px"><label>Năm</label><select id="${pid('nam',prefix)}" oninput="TuviForm._update(${pf})">${namOpts}</select></div>
-      <div class="fg" style="width:70px"><label style="display:flex;align-items:center;gap:3px">Giờ<span class="tvf-tooltip-wrap"><span class="tvf-tooltip-icon" onclick="event.stopPropagation();TuviForm._toggleTip(this)">?</span>${TOOLTIP_CONTENT}</span></label><select id="${pid('tvf-gio',prefix)}" oninput="TuviForm._update(${pf})">${gioOpts}</select></div>
-      <div class="fg" style="width:70px"><label>Phút</label><select id="${pid('tvf-phut',prefix)}" oninput="TuviForm._update(${pf})">${phutOpts}</select></div>
-      <div class="tvf-gio-am-wrap"><span class="tvf-gio-am" id="${pid('tvf-gio-am',prefix)}">Giờ âm: Tý</span><span class="tvf-gio-vn" id="${pid('tvf-gio-vn',prefix)}"></span></div>
+      <div class="fg" style="width:74px"><label>${T('js.tuviform.ngay','Ngày')}</label><select id="${pid('ngay',prefix)}" oninput="TuviForm._update(${pf})">${ngayOpts}</select></div>
+      <div class="fg" style="width:82px"><label>${T('js.tuviform.thang','Tháng')}</label><select id="${pid('thang',prefix)}" oninput="TuviForm._update(${pf})">${thangOpts}</select></div>
+      <div class="fg" style="width:90px"><label>${T('js.tuviform.nam','Năm')}</label><select id="${pid('nam',prefix)}" oninput="TuviForm._update(${pf})">${namOpts}</select></div>
+      <div class="fg" style="width:70px"><label style="display:flex;align-items:center;gap:3px">${T('js.tuviform.gio','Giờ')}<span class="tvf-tooltip-wrap"><span class="tvf-tooltip-icon" onclick="event.stopPropagation();TuviForm._toggleTip(this)">?</span>${TOOLTIP_CONTENT}</span></label><select id="${pid('tvf-gio',prefix)}" oninput="TuviForm._update(${pf})">${gioOpts}</select></div>
+      <div class="fg" style="width:70px"><label>${T('js.tuviform.phut','Phút')}</label><select id="${pid('tvf-phut',prefix)}" oninput="TuviForm._update(${pf})">${phutOpts}</select></div>
+      <div class="tvf-gio-am-wrap"><span class="tvf-gio-am" id="${pid('tvf-gio-am',prefix)}">${T('js.tuviform.gio-am','Giờ âm: {chi}',{chi:G('chi','Tý')})}</span><span class="tvf-gio-vn" id="${pid('tvf-gio-vn',prefix)}"></span></div>
     </div>
     <div class="frow" style="align-items:flex-start">
       <label class="tvf-compact-foreign">
         <input type="checkbox" id="${pid('tvf-foreign',prefix)}" onchange="TuviForm._toggleUtc(${pf})">
-        Sinh ở ngoài Việt Nam?
+        ${T('js.tuviform.ngoai-vn','Sinh ở ngoài Việt Nam?')}
       </label>
       <div class="fg tvf-compact-utc" id="${pid('tvf-utc-wrap',prefix)}" style="display:none">
-        <label>Nơi sinh</label>
+        <label>${T('js.tuviform.noi-sinh','Nơi sinh')}</label>
         <select id="${pid('tvf-noisinh',prefix)}" oninput="TuviForm._noiSinh(${pf})">${utcOpts}</select>
         <select id="${pid('tvf-vung',prefix)}" oninput="TuviForm._update(${pf})" style="display:none;margin-top:6px"></select>
       </div>
@@ -418,34 +429,34 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
     <div class="tvf-pretty">
       <div class="tvf-row">
         ${showName ? `<div class="tvf-col" style="flex:1.6;min-width:150px">
-          <label class="tvf-lb">Họ và tên</label>
-          <div class="tvf-ibox"><span class="tvf-ic" data-icon="user"></span><input type="text" id="${pid('hoten',prefix)}" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="off"></div>
+          <label class="tvf-lb">${T('js.tuviform.ho-ten','Họ và tên')}</label>
+          <div class="tvf-ibox"><span class="tvf-ic" data-icon="user"></span><input type="text" id="${pid('hoten',prefix)}" placeholder="${T('js.tuviform.ten-mau-vd','Ví dụ: Nguyễn Văn A')}" autocomplete="off"></div>
         </div>` : ''}
         <div class="tvf-col" style="flex:0 0 110px">
-          <label class="tvf-lb">Giới tính</label>
+          <label class="tvf-lb">${T('js.tuviform.gioi-tinh','Giới tính')}</label>
           <div class="tvf-ibox no-ic">
             <select id="${pid('gioitinh',prefix)}">
-              <option value="nam"${isNam?' selected':''}>Nam</option>
-              <option value="nu"${isNam?'':' selected'}>Nữ</option>
+              <option value="nam"${isNam?' selected':''}>${T('js.tuviform.gt-nam','Nam')}</option>
+              <option value="nu"${isNam?'':' selected'}>${T('js.tuviform.gt-nu','Nữ')}</option>
             </select>
             <span class="tvf-chev" data-icon="chevron-down"></span>
           </div>
         </div>
         ${showNamXem ? `<div class="tvf-col" style="flex:0 0 110px">
-          <label class="tvf-lb">Năm xem vận</label>
+          <label class="tvf-lb">${T('js.tuviform.nam-xem-van','Năm xem vận')}</label>
           <div class="tvf-ibox no-ic"><input type="number" id="${pid('namXem',prefix)}" value="${namXemDefault}" min="1900" max="2100"></div>
         </div>` : ''}
       </div>
       <div class="tvf-row">
-        <div class="tvf-col"><label class="tvf-lb">Ngày sinh</label><div class="tvf-ibox"><span class="tvf-ic" data-icon="calendar"></span><select id="${pid('ngay',prefix)}" oninput="TuviForm._update(${pf})">${ngayOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
-        <div class="tvf-col"><label class="tvf-lb">Tháng sinh</label><div class="tvf-ibox"><span class="tvf-ic" data-icon="calendar"></span><select id="${pid('thang',prefix)}" oninput="TuviForm._update(${pf})">${thangOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
-        <div class="tvf-col"><label class="tvf-lb">Năm sinh</label><div class="tvf-ibox"><span class="tvf-ic" data-icon="calendar"></span><select id="${pid('nam',prefix)}" oninput="TuviForm._update(${pf})">${namOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
+        <div class="tvf-col"><label class="tvf-lb">${T('js.tuviform.ngay-sinh','Ngày sinh')}</label><div class="tvf-ibox"><span class="tvf-ic" data-icon="calendar"></span><select id="${pid('ngay',prefix)}" oninput="TuviForm._update(${pf})">${ngayOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
+        <div class="tvf-col"><label class="tvf-lb">${T('js.tuviform.thang-sinh','Tháng sinh')}</label><div class="tvf-ibox"><span class="tvf-ic" data-icon="calendar"></span><select id="${pid('thang',prefix)}" oninput="TuviForm._update(${pf})">${thangOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
+        <div class="tvf-col"><label class="tvf-lb">${T('js.tuviform.nam-sinh','Năm sinh')}</label><div class="tvf-ibox"><span class="tvf-ic" data-icon="calendar"></span><select id="${pid('nam',prefix)}" oninput="TuviForm._update(${pf})">${namOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
       </div>
       <div class="tvf-row">
-        <div class="tvf-col" style="flex:0 0 96px"><label class="tvf-lb">Giờ sinh</label><div class="tvf-ibox"><span class="tvf-ic" data-icon="clock"></span><select id="${pid('tvf-gio',prefix)}" oninput="TuviForm._update(${pf})">${gioOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
-        <div class="tvf-col" style="flex:0 0 88px"><label class="tvf-lb">Phút</label><div class="tvf-ibox no-ic"><select id="${pid('tvf-phut',prefix)}" oninput="TuviForm._update(${pf})">${phutOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
+        <div class="tvf-col" style="flex:0 0 96px"><label class="tvf-lb">${T('js.tuviform.gio-sinh','Giờ sinh')}</label><div class="tvf-ibox"><span class="tvf-ic" data-icon="clock"></span><select id="${pid('tvf-gio',prefix)}" oninput="TuviForm._update(${pf})">${gioOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
+        <div class="tvf-col" style="flex:0 0 88px"><label class="tvf-lb">${T('js.tuviform.phut','Phút')}</label><div class="tvf-ibox no-ic"><select id="${pid('tvf-phut',prefix)}" oninput="TuviForm._update(${pf})">${phutOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
         <div class="tvf-gio-chip">
-          <span id="${pid('tvf-gio-am',prefix)}">Giờ âm: Tý</span>
+          <span id="${pid('tvf-gio-am',prefix)}">${T('js.tuviform.gio-am','Giờ âm: {chi}',{chi:G('chi','Tý')})}</span>
           <span class="tvf-tooltip-wrap" style="margin-left:0"><span class="tvf-tooltip-icon" onclick="event.stopPropagation();TuviForm._toggleTip(this)">?</span>${TOOLTIP_CONTENT}</span>
         </div>
         <span class="tvf-gio-vn" id="${pid('tvf-gio-vn',prefix)}"></span>
@@ -454,11 +465,11 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
         <div style="display:flex;flex-direction:column;gap:5px;width:100%">
           <label class="tvf-foreign-label">
             <input type="checkbox" id="${pid('tvf-foreign',prefix)}" onchange="TuviForm._toggleUtc(${pf})">
-            <span>Sinh ở ngoài Việt Nam?</span>
+            <span>${T('js.tuviform.ngoai-vn','Sinh ở ngoài Việt Nam?')}</span>
           </label>
-          <span class="tvf-foreign-hint">Chọn nếu bạn sinh tại nước ngoài — hệ thống tự tính múi giờ, giờ mùa hè và lịch âm của nơi sinh.</span>
+          <span class="tvf-foreign-hint">${T('js.tuviform.ngoai-goi-y','Chọn nếu bạn sinh tại nước ngoài — hệ thống tự tính múi giờ, giờ mùa hè và lịch âm của nơi sinh.')}</span>
           <div class="tvf-col" id="${pid('tvf-utc-wrap',prefix)}" style="display:none;margin:6px 0 0 24px;max-width:280px">
-            <label class="tvf-lb">Nơi sinh</label>
+            <label class="tvf-lb">${T('js.tuviform.noi-sinh','Nơi sinh')}</label>
             <div class="tvf-ibox no-ic"><select id="${pid('tvf-noisinh',prefix)}" oninput="TuviForm._noiSinh(${pf})">${utcOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div>
             <div class="tvf-ibox no-ic" style="display:none;margin-top:6px"><select id="${pid('tvf-vung',prefix)}" oninput="TuviForm._update(${pf})"></select><span class="tvf-chev" data-icon="chevron-down"></span></div>
           </div>
@@ -472,10 +483,10 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
     injectCss();
     const {
       onSubmit,
-      submitLabel   = 'Luận Giải Lá Số →',
+      submitLabel   = T('js.tuviform.luan-giai-la-so','Luận Giải Lá Số →'),
       prefix        = '',
       mode          = 'full',     // 'full' | 'person' | 'compact'
-      label         = mode === 'person' ? 'Thông Tin' : 'Cá Nhân',
+      label         = mode === 'person' ? T('js.tuviform.thong-tin','Thông Tin') : T('js.tuviform.ca-nhan','Cá Nhân'),
       gioitinh      = 'nam',
       showSample    = true,
       showName      = true,       // mode:'compact' only — false nếu tool không cần Họ và tên
@@ -504,35 +515,35 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
       // ── Full: 3-column layout — dùng cho luan-giai ──
       html = `<div class="form-grid">
         <div class="form-col">
-          <div class="form-col-title">Cá Nhân</div>
+          <div class="form-col-title">${T('js.tuviform.ca-nhan','Cá Nhân')}</div>
           <div class="form-group">
-            <label class="form-label">Họ và tên</label>
-            <input class="form-input" type="text" id="${pid('hoten',prefix)}" placeholder="Nguyễn Văn A" autocomplete="name" />
+            <label class="form-label">${T('js.tuviform.ho-ten','Họ và tên')}</label>
+            <input class="form-input" type="text" id="${pid('hoten',prefix)}" placeholder="${T('js.tuviform.ten-mau','Nguyễn Văn A')}" autocomplete="name" />
           </div>
           <div class="form-group-row">
             <div class="form-group">
-              <label class="form-label">Giới tính</label>
+              <label class="form-label">${T('js.tuviform.gioi-tinh','Giới tính')}</label>
               <select class="form-input" id="${pid('gioitinh',prefix)}">
-                <option value="nam">Nam</option>
-                <option value="nu">Nữ</option>
+                <option value="nam">${T('js.tuviform.gt-nam','Nam')}</option>
+                <option value="nu">${T('js.tuviform.gt-nu','Nữ')}</option>
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Năm xem vận</label>
+              <label class="form-label">${T('js.tuviform.nam-xem-van','Năm xem vận')}</label>
               <input class="form-input" type="number" id="${pid('namXem',prefix)}" value="${namXemDefault}" min="1900" max="2100" />
             </div>
           </div>
         </div>
 
         <div class="form-col">
-          <div class="form-col-title">Ngày Sinh Dương Lịch</div>
+          <div class="form-col-title">${T('js.tuviform.ngay-sinh-duong','Ngày Sinh Dương Lịch')}</div>
           ${buildPersonFields(prefix, opts, gioitinh, false)}
         </div>
 
         <div class="form-col">
-          <div class="form-col-title">Thực Thi</div>
+          <div class="form-col-title">${T('js.tuviform.thuc-thi','Thực Thi')}</div>
           <p style="font-size:14px;color:var(--text-lt);line-height:1.7;margin-bottom:28px;font-style:italic">
-            Điền đầy đủ thông tin bên trái — ngày tháng năm sinh dương lịch và giờ sinh — rồi bấm luận giải.
+            ${T('js.tuviform.dien-day-du','Điền đầy đủ thông tin bên trái — ngày tháng năm sinh dương lịch và giờ sinh — rồi bấm luận giải.')}
           </p>
           <div class="btn-group-submit">
             <button class="btn-submit" id="${pid('tvf-submit-btn',prefix)}">${submitLabel}</button>
@@ -541,7 +552,7 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
                  target="_blank" rel="noopener"
                  style="font-size:12px;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:5px;opacity:0.8;transition:opacity 0.15s"
                  onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
-                <span class="ic" data-icon="chevron-down"></span><span>Xem mẫu luận giải PDF</span>
+                <span class="ic" data-icon="chevron-down"></span><span>${T('js.tuviform.xem-mau-pdf','Xem mẫu luận giải PDF')}</span>
               </a>
             </div>` : ''}
           </div>
@@ -674,16 +685,16 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
       showNamXem = false,
       skipHour   = false, // than-so-hoc: không cần giờ sinh — dừng sau bước 2
       requireName = false, // than-so-hoc: tính TỪ họ tên, trống là trang báo lỗi vào #birthPanel đang ẩn ⇒ kẹt
-      submitLabel = 'Tiếp tục →',
+      submitLabel = T('js.tuviform.tiep-tuc','Tiếp tục →'),
       // false = không đắp bong bóng "Con hỏi cho ai?" từ Sổ lá số. Luồng mời
       // thêm lá số NGƯỜI NHÀ (shell.js) cần một người MỚI, và bấm chip ở đó còn
       // gọi `Shell.rememberBirth` — đổi luôn lá số đang nhớ của chính người hỏi.
       savedPicker = true,
       q1 = showName
-        ? (showGender ? 'Cho thầy xin họ tên và giới tính của con nhé.' : 'Cho thầy xin họ tên đầy đủ của con nhé.')
-        : 'Giới tính của con là gì?',
-      q2 = 'Ngày sinh dương lịch của con là ngày nào?',
-      q3 = 'Giờ sinh của con là mấy giờ?',
+        ? (showGender ? T('js.tuviform.q1-ten-gt','Cho thầy xin họ tên và giới tính của con nhé.') : T('js.tuviform.q1-ten','Cho thầy xin họ tên đầy đủ của con nhé.'))
+        : T('js.tuviform.q1-gt','Giới tính của con là gì?'),
+      q2 = T('js.tuviform.q2','Ngày sinh dương lịch của con là ngày nào?'),
+      q3 = T('js.tuviform.q3','Giờ sinh của con là mấy giờ?'),
       onDone: onDoneRaw,
     } = options;
     const chat = document.getElementById('chat');
@@ -748,8 +759,8 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
     const collapsedS1Html = (hoten, gioitinhV, namXemV) => {
       const parts = [];
       if (hoten) parts.push('<b>' + esc(hoten) + '</b>');
-      if (showGender) parts.push(gioitinhV === 'nam' ? 'Nam' : 'Nữ');
-      if (namXemV) parts.push('xem vận năm ' + namXemV);
+      if (showGender) parts.push(gioitinhV === 'nam' ? T('js.tuviform.gt-nam','Nam') : T('js.tuviform.gt-nu','Nữ'));
+      if (namXemV) parts.push(T('js.tuviform.xem-van-nam','xem vận năm {n}',{n:namXemV}));
       return '<p>' + parts.join(' · ') + ' ✓</p>';
     };
 
@@ -762,7 +773,7 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
     let manualBubbles = []; // bong bóng của flow gõ tay/khôi phục draft — ẩn hết nếu chọn từ sổ
     function birthShort(b) {
       if (!b) return '';
-      const g = b.gioitinh === 'nu' ? 'Nữ' : 'Nam';
+      const g = b.gioitinh === 'nu' ? T('js.tuviform.gt-nu','Nữ') : T('js.tuviform.gt-nam','Nam');
       return g + ' · ' + (b.ngay || '?') + '/' + (b.thang || '?') + '/' + (b.nam || '?');
     }
     function finishWithBirth(birth) {
@@ -771,38 +782,38 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
       if (onDone) onDone(Object.assign({}, birth));
     }
     function askNamXem(birth) {
-      const s = bubble('chatStep-' + cp + '-namxem', '<p>Con muốn xem vận năm nào?</p>' +
-        '<div class="frow"><div class="fg" style="width:90px"><label>Năm xem vận</label>' +
+      const s = bubble('chatStep-' + cp + '-namxem', '<p>' + T('js.tuviform.con-muon-xem-nam','Con muốn xem vận năm nào?') + '</p>' +
+        '<div class="frow"><div class="fg" style="width:90px"><label>' + T('js.tuviform.nam-xem-van','Năm xem vận') + '</label>' +
         `<input type="number" id="${cp}-namxem-only" value="${namXemDefault}" min="1900" max="2100"></div></div>` +
         `<button class="btn-go" type="button" id="${cp}-namxem-next" style="width:auto;padding:9px 16px;font-size:13px">${submitLabel}</button>`);
       document.getElementById(cp + '-namxem-next').addEventListener('click', () => {
         const namXemV = parseInt(document.getElementById(cp + '-namxem-only').value) || namXemDefault;
-        collapse(s, '<p>Xem vận năm <b>' + namXemV + '</b> ✓</p>');
+        collapse(s, '<p>' + T('js.tuviform.xem-van-nam-ok','Xem vận năm <b>{n}</b> ✓',{n:namXemV}) + '</p>');
         const birthWithYear = Object.assign({}, birth, { namXem: namXemV });
         setData(birthWithYear, prefix);
         if (onDone) onDone(birthWithYear);
       });
     }
     function renderSavedPicker(items) {
-      const el = bubble('chatStep-' + cp + '-saved', '<p>Con hỏi cho ai?</p>' +
+      const el = bubble('chatStep-' + cp + '-saved', '<p>' + T('js.tuviform.con-hoi-cho-ai','Con hỏi cho ai?') + '</p>' +
         '<div class="tvf-saved-chips">' +
         items.map((it) => {
-          const name = esc(it.label || (it.birth && it.birth.hoten) || 'Không tên');
+          const name = esc(it.label || (it.birth && it.birth.hoten) || T('js.tuviform.khong-ten','Không tên'));
           const sub = esc(birthShort(it.birth));
           return `<button type="button" class="tvf-saved-chip" data-id="${esc(it.id)}">${name}<span>${sub}</span></button>`;
         }).join('') +
-        '<button type="button" class="tvf-saved-chip tvf-saved-new" data-id="">+ Người mới</button>' +
+        '<button type="button" class="tvf-saved-chip tvf-saved-new" data-id="">' + T('js.tuviform.nguoi-moi','+ Người mới') + '</button>' +
         '</div>');
       el.querySelector('.tvf-saved-chips').addEventListener('click', (e) => {
         const btn = e.target.closest('.tvf-saved-chip');
         if (!btn) return;
         const id = btn.getAttribute('data-id');
         // Form gõ tay đã hiện sẵn — "+ Người mới" chỉ cần dẹp bong bóng này đi.
-        if (!id) { collapse(el, '<p>Người mới nhé.</p>'); return; }
+        if (!id) { collapse(el, '<p>' + T('js.tuviform.nguoi-moi-nhe','Người mới nhé.') + '</p>'); return; }
         const it = items.find((x) => String(x.id) === id);
         if (!it || !it.birth) return;
         const name = it.label || it.birth.hoten || '';
-        collapse(el, '<p>Hỏi cho <b>' + esc(name) + '</b> ✓</p>');
+        collapse(el, '<p>' + T('js.tuviform.hoi-cho','Hỏi cho <b>{ten}</b> ✓',{ten:esc(name)}) + '</p>');
         // Ẩn MỌI bong bóng gõ tay/khôi phục draft đang dở (không chỉ bước 1 —
         // reload giữa chừng có thể đã resume tới bước 2/3 trước khi bấm đây).
         manualBubbles.forEach((b) => { if (b) b.style.display = 'none'; });
@@ -842,7 +853,7 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
       // bước 2 (ngày sinh) đã xong, đủ điều kiện nhảy thẳng vào bước 3.
       if (draft && draft.ngay && draft.thang && draft.nam) {
         manualBubbles.push(bubble('chatStep-' + cp + '-1', collapsedS1Html(draft.hoten, draft.gioitinh, draft.namXem)));
-        manualBubbles.push(bubble('chatStep-' + cp + '-2', '<p>Ngày sinh: <b>' + draft.ngay + '/' + draft.thang + '/' + draft.nam + '</b> ✓</p>'));
+        manualBubbles.push(bubble('chatStep-' + cp + '-2', '<p>' + T('js.tuviform.ngay-sinh-ok','Ngày sinh: <b>{d}/{m}/{y}</b> ✓',{d:draft.ngay,m:draft.thang,y:draft.nam}) + '</p>'));
         step3(draft.hoten, draft.gioitinh, draft.namXem, draft.ngay, draft.thang, draft.nam);
         return;
       }
@@ -854,11 +865,11 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
 
       const s1 = bubble('chatStep-' + cp + '-1', '<p>' + q1 + '</p>' +
         '<div class="frow">' +
-          (showName ? `<div class="fg" style="flex:1.6;min-width:150px"><label>Họ và tên</label><input type="text" id="${pid('hoten', cp)}" placeholder="Nguyễn Văn A" autocomplete="off"></div>` : '') +
-          (showGender ? `<div class="fg" style="width:90px"><label>Giới tính</label><select id="${pid('gioitinh', cp)}"><option value="nam"${gioitinh === 'nam' ? ' selected' : ''}>Nam</option><option value="nu"${gioitinh === 'nu' ? ' selected' : ''}>Nữ</option></select></div>` : '') +
-          (showNamXem ? `<div class="fg" style="width:90px"><label>Năm xem vận</label><input type="number" id="${pid('namXem', cp)}" value="${namXemDefault}" min="1900" max="2100"></div>` : '') +
+          (showName ? `<div class="fg" style="flex:1.6;min-width:150px"><label>${T('js.tuviform.ho-ten','Họ và tên')}</label><input type="text" id="${pid('hoten', cp)}" placeholder="${T('js.tuviform.ten-mau','Nguyễn Văn A')}" autocomplete="off"></div>` : '') +
+          (showGender ? `<div class="fg" style="width:90px"><label>${T('js.tuviform.gioi-tinh','Giới tính')}</label><select id="${pid('gioitinh', cp)}"><option value="nam"${gioitinh === 'nam' ? ' selected' : ''}>${T('js.tuviform.gt-nam','Nam')}</option><option value="nu"${gioitinh === 'nu' ? ' selected' : ''}>${T('js.tuviform.gt-nu','Nữ')}</option></select></div>` : '') +
+          (showNamXem ? `<div class="fg" style="width:90px"><label>${T('js.tuviform.nam-xem-van','Năm xem vận')}</label><input type="number" id="${pid('namXem', cp)}" value="${namXemDefault}" min="1900" max="2100"></div>` : '') +
         '</div>' +
-        `<button class="btn-go" type="button" id="${cp}-next1" style="width:auto;padding:9px 16px;font-size:13px">Tiếp tục →</button>` +
+        `<button class="btn-go" type="button" id="${cp}-next1" style="width:auto;padding:9px 16px;font-size:13px">${T('js.tuviform.tiep-tuc','Tiếp tục →')}</button>` +
         `<div class="err tvf-err" id="${cp}-err1" role="alert"></div>`);
       manualBubbles.push(s1);
       const focusFirst = () => { const f = document.getElementById(pid('hoten', cp)) || document.getElementById(pid('gioitinh', cp)); if (f) f.focus(); };
@@ -868,7 +879,7 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
         const gioitinhV = showGender ? (document.getElementById(pid('gioitinh', cp))?.value || 'nam') : gioitinh;
         const namXemV = showNamXem ? (parseInt(document.getElementById(pid('namXem', cp))?.value) || namXemDefault) : undefined;
         const err1 = document.getElementById(cp + '-err1');
-        if (requireName && !hoten) { err1.textContent = 'Vui lòng nhập họ tên.'; return; }
+        if (requireName && !hoten) { err1.textContent = T('js.tuviform.nhap-ho-ten','Vui lòng nhập họ tên.'); return; }
         err1.textContent = '';
         collapse(s1, collapsedS1Html(hoten, gioitinhV, namXemV));
         saveDraft(1, { hoten, gioitinh: gioitinhV, namXem: namXemV });
@@ -878,11 +889,11 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
       function step2(hoten, gioitinhV, namXemV) {
         const s2 = bubble('chatStep-' + cp + '-2', '<p>' + q2 + '</p>' +
           '<div class="frow">' +
-            `<div class="fg" style="width:74px"><label>Ngày</label><select id="${pid('ngay', cp)}">${opts.ngayOpts}</select></div>` +
-            `<div class="fg" style="width:82px"><label>Tháng</label><select id="${pid('thang', cp)}">${opts.thangOpts}</select></div>` +
-            `<div class="fg" style="width:90px"><label>Năm</label><select id="${pid('nam', cp)}">${opts.namOpts}</select></div>` +
+            `<div class="fg" style="width:74px"><label>${T('js.tuviform.ngay','Ngày')}</label><select id="${pid('ngay', cp)}">${opts.ngayOpts}</select></div>` +
+            `<div class="fg" style="width:82px"><label>${T('js.tuviform.thang','Tháng')}</label><select id="${pid('thang', cp)}">${opts.thangOpts}</select></div>` +
+            `<div class="fg" style="width:90px"><label>${T('js.tuviform.nam','Năm')}</label><select id="${pid('nam', cp)}">${opts.namOpts}</select></div>` +
           '</div>' +
-          `<button class="btn-go" type="button" id="${cp}-next2" style="width:auto;padding:9px 16px;font-size:13px">${skipHour ? submitLabel : 'Tiếp tục →'}</button>` +
+          `<button class="btn-go" type="button" id="${cp}-next2" style="width:auto;padding:9px 16px;font-size:13px">${skipHour ? submitLabel : T('js.tuviform.tiep-tuc','Tiếp tục →')}</button>` +
           `<div class="err tvf-err" id="${cp}-err2" role="alert"></div>`);
         manualBubbles.push(s2);
         document.getElementById(cp + '-next2').addEventListener('click', function () {
@@ -893,10 +904,10 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
           // rồi trang gọi alert + khoá nút vĩnh viễn; còn 31/2 thì Date tự lăn
           // sang 3/3 và lập lá số SAI không báo gì.
           const err = document.getElementById(cp + '-err2');
-          if (!ngay || !thang || !nam) { err.textContent = 'Vui lòng chọn đủ ngày, tháng, năm sinh.'; return; }
-          if (new Date(nam, thang - 1, ngay).getDate() !== ngay) { err.textContent = 'Tháng ' + thang + '/' + nam + ' không có ngày ' + ngay + ' — vui lòng chọn lại.'; return; }
+          if (!ngay || !thang || !nam) { err.textContent = T('js.tuviform.chon-du-ngay','Vui lòng chọn đủ ngày, tháng, năm sinh.'); return; }
+          if (new Date(nam, thang - 1, ngay).getDate() !== ngay) { err.textContent = T('js.tuviform.thang-khong-co-ngay','Tháng {m}/{y} không có ngày {d} — vui lòng chọn lại.',{m:thang,y:nam,d:ngay}); return; }
           err.textContent = '';
-          collapse(s2, '<p>Ngày sinh: <b>' + ngay + '/' + thang + '/' + nam + '</b> ✓</p>');
+          collapse(s2, '<p>' + T('js.tuviform.ngay-sinh-ok','Ngày sinh: <b>{d}/{m}/{y}</b> ✓',{d:ngay,m:thang,y:nam}) + '</p>');
           if (skipHour) {
             const data = { hoten, gioitinh: gioitinhV, ngay, thang, nam };
             if (namXemV !== undefined) data.namXem = namXemV;
@@ -913,16 +924,16 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
       function step3(hoten, gioitinhV, namXemV, ngay, thang, nam) {
         const s3 = bubble('chatStep-' + cp + '-3', '<p>' + q3 + '</p>' +
           '<div class="frow" style="margin-bottom:8px">' +
-            `<div class="fg" style="width:74px"><label>Giờ</label><select id="${pid('tvf-gio', cp)}">${opts.gioOpts}</select></div>` +
-            `<div class="fg" style="width:74px"><label>Phút</label><select id="${pid('tvf-phut', cp)}">${opts.phutOpts}</select></div>` +
-            `<div class="tvf-gio-am-wrap"><span class="tvf-gio-am" id="${pid('tvf-gio-am', cp)}">Giờ âm: Tý</span><span class="tvf-gio-vn" id="${pid('tvf-gio-vn', cp)}"></span></div>` +
+            `<div class="fg" style="width:74px"><label>${T('js.tuviform.gio','Giờ')}</label><select id="${pid('tvf-gio', cp)}">${opts.gioOpts}</select></div>` +
+            `<div class="fg" style="width:74px"><label>${T('js.tuviform.phut','Phút')}</label><select id="${pid('tvf-phut', cp)}">${opts.phutOpts}</select></div>` +
+            `<div class="tvf-gio-am-wrap"><span class="tvf-gio-am" id="${pid('tvf-gio-am', cp)}">${T('js.tuviform.gio-am','Giờ âm: {chi}',{chi:G('chi','Tý')})}</span><span class="tvf-gio-vn" id="${pid('tvf-gio-vn', cp)}"></span></div>` +
           '</div>' +
           '<label style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-mid);cursor:pointer;margin-bottom:6px">' +
-            `<input type="checkbox" id="${pid('tvf-foreign', cp)}"> Sinh ở ngoài Việt Nam?` +
+            `<input type="checkbox" id="${pid('tvf-foreign', cp)}"> ${T('js.tuviform.ngoai-vn','Sinh ở ngoài Việt Nam?')}` +
           '</label>' +
           `<div id="${pid('tvf-utc-wrap', cp)}" style="display:none;margin-bottom:8px"><select id="${pid('tvf-noisinh', cp)}">${opts.utcOpts}</select>` +
           `<select id="${pid('tvf-vung', cp)}" style="display:none;margin-top:6px"></select></div>` +
-          `<p style="font-size:11.5px;margin-bottom:8px"><a href="/app/gio-sinh" target="_blank" style="color:#1455A4;font-weight:600">Không nhớ giờ sinh chính xác? Xác định giờ sinh →</a></p>` +
+          `<p style="font-size:11.5px;margin-bottom:8px"><a href="/app/gio-sinh" target="_blank" style="color:#1455A4;font-weight:600">${T('js.tuviform.khong-nho-chinh-xac','Không nhớ giờ sinh chính xác? Xác định giờ sinh →')}</a></p>` +
           `<button class="btn-go" type="button" id="${cp}-next3" style="width:auto;padding:9px 16px;font-size:13px">${submitLabel}</button>` +
           `<div class="err" id="${cp}-err3"></div>`);
         manualBubbles.push(s3);
@@ -937,7 +948,7 @@ window.TuviForm = (window.TuviForm && window.TuviForm._noiSinh) ? window.TuviFor
           const hh = parseInt(document.getElementById(pid('tvf-gio', cp)).value) || 0;
           const mm = parseInt(document.getElementById(pid('tvf-phut', cp)).value) || 0;
           const q = quyDoiGio(noiSinhOf(cp), ngay, thang, nam, hh, mm);
-          collapse(s3, '<p>Giờ sinh: <b>' + String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0') + '</b> ✓</p>');
+          collapse(s3, '<p>' + T('js.tuviform.gio-sinh-ok','Giờ sinh: <b>{hm}</b> ✓',{hm:String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0')}) + '</p>');
           const data = { hoten, gioitinh: gioitinhV, ngay: q.ngay, thang: q.thang, nam: q.nam, gioHour: q.gioHour, gioPhut: q.gioPhut };
           if (q.lich) Object.assign(data, { lich: q.lich, noiSinh: q.noiSinh, noiSinhTz: q.noiSinhTz, goc: q.goc });
           if (namXemV !== undefined) data.namXem = namXemV;

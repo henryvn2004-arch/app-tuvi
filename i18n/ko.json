@@ -3863,6 +3863,318 @@
   "t": "사진으로 관상 보기",
   "h": "24c4d64e"
  },
+ "js.nhtg.anh-mat-noi-len-dieu-gi": {
+  "t": "눈빛은 무엇을 말해 주나요?",
+  "h": "dca0ccee"
+ },
+ "js.nhtg.anh-qua-lon-toi-da-5mb": {
+  "t": "이미지가 너무 커요(최대 5MB).",
+  "h": "874f95b2"
+ },
+ "js.nhtg.da-phan-tich-xong-nhan-tuong": {
+  "t": "유장신상에 따른 안상 분석이 끝났어요. 더 궁금한 점이 있나요?",
+  "h": "040562fa"
+ },
+ "js.nhtg.dang-phan-tich-nhan-tuong": {
+  "t": "안상을 분석하는 중…",
+  "h": "7c6f7d8c"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang": {
+  "t": "MediaPipe로 이미지에서 직접 측정했어요(눈동자 위치를 위·아래 눈꺼풀과 비교). 『마의신상』에 따른 전체 의미는 심층 분석에 들어 있어요.",
+  "h": "09bcb88b"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang-si1j": {
+  "t": "MediaPipe로 이미지에서 직접 측정했어요. 눈의 모양, 신기, 그 밖의 세부 내용은 심층 분석에 들어 있어요.",
+  "h": "c13331fd"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang-ymai": {
+  "t": "MediaPipe로 이미지에서 직접 측정했어요. 『마의신상』에 따른 전체 의미는 심층 분석에 들어 있어요.",
+  "h": "91c76fe7"
+ },
+ "js.nhtg.duoi-mat-cong-len": {
+  "t": "눈꼬리가 올라감",
+  "h": "eddf4211"
+ },
+ "js.nhtg.duoi-mat-xuoi": {
+  "t": "눈꼬리가 처짐",
+  "h": "8e2e1aeb"
+ },
+ "js.nhtg.goc-duoi-mat-a-d": {
+  "t": "눈꼬리 각도: {a}°({d})",
+  "h": "f80c29d1"
+ },
+ "js.nhtg.khong-co-ket-qua": {
+  "t": "결과가 없어요.",
+  "h": "97fa6f91"
+ },
+ "js.nhtg.khong-doc-duoc-anh-nay-vui": {
+  "t": "이 이미지를 읽을 수 없어요 — JPG나 PNG 이미지를 선택해 주세요.",
+  "h": "32a1faf4"
+ },
+ "js.nhtg.khong-nhan-dien-duoc-mat-ro": {
+  "t": "⚠ 얼굴을 뚜렷하게 인식하지 못했어요. 분석은 가능하지만 정면 사진을 쓰는 것이 좋아요.",
+  "h": "8aef3360"
+ },
+ "js.nhtg.khong-the-ket-noi": {
+  "t": "연결할 수 없어요.",
+  "h": "3dc4d8cb"
+ },
+ "js.nhtg.khong-the-mo-camera": {
+  "t": "카메라를 열 수 없어요.",
+  "h": "39a33224"
+ },
+ "js.nhtg.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.nhtg.loi-s": {
+  "t": "오류 {s}",
+  "h": "c406c72b"
+ },
+ "js.nhtg.ngang": {
+  "t": "수평",
+  "h": "a704525f"
+ },
+ "js.nhtg.nhan-tuong": {
+  "t": "안상",
+  "h": "1826b211"
+ },
+ "js.nhtg.nhan-tuong-cua-toi": {
+  "t": "내 안상",
+  "h": "1943cfc5"
+ },
+ "js.nhtg.nhan-tuong-d6ph": {
+  "t": "안상",
+  "h": "1bc89b2e"
+ },
+ "js.nhtg.phuong-nhan-la-gi": {
+  "t": "봉안이 뭐예요?",
+  "h": "9ea5dc8a"
+ },
+ "js.nhtg.tam-bach-nhan-co-y-nghia": {
+  "t": "삼백안은 어떤 의미가 있나요?",
+  "h": "913d8ad7"
+ },
+ "js.nhtg.thuong-mat-15-20-giay": {
+  "t": "보통 15~20초 걸려요",
+  "h": "087173ee"
+ },
+ "js.nhtg.trong-mat-hoi-lech-len-co": {
+  "t": "눈동자가 살짝 위로 치우침 — 하삼백안일 수 있어요",
+  "h": "2815a4af"
+ },
+ "js.nhtg.trong-mat-hoi-lech-xuong-co": {
+  "t": "눈동자가 살짝 아래로 치우침 — 상삼백안일 수 있어요",
+  "h": "165636af"
+ },
+ "js.nhtg.vi-tri-trong-mat-can-doi": {
+  "t": "눈동자 위치: 균형 잡힘",
+  "h": "e253adf3"
+ },
+ "js.nhtg.vui-long-chon-file-anh": {
+  "t": "이미지 파일을 선택해 주세요.",
+  "h": "71a61127"
+ },
+ "js.noisinh.noi-khac": {
+  "t": "기타 (시간대 선택)",
+  "h": "dee91293"
+ },
+ "js.noisinh.vung-america-anchorage": {
+  "t": "알래스카",
+  "h": "7288f7f8"
+ },
+ "js.noisinh.vung-america-cancun": {
+  "t": "킨타나로오 (칸쿤)",
+  "h": "a0570d82"
+ },
+ "js.noisinh.vung-america-chicago": {
+  "t": "중부 (시카고, 텍사스)",
+  "h": "bff83b4f"
+ },
+ "js.noisinh.vung-america-chihuahua": {
+  "t": "치와와",
+  "h": "c505a9ee"
+ },
+ "js.noisinh.vung-america-cuiaba": {
+  "t": "마투그로수 (쿠이아바)",
+  "h": "93bc2a58"
+ },
+ "js.noisinh.vung-america-denver": {
+  "t": "산악 (덴버, 유타)",
+  "h": "134332e5"
+ },
+ "js.noisinh.vung-america-edmonton": {
+  "t": "앨버타 (캘거리, 에드먼턴)",
+  "h": "b2e43118"
+ },
+ "js.noisinh.vung-america-fortaleza": {
+  "t": "북동부 (포르탈레자, 헤시피)",
+  "h": "9aec8b83"
+ },
+ "js.noisinh.vung-america-halifax": {
+  "t": "노바스코샤, 뉴브런즈윅",
+  "h": "a8df3343"
+ },
+ "js.noisinh.vung-america-hermosillo": {
+  "t": "소노라",
+  "h": "6bf7497c"
+ },
+ "js.noisinh.vung-america-los-angeles": {
+  "t": "서부 (캘리포니아, 워싱턴, 네바다)",
+  "h": "575d6232"
+ },
+ "js.noisinh.vung-america-manaus": {
+  "t": "아마조나스 (마나우스)",
+  "h": "ed2318c2"
+ },
+ "js.noisinh.vung-america-mexico-city": {
+  "t": "멕시코시티",
+  "h": "6f2504a8"
+ },
+ "js.noisinh.vung-america-new-york": {
+  "t": "동부 (뉴욕, 워싱턴, 플로리다)",
+  "h": "dd133140"
+ },
+ "js.noisinh.vung-america-noronha": {
+  "t": "페르난두지노로냐",
+  "h": "2fde06cc"
+ },
+ "js.noisinh.vung-america-phoenix": {
+  "t": "애리조나",
+  "h": "104fd3fd"
+ },
+ "js.noisinh.vung-america-regina": {
+  "t": "서스캐처원",
+  "h": "59faf251"
+ },
+ "js.noisinh.vung-america-rio-branco": {
+  "t": "아크리 (히우브랑쿠)",
+  "h": "f9bd2753"
+ },
+ "js.noisinh.vung-america-sao-paulo": {
+  "t": "상파울루, 리우데자네이루, 브라질리아",
+  "h": "399ffe72"
+ },
+ "js.noisinh.vung-america-st-johns": {
+  "t": "뉴펀들랜드",
+  "h": "26141861"
+ },
+ "js.noisinh.vung-america-tijuana": {
+  "t": "바하칼리포르니아 (티후아나)",
+  "h": "13926f45"
+ },
+ "js.noisinh.vung-america-toronto": {
+  "t": "온타리오, 퀘벡 (토론토, 몬트리올)",
+  "h": "269b79f5"
+ },
+ "js.noisinh.vung-america-vancouver": {
+  "t": "브리티시컬럼비아 (밴쿠버)",
+  "h": "28973314"
+ },
+ "js.noisinh.vung-america-winnipeg": {
+  "t": "매니토바 (위니펙)",
+  "h": "80e2d9ca"
+ },
+ "js.noisinh.vung-asia-almaty": {
+  "t": "알마티, 아스타나",
+  "h": "aa213dd9"
+ },
+ "js.noisinh.vung-asia-aqtobe": {
+  "t": "카자흐스탄 서부 (악토베)",
+  "h": "6d10ee22"
+ },
+ "js.noisinh.vung-asia-irkutsk": {
+  "t": "이르쿠츠크",
+  "h": "f9bd4c15"
+ },
+ "js.noisinh.vung-asia-jakarta": {
+  "t": "인도네시아 서부 (자카르타, 수마트라)",
+  "h": "2392de20"
+ },
+ "js.noisinh.vung-asia-jayapura": {
+  "t": "인도네시아 동부 (파푸아)",
+  "h": "df48b98d"
+ },
+ "js.noisinh.vung-asia-kamchatka": {
+  "t": "캄차카",
+  "h": "23e8a422"
+ },
+ "js.noisinh.vung-asia-krasnoyarsk": {
+  "t": "크라스노야르스크",
+  "h": "7f9fde59"
+ },
+ "js.noisinh.vung-asia-magadan": {
+  "t": "마가단",
+  "h": "4fdccca9"
+ },
+ "js.noisinh.vung-asia-makassar": {
+  "t": "인도네시아 중부 (발리, 술라웨시)",
+  "h": "8702559b"
+ },
+ "js.noisinh.vung-asia-novosibirsk": {
+  "t": "노보시비르스크",
+  "h": "fb8d7707"
+ },
+ "js.noisinh.vung-asia-omsk": {
+  "t": "옴스크",
+  "h": "eb8ebb22"
+ },
+ "js.noisinh.vung-asia-vladivostok": {
+  "t": "블라디보스토크",
+  "h": "fa32a249"
+ },
+ "js.noisinh.vung-asia-yakutsk": {
+  "t": "야쿠츠크",
+  "h": "0613e23b"
+ },
+ "js.noisinh.vung-asia-yekaterinburg": {
+  "t": "예카테린부르크",
+  "h": "c2daa856"
+ },
+ "js.noisinh.vung-australia-adelaide": {
+  "t": "사우스오스트레일리아 (애들레이드)",
+  "h": "72ad53b3"
+ },
+ "js.noisinh.vung-australia-brisbane": {
+  "t": "퀸즐랜드 (브리즈번)",
+  "h": "272e1f8b"
+ },
+ "js.noisinh.vung-australia-darwin": {
+  "t": "노던테리토리 (다윈)",
+  "h": "450de8f0"
+ },
+ "js.noisinh.vung-australia-hobart": {
+  "t": "태즈메이니아 (호바트)",
+  "h": "902ee4e7"
+ },
+ "js.noisinh.vung-australia-melbourne": {
+  "t": "빅토리아 (멜버른)",
+  "h": "34e81b5d"
+ },
+ "js.noisinh.vung-australia-perth": {
+  "t": "웨스턴오스트레일리아 (퍼스)",
+  "h": "de084687"
+ },
+ "js.noisinh.vung-australia-sydney": {
+  "t": "뉴사우스웨일스, ACT (시드니, 캔버라)",
+  "h": "5bc1b945"
+ },
+ "js.noisinh.vung-europe-kaliningrad": {
+  "t": "칼리닌그라드",
+  "h": "7484e853"
+ },
+ "js.noisinh.vung-europe-moscow": {
+  "t": "모스크바, 상트페테르부르크",
+  "h": "5a57fbcd"
+ },
+ "js.noisinh.vung-europe-samara": {
+  "t": "사마라",
+  "h": "f6b8e61f"
+ },
+ "js.noisinh.vung-pacific-honolulu": {
+  "t": "하와이",
+  "h": "a1be9509"
+ },
  "js.oracle.ai-dang-ho-tro-ban-ma": {
   "t": "당신을 도와주고 있는데 아직 고마움을 전하지 못한 사람은 누구인가요? 당신이 돌봐 줄 수 있는 사람이 있지는 않나요?",
   "h": "96542020"
@@ -11875,6 +12187,686 @@
   "t": "<button type=\"button\" class=\"chat-hl-cta\" id=\"tshOpenSheet\">13가지 수 전체 보기 →</button></div></div>",
   "h": "f89bb371"
  },
+ "js.thtg.am-luong": {
+  "t": "음량",
+  "h": "71662f1b"
+ },
+ "js.thtg.am-sac-brightness": {
+  "t": "음색(밝기)",
+  "h": "b3cd8066"
+ },
+ "js.thtg.bat-dau-thu-am": {
+  "t": "녹음 시작",
+  "h": "61e33202"
+ },
+ "js.thtg.cao-do-pitch": {
+  "t": "음높이(피치)",
+  "h": "d81eb36d"
+ },
+ "js.thtg.chuan-bi-giong-noi": {
+  "t": "목소리를 준비하세요…",
+  "h": "f2647a9c"
+ },
+ "js.thtg.dang-luan-giai-thanh-tuong": {
+  "t": "성상을 풀이하는 중…",
+  "h": "69e05b82"
+ },
+ "js.thtg.dang-phan-tich-am-thanh": {
+  "t": "음성을 분석하는 중…",
+  "h": "f92bf29f"
+ },
+ "js.thtg.dang-thu-am-hay-doc-doan": {
+  "t": "녹음 중 — 위의 시를 읽어 주세요…",
+  "h": "9798c154"
+ },
+ "js.thtg.dang-xu-ly": {
+  "t": "처리 중…",
+  "h": "e8c1faab"
+ },
+ "js.thtg.do-on-dinh": {
+  "t": "안정도",
+  "h": "86509ba8"
+ },
+ "js.thtg.dung-lai": {
+  "t": "중지",
+  "h": "d313e7b3"
+ },
+ "js.thtg.giong-cua-ban-thuoc-n": {
+  "t": "당신의 목소리는 **{n}**에 속해요. 성상학에 대해 더 궁금한 점이 있나요?",
+  "h": "7f3afd32"
+ },
+ "js.thtg.giong-tram-noi-len-dieu-gi": {
+  "t": "낮은 목소리는 무엇을 뜻하나요?",
+  "h": "93f12462"
+ },
+ "js.thtg.kha-to": {
+  "t": "꽤 큼",
+  "h": "089b5f63"
+ },
+ "js.thtg.khong-co-ket-qua": {
+  "t": "결과가 없어요.",
+  "h": "97fa6f91"
+ },
+ "js.thtg.khong-ro": {
+  "t": "알 수 없음",
+  "h": "988a61b5"
+ },
+ "js.thtg.khong-the-ket-noi": {
+  "t": "연결할 수 없어요.",
+  "h": "3dc4d8cb"
+ },
+ "js.thtg.khong-the-truy-cap-microphone-vui": {
+  "t": "마이크에 접근할 수 없어요. 브라우저에서 권한을 허용해 주세요.",
+  "h": "f9d607c1"
+ },
+ "js.thtg.khong-the-xu-ly-am-thanh-e": {
+  "t": "음성을 처리할 수 없어요: {e}. 다시 시도해 주세요.",
+  "h": "96163473"
+ },
+ "js.thtg.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.thtg.loi-s": {
+  "t": "오류 {s}",
+  "h": "c406c72b"
+ },
+ "js.thtg.ngu-am": {
+  "t": "오음",
+  "h": "bc7a6d13"
+ },
+ "js.thtg.ngu-am-la-gi": {
+  "t": "오음이 뭐예요?",
+  "h": "ed2678e3"
+ },
+ "js.thtg.nguam-hoa": {
+  "t": "화(火)의 소리(치) — 높고 힘 있게 울림",
+  "h": "52199252"
+ },
+ "js.thtg.nguam-hoa-short": {
+  "t": "화(火)의 소리(치)",
+  "h": "eec6e5c6"
+ },
+ "js.thtg.nguam-kim": {
+  "t": "금(金)의 소리(상) — 맑고 멀리 울림",
+  "h": "83770d13"
+ },
+ "js.thtg.nguam-kim-short": {
+  "t": "금(金)의 소리(상)",
+  "h": "1e2fe8d9"
+ },
+ "js.thtg.nguam-moc": {
+  "t": "목(木)의 소리(각) — 둥글고 온후함",
+  "h": "1e8e07c1"
+ },
+ "js.thtg.nguam-moc-short": {
+  "t": "목(木)의 소리(각)",
+  "h": "7835647e"
+ },
+ "js.thtg.nguam-tho": {
+  "t": "토(土)의 소리(궁) — 낮고 따뜻하며 여운이 있음",
+  "h": "dbbc4796"
+ },
+ "js.thtg.nguam-tho-short": {
+  "t": "토(土)의 소리(궁)",
+  "h": "66f33677"
+ },
+ "js.thtg.nguam-thuy": {
+  "t": "수(水)의 소리(우) — 서늘하고 깊음",
+  "h": "48b02063"
+ },
+ "js.thtg.nguam-thuy-short": {
+  "t": "수(水)의 소리(우)",
+  "h": "51405ff5"
+ },
+ "js.thtg.nhan-de-bat-dau-thu-am": {
+  "t": "눌러서 녹음 시작 · 브라우저가 물어보면 마이크 사용을 허용해 주세요",
+  "h": "74465b56"
+ },
+ "js.thtg.nho-yeu": {
+  "t": "작고 약함",
+  "h": "906c7657"
+ },
+ "js.thtg.pitch-cao": {
+  "t": "{p}Hz — 높음",
+  "h": "526966ef"
+ },
+ "js.thtg.pitch-rat-tram": {
+  "t": "{p}Hz — 매우 낮음",
+  "h": "1b80b5d2"
+ },
+ "js.thtg.pitch-tram": {
+  "t": "{p}Hz — 낮음",
+  "h": "110698bc"
+ },
+ "js.thtg.pitch-trung-binh": {
+  "t": "{p}Hz — 보통",
+  "h": "8577f320"
+ },
+ "js.thtg.pitch-trung-cao": {
+  "t": "{p}Hz — 중간 높음",
+  "h": "163ebf39"
+ },
+ "js.thtg.pitch-trung-thap": {
+  "t": "{p}Hz — 중간 낮음",
+  "h": "d249a0d1"
+ },
+ "js.thtg.rat-sang": {
+  "t": "매우 밝음",
+  "h": "17b19c93"
+ },
+ "js.thtg.rate-cham": {
+  "t": "{r} 음절/초 — 느림",
+  "h": "7a1bd431"
+ },
+ "js.thtg.rate-nhanh": {
+  "t": "{r} 음절/초 — 빠름",
+  "h": "3a26518c"
+ },
+ "js.thtg.rate-rat-cham": {
+  "t": "{r} 음절/초 — 매우 느림",
+  "h": "73a0a454"
+ },
+ "js.thtg.rate-rat-nhanh": {
+  "t": "{r} 음절/초 — 매우 빠름",
+  "h": "40972e00"
+ },
+ "js.thtg.rate-vua": {
+  "t": "{r} 음절/초 — 보통",
+  "h": "39d27349"
+ },
+ "js.thtg.sang-trong": {
+  "t": "밝고 맑음",
+  "h": "754176c3"
+ },
+ "js.thtg.thanh-tuong": {
+  "t": "성상",
+  "h": "d47f6d49"
+ },
+ "js.thtg.thanh-tuong-co-doi-duoc-khong": {
+  "t": "성상은 바꿀 수 있나요?",
+  "h": "0bac268d"
+ },
+ "js.thtg.thanh-tuong-cua-toi": {
+  "t": "나의 성상",
+  "h": "f28a25a6"
+ },
+ "js.thtg.thoi-luong": {
+  "t": "소요 시간",
+  "h": "83dc4d39"
+ },
+ "js.thtg.thu-am-hoan-tat-nhan-phan": {
+  "t": "녹음이 끝났어요 — '분석'을 눌러 결과를 확인하세요.",
+  "h": "016efee8"
+ },
+ "js.thtg.thu-am-lai": {
+  "t": "다시 녹음",
+  "h": "e7849d1e"
+ },
+ "js.thtg.thuong-mat-10-15-giay": {
+  "t": "보통 10~15초 걸려요",
+  "h": "56670e66"
+ },
+ "js.thtg.to-co-luc": {
+  "t": "크고 힘 있음",
+  "h": "7514dffb"
+ },
+ "js.thtg.toc-do-noi": {
+  "t": "말하는 속도",
+  "h": "3e47bcf8"
+ },
+ "js.thtg.toi-am": {
+  "t": "어둡고 따뜻함",
+  "h": "4fb70bda"
+ },
+ "js.thtg.trung-binh-am": {
+  "t": "보통이며 따뜻함",
+  "h": "94def005"
+ },
+ "js.thtg.uoc-tinh-n": {
+  "t": "추정: {n}",
+  "h": "9c0f8c8c"
+ },
+ "js.thtg.vua-phai": {
+  "t": "적당함",
+  "h": "e3fa9054"
+ },
+ "js.thtp.am-s": {
+  "t": " 음절/초",
+  "h": "49ed1880"
+ },
+ "js.thtp.am-sac-am-toi-tho-kim": {
+  "t": "음색이 따뜻하고 어두워요 — 토·금의 저음.",
+  "h": "12665913"
+ },
+ "js.thtp.am-sac-sang": {
+  "t": "음색이 밝아요.",
+  "h": "8c1437e2"
+ },
+ "js.thtp.am-sac-trung-binh": {
+  "t": "음색이 보통이에요.",
+  "h": "ed7134e9"
+ },
+ "js.thtp.amplitude-rat-on-dinh": {
+  "t": "진폭이 매우 안정적이에요.",
+  "h": "5f11e83b"
+ },
+ "js.thtp.bai-n": {
+  "t": "과제 {n}",
+  "h": "9227ba34"
+ },
+ "js.thtp.bai-tiep-theo": {
+  "t": "다음 과제 →",
+  "h": "aad8808b"
+ },
+ "js.thtp.bat-dau-thu-am": {
+  "t": "녹음 시작",
+  "h": "61e33202"
+ },
+ "js.thtp.bien-dong-lon": {
+  "t": "변동이 커요.",
+  "h": "56e49443"
+ },
+ "js.thtp.binh-thuong": {
+  "t": "보통이에요.",
+  "h": "4711eaec"
+ },
+ "js.thtp.cao-vung-moc": {
+  "t": "높음 — 목의 영역.",
+  "h": "1f708e1f"
+ },
+ "js.thtp.cham-diem-dam": {
+  "t": "느림 — 차분함.",
+  "h": "1761f7f1"
+ },
+ "js.thtp.co-bien-dong": {
+  "t": "변동이 있어요.",
+  "h": "bb657503"
+ },
+ "js.thtp.co-tap-am-vung-giua-thanh": {
+  "t": "잡음 있음 — 청과 탁의 중간.",
+  "h": "72479b12"
+ },
+ "js.thtp.cong-cha-nhu-nui-thai-son": {
+  "t": "아버지의 은혜는 태산처럼 높고,\n어머니의 은혜는 샘물처럼 끝없이 흐른다.",
+  "h": "5e8b8ca0"
+ },
+ "js.thtp.da-ghi-xong": {
+  "t": "녹음 완료",
+  "h": "8d555bc2"
+ },
+ "js.thtp.dang-ghi-am": {
+  "t": "녹음 중…",
+  "h": "e8185717"
+ },
+ "js.thtp.dang-luan-giai": {
+  "t": "풀이 중…",
+  "h": "aa035f2b"
+ },
+ "js.thtp.dang-phan-tich": {
+  "t": "분석 중…",
+  "h": "6c1c499b"
+ },
+ "js.thtp.dang-phan-tich-theo-co-phap": {
+  "t": "고법에 따라 분석하고 있어요",
+  "h": "18ad9517"
+ },
+ "js.thtp.dang-tinh-toan-dac-trung-am": {
+  "t": "음향 특징을 계산하고 있어요…",
+  "h": "7e4c7703"
+ },
+ "js.thtp.dao-dong-manh-ky-cach-pha": {
+  "t": "크게 흔들려요 — '파라(破鑼)'격을 꺼려요.",
+  "h": "af8f73b4"
+ },
+ "js.thtp.dem-deu-toc-do-khong-gap": {
+  "t": "일정한 속도로, 서두르지도 늦추지도 말고 세어 주세요. 숫자 사이 간격은 약 0.5초예요.",
+  "h": "3c773947"
+ },
+ "js.thtp.dem-so-1-15": {
+  "t": "1 → 15 세기",
+  "h": "f6278207"
+ },
+ "js.thtp.do-on-dinh-f0": {
+  "t": "F0 안정도",
+  "h": "f0626dcb"
+ },
+ "js.thtp.do-truc-tiep-tu-giong-noi": {
+  "t": " 마이크로 목소리를 직접 측정한 결과예요. 나머지 11개 음향 지표와 전체 풀이는 심층 분석에 들어 있어요.",
+  "h": "1514c6cc"
+ },
+ "js.thtp.do-uyen-chuyen-tong-giong": {
+  "t": "음높이의 유연함.",
+  "h": "c42d8f86"
+ },
+ "js.thtp.doc-binh-thuong-ro-rang-khong": {
+  "t": "평소처럼 또렷하게, 서두르지 말고, 일부러 낮추거나 높이지 말고 읽어 주세요. 기본이 되는 목소리예요.",
+  "h": "ace9a97f"
+ },
+ "js.thtp.doc-co-ngu-dieu-len-xuong": {
+  "t": "억양을 살려 자연스럽게 높낮이를 주며 읽어 주세요. 베트남 고전 『쭈옌 끼에우』의 첫 구절이에요 — 시를 낭송하듯 읽어 보세요.",
+  "h": "deebf884"
+ },
+ "js.thtp.doc-doan-van": {
+  "t": "문장 읽기",
+  "h": "1d0b2c72"
+ },
+ "js.thtp.doc-ngan-theo-huong-dan": {
+  "t": "안내에 따라 읽거나 소리를 길게 내 주세요.",
+  "h": "3c680985"
+ },
+ "js.thtp.doc-tho-bai-do-pitch-range": {
+  "t": "시 낭송 — 음역 측정",
+  "h": "73c2b60b"
+ },
+ "js.thtp.don-dieu-it-bieu-cam": {
+  "t": "단조로움 — 표현이 적어요.",
+  "h": "3e48c9db"
+ },
+ "js.thtp.f0-trung-binh": {
+  "t": "F0 평균",
+  "h": "36f5bf55"
+ },
+ "js.thtp.giong-cao-bat-thuong-cho-nam": {
+  "t": "ℹ 남성치고 비정상적으로 높은 목소리예요. 가성으로 말했거나 데이터가 불안정할 수 있어요.",
+  "h": "a3164510"
+ },
+ "js.thtp.giong-cua-ban-thuoc-n": {
+  "t": "당신의 목소리는 **{n}**에 속해요(4개 과제, 12개 음향 지표로 측정). 성상학에 대해 더 궁금한 점이 있나요?",
+  "h": "890b1b1b"
+ },
+ "js.thtp.giong-nen-f0": {
+  "t": "기본 목소리: F0 평균 <strong>{f0}Hz</strong>, 말하는 속도 {rate} 음절/초.",
+  "h": "a9e1812d"
+ },
+ "js.thtp.giong-thanh-trong-vang": {
+  "t": "'청(清)' 목소리 — 맑고 울림이 좋아요.",
+  "h": "b5424c0c"
+ },
+ "js.thtp.giong-tram-bat-thuong-cho-nu": {
+  "t": "ℹ 여성치고 비정상적으로 낮은 목소리예요. 일부러 꾸민 목소리이거나 데이터가 불안정할 수 있어요.",
+  "h": "b7ed0210"
+ },
+ "js.thtp.giong-troc-duc": {
+  "t": "'탁(濁)' 목소리 — 탁해요.",
+  "h": "b504dd91"
+ },
+ "js.thtp.giong-vua-thanh-vua-co-luc": {
+  "t": "맑으면서 힘이 있는 목소리.",
+  "h": "a7a812ab"
+ },
+ "js.thtp.giu-deu-khi-day-tot": {
+  "t": "고르게 유지 — 기의 바탕이 좋아요.",
+  "h": "ee4f48e1"
+ },
+ "js.thtp.hit-mot-hoi-sau-sau-do": {
+  "t": "숨을 깊이 들이쉰 뒤 '아' 소리를 같은 높이로 끊김 없이 길게 내 주세요. 오르내림 없이 고를수록 좋아요. 가장 중요한 과제예요 — 기력을 측정해요.",
+  "h": "a85ada27"
+ },
+ "js.thtp.hnr-do-trong": {
+  "t": "HNR(맑기)",
+  "h": "372da110"
+ },
+ "js.thtp.hnr-thap-8db-nhieu-tap-am": {
+  "t": "⚠ HNR이 낮아요(<8dB) — 잡음이 많아요. 더 조용한 환경인지 확인해 주세요.",
+  "h": "4f448bef"
+ },
+ "js.thtp.hnr-thap-noi-len-dieu-gi": {
+  "t": "HNR이 낮으면 무엇을 뜻하나요?",
+  "h": "c0db1713"
+ },
+ "js.thtp.hoi-lech-dau-hieu-khi-khong": {
+  "t": "약간 흔들림 — 기가 고르지 않다는 신호.",
+  "h": "7392dcf4"
+ },
+ "js.thtp.hoi-rung-co-the-cang-thang": {
+  "t": "약간 떨림 — 긴장했을 수 있어요.",
+  "h": "a544df6f"
+ },
+ "js.thtp.jitter-ngan": {
+  "t": "지터(지속음)",
+  "h": "6ca69280"
+ },
+ "js.thtp.jitter-va-shimmer-la-gi": {
+  "t": "지터와 시머가 뭐예요?",
+  "h": "0fc478fd"
+ },
+ "js.thtp.khac-gi-ban-thanh-tuong-thuong": {
+  "t": "일반 성상과 무엇이 다른가요?",
+  "h": "37afdd5e"
+ },
+ "js.thtp.khi-bat-tuc": {
+  "t": "기 부족",
+  "h": "26098327"
+ },
+ "js.thtp.khi-bat-tuc-can-luyen-duong": {
+  "t": "기 부족 — 양기 단련이 필요해요.",
+  "h": "a17003c2"
+ },
+ "js.thtp.khi-du-vung-quy-tuong": {
+  "t": "기가 충분해요 — 귀상의 영역.",
+  "h": "ba173e75"
+ },
+ "js.thtp.khi-luc-rat-tot-khi-tuc": {
+  "t": "기력이 매우 좋아요 — '기족성원(氣足聲圓)'.",
+  "h": "271ac112"
+ },
+ "js.thtp.khi-luc-tot": {
+  "t": "기력 좋음",
+  "h": "191dd52d"
+ },
+ "js.thtp.khi-sustain": {
+  "t": "기(지속 시간)",
+  "h": "64bc1d84"
+ },
+ "js.thtp.khi-trung-binh": {
+  "t": "기 보통",
+  "h": "7f2a227e"
+ },
+ "js.thtp.khi-trung-binh-dogb": {
+  "t": "기가 보통이에요.",
+  "h": "29600da0"
+ },
+ "js.thtp.khong-nhan-duoc-noi-dung-tra": {
+  "t": "결과를 받지 못했어요. 다시 시도해 주세요.",
+  "h": "a80badc4"
+ },
+ "js.thtp.khong-truy-cap-duoc-microphone": {
+  "t": "마이크에 접근할 수 없어요",
+  "h": "a07b8893"
+ },
+ "js.thtp.loi": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.thtp.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.thtp.loi-stream-e": {
+  "t": "스트림 오류: {e}",
+  "h": "62596680"
+ },
+ "js.thtp.luan-giai-lai": {
+  "t": "다시 풀이하기",
+  "h": "11d43587"
+ },
+ "js.thtp.mot-hai-ba-bon-nam-sau": {
+  "t": "하나, 둘, 셋, 넷, 다섯, 여섯,\n일곱, 여덟, 아홉, 열, 열하나,\n열둘, 열셋, 열넷, 열다섯.",
+  "h": "6b26e8a7"
+ },
+ "js.thtp.n-giay": {
+  "t": "{n}초",
+  "h": "4b5fecbd"
+ },
+ "js.thtp.ngan-am-a-bai-do-khi": {
+  "t": "'아' 소리 길게 내기 — 기 측정",
+  "h": "df9c2325"
+ },
+ "js.thtp.ngan-am-qua-ngan-2-5s": {
+  "t": "⚠ 소리가 너무 짧아요(<2.5s) — 기가 부족하거나 마이크가 제대로 담지 못했을 수 있어요. 의도한 것이 아니라면 2번 과제를 다시 녹음해 보세요.",
+  "h": "608e2941"
+ },
+ "js.thtp.ngan-dai-shimmer": {
+  "t": "지속 <strong>{d}s</strong>, 시머 {sh}dB — <em>{q}</em>.",
+  "h": "e8a19bff"
+ },
+ "js.thtp.ngu-am-uoc-tinh-n": {
+  "t": "추정 오음: {n}",
+  "h": "21219146"
+ },
+ "js.thtp.nguam-chen": {
+  "t": "{a}, {b} 섞임",
+  "h": "8891cc34"
+ },
+ "js.thtp.nguam-thanh": {
+  "t": "{x}(맑음)",
+  "h": "796dcf40"
+ },
+ "js.thtp.nguam-troc": {
+  "t": "{x}(탁함)",
+  "h": "8f9cb8cf"
+ },
+ "js.thtp.nhanh-linh-hoat": {
+  "t": "빠름 — 민첩함.",
+  "h": "f8f7c567"
+ },
+ "js.thtp.on-dinh": {
+  "t": "안정적이에요.",
+  "h": "44fce326"
+ },
+ "js.thtp.on-dinh-binh-thuong": {
+  "t": "안정적 — 보통이에요.",
+  "h": "2d859433"
+ },
+ "js.thtp.pitch-range-uyen-chuyen": {
+  "t": "음역: <strong>{r}Hz</strong>, 유연함 {a}Hz/단계.",
+  "h": "b98dd351"
+ },
+ "js.thtp.rat-bien-ao-co-the-kich": {
+  "t": "매우 변화무쌍 — 극적일 수 있어요.",
+  "h": "fc2e0818"
+ },
+ "js.thtp.rat-cao-bat-thuong-cho-nam": {
+  "t": "매우 높음 — 남성으로서는 비정상.",
+  "h": "6e3d8f7a"
+ },
+ "js.thtp.rat-cao-kiem-tra-lai": {
+  "t": "매우 높음 — 다시 확인해 주세요.",
+  "h": "2fd84911"
+ },
+ "js.thtp.rat-duc-co-the-mic-kem": {
+  "t": "매우 탁함 — 마이크 품질 문제이거나 목소리가 갈라졌을 수 있어요.",
+  "h": "532d0a63"
+ },
+ "js.thtp.rat-nhanh-co-the-gap-gap": {
+  "t": "매우 빠름 — 조급할 수 있어요.",
+  "h": "468f53f6"
+ },
+ "js.thtp.rat-on-dinh": {
+  "t": "매우 안정적이에요.",
+  "h": "01b80ed2"
+ },
+ "js.thtp.rat-on-dinh-giong-vien-man": {
+  "t": "매우 안정적 — '원만(圓滿)'한 목소리.",
+  "h": "3d4e7673"
+ },
+ "js.thtp.rat-sang-co-the-choi": {
+  "t": "매우 밝음 — 날카로울 수 있어요.",
+  "h": "b82be1c7"
+ },
+ "js.thtp.rat-tram-vung-tho-ho-hong": {
+  "t": "매우 낮음 — 토·호후(虎吼)의 영역.",
+  "h": "25ff5eb4"
+ },
+ "js.thtp.rung-ro-ret-chu-y-suc": {
+  "t": "뚜렷하게 떨려요 — 목소리 건강에 주의하세요.",
+  "h": "624dbc77"
+ },
+ "js.thtp.sang-vung-moc-oanh-minh": {
+  "t": "밝음 — 목·앵명(鶯鳴)의 영역.",
+  "h": "4c2e15f1"
+ },
+ "js.thtp.shimmer-cao-1-2db-giong-khong": {
+  "t": "⚠ 시머가 높아요(>1.2dB) — 소리를 길게 낼 때 불안정해요. 목소리 떨림이나 낮은 마이크 품질 때문일 수 있어요.",
+  "h": "3f02b1f2"
+ },
+ "js.thtp.shimmer-ngan": {
+  "t": "시머(지속음)",
+  "h": "4f46f5b3"
+ },
+ "js.thtp.suy-nhanh-huu-dau-vo-vi": {
+  "t": "빠르게 약해짐 — '유두무미(有頭無尾)', 뒤로 갈수록 기가 약해요.",
+  "h": "70b554fb"
+ },
+ "js.thtp.suy-nhe-binh-thuong": {
+  "t": "약간 줄어듦 — 보통이에요.",
+  "h": "e192d8a5"
+ },
+ "js.thtp.thanh-tuong-pro": {
+  "t": "성상 Pro",
+  "h": "b2e5a151"
+ },
+ "js.thtp.thanh-tuong-pro-cua-toi": {
+  "t": "나의 성상 Pro",
+  "h": "9cca3092"
+ },
+ "js.thtp.thanh-tuong-pro-n": {
+  "t": "성상 Pro — {n}",
+  "h": "677bf701"
+ },
+ "js.thtp.thu-lai": {
+  "t": "다시 시도",
+  "h": "761e1380"
+ },
+ "js.thtp.toc-do-dem-am-tiet": {
+  "t": "세는 속도: <strong>{rate}</strong> 음절/초.",
+  "h": "76b9cb6a"
+ },
+ "js.thtp.toc-do-noi": {
+  "t": "말하는 속도",
+  "h": "3e47bcf8"
+ },
+ "js.thtp.tram-nam-trong-coi-nguoi-ta": {
+  "t": "사람의 한평생 백 년 가운데,\n재주와 운명은 서로 시기하기 마련이니.",
+  "h": "820f3996"
+ },
+ "js.thtp.tram-vung-kim-tho": {
+  "t": "낮음 — 금·토의 영역.",
+  "h": "38ae56f0"
+ },
+ "js.thtp.tram-vung-tho": {
+  "t": "낮음 — 토의 영역.",
+  "h": "16b2fd85"
+ },
+ "js.thtp.trung-binh": {
+  "t": "보통이에요.",
+  "h": "9942b5ce"
+ },
+ "js.thtp.trung-binh-vung-kim": {
+  "t": "보통 — 금의 영역.",
+  "h": "7f4bb46d"
+ },
+ "js.thtp.uyen-chuyen-vung-thuy": {
+  "t": "유연함 — 수의 영역.",
+  "h": "d127ffa4"
+ },
+ "js.thtp.vua-phai": {
+  "t": "적당해요.",
+  "h": "080fe879"
+ },
+ "js.thtp.vung-cong-huong-giong": {
+  "t": "목소리의 공명 영역.",
+  "h": "bb5e88f1"
+ },
+ "js.thtp.xem-ket-qua": {
+  "t": "결과 보기 →",
+  "h": "73c02132"
+ },
+ "js.thtp.xep-theo-12-chi-so-am": {
+  "t": "측정한 12개 음향 지표(HNR, 지속 시간, 지터, 스펙트럼 중심…)를 기준으로 분류했어요. 오음 고법에 따른 전체 의미는 심층 분석에 들어 있어요.",
+  "h": "0c3c0a37"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"결제 ",
   "h": "3d7d89ae"
@@ -12154,6 +13146,262 @@
  "js.topup.xem-lich-su": {
   "t": "기록 보기",
   "h": "21a19fb0"
+ },
+ "js.tuviform.ca-nhan": {
+  "t": "개인 정보",
+  "h": "bbe1cce8"
+ },
+ "js.tuviform.chon-du-ngay": {
+  "t": "생년월일(일·월·년)을 모두 선택해 주세요.",
+  "h": "808dc076"
+ },
+ "js.tuviform.chon-noi-sinh": {
+  "t": "— 출생지 선택 —",
+  "h": "87b109c3"
+ },
+ "js.tuviform.con-hoi-cho-ai": {
+  "t": "누구의 풀이인가요?",
+  "h": "4171dda8"
+ },
+ "js.tuviform.con-muon-xem-nam": {
+  "t": "어느 해의 운세를 볼까요?",
+  "h": "43e3ee2b"
+ },
+ "js.tuviform.dien-day-du": {
+  "t": "왼쪽에 양력 생년월일과 태어난 시각을 모두 입력한 뒤 풀이를 시작하세요.",
+  "h": "618a618f"
+ },
+ "js.tuviform.gio": {
+  "t": "시",
+  "h": "75f92388"
+ },
+ "js.tuviform.gio-am": {
+  "t": "시진: {chi}",
+  "h": "9ce5a400"
+ },
+ "js.tuviform.gio-sinh": {
+  "t": "태어난 시각",
+  "h": "2d0aa7eb"
+ },
+ "js.tuviform.gio-sinh-ok": {
+  "t": "태어난 시각: <b>{hm}</b> ✓",
+  "h": "b77347e7"
+ },
+ "js.tuviform.gioi-tinh": {
+  "t": "성별",
+  "h": "80bbce55"
+ },
+ "js.tuviform.gt-nam": {
+  "t": "남성",
+  "h": "b580ba1b"
+ },
+ "js.tuviform.gt-nu": {
+  "t": "여성",
+  "h": "feb92ccd"
+ },
+ "js.tuviform.ho-ten": {
+  "t": "이름",
+  "h": "ad9f2994"
+ },
+ "js.tuviform.hoi-cho": {
+  "t": "<b>{ten}</b>님에 대해 ✓",
+  "h": "3ced148a"
+ },
+ "js.tuviform.khong-nho-chinh-xac": {
+  "t": "태어난 시각이 정확하지 않나요? 알아보기 →",
+  "h": "333f8bee"
+ },
+ "js.tuviform.khong-ten": {
+  "t": "이름 없음",
+  "h": "7c5b38ee"
+ },
+ "js.tuviform.lich-cn": {
+  "t": "중국 역법 시각",
+  "h": "5fe3ccc2"
+ },
+ "js.tuviform.lich-jp": {
+  "t": "일본 역법 시각",
+  "h": "fe6e8036"
+ },
+ "js.tuviform.lich-kr": {
+  "t": "한국 역법 시각",
+  "h": "a8ae0a48"
+ },
+ "js.tuviform.lich-vn": {
+  "t": "베트남 시간",
+  "h": "f54ee2eb"
+ },
+ "js.tuviform.luan-giai-la-so": {
+  "t": "명반 풀이 →",
+  "h": "4bb771eb"
+ },
+ "js.tuviform.nam": {
+  "t": "년",
+  "h": "98926c7e"
+ },
+ "js.tuviform.nam-sinh": {
+  "t": "태어난 해",
+  "h": "75a6785f"
+ },
+ "js.tuviform.nam-xem-van": {
+  "t": "운세를 볼 해",
+  "h": "8f575533"
+ },
+ "js.tuviform.ngay": {
+  "t": "일",
+  "h": "368c4575"
+ },
+ "js.tuviform.ngay-sinh": {
+  "t": "태어난 일",
+  "h": "6f8de308"
+ },
+ "js.tuviform.ngay-sinh-duong": {
+  "t": "양력 생년월일",
+  "h": "5b85cc30"
+ },
+ "js.tuviform.ngay-sinh-ok": {
+  "t": "생년월일: <b>{y}년 {m}월 {d}일</b> ✓",
+  "h": "c457dbc0"
+ },
+ "js.tuviform.ngay-thang-nam-sinh": {
+  "t": "생년월일 (일 / 월 / 년)",
+  "h": "84864f2e"
+ },
+ "js.tuviform.ngoai-goi-y": {
+  "t": "해외에서 태어났다면 선택하세요. 출생지의 시간대·서머타임·음력을 자동으로 계산합니다.",
+  "h": "6af69dc4"
+ },
+ "js.tuviform.ngoai-vn": {
+  "t": "베트남 밖에서 태어났나요?",
+  "h": "db788745"
+ },
+ "js.tuviform.nguoi-moi": {
+  "t": "+ 새 사람",
+  "h": "eab3d0ff"
+ },
+ "js.tuviform.nguoi-moi-nhe": {
+  "t": "새로운 분이시군요.",
+  "h": "021dd849"
+ },
+ "js.tuviform.nhap-ho-ten": {
+  "t": "이름을 입력해 주세요.",
+  "h": "69dc7698"
+ },
+ "js.tuviform.noi-sinh": {
+  "t": "출생지",
+  "h": "39348136"
+ },
+ "js.tuviform.phut": {
+  "t": "분",
+  "h": "34ca51a4"
+ },
+ "js.tuviform.q1-gt": {
+  "t": "성별이 어떻게 되나요?",
+  "h": "d8b7441e"
+ },
+ "js.tuviform.q1-ten": {
+  "t": "성함을 전체 이름으로 알려 주세요.",
+  "h": "1e9a5600"
+ },
+ "js.tuviform.q1-ten-gt": {
+  "t": "성함과 성별을 알려 주세요.",
+  "h": "24ab2186"
+ },
+ "js.tuviform.q2": {
+  "t": "양력 생년월일이 언제인가요?",
+  "h": "abef36df"
+ },
+ "js.tuviform.q3": {
+  "t": "태어난 시각은 몇 시인가요?",
+  "h": "e5d555b9"
+ },
+ "js.tuviform.ten-mau": {
+  "t": "홍길동",
+  "h": "7388465b"
+ },
+ "js.tuviform.ten-mau-vd": {
+  "t": "예: 홍길동",
+  "h": "eafae45a"
+ },
+ "js.tuviform.thang": {
+  "t": "월",
+  "h": "0e2b3099"
+ },
+ "js.tuviform.thang-khong-co-ngay": {
+  "t": "{y}년 {m}월에는 {d}일이 없습니다. 다시 선택해 주세요.",
+  "h": "da49ec5e"
+ },
+ "js.tuviform.thang-sinh": {
+  "t": "태어난 월",
+  "h": "4695b6cf"
+ },
+ "js.tuviform.thong-tin": {
+  "t": "정보",
+  "h": "d5fc2a3b"
+ },
+ "js.tuviform.thuc-thi": {
+  "t": "제출",
+  "h": "c591a584"
+ },
+ "js.tuviform.tiep-tuc": {
+  "t": "계속 →",
+  "h": "86f35ed9"
+ },
+ "js.tuviform.tip-auto": {
+  "t": "입력한 생년월일에 따라 자동으로 보정됩니다.",
+  "h": "62305e4c"
+ },
+ "js.tuviform.tip-intro": {
+  "t": "고법에서 <b>자시(子時)</b>는 23:00–00:59입니다. 그러나 베트남은 역사적으로 여러 차례 표준시를 바꿨습니다.",
+  "h": "2cd8aaeb"
+ },
+ "js.tuviform.tip-khong-nho": {
+  "t": "<b>태어난 시각이 기억나지 않나요?</b> 정확히 모르는 분이 많지만, 태어난 시각은 이 사이트의 여러 풀이를 좌우합니다. <a href=\"/app/gio-sinh\" target=\"_blank\" style=\"color:#1455A4;font-weight:600\">태어난 시각 알아보기 →</a>",
+  "h": "af1572d3"
+ },
+ "js.tuviform.tip-li1": {
+  "t": "<b>1942년 ~ 1944년 3월 9일</b> (UTC+8): 자시 = 00:00–01:59",
+  "h": "0d7e7b3f"
+ },
+ "js.tuviform.tip-li2": {
+  "t": "<b>1944년 3월 9일 ~ 1945년 9월 2일</b> (UTC+9): 자시 = 01:00–02:59",
+  "h": "ac7257ad"
+ },
+ "js.tuviform.tip-li3": {
+  "t": "<b>1945년 9월 2일 ~ 1946년 12월 18일</b> (UTC+7): 자시 = 23:00–00:59",
+  "h": "8375e4b8"
+ },
+ "js.tuviform.tip-li4": {
+  "t": "<b>1946년 12월 19일 ~ 1955년 6월 30일</b> (UTC+8): 자시 = 00:00–01:59",
+  "h": "72d27e9b"
+ },
+ "js.tuviform.tip-li5": {
+  "t": "<b>1955년 7월 1일 ~ 1959년 12월 31일</b> (UTC+7): 자시 = 23:00–00:59",
+  "h": "88a1bc9a"
+ },
+ "js.tuviform.tip-li6": {
+  "t": "<b>1960년 1월 1일 ~ 1975년 4월 30일</b> (UTC+8, 남베트남): 자시 = 00:00–01:59",
+  "h": "a0d6511f"
+ },
+ "js.tuviform.tip-li7": {
+  "t": "<b>1975년 5월 1일부터</b> (UTC+7): 자시 = 23:00–00:59",
+  "h": "4995b03d"
+ },
+ "js.tuviform.tip-title": {
+  "t": "베트남 표준시의 변천",
+  "h": "3172a126"
+ },
+ "js.tuviform.xem-mau-pdf": {
+  "t": "풀이 샘플(PDF) 보기",
+  "h": "0053d860"
+ },
+ "js.tuviform.xem-van-nam": {
+  "t": "{n}년 운세",
+  "h": "c2204f1d"
+ },
+ "js.tuviform.xem-van-nam-ok": {
+  "t": "<b>{n}</b>년 운세 ✓",
+  "h": "f47721f2"
  },
  "js.vanhannam.bai-tinh": {
   "t": "패성:",
@@ -13771,6 +15019,130 @@
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>맞는 띠<br>꺼리는 띠</span>",
   "h": "9a664cc3"
  },
+ "nhtg.anh-chi-gui-toi-may-chu": {
+  "t": "이미지는 분석을 위해 서버로만 보내고, 서버에 저장하지 않아요. 정면에서 밝은 곳에서 찍어 주세요 — 시스템이 눈 부위를 자동으로 확대해요.",
+  "h": "65e7d1ba"
+ },
+ "nhtg.anh-da-chon": {
+  "t": "✓ 이미지 선택됨",
+  "h": "c435e239"
+ },
+ "nhtg.anh-da-chon-oxp5": {
+  "t": "이미지 선택됨",
+  "h": "d1e5382e"
+ },
+ "nhtg.chua-muon-chup-anh-ban-co": {
+  "t": "<b>아직 촬영하고 싶지 않으신가요?</b><span>먼저 샘플을 보며 어떤 느낌인지 체험해 볼 수 있어요.</span>",
+  "h": "70fdc9d9"
+ },
+ "nhtg.chup": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 촬영",
+  "h": "71b3b3cf"
+ },
+ "nhtg.chup-anh": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 사진 찍기",
+  "h": "f78326e0"
+ },
+ "nhtg.doi-mat-duoc-xem-la-noi": {
+  "t": "전통 상학에서 눈은 사람의 마음이 가장 뚜렷이 드러나는 곳으로 여겨요. 얼굴 사진을 올리면 유장신상에 따라 눈의 모양, 눈빛, 눈썹을 자세히 풀이해 드려요.",
+  "h": "f0bba1fa"
+ },
+ "nhtg.huy": {
+  "t": "✕ 취소",
+  "h": "a46abff1"
+ },
+ "nhtg.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG, PNG, WebP — 최대 5MB · 정면에서 찍어 두 눈이 또렷이 보이게",
+  "h": "79a1629f"
+ },
+ "nhtg.keo-tha-anh-vao-day-hoac": {
+  "t": "이미지를 여기로 끌어다 놓거나 클릭해서 선택",
+  "h": "2ce7b073"
+ },
+ "nhtg.luan-theo-lieu-trang-than-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>유장신상에<br>따른 풀이</span>",
+  "h": "6ad548df"
+ },
+ "nhtg.ma-y-than-tuong-la-mot": {
+  "t": "『마의신상』은 중국에서 가장 유명한 인상학 고서 가운데 하나로, 삼정·오관 같은 얼굴 부위를 통해 성격과 운명을 읽는 방법을 체계화했어요. 『유장신상』과 『수경집』도 함께 대조해 보는 상학 고서예요.",
+  "h": "f21522a3"
+ },
+ "nhtg.ma-y-than-tuong-nhan-phap": {
+  "t": "마의신상 · 안법 고법",
+  "h": "38e14ae2"
+ },
+ "nhtg.mat-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"eye\"></span> 눈 인식됨",
+  "h": "b00eb630"
+ },
+ "nhtg.mat-phai": {
+  "t": "오른쪽 눈",
+  "h": "a88c59ed"
+ },
+ "nhtg.mat-trai": {
+  "t": "왼쪽 눈",
+  "h": "34e4f87a"
+ },
+ "nhtg.mo-camera": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 카메라 열기",
+  "h": "dda0b3af"
+ },
+ "nhtg.moi-luot-luong": {
+  "t": "1회 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-tuong\">…</span> 냥)</span>",
+  "h": "3c4bc428"
+ },
+ "nhtg.nhan-tuong": {
+  "t": "안상",
+  "h": "1bc89b2e"
+ },
+ "nhtg.nhan-tuong-tu-vi-minh-bao": {
+  "t": "안상 — 명보 자미두수",
+  "h": "beddeaa1"
+ },
+ "nhtg.nhan-tuong-xem-tuong-mat-theo": {
+  "t": "<b>안상</b><span>고법으로 눈의 상을 봐요 — <span data-tvp-price=\"nhan-tuong\">…</span> 냥</span>",
+  "h": "f3a91f07"
+ },
+ "nhtg.phan-tich-anh-khac": {
+  "t": "다른 이미지 분석",
+  "h": "eceede8c"
+ },
+ "nhtg.phan-tich-nhan-tuong-hoc": {
+  "t": "안상학 분석",
+  "h": "1ed9443b"
+ },
+ "nhtg.phan-tich-nhan-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"eye\"></span><b id=\"analyzeBtnLabel\">안상 분석하기 →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"nhan-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-tuong\">…</span> 냥)</span> 필요</small>",
+  "h": "1e319aa8"
+ },
+ "nhtg.tai-anh-hoac-chup-truc-tiep": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>이미지를 올리거나<br>바로 촬영</span>",
+  "h": "45a94ade"
+ },
+ "nhtg.tai-anh-khuon-mat": {
+  "t": "얼굴 사진 올리기",
+  "h": "0ce655e6"
+ },
+ "nhtg.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> 이미지 올리기",
+  "h": "c3712e70"
+ },
+ "nhtg.tai-hoac-chup-anh-mat-he": {
+  "t": "얼굴 사진을 올리거나 촬영하세요 — 『마의신상』, 『유장신상』에 따라 안상(눈)을 분석해요.",
+  "h": "6b1bb466"
+ },
+ "nhtg.tai-mot-tam-anh-ro-khuon": {
+  "t": "얼굴이 또렷하게 나온 사진, 특히 눈 부위가 잘 보이는 사진을 올려 주세요. 유장신상 고법에 따라 눈의 모양, 눈빛, 눈썹, 성격을 풀이해요.",
+  "h": "030abd5a"
+ },
+ "nhtg.tu-zoom-vao-doi-mat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"eye\"></span><span>눈 부위<br>자동 확대</span>",
+  "h": "214dd5e2"
+ },
+ "nhtg.xoa-anh": {
+  "t": "✕ 이미지 삭제",
+  "h": "36e95d9f"
+ },
  "oracle.1-chon-kieu-rut": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">뽑는 방식 고르기</span>",
   "h": "36067a21"
@@ -14726,6 +16098,230 @@
  "thansohoc.tra-loi-thay-o-khung-chat": {
   "t": "채팅창에서 선생님께 답하며 수비학 차트를 만들어 보세요 — 생년월일과 이름만 있으면 돼요.",
   "h": "8268b781"
+ },
+ "thtg.1-ghi-am-giong-noi": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">목소리 녹음</span>",
+  "h": "8a655678"
+ },
+ "thtg.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">결제</span>",
+  "h": "67c0b759"
+ },
+ "thtg.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">결과 받기</span>",
+  "h": "5b1e84a0"
+ },
+ "thtg.am-thanh-xu-ly-hoan-toan": {
+  "t": "음성은 브라우저 안에서만 처리돼요. 측정한 지표만(음성 파일은 보내지 않고) 서버로 보내 분석해요.",
+  "h": "cc7cd8bb"
+ },
+ "thtg.bat-dau-thu-am": {
+  "t": "<span id=\"recordIcon\" class=\"ic\" data-icon=\"mic\"></span> <span id=\"recordLabel\">녹음 시작</span>",
+  "h": "2de7804f"
+ },
+ "thtg.cong-cha-nhu-nui-thai-son": {
+  "t": "아버지의 은혜는 <em>태산</em>처럼 높고,<br> 어머니의 은혜는 샘에서 <em>흘러나오는 물</em>처럼 깊어라.<br> 한마음으로 어머니를 모시고 아버지를 공경하여,<br> 효를 다하는 것이 곧 <em>자식의 도리</em>.",
+  "h": "64ec2a8d"
+ },
+ "thtg.do-cao-do-toc-do-am": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>음높이·속도·<br>음색 측정</span>",
+  "h": "0098d11d"
+ },
+ "thtg.doc-cham-rai-tu-nhien-khoang": {
+  "t": "천천히 자연스럽게 읽어 주세요 — 약 10~15초 · 조용한 곳에서, 소음이 없는 환경을 권해요",
+  "h": "d43c4d70"
+ },
+ "thtg.doc-doan-tho-nay-tu-nhien": {
+  "t": "<span class=\"ic\" data-icon=\"book-open\"></span> 이 시를 읽어 주세요(자연스럽고 또렷하게)",
+  "h": "b1041484"
+ },
+ "thtg.doc-thanh-tieng-doan-mau-ben": {
+  "t": "아래 예시 문장을 소리 내어 읽으면 시스템이 녹음해 음향 지표를 측정하고, 오음 고법과 대조해요.",
+  "h": "c7a7cc92"
+ },
+ "thtg.ghi-am-doan-tho-ngan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"mic\"></span><span>짧은 시<br>녹음</span>",
+  "h": "a159c35f"
+ },
+ "thtg.ghi-am-doc-mot-doan-tho": {
+  "t": "짧은 시를 읽어 녹음하면 — 오음 고법(금·목·수·화·토)에 따라 성상을 분석해요.",
+  "h": "93f54a82"
+ },
+ "thtg.ghi-am-giong-noi": {
+  "t": "목소리 녹음",
+  "h": "c4c81682"
+ },
+ "thtg.giong-noi-khong-chi-de-giao": {
+  "t": "목소리는 대화만을 위한 것이 아니에요 — 고법 음성학은 목소리의 바탕만으로 맞는 직업과 피해야 할 직업까지 읽어 내요. 짧게 녹음하면 곧바로 오음 풀이를 받아 볼 수 있어요.",
+  "h": "0b8e2c03"
+ },
+ "thtg.ket-qua-do-luong-giong-noi": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> 목소리 측정 결과",
+  "h": "ccbc07c1"
+ },
+ "thtg.luan-theo-ngu-am-co-phap": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>오음 고법으로<br>풀이</span>",
+  "h": "fb865a03"
+ },
+ "thtg.moi-luot-luong": {
+  "t": "1회 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> 냥)</span>",
+  "h": "c4336d95"
+ },
+ "thtg.ngu-am-co-phap-ma-moi": {
+  "t": "오음 고법 · 마미 · 달마",
+  "h": "a036cb20"
+ },
+ "thtg.nhan-de-bat-dau-thu-am": {
+  "t": "눌러서 녹음 시작 · 브라우저가 물어보면 마이크 사용을 허용해 주세요",
+  "h": "74465b56"
+ },
+ "thtg.phan-tich-thanh-tuong-hoc": {
+  "t": "성상학 분석",
+  "h": "2c14b754"
+ },
+ "thtg.phan-tich-thanh-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">성상 분석하기 →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> 냥)</span> 필요</small>",
+  "h": "04250412"
+ },
+ "thtg.thanh-tuong": {
+  "t": "성상",
+  "h": "d47f6d49"
+ },
+ "thtg.thanh-tuong-tu-vi-minh-bao": {
+  "t": "성상 — 명보 자미두수",
+  "h": "edcb4bcf"
+ },
+ "thtg.thanh-tuong-xem-tuong-giong-noi": {
+  "t": "<b>성상</b><span>오음 고법으로 목소리의 상을 봐요 — <span data-tvp-price=\"thanh-tuong\">…</span> 냥</span>",
+  "h": "247ec01f"
+ },
+ "thtg.thu-am-lai": {
+  "t": "다시 녹음",
+  "h": "e7849d1e"
+ },
+ "thtp.12-chi-so-am-hoc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>12개<br>음향 지표</span>",
+  "h": "cf4e2866"
+ },
+ "thtp.2-xem-ket-qua-do": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">측정 결과 보기</span>",
+  "h": "93f0142c"
+ },
+ "thtp.4-bai-do-giong-chuyen-sau": {
+  "t": "<span class=\"hp-ic\" data-icon=\"mic\"></span><span>4개 과제로<br>목소리 심층 측정</span>",
+  "h": "f5f91cc8"
+ },
+ "thtp.bai-1-4-10-giay": {
+  "t": "<span class=\"task-num\" id=\"taskNum\">과제 1/4</span> <span class=\"task-time\" id=\"taskTime\">10초</span>",
+  "h": "72a8ecea"
+ },
+ "thtp.bai-tiep-theo": {
+  "t": "다음 과제 →",
+  "h": "aad8808b"
+ },
+ "thtp.bat-dau-bai-do": {
+  "t": "측정 시작",
+  "h": "76374e88"
+ },
+ "thtp.bat-dau-thu-am": {
+  "t": "녹음 시작",
+  "h": "61e33202"
+ },
+ "thtp.bon-bai-do-giong-noi-chuyen": {
+  "t": "4개 과제로 목소리를 깊이 측정 — 『마의신상』, 『신상전편』, 『수경집』에 따라 오음을 분석하는 시스템.",
+  "h": "1eef1ee9"
+ },
+ "thtp.buoc-1-thong-tin-co-ban": {
+  "t": "1단계 · 기본 정보",
+  "h": "9c5356b8"
+ },
+ "thtp.buoc-2-bon-bai-do-giong": {
+  "t": "2단계 · 목소리 4개 과제",
+  "h": "5b99459f"
+ },
+ "thtp.buoc-3-ket-qua-do": {
+  "t": "3단계 · 측정 결과",
+  "h": "3541b2e4"
+ },
+ "thtp.chua-muon-ghi-am-ban-co": {
+  "t": "<b>아직 녹음하고 싶지 않으신가요?</b><span>먼저 샘플을 보며 어떤 느낌인지 체험해 볼 수 있어요.</span>",
+  "h": "468bb930"
+ },
+ "thtp.da-ghi-xong": {
+  "t": "✓ 녹음을 마쳤어요.",
+  "h": "53247aed"
+ },
+ "thtp.doc-binh-thuong-ro-rang-khong": {
+  "t": "평소처럼 또렷하게, 서두르지 말고 읽어 주세요.",
+  "h": "2998c866"
+ },
+ "thtp.doc-doan-van": {
+  "t": "문장 읽기",
+  "h": "1d0b2c72"
+ },
+ "thtp.ghi-am-du-4-bai-do": {
+  "t": "성별과 나이에 맞춰 4개 과제를 모두 녹음해 주세요. 시스템이 심층 분석해 기, 성격, 운명, 그리고 목소리와 기를 기르는 방법까지 풀이해 드려요.",
+  "h": "0e8aaf05"
+ },
+ "thtp.giong-noi-mang-nhieu-thong-tin": {
+  "t": "목소리에는 생각보다 많은 정보가 담겨 있어요 — 4개의 심층 과제에서 얻은 12개 음향 지표가 오음과 기력의 가장 완전한 모습을 그려 줘요. 일반 성상보다 더 깊이 알고 싶은 분께 알맞아요.",
+  "h": "f907ddc6"
+ },
+ "thtp.luan-giai-thanh-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">성상 풀이하기 →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> 냥)</span> 필요</small>",
+  "h": "39fe65f9"
+ },
+ "thtp.luan-ngu-am-va-khi-luc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>오음과 기력<br>풀이</span>",
+  "h": "c9962dad"
+ },
+ "thtp.moi-luot-luong": {
+  "t": "1회 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> 냥)</span>",
+  "h": "a06b62cc"
+ },
+ "thtp.ngu-am": {
+  "t": "오음: —",
+  "h": "6ab7c5b6"
+ },
+ "thtp.ngu-am-co-phap-ma-y": {
+  "t": "오음 고법 · 마의신상 · 신상전편 · 수경집",
+  "h": "a2f34068"
+ },
+ "thtp.ngu-am-tuong-phap-la-mot": {
+  "t": "오음 상법은 목소리로 운명을 풀이하는 관상학의 한 갈래로, 소리를 궁·상·각·치·우로 나누어 오행에 대응시켜요. 이 방법은 『마의신상』 같은 상학 고서에 기록되어 있어요.",
+  "h": "8f425df6"
+ },
+ "thtp.phan-tich-thanh-tuong-chuyen-sau": {
+  "t": "성상 심층 분석",
+  "h": "1e2230b3"
+ },
+ "thtp.thanh-tuong-pro": {
+  "t": "성상 Pro",
+  "h": "b2e5a151"
+ },
+ "thtp.thanh-tuong-pro-4-bai-do": {
+  "t": "<b>성상 Pro</b><span>4개 과제로 목소리 심층 측정 — <span data-tvp-price=\"thanh-tuong-pro\">…</span> 냥</span>",
+  "h": "a4477440"
+ },
+ "thtp.thanh-tuong-pro-tu-vi-minh": {
+  "t": "성상 Pro — 명보 자미두수",
+  "h": "b4ae7c2a"
+ },
+ "thtp.thu-lai": {
+  "t": "다시 녹음",
+  "h": "0e099100"
+ },
+ "thtp.tuoi": {
+  "t": "나이",
+  "h": "3a6fc33f"
+ },
+ "thtp.vi-du-32": {
+  "t": "예: 32",
+  "h": "dc9bd965"
+ },
+ "thtp.xem-ban-mau": {
+  "t": "샘플 보기 →",
+  "h": "ba3671b1"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "잠금 해제 중…",

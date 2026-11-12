@@ -16,10 +16,10 @@ export const nsOf = (k) => k.split('.')[1];
 export function scriptsOf(html) {
   const out = new Set();
   const has = (f) => new RegExp(`<script[^>]+src=["']/${f.replace('.', '\\.')}`, 'i').test(html);
-  for (const f of ['shell.js', 'tuvi-paywall.js', 'auth.js', 'tool-prices.js'])
+  for (const f of ['shell.js', 'tuvi-paywall.js', 'auth.js', 'tool-prices.js', 'tuvi-form.js'])
     if (has(f)) out.add(f);
   if (out.has('shell.js'))
-    ['tuvi-paywall.js', 'auth.js', 'tool-prices.js'].forEach((f) => out.add(f));
+    ['tuvi-paywall.js', 'auth.js', 'tool-prices.js', 'tuvi-form.js'].forEach((f) => out.add(f));
   if (detectJsNamespaces(html).includes('nav')) out.add('nav.js');
   return [...out];
 }
