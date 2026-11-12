@@ -8011,6 +8011,466 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.taikhoan.ban-chua-chia-se-luot-nao": {
+  "t": "您還沒有分享過任何內容。",
+  "h": "4be43058"
+ },
+ "js.taikhoan.ban-chua-gui-gop-y-nao": {
+  "t": "您還沒有送出任何建議。",
+  "h": "ed1ab4a7"
+ },
+ "js.taikhoan.ban-da-dung-het-luot-moi": {
+  "t": "您已用完過去 30 天內 <strong>{n}</strong> 次有獎勵的邀請—— ",
+  "h": "fbab17bd"
+ },
+ "js.taikhoan.ban-muon-noi-gi": {
+  "t": "您想說些什麼？",
+  "h": "7a12a7f9"
+ },
+ "js.taikhoan.ban-tu-them": {
+  "t": "您自行新增",
+  "h": "39ff4ca3"
+ },
+ "js.taikhoan.buoc-xong": {
+  "t": "{a}/{b} 步",
+  "h": "ab8c9cf8"
+ },
+ "js.taikhoan.cap-luong-quan-tri": {
+  "t": "兩發放（管理員）",
+  "h": "24c9d12a"
+ },
+ "js.taikhoan.chua-co-giao-dich-nao": {
+  "t": "還沒有任何交易。",
+  "h": "eca9ffd5"
+ },
+ "js.taikhoan.chua-dung": {
+  "t": " 不對",
+  "h": "ddd914ee"
+ },
+ "js.taikhoan.chua-lien-ket": {
+  "t": "尚未連結。",
+  "h": "e0fe1693"
+ },
+ "js.taikhoan.da-chep": {
+  "t": "已複製 ✓",
+  "h": "846252e0"
+ },
+ "js.taikhoan.da-copy": {
+  "t": "✓ 已複製",
+  "h": "86409906"
+ },
+ "js.taikhoan.da-doi-mat-khau-thanh-cong": {
+  "t": "✓ 密碼已變更。",
+  "h": "b0be11cd"
+ },
+ "js.taikhoan.da-hoan-tat-luong": {
+  "t": "✓ 已完成——+{n} 兩已存入錢包。",
+  "h": "7974b68b"
+ },
+ "js.taikhoan.da-lien-ket-bot-messenger-dung": {
+  "t": "✓ 已連結——Messenger 機器人共用此兩錢包。",
+  "h": "ead6c730"
+ },
+ "js.taikhoan.da-lien-ket-bot-telegram-dung": {
+  "t": "✓ 已連結——Telegram 機器人共用此兩錢包。",
+  "h": "6f58b63f"
+ },
+ "js.taikhoan.da-lien-ket-bot-whatsapp-dung": {
+  "t": "✓ 已連結——WhatsApp 機器人共用此兩錢包。",
+  "h": "882115d7"
+ },
+ "js.taikhoan.da-lien-ket-bot-zalo-dung": {
+  "t": "✓ 已連結——Zalo 機器人共用此兩錢包。",
+  "h": "deed0e79"
+ },
+ "js.taikhoan.da-luu-ten-hien-thi": {
+  "t": "✓ 已儲存顯示名稱。",
+  "h": "48253036"
+ },
+ "js.taikhoan.da-mo-messenger-bam-bat-dau": {
+  "t": " 已開啟 Messenger——點「Get Started」或傳一則訊息完成連結，再重新整理頁面。",
+  "h": "e353366d"
+ },
+ "js.taikhoan.da-mo-telegram-bam-bat-dau": {
+  "t": " 已開啟 Telegram——在機器人中點「Start」完成連結，再重新整理頁面。",
+  "h": "4d2c8d09"
+ },
+ "js.taikhoan.da-mo-whatsapp-bam-gui-tin": {
+  "t": " 已開啟 WhatsApp——送出預先寫好的訊息完成連結，再重新整理頁面。",
+  "h": "c9e07106"
+ },
+ "js.taikhoan.da-nhan-cam-on-ban-trang": {
+  "t": "已收到——謝謝您。處理狀態會顯示在下方。",
+  "h": "a25f2423"
+ },
+ "js.taikhoan.dang-gui": {
+  "t": "傳送中…",
+  "h": "f04c8be3"
+ },
+ "js.taikhoan.dang-nhap-de-xem-ho-so": {
+  "t": "登入以查看個人檔案。",
+  "h": "1bfe72cf"
+ },
+ "js.taikhoan.dang-tai": {
+  "t": "載入中…",
+  "h": "577a1d59"
+ },
+ "js.taikhoan.dang-tao": {
+  "t": "建立中…",
+  "h": "47662404"
+ },
+ "js.taikhoan.dang-tao-lien-ket": {
+  "t": "正在建立連結…",
+  "h": "c32c93b3"
+ },
+ "js.taikhoan.dang-tao-ma": {
+  "t": "正在產生代碼…",
+  "h": "a761e1d7"
+ },
+ "js.taikhoan.day-la-hop-thu-toi-thang": {
+  "t": "這是直接寄給營運者的信箱——不是問老師的地方。",
+  "h": "4eeaf74a"
+ },
+ "js.taikhoan.doi-mat-khau-that-bai": {
+  "t": "✗ 密碼變更失敗。",
+  "h": "85e611bb"
+ },
+ "js.taikhoan.dung": {
+  "t": " 正確",
+  "h": "552da34c"
+ },
+ "js.taikhoan.fb-bug": {
+  "t": "技術錯誤",
+  "h": "ac755291"
+ },
+ "js.taikhoan.fb-da-nhan": {
+  "t": "已收到",
+  "h": "efb7534b"
+ },
+ "js.taikhoan.fb-da-xem": {
+  "t": "已查看",
+  "h": "f9809904"
+ },
+ "js.taikhoan.fb-da-xu-ly": {
+  "t": "已處理",
+  "h": "500a2314"
+ },
+ "js.taikhoan.fb-dang-xu-ly": {
+  "t": "處理中",
+  "h": "39fc9334"
+ },
+ "js.taikhoan.fb-noi-dung": {
+  "t": "解讀內容",
+  "h": "535d1e57"
+ },
+ "js.taikhoan.fb-placeholder": {
+  "t": "越具體越容易修正。例如：&quot;1990 年生命盤解讀中的財運一節，和大運一節說法相反&quot;，遠比 &quot;解讀不夠好&quot; 有用。",
+  "h": "e9db4ac9"
+ },
+ "js.taikhoan.fb-thanh-toan": {
+  "t": "付款 · 兩",
+  "h": "8987b413"
+ },
+ "js.taikhoan.fb-tinh-nang": {
+  "t": "功能建議",
+  "h": "f6ecc4b0"
+ },
+ "js.taikhoan.giu-toi-da-muc": {
+  "t": "最多保留 {n} 項——超過時老師會自動刪去最舊的項目。",
+  "h": "1ca9d45e"
+ },
+ "js.taikhoan.gop-y-da-gui": {
+  "t": "已送出的建議",
+  "h": "edc5809d"
+ },
+ "js.taikhoan.gui-gop-y-ka3h": {
+  "t": "送出建議",
+  "h": "9e3497a6"
+ },
+ "js.taikhoan.gui-gop-y-tieu-de": {
+  "t": "送出建議",
+  "h": "dc7d7429"
+ },
+ "js.taikhoan.hien-thi-giao-dich": {
+  "t": "顯示第 {a}–{b} 筆 / 共 {n} 筆交易",
+  "h": "7ab97fcf"
+ },
+ "js.taikhoan.hoac": {
+  "t": "或",
+  "h": "2797f4b3"
+ },
+ "js.taikhoan.hoi-dap-tu-tu-vi-minh": {
+  "t": "明寶紫微斗數的回覆",
+  "h": "dd209967"
+ },
+ "js.taikhoan.hoi-thay": {
+  "t": "問老師",
+  "h": "c9ffbbaf"
+ },
+ "js.taikhoan.huong-dan-thanh-toan": {
+  "t": "付款指南",
+  "h": "53371141"
+ },
+ "js.taikhoan.huy": {
+  "t": "取消",
+  "h": "33639e92"
+ },
+ "js.taikhoan.huy-lien-ket-messenger-bot-se": {
+  "t": "要取消連結 Messenger 嗎？機器人將無法再使用您的兩錢包。",
+  "h": "e19d5555"
+ },
+ "js.taikhoan.huy-lien-ket-telegram-bot-se": {
+  "t": "要取消連結 Telegram 嗎？機器人將無法再使用您的兩錢包。",
+  "h": "6c158247"
+ },
+ "js.taikhoan.huy-lien-ket-whatsapp-bot-se": {
+  "t": "要取消連結 WhatsApp 嗎？機器人將無法再使用您的兩錢包。",
+  "h": "31f159a4"
+ },
+ "js.taikhoan.huy-lien-ket-zalo-bot-se": {
+  "t": "要取消連結 Zalo 嗎？機器人將無法再使用您的兩錢包。",
+  "h": "a3a4a628"
+ },
+ "js.taikhoan.ket-qua": {
+  "t": "結果",
+  "h": "c9f95514"
+ },
+ "js.taikhoan.khac": {
+  "t": "其他",
+  "h": "5b8a28ab"
+ },
+ "js.taikhoan.khi-ho-nap-luong-lan-dau": {
+  "t": "對方第一次儲值兩時，雙方再各得 <strong>30 兩</strong>。",
+  "h": "201f2475"
+ },
+ "js.taikhoan.khong-co-giao-dich-khop-bo": {
+  "t": "沒有符合篩選條件的交易。",
+  "h": "b78b80e3"
+ },
+ "js.taikhoan.khong-doc-duoc-ho-so-thu": {
+  "t": "無法讀取個人檔案，請重新整理頁面。",
+  "h": "ac5f4991"
+ },
+ "js.taikhoan.khong-doc-duoc-lich-su": {
+  "t": "無法讀取紀錄。",
+  "h": "c7ccf5f8"
+ },
+ "js.taikhoan.khong-doc-duoc-tien-do-thu": {
+  "t": "無法讀取進度，請重新整理頁面。",
+  "h": "873418be"
+ },
+ "js.taikhoan.khong-gui-duoc-xin-thu-lai": {
+  "t": "送出失敗，請再試一次。",
+  "h": "c29e25ae"
+ },
+ "js.taikhoan.khong-tai-duoc-danh-sach-gop": {
+  "t": "無法載入建議列表。",
+  "h": "56f9aa7c"
+ },
+ "js.taikhoan.khong-tai-duoc-trang-thai-lien": {
+  "t": "無法載入連結狀態。",
+  "h": "d42a2701"
+ },
+ "js.taikhoan.khong-tao-duoc-key-thu-lai": {
+  "t": "無法建立金鑰，請稍後再試。",
+  "h": "d5bedd90"
+ },
+ "js.taikhoan.khong-tao-duoc-lien-ket-thu": {
+  "t": "無法建立連結，請稍後再試。",
+  "h": "095112a9"
+ },
+ "js.taikhoan.khong-the-tai-lich-su": {
+  "t": "無法載入紀錄。",
+  "h": "034a35a9"
+ },
+ "js.taikhoan.khong-thuc-hien-duoc": {
+  "t": "無法執行。",
+  "h": "ec9f72a3"
+ },
+ "js.taikhoan.lien-he": {
+  "t": "聯絡我們",
+  "h": "603522f1"
+ },
+ "js.taikhoan.lien-ket-messenger": {
+  "t": "連結 Messenger",
+  "h": "99c405ee"
+ },
+ "js.taikhoan.lien-ket-telegram": {
+  "t": "連結 Telegram",
+  "h": "e4c7777f"
+ },
+ "js.taikhoan.lien-ket-whatsapp": {
+  "t": "連結 WhatsApp",
+  "h": "007375bb"
+ },
+ "js.taikhoan.lien-ket-zalo": {
+  "t": "連結 Zalo",
+  "h": "73727376"
+ },
+ "js.taikhoan.loi-mang": {
+  "t": "網路錯誤。",
+  "h": "8fe8f313"
+ },
+ "js.taikhoan.loi-mang-thu-lai-sau-nhe": {
+  "t": "網路錯誤，請稍後再試。",
+  "h": "e09e98e7"
+ },
+ "js.taikhoan.loi-mang-xin-thu-lai": {
+  "t": "網路錯誤——請再試一次。",
+  "h": "1464653a"
+ },
+ "js.taikhoan.luan-giai-la-so": {
+  "t": "命盤解讀",
+  "h": "72f1fa6d"
+ },
+ "js.taikhoan.luong-khi-xong-ca-n": {
+  "t": "完成全部 {b} 項可得 +{n} 兩",
+  "h": "6a55c9a9"
+ },
+ "js.taikhoan.luot-moi-se-mo-lai-dan": {
+  "t": "邀請次數會隨每個人滿 30 天陸續恢復。",
+  "h": "3ce174a5"
+ },
+ "js.taikhoan.luu": {
+  "t": "儲存",
+  "h": "a306970e"
+ },
+ "js.taikhoan.luu-that-bai-thu-lai": {
+  "t": "✗ 儲存失敗，請再試一次。",
+  "h": "0543df5d"
+ },
+ "js.taikhoan.mat-khau-khong-khop": {
+  "t": "密碼不一致。",
+  "h": "782aade8"
+ },
+ "js.taikhoan.mat-khau-toi-thieu-6-ky": {
+  "t": "密碼至少需 6 個字元。",
+  "h": "56257bc3"
+ },
+ "js.taikhoan.moi-nguoi-dang-ky-thuong": {
+  "t": "每有一人透過您的連結註冊：對方建立帳號時，您的錢包立即獲得 <strong>+{n} 兩</strong>。",
+  "h": "a78b2e10"
+ },
+ "js.taikhoan.moi-y-kien-ve-noi-dung": {
+  "t": "凡是關於解讀內容、技術錯誤、兩的價格或您想要的功能等任何意見，",
+  "h": "76ce940d"
+ },
+ "js.taikhoan.n-luong": {
+  "t": "{n} 兩",
+  "h": "c4904a65"
+ },
+ "js.taikhoan.n-luong-thuong": {
+  "t": "{n} 兩",
+  "h": "4c7471c6"
+ },
+ "js.taikhoan.n-luot-xem": {
+  "t": "{n} 次瀏覽",
+  "h": "b99dc30e"
+ },
+ "js.taikhoan.nap-luong": {
+  "t": "儲值兩",
+  "h": "b70a5d1d"
+ },
+ "js.taikhoan.nap-thuong": {
+  "t": "儲值／獎勵",
+  "h": "1f6352ba"
+ },
+ "js.taikhoan.neu-chua-tu-lien-ket": {
+  "t": " 若未自動連結，請傳送：/link {t}",
+  "h": "4271bec8"
+ },
+ "js.taikhoan.nguoi-dung": {
+  "t": "使用者",
+  "h": "06f23b4d"
+ },
+ "js.taikhoan.nhan-cho-oa-zalo": {
+  "t": " 在 Zalo 上傳送以下這一行給明寶紫微斗數 OA（代碼 15 分鐘內有效），再重新整理頁面：<code>/link {t}</code>",
+  "h": "1cbb362f"
+ },
+ "js.taikhoan.noi-dung-gop-y-ve": {
+  "t": "建議的主題",
+  "h": "b744e759"
+ },
+ "js.taikhoan.sao-chep": {
+  "t": "複製",
+  "h": "09a1db3e"
+ },
+ "js.taikhoan.su-dung": {
+  "t": "使用",
+  "h": "a6ee0e07"
+ },
+ "js.taikhoan.sua": {
+  "t": "編輯",
+  "h": "0963749f"
+ },
+ "js.taikhoan.tao-duong-ket-noi": {
+  "t": "建立連線網址",
+  "h": "1ea224f1"
+ },
+ "js.taikhoan.tat-ca-loai-giao-dich": {
+  "t": "所有交易類型",
+  "h": "32529f70"
+ },
+ "js.taikhoan.thanh-vien-tu": {
+  "t": "{d} 加入",
+  "h": "43b4abd6"
+ },
+ "js.taikhoan.thay-chua-ghi-lai": {
+  "t": "老師還沒有記下關於您的任何事。<br>多聊幾次，老師會自己記住值得記的事。",
+  "h": "9f324126"
+ },
+ "js.taikhoan.thay-tu-ghi": {
+  "t": "老師記下",
+  "h": "4a9b5be3"
+ },
+ "js.taikhoan.thoi-gian-loai-noi-dung-so": {
+  "t": "<th>#</th><th>時間</th><th>類型</th><th>內容</th><th>數量</th><th>交易編號</th>",
+  "h": "a6125b8d"
+ },
+ "js.taikhoan.thu-hoi-key-hien-tai-ket": {
+  "t": "要撤銷目前的金鑰嗎？使用舊金鑰的連線將停止——您會立即獲得新金鑰。",
+  "h": "92016734"
+ },
+ "js.taikhoan.trang-thiet-bi-ban-dang-dung": {
+  "t": " 您正在使用的頁面與裝置會自動附上，方便我們追查錯誤——您不需另外描述。",
+  "h": "62db43d2"
+ },
+ "js.taikhoan.viec-gap-ve-thanh-toan-xem": {
+  "t": "付款的急事請見",
+  "h": "ba40de24"
+ },
+ "js.taikhoan.viet-dai-hon-mot-chut-nhe": {
+  "t": "請再多寫一點。",
+  "h": "42a09878"
+ },
+ "js.taikhoan.viet-giup-vai-dong-de-chung": {
+  "t": "請寫幾行，讓我們了解您的意思。",
+  "h": "d9864f5c"
+ },
+ "js.taikhoan.viet-vao-day-chung-toi-doc": {
+  "t": "寫在這裡。我們會全部讀過，並直接在本頁回覆。",
+  "h": "d8eb64da"
+ },
+ "js.taikhoan.vua-cong-luong": {
+  "t": "✓ 剛剛已將 <b>+{n} 兩</b>加入您的錢包。",
+  "h": "32cba2ec"
+ },
+ "js.taikhoan.xem-tuoi-lam-an": {
+  "t": "合夥合盤",
+  "h": "5f5ba4e2"
+ },
+ "js.taikhoan.xem-tuoi-vo-chong": {
+  "t": "夫妻合婚",
+  "h": "f3e7b1ed"
+ },
+ "js.taikhoan.xoa": {
+  "t": "刪除",
+  "h": "82339c0a"
+ },
+ "js.taikhoan.xoa-dieu-nay-khoi-ho-so": {
+  "t": "要從個人檔案刪除這一項嗎？老師會完全忘記。",
+  "h": "d35cee4f"
+ },
  "js.thay.disc-bac-minh": {
   "t": "相術",
   "h": "ae8ee50b"
@@ -10406,6 +10866,378 @@
  "sanpham.xem-tuoi-vo-chong": {
   "t": "夫妻合婚",
   "h": "f3e7b1ed"
+ },
+ "taikhoan.add-mcp-server-chon-streamable-http": {
+  "t": "<strong>Add MCP server</strong> → 選擇 <strong>Streamable HTTP</strong>。",
+  "h": "f63db93e"
+ },
+ "taikhoan.bam-add-custom-connector": {
+  "t": "點 <strong>Add custom connector</strong>。",
+  "h": "f171eae6"
+ },
+ "taikhoan.bam-nut-chia-se-o-goc": {
+  "t": "在任何結果頁面底部點<strong>「分享」</strong>按鈕即可取得連結——傳給別人或發到 Facebook/Zalo/WhatsApp。您分享過的內容與瀏覽次數會顯示在這裡。",
+  "h": "d3fc4566"
+ },
+ "taikhoan.bao-cao": {
+  "t": "<span data-icon=\"file-text\"></span><span class=\"ml-tx\">報告</span><span class=\"ml-go\">→</span>",
+  "h": "30fcaff2"
+ },
+ "taikhoan.bao-mat": {
+  "t": "<span data-icon=\"lock\"></span> 安全",
+  "h": "a32a24fb"
+ },
+ "taikhoan.bat-settings-connectors-developer-mode": {
+  "t": "開啟 <strong>Settings → Connectors → Developer mode</strong>。",
+  "h": "5ddc655e"
+ },
+ "taikhoan.cai-dat": {
+  "t": "<span class=\"tab-ic\" data-icon=\"settings\"></span> 設定",
+  "h": "de9c2df8"
+ },
+ "taikhoan.chat-voi-bot-bang-dung-vi": {
+  "t": "用同一個兩錢包和機器人聊天",
+  "h": "c6fcc4a8"
+ },
+ "taikhoan.chia-se-lich-su": {
+  "t": "<span data-icon=\"share-2\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> 分享——紀錄",
+  "h": "fc051dae"
+ },
+ "taikhoan.chon-nen-sang-hoac-toi-cho": {
+  "t": "為整個明寶紫微斗數選擇淺色或深色背景——立即套用，下次也會記住。",
+  "h": "ac29b196"
+ },
+ "taikhoan.chua-ket-noi": {
+  "t": "尚未連線",
+  "h": "a6c7297d"
+ },
+ "taikhoan.claude-chatgpt-gemini-grok": {
+  "t": "Claude · ChatGPT · Gemini · Grok",
+  "h": "bbad7d3a"
+ },
+ "taikhoan.cua-ban": {
+  "t": "您的",
+  "h": "4ae2197a"
+ },
+ "taikhoan.da-dung-thang-nay-0-luong": {
+  "t": "<span>本月已使用</span> <span id=\"monthlyUsageLabel\">0 兩</span>",
+  "h": "3be2cf3d"
+ },
+ "taikhoan.da-ket-noi": {
+  "t": "已連線",
+  "h": "5c4300f9"
+ },
+ "taikhoan.da-moi-duoc-thuong-30-ngay": {
+  "t": "<span>有獎勵的邀請（過去 30 天）</span> <span id=\"refProgressLabel\">—</span>",
+  "h": "15ce0d55"
+ },
+ "taikhoan.da-san-sang": {
+  "t": "● 已就緒",
+  "h": "4a6360a8"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren": {
+  "t": "把上方的連線網址貼到 URL 欄 → <strong>Add</strong>。",
+  "h": "63f3a9b6"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren-6lkt": {
+  "t": "貼上上方的連線網址 → 儲存。",
+  "h": "5c24e4aa"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren-bdph": {
+  "t": "貼上上方的連線網址即可。不需其他設定——金鑰已包含在網址中。",
+  "h": "8957fdf6"
+ },
+ "taikhoan.dang-kiem-tra": {
+  "t": "<span class=\"conn-status\"><span class=\"ic\" data-icon=\"hourglass\"></span> 檢查中…</span>",
+  "h": "88fb5296"
+ },
+ "taikhoan.dang-kiem-tra-akb9": {
+  "t": "檢查中…",
+  "h": "05a0307a"
+ },
+ "taikhoan.dang-nhap-dang-ky": {
+  "t": "登入／註冊",
+  "h": "8df57bec"
+ },
+ "taikhoan.dang-nhap-de-xem-ho-so": {
+  "t": "登入以查看個人檔案",
+  "h": "a6bad53c"
+ },
+ "taikhoan.dang-tai": {
+  "t": "載入中...",
+  "h": "3d8a48b7"
+ },
+ "taikhoan.dang-xuat": {
+  "t": "登出",
+  "h": "adff9c76"
+ },
+ "taikhoan.doi-mat-khau": {
+  "t": "變更密碼",
+  "h": "d4e1de23"
+ },
+ "taikhoan.doi-mat-khau-9m0f": {
+  "t": "變更密碼",
+  "h": "6e8da8ff"
+ },
+ "taikhoan.dung-tu-vi-minh-bao-o": {
+  "t": "在您聊天的任何地方使用明寶紫微斗數——在慣用的聊天助理中，或在 Telegram · WhatsApp · Messenger 裡問老師，全部共用同一個兩錢包。",
+  "h": "2c9f35b9"
+ },
+ "taikhoan.duong-ket-noi-rieng-cua-ban": {
+  "t": "您專屬的連線網址",
+  "h": "8dbee506"
+ },
+ "taikhoan.gemini-grok-tro-ly-khac": {
+  "t": "Gemini / Grok / 其他助理",
+  "h": "f0e6a5a3"
+ },
+ "taikhoan.giao-dien": {
+  "t": "<span data-icon=\"sun\"></span> 外觀",
+  "h": "ad9cf22d"
+ },
+ "taikhoan.giao-dien-e4yw": {
+  "t": "外觀",
+  "h": "705b4237"
+ },
+ "taikhoan.gop-y": {
+  "t": "<span data-icon=\"inbox\"></span> 建議",
+  "h": "fa000453"
+ },
+ "taikhoan.ho-so-vi-luong-ket-noi": {
+  "t": "<b>個人檔案</b><span>兩錢包 · 連線 · 設定</span>",
+  "h": "61d17307"
+ },
+ "taikhoan.ho-tro-dang-nhap-qua-google": {
+  "t": "支援以 <strong>Google</strong>、<strong>Facebook</strong> 或電子郵件登入。",
+  "h": "b8ce549c"
+ },
+ "taikhoan.hoi-thay-trong-tro-ly-chat": {
+  "t": "在聊天助理中問老師 <span class=\"conn-badge\">新</span>",
+  "h": "11fcd343"
+ },
+ "taikhoan.huy-lien-ket": {
+  "t": "取消連結",
+  "h": "5f50b732"
+ },
+ "taikhoan.kenh-lien-lac": {
+  "t": "<span data-icon=\"message-circle\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> 聯絡管道",
+  "h": "aa753fc7"
+ },
+ "taikhoan.ket-noi": {
+  "t": "<span class=\"tab-ic\" data-icon=\"link\"></span> 連線",
+  "h": "5ba3bb0d"
+ },
+ "taikhoan.ket-noi-vao-chatgpt": {
+  "t": "連線到 ChatGPT",
+  "h": "20d3bbf9"
+ },
+ "taikhoan.ket-noi-vao-claude": {
+  "t": "連線到 Claude",
+  "h": "f03eaded"
+ },
+ "taikhoan.ket-noi-xong-thi-hoi-the": {
+  "t": "<span data-icon=\"lightbulb\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> 連線好之後要怎麼問？",
+  "h": "c918e147"
+ },
+ "taikhoan.khoi-hanh": {
+  "t": "<span data-icon=\"trophy\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> 啟程",
+  "h": "60535802"
+ },
+ "taikhoan.khong-can-bam-gi-cu-chat": {
+  "t": "不需要按任何東西——照常聊天，系統會自動呼叫工具。記得",
+  "h": "cd1a05b2"
+ },
+ "taikhoan.khong-het-han": {
+  "t": "永不過期",
+  "h": "b4fef21a"
+ },
+ "taikhoan.la-so-da-luu": {
+  "t": "<span data-icon=\"folder\"></span><span class=\"ml-tx\">已儲存的命盤</span><span class=\"ml-go\">→</span>",
+  "h": "6739d4ef"
+ },
+ "taikhoan.lap-la-so-tu-vi-cho": {
+  "t": "「幫 1984 年 5 月 9 日凌晨 1:45 出生的男性排紫微命盤」",
+  "h": "4b2026e7"
+ },
+ "taikhoan.lich-su-giao-dich": {
+  "t": "交易紀錄",
+  "h": "99e8eb90"
+ },
+ "taikhoan.lien-ket-messenger": {
+  "t": "連結 Messenger",
+  "h": "99c405ee"
+ },
+ "taikhoan.lien-ket-telegram": {
+  "t": "連結 Telegram",
+  "h": "e4c7777f"
+ },
+ "taikhoan.lien-ket-whatsapp": {
+  "t": "連結 WhatsApp",
+  "h": "007375bb"
+ },
+ "taikhoan.lien-ket-zalo": {
+  "t": "連結 Zalo",
+  "h": "73727376"
+ },
+ "taikhoan.luan-giai-chi-tiet-la-so": {
+  "t": "「幫我詳細解讀命盤」",
+  "h": "daab7a26"
+ },
+ "taikhoan.luot-hoi-thay": {
+  "t": "<span data-icon=\"message-circle\"></span><span class=\"ml-tx\">問老師紀錄</span><span class=\"ml-go\">→</span>",
+  "h": "2603dd9c"
+ },
+ "taikhoan.luu-ten": {
+  "t": "儲存名稱",
+  "h": "19fd43c9"
+ },
+ "taikhoan.mat-khau-moi": {
+  "t": "新密碼",
+  "h": "4267a600"
+ },
+ "taikhoan.mo-settings-connectors-claude-desktop-ho": {
+  "t": "開啟 <strong>Settings → Connectors</strong>（Claude Desktop 或 claude.ai）。",
+  "h": "b7a053cb"
+ },
+ "taikhoan.moi-ban-nhan-them-luong": {
+  "t": "邀請朋友——多得兩",
+  "h": "c87d6753"
+ },
+ "taikhoan.nam-2027-cua-toi-van-han": {
+  "t": "「我 2027 年的運勢如何？3 月呢？」",
+  "h": "2c70ccfb"
+ },
+ "taikhoan.nap-luong": {
+  "t": "<span data-icon=\"wallet\" style=\"width:16px;height:16px\"></span> 儲值兩",
+  "h": "2fb3641a"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot": {
+  "t": "在這裡儲值兩，傳訊息給 Telegram 機器人即可用同一個錢包。",
+  "h": "b2be6c64"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot-1xta": {
+  "t": "在這裡儲值兩，傳訊息給 WhatsApp 機器人即可用同一個錢包。",
+  "h": "76114b7e"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot-x2oh": {
+  "t": "在這裡儲值兩，傳訊息給 Facebook Messenger 機器人即可用同一個錢包。",
+  "h": "e8af5d50"
+ },
+ "taikhoan.nap-luong-o-day-nhan-zalo": {
+  "t": "在這裡儲值兩，傳訊息給 Zalo OA 明寶紫微斗數即可用同一個錢包。",
+  "h": "f86646c2"
+ },
+ "taikhoan.nguoi-dung": {
+  "t": "使用者",
+  "h": "06f23b4d"
+ },
+ "taikhoan.nhap-lai-mat-khau": {
+  "t": "再次輸入密碼",
+  "h": "4ff37e70"
+ },
+ "taikhoan.nhap-mat-khau-moi": {
+  "t": "輸入新密碼",
+  "h": "62b70346"
+ },
+ "taikhoan.nhap-ten-cua-ban": {
+  "t": "輸入您的名字",
+  "h": "5e6b745a"
+ },
+ "taikhoan.noi-du-ngay-gio-gioi-tinh": {
+  "t": "說齊出生日期、時間與性別",
+  "h": "19c46e88"
+ },
+ "taikhoan.quan-ly-vi-luong-nhan-them": {
+  "t": "管理兩錢包、獲得更多兩、連結聊天管道與帳號設定。",
+  "h": "6233b736"
+ },
+ "taikhoan.quan-trong-trong-khung-chat-bam": {
+  "t": "<strong>重要：</strong>在聊天框點工具按鈕（<strong>+</strong>）→ <strong>Tool access</strong> → 選 <strong>\"Tools already loaded\"</strong>。預設的 \"Load tools when needed\" 會讓 Claude 看不到工具而自行編造命盤。開啟一次，之後的聊天都會保留。",
+  "h": "916eda3a"
+ },
+ "taikhoan.sang": {
+  "t": "<span data-icon=\"sun\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> 淺色",
+  "h": "910fdb50"
+ },
+ "taikhoan.sao-that-sat-o-cung-menh": {
+  "t": "「七殺在命宮代表什麼？」",
+  "h": "5d996c81"
+ },
+ "taikhoan.so-du-luong": {
+  "t": "兩餘額",
+  "h": "2a573b63"
+ },
+ "taikhoan.tai-khoan-dang-nhap-qua-oauth": {
+  "t": "透過 OAuth 登入的帳號不使用密碼。",
+  "h": "4cbe60f1"
+ },
+ "taikhoan.tai-khoan-tu-vi-minh-bao": {
+  "t": "帳號 — 明寶紫微斗數",
+  "h": "0ec3e09f"
+ },
+ "taikhoan.tao-duong-ket-noi": {
+  "t": "建立連線網址",
+  "h": "1ea224f1"
+ },
+ "taikhoan.tao-mot-duong-ket-noi-rieng": {
+  "t": "建立一條專屬連線網址，貼到您的聊天助理中。之後直接問「幫 1984 年 5 月 9 日丑時出生的男性排命盤」「2027 年運勢如何？」——系統從 tuviminhbao.com 的<strong>引擎取得精確</strong>數據，不會編造。",
+  "h": "d3398742"
+ },
+ "taikhoan.tat-ca-loai-giao-dich": {
+  "t": "所有交易類型",
+  "h": "32529f70"
+ },
+ "taikhoan.ten-hien-thi": {
+  "t": "顯示名稱",
+  "h": "1e9d85d8"
+ },
+ "taikhoan.thong-tin": {
+  "t": "<span data-icon=\"user\"></span> 資訊",
+  "h": "ff941fc8"
+ },
+ "taikhoan.thong-tin-ca-nhan": {
+  "t": "個人資訊",
+  "h": "5de3e5eb"
+ },
+ "taikhoan.thu-hoi-tao-key-moi": {
+  "t": "撤銷並建立新金鑰",
+  "h": "8fec8bbc"
+ },
+ "taikhoan.tim-muc-them-mcp-server-custom": {
+  "t": "找到新增 <strong>MCP server</strong> / <strong>custom connector</strong>（Streamable HTTP）的選項。",
+  "h": "07a00e26"
+ },
+ "taikhoan.tim-theo-noi-dung": {
+  "t": "依內容搜尋…",
+  "h": "ad472d5e"
+ },
+ "taikhoan.toi": {
+  "t": "<span data-icon=\"moon\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> 深色",
+  "h": "f4040249"
+ },
+ "taikhoan.tong-da-moi-0-da-nhan": {
+  "t": "共邀請：<strong id=\"refTotalCount\" style=\"color:var(--heading)\">0</strong> · 已獲得：<strong id=\"refEarnedCount\" style=\"color:var(--tx-gold)\">0</strong> 兩",
+  "h": "1aae41a3"
+ },
+ "taikhoan.vi-du": {
+  "t": "。例如：",
+  "h": "4622a94a"
+ },
+ "taikhoan.vi-luong": {
+  "t": "<span class=\"tab-ic\" data-icon=\"wallet\"></span> 兩錢包",
+  "h": "397cf5a3"
+ },
+ "taikhoan.vo-chong-tuoi-1984-va-1986": {
+  "t": "「1984 年和 1986 年出生的夫妻合不合？」",
+  "h": "3cbf661e"
+ },
+ "taikhoan.xac-nhan-mat-khau": {
+  "t": "確認密碼",
+  "h": "7386c6b1"
+ },
+ "taikhoan.xong-hoi-claude-lap-la-so": {
+  "t": "完成！問 Claude「幫 1984 年 5 月 9 日丑時出生的男性排命盤」，它就會自動呼叫明寶紫微斗數的工具。",
+  "h": "88358e38"
  },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. 服務性質",

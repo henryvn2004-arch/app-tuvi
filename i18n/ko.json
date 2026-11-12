@@ -8011,6 +8011,466 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.taikhoan.ban-chua-chia-se-luot-nao": {
+  "t": "아직 공유한 내역이 없습니다.",
+  "h": "4be43058"
+ },
+ "js.taikhoan.ban-chua-gui-gop-y-nao": {
+  "t": "아직 보낸 의견이 없습니다.",
+  "h": "ed1ab4a7"
+ },
+ "js.taikhoan.ban-da-dung-het-luot-moi": {
+  "t": "지난 30일 동안 보상받는 초대 <strong>{n}</strong>회를 모두 사용했습니다 — ",
+  "h": "fbab17bd"
+ },
+ "js.taikhoan.ban-muon-noi-gi": {
+  "t": "어떤 말씀을 하고 싶으신가요?",
+  "h": "7a12a7f9"
+ },
+ "js.taikhoan.ban-tu-them": {
+  "t": "직접 추가",
+  "h": "39ff4ca3"
+ },
+ "js.taikhoan.buoc-xong": {
+  "t": "{a}/{b} 단계",
+  "h": "ab8c9cf8"
+ },
+ "js.taikhoan.cap-luong-quan-tri": {
+  "t": "냥 지급(관리자)",
+  "h": "24c9d12a"
+ },
+ "js.taikhoan.chua-co-giao-dich-nao": {
+  "t": "아직 거래가 없습니다.",
+  "h": "eca9ffd5"
+ },
+ "js.taikhoan.chua-dung": {
+  "t": " 맞지 않음",
+  "h": "ddd914ee"
+ },
+ "js.taikhoan.chua-lien-ket": {
+  "t": "연결되지 않음.",
+  "h": "e0fe1693"
+ },
+ "js.taikhoan.da-chep": {
+  "t": "복사했습니다 ✓",
+  "h": "846252e0"
+ },
+ "js.taikhoan.da-copy": {
+  "t": "✓ 복사했습니다",
+  "h": "86409906"
+ },
+ "js.taikhoan.da-doi-mat-khau-thanh-cong": {
+  "t": "✓ 비밀번호를 변경했습니다.",
+  "h": "b0be11cd"
+ },
+ "js.taikhoan.da-hoan-tat-luong": {
+  "t": "✓ 완료 — +{n}냥이 지갑에 들어왔습니다.",
+  "h": "7974b68b"
+ },
+ "js.taikhoan.da-lien-ket-bot-messenger-dung": {
+  "t": "✓ 연결됨 — Messenger 봇이 이 냥 지갑을 함께 씁니다.",
+  "h": "ead6c730"
+ },
+ "js.taikhoan.da-lien-ket-bot-telegram-dung": {
+  "t": "✓ 연결됨 — Telegram 봇이 이 냥 지갑을 함께 씁니다.",
+  "h": "6f58b63f"
+ },
+ "js.taikhoan.da-lien-ket-bot-whatsapp-dung": {
+  "t": "✓ 연결됨 — WhatsApp 봇이 이 냥 지갑을 함께 씁니다.",
+  "h": "882115d7"
+ },
+ "js.taikhoan.da-lien-ket-bot-zalo-dung": {
+  "t": "✓ 연결됨 — Zalo 봇이 이 냥 지갑을 함께 씁니다.",
+  "h": "deed0e79"
+ },
+ "js.taikhoan.da-luu-ten-hien-thi": {
+  "t": "✓ 표시 이름을 저장했습니다.",
+  "h": "48253036"
+ },
+ "js.taikhoan.da-mo-messenger-bam-bat-dau": {
+  "t": " Messenger를 열었습니다 — \"Get Started\"를 누르거나 메시지를 1개 보내 완료한 뒤 페이지를 새로고침하세요.",
+  "h": "e353366d"
+ },
+ "js.taikhoan.da-mo-telegram-bam-bat-dau": {
+  "t": " Telegram을 열었습니다 — 봇에서 \"Start\"를 눌러 완료한 뒤 페이지를 새로고침하세요.",
+  "h": "4d2c8d09"
+ },
+ "js.taikhoan.da-mo-whatsapp-bam-gui-tin": {
+  "t": " WhatsApp을 열었습니다 — 미리 작성된 메시지를 보내 완료한 뒤 페이지를 새로고침하세요.",
+  "h": "c9e07106"
+ },
+ "js.taikhoan.da-nhan-cam-on-ban-trang": {
+  "t": "접수했습니다 — 감사합니다. 처리 상태는 바로 아래에 표시됩니다.",
+  "h": "a25f2423"
+ },
+ "js.taikhoan.dang-gui": {
+  "t": "보내는 중…",
+  "h": "f04c8be3"
+ },
+ "js.taikhoan.dang-nhap-de-xem-ho-so": {
+  "t": "로그인하면 프로필을 볼 수 있습니다.",
+  "h": "1bfe72cf"
+ },
+ "js.taikhoan.dang-tai": {
+  "t": "불러오는 중…",
+  "h": "577a1d59"
+ },
+ "js.taikhoan.dang-tao": {
+  "t": "만드는 중…",
+  "h": "47662404"
+ },
+ "js.taikhoan.dang-tao-lien-ket": {
+  "t": "연결 링크를 만드는 중…",
+  "h": "c32c93b3"
+ },
+ "js.taikhoan.dang-tao-ma": {
+  "t": "코드를 만드는 중…",
+  "h": "a761e1d7"
+ },
+ "js.taikhoan.day-la-hop-thu-toi-thang": {
+  "t": "이곳은 운영자에게 바로 가는 우편함입니다 — 선생님께 묻는 곳이 아닙니다. ",
+  "h": "4eeaf74a"
+ },
+ "js.taikhoan.doi-mat-khau-that-bai": {
+  "t": "✗ 비밀번호를 변경하지 못했습니다.",
+  "h": "85e611bb"
+ },
+ "js.taikhoan.dung": {
+  "t": " 맞음",
+  "h": "552da34c"
+ },
+ "js.taikhoan.fb-bug": {
+  "t": "기술 오류",
+  "h": "ac755291"
+ },
+ "js.taikhoan.fb-da-nhan": {
+  "t": "접수됨",
+  "h": "efb7534b"
+ },
+ "js.taikhoan.fb-da-xem": {
+  "t": "확인함",
+  "h": "f9809904"
+ },
+ "js.taikhoan.fb-da-xu-ly": {
+  "t": "처리 완료",
+  "h": "500a2314"
+ },
+ "js.taikhoan.fb-dang-xu-ly": {
+  "t": "처리 중",
+  "h": "39fc9334"
+ },
+ "js.taikhoan.fb-noi-dung": {
+  "t": "풀이 내용",
+  "h": "535d1e57"
+ },
+ "js.taikhoan.fb-placeholder": {
+  "t": "구체적일수록 고치기 쉽습니다. 예: &quot;1990년생 명반 풀이에서 재운 항목이 대운 항목과 반대로 말한다&quot;가 &quot;풀이가 별로다&quot;보다 훨씬 낫습니다.",
+  "h": "e9db4ac9"
+ },
+ "js.taikhoan.fb-thanh-toan": {
+  "t": "결제 · 냥",
+  "h": "8987b413"
+ },
+ "js.taikhoan.fb-tinh-nang": {
+  "t": "기능 제안",
+  "h": "f6ecc4b0"
+ },
+ "js.taikhoan.giu-toi-da-muc": {
+  "t": "최대 {n}개까지 보관 — 넘으면 선생님이 가장 오래된 항목부터 지웁니다.",
+  "h": "1ca9d45e"
+ },
+ "js.taikhoan.gop-y-da-gui": {
+  "t": "보낸 의견",
+  "h": "edc5809d"
+ },
+ "js.taikhoan.gui-gop-y-ka3h": {
+  "t": "의견 보내기",
+  "h": "9e3497a6"
+ },
+ "js.taikhoan.gui-gop-y-tieu-de": {
+  "t": "의견 보내기",
+  "h": "dc7d7429"
+ },
+ "js.taikhoan.hien-thi-giao-dich": {
+  "t": "{a}–{b}번째 표시 / 전체 {n}건 거래",
+  "h": "7ab97fcf"
+ },
+ "js.taikhoan.hoac": {
+  "t": "또는",
+  "h": "2797f4b3"
+ },
+ "js.taikhoan.hoi-dap-tu-tu-vi-minh": {
+  "t": "명보 자미두수의 답변",
+  "h": "dd209967"
+ },
+ "js.taikhoan.hoi-thay": {
+  "t": "선생님께 묻기",
+  "h": "c9ffbbaf"
+ },
+ "js.taikhoan.huong-dan-thanh-toan": {
+  "t": "결제 안내",
+  "h": "53371141"
+ },
+ "js.taikhoan.huy": {
+  "t": "취소",
+  "h": "33639e92"
+ },
+ "js.taikhoan.huy-lien-ket-messenger-bot-se": {
+  "t": "Messenger 연결을 해제할까요? 봇이 더 이상 당신의 냥 지갑을 쓰지 못합니다.",
+  "h": "e19d5555"
+ },
+ "js.taikhoan.huy-lien-ket-telegram-bot-se": {
+  "t": "Telegram 연결을 해제할까요? 봇이 더 이상 당신의 냥 지갑을 쓰지 못합니다.",
+  "h": "6c158247"
+ },
+ "js.taikhoan.huy-lien-ket-whatsapp-bot-se": {
+  "t": "WhatsApp 연결을 해제할까요? 봇이 더 이상 당신의 냥 지갑을 쓰지 못합니다.",
+  "h": "31f159a4"
+ },
+ "js.taikhoan.huy-lien-ket-zalo-bot-se": {
+  "t": "Zalo 연결을 해제할까요? 봇이 더 이상 당신의 냥 지갑을 쓰지 못합니다.",
+  "h": "a3a4a628"
+ },
+ "js.taikhoan.ket-qua": {
+  "t": "결과",
+  "h": "c9f95514"
+ },
+ "js.taikhoan.khac": {
+  "t": "기타",
+  "h": "5b8a28ab"
+ },
+ "js.taikhoan.khi-ho-nap-luong-lan-dau": {
+  "t": "그 사람이 처음 냥을 충전하면 두 사람 모두 <strong>30냥</strong>을 더 받습니다.",
+  "h": "201f2475"
+ },
+ "js.taikhoan.khong-co-giao-dich-khop-bo": {
+  "t": "필터에 맞는 거래가 없습니다.",
+  "h": "b78b80e3"
+ },
+ "js.taikhoan.khong-doc-duoc-ho-so-thu": {
+  "t": "프로필을 불러오지 못했습니다. 페이지를 새로고침해 주세요.",
+  "h": "ac5f4991"
+ },
+ "js.taikhoan.khong-doc-duoc-lich-su": {
+  "t": "기록을 불러오지 못했습니다.",
+  "h": "c7ccf5f8"
+ },
+ "js.taikhoan.khong-doc-duoc-tien-do-thu": {
+  "t": "진행 상황을 불러오지 못했습니다. 페이지를 새로고침해 주세요.",
+  "h": "873418be"
+ },
+ "js.taikhoan.khong-gui-duoc-xin-thu-lai": {
+  "t": "보내지 못했습니다. 다시 시도해 주세요.",
+  "h": "c29e25ae"
+ },
+ "js.taikhoan.khong-tai-duoc-danh-sach-gop": {
+  "t": "의견 목록을 불러오지 못했습니다.",
+  "h": "56f9aa7c"
+ },
+ "js.taikhoan.khong-tai-duoc-trang-thai-lien": {
+  "t": "연결 상태를 불러오지 못했습니다.",
+  "h": "d42a2701"
+ },
+ "js.taikhoan.khong-tao-duoc-key-thu-lai": {
+  "t": "키를 만들지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  "h": "d5bedd90"
+ },
+ "js.taikhoan.khong-tao-duoc-lien-ket-thu": {
+  "t": "연결 링크를 만들지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  "h": "095112a9"
+ },
+ "js.taikhoan.khong-the-tai-lich-su": {
+  "t": "기록을 불러올 수 없습니다.",
+  "h": "034a35a9"
+ },
+ "js.taikhoan.khong-thuc-hien-duoc": {
+  "t": "실행하지 못했습니다.",
+  "h": "ec9f72a3"
+ },
+ "js.taikhoan.lien-he": {
+  "t": "문의",
+  "h": "603522f1"
+ },
+ "js.taikhoan.lien-ket-messenger": {
+  "t": "Messenger 연결",
+  "h": "99c405ee"
+ },
+ "js.taikhoan.lien-ket-telegram": {
+  "t": "Telegram 연결",
+  "h": "e4c7777f"
+ },
+ "js.taikhoan.lien-ket-whatsapp": {
+  "t": "WhatsApp 연결",
+  "h": "007375bb"
+ },
+ "js.taikhoan.lien-ket-zalo": {
+  "t": "Zalo 연결",
+  "h": "73727376"
+ },
+ "js.taikhoan.loi-mang": {
+  "t": "네트워크 오류.",
+  "h": "8fe8f313"
+ },
+ "js.taikhoan.loi-mang-thu-lai-sau-nhe": {
+  "t": "네트워크 오류입니다. 잠시 후 다시 시도해 주세요.",
+  "h": "e09e98e7"
+ },
+ "js.taikhoan.loi-mang-xin-thu-lai": {
+  "t": "네트워크 오류 — 다시 시도해 주세요.",
+  "h": "1464653a"
+ },
+ "js.taikhoan.luan-giai-la-so": {
+  "t": "명반 풀이",
+  "h": "72f1fa6d"
+ },
+ "js.taikhoan.luong-khi-xong-ca-n": {
+  "t": "{b}개를 모두 마치면 +{n}냥",
+  "h": "6a55c9a9"
+ },
+ "js.taikhoan.luot-moi-se-mo-lai-dan": {
+  "t": "초대 횟수는 각 사람의 30일이 지날 때마다 차례로 다시 열립니다.",
+  "h": "3ce174a5"
+ },
+ "js.taikhoan.luu": {
+  "t": "저장",
+  "h": "a306970e"
+ },
+ "js.taikhoan.luu-that-bai-thu-lai": {
+  "t": "✗ 저장하지 못했습니다. 다시 시도해 주세요.",
+  "h": "0543df5d"
+ },
+ "js.taikhoan.mat-khau-khong-khop": {
+  "t": "비밀번호가 일치하지 않습니다.",
+  "h": "782aade8"
+ },
+ "js.taikhoan.mat-khau-toi-thieu-6-ky": {
+  "t": "비밀번호는 6자 이상이어야 합니다.",
+  "h": "56257bc3"
+ },
+ "js.taikhoan.moi-nguoi-dang-ky-thuong": {
+  "t": "당신의 링크로 가입한 사람 1명당: 계정을 만드는 즉시 <strong>+{n}냥</strong>이 당신의 지갑에 들어옵니다. ",
+  "h": "a78b2e10"
+ },
+ "js.taikhoan.moi-y-kien-ve-noi-dung": {
+  "t": "풀이 내용, 기술 오류, 냥 요금, 원하는 기능에 관한 어떤 의견이든 ",
+  "h": "76ce940d"
+ },
+ "js.taikhoan.n-luong": {
+  "t": "{n}냥",
+  "h": "c4904a65"
+ },
+ "js.taikhoan.n-luong-thuong": {
+  "t": "{n}냥",
+  "h": "4c7471c6"
+ },
+ "js.taikhoan.n-luot-xem": {
+  "t": "조회 {n}회",
+  "h": "b99dc30e"
+ },
+ "js.taikhoan.nap-luong": {
+  "t": "냥 충전",
+  "h": "b70a5d1d"
+ },
+ "js.taikhoan.nap-thuong": {
+  "t": "충전 / 보상",
+  "h": "1f6352ba"
+ },
+ "js.taikhoan.neu-chua-tu-lien-ket": {
+  "t": " 자동으로 연결되지 않으면 다음 메시지를 보내세요: /link {t}",
+  "h": "4271bec8"
+ },
+ "js.taikhoan.nguoi-dung": {
+  "t": "사용자",
+  "h": "06f23b4d"
+ },
+ "js.taikhoan.nhan-cho-oa-zalo": {
+  "t": " Zalo의 명보 자미두수 OA에 다음 한 줄을 그대로 보내고(코드 유효 15분) 페이지를 새로고침하세요: <code>/link {t}</code>",
+  "h": "1cbb362f"
+ },
+ "js.taikhoan.noi-dung-gop-y-ve": {
+  "t": "의견 주제",
+  "h": "b744e759"
+ },
+ "js.taikhoan.sao-chep": {
+  "t": "복사",
+  "h": "09a1db3e"
+ },
+ "js.taikhoan.su-dung": {
+  "t": "사용",
+  "h": "a6ee0e07"
+ },
+ "js.taikhoan.sua": {
+  "t": "수정",
+  "h": "0963749f"
+ },
+ "js.taikhoan.tao-duong-ket-noi": {
+  "t": "연결 링크 만들기",
+  "h": "1ea224f1"
+ },
+ "js.taikhoan.tat-ca-loai-giao-dich": {
+  "t": "모든 거래 유형",
+  "h": "32529f70"
+ },
+ "js.taikhoan.thanh-vien-tu": {
+  "t": "{d}부터 회원",
+  "h": "43b4abd6"
+ },
+ "js.taikhoan.thay-chua-ghi-lai": {
+  "t": "선생님이 아직 당신에 대해 기록한 것이 없습니다.<br>몇 번 대화하다 보면 선생님이 기억할 만한 것을 알아서 기억합니다.",
+  "h": "9f324126"
+ },
+ "js.taikhoan.thay-tu-ghi": {
+  "t": "선생님이 기록",
+  "h": "4a9b5be3"
+ },
+ "js.taikhoan.thoi-gian-loai-noi-dung-so": {
+  "t": "<th>#</th><th>시간</th><th>유형</th><th>내용</th><th>수량</th><th>거래 번호</th>",
+  "h": "a6125b8d"
+ },
+ "js.taikhoan.thu-hoi-key-hien-tai-ket": {
+  "t": "현재 키를 회수할까요? 이전 키를 쓰는 연결은 멈춥니다 — 바로 새 키가 발급됩니다.",
+  "h": "92016734"
+ },
+ "js.taikhoan.trang-thiet-bi-ban-dang-dung": {
+  "t": " 사용 중인 페이지와 기기 정보가 오류 추적을 위해 자동으로 첨부됩니다 — 따로 설명하지 않아도 됩니다. ",
+  "h": "62db43d2"
+ },
+ "js.taikhoan.viec-gap-ve-thanh-toan-xem": {
+  "t": "결제 관련 급한 일은:",
+  "h": "ba40de24"
+ },
+ "js.taikhoan.viet-dai-hon-mot-chut-nhe": {
+  "t": "조금만 더 길게 써 주세요.",
+  "h": "42a09878"
+ },
+ "js.taikhoan.viet-giup-vai-dong-de-chung": {
+  "t": "저희가 이해할 수 있도록 몇 줄 적어 주세요.",
+  "h": "d9864f5c"
+ },
+ "js.taikhoan.viet-vao-day-chung-toi-doc": {
+  "t": "여기에 써 주세요. 모두 읽고 이 페이지에서 바로 답합니다.",
+  "h": "d8eb64da"
+ },
+ "js.taikhoan.vua-cong-luong": {
+  "t": "✓ <b>+{n}냥</b>을 지갑에 더했습니다.",
+  "h": "32cba2ec"
+ },
+ "js.taikhoan.xem-tuoi-lam-an": {
+  "t": "사업 궁합 보기",
+  "h": "5f5ba4e2"
+ },
+ "js.taikhoan.xem-tuoi-vo-chong": {
+  "t": "부부 궁합 보기",
+  "h": "f3e7b1ed"
+ },
+ "js.taikhoan.xoa": {
+  "t": "삭제",
+  "h": "82339c0a"
+ },
+ "js.taikhoan.xoa-dieu-nay-khoi-ho-so": {
+  "t": "이 항목을 프로필에서 지울까요? 선생님이 완전히 잊게 됩니다.",
+  "h": "d35cee4f"
+ },
  "js.thay.disc-bac-minh": {
   "t": "관상",
   "h": "ae8ee50b"
@@ -10406,6 +10866,378 @@
  "sanpham.xem-tuoi-vo-chong": {
   "t": "부부 궁합 보기",
   "h": "f3e7b1ed"
+ },
+ "taikhoan.add-mcp-server-chon-streamable-http": {
+  "t": "<strong>Add MCP server</strong> → <strong>Streamable HTTP</strong> 선택.",
+  "h": "f63db93e"
+ },
+ "taikhoan.bam-add-custom-connector": {
+  "t": "<strong>Add custom connector</strong>를 누릅니다.",
+  "h": "f171eae6"
+ },
+ "taikhoan.bam-nut-chia-se-o-goc": {
+  "t": "어느 결과 페이지에서든 아래쪽의 <strong>\"공유\"</strong> 버튼을 누르면 링크를 받을 수 있습니다 — 누군가에게 보내거나 Facebook/Zalo/WhatsApp에 올리세요. 공유한 내역과 조회 수가 여기에 표시됩니다.",
+  "h": "d3fc4566"
+ },
+ "taikhoan.bao-cao": {
+  "t": "<span data-icon=\"file-text\"></span><span class=\"ml-tx\">리포트</span><span class=\"ml-go\">→</span>",
+  "h": "30fcaff2"
+ },
+ "taikhoan.bao-mat": {
+  "t": "<span data-icon=\"lock\"></span> 보안",
+  "h": "a32a24fb"
+ },
+ "taikhoan.bat-settings-connectors-developer-mode": {
+  "t": "<strong>Settings → Connectors → Developer mode</strong>를 켭니다.",
+  "h": "5ddc655e"
+ },
+ "taikhoan.cai-dat": {
+  "t": "<span class=\"tab-ic\" data-icon=\"settings\"></span> 설정",
+  "h": "de9c2df8"
+ },
+ "taikhoan.chat-voi-bot-bang-dung-vi": {
+  "t": "이 냥 지갑 그대로 봇과 채팅",
+  "h": "c6fcc4a8"
+ },
+ "taikhoan.chia-se-lich-su": {
+  "t": "<span data-icon=\"share-2\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> 공유 — 기록",
+  "h": "fc051dae"
+ },
+ "taikhoan.chon-nen-sang-hoac-toi-cho": {
+  "t": "명보 자미두수 전체의 밝은/어두운 배경을 고르세요 — 바로 적용되고 다음에도 기억합니다.",
+  "h": "ac29b196"
+ },
+ "taikhoan.chua-ket-noi": {
+  "t": "연결 안 됨",
+  "h": "a6c7297d"
+ },
+ "taikhoan.claude-chatgpt-gemini-grok": {
+  "t": "Claude · ChatGPT · Gemini · Grok",
+  "h": "bbad7d3a"
+ },
+ "taikhoan.cua-ban": {
+  "t": "내",
+  "h": "4ae2197a"
+ },
+ "taikhoan.da-dung-thang-nay-0-luong": {
+  "t": "<span>이번 달 사용</span> <span id=\"monthlyUsageLabel\">0냥</span>",
+  "h": "3be2cf3d"
+ },
+ "taikhoan.da-ket-noi": {
+  "t": "연결됨",
+  "h": "5c4300f9"
+ },
+ "taikhoan.da-moi-duoc-thuong-30-ngay": {
+  "t": "<span>보상받은 초대(지난 30일)</span> <span id=\"refProgressLabel\">—</span>",
+  "h": "15ce0d55"
+ },
+ "taikhoan.da-san-sang": {
+  "t": "● 준비됨",
+  "h": "4a6360a8"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren": {
+  "t": "위의 연결 링크를 URL 칸에 붙여넣기 → <strong>Add</strong>.",
+  "h": "63f3a9b6"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren-6lkt": {
+  "t": "위의 연결 링크를 붙여넣기 → 저장.",
+  "h": "5c24e4aa"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren-bdph": {
+  "t": "위의 연결 링크를 붙여넣으세요. 다른 설정은 필요 없습니다 — 키가 링크 안에 들어 있습니다.",
+  "h": "8957fdf6"
+ },
+ "taikhoan.dang-kiem-tra": {
+  "t": "<span class=\"conn-status\"><span class=\"ic\" data-icon=\"hourglass\"></span> 확인 중…</span>",
+  "h": "88fb5296"
+ },
+ "taikhoan.dang-kiem-tra-akb9": {
+  "t": "확인 중…",
+  "h": "05a0307a"
+ },
+ "taikhoan.dang-nhap-dang-ky": {
+  "t": "로그인 / 가입",
+  "h": "8df57bec"
+ },
+ "taikhoan.dang-nhap-de-xem-ho-so": {
+  "t": "로그인하고 프로필 보기",
+  "h": "a6bad53c"
+ },
+ "taikhoan.dang-tai": {
+  "t": "불러오는 중...",
+  "h": "3d8a48b7"
+ },
+ "taikhoan.dang-xuat": {
+  "t": "로그아웃",
+  "h": "adff9c76"
+ },
+ "taikhoan.doi-mat-khau": {
+  "t": "비밀번호 변경",
+  "h": "d4e1de23"
+ },
+ "taikhoan.doi-mat-khau-9m0f": {
+  "t": "비밀번호 변경",
+  "h": "6e8da8ff"
+ },
+ "taikhoan.dung-tu-vi-minh-bao-o": {
+  "t": "채팅하는 어디서나 명보 자미두수를 — 늘 쓰는 채팅 어시스턴트 안에서도, Telegram · WhatsApp · Messenger에서도 선생님께 물어보세요. 모두 같은 냥 지갑으로.",
+  "h": "2c9f35b9"
+ },
+ "taikhoan.duong-ket-noi-rieng-cua-ban": {
+  "t": "나만의 연결 링크",
+  "h": "8dbee506"
+ },
+ "taikhoan.gemini-grok-tro-ly-khac": {
+  "t": "Gemini / Grok / 기타 어시스턴트",
+  "h": "f0e6a5a3"
+ },
+ "taikhoan.giao-dien": {
+  "t": "<span data-icon=\"sun\"></span> 화면",
+  "h": "ad9cf22d"
+ },
+ "taikhoan.giao-dien-e4yw": {
+  "t": "화면",
+  "h": "705b4237"
+ },
+ "taikhoan.gop-y": {
+  "t": "<span data-icon=\"inbox\"></span> 의견",
+  "h": "fa000453"
+ },
+ "taikhoan.ho-so-vi-luong-ket-noi": {
+  "t": "<b>프로필</b><span>냥 지갑 · 연결 · 설정</span>",
+  "h": "61d17307"
+ },
+ "taikhoan.ho-tro-dang-nhap-qua-google": {
+  "t": "<strong>Google</strong>, <strong>Facebook</strong> 또는 이메일로 로그인할 수 있습니다.",
+  "h": "b8ce549c"
+ },
+ "taikhoan.hoi-thay-trong-tro-ly-chat": {
+  "t": "채팅 어시스턴트에서 선생님께 묻기 <span class=\"conn-badge\">신규</span>",
+  "h": "11fcd343"
+ },
+ "taikhoan.huy-lien-ket": {
+  "t": "연결 해제",
+  "h": "5f50b732"
+ },
+ "taikhoan.kenh-lien-lac": {
+  "t": "<span data-icon=\"message-circle\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> 연락 채널",
+  "h": "aa753fc7"
+ },
+ "taikhoan.ket-noi": {
+  "t": "<span class=\"tab-ic\" data-icon=\"link\"></span> 연결",
+  "h": "5ba3bb0d"
+ },
+ "taikhoan.ket-noi-vao-chatgpt": {
+  "t": "ChatGPT에 연결",
+  "h": "20d3bbf9"
+ },
+ "taikhoan.ket-noi-vao-claude": {
+  "t": "Claude에 연결",
+  "h": "f03eaded"
+ },
+ "taikhoan.ket-noi-xong-thi-hoi-the": {
+  "t": "<span data-icon=\"lightbulb\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> 연결한 뒤에는 어떻게 물어보나요?",
+  "h": "c918e147"
+ },
+ "taikhoan.khoi-hanh": {
+  "t": "<span data-icon=\"trophy\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> 첫걸음",
+  "h": "60535802"
+ },
+ "taikhoan.khong-can-bam-gi-cu-chat": {
+  "t": "아무것도 누를 필요 없습니다 — 평소처럼 채팅하면 시스템이 알아서 도구를 부릅니다. 꼭",
+  "h": "cd1a05b2"
+ },
+ "taikhoan.khong-het-han": {
+  "t": "만료 없음",
+  "h": "b4fef21a"
+ },
+ "taikhoan.la-so-da-luu": {
+  "t": "<span data-icon=\"folder\"></span><span class=\"ml-tx\">저장한 명반</span><span class=\"ml-go\">→</span>",
+  "h": "6739d4ef"
+ },
+ "taikhoan.lap-la-so-tu-vi-cho": {
+  "t": "\"1984년 5월 9일 새벽 1시 45분생 남성의 자미두수 명반을 세워 줘\"",
+  "h": "4b2026e7"
+ },
+ "taikhoan.lich-su-giao-dich": {
+  "t": "거래 내역",
+  "h": "99e8eb90"
+ },
+ "taikhoan.lien-ket-messenger": {
+  "t": "Messenger 연결",
+  "h": "99c405ee"
+ },
+ "taikhoan.lien-ket-telegram": {
+  "t": "Telegram 연결",
+  "h": "e4c7777f"
+ },
+ "taikhoan.lien-ket-whatsapp": {
+  "t": "WhatsApp 연결",
+  "h": "007375bb"
+ },
+ "taikhoan.lien-ket-zalo": {
+  "t": "Zalo 연결",
+  "h": "73727376"
+ },
+ "taikhoan.luan-giai-chi-tiet-la-so": {
+  "t": "\"내 명반을 자세히 풀이해 줘\"",
+  "h": "daab7a26"
+ },
+ "taikhoan.luot-hoi-thay": {
+  "t": "<span data-icon=\"message-circle\"></span><span class=\"ml-tx\">선생님께 물은 기록</span><span class=\"ml-go\">→</span>",
+  "h": "2603dd9c"
+ },
+ "taikhoan.luu-ten": {
+  "t": "이름 저장",
+  "h": "19fd43c9"
+ },
+ "taikhoan.mat-khau-moi": {
+  "t": "새 비밀번호",
+  "h": "4267a600"
+ },
+ "taikhoan.mo-settings-connectors-claude-desktop-ho": {
+  "t": "<strong>Settings → Connectors</strong>를 엽니다(Claude Desktop 또는 claude.ai).",
+  "h": "b7a053cb"
+ },
+ "taikhoan.moi-ban-nhan-them-luong": {
+  "t": "친구 초대 — 냥 더 받기",
+  "h": "c87d6753"
+ },
+ "taikhoan.nam-2027-cua-toi-van-han": {
+  "t": "\"내 2027년 운세는 어때? 3월은?\"",
+  "h": "2c70ccfb"
+ },
+ "taikhoan.nap-luong": {
+  "t": "<span data-icon=\"wallet\" style=\"width:16px;height:16px\"></span> 냥 충전",
+  "h": "2fb3641a"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot": {
+  "t": "여기서 냥을 충전하면 Telegram 봇에 메시지만 보내도 같은 지갑으로 바로 쓸 수 있습니다.",
+  "h": "b2be6c64"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot-1xta": {
+  "t": "여기서 냥을 충전하면 WhatsApp 봇에 메시지만 보내도 같은 지갑으로 바로 쓸 수 있습니다.",
+  "h": "76114b7e"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot-x2oh": {
+  "t": "여기서 냥을 충전하면 Facebook Messenger 봇에 메시지만 보내도 같은 지갑으로 바로 쓸 수 있습니다.",
+  "h": "e8af5d50"
+ },
+ "taikhoan.nap-luong-o-day-nhan-zalo": {
+  "t": "여기서 냥을 충전하면 Zalo OA 명보 자미두수에 메시지만 보내도 같은 지갑으로 바로 쓸 수 있습니다.",
+  "h": "f86646c2"
+ },
+ "taikhoan.nguoi-dung": {
+  "t": "사용자",
+  "h": "06f23b4d"
+ },
+ "taikhoan.nhap-lai-mat-khau": {
+  "t": "비밀번호 다시 입력",
+  "h": "4ff37e70"
+ },
+ "taikhoan.nhap-mat-khau-moi": {
+  "t": "새 비밀번호 입력",
+  "h": "62b70346"
+ },
+ "taikhoan.nhap-ten-cua-ban": {
+  "t": "이름을 입력하세요",
+  "h": "5e6b745a"
+ },
+ "taikhoan.noi-du-ngay-gio-gioi-tinh": {
+  "t": "생년월일, 시각, 성별을 모두 말하기",
+  "h": "19c46e88"
+ },
+ "taikhoan.quan-ly-vi-luong-nhan-them": {
+  "t": "냥 지갑 관리, 냥 더 받기, 채팅 채널 연결, 계정 설정.",
+  "h": "6233b736"
+ },
+ "taikhoan.quan-trong-trong-khung-chat-bam": {
+  "t": "<strong>중요:</strong> 채팅 창에서 도구 버튼(<strong>+</strong>) → <strong>Tool access</strong> → <strong>\"Tools already loaded\"</strong>를 고르세요. 기본값 \"Load tools when needed\"이면 Claude가 도구를 못 보고 명반을 지어냅니다. 한 번 켜면 이후 채팅에서도 유지됩니다.",
+  "h": "916eda3a"
+ },
+ "taikhoan.sang": {
+  "t": "<span data-icon=\"sun\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> 밝게",
+  "h": "910fdb50"
+ },
+ "taikhoan.sao-that-sat-o-cung-menh": {
+  "t": "\"명궁의 칠살은 무슨 뜻이야?\"",
+  "h": "5d996c81"
+ },
+ "taikhoan.so-du-luong": {
+  "t": "냥 잔액",
+  "h": "2a573b63"
+ },
+ "taikhoan.tai-khoan-dang-nhap-qua-oauth": {
+  "t": "OAuth로 로그인한 계정은 비밀번호를 쓰지 않습니다.",
+  "h": "4cbe60f1"
+ },
+ "taikhoan.tai-khoan-tu-vi-minh-bao": {
+  "t": "계정 — 명보 자미두수",
+  "h": "0ec3e09f"
+ },
+ "taikhoan.tao-duong-ket-noi": {
+  "t": "연결 링크 만들기",
+  "h": "1ea224f1"
+ },
+ "taikhoan.tao-mot-duong-ket-noi-rieng": {
+  "t": "전용 연결 링크를 만들어 채팅 어시스턴트에 붙여넣으세요. 그다음 \"1984년 5월 9일 축시생 남성의 명반을 세워 줘\", \"2027년 운세는?\"처럼 바로 물으면 됩니다 — tuviminhbao.com의 <strong>엔진에서 정확한</strong> 수치를 가져오며 지어내지 않습니다.",
+  "h": "d3398742"
+ },
+ "taikhoan.tat-ca-loai-giao-dich": {
+  "t": "모든 거래 유형",
+  "h": "32529f70"
+ },
+ "taikhoan.ten-hien-thi": {
+  "t": "표시 이름",
+  "h": "1e9d85d8"
+ },
+ "taikhoan.thong-tin": {
+  "t": "<span data-icon=\"user\"></span> 정보",
+  "h": "ff941fc8"
+ },
+ "taikhoan.thong-tin-ca-nhan": {
+  "t": "개인 정보",
+  "h": "5de3e5eb"
+ },
+ "taikhoan.thu-hoi-tao-key-moi": {
+  "t": "회수 후 새 키 만들기",
+  "h": "8fec8bbc"
+ },
+ "taikhoan.tim-muc-them-mcp-server-custom": {
+  "t": "<strong>MCP server</strong> / <strong>custom connector</strong>(Streamable HTTP)를 추가하는 항목을 찾으세요.",
+  "h": "07a00e26"
+ },
+ "taikhoan.tim-theo-noi-dung": {
+  "t": "내용으로 검색…",
+  "h": "ad472d5e"
+ },
+ "taikhoan.toi": {
+  "t": "<span data-icon=\"moon\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> 어둡게",
+  "h": "f4040249"
+ },
+ "taikhoan.tong-da-moi-0-da-nhan": {
+  "t": "총 초대: <strong id=\"refTotalCount\" style=\"color:var(--heading)\">0</strong> · 받은 보상: <strong id=\"refEarnedCount\" style=\"color:var(--tx-gold)\">0</strong>냥",
+  "h": "1aae41a3"
+ },
+ "taikhoan.vi-du": {
+  "t": ". 예:",
+  "h": "4622a94a"
+ },
+ "taikhoan.vi-luong": {
+  "t": "<span class=\"tab-ic\" data-icon=\"wallet\"></span> 냥 지갑",
+  "h": "397cf5a3"
+ },
+ "taikhoan.vo-chong-tuoi-1984-va-1986": {
+  "t": "\"1984년생과 1986년생 부부는 잘 맞아?\"",
+  "h": "3cbf661e"
+ },
+ "taikhoan.xac-nhan-mat-khau": {
+  "t": "비밀번호 확인",
+  "h": "7386c6b1"
+ },
+ "taikhoan.xong-hoi-claude-lap-la-so": {
+  "t": "완료! Claude에게 \"1984년 5월 9일 축시생 남성의 명반을 세워 줘\"라고 물으면 명보 자미두수 도구를 알아서 부릅니다.",
+  "h": "88358e38"
  },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. 서비스의 성격",

@@ -8011,6 +8011,466 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.taikhoan.ban-chua-chia-se-luot-nao": {
+  "t": "まだ何もシェアしていません。",
+  "h": "4be43058"
+ },
+ "js.taikhoan.ban-chua-gui-gop-y-nao": {
+  "t": "まだご意見を送っていません。",
+  "h": "ed1ab4a7"
+ },
+ "js.taikhoan.ban-da-dung-het-luot-moi": {
+  "t": "過去30日間の特典付き招待<strong>{n}</strong>回分をすべて使いました — ",
+  "h": "fbab17bd"
+ },
+ "js.taikhoan.ban-muon-noi-gi": {
+  "t": "どんなことを伝えたいですか？",
+  "h": "7a12a7f9"
+ },
+ "js.taikhoan.ban-tu-them": {
+  "t": "自分で追加",
+  "h": "39ff4ca3"
+ },
+ "js.taikhoan.buoc-xong": {
+  "t": "{a}/{b} ステップ",
+  "h": "ab8c9cf8"
+ },
+ "js.taikhoan.cap-luong-quan-tri": {
+  "t": "両の付与（管理者）",
+  "h": "24c9d12a"
+ },
+ "js.taikhoan.chua-co-giao-dich-nao": {
+  "t": "まだ取引はありません。",
+  "h": "eca9ffd5"
+ },
+ "js.taikhoan.chua-dung": {
+  "t": " 違う",
+  "h": "ddd914ee"
+ },
+ "js.taikhoan.chua-lien-ket": {
+  "t": "未連携。",
+  "h": "e0fe1693"
+ },
+ "js.taikhoan.da-chep": {
+  "t": "コピーしました ✓",
+  "h": "846252e0"
+ },
+ "js.taikhoan.da-copy": {
+  "t": "✓ コピーしました",
+  "h": "86409906"
+ },
+ "js.taikhoan.da-doi-mat-khau-thanh-cong": {
+  "t": "✓ パスワードを変更しました。",
+  "h": "b0be11cd"
+ },
+ "js.taikhoan.da-hoan-tat-luong": {
+  "t": "✓ 完了 — +{n} 両がウォレットに入りました。",
+  "h": "7974b68b"
+ },
+ "js.taikhoan.da-lien-ket-bot-messenger-dung": {
+  "t": "✓ 連携済み — Messengerボットはこの両ウォレットを共用します。",
+  "h": "ead6c730"
+ },
+ "js.taikhoan.da-lien-ket-bot-telegram-dung": {
+  "t": "✓ 連携済み — Telegramボットはこの両ウォレットを共用します。",
+  "h": "6f58b63f"
+ },
+ "js.taikhoan.da-lien-ket-bot-whatsapp-dung": {
+  "t": "✓ 連携済み — WhatsAppボットはこの両ウォレットを共用します。",
+  "h": "882115d7"
+ },
+ "js.taikhoan.da-lien-ket-bot-zalo-dung": {
+  "t": "✓ 連携済み — Zaloボットはこの両ウォレットを共用します。",
+  "h": "deed0e79"
+ },
+ "js.taikhoan.da-luu-ten-hien-thi": {
+  "t": "✓ 表示名を保存しました。",
+  "h": "48253036"
+ },
+ "js.taikhoan.da-mo-messenger-bam-bat-dau": {
+  "t": " Messengerを開きました — 「Get Started」を押すかメッセージを1通送って完了し、ページを再読み込みしてください。",
+  "h": "e353366d"
+ },
+ "js.taikhoan.da-mo-telegram-bam-bat-dau": {
+  "t": " Telegramを開きました — ボットで「Start」を押して完了し、ページを再読み込みしてください。",
+  "h": "4d2c8d09"
+ },
+ "js.taikhoan.da-mo-whatsapp-bam-gui-tin": {
+  "t": " WhatsAppを開きました — 用意されたメッセージを送信して完了し、ページを再読み込みしてください。",
+  "h": "c9e07106"
+ },
+ "js.taikhoan.da-nhan-cam-on-ban-trang": {
+  "t": "受け付けました — ありがとうございます。対応状況はすぐ下に表示されます。",
+  "h": "a25f2423"
+ },
+ "js.taikhoan.dang-gui": {
+  "t": "送信中…",
+  "h": "f04c8be3"
+ },
+ "js.taikhoan.dang-nhap-de-xem-ho-so": {
+  "t": "ログインしてプロフィールを見る。",
+  "h": "1bfe72cf"
+ },
+ "js.taikhoan.dang-tai": {
+  "t": "読み込み中…",
+  "h": "577a1d59"
+ },
+ "js.taikhoan.dang-tao": {
+  "t": "作成中…",
+  "h": "47662404"
+ },
+ "js.taikhoan.dang-tao-lien-ket": {
+  "t": "連携リンクを作成中…",
+  "h": "c32c93b3"
+ },
+ "js.taikhoan.dang-tao-ma": {
+  "t": "コードを作成中…",
+  "h": "a761e1d7"
+ },
+ "js.taikhoan.day-la-hop-thu-toi-thang": {
+  "t": "これは運営者に直接届く窓口です——先生への質問の場所ではありません。",
+  "h": "4eeaf74a"
+ },
+ "js.taikhoan.doi-mat-khau-that-bai": {
+  "t": "✗ パスワードを変更できませんでした。",
+  "h": "85e611bb"
+ },
+ "js.taikhoan.dung": {
+  "t": " 正しい",
+  "h": "552da34c"
+ },
+ "js.taikhoan.fb-bug": {
+  "t": "技術的な不具合",
+  "h": "ac755291"
+ },
+ "js.taikhoan.fb-da-nhan": {
+  "t": "受付済み",
+  "h": "efb7534b"
+ },
+ "js.taikhoan.fb-da-xem": {
+  "t": "確認済み",
+  "h": "f9809904"
+ },
+ "js.taikhoan.fb-da-xu-ly": {
+  "t": "対応済み",
+  "h": "500a2314"
+ },
+ "js.taikhoan.fb-dang-xu-ly": {
+  "t": "対応中",
+  "h": "39fc9334"
+ },
+ "js.taikhoan.fb-noi-dung": {
+  "t": "鑑定の内容",
+  "h": "535d1e57"
+ },
+ "js.taikhoan.fb-placeholder": {
+  "t": "具体的なほど直しやすくなります。例：&quot;1990年生まれの命盤の鑑定で、財運の項が大運の項と逆のことを言っている&quot; のほうが &quot;鑑定がいまひとつ&quot; よりずっと役立ちます。",
+  "h": "e9db4ac9"
+ },
+ "js.taikhoan.fb-thanh-toan": {
+  "t": "お支払い · 両",
+  "h": "8987b413"
+ },
+ "js.taikhoan.fb-tinh-nang": {
+  "t": "機能の提案",
+  "h": "f6ecc4b0"
+ },
+ "js.taikhoan.giu-toi-da-muc": {
+  "t": "最大 {n} 件まで保持 — 超えると先生がいちばん古い項目から外します。",
+  "h": "1ca9d45e"
+ },
+ "js.taikhoan.gop-y-da-gui": {
+  "t": "送ったご意見",
+  "h": "edc5809d"
+ },
+ "js.taikhoan.gui-gop-y-ka3h": {
+  "t": "意見を送る",
+  "h": "9e3497a6"
+ },
+ "js.taikhoan.gui-gop-y-tieu-de": {
+  "t": "ご意見を送る",
+  "h": "dc7d7429"
+ },
+ "js.taikhoan.hien-thi-giao-dich": {
+  "t": "{a}–{b} 件を表示 / 全 {n} 件の取引",
+  "h": "7ab97fcf"
+ },
+ "js.taikhoan.hoac": {
+  "t": "または",
+  "h": "2797f4b3"
+ },
+ "js.taikhoan.hoi-dap-tu-tu-vi-minh": {
+  "t": "明宝紫微斗数からの返信",
+  "h": "dd209967"
+ },
+ "js.taikhoan.hoi-thay": {
+  "t": "先生に聞く",
+  "h": "c9ffbbaf"
+ },
+ "js.taikhoan.huong-dan-thanh-toan": {
+  "t": "お支払いガイド",
+  "h": "53371141"
+ },
+ "js.taikhoan.huy": {
+  "t": "キャンセル",
+  "h": "33639e92"
+ },
+ "js.taikhoan.huy-lien-ket-messenger-bot-se": {
+  "t": "Messengerとの連携を解除しますか？ボットはあなたの両ウォレットを使えなくなります。",
+  "h": "e19d5555"
+ },
+ "js.taikhoan.huy-lien-ket-telegram-bot-se": {
+  "t": "Telegramとの連携を解除しますか？ボットはあなたの両ウォレットを使えなくなります。",
+  "h": "6c158247"
+ },
+ "js.taikhoan.huy-lien-ket-whatsapp-bot-se": {
+  "t": "WhatsAppとの連携を解除しますか？ボットはあなたの両ウォレットを使えなくなります。",
+  "h": "31f159a4"
+ },
+ "js.taikhoan.huy-lien-ket-zalo-bot-se": {
+  "t": "Zaloとの連携を解除しますか？ボットはあなたの両ウォレットを使えなくなります。",
+  "h": "a3a4a628"
+ },
+ "js.taikhoan.ket-qua": {
+  "t": "結果",
+  "h": "c9f95514"
+ },
+ "js.taikhoan.khac": {
+  "t": "その他",
+  "h": "5b8a28ab"
+ },
+ "js.taikhoan.khi-ho-nap-luong-lan-dau": {
+  "t": "その人が初めて両をチャージすると、二人とも<strong>30両</strong>ずつ追加でもらえます。",
+  "h": "201f2475"
+ },
+ "js.taikhoan.khong-co-giao-dich-khop-bo": {
+  "t": "条件に合う取引はありません。",
+  "h": "b78b80e3"
+ },
+ "js.taikhoan.khong-doc-duoc-ho-so-thu": {
+  "t": "プロフィールを読み込めませんでした。ページを再読み込みしてください。",
+  "h": "ac5f4991"
+ },
+ "js.taikhoan.khong-doc-duoc-lich-su": {
+  "t": "履歴を読み込めませんでした。",
+  "h": "c7ccf5f8"
+ },
+ "js.taikhoan.khong-doc-duoc-tien-do-thu": {
+  "t": "進み具合を読み込めませんでした。ページを再読み込みしてください。",
+  "h": "873418be"
+ },
+ "js.taikhoan.khong-gui-duoc-xin-thu-lai": {
+  "t": "送信できませんでした。もう一度お試しください。",
+  "h": "c29e25ae"
+ },
+ "js.taikhoan.khong-tai-duoc-danh-sach-gop": {
+  "t": "ご意見の一覧を読み込めませんでした。",
+  "h": "56f9aa7c"
+ },
+ "js.taikhoan.khong-tai-duoc-trang-thai-lien": {
+  "t": "連携状況を読み込めませんでした。",
+  "h": "d42a2701"
+ },
+ "js.taikhoan.khong-tao-duoc-key-thu-lai": {
+  "t": "キーを作成できませんでした。しばらくしてからお試しください。",
+  "h": "d5bedd90"
+ },
+ "js.taikhoan.khong-tao-duoc-lien-ket-thu": {
+  "t": "連携リンクを作成できませんでした。しばらくしてからお試しください。",
+  "h": "095112a9"
+ },
+ "js.taikhoan.khong-the-tai-lich-su": {
+  "t": "履歴を読み込めません。",
+  "h": "034a35a9"
+ },
+ "js.taikhoan.khong-thuc-hien-duoc": {
+  "t": "実行できませんでした。",
+  "h": "ec9f72a3"
+ },
+ "js.taikhoan.lien-he": {
+  "t": "お問い合わせ",
+  "h": "603522f1"
+ },
+ "js.taikhoan.lien-ket-messenger": {
+  "t": "Messengerと連携",
+  "h": "99c405ee"
+ },
+ "js.taikhoan.lien-ket-telegram": {
+  "t": "Telegramと連携",
+  "h": "e4c7777f"
+ },
+ "js.taikhoan.lien-ket-whatsapp": {
+  "t": "WhatsAppと連携",
+  "h": "007375bb"
+ },
+ "js.taikhoan.lien-ket-zalo": {
+  "t": "Zaloと連携",
+  "h": "73727376"
+ },
+ "js.taikhoan.loi-mang": {
+  "t": "ネットワークエラー。",
+  "h": "8fe8f313"
+ },
+ "js.taikhoan.loi-mang-thu-lai-sau-nhe": {
+  "t": "ネットワークエラーです。しばらくしてからお試しください。",
+  "h": "e09e98e7"
+ },
+ "js.taikhoan.loi-mang-xin-thu-lai": {
+  "t": "ネットワークエラー — もう一度お試しください。",
+  "h": "1464653a"
+ },
+ "js.taikhoan.luan-giai-la-so": {
+  "t": "命盤鑑定",
+  "h": "72f1fa6d"
+ },
+ "js.taikhoan.luong-khi-xong-ca-n": {
+  "t": "{b} つすべて終えると +{n} 両",
+  "h": "6a55c9a9"
+ },
+ "js.taikhoan.luot-moi-se-mo-lai-dan": {
+  "t": "招待枠は、一人ひとりの30日が過ぎるごとに順に戻ります。",
+  "h": "3ce174a5"
+ },
+ "js.taikhoan.luu": {
+  "t": "保存",
+  "h": "a306970e"
+ },
+ "js.taikhoan.luu-that-bai-thu-lai": {
+  "t": "✗ 保存できませんでした。もう一度お試しください。",
+  "h": "0543df5d"
+ },
+ "js.taikhoan.mat-khau-khong-khop": {
+  "t": "パスワードが一致しません。",
+  "h": "782aade8"
+ },
+ "js.taikhoan.mat-khau-toi-thieu-6-ky": {
+  "t": "パスワードは6文字以上にしてください。",
+  "h": "56257bc3"
+ },
+ "js.taikhoan.moi-nguoi-dang-ky-thuong": {
+  "t": "あなたのリンクから登録した人1人につき：アカウント作成と同時に<strong>+{n} 両</strong>があなたのウォレットに入ります。",
+  "h": "a78b2e10"
+ },
+ "js.taikhoan.moi-y-kien-ve-noi-dung": {
+  "t": "鑑定の内容、技術的な不具合、両の料金、欲しい機能について、どんなご意見でも ",
+  "h": "76ce940d"
+ },
+ "js.taikhoan.n-luong": {
+  "t": "{n} 両",
+  "h": "c4904a65"
+ },
+ "js.taikhoan.n-luong-thuong": {
+  "t": "{n} 両",
+  "h": "4c7471c6"
+ },
+ "js.taikhoan.n-luot-xem": {
+  "t": "{n} 回表示",
+  "h": "b99dc30e"
+ },
+ "js.taikhoan.nap-luong": {
+  "t": "両のチャージ",
+  "h": "b70a5d1d"
+ },
+ "js.taikhoan.nap-thuong": {
+  "t": "チャージ／特典",
+  "h": "1f6352ba"
+ },
+ "js.taikhoan.neu-chua-tu-lien-ket": {
+  "t": " 自動で連携されない場合は、次のメッセージを送ってください：/link {t}",
+  "h": "4271bec8"
+ },
+ "js.taikhoan.nguoi-dung": {
+  "t": "ユーザー",
+  "h": "06f23b4d"
+ },
+ "js.taikhoan.nhan-cho-oa-zalo": {
+  "t": " Zaloの明宝紫微斗数OAに次の1行をそのまま送り（コードの有効期限は15分）、ページを再読み込みしてください：<code>/link {t}</code>",
+  "h": "1cbb362f"
+ },
+ "js.taikhoan.noi-dung-gop-y-ve": {
+  "t": "ご意見の内容",
+  "h": "b744e759"
+ },
+ "js.taikhoan.sao-chep": {
+  "t": "コピー",
+  "h": "09a1db3e"
+ },
+ "js.taikhoan.su-dung": {
+  "t": "利用",
+  "h": "a6ee0e07"
+ },
+ "js.taikhoan.sua": {
+  "t": "編集",
+  "h": "0963749f"
+ },
+ "js.taikhoan.tao-duong-ket-noi": {
+  "t": "接続リンクを作成",
+  "h": "1ea224f1"
+ },
+ "js.taikhoan.tat-ca-loai-giao-dich": {
+  "t": "すべての取引の種類",
+  "h": "32529f70"
+ },
+ "js.taikhoan.thanh-vien-tu": {
+  "t": "{d}からのメンバー",
+  "h": "43b4abd6"
+ },
+ "js.taikhoan.thay-chua-ghi-lai": {
+  "t": "先生はまだあなたについて何も記録していません。<br>何度か話すうちに、先生が覚えておくべきことを自然に覚えていきます。",
+  "h": "9f324126"
+ },
+ "js.taikhoan.thay-tu-ghi": {
+  "t": "先生が記録",
+  "h": "4a9b5be3"
+ },
+ "js.taikhoan.thoi-gian-loai-noi-dung-so": {
+  "t": "<th>#</th><th>日時</th><th>種類</th><th>内容</th><th>数量</th><th>取引ID</th>",
+  "h": "a6125b8d"
+ },
+ "js.taikhoan.thu-hoi-key-hien-tai-ket": {
+  "t": "現在のキーを無効にしますか？古いキーを使っている接続は止まります——すぐに新しいキーが発行されます。",
+  "h": "92016734"
+ },
+ "js.taikhoan.trang-thiet-bi-ban-dang-dung": {
+  "t": " ご利用中のページと端末の情報は、不具合を追えるよう自動で添付されます——説明は不要です。",
+  "h": "62db43d2"
+ },
+ "js.taikhoan.viec-gap-ve-thanh-toan-xem": {
+  "t": "お支払いの急ぎのご用件は：",
+  "h": "ba40de24"
+ },
+ "js.taikhoan.viet-dai-hon-mot-chut-nhe": {
+  "t": "もう少し長く書いてください。",
+  "h": "42a09878"
+ },
+ "js.taikhoan.viet-giup-vai-dong-de-chung": {
+  "t": "内容がわかるよう、数行書いてください。",
+  "h": "d9864f5c"
+ },
+ "js.taikhoan.viet-vao-day-chung-toi-doc": {
+  "t": "ここに書いてください。すべて目を通し、このページ内でお返事します。",
+  "h": "d8eb64da"
+ },
+ "js.taikhoan.vua-cong-luong": {
+  "t": "✓ <b>+{n} 両</b>をウォレットに加算しました。",
+  "h": "32cba2ec"
+ },
+ "js.taikhoan.xem-tuoi-lam-an": {
+  "t": "ビジネスの相性",
+  "h": "5f5ba4e2"
+ },
+ "js.taikhoan.xem-tuoi-vo-chong": {
+  "t": "夫婦の相性",
+  "h": "f3e7b1ed"
+ },
+ "js.taikhoan.xoa": {
+  "t": "削除",
+  "h": "82339c0a"
+ },
+ "js.taikhoan.xoa-dieu-nay-khoi-ho-so": {
+  "t": "この項目をプロフィールから削除しますか？先生は完全に忘れます。",
+  "h": "d35cee4f"
+ },
  "js.thay.disc-bac-minh": {
   "t": "相術",
   "h": "ae8ee50b"
@@ -10406,6 +10866,378 @@
  "sanpham.xem-tuoi-vo-chong": {
   "t": "夫婦の相性",
   "h": "f3e7b1ed"
+ },
+ "taikhoan.add-mcp-server-chon-streamable-http": {
+  "t": "<strong>Add MCP server</strong> → <strong>Streamable HTTP</strong> を選択。",
+  "h": "f63db93e"
+ },
+ "taikhoan.bam-add-custom-connector": {
+  "t": "<strong>Add custom connector</strong> を押します。",
+  "h": "f171eae6"
+ },
+ "taikhoan.bam-nut-chia-se-o-goc": {
+  "t": "どの結果ページでも下部の<strong>「シェア」</strong>ボタンを押すとリンクを取得できます——誰かに送ったり、Facebook/Zalo/WhatsAppに投稿したり。シェアした履歴と表示回数はここに表示されます。",
+  "h": "d3fc4566"
+ },
+ "taikhoan.bao-cao": {
+  "t": "<span data-icon=\"file-text\"></span><span class=\"ml-tx\">レポート</span><span class=\"ml-go\">→</span>",
+  "h": "30fcaff2"
+ },
+ "taikhoan.bao-mat": {
+  "t": "<span data-icon=\"lock\"></span> セキュリティ",
+  "h": "a32a24fb"
+ },
+ "taikhoan.bat-settings-connectors-developer-mode": {
+  "t": "<strong>Settings → Connectors → Developer mode</strong> をオンにします。",
+  "h": "5ddc655e"
+ },
+ "taikhoan.cai-dat": {
+  "t": "<span class=\"tab-ic\" data-icon=\"settings\"></span> 設定",
+  "h": "de9c2df8"
+ },
+ "taikhoan.chat-voi-bot-bang-dung-vi": {
+  "t": "この両ウォレットのままボットとチャット",
+  "h": "c6fcc4a8"
+ },
+ "taikhoan.chia-se-lich-su": {
+  "t": "<span data-icon=\"share-2\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> シェア — 履歴",
+  "h": "fc051dae"
+ },
+ "taikhoan.chon-nen-sang-hoac-toi-cho": {
+  "t": "明宝紫微斗数全体のライト／ダーク表示を選べます——すぐ反映され、次回も覚えています。",
+  "h": "ac29b196"
+ },
+ "taikhoan.chua-ket-noi": {
+  "t": "未接続",
+  "h": "a6c7297d"
+ },
+ "taikhoan.claude-chatgpt-gemini-grok": {
+  "t": "Claude · ChatGPT · Gemini · Grok",
+  "h": "bbad7d3a"
+ },
+ "taikhoan.cua-ban": {
+  "t": "あなたの",
+  "h": "4ae2197a"
+ },
+ "taikhoan.da-dung-thang-nay-0-luong": {
+  "t": "<span>今月の利用</span> <span id=\"monthlyUsageLabel\">0 両</span>",
+  "h": "3be2cf3d"
+ },
+ "taikhoan.da-ket-noi": {
+  "t": "接続済み",
+  "h": "5c4300f9"
+ },
+ "taikhoan.da-moi-duoc-thuong-30-ngay": {
+  "t": "<span>特典付き招待（過去30日）</span> <span id=\"refProgressLabel\">—</span>",
+  "h": "15ce0d55"
+ },
+ "taikhoan.da-san-sang": {
+  "t": "● 準備完了",
+  "h": "4a6360a8"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren": {
+  "t": "上の接続リンクをURL欄に貼り付け → <strong>Add</strong>。",
+  "h": "63f3a9b6"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren-6lkt": {
+  "t": "上の接続リンクを貼り付け → 保存。",
+  "h": "5c24e4aa"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren-bdph": {
+  "t": "上の接続リンクを貼り付けるだけ。追加の設定は不要です——キーはリンクに含まれています。",
+  "h": "8957fdf6"
+ },
+ "taikhoan.dang-kiem-tra": {
+  "t": "<span class=\"conn-status\"><span class=\"ic\" data-icon=\"hourglass\"></span> 確認中…</span>",
+  "h": "88fb5296"
+ },
+ "taikhoan.dang-kiem-tra-akb9": {
+  "t": "確認中…",
+  "h": "05a0307a"
+ },
+ "taikhoan.dang-nhap-dang-ky": {
+  "t": "ログイン／新規登録",
+  "h": "8df57bec"
+ },
+ "taikhoan.dang-nhap-de-xem-ho-so": {
+  "t": "ログインしてプロフィールを見る",
+  "h": "a6bad53c"
+ },
+ "taikhoan.dang-tai": {
+  "t": "読み込み中...",
+  "h": "3d8a48b7"
+ },
+ "taikhoan.dang-xuat": {
+  "t": "ログアウト",
+  "h": "adff9c76"
+ },
+ "taikhoan.doi-mat-khau": {
+  "t": "パスワードの変更",
+  "h": "d4e1de23"
+ },
+ "taikhoan.doi-mat-khau-9m0f": {
+  "t": "パスワードを変更",
+  "h": "6e8da8ff"
+ },
+ "taikhoan.dung-tu-vi-minh-bao-o": {
+  "t": "チャットするあらゆる場所で明宝紫微斗数を——いつものチャットアシスタントの中でも、Telegram · WhatsApp · Messengerでも、先生に聞けます。すべて同じ両ウォレットで。",
+  "h": "2c9f35b9"
+ },
+ "taikhoan.duong-ket-noi-rieng-cua-ban": {
+  "t": "あなた専用の接続リンク",
+  "h": "8dbee506"
+ },
+ "taikhoan.gemini-grok-tro-ly-khac": {
+  "t": "Gemini / Grok / その他のアシスタント",
+  "h": "f0e6a5a3"
+ },
+ "taikhoan.giao-dien": {
+  "t": "<span data-icon=\"sun\"></span> 表示",
+  "h": "ad9cf22d"
+ },
+ "taikhoan.giao-dien-e4yw": {
+  "t": "表示",
+  "h": "705b4237"
+ },
+ "taikhoan.gop-y": {
+  "t": "<span data-icon=\"inbox\"></span> ご意見",
+  "h": "fa000453"
+ },
+ "taikhoan.ho-so-vi-luong-ket-noi": {
+  "t": "<b>プロフィール</b><span>両ウォレット · 接続 · 設定</span>",
+  "h": "61d17307"
+ },
+ "taikhoan.ho-tro-dang-nhap-qua-google": {
+  "t": "<strong>Google</strong>、<strong>Facebook</strong>、またはメールでログインできます。",
+  "h": "b8ce549c"
+ },
+ "taikhoan.hoi-thay-trong-tro-ly-chat": {
+  "t": "チャットアシスタントで先生に聞く <span class=\"conn-badge\">新着</span>",
+  "h": "11fcd343"
+ },
+ "taikhoan.huy-lien-ket": {
+  "t": "連携を解除",
+  "h": "5f50b732"
+ },
+ "taikhoan.kenh-lien-lac": {
+  "t": "<span data-icon=\"message-circle\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> 連絡チャネル",
+  "h": "aa753fc7"
+ },
+ "taikhoan.ket-noi": {
+  "t": "<span class=\"tab-ic\" data-icon=\"link\"></span> 接続",
+  "h": "5ba3bb0d"
+ },
+ "taikhoan.ket-noi-vao-chatgpt": {
+  "t": "ChatGPTに接続",
+  "h": "20d3bbf9"
+ },
+ "taikhoan.ket-noi-vao-claude": {
+  "t": "Claudeに接続",
+  "h": "f03eaded"
+ },
+ "taikhoan.ket-noi-xong-thi-hoi-the": {
+  "t": "<span data-icon=\"lightbulb\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> 接続できたら、どう聞けばいい？",
+  "h": "c918e147"
+ },
+ "taikhoan.khoi-hanh": {
+  "t": "<span data-icon=\"trophy\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> はじめの一歩",
+  "h": "60535802"
+ },
+ "taikhoan.khong-can-bam-gi-cu-chat": {
+  "t": "何も押す必要はありません——普通にチャットすれば、システムが自動でツールを呼び出します。忘れずに",
+  "h": "cd1a05b2"
+ },
+ "taikhoan.khong-het-han": {
+  "t": "有効期限なし",
+  "h": "b4fef21a"
+ },
+ "taikhoan.la-so-da-luu": {
+  "t": "<span data-icon=\"folder\"></span><span class=\"ml-tx\">保存した命盤</span><span class=\"ml-go\">→</span>",
+  "h": "6739d4ef"
+ },
+ "taikhoan.lap-la-so-tu-vi-cho": {
+  "t": "「1984年5月9日 午前1時45分生まれの男性の紫微斗数の命盤を作って」",
+  "h": "4b2026e7"
+ },
+ "taikhoan.lich-su-giao-dich": {
+  "t": "取引履歴",
+  "h": "99e8eb90"
+ },
+ "taikhoan.lien-ket-messenger": {
+  "t": "Messengerと連携",
+  "h": "99c405ee"
+ },
+ "taikhoan.lien-ket-telegram": {
+  "t": "Telegramと連携",
+  "h": "e4c7777f"
+ },
+ "taikhoan.lien-ket-whatsapp": {
+  "t": "WhatsAppと連携",
+  "h": "007375bb"
+ },
+ "taikhoan.lien-ket-zalo": {
+  "t": "Zaloと連携",
+  "h": "73727376"
+ },
+ "taikhoan.luan-giai-chi-tiet-la-so": {
+  "t": "「私の命盤を詳しく鑑定して」",
+  "h": "daab7a26"
+ },
+ "taikhoan.luot-hoi-thay": {
+  "t": "<span data-icon=\"message-circle\"></span><span class=\"ml-tx\">先生への質問履歴</span><span class=\"ml-go\">→</span>",
+  "h": "2603dd9c"
+ },
+ "taikhoan.luu-ten": {
+  "t": "名前を保存",
+  "h": "19fd43c9"
+ },
+ "taikhoan.mat-khau-moi": {
+  "t": "新しいパスワード",
+  "h": "4267a600"
+ },
+ "taikhoan.mo-settings-connectors-claude-desktop-ho": {
+  "t": "<strong>Settings → Connectors</strong> を開きます（Claude Desktop または claude.ai）。",
+  "h": "b7a053cb"
+ },
+ "taikhoan.moi-ban-nhan-them-luong": {
+  "t": "友だちを招待 — 両をもっともらう",
+  "h": "c87d6753"
+ },
+ "taikhoan.nam-2027-cua-toi-van-han": {
+  "t": "「私の2027年の運勢は？3月はどう？」",
+  "h": "2c70ccfb"
+ },
+ "taikhoan.nap-luong": {
+  "t": "<span data-icon=\"wallet\" style=\"width:16px;height:16px\"></span> 両をチャージ",
+  "h": "2fb3641a"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot": {
+  "t": "ここで両をチャージすれば、Telegramボットにメッセージするだけで同じウォレットですぐ使えます。",
+  "h": "b2be6c64"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot-1xta": {
+  "t": "ここで両をチャージすれば、WhatsAppボットにメッセージするだけで同じウォレットですぐ使えます。",
+  "h": "76114b7e"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot-x2oh": {
+  "t": "ここで両をチャージすれば、Facebook Messengerボットにメッセージするだけで同じウォレットですぐ使えます。",
+  "h": "e8af5d50"
+ },
+ "taikhoan.nap-luong-o-day-nhan-zalo": {
+  "t": "ここで両をチャージすれば、ZaloのOA「明宝紫微斗数」にメッセージするだけで同じウォレットですぐ使えます。",
+  "h": "f86646c2"
+ },
+ "taikhoan.nguoi-dung": {
+  "t": "ユーザー",
+  "h": "06f23b4d"
+ },
+ "taikhoan.nhap-lai-mat-khau": {
+  "t": "パスワードを再入力",
+  "h": "4ff37e70"
+ },
+ "taikhoan.nhap-mat-khau-moi": {
+  "t": "新しいパスワードを入力",
+  "h": "62b70346"
+ },
+ "taikhoan.nhap-ten-cua-ban": {
+  "t": "お名前を入力",
+  "h": "5e6b745a"
+ },
+ "taikhoan.noi-du-ngay-gio-gioi-tinh": {
+  "t": "生年月日・時刻・性別をすべて伝えること",
+  "h": "19c46e88"
+ },
+ "taikhoan.quan-ly-vi-luong-nhan-them": {
+  "t": "両ウォレットの管理、両の獲得、チャットチャネルの接続、アカウント設定。",
+  "h": "6233b736"
+ },
+ "taikhoan.quan-trong-trong-khung-chat-bam": {
+  "t": "<strong>重要：</strong>チャット欄でツールボタン（<strong>+</strong>）→ <strong>Tool access</strong> → <strong>\"Tools already loaded\"</strong> を選んでください。初期設定の \"Load tools when needed\" のままだとClaudeがツールを見つけられず、命盤を勝手に作ってしまいます。一度オンにすれば以降のチャットでも保持されます。",
+  "h": "916eda3a"
+ },
+ "taikhoan.sang": {
+  "t": "<span data-icon=\"sun\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> ライト",
+  "h": "910fdb50"
+ },
+ "taikhoan.sao-that-sat-o-cung-menh": {
+  "t": "「命宮の七殺はどういう意味？」",
+  "h": "5d996c81"
+ },
+ "taikhoan.so-du-luong": {
+  "t": "両の残高",
+  "h": "2a573b63"
+ },
+ "taikhoan.tai-khoan-dang-nhap-qua-oauth": {
+  "t": "OAuthでログインしたアカウントはパスワードを使いません。",
+  "h": "4cbe60f1"
+ },
+ "taikhoan.tai-khoan-tu-vi-minh-bao": {
+  "t": "アカウント — 明宝紫微斗数",
+  "h": "0ec3e09f"
+ },
+ "taikhoan.tao-duong-ket-noi": {
+  "t": "接続リンクを作成",
+  "h": "1ea224f1"
+ },
+ "taikhoan.tao-mot-duong-ket-noi-rieng": {
+  "t": "専用の接続リンクを作り、お使いのチャットアシスタントに貼り付けます。あとは「1984年5月9日 丑の刻生まれの男性の命盤を作って」「2027年の運勢は？」と直接聞くだけ——tuviminhbao.comの<strong>エンジンから正確な</strong>数値を取得し、でっち上げません。",
+  "h": "d3398742"
+ },
+ "taikhoan.tat-ca-loai-giao-dich": {
+  "t": "すべての取引の種類",
+  "h": "32529f70"
+ },
+ "taikhoan.ten-hien-thi": {
+  "t": "表示名",
+  "h": "1e9d85d8"
+ },
+ "taikhoan.thong-tin": {
+  "t": "<span data-icon=\"user\"></span> 情報",
+  "h": "ff941fc8"
+ },
+ "taikhoan.thong-tin-ca-nhan": {
+  "t": "個人情報",
+  "h": "5de3e5eb"
+ },
+ "taikhoan.thu-hoi-tao-key-moi": {
+  "t": "無効にして新しいキーを作成",
+  "h": "8fec8bbc"
+ },
+ "taikhoan.tim-muc-them-mcp-server-custom": {
+  "t": "<strong>MCP server</strong> / <strong>custom connector</strong>（Streamable HTTP）を追加する項目を探します。",
+  "h": "07a00e26"
+ },
+ "taikhoan.tim-theo-noi-dung": {
+  "t": "内容で検索…",
+  "h": "ad472d5e"
+ },
+ "taikhoan.toi": {
+  "t": "<span data-icon=\"moon\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> ダーク",
+  "h": "f4040249"
+ },
+ "taikhoan.tong-da-moi-0-da-nhan": {
+  "t": "招待した合計：<strong id=\"refTotalCount\" style=\"color:var(--heading)\">0</strong> · 受け取り：<strong id=\"refEarnedCount\" style=\"color:var(--tx-gold)\">0</strong> 両",
+  "h": "1aae41a3"
+ },
+ "taikhoan.vi-du": {
+  "t": "。例：",
+  "h": "4622a94a"
+ },
+ "taikhoan.vi-luong": {
+  "t": "<span class=\"tab-ic\" data-icon=\"wallet\"></span> 両ウォレット",
+  "h": "397cf5a3"
+ },
+ "taikhoan.vo-chong-tuoi-1984-va-1986": {
+  "t": "「1984年生まれと1986年生まれの夫婦は相性がいい？」",
+  "h": "3cbf661e"
+ },
+ "taikhoan.xac-nhan-mat-khau": {
+  "t": "パスワードの確認",
+  "h": "7386c6b1"
+ },
+ "taikhoan.xong-hoi-claude-lap-la-so": {
+  "t": "完了！Claudeに「1984年5月9日 丑の刻生まれの男性の命盤を作って」と聞けば、明宝紫微斗数のツールを自動で呼び出します。",
+  "h": "88358e38"
  },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. サービスの性質",

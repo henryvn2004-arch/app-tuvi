@@ -11,6 +11,8 @@ var SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
 var _pUser = null;
+// Định dạng ngày theo ngôn ngữ trang (I18n.locale do server chèn ở /<locale>/; vi ⇒ 'vi-VN' như cũ).
+function _dateLoc() { var l = window.I18n && I18n.locale; return l && l !== 'vi' ? l : 'vi-VN'; }
 // Lưới an toàn soft-nav: mọi hàm `load*`/`render*` dưới đây có thể còn treo
 // sau một `fetch()` khi người dùng đã soft-nav rời trang — "nghĩa địa" của
 // shell-soft-nav.js giữ phần tử id cũ SỐNG (vô hình) chỉ 15 giây; fetch chậm
@@ -112,7 +114,7 @@ function setupThemeChoice() {
 function renderProfileHeader() {
   const email = _pUser.email || '';
   const displayName = _pUser.user_metadata?.display_name || _pUser.user_metadata?.full_name || '';
-  const createdAt = _pUser.created_at ? new Date(_pUser.created_at).toLocaleDateString('vi-VN',{year:'numeric',month:'long'}) : '';
+  const createdAt = _pUser.created_at ? new Date(_pUser.created_at).toLocaleDateString(_dateLoc(),{year:'numeric',month:'long'}) : '';
   const letter = (displayName || email || '?')[0].toUpperCase();
 
   // Lưới an toàn soft-nav (xem _hoSoLeftPage đầu file): initProfile() gọi hàm
@@ -120,8 +122,8 @@ function renderProfileHeader() {
   var setEl = (id, prop, val) => { var el = document.getElementById(id); if (el) el[prop] = val; };
   setEl('avatarLetter', 'textContent', letter);
   setEl('userEmail', 'textContent', email);
-  setEl('userDisplayName', 'textContent', displayName || 'Người Dùng');
-  setEl('userSince', 'textContent', createdAt ? `Thành viên từ ${createdAt}` : '');
+  setEl('userDisplayName', 'textContent', displayName || _tvmbT('js.taikhoan.nguoi-dung', 'Người Dùng'));
+  setEl('userSince', 'textContent', createdAt ? _tvmbT('js.taikhoan.thanh-vien-tu', 'Thành viên từ {d}', { d: createdAt }) : '');
   setEl('accEmail', 'value', email);
   setEl('accName', 'value', displayName);
 
@@ -210,7 +212,7 @@ async function loadHeaderBalance() {
     const d = await res.json();
     const bal = d.balance ?? 0;
     const t = document.getElementById('tabCreditBalance');
-    if (t) t.textContent = bal + ' lượng';
+    if (t) t.textContent = _tvmbT('js.taikhoan.n-luong-thuong', '{n} lượng', { n: bal });
   } catch(e) {
     console.error('[loadHeaderBalance]', e);
     const t = document.getElementById('tabCreditBalance');
@@ -256,26 +258,26 @@ async function loadMcpKey() {
 }
 async function genMcpKey() {
   const btn = document.getElementById('btnMcpGen');
-  btn.disabled = true; btn.textContent = 'Đang tạo…';
+  btn.disabled = true; btn.textContent = _tvmbT('js.taikhoan.dang-tao', 'Đang tạo…');
   try {
     const res = await fetch('/api/mcp/key', { method: 'POST', headers: { Authorization: `Bearer ${await _tok()}` } });
     const d = await res.json();
     if (_hoSoLeftPage) return;
     if (d && d.url) { const el = document.getElementById('mcpUrl'); if (el) el.value = d.url; _mcpShow('ready'); }
-    else alert('Không tạo được key, thử lại sau nhé.');
-  } catch { if (!_hoSoLeftPage) alert('Lỗi mạng, thử lại sau nhé.'); }
-  finally { btn.disabled = false; btn.textContent = 'Tạo đường kết nối'; }
+    else alert(_tvmbT('js.taikhoan.khong-tao-duoc-key-thu-lai', 'Không tạo được key, thử lại sau nhé.'));
+  } catch { if (!_hoSoLeftPage) alert(_tvmbT('js.taikhoan.loi-mang-thu-lai-sau-nhe', 'Lỗi mạng, thử lại sau nhé.')); }
+  finally { btn.disabled = false; btn.textContent = _tvmbT('js.taikhoan.tao-duong-ket-noi', 'Tạo đường kết nối'); }
 }
 async function copyMcpUrl() {
   const inp = document.getElementById('mcpUrl');
   const btn = document.getElementById('btnMcpCopy');
   try { await navigator.clipboard.writeText(inp.value); }
   catch { inp.select(); document.execCommand('copy'); }
-  btn.textContent = '✓ Đã copy'; btn.classList.add('ok');
+  btn.textContent = _tvmbT('js.taikhoan.da-copy', '✓ Đã copy'); btn.classList.add('ok');
   setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('ok'); }, 1800);
 }
 async function revokeMcpKey() {
-  if (!confirm('Thu hồi key hiện tại? Kết nối Đang dùng key cũ sẽ ngừng — bạn sẽ có key mới ngay sau đó.')) return;
+  if (!confirm(_tvmbT('js.taikhoan.thu-hoi-key-hien-tai-ket', 'Thu hồi key hiện tại? Kết nối Đang dùng key cũ sẽ ngừng — bạn sẽ có key mới ngay sau đó.'))) return;
   _mcpShow('checking');
   try {
     await fetch('/api/mcp/key', { method: 'DELETE', headers: { Authorization: `Bearer ${await _tok()}` } });
@@ -301,22 +303,22 @@ async function loadTelegramLink() {
     _connStats.tg = !!d.linked;
     updateConnStats();
     if (d.linked) {
-      statusEl.innerHTML = '✓ Đã liên kết — bot Telegram dùng chung ví Lượng này.' + (d.telegram_user_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.telegram_user_id)) + '</span>' : '');
+      statusEl.innerHTML = _tvmbT('js.taikhoan.da-lien-ket-bot-telegram-dung', '✓ Đã liên kết — bot Telegram dùng chung ví Lượng này.') + (d.telegram_user_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.telegram_user_id)) + '</span>' : '');
       btnLink.style.display = 'none';
       btnUnlink.style.display = 'inline-block';
     } else {
-      statusEl.textContent = 'Chưa liên kết.';
+      statusEl.textContent = _tvmbT('js.taikhoan.chua-lien-ket', 'Chưa liên kết.');
       btnLink.style.display = 'inline-block';
       btnUnlink.style.display = 'none';
     }
   } catch {
-    statusEl.textContent = 'Không tải được trạng thái liên kết.';
+    statusEl.textContent = _tvmbT('js.taikhoan.khong-tai-duoc-trang-thai-lien', 'Không tải được trạng thái liên kết.');
   }
 }
 
 document.getElementById('btnTgLink').onclick = async () => {
   const btn = document.getElementById('btnTgLink');
-  btn.disabled = true; btn.textContent = 'Đang tạo liên kết…';
+  btn.disabled = true; btn.textContent = _tvmbT('js.taikhoan.dang-tao-lien-ket', 'Đang tạo liên kết…');
   try {
     const res = await fetch('/api/channels/telegram/link', {
       method: 'POST',
@@ -328,19 +330,19 @@ document.getElementById('btnTgLink').onclick = async () => {
       // Mở bot Telegram với token /start → bot tự gắn ví.
       window.open(d.url, '_blank');
       const st = document.getElementById('tgLinkStatus');
-      if (st) st.innerHTML = ic('hourglass') + ' Đã mở Telegram — bấm "Bắt đầu / Start" trong bot để hoàn tất, rồi tải lại trang.';
+      if (st) st.innerHTML = ic('hourglass') + _tvmbT('js.taikhoan.da-mo-telegram-bam-bat-dau', ' Đã mở Telegram — bấm "Bắt đầu / Start" trong bot để hoàn tất, rồi tải lại trang.');
     } else {
-      alert('Không tạo được liên kết, thử lại sau nhé.');
+      alert(_tvmbT('js.taikhoan.khong-tao-duoc-lien-ket-thu', 'Không tạo được liên kết, thử lại sau nhé.'));
     }
   } catch {
-    if (!_hoSoLeftPage) alert('Lỗi mạng, thử lại sau nhé.');
+    if (!_hoSoLeftPage) alert(_tvmbT('js.taikhoan.loi-mang-thu-lai-sau-nhe', 'Lỗi mạng, thử lại sau nhé.'));
   } finally {
-    btn.disabled = false; btn.textContent = 'Liên kết Telegram';
+    btn.disabled = false; btn.textContent = _tvmbT('js.taikhoan.lien-ket-telegram', 'Liên kết Telegram');
   }
 };
 
 document.getElementById('btnTgUnlink').onclick = async () => {
-  if (!confirm('Hủy liên kết Telegram? Bot sẽ không còn dùng ví Lượng của bạn.')) return;
+  if (!confirm(_tvmbT('js.taikhoan.huy-lien-ket-telegram-bot-se', 'Hủy liên kết Telegram? Bot sẽ không còn dùng ví Lượng của bạn.'))) return;
   try {
     await fetch('/api/channels/telegram/link', {
       method: 'DELETE',
@@ -364,22 +366,22 @@ async function loadWhatsappLink() {
     _connStats.wa = !!d.linked;
     updateConnStats();
     if (d.linked) {
-      statusEl.innerHTML = '✓ Đã liên kết — bot WhatsApp dùng chung ví Lượng này.' + (d.whatsapp_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.whatsapp_id)) + '</span>' : '');
+      statusEl.innerHTML = _tvmbT('js.taikhoan.da-lien-ket-bot-whatsapp-dung', '✓ Đã liên kết — bot WhatsApp dùng chung ví Lượng này.') + (d.whatsapp_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.whatsapp_id)) + '</span>' : '');
       btnLink.style.display = 'none';
       btnUnlink.style.display = 'inline-block';
     } else {
-      statusEl.textContent = 'Chưa liên kết.';
+      statusEl.textContent = _tvmbT('js.taikhoan.chua-lien-ket', 'Chưa liên kết.');
       btnLink.style.display = 'inline-block';
       btnUnlink.style.display = 'none';
     }
   } catch {
-    statusEl.textContent = 'Không tải được trạng thái liên kết.';
+    statusEl.textContent = _tvmbT('js.taikhoan.khong-tai-duoc-trang-thai-lien', 'Không tải được trạng thái liên kết.');
   }
 }
 
 document.getElementById('btnWaLink').onclick = async () => {
   const btn = document.getElementById('btnWaLink');
-  btn.disabled = true; btn.textContent = 'Đang tạo liên kết…';
+  btn.disabled = true; btn.textContent = _tvmbT('js.taikhoan.dang-tao-lien-ket', 'Đang tạo liên kết…');
   try {
     const res = await fetch('/api/channels/whatsapp/link', {
       method: 'POST',
@@ -391,19 +393,19 @@ document.getElementById('btnWaLink').onclick = async () => {
       // Mở WhatsApp với tin soạn sẵn "/link <token>" → gửi để bot gắn ví.
       window.open(d.url, '_blank');
       const st = document.getElementById('waLinkStatus');
-      if (st) st.innerHTML = ic('hourglass') + ' Đã mở WhatsApp — bấm GỬI tin soạn sẵn để hoàn tất, rồi tải lại trang.';
+      if (st) st.innerHTML = ic('hourglass') + _tvmbT('js.taikhoan.da-mo-whatsapp-bam-gui-tin', ' Đã mở WhatsApp — bấm GỬI tin soạn sẵn để hoàn tất, rồi tải lại trang.');
     } else {
-      alert('Không tạo được liên kết, thử lại sau nhé.');
+      alert(_tvmbT('js.taikhoan.khong-tao-duoc-lien-ket-thu', 'Không tạo được liên kết, thử lại sau nhé.'));
     }
   } catch {
-    if (!_hoSoLeftPage) alert('Lỗi mạng, thử lại sau nhé.');
+    if (!_hoSoLeftPage) alert(_tvmbT('js.taikhoan.loi-mang-thu-lai-sau-nhe', 'Lỗi mạng, thử lại sau nhé.'));
   } finally {
-    btn.disabled = false; btn.textContent = 'Liên kết WhatsApp';
+    btn.disabled = false; btn.textContent = _tvmbT('js.taikhoan.lien-ket-whatsapp', 'Liên kết WhatsApp');
   }
 };
 
 document.getElementById('btnWaUnlink').onclick = async () => {
-  if (!confirm('Hủy liên kết WhatsApp? Bot sẽ không còn dùng ví Lượng của bạn.')) return;
+  if (!confirm(_tvmbT('js.taikhoan.huy-lien-ket-whatsapp-bot-se', 'Hủy liên kết WhatsApp? Bot sẽ không còn dùng ví Lượng của bạn.'))) return;
   try {
     await fetch('/api/channels/whatsapp/link', {
       method: 'DELETE',
@@ -427,22 +429,22 @@ async function loadMessengerLink() {
     _connStats.msgr = !!d.linked;
     updateConnStats();
     if (d.linked) {
-      statusEl.innerHTML = '✓ Đã liên kết — bot Messenger dùng chung ví Lượng này.' + (d.messenger_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.messenger_id)) + '</span>' : '');
+      statusEl.innerHTML = _tvmbT('js.taikhoan.da-lien-ket-bot-messenger-dung', '✓ Đã liên kết — bot Messenger dùng chung ví Lượng này.') + (d.messenger_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.messenger_id)) + '</span>' : '');
       btnLink.style.display = 'none';
       btnUnlink.style.display = 'inline-block';
     } else {
-      statusEl.textContent = 'Chưa liên kết.';
+      statusEl.textContent = _tvmbT('js.taikhoan.chua-lien-ket', 'Chưa liên kết.');
       btnLink.style.display = 'inline-block';
       btnUnlink.style.display = 'none';
     }
   } catch {
-    statusEl.textContent = 'Không tải được trạng thái liên kết.';
+    statusEl.textContent = _tvmbT('js.taikhoan.khong-tai-duoc-trang-thai-lien', 'Không tải được trạng thái liên kết.');
   }
 }
 
 document.getElementById('btnMsgrLink').onclick = async () => {
   const btn = document.getElementById('btnMsgrLink');
-  btn.disabled = true; btn.textContent = 'Đang tạo liên kết…';
+  btn.disabled = true; btn.textContent = _tvmbT('js.taikhoan.dang-tao-lien-ket', 'Đang tạo liên kết…');
   try {
     const res = await fetch('/api/channels/messenger/link', {
       method: 'POST',
@@ -453,21 +455,21 @@ document.getElementById('btnMsgrLink').onclick = async () => {
     if (d.url) {
       // Mở Messenger với m.me/<page>?ref=<token> → bot tự gắn ví.
       window.open(d.url, '_blank');
-      const fallback = d.token ? ` Nếu chưa tự liên kết, gửi tin: /link ${escHtml(d.token)}` : '';
+      const fallback = d.token ? _tvmbT('js.taikhoan.neu-chua-tu-lien-ket', ' Nếu chưa tự liên kết, gửi tin: /link {t}', { t: escHtml(d.token) }) : '';
       const st = document.getElementById('msgrLinkStatus');
-      if (st) st.innerHTML = ic('hourglass') + ' Đã mở Messenger — bấm "Bắt đầu / Get Started" hoặc gửi 1 tin để hoàn tất, rồi tải lại trang.' + fallback;
+      if (st) st.innerHTML = ic('hourglass') + _tvmbT('js.taikhoan.da-mo-messenger-bam-bat-dau', ' Đã mở Messenger — bấm "Bắt đầu / Get Started" hoặc gửi 1 tin để hoàn tất, rồi tải lại trang.') + fallback;
     } else {
-      alert('Không tạo được liên kết, thử lại sau nhé.');
+      alert(_tvmbT('js.taikhoan.khong-tao-duoc-lien-ket-thu', 'Không tạo được liên kết, thử lại sau nhé.'));
     }
   } catch {
-    if (!_hoSoLeftPage) alert('Lỗi mạng, thử lại sau nhé.');
+    if (!_hoSoLeftPage) alert(_tvmbT('js.taikhoan.loi-mang-thu-lai-sau-nhe', 'Lỗi mạng, thử lại sau nhé.'));
   } finally {
-    btn.disabled = false; btn.textContent = 'Liên kết Messenger';
+    btn.disabled = false; btn.textContent = _tvmbT('js.taikhoan.lien-ket-messenger', 'Liên kết Messenger');
   }
 };
 
 document.getElementById('btnMsgrUnlink').onclick = async () => {
-  if (!confirm('Hủy liên kết Messenger? Bot sẽ không còn dùng ví Lượng của bạn.')) return;
+  if (!confirm(_tvmbT('js.taikhoan.huy-lien-ket-messenger-bot-se', 'Hủy liên kết Messenger? Bot sẽ không còn dùng ví Lượng của bạn.'))) return;
   try {
     await fetch('/api/channels/messenger/link', {
       method: 'DELETE',
@@ -497,22 +499,22 @@ async function loadZaloLink() {
     card.style.display = _zaloAvailable ? '' : 'none';
     if (!_zaloAvailable) return;
     if (d.linked) {
-      statusEl.innerHTML = '✓ Đã liên kết — bot Zalo dùng chung ví Lượng này.' + (d.zalo_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.zalo_id)) + '</span>' : '');
+      statusEl.innerHTML = _tvmbT('js.taikhoan.da-lien-ket-bot-zalo-dung', '✓ Đã liên kết — bot Zalo dùng chung ví Lượng này.') + (d.zalo_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.zalo_id)) + '</span>' : '');
       btnLink.style.display = 'none';
       btnUnlink.style.display = 'inline-block';
     } else {
-      statusEl.textContent = 'Chưa liên kết.';
+      statusEl.textContent = _tvmbT('js.taikhoan.chua-lien-ket', 'Chưa liên kết.');
       btnLink.style.display = 'inline-block';
       btnUnlink.style.display = 'none';
     }
   } catch {
-    statusEl.textContent = 'Không tải được trạng thái liên kết.';
+    statusEl.textContent = _tvmbT('js.taikhoan.khong-tai-duoc-trang-thai-lien', 'Không tải được trạng thái liên kết.');
   }
 }
 
 document.getElementById('btnZaloLink').onclick = async () => {
   const btn = document.getElementById('btnZaloLink');
-  btn.disabled = true; btn.textContent = 'Đang tạo mã…';
+  btn.disabled = true; btn.textContent = _tvmbT('js.taikhoan.dang-tao-ma', 'Đang tạo mã…');
   try {
     const res = await fetch('/api/channels/zalo/link', {
       method: 'POST',
@@ -522,20 +524,20 @@ document.getElementById('btnZaloLink').onclick = async () => {
     if (_hoSoLeftPage) return;
     if (d.token) {
       const st = document.getElementById('zaloLinkStatus');
-      if (st) st.innerHTML = ic('hourglass') + ' Nhắn cho OA Tử Vi Minh Bảo trên Zalo đúng dòng sau (mã sống 15 phút), rồi tải lại trang: <code>/link ' + escHtml(d.token) + '</code>';
+      if (st) st.innerHTML = ic('hourglass') + _tvmbT('js.taikhoan.nhan-cho-oa-zalo', ' Nhắn cho OA Tử Vi Minh Bảo trên Zalo đúng dòng sau (mã sống 15 phút), rồi tải lại trang: <code>/link {t}</code>', { t: escHtml(d.token) });
       if (d.url) window.open(d.url, '_blank');
     } else {
-      alert('Không tạo được liên kết, thử lại sau nhé.');
+      alert(_tvmbT('js.taikhoan.khong-tao-duoc-lien-ket-thu', 'Không tạo được liên kết, thử lại sau nhé.'));
     }
   } catch {
-    if (!_hoSoLeftPage) alert('Lỗi mạng, thử lại sau nhé.');
+    if (!_hoSoLeftPage) alert(_tvmbT('js.taikhoan.loi-mang-thu-lai-sau-nhe', 'Lỗi mạng, thử lại sau nhé.'));
   } finally {
-    btn.disabled = false; btn.textContent = 'Liên kết Zalo';
+    btn.disabled = false; btn.textContent = _tvmbT('js.taikhoan.lien-ket-zalo', 'Liên kết Zalo');
   }
 };
 
 document.getElementById('btnZaloUnlink').onclick = async () => {
-  if (!confirm('Hủy liên kết Zalo? Bot sẽ không còn dùng ví Lượng của bạn.')) return;
+  if (!confirm(_tvmbT('js.taikhoan.huy-lien-ket-zalo-bot-se', 'Hủy liên kết Zalo? Bot sẽ không còn dùng ví Lượng của bạn.'))) return;
   try {
     await fetch('/api/channels/zalo/link', {
       method: 'DELETE',
@@ -578,10 +580,10 @@ async function loadReferralPanel() {
   const link = window.location.origin + '/?ref=' + encodeURIComponent(d.code);
   document.getElementById('refLinkInput').value = link;
   document.getElementById('refPitch').innerHTML = left > 0
-    ? 'Mỗi người đăng ký qua link của bạn: <strong>+' + reward + ' Lượng</strong> vào ví bạn ngay khi họ tạo tài khoản. '
-      + 'Khi họ nạp Lượng lần đầu, cả hai nhận thêm <strong>30 Lượng</strong> nữa.'
-    : 'Bạn đã dùng hết <strong>' + cap + '</strong> lượt mời được thưởng trong 30 ngày qua — '
-      + 'lượt mời sẽ mở lại dần khi qua mốc 30 ngày của từng người.';
+    ? _tvmbT('js.taikhoan.moi-nguoi-dang-ky-thuong', 'Mỗi người đăng ký qua link của bạn: <strong>+{n} Lượng</strong> vào ví bạn ngay khi họ tạo tài khoản. ', { n: reward })
+      + _tvmbT('js.taikhoan.khi-ho-nap-luong-lan-dau', 'Khi họ nạp Lượng lần đầu, cả hai nhận thêm <strong>30 Lượng</strong> nữa.')
+    : _tvmbT('js.taikhoan.ban-da-dung-het-luot-moi', 'Bạn đã dùng hết <strong>{n}</strong> lượt mời được thưởng trong 30 ngày qua — ', { n: cap })
+      + _tvmbT('js.taikhoan.luot-moi-se-mo-lai-dan', 'lượt mời sẽ mở lại dần khi qua mốc 30 ngày của từng người.');
   document.getElementById('refProgressLabel').textContent = used + '/' + (cap || '—');
   const bar = document.getElementById('refProgressBar');
   if (bar && cap > 0) setTimeout(() => { bar.style.width = Math.min(100, Math.round(used / cap * 100)) + '%'; }, 100);
@@ -592,7 +594,7 @@ async function loadReferralPanel() {
   if (btn && !btn.dataset.wired) {
     btn.dataset.wired = '1';
     btn.addEventListener('click', () => {
-      const done = () => { btn.textContent = 'Đã chép ✓'; setTimeout(() => { btn.textContent = 'Sao chép'; }, 1600); };
+      const done = () => { btn.textContent = _tvmbT('js.taikhoan.da-chep', 'Đã chép ✓'); setTimeout(() => { btn.textContent = _tvmbT('js.taikhoan.sao-chep', 'Sao chép'); }, 1600); };
       if (navigator.clipboard) navigator.clipboard.writeText(link).then(done, done);
       else { document.getElementById('refLinkInput').select(); try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } }
       try { window.Track && window.Track.event && window.Track.event('cta_click', { meta: { from: 'invite', action: 'copy', page: 'profile' } }); } catch (e) { /* ignore */ }
@@ -626,9 +628,9 @@ async function loadQuestTasks() {
     });
     const d = await res.json();
     if (d && d.khoiHanh) { renderQuestTasks(d.khoiHanh); renderChannelTasks(d.khoiHanh.steps.length, (d.channels && d.channels.tasks) || []); }
-    else host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không đọc được tiến độ. Thử tải lại trang.</div>';
+    else host.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.khong-doc-duoc-tien-do-thu', 'Không đọc được tiến độ. Thử tải lại trang.') + '</div>');
   } catch (e) {
-    host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không đọc được tiến độ. Thử tải lại trang.</div>';
+    host.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.khong-doc-duoc-tien-do-thu', 'Không đọc được tiến độ. Thử tải lại trang.') + '</div>');
   }
 }
 
@@ -636,7 +638,7 @@ function questRowHtml(t, i) {
   return '<div class="qt-row' + (t.done ? ' done' : '') + '"><div class="qt-tick"></div>'
     + '<div class="qt-body"><div class="qt-t">' + escHtml(t.title) + '</div>'
     + (t.done ? '' : '<div class="qt-d">' + escHtml(t.desc) + '</div>') + '</div>'
-    + '<div class="qt-pay"><div class="qt-amt">' + (t.done ? '+' : '') + (+t.credits || 0) + ' Lượng</div>'
+    + '<div class="qt-pay"><div class="qt-amt">' + (t.done ? '+' : '') + _tvmbT('js.taikhoan.n-luong', '{n} Lượng', { n: (+t.credits || 0) }) + '</div>'
     + (t.done ? '' : '<button class="qt-go" type="button" data-i="' + i + '">' + escHtml(t.cta) + '</button>')
     + '</div></div>';
 }
@@ -648,10 +650,10 @@ function renderQuestTasks(kh) {
   for (let i = 0; i < kh.steps.length; i++) if (kh.steps[i].done) done++;
 
   let h = kh.claimed
-    ? '<div class="qt-top"><div class="qt-count" style="color:var(--green)">✓ Đã hoàn tất — +' + (+kh.credits || 0) + ' Lượng đã vào ví.</div></div>'
-    : '<div class="qt-top"><div style="font-size:.85rem;color:var(--text-mid)">' + done + '/' + kh.steps.length + ' bước</div>'
-      + '<div class="qt-count">+' + (+kh.credits || 0) + ' Lượng khi xong cả ' + kh.steps.length + '</div></div>';
-  if (kh.justGranted) h += '<div class="qt-note ok">✓ Vừa cộng <b>+' + (+kh.credits || 0) + ' Lượng</b> vào ví bạn.</div>';
+    ? ('<div class="qt-top"><div class="qt-count" style="color:var(--green)">' + _tvmbT('js.taikhoan.da-hoan-tat-luong', '✓ Đã hoàn tất — +{n} Lượng đã vào ví.', { n: (+kh.credits || 0) })) + '</div></div>'
+    : '<div class="qt-top"><div style="font-size:.85rem;color:var(--text-mid)">' + _tvmbT('js.taikhoan.buoc-xong', '{a}/{b} bước', { a: done, b: kh.steps.length }) + '</div>'
+      + '<div class="qt-count">' + _tvmbT('js.taikhoan.luong-khi-xong-ca-n', '+{n} Lượng khi xong cả {b}', { n: (+kh.credits || 0), b: kh.steps.length }) + '</div></div>';
+  if (kh.justGranted) h += ('<div class="qt-note ok">' + _tvmbT('js.taikhoan.vua-cong-luong', '✓ Vừa cộng <b>+{n} Lượng</b> vào ví bạn.', { n: (+kh.credits || 0) })) + '</div>';
 
   // Bước Khởi Hành chiếm CHỈ SỐ 0..N-1 của `_qtDefs`; renderChannelTasks nối
   // tiếp từ đó — thứ tự gọi PHẢI là render Khởi Hành trước rồi mới tới kênh
@@ -672,7 +674,7 @@ function renderChannelTasks(indexOffset, tasks) {
 
   const granted = tasks.filter(function (t) { return t.justGranted; })
     .reduce(function (s, t) { return s + (+t.credits || 0); }, 0);
-  let h = granted > 0 ? '<div class="qt-note ok">✓ Vừa cộng <b>+' + granted + ' Lượng</b> vào ví bạn.</div>' : '';
+  let h = granted > 0 ? ('<div class="qt-note ok">' + _tvmbT('js.taikhoan.vua-cong-luong', '✓ Vừa cộng <b>+{n} Lượng</b> vào ví bạn.', { n: granted })) + '</div>' : '';
 
   _qtDefs = _qtDefs.concat(tasks);
   h += '<div>' + tasks.map(function (t, i) { return questRowHtml(t, indexOffset + i); }).join('') + '</div>';
@@ -690,7 +692,7 @@ function questTaskGo() {
   // `href` rỗng = việc chỉ làm được TẠI Tổng Quan (ô lá số/rail của thẻ "Vận
   // hôm nay", hoặc quyền thông báo trình duyệt) — tab này không có UI đó, đưa
   // người ta tới đúng chỗ có thay vì cố dựng lại một bản thứ hai ở đây.
-  if (!href) { location.href = '/app'; return; }
+  if (!href) { location.href = _tvmbHref('/app'); return; }
   // Trỏ VÀO CHÍNH trang đang đứng (`/app/tai-khoan#<tab>` hay `/app/ho-so#…`)
   // thì chuyển tab TẠI CHỖ thay vì tải lại cả trang.
   const m = /^\/app\/(?:tai-khoan|ho-so)#(.+)$/.exec(href);
@@ -718,7 +720,7 @@ async function loadMyShares() {
     const d = await res.json();
     renderMyShares((d && d.shares) || []);
   } catch (e) {
-    host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không đọc được lịch sử.</div>';
+    host.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.khong-doc-duoc-lich-su', 'Không đọc được lịch sử.') + '</div>');
   }
 }
 
@@ -726,16 +728,16 @@ function renderMyShares(list) {
   const host = document.getElementById('spBody');
   if (!host) return;
   if (!list.length) {
-    host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Bạn chưa chia sẻ lượt nào.</div>';
+    host.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.ban-chua-chia-se-luot-nao', 'Bạn chưa chia sẻ lượt nào.') + '</div>');
     return;
   }
   host.innerHTML = list.map(function (s) {
-    const date = new Date(s.created_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const date = new Date(s.created_at).toLocaleDateString(_dateLoc(), { day: '2-digit', month: '2-digit', year: 'numeric' });
     const views = Number(s.view_count) || 0;
     return '<div class="sp-row"><div style="flex:1;min-width:0">'
-      + '<div class="sp-plat">' + escHtml(s.title || 'Kết quả') + '</div>'
+      + '<div class="sp-plat">' + escHtml(s.title || _tvmbT('js.taikhoan.ket-qua', 'Kết quả')) + '</div>'
       + '<div class="sp-meta">' + date + '</div></div>'
-      + '<span class="sp-status approved">' + views + ' lượt xem</span></div>';
+      + '<span class="sp-status approved">' + _tvmbT('js.taikhoan.n-luot-xem', '{n} lượt xem', { n: views }) + '</span></div>';
   }).join('');
 }
 
@@ -773,16 +775,16 @@ async function loadCredits() {
     const bar = document.getElementById('monthlyUsageBar');
     const label = document.getElementById('monthlyUsageLabel');
     if (bar) setTimeout(() => { bar.style.width = pct + '%'; }, 100);
-    if (label) label.textContent = monthUsed + ' lượng';
+    if (label) label.textContent = _tvmbT('js.taikhoan.n-luong-thuong', '{n} lượng', { n: monthUsed });
     // Color shift when high usage
     if (bar && pct >= 80) bar.style.background = 'linear-gradient(90deg,#c0392b,#e74c3c)';
   } catch(e) {
     const tl = document.getElementById('transactionList');
-    if (tl) tl.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không thể tải lịch sử.</div>';
+    if (tl) tl.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.khong-the-tai-lich-su', 'Không thể tải lịch sử.') + '</div>');
   }
 }
 
-var VILU_LABELS = { topup:'Nạp Lượng', use_laso:'Luận Giải Lá Số', use_xem_tuoi:'Xem Tuổi Vợ Chồng', use_xem_lam_an:'Xem Tuổi Làm Ăn', admin_grant:'Cấp Lượng (quản trị)', chat:'Hỏi Thầy' };
+var VILU_LABELS = { topup:_tvmbT('js.taikhoan.nap-luong', 'Nạp Lượng'), use_laso:_tvmbT('js.taikhoan.luan-giai-la-so', 'Luận Giải Lá Số'), use_xem_tuoi:_tvmbT('js.taikhoan.xem-tuoi-vo-chong', 'Xem Tuổi Vợ Chồng'), use_xem_lam_an:_tvmbT('js.taikhoan.xem-tuoi-lam-an', 'Xem Tuổi Làm Ăn'), admin_grant:_tvmbT('js.taikhoan.cap-luong-quan-tri', 'Cấp Lượng (quản trị)'), chat:_tvmbT('js.taikhoan.hoi-thay', 'Hỏi Thầy') };
 function viluLabel(t) { return VILU_LABELS[t.type] || t.description || t.type; }
 
 var _viluTxns = [];
@@ -799,7 +801,7 @@ function renderTransactions(list) {
   const typeSel = document.getElementById('viluTypeFilter');
   if (typeSel) {
     const seen = {}, cur = typeSel.value;
-    let opts = '<option value="">Tất cả loại giao dịch</option>';
+    let opts = ('<option value="">' + _tvmbT('js.taikhoan.tat-ca-loai-giao-dich', 'Tất cả loại giao dịch') + '</option>');
     _viluTxns.forEach(t => {
       if (t.type && !seen[t.type]) { seen[t.type] = 1; opts += `<option value="${escHtml(t.type)}">${escHtml(viluLabel(t))}</option>`; }
     });
@@ -822,7 +824,7 @@ function renderViluTable() {
   const pager = document.getElementById('viluPager');
   if (!el) return;
   if (!_viluTxns.length) {
-    el.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Chưa có giao dịch nào.</div>';
+    el.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.chua-co-giao-dich-nao', 'Chưa có giao dịch nào.') + '</div>');
     if (pager) pager.style.display = 'none';
     return;
   }
@@ -836,7 +838,7 @@ function renderViluTable() {
   });
 
   if (!filtered.length) {
-    el.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không có giao dịch khớp bộ lọc.</div>';
+    el.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.khong-co-giao-dich-khop-bo', 'Không có giao dịch khớp bộ lọc.') + '</div>');
     if (pager) pager.style.display = 'none';
     return;
   }
@@ -847,12 +849,12 @@ function renderViluTable() {
   const pageItems = filtered.slice(start, start + VILU_PAGE_SIZE);
 
   el.innerHTML = '<div class="vilu-tbl-wrap"><table class="vilu-tbl"><thead><tr>' +
-    '<th>#</th><th>Thời gian</th><th>Loại</th><th>Nội dung</th><th>Số lượng</th><th>Mã giao dịch</th>' +
+    _tvmbT('js.taikhoan.thoi-gian-loai-noi-dung-so', '<th>#</th><th>Thời gian</th><th>Loại</th><th>Nội dung</th><th>Số lượng</th><th>Mã giao dịch</th>') +
     '</tr></thead><tbody>' + pageItems.map((t, i) => {
-      const date = new Date(t.created_at).toLocaleString('vi-VN', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      const date = new Date(t.created_at).toLocaleString(_dateLoc(), { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
       const isAdd = t.amount > 0;
       const loaiColor = isAdd ? 'var(--green)' : 'var(--red)';
-      const loaiText = isAdd ? 'Nạp / Thưởng' : 'Sử dụng';
+      const loaiText = isAdd ? _tvmbT('js.taikhoan.nap-thuong', 'Nạp / Thưởng') : _tvmbT('js.taikhoan.su-dung', 'Sử dụng');
       const amtCls = isAdd ? 'pos' : 'neg';
       const amtStr = (isAdd ? '+' : '') + t.amount;
       const ma = t.id ? String(t.id).slice(0, 8) : '—';
@@ -866,7 +868,7 @@ function renderViluTable() {
   if (pager) {
     pager.style.display = totalPages > 1 ? 'flex' : 'none';
     if (totalPages > 1) {
-      pager.innerHTML = '<span>Hiển thị ' + (start + 1) + '–' + Math.min(start + VILU_PAGE_SIZE, filtered.length) + ' / ' + filtered.length + ' giao dịch</span><div class="vilu-pgbtns">' +
+      pager.innerHTML = '<span>' + _tvmbT('js.taikhoan.hien-thi-giao-dich', 'Hiển thị {a}–{b} / {n} giao dịch', { a: start + 1, b: Math.min(start + VILU_PAGE_SIZE, filtered.length), n: filtered.length }) + '</span><div class="vilu-pgbtns">' +
         Array.from({ length: totalPages }, (_, idx) => idx + 1).map(p =>
           '<button type="button" class="vilu-pgbtn' + (p === _viluPage ? ' active' : '') + '" data-p="' + p + '">' + p + '</button>'
         ).join('') + '</div>';
@@ -886,14 +888,14 @@ async function saveDisplayName() {
       body: JSON.stringify({ data: { display_name: name } })
     });
     if (resp.ok) {
-      alert.innerHTML = '<div class="alert success">✓ Đã lưu tên hiển thị.</div>';
+      alert.innerHTML = ('<div class="alert success">' + _tvmbT('js.taikhoan.da-luu-ten-hien-thi', '✓ Đã lưu tên hiển thị.') + '</div>');
       const nd = document.getElementById('userDisplayName');
-      if (nd) nd.textContent = name || 'Người Dùng';
+      if (nd) nd.textContent = name || _tvmbT('js.taikhoan.nguoi-dung', 'Người Dùng');
       const al = document.getElementById('avatarLetter');
       if (al) al.textContent = (name || 'N')[0].toUpperCase();
     } else throw new Error();
   } catch {
-    alert.innerHTML = '<div class="alert error">✗ Lưu thất bại. Thử lại.</div>';
+    alert.innerHTML = ('<div class="alert error">' + _tvmbT('js.taikhoan.luu-that-bai-thu-lai', '✗ Lưu thất bại. Thử lại.') + '</div>');
   }
   setTimeout(() => { alert.innerHTML = ''; }, 3000);
 }
@@ -902,8 +904,8 @@ async function changePassword() {
   const pwd = document.getElementById('newPwd').value;
   const confirm = document.getElementById('confirmPwd').value;
   const alert = document.getElementById('pwdAlert');
-  if (pwd !== confirm) { alert.innerHTML = '<div class="alert error">Mật khẩu không khớp.</div>'; return; }
-  if (pwd.length < 6) { alert.innerHTML = '<div class="alert error">Mật khẩu tối thiểu 6 ký tự.</div>'; return; }
+  if (pwd !== confirm) { alert.innerHTML = ('<div class="alert error">' + _tvmbT('js.taikhoan.mat-khau-khong-khop', 'Mật khẩu không khớp.') + '</div>'); return; }
+  if (pwd.length < 6) { alert.innerHTML = ('<div class="alert error">' + _tvmbT('js.taikhoan.mat-khau-toi-thieu-6-ky', 'Mật khẩu tối thiểu 6 ký tự.') + '</div>'); return; }
   try {
     const resp = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
       method: 'PUT',
@@ -911,14 +913,14 @@ async function changePassword() {
       body: JSON.stringify({ password: pwd })
     });
     if (resp.ok) {
-      alert.innerHTML = '<div class="alert success">✓ Đã đổi mật khẩu thành công.</div>';
+      alert.innerHTML = ('<div class="alert success">' + _tvmbT('js.taikhoan.da-doi-mat-khau-thanh-cong', '✓ Đã đổi mật khẩu thành công.') + '</div>');
       const np = document.getElementById('newPwd');
       if (np) np.value = '';
       const cp = document.getElementById('confirmPwd');
       if (cp) cp.value = '';
     } else throw new Error();
   } catch {
-    alert.innerHTML = '<div class="alert error">✗ Đổi mật khẩu thất bại.</div>';
+    alert.innerHTML = ('<div class="alert error">' + _tvmbT('js.taikhoan.doi-mat-khau-that-bai', '✗ Đổi mật khẩu thất bại.') + '</div>');
   }
   setTimeout(() => { alert.innerHTML = ''; }, 3000);
 }
@@ -937,8 +939,8 @@ var _memMax = 40;
 async function loadMemory() {
   const box = document.getElementById('memList');
   if (!box) return;
-  if (!(await _tok())) { box.innerHTML = '<div class="mem-empty">Đăng nhập để xem hồ sơ.</div>'; return; }
-  box.innerHTML = '<div class="mem-empty">Đang tải…</div>';
+  if (!(await _tok())) { box.innerHTML = ('<div class="mem-empty">' + _tvmbT('js.taikhoan.dang-nhap-de-xem-ho-so', 'Đăng nhập để xem hồ sơ.') + '</div>'); return; }
+  box.innerHTML = ('<div class="mem-empty">' + _tvmbT('js.taikhoan.dang-tai', 'Đang tải…') + '</div>');
   try {
     const r = await fetch('/api/payment?action=my-memory', { headers: { Authorization: 'Bearer ' + (await _tok()) } });
     const j = await r.json();
@@ -953,7 +955,7 @@ async function loadMemory() {
     }
     memRender();
   } catch (e) {
-    box.innerHTML = '<div class="mem-empty">Không đọc được hồ sơ. Thử tải lại trang.</div>';
+    box.innerHTML = ('<div class="mem-empty">' + _tvmbT('js.taikhoan.khong-doc-duoc-ho-so-thu', 'Không đọc được hồ sơ. Thử tải lại trang.') + '</div>');
   }
 }
 
@@ -961,23 +963,21 @@ function memRender() {
   const box = document.getElementById('memList');
   if (!box) return;
   if (!_memItems.length) {
-    box.innerHTML = '<div class="mem-empty">Thầy chưa ghi lại điều gì về bạn.<br>'
-      + 'Cứ trò chuyện vài lần, Thầy sẽ tự nhớ những điều đáng nhớ.</div>';
+    box.innerHTML = ('<div class="mem-empty">' + _tvmbT('js.taikhoan.thay-chua-ghi-lai', 'Thầy chưa ghi lại điều gì về bạn.<br>Cứ trò chuyện vài lần, Thầy sẽ tự nhớ những điều đáng nhớ.')) + '</div>';
     return;
   }
   box.innerHTML = _memItems.map(function (it, i) {
     return '<div class="mem-item">'
       + '<div class="mem-body">'
-      +   '<div class="mem-kind">' + escHtml(_memKinds[it.loai] || 'Khác') + '</div>'
+      +   '<div class="mem-kind">' + escHtml(_memKinds[it.loai] || _tvmbT('js.taikhoan.khac', 'Khác')) + '</div>'
       +   '<div class="mem-text" id="memTxt' + i + '">' + escHtml(it.noi_dung) + '</div>'
-      +   '<div class="mem-src">' + (it.nguon === 'nguoi' ? 'Bạn tự thêm' : 'Thầy tự ghi') + '</div>'
+      +   '<div class="mem-src">' + (it.nguon === 'nguoi' ? _tvmbT('js.taikhoan.ban-tu-them', 'Bạn tự thêm') : _tvmbT('js.taikhoan.thay-tu-ghi', 'Thầy tự ghi')) + '</div>'
       + '</div>'
       + '<div class="mem-act">'
-      +   '<button class="mem-btn" onclick="memStartEdit(' + i + ')">Sửa</button>'
-      +   '<button class="mem-btn danger" onclick="memDelete(' + i + ')">Xoá</button>'
+      +   '<button class="mem-btn" onclick="memStartEdit(' + i + (')">' + _tvmbT('js.taikhoan.sua', 'Sửa') + '</button>')
+      +   '<button class="mem-btn danger" onclick="memDelete(' + i + (')">' + _tvmbT('js.taikhoan.xoa', 'Xoá') + '</button>')
       + '</div></div>';
-  }).join('') + '<div class="mem-src" style="margin-top:.5rem">Giữ tối đa ' + _memMax
-    + ' mục — quá thì Thầy tự bỏ mục cũ nhất.</div>';
+  }).join('') + ('<div class="mem-src" style="margin-top:.5rem">' + _tvmbT('js.taikhoan.giu-toi-da-muc', 'Giữ tối đa {n} mục — quá thì Thầy tự bỏ mục cũ nhất.', { n: _memMax })) + '</div>';
 }
 
 function memStartEdit(i) {
@@ -986,8 +986,8 @@ function memStartEdit(i) {
   const cur = _memItems[i].noi_dung;
   cell.innerHTML = '<input class="mem-edit" id="memInp' + i + '" maxlength="200">'
     + '<div style="margin-top:.4rem;display:flex;gap:.35rem">'
-    + '<button class="mem-btn" onclick="memSave(' + i + ')">Lưu</button>'
-    + '<button class="mem-btn" onclick="memRender()">Huỷ</button></div>';
+    + '<button class="mem-btn" onclick="memSave(' + i + (')">' + _tvmbT('js.taikhoan.luu', 'Lưu') + '</button>')
+    + ('<button class="mem-btn" onclick="memRender()">' + _tvmbT('js.taikhoan.huy', 'Huỷ') + '</button></div>');
   const inp = document.getElementById('memInp' + i);
   if (inp) { inp.value = cur; inp.focus(); }   // gán qua .value, không nội suy vào HTML
 }
@@ -1002,7 +1002,7 @@ async function memSave(i) {
 
 async function memDelete(i) {
   if (!_memItems[i]) return;
-  if (!confirm('Xoá điều này khỏi hồ sơ? Thầy sẽ quên hẳn.')) return;
+  if (!confirm(_tvmbT('js.taikhoan.xoa-dieu-nay-khoi-ho-so', 'Xoá điều này khỏi hồ sơ? Thầy sẽ quên hẳn.'))) return;
   await memPost('memory-delete', { id: _memItems[i].id });
 }
 
@@ -1011,7 +1011,7 @@ async function memAdd() {
   const sel = document.getElementById('memAddKind');
   if (!inp) return;
   const val = inp.value.trim();
-  if (val.length < 3) { alert('Viết dài hơn một chút nhé.'); return; }
+  if (val.length < 3) { alert(_tvmbT('js.taikhoan.viet-dai-hon-mot-chut-nhe', 'Viết dài hơn một chút nhé.')); return; }
   const done = await memPost('memory-add', { noi_dung: val, loai: sel ? sel.value : 'khac' });
   if (done) inp.value = '';
 }
@@ -1024,10 +1024,10 @@ async function memPost(action, body) {
       body: JSON.stringify(body),
     });
     const j = await r.json().catch(() => ({}));
-    if (!r.ok) { alert((j && j.error) || 'Không thực hiện được.'); return false; }
+    if (!r.ok) { alert((j && j.error) || _tvmbT('js.taikhoan.khong-thuc-hien-duoc', 'Không thực hiện được.')); return false; }
     await loadMemory();
     return true;
-  } catch (e) { alert('Lỗi mạng.'); return false; }
+  } catch (e) { alert(_tvmbT('js.taikhoan.loi-mang', 'Lỗi mạng.')); return false; }
 }
 
 // ── BOOT ──
@@ -1050,20 +1050,20 @@ initProfile();
 // đường cho chúng trôi lệch nhau. Trang chỉ khai nút tab + một khung rỗng.
 
 var FB_KINDS = [
-  ['noi_dung',  'Nội dung luận giải'],
-  ['bug',       'Lỗi kỹ thuật'],
-  ['tinh_nang', 'Đề xuất tính năng'],
-  ['thanh_toan','Thanh toán · Lượng'],
-  ['khac',      'Khác'],
+  ['noi_dung',  _tvmbT('js.taikhoan.fb-noi-dung', 'Nội dung luận giải')],
+  ['bug',       _tvmbT('js.taikhoan.fb-bug', 'Lỗi kỹ thuật')],
+  ['tinh_nang', _tvmbT('js.taikhoan.fb-tinh-nang', 'Đề xuất tính năng')],
+  ['thanh_toan',_tvmbT('js.taikhoan.fb-thanh-toan', 'Thanh toán · Lượng')],
+  ['khac',      _tvmbT('js.taikhoan.khac', 'Khác')],
 ];
 // Nhãn hiện cho NGƯỜI GÓP Ý — cố ý khác nhãn trong admin: 'bo_qua' ở đây là
 // "Đã xem", không phải "Bỏ qua". Người ta bỏ công viết, đừng trả về mặt chữ
 // nói rằng công đó bị vứt.
 var FB_STATUS = {
-  moi:        ['Đã nhận',    'chip-blue',  'chip-blue-line',  'blue'],
-  dang_xu_ly: ['Đang xử lý', 'chip-amber', 'chip-amber-line', 'tx-amber'],
-  da_xu_ly:   ['Đã xử lý',   'chip-green', 'chip-green-line', 'green'],
-  bo_qua:     ['Đã xem',     'chip-blue',  'chip-blue-line',  'text-lt'],
+  moi:        [_tvmbT('js.taikhoan.fb-da-nhan', 'Đã nhận'),    'chip-blue',  'chip-blue-line',  'blue'],
+  dang_xu_ly: [_tvmbT('js.taikhoan.fb-dang-xu-ly', 'Đang xử lý'), 'chip-amber', 'chip-amber-line', 'tx-amber'],
+  da_xu_ly:   [_tvmbT('js.taikhoan.fb-da-xu-ly', 'Đã xử lý'),   'chip-green', 'chip-green-line', 'green'],
+  bo_qua:     [_tvmbT('js.taikhoan.fb-da-xem', 'Đã xem'),     'chip-blue',  'chip-blue-line',  'text-lt'],
 };
 var FB_MAX = 2000;
 var _fbBusy = false;
@@ -1095,34 +1095,34 @@ function fbFormHtml() {
   const opts = FB_KINDS.map(k => '<option value="' + k[0] + '">' + k[1] + '</option>').join('');
   return ''
     + '<div class="account-section">'
-    +   '<h3>' + ic('inbox', 16) + ' Gửi góp ý</h3>'
+    +   '<h3>' + ic('inbox', 16) + ' ' + _tvmbT('js.taikhoan.gui-gop-y-tieu-de', 'Gửi góp ý') + '</h3>'
     +   '<p style="font-size:.85rem;color:var(--text-mid);margin:-.35rem 0 1rem;line-height:1.6">'
-    +     'Đây là hộp thư tới thẳng người vận hành — không phải chỗ hỏi Thầy. '
-    +     'Mọi ý kiến về nội dung luận giải, lỗi kỹ thuật, giá Lượng hay tính năng bạn muốn có, '
-    +     'viết vào đây. Chúng tôi đọc hết và trả lời ngay trong trang này.'
+    +     _tvmbT('js.taikhoan.day-la-hop-thu-toi-thang', 'Đây là hộp thư tới thẳng người vận hành — không phải chỗ hỏi Thầy. ')
+    +     _tvmbT('js.taikhoan.moi-y-kien-ve-noi-dung', 'Mọi ý kiến về nội dung luận giải, lỗi kỹ thuật, giá Lượng hay tính năng bạn muốn có, ')
+    +     _tvmbT('js.taikhoan.viet-vao-day-chung-toi-doc', 'viết vào đây. Chúng tôi đọc hết và trả lời ngay trong trang này.')
     +   '</p>'
     +   '<div class="form-row">'
-    +     '<label for="fbKind">Nội dung góp ý về</label>'
+    +     ('<label for="fbKind">' + _tvmbT('js.taikhoan.noi-dung-gop-y-ve', 'Nội dung góp ý về') + '</label>')
     +     '<select id="fbKind">' + opts + '</select>'
     +   '</div>'
     +   '<div class="form-row">'
-    +     '<label for="fbMessage">Bạn muốn nói gì?</label>'
+    +     ('<label for="fbMessage">' + _tvmbT('js.taikhoan.ban-muon-noi-gi', 'Bạn muốn nói gì?') + '</label>')
     +     '<textarea id="fbMessage" rows="6" maxlength="' + FB_MAX + '" '
-    +       'placeholder="Càng cụ thể càng dễ sửa. Ví dụ: &quot;Mục Tài Vận trong bản Luận Giải của lá số sinh 1990 nói ngược với mục Đại Vận&quot; — hơn hẳn &quot;luận giải chưa hay&quot;." '
+    +       'placeholder="' + _tvmbT('js.taikhoan.fb-placeholder', 'Càng cụ thể càng dễ sửa. Ví dụ: &quot;Mục Tài Vận trong bản Luận Giải của lá số sinh 1990 nói ngược với mục Đại Vận&quot; — hơn hẳn &quot;luận giải chưa hay&quot;.') + '" '
     +       'style="font-family:inherit;line-height:1.6;resize:vertical"></textarea>'
     +     '<div id="fbCount" style="font-size:.74rem;color:var(--text-lt);text-align:right;margin-top:.25rem">0 / ' + FB_MAX + '</div>'
     +   '</div>'
-    +   '<button class="btn-primary" id="fbSubmit" onclick="submitFeedback()">Gửi Góp Ý</button>'
+    +   ('<button class="btn-primary" id="fbSubmit" onclick="submitFeedback()">' + _tvmbT('js.taikhoan.gui-gop-y-ka3h', 'Gửi Góp Ý') + '</button>')
     +   '<div id="fbAlert"></div>'
     +   '<p style="font-size:.78rem;color:var(--text-lt);margin-top:.9rem;line-height:1.6">'
-    +     ic('info', 12) + ' Trang / thiết bị bạn đang dùng được đính kèm tự động để chúng tôi lần được lỗi — bạn không cần mô tả. '
-    +     'Việc gấp về thanh toán: xem <a href="/huong-dan-thanh-toan.html" style="color:var(--tx-gold)">Hướng dẫn thanh toán</a> '
-    +     'hoặc <a href="/contact.html" style="color:var(--tx-gold)">Liên hệ</a>.'
+    +     ic('info', 12) + _tvmbT('js.taikhoan.trang-thiet-bi-ban-dang-dung', ' Trang / thiết bị bạn đang dùng được đính kèm tự động để chúng tôi lần được lỗi — bạn không cần mô tả. ')
+    +     (_tvmbT('js.taikhoan.viec-gap-ve-thanh-toan-xem', 'Việc gấp về thanh toán: xem') + ' <a href="' + _tvmbHref('/huong-dan-thanh-toan.html') + '" style="color:var(--tx-gold)">' + _tvmbT('js.taikhoan.huong-dan-thanh-toan', 'Hướng dẫn thanh toán') + '</a> ')
+    +     (_tvmbT('js.taikhoan.hoac', 'hoặc') + ' <a href="' + _tvmbHref('/contact.html') + '" style="color:var(--tx-gold)">' + _tvmbT('js.taikhoan.lien-he', 'Liên hệ') + '</a>.')
     +   '</p>'
     + '</div>'
     + '<div class="account-section">'
-    +   '<h3>Góp ý đã gửi</h3>'
-    +   '<div id="fbList"><div style="color:var(--text-lt);font-size:.85rem">Đang tải…</div></div>'
+    +   '<h3>' + _tvmbT('js.taikhoan.gop-y-da-gui', 'Góp ý đã gửi') + '</h3>'
+    +   ('<div id="fbList"><div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.dang-tai', 'Đang tải…') + '</div></div>')
     + '</div>';
 }
 
@@ -1160,10 +1160,10 @@ async function submitFeedback() {
   const ta = document.getElementById('fbMessage');
   const kind = (document.getElementById('fbKind') || {}).value || 'khac';
   const message = (ta && ta.value || '').trim();
-  if (message.length < 5) { fbAlert('Viết giúp vài dòng để chúng tôi hiểu ý nhé.', 'error'); return; }
+  if (message.length < 5) { fbAlert(_tvmbT('js.taikhoan.viet-giup-vai-dong-de-chung', 'Viết giúp vài dòng để chúng tôi hiểu ý nhé.'), 'error'); return; }
 
   _fbBusy = true;
-  if (btn) { btn.disabled = true; btn.textContent = 'Đang gửi…'; }
+  if (btn) { btn.disabled = true; btn.textContent = _tvmbT('js.taikhoan.dang-gui', 'Đang gửi…'); }
   try {
     const res = await fetch('/api/feedback', {
       method: 'POST',
@@ -1171,17 +1171,17 @@ async function submitFeedback() {
       body: JSON.stringify({ kind, message, page_url: location.href, meta: fbMeta() }),
     });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) { fbAlert(data.error || 'Không gửi được. Xin thử lại.', 'error'); return; }
+    if (!res.ok) { fbAlert(data.error || _tvmbT('js.taikhoan.khong-gui-duoc-xin-thu-lai', 'Không gửi được. Xin thử lại.'), 'error'); return; }
     if (ta) ta.value = '';
     fbCount();
-    fbAlert('Đã nhận — cảm ơn bạn. Trạng thái xử lý hiện ngay bên dưới.', 'success');
+    fbAlert(_tvmbT('js.taikhoan.da-nhan-cam-on-ban-trang', 'Đã nhận — cảm ơn bạn. Trạng thái xử lý hiện ngay bên dưới.'), 'success');
     await fbLoadList();
   } catch (e) {
     console.error('[submitFeedback]', e);
-    fbAlert('Lỗi mạng — xin thử lại.', 'error');
+    fbAlert(_tvmbT('js.taikhoan.loi-mang-xin-thu-lai', 'Lỗi mạng — xin thử lại.'), 'error');
   } finally {
     _fbBusy = false;
-    if (btn) { btn.disabled = false; btn.textContent = 'Gửi Góp Ý'; }
+    if (btn) { btn.disabled = false; btn.textContent = _tvmbT('js.taikhoan.gui-gop-y-ka3h', 'Gửi Góp Ý'); }
   }
 }
 
@@ -1195,7 +1195,7 @@ async function fbLoadList() {
     fbRenderList(data.items || []);
   } catch (e) {
     console.error('[fbLoadList]', e);
-    el.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không tải được danh sách góp ý.</div>';
+    el.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.khong-tai-duoc-danh-sach-gop', 'Không tải được danh sách góp ý.') + '</div>');
   }
 }
 
@@ -1203,22 +1203,22 @@ function fbRenderList(list) {
   const el = document.getElementById('fbList');
   if (!el) return;
   if (!list.length) {
-    el.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Bạn chưa gửi góp ý nào.</div>';
+    el.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.ban-chua-gui-gop-y-nao', 'Bạn chưa gửi góp ý nào.') + '</div>');
     return;
   }
   const KIND = Object.fromEntries(FB_KINDS);
   el.innerHTML = list.map(f => {
     const st = FB_STATUS[f.status] || FB_STATUS.moi;
-    const date = new Date(f.created_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const date = new Date(f.created_at).toLocaleDateString(_dateLoc(), { day: '2-digit', month: '2-digit', year: 'numeric' });
     // Góp ý gửi kèm lá phiếu từ nút dưới bản luận giải — nhắc lại để người ta
     // nhớ mình đã nói về bản nào.
-    const vote = f.rating === 'down' ? ic('x-circle', 13) + ' Chưa đúng'
-               : f.rating === 'up'   ? ic('check-circle', 13) + ' Đúng' : '';
+    const vote = f.rating === 'down' ? ic('x-circle', 13) + _tvmbT('js.taikhoan.chua-dung', ' Chưa đúng')
+               : f.rating === 'up'   ? ic('check-circle', 13) + _tvmbT('js.taikhoan.dung', ' Đúng') : '';
     const from = (f.source === 'reading' && f.tool_id)
       ? '<span style="font-size:.74rem;color:var(--text-lt)">· ' + escHtml(f.tool_id) + '</span>' : '';
     const reply = f.admin_reply
       ? '<div style="margin-top:.7rem;padding:.65rem .8rem;background:var(--gold-lt);border-left:3px solid var(--tx-gold);border-radius:0 6px 6px 0">'
-        + '<div style="font-size:.72rem;font-weight:700;color:var(--tx-gold);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">Hồi đáp từ Tử Vi Minh Bảo</div>'
+        + ('<div style="font-size:.72rem;font-weight:700;color:var(--tx-gold);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">' + _tvmbT('js.taikhoan.hoi-dap-tu-tu-vi-minh', 'Hồi đáp từ Tử Vi Minh Bảo') + '</div>')
         + '<div style="font-size:.86rem;color:var(--text);line-height:1.65;white-space:pre-wrap">' + escHtml(f.admin_reply) + '</div>'
         + '</div>'
       : '';
