@@ -253,6 +253,32 @@ console.log('__KQ__' + JSON.stringify(out));
         `, ${ks.length} khoá, vân tay ${van}`
     );
   }
+
+  // W30c — MÃ tra bản dịch của Dạy Con trong payload trả tiền phải trỏ ĐÚNG khoá nguồn văn engine
+  // (lib/i18n/long.mjs ns `daycon`). Engine thôi gửi `nhanMa` / đổi id kiểu ⇒ client lặng lẽ lùi về chữ Việt ở /ja…
+  {
+    const { loadSources } = await import('../lib/i18n/long.mjs');
+    const co = new Set(loadSources(ROOT).daycon.map((e) => e.k));
+    const p = kq['day-con'];
+    const can = [
+      ...(p.changHoc || []).map((c) => `chang.${c.nhanMa}`),
+      ...(p.matDoc || []).map((m) => `mat.${m.cung}.nhan`),
+      `moilo.${p.moiLo?.id}.label`,
+      ...['tiepThu', 'giaoViec', 'dongVien', 'kyLuatHong', 'hieuNham', 'canHoc'].map(
+        (f) => `hoc.${p.hoc?.kieu}.${f}`
+      ),
+      ...(p.hoc?.dauHieu || []).map((_, i) => `hoc.${p.hoc.kieu}.dh.${i}`),
+      ...['nen', 'tranh', 'batDau'].map((f) => `dd.${p.kieu?.id}.${f}`),
+      `band.${p.hoatDong?.band}`,
+    ];
+    const sot = can.filter((k) => !co.has(k));
+    const ok = can.length >= 20 && sot.length === 0;
+    console.log(
+      `  ${ok ? '✅' : '❌'} day-con mã dịch — ${can.length} mã trong payload mẫu` +
+        (sot.length ? `, không khớp nguồn dịch: ${sot.slice(0, 5).join(', ')}` : ', đều khớp nguồn')
+    );
+    if (!ok) loi++;
+  }
 } finally {
   rmSync(out, { recursive: true, force: true });
 }
