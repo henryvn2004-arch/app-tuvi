@@ -2079,6 +2079,66 @@
   "t": "流年小运 ",
   "h": "1979c56a"
  },
+ "js.congcutr.chua-xep-vao-nhom-nao": {
+  "t": "尚未归类",
+  "h": "7ea3cc13"
+ },
+ "js.congcutr.cong-cu": {
+  "t": " 项工具</span>",
+  "h": "e1059f84"
+ },
+ "js.congcutr.cong-cu-43pa": {
+  "t": " 项工具</div>",
+  "h": "f2a9cef1"
+ },
+ "js.congcutr.cong-cu-menh-ly-dung-rieng": {
+  "t": " 项命理工具——可单独使用",
+  "h": "d6267101"
+ },
+ "js.congcutr.khac": {
+  "t": "其他",
+  "h": "5b8a28ab"
+ },
+ "js.congcutr.khong-can-biet-bo-mon-nao": {
+  "t": "不必知道是哪一门术数——直接选您最挂心的那件事。",
+  "h": "6723d4c3"
+ },
+ "js.congcutr.khong-co-cong-cu-nao": {
+  "t": "<div class=\"tools-loading\">目前没有工具。</div>",
+  "h": "4bfcd6fb"
+ },
+ "js.congcutr.khong-co-cong-cu-nao-trong": {
+  "t": "<div class=\"tools-loading\">此分类下没有工具。</div>",
+  "h": "1d05d574"
+ },
+ "js.congcutr.khong-co-du-lieu": {
+  "t": "<div class=\"tools-loading\">没有数据。</div>",
+  "h": "0ad1bedb"
+ },
+ "js.congcutr.khong-tai-duoc-vui-long-f5": {
+  "t": "<div class=\"tools-loading\"><span data-icon=\"alert-triangle\" style=\"display:inline-flex;width:14px;height:14px;vertical-align:middle\"></span> 加载失败，请按 F5 刷新。</div>",
+  "h": "336d219d"
+ },
+ "js.congcutr.luong": {
+  "t": " 两)</div>",
+  "h": "7adeda99"
+ },
+ "js.congcutr.luong-icr4": {
+  "t": " 两</div>",
+  "h": "81dc9146"
+ },
+ "js.congcutr.mien-phi": {
+  "t": "<span class=\"tool-price-free\">免费</span>",
+  "h": "f09c2d4a"
+ },
+ "js.congcutr.mo": {
+  "t": "<div class=\"tool-cta\">打开 →</div>",
+  "h": "c7121247"
+ },
+ "js.congcutr.xep-theo-mon-tu-vi-tu": {
+  "t": "依术数分类：紫微斗数、八字、相学、风水…",
+  "h": "cf4f8ecc"
+ },
  "js.home.3-buoc-dau-tien": {
   "t": "最初的 3 步",
   "h": "cd4d028c"
@@ -4982,6 +5042,50 @@
  "js.prices.money-moi-luot-sale": {
   "t": "每次 {money}（{sale} 两，原价 {credits}）",
   "h": "7aabe37f"
+ },
+ "js.resources.ket-qua": {
+  "t": "{visible} / {total} 笔结果",
+  "h": "011cac03"
+ },
+ "js.resources.tai-lieu": {
+  "t": "共 {total} 份数据",
+  "h": "f0694133"
+ },
+ "js.sachdetail.chua-co-link-tai-xuong": {
+  "t": "尚无下载链接",
+  "h": "e79f961c"
+ },
+ "js.sachdetail.file-pdf-chia-se-cho": {
+  "t": "PDF 文件——分享给研究紫微斗数的同好。",
+  "h": "7c5d9e1e"
+ },
+ "js.sachdetail.khong-ro-tac-gia": {
+  "t": "作者不详",
+  "h": "96dde3b9"
+ },
+ "js.sachdetail.tai-lieu-dang-duoc-cap-nhat": {
+  "t": "数据更新中，请稍后再来，或与我们联系索取。",
+  "h": "751a9da5"
+ },
+ "js.sachdetail.tai-xuong": {
+  "t": "⬇ 下载",
+  "h": "e1981ed0"
+ },
+ "js.sachdetail.tai-xuong-mien-phi": {
+  "t": "免费下载",
+  "h": "ba3e26bc"
+ },
+ "js.sachdetail.tieng-trung": {
+  "t": "中文",
+  "h": "58e04c6a"
+ },
+ "js.sachdetail.tieng-viet": {
+  "t": "越南语",
+  "h": "4993440c"
+ },
+ "js.sachdetail.tu-vi-minh-bao": {
+  "t": "明宝紫微斗数",
+  "h": "33336b26"
  },
  "js.shell.an": {
   "t": "隐藏",
@@ -8703,6 +8807,42 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.tailieu.cat-cach-cuc": {
+  "t": "格局",
+  "h": "760d1ac9"
+ },
+ "js.tailieu.cat-cung": {
+  "t": "宫位",
+  "h": "275eb0cd"
+ },
+ "js.tailieu.cat-khai-niem": {
+  "t": "基本概念",
+  "h": "27006f25"
+ },
+ "js.tailieu.cat-luan-giai": {
+  "t": "论断",
+  "h": "4e36b042"
+ },
+ "js.tailieu.cat-sao-chinh": {
+  "t": "主星",
+  "h": "3f5b010b"
+ },
+ "js.tailieu.cat-sao-phu": {
+  "t": "辅星",
+  "h": "44e6258b"
+ },
+ "js.tailieu.cat-van-han": {
+  "t": "运限",
+  "h": "cf15573a"
+ },
+ "js.tailieu.noi-dung-dang-duoc-cap-nhat": {
+  "t": "内容更新中。",
+  "h": "dc838116"
+ },
+ "js.tailieu.tu-vi-minh-bao": {
+  "t": "明宝紫微斗数",
+  "h": "33336b26"
+ },
  "js.tarot.ac-mong": {
   "t": "恶梦",
   "h": "c6b4b890"
@@ -10834,6 +10974,130 @@
  "js.tarot.yeu-duoi-tu-nghi-ngo-thieu": {
   "t": "软弱、自我怀疑、缺乏勇气。让恐惧主宰，或相反地残酷地运用力量。",
   "h": "543f7227"
+ },
+ "js.thansohoc.9-bieu-do-thieu": {
+  "t": "/9 · 缺少的数字：",
+  "h": "a961744e"
+ },
+ "js.thansohoc.bieu-do-ngay-sinh-toi-thieu": {
+  "t": "我的生日图缺少什么？",
+  "h": "bf05b8d3"
+ },
+ "js.thansohoc.cho-thay-xin-ho-ten-day": {
+  "t": "请告诉老师您出生证明上的完整姓名——请以罗马拼音输入（不需声调符号）。",
+  "h": "9b335230"
+ },
+ "js.thansohoc.da-lap-ban-do-than-so": {
+  "t": "已为您创建生命灵数图：**",
+  "h": "ef7d6a3a"
+ },
+ "js.thansohoc.dinh-menh": {
+  "t": "**、命运数 ",
+  "h": "6ccdbf93"
+ },
+ "js.thansohoc.dinh-menh-sba7": {
+  "t": " · 命运数：",
+  "h": "4ed83cf2"
+ },
+ "js.thansohoc.dinh-menh-sxmj": {
+  "t": "命运数",
+  "h": "04ce2b85"
+ },
+ "js.thansohoc.duong-doi": {
+  "t": "**（生命之路 **",
+  "h": "34cd1965"
+ },
+ "js.thansohoc.duong-doi-653r": {
+  "t": "生命之路",
+  "h": "105d888c"
+ },
+ "js.thansohoc.duong-doi-6p15": {
+  "t": "生命之路：",
+  "h": "2ea6525b"
+ },
+ "js.thansohoc.kem-bieu-do-ngay-sinh-no": {
+  "t": "）——另附生日图、业力债，以及各阶段的高峰与挑战。想先从哪一部分谈起？",
+  "h": "5809cd7c"
+ },
+ "js.thansohoc.linh-hon": {
+  "t": "、灵魂数 ",
+  "h": "6e12f834"
+ },
+ "js.thansohoc.linh-hon-avwt": {
+  "t": " · 灵魂数：",
+  "h": "dd806dd6"
+ },
+ "js.thansohoc.linh-hon-oll4": {
+  "t": "灵魂数",
+  "h": "b656dfff"
+ },
+ "js.thansohoc.nam-ca-nhan": {
+  "t": "个人年 ",
+  "h": "eb45f6cc"
+ },
+ "js.thansohoc.nam-cua-toi-nen-lam-gi": {
+  "t": "{y} 年我该做些什么？",
+  "h": "92b21a84"
+ },
+ "js.thansohoc.ngay-sinh": {
+  "t": "生日数：",
+  "h": "20265f1b"
+ },
+ "js.thansohoc.nghe-nghiep-nao-hop": {
+  "t": "适合什么职业？",
+  "h": "ea320897"
+ },
+ "js.thansohoc.no-nghiep-quat": {
+  "t": "业力债：",
+  "h": "a7848bc3"
+ },
+ "js.thansohoc.so-duong-doi-noi-gi-ve": {
+  "t": "生命之路数字说了我什么？",
+  "h": "c53334d7"
+ },
+ "js.thansohoc.su-menh": {
+  "t": "、使命数 ",
+  "h": "451fb36d"
+ },
+ "js.thansohoc.su-menh-hzws": {
+  "t": "使命数",
+  "h": "de1c2c2d"
+ },
+ "js.thansohoc.su-menh-jyge": {
+  "t": " · 使命数：",
+  "h": "31834686"
+ },
+ "js.thansohoc.thai-do": {
+  "t": " · 态度数：",
+  "h": "322d40a6"
+ },
+ "js.thansohoc.than-so-hoc": {
+  "t": "生命灵数 · ",
+  "h": "365ce0d2"
+ },
+ "js.thansohoc.than-so-hoc-cua": {
+  "t": "生命灵数：",
+  "h": "ea8f5b40"
+ },
+ "js.thansohoc.than-so-hoc-r6ky": {
+  "t": "生命灵数—— ",
+  "h": "b4ae646d"
+ },
+ "js.thansohoc.tinh-than-so": {
+  "t": "计算生命灵数 →",
+  "h": "0aa2d8b7"
+ },
+ "js.thansohoc.toi-dang-o-chang-nao-thu": {
+  "t": "我目前在哪个阶段，有什么挑战？",
+  "h": "b29a99ed"
+ },
+ "js.thansohoc.truong-thanh": {
+  "t": " · 成熟数：",
+  "h": "55b24485"
+ },
+ "js.thansohoc.xem-day-du-13-chi-so": {
+  "t": "<button type=\"button\" class=\"chat-hl-cta\" id=\"tshOpenSheet\">查看完整 13 项指数 →</button></div></div>",
+  "h": "f89bb371"
  },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"付款 ",
