@@ -9567,6 +9567,170 @@
   "t": "王亭之 · 参考資料",
   "h": "f0de146d"
  },
+ "ppx.10-chuyen-gia-tu-vi-tham": {
+  "t": "<b>10+</b><span>名の紫微斗数の専門家が審査に参加</span>",
+  "h": "a8396ff8"
+ },
+ "ppx.2-000-quy-tac-luan-giai": {
+  "t": "<b>2,000+</b><span>件の検証済み鑑定ルール</span>",
+  "h": "2bea45aa"
+ },
+ "ppx.270-000-ho-so-nhan-vat": {
+  "t": "<b>270,000+</b><span>件の実在人物の記録（AstroDataBankより）</span>",
+  "h": "249ccdc9"
+ },
+ "ppx.5-buoc-tao-nen-moi-ban": {
+  "t": "一つひとつの鑑定を生み出す5つの段階：命盤の作成、実例との照合、専門家による検証、モデルの調整、言葉での解説。",
+  "h": "8a0c1f4a"
+ },
+ "ppx.a-global-astrology-database": {
+  "t": "世界規模の占星術データベース",
+  "h": "fc9b2e72"
+ },
+ "ppx.buoc-1-tu-ngay-gio-sinh": {
+  "t": "段階1：生年月日と出生時刻から古法で紫微斗数の命盤を作成し、構造化データ（宮、星、位置、四化、相互関係）に変換",
+  "h": "a7e27eb8"
+ },
+ "ppx.buoc-2-luan-giai-so-khai": {
+  "t": "段階2：初期の鑑定をAstroDataBankの検証済み実データと照合し、格局ごとに適合／不正確／ずれを評価",
+  "h": "8debaf16"
+ },
+ "ppx.buoc-3-nhom-chuyen-gia-thao": {
+  "t": "段階3：専門家チームが照合結果を討議・評価・反論し、審査後の結論を出す——ルールを採用・調整・除外",
+  "h": "2c4e81c3"
+ },
+ "ppx.buoc-4-huan-luyen-va-cap": {
+  "t": "段階4：モデルを継続的に学習・更新——学習、テストと評価、改良を繰り返し、実用に耐える完成した鑑定モデルへ",
+  "h": "45f6ed84"
+ },
+ "ppx.buoc-5-llm-chuyen-doi-ket": {
+  "t": "段階5：LLMがモデルの結果を自然な言葉に変換し、明確で一人ひとりに合わせた解説として、完成した鑑定を利用者に提示",
+  "h": "d5b4c8b7"
+ },
+ "ppx.cac-quy-tac-da-duoc-chuyen": {
+  "t": "専門家の審査を経たルールはモデルに戻され、学習が続けられます。システムは新しい実際の命盤（アウトオブサンプル）で検証を続け、最適な精度に達するまで改良のサイクルを繰り返します。",
+  "h": "d91af071"
+ },
+ "ppx.cach-he-thong-hoat-dong": {
+  "t": "システムの仕組み",
+  "h": "ef8b9152"
+ },
+ "ppx.cach-he-thong-hoat-dong-tu": {
+  "t": "システムの仕組み — 紫微斗数 検証 | 明宝紫微斗数",
+  "h": "3dffc874"
+ },
+ "ppx.cach-he-thong-hoat-dong-tu-e5d1": {
+  "t": "システムの仕組み — 紫微斗数 検証",
+  "h": "2384f4b7"
+ },
+ "ppx.chi-nhung-ket-luan-da-duoc": {
+  "t": "検証を経た結論だけ。",
+  "h": "34eb8158"
+ },
+ "ppx.dien-giai-ket-qua-thanh-loi": {
+  "t": "結果を自然な言葉で解説",
+  "h": "97ea4d62"
+ },
+ "ppx.do-la-cach-chung-toi-tao": {
+  "t": "こうして私たちは、根拠があり、透明で、信頼できる鑑定を生み出しています。",
+  "h": "168afdad"
+ },
+ "ppx.doi-chieu-voi-du-lieu-thuc": {
+  "t": "検証済みの実データと照合",
+  "h": "539cfe91"
+ },
+ "ppx.he-thong-su-dung-hon-270": {
+  "t": "システムは<b>AstroDataBank</b>の<b>検証済み</b>出生データ27万件以上を用い、政治、科学、芸術、ビジネスなど多くの分野の人物の経歴や人生の出来事のデータと組み合わせています。",
+  "h": "c3cee5bc"
+ },
+ "ppx.hieu-chinh-va-toi-uu-mo": {
+  "t": "最終的なモデルの調整と最適化",
+  "h": "5af8fc01"
+ },
+ "ppx.input-bo-quy-tac-da-tham": {
+  "t": "<span>入力：審査済みのルール群</span><span class=\"out\">出力：完成した鑑定モデル</span>",
+  "h": "93067baf"
+ },
+ "ppx.input-ket-qua-doi-chieu-output": {
+  "t": "<span>入力：照合結果</span><span class=\"out\">出力：専門家が審査したルール群</span>",
+  "h": "d4af0fe2"
+ },
+ "ppx.input-ket-qua-tu-mo-hinh": {
+  "t": "<span>入力：モデルの結果</span><span class=\"out\">出力：完成した鑑定</span>",
+  "h": "b6d766a4"
+ },
+ "ppx.input-luan-giai-so-khai-du": {
+  "t": "<span>入力：初期の鑑定＋実際の人生データ</span><span class=\"out\">出力：精度の評価、誤りの発見、改善の提案</span>",
+  "h": "1c5a4557"
+ },
+ "ppx.input-ngay-gio-sinh-co-thu": {
+  "t": "<span>入力：生年月日時＋紫微斗数の古典・資料</span><span class=\"out\">出力：命盤＋初期の鑑定ルール群</span>",
+  "h": "f3dd6403"
+ },
+ "ppx.ket-hop-du-lieu-co-phap": {
+  "t": "<span class=\"ic\" data-icon=\"shield-check\"></span>データ・古法・専門家・AIの組み合わせ",
+  "h": "a6c14499"
+ },
+ "ppx.ket-qua-sau-doi-chieu-duoc": {
+  "t": "照合後の結果は、研究者、紫微斗数家、玄学家からなる専門家チームに送られ、各鑑定ルールの信頼度を討議・評価・結論づけます。",
+  "h": "b5c2296f"
+ },
+ "ppx.ket-qua-tu-mo-hinh-duoc": {
+  "t": "モデルの結果はLLM（大規模言語AI）によって、命盤ごとに合わせた自然でわかりやすい言葉に解説され、利用者が理解し活用しやすくなります。AIが自ら推論することはなく、モデルが確定した結果を言い表し直すだけです。",
+  "h": "7b7eac5a"
+ },
+ "ppx.khong-cam-doan-khong-suy-luan": {
+  "t": "勘に頼らない。勝手に推論しない。",
+  "h": "1faeab3a"
+ },
+ "ppx.kiem-chung-boi-chuyen-gia": {
+  "t": "専門家による検証",
+  "h": "10ee351e"
+ },
+ "ppx.lap-la-so-va-xay-dung": {
+  "t": "命盤の作成と初期の鑑定モデルの構築",
+  "h": "8b5789c7"
+ },
+ "ppx.lien-tuc-cap-nhat-va-cai": {
+  "t": "<b>継続的に</b><span>モデルを更新・改良</span>",
+  "h": "b810dcc9"
+ },
+ "ppx.luan-giai-so-khai-duoc-doi": {
+  "t": "初期の鑑定を、データベース内の人物の実際の人生データと照合し、格局ごとの精度を評価し、ずれを特定し、組み合わせ方法を試験します。",
+  "h": "ed45b0df"
+ },
+ "ppx.mot-luan-giai-dang-tin-cay": {
+  "t": "信頼できる鑑定は、実データと何層もの検証工程から築かれます。以下は、明宝紫微斗数の一つひとつの鑑定を生み出す5つの段階です。",
+  "h": "45694c20"
+ },
+ "ppx.mot-luan-giai-dang-tin-cay-ss0b": {
+  "t": "信頼できる鑑定は、実データと何層もの検証工程から築かれます——明宝紫微斗数の一つひとつの鑑定を生み出す5つの段階。",
+  "h": "5c0f6569"
+ },
+ "ppx.muon-thay-he-thong-nay-hoat": {
+  "t": "このシステムがあなたの命盤でどう働くか、見てみませんか？",
+  "h": "afe4354a"
+ },
+ "ppx.nguon-du-lieu-270-000-ho": {
+  "t": "<span class=\"pm-source-eyebrow\">データソース</span><b>270,000+</b><span>件の検証済み実在人物の記録</span>",
+  "h": "303ab3fd"
+ },
+ "ppx.quay-lai-trang-chu": {
+  "t": "← トップページに戻る",
+  "h": "11355810"
+ },
+ "ppx.tu-thong-tin-ngay-gio-sinh": {
+  "t": "生年月日と出生時刻から、システムは古法で紫微斗数の命盤を作成し、紫微斗数・玄学の書物や資料に基づいて命盤の各要素を解釈・解説します。",
+  "h": "845dbbf5"
+ },
+ "ppx.tu-vi-nghiem-chung": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span>紫微斗数 検証",
+  "h": "4ad3d92e"
+ },
+ "ppx.xem-la-so-cua-ban": {
+  "t": "あなたの命盤を見る →",
+  "h": "a6169a07"
+ },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 収集する情報",
   "h": "5354d2ca"

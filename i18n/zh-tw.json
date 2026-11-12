@@ -9567,6 +9567,170 @@
   "t": "王亭之 · 參考資料",
   "h": "f0de146d"
  },
+ "ppx.10-chuyen-gia-tu-vi-tham": {
+  "t": "<b>10+</b><span>位紫微斗數專家參與審定</span>",
+  "h": "a8396ff8"
+ },
+ "ppx.2-000-quy-tac-luan-giai": {
+  "t": "<b>2,000+</b><span>條經驗證的解讀規則</span>",
+  "h": "2bea45aa"
+ },
+ "ppx.270-000-ho-so-nhan-vat": {
+  "t": "<b>270,000+</b><span>份真實人物檔案（來自 AstroDataBank）</span>",
+  "h": "249ccdc9"
+ },
+ "ppx.5-buoc-tao-nen-moi-ban": {
+  "t": "造就每份解讀的 5 個步驟：排盤、實證比對、專家驗證、模型校正、以文字解說。",
+  "h": "8a0c1f4a"
+ },
+ "ppx.a-global-astrology-database": {
+  "t": "全球性的占星資料庫",
+  "h": "fc9b2e72"
+ },
+ "ppx.buoc-1-tu-ngay-gio-sinh": {
+  "t": "步驟 1：依出生年月日時以古法排出紫微命盤，再轉為結構化資料（宮位、星曜、位置、四化、相互關係）",
+  "h": "a7e27eb8"
+ },
+ "ppx.buoc-2-luan-giai-so-khai": {
+  "t": "步驟 2：初步解讀與 AstroDataBank 經驗證的實際資料比對，逐一評估每個格局為吻合／不夠準確／偏差",
+  "h": "8debaf16"
+ },
+ "ppx.buoc-3-nhom-chuyen-gia-thao": {
+  "t": "步驟 3：專家團隊討論、評估並反駁比對結果，作出審定後的結論——規則被採納、需調整或被剔除",
+  "h": "2c4e81c3"
+ },
+ "ppx.buoc-4-huan-luyen-va-cap": {
+  "t": "步驟 4：持續訓練與更新模型——訓練、測試與評估、改進的循環——直到得出可實際應用的完整解讀模型",
+  "h": "45f6ed84"
+ },
+ "ppx.buoc-5-llm-chuyen-doi-ket": {
+  "t": "步驟 5：LLM 將模型結果轉為自然語言，清楚且個人化地解說，產出呈現給使用者的完整解讀",
+  "h": "d5b4c8b7"
+ },
+ "ppx.cac-quy-tac-da-duoc-chuyen": {
+  "t": "經專家審定的規則會回到模型中繼續訓練。系統持續以新的真實命盤（樣本外）進行測試，並反覆改進，直到達到最佳準確度。",
+  "h": "d91af071"
+ },
+ "ppx.cach-he-thong-hoat-dong": {
+  "t": "系統如何運作",
+  "h": "ef8b9152"
+ },
+ "ppx.cach-he-thong-hoat-dong-tu": {
+  "t": "系統如何運作 — 紫微驗證 | 明寶紫微斗數",
+  "h": "3dffc874"
+ },
+ "ppx.cach-he-thong-hoat-dong-tu-e5d1": {
+  "t": "系統如何運作 — 紫微驗證",
+  "h": "2384f4b7"
+ },
+ "ppx.chi-nhung-ket-luan-da-duoc": {
+  "t": "只有經過驗證的結論。",
+  "h": "34eb8158"
+ },
+ "ppx.dien-giai-ket-qua-thanh-loi": {
+  "t": "將結果解說為自然的文字",
+  "h": "97ea4d62"
+ },
+ "ppx.do-la-cach-chung-toi-tao": {
+  "t": "這就是我們產出有根據、透明而可信的解讀的方式。",
+  "h": "168afdad"
+ },
+ "ppx.doi-chieu-voi-du-lieu-thuc": {
+  "t": "與經驗證的實際資料比對",
+  "h": "539cfe91"
+ },
+ "ppx.he-thong-su-dung-hon-270": {
+  "t": "系統使用來自 <b>AstroDataBank</b>、<b>經過驗證</b>的 270,000 多份出生資料，並結合政治、科學、藝術、商業等各領域人物的生平與人生事件資料。",
+  "h": "c3cee5bc"
+ },
+ "ppx.hieu-chinh-va-toi-uu-mo": {
+  "t": "最終模型的校正與優化",
+  "h": "5af8fc01"
+ },
+ "ppx.input-bo-quy-tac-da-tham": {
+  "t": "<span>輸入：經審定的規則組</span><span class=\"out\">輸出：完整的解讀模型</span>",
+  "h": "93067baf"
+ },
+ "ppx.input-ket-qua-doi-chieu-output": {
+  "t": "<span>輸入：比對結果</span><span class=\"out\">輸出：經專業審定的規則組</span>",
+  "h": "d4af0fe2"
+ },
+ "ppx.input-ket-qua-tu-mo-hinh": {
+  "t": "<span>輸入：模型的結果</span><span class=\"out\">輸出：完整的解讀</span>",
+  "h": "b6d766a4"
+ },
+ "ppx.input-luan-giai-so-khai-du": {
+  "t": "<span>輸入：初步解讀＋真實人生資料</span><span class=\"out\">輸出：準確度評估、找出錯誤、改進建議</span>",
+  "h": "1c5a4557"
+ },
+ "ppx.input-ngay-gio-sinh-co-thu": {
+  "t": "<span>輸入：出生年月日時＋紫微古籍、資料</span><span class=\"out\">輸出：命盤＋初步解讀規則組</span>",
+  "h": "f3dd6403"
+ },
+ "ppx.ket-hop-du-lieu-co-phap": {
+  "t": "<span class=\"ic\" data-icon=\"shield-check\"></span>結合資料、古法、專家與 AI",
+  "h": "a6c14499"
+ },
+ "ppx.ket-qua-sau-doi-chieu-duoc": {
+  "t": "比對後的結果會送交由研究者、紫微命理師與玄學家組成的專家團隊，討論、評估並判定每條解讀規則的可信度。",
+  "h": "b5c2296f"
+ },
+ "ppx.ket-qua-tu-mo-hinh-duoc": {
+  "t": "模型的結果透過 LLM（大型語言 AI）解說為自然易懂、依每份命盤個人化的語言，讓使用者容易理解與應用。AI 不會自行推論，只是重新表述模型已確定的結果。",
+  "h": "7b7eac5a"
+ },
+ "ppx.khong-cam-doan-khong-suy-luan": {
+  "t": "不憑感覺臆斷。不隨意推論。",
+  "h": "1faeab3a"
+ },
+ "ppx.kiem-chung-boi-chuyen-gia": {
+  "t": "專家驗證",
+  "h": "10ee351e"
+ },
+ "ppx.lap-la-so-va-xay-dung": {
+  "t": "排盤並建立初步解讀模型",
+  "h": "8b5789c7"
+ },
+ "ppx.lien-tuc-cap-nhat-va-cai": {
+  "t": "<b>持續</b><span>更新與改進模型</span>",
+  "h": "b810dcc9"
+ },
+ "ppx.luan-giai-so-khai-duoc-doi": {
+  "t": "初步解讀會與資料庫中人物的實際人生資料比對，以評估每個格局的準確度、找出偏差，並測試各種組合方法。",
+  "h": "ed45b0df"
+ },
+ "ppx.mot-luan-giai-dang-tin-cay": {
+  "t": "可信的解讀建立在實際資料與多層驗證流程之上。以下是造就明寶紫微斗數每份解讀的 5 個步驟。",
+  "h": "45694c20"
+ },
+ "ppx.mot-luan-giai-dang-tin-cay-ss0b": {
+  "t": "可信的解讀建立在實際資料與多層驗證流程之上——造就明寶紫微斗數每份解讀的 5 個步驟。",
+  "h": "5c0f6569"
+ },
+ "ppx.muon-thay-he-thong-nay-hoat": {
+  "t": "想看看這套系統用在您的命盤上是什麼樣子嗎？",
+  "h": "afe4354a"
+ },
+ "ppx.nguon-du-lieu-270-000-ho": {
+  "t": "<span class=\"pm-source-eyebrow\">資料來源</span><b>270,000+</b><span>份經驗證的真實人物檔案</span>",
+  "h": "303ab3fd"
+ },
+ "ppx.quay-lai-trang-chu": {
+  "t": "← 返回首頁",
+  "h": "11355810"
+ },
+ "ppx.tu-thong-tin-ngay-gio-sinh": {
+  "t": "系統依出生年月日時以古法排出紫微命盤，並根據紫微與玄學的書籍、資料，解讀與解說命盤中的各項要素。",
+  "h": "845dbbf5"
+ },
+ "ppx.tu-vi-nghiem-chung": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span>紫微驗證",
+  "h": "4ad3d92e"
+ },
+ "ppx.xem-la-so-cua-ban": {
+  "t": "查看您的命盤 →",
+  "h": "a6169a07"
+ },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 我們蒐集的資料",
   "h": "5354d2ca"

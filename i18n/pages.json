@@ -1081,6 +1081,56 @@
    "nav"
   ]
  },
+ "/phuong-phap": {
+  "file": "phuong-phap.html",
+  "keys": [
+   "laso.tu-vi-minh-bao",
+   "ppx.10-chuyen-gia-tu-vi-tham",
+   "ppx.2-000-quy-tac-luan-giai",
+   "ppx.270-000-ho-so-nhan-vat",
+   "ppx.5-buoc-tao-nen-moi-ban",
+   "ppx.a-global-astrology-database",
+   "ppx.buoc-1-tu-ngay-gio-sinh",
+   "ppx.buoc-2-luan-giai-so-khai",
+   "ppx.buoc-3-nhom-chuyen-gia-thao",
+   "ppx.buoc-4-huan-luyen-va-cap",
+   "ppx.buoc-5-llm-chuyen-doi-ket",
+   "ppx.cac-quy-tac-da-duoc-chuyen",
+   "ppx.cach-he-thong-hoat-dong",
+   "ppx.cach-he-thong-hoat-dong-tu",
+   "ppx.cach-he-thong-hoat-dong-tu-e5d1",
+   "ppx.chi-nhung-ket-luan-da-duoc",
+   "ppx.dien-giai-ket-qua-thanh-loi",
+   "ppx.do-la-cach-chung-toi-tao",
+   "ppx.doi-chieu-voi-du-lieu-thuc",
+   "ppx.he-thong-su-dung-hon-270",
+   "ppx.hieu-chinh-va-toi-uu-mo",
+   "ppx.input-bo-quy-tac-da-tham",
+   "ppx.input-ket-qua-doi-chieu-output",
+   "ppx.input-ket-qua-tu-mo-hinh",
+   "ppx.input-luan-giai-so-khai-du",
+   "ppx.input-ngay-gio-sinh-co-thu",
+   "ppx.ket-hop-du-lieu-co-phap",
+   "ppx.ket-qua-sau-doi-chieu-duoc",
+   "ppx.ket-qua-tu-mo-hinh-duoc",
+   "ppx.khong-cam-doan-khong-suy-luan",
+   "ppx.kiem-chung-boi-chuyen-gia",
+   "ppx.lap-la-so-va-xay-dung",
+   "ppx.lien-tuc-cap-nhat-va-cai",
+   "ppx.luan-giai-so-khai-duoc-doi",
+   "ppx.mot-luan-giai-dang-tin-cay",
+   "ppx.mot-luan-giai-dang-tin-cay-ss0b",
+   "ppx.muon-thay-he-thong-nay-hoat",
+   "ppx.nguon-du-lieu-270-000-ho",
+   "ppx.quay-lai-trang-chu",
+   "ppx.tu-thong-tin-ngay-gio-sinh",
+   "ppx.tu-vi-nghiem-chung",
+   "ppx.xem-la-so-cua-ban"
+  ],
+  "js": [
+   "nav"
+  ]
+ },
  "/san-pham-dich-vu.html": {
   "file": "san-pham-dich-vu.html",
   "keys": [

@@ -9567,6 +9567,170 @@
   "t": "왕정지 · 참고 자료",
   "h": "f0de146d"
  },
+ "ppx.10-chuyen-gia-tu-vi-tham": {
+  "t": "<b>10+</b><span>명의 자미두수 전문가가 심사에 참여</span>",
+  "h": "a8396ff8"
+ },
+ "ppx.2-000-quy-tac-luan-giai": {
+  "t": "<b>2,000+</b><span>개의 검증된 풀이 규칙</span>",
+  "h": "2bea45aa"
+ },
+ "ppx.270-000-ho-so-nhan-vat": {
+  "t": "<b>270,000+</b><span>건의 실존 인물 기록(AstroDataBank)</span>",
+  "h": "249ccdc9"
+ },
+ "ppx.5-buoc-tao-nen-moi-ban": {
+  "t": "각 풀이를 만드는 5단계: 명반 작성, 실증 대조, 전문가 검증, 모델 보정, 말로 풀어 설명.",
+  "h": "8a0c1f4a"
+ },
+ "ppx.a-global-astrology-database": {
+  "t": "세계적인 점성술 데이터베이스",
+  "h": "fc9b2e72"
+ },
+ "ppx.buoc-1-tu-ngay-gio-sinh": {
+  "t": "1단계: 생년월일시로 고법에 따라 자미두수 명반을 세우고, 구조화된 데이터(궁, 별, 위치, 사화, 관계)로 변환",
+  "h": "a7e27eb8"
+ },
+ "ppx.buoc-2-luan-giai-so-khai": {
+  "t": "2단계: 초기 풀이를 AstroDataBank의 검증된 실제 데이터와 대조해, 격국마다 부합 / 부정확 / 어긋남을 평가",
+  "h": "8debaf16"
+ },
+ "ppx.buoc-3-nhom-chuyen-gia-thao": {
+  "t": "3단계: 전문가 팀이 대조 결과를 토론·평가·반박하고 심사 후 결론을 냄 — 규칙을 채택, 조정 또는 제외",
+  "h": "2c4e81c3"
+ },
+ "ppx.buoc-4-huan-luyen-va-cap": {
+  "t": "4단계: 모델을 계속 학습·갱신 — 학습, 시험과 평가, 개선을 반복해 실제로 쓸 수 있는 완성된 풀이 모델로",
+  "h": "45f6ed84"
+ },
+ "ppx.buoc-5-llm-chuyen-doi-ket": {
+  "t": "5단계: LLM이 모델 결과를 자연어로 바꾸어 명확하고 개인화된 해설로 만들고, 완성된 풀이를 사용자에게 보여 줌",
+  "h": "d5b4c8b7"
+ },
+ "ppx.cac-quy-tac-da-duoc-chuyen": {
+  "t": "전문가 심사를 거친 규칙은 다시 모델로 들어가 학습이 이어집니다. 시스템은 새로운 실제 명반(표본 외)으로 계속 시험하고, 최적의 정확도에 이를 때까지 개선 주기를 반복합니다.",
+  "h": "d91af071"
+ },
+ "ppx.cach-he-thong-hoat-dong": {
+  "t": "시스템 작동 방식",
+  "h": "ef8b9152"
+ },
+ "ppx.cach-he-thong-hoat-dong-tu": {
+  "t": "시스템 작동 방식 — 자미두수 검증 | 명보 자미두수",
+  "h": "3dffc874"
+ },
+ "ppx.cach-he-thong-hoat-dong-tu-e5d1": {
+  "t": "시스템 작동 방식 — 자미두수 검증",
+  "h": "2384f4b7"
+ },
+ "ppx.chi-nhung-ket-luan-da-duoc": {
+  "t": "검증된 결론만.",
+  "h": "34eb8158"
+ },
+ "ppx.dien-giai-ket-qua-thanh-loi": {
+  "t": "결과를 자연스러운 말로 해설",
+  "h": "97ea4d62"
+ },
+ "ppx.do-la-cach-chung-toi-tao": {
+  "t": "이렇게 저희는 근거 있고 투명하며 믿을 수 있는 풀이를 만듭니다.",
+  "h": "168afdad"
+ },
+ "ppx.doi-chieu-voi-du-lieu-thuc": {
+  "t": "검증된 실제 데이터와 대조",
+  "h": "539cfe91"
+ },
+ "ppx.he-thong-su-dung-hon-270": {
+  "t": "시스템은 <b>AstroDataBank</b>의 <b>검증된</b> 출생 기록 27만 건 이상을 쓰며, 정치·과학·예술·비즈니스 등 여러 분야 인물의 전기와 인생 사건 데이터와 결합합니다.",
+  "h": "c3cee5bc"
+ },
+ "ppx.hieu-chinh-va-toi-uu-mo": {
+  "t": "최종 모델 보정과 최적화",
+  "h": "5af8fc01"
+ },
+ "ppx.input-bo-quy-tac-da-tham": {
+  "t": "<span>입력: 심사된 규칙 세트</span><span class=\"out\">출력: 완성된 풀이 모델</span>",
+  "h": "93067baf"
+ },
+ "ppx.input-ket-qua-doi-chieu-output": {
+  "t": "<span>입력: 대조 결과</span><span class=\"out\">출력: 전문가가 심사한 규칙 세트</span>",
+  "h": "d4af0fe2"
+ },
+ "ppx.input-ket-qua-tu-mo-hinh": {
+  "t": "<span>입력: 모델의 결과</span><span class=\"out\">출력: 완성된 풀이</span>",
+  "h": "b6d766a4"
+ },
+ "ppx.input-luan-giai-so-khai-du": {
+  "t": "<span>입력: 초기 풀이 + 실제 인생 데이터</span><span class=\"out\">출력: 정확도 평가, 오류 발견, 개선 제안</span>",
+  "h": "1c5a4557"
+ },
+ "ppx.input-ngay-gio-sinh-co-thu": {
+  "t": "<span>입력: 생년월일시 + 자미두수 고서·자료</span><span class=\"out\">출력: 명반 + 초기 풀이 규칙 세트</span>",
+  "h": "f3dd6403"
+ },
+ "ppx.ket-hop-du-lieu-co-phap": {
+  "t": "<span class=\"ic\" data-icon=\"shield-check\"></span>데이터 – 고법 – 전문가 – AI의 결합",
+  "h": "a6c14499"
+ },
+ "ppx.ket-qua-sau-doi-chieu-duoc": {
+  "t": "대조 후 결과는 연구자, 자미두수가, 현학가로 이루어진 전문가 팀에 보내져, 각 풀이 규칙의 신뢰도를 토론·평가하고 결론짓습니다.",
+  "h": "b5c2296f"
+ },
+ "ppx.ket-qua-tu-mo-hinh-duoc": {
+  "t": "모델의 결과는 LLM(대규모 언어 AI)을 통해 명반마다 맞춘 자연스럽고 이해하기 쉬운 말로 해설되어, 사용자가 쉽게 접하고 활용할 수 있게 합니다. AI는 스스로 추론하지 않고, 모델이 확정한 결과를 다시 표현할 뿐입니다.",
+  "h": "7b7eac5a"
+ },
+ "ppx.khong-cam-doan-khong-suy-luan": {
+  "t": "감으로 판단하지 않는다. 함부로 추론하지 않는다.",
+  "h": "1faeab3a"
+ },
+ "ppx.kiem-chung-boi-chuyen-gia": {
+  "t": "전문가 검증",
+  "h": "10ee351e"
+ },
+ "ppx.lap-la-so-va-xay-dung": {
+  "t": "명반 작성과 초기 풀이 모델 구축",
+  "h": "8b5789c7"
+ },
+ "ppx.lien-tuc-cap-nhat-va-cai": {
+  "t": "<b>지속적으로</b><span>모델을 갱신·개선</span>",
+  "h": "b810dcc9"
+ },
+ "ppx.luan-giai-so-khai-duoc-doi": {
+  "t": "초기 풀이를 데이터베이스 속 인물들의 실제 인생 데이터와 대조해, 격국마다 정확도를 평가하고 어긋남을 찾아내며 결합 방법을 시험합니다.",
+  "h": "ed45b0df"
+ },
+ "ppx.mot-luan-giai-dang-tin-cay": {
+  "t": "믿을 수 있는 풀이는 실제 데이터와 여러 겹의 검증 과정으로 만들어집니다. 아래는 명보 자미두수의 각 풀이를 만드는 5단계입니다.",
+  "h": "45694c20"
+ },
+ "ppx.mot-luan-giai-dang-tin-cay-ss0b": {
+  "t": "믿을 수 있는 풀이는 실제 데이터와 여러 겹의 검증 과정으로 만들어집니다 — 명보 자미두수의 각 풀이를 만드는 5단계.",
+  "h": "5c0f6569"
+ },
+ "ppx.muon-thay-he-thong-nay-hoat": {
+  "t": "이 시스템이 당신의 명반으로 어떻게 작동하는지 보고 싶나요?",
+  "h": "afe4354a"
+ },
+ "ppx.nguon-du-lieu-270-000-ho": {
+  "t": "<span class=\"pm-source-eyebrow\">데이터 출처</span><b>270,000+</b><span>건의 검증된 실존 인물 기록</span>",
+  "h": "303ab3fd"
+ },
+ "ppx.quay-lai-trang-chu": {
+  "t": "← 홈으로 돌아가기",
+  "h": "11355810"
+ },
+ "ppx.tu-thong-tin-ngay-gio-sinh": {
+  "t": "생년월일시 정보로 시스템이 고법에 따라 자미두수 명반을 세우고, 자미두수·현학 서적과 자료를 바탕으로 명반의 요소들을 풀이·해설합니다.",
+  "h": "845dbbf5"
+ },
+ "ppx.tu-vi-nghiem-chung": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span>자미두수 검증",
+  "h": "4ad3d92e"
+ },
+ "ppx.xem-la-so-cua-ban": {
+  "t": "내 명반 보기 →",
+  "h": "a6169a07"
+ },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 수집하는 정보",
   "h": "5354d2ca"

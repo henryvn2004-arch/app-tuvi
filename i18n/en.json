@@ -872,7 +872,7 @@
   "h": "879a3e4e"
  },
  "faqs.he-thong-khong-tu-doan-ma": {
-  "t": "The system doesn't \"guess\" — it only re-explains conclusions that have already been determined. See the full 5-step process in <a href=\"/phuong-phap\">Zi Wei Verified</a>.",
+  "t": "The system doesn't \"guess\" — it only re-explains conclusions that have already been determined. See the full 5-step process in <a href=\"/phuong-phap\">Zi Wei Verification</a>.",
   "h": "4480c36f"
  },
  "faqs.hieu-chinh-boi-chuyen-gia": {
@@ -9566,6 +9566,170 @@
  "nguon.vuong-dinh-chi-tai-lieu-tham": {
   "t": "Wang Ting Zhi · reference",
   "h": "f0de146d"
+ },
+ "ppx.10-chuyen-gia-tu-vi-tham": {
+  "t": "<b>10+</b><span>Zi Wei specialists involved in review</span>",
+  "h": "a8396ff8"
+ },
+ "ppx.2-000-quy-tac-luan-giai": {
+  "t": "<b>2,000+</b><span>tested reading rules</span>",
+  "h": "2bea45aa"
+ },
+ "ppx.270-000-ho-so-nhan-vat": {
+  "t": "<b>270,000+</b><span>real-person records (from AstroDataBank)</span>",
+  "h": "249ccdc9"
+ },
+ "ppx.5-buoc-tao-nen-moi-ban": {
+  "t": "The 5 steps behind every reading: building the chart, checking against real cases, specialist verification, model calibration, and putting it into words.",
+  "h": "8a0c1f4a"
+ },
+ "ppx.a-global-astrology-database": {
+  "t": "A global astrology database",
+  "h": "fc9b2e72"
+ },
+ "ppx.buoc-1-tu-ngay-gio-sinh": {
+  "t": "Step 1: from the birth date and time, build a Zi Wei chart by the classical method, then turn it into structured data (palaces, stars, positions, Four Transformations, relationships)",
+  "h": "a7e27eb8"
+ },
+ "ppx.buoc-2-luan-giai-so-khai": {
+  "t": "Step 2: the preliminary reading is checked against verified real data from AstroDataBank, rating each chart pattern as fitting / inaccurate / off",
+  "h": "8debaf16"
+ },
+ "ppx.buoc-3-nhom-chuyen-gia-thao": {
+  "t": "Step 3: the specialist team discusses, evaluates and challenges the comparison results, then reaches a reviewed conclusion — rules are accepted, adjusted or dropped",
+  "h": "2c4e81c3"
+ },
+ "ppx.buoc-4-huan-luyen-va-cap": {
+  "t": "Step 4: the model is continuously trained and updated — a loop of training, testing & evaluation and improvement — until there is a complete reading model ready for use",
+  "h": "45f6ed84"
+ },
+ "ppx.buoc-5-llm-chuyen-doi-ket": {
+  "t": "Step 5: an LLM turns the model's results into natural language, explaining them clearly and personally, producing the complete reading shown to the user",
+  "h": "d5b4c8b7"
+ },
+ "ppx.cac-quy-tac-da-duoc-chuyen": {
+  "t": "Rules reviewed by specialists are fed back into the model for further training. The system keeps testing on new real charts (out-of-sample) and repeats the improvement loop until accuracy is optimal.",
+  "h": "d91af071"
+ },
+ "ppx.cach-he-thong-hoat-dong": {
+  "t": "How the system works",
+  "h": "ef8b9152"
+ },
+ "ppx.cach-he-thong-hoat-dong-tu": {
+  "t": "How the System Works — Zi Wei Verification | Minh Bao Zi Wei Dou Shu",
+  "h": "3dffc874"
+ },
+ "ppx.cach-he-thong-hoat-dong-tu-e5d1": {
+  "t": "How the System Works — Zi Wei Verification",
+  "h": "2384f4b7"
+ },
+ "ppx.chi-nhung-ket-luan-da-duoc": {
+  "t": "Only conclusions that have been verified.",
+  "h": "34eb8158"
+ },
+ "ppx.dien-giai-ket-qua-thanh-loi": {
+  "t": "Explaining the results in natural language",
+  "h": "97ea4d62"
+ },
+ "ppx.do-la-cach-chung-toi-tao": {
+  "t": "That's how we produce readings that are well-grounded, transparent and trustworthy.",
+  "h": "168afdad"
+ },
+ "ppx.doi-chieu-voi-du-lieu-thuc": {
+  "t": "Checking against verified real data",
+  "h": "539cfe91"
+ },
+ "ppx.he-thong-su-dung-hon-270": {
+  "t": "The system uses more than 270,000 <b>verified</b> birth records from <b>AstroDataBank</b>, combined with biographical data and life events of people across many fields: politics, science, the arts, business, ...",
+  "h": "c3cee5bc"
+ },
+ "ppx.hieu-chinh-va-toi-uu-mo": {
+  "t": "Final model calibration and optimization",
+  "h": "5af8fc01"
+ },
+ "ppx.input-bo-quy-tac-da-tham": {
+  "t": "<span>Input: the reviewed rule set</span><span class=\"out\">Output: a complete reading model</span>",
+  "h": "93067baf"
+ },
+ "ppx.input-ket-qua-doi-chieu-output": {
+  "t": "<span>Input: comparison results</span><span class=\"out\">Output: a specialist-reviewed rule set</span>",
+  "h": "d4af0fe2"
+ },
+ "ppx.input-ket-qua-tu-mo-hinh": {
+  "t": "<span>Input: the model's results</span><span class=\"out\">Output: a complete reading</span>",
+  "h": "b6d766a4"
+ },
+ "ppx.input-luan-giai-so-khai-du": {
+  "t": "<span>Input: preliminary reading + real-life data</span><span class=\"out\">Output: accuracy assessment, errors found, suggested improvements</span>",
+  "h": "1c5a4557"
+ },
+ "ppx.input-ngay-gio-sinh-co-thu": {
+  "t": "<span>Input: birth date and time + classical Zi Wei texts and references</span><span class=\"out\">Output: chart + preliminary reading rule set</span>",
+  "h": "f3dd6403"
+ },
+ "ppx.ket-hop-du-lieu-co-phap": {
+  "t": "<span class=\"ic\" data-icon=\"shield-check\"></span>Data – classical method – specialists – AI, combined",
+  "h": "a6c14499"
+ },
+ "ppx.ket-qua-sau-doi-chieu-duoc": {
+  "t": "The comparison results go to a specialist team of researchers, Zi Wei practitioners and esoteric scholars, who discuss, evaluate and conclude how reliable each reading rule is.",
+  "h": "b5c2296f"
+ },
+ "ppx.ket-qua-tu-mo-hinh-duoc": {
+  "t": "The model's results are put into natural, easy-to-understand language by an LLM (a large language AI), personalized to each chart so users can grasp and apply them. The AI does not reason on its own — it only rephrases results already determined by the model.",
+  "h": "7b7eac5a"
+ },
+ "ppx.khong-cam-doan-khong-suy-luan": {
+  "t": "No guesswork. No arbitrary inference.",
+  "h": "1faeab3a"
+ },
+ "ppx.kiem-chung-boi-chuyen-gia": {
+  "t": "Verified by specialists",
+  "h": "10ee351e"
+ },
+ "ppx.lap-la-so-va-xay-dung": {
+  "t": "Building the chart and a preliminary reading model",
+  "h": "8b5789c7"
+ },
+ "ppx.lien-tuc-cap-nhat-va-cai": {
+  "t": "<b>Continuous</b><span>model updates and improvements</span>",
+  "h": "b810dcc9"
+ },
+ "ppx.luan-giai-so-khai-duoc-doi": {
+  "t": "The preliminary reading is checked against the real-life data of people in the database, to assess the accuracy of each chart pattern, pinpoint deviations and test ways of combining them.",
+  "h": "ed45b0df"
+ },
+ "ppx.mot-luan-giai-dang-tin-cay": {
+  "t": "A trustworthy reading is built from real data and a multi-layered verification process. Below are the 5 steps behind every reading on Minh Bao Zi Wei Dou Shu.",
+  "h": "45694c20"
+ },
+ "ppx.mot-luan-giai-dang-tin-cay-ss0b": {
+  "t": "A trustworthy reading is built from real data and a multi-layered verification process — the 5 steps behind every reading on Minh Bao Zi Wei Dou Shu.",
+  "h": "5c0f6569"
+ },
+ "ppx.muon-thay-he-thong-nay-hoat": {
+  "t": "Want to see how this system works with your chart?",
+  "h": "afe4354a"
+ },
+ "ppx.nguon-du-lieu-270-000-ho": {
+  "t": "<span class=\"pm-source-eyebrow\">Data source</span><b>270,000+</b><span>verified real-person records</span>",
+  "h": "303ab3fd"
+ },
+ "ppx.quay-lai-trang-chu": {
+  "t": "← Back to home",
+  "h": "11355810"
+ },
+ "ppx.tu-thong-tin-ngay-gio-sinh": {
+  "t": "From your birth date and time, the system builds a Zi Wei chart by the classical method and draws on Zi Wei and esoteric texts and references to interpret and explain each element of the chart.",
+  "h": "845dbbf5"
+ },
+ "ppx.tu-vi-nghiem-chung": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span>Zi Wei Verification",
+  "h": "4ad3d92e"
+ },
+ "ppx.xem-la-so-cua-ban": {
+  "t": "See your chart →",
+  "h": "a6169a07"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. Information we collect",
