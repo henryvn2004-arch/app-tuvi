@@ -277,6 +277,26 @@
    "shell"
   ]
  },
+ "/app/bao-cao": {
+  "file": "app-bao-cao.html",
+  "keys": [
+   "baocao.bao-cao-moi-ban-luan-ban",
+   "baocao.bao-cao-tu-vi-minh-bao",
+   "baocao.cap-nhat",
+   "baocao.chua-co-bao-cao-nao-ket",
+   "baocao.dang-nhap-dang-ky",
+   "baocao.dang-nhap-de-xem-cac-bao",
+   "baocao.ten",
+   "baocao.tim-bao-cao",
+   "baocao.tim-theo-ten-cong-cu",
+   "hdtt.cong-cu",
+   "topup.dang-tai",
+   "topup.dong"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/bat-tu": {
   "file": "app-bat-tu.html",
   "keys": [

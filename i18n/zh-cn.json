@@ -387,6 +387,42 @@
   "t": "紫微斗数的意义",
   "h": "835e8685"
  },
+ "baocao.bao-cao-moi-ban-luan-ban": {
+  "t": "<b>报告</b><span>您打开过的所有解读——重看不再扣两</span>",
+  "h": "03ea853c"
+ },
+ "baocao.bao-cao-tu-vi-minh-bao": {
+  "t": "报告 — 明宝紫微斗数",
+  "h": "424869c8"
+ },
+ "baocao.cap-nhat": {
+  "t": "更新",
+  "h": "8f92d966"
+ },
+ "baocao.chua-co-bao-cao-nao-ket": {
+  "t": "还没有任何报告。<br>您在任何工具看过的结果（包括预览）都会自动存到这里。",
+  "h": "8daa85e0"
+ },
+ "baocao.dang-nhap-dang-ky": {
+  "t": "登录／注册",
+  "h": "2bcf279e"
+ },
+ "baocao.dang-nhap-de-xem-cac-bao": {
+  "t": "登录后即可查看您已有的报告。",
+  "h": "4afe4408"
+ },
+ "baocao.ten": {
+  "t": "名称",
+  "h": "e826b62a"
+ },
+ "baocao.tim-bao-cao": {
+  "t": "搜索报告",
+  "h": "dac215a4"
+ },
+ "baocao.tim-theo-ten-cong-cu": {
+  "t": "依名称、工具搜索…",
+  "h": "86f221f0"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">输入数据</span>",
   "h": "487c9507"
@@ -2042,6 +2078,82 @@
  "js.auth.vui-long-dien-email-va-mat": {
   "t": "请填写电子邮件与密码。",
   "h": "d84b9abd"
+ },
+ "js.baocao.bao-cao": {
+  "t": "报告",
+  "h": "7013ca8b"
+ },
+ "js.baocao.bao-cao-nay-trong": {
+  "t": "这份报告是空的。",
+  "h": "173edc16"
+ },
+ "js.baocao.chua-gui-duoc-thu-lai-sau": {
+  "t": "尚未送出，请稍后再试。",
+  "h": "22c4f6e1"
+ },
+ "js.baocao.chua-mo-duoc-bao-cao-thu": {
+  "t": "无法打开报告，请稍后再试。",
+  "h": "881dfbd0"
+ },
+ "js.baocao.chua-tai-duoc-danh-sach-bao": {
+  "t": "无法加载报告列表，请刷新页面。",
+  "h": "ebdf3123"
+ },
+ "js.baocao.da-gui-vao-email": {
+  "t": "✓ 已寄到电子邮件",
+  "h": "9a79e18c"
+ },
+ "js.baocao.da-gui-vao-zalo": {
+  "t": "✓ 已传到 Zalo",
+  "h": "8b84b9e9"
+ },
+ "js.baocao.dang-gui": {
+  "t": "发送中…",
+  "h": "f04c8be3"
+ },
+ "js.baocao.dang-mo-bao-cao": {
+  "t": "正在打开报告…",
+  "h": "401bc684"
+ },
+ "js.baocao.gio-truoc": {
+  "t": " 小时前",
+  "h": "ce828227"
+ },
+ "js.baocao.gui-lai-chua-thanh-cong": {
+  "t": "重新发送未成功：",
+  "h": "b6ab8dbd"
+ },
+ "js.baocao.gui-lai-loi": {
+  "t": "重新发送错误：",
+  "h": "1364cea5"
+ },
+ "js.baocao.gui-loi": {
+  "t": "发送错误：",
+  "h": "485901a2"
+ },
+ "js.baocao.gui-pdf": {
+  "t": "寄送 PDF",
+  "h": "c2a33934"
+ },
+ "js.baocao.gui-ve-zalo": {
+  "t": "传到 Zalo",
+  "h": "3ae6f411"
+ },
+ "js.baocao.loi-khong-ro": {
+  "t": "未知错误",
+  "h": "33ea1001"
+ },
+ "js.baocao.ngay-truoc": {
+  "t": " 天前",
+  "h": "92423d27"
+ },
+ "js.baocao.phut-truoc": {
+  "t": " 分钟前",
+  "h": "b1017a2c"
+ },
+ "js.baocao.thu-lai-sau-it-phut": {
+  "t": "。请稍后再试。",
+  "h": "0795401e"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10) — 请帮我详细解读",

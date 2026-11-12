@@ -387,6 +387,42 @@
   "t": "자미두수의 의미",
   "h": "835e8685"
  },
+ "baocao.bao-cao-moi-ban-luan-ban": {
+  "t": "<b>리포트</b><span>지금까지 연 모든 풀이 — 다시 봐도 냥이 들지 않습니다</span>",
+  "h": "03ea853c"
+ },
+ "baocao.bao-cao-tu-vi-minh-bao": {
+  "t": "리포트 — 명보 자미두수",
+  "h": "424869c8"
+ },
+ "baocao.cap-nhat": {
+  "t": "업데이트",
+  "h": "8f92d966"
+ },
+ "baocao.chua-co-bao-cao-nao-ket": {
+  "t": "아직 리포트가 없습니다.<br>어느 도구에서 본 결과든(미리 보기 포함) 자동으로 여기에 저장됩니다.",
+  "h": "8daa85e0"
+ },
+ "baocao.dang-nhap-dang-ky": {
+  "t": "로그인 / 가입",
+  "h": "2bcf279e"
+ },
+ "baocao.dang-nhap-de-xem-cac-bao": {
+  "t": "로그인하면 가지고 있는 리포트를 볼 수 있습니다.",
+  "h": "4afe4408"
+ },
+ "baocao.ten": {
+  "t": "이름",
+  "h": "e826b62a"
+ },
+ "baocao.tim-bao-cao": {
+  "t": "리포트 검색",
+  "h": "dac215a4"
+ },
+ "baocao.tim-theo-ten-cong-cu": {
+  "t": "이름, 도구로 검색…",
+  "h": "86f221f0"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">정보 입력</span>",
   "h": "487c9507"
@@ -2042,6 +2078,82 @@
  "js.auth.vui-long-dien-email-va-mat": {
   "t": "이메일과 비밀번호를 입력해 주세요.",
   "h": "d84b9abd"
+ },
+ "js.baocao.bao-cao": {
+  "t": "리포트",
+  "h": "7013ca8b"
+ },
+ "js.baocao.bao-cao-nay-trong": {
+  "t": "이 리포트는 비어 있습니다.",
+  "h": "173edc16"
+ },
+ "js.baocao.chua-gui-duoc-thu-lai-sau": {
+  "t": "보내지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  "h": "22c4f6e1"
+ },
+ "js.baocao.chua-mo-duoc-bao-cao-thu": {
+  "t": "리포트를 열지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  "h": "881dfbd0"
+ },
+ "js.baocao.chua-tai-duoc-danh-sach-bao": {
+  "t": "리포트 목록을 불러오지 못했습니다. 페이지를 새로고침해 주세요.",
+  "h": "ebdf3123"
+ },
+ "js.baocao.da-gui-vao-email": {
+  "t": "✓ 이메일로 보냈습니다",
+  "h": "9a79e18c"
+ },
+ "js.baocao.da-gui-vao-zalo": {
+  "t": "✓ Zalo로 보냈습니다",
+  "h": "8b84b9e9"
+ },
+ "js.baocao.dang-gui": {
+  "t": "보내는 중…",
+  "h": "f04c8be3"
+ },
+ "js.baocao.dang-mo-bao-cao": {
+  "t": "리포트를 여는 중…",
+  "h": "401bc684"
+ },
+ "js.baocao.gio-truoc": {
+  "t": " 시간 전",
+  "h": "ce828227"
+ },
+ "js.baocao.gui-lai-chua-thanh-cong": {
+  "t": "다시 보내지 못했습니다: ",
+  "h": "b6ab8dbd"
+ },
+ "js.baocao.gui-lai-loi": {
+  "t": "다시 보내기 오류: ",
+  "h": "1364cea5"
+ },
+ "js.baocao.gui-loi": {
+  "t": "전송 오류: ",
+  "h": "485901a2"
+ },
+ "js.baocao.gui-pdf": {
+  "t": "PDF 보내기",
+  "h": "c2a33934"
+ },
+ "js.baocao.gui-ve-zalo": {
+  "t": "Zalo로 보내기",
+  "h": "3ae6f411"
+ },
+ "js.baocao.loi-khong-ro": {
+  "t": "알 수 없는 오류",
+  "h": "33ea1001"
+ },
+ "js.baocao.ngay-truoc": {
+  "t": " 일 전",
+  "h": "92423d27"
+ },
+ "js.baocao.phut-truoc": {
+  "t": " 분 전",
+  "h": "b1017a2c"
+ },
+ "js.baocao.thu-lai-sau-it-phut": {
+  "t": ". 잠시 후 다시 시도해 주세요.",
+  "h": "0795401e"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10)’ — 자세히 풀이해 주세요",

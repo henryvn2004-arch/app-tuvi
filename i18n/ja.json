@@ -387,6 +387,42 @@
   "t": "紫微斗数の意味",
   "h": "835e8685"
  },
+ "baocao.bao-cao-moi-ban-luan-ban": {
+  "t": "<b>レポート</b><span>これまで開いたすべての鑑定——見直しても両はかかりません</span>",
+  "h": "03ea853c"
+ },
+ "baocao.bao-cao-tu-vi-minh-bao": {
+  "t": "レポート — 明宝紫微斗数",
+  "h": "424869c8"
+ },
+ "baocao.cap-nhat": {
+  "t": "更新",
+  "h": "8f92d966"
+ },
+ "baocao.chua-co-bao-cao-nao-ket": {
+  "t": "まだレポートはありません。<br>どのツールで見た結果も（プレビューを含め）自動でここに保存されます。",
+  "h": "8daa85e0"
+ },
+ "baocao.dang-nhap-dang-ky": {
+  "t": "ログイン／新規登録",
+  "h": "2bcf279e"
+ },
+ "baocao.dang-nhap-de-xem-cac-bao": {
+  "t": "ログインすると、お持ちのレポートを見られます。",
+  "h": "4afe4408"
+ },
+ "baocao.ten": {
+  "t": "名前",
+  "h": "e826b62a"
+ },
+ "baocao.tim-bao-cao": {
+  "t": "レポートを検索",
+  "h": "dac215a4"
+ },
+ "baocao.tim-theo-ten-cong-cu": {
+  "t": "名前やツールで検索…",
+  "h": "86f221f0"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">情報を入力</span>",
   "h": "487c9507"
@@ -2042,6 +2078,82 @@
  "js.auth.vui-long-dien-email-va-mat": {
   "t": "メールアドレスとパスワードを入力してください。",
   "h": "d84b9abd"
+ },
+ "js.baocao.bao-cao": {
+  "t": "レポート",
+  "h": "7013ca8b"
+ },
+ "js.baocao.bao-cao-nay-trong": {
+  "t": "このレポートは空です。",
+  "h": "173edc16"
+ },
+ "js.baocao.chua-gui-duoc-thu-lai-sau": {
+  "t": "送信できませんでした。しばらくしてからもう一度お試しください。",
+  "h": "22c4f6e1"
+ },
+ "js.baocao.chua-mo-duoc-bao-cao-thu": {
+  "t": "レポートを開けませんでした。しばらくしてからもう一度お試しください。",
+  "h": "881dfbd0"
+ },
+ "js.baocao.chua-tai-duoc-danh-sach-bao": {
+  "t": "レポート一覧を読み込めませんでした。ページを再読み込みしてください。",
+  "h": "ebdf3123"
+ },
+ "js.baocao.da-gui-vao-email": {
+  "t": "✓ メールに送信しました",
+  "h": "9a79e18c"
+ },
+ "js.baocao.da-gui-vao-zalo": {
+  "t": "✓ Zaloに送信しました",
+  "h": "8b84b9e9"
+ },
+ "js.baocao.dang-gui": {
+  "t": "送信中…",
+  "h": "f04c8be3"
+ },
+ "js.baocao.dang-mo-bao-cao": {
+  "t": "レポートを開いています…",
+  "h": "401bc684"
+ },
+ "js.baocao.gio-truoc": {
+  "t": " 時間前",
+  "h": "ce828227"
+ },
+ "js.baocao.gui-lai-chua-thanh-cong": {
+  "t": "再送できませんでした：",
+  "h": "b6ab8dbd"
+ },
+ "js.baocao.gui-lai-loi": {
+  "t": "再送エラー：",
+  "h": "1364cea5"
+ },
+ "js.baocao.gui-loi": {
+  "t": "送信エラー：",
+  "h": "485901a2"
+ },
+ "js.baocao.gui-pdf": {
+  "t": "PDFを送る",
+  "h": "c2a33934"
+ },
+ "js.baocao.gui-ve-zalo": {
+  "t": "Zaloに送る",
+  "h": "3ae6f411"
+ },
+ "js.baocao.loi-khong-ro": {
+  "t": "不明なエラー",
+  "h": "33ea1001"
+ },
+ "js.baocao.ngay-truoc": {
+  "t": " 日前",
+  "h": "92423d27"
+ },
+ "js.baocao.phut-truoc": {
+  "t": " 分前",
+  "h": "b1017a2c"
+ },
+ "js.baocao.thu-lai-sau-it-phut": {
+  "t": "。しばらくしてからもう一度お試しください。",
+  "h": "0795401e"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10) — 詳しく鑑定してください",

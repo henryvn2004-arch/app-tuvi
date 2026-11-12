@@ -387,6 +387,42 @@
   "t": "The Meaning of Zi Wei Dou Shu",
   "h": "835e8685"
  },
+ "baocao.bao-cao-moi-ban-luan-ban": {
+  "t": "<b>Reports</b><span>Every reading you've opened — view again at no extra credits</span>",
+  "h": "03ea853c"
+ },
+ "baocao.bao-cao-tu-vi-minh-bao": {
+  "t": "Reports — Minh Bao Zi Wei Dou Shu",
+  "h": "424869c8"
+ },
+ "baocao.cap-nhat": {
+  "t": "Updated",
+  "h": "8f92d966"
+ },
+ "baocao.chua-co-bao-cao-nao-ket": {
+  "t": "No reports yet.<br>Results you view in any tool (previews included) are saved here automatically.",
+  "h": "8daa85e0"
+ },
+ "baocao.dang-nhap-dang-ky": {
+  "t": "Sign in / Sign up",
+  "h": "2bcf279e"
+ },
+ "baocao.dang-nhap-de-xem-cac-bao": {
+  "t": "Sign in to see the reports you already have.",
+  "h": "4afe4408"
+ },
+ "baocao.ten": {
+  "t": "Name",
+  "h": "e826b62a"
+ },
+ "baocao.tim-bao-cao": {
+  "t": "Search reports",
+  "h": "dac215a4"
+ },
+ "baocao.tim-theo-ten-cong-cu": {
+  "t": "Search by name, tool…",
+  "h": "86f221f0"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Enter details</span>",
   "h": "487c9507"
@@ -2042,6 +2078,82 @@
  "js.auth.vui-long-dien-email-va-mat": {
   "t": "Please enter your email and password.",
   "h": "d84b9abd"
+ },
+ "js.baocao.bao-cao": {
+  "t": "Report",
+  "h": "7013ca8b"
+ },
+ "js.baocao.bao-cao-nay-trong": {
+  "t": "This report is empty.",
+  "h": "173edc16"
+ },
+ "js.baocao.chua-gui-duoc-thu-lai-sau": {
+  "t": "Couldn't send. Please try again in a few minutes.",
+  "h": "22c4f6e1"
+ },
+ "js.baocao.chua-mo-duoc-bao-cao-thu": {
+  "t": "Couldn't open the report. Please try again in a few minutes.",
+  "h": "881dfbd0"
+ },
+ "js.baocao.chua-tai-duoc-danh-sach-bao": {
+  "t": "Couldn't load the report list. Please reload the page.",
+  "h": "ebdf3123"
+ },
+ "js.baocao.da-gui-vao-email": {
+  "t": "✓ Sent to your email",
+  "h": "9a79e18c"
+ },
+ "js.baocao.da-gui-vao-zalo": {
+  "t": "✓ Sent to Zalo",
+  "h": "8b84b9e9"
+ },
+ "js.baocao.dang-gui": {
+  "t": "Sending…",
+  "h": "f04c8be3"
+ },
+ "js.baocao.dang-mo-bao-cao": {
+  "t": "Opening report…",
+  "h": "401bc684"
+ },
+ "js.baocao.gio-truoc": {
+  "t": " h ago",
+  "h": "ce828227"
+ },
+ "js.baocao.gui-lai-chua-thanh-cong": {
+  "t": "Resend failed: ",
+  "h": "b6ab8dbd"
+ },
+ "js.baocao.gui-lai-loi": {
+  "t": "Resend error: ",
+  "h": "1364cea5"
+ },
+ "js.baocao.gui-loi": {
+  "t": "Send error: ",
+  "h": "485901a2"
+ },
+ "js.baocao.gui-pdf": {
+  "t": "Send PDF",
+  "h": "c2a33934"
+ },
+ "js.baocao.gui-ve-zalo": {
+  "t": "Send to Zalo",
+  "h": "3ae6f411"
+ },
+ "js.baocao.loi-khong-ro": {
+  "t": "unknown error",
+  "h": "33ea1001"
+ },
+ "js.baocao.ngay-truoc": {
+  "t": " d ago",
+  "h": "92423d27"
+ },
+ "js.baocao.phut-truoc": {
+  "t": " min ago",
+  "h": "b1017a2c"
+ },
+ "js.baocao.thu-lai-sau-it-phut": {
+  "t": ". Please try again in a few minutes.",
+  "h": "0795401e"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10) — please read this in detail for me",
