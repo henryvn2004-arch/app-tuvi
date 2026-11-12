@@ -8751,6 +8751,110 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.solaso.bao-cao": {
+  "t": "리포트",
+  "h": "7013ca8b"
+ },
+ "js.solaso.chua-co-la-so-nhom": {
+  "t": "이 그룹에는 아직 명반이 없어요.",
+  "h": "79bf9444"
+ },
+ "js.solaso.chua-dat-ten": {
+  "t": "이름 없음",
+  "h": "dfb078dd"
+ },
+ "js.solaso.combo-1-s": {
+  "t": "두 가지를 묶어 사면 따로 사는 것보다 저렴해요",
+  "h": "584d7fc7"
+ },
+ "js.solaso.combo-1-t": {
+  "t": "콤보: 자미두수 풀이 + 사주",
+  "h": "c69e7864"
+ },
+ "js.solaso.combo-2-s": {
+  "t": "자미두수 풀이 + 사주 + 인생 사이클 + 연운",
+  "h": "12345b3e"
+ },
+ "js.solaso.combo-2-t": {
+  "t": "콤보: 4개 도구 풀세트",
+  "h": "0726a4ab"
+ },
+ "js.solaso.da-co-xem-lai": {
+  "t": "✓ 보유 · 다시 보기",
+  "h": "308bad31"
+ },
+ "js.solaso.rel-ban-be": {
+  "t": "친구",
+  "h": "159fe485"
+ },
+ "js.solaso.rel-dong-nghiep": {
+  "t": "동료",
+  "h": "d8e2bdd8"
+ },
+ "js.solaso.rel-gia-dinh": {
+  "t": "가족",
+  "h": "bf9b33dc"
+ },
+ "js.solaso.rel-khac": {
+  "t": "기타",
+  "h": "5b8a28ab"
+ },
+ "js.solaso.tool-cdtk": {
+  "t": "전생 초상",
+  "h": "e7d0f866"
+ },
+ "js.solaso.tool-cdvc": {
+  "t": "배우자 초상",
+  "h": "eb21b5ef"
+ },
+ "js.solaso.tool-ctcd": {
+  "t": "인생 사이클",
+  "h": "38c0c6ce"
+ },
+ "js.solaso.tool-dc": {
+  "t": "명반으로 하는 자녀 교육",
+  "h": "6043b236"
+ },
+ "js.solaso.tool-dntk": {
+  "t": "전생 인연",
+  "h": "c6b0ccb5"
+ },
+ "js.solaso.tool-hnt": {
+  "t": "이른 진로 안내",
+  "h": "826c517b"
+ },
+ "js.solaso.tool-lg": {
+  "t": "자미두수 풀이",
+  "h": "ab5a4607"
+ },
+ "js.solaso.tool-nk": {
+  "t": "다른 사람의 명반",
+  "h": "5a73dc8f"
+ },
+ "js.solaso.tool-nm": {
+  "t": "인맥",
+  "h": "78fdc03b"
+ },
+ "js.solaso.tool-tb": {
+  "t": "자평 사주팔자",
+  "h": "6ade52e9"
+ },
+ "js.solaso.tool-vhn": {
+  "t": "연운",
+  "h": "ba425e43"
+ },
+ "js.solaso.xem-tao": {
+  "t": "보기 / 만들기",
+  "h": "a89b1542"
+ },
+ "js.solaso.xoa-khoi-so": {
+  "t": "보관함에서 삭제",
+  "h": "4ba4a755"
+ },
+ "js.solaso.xoa-la-so-nay": {
+  "t": "이 명반을 보관함에서 삭제할까요?",
+  "h": "d9231d4e"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"결제 ",
   "h": "3d7d89ae"
@@ -10914,6 +11018,26 @@
  "privacy.xac-minh-trang-thai-thanh-toan": {
   "t": "결제 상태 확인 및 결과 제공",
   "h": "84a1b3b2"
+ },
+ "solaso.chua-co-la-so-nao-trong": {
+  "t": "명반 보관함에 아직 명반이 없어요.<br>어떤 도구에서든 생년월일을 입력하면 명반이 자동으로 여기에 들어와요.",
+  "h": "f40b05ed"
+ },
+ "solaso.dang-nhap-dang-ky": {
+  "t": "로그인 / 가입",
+  "h": "2bcf279e"
+ },
+ "solaso.dang-nhap-de-xem-so-la": {
+  "t": "저장된 명반 보관함을 보려면 로그인하세요.",
+  "h": "4fa47b77"
+ },
+ "solaso.la-so-da-luu-so-la": {
+  "t": "<b>저장된 명반</b><span>계정별 명반 보관함 — 관계 그룹별로 정리돼요. 명반의 \"리포트\"를 누르면 그 명반의 리포트를 보거나 만들 수 있어요.</span>",
+  "h": "703b7bd9"
+ },
+ "solaso.la-so-da-luu-tu-vi": {
+  "t": "저장된 명반 — 명보 자미두수",
+  "h": "183c05e5"
  },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. 서비스의 성격",

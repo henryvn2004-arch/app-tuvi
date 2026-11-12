@@ -8751,6 +8751,110 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.solaso.bao-cao": {
+  "t": "Reports",
+  "h": "7013ca8b"
+ },
+ "js.solaso.chua-co-la-so-nhom": {
+  "t": "No charts in this group yet.",
+  "h": "79bf9444"
+ },
+ "js.solaso.chua-dat-ten": {
+  "t": "Unnamed",
+  "h": "dfb078dd"
+ },
+ "js.solaso.combo-1-s": {
+  "t": "Buy both together — cheaper than buying separately",
+  "h": "584d7fc7"
+ },
+ "js.solaso.combo-1-t": {
+  "t": "Combo: Zi Wei Reading + BaZi",
+  "h": "c69e7864"
+ },
+ "js.solaso.combo-2-s": {
+  "t": "Zi Wei Reading + BaZi + Life Cycles + Yearly Fortune",
+  "h": "12345b3e"
+ },
+ "js.solaso.combo-2-t": {
+  "t": "Combo: The Full Set of 4 Tools",
+  "h": "0726a4ab"
+ },
+ "js.solaso.da-co-xem-lai": {
+  "t": "✓ Owned · View again",
+  "h": "308bad31"
+ },
+ "js.solaso.rel-ban-be": {
+  "t": "Friends",
+  "h": "159fe485"
+ },
+ "js.solaso.rel-dong-nghiep": {
+  "t": "Colleagues",
+  "h": "d8e2bdd8"
+ },
+ "js.solaso.rel-gia-dinh": {
+  "t": "Family",
+  "h": "bf9b33dc"
+ },
+ "js.solaso.rel-khac": {
+  "t": "Other",
+  "h": "5b8a28ab"
+ },
+ "js.solaso.tool-cdtk": {
+  "t": "Past-Life Portrait",
+  "h": "e7d0f866"
+ },
+ "js.solaso.tool-cdvc": {
+  "t": "Spouse Portrait",
+  "h": "eb21b5ef"
+ },
+ "js.solaso.tool-ctcd": {
+  "t": "Life Cycles",
+  "h": "38c0c6ce"
+ },
+ "js.solaso.tool-dc": {
+  "t": "Parenting by Chart",
+  "h": "6043b236"
+ },
+ "js.solaso.tool-dntk": {
+  "t": "Past-Life Karmic Bonds",
+  "h": "c6b0ccb5"
+ },
+ "js.solaso.tool-hnt": {
+  "t": "Early Career Guidance",
+  "h": "826c517b"
+ },
+ "js.solaso.tool-lg": {
+  "t": "Zi Wei Reading",
+  "h": "ab5a4607"
+ },
+ "js.solaso.tool-nk": {
+  "t": "Someone Else's Chart",
+  "h": "5a73dc8f"
+ },
+ "js.solaso.tool-nm": {
+  "t": "People Connections",
+  "h": "78fdc03b"
+ },
+ "js.solaso.tool-tb": {
+  "t": "Zi Ping BaZi",
+  "h": "6ade52e9"
+ },
+ "js.solaso.tool-vhn": {
+  "t": "Yearly Fortune",
+  "h": "ba425e43"
+ },
+ "js.solaso.xem-tao": {
+  "t": "View / Create",
+  "h": "a89b1542"
+ },
+ "js.solaso.xoa-khoi-so": {
+  "t": "Remove from the book",
+  "h": "4ba4a755"
+ },
+ "js.solaso.xoa-la-so-nay": {
+  "t": "Remove this chart from the book?",
+  "h": "d9231d4e"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"Pay ",
   "h": "3d7d89ae"
@@ -10914,6 +11018,26 @@
  "privacy.xac-minh-trang-thai-thanh-toan": {
   "t": "Verifying payment status and delivering results",
   "h": "84a1b3b2"
+ },
+ "solaso.chua-co-la-so-nao-trong": {
+  "t": "No charts in your book yet.<br>Charts will land here automatically once you enter a birth date in any tool.",
+  "h": "f40b05ed"
+ },
+ "solaso.dang-nhap-dang-ky": {
+  "t": "Sign in / Sign up",
+  "h": "2bcf279e"
+ },
+ "solaso.dang-nhap-de-xem-so-la": {
+  "t": "Sign in to see your saved Chart Book.",
+  "h": "4fa47b77"
+ },
+ "solaso.la-so-da-luu-so-la": {
+  "t": "<b>Saved Charts</b><span>Your account's Chart Book — grouped by relationship. Tap \"Reports\" on a chart to view or create reports for that chart.</span>",
+  "h": "703b7bd9"
+ },
+ "solaso.la-so-da-luu-tu-vi": {
+  "t": "Saved Charts — Minh Bao Zi Wei Dou Shu",
+  "h": "183c05e5"
  },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. Nature of the service",

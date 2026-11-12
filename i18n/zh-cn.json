@@ -8751,6 +8751,110 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.solaso.bao-cao": {
+  "t": "报告",
+  "h": "7013ca8b"
+ },
+ "js.solaso.chua-co-la-so-nhom": {
+  "t": "此分组尚无命盘。",
+  "h": "79bf9444"
+ },
+ "js.solaso.chua-dat-ten": {
+  "t": "未命名",
+  "h": "dfb078dd"
+ },
+ "js.solaso.combo-1-s": {
+  "t": "两者合购，比单买便宜",
+  "h": "584d7fc7"
+ },
+ "js.solaso.combo-1-t": {
+  "t": "组合：紫微斗数解读＋八字",
+  "h": "c69e7864"
+ },
+ "js.solaso.combo-2-s": {
+  "t": "紫微斗数解读＋八字＋人生周期＋年度运势",
+  "h": "12345b3e"
+ },
+ "js.solaso.combo-2-t": {
+  "t": "组合：4项工具完整套组",
+  "h": "0726a4ab"
+ },
+ "js.solaso.da-co-xem-lai": {
+  "t": "✓ 已拥有・再次查看",
+  "h": "308bad31"
+ },
+ "js.solaso.rel-ban-be": {
+  "t": "朋友",
+  "h": "159fe485"
+ },
+ "js.solaso.rel-dong-nghiep": {
+  "t": "同事",
+  "h": "d8e2bdd8"
+ },
+ "js.solaso.rel-gia-dinh": {
+  "t": "家人",
+  "h": "bf9b33dc"
+ },
+ "js.solaso.rel-khac": {
+  "t": "其他",
+  "h": "5b8a28ab"
+ },
+ "js.solaso.tool-cdtk": {
+  "t": "前世肖像",
+  "h": "e7d0f866"
+ },
+ "js.solaso.tool-cdvc": {
+  "t": "伴侣肖像",
+  "h": "eb21b5ef"
+ },
+ "js.solaso.tool-ctcd": {
+  "t": "人生周期",
+  "h": "38c0c6ce"
+ },
+ "js.solaso.tool-dc": {
+  "t": "依命盘教养孩子",
+  "h": "6043b236"
+ },
+ "js.solaso.tool-dntk": {
+  "t": "前世缘分",
+  "h": "c6b0ccb5"
+ },
+ "js.solaso.tool-hnt": {
+  "t": "早期职涯指引",
+  "h": "826c517b"
+ },
+ "js.solaso.tool-lg": {
+  "t": "紫微斗数解读",
+  "h": "ab5a4607"
+ },
+ "js.solaso.tool-nk": {
+  "t": "他人的命盘",
+  "h": "5a73dc8f"
+ },
+ "js.solaso.tool-nm": {
+  "t": "人脉",
+  "h": "78fdc03b"
+ },
+ "js.solaso.tool-tb": {
+  "t": "子平八字",
+  "h": "6ade52e9"
+ },
+ "js.solaso.tool-vhn": {
+  "t": "年度运势",
+  "h": "ba425e43"
+ },
+ "js.solaso.xem-tao": {
+  "t": "查看／创建",
+  "h": "a89b1542"
+ },
+ "js.solaso.xoa-khoi-so": {
+  "t": "从簿册移除",
+  "h": "4ba4a755"
+ },
+ "js.solaso.xoa-la-so-nay": {
+  "t": "要将这张命盘从簿册中移除吗？",
+  "h": "d9231d4e"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"付款 ",
   "h": "3d7d89ae"
@@ -10914,6 +11018,26 @@
  "privacy.xac-minh-trang-thai-thanh-toan": {
   "t": "确认付款状态并提供结果",
   "h": "84a1b3b2"
+ },
+ "solaso.chua-co-la-so-nao-trong": {
+  "t": "簿册中还没有命盘。<br>在任何工具输入出生年月日后，命盘会自动收进这里。",
+  "h": "f40b05ed"
+ },
+ "solaso.dang-nhap-dang-ky": {
+  "t": "登录／注册",
+  "h": "2bcf279e"
+ },
+ "solaso.dang-nhap-de-xem-so-la": {
+  "t": "请登录以查看已保存的命盘簿。",
+  "h": "4fa47b77"
+ },
+ "solaso.la-so-da-luu-so-la": {
+  "t": "<b>已保存的命盘</b><span>帐号专属的命盘簿——依关系分组。点命盘上的「报告」，即可查看或创建该命盘的报告。</span>",
+  "h": "703b7bd9"
+ },
+ "solaso.la-so-da-luu-tu-vi": {
+  "t": "已保存的命盘——明宝紫微斗数",
+  "h": "183c05e5"
  },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. 服务性质",

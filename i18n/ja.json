@@ -8751,6 +8751,110 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.solaso.bao-cao": {
+  "t": "レポート",
+  "h": "7013ca8b"
+ },
+ "js.solaso.chua-co-la-so-nhom": {
+  "t": "このグループにはまだ命盤がありません。",
+  "h": "79bf9444"
+ },
+ "js.solaso.chua-dat-ten": {
+  "t": "名称未設定",
+  "h": "dfb078dd"
+ },
+ "js.solaso.combo-1-s": {
+  "t": "2つまとめて購入すると、別々に買うよりお得",
+  "h": "584d7fc7"
+ },
+ "js.solaso.combo-1-t": {
+  "t": "セット：紫微斗数の鑑定＋四柱推命",
+  "h": "c69e7864"
+ },
+ "js.solaso.combo-2-s": {
+  "t": "紫微斗数の鑑定＋四柱推命＋人生のサイクル＋年運",
+  "h": "12345b3e"
+ },
+ "js.solaso.combo-2-t": {
+  "t": "セット：4ツール完全版",
+  "h": "0726a4ab"
+ },
+ "js.solaso.da-co-xem-lai": {
+  "t": "✓ 購入済み・もう一度見る",
+  "h": "308bad31"
+ },
+ "js.solaso.rel-ban-be": {
+  "t": "友人",
+  "h": "159fe485"
+ },
+ "js.solaso.rel-dong-nghiep": {
+  "t": "同僚",
+  "h": "d8e2bdd8"
+ },
+ "js.solaso.rel-gia-dinh": {
+  "t": "家族",
+  "h": "bf9b33dc"
+ },
+ "js.solaso.rel-khac": {
+  "t": "その他",
+  "h": "5b8a28ab"
+ },
+ "js.solaso.tool-cdtk": {
+  "t": "前世の肖像",
+  "h": "e7d0f866"
+ },
+ "js.solaso.tool-cdvc": {
+  "t": "配偶者の肖像",
+  "h": "eb21b5ef"
+ },
+ "js.solaso.tool-ctcd": {
+  "t": "人生のサイクル",
+  "h": "38c0c6ce"
+ },
+ "js.solaso.tool-dc": {
+  "t": "命盤で育てる子育て",
+  "h": "6043b236"
+ },
+ "js.solaso.tool-dntk": {
+  "t": "前世の縁",
+  "h": "c6b0ccb5"
+ },
+ "js.solaso.tool-hnt": {
+  "t": "若いうちの進路鑑定",
+  "h": "826c517b"
+ },
+ "js.solaso.tool-lg": {
+  "t": "紫微斗数の鑑定",
+  "h": "ab5a4607"
+ },
+ "js.solaso.tool-nk": {
+  "t": "他の人の命盤",
+  "h": "5a73dc8f"
+ },
+ "js.solaso.tool-nm": {
+  "t": "人脈",
+  "h": "78fdc03b"
+ },
+ "js.solaso.tool-tb": {
+  "t": "四柱推命（子平）",
+  "h": "6ade52e9"
+ },
+ "js.solaso.tool-vhn": {
+  "t": "年運",
+  "h": "ba425e43"
+ },
+ "js.solaso.xem-tao": {
+  "t": "見る／作る",
+  "h": "a89b1542"
+ },
+ "js.solaso.xoa-khoi-so": {
+  "t": "ノートから削除",
+  "h": "4ba4a755"
+ },
+ "js.solaso.xoa-la-so-nay": {
+  "t": "この命盤をノートから削除しますか？",
+  "h": "d9231d4e"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"お支払い：",
   "h": "3d7d89ae"
@@ -10914,6 +11018,26 @@
  "privacy.xac-minh-trang-thai-thanh-toan": {
   "t": "決済状況の確認と結果のご提供",
   "h": "84a1b3b2"
+ },
+ "solaso.chua-co-la-so-nao-trong": {
+  "t": "命盤ノートにはまだ命盤がありません。<br>どのツールでも生年月日を入力すると、命盤が自動でここに入ります。",
+  "h": "f40b05ed"
+ },
+ "solaso.dang-nhap-dang-ky": {
+  "t": "ログイン／新規登録",
+  "h": "2bcf279e"
+ },
+ "solaso.dang-nhap-de-xem-so-la": {
+  "t": "保存した命盤ノートを見るにはログインしてください。",
+  "h": "4fa47b77"
+ },
+ "solaso.la-so-da-luu-so-la": {
+  "t": "<b>保存した命盤</b><span>アカウントの命盤ノート — 関係のグループ別に並びます。命盤の「レポート」を押すと、その命盤のレポートを見たり作ったりできます。</span>",
+  "h": "703b7bd9"
+ },
+ "solaso.la-so-da-luu-tu-vi": {
+  "t": "保存した命盤 — 明宝紫微斗数",
+  "h": "183c05e5"
  },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. サービスの性質",
