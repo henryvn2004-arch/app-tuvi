@@ -2563,6 +2563,22 @@
   "t": "Reliability of the birth time on the Rodden scale",
   "h": "45221bc0"
  },
+ "js.cns.tang-t0": {
+  "t": "Same birthday",
+  "h": "6b9b0710"
+ },
+ "js.cns.tang-t1": {
+  "t": "Same lunar date",
+  "h": "25904580"
+ },
+ "js.cns.tang-t2": {
+  "t": "SAME CHART",
+  "h": "10a40788"
+ },
+ "js.cns.tang-t2b": {
+  "t": "Same chart frame",
+  "h": "bd4da5be"
+ },
  "js.cns.tim-hieu": {
   "t": "Learn more",
   "h": "90b61c50"

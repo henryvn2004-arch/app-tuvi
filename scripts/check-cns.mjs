@@ -62,6 +62,23 @@ const PAGES = [
 const SRC = /<script[^>]+src="\/tools-shared\/cung-ngay-sinh\.js/;
 const FORM = /<script[^>]+src="\/tuvi-form\.js/;
 
+// Nhãn badge 4 tầng: route (`TIER_LABEL`) là chữ gốc, client dịch theo mã `tang` bằng khoá `js.cns.tang-<tầng>`
+// (i18n W26c). Câu vi ở `i18n/vi.json` phải KHỚP route, nếu không trang vi đổi chữ im lặng so với API.
+{
+  const route = readFileSync(join(ROOT, 'app/api/v1/cung-ngay-sinh/route.ts'), 'utf-8');
+  const vi = JSON.parse(readFileSync(join(ROOT, 'i18n/vi.json'), 'utf-8'));
+  const blk = /const TIER_LABEL[^{]*\{([\s\S]*?)\};/.exec(route);
+  if (!blk) fail('route cung-ngay-sinh: không đọc được TIER_LABEL.');
+  else
+    for (const t of ['t2', 't2b', 't1', 't0']) {
+      const m = new RegExp(`${t}:\\s*'([^']*)'`).exec(blk[1]);
+      if (!m) fail(`TIER_LABEL thiếu tầng ${t}.`);
+      else if (vi[`js.cns.tang-${t}`] !== m[1])
+        fail(
+          `js.cns.tang-${t} ("${vi[`js.cns.tang-${t}`]}") lệch TIER_LABEL.${t} ("${m[1]}") ở route.`
+        );
+    }
+}
 if (!readFileSync(join(ROOT, MODULE), 'utf-8').includes('CungNgaySinh')) {
   fail(`${MODULE} không còn export CungNgaySinh.`);
 }
