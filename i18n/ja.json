@@ -1259,6 +1259,62 @@
   "t": "小運の年：",
   "h": "1979c56a"
  },
+ "js.cns.ai-sinh": {
+  "t": "あなたと同じ日に生まれた人",
+  "h": "33d96a43"
+ },
+ "js.cns.al": {
+  "t": "旧暦{m}月{d}日（{cc}）",
+  "h": "cc05e85c"
+ },
+ "js.cns.am-ban": {
+  "t": "あなたの旧暦：<b>{m}月{d}日（{cc}）</b>。",
+  "h": "5bd9c1aa"
+ },
+ "js.cns.anh": {
+  "t": "写真：{nguon}",
+  "h": "ac251971"
+ },
+ "js.cns.ghi": {
+  "t": "表示するのは生年月日と出生時刻のデータのみで、他の方の鑑定は行いません。比較のため出生時刻はベトナム時間に換算しています。出典：Wikidata（CC0）・写真は Wikimedia Commons（ライセンスは各写真の下に記載）・出生時刻は Astro-Databank。",
+  "h": "bb2a4862"
+ },
+ "js.cns.gio-chi": {
+  "t": "{chi}の刻",
+  "h": "305f8351"
+ },
+ "js.cns.gio-sinh": {
+  "t": "出生時刻 {gio}",
+  "h": "f4e26258"
+ },
+ "js.cns.khung-gio-vn": {
+  "t": "ベトナム時間{khung}",
+  "h": "a67644fa"
+ },
+ "js.cns.nam": {
+  "t": "男性",
+  "h": "b580ba1b"
+ },
+ "js.cns.nguoi-noi-tieng": {
+  "t": "誕生日が同じ有名人です。各カードのラベルで、旧暦と新暦のどちらで一致しているか確認できます。",
+  "h": "fbb49f18"
+ },
+ "js.cns.nu": {
+  "t": "女性",
+  "h": "feb92ccd"
+ },
+ "js.cns.rodden": {
+  "t": "ロッデン・レーティングによる出生時刻の信頼度",
+  "h": "45221bc0"
+ },
+ "js.cns.tim-hieu": {
+  "t": "詳しく見る",
+  "h": "90b61c50"
+ },
+ "js.cns.trung-ca": {
+  "t": "<b>生年月日も出生時刻も</b>あなたと一致する人がいます。命盤はまったく同じになります。",
+  "h": "3272dba6"
+ },
  "js.home.3-buoc-dau-tien": {
   "t": "最初の3ステップ",
   "h": "cd4d028c"
@@ -1759,6 +1815,50 @@
   "t": "相冲 ",
   "h": "e92ab4fa"
  },
+ "js.hooklayer.5-8-giay": {
+  "t": "5〜8秒",
+  "h": "cbbdee08"
+ },
+ "js.hooklayer.da-lap-xong": {
+  "t": "命盤の作成が完了 · 注目ポイント{n}件",
+  "h": "124b920b"
+ },
+ "js.hooklayer.dang-ky-de-xem": {
+  "t": "無料アカウントを登録するとプレビューが増えます。クレジットをチャージすればすぐに無制限でご覧いただけます。",
+  "h": "0c412f92"
+ },
+ "js.hooklayer.dang-ky-mien-phi": {
+  "t": "無料で登録する →",
+  "h": "89d5985d"
+ },
+ "js.hooklayer.dang-soan": {
+  "t": "より魅力的な導入文を作成中…",
+  "h": "edd225b5"
+ },
+ "js.hooklayer.dang-soan-eta": {
+  "t": "より魅力的な導入文を作成中… （通常5〜8秒）",
+  "h": "96371284"
+ },
+ "js.hooklayer.dieu-quan-trong": {
+  "t": "あなたの{tool}で最も大切な{n}つのポイント <span>（プレビュー）</span>",
+  "h": "bcfab32e"
+ },
+ "js.hooklayer.het-luot": {
+  "t": "無料プレビューの回数を使い切りました",
+  "h": "7fc6be3c"
+ },
+ "js.hooklayer.mo-ban-day-du": {
+  "t": "完全版を開く",
+  "h": "84fe9699"
+ },
+ "js.hooklayer.nap-de-xem": {
+  "t": "クレジットをチャージすると、この注目の導入部をサイト内のすべてのツールで無制限にご覧いただけます。",
+  "h": "151e4adb"
+ },
+ "js.hooklayer.nap-luong": {
+  "t": "チャージする →",
+  "h": "96c6fb5d"
+ },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "押すと卦立てを開始します——6回投げ、1回につき1つの爻が決まります",
   "h": "5f61aa02"
@@ -1978,6 +2078,146 @@
  "js.laso.xuat-that-bai": {
   "t": "書き出しに失敗しました：",
   "h": "b105cd2a"
+ },
+ "js.lasochart.am": {
+  "t": "陰",
+  "h": "99492f1a"
+ },
+ "js.lasochart.am-duong-nam": {
+  "t": "{ad}{gt} · 陰陽{tl}",
+  "h": "749576bd"
+ },
+ "js.lasochart.am-lich": {
+  "t": "{ngay}（旧暦）· {chi}の刻",
+  "h": "15f51c93"
+ },
+ "js.lasochart.cuc-l": {
+  "t": "局：",
+  "h": "aac31479"
+ },
+ "js.lasochart.dai-van": {
+  "t": "大運：{chi}（{a}–{b}歳）",
+  "h": "f2d3551d"
+ },
+ "js.lasochart.diem": {
+  "t": "{n}点",
+  "h": "295a951c"
+ },
+ "js.lasochart.duong": {
+  "t": "陽",
+  "h": "0efa2ecf"
+ },
+ "js.lasochart.duong-lich": {
+  "t": "{y}年{m}月{d}日（新暦）· {chi}の刻",
+  "h": "499f734e"
+ },
+ "js.lasochart.gioi-tinh": {
+  "t": "性別：{gt}",
+  "h": "72c2c73e"
+ },
+ "js.lasochart.lap-la-so": {
+  "t": "作成日時：{t}",
+  "h": "188a89be"
+ },
+ "js.lasochart.luu-dai-han": {
+  "t": "流大限：{chi} · {cung}",
+  "h": "0ee60780"
+ },
+ "js.lasochart.luu-tip": {
+  "t": "{ten} — 鑑定する年のみ作用",
+  "h": "e2da452a"
+ },
+ "js.lasochart.luu-tip-sao": {
+  "t": "{ten}（{sao}）— 鑑定する年のみ作用",
+  "h": "943e2001"
+ },
+ "js.lasochart.menh-l": {
+  "t": "命：",
+  "h": "d24288f5"
+ },
+ "js.lasochart.nam": {
+  "t": "男性",
+  "h": "b580ba1b"
+ },
+ "js.lasochart.nam-l": {
+  "t": "年：",
+  "h": "3731977b"
+ },
+ "js.lasochart.nam-xem-tuoi": {
+  "t": "{chi}年 — {n}歳",
+  "h": "32dd7a23"
+ },
+ "js.lasochart.nghich-ly": {
+  "t": "逆理",
+  "h": "7fd88b7f"
+ },
+ "js.lasochart.nu": {
+  "t": "女性",
+  "h": "feb92ccd"
+ },
+ "js.lasochart.than-l": {
+  "t": "身：",
+  "h": "dfb815b4"
+ },
+ "js.lasochart.thuan-ly": {
+  "t": "順理",
+  "h": "f85a07ab"
+ },
+ "js.lasochart.tieu-han": {
+  "t": "小限：{chi} · {cung}",
+  "h": "72610665"
+ },
+ "js.lasochart.tieu-han-title": {
+  "t": "{y}年の小限は{c}宮に入ります",
+  "h": "4d69ee5c"
+ },
+ "js.lasochart.tuoi-al": {
+  "t": "{n}歳（数え）",
+  "h": "cd4bc076"
+ },
+ "js.loading.45-60": {
+  "t": "約45〜60秒",
+  "h": "faa5fa7c"
+ },
+ "js.loading.con-1-phut": {
+  "t": "残り約1分",
+  "h": "3a0f6379"
+ },
+ "js.loading.con-giay": {
+  "t": "残り約{n}秒",
+  "h": "37f5b771"
+ },
+ "js.loading.con-phut": {
+  "t": "残り約{n}分",
+  "h": "dd8b53f1"
+ },
+ "js.loading.da-cho": {
+  "t": "待機{s}秒",
+  "h": "6315aab2"
+ },
+ "js.loading.da-cho-dots": {
+  "t": "{s}秒待っています…",
+  "h": "a98f17f2"
+ },
+ "js.loading.dang-ve": {
+  "t": "絵を描いています…",
+  "h": "9806c851"
+ },
+ "js.loading.khoang-giay": {
+  "t": "約{n}秒",
+  "h": "bd9c1ed0"
+ },
+ "js.loading.lau-hon": {
+  "t": "通常より時間がかかっています。まだ描いています。このページを閉じないでください（待機{s}秒）",
+  "h": "771e54dd"
+ },
+ "js.loading.thuong-mat": {
+  "t": "通常は{eta}ほど · 待機{s}秒",
+  "h": "31ef12fb"
+ },
+ "js.loading.van-chay": {
+  "t": "処理中です。このページを閉じないでください（待機{s}秒）",
+  "h": "a61e402a"
  },
  "js.luangiai.10-8-dai-van-con-lai": {
   "t": "/10。残り8つの大運と各年の小運は、「人生のサイクル」でご覧いただけます。",
@@ -3226,6 +3466,10 @@
  "js.prices.money-moi-luot-sale": {
   "t": "1回 {money}（{sale}両、{credits}両から値下げ）",
   "h": "7aabe37f"
+ },
+ "js.samplehint.dang-chuan-bi": {
+  "t": "サンプルは準備中です。しばらくしてからまたお越しください。",
+  "h": "992fd7e6"
  },
  "js.shell.an": {
   "t": "非表示",

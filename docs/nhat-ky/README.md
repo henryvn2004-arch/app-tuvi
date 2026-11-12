@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-572 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+573 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🧩 W26b — Widget dùng chung (2): hook-layer · ai-loading-steps · cung-ngay-sinh · sample-hint · laso-chart (62 khoá) |
 | 1 | 2026-11 | `2026-11.md` | 🧩 W26a — Widget dùng chung: `tuvi-form.js` + `noi-sinh.js` theo ngôn ngữ (114 khoá, tên nước qua Intl.DisplayNames) |
 | 1 | 2026-11 | `2026-11.md` | 📨 W17b — "Gửi lại PDF" đọc văn luận theo ngôn ngữ người nhận (`readLuanI18n`), hụt lùi bản Việt |
 | 1 | 2026-11 | `2026-11.md` | 🌐 W18 — Chân dung/cẩm nang theo locale (cache tách ngôn ngữ, sở hữu giữ nguyên) · link email `/<locale>/` · PDF font CJK/Hangul + khung theo ngôn ngữ |

@@ -1259,6 +1259,62 @@
   "t": "소한 ‘ ",
   "h": "1979c56a"
  },
+ "js.cns.ai-sinh": {
+  "t": "나와 같은 날 태어난 사람",
+  "h": "33d96a43"
+ },
+ "js.cns.al": {
+  "t": "음력 {m}월 {d}일 ({cc})",
+  "h": "cc05e85c"
+ },
+ "js.cns.am-ban": {
+  "t": "당신의 음력 날짜: <b>{m}월 {d}일 ({cc})</b>.",
+  "h": "5bd9c1aa"
+ },
+ "js.cns.anh": {
+  "t": "사진: {nguon}",
+  "h": "ac251971"
+ },
+ "js.cns.ghi": {
+  "t": "생년월일과 태어난 시각 정보만 표시하며 다른 사람에 대한 풀이는 하지 않습니다. 비교를 위해 출생 시각은 베트남 시간으로 환산했습니다. 출처: Wikidata(CC0) · 사진은 Wikimedia Commons(라이선스는 각 사진 아래 표기) · 출생 시각은 Astro-Databank.",
+  "h": "bb2a4862"
+ },
+ "js.cns.gio-chi": {
+  "t": "{chi}시",
+  "h": "305f8351"
+ },
+ "js.cns.gio-sinh": {
+  "t": "태어난 시각 {gio}",
+  "h": "f4e26258"
+ },
+ "js.cns.khung-gio-vn": {
+  "t": "베트남 시간 {khung}",
+  "h": "a67644fa"
+ },
+ "js.cns.nam": {
+  "t": "남성",
+  "h": "b580ba1b"
+ },
+ "js.cns.nguoi-noi-tieng": {
+  "t": "생일이 같은 유명인입니다. 각 카드의 라벨에서 음력 기준인지 양력 기준인지 확인하세요.",
+  "h": "fbb49f18"
+ },
+ "js.cns.nu": {
+  "t": "여성",
+  "h": "feb92ccd"
+ },
+ "js.cns.rodden": {
+  "t": "로든 등급에 따른 출생 시각 신뢰도",
+  "h": "45221bc0"
+ },
+ "js.cns.tim-hieu": {
+  "t": "자세히 보기",
+  "h": "90b61c50"
+ },
+ "js.cns.trung-ca": {
+  "t": "<b>생일과 태어난 시각이 모두</b> 같은 사람이 있습니다. 명반이 똑같이 나옵니다.",
+  "h": "3272dba6"
+ },
  "js.home.3-buoc-dau-tien": {
   "t": "처음 3단계",
   "h": "cd4d028c"
@@ -1759,6 +1815,50 @@
   "t": "충하는 띠: ",
   "h": "e92ab4fa"
  },
+ "js.hooklayer.5-8-giay": {
+  "t": "5~8초",
+  "h": "cbbdee08"
+ },
+ "js.hooklayer.da-lap-xong": {
+  "t": "명반 작성 완료 · 눈여겨볼 점 {n}가지",
+  "h": "124b920b"
+ },
+ "js.hooklayer.dang-ky-de-xem": {
+  "t": "무료 계정을 만들면 미리보기를 더 볼 수 있습니다. 냥을 충전하면 바로 제한 없이 볼 수 있습니다.",
+  "h": "0c412f92"
+ },
+ "js.hooklayer.dang-ky-mien-phi": {
+  "t": "무료로 가입하기 →",
+  "h": "89d5985d"
+ },
+ "js.hooklayer.dang-soan": {
+  "t": "더 흥미로운 도입부를 작성하는 중…",
+  "h": "edd225b5"
+ },
+ "js.hooklayer.dang-soan-eta": {
+  "t": "더 흥미로운 도입부를 작성하는 중… (보통 5~8초 소요)",
+  "h": "96371284"
+ },
+ "js.hooklayer.dieu-quan-trong": {
+  "t": "당신의 {tool}에서 가장 중요한 {n}가지 <span>(미리보기)</span>",
+  "h": "bcfab32e"
+ },
+ "js.hooklayer.het-luot": {
+  "t": "무료 미리보기를 모두 사용했습니다",
+  "h": "7fc6be3c"
+ },
+ "js.hooklayer.mo-ban-day-du": {
+  "t": "전체 풀이 열기",
+  "h": "84fe9699"
+ },
+ "js.hooklayer.nap-de-xem": {
+  "t": "냥을 충전하면 이 핵심 도입부를 사이트의 모든 도구에서 제한 없이 볼 수 있습니다.",
+  "h": "151e4adb"
+ },
+ "js.hooklayer.nap-luong": {
+  "t": "냥 충전 →",
+  "h": "96c6fb5d"
+ },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "눌러서 괘 뽑기를 시작하세요 — 6번 던지며, 한 번에 효 하나가 정해집니다",
   "h": "5f61aa02"
@@ -1978,6 +2078,146 @@
  "js.laso.xuat-that-bai": {
   "t": "내보내기 실패: ",
   "h": "b105cd2a"
+ },
+ "js.lasochart.am": {
+  "t": "음",
+  "h": "99492f1a"
+ },
+ "js.lasochart.am-duong-nam": {
+  "t": "{ad}{gt} · 음양 {tl}",
+  "h": "749576bd"
+ },
+ "js.lasochart.am-lich": {
+  "t": "{ngay} (음력) · {chi}시",
+  "h": "15f51c93"
+ },
+ "js.lasochart.cuc-l": {
+  "t": "국:",
+  "h": "aac31479"
+ },
+ "js.lasochart.dai-van": {
+  "t": "대운: {chi} ({a}–{b}세)",
+  "h": "f2d3551d"
+ },
+ "js.lasochart.diem": {
+  "t": "{n}점",
+  "h": "295a951c"
+ },
+ "js.lasochart.duong": {
+  "t": "양",
+  "h": "0efa2ecf"
+ },
+ "js.lasochart.duong-lich": {
+  "t": "{y}.{m}.{d} (양력) · {chi}시",
+  "h": "499f734e"
+ },
+ "js.lasochart.gioi-tinh": {
+  "t": "성별: {gt}",
+  "h": "72c2c73e"
+ },
+ "js.lasochart.lap-la-so": {
+  "t": "작성 일시: {t}",
+  "h": "188a89be"
+ },
+ "js.lasochart.luu-dai-han": {
+  "t": "유대한: {chi} · {cung}",
+  "h": "0ee60780"
+ },
+ "js.lasochart.luu-tip": {
+  "t": "{ten} — 보는 해에만 작용",
+  "h": "e2da452a"
+ },
+ "js.lasochart.luu-tip-sao": {
+  "t": "{ten} ({sao}) — 보는 해에만 작용",
+  "h": "943e2001"
+ },
+ "js.lasochart.menh-l": {
+  "t": "명:",
+  "h": "d24288f5"
+ },
+ "js.lasochart.nam": {
+  "t": "남성",
+  "h": "b580ba1b"
+ },
+ "js.lasochart.nam-l": {
+  "t": "해:",
+  "h": "3731977b"
+ },
+ "js.lasochart.nam-xem-tuoi": {
+  "t": "{chi}년 — {n}세",
+  "h": "32dd7a23"
+ },
+ "js.lasochart.nghich-ly": {
+  "t": "역리",
+  "h": "7fd88b7f"
+ },
+ "js.lasochart.nu": {
+  "t": "여성",
+  "h": "feb92ccd"
+ },
+ "js.lasochart.than-l": {
+  "t": "신:",
+  "h": "dfb815b4"
+ },
+ "js.lasochart.thuan-ly": {
+  "t": "순리",
+  "h": "f85a07ab"
+ },
+ "js.lasochart.tieu-han": {
+  "t": "소한: {chi} · {cung}",
+  "h": "72610665"
+ },
+ "js.lasochart.tieu-han-title": {
+  "t": "{y}년 소한이 {c}궁에 들어갑니다",
+  "h": "4d69ee5c"
+ },
+ "js.lasochart.tuoi-al": {
+  "t": "{n}세 (음력 기준)",
+  "h": "cd4bc076"
+ },
+ "js.loading.45-60": {
+  "t": "약 45~60초",
+  "h": "faa5fa7c"
+ },
+ "js.loading.con-1-phut": {
+  "t": "약 1분 남음",
+  "h": "3a0f6379"
+ },
+ "js.loading.con-giay": {
+  "t": "약 {n}초 남음",
+  "h": "37f5b771"
+ },
+ "js.loading.con-phut": {
+  "t": "약 {n}분 남음",
+  "h": "dd8b53f1"
+ },
+ "js.loading.da-cho": {
+  "t": "{s}초 대기",
+  "h": "6315aab2"
+ },
+ "js.loading.da-cho-dots": {
+  "t": "{s}초째 기다리는 중…",
+  "h": "a98f17f2"
+ },
+ "js.loading.dang-ve": {
+  "t": "그림을 그리는 중…",
+  "h": "9806c851"
+ },
+ "js.loading.khoang-giay": {
+  "t": "약 {n}초",
+  "h": "bd9c1ed0"
+ },
+ "js.loading.lau-hon": {
+  "t": "평소보다 오래 걸리고 있습니다. 아직 그리는 중이니 페이지를 닫지 마세요 ({s}초 대기)",
+  "h": "771e54dd"
+ },
+ "js.loading.thuong-mat": {
+  "t": "보통 {eta} 소요 · {s}초 대기",
+  "h": "31ef12fb"
+ },
+ "js.loading.van-chay": {
+  "t": "아직 진행 중입니다. 페이지를 닫지 마세요 ({s}초 대기)",
+  "h": "a61e402a"
  },
  "js.luangiai.10-8-dai-van-con-lai": {
   "t": "/10. 나머지 대운 8개와 매년의 소한은 인생 사이클에서 볼 수 있어요.",
@@ -3226,6 +3466,10 @@
  "js.prices.money-moi-luot-sale": {
   "t": "1회당 {money} ({sale}냥, {credits}냥에서 할인)",
   "h": "7aabe37f"
+ },
+ "js.samplehint.dang-chuan-bi": {
+  "t": "샘플을 준비하고 있습니다. 잠시 후 다시 확인해 주세요!",
+  "h": "992fd7e6"
  },
  "js.shell.an": {
   "t": "숨기기",

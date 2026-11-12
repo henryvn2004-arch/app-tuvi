@@ -1259,6 +1259,62 @@
   "t": "流年小運 ",
   "h": "1979c56a"
  },
+ "js.cns.ai-sinh": {
+  "t": "與你同日出生的人",
+  "h": "33d96a43"
+ },
+ "js.cns.al": {
+  "t": "農曆{m}月{d}日（{cc}）",
+  "h": "cc05e85c"
+ },
+ "js.cns.am-ban": {
+  "t": "你的農曆日期：<b>{m}月{d}日（{cc}）</b>。",
+  "h": "5bd9c1aa"
+ },
+ "js.cns.anh": {
+  "t": "圖片：{nguon}",
+  "h": "ac251971"
+ },
+ "js.cns.ghi": {
+  "t": "僅顯示出生日期與時間資料，不對他人進行解讀。為便於比較，出生時間已換算為越南時間。來源：Wikidata（CC0）・圖片來自 Wikimedia Commons（授權標示於各圖下方）・出生時間來自 Astro-Databank。",
+  "h": "bb2a4862"
+ },
+ "js.cns.gio-chi": {
+  "t": "{chi}時",
+  "h": "305f8351"
+ },
+ "js.cns.gio-sinh": {
+  "t": "出生時間 {gio}",
+  "h": "f4e26258"
+ },
+ "js.cns.khung-gio-vn": {
+  "t": "越南時間 {khung}",
+  "h": "a67644fa"
+ },
+ "js.cns.nam": {
+  "t": "男",
+  "h": "b580ba1b"
+ },
+ "js.cns.nguoi-noi-tieng": {
+  "t": "與你生日相同的名人——請看每張卡片上的標籤，了解是以農曆或國曆相符。",
+  "h": "fbb49f18"
+ },
+ "js.cns.nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.cns.rodden": {
+  "t": "羅登評級的出生時間可信度",
+  "h": "45221bc0"
+ },
+ "js.cns.tim-hieu": {
+  "t": "了解更多",
+  "h": "90b61c50"
+ },
+ "js.cns.trung-ca": {
+  "t": "有人與你<b>出生日期和時辰都相同</b>——排出來的命盤完全一樣。",
+  "h": "3272dba6"
+ },
  "js.home.3-buoc-dau-tien": {
   "t": "最初的 3 步",
   "h": "cd4d028c"
@@ -1759,6 +1815,50 @@
   "t": "沖生肖 ",
   "h": "e92ab4fa"
  },
+ "js.hooklayer.5-8-giay": {
+  "t": "5–8 秒",
+  "h": "cbbdee08"
+ },
+ "js.hooklayer.da-lap-xong": {
+  "t": "命盤已完成 · {n} 個值得留意的重點",
+  "h": "124b920b"
+ },
+ "js.hooklayer.dang-ky-de-xem": {
+  "t": "免費註冊帳號即可獲得更多預覽次數，或儲值後立即無限次查看。",
+  "h": "0c412f92"
+ },
+ "js.hooklayer.dang-ky-mien-phi": {
+  "t": "免費註冊 →",
+  "h": "89d5985d"
+ },
+ "js.hooklayer.dang-soan": {
+  "t": "正在撰寫更吸引人的開場…",
+  "h": "edd225b5"
+ },
+ "js.hooklayer.dang-soan-eta": {
+  "t": "正在撰寫更吸引人的開場…（通常需 5–8 秒）",
+  "h": "96371284"
+ },
+ "js.hooklayer.dieu-quan-trong": {
+  "t": "你的{tool}中最重要的 {n} 點 <span>（預覽）</span>",
+  "h": "bcfab32e"
+ },
+ "js.hooklayer.het-luot": {
+  "t": "免費預覽次數已用完",
+  "h": "7fc6be3c"
+ },
+ "js.hooklayer.mo-ban-day-du": {
+  "t": "開啟完整版",
+  "h": "84fe9699"
+ },
+ "js.hooklayer.nap-de-xem": {
+  "t": "儲值後即可在本站所有工具中無限次查看這段精選開場。",
+  "h": "151e4adb"
+ },
+ "js.hooklayer.nap-luong": {
+  "t": "儲值 →",
+  "h": "96c6fb5d"
+ },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "按下開始起卦——共擲 6 次，每次決定一個爻",
   "h": "5f61aa02"
@@ -1978,6 +2078,146 @@
  "js.laso.xuat-that-bai": {
   "t": "匯出失敗：",
   "h": "b105cd2a"
+ },
+ "js.lasochart.am": {
+  "t": "陰",
+  "h": "99492f1a"
+ },
+ "js.lasochart.am-duong-nam": {
+  "t": "{ad}{gt} · 陰陽{tl}",
+  "h": "749576bd"
+ },
+ "js.lasochart.am-lich": {
+  "t": "{ngay}（農曆）· {chi}時",
+  "h": "15f51c93"
+ },
+ "js.lasochart.cuc-l": {
+  "t": "局：",
+  "h": "aac31479"
+ },
+ "js.lasochart.dai-van": {
+  "t": "大運：{chi}（{a}–{b} 歲）",
+  "h": "f2d3551d"
+ },
+ "js.lasochart.diem": {
+  "t": "{n} 分",
+  "h": "295a951c"
+ },
+ "js.lasochart.duong": {
+  "t": "陽",
+  "h": "0efa2ecf"
+ },
+ "js.lasochart.duong-lich": {
+  "t": "{y}/{m}/{d}（國曆）· {chi}時",
+  "h": "499f734e"
+ },
+ "js.lasochart.gioi-tinh": {
+  "t": "性別：{gt}",
+  "h": "72c2c73e"
+ },
+ "js.lasochart.lap-la-so": {
+  "t": "排盤時間：{t}",
+  "h": "188a89be"
+ },
+ "js.lasochart.luu-dai-han": {
+  "t": "流大限：{chi} · {cung}",
+  "h": "0ee60780"
+ },
+ "js.lasochart.luu-tip": {
+  "t": "{ten} — 僅在推算年份作用",
+  "h": "e2da452a"
+ },
+ "js.lasochart.luu-tip-sao": {
+  "t": "{ten}（{sao}）— 僅在推算年份作用",
+  "h": "943e2001"
+ },
+ "js.lasochart.menh-l": {
+  "t": "命：",
+  "h": "d24288f5"
+ },
+ "js.lasochart.nam": {
+  "t": "男",
+  "h": "b580ba1b"
+ },
+ "js.lasochart.nam-l": {
+  "t": "年：",
+  "h": "3731977b"
+ },
+ "js.lasochart.nam-xem-tuoi": {
+  "t": "{chi}年 — {n} 歲",
+  "h": "32dd7a23"
+ },
+ "js.lasochart.nghich-ly": {
+  "t": "逆理",
+  "h": "7fd88b7f"
+ },
+ "js.lasochart.nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.lasochart.than-l": {
+  "t": "身：",
+  "h": "dfb815b4"
+ },
+ "js.lasochart.thuan-ly": {
+  "t": "順理",
+  "h": "f85a07ab"
+ },
+ "js.lasochart.tieu-han": {
+  "t": "小限：{chi} · {cung}",
+  "h": "72610665"
+ },
+ "js.lasochart.tieu-han-title": {
+  "t": "{y}年小限入{c}宮",
+  "h": "4d69ee5c"
+ },
+ "js.lasochart.tuoi-al": {
+  "t": "{n} 歲（虛歲）",
+  "h": "cd4bc076"
+ },
+ "js.loading.45-60": {
+  "t": "約 45–60 秒",
+  "h": "faa5fa7c"
+ },
+ "js.loading.con-1-phut": {
+  "t": "還剩約 1 分鐘",
+  "h": "3a0f6379"
+ },
+ "js.loading.con-giay": {
+  "t": "還剩約 {n} 秒",
+  "h": "37f5b771"
+ },
+ "js.loading.con-phut": {
+  "t": "還剩約 {n} 分鐘",
+  "h": "dd8b53f1"
+ },
+ "js.loading.da-cho": {
+  "t": "已等待 {s} 秒",
+  "h": "6315aab2"
+ },
+ "js.loading.da-cho-dots": {
+  "t": "已等待 {s} 秒…",
+  "h": "a98f17f2"
+ },
+ "js.loading.dang-ve": {
+  "t": "繪製圖像中…",
+  "h": "9806c851"
+ },
+ "js.loading.khoang-giay": {
+  "t": "約 {n} 秒",
+  "h": "bd9c1ed0"
+ },
+ "js.loading.lau-hon": {
+  "t": "比平常久——仍在繪製中，請勿關閉頁面（已等待 {s} 秒）",
+  "h": "771e54dd"
+ },
+ "js.loading.thuong-mat": {
+  "t": "通常需要{eta} · 已等待 {s} 秒",
+  "h": "31ef12fb"
+ },
+ "js.loading.van-chay": {
+  "t": "仍在處理中，請勿關閉頁面（已等待 {s} 秒）",
+  "h": "a61e402a"
  },
  "js.luangiai.10-8-dai-van-con-lai": {
   "t": "/10。其餘 8 個大運與逐年小運，都收錄在「人生週期」中。",
@@ -3226,6 +3466,10 @@
  "js.prices.money-moi-luot-sale": {
   "t": "每次 {money}（{sale} 兩，原價 {credits}）",
   "h": "7aabe37f"
+ },
+ "js.samplehint.dang-chuan-bi": {
+  "t": "範例準備中，請稍後再來！",
+  "h": "992fd7e6"
  },
  "js.shell.an": {
   "t": "隱藏",
