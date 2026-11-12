@@ -135,7 +135,7 @@
       '<span><b>' + esc(tTruDem(k)) + '</b></span></div>'
     );
     o.push(
-      '<div class="lnk-row"><span>' + _tv('js.shellui.dln-nguyet-tuong', 'Nguyệt tướng <b>{nt}</b> gia lên giờ chiêm <b>{ct}</b>', { nt: esc(k.nguyetTuong), ct: esc(_g('chi', k.chiemThoi)) }) + '</span>' +
+      '<div class="lnk-row"><span>' + _tv('js.shellui.dln-nguyet-tuong', 'Nguyệt tướng <b>{nt}</b> gia lên giờ chiêm <b>{ct}</b>', { nt: esc(_g('chi', k.nguyetTuong)), ct: esc(_g('chi', k.chiemThoi)) }) + '</span>' +
       '<span>' + _tv('js.shellui.dln-quy-nhan', 'Quý Nhân <b>{tb}</b> trên <b>{db}</b>', { tb: esc(_g('chi', k.quyNhan.thienBan)), db: esc(_g('chi', k.quyNhan.diaBan)) }) + '</span>' +
       '<span>' + _tv('js.shellui.dln-tuan-khong', 'Tuần Không <b>{v}</b>', { v: esc(k.tuanKhong.map(function (c) { return _g('chi', c); }).join(', ')) }) + '</span></div>'
     );
@@ -144,7 +144,7 @@
     o.push('<div class="lnk-h">' + _tv('js.shellui.dln-tu-khoa', 'Tứ khóa') + '</div><div class="lnk-grid">');
     k.tuKhoa.forEach(function (x) {
       o.push(
-        '<div class="lnk-cell ' + x.muc + '"><b>' + esc(_g('chi', x.tren)) + ' / ' + esc(_g('chi', x.duoi)) + '</b>' +
+        '<div class="lnk-cell ' + x.muc + '"><b>' + esc(_g('chi', x.tren)) + ' / ' + esc(_g(['chi', 'can'], x.duoi)) + '</b>' +
         '<span>' + esc(tKhoaTen(x.ma, x.ten)) + ' · ' + esc(tTuong(x.ma, x.tuong)) + '<br>' + esc(tQuanHe(x.ma && x.ma.quanHe, x.quanHe)) + '</span></div>'
       );
     });
