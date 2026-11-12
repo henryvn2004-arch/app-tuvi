@@ -166,6 +166,13 @@ const TOOLS = [
     // MỘT — model không có đường suy lại. Trang thì hiện thẳng "cơ sở trong
     // hai lá số", nên người ta đọc xong hỏi lại là chuyện đương nhiên.
     deep: [[ENG.bond, 'BondSignal']],
+    // Miễn có LÝ DO, cho đúng hai trường của kiểu lồng (thu hẹp, không tắt bộ dò): `ma`/`bien` (W30d) là MÃ TRA
+    // BẢN DỊCH cho CLIENT — rail vẫn nhận chữ Việt đã dựng sẵn ở `label`/`detail` (signalBlock), nên không có
+    // thông tin nào bị bỏ sót; chép mã vào prompt chỉ thêm token mà model không dùng được.
+    deepSkip: {
+      'BondSignal.ma': 'mã tra bản dịch (client) — rail đọc label/detail Việt',
+      'BondSignal.bien': 'biến của khuôn (client) — rail đọc detail Việt đã thế biến',
+    },
   },
   {
     id: 'nguoi-khac',
@@ -256,8 +263,16 @@ for (const t of TOOLS) {
       fail(`${t.id}: không đọc được interface lồng ${name} — sửa bộ dò`);
       continue;
     }
-    for (const k of dk) if (!readsIn(body, k)) deepMiss.push(`${name}.${k}`);
+    for (const k of dk)
+      if (!(t.deepSkip || {})[`${name}.${k}`] && !readsIn(body, k)) deepMiss.push(`${name}.${k}`);
   }
+  const deepStale = Object.keys(t.deepSkip || {}).filter((q) => {
+    const [name, k] = q.split('.');
+    const f = t.deep.find((d) => d[1] === name);
+    return !f || !(ifaceKeys(f[0], name) || []).includes(k);
+  });
+  if (deepStale.length)
+    fail(`${t.id}: deepSkip khai thừa (kiểu lồng không còn trường): ${deepStale.join(', ')} — gỡ đi`);
 
   const label = `${t.id} — ${keys.length} trường cấp 1, bỏ có khai ${Object.keys(t.skip).length}`;
   if (missing.length) {

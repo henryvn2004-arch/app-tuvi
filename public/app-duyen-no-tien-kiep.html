@@ -305,8 +305,7 @@ var _imgRetryTimer = null;
 // (docs/i18n/QUY-UOC.md "Văn engine server"). vi / payload cũ trong cache (thiếu mã) ⇒ nguyên chữ Việt.
 if (window.I18n && window.I18n.loadLong) window.I18n.loadLong('duyen-no');
 function _dnLong(key, vi, vars) {
-  var I = window.I18n;
-  if (I && I.long) return I.long('duyen-no', key, vi, vars);
+  if (window.I18n && window.I18n.long) return window.I18n.long('duyen-no', key, vi, vars);
   return vars ? vi.replace(/\{(\w+)\}/g, function (m, n) { return vars[n] !== undefined ? vars[n] : m; }) : vi;
 }
 /** Nhãn / câu mô tả loại duyên theo `kind` (BondType hoặc phần tử capDuyen); thiếu kind ⇒ chữ engine. */

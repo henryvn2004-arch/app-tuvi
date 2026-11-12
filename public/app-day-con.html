@@ -517,8 +517,7 @@ var _loadingCtl = null;
 // Chỉ đổi ở chỗ VẼ + chia sẻ; `railData`/prompt/`coSo` giữ chữ Việt (luật SERVER_BOUND). vi ⇒ nguyên chữ Việt.
 if (window.I18n && window.I18n.loadLong) window.I18n.loadLong('day-con-assess');
 function _dcaLong(key, vi) {
-  var I = window.I18n;
-  return I && I.long ? I.long('day-con-assess', key, vi) : vi;
+  return window.I18n && window.I18n.long ? window.I18n.long('day-con-assess', key, vi) : vi;
 }
 /** Chữ của một TRỤC: `f` = ten | cauHoi | <thap|cao|can>.<trường>. Thiếu id (payload lạ) ⇒ chữ engine. */
 function _trucT(t, f, vi) { return t && t.id ? _dcaLong('truc.' + t.id + '.' + f, vi) : vi; }

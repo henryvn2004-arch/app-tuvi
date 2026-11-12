@@ -348,8 +348,7 @@ var KIEU_MAU = {
 // vi / payload cũ trong cache (thiếu mã) ⇒ nguyên chữ Việt, byte-giống bản cũ.
 if (window.I18n && window.I18n.loadLong) window.I18n.loadLong('nhan-mach');
 function _nmLong(key, vi, vars) {
-  var I = window.I18n;
-  if (I && I.long) return I.long('nhan-mach', key, vi, vars);
+  if (window.I18n && window.I18n.long) return window.I18n.long('nhan-mach', key, vi, vars);
   return vars ? vi.replace(/\{(\w+)\}/g, function (m, n) { return vars[n] !== undefined ? vars[n] : m; }) : vi;
 }
 /** Tên kiểu theo id (cùng chữ với trang Công Sở); thiếu id ⇒ chữ Việt của engine. */
