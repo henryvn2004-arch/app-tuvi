@@ -614,7 +614,7 @@ async function _replicateRun(replKey, modelUrl, input, extraBody = {}) {
   throw new Error('Hết thời gian chờ. Vui lòng thử lại.');
 }
 
-async function handleKieuTocPhanTich(body) {
+async function handleKieuTocPhanTich(body, locale = 'vi') {
   const { image, mediaType = 'image/jpeg', gender = 'nam', faceMeasurements } = body;
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
   if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
@@ -645,7 +645,8 @@ Dùng các số đo này để xác định hình dạng khuôn mặt CHÍNH XÁ
     text = await llmText({
       luanGiai: true,
       system: SP_NGOAI_HINH + measurementContext,
-      prompt: `Giới tính: ${genderLabel}. IDs kiểu tóc hợp lệ: ${validHairIds}. Phân tích và trả về JSON. Chọn TẤT CẢ ${gender === 'nu' ? '5-7' : '5'} kiểu phù hợp nhất trong danh sách.`,
+      // Ngôn ngữ ở USER (json:true giữ nguyên khoá/enum — id kiểu tóc/kính, faceShape); vi → chuỗi cũ.
+      prompt: withLang(`Giới tính: ${genderLabel}. IDs kiểu tóc hợp lệ: ${validHairIds}. Phân tích và trả về JSON. Chọn TẤT CẢ ${gender === 'nu' ? '5-7' : '5'} kiểu phù hợp nhất trong danh sách.`, locale, [], { json: true }),
       images: [{ data: image, mediaType }],
       maxTokens: 1500,
     });
@@ -801,7 +802,7 @@ Quy tắc:
 - colorPalette: hex codes thực tế phù hợp skinTone
 - Chỉ trả về JSON`;
 
-async function handleTrangDiemPhanTich(body) {
+async function handleTrangDiemPhanTich(body, locale = 'vi') {
   const { image, mediaType = 'image/jpeg', namSinh, faceMeasurements } = body;
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
   if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
@@ -833,7 +834,8 @@ Theo cổ pháp, người mệnh ${napAmHanh} hợp với phong cách: ${menhMak
     text = await llmText({
       luanGiai: true,
       system: SP_TRANG_DIEM + napAmContext + measurementContext,
-      prompt: 'Phân tích khuôn mặt và trả về JSON phong cách makeup phù hợp.',
+      // Ngôn ngữ ở USER (json:true giữ nguyên khoá/enum: faceShape, makeupRanked id…); vi → chuỗi cũ.
+      prompt: withLang('Phân tích khuôn mặt và trả về JSON phong cách makeup phù hợp.', locale, [], { json: true }),
       images: [{ data: image, mediaType }],
       maxTokens: 1200,
     });
@@ -983,7 +985,7 @@ Quy tắc:
 - Lồng ghép Đông y (ngũ tạng, âm dương, hành) VÀ Tây y (vitamin, peptide, SPF...) tự nhiên
 - Chỉ trả về JSON`;
 
-async function handleDaLieuAI(body) {
+async function handleDaLieuAI(body, locale = 'vi') {
   const { image, mediaType = 'image/jpeg', namSinh, faceMeasurements } = body;
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
   if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn (tối đa ~5MB).' }, { status: 400 });
@@ -1012,7 +1014,10 @@ Phần an_uong cũng phải tính đến mệnh ${menhHanh} (VD: mệnh Hỏa c�
     text = await llmText({
       luanGiai: true,
       system: SP_DA_LIEU + menhContext,
-      prompt: 'Phân tích tình trạng da trong ảnh và trả về JSON tư vấn holistic đầy đủ 4 phần.',
+      // Ngôn ngữ ở USER (json:true giữ nguyên khoá/enum). `loai_da` là enum Việt mà trang tra icon + bản dịch theo đúng chuỗi
+      // đó ⇒ ép giữ nguyên văn; các giá trị chữ còn lại viết bằng ngôn ngữ đích. vi → chuỗi cũ từng byte.
+      prompt: withLang('Phân tích tình trạng da trong ảnh và trả về JSON tư vấn holistic đầy đủ 4 phần.', locale, [], { json: true })
+        + (locale === 'vi' ? '' : '\n\n[loai_da: chép NGUYÊN VĂN tiếng Việt đúng một trong năm giá trị "da dầu" / "da khô" / "da hỗn hợp" / "da thường" / "da nhạy cảm" — KHÔNG dịch (trang tra theo đúng chuỗi này). Mọi giá trị chữ khác viết bằng ngôn ngữ đã chỉ định.]'),
       images: [{ data: image, mediaType }],
       maxTokens: 2000,
     });
@@ -1156,7 +1161,7 @@ Quy tắc quan trọng:
 - celebrity_inspo: chỉ celeb châu Á (Hàn/Nhật/Việt/Trung)
 - Chỉ trả về JSON`;
 
-async function handlePersonalColor(body) {
+async function handlePersonalColor(body, locale = 'vi') {
   const { image, mediaType = 'image/jpeg', namSinh } = body;
   if (!image) return Response.json({ error: 'Thiếu ảnh.' }, { status: 400 });
   if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
@@ -1181,7 +1186,8 @@ Nếu kết quả phân tích ảnh cho phép, ưu tiên season này. Nếu tôn
     raw = await llmText({
       luanGiai: true,
       system: SP_PERSONAL_COLOR + menhContext,
-      prompt: 'Phân tích personal color từ ảnh này và trả về JSON.',
+      // Ngôn ngữ ở USER (json:true giữ nguyên khoá/enum: season, undertone, confidence cao|trung bình|thấp); vi → chuỗi cũ.
+      prompt: withLang('Phân tích personal color từ ảnh này và trả về JSON.', locale, [], { json: true }),
       images: [{ data: image, mediaType }],
       maxTokens: 1200,
     });
@@ -1486,14 +1492,14 @@ async function runPost(request) {
     if (action === 'kieu-toc-tryon') return await handleKieuTocTryon(body);
 
     // ── Non-streaming Vision JSON actions (LLM qua llmText) ────────────────
-    if (action === 'kieu-toc-phan-tich') return await handleKieuTocPhanTich(body);
+    if (action === 'kieu-toc-phan-tich') return await handleKieuTocPhanTich(body, requestLocale(request));
     if (action === 'wardrobe-add')    return await handleWardrobeAdd(request, body);
     if (action === 'wardrobe-mix')    return await handleWardrobeMix(request, body);
     if (action === 'wardrobe-delete') return await handleWardrobeDelete(request, body);
-    if (action === 'personal-color') return await handlePersonalColor(body);
+    if (action === 'personal-color') return await handlePersonalColor(body, requestLocale(request));
     if (action === 'personal-color-tryon') return await handlePersonalColorTryon(body);
-    if (action === 'da-lieu-ai') return await handleDaLieuAI(body);
-    if (action === 'trang-diem-phan-tich') return await handleTrangDiemPhanTich(body);
+    if (action === 'da-lieu-ai') return await handleDaLieuAI(body, requestLocale(request));
+    if (action === 'trang-diem-phan-tich') return await handleTrangDiemPhanTich(body, requestLocale(request));
     if (action === 'trang-diem-tryon') return await handleTrangDiemTryon(body);
 
     // Validation: thanh-tuong & thanh-tuong-pro cần geoNote (text), còn lại cần image

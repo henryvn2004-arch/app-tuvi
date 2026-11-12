@@ -146,6 +146,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/da-lieu-ai": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/dat-ten": [
   "en",
   "ja",
@@ -216,6 +223,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/kieu-toc": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/kim-lau": [
   "en",
   "ja",
@@ -252,6 +266,13 @@
   "zh-cn"
  ],
  "/app/mai-hoa": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/mau-sac-hop-menh": [
   "en",
   "ja",
   "ko",
@@ -308,6 +329,13 @@
   "zh-cn"
  ],
  "/app/oracle": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/personal-color": [
   "en",
   "ja",
   "ko",
@@ -371,6 +399,20 @@
   "zh-cn"
  ],
  "/app/thu-tuong": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/trang-diem": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/trang-phuc-theo-ngay": [
   "en",
   "ja",
   "ko",

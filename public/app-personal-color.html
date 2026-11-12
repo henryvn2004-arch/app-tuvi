@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Personal Color — Tử Vi Minh Bảo</title>
-<meta name="description" content="Phân tích undertone và Personal Color Season — gợi ý màu áo, màu tóc và phụ kiện làm sáng gương mặt nhất. Kết hợp cổ pháp ngũ hành.">
+<title data-i18n="pcol.personal-color-tu-vi-minh-bao">Personal Color — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:pcol.phan-tich-undertone-va-personal-color" name="description" content="Phân tích undertone và Personal Color Season — gợi ý màu áo, màu tóc và phụ kiện làm sáng gương mặt nhất. Kết hợp cổ pháp ngũ hành.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -123,9 +123,9 @@ body.chat-first-live .ba-grid{grid-template-columns:1fr}
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Personal Color</b><span>Phân tích undertone + season màu, gợi ý outfit và thử ngay trên ảnh</span></div>
+      <div data-i18n="pcol.personal-color-phan-tich-undertone-seaso" class="ws-title"><b>Personal Color</b><span>Phân tích undertone + season màu, gợi ý outfit và thử ngay trên ảnh</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -139,8 +139,8 @@ body.chat-first-live .ba-grid{grid-template-columns:1fr}
         <img class="intro-avatar" src="/tool-avatars/personal-color.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Personal Color</div>
-            <div class="intro-d">Diện đồ đúng mốt mà vẫn bị nhận xét trông mệt mỏi, xỉn màu — có thể bạn chưa từng biết mình thuộc mùa màu nào. Tải ảnh chân dung, xem ngay bản ghép thử trên ảnh thật.</div>
+            <div data-i18n="pcol.personal-color" class="intro-t">Personal Color</div>
+            <div data-i18n="pcol.dien-do-dung-mot-ma-van" class="intro-d">Diện đồ đúng mốt mà vẫn bị nhận xét trông mệt mỏi, xỉn màu — có thể bạn chưa từng biết mình thuộc mùa màu nào. Tải ảnh chân dung, xem ngay bản ghép thử trên ảnh thật.</div>
             <div id="introSrc"></div>
           </div>
         </div>
@@ -150,13 +150,13 @@ body.chat-first-live .ba-grid{grid-template-columns:1fr}
            tại đúng chỗ trạng thái đã đổi trong flow cũ (analyze/requireCredits/
            renderResults/resetAll). -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="thtg.2-thanh-toan" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="thtg.3-nhan-ket-qua" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="pc-card">
-        <h2><span class="ic" data-icon="camera"></span> Ảnh Khuôn Mặt</h2>
-        <p class="sub">Tải lên một tấm ảnh chân dung rõ mặt, đủ sáng tự nhiên. Hệ thống phân tích tông da rồi ghép thử màu ngay trên ảnh. Nhận về mùa màu của bạn, bảng màu hợp – nên tránh và ảnh đã ghép thử.</p>
+        <h2 data-i18n="pcol.anh-khuon-mat"><span class="ic" data-icon="camera"></span> Ảnh Khuôn Mặt</h2>
+        <p data-i18n="pcol.tai-len-mot-tam-anh-chan" class="sub">Tải lên một tấm ảnh chân dung rõ mặt, đủ sáng tự nhiên. Hệ thống phân tích tông da rồi ghép thử màu ngay trên ảnh. Nhận về mùa màu của bạn, bảng màu hợp – nên tránh và ảnh đã ghép thử.</p>
         <p class="price-note" data-tvp-price-label="personal-color">…</p>
 
         <div class="upload-zone" id="uploadZone"
@@ -166,16 +166,16 @@ body.chat-first-live .ba-grid{grid-template-columns:1fr}
           <input type="file" accept="image/*" id="fileInput" onchange="loadFile(this.files[0])">
           <div id="uploadPrompt">
             <div class="upload-icon ic" data-icon="palette" style="font-size:36px;display:block"></div>
-            <div class="upload-text">Chụp hoặc chọn ảnh khuôn mặt</div>
-            <div class="upload-hint">Ánh sáng tự nhiên ban ngày · Không filter không makeup<br>Cần thấy rõ tông da, không bị overexposed</div>
+            <div data-i18n="pcol.chup-hoac-chon-anh-khuon-mat" class="upload-text">Chụp hoặc chọn ảnh khuôn mặt</div>
+            <div data-i18n="pcol.anh-sang-tu-nhien-ban-ngay" class="upload-hint">Ánh sáng tự nhiên ban ngày · Không filter không makeup<br>Cần thấy rõ tông da, không bị overexposed</div>
           </div>
           <div id="previewBox" class="preview-box" style="display:none">
             <img id="previewImg" alt="preview">
-            <button class="btn-change" onclick="clearPhoto()">✕ Đổi ảnh</button>
+            <button data-i18n="phongthuy.doi-anh" class="btn-change" onclick="clearPhoto()">✕ Đổi ảnh</button>
           </div>
         </div>
 
-        <div class="tips-row">
+        <div data-i18n="pcol.anh-sang-tu-nhien-tot-nhat" class="tips-row">
           <span class="tip-badge"><span class="ic" data-icon="sun"></span> Ánh sáng tự nhiên tốt nhất</span>
           <span class="tip-badge"><span class="ic" data-icon="x-circle"></span> Không filter màu</span>
           <span class="tip-badge"><span class="ic" data-icon="smile"></span> Mặt không trang điểm</span>
@@ -183,27 +183,27 @@ body.chat-first-live .ba-grid{grid-template-columns:1fr}
         </div>
 
         <div class="pt-row">
-          <div class="pt-fg"><label>Năm sinh (tùy chọn — kết hợp bản mệnh)</label><input type="number" id="namSinh" placeholder="VD: 1992" min="1920" max="2010" oninput="mountHook()"></div>
-          <div class="pt-fg"><label>Giới tính</label>
+          <div class="pt-fg"><label data-i18n="pcol.nam-sinh-tuy-chon-ket-hop">Năm sinh (tùy chọn — kết hợp bản mệnh)</label><input data-i18n-attr="placeholder:pcol.vd-1992" type="number" id="namSinh" placeholder="VD: 1992" min="1920" max="2010" oninput="mountHook()"></div>
+          <div class="pt-fg"><label data-i18n="phongthuy.gioi-tinh">Giới tính</label>
             <select id="gioiTinh">
               <option value="nam">Nam</option>
-              <option value="nu">Nữ</option>
+              <option data-i18n="laso.nu" value="nu">Nữ</option>
             </select>
           </div>
         </div>
 
         <div id="hookHost"></div>
 
-        <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
+        <button data-i18n="pcol.phan-tich-personal-color-luong" class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
           <span class="ic" data-icon="palette"></span> Phân Tích Personal Color — <span data-tvp-price="personal-color">…</span> Lượng
         </button>
       </div>
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Personal Color</div>
-        <p class="wsp-desc">Personal Color (phân tích màu sắc cá nhân) là phương pháp phân loại tông da, tóc và mắt thành các "mùa màu" — Xuân, Hạ, Thu, Đông — dựa trên lý thuyết phối màu phương Tây, được ứng dụng rộng rãi trong thời trang và làm đẹp tại Hàn Quốc, Nhật Bản. Mỗi mùa màu ứng với một bảng màu trang phục, trang điểm phù hợp nhất.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="pcol.personal-color" class="wsp-title">Personal Color</div>
+        <p data-i18n="pcol.personal-color-phan-tich-mau-sac" class="wsp-desc">Personal Color (phân tích màu sắc cá nhân) là phương pháp phân loại tông da, tóc và mắt thành các "mùa màu" — Xuân, Hạ, Thu, Đông — dựa trên lý thuyết phối màu phương Tây, được ứng dụng rộng rãi trong thời trang và làm đẹp tại Hàn Quốc, Nhật Bản. Mỗi mùa màu ứng với một bảng màu trang phục, trang điểm phù hợp nhất.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -236,24 +236,24 @@ body.chat-first-live .ba-grid{grid-template-columns:1fr}
         </div>
 
         <div class="pc-card">
-          <h2><span class="ic" data-icon="palette"></span> Bảng Màu Cá Nhân</h2>
-          <div class="palette-label good">✓ Màu hợp — làm sáng, nổi bật gương mặt</div>
+          <h2 data-i18n="pcol.bang-mau-ca-nhan"><span class="ic" data-icon="palette"></span> Bảng Màu Cá Nhân</h2>
+          <div data-i18n="pcol.mau-hop-lam-sang-noi-bat" class="palette-label good">✓ Màu hợp — làm sáng, nổi bật gương mặt</div>
           <div class="swatches" id="swatchesGood"></div>
-          <div class="palette-label bad" style="margin-top:14px">✗ Màu nên tránh — làm xỉn, tối da</div>
+          <div data-i18n="pcol.mau-nen-tranh-lam-xin-toi" class="palette-label bad" style="margin-top:14px">✗ Màu nên tránh — làm xỉn, tối da</div>
           <div class="swatches" id="swatchesBad"></div>
         </div>
 
         <div class="rec-grid">
           <div class="pc-card rec-card" style="margin-bottom:0">
             <div class="rec-icon ic" data-icon="shirt" style="display:block"></div>
-            <div class="rec-title">Màu Áo Sơ Mi</div>
+            <div data-i18n="pcol.mau-ao-so-mi" class="rec-title">Màu Áo Sơ Mi</div>
             <div class="rec-items" id="aoSoMiItems"></div>
             <div class="rec-avoid" id="aoSoMiAvoid"></div>
             <div class="rec-reason" id="aoSoMiReason"></div>
           </div>
           <div class="pc-card rec-card" style="margin-bottom:0">
             <div class="rec-icon ic" data-icon="scissors" style="display:block"></div>
-            <div class="rec-title">Màu Tóc</div>
+            <div data-i18n="pcol.mau-toc" class="rec-title">Màu Tóc</div>
             <div class="rec-items" id="mauTocItems"></div>
             <div class="rec-avoid" id="mauTocAvoid"></div>
             <div class="rec-reason" id="mauTocReason"></div>
@@ -261,32 +261,32 @@ body.chat-first-live .ba-grid{grid-template-columns:1fr}
         </div>
 
         <div class="pc-card">
-          <h2><span class="ic" data-icon="gem"></span> Kim Loại & Phụ Kiện</h2>
+          <h2 data-i18n="pcol.kim-loai-phu-kien"><span class="ic" data-icon="gem"></span> Kim Loại & Phụ Kiện</h2>
           <div class="accessory-row">
             <div class="acc-item">
               <div class="acc-icon ic" data-icon="settings" style="display:block"></div>
-              <div class="acc-label">Kim Loại</div>
+              <div data-i18n="pcol.kim-loai" class="acc-label">Kim Loại</div>
               <div class="acc-val" id="accKimLoai">—</div>
             </div>
             <div class="acc-item">
               <div class="acc-icon ic" data-icon="glasses" style="display:block"></div>
-              <div class="acc-label">Gọng Kính</div>
+              <div data-i18n="pcol.gong-kinh" class="acc-label">Gọng Kính</div>
               <div class="acc-val" id="accKinh">—</div>
             </div>
             <div class="acc-item" style="flex:2">
               <div class="acc-icon ic" data-icon="message-circle" style="display:block"></div>
-              <div class="acc-label">Lý Do</div>
+              <div data-i18n="pcol.ly-do" class="acc-label">Lý Do</div>
               <div class="acc-val" style="font-size:12px;font-weight:400;color:var(--text-mid)" id="accLyDo">—</div>
             </div>
           </div>
         </div>
 
         <div class="pc-card" id="outfitSection" style="display:none">
-          <h2><span class="ic" data-icon="shirt"></span> Gợi Ý Trang Phục Theo Season</h2>
+          <h2 data-i18n="pcol.goi-y-trang-phuc-theo-season"><span class="ic" data-icon="shirt"></span> Gợi Ý Trang Phục Theo Season</h2>
           <div class="outfit-tabs">
-            <button class="outfit-tab active" onclick="showOutfit('hang_ngay',this)"><span class="ic" data-icon="leaf"></span> Hàng Ngày</button>
-            <button class="outfit-tab" onclick="showOutfit('cong_so',this)"><span class="ic" data-icon="briefcase"></span> Công Sở</button>
-            <button class="outfit-tab" onclick="showOutfit('su_kien',this)"><span class="ic" data-icon="sparkles"></span> Sự Kiện</button>
+            <button data-i18n="pcol.hang-ngay" class="outfit-tab active" onclick="showOutfit('hang_ngay',this)"><span class="ic" data-icon="leaf"></span> Hàng Ngày</button>
+            <button data-i18n="pcol.cong-so" class="outfit-tab" onclick="showOutfit('cong_so',this)"><span class="ic" data-icon="briefcase"></span> Công Sở</button>
+            <button data-i18n="pcol.su-kien" class="outfit-tab" onclick="showOutfit('su_kien',this)"><span class="ic" data-icon="sparkles"></span> Sự Kiện</button>
           </div>
           <div class="outfit-panel show" id="outfit-hang_ngay"></div>
           <div class="outfit-panel" id="outfit-cong_so"></div>
@@ -294,25 +294,25 @@ body.chat-first-live .ba-grid{grid-template-columns:1fr}
         </div>
 
         <div class="pc-card" id="tryonSection" style="display:none">
-          <h2><span class="ic" data-icon="sparkles"></span> Thử Trang Phục
+          <h2 data-i18n="pcol.thu-trang-phuc-luong-lan"><span class="ic" data-icon="sparkles"></span> Thử Trang Phục
             <span style="font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px"><span data-tvp-price="personal-color-tryon">…</span> Lượng/lần</span>
           </h2>
 
-          <div style="font-size:12px;color:var(--text-lt);margin-bottom:10px;line-height:1.5">
+          <div data-i18n="pcol.upload-anh-toan-than-he-thong" style="font-size:12px;color:var(--text-lt);margin-bottom:10px;line-height:1.5">
             Upload ảnh toàn thân → hệ thống thay trang phục đúng màu season <strong id="tryonSeasonLabel"></strong> của bạn
           </div>
 
           <div class="tryon-grid">
             <div>
-              <div style="font-size:11px;font-weight:700;color:var(--text-lt);margin-bottom:6px">CHỌN STYLE</div>
+              <div data-i18n="pcol.chon-style" style="font-size:11px;font-weight:700;color:var(--text-lt);margin-bottom:6px">CHỌN STYLE</div>
               <div style="display:flex;flex-direction:column;gap:6px">
-                <button class="outfit-tab active" id="tryonTabCasual" style="border-radius:8px;justify-content:flex-start" onclick="setTryonType('casual',this)"><span class="ic" data-icon="leaf"></span> Hàng ngày</button>
-                <button class="outfit-tab" id="tryonTabFormal" style="border-radius:8px;justify-content:flex-start" onclick="setTryonType('formal',this)"><span class="ic" data-icon="briefcase"></span> Công sở</button>
-                <button class="outfit-tab" id="tryonTabEvening" style="border-radius:8px;justify-content:flex-start" onclick="setTryonType('evening',this)"><span class="ic" data-icon="sparkles"></span> Sự kiện</button>
+                <button data-i18n="pcol.hang-ngay-dbs5" class="outfit-tab active" id="tryonTabCasual" style="border-radius:8px;justify-content:flex-start" onclick="setTryonType('casual',this)"><span class="ic" data-icon="leaf"></span> Hàng ngày</button>
+                <button data-i18n="pcol.cong-so-li34" class="outfit-tab" id="tryonTabFormal" style="border-radius:8px;justify-content:flex-start" onclick="setTryonType('formal',this)"><span class="ic" data-icon="briefcase"></span> Công sở</button>
+                <button data-i18n="pcol.su-kien-cbgc" class="outfit-tab" id="tryonTabEvening" style="border-radius:8px;justify-content:flex-start" onclick="setTryonType('evening',this)"><span class="ic" data-icon="sparkles"></span> Sự kiện</button>
               </div>
             </div>
             <div>
-              <div style="font-size:11px;font-weight:700;color:var(--text-lt);margin-bottom:6px">ẢNH CỦA BẠN</div>
+              <div data-i18n="pcol.anh-cua-ban" style="font-size:11px;font-weight:700;color:var(--text-lt);margin-bottom:6px">ẢNH CỦA BẠN</div>
               <div class="tryon-upload" id="tryonZone"
                 ondragover="event.preventDefault();this.classList.add('drag')"
                 ondragleave="this.classList.remove('drag')"
@@ -320,41 +320,41 @@ body.chat-first-live .ba-grid{grid-template-columns:1fr}
                 <input type="file" accept="image/*" id="tryonInput" onchange="loadTryonFile(this.files[0])">
                 <div id="tryonPrompt" style="font-size:12px;color:var(--text-lt)">
                   <div class="ic" data-icon="user" style="font-size:24px;margin-bottom:6px;display:block"></div>
-                  Chụp ảnh toàn thân
+                  <span data-i18n="pcol.chup-anh-toan-than">Chụp ảnh toàn thân</span>
                 </div>
                 <img id="tryonPreviewImg" class="tryon-preview-img" src="" alt="" style="display:none">
               </div>
-              <button id="btnChangeTryon" onclick="clearTryon()" style="display:none;background:none;border:1px solid var(--line-2);border-radius:6px;padding:3px 10px;font-size:10px;color:var(--text-mid);cursor:pointer;margin-top:4px;width:100%">✕ Đổi ảnh</button>
+              <button data-i18n="phongthuy.doi-anh" id="btnChangeTryon" onclick="clearTryon()" style="display:none;background:none;border:1px solid var(--line-2);border-radius:6px;padding:3px 10px;font-size:10px;color:var(--text-mid);cursor:pointer;margin-top:4px;width:100%">✕ Đổi ảnh</button>
             </div>
           </div>
 
-          <button class="btn-tryon" id="btnTryon" onclick="doTryon()" disabled><span class="ic" data-icon="sparkles"></span> Thử Trang Phục Ngay</button>
+          <button data-i18n="pcol.thu-trang-phuc-ngay" class="btn-tryon" id="btnTryon" onclick="doTryon()" disabled><span class="ic" data-icon="sparkles"></span> Thử Trang Phục Ngay</button>
 
           <div id="tryonLoading" style="display:none;text-align:center;padding:24px 0">
             <div id="tryonStepsHost"></div>
           </div>
           <div id="tryonResult" style="display:none;margin-top:12px">
             <div class="ba-grid">
-              <div><div class="ba-label">Ảnh gốc</div><img id="tryonBefore" class="ba-img" src="" alt=""></div>
-              <div><div class="ba-label" id="tryonAfterLabel">Sau khi thử</div><img id="tryonAfter" class="ba-img" src="" alt=""></div>
+              <div><div data-i18n="phongthuy.anh-goc" class="ba-label">Ảnh gốc</div><img id="tryonBefore" class="ba-img" src="" alt=""></div>
+              <div><div data-i18n="kieut.sau-khi-thu" class="ba-label" id="tryonAfterLabel">Sau khi thử</div><img id="tryonAfter" class="ba-img" src="" alt=""></div>
             </div>
             <div style="display:flex;gap:8px;margin-top:10px">
-              <button onclick="downloadTryon()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh</button>
-              <button onclick="resetTryon()" class="btn-cancel" style="flex:1"><span class="ic" data-icon="rotate-cw"></span> Thử Lại</button>
+              <button data-i18n="banlamviec.tai-anh" onclick="downloadTryon()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh</button>
+              <button data-i18n="pcol.thu-lai" onclick="resetTryon()" class="btn-cancel" style="flex:1"><span class="ic" data-icon="rotate-cw"></span> Thử Lại</button>
             </div>
           </div>
         </div>
 
         <div class="tip-final">
-          <strong>✦ Tip Áp Dụng Ngay</strong>
+          <strong data-i18n="pcol.tip-ap-dung-ngay">✦ Tip Áp Dụng Ngay</strong>
           <p id="tipFinal">—</p>
         </div>
-        <div class="celeb-box">
+        <div data-i18n="pcol.celeb-cung-tong-mau" class="celeb-box">
           <span class="ic" data-icon="star"></span> <strong>Celeb cùng tông màu:</strong> <span id="celebInspo">—</span>
         </div>
 
         <div style="text-align:center;padding:16px 0 4px">
-          <button onclick="resetAll()" class="btn-cancel">← Phân Tích Lại</button>
+          <button data-i18n="banlamviec.phan-tich-lai" onclick="resetAll()" class="btn-cancel">← Phân Tích Lại</button>
         </div>
       </div>
     </div>
@@ -398,26 +398,33 @@ function wsStepsSet(n){
 // (EXIF fix) + gate Lượng 2 sản phẩm (personal-color + tryon).
 // ══════════════════════════════════════════════════════════════════════
 var SEASON_META = {
-  spring_warm:  { icon:'flower', color:'linear-gradient(135deg,#7a3a10,#c86020)', name:'Spring Warm',   vn:'Xuân Ấm' },
-  spring_bright:{ icon:'sparkles', color:'linear-gradient(135deg,#1a3a7a,#c82060)', name:'Spring Bright', vn:'Xuân Sáng' },
-  summer_cool:  { icon:'waves', color:'linear-gradient(135deg,#1a3a6a,#5a7aaa)', name:'Summer Cool',   vn:'Hạ Lạnh' },
-  summer_soft:  { icon:'flower', color:'linear-gradient(135deg,#3a2a5a,#7a5a8a)', name:'Summer Soft',   vn:'Hạ Dịu' },
-  autumn_warm:  { icon:'leaf', color:'linear-gradient(135deg,#5a2a10,#9a5a20)', name:'Autumn Warm',   vn:'Thu Ấm' },
-  autumn_deep:  { icon:'leaf', color:'linear-gradient(135deg,#3a1a10,#6a2a18)', name:'Autumn Deep',   vn:'Thu Sâu' },
-  winter_cool:  { icon:'waves', color:'linear-gradient(135deg,#0a1040,#2a2a6a)', name:'Winter Cool',   vn:'Đông Lạnh' },
-  winter_deep:  { icon:'moon', color:'linear-gradient(135deg,#0a0a1a,#1a1a3a)', name:'Winter Deep',   vn:'Đông Sâu' },
+  spring_warm:  { icon:'flower', color:'linear-gradient(135deg,#7a3a10,#c86020)', name:'Spring Warm',   vn:_tvmbT('js.pcol.season-spring-warm','Xuân Ấm') },
+  spring_bright:{ icon:'sparkles', color:'linear-gradient(135deg,#1a3a7a,#c82060)', name:'Spring Bright', vn:_tvmbT('js.pcol.season-spring-bright','Xuân Sáng') },
+  summer_cool:  { icon:'waves', color:'linear-gradient(135deg,#1a3a6a,#5a7aaa)', name:'Summer Cool',   vn:_tvmbT('js.pcol.season-summer-cool','Hạ Lạnh') },
+  summer_soft:  { icon:'flower', color:'linear-gradient(135deg,#3a2a5a,#7a5a8a)', name:'Summer Soft',   vn:_tvmbT('js.pcol.season-summer-soft','Hạ Dịu') },
+  autumn_warm:  { icon:'leaf', color:'linear-gradient(135deg,#5a2a10,#9a5a20)', name:'Autumn Warm',   vn:_tvmbT('js.pcol.season-autumn-warm','Thu Ấm') },
+  autumn_deep:  { icon:'leaf', color:'linear-gradient(135deg,#3a1a10,#6a2a18)', name:'Autumn Deep',   vn:_tvmbT('js.pcol.season-autumn-deep','Thu Sâu') },
+  winter_cool:  { icon:'waves', color:'linear-gradient(135deg,#0a1040,#2a2a6a)', name:'Winter Cool',   vn:_tvmbT('js.pcol.season-winter-cool','Đông Lạnh') },
+  winter_deep:  { icon:'moon', color:'linear-gradient(135deg,#0a0a1a,#1a1a3a)', name:'Winter Deep',   vn:_tvmbT('js.pcol.season-winter-deep','Đông Sâu') },
 };
 var SEASON_DESC = {
-  spring_warm:'Tông da vàng ấm, sáng, tươi — ánh peach/golden',
-  spring_bright:'Tông sáng rõ, contrast cao, màu tươi nổi bật',
-  summer_cool:'Tông hồng lạnh, nhẹ nhàng, da hồng pha xanh',
-  summer_soft:'Tông lạnh muted, soft — màu pha xám dịu',
-  autumn_warm:'Tông vàng đất, ấm sâu — da olive/bánh mật',
-  autumn_deep:'Tông đất sâu, rich — da nâu ấm, contrast cao',
-  winter_cool:'Tông lạnh tương phản cao — da trắng xanh hoặc tối lạnh',
-  winter_deep:'Tông lạnh deep, contrast rất cao — da nâu/tối lạnh',
+  spring_warm:_tvmbT('js.pcol.desc-spring-warm','Tông da vàng ấm, sáng, tươi — ánh peach/golden'),
+  spring_bright:_tvmbT('js.pcol.desc-spring-bright','Tông sáng rõ, contrast cao, màu tươi nổi bật'),
+  summer_cool:_tvmbT('js.pcol.desc-summer-cool','Tông hồng lạnh, nhẹ nhàng, da hồng pha xanh'),
+  summer_soft:_tvmbT('js.pcol.desc-summer-soft','Tông lạnh muted, soft — màu pha xám dịu'),
+  autumn_warm:_tvmbT('js.pcol.desc-autumn-warm','Tông vàng đất, ấm sâu — da olive/bánh mật'),
+  autumn_deep:_tvmbT('js.pcol.desc-autumn-deep','Tông đất sâu, rich — da nâu ấm, contrast cao'),
+  winter_cool:_tvmbT('js.pcol.desc-winter-cool','Tông lạnh tương phản cao — da trắng xanh hoặc tối lạnh'),
+  winter_deep:_tvmbT('js.pcol.desc-winter-deep','Tông lạnh deep, contrast rất cao — da nâu/tối lạnh'),
 };
-var UNDERTONE_VN = { warm:'Ấm (Warm)', cool:'Lạnh (Cool)', neutral:'Trung tính (Neutral)' };
+var UNDERTONE_VN = { warm:_tvmbT('js.pcol.undertone-warm','Ấm (Warm)'), cool:_tvmbT('js.pcol.undertone-cool','Lạnh (Cool)'), neutral:_tvmbT('js.pcol.undertone-neutral','Trung tính (Neutral)') };
+// Độ tin cậy do server trả bằng enum Việt (cao|trung bình|thấp) — CONFIDENCE_COLOR tra theo enum, chữ hiển thị qua map này.
+var CONFIDENCE_SHOWN = { cao:_tvmbT('js.pcol.conf-cao','cao'), 'trung bình':_tvmbT('js.pcol.conf-trung-binh','trung bình'), 'thấp':_tvmbT('js.pcol.conf-thap','thấp') };
+// Tên season hiển thị: vi giữ giá trị server (season_vn) như cũ; ngôn ngữ khác dùng bảng của trang.
+function _pcSeasonShown(d, meta) {
+  var loc = (window.I18n && window.I18n.locale) || 'vi';
+  return loc === 'vi' ? (d.season_vn || meta.vn) : meta.vn;
+}
 var CONFIDENCE_COLOR = { cao:'#2E8B57', 'trung bình':'#9A7B3A', thấp:'#c0392b' };
 
 var _imgData = null, _mediaType = 'image/jpeg';
@@ -431,7 +438,7 @@ var NAP_AM_MAP_PC = {};
   const base = [[1924,'Hỏa'],[1926,'Thổ'],[1928,'Mộc'],[1930,'Kim'],[1932,'Thủy'],[1934,'Hỏa'],[1936,'Thổ'],[1938,'Mộc'],[1940,'Kim'],[1942,'Thủy'],[1944,'Hỏa'],[1946,'Thổ'],[1948,'Mộc'],[1950,'Kim'],[1952,'Thủy'],[1954,'Hỏa'],[1956,'Thổ'],[1958,'Mộc'],[1960,'Kim'],[1962,'Thủy'],[1964,'Hỏa'],[1966,'Thổ'],[1968,'Mộc'],[1970,'Kim'],[1972,'Thủy'],[1974,'Hỏa'],[1976,'Thổ'],[1978,'Mộc'],[1980,'Kim'],[1982,'Thủy'],[1984,'Hỏa'],[1986,'Thổ'],[1988,'Mộc'],[1990,'Kim'],[1992,'Thủy'],[1994,'Hỏa'],[1996,'Thổ'],[1998,'Mộc'],[2000,'Kim'],[2002,'Thủy'],[2004,'Hỏa'],[2006,'Thổ'],[2008,'Mộc'],[2010,'Kim']];
   base.forEach(([y,h])=>{NAP_AM_MAP_PC[y]=h;NAP_AM_MAP_PC[y+1]=h;});
 })();
-var SEASON_VN_PC={spring_warm:'Xuân Ấm',spring_bright:'Xuân Sáng',summer_cool:'Hạ Lạnh',summer_soft:'Hạ Dịu',autumn_warm:'Thu Ấm',autumn_deep:'Thu Sâu',winter_cool:'Đông Lạnh',winter_deep:'Đông Sâu'};
+var SEASON_VN_PC=(function(){var o={};for(var k in SEASON_META)o[k]=SEASON_META[k].vn;return o;})();
 var MENH_SEASON_PC={Kim:['winter_cool','summer_cool'],Thủy:['winter_deep','summer_soft'],Mộc:['spring_warm','autumn_warm'],Hỏa:['spring_bright','autumn_deep'],Thổ:['autumn_warm','autumn_deep']};
 
 function mountHook() {
@@ -447,19 +454,19 @@ function mountHook() {
     charts: [],
     facts: [{
       tone: 'neutral',
-      title: 'Mệnh ' + na + ' — cổ pháp gợi ý season: ' + seasons,
-      body: 'Đây là gợi ý theo Nạp Âm, chưa phải kết quả đọc tông da thật từ ảnh — season chính xác + bảng màu + gợi ý trang phục nằm trong bản phân tích chuyên sâu.',
+      title: _tvmbT('js.pcol.menh-goi-y','Mệnh {h} — cổ pháp gợi ý season: {s}',{ h: _tvmbG('hanh', na), s: seasons }),
+      body: _tvmbT('js.pcol.day-la-goi-y','Đây là gợi ý theo Nạp Âm, chưa phải kết quả đọc tông da thật từ ảnh — season chính xác + bảng màu + gợi ý trang phục nằm trong bản phân tích chuyên sâu.'),
       source: 'engine · Nạp Âm',
     }],
   });
 }
 var ANALYSIS_STEPS = [
-  { label: 'Tính bản mệnh theo năm sinh', ms: 900 },
-  { label: 'Phân tích tông da & season màu', ms: 0 },
+  { label: _tvmbT('js.pcol.step-tinh-menh','Tính bản mệnh theo năm sinh'), ms: 900 },
+  { label: _tvmbT('js.pcol.step-phan-tich','Phân tích tông da & season màu'), ms: 0 },
 ];
 var TRYON_STEPS = [
-  { label: 'Chuẩn bị outfit theo season', ms: 1200 },
-  { label: 'Đang tạo ảnh outfit mới', ms: 0 },
+  { label: _tvmbT('js.pcol.step-chuan-bi','Chuẩn bị outfit theo season'), ms: 1200 },
+  { label: _tvmbT('js.pcol.step-tao-anh','Đang tạo ảnh outfit mới'), ms: 0 },
 ];
 var _analysisLoadingCtl = null;
 var _tryonLoadingCtl = null;
@@ -538,7 +545,7 @@ async function analyze() {
             body: JSON.stringify({ action: 'personal-color', image: _imgData, mediaType: _mediaType, namSinh }),
           });
           const data = await res.json();
-          if (!res.ok || data.error) throw new Error(data.error || 'Lỗi phân tích');
+          if (!res.ok || data.error) throw new Error(data.error || _tvmbT('js.pcol.loi-phan-tich','Lỗi phân tích'));
           window.refreshNavCredits?.();
           _analysisLoadingCtl && _analysisLoadingCtl.finish();
           renderResults(data);
@@ -548,7 +555,7 @@ async function analyze() {
     });
   } catch(e) {
     _analysisLoadingCtl && _analysisLoadingCtl.stop();
-    alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
+    alert(_tvmbT('js.pcol.loi-e','Lỗi: {e}',{ e: e.message || _tvmbT('js.pcol.vui-long-thu-lai','Vui lòng thử lại.') }));
   } finally {
     document.getElementById('btnAnalyze').disabled = false;
     document.getElementById('loading').classList.remove('show');
@@ -564,18 +571,18 @@ function renderResults(d) {
   document.getElementById('seasonResult').style.background = meta.color;
   document.getElementById('seasonIcon').innerHTML = window.iconHtml ? window.iconHtml(meta.icon) : '';
   document.getElementById('seasonType').textContent = meta.name;
-  document.getElementById('seasonVn').textContent = d.season_vn || meta.vn;
+  document.getElementById('seasonVn').textContent = _pcSeasonShown(d, meta);
   document.getElementById('seasonDesc').textContent = SEASON_DESC[season] || '';
   document.getElementById('undertoneVal').textContent = UNDERTONE_VN[d.undertone] || d.undertone || '—';
   const confBadge = document.getElementById('confidenceBadge');
-  confBadge.textContent = 'Độ tin cậy: ' + (d.confidence || '—');
+  confBadge.textContent = _tvmbT('js.pcol.do-tin-cay','Độ tin cậy: {c}',{ c: CONFIDENCE_SHOWN[d.confidence] || d.confidence || '—' });
   confBadge.style.background = (CONFIDENCE_COLOR[d.confidence] || '#888') + '33';
   document.getElementById('seasonLyGiai').textContent = d.ly_giai || '';
 
   if (d.menhHanh) {
     const mNote = document.getElementById('menhNote');
     const mSeasons = (d.menhSeasons || []).map(s => SEASON_META[s]?.vn || s).join(', ');
-    mNote.textContent = `✦ Bản mệnh ${d.menhHanh} (${d.menhFull}) — cổ pháp gợi ý season: ${mSeasons}`;
+    mNote.textContent = _tvmbT('js.pcol.ban-menh','✦ Bản mệnh {h} ({f}) — cổ pháp gợi ý season: {s}',{ h: _tvmbG('hanh', d.menhHanh), f: _tvmbG('napam', d.menhFull), s: mSeasons });
     mNote.style.display = 'block';
   }
 
@@ -610,7 +617,7 @@ function renderResults(d) {
   }
 
   _tryonSeason = d.season || 'spring_warm';
-  document.getElementById('tryonSeasonLabel').textContent = '— ' + (d.season_vn || d.season || '');
+  document.getElementById('tryonSeasonLabel').textContent = '— ' + (_pcSeasonShown(d, meta) || d.season || '');
   document.getElementById('tryonSection').style.display = 'block';
   clearTryon();
 
@@ -619,12 +626,12 @@ function renderResults(d) {
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({
     label: 'Personal Color — ' + meta.name,
-    greeting: 'Bạn thuộc season **' + (d.season_vn || meta.vn) + '**, undertone ' + (UNDERTONE_VN[d.undertone] || d.undertone || '') + '. Bạn muốn hỏi thêm về màu sắc hay outfit?',
-    chips: ['Vì sao tôi thuộc season này?', 'Nên tránh màu nào?', 'Nên phối đồ thế nào theo season?']
+    greeting: _tvmbT('js.pcol.greeting','Bạn thuộc season **{s}**, undertone {u}. Bạn muốn hỏi thêm về màu sắc hay outfit?',{ s: _pcSeasonShown(d, meta), u: UNDERTONE_VN[d.undertone] || d.undertone || '' }),
+    chips: [_tvmbT('js.pcol.chip-vi-sao','Vì sao tôi thuộc season này?'), _tvmbT('js.pcol.chip-tranh','Nên tránh màu nào?'), _tvmbT('js.pcol.chip-phoi-do','Nên phối đồ thế nào theo season?')]
   });
   Shell.setShareable({
-    kind: 'text', toolId: 'personal-color', title: 'Personal Color của tôi',
-    text: 'Season: ' + meta.name + ' (' + (d.season_vn || meta.vn) + ') · Undertone: ' + (UNDERTONE_VN[d.undertone] || d.undertone || '') + (d.tip ? '\n\n✦ ' + d.tip : '')
+    kind: 'text', toolId: 'personal-color', title: _tvmbT('js.pcol.share-title','Personal Color của tôi'),
+    text: _tvmbT('js.pcol.share-text','Season: {n} ({s}) · Undertone: {u}',{ n: meta.name, s: _pcSeasonShown(d, meta), u: UNDERTONE_VN[d.undertone] || d.undertone || '' }) + (d.tip ? '\n\n✦ ' + d.tip : '')
   });
 }
 
@@ -644,7 +651,7 @@ function renderRecItems(id, items) {
 function renderAvoidItems(id, items) {
   if (!items.length) return;
   document.getElementById(id).innerHTML = `
-    <div class="rec-avoid-title">✕ Nên tránh</div>
+    <div class="rec-avoid-title">✕ ${_tvmbT('js.pcol.nen-tranh','Nên tránh')}</div>
     ${items.map(i => `<div class="rec-avoid-item">${i}</div>`).join('')}`;
 }
 
@@ -652,7 +659,7 @@ function renderOutfit(key, data) {
   const el = document.getElementById('outfit-' + key);
   if (!el || !data) return;
   const icons = { ao:'shirt', quan_vay:'shirt', layer:'shirt', giay:'package' };
-  const labels = { ao:'Áo', quan_vay:'Quần / Váy', layer:'Layer ngoài', giay:'Giày' };
+  const labels = { ao:_tvmbT('js.pcol.lbl-ao','Áo'), quan_vay:_tvmbT('js.pcol.lbl-quan-vay','Quần / Váy'), layer:_tvmbT('js.pcol.lbl-layer','Layer ngoài'), giay:_tvmbT('js.pcol.lbl-giay','Giày') };
   const items = ['ao','quan_vay','layer','giay'].filter(k => data[k]).map(k => `
     <div class="outfit-item">
       <div class="outfit-item-icon ic" data-icon="${icons[k]}"></div>
@@ -725,7 +732,7 @@ async function doTryon() {
         body: JSON.stringify({ action: 'personal-color-tryon', image: _tryonImgData, mediaType: _tryonMediaType, season: _tryonSeason, outfit_type: _tryonType }),
       });
       const data = await res.json();
-      if (!data.imageUrl) throw new Error(data.error || 'Lỗi');
+      if (!data.imageUrl) throw new Error(data.error || _tvmbT('js.pcol.loi','Lỗi'));
       _tryonResultUrl = data.imageUrl;
       document.getElementById('tryonBefore').src = 'data:' + _tryonMediaType + ';base64,' + _tryonImgData;
       document.getElementById('tryonAfter').src = data.imageUrl;
@@ -734,10 +741,10 @@ async function doTryon() {
       document.getElementById('tryonResult').style.display = 'block';
       window.refreshNavCredits?.();
       Shell.setShareable({
-        kind: 'image', title: 'Outfit theo Personal Color của tôi',
-        imageUrl: data.imageUrl, text: 'Season ' + (SEASON_META[_tryonSeason]?.vn || _tryonSeason)
+        kind: 'image', title: _tvmbT('js.pcol.share-outfit-title','Outfit theo Personal Color của tôi'),
+        imageUrl: data.imageUrl, text: _tvmbT('js.pcol.share-outfit-text','Season {s}',{ s: SEASON_META[_tryonSeason]?.vn || _tryonSeason })
       });
-    } catch(e) { _tryonLoadingCtl && _tryonLoadingCtl.stop(); alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.')); }
+    } catch(e) { _tryonLoadingCtl && _tryonLoadingCtl.stop(); alert(_tvmbT('js.pcol.loi-e','Lỗi: {e}',{ e: e.message || _tvmbT('js.pcol.vui-long-thu-lai','Vui lòng thử lại.') })); }
     finally { document.getElementById('tryonLoading').style.display = 'none'; document.getElementById('btnTryon').disabled = false; }
   });
 }
