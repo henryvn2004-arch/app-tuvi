@@ -129,6 +129,12 @@ for (let i = 0; i < 150; i++) {
     out.nn.push({ dom, goiY: r.goiY.map((g) => ({ id: g.id, ten: g.ten, chat: g.chat, viec: g.viec, vi: g.vi, viMa: g.viMa })), chatNguoi: r.chatNguoi, neTranh: r.neTranh });
   }
 }
+// Câu ý nghĩa từng cung (W30f-5): MỌI chuỗi trong ls.cachCucTungCung trên lưới lá số rộng (đủ tuổi để Tuần/Triệt bật + tắt).
+out.cc = [];
+for (let i = 0; i < 700; i++) {
+  const l = ls(mk());
+  for (const v of Object.values(l.cachCucTungCung || {})) for (const x of v) out.cc.push(x);
+}
 // GOLDEN: chữ Việt do engine TRƯỚC lô D dựng bằng chuỗi viết tay (scripts/fixtures/engine-ma-golden.json) — engine nay
 // dựng từ bảng khuôn và phải giữ từng byte (chữ còn vào prompt LLM + portrait_cache).
 const { readFileSync } = await import('node:fs');
@@ -395,6 +401,56 @@ console.log('__KQ__' + JSON.stringify(out));
     );
     const nNhanh = [...dung].filter((k) => k.endsWith('.ten') && k.startsWith('nhanh.')).length;
     bao(nNhanh >= 25, `nghe-nghiep — mẫu chạm ${nNhanh}/34 nhánh (cần ≥25)`);
+  }
+
+  // ── Câu ý nghĩa cung (W30f-5): chạy CHÍNH hàm tra của trang (public/tools-shared/cach-cuc.js) với I18n giả trả câu Việt
+  // nguồn (kèm dấu \u0001 để biết ĐÃ tra trúng khoá) ⇒ mọi câu engine thật sinh ra phải có khoá `s.<fnv>`/`t.<mẫu>` trong nguồn.
+  {
+    const vm = await import('node:vm');
+    const S = nguon('cach-cuc');
+    const I18n = {
+      locale: 'xx',
+      loadLong() {},
+      long: (ns, k, vi) => (ns === 'cach-cuc' && S.has(k) ? '\u0001' + S.get(k) : vi),
+    };
+    const ctx = vm.createContext({ window: { I18n } });
+    ctx.I18n = I18n;
+    vm.runInContext(readFileSync(join(ROOT, 'public/tools-shared/cach-cuc.js'), 'utf8'), ctx);
+    const cc = ctx.window.TuviCachCuc;
+    const duy = [...new Set(kq.cc)];
+    // câu có tiền tố `[Sao, Sao] …` ⇒ mong đợi từng tên đã tra `n.<tên>` và câu đã tra `s.<fnv>` (đều kèm dấu \u0001)
+    const mongDoi = (x) => {
+      const m = /^\[([^\]]+)\] ([\s\S]+)$/.exec(x);
+      return m && !S.has(`s.${cc.fnv(x)}`)
+        ? '[' +
+            m[1]
+              .split(', ')
+              .map((n) => '\u0001' + n)
+              .join(', ') +
+            '] \u0001' +
+            m[2]
+        : '\u0001' + x;
+    };
+    const thieu = duy.filter((x) => cc.t(x) !== mongDoi(x));
+    bao(
+      thieu.length === 0,
+      `cach-cuc — ${duy.length} câu khác nhau từ ${kq.cc.length} lượt (700 lá số), không câu nào hụt khoá: ${thieu.slice(0, 3).join(' | ') || 'không'}`
+    );
+    bao(
+      duy.length >= 250,
+      `cach-cuc — mẫu chạm ${duy.length} câu khác nhau (cần ≥250; nguồn có 1.116 câu + 8 mẫu Tuần/Triệt)`
+    );
+    const mauTrung = new Set(
+      duy.filter((x) => /^(Tuần|Triệt)/.test(x)).map((x) => x.replace(/\(.+?\)/, '({dc})'))
+    );
+    bao(mauTrung.size >= 6, `cach-cuc — chạm ${mauTrung.size}/8 biến thể mẫu Tuần/Triệt (cần ≥6)`);
+    // đối chứng: hash của trang == hash của nguồn (fnvVi) — nếu lệch thì mọi câu ở trên đã hụt, nhưng nói thẳng cho dễ chẩn đoán
+    const { fnvVi } = await import('../lib/i18n/long.mjs');
+    bao(
+      cc.fnv('Tử Vi sáng: thân hình đẫy đà, thông minh, phúc thọ') ===
+        fnvVi('Tử Vi sáng: thân hình đẫy đà, thông minh, phúc thọ'),
+      'cach-cuc — fnv của trang == fnvVi của nguồn'
+    );
   }
 
   // ── GOLDEN: chữ Việt byte-giống engine cũ (nguồn độc lập với bảng khuôn)

@@ -184,6 +184,31 @@ for (const ns of Object.keys(ENGINE_NS)) {
   for (const t of ['ma.desc', 'ma.src', 'ma.tier', 'vaiTroMa', 'ma.bd', 'ma.notes', "'bd.'"])
     if (!page.includes(t)) fail(`${LONG_MODULE['past-life']}: trang không tra ${t}`);
 }
+// Hàm tra dùng chung (W30f): trang đã nạp script VÀ gọi hàm. Gỡ một trong hai ⇒ /ja lặng lẽ lùi về chữ Việt ở khối đó.
+{
+  const doc = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
+  const TRANG = [
+    'public/app-cong-so.html',
+    'public/app-day-con.html',
+    'public/app-huong-nghiep-tre.html',
+    'public/app-nguoi-khac.html',
+  ];
+  for (const f of TRANG)
+    for (const js of ['star-label.js', 'cach-cuc.js'])
+      if (!new RegExp(`/tools-shared/${js.replace('.', '\\.')}\\?v=\\d+`).test(doc(f)))
+        fail(`${f}: không nạp /tools-shared/${js}`);
+  for (const f of TRANG.slice(1)) {
+    const code = doc(f);
+    if (!code.includes('TuviCachCuc.list('))
+      fail(`${f}: không gọi TuviCachCuc.list (câu cachCucTungCung sẽ giữ chữ Việt)`);
+    if (!code.includes('TuviStarLabel.'))
+      fail(`${f}: không gọi TuviStarLabel (nhãn sao sẽ giữ chữ Việt)`);
+  }
+  const cs = doc('public/tools-shared/cong-so.js');
+  if (!cs.includes('TuviCachCuc')) fail('public/tools-shared/cong-so.js: không gọi TuviCachCuc');
+  if (!cs.includes('TuviStarLabel'))
+    fail('public/tools-shared/cong-so.js: không gọi TuviStarLabel');
+}
 for (const f of new Set(Object.values(LONG_MODULE))) {
   const code = fs.readFileSync(path.join(ROOT, f), 'utf8');
   for (const m of code.matchAll(/(?:I18n\.long|\b_long)\(\s*'([^']+)'/g))
