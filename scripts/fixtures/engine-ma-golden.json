@@ -399,5 +399,2219 @@
         "Hợp tác và Khai sáng khác tính âm/dương — một bên xông, một bên giữ. Ghép được, miễn là chia rõ ai quyết phần nào."
       ]
     ]
-  }
+  },
+  "pl": [
+    {
+      "b": {
+        "day": 5,
+        "month": 9,
+        "year": 1972,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người cần mẫn với công việc tỉ mỉ dưới đèn — làm cho người khác, tay nghề được trọng mà tên tuổi thì không.",
+      "source": "Tân Biên 8.8: \"lúc thiếu thời lật đật vất vả\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-2 Thái Âm Hãm", "+1 Hữu Bật"],
+      "notes": ["Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc"],
+      "star": "Thái Âm",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 9,
+        "year": 1972,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người có nghề trong tay nhưng cứ mãi đi làm thuê hết nơi này tới nơi khác, lòng thì vẫn tiếc cái đường công danh không với tới.",
+      "source": "Tân Biên 8.2: Phá đồng cung — \"Nếu chen chân vào đường công danh, tất chẳng được xứng ý toại lòng, suốt đời hậm hực\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-2 Liêm Trinh Hãm"],
+      "notes": ["Đào Hoa → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái"],
+      "star": "Liêm Trinh + Phá Quân đồng cung",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 21,
+        "month": 9,
+        "year": 1940,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người được các nhà quyền quý rước về dạy con cái — tiếng thơm lan trong giới quan lại, dù chưa vào tới cung.",
+      "source": "Tân Biên 8.5: Lương đồng cung tại Mão — \"Nên chuyên về y dược, sư phạm, sau rất nổi tiếng\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": [
+        "+2 Thái Dương Vượng",
+        "-1 Tuần/Triệt án ngữ (phá cách tốt)",
+        "-1 Đà La",
+        "+2 cách Quan Lộc Vô Chính Phùng Tuần Triệt"
+      ],
+      "notes": [
+        "Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích",
+        "Đào Hoa → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái"
+      ],
+      "star": "Thái Dương + Thiên Lương đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 5,
+        "year": 1940,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người ngồi trong trướng hiến kế, chủ tướng nghe theo nhiều lần — công thì có mà tên thì chưa ai ngoài trướng biết.",
+      "source": "Tân Biên 8.6: Lương đồng cung — \"công danh hiển đạt văn võ kiêm toàn. Thích luận đàm về chính trị và quân sự\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 Thiên Cơ Miếu"],
+      "notes": [],
+      "star": "Thiên Cơ + Thiên Lương đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 1,
+        "year": 2004,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người dẫn đám sai nha đi bắt người, đòi thuế, áp giải tù — chức nhỏ, tiếng dữ, và luôn đứng sát mép hoạ.",
+      "source": "Tân Biên 8.2: Tham đồng cung — \"có võ chức, nhưng nhỏ thấp\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["-2 Liêm Trinh Hãm", "+1 Thiên Việt", "+2 cách Thiên Mã Thủ Quan Lộc"],
+      "notes": [
+        "Thiên Mã → chức phận gắn với đi lại, chinh chiến hoặc bôn ba xa xứ",
+        "Thiên Việt → gặp quý nhân tiến cử đúng lúc, có cơ hội mà người khác không có"
+      ],
+      "star": "Liêm Trinh + Tham Lang đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 13,
+        "month": 1,
+        "year": 1988,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người xét lại những bản án đã tuyên — lý lẽ sắc tới mức đồng liêu ngại, và cũng vì thế mà bị nhớ mặt.",
+      "source": "Tân Biên 8.5: Cự đồng cung tại Thân — \"công danh thăng giáng thất thường, hay mắc thị phi\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 Thái Dương Vượng"],
+      "notes": [],
+      "star": "Thái Dương + Cự Môn đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 5,
+        "year": 2004,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người cầm đầu một ban ca múa có tiếng, được các nhà quyền quý vời tới — sống bằng tài nghệ và bằng chỗ quen biết.",
+      "source": "Tân Biên 8.9: \"công danh trắc trở nhưng nếu buôn bán lại phát đạt\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+1 Tham Lang Đắc", "+1 Hữu Bật"],
+      "notes": ["Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc"],
+      "star": "Tham Lang",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 1,
+        "year": 1988,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người trông coi cả một sở chế tác của nhà nước — dưới tay hàng trăm thợ, mọi thứ tinh xảo làm ra đều qua mắt mình duyệt.",
+      "source": "Tân Biên 8.6: \"nên chuyên về kỹ nghệ, máy móc\"; 8.23: Cơ-Nguyệt gặp Tả Hữu — \"đàn bà hay làm nghề cô đỡ\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+1 Thiên Cơ Đắc", "+1 Thiên Cơ hóa Khoa", "+1 Hữu Bật"],
+      "notes": [
+        "Đào Hoa/Hồng Loan → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái",
+        "Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc",
+        "Thiên Cơ hóa Khoa → có danh tiếng, được ghi nhận về học vấn hoặc tài năng"
+      ],
+      "star": "Thiên Cơ",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 25,
+        "month": 9,
+        "year": 1940,
+        "hourBranch": 0,
+        "gender": "nam",
+        "isLunar": false
+      },
+      "desc": "Người đem quân mở đất, dựng nên phủ huyện ở chỗ trước đó chỉ có rừng — công trạng rõ ràng mà chỗ đứng thì chưa yên.",
+      "source": "Tân Biên 8.1: Phá đồng cung — \"thành công trong võ nghiệp nhưng thăng giáng thất thường\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 Phá Quân Vượng"],
+      "notes": [],
+      "star": "Tử Vi + Phá Quân đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 5,
+        "year": 1972,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người có tài thật, danh tiếng cũng có, nhưng cả đời không gặp cơ hội thi thố — giữ chữ nghĩa cho riêng mình.",
+      "source": "Tân Biên 8.5: \"có tài nhưng không gặp cơ hội thi thố, suốt đời hậm hực\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-2 Thái Dương Hãm", "+1 Văn Khúc", "-1 Đà La"],
+      "notes": [
+        "Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng",
+        "Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích"
+      ],
+      "star": "Thái Dương",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 5,
+        "year": 2004,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người cầm sổ sách tiền bạc của cả nước, văn võ đều thạo — cổ thư chỉ đích danh chức vụ thuộc về tài chánh hay kinh tế.",
+      "source": "Tân Biên 8.4: Phủ đồng cung — \"công danh hoạnh đạt, văn võ kiêm toàn, có chức vụ thuộc về tài chánh hay kinh tế\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": ["+2 Vũ Khúc Vượng", "+1 Vũ Khúc hóa Khoa", "+1 Văn Khúc"],
+      "notes": [
+        "Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng",
+        "Vũ Khúc hóa Khoa → có danh tiếng, được ghi nhận về học vấn hoặc tài năng"
+      ],
+      "star": "Vũ Khúc + Thiên Phủ đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 9,
+        "year": 1940,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người mang chức võ rồi chính mình dính vào vòng lao lý — cổ thư nói thẳng: chỉ có rời khỏi chỗ lợi danh mới giữ được thân.",
+      "source": "Tân Biên 8.2: Tham đồng cung — \"Chỉ có lánh mình ra khỏi chỗ lợi danh, mới được an toàn\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-2 Liêm Trinh Hãm"],
+      "notes": [],
+      "star": "Liêm Trinh + Tham Lang đồng cung",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 21,
+        "month": 1,
+        "year": 1940,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người sống bằng đôi tay khéo và cái đầu tính toán, chế ra những cơ quan khí giới mà kẻ khác không làm nổi — cả vùng có việc khó là tìm tới, triều đình cũng từng vời.",
+      "source": "Tân Biên 8.6: \"nên chuyên về kỹ nghệ, máy móc\"; 8.23: Cơ-Nguyệt gặp Tả Hữu — \"đàn bà hay làm nghề cô đỡ\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["+1 Thiên Cơ Đắc", "-1 Hỏa Tinh"],
+      "notes": ["Hỏa Tinh → tính khí nóng nảy gấp gáp, thăng trầm đột ngột trong nghề"],
+      "star": "Thiên Cơ",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 1,
+        "year": 1972,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người coi việc lương thực cả nước — mất mùa hay được mùa đều dồn về bàn của mình, quyền không phô mà rất nặng.",
+      "source": "Tân Biên 8.1: Phủ đồng cung — \"công danh hiển hách, phú quý song toàn\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 Tử Vi Miếu", "-1 Đà La", "+2 cách Phụ Bật Củng Chủ"],
+      "notes": ["Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích"],
+      "star": "Tử Vi + Thiên Phủ đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 5,
+        "year": 1956,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người nhận những chuyến hàng nguy hiểm mà kẻ khác từ chối — giữ chữ tín bằng chính tính mạng mình và cả cơ nghiệp.",
+      "source": "Tân Biên 8.13: Liêm đồng cung — \"kinh doanh, buôn bán hay chuyên về kỹ nghệ, cũng phát đạt và được yên thân\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": [
+        "-2 Thất Sát Hãm",
+        "+1 Tuần/Triệt án ngữ (giải hãm)",
+        "-1 Kình Dương",
+        "+2 cách Kình Dương Nhập Mệnh"
+      ],
+      "notes": ["Kình Dương → con đường công danh nhiều va chạm, tranh đoạt, thương tích"],
+      "star": "Thất Sát",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 1,
+        "year": 2004,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người đứng đầu việc chữa bệnh chốn cung đình — tay nghề được cả hoàng tộc đặt tính mạng vào.",
+      "source": "Tân Biên 8.3: Lương đồng cung — \"rất nổi tiếng nếu chuyên về y khoa hay sư phạm\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": ["+1 Thiên Đồng Đắc", "+1 Thiên Việt", "+2 cách Thiên Mã Thủ Quan Lộc"],
+      "notes": [
+        "Thiên Mã → chức phận gắn với đi lại, chinh chiến hoặc bôn ba xa xứ",
+        "Thiên Việt → gặp quý nhân tiến cử đúng lúc, có cơ hội mà người khác không có"
+      ],
+      "star": "Thiên Đồng",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 5,
+        "year": 1972,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người đi khắp nơi tìm cây thuốc, ưa dịch chuyển hơn ưa danh phận — nhưng ai bệnh nặng thì vẫn lặn lội tìm tới tận nơi.",
+      "source": "Tân Biên 8.3: \"làm việc hay chóng chán, thích di chuyển, nên làm công việc lưu động\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-2 Thiên Đồng Hãm"],
+      "notes": [],
+      "star": "Thiên Đồng",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 1,
+        "year": 1956,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người coi giữ một phủ lớn, dưới có quan huyện, trên còn phải trình về kinh — có tiếng nói thật trong vùng nhưng chưa tới bậc phong đất.",
+      "source": "Tân Biên 8.1: đơn thủ tại Tý — \"bình thường\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+1 Tử Vi hóa Khoa", "+1 Thiên Khôi", "+1 Hữu Bật"],
+      "notes": [
+        "Đào Hoa → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái",
+        "Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc",
+        "Thiên Khôi → gặp quý nhân tiến cử đúng lúc, có cơ hội mà người khác không có",
+        "Tử Vi hóa Khoa → có danh tiếng, được ghi nhận về học vấn hoặc tài năng"
+      ],
+      "star": "Tử Vi",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 9,
+        "year": 1940,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người đứng gần bậc quyền quý nhất, lo việc hầu hạ và thưa gửi — chức không lớn nhưng biết nhiều chuyện hơn cả trọng thần.",
+      "source": "Tân Biên 8.1: Tham đồng cung — \"bình thường. Nếu công danh rực rỡ, tất sinh tai họa\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["-1 Đà La", "+2 cách Quan Lộc Vô Chính Phùng Tuần Triệt"],
+      "notes": [
+        "Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích",
+        "Đào Hoa → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái"
+      ],
+      "star": "Tử Vi + Tham Lang đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 5,
+        "year": 1940,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người sống bằng tài ăn nói, việc khó mấy cũng dàn xếp được — được việc cho thiên hạ mà mang tiếng thị phi.",
+      "source": "Tân Biên 8.10: \"chức vị nhỏ thấp, hay gặp tai ương… thường gặp nhiều chuyện thị phi\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-2 Cự Môn Hãm"],
+      "notes": [],
+      "star": "Cự Môn",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 1,
+        "year": 1972,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người thay vua trông coi việc nước lúc ngôi báu còn non — tài tổ chức bậc nhất, và cũng thừa mưu mẹo để giữ lấy chỗ đứng ấy.",
+      "source": "Tân Biên 8.1: Tướng đồng cung — \"văn võ toàn tài trước nhỏ sau lớn. Có tài tổ chức, nhiều mánh lới, thủ đoạn, hay lấn quyền người trên\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+2 Tử Vi Vượng",
+        "+1 Văn Khúc hóa Khoa",
+        "-1 Tuần/Triệt án ngữ (phá cách tốt)",
+        "+1 Văn Khúc",
+        "+2 cách Văn Tinh Ám Củng"
+      ],
+      "notes": [
+        "Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng",
+        "Hồng Loan → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái",
+        "Văn Khúc hóa Khoa → có danh tiếng, được ghi nhận về học vấn hoặc tài năng"
+      ],
+      "star": "Tử Vi + Thiên Tướng đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 21,
+        "month": 9,
+        "year": 1956,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người dạy chữ dạy nghề cho cả một vùng, được kính trọng — nhưng cái miệng thẳng cũng hay gây chuyện.",
+      "source": "Tân Biên 8.10: \"làm thầy giáo cũng nổi tiếng, có nhiều tài năng, nhất là ăn nói\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["-2 Cự Môn Hãm", "+1 Tuần/Triệt án ngữ (giải hãm)", "+1 Lộc Tồn"],
+      "notes": ["Lộc Tồn → nghề nghiệp gắn liền với tiền bạc, bổng lộc dồi dào"],
+      "star": "Cự Môn",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 13,
+        "month": 1,
+        "year": 1964,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người thống lĩnh một doanh quân, đánh trận nào cũng đi đầu — chưa cầm ấn soái nhưng lính dưới tay thì phục.",
+      "source": "Tân Biên 8.13: Liêm đồng cung — \"kinh doanh, buôn bán hay chuyên về kỹ nghệ, cũng phát đạt và được yên thân\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": [
+        "-2 Thất Sát Hãm",
+        "+1 Tuần/Triệt án ngữ (giải hãm)",
+        "+1 Văn Khúc",
+        "+2 cách Văn Tinh Ám Củng"
+      ],
+      "notes": ["Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng"],
+      "star": "Thất Sát",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 9,
+        "year": 1956,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người bày mưu định kế sau lưng bậc chí tôn — không cầm quân, nhưng quyết định thắng bại của cả cuộc chiến.",
+      "source": "Tân Biên 8.6: \"chuyên việc tham mưu, tất có chức vị lớn lao\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+2 Thiên Cơ Vượng",
+        "+2 Thiên Cơ hóa Quyền",
+        "-1 Tuần/Triệt án ngữ (phá cách tốt)",
+        "+1 Lộc Tồn",
+        "+2 cách Hóa Quyền Tại Quan Lộc"
+      ],
+      "notes": [
+        "Lộc Tồn → nghề nghiệp gắn liền với tiền bạc, bổng lộc dồi dào",
+        "Thiên Cơ hóa Quyền → nắm quyền lực thật sự, chỉ huy được người khác"
+      ],
+      "star": "Thiên Cơ",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 21,
+        "month": 9,
+        "year": 1988,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người vào được viện hàn lâm sau cả một quãng dài trắc trở — buổi đầu mưu cầu công danh vấp mãi, về sau thì rất hiển hách.",
+      "source": "Tân Biên 8.5: Nguyệt đồng cung — \"tuy buổi đầu mưu cầu công danh thường mắc nhiều trở ngại, nhưng về sau rất hiển hách\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+1 Thái Âm Đắc",
+        "+2 Thái Âm hóa Quyền",
+        "+1 Thiên Khôi",
+        "+2 cách Tọa Quý Hưởng Quý",
+        "+2 cách Hóa Quyền Tại Quan Lộc"
+      ],
+      "notes": [
+        "Thiên Khôi → gặp quý nhân tiến cử đúng lúc, có cơ hội mà người khác không có",
+        "Thái Âm hóa Quyền → nắm quyền lực thật sự, chỉ huy được người khác"
+      ],
+      "star": "Thái Dương + Thái Âm đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 9,
+        "year": 2004,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người đi đầu mở đường, dám đập bỏ cái cũ — làm nên tên tuổi giữa thời loạn bằng chính lưỡi dao của mình.",
+      "source": "Tân Biên 8.14: đơn thủ tại Tý, Ngọ — \"lập công danh trong thời loạn… có nhiều mưu trí và rất dũng mãnh\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "-2 Phá Quân Hãm",
+        "+2 Phá Quân hóa Quyền",
+        "+1 Tuần/Triệt án ngữ (giải hãm)",
+        "+1 Văn Khúc",
+        "+2 cách Hóa Quyền Tại Quan Lộc"
+      ],
+      "notes": [
+        "Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng",
+        "Phá Quân hóa Quyền → nắm quyền lực thật sự, chỉ huy được người khác"
+      ],
+      "star": "Phá Quân",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 1,
+        "year": 1956,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người ngồi bàn việc trong nha môn, lời nói có trọng lượng — nhưng nói nhiều thì thị phi cũng theo về nhiều.",
+      "source": "Tân Biên 8.10: \"làm thầy giáo cũng nổi tiếng, có nhiều tài năng, nhất là ăn nói\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": [
+        "-2 Cự Môn Hãm",
+        "+1 Tuần/Triệt án ngữ (giải hãm)",
+        "+1 Văn Khúc",
+        "-1 Kình Dương",
+        "+2 cách Kình Dương Nhập Mệnh",
+        "+2 cách Văn Tinh Ám Củng"
+      ],
+      "notes": [
+        "Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng",
+        "Kình Dương → con đường công danh nhiều va chạm, tranh đoạt, thương tích"
+      ],
+      "star": "Cự Môn",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 1,
+        "year": 2004,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người ra vào nơi bậc chí tôn ngự như đi lại trong nhà mình — chưa được ban gì lớn, nhưng lời nói lọt tới tai người trên.",
+      "source": "Tân Biên 8.1: Tham đồng cung — \"bình thường. Nếu công danh rực rỡ, tất sinh tai họa\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 cách Quan Lộc Vô Chính Phùng Tuần Triệt"],
+      "notes": [],
+      "star": "Tử Vi + Tham Lang đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 5,
+        "year": 1940,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người đứng đầu trăm quan, vừa nắm quyền điều hành cả triều vừa nắm kho tàng quốc gia — nói một câu là cả nước chuyển động.",
+      "source": "Tân Biên 8.1: Phủ đồng cung — \"công danh hiển hách, phú quý song toàn\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+2 Tử Vi Miếu",
+        "-1 Tuần/Triệt án ngữ (phá cách tốt)",
+        "+1 Hữu Bật",
+        "+1 Lộc Tồn",
+        "+2 cách Minh Lộc Ám Lộc"
+      ],
+      "notes": [
+        "Lộc Tồn → nghề nghiệp gắn liền với tiền bạc, bổng lộc dồi dào",
+        "Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc"
+      ],
+      "star": "Tử Vi + Thiên Phủ đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 13,
+        "month": 1,
+        "year": 1940,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người bán chữ nghĩa cho hết nhà quyền quý này tới nhà khác, chủ nào đổ thì mình cũng lao đao theo, có khi vạ lây cả án tù.",
+      "source": "Tân Biên 8.3: Cự đồng cung — \"hay mắc thị phi hình sự\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-2 Thiên Đồng Hãm", "-1 Hỏa Tinh"],
+      "notes": ["Hỏa Tinh → tính khí nóng nảy gấp gáp, thăng trầm đột ngột trong nghề"],
+      "star": "Thiên Đồng + Cự Môn đồng cung",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 1,
+        "year": 1972,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người vừa cầm quân vừa cầm tiền — cứng rắn, thực tế, quyết đoán trong cả trận mạc lẫn sổ sách.",
+      "source": "Tân Biên 8.4: \"võ nghiệp hiển đạt\"; Phủ đồng cung — \"chức vụ thuộc về tài chánh hay kinh tế\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+2 Vũ Khúc Miếu",
+        "+1 Văn Khúc hóa Khoa",
+        "-1 Tuần/Triệt án ngữ (phá cách tốt)",
+        "+1 Văn Khúc",
+        "+2 cách Văn Tinh Ám Củng"
+      ],
+      "notes": [
+        "Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng",
+        "Hồng Loan → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái",
+        "Văn Khúc hóa Khoa → có danh tiếng, được ghi nhận về học vấn hoặc tài năng"
+      ],
+      "star": "Vũ Khúc",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 25,
+        "month": 5,
+        "year": 1940,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người coi việc biên soạn, hiệu đính sách vở cho triều đình — công việc lặng lẽ, thành tựu phải rất lâu sau mới có người nhắc.",
+      "source": "Tân Biên 8.5: Nguyệt đồng cung — \"công danh trắc trở… nhưng về sau rất hiển hách\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["+1 Thái Âm Đắc"],
+      "notes": [],
+      "star": "Thái Dương + Thái Âm đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 21,
+        "month": 1,
+        "year": 1956,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người làm chủ hiệu vàng bạc trong phố lớn, tiền vào tiền ra mỗi ngày — của cải đã vững, chỉ chưa tới hàng cự phú.",
+      "source": "Tân Biên 8.4: Tham đồng cung — \"Lúc thiếu thời mọi sự chẳng được hành thông\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 Vũ Khúc Miếu", "-1 Hỏa Tinh", "+2 cách Tham Hỏa Tương Phùng"],
+      "notes": ["Hỏa Tinh → tính khí nóng nảy gấp gáp, thăng trầm đột ngột trong nghề"],
+      "star": "Vũ Khúc + Tham Lang đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 13,
+        "month": 5,
+        "year": 2004,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người có quyền can ngăn cả bậc chí tôn — chức phận là nói thẳng điều người trên không muốn nghe, và nói mà vẫn giữ được đầu.",
+      "source": "Tân Biên 8.3: Nguyệt đồng cung tại Tý — \"công danh hiển hách, có tài can gián người trên\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": ["+2 Thiên Đồng Vượng", "+1 Văn Khúc", "+2 cách Nguyệt Sinh Thương Hải"],
+      "notes": ["Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng"],
+      "star": "Thiên Đồng + Thái Âm đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 25,
+        "month": 9,
+        "year": 2004,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người làm chủ cả một xưởng lớn đóng thuyền lớn — cổ thư khuyên đúng nghề này, và người ấy nghe theo nên mới nên nghiệp.",
+      "source": "Tân Biên 8.2: Phá đồng cung — \"nên chuyên về kỹ nghệ, hay thương mại\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "-2 Phá Quân Hãm",
+        "+1 Liêm Trinh hóa Lộc",
+        "+2 Phá Quân hóa Quyền",
+        "+1 Tuần/Triệt án ngữ (giải hãm)",
+        "+2 cách Hóa Lộc Tại Quan Lộc",
+        "+2 cách Hóa Quyền Tại Quan Lộc"
+      ],
+      "notes": [
+        "Đào Hoa → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái",
+        "Liêm Trinh hóa Lộc → đường công danh sinh lợi, có thực quyền về tài vật",
+        "Phá Quân hóa Quyền → nắm quyền lực thật sự, chỉ huy được người khác"
+      ],
+      "star": "Liêm Trinh + Phá Quân đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 5,
+        "year": 1972,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người thay triều đình trông coi việc chính sự một trấn — công văn qua tay đều đặn, tiếng tăm lan ra ngoài hạt.",
+      "source": "Tân Biên 8.5: Cự đồng tại Dần — \"nên chuyên về hình luật\"; Lương đồng tại Mão — \"y dược, sư phạm\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 Thái Dương Vượng"],
+      "notes": [],
+      "star": "Thái Dương",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 1,
+        "year": 1972,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người nắm toàn bộ tiền lương thuế má của cả nước — không hào nhoáng, nhưng mọi việc lớn đều phải qua tay.",
+      "source": "Tân Biên 8.7: Vũ đồng cung — \"chức vụ thuộc về tài chánh hay kinh tế\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+1 Thiên Phủ Đắc",
+        "+2 cách Tử Phủ Triều Viên",
+        "+2 cách Thiên Mã Thủ Quan Lộc"
+      ],
+      "notes": ["Thiên Mã → chức phận gắn với đi lại, chinh chiến hoặc bôn ba xa xứ"],
+      "star": "Thiên Phủ",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 25,
+        "month": 9,
+        "year": 1988,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người làm chủ xưởng chế khí giới cho quân đội — mưu trí đổi ra được đơn hàng, phú quý đến chậm mà bền.",
+      "source": "Tân Biên 8.6: Cự đồng cung — \"văn võ toàn tài… rất ưa thích máy móc\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 Thiên Cơ Miếu"],
+      "notes": ["Đào Hoa → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái"],
+      "star": "Thiên Cơ + Cự Môn đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 1,
+        "year": 1988,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người bỏ chốn cũ đi mở đất mới, dẫn theo cả một đoàn người — cực nhọc nhưng tự do, đời dựng lại nhiều lần từ hai bàn tay.",
+      "source": "Tân Biên 8.14: đơn thủ tại Dần, Thân — \"công danh trắc trở, chức vị nhỏ thấp\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-2 Phá Quân Hãm"],
+      "notes": [],
+      "star": "Phá Quân",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 9,
+        "year": 1988,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người có tài thật mà không gặp thời, dạy dăm ba đứa trẻ trong xóm để sống, công danh thì cứ lùi mãi về sau.",
+      "source": "Tân Biên 8.5: Lương đồng cung tại Dậu — \"có tài, nhưng không gặp thời, công danh muộn màng và lật đật\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-2 Thái Dương Hãm"],
+      "notes": ["Đào Hoa → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái"],
+      "star": "Thái Dương + Thiên Lương đồng cung",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 13,
+        "month": 5,
+        "year": 1988,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người thông minh nhanh trí, sống bằng lời đoán và lòng tin của thiên hạ — nay đây mai đó, không chốn nào giữ chân được lâu.",
+      "source": "Tân Biên 8.6: \"công danh muộn màng và chật vật\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": [
+        "+1 Thiên Cơ Đắc",
+        "-2 Thiên Cơ hóa Kỵ",
+        "+1 Văn Khúc",
+        "-2 cách Hóa Kỵ Phá Quan Lộc"
+      ],
+      "notes": [
+        "Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng",
+        "Thiên Cơ hóa Kỵ → công danh nhiều trắc trở, dễ mắc kẹt hoặc bị cản phá"
+      ],
+      "star": "Thiên Cơ",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 21,
+        "month": 5,
+        "year": 1972,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người mở lớp dạy học kiêm bốc thuốc trong vùng, học trò kéo tới từ mấy huyện — danh có, giàu thì không.",
+      "source": "Tân Biên 8.5: Lương đồng cung tại Mão — \"Nên chuyên về y dược, sư phạm, sau rất nổi tiếng\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": [
+        "-2 Thái Dương Hãm",
+        "+1 Thiên Lương hóa Lộc",
+        "+2 cách Hóa Lộc Tại Quan Lộc"
+      ],
+      "notes": [
+        "Đào Hoa → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái",
+        "Thiên Lương hóa Lộc → đường công danh sinh lợi, có thực quyền về tài vật"
+      ],
+      "star": "Thái Dương + Thiên Lương đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 21,
+        "month": 5,
+        "year": 2004,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người theo chủ tướng từ lúc chưa có gì, đánh đổ cái cũ để dựng nên triều đại mới — công lớn tới mức chính nó thành mối lo cho người ngồi trên.",
+      "source": "Tân Biên 8.1: Phá đồng cung — \"thành công trong võ nghiệp nhưng thăng giáng thất thường. Nếu đi buôn cũng phát đạt\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+1 Tử Vi Đắc",
+        "+2 Phá Quân hóa Quyền",
+        "+1 Thiên Khôi",
+        "-1 Kình Dương",
+        "+2 cách Phụ Bật Củng Chủ",
+        "+2 cách Kình Dương Nhập Mệnh",
+        "+2 cách Tọa Quý Hưởng Quý",
+        "+2 cách Hóa Quyền Tại Quan Lộc"
+      ],
+      "notes": [
+        "Kình Dương → con đường công danh nhiều va chạm, tranh đoạt, thương tích",
+        "Thiên Khôi → gặp quý nhân tiến cử đúng lúc, có cơ hội mà người khác không có",
+        "Phá Quân hóa Quyền → nắm quyền lực thật sự, chỉ huy được người khác"
+      ],
+      "star": "Tử Vi + Phá Quân đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 5,
+        "year": 1940,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người đứng đầu viện thái y, tiếng tăm lan khắp nước — cổ thư nói rõ: phú quý song toàn, nổi tiếng nhất là ở nghề y và nghề dạy.",
+      "source": "Tân Biên 8.3: Lương đồng cung — \"phú quý song toàn, rất nổi tiếng nếu chuyên về y khoa hay sư phạm\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+2 Thiên Đồng Miếu",
+        "-1 Tuần/Triệt án ngữ (phá cách tốt)",
+        "+1 Hữu Bật",
+        "+1 Lộc Tồn",
+        "+2 cách Quan Lộc Vô Chính Phùng Tuần Triệt"
+      ],
+      "notes": [
+        "Lộc Tồn → nghề nghiệp gắn liền với tiền bạc, bổng lộc dồi dào",
+        "Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc"
+      ],
+      "star": "Thiên Đồng + Thiên Lương đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 21,
+        "month": 5,
+        "year": 1940,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người vừa chữa bệnh vừa dạy người — cả vùng gọi bằng thầy và tìm đến lúc hoạn nạn.",
+      "source": "Tân Biên 8.12: \"nên chuyên về y dược hay sư phạm. Buôn bán cũng phát đạt\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["+1 Thiên Lương Đắc"],
+      "notes": [],
+      "star": "Thiên Lương",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 5,
+        "year": 1956,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người cầm đội thuyền chiến, quen sóng gió hơn quen sân triều — lập công trên mặt nước, thăng giáng cũng theo con nước.",
+      "source": "Tân Biên 8.14: đơn thủ tại Dần, Thân — \"nên kinh doanh, buôn bán hay chuyên về kỹ nghệ\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 Phá Quân Miếu", "+1 Văn Khúc"],
+      "notes": ["Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng"],
+      "star": "Phá Quân",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 25,
+        "month": 9,
+        "year": 1940,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người giữ của cho kẻ khác, cẩn thận tỉ mỉ cả đời — kho ấy đầy ắp mà chưa từng là của mình.",
+      "source": "Tân Biên 8.7: \"có danh chức cũng chỉ trong một thời gian ngắn\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-1 Đà La"],
+      "notes": [
+        "Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích",
+        "Đào Hoa → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái"
+      ],
+      "star": "Thiên Phủ",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 25,
+        "month": 5,
+        "year": 1988,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người phụ tá bậc nhất, giữ ấn tín, thay chủ điều hành cả bộ máy — quyền lớn mà không phải là chủ.",
+      "source": "Tân Biên 8.11: \"công danh nhẹ bước, văn võ kiêm toàn\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": ["+1 Thiên Tướng Đắc", "+1 Thiên Khôi", "+2 cách Tọa Quý Hưởng Quý"],
+      "notes": ["Thiên Khôi → gặp quý nhân tiến cử đúng lúc, có cơ hội mà người khác không có"],
+      "star": "Thiên Tướng",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 1,
+        "year": 1988,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người lo việc bên trong — giấy tờ cơ mật, sổ sách, tính toán thầm lặng. Ít ai thấy mặt, nhưng thiếu thì cả cung rối loạn.",
+      "source": "Tân Biên 8.8: Đồng đồng cung tại Tý — \"công danh hiển hách, có tài can gián người trên\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "-2 Thái Âm Hãm",
+        "+1 Thái Âm hóa Lộc",
+        "+1 Văn Khúc",
+        "+2 cách Văn Tinh Ám Củng",
+        "+2 cách Hóa Lộc Tại Quan Lộc"
+      ],
+      "notes": [
+        "Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng",
+        "Thái Âm hóa Lộc → đường công danh sinh lợi, có thực quyền về tài vật"
+      ],
+      "star": "Thái Âm",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 13,
+        "month": 1,
+        "year": 1940,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người làm phó cho một bộ, việc gì cũng nắm mà quyết thì vẫn phải trình lên — đứng ngay dưới đỉnh và biết rõ điều đó.",
+      "source": "Tân Biên 8.11: đơn thủ tại Tỵ, Hợi — \"nên chuyên về kỹ thuật hay mỹ thuật\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+1 Thiên Tướng Đắc", "-1 Đà La", "+2 cách Thiên Mã Thủ Quan Lộc"],
+      "notes": [
+        "Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích",
+        "Thiên Mã → chức phận gắn với đi lại, chinh chiến hoặc bôn ba xa xứ"
+      ],
+      "star": "Thiên Tướng",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 1,
+        "year": 2004,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người đứng giữa công đường, tiếng nói vang xa khắp thiên hạ — danh tiếng rạng rỡ mà cũng chói mắt kẻ khác.",
+      "source": "Tân Biên 8.5: \"công danh sớm đạt, văn võ kiêm toàn\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": ["+2 Thái Dương Miếu", "+1 Thiên Việt", "+2 cách Thiên Mã Thủ Quan Lộc"],
+      "notes": [
+        "Thiên Mã → chức phận gắn với đi lại, chinh chiến hoặc bôn ba xa xứ",
+        "Thiên Việt → gặp quý nhân tiến cử đúng lúc, có cơ hội mà người khác không có"
+      ],
+      "star": "Thái Dương",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 25,
+        "month": 9,
+        "year": 1988,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người rời chốn đông người, cứu giúp lặng lẽ và không màng danh phận — nhưng tiếng lành đồn xa, người vẫn lặn lội tìm tới.",
+      "source": "Tân Biên 8.12: đơn thủ tại Tỵ, Hợi — \"công danh phú quý như đám mây nổi… nên làm công việc lưu động\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-2 Thiên Lương Hãm", "+1 Lộc Tồn"],
+      "notes": ["Lộc Tồn → nghề nghiệp gắn liền với tiền bạc, bổng lộc dồi dào"],
+      "star": "Thiên Lương",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 21,
+        "month": 9,
+        "year": 1972,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người giữ kho sách và điển tịch của triều đình — chữ nghĩa cả nước nằm trong tay, dù chức không lớn tiếng.",
+      "source": "Tân Biên 8.8: Đồng đồng cung tại Ngọ — \"nên chuyên về kỹ nghệ hay doanh thương\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 Thái Âm Miếu"],
+      "notes": ["Đào Hoa → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái"],
+      "star": "Thái Âm",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 9,
+        "year": 1940,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người dựng cơ nghiệp trên sóng nước, cầm cả một đội thuyền — mấy lần trắng tay rồi lại làm lại từ đầu.",
+      "source": "Tân Biên 8.14: đơn thủ tại Dần, Thân — \"nên kinh doanh, buôn bán hay chuyên về kỹ nghệ\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": [
+        "-2 Phá Quân Hãm",
+        "+1 Tuần/Triệt án ngữ (giải hãm)",
+        "+1 Văn Khúc",
+        "+1 Lộc Tồn"
+      ],
+      "notes": [
+        "Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng",
+        "Lộc Tồn → nghề nghiệp gắn liền với tiền bạc, bổng lộc dồi dào"
+      ],
+      "star": "Phá Quân",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 1,
+        "year": 1972,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người lo chuyển tiền lương của triều đình đi khắp nơi — số qua tay rất lớn, sai một chuyến là mất cả chức.",
+      "source": "Tân Biên 8.4: Phủ đồng cung — \"có chức vụ thuộc về tài chánh hay kinh tế\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 Vũ Khúc Vượng", "+1 Hữu Bật"],
+      "notes": [
+        "Đào Hoa → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái",
+        "Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc"
+      ],
+      "star": "Vũ Khúc + Thiên Phủ đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 21,
+        "month": 1,
+        "year": 1940,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người trông coi ruộng vườn thẳng cánh cò bay, hoặc khung cửi dệt hàng tiến cung — cơ nghiệp lặng lẽ mà nuôi được cả một vùng.",
+      "source": "Tân Biên 8.8: Đồng đồng cung tại Ngọ — \"nên chuyên về kỹ nghệ hay doanh thương\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["+2 Thái Âm Miếu", "-1 Tuần/Triệt án ngữ (phá cách tốt)"],
+      "notes": [],
+      "star": "Thái Âm",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 13,
+        "month": 9,
+        "year": 1940,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người làm ra những thứ tinh xảo mà kẻ khác không làm nổi, tác phẩm tiến cống vào cung — danh tiếng nằm ở tay nghề chứ không ở chức tước.",
+      "source": "Tân Biên 8.11: đơn thủ tại Tỵ, Hợi — \"nên chuyên về kỹ thuật hay mỹ thuật\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["+1 Thiên Tướng Đắc"],
+      "notes": [],
+      "star": "Thiên Tướng",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 13,
+        "month": 6,
+        "year": 1956,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người coi việc xét xử và giám sát quan lại trong hạt — chữ ký của mình quyết định người khác vào ngục hay được thả.",
+      "source": "Tân Biên 8.2: Tướng đồng cung — \"văn võ kiêm toàn, được hưởng giàu sang, được nhiều người kính nể\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": [
+        "+2 Thiên Tướng Vượng",
+        "-2 Liêm Trinh hóa Kỵ",
+        "+1 Văn Xương hóa Khoa",
+        "+1 Văn Xương",
+        "+1 Hữu Bật",
+        "-1 Đà La",
+        "-2 cách Hóa Kỵ Phá Quan Lộc"
+      ],
+      "notes": [
+        "Văn Xương → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng",
+        "Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích",
+        "Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc",
+        "Liêm Trinh hóa Kỵ → công danh nhiều trắc trở, dễ mắc kẹt hoặc bị cản phá",
+        "Văn Xương hóa Khoa → có danh tiếng, được ghi nhận về học vấn hoặc tài năng"
+      ],
+      "star": "Liêm Trinh + Thiên Tướng đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 9,
+        "year": 1956,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người cầm đại quân giữ cả một dải biên cương — quyết liệt, cô độc, quen sống giữa sinh tử.",
+      "source": "Tân Biên 8.13: đơn thủ tại Dần, Thân — \"thành công trong những việc thật khó khăn… uy quyền lớn lao\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": ["+2 Thất Sát Miếu", "+1 Văn Khúc", "+2 cách Thất Sát Triều Đẩu"],
+      "notes": ["Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng"],
+      "star": "Thất Sát",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 25,
+        "month": 9,
+        "year": 1940,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người cầm cả binh quyền một nước, được trao quyền tiền trảm hậu tấu — ra trận là mang theo vận mệnh của cả triều đại.",
+      "source": "Tân Biên 8.1: Sát đồng cung — \"có uy quyền, nên chuyên về quân sự\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": ["+2 Tử Vi Miếu", "+2 cách Tử Phủ Triều Viên"],
+      "notes": [],
+      "star": "Tử Vi + Thất Sát đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 1,
+        "year": 1972,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người làm việc giấy tờ trong nha môn, biết rõ mọi ngóc ngách mà chức thì mãi không lên — và luôn có sẵn một vụ thị phi chờ mình.",
+      "source": "Tân Biên 8.3: Cự đồng cung — \"rất chật vật trong đường công danh… hay mắc thị phi hình sự\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": [
+        "-2 Thiên Đồng Hãm",
+        "+1 Cự Môn hóa Lộc",
+        "-1 Hỏa Tinh",
+        "+2 cách Hóa Lộc Tại Quan Lộc"
+      ],
+      "notes": [
+        "Hỏa Tinh → tính khí nóng nảy gấp gáp, thăng trầm đột ngột trong nghề",
+        "Cự Môn hóa Lộc → đường công danh sinh lợi, có thực quyền về tài vật"
+      ],
+      "star": "Thiên Đồng + Cự Môn đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 9,
+        "year": 1940,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người trấn một cửa ải hiểm, năm này qua năm khác — trong cái may luôn có cái rủi, giữ được ải là công, mất một đêm là tội.",
+      "source": "Tân Biên 8.2: Sát đồng cung — \"trong cái may thường chứa đựng nhiều cái rủi\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["+1 Thất Sát Đắc"],
+      "notes": [],
+      "star": "Liêm Trinh + Thất Sát đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 1,
+        "year": 2004,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người gây dựng cả một mạng lưới buôn bán, tính toán chắc tay, của cải bền vững qua nhiều đời.",
+      "source": "Tân Biên 8.7: \"thành công trong việc kinh doanh buôn bán\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": [],
+      "notes": [],
+      "star": "Thiên Phủ",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 13,
+        "month": 5,
+        "year": 2004,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người buôn bán được triều đình chọn làm mối cung ứng — vừa có danh phận quan trường, vừa giàu lên rất nhanh từ chính mối ấy.",
+      "source": "Tân Biên 8.4: Tướng đồng cung — \"bước vào đường công danh cũng được toại lòng. Nếu không, buôn bán kinh doanh cũng sớm trở nên giàu có\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+2 Thiên Tướng Miếu",
+        "+1 Vũ Khúc hóa Khoa",
+        "-1 Tuần/Triệt án ngữ (phá cách tốt)",
+        "+1 Hữu Bật",
+        "+2 cách Khoa Quyền Lộc Củng"
+      ],
+      "notes": [
+        "Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc",
+        "Vũ Khúc hóa Khoa → có danh tiếng, được ghi nhận về học vấn hoặc tài năng"
+      ],
+      "star": "Vũ Khúc + Thiên Tướng đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 9,
+        "year": 1972,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người giữ việc can gián và dạy dỗ bậc chí tôn, thầy của cả hoàng đế — nói thẳng điều mà cả triều không ai dám mở miệng.",
+      "source": "Tân Biên 8.12: đơn thủ tại Tý, Ngọ — \"phú quý đến tột bực, có danh tiếng lừng lẫy\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+2 Thiên Lương Vượng",
+        "+1 Thiên Lương hóa Lộc",
+        "-1 Đà La",
+        "+2 cách Hóa Lộc Tại Quan Lộc"
+      ],
+      "notes": [
+        "Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích",
+        "Thiên Lương hóa Lộc → đường công danh sinh lợi, có thực quyền về tài vật"
+      ],
+      "star": "Thiên Lương",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 1,
+        "year": 1940,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người coi việc tuần phòng trong thành, đêm nào cũng đi qua chỗ tối nhất của phố phường — có quyền, và luôn ở gần chỗ hoạ.",
+      "source": "Tân Biên 8.2: Tham đồng cung — \"có võ chức, nhưng nhỏ thấp\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": [
+        "-2 Liêm Trinh Hãm",
+        "+2 Tham Lang hóa Quyền",
+        "-1 Đà La",
+        "+2 cách Hóa Quyền Tại Quan Lộc",
+        "+2 cách Thiên Mã Thủ Quan Lộc"
+      ],
+      "notes": [
+        "Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích",
+        "Thiên Mã → chức phận gắn với đi lại, chinh chiến hoặc bôn ba xa xứ",
+        "Tham Lang hóa Quyền → nắm quyền lực thật sự, chỉ huy được người khác"
+      ],
+      "star": "Liêm Trinh + Tham Lang đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 1,
+        "year": 1940,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người gây dựng được một hiệu tơ lụa khá giả sau nhiều năm long đong — hàng đẹp, khách quen, và ký ức về quãng thiếu thời chẳng ra gì.",
+      "source": "Tân Biên 8.4: Tham đồng cung — \"Lúc thiếu thời mọi sự chẳng được hành thông\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["+2 Vũ Khúc Miếu", "-1 Hỏa Tinh"],
+      "notes": ["Hỏa Tinh → tính khí nóng nảy gấp gáp, thăng trầm đột ngột trong nghề"],
+      "star": "Vũ Khúc + Tham Lang đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 21,
+        "month": 1,
+        "year": 1988,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người soát lại sách vở trước khi khắc in — sai một chữ là sai cả đời sau, nên làm rất kỹ và rất lặng lẽ.",
+      "source": "Tân Biên 8.5: Nguyệt đồng cung — \"công danh trắc trở… nhưng về sau rất hiển hách\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": [
+        "+1 Thái Dương Đắc",
+        "+1 Thái Âm hóa Lộc",
+        "-1 Hỏa Tinh",
+        "+2 cách Hóa Lộc Tại Quan Lộc"
+      ],
+      "notes": [
+        "Hỏa Tinh → tính khí nóng nảy gấp gáp, thăng trầm đột ngột trong nghề",
+        "Thái Âm hóa Lộc → đường công danh sinh lợi, có thực quyền về tài vật"
+      ],
+      "star": "Thái Dương + Thái Âm đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 25,
+        "month": 1,
+        "year": 1940,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người mở được cục áp tải của riêng mình, có người làm công và có tuyến đường quen — chưa lớn tới mức cả nước biết tên.",
+      "source": "Tân Biên 8.4: Phá đồng cung — \"Nếu kinh doanh buôn bán, rất được xứng ý toại lòng\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": [
+        "-2 Phá Quân Hãm",
+        "+1 Vũ Khúc hóa Lộc",
+        "-1 Đà La",
+        "+2 cách Hóa Lộc Tại Quan Lộc",
+        "+2 cách Thiên Mã Thủ Quan Lộc"
+      ],
+      "notes": [
+        "Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích",
+        "Thiên Mã → chức phận gắn với đi lại, chinh chiến hoặc bôn ba xa xứ",
+        "Vũ Khúc hóa Lộc → đường công danh sinh lợi, có thực quyền về tài vật"
+      ],
+      "star": "Vũ Khúc + Phá Quân đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 9,
+        "year": 1988,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người giúp việc giấy tờ và bày mưu cho một vị quan — sống nhờ chủ, chủ lên thì mình lên, chủ đổ thì mình cũng đổ.",
+      "source": "Tân Biên 8.3: Cự đồng cung — \"rất chật vật trong đường công danh… hay mắc thị phi hình sự\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": [
+        "-2 Thiên Đồng Hãm",
+        "+1 Tuần/Triệt án ngữ (giải hãm)",
+        "+1 Thiên Khôi",
+        "+2 cách Tọa Quý Hưởng Quý"
+      ],
+      "notes": ["Thiên Khôi → gặp quý nhân tiến cử đúng lúc, có cơ hội mà người khác không có"],
+      "star": "Thiên Đồng + Cự Môn đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 1,
+        "year": 2004,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người tin cẩn đứng sau một gia chủ quyền thế, thu xếp mọi việc trơn tru — mà tên tuổi không bao giờ được nhắc.",
+      "source": "Tân Biên 8.11: đơn thủ tại Mão, Dậu — \"chức vị nhỏ thấp, thăng giáng thất thường\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-2 Thiên Tướng Hãm", "+1 Tuần/Triệt án ngữ (giải hãm)"],
+      "notes": [],
+      "star": "Thiên Tướng",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 1,
+        "year": 1940,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người chuyên được đẩy lên trước để đập vỡ chỗ khó nhất — lập công liên tục, mà chức tước lên xuống thất thường theo từng trận.",
+      "source": "Tân Biên 8.1: Phá đồng cung — \"thành công trong võ nghiệp nhưng thăng giáng thất thường\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["+1 Tử Vi Đắc", "-1 Hỏa Tinh"],
+      "notes": ["Hỏa Tinh → tính khí nóng nảy gấp gáp, thăng trầm đột ngột trong nghề"],
+      "star": "Tử Vi + Phá Quân đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 1,
+        "year": 1956,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người vừa nắm quân vừa nắm của một vùng lớn, chiến công đầy mình — triều đình phải nể, dân trong hạt thì vừa sợ vừa trọng.",
+      "source": "Tân Biên 8.2: Phủ đồng cung — \"phú quý song toàn, lập được nhiều chiến công, có uy quyền hiển hách\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+2 Liêm Trinh Miếu",
+        "-1 Tuần/Triệt án ngữ (phá cách tốt)",
+        "+1 Văn Khúc",
+        "-1 Kình Dương",
+        "+2 cách Kình Dương Nhập Mệnh",
+        "+2 cách Văn Tinh Ám Củng"
+      ],
+      "notes": [
+        "Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng",
+        "Kình Dương → con đường công danh nhiều va chạm, tranh đoạt, thương tích"
+      ],
+      "star": "Liêm Trinh + Thiên Phủ đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 1,
+        "year": 1940,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người dạy học cho cả một phủ, học trò đỗ đạt thì tiếng về mình — vừa dạy vừa lo chi thu của trường.",
+      "source": "Tân Biên 8.6: Nguyệt đồng cung tại Thìn — \"nên chuyên về khoa hay sư phạm. Buôn bán cũng phát đạt\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": [
+        "+2 Thiên Cơ Vượng",
+        "-1 Tuần/Triệt án ngữ (phá cách tốt)",
+        "+1 Thiên Việt"
+      ],
+      "notes": ["Thiên Việt → gặp quý nhân tiến cử đúng lúc, có cơ hội mà người khác không có"],
+      "star": "Thiên Cơ + Thái Âm đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 1,
+        "year": 2004,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người trấn một cửa ải hiểm, năm này qua năm khác — trong cái may luôn có cái rủi, giữ được ải là công, mất một đêm là tội.",
+      "source": "Tân Biên 8.2: Sát đồng cung — \"trong cái may thường chứa đựng nhiều cái rủi\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": [
+        "+1 Liêm Trinh Đắc",
+        "-2 Kình Dương/Hỏa Tinh",
+        "+2 cách Kình Dương Nhập Mệnh"
+      ],
+      "notes": [
+        "Kình Dương → con đường công danh nhiều va chạm, tranh đoạt, thương tích",
+        "Hỏa Tinh → tính khí nóng nảy gấp gáp, thăng trầm đột ngột trong nghề"
+      ],
+      "star": "Liêm Trinh + Thất Sát đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 9,
+        "year": 1972,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người theo hầu ghi chép lời ăn tiếng nói của bậc trên — biết những chuyện không ai được biết, mà không được nói ra.",
+      "source": "Tân Biên 8.3: Nguyệt đồng cung tại Tý — \"công danh hiển hách, có tài can gián người trên\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 Thiên Đồng Vượng", "-1 Đà La", "+2 cách Nguyệt Sinh Thương Hải"],
+      "notes": ["Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích"],
+      "star": "Thiên Đồng + Thái Âm đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 21,
+        "month": 1,
+        "year": 1956,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người giữ một đồn xa kinh kỳ, quanh năm sống với lính và gió cát — công có, nhưng tin thắng trận về tới triều thì đã nguội.",
+      "source": "Tân Biên 8.4: Sát đồng cung — \"thường trọng trấn ở nơi xa\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["+1 Vũ Khúc Đắc"],
+      "notes": [],
+      "star": "Vũ Khúc + Thất Sát đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 1,
+        "year": 1988,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người dạy dăm đứa trẻ ngay tại nhà mình, muộn màng mới có được chỗ đứng đó, và cũng chỉ tới đó là hết.",
+      "source": "Tân Biên 8.6: Nguyệt đồng cung tại Dần — \"cũng như trên, nhưng muộn và gặp nhiều trở ngại\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-2 Thiên Cơ Hãm"],
+      "notes": [],
+      "star": "Thiên Cơ + Thái Âm đồng cung",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 9,
+        "year": 1956,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người giữ một trấn hiểm yếu mà mất là mất cả phên giậu — quan trọng tới mức không ai dám điều đi, cũng vì thế mà không lên nổi.",
+      "source": "Tân Biên 8.4: Sát đồng cung — \"thường trọng trấn ở nơi xa\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+1 Vũ Khúc Đắc", "+1 Thiên Việt"],
+      "notes": [
+        "Đào Hoa → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái",
+        "Thiên Việt → gặp quý nhân tiến cử đúng lúc, có cơ hội mà người khác không có"
+      ],
+      "star": "Vũ Khúc + Thất Sát đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 9,
+        "year": 1956,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người rời quân ngũ giữa chừng vì một lần thăng giáng không gượng lại được, quay sang buôn bán để sống — cổ thư bảo đường ấy lại yên thân hơn.",
+      "source": "Tân Biên 8.2: Sát đồng cung — \"Nếu kinh doanh, buôn bán hay chuyên về kỹ nghệ, cũng phát đạt và được yên thân\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["+1 Liêm Trinh Đắc", "-2 Liêm Trinh hóa Kỵ", "-2 cách Hóa Kỵ Phá Quan Lộc"],
+      "notes": ["Liêm Trinh hóa Kỵ → công danh nhiều trắc trở, dễ mắc kẹt hoặc bị cản phá"],
+      "star": "Liêm Trinh + Thất Sát đồng cung",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 5,
+        "year": 1972,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người chuyên đi tra những vụ rối mà quan huyện không gỡ nổi — cứng rắn, không nể mặt ai, nên chuốc oán cũng nhiều.",
+      "source": "Tân Biên 8.2: Phá đồng cung — \"nên chuyên về kỹ nghệ, hay thương mại\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 Liêm Trinh Vượng", "+1 Hữu Bật"],
+      "notes": ["Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc"],
+      "star": "Liêm Trinh",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 9,
+        "year": 1940,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người cầm cân nảy mực hoặc cầm sách dạy người ở cả một vùng — uy tín đủ để một lời nói ra là có người nghe theo.",
+      "source": "Tân Biên 8.5: Cự đồng tại Dần — \"nên chuyên về hình luật\"; Lương đồng tại Mão — \"y dược, sư phạm\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": [
+        "-2 Thái Dương Hãm",
+        "+1 Thái Dương hóa Lộc",
+        "+2 cách Hóa Lộc Tại Quan Lộc"
+      ],
+      "notes": ["Thái Dương hóa Lộc → đường công danh sinh lợi, có thực quyền về tài vật"],
+      "star": "Thái Dương",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 5,
+        "year": 1988,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người bàn việc thiên hạ rất hay mà chẳng ai chịu nghe, cuối cùng lui về làm thầy thuốc, thầy giáo cho qua ngày.",
+      "source": "Tân Biên 8.6: Lương đồng cung — \"Nếu làm thầy thuốc hay thầy giáo, được nhiều người biết tiếng\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": [
+        "+2 Thiên Cơ Miếu",
+        "-2 Thiên Cơ hóa Kỵ",
+        "-1 Kình Dương",
+        "+2 cách Kình Dương Nhập Mệnh",
+        "-2 cách Hóa Kỵ Phá Quan Lộc"
+      ],
+      "notes": [
+        "Kình Dương → con đường công danh nhiều va chạm, tranh đoạt, thương tích",
+        "Thiên Cơ hóa Kỵ → công danh nhiều trắc trở, dễ mắc kẹt hoặc bị cản phá"
+      ],
+      "star": "Thiên Cơ + Thiên Lương đồng cung",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 25,
+        "month": 9,
+        "year": 1956,
+        "hourBranch": 5,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người ngồi ghế xử kiện trong một hạt, nói năng sắc bén, xét đoán nhanh — nhưng lời nói sắc quá thì thị phi cũng nhiều theo.",
+      "source": "Tân Biên 8.5: Cự đồng cung tại Thân — \"công danh thăng giáng thất thường, hay mắc thị phi\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["+1 Cự Môn Đắc"],
+      "notes": ["Thiên Riêu → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái"],
+      "star": "Thái Dương + Cự Môn đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 6,
+        "month": 5,
+        "year": 1972,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người coi việc hành chính và thuế khoá cả một tỉnh — văn võ đều đụng tới, được kính nể nhưng chưa đứng đầu.",
+      "source": "Tân Biên 8.2: Tướng đồng cung — \"văn võ kiêm toàn, được hưởng giàu sang, được nhiều người kính nể\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 Liêm Trinh Vượng", "+1 Văn Khúc", "-1 Đà La"],
+      "notes": [
+        "Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng",
+        "Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích"
+      ],
+      "star": "Liêm Trinh + Thiên Tướng đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 1,
+        "year": 1940,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người cầm đầu một xưởng làm khí cụ cho quân đội — vừa hiểu máy móc vừa hiểu binh đao, nghề nuôi được cả nhà.",
+      "source": "Tân Biên 8.6: Cự đồng cung — \"văn võ toàn tài… rất ưa thích máy móc\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["+2 Thiên Cơ Miếu", "-1 Tuần/Triệt án ngữ (phá cách tốt)"],
+      "notes": [],
+      "star": "Thiên Cơ + Cự Môn đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 5,
+        "year": 1972,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người chữa bệnh trong cung, được tin cậy tới mức thuốc mình kê không ai kiểm lại — chỉ chưa đứng đầu cả viện.",
+      "source": "Tân Biên 8.3: Lương đồng cung — \"rất nổi tiếng nếu chuyên về y khoa hay sư phạm\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+2 Thiên Lương Vượng", "+1 Hữu Bật"],
+      "notes": ["Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc"],
+      "star": "Thiên Đồng + Thiên Lương đồng cung",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 5,
+        "year": 1988,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người đứng đầu việc hình luật của cả nước, tài luận lý và xét đoán bậc nhất — cổ thư chỉ đích danh: nên chuyên về hình luật.",
+      "source": "Tân Biên 8.5: Cự đồng cung tại Dần — \"công danh hiển hách. Nên chuyên về hình luật, vì có tài luận lý, xét đoán\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": ["+2 Thái Dương Vượng", "+1 Hữu Bật hóa Khoa", "+1 Hữu Bật"],
+      "notes": [
+        "Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc",
+        "Hữu Bật hóa Khoa → có danh tiếng, được ghi nhận về học vấn hoặc tài năng"
+      ],
+      "star": "Thái Dương + Cự Môn đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 1,
+        "year": 1940,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người cai quản phần hoa lệ nhất của triều đình — tài hoa và giỏi giao tế bậc nhất thiên hạ.",
+      "source": "Tân Biên 8.23: Tham + Xương/Khúc tại Hợi, Tý — \"có danh chức, được nhiều người biết tiếng\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+2 Tham Lang Vượng",
+        "+2 Tham Lang hóa Quyền",
+        "-2 Văn Khúc hóa Kỵ",
+        "+1 Văn Khúc",
+        "+2 cách Văn Tinh Ám Củng",
+        "+2 cách Hóa Quyền Tại Quan Lộc",
+        "-2 cách Hóa Kỵ Phá Quan Lộc"
+      ],
+      "notes": [
+        "Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng",
+        "Tham Lang hóa Quyền → nắm quyền lực thật sự, chỉ huy được người khác",
+        "Văn Khúc hóa Kỵ → công danh nhiều trắc trở, dễ mắc kẹt hoặc bị cản phá"
+      ],
+      "star": "Tham Lang",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 13,
+        "month": 5,
+        "year": 1940,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người được vời vào cung chữa bệnh cho hoàng thân — tay nghề đã được thừa nhận, chỉ chưa đứng đầu cả viện.",
+      "source": "Tân Biên 8.3: \"nên chuyên về thương mại hay kỹ nghệ\"; Lương đồng — y khoa",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+1 Thiên Đồng Đắc", "+1 Thiên Đồng hóa Khoa"],
+      "notes": ["Thiên Đồng hóa Khoa → có danh tiếng, được ghi nhận về học vấn hoặc tài năng"],
+      "star": "Thiên Đồng",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 1,
+        "year": 2004,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người buôn chuyến nhỏ, gánh hàng đi hết chợ này tới chợ khác, chờ mãi cái ngày hanh thông mà cổ thư hứa là sẽ tới muộn.",
+      "source": "Tân Biên 8.4: Tham đồng cung — \"Lúc thiếu thời mọi sự chẳng được hành thông\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": [
+        "+2 Tham Lang Miếu",
+        "-2 Tham Lang hóa Kỵ",
+        "-1 Tuần/Triệt án ngữ (phá cách tốt)",
+        "-2 Kình Dương/Hỏa Tinh",
+        "+2 cách Tham Hỏa Tương Phùng",
+        "+2 cách Kình Dương Nhập Mệnh",
+        "-2 cách Hóa Kỵ Hội Sát",
+        "-2 cách Hóa Kỵ Phá Quan Lộc"
+      ],
+      "notes": [
+        "Kình Dương → con đường công danh nhiều va chạm, tranh đoạt, thương tích",
+        "Hỏa Tinh → tính khí nóng nảy gấp gáp, thăng trầm đột ngột trong nghề",
+        "Tham Lang hóa Kỵ → công danh nhiều trắc trở, dễ mắc kẹt hoặc bị cản phá"
+      ],
+      "star": "Vũ Khúc + Tham Lang đồng cung",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 1,
+        "year": 1972,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người làm chủ một hiệu buôn có tiếng trong vùng, người làm công đông, sổ nợ dày — của cải đến chậm mà chắc.",
+      "source": "Tân Biên 8.4: Tướng đồng cung — \"buôn bán kinh doanh cũng sớm trở nên giàu có\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["+2 Thiên Tướng Miếu", "-1 Đà La"],
+      "notes": ["Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích"],
+      "star": "Vũ Khúc + Thiên Tướng đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 21,
+        "month": 5,
+        "year": 1988,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người có ruộng có kho, tiền cho vay khắp huyện — cả vùng nể mặt, nhưng chưa cầm được sổ sách của triều đình.",
+      "source": "Tân Biên 8.7: \"thành công trong việc kinh doanh buôn bán\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": ["+1 Thiên Khôi", "+2 cách Tọa Quý Hưởng Quý"],
+      "notes": ["Thiên Khôi → gặp quý nhân tiến cử đúng lúc, có cơ hội mà người khác không có"],
+      "star": "Thiên Phủ",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 5,
+        "year": 2004,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người có tài thật, đi hát khắp các phủ đệ và bến chợ, phủ nào cũng tranh nhau mời — được yêu mến một đêm rồi lại lên đường.",
+      "source": "Tân Biên 8.9: \"chức vị nhỏ thấp, thăng giáng thất thường\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-2 Tham Lang Hãm", "+1 Văn Khúc"],
+      "notes": ["Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng"],
+      "star": "Tham Lang",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 25,
+        "month": 5,
+        "year": 1956,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người nhận áp tải hàng thuê từng chuyến — sống bằng đường trường, mỗi chuyến trót lọt là một khoản, mỗi chuyến hỏng là một vết sẹo.",
+      "source": "Tân Biên 8.4: Phá đồng cung — \"Nếu kinh doanh buôn bán, rất được xứng ý toại lòng\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["-2 Vũ Khúc Hãm", "+1 Tuần/Triệt án ngữ (giải hãm)", "+1 Lộc Tồn"],
+      "notes": ["Lộc Tồn → nghề nghiệp gắn liền với tiền bạc, bổng lộc dồi dào"],
+      "star": "Vũ Khúc + Phá Quân đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 17,
+        "month": 5,
+        "year": 1972,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người bị đẩy ra biên ải làm lính giữ đồn, năm này qua năm khác không có ngày về — có sức, có gan, mà không có thời.",
+      "source": "Tân Biên 8.4: Sát đồng cung — \"thăng giáng thất thường\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["+1 Vũ Khúc Đắc", "-2 Vũ Khúc hóa Kỵ", "-2 cách Hóa Kỵ Phá Quan Lộc"],
+      "notes": [
+        "Đào Hoa → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái",
+        "Vũ Khúc hóa Kỵ → công danh nhiều trắc trở, dễ mắc kẹt hoặc bị cản phá"
+      ],
+      "star": "Vũ Khúc + Thất Sát đồng cung",
+      "tier": "thap"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 5,
+        "year": 1988,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người trông coi việc học của cả một vùng lớn, vừa dạy vừa quản — cổ thư khuyên chuyên về khoa cử, sư phạm, và người ấy đi đúng đường.",
+      "source": "Tân Biên 8.6: Nguyệt đồng cung tại Thìn — \"nên chuyên về khoa hay sư phạm. Buôn bán cũng phát đạt\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+2 Thiên Cơ Vượng",
+        "-2 Thiên Cơ hóa Kỵ",
+        "+2 Thái Âm hóa Quyền",
+        "+1 Hữu Bật hóa Khoa",
+        "+1 Hữu Bật",
+        "+2 cách Hóa Quyền Tại Quan Lộc",
+        "-2 cách Hóa Kỵ Phá Quan Lộc"
+      ],
+      "notes": [
+        "Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc",
+        "Thiên Cơ hóa Kỵ → công danh nhiều trắc trở, dễ mắc kẹt hoặc bị cản phá",
+        "Thái Âm hóa Quyền → nắm quyền lực thật sự, chỉ huy được người khác",
+        "Hữu Bật hóa Khoa → có danh tiếng, được ghi nhận về học vấn hoặc tài năng"
+      ],
+      "star": "Thiên Cơ + Thái Âm đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 1,
+        "year": 1972,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người quen biết khắp chốn, từ quan lại tới thương nhân — sống bằng tài khéo và sức hút riêng hơn là bằng chức tước.",
+      "source": "Tân Biên 8.9: \"công danh trắc trở nhưng nếu buôn bán lại phát đạt\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": ["+1 Tham Lang Đắc", "-1 Đà La"],
+      "notes": ["Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích"],
+      "star": "Tham Lang",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 5,
+        "year": 1948,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người đứng đầu việc xét xử và luật lệ cả nước — nghiêm khắc, không dễ lay chuyển, và vì thế chuốc oán không ít.",
+      "source": "Tân Biên 8.2: \"võ nghiệp hiển đạt, kiêm nhiếp cả việc chính trị, được nhiều người kính nể\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": ["+2 Liêm Trinh Vượng", "+1 Hữu Bật hóa Khoa", "+1 Hữu Bật"],
+      "notes": [
+        "Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc",
+        "Hữu Bật hóa Khoa → có danh tiếng, được ghi nhận về học vấn hoặc tài năng"
+      ],
+      "star": "Liêm Trinh",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 5,
+        "year": 1988,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người trông coi việc học và khoa cử một vùng — chấm bài, chọn người, được kẻ sĩ trong hạt gọi là thầy.",
+      "source": "Tân Biên 8.12: \"nên chuyên về y dược hay sư phạm. Buôn bán cũng phát đạt\"",
+      "tierLabel": "khá giả",
+      "tierBreakdown": [
+        "+2 Thiên Lương Vượng",
+        "-1 Tuần/Triệt án ngữ (phá cách tốt)",
+        "+1 Văn Khúc"
+      ],
+      "notes": ["Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng"],
+      "star": "Thiên Lương",
+      "tier": "kha"
+    },
+    {
+      "b": {
+        "day": 1,
+        "month": 1,
+        "year": 1940,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người coi giữ trật tự và kho tàng một phủ — vừa cầm binh vừa cầm sổ sách, việc gì trong hạt cũng phải trình qua.",
+      "source": "Tân Biên 8.2: Phủ đồng cung — \"phú quý song toàn, lập được nhiều chiến công, có uy quyền hiển hách\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": [
+        "+2 Liêm Trinh Miếu",
+        "-2 Văn Khúc hóa Kỵ",
+        "+1 Văn Khúc",
+        "+2 cách Văn Tinh Ám Củng",
+        "-2 cách Hóa Kỵ Phá Quan Lộc"
+      ],
+      "notes": [
+        "Văn Khúc → ngả hẳn về đường văn chương, chữ nghĩa, khoa bảng",
+        "Văn Khúc hóa Kỵ → công danh nhiều trắc trở, dễ mắc kẹt hoặc bị cản phá"
+      ],
+      "star": "Liêm Trinh + Thiên Phủ đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 13,
+        "month": 5,
+        "year": 1996,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người bày mưu cho cả một đại quân, không cầm giáo mà quyết định được trận đánh — cổ thư nói rõ: chuyên việc tham mưu tất có chức vị lớn lao.",
+      "source": "Tân Biên 8.6: Lương đồng cung — \"Nếu chuyên việc tham mưu, tất có chức vị lớn lao\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+2 Thiên Cơ Miếu",
+        "-1 Tuần/Triệt án ngữ (phá cách tốt)",
+        "-1 Kình Dương",
+        "+2 cách Kình Dương Nhập Mệnh",
+        "+2 cách Quan Lộc Vô Chính Phùng Tuần Triệt"
+      ],
+      "notes": ["Kình Dương → con đường công danh nhiều va chạm, tranh đoạt, thương tích"],
+      "star": "Thiên Cơ + Thiên Lương đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 9,
+        "year": 1988,
+        "hourBranch": 8,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người ngồi trong trướng bàn việc binh, tính đường lui đường tiến cho chủ tướng — công lớn mà tên thì hiếm khi được nhắc.",
+      "source": "Tân Biên 8.6: Lương đồng cung — \"công danh hiển đạt văn võ kiêm toàn. Thích luận đàm về chính trị và quân sự\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": [
+        "+2 Thiên Cơ Miếu",
+        "-2 Thiên Cơ hóa Kỵ",
+        "+1 Hữu Bật hóa Khoa",
+        "+1 Hữu Bật",
+        "-1 Kình Dương",
+        "+2 cách Kình Dương Nhập Mệnh",
+        "-2 cách Hóa Kỵ Phá Quan Lộc"
+      ],
+      "notes": [
+        "Kình Dương → con đường công danh nhiều va chạm, tranh đoạt, thương tích",
+        "Hữu Bật → luôn có người phò tá, đề bạt, không phải đơn độc",
+        "Thiên Cơ hóa Kỵ → công danh nhiều trắc trở, dễ mắc kẹt hoặc bị cản phá",
+        "Hữu Bật hóa Khoa → có danh tiếng, được ghi nhận về học vấn hoặc tài năng"
+      ],
+      "star": "Thiên Cơ + Thiên Lương đồng cung",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 9,
+        "year": 1940,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người giàu nứt vách nhờ kinh doanh, nhưng của cải chỉ đến sau tuổi ba mươi — nửa đời trước làm gì cũng nghẽn, nửa sau làm gì cũng trôi.",
+      "source": "Tân Biên 8.4: Tham đồng cung — \"giàu có và thành công trong việc kinh doanh… từ 30 tuổi trở đi, mới được xứng ý toại lòng\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+2 Vũ Khúc Miếu",
+        "+2 Vũ Khúc hóa Quyền",
+        "+2 cách Hóa Quyền Tại Quan Lộc"
+      ],
+      "notes": ["Vũ Khúc hóa Quyền → nắm quyền lực thật sự, chỉ huy được người khác"],
+      "star": "Vũ Khúc + Tham Lang đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 5,
+        "month": 9,
+        "year": 1988,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người thay triều đình cai quản cả một vùng rộng — quyền uy trong tay, nhưng vẫn phải ngoái nhìn về kinh đô.",
+      "source": "Tân Biên 8.1: đơn thủ tại Tý — \"bình thường\"",
+      "tierLabel": "thị dân",
+      "tierBreakdown": [],
+      "notes": [],
+      "star": "Tử Vi",
+      "tier": "giua"
+    },
+    {
+      "b": {
+        "day": 9,
+        "month": 5,
+        "year": 1940,
+        "hourBranch": 0,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người được giao trọng trấn ở nơi xa nhất, lập chiến công liên miên — cổ thư nói đúng chỗ này: hiển đạt, nhưng thăng giáng thất thường.",
+      "source": "Tân Biên 8.4: Sát đồng cung — \"võ nghiệp hiển đạt, thường trọng trấn ở nơi xa, lập được nhiều chiến công, nhưng thăng giáng thất thường\"",
+      "tierLabel": "hiển đạt",
+      "tierBreakdown": [
+        "+1 Vũ Khúc Đắc",
+        "+2 Vũ Khúc hóa Quyền",
+        "-1 Đà La",
+        "+2 cách Hóa Quyền Tại Quan Lộc"
+      ],
+      "notes": [
+        "Đà La → con đường công danh nhiều va chạm, tranh đoạt, thương tích",
+        "Đào Hoa → nổi tiếng nhờ tài hoa và sức hút cá nhân, dính dáng chuyện tình ái",
+        "Vũ Khúc hóa Quyền → nắm quyền lực thật sự, chỉ huy được người khác"
+      ],
+      "star": "Vũ Khúc + Thất Sát đồng cung",
+      "tier": "cao"
+    },
+    {
+      "b": {
+        "day": 25,
+        "month": 10,
+        "year": 1940,
+        "hourBranch": 4,
+        "gender": "nu",
+        "isLunar": false
+      },
+      "desc": "Người gan lì, quen với rừng núi và hiểm nguy — sống bằng sức mình, cầm đầu một toán người và không nợ ai điều gì.",
+      "source": "Tân Biên 8.13: đơn thủ tại Thìn, Tuất — \"chẳng được lâu bền, tai ương họa hại thường đi liền với lợi danh\"",
+      "tierLabel": "lận đận",
+      "tierBreakdown": ["-2 Thất Sát Hãm", "-1 Hỏa Tinh"],
+      "notes": ["Hỏa Tinh → tính khí nóng nảy gấp gáp, thăng trầm đột ngột trong nghề"],
+      "star": "Thất Sát",
+      "tier": "thap"
+    }
+  ]
 }

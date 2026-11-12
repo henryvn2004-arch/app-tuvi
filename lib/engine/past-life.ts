@@ -17,6 +17,7 @@
 // ============================================================
 
 import type { Laso } from './laso';
+import { dungMau } from './khuon';
 import { getPalaceReadout, starElement, type PhuTheReadout } from './portrait';
 
 type Rec = Record<string, unknown>;
@@ -1987,24 +1988,56 @@ export interface TierScore {
   tier: OccTier;
   /** Từng khoản cộng/trừ — hiện ở khối "Cơ Sở Trong Lá Số" cho minh bạch. */
   breakdown: string[];
+  /** Mã tra song song `breakdown` (cùng chỉ số) — additive, để client dịch từng khoản (xem `BdMa`). */
+  breakdownMa: BdMa[];
 }
+
+/**
+ * Mã tra MỘT khoản chấm bậc chức phận (additive; chữ Việt ở `breakdown` giữ NGUYÊN — còn vào rail/prompt):
+ * `chinh` (ten = sao chủ hoặc null khi không có, sang = độ sáng) · `hoa` (ten + hoa: 'Lộc'…) · `tuan-giai` · `tuan-pha`
+ * · `cat`/`sat` (ds = danh sách tên sao) · `cach` (ten = tên cách cục). `n` = điểm có dấu.
+ */
+export interface BdMa {
+  n: number;
+  k: 'chinh' | 'hoa' | 'tuan-giai' | 'tuan-pha' | 'cat' | 'sat' | 'cach';
+  ten?: string | null;
+  sang?: string;
+  hoa?: string;
+  ds?: string[];
+}
+
+/** Khuôn chữ của các khoản chấm có LỜI (ns `past-life`, khoá `bd.<k>`) — engine dựng chữ Việt bằng CHÍNH khuôn này. */
+export const BD_MAU = {
+  hoa: '{ten} hóa {hoa}',
+  cach: 'cách {ten}',
+  'tuan-giai': 'Tuần/Triệt án ngữ (giải hãm)',
+  'tuan-pha': 'Tuần/Triệt án ngữ (phá cách tốt)',
+  chinhtinh: 'chính tinh',
+};
 
 /** Chấm tầng chức phận từ khối dữ liệu cung Quan Lộc. */
 function scoreQuanTier(ls: Laso, quan: Rec | undefined, lead: StarObj | null): TierScore {
   const breakdown: string[] = [];
+  const breakdownMa: BdMa[] = [];
   let score = 0;
-  const add = (n: number, why: string) => {
+  const add = (n: number, why: string, ma: Omit<BdMa, 'n'>) => {
     if (!n) return;
     score += n;
     breakdown.push(`${n > 0 ? '+' : ''}${n} ${why}`);
+    breakdownMa.push({ n, ...ma });
   };
 
   const bright = lead?.brightness || '';
-  add(BRIGHTNESS_SCORE[bright] ?? 0, `${lead?.ten || 'chính tinh'}${bright ? ` ${bright}` : ''}`);
+  add(BRIGHTNESS_SCORE[bright] ?? 0, `${lead?.ten || dungMau(BD_MAU.chinhtinh, {})}${bright ? ` ${bright}` : ''}`, {
+    k: 'chinh',
+    ten: lead?.ten || null,
+    sang: bright,
+  });
 
   const stars = palaceStarObjs(quan);
   for (const s of stars) {
-    if (s.hoa && HOA_SCORE[s.hoa] != null) add(HOA_SCORE[s.hoa], `${s.ten} hóa ${s.hoa}`);
+    if (s.hoa && HOA_SCORE[s.hoa] != null)
+      add(HOA_SCORE[s.hoa], dungMau(BD_MAU.hoa, { ten: s.ten, hoa: s.hoa }), { k: 'hoa', ten: s.ten, hoa: s.hoa });
   }
 
   // Tuần/Triệt: gặp sao HÃM thì bớt hãm (+1), gặp sao MIẾU/VƯỢNG thì phá cách
@@ -2012,27 +2045,30 @@ function scoreQuanTier(ls: Laso, quan: Rec | undefined, lead: StarObj | null): T
   // chính diệu có Tuần/Triệt án ngữ thì "sau vẫn hiển đạt").
   const hasTuanTriet = stars.some((s) => s.nhom === 'tuan_triet');
   if (hasTuanTriet) {
-    if (bright === 'Hãm') add(1, 'Tuần/Triệt án ngữ (giải hãm)');
-    else if (bright === 'Miếu' || bright === 'Vượng') add(-1, 'Tuần/Triệt án ngữ (phá cách tốt)');
+    if (bright === 'Hãm') add(1, dungMau(BD_MAU['tuan-giai'], {}), { k: 'tuan-giai' });
+    else if (bright === 'Miếu' || bright === 'Vượng')
+      add(-1, dungMau(BD_MAU['tuan-pha'], {}), { k: 'tuan-pha' });
   }
 
   const names = new Set(stars.map((s) => s.ten));
   for (const set of CAT_TINH_SETS) {
     const hit = set.filter((n) => names.has(n));
-    if (hit.length) add(1, hit.join('/'));
+    if (hit.length) add(1, hit.join('/'), { k: 'cat', ds: hit });
   }
   const sat = stars.filter((s) => SAT_TINH.has(s.ten)).map((s) => s.ten);
-  if (sat.length) add(-sat.length, sat.join('/'));
+  if (sat.length) add(-sat.length, sat.join('/'), { k: 'sat', ds: sat });
 
   for (const c of getPalaceReadout(ls, 'Quan Lộc').cachCuc) {
     const loai = String(c.loai || '').toLowerCase();
-    if (loai === 'quy_cuc' || loai === 'phu_cuc' || loai === 'tốt') add(2, `cách ${c.ten}`);
-    else if (loai === 'ban_tien_cuc' || loai === 'xấu') add(-2, `cách ${c.ten}`);
+    if (loai === 'quy_cuc' || loai === 'phu_cuc' || loai === 'tốt')
+      add(2, dungMau(BD_MAU.cach, { ten: String(c.ten) }), { k: 'cach', ten: String(c.ten) });
+    else if (loai === 'ban_tien_cuc' || loai === 'xấu')
+      add(-2, dungMau(BD_MAU.cach, { ten: String(c.ten) }), { k: 'cach', ten: String(c.ten) });
   }
 
   const tier: OccTier =
     score >= TIER_CUTOFF_CAO ? 'cao' : score >= TIER_CUTOFF_KHA ? 'kha' : score <= TIER_CUTOFF_THAP ? 'thap' : 'giua';
-  return { score, tier, breakdown };
+  return { score, tier, breakdown, breakdownMa };
 }
 
 // Ngưỡng chia tầng — ĐÃ hiệu chỉnh bằng số liệu thật, không phải đặt cảm tính.
@@ -2116,6 +2152,20 @@ export interface CareerBase {
   borrowed: boolean;
   /** Sắc thái từ phụ tinh + tứ hóa đóng TẠI Quan Lộc. */
   notes: string[];
+  /**
+   * Mã tra ADDITIVE cho client dịch (ns `past-life`; chữ Việt ở các trường trên giữ NGUYÊN): `desc`/`src` = khoá đầy đủ
+   * (`nghe.<sao>.<bậc>.desc` · `pair.<cặp>.<bậc>.desc` · `nghe.default.desc`), `tier` = `tier.<bậc>`, `bd` = khoản chấm
+   * bậc (`tierBreakdown` song song), `notes` = sắc thái (`notes` song song).
+   */
+  ma: CareerMa;
+}
+
+export interface CareerMa {
+  desc: string;
+  src: string;
+  tier: string;
+  bd: BdMa[];
+  notes: { k: string; ds?: string[]; ten?: string }[];
 }
 
 export function resolveCareerBase(ls: Laso): CareerBase {
@@ -2158,13 +2208,22 @@ export function resolveCareerBase(ls: Laso): CareerBase {
   const quanStars = palaceStarObjs(quan);
   const quanNames = new Set(quanStars.map((s) => s.ten));
   const notes: string[] = [];
-  for (const m of CAREER_MODIFIERS) {
+  const notesMa: CareerMa['notes'] = [];
+  CAREER_MODIFIERS.forEach((m, i) => {
     const hit = m.stars.filter((s) => quanNames.has(s));
-    if (hit.length) notes.push(`${hit.join('/')} → ${m.note}`);
-  }
+    if (hit.length) {
+      notes.push(`${hit.join('/')} → ${m.note}`);
+      notesMa.push({ k: `note.mod.${i}`, ds: hit });
+    }
+  });
   for (const s of quanStars) {
-    if (s.hoa && HOA_NOTES[s.hoa]) notes.push(`${s.ten} hóa ${s.hoa} → ${HOA_NOTES[s.hoa]}`);
+    if (s.hoa && HOA_NOTES[s.hoa]) {
+      notes.push(`${dungMau(BD_MAU.hoa, { ten: s.ten, hoa: s.hoa })} → ${HOA_NOTES[s.hoa]}`);
+      notesMa.push({ k: `note.hoa.${s.hoa}`, ten: s.ten });
+    }
   }
+  // Khoá bảng nguồn của `desc`/`source` — CÙNG nhánh với `base` ở trên.
+  const maKhoa = pairEntry ? `pair.${pk}.${tierInfo.tier}` : lead ? `nghe.${lead.ten}.${tierInfo.tier}` : 'nghe.default';
 
   return {
     domain: base.domain,
@@ -2180,6 +2239,13 @@ export function resolveCareerBase(ls: Laso): CareerBase {
     laCap: !!pairEntry,
     borrowed,
     notes,
+    ma: {
+      desc: `${maKhoa}.desc`,
+      src: `${maKhoa}.src`,
+      tier: `tier.${tierInfo.tier}`,
+      bd: tierInfo.breakdownMa,
+      notes: notesMa,
+    },
   };
 }
 
