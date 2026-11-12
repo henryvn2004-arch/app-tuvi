@@ -8423,6 +8423,106 @@
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>Compatible<br>and clashing years</span>",
   "h": "9a664cc3"
  },
+ "nguon.bo-du-lieu-mo": {
+  "t": "Open datasets",
+  "h": "edc59291"
+ },
+ "nguon.cac-nguon-du-lieu-co-thu": {
+  "t": "The data, classical texts and open datasets Minh Bao Zi Wei Dou Shu uses, with their licenses and attribution.",
+  "h": "0a800241"
+ },
+ "nguon.chung-toi-cung-khong-goi-bat": {
+  "t": "Nor do we call any part of the system “scientific”, “validated” or “based on statistics from N people”. It is a framework for reading a chart, not a controlled measurement instrument.",
+  "h": "b44c3d70"
+ },
+ "nguon.chung-toi-dung-bo-du-lieu": {
+  "t": "We use this dataset as a <b>yardstick</b> for career-field suggestions: each occupational group has a work-characteristics profile, and that profile is the reference point for comparison. The dataset is <b>not</b> used as a displayed catalog — the list of careers shown to readers is a table we built ourselves for the Vietnamese context.",
+  "h": "cb4e0e46"
+ },
+ "nguon.chung-toi-dung-du-lieu-nao": {
+  "t": "What data we use, where it comes from, and under what license.",
+  "h": "530e37c8"
+ },
+ "nguon.co-thu-va-tai-lieu-menh": {
+  "t": "Classical texts and destiny-reading references",
+  "h": "23dd5204"
+ },
+ "nguon.dieu-chung-toi-khong-lam": {
+  "t": "What we don't do",
+  "h": "d21049b1"
+ },
+ "nguon.do-so-lao-dong-hoa-ky": {
+  "t": "Sponsored by the U.S. Department of Labor, Employment and Training Administration (USDOL/ETA). License <a href=\"https://creativecommons.org/licenses/by/4.0/\" rel=\"license noopener\" target=\"_blank\">CC BY 4.0</a>.",
+  "h": "09a551ba"
+ },
+ "nguon.dung-de-doi-chieu-phan-luan": {
+  "t": "Used to cross-check the interpretation of star qualities and star combinations, especially in sections about career tendencies.",
+  "h": "47c53c54"
+ },
+ "nguon.ghi-ro-de-khong-gay-hieu": {
+  "t": "<b>To avoid any misunderstanding:</b> O*NET is a reference data source, <b>not</b> a partner, sponsor or endorser of Minh Bao Zi Wei Dou Shu. All interpretations, all adaptations into other languages and every conclusion on the site are ours, and ours alone to answer for.",
+  "h": "76f83d0f"
+ },
+ "nguon.khong-muc-nao-tren-trang-duoc": {
+  "t": "Nothing on the site was built by copying another author's interpretive wording. The written content — personality descriptions, career fields, advice — is written by us. Where we rely on classical texts, we quote them verbatim and say it is a quotation; where something is the site's own reference framework, we say that too.",
+  "h": "541a3011"
+ },
+ "nguon.khong-phai-moi-phan-tren-trang": {
+  "t": "Not everything on the site comes straight from the classics. Many scoring scales, classification frameworks and ways of combining data (for example, how career fit is scored, the framework for reading a child's temperament, how functional groups are arranged…) are <b>methods researched and built by Minh Bao Zi Wei Dou Shu's own team of specialists</b>, not copied from elsewhere. In every tool that uses them, we state that this is the site's own reference framework — not the verbatim classical method — so readers can tell what the ancients said from what we interpret. We do not publish the details of how these scales were built.",
+  "h": "2b715abc"
+ },
+ "nguon.mot-so-cong-cu-ky-mon": {
+  "t": "Some tools (Qi Men Dun Jia, the Huang Li almanac, Da Liu Ren, BaZi, Western astrology charts, calendar and solar-term conversion) use open-source calculation libraries under the <a href=\"https://opensource.org/licenses/MIT\" rel=\"license noopener\" target=\"_blank\">MIT</a> license. The MIT license does not require public attribution on the product — only that the copyright notice be kept in copies of the software itself — so we don't name the specific packages here, to avoid revealing technical details to competitors.",
+  "h": "d0bcac41"
+ },
+ "nguon.nguon-chinh-cho-phep-an-sao": {
+  "t": "The main source for star placement, the interpretation of the twelve palaces, chart patterns and the functions of the Career Palace. Every quotation shown on the site is taken verbatim from it.",
+  "h": "d895afbc"
+ },
+ "nguon.nguon-du-lieu-ghi-cong": {
+  "t": "Data sources &amp; attribution",
+  "h": "a92c482f"
+ },
+ "nguon.nguon-du-lieu-ghi-cong-tu": {
+  "t": "Data Sources & Attribution | Minh Bao Zi Wei Dou Shu",
+  "h": "95039fbb"
+ },
+ "nguon.nguon-du-lieu-ghi-cong-tu-bnyf": {
+  "t": "Data Sources & Attribution — Minh Bao Zi Wei Dou Shu",
+  "h": "942593da"
+ },
+ "nguon.o-net-database": {
+  "t": "O*NET Database",
+  "h": "ae039102"
+ },
+ "nguon.phuong-phap-do-tu-vi-minh": {
+  "t": "Methods built in-house by Minh Bao Zi Wei Dou Shu",
+  "h": "b2161377"
+ },
+ "nguon.thu-vien-ma-nguon-mo": {
+  "t": "Open-source libraries",
+  "h": "e8b10d2e"
+ },
+ "nguon.trang-nay-liet-ke-nhung-nguon": {
+  "t": "This page lists the sources the system uses for its calculations, along with their licenses. We keep it public for two reasons: some sources' licenses require attribution, and readers have a right to know what a conclusion is built on.",
+  "h": "23879e75"
+ },
+ "nguon.trung-chau-phai-luc-thap-tinh": {
+  "t": "Zhongzhou School — Sixty Star Systems",
+  "h": "b80b8a1f"
+ },
+ "nguon.tu-vi-dau-so-tan-bien": {
+  "t": "Zi Wei Dou Shu: A New Compilation",
+  "h": "34e57a47"
+ },
+ "nguon.van-dang-thai-thu-lang-tai": {
+  "t": "Van Dang Thai Thu Lang · reference",
+  "h": "c40a58cf"
+ },
+ "nguon.vuong-dinh-chi-tai-lieu-tham": {
+  "t": "Wang Ting Zhi · reference",
+  "h": "f0de146d"
+ },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. Information we collect",
   "h": "5354d2ca"

@@ -746,5 +746,39 @@
   "js": [
    "nav"
   ]
+ },
+ "/nguon-du-lieu.html": {
+  "file": "nguon-du-lieu.html",
+  "keys": [
+   "laso.tu-vi-minh-bao",
+   "nguon.bo-du-lieu-mo",
+   "nguon.cac-nguon-du-lieu-co-thu",
+   "nguon.chung-toi-cung-khong-goi-bat",
+   "nguon.chung-toi-dung-bo-du-lieu",
+   "nguon.chung-toi-dung-du-lieu-nao",
+   "nguon.co-thu-va-tai-lieu-menh",
+   "nguon.dieu-chung-toi-khong-lam",
+   "nguon.do-so-lao-dong-hoa-ky",
+   "nguon.dung-de-doi-chieu-phan-luan",
+   "nguon.ghi-ro-de-khong-gay-hieu",
+   "nguon.khong-muc-nao-tren-trang-duoc",
+   "nguon.khong-phai-moi-phan-tren-trang",
+   "nguon.mot-so-cong-cu-ky-mon",
+   "nguon.nguon-chinh-cho-phep-an-sao",
+   "nguon.nguon-du-lieu-ghi-cong",
+   "nguon.nguon-du-lieu-ghi-cong-tu",
+   "nguon.nguon-du-lieu-ghi-cong-tu-bnyf",
+   "nguon.o-net-database",
+   "nguon.phuong-phap-do-tu-vi-minh",
+   "nguon.thu-vien-ma-nguon-mo",
+   "nguon.trang-nay-liet-ke-nhung-nguon",
+   "nguon.trung-chau-phai-luc-thap-tinh",
+   "nguon.tu-vi-dau-so-tan-bien",
+   "nguon.van-dang-thai-thu-lang-tai",
+   "nguon.vuong-dinh-chi-tai-lieu-tham"
+  ],
+  "js": [
+   "nav"
+  ]
  }
 }

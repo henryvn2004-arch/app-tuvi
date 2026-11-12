@@ -8423,6 +8423,106 @@
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>相合、相剋<br>的生肖</span>",
   "h": "9a664cc3"
  },
+ "nguon.bo-du-lieu-mo": {
+  "t": "開放資料集",
+  "h": "edc59291"
+ },
+ "nguon.cac-nguon-du-lieu-co-thu": {
+  "t": "明寶紫微斗數所使用的資料、古籍與開放資料集，以及相應的授權與出處標示。",
+  "h": "0a800241"
+ },
+ "nguon.chung-toi-cung-khong-goi-bat": {
+  "t": "我們也不會把系統的任何部分稱為「科學」「已驗證」或「基於 N 人統計」。這是一套解讀命盤的框架，而不是有對照組的測量工具。",
+  "h": "b44c3d70"
+ },
+ "nguon.chung-toi-dung-bo-du-lieu": {
+  "t": "我們把這個資料集當作職業方向建議的<b>量尺</b>：每個職業群組都有一份工作特性檔案，作為比對的基準。資料集<b>不</b>用於顯示清單——呈現給讀者的職業列表，是我們針對越南情境自行建立的表格。",
+  "h": "cb4e0e46"
+ },
+ "nguon.chung-toi-dung-du-lieu-nao": {
+  "t": "我們用了哪些資料、從哪裡來、授權如何。",
+  "h": "530e37c8"
+ },
+ "nguon.co-thu-va-tai-lieu-menh": {
+  "t": "古籍與命理資料",
+  "h": "23dd5204"
+ },
+ "nguon.dieu-chung-toi-khong-lam": {
+  "t": "我們不做的事",
+  "h": "d21049b1"
+ },
+ "nguon.do-so-lao-dong-hoa-ky": {
+  "t": "由美國勞工部就業與培訓署（USDOL/ETA）贊助。授權 <a href=\"https://creativecommons.org/licenses/by/4.0/\" rel=\"license noopener\" target=\"_blank\">CC BY 4.0</a>。",
+  "h": "09a551ba"
+ },
+ "nguon.dung-de-doi-chieu-phan-luan": {
+  "t": "用於比對星曜性質與星曜組合的論述，尤其是談職業傾向的部分。",
+  "h": "47c53c54"
+ },
+ "nguon.ghi-ro-de-khong-gay-hieu": {
+  "t": "<b>為避免誤解特此說明：</b>O*NET 是參考資料來源，<b>並非</b>明寶紫微斗數的合作夥伴、贊助者或背書單位。所有詮釋、語言轉換與頁面上的一切結論皆屬於我們，也只由我們負責。",
+  "h": "76f83d0f"
+ },
+ "nguon.khong-muc-nao-tren-trang-duoc": {
+  "t": "頁面上沒有任何項目是抄寫其他作者的解說文字而成。人物類型、職業方向、建議等文字皆由我們撰寫。依據古籍之處會引用原文並註明是引文；屬於本站自訂標準之處也同樣註明。",
+  "h": "541a3011"
+ },
+ "nguon.khong-phai-moi-phan-tren-trang": {
+  "t": "頁面上並非所有內容都直接取自古籍。許多評分量表、分類框架與資料整合方式（例如職業契合度的評分方法、解讀兒童氣質的框架、職能群組的劃分方式……）是<b>明寶紫微斗數專家團隊研究並建立的獨有方法</b>，並非從別處抄來。凡使用這部分的工具，我們都會註明這是本站的參照標準，而非古法原文，讓讀者分得清哪些是古人所言、哪些是我們的詮釋。我們不公開這些量表的建立細節。",
+  "h": "2b715abc"
+ },
+ "nguon.mot-so-cong-cu-ky-mon": {
+  "t": "部分工具（奇門遁甲、黃曆、大六壬、八字、西洋占星星盤、曆法與節氣換算）使用了 <a href=\"https://opensource.org/licenses/MIT\" rel=\"license noopener\" target=\"_blank\">MIT</a> 授權的開源計算函式庫。MIT 授權不要求在產品上公開標示出處，只要求在軟體副本中保留版權聲明——因此我們在此不列出具體套件名稱，以免向競爭對手洩露技術細節。",
+  "h": "d0bcac41"
+ },
+ "nguon.nguon-chinh-cho-phep-an-sao": {
+  "t": "安星法、十二宮論述、格局與官祿宮職能的主要出處。頁面上的引文皆原文引自此書。",
+  "h": "d895afbc"
+ },
+ "nguon.nguon-du-lieu-ghi-cong": {
+  "t": "資料來源與出處標示",
+  "h": "a92c482f"
+ },
+ "nguon.nguon-du-lieu-ghi-cong-tu": {
+  "t": "資料來源與出處標示 | 明寶紫微斗數",
+  "h": "95039fbb"
+ },
+ "nguon.nguon-du-lieu-ghi-cong-tu-bnyf": {
+  "t": "資料來源與出處標示 — 明寶紫微斗數",
+  "h": "942593da"
+ },
+ "nguon.o-net-database": {
+  "t": "O*NET Database",
+  "h": "ae039102"
+ },
+ "nguon.phuong-phap-do-tu-vi-minh": {
+  "t": "明寶紫微斗數自行建立的方法",
+  "h": "b2161377"
+ },
+ "nguon.thu-vien-ma-nguon-mo": {
+  "t": "開源函式庫",
+  "h": "e8b10d2e"
+ },
+ "nguon.trang-nay-liet-ke-nhung-nguon": {
+  "t": "本頁列出系統用於計算的來源及相應授權。公開它有兩個理由：部分來源的授權要求標示出處；而讀者有權知道一個結論是建立在什麼之上。",
+  "h": "23879e75"
+ },
+ "nguon.trung-chau-phai-luc-thap-tinh": {
+  "t": "中州派 — 六十星系",
+  "h": "b80b8a1f"
+ },
+ "nguon.tu-vi-dau-so-tan-bien": {
+  "t": "紫微斗數新編",
+  "h": "34e57a47"
+ },
+ "nguon.van-dang-thai-thu-lang-tai": {
+  "t": "雲騰太次郎 · 參考資料",
+  "h": "c40a58cf"
+ },
+ "nguon.vuong-dinh-chi-tai-lieu-tham": {
+  "t": "王亭之 · 參考資料",
+  "h": "f0de146d"
+ },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 我們蒐集的資料",
   "h": "5354d2ca"
