@@ -8707,6 +8707,154 @@
   "t": "Verifying payment status and delivering results",
   "h": "84a1b3b2"
  },
+ "sanpham.1-tu-vi-minh-bao-cung": {
+  "t": "1. What Minh Bao Zi Wei Dou Shu offers",
+  "h": "ddb304e7"
+ },
+ "sanpham.2-cach-tinh-phi-he-thong": {
+  "t": "2. How pricing works — credits",
+  "h": "75e2a0e9"
+ },
+ "sanpham.3-mua-luong-hinh-thuc-thanh": {
+  "t": "3. Buying credits &amp; payment methods",
+  "h": "59dbc44c"
+ },
+ "sanpham.4-hoan-tien": {
+  "t": "4. Refunds",
+  "h": "9500f12f"
+ },
+ "sanpham.5-lien-he": {
+  "t": "5. Contact",
+  "h": "f583579d"
+ },
+ "sanpham.cac-nhom-dich-vu-chinh": {
+  "t": "Main service groups:",
+  "h": "6873de28"
+ },
+ "sanpham.cau-hoi-ve-san-pham-dich": {
+  "t": "For questions about our products, services or prices, please reach us through the <a href=\"/contact.html\">Contact</a> page.",
+  "h": "c9b2038c"
+ },
+ "sanpham.chon-ngay-dat-ten-chon-ngay": {
+  "t": "<strong>Date selection, naming</strong> — auspicious dates for a given task, baby naming, business naming",
+  "h": "7bd24940"
+ },
+ "sanpham.danh-muc-day-du-va-cap": {
+  "t": "The full, up-to-date catalog is always on the <a href=\"/cong-cu.html\">Tools</a> page.",
+  "h": "ed8fd601"
+ },
+ "sanpham.dich-vu": {
+  "t": "Service",
+  "h": "2c509399"
+ },
+ "sanpham.dich-vu-tinh-phi-theo-luong": {
+  "t": "Services are paid for in <strong>credits</strong>: top up once and use them on every current tool and on tools launched later. Credits <strong>never expire</strong> and are <strong>not a subscription</strong> — they are deducted only when you actually use them, once per result.",
+  "h": "86d16de4"
+ },
+ "sanpham.do-tinh-chat-so-cua-dich": {
+  "t": "Because the service is digital, results are unlocked right after payment, so <strong>no refunds apply</strong> once a result has been displayed, except where a technical error prevented you from receiving it. Full details in the <a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">\"Payment and refunds\"</a> section of the Terms of Service.",
+  "h": "58bace1c"
+ },
+ "sanpham.gia": {
+  "t": "Price",
+  "h": "71efef06"
+ },
+ "sanpham.gia-doc-truc-tiep-tu-he": {
+  "t": "Prices are read live from the system and may change. Full price list for every tool: see the <a href=\"/cong-cu.html\">Tools</a> page.",
+  "h": "307fe224"
+ },
+ "sanpham.gia-tham-khao-mot-so-dich": {
+  "t": "Reference prices for some popular services:",
+  "h": "24342e2e"
+ },
+ "sanpham.huong-dan-tung-buoc-tu-dang": {
+  "t": "Step-by-step guide — from creating an account to using a tool: see the <a href=\"/huong-dan-thanh-toan.html\">Payment Guide</a> page.",
+  "h": "fe6dd621"
+ },
+ "sanpham.luan-giai-la-so-day-du": {
+  "t": "Full Chart Reading (24 parts)",
+  "h": "bd642f37"
+ },
+ "sanpham.luong": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"laso\">…</span> credits</span>",
+  "h": "821dcba7"
+ },
+ "sanpham.luong-211d": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"phong-thuy\">…</span> credits</span>",
+  "h": "c1b9463c"
+ },
+ "sanpham.luong-duoc-ban-theo-cac-goi": {
+  "t": "Credits are sold in top-up packs on the <a href=\"/topup.html\">Top up credits</a> page — larger packs give a better price per credit. Pay in USD via PayPal or Visa/Mastercard (no PayPal account needed).",
+  "h": "9bcde6e3"
+ },
+ "sanpham.luong-tuy0": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"xem-tuoi\">…</span> credits</span>",
+  "h": "bbfec03e"
+ },
+ "sanpham.luong-w5we": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"xem-lam-an\">…</span> credits</span>",
+  "h": "3d0b4f93"
+ },
+ "sanpham.luong-y747": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"tu-binh\">…</span> credits</span>",
+  "h": "baa134d9"
+ },
+ "sanpham.noi-dung-luan-giai-mang-tinh": {
+  "t": "Readings are cultural and scholarly reference material, <strong>not</strong> financial, medical or legal advice. See the <a href=\"/mien-tru-trach-nhiem.html\" style=\"color:#5a4000;text-decoration:underline\">Disclaimer</a> page for details.",
+  "h": "8a879070"
+ },
+ "sanpham.phong-thuy-noi-that": {
+  "t": "Interior Feng Shui",
+  "h": "3f80b53f"
+ },
+ "sanpham.phong-thuy-xem-tuong-phong-thuy": {
+  "t": "<strong>Feng Shui &amp; Physiognomy</strong> — interior feng shui, Eight Mansions house direction, face reading, signature reading",
+  "h": "e3aa719d"
+ },
+ "sanpham.san-pham": {
+  "t": "Products",
+  "h": "982197dc"
+ },
+ "sanpham.san-pham-dich-vu": {
+  "t": "Products &amp; Services",
+  "h": "5af2d451"
+ },
+ "sanpham.san-pham-dich-vu-tu-vi": {
+  "t": "Products &amp; Services — Minh Bao Zi Wei Dou Shu",
+  "h": "95bd5738"
+ },
+ "sanpham.tu-binh-bat-tu": {
+  "t": "Zi Ping BaZi",
+  "h": "6ade52e9"
+ },
+ "sanpham.tu-binh-bat-tu-lap-tru": {
+  "t": "<strong>Zi Ping BaZi</strong> — set up the four pillars, read through the five elements",
+  "h": "4c4e3cc3"
+ },
+ "sanpham.tu-vi-dau-so-an-sao": {
+  "t": "<strong>Zi Wei Dou Shu</strong> — chart construction, the full Chart Reading (24 parts), yearly/monthly/daily luck, personality portrait",
+  "h": "f2ef7494"
+ },
+ "sanpham.tu-vi-minh-bao-cung-cap": {
+  "t": "What Minh Bao Zi Wei Dou Shu offers and how pricing works — credits: top up once, use on every tool, no expiry.",
+  "h": "2e334f2c"
+ },
+ "sanpham.tu-vi-minh-bao-tuviminhbao-com": {
+  "t": "Minh Bao Zi Wei Dou Shu (tuviminhbao.com) is a platform for looking up and interpreting Eastern destiny systems according to classical methods, based on the birth date and time you provide. Everything is delivered online through the website — nothing to install.",
+  "h": "31b96dd9"
+ },
+ "sanpham.xem-tuoi-hop-xem-tuoi-vo": {
+  "t": "<strong>Compatibility</strong> — marriage compatibility, business compatibility, parent–child compatibility",
+  "h": "2ca9430c"
+ },
+ "sanpham.xem-tuoi-lam-an": {
+  "t": "Business Compatibility",
+  "h": "5f5ba4e2"
+ },
+ "sanpham.xem-tuoi-vo-chong": {
+  "t": "Marriage Compatibility",
+  "h": "f3e7b1ed"
+ },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. Nature of the service",
   "h": "7fb94895"

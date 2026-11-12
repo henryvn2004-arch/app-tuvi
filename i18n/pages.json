@@ -780,5 +780,51 @@
   "js": [
    "nav"
   ]
+ },
+ "/san-pham-dich-vu.html": {
+  "file": "san-pham-dich-vu.html",
+  "keys": [
+   "sanpham.1-tu-vi-minh-bao-cung",
+   "sanpham.2-cach-tinh-phi-he-thong",
+   "sanpham.3-mua-luong-hinh-thuc-thanh",
+   "sanpham.4-hoan-tien",
+   "sanpham.5-lien-he",
+   "sanpham.cac-nhom-dich-vu-chinh",
+   "sanpham.cau-hoi-ve-san-pham-dich",
+   "sanpham.chon-ngay-dat-ten-chon-ngay",
+   "sanpham.danh-muc-day-du-va-cap",
+   "sanpham.dich-vu",
+   "sanpham.dich-vu-tinh-phi-theo-luong",
+   "sanpham.do-tinh-chat-so-cua-dich",
+   "sanpham.gia",
+   "sanpham.gia-doc-truc-tiep-tu-he",
+   "sanpham.gia-tham-khao-mot-so-dich",
+   "sanpham.huong-dan-tung-buoc-tu-dang",
+   "sanpham.luan-giai-la-so-day-du",
+   "sanpham.luong",
+   "sanpham.luong-211d",
+   "sanpham.luong-duoc-ban-theo-cac-goi",
+   "sanpham.luong-tuy0",
+   "sanpham.luong-w5we",
+   "sanpham.luong-y747",
+   "sanpham.noi-dung-luan-giai-mang-tinh",
+   "sanpham.phong-thuy-noi-that",
+   "sanpham.phong-thuy-xem-tuong-phong-thuy",
+   "sanpham.san-pham",
+   "sanpham.san-pham-dich-vu",
+   "sanpham.san-pham-dich-vu-tu-vi",
+   "sanpham.tu-binh-bat-tu",
+   "sanpham.tu-binh-bat-tu-lap-tru",
+   "sanpham.tu-vi-dau-so-an-sao",
+   "sanpham.tu-vi-minh-bao-cung-cap",
+   "sanpham.tu-vi-minh-bao-tuviminhbao-com",
+   "sanpham.xem-tuoi-hop-xem-tuoi-vo",
+   "sanpham.xem-tuoi-lam-an",
+   "sanpham.xem-tuoi-vo-chong",
+   "terms.cap-nhat-lan-cuoi-thang-9"
+  ],
+  "js": [
+   "nav"
+  ]
  }
 }

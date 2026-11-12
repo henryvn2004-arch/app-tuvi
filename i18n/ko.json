@@ -8707,6 +8707,154 @@
   "t": "결제 상태 확인 및 결과 제공",
   "h": "84a1b3b2"
  },
+ "sanpham.1-tu-vi-minh-bao-cung": {
+  "t": "1. 명보 자미두수가 제공하는 서비스",
+  "h": "ddb304e7"
+ },
+ "sanpham.2-cach-tinh-phi-he-thong": {
+  "t": "2. 요금 방식 — 냥(크레딧)",
+  "h": "75e2a0e9"
+ },
+ "sanpham.3-mua-luong-hinh-thuc-thanh": {
+  "t": "3. 냥 구매와 결제 방법",
+  "h": "59dbc44c"
+ },
+ "sanpham.4-hoan-tien": {
+  "t": "4. 환불",
+  "h": "9500f12f"
+ },
+ "sanpham.5-lien-he": {
+  "t": "5. 문의",
+  "h": "f583579d"
+ },
+ "sanpham.cac-nhom-dich-vu-chinh": {
+  "t": "주요 서비스:",
+  "h": "6873de28"
+ },
+ "sanpham.cau-hoi-ve-san-pham-dich": {
+  "t": "상품, 서비스, 요금에 관한 질문은 <a href=\"/contact.html\">문의</a> 페이지로 연락해 주세요.",
+  "h": "c9b2038c"
+ },
+ "sanpham.chon-ngay-dat-ten-chon-ngay": {
+  "t": "<strong>택일·작명</strong> — 용도별 길일 선택, 아기 작명, 사업체 작명",
+  "h": "7bd24940"
+ },
+ "sanpham.danh-muc-day-du-va-cap": {
+  "t": "최신 전체 목록은 언제나 <a href=\"/cong-cu.html\">도구</a> 페이지에서 볼 수 있습니다.",
+  "h": "ed8fd601"
+ },
+ "sanpham.dich-vu": {
+  "t": "서비스",
+  "h": "2c509399"
+ },
+ "sanpham.dich-vu-tinh-phi-theo-luong": {
+  "t": "서비스 요금은 <strong>냥</strong>(크레딧)으로 냅니다. 한 번 충전하면 현재의 모든 도구와 앞으로 나올 도구에 쓸 수 있습니다. 충전한 냥은 <strong>만료되지 않으며</strong> <strong>구독 방식도 아닙니다</strong> — 실제로 쓸 때만 차감되고, 결과 하나당 한 번만 차감됩니다.",
+  "h": "86d16de4"
+ },
+ "sanpham.do-tinh-chat-so-cua-dich": {
+  "t": "디지털 서비스의 특성상 결과는 결제 직후 바로 열리므로, 결과가 표시된 뒤에는 <strong>환불이 적용되지 않습니다</strong>. 단, 기술적 오류로 결과를 받지 못한 경우는 예외입니다. 자세한 내용은 이용약관의 <a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">'결제와 환불'</a> 항목을 보세요.",
+  "h": "58bace1c"
+ },
+ "sanpham.gia": {
+  "t": "요금",
+  "h": "71efef06"
+ },
+ "sanpham.gia-doc-truc-tiep-tu-he": {
+  "t": "요금은 시스템에서 바로 읽어 오며 바뀔 수 있습니다. 전체 도구 요금표는 <a href=\"/cong-cu.html\">도구</a> 페이지에서 보세요.",
+  "h": "307fe224"
+ },
+ "sanpham.gia-tham-khao-mot-so-dich": {
+  "t": "주요 서비스 참고 요금:",
+  "h": "24342e2e"
+ },
+ "sanpham.huong-dan-tung-buoc-tu-dang": {
+  "t": "계정 가입부터 도구 사용까지 단계별 안내는 <a href=\"/huong-dan-thanh-toan.html\">결제 안내</a> 페이지를 보세요.",
+  "h": "fe6dd621"
+ },
+ "sanpham.luan-giai-la-so-day-du": {
+  "t": "명반 풀이 전체판(24부)",
+  "h": "bd642f37"
+ },
+ "sanpham.luong": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"laso\">…</span>냥</span>",
+  "h": "821dcba7"
+ },
+ "sanpham.luong-211d": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"phong-thuy\">…</span>냥</span>",
+  "h": "c1b9463c"
+ },
+ "sanpham.luong-duoc-ban-theo-cac-goi": {
+  "t": "냥은 <a href=\"/topup.html\">냥 충전</a> 페이지의 충전 패키지로 판매합니다. 큰 패키지일수록 1냥당 단가가 유리합니다. 결제는 PayPal 또는 Visa/Mastercard 카드(PayPal 계정 불필요)로 미국 달러로 합니다.",
+  "h": "9bcde6e3"
+ },
+ "sanpham.luong-tuy0": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"xem-tuoi\">…</span>냥</span>",
+  "h": "bbfec03e"
+ },
+ "sanpham.luong-w5we": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"xem-lam-an\">…</span>냥</span>",
+  "h": "3d0b4f93"
+ },
+ "sanpham.luong-y747": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"tu-binh\">…</span>냥</span>",
+  "h": "baa134d9"
+ },
+ "sanpham.noi-dung-luan-giai-mang-tinh": {
+  "t": "풀이 내용은 문화적·학술적 참고용이며, 금융·의료·법률 자문이 <strong>아닙니다</strong>. 자세한 내용은 <a href=\"/mien-tru-trach-nhiem.html\" style=\"color:#5a4000;text-decoration:underline\">면책 고지</a> 페이지를 보세요.",
+  "h": "8a879070"
+ },
+ "sanpham.phong-thuy-noi-that": {
+  "t": "인테리어 풍수",
+  "h": "3f80b53f"
+ },
+ "sanpham.phong-thuy-xem-tuong-phong-thuy": {
+  "t": "<strong>풍수·관상</strong> — 인테리어 풍수, 팔택 집 방향, 얼굴 관상, 서명 보기(필상)",
+  "h": "e3aa719d"
+ },
+ "sanpham.san-pham": {
+  "t": "상품",
+  "h": "982197dc"
+ },
+ "sanpham.san-pham-dich-vu": {
+  "t": "상품과 서비스",
+  "h": "5af2d451"
+ },
+ "sanpham.san-pham-dich-vu-tu-vi": {
+  "t": "상품과 서비스 — 명보 자미두수",
+  "h": "95bd5738"
+ },
+ "sanpham.tu-binh-bat-tu": {
+  "t": "자평 사주팔자",
+  "h": "6ade52e9"
+ },
+ "sanpham.tu-binh-bat-tu-lap-tru": {
+  "t": "<strong>자평 사주팔자</strong> — 사주를 세우고 오행으로 풀이",
+  "h": "4c4e3cc3"
+ },
+ "sanpham.tu-vi-dau-so-an-sao": {
+  "t": "<strong>자미두수</strong> — 명반 작성, 명반 풀이 전체판(24부), 연·월·일별 운세, 성격 초상",
+  "h": "f2ef7494"
+ },
+ "sanpham.tu-vi-minh-bao-cung-cap": {
+  "t": "명보 자미두수가 제공하는 서비스와 요금 방식 — 냥(크레딧)을 한 번 충전하면 모든 도구에 쓸 수 있고 만료되지 않습니다.",
+  "h": "2e334f2c"
+ },
+ "sanpham.tu-vi-minh-bao-tuviminhbao-com": {
+  "t": "명보 자미두수(tuviminhbao.com)는 사용자가 입력한 생년월일시를 바탕으로 고법에 따라 동양 명리를 조회하고 풀이하는 플랫폼입니다. 모든 서비스는 웹사이트에서 온라인으로 제공되며 프로그램 설치가 필요 없습니다.",
+  "h": "31b96dd9"
+ },
+ "sanpham.xem-tuoi-hop-xem-tuoi-vo": {
+  "t": "<strong>궁합</strong> — 부부 궁합, 사업 궁합, 자녀 궁합",
+  "h": "2ca9430c"
+ },
+ "sanpham.xem-tuoi-lam-an": {
+  "t": "사업 궁합 보기",
+  "h": "5f5ba4e2"
+ },
+ "sanpham.xem-tuoi-vo-chong": {
+  "t": "부부 궁합 보기",
+  "h": "f3e7b1ed"
+ },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. 서비스의 성격",
   "h": "7fb94895"

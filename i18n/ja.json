@@ -8707,6 +8707,154 @@
   "t": "決済状況の確認と結果のご提供",
   "h": "84a1b3b2"
  },
+ "sanpham.1-tu-vi-minh-bao-cung": {
+  "t": "1. 明宝紫微斗数が提供するサービス",
+  "h": "ddb304e7"
+ },
+ "sanpham.2-cach-tinh-phi-he-thong": {
+  "t": "2. 料金の仕組み — 両（クレジット）",
+  "h": "75e2a0e9"
+ },
+ "sanpham.3-mua-luong-hinh-thuc-thanh": {
+  "t": "3. 両の購入とお支払い方法",
+  "h": "59dbc44c"
+ },
+ "sanpham.4-hoan-tien": {
+  "t": "4. 返金",
+  "h": "9500f12f"
+ },
+ "sanpham.5-lien-he": {
+  "t": "5. お問い合わせ",
+  "h": "f583579d"
+ },
+ "sanpham.cac-nhom-dich-vu-chinh": {
+  "t": "主なサービス：",
+  "h": "6873de28"
+ },
+ "sanpham.cau-hoi-ve-san-pham-dich": {
+  "t": "商品・サービス・料金についてのご質問は、<a href=\"/contact.html\">お問い合わせ</a>ページからご連絡ください。",
+  "h": "c9b2038c"
+ },
+ "sanpham.chon-ngay-dat-ten-chon-ngay": {
+  "t": "<strong>日取り・名づけ</strong> — 用途別の吉日選び、赤ちゃんの名づけ、社名・屋号の名づけ",
+  "h": "7bd24940"
+ },
+ "sanpham.danh-muc-day-du-va-cap": {
+  "t": "最新の全ツール一覧は<a href=\"/cong-cu.html\">ツール</a>ページでご覧いただけます。",
+  "h": "ed8fd601"
+ },
+ "sanpham.dich-vu": {
+  "t": "サービス",
+  "h": "2c509399"
+ },
+ "sanpham.dich-vu-tinh-phi-theo-luong": {
+  "t": "料金は<strong>両</strong>（クレジット）でお支払いいただきます。一度チャージすれば、現在のすべてのツールにも今後追加されるツールにも使えます。チャージした両は<strong>有効期限がなく</strong>、<strong>サブスクリプションでもありません</strong>——実際に使ったときだけ差し引かれ、一つの結果につき一度だけです。",
+  "h": "86d16de4"
+ },
+ "sanpham.do-tinh-chat-so-cua-dich": {
+  "t": "デジタルサービスの性質上、結果はお支払い直後に開放されるため、結果が表示された後は<strong>返金の対象外</strong>となります。ただし、技術的な不具合で結果を受け取れなかった場合を除きます。詳しくは利用規約の<a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">「お支払いと返金」</a>をご覧ください。",
+  "h": "58bace1c"
+ },
+ "sanpham.gia": {
+  "t": "料金",
+  "h": "71efef06"
+ },
+ "sanpham.gia-doc-truc-tiep-tu-he": {
+  "t": "料金はシステムから直接読み込んでおり、変更される場合があります。全ツールの料金表は<a href=\"/cong-cu.html\">ツール</a>ページをご覧ください。",
+  "h": "307fe224"
+ },
+ "sanpham.gia-tham-khao-mot-so-dich": {
+  "t": "主なサービスの参考料金：",
+  "h": "24342e2e"
+ },
+ "sanpham.huong-dan-tung-buoc-tu-dang": {
+  "t": "アカウント登録からツールのご利用までの手順は<a href=\"/huong-dan-thanh-toan.html\">お支払いガイド</a>ページをご覧ください。",
+  "h": "fe6dd621"
+ },
+ "sanpham.luan-giai-la-so-day-du": {
+  "t": "命盤鑑定 完全版（24章）",
+  "h": "bd642f37"
+ },
+ "sanpham.luong": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"laso\">…</span>両</span>",
+  "h": "821dcba7"
+ },
+ "sanpham.luong-211d": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"phong-thuy\">…</span>両</span>",
+  "h": "c1b9463c"
+ },
+ "sanpham.luong-duoc-ban-theo-cac-goi": {
+  "t": "両は<a href=\"/topup.html\">両をチャージ</a>ページのチャージパックで販売しています。大きなパックほど1両あたりの単価がお得です。お支払いはPayPalまたはVisa/Mastercard（PayPalアカウント不要）による米ドル決済です。",
+  "h": "9bcde6e3"
+ },
+ "sanpham.luong-tuy0": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"xem-tuoi\">…</span>両</span>",
+  "h": "bbfec03e"
+ },
+ "sanpham.luong-w5we": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"xem-lam-an\">…</span>両</span>",
+  "h": "3d0b4f93"
+ },
+ "sanpham.luong-y747": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"tu-binh\">…</span>両</span>",
+  "h": "baa134d9"
+ },
+ "sanpham.noi-dung-luan-giai-mang-tinh": {
+  "t": "鑑定内容は文化的・学術的な参考情報であり、金融・医療・法律の助言では<strong>ありません</strong>。詳しくは<a href=\"/mien-tru-trach-nhiem.html\" style=\"color:#5a4000;text-decoration:underline\">免責事項</a>ページをご覧ください。",
+  "h": "8a879070"
+ },
+ "sanpham.phong-thuy-noi-that": {
+  "t": "インテリア風水",
+  "h": "3f80b53f"
+ },
+ "sanpham.phong-thuy-xem-tuong-phong-thuy": {
+  "t": "<strong>風水・相術</strong> — インテリア風水、八宅による家の向き、人相、サイン（筆相）",
+  "h": "e3aa719d"
+ },
+ "sanpham.san-pham": {
+  "t": "商品",
+  "h": "982197dc"
+ },
+ "sanpham.san-pham-dich-vu": {
+  "t": "商品とサービス",
+  "h": "5af2d451"
+ },
+ "sanpham.san-pham-dich-vu-tu-vi": {
+  "t": "商品とサービス — 明宝紫微斗数",
+  "h": "95bd5738"
+ },
+ "sanpham.tu-binh-bat-tu": {
+  "t": "四柱推命（子平）",
+  "h": "6ade52e9"
+ },
+ "sanpham.tu-binh-bat-tu-lap-tru": {
+  "t": "<strong>四柱推命（子平）</strong> — 四柱を立て、五行で読み解く",
+  "h": "4c4e3cc3"
+ },
+ "sanpham.tu-vi-dau-so-an-sao": {
+  "t": "<strong>紫微斗数</strong> — 命盤の作成、命盤鑑定 完全版（24章）、年・月・日ごとの運勢、性格の肖像",
+  "h": "f2ef7494"
+ },
+ "sanpham.tu-vi-minh-bao-cung-cap": {
+  "t": "明宝紫微斗数のサービス内容と料金の仕組み——両（クレジット）を一度チャージすれば全ツールで使え、有効期限はありません。",
+  "h": "2e334f2c"
+ },
+ "sanpham.tu-vi-minh-bao-tuviminhbao-com": {
+  "t": "明宝紫微斗数（tuviminhbao.com）は、利用者が入力した生年月日と出生時刻をもとに、古法に沿って東洋の命理を調べ、読み解くプラットフォームです。すべてのサービスはウェブサイト上で提供され、ソフトのインストールは不要です。",
+  "h": "31b96dd9"
+ },
+ "sanpham.xem-tuoi-hop-xem-tuoi-vo": {
+  "t": "<strong>相性</strong> — 夫婦の相性、ビジネスの相性、親子の相性",
+  "h": "2ca9430c"
+ },
+ "sanpham.xem-tuoi-lam-an": {
+  "t": "ビジネスの相性",
+  "h": "5f5ba4e2"
+ },
+ "sanpham.xem-tuoi-vo-chong": {
+  "t": "夫婦の相性",
+  "h": "f3e7b1ed"
+ },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. サービスの性質",
   "h": "7fb94895"

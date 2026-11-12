@@ -8707,6 +8707,154 @@
   "t": "确认付款状态并提供结果",
   "h": "84a1b3b2"
  },
+ "sanpham.1-tu-vi-minh-bao-cung": {
+  "t": "1. 明宝紫微斗数提供哪些服务",
+  "h": "ddb304e7"
+ },
+ "sanpham.2-cach-tinh-phi-he-thong": {
+  "t": "2. 计费方式——两（点数）",
+  "h": "75e2a0e9"
+ },
+ "sanpham.3-mua-luong-hinh-thuc-thanh": {
+  "t": "3. 购买两与付款方式",
+  "h": "59dbc44c"
+ },
+ "sanpham.4-hoan-tien": {
+  "t": "4. 退款",
+  "h": "9500f12f"
+ },
+ "sanpham.5-lien-he": {
+  "t": "5. 联系我们",
+  "h": "f583579d"
+ },
+ "sanpham.cac-nhom-dich-vu-chinh": {
+  "t": "主要服务类别：",
+  "h": "6873de28"
+ },
+ "sanpham.cau-hoi-ve-san-pham-dich": {
+  "t": "关于产品、服务或价格的问题，请透过<a href=\"/contact.html\">联系我们</a>页面与我们联系。",
+  "h": "c9b2038c"
+ },
+ "sanpham.chon-ngay-dat-ten-chon-ngay": {
+  "t": "<strong>择日、取名</strong>——依事择吉日、宝宝取名、企业取名",
+  "h": "7bd24940"
+ },
+ "sanpham.danh-muc-day-du-va-cap": {
+  "t": "完整且最新的工具目录随时可在<a href=\"/cong-cu.html\">工具</a>页面查看。",
+  "h": "ed8fd601"
+ },
+ "sanpham.dich-vu": {
+  "t": "服务",
+  "h": "2c509399"
+ },
+ "sanpham.dich-vu-tinh-phi-theo-luong": {
+  "t": "服务以<strong>两</strong>（点数）计费：储值一次，即可用于现有的所有工具及日后推出的工具。储值的两<strong>不会过期</strong>，也<strong>不是订阅制</strong>——只在实际使用时扣除，每个结果只扣一次。",
+  "h": "86d16de4"
+ },
+ "sanpham.do-tinh-chat-so-cua-dich": {
+  "t": "由于数字服务的性质，结果在付款后立即解锁，因此结果显示后<strong>不适用退款</strong>，但因技术错误而未能收到结果的情况除外。完整说明请见服务条款中的<a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">「付款与退款」</a>。",
+  "h": "58bace1c"
+ },
+ "sanpham.gia": {
+  "t": "价格",
+  "h": "71efef06"
+ },
+ "sanpham.gia-doc-truc-tiep-tu-he": {
+  "t": "价格直接读取自系统，可能会调整。所有工具的完整价目表请见<a href=\"/cong-cu.html\">工具</a>页面。",
+  "h": "307fe224"
+ },
+ "sanpham.gia-tham-khao-mot-so-dich": {
+  "t": "部分热门服务的参考价格：",
+  "h": "24342e2e"
+ },
+ "sanpham.huong-dan-tung-buoc-tu-dang": {
+  "t": "从注册帐号到使用工具的逐步说明，请见<a href=\"/huong-dan-thanh-toan.html\">付款指南</a>页面。",
+  "h": "fe6dd621"
+ },
+ "sanpham.luan-giai-la-so-day-du": {
+  "t": "命盘解读完整版（24 部分）",
+  "h": "bd642f37"
+ },
+ "sanpham.luong": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"laso\">…</span>两</span>",
+  "h": "821dcba7"
+ },
+ "sanpham.luong-211d": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"phong-thuy\">…</span>两</span>",
+  "h": "c1b9463c"
+ },
+ "sanpham.luong-duoc-ban-theo-cac-goi": {
+  "t": "两以储值方案在<a href=\"/topup.html\">储值两</a>页面贩售——方案越大，每两单价越划算。以美元透过 PayPal 或 Visa/Mastercard 信用卡付款（不需 PayPal 帐号）。",
+  "h": "9bcde6e3"
+ },
+ "sanpham.luong-tuy0": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"xem-tuoi\">…</span>两</span>",
+  "h": "bbfec03e"
+ },
+ "sanpham.luong-w5we": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"xem-lam-an\">…</span>两</span>",
+  "h": "3d0b4f93"
+ },
+ "sanpham.luong-y747": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"tu-binh\">…</span>两</span>",
+  "h": "baa134d9"
+ },
+ "sanpham.noi-dung-luan-giai-mang-tinh": {
+  "t": "解读内容属文化、学术性质的参考，<strong>并非</strong>财务、医疗或法律建议。详见<a href=\"/mien-tru-trach-nhiem.html\" style=\"color:#5a4000;text-decoration:underline\">免责声明</a>页面。",
+  "h": "8a879070"
+ },
+ "sanpham.phong-thuy-noi-that": {
+  "t": "室内风水",
+  "h": "3f80b53f"
+ },
+ "sanpham.phong-thuy-xem-tuong-phong-thuy": {
+  "t": "<strong>风水与相术</strong>——室内风水、八宅宅向、面相、签名（笔相）",
+  "h": "e3aa719d"
+ },
+ "sanpham.san-pham": {
+  "t": "产品",
+  "h": "982197dc"
+ },
+ "sanpham.san-pham-dich-vu": {
+  "t": "产品与服务",
+  "h": "5af2d451"
+ },
+ "sanpham.san-pham-dich-vu-tu-vi": {
+  "t": "产品与服务 — 明宝紫微斗数",
+  "h": "95bd5738"
+ },
+ "sanpham.tu-binh-bat-tu": {
+  "t": "子平八字",
+  "h": "6ade52e9"
+ },
+ "sanpham.tu-binh-bat-tu-lap-tru": {
+  "t": "<strong>子平八字</strong>——排八字四柱，依五行论断",
+  "h": "4c4e3cc3"
+ },
+ "sanpham.tu-vi-dau-so-an-sao": {
+  "t": "<strong>紫微斗数</strong>——安星排盘、命盘解读完整版（24 部分）、流年／流月／流日运势、性格画像",
+  "h": "f2ef7494"
+ },
+ "sanpham.tu-vi-minh-bao-cung-cap": {
+  "t": "明宝紫微斗数提供哪些服务、如何计费——两（点数）储值一次即可用于所有工具，永不过期。",
+  "h": "2e334f2c"
+ },
+ "sanpham.tu-vi-minh-bao-tuviminhbao-com": {
+  "t": "明宝紫微斗数（tuviminhbao.com）是依古法查找与解读东方命理的平台，根据用户提供的出生年月日时进行论断。所有服务皆透过网站在线提供，无需安装软件。",
+  "h": "31b96dd9"
+ },
+ "sanpham.xem-tuoi-hop-xem-tuoi-vo": {
+  "t": "<strong>年龄合盘</strong>——夫妻合婚、合伙合盘、亲子合盘",
+  "h": "2ca9430c"
+ },
+ "sanpham.xem-tuoi-lam-an": {
+  "t": "合伙合盘",
+  "h": "5f5ba4e2"
+ },
+ "sanpham.xem-tuoi-vo-chong": {
+  "t": "夫妻合婚",
+  "h": "f3e7b1ed"
+ },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. 服务性质",
   "h": "7fb94895"
